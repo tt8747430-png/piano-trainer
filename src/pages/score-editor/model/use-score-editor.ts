@@ -1,3 +1,4 @@
+import { useSearch } from '@tanstack/react-router'
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
 import {
   entryTitles,
@@ -18,15 +19,16 @@ import {
   type EditorAction,
 } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
-import { useGoBack, useWakeLock } from '@/shared/lib'
+import { useGoBack, useViewChange, useWakeLock, type SheetView } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { audibleHands, schedule } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { inPopUp, isTyping } from '@/shared/lib/shortcuts'
 import { arrangeDraft, playedInBar } from './arrange-draft'
+import type { EditSearch } from './edit-search'
 import type { ScoreEditorValue } from './editor-context'
 import { savedMusic, savingTo, type EditorTarget } from './editor-target'
-import { shortcutOf } from './shortcuts'
+import { shortcutOf, staffNear } from './shortcuts'
 import { useEditorTakes } from './use-editor-takes'
 
 /** Where every key press is the field's or the open popup's own, not the editor's. */
@@ -59,6 +61,10 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   const pieces = usePiecesStoreApi()
   const locale = useLocale()
   const [chordNames, setChordNames] = useState(true)
+  // How the score is laid out is what the learner looks at: the URL's.
+  const { layout } = useSearch({ from: '/full-screen/edit/$pieceId' })
+  const changeView = useViewChange<EditSearch>()
+  const setLayout = (next: SheetView) => changeView({ layout: next })
   const [settingsOpen, openSettings] = useState(false)
   /** The music last saved here, or read: what the store holds unless another tab saved since. */
   const [saved] = useState(() => ({ music: target.music }))
@@ -87,6 +93,7 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   const chordFieldRef = useCallback((field: HTMLInputElement | null) => {
     chordField.current = field
   }, [])
+  const [chordFieldAsked, askChordField] = useState(0)
   const close = useCloseTo(target)
   const hasVersion = usePieces(
     (state) => target.kind === 'version' && selectHasVersion(state, target.id),
@@ -152,10 +159,21 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     if (shortcut.type === 'chordField') {
       if (event.target.closest(PRESSED)) return
       event.preventDefault()
-      chordField.current?.focus()
+      if (chordField.current) chordField.current.focus()
+      else askChordField((asked) => asked + 1)
       return
     }
     event.preventDefault()
+    if (shortcut.type === 'staff') {
+      const { layer, draft } = store.getState()
+      const next = staffNear(layer, shortcut.direction, {
+        chordNames,
+        melodyStaff: draft.melodyStaff,
+        voices: draft.voices.length,
+      })
+      if (next !== layer) store.dispatch({ type: 'layer', layer: next })
+      return
+    }
     store.dispatch(shortcut)
   })
   useEffect(() => {
@@ -164,12 +182,14 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     return () => window.removeEventListener('keydown', listener)
   }, [])
 
-  // With no chord row there is no chord to write: the caret goes to the tune, now and whenever a
-  // step undone or redone would bring it back to the chords.
+  // With no chord row there is no chord to write: the caret goes to the top staff (the tune's, or
+  // the right hand's), now and whenever a step undone or redone would bring it back to the chords.
   useEffect(() => {
     if (chordNames) return
     const toTune = () => {
-      if (store.getState().layer === 'chords') store.dispatch({ type: 'layer', layer: 'melody' })
+      const { layer, draft } = store.getState()
+      if (layer === 'chords')
+        store.dispatch({ type: 'layer', layer: draft.melodyStaff ? 'melody' : 'rh' })
     }
     toTune()
     return store.subscribe(toTune)
@@ -180,13 +200,14 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     store,
     takes,
     actions: { dispatch, play, togglePlay, writeOut, close, rename },
-    view: { chordNames, showChordNames, settingsOpen, openSettings },
+    view: { chordNames, showChordNames, settingsOpen, openSettings, layout, setLayout },
     meta: {
       title,
       hasVersion,
       playing: playback.playing === 'piece',
       kind: target.kind,
       chordFieldRef,
+      chordFieldAsked,
     },
   }
 }

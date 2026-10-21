@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createProgressStore, PROGRESS_STORAGE_KEY, PROGRESS_VERSION } from './store'

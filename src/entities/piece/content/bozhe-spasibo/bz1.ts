@@ -15,8 +15,8 @@ export default definePiece({
   tempo: 56,
   pattern: 'r1',
   note: {
-    en: 'The score prints no chord symbols for this song. These chords were read from the bass line, so check them against the score.',
-    ru: 'В нотах этой песни нет буквенных обозначений аккордов. Эти аккорды прочитаны по басу — сверьте их с нотами.',
+    en: 'The score prints no chord symbols for this song. The chords here were worked out from the bass line, so check them against the score.',
+    ru: 'В нотах этой песни нет буквенных обозначений аккордов. Аккорды здесь подобраны по басовой линии, поэтому сверьте их с нотами.',
   },
   sections: [
     { kind: 'intro', lines: ['Bm Bm'] },

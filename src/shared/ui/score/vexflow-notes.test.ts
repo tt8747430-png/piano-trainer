@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { midi, note } from '@/shared/lib/music'
+import { midi, note, TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { Duration, Measure, ScoreEvent, ScoreVoice } from '@/shared/lib/notation'
 import { StaveNote } from 'vexflow/core'
 import { buildVoice } from './vexflow-notes'
@@ -33,9 +33,9 @@ const hidden = (tick: number, duration: Duration): ScoreEvent => ({
 
 const measure = (startTick: number, count: number, voice: ScoreVoice): Measure => ({
   startTick,
-  ticks: count * 12,
+  ticks: count * TICKS_PER_BEAT,
   time: { count, unit: 4 },
-  staves: { treble: [voice], bass: [] },
+  staves: { melody: [], voice2: [], voice3: [], voice4: [], treble: [voice], bass: [] },
   chords: [],
 })
 
@@ -46,6 +46,7 @@ const build = (startTick: number, count: number, voice: ScoreVoice, { names = fa
     meter: '4/4',
     fingers: false,
     names,
+    key: { tonic: note('C'), minor: false },
   })
 
 const headsOf = (built: ReturnType<typeof buildVoice>) =>
@@ -54,40 +55,74 @@ const headsOf = (built: ReturnType<typeof buildVoice>) =>
   )
 
 describe('buildVoice', () => {
+  it('draws a note’s marks on it: articulations, an ornament, a roll, grace notes and a dynamic', () => {
+    const voice: ScoreVoice = {
+      stem: 'auto',
+      events: [
+        {
+          kind: 'notes',
+          tick: 0,
+          duration: { value: 1, dots: 0, triplet: false },
+          notes: [{ midi: midi(72), spelled: note('C'), octave: 5, accidental: null, tie: false }],
+          marks: {
+            articulations: ['accent', 'fermata'],
+            ornament: 'trill',
+            arpeggio: true,
+            grace: [{ midi: midi(74), spelled: note('D') }],
+            dynamic: 'mf',
+          },
+        },
+      ],
+    }
+    const [built] = build(0, 4, voice).notes
+    const kinds = built?.note
+      .getModifiers()
+      .map((modifier) => modifier.getCategory())
+      .sort()
+    expect(kinds).toEqual([
+      'Annotation',
+      'Articulation',
+      'Articulation',
+      'GraceNoteGroup',
+      'Ornament',
+      'Stroke',
+    ])
+  })
+
   it('beams by the beat across a second voice’s hidden rest, never over it', () => {
     const voice: ScoreVoice = {
       stem: 'down',
       events: [
         played(0, eighth),
-        hidden(6, eighth),
-        played(12, eighth),
-        played(18, eighth),
-        hidden(24, { value: 2, dots: 0, triplet: false }),
+        hidden(12, eighth),
+        played(24, eighth),
+        played(36, eighth),
+        hidden(48, { value: 2, dots: 0, triplet: false }),
       ],
     }
     const built = build(0, 4, voice)
     const tickOf = (note: unknown) => built.notes.find((each) => each.note === note)?.event.tick
-    expect(built.beams.map((beam) => beam.getNotes().map(tickOf))).toEqual([[12, 18]])
+    expect(built.beams.map((beam) => beam.getNotes().map(tickOf))).toEqual([[24, 36]])
   })
 
   it('brackets a triplet beat counted from its bar’s start', () => {
     const voice: ScoreVoice = {
       stem: 'auto',
       events: [
-        played(18, tripletEighth),
-        played(22, tripletEighth),
-        played(26, tripletEighth),
-        played(30, quarter),
+        played(36, tripletEighth),
+        played(44, tripletEighth),
+        played(52, tripletEighth),
+        played(60, quarter),
       ],
     }
-    const built = build(18, 2, voice)
+    const built = build(36, 2, voice)
     expect(built.tuplets.map((tuplet) => tuplet.getNotes().length)).toEqual([3])
   })
 
   it('names each head with Named notes, beamed eighths’ too, whose stems are set after they are built', () => {
     const voice: ScoreVoice = {
       stem: 'auto',
-      events: [chord(0, eighth), chord(6, eighth), played(12, half)],
+      events: [chord(0, eighth), chord(12, eighth), played(24, half)],
     }
     // F♯ and D filled, then C in a half note's hollow head (SMuFL's note name noteheads).
     expect(headsOf(build(0, 3, voice, { names: true }))).toEqual([

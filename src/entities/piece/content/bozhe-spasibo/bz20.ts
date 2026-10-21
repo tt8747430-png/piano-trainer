@@ -9,7 +9,7 @@ export default defineListing({
   key: 'E',
   meter: '4/4',
   note: {
-    en: 'Form: verse 1, chorus, verse 2, chorus, bridge, chorus.',
-    ru: 'Форма: 1-й куплет, припев, 2-й куплет, припев, бридж, припев.',
+    en: 'The song’s form: verse 1, chorus, verse 2, chorus, bridge, chorus.',
+    ru: 'Форма песни: 1-й куплет, припев, 2-й куплет, припев, бридж, припев.',
   },
 })

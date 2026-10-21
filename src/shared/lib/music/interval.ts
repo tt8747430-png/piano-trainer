@@ -25,12 +25,15 @@ export interface LabelledInterval extends Interval {
 
 /**
  * How an interval above a root is written as a degree: its number from the letter steps, past the
- * octave from 12 semitones on (a 9th, an 11th), and its sign from how far it lies from the major or
+ * octave from 12 semitones on (a 9th, an 11th) unless an accidental reaches it within (`#7`), and its sign from how far it lies from the major or
  * perfect interval of that number: `♭3`, `#11`, `𝄫7`.
  */
 export function degreeLabel(steps: number, semitones: number): string {
-  const compound = semitones >= 12
-  const plain = plainSemitones(steps % 7) + (compound ? 12 : 0)
+  const simple = plainSemitones(steps % 7)
+  // Within the octave where its letters reach it by an accidental (B♯ over C is a #7, not a 14th).
+  const compound =
+    steps >= 7 || (semitones >= 12 && accidentalSign(semitones - simple) === undefined)
+  const plain = simple + (compound ? 12 : 0)
   const sign = accidentalSign(semitones - plain)
   if (sign === undefined) throw new RangeError(`${semitones} semitones is no ${steps}-step degree`)
   return `${sign}${(steps % 7) + 1 + (compound ? 7 : 0)}`

@@ -5,8 +5,8 @@ const accompanimentPatterns: Lesson = {
   id: 'accompaniment-patterns',
   title: { en: 'Accompaniment patterns', ru: 'Фактуры аккомпанемента' },
   summary: {
-    en: 'Play the same chords four ways under a song.',
-    ru: 'Играйте одни и те же аккорды под песню четырьмя способами.',
+    en: 'Play the same chords four different ways under a song: block, broken, Alberti bass, and bass and chord.',
+    ru: 'Играйте одни и те же аккорды под песню четырьмя способами: целиком, разложенными, альбертиевыми басами и «бас и аккорд».',
   },
   sections: [
     {
@@ -14,10 +14,10 @@ const accompanimentPatterns: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Block chords:', ru: 'Аккордовая фактура:' },
+          lead: { en: 'Block chords', ru: 'Аккордовая фактура' },
           text: {
-            en: 'every note of the chord struck together, on each beat or each bar. Steady and full.',
-            ru: 'все звуки аккорда берутся вместе, на каждую долю или на каждый такт. Ровно и полно.',
+            en: 'strike every note of the chord together, once a beat or once a bar. They sound steady and full. Here the left hand adds the root and 5th.',
+            ru: '— все звуки аккорда берутся вместе, раз в долю или раз в такт. Звучит ровно и плотно. Левая рука здесь добавляет приму и квинту.',
           },
         },
         {
@@ -36,10 +36,10 @@ const accompanimentPatterns: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Broken chord:', ru: 'Разложенный аккорд:' },
+          lead: { en: 'A broken chord', ru: 'Разложенный аккорд' },
           text: {
-            en: 'the chord’s notes one after another. Here C, then F, up and back down in eighths.',
-            ru: 'звуки аккорда один за другим. Здесь до мажор, затем фа мажор, вверх и вниз восьмыми.',
+            en: 'plays the chord’s notes one after another. Here the left hand plays C major, then F major, up and back down in eighth notes.',
+            ru: '— звуки аккорда берутся по одному. Здесь левая рука играет до мажор, затем фа мажор, вверх и вниз восьмыми.',
           },
         },
         {
@@ -54,10 +54,10 @@ const accompanimentPatterns: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Alberti bass:', ru: 'Альбертиевы басы:' },
+          lead: { en: 'Alberti bass', ru: 'Альбертиевы басы' },
           text: {
-            en: 'a chord broken low, high, middle, high, in even eighths.',
-            ru: 'аккорд, разложенный в порядке «низ, верх, середина, верх», ровными восьмыми.',
+            en: 'breaks a chord in a fixed order: lowest, highest, middle, highest. Play it in even eighth notes and keep the lowest note a little stronger.',
+            ru: '— аккорд, разложенный в постоянном порядке: нижний, верхний, средний, верхний звук. Играйте ровными восьмыми, нижний звук чуть ярче.',
           },
         },
         {
@@ -73,8 +73,8 @@ const accompanimentPatterns: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The bass plays the root on beat 1 and the 5th on beat 3. The right hand answers with the chord on beats 2 and 4.',
-            ru: 'Бас играет основной тон на первую долю и квинту на третью. Правая рука отвечает аккордом на вторую и четвёртую.',
+            en: 'Split the chord between the hands. The left hand plays the root on beat 1 and the 5th on beat 3. The right hand answers with the chord on beats 2 and 4.',
+            ru: 'Разделите аккорд между руками. Левая играет основной тон на первую долю и квинту на третью. Правая отвечает аккордом на вторую и четвёртую.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'C3 r/4 G2 r/4 F2 r/4 C3 r/4' },
@@ -95,8 +95,8 @@ const accompanimentPatterns: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Hear the song in block chords. Then open it in the Player and try each way.',
-            ru: 'Послушайте песню с аккордами целиком. Затем откройте её в плеере и попробуйте каждый способ.',
+            en: 'Listen to Kumbaya in block chords. Then open the songs below in the Player and try each pattern under the melody.',
+            ru: 'Послушайте «Кумбаю» с аккордами целиком. Затем откройте песни ниже в плеере и попробуйте каждую фактуру под мелодию.',
           },
         },
         { kind: 'pattern', pattern: 'block', piece: 'kumbaya' },

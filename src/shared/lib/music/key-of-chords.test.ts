@@ -3,6 +3,7 @@ import { pitchClassOf } from './note'
 import { keysOfChords, readInKey } from './key-of-chords'
 import { keySymbol, type Key } from './key'
 import { parseChordSymbol } from './chord-symbol'
+import { chordSymbol } from './chord'
 import { note } from './note'
 import { numeralChord, numeralText } from './numerals'
 
@@ -63,7 +64,7 @@ describe('readInKey', () => {
   })
 
   it('names a dominant out of the key by the chord it leads to', () => {
-    expect(numerals('D D/F# Gm', D_MINOR)).toEqual(['I', 'V/iv', 'iv'])
+    expect(numerals('D D/F# Gm', D_MINOR)).toEqual(['I', 'V/3/iv', 'iv'])
     expect(numerals('C A7 Dm G7 C', { tonic: note('C'), minor: false })).toEqual([
       'I',
       'V7/ii',
@@ -84,11 +85,35 @@ describe('readInKey', () => {
     expect(chord).toEqual({ root: note('B', -1), quality: 'maj', bass: note('D') })
   })
 
+  it('keeps a chord out of the key as typed, its numeral from its letter', () => {
+    const G: Key = { tonic: note('G'), minor: false }
+    const C: Key = { tonic: note('C'), minor: false }
+    const E_FLAT: Key = { tonic: note('E', -1), minor: false }
+    const D: Key = { tonic: note('D'), minor: false }
+    const symbols = (line: string, key: Key) =>
+      readInKey(chords(line), key).map(({ chord }) => chordSymbol(chord))
+    expect(symbols('G Bb C G', G)).toEqual(['G', 'B♭', 'C', 'G'])
+    expect(numerals('G Bb C G', G)).toEqual(['I', '♭III', 'IV', 'I'])
+    expect(symbols('C F#m7b5 B7 Em', C)[1]).toBe('F#m7♭5')
+    expect(numerals('C F#m7b5 B7 Em', C)[1]).toBe('#ivø7')
+    expect(symbols('Eb Cb Ab Bb7', E_FLAT)[1]).toBe('C♭')
+    expect(numerals('Eb Cb Ab Bb7', E_FLAT)[1]).toBe('♭VI')
+    expect(symbols('D Bb A D', D)[1]).toBe('B♭')
+    expect(numerals('D Bb A D', D)[1]).toBe('♭VI')
+  })
+
+  it('reads a minor key’s chords on its raised 6th and 7th as its own', () => {
+    const A_MINOR: Key = { tonic: note('A'), minor: true }
+    expect(numerals('Am G#dim Am', A_MINOR)).toEqual(['i', 'vii°', 'i'])
+    expect(numerals('F#m7b5 E7 Am', A_MINOR)).toEqual(['viø7', 'V7', 'i'])
+  })
+
   it('reads every chord back: its numeral in the key is the chord', () => {
     const lines: [string, Key][] = [
       ['Dm Gm Asus4 Dm Gm Csus4 Am D D/F# Gm Csus4 C F Bb Gm Em7b5 A Dm6', D_MINOR],
       ['C A7 Dm G7 C E7 Am Fm6 C', { tonic: note('C'), minor: false }],
       ['Em9 A7b9 DMaj9 C#m7b5 F#7#9 Bm9', { tonic: note('D'), minor: false }],
+      ['Am F#m7b5 G#dim7 Am G#m7b5 E7 Am', { tonic: note('A'), minor: true }],
     ]
     for (const [line, key] of lines) {
       for (const { chord, numeral } of readInKey(chords(line), key)) {

@@ -6,8 +6,8 @@ const sixEight: Lesson = {
   id: 'six-eight',
   title: { en: '6/8 time', ru: 'Размер 6/8' },
   summary: {
-    en: 'Count 6/8 as two beats of three and play its lilt.',
-    ru: 'Считать 6/8 как две доли по три и играть его покачивание.',
+    en: 'Count 6/8 as two beats of three eighths, and play its rocking rhythm.',
+    ru: 'Считать 6/8 как две доли по три восьмых и играть его покачивающийся ритм.',
   },
   sections: [
     {
@@ -15,10 +15,10 @@ const sixEight: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: '6/8:', ru: '6/8:' },
+          lead: { en: '6/8 time:', ru: 'Размер 6/8:' },
           text: {
-            en: 'six eighth notes to a bar, grouped in two threes. The bar has two beats, each a dotted quarter.',
-            ru: 'шесть восьмых в такте, по три в группе. В такте две доли, каждая — четверть с точкой.',
+            en: 'six eighth notes in a bar, grouped as two threes. So the bar has two beats, and each beat lasts a dotted quarter.',
+            ru: 'шесть восьмых в такте, сгруппированных по три. Значит, в такте две доли, и каждая длится четверть с точкой.',
           },
         },
         {
@@ -42,13 +42,13 @@ const sixEight: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Count 1 to 6, one number to each eighth.',
-              ru: 'Считайте от одного до шести, по цифре на восьмую.',
+              en: 'Count 1 to 6, one number for each eighth.',
+              ru: 'Считайте от одного до шести, по числу на каждую восьмую.',
             },
             { en: 'Lean on 1 and 4.', ru: 'Опирайтесь на «раз» и «четыре».' },
             {
-              en: 'Speed up until you feel only two beats.',
-              ru: 'Ускоряйтесь, пока не почувствуете только две доли.',
+              en: 'Speed up until you feel only two beats in the bar.',
+              ru: 'Ускоряйтесь, пока не почувствуете в такте только две доли.',
             },
           ],
         },
@@ -60,8 +60,8 @@ const sixEight: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A quarter then an eighth fills one beat: long, short. Repeated, it makes 6/8 rock.',
-            ru: 'Четверть и восьмая заполняют одну долю: долго, коротко. Повторяясь, они раскачивают 6/8.',
+            en: 'A quarter then an eighth fill one beat: long, short. Repeat the pair and 6/8 starts to rock.',
+            ru: 'Четверть и восьмая заполняют одну долю: долго, коротко. Повторяйте эту пару, и 6/8 начинает покачиваться.',
           },
         },
         {
@@ -73,13 +73,13 @@ const sixEight: Lesson = {
       ],
     },
     {
-      heading: { en: 'Broken chords in 6/8', ru: 'Арпеджио в 6/8' },
+      heading: { en: 'Broken chords in 6/8', ru: 'Ломаные аккорды в 6/8' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'The left hand often breaks a chord into six eighths: three up, three back down. Here A minor, then C.',
-            ru: 'Левая рука часто раскладывает аккорд на шесть восьмых: три вверх, три обратно. Здесь ля минор, затем до мажор.',
+            en: 'The left hand often breaks a chord into six eighths: four going up, two coming back. Here it plays A minor, then C major.',
+            ru: 'Левая рука часто раскладывает аккорд на шесть восьмых: четыре вверх, две обратно. Здесь она играет ля минор, затем до мажор.',
           },
         },
         {
@@ -96,15 +96,15 @@ const sixEight: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play the chord the left hand broke first.',
-            ru: 'Сыграйте аккорд, который левая рука разложила первым.',
+            en: 'Play the first chord the left hand broke up.',
+            ru: 'Сыграйте первый аккорд, который разложила левая рука.',
           },
           answer: { chord: 'Am' },
         },
         {
           kind: 'question',
           ask: {
-            en: 'Play its rising notes: A, E, A, C.',
+            en: 'Play its notes going up: A, E, A, C.',
             ru: 'Сыграйте его звуки вверх: ля, ми, ля, до.',
           },
           answer: { notes: ['A', 'E', 'A', 'C'], rising: true },

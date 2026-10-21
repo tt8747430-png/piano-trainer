@@ -95,8 +95,13 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         : t('quiz:itWas', { answer: words.answer(question) })
 
   return (
-    <section ref={board} className="flex flex-col gap-5">
-      <div className="flex items-center gap-3">
+    // On a phone on its side the round's one action stands beside its question, so the keys and
+    // the action are in sight together; everything else spans the board under them.
+    <section
+      ref={board}
+      className="flex flex-col gap-5 landscape-phone:grid landscape-phone:grid-cols-[minmax(0,1fr)_auto] landscape-phone:gap-x-3 landscape-phone:gap-y-2 landscape-phone:[&>:not([data-beside])]:col-span-2"
+    >
+      <div data-beside="" className="flex items-center gap-3">
         <h2
           ref={prompt}
           tabIndex={-1}
@@ -169,7 +174,10 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
       ) : null}
 
       {choosing ? (
-        <div className="flex flex-wrap items-center gap-3">
+        <div
+          data-beside=""
+          className="flex flex-wrap items-center gap-3 landscape-phone:col-start-2 landscape-phone:row-start-1 landscape-phone:flex-nowrap"
+        >
           {selected.length > 0 ? (
             <Button variant="soft" size="pill" onClick={trainer.clear}>
               {t('quiz:clear')}
@@ -177,7 +185,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
           ) : null}
           <Button
             size="pill"
-            className="flex-1 sm:min-w-56 sm:flex-none"
+            className="flex-1 sm:min-w-56 sm:flex-none landscape-phone:min-w-32"
             disabled={selected.length === 0}
             aria-describedby={selected.length === 0 ? checkHint : undefined}
             onClick={trainer.check}
@@ -185,7 +193,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
             {t('quiz:check')}
           </Button>
           {selected.length === 0 ? (
-            <p id={checkHint} className="text-sm text-muted-foreground">
+            <p id={checkHint} className="text-sm text-muted-foreground landscape-phone:sr-only">
               {t('quiz:checkHint')}
             </p>
           ) : null}
@@ -194,7 +202,13 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
 
       {result ? (
         // Shown in place of what was just pressed, so the answer hands it the focus.
-        <Button size="pill" autoFocus className="sm:min-w-56 sm:self-start" onClick={goOn}>
+        <Button
+          data-beside=""
+          size="pill"
+          autoFocus
+          className="sm:min-w-56 sm:self-start landscape-phone:col-start-2 landscape-phone:row-start-1 landscape-phone:min-w-32"
+          onClick={goOn}
+        >
           {trainer.run.over ? t('quiz:results') : t('quiz:next')}
         </Button>
       ) : null}

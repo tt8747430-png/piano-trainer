@@ -5,21 +5,36 @@ const rightHandInTwelveEight: Lesson = {
   id: 'right-hand-in-twelve-eight',
   title: { en: 'Right-hand ways in 12/8', ru: 'Виды игры правой рукой в 12/8' },
   summary: {
-    en: 'Fill a bar of 12/8 with ways 7 to 10.',
-    ru: 'Заполняйте такт 12/8 видами 7–10.',
+    en: 'Fill a bar of 12/8 with ways 7 to 10: the techniques 5.1, 5.2, 5.3 and 3 chords.',
+    ru: 'Заполняйте такт 12/8 видами 7–10: техниками 5.1, 5.2, 5.3 и тремя аккордами.',
   },
   sections: [
     {
-      heading: { en: 'Ways 7 and 8', ru: 'Виды 7 и 8' },
+      heading: {
+        en: 'Way 7 (5.1): the ♭7 under the root',
+        ru: 'Вид 7 (5.1): ♭7 под основным тоном',
+      },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Way 7, 5.1, plays the chord twice, then twice over its ♭7. Way 8, 5.2, lets the root fall 1–7–♭7–6.',
-            ru: 'Вид 7, 5.1: аккорд дважды, затем дважды с ♭7 под ним. Вид 8, 5.2: основной тон опускается 1–7–♭7–6.',
+            en: 'Play the chord twice, then twice more with its ♭7 added under it.',
+            ru: 'Сыграйте аккорд дважды, затем ещё дважды с ♭7 под ним.',
           },
         },
         { kind: 'pattern', pattern: 'p51', piece: 'vyshina' },
+      ],
+    },
+    {
+      heading: { en: 'Way 8 (5.2): a falling line', ru: 'Вид 8 (5.2): нисходящая линия' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'The root falls by semitones: 1, 7, ♭7, 6.',
+            ru: 'Основной тон спускается по полутонам: 1, 7, ♭7, 6.',
+          },
+        },
         { kind: 'pattern', pattern: 'p52', piece: 'vyshina' },
         {
           kind: 'note',
@@ -31,16 +46,28 @@ const rightHandInTwelveEight: Lesson = {
       ],
     },
     {
-      heading: { en: 'Ways 9 and 10', ru: 'Виды 9 и 10' },
+      heading: { en: 'Way 9 (5.3): the 3rd moves', ru: 'Вид 9 (5.3): движется терция' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Way 9, 5.3, moves the 3rd: 3–2–4–3. Way 10 is 3 chords, an octave apart, the last one held.',
-            ru: 'Вид 9, 5.3: движется терция, 3–2–4–3. Вид 10 — 3 аккорда через октаву, последний выдержан.',
+            en: 'The 3rd moves 3–2–4–3: down to the 2nd, up to the 4th, then back.',
+            ru: 'Терция движется 3–2–4–3: вниз во вторую ступень, вверх в четвёртую и обратно.',
           },
         },
         { kind: 'pattern', pattern: 'p53', piece: 'vyshina' },
+      ],
+    },
+    {
+      heading: { en: 'Way 10: 3 chords', ru: 'Вид 10: 3 аккорда' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Play the chord three times, each an octave higher, and hold the last one.',
+            ru: 'Сыграйте аккорд три раза, каждый раз октавой выше, последний выдержите.',
+          },
+        },
         { kind: 'pattern', pattern: 'c3', piece: 'vyshina' },
       ],
     },
@@ -51,8 +78,8 @@ const rightHandInTwelveEight: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Play this row of chords with the new ways.',
-              ru: 'Сыграйте эту цепочку аккордов новыми видами.',
+              en: 'Play this row of chords with each of ways 7 to 10.',
+              ru: 'Сыграйте эту цепочку аккордов каждым из видов 7–10.',
             },
             {
               en: 'Learn two songs by their plans.',
@@ -64,7 +91,7 @@ const rightHandInTwelveEight: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«Там, в вышине бесконечной» in the Player',
+            en: '“Там, в вышине бесконечной” in the Player',
             ru: '«Там, в вышине бесконечной» в плеере',
           },
           target: { opens: 'piece', piece: 'vyshina' },
@@ -72,7 +99,7 @@ const rightHandInTwelveEight: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«Христос, для многих Ты людей – легенда» in the Player',
+            en: '“Христос, для многих Ты людей – легенда” in the Player',
             ru: '«Христос, для многих Ты людей – легенда» в плеере',
           },
           target: { opens: 'piece', piece: 'legenda' },

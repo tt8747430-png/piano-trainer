@@ -9,7 +9,7 @@ import { startRecorder, type RecorderPlan, type RecorderProgress } from './recor
 const PLAN: RecorderPlan = {
   bars: [
     { startTick: 0, beats: 4 },
-    { startTick: 48, beats: 4 },
+    { startTick: 96, beats: 4 },
   ],
   meter: '4/4',
   from: 0,

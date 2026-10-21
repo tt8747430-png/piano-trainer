@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 72,
   pattern: 'pop8',
   note: {
-    en: 'From Vasily Gorshkov’s course, the song of his lesson on melodic figuration: its chorus holds long notes for a line to answer.',
-    ru: 'Из курса Василия Горшкова, песня его урока о мелодической фигурации: в припеве долгие ноты, на которые может ответить линия.',
+    en: 'From Vasily Gorshkov’s course: the song of his lesson on melodic figuration. Its chorus holds long notes, and a line in the accompaniment can answer them.',
+    ru: 'Из курса Василия Горшкова, песня к его уроку о мелодической фигурации. В припеве есть долгие ноты, и на них может ответить линия в аккомпанементе.',
   },
   sections: [
     {

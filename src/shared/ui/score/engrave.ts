@@ -1,35 +1,58 @@
 import {
+  BarlineType,
+  Curve,
   Formatter,
   MetricsDefaults,
+  Modifier,
+  PedalMarking,
   Renderer,
+  Repetition,
   Stave,
   StaveConnector,
+  StaveHairpin,
   StaveNote,
+  StaveTempo,
   StaveTie,
   SVGContext,
+  TextBracket,
   VexFlow,
+  VoltaType,
   type RenderContext,
   type Voice,
 } from 'vexflow/core'
 import {
+  isCompound,
   keySignature,
+  sameKey,
   timeSignatureText,
+  type Barline,
+  type BarMarks,
+  type Jump,
   type Key,
+  type NoteMarks,
   type Tick,
   type TimeSignature,
 } from '@/shared/lib/music'
-import { STAVES, ticksOf, type Measure, type Score, type StaffId } from '@/shared/lib/notation'
+import {
+  clefIn,
+  STAVES,
+  ticksOf,
+  type Measure,
+  type Score,
+  type StaffId,
+  type StaffInstruments,
+} from '@/shared/lib/notation'
 import { chordSymbolWidth } from './chord-symbols'
 import { xAmong } from './layout'
 import { MUSIC_FONT, TEXT_FONT } from './music-font'
-import { ONE_STAFF_Y, SCORE_HEIGHT, STAFF_HEIGHT } from './size'
+import { ONE_STAFF_Y, STAFF_GAP, STAFF_HEIGHT, LAST_STAFF } from './size'
 import { buildVoice, type BuiltVoice, type FingerReach, type VexNote } from './vexflow-notes'
 
 export interface ScoreLayout {
   /** The engraving's size in CSS pixels. */
   readonly width: number
   readonly height: number
-  /** The treble staff's top line and the bass staff's bottom line. */
+  /** The top staff's top line and the bottom staff's bottom line. */
   readonly staffTop: number
   readonly staffBottom: number
   readonly measures: readonly {
@@ -42,11 +65,12 @@ export interface ScoreLayout {
   }[]
   /** Each staff drawn: its top and bottom lines. */
   readonly staves: Partial<Record<StaffId, { readonly top: number; readonly bottom: number }>>
+  /** What each sung staff is played on, where one is chosen (ADR 0070): its name over it. */
+  readonly staffInstruments?: StaffInstruments
   /** Each written onset left to right: its tick and its first notehead's or rest's x. */
   readonly onsets: readonly { readonly tick: Tick; readonly x: number }[]
 }
 
-const STAFF_Y: Readonly<Record<StaffId, number>> = { treble: 0, bass: 90 }
 /** A staff's top and bottom lines from its own top (VexFlow keeps four spaces over the staff). */
 const TOP_LINE = 40
 const BOTTOM_LINE = 80
@@ -58,9 +82,13 @@ const SPACING = 1.4
 const NOTE_PADDING = 20
 /** The least space in CSS pixels between a chord symbol and the next, or its barline. */
 const CHORD_GAP = 8
+/** How far a hairpin keeps from a dynamic under the note it starts or ends at. */
+const DYNAMIC_ROOM = 14
 /** How many times a measure is widened, at most, until its chord symbols fit. */
 const WIDEN_PASSES = 6
 const END_MARGIN = 8
+/** The room a brace takes left of the staves it joins. */
+const BRACE_ROOM = 14
 
 let setUp = false
 /** VexFlow's globals, once: our faces, and every colour `currentColor` so CSS colours the staff. */
@@ -96,15 +124,79 @@ function signatureOf(key: Key): string {
   return name
 }
 
+/** The key a measure is written in: its own at a key change, else the score's. */
+const keyOf = (score: Score, measure: Measure): Key => measure.key ?? score.key
+
 interface BuiltMeasure {
   readonly measure: Measure
+  /** Where the key changes at this measure, the key it leaves, whose signature is cancelled. */
+  readonly keyFrom: Key | null
   readonly staves: Readonly<Record<StaffId, readonly BuiltVoice[]>>
   readonly formatter: Formatter
   readonly clefs: boolean
+  /** The staves whose clef changes at this measure, from the one before. */
+  readonly clefChanges: readonly StaffId[]
   readonly time: boolean
   readonly width: number
   /** What of its width its notes have, past its clef, key and time. */
   readonly notes: number
+}
+
+/** How a bar's end is drawn, as a score prints it. */
+const END_BARLINE: Readonly<Record<Barline, BarlineType>> = {
+  double: BarlineType.DOUBLE,
+  final: BarlineType.END,
+  repeat: BarlineType.REPEAT_END,
+}
+
+/** The grand staff's line across both staves at a bar's end, as each barline is printed. */
+const END_CONNECTOR = {
+  double: 'thinDouble',
+  final: 'boldDoubleRight',
+  repeat: 'boldDoubleRight',
+} as const
+
+const JUMP_SIGN: Readonly<Record<Jump, number>> = {
+  dc: Repetition.type.DC,
+  'dc-fine': Repetition.type.DC_AL_FINE,
+  'dc-coda': Repetition.type.DC_AL_CODA,
+  ds: Repetition.type.DS,
+  'ds-fine': Repetition.type.DS_AL_FINE,
+  'ds-coda': Repetition.type.DS_AL_CODA,
+}
+/** How far a jump stands over Fine or To Coda at the same bar's end, clear of them. */
+const JUMP_OVER = -14
+
+/**
+ * The signs over a bar, each with its height: the segno or the coda's sign at its start; Fine, To
+ * Coda and a jump at its end, the jump over the others there.
+ */
+function signsOf({ segno, coda, fine, toCoda, jump }: BarMarks): (readonly [number, number])[] {
+  const signs: (readonly [number, number])[] = []
+  if (segno) signs.push([Repetition.type.SEGNO_LEFT, 0])
+  if (coda) signs.push([Repetition.type.CODA_LEFT, 0])
+  if (fine) signs.push([Repetition.type.FINE, 0])
+  if (toCoda) signs.push([Repetition.type.TO_CODA, 0])
+  if (jump) signs.push([JUMP_SIGN[jump], fine || toCoda ? JUMP_OVER : 0])
+  return signs
+}
+
+/**
+ * Where an ending's bracket stands over this bar: begun, carried on or ended, by the bars beside it
+ * that are of the same ending; none outside one.
+ */
+function voltaOf(built: readonly BuiltMeasure[], index: number): VoltaType {
+  const ending = built[index]?.measure.ending
+  if (ending === undefined) return VoltaType.NONE
+  const begins = built[index - 1]?.measure.ending !== ending
+  const ends = built[index + 1]?.measure.ending !== ending
+  return begins && ends
+    ? VoltaType.BEGIN_END
+    : begins
+      ? VoltaType.BEGIN
+      : ends
+        ? VoltaType.END
+        : VoltaType.MID
 }
 
 function staveAt(
@@ -114,7 +206,13 @@ function staveAt(
   key: Key,
 ): Stave {
   const stave = new Stave(x, y, width)
-  if (built.clefs) stave.addClef(staff).addKeySignature(signatureOf(key))
+  const { repeatStart, barline } = built.measure
+  if (repeatStart) stave.setBegBarType(BarlineType.REPEAT_BEGIN)
+  if (barline) stave.setEndBarType(END_BARLINE[barline])
+  const clef = clefIn(built.measure, staff)
+  if (built.clefs) stave.addClef(clef).addKeySignature(signatureOf(key))
+  else if (built.clefChanges.includes(staff)) stave.addClef(clef, 'small')
+  else if (built.keyFrom) stave.addKeySignature(signatureOf(key), signatureOf(built.keyFrom))
   if (built.time) stave.addTimeSignature(timeSignatureText(built.measure.time))
   return stave
 }
@@ -151,9 +249,7 @@ function chordShortfall(
 ): number {
   const { chords, startTick, ticks } = built.measure
   if (chords.length === 0) return 0
-  const stave = staveAt('treble', { x: 0, y: STAFF_Y.treble, width }, built, key).setNoteStartX(
-    noteStart,
-  )
+  const stave = staveAt('treble', { x: 0, y: 0, width }, built, key).setNoteStartX(noteStart)
   built.formatter.formatToStave([...voices], stave)
   // Each note on the trial stave, so its x is read as the engraving will read it (a voice's stave
   // does not reach its notes until it is drawn).
@@ -193,10 +289,20 @@ function buildMeasure(
   const build = (staff: StaffId) =>
     shown.includes(staff)
       ? measure.staves[staff].map((voice) =>
-          buildVoice(voice, { staff, measure, meter: score.meter, fingers, names }),
+          buildVoice(voice, {
+            staff,
+            measure,
+            meter: score.meter,
+            fingers,
+            names,
+            key: keyOf(score, measure),
+          }),
         )
       : []
-  const staves = { treble: build('treble'), bass: build('bass') }
+  const staves = Object.fromEntries(STAVES.map((id) => [id, build(id)])) as Record<
+    StaffId,
+    BuiltVoice[]
+  >
   const formatter = new Formatter()
   for (const staff of shown) formatter.joinVoices(staves[staff].map((built) => built.voice))
   const voices = shown.flatMap((staff) => staves[staff].map((built) => built.voice))
@@ -204,15 +310,25 @@ function buildMeasure(
   const clefs = previous === undefined
   const before = previous?.time ?? timeBefore
   const time = !before || before.count !== measure.time.count || before.unit !== measure.time.unit
-  const probe = { measure, staves, formatter, clefs, time, width: 0, notes: 0 }
+  const key = keyOf(score, measure)
+  const keyFrom = previous && !sameKey(keyOf(score, previous), key) ? keyOf(score, previous) : null
+  const clefChanges = previous
+    ? shown.filter((staff) => clefIn(previous, staff) !== clefIn(measure, staff))
+    : []
+  const probe = {
+    measure,
+    keyFrom,
+    staves,
+    formatter,
+    clefs,
+    clefChanges,
+    time,
+    width: 0,
+    notes: 0,
+  }
   const modifiers = Math.max(
     ...shown.map((staff) => {
-      const stave = staveAt(
-        staff,
-        { x: 0, y: STAFF_Y[staff], width: LEAST_NOTES },
-        probe,
-        score.key,
-      )
+      const stave = staveAt(staff, { x: 0, y: 0, width: LEAST_NOTES }, probe, key)
       return stave.getNoteStartX() - stave.getX()
     }),
   )
@@ -222,7 +338,7 @@ function buildMeasure(
     const short = chordShortfall(probe, voices, {
       width: modifiers + notes,
       noteStart: modifiers,
-      key: score.key,
+      key,
       scale,
     })
     if (short <= 1) break
@@ -233,34 +349,66 @@ function buildMeasure(
 
 /**
  * Where the staves stand and how tall the engraving is: one staff at `ONE_STAFF_Y` in
- * `STAFF_HEIGHT`, or the grand staff of `STAFF_Y` and `SCORE_HEIGHT`; moved down where fingers stand
- * over the top staff, apart where they stand between the staves, and taller where they stand under
- * the bottom one.
+ * `STAFF_HEIGHT`, or several `STAFF_GAP` apart with `LAST_STAFF` under the last; moved down where
+ * fingers stand over the top staff, apart where they stand between two, and taller where they stand
+ * under the bottom one.
  */
+/** The room an ending's bracket, the tempo or a sign takes over the top staff. */
+const VOLTA_ROOM = 32
+/** How far the tempo mark stands up from where the stave puts it, clear of the words over the notes. */
+const TEMPO_SHIFT = -10
+/** The width of the segno, and of Coda with its sign, that a tempo in their bar stands after. */
+const SEGNO_WIDTH = 28
+const CODA_WIDTH = 56
+
+/** Where each staff stands, and the height they take: an ending's bracket, where there is one, over them. */
 function placesOf(
   built: readonly BuiltMeasure[],
-  staff: StaffId | undefined,
+  shown: readonly StaffId[],
 ): {
-  readonly y: Readonly<Record<StaffId, number>>
+  readonly y: Readonly<Partial<Record<StaffId, number>>>
+  readonly height: number
+} {
+  const placed = stavesPlaced(built, shown)
+  const over = ({ measure }: BuiltMeasure) =>
+    measure.ending !== undefined || measure.tempo !== undefined || signsOf(measure).length > 0
+  if (!built.some(over)) return placed
+  const y: Partial<Record<StaffId, number>> = {}
+  for (const staff of shown) y[staff] = (placed.y[staff] ?? 0) + VOLTA_ROOM
+  return { y, height: placed.height + VOLTA_ROOM }
+}
+
+function stavesPlaced(
+  built: readonly BuiltMeasure[],
+  shown: readonly StaffId[],
+): {
+  readonly y: Readonly<Partial<Record<StaffId, number>>>
   readonly height: number
 } {
   const reach = (on: StaffId, side: keyof FingerReach) =>
     built.flatMap((measure) => measure.staves[on].flatMap((voice) => voice.fingerReach[side] ?? []))
-  if (staff) {
-    const y = Math.max(ONE_STAFF_Y, FINGER_MARGIN - Math.min(...reach(staff, 'above')))
+  const [only] = shown
+  if (shown.length === 1 && only) {
+    const y = Math.max(ONE_STAFF_Y, FINGER_MARGIN - Math.min(...reach(only, 'above')))
     const height =
-      y + Math.max(STAFF_HEIGHT - ONE_STAFF_Y, Math.max(...reach(staff, 'below')) + FINGER_MARGIN)
-    return { y: { treble: y, bass: y }, height }
+      y + Math.max(STAFF_HEIGHT - ONE_STAFF_Y, Math.max(...reach(only, 'below')) + FINGER_MARGIN)
+    return { y: { [only]: y }, height }
   }
-  const treble = Math.max(STAFF_Y.treble, FINGER_MARGIN - Math.min(...reach('treble', 'above')))
-  const trebleFloor = Math.max(BOTTOM_LINE, ...reach('treble', 'below'))
-  const bassCeiling = Math.min(TOP_LINE, ...reach('bass', 'above'))
-  const bass =
-    treble + Math.max(STAFF_Y.bass - STAFF_Y.treble, trebleFloor + FINGER_MARGIN - bassCeiling)
-  const height =
-    bass +
-    Math.max(SCORE_HEIGHT - STAFF_Y.bass, Math.max(...reach('bass', 'below')) + FINGER_MARGIN)
-  return { y: { treble, bass }, height }
+  const y: Partial<Record<StaffId, number>> = {}
+  let at = 0
+  shown.forEach((staff, index) => {
+    const above = shown[index - 1]
+    if (above === undefined) at = Math.max(0, FINGER_MARGIN - Math.min(...reach(staff, 'above')))
+    else {
+      const floor = Math.max(BOTTOM_LINE, ...reach(above, 'below'))
+      const ceiling = Math.min(TOP_LINE, ...reach(staff, 'above'))
+      at += Math.max(STAFF_GAP, floor + FINGER_MARGIN - ceiling)
+    }
+    y[staff] = at
+  })
+  const last = shown.at(-1)
+  const below = last ? Math.max(...reach(last, 'below')) + FINGER_MARGIN : 0
+  return { y, height: at + Math.max(LAST_STAFF, below) }
 }
 
 /** Every tied note joined to the note of its key where its value ends, on its staff. */
@@ -307,6 +455,126 @@ function drawTies(
   }
 }
 
+/** The written note it is drawn as, of each of a staff's chords along the line, in time order. */
+function chordsAlong(built: readonly BuiltMeasure[], staff: StaffId) {
+  return built
+    .flatMap((measure) => measure.staves[staff].flatMap((voice) => voice.notes))
+    .flatMap(({ event, note }) =>
+      event.kind === 'notes' && note instanceof StaveNote ? [{ event, note }] : [],
+    )
+    .sort((a, b) => a.event.tick - b.event.tick)
+}
+
+/**
+ * What spans notes, on each staff (ADR 0063): a slur from the chord that starts one to the next that
+ * ends one (from or to the line's edge where it goes on past it), a hairpin to the next dynamic or
+ * hairpin's end, and an octave line over (8va) or under (8vb) each run of chords under it.
+ */
+function drawSpans(
+  context: RenderContext,
+  built: readonly BuiltMeasure[],
+  shown: readonly StaffId[],
+) {
+  for (const staff of shown) {
+    const chords = chordsAlong(built, staff)
+    context.openGroup(`staff-${staff}`)
+    const slurs: (StaveNote | undefined)[] = []
+    let hairpin: { from: StaveNote; type: number; afterDynamic: boolean } | null = null
+    // A hairpin starts clear of a dynamic under its first note and stops short of one under its last.
+    const drawHairpin = (to: StaveNote, toDynamic = false) => {
+      if (!hairpin || hairpin.from === to) return
+      new StaveHairpin({ firstNote: hairpin.from, lastNote: to }, hairpin.type)
+        .setRenderOptions({
+          height: 10,
+          yShift: 0,
+          leftShiftPx: hairpin.afterDynamic ? DYNAMIC_ROOM : 0,
+          rightShiftPx: toDynamic ? -DYNAMIC_ROOM : 0,
+          leftShiftTicks: 0,
+          rightShiftTicks: 0,
+        })
+        .setPosition(Modifier.Position.BELOW)
+        .setContext(context)
+        .draw()
+      hairpin = null
+    }
+    // A holder, so the line drawn and the line read share one run.
+    const run: { octave: { line: '8va' | '8vb'; from: StaveNote; to: StaveNote } | null } = {
+      octave: null,
+    }
+    const drawOctave = () => {
+      const octave = run.octave
+      if (!octave) return
+      new TextBracket({
+        start: octave.from,
+        stop: octave.to,
+        text: '8',
+        superscript: octave.line === '8va' ? 'va' : 'vb',
+        position: octave.line === '8va' ? TextBracket.Position.TOP : TextBracket.Position.BOTTOM,
+      })
+        .setContext(context)
+        .draw()
+      run.octave = null
+    }
+    for (const { event, note } of chords) {
+      const marks = event.marks
+      if (marks?.slurEnd) {
+        new Curve(slurs.pop(), note, {}).setContext(context).draw()
+      }
+      if (marks?.slurStart) slurs.push(note)
+      if (marks?.dynamic || marks?.hairpin) drawHairpin(note, marks.dynamic !== undefined)
+      if (marks?.hairpin === 'cresc' || marks?.hairpin === 'dim') {
+        hairpin = {
+          from: note,
+          afterDynamic: marks.dynamic !== undefined,
+          type: marks.hairpin === 'cresc' ? StaveHairpin.type.CRESC : StaveHairpin.type.DECRESC,
+        }
+      }
+      const line = marks?.octave
+      if (run.octave && run.octave.line !== line) drawOctave()
+      if (line)
+        run.octave = run.octave ? { ...run.octave, to: note } : { line, from: note, to: note }
+    }
+    for (const from of slurs) new Curve(from, undefined, {}).setContext(context).draw()
+    const last = chords.at(-1)?.note
+    if (last) drawHairpin(last)
+    drawOctave()
+    drawPedal(context, chords)
+    context.closeGroup()
+  }
+}
+
+/**
+ * The sustain pedal under a staff (Ped. and its release), as its notes mark it: pressed at one, let up
+ * at another, let up and pressed again at a change; one held past the line's last note let up there.
+ */
+function drawPedal(
+  context: RenderContext,
+  chords: readonly { readonly event: { readonly marks?: NoteMarks }; readonly note: StaveNote }[],
+) {
+  const marked: StaveNote[] = []
+  let down = false
+  for (const { event, note } of chords) {
+    const pedal = event.marks?.pedal
+    if (pedal === 'down' && !down) {
+      marked.push(note)
+      down = true
+    } else if (pedal === 'up' && down) {
+      marked.push(note)
+      down = false
+    } else if (pedal === 'change') {
+      // A release and a press at once: the note twice, as the pedal's own notation writes it; with
+      // the pedal up, only the press.
+      if (down) marked.push(note, note)
+      else marked.push(note)
+      down = true
+    }
+  }
+  const last = chords.at(-1)?.note
+  if (down && last) marked.push(last)
+  if (marked.length < 2) return
+  new PedalMarking(marked).setType(PedalMarking.type.TEXT).setContext(context).draw()
+}
+
 /**
  * Each drawn chord or note named by its staff and tick (`data-staff`, `data-tick`), so what lies over
  * the engraving can mark the notes chosen without engraving again.
@@ -346,6 +614,8 @@ export interface EngraveOptions {
   readonly fingers: boolean
   readonly names: boolean
   readonly staff?: StaffId | undefined
+  /** The staves drawn, of the score's, top down (some hidden): all of them unless `staff` names one. */
+  readonly staves?: readonly StaffId[] | undefined
   /** The time signature in force before the first measure: a line that continues prints it only where it changes. */
   readonly timeBefore?: TimeSignature | undefined
   /** A width in CSS pixels the line is spread to, its measures widened alike (`spread`). */
@@ -424,24 +694,44 @@ function* drawn(
   score: Score,
   host: HTMLDivElement,
   sheet: HTMLDivElement,
-  { scale, fingers, names, staff, timeBefore, fill }: EngraveOptions,
+  { scale: asked, fingers, names, staff, staves: chosen, timeBefore, fill }: EngraveOptions,
 ): Generator<void, ScoreLayout, void> {
-  const shown: readonly StaffId[] = staff ? [staff] : STAVES
-  const natural: BuiltMeasure[] = []
-  for (const [index, measure] of score.measures.entries()) {
-    natural.push(
-      buildMeasure(score, measure, score.measures[index - 1], timeBefore, {
-        fingers,
-        names,
-        scale,
-        shown,
-      }),
-    )
-    if ((index + 1) % MEASURES_A_STEP === 0) yield
+  const written = score.staves.length > 0 ? score.staves : STAVES
+  const shown: readonly StaffId[] = staff
+    ? [staff]
+    : (chosen?.filter((each) => written.includes(each)) ?? written)
+  if (shown.length === 0) throw new RangeError('A score is engraved on at least one staff')
+  // The grand staff's brace stands left of its staves: room for it before the first measure.
+  const lead = shown.includes('treble') && shown.includes('bass') ? BRACE_ROOM : 0
+  const lineWidth = (measures: readonly BuiltMeasure[]) =>
+    lead + measures.reduce((sum, measure) => sum + measure.width, 0) + END_MARGIN
+  function* naturalAt(scale: number): Generator<void, BuiltMeasure[], void> {
+    const natural: BuiltMeasure[] = []
+    for (const [index, measure] of score.measures.entries()) {
+      natural.push(
+        buildMeasure(score, measure, score.measures[index - 1], timeBefore, {
+          fingers,
+          names,
+          scale,
+          shown,
+        }),
+      )
+      if ((index + 1) % MEASURES_A_STEP === 0) yield
+    }
+    return natural
   }
-  const built = spread(natural, fill === undefined ? undefined : fill / scale)
-  const width = built.reduce((sum, measure) => sum + measure.width, 0) + END_MARGIN
-  const places = placesOf(built, staff)
+  let scale = asked
+  let natural = yield* naturalAt(scale)
+  // A line wider than the width it may fill is drawn smaller to fit it, never wider than the screen:
+  // built again at that size, as its chord names keep their own size and need more of its room.
+  if (fill !== undefined && lineWidth(natural) * scale > fill) {
+    scale = fill / lineWidth(natural)
+    natural = yield* naturalAt(scale)
+    scale = Math.min(scale, fill / lineWidth(natural))
+  }
+  const built = spread(natural, fill === undefined ? undefined : fill / scale - lead)
+  const width = lineWidth(built)
+  const places = placesOf(built, shown)
   const renderer = new Renderer(sheet, Renderer.Backends.SVG)
   renderer.resize(width * scale, places.height * scale)
   const context = renderer.getContext()
@@ -458,26 +748,55 @@ function* drawn(
   let staffTop = 0
   let staffBottom = 0
   const staves: { -readonly [S in StaffId]?: { top: number; bottom: number } } = {}
-  let x = 0
+  let x = lead
   for (const [index, measure] of built.entries()) {
     if (index > 0 && index % MEASURES_A_STEP === 0) yield
     const drawn = shown.map((on) => ({
       staff: on,
-      stave: staveAt(on, { x, y: places.y[on], width: measure.width }, measure, score.key),
+      stave: staveAt(
+        on,
+        { x, y: places.y[on] ?? 0, width: measure.width },
+        measure,
+        keyOf(score, measure.measure),
+      ),
     }))
     const [top] = drawn
     const bottom = drawn.at(-1)
     if (!top || !bottom) throw new RangeError('A score is engraved on at least one staff')
     const start = Math.max(...drawn.map(({ stave }) => stave.getNoteStartX()))
+    // An ending's bracket over the system's top staff, numbered where it begins.
+    const volta = voltaOf(built, index)
+    if (volta !== VoltaType.NONE) top.stave.setVoltaType(volta, `${measure.measure.ending}.`, 0)
+    // The tempo over the music's head: a beat (a dotted quarter's in a compound meter) equals so many.
+    const { tempo } = measure.measure
+    if (tempo) {
+      // After the bar's sign where it has one, as the two stand side by side over its start.
+      const after = measure.measure.coda ? CODA_WIDTH : measure.measure.segno ? SEGNO_WIDTH : 0
+      const beat = { duration: 'q', dots: isCompound(score.meter) ? 1 : 0, bpm: tempo }
+      top.stave.addModifier(new StaveTempo(beat, top.stave.getX() + after, TEMPO_SHIFT))
+    }
+    for (const [type, shift] of signsOf(measure.measure)) top.stave.setRepetitionType(type, shift)
     for (const { stave } of drawn) stave.setNoteStartX(start).setContext(context).draw()
-    // The grand staff's two staves are joined; one staff's own barlines close it.
-    if (top !== bottom) {
-      if (measure.clefs) {
-        for (const type of ['brace', 'singleLeft'] as const) {
-          new StaveConnector(top.stave, bottom.stave).setType(type).setContext(context).draw()
-        }
-      }
-      new StaveConnector(top.stave, bottom.stave).setType('singleRight').setContext(context).draw()
+    // A system's staves are joined at its left; the grand staff's two by a brace and their barlines,
+    // the tune's staff over it keeping its own, as a song's piano part is printed.
+    const treble = drawn.find((each) => each.staff === 'treble')
+    const bass = drawn.find((each) => each.staff === 'bass')
+    if (top !== bottom && measure.clefs) {
+      new StaveConnector(top.stave, bottom.stave).setType('singleLeft').setContext(context).draw()
+    }
+    if (treble && bass) {
+      if (measure.clefs)
+        new StaveConnector(treble.stave, bass.stave).setType('brace').setContext(context).draw()
+      const { barline, repeatStart } = measure.measure
+      new StaveConnector(treble.stave, bass.stave)
+        .setType(barline ? END_CONNECTOR[barline] : 'singleRight')
+        .setContext(context)
+        .draw()
+      if (repeatStart)
+        new StaveConnector(treble.stave, bass.stave)
+          .setType('boldDoubleLeft')
+          .setContext(context)
+          .draw()
     }
     measure.formatter.formatToStave(
       shown.flatMap((on) => measure.staves[on].map((voice) => voice.voice)),
@@ -509,6 +828,7 @@ function* drawn(
     x += measure.width
   }
   drawTies(context, built, score.meter, shown)
+  drawSpans(context, built, shown)
   host.replaceChildren(...sheet.childNodes)
 
   return {
@@ -518,6 +838,7 @@ function* drawn(
     staffBottom,
     staves,
     measures,
+    ...(score.staffInstruments ? { staffInstruments: score.staffInstruments } : {}),
     onsets: [...onsets].map(([tick, at]) => ({ tick, x: at })).sort((a, b) => a.tick - b.tick),
   }
 }

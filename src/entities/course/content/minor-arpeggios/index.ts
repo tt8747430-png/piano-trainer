@@ -8,8 +8,8 @@ const course: Course = {
   stage: 'intermediate',
   title: { en: 'Minor Arpeggios', ru: 'Минорные арпеджио' },
   summary: {
-    en: 'The minor arpeggio in all twelve keys round the circle of fifths: each triad over two octaves, fingered in both hands, with its inversions.',
-    ru: 'Минорные арпеджио во всех двенадцати тональностях по квинтовому кругу: каждое трезвучие на две октавы, аппликатура обеих рук и обращения.',
+    en: 'The minor arpeggio in all twelve keys, in circle-of-fifths order. Each lesson takes one triad over two octaves, with both hands’ fingering and its inversions.',
+    ru: 'Минорные арпеджио во всех двенадцати тональностях, по квинтовому кругу. В каждом уроке одно трезвучие на две октавы: аппликатура обеих рук и обращения.',
   },
   weeks: 13,
   lessons: [understanding, ...MINOR_TONICS.map((tonic) => arpeggioLesson({ tonic, minor: true }))],

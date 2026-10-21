@@ -10,8 +10,8 @@ export default definePiece({
   tempo: 80,
   pattern: 'M1',
   note: {
-    en: 'The workbook asks you to make your own plan for this song: a different way on each line, with the earlier songs as a model.',
-    ru: 'Учебник предлагает составить свой план для этой песни: на каждой строке новый способ, по образцу предыдущих песен.',
+    en: 'The workbook leaves the plan for this song to you. Give each line a different way, using the earlier songs as a model.',
+    ru: 'План для этой песни учебник оставляет вам. Дайте каждой строке свой способ, по образцу предыдущих песен.',
   },
   sections: [
     { kind: 'verse', lines: ['G C', 'D G', 'G C', 'D G'] },

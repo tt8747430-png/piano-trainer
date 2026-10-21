@@ -131,6 +131,7 @@ export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } fro
 export { voiceLead, type RowPosition } from './voice-lead'
 export { handPosition, type FromTone, type HandPosition } from './hand-position'
 export {
+  hasMinorThird,
   numeralChord,
   numeralGrows,
   numeralOf,
@@ -221,3 +222,47 @@ export { keysHolding, type KeyHolding } from './keys-holding'
 export { keysOfChords, readInKey, type ChordReading, type KeyReading } from './key-of-chords'
 export { KEY_WALKS, walkKeys, type KeyWalk } from './key-walk'
 export { LEAD_INS, withLeadIns, type LeadIn } from './lead-in'
+export {
+  ARTICULATIONS,
+  DYNAMICS,
+  EXPRESSION_TEXT,
+  EXPRESSIONS,
+  HAIRPINS,
+  OCTAVE_LINES,
+  ORNAMENTS,
+  PEDALS,
+  hasMarks,
+  writtenShift,
+  type Articulation,
+  type Dynamic,
+  type Expression,
+  type GraceNote,
+  type Hairpin,
+  type NoteMarks,
+  type OctaveLine,
+  type Ornament,
+  type Pedal,
+} from './marks'
+export {
+  BARLINES,
+  barMarksOf,
+  ENDINGS,
+  JUMPS,
+  playOrder,
+  withoutBarMarks,
+  type BarMarks,
+  type Barline,
+  type Ending,
+  type Jump,
+} from './bar-marks'
+export { CLEFS, clefsInForce, HOME_CLEF, type Clef, type HandClefs } from './clef'
+export {
+  DEFAULT_INSTRUMENT,
+  INSTRUMENT_FAMILIES,
+  INSTRUMENT_OF,
+  INSTRUMENTS,
+  instrumentsIn,
+  isInstrument,
+  type Instrument,
+  type InstrumentFamily,
+} from './instrument'

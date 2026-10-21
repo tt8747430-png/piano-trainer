@@ -1,5 +1,6 @@
 import {
   barAt,
+  isHandLayer,
   notesAt,
   notesOf,
   totalTicks,
@@ -49,7 +50,7 @@ export function caretSaid({
     const chord = bar.chords.findLast((placed) => placed.at <= caret - start)
     return { kind: 'at', ...at, what: chord ? chordSymbol(chord.chord) : '' }
   }
-  if (layer !== 'melody' && !bar[layer]) return { kind: 'pattern', ...at, what: '' }
+  if (isHandLayer(layer) && !bar[layer]) return { kind: 'pattern', ...at, what: '' }
   const notes = notesAt(draft, layer, caret)
   const [first] = notes
   if (first) {

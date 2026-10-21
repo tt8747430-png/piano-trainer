@@ -5,13 +5,15 @@ import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useScoreEditorContext } from '../model/editor-context'
 import { TAKES_PAGE } from '../model/use-editor-takes'
+import { RecordButton } from './RecordButton'
 import { RecordPanel } from './RecordPanel'
 import { TakeList } from './TakeList'
 import { WriteTakePage } from './WriteTakePage'
 
 /**
- * The takes (ADR 0028): Record over the caret's bar, and the piece's takes, each heard, written into
- * the score, downloaded or deleted; a take's form to write it is a page of the sheet.
+ * The takes (ADR 0028), opened from the bar's Record: Record over the caret's bar, in the footer, in reach however long the list;
+ * and the piece's takes, each heard, written into the score, downloaded or deleted; a take's form to
+ * write it is a page of the sheet.
  */
 export function RecorderSheet() {
   const { t } = useTranslation('editor')
@@ -26,18 +28,21 @@ export function RecorderSheet() {
       <SheetTrigger
         render={
           <Button
-            variant="surface"
+            variant="ghost"
             size="icon"
-            className="lg:w-auto lg:gap-2 lg:px-4"
+            aria-label={t('recorder.open')}
+            title={t('recorder.open')}
+            className="rounded-full"
             disabled={takes.stage !== 'idle'}
           />
         }
       >
         <CircleDot aria-hidden />
-        {/* Named on a laptop's toolbar, where there is room; its icon alone on a phone. */}
-        <span className="max-lg:sr-only">{t('recorder.open')}</span>
       </SheetTrigger>
-      <SheetContent title={writing ? t('recorder.write') : t('recorder.title')}>
+      <SheetContent
+        title={writing ? t('recorder.write') : t('recorder.title')}
+        footer={writing ? undefined : <RecordButton />}
+      >
         {writing ? (
           <WriteTakePage take={writing} />
         ) : (

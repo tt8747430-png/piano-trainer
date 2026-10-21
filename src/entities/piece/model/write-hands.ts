@@ -1,15 +1,26 @@
 import type { HandNote } from '@/shared/lib/arrangement'
-import { TICKS_PER_BEAT, type Tick } from '@/shared/lib/music'
+import { TICKS_PER_BEAT, type Clef, type Tick } from '@/shared/lib/music'
+import { CLEF_TOKEN } from './parse-hands'
 import { pitchText } from './music'
+import { writeMarks } from './note-marks'
 import { beatsText } from './write-chart'
 
 const noteText = (n: HandNote) => `${pitchText(n)}${n.finger === undefined ? '' : `^${n.finger}`}`
 
-/** A bar's notes struck together: those sharing an onset and a length, lowest first, held ones first. */
+/** A note's marks as its token writes them: `[acc,stacc]`, or nothing. */
+const marksText = (n: HandNote): string => {
+  const written = n.marks ? writeMarks(n.marks) : ''
+  return written === '' ? '' : `[${written}]`
+}
+
+/**
+ * A bar's notes struck together: those sharing an onset, a length and their marks, lowest first,
+ * held ones first.
+ */
 function chordsOf(notes: readonly HandNote[]): HandNote[][] {
   const chords = new Map<string, HandNote[]>()
   for (const n of notes) {
-    const id = `${n.startTick} ${n.durationTicks}`
+    const id = `${n.startTick} ${n.durationTicks} ${marksText(n)}`
     chords.set(id, [...(chords.get(id) ?? []), n])
   }
   return [...chords.values()]
@@ -35,20 +46,31 @@ function barText(notes: readonly HandNote[], barTicks: Tick): string {
     const played = `${chord.map(noteText).join('+')}/${beatsText(first.durationTicks)}`
     if (first.startTick > running) tokens.push(`r/${beatsText(first.startTick - running)}`)
     tokens.push(
-      first.startTick < running
+      (first.startTick < running
         ? `${played}@${beatsText(first.startTick + TICKS_PER_BEAT)}`
-        : played,
+        : played) + marksText(first),
     )
     running = first.startTick + first.durationTicks
   }
   return tokens.join(' ')
 }
 
-/** A hand as the piece writes it, bar by bar (`-` where the pattern plays); nothing when no bar is written. */
+/**
+ * A hand as the piece writes it, bar by bar (`-` where the pattern plays), each bar that changes its
+ * staff's clef starting `clef:` (ADR 0069); nothing when no bar is written or changes its clef.
+ */
 export function writeHand(
   bars: readonly (readonly HandNote[] | null)[],
   barTicks: readonly Tick[],
+  clefs: readonly (Clef | undefined)[] = [],
 ): string | undefined {
-  if (bars.every((bar) => bar === null)) return undefined
-  return bars.map((bar, i) => (bar === null ? '-' : barText(bar, barTicks[i] ?? 0))).join(' | ')
+  if (bars.every((bar) => bar === null) && clefs.every((clef) => clef === undefined))
+    return undefined
+  return bars
+    .map((bar, i) => {
+      const clef = clefs[i]
+      const text = bar === null ? '-' : barText(bar, barTicks[i] ?? 0)
+      return clef ? `${CLEF_TOKEN}${clef} ${text}` : text
+    })
+    .join(' | ')
 }

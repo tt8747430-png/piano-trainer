@@ -96,12 +96,16 @@ function LessonEnd({ step, track }: { step: StepId; track: LessonTrack }) {
   )
 }
 
-/** A link in a lesson's place line: what it is part of, by name. */
+/**
+ * A link in a lesson's place line: what it is part of, by name, a line of text whose target reaches
+ * past it to a finger's size (44px), as a switch's does: mostly downwards, the screen's bar being
+ * just above it.
+ */
 export function PlaceLink({ children, ...link }: LinkProps & { children: ReactNode }) {
   return (
     <Link
       {...link}
-      className="rounded-sm font-semibold text-foreground underline-offset-4 hover:underline"
+      className="relative rounded-sm font-semibold text-foreground underline-offset-4 after:absolute after:-inset-x-2 after:-top-1.5 after:-bottom-4.5 hover:underline"
     >
       {children}
     </Link>

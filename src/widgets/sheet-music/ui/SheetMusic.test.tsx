@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import type { ComponentProps } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { TWO_BARS } from '@/features/practice/testing/performances'
 import type { BarRange } from '@/features/practice'
@@ -9,7 +10,12 @@ import { SheetMusic } from './SheetMusic'
 function renderSheet({
   current = 0,
   loop = null,
-}: { current?: number; loop?: BarRange | null } = {}) {
+  shown,
+}: {
+  current?: number
+  loop?: BarRange | null
+  shown?: ComponentProps<typeof SheetMusic>['view']
+} = {}) {
   const onJump = vi.fn()
   const onLoopChange = vi.fn()
   const view = render(
@@ -24,12 +30,25 @@ function renderSheet({
       muted={undefined}
       onJump={onJump}
       onLoopChange={onLoopChange}
+      {...(shown ? { view: shown } : {})}
     />,
   )
   return { ...view, onJump, onLoopChange }
 }
 
 describe('SheetMusic', () => {
+  it('lays the score out in the chart’s lines, each with its bars, the chord names hidden where asked', async () => {
+    renderSheet({
+      current: 5,
+      shown: { layout: 'scroll', chordNames: false, melodyStaff: true, hidden: ['bass'] },
+    })
+    expect(await screen.findByRole('button', { name: 'Bar 2: G' })).toHaveAttribute(
+      'aria-current',
+      'step',
+    )
+    expect(screen.queryByText('G', { selector: 'span' })).not.toBeInTheDocument()
+  })
+
   it('names each bar by its chords, the cursor’s marked', async () => {
     renderSheet({ current: 5 })
     expect(await screen.findByRole('region', { name: 'Sheet music' })).toBeInTheDocument()

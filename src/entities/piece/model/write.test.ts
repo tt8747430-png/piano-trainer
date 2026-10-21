@@ -5,10 +5,11 @@ import {
   midi,
   note,
   parseChordSymbol,
+  TICKS_PER_BEAT,
   type Key,
 } from '@/shared/lib/music'
 import type { ChartBar, HandNote, Melody } from '@/shared/lib/arrangement'
-import { ticksIn } from './beats'
+import { readBeats, ticksIn } from './beats'
 import { keyText, musicOf, pitchText, sameMusic } from './music'
 import { parseChart } from './parse-chart'
 import { parseMelody } from './parse-melody'
@@ -29,10 +30,30 @@ const firstBar = (line: string) => parseChart(testSong([line])).sections[0]?.lin
 
 describe('beatsText', () => {
   it('writes ticks as beats in the shortest decimal that reads back as them', () => {
-    expect([24, 18, 6, 3, 27].map(beatsText)).toEqual(['2', '1.5', '.5', '.25', '2.25'])
-    expect(beatsText(4)).toBe('.3333333333')
-    expect(ticksIn(Number(beatsText(4)))).toBe(4)
-    expect(ticksIn(Number(beatsText(20)))).toBe(20)
+    expect([48, 36, 12, 6, 3, 54].map(beatsText)).toEqual(['2', '1.5', '.5', '.25', '.125', '2.25'])
+  })
+
+  it('writes thirds of a beat as a fraction in its lowest terms, which reads back as them', () => {
+    expect([8, 16, 4, 40].map(beatsText)).toEqual(['1:3', '2:3', '1:6', '5:3'])
+    for (const ticks of [8, 4, 40]) expect(ticksIn(readBeats(beatsText(ticks)) ?? 0)).toBe(ticks)
+  })
+})
+
+describe('writeHand with marks', () => {
+  it('writes a token’s marks after its beats, and reads them back', () => {
+    const text = 'C4+E4/1[acc,stacc] G4/1@2[tr] r/1 A4/1[8va,(,p]'
+    const parsed = parseChart(testSong(['C'], { hands: { rh: text } }))
+    const bar = parsed.sections[0]?.lines[0]?.[0]
+    expect(writeHand([bar?.hands?.rh ?? []], [4 * TICKS_PER_BEAT])).toBe(
+      'C4+E4/1[acc,stacc] G4/1[tr] r/1 A4/1[(,8va,p]',
+    )
+  })
+
+  it('writes notes struck together with other marks as tokens of their own', () => {
+    const text = 'C4/4[acc] E4/4@1'
+    const parsed = parseChart(testSong(['C'], { hands: { rh: text } }))
+    const bar = parsed.sections[0]?.lines[0]?.[0]
+    expect(writeHand([bar?.hands?.rh ?? []], [4 * TICKS_PER_BEAT])).toBe('C4/4[acc] E4/4@1')
   })
 })
 
@@ -63,13 +84,13 @@ describe('writeBar', () => {
 
   it('reads back thirds of a beat exactly', () => {
     const written = writeBar(bar(['C', 1 / 3], ['G', 11 / 3]), '4/4')
-    expect(firstBar(written)?.chords.map((chord) => chord.beats * 12)).toEqual([4, 44])
+    expect(firstBar(written)?.chords.map((chord) => chord.beats * 24)).toEqual([8, 88])
   })
 })
 
 const bars4 = [
-  { startTick: 0, ticks: 48 },
-  { startTick: 48, ticks: 48 },
+  { startTick: 0, ticks: 96 },
+  { startTick: 96, ticks: 96 },
 ]
 const melodyNote = (m: number, startTick: number, durationTicks: number) => ({
   midi: midi(m),
@@ -80,20 +101,28 @@ const melodyNote = (m: number, startTick: number, durationTicks: number) => ({
 
 describe('writeMelody', () => {
   it('writes notes and the rests between them, a bar line where one falls between notes', () => {
-    const melody: Melody = [melodyNote(64, 12, 24), melodyNote(64, 48, 48)]
+    const melody: Melody = [melodyNote(64, 24, 48), melodyNote(64, 96, 96)]
     expect(writeMelody(melody, bars4)).toBe('r/1 E4/2 r/1 | E4/4')
   })
 
   it('writes a note across a bar line as one note', () => {
-    expect(writeMelody([melodyNote(61, 24, 48)], bars4)).toBe('r/2 C#4/4')
+    expect(writeMelody([melodyNote(61, 48, 96)], bars4)).toBe('r/2 C#4/4')
   })
 
   it('writes nothing for no notes', () => {
     expect(writeMelody([], bars4)).toBeUndefined()
   })
 
+  it('writes a note’s marks after its beats, and reads them back', () => {
+    const text = 'E4/1[stacc,p] r/1 E4/2[ferm]'
+    const melody = parseMelody(testSong(['C'], { melody: text }))
+    expect(melody?.[0]?.marks).toEqual({ articulations: ['staccato'], dynamic: 'p' })
+    expect(writeMelody(melody ?? [], bars4)).toBe(text)
+    expect(() => parseMelody(testSong(['C'], { melody: 'r/1[acc]' }))).toThrow()
+  })
+
   it('reads back as written', () => {
-    const melody: Melody = [melodyNote(64, 0, 4), melodyNote(61, 4, 44), melodyNote(64, 60, 12)]
+    const melody: Melody = [melodyNote(64, 0, 8), melodyNote(61, 8, 88), melodyNote(64, 120, 24)]
     const text = writeMelody(melody, bars4)
     expect(parseMelody(testSong(['C C'], { melody: text }))).toEqual(melody)
   })
@@ -118,28 +147,28 @@ describe('writeHand', () => {
       [
         null,
         [
-          handNote(48, 0, 48, 1),
-          handNote(52, 12, 12),
-          handNote(55, 12, 12, 3),
-          handNote(52, 24, 12),
-          handNote(55, 24, 12),
+          handNote(48, 0, 96, 1),
+          handNote(52, 24, 24),
+          handNote(55, 24, 24, 3),
+          handNote(52, 48, 24),
+          handNote(55, 48, 24),
         ],
       ],
-      [48, 48],
+      [96, 96],
     )
     expect(written).toBe('- | C3^1/4 E3+G3^3/1@2 E3+G3/1')
   })
 
   it('writes a written bar of silence as a rest, and nothing for a hand written nowhere', () => {
-    expect(writeHand([[], null], [48, 48])).toBe('r/4 | -')
-    expect(writeHand([null, null], [48, 48])).toBeUndefined()
+    expect(writeHand([[], null], [96, 96])).toBe('r/4 | -')
+    expect(writeHand([null, null], [96, 96])).toBeUndefined()
   })
 
   it('reads back as written', () => {
-    const notes = [handNote(48, 0, 72), handNote(52, 24, 12)]
-    const text = writeHand([notes, [handNote(55, 36, 12)]], [48, 48])
+    const notes = [handNote(48, 0, 144), handNote(52, 48, 24)]
+    const text = writeHand([notes, [handNote(55, 72, 24)]], [96, 96])
     const bars = parseChart(testSong(['C G'], { hands: { lh: text } })).sections[0]?.lines[0]
-    expect(bars?.map((read) => read.hands?.lh)).toEqual([notes, [handNote(55, 36, 12)]])
+    expect(bars?.map((read) => read.hands?.lh)).toEqual([notes, [handNote(55, 72, 24)]])
   })
 })
 

@@ -9,6 +9,10 @@ export const songs: LocaleResources['songs'] = {
   learned: 'Выучено',
   empty: 'Ничего не найдено.',
   yours: 'Ваши песни',
+  mineEmpty: {
+    title: 'Своих песен пока нет',
+    description: 'Запишите песню аккордами или сыграйте её на клавишах.',
+  },
   newSong: 'Новая песня',
   making: {
     title: 'Новая песня',
@@ -22,8 +26,9 @@ export const songs: LocaleResources['songs'] = {
   shared: {
     title: 'Песня по ссылке',
     reading: 'Читаем песню…',
-    facts: '{{key}} · {{meter}} · {{tempo}} уд/мин',
+    facts: '{{key}} · {{meter}} · {{tempo}} уд/мин',
     add: 'Добавить к вашим песням',
+    says: 'Добавьте её к вашим песням, чтобы разучивать.',
     none: 'В этой ссылке нет песни: возможно, она обрезана.',
     toSongs: 'К песням',
   },

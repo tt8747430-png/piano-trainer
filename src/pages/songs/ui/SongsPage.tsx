@@ -1,4 +1,5 @@
 import { useNavigate, useSearch } from '@tanstack/react-router'
+import { ListMusic, Plus } from 'lucide-react'
 import { useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SONG_COLLECTIONS, useRepertoire } from '@/entities/piece'
@@ -7,7 +8,13 @@ import { useViewChange } from '@/shared/lib'
 import { FloatingActions, ScreenHeader, SearchField } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Toggle } from '@/shared/ui/primitives/toggle'
-import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle,
+} from '@/shared/ui/primitives/empty'
 import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/primitives/tabs'
 import { PieceList } from '@/widgets/piece-list'
 import type { SongsFilter, SongsShelf } from '../model/songs-filter'
@@ -15,8 +22,9 @@ import { songsView } from '../model/songs-view'
 import { NewSongSheet } from './NewSongSheet'
 
 /**
- * Songs: a search and With chords (no song whose chart is still to come), the collections as tabs (the learner's own songs first, All before them), and the
- * songs as cards in as many columns as the width holds, under their collection while All shows.
+ * Songs: the collections as tabs in its bar (the learner's own songs first, All before them), a
+ * search and With chords (no song whose chart is still to come), and the songs as cards in as many
+ * columns as the width holds, under their collection while All shows; New song floats.
  */
 export function SongsPage() {
   const { t } = useTranslation('songs')
@@ -47,8 +55,26 @@ export function SongsPage() {
   }))
 
   return (
-    <div className="flex flex-col gap-4">
-      <ScreenHeader title={t('title')} />
+    <Tabs
+      value={search.collection}
+      onValueChange={(next: unknown) => {
+        if (isShelf(next)) set({ collection: next })
+      }}
+      className="gap-4"
+    >
+      <ScreenHeader
+        title={t('title')}
+        tabs={
+          <TabsList aria-label={t('collection')} className="-mx-gutter px-gutter">
+            <TabsTrigger value="all">{t('all')}</TabsTrigger>
+            {tabs.map((shelf) => (
+              <TabsTrigger key={shelf.id} value={shelf.id}>
+                {shelf.name}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        }
+      />
       <div className="flex items-center gap-2 lg:max-w-xl">
         <div className="min-w-0 flex-1">
           <SearchField
@@ -58,42 +84,52 @@ export function SongsPage() {
             screen={t('title')}
           />
         </div>
-        <Toggle pressed={search.withChords} onPressedChange={(withChords) => set({ withChords })}>
-          {t('withChords')}
+        {/* Its icon alone on a phone, beside a search that needs the width. */}
+        <Toggle
+          pressed={search.withChords}
+          onPressedChange={(withChords) => set({ withChords })}
+          aria-label={t('withChords')}
+          title={t('withChords')}
+          className="max-sm:w-11 max-sm:px-0"
+        >
+          <ListMusic aria-hidden />
+          <span className="max-sm:hidden">{t('withChords')}</span>
         </Toggle>
       </div>
-      <Tabs
-        value={search.collection}
-        onValueChange={(next: unknown) => {
-          if (isShelf(next)) set({ collection: next })
-        }}
-      >
-        <TabsList aria-label={t('collection')} className="-mx-gutter px-gutter">
-          <TabsTrigger value="all">{t('all')}</TabsTrigger>
-          {tabs.map((shelf) => (
-            <TabsTrigger key={shelf.id} value={shelf.id}>
-              {shelf.name}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-        {groups.length > 0 ? (
-          <PieceList groups={groups} />
-        ) : (
-          <Empty>
-            <EmptyHeader>
-              <EmptyTitle>{t('empty')}</EmptyTitle>
-            </EmptyHeader>
-            <EmptyContent>
-              <Button variant="soft" onClick={clear}>
-                {t('clearFilters')}
-              </Button>
-            </EmptyContent>
-          </Empty>
-        )}
-      </Tabs>
+      {groups.length > 0 ? (
+        <PieceList groups={groups} />
+      ) : search.collection === 'mine' && pieces.ownSongs.length === 0 ? (
+        <Empty>
+          <EmptyHeader>
+            <EmptyTitle>{t('mineEmpty.title')}</EmptyTitle>
+            <EmptyDescription>{t('mineEmpty.description')}</EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <NewSongSheet
+              trigger={
+                <Button variant="soft">
+                  <Plus data-icon="inline-start" aria-hidden />
+                  {t('newSong')}
+                </Button>
+              }
+            />
+          </EmptyContent>
+        </Empty>
+      ) : (
+        <Empty>
+          <EmptyHeader>
+            <EmptyTitle>{t('empty')}</EmptyTitle>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button variant="soft" onClick={clear}>
+              {t('clearFilters')}
+            </Button>
+          </EmptyContent>
+        </Empty>
+      )}
       <FloatingActions>
         <NewSongSheet />
       </FloatingActions>
-    </div>
+    </Tabs>
   )
 }

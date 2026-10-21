@@ -25,7 +25,11 @@ export function usePlayer(
       resolveChoice(piece, { key, pattern, rh, lh, inversion, nearest, chordSize }, melody, book),
     [piece, key, pattern, rh, lh, inversion, nearest, chordSize, melody, book],
   )
-  const performance = useMemo(() => arrangePiece(piece, choice, book), [piece, choice, book])
+  // The Player plays the repeats taken, the bars unrolled as they are played.
+  const performance = useMemo(
+    () => arrangePiece(piece, choice, book, { unfold: true }),
+    [piece, choice, book],
+  )
   const headings = usePieceHeadings(piece)
   useEffect(() => recordPractised(progress, piece.id, new Date()), [progress, piece.id])
   // The recording plays along in the piece's own key only: another would put the voice over other chords.

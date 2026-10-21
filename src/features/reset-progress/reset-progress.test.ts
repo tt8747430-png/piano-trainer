@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, expect, it } from 'vitest'
 import { createProgressStore, EMPTY_PROGRESS } from '@/entities/progress'
 import { recordPractised } from '@/features/record-practised'

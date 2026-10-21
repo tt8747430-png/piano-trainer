@@ -10,18 +10,22 @@ export interface Span {
 
 /** How a voice's beats are written: which are triplet beats, and where a boundary is written. */
 export interface VoiceGrid {
-  /** A boundary's written tick: itself, or the nearest 3 ticks in a beat on neither grid. */
+  /** A boundary's written tick: itself, or the nearest 32nd in a beat on neither grid. */
   place(tick: Tick): Tick
   /** Whether the beat a tick lies in is written in triplets. */
   isTriplet(tick: Tick): boolean
 }
 
 const BEAT = TICKS_PER_BEAT
+/** The binary grid: a 32nd. */
+const BINARY = BEAT / 8
+/** The triplet grid: a triplet 16th. */
+const TRIPLET = BEAT / 6
 const beatOf = (tick: Tick) => Math.floor(tick / BEAT)
 
 /**
- * A voice's grid from its spans: a beat whose inner boundaries all lie on the 3-tick grid is binary;
- * on the 2-tick grid, a triplet beat; on neither, its boundaries move to the nearest 3 ticks. In x/8
+ * A voice's grid from its spans: a beat whose inner boundaries all lie on the 32nds' grid is binary;
+ * on the triplet 16ths', a triplet beat; on neither, its boundaries move to the nearest 32nd. In x/8
  * every tick is written as it is.
  */
 export function voiceGrid(spans: readonly Span[], meter: Meter): VoiceGrid {
@@ -37,12 +41,12 @@ export function voiceGrid(spans: readonly Span[], meter: Meter): VoiceGrid {
   const triplets = new Set<number>()
   const offGrid = new Set<number>()
   for (const [beat, positions] of inner) {
-    if (positions.every((at) => at % 3 === 0)) continue
-    if (positions.every((at) => at % 2 === 0)) triplets.add(beat)
+    if (positions.every((at) => at % BINARY === 0)) continue
+    if (positions.every((at) => at % TRIPLET === 0)) triplets.add(beat)
     else offGrid.add(beat)
   }
   return {
-    place: (tick) => (offGrid.has(beatOf(tick)) ? Math.round(tick / 3) * 3 : tick),
+    place: (tick) => (offGrid.has(beatOf(tick)) ? Math.round(tick / BINARY) * BINARY : tick),
     isTriplet: (tick) => triplets.has(beatOf(tick)),
   }
 }
@@ -67,7 +71,7 @@ function allowed(
     return at % BEAT === 0 && endsWell && !crossesMiddle
   }
   const beatStart = beatOf(at) * BEAT
-  const undotted = duration.dots === 1 ? (length * 2) / 3 : length
+  const undotted = ticksOf({ ...duration, dots: 0 }, meter)
   return at + length <= beatStart + BEAT && (at - beatStart) % (undotted / 2) === 0
 }
 

@@ -48,6 +48,13 @@ describe('parseMidiMessage', () => {
     expect(parseMidiMessage([0xb0, 64, value], 7, true)).toMatchObject({ down })
   })
 
+  it.each([[[0xb0, 120, 0]], [[0xb3, 123, 0]]])(
+    'reads %j (All Sound Off, All Notes Off) as letting go of every key',
+    (data) => {
+      expect(parseMidiMessage(data, 9)).toEqual({ kind: 'all-off', time: 9 })
+    },
+  )
+
   it.each([[[0xb0, 1, 127]], [[0x90, 60]], [[]], [[0x90, 200, 100]], [[0xe0, 0, 64]]])(
     'ignores %j',
     (data) => {

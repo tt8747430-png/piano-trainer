@@ -25,6 +25,7 @@ export {
   SpeedDial,
   SpeedDialAction,
 } from './FloatingActions'
+export { FloatingBar, FloatingBarButton, FloatingBarPlay } from './FloatingBar'
 export { useFloatingLabels, type FloatingPlace } from './floating-context'
 export { RankMark } from './RankMark'
 export { Listbox } from './Listbox'
@@ -67,11 +68,21 @@ export { ScreenHeader } from './ScreenHeader'
 export { SearchField } from './SearchField'
 export { usePageHeading } from './use-page-heading'
 export { Segmented } from './Segmented'
+export { SheetViewIcon } from './SheetViewIcon'
 export { Sheet, SheetContent, SheetTrigger } from './Sheet'
 export { SettingField } from './SettingField'
 export { SwitchRow } from './SwitchRow'
 export { ToggleChips } from './ToggleChips'
 export { ToggleGrid, ToggleTile } from './ToggleTile'
 export { ToolButton } from './ToolButton'
+export {
+  ToolKey,
+  ToolPalette,
+  ToolPaletteActions,
+  ToolPaletteFoot,
+  ToolPalettePanel,
+  ToolPaletteTab,
+  ToolPaletteTabs,
+} from './ToolPalette'
 export { ToolDivider } from './ToolDivider'
 export { TypedField } from './TypedField'

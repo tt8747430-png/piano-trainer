@@ -1,11 +1,10 @@
 import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
-import { scaleShown } from '@/features/play-example'
 import { noteFromParam, noteName, spellScale } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, runSounds } from '@/shared/lib/schedule'
 import { Dropdown, Labelled, Segmented } from '@/shared/ui'
-import { scaleRunOf } from '../model/scale-run'
+import { runShown, scaleRunOf } from '../model/scale-run'
 import type { ScaleView } from '../model/scale-view'
 import { PlayUpDown } from './PlayUpDown'
 import { ScaleExercises } from './ScaleExercises'
@@ -39,23 +38,11 @@ export function RunView({
     () => scaleRunOf({ root, kind, start, fingering, rhythm, hands }),
     [root, kind, start, fingering, rhythm, hands],
   )
-  const hand = hands === 'lh' ? 'lh' : 'rh'
   const tonic = noteFromParam(root)
   const tones = spellScale(tonic, kind)
   return (
     <ScaleLayout
-      keyboard={
-        <PinnedKeyboard
-          shown={{
-            keys: run.music.notes.map((n) => n.midi),
-            // The keys coming down marked too: melodic minor's natural 6th and 7th are no blank keys.
-            marks: new Map([
-              ...scaleShown(run.down.placed, run.down.fingers[hand]).marks,
-              ...scaleShown(run.placed, run.fingers[hand]).marks,
-            ]),
-          }}
-        />
-      }
+      keyboard={<PinnedKeyboard shown={runShown(run, hands)} />}
       name={name}
       facts={facts}
       action={<PlayUpDown sounds={runSounds(run.music, scale.tempo)} />}

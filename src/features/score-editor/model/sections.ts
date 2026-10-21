@@ -1,3 +1,4 @@
+import type { PatternId } from '@/entities/pattern'
 import type { SectionKind } from '@/entities/piece'
 import type { Draft, DraftSection } from './draft'
 import { slotsOf, withSlots, type Heading } from './structure'
@@ -10,7 +11,9 @@ const sameHeading = (a: Heading, b: Heading): boolean =>
   a.label === b.label &&
   a.last === b.last &&
   a.detail?.en === b.detail?.en &&
-  a.detail?.ru === b.detail?.ru
+  a.detail?.ru === b.detail?.ru &&
+  a.key === b.key &&
+  a.pattern === b.pattern
 
 /**
  * A new section's heading as its kind and place name it: a verse the number after the verses before
@@ -82,13 +85,31 @@ export function setSectionKind(draft: Draft, index: number, kind: SectionKind): 
   const section = draft.sections[index]
   if (!section) return draft
   const others = draft.sections.filter((other) => other !== section)
-  const heading = named(kind, draft.sections.slice(0, index), others)
+  // Named afresh, it keeps what it plays: its key and its own pattern.
+  const { key, pattern } = section.heading
+  const heading: Heading = {
+    ...named(kind, draft.sections.slice(0, index), others),
+    ...(key === undefined ? {} : { key }),
+    ...(pattern === undefined ? {} : { pattern }),
+  }
   if (sameHeading(heading, section.heading)) return draft
   const renamed: Draft = {
     ...draft,
     sections: draft.sections.map((other) => (other === section ? { ...other, heading } : other)),
   }
   return withVerse(withoutVerse(renamed, index, section.heading), index, heading)
+}
+
+/** Section `index` playing a pattern of its own (ADR 0065), or the piece's again (`null`). */
+export function setSectionPattern(draft: Draft, index: number, pattern: PatternId | null): Draft {
+  const section = draft.sections[index]
+  if (!section || (section.heading.pattern ?? null) === pattern) return draft
+  const { pattern: _was, ...rest } = section.heading
+  const heading: Heading = pattern === null ? rest : { ...rest, pattern }
+  return {
+    ...draft,
+    sections: draft.sections.map((other) => (other === section ? { ...other, heading } : other)),
+  }
 }
 
 /** A new section from bar `index`, of the kind it was in, named next; a bar starting one changes nothing. */

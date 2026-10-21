@@ -1,8 +1,8 @@
-/** The domain's unit of time: 12 per beat, so 16ths (3) and triplet 8ths (4) are whole. */
+/** The domain's unit of time: 24 per beat, so 32nds (3), 16ths (6) and triplet 8ths (8) are whole. */
 export type Tick = number
-export const TICKS_PER_BEAT = 12
+export const TICKS_PER_BEAT = 24
 
-/** Beats in ticks, to the nearest tick (a third of a beat written `.3333` is 4). */
+/** Beats in ticks, to the nearest tick (a third of a beat written `.3333` is 8). */
 export const beatsToTicks = (beats: number): Tick => Math.round(beats * TICKS_PER_BEAT)
 
 export const METERS = ['2/4', '3/4', '4/4', '6/8', '12/8'] as const

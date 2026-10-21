@@ -29,4 +29,11 @@ describe('locales', () => {
   it('leave no string empty in either language', () => {
     for (const [key, text] of [...leaves(en), ...leaves(ru)]) expect(text.trim(), key).not.toBe('')
   })
+
+  it('name every way between two chords in Russian', () => {
+    const russian = new Map(leaves(ru.practice.passingChords.kind))
+    for (const [key, text] of leaves(en.practice.passingChords.kind)) {
+      if (key.endsWith('.name')) expect(russian.get(key), key).not.toBe(text)
+    }
+  })
 })

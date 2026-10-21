@@ -41,7 +41,11 @@ describe('parseChordSymbol', () => {
   it.each([
     ['D/F#', { root: note('D'), quality: 'maj', bass: note('F', 1) }],
     ['F#m/D#', { root: note('F', 1), quality: 'min', bass: note('D', 1) }],
-    ['D#/G', { root: note('D', 1), quality: 'maj', bass: note('F', 2) }],
+    ['F#m/Db', { root: note('F', 1), quality: 'min', bass: note('C', 1) }],
+    // A chord tone with a double accidental, or a B♯ for a C, stays as typed.
+    ['D#/G', { root: note('D', 1), quality: 'maj', bass: note('G') }],
+    ['Cdim7/A', { root: note('C'), quality: 'o7', bass: note('A') }],
+    ['E+/C', { root: note('E'), quality: 'aug', bass: note('C') }],
     ['C6/9', { root: note('C'), quality: 's69' }],
     ['C6/9/E', { root: note('C'), quality: 's69', bass: note('E') }],
     ['Am7/G', { root: note('A'), quality: 'm7', bass: note('G') }],
@@ -49,7 +53,7 @@ describe('parseChordSymbol', () => {
     expect(parseChordSymbol(symbol)).toEqual(chord)
   })
 
-  it.each(['H7', 'Cmaj13', '', 'C/X', '7', 'C11'])(
+  it.each(['H7', 'Cmaj13', '', 'C/X', '7', 'C12'])(
     'names the symbol it cannot read: %j',
     (symbol) => {
       let caught: unknown
@@ -74,6 +78,23 @@ describe('the chords Gorshkov prints', () => {
 })
 
 describe('readChordSymbol', () => {
+  it.each([
+    ['Cmin7', 'm7'],
+    ['CmMaj7', 'mM7'],
+    ['CmM7', 'mM7'],
+    ['Cm(Maj7)', 'mM7'],
+    ['C11', 'n11'],
+    ['C69', 's69'],
+    ['C9sus4', 'sus9'],
+    ['C9sus', 'sus9'],
+    ['C7(b9)', 'b9'],
+    ['Cadd11', 'add11'],
+    ['Caug7', 's5'],
+    ['Cm7-5', 'hd'],
+  ])('reads the chord %s as sheets write it', (symbol, quality) => {
+    expect(readChordSymbol(symbol)).toEqual({ root: note('C'), quality })
+  })
+
   it('reads what is typed, spaces around it left out, and nothing it cannot read', () => {
     expect(readChordSymbol(' Dm7 ')).toEqual({ root: note('D'), quality: 'm7' })
     expect(readChordSymbol('Dm7/')).toBeNull()

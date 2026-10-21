@@ -11,8 +11,8 @@ const chordPulse: Lesson = {
   id: 'chord-pulse',
   title: { en: 'Chord pulse', ru: 'Аккордовая пульсация' },
   summary: {
-    en: 'Turn chords into texture: pulse, added notes, broken chords, figuration.',
-    ru: 'Превращайте аккорды в фактуру: пульсация, добавочные звуки, ломаные аккорды, фигурация.',
+    en: 'Turn plain chords into an accompaniment: pulse, an added note, broken chords and figuration.',
+    ru: 'Превратить простые аккорды в аккомпанемент: пульсация, добавочный звук, ломаные аккорды и фигурация.',
   },
   sections: [
     {
@@ -21,8 +21,8 @@ const chordPulse: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Chords alone are not yet an accompaniment. Four elements turn harmony into texture.',
-            ru: 'Аккорды сами по себе ещё не аккомпанемент. Гармонию превращают в фактуру четыре элемента.',
+            en: 'Chords alone are not yet an accompaniment. Four elements turn harmony into texture, the way the chords are laid out in time:',
+            ru: 'Аккорды сами по себе ещё не аккомпанемент. Гармонию превращают в фактуру, то есть в способ изложения аккордов во времени, четыре элемента:',
           },
         },
         { kind: 'chords', symbols: ['C', 'G', 'Am', 'F'] },
@@ -43,15 +43,15 @@ const chordPulse: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Start plain and add movement as the song grows. Find its sections, its build and its peak first.',
-            ru: 'Начинайте просто и добавляйте движение по мере развития песни. Сначала найдите разделы, нарастание и кульминацию.',
+            en: 'Start plain and add movement as the song grows. First find its sections, where it builds and where it peaks.',
+            ru: 'Начинайте просто и добавляйте движение по мере развития песни. Сначала найдите её разделы, нарастание и кульминацию.',
           },
         },
         { kind: 'pattern', pattern: 'block', piece: 'romashki' },
         {
           kind: 'note',
           text: {
-            en: 'Every device at once leaves the song nothing to grow into.',
+            en: 'Use every device at once and the song has nothing left to grow into.',
             ru: 'Если использовать всё сразу, песне некуда развиваться.',
           },
         },
@@ -62,9 +62,10 @@ const chordPulse: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'Chord pulse:', ru: 'Аккордовая пульсация:' },
           text: {
-            en: 'A chord on every beat. Play beats 1 and 4 brighter, 2 and 3 softer.',
-            ru: 'Аккорд на каждую долю. Первую и четвёртую доли играйте ярче, вторую и третью — мягче.',
+            en: 'a chord on every beat. Play beats 1 and 4 brighter, beats 2 and 3 softer.',
+            ru: 'аккорд на каждую долю. Первую и четвёртую доли играйте ярче, вторую и третью мягче.',
           },
         },
         { kind: 'pattern', pattern: 'g1', piece: 'romashki' },
@@ -76,8 +77,8 @@ const chordPulse: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Give each chord a fourth note. A major triad takes its 2nd, add2. A minor triad grows to a 7th or a 9th.',
-            ru: 'Добавьте в аккорд четвёртый звук. Мажорное трезвучие получает вторую ступень, add2. Минорное расширяется до септ- или нонаккорда.',
+            en: 'Give each chord a fourth note. A major triad takes its 2nd, written add2. A minor triad grows into a 7th or a 9th chord.',
+            ru: 'Добавьте в аккорд четвёртый звук. Мажорное трезвучие получает вторую ступень, это add2. Минорное расширяется до септ- или нонаккорда.',
           },
         },
         { kind: 'pattern', pattern: 'g2', piece: 'romashki' },
@@ -93,7 +94,7 @@ const chordPulse: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'A major triad can also grow to Maj7 or Maj9.',
+            en: 'A major triad can also grow into Maj7 or Maj9.',
             ru: 'Мажорное трезвучие можно расширить и до Maj7 или Maj9, если позволяет гармония.',
           },
         },
@@ -124,16 +125,17 @@ const chordPulse: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'Harmonic figuration:', ru: 'Гармоническая фигурация:' },
           text: {
-            en: 'The chord’s notes played in turn.',
-            ru: 'Звуки аккорда по очереди.',
+            en: 'the chord’s notes played one after another.',
+            ru: 'звуки аккорда, сыгранные один за другим.',
           },
         },
         { kind: 'pattern', pattern: 'g4', piece: 'romashki' },
         {
           kind: 'note',
           text: {
-            en: 'Pulse on beats 1 to 3 and figuration on beat 4 mix the two well.',
+            en: 'A good mix: pulse on beats 1 to 3, then figuration on beat 4.',
             ru: 'Хорошо сочетать пульсацию на первые три доли и фигурацию на четвёртую.',
           },
         },
@@ -141,13 +143,13 @@ const chordPulse: Lesson = {
       ],
     },
     {
-      heading: { en: 'A ii–V on a held note', ru: '2-5 на долгой ноте' },
+      heading: { en: 'ii and V over a held note', ru: '2-5 на долгой ноте' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Where the melody holds a long note on V before I, the bar can take the whole ii–V. Gorshkov’s «What a Friend» writes II and V over its G, then I on C.',
-            ru: 'Там, где мелодия тянет долгую ноту на V перед I, такт может вместить весь оборот 2-5. В «What a Friend» Горшков пишет II и V над его G, затем I на C.',
+            en: 'When the melody holds a long note on V before I, that bar can carry both ii and V. In “What a Friend”, Gorshkov writes II and V over the G, then I on C.',
+            ru: 'Когда мелодия тянет долгую ноту на V перед I, в этот такт помещается весь оборот 2-5. В «What a Friend» Горшков пишет II и V над соль, затем I на до.',
           },
         },
         { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
@@ -159,8 +161,8 @@ const chordPulse: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The verse pulses in quarters with add2. The chorus breaks into eighths.',
-            ru: 'Куплет пульсирует четвертями с add2. Припев раскладывается восьмыми.',
+            en: 'The verse pulses in quarter notes, with add2 chords. The chorus breaks the chords into eighths.',
+            ru: 'Куплет пульсирует четвертями, с аккордами add2. В припеве аккорды раскладываются восьмыми.',
           },
         },
         { kind: 'chords', symbols: ['A', 'F♯m7', 'D', 'Bm7', 'Esus4'] },
@@ -188,7 +190,7 @@ const chordPulse: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: '«What a Friend» in the Player', ru: '«What a Friend» в плеере' },
+          title: { en: '“What a Friend” in the Player', ru: '«What a Friend» в плеере' },
           target: { opens: 'piece', piece: 'wafriend' },
         },
       ],

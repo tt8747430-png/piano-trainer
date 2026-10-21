@@ -5,19 +5,10 @@ import { entryTitles, pieceKey, selectHasVersion, usePieces, type Entry } from '
 import { useLocale } from '@/shared/i18n'
 import { keySymbol } from '@/shared/lib/music'
 
-/** A fact as a small printed label: named for a screen reader, its value alone on screen. */
-function FactChip({ term, children }: { term: string; children: string }) {
-  return (
-    <div className="rounded-lg border border-border bg-card px-3 py-1">
-      <dt className="sr-only">{term}</dt>
-      <dd className="font-semibold tabular-nums">{children}</dd>
-    </div>
-  )
-}
-
 /**
- * A song's or listing's facts under its bar (`PieceHeader`), in a line: its second title, then its
- * key and meter (and Your version, where the learner has one) as labels, and its stage's mark.
+ * A song's or listing's facts under its bar (`PieceHeader`), in one quiet line that reads and is not
+ * pressed: its second title, then its key, meter and tempo, named for a screen reader, its stage's mark, and
+ * Your version where the learner has one.
  */
 export function PieceFacts({ entry }: { entry: Entry }) {
   const { t } = useTranslation('piece')
@@ -26,12 +17,31 @@ export function PieceFacts({ entry }: { entry: Entry }) {
   const stage = entry.kind === 'listing' ? undefined : pieceStage(entry.id)
   const hasVersion = usePieces((state) => selectHasVersion(state, entry.id))
   return (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-      {secondary ? <p className="text-lg text-muted-foreground">{secondary}</p> : null}
-      <dl className="flex flex-wrap items-center gap-2">
-        <FactChip term={t('key')}>{keySymbol(pieceKey(entry))}</FactChip>
-        <FactChip term={t('meter')}>{entry.meter}</FactChip>
-        {hasVersion ? <FactChip term={t('music')}>{t('yourVersion')}</FactChip> : null}
+    <div className="-mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-lg text-muted-foreground">
+      {secondary ? <p>{secondary}</p> : null}
+      <dl className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <dt className="sr-only">{t('key')}</dt>
+        <dd className="font-display font-semibold text-foreground tabular-nums">
+          {keySymbol(pieceKey(entry))}
+        </dd>
+        <dd aria-hidden>·</dd>
+        <dt className="sr-only">{t('meter')}</dt>
+        <dd className="font-display font-semibold text-foreground tabular-nums">{entry.meter}</dd>
+        {entry.kind === 'listing' ? null : (
+          <>
+            <dd aria-hidden>·</dd>
+            <dt className="sr-only">{t('tempo')}</dt>
+            <dd className="text-foreground tabular-nums">{t('bpm', { tempo: entry.tempo })}</dd>
+          </>
+        )}
+        {hasVersion ? (
+          <>
+            <dt className="sr-only">{t('music')}</dt>
+            <dd className="ms-1 rounded-full bg-paint-yellow px-2.5 py-0.5 text-sm font-medium text-on-paint-yellow">
+              {t('yourVersion')}
+            </dd>
+          </>
+        ) : null}
       </dl>
       {stage ? <StageMark stage={stage} /> : null}
     </div>

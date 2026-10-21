@@ -6,21 +6,28 @@ const majorAndMinorChords: Lesson = {
   id: 'major-and-minor-chords',
   title: { en: 'Major and minor chords', ru: 'Мажорные и минорные аккорды' },
   summary: {
-    en: 'Tell major from minor by ear and by semitones.',
-    ru: 'Отличайте мажор от минора на слух и по полутонам.',
+    en: 'Hear major and minor, count their semitones, and play both on every white key.',
+    ru: 'Слышите мажор и минор, считайте полутоны и играйте оба от каждой белой клавиши.',
   },
   sections: [
     {
-      heading: { en: 'Major and minor', ru: 'Мажор и минор' },
+      heading: { en: 'Bright and soft', ru: 'Светлый и мягкий' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'A major chord sounds bright and is written as a letter: C. A minor chord sounds soft and is written with m: Cm.',
-            ru: 'Мажорный аккорд звучит светло и пишется буквой: C. Минорный звучит мягко и пишется с m: Cm.',
+            en: 'Play C, then Cm, and listen. The major chord sounds bright. The minor chord sounds softer and sadder.',
+            ru: 'Сыграйте C, затем Cm и послушайте. Мажорный аккорд звучит светло. Минорный звучит мягче и грустнее.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Cm'], apart: true },
+        {
+          kind: 'note',
+          text: {
+            en: 'A letter alone names a major chord: C. A letter with m names a minor one: Cm.',
+            ru: 'Буква без знаков означает мажорный аккорд: C. Буква с m — минорный: Cm.',
+          },
+        },
       ],
     },
     {
@@ -28,9 +35,10 @@ const majorAndMinorChords: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A semitone', ru: 'Полутон' },
           text: {
-            en: 'Count the semitones from the first note to the second: 4 in a major chord, 3 in a minor one.',
-            ru: 'Посчитайте полутоны от первого звука до второго: в мажорном аккорде их 4, в минорном 3.',
+            en: 'is the step to the very next key, black or white. From the bottom note to the middle one, major has 4 semitones and minor has 3.',
+            ru: '— это шаг на соседнюю клавишу, чёрную или белую. От нижнего звука до среднего в мажоре 4 полутона, в миноре 3.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'M3' },
@@ -38,13 +46,13 @@ const majorAndMinorChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'On every white key', ru: 'От каждой белой клавиши' },
+      heading: { en: 'Only the middle note moves', ru: 'Меняется только средний звук' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Play both on every white key, each hand alone, then together.',
-            ru: 'Сыграйте оба от каждой белой клавиши, каждой рукой отдельно, затем вместе.',
+            en: 'A major chord and its minor share the bottom and top notes. For minor, lower the middle note one semitone. Play each pair, each hand alone, then together.',
+            ru: 'У мажорного и минорного аккорда общие нижний и верхний звуки. Для минора опустите средний звук на полутон. Играйте каждую пару каждой рукой, затем вместе.',
           },
         },
         {
@@ -55,26 +63,29 @@ const majorAndMinorChords: Lesson = {
       ],
     },
     {
-      heading: { en: 'Four chords you like', ru: 'Четыре аккорда на выбор' },
+      heading: { en: 'Four chords in a row', ru: 'Четыре аккорда подряд' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Choose four chords you like and play them in turn: smoothly, evenly and softly.',
-            ru: 'Выберите четыре понравившихся аккорда и сыграйте их по очереди: плавно, ровно и мягко.',
+            en: 'Choose four chords you like and play them in turn, over and over. Change chords without a gap, evenly and softly. Here is one choice.',
+            ru: 'Выберите четыре понравившихся аккорда и играйте их по кругу. Меняйте аккорды без пауз, ровно и мягко. Вот один вариант.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Am', 'F', 'G'] },
       ],
     },
     {
-      heading: { en: 'The table of all chords', ru: 'Таблица всех аккордов' },
+      heading: {
+        en: 'Both chords on all twelve keys',
+        ru: 'Оба аккорда от всех двенадцати звуков',
+      },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Both chords on all twelve roots, to look up as you play.',
-            ru: 'Оба аккорда от всех двенадцати звуков — чтобы сверяться во время игры.',
+            en: 'The tables show major and minor on every root, black keys too. Look a chord up here while you play.',
+            ru: 'В таблицах мажор и минор от каждого звука, включая чёрные клавиши. Сверяйтесь с ними во время игры.',
           },
         },
         { kind: 'grid', quality: 'maj' },
@@ -97,8 +108,8 @@ const majorAndMinorChords: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play E major: it takes a black key.',
-            ru: 'Сыграйте ми мажор: в нём есть чёрная клавиша.',
+            en: 'Play E major. It takes a black key.',
+            ru: 'Сыграйте ми мажор. В нём есть чёрная клавиша.',
           },
           answer: { chord: 'E' },
         },

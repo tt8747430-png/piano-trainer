@@ -1,27 +1,45 @@
 import {
   Accidental,
+  Annotation,
+  AnnotationVerticalJustify,
+  Articulation,
   Beam,
   Dot,
   Fraction,
   FretHandFinger,
   GhostNote,
+  GraceNote,
+  GraceNoteGroup,
   Modifier,
+  Ornament,
   Stave,
   StaveNote,
   Stem,
+  Stroke,
+  Tremolo,
   Tuplet,
   Voice,
   VoiceMode,
 } from 'vexflow/core'
 import {
+  type Clef,
   isCompound,
+  EXPRESSION_TEXT,
+  keySignature,
   TICKS_PER_BEAT,
   timeSignature,
+  writtenOctave,
   type Accidental as Sign,
+  type Articulation as ArticulationMark,
+  type Key,
+  type Letter,
   type Meter,
+  type NoteMarks,
+  type Ornament as OrnamentMark,
 } from '@/shared/lib/music'
 import {
   ticksOf,
+  clefIn,
   type Duration,
   type Measure,
   type ScoreEvent,
@@ -34,7 +52,7 @@ import { namedHead } from './named-head'
 const VALUE_CODE = { 1: 'w', 2: 'h', 4: 'q', 8: '8', 16: '16', 32: '32' } as const
 const SIGN: Readonly<Record<Sign, string>> = { [-2]: 'bb', [-1]: 'b', 0: 'n', 1: '#', 2: '##' }
 /** Where a rest sits: in the middle of a staff alone, above or below it beside another voice. */
-const REST_KEY: Readonly<Record<StaffId, Readonly<Record<ScoreVoice['stem'], string>>>> = {
+const REST_KEY: Readonly<Record<Clef, Readonly<Record<ScoreVoice['stem'], string>>>> = {
   treble: { auto: 'b/4', up: 'e/5', down: 'f/4' },
   bass: { auto: 'd/3', up: 'g/3', down: 'a/2' },
 }
@@ -48,15 +66,95 @@ const DIGIT_HEIGHT = 9
 
 type FingerSide = keyof FingerReach
 
-/** A voice's fingers stand on its outer side: an upper voice's over it, a lower voice's under it; a lone voice's over the treble and under the bass. */
+/** A voice's fingers stand on its outer side: an upper voice's over it, a lower voice's under it; a lone voice's over a treble and under the bass. */
 const sideOf = (staff: StaffId, stem: ScoreVoice['stem']): FingerSide =>
-  stem === 'up' ? 'above' : stem === 'down' ? 'below' : staff === 'treble' ? 'above' : 'below'
+  stem === 'up' ? 'above' : stem === 'down' ? 'below' : staff === 'bass' ? 'below' : 'above'
 
 /** A staff at the origin: where VexFlow puts a note's line, from its staff's own top. */
 let origin: Stave | null = null
 const lineY = (line: number): number => (origin ??= new Stave(0, 0, 0)).getYForNote(line)
 
-const code = (duration: Duration) => `${VALUE_CODE[duration.value]}${duration.dots ? 'd' : ''}`
+/** VexFlow's codes for each mark (its `Tables`): the upper mordent is its `mordent`, the lower its `mordentInverted`. */
+const ARTICULATION_CODE: Readonly<Record<ArticulationMark, string>> = {
+  staccato: 'a.',
+  staccatissimo: 'av',
+  accent: 'a>',
+  tenuto: 'a-',
+  marcato: 'a^',
+  fermata: 'a@a',
+}
+/** Marks printed over the staff whichever way the stem goes; the rest stand by the notehead. */
+const ALWAYS_ABOVE: ReadonlySet<ArticulationMark> = new Set(['marcato', 'fermata'])
+const ORNAMENT_CODE: Readonly<Record<Exclude<OrnamentMark, 'tremolo'>, string>> = {
+  trill: 'tr',
+  mordent: 'mordent',
+  'lower-mordent': 'mordentInverted',
+  turn: 'turn',
+}
+/** A tremolo's strokes through the stem: three, as a measured 32nd. */
+const TREMOLO_STROKES = 3
+
+/** The letters a key signature alters and how: sharps from F, flats from B. */
+const SHARPS_ORDER: readonly Letter[] = ['F', 'C', 'G', 'D', 'A', 'E', 'B']
+function signatureAlter(key: Key, letter: Letter): number {
+  const count = keySignature(key)
+  const order = count >= 0 ? SHARPS_ORDER : [...SHARPS_ORDER].reverse()
+  return order.slice(0, Math.abs(count)).includes(letter) ? Math.sign(count) : 0
+}
+
+/** An expression as a score prints it over its note, in italics. */
+
+/**
+ * A note's marks drawn on it (ADR 0063): articulations by its head (marcato and a fermata over the
+ * staff), an ornament or tremolo, a roll's wavy line, grace notes before it, and its dynamic under it.
+ */
+function addMarks(note: StaveNote, marks: NoteMarks, key: Key) {
+  const stemUp = note.getStemDirection() === Stem.UP
+  for (const articulation of marks.articulations ?? []) {
+    const mark = new Articulation(ARTICULATION_CODE[articulation])
+    mark.setPosition(
+      ALWAYS_ABOVE.has(articulation) || !stemUp ? Modifier.Position.ABOVE : Modifier.Position.BELOW,
+    )
+    note.addModifier(mark, 0)
+  }
+  if (marks.ornament === 'tremolo') note.addModifier(new Tremolo(TREMOLO_STROKES), 0)
+  else if (marks.ornament) note.addModifier(new Ornament(ORNAMENT_CODE[marks.ornament]), 0)
+  if (marks.arpeggio) note.addModifier(new Stroke(Stroke.Type.ARPEGGIO_DIRECTIONLESS), 0)
+  if (marks.grace?.length) {
+    const graces = marks.grace.map((grace) => {
+      const graceNote = new GraceNote({
+        keys: [`${grace.spelled.letter.toLowerCase()}/${writtenOctave(grace.midi, grace.spelled)}`],
+        duration: marks.grace?.length === 1 ? '8' : '16',
+        slash: marks.grace?.length === 1,
+      })
+      if (grace.spelled.accidental !== signatureAlter(key, grace.spelled.letter))
+        graceNote.addModifier(new Accidental(SIGN[grace.spelled.accidental]), 0)
+      return graceNote
+    })
+    const group = new GraceNoteGroup(graces, true)
+    if (graces.length > 1) group.beamNotes()
+    note.addModifier(group, 0)
+  }
+  if (marks.expression) {
+    const words = new Annotation(EXPRESSION_TEXT[marks.expression])
+      .setFont('serif', 12, 'normal', 'italic')
+      .setVerticalJustification(AnnotationVerticalJustify.TOP)
+    note.addModifier(words, 0)
+  }
+  if (marks.dynamic) {
+    const dynamic = new Annotation(marks.dynamic)
+      .setFont('serif', 12, 'bold', 'italic')
+      .setVerticalJustification(AnnotationVerticalJustify.BOTTOM)
+    note.addModifier(dynamic, 0)
+  }
+}
+
+const code = (duration: Duration) => `${VALUE_CODE[duration.value]}${'d'.repeat(duration.dots)}`
+
+/** A note's or a rest's dots, one by one. */
+const dotted = (note: StaveNote, dots: Duration['dots']) => {
+  for (let i = 0; i < dots; i++) Dot.buildAndAttach([note], { all: true })
+}
 const keyOf = (note: WrittenNote) => `${note.spelled.letter.toLowerCase()}/${note.octave}`
 
 export type VexNote = StaveNote | GhostNote
@@ -98,28 +196,29 @@ function nameHeads(note: StaveNote, written: readonly WrittenNote[], value: Dura
 function noteOf(
   event: ScoreEvent,
   {
-    staff,
+    clef,
     stem,
     wholeBar,
     names,
-  }: { staff: StaffId; stem: ScoreVoice['stem']; wholeBar: boolean; names: boolean },
+    key,
+  }: { clef: Clef; stem: ScoreVoice['stem']; wholeBar: boolean; names: boolean; key: Key },
 ): VexNote {
   if (event.kind === 'rest') {
     if (event.hidden) return new GhostNote({ duration: code(event.duration) })
     const rest = new StaveNote({
-      keys: [REST_KEY[staff][stem]],
+      keys: [REST_KEY[clef][stem]],
       duration: wholeBar ? 'w' : code(event.duration),
       type: 'r',
-      clef: staff,
+      clef,
       alignCenter: wholeBar,
     })
-    if (!wholeBar && event.duration.dots) Dot.buildAndAttach([rest], { all: true })
+    if (!wholeBar) dotted(rest, event.duration.dots)
     return rest
   }
   const note = new StaveNote({
     keys: event.notes.map(keyOf),
     duration: code(event.duration),
-    clef: staff,
+    clef,
     ...(stem === 'auto'
       ? { autoStem: true }
       : { stemDirection: stem === 'up' ? Stem.UP : Stem.DOWN }),
@@ -129,7 +228,8 @@ function noteOf(
     if (written.accidental !== null)
       note.addModifier(new Accidental(SIGN[written.accidental]), index)
   })
-  if (event.duration.dots) Dot.buildAndAttach([note], { all: true })
+  dotted(note, event.duration.dots)
+  if (event.marks) addMarks(note, event.marks, key)
   return note
 }
 
@@ -175,7 +275,15 @@ export function buildVoice(
     meter,
     fingers,
     names,
-  }: { staff: StaffId; measure: Measure; meter: Meter; fingers: boolean; names: boolean },
+    key,
+  }: {
+    staff: StaffId
+    measure: Measure
+    meter: Meter
+    fingers: boolean
+    names: boolean
+    key: Key
+  },
 ): BuiltVoice {
   const [only] = voice.events
   const wholeBar =
@@ -185,7 +293,7 @@ export function buildVoice(
     ticksOf(only.duration, meter) === measure.ticks
   const notes = voice.events.map((event) => ({
     event,
-    note: noteOf(event, { staff, stem: voice.stem, wholeBar, names }),
+    note: noteOf(event, { clef: clefIn(measure, staff), stem: voice.stem, wholeBar, names, key }),
   }))
   const side = sideOf(staff, voice.stem)
   const ends = fingers

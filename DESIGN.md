@@ -511,6 +511,11 @@ press fill with sand or darken a shade (brightness 95%). Shadows appear only on 
   hands popovers.
 - **Floating banner** (`shadow-lg`, over its 1px line): the update banner.
 - **Slider thumb** (`shadow-md` with a 1px soft-line ring).
+- **Floating controls** (the floating buttons, a dial's card, the floating bar): the raised paper (`bg-raised`,
+  a step lighter than a card by night) or honey, and a soft layered shade (`elevation-1` resting second actions and
+  rows, `elevation-2` the main action and the bar, `elevation-3` a pointer over them and a dial's card), ink by day
+  and a deeper shade by night. The main action is 56px, a second one 48px; pressed, either gives to 96%. A dial
+  opens as a card of 48px rows, each its icon and its name, growing from its button over a page dimmed to half.
 
 Bottom sheets rise over a page dimmed to 10% black and need no shadow.
 
@@ -874,7 +879,7 @@ exponential ease-out. Under reduced motion every transition is instant.
 - **Don't** put a chrome paint at full strength on the chrome: a place's tint is its wash, with its deep shade on it.
 - **Don't** set a control, a tab or a key label in the serif.
 - **Don't** draw a 2px line round a card or control, or lift a surface with a shadow (only popovers, the update
-  banner and the slider thumb float).
+  banner, the slider thumb and the floating controls float).
 - **Don't** draw a key that does nothing: every key sounds.
 - **Don't** stack a sheet over a sheet; open a list as a page of the sheet.
 - **Don't** write how-to paragraphs; the labelled keyboard and the layout teach.

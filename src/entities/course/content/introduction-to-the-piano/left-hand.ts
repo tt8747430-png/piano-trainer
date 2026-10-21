@@ -5,8 +5,8 @@ const leftHand: Lesson = {
   id: 'left-hand',
   title: { en: 'Playing with the left hand', ru: 'Игра левой рукой' },
   summary: {
-    en: 'Play in the left hand’s C position and read the bass clef.',
-    ru: 'Играть левой рукой в позиции до и читать басовый ключ.',
+    en: 'Put the left hand in the C position, read the bass clef and play a tune and bass notes.',
+    ru: 'Поставить левую руку в позицию до, читать басовый ключ, сыграть мелодию и басы.',
   },
   sections: [
     {
@@ -17,7 +17,7 @@ const leftHand: Lesson = {
           lead: { en: 'The left-hand C position', ru: 'Позиция до в левой руке' },
           text: {
             en: 'puts finger 5 on the C below middle C and the thumb on G. Going up, the fingers count down: 5 4 3 2 1.',
-            ru: '— пятый палец на до малой октавы, большой на соль. Вверх пальцы идут от пятого: 5 4 3 2 1.',
+            ru: '— пятый палец на до малой октавы, большой на соль. Когда вы идёте вверх, номера пальцев убывают: 5 4 3 2 1.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'C3 D3 E3 F3 G3 F3 E3 D3 C3/1' },
@@ -30,8 +30,8 @@ const leftHand: Lesson = {
           kind: 'text',
           lead: { en: 'The bass clef', ru: 'Басовый ключ' },
           text: {
-            en: 'marks F on the line between its two dots. The left hand reads it.',
-            ru: 'отмечает фа на линейке между двумя точками. По нему читает левая рука.',
+            en: 'is the sign for low notes, which the left hand usually plays. Its two dots sit either side of the F line.',
+            ru: '— знак для низких нот, которые обычно играет левая рука. Его две точки стоят по сторонам линейки фа.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'F3/1' },
@@ -43,8 +43,8 @@ const leftHand: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'From the bottom, the lines read G B D F A and the spaces A C E G.',
-            ru: 'Снизу линейки: соль, си, ре, фа, ля. Промежутки: ля, до, ми, соль.',
+            en: 'Read the bass staff from the bottom up. The lines are G B D F A, and the spaces are A C E G.',
+            ru: 'Читайте басовый стан снизу вверх. На линейках соль, си, ре, фа, ля, в промежутках ля, до, ми, соль.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'G2 B2 D3 F3 A3/1' },
@@ -57,8 +57,8 @@ const leftHand: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Hot Cross Buns an octave lower: E, D, C with fingers 3, 4 and 5.',
-            ru: '«Горячие булочки» октавой ниже: ми, ре, до пальцами 3, 4 и 5.',
+            en: 'Here is Hot Cross Buns an octave lower. The left hand plays E, D and C with fingers 3, 4 and 5.',
+            ru: 'Это «Горячие булочки» октавой ниже. Левая рука играет ми, ре и до пальцами 3, 4 и 5.',
           },
         },
         {
@@ -74,14 +74,14 @@ const leftHand: Lesson = {
       ],
     },
     {
-      heading: { en: 'Bass notes', ru: 'Басовые ноты' },
+      heading: { en: 'Bass notes', ru: 'Басы' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'A bass note', ru: 'Бас' },
           text: {
-            en: 'is a low note under the tune, often one a bar. In C the most used are C and G, fingers 5 and 1.',
-            ru: '— низкая нота под мелодией, часто одна на такт. В до мажоре чаще всего до и соль, пальцы 5 и 1.',
+            en: 'is a low note that supports the tune, often one per bar. In C major the most common are C and G, with fingers 5 and 1.',
+            ru: '— низкая нота, которая поддерживает мелодию, часто одна на такт. В до мажоре чаще всего это до и соль, пальцы 5 и 1.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'C3/1 G3/1 G3/1 C3/1' },
@@ -93,15 +93,15 @@ const leftHand: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'With the left hand in the C position, play from finger 5 up to the thumb.',
-            ru: 'Левой рукой в позиции до сыграйте от пятого пальца вверх до большого.',
+            en: 'With the left hand in the C position, play up from finger 5 to the thumb.',
+            ru: 'Левой рукой в позиции до сыграйте вверх от пятого пальца до большого.',
           },
           answer: { notes: ['C', 'D', 'E', 'F', 'G'], rising: true },
         },
         {
           kind: 'question',
           ask: {
-            en: 'Play the note on the bass staff’s middle line.',
+            en: 'Play the note on the middle line of the bass staff.',
             ru: 'Сыграйте ноту на средней линейке басового стана.',
           },
           answer: { notes: ['D'] },
@@ -109,8 +109,8 @@ const leftHand: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play the two bass notes used most in C.',
-            ru: 'Сыграйте два баса, самые частые в до мажоре.',
+            en: 'Play the two most common bass notes in C major.',
+            ru: 'Сыграйте два самых частых баса в до мажоре.',
           },
           answer: { notes: ['C', 'G'] },
         },

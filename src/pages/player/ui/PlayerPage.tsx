@@ -1,8 +1,10 @@
-import { useParams, useSearch } from '@tanstack/react-router'
+import { Link, useParams, useSearch } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import { entryTitles, useRepertoire, type Piece } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
 import { isCompound } from '@/shared/lib/music'
+import { ButtonLink, NotFound } from '@/shared/ui'
 import { useClose } from '../model/use-close'
 import type { PlayerSearch } from '../model/player-search'
 import { usePlayer } from '../model/use-player'
@@ -45,6 +47,15 @@ function PiecePlayer({ piece }: { piece: Piece }) {
 /** A piece in the Player: the route's piece, its choices from the URL. */
 export function PlayerPage() {
   const { pieceId } = useParams({ from: '/full-screen/play/$pieceId' })
+  const { t } = useTranslation('common')
   const piece = useRepertoire().piece(pieceId)
-  return piece ? <PiecePlayer key={piece.id} piece={piece} /> : null
+  if (!piece) {
+    // An own song deleted in another tab.
+    return (
+      <NotFound>
+        <ButtonLink render={<Link to="/songs" />}>{t('notFound.toSongs')}</ButtonLink>
+      </NotFound>
+    )
+  }
+  return <PiecePlayer key={piece.id} piece={piece} />
 }

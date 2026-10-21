@@ -19,7 +19,7 @@ import {
   RailGroup,
   type ShownKeys,
 } from '@/shared/ui'
-import { useFoldKeys } from '../model/use-fold-keys'
+import { useFoldKeys, type KeysScreen } from '../model/use-fold-keys'
 import { LiveKeyboard } from './LiveKeyboard'
 
 /**
@@ -30,7 +30,8 @@ import { LiveKeyboard } from './LiveKeyboard'
  * the tab bar or at its top under the screen's bar; folded from its rail, it is a button floating
  * where it was (lowest among the screen's actions at the foot, under the screen's bar at the top)
  * that brings it back, and stays folded on every page until then. Folding and unfolding morph the
- * keys into the button and back.
+ * keys into the button and back. On a phone on its side a reading page opens with them folded, until
+ * the learner unfolds them there (ADR 0062); a screen played on (`screen="playing"`) keeps them out.
  */
 export function PinnedKeyboard({
   shown,
@@ -40,6 +41,7 @@ export function PinnedKeyboard({
   selected,
   wrong,
   onKeyPress,
+  screen = 'reading',
   className,
 }: {
   /** The keys to hold in view, each marked as the page shows it. */
@@ -55,12 +57,14 @@ export function PinnedKeyboard({
   wrong?: ReadonlySet<Midi> | undefined
   /** What a key means besides its sound (Notes view: the note). */
   onKeyPress?: ((key: Midi) => void) | undefined
+  /** What the screen's keys are for: read beside, or played on (the Chord finder). */
+  screen?: KeysScreen
   /** Where it sits in its page's layout (a laptop's full-width row). */
   className?: string
 }) {
   const { t } = useTranslation('common')
   const dock = useSettings((state) => selectKeyboard(state).dock)
-  const { folded, fold } = useFoldKeys()
+  const { folded, fold } = useFoldKeys(screen)
   const { keys, marks } = shown
   const [opened] = useState(keys)
   const showing = selected ? keys.filter((key) => !selected.has(key)) : keys

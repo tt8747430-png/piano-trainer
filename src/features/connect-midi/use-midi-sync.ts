@@ -37,16 +37,23 @@ export function useMidiSync(): void {
   const heard = useEffectEvent((velocity: number) => touchVelocity(velocity, touch))
   useEffect(() => {
     if (!midi || !sound) return
-    const sounded = new Set<Midi>()
+    // How many note-ons each key sounded (two keyboards under Any can hold one key): one release each.
+    const sounded = new Map<Midi, number>()
     const stop = midi.onNote((event) => {
+      const held = sounded.get(event.midi) ?? 0
       if (event.on) {
-        sounded.add(event.midi)
+        sounded.set(event.midi, held + 1)
         audio.press(event.midi, heard(event.velocity))
-      } else if (sounded.delete(event.midi)) audio.release(event.midi)
+        return
+      }
+      if (held === 0) return
+      if (held === 1) sounded.delete(event.midi)
+      else sounded.set(event.midi, held - 1)
+      audio.release(event.midi)
     })
     return () => {
       stop()
-      for (const key of sounded) audio.release(key)
+      for (const [key, held] of sounded) for (let i = 0; i < held; i++) audio.release(key)
     }
   }, [midi, audio, sound])
 }

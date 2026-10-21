@@ -72,14 +72,18 @@ export const pitchClassOf = (spelled: SpelledNote): PitchClass =>
 export const midiOf = (spelled: SpelledNote, octave: number): Midi =>
   midi(12 * (octave + 1) + naturalPitch(spelled.letter) + spelled.accidental)
 
-/** A note with its octave, as scientific pitch writes it: `C4` is middle C, `B♭3` the key below A3's. */
+/**
+ * A note with its octave, as scientific pitch writes it: `C4` is middle C, `B♭3` the key below A3's.
+ * None outside MIDI's keys: `C♭-1` and `B♯9` are no key.
+ */
 export function parseNoteInOctave(
   text: string,
 ): { readonly note: SpelledNote; readonly midi: Midi } | null {
   const match = /^(.+?)(-?\d)$/.exec(text)
   const spelled = match?.[1] === undefined ? null : parseNoteName(match[1])
   if (!match || !spelled) return null
-  return { note: spelled, midi: midiOf(spelled, Number(match[2])) }
+  const key = 12 * (Number(match[2]) + 1) + naturalPitch(spelled.letter) + spelled.accidental
+  return key < 0 || key > 127 ? null : { note: spelled, midi: midi(key) }
 }
 
 /** The octave a key is written in under a spelling: B♯3 and C4 are both 60, C♭5 is 71. */

@@ -196,6 +196,7 @@ const rhOctave = 4
 const lhOctave = (tonic: SpelledNote) => (pitchClassOf(tonic) <= 4 ? 3 : 2)
 
 const TRY_IT: LocalText = { en: 'Try it', ru: 'Попробуйте' }
+const PRIMARY: LocalText = { en: 'The primary chords', ru: 'Главные трезвучия' }
 
 /** The signature's section text: its count, its notes, and for a minor key its relative major. */
 function signatureText(key: Key): LocalText {
@@ -205,12 +206,12 @@ function signatureText(key: Key): LocalText {
   if (signs.length === 0) {
     return relative
       ? {
-          en: `${names.en} has no sharps or flats, like ${relative.en}, its relative major. Every note of its natural form is a white key.`,
-          ru: `В ${names.ruIn} нет ключевых знаков, как и в ${relative.ruIn}, его параллельном мажоре. Все ноты натурального минора — белые клавиши.`,
+          en: `${names.en} has no sharps or flats, just like ${relative.en}, its relative major. Natural ${names.en} uses only white keys.`,
+          ru: `В ${names.ruIn} нет ключевых знаков, как и в ${relative.ruIn}, его параллельном мажоре. Натуральный ${names.ru} играется только на белых клавишах.`,
         }
       : {
-          en: `${names.en} has no sharps or flats, so its key signature is empty. Every note is a white key.`,
-          ru: `В ${names.ruIn} нет ни диезов, ни бемолей, и ключевых знаков нет. Все ноты — белые клавиши.`,
+          en: `${names.en} has no sharps or flats, so its key signature is empty. The scale uses only white keys.`,
+          ru: `В ${names.ruIn} нет ни диезов, ни бемолей, поэтому ключевых знаков нет. Гамма играется только на белых клавишах.`,
         }
   }
   const sharp = (signs[0]?.accidental ?? 0) > 0
@@ -224,8 +225,8 @@ function signatureText(key: Key): LocalText {
     }
   }
   return {
-    en: `${names.en} has ${count.en}: ${listed.en}. The key signature writes ${one ? 'it' : 'them'} at the start of every line, for every octave.`,
-    ru: `В ${names.ruIn} ${count.ru}: ${listed.ru}. Ключевые знаки ставят ${one ? 'его' : 'их'} в начале каждой строки, для всех октав.`,
+    en: `${names.en} has ${count.en}: ${listed.en}. The key signature writes ${one ? 'it' : 'them'} once at the start of every line, and ${one ? 'it holds' : 'they hold'} in every octave.`,
+    ru: `В ${names.ruIn} ${count.ru}: ${listed.ru}. Ключевые знаки пишут ${one ? 'его' : 'их'} один раз в начале каждой строки, и ${one ? 'он действует' : 'они действуют'} во всех октавах.`,
   }
 }
 
@@ -233,8 +234,8 @@ function signatureText(key: Key): LocalText {
 function rightHandText(notes: readonly SpelledNote[], fingers: readonly Finger[]): LocalText {
   const under = notesAt(notes, fingers, (finger, i) => finger === 1 && i > 0)
   return {
-    en: `Up: ${fingerText(fingers)}. The thumb passes under to ${enList(under.map(enNote))}. Coming down, the same fingers in reverse.`,
-    ru: `Вверх: ${fingerText(fingers)}. Большой палец подкладывается на ${ruList(under.map(ruNote))}. Вниз — те же пальцы в обратном порядке.`,
+    en: `Up: ${fingerText(fingers)}. The thumb passes under the hand to play ${enList(under.map(enNote))}. Coming down, use the same fingers in reverse.`,
+    ru: `Вверх: ${fingerText(fingers)}. Большой палец подкладывается под руку на ${ruList(under.map(ruNote))}. Вниз — те же пальцы в обратном порядке.`,
   }
 }
 
@@ -259,8 +260,8 @@ function leftHandText(notes: readonly SpelledNote[], fingers: readonly Finger[])
           ru: ` Через большой палец перекладываются: ${ruList(over.map((each) => `${RU_FINGERS[each.finger]} на ${ruNote(each.spelled)}`))}.`,
         }
   return {
-    en: `Up: ${fingerText(fingers)}.${crossing.en} Coming down, the same in reverse.`,
-    ru: `Вверх: ${fingerText(fingers)}.${crossing.ru} Вниз — то же в обратном порядке.`,
+    en: `Up: ${fingerText(fingers)}.${crossing.en} Coming down, use the same fingers in reverse.`,
+    ru: `Вверх: ${fingerText(fingers)}.${crossing.ru} Вниз — те же пальцы в обратном порядке.`,
   }
 }
 
@@ -277,17 +278,17 @@ function togetherSteps(tonic: SpelledNote, kind: ScaleKind): LocalText[] {
   const met = thumbsTogether(tonic, kind)
   return [
     {
-      en: 'Each hand alone, slowly, until the fingers come without thinking.',
-      ru: 'Каждой рукой отдельно, медленно, пока пальцы не пойдут сами.',
+      en: 'Practise each hand alone, slowly, until the fingers come without thinking.',
+      ru: 'Играйте каждой рукой отдельно и медленно, пока пальцы не пойдут сами.',
     },
     met.length > 0
       ? {
-          en: `Then hands together over two octaves. Both thumbs play ${enList(met.map(enNote))} at once.`,
-          ru: `Затем двумя руками на две октавы. Оба больших пальца вместе берут ${ruList(met.map(ruNote))}.`,
+          en: `Then play hands together over two octaves. Both thumbs land on ${enList(met.map(enNote))} at the same moment.`,
+          ru: `Затем играйте двумя руками на две октавы. Оба больших пальца одновременно берут ${ruList(met.map(ruNote))}.`,
         }
       : {
-          en: 'Then hands together over two octaves. The thumbs never meet, so watch each crossing.',
-          ru: 'Затем двумя руками на две октавы. Большие пальцы не совпадают, следите за каждым подкладыванием.',
+          en: 'Then play hands together over two octaves. The thumbs never play at the same moment, so watch each crossing.',
+          ru: 'Затем играйте двумя руками на две октавы. Большие пальцы ни разу не совпадают, поэтому следите за каждым подкладыванием.',
         },
   ]
 }
@@ -317,7 +318,7 @@ export function majorScaleLesson(tonic: SpelledNote): Lesson {
     id: keyLessonId(key),
     title: { en: names.en, ru: capital(names.ru) },
     summary: {
-      en: `The ${names.en} scale: its notes and key signature, each hand’s fingers and its three primary chords.`,
+      en: `Learn the ${names.en} scale: its notes and key signature, the fingering for each hand and its three primary chords.`,
       ru: `Гамма ${names.ru}: её ноты и ключевые знаки, аппликатура каждой руки и три главных трезвучия.`,
     },
     sections: [
@@ -326,8 +327,8 @@ export function majorScaleLesson(tonic: SpelledNote): Lesson {
         blocks: [
           { kind: 'scale', root: tonic, scale: 'major' },
           say({
-            en: `${names.en} climbs from ${enNote(tonic)} by whole, whole, half, whole, whole, whole, half: ${notes.map(enNote).join(' ')}.`,
-            ru: `${capital(names.ru)} поднимается от ${ruNote(tonic)} так: тон, тон, полутон, тон, тон, тон, полутон.`,
+            en: `${names.en} starts on ${enNote(tonic)} and climbs by the major pattern: whole, whole, half, whole, whole, whole, half. Its notes are ${notes.map(enNote).join(' ')}.`,
+            ru: `${capital(names.ru)} начинается с ${ruNote(tonic)} и поднимается по схеме мажора: тон, тон, полутон, тон, тон, тон, полутон. Его ноты: ${notes.map(ruNote).join(', ')}.`,
           }),
         ],
       },
@@ -360,13 +361,17 @@ export function majorScaleLesson(tonic: SpelledNote): Lesson {
         ],
       },
       {
-        heading: { en: 'Its primary chords', ru: 'Главные трезвучия' },
+        heading: { en: 'The key’s main chords', ru: 'Три главных аккорда' },
         blocks: [
           { kind: 'progression', numerals: 'I IV V I', key },
-          say({
-            en: `${shown(one)}, ${shown(four)} and ${shown(five)} are its I, IV and V. Between them they hold every note of ${names.en}.`,
-            ru: `${shown(one)}, ${shown(four)} и ${shown(five)} — его I, IV и V ступени. Вместе они содержат все ноты ${names.ruOf}.`,
-          }),
+          {
+            kind: 'text',
+            lead: PRIMARY,
+            text: {
+              en: `are the chords on the 1st, 4th and 5th notes: ${shown(one)}, ${shown(four)} and ${shown(five)}, or I, IV and V. Together they hold every note of ${names.en}.`,
+              ru: `— трезвучия на I, IV и V ступенях: ${shown(one)}, ${shown(four)} и ${shown(five)}. Вместе они содержат все ноты ${names.ruOf}.`,
+            },
+          },
         ],
       },
       {
@@ -440,7 +445,7 @@ function otherFingerings(tonic: SpelledNote, hand: Hand): LocalText {
   )
   if (own.length === 0) {
     return {
-      en: ' Harmonic and melodic minor take the same fingers.',
+      en: ' Harmonic and melodic minor use the same fingers.',
       ru: ' В гармоническом и мелодическом миноре пальцы те же.',
     }
   }
@@ -487,7 +492,7 @@ export function minorScaleLesson(tonic: SpelledNote): Lesson {
     id: keyLessonId(key),
     title: { en: names.en, ru: capital(names.ru) },
     summary: {
-      en: `${names.en} in its natural, harmonic and melodic forms: its key signature, each hand’s fingers and its primary chords.`,
+      en: `Learn ${names.en} in its natural, harmonic and melodic forms: its key signature, the fingering for each hand and its primary chords.`,
       ru: `${capital(names.ru)} в натуральном, гармоническом и мелодическом виде: ключевые знаки, аппликатура каждой руки и главные трезвучия.`,
     },
     sections: [
@@ -496,8 +501,8 @@ export function minorScaleLesson(tonic: SpelledNote): Lesson {
         blocks: [
           { kind: 'scale', root: tonic, scale: 'natural' },
           say({
-            en: `Natural ${names.en} climbs whole, half, whole, whole, half, whole, whole: ${notes.map(enNote).join(' ')}.`,
-            ru: `Натуральный ${names.ru} поднимается так: тон, полутон, тон, тон, полутон, тон, тон.`,
+            en: `Natural ${names.en} starts on ${enNote(tonic)} and climbs whole, half, whole, whole, half, whole, whole. Its notes are ${notes.map(enNote).join(' ')}.`,
+            ru: `Натуральный ${names.ru} начинается с ${ruNote(tonic)} и поднимается так: тон, полутон, тон, тон, полутон, тон, тон. Его ноты: ${notes.map(ruNote).join(', ')}.`,
           }),
         ],
       },
@@ -513,8 +518,8 @@ export function minorScaleLesson(tonic: SpelledNote): Lesson {
         blocks: [
           { kind: 'scale', root: tonic, scale: 'harmonic' },
           say({
-            en: `Harmonic minor raises the 7th, ${raisedEn(6, seventh ?? tonic)}. It leans up into the tonic and makes the V chord major.`,
-            ru: `Гармонический минор повышает седьмую ступень: ${raisedRu(6, seventh ?? tonic).replace(' — ', ' становится ')}. Она тяготеет к тонике, а трезвучие V ступени становится мажорным.`,
+            en: `Harmonic minor raises the 7th note a half step, from ${raisedEn(6, seventh ?? tonic)}. The raised note leans up into the tonic and makes the V chord major.`,
+            ru: `Гармонический минор повышает седьмую ступень на полутон: ${raisedRu(6, seventh ?? tonic).replace(' — ', ' становится ')}. Повышенный звук тянется к тонике и делает трезвучие V ступени мажорным.`,
           }),
         ],
       },
@@ -523,8 +528,8 @@ export function minorScaleLesson(tonic: SpelledNote): Lesson {
         blocks: [
           { kind: 'scale', root: tonic, scale: 'melodic' },
           say({
-            en: `Melodic minor raises the 6th and 7th going up: ${enList(sixthSeventh.map((to, i) => raisedEn(5 + i, to)))}. Coming down, it plays natural minor.`,
-            ru: `Мелодический минор вверх повышает шестую и седьмую ступени: ${ruList(sixthSeventh.map((to, i) => raisedRu(5 + i, to)))}. Вниз играется натуральный минор.`,
+            en: `On the way up, melodic minor raises the 6th and 7th notes: ${enList(sixthSeventh.map((to, i) => raisedEn(5 + i, to)))}. On the way down, it plays natural minor.`,
+            ru: `На пути вверх мелодический минор повышает шестую и седьмую ступени: ${ruList(sixthSeventh.map((to, i) => raisedRu(5 + i, to)))}. Вниз играется натуральный минор.`,
           }),
         ],
       },
@@ -560,25 +565,17 @@ export function minorScaleLesson(tonic: SpelledNote): Lesson {
         ],
       },
       {
-        heading: { en: 'Its primary chords', ru: 'Главные трезвучия' },
+        heading: { en: 'The key’s main chords', ru: 'Три главных аккорда' },
         blocks: [
           { kind: 'progression', numerals: 'i iv V i', key },
-          say({
-            en: `${primary
-              .map(shown)
-              .join(', ')
-              .replace(
-                /, ([^,]*)$/,
-                ' and $1',
-              )} are its i, iv and V. The V chord takes harmonic minor’s raised 7th.`,
-            ru: `${primary
-              .map(shown)
-              .join(', ')
-              .replace(
-                /, ([^,]*)$/,
-                ' и $1',
-              )} — его i, iv и V ступени. Трезвучие V ступени берёт повышенную седьмую гармонического минора.`,
-          }),
+          {
+            kind: 'text',
+            lead: PRIMARY,
+            text: {
+              en: `are the chords on the 1st, 4th and 5th notes: ${enList(primary.map(shown))}, or i, iv and V. The V chord is major because it takes harmonic minor’s raised 7th.`,
+              ru: `— трезвучия на I, IV и V ступенях (i, iv, V): ${ruList(primary.map(shown))}. Трезвучие V ступени мажорное, потому что берёт повышенную седьмую ступень гармонического минора.`,
+            },
+          },
         ],
       },
       {
@@ -667,16 +664,16 @@ function arpeggioHandText(key: Key, hand: Hand): LocalText {
   if (hand === 'rh') {
     return fifth
       ? {
-          en: `Up: ${fingerText(fingers)}. The thumb passes under to each ${enNote(thumb)}, and 5 takes the top one.`,
+          en: `Up: ${fingerText(fingers)}. The thumb passes under to each ${enNote(thumb)}, and finger 5 takes the top one.`,
           ru: `Вверх: ${fingerText(fingers)}. Большой палец подкладывается на каждую ноту ${ruNote(thumb)}, а верхнюю берёт пятый.`,
         }
       : {
-          en: `Up: ${fingerText(fingers)}. The thumb passes under to each ${enNote(thumb)}, and ${outer} takes the top note.`,
+          en: `Up: ${fingerText(fingers)}. The thumb passes under to each ${enNote(thumb)}, and finger ${outer} takes the top note.`,
           ru: `Вверх: ${fingerText(fingers)}. Большой палец подкладывается на каждую ноту ${ruNote(thumb)}, а верхнюю ноту берёт ${RU_FINGERS[outer ?? 1]}.`,
         }
   }
   return {
-    en: `Up: ${fingerText(fingers)}. The thumb plays each ${enNote(thumb)}${fifth ? ' above the bottom one' : ''}, and ${after} crosses over it. Coming down, the same in reverse.`,
+    en: `Up: ${fingerText(fingers)}. The thumb plays each ${enNote(thumb)}${fifth ? ' above the bottom one' : ''}, and finger ${after} crosses over it. Coming down, use the same fingers in reverse.`,
     ru: `Вверх: ${fingerText(fingers)}. Большой палец берёт каждую ноту ${ruNote(thumb)}${fifth ? ', кроме нижней,' : ''} и ${RU_FINGERS[after]} перекладывается через него. Вниз — в обратном порядке.`,
   }
 }
@@ -709,7 +706,7 @@ export function arpeggioLesson(key: Key): Lesson {
     id: keyLessonId(key),
     title: { en: names.en, ru: capital(names.ru) },
     summary: {
-      en: `The ${names.en} arpeggio over two octaves: its three notes, each hand’s fingers and its inversions.`,
+      en: `Learn the ${names.en} arpeggio over two octaves: its three notes, the fingering for each hand and its inversions.`,
       ru: `Арпеджио ${names.ruOf} на две октавы: три его звука, аппликатура каждой руки и обращения.`,
     },
     sections: [
@@ -717,10 +714,14 @@ export function arpeggioLesson(key: Key): Lesson {
         heading: { en: 'The chord', ru: 'Аккорд' },
         blocks: [
           { kind: 'chords', symbols: [symbol] },
-          say({
-            en: `The ${names.en} triad is ${enList(noteNames.map(enNote))}. Its arpeggio plays them one at a time, up and down the keyboard.`,
-            ru: `Трезвучие ${names.ruOf}: ${ruList(noteNames.map(ruNote))}. Арпеджио играет эти звуки по одному, вверх и вниз по клавиатуре.`,
-          }),
+          {
+            kind: 'text',
+            lead: { en: 'An arpeggio', ru: 'Арпеджио' },
+            text: {
+              en: `plays a chord’s notes one at a time, up and down the keyboard. The ${names.en} triad is ${enList(noteNames.map(enNote))}.`,
+              ru: `— звуки аккорда, сыгранные по одному, вверх и вниз по клавиатуре. Трезвучие ${names.ruOf}: ${ruList(noteNames.map(ruNote))}.`,
+            },
+          },
         ],
       },
       {
@@ -744,12 +745,12 @@ export function arpeggioLesson(key: Key): Lesson {
             kind: 'steps',
             steps: [
               {
-                en: 'Each hand alone, slowly, with a loose wrist that carries the hand along.',
-                ru: 'Каждой рукой отдельно, медленно, со свободным запястьем, которое ведёт руку.',
+                en: 'Practise each hand alone, slowly. Keep the wrist loose and let it carry the hand along.',
+                ru: 'Играйте каждой рукой отдельно и медленно. Запястье свободное, оно ведёт руку за собой.',
               },
               {
-                en: 'Then both hands two octaves apart, keeping every note even.',
-                ru: 'Затем двумя руками через две октавы, ровно на каждом звуке.',
+                en: 'Then play both hands together, keeping every note even.',
+                ru: 'Затем играйте двумя руками вместе, ровно на каждом звуке.',
               },
             ],
           },
@@ -761,8 +762,8 @@ export function arpeggioLesson(key: Key): Lesson {
         blocks: [
           { kind: 'voicings', voicings: [0, 1, 2].map(voicing), key },
           say({
-            en: `Start the arpeggio on ${enNote(third?.note ?? key.tonic)} or ${enNote(fifth?.note ?? key.tonic)} to play it from an inversion. The thumb moves to a new note, so learn each one.`,
-            ru: `Начните арпеджио с ${ruNote(third?.note ?? key.tonic)} или ${ruNote(fifth?.note ?? key.tonic)}, и оно пойдёт от обращения. Большой палец переходит на другую ноту, поэтому учите каждое.`,
+            en: `Start the arpeggio on ${enNote(third?.note ?? key.tonic)} or ${enNote(fifth?.note ?? key.tonic)} instead of the root, and it runs from an inversion. The thumb lands on different notes, so learn the fingering of each.`,
+            ru: `Начните арпеджио не с основного тона, а с ${ruNote(third?.note ?? key.tonic)} или ${ruNote(fifth?.note ?? key.tonic)}, и оно пойдёт от обращения. Большой палец попадает на другие ноты, поэтому учите аппликатуру каждого.`,
           }),
         ],
       },

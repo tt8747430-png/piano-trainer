@@ -11,7 +11,7 @@ export default definePiece({
   tempo: 72,
   pattern: 't1',
   note: {
-    en: 'Use the two new right-hand techniques, ♪♩ and ♪♪♪♪.',
+    en: 'Use the two new right-hand techniques: ♪♩ and ♪♪♪♪.',
     ru: 'Используйте две новые техники правой руки: ♪♩ и ♪♪♪♪.',
   },
   sections: [{ kind: 'practice', lines: ['Am Dm E Am', 'F C Dm E Am'] }],

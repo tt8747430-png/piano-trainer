@@ -1,12 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import { COURSES, courseIcon, COURSE_ICON } from '@/entities/course'
-import { BUILT_IN_PATTERNS, bookOfPattern, patternNeed, type PatternId } from '@/entities/pattern'
+import { BUILT_IN_PATTERNS, partOfShelf, patternNeed, type PatternId } from '@/entities/pattern'
 import { pieceById, pieceFit } from '@/entities/piece'
 import { isTrainerId } from '@/features/trainer'
+import { readProgressionsSearch } from '@/app/routes/explorer-search'
+import { typedSearch } from '@/widgets/progression-explorer'
 import {
   chordsHolding,
   chordSymbol,
   HOLDING_GROUPS,
+  keyFromParam,
   note,
   numeralChord,
   parseChordSymbol,
@@ -273,6 +276,40 @@ describe('the lessons, a journey’s and a course’s', () => {
       expect(ways, at).toContainEqual(between)
     }
   })
+
+  it('open Between on the very chords a link names, its slash bass kept, and the chords it teaches', () => {
+    const written = (symbol: string) => chordSymbol(parseChordSymbol(symbol))
+    const links = WORKSHEETS.flatMap((lesson) =>
+      lesson.sections.flatMap((section) => {
+        const row = section.blocks.flatMap((block) =>
+          block.kind === 'chords' ? block.symbols : [],
+        )
+        return section.blocks.flatMap((block) =>
+          block.kind === 'link' && block.target.opens === 'between'
+            ? [{ at: `${lesson.id}: ${block.title.en}`, row, target: block.target }]
+            : [],
+        )
+      }),
+    )
+    expect(links.length).toBeGreaterThan(0)
+    for (const { at, row, target } of links) {
+      // As the link opens Progressions and the page builds its row from the URL's numerals.
+      const search = typedSearch(`${target.from} ${target.to}`, target.key)
+      expect(search, at).not.toBeNull()
+      const view = readProgressionsSearch({ ...search })
+      const key = keyFromParam(view.key)
+      const built = (parseNumerals(view.p) ?? []).map((numeral) =>
+        numeralChord(numeral, key, view.size),
+      )
+      expect(built.map(chordSymbol), at).toEqual([written(target.from), written(target.to)])
+      const [from, to] = built
+      if (!from || !to) continue
+      const ways = passingChords(from, to, key).map((way) => way.chords.map(chordSymbol))
+      if (written(row.at(-1) ?? '') !== written(target.to)) continue
+      const between = row.slice(row[0] === target.from ? 1 : 0, -1).map(written)
+      expect(ways, at).toContainEqual(between)
+    }
+  })
 })
 
 /** Every piece of a lesson's prose, in both languages: text, steps, notes and questions' asks. */
@@ -496,8 +533,8 @@ describe('the courses', () => {
             .map((piece) => `${where}: plays ${piece}, not its song`),
           ...patternsOf(lesson)
             .filter((pattern) => {
-              const of = bookOfPattern(pattern)
-              return of !== null && !books.includes(of)
+              const of = partOfShelf(BUILT_IN_PATTERNS.require(pattern).group)
+              return isMethodBookId(of) && !books.includes(of)
             })
             .map((pattern) => `${where}: shows ${pattern}, another book’s`),
           ...lessonLinksOf(lesson).map((id) => `${where}: links lesson ${id}`),

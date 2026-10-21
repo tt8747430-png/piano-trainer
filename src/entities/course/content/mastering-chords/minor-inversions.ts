@@ -8,8 +8,8 @@ const minorInversions: Lesson = {
   id: 'minor-inversions',
   title: { en: 'Minor chord inversions', ru: 'Обращения минорного аккорда' },
   summary: {
-    en: 'Play a minor chord in three positions and join it smoothly.',
-    ru: 'Играйте минорный аккорд в трёх видах и соединяйте плавно.',
+    en: 'Play a minor chord in its three positions, tell it from a major one and join chords smoothly.',
+    ru: 'Играйте минорное трезвучие в трёх видах, отличайте его от мажорного и плавно соединяйте аккорды.',
   },
   sections: [
     {
@@ -18,8 +18,8 @@ const minorInversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A minor chord inverts as a major one does. At the bottom: the root A, then the 3rd C, then the 5th E.',
-            ru: 'Минорный аккорд обращается так же, как мажорный. Внизу: основной тон ля, затем терция до, затем квинта ми.',
+            en: 'A minor chord inverts just as a major one does. Put each of its notes at the bottom in turn: the root A, the 3rd C, then the 5th E.',
+            ru: 'Минорное трезвучие обращается так же, как мажорное. Поставьте вниз по очереди каждый его звук: основной тон ля, терцию до, затем квинту ми.',
           },
         },
         {
@@ -33,7 +33,7 @@ const minorInversions: Lesson = {
       ],
     },
     {
-      heading: { en: 'The 4th points to the root', ru: 'Кварта указывает на основной тон' },
+      heading: { en: 'Find the root', ru: 'Найдите основной тон' },
       blocks: [
         {
           kind: 'voicings',
@@ -46,8 +46,8 @@ const minorInversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Find the 4th, A to D, in each. Its upper note, D, is the root.',
-            ru: 'Найдите в каждом кварту ля – ре. Её верхний звук, ре, — основной тон.',
+            en: 'The 4th works here too. In both inversions of D minor, find the 4th from A to D. Its upper note, D, is the root.',
+            ru: 'Кварта помогает и здесь. В обоих обращениях ре минора найдите кварту ля — ре. Её верхний звук, ре, и есть основной тон.',
           },
         },
       ],
@@ -65,8 +65,8 @@ const minorInversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Both have E at the bottom and C on top. Find the root, then count to its 3rd: four semitones is major, three minor.',
-            ru: 'В обоих внизу ми, а сверху до. Найдите основной тон и отсчитайте до терции: четыре полутона — мажор, три — минор.',
+            en: 'Both chords have E at the bottom and C on top. To tell them apart, find the root and count up to its 3rd. Four semitones is major, three is minor.',
+            ru: 'В обоих аккордах внизу ми, а сверху до. Чтобы различить их, найдите основной тон и отсчитайте до терции. Четыре полутона — мажор, три — минор.',
           },
         },
       ],
@@ -87,8 +87,8 @@ const minorInversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The right hand holds A over Am and Dm, then slips down to G♯ for E major.',
-            ru: 'Правая рука держит ля в Am и Dm, затем опускается на соль-диез в ми мажоре.',
+            en: 'Here the right hand barely moves. It holds A through Am and Dm, then slips down a semitone to G♯ for E major.',
+            ru: 'Здесь правая рука почти не двигается. Она держит ля в Am и Dm, затем опускается на полутон к соль-диезу в ми мажоре.',
           },
         },
         {

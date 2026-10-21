@@ -98,4 +98,11 @@ describe('piecesPlaying', () => {
     expect(PIECES.find((piece) => piece.id === 'hgta')?.pattern).toBe('M1')
     expect(piecesPlaying('pop8')).toBe(piecesPlaying('pop8'))
   })
+
+  it('leaves out a piece whose every chord names a method other than its pattern', () => {
+    const playingM1 = piecesPlaying('M1').map((piece) => piece.id)
+    for (const id of ['mercy', 'zemlya', 'legenda', 'milost', 'letom']) {
+      expect(playingM1).not.toContain(id)
+    }
+  })
 })

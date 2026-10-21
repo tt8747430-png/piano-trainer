@@ -6,33 +6,33 @@ const pitchAndThePiano: Lesson = {
   id: 'pitch-and-the-piano',
   title: { en: 'Pitch and the piano', ru: 'Высота звука и фортепиано' },
   summary: {
-    en: 'Name every white key and find it in any octave.',
-    ru: 'Называть любую белую клавишу и находить её в любой октаве.',
+    en: 'Learn the names of the white keys and find each one in every octave.',
+    ru: 'Выучите названия белых клавиш и находите каждую в любой октаве.',
   },
   sections: [
     {
-      heading: { en: 'High and low', ru: 'Высоко и низко' },
+      heading: { en: 'High and low', ru: 'Высокие и низкие звуки' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'Pitch', ru: 'Высота звука' },
           text: {
-            en: 'is how high or low a note sounds. Keys to the right sound higher, keys to the left lower.',
-            ru: '— насколько высоко или низко звучит нота. Клавиши правее звучат выше, левее — ниже.',
+            en: 'is how high or low a note sounds. Keys to the right sound higher, keys to the left sound lower. Play these from left to right.',
+            ru: '— это то, насколько высоко или низко звучит нота. Клавиши правее звучат выше, левее — ниже. Сыграйте эти ноты слева направо.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
       ],
     },
     {
-      heading: { en: 'Seven letters', ru: 'Семь нот' },
+      heading: { en: 'The names of the white keys', ru: 'Названия белых клавиш' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'The musical alphabet', ru: 'Названия нот' },
           text: {
-            en: 'has seven letters, A B C D E F G, one to each white key. After G it starts again on A.',
-            ru: '— семь букв, A B C D E F G: ля, си, до, ре, ми, фа, соль. После соль снова ля.',
+            en: 'is seven letters, A B C D E F G, one for each white key. After G it starts again from A. Say each name as you play.',
+            ru: '— семь букв A B C D E F G: ля, си, до, ре, ми, фа, соль. После соль снова идёт ля. Называйте каждую ноту, когда играете.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'A4 B4 C5 D5 E5 F5 G5 A5' },
@@ -44,26 +44,29 @@ const pitchAndThePiano: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The black keys come in twos and threes. C is just left of each two, F just left of each three.',
-            ru: 'Чёрные клавиши идут по две и по три. До — слева от каждой пары, фа — слева от каждой тройки.',
+            en: 'The black keys come in groups of two and three. C is the white key just left of each pair. F is just left of each three.',
+            ru: 'Чёрные клавиши идут группами по две и по три. До — белая клавиша слева от каждой пары. Фа — слева от каждой тройки.',
           },
         },
         {
           kind: 'question',
-          ask: { en: 'Play an F.', ru: 'Сыграйте фа.' },
+          ask: {
+            en: 'Find a group of three black keys and play the F.',
+            ru: 'Найдите тройку чёрных клавиш и сыграйте фа.',
+          },
           answer: { notes: ['F'] },
         },
       ],
     },
     {
-      heading: { en: 'Octaves', ru: 'Октавы' },
+      heading: { en: 'The octave', ru: 'Октава' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'An octave', ru: 'Октава' },
           text: {
-            en: 'spans from a note to the next of the same name, eight white keys up. The two sound alike.',
-            ru: '— расстояние от ноты до следующей с тем же названием, на восемь белых клавиш выше. Они звучат похоже.',
+            en: 'is the distance from a note to the next note of the same name, eight white keys up. The two sound alike, one higher.',
+            ru: '— расстояние от ноты до ближайшей ноты с тем же названием, на восемь белых клавиш выше. Они звучат похоже, только одна выше.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'P8' },
@@ -76,8 +79,8 @@ const pitchAndThePiano: Lesson = {
           kind: 'text',
           lead: { en: 'Middle C', ru: 'До первой октавы' },
           text: {
-            en: 'is the C nearest the middle of the keyboard, written C4. The number changes at each C, so the B below is B3.',
-            ru: '— до у середины клавиатуры, в записи C4. Номер меняется на каждом до, поэтому си под ним — B3.',
+            en: 'is the C nearest the middle of the keyboard, written C4. The number goes up at every C, so the B just below it is B3.',
+            ru: '— это до в середине клавиатуры, в записи C4. Цифра меняется на каждом до, поэтому си прямо под ним — B3.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4/1' },
@@ -89,8 +92,8 @@ const pitchAndThePiano: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play the seven letters from A upwards.',
-            ru: 'Сыграйте семь нот от ля вверх.',
+            en: 'Play the seven letters from A upwards, saying each name.',
+            ru: 'Сыграйте семь нот от ля вверх, называя каждую.',
           },
           answer: { notes: ['A', 'B', 'C', 'D', 'E', 'F', 'G'], rising: true },
         },
@@ -104,13 +107,13 @@ const pitchAndThePiano: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Octaves in the Intervals explorer', ru: 'Октава в разделе «Интервалы»' },
+          title: { en: 'See the octave in Intervals', ru: 'Октава в разделе «Интервалы»' },
           target: { opens: 'intervals', root: note('C') },
         },
         {
           kind: 'link',
           title: {
-            en: 'Hear high and low in Yankee Doodle',
+            en: 'Hear high and low notes in Yankee Doodle',
             ru: 'Высокие и низкие звуки в «Янки Дудл»',
           },
           target: { opens: 'piece', piece: 'yankee-doodle' },

@@ -24,7 +24,7 @@ describe('inversionsExercise', () => {
       [64, 67, 72],
       [60, 64, 67],
     ])
-    expect(exercise.notes[1]?.durationTicks).toBe(24)
+    expect(exercise.notes[1]?.durationTicks).toBe(48)
   })
 
   it('fingers each inversion as it is taught, the root under it in the left hand', () => {

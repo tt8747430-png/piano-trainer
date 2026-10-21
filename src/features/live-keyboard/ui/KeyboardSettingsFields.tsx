@@ -109,6 +109,12 @@ export function KeyboardSettingsFields() {
           detail={t('keyboardSettings.foldedNote')}
           checked={keyboard.folded}
           onCheckedChange={(folded) => setKeyboard(store, { folded })}
+        />
+        <SwitchRow
+          label={t('keyboardSettings.foldedLandscape')}
+          detail={t('keyboardSettings.foldedLandscapeNote')}
+          checked={keyboard.foldedLandscape}
+          onCheckedChange={(foldedLandscape) => setKeyboard(store, { foldedLandscape })}
           className="border-b-0"
         />
       </Part>

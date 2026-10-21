@@ -3,12 +3,71 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
-import { melodyOf, pieceById, PIECES } from '@/entities/piece'
+import { melodyOf, pieceById, PIECES, PIECES_STORAGE_KEY } from '@/entities/piece'
 import { setPracticeToggle } from '@/features/set-preference'
+import { createMemoryStorage } from '@/shared/lib'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
 import { stubFonts } from '@/shared/test/fonts'
 
 describe('Player', () => {
+  it('says an own song is gone once another tab deletes it', async () => {
+    const storage = createMemoryStorage()
+    const song = {
+      id: 'my-1',
+      title: 'Morning',
+      key: 'G',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['G G G G'] }],
+    }
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 1 }),
+    )
+    const { piecesStore } = await renderApp('/play/my-1', { storage })
+    await screen.findByRole('button', { name: 'Play' })
+    act(() => piecesStore.setState({ songs: [] }))
+    expect(await screen.findByRole('link', { name: 'Go to Songs' })).toBeInTheDocument()
+  })
+
+  it('shows the score as its View menu says, remembered for every piece', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/play/romashki')
+    await user.click(await screen.findByRole('button', { name: 'View' }))
+    await user.click(await screen.findByRole('radio', { name: 'Pages' }))
+    expect(settingsStore.getState().scoreView.layout).toBe('pages')
+    expect((await screen.findAllByText('1', { selector: 'span' })).length).toBeGreaterThan(0)
+    expect(document.querySelector('[data-slot="sheet-page"]')).toBeInTheDocument()
+    await user.click(screen.getByRole('switch', { name: 'Notation' }))
+    expect(screen.queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('switch', { name: 'Piano keys' }))
+    expect(settingsStore.getState().scoreView).toMatchObject({ notation: false, keys: false })
+  })
+
+  it('holds the tempo, ‹, Play, › and the hands in one toolbar named Playback', async () => {
+    await renderApp('/play/romashki')
+    const dock = await screen.findByRole('toolbar', { name: 'Playback' })
+    const names = within(dock)
+      .getAllByRole('button')
+      .map((button) => button.getAttribute('aria-label'))
+    expect(names).toEqual(['Tempo: 100%', 'Back', 'Play', 'Next', 'Hands: Both hands'])
+    expect(within(dock).getByRole('button', { name: 'Play' })).toHaveAttribute(
+      'title',
+      'Play (Space)',
+    )
+  })
+
+  it('docks the keys at the foot, under the toolbar, unless the settings dock them at the top', async () => {
+    const { settingsStore } = await renderApp('/play/romashki')
+    const dock = await screen.findByRole('toolbar', { name: 'Playback' })
+    const keys = screen.getByRole('group', { name: 'Keyboard' })
+    expect(dock.compareDocumentPosition(keys) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    act(() => settingsStore.setState((state) => ({ keyboard: { ...state.keyboard, dock: 'top' } })))
+    const top = screen.getByRole('group', { name: 'Keyboard' })
+    expect(dock.compareDocumentPosition(top) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
+  })
+
   it('plays «Ромашковые поля»’s recording along in Listen, from bar 1, slowed to the chart’s tempo', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/romashki')
@@ -236,5 +295,13 @@ describe('Player', () => {
     await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
     expect(screen.queryByRole('combobox', { name: 'Through the keys' })).not.toBeInTheDocument()
+  })
+  it('keeps ‹ and › pointing back and forward on a phone on its side, unlike the tempo’s ↑ ↓', async () => {
+    await renderApp('/play/bz5')
+    const transport = await screen.findByRole('toolbar', { name: 'Playback' })
+    for (const name of ['Back', 'Next']) {
+      const icon = within(transport).getByRole('button', { name }).querySelector('svg')
+      expect(icon?.getAttribute('class')).not.toMatch(/rotate/)
+    }
   })
 })

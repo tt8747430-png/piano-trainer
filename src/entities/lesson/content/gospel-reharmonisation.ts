@@ -7,19 +7,19 @@ const gospelReharmonisation: Lesson = {
   id: 'gospel-reharmonisation',
   title: { en: 'Gospel reharmonisation', ru: 'Госпел-реармонизация' },
   summary: {
-    en: 'Turn a hymn’s plain chords into rich gospel ones.',
-    ru: 'Превращайте простые аккорды гимна в богатые госпел-аккорды.',
+    en: 'Keep a hymn’s tune and give it fuller gospel chords: 9ths, sus chords, IV over V and the minor iv.',
+    ru: 'Сохраните мелодию гимна и дайте ей более полные госпел-аккорды: нонаккорды, sus, IV над V и минорную iv.',
   },
   sections: [
     {
-      heading: { en: 'Plain chords made rich', ru: 'Простые аккорды — богаче' },
+      heading: { en: 'Plain chords made fuller', ru: 'Простые аккорды полнее' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'Reharmonisation', ru: 'Реармонизация' },
           text: {
-            en: 'puts richer chords under the same tune. Play a major 9th on I and IV, a dominant 9th on V.',
-            ru: '— более богатые аккорды под той же мелодией. Сыграйте большой нонаккорд на I и IV, доминантнонаккорд на V.',
+            en: 'means playing fuller chords under the same tune. Compare the plain row with this one: a major 9th on I and IV, a dominant 9th on V.',
+            ru: '— это более полные аккорды под той же мелодией. Сравните простой ряд с этим: большой нонаккорд на I и IV, доминантнонаккорд на V.',
           },
         },
         { kind: 'chords', symbols: ['C', 'F', 'G'] },
@@ -31,10 +31,10 @@ const gospelReharmonisation: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'A sus4 chord', ru: 'В аккорде sus4' },
+          lead: { en: 'A sus4 chord', ru: 'Аккорд sus4' },
           text: {
-            en: 'has the 4th in place of the 3rd. Hold it over the dominant, then let it fall to the 3rd.',
-            ru: 'кварта стоит вместо терции. Задержите её над доминантой, затем опустите в терцию.',
+            en: 'has a 4th in place of the 3rd. Hold the 4th, C, over the dominant, then let it fall to the 3rd, B.',
+            ru: '— это аккорд с квартой вместо терции. Задержите кварту до над доминантой, затем опустите её в терцию си.',
           },
         },
         { kind: 'chords', symbols: ['G7sus4', 'G7', 'C'] },
@@ -46,8 +46,8 @@ const gospelReharmonisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play IV over the dominant’s root: F/G. A soft dominant, it has no 3rd to push it home.',
-            ru: 'Сыграйте IV над основным тоном доминанты: F/G. Это мягкая доминанта, в ней нет терции, которая толкает домой.',
+            en: 'Play the IV chord over the dominant’s root: F/G. It works as a soft dominant. It has no B, the 3rd that pushes toward home.',
+            ru: 'Сыграйте аккорд IV над основным тоном доминанты: F/G. Он звучит как мягкая доминанта. В нём нет си, терции, которая толкает домой.',
           },
         },
         { kind: 'chords', symbols: ['F/G', 'C'] },
@@ -59,8 +59,8 @@ const gospelReharmonisation: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Borrow iv from the minor key: F, Fm, C. Its A♭ falls to G, the sound of an Amen.',
-            ru: 'Возьмите iv из минора: F, Fm, C. Его ля-бемоль спускается в соль. Так звучит «аминь».',
+            en: 'Borrow iv from C minor: F, then Fm, then C. The A♭ in Fm falls to G. It sounds like an Amen.',
+            ru: 'Возьмите iv из до минора: F, затем Fm, затем C. Ля-бемоль из Fm спускается в соль. Это звучит как «аминь».',
           },
         },
         { kind: 'chords', symbols: ['F', 'Fm', 'C'] },
@@ -73,14 +73,14 @@ const gospelReharmonisation: Lesson = {
           kind: 'text',
           lead: { en: 'Tensions', ru: 'Тенсии' },
           text: {
-            en: 'are 9ths, 11ths and 13ths added above a 7th chord. A dominant 7th takes the most, altered or not.',
-            ru: '— ноны, ундецимы и терцдецимы над септаккордом. Больше всего их принимает доминантсептаккорд, альтерированных и нет.',
+            en: 'are 9ths, 11ths and 13ths added above a 7th chord. A dominant 7th takes more of them than any other chord, plain or altered.',
+            ru: '— это ноны, ундецимы и терцдецимы над септаккордом. Доминантсептаккорд принимает их больше всех, простых и альтерированных.',
           },
         },
         { kind: 'chords', symbols: ['G7', 'G9', 'G13', 'G7♭9'] },
         {
           kind: 'link',
-          title: { en: 'G7’s tensions', ru: 'Тенсии G7' },
+          title: { en: 'Explore G7’s tensions', ru: 'Тенсии G7' },
           target: { opens: 'tensions', chord: 'd7', root: note('G') },
         },
       ],
@@ -106,7 +106,7 @@ const gospelReharmonisation: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'C in Reharmonise', ru: 'До в «Гармонизации мелодии»' },
+          title: { en: 'Find chords under the note C', ru: 'Аккорды под нотой до' },
           target: { opens: 'harmonise', key: C_MAJOR, note: note('C') },
         },
       ],

@@ -5,8 +5,8 @@ const inversions: Lesson = {
   id: 'inversions',
   title: { en: 'Inversions', ru: 'Обращения' },
   summary: {
-    en: 'Put any note of a chord lowest and change chords smoothly.',
-    ru: 'Ставить внизу любую ноту аккорда и плавно менять аккорды.',
+    en: 'Play a chord with any of its notes at the bottom, and use that to move between chords smoothly.',
+    ru: 'Играйте аккорд с любой его нотой внизу и плавно переходите так от аккорда к аккорду.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const inversions: Lesson = {
           kind: 'text',
           lead: { en: 'Root position', ru: 'Основной вид' },
           text: {
-            en: 'means the root is the lowest note.',
-            ru: '— это когда основной тон звучит ниже всех.',
+            en: 'means the chord’s root is its lowest note. C major in root position is C E G, from the bottom up.',
+            ru: '— это когда основной тон звучит ниже всех. До мажор в основном виде снизу вверх: до, ми, соль.',
           },
         },
         { kind: 'chords', symbols: ['C'] },
@@ -30,8 +30,8 @@ const inversions: Lesson = {
           kind: 'text',
           lead: { en: 'An inversion', ru: 'Обращение' },
           text: {
-            en: 'puts another chord note lowest. Move C up an octave and the 3rd is lowest: C/E.',
-            ru: '— тот же аккорд с другой нотой внизу. Перенесите до на октаву вверх, и внизу окажется терция: C/E.',
+            en: 'is the same chord with another of its notes at the bottom. Move C up an octave to get E G C. Now the 3rd is lowest, written C/E.',
+            ru: '— тот же аккорд с другой своей нотой внизу. Перенесите до на октаву вверх: ми, соль, до. Теперь внизу терция, это пишут C/E.',
           },
         },
         { kind: 'chords', symbols: ['C/E'] },
@@ -43,8 +43,8 @@ const inversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Move the 3rd up an octave too. Now the 5th is lowest: C/G.',
-            ru: 'Перенесите вверх и терцию. Теперь внизу квинта: C/G.',
+            en: 'Now move E up an octave too, to get G C E. The 5th is lowest, written C/G.',
+            ru: 'Теперь перенесите на октаву вверх и ми: соль, до, ми. Внизу квинта, это пишут C/G.',
           },
         },
         { kind: 'chords', symbols: ['C/G'] },
@@ -56,8 +56,8 @@ const inversions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Inversions let the hand change chords while barely moving. Keep the shared note and move the others by step.',
-            ru: 'Обращения позволяют менять аккорды, почти не сдвигая руку. Общую ноту оставьте, остальные сдвиньте на шаг.',
+            en: 'With inversions your hand barely moves between chords. Keep any note the two chords share. Move the other notes to the nearest notes of the next chord.',
+            ru: 'С обращениями рука почти не сдвигается между аккордами. Общую ноту двух аккордов оставьте. Остальные переставьте на ближайшие ноты следующего аккорда.',
           },
         },
         { kind: 'chords', symbols: ['C', 'F/C', 'G/B', 'C'] },

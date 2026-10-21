@@ -10,7 +10,10 @@ export default definePiece({
   meter: '4/4',
   tempo: 100,
   pattern: 'r7',
-  note: { en: 'A good first melody for both hands.', ru: 'Хорошая первая мелодия для двух рук.' },
+  note: {
+    en: 'A good first tune to play with both hands.',
+    ru: 'Хорошая первая мелодия для игры двумя руками.',
+  },
   sections: [
     { kind: 'part', label: 'A', lines: ['C G', 'C G'] },
     { kind: 'part', label: 'A', lines: ['C G', 'C G-C'] },

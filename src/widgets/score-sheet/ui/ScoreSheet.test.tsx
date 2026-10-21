@@ -22,9 +22,9 @@ const sheet = (layer: Layer, onPlace = vi.fn(), chordNames = true, onSignature =
   render(
     <ScoreSheet
       draft={draft}
-      caret={48}
+      caret={96}
       layer={layer}
-      caretTicks={12}
+      caretTicks={24}
       selection={null}
       onPlace={onPlace}
       placesOf={(to) => placesIn(createEditorStore(draft, vi.fn()).getState(), to)}
@@ -50,16 +50,24 @@ describe('ScoreSheet', () => {
     const onPlace = vi.fn()
     sheet('chords', onPlace)
     await user.click(await screen.findByRole('button', { name: 'Bar 3: Em' }))
-    expect(onPlace).toHaveBeenLastCalledWith(96, 'chords', false)
+    expect(onPlace).toHaveBeenLastCalledWith(192, 'chords', false)
     await user.keyboard('{Shift>}')
     await user.click(screen.getByRole('button', { name: 'Bar 4: C' }))
-    expect(onPlace).toHaveBeenLastCalledWith(144, 'chords', true)
+    expect(onPlace).toHaveBeenLastCalledWith(288, 'chords', true)
   })
 
   it('marks the bars a hand leaves to the pattern, in that hand’s layer', async () => {
     sheet('lh')
     await screen.findByRole('button', { name: 'Bar 1: G' })
     expect(screen.getAllByText('Pattern')).toHaveLength(4)
+  })
+
+  it('says Pattern in the labels over the staff, clear of the notes', async () => {
+    sheet('rh')
+    await screen.findByRole('button', { name: 'Bar 1: G' })
+    for (const mark of screen.getAllByText('Pattern')) {
+      expect(mark.closest('[data-slot="line-labels"]')).not.toBeNull()
+    }
   })
 
   it('writes a click over the staff into the tune when chord names are hidden', async () => {
@@ -85,6 +93,27 @@ describe('ScoreSheet', () => {
   it('marks the notes at the caret on its staff as the ones chosen', async () => {
     sheet('melody')
     await waitFor(() => expect(document.querySelector('.vf-selected')).toBeInTheDocument())
-    expect(document.querySelector('.vf-selected')).toHaveAttribute('data-staff', 'treble')
+    expect(document.querySelector('.vf-selected')).toHaveAttribute('data-staff', 'melody')
+  })
+
+  it('opens where it is with the caret’s line in sight, and brings a line the caret moves onto into view', async () => {
+    const scrolled = vi.mocked(Element.prototype.scrollIntoView)
+    scrolled.mockClear()
+    const props = {
+      draft,
+      layer: 'chords' as const,
+      caretTicks: 24,
+      selection: null,
+      onPlace: vi.fn(),
+      placesOf: () => [],
+      heading: () => null,
+      chordNames: true,
+      onSignature: vi.fn(),
+    }
+    const { rerender } = render(<ScoreSheet {...props} caret={96} />)
+    await screen.findByRole('button', { name: 'Bar 2: C D' })
+    expect(scrolled).not.toHaveBeenCalled()
+    rerender(<ScoreSheet {...props} caret={288} />)
+    expect(scrolled).toHaveBeenCalledWith({ block: 'nearest' })
   })
 })

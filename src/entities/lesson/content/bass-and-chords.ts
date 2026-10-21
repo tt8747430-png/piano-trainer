@@ -7,8 +7,8 @@ const bassAndChords: Lesson = {
   id: 'bass-and-chords',
   title: { en: 'Bass and chords', ru: 'Бас и аккорды' },
   summary: {
-    en: 'Split a chord chart between the hands: bass left, chord right.',
-    ru: 'Делите аккорды между руками: бас в левой, аккорд в правой.',
+    en: 'Turn chord names into music: the bass in the left hand, the chord in the right.',
+    ru: 'Превращайте названия аккордов в музыку: бас в левой руке, аккорд в правой.',
   },
   sections: [
     {
@@ -16,10 +16,10 @@ const bassAndChords: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'From a chord chart,', ru: 'По аккордовой записи' },
+          lead: { en: 'A chord chart', ru: 'Аккордовая запись' },
           text: {
-            en: 'split each chord: the left hand plays its root low, the right hand the chord near the middle.',
-            ru: 'делите каждый аккорд: левая рука берёт его основной тон внизу, правая — сам аккорд в середине.',
+            en: 'gives only chord names. Play each one with two hands: the left hand plays the root low, the right hand plays the chord near middle C.',
+            ru: 'даёт только названия аккордов. Каждый играйте двумя руками: левая берёт основной тон внизу, правая — весь аккорд около до первой октавы.',
           },
         },
         {
@@ -39,8 +39,8 @@ const bassAndChords: Lesson = {
           kind: 'text',
           lead: { en: 'An inversion', ru: 'Обращение' },
           text: {
-            en: 'is the same chord with another note at the bottom. Take the nearest: keep shared notes, move the rest by the smallest step.',
-            ru: '— тот же аккорд с другой нотой внизу. Берите ближайшее: общие ноты оставьте, остальные сдвиньте на ближайшую ступень.',
+            en: 'is the same chord with another of its notes at the bottom. Choose the one nearest your hand: keep shared notes still and move the others as little as you can.',
+            ru: '— тот же аккорд с другой своей нотой внизу. Выбирайте ближайшее к руке: общие ноты оставьте, остальные сдвиньте как можно меньше.',
           },
         },
         {
@@ -60,8 +60,8 @@ const bassAndChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Strike the bass and the chord together on beat 1, then the chord alone on each beat after.',
-            ru: 'Бас и аккорд вместе на первую долю, затем аккорд один на каждую следующую.',
+            en: 'Now add rhythm. On beat 1 play the bass and the chord together. On each beat after, repeat the chord alone.',
+            ru: 'Теперь добавьте ритм. На первую долю играйте бас и аккорд вместе. На каждую следующую повторяйте один аккорд.',
           },
         },
         { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
@@ -73,8 +73,8 @@ const bassAndChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Hold the chord in the right hand and move the bass: root, the 5th below, root, the 5th below.',
-            ru: 'Правая рука держит аккорд, а бас движется: основной тон, квинта вниз, основной тон, квинта вниз.',
+            en: 'The right hand holds the chord. The left hand walks between two notes: the root, then the chord’s 5th below it, and again.',
+            ru: 'Правая рука держит аккорд. Левая ходит между двумя нотами: основной тон, затем квинта аккорда под ним, и снова.',
           },
         },
         {
@@ -91,8 +91,8 @@ const bassAndChords: Lesson = {
           kind: 'text',
           lead: { en: 'Oom-pah:', ru: 'Бас — аккорд:' },
           text: {
-            en: 'the hands take turns. In a waltz the bass sounds on 1, the chord on 2 and 3.',
-            ru: 'руки звучат по очереди. В вальсе бас — на раз, аккорд — на два и три.',
+            en: 'the hands take turns instead of playing together. In a waltz, count 1 2 3: the bass on 1, the chord on 2 and 3.',
+            ru: 'руки играют по очереди, а не вместе. В вальсе считайте «раз, два, три»: бас на раз, аккорд на два и три.',
           },
         },
         {
@@ -129,12 +129,12 @@ const bassAndChords: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'I–IV–V–I in the Player', ru: 'I–IV–V–I в плеере' },
+          title: { en: 'Practise I–IV–V–I in the Player', ru: 'I–IV–V–I в плеере' },
           target: { opens: 'player', numerals: 'I IV V I', key: C_MAJOR },
         },
         {
           kind: 'link',
-          title: { en: 'I–vi–IV–V in the Player', ru: 'I–vi–IV–V в плеере' },
+          title: { en: 'Practise I–vi–IV–V in the Player', ru: 'I–vi–IV–V в плеере' },
           target: { opens: 'player', numerals: 'I vi IV V', key: C_MAJOR },
         },
       ],

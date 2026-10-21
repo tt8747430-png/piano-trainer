@@ -72,6 +72,16 @@ describe('Custom', () => {
     expect(asks.kind === 'notes' && asks.notes.map((n) => n.key)).toEqual([60, 61, 61, 62])
   })
 
+  it('ignores an end of Reading notes’ range off the piano', () => {
+    const keys = (from: string, to: string) => {
+      const asks = trainerOf('reading-notes').asks(CUSTOM, { ...TEN, from, to }, [])
+      return asks.kind === 'notes' ? asks.notes.map((n) => n.key) : []
+    }
+    expect(keys('C-1', 'D4')).toEqual([60, 62])
+    expect(keys('C4', 'C9')).toEqual([60, 62, 64, 65, 67, 69, 71, 72])
+    expect(keys('A0', 'C8')).toHaveLength(52)
+  })
+
   it('hears chords one note at a time and scales coming down when the URL says so', () => {
     expect(trainerOf('chords-by-ear').asks(CUSTOM, { ...TEN, arpeggio: true }, [])).toMatchObject({
       arpeggio: true,

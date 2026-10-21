@@ -5,8 +5,8 @@ const practiceTwo: Lesson = {
   id: 'practice-two',
   title: { en: 'Practice and repetition 2', ru: 'Практика и повторение 2' },
   summary: {
-    en: 'Read leaps, eighths and position shifts in both clefs.',
-    ru: 'Читать скачки, восьмые и смену позиций в обоих ключах.',
+    en: 'Read wider leaps, eighth notes, rests and a change of hand position in both clefs.',
+    ru: 'Читать широкие скачки, восьмые, паузы и смену позиции руки в обоих ключах.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const practiceTwo: Lesson = {
           kind: 'text',
           lead: { en: 'A leap', ru: 'Широкий скачок' },
           text: {
-            en: 'is any move wider than a skip. Read it as an interval from the last note, not letter by letter.',
-            ru: '— любое движение шире терции. Читайте его как интервал от предыдущей ноты, а не по буквам.',
+            en: 'is any move wider than a skip. Read it as a distance from the last note, such as C up to G, instead of naming every letter between.',
+            ru: '— любое движение шире терции. Читайте его как расстояние от предыдущей ноты, например от до вверх к соль, а не перебирая все ноты между ними.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 G4 E4 C4 F4/2 D4/2 G4 C4 F4 D4 C4/1' },
@@ -30,21 +30,21 @@ const practiceTwo: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Bottom line to second space is G2 to C3, a 4th. Under the staff to second space is F2 to C3, a 5th.',
-            ru: 'С нижней линейки во второй промежуток — соль — до, кварта. Из-под стана во второй промежуток — фа — до, квинта.',
+            en: 'Learn two leaps by their look. Bottom line to second space is G2 to C3, a 4th. Under the staff to second space is F2 to C3, a 5th.',
+            ru: 'Запомните два скачка на вид. С нижней линейки во второй промежуток — соль — до, кварта. Из-под стана во второй промежуток — фа — до, квинта.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'C3 F2 G2 C3 A2 F2 C3/2 G2 C3 B2 F2 G2/1' },
       ],
     },
     {
-      heading: { en: 'Moving between positions', ru: 'Смена позиции' },
+      heading: { en: 'Changing position', ru: 'Смена позиции' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'The left hand starts with finger 5 on C3, then moves up to F3. Move the hand as the whole note ends.',
-            ru: 'Левая рука начинает с пятого пальца на до, затем переходит на фа. Перенесите руку, когда закончится целая.',
+            en: 'The left hand starts with finger 5 on C3, then moves up so finger 5 is on F3. Move the hand when the whole note ends.',
+            ru: 'Левая рука начинает с пятого пальца на до, затем переходит выше, и пятый палец встаёт на фа. Перенесите руку, когда закончится целая нота.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'C3 D3 E3 D3 C3/1 F3 G3 A3 B3 A3 F3 G3/2 F3/1' },
@@ -62,8 +62,8 @@ const practiceTwo: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Count 1 and 2 and through the eighths. Read them in groups of two, a beat at a time.',
-            ru: 'Считайте «раз-и, два-и» на восьмых. Читайте их парами, по одной доле.',
+            en: 'Count 1 and 2 and through the eighths. Read them in pairs, one beat at a time. Then read the left hand’s line the same way.',
+            ru: 'Считайте «раз-и, два-и» на восьмых. Читайте их парами, по одной доле. Затем так же прочитайте строку левой руки.',
           },
         },
         {
@@ -80,12 +80,16 @@ const practiceTwo: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play each treble line, then the bass line that answers it, without a gap between.',
-            ru: 'Сыграйте каждую строку в скрипичном ключе, затем ответную в басовом, без паузы между ними.',
+            en: 'Play each treble line with the right hand. Then play the bass line under it with the left, with no gap between them.',
+            ru: 'Сыграйте каждую строку в скрипичном ключе правой рукой. Затем левой сыграйте басовую строку под ней, без паузы между ними.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'G4 E4 C4 E4 F4 D4 G4/2 E4 C4 D4 G4 C4/1' },
-        { kind: 'notes', clef: 'bass', notes: 'C3 A2 F2 A2 B2 G2 C3/2 A2 F2 G2 C3 F2/1' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'G4 E4 C4 E4 F4 D4 G4/2 E4 C4 D4 G4 C4/1',
+          bass: 'C3 A2 F2 A2 B2 G2 C3/2 A2 F2 G2 C3 F2/1',
+        },
         { kind: 'notes', clef: 'treble', meter: '3/4', notes: 'E4 G4 C4 D4/2 G4 F4 D4 E4 C4/2.' },
         { kind: 'notes', clef: 'bass', meter: '3/4', notes: 'F3 A3 C4 B3/2 G3 A3 F3 G3 F3/2.' },
       ],
@@ -96,12 +100,16 @@ const practiceTwo: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Count the rests as firmly as the notes.',
-            ru: 'Отсчитывайте паузы так же твёрдо, как ноты.',
+            en: 'Count every rest as firmly as a note. Lift the hand on the rest and come in exactly on the next beat.',
+            ru: 'Отсчитывайте каждую паузу так же твёрдо, как ноту. На паузе снимите руку и вступайте точно на следующей доле.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4 r/4 G4 r/4 E4/2. r/4 F4 D4 G4/2 C4/1' },
-        { kind: 'notes', clef: 'bass', notes: 'r/4 C3 G2 C3 F2/2. r/4 A2 B2 G2/2 C3/1' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'C4 r/4 G4 r/4 E4/2. r/4 F4 D4 G4/2 C4/1',
+          bass: 'r/4 C3 G2 C3 F2/2. r/4 A2 B2 G2/2 C3/1',
+        },
       ],
     },
     {
@@ -133,7 +141,7 @@ const practiceTwo: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          title: { en: 'Practise reading notes in the Quiz', ru: 'Чтение нот в тестах' },
           target: { opens: 'quiz', trainer: 'reading-notes' },
         },
       ],

@@ -43,6 +43,10 @@ export interface AudioOutput {
    */
   press(key: Midi, velocity: number): void
   release(key: Midi): void
+  /**
+   * A source puts `pedal` down or lets it up: each down is paired with its own up, and the pedal is
+   * down while any source holds it.
+   */
   pedal(pedal: PedalKind, down: boolean): void
   /** The pedals now: the same object until one changes. */
   pedals(): Readonly<Record<PedalKind, boolean>>

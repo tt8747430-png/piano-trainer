@@ -5,8 +5,8 @@ const lhCBA: Lesson = {
   id: 'lh-c-b-a',
   title: { en: 'C, B and A in the left hand', ru: 'До, си и ля в левой руке' },
   summary: {
-    en: 'Sight-read C, B and A in the left hand.',
-    ru: 'Читать с листа и играть левой рукой до, си и ля.',
+    en: 'Read C, B and A on the bass staff and play them with left-hand fingers 1, 2 and 3.',
+    ru: 'Читать до, си и ля в басовом ключе и играть их первым, вторым и третьим пальцами левой руки.',
   },
   sections: [
     {
@@ -15,8 +15,8 @@ const lhCBA: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Left thumb on C3 in the second space, finger 2 on B2 on the second line, 3 on A2 in the first space.',
-            ru: 'Левый первый палец на до во втором промежутке, второй — на си на второй линейке, третий — на ля в первом промежутке.',
+            en: 'The left hand is numbered like the right, thumb 1 to little finger 5. Thumb on C3, the second space. Finger 2 on B2, the second line. Finger 3 on A2, the first space.',
+            ru: 'Пальцы левой руки нумеруют так же: от большого (1) до мизинца (5). Первый палец на до во втором промежутке, второй на си на второй линейке, третий на ля в первом промежутке.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'A2 B2 C3 B2 A2/1' },
@@ -28,8 +28,8 @@ const lhCBA: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'In the left hand, going up the staff moves toward the thumb, going down toward finger 5.',
-            ru: 'В левой руке вверх по стану — к первому пальцу, вниз — к пятому.',
+            en: 'In the left hand the thumb plays the highest note. So notes going up the staff move toward the thumb, and notes going down move toward finger 5.',
+            ru: 'В левой руке первый палец играет самую высокую ноту. Поэтому вверх по стану — к первому пальцу, вниз — к пятому.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'A2 B2 C3/2 C3 B2 A2/2 B2 C3 B2 A2 C3/1' },
@@ -42,8 +42,8 @@ const lhCBA: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A2 to C3 is a skip, space to space. Fingers 3 and 1 play it, 2 waits over B.',
-            ru: 'Ля — до — скачок из промежутка в промежуток. Его играют третий и первый пальцы, второй ждёт над си.',
+            en: 'A2 to C3 is a skip, from space to space. Fingers 3 and 1 play it. Finger 2 waits over B.',
+            ru: 'Ля — до — скачок из промежутка в промежуток. Его играют третий и первый пальцы, а второй ждёт над си.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'A2 C3 A2 C3 B2/2 A2/2 C3 A2 B2 C3 A2/1' },
@@ -55,21 +55,21 @@ const lhCBA: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play each repeat with the same finger, from the key’s surface.',
-            ru: 'Каждый повтор играйте тем же пальцем, не отрывая его от клавиши.',
+            en: 'Play a repeated note with the same finger. Keep the finger close to the key between the two notes.',
+            ru: 'Повторённую ноту играйте тем же пальцем. Между нотами держите палец у самой клавиши.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'C3 C3 B2 B2 A2 A2 C3/2 B2 B2 A2 B2 C3/1' },
       ],
     },
     {
-      heading: { en: 'Read on sight', ru: 'Чтение с листа' },
+      heading: { en: 'Sight-reading', ru: 'Чтение с листа' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Read the bass staff by its own lines, not the treble’s.',
-            ru: 'Читайте басовый стан по его линейкам, а не по скрипичным.',
+            en: 'The bass staff names its lines differently from the treble staff. Read each note from the bass staff’s own landmarks, such as C in the second space.',
+            ru: 'Линейки басового стана называются иначе, чем скрипичного. Читайте каждую ноту от ориентиров басового стана, например от до во втором промежутке.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'C3 B2 A2 B2 C3 C3 C3/2 B2 B2 C3 B2 A2/1' },
@@ -82,7 +82,10 @@ const lhCBA: Lesson = {
       blocks: [
         {
           kind: 'question',
-          ask: { en: 'Play the note on the second line.', ru: 'Сыграйте ноту на второй линейке.' },
+          ask: {
+            en: 'Play the note on the bass staff’s second line.',
+            ru: 'Сыграйте ноту на второй линейке басового стана.',
+          },
           answer: { notes: ['B'] },
         },
         {
@@ -95,12 +98,12 @@ const lhCBA: Lesson = {
         },
         {
           kind: 'question',
-          ask: { en: 'Play A, then skip up to C.', ru: 'Сыграйте ля, затем скачком до.' },
+          ask: { en: 'Play A, then skip up to C.', ru: 'Сыграйте ля, затем скачком вверх до.' },
           answer: { notes: ['A', 'C'], rising: true },
         },
         {
           kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          title: { en: 'Practise reading notes in the Quiz', ru: 'Чтение нот в тестах' },
           target: { opens: 'quiz', trainer: 'reading-notes' },
         },
       ],

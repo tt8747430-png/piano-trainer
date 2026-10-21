@@ -46,6 +46,8 @@
   --p-honey-night: #d4b176;
   --p-ochre: #a8742a;
   --p-crimson: #a34243;
+  /* The shade cast by night: near black, warm. */
+  --p-night-shade: #0a0705;
 
   --p-dusk-950: #191512;
   --p-dusk-900: #24201c;
@@ -124,6 +126,27 @@
   --ring: var(--p-sky-deep);
   /* A slider's thumb: white by day, near-white by night, on the muted track in both. */
   --thumb: var(--p-white);
+  /*
+   * What floats over the page (the floating buttons, the transport, a dial's chips): a surface a step
+   * off the page's (`--raised`) and a soft shade in layers, a contact shade under a wide, faint
+   * one. Three heights: resting second actions (1), the main action and the transport (2), a pointer
+   * over either (3). Ink by day; by night a deeper, stronger shade, since dark paper casts little.
+   */
+  --raised: var(--p-paper-card);
+  --shade: var(--p-ink);
+  --shade-near: 12%;
+  --shade-far: 14%;
+  --elevation-1:
+    0 1px 2px color-mix(in oklab, var(--shade) var(--shade-near), transparent),
+    0 3px 8px -2px color-mix(in oklab, var(--shade) var(--shade-far), transparent);
+  --elevation-2:
+    0 1px 3px color-mix(in oklab, var(--shade) var(--shade-near), transparent),
+    0 6px 14px -4px color-mix(in oklab, var(--shade) var(--shade-far), transparent),
+    0 14px 28px -8px color-mix(in oklab, var(--shade) var(--shade-far), transparent);
+  --elevation-3:
+    0 2px 4px color-mix(in oklab, var(--shade) var(--shade-near), transparent),
+    0 10px 20px -6px color-mix(in oklab, var(--shade) var(--shade-far), transparent),
+    0 22px 40px -12px color-mix(in oklab, var(--shade) var(--shade-far), transparent);
 
   /* Chord-tone roles (spec §8): only on chord tones — keys, the legend, a chord chip. */
   --role-root: var(--p-brick);
@@ -227,6 +250,11 @@
     --hairline: var(--p-dusk-800);
     --ring: var(--p-sky-light);
     --thumb: var(--p-dusk-ink);
+    /* By night what floats is a step lighter than the cards, and its shade deeper. */
+    --raised: var(--p-dusk-800);
+    --shade: var(--p-night-shade);
+    --shade-near: 45%;
+    --shade-far: 50%;
 
     /* By night the keys keep their paper, a shade softer; the marks do not change. */
     --key-white: var(--p-dusk-key);

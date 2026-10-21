@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, expect, it } from 'vitest'
 import { note, placeScale, scaleKey } from '@/shared/lib/music'
 import { notate, ticksOf, type Score } from '@/shared/lib/notation'

@@ -15,8 +15,8 @@ export default definePiece({
   tempo: 72,
   pattern: 'r4',
   note: {
-    en: 'The last chorus moves up a half step, from G♯ minor to A minor. The score writes D♯/F𝄪 as D♯/G, and Bdim7 as Hdim7.',
-    ru: 'Последний припев поднимается на полтона, из соль-диез минора в ля минор. В нотах D♯/F𝄪 записан как D♯/G, а Bdim7 — как Hdim7.',
+    en: 'The last chorus goes up a half step, from G♯ minor to A minor. The score writes D♯/F𝄪 as D♯/G and Bdim7 as Hdim7.',
+    ru: 'Последний припев поднимается на полтона: из соль-диез минора в ля минор. В нотах D♯/F𝄪 записан как D♯/G, а Bdim7 — как Hdim7.',
   },
   sections: [
     {

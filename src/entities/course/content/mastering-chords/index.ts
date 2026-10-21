@@ -10,8 +10,8 @@ const course: Course = {
   stage: 'intermediate',
   title: { en: 'Mastering Chords', ru: 'Аккорды в совершенстве' },
   summary: {
-    en: 'Build any major or minor chord on all twelve roots by counting semitones, then play each in its three positions and reach the nearest one.',
-    ru: 'Стройте любой мажорный и минорный аккорд от всех двенадцати нот, считая полутоны, затем играйте каждый в трёх видах и находите ближайший.',
+    en: 'Build a major or minor chord on any of the twelve roots by counting semitones. Then play each chord in its three positions and learn to reach the nearest one.',
+    ru: 'Стройте мажорное и минорное трезвучие от любой из двенадцати нот, считая полутоны. Затем играйте каждое в трёх видах и находите ближайший.',
   },
   weeks: 4,
   lessons: [buildMajorChords, buildMinorChords, majorInversions, minorInversions],

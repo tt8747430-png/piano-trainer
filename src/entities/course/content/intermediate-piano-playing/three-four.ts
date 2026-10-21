@@ -8,8 +8,8 @@ const threeFour: Lesson = {
   id: 'three-four',
   title: { en: '3/4 time', ru: 'Размер 3/4' },
   summary: {
-    en: 'Play in 3/4 with a waltz bass in the left hand.',
-    ru: 'Играть в 3/4 с вальсовым басом в левой руке.',
+    en: 'Count three beats to a bar, hold a dotted half, and play a waltz bass in the left hand.',
+    ru: 'Считать три доли в такте, выдерживать половинную с точкой и играть вальсовый бас левой рукой.',
   },
   sections: [
     {
@@ -17,10 +17,10 @@ const threeFour: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: '3/4:', ru: '3/4:' },
+          lead: { en: '3/4 time:', ru: 'Размер 3/4:' },
           text: {
-            en: 'three quarter-note beats in every bar. Count «1 2 3» and lean on 1: ONE two three.',
-            ru: 'три четвертные доли в каждом такте. Считайте «раз-два-три» с опорой на первую: РАЗ-два-три.',
+            en: 'three beats in every bar, each a quarter note. Count “1 2 3” and lean on 1: ONE two three.',
+            ru: 'три доли в каждом такте, каждая — четверть. Считайте «раз, два, три» с опорой на первую: РАЗ-два-три.',
           },
         },
         {
@@ -37,8 +37,8 @@ const threeFour: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A whole note is too long for 3/4. A note that fills the bar is a dotted half: hold it «1 2 3».',
-            ru: 'Целая нота для 3/4 слишком долгая. Звук на весь такт — половинная с точкой: держите её «раз-два-три».',
+            en: 'A whole note lasts four beats, so it does not fit in 3/4. A note that fills the bar is a dotted half. Hold it for “1 2 3”.',
+            ru: 'Целая нота длится четыре доли, поэтому в 3/4 не помещается. Звук на весь такт — половинная с точкой. Держите её на «раз, два, три».',
           },
         },
         {
@@ -50,13 +50,13 @@ const threeFour: Lesson = {
       ],
     },
     {
-      heading: { en: 'Oom-pah-pah', ru: 'Бас – аккорд – аккорд' },
+      heading: { en: 'Oom-pah-pah', ru: 'Бас, аккорд, аккорд' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'The waltz’s left hand plays the root low on beat 1, then the chord’s other notes on beats 2 and 3.',
-            ru: 'В вальсе левая рука берёт основной тон в басу на первую долю, затем остальные звуки аккорда на вторую и третью.',
+            en: 'In a waltz, the left hand plays the root low on beat 1. On beats 2 and 3 it plays two of the chord’s other notes, higher up.',
+            ru: 'В вальсе левая рука берёт основной тон в басу на первую долю. На вторую и третью она играет выше два других звука аккорда.',
           },
         },
         {
@@ -75,10 +75,10 @@ const threeFour: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Minuet:', ru: 'Менуэт:' },
+          lead: { en: 'A minuet', ru: 'Менуэт' },
           text: {
-            en: 'a dance in 3/4. The Minuet in G opens with these four bars, one strong beat in each.',
-            ru: 'танец в размере 3/4. Менуэт соль мажор начинается этими четырьмя тактами, в каждом одна сильная доля.',
+            en: 'is a dance in 3/4. The Minuet in G opens with these four bars. Feel one strong beat at the start of each.',
+            ru: '— танец в размере 3/4. Менуэт соль мажор начинается этими четырьмя тактами. Почувствуйте сильную долю в начале каждого.',
           },
         },
         {
@@ -101,7 +101,7 @@ const threeFour: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play the chord an oom-pah-pah on C spreads out.',
+            en: 'Play, all at once, the chord that an oom-pah-pah on C breaks up.',
             ru: 'Сыграйте целиком аккорд, из которого строится вальсовый бас от до.',
           },
           answer: { chord: 'C' },
@@ -109,7 +109,7 @@ const threeFour: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Play G7’s «pah»: its 7th and 3rd, F and B.',
+            en: 'Play the “pah” of G7: its 7th and 3rd, F and B.',
             ru: 'Сыграйте аккордовую часть G7: септиму и терцию, фа и си.',
           },
           answer: { notes: ['F', 'B'] },

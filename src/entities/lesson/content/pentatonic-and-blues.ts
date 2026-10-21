@@ -5,8 +5,8 @@ const pentatonicAndBlues: Lesson = {
   id: 'pentatonic-and-blues',
   title: { en: 'Pentatonic and blues scales', ru: 'Пентатоника и блюзовая гамма' },
   summary: {
-    en: 'Play the major and minor pentatonic and both blues scales.',
-    ru: 'Играть мажорную и минорную пентатонику и обе блюзовые гаммы.',
+    en: 'Play the five-note scales, major and minor, then add one note to each for the two blues scales.',
+    ru: 'Играть пятинотные гаммы, мажорную и минорную, и добавлять к каждой по ноте, чтобы получить две блюзовые гаммы.',
   },
   sections: [
     {
@@ -16,16 +16,16 @@ const pentatonicAndBlues: Lesson = {
           kind: 'text',
           lead: { en: 'The major pentatonic', ru: 'Мажорная пентатоника' },
           text: {
-            en: 'is the major scale without its 4th and 7th. With no half steps, no note clashes.',
-            ru: '— мажорная гамма без четвёртой и седьмой ступеней. Без полутонов ни одна нота не режет слух.',
+            en: 'is a five-note scale: the major scale without its 4th and 7th. It has no half steps, so no two notes clash.',
+            ru: '— это гамма из пяти нот: мажор без четвёртой и седьмой ступеней. В ней нет полутонов, поэтому ноты не режут слух.',
           },
         },
         { kind: 'scale', root: note('C'), scale: 'pent' },
         {
           kind: 'note',
           text: {
-            en: 'The black keys alone are G♭ major pentatonic.',
-            ru: 'Одни чёрные клавиши — это соль-бемоль-мажорная пентатоника.',
+            en: 'Try the black keys alone: they make G♭ major pentatonic.',
+            ru: 'Сыграйте одни чёрные клавиши: это соль-бемоль-мажорная пентатоника.',
           },
         },
       ],
@@ -37,11 +37,15 @@ const pentatonicAndBlues: Lesson = {
           kind: 'text',
           lead: { en: 'The minor pentatonic', ru: 'Минорная пентатоника' },
           text: {
-            en: 'holds the notes of the major pentatonic a minor 3rd up. A minor shares C major’s.',
-            ru: 'состоит из нот мажорной пентатоники на малую терцию выше. У ля минорной те же ноты, что у до мажорной.',
+            en: 'uses the notes of the major pentatonic a minor 3rd above. A minor pentatonic has C major pentatonic’s notes, starting on A.',
+            ru: 'состоит из нот мажорной пентатоники на малую терцию выше. В ля-минорной пентатонике ноты до-мажорной, но начинается она с ля.',
           },
         },
         { kind: 'scale', root: note('A'), scale: 'mpent' },
+        {
+          kind: 'text',
+          text: { en: 'Play it and end on A.', ru: 'Сыграйте её и закончите на ля.' },
+        },
       ],
     },
     {
@@ -51,8 +55,8 @@ const pentatonicAndBlues: Lesson = {
           kind: 'text',
           lead: { en: 'The blues scale', ru: 'Блюзовая гамма' },
           text: {
-            en: 'is the minor pentatonic with one more note: the ♭5, the blue note. Pass through it, do not stop on it.',
-            ru: '— минорная пентатоника с ещё одной нотой, ♭5, «блюзовой нотой». Проходите через неё, не останавливаясь.',
+            en: 'is the minor pentatonic plus one note, the ♭5. This blue note is for passing through. Do not stop on it.',
+            ru: '— это минорная пентатоника и ещё одна нота, ♭5. Через эту «блюзовую ноту» проходят, на ней не останавливаются.',
           },
         },
         { kind: 'scale', root: note('C'), scale: 'blues' },
@@ -63,13 +67,14 @@ const pentatonicAndBlues: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'The major blues scale', ru: 'Мажорная блюзовая гамма' },
           text: {
-            en: 'The major pentatonic with a ♭3 that slides up into the 3rd: the sound of gospel and country runs.',
-            ru: 'Мажорная пентатоника с ♭3, которая соскальзывает в терцию: так звучат пассажи в госпеле и кантри.',
+            en: 'is the major pentatonic plus a ♭3 that slides up into the 3rd. Gospel and country runs use it.',
+            ru: '— это мажорная пентатоника и ♭3, которая соскальзывает в терцию. Так звучат пассажи в госпеле и кантри.',
           },
         },
         { kind: 'scale', root: note('C'), scale: 'majorBlues' },
-        { kind: 'notes', clef: 'treble', notes: 'D#4/8 E4/8 G4/8 A4/8 C5/2' },
+        { kind: 'notes', clef: 'treble', notes: 'E♭4/8 E4/8 G4/8 A4/8 C5/2' },
       ],
     },
     {
@@ -78,8 +83,8 @@ const pentatonicAndBlues: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The C major pentatonic fits C, F and G alike. Play it as a fill between the melody’s lines.',
-            ru: 'До-мажорная пентатоника подходит и к C, и к F, и к G. Играйте её как подыгрыш между фразами мелодии.',
+            en: 'The C major pentatonic fits over C, F and G. Play it as a fill, a short run between the melody’s lines.',
+            ru: 'До-мажорная пентатоника подходит к C, F и G. Играйте её как подыгрыш, короткий пассаж между фразами мелодии.',
           },
         },
         { kind: 'chords', symbols: ['C', 'F', 'G', 'C'] },

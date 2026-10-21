@@ -145,15 +145,26 @@ describe('A trainer', () => {
   it('shows Custom’s choices when Custom is the level, each written to the URL', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/quiz/intervals-by-ear?level=custom')
-    const heard = await screen.findByRole('group', { name: 'Heard' })
+    const heard = await screen.findByRole('group', { name: 'How they sound' })
     await user.click(within(heard).getByRole('button', { name: 'Together' }))
     expect(router.state.location.search).toMatchObject({ ways: 'up.together' })
+  })
+
+  it('leaves Custom’s intervals out of the URL once they are its own again', async () => {
+    const user = userEvent.setup()
+    const own = 'm2.M2.m3.M3.P4.A4.P5.m6.M6.m7.M7.P8'
+    const { router } = await renderApp(
+      `/practice/quiz/intervals-by-ear?level=custom&intervals=${own}.m9`,
+    )
+    await user.click(await screen.findByRole('combobox', { name: 'Intervals' }))
+    await user.click(await screen.findByRole('option', { name: /^Minor ninth/ }))
+    expect(router.state.location.search).not.toHaveProperty('intervals')
   })
 
   it('asks Build chord’s types as the chord trainer’s sheet names them, each in sight', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/quiz/build-chord?level=custom')
-    const sizes = await screen.findByRole('group', { name: 'Sizes' })
+    const sizes = await screen.findByRole('group', { name: 'Chord sizes' })
     expect(
       within(sizes)
         .getAllByRole('button')
@@ -179,7 +190,7 @@ describe('A trainer', () => {
   it('opens a level its trainer does not have at the first, and keeps it out of the URL', async () => {
     const { router, viewsStore } = await renderApp('/practice/quiz/reading-notes?level=everything')
     expect(await screen.findByRole('combobox', { name: /^Level/ })).toHaveTextContent(
-      'The three anchors',
+      'The three landmarks',
     )
     expect(router.state.location.search).toEqual({})
     expect(viewsStore.getState().views['/practice/quiz/reading-notes']).toEqual({})

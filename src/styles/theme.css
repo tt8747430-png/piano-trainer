@@ -2,6 +2,15 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 /* A phone on its side on the music stand: short and wide (the Player's two-column layout). */
 @custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 500px) and (max-width: 1023px));
+/* Keys docked at the foot of a screen wide for its height (a phone on its side, a laptop): the
+   screen's floating actions stand at its side, over the keys, not over the little height left. */
+@custom-variant aside {
+  @media (orientation: landscape) and (max-height: 500px), (width >= 64rem) {
+    :root:has([data-slot='docked']) & {
+      @slot;
+    }
+  }
+}
 
 @theme inline {
   --color-background: var(--background);
@@ -42,6 +51,7 @@
   --color-on-paint-sky: var(--on-paint-sky);
   --color-on-paint-lilac: var(--on-paint-lilac);
   --color-thumb: var(--thumb);
+  --color-raised: var(--raised);
 
   --color-hand-rh: var(--hand-rh);
   --color-hand-lh: var(--hand-lh);
@@ -147,11 +157,12 @@
       color-scheme: dark;
     }
   }
-  /* The keys' greatest height, a share of the screen's: a phone on its side keeps room for the music. */
+  /* The keys' greatest height, a share of the screen's: a phone on its side keeps room for the music,
+     its keys, their rail and their foot together under half its height. */
   :root {
     --keys-most: 32dvh;
     @variant landscape-phone {
-      --keys-most: 26dvh;
+      --keys-most: 22dvh;
     }
   }
   /* The phone's tab bar, docked at the bottom (its border, its top padding, its 56px places, the
@@ -163,6 +174,23 @@
     }
     @variant lg {
       --nav-bar: 0px;
+    }
+  }
+  /* The room the screen's floating actions take (`FloatingHost` measures them, a gap included): at the
+     foot, their height; standing `aside`, their width, at the side they stand. The page pads by it. */
+  :root {
+    --floating-foot: var(--floating-block, 0px);
+    --floating-left: 0px;
+    --floating-right: 0px;
+  }
+  @media (orientation: landscape) and (max-height: 500px), (width >= 64rem) {
+    :root:has([data-slot='docked']) {
+      --floating-foot: 0px;
+      --floating-right: var(--floating-inline, 0px);
+    }
+    :root:has([data-slot='docked']):has([data-slot='floating-host'][data-place='left']) {
+      --floating-left: var(--floating-inline, 0px);
+      --floating-right: 0px;
     }
   }
   /* A screen's side gutter: 16px on a phone, 24px from 640px, 40px beside a sidebar. */
@@ -235,7 +263,7 @@
     );
   }
   html:has([data-slot='app-nav']) {
-    scroll-padding-bottom: calc(var(--nav-bar) + var(--docked, 0px));
+    scroll-padding-bottom: calc(var(--nav-bar) + var(--docked, 0px) + var(--floating-foot));
   }
   /* Keys docked at the foot leave the top to the screen's bar alone. */
   html:has([data-slot='docked']) {
@@ -312,6 +340,19 @@
 @utility -mx-gutter {
   margin-inline: calc(-1 * var(--gutter));
 }
+/* The same gutter clear of a notch at the side, on a phone on its side: the screen's own edges. */
+@utility px-gutter-safe {
+  padding-left: max(var(--gutter), env(safe-area-inset-left));
+  padding-right: max(var(--gutter), env(safe-area-inset-right));
+}
+/* The right edge alone, where the left is a rail's or a sidebar's, which clear the notch themselves. */
+@utility pr-gutter-safe {
+  padding-right: max(var(--gutter), env(safe-area-inset-right));
+}
+/* The screen's right edge, clear of the floating actions where they stand at its right. */
+@utility pr-floating {
+  padding-right: calc(max(var(--gutter), env(safe-area-inset-right)) + var(--floating-right));
+}
 /* What floats at the screen's side, in from its edge by a gutter. */
 @utility right-gutter {
   right: max(var(--gutter), env(safe-area-inset-right));
@@ -357,15 +398,18 @@
 @utility pb-safe-4 {
   padding-bottom: max(--spacing(4), env(safe-area-inset-bottom));
 }
+@utility pb-safe-2 {
+  padding-bottom: max(--spacing(2), env(safe-area-inset-bottom));
+}
 /* A screen beside the laptop's sidebar: clear of it, open (16rem) or collapsed (4.5rem), by a gutter. */
 @utility pl-sidebar {
-  padding-left: calc(--spacing(64) + var(--gutter));
+  padding-left: calc(--spacing(64) + var(--gutter) + var(--floating-left));
 }
 @utility pl-sidebar-collapsed {
-  padding-left: calc(--spacing(18) + var(--gutter));
+  padding-left: calc(--spacing(18) + var(--gutter) + var(--floating-left));
 }
 /* A phone on its side: its places a rail down the left (5rem, clear of a notch there), the screen
-   clear of it by a gutter. */
+   clear of it by a gutter, and of the floating actions where they stand at its left. */
 @utility pl-safe-left {
   padding-left: env(safe-area-inset-left);
 }
@@ -373,11 +417,68 @@
   width: calc(--spacing(20) + env(safe-area-inset-left));
 }
 @utility pl-rail {
-  padding-left: calc(--spacing(20) + env(safe-area-inset-left) + var(--gutter));
+  padding-left: calc(
+    --spacing(20) + env(safe-area-inset-left) + var(--gutter) + var(--floating-left)
+  );
 }
 /* No narrower than its longest word, nor wider than its line: a title that wraps between words only. */
 @utility min-w-longest-word {
   min-width: min(100%, min-content);
+}
+/* What floats over the page casts a soft shade (`tokens.css`' `--elevation-*`): resting second
+   actions, the main action and the transport, a pointer over either. */
+@utility elevation-1 {
+  box-shadow: var(--elevation-1);
+}
+@utility elevation-2 {
+  box-shadow: var(--elevation-2);
+}
+@utility elevation-3 {
+  box-shadow: var(--elevation-3);
+}
+/* A dial's card grows from its button and its rows come up one after another, the nearest the
+   button first; they leave together. */
+@utility dial-card {
+  animation: dial-card-in 200ms var(--ease-out) both;
+  & > li {
+    animation: dial-row-in 220ms var(--ease-out) both;
+  }
+  & > li:nth-last-child(1) {
+    animation-delay: 40ms;
+  }
+  & > li:nth-last-child(2) {
+    animation-delay: 70ms;
+  }
+  & > li:nth-last-child(3) {
+    animation-delay: 100ms;
+  }
+  & > li:nth-last-child(n + 4) {
+    animation-delay: 130ms;
+  }
+  &[data-closing] {
+    animation: dial-card-out 120ms ease-in both;
+  }
+  &[data-closing] > li {
+    animation: none;
+  }
+}
+@keyframes dial-card-in {
+  from {
+    opacity: 0;
+    scale: 0.9;
+  }
+}
+@keyframes dial-card-out {
+  to {
+    opacity: 0;
+    scale: 0.95;
+  }
+}
+@keyframes dial-row-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
 }
 /* Docked over the tab bar, and what floats over the keys docked there (`--docked`, `Docked`). */
 @utility bottom-nav-bar {
@@ -389,6 +490,13 @@
 /* A page's foot padding, and the keys docked at its foot clear of it: `pb-docked-28`. */
 @utility pb-docked-* {
   padding-bottom: calc(--spacing(--value(integer)) + var(--docked, 0px));
+}
+/* A screen's foot padding, clear of all that stands at its foot: the phone's tab bar, the keys docked
+   over it and the floating actions over them: `pb-foot-6`. */
+@utility pb-foot-* {
+  padding-bottom: calc(
+    --spacing(--value(integer)) + var(--nav-bar) + var(--docked, 0px) + var(--floating-foot)
+  );
 }
 /* The keys and the button they fold into share one name, so folding morphs one into the other
    (`morph`); the page under them changes at once. The two are never stretched into each other's
@@ -486,31 +594,25 @@
   bottom: max(--spacing(4), env(safe-area-inset-bottom));
 }
 
-/* The Player's screen (widgets/practice-player; spec §2.8): its parts placed by `data-area`. Upright,
-   the tempo and hands flank the transport at the bottom, in the thumb's reach, and the toolbar's
-   title and actions span columns of their own, so neither row squeezes the other; from 640px the
-   tempo and hands join the toolbar and the transport sits under the sheet; on a phone on its side
-   the transport stands right of the sheet, where the right thumb is. The keyboard is as tall as its
-   keys' proportion makes it; what is left goes to the Wait line's row, so the transport stays at the
-   bottom. */
+/* The Player's screen (widgets/practice-player; spec §2.8, ADR 0061): its parts placed by `data-area`.
+   Upright and from a laptop's width, a column: the toolbar (its title and actions in columns of their
+   own, so neither squeezes the other), the sheet taking what is left, Wait mode's line, the transport
+   floating in the thumb's reach and the keys at the foot. On a phone on its side the transport stands
+   upright at the right edge, beside the toolbar and the sheet, and Wait mode's line joins the
+   toolbar's row, so the sheet keeps the height those rows would take. Where the keyboard settings dock the keys at the top (`data-keys='top'`), they sit under
+   the toolbar instead. */
 @utility player-screen {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
-  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
   grid-template-areas:
-    'lead lead actions actions'
-    'keys keys keys keys'
-    'sheet sheet sheet sheet'
-    'status status status status'
-    'tempo transport transport hands';
+    'lead actions'
+    'sheet sheet'
+    'status status'
+    'dock dock'
+    'keys keys';
   & > [data-area='lead'] {
     grid-area: lead;
-  }
-  & > [data-area='tempo'] {
-    grid-area: tempo;
-  }
-  & > [data-area='hands'] {
-    grid-area: hands;
   }
   & > [data-area='actions'] {
     grid-area: actions;
@@ -524,27 +626,110 @@
   & > [data-area='status'] {
     grid-area: status;
   }
-  & > [data-area='transport'] {
-    grid-area: transport;
+  & > [data-area='dock'] {
+    grid-area: dock;
   }
-  @variant sm {
-    grid-template-columns: minmax(0, 1fr) auto auto auto;
+  &[data-keys='top'] {
     grid-template-rows: auto auto minmax(0, 1fr) auto auto;
     grid-template-areas:
-      'lead tempo hands actions'
-      'keys keys keys keys'
-      'sheet sheet sheet sheet'
-      'status status status status'
-      'transport transport transport transport';
+      'lead actions'
+      'keys keys'
+      'sheet sheet'
+      'status status'
+      'dock dock';
   }
   @variant landscape-phone {
     grid-template-columns: minmax(0, 1fr) auto auto auto;
-    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-rows: auto minmax(0, 1fr) auto;
     grid-template-areas:
-      'lead tempo hands actions'
-      'keys keys keys keys'
-      'sheet sheet sheet status'
-      'sheet sheet sheet transport';
+      'lead status actions dock'
+      'sheet sheet sheet dock'
+      'keys keys keys keys';
+    &[data-keys='top'] {
+      grid-template-rows: auto auto minmax(0, 1fr);
+      grid-template-areas:
+        'lead status actions dock'
+        'keys keys keys dock'
+        'sheet sheet sheet dock';
+    }
+  }
+}
+
+/* The score editor's screen (pages/score-editor; spec §6, ADR 0065): its parts placed by `data-area`,
+   one screen that never scrolls as a whole, the sheet its one scroller. Its palette (`data-palette`)
+   stands at the foot over the keys (`foot`: a phone held upright, a tablet), or in a column beside the
+   sheet (`side`: a laptop, a phone on its side); folded, it leaves its room to the sheet. The keys at
+   the foot, or under the bar where the keyboard settings dock them at the top (`data-keys='top'`);
+   folded, their button and the palette's float over the sheet's lower corners (`float`). */
+@utility editor-screen {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+  grid-template-areas: 'bar' 'sheet' 'status' 'palette' 'keys';
+  & > [data-area='bar'] {
+    grid-area: bar;
+    min-width: 0;
+  }
+  & > [data-area='sheet'] {
+    grid-area: sheet;
+  }
+  & > [data-area='status'] {
+    grid-area: status;
+    min-width: 0;
+  }
+  & > [data-area='palette'] {
+    grid-area: palette;
+    min-width: 0;
+    min-height: 0;
+  }
+  & > [data-area='keys'] {
+    grid-area: keys;
+  }
+  & > [data-area='float'] {
+    grid-area: sheet;
+    z-index: 10;
+    align-self: end;
+    display: flex;
+    gap: --spacing(2);
+    padding: --spacing(1);
+    pointer-events: none;
+    & > * {
+      pointer-events: auto;
+    }
+  }
+  &[data-keys='top'] {
+    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+    grid-template-areas: 'bar' 'keys' 'sheet' 'status' 'palette';
+  }
+  &[data-palette='side'] {
+    grid-template-columns: minmax(0, 1fr) 21rem;
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    grid-template-areas: 'bar bar' 'sheet palette' 'status palette' 'keys keys';
+    &[data-keys='top'] {
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+      grid-template-areas: 'bar bar' 'keys keys' 'sheet palette' 'status palette';
+    }
+    @variant landscape-phone {
+      grid-template-columns: minmax(0, 1fr) 17.5rem;
+    }
+    @variant xl {
+      grid-template-columns: minmax(0, 1fr) 24rem;
+    }
+  }
+}
+
+/* A row that scrolls sideways fades at an edge with more beyond it, where the browser can tell. */
+@utility fade-scroll-x {
+  @supports (animation-timeline: scroll()) {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 var(--strip-fade-start),
+      #000 calc(100% - var(--strip-fade-end)),
+      transparent
+    );
+    animation: strip-fade linear both;
+    animation-timeline: scroll(self inline);
   }
 }
 

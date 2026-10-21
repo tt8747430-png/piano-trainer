@@ -5,8 +5,8 @@ const brokenChords: Lesson = {
   id: 'broken-chords',
   title: { en: 'Broken chords and arpeggios', ru: 'Ломаные аккорды и арпеджио' },
   summary: {
-    en: 'Play a chord one note at a time, in one hand or both.',
-    ru: 'Играйте аккорд по одному звуку — одной рукой или двумя.',
+    en: 'Play a chord one note at a time: rising, rocking, or spread across both hands.',
+    ru: 'Играйте аккорд по одному звуку: вверх, покачиваясь или через обе руки.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const brokenChords: Lesson = {
           kind: 'text',
           lead: { en: 'A broken chord', ru: 'Ломаный аккорд' },
           text: {
-            en: 'plays its notes one at a time. It keeps a slow song moving without getting louder.',
-            ru: '— аккорд, звуки которого берут по одному. Он движет медленную песню, не делая её громче.',
+            en: 'is a chord played one note at a time instead of all together. In a slow song it keeps the sound moving without making it louder.',
+            ru: '— аккорд, звуки которого берут по одному, а не вместе. В медленной песне он держит движение и не делает звук громче.',
           },
         },
         {
@@ -35,8 +35,8 @@ const brokenChords: Lesson = {
           kind: 'text',
           lead: { en: 'The Alberti bass', ru: 'Альбертиев бас' },
           text: {
-            en: 'rocks instead of climbing: lowest, top, middle, top. Keep the hand still over the chord.',
-            ru: 'покачивается, а не поднимается: нижний, верхний, средний, верхний. Рука лежит над аккордом неподвижно.',
+            en: 'is a left-hand broken chord that rocks back and forth: lowest note, top, middle, top. Set fingers 5, 3 and 1 on the three notes and keep the hand still.',
+            ru: '— ломаный аккорд в левой руке, который покачивается: нижний звук, верхний, средний, верхний. Поставьте пальцы 5, 3 и 1 на три звука и не двигайте руку.',
           },
         },
         {
@@ -54,8 +54,8 @@ const brokenChords: Lesson = {
           kind: 'text',
           lead: { en: 'An arpeggio', ru: 'Арпеджио' },
           text: {
-            en: 'climbs the chord in one line, from the left hand into the right: 1 5 1 below, 3 5 1 above.',
-            ru: 'поднимается по аккорду одной линией, из левой руки в правую: внизу 1 5 1, вверху 3 5 1.',
+            en: 'is a broken chord that keeps climbing. The left hand plays root, 5th, root. Then the right hand plays 3rd, 5th, root.',
+            ru: '— ломаный аккорд, который поднимается всё выше. Здесь левая рука играет основной тон, квинту и основной тон. Правая продолжает: терция, квинта, основной тон.',
           },
         },
         {
@@ -68,8 +68,8 @@ const brokenChords: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Catch the bass with the pedal and change it with each chord.',
-            ru: 'Берите бас на педаль и меняйте её с каждым аккордом.',
+            en: 'Pedal from the bass note. Change it with each chord.',
+            ru: 'Берите педаль с басовой ноты. Меняйте её с каждым аккордом.',
           },
         },
       ],
@@ -80,8 +80,8 @@ const brokenChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'In 6/8 the left hand rolls up and back over each bar: root, 5th, octave, 10th, octave, 5th.',
-            ru: 'В 6/8 левая рука катится вверх и обратно в каждом такте: основной тон, квинта, октава, децима, октава, квинта.',
+            en: 'A 6/8 bar has six eighth notes. The left hand fills them by rolling up and back: root, 5th, octave, 10th, octave, 5th.',
+            ru: 'В такте 6/8 шесть восьмых. Левая рука заполняет их волной вверх и обратно: основной тон, квинта, октава, децима, октава, квинта.',
           },
         },
         {
@@ -114,7 +114,10 @@ const brokenChords: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'C major’s arpeggio in the Player', ru: 'Арпеджио до мажора в плеере' },
+          title: {
+            en: 'Practise C major’s arpeggio in the Player',
+            ru: 'Арпеджио до мажора в плеере',
+          },
           target: { opens: 'exercise', exercise: 'arpeggio', root: note('C'), quality: 'maj' },
         },
       ],

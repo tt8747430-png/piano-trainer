@@ -8,18 +8,18 @@ const artOfAccompaniment: Lesson = {
   id: 'art-of-accompaniment',
   title: { en: 'The art of accompaniment', ru: 'Искусство аккомпанемента' },
   summary: {
-    en: 'Support a singer, fill the long notes, introduce the song.',
-    ru: 'Поддерживайте пение, заполняйте долгие ноты, начинайте со вступления.',
+    en: 'Support the singer, fill the long notes, and start a song with an introduction.',
+    ru: 'Поддерживайте пение, заполняйте долгие ноты и начинайте песню со вступления.',
   },
   sections: [
     {
-      heading: { en: 'Never in the singer’s way', ru: 'Не мешать пению' },
+      heading: { en: 'Stay out of the singer’s way', ru: 'Не мешайте пению' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'The golden rule: the accompaniment never gets in the singer’s way. It supports the song and draws no attention from it.',
-            ru: 'Золотое правило: аккомпанемент не мешает пению. Он поддерживает песню и не отвлекает от неё внимание.',
+            en: 'The golden rule: the accompaniment supports the song and never gets in the singer’s way. It should draw no attention from the words.',
+            ru: 'Золотое правило: аккомпанемент поддерживает песню и никогда не мешает пению. Он не должен отвлекать внимание от слов.',
           },
         },
         { kind: 'pattern', pattern: 'M1', piece: 'wonder' },
@@ -31,8 +31,8 @@ const artOfAccompaniment: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Place techniques and embellishments where the voice holds a long note or rests.',
-            ru: 'Ставьте техники и украшения туда, где голос тянет долгую ноту или молчит.',
+            en: 'Save techniques and embellishments for the places where the voice holds a long note or rests. While the words move, keep the accompaniment simple.',
+            ru: 'Оставляйте техники и украшения для мест, где голос тянет долгую ноту или молчит. Пока звучат слова, играйте проще.',
           },
         },
         { kind: 'pattern', pattern: 't3', piece: 'soon' },
@@ -52,7 +52,7 @@ const artOfAccompaniment: Lesson = {
         {
           kind: 'steps',
           steps: [
-            { en: 'One voice in the right hand.', ru: 'Одноголосно, правой рукой.' },
+            { en: 'The melody alone, right hand.', ru: 'Одна мелодия, правой рукой.' },
             { en: 'The melody in octaves.', ru: 'Мелодия октавами.' },
             {
               en: 'Add a second voice in sixths or thirds.',
@@ -68,8 +68,8 @@ const artOfAccompaniment: Lesson = {
         {
           kind: 'steps',
           steps: [
-            { en: 'Listen more than you show.', ru: 'Больше слушайте, чем показывайте себя.' },
-            { en: 'Read the lyrics first.', ru: 'Сначала прочитайте слова песни.' },
+            { en: 'Listen more than you show off.', ru: 'Больше слушайте, чем показывайте себя.' },
+            { en: 'Read the lyrics before you play.', ru: 'Прочитайте слова песни до игры.' },
             {
               en: 'Let their meaning choose the dynamics, the character and the embellishments.',
               ru: 'Пусть их смысл подскажет динамику, характер и украшения.',
@@ -85,8 +85,8 @@ const artOfAccompaniment: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Keep the table beside a song’s chords to choose what to add where.',
-            ru: 'Держите таблицу рядом с аккордами песни, чтобы выбирать, что и где добавить.',
+            en: 'Here is every right-hand technique. Keep the list beside a song’s chords to choose what goes where.',
+            ru: 'Здесь все техники правой руки. Держите список рядом с аккордами песни и выбирайте, что и где добавить.',
           },
         },
         { kind: 'pattern', pattern: 'c3', piece: 'wonder' },
@@ -115,8 +115,8 @@ const artOfAccompaniment: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Learn two of these songs by their plan.',
-            ru: 'Выучите две из этих песен по плану.',
+            en: 'Choose two of these songs and learn them by their plan.',
+            ru: 'Выберите две из этих песен и выучите их по плану.',
           },
         },
         { kind: 'pattern', pattern: 'p52', piece: 'soon' },

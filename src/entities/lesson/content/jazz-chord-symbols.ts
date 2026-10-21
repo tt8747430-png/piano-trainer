@@ -3,10 +3,10 @@ import type { Lesson } from '../model/types'
 /** The jazz way of writing notes and chords: letters, signs for triads, the 7th and its other signs. */
 const jazzChordSymbols: Lesson = {
   id: 'jazz-chord-symbols',
-  title: { en: 'Jazz chord symbols', ru: 'Джазовые обозначения' },
+  title: { en: 'Jazz chord symbols', ru: 'Джазовые обозначения аккордов' },
   summary: {
-    en: 'Read any jazz chord symbol, in every way books write it.',
-    ru: 'Читать любое джазовое обозначение аккорда в любой записи.',
+    en: 'Read a jazz chord symbol in two halves, and know the other signs books use for the same chord.',
+    ru: 'Читать джазовое обозначение аккорда по двум половинам и узнавать другие знаки для того же аккорда.',
   },
   sections: [
     {
@@ -15,21 +15,28 @@ const jazzChordSymbols: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Jazz names notes by letter. B is B, never H.',
-            ru: 'В джазе ноты называют буквами. Си — это B, а не H.',
+            en: 'Jazz writes each note as a letter from A to G. The note before C is B, never H.',
+            ru: 'В джазе каждую ноту пишут буквой от A до G. Нота перед до — это B, а не H.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play the line and say each letter aloud.',
+            ru: 'Сыграйте строчку и называйте каждую букву вслух.',
+          },
+        },
       ],
     },
     {
-      heading: { en: 'Triads by their sign', ru: 'Трезвучия по знаку' },
+      heading: { en: 'The sign after the letter', ru: 'Знак после буквы' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'A letter alone is major. m or − makes it minor, ° or dim diminished, + or aug augmented.',
-            ru: 'Буква без знака — мажор. m или «−» — минор, ° или dim — уменьшённое, + или aug — увеличенное.',
+            en: 'A letter alone means a major triad. m or − means minor. ° or dim means diminished. + or aug means augmented.',
+            ru: 'Буква без знака — мажорное трезвучие. m или «−» — минорное. ° или dim — уменьшённое. + или aug — увеличенное.',
           },
         },
         {
@@ -37,19 +44,33 @@ const jazzChordSymbols: Lesson = {
           symbols: ['C', 'Cm', 'E♭−', 'C°', 'E♭dim', 'C+', 'E♭aug'],
           apart: true,
         },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play the row. Two signs for one triad sound the same.',
+            ru: 'Сыграйте ряд. Два знака одного трезвучия звучат одинаково.',
+          },
+        },
       ],
     },
     {
-      heading: { en: 'The triad, then the rest', ru: 'Трезвучие, затем остальное' },
+      heading: { en: 'Read it in two halves', ru: 'Читайте по половинам' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Read a symbol in two halves: the triad on the left, the rest on the right. Cm7♭5 is Cm, then 7♭5.',
-            ru: 'Читайте обозначение по половинам: слева трезвучие, справа остальное. Cm7♭5 — это Cm, затем 7♭5.',
+            en: 'Split a long symbol in two. The left half is the triad. The right half adds to it. Cm7♭5 is Cm, then 7♭5.',
+            ru: 'Делите длинное обозначение надвое. Левая половина — трезвучие. Правая что-то к нему добавляет. Cm7♭5 — это Cm, затем 7♭5.',
           },
         },
         { kind: 'chords', symbols: ['Cm', 'Cm7♭5'], apart: true },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play Cm, then Cm7♭5, and hear what the right half adds.',
+            ru: 'Сыграйте Cm, затем Cm7♭5 и послушайте, что добавила правая половина.',
+          },
+        },
       ],
     },
     {
@@ -58,24 +79,42 @@ const jazzChordSymbols: Lesson = {
         {
           kind: 'text',
           text: {
-            en: '7 adds the minor 7th: C7, Cm7. Maj7 adds the major 7th: CMaj7. Maj names the 7th, not the triad.',
-            ru: '7 добавляет малую септиму: C7, Cm7. Maj7 добавляет большую: CMaj7. Maj говорит о септиме, а не о трезвучии.',
+            en: 'A plain 7 adds the minor 7th: C7, Cm7. Maj7 adds the major 7th: CMaj7. Maj describes the 7th, not the triad.',
+            ru: 'Простая 7 добавляет малую септиму: C7, Cm7. Maj7 добавляет большую: CMaj7. Maj говорит о септиме, а не о трезвучии.',
           },
         },
         { kind: 'chords', symbols: ['C7', 'Cm7', 'CMaj7'], apart: true },
-      ],
-    },
-    {
-      heading: { en: 'Half-diminished and diminished', ru: 'Полууменьшённый и уменьшённый' },
-      blocks: [
         {
           kind: 'text',
           text: {
-            en: 'A diminished triad with a minor 7th is Cm7♭5, the half-diminished 7th. With a diminished 7th it is C°7.',
-            ru: 'Уменьшённое трезвучие с малой септимой — Cm7♭5, полууменьшённый септаккорд. С уменьшённой септимой — C°7.',
+            en: 'Play C7 and CMaj7. Only the top note moves, by one key.',
+            ru: 'Сыграйте C7 и CMaj7. Меняется только верхний звук, на одну клавишу.',
+          },
+        },
+      ],
+    },
+    {
+      heading: {
+        en: 'Half-diminished and diminished 7ths',
+        ru: 'Полууменьшённый и уменьшённый септаккорды',
+      },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'The half-diminished 7th', ru: 'Полууменьшённый септаккорд' },
+          text: {
+            en: 'is a diminished triad with a minor 7th: Cm7♭5. With a diminished 7th instead, it is the diminished 7th chord, C°7.',
+            ru: '— это уменьшённое трезвучие с малой септимой: Cm7♭5. С уменьшённой септимой получается уменьшённый септаккорд, C°7.',
           },
         },
         { kind: 'chords', symbols: ['Cm7♭5', 'C°7'], apart: true },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play both. C°7 lowers the top note one more key.',
+            ru: 'Сыграйте оба. В C°7 верхний звук ниже ещё на клавишу.',
+          },
+        },
       ],
     },
     {
@@ -84,11 +123,18 @@ const jazzChordSymbols: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'On a minor triad Maj7 makes the minor-major 7th, 1 ♭3 5 7. On an augmented one, 1 3 ♯5 7.',
-            ru: 'На минорном трезвучии Maj7 даёт минорный с большой септимой, 1 ♭3 5 7. На увеличенном — 1 3 ♯5 7.',
+            en: 'Maj7 fits any triad. On a minor triad it makes the minor-major 7th, 1 ♭3 5 7. On an augmented triad, 1 3 ♯5 7.',
+            ru: 'Maj7 ставят на любое трезвучие. На минорном получается минорный с большой септимой, 1 ♭3 5 7. На увеличенном — 1 3 ♯5 7.',
           },
         },
         { kind: 'chords', symbols: ['Cm(maj7)', 'C+Maj7'], apart: true },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play each and find the major 7th, B.',
+            ru: 'Сыграйте каждый и найдите большую септиму, си.',
+          },
+        },
       ],
     },
     {
@@ -97,15 +143,22 @@ const jazzChordSymbols: Lesson = {
         {
           kind: 'text',
           text: {
-            en: '6 adds the major 6th to a triad, major or minor: C6, Cm6.',
-            ru: '6 добавляет к трезвучию, мажорному или минорному, большую сексту: C6, Cm6.',
+            en: '6 adds the major 6th to a major or minor triad: C6, Cm6. In C the 6th is A.',
+            ru: '6 добавляет большую сексту к мажорному или минорному трезвучию: C6, Cm6. От до секста — ля.',
           },
         },
         { kind: 'chords', symbols: ['C6', 'Cm6'], apart: true },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play both and find the A in each.',
+            ru: 'Сыграйте оба и найдите ля в каждом.',
+          },
+        },
       ],
     },
     {
-      heading: { en: 'Other signs', ru: 'Другие обозначения' },
+      heading: { en: 'Other signs, same chords', ru: 'Другие знаки, те же аккорды' },
       blocks: [
         {
           kind: 'text',
@@ -115,6 +168,13 @@ const jazzChordSymbols: Lesson = {
           },
         },
         { kind: 'chords', symbols: ['CΔ7', 'C−7', 'Cø', 'Csus', 'C7(−9)'], apart: true },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play each and name it the long way.',
+            ru: 'Сыграйте каждый и назовите его полной записью.',
+          },
+        },
       ],
     },
     {

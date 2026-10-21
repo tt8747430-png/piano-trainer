@@ -55,6 +55,7 @@ export const music = {
     m69: 'Minor 6/9',
     add9: 'Added 9th',
     madd9: 'Minor added 9th',
+    add11: 'Added 11th',
     maj7: 'Major 7th',
     m7: 'Minor 7th',
     d7: 'Dominant 7th',
@@ -67,10 +68,12 @@ export const music = {
     m9: 'Minor 9th',
     maj9: 'Major 9th',
     n9: 'Dominant 9th',
+    sus9: 'Dominant 9th sus4',
     mM9: 'Minor-major 9th',
     M9s5: 'Augmented major 9th',
     hd9: 'Half-diminished 9th',
     m11: 'Minor 11th',
+    n11: 'Dominant 11th',
     n13: 'Dominant 13th',
     b9: '7th flat 9',
     b9n13: '13th flat 9',
@@ -122,7 +125,7 @@ export const music = {
     minor: '{{tonic}} minor',
     // A row that opens something in a key.
     in: 'In {{key}}',
-    mode: 'Mode',
+    mode: 'Major or minor',
     majorMode: 'Major',
     minorMode: 'Minor',
   },
@@ -165,6 +168,8 @@ export const music = {
   // The sheet music: the Player's staff.
   sheet: {
     label: 'Sheet music',
+    // Each sung staff's name, over its start where voices are sung together (ADR 0066).
+    staff: { melody: 'Melody', voice2: 'Voice 2', voice3: 'Voice 3', voice4: 'Voice 4' },
     // A staff's own options, inline on its card (ADR 0058).
     fingers: 'Fingers',
     noteNames: 'Note names',
@@ -190,10 +195,43 @@ export const music = {
   // An interval's card: how far it is, the chords it is heard in, and the ways it is played.
   intervalCard: {
     semitones: 'Semitones: {{n}}',
-    tones: 'Tones: {{n}}',
+    semitone: 'Size: a semitone',
+    tones_one: 'Size: {{n}} tone',
+    tones_other: 'Size: {{n}} tones',
     inChords: 'In chords: {{degree}}',
     up: 'Up',
     down: 'Down',
     together: 'Together',
+  },
+  // What a sung part is played on, and the families they are found under (ADR 0070).
+  instrument: {
+    voice: 'Voice',
+    violin: 'Violin',
+    cello: 'Cello',
+    flute: 'Flute',
+    oboe: 'Oboe',
+    clarinet: 'Clarinet',
+    trumpet: 'Trumpet',
+    horn: 'Horn',
+    guitar: 'Guitar',
+  },
+  // As a score names a part at its staff.
+  instrumentShort: {
+    voice: 'V.',
+    violin: 'Vln.',
+    cello: 'Vc.',
+    flute: 'Fl.',
+    oboe: 'Ob.',
+    clarinet: 'Cl.',
+    trumpet: 'Tpt.',
+    horn: 'Hn.',
+    guitar: 'Gtr.',
+  },
+  instrumentFamily: {
+    voices: 'Voices',
+    strings: 'Strings',
+    woodwind: 'Woodwind',
+    brass: 'Brass',
+    plucked: 'Plucked',
   },
 } as const

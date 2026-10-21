@@ -5,8 +5,8 @@ const noteValues: Lesson = {
   id: 'note-values',
   title: { en: 'Note value and rhythm', ru: 'Длительности и ритм' },
   summary: {
-    en: 'Count 4/4 aloud and hold quarter, half and whole notes.',
-    ru: 'Считать вслух 4/4 и выдерживать четверти, половинные и целые.',
+    en: 'Count the beat aloud in 4/4 and hold quarter, half and whole notes for their full length.',
+    ru: 'Считать доли вслух в размере 4/4 и выдерживать четверти, половинные и целые до конца.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const noteValues: Lesson = {
           kind: 'text',
           lead: { en: 'The beat', ru: 'Доля' },
           text: {
-            en: 'is the steady pulse you tap your foot to. Tap along and count it aloud: 1, 2, 3, 4.',
-            ru: '— ровная пульсация, под которую притопывают. Отстукивайте и считайте вслух: раз, два, три, четыре.',
+            en: 'is the steady pulse of the music, the one you tap your foot to. Play one C on each beat and count aloud: 1, 2, 3, 4.',
+            ru: '— ровная пульсация музыки, под которую хочется притопывать. Играйте до на каждую долю и считайте вслух: раз, два, три, четыре.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 C4 C4 C4 C4 C4 C4 C4' },
@@ -30,8 +30,8 @@ const noteValues: Lesson = {
           kind: 'text',
           lead: { en: 'A quarter note', ru: 'Четвертная нота' },
           text: {
-            en: 'has a filled head and a stem. It lasts one beat.',
-            ru: 'имеет закрашенную головку и штиль. Она длится одну долю.',
+            en: 'has a filled-in head and a stem. It lasts one beat, so you play a new note on every count.',
+            ru: 'имеет закрашенную головку и штиль. Она длится одну долю: на каждый счёт звучит новая нота.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 F4 E4 D4' },
@@ -44,8 +44,8 @@ const noteValues: Lesson = {
           kind: 'text',
           lead: { en: 'A half note', ru: 'Половинная нота' },
           text: {
-            en: 'has a hollow head and a stem. It lasts two beats: play on 1, hold through 2.',
-            ru: 'имеет пустую головку и штиль. Она длится две доли: играйте на «раз», держите на «два».',
+            en: 'has a hollow head and a stem. It lasts two beats. Play it on one count and keep holding it through the next.',
+            ru: 'имеет пустую головку и штиль. Она длится две доли. Сыграйте её на один счёт и держите на следующий.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4/2 G4/2 E4/2 C4/2' },
@@ -58,8 +58,8 @@ const noteValues: Lesson = {
           kind: 'text',
           lead: { en: 'A whole note', ru: 'Целая нота' },
           text: {
-            en: 'has a hollow head and no stem. It lasts four beats: play on 1, hold through 2, 3 and 4.',
-            ru: 'имеет пустую головку без штиля. Она длится четыре доли: играйте на «раз», держите до «четырёх».',
+            en: 'has a hollow head and no stem. It lasts four beats. Play it on 1 and hold it through 2, 3 and 4.',
+            ru: 'имеет пустую головку без штиля. Она длится четыре доли. Сыграйте её на «раз» и держите на «два, три, четыре».',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'G4/1 C4/1' },
@@ -72,8 +72,8 @@ const noteValues: Lesson = {
           kind: 'text',
           lead: { en: 'A time signature', ru: 'Размер' },
           text: {
-            en: 'says how many beats fill a bar. In 4/4 every bar holds four quarter-note beats.',
-            ru: 'показывает, сколько долей в такте. В 4/4 в каждом такте четыре доли по четверти.',
+            en: 'such as 4/4 says how many beats fill each bar, the space between two barlines. In 4/4 every bar holds four quarter-note beats.',
+            ru: 'показывает, сколько долей в каждом такте, то есть между двумя тактовыми чертами. В размере 4/4 в такте четыре доли по четверти.',
           },
         },
         {
@@ -92,16 +92,16 @@ const noteValues: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Count one empty bar: 1 2 3 4.',
-              ru: 'Отсчитайте пустой такт: раз, два, три, четыре.',
+              en: 'Before you play, count one empty bar: 1 2 3 4.',
+              ru: 'Перед игрой отсчитайте пустой такт: раз, два, три, четыре.',
             },
             {
-              en: 'Keep counting every beat, played or held.',
-              ru: 'Считайте каждую долю, сыгранную или выдержанную.',
+              en: 'Keep counting every beat, whether you play a note or hold one.',
+              ru: 'Считайте каждую долю, играете вы новую ноту или держите прежнюю.',
             },
             {
-              en: 'Lift off a long note exactly on the next count.',
-              ru: 'Снимайте долгую ноту точно на следующий счёт.',
+              en: 'Let go of a long note exactly when the next note starts.',
+              ru: 'Отпускайте долгую ноту точно тогда, когда начинается следующая.',
             },
           ],
         },

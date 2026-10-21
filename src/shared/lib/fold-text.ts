@@ -9,8 +9,17 @@ export const foldText = (text: string): string =>
     .normalize('NFC')
     .toLowerCase()
 
-/** Whether any field holds the query; a blank query matches everything. */
+/** Where a word of a name starts: after a space or a mark between words. */
+export const WORD_BREAK = /[\s\-–—·,.:;()/«»"“”]+/
+
+/**
+ * Whether the fields hold every word of the query, in any order and any field, whatever lies
+ * between them («Боже спасибо» finds «Боже, спасибо»); a blank query matches everything.
+ */
 export function matchesQuery(fields: readonly string[], query: string): boolean {
-  const wanted = foldText(query.trim())
-  return wanted === '' || fields.some((field) => foldText(field).includes(wanted))
+  const words = foldText(query)
+    .split(WORD_BREAK)
+    .filter((word) => word !== '')
+  const folded = fields.map(foldText)
+  return words.every((word) => folded.some((field) => field.includes(word)))
 }

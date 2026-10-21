@@ -8,9 +8,10 @@ export const learn: LocaleResources['learn'] = {
     courses: 'Курсы',
   },
   journey: {
-    label: 'Ступени',
+    label: 'Маршруты',
     chapter: 'Глава {{n}}. {{title}}',
     count: '{{learned}}/{{total}}',
+    steps: 'Шаги: {{learned}}/{{total}}',
   },
   shelves: {
     beginner: 'Курсы для начинающих',
@@ -21,6 +22,7 @@ export const learn: LocaleResources['learn'] = {
   },
   progress: 'Изучено {{learned}} из {{total}}',
   lessonNumber: 'Урок {{n}}',
+  learned: 'изучено',
   current: 'Вы здесь',
   continue: 'Продолжить',
   allLearned: 'Всё изучено.',
@@ -83,7 +85,7 @@ export const learn: LocaleResources['learn'] = {
     previous: 'Предыдущий урок',
     next: 'Следующий урок',
     toCourseLessons: 'Курс',
-    toJourney: 'Вернуться к ступени',
+    toJourney: 'Вернуться к маршруту',
     toCourse: 'Перейти к песням курса',
     courseDone: 'Вернуться к курсу',
   },

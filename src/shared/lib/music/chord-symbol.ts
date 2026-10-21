@@ -5,7 +5,7 @@ import {
   type Chord,
   type ChordQuality,
 } from './chord'
-import { parseNoteName } from './note'
+import { parseNoteName, plainRoot, type SpelledNote } from './note'
 
 export class ChordSymbolError extends Error {
   override readonly name = 'ChordSymbolError'
@@ -31,12 +31,22 @@ const QUALITY_BY_SUFFIX = new Map<string, ChordQuality>(
 export const readQualitySuffix = (suffix: string): ChordQuality | null =>
   QUALITY_BY_SUFFIX.get(normalise(suffix)) ?? null
 
+/**
+ * A slash chord's bass spelled as its chord tone, unless that writes it oddly (a double accidental,
+ * a B♯ for a C: `Cdim7/A`, not `C°7/B𝄫`), as the chord finder writes a bass; then as typed.
+ */
+function slashBass(root: SpelledNote, quality: ChordQuality, typed: SpelledNote): SpelledNote {
+  const tone = chordBass(root, quality, typed)
+  return plainRoot(tone) === tone ? tone : typed
+}
+
 /** Root lengths tried, longest first: `F##`, `Bbb` and `F𝄪` take three code units. */
 const ROOT_LENGTHS = [3, 2, 1]
 
 /**
  * Reads `F#m7b5/C`: a root, a quality suffix in any of its spellings, and an optional bass after the
- * last slash. A bass that is a chord tone is spelled as that tone (`D#/G` → `D#/F𝄪`).
+ * last slash. A bass that is a chord tone is spelled as that tone (`F#m/Db` → `F#m/C#`), unless
+ * that writes it oddly (`D#/G` keeps its G, not F𝄪).
  */
 export function parseChordSymbol(symbol: string): Chord {
   const slash = symbol.lastIndexOf('/')
@@ -47,7 +57,7 @@ export function parseChordSymbol(symbol: string): Chord {
     const root = parseNoteName(head.slice(0, length))
     const quality = readQualitySuffix(head.slice(length))
     if (!root || !quality) continue
-    return bass ? { root, quality, bass: chordBass(root, quality, bass) } : { root, quality }
+    return bass ? { root, quality, bass: slashBass(root, quality, bass) } : { root, quality }
   }
   throw new ChordSymbolError(symbol)
 }

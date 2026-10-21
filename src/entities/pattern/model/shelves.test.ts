@@ -1,13 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { patternBook } from './book'
-import {
-  isAccompanimentPart,
-  partOfShelf,
-  pickerShelves,
-  ACCOMPANIMENT_PARTS,
-  partShelves,
-} from './shelves'
-import { patternsIn } from './selectors'
+import { patternsIn } from './groups'
+import { ACCOMPANIMENT_PARTS, isAccompanimentPart } from './parts'
+import { partOfShelf, partShelves, pickerShelves } from './shelves'
 
 const book = patternBook([{ id: 'my-1', name: 'Sunday', rh: 'jaz', lh: 'walk' }])
 const outline = (shelves: ReturnType<typeof partShelves>) =>

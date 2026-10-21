@@ -1,10 +1,10 @@
 import { act, renderHook } from '@testing-library/react'
 import type { ReactNode } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import type { Performance } from '@/shared/lib/arrangement'
+import { arrange, parseFigure, type Performance } from '@/shared/lib/arrangement'
 import { createFakeAudio, type FakeAudio } from '@/shared/api/audio'
 import { createFakeMidi, type FakeMidi } from '@/shared/api/midi'
-import { midi } from '@/shared/lib/music'
+import { midi, note, parseChordSymbol } from '@/shared/lib/music'
 import type { NoteSound, Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from '@/shared/lib/services'
 import { ONE_BAR, TWO_BARS } from './testing/performances'
@@ -104,7 +104,7 @@ describe('usePractice: Listen', () => {
   it('counts in when Play starts, never when a move starts the pass again', () => {
     const { result } = renderPractice(TWO_BARS, { countIn: true })
     act(() => result.current.play())
-    act(() => result.current.jumpToBar(1))
+    act(() => result.current.jumpToBeatGroup(4))
     expect(audio.played).toHaveLength(2)
     expect(audio.played[1]?.sounds.some((sound) => sound.kind === 'click')).toBe(false)
   })
@@ -129,7 +129,7 @@ describe('usePractice: Listen', () => {
   it('starts a new pass from where the learner jumps while playing', () => {
     const { result } = renderPractice(TWO_BARS)
     act(() => result.current.play())
-    act(() => result.current.jumpToBar(1))
+    act(() => result.current.jumpToBeatGroup(4))
     expect(result.current.state.beatGroup).toBe(4)
     expect(audio.played).toHaveLength(2)
     const second = notesOf(audio.played[1]?.sounds ?? [])
@@ -144,7 +144,7 @@ describe('usePractice: Listen', () => {
     rerender({ performance: ONE_BAR, setup: { ...LISTEN, tempo: 120 } })
     expect(audio.played).toHaveLength(2)
     expect(notesOf(audio.played[1]?.sounds ?? [])).toHaveLength(
-      ONE_BAR.notes.filter((n) => n.startTick >= 24).length,
+      ONE_BAR.notes.filter((n) => n.startTick >= 48).length,
     )
   })
 
@@ -159,7 +159,7 @@ describe('usePractice: Listen', () => {
 describe('usePractice: moving', () => {
   it('sounds every beat group moved to, in the audible hands', () => {
     const { result } = renderPractice(TWO_BARS, { hands: 'lh' })
-    act(() => result.current.jumpToBar(1))
+    act(() => result.current.jumpToBeatGroup(4))
     act(() => result.current.jumpToBeatGroup(0))
     expect(audio.played.map((play) => keysOf(play.sounds))).toEqual([
       [31, 43],
@@ -218,6 +218,34 @@ describe('usePractice: Wait mode', () => {
     wait(1000)
     expect(result.current.state.beatGroup).toBe(2)
     expect(audio.played.map((play) => play.at)).toEqual([0.1, 0.1, 1.1])
+  })
+
+  it('keeps a run of rests on the swung grid the music is heard on', () => {
+    const eighths = arrange(
+      {
+        key: { tonic: note('C'), minor: false },
+        meter: '4/4',
+        sections: [{ lines: [[{ chords: [{ ...parseChordSymbol('C'), beats: 4 }], beats: 4 }]] }],
+      },
+      {
+        tonic: note('C'),
+        pattern: {
+          id: 'eighths',
+          rh: { kind: 'events', events: parseFigure('0/2 C,2/2 C,4/2 C,6/2 C') },
+          lh: { kind: 'events', events: parseFigure('0/16 L1') },
+        },
+      },
+    )
+    const { result } = renderPractice(eighths, { mode: 'wait', hands: 'lh', swing: true })
+    act(() => result.current.play())
+    act(() => keyboard.press(midi(48)))
+    wait(150)
+    wait(334)
+    // The audio clock stands still here: the wait runs from the start of the chain.
+    wait(1000)
+    expect(result.current.state.beatGroup).toBe(3)
+    // The off-beat 8th (beat group 1) is short and the 8th on the beat long: 1/3 then 2/3 of a beat.
+    expect(audio.played.map((play) => Number(play.at.toFixed(4)))).toEqual([0.1, 0.1, 0.4333, 1.1])
   })
 
   it('sounds nothing where the learner moves while it waits: the learner plays it', () => {
@@ -285,7 +313,7 @@ describe('usePractice: a loop and speed training', () => {
     const restarted = audio.played.at(-1)
     expect(restarted?.at).toBeCloseTo(5.3 + 0.1)
     expect(notesOf(restarted?.sounds ?? [])[0]?.at).toBe(0)
-    expect(ONE_BAR.beatGroups[beatGroup]?.tick).toBe(12)
+    expect(ONE_BAR.beatGroups[beatGroup]?.tick).toBe(24)
     clockTo(5.3 + 0.1 + 0.5)
     expect(result.current.passTempo).toBe(66)
   })

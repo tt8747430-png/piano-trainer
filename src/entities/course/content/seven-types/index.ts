@@ -8,8 +8,8 @@ const course: Course = {
   stage: 'intermediate',
   title: { en: 'Bobrova: seven types of accompaniment', ru: 'Боброва: семь видов аккомпанемента' },
   summary: {
-    en: 'N. V. Bobrova’s seven types of accompaniment, each on one hymn, then hymns and her songbook’s songs accompanied from their chords.',
-    ru: 'Семь видов аккомпанемента Н. В. Бобровой на одном гимне, затем гимны и песни её сборника по аккордам.',
+    en: 'N. V. Bobrova’s seven types of accompaniment, all heard on one hymn. Then you accompany hymns and the songs of her songbook from their chords.',
+    ru: 'Семь видов аккомпанемента Н. В. Бобровой, все на одном гимне. Затем вы аккомпанируете гимнам и песням её сборника по аккордам.',
   },
   weeks: 4,
   lessons: [sevenTypes, accompanyingAHymn],

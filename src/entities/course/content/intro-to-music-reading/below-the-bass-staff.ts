@@ -5,8 +5,8 @@ const belowTheBassStaff: Lesson = {
   id: 'below-the-bass-staff',
   title: { en: 'Notes below the bass staff', ru: 'Ноты под басовым станом' },
   summary: {
-    en: 'Read the low notes below the bass staff, down to C2.',
-    ru: 'Читать низкие ноты под басовым станом, до до большой октавы.',
+    en: 'Read the low notes below the bass staff, from F2 down to C2, using ledger lines.',
+    ru: 'Читать низкие ноты под басовым станом, от фа до до большой октавы, по добавочным линейкам.',
   },
   sections: [
     {
@@ -15,21 +15,21 @@ const belowTheBassStaff: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'G2 is the bottom line. One step lower, F2 hangs just under the staff.',
-            ru: 'Соль большой октавы — на нижней линейке. На шаг ниже, прямо под станом, — фа.',
+            en: 'G2 sits on the bottom line. The note a step lower, F2, hangs just under the staff, touching the bottom line.',
+            ru: 'Соль большой октавы стоит на нижней линейке. Нота на шаг ниже, фа, висит прямо под станом и касается нижней линейки.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'A2 G2 F2/2' },
       ],
     },
     {
-      heading: { en: 'E2 and D2', ru: 'Ми и ре' },
+      heading: { en: 'Ledger lines below: E2 and D2', ru: 'Добавочные линейки внизу: ми и ре' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Ledger lines work below the staff as above it. E2 sits on the first, D2 hangs just under it.',
-            ru: 'Под станом добавочные линейки работают так же, как над ним. Ми — на первой, ре — прямо под ней.',
+            en: 'Lower notes need ledger lines, the short lines that extend the staff. E2 sits on the first ledger line below. D2 hangs just under it.',
+            ru: 'Для нот ниже нужны добавочные линейки — короткие линейки, продолжающие стан. Ми стоит на первой добавочной снизу. Ре висит прямо под ней.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'F2/2 E2/2 D2/1' },
@@ -41,8 +41,8 @@ const belowTheBassStaff: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'C2 takes a second ledger line, two octaves below middle C.',
-            ru: 'До большой октавы — на второй добавочной линейке, на две октавы ниже до первой.',
+            en: 'C2 sits on a second ledger line below the staff. It is two octaves below middle C.',
+            ru: 'До большой октавы стоит на второй добавочной линейке под станом. Это на две октавы ниже до первой октавы.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'C2/1' },
@@ -54,8 +54,8 @@ const belowTheBassStaff: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Count the ledger lines before naming the note. One line is E, two lines are C.',
-            ru: 'Сначала сосчитайте добавочные линейки. Одна — ми, две — до.',
+            en: 'Count the ledger lines before you name a note. A note on one line is E. A note on two lines is C.',
+            ru: 'Прежде чем назвать ноту, сосчитайте добавочные линейки. Нота на одной линейке — ми, на двух — до.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'G2 F2 E2 D2 C2/1 C2 D2 E2 F2 G2/1' },
@@ -67,8 +67,8 @@ const belowTheBassStaff: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'C3 in the second space is an octave above C2. G2 on the bottom line is a 5th above it.',
-            ru: 'До во втором промежутке — октавой выше до большой октавы. Соль на нижней линейке — квинтой выше неё.',
+            en: 'Leap to a low note from a landmark you know. C3 in the second space is an octave above C2. G2 on the bottom line is a 5th above C2.',
+            ru: 'Скачок к низкой ноте делайте от знакомого ориентира. До во втором промежутке на октаву выше до большой октавы. Соль на нижней линейке на квинту выше него.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'C3/2 C2/2 G2/2 E2/2 D2 F2 E2 G2 C2/1' },
@@ -103,7 +103,7 @@ const belowTheBassStaff: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          title: { en: 'Practise reading notes in the Quiz', ru: 'Чтение нот в тестах' },
           target: { opens: 'quiz', trainer: 'reading-notes' },
         },
         {

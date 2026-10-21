@@ -9,10 +9,10 @@ import {
   type TimeSignature,
 } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
-import { cn } from '@/shared/lib'
+import { cn, keyListParam } from '@/shared/lib'
 import { LazyScoreView } from '@/shared/ui'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
-import { findChord, type Finding } from '../model/finding'
+import { findChord, readingAt, type Finding } from '../model/finding'
 import { BAR_TICKS, trailMusic } from '../model/trail-music'
 import { chordLabel, useChordAbout } from './use-chord-about'
 
@@ -84,24 +84,31 @@ export function ChordTrail({
   musicKey,
   remember,
   slash,
+  chosen,
 }: {
   chords: readonly (readonly Midi[])[]
   musicKey: Key
   remember: boolean
   /** An inversion named over its bass; else by its root. */
   slash: boolean
+  /** The reading chosen for the chord shown: the newest bar, where it holds those keys, is named so. */
+  chosen?: { readonly keys: readonly Midi[]; readonly at: number }
 }) {
+  // By value: the keys shown are a new list on each render.
+  const chosenKeys = chosen ? keyListParam(chosen.keys) : undefined
+  const chosenAt = chosen?.at ?? 0
   const { t } = useTranslation(['practice', 'music'])
   const about = useChordAbout()
   // Engraved after the key a tap put down is painted: a busy phone keeps its keys quick.
   const shown = useDeferredValue(chords)
   const names = useMemo(
     () =>
-      shown.map((keys): Said => {
+      shown.map((keys, i): Said => {
         const finding: Finding = findChord(keys, musicKey)
         switch (finding.kind) {
           case 'chord': {
-            const [best] = finding.readings
+            const newest = i === shown.length - 1 && keyListParam(keys) === chosenKeys
+            const best = readingAt(finding.readings, newest ? chosenAt : 0)
             // Under its bar, what the chord is; how the keys lay it out is the name's to say.
             const detail = about(best, { slash }).join(' · ')
             const symbol = chordLabel(best, slash)
@@ -123,7 +130,7 @@ export function ChordTrail({
             }
         }
       }),
-    [shown, musicKey, t, about, slash],
+    [shown, musicKey, t, about, slash, chosenKeys, chosenAt],
   )
   const score = useMemo(
     () =>

@@ -5,8 +5,8 @@ const calledToPlayTwoExam: Lesson = {
   id: 'called-to-play-two-exam',
   title: { en: 'Level 2 final exam', ru: 'Экзамен второго курса' },
   summary: {
-    en: 'Accompany a singer in two songs of your own plan.',
-    ru: 'Аккомпанируйте солисту в двух песнях по своему плану.',
+    en: 'Write your own plans for two songs and accompany a singer with them.',
+    ru: 'Составьте свои планы для двух песен и аккомпанируйте по ним солисту.',
   },
   sections: [
     {
@@ -15,15 +15,15 @@ const calledToPlayTwoExam: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Prepare two songs with your own plan for two verses: the introduction, the character, the dynamics, the ornaments and the ending.',
-            ru: 'Подготовьте две песни по собственному плану на два куплета: вступление, характер, динамику, вставки и окончание.',
+            en: 'Prepare two songs, two verses each, with plans of your own. Choose the introduction, character, dynamics, ornaments and ending.',
+            ru: 'Подготовьте две песни, по два куплета, по собственным планам. Выберите вступление, характер, динамику, вставки и окончание.',
           },
         },
         { kind: 'chords', symbols: ['C', 'Am', 'Dm', 'F', 'E'] },
         {
           kind: 'link',
           title: {
-            en: '«Когда Христос меня простил» in the Player',
+            en: '“Когда Христос меня простил” in the Player',
             ru: '«Когда Христос меня простил» в плеере',
           },
           target: { opens: 'piece', piece: 'prostil' },
@@ -31,7 +31,7 @@ const calledToPlayTwoExam: Lesson = {
         {
           kind: 'link',
           title: {
-            en: '«Твои небеса и Твоя земля» in the Player',
+            en: '“Твои небеса и Твоя земля” in the Player',
             ru: '«Твои небеса и Твоя земля» в плеере',
           },
           target: { opens: 'piece', piece: 'nebesa' },
@@ -58,16 +58,16 @@ const calledToPlayTwoExam: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Find a soloist: they sing, you accompany.',
+              en: 'Find a soloist to sing while you accompany.',
               ru: 'Найдите солиста: он поёт, вы аккомпанируете.',
             },
             {
-              en: 'Play it live and bright, never covering the voice.',
+              en: 'Play with life and energy, but never cover the voice.',
               ru: 'Играйте живо и бодро, не заглушая голос.',
             },
             {
-              en: 'Record a video of it.',
-              ru: 'Запишите это на видео.',
+              en: 'Record a video of your performance.',
+              ru: 'Запишите исполнение на видео.',
             },
           ],
         },

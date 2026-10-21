@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 96,
   pattern: 'block',
   note: {
-    en: 'An English ballad in the Dorian mode: its B is natural, so the chord on the fourth degree is G major.',
-    ru: 'Английская баллада в дорийском ладу: си в ней без бемоля, поэтому аккорд четвёртой ступени — соль мажор.',
+    en: 'An English ballad in the Dorian mode. Its B stays natural, so the chord on the fourth degree is G major, where D minor would have G minor.',
+    ru: 'Английская баллада в дорийском ладу. Си в ней остаётся без бемоля, поэтому аккорд IV ступени — соль мажор, а не соль минор, как в ре миноре.',
   },
   sections: [
     {

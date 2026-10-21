@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 120,
   pattern: 'block',
   note: {
-    en: 'The folk tune as American songbooks print it, in 3/4; the Animals’ 1964 recording sets it in 6/8 over Am, C, D and F.',
-    ru: 'Народная мелодия, как её печатают американские песенники, на 3/4; в записи The Animals 1964 года она звучит на 6/8 на аккордах Am, C, D и F.',
+    en: 'The folk tune in 3/4, as American songbooks print it. The Animals’ 1964 recording plays it in 6/8, over Am, C, D and F.',
+    ru: 'Народная мелодия на 3/4, как её печатают американские песенники. В записи The Animals 1964 года она звучит на 6/8, на аккордах Am, C, D и F.',
   },
   sections: [
     { kind: 'verse', lines: ['Am@1 Am Am E7 Am', 'Am C C E7', 'Am C Am Am', 'Am E7 Am Am'] },

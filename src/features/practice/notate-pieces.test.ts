@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, expect, it } from 'vitest'
 import { PATTERN_IDS, BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { melodyOf, PIECES } from '@/entities/piece'

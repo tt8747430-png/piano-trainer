@@ -11,8 +11,8 @@ const course: Course = {
   stage: 'advanced',
   title: { en: 'Gorshkov: a course in accompaniment', ru: 'Горшков: курс по аккомпанементу' },
   summary: {
-    en: 'Vasily Gorshkov’s course on his songs: 7th and 9th chords where they sound, thinking in degrees, the chord’s pulse and the melody woven into it.',
-    ru: 'Курс Василия Горшкова на его песнях: септ- и нонаккорды там, где они звучат, мышление ступенями, пульсация аккорда и вплетённая в неё мелодия.',
+    en: 'Vasily Gorshkov’s accompaniment course, taught on the songs of his lessons: 7th and 9th chords where they fit, thinking in degrees, chord pulse, and a line woven into the chords.',
+    ru: 'Курс аккомпанемента Василия Горшкова на песнях из его уроков: септ- и нонаккорды там, где они уместны, мышление ступенями, аккордовая пульсация и линия, вплетённая в аккорды.',
   },
   weeks: 5,
   lessons: [seventhsInASong, ninthsInASong, thinkingInDegrees, chordPulse, melodicFiguration],

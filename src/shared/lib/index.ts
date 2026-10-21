@@ -7,7 +7,7 @@ export {
   readAlterations,
   type PartsParams,
 } from './chord-params'
-export { foldText, matchesQuery } from './fold-text'
+export { foldText, matchesQuery, WORD_BREAK } from './fold-text'
 export { IN_PLACE } from './in-place'
 export { OPEN_PLAINLY } from './open-plainly'
 export { isOneOf } from './is-one-of'
@@ -40,13 +40,20 @@ export {
 export {
   keepCentre,
   scrollToReveal,
+  scrollToShow,
   keysInView,
   scrollByOctave,
   scrollToCentre,
   viewFrame,
   type ScrollMetrics,
 } from './keyboard-view'
-export { createMemoryStorage, keepsSaves, onFailedWrite, safeLocalStorage } from './safe-storage'
+export {
+  createMemoryStorage,
+  keepsSaves,
+  onFailedWrite,
+  safeLocalStorage,
+  unguarded,
+} from './safe-storage'
 export { isRecord, savedObject } from './saved'
 export { createSavedStore, type SavingOptions } from './saved-store'
 export { downloadFile } from './download-file'
@@ -62,7 +69,7 @@ export {
 } from './typing-keys'
 export { useGoBack } from './use-go-back'
 export { useShownOnScrollUp } from './use-shown-on-scroll-up'
-export { useMediaQuery } from './use-media-query'
+export { LANDSCAPE_PHONE, useMediaQuery } from './use-media-query'
 export { useWakeLock } from './use-wake-lock'
 export { useElementSize } from './use-element-size'
 export { toggled } from './toggled'
@@ -70,3 +77,4 @@ export { useScrollMotion } from './use-scroll-motion'
 export { SHORTEST_PRESS_MS, usePresses } from './use-presses'
 export { useViewChange } from './use-view-change'
 export { morph } from './morph'
+export { PAGE, paginate, SHEET_VIEWS, type SheetView } from './sheet-views'

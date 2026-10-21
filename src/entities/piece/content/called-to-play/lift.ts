@@ -10,8 +10,8 @@ export default definePiece({
   tempo: 76,
   pattern: 'M1',
   note: {
-    en: 'The workbook asks you to make your own accompaniment plan for this song, based on the earlier songs.',
-    ru: 'Учебник предлагает составить свой план аккомпанемента для этой песни по образцу предыдущих.',
+    en: 'The workbook leaves the accompaniment plan for this song to you. Use the earlier songs as a model.',
+    ru: 'План аккомпанемента для этой песни учебник оставляет вам. Возьмите за образец предыдущие песни.',
   },
   sections: [
     { kind: 'verse', lines: ['Dm Gm', 'A Dm', 'Dm Gm', 'C F-A'] },

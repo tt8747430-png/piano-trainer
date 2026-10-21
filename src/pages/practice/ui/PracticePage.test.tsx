@@ -18,8 +18,8 @@ describe('Practice', () => {
     expect(rowsOf(things!)).toEqual([
       ['Chords Triads to 13ths · Inversions · Tensions', '/practice/chords'],
       ['Scales and keys Scale · Chords · Key', '/practice/scales'],
-      ['Intervals On the keys, up and down', '/practice/intervals'],
-      ['Progressions From the library or typed, in any key', '/practice/progressions'],
+      ['Intervals Every interval, heard and shown on the keys', '/practice/intervals'],
+      ['Progressions Pick a known one or type your own, in any key', '/practice/progressions'],
       [
         'Accompaniment Called to Play · Called to Play 2 · Боброва · Горшков · Styles · Yours',
         '/practice/accompaniment',
@@ -31,7 +31,7 @@ describe('Practice', () => {
     await renderApp('/practice')
     const keys = await screen.findByRole('region', { name: 'At the keys' })
     expect(rowsOf(keys)).toEqual([
-      ['Chord finder Any chord named, spelled and written', '/practice/chord-finder'],
+      ['Chord finder Play a chord to see its name and how it is written', '/practice/chord-finder'],
     ])
   })
 

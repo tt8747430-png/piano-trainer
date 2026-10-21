@@ -15,9 +15,9 @@ export const practice: LocaleResources['practice'] = {
   },
   about: {
     chords: 'От трезвучий до терцдецимаккордов · Обращения · Тенсии',
-    intervals: 'На клавишах, вверх и вниз',
-    progressions: 'Из библиотеки или своя, в любой тональности',
-    chordFinder: 'Любой аккорд: название, ноты и запись',
+    intervals: 'Каждый интервал на клавишах и на слух',
+    progressions: 'Известные или свои, в любой тональности',
+    chordFinder: 'Сыграйте аккорд и узнайте, как он называется и пишется',
   },
   root: 'Основной тон',
   hands: 'Руки',
@@ -61,14 +61,14 @@ export const practice: LocaleResources['practice'] = {
     tensions: {
       title: 'Доступные тенсии',
       group: {
-        weak: { title: 'Слабые', says: 'Ничего не добавляют к звучанию.' },
-        strong: { title: 'Сильные', says: 'Называют аккорд.' },
-        tension: { title: 'Тенсии', says: 'Окрашивают его.' },
-        avoid: { title: 'Избегаемые', says: 'Конфликтуют с ним.' },
+        weak: { title: 'Слабые', says: 'Ничего нового к звучанию не добавляют.' },
+        strong: { title: 'Сильные', says: 'Дают аккорду его название.' },
+        tension: { title: 'Тенсии', says: 'Добавляют краску.' },
+        avoid: { title: 'Избегаемые', says: 'Конфликтуют с аккордом.' },
       },
     },
     chromatic: 'По полутонам',
-    chromaticDetail: 'Аккорд на каждый такт, по полутону от его основного тона',
+    chromaticDetail: 'Аккорд сдвигается по полутону от основного тона, по такту на каждый',
   },
   scales: {
     show: { scale: 'Гамма', chords: 'Аккорды', key: 'Тональность' },
@@ -76,7 +76,7 @@ export const practice: LocaleResources['practice'] = {
     startOn: 'Начать с',
     fingering: {
       label: 'Аппликатура',
-      thumb: 'От первого пальца',
+      thumb: 'С первого пальца',
       scale: 'Как в гамме',
     },
     rhythmLabel: 'Ритм',
@@ -88,7 +88,7 @@ export const practice: LocaleResources['practice'] = {
       'short-short-short-long': '3 короткие, длинная',
     },
     tempo: 'Темп',
-    bpm: '{{tempo}} уд/мин',
+    bpm: '{{tempo}} уд/мин',
     playUpDown: 'Вверх и вниз',
     facts: { formula: 'Формула', gaps: 'Строение', relative: 'Параллельная', modeOf: 'Лад от' },
     chordsIn: 'Аккорды гаммы',
@@ -109,7 +109,7 @@ export const practice: LocaleResources['practice'] = {
       noSongs: 'Песен в этой тональности нет.',
       harmonise: 'Гармонизовать ноту мелодии',
       harmoniseAbout:
-        'Все аккорды, в которых есть эта нота, сыгранные под ней: свои и заимствованные.',
+        'Все аккорды, в которых есть нота мелодии, сыгранные под ней: аккорды тональности и заимствованные извне.',
     },
     keyProgressions: 'Последовательности в этой тональности',
   },
@@ -120,13 +120,17 @@ export const practice: LocaleResources['practice'] = {
   progressions: {
     field: 'Ступени или аккорды',
     unread: 'Эта последовательность не читается.',
+    majorLine: 'Эти ступени — мажорной тональности.',
+    minorLine: 'Эти ступени — минорной тональности.',
+    playIn: 'Сыграть в тональности {{key}}',
     throughKeys: 'По тональностям',
     choose: 'Последовательность',
     typed: 'Набрана',
     lead: { label: 'Подвести к каждому аккорду', none: 'Нет', v: 'Через V', 'ii-v': 'Через ii–V' },
     between: {
       title: 'Между двумя аккордами',
-      about: 'Проходящие аккорды, которые ведут от одного аккорда ряда к следующему.',
+      about:
+        'Проходящие аккорды — это добавочные аккорды, которые ведут от одного аккорда ряда к следующему.',
       pair: 'От аккорда к аккорду',
     },
     style: {
@@ -155,7 +159,7 @@ export const practice: LocaleResources['practice'] = {
     makeOwn: 'Сделать свою на её основе',
     hide: 'Скрыть из плеера',
     show: 'Показать в плеере',
-    hiddenNote: 'Скрыта из списка в плеере и с полки своей книги; она остаётся в «Своих».',
+    hiddenNote: 'Скрыта из списка плеера и со своей полки. Её по-прежнему можно найти в «Своих».',
     edit: 'Изменить',
     delete: 'Удалить',
     deleting: {
@@ -196,15 +200,15 @@ export const practice: LocaleResources['practice'] = {
     settings: 'Настройки определителя аккордов',
     remember: 'Запоминать',
     rememberDetail: 'Последние {{count}}',
-    slash: 'Через бас',
+    slash: 'Над басом',
     inversion: { first: 'Первое обращение', second: 'Второе обращение', third: 'Третье обращение' },
     bass: 'В басу {{note}}',
     voicing: {
       quartal: 'Кварты',
       soWhat: 'Аккорд «So What»',
       shell: 'Основа: 1, 3, 7',
-      drop2: 'Дроп-2',
-      drop3: 'Дроп-3',
+      drop2: 'Drop 2',
+      drop3: 'Drop 3',
       close: 'Тесное расположение',
       open: 'Широкое расположение',
     },
@@ -227,15 +231,15 @@ export const practice: LocaleResources['practice'] = {
     kind: {
       secondaryDominant: {
         name: 'Побочная доминанта',
-        why: '{{chord}} — доминантсептаккорд к {{to}}.',
+        why: '{{chord}} — доминантсептаккорд к {{to}} и тянет в него.',
       },
       tritoneSub: {
         name: 'Тритоновая замена',
         why: '{{chord}} заменяет доминанту к {{to}} и спускается в него на полутон.',
       },
       secondaryTwoFive: {
-        name: 'Побочная ii–V',
-        why: '{{chord}} и {{next}} — II и V ступени для {{to}}.',
+        name: 'Побочный оборот ii–V',
+        why: '{{chord}} и {{next}} — ii и V для {{to}}.',
       },
       approachBelow: {
         name: 'Хроматический подход снизу',
@@ -257,24 +261,27 @@ export const practice: LocaleResources['practice'] = {
       },
       commonToneDiminished: {
         name: 'Уменьшённый с общим тоном',
-        why: '{{chord}} стоит на основном тоне {{to}} и раскрывается в него.',
+        why: '{{chord}} построен на основном тоне {{to}} и раскрывается в него.',
       },
       diatonicWalk: {
         name: 'Ход по ступеням тональности',
         why: 'Бас идёт к {{to}} по ступеням, через аккорды самой тональности.',
       },
-      backdoor: { name: 'Backdoor-каденция', why: '{{chord}} — ♭VII7 к {{to}}.' },
+      backdoor: {
+        name: 'Каденция «с чёрного хода»',
+        why: '{{chord}} — ♭VII7 к {{to}}. Он входит «с чёрного хода»: на целый тон снизу, а не от V.',
+      },
       backdoorTwoFive: {
-        name: 'Backdoor ii–V',
+        name: 'Оборот ii–V «с чёрного хода»',
         why: '{{chord}} и {{next}} — iv и ♭VII7 к {{to}}, взятые из одноимённого минора.',
       },
       plagal: {
         name: 'Плагальная каденция',
-        why: '{{chord}} — субдоминанта к {{to}}: «аминь».',
+        why: '{{chord}} — субдоминанта (IV) к {{to}}: каденция «аминь».',
       },
       minorPlagal: {
         name: 'Минорная плагальная каденция',
-        why: '{{chord}} — iv к {{to}}, взятая из одноимённого минора.',
+        why: '{{chord}} — iv к {{to}}; этот аккорд взят из одноимённого минора.',
       },
       gospelWalkUp: {
         name: 'Госпел-подход',
@@ -288,6 +295,8 @@ export const practice: LocaleResources['practice'] = {
     as: 'как {{degree}}',
     inKey: 'в тональности',
     onlyInKey: 'Только в тональности',
+    noneInKey: 'Ни один аккорд тональности не содержит {{note}}.',
+    showBorrowed: 'Показать и заимствованные аккорды',
     group: {
       triads: 'Трезвучия',
       major: 'Мажорные септаккорды',

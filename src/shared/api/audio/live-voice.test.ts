@@ -51,6 +51,27 @@ describe('createLiveVoice', () => {
     expect(heard.at(-1)).toBe('silence 60')
   })
 
+  it('keeps a pedal two sources hold down until both let it up', () => {
+    const { voice, heard } = setUp()
+    voice.pedal('sustain', true)
+    voice.pedal('sustain', true)
+    voice.press(C, 100)
+    voice.release(C)
+    voice.pedal('sustain', false)
+    expect(voice.pedals().sustain).toBe(true)
+    expect(heard).toHaveLength(1)
+    voice.pedal('sustain', false)
+    expect(voice.pedals().sustain).toBe(false)
+    expect(heard.at(-1)).toBe('silence 60')
+  })
+
+  it('lets a pedal up no further than up', () => {
+    const { voice } = setUp()
+    voice.pedal('sustain', false)
+    voice.pedal('sustain', true)
+    expect(voice.pedals().sustain).toBe(true)
+  })
+
   it('silences a key still sounding before it strikes it again', () => {
     const { voice, heard } = setUp()
     voice.pedal('sustain', true)

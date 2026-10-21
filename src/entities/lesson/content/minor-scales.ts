@@ -5,8 +5,8 @@ const minorScales: Lesson = {
   id: 'minor-scales',
   title: { en: 'The minor scales', ru: 'Минорные гаммы' },
   summary: {
-    en: 'Play natural, harmonic and melodic minor and find the relative major.',
-    ru: 'Играть натуральный, гармонический и мелодический минор и находить параллельный мажор.',
+    en: 'Build the three minor scales from A, and find the major key that shares a minor key’s notes.',
+    ru: 'Строить три вида минора от ля и находить мажор с теми же нотами, что у минора.',
   },
   sections: [
     {
@@ -16,11 +16,18 @@ const minorScales: Lesson = {
           kind: 'text',
           lead: { en: 'Natural minor', ru: 'Натуральный минор' },
           text: {
-            en: 'climbs whole, half, whole, whole, half, whole, whole. From A it is the white keys.',
-            ru: 'идёт так: тон, полутон, тон, тон, полутон, тон, тон. От ля это белые клавиши.',
+            en: 'climbs whole, half, whole, whole, half, whole, whole. From A it uses only white keys.',
+            ru: 'поднимается так: тон, полутон, тон, тон, полутон, тон, тон. От ля в ней только белые клавиши.',
           },
         },
         { kind: 'scale', root: note('A'), scale: 'natural' },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play it and listen to the 3rd, C. It makes the scale minor.',
+            ru: 'Сыграйте её и послушайте третью ступень, до. Она делает гамму минорной.',
+          },
+        },
       ],
     },
     {
@@ -30,8 +37,8 @@ const minorScales: Lesson = {
           kind: 'text',
           lead: { en: 'Relative keys', ru: 'Параллельные тональности' },
           text: {
-            en: 'share their notes and signature, like A minor and C major. The minor tonic is a minor 3rd below.',
-            ru: 'имеют одни ноты и ключевые знаки, как ля минор и до мажор. Тоника минора на малую терцию ниже.',
+            en: 'share the same notes and key signature, like A minor and C major. The minor key’s tonic is a minor 3rd below the major’s.',
+            ru: 'имеют одни ноты и ключевые знаки, как ля минор и до мажор. Тоника минора на малую терцию ниже тоники мажора.',
           },
         },
         { kind: 'interval', root: note('A'), interval: 'm3' },
@@ -49,12 +56,19 @@ const minorScales: Lesson = {
           kind: 'text',
           lead: { en: 'Harmonic minor', ru: 'Гармонический минор' },
           text: {
-            en: 'raises the 7th, G♯ in A minor. It leads up to the tonic, and the chord on the 5th turns major.',
-            ru: 'повышает седьмую ступень, соль-диез в ля миноре. Она ведёт к тонике, а аккорд пятой ступени становится мажорным.',
+            en: 'raises the 7th note: G becomes G♯ in A minor. G♯ pulls up to A, and the chord on the 5th becomes major.',
+            ru: 'повышает седьмую ступень: в ля миноре соль становится соль-диезом. Он тянется к ля, а аккорд пятой ступени становится мажорным.',
           },
         },
         { kind: 'scale', root: note('A'), scale: 'harmonic' },
         { kind: 'chords', symbols: ['E', 'Am'] },
+        {
+          kind: 'text',
+          text: {
+            en: 'Play E, then Am, and hear G♯ rise to A.',
+            ru: 'Сыграйте E, затем Am и услышьте, как соль-диез идёт в ля.',
+          },
+        },
       ],
     },
     {
@@ -64,11 +78,18 @@ const minorScales: Lesson = {
           kind: 'text',
           lead: { en: 'Melodic minor', ru: 'Мелодический минор' },
           text: {
-            en: 'raises the 6th too, smoothing the leap from F to G♯. Classical music raises them going up only, jazz both ways.',
-            ru: 'повышает и шестую, сглаживая скачок от фа к соль-диезу. В классике их повышают только вверх, в джазе — в обе стороны.',
+            en: 'raises the 6th as well, F to F♯. That closes the wide gap from F to G♯.',
+            ru: 'повышает ещё и шестую ступень: фа становится фа-диезом. Так исчезает широкий шаг от фа к соль-диезу.',
           },
         },
         { kind: 'scale', root: note('A'), scale: 'melodic' },
+        {
+          kind: 'note',
+          text: {
+            en: 'Classical music raises them going up only. Jazz raises them both ways.',
+            ru: 'В классике их повышают только при движении вверх. В джазе — в обе стороны.',
+          },
+        },
       ],
     },
     {

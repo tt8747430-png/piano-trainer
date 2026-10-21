@@ -55,7 +55,7 @@ export function scaleExercise(
     ? run.fingering
     : ownFingering(kind, start)
   const degrees = range(start, start + count * octaves)
-  const tonic = tonicKey(root, octaves)
+  const tonic = tonicKey(root, octaves, spellScale(root, kind)[start]?.semitones)
   const handRun = (scale: ScaleKind, hand: Hand): Played[] => {
     const place = scaleDegrees(
       root,

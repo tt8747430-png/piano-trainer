@@ -2,7 +2,6 @@ export { SHELVES, type Course, type Shelf } from './model/types'
 export {
   courseById,
   courseLesson,
-  courseOfPiece,
   coursesOn,
   courseStepIds,
   nextCourseLesson,

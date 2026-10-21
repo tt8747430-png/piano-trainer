@@ -270,7 +270,7 @@ describe('Practice → Chords', () => {
   it('writes the other ways the chord is written', async () => {
     await renderApp('/practice/chords?triad=min&size=7')
     const written = await screen.findByText('Also written')
-    expect(written.parentElement).toHaveTextContent(/^Also writtenC−7$/)
+    expect(written.parentElement).toHaveTextContent(/^Also writtenC−7 · Cmin7$/)
   })
 
   it('sets a long symbol a size down, so it stays on a phone’s line', async () => {
@@ -308,7 +308,7 @@ describe('Practice → Chords', () => {
     await renderApp('/practice/chords?root=G&triad=min&size=9')
     expect(await screen.findByRole('heading', { level: 2, name: 'Gm9' })).toBeInTheDocument()
     const walk = screen.getByRole('link', {
-      name: 'Chromatic walk The chord a bar each, a semitone at a time from its root',
+      name: 'Chromatic walk The chord moved a semitone at a time from its root, one bar each',
     })
     const href = walk.getAttribute('href') ?? ''
     const [path, query] = href.split('?')

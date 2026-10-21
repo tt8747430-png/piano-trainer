@@ -11,23 +11,23 @@ describe('scaleRun', () => {
     expect(run.notes.map((n) => n.midi)).toEqual([
       60, 62, 64, 65, 67, 69, 71, 72, 71, 69, 67, 65, 64, 62, 60,
     ])
-    expect(run.notes.map((n) => n.startTick).slice(0, 3)).toEqual([0, 6, 12])
+    expect(run.notes.map((n) => n.startTick).slice(0, 3)).toEqual([0, 12, 24])
     expect(run.meter).toBe('4/4')
     expect(run.bars).toEqual([
       { startTick: 0, beats: 4 },
-      { startTick: 48, beats: 4 },
+      { startTick: 96, beats: 4 },
     ])
   })
 
-  it('repeats the rhythm’s lengths, a triplet 8th four ticks', () => {
+  it('repeats the rhythm’s lengths, a triplet 8th eight ticks', () => {
     const longShort = scaleRun(C_MAJOR, { rhythm: 'long-short', hands: 'rh', key: C_KEY })
-    expect(longShort.notes.slice(0, 3).map((n) => n.startTick)).toEqual([0, 9, 12])
+    expect(longShort.notes.slice(0, 3).map((n) => n.startTick)).toEqual([0, 18, 24])
     const triplets = scaleRun(C_MAJOR, {
       rhythm: 'long-short-short-short',
       hands: 'rh',
       key: C_KEY,
     })
-    expect(triplets.notes.slice(0, 5).map((n) => n.durationTicks)).toEqual([12, 4, 4, 4, 12])
+    expect(triplets.notes.slice(0, 5).map((n) => n.durationTicks)).toEqual([24, 8, 8, 8, 24])
   })
 
   it('plays the left hand an octave lower, both hands together, each note with its hand’s finger', () => {

@@ -24,8 +24,11 @@ export function CourseLessonPage() {
   const lessonLink = (id: string) => (
     <Link to="/courses/$courseId/$lessonId" params={{ courseId, lessonId: id }} />
   )
+  // Keyed by its lesson: the next one is a new screen, its heading taking the focus from the way on,
+  // so Enter again does not go on (and learn) past a lesson unread.
   return (
     <LessonLayout
+      key={lessonId}
       lesson={place.lesson}
       step={courseLessonStepId(courseId, lessonId)}
       back={<BackButton fallback={course} />}

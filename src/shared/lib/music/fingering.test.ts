@@ -119,6 +119,12 @@ describe('thumbFingering', () => {
     }
   })
 
+  it('fingers one note with the thumb, so every key has a finger', () => {
+    expect(thumbFingering([midi(60)], 'rh')).toEqual([1])
+    expect(thumbFingering([midi(60)], 'lh')).toEqual([1])
+    expect(thumbFingering([], 'rh')).toEqual([])
+  })
+
   it('keeps the later thumbs off the black keys', () => {
     const bFlat = placeScale(note('B', -1), 'major').map((placed) => placed.midi)
     expect(digits(thumbFingering(bFlat, 'rh'))).toBe('12341234')

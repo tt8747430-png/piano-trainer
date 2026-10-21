@@ -18,7 +18,7 @@ export const JOURNEYS: readonly Journey[] = [
     stage: 'beginner',
     title: { en: 'Foundations', ru: 'Основы' },
     goal: {
-      en: 'Find any key, read notes on both staves, count a rhythm, and build a scale and its first chords.',
+      en: 'Find any key, read notes on both staves, count a rhythm, then build a major scale and your first chords.',
       ru: 'Находить любую клавишу, читать ноты в обоих ключах, считать ритм, строить гамму и первые аккорды.',
     },
     chapters: [
@@ -34,7 +34,10 @@ export const JOURNEYS: readonly Journey[] = [
       },
       {
         id: 'steps-and-scales',
-        title: { en: 'Steps and the major scale', ru: 'Тоны, полутоны и мажорная гамма' },
+        title: {
+          en: 'Half steps, whole steps and the major scale',
+          ru: 'Полутоны, тоны и мажорная гамма',
+        },
         steps: [...lessons('whole-and-half-steps', 'major-scales'), ...scales('major')],
       },
       {
@@ -83,7 +86,7 @@ export const JOURNEYS: readonly Journey[] = [
       },
       {
         id: 'compound-time',
-        title: { en: 'Compound time and swing', ru: 'Сложные размеры и свинг' },
+        title: { en: 'Compound time and swing', ru: 'Размеры 6/8, 12/8 и свинг' },
         steps: lessons('compound-meter', 'syncopation-and-swing'),
       },
       {
@@ -102,8 +105,8 @@ export const JOURNEYS: readonly Journey[] = [
     stage: 'advanced',
     title: { en: 'Musicianship', ru: 'Музыкальность' },
     goal: {
-      en: 'Colour a melody with new chords, play the blues and gospel, and use the modes.',
-      ru: 'Раскрашивать мелодию новыми аккордами, играть блюз и госпел и пользоваться ладами.',
+      en: 'Play the blues and gospel, move between chords smoothly, give a melody new chords, and use the modes.',
+      ru: 'Играть блюз и госпел, плавно переходить между аккордами, подбирать мелодии новые аккорды и пользоваться ладами.',
     },
     chapters: [
       {

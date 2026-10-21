@@ -5,8 +5,8 @@ const intervalQuality: Lesson = {
   id: 'interval-quality',
   title: { en: 'Interval quality and inversion', ru: 'Качество интервалов и обращение' },
   summary: {
-    en: 'Name any interval’s exact quality, and invert it.',
-    ru: 'Определяйте точное качество любого интервала и обращайте его.',
+    en: 'Name an interval exactly, as major, minor, perfect, augmented or diminished, and turn it upside down.',
+    ru: 'Называйте интервал точно: большой, малый, чистый, увеличенный или уменьшённый. И обращайте его.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const intervalQuality: Lesson = {
           kind: 'text',
           lead: { en: 'Major and minor', ru: 'Большие и малые' },
           text: {
-            en: '2nds, 3rds, 6ths and 7ths come in two sizes. The minor one is a half step smaller than the major.',
-            ru: 'секунды, терции, сексты и септимы бывают двух размеров. Малая на полутон меньше большой.',
+            en: 'are the two sizes of 2nds, 3rds, 6ths and 7ths. The minor one is a half step smaller than the major one.',
+            ru: '— два размера секунд, терций, секст и септим. Малый интервал на полутон меньше большого.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'M6' },
@@ -48,8 +48,8 @@ const intervalQuality: Lesson = {
           kind: 'text',
           lead: { en: 'Augmented', ru: 'Увеличенный' },
           text: {
-            en: 'is a half step wider than perfect or major. Diminished is a half step narrower than perfect or minor. The letters keep the number.',
-            ru: 'интервал на полутон шире чистого или большого. Уменьшённый — на полутон уже чистого или малого. Буквы сохраняют число.',
+            en: 'means a half step wider than perfect or major. Diminished means a half step narrower than perfect or minor.',
+            ru: 'интервал на полутон шире чистого или большого. Уменьшённый на полутон уже чистого или малого.',
           },
         },
         {
@@ -64,8 +64,8 @@ const intervalQuality: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'C–F♯ and C–G♭ are the same keys: the tritone.',
-            ru: 'До–фа-диез и до–соль-бемоль — одни и те же клавиши: тритон.',
+            en: 'C to F♯ and C to G♭ use the same keys: both are a tritone.',
+            ru: 'До – фа-диез и до – соль-бемоль играются на одних и тех же клавишах. Оба — тритон.',
           },
         },
       ],
@@ -75,10 +75,10 @@ const intervalQuality: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'Inverting', ru: 'Обратить' },
+          lead: { en: 'To invert', ru: 'Обратить' },
           text: {
-            en: 'an interval moves its lower note up an octave. The numbers add to 9: a 3rd becomes a 6th. The half steps add to 12.',
-            ru: 'интервал — перенести нижний звук на октаву вверх. Числа дают в сумме 9: терция становится секстой. Полутоны дают в сумме 12.',
+            en: 'an interval, move its lower note up an octave. The two numbers add up to 9: a 3rd becomes a 6th. Their half steps add up to 12.',
+            ru: 'интервал — значит перенести нижний звук на октаву вверх. Числа двух интервалов дают в сумме 9: терция становится секстой. Полутоны дают в сумме 12.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'M3' },
@@ -86,7 +86,7 @@ const intervalQuality: Lesson = {
       ],
     },
     {
-      heading: { en: 'The quality flips', ru: 'Качество меняется' },
+      heading: { en: 'The quality flips too', ru: 'Качество тоже меняется' },
       blocks: [
         {
           kind: 'steps',
@@ -113,15 +113,18 @@ const intervalQuality: Lesson = {
           kind: 'text',
           lead: { en: 'A compound interval', ru: 'Составной интервал' },
           text: {
-            en: 'is wider than an octave. Take 7 from its number: a 9th is a 2nd plus an octave, a 10th a 3rd.',
-            ru: 'шире октавы. Отнимите от его числа 7: нона — это секунда плюс октава, децима — терция.',
+            en: 'is wider than an octave. Subtract 7 from its number: a 9th is a 2nd plus an octave, a 10th a 3rd.',
+            ru: '— интервал шире октавы. Отнимите от его числа 7: нона — это секунда плюс октава, децима — терция плюс октава.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'M2' },
         { kind: 'interval', root: note('C'), interval: 'M9' },
         {
           kind: 'note',
-          text: { en: 'In C9, the 9 is D.', ru: 'В C9 нона — это ре.' },
+          text: {
+            en: 'So in the chord C9, the 9 is D.',
+            ru: 'Поэтому в аккорде C9 нона — это ре.',
+          },
         },
       ],
     },
@@ -147,19 +150,19 @@ const intervalQuality: Lesson = {
         {
           kind: 'question',
           ask: {
-            en: 'Invert the minor 3rd A–C: play C and the A above it.',
-            ru: 'Обратите малую терцию ля–до: сыграйте до и ля над ней.',
+            en: 'Invert the minor 3rd from A up to C: play C and the A above it.',
+            ru: 'Обратите малую терцию от ля до до: сыграйте до и ля над ней.',
           },
           answer: { notes: ['C', 'A'], rising: true },
         },
         {
           kind: 'link',
-          title: { en: 'Every interval', ru: 'Все интервалы' },
+          title: { en: 'See every interval', ru: 'Все интервалы' },
           target: { opens: 'intervals' },
         },
         {
           kind: 'link',
-          title: { en: 'Intervals by ear in the Quiz', ru: 'Интервалы на слух в тестах' },
+          title: { en: 'Hear intervals in the Quiz', ru: 'Интервалы на слух в тестах' },
           target: { opens: 'quiz', trainer: 'intervals-by-ear' },
         },
       ],

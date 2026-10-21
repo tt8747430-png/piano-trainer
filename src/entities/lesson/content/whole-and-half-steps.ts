@@ -5,8 +5,8 @@ const wholeAndHalfSteps: Lesson = {
   id: 'whole-and-half-steps',
   title: { en: 'Half steps, whole steps, sharps and flats', ru: 'Полутоны, тоны, диезы и бемоли' },
   summary: {
-    en: 'Find half and whole steps and name sharps and flats.',
-    ru: 'Находить полутоны и тоны и называть диезы и бемоли.',
+    en: 'Measure the distance between keys in half and whole steps, and name the black keys with sharps and flats.',
+    ru: 'Измерять расстояние между клавишами полутонами и тонами и называть чёрные клавиши через диезы и бемоли.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const wholeAndHalfSteps: Lesson = {
           kind: 'text',
           lead: { en: 'A half step', ru: 'Полутон' },
           text: {
-            en: 'goes to the very next key, black or white. E–F and B–C are the only white-key half steps.',
-            ru: '— шаг к соседней клавише, чёрной или белой. Ми–фа и си–до — единственные полутоны между белыми клавишами.',
+            en: 'is the step to the very next key, black or white. E to F and B to C are the only half steps between two white keys.',
+            ru: '— это шаг к соседней клавише, чёрной или белой. Ми–фа и си–до — единственные полутоны между двумя белыми клавишами.',
           },
         },
         { kind: 'interval', root: note('E'), interval: 'm2' },
@@ -31,8 +31,8 @@ const wholeAndHalfSteps: Lesson = {
           kind: 'text',
           lead: { en: 'A whole step', ru: 'Тон' },
           text: {
-            en: 'is two half steps, with one key between: C–D, E–F♯.',
-            ru: '— два полутона, через одну клавишу: до–ре, ми–фа♯.',
+            en: 'is two half steps. It skips one key in between: C to D, or E to F♯.',
+            ru: '— это два полутона. Между ними пропущена одна клавиша: до–ре или ми–фа-диез.',
           },
         },
         { kind: 'interval', root: note('C'), interval: 'M2' },
@@ -45,15 +45,15 @@ const wholeAndHalfSteps: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A sharp (♯) raises a note a half step, a flat (♭) lowers it, and a natural (♮) cancels either.',
-            ru: 'Диез (♯) повышает ноту на полутон, бемоль (♭) понижает, а бекар (♮) отменяет и то и другое.',
+            en: 'A sharp (♯) raises a note a half step. A flat (♭) lowers it a half step. A natural (♮) cancels either one.',
+            ru: 'Диез (♯) повышает ноту на полутон. Бемоль (♭) понижает её на полутон. Бекар (♮) отменяет и то и другое.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'F4 F#4 F4/2 B4 B♭4 B4/2' },
         {
           kind: 'note',
           text: {
-            en: 'A sign written in a bar holds to the end of that bar.',
+            en: 'A sign lasts until the end of its bar.',
             ru: 'Знак, написанный в такте, действует до конца этого такта.',
           },
         },
@@ -65,8 +65,8 @@ const wholeAndHalfSteps: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'C♯ and D♭ are one key. Going up from C, call it C♯. Coming down from D, call it D♭.',
-            ru: 'До-диез и ре-бемоль — одна клавиша. Вверх от до это до-диез, вниз от ре — ре-бемоль.',
+            en: 'C♯ and D♭ are the same black key. Going up from C, call it C♯. Coming down from D, call it D♭.',
+            ru: 'До-диез и ре-бемоль — одна и та же чёрная клавиша. Вверх от до это до-диез, вниз от ре — ре-бемоль.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C#4/2 D♭4/2' },
@@ -78,8 +78,8 @@ const wholeAndHalfSteps: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Every key from C to the next C is twelve half steps.',
-            ru: 'Все клавиши от до до следующего до — двенадцать полутонов.',
+            en: 'From C up to the next C is twelve half steps. Play every key, black and white, in order.',
+            ru: 'От до до следующего до — двенадцать полутонов. Сыграйте подряд все клавиши, чёрные и белые.',
           },
         },
         {

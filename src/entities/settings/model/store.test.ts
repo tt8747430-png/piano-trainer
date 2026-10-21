@@ -1,8 +1,10 @@
+// @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createSettingsStore, SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from './store'
 import {
   DEFAULT_CHORD_FINDER,
+  DEFAULT_SCORE_VIEW,
   DEFAULT_MIDI,
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
@@ -33,6 +35,7 @@ const DEFAULTS = {
   sidebar: DEFAULT_SIDEBAR,
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
+  scoreView: DEFAULT_SCORE_VIEW,
   foldedSections: [],
 }
 
@@ -96,6 +99,7 @@ describe('createSettingsStore', () => {
         typing: true,
         dock: 'top',
         folded: true,
+        foldedLandscape: false,
         keyLength: 'short',
         railControls: ['zoom', 'pedal'],
       },
@@ -117,6 +121,14 @@ describe('createSettingsStore', () => {
           [48, 52, 55],
           [53, 57, 60],
         ],
+      },
+      scoreView: {
+        layout: 'scroll',
+        notation: true,
+        chordNames: false,
+        melodyStaff: false,
+        hidden: ['treble'],
+        keys: false,
       },
       foldedSections: ['chords.tensions'],
     }
@@ -140,12 +152,40 @@ describe('createSettingsStore', () => {
     expect(kept.at(-1)).toEqual([69])
   })
 
+  it('keeps the Player’s view where still valid, each staff hidden once', () => {
+    expect(
+      restored({
+        scoreView: {
+          layout: 'pages',
+          notation: 'no',
+          chordNames: false,
+          hidden: ['bass', 'x', 'bass'],
+        },
+      }).scoreView,
+    ).toEqual({
+      layout: 'pages',
+      notation: true,
+      chordNames: false,
+      melodyStaff: true,
+      hidden: ['bass'],
+      keys: true,
+    })
+    expect(restored({ scoreView: { layout: 'paper' } }).scoreView).toEqual(DEFAULT_SCORE_VIEW)
+  })
+
   it('opens a sidebar saved as anything but open or collapsed', () => {
     expect(restored({ sidebar: 'wide' }).sidebar).toBe('open')
   })
 
   it('turns a click that is not a boolean on, its default', () => {
     expect(restored({ recorder: { click: 'no' } }).recorder).toEqual(DEFAULT_RECORDER)
+  })
+
+  it('starts afresh over a save of the version before, which had no fold for a phone on its side', () => {
+    expect(SETTINGS_VERSION).toBe(3)
+    expect(restored({ theme: 'dark', keyboard: { folded: true } }, 2)).toEqual(
+      createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
+    )
   })
 
   it('plays from the computer keyboard by default only where the pointer is fine', () => {
@@ -164,6 +204,7 @@ describe('createSettingsStore', () => {
       typing: true,
       dock: 'bottom',
       folded: false,
+      foldedLandscape: true,
       keyLength: 'long',
       railControls: [
         'zoom',
@@ -188,6 +229,7 @@ describe('createSettingsStore', () => {
       typing: 'yes',
       dock: 'top',
       folded: true,
+      foldedLandscape: 'no',
       keyLength: 'tiny',
       railControls: ['pedal', 'pedal', 'nope'],
     }
@@ -200,6 +242,7 @@ describe('createSettingsStore', () => {
       typing: false,
       dock: 'top',
       folded: true,
+      foldedLandscape: true,
       keyLength: 'long',
       railControls: ['pedal'],
     })

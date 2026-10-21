@@ -11,6 +11,8 @@ export const learn = {
     label: 'Journeys',
     chapter: 'Chapter {{n}}: {{title}}',
     count: '{{learned}}/{{total}}',
+    // A journey's tab: its steps learned, lessons and checks alike (a lesson's line counts lessons).
+    steps: '{{learned}}/{{total}} steps',
   },
   // The Courses, shelf by shelf.
   shelves: {
@@ -22,6 +24,8 @@ export const learn = {
   },
   progress: '{{learned}} of {{total}} learned',
   lessonNumber: 'Lesson {{n}}',
+  // Said after a learned lesson's or check's name, whose check mark is for the eye.
+  learned: 'learned',
   current: 'You are here',
   // Continue: the next lesson of the journey or the course in progress, in one tap.
   continue: 'Continue',

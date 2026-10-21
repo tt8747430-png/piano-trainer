@@ -1,6 +1,6 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { PIECES_STORAGE_KEY } from '@/entities/piece'
@@ -61,6 +61,12 @@ describe('A take’s page', () => {
     },
   )
 
+  it('names its song under its own name', async () => {
+    await renderApp('/edit/my-1/takes/take-1', { storage: withTake() })
+    expect(await screen.findByRole('heading', { level: 1, name: 'First go' })).toBeInTheDocument()
+    expect(screen.getByText('Morning')).toBeInTheDocument()
+  })
+
   it('plays the take, or from a bar tapped on its roll', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/edit/my-1/takes/take-1', { storage: withTake() })
@@ -103,6 +109,38 @@ describe('A take’s page', () => {
     await waitFor(() => expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument())
     expect(await screen.findByRole('button', { name: 'Play from bar 2' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Play from bar 1' })).not.toBeInTheDocument()
+  })
+
+  it('downloads the take from its actions, and deletes it once asked, back to the takes', async () => {
+    const user = userEvent.setup()
+    const { router, takesStore } = await renderApp('/edit/my-1/takes/take-1', {
+      storage: withTake(),
+    })
+    await screen.findByRole('heading', { level: 1, name: 'First go' })
+    vi.stubGlobal(
+      'URL',
+      class extends URL {
+        static override createObjectURL = () => 'blob:take'
+        static override revokeObjectURL = () => {}
+      },
+    )
+    const saved: string[] = []
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (
+      this: HTMLAnchorElement,
+    ) {
+      saved.push(this.download)
+    })
+    await user.click(screen.getByRole('button', { name: 'More actions' }))
+    await user.click(await screen.findByRole('button', { name: 'Download' }))
+    expect(saved[0]).toMatch(/^Morning .*\.mid$/)
+
+    await user.click(screen.getByRole('button', { name: 'More actions' }))
+    await user.click(await screen.findByRole('button', { name: 'Delete' }))
+    const asking = await screen.findByRole('alertdialog', { name: 'Delete this take?' })
+    await user.click(within(asking).getByRole('button', { name: 'Delete' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
+    expect(router.state.location.search).toEqual({ record: true })
+    expect(takesStore.getState().takes).toEqual([])
   })
 
   it('opens from its row in the takes', async () => {

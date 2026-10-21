@@ -131,6 +131,22 @@ describe('numeralChord', () => {
     expect(chords('vii°', A_MINOR, 'triads')).toEqual(['G#°'])
     expect(chords('vii°', A_MINOR, 'sevenths')).toEqual(['G#°7'])
     expect(chords('vii°7', A_MINOR, 'triads')).toEqual(['G#°7'])
+  })
+
+  it('spells the leading tone as the key does, though it is a white key (E♯, B♯)', () => {
+    const F_SHARP_MINOR: Key = { tonic: note('F', 1), minor: true }
+    const C_SHARP_MINOR: Key = { tonic: note('C', 1), minor: true }
+    expect(chords('vii°', F_SHARP_MINOR, 'triads')).toEqual(['E#°'])
+    expect(chords('vii°', F_SHARP_MINOR, 'sevenths')).toEqual(['E#°7'])
+    expect(chords('vii°', C_SHARP_MINOR, 'triads')).toEqual(['B#°'])
+    expect(chords('vii° IV', { tonic: note('C', 1), minor: false }, 'triads')).toEqual([
+      'B#°',
+      'F#',
+    ])
+    expect(chords('IV IV7', { tonic: note('G', -1), minor: false }, 'triads')).toEqual([
+      'C♭',
+      'C♭7',
+    ])
     expect(chords('VII', A_MINOR, 'triads')).toEqual(['G'])
   })
 
@@ -210,6 +226,39 @@ describe('an applied numeral', () => {
   })
 })
 
+describe('a numeral over its bass', () => {
+  it('reads and writes the chord tone in the bass after a slash: its 3rd, 5th or 7th', () => {
+    expect(texts('I/5 I/3 V7/7 ii7/3 V7/3/ii')).toEqual(['I/5', 'I/3', 'V7/7', 'ii7/3', 'V7/3/ii'])
+    expect(parseNumeral('I/5')).toEqual({ degree: 0, shift: 0, quality: 'maj', bass: '5th' })
+    expect(numeralsParam(parseNumerals('IV I/5') ?? [])).toBe('IV-I/5')
+    expect(texts('I6/9')).toEqual(['I6/9'])
+  })
+
+  it('reads no bass that is no chord tone a numeral writes', () => {
+    for (const token of ['I/2', 'I/1', 'I/', 'I/5/5']) expect(parseNumeral(token), token).toBeNull()
+  })
+
+  it('plays the chord over that tone, at every chord size', () => {
+    expect(chords('IV I/5', C, 'triads')).toEqual(['F', 'C/G'])
+    expect(chords('I/3 V7/7', C, 'triads')).toEqual(['C/E', 'G7/F'])
+    expect(chords('I/5', C, 'sevenths')).toEqual(['CMaj7/G'])
+    expect(chords('V7/3/ii', C, 'triads')).toEqual(['A7/C#'])
+  })
+
+  it('plays a chord with no such tone over its root', () => {
+    expect(chords('I/7', C, 'triads')).toEqual(['C'])
+  })
+
+  it('is what a slash chord over its own tone reads as, and a bass outside it is left out', () => {
+    const written = (symbol: string) => {
+      const numeral = numeralOf(parseChordSymbol(symbol), C)
+      return numeral ? numeralText(numeral) : null
+    }
+    expect(['C/G', 'C/E', 'G7/F', 'Dm7/F'].map(written)).toEqual(['I/5', 'I/3', 'V7/7', 'ii7/3'])
+    expect(written('C/D')).toBe('I')
+  })
+})
+
 describe('numeralGrows', () => {
   it('says a plain triad grows with the chord size, and a chord written out does not', () => {
     const grows = (text: string) => (parseNumerals(text) ?? []).map(numeralGrows)
@@ -244,6 +293,24 @@ describe('numeralOf', () => {
     expect(written(['Dm7', 'G7', 'C6'], C)).toEqual(['ii7', 'V7', 'I6'])
     expect(written(['Dm9', 'G9', 'CMaj9'], C)).toEqual(['ii9', 'V9', 'IMaj9'])
     expect(written(['Dm7', 'Gm9', 'Asus4'], D_MINOR)).toEqual(['i7', 'iv9', 'Vsus4'])
+  })
+
+  it('writes a minor key’s chords on its raised 6th and 7th as its own degrees', () => {
+    const written = (symbols: string[]) =>
+      symbols.map((symbol) => {
+        const numeral = numeralOf(parseChordSymbol(symbol), A_MINOR)
+        return numeral ? numeralText(numeral) : null
+      })
+    expect(written(['G#°', 'G#°7', 'G#m7♭5', 'F#°', 'F#m7♭5'])).toEqual([
+      'vii°',
+      'vii°7',
+      'viiø7',
+      'vi°',
+      'viø7',
+    ])
+    expect(written(['G', 'F', 'G#'])).toEqual(['VII', 'VI', '#VII'])
+    expect(chords('vii° vi° viø7', A_MINOR, 'triads')).toEqual(['G#°', 'F#°', 'F#m7♭5'])
+    expect(chords('vii° vi°', A_MINOR, 'sevenths')).toEqual(['G#°7', 'F#m7♭5'])
   })
 
   it('writes none for a chord whose root is no degree’s, sharpened or flattened', () => {

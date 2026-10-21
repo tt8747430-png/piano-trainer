@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 54,
   pattern: 'M1',
   note: {
-    en: 'Each verse’s last two lines repeat; the D printed in brackets after Dm leads back into them.',
-    ru: 'Две последние строки каждого куплета повторяются; D в скобках после Dm ведёт обратно к ним.',
+    en: 'The last two lines of each verse repeat. The D printed in brackets after Dm leads back into them.',
+    ru: 'Две последние строки каждого куплета повторяются. D в скобках после Dm ведёт обратно к их началу.',
   },
   sections: [
     {

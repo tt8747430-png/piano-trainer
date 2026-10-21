@@ -29,13 +29,14 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
     (value) => ({ value, label: levelName(id, value) }),
   )
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 landscape-phone:gap-3">
       <ScreenHeader
         title={t(`trainers.${id}`)}
         back={<BackButton fallback={{ to: '/practice/quiz' }} />}
         actions={<MidiButton />}
       />
-      <div className="flex flex-col gap-3">
+      {/* On a phone on its side the run comes first, its keys and Check in sight; these follow it. */}
+      <div className="flex flex-col gap-3 landscape-phone:order-last landscape-phone:border-t landscape-phone:border-hairline landscape-phone:pt-3">
         <div className="flex flex-wrap items-center gap-2">
           {levels.length > 0 ? (
             <Dropdown

@@ -5,18 +5,18 @@ const bassBAGF: Lesson = {
   id: 'bass-b-a-g-f',
   title: { en: 'B, A, G and F on the bass staff', ru: 'Си, ля, соль и фа на басовом стане' },
   summary: {
-    en: 'Sight-read the bass staff from F up to middle C.',
-    ru: 'Читать и играть верх басового стана, от фа до до первой октавы.',
+    en: 'Move the left hand to the top of the bass staff and read from F up to middle C.',
+    ru: 'Перенести левую руку в верхнюю часть басового стана и читать от фа до до первой октавы.',
   },
   sections: [
     {
-      heading: { en: 'Finger 5 on F3', ru: 'Пятый палец на фа' },
+      heading: { en: 'A new position: finger 5 on F3', ru: 'Новая позиция: пятый палец на фа' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Finger 5 on F3, between the clef’s dots. G3 fills the top space, A3 the top line, B3 sits above. The thumb takes middle C.',
-            ru: 'Пятый палец на фа, между точками ключа. Соль — в верхнем промежутке, ля — на верхней линейке, си — над станом. Первый палец — на до.',
+            en: 'Finger 5 on F3, the line between the clef’s dots. G3 is in the top space, A3 on the top line, B3 just above. The thumb plays middle C.',
+            ru: 'Пятый палец на фа, на линейке между точками ключа. Соль в верхнем промежутке, ля на верхней линейке, си прямо над станом. Первый палец играет до.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'F3 G3 A3 B3 C4/1' },
@@ -28,8 +28,8 @@ const bassBAGF: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Check each line note against F, the clef’s own line.',
-            ru: 'Сверяйте каждую ноту на линейке с фа — линейкой ключа.',
+            en: 'F3 is your landmark here: the clef’s own line. Read each note as a step up or down from it.',
+            ru: 'Здесь ваш ориентир — фа на линейке ключа. Читайте каждую ноту как шаг вверх или вниз от него.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'F3 G3 A3/2 A3 G3 F3/2 G3 A3 B3 A3 G3/1' },
@@ -42,8 +42,8 @@ const bassBAGF: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'F3 to A3 is line to line. G3 to B3 goes from the top space to just above the staff, leaving A out.',
-            ru: 'Фа — ля — с линейки на линейку. Соль — си — из верхнего промежутка за пределы стана, через ля.',
+            en: 'F3 to A3 is a skip from line to line. G3 to B3 skips from the top space to just above the staff, leaving out A.',
+            ru: 'Фа — ля — скачок с линейки на линейку. Соль — си — скачок из верхнего промежутка за пределы стана, через ля.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'F3 A3 F3 A3 G3 B3 G3/2 A3 F3 G3 B3 A3/1' },
@@ -55,15 +55,15 @@ const bassBAGF: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The thumb reaches middle C on the ledger line above the staff: the key the right thumb took.',
-            ru: 'Первый палец достаёт до первой октавы на добавочной линейке над станом — ту же клавишу, что у правой руки.',
+            en: 'The left thumb reaches middle C, on a ledger line above the bass staff. It is the same key the right thumb played in the treble staff.',
+            ru: 'Первый палец левой руки достаёт до первой октавы на добавочной линейке над басовым станом. Это та же клавиша, которую правая рука играла в скрипичном ключе.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'A3 B3 C4/2 C4 A3 F3/2 G3 B3 C4 A3 F3/1' },
       ],
     },
     {
-      heading: { en: 'Read on sight', ru: 'Чтение с листа' },
+      heading: { en: 'Sight-reading', ru: 'Чтение с листа' },
       blocks: [
         { kind: 'notes', clef: 'bass', notes: 'G3 A3 B3 G3 A3 F3 G3/2 B3 A3 G3 F3 G3/1' },
         { kind: 'notes', clef: 'bass', meter: '3/4', notes: 'F3 A3 G3 B3/2 A3 G3 F3 A3 F3/2.' },
@@ -96,7 +96,7 @@ const bassBAGF: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          title: { en: 'Practise reading notes in the Quiz', ru: 'Чтение нот в тестах' },
           target: { opens: 'quiz', trainer: 'reading-notes' },
         },
       ],

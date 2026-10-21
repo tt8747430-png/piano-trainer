@@ -11,7 +11,7 @@ import {
 } from '@/entities/progression-library'
 import { TRAINER_IDS, type TrainerId } from '@/features/trainer'
 import { localText, type Locale, type LocalText } from '@/shared/i18n'
-import { foldText, matchesQuery } from '@/shared/lib'
+import { foldText, matchesQuery, WORD_BREAK } from '@/shared/lib'
 import {
   CHORD_QUALITIES,
   chordsOfLine,
@@ -269,14 +269,6 @@ export interface IndexGroup {
 }
 
 /**
- * What a query finds, by kind in the index's order, the kinds with nothing left out; with no query,
- * the whole index. A title, a line or another name holds the query, in either case and without
- * accents. What was typed leads: first of its kind, and its kind first of the kinds.
- */
-/** Where a word of a name starts: after a space or a mark between words. */
-const WORD_BREAK = /[\s\-–—·,.:;()/«»"“”]+/
-
-/**
  * How near an entry answers a folded query, lowest nearest: its title or another of its names itself
  * (a chord's symbol), a title starting with it, a word of its title, a word of another of its names,
  * a part of any.
@@ -296,8 +288,10 @@ function nearness(entry: IndexEntry, wanted: string): number {
 }
 
 /**
- * The entries a query finds, by kind: each kind's nearest first, and the kind with the nearest entry
- * first (the kinds' own order between equals), a typed chord's or song's kind before all. No query
+ * The entries a query finds, by kind, the kinds with nothing left out: an entry's title, line and
+ * other names hold every word of the query, in either case and without accents. Each kind's nearest
+ * first, and the kind with the nearest entry first (the kinds' own order between equals); what was
+ * typed (a chord or a song's chords) leads, first of its kind and its kind first of all. No query
  * lists the whole index in its order.
  */
 export function searchIndex(

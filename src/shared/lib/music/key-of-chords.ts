@@ -2,7 +2,7 @@ import { chordBass, qualityIntervals, type Chord, type ChordQuality } from './ch
 import { CIRCLE_OF_FIFTHS } from './circle'
 import { isWrittenKey, keySignature, type Key } from './key'
 import { pitchClassOf } from './note'
-import { hasMinorThird, numeralOf, type Numeral } from './numerals'
+import { hasMinorThird, numeralBass, numeralOf, type Numeral } from './numerals'
 import { chordInKey } from './passing-chords'
 import { pitchClass } from './pitch'
 import { spellInKey } from './scale'
@@ -42,15 +42,20 @@ const isTonic = (chord: Chord | undefined, key: Key): boolean =>
   hasInterval(chord.quality, 2, key.minor ? 3 : 4) &&
   hasInterval(chord.quality, 4, 7)
 
-/** A chord spelled as the key spells its root and bass. */
+/**
+ * A chord spelled as the key spells its root and bass, where that makes every note of it the key's
+ * (`A#` in D minor is B♭); any other chord as it was typed (`B♭` in G stays B♭, its ♭III).
+ */
 function spelledIn(chord: Chord, key: Key): Chord {
   const root = spellInKey(pitchClassOf(chord.root), key)
-  if (!chord.bass) return { root, quality: chord.quality }
-  return {
-    root,
-    quality: chord.quality,
-    bass: chordBass(root, chord.quality, spellInKey(pitchClassOf(chord.bass), key)),
-  }
+  const respelled: Chord = chord.bass
+    ? {
+        root,
+        quality: chord.quality,
+        bass: chordBass(root, chord.quality, spellInKey(pitchClassOf(chord.bass), key)),
+      }
+    : { root, quality: chord.quality }
+  return chordInKey(respelled, key) ? respelled : chord
 }
 
 /**
@@ -62,10 +67,12 @@ function appliedNumeral(chord: Chord, next: Chord | undefined, key: Key): Numera
   if (pitchClass(pitchClassOf(chord.root) + 5) !== pitchClassOf(next.root)) return null
   const target = numeralOf(next, key)
   if (!target || (target.degree === 0 && target.shift === 0)) return null
+  const bass = numeralBass(chord)
   return {
     degree: 4,
     shift: 0,
     quality: chord.quality,
+    ...(bass ? { bass } : {}),
     of: { degree: target.degree, shift: target.shift, minor: hasMinorThird(next.quality) },
   }
 }

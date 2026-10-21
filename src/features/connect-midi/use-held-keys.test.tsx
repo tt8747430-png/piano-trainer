@@ -6,16 +6,16 @@ import { createFakeMidi } from '@/shared/api/midi'
 import { SHORTEST_PRESS_MS } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
-import { useHeldKeys } from './use-held-keys'
+import { useHeldKeys, useKeysDown } from './use-held-keys'
 
-function renderHeldKeys() {
+function renderHeldKeys(hook: () => ReadonlySet<number> = useHeldKeys) {
   const keyboard = createFakeMidi()
   const wrapper = ({ children }: { children: ReactNode }) => (
     <ServicesProvider services={{ audio: createFakeAudio(), midi: keyboard }}>
       {children}
     </ServicesProvider>
   )
-  return { keyboard, ...renderHook(() => useHeldKeys(), { wrapper }) }
+  return { keyboard, ...renderHook(() => hook(), { wrapper }) }
 }
 
 beforeEach(() => vi.useFakeTimers())
@@ -69,5 +69,21 @@ describe('useHeldKeys', () => {
     act(() => keyboard.pedal(false))
     act(() => vi.advanceTimersByTime(SHORTEST_PRESS_MS))
     expect([...result.current]).toEqual([60])
+  })
+})
+
+describe('useKeysDown', () => {
+  it('lets a key go as the hand does, whatever the sustain pedal', () => {
+    const { keyboard, result } = renderHeldKeys(useKeysDown)
+    act(() => {
+      keyboard.pedal(true)
+      keyboard.press(midi(60))
+      keyboard.press(midi(64))
+    })
+    act(() => vi.advanceTimersByTime(SHORTEST_PRESS_MS))
+    act(() => keyboard.release(midi(60)))
+    expect([...result.current]).toEqual([64])
+    act(() => keyboard.pedal(false))
+    expect([...result.current]).toEqual([64])
   })
 })

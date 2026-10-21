@@ -14,8 +14,8 @@ export default definePiece({
   tempo: 92,
   pattern: 'block',
   note: {
-    en: 'The French tune «Ah ! vous dirai-je, maman», which Mozart wrote his variations on.',
-    ru: 'Французская мелодия «Ah ! vous dirai-je, maman», на которую Моцарт написал вариации.',
+    en: 'The tune is the French song “Ah ! vous dirai-je, maman”. Mozart wrote a set of variations on it.',
+    ru: 'Это мелодия французской песенки «Ah ! vous dirai-je, maman». Моцарт написал на неё вариации.',
   },
   sections: [
     { kind: 'part', label: 'A', lines: ['C F-C F-C G-C'] },

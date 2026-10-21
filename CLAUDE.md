@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 ## Answer style
 
 Concise. Answer first. No preamble, no recap.
@@ -36,15 +38,23 @@ Non-trivial feature → `superpowers:brainstorming` first; specs in `docs/superp
 - **New code copies the nearest slice's shape.** Writes → a feature command. Reads → selectors. Pure logic →
   `shared/lib` or `entities/*/model` with a colocated test.
 - **Complete, not placeholder.** Every UI string in both `en` and `ru`. Loading, empty, error and offline states.
-- **Verify before claiming done:** `npm run typecheck && npm run lint && npm run test`; after touching startup,
-  routing, the PWA or config, also `npm run build`.
+- **Verify before claiming done:** `npm run typecheck && npm run lint`, then **only the tests your change can
+  break**: the files you touched and their importers (`npm run test:related -- <changed source files>`, or
+  `npm run test:changed` for everything uncommitted). The full `npm run test` takes minutes: run it once before a
+  push that touches shared code (`shared/lib`, an entity's model, `app/`, the test setup or config), never after
+  each edit; CI runs it on every push anyway. After touching startup, routing, the PWA or config, also
+  `npm run build`.
 
 ## Commands
 
-`dev` · `build` · `preview` · `typecheck` · `lint` (includes the layer rules) · `test` / `test:watch` / `test:cov`
-(90% lines on `src/shared/lib/**` and `src/entities/*/model/**`) · `icons` (regenerates the PWA icons from
-`public/favicon.svg`).
-One file: `npx vitest run src/shared/lib/cn.test.ts` · one test: `npx vitest run -t "saves a new language"`.
+Node 24 (`.nvmrc`, `nvm use`). CI (`.github/workflows/ci.yml`) runs `typecheck`, `lint`, `test:cov` and `build`
+on every push and PR; Vercel previews each PR and deploys `main`.
+`dev` · `build` · `preview` · `typecheck` · `lint` (includes the layer rules) · `test` (everything) /
+`test:unit` (the node half, about two minutes) / `test:related -- <files>` (the tests that import them) /
+`test:changed` (the tests uncommitted changes reach) / `test:watch` / `test:cov` (90% lines on `src/shared/lib/**`
+and `src/entities/*/model/**`) · `icons` (regenerates the PWA icons from `public/favicon.svg`).
+One file: `npx vitest run src/shared/lib/cn.test.ts` · one test: `npx vitest run src/x.test.ts -t "saves a new
+language"` (always with its file: `-t` alone still loads every file).
 **Never `npm run format`** on the whole repo: `npx prettier --write <files you touched>`.
 
 ## Architecture — FSD (lint-enforced)
@@ -95,7 +105,7 @@ it. `@` → `src`.
   Accompaniment (`AccompanimentTabs` over its URL's `AccompanimentView`, a part's `PatternShelves`, a method book's
   `BookPieces`; its lessons are its course on Learn alone), `pages/pattern` and `pages/pattern-editor` a pattern's page and the
   editor of the learner's own; `pages/score-editor` the score editor (`editorTarget`, what it writes;
-  `useScoreEditor`, the visit's store saving each change, keys, MIDI, `shortcuts.ts` and Play; `useEditorTakes`, the recorder
+  `useScoreEditor`, the visit's store saving each change, keys, MIDI, `shortcuts.ts` and Play; its bar (`EditorHeader`: Undo · Redo · Play · Record, + (`AddMenu`, `add-menu.ts`: bars, barlines and jumps, lines, text (expressions, pedal, tempo), key, time and staves with each hand's clef from a bar, as engraved tiles, ADR 0065, 0067, 0068, 0069) and the gear (`PieceSettings`: the song, the view, the tune's staff, chord names, the layout `?layout=` scroll · pages · horizontal (ADR 0064), MIDI)); its palette (`EditorTools`, `palette-tabs.ts`: the notes' values, pitch, marks, dynamics and fingering; in the chord row the chord names' in the key, built, or typed on `chord-keypad.ts`): one size whatever its tab, at the foot over the keys on a phone held upright and a tablet, a column beside the sheet on a laptop and a phone on its side, folding into a button over the sheet's corner (ADR 0065); the sheet its one scroller; a section's own pattern from its heading's menu (`SectionHeading`, `Section.pattern`, ADR 0065); barlines, repeats and endings (`|: :| || |. [1 [2`, the + menu's Barlines; the Player plays them taken, `unfold`, ADR 0067); up to three more voices sung with the tune, each a row and a staff of its own, added from + as an instrument by family and taken away in the settings, where each part's instrument is chosen (`InstrumentChoice`; ADR 0066, 0070); the staff written chosen by a click (or Alt ↑ ↓), a double click writing the note there, the caret's notes dragged by the key's steps; Delete as Backspace; its keys folding; `useEditorTakes`, the recorder
   and the takes' sheet (ADR 0028), `tuneOf` (the song's tune under a take); its parts share one context and read the store narrowly;
   `TakePage`, a take's page: its name, `TakeRoll`, `useTakePlay` and `KeepBars`, ADR 0034).
 - **widgets/<x>/**: composite UI tied to screens (`practice-days` (the days practised in a row and the last seven, on Learn), `piece-list` (with `EntryRow`, a song's row wherever it is listed, and `RecentPieces`, the pieces practised last, on Learn), `app-nav` (the phone's bar, a rail down the left on a phone on its side (`landscape-phone`); the laptop's sidebar, which collapses to its icons; Search and Settings at its foot; Alt and 1–3 go to its places, Cmd or Ctrl with K opens Search, with B collapses it), `continue-action` (Continue, one honey button floating over Learn, ADR 0057), `curriculum` (Learn's two views, ADR 0053: `JourneyMap`, the journeys as tabs, its chapters folding (`useFold`) as zigzags of `JourneyNode`s; `CourseFacts`, `LearnedMeter`; `CourseShelves` of `CourseCard`s; `CourseLessons` and `GuidedSongs`, a course's; `continueStep`, Continue, on the track last learned on; `useStepTitle`; `journeyProgress`, `courseProgress`; `LearnView`, its URL),
@@ -104,11 +114,11 @@ it. `@` → `src`.
   composed by its page, `PlayerLayout`'s `setup` slot: `PlayerSetup` over a `PatternFit`, `PatternCard` (the pattern
   over its two hands, each naming its figure, with the `InversionField`: the first chord's position and Nearest, ADR 0039; the hands' figures listed under `LEFT_FIGURE_GROUPS` / `RIGHT_FIGURE_GROUPS`), `KeyWalkField` (Through the keys),
   `MelodyToggle`, `RecordingToggle`), `practice-player` (the Player over any Performance: `usePracticePlayer`, its `PracticeView` URL, `usePlayerShortcuts` over `PLAYER_KEYS` (Space, the arrows, R, Home, Escape), the
-  `player-screen` areas, the tempo and hands popovers, the loop button, ‹ ▶ ›, Wait mode's line, `PlayingToggles` for the Setup's grid), `sheet-music`
+  `player-screen` areas, `PlayerDock` (the transport floating as one pill: tempo, ‹ ▶ ›, hands; upright beside the sheet on a phone on its side, ADR 0061), the loop button, Wait mode's line, `PlayingToggles` for the Setup's grid), `sheet-music`
   (`SheetMusic`: the Score engraved, labels, the cursor, bars to jump to, the loop's grips), `chord-explorer` (the
   chord builder, read top to bottom: `ChordBuilder` (its choices as labelled fields), `ChordSheet`, `ChordTensions`
   (a 7th chord's twelve notes in the owner's table's four groups, each played on top), `ChordPractice` (its arpeggio
-  and chromatic walk in the Player), `viewChord`, `chordKeys` (what Find opens on), `changedView`), `scale-explorer` (`ScaleExplorer` picks, in
+  and chromatic walk in the Player), `viewChord`, `chordKeys` (what Play sounds), `changedView`), `scale-explorer` (`ScaleExplorer` picks, in
   `ScaleLayout`'s one flow, `RunView`, the run from any Start on note, the playing hand's fingers under the keys, on a
   staff, with `ScaleExercises` (the scale's exercises in the Player), `ChordsView`, the scale's chords to 13ths in an
   inversion, walked, or `KeyView`, a major or minor scale's key: the circle of fifths, its signature,
@@ -123,7 +133,7 @@ it. `@` → `src`.
   `trainer-choice` (a trainer's Custom fields), `trainer-list` (a group of trainers, the Quiz page's groups in `model/quiz-groups.ts`, held by a test to every trainer, and `GapsLink`, My gaps in Quiz's bar), `practice-pages` (Practice's pages wherever they are listed: `PRACTICE_PAGES`, `THINGS`, `PRACTICE_GROUPS` in `model/`; `usePageWords`, a page's name and its line, a page of tabs or groups saying those in its own words; `PageRow`), `take-roll` (`TakeRoll`, a take as a piano roll over `rollOf`, its playhead
   moved by the audio clock)), each owning in `model/` the view type a route's URL holds.
 - **features/<x>/**: commands, one use case per file (`set-preference/set-theme.ts`, `mark-learned` with its
-  `LearnedCheck` on a row and `LearnedButton` on a screen, `record-answer`, `record-practised` (with `recordDay`: a day practised, as the Player opens or a round is answered), `reset-progress`, `backup-data` (every saved store as one file, `writeBackup`, and put back in place of what is on the device, `restoreBackup`; Settings' Backup), `remember-view`, `manage-patterns` (favourite, hide, save and delete
+  `LearnedButton` on a screen, `record-answer`, `record-practised` (with `recordDay`: a day practised, as the Player opens or a round is answered), `reset-progress`, `backup-data` (every saved store as one file, `writeBackup`, and put back in place of what is on the device, `restoreBackup`; Settings' Backup), `remember-view`, `manage-patterns` (favourite, hide, save and delete
   the learner's own), `edit-piece` (save a version's or own song's music, reset a version, make, rename and delete a
   song with its takes; `chartStart`)), `score-editor` (the draft of a piece's music, `readDraft`/`writeDraft`; its pure edits of notes,
   chords, bars, sections and settings; a take written from the caret's bar, `writeTake`, `takeParts`; the
@@ -146,7 +156,7 @@ it. `@` → `src`.
   `arrangeProgression`; walked through the keys by `walk`, `walkingFit`); Listen and Wait mode, Play in both, ‹ › in either) and `trainer` (ADR 0025: the round
   machine, every round answered on the keys or by a choice; `draw.ts`, a round from what a run `Asks`; the ladders in
   `ladders/`, `trainers.ts` (each trainer's levels, Custom and asks), `trainer-view.ts` (its URL), `run.ts` (rounds,
-  times, streak, summary), `useTrainer`, the Check's plan, My gaps); `record-run` (a run's record); `fold-section` (`useFold`, a section folded as the learner left it, saved in `pt-settings`' `foldedSections`); `shortcuts-help` (`ShortcutsHelp`, the sheet `?` opens over what the screens bind, and `ShortcutsButton`); `share-song` (an own song as a link, `songLinkData` / `readSongLink`, deflated in base64url and read as a save is; `ShareSongButton`).
+  times, streak, summary), `useTrainer`, the Check's plan, My gaps); `record-run` (a run's record); `fold-section` (`useFold`, a section folded as the learner left it, saved in `pt-settings`' `foldedSections`); `shortcuts-help` (`ShortcutsHelp`, the sheet `?` opens over what the screens bind, and `ShortcutsButton`); `share-song` (an own song as a link, `songLinkData` / `readSongLink`, deflated in base64url and read as a save is; `useShareSong` and `ShareSaid`, what it said).
 - **entities/<x>/**: `model/types.ts` (types, guards, validating constructors; no IO, no React), `model/store.ts`
   (`createSavedStore`: its key, version, initial state and sanitiser), `model/selectors.ts`, `model/context.ts`
   (`createStoreContext`), `content/` (authored data), `ui/` (only the entity's own data shown: a piece's titles, credits
@@ -170,10 +180,10 @@ it. `@` → `src`.
   `book` (the books a Source cites; `METHOD_BOOK_IDS`, `METHOD_BOOK_NAMES`, ADR 0033, 0047), `progression-library` (the one model of a progression that is practised, ADR 0041: one entry for each idea,
   named, by style, its line in each mode it has (`major`, `minor`), with its note, pattern and chord size; `libraryProgression` names a line,
   `progressionMode` the mode one is shown in, `COMMON_PROGRESSIONS` a key's, `LIBRARY_BY_STYLE` what its pop-up lists), `exercise` (the exercises: groups, stages, names, the fields each rule takes and its own choice;
-  `exerciseChoice` reads a URL against an exercise). Saved state: `settings` (`pt-settings`, v2, with `floating` (where the floating buttons stand and whether they say their names, ADR 0058), with the laptop's sidebar, open or collapsed, the title size, the
-  keyboard settings (with `chordNames`, `markNotes` (a marked key names its note under its degree, `toneMark`; no row of chips repeats them), and where a page's keys dock, folded, their length, ADR 0055; `railControls`, the buttons the bar over the keys keeps, chosen one by one in Settings as tiles wearing the bar's pictures (`RailControlsField`), ADR 0056), the sections folded, the trainers' auto-next, the recorder's click and tune, and the MIDI keyboard's `midi`: device, sound, through the piano, octave shift, Touch, pedal), `take` (ADR 0028, 0034: `pt-takes`: a name, the bar it starts at, its barlines as the piece's bars fell, the three pedals' presses; saved
+  `exerciseChoice` reads a URL against an exercise). Saved state: `settings` (`pt-settings`, v3, with `floating` (where the floating buttons stand and whether they say their names, ADR 0058), with the laptop's sidebar, open or collapsed, the title size, the
+  keyboard settings (with `chordNames`, `markNotes` (a marked key names its note under its degree, `toneMark`; no row of chips repeats them), and where a page's keys dock, folded, folded on a phone on its side (`foldedLandscape`, a reading page's; `PinnedKeyboard`'s `screen="playing"` keeps them out, ADR 0062), their length, ADR 0055; `railControls`, the buttons the bar over the keys keeps, chosen one by one in Settings as tiles wearing the bar's pictures (`RailControlsField`), ADR 0056), the sections folded, the trainers' auto-next, the recorder's click and tune, and the MIDI keyboard's `midi`: device, sound, through the piano, octave shift, Touch, pedal; `scoreView`, the Player's View menu: layout across · scroll · pages, notation, chord names, the tune's staff, staves hidden, keys, ADR 0064), `take` (ADR 0028, 0034: `pt-takes`: a name, the bar it starts at, its barlines as the piece's bars fell, the three pedals' presses; saved
   compactly through `createSavedStore`'s `write`; `selectTakesOf`, `selectRoomLeft`; `takeSounds` (its pedals, through the Touch) and `takeSoundsFrom`, `barMs`, `takeBarStart`, `keepBars`, `quantise` to `takeGrids` of the take's meter, `midiFile`), `progress` (`pt-progress`, with each trainer level's record and the days practised (`days`, `streak`, `lastWeek`); the evidence rules in `model/mastery.ts`, what an answer or a mark
-  changes in `model/changes.ts`; `ratingOf` rates a skill, `selectSuggestedStep` is Continue), `views` (`pt-views`:
+  changes in `model/changes.ts`; `ratingOf` rates a skill, `continueStep` (`widgets/curriculum`) is Continue), `views` (`pt-views`:
   each remembered screen's last view, at most 200, `selectView`, `viewOf`, `sameView`, `withView`; written by `features/remember-view`).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `createSavedStore` (a zustand `persist` store read
   by one sanitiser for its version, saved as its `write` makes it, following other tabs' saves), `downloadFile`, `isOneOf`, `toggled`, `createStoreContext`, `useMediaQuery`,
@@ -211,9 +221,9 @@ it. `@` → `src`.
   with `RailButton` (an icon or a glyph), `RailGroup` and the rail's `caption` (what it says of the keys held), `Pinned`, `Docked` (keys docked at the screen's foot over the tab bar, its height the page's `--docked`), `FloatingHost` (the one place they stand, in `AppShell`, where `floating` says, ADR 0058) and `FloatingActions` with `Fab`, `PlayFab`, `FabPill`, `SpeedDial` and `SpeedDialAction` (a screen's actions floating in the thumb's reach, each its icon alone unless names are asked, `useFloatingLabels`, ADR 0055), `FoldSection` (a section whose heading folds it, a `Fold`) over `FoldBody` (what folds, sliding), `ScreenHeader` (the screen's bar, sticky, hidden while reading down, a page's `tabs` its second row; a child of the page's root, held by `src/app/screen-bar.test.tsx`; `ScreenBarProvider` in `AppShell`
   sets `--screen-bar`, which `Pinned` and the `top-screen-bar` utility read), `BackButton` (a screen's Back, over `useGoBack`), `RoundButton`, `RoundLink`, `ButtonLink`, `Segmented`, `NamedSegmented`, `Listbox`, `Dropdown` (the pop-up
   button; `bare` under a printed name), `MultiDropdown` (the pop-up that checks several, grouped like `Dropdown`; in both a list with other values is another list, mounted anew: `listKey`),
-  `NoteChoice` (a note as written: its letter, then ♮ # ♭) and `KeyChoice` (a key as written: its tonic so, then Major · Minor, only the keys a signature writes), `ToggleChips` (several of a few, all in sight), `PositionField` (a row's first chord's inversion and Nearest) with `usePositionName`, `ChordHeading` (a chord's symbol, a long one a size down), `FoldGroup` (a titled group folding under its heading, its count and bar: the Intervals' groups), `Labelled` (a choice under its name, one field of a page's `grid-fields`), `SettingField` (a choice in Settings under its name), `NavTabs` with `NavTab` (tabs that are router links, each saying whether its page is shown), `InversionChoice` over `InversionGlyph`, `ChordSizeField`, `SwitchRow`, `ToggleTile` and `ToggleGrid`, `ToolButton`, `LearnedBadge`, `TypedField` (music typed by name) and `NameField` (a name the learner gives), `RowLink` (its tile an icon, a number or none, a detail of up to two lines, a trailing slot) and `RowGroup` (a titled grid of row cards), `PAGE_TILES` (the tile a row to each page wears, every row Practice lists among them), `SearchField` (a screen's search box, `/` puts the cursor in it), `Fact`, `PlayToggle` and `ChordButton`, `PlayButton` (an example's Play as a round icon), `SheetOption` (a staff's own option on its card), `PlayLabel` (a Play button's words, Stop while it sounds), `usePlayKey` (Enter plays a screen's one Play), `ShownKeys` with `NO_KEYS` and `unmarked`, `PAINT`,
+  `NoteChoice` (a note as written: its letter, then ♮ # ♭) and `KeyChoice` (a key as written: its tonic so, then Major · Minor, only the keys a signature writes), `ToggleChips` (several of a few, all in sight), `PositionField` (a row's first chord's inversion and Nearest) with `usePositionName`, `ChordHeading` (a chord's symbol, a long one a size down), `FoldGroup` (a titled group folding under its heading, its count and bar: the Intervals' groups), `Labelled` (a choice under its name, one field of a page's `grid-fields`), `SettingField` (a choice in Settings under its name), `NavTabs` with `NavTab` (tabs that are router links, each saying whether its page is shown), `InversionChoice` over `InversionGlyph`, `ChordSizeField`, `SwitchRow`, `ToggleTile` and `ToggleGrid`, `ToolButton`, `ToolPalette` (a notation app's palette: its actions, tabs of big `ToolKey`s, a foot), `LearnedBadge`, `TypedField` (music typed by name) and `NameField` (a name the learner gives), `RowLink` (its tile an icon, a number or none, a detail of up to two lines, a trailing slot) and `RowGroup` (a titled grid of row cards), `PAGE_TILES` (the tile a row to each page wears, every row Practice lists among them), `SearchField` (a screen's search box, `/` puts the cursor in it), `Fact`, `PlayToggle` and `ChordButton`, `PlayButton` (an example's Play as a round icon), `SheetOption` (a staff's own option on its card), `PlayLabel` (a Play button's words, Stop while it sounds), `usePlayKey` (Enter plays a screen's one Play), `ShownKeys` with `NO_KEYS` and `unmarked`, `PAINT`,
   `Sheet` with its trigger (its content carries a Close for a screen reader), `RatingMark`, `RankMark` (four rising pips, a stage's), `NotFound` (a page not there, or deleted in another tab), `LazyScoreView` (a staff outside the Player,
-  VexFlow loaded when first shown; `staff` draws one staff of the grand staff); shadcn in `ui/primitives` (`kbd` for a shortcut's keycaps); `ui/score`, imported by that path only: `ScoreView`,
+  VexFlow loaded when first shown; `staff` draws one staff of the grand staff); shadcn in `ui/primitives` (`kbd` for a shortcut's keycaps); `ui/score`, imported by that path only: `ScoreView`, `StaffNames` (each sung staff named where voices sing together, ADR 0066),
   VexFlow over a Score (each note named by its staff and tick, the `selected` ones marked), and `xAtTick`), `i18n` (`Locale`,
   `useLocale`, `useScaleName`, `useKeyName`, `LocalText`; namespaces per place (`learn` Learn's, its journeys', a course's and a lesson's, `practice` Practice's pages', `search`), `music` for the words every screen shares), `test`.
 
@@ -241,10 +251,15 @@ wait on controls (Mindscape's PWA setup; `src/app/standalone-boot.test.ts`).
 
 - Strict TS: `noUncheckedIndexedAccess`, `noUnusedLocals/Parameters`, `verbatimModuleSyntax` → `import type`.
   No `any`.
-- Tests colocated as `*.test.ts(x)`; Vitest + jsdom with **`globals: false`** (import `describe/it/expect/vi`).
-  Setup: `src/shared/test/setup.ts` (jest-dom, cleanup, English, and per-test fakes: `stubMatchMedia` for the OS
-  scheme, `stubServiceWorker` for a waiting version, `stubFonts` for the music font and a canvas that measures text, `stubIntersectionObserver` with everything on screen). Only a test the DOM gets in the way of opts into
-  `// @vitest-environment node` (the ESLint API in `architecture.test.ts`). With the settings store:
+- Tests colocated as `*.test.ts(x)`; Vitest with **`globals: false`** (import `describe/it/expect/vi`), in two
+  projects (`vite.config.ts`): **`unit`** runs `*.test.ts` in node, **`dom`** runs `*.test.tsx` in jsdom. A
+  `*.test.ts` that needs a DOM (localStorage, `renderHook`, `document`) opts in with `// @vitest-environment jsdom`
+  on its first line; pure logic never does. Setup: `src/shared/test/setup.ts`, and for a DOM `setup-dom.ts`
+  (jest-dom, cleanup, English, and per-test fakes: `stubMatchMedia` for the OS
+  scheme, `stubServiceWorker` for a waiting version, `stubFonts` for the music font and a canvas that measures text, `stubIntersectionObserver` with everything on screen).
+  **`isolate: false`**: a worker's files share their modules, so a test leaves no state behind (the setup puts back
+  mocks, globals, localStorage and the language); a file that needs module state fresh (`safeLocalStorage`'s choice,
+  once a page) starts with `vi.hoisted(() => vi.resetModules())`. With the settings store:
   `renderWithSettings(ui, { locale, theme })`; the whole app: `await renderApp(path, { locale, storage, webMidi })` (its `viewsStore`, `patternsStore`, `piecesStore` and `takesStore` too); a widget that
   leads elsewhere, `await renderRouted(ui)`; which
   loads every screen's chunk before it renders (so a test never waits on the runner) and returns its fake `audio` and

@@ -8,8 +8,8 @@ const minorTwoFiveLevels: Lesson = {
   id: 'minor-two-five-levels',
   title: { en: 'Minor ii–V–i: beginner to pro', ru: 'Минорный ii–V–i: от новичка до профи' },
   summary: {
-    en: 'Voice the minor ii–V–i four ways, each richer than the last.',
-    ru: 'Играть минорный ii–V–i в четырёх расположениях, каждое богаче прежнего.',
+    en: 'Play the minor ii–V–i in C minor at four levels, adding notes and colour at each one.',
+    ru: 'Играть минорный ii–V–i в до миноре на четырёх уровнях, с каждым добавляя звуки и краски.',
   },
   sections: [
     {
@@ -17,9 +17,10 @@ const minorTwoFiveLevels: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'The minor ii–V–i', ru: 'Минорный ii–V–i' },
           text: {
-            en: 'Two notes in each hand. The numbers name each note’s degree, left hand first.',
-            ru: 'По два звука в каждой руке. Цифры называют ступень каждого звука, начиная с левой руки.',
+            en: 'in C minor is Dm7♭5, G7, Cm. At level 1 each hand plays two notes. The numbers give each note’s degree, left hand first.',
+            ru: 'в до миноре — это Dm7♭5, G7, Cm. На первом уровне каждая рука играет по два звука. Цифры показывают ступени, начиная с левой руки.',
           },
         },
         {
@@ -28,15 +29,15 @@ const minorTwoFiveLevels: Lesson = {
           voicings: [
             { symbol: 'Dm7♭5', caption: 'iiø7', degrees: '1 ♭5 | ♭7 ♭3', hands: 'D3 A♭3 | C4 F4' },
             { symbol: 'G7♭13', caption: 'V7♭13', degrees: '♭7 3 | ♭13 1', hands: 'F3 B3 | E♭4 G4' },
-            { symbol: 'Cm9', caption: 'i7', degrees: '♭3 ♭7 | 9 5', hands: 'E♭3 B♭3 | D4 G4' },
+            { symbol: 'Cm9', caption: 'i9', degrees: '♭3 ♭7 | 9 5', hands: 'E♭3 B♭3 | D4 G4' },
             { symbol: 'Cm6', caption: 'i6', degrees: '♭3 6 | 1 5', hands: 'E♭3 A3 | C4 G4' },
           ],
         },
         {
           kind: 'note',
           text: {
-            en: 'Only the ii has its root in the bass.',
-            ru: 'Только у ii в басу основной тон.',
+            en: 'Only the ii has its root lowest.',
+            ru: 'Только у ii внизу основной тон.',
           },
         },
       ],
@@ -44,6 +45,13 @@ const minorTwoFiveLevels: Lesson = {
     {
       heading: { en: 'Level 2: Late beginner', ru: 'Уровень 2: продолжающий' },
       blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Now the V and the i have their roots in the bass too. The V adds a ♯9.',
+            ru: 'Теперь и у V, и у i в басу основной тон. Доминанта получает ♯9.',
+          },
+        },
         {
           kind: 'voicings',
           key: C_MINOR,
@@ -72,8 +80,8 @@ const minorTwoFiveLevels: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Between chords the right hand sings one note: F after the ii, A♭ after the V.',
-            ru: 'Между аккордами правая рука поёт один звук: фа после ii, ля-бемоль после V.',
+            en: 'Between chords, the right hand plays one melody note: F after the ii, A♭ after the V.',
+            ru: 'Между аккордами правая рука играет один мелодический звук: фа после ii, ля-бемоль после V.',
           },
         },
       ],
@@ -84,8 +92,8 @@ const minorTwoFiveLevels: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The right hand plays an octave with a note inside. The tensions sit on top.',
-            ru: 'Правая рука играет октаву со звуком внутри. Наверху — альтерации и надстройки.',
+            en: 'The right hand plays an octave with one note inside it. The tensions sit at the top.',
+            ru: 'Правая рука играет октаву с одним звуком внутри. Альтерации и надстройки звучат сверху.',
           },
         },
         {
@@ -104,15 +112,20 @@ const minorTwoFiveLevels: Lesson = {
               degrees: '♭7 3 | ♭13 ♭9 ♭13',
               hands: 'F3 B3 | E♭4 A♭4 E♭5',
             },
-            { symbol: 'Cm9', caption: 'i9', degrees: '11 ♭7 | 9 5 9', hands: 'F3 B♭3 | D4 G4 D5' },
+            {
+              symbol: 'Cm11',
+              caption: 'i11',
+              degrees: '11 ♭7 | 9 5 9',
+              hands: 'F3 B♭3 | D4 G4 D5',
+            },
             { symbol: 'Cm6/9', caption: 'i6/9', degrees: '♭3 6 | 9 5', hands: 'E♭3 A3 | D4 G4' },
           ],
         },
         {
           kind: 'note',
           text: {
-            en: 'Notes between: F after the ii, B after the V, C after the i.',
-            ru: 'Звуки между аккордами: фа после ii, си после V, до после i.',
+            en: 'Melody notes between chords: F after the ii, B after the V, C after the i.',
+            ru: 'Мелодия между аккордами: фа после ii, си после V, до после i.',
           },
         },
       ],
@@ -123,8 +136,8 @@ const minorTwoFiveLevels: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A♭13, the tritone substitute for G’s own dominant, slides into G7. The dominant then changes colour, and the i moves inside.',
-            ru: 'A♭13, тритоновая замена доминанты к G, соскальзывает в G7. Затем доминанта меняет краску, а i движется внутри.',
+            en: 'A♭13 slides down a half step into G7. It stands in for G’s own dominant. Then G7 changes colour, and the i moves inside.',
+            ru: 'A♭13 сползает на полутон вниз в G7. Он заменяет доминанту к соль. Затем G7 меняет краску, а внутри i движутся голоса.',
           },
         },
         {

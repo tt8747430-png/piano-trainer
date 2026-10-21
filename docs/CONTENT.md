@@ -55,8 +55,10 @@ export default definePiece({
 | `hands`                    | Songs and studies: optional bars of either hand [written out](#written-hands)         |
 | `progression`, `chordSize` | A song written in degrees: see [Written in degrees](#written-in-degrees)              |
 
-A chart that names method codes starts the Player on its own plan: each coded chord plays its method's pattern,
-every other chord plays `pattern`.
+A chart that names method codes, or a section with a `pattern` of its own, starts the Player on its own plan:
+each coded chord plays its method's pattern, every other chord its section's `pattern`, else the piece's. A
+section's `pattern` (`{ kind: 'chorus', pattern: 'M3', lines: […] }`) is a built-in pattern id, as the piece's is
+(ADR 0065).
 
 ## Add a listing, a collection
 
@@ -68,11 +70,19 @@ meter, note })`. It shows in Songs and never opens in the Player; no course has 
 
 ## The chart
 
-`sections` is a list of `{ kind, n?, label?, last?, detail?, lines }`:
+Between a line's bars, barlines (ADR 0067): `|:` starts a repeat at the next bar, `:|` ends one at the bar before, `||`
+is a double barline, `|.` the final one, and `[1` or `[2` before a bar puts it in that ending: `'|: G C [1 D :| [2 D7 G |.'`.
+The jumps (ADR 0068): `Segno` or `Coda` before a bar puts its sign there; `Fine`, `ToCoda` and a jump `DC`, `DC.Fine`,
+`DC.Coda`, `DS`, `DS.Fine` or `DS.Coda` after a bar: `'Segno G C ToCoda D DS.Coda Coda D7 G |.'`.
+
+`sections` is a list of `{ kind, n?, label?, last?, detail?, key?, pattern?, lines }`:
 
 - `kind`: `'intro' | 'verse' | 'chorus' | 'ending' | 'practice' | 'hymn' | 'part'`. The interface writes the heading.
 - `n` numbers a verse; `label` names a part (`'A'`); `last` marks a last chorus or last ending; `detail` is a
   `LocalText` for anything else (`{ en: 'in 2/4', ru: 'на 2/4' }`, `{ en: 'and ending', ru: 'и окончание' }`).
+- `key` is a key change: the key the section is written in where it is not the piece's (`'Db'`), its signature
+  printed where it starts; a learner's other key moves it with the piece's (ADR 0060).
+- `pattern` is the accompaniment the section's chords play where it is not the piece's (ADR 0065).
 - `lines`: each line is bars separated by spaces.
 
 A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:method]`:
@@ -87,8 +97,9 @@ A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:met
 | `C:t1 F`, `C-G:1`          | A method code; a chord without one takes its bar's first code                                    |
 | `D/F#`                     | A slash chord; a bass that is a chord tone is spelled as that tone (`D#/G` → `D#/F𝄪`)            |
 
-Beats per bar by meter: `2/4` 2, `3/4` 3, `4/4` 4, `6/8` 2, `12/8` 4. Beats must fall on whole ticks (12 per beat:
-`.5`, `.25`, `1.5`, not `.3`).
+Beats per bar by meter: `2/4` 2, `3/4` 3, `4/4` 4, `6/8` 2, `12/8` 4. Beats must fall on whole ticks (24 per beat:
+`.5`, `.25`, `.125` a 32nd, `1.5`, not `.3`); a third of a beat is written as a fraction, `1:3` (a triplet 8th), `2:3`,
+`1:6` (a triplet 16th) (ADR 0060).
 
 **Chord symbols** are read in every spelling `qualitySpellings` lists (`src/shared/lib/music/chord.ts`): `m`, `7`,
 `Maj7`/`maj7`/`M7`/`Δ`, `m7♭5`/`m7b5`/`ø`, `°`/`dim`, `°7`/`dim7`, `sus`/`sus4`, `sus2`, `6`, `m6`, `6/9`,
@@ -118,6 +129,10 @@ written with (`C#5` is C♯, never D♭): the sheet music prints them so, moved 
 
 ## Written hands
 
+`voices`: up to three more voices sung with the tune, each a string written as `melody` is, each on a staff of
+its own under the tune's (ADR 0066). `instruments` names what the tune and each voice are played on, in that order: `voice`, `violin`, `cello`,
+`flute`, `oboe`, `clarinet`, `trumpet`, `horn` or `guitar` (ADR 0070).
+
 `hands: { rh?, lh? }`: any bar of either hand written note by note, played in place of the pattern's hand there
 (the learner's versions are written so too, ADR 0027). Each hand is its bars separated by `|`, one entry for every bar
 of the chart in order:
@@ -130,9 +145,23 @@ of the chart in order:
 | `E4^3`                   | A finger (1–5), as the figure notation writes it                                                                                                          |
 | `r/1`                    | A rest; a bar of rests is written silence, not the pattern                                                                                                |
 | `C3/4 E3+G3/1@2 E3+G3/1` | `@beat` starts a token on a beat counted from 1 (`@2.5` the "and" of 2), so a held note and the notes over it are both written; the next token follows it |
+| `F4/1:3 D4/1:3 E4/1:3`   | A triplet: thirds of a beat as fractions; `C4/.125` a 32nd                                                                                                |
+| `C4+E4/1[acc,stacc]`     | Marks after a token, on each of its notes (below)                                                                                                         |
 
-Written in the piece's key, on whole ticks, every note on the piano. A note may last past its bar's end only into bars
+Written in the piece's key, its accidentals as printed (`E5` in a D♭ section is E natural), on whole ticks, every
+note on the piano. A note may last past its bar's end only into bars
 where the same hand is written: it is held across the barline.
+
+**Marks** (ADR 0063), words joined by commas in brackets: articulations `stacc` `staccatiss` `acc` `ten` `marc`
+`ferm` (several may join); one ornament `tr` `mord` `lmord` `turn` `trem`; `arp` rolls the chord; `(` starts a slur
+and `)` ends one; `8va` writes the notes an octave lower than they sound, `8vb` higher; a dynamic `pp` `p` `mp` `mf`
+`f` `ff`; a hairpin `cresc` or `dim` starts, `/hairpin` ends; an expression `dolce` `cantabile` `espress` `legato`
+`leggiero` `rit` `rall` `accel` `atempo` (ADR 0068); the pedal `ped` down, `pedch` changed, `pedup` up;
+`gr:D5+E5` grace notes struck just before. A pitch is
+always the one heard. A melody's notes take the same marks (`E4/1[stacc,p]`), a rest none.
+
+**Clef changes** (ADR 0069): `clef:treble` or `clef:bass` first in a hand's bar changes its staff from that bar on,
+before its notes or before `-`: `lh: '- | clef:treble C4/2 E4/2 | clef:bass G2/1'`.
 
 ## The recording
 

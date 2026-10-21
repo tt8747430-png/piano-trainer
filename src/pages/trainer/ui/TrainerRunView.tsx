@@ -25,7 +25,7 @@ export function TrainerRunView({
     return <RunResults summary={trainer.summary} onAgain={trainer.again} onDone={onDone} />
   }
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 landscape-phone:gap-2">
       <div className="flex min-h-11 items-center justify-between gap-3">
         <p className="text-sm text-muted-foreground tabular-nums">
           {rounds > 0

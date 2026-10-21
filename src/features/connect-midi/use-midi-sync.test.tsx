@@ -68,6 +68,21 @@ describe('useMidiSync', () => {
     expect(audio.voice.at(-1)).toEqual({ kind: 'release', midi: C })
   })
 
+  it('lets go of a key two keyboards hold only as both let go of it', () => {
+    const { audio, keyboard, settingsStore, unmount } = setUp()
+    act(() => setMidi(settingsStore, { sound: true }))
+    keyboard.press(C)
+    keyboard.press(C)
+    keyboard.release(C)
+    expect([...audio.live()]).toEqual([C])
+    keyboard.release(C)
+    expect([...audio.live()]).toEqual([])
+    keyboard.press(C)
+    keyboard.press(C)
+    unmount()
+    expect([...audio.live()]).toEqual([])
+  })
+
   it('sends the app’s music to the piano with Play through the piano on, and back when it goes', async () => {
     const { audio, keyboard, settingsStore } = setUp()
     await act(() => keyboard.connect())

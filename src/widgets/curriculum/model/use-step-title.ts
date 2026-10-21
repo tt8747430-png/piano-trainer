@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { courseLesson } from '@/entities/course'
 import { lessonById, lessonPlace } from '@/entities/lesson'
-import { entryTitles, pieceById } from '@/entities/piece'
+import { entryTitles, useRepertoire } from '@/entities/piece'
 import type { Step, StepKind } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 
@@ -16,6 +16,7 @@ export interface StepTitle {
 export function useStepTitle(): (step: Step) => StepTitle {
   const { t } = useTranslation(['music', 'learn'])
   const locale = useLocale()
+  const pieces = useRepertoire()
   return useCallback(
     (step) => {
       switch (step.kind) {
@@ -54,12 +55,12 @@ export function useStepTitle(): (step: Step) => StepTitle {
         case 'scale':
           return { primary: t(`music:scaleKind.${step.scale}`), kind: 'scale' }
         case 'piece': {
-          const piece = pieceById(step.pieceId)
+          const piece = pieces.piece(step.pieceId)
           if (!piece) return { primary: step.pieceId, kind: 'song' }
           return { ...entryTitles(piece, locale), kind: piece.kind }
         }
       }
     },
-    [t, locale],
+    [t, locale, pieces],
   )
 }

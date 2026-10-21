@@ -189,6 +189,44 @@ describe('PianoKeyboard', () => {
     expect(document.querySelector('[data-slot="finger-row"]')).not.toBeInTheDocument()
   })
 
+  it('is never longer than the screen’s share for the keys, though that is under the shortest keys', () => {
+    renderKeyboard()
+    const keys = screen.getByRole('group', { name: 'Keyboard' })
+    // A phone on its side keeps the music more room than the shortest keys would leave it.
+    expect(keys.style.height).toMatch(
+      /^clamp\(min\(96px, var\(--keys-most\)\), .*, var\(--keys-most\)\)$/,
+    )
+  })
+
+  it('narrows Fit’s keys, past their usual narrowest, until the keys asked to be in sight fit', () => {
+    // C2 to G4: nineteen white keys asked for, wider than the octave the keys fill.
+    const asked = { from: midi(36), to: midi(67) }
+    const { rerender } = renderKeyboard({ inView: asked, fitInView: true })
+    const keys = screen.getByRole('group', { name: 'Keyboard' })
+    expect(keys.style.height).toContain('100cqw / 19')
+    // A narrower span asked next leaves the keys as they are: they hold still (ADR 0059).
+    rerender(
+      <PianoKeyboard
+        range={ONE_OCTAVE}
+        inView={{ from: C4, to: midi(64) }}
+        fitInView
+        onKeyPress={() => {}}
+      />,
+    )
+    expect(keys.style.height).toContain('100cqw / 19')
+  })
+
+  it('keeps Fit’s narrowest keys where it is not asked to fit what is in sight', () => {
+    renderKeyboard({ inView: { from: midi(36), to: midi(67) } })
+    expect(screen.getByRole('group', { name: 'Keyboard' }).style.height).not.toContain('/ 19')
+  })
+
+  it('keeps short keys within their own share of the screen too', () => {
+    renderKeyboard({ keyLength: 'short' })
+    const keys = screen.getByRole('group', { name: 'Keyboard' })
+    expect(keys.style.height).toMatch(/^clamp\(min\(96px, calc\(var\(--keys-most\) \* 2 \/ 3\)\), /)
+  })
+
   it('scrolls from its rail: the rail moves with the keys, its controls kept in view', () => {
     renderKeyboard()
     const scroller = document.querySelector('[data-slot="keys-scroller"]')

@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -31,11 +31,40 @@ describe('A shared song', () => {
     const { router, piecesStore } = await renderApp(`/songs/shared?song=${data}`)
     expect(await screen.findByRole('heading', { level: 1, name: 'Morning' })).toBeInTheDocument()
     expect(screen.getByText('G · 3/4 · 84 BPM')).toBeInTheDocument()
-    expect(screen.getByText('G C G D')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /^Bar 1: G$/ })).toBeInTheDocument()
     expect(piecesStore.getState().songs).toEqual([])
     await user.click(screen.getByRole('button', { name: 'Add to Your songs' }))
     expect(piecesStore.getState().songs.map((song) => song.title)).toEqual(['Morning'])
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/my-1'))
+  })
+
+  it('floats Add, and plays a tapped bar on its keys before it is added', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp(`/songs/shared?song=${await linkOf(SONG)}`)
+    const add = await screen.findByRole('button', { name: 'Add to Your songs' })
+    expect(add.closest('[data-slot="floating-actions"]')).not.toBeNull()
+    expect(screen.getByRole('group', { name: 'Keyboard' })).toBeInTheDocument()
+    const bar = screen.getByRole('button', { name: /^Bar 2: C$/ })
+    await user.click(bar)
+    expect(audio.played).toHaveLength(1)
+    expect(bar).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  it('says what the song is for, and names Add in words', async () => {
+    await renderApp(`/songs/shared?song=${await linkOf(SONG)}`)
+    expect(await screen.findByText('Add it to Your songs to practise it.')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Add to Your songs' })).toHaveTextContent(
+      'Add to Your songs',
+    )
+  })
+
+  it('adds the song once, however quickly Add is pressed again', async () => {
+    const { router, piecesStore } = await renderApp(`/songs/shared?song=${await linkOf(SONG)}`)
+    const add = await screen.findByRole('button', { name: 'Add to Your songs' })
+    fireEvent.click(add)
+    fireEvent.click(add)
+    await waitFor(() => expect(router.state.location.pathname).toBe('/songs/my-1'))
+    expect(piecesStore.getState().songs.map((song) => song.id)).toEqual(['my-1'])
   })
 
   it('says so when the link holds no song', async () => {

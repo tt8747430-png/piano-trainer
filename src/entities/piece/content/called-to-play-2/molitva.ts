@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 76,
   pattern: 'M5',
   note: {
-    en: 'Lesson 1’s song: its chorus is in 7th chords. Way 5 is printed once over the chorus and holds until way 2.',
-    ru: 'Песня урока 1: припев идёт септаккордами. Вид 5 напечатан один раз над припевом и держится до вида 2.',
+    en: 'The song of lesson 1. Its chorus is played in 7th chords. Way 5 is printed once over the chorus and holds until way 2 appears.',
+    ru: 'Песня урока 1. Припев играется септаккордами. Вид 5 напечатан над припевом один раз и действует до появления вида 2.',
   },
   sections: [
     { kind: 'verse', lines: ['Em:3 Am:t3', 'Em:2-B Em:t2', 'Em:5.2 Am:5.3', 'Em:3-B Em:2-E'] },

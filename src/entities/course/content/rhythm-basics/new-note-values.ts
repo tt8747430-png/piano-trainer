@@ -5,8 +5,8 @@ const newNoteValues: Lesson = {
   id: 'new-note-values',
   title: { en: 'New note values', ru: 'Новые длительности' },
   summary: {
-    en: 'Count eighth notes and hold dotted halves for three beats.',
-    ru: 'Считать восьмые и выдерживать половинные с точкой три доли.',
+    en: 'Count eighth notes, two to a beat, and hold dotted half notes for three beats.',
+    ru: 'Считать восьмые, по две на долю, и выдерживать половинные с точкой три доли.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const newNoteValues: Lesson = {
           kind: 'text',
           lead: { en: 'An eighth note', ru: 'Восьмая нота' },
           text: {
-            en: 'lasts half a beat, so two fill one beat. Alone it has a flag on its stem.',
-            ru: 'длится полдоли: две восьмые заполняют долю. Одиночная восьмая пишется с флажком.',
+            en: 'lasts half a beat, so two eighths fill one beat. A single eighth has a flag on its stem. Play these evenly, twice as fast as quarters.',
+            ru: 'длится полдоли, поэтому две восьмые заполняют одну долю. Одиночная восьмая пишется с флажком. Играйте их ровно, вдвое быстрее четвертей.',
           },
         },
         {
@@ -28,27 +28,27 @@ const newNoteValues: Lesson = {
       ],
     },
     {
-      heading: { en: 'Count 1 and', ru: 'Счёт «раз-и»' },
+      heading: { en: 'Counting eighths: 1 and', ru: 'Счёт восьмых: «раз-и»' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Count eighths with “and” between the numbers: 1 and 2 and. A note on “and” falls halfway between beats.',
-            ru: 'Восьмые считайте с «и» между числами: «раз-и, два-и». Нота на «и» звучит ровно между долями.',
+            en: 'Count eighths by saying “and” between the numbers: 1 and 2 and. The number falls on the beat. A note on “and” falls halfway between two beats.',
+            ru: 'Восьмые считайте, вставляя «и» между числами: «раз-и, два-и». Число приходится на долю. Нота на «и» звучит ровно посередине между долями.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 C4/8 D4/8 E4 E4/8 F4/8 G4/1' },
       ],
     },
     {
-      heading: { en: 'Beamed by the beat', ru: 'Под ребром по долям' },
+      heading: { en: 'Beams group eighths by the beat', ru: 'Ребро группирует восьмые по долям' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'A beam', ru: 'Ребро' },
           text: {
-            en: 'joins eighth notes by their stems in place of flags, so each beat shows at a glance.',
-            ru: 'соединяет штили восьмых вместо флажков, чтобы каждая доля была видна сразу.',
+            en: 'is a thick line that joins the stems of eighth notes in place of their flags. Eighths are beamed by the beat, so you can see each beat at a glance.',
+            ru: '— толстая черта, которая соединяет штили восьмых вместо флажков. Восьмые объединяют по долям, поэтому каждая доля видна сразу.',
           },
         },
         {
@@ -65,8 +65,8 @@ const newNoteValues: Lesson = {
           kind: 'text',
           lead: { en: 'A dot', ru: 'Точка' },
           text: {
-            en: 'after a note adds half its value again, so a dotted half lasts three beats. Count 1 2 3 on it, then play on 4.',
-            ru: 'после ноты добавляет половину её длительности: половинная с точкой длится три доли. Считайте «раз, два, три», играйте на «четыре».',
+            en: 'after a note adds half its value again. A half note is two beats, so a dotted half lasts three. Hold it through 1 2 3, then play on 4.',
+            ru: 'после ноты добавляет к ней ещё половину её длительности. Половинная — две доли, значит, половинная с точкой длится три. Держите её на «раз, два, три», играйте на «четыре».',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4/2. D4 E4/2. C4' },
@@ -83,9 +83,15 @@ const newNoteValues: Lesson = {
         {
           kind: 'steps',
           steps: [
-            { en: 'Count the line aloud.', ru: 'Просчитайте строку вслух.' },
-            { en: 'Clap it, saying the counts.', ru: 'Прохлопайте её, проговаривая счёт.' },
-            { en: 'Play it slowly, still counting.', ru: 'Сыграйте медленно, продолжая считать.' },
+            {
+              en: 'Count the line aloud: 1 and 2 and.',
+              ru: 'Просчитайте строку вслух: «раз-и, два-и».',
+            },
+            { en: 'Clap the rhythm while you count.', ru: 'Прохлопайте ритм, продолжая считать.' },
+            {
+              en: 'Play it slowly, still counting.',
+              ru: 'Сыграйте медленно, не переставая считать.',
+            },
           ],
         },
         {

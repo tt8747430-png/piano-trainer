@@ -15,18 +15,39 @@ const progressionsInOrder: Lesson = {
     ru: 'Последовательности в порядке изучения',
   },
   summary: {
-    en: 'Learn ten progressions in order, from I–IV–V to the tritone substitution.',
-    ru: 'Выучить десять последовательностей по порядку, от I–IV–V до тритоновой замены.',
+    en: 'Ten progressions in the order to learn them, each building on the one before, from three chords to the tritone substitution.',
+    ru: 'Десять последовательностей в порядке изучения, каждая опирается на предыдущую: от трёх аккордов до тритоновой замены.',
   },
   sections: [
+    {
+      heading: { en: 'How to practise', ru: 'Как заниматься' },
+      blocks: [
+        { kind: 'progression', numerals: 'I IV V I', key: G_MAJOR },
+        {
+          kind: 'steps',
+          steps: [
+            { en: 'At least a week on each step.', ru: 'Не меньше недели на каждый шаг.' },
+            { en: 'Steps 1 to 5 in C, G, D and F.', ru: 'Шаги 1–5 — в до, соль, ре и фа.' },
+            {
+              en: 'From step 6, all twelve keys.',
+              ru: 'Начиная с шага 6 — во всех двенадцати тональностях.',
+            },
+            {
+              en: 'Skip a step only if it is clean in three keys.',
+              ru: 'Пропускайте шаг, только если чисто играете его в трёх тональностях.',
+            },
+          ],
+        },
+      ],
+    },
     {
       heading: { en: 'Step 1: I–IV–V, three chords', ru: 'Шаг 1: I–IV–V, три аккорда' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Three chords carry thousands of folk, blues and rock songs. Start in C, then G and D.',
-            ru: 'Три аккорда держат тысячи народных, блюзовых и рок-песен. Начните в до, затем соль и ре.',
+            en: 'Three chords, on degrees 1, 4 and 5, carry thousands of folk, blues and rock songs. Start in C, then G and D.',
+            ru: 'Три аккорда на ступенях 1, 4 и 5 держат тысячи народных, блюзовых и рок-песен. Начните в до, затем соль и ре.',
           },
         },
         { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
@@ -42,9 +63,10 @@ const progressionsInOrder: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'The authentic cadence', ru: 'Автентическая каденция' },
           text: {
-            en: 'V to I, the authentic cadence, is the strongest sound of arriving.',
-            ru: 'V–I, автентическая каденция, — самое сильное ощущение прихода.',
+            en: 'is V moving to I. It is the strongest way to sound like you have arrived home.',
+            ru: '— это переход V в I. Он сильнее всего даёт ощущение возвращения домой.',
           },
         },
         { kind: 'progression', numerals: 'V I', key: C_MAJOR },
@@ -56,8 +78,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Add vi, the relative minor, and you have pop’s most played four-chord loop.',
-            ru: 'Добавьте vi, параллельный минор, и получите самый частый круг из четырёх аккордов в поп-музыке.',
+            en: 'Add vi, the chord of the relative minor. Now you have the four-chord loop pop plays most.',
+            ru: 'Добавьте vi, аккорд параллельного минора. Получится круг из четырёх аккордов, самый частый в поп-музыке.',
           },
         },
         { kind: 'progression', numerals: 'I V vi IV', key: C_MAJOR },
@@ -74,8 +96,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The same four chords reordered: the doo-wop and ballad loop.',
-            ru: 'Те же четыре аккорда в другом порядке: круг ду-вопа и баллад.',
+            en: 'The same four chords in a new order. This is the loop of doo-wop and ballads.',
+            ru: 'Те же четыре аккорда в другом порядке. Это круг ду-вопа и баллад.',
           },
         },
         { kind: 'progression', numerals: 'I vi IV V', key: C_MAJOR },
@@ -91,9 +113,10 @@ const progressionsInOrder: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A cadence', ru: 'Каденция' },
           text: {
-            en: 'Cadences end phrases. Beside V–I come the plagal IV–I, the half cadence on V and the deceptive V–vi.',
-            ru: 'Каденции завершают фразы. Кроме V–I есть плагальная IV–I, половинная на V и прерванная V–vi.',
+            en: 'is the chords that end a phrase. Besides V to I: the plagal IV to I, the half cadence on V, the deceptive V to vi.',
+            ru: '— это аккорды, которыми кончается фраза. Кроме V–I: плагальная IV–I, половинная на V и прерванная V–vi.',
           },
         },
         { kind: 'progression', numerals: 'I IV I', key: C_MAJOR },
@@ -107,8 +130,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The building block of jazz standards. Play it in all twelve keys round the cycle of fourths.',
-            ru: 'Кирпичик джазовых стандартов. Играйте её во всех двенадцати тональностях по кругу кварт.',
+            en: 'Jazz standards are built from this progression. Play it in all twelve keys, round the cycle of fourths.',
+            ru: 'Из этого оборота построены джазовые стандарты. Играйте его во всех двенадцати тональностях по кругу кварт.',
           },
         },
         { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
@@ -136,8 +159,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Dominant 7ths on I, IV and V. Start in C, then F, B♭ and E♭.',
-            ru: 'Доминантсептаккорды на I, IV и V. Начните в до, затем фа, си-бемоль и ми-бемоль.',
+            en: 'Twelve bars with a dominant 7th on I, IV and V. Start in C, then F, B♭ and E♭.',
+            ru: 'Двенадцать тактов с доминантсептаккордами на I, IV и V. Начните в до, затем фа, си-бемоль и ми-бемоль.',
           },
         },
         {
@@ -166,8 +189,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Borrow ♭VII from the parallel minor for rock’s colour: C–B♭–F–C.',
-            ru: 'Возьмите ♭VII из одноимённого минора для краски рока: C–B♭–F–C.',
+            en: 'Take ♭VII from C minor, the minor key on the same tonic. In C that gives C, B♭, F, C, a rock sound.',
+            ru: 'Возьмите ♭VII из до минора, одноимённой тональности. В до получится C, B♭, F, C: звук рока.',
           },
         },
         { kind: 'progression', numerals: 'I ♭VII IV I', key: C_MAJOR },
@@ -182,13 +205,14 @@ const progressionsInOrder: Lesson = {
       ],
     },
     {
-      heading: { en: 'Step 9: secondary dominants', ru: 'Шаг 9: вторичные доминанты' },
+      heading: { en: 'Step 9: secondary dominants', ru: 'Шаг 9: побочные доминанты' },
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'A secondary dominant', ru: 'Побочная доминанта' },
           text: {
-            en: 'V/V is the V of V: D7 leads into G, visiting G major for a moment.',
-            ru: 'V/V — это V от V: D7 ведёт в G, ненадолго заходя в соль мажор.',
+            en: 'is the V of a chord other than I. V/V is the V of V. In C, D7 leads into G.',
+            ru: '— это V к аккорду тональности, кроме I. V/V — доминанта к V. В до D7 ведёт в G.',
           },
         },
         { kind: 'progression', numerals: 'I V7/V V I', key: C_MAJOR },
@@ -200,8 +224,8 @@ const progressionsInOrder: Lesson = {
         {
           kind: 'text',
           text: {
-            en: '♭II7 stands in for V7, a tritone away, and the bass falls by semitones into I.',
-            ru: '♭II7 заменяет V7, отстоящий на тритон, и бас спускается к I по полутонам.',
+            en: '♭II7 replaces V7, a tritone away. They share the tritone F and B. The bass now falls by half steps: D, D♭, C.',
+            ru: '♭II7 заменяет V7, отстоящий на тритон. У них общий тритон фа–си. Бас теперь спускается по полутонам: ре, ре-бемоль, до.',
           },
         },
         { kind: 'progression', numerals: 'ii7 ♭II7 Imaj7', key: C_MAJOR },
@@ -212,27 +236,6 @@ const progressionsInOrder: Lesson = {
             ru: 'Тритоновая замена в последовательностях',
           },
           target: { opens: 'progressions', numerals: 'ii7 ♭II7 Imaj7', key: C_MAJOR },
-        },
-      ],
-    },
-    {
-      heading: { en: 'How to practise', ru: 'Как заниматься' },
-      blocks: [
-        { kind: 'progression', numerals: 'I IV V I', key: G_MAJOR },
-        {
-          kind: 'steps',
-          steps: [
-            { en: 'A week on each step, at the least.', ru: 'Не меньше недели на каждый шаг.' },
-            { en: 'Steps 1 to 5 in C, G, D and F.', ru: 'Шаги 1–5 — в до, соль, ре и фа.' },
-            {
-              en: 'From step 6 on, all twelve keys.',
-              ru: 'Начиная с шага 6 — во всех двенадцати тональностях.',
-            },
-            {
-              en: 'Skip one only if it is clean in three keys.',
-              ru: 'Пропускайте шаг, только если чисто играете его в трёх тональностях.',
-            },
-          ],
         },
       ],
     },

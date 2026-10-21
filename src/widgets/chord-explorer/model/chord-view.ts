@@ -38,7 +38,7 @@ export function viewChord(view: ChordView): { chord: BuiltChord; placed: PlacedC
   return { chord, placed }
 }
 
-/** The keys a chord's placement strikes, the left hand's first: what the Find tab opens on. */
+/** The keys a chord's placement strikes, the left hand's first: what its Play sounds. */
 export function chordKeys(view: ChordView): Midi[] {
   const { placed } = viewChord(view)
   return [...placed.lh, ...placed.rh].map((key) => key.midi)

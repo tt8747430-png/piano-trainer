@@ -18,8 +18,8 @@ const twoFiveOne: Lesson = {
   id: 'two-five-one',
   title: { en: 'The ii–V–I', ru: 'Оборот ii–V–I' },
   summary: {
-    en: 'Play the ii–V–I in major and minor, in every key.',
-    ru: 'Играть ii–V–I в мажоре и миноре во всех тональностях.',
+    en: 'Learn how the ii–V–I moves in major and minor, hear it inside songs, then practise it in every key.',
+    ru: 'Понять, как движется ii–V–I в мажоре и миноре, услышать его в песнях и отработать во всех тональностях.',
   },
   sections: [
     {
@@ -27,9 +27,10 @@ const twoFiveOne: Lesson = {
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'The ii–V–I', ru: 'Оборот ii–V–I' },
           text: {
-            en: 'ii stands for the subdominant. Jazz plays all three as 7th chords, the roots falling a 5th each time.',
-            ru: 'ii заменяет субдоминанту. Джаз играет все три аккорда септаккордами, и основные тоны каждый раз опускаются на квинту.',
+            en: 'plays the chords on degrees 2, 5 and 1. ii does the subdominant’s job. Each root falls a 5th. Jazz plays all three as 7th chords.',
+            ru: '— это аккорды на 2-й, 5-й и 1-й ступенях. ii выполняет роль субдоминанты. Каждый бас опускается на квинту. В джазе все три — септаккорды.',
           },
         },
         { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
@@ -41,16 +42,16 @@ const twoFiveOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The 3rd of each chord becomes the 7th of the next, and the 7th becomes the 3rd.',
-            ru: 'Терция каждого аккорда становится септимой следующего, а септима — терцией.',
+            en: 'Each chord’s 3rd stays and becomes the next chord’s 7th. Its 7th falls a step to become the next 3rd.',
+            ru: 'Терция каждого аккорда остаётся и становится септимой следующего. Септима опускается на ступень и становится терцией.',
           },
         },
         { kind: 'chords', symbols: ['Dm7', 'G7', 'C6'] },
         {
           kind: 'note',
           text: {
-            en: 'Tense notes fall a step and common notes stay. C6 can stand in for CMaj7.',
-            ru: 'Неустойчивые звуки опускаются на ступень, общие остаются. C6 может заменить CMaj7.',
+            en: 'C6 can stand in for CMaj7 as the I.',
+            ru: 'C6 может заменить CMaj7 в роли I.',
           },
         },
       ],
@@ -61,8 +62,8 @@ const twoFiveOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'In minor, ii is half-diminished and V is major, often with a ♭9. The tonic is often a minor 6th chord.',
-            ru: 'В миноре ii полууменьшённый, а V мажорный, часто с ♭9. Тоникой часто бывает минорный аккорд с секстой.',
+            en: 'In minor, ii is half-diminished. V is a dominant 7th, often with a ♭9. The tonic is often a minor 6th chord.',
+            ru: 'В миноре ii полууменьшённый. V — доминантсептаккорд, часто с ♭9. Тоникой часто бывает минорный аккорд с секстой.',
           },
         },
         { kind: 'chords', symbols: ['Dm7♭5', 'G7♭9', 'Cm6'] },
@@ -79,136 +80,11 @@ const twoFiveOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A ii–V can visit another key for a moment. Chained, each lands on the next ii, the roots still falling in 5ths.',
-            ru: 'Оборот ii–V может ненадолго уводить в другую тональность. В цепочке каждый приходит в следующий ii, а основные тоны по-прежнему идут вниз по квинтам.',
+            en: 'A ii–V can visit another key for a moment. In a chain, each one lands on the next ii. The roots keep falling in 5ths.',
+            ru: 'Оборот ii–V может ненадолго уводить в другую тональность. В цепочке каждый приходит в следующий ii. Басы всё так же идут вниз по квинтам.',
           },
         },
         { kind: 'chords', symbols: ['Em7♭5', 'A7♭9', 'Dm7', 'G7', 'Cm7', 'F7', 'B♭6'] },
-      ],
-    },
-    {
-      heading: { en: 'Exercise 1: every key', ru: 'Упражнение 1: все тональности' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'Play it in close position, up by semitones. Then turn each I into the next key’s ii, so the keys fall a tone: C, B♭, A♭.',
-            ru: 'Играйте его в тесном расположении вверх по полутонам. Затем делайте каждый I следующим ii, и тональности опускаются на тон: C, B♭, A♭.',
-          },
-        },
-        { kind: 'chords', symbols: ['Dm7', 'G7', 'CMaj7', 'Cm7', 'F7', 'B♭Maj7'] },
-        {
-          kind: 'link',
-          title: { en: 'Step 1: up by semitones', ru: 'Шаг 1: вверх по полутонам' },
-          target: {
-            opens: 'player',
-            numerals: 'ii V I',
-            key: C_MAJOR,
-            size: 'sevenths',
-            walk: 'semitones-up',
-          },
-        },
-        {
-          kind: 'link',
-          title: {
-            en: 'Step 2: down the circle of fifths, each I the next ii',
-            ru: 'Шаг 2: вниз по квинтовому кругу, каждый I — следующий ii',
-          },
-          target: {
-            opens: 'player',
-            numerals: 'ii V I',
-            key: C_MAJOR,
-            size: 'sevenths',
-            walk: 'tones-down',
-          },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Every chord of the key', ru: 'Каждый аккорд тональности' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'Make each chord of the key home in turn: a ii–V–I to C, then Dm, Em, F, G, Am and B°.',
-            ru: 'По очереди делайте каждый аккорд тональности тоникой: ii–V–I к C, затем к Dm, Em, F, G, Am и B°.',
-          },
-        },
-        {
-          kind: 'progression',
-          numerals: TO_EVERY_CHORD,
-          key: C_MAJOR,
-          size: 'sevenths',
-        },
-        {
-          kind: 'note',
-          text: {
-            en: 'A minor chord takes the minor ii–V.',
-            ru: 'К минорному аккорду ведёт минорный ii–V.',
-          },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Up the scale in the Player', ru: 'Вверх по гамме в плеере' },
-          target: { opens: 'player', numerals: TO_EVERY_CHORD, key: C_MAJOR, size: 'sevenths' },
-        },
-        {
-          kind: 'link',
-          title: { en: 'Round the circle in the key', ru: 'По квинтовому кругу в тональности' },
-          target: {
-            opens: 'player',
-            numerals: ROUND_THE_KEY,
-            key: C_MAJOR,
-            size: 'sevenths',
-          },
-        },
-      ],
-    },
-    {
-      heading: { en: 'Exercise 2: with 9ths', ru: 'Упражнение 2: с нонами' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'Leave the root to the bass. Play each 9th chord from its 3rd (3-5-7-9), then from its 7th (7-9-3-5).',
-            ru: 'Основной тон оставьте басу. Играйте каждый нонаккорд от терции (3-5-7-9), затем от септимы (7-9-3-5).',
-          },
-        },
-        {
-          kind: 'question',
-          ask: { en: 'Play Dm9 from its 3rd.', ru: 'Сыграйте Dm9 от терции.' },
-          answer: { notes: ['F', 'A', 'C', 'E'] },
-        },
-        {
-          kind: 'link',
-          title: {
-            en: 'Step 1: from the 3rd, up by semitones',
-            ru: 'Шаг 1: от терции, вверх по полутонам',
-          },
-          target: {
-            opens: 'player',
-            numerals: 'ii V I',
-            key: C_MAJOR,
-            size: 'ninths',
-            inversion: 1,
-            walk: 'semitones-up',
-          },
-        },
-        {
-          kind: 'link',
-          title: {
-            en: 'Step 2: from the 7th, down the circle of fifths',
-            ru: 'Шаг 2: от септимы, вниз по квинтовому кругу',
-          },
-          target: {
-            opens: 'player',
-            numerals: 'ii V I',
-            key: C_MAJOR,
-            size: 'ninths',
-            inversion: 3,
-            walk: 'tones-down',
-          },
-        },
       ],
     },
     {
@@ -217,8 +93,8 @@ const twoFiveOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Songs close phrases with ii–V–Is. Below, the first lands on D. The second leads to Bm, so its ii and V are B minor’s.',
-            ru: 'Песни завершают фразы оборотами ii–V–I. Ниже первый приходит в ре мажор. Второй ведёт в си минор, поэтому его ii и V — из си минора.',
+            en: 'Songs often end phrases with a ii–V–I. Below, the first lands on D. The second leads to Bm, so its ii and V come from B minor.',
+            ru: 'Песни часто завершают фразы оборотом ii–V–I. Ниже первый приходит в ре мажор. Второй ведёт в си минор, поэтому его ii и V взяты из си минора.',
           },
         },
         {
@@ -246,6 +122,131 @@ const twoFiveOne: Lesson = {
             numerals: 'ii V I iiø/vi V/vi vi',
             key: D_MAJOR,
             size: 'sevenths',
+          },
+        },
+      ],
+    },
+    {
+      heading: { en: 'Exercise 1: every key', ru: 'Упражнение 1: все тональности' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Play it in close position, moving up a half step each time. Then turn each I into the next ii. The keys fall a whole step: C, B♭, A♭.',
+            ru: 'Играйте его в тесном расположении, каждый раз на полутон выше. Затем делайте каждый I следующим ii. Тональности опускаются на тон: C, B♭, A♭.',
+          },
+        },
+        { kind: 'chords', symbols: ['Dm7', 'G7', 'CMaj7', 'Cm7', 'F7', 'B♭Maj7'] },
+        {
+          kind: 'link',
+          title: { en: 'Step 1: up by semitones', ru: 'Шаг 1: вверх по полутонам' },
+          target: {
+            opens: 'player',
+            numerals: 'ii V I',
+            key: C_MAJOR,
+            size: 'sevenths',
+            walk: 'semitones-up',
+          },
+        },
+        {
+          kind: 'link',
+          title: {
+            en: 'Step 2: down by whole tones, each I the next ii',
+            ru: 'Шаг 2: вниз по целым тонам, каждый I — следующий ii',
+          },
+          target: {
+            opens: 'player',
+            numerals: 'ii V I',
+            key: C_MAJOR,
+            size: 'sevenths',
+            walk: 'tones-down',
+          },
+        },
+      ],
+    },
+    {
+      heading: { en: 'Every chord of the key', ru: 'Каждый аккорд тональности' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Make each chord of the key home in turn. Play a ii–V–I to C, then to Dm, Em, F, G, Am and B°.',
+            ru: 'По очереди делайте каждый аккорд тональности тоникой. Сыграйте ii–V–I к C, затем к Dm, Em, F, G, Am и B°.',
+          },
+        },
+        {
+          kind: 'progression',
+          numerals: TO_EVERY_CHORD,
+          key: C_MAJOR,
+          size: 'sevenths',
+        },
+        {
+          kind: 'note',
+          text: {
+            en: 'A minor target takes the minor ii–V.',
+            ru: 'К минорному аккорду ведёт минорный ii–V.',
+          },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Up the scale in the Player', ru: 'Вверх по гамме в плеере' },
+          target: { opens: 'player', numerals: TO_EVERY_CHORD, key: C_MAJOR, size: 'sevenths' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Round the circle in the key', ru: 'По квинтовому кругу в тональности' },
+          target: {
+            opens: 'player',
+            numerals: ROUND_THE_KEY,
+            key: C_MAJOR,
+            size: 'sevenths',
+          },
+        },
+      ],
+    },
+    {
+      heading: { en: 'Exercise 2: with 9ths', ru: 'Упражнение 2: с нонами' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Leave the root to the bass. In the right hand, play each 9th chord from its 3rd (3 5 7 9), then from its 7th (7 9 3 5).',
+            ru: 'Основной тон оставьте басу. Правой рукой играйте каждый нонаккорд от терции (3 5 7 9), затем от септимы (7 9 3 5).',
+          },
+        },
+        {
+          kind: 'question',
+          ask: { en: 'Play Dm9 from its 3rd.', ru: 'Сыграйте Dm9 от терции.' },
+          answer: { notes: ['F', 'A', 'C', 'E'] },
+        },
+        {
+          kind: 'link',
+          title: {
+            en: 'Step 1: from the 3rd, up by semitones',
+            ru: 'Шаг 1: от терции, вверх по полутонам',
+          },
+          target: {
+            opens: 'player',
+            numerals: 'ii V I',
+            key: C_MAJOR,
+            size: 'ninths',
+            inversion: 1,
+            walk: 'semitones-up',
+          },
+        },
+        {
+          kind: 'link',
+          title: {
+            en: 'Step 2: from the 7th, down by whole tones',
+            ru: 'Шаг 2: от септимы, вниз по целым тонам',
+          },
+          target: {
+            opens: 'player',
+            numerals: 'ii V I',
+            key: C_MAJOR,
+            size: 'ninths',
+            inversion: 3,
+            walk: 'tones-down',
           },
         },
       ],

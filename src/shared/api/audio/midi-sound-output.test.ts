@@ -68,4 +68,17 @@ describe('createMidiSoundOutput', () => {
     sound.stop()
     expect(sent).toEqual(['clear', 'off 60 @1150', 'off 64 @1150', 'off 64 @1201'])
   })
+  it('lets go again on Stop of a key whose off is only queued, though it forgets keys that have ended', () => {
+    const { output, sent } = speaker()
+    let now = 1000
+    const sound = createMidiSoundOutput(output, { pageTimeOf, pageNow: () => now })
+    sound.render(note(60, 0.1), 0)
+    sound.render(note(64, 0.5), 0)
+    now = 1420
+    vi.advanceTimersByTime(25)
+    expect(sent.at(-1)).toBe('off 64 @1500')
+    sent.length = 0
+    sound.stop()
+    expect(sent).toEqual(['clear', 'off 64 @1420'])
+  })
 })

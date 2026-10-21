@@ -1,45 +1,76 @@
+import { Music } from 'lucide-react'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { selectKeyboard, useSettings } from '@/entities/settings'
+import { LANDSCAPE_PHONE, useMediaQuery } from '@/shared/lib'
+import { FabPill } from '@/shared/ui'
 import { ScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
 import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
 import { useScoreEditor } from '../model/use-score-editor'
 import { CaretLine } from './CaretLine'
-import { EditorKeyboard } from './EditorKeyboard'
+import { EditorHeader } from './EditorHeader'
+import { EditorKeyboard, KeysButton } from './EditorKeyboard'
 import { EditorSheet } from './EditorSheet'
-import { EditorToolbar } from './EditorToolbar'
 import { EditorTools } from './EditorTools'
 import { RecordingStrip } from './RecordingStrip'
 
+/** A laptop's width: the palette a column beside the sheet. */
+const LAPTOP = '(min-width: 64rem)'
+
 /**
- * The score editor (spec §6): the toolbar, the sheet scrolling under it, then at the foot the tool
- * dock (what the keys write, and that layer's tools), the caret's line and the keys; while a take
- * records, the recording strip in place of the dock and the caret's line. A phone on its side has no
- * height for them all in a column: the dock stands beside the sheet, the keys under both.
+ * The score editor (spec §6, ADR 0064, 0065), laid out as a notation app, one screen that never
+ * scrolls as a whole: the bar (Undo, Redo, Play, Record, the view); the sheet, the one part that
+ * scrolls; the caret's line (in the bar on a phone on its side; while a take records, the recording
+ * strip); the palette, a card of one size whatever its tab, at the foot on a phone held upright and
+ * a tablet, a column beside the sheet on a laptop and a phone on its side; and the keys, at the foot
+ * under the palette or under the bar as the keyboard settings dock them (`editor-screen`). Folded,
+ * the palette and the keys leave their room to the sheet, each a button floating over its corner.
  */
 export function ScoreEditor({ target }: { target: EditorTarget }) {
+  const { t } = useTranslation('editor')
   const editor = useScoreEditor(target)
   useEditorShortcutList()
+  const onSide = useMediaQuery(LANDSCAPE_PHONE)
+  const side = useMediaQuery(LAPTOP) || onSide
+  const idle = editor.takes.stage === 'idle'
+  const dock = useSettings((state) => selectKeyboard(state).dock)
+  const [palette, setPalette] = useState(true)
   return (
     <ScoreEditorContext value={editor}>
-      <div className="flex min-h-0 flex-1 flex-col gap-3 py-2 landscape-phone:grid landscape-phone:grid-cols-[minmax(0,1fr)_minmax(0,18rem)] landscape-phone:grid-rows-[auto_minmax(0,1fr)_auto] landscape-phone:gap-2 landscape-phone:py-1">
-        <div className="landscape-phone:col-span-2">
-          <EditorToolbar />
+      <div
+        data-keys={dock}
+        data-palette={palette ? (side ? 'side' : 'foot') : 'folded'}
+        className="editor-screen min-h-0 flex-1 gap-2 py-2 landscape-phone:gap-1.5 landscape-phone:py-1"
+      >
+        <div data-area="bar">
+          <EditorHeader status={onSide && idle ? <CaretLine /> : undefined} />
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+        <div data-area="sheet" className="min-h-0 overflow-y-auto overscroll-contain">
           <EditorSheet />
         </div>
-        <div className="flex min-h-0 flex-col gap-3 landscape-phone:gap-1 landscape-phone:overflow-y-auto">
-          {editor.takes.stage === 'idle' ? (
-            <>
-              <EditorTools />
-              <CaretLine />
-            </>
-          ) : (
-            <RecordingStrip />
+        <div data-area="float">
+          <KeysButton />
+          {palette ? null : (
+            <FabPill
+              label={t('palette.open')}
+              icon={Music}
+              onClick={() => setPalette(true)}
+              className="ms-auto"
+            />
           )}
         </div>
-        <div className="landscape-phone:col-span-2">
-          <EditorKeyboard />
-        </div>
+        {onSide && idle ? null : (
+          <div data-area="status" className="flex min-h-6 flex-col justify-center">
+            {idle ? <CaretLine /> : <RecordingStrip />}
+          </div>
+        )}
+        {palette ? (
+          <div data-area="palette">
+            <EditorTools side={side} onFold={() => setPalette(false)} />
+          </div>
+        ) : null}
+        <EditorKeyboard />
       </div>
     </ScoreEditorContext>
   )

@@ -5,8 +5,8 @@ describe('parseFigure', () => {
   it('reads positions in 16ths as ticks', () => {
     const events = parseFigure('0/4 C,4/4 C')
     expect(events.map(({ start, duration }) => ({ start, duration }))).toEqual([
-      { start: 0, duration: 12 },
-      { start: 12, duration: 12 },
+      { start: 0, duration: 24 },
+      { start: 24, duration: 24 },
     ])
     expect(events[0]?.tones).toEqual([{ token: { kind: 'chord' } }])
     expect(events[0]?.accent).toBe(false)
@@ -14,14 +14,14 @@ describe('parseFigure', () => {
 
   it('reads positions in triplet 8ths', () => {
     const [event] = parseFigure('3/6 C', { perBeat: 3 })
-    expect(event?.start).toBe(12)
-    expect(event?.duration).toBe(24)
+    expect(event?.start).toBe(24)
+    expect(event?.duration).toBe(48)
   })
 
   it('reads positions in 16ths of compound time, six to a beat', () => {
     const [event] = parseFigure('6/12 C', { perBeat: 6 })
-    expect(event?.start).toBe(12)
-    expect(event?.duration).toBe(24)
+    expect(event?.start).toBe(24)
+    expect(event?.duration).toBe(48)
   })
 
   it('reads accents', () => {

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { midi } from '@/shared/lib/music'
-import { lessonById } from '@/entities/lesson'
+import { COURSES } from '@/entities/course'
+import { lessonById, LESSONS } from '@/entities/lesson'
 import {
   answerSounds,
   chosenOf,
@@ -32,6 +33,42 @@ describe('questionAnswer', () => {
     expect(questionAnswer({ notes: ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'] }).keys).toEqual([
       62, 64, 66, 67, 69, 71, 73,
     ])
+  })
+})
+
+describe('questionAnswer, notes not in order', () => {
+  it('places each note nearest the last, so a line stepping down steps down', () => {
+    expect(questionAnswer({ notes: ['G', 'F', 'E', 'D', 'C'] }).keys).toEqual([67, 65, 64, 62, 60])
+  })
+
+  it('keeps a long set of notes near middle C, not drifting a fourth at a time', () => {
+    const sharps = questionAnswer({ notes: ['F#', 'C#', 'G#', 'D#', 'A#', 'E#'] }).keys
+    expect(Math.max(...sharps) - Math.min(...sharps)).toBeLessThanOrEqual(19)
+    expect(sharps.every((key) => key >= 48 && key <= 84)).toBe(true)
+  })
+
+  it('places notes falling, each the first of its name below the last', () => {
+    const down = questionAnswer({ notes: ['G', 'F', 'E', 'D', 'C'], falling: true })
+    expect(down.keys).toEqual([67, 65, 64, 62, 60])
+    expect(down.inOrder).toBe(true)
+    expect(questionAnswer({ notes: ['C', 'G'], falling: true }).keys).toEqual([60, 55])
+  })
+})
+
+describe('every question of a lesson or a course', () => {
+  const worksheets = [...LESSONS, ...COURSES.flatMap((course) => course.lessons)]
+
+  it('answers on the piano’s keys, within two octaves', () => {
+    const problems = worksheets.flatMap((lesson) =>
+      [...questionAnswers(lesson)].flatMap(([place, answer]) => {
+        const low = Math.min(...answer.keys)
+        const high = Math.max(...answer.keys)
+        return low < 21 || high > 108 || high - low > 24
+          ? [`${lesson.id} ${place}: ${answer.keys.join(' ')}`]
+          : []
+      }),
+    )
+    expect(problems).toEqual([])
   })
 })
 
@@ -76,6 +113,20 @@ describe('isRight', () => {
     expect(isRight(keys(62, 69), fifth)).toBe(true)
     expect(isRight(keys(57, 62), fifth)).toBe(false)
     expect(isRight(keys(62, 81), fifth)).toBe(false)
+  })
+
+  it('takes a slash chord only over its bass, its lowest key', () => {
+    const overB = questionAnswer({ chord: 'G/B' })
+    expect(isRight(keys(59, 62, 67), overB)).toBe(true)
+    expect(isRight(keys(47, 55, 62), overB)).toBe(true)
+    expect(isRight(keys(55, 59, 62), overB)).toBe(false)
+  })
+
+  it('takes a falling answer only as its notes lie, in any octave', () => {
+    const down = questionAnswer({ notes: ['G', 'F', 'E'], falling: true })
+    expect(isRight(keys(67, 65, 64), down)).toBe(true)
+    expect(isRight(keys(52, 53, 55), down)).toBe(true)
+    expect(isRight(keys(67, 77, 76), down)).toBe(false)
   })
 })
 
@@ -149,5 +200,21 @@ describe('questionKeys', () => {
     expect(questionKeys({ id: 'q', chosen: [], stage: 'answer' }, E_MINOR).keys).toEqual([
       64, 67, 71,
     ])
+  })
+
+  it('judges an answer in order key by key, so a note in the wrong place is marked wrong', () => {
+    const inversion = questionAnswer({ notes: ['E', 'G', 'C'], rising: true })
+    const wrong = questionKeys({ id: 'q', chosen: keys(60, 64, 67), stage: 'wrong' }, inversion)
+    expect(wrong.wrong).toEqual(new Set([60]))
+    expect([...wrong.marks.keys()]).toEqual([64, 67])
+    const octave = questionKeys({ id: 'q', chosen: keys(52, 55, 60), stage: 'right' }, inversion)
+    expect(octave.wrong).toEqual(new Set())
+    expect(octave.marks.get(midi(60))).toEqual({ tone: 'scale', label: 'C' })
+  })
+
+  it('marks a slash chord’s lowest key wrong when it is not the bass', () => {
+    const overB = questionAnswer({ chord: 'G/B' })
+    const judged = questionKeys({ id: 'q', chosen: keys(55, 59, 62), stage: 'wrong' }, overB)
+    expect(judged.wrong).toEqual(new Set([55]))
   })
 })

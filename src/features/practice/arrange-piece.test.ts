@@ -1,6 +1,6 @@
-import { BUILT_IN_PATTERNS } from '@/entities/pattern'
+import { BUILT_IN_PATTERNS, followsInversion } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
-import { hasMethodCodes, PIECES, pieceById, pieceKey } from '@/entities/piece'
+import { hasChartPlan, PIECES, pieceById, pieceFit, pieceKey } from '@/entities/piece'
 import { note } from '@/shared/lib/music'
 import { arrangePiece, defaultPattern, ownChoice } from './arrange-piece'
 
@@ -10,6 +10,20 @@ const piece = (id: string) => {
   return found
 }
 const bz5 = piece('bz5')
+
+/** The right hand's keys under a pattern with every chord in an inversion. */
+const rightHandIn = (
+  played: ReturnType<typeof piece>,
+  pattern: ReturnType<typeof ownChoice>['pattern'],
+  inversion: 0 | 1,
+) =>
+  arrangePiece(
+    played,
+    { ...ownChoice(played), pattern, inversion, nearest: false },
+    BUILT_IN_PATTERNS,
+  )
+    .notes.filter((n) => n.hand === 'rh')
+    .map((n) => n.midi)
 
 describe('ownChoice', () => {
   it('plays a piece as written', () => {
@@ -35,8 +49,38 @@ describe('arrangePiece', () => {
     ).toBe('A')
   })
 
+  it('plays each section with its own pattern, as written, unless the learner picks one for all', () => {
+    if (!('sections' in bz5)) throw new Error('bz5 is a chart')
+    const [first, ...rest] = bz5.sections
+    if (!first) throw new Error('a section')
+    const sectioned = { ...bz5, sections: [{ ...first, pattern: 'M3' as const }, ...rest] }
+    expect(defaultPattern(sectioned)).toBe('chart')
+    const played = arrangePiece(sectioned, ownChoice(sectioned), BUILT_IN_PATTERNS)
+    const bars = new Set(played.bars.flatMap((bar, index) => (bar.section === 0 ? [index] : [])))
+    const patternsIn = (inFirst: boolean) =>
+      new Set(played.chords.filter((c) => bars.has(c.bar) === inFirst).map((c) => c.pattern))
+    expect([...patternsIn(true)]).toEqual(['M3'])
+    if (rest.length > 0) expect(patternsIn(false).has('M3')).toBe(false)
+    const forAll = arrangePiece(
+      sectioned,
+      { ...ownChoice(sectioned), pattern: 'r1' },
+      BUILT_IN_PATTERNS,
+    )
+    expect(new Set(forAll.chords.map((c) => c.pattern))).toEqual(new Set(['r1']))
+  })
+
+  it('plays the repeats taken in the Player, and the bars as written elsewhere', () => {
+    if (!('sections' in bz5)) throw new Error('bz5 is a chart')
+    const { melody: _tune, hands: _hands, ...rest } = bz5
+    const plain = { ...rest, sections: [{ kind: 'verse' as const, lines: ['|: G C :| D'] }] }
+    const written = arrangePiece(plain, ownChoice(plain), BUILT_IN_PATTERNS)
+    expect(written.chords.map((c) => c.symbol)).toEqual(['G', 'C', 'D'])
+    const played = arrangePiece(plain, ownChoice(plain), BUILT_IN_PATTERNS, { unfold: true })
+    expect(played.chords.map((c) => c.symbol)).toEqual(['G', 'C', 'G', 'C', 'D'])
+  })
+
   it('follows the chart’s own methods when asked', () => {
-    const withCodes = PIECES.find((p) => hasMethodCodes(p))
+    const withCodes = PIECES.find((p) => hasChartPlan(p))
     if (!withCodes) throw new Error('no piece names its methods')
     expect(defaultPattern(withCodes)).toBe('chart')
     expect(ownChoice(withCodes).pattern).toBe('chart')
@@ -45,6 +89,27 @@ describe('arrangePiece', () => {
     )
     expect(patterns.size).toBeGreaterThan(0)
     expect([...patterns].every((id) => typeof id === 'string')).toBe(true)
+  })
+
+  it('moves a tune’s figuration between a line’s ends with the inversion chosen', () => {
+    const lamb = piece('mary-lamb')
+    expect(rightHandIn(lamb, 'r6', 1)).not.toEqual(rightHandIn(lamb, 'r6', 0))
+  })
+
+  it('From the chart, follows an inversion exactly where a pattern its chart plays does', () => {
+    const follows = (id: string) =>
+      followsInversion(BUILT_IN_PATTERNS, { pattern: 'chart', rh: null }, pieceFit(piece(id)).chart)
+    const moves = (id: string) =>
+      JSON.stringify(rightHandIn(piece(id), 'chart', 1)) !==
+      JSON.stringify(rightHandIn(piece(id), 'chart', 0))
+    for (const id of ['zemlya', 'legenda', 'nuzhdayus', 'letom']) {
+      expect(follows(id), id).toBe(false)
+      expect(moves(id), id).toBe(false)
+    }
+    for (const id of ['buri', 'milost']) {
+      expect(follows(id), id).toBe(true)
+      expect(moves(id), id).toBe(true)
+    }
   })
 
   it('falls back to r4 for a melody pattern on a piece without a melody', () => {

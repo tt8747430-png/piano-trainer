@@ -23,9 +23,9 @@ const names = (root: SpelledNote, quality: ChordQuality) =>
   spellChord(root, quality).map((tone) => noteName(tone.note))
 
 describe('chord qualities', () => {
-  it('are 38, in five families', () => {
-    expect(CHORD_QUALITIES).toHaveLength(38)
-    expect(CHORD_FAMILIES.map((family) => qualitiesIn(family).length)).toEqual([6, 6, 9, 8, 9])
+  it('are 41, in five families', () => {
+    expect(CHORD_QUALITIES).toHaveLength(41)
+    expect(CHORD_FAMILIES.map((family) => qualitiesIn(family).length)).toEqual([6, 7, 9, 10, 9])
     expect(qualitiesIn('sev').every((quality) => chordFamily(quality) === 'sev')).toBe(true)
   })
 
@@ -141,6 +141,19 @@ describe('qualityRootSpelling', () => {
   it('names a chord of a quality from the root that reads best', () => {
     expect(qualityRootSpelling(pitchClass(1), 'min')).toEqual(note('C', 1))
     expect(qualityRootSpelling(pitchClass(1), 'maj7')).toEqual(note('D', -1))
+  })
+
+  it('names a chord from the root that spells it with no double accidental and fewer accidentals', () => {
+    expect(qualityRootSpelling(pitchClass(3), 'o7')).toEqual(note('D', 1))
+    expect(qualityRootSpelling(pitchClass(3), 'dim')).toEqual(note('D', 1))
+    expect(qualityRootSpelling(pitchClass(10), 'o7')).toEqual(note('A', 1))
+    expect(qualityRootSpelling(pitchClass(6), 'aug')).toEqual(note('G', -1))
+  })
+
+  it('keeps its lean where both roots spell the chord as plainly', () => {
+    expect(qualityRootSpelling(pitchClass(3), 'min')).toEqual(note('E', -1))
+    expect(qualityRootSpelling(pitchClass(6), 'maj')).toEqual(note('F', 1))
+    expect(qualityRootSpelling(pitchClass(10), 'min')).toEqual(note('B', -1))
   })
 })
 

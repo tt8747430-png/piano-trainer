@@ -16,6 +16,7 @@ export interface BarRange {
 export interface Clip {
   readonly bars: readonly DraftBar[]
   readonly melody: readonly DraftNote[]
+  readonly voices: readonly (readonly DraftNote[])[]
   readonly hands: Readonly<Record<HandId, readonly DraftNote[]>>
 }
 
@@ -101,6 +102,7 @@ export function copyBars(draft: Draft, { from, to }: BarRange): Clip {
   return {
     bars: bars.map((placed) => placed.bar),
     melody: inside(draft.melody),
+    voices: draft.voices.map(inside),
     hands: { rh: inside(draft.hands.rh), lh: inside(draft.hands.lh) },
   }
 }
@@ -117,6 +119,7 @@ export function pasteBars(draft: Draft, after: number, clip: Clip): Draft {
   return {
     ...inserted,
     melody: order([...inserted.melody, ...moved(clip.melody)]),
+    voices: inserted.voices.map((voice, i) => order([...voice, ...moved(clip.voices[i] ?? [])])),
     hands: {
       rh: order([...inserted.hands.rh, ...moved(clip.hands.rh)]),
       lh: order([...inserted.hands.lh, ...moved(clip.hands.lh)]),

@@ -10,8 +10,8 @@ export default definePiece({
   tempo: 76,
   pattern: 'M4',
   note: {
-    en: 'The final exam song. Plan your own introduction, ways and dynamics for 2 verses, then play it with a singer.',
-    ru: 'Песня выпускного экзамена. Спланируйте своё вступление, способы и динамику на 2 куплета, затем сыграйте её с певцом.',
+    en: 'The final exam song. Make your own plan for two verses: the introduction, the ways and the dynamics. Then play it with a singer.',
+    ru: 'Песня выпускного экзамена. Составьте свой план на два куплета: вступление, способы и динамику. Затем сыграйте её вместе с певцом.',
   },
   sections: [
     { kind: 'verse', n: 1, lines: ['Am Dm G C', 'F Dm E E', 'Am Dm G C', 'F Dm E E'] },

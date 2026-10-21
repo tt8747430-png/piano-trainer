@@ -6,7 +6,6 @@ import {
   latestEvidence,
   rate,
   ratingOf,
-  skillsToCheck,
   stepCompletedBy,
   stillToKnow,
 } from './mastery'
@@ -110,17 +109,10 @@ describe('ratingOf', () => {
   })
 })
 
-describe('skillsToCheck and knownCount', () => {
+describe('knownCount', () => {
   const right = (n: number) =>
     Array.from({ length: n }, () => ({ correct: true, at: '2026-09-01' }))
   const answers = { 'chord:maj': right(5), 'chord:min': [{ correct: false, at: '2026-09-01' }] }
-
-  it('keeps gaps and unknowns in the order given', () => {
-    expect(skillsToCheck(['chord:maj', 'chord:min', 'chord:dim'], answers)).toEqual([
-      'chord:min',
-      'chord:dim',
-    ])
-  })
 
   it('counts the known ones', () => {
     expect(knownCount(['chord:maj', 'chord:min', 'chord:dim'], answers)).toBe(1)

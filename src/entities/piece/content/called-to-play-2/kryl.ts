@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 80,
   pattern: 'M5',
   note: {
-    en: 'Lesson 8 asks for way 5 throughout, each chord joined to the next by its nearest notes, then a plan of your own. The chorus is written out twice: its E7 leads back into it.',
-    ru: 'Урок 8 просит играть всё 5-м видом, соединяя аккорды через ближайшие звуки, а затем составить свой план. Припев выписан дважды: E7 ведёт к его повтору.',
+    en: 'Lesson 8 asks you to play way 5 all through, joining each chord to the next by its nearest notes. After that, make a plan of your own. The chorus is written out twice, because its E7 leads back into it.',
+    ru: 'Урок 8 просит сыграть всю песню 5-м видом, соединяя каждый аккорд со следующим через ближайшие звуки. После этого составьте свой план. Припев выписан дважды: его E7 ведёт к повтору.',
   },
   sections: [
     { kind: 'verse', lines: ['Em:5 C:5', 'D:5 B:5.1', 'Em:5 Am:5', 'B:5.1 Em:5'] },

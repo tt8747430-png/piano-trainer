@@ -1,7 +1,7 @@
 import { useRef, type RefObject } from 'react'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
+import { StaffNames, xAtTick, type ScoreLayout } from '@/shared/ui/score'
 import { BarTargets } from './BarTargets'
 import { LoopBand } from './LoopBand'
 import { SheetCursor } from './SheetCursor'
@@ -19,7 +19,12 @@ export function SheetOverlay({
   loop,
   onJump,
   onLoopChange,
+  chordNames = true,
+  firstBar = 0,
 }: {
+  chordNames?: boolean
+  /** The piece's bar the layout's first measure is: a line of a score laid out in lines. */
+  firstBar?: number
   layout: ScoreLayout
   scroller: RefObject<HTMLElement | null>
   performance: Performance
@@ -32,7 +37,10 @@ export function SheetOverlay({
 }) {
   const cursor = useRef<HTMLDivElement>(null)
   const group = performance.beatGroups[current]
-  const x = group ? xAtTick(layout, group.tick) : null
+  // On a line, the cursor only where the beat group is.
+  const here =
+    group !== undefined && group.bar >= firstBar && group.bar < firstBar + layout.measures.length
+  const x = group && here ? xAtTick(layout, group.tick) : null
   useFollow(scroller, cursor, x)
   return (
     <>
@@ -41,8 +49,13 @@ export function SheetOverlay({
         performance={performance}
         headings={headings}
         positions={positions}
+        chordNames={chordNames}
+        firstBar={firstBar}
       />
-      {loop ? <LoopBand layout={layout} loop={loop} onChange={onLoopChange} /> : null}
+      <StaffNames layout={layout} />
+      {loop ? (
+        <LoopBand layout={layout} loop={loop} onChange={onLoopChange} firstBar={firstBar} />
+      ) : null}
       {x === null ? null : <SheetCursor ref={cursor} x={x} layout={layout} />}
       <BarTargets
         layout={layout}
@@ -50,6 +63,7 @@ export function SheetOverlay({
         positions={positions}
         current={group?.bar}
         onJump={onJump}
+        firstBar={firstBar}
       />
     </>
   )

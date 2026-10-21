@@ -40,6 +40,13 @@ export function deleteChord(draft: Draft, index: number, at: Tick): Draft {
   return changed ? next : draft
 }
 
+/** The key's seventh chords, one on each degree (a minor key's V7 from its harmonic minor). */
+export function keySevenths(key: Key): Chord[] {
+  return [0, 1, 2, 3, 4, 5, 6].map((degree) =>
+    scaleChordAt(key.tonic, key.minor && degree === 4 ? 'harmonic' : keyScale(key), degree, 4),
+  )
+}
+
 /** The key's chords to tap: its seven triads, then its V7 (a minor key's from its harmonic minor). */
 export function keyChords(key: Key): Chord[] {
   const triads = [0, 1, 2, 3, 4, 5, 6].map((degree) =>

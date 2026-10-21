@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 92,
   pattern: 'r5',
   note: {
-    en: 'One of lesson 9’s three songs: the right hand plays the tune from the notes, the left a way of its own over the chords. The chorus repeats, written out with both endings.',
-    ru: 'Одна из трёх песен урока 9: правая рука играет мелодию по нотам, левая — один из своих видов по аккордам. Припев повторяется и выписан с обеими вольтами.',
+    en: 'One of the three songs of lesson 9. The right hand plays the tune from the notes, and the left hand plays one of its ways over the chords. The chorus repeats and is written out with both endings.',
+    ru: 'Одна из трёх песен урока 9. Правая рука играет мелодию по нотам, а левая — один из своих видов по аккордам. Припев повторяется и выписан с обеими вольтами.',
   },
   sections: [
     { kind: 'verse', lines: ['Em@2 Em B B Em'] },

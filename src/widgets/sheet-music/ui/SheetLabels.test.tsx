@@ -1,0 +1,39 @@
+import { render, screen } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+import { TWO_BARS } from '@/features/practice/testing/performances'
+import type { ScoreLayout } from '@/shared/ui/score'
+import { SheetLabels } from './SheetLabels'
+
+/** Two narrow bars, 60px each. */
+const layout: ScoreLayout = {
+  width: 120,
+  height: 210,
+  staffTop: 40,
+  staffBottom: 170,
+  staves: { treble: { top: 40, bottom: 80 }, bass: { top: 130, bottom: 170 } },
+  measures: [
+    { startTick: 0, ticks: 96, x: 0, width: 60, notes: 30 },
+    { startTick: 96, ticks: 96, x: 60, width: 60, notes: 70 },
+  ],
+  onsets: [
+    { tick: 0, x: 30 },
+    { tick: 96, x: 70 },
+  ],
+}
+
+describe('SheetLabels', () => {
+  it('keeps a bar’s number and section name to its own bar, cut short where it is longer', () => {
+    render(
+      <SheetLabels
+        layout={layout}
+        performance={TWO_BARS}
+        headings={['A long section name']}
+        positions={false}
+      />,
+    )
+    const label = screen.getByText('1 · A long section name')
+    expect(label).toHaveClass('truncate')
+    // The bar's width less the number's inset on either side: clear of the next bar's number.
+    expect(label).toHaveStyle({ left: '4px', maxWidth: '52px' })
+  })
+})

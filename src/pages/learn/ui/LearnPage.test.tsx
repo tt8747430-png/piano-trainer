@@ -31,6 +31,24 @@ describe('Learn', () => {
     ).toHaveAttribute('href', `/courses/gorshkov/${second?.id}`)
   })
 
+  it('continues onto a guided song’s page, where it is marked learned', async () => {
+    const { progressStore } = await renderApp('/')
+    await screen.findByRole('heading', { level: 1, name: 'Learn' })
+    const course = courseById('introduction-to-the-piano')!
+    act(() =>
+      progressStore.setState({
+        learned: Object.fromEntries(
+          course.lessons.map((lesson) => [`course:${course.id}/${lesson.id}`, at]),
+        ),
+      }),
+    )
+    const song = course.songs[0]
+    expect(await screen.findByRole('link', { name: /^Continue: / })).toHaveAttribute(
+      'href',
+      `/songs/${song}`,
+    )
+  })
+
   it('lists the pieces practised last, latest first, and none before the first', async () => {
     const { progressStore } = await renderApp('/')
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
@@ -67,6 +85,28 @@ describe('Learn', () => {
       expect(first).toHaveAttribute('aria-current', 'step')
     })
 
+    it('count each journey’s steps on its tab, its lessons and its checks, and say so', async () => {
+      await renderApp('/')
+      const tabs = await screen.findByRole('navigation', { name: 'Journeys' })
+      const journey = JOURNEYS[0]!
+      const steps = journey.chapters.flatMap((chapter) => chapter.steps).length
+      expect(within(tabs).getByRole('link', { name: /^Foundations/ })).toHaveTextContent(
+        `0/${steps} steps`,
+      )
+    })
+
+    it('say a learned node is learned', async () => {
+      const { progressStore } = await renderApp('/')
+      await screen.findByRole('heading', { level: 2, name: 'Foundations' })
+      act(() => progressStore.setState({ learned: { 'lesson:finding-home': at } }))
+      expect(
+        screen.getByRole('link', { name: /^Finding your way on the keys.*, learned$/ }),
+      ).toHaveAttribute('href', '/lessons/finding-home')
+      expect(
+        screen.getByRole('link', { name: /^The staff and the treble clef/ }),
+      ).not.toHaveAccessibleName(/learned/)
+    })
+
     it('switch journeys from their tabs, and fold a chapter under its heading', async () => {
       const user = userEvent.setup()
       const { router, settingsStore } = await renderApp('/')
@@ -80,7 +120,10 @@ describe('Learn', () => {
         'page',
       )
       const chapter = JOURNEYS[1]!.chapters[0]!
-      const heading = screen.getByRole('button', { name: `Chapter 1: ${chapter.title.en}` })
+      // Its visible words name it, its count of steps learned with them.
+      const heading = screen.getByRole('button', {
+        name: new RegExp(`^${chapter.title.en}\\s*0/${chapter.steps.length}$`),
+      })
       expect(heading).toHaveAttribute('aria-expanded', 'true')
       await user.click(heading)
       expect(heading).toHaveAttribute('aria-expanded', 'false')
@@ -110,6 +153,19 @@ describe('Learn', () => {
         .filter((link) => /^\/courses\/[^/]+$/.test(link.getAttribute('href') ?? ''))
       expect(all).toHaveLength(COURSES.length)
       expect(screen.getByRole('region', { name: 'Method books' })).toBeInTheDocument()
+    })
+
+    it('stay up when Learn is opened again from the navigation', async () => {
+      const user = userEvent.setup()
+      const { router, viewsStore } = await renderApp('/?view=courses')
+      await screen.findByRole('region', { name: 'Method books' })
+      expect(viewsStore.getState().views['/']).toEqual({ view: 'courses' })
+      const nav = screen.getAllByRole('navigation', { name: 'Main navigation' })[0]
+      if (!nav) throw new Error('no navigation')
+      await user.click(within(nav).getByRole('link', { name: 'Learn' }))
+      expect(router.state.location.search).toEqual({ view: 'courses' })
+      expect(viewsStore.getState().views['/']).toEqual({ view: 'courses' })
+      expect(await screen.findByRole('region', { name: 'Method books' })).toBeInTheDocument()
     })
 
     it('ring the course Continue is in', async () => {

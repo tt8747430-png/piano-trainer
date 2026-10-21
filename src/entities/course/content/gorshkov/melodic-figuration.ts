@@ -8,18 +8,19 @@ const melodicFiguration: Lesson = {
   id: 'melodic-figuration',
   title: { en: 'Melodic figuration', ru: 'Мелодическая фигурация' },
   summary: {
-    en: 'Weave a line into the accompaniment that answers the melody.',
-    ru: 'Ведите в аккомпанементе линию, которая отвечает мелодии.',
+    en: 'Weave a line into the accompaniment that moves through the chords and answers the melody.',
+    ru: 'Вести в аккомпанементе линию, которая проходит через аккорды и отвечает мелодии.',
   },
   sections: [
     {
-      heading: { en: 'A line, not a chord', ru: 'Линия, а не аккорд' },
+      heading: { en: 'A line through the chords', ru: 'Линия через аккорды' },
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'Melodic figuration', ru: 'Мелодическая фигурация' },
           text: {
-            en: 'Harmonic figuration moves inside one chord. Melodic figuration is a line with a direction, joining several chords.',
-            ru: 'Гармоническая фигурация движется внутри одного аккорда. Мелодическая — это линия с направлением, которая связывает несколько аккордов.',
+            en: 'is a line that moves through several chords, where harmonic figuration stays inside one. Its notes:',
+            ru: '— линия, которая проходит через несколько аккордов, тогда как гармоническая остаётся внутри одного. Её звуки:',
           },
         },
         {
@@ -32,11 +33,11 @@ const melodicFiguration: Lesson = {
         {
           kind: 'steps',
           steps: [
-            { en: 'Notes of the chord.', ru: 'Звуки текущего аккорда.' },
+            { en: 'The chord’s own notes.', ru: 'Звуки текущего аккорда.' },
             { en: 'Passing and neighbour notes.', ru: 'Проходящие и вспомогательные звуки.' },
             {
-              en: 'The next chord’s notes, where it is going.',
-              ru: 'Звуки следующего аккорда — точка назначения.',
+              en: 'The next chord’s notes, where the line is going.',
+              ru: 'Звуки следующего аккорда, к которым идёт линия.',
             },
           ],
         },
@@ -48,7 +49,7 @@ const melodicFiguration: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The 3rd and 7th say most about a chord, so a line rests on them. The 5th and 9th help.',
+            en: 'The 3rd and 7th say the most about a chord, so the line rests on them. The 5th and 9th help.',
             ru: 'Терция и септима больше всего говорят об аккорде, поэтому на них опирается линия. Помогают квинта и нона.',
           },
         },
@@ -56,8 +57,8 @@ const melodicFiguration: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Above, B♭ and F anchor Gm7, a 5th apart. Passing notes lead to the goal.',
-            ru: 'Выше си-бемоль и фа — опоры Gm7, на квинту друг от друга. Проходящие звуки ведут к цели.',
+            en: 'In the line above, B♭ and F, Gm7’s 3rd and 7th, are the anchors.',
+            ru: 'В линии выше опоры — си-бемоль и фа, терция и септима Gm7.',
           },
         },
       ],
@@ -69,15 +70,15 @@ const melodicFiguration: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'It moves a lot: leave room, play the harmony.',
-              ru: 'Мелодия активно движется: оставьте место, играйте гармонию.',
+              en: 'If the melody is busy, play the harmony.',
+              ru: 'Мелодия активно движется: оставьте ей место и играйте гармонию.',
             },
             {
-              en: 'It stops: answer with a short figure.',
+              en: 'If it stops, answer with a short figure.',
               ru: 'Мелодия остановилась: ответьте короткой фигурой.',
             },
             {
-              en: 'It holds a long note: draw a longer line.',
+              en: 'If it holds a long note, draw a longer line.',
               ru: 'Мелодия держит долгую ноту: проведите длинную линию.',
             },
           ],
@@ -85,14 +86,14 @@ const melodicFiguration: Lesson = {
         { kind: 'chords', symbols: ['Cm7', 'Dsus4', 'D', 'Gm9', 'Gm/F', 'E♭Maj7'] },
         {
           kind: 'link',
-          title: { en: '«Опять метель» in the Player', ru: '«Опять метель» в плеере' },
+          title: { en: '“Опять метель” in the Player', ru: '«Опять метель» в плеере' },
           target: { opens: 'piece', piece: 'metel' },
         },
         {
           kind: 'note',
           text: {
-            en: 'A pause is a chance, not a duty.',
-            ru: 'Пауза — возможность, а не обязанность.',
+            en: 'A pause allows a figure but never demands one.',
+            ru: 'Пауза позволяет вставить фигуру, но не требует её.',
           },
         },
       ],
@@ -103,8 +104,8 @@ const melodicFiguration: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Keep the chord on the strong beats, and lead into the next bar on beats 3 and 4.',
-            ru: 'Держите аккорд на сильных долях, а на третьей и четвёртой дайте короткий выход в следующий такт.',
+            en: 'Hold the chord through beats 1 and 2. On beats 3 and 4, run into the next bar.',
+            ru: 'Держите аккорд на первой и второй долях. На третьей и четвёртой сделайте короткий пробег в следующий такт.',
           },
         },
         {
@@ -117,7 +118,7 @@ const melodicFiguration: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'Run down a 7th or a 9th chord from its top note.',
+            en: 'Run down the notes of a 7th or 9th chord from its top note.',
             ru: 'Спуститесь по звукам септ- или нонаккорда от верхнего звука.',
           },
         },
@@ -129,8 +130,8 @@ const melodicFiguration: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'One motif can run through a progression. Over A minor’s i–VI–III–VII, C and G are Am7’s 3rd and 7th, then other degrees of each chord.',
-            ru: 'Один мотив может пронизывать всю последовательность. В i–VI–III–VII ля минора до и соль — терция и септима Am7, затем другие ступени каждого аккорда.',
+            en: 'One motif can repeat over a whole progression. In A minor’s i VI III VII, C and G start as Am7’s 3rd and 7th.',
+            ru: 'Один мотив может повторяться на всей последовательности. В i–VI–III–VII ля минора до и соль сначала терция и септима Am7.',
           },
         },
         {
@@ -162,11 +163,11 @@ const melodicFiguration: Lesson = {
             },
             {
               en: 'Anchor on the 3rd or the 7th.',
-              ru: 'Выберите опорный звук: прежде всего 3 или 7.',
+              ru: 'Выберите опорный звук: прежде всего терцию или септиму.',
             },
             { en: 'Aim the line at a goal.', ru: 'Определите направление и точку назначения.' },
             {
-              en: 'Join them with passing notes.',
+              en: 'Join the anchors with passing notes.',
               ru: 'Соедините опоры проходящими звуками.',
             },
             {

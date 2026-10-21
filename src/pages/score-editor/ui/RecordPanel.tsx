@@ -1,4 +1,3 @@
-import { CircleDot } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { selectRecorder, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { selectRoomLeft, useTakes } from '@/entities/take'
@@ -6,12 +5,12 @@ import { isMidiConnected, MidiControl, useMidiConnection } from '@/features/conn
 import { barAt } from '@/features/score-editor'
 import { setRecorderClick, setRecorderTune } from '@/features/set-preference'
 import { Fact, SwitchRow } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /**
  * What a take is recorded to (the song's tempo and meter, from the caret's bar), the click, the tune
- * under it where the song has one, and Record: with a MIDI keyboard connected and room in the takes.
+ * under it where the song has one, and why Record waits: no MIDI keyboard connected, nothing heard, or
+ * no room in the takes (Record itself is the sheet's footer, `RecordButton`).
  */
 export function RecordPanel() {
   const { t } = useTranslation('editor')
@@ -51,10 +50,6 @@ export function RecordPanel() {
         <p role="status">{t('recorder.nothing')}</p>
       ) : null}
       {room === 0 ? <p>{t('recorder.full')}</p> : null}
-      <Button size="lg" disabled={!connected || room === 0} onClick={takes.record}>
-        <CircleDot data-icon="inline-start" />
-        {t('recorder.record')}
-      </Button>
     </section>
   )
 }

@@ -7,8 +7,8 @@ const passingChords: Lesson = {
   id: 'passing-chords',
   title: { en: 'Passing chords', ru: 'Проходящие аккорды' },
   summary: {
-    en: 'Lead into any chord with a dominant, diminished or chromatic passing chord.',
-    ru: 'Вести в любой аккорд через доминанту, уменьшённый или хроматический аккорд.',
+    en: 'Lead into a chord with a short chord just before it: its dominant 7th, a diminished 7th, or a chromatic slide.',
+    ru: 'Вести в аккорд коротким аккордом прямо перед ним: его доминантсептаккордом, уменьшённым септаккордом или хроматическим сползанием.',
   },
   sections: [
     {
@@ -21,16 +21,16 @@ const passingChords: Lesson = {
           kind: 'text',
           lead: { en: 'A passing chord', ru: 'Проходящий аккорд' },
           text: {
-            en: 'leads into the next chord. The simplest is that chord’s dominant 7th, a 5th above it.',
-            ru: 'ведёт в следующий аккорд. Самый простой — доминантсептаккорд к нему, на квинту выше.',
+            en: 'is a short chord that leads into the next one. The simplest is the next chord’s dominant 7th, a 5th above it.',
+            ru: '— это короткий аккорд, который ведёт в следующий. Самый простой — доминантсептаккорд к нему, на квинту выше.',
           },
         },
         { kind: 'chords', symbols: ['C', 'C7', 'F'] },
         {
           kind: 'note',
           text: {
-            en: 'C7’s E rises to F, its B♭ falls to A.',
-            ru: 'Ми в C7 поднимается в фа, а си-бемоль спускается в ля.',
+            en: 'C7’s E rises to F. Its B♭ falls to A.',
+            ru: 'Ми в C7 поднимается в фа. Си-бемоль спускается в ля.',
           },
         },
         {
@@ -47,8 +47,8 @@ const passingChords: Lesson = {
           kind: 'text',
           lead: { en: 'A secondary dominant', ru: 'Побочная доминанта' },
           text: {
-            en: 'is the V7 of a chord other than I. A7 leads into Dm, its C♯ rising to D.',
-            ru: '— это V7 к аккорду тональности, кроме I. A7 ведёт в Dm: его до-диез поднимается в ре.',
+            en: 'is the V7 of a chord other than I. A7 is the V7 of Dm. Its C♯ rises to D.',
+            ru: '— это V7 к аккорду тональности, кроме I. A7 — это V7 к Dm. Его до-диез поднимается в ре.',
           },
         },
         { kind: 'chords', symbols: ['C', 'A7', 'Dm'] },
@@ -66,8 +66,8 @@ const passingChords: Lesson = {
           kind: 'text',
           lead: { en: 'A diminished 7th', ru: 'Уменьшённый септаккорд' },
           text: {
-            en: 'is four notes a minor 3rd apart. A half step below the next chord, it climbs into it: F♯°7 into G.',
-            ru: '— четыре звука через малую терцию. На полутон ниже следующего аккорда он поднимается в него: F♯°7 в G.',
+            en: 'is four notes, each a minor 3rd apart. Build it a half step below the next chord, and it climbs into it: F♯°7 into G.',
+            ru: '— это четыре звука через малую терцию. Постройте его на полутон ниже следующего аккорда, и он поднимется в него: F♯°7 в G.',
           },
         },
         { kind: 'chords', symbols: ['F', 'F#°7', 'G'] },
@@ -85,8 +85,8 @@ const passingChords: Lesson = {
           kind: 'text',
           lead: { en: 'A chromatic approach', ru: 'Хроматический подход' },
           text: {
-            en: 'slides in by half steps. From C to Am the bass walks down, with a dominant 7th on each step between.',
-            ru: 'ведёт в аккорд по полутонам. Из C в Am бас спускается, и на каждой ступени между ними — доминантсептаккорд.',
+            en: 'slides into a chord by half steps. From C to Am the bass walks down B, B♭, A, with a dominant 7th on each step between.',
+            ru: 'ведёт в аккорд по полутонам. Из C в Am бас спускается си, си-бемоль, ля, и на каждом шаге между ними — доминантсептаккорд.',
           },
         },
         { kind: 'chords', symbols: ['C', 'B7', 'B♭7', 'Am'] },

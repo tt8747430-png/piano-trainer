@@ -81,6 +81,8 @@ export function JourneyNode({
       {detail ? (
         <span className="-mt-1 text-xs text-muted-foreground tabular-nums">{detail}</span>
       ) : null}
+      {/* The check says it to the eye alone. */}
+      {learned ? <span className="sr-only">, {t('learned')}</span> : null}
     </StepLink>
   )
 }

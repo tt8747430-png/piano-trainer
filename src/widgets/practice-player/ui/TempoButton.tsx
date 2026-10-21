@@ -2,13 +2,19 @@ import { Gauge } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { PracticeMode } from '@/features/practice'
+import { formatPercent, useLocale } from '@/shared/i18n'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import { Listbox } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { Switch } from '@/shared/ui/primitives/switch'
+import { useDockSide } from '../model/dock-side'
 import { percentOf, SPEEDS, speedTempo } from '../model/speeds'
+
+/** The transport's round look: a pill along the bar, a circle saying the value upright. */
+const TRIGGER =
+  'h-12 rounded-full px-3 landscape-phone:size-10 landscape-phone:px-0 landscape-phone:text-xs'
 
 /**
  * The tempo button and its popover (spec §2.7): Wait mode, or a speed of the piece's tempo, or any
@@ -36,22 +42,36 @@ export function TempoButton({
   onSpeedTraining: (on: boolean) => void
 }) {
   const { t } = useTranslation('player')
+  const locale = useLocale()
   const [open, setOpen] = useState(false)
+  const side = useDockSide()
   const value =
-    mode === 'wait'
-      ? t('pace.waitShort')
-      : t('pace.percent', { percent: percentOf(shownTempo, ownTempo) })
+    mode === 'wait' ? t('pace.waitShort') : formatPercent(locale, percentOf(shownTempo, ownTempo))
   const choose = (act: () => void) => {
     act()
     setOpen(false)
   }
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger render={<Button variant="soft" aria-label={t('pace.of', { value })} />}>
-        <Gauge data-icon="inline-start" />
+      <PopoverTrigger
+        render={
+          <Button
+            variant="ghost"
+            aria-label={t('pace.of', { value })}
+            title={t('tempo')}
+            className={TRIGGER}
+          />
+        }
+      >
+        <Gauge data-icon="inline-start" className="landscape-phone:hidden" />
         <span className="tabular-nums">{value}</span>
       </PopoverTrigger>
-      <PopoverContent aria-label={t('tempo')} align="start" className="w-80 gap-4 p-4">
+      <PopoverContent
+        aria-label={t('tempo')}
+        side={side}
+        align="start"
+        className="max-h-(--available-height) w-80 gap-4 overflow-y-auto overscroll-contain p-4"
+      >
         <Listbox
           label={t('tempo')}
           className="gap-4"
@@ -75,7 +95,10 @@ export function TempoButton({
                 return {
                   key: String(share),
                   selected: mode === 'listen' && tempo === speed,
-                  content: share === 1 ? t('pace.own') : t('pace.speed', { percent: share * 100 }),
+                  content:
+                    share === 1
+                      ? t('pace.own')
+                      : t('pace.speed', { percent: formatPercent(locale, share * 100) }),
                   onChoose: () => choose(() => onTempo(speed)),
                 }
               }),
@@ -88,7 +111,8 @@ export function TempoButton({
           step={1}
           value={tempo}
           onValueChange={onTempo}
-          className="flex flex-col gap-3"
+          // Room under the track for the thumb's 44px reach, which the popover's edge would cut.
+          className="flex flex-col gap-3 pb-2.5"
         >
           <div className="flex justify-between">
             <SliderLabel>{t('tempo')}</SliderLabel>

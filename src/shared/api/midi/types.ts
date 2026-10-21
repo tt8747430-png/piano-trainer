@@ -19,10 +19,10 @@ export interface MidiChoice {
   readonly reversedPedal: boolean
 }
 
-/** Every keyboard heard as it plays. */
 /** A keyboard's name as the app knows it, at most this long: what a setting can keep. */
 export const DEVICE_NAME_MAX = 100
 
+/** Every keyboard heard as it plays. */
 export const ANY_KEYBOARD: MidiChoice = { device: null, octaveShift: 0, reversedPedal: false }
 
 /**
@@ -43,9 +43,11 @@ export interface PedalEvent {
   readonly time: number
 }
 
-/** A message the app reads: a key, or a pedal. */
+/** A message the app reads: a key, a pedal, or every key let go (All Sound Off, All Notes Off). */
 export type MidiMessage =
-  ({ readonly kind: 'note' } & NoteEvent) | ({ readonly kind: 'pedal' } & PedalEvent)
+  | ({ readonly kind: 'note' } & NoteEvent)
+  | ({ readonly kind: 'pedal' } & PedalEvent)
+  | { readonly kind: 'all-off'; readonly time: number }
 
 /**
  * The MIDI keyboards: the keys and pedals played on them, and their speakers. Built once in

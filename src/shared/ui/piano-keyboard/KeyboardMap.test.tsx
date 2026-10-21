@@ -37,4 +37,20 @@ describe('the keyboard map', () => {
     rerender(<PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} keySize="piano" />)
     expect(screen.queryByRole('slider')).not.toBeInTheDocument()
   })
+
+  it('keeps a usable width on a short rail, the rail’s buttons scrolling before it shrinks', () => {
+    render(
+      <PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}}>
+        <button type="button">Zoom in</button>
+      </PianoKeyboard>,
+    )
+    // jsdom lays nothing out: the classes are the layout. The map's place never shrinks under 64px;
+    // the buttons' row gives way first, scrolling sideways.
+    const map = screen.getByRole('slider', { name: 'Keys in view' })
+    expect(map.parentElement?.parentElement).toHaveClass('min-w-16')
+    expect(screen.getByRole('button', { name: 'Zoom in' }).parentElement).toHaveClass(
+      'min-w-0',
+      'overflow-x-auto',
+    )
+  })
 })

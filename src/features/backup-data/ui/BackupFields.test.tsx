@@ -5,6 +5,10 @@ import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { createMemoryStorage, safeLocalStorage } from '@/shared/lib'
 import { BackupFields } from './BackupFields'
 
+// The storage is chosen once a page, and a file before this one in its worker may have chosen it:
+// this file loads the app's modules afresh, as a page would.
+vi.hoisted(() => vi.resetModules())
+
 const SETTINGS = { state: { theme: 'dark' }, version: 1 }
 
 const fileInput = () => {

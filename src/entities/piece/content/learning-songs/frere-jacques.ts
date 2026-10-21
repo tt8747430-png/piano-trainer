@@ -12,8 +12,8 @@ export default definePiece({
   tempo: 100,
   pattern: 'block',
   note: {
-    en: 'A round: a second voice starts the tune when the first reaches bar 3.',
-    ru: 'Канон: второй голос начинает мелодию, когда первый доходит до третьего такта.',
+    en: 'A round: when the first voice reaches bar 3, a second voice starts the tune from the beginning.',
+    ru: 'Канон: когда первый голос доходит до третьего такта, второй начинает мелодию сначала.',
   },
   sections: [{ kind: 'verse', lines: ['C C C C', 'C C C@1-G@1-C@2 C@1-G@1-C@2'] }],
   melody:

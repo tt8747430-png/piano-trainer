@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 54,
   pattern: 'M1',
   note: {
-    en: 'Lesson 4 gives this song with no ways, for a plan of your own; this is lesson 7’s. Its 2nd verse marks the sixths over F “melody”: they follow the tune.',
-    ru: 'В уроке 4 эта песня дана без видов, для собственного плана; здесь план урока 7. Во 2-м куплете сексты над F помечены «melody»: они идут за мелодией.',
+    en: 'Lesson 4 gives this song with no ways printed, for a plan of your own. This chart follows lesson 7’s plan. In verse 2 the sixths over F are marked “melody”: they follow the tune.',
+    ru: 'В уроке 4 эта песня дана без видов, чтобы вы составили свой план. Здесь записан план урока 7. Во 2-м куплете сексты над F помечены «melody»: они идут за мелодией.',
   },
   sections: [
     {

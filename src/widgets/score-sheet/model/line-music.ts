@@ -1,12 +1,33 @@
-import { barsOf, type Draft, type DraftNote, type PlacedBar } from '@/features/score-editor'
 import {
+  barsOf,
+  isVoiceLayer,
+  type Draft,
+  type DraftNote,
+  type Layer,
+  type NoteLayer,
+  type PlacedBar,
+} from '@/features/score-editor'
+import type { ScoreLayout } from '@/shared/ui/score'
+import {
+  clefsInForce,
+  DEFAULT_INSTRUMENT,
+  HOME_CLEF,
+  barMarksOf,
   beatsPerBar,
   chordSymbol,
   TICKS_PER_BEAT,
   timeSignature,
   type TimeSignature,
 } from '@/shared/lib/music'
-import type { StaffId, TimedMusic, TimedNote } from '@/shared/lib/notation'
+import {
+  EXTRA_VOICES,
+  PIANO_STAVES,
+  STAVES,
+  type StaffId,
+  type StaffInstruments,
+  type TimedMusic,
+  type TimedNote,
+} from '@/shared/lib/notation'
 
 /** One line of the chart: its section, its place there, and its bars. */
 export interface SheetLineBars {
@@ -17,7 +38,23 @@ export interface SheetLineBars {
   readonly start: number
 }
 
-export function linesOf(draft: Draft): SheetLineBars[] {
+/**
+ * The chart's lines, each section's as written; a line of more than `most` bars (more than a narrow
+ * screen holds) cut into as few parts as hold it, as even as they come.
+ */
+export function linesOf(draft: Draft, most = Infinity): SheetLineBars[] {
+  return chartLines(draft).flatMap((line) => {
+    const parts = Math.ceil(line.bars.length / most)
+    if (parts <= 1) return [line]
+    const size = Math.ceil(line.bars.length / parts)
+    return Array.from({ length: parts }, (_, part) => {
+      const bars = line.bars.slice(part * size, (part + 1) * size)
+      return { ...line, bars, start: bars[0]?.start ?? line.start }
+    }).filter((each) => each.bars.length > 0)
+  })
+}
+
+function chartLines(draft: Draft): SheetLineBars[] {
   const lines: SheetLineBars[] = []
   for (const placed of barsOf(draft)) {
     const current = lines.at(-1)
@@ -33,6 +70,12 @@ export function linesOf(draft: Draft): SheetLineBars[] {
     }
   }
   return lines
+}
+
+/** The whole piece as one line, a panorama's: its sections and lines run on. */
+export function oneLine(draft: Draft): SheetLineBars[] {
+  const bars = barsOf(draft)
+  return bars.length === 0 ? [] : [{ section: 0, line: 0, bars, start: 0 }]
 }
 
 const endOf = (line: SheetLineBars) => {
@@ -56,36 +99,129 @@ function sounding(
       startTick: n.startTick - from,
       durationTicks: n.durationTicks,
       ...(n.finger === undefined ? {} : { finger: n.finger }),
+      ...(n.marks ? { marks: n.marks } : {}),
     }))
 }
 
 /**
- * A line as the sheet writes it, from its own start: the melody and the written right hand on the
- * treble staff, the written left hand on the bass, the chord symbols; a staff with nothing in a bar is
- * left blank there.
+ * The staff a layer's notes are written on: a more voice's own (ADR 0066), the tune's own where it has
+ * one (ADR 0064), the treble or the bass.
  */
+export const staffOfHand = (layer: NoteLayer, melodyStaff: boolean): StaffId =>
+  isVoiceLayer(layer)
+    ? layer
+    : layer === 'lh'
+      ? 'bass'
+      : layer === 'melody' && melodyStaff
+        ? 'melody'
+        : 'treble'
+
+/**
+ * What a click on a staff writes: the tune or a more voice on its own staff, the right hand on the
+ * treble, the left on the bass.
+ */
+export const LAYER_OF_STAFF = {
+  melody: 'melody',
+  voice2: 'voice2',
+  voice3: 'voice3',
+  voice4: 'voice4',
+  treble: 'rh',
+  bass: 'lh',
+} as const satisfies Record<StaffId, NoteLayer>
+
+/**
+ * The layer a point on a line's bar writes: the chord row over the staves (with chord names), else
+ * the staff nearest it, each staff reaching half way to the next.
+ */
+export function layerAt(y: number, layout: ScoreLayout, chordNames: boolean): Layer {
+  if (y < 0 && chordNames) return 'chords'
+  const drawn = STAVES.flatMap((staff) => {
+    const box = layout.staves[staff]
+    return box ? [{ staff, ...box }] : []
+  })
+  const at = drawn.findLast((each, index) => {
+    const above = drawn[index - 1]
+    return !above || y >= (above.bottom + each.top) / 2
+  })
+  return LAYER_OF_STAFF[at?.staff ?? 'treble']
+}
+
+/** The staff a layer writes on, as a line's engraving drew it; none for the chord row. */
+export function staffOfLayer(
+  staves: ScoreLayout['staves'],
+  layer: Layer,
+): { readonly staff: StaffId; readonly top: number; readonly bottom: number } | undefined {
+  if (layer === 'chords') return undefined
+  const staff = staffOfHand(layer, staves.melody !== undefined)
+  const box = staves[staff]
+  return box ? { staff, ...box } : undefined
+}
+
+/**
+ * A line as the sheet writes it, from its own start: the melody on its staff (or the treble's where
+ * it has none), the written right hand on the treble staff, the written left hand on the bass, the
+ * chord symbols; a staff with nothing in a bar is left blank there.
+ */
+/** Each sung staff's instrument where one other than the voice is chosen (ADR 0070). */
+function staffInstrumentsOf(
+  draft: Draft,
+  voiceStaves: readonly StaffId[],
+): { staffInstruments?: StaffInstruments } {
+  const staves = [...(draft.melodyStaff ? (['melody'] as const) : []), ...voiceStaves]
+  const parts = draft.melodyStaff ? draft.instruments : draft.instruments.slice(1)
+  const chosen = Object.fromEntries(
+    staves.flatMap((staff, i) => {
+      const instrument = parts[i]
+      return instrument && instrument !== DEFAULT_INSTRUMENT ? [[staff, instrument]] : []
+    }),
+  )
+  return Object.keys(chosen).length > 0 ? { staffInstruments: chosen } : {}
+}
+
 export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
   const from = line.start
   const to = endOf(line)
+  const voiceStaves = EXTRA_VOICES.slice(0, draft.voices.length)
   const notes = [
     ...sounding(draft.melody, 'melody', from, to),
+    ...voiceStaves.flatMap((voice, i) =>
+      sounding(draft.voices[i] ?? [], 'melody', from, to).map((n) => ({ ...n, voice })),
+    ),
     ...sounding(draft.hands.rh, 'rh', from, to),
     ...sounding(draft.hands.lh, 'lh', from, to),
   ]
-  const bars = line.bars.map(({ start, bar }) => {
+  const staves: StaffId[] = [
+    ...(draft.melodyStaff ? (['melody'] as const) : []),
+    ...voiceStaves,
+    ...PIANO_STAVES,
+  ]
+  // A line starts in the clefs its first bar is in; its bars change them after.
+  const [first] = line.bars
+  const inForce = first
+    ? clefsInForce(barsOf(draft).map((placed) => placed.bar))[first.index]
+    : undefined
+  const bars = line.bars.map(({ start, bar }, index) => {
     const startTick = start - from
     const holds = (staff: StaffId) =>
       notes.some(
         (n) =>
-          (staff === 'bass') === (n.hand === 'lh') &&
+          staffOfHand(n.voice ?? n.hand, draft.melodyStaff) === staff &&
           n.startTick < startTick + bar.ticks &&
           n.startTick + n.durationTicks > startTick,
       )
-    const blank = (['treble', 'bass'] as const).filter((staff) => !holds(staff))
+    const blank = staves.filter((staff) => !holds(staff))
     return {
       startTick,
       beats: bar.ticks / TICKS_PER_BEAT,
       ...(blank.length > 0 ? { blank } : {}),
+      // The piece's tempo over its first bar.
+      ...(index === 0 && start === 0 ? { tempo: draft.tempo } : {}),
+      ...barMarksOf(bar),
+      ...(index === 0 && inForce && inForce !== HOME_CLEF
+        ? { clefs: inForce }
+        : bar.clefs
+          ? { clefs: bar.clefs }
+          : {}),
     }
   })
   const chords = line.bars.flatMap(({ start, bar }) =>
@@ -94,7 +230,16 @@ export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
       symbol: chordSymbol(chord.chord),
     })),
   )
-  return { key: draft.key, meter: draft.meter, bars, notes, chords }
+  return {
+    key: draft.key,
+    meter: draft.meter,
+    bars,
+    notes,
+    chords,
+    ...(draft.melodyStaff ? { melodyStaff: true } : {}),
+    ...(voiceStaves.length > 0 ? { voiceStaves } : {}),
+    ...staffInstrumentsOf(draft, voiceStaves),
+  }
 }
 
 /**

@@ -5,8 +5,8 @@ const tensions: Lesson = {
   id: 'tensions',
   title: { en: 'Available tensions', ru: 'Доступные тенсии' },
   summary: {
-    en: 'Add the right 9ths, 11ths and 13ths to any 7th chord.',
-    ru: 'Добавлять к любому септаккорду подходящие ноны, ундецимы и терцдецимы.',
+    en: 'Know which 9ths, 11ths and 13ths fit each kind of 7th chord, and which one clashes.',
+    ru: 'Знать, какие ноны, ундецимы и терцдецимы подходят к каждому виду септаккорда, а какая режет слух.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const tensions: Lesson = {
           kind: 'text',
           lead: { en: 'A tension', ru: 'Тенсия' },
           text: {
-            en: 'is a note above the 7th: the 9th, 11th or 13th. It colours the chord without changing its job.',
-            ru: '— нота над септимой: нона, ундецима или терцдецима. Она окрашивает аккорд, не меняя его функции.',
+            en: 'is a note above the 7th: the 9th, 11th or 13th. It adds colour. The chord still does the same job.',
+            ru: '— это нота над септимой: нона, ундецима или терцдецима. Она добавляет краску, а функция аккорда остаётся прежней.',
           },
         },
         { kind: 'chords', symbols: ['CMaj7', 'CMaj9'] },
@@ -29,8 +29,8 @@ const tensions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A tension fits a whole step above a chord tone. A half step above one, it clashes: an avoid note.',
-            ru: 'Тенсия подходит на тон выше звука аккорда. На полутон выше она режет слух: это нота, которой избегают.',
+            en: 'A tension a whole step above a chord tone fits. One a half step above a chord tone clashes. It is called an avoid note.',
+            ru: 'Тенсия на тон выше звука аккорда подходит. На полутон выше — режет слух. Такую ноту называют нотой избегания.',
           },
         },
         {
@@ -53,8 +53,8 @@ const tensions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'CMaj7 takes the 9th, the raised 11th and the 13th. The plain 11th, F, rubs against E.',
-            ru: 'CMaj7 берёт нону, повышенную ундециму и терцдециму. Чистая ундецима, фа, трётся о ми.',
+            en: 'CMaj7 takes the 9th, the raised 11th and the 13th. The plain 11th, F, is a half step above E, so it clashes.',
+            ru: 'CMaj7 берёт нону, повышенную ундециму и терцдециму. Чистая ундецима, фа, на полутон выше ми и режет слух.',
           },
         },
         { kind: 'chords', symbols: ['CMaj9', 'CMaj7#11', 'C6/9'] },
@@ -66,8 +66,8 @@ const tensions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Dm7 takes the 9th and the 11th freely. In a ii–V its 13th, B, can blur the move to G.',
-            ru: 'Dm7 свободно берёт нону и ундециму. В обороте ii–V его терцдецима, си, может смазать переход к G.',
+            en: 'Dm7 takes the 9th and the 11th freely. Careful with the 13th, B: before G7 it can blur the change.',
+            ru: 'Dm7 свободно берёт нону и ундециму. Осторожнее с терцдецимой, си: перед G7 она может смазать смену аккорда.',
           },
         },
         { kind: 'chords', symbols: ['Dm7', 'Dm9', 'Dm11'] },
@@ -79,8 +79,8 @@ const tensions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'G7 takes the 9th and 13th, and also the altered ♭9, ♯9, ♯11 and ♭13. Only the plain 11th clashes.',
-            ru: 'G7 берёт нону и терцдециму, а также альтерированные ♭9, ♯9, ♯11 и ♭13. Режет слух только чистая ундецима.',
+            en: 'G7 takes the 9th and 13th. It also takes the altered ♭9, ♯9, ♯11 and ♭13. Only the plain 11th clashes.',
+            ru: 'G7 берёт нону и терцдециму. Подходят и альтерированные ♭9, ♯9, ♯11 и ♭13. Режет слух только чистая ундецима.',
           },
         },
         { kind: 'chords', symbols: ['G9', 'G13', 'G7♭9', 'G7#11'] },
@@ -92,8 +92,8 @@ const tensions: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'To make room, drop the 5th first, then the root, which the bass already plays.',
-            ru: 'Чтобы освободить место, сначала опустите квинту, затем основной тон: его уже играет бас.',
+            en: 'Five fingers cannot hold every note. Drop the 5th first. Then drop the root from the right hand, because the bass plays it.',
+            ru: 'Пять пальцев не возьмут все звуки. Сначала уберите квинту. Затем уберите основной тон из правой руки: его играет бас.',
           },
         },
         {

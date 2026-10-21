@@ -139,6 +139,9 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
   const [shown, show] = useShownKeys(pattern.ref, sample.shown)
   const name = localText(pattern.name, locale)
   const pieces = isPatternId(pattern.ref) ? piecesPlaying(pattern.ref) : []
+  // A hidden pattern is listed under Yours alone, no longer on its book's shelf.
+  const { ref } = pattern
+  const hidden = usePatterns((state) => isPatternId(ref) && selectIsHidden(ref)(state))
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
@@ -147,7 +150,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
           <BackButton
             fallback={{
               to: '/practice/accompaniment',
-              search: { show: partOfShelf(pattern.group) },
+              search: { show: hidden ? 'yours' : partOfShelf(pattern.group) },
             }}
           />
         }

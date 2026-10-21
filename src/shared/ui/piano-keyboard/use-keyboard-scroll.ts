@@ -1,34 +1,24 @@
 import { useEffect, useEffectEvent, useLayoutEffect, useMemo, useRef, type RefObject } from 'react'
 import {
   keepCentre,
+  scrollToCentre,
   scrollToReveal,
+  scrollToShow,
   spanOf,
   useScrollMotion,
   type KeyGeometry,
   type KeySize,
   type KeySpan,
-  type ScrollMetrics,
 } from '@/shared/lib'
 import type { KeyRange } from '@/shared/lib/music'
 import { scrollStore } from './use-scroll-view'
 
-/** Scrolls so `span` sits in the middle of the keyboard, measured as `metrics`. */
-function centre(
-  element: HTMLElement,
-  { clientWidth, scrollWidth }: ScrollMetrics,
-  span: KeySpan,
-  behavior: ScrollBehavior,
-) {
-  if (scrollWidth <= clientWidth) return
-  const middle = ((span.left + span.right) / 2 / 100) * scrollWidth
-  element.scrollTo({ left: middle - clientWidth / 2, behavior })
-}
-
 /**
- * The keyboard's scrolling: it opens centred on `inView` (else on `span`, where the range that fills
+ * The keyboard's scrolling: it opens centred on `inView` (its top where wider than the view; else on `span`, where the range that fills
  * its width sits), and centres again when the key size changes. When the range changes the keys
  * keep the same point in the middle, and `inView` is brought into sight moving no further than that
- * (`scrollToReveal`): the keys never swing from one hand's notes to the other's.
+ * (`scrollToReveal`; of a stretch wider than the view, its top): the keys never swing from one
+ * hand's notes to the other's.
  */
 export function useKeyboardScroll(
   scroller: RefObject<HTMLElement | null>,
@@ -36,6 +26,8 @@ export function useKeyboardScroll(
   span: KeySpan,
   inView: KeyRange | undefined,
   keySize: KeySize,
+  /** A white key's width as drawn: narrowed to fit what is asked, the keys are measured anew. */
+  white = '',
 ) {
   const motion = useScrollMotion()
   const opened = useRef(false)
@@ -45,15 +37,19 @@ export function useKeyboardScroll(
   useEffect(() => metrics.subscribe(() => undefined), [metrics])
   // The keys in view as they are when the range changes: following them is the next effect's.
   const centreOnRange = useEffectEvent((element: HTMLElement) => {
-    const target = inView ? spanOf(keys, inView) : span
     // Measured now: the key size may have just changed the keyboard's width.
     const now = {
       scrollLeft: 0,
       clientWidth: element.clientWidth,
       scrollWidth: element.scrollWidth,
     }
-    centre(element, now, target, opened.current ? motion : 'instant')
+    const behavior = opened.current ? motion : 'instant'
     opened.current = true
+    if (now.scrollWidth <= now.clientWidth) return
+    const left = inView
+      ? scrollToShow(now, spanOf(keys, inView))
+      : scrollToCentre(now, (span.left + span.right) / 200)
+    element.scrollTo({ left, behavior })
   })
 
   useLayoutEffect(() => {
@@ -77,10 +73,21 @@ export function useKeyboardScroll(
 
   const viewFrom = inView?.from
   const viewTo = inView?.to
+  const measuredWhite = useRef(white)
   useEffect(() => {
     const element = scroller.current
     if (!element || viewFrom === undefined || viewTo === undefined) return
-    const left = scrollToReveal(metrics.read(), spanOf(keys, { from: viewFrom, to: viewTo }))
+    // Keys just narrowed to fit: what was kept of their width is stale, so they are measured now.
+    const resized = measuredWhite.current !== white
+    measuredWhite.current = white
+    const now = resized
+      ? {
+          scrollLeft: element.scrollLeft,
+          clientWidth: element.clientWidth,
+          scrollWidth: element.scrollWidth,
+        }
+      : metrics.read()
+    const left = scrollToReveal(now, spanOf(keys, { from: viewFrom, to: viewTo }))
     if (left !== null) element.scrollTo({ left, behavior: motion })
-  }, [scroller, metrics, keys, viewFrom, viewTo, motion])
+  }, [scroller, metrics, keys, viewFrom, viewTo, motion, white])
 }

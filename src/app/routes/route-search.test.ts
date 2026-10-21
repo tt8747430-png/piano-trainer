@@ -1,6 +1,8 @@
+// @vitest-environment jsdom
 import { createMemoryHistory } from '@tanstack/react-router'
 import { describe, expect, it } from 'vitest'
 import { testContext } from '@/app/testing/test-context'
+import { keyParam, note } from '@/shared/lib/music'
 import { createAppRouter } from '../router'
 import {
   CHORDS_DEFAULTS,
@@ -44,9 +46,11 @@ describe('search params', () => {
     expect(await searchAt('/practice/chord-finder?keys=x-500&key=H')).toEqual(CHORD_FINDER_DEFAULTS)
   })
 
-  it('open the score editor’s takes only when the URL says so', async () => {
-    expect(await searchAt('/edit/bz5?record=true')).toEqual({ record: true })
-    expect(await searchAt('/edit/bz5?record=yes')).toEqual({ record: false })
+  it('open the score editor’s takes only when the URL says so, and lay its score out as it says', async () => {
+    expect(await searchAt('/edit/bz5?record=true')).toEqual({ record: true, layout: 'scroll' })
+    expect(await searchAt('/edit/bz5?record=yes')).toEqual({ record: false, layout: 'scroll' })
+    expect(await searchAt('/edit/bz5?layout=pages')).toEqual({ record: false, layout: 'pages' })
+    expect(await searchAt('/edit/bz5?layout=paper')).toEqual({ record: false, layout: 'scroll' })
   })
 
   it('keep what is valid', async () => {
@@ -104,6 +108,20 @@ describe('search params', () => {
       chords: 4,
     })
     expect(await searchAt('/check?of=scale:blues')).toEqual({ of: 'scale:blues' })
+  })
+
+  it('drop a Reading notes range end that is off the piano or no MIDI key', async () => {
+    for (const end of ['Cb-1', 'B#9', 'C-1', 'C9']) {
+      expect(
+        await searchAt(`/practice/quiz/reading-notes?level=custom&from=${end}&to=${end}`),
+      ).toMatchObject({ from: undefined, to: undefined })
+    }
+    expect(await searchAt('/practice/quiz/reading-notes?level=custom&from=A0&to=C8')).toMatchObject(
+      {
+        from: 'A0',
+        to: 'C8',
+      },
+    )
   })
 
   it('drop anything stale or hand-edited back to its default, without clamping', async () => {
@@ -250,6 +268,39 @@ describe('search params', () => {
       nearest: false,
     })
     expect(await searchAt('/practice/progressions?inversion=7')).toMatchObject({ inversion: 0 })
+  })
+
+  it('open a minor key with no line on the default progression’s minor line', async () => {
+    expect(await searchAt('/practice/progressions?key=F%23m')).toMatchObject({
+      key: 'F#m',
+      p: 'i-VI-III-VII',
+    })
+    expect(await searchAt('/practice/progressions?key=F%23m&p=I-V-vi-IV')).toMatchObject({
+      p: 'I-V-vi-IV',
+    })
+    expect(await searchAt('/practice/progressions?key=F%23m&p=Q')).toMatchObject({
+      p: 'i-VI-III-VII',
+    })
+  })
+
+  it('leave out of the URL only the line its key opens on', async () => {
+    const F_SHARP_MINOR = keyParam({ tonic: note('F', 1), minor: true })
+    const router = createAppRouter({
+      history: createMemoryHistory({ initialEntries: ['/practice/progressions'] }),
+      ...testContext(),
+    })
+    await router.load()
+    await router.navigate({
+      to: '/practice/progressions',
+      search: { ...PROGRESSIONS_DEFAULTS, key: F_SHARP_MINOR, p: 'I-V-vi-IV' },
+    })
+    expect(router.state.location.search).toMatchObject({ key: 'F#m', p: 'I-V-vi-IV' })
+    expect(router.state.location.searchStr).toContain('p=')
+    await router.navigate({
+      to: '/practice/progressions',
+      search: { ...PROGRESSIONS_DEFAULTS, key: F_SHARP_MINOR, p: 'i-VI-III-VII' },
+    })
+    expect(router.state.location.searchStr).not.toContain('p=')
   })
 
   it('read the pair Between looks at and In the key only, and the Key view’s melody note', async () => {

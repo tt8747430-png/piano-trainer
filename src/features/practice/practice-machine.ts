@@ -52,7 +52,6 @@ export type PracticeEvent =
   /** Wait mode moves on by itself after a right answer or a rest. */
   | { readonly type: 'advance' }
   | { readonly type: 'prev' }
-  | { readonly type: 'jumpToBar'; readonly bar: number }
   /** The learner tapped a beat group. */
   | { readonly type: 'jumpToBeatGroup'; readonly beatGroup: number }
   | { readonly type: 'noteOn'; readonly midi: Midi }
@@ -210,6 +209,8 @@ export function practiceReducer(state: PracticeState, event: PracticeEvent): Pra
         // Other music, hands or loop: the slips counted were another pass's.
         slips: {},
       }
+      // A finished pass starts again at the start.
+      if (state.outcome === 'finished') return moveTo(configured, bounds(configured).first)
       // The cursor keeps its moment; outside a new loop it starts at the loop's start.
       const { loop } = configured
       const at = sameMoment(state, configured)
@@ -237,10 +238,6 @@ export function practiceReducer(state: PracticeState, event: PracticeEvent): Pra
       return advance(state)
     case 'prev':
       return prev(state)
-    case 'jumpToBar': {
-      const target = state.performance.beatGroups.findIndex((group) => group.bar === event.bar)
-      return target < 0 ? state : moveTo(state, clamp(state, target))
-    }
     case 'jumpToBeatGroup':
       return event.beatGroup >= 0 && event.beatGroup < state.performance.beatGroups.length
         ? moveTo(state, clamp(state, event.beatGroup))

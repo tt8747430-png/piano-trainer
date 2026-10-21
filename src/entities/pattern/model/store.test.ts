@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, expect, it } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { createPatternsStore, PATTERNS_STORAGE_KEY } from './store'
@@ -27,9 +28,9 @@ describe('createPatternsStore', () => {
     expect(restored(saved)).toEqual(saved)
   })
 
-  it('reads an own pattern saved with the held 1–5–8 left hand as the 1–5–8 it became', () => {
+  it('keeps no own pattern whose left hand is no figure there is', () => {
     const held = { id: 'my-1', name: 'Held', rh: 'b3', lh: 'arp' }
-    expect(restored({ own: [held], nextOwn: 2 }).own).toEqual([{ ...held, lh: 'fig' }])
+    expect(restored({ own: [held], nextOwn: 2 }).own).toEqual([])
   })
 
   it('keeps an own pattern only with a name of 1 to 40 characters and known figures', () => {

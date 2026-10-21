@@ -6,7 +6,7 @@ import { barsOf, totalTicks } from './timeline'
 const sortedUnique = (ticks: readonly Tick[]) => [...new Set(ticks)].sort((a, b) => a - b)
 
 /** Where the caret stands in the chords: every beat of every bar, and every chord's start. */
-export function chordPlaces(draft: Draft): Tick[] {
+function chordPlaces(draft: Draft): Tick[] {
   return sortedUnique(
     barsOf(draft).flatMap(({ start, bar }) => [
       ...Array.from(

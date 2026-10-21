@@ -34,10 +34,8 @@ function renderPlayer(view: Partial<PracticeView> = {}) {
 describe('usePracticePlayer', () => {
   it('writes the piece’s own tempo as absent', () => {
     const { result, setView } = renderPlayer()
-    act(() => result.current.setTempo(72))
-    expect(setView).toHaveBeenLastCalledWith({ tempo: undefined })
-    act(() => result.current.setTempo(36))
-    expect(setView).toHaveBeenLastCalledWith({ tempo: 36 })
+    act(() => result.current.listenAt(72))
+    expect(setView).toHaveBeenLastCalledWith({ mode: 'listen', tempo: undefined })
   })
 
   it('writes Listen and a tempo in one change', () => {

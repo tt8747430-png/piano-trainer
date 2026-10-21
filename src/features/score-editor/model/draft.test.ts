@@ -13,6 +13,26 @@ import { barAt, barsOf, chordsAt, totalTicks } from './timeline'
 
 const CHART_PIECES = PIECES.filter((piece): piece is ChartPiece => !isDegreePiece(piece))
 
+type Hand = readonly { readonly midi: number; readonly startTick: number }[] | undefined
+const lowToHigh = (notes: Hand) =>
+  notes && [...notes].sort((a, b) => a.startTick - b.startTick || a.midi - b.midi)
+
+/** Music as it sounds: notes struck together in any order (a hymn writes them high to low, the editor low to high). */
+function heard(music: PieceMusic) {
+  const { chart, melody } = readMusic(music)
+  const sections = chart.sections.map((section) => ({
+    ...section,
+    lines: section.lines.map((line) =>
+      line.map((bar) =>
+        bar.hands
+          ? { ...bar, hands: { rh: lowToHigh(bar.hands.rh), lh: lowToHigh(bar.hands.lh) } }
+          : bar,
+      ),
+    ),
+  }))
+  return { chart: { ...chart, sections }, melody }
+}
+
 const WRITTEN: PieceMusic = {
   key: 'G',
   meter: '4/4',
@@ -31,7 +51,7 @@ describe('the draft', () => {
     'reads %s and writes it back the same',
     (_id, piece) => {
       const music = musicOf(piece)
-      expect(readMusic(writeDraft(readDraft(music)))).toEqual(readMusic(music))
+      expect(heard(writeDraft(readDraft(music)))).toEqual(heard(music))
     },
   )
 
@@ -44,13 +64,28 @@ describe('the draft', () => {
     ])
   })
 
+  it('holds each more voice on the timeline, its staff added, and writes them back', () => {
+    const sung = {
+      key: 'G',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['G C'] }],
+      melody: 'B4/4 | C5/4',
+      voices: ['G4/4 | E4/4', 'D4/2 r/2 | r/4'],
+    } as const satisfies PieceMusic
+    const draft = readDraft(sung)
+    expect(draft.voices.map((voice) => voice.map((n) => n.startTick))).toEqual([[0, 96], [0]])
+    expect(writeDraft(draft).voices).toEqual(['G4/4 | E4/4', 'D4/2'])
+  })
+
   it('saves only music that reads back', () => {
     const draft = readDraft(WRITTEN)
     expect(musicToSave(draft)).toEqual(writeDraft(draft))
     const [section] = draft.sections
     if (!section) throw new Error('no section')
     // A bar with no chord writes nothing the chart can read.
-    const unread = [{ ...section, lines: [[{ ticks: 48, chords: [], rh: false, lh: false }]] }]
+    const unread = [{ ...section, lines: [[{ ticks: 96, chords: [], rh: false, lh: false }]] }]
     expect(musicToSave({ ...draft, sections: unread })).toBeNull()
   })
 
@@ -59,19 +94,19 @@ describe('the draft', () => {
     expect(draft.key).toEqual({ tonic: note('G'), minor: false })
     const [pickup, second] = barsOf(draft)
     expect(pickup).toMatchObject({ index: 0, section: 0, line: 0, start: 0 })
-    expect(pickup?.bar.ticks).toBe(12)
-    expect(second?.bar.chords.map((chord) => chord.at)).toEqual([0, 24])
+    expect(pickup?.bar.ticks).toBe(24)
+    expect(second?.bar.chords.map((chord) => chord.at)).toEqual([0, 48])
     expect(draft.melody[1]).toEqual({
       midi: midi(67),
       spelled: note('G'),
-      startTick: 12,
-      durationTicks: 24,
+      startTick: 24,
+      durationTicks: 48,
     })
     expect(draft.hands.lh.map((n) => [n.midi, n.startTick, n.durationTicks, n.finger])).toEqual([
-      [48, 12, 48, undefined],
-      [52, 24, 12, undefined],
-      [55, 24, 12, 2],
-      [43, 60, 48, undefined],
+      [48, 24, 96, undefined],
+      [52, 48, 24, undefined],
+      [55, 48, 24, 2],
+      [43, 120, 96, undefined],
     ])
     expect(barsOf(draft).map(({ bar }) => [bar.rh, bar.lh])).toEqual([
       [false, false],
@@ -83,9 +118,9 @@ describe('the draft', () => {
 
   it('finds the bar a tick is in, a barline in the later bar, the end in the last', () => {
     const draft = readDraft(WRITTEN)
-    expect(totalTicks(draft)).toBe(12 + 48 + 48 + 48)
-    expect(barAt(draft, 12).index).toBe(1)
-    expect(barAt(draft, 11).index).toBe(0)
+    expect(totalTicks(draft)).toBe(24 + 96 + 96 + 96)
+    expect(barAt(draft, 24).index).toBe(1)
+    expect(barAt(draft, 23).index).toBe(0)
     expect(barAt(draft, totalTicks(draft)).index).toBe(3)
   })
 
@@ -93,9 +128,9 @@ describe('the draft', () => {
     const bar = barsOf(readDraft(WRITTEN))[3]?.bar
     if (!bar) throw new Error('a fourth bar')
     expect(chordsAt(bar).map(({ at, ticks, method }) => [at, ticks, method])).toEqual([
-      [0, 24, 't1'],
-      [24, 12, 't1'],
-      [36, 12, 't1'],
+      [0, 48, 't1'],
+      [48, 24, 't1'],
+      [72, 24, 't1'],
     ])
   })
 })

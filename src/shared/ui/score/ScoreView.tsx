@@ -4,6 +4,7 @@ import type { Tick, TimeSignature } from '@/shared/lib/music'
 import type { Score, StaffId } from '@/shared/lib/notation'
 import { engraveInSteps, type ScoreLayout } from './engrave'
 import { loadMusicFonts } from './music-font'
+import { drawnStaves } from './drawn-staves'
 import { staffHeight } from './size'
 import './score.css'
 
@@ -13,8 +14,8 @@ type Engraving =
   | { readonly status: 'error' }
 
 /**
- * A score engraved on one line of grand staff (spec §2.5), or on one of its staves, once the music
- * font is in. What lies over it (labels, a cursor, the loop) is its children, given the engraving's
+ * A score engraved on one line of its staves (spec §2.5; the grand staff, the tune's over it), or on
+ * some or one of them, once the music font is in. What lies over it (labels, a cursor, the loop) is its children, given the engraving's
  * layout. The staff of `muted` is soft ink.
  */
 export function ScoreView({
@@ -24,6 +25,7 @@ export function ScoreView({
   names = false,
   muted,
   staff,
+  staves,
   timeBefore,
   selected,
   fill,
@@ -37,6 +39,8 @@ export function ScoreView({
   muted?: StaffId | undefined
   /** Only this staff of the grand staff: a line in one hand, an interval, a note to read. */
   staff?: StaffId | undefined
+  /** The staves drawn, of those the score writes (the others hidden): all of them by default. */
+  staves?: readonly StaffId[] | undefined
   /** The time signature before this line of music: printed again only where it changes. */
   timeBefore?: TimeSignature | undefined
   /** A width in CSS pixels the line is spread to where it is a fair share of it (the editor's lines). */
@@ -51,6 +55,9 @@ export function ScoreView({
   // As numbers, so a new object of the same time engraves nothing again.
   const beforeCount = timeBefore?.count
   const beforeUnit = timeBefore?.unit
+  const drawn = drawnStaves(score, staff, staves)
+  // As one string, so a new list of the same staves engraves nothing again.
+  const shownKey = drawn.join(' ')
 
   // VexFlow draws into the DOM, outside React, a few measures at a time; the font must be in before
   // it measures anything. What was drawn stays until the new drawing is whole.
@@ -68,6 +75,7 @@ export function ScoreView({
             fingers,
             names,
             staff,
+            staves: shownKey.split(' ') as StaffId[],
             timeBefore:
               beforeCount === undefined || beforeUnit === undefined
                 ? undefined
@@ -84,7 +92,7 @@ export function ScoreView({
         if (!stopped.signal.aborted) setEngraving({ status: 'error' })
       })
     return () => stopped.abort()
-  }, [score, scale, fingers, names, staff, beforeCount, beforeUnit, fill])
+  }, [score, scale, fingers, names, staff, shownKey, beforeCount, beforeUnit, fill])
 
   // The chosen notes are marked on the engraving as it is, so moving the caret engraves nothing again.
   const selectedStaff = selected?.staff
@@ -104,7 +112,7 @@ export function ScoreView({
   const size =
     engraving.status === 'ready'
       ? { width: engraving.layout.width, height: engraving.layout.height }
-      : { height: staffHeight(staff) * scale }
+      : { height: staffHeight(undefined, drawn.length) * scale }
   return (
     // Its layers are its own: what lies over the engraving stays under what the page pins.
     <div className="relative isolate" style={size}>

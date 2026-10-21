@@ -9,11 +9,23 @@ import { useServices } from '@/shared/lib/services'
  * screen shows what is heard.
  */
 export function useHeldKeys(): ReadonlySet<Midi> {
+  return useMidiKeys(true)
+}
+
+/**
+ * The keys the hand holds down on the MIDI keyboard now, each for at least the shortest press,
+ * whatever the sustain pedal: what is played, not what is heard (the Chord finder's chords).
+ */
+export function useKeysDown(): ReadonlySet<Midi> {
+  return useMidiKeys(false)
+}
+
+function useMidiKeys(underPedal: boolean): ReadonlySet<Midi> {
   const { midi } = useServices()
   const { keys, press, release } = usePresses<Midi>()
   useEffect(() => {
     if (!midi) return
-    let sustain = midi.pedalsDown().has('sustain')
+    let sustain = underPedal && midi.pedalsDown().has('sustain')
     /** The keys let go under the sustain: down until it comes up. */
     const sustained = new Set<Midi>()
     const stopNotes = midi.onNote((event) => {
@@ -24,7 +36,7 @@ export function useHeldKeys(): ReadonlySet<Midi> {
       else release(event.midi)
     })
     const stopPedal = midi.onPedal((event) => {
-      if (event.pedal !== 'sustain') return
+      if (!underPedal || event.pedal !== 'sustain') return
       sustain = event.down
       if (sustain) return
       for (const key of sustained) release(key)
@@ -34,6 +46,6 @@ export function useHeldKeys(): ReadonlySet<Midi> {
       stopNotes()
       stopPedal()
     }
-  }, [midi, press, release])
+  }, [midi, press, release, underPedal])
   return keys
 }

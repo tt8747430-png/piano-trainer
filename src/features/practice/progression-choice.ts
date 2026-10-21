@@ -6,16 +6,19 @@ import type { ChordSize, Key, KeyWalk, Numeral } from '@/shared/lib/music'
 
 /**
  * A progression's own numerals, tempo, pattern and chord size: what the Player plays when its URL
- * chooses none; and what it has for a pattern: a key, no tune, no methods of its own.
+ * chooses none (in a minor key, Progressions opens on its minor line, the library's); and what it has
+ * for a pattern: a key, no tune, no methods of its own.
  */
 export const PROGRESSION = {
   numerals: 'I-V-vi-IV',
+  minorNumerals: 'i-VI-III-VII',
   tempo: 80,
   pattern: 'block',
   chordSize: 'triads',
   fit: { methodCodes: false, melody: false, key: true, simpleTime: true },
 } as const satisfies {
   readonly numerals: string
+  readonly minorNumerals: string
   readonly tempo: number
   readonly pattern: PatternId
   readonly chordSize: ChordSize

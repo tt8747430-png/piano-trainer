@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { readFileSync } from 'node:fs'
 import { describe, expect, it, onTestFinished } from 'vitest'
 import { createSettingsStore, SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from '@/entities/settings'

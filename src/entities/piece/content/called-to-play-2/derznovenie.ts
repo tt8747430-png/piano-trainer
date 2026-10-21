@@ -11,8 +11,8 @@ export default definePiece({
   tempo: 92,
   pattern: 'r5',
   note: {
-    en: 'One of lesson 9’s three songs, the tune in the right hand. The chorus is printed in two voices a 3rd apart; this is the upper.',
-    ru: 'Одна из трёх песен урока 9, мелодия в правой руке. Припев напечатан в два голоса в терцию; здесь верхний.',
+    en: 'One of the three songs of lesson 9, with the tune in the right hand. The score prints the chorus in two voices a 3rd apart; this chart has the upper one.',
+    ru: 'Одна из трёх песен урока 9, мелодия в правой руке. В нотах припев напечатан в два голоса в терцию; здесь записан верхний.',
   },
   sections: [
     { kind: 'verse', lines: ['F@1 F Gm C F', 'F Gm C F'] },

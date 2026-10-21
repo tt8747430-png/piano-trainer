@@ -51,7 +51,10 @@ export function continueStep(learned: Learned): ContinueStep | null {
   return null
 }
 
-/** The journey Lessons opens on: the one Continue is in, else the first not yet learned. */
+/**
+ * The journey Lessons opens on: the first with a step not yet learned (where the Lessons' next step
+ * is, whichever track Continue is on), else the first journey once every one is learned.
+ */
 export function currentJourney(learned: Learned): Journey {
   const first = JOURNEYS[0]
   if (!first) throw new Error('The Lessons need a journey')

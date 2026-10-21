@@ -1,5 +1,7 @@
+import { scaleShown } from '@/features/play-example'
 import {
   fingeringsOf,
+  midi,
   kindComingDown,
   noteFromParam,
   ownFingering,
@@ -13,7 +15,8 @@ import {
   type ScaleKind,
 } from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
-import { scaleRun } from '@/shared/lib/schedule'
+import { scaleRun, type Hands } from '@/shared/lib/schedule'
+import type { ShownKeys } from '@/shared/ui'
 import type { ScaleView } from './scale-view'
 
 /** Scale view's run: its keys from the start note, how it is fingered, and the run as it plays and is written. */
@@ -69,5 +72,24 @@ export function scaleRunOf(
         down: { notes: down.placed, fingers: down.fingers },
       },
     ),
+  }
+}
+
+/**
+ * The keys a run shows: every key it plays, the playing hand's (the right hand's when both play)
+ * marked by degree with that hand's fingers, where that hand plays them (the left an octave down).
+ * The keys coming down are marked too: melodic minor's natural 6th and 7th are no blank keys.
+ */
+export function runShown(run: ScaleRun, hands: Hands): ShownKeys {
+  const hand: Hand = hands === 'lh' ? 'lh' : 'rh'
+  const octave = hand === 'lh' ? -12 : 0
+  const played = (notes: readonly PlacedTone[]) =>
+    notes.map((note) => ({ ...note, midi: midi(note.midi + octave) }))
+  return {
+    keys: run.music.notes.map((note) => note.midi),
+    marks: new Map([
+      ...scaleShown(played(run.down.placed), run.down.fingers[hand]).marks,
+      ...scaleShown(played(run.placed), run.fingers[hand]).marks,
+    ]),
   }
 }

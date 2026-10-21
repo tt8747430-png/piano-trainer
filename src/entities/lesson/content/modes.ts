@@ -5,8 +5,8 @@ const modes: Lesson = {
   id: 'modes',
   title: { en: 'The seven modes', ru: 'Семь ладов' },
   summary: {
-    en: 'Play the seven modes and hear the note that colours each.',
-    ru: 'Играть семь ладов и слышать ноту, которая окрашивает каждый.',
+    en: 'Play the major scale from each of its notes, and hear the one note that colours each mode.',
+    ru: 'Играть мажорную гамму от каждой её ноты и слышать ту ноту, что окрашивает каждый лад.',
   },
   sections: [
     {
@@ -17,15 +17,15 @@ const modes: Lesson = {
           lead: { en: 'A mode', ru: 'Лад' },
           text: {
             en: 'is the major scale played from another of its notes. The white keys from D to D make D Dorian.',
-            ru: '— мажорная гамма, сыгранная от другой своей ноты. Белые клавиши от ре до ре дают ре дорийский.',
+            ru: '— это мажорная гамма, сыгранная от другой своей ноты. Белые клавиши от ре до ре дают ре дорийский.',
           },
         },
         { kind: 'scale', root: note('D'), scale: 'dorian' },
         {
           kind: 'note',
           text: {
-            en: 'Ionian is the major scale itself, Aeolian the natural minor.',
-            ru: 'Ионийский лад — это сам мажор, эолийский — натуральный минор.',
+            en: 'Ionian is the major scale itself. Aeolian is the natural minor.',
+            ru: 'Ионийский лад — это сам мажор. Эолийский — натуральный минор.',
           },
         },
       ],
@@ -36,37 +36,11 @@ const modes: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Dorian is the natural minor with its 6th raised. It sounds minor but brighter.',
-            ru: 'Дорийский лад — натуральный минор с повышенной шестой ступенью. Он минорный, но светлее.',
+            en: 'Dorian is natural minor with the 6th raised. It sounds minor, but brighter. In A Dorian the colour note is F♯.',
+            ru: 'Дорийский лад — натуральный минор с повышенной шестой ступенью. Он минорный, но светлее. В ля дорийском характерная нота — фа-диез.',
           },
         },
         { kind: 'scale', root: note('A'), scale: 'dorian' },
-      ],
-    },
-    {
-      heading: { en: 'Mixolydian: major with a ♭7', ru: 'Миксолидийский: мажор с ♭7' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'Mixolydian lowers the major scale’s 7th. Its tonic chord is a dominant 7th that needs no resolving.',
-            ru: 'Миксолидийский лад понижает седьмую ступень мажора. Его тонический аккорд — доминантсептаккорд, которому не нужно разрешаться.',
-          },
-        },
-        { kind: 'scale', root: note('G'), scale: 'mixolydian' },
-      ],
-    },
-    {
-      heading: { en: 'Lydian: major with a ♯4', ru: 'Лидийский: мажор с ♯4' },
-      blocks: [
-        {
-          kind: 'text',
-          text: {
-            en: 'Lydian raises the major scale’s 4th. It floats, with no note that wants to fall.',
-            ru: 'Лидийский лад повышает четвёртую ступень мажора. Он звучит парящим, без ноты, которая тянет вниз.',
-          },
-        },
-        { kind: 'scale', root: note('F'), scale: 'lydian' },
       ],
     },
     {
@@ -75,11 +49,37 @@ const modes: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Phrygian lowers the natural minor’s 2nd. The half step above the tonic sounds dark and Spanish.',
-            ru: 'Фригийский лад понижает вторую ступень натурального минора. Полутон над тоникой звучит мрачно, по-испански.',
+            en: 'Phrygian is natural minor with the 2nd lowered. The half step above the tonic sounds dark and Spanish.',
+            ru: 'Фригийский лад — натуральный минор с пониженной второй ступенью. Полутон над тоникой звучит мрачно, по-испански.',
           },
         },
         { kind: 'scale', root: note('E'), scale: 'phrygian' },
+      ],
+    },
+    {
+      heading: { en: 'Lydian: major with a ♯4', ru: 'Лидийский: мажор с ♯4' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Lydian is the major scale with the 4th raised. It floats, with no note that wants to fall.',
+            ru: 'Лидийский лад — мажор с повышенной четвёртой ступенью. Он звучит парящим, без ноты, которая тянет вниз.',
+          },
+        },
+        { kind: 'scale', root: note('F'), scale: 'lydian' },
+      ],
+    },
+    {
+      heading: { en: 'Mixolydian: major with a ♭7', ru: 'Миксолидийский: мажор с ♭7' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Mixolydian is the major scale with the 7th lowered. Its tonic chord is a dominant 7th that does not need to resolve.',
+            ru: 'Миксолидийский лад — мажор с пониженной седьмой ступенью. Его тонический аккорд — доминантсептаккорд, которому не нужно разрешаться.',
+          },
+        },
+        { kind: 'scale', root: note('G'), scale: 'mixolydian' },
       ],
     },
     {
@@ -101,8 +101,8 @@ const modes: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play C major, C Mixolydian and C Dorian in turn. Each lowers one more note: B, then E.',
-            ru: 'Сыграйте подряд до мажор, до миксолидийский и до дорийский. Каждый понижает ещё одну ноту: си, затем ми.',
+            en: 'Play C major, C Mixolydian and C Dorian in turn. Each one lowers one more note: first B, then E.',
+            ru: 'Сыграйте подряд до мажор, до миксолидийский и до дорийский. Каждый понижает ещё одну ноту: сначала си, затем ми.',
           },
         },
         { kind: 'scale', root: note('C'), scale: 'major' },

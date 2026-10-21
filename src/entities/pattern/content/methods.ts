@@ -1,5 +1,4 @@
-import { BUILT_IN_PATTERNS } from '../model/book'
-import { METHOD_CODES, type MethodCode, type MethodEntry } from '../model/types'
+import type { MethodCode, MethodEntry } from '../model/types'
 
 /** The code itself where it is a number; otherwise the source book's short label. */
 const numbered = (code: MethodCode) => ({ en: code, ru: code })
@@ -26,8 +25,3 @@ export const METHODS: Readonly<Record<MethodCode, MethodEntry>> = {
   octs: { pattern: 'octs', label: { en: 'Octaves (scale)', ru: 'Октавы (гамма)' } },
   ch: { pattern: 'chd', label: { en: 'Chords', ru: 'Аккорды' } },
 }
-
-/** The chart's own plan, as `arrange` takes it: each method code's pattern. */
-export const METHOD_PATTERNS = new Map(
-  METHOD_CODES.map((code) => [code, BUILT_IN_PATTERNS.require(METHODS[code].pattern).pattern]),
-)

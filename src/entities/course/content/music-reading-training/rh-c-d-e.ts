@@ -6,21 +6,35 @@ const rhCDE: Lesson = {
   id: 'rh-c-d-e',
   title: { en: 'C, D and E in the right hand', ru: 'До, ре и ми в правой руке' },
   summary: {
-    en: 'Sight-read C, D and E in the right hand.',
-    ru: 'Читать с листа и играть правой рукой до, ре и ми.',
+    en: 'Read C, D and E on the treble staff and play them with right-hand fingers 1, 2 and 3.',
+    ru: 'Читать до, ре и ми в скрипичном ключе и играть их первым, вторым и третьим пальцами правой руки.',
   },
   sections: [
     {
-      heading: { en: 'Thumb on middle C', ru: 'Первый палец на до' },
+      heading: { en: 'Finger numbers', ru: 'Номера пальцев' },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'Finger numbers', ru: 'Номера пальцев' },
+          text: {
+            en: 'run from the thumb (1) to the little finger (5). Put the right thumb on middle C, finger 2 on D and finger 3 on E.',
+            ru: 'идут от большого пальца (1) до мизинца (5). Поставьте первый палец правой руки на до первой октавы, второй на ре, третий на ми.',
+          },
+        },
+        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 D4 C4/1' },
+      ],
+    },
+    {
+      heading: { en: 'C, D and E on the staff', ru: 'До, ре и ми на стане' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Thumb on C4, finger 2 on D4, 3 on E4. C sits on a ledger line, D hangs under the bottom line, E sits on it.',
-            ru: 'Первый палец на до, второй на ре, третий на ми. До — на добавочной линейке, ре — под нижней линейкой, ми — на ней.',
+            en: 'Middle C sits on a ledger line below the staff. D hangs just under the bottom line. E sits on the bottom line.',
+            ru: 'До первой октавы стоит на добавочной линейке под станом. Ре висит прямо под нижней линейкой. Ми стоит на нижней линейке.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 D4 C4/1' },
+        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4/2 E4 D4 C4/2 C4 D4 E4 D4 C4/1' },
       ],
     },
     {
@@ -29,11 +43,10 @@ const rhCDE: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each step is the next finger. Read the direction first, then the notes.',
-            ru: 'Каждый шаг — соседний палец. Сначала прочитайте направление, потом ноты.',
+            en: 'A step on the staff is the next finger on the keys. First see which way the notes move, up or down. Then name them.',
+            ru: 'Шаг на стане — соседний палец на клавишах. Сначала посмотрите, куда идут ноты, вверх или вниз. Потом назовите их.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4/2 E4 D4 C4/2 C4 D4 E4 D4 C4/1' },
         { kind: 'notes', clef: 'treble', notes: 'E4 D4 C4 D4 E4/2 D4/2 C4 D4 E4 D4 C4/1' },
       ],
     },
@@ -43,8 +56,8 @@ const rhCDE: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'C to E skips from the ledger line to the bottom line. Fingers 1 and 3 play it, 2 waits over D.',
-            ru: 'До — ми — скачок с добавочной линейки на нижнюю. Его играют первый и третий пальцы, второй ждёт над ре.',
+            en: 'C to E is a skip, from the ledger line to the bottom line. Fingers 1 and 3 play it. Finger 2 waits over D.',
+            ru: 'До — ми — скачок с добавочной линейки на нижнюю. Его играют первый и третий пальцы, а второй ждёт над ре.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 E4 C4 E4 D4/2 C4/2 E4 C4 D4 E4 C4/1' },
@@ -56,21 +69,22 @@ const rhCDE: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A repeat stays on the same line or space: the same key, the same finger.',
-            ru: 'Повтор — та же линейка или промежуток: та же клавиша, тот же палец.',
+            en: 'A repeated note stays on the same line or space. Play the same key again with the same finger.',
+            ru: 'Повторённая нота остаётся на той же линейке или в том же промежутке. Сыграйте ту же клавишу тем же пальцем.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4 E4 D4 D4 C4 C4 E4/2 D4 D4 E4 D4 C4/1' },
       ],
     },
     {
-      heading: { en: 'Read on sight', ru: 'Чтение с листа' },
+      heading: { en: 'Sight-reading', ru: 'Чтение с листа' },
       blocks: [
         {
           kind: 'text',
+          lead: { en: 'Sight-reading', ru: 'Чтение с листа' },
           text: {
-            en: 'Play each line once, slowly, without stopping, even past a wrong note.',
-            ru: 'Сыграйте каждую строку один раз, медленно и без остановок, даже после ошибки.',
+            en: 'means playing music you have not practised. Play each line once, slowly. Keep going even after a wrong note.',
+            ru: '— игра незнакомых нот без подготовки. Сыграйте каждую строку один раз, медленно. Не останавливайтесь даже после ошибки.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'E4 D4 C4 D4 E4 E4 E4/2 D4 D4 E4 D4 C4/1' },
@@ -96,17 +110,17 @@ const rhCDE: Lesson = {
         },
         {
           kind: 'question',
-          ask: { en: 'Play C, then skip up to E.', ru: 'Сыграйте до, затем скачком ми.' },
+          ask: { en: 'Play C, then skip up to E.', ru: 'Сыграйте до, затем скачком вверх ми.' },
           answer: { notes: ['C', 'E'], rising: true },
         },
         {
           kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          title: { en: 'Practise reading notes in the Quiz', ru: 'Чтение нот в тестах' },
           target: { opens: 'quiz', trainer: 'reading-notes' },
         },
         {
           kind: 'link',
-          title: { en: 'The C position in the Player', ru: 'Позиция до в плеере' },
+          title: { en: 'Play the C position in the Player', ru: 'Позиция до в плеере' },
           target: { opens: 'exercise', exercise: 'five-finger', root: note('C') },
         },
       ],

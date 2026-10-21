@@ -5,21 +5,33 @@ const rightHandRuns: Lesson = {
   id: 'right-hand-runs',
   title: { en: 'Right-hand techniques: runs', ru: 'Техники правой руки: пассажи' },
   summary: {
-    en: 'Play runs down to the root and up 1–2–3–5.',
-    ru: 'Играйте пассажи вниз к основному тону и вверх 1–2–3–5.',
+    en: 'Add the 2nd to a chord and play two runs with it: down to the root and up 1–2–3–5.',
+    ru: 'Добавьте к аккорду вторую ступень и сыграйте с ней два пассажа: вниз к основному тону и вверх 1–2–3–5.',
   },
   sections: [
     {
-      heading: { en: 'Down and up', ru: 'Вниз и вверх' },
+      heading: { en: '♬: a run down to the root', ru: '♬: пассаж вниз к основному тону' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'The third technique runs down to the root in pairs. The fourth runs up the chord’s 1, 2, 3 and 5.',
-            ru: 'Третья техника спускается к основному тону парами. Четвёртая поднимается по 1, 2, 3 и 5 ступеням аккорда.',
+            en: 'The 2nd is the note just above the root: D in C. Take the 2nd and 5th together, then play the 3rd, 2nd and root. Repeat an octave lower.',
+            ru: 'Вторая ступень — звук сразу над основным тоном: ре в до мажоре. Возьмите вместе секунду и квинту, затем сыграйте терцию, секунду и основной тон. Повторите октавой ниже.',
           },
         },
         { kind: 'pattern', pattern: 't3', piece: 'ex6' },
+      ],
+    },
+    {
+      heading: { en: '♫: a run up 1–2–3–5', ru: '♫: пассаж вверх 1–2–3–5' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'Play the root, 2nd, 3rd and 5th with fingers 1, 2, 3 and 5. Then play them again an octave higher, all in eighths.',
+            ru: 'Сыграйте основной тон, секунду, терцию и квинту пальцами 1, 2, 3 и 5. Затем повторите октавой выше, всё восьмыми.',
+          },
+        },
         { kind: 'pattern', pattern: 't4', piece: 'ex6' },
       ],
     },
@@ -30,11 +42,12 @@ const rightHandRuns: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Play G – C – D – Em – Am – D – G with both runs.',
-              ru: 'Сыграйте G – C – D – Em – Am – D – G обоими пассажами.',
+              en: 'Play this row of chords with ♬, then with ♫.',
+              ru: 'Сыграйте эту цепочку аккордов пассажем ♬, затем ♫.',
             },
+            { en: 'Play the lesson’s study.', ru: 'Сыграйте этюд урока.' },
             {
-              en: 'Learn «What a Fellowship» by its plan.',
+              en: 'Learn “What a Fellowship” by its plan.',
               ru: 'Выучите «What a Fellowship» по плану.',
             },
           ],
@@ -58,8 +71,8 @@ const rightHandRuns: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Make your own plan for «You Came for Me, O Saviour»: a way or a technique on each chord.',
-            ru: 'Составьте свой план для «You Came for Me, O Saviour»: способ или технику на каждый аккорд.',
+            en: 'Now write the plan yourself for “You Came for Me, O Saviour”. Choose a way or a technique for each chord.',
+            ru: 'Теперь составьте план сами для «You Came for Me, O Saviour». Выберите способ или технику для каждого аккорда.',
           },
         },
         { kind: 'chords', symbols: ['G', 'C', 'D', 'G'] },

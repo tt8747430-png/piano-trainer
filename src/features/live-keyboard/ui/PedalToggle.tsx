@@ -7,28 +7,31 @@ import { RailButton } from '@/shared/ui'
 export const PEDAL_MARK = '\u{1D1AE}'
 
 /**
- * The rail's sustain pedal, for a touch screen or a mouse: a tap puts it down or up; it shows the
- * MIDI pedal too. It wears the score's pedal mark. Put down here, it comes up as the keyboard goes
- * (unless the MIDI foot holds it): no screen without a keyboard keeps a sustain it cannot lift.
+ * The rail's sustain pedal, for a touch screen or a mouse: a tap puts its own hold down or up, beside
+ * the MIDI foot's and Space's (the pedal is down while any holds it); it shows the pedal down
+ * whoever holds it. It wears the score's pedal mark. Held here, it comes up as the keyboard goes: no
+ * screen without a keyboard keeps a sustain it cannot lift.
  */
 export function PedalToggle() {
   const { t } = useTranslation('common')
-  const { audio, midi } = useServices()
+  const { audio } = useServices()
   const down = usePedal()
-  const putDown = useRef(false)
+  /** Whether this button holds the pedal down. */
+  const held = useRef(false)
   useEffect(
     () => () => {
-      if (putDown.current && !midi?.pedalsDown().has('sustain')) audio.pedal('sustain', false)
+      if (held.current) audio.pedal('sustain', false)
+      held.current = false
     },
-    [audio, midi],
+    [audio],
   )
   return (
     <RailButton
       label={t('rail.pedal')}
       aria-pressed={down}
       onClick={() => {
-        putDown.current = !down
-        audio.pedal('sustain', !down)
+        held.current = !held.current
+        audio.pedal('sustain', held.current)
       }}
     >
       <span aria-hidden className="font-music text-3xl leading-none font-normal tracking-normal">

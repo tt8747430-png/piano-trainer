@@ -10,6 +10,7 @@ import {
   RAIL_CONTROLS,
   SWIPES,
   type KeyDock,
+  type SheetView,
   type KeyLength,
   type KeySize,
   type NamedKeys,
@@ -19,6 +20,7 @@ import {
   type Swipe,
 } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
+import type { StaffId } from '@/shared/lib/notation'
 import { TOUCHES, type Touch } from '@/shared/lib/schedule'
 
 export const THEMES = ['system', 'light', 'dark'] as const
@@ -83,6 +85,11 @@ export interface KeyboardSettings {
   readonly dock: KeyDock
   /** A page's keys folded away to a button that brings them back. */
   readonly folded: boolean
+  /**
+   * On a phone on its side, a reading page's keys (a lesson's, an explorer's, a song's) folded away,
+   * apart from `folded`: the screen is too short for the page and the keys both (ADR 0062).
+   */
+  readonly foldedLandscape: boolean
   readonly keyLength: KeyLength
   /** The controls the keys' rail holds, in its order. */
   readonly railControls: readonly RailControl[]
@@ -135,6 +142,31 @@ export const REMEMBERED_CHORDS = 24
 /** The most keys a chord remembered holds: two hands'. */
 export const CHORD_KEYS_MAX = 10
 
+/**
+ * How the Player shows a score (ADR 0064, Soundslice's view settings): laid out as one line across,
+ * lines down the screen or A4 pages; the score itself, or only the keys; the chord names; the tune on
+ * its own staff; the staves hidden; and the keys, or the score alone.
+ */
+export interface ScoreViewSettings {
+  readonly layout: SheetView
+  readonly notation: boolean
+  readonly chordNames: boolean
+  readonly melodyStaff: boolean
+  readonly hidden: readonly StaffId[]
+  /** The keys under the score: off, the score has the screen. */
+  readonly keys: boolean
+}
+
+/** As the Player was: one line across, every staff, the chord names, the tune on its staff. */
+export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
+  layout: 'horizontal',
+  notation: true,
+  chordNames: true,
+  melodyStaff: true,
+  hidden: [],
+  keys: true,
+}
+
 export interface SettingsState {
   theme: Theme
   titles: TitleSize
@@ -147,6 +179,7 @@ export interface SettingsState {
   sidebar: Sidebar
   midi: MidiSettings
   chordFinder: ChordFinderSettings
+  scoreView: ScoreViewSettings
   /** The sections folded away, by their ids (`chords.tensions`): the same on every visit. */
   foldedSections: readonly string[]
 }
@@ -201,6 +234,7 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   typing: finePointer,
   dock: 'bottom',
   folded: false,
+  foldedLandscape: true,
   keyLength: 'long',
   railControls: RAIL_CONTROLS,
 })

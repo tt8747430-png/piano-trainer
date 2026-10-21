@@ -17,8 +17,8 @@ const course: Course = {
   stage: 'intermediate',
   title: { en: 'Called to Play for Him, level 2', ru: 'Призван играть для Него. Уровень 2' },
   summary: {
-    en: 'The workbook’s level 2: the 7th chord in a key, octaves, the ways in 6/8 and 12/8, joining chords, and an accompaniment in balance.',
-    ru: 'Второй уровень рабочей тетради: септаккорд в тональности, октавы, способы в 6/8 и 12/8, соединение аккордов и баланс аккомпанемента.',
+    en: 'Level 2 of the workbook. Choose 7th chords by the key, play octaves, move the ways into 6/8 and 12/8, join chords smoothly, and balance bass, melody and accompaniment.',
+    ru: 'Второй уровень рабочей тетради. Септаккорды по тональности, октавы, виды игры в 6/8 и 12/8, плавное соединение аккордов и баланс баса, мелодии и аккомпанемента.',
   },
   weeks: 11,
   lessons: [

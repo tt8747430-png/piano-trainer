@@ -48,7 +48,6 @@ export interface Practice {
   stop(): void
   next(): void
   prev(): void
-  jumpToBar(bar: number): void
   jumpToBeatGroup(beatGroup: number): void
   /** An on-screen key: the same as a MIDI note-on. */
   press(midi: Midi): void
@@ -189,7 +188,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
       due.current = null
       return CORRECT_PAUSE_MS
     }
-    due.current = at + untilNextBeatGroup(state.performance, state.beatGroup, { tempo })
+    due.current = at + untilNextBeatGroup(state.performance, state.beatGroup, { tempo, swing })
     return Math.max(0, (due.current - PLAY_DELAY - audio.now()) * 1000)
   })
   useEffect(() => {
@@ -241,7 +240,6 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     },
     next: () => move({ type: 'next' }),
     prev: () => move({ type: 'prev' }),
-    jumpToBar: (bar: number) => move({ type: 'jumpToBar', bar }),
     jumpToBeatGroup: (beatGroup: number) => move({ type: 'jumpToBeatGroup', beatGroup }),
     press: (key: Midi) => dispatch({ type: 'noteOn', midi: key }),
   }

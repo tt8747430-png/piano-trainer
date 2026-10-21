@@ -13,8 +13,8 @@ const course: Course = {
   stage: 'beginner',
   title: { en: 'Intro to Music Reading', ru: 'Введение в чтение нот' },
   summary: {
-    en: 'Read music from the keys up: pitch and the octave, the staff and its two clefs, ledger lines above and below, and sharps, flats and naturals.',
-    ru: 'Чтение нот от клавиатуры: высота звука и октава, нотный стан и два ключа, добавочные линейки сверху и снизу, диезы, бемоли и бекары.',
+    en: 'Learn to read notes, starting at the keyboard. You meet pitch and the octave, then the staff, the treble and bass clefs, ledger lines, and sharps, flats and naturals.',
+    ru: 'Учимся читать ноты, начиная с клавиатуры. Сначала высота звука и октава, затем нотный стан, скрипичный и басовый ключи, добавочные линейки, диезы, бемоли и бекары.',
   },
   weeks: 7,
   lessons: [

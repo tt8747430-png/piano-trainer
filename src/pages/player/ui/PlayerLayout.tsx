@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { selectKeyboard, selectScoreView, useSettings } from '@/entities/settings'
 import { MidiButton } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
@@ -7,8 +8,8 @@ import {
   LoopButton,
   PlayerArea,
   PlayerScreen,
+  PlayerDock,
   PlayerTitle,
-  PlayerTransport,
   TempoButton,
   usePlayerShortcuts,
   WaitLine,
@@ -16,14 +17,16 @@ import {
   type PracticeView,
 } from '@/widgets/practice-player'
 import { SheetMusic } from '@/widgets/sheet-music'
+import { PlayerViewMenu } from './PlayerViewMenu'
 
 /** A walk or a progression: one section, named nowhere. */
 const NO_HEADINGS: readonly string[] = []
 
 /**
- * The Player's screen over any Performance (Flowkey's shape): the toolbar with the tempo, hands, loop,
- * MIDI and Setup, the keys, the sheet music, Wait mode's line and the transport; the computer's keys
- * drive it (`usePlayerShortcuts`).
+ * The Player's screen over any Performance (Flowkey's shape, ADR 0061): the toolbar with the loop,
+ * MIDI and Setup, the sheet music, Wait mode's line, the transport floating under it (the tempo, ‹ ▶ ›
+ * and the hands) and the keys at the foot, or under the toolbar where the keyboard settings dock them
+ * at the top; the computer's keys drive it (`usePlayerShortcuts`).
  */
 export function PlayerLayout({
   title,
@@ -45,65 +48,81 @@ export function PlayerLayout({
   setup: ReactNode
 }) {
   const { practice } = player
+  const dock = useSettings((state) => selectKeyboard(state).dock)
+  const shown = useSettings(selectScoreView)
   usePlayerShortcuts(player, view, onClose)
+  const keys = !shown.keys ? null : (
+    <PlayerArea area="keys">
+      <LiveKeyboard
+        range={player.range}
+        inView={player.inView}
+        // Wait mode's chord across both hands is all in sight, the keys narrowing to hold it.
+        fitInView
+        marks={player.marks}
+        wrong={player.wrong}
+        onKeyPress={player.tapKey}
+        // Space is Play here: the pedal is the rail's, or a MIDI keyboard's.
+        spacePedal={false}
+      />
+    </PlayerArea>
+  )
   return (
-    <PlayerScreen>
+    <PlayerScreen keys={dock}>
       <PlayerArea area="lead">
         <PlayerTitle title={title} onClose={onClose} />
       </PlayerArea>
-      <PlayerArea area="tempo" className="flex items-center">
-        <TempoButton
-          mode={view.mode}
-          tempo={player.tempo}
-          shownTempo={player.shownTempo}
-          ownTempo={player.ownTempo}
-          speedTraining={view.speedTraining}
-          onWait={() => player.setMode('wait')}
-          onTempo={player.listenAt}
-          onSpeedTraining={player.setSpeedTraining}
-        />
-      </PlayerArea>
-      <PlayerArea area="hands" className="flex items-center justify-end">
-        <HandsButton hands={view.hands} onChange={player.setHands} />
-      </PlayerArea>
       <PlayerArea area="actions" className="flex items-center justify-end gap-2">
         <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />
+        <PlayerViewMenu />
         <MidiButton />
         {setup}
       </PlayerArea>
-      <PlayerArea area="keys">
-        <LiveKeyboard
-          range={player.range}
-          inView={player.inView}
-          marks={player.marks}
-          wrong={player.wrong}
-          onKeyPress={player.tapKey}
-          // Space is Play here: the pedal is the rail's, or a MIDI keyboard's.
-          spacePedal={false}
-        />
-      </PlayerArea>
+      {dock === 'top' ? keys : null}
       <PlayerArea area="sheet">
-        <SheetMusic
-          performance={performance}
-          headings={headings}
-          current={practice.state.beatGroup}
-          loop={player.loop}
-          fingers={player.fingers}
-          names={player.names}
-          positions={player.positions}
-          muted={player.muted}
-          onJump={practice.jumpToBeatGroup}
-          onLoopChange={player.setLoop}
-        />
+        {shown.notation ? (
+          <SheetMusic
+            view={shown}
+            title={title}
+            performance={performance}
+            headings={headings}
+            current={practice.state.beatGroup}
+            loop={player.loop}
+            fingers={player.fingers}
+            names={player.names}
+            positions={player.positions}
+            muted={player.muted}
+            onJump={practice.jumpToBeatGroup}
+            onLoopChange={player.setLoop}
+          />
+        ) : null}
       </PlayerArea>
-      <PlayerArea area="status" className="landscape-phone:self-end">
+      <PlayerArea
+        area="status"
+        className="landscape-phone:max-w-[45vw] landscape-phone:self-center"
+      >
         {view.mode === 'wait' ? (
           <WaitLine feedback={player.feedback} onAgain={practice.play} onLoop={player.setLoop} />
         ) : null}
       </PlayerArea>
-      <PlayerArea area="transport">
-        <PlayerTransport practice={practice} />
+      <PlayerArea area="dock" className="flex justify-center landscape-phone:items-center">
+        <PlayerDock
+          practice={practice}
+          tempo={
+            <TempoButton
+              mode={view.mode}
+              tempo={player.tempo}
+              shownTempo={player.shownTempo}
+              ownTempo={player.ownTempo}
+              speedTraining={view.speedTraining}
+              onWait={() => player.setMode('wait')}
+              onTempo={player.listenAt}
+              onSpeedTraining={player.setSpeedTraining}
+            />
+          }
+          hands={<HandsButton hands={view.hands} onChange={player.setHands} />}
+        />
       </PlayerArea>
+      {dock === 'top' ? null : keys}
     </PlayerScreen>
   )
 }

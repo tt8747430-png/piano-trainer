@@ -112,6 +112,17 @@ describe('touching the keys', () => {
     expect(onKeyPress.mock.calls).toEqual([[60], [60]])
   })
 
+  it('plays no key twice when two fingers press and the first one’s click comes late', () => {
+    const { onKeyPress, key } = setUp()
+    fireEvent.pointerDown(key('C4'), touch(1, x(23)))
+    fireEvent.pointerDown(key('E4'), touch(2, x(25)))
+    fireEvent.pointerUp(key('C4'), touch(1, x(23)))
+    fireEvent.click(key('C4'), { detail: 1 })
+    fireEvent.pointerUp(key('E4'), touch(2, x(25)))
+    fireEvent.click(key('E4'), { detail: 1 })
+    expect(onKeyPress.mock.calls).toEqual([[60], [64]])
+  })
+
   it.each(['scroll', 'glissando'] as const)(
     'holds the keys still under a finger, so a key that plays never scrolls (%s)',
     (swipe) => {
@@ -212,6 +223,27 @@ describe('letting a key go', () => {
     fireEvent.pointerDown(key('C4'), touch(1, x(23)))
     fireEvent.pointerLeave(keys, touch(1, x(23)))
     expect(onKeyRelease).toHaveBeenCalledExactlyOnceWith(60)
+  })
+
+  it.each([
+    ['the window loses focus', () => fireEvent.blur(window)],
+    [
+      'the page is hidden',
+      () => {
+        vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('hidden')
+        fireEvent(document, new Event('visibilitychange'))
+      },
+    ],
+  ])('lets go of every key a pointer holds as %s', (_, away) => {
+    const { onKeyRelease, key } = setUp()
+    const mouse = { pointerId: 1, pointerType: 'mouse', button: 0, buttons: 1, clientX: x(23) }
+    fireEvent.pointerDown(key('C4'), mouse)
+    fireEvent.pointerDown(key('E4'), touch(2, x(25)))
+    away()
+    expect(onKeyRelease.mock.calls).toEqual([[60], [64]])
+    fireEvent.pointerUp(key('C4'), mouse)
+    expect(onKeyRelease).toHaveBeenCalledTimes(2)
+    vi.restoreAllMocks()
   })
 
   it('plays then lets go a key pressed with no pointer (Enter, a screen reader)', async () => {

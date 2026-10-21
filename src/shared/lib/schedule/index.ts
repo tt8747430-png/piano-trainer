@@ -32,7 +32,7 @@ export {
 } from './sounds'
 export { chordBar } from './chord-bar'
 export { runSounds, scaleRun } from './run'
-export { noteLine, type NoteLineMeter } from './note-line'
+export { noteLine, twoHands, type NoteLineMeter } from './note-line'
 export { voicingKeys, voicingsMusic, type VoicedKey, type WrittenVoicing } from './voicings'
 export { keysSoundingAt, keysStruckAt, keyWindows, type KeyWindow } from './sounding'
 export { recordingPlay, type Recording, type RecordingPlay } from './recording'

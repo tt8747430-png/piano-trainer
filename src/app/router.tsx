@@ -432,9 +432,9 @@ const checkRoute = createRoute({
   path: '/check',
   notFoundComponent: notFoundIn('learn'),
   validateSearch: validateCheckSearch,
-  beforeLoad: async ({ search }) => {
-    const { checkPlan } = await practiceScreens()
-    if (!search.of || !checkPlan(search.of)) throw notFound()
+  beforeLoad: async ({ search, context }) => {
+    const { checkIn } = await practiceScreens()
+    if (!search.of || !checkIn(context.pieces.getState(), search.of)) throw notFound()
   },
   component: lazyRouteComponent(practiceScreens, 'CheckPage'),
 })

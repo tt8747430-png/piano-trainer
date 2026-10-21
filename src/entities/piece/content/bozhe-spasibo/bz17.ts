@@ -15,8 +15,8 @@ export default definePiece({
   tempo: 72,
   pattern: 'r4',
   note: {
-    en: 'Fm/D is an F minor chord over D in the bass: the same notes as Dm7♭5.',
-    ru: 'Fm/D — фа-минорный аккорд над басом ре: те же звуки, что в Dm7♭5.',
+    en: 'Fm/D is an F minor chord with D in the bass. It has the same notes as Dm7♭5.',
+    ru: 'Fm/D — это фа-минорный аккорд с ре в басу. В нём те же звуки, что в Dm7♭5.',
   },
   sections: [
     {

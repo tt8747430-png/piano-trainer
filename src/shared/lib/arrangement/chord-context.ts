@@ -62,6 +62,15 @@ const within = (semitones: number | undefined, fallback: number) =>
   semitones === undefined ? fallback : semitones % 12
 
 /**
+ * The 7th a chord written without one plays, as the key gives it above the root: major over C or F in
+ * C, minor over G (its dominant's) or A; minor where the key gives neither.
+ */
+function keySeventh(rootPc: PitchClass, key: Key): number {
+  const scale = scaleIntervals(key.minor ? 'natural' : 'major').map((step) => step.semitones)
+  return scale.includes(pitchClass(rootPc + 11 - pitchClassOf(key.tonic))) ? 11 : 10
+}
+
+/**
  * Where the right hand's chord stands: in an inversion; `'nearest'`, its notes as an inversion
  * stacks them, voiced nearest the last; `null`, the hand's own notes voice-led from the last.
  */
@@ -77,7 +86,10 @@ export function chordContext(
   const bassPc = pitchClassOf(chord.bass)
   const third = within(chord.tones[1]?.semitones, 4)
   const fifth = within(chord.tones[2]?.semitones, 7)
-  const seventh = within(chord.tones.find((tone) => tone.role === '7th')?.semitones, 10)
+  const seventh = within(
+    chord.tones.find((tone) => tone.role === '7th')?.semitones,
+    keySeventh(rootPc, key),
+  )
   const root = midi(55 + pitchClass(rootPc - 7))
   const voiced =
     position === null

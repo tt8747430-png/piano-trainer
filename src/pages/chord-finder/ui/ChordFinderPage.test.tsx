@@ -46,6 +46,12 @@ describe('Practice → Chord finder', () => {
       'aria-pressed',
       'true',
     )
+    // The staff writes the chord as it is read.
+    await waitFor(() =>
+      expect(
+        within(screen.getByRole('region', { name: 'On the staff' })).getByRole('listitem'),
+      ).toHaveTextContent(/^C6\/A/),
+    )
   })
 
   it('writes only the chord down now on the staff, and nothing once it is let go', async () => {
@@ -174,7 +180,7 @@ describe('Practice → Chord finder', () => {
     await renderApp('/practice/chord-finder?keys=60-64-67')
     expect(await screen.findByRole('region', { name: 'In these keys' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
-    await user.click(screen.getByRole('button', { name: 'Its keys' }))
+    await user.click(screen.getByRole('button', { name: 'Keys it is in' }))
     await user.click(screen.getByRole('button', { name: 'Close' }))
     expect(screen.queryByRole('region', { name: 'In these keys' })).not.toBeInTheDocument()
   })
@@ -232,6 +238,28 @@ describe('Practice → Chord finder', () => {
     await waitFor(() => expect(playedNames()).toEqual(['C7', 'F']))
   })
 
+  it('reads each chord played under the sustain pedal on its own', async () => {
+    const user = userEvent.setup()
+    const { midi: piano } = await renderApp('/practice/chord-finder')
+    await screen.findByRole('heading', { level: 1, name: 'Chord finder' })
+    await remember(user)
+    act(() => piano.pedal(true))
+    for (const chord of [
+      [48, 52, 55],
+      [53, 57, 60],
+    ]) {
+      act(() => {
+        for (const each of chord) piano.press(midi(each))
+      })
+      act(() => {
+        for (const each of chord) piano.release(midi(each))
+      })
+      await waitFor(() => expect(screen.queryByText(/^Held/)).not.toBeInTheDocument())
+    }
+    await waitFor(() => expect(playedNames()).toEqual(['C', 'F']))
+    expect(name()).toHaveTextContent(/^F$/)
+  })
+
   it('names a 5th as its power chord', async () => {
     await renderApp('/practice/chord-finder?keys=43-50')
     expect(await screen.findByRole('heading', { level: 2, name: 'G5' })).toBeInTheDocument()
@@ -267,6 +295,23 @@ describe('Practice → Chord finder', () => {
     const open = screen.getByRole('link', { name: 'Open in Chords' })
     expect(open.getAttribute('href')).toMatch(/^\/practice\/chords/)
     expect(screen.getByRole('region', { name: 'In these keys' })).toBeInTheDocument()
+  })
+
+  it('opens an inversion in Chords over its bass, and never a chord Chords cannot show over it', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/chord-finder?keys=52-60-67')
+    await user.click(await screen.findByRole('button', { name: 'More actions' }))
+    expect(screen.getByRole('link', { name: 'Open in Chords' }).getAttribute('href')).toMatch(
+      /inversion=1/,
+    )
+  })
+
+  it('offers no way into Chords for a chord of five notes over a bass it cannot keep', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/chord-finder?keys=40-58-62-67-72')
+    expect(await screen.findByRole('heading', { level: 2, name: 'C9/E' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'More actions' }))
+    expect(screen.queryByRole('link', { name: 'Open in Chords' })).not.toBeInTheDocument()
   })
 
   it('opens from Practice', async () => {

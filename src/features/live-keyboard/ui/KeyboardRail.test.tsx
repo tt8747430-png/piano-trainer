@@ -91,7 +91,7 @@ describe('the keyboard’s rail', () => {
   it('offers Sound the MIDI keyboard only while one is connected, and saves it', async () => {
     const user = userEvent.setup()
     const { settingsStore, midiKeyboard } = setUp()
-    const sound = () => screen.queryByRole('button', { name: 'Hear what you play in the app' })
+    const sound = () => screen.queryByRole('button', { name: 'Sound the MIDI keyboard' })
     expect(sound()).not.toBeInTheDocument()
     await act(() => midiKeyboard.connect())
     await user.click(sound() ?? document.body)

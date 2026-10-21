@@ -9,9 +9,9 @@ const melodyOf = (melody: string) => parseMelody(testSong(['C'], { melody }))
 describe('parseMelody', () => {
   it('reads notes as written and rests, in beats, ignoring bar lines', () => {
     expect(melodyOf('E4/1 D4/.5 r/1 | C#5/1.5')).toEqual([
-      { midi: 64, spelled: note('E'), startTick: 0, durationTicks: 12 },
-      { midi: 62, spelled: note('D'), startTick: 12, durationTicks: 6 },
-      { midi: 73, spelled: note('C', 1), startTick: 30, durationTicks: 18 },
+      { midi: 64, spelled: note('E'), startTick: 0, durationTicks: 24 },
+      { midi: 62, spelled: note('D'), startTick: 24, durationTicks: 12 },
+      { midi: 73, spelled: note('C', 1), startTick: 60, durationTicks: 36 },
     ])
   })
 
@@ -23,15 +23,18 @@ describe('parseMelody', () => {
     expect(parseMelody(testSong(['C']))).toBeUndefined()
   })
 
-  it.each(['X4/1', 'E4', 'E4/0', 'E4/0.3', 'E/1'])('names the note it cannot read: %j', (token) => {
-    let caught: unknown
-    try {
-      melodyOf(`C4/1 ${token}`)
-    } catch (error) {
-      caught = error
-    }
-    expect(caught).toBeInstanceOf(ContentError)
-    expect((caught as ContentError).position).toEqual({ note: 2 })
-    expect((caught as ContentError).message).toContain(token)
-  })
+  it.each(['X4/1', 'E4', 'E4/0', 'E4/0.3', 'E/1', 'E4/17', 'E4/1e8', 'C9/1', 'B#8/1', 'Ab0/1'])(
+    'names the note it cannot read: %j',
+    (token) => {
+      let caught: unknown
+      try {
+        melodyOf(`C4/1 ${token}`)
+      } catch (error) {
+        caught = error
+      }
+      expect(caught).toBeInstanceOf(ContentError)
+      expect((caught as ContentError).position).toEqual({ note: 2 })
+      expect((caught as ContentError).message).toContain(token)
+    },
+  )
 })

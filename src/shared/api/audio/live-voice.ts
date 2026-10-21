@@ -27,12 +27,15 @@ interface LiveRender {
 /**
  * The damper over an adapter's sound: what each hand and pedal does is heard as the damper says. A
  * key held from two places (the MIDI keyboard and a finger on the screen) is let go when both let go
- * of it: one letting go never cuts the other's sound.
+ * of it: one letting go never cuts the other's sound. A pedal is the same: held from two places (Space,
+ * the rail's button, the MIDI foot), it comes up when both let it up.
  */
 export function createLiveVoice(render: LiveRender): LiveVoice {
   let damper = QUIET_DAMPER
   /** How many hands hold each key down now. */
   const holds = new Map<Midi, number>()
+  /** How many sources hold each pedal down now. */
+  const pedalHolds = new Map<PedalKind, number>()
 
   const apply = (event: DamperEvent) => {
     const next = damp(damper, event)
@@ -59,6 +62,10 @@ export function createLiveVoice(render: LiveRender): LiveVoice {
       render.changed(damper)
     },
     pedal(pedal, down) {
+      const before = pedalHolds.get(pedal) ?? 0
+      const after = down ? before + 1 : Math.max(0, before - 1)
+      pedalHolds.set(pedal, after)
+      if (before > 0 === after > 0) return
       apply({ kind: 'pedal', pedal, down })
       render.changed(damper)
     },

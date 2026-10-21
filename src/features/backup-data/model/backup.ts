@@ -4,7 +4,7 @@ import { PROGRESS_STORAGE_KEY, PROGRESS_VERSION } from '@/entities/progress'
 import { SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from '@/entities/settings'
 import { TAKES_STORAGE_KEY, TAKES_VERSION } from '@/entities/take'
 import { VIEWS_STORAGE_KEY, VIEWS_VERSION } from '@/entities/views'
-import { isRecord } from '@/shared/lib'
+import { isRecord, unguarded } from '@/shared/lib'
 
 /** Every saved store, by the key it saves under, with the version it reads: what a backup holds. */
 const STORES = {
@@ -96,19 +96,36 @@ export const hasOtherVersions = (backup: Backup): boolean =>
 
 /**
  * Puts a backup's saves in storage in place of what is there: a store it has no save of starts afresh.
- * Each write is read back; where one did not hold (the device has no room), everything is put back as
- * it was and false is handed back, so a restore is never half done.
+ * Each write is read back; where one did not hold (the device has no room), every store's save is
+ * taken out and what was there put back, which fit together before, and false is handed back, so a
+ * restore is never half done. It writes under the storage's guard and says itself what failed: no
+ * change of the learner's was lost.
  */
 export function restoreBackup(storage: Storage, backup: Backup): boolean {
-  const before = SAVE_KEYS.map((key) => [key, storage.getItem(key)] as const)
+  const raw = unguarded(storage)
+  const attempt = (act: () => void) => {
+    try {
+      act()
+    } catch {}
+  }
+  const read = (key: string) => {
+    try {
+      return raw.getItem(key)
+    } catch {
+      return null
+    }
+  }
   const put = (key: string, json: string | null) =>
-    json === null ? storage.removeItem(key) : storage.setItem(key, json)
+    attempt(() => (json === null ? raw.removeItem(key) : raw.setItem(key, json)))
+  const before = SAVE_KEYS.map((key) => [key, read(key)] as const)
   const held = SAVE_KEYS.every((key) => {
     const save = backup.saves[key]
     const json = save ? JSON.stringify(save) : null
     put(key, json)
-    return storage.getItem(key) === json
+    return read(key) === json
   })
-  if (!held) for (const [key, json] of before) put(key, json)
-  return held
+  if (held) return true
+  for (const key of SAVE_KEYS) put(key, null)
+  for (const [key, json] of before) put(key, json)
+  return false
 }

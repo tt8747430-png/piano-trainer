@@ -54,7 +54,22 @@ export function placeCaret(
   return { ...state, layer, caret: next, selection, struck: null }
 }
 
-/** The caret moved a step, a bar or to an end, Shift choosing bars in the chords. */
+/**
+ * The start of the next chart line (none past the last: the caret stays), or back: the start
+ * of the caret's line, else of the line before.
+ */
+function lineStart(bars: ReturnType<typeof barsOf>, caret: Tick, direction: -1 | 1): Tick {
+  const starts = bars
+    .filter((bar, i) => {
+      const before = bars[i - 1]
+      return !before || before.section !== bar.section || before.line !== bar.line
+    })
+    .map((bar) => bar.start)
+  if (direction > 0) return starts.find((start) => start > caret) ?? caret
+  return starts.findLast((start) => start < caret) ?? 0
+}
+
+/** The caret moved a step, a bar, a line or to an end, Shift choosing bars in the chords. */
 export function moveCaret(
   state: EditorState,
   by: CaretMove,
@@ -68,6 +83,8 @@ export function moveCaret(
     target = nextCaret(draft, layer, caret, stepOf(state), direction)
   } else if (by === 'end') {
     target = direction < 0 ? 0 : totalTicks(draft)
+  } else if (by === 'line') {
+    target = lineStart(bars, caret, direction)
   } else {
     const here = barAt(draft, caret)
     target =

@@ -5,8 +5,8 @@ const pickupAndDottedHalf: Lesson = {
   id: 'pickup-and-dotted-half',
   title: { en: 'The pickup and the dotted half note', ru: 'Затакт и половинная с точкой' },
   summary: {
-    en: 'Count 3/4 and start a tune on a pickup.',
-    ru: 'Считать 3/4 и начинать мелодию с затакта.',
+    en: 'Count three beats to a bar in 3/4, and start a tune on a pickup before beat 1.',
+    ru: 'Считать три доли в такте в размере 3/4 и начинать мелодию с затакта перед первой долей.',
   },
   sections: [
     {
@@ -15,8 +15,8 @@ const pickupAndDottedHalf: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'In 3/4 each bar holds three quarter-note beats. Count 1 2 3, leaning on 1.',
-            ru: 'В размере 3/4 в такте три доли по четверти. Считайте «раз, два, три» с опорой на «раз».',
+            en: 'In 3/4 each bar holds three quarter-note beats. Count 1 2 3 and play beat 1 a little stronger than the other two.',
+            ru: 'В размере 3/4 в такте три доли по четверти. Считайте «раз, два, три» и играйте первую долю чуть сильнее двух других.',
           },
         },
         { kind: 'notes', clef: 'treble', meter: '3/4', notes: 'C4 E4 G4 G4 E4 C4 D4 F4 A4 G4/2.' },
@@ -28,8 +28,8 @@ const pickupAndDottedHalf: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A dotted half lasts three beats, so in 3/4 it fills a bar alone. A half and a quarter fill one too.',
-            ru: 'Половинная с точкой длится три доли и в 3/4 одна заполняет такт. Половинная и четверть — тоже.',
+            en: 'A dotted half lasts three beats, so in 3/4 it fills a whole bar on its own. A half note and a quarter note together fill a bar too.',
+            ru: 'Половинная с точкой длится три доли, поэтому в 3/4 она одна заполняет весь такт. Половинная и четверть вместе тоже заполняют такт.',
           },
         },
         { kind: 'notes', clef: 'treble', meter: '3/4', notes: 'E4 F4 G4 C5/2. G4/2 E4 C4/2.' },
@@ -42,8 +42,8 @@ const pickupAndDottedHalf: Lesson = {
           kind: 'text',
           lead: { en: 'A pickup', ru: 'Затакт' },
           text: {
-            en: 'is a note or two before the first full bar. The tune starts on a weak beat and leans into beat 1.',
-            ru: '— одна-две ноты перед первым полным тактом. Мелодия начинается со слабой доли и приходит на «раз».',
+            en: 'is a note or two before the first full bar. The tune starts on a weak beat and leads into beat 1. Here the pickup G falls on beat 3.',
+            ru: '— одна-две ноты перед первым полным тактом. Мелодия начинается со слабой доли и ведёт к «раз». Здесь затакт соль приходится на «три».',
           },
         },
         {
@@ -55,21 +55,24 @@ const pickupAndDottedHalf: Lesson = {
       ],
     },
     {
-      heading: { en: 'Count a pickup', ru: 'Как считать затакт' },
+      heading: { en: 'How to count a pickup', ru: 'Как считать затакт' },
       blocks: [
         { kind: 'notes', clef: 'treble', notes: 'r/2. G4 C5/2 E5/2 D5 C5 B4 A4 G4/1' },
         {
           kind: 'steps',
           steps: [
             {
-              en: 'Find the beat the pickup falls on: here 4.',
-              ru: 'Найдите долю затакта: здесь «четыре».',
+              en: 'Find the beat the pickup falls on. In this 4/4 line it is beat 4.',
+              ru: 'Найдите долю, на которую падает затакт. В этой строке в 4/4 это «четыре».',
             },
             {
-              en: 'Count 1 2 3 silently and play on 4.',
-              ru: 'Просчитайте про себя «раз, два, три» и играйте на «четыре».',
+              en: 'Count 1 2 3 silently, then play the pickup on 4.',
+              ru: 'Просчитайте про себя «раз, два, три» и сыграйте затакт на «четыре».',
             },
-            { en: 'Land on the next 1.', ru: 'Придите на следующий «раз».' },
+            {
+              en: 'Land on the next 1, the first full bar.',
+              ru: 'Придите на следующий «раз», в первый полный такт.',
+            },
           ],
         },
       ],
@@ -80,8 +83,8 @@ const pickupAndDottedHalf: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'In 3/4 a pickup of two notes falls on 2 and 3. Count 1 silently, then play.',
-            ru: 'В 3/4 затакт из двух нот приходится на «два, три». Просчитайте «раз» про себя и играйте.',
+            en: 'In 3/4 a pickup of two notes falls on beats 2 and 3. Count 1 silently, play the two notes, then land on the next 1.',
+            ru: 'В 3/4 затакт из двух нот приходится на «два, три». Просчитайте «раз» про себя, сыграйте две ноты и придите на следующий «раз».',
           },
         },
         { kind: 'notes', clef: 'treble', meter: '3/4', notes: 'r/4 E4 F4 G4/2. G4 A4 B4 C5/2.' },

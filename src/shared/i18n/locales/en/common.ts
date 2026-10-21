@@ -79,7 +79,7 @@ export const common = {
     names: { c: 'Note names: every C', all: 'Note names: every key', none: 'Note names: off' },
     glissando: 'Glissando',
     pedal: 'Pedal',
-    sound: 'Hear what you play in the app',
+    sound: 'Sound the MIDI keyboard',
     chord: 'Chord played',
     fold: 'Hide the keys',
     unfold: 'Keys',
@@ -122,6 +122,8 @@ export const common = {
     },
     folded: 'Hide a page’s keys',
     foldedNote: 'They fold into a Keys button that brings them back',
+    foldedLandscape: 'Hide them on a phone on its side',
+    foldedLandscapeNote: 'Lessons, explorers and songs; the Player and the editor keep theirs',
     swipe: {
       label: 'A swipe on the keys',
       detail: 'Scrolls the keyboard, or plays each key it crosses (glissando)',
@@ -157,7 +159,7 @@ export const common = {
     app: 'Anywhere',
     sidebar: 'Collapse or open the sidebar',
   },
-  learned: { toggle: '{{title}}: learned', done: 'Learned' },
+  learned: { done: 'Learned' },
   midi: {
     label: 'MIDI keyboard',
     labelConnected: 'MIDI keyboard, connected',
@@ -173,12 +175,12 @@ export const common = {
   // The MIDI keyboard's settings, in Settings under its connection.
   midiSettings: {
     device: {
-      label: 'Keyboard listened to',
+      label: 'Listen to',
       detail: 'With more than one connected, the app hears only this one',
       any: 'Any keyboard',
       away: '{{device}} (not connected)',
     },
-    sound: 'Hear what you play in the app',
+    sound: 'Sound the MIDI keyboard',
     soundNote: 'For a keyboard without speakers: the app sounds the keys you press',
     throughPiano: 'Play the app’s music on the keyboard',
     throughPianoNote: 'Songs and examples sound from the keyboard’s own speakers',

@@ -46,7 +46,7 @@ describe('Practice → Accompaniment', () => {
     expect(shelves()).toEqual(['The five ways (lesson 3)', 'Right-hand techniques', 'Studies'])
     expect(
       within(shelf('The five ways (lesson 3)')).getByRole('link', {
-        name: /^1 · Bass \+ chords The chord on every beat over a held octave bass\.$/,
+        name: /^1 · Bass \+ chords The right hand plays the chord on every beat over an octave held in the left\.$/,
       }),
     ).toHaveAttribute('href', '/practice/accompaniment/patterns/M1')
     expect(rows('Studies')).toEqual(
@@ -62,7 +62,13 @@ describe('Practice → Accompaniment', () => {
     expect(screen.getByRole('link', { name: 'Боброва' })).toHaveAttribute('aria-current', 'page')
     expect(shelves()).toEqual(['The seven types of accompaniment', 'Hymns'])
     expect(rows('The seven types of accompaniment')).toHaveLength(8)
-    expect(rows('Hymns')).toEqual(['/songs/otche', '/songs/ode', '/songs/silent', '/songs/amazing'])
+    expect(rows('Hymns')).toEqual([
+      '/songs/otche',
+      '/songs/ode',
+      '/songs/silent',
+      '/songs/amazing',
+      '/songs/wonderful',
+    ])
   })
 
   it('lists on Called to Play 2 its octaves and chords, and the songs of its workbook', async () => {

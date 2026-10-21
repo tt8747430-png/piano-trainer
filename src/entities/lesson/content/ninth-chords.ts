@@ -5,8 +5,8 @@ const ninthChords: Lesson = {
   id: 'ninth-chords',
   title: { en: 'Ninth chords', ru: 'Нонаккорды' },
   summary: {
-    en: 'Build minor, major and dominant 9ths and voice them two ways.',
-    ru: 'Строить минорный, мажорный и доминантовый нонаккорды в двух расположениях.',
+    en: 'Build minor, major and dominant 9th chords from two triads, and voice them two ways.',
+    ru: 'Строить минорный, мажорный и доминантовый нонаккорды из двух трезвучий и играть их в двух расположениях.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const ninthChords: Lesson = {
           kind: 'text',
           lead: { en: 'A 9th chord', ru: 'Нонаккорд' },
           text: {
-            en: 'is a 7th chord with one more 3rd on top.',
-            ru: '— септаккорд и ещё одна терция сверху.',
+            en: 'is a 7th chord with one more 3rd on top. The 9th is the 2nd an octave up.',
+            ru: '— это септаккорд и ещё одна терция сверху. Нона — это вторая ступень октавой выше.',
           },
         },
         {
@@ -32,8 +32,8 @@ const ninthChords: Lesson = {
         {
           kind: 'note',
           text: {
-            en: '9 means the minor 7th is there too. Maj9 means the major 7th.',
-            ru: '9 означает, что малая септима тоже есть. Maj9 — что есть большая.',
+            en: 'A plain 9 includes the minor 7th. Maj9 includes the major 7th.',
+            ru: 'Простая 9 включает малую септиму. Maj9 включает большую.',
           },
         },
       ],
@@ -45,16 +45,16 @@ const ninthChords: Lesson = {
           kind: 'steps',
           steps: [
             {
-              en: 'Minor and minor: Gm and Dm make Gm9.',
-              ru: 'Минорное и минорное: Gm и Dm дают Gm9.',
+              en: 'Minor on minor: Gm and Dm make Gm9.',
+              ru: 'Минорное над минорным: Gm и Dm дают Gm9.',
             },
             {
-              en: 'Major and major: G and D make GMaj9.',
-              ru: 'Мажорное и мажорное: G и D дают GMaj9.',
+              en: 'Major on major: G and D make GMaj9.',
+              ru: 'Мажорное над мажорным: G и D дают GMaj9.',
             },
             {
-              en: 'Major and minor: G and Dm make G9.',
-              ru: 'Мажорное и минорное: G и Dm дают G9.',
+              en: 'Minor on major: G and Dm make G9.',
+              ru: 'Минорное над мажорным: G и Dm дают G9.',
             },
           ],
         },
@@ -62,8 +62,8 @@ const ninthChords: Lesson = {
         {
           kind: 'note',
           text: {
-            en: 'The second triad starts on the first one’s 5th.',
-            ru: 'Второе трезвучие строится от квинты первого.',
+            en: 'The top triad starts on the bottom one’s 5th.',
+            ru: 'Верхнее трезвучие строится от квинты нижнего.',
           },
         },
       ],
@@ -74,8 +74,8 @@ const ninthChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Play the root in the left hand and the other four notes in the right. Then move the top 3rd down an octave.',
-            ru: 'Основной тон играйте левой рукой, остальные четыре ноты — правой. Затем перенесите верхнюю терцию на октаву вниз.',
+            en: 'The left hand plays the root. The right hand plays the other four notes. For the second position, move the top two notes down an octave.',
+            ru: 'Левая рука играет основной тон. Правая — остальные четыре звука. Для второго расположения перенесите два верхних звука на октаву вниз.',
           },
         },
         {
@@ -95,8 +95,8 @@ const ninthChords: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'A quick way to the second position: split the triad’s root into its two neighbours, the 7th and the 9th.',
-            ru: 'Быстрый путь ко второму расположению: расщепите основной тон трезвучия на два соседних звука, септиму и нону.',
+            en: 'A shortcut to the second position: play the triad, then split its root into the two notes beside it, the 7th and the 9th.',
+            ru: 'Короткий путь ко второму расположению: сыграйте трезвучие, затем замените основной тон двумя соседними звуками, септимой и ноной.',
           },
         },
         {

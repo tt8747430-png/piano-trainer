@@ -1,6 +1,4 @@
-import { METHOD_BOOK_IDS, type MethodBookId } from '@/entities/book'
-import { isOneOf } from '@/shared/lib'
-import { PATTERN_GROUP_ENTRIES, PATTERNS } from '../content/patterns'
+import { PATTERN_GROUP_ENTRIES } from '../content/patterns'
 import type { PatternChoice } from './accompaniment'
 import type { BookPattern, PatternBook } from './book'
 import type { PatternRef } from './own'
@@ -12,21 +10,14 @@ import {
   type PatternGroup,
   type PatternId,
 } from './types'
-import { patternsIn } from './selectors'
+import { patternsIn } from './groups'
+import type { AccompanimentPart } from './parts'
 
 /** A titled run of patterns in a list: the learner's favourites or own, a built-in group, the hidden. */
 export interface PatternShelf {
   readonly shelf: 'favourites' | 'own' | PatternGroup | 'hidden'
   readonly patterns: readonly BookPattern[]
 }
-
-/**
- * Accompaniment's parts, each a tab of its page: a method book's groups, the rhythm styles, and what
- * the learner starred, made and hid.
- */
-export const ACCOMPANIMENT_PARTS = [...METHOD_BOOK_IDS, 'styles', 'yours'] as const
-export type AccompanimentPart = (typeof ACCOMPANIMENT_PARTS)[number]
-export const isAccompanimentPart = isOneOf(ACCOMPANIMENT_PARTS)
 
 /** The part a shelf is on: a group's book's, Styles for a group of no book, Yours for the learner's. */
 export const partOfShelf = (shelf: PatternShelf['shelf']): AccompanimentPart =>
@@ -89,7 +80,3 @@ export function pickerShelves(
   const hidden = new Set(choices.hidden)
   return shelves(book, choices, (id) => hidden.has(id) && id !== chosen)
 }
-
-/** The method book that teaches a built-in pattern; null for a style, which is no book's. */
-export const bookOfPattern = (id: PatternId): MethodBookId | null =>
-  PATTERN_GROUP_ENTRIES[PATTERNS[id].group].book

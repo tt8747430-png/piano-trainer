@@ -20,6 +20,13 @@ describe('matchesQuery', () => {
     expect(matchesQuery(['Silent Night'], 'grace')).toBe(false)
   })
 
+  it('finds each word of the query, in any order and any field, whatever lies between', () => {
+    expect(matchesQuery(['Major scale'], 'scale major')).toBe(true)
+    expect(matchesQuery(['Боже, спасибо'], 'Боже спасибо')).toBe(true)
+    expect(matchesQuery(['Scales', 'Major and minor'], 'major scales')).toBe(true)
+    expect(matchesQuery(['Major scale'], 'major waltz')).toBe(false)
+  })
+
   it('matches everything for an empty or blank query', () => {
     expect(matchesQuery(['Silent Night'], '   ')).toBe(true)
   })

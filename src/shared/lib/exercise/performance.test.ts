@@ -38,14 +38,14 @@ describe('exercisePerformance', () => {
       notes: Array.from({ length: 16 }, (_, i) => at(i, 60)),
       harmony: [
         { chord: { root: note('D'), quality: 'm7' }, startTick: 0 },
-        { chord: { root: note('G'), quality: 'd7' }, startTick: 48 },
+        { chord: { root: note('G'), quality: 'd7' }, startTick: 96 },
       ],
     })
     expect(
       performance.chords.map((chord) => [chord.symbol, chord.bar, chord.durationTicks]),
     ).toEqual([
-      ['Dm7', 0, 48],
-      ['G7', 1, 48],
+      ['Dm7', 0, 96],
+      ['G7', 1, 96],
     ])
     expect(performance.bars.map((bar) => bar.chords)).toEqual([[0], [1]])
     expect(performance.notes.map((n) => n.chord)).toEqual([

@@ -14,9 +14,17 @@ export const percentOf = (tempo: number, ownTempo: number): number =>
 /** A shortcut's tempo step, in percent of the piece's tempo. */
 const STEP = 5
 
-/** The tempo a step up (1) or down (-1): the next 5% of the piece's tempo, within the range. */
+/**
+ * The tempo a step up (1) or down (-1): the next whole 5% of the piece's tempo that rounds to another
+ * tempo, within the range.
+ */
 export function stepTempo(tempo: number, ownTempo: number, by: -1 | 1): number {
-  const percent = percentOf(tempo, ownTempo)
-  const next = by > 0 ? Math.floor(percent / STEP) + 1 : Math.ceil(percent / STEP) - 1
-  return speedTempo(ownTempo, (next * STEP) / 100)
+  const share = (tempo / ownTempo) * 100
+  let mark = by > 0 ? Math.floor(share / STEP) + 1 : Math.ceil(share / STEP) - 1
+  for (;;) {
+    const next = speedTempo(ownTempo, (mark * STEP) / 100)
+    const limit = by > 0 ? TEMPO_RANGE.max : TEMPO_RANGE.min
+    if (next !== tempo || next === limit) return next
+    mark += by
+  }
 }

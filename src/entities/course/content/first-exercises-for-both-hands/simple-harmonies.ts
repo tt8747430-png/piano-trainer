@@ -8,8 +8,8 @@ const simpleHarmonies: Lesson = {
   id: 'simple-harmonies',
   title: { en: 'Simple harmonies', ru: 'Простая гармонизация' },
   summary: {
-    en: 'Play a tune over I, IV and V in the left hand.',
-    ru: 'Играть мелодию над I, IV и V в левой руке.',
+    en: 'Play a tune in the right hand over I, IV and V in the left, first in C, then in G.',
+    ru: 'Играть мелодию правой рукой над I, IV и V в левой, сначала в до мажоре, затем в соль мажоре.',
   },
   sections: [
     {
@@ -18,8 +18,8 @@ const simpleHarmonies: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The left hand holds C and G, fingers 5 and 1. The right plays E, D, C over it.',
-            ru: 'Левая рука держит до и соль пальцами 5 и 1. Правая играет над ними ми, ре, до.',
+            en: 'The left hand holds C and G with fingers 5 and 1. Above it, the right hand plays E, D, C.',
+            ru: 'Левая рука держит до и соль пятым и первым пальцами. Над ними правая играет ми, ре, до.',
           },
         },
         {
@@ -39,11 +39,16 @@ const simpleHarmonies: Lesson = {
           kind: 'text',
           lead: { en: 'The primary chords', ru: 'Главные трезвучия' },
           text: {
-            en: 'stand on the 1st, 4th and 5th notes of the scale: I, IV and V. In C they are C, F and G.',
-            ru: 'стоят на I, IV и V ступенях гаммы. В до мажоре это C, F и G.',
+            en: 'are built on the 1st, 4th and 5th notes of the scale, written I, IV and V. In C major they are C, F and G.',
+            ru: 'строятся на I, IV и V ступенях гаммы. В до мажоре это C, F и G.',
           },
         },
         { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR },
+        {
+          kind: 'question',
+          ask: { en: 'Play the IV chord in C.', ru: 'Сыграйте аккорд IV ступени в до мажоре.' },
+          answer: { chord: 'F' },
+        },
       ],
     },
     {
@@ -52,8 +57,8 @@ const simpleHarmonies: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Two left-hand notes can stand for a chord. The thumb moves up to A for IV, the little finger down to B for V.',
-            ru: 'Два звука левой руки могут заменить аккорд. Для IV большой палец переходит на ля, для V мизинец — на си.',
+            en: 'The left hand can play just two notes of each chord. For IV the thumb moves up to A. For V the little finger moves down to B.',
+            ru: 'Левая рука может брать от аккорда всего два звука. Для IV большой палец переходит вверх на ля, для V мизинец опускается на си.',
           },
         },
         {
@@ -65,6 +70,14 @@ const simpleHarmonies: Lesson = {
             { symbol: 'C', degrees: '1 5 | 1', hands: 'C3 G3 | C4' },
           ],
         },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play the left hand’s two notes for IV: C and A.',
+            ru: 'Сыграйте два звука левой руки для IV: до и ля.',
+          },
+          answer: { notes: ['C', 'A'], rising: true },
+        },
       ],
     },
     {
@@ -74,8 +87,8 @@ const simpleHarmonies: Lesson = {
           kind: 'text',
           lead: { en: 'A triad', ru: 'Трезвучие' },
           text: {
-            en: 'is a chord of three notes. Keep C at the bottom for C and F, B for G7. Fingers 5 3 1, 5 2 1, 5 2 1, 5 3 1.',
-            ru: '— аккорд из трёх звуков. Для C и F внизу до, для G7 — си. Пальцы: 5 3 1, 5 2 1, 5 2 1, 5 3 1.',
+            en: 'is a chord of three notes. Keep C at the bottom for C and F, and B for G7. Fingers: 5 3 1, 5 2 1, 5 2 1, 5 3 1.',
+            ru: '— аккорд из трёх звуков. Для C и F внизу остаётся до, для G7 — си. Пальцы: 5 3 1, 5 2 1, 5 2 1, 5 3 1.',
           },
         },
         {
@@ -95,8 +108,8 @@ const simpleHarmonies: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'In G the chords are G, C and D7. The hand shapes stay the same, built up from G.',
-            ru: 'В соль мажоре аккорды G, C и D7. Формы руки те же, только от соль.',
+            en: 'In G major the chords are G, C and D7. The hand shapes stay the same, now built up from G.',
+            ru: 'В соль мажоре аккорды G, C и D7. Формы руки те же, только теперь от соль.',
           },
         },
         {
@@ -121,21 +134,8 @@ const simpleHarmonies: Lesson = {
       blocks: [
         {
           kind: 'question',
-          ask: { en: 'Play the IV chord in C.', ru: 'Сыграйте аккорд IV ступени в до мажоре.' },
-          answer: { chord: 'F' },
-        },
-        {
-          kind: 'question',
           ask: { en: 'Play the V7 chord in C.', ru: 'Сыграйте аккорд V7 в до мажоре.' },
           answer: { chord: 'G7' },
-        },
-        {
-          kind: 'question',
-          ask: {
-            en: 'Play the left hand’s two notes for IV: C and A.',
-            ru: 'Сыграйте два звука левой руки для IV: до и ля.',
-          },
-          answer: { notes: ['C', 'A'], rising: true },
         },
         {
           kind: 'link',

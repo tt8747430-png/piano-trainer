@@ -2,7 +2,14 @@ import type { BookId } from '@/entities/book'
 import type { PatternId } from '@/entities/pattern'
 import type { LocalText } from '@/shared/i18n'
 import { isOneOf } from '@/shared/lib'
-import { parseKey, type ChordSize, type Key, type Letter, type Meter } from '@/shared/lib/music'
+import {
+  parseKey,
+  type ChordSize,
+  type Instrument,
+  type Key,
+  type Letter,
+  type Meter,
+} from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
 
 /** A saved id may name a piece a later version removed, so it stays a plain name. */
@@ -41,6 +48,10 @@ export interface Section {
   readonly last?: boolean
   /** Anything else the heading says: 'in 2/4', 'and ending'. */
   readonly detail?: LocalText
+  /** The key its bars are written in, where that is not the piece's: a key change. */
+  readonly key?: KeyText
+  /** The accompaniment its chords play, where it is not the piece's (a chord's method code still wins). */
+  readonly pattern?: PatternId
   /** A chart's bars separated by spaces, or a sectioned progression's chords; see docs/CONTENT.md. */
   readonly lines: readonly string[]
 }
@@ -52,7 +63,7 @@ export interface Source {
   readonly page?: number
 }
 
-export type CreditRole =
+type CreditRole =
   'authors' | 'words-and-music' | 'words' | 'music' | 'russian-text' | 'harmony' | 'accompaniment'
 /** Names stay as printed; the role is shown through an interface string in the learner's language. */
 export type Credit =
@@ -92,6 +103,13 @@ export interface ChartPiece extends PieceCommon {
   readonly sections: readonly Section[]
   /** Note, octave and beats: `E4/1 D4/.5 r/1`. */
   readonly melody?: string
+  /** More voices sung with the tune, each written as the tune is, each on a staff of its own (ADR 0066). */
+  readonly voices?: readonly string[]
+  /**
+   * What each sung part is played on, the tune's first, then each more voice's (ADR 0070): `voice`
+   * where none is given.
+   */
+  readonly instruments?: readonly Instrument[]
   /** Bars of either hand written note by note, played in place of the pattern's hand there. */
   readonly hands?: Hands
 }
@@ -133,13 +151,12 @@ export const COLLECTION_IDS = [
   'studies',
 ] as const
 export type CollectionId = (typeof COLLECTION_IDS)[number]
-export const isCollectionId = isOneOf(COLLECTION_IDS)
 
 /**
  * The collections Songs lists: ids only, so a URL is checked without loading a piece (the content
  * holds `SONG_COLLECTIONS` to them).
  */
-export const SONG_COLLECTION_IDS = [
+const SONG_COLLECTION_IDS = [
   'learning-songs',
   'bozhe-spasibo',
   'called-to-play',

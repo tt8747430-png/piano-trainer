@@ -30,7 +30,9 @@ describe('keysHolding', () => {
     expect(holding(['E'], 'maj')).toEqual(
       expect.arrayContaining(['A minor: V', 'E major: I', 'B major: IV', 'A major: V']),
     )
-    expect(holding(['G', 1], 'dim')).toEqual(expect.arrayContaining(['A minor: #vii°']))
+    expect(holding(['G', 1], 'dim')).toEqual(
+      expect.arrayContaining(['A minor: vii°', 'B minor: vi°']),
+    )
   })
 
   it('spells the chord as each key spells it: C♯ is D♭ in a key of flats', () => {

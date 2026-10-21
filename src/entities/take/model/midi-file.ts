@@ -44,11 +44,17 @@ const ascii = (text: string): number[] => [...text].map((char) => char.charCodeA
 /** The beats each whole bar of a take holds, from its barlines: a pickup's, a short bar's, the meter's. */
 function barBeats(take: Take): { readonly ms: number; readonly beats: number }[] {
   const beatMs = 60_000 / take.tempo
-  return take.bars.slice(0, -1).map((ms, i) => ({
-    ms,
-    // To the nearest quarter of a beat: the barlines are where the click fell, in milliseconds.
-    beats: Math.round((((take.bars[i + 1] ?? ms) - ms) / beatMs) * 4) / 4,
-  }))
+  // To the nearest eighth of the meter (a third of a compound beat, half a simple one): the barlines
+  // are where the click fell, in milliseconds.
+  const eighths = isCompound(take.meter) ? 3 : 2
+  // A bar shorter than an eighth (a barline just before the take's end) is the bar before's.
+  return take.bars
+    .slice(0, -1)
+    .map((ms, i) => ({
+      ms,
+      beats: Math.round((((take.bars[i + 1] ?? ms) - ms) / beatMs) * eighths) / eighths,
+    }))
+    .filter((bar) => bar.beats > 0)
 }
 
 /**

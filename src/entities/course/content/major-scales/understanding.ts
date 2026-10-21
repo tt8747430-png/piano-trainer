@@ -5,8 +5,8 @@ const understanding: Lesson = {
   id: 'understanding',
   title: { en: 'Understanding major scales', ru: 'Как устроены мажорные гаммы' },
   summary: {
-    en: 'Build any major scale from its steps and finger it.',
-    ru: 'Строить любую мажорную гамму по ступеням и знать её аппликатуру.',
+    en: 'Build any major scale from its pattern of steps, see how the keys follow one another and finger the scale.',
+    ru: 'Строить любую мажорную гамму по схеме тонов и полутонов, понять, как тональности следуют друг за другом, и знать аппликатуру.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const understanding: Lesson = {
           kind: 'text',
           lead: { en: 'A half step', ru: 'Полутон' },
           text: {
-            en: 'is the very next key, black or white: E to F. A whole step is two half steps: C to D.',
-            ru: '— соседняя клавиша, чёрная или белая: ми — фа. Тон — два полутона: до — ре.',
+            en: 'goes to the very next key, black or white, as from E to F. A whole step is two half steps, as from C to D.',
+            ru: '— переход на соседнюю клавишу, чёрную или белую, как от ми к фа. Тон — это два полутона, как от до к ре.',
           },
         },
         { kind: 'interval', root: note('E'), interval: 'm2' },
@@ -31,22 +31,22 @@ const understanding: Lesson = {
           kind: 'text',
           lead: { en: 'A major scale', ru: 'Мажорная гамма' },
           text: {
-            en: 'climbs whole, whole, half, whole, whole, whole, half. From C it takes only white keys.',
-            ru: 'поднимается так: тон, тон, полутон, тон, тон, тон, полутон. От до в ней только белые клавиши.',
+            en: 'climbs eight notes by whole, whole, half, whole, whole, whole, half. Starting on C, this pattern uses only white keys.',
+            ru: 'поднимается на восемь нот так: тон, тон, полутон, тон, тон, тон, полутон. От до эта схема даёт только белые клавиши.',
           },
         },
         { kind: 'scale', root: note('C'), scale: 'major' },
       ],
     },
     {
-      heading: { en: 'Two tetrachords', ru: 'Два тетрахорда' },
+      heading: { en: 'Two halves', ru: 'Две половины' },
       blocks: [
         {
           kind: 'text',
           lead: { en: 'A tetrachord', ru: 'Тетрахорд' },
           text: {
-            en: 'is four notes stepping whole, whole, half. A major scale is two, a whole step apart: C D E F, then G A B C.',
-            ru: '— четыре ноты через тон, тон, полутон. Мажорная гамма — два тетрахорда через тон: до ре ми фа и соль ля си до.',
+            en: 'is four notes that step whole, whole, half. A major scale is two of them, joined by a whole step: C D E F, then G A B C.',
+            ru: '— четыре ноты через тон, тон, полутон. Мажорная гамма состоит из двух тетрахордов, соединённых тоном: до ре ми фа и соль ля си до.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 A4 B4 C5' },
@@ -58,8 +58,8 @@ const understanding: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'C major’s upper tetrachord starts G major. Its 7th rises to F♯ to keep the pattern.',
-            ru: 'Верхний тетрахорд до мажора начинает соль мажор. Его седьмая ступень повышается до фа-диеза, чтобы сохранить схему.',
+            en: 'C major’s upper half, G A B C, is also the lower half of G major. To keep the pattern, G major raises its 7th note to F♯.',
+            ru: 'Верхняя половина до мажора, соль ля си до, — это нижняя половина соль мажора. Чтобы сохранить схему, соль мажор повышает седьмую ступень до фа-диеза.',
           },
         },
         { kind: 'scale', root: note('G'), scale: 'major' },
@@ -72,8 +72,8 @@ const understanding: Lesson = {
           kind: 'text',
           lead: { en: 'The circle of fifths', ru: 'Квинтовый круг' },
           text: {
-            en: 'puts each key a 5th above the last, one sharp more. Past F♯ the flats shrink back to F major’s one B♭.',
-            ru: 'ставит каждую тональность квинтой выше, на диез больше. После фа-диез мажора бемолей всё меньше, до одного си-бемоля фа мажора.',
+            en: 'orders the keys a 5th apart, each with one more sharp. After F♯ major the keys use flats, fewer each time, down to F major’s one B♭.',
+            ru: 'выстраивает тональности через квинту, каждую с ещё одним диезом. После фа-диез мажора идут бемольные, со всё меньшим числом знаков, до одного си-бемоля в фа мажоре.',
           },
         },
         { kind: 'scale', root: note('F'), scale: 'major' },
@@ -86,8 +86,8 @@ const understanding: Lesson = {
           kind: 'text',
           lead: { en: 'The thumb crossing', ru: 'Подкладывание' },
           text: {
-            en: 'joins a scale’s groups of three and four fingers. The thumb moves under while 2 and 3 play, ready over F.',
-            ru: 'соединяет группы из трёх и четырёх пальцев. Большой палец уходит под руку, пока играют второй и третий, и ждёт над фа.',
+            en: 'joins a scale’s groups of three and four fingers. In C major, the thumb slides under while fingers 2 and 3 play, ready over F.',
+            ru: 'соединяет группы из трёх и четырёх пальцев. В до мажоре большой палец уходит под руку, пока играют второй и третий, и ждёт над фа.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 E4 D4 C4/2' },
@@ -99,8 +99,8 @@ const understanding: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'In flat keys the thumb takes white keys only, the long fingers the black. D♭ major puts the thumb on F and C.',
-            ru: 'В бемольных тональностях большой палец берёт только белые клавиши, длинные пальцы — чёрные. В ре-бемоль мажоре большой палец на фа и до.',
+            en: 'In flat keys the thumb plays only white keys, and the longer fingers take the black ones. In D♭ major the thumb plays F and C.',
+            ru: 'В бемольных тональностях большой палец играет только белые клавиши, а длинные пальцы берут чёрные. В ре-бемоль мажоре большой палец играет фа и до.',
           },
         },
         { kind: 'scale', root: note('D', -1), scale: 'major' },

@@ -43,12 +43,10 @@ describe('the practice machine', () => {
       expect(run(state, ...Array(4).fill({ type: 'next' })).beatGroup).toBe(0)
     })
 
-    it('jumps to a bar or a beat group', () => {
+    it('jumps to a beat group', () => {
       const state = initialPractice(TWO_BARS, 'listen', 'both')
-      expect(run(state, { type: 'jumpToBar', bar: 1 }).beatGroup).toBe(4)
       expect(run(state, { type: 'jumpToBeatGroup', beatGroup: 6 }).beatGroup).toBe(6)
       expect(run(state, { type: 'jumpToBeatGroup', beatGroup: 99 }).beatGroup).toBe(0)
-      expect(run(state, { type: 'jumpToBar', bar: 9 }).beatGroup).toBe(0)
     })
 
     it('ignores keys', () => {
@@ -202,6 +200,24 @@ describe('the practice machine', () => {
     it('stays at the start going back', () => {
       expect(run(waiting('rh'), { type: 'prev' }).beatGroup).toBe(0)
     })
+
+    it('starts again from the start when set up anew after finishing', () => {
+      const finish = (state: PracticeState) =>
+        run(state, { type: 'jumpToBeatGroup', beatGroup: 7 }, { type: 'next' })
+      const finished = finish(run(initialPractice(TWO_BARS, 'wait', 'rh'), { type: 'play' }))
+      expect(finished.outcome).toBe('finished')
+      const configure = (hands: 'rh' | 'lh', loop: { first: number; last: number } | null) =>
+        run(
+          finished,
+          { type: 'configure', performance: TWO_BARS, mode: 'wait', hands, loop },
+          { type: 'play' },
+        )
+      expect(configure('lh', null)).toMatchObject({ beatGroup: 0, outcome: 'waiting' })
+      expect(configure('rh', { first: 4, last: 7 })).toMatchObject({
+        beatGroup: 4,
+        outcome: 'waiting',
+      })
+    })
   })
 
   describe('configure', () => {
@@ -229,7 +245,7 @@ describe('the practice machine', () => {
         beatGroup: 5,
       })
       const configured = run(state, configure(TWO_BARS_IN_HALVES, 'listen', 'both'))
-      expect(TWO_BARS_IN_HALVES.beatGroups[configured.beatGroup]?.tick).toBe(48)
+      expect(TWO_BARS_IN_HALVES.beatGroups[configured.beatGroup]?.tick).toBe(96)
     })
 
     it('stops playing when the mode changes, and not otherwise', () => {

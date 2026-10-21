@@ -17,9 +17,9 @@ export const practice = {
   // of tabs or of groups says those, in their own words, so it has no line here.
   about: {
     chords: 'Triads to 13ths · Inversions · Tensions',
-    intervals: 'On the keys, up and down',
-    progressions: 'From the library or typed, in any key',
-    chordFinder: 'Any chord named, spelled and written',
+    intervals: 'Every interval, heard and shown on the keys',
+    progressions: 'Pick a known one or type your own, in any key',
+    chordFinder: 'Play a chord to see its name and how it is written',
   },
   // Words the explorers share.
   root: 'Root',
@@ -63,14 +63,14 @@ export const practice = {
     tensions: {
       title: 'Available tensions',
       group: {
-        weak: { title: 'Weak', says: 'They add nothing to its sound.' },
-        strong: { title: 'Strong', says: 'They name the chord.' },
-        tension: { title: 'Tensions', says: 'They colour it.' },
-        avoid: { title: 'Avoid', says: 'They clash with it.' },
+        weak: { title: 'Weak', says: 'These add nothing new to the sound.' },
+        strong: { title: 'Strong', says: 'These give the chord its name.' },
+        tension: { title: 'Tensions', says: 'These add colour.' },
+        avoid: { title: 'Avoid', says: 'These clash with the chord.' },
       },
     },
     chromatic: 'Chromatic walk',
-    chromaticDetail: 'The chord a bar each, a semitone at a time from its root',
+    chromaticDetail: 'The chord moved a semitone at a time from its root, one bar each',
     // Chords' row to the Chord finder, which opens on the chord's own keys.
   },
   // Scales and keys: the run, the chords, the key.
@@ -99,7 +99,7 @@ export const practice = {
     keysPlay: { label: 'Keys play', chords: 'Chords', notes: 'Notes' },
     holds: '{{note}} is in {{chords}}',
     holdsNone: 'No chord of the scale holds {{note}}',
-    walk: { title: 'Walk the chords', played: 'Played', block: 'Block' },
+    walk: { title: 'Walk the chords', played: 'Played as', block: 'Block' },
     key: {
       circle: 'Circle of fifths',
       random: 'A random key',
@@ -113,7 +113,7 @@ export const practice = {
       noSongs: 'No songs are in this key.',
       harmonise: 'Harmonise a melody note',
       harmoniseAbout:
-        'Every chord that holds the note, played under it: the key’s own and borrowed ones.',
+        'Every chord that holds the melody note, played under it: chords of the key and chords borrowed from outside it.',
     },
     // A scale's page: its key's common progressions, each opening Progressions in this key.
     keyProgressions: 'Progressions in this key',
@@ -125,6 +125,9 @@ export const practice = {
   progressions: {
     field: 'Numerals or chords',
     unread: 'This progression can’t be read.',
+    majorLine: 'These numerals are a major key’s.',
+    minorLine: 'These numerals are a minor key’s.',
+    playIn: 'Play them in {{key}}',
     throughKeys: 'Through the keys',
     choose: 'Progression',
     typed: 'Typed',
@@ -132,7 +135,7 @@ export const practice = {
     lead: { label: 'Lead into each chord', none: 'No', v: 'By its V', 'ii-v': 'By its ii–V' },
     between: {
       title: 'Between two chords',
-      about: 'Passing chords that lead from one chord of the row into the next.',
+      about: 'Passing chords are extra chords that lead from one chord of the row into the next.',
       pair: 'From chord to chord',
     },
     style: {
@@ -149,7 +152,7 @@ export const practice = {
   // The line of a part of Accompaniment with no pattern to show.
   accompaniment: {
     noneYours: 'Patterns you star, make or hide are kept here.',
-    allHidden: 'Every pattern here is hidden. Find them under Yours.',
+    allHidden: 'Every pattern here is hidden. You can find them under Yours.',
   },
   // Patterns: each explained and heard, the learner's favourites, hidden and own.
   patterns: {
@@ -163,7 +166,8 @@ export const practice = {
     makeOwn: 'Make your own from it',
     hide: 'Hide from the Player',
     show: 'Show in the Player',
-    hiddenNote: 'Hidden from the Player’s list and its book’s shelf; it stays in Yours.',
+    hiddenNote:
+      'Hidden from the Player’s list and from its shelf. You can still find it under Yours.',
     edit: 'Edit',
     delete: 'Delete',
     deleting: {
@@ -208,7 +212,7 @@ export const practice = {
     settings: 'Chord finder settings',
     remember: 'Remember',
     rememberDetail: 'The last {{count}}',
-    inKeysShown: 'Its keys',
+    inKeysShown: 'Keys it is in',
     slash: 'Over the bass',
     // An inversion said in words where the name leaves its bass out, or a bass beyond the 7th.
     inversion: { first: '1st inversion', second: '2nd inversion', third: '3rd inversion' },
@@ -239,10 +243,13 @@ export const practice = {
       cadence: 'Cadences',
     },
     kind: {
-      secondaryDominant: { name: 'Secondary dominant', why: '{{chord}} is the V7 of {{to}}.' },
+      secondaryDominant: {
+        name: 'Secondary dominant',
+        why: '{{chord}} is the V7 of {{to}}, the dominant 7th that pulls into it.',
+      },
       tritoneSub: {
         name: 'Tritone substitution',
-        why: '{{chord}} stands in for the V7 of {{to}} and falls a half step into it.',
+        why: '{{chord}} stands in for the V7 of {{to}} and falls a semitone into it.',
       },
       secondaryTwoFive: {
         name: 'Secondary ii–V',
@@ -250,31 +257,31 @@ export const practice = {
       },
       approachBelow: {
         name: 'Chromatic approach from below',
-        why: '{{chord}} rises a half step into {{to}}.',
+        why: '{{chord}} rises a semitone into {{to}}.',
       },
       walkUp: {
         name: 'Bass walking up',
-        why: 'The bass climbs a half step at a time into {{to}}.',
+        why: 'The bass climbs a semitone at a time into {{to}}.',
       },
       walkDown: {
         name: 'Bass walking down',
-        why: 'The bass falls a half step at a time into {{to}}.',
+        why: 'The bass falls a semitone at a time into {{to}}.',
       },
       doubleApproach: {
         name: 'Double chromatic approach',
-        why: '{{chord}} and {{next}} close in on {{to}} from a half step below and above.',
+        why: '{{chord}} and {{next}} close in on {{to}} from a semitone below and above.',
       },
       diminishedApproach: {
         name: 'Diminished approach',
-        why: '{{chord}} leads up a half step into {{to}}.',
+        why: '{{chord}} leads up a semitone into {{to}}.',
       },
       diminishedAbove: {
         name: 'Diminished approach from above',
-        why: '{{chord}} slides down a half step into {{to}}.',
+        why: '{{chord}} slides down a semitone into {{to}}.',
       },
       commonToneDiminished: {
         name: 'Common-tone diminished',
-        why: '{{chord}} stands on the root of {{to}} and opens into it.',
+        why: '{{chord}} is built on the root of {{to}} and opens out into it.',
       },
       diatonicWalk: {
         name: 'Walking through the key',
@@ -282,7 +289,7 @@ export const practice = {
       },
       backdoor: {
         name: 'Backdoor cadence',
-        why: '{{chord}} is the ♭VII7 of {{to}}: its back door.',
+        why: '{{chord}} is the ♭VII7 of {{to}}. It comes in by the back door: from a whole tone below, not from the V.',
       },
       backdoorTwoFive: {
         name: 'Backdoor ii–V',
@@ -290,7 +297,7 @@ export const practice = {
       },
       plagal: {
         name: 'Plagal cadence',
-        why: '{{chord}} is the subdominant of {{to}}: the Amen cadence.',
+        why: '{{chord}} is the subdominant (IV) of {{to}}: the “Amen” cadence.',
       },
       minorPlagal: {
         name: 'Minor plagal cadence',
@@ -298,7 +305,7 @@ export const practice = {
       },
       gospelWalkUp: {
         name: 'Gospel walk-up',
-        why: '{{chord}} and {{next}} climb by whole steps into {{to}}, borrowed from its minor.',
+        why: '{{chord}} and {{next}} climb by whole tones into {{to}}, borrowed from its minor.',
       },
     },
   },
@@ -308,6 +315,8 @@ export const practice = {
     as: 'as {{degree}}',
     inKey: 'in the key',
     onlyInKey: 'In the key only',
+    noneInKey: 'No chord of the key holds {{note}}.',
+    showBorrowed: 'Show borrowed chords too',
     group: {
       triads: 'Triads',
       major: 'Major 7ths',

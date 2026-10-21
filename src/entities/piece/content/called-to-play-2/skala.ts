@@ -11,7 +11,7 @@ export default definePiece({
   tempo: 100,
   pattern: 'r5',
   note: {
-    en: 'One of lesson 9’s three songs, the tune in the right hand.',
+    en: 'One of the three songs of lesson 9, with the tune in the right hand.',
     ru: 'Одна из трёх песен урока 9, мелодия в правой руке.',
   },
   sections: [{ kind: 'verse', lines: ['F@1 F C C F', 'Bb F C F', 'F C C F', 'Bb F C F@3'] }],

@@ -6,8 +6,8 @@ const practiceOne: Lesson = {
   id: 'practice-one',
   title: { en: 'Practice and repetition 1', ru: 'Практика и повторение 1' },
   summary: {
-    en: 'Read mixed lines in both clefs on sight.',
-    ru: 'Читать с листа смешанные строки в обоих ключах.',
+    en: 'Review every position so far: read lines in both clefs, then pass a tune from hand to hand.',
+    ru: 'Повторить все позиции: читать строки в обоих ключах, затем передавать мелодию из руки в руку.',
   },
   sections: [
     {
@@ -16,8 +16,8 @@ const practiceOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Thumb on middle C. Read each line once slowly, then once a little faster.',
-            ru: 'Первый палец на до первой октавы. Прочитайте каждую строку медленно, затем чуть быстрее.',
+            en: 'Right thumb on middle C, the C position. Play each line once slowly, then once a little faster.',
+            ru: 'Первый палец правой руки на до первой октавы, в позиции до. Сыграйте каждую строку сначала медленно, затем чуть быстрее.',
           },
         },
         { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 E4 C4/2 D4 F4 E4 D4 C4/1' },
@@ -30,8 +30,8 @@ const practiceOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Left thumb on C3. Read from the bottom line and the second space.',
-            ru: 'Первый палец левой руки на до малой октавы. Читайте от нижней линейки и второго промежутка.',
+            en: 'Left thumb on C3, finger 5 on F2. Read from two landmarks: G2 on the bottom line and C3 in the second space.',
+            ru: 'Первый палец левой руки на до малой октавы, пятый на фа. Читайте от двух ориентиров: соль на нижней линейке и до во втором промежутке.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'C3 B2 A2 G2 F2 A2 C3/2 B2 G2 A2 B2 C3/1' },
@@ -44,22 +44,26 @@ const practiceOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Each clef names its own note: G4 in the treble, F3 in the bass. Middle C sits between them.',
-            ru: 'Каждый ключ называет свою ноту: соль в скрипичном, фа в басовом. До первой октавы — между ними.',
+            en: 'Each clef marks its own note: the treble clef G4, the bass clef F3. Middle C sits between the two staves and belongs to both.',
+            ru: 'Каждый ключ отмечает свою ноту: скрипичный — соль, басовый — фа. До первой октавы стоит между станами и принадлежит обоим.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4/2 G4/2 E4/2 C4/2' },
-        { kind: 'notes', clef: 'bass', notes: 'C4/2 F3/2 A3/2 C4/2' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'C4/2 G4/2 E4/2 C4/2',
+          bass: 'C4/2 F3/2 A3/2 C4/2',
+        },
       ],
     },
     {
-      heading: { en: 'The left hand higher', ru: 'Левая рука выше' },
+      heading: { en: 'The left hand higher up', ru: 'Левая рука выше' },
       blocks: [
         {
           kind: 'text',
           text: {
-            en: 'Now the left hand reads at the top of the bass staff, finger 5 on C3 or F3.',
-            ru: 'Теперь левая рука читает в верхней части басового стана, пятый палец на до или на фа.',
+            en: 'Now the left hand plays the two higher positions. In the first line, finger 5 is on C3. In the second, it is on F3.',
+            ru: 'Теперь левая рука играет в двух верхних позициях. В первой строке пятый палец на до, во второй — на фа.',
           },
         },
         { kind: 'notes', clef: 'bass', notes: 'C3 D3 E3 D3 C3 E3 D3/2 E3 D3 C3 D3 C3/1' },
@@ -72,12 +76,16 @@ const practiceOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'The tune passes from hand to hand. Play the treble line, then answer it with the bass.',
-            ru: 'Мелодия переходит из руки в руку. Сыграйте строку в скрипичном ключе, затем ответьте басом.',
+            en: 'Here the tune passes from hand to hand. Play the treble line with the right hand, then answer it with the left on the bass line.',
+            ru: 'Здесь мелодия переходит из руки в руку. Сыграйте строку в скрипичном ключе правой рукой, затем ответьте левой по басовой строке.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'E4 F4 G4/2 F4 E4 D4/2 E4 D4 C4 D4 E4/1' },
-        { kind: 'notes', clef: 'bass', notes: 'A2 B2 C3/2 B2 A2 G2/2 A2 G2 F2 G2 A2/1' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'E4 F4 G4/2 F4 E4 D4/2 E4 D4 C4 D4 E4/1',
+          bass: 'A2 B2 C3/2 B2 A2 G2/2 A2 G2 F2 G2 A2/1',
+        },
       ],
     },
     {
@@ -86,8 +94,8 @@ const practiceOne: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'Lean on beat 1 of each bar and keep the count going.',
-            ru: 'Опирайтесь на первую долю каждого такта и не теряйте счёт.',
+            en: 'These lines have three beats to a bar. Play beat 1 a little stronger and keep counting 1 2 3.',
+            ru: 'В этих строках по три доли в такте. Играйте первую долю чуть сильнее и не теряйте счёт «раз, два, три».',
           },
         },
         { kind: 'notes', clef: 'treble', meter: '3/4', notes: 'C4 E4 G4 F4/2 D4 E4 G4 E4 C4/2.' },
@@ -123,7 +131,7 @@ const practiceOne: Lesson = {
         },
         {
           kind: 'link',
-          title: { en: 'Reading notes in the Quiz', ru: 'Чтение нот в тестах' },
+          title: { en: 'Practise reading notes in the Quiz', ru: 'Чтение нот в тестах' },
           target: { opens: 'quiz', trainer: 'reading-notes' },
         },
         {

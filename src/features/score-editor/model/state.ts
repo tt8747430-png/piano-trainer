@@ -1,9 +1,23 @@
+import type { BarMarkChoice } from './bar-marks'
+import type { PatternId } from '@/entities/pattern'
+import type { ExtraVoice } from '@/shared/lib/notation'
 import type { SectionKind } from '@/entities/piece'
-import type { Chord, Finger, Key, Meter, Midi, Tick } from '@/shared/lib/music'
+import type {
+  Chord,
+  Clef,
+  Finger,
+  Hand,
+  Instrument,
+  Key,
+  Meter,
+  Midi,
+  Tick,
+} from '@/shared/lib/music'
 import type { Clip } from './bars'
 import type { Draft, DraftNote, Layer } from './draft'
 import type { TakePart } from './take-edits'
-import type { ChosenValue } from './values'
+import type { MarkChoice } from './marks'
+import type { ChosenValue, Dots } from './values'
 
 /** What undo and redo bring back. */
 export interface Snapshot {
@@ -44,18 +58,18 @@ export type BarEdit =
   'insert' | 'delete' | 'copy' | 'cut' | 'paste' | 'newLine' | 'joinLine' | 'newSection'
 
 /** How far the caret moves: a step of the value (or to the next place), a bar, or to an end. */
-export type CaretMove = 'step' | 'bar' | 'end'
+export type CaretMove = 'step' | 'bar' | 'line' | 'end'
 
 /**
- * Where the caret goes after a chord: the next beat; the next bar (staying on the last, a tapped chord);
- * or the next bar, one added past the last (a chart typed on).
+ * Where the caret goes after a chord: nowhere (a chord built part by part); the next beat; the next
+ * bar (staying on the last, a tapped chord); or the next bar, one added past the last (a chart typed on).
  */
-export type ChordAdvance = 'beat' | 'bar' | 'barAdding'
+export type ChordAdvance = 'stay' | 'beat' | 'bar' | 'barAdding'
 
 export type EditorAction =
   | { readonly type: 'layer'; readonly layer: Layer }
   | { readonly type: 'value'; readonly value: ChosenValue['value'] }
-  | { readonly type: 'dot' }
+  | { readonly type: 'dot'; readonly dots?: Dots }
   | { readonly type: 'triplet' }
   | { readonly type: 'chordMode' }
   | {
@@ -72,10 +86,29 @@ export type EditorAction =
     }
   | { readonly type: 'key'; readonly key: Midi; readonly time: number }
   | { readonly type: 'rest' }
-  | { readonly type: 'delete' }
+  /** The notes or chord at the caret; with `back`, else the ones before it (Backspace). */
+  | { readonly type: 'delete'; readonly back?: boolean }
+  /** The notes at the caret moved by notes of the key: a note dragged on its staff. */
+  | { readonly type: 'step'; readonly steps: number; readonly joins?: boolean }
+  /** The tune's staff added over the grand staff, or taken away with its notes (ADR 0064). */
+  | { readonly type: 'melodyStaff'; readonly on: boolean }
+  /** A more voice's staff added (the next one) or taken away with its notes, the later voices moving up. */
+  | {
+      readonly type: 'voiceStaff'
+      readonly voice: ExtraVoice
+      readonly on: boolean
+      /** What the voice added is played on (ADR 0070): the voice where none. */
+      readonly instrument?: Instrument
+    }
+  /** What a sung part is played on: 0 the tune, then each more voice (ADR 0070). */
+  | { readonly type: 'instrument'; readonly part: number; readonly instrument: Instrument }
   | { readonly type: 'shift'; readonly semitones: number }
   | { readonly type: 'respell' }
   | { readonly type: 'finger'; readonly midi: Midi; readonly finger: Finger | null }
+  /** A mark put on the notes at the caret, or those of the bars chosen, or taken off them all (ADR 0063). */
+  | { readonly type: 'mark'; readonly mark: MarkChoice }
+  /** The notes at the caret joined to the same keys' notes after them. */
+  | { readonly type: 'tie' }
   | { readonly type: 'chord'; readonly chord: Chord; readonly advance: ChordAdvance }
   | { readonly type: 'writeOut'; readonly played: readonly DraftNote[] }
   | { readonly type: 'backToPattern' }
@@ -83,8 +116,17 @@ export type EditorAction =
   | { readonly type: 'take'; readonly parts: readonly TakePart[] }
   | { readonly type: 'bars'; readonly edit: BarEdit }
   | { readonly type: 'barLength'; readonly ticks: Tick }
+  /** Barlines on the bars chosen, else the caret's (a repeat, an ending, a double or final barline). */
+  | { readonly type: 'barMarks'; readonly choice: BarMarkChoice }
+  /** A hand's staff changes clef at the caret's bar (ADR 0069). */
+  | { readonly type: 'clef'; readonly hand: Hand; readonly clef: Clef }
   | { readonly type: 'sectionKind'; readonly section: number; readonly kind: SectionKind }
   | { readonly type: 'joinSection'; readonly section: number }
+  | {
+      readonly type: 'sectionPattern'
+      readonly section: number
+      readonly pattern: PatternId | null
+    }
   | {
       readonly type: 'settings'
       readonly key?: Key
@@ -97,7 +139,8 @@ export type EditorAction =
 export const initialEditor = (draft: Draft): EditorState => ({
   draft,
   caret: 0,
-  layer: 'melody',
+  // The tune where the piece has a staff for it, else the right hand.
+  layer: draft.melodyStaff ? 'melody' : 'rh',
   value: { value: 4, dots: 0, triplet: false },
   chord: false,
   selection: null,

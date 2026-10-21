@@ -1,8 +1,8 @@
-import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { Link } from '@tanstack/react-router'
-import { PencilLine, Play, Printer } from 'lucide-react'
-import { useMemo } from 'react'
+import { PencilLine, Play, Printer, RotateCcw, Share2, Target, Trash2 } from 'lucide-react'
+import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { pieceStepId } from '@/entities/step'
 import {
   entryTitles,
@@ -17,24 +17,35 @@ import {
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { LearnedButton } from '@/features/mark-learned'
 import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
-import { ShareSongButton } from '@/features/share-song'
+import { ShareSaid, useShareSong } from '@/features/share-song'
+import { loopParam } from '@/features/practice'
+import { OPEN_PLAINLY } from '@/shared/lib'
 import { audibleHands, barSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { useLocale } from '@/shared/i18n'
-import { FabLink, FloatingActions, NO_KEYS, RoundButton, RoundLink } from '@/shared/ui'
+import {
+  ButtonLink,
+  FabLink,
+  FloatingActions,
+  NO_KEYS,
+  SpeedDial,
+  SpeedDialAction,
+} from '@/shared/ui'
 import { ChordChart } from '@/widgets/chord-chart'
 import { PieceChords } from '@/widgets/piece-chords'
-import { PieceAbout } from './PieceAbout'
+import { PieceAbout, PieceCredits } from './PieceAbout'
 import { PieceFacts } from './PieceFacts'
-import { OwnMusicActions } from './OwnMusicActions'
+import { PieceForm } from './PieceForm'
+import { OwnMusicAsk } from './OwnMusicAsk'
 import { PieceHeader } from './PieceHeader'
-import { OPEN_PLAINLY } from '@/shared/lib'
 
 /**
- * A piece with a chart, in one column: Edit and Learned as round buttons in its bar, its facts, the
- * keyboard where the page's keys dock, showing what sounds, over the chords it plays and its chart,
- * each to tap and hear; then what is printed about it and, for the learner's own music, its way back.
- * Practise, to the Player, is the screen's one floating action.
+ * A piece with a chart, in one column, as a songbook's page reads: Learned in its bar; its facts (key,
+ * time, tempo) and who wrote it; its form, the sections in order, each a link to its place; the
+ * chords it plays and its chart by section, each section to practise on its own, every chord and bar
+ * to tap and hear on its keys, docked as the keyboard settings say; then its note and the way to its
+ * key's scale. Practise floats in the thumb's reach, the rest folded beside it in More actions: Edit,
+ * Check these chords, Print, and for the learner's own music Share and its way back, asked first.
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
@@ -48,67 +59,96 @@ export function PieceView({ piece }: { piece: Piece }) {
     [piece],
   )
   const headings = usePieceHeadings(piece)
+  const shared = useShareSong()
+  const [asking, setAsking] = useState(false)
+  // More actions, which takes the focus back from a dialog it opened: the action chosen is folded away.
+  const more = useRef<HTMLDivElement>(null)
+  const step = pieceStepId(piece.id)
   const toggleBar = (bar: number) =>
     playback.toggle(bar, () =>
       barSounds(performance, bar, { tempo: piece.tempo, hands: audibleHands('both') }),
     )
+  const ownMusic = own
+    ? ({ kind: 'song', id: own, title } as const)
+    : hasVersion
+      ? ({ kind: 'version', id: piece.id, title } as const)
+      : null
 
   return (
     <div className="flex flex-col gap-6 pb-4">
-      <PieceHeader
-        entry={piece}
-        actions={
-          <div className="flex gap-2 print:hidden">
-            {isDegreePiece(piece) ? null : (
-              <RoundLink
-                label={t('edit')}
-                icon={PencilLine}
-                render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
-              />
-            )}
-            {own ? null : <LearnedButton step={pieceStepId(piece.id)} round />}
-          </div>
-        }
-      />
+      <PieceHeader entry={piece} actions={own ? null : <LearnedButton step={step} round />} />
       <PieceFacts entry={piece} />
-      <PinnedKeyboard shown={NO_KEYS} range={playerRange(performance)} />
+      <PieceCredits entry={piece} />
+      <ShareSaid said={shared.said} />
+      <PinnedKeyboard shown={NO_KEYS} range={playerRange(performance)} className="print:hidden" />
+      <PieceForm performance={performance} headings={headings} />
       <div className="print:hidden">
-        <PieceChords piece={piece} performance={performance} />
+        <PieceChords performance={performance} />
       </div>
       <section className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-2xl">{t('chart')}</h2>
-          {/* An installed app has no browser menu to print from. */}
-          <RoundButton
-            label={t('print')}
-            title={t('print')}
-            icon={Printer}
-            className="print:hidden"
-            onClick={() => window.print()}
-          />
-        </div>
+        <h2 className="text-2xl">{t('chart')}</h2>
         <ChordChart
           performance={performance}
           headings={headings}
           onBar={toggleBar}
           playing={playback.playing}
+          sectionAction={(bars, section) => (
+            <ButtonLink
+              variant="outline"
+              className="h-9 rounded-full px-3 text-sm print:hidden"
+              aria-label={t('practiseSectionOf', { section: headings[section] ?? '' })}
+              render={
+                <Link
+                  to="/play/$pieceId"
+                  params={{ pieceId: piece.id }}
+                  search={{ loop: loopParam(bars) }}
+                  state={OPEN_PLAINLY}
+                />
+              }
+            >
+              <Play data-icon="inline-start" aria-hidden />
+              {t('practiseSection')}
+            </ButtonLink>
+          )}
         />
       </section>
       <PieceAbout entry={piece} />
-      {own ? (
-        <div className="flex flex-wrap items-start gap-3 print:hidden">
-          {isDegreePiece(piece) ? null : (
-            <ShareSongButton song={{ title, music: musicOf(piece) }} />
-          )}
-          <OwnMusicActions piece={{ kind: 'song', id: own, title }} />
-        </div>
-      ) : hasVersion ? (
-        <div className="flex print:hidden">
-          <OwnMusicActions piece={{ kind: 'version', id: piece.id, title }} />
-        </div>
+      {ownMusic ? (
+        <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} returnTo={more} />
       ) : null}
-      {/* The screen's one way on: to the keys, in the Player. */}
       <FloatingActions>
+        <div ref={more} className="contents">
+          <SpeedDial>
+            {ownMusic ? (
+              <SpeedDialAction
+                label={t(ownMusic.kind === 'song' ? 'delete' : 'reset')}
+                icon={ownMusic.kind === 'song' ? Trash2 : RotateCcw}
+                onClick={() => setAsking(true)}
+              />
+            ) : null}
+            {own && !isDegreePiece(piece) ? (
+              <SpeedDialAction
+                label={t('share')}
+                icon={Share2}
+                onClick={() => shared.share({ title, music: musicOf(piece) })}
+              />
+            ) : null}
+            {/* An installed app has no browser menu to print from. */}
+            <SpeedDialAction label={t('print')} icon={Printer} onClick={() => window.print()} />
+            <SpeedDialAction
+              label={t('checkChords')}
+              icon={Target}
+              render={<Link to="/check" search={{ of: step }} />}
+            />
+            {isDegreePiece(piece) ? null : (
+              <SpeedDialAction
+                label={t('edit')}
+                icon={PencilLine}
+                render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
+              />
+            )}
+          </SpeedDial>
+        </div>
         <FabLink
           label={t('practise')}
           icon={Play}

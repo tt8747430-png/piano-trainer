@@ -26,14 +26,16 @@ export interface RailCaption {
  * rail's edges: the keyboard map, then at its end ‹ › an octave together (one control, never a lone
  * arrow in the corner a Back takes; for a mouse on a rail long enough, which cannot swipe: a finger
  * does not see them) and `children` (the screen's `RailGroup`s of `RailButton`s). Keys that do not
- * scroll have no ‹ › and no map. Its `caption` is said beside the buttons, in the room the map
- * leaves; on a rail with no such room it starts at the rail's start, over the map, whole.
+ * scroll have no ‹ › and no map; the rail's `end` stays at its end, out of the buttons that scroll. Its `caption` is said beside the buttons, in the room the map
+ * leaves; on a rail with no such room it starts at the rail's start, over the map, whole. On a short
+ * rail the map keeps a usable width and the buttons scroll sideways.
  */
 export function KeyRail({
   scroller,
   scrolls,
   dots,
   caption,
+  end,
   children,
 }: {
   scroller: RefObject<HTMLElement | null>
@@ -41,6 +43,8 @@ export function KeyRail({
   /** The keys the map dots: marked or down. */
   dots: ReadonlySet<Midi>
   caption?: RailCaption | undefined
+  /** The rail's last control (a page's Hide the keys): always in sight, never scrolled away. */
+  end?: ReactNode
   children?: ReactNode
 }) {
   const { t } = useTranslation('common')
@@ -56,7 +60,8 @@ export function KeyRail({
       <span aria-hidden className="absolute inset-x-0 bottom-0 h-9 bg-key-rail" />
       <div className="sticky left-0 flex h-full items-end px-1" style={{ width: IN_VIEW }}>
         {/* The map and the caption share one place: the caption at its end, or from its start when it is longer. */}
-        <div className="grid min-w-0 flex-1 grid-cols-1 items-end">
+        {/* It keeps a usable width (64px): the buttons give way first, scrolling sideways. */}
+        <div className="grid min-w-16 flex-1 grid-cols-1 items-end">
           {/* A rail too short for its buttons and a map keeps the buttons. */}
           <div className="col-start-1 row-start-1 flex min-w-0 @max-xs:hidden">
             {scrolls ? <KeyboardMap scroller={scroller} dots={dots} /> : null}
@@ -68,13 +73,23 @@ export function KeyRail({
             </p>
           ) : null}
         </div>
-        {scrolls ? (
-          <RailGroup className="@max-md:hidden pointer-coarse:hidden">
-            <RailButton label={t('rail.octaveDown')} icon={ChevronLeft} onClick={() => step(-1)} />
-            <RailButton label={t('rail.octaveUp')} icon={ChevronRight} onClick={() => step(1)} />
-          </RailGroup>
-        ) : null}
-        {children}
+        <div
+          data-slot="rail-controls"
+          className="flex min-w-0 overflow-x-auto overscroll-x-contain scrollbar-none"
+        >
+          {scrolls ? (
+            <RailGroup className="@max-md:hidden pointer-coarse:hidden">
+              <RailButton
+                label={t('rail.octaveDown')}
+                icon={ChevronLeft}
+                onClick={() => step(-1)}
+              />
+              <RailButton label={t('rail.octaveUp')} icon={ChevronRight} onClick={() => step(1)} />
+            </RailGroup>
+          ) : null}
+          {children}
+        </div>
+        {end}
       </div>
     </div>
   )
