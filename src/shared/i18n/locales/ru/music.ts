@@ -202,7 +202,7 @@ export const music: LocaleResources['music'] = {
   instrumentShort: {
     voice: 'Гол.',
     violin: 'Скр.',
-    cello: 'Вч.',
+    cello: 'Влч.',
     flute: 'Фл.',
     oboe: 'Гоб.',
     clarinet: 'Кл.',

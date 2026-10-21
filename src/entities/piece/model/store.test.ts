@@ -92,6 +92,13 @@ describe('createPiecesStore', () => {
       versions: { bz1: { ...MUSIC, voices: ['D4/4'], instruments: ['flute', 'kazoo'] } },
     })
     expect(wrong.versions.bz1).not.toHaveProperty('instruments')
+    // A voice that does not read goes, and its instrument with it.
+    const dropped = restored({
+      versions: {
+        bz1: { ...MUSIC, voices: ['Q4/1', 'D4/4'], instruments: ['flute', 'oboe', 'cello'] },
+      },
+    })
+    expect(dropped.versions.bz1?.instruments).toEqual(['flute', 'cello'])
   })
 
   it('keeps up to three more voices that read and fit the chart, dropping any that does not', () => {

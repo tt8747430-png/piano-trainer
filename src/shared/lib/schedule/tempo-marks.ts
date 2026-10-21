@@ -44,6 +44,8 @@ export function tempoWarp(
   }
   const sums = [0]
   return (tick) => {
+    // Before the music (a count-in), the written tempo.
+    if (tick <= 0) return tick
     const steps = Math.floor(tick / STEP)
     for (let i = sums.length; i <= steps; i += 1)
       sums.push((sums[i - 1] ?? 0) + STEP / factorAt((i - 1) * STEP + STEP / 2))

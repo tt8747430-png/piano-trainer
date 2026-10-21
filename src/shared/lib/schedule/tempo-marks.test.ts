@@ -27,4 +27,9 @@ describe('tempoWarp', () => {
     const warp = tempoWarp([at(0, 'accel')])
     expect(warp(6 * beat) - warp(4 * beat)).toBeCloseTo((2 * beat) / 1.25)
   })
+
+  it('leaves a count-in before the music at the written tempo', () => {
+    const warp = tempoWarp([{ startTick: 288, marks: { expression: 'rit' } }])
+    expect([-96, -48, 0].map(warp)).toEqual([-96, -48, 0])
+  })
 })

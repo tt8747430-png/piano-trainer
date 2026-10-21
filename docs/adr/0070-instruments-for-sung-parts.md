@@ -11,8 +11,9 @@ added as a notation app adds them, by family, each part with its sound, its clef
 
 - **A part's instrument.** `INSTRUMENTS` (`shared/lib/music/instrument.ts`): the voice, violin and cello, flute,
   oboe and clarinet, trumpet and horn, the guitar; `INSTRUMENT_OF` gives each its family and its clef (the cello's
-  and the horn's bass). A piece's `instruments` names the tune's first, then each more voice's; `voice` where none
-  is named. A save keeps them only where every one names an instrument.
+  bass). A piece's `instruments` names the tune's first, then each more voice's; `voice` where none is named. The
+  editor writes them where any part is not the voice (none for a song with no tune); a save is read keeping them
+  where every one names an instrument, each staying with its voice where a voice that does not read is dropped.
 - **Heard.** `arrange` sings the parts (`Performance.sung`) where there are more voices or the tune is on an
   instrument, with `Performance.instruments` beside them; `schedule` gives each note its part's instrument as its
   timbre; the web-audio adapter plays each from a table of tones (waves, attack, release, vibrato, brightness, a
@@ -24,5 +25,7 @@ added as a notation app adds them, by family, each part with its sound, its clef
   part that writes nothing is not saved, nor its instrument.
 
 ## Consequences
+
+The recorder plays the tune under a take in strict time, as its click keeps it.
 
 The guitar is written where it sounds, not an octave up. A part's range is not checked.

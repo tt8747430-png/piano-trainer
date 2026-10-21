@@ -126,9 +126,10 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   const tempo = checkedTempo(options.tempo)
   // Swung where asked, then held back or pressed on where the notes mark the tempo (ADR 0068).
   const swung = placement(performance, options.swing)
-  const warp = tempoWarp([...performance.notes, ...(performance.sung ?? []).flat()])
+  const marked = performance.timing ?? [...performance.notes, ...(performance.sung ?? []).flat()]
+  const warp = tempoWarp(marked)
   const place = (tick: Tick) => warp(swung(tick))
-  const pedal = pedalHeld([...performance.notes, ...(performance.sung ?? []).flat()])
+  const pedal = pedalHeld(marked)
   const counted = options.countIn ? countInBeats(performance, fromTick) : []
   const musicStart = secondsFor(place(fromTick) - place(counted[0]?.tick ?? fromTick), tempo)
   const at = (tick: Tick) => musicStart + secondsFor(place(tick) - place(fromTick), tempo)

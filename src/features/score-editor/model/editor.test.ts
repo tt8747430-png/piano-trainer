@@ -262,7 +262,7 @@ describe('the editor', () => {
   })
 
   it('adds a voice on an instrument, changes the tune’s, and saves only the voices written', () => {
-    const added = run(initialEditor(draftOf()), {
+    const added = run(initialEditor(draftOf({ melody: 'B4/1 | D5/1' })), {
       type: 'voiceStaff',
       voice: 'voice2',
       on: true,

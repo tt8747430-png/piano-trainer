@@ -669,10 +669,19 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     notes: members,
   }))
 
+  const voicesPlayed = (options.voices ?? []).map((voice) =>
+    played(transposeNotes(voice, chart.key.tonic, options.tonic)),
+  )
+  // The tempo and the pedal as every part marks them, whichever the learner hears (ADR 0068).
+  const timing = [...(melody ?? []), ...voicesPlayed.flat(), ...notes].flatMap(
+    ({ startTick, marks }) =>
+      marks?.expression !== undefined || marks?.pedal !== undefined ? [{ startTick, marks }] : [],
+  )
   return {
     key,
     meter: chart.meter,
     totalTicks: layout.totalTicks,
+    ...(timing.length > 0 ? { timing } : {}),
     bars: layout.bars.map((bar, index) => {
       const own = sectionKeys[bar.section]
       const keyed = own ? { ...bar, key: own } : bar
@@ -683,12 +692,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     beatGroups,
     ...(options.voices?.length || options.instruments?.some((one) => one !== DEFAULT_INSTRUMENT)
       ? {
-          sung: [
-            melody ?? [],
-            ...(options.voices ?? []).map((voice) =>
-              played(transposeNotes(voice, chart.key.tonic, options.tonic)),
-            ),
-          ],
+          sung: [melody ?? [], ...voicesPlayed],
           ...(options.instruments?.length ? { instruments: options.instruments } : {}),
         }
       : {}),

@@ -102,35 +102,14 @@ export const TEMPO_TILES = [
   ['presto', 160],
 ] as const
 
-/** The pedal's tiles: each mark, and the marks its picture draws over four notes. */
+/** The pedal's tiles: each mark as a score prints it, Ped. down and ✱ up (a change both). */
 export const PEDAL_TILES = [
-  { pedal: 'down', marks: ['down', undefined, undefined, 'up'] },
-  { pedal: 'change', marks: ['down', 'change', undefined, 'up'] },
-  { pedal: 'up', marks: ['down', undefined, undefined, 'up'] },
-] as const satisfies readonly {
-  pedal: Pedal
-  marks: readonly (Pedal | undefined)[]
-}[]
+  { pedal: 'down', glyph: '𝆮' },
+  { pedal: 'change', glyph: '𝆯𝆮' },
+  { pedal: 'up', glyph: '𝆯' },
+] as const satisfies readonly { pedal: Pedal; glyph: string }[]
 
 const C_MAJOR: Key = { tonic: note('C'), minor: false }
-
-/** A pedal tile's picture: four quarter notes on the treble staff, the pedal under them. */
-export function pedalMusic(marks: readonly (Pedal | undefined)[]): TimedMusic {
-  return {
-    key: C_MAJOR,
-    meter: '4/4',
-    bars: [{ startTick: 0, beats: 4, blank: ['bass'] }],
-    notes: marks.map((pedal, i): TimedNote => ({
-      midi: midi(72),
-      spelled: note('C'),
-      hand: 'rh',
-      startTick: i * TICKS_PER_BEAT,
-      durationTicks: TICKS_PER_BEAT,
-      ...(pedal ? { marks: { pedal } } : {}),
-    })),
-    chords: [],
-  }
-}
 
 /** How each of the Barlines' tiles draws its mark on a bar. */
 export const BARLINE_TILES: Readonly<Record<BarMarkChoice, BarMarks>> = {

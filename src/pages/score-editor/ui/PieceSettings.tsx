@@ -60,8 +60,8 @@ function Part({ title, children }: { title: string; children: ReactNode }) {
 /**
  * The editor's settings, one sheet behind the gear (spec §6.4, ADR 0065): the song (an own song's
  * title, the key, the tempo, the meter of its kind); what the score shows and how (the tune's staff,
- * the chord names, the layout down the screen, on A4 pages or as one line, ADR 0064); and the MIDI
- * keyboard. Opened from the bar, or from the sheet's clef, key and time signature.
+ * the chord names, the layout down the screen, on A4 pages or as one line, ADR 0064); what the tune
+ * and each voice are played on (ADR 0070); and the MIDI keyboard. Opened from the bar, or from the sheet's clef, key and time signature.
  */
 export function PieceSettings() {
   const { t } = useTranslation('editor')
@@ -146,7 +146,7 @@ export function PieceSettings() {
           </Part>
           <Part title={t('instruments.label')}>
             <div className="grid-fields">
-              <InstrumentChoice part={0} label={t('layers.melody')} />
+              {melodyStaff ? <InstrumentChoice part={0} label={t('layers.melody')} /> : null}
               {EXTRA_VOICES.slice(0, voices).map((voice, i) => (
                 <InstrumentChoice key={voice} part={i + 1} label={t(`layers.${voice}`)} />
               ))}

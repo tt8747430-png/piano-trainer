@@ -25,6 +25,28 @@ describe('barSounds', () => {
     expect(Math.max(...sounds.map((s) => s.at))).toBeLessThan(4)
   })
 
+  it('plays every beat of a bar a rit. holds back, though the tune is not heard', () => {
+    const slowed = arrange(TWO_BARS_CHART, {
+      tonic: note('C'),
+      pattern: BEATS,
+      melody: [
+        {
+          midi: midi(72),
+          spelled: note('C'),
+          startTick: 0,
+          durationTicks: 96,
+          marks: { expression: 'rit' },
+        },
+      ],
+    })
+    const onsets = new Set(
+      barSounds(slowed, 1, { tempo: 60, hands: audibleHands('both') }).map((s) => s.at.toFixed(2)),
+    )
+    expect(onsets.size).toBe(4)
+    // Its last beat, three beats in at three quarters of the tempo.
+    expect(Math.max(...[...onsets].map(Number))).toBeCloseTo(4)
+  })
+
   it('plays nothing for a bar the piece does not have', () => {
     expect(barSounds(FIXTURE, 9, { tempo: 60, hands: audibleHands('both') })).toEqual([])
   })

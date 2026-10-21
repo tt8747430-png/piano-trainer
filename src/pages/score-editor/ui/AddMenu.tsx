@@ -52,7 +52,6 @@ import {
   LINE_TILES,
   lineMusic,
   PEDAL_TILES,
-  pedalMusic,
   TEMPO_TILES,
   timeTiles,
   type AddTab,
@@ -261,7 +260,7 @@ export function AddMenu() {
     ),
     text: (
       <div className="flex flex-col gap-4">
-        {hasNotes ? null : <p className="text-sm text-muted-foreground">{t('add.noNotes')}</p>}
+        {hasNotes ? null : <p className="text-sm text-muted-foreground">{t('add.noNotesText')}</p>}
         <Tiles heading={t('add.expressions')}>
           {EXPRESSIONS.map((expression) => (
             <Tile
@@ -277,7 +276,7 @@ export function AddMenu() {
           ))}
         </Tiles>
         <Tiles heading={t('add.pedal')}>
-          {PEDAL_TILES.map(({ pedal, marks }) => (
+          {PEDAL_TILES.map(({ pedal, glyph }) => (
             <Tile
               key={pedal}
               label={t(PEDAL_LABEL[pedal])}
@@ -286,7 +285,7 @@ export function AddMenu() {
                 actions.dispatch({ type: 'mark', mark: { kind: 'pedal', pedal } }),
               )}
             >
-              <Engraved music={pedalMusic(marks)} noTime />
+              <span className="font-music text-5xl leading-none">{glyph}</span>
             </Tile>
           ))}
         </Tiles>
@@ -454,7 +453,8 @@ export function AddMenu() {
                 <span aria-hidden className="grid size-6 place-items-center">
                   {TAB_ICONS[each]}
                 </span>
-                {t(`add.tab.${each}`)}
+                {/* On a phone the pictures alone: seven names do not fit its width. */}
+                <span className="max-sm:sr-only">{t(`add.tab.${each}`)}</span>
               </Tabs.Tab>
             ))}
           </Tabs.List>

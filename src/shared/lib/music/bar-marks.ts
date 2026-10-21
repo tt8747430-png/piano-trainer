@@ -83,6 +83,13 @@ export function playOrder(bars: readonly BarMarks[]): number[] {
         continue
       }
     }
+    // A repeat is taken before the jump at the same bar's end: back once, then on to the jump.
+    if (bar.barline === 'repeat' && !taken.has(i) && !jumped) {
+      taken.add(i)
+      second = true
+      i = start
+      continue
+    }
     if (bar.jump && !jumped) {
       jumped = bar.jump
       second = false
@@ -92,12 +99,6 @@ export function playOrder(bars: readonly BarMarks[]): number[] {
             bars.findIndex((each) => each.segno),
           )
         : 0
-      continue
-    }
-    if (bar.barline === 'repeat' && !taken.has(i) && !jumped) {
-      taken.add(i)
-      second = true
-      i = start
       continue
     }
     // Past the repeated passage: the next repeat starts after it, unless a bar says otherwise.

@@ -1,7 +1,14 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isPatternId } from '@/entities/pattern'
 import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
-import { isInstrument, isMeter, isWrittenKey, parseKey, type Tick } from '@/shared/lib/music'
+import {
+  DEFAULT_INSTRUMENT,
+  isInstrument,
+  isMeter,
+  isWrittenKey,
+  parseKey,
+  type Tick,
+} from '@/shared/lib/music'
 import type { Melody } from '@/shared/lib/arrangement'
 import { barTicksOf } from './chart'
 import { ContentError } from './content-error'
@@ -94,16 +101,19 @@ function savedHands(saved: unknown): Hands | undefined {
 /** The most voices sung besides the tune, each on its own staff (ADR 0066). */
 const MOST_VOICES = 3
 
-/** The saved more voices that read and fit the chart, the first three at most. */
+/**
+ * The saved more voices that read and fit the chart, the first three at most, each with its place
+ * among those saved (its instrument's is one more).
+ */
 function savedVoices(
   piece: ChartPiece,
   saved: unknown,
   fits: (tune: Melody | undefined) => boolean,
-): string[] {
+): { readonly voice: string; readonly index: number }[] {
   if (!Array.isArray(saved)) return []
   return saved
-    .filter(isText)
-    .filter((voice) => {
+    .flatMap((voice, index) => (isText(voice) ? [{ voice, index }] : []))
+    .filter(({ voice }) => {
       try {
         return fits(parseMelody({ ...piece, melody: voice }))
       } catch (error) {
@@ -144,11 +154,16 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
       Math.max(0, ...(tune ?? []).map((n) => n.startTick + n.durationTicks)) <= chartTicks(piece)
     if (!fits(parseMelody(piece))) return null
     const sung = savedVoices(piece, voices, fits)
-    // The tune's and each voice's instrument, kept where every one of them names one.
-    const played = Array.isArray(instruments) ? instruments.slice(0, sung.length + 1) : []
+    // The tune's and each kept voice's instrument, kept where every one of them names one.
+    // A part saved without one is sung.
+    const played = Array.isArray(instruments)
+      ? [instruments[0], ...sung.map(({ index }) => instruments[index + 1])].map(
+          (instrument: unknown) => instrument ?? DEFAULT_INSTRUMENT,
+        )
+      : []
     return musicOf({
       ...piece,
-      ...(sung.length > 0 ? { voices: sung } : {}),
+      ...(sung.length > 0 ? { voices: sung.map(({ voice }) => voice) } : {}),
       ...(played.length > 0 && played.every(isInstrument) ? { instruments: played } : {}),
     })
   } catch (error) {

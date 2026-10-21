@@ -11,7 +11,7 @@ import { EXTRA_VOICES, type TimedMusic, type TimedNote } from '@/shared/lib/nota
  */
 export function playedMusic(performance: Performance, ownStaff: boolean): TimedMusic {
   const [tune = [], ...more] = performance.sung ?? []
-  if (more.length > 0 || performance.instruments?.length) {
+  if (more.length > 0 || (tune.length > 0 && performance.instruments?.length)) {
     const voiceStaves = EXTRA_VOICES.slice(0, more.length)
     // Each sung staff's instrument (ADR 0070): the tune's first, then each voice's.
     const staffInstruments = Object.fromEntries(

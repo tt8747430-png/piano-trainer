@@ -73,4 +73,10 @@ describe('playOrder', () => {
       ),
     ).toEqual([0, 1, 0, 2, 3, 0, 2, 3])
   })
+
+  it('takes a repeat before the jump at the same bar’s end', () => {
+    expect(playOrder(bars({ fine: true }, {}, { barline: 'repeat', jump: 'dc-fine' }))).toEqual([
+      0, 1, 2, 0, 1, 2, 0,
+    ])
+  })
 })

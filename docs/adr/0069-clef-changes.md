@@ -22,4 +22,5 @@ ledger lines. Notation apps change a staff's clef at a bar; the owner asked that
 
 ## Consequences
 
-A clef changes at a bar's start, not mid-bar. The tune's and the voices' staves keep the treble clef.
+A clef changes at a bar's start, not mid-bar. The tune's and the voices' staves keep their instrument's clef
+(ADR 0070).

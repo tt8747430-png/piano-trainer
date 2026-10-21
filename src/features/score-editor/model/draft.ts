@@ -192,7 +192,9 @@ export function writeDraft(draft: Draft): PieceMusic {
     return text === undefined ? [] : [{ text, instrument: draft.instruments[i + 1] }]
   })
   const voices = written.map(({ text }) => text)
-  const instruments = [draft.instruments[0], ...written.map(({ instrument }) => instrument)].map(
+  // No tune, no tune's instrument.
+  const tuneInstrument = melody === undefined ? DEFAULT_INSTRUMENT : draft.instruments[0]
+  const instruments = [tuneInstrument, ...written.map(({ instrument }) => instrument)].map(
     (instrument) => instrument ?? DEFAULT_INSTRUMENT,
   )
   const ticks = placed.map(({ bar }) => bar.ticks)

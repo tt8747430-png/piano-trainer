@@ -31,7 +31,7 @@ export const INSTRUMENT_OF: Readonly<
   oboe: { family: 'woodwind', clef: 'treble' },
   clarinet: { family: 'woodwind', clef: 'treble' },
   trumpet: { family: 'brass', clef: 'treble' },
-  horn: { family: 'brass', clef: 'bass' },
+  horn: { family: 'brass', clef: 'treble' },
   guitar: { family: 'plucked', clef: 'treble' },
 }
 

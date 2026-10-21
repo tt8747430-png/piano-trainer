@@ -8,7 +8,7 @@ export const editor: LocaleResources['editor'] = {
   settings: 'Настройки песни',
   dock: 'Правка',
   palette: {
-    move: { left: 'Палитру влево', right: 'Палитру вправо' },
+    move: { left: 'Переместить палитру влево', right: 'Переместить палитру вправо' },
     label: 'Инструменты',
     open: 'Показать инструменты',
     close: 'Скрыть инструменты',
@@ -89,10 +89,11 @@ export const editor: LocaleResources['editor'] = {
     song: 'Песня',
     thisBar: 'Этот такт',
     noNotes: 'Линия начинается у нот под курсором: сначала поставьте курсор на ноту.',
+    noNotesText: 'Слова и педаль ставятся на ноты: сначала поставьте курсор на ноту.',
   },
+  instruments: { label: 'Инструменты', add: 'Добавить инструмент' },
   // How the score is laid out (ADR 0064).
   layout: { label: 'Вид нот', scroll: 'Лента', pages: 'Страницы', horizontal: 'В строку' },
-  instruments: { label: 'Инструменты', add: 'Добавить инструмент' },
   layers: {
     chords: 'Аккорды',
     melody: 'Мелодия',

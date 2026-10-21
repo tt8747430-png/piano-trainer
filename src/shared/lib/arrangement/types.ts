@@ -208,6 +208,11 @@ export interface Performance {
    * groups.
    */
   readonly sung?: readonly Melody[]
+  /**
+   * Every part's tempo and pedal marks (ADR 0068), whether the learner hears that part or not: the
+   * time and the pedal the whole piece keeps.
+   */
+  readonly timing?: readonly { readonly startTick: Tick; readonly marks: NoteMarks }[]
   /** What each of `sung` is played on (ADR 0070), the voice where it names none. */
   readonly instruments?: readonly Instrument[]
 }
