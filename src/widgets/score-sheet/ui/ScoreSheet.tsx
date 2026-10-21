@@ -6,15 +6,22 @@ import type { Midi, Tick } from '@/shared/lib/music'
 import { staffHeight } from '@/shared/ui/score'
 import { HEADING, lineFit } from '../model/line-fit'
 import { createLineSheets, type LineSheet } from '../model/line-sheets'
-import { CHORD_ROW } from './chord-row'
+import { labelRow } from './chord-row'
 import { SheetLine } from './SheetLine'
 
-/** The room between lines, for dealing lines onto pages. */
-const LINE_GAP = 8
+/** The room between lines on a page at full size, for dealing lines onto pages. */
+const LINE_GAP = 16
+/**
+ * The least a bar takes across at full size, in CSS px, its chords and notes read: a lead sheet's four
+ * bars to a tablet's line, two to a phone's.
+ */
+const BAR_SPAN = 150
+/** How small a page is drawn, and how large: smaller, a phone shows its page's music too small to read. */
+const PAGE_SCALE = { least: 0.62, most: 1.2 } as const
 
-/** How many bars a line down a screen this wide holds at most, readable: a phone's two, a tablet's three. */
-const mostBars = (width: number) =>
-  width === 0 ? Infinity : width < 560 ? 2 : width < 860 ? 3 : Infinity
+/** How many bars a line this wide holds at most, each readable; any where the width is not known yet. */
+const barsAcross = (width: number, scale = 1) =>
+  width <= 0 ? Infinity : Math.max(1, Math.floor(width / (BAR_SPAN * scale)))
 
 type PageItem =
   | { readonly kind: 'title' }
@@ -74,7 +81,18 @@ export function ScoreSheet({
   const across = view === 'horizontal'
   const box = useRef<HTMLElement>(null)
   const { width } = useElementSize(box)
-  const most = view === 'scroll' ? mostBars(width) : Infinity
+  // A page zoomed to the screen's width, as a notation app's Page Width, never under a readable size:
+  // a phone's page is then a narrower one, its lines of fewer bars.
+  const pageScale =
+    width > 0 ? Math.min(PAGE_SCALE.most, Math.max(PAGE_SCALE.least, width / PAGE.width)) : 1
+  const paper = width > 0 ? Math.min(width, PAGE.width * pageScale) : PAGE.width
+  const margin = PAGE.margin * pageScale
+  const most =
+    view === 'scroll'
+      ? barsAcross(width)
+      : view === 'pages'
+        ? barsAcross(paper - 2 * margin, pageScale)
+        : Infinity
   const sheets = useMemo(() => sheetsOf(draft, across, most), [sheetsOf, draft, across, most])
   const caretBar = barAt(draft, caret).index
   // Each line runs to its bars' share of the longest, so bars line up down the sheet as a chart's do.
@@ -86,6 +104,7 @@ export function ScoreSheet({
           room,
           staves: Math.max(1, ...sheets.map((sheet) => sheet.score.staves.length)),
           headed: !across,
+          chordNames,
         })
       : 1
 
@@ -114,13 +133,12 @@ export function ScoreSheet({
   )
 
   if (view === 'pages') {
-    const paper = Math.min(width, PAGE.width)
-    const scale = paper > 0 ? paper / PAGE.width : 1
-    const margin = PAGE.margin * scale
+    const scale = pageScale
     // The staves a line writes: the shown sung ones over the piano's two.
     const count =
       (sheets[0]?.music.voiceStaves?.length ?? 0) + (sheets[0]?.music.melodyStaff ? 3 : 2)
-    const lineHeight = CHORD_ROW + staffHeight(undefined, count) * scale + LINE_GAP
+    const lineHeight =
+      labelRow(chordNames, scale) + (staffHeight(undefined, count) + LINE_GAP) * scale
     const items: PageItem[] = [
       ...(title ? [{ kind: 'title' } as const] : []),
       ...draft.sections.flatMap((_, section): PageItem[] => [
@@ -133,7 +151,7 @@ export function ScoreSheet({
     const pages = paginate(
       items,
       (item) => (item.kind === 'line' ? lineHeight : HEADING),
-      PAGE.height * scale - 2 * margin,
+      (paper * PAGE.height) / PAGE.width - 2 * margin,
       (item) => item.kind !== 'line',
     )
     return (
@@ -143,12 +161,21 @@ export function ScoreSheet({
             key={index}
             aria-label={t('sheet.page', { n: index + 1, of: pages.length })}
             data-slot="sheet-page"
-            className="relative flex w-full flex-col gap-2 bg-card text-card-foreground shadow-lg shadow-foreground/10 ring-1 ring-hairline"
-            style={{ maxWidth: PAGE.width, minHeight: PAGE.height * scale, padding: margin }}
+            className="relative flex flex-col bg-card text-card-foreground shadow-lg shadow-foreground/10 ring-1 ring-hairline"
+            style={{
+              width: paper,
+              minHeight: (paper * PAGE.height) / PAGE.width,
+              padding: margin,
+              gap: LINE_GAP * scale,
+            }}
           >
             {page.map((item) =>
               item.kind === 'title' ? (
-                <h2 key="title" className="text-center font-display text-2xl">
+                <h2
+                  key="title"
+                  className="text-center font-display"
+                  style={{ fontSize: `${1.5 * scale}rem` }}
+                >
                   {title}
                 </h2>
               ) : item.kind === 'heading' ? (

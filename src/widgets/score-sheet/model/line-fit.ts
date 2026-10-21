@@ -1,5 +1,5 @@
 import { staffHeight } from '@/shared/ui/score'
-import { CHORD_ROW } from '../ui/chord-row'
+import { labelRow } from '../ui/chord-row'
 
 /** A section's heading over its first line, in CSS px. */
 export const HEADING = 52
@@ -17,13 +17,16 @@ export function lineFit({
   room,
   staves,
   headed,
+  chordNames = true,
 }: {
   room: number
   staves: number
   headed: boolean
+  /** Whether the line has its chord row over it. */
+  chordNames?: boolean
 }): number {
   const system = staffHeight(undefined, staves) + TEMPO_ROOM
   // The labels' row over each line is the chord row's height.
-  const left = room - CHORD_ROW - (headed ? HEADING : 0)
+  const left = room - labelRow(chordNames) - (headed ? HEADING : 0)
   return Math.min(1, Math.max(LEAST_FIT, left / system))
 }

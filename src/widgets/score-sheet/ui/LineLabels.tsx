@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import type { TimedMusic } from '@/shared/lib/notation'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 
@@ -6,16 +5,17 @@ import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 const NUMBER_INSET_PX = 4
 
 /**
- * Over a line's staff: each bar's number and, with chord names, each chord symbol at its onset, as the
- * Player's sheet sets them; beside the number, Pattern on a bar a hand leaves to the pattern,
- * so the mark never stands over the notes.
+ * Over a line's staff: the number of its first bar at its head, as a printed system numbers it, and
+ * with chord names each chord symbol at its onset, as the Player's sheet sets them; the row as tall as
+ * what it holds (`row`), drawn at the line's size.
  */
 export function LineLabels({
   layout,
   music,
   firstBar,
   chordNames,
-  patterned,
+  row,
+  size,
 }: {
   layout: ScoreLayout
   music: TimedMusic
@@ -23,27 +23,32 @@ export function LineLabels({
   firstBar: number
   /** Whether the chord symbols are shown. */
   chordNames: boolean
-  /** By bar of the line, whether a hand leaves it to the pattern. */
-  patterned: readonly boolean[]
+  /** The row's height in CSS px. */
+  row: number
+  /** The labels' size: 1 at full size. */
+  size: number
 }) {
-  const { t } = useTranslation('editor')
+  const [first] = layout.measures
   return (
-    <div aria-hidden data-slot="line-labels" className="absolute inset-x-0 bottom-full h-11">
-      {layout.measures.map((measure, index) => (
+    <div
+      aria-hidden
+      data-slot="line-labels"
+      className="absolute inset-x-0 bottom-full"
+      style={{ height: row }}
+    >
+      {first ? (
         <span
-          key={index}
-          className="absolute top-0 flex gap-2 text-xs whitespace-nowrap text-muted-foreground"
-          style={{ left: measure.x + NUMBER_INSET_PX }}
+          className="absolute top-0 text-xs text-muted-foreground tabular-nums"
+          style={{ left: first.x + NUMBER_INSET_PX, fontSize: `${0.75 * size}rem` }}
         >
-          <span className="tabular-nums">{firstBar + index}</span>
-          {patterned[index] ? <span>{t('sheet.pattern')}</span> : null}
+          {firstBar}
         </span>
-      ))}
+      ) : null}
       {(chordNames ? music.chords : []).map((chord, index) => (
         <span
           key={index}
-          className="absolute bottom-0.5 font-display text-lg font-semibold whitespace-nowrap"
-          style={{ left: xAtTick(layout, chord.startTick) }}
+          className="absolute bottom-0.5 font-display font-semibold whitespace-nowrap"
+          style={{ left: xAtTick(layout, chord.startTick), fontSize: `${1.125 * size}rem` }}
         >
           {chord.symbol}
         </span>

@@ -5,6 +5,7 @@ import { cn, useElementSize } from '@/shared/lib'
 import { LazyScoreView } from '@/shared/ui'
 import { staffOfHand } from '../model/line-music'
 import type { LineSheet } from '../model/line-sheets'
+import { labelRow, labelScale } from './chord-row'
 import { LineOverlay } from './LineOverlay'
 
 /** Whether an element's top is on the screen. */
@@ -57,6 +58,8 @@ export const SheetLine = memo(function SheetLine({
   // A line of a few bars runs the sheet's width, as a printed page's does.
   const { width } = useElementSize(ref)
   const holdsCaret = caret !== null
+  // The labels' row over the staff: as tall as what it holds, at the line's size.
+  const row = labelRow(chordNames, scale)
   // The notes at the caret on its staff are the ones chosen, marked as a notation app marks them.
   const selected =
     caret === null || layer === 'chords'
@@ -78,10 +81,8 @@ export const SheetLine = memo(function SheetLine({
     <div
       ref={ref}
       data-slot="sheet-line"
-      className={cn(
-        'relative pt-11',
-        !justify && 'overflow-x-auto overscroll-x-contain scrollbar-none',
-      )}
+      className={cn('relative', !justify && 'overflow-x-auto overscroll-x-contain scrollbar-none')}
+      style={{ paddingTop: row }}
     >
       <LazyScoreView
         scale={scale}
@@ -103,6 +104,8 @@ export const SheetLine = memo(function SheetLine({
             onPlace={onPlace}
             placesOf={placesOf}
             chordNames={chordNames}
+            row={row}
+            labels={labelScale(scale)}
             onSignature={onSignature}
             onWrite={onWrite}
             onDrag={onDrag}

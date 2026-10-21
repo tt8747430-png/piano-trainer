@@ -7,10 +7,13 @@ import { StaffNames, xAtTick, type ScoreLayout } from '@/shared/ui/score'
 import { layerAt, staffOfLayer, type SheetLineBars } from '../model/line-music'
 import { nearestPlace } from '../model/nearest'
 import { noteAtStaffY, stepsDragged } from '../model/staff-pitch'
-import { CHORD_ROW } from './chord-row'
 import { EditorCaret } from './EditorCaret'
 import { LineLabels } from './LineLabels'
 
+/** How far a bar's Pattern stands in from where its notes begin. */
+const PATTERN_INSET = 6
+/** How far the bars chosen reach past their staves, and in from their barlines. */
+const CHOSEN = { over: 6, inset: 3 } as const
 /** How far round the caret's onset a press takes hold of its notes to drag them. */
 const GRIP = { before: 14, after: 22, over: 16 } as const
 /**
@@ -30,10 +33,16 @@ export function LineOverlay({
   onPlace,
   placesOf,
   chordNames,
+  row,
+  labels,
   onSignature,
   onWrite,
   onDrag,
 }: {
+  /** The labels' row over the staff, in CSS px. */
+  row: number
+  /** The labels' size. */
+  labels: number
   /** A note written where a staff was double-clicked: its tick, row and key. */
   onWrite?: ((tick: Tick, layer: Layer, key: Midi) => void) | undefined
   /** The notes at the caret dragged by steps of the key, the first step of a drag not `joins`. */
@@ -55,6 +64,28 @@ export function LineOverlay({
   const hand = isHandLayer(layer) ? layer : null
   const [first] = layout.measures
   const staff = hand ? layout.staves[hand === 'lh' ? 'bass' : 'treble'] : undefined
+  // The bars chosen on this line, as one box over its staves: none where no bar of it is chosen.
+  const shownStaves = Object.values(layout.staves)
+  const chosenAt = selection
+    ? layout.measures.flatMap((measure, index) => {
+        const bar = line.bars[index]?.index ?? -1
+        return bar >= selection.from && bar <= selection.to ? [measure] : []
+      })
+    : []
+  const firstChosen = chosenAt[0]
+  const lastChosen = chosenAt.at(-1)
+  const chosen =
+    firstChosen && lastChosen && shownStaves.length > 0
+      ? {
+          left: firstChosen.x + CHOSEN.inset,
+          width: lastChosen.x + lastChosen.width - firstChosen.x - 2 * CHOSEN.inset,
+          top: Math.min(...shownStaves.map((box) => box.top)) - CHOSEN.over,
+          height:
+            Math.max(...shownStaves.map((box) => box.bottom)) -
+            Math.min(...shownStaves.map((box) => box.top)) +
+            2 * CHOSEN.over,
+        }
+      : null
   // In a hand's layer, the bars it leaves to the pattern.
   const patterned =
     hand && staff ? layout.measures.map((_, index) => !line.bars[index]?.bar[hand]) : []
@@ -64,7 +95,7 @@ export function LineOverlay({
     const measure = layout.measures[index]
     if (!placed || !measure) return null
     const box = event.currentTarget.getBoundingClientRect()
-    const y = event.clientY - box.top - CHORD_ROW
+    const y = event.clientY - box.top - row
     const target = layerAt(y, layout, chordNames)
     const end = placed.start + placed.bar.ticks
     const places = placesOf(target).filter((tick) => tick >= placed.start && tick < end)
@@ -116,28 +147,48 @@ export function LineOverlay({
   }
   return (
     <>
-      {layout.measures.map((measure, index) => {
-        const bar = line.bars[index]?.index ?? -1
-        return selection && bar >= selection.from && bar <= selection.to ? (
-          <div
-            key={`chosen-${index}`}
-            aria-hidden
-            className="absolute bottom-0 z-0 bg-muted"
-            style={{ left: measure.x, width: measure.width, top: -CHORD_ROW }}
-          />
-        ) : null
-      })}
+      {chosen ? (
+        // The bars chosen as one box on this line, from its staves' top to their foot, inset from
+        // the barlines so the next line's or section's bars stay clear of it.
+        <div
+          aria-hidden
+          data-slot="bars-chosen"
+          className="absolute z-0 rounded-lg bg-selected/10 ring-2 ring-selected/60"
+          style={chosen}
+        />
+      ) : null}
       {/* The caret first, so the labels and the notes stand over it. */}
       {caret === null ? null : (
-        <EditorCaret layout={layout} layer={layer} tick={caret} ticks={caretTicks} />
+        <EditorCaret layout={layout} layer={layer} tick={caret} ticks={caretTicks} row={row} />
       )}
       <LineLabels
         layout={layout}
         music={music}
         firstBar={(line.bars[0]?.index ?? 0) + 1}
         chordNames={chordNames}
-        patterned={patterned}
+        row={row}
+        size={labels}
       />
+      {staff
+        ? patterned.map((left, index) => {
+            const measure = layout.measures[index]
+            // A bar the hand leaves to the pattern says so inside its empty staff, not over the music.
+            return left && measure ? (
+              <span
+                key={`pattern-${index}`}
+                aria-hidden
+                className="pointer-events-none absolute z-10 text-xs text-muted-foreground italic"
+                style={{
+                  left: Math.max(measure.notes, measure.x) + PATTERN_INSET,
+                  top: (staff.top + staff.bottom) / 2,
+                  transform: 'translateY(-50%)',
+                }}
+              >
+                {t('sheet.pattern')}
+              </span>
+            ) : null
+          })
+        : null}
       <StaffNames layout={layout} />
       {first && first.notes > first.x ? (
         // The clef, key and time signature at the line's head: a click opens what changes them.
@@ -164,7 +215,7 @@ export function LineOverlay({
             onDoubleClick={write(index)}
             // A pointer's target only (the arrows move the caret): it takes no focus ring round the bar.
             className="absolute bottom-0 z-20 cursor-text rounded-lg outline-none transition-colors duration-200 ease-out hover:bg-foreground/5"
-            style={{ left: measure.x, width: measure.width, top: -CHORD_ROW }}
+            style={{ left: measure.x, width: measure.width, top: -row }}
           />
         )
       })}

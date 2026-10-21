@@ -62,12 +62,43 @@ describe('ScoreSheet', () => {
     expect(screen.getAllByText('Pattern')).toHaveLength(4)
   })
 
-  it('says Pattern in the labels over the staff, clear of the notes', async () => {
+  it('says Pattern inside the hand’s empty staff, not in the labels over it', async () => {
     sheet('rh')
     await screen.findByRole('button', { name: 'Bar 1: G' })
     for (const mark of screen.getAllByText('Pattern')) {
-      expect(mark.closest('[data-slot="line-labels"]')).not.toBeNull()
+      expect(mark.closest('[data-slot="line-labels"]')).toBeNull()
     }
+  })
+
+  it('numbers each line at its head, its row only as tall as what it holds', async () => {
+    sheet('rh', vi.fn(), false)
+    await screen.findByRole('button', { name: 'Bar 1: G' })
+    const rows = [...document.querySelectorAll<HTMLElement>('[data-slot="line-labels"]')]
+    expect(rows.map((row) => row.textContent)).toEqual(['1', '3', '4'])
+    // No chord names: the row holds a number alone, not the chords' room (ADR 0072).
+    expect(rows.every((row) => row.style.height === '20px')).toBe(true)
+  })
+
+  it('draws the bars chosen as one box on each line they are on', async () => {
+    render(
+      <ScoreSheet
+        draft={draft}
+        caret={0}
+        layer="rh"
+        caretTicks={24}
+        selection={{ from: 0, to: 2 }}
+        onPlace={vi.fn()}
+        placesOf={() => []}
+        heading={() => null}
+        chordNames
+        onSignature={vi.fn()}
+      />,
+    )
+    await screen.findByRole('button', { name: 'Bar 1: G' })
+    // Bars 1–2 on the verse's first line, bar 3 on its second: a box each, the chorus none.
+    await waitFor(() =>
+      expect(document.querySelectorAll('[data-slot="bars-chosen"]')).toHaveLength(2),
+    )
   })
 
   it('writes a click over the staff into the tune when chord names are hidden', async () => {

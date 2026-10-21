@@ -158,7 +158,7 @@ export const music: LocaleResources['music'] = {
   // Ноты: нотный стан плеера.
   sheet: {
     label: 'Ноты',
-    layout: { label: 'Вид нот', horizontal: 'В строку', scroll: 'Строками', pages: 'Страницы' },
+    layout: { label: 'Вид нот', horizontal: 'Панорама', scroll: 'Прокрутка', pages: 'Страницы' },
     staff: { melody: 'Мелодия', voice2: 'Голос 2', voice3: 'Голос 3', voice4: 'Голос 4' },
     fingers: 'Аппликатура',
     noteNames: 'Названия нот',

@@ -169,7 +169,8 @@ export const music = {
   sheet: {
     label: 'Sheet music',
     // How a score is laid out (ADR 0064), the same words in the Player and the editor.
-    layout: { label: 'Layout', horizontal: 'Across', scroll: 'Down', pages: 'Pages' },
+    // As notation apps name their views: one line across, lines down the screen, A4 pages.
+    layout: { label: 'Layout', horizontal: 'Panorama', scroll: 'Scroll', pages: 'Pages' },
     // Each sung staff's name, over its start where voices are sung together (ADR 0066).
     staff: { melody: 'Melody', voice2: 'Voice 2', voice3: 'Voice 3', voice4: 'Voice 4' },
     // A staff's own options, inline on its card (ADR 0058).

@@ -3,7 +3,6 @@ import type { Layer } from '@/features/score-editor'
 import type { Tick } from '@/shared/lib/music'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 import { staffOfLayer } from '../model/line-music'
-import { CHORD_ROW } from './chord-row'
 
 /** How far left of a notehead the band starts, how far past its staff it reaches, its least width. */
 const LEAD = 8
@@ -51,12 +50,15 @@ export function EditorCaret({
   layer,
   tick,
   ticks,
+  row,
 }: {
   layout: ScoreLayout
   layer: Layer
   /** From the line's start. */
   tick: Tick
   ticks: Tick
+  /** The labels' row over the staff, the chord row the caret fills in the chords' layer. */
+  row: number
 }) {
   const left = xAtTick(layout, tick) - LEAD
   const right = xAtTick(layout, tick + ticks) - LEAD
@@ -80,7 +82,7 @@ export function EditorCaret({
   }, [left, right])
   const box =
     layer === 'chords' || !staff
-      ? { top: -CHORD_ROW, height: CHORD_ROW }
+      ? { top: -row, height: row }
       : { top: staff.top - REACH, height: staff.bottom - staff.top + 2 * REACH }
   // The sheet scrolls to the caret's staff as the caret comes onto it (a short screen shows less
   // than a line's grand staff), leaving the sheet as it is while the staff is in sight.
