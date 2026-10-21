@@ -87,7 +87,7 @@ export function LineOverlay({
     if (!point || !onWrite || point.target === 'chords') return
     const lines = staffOfLayer(layout.staves, point.target)
     if (!lines) return
-    const clef = staffClefAt(music.bars, index, lines.staff)
+    const clef = staffClefAt(music, index, lines.staff)
     const { midi } = noteAtStaffY(clef, point.y, lines, music.key)
     onWrite(point.tick, point.target, midi)
   }

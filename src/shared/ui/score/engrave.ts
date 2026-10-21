@@ -40,6 +40,7 @@ import {
   type Measure,
   type Score,
   type StaffId,
+  type StaffInstruments,
 } from '@/shared/lib/notation'
 import { chordSymbolWidth } from './chord-symbols'
 import { xAmong } from './layout'
@@ -64,6 +65,8 @@ export interface ScoreLayout {
   }[]
   /** Each staff drawn: its top and bottom lines. */
   readonly staves: Partial<Record<StaffId, { readonly top: number; readonly bottom: number }>>
+  /** What each sung staff is played on, where one is chosen (ADR 0070): its name over it. */
+  readonly staffInstruments?: StaffInstruments
   /** Each written onset left to right: its tick and its first notehead's or rest's x. */
   readonly onsets: readonly { readonly tick: Tick; readonly x: number }[]
 }
@@ -835,6 +838,7 @@ function* drawn(
     staffBottom,
     staves,
     measures,
+    ...(score.staffInstruments ? { staffInstruments: score.staffInstruments } : {}),
     onsets: [...onsets].map(([tick, at]) => ({ tick, x: at })).sort((a, b) => a.tick - b.tick),
   }
 }

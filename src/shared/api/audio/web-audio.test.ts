@@ -121,6 +121,12 @@ describe('createWebAudioOutput', () => {
     expect(context.oscillators.every((o) => o.start === 0.175)).toBe(true)
   })
 
+  it('plays a part on its instrument: a clarinet’s square and triangle, with no vibrato', () => {
+    const { context, audio } = setUp()
+    audio.play([{ ...A4, timbre: 'clarinet' }], 0.125)
+    expect(context.oscillators.map((o) => o.type)).toEqual(['square', 'triangle'])
+  })
+
   it('leaves a sound beyond the lookahead for later', () => {
     const { context, audio } = setUp()
     audio.play([A4], 1)

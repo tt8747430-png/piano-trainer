@@ -83,6 +83,17 @@ describe('createPiecesStore', () => {
     expect(Object.keys(restored({ versions }).versions)).toEqual(['bz1'])
   })
 
+  it('keeps the tune’s and each voice’s instrument where every one names one', () => {
+    const kept = restored({
+      versions: { bz1: { ...MUSIC, voices: ['D4/4'], instruments: ['flute', 'cello', 'oboe'] } },
+    })
+    expect(kept.versions.bz1?.instruments).toEqual(['flute', 'cello'])
+    const wrong = restored({
+      versions: { bz1: { ...MUSIC, voices: ['D4/4'], instruments: ['flute', 'kazoo'] } },
+    })
+    expect(wrong.versions.bz1).not.toHaveProperty('instruments')
+  })
+
   it('keeps up to three more voices that read and fit the chart, dropping any that does not', () => {
     const voices = ['D4/4', 'F#4/2 G4/2', 'B3/4', 'A3/4']
     expect(restored({ versions: { bz1: { ...MUSIC, voices } } }).versions.bz1?.voices).toEqual([

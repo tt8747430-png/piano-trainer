@@ -10,6 +10,7 @@ import {
 import type { ScoreLayout } from '@/shared/ui/score'
 import {
   clefsInForce,
+  DEFAULT_INSTRUMENT,
   HOME_CLEF,
   barMarksOf,
   beatsPerBar,
@@ -23,6 +24,7 @@ import {
   PIANO_STAVES,
   STAVES,
   type StaffId,
+  type StaffInstruments,
   type TimedMusic,
   type TimedNote,
 } from '@/shared/lib/notation'
@@ -160,6 +162,22 @@ export function staffOfLayer(
  * it has none), the written right hand on the treble staff, the written left hand on the bass, the
  * chord symbols; a staff with nothing in a bar is left blank there.
  */
+/** Each sung staff's instrument where one other than the voice is chosen (ADR 0070). */
+function staffInstrumentsOf(
+  draft: Draft,
+  voiceStaves: readonly StaffId[],
+): { staffInstruments?: StaffInstruments } {
+  const staves = [...(draft.melodyStaff ? (['melody'] as const) : []), ...voiceStaves]
+  const parts = draft.melodyStaff ? draft.instruments : draft.instruments.slice(1)
+  const chosen = Object.fromEntries(
+    staves.flatMap((staff, i) => {
+      const instrument = parts[i]
+      return instrument && instrument !== DEFAULT_INSTRUMENT ? [[staff, instrument]] : []
+    }),
+  )
+  return Object.keys(chosen).length > 0 ? { staffInstruments: chosen } : {}
+}
+
 export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
   const from = line.start
   const to = endOf(line)
@@ -220,6 +238,7 @@ export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
     chords,
     ...(draft.melodyStaff ? { melodyStaff: true } : {}),
     ...(voiceStaves.length > 0 ? { voiceStaves } : {}),
+    ...staffInstrumentsOf(draft, voiceStaves),
   }
 }
 

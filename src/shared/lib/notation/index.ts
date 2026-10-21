@@ -15,5 +15,6 @@ export {
   type TimedMusic,
   type TimedNote,
   type WrittenNote,
+  type StaffInstruments,
 } from './types'
 export { ticksOf, valuesOf } from './values'

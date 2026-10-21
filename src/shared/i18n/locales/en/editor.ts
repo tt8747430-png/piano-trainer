@@ -73,7 +73,6 @@ export const editor = {
       presto: 'Presto',
     },
     tempoLabel: '{{word}}, {{bpm}} a minute',
-    voice: 'Add a voice',
     open: 'Add to the score',
     label: 'Add',
     tabs: 'What to add',
@@ -95,6 +94,8 @@ export const editor = {
   // How the score is laid out (ADR 0064).
   layout: { label: 'Layout', scroll: 'Scroll', pages: 'Pages', horizontal: 'Horizontal' },
   // Where the caret writes: the chord row, the treble staff's two voices, the bass staff.
+  // What the tune and each more voice are played on (ADR 0070).
+  instruments: { label: 'Instruments', add: 'Add an instrument' },
   layers: {
     chords: 'Chords',
     melody: 'Melody',

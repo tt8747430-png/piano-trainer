@@ -4,6 +4,7 @@ import type {
   Finger,
   Hand,
   HandClefs,
+  Instrument,
   Key,
   Meter,
   Midi,
@@ -207,4 +208,6 @@ export interface Performance {
    * groups.
    */
   readonly sung?: readonly Melody[]
+  /** What each of `sung` is played on (ADR 0070), the voice where it names none. */
+  readonly instruments?: readonly Instrument[]
 }

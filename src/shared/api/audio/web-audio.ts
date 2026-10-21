@@ -1,4 +1,4 @@
-import type { Midi } from '@/shared/lib/music'
+import { DEFAULT_INSTRUMENT, type Instrument, type Midi } from '@/shared/lib/music'
 import type { ClickSound, NoteSound, Sound } from '@/shared/lib/schedule'
 import { createLiveVoice } from './live-voice'
 import { createLookahead } from './lookahead'
@@ -60,45 +60,172 @@ const playNote: Render<NoteSound> = (context, note, at, ended) => {
   return { sources, output: envelope }
 }
 
-/** A more voice's vibrato: its rate in Hz, and how far it moves the pitch, in Hz at A4. */
-const VIBRATO = { rate: 5.5, depth: 0.012 } as const
+/**
+ * How each instrument a sung part is played on sounds (ADR 0070), built from a few waves: their mix,
+ * how fast it speaks and lets go, its vibrato (Hz, and how far at A4), how bright its low-pass is (a
+ * multiple of the note, up to a ceiling), and whether it is plucked: struck, then dying away.
+ */
+interface Tone {
+  readonly waves: readonly (readonly [OscillatorType, number])[]
+  readonly attack: number
+  readonly release: number
+  readonly vibrato: { readonly rate: number; readonly depth: number } | null
+  readonly bright: number
+  readonly ceiling: number
+  readonly pluck?: true
+}
+
+const TONES: Readonly<Record<Instrument, Tone>> = {
+  voice: {
+    waves: [
+      ['sawtooth', 0.35],
+      ['triangle', 0.65],
+    ],
+    attack: 0.08,
+    release: 0.15,
+    vibrato: { rate: 5.5, depth: 0.012 },
+    bright: 4,
+    ceiling: 3200,
+  },
+  violin: {
+    waves: [
+      ['sawtooth', 0.8],
+      ['triangle', 0.2],
+    ],
+    attack: 0.06,
+    release: 0.2,
+    vibrato: { rate: 6, depth: 0.008 },
+    bright: 6,
+    ceiling: 6000,
+  },
+  cello: {
+    waves: [
+      ['sawtooth', 0.9],
+      ['sine', 0.1],
+    ],
+    attack: 0.09,
+    release: 0.25,
+    vibrato: { rate: 5, depth: 0.008 },
+    bright: 5,
+    ceiling: 2500,
+  },
+  flute: {
+    waves: [
+      ['sine', 0.85],
+      ['triangle', 0.15],
+    ],
+    attack: 0.05,
+    release: 0.1,
+    vibrato: { rate: 5, depth: 0.006 },
+    bright: 8,
+    ceiling: 8000,
+  },
+  oboe: {
+    waves: [
+      ['sawtooth', 0.5],
+      ['square', 0.5],
+    ],
+    attack: 0.03,
+    release: 0.08,
+    vibrato: { rate: 5.5, depth: 0.005 },
+    bright: 6,
+    ceiling: 4500,
+  },
+  clarinet: {
+    waves: [
+      ['square', 0.6],
+      ['triangle', 0.4],
+    ],
+    attack: 0.04,
+    release: 0.1,
+    vibrato: null,
+    bright: 5,
+    ceiling: 3000,
+  },
+  trumpet: {
+    waves: [['sawtooth', 1]],
+    attack: 0.03,
+    release: 0.1,
+    vibrato: { rate: 5, depth: 0.004 },
+    bright: 8,
+    ceiling: 5000,
+  },
+  horn: {
+    waves: [
+      ['sawtooth', 0.5],
+      ['triangle', 0.5],
+    ],
+    attack: 0.07,
+    release: 0.2,
+    vibrato: null,
+    bright: 3,
+    ceiling: 1500,
+  },
+  guitar: {
+    waves: [
+      ['triangle', 0.6],
+      ['sawtooth', 0.4],
+    ],
+    attack: 0.005,
+    release: 0.3,
+    vibrato: null,
+    bright: 6,
+    ceiling: 4000,
+    pluck: true,
+  },
+}
+
+/** How long a plucked string takes to die away, at the most. */
+const PLUCK_DECAY = 1.6
 
 /**
- * A more voice's note (ADR 0066), sung rather than struck: a bright and a soft tone through a vowel's
- * low-pass, rising over 80 ms, held, with a slow vibrato, and let go over 150 ms.
+ * A sung part's note (ADR 0066, 0070), played on its instrument: its waves through a low-pass, rising
+ * over its attack, held (or, plucked, dying away), with its vibrato, and let go over its release.
  */
 const playSung: Render<NoteSound> = (context, note, at, ended) => {
+  const tone = TONES[note.timbre ?? DEFAULT_INSTRUMENT]
   const frequency = frequencyOf(note.midi)
   const end = at + note.duration
   const filter = context.createBiquadFilter()
   filter.type = 'lowpass'
-  filter.frequency.value = Math.min(3200, frequency * 4)
+  filter.frequency.value = Math.min(tone.ceiling, frequency * tone.bright)
   const envelope = context.createGain()
   const peak = Math.max(SILENT, note.velocity)
+  const spoken = at + tone.attack
   envelope.gain.setValueAtTime(SILENT, at)
-  envelope.gain.exponentialRampToValueAtTime(peak, at + 0.08)
-  envelope.gain.setValueAtTime(peak, Math.max(at + 0.08, end))
-  envelope.gain.exponentialRampToValueAtTime(SILENT, end + 0.15)
-  const tones = (['sawtooth', 'triangle'] as const).map((type, i) => {
+  envelope.gain.exponentialRampToValueAtTime(peak, spoken)
+  if (tone.pluck) {
+    envelope.gain.exponentialRampToValueAtTime(
+      SILENT,
+      Math.max(spoken, Math.min(end + tone.release, at + PLUCK_DECAY)),
+    )
+  } else {
+    envelope.gain.setValueAtTime(peak, Math.max(spoken, end))
+    envelope.gain.exponentialRampToValueAtTime(SILENT, Math.max(spoken, end) + tone.release)
+  }
+  const tones = tone.waves.map(([type, mix]) => {
     const oscillator = context.createOscillator()
     const level = context.createGain()
     oscillator.type = type
     oscillator.frequency.value = frequency
-    level.gain.value = i === 0 ? 0.35 : 0.65
+    level.gain.value = mix
     oscillator.connect(level).connect(filter)
     return oscillator
   })
-  const vibrato = context.createOscillator()
-  const depth = context.createGain()
-  vibrato.type = 'sine'
-  vibrato.frequency.value = VIBRATO.rate
-  depth.gain.value = frequency * VIBRATO.depth
-  vibrato.connect(depth)
-  for (const tone of tones) depth.connect(tone.frequency)
-  const sources = [...tones, vibrato]
+  const sources: OscillatorNode[] = [...tones]
+  if (tone.vibrato) {
+    const vibrato = context.createOscillator()
+    const depth = context.createGain()
+    vibrato.type = 'sine'
+    vibrato.frequency.value = tone.vibrato.rate
+    depth.gain.value = frequency * tone.vibrato.depth
+    vibrato.connect(depth)
+    for (const each of tones) depth.connect(each.frequency)
+    sources.push(vibrato)
+  }
   for (const source of sources) {
     source.start(at)
-    source.stop(end + 0.2)
+    source.stop(end + tone.release + 0.05)
   }
   if (sources[0]) sources[0].onended = ended
   filter.connect(envelope).connect(context.destination)
@@ -215,8 +342,8 @@ export function createWebAudioOutput({
   }
 
   const render = (sound: Sound, at: number) => {
-    // A sung voice is the app's own: the keyboard's speaker plays a piano.
-    if (sound.kind === 'note' && piano && sound.timbre !== 'voice') {
+    // A sung part is the app's own: the keyboard's speaker plays a piano.
+    if (sound.kind === 'note' && piano && sound.timbre === undefined) {
       piano.render(sound, at)
       return
     }
@@ -224,7 +351,7 @@ export function createWebAudioOutput({
     const ended = () => voices.delete(voice)
     const voice =
       sound.kind === 'note'
-        ? (sound.timbre === 'voice' ? playSung : playNote)(context, sound, at, ended)
+        ? (sound.timbre === undefined ? playNote : playSung)(context, sound, at, ended)
         : playClick(context, sound, at, ended)
     voices.add(voice)
   }

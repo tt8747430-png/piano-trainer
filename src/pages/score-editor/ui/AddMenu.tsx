@@ -26,6 +26,9 @@ import { cn } from '@/shared/lib'
 import {
   beatsPerBar,
   CLEFS,
+  INSTRUMENT_FAMILIES,
+  INSTRUMENT_OF,
+  instrumentsIn,
   EXPRESSION_TEXT,
   EXPRESSIONS,
   keyParam,
@@ -177,6 +180,7 @@ function Tiles({ heading, children }: { heading?: string; children: ReactNode })
  */
 export function AddMenu() {
   const { t } = useTranslation('editor')
+  const { t: tm } = useTranslation('music')
   const { actions, takes, view } = useScoreEditorContext()
   const keyName = useKeyName()
   const [open, setOpen] = useState(false)
@@ -356,19 +360,6 @@ export function AddMenu() {
             <span className="font-music text-4xl leading-none">𝄞</span>
           </Tile>
           <Tile
-            label={t('add.voice')}
-            disabled={draft.voices.length >= EXTRA_VOICES.length}
-            onClick={done(() => {
-              const voice = EXTRA_VOICES[draft.voices.length]
-              if (voice) actions.dispatch({ type: 'voiceStaff', voice, on: true })
-            })}
-          >
-            <span className="flex items-center gap-1">
-              <span className="font-music text-4xl leading-none">𝄞</span>
-              <Plus className="size-5" />
-            </span>
-          </Tile>
-          <Tile
             label={t('chordNames')}
             pressed={layer === 'chords'}
             onClick={done(() => {
@@ -379,6 +370,34 @@ export function AddMenu() {
             <span className="font-display text-2xl font-semibold">C⁷</span>
           </Tile>
         </Tiles>
+        {/* As a notation app adds a staff: an instrument, its part a voice sung with the tune (ADR 0070). */}
+        {INSTRUMENT_FAMILIES.map((family) => (
+          <Tiles
+            key={family}
+            heading={`${t('instruments.add')} · ${tm(`instrumentFamily.${family}`)}`}
+          >
+            {instrumentsIn(family).map((instrument) => (
+              <Tile
+                key={instrument}
+                label={tm(`instrument.${instrument}`)}
+                disabled={draft.voices.length >= EXTRA_VOICES.length}
+                onClick={done(() => {
+                  const voice = EXTRA_VOICES[draft.voices.length]
+                  if (voice) actions.dispatch({ type: 'voiceStaff', voice, on: true, instrument })
+                })}
+              >
+                <span className="flex items-center gap-1.5">
+                  <span className="font-music text-4xl leading-none">
+                    {INSTRUMENT_OF[instrument].clef === 'bass' ? '𝄢' : '𝄞'}
+                  </span>
+                  <span className="font-serif text-xl italic">
+                    {tm(`instrumentShort.${instrument}`)}
+                  </span>
+                </span>
+              </Tile>
+            ))}
+          </Tiles>
+        ))}
         <Tiles heading={t('add.clefs')}>
           {HANDS.flatMap((hand) =>
             CLEFS.map((clef) => (

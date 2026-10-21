@@ -112,6 +112,15 @@ describe('schedule', () => {
     expect(voiced[0]?.kind === 'note' && voiced[0].duration).toBeCloseTo(2 * 0.95)
   })
 
+  it('plays each sung part on its own instrument', () => {
+    const G = { midi: midi(67), spelled: note('G'), startTick: 0, durationTicks: 24 }
+    const sung: Performance = { ...perform('C'), sung: [[G], [G]], instruments: ['flute'] }
+    const timbres = schedule(sung, { tempo: 60, hands: ALL }).sounds.flatMap((sound) =>
+      sound.kind === 'note' && sound.timbre ? [sound.timbre] : [],
+    )
+    expect(timbres).toEqual(['flute', 'voice'])
+  })
+
   it('holds a note under the pedal until it is let up, and slows at a rit.', () => {
     const plain = perform('C', 'C')
     const marked: Performance = {

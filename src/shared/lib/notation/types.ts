@@ -5,6 +5,7 @@ import type {
   Finger,
   Hand,
   HandClefs,
+  Instrument,
   Key,
   Meter,
   Midi,
@@ -60,7 +61,12 @@ export interface TimedMusic {
   readonly melodyStaff?: boolean
   /** The more voices written, each on its own staff under the tune's (ADR 0066). */
   readonly voiceStaves?: readonly ExtraVoice[]
+  /** What a sung staff's part is played on (ADR 0070), its clef and its name: the voice where none. */
+  readonly staffInstruments?: StaffInstruments
 }
+
+/** The instrument each sung staff's part is played on, where one is chosen. */
+export type StaffInstruments = Readonly<Partial<Record<StaffId, Instrument>>>
 
 export interface WrittenNote {
   readonly midi: Midi
@@ -147,4 +153,6 @@ export interface Score {
   /** The staves it writes, top down. */
   readonly staves: readonly StaffId[]
   readonly measures: readonly Measure[]
+  /** What each sung staff is played on, where one is chosen (ADR 0070). */
+  readonly staffInstruments?: StaffInstruments
 }

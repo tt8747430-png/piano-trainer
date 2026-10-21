@@ -1,3 +1,4 @@
+import { musicToSave } from './draft'
 import { describe, expect, it, vi } from 'vitest'
 import { chordSymbol, midi, note, parseChordSymbol, type Meter } from '@/shared/lib/music'
 import { ticksOf } from '@/shared/lib/notation'
@@ -258,6 +259,22 @@ describe('the editor', () => {
     const gone = run(third, { type: 'voiceStaff', voice: 'voice2', on: false })
     expect(gone.draft.voices).toEqual([[]])
     expect(gone.layer).toBe('rh')
+  })
+
+  it('adds a voice on an instrument, changes the tune’s, and saves only the voices written', () => {
+    const added = run(initialEditor(draftOf()), {
+      type: 'voiceStaff',
+      voice: 'voice2',
+      on: true,
+      instrument: 'cello',
+    })
+    expect(added.draft.instruments).toEqual(['voice', 'cello'])
+    const flute = run(added, { type: 'instrument', part: 0, instrument: 'flute' })
+    expect(flute.draft.instruments).toEqual(['flute', 'cello'])
+    // The cello wrote nothing: its staff and instrument are not saved.
+    expect(musicToSave(flute.draft)?.instruments).toEqual(['flute'])
+    const gone = run(flute, { type: 'voiceStaff', voice: 'voice2', on: false })
+    expect(gone.draft.instruments).toEqual(['flute'])
   })
 
   it('moves the caret a line on and back, to its line’s start first', () => {

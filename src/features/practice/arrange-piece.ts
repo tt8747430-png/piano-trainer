@@ -81,5 +81,8 @@ function arrangeOptions(piece: Piece, choice: PracticeChoice, book: PatternBook)
       : {}),
     ...(melody ? { melody, doubleMelody: choice.melody } : {}),
     ...(voices.length > 0 ? { voices } : {}),
+    ...('instruments' in piece && piece.instruments?.length
+      ? { instruments: piece.instruments }
+      : {}),
   }
 }

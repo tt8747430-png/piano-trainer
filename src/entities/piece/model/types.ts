@@ -2,7 +2,14 @@ import type { BookId } from '@/entities/book'
 import type { PatternId } from '@/entities/pattern'
 import type { LocalText } from '@/shared/i18n'
 import { isOneOf } from '@/shared/lib'
-import { parseKey, type ChordSize, type Key, type Letter, type Meter } from '@/shared/lib/music'
+import {
+  parseKey,
+  type ChordSize,
+  type Instrument,
+  type Key,
+  type Letter,
+  type Meter,
+} from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
 
 /** A saved id may name a piece a later version removed, so it stays a plain name. */
@@ -98,6 +105,11 @@ export interface ChartPiece extends PieceCommon {
   readonly melody?: string
   /** More voices sung with the tune, each written as the tune is, each on a staff of its own (ADR 0066). */
   readonly voices?: readonly string[]
+  /**
+   * What each sung part is played on, the tune's first, then each more voice's (ADR 0070): `voice`
+   * where none is given.
+   */
+  readonly instruments?: readonly Instrument[]
   /** Bars of either hand written note by note, played in place of the pattern's hand there. */
   readonly hands?: Hands
 }

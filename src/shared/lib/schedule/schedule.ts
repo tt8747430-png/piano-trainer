@@ -1,5 +1,12 @@
 import type { NoteHand, Performance, PerformanceNote } from '@/shared/lib/arrangement'
-import { isCompound, TICKS_PER_BEAT, type Midi, type Tick } from '@/shared/lib/music'
+import {
+  DEFAULT_INSTRUMENT,
+  isCompound,
+  TICKS_PER_BEAT,
+  type Instrument,
+  type Midi,
+  type Tick,
+} from '@/shared/lib/music'
 import {
   barClicks,
   barGrid,
@@ -37,8 +44,8 @@ export interface NoteSound {
   readonly at: number
   readonly duration: number
   readonly velocity: number
-  /** A more voice sung with the tune (ADR 0066), not the piano. */
-  readonly timbre?: 'voice'
+  /** A sung part's instrument (ADR 0066, 0070), not the piano. */
+  readonly timbre?: Instrument
 }
 export interface ClickSound {
   readonly kind: 'click'
@@ -159,7 +166,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   })
 
   // The more voices: heard whatever hands the learner chose, as the doubled tune is.
-  const sung: Sound[] = (performance.sung ?? []).flatMap((voice) =>
+  const sung: Sound[] = (performance.sung ?? []).flatMap((voice, part) =>
     voice.flatMap((n): Sound[] => {
       if (!inPass(n.startTick)) return []
       const end = Math.min(n.startTick + n.durationTicks, toTick)
@@ -170,7 +177,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
           at: at(n.startTick),
           duration: Math.max(SHORTEST_NOTE, (at(end) - at(n.startTick)) * LEGATO),
           velocity: SUNG_VELOCITY,
-          timbre: 'voice',
+          timbre: performance.instruments?.[part] ?? DEFAULT_INSTRUMENT,
         },
       ]
     }),

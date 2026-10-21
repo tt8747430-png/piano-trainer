@@ -14,7 +14,9 @@ import { isOneOf } from '@/shared/lib'
 import { EXTRA_VOICES, type ExtraVoice } from '@/shared/lib/notation'
 import type { HandNote } from '@/shared/lib/arrangement'
 import {
+  DEFAULT_INSTRUMENT,
   type Hand,
+  type Instrument,
   type HandClefs,
   barMarksOf,
   beatsToTicks,
@@ -90,6 +92,8 @@ export interface Draft {
   readonly melody: readonly DraftNote[]
   /** The more voices' notes, the second voice's first, each staff there once added (ADR 0066). */
   readonly voices: readonly (readonly DraftNote[])[]
+  /** What the tune and each more voice are played on (ADR 0070): one more than the voices. */
+  readonly instruments: readonly Instrument[]
   /** Only in bars the hand writes. */
   readonly hands: Readonly<Record<HandId, readonly DraftNote[]>>
 }
@@ -141,6 +145,10 @@ export function readDraft(music: PieceMusic): Draft {
     melodyStaff: (melody ?? []).length > 0,
     melody: melody ?? [],
     voices: voices.slice(0, EXTRA_VOICES.length).map((voice) => [...voice]),
+    instruments: Array.from(
+      { length: Math.min(voices.length, EXTRA_VOICES.length) + 1 },
+      (_, i) => music.instruments?.[i] ?? DEFAULT_INSTRUMENT,
+    ),
     hands,
   }
 }
@@ -178,8 +186,15 @@ export function writeDraft(draft: Draft): PieceMusic {
   const placed = barsOf(draft)
   const timeline = placed.map(({ start, bar }) => ({ startTick: start, ticks: bar.ticks }))
   const melody = writeMelody(draft.melody, timeline)
-  // A voice with no notes is not written: its staff goes with it, as the tune's does.
-  const voices = draft.voices.flatMap((voice) => writeMelody(voice, timeline) ?? [])
+  // A voice with no notes is not written: its staff goes with it, as the tune's does, and its instrument.
+  const written = draft.voices.flatMap((voice, i) => {
+    const text = writeMelody(voice, timeline)
+    return text === undefined ? [] : [{ text, instrument: draft.instruments[i + 1] }]
+  })
+  const voices = written.map(({ text }) => text)
+  const instruments = [draft.instruments[0], ...written.map(({ instrument }) => instrument)].map(
+    (instrument) => instrument ?? DEFAULT_INSTRUMENT,
+  )
   const ticks = placed.map(({ bar }) => bar.ticks)
   const clefs = (hand: Hand) => placed.map(({ bar }) => bar.clefs?.[hand])
   const rh = writeHand(handBars(draft.hands.rh, placed, 'rh'), ticks, clefs('rh'))
@@ -197,6 +212,7 @@ export function writeDraft(draft: Draft): PieceMusic {
     })),
     ...(melody === undefined ? {} : { melody }),
     ...(voices.length > 0 ? { voices } : {}),
+    ...(instruments.some((instrument) => instrument !== DEFAULT_INSTRUMENT) ? { instruments } : {}),
     ...(rh === undefined && lh === undefined
       ? {}
       : { hands: { ...(rh === undefined ? {} : { rh }), ...(lh === undefined ? {} : { lh }) } }),

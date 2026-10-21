@@ -1,5 +1,7 @@
 import {
   barMarksOf,
+  DEFAULT_INSTRUMENT,
+  type Instrument,
   clefsInForce,
   HOME_CLEF,
   withoutBarMarks,
@@ -73,6 +75,8 @@ export interface ArrangeOptions {
   readonly melody?: Melody
   /** The more voices sung with the tune (ADR 0066), in the chart's key. */
   readonly voices?: readonly Melody[]
+  /** What the tune and each more voice are played on (ADR 0070): a tune on another instrument than the voice is sung too. */
+  readonly instruments?: readonly Instrument[]
   /** Also play the tune an octave up (hand 'melody'). */
   readonly doubleMelody?: boolean
   /**
@@ -677,14 +681,15 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     chords,
     notes,
     beatGroups,
-    ...(options.voices?.length
+    ...(options.voices?.length || options.instruments?.some((one) => one !== DEFAULT_INSTRUMENT)
       ? {
           sung: [
             melody ?? [],
-            ...options.voices.map((voice) =>
+            ...(options.voices ?? []).map((voice) =>
               played(transposeNotes(voice, chart.key.tonic, options.tonic)),
             ),
           ],
+          ...(options.instruments?.length ? { instruments: options.instruments } : {}),
         }
       : {}),
   }

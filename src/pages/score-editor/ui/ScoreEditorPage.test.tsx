@@ -294,12 +294,29 @@ describe('the score editor', () => {
     const user = userEvent.setup({ delay: 120 })
     const { piecesStore, settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     act(() => setKeyboard(settingsStore, { typing: true }))
-    await addFrom(user, 'Staves', 'Add a voice')
+    await addFrom(user, 'Staves', 'Voice')
     expect(screen.getByRole('status')).toHaveTextContent(/^Voice 2 · Bar 1/)
     await user.keyboard('d')
     await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ voices: ['E4/1'] }))
     await user.click(within(await openSettings(user)).getByRole('switch', { name: /^Voice 2/ }))
     await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('voices'))
+  })
+
+  it('adds an instrument from the + menu, its part saved on it, and changes it in the settings', async () => {
+    const user = userEvent.setup({ delay: 120 })
+    const { piecesStore, settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    act(() => setKeyboard(settingsStore, { typing: true }))
+    await addFrom(user, 'Staves', 'Cello')
+    await user.keyboard('d')
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({ instruments: ['voice', 'cello'] }),
+    )
+    const settings = await openSettings(user)
+    await user.click(within(settings).getByRole('combobox', { name: 'Voice 2' }))
+    await user.click(await screen.findByRole('option', { name: 'Flute' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({ instruments: ['voice', 'flute'] }),
+    )
   })
 
   it('gives a section a pattern of its own from its heading’s menu, named beside it', async () => {

@@ -256,3 +256,13 @@ export {
   type Jump,
 } from './bar-marks'
 export { CLEFS, clefsInForce, HOME_CLEF, type Clef, type HandClefs } from './clef'
+export {
+  DEFAULT_INSTRUMENT,
+  INSTRUMENT_FAMILIES,
+  INSTRUMENT_OF,
+  INSTRUMENTS,
+  instrumentsIn,
+  isInstrument,
+  type Instrument,
+  type InstrumentFamily,
+} from './instrument'

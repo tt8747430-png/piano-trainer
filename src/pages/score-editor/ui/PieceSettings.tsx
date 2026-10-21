@@ -20,6 +20,7 @@ import {
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { InstrumentChoice } from './InstrumentChoice'
 import { SongTitleField } from './SongTitleField'
 
 /** The tempo, moved freely and saved when let go: it starts from the piece's each time the sheet opens. */
@@ -141,6 +142,14 @@ export function PieceSettings() {
                 onCheckedChange={view.showChordNames}
                 className="border-b-0"
               />
+            </div>
+          </Part>
+          <Part title={t('instruments.label')}>
+            <div className="grid-fields">
+              <InstrumentChoice part={0} label={t('layers.melody')} />
+              {EXTRA_VOICES.slice(0, voices).map((voice, i) => (
+                <InstrumentChoice key={voice} part={i + 1} label={t(`layers.${voice}`)} />
+              ))}
             </div>
           </Part>
           <Part title={t('viewMenu.midi')}>

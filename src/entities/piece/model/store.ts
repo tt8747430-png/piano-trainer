@@ -1,7 +1,7 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isPatternId } from '@/entities/pattern'
 import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
-import { isMeter, isWrittenKey, parseKey, type Tick } from '@/shared/lib/music'
+import { isInstrument, isMeter, isWrittenKey, parseKey, type Tick } from '@/shared/lib/music'
 import type { Melody } from '@/shared/lib/arrangement'
 import { barTicksOf } from './chart'
 import { ContentError } from './content-error'
@@ -121,7 +121,7 @@ const chartTicks = (piece: ChartPiece): Tick =>
 /** Saved music that reads as a piece's: its fields, its chart, melody and hands; null otherwise. */
 function musicOfSaved(saved: unknown): PieceMusic | null {
   if (!isRecord(saved)) return null
-  const { key, meter, tempo, pattern, sections, melody, voices, hands } = saved
+  const { key, meter, tempo, pattern, sections, melody, voices, instruments, hands } = saved
   if (!isKeyText(key) || !isMeter(meter) || !isTempo(tempo) || !isPatternId(pattern)) return null
   if (!Array.isArray(sections) || sections.length === 0) return null
   const read = sections.map(sectionOf)
@@ -144,7 +144,13 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
       Math.max(0, ...(tune ?? []).map((n) => n.startTick + n.durationTicks)) <= chartTicks(piece)
     if (!fits(parseMelody(piece))) return null
     const sung = savedVoices(piece, voices, fits)
-    return musicOf(sung.length > 0 ? { ...piece, voices: sung } : piece)
+    // The tune's and each voice's instrument, kept where every one of them names one.
+    const played = Array.isArray(instruments) ? instruments.slice(0, sung.length + 1) : []
+    return musicOf({
+      ...piece,
+      ...(sung.length > 0 ? { voices: sung } : {}),
+      ...(played.length > 0 && played.every(isInstrument) ? { instruments: played } : {}),
+    })
   } catch (error) {
     if (error instanceof ContentError) return null
     throw error

@@ -203,4 +203,35 @@ export const music = {
     down: 'Down',
     together: 'Together',
   },
+  // What a sung part is played on, and the families they are found under (ADR 0070).
+  instrument: {
+    voice: 'Voice',
+    violin: 'Violin',
+    cello: 'Cello',
+    flute: 'Flute',
+    oboe: 'Oboe',
+    clarinet: 'Clarinet',
+    trumpet: 'Trumpet',
+    horn: 'Horn',
+    guitar: 'Guitar',
+  },
+  // As a score names a part at its staff.
+  instrumentShort: {
+    voice: 'V.',
+    violin: 'Vln.',
+    cello: 'Vc.',
+    flute: 'Fl.',
+    oboe: 'Ob.',
+    clarinet: 'Cl.',
+    trumpet: 'Tpt.',
+    horn: 'Hn.',
+    guitar: 'Gtr.',
+  },
+  instrumentFamily: {
+    voices: 'Voices',
+    strings: 'Strings',
+    woodwind: 'Woodwind',
+    brass: 'Brass',
+    plucked: 'Plucked',
+  },
 } as const

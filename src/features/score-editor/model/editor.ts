@@ -3,6 +3,7 @@ import { setClef } from './clefs'
 import { setBarTicks } from './bars'
 import { moveCaret, placeCaret, placed, stepOf } from './caret-moves'
 import { deleteChord } from './chords'
+import { DEFAULT_INSTRUMENT } from '@/shared/lib/music'
 import { EXTRA_VOICES } from '@/shared/lib/notation'
 import { isHandLayer, isVoiceLayer, voiceIndex } from './draft'
 import { barsEdited, chordSet, selectedBars } from './form-edits'
@@ -98,6 +99,13 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         { layer: layer === 'melody' ? 'rh' : layer, struck: null },
       )
     }
+    case 'instrument': {
+      if (action.part > draft.voices.length) return state
+      const instruments = draft.voices.map((_, i) => draft.instruments[i + 1] ?? DEFAULT_INSTRUMENT)
+      const all = [draft.instruments[0] ?? DEFAULT_INSTRUMENT, ...instruments]
+      all[action.part] = action.instrument
+      return commit(state, { ...draft, instruments: all })
+    }
     case 'voiceStaff': {
       const index = voiceIndex(action.voice)
       if (action.on) {
@@ -105,14 +113,23 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         const next = draft.voices.length
         if (next >= EXTRA_VOICES.length) return state
         const voice = EXTRA_VOICES[next] ?? action.voice
-        return commit(state, { ...draft, voices: [...draft.voices, []] }, { layer: voice })
+        const instruments = [
+          ...draft.instruments.slice(0, next + 1),
+          action.instrument ?? DEFAULT_INSTRUMENT,
+        ]
+        return commit(
+          state,
+          { ...draft, voices: [...draft.voices, []], instruments },
+          { layer: voice },
+        )
       }
       if (index >= draft.voices.length) return state
       const voices = draft.voices.filter((_, i) => i !== index)
+      const instruments = draft.instruments.filter((_, i) => i !== index + 1)
       const stays = !isVoiceLayer(layer) || voiceIndex(layer) < voices.length
       return commit(
         state,
-        { ...draft, voices },
+        { ...draft, voices, instruments },
         stays ? { struck: null } : { layer: 'rh', struck: null },
       )
     }
