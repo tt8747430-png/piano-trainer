@@ -9,6 +9,7 @@ import {
 } from '@/features/score-editor'
 import type { ScoreLayout } from '@/shared/ui/score'
 import {
+  barMarksOf,
   beatsPerBar,
   chordSymbol,
   TICKS_PER_BEAT,
@@ -174,7 +175,7 @@ export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
     ...voiceStaves,
     ...PIANO_STAVES,
   ]
-  const bars = line.bars.map(({ start, bar }) => {
+  const bars = line.bars.map(({ start, bar }, index) => {
     const startTick = start - from
     const holds = (staff: StaffId) =>
       notes.some(
@@ -188,9 +189,9 @@ export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
       startTick,
       beats: bar.ticks / TICKS_PER_BEAT,
       ...(blank.length > 0 ? { blank } : {}),
-      ...(bar.repeatStart ? { repeatStart: true as const } : {}),
-      ...(bar.barline ? { barline: bar.barline } : {}),
-      ...(bar.ending ? { ending: bar.ending } : {}),
+      // The piece's tempo over its first bar.
+      ...(index === 0 && start === 0 ? { tempo: draft.tempo } : {}),
+      ...barMarksOf(bar),
     }
   })
   const chords = line.bars.flatMap(({ start, bar }) =>

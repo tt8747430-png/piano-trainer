@@ -11,16 +11,18 @@ import {
   type Key,
   type Meter,
   type NoteMarks,
+  type Pedal,
   type Tick,
 } from '@/shared/lib/music'
 import type { TimedMusic, TimedNote } from '@/shared/lib/notation'
 
 /**
  * What the + menu adds to the score, as Sibelius's does, each kind a tab of tiles: bars, lines and
- * sections; barlines (repeats, endings, a double or final barline); lines over notes (slurs, hairpins, octave lines); the key signature; the time signature;
- * and the staves (the tune's, the chord names' row).
+ * sections; barlines (repeats, endings, a double or final barline, the signs and jumps); lines over
+ * notes (slurs, hairpins, octave lines); text (expressions, the tempo, the pedal); the key signature;
+ * the time signature; and the staves (the tune's, the chord names' row).
  */
-export const ADD_TABS = ['bars', 'barlines', 'lines', 'key', 'time', 'staves'] as const
+export const ADD_TABS = ['bars', 'barlines', 'lines', 'text', 'key', 'time', 'staves'] as const
 export type AddTab = (typeof ADD_TABS)[number]
 
 /** Sharps first, fewest first, then flats: a signature's place in a chooser, as a score's index lists them. */
@@ -88,7 +90,45 @@ export const LINE_TILES = [
 ] as const satisfies readonly { mark: MarkChoice; word: string; from: NoteMarks; to: NoteMarks }[]
 export type LineTile = (typeof LINE_TILES)[number]
 
+/** The tempo words a song's tempo is set by, each at its beats a minute, as a metronome marks them. */
+export const TEMPO_TILES = [
+  ['largo', 50],
+  ['adagio', 70],
+  ['andante', 90],
+  ['moderato', 110],
+  ['allegro', 130],
+  ['presto', 160],
+] as const
+
+/** The pedal's tiles: each mark, and the marks its picture draws over four notes. */
+export const PEDAL_TILES = [
+  { pedal: 'down', marks: ['down', undefined, undefined, 'up'] },
+  { pedal: 'change', marks: ['down', 'change', undefined, 'up'] },
+  { pedal: 'up', marks: ['down', undefined, undefined, 'up'] },
+] as const satisfies readonly {
+  pedal: Pedal
+  marks: readonly (Pedal | undefined)[]
+}[]
+
 const C_MAJOR: Key = { tonic: note('C'), minor: false }
+
+/** A pedal tile's picture: four quarter notes on the treble staff, the pedal under them. */
+export function pedalMusic(marks: readonly (Pedal | undefined)[]): TimedMusic {
+  return {
+    key: C_MAJOR,
+    meter: '4/4',
+    bars: [{ startTick: 0, beats: 4, blank: ['bass'] }],
+    notes: marks.map((pedal, i): TimedNote => ({
+      midi: midi(72),
+      spelled: note('C'),
+      hand: 'rh',
+      startTick: i * TICKS_PER_BEAT,
+      durationTicks: TICKS_PER_BEAT,
+      ...(pedal ? { marks: { pedal } } : {}),
+    })),
+    chords: [],
+  }
+}
 
 /** How each of the Barlines' tiles draws its mark on a bar. */
 export const BARLINE_TILES: Readonly<Record<BarMarkChoice, BarMarks>> = {
@@ -99,6 +139,16 @@ export const BARLINE_TILES: Readonly<Record<BarMarkChoice, BarMarks>> = {
   double: { barline: 'double' },
   final: { barline: 'final' },
   plain: {},
+  segno: { segno: true },
+  coda: { coda: true },
+  toCoda: { toCoda: true },
+  fine: { fine: true },
+  dc: { jump: 'dc' },
+  'dc-fine': { jump: 'dc-fine' },
+  'dc-coda': { jump: 'dc-coda' },
+  ds: { jump: 'ds' },
+  'ds-fine': { jump: 'ds-fine' },
+  'ds-coda': { jump: 'ds-coda' },
 }
 
 /** A tile's empty bar of `beats`, in `key` and `meter`: what a signature's tile engraves. */

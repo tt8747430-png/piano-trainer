@@ -8,8 +8,8 @@ import {
   parseKey,
   TICKS_PER_BEAT,
   type BarMarks,
-  type Barline,
   type Chord,
+  type Jump,
   type Key,
 } from '@/shared/lib/music'
 import { MAX_BEATS, readBeats, ticksIn } from './beats'
@@ -19,17 +19,35 @@ import { pieceKey, type ChartPiece } from './types'
 
 type Fail = (problem: string) => never
 
-/** A barline written after a bar: a repeat back, a double barline, the final one. */
-const END_TOKENS: Readonly<Record<string, Barline>> = {
-  ':|': 'repeat',
-  '||': 'double',
-  '|.': 'final',
+/** Each jump as a chart writes it after its bar. */
+export const JUMP_TOKENS: Readonly<Record<Jump, string>> = {
+  dc: 'DC',
+  'dc-fine': 'DC.Fine',
+  'dc-coda': 'DC.Coda',
+  ds: 'DS',
+  'ds-fine': 'DS.Fine',
+  'ds-coda': 'DS.Coda',
 }
-/** Marks written before a bar: a repeat starting at it, the ending it belongs to. */
+
+/**
+ * Marks written after a bar, its end: a repeat back, a double barline, the final one; a jump, Fine,
+ * To Coda (ADR 0068).
+ */
+const END_TOKENS: Readonly<Record<string, BarMarks>> = {
+  ':|': { barline: 'repeat' },
+  '||': { barline: 'double' },
+  '|.': { barline: 'final' },
+  ...Object.fromEntries(Object.entries(JUMP_TOKENS).map(([jump, token]) => [token, { jump }])),
+  Fine: { fine: true },
+  ToCoda: { toCoda: true },
+}
+/** Marks written before a bar: a repeat starting at it, the ending it belongs to, the signs. */
 const START_TOKENS: Readonly<Record<string, BarMarks>> = {
   '|:': { repeatStart: true },
   '[1': { ending: 1 },
   '[2': { ending: 2 },
+  Segno: { segno: true },
+  Coda: { coda: true },
 }
 
 /** The most bars of its meter one bar may last: a bar of chords with long `@beats`. */
@@ -127,12 +145,15 @@ export function parseChart(piece: ChartPiece): Chart {
         if (end) {
           const last = bars.at(-1)
           if (!last || Object.keys(before).length > 0) fail(`a barline before any bar: "${token}"`)
-          if (last.barline) fail(`two barlines after one bar: "${token}"`)
-          bars[bars.length - 1] = { ...last, barline: end }
+          if (Object.keys(end).some((mark) => mark in last))
+            fail(`two of a kind after one bar: "${token}"`)
+          bars[bars.length - 1] = { ...last, ...end }
           continue
         }
         const start = START_TOKENS[token]
         if (start) {
+          if (Object.keys(start).some((mark) => mark in before))
+            fail(`two of a kind before one bar: "${token}"`)
           before = { ...before, ...start }
           continue
         }

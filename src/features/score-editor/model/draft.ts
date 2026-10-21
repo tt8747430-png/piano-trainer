@@ -14,6 +14,7 @@ import { isOneOf } from '@/shared/lib'
 import { EXTRA_VOICES, type ExtraVoice } from '@/shared/lib/notation'
 import type { HandNote } from '@/shared/lib/arrangement'
 import {
+  barMarksOf,
   beatsToTicks,
   parseKey,
   TICKS_PER_BEAT,
@@ -120,9 +121,7 @@ export function readDraft(music: PieceMusic): Draft {
             chords,
             rh: bar.hands?.rh !== undefined,
             lh: bar.hands?.lh !== undefined,
-            ...(bar.repeatStart ? { repeatStart: true } : {}),
-            ...(bar.barline ? { barline: bar.barline } : {}),
-            ...(bar.ending ? { ending: bar.ending } : {}),
+            ...barMarksOf(bar),
           }
         }),
       ),
@@ -150,9 +149,7 @@ function chartBar(bar: DraftBar) {
       ...(method ? { method } : {}),
     })),
     beats: bar.ticks / TICKS_PER_BEAT,
-    ...(bar.repeatStart ? { repeatStart: true as const } : {}),
-    ...(bar.barline ? { barline: bar.barline } : {}),
-    ...(bar.ending ? { ending: bar.ending } : {}),
+    ...barMarksOf(bar),
   }
 }
 

@@ -156,6 +156,8 @@ export interface PerformedChord extends Chord {
 export interface PerformanceBar extends BarMarks {
   /** The chart's bar it plays, where the repeats are played (`unfold`): its index as written. */
   readonly written?: number
+  /** The tempo marked over it, the first bar's: beats a minute. */
+  readonly tempo?: number
   readonly startTick: Tick
   readonly beats: number
   readonly section: number

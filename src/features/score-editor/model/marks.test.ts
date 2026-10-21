@@ -57,6 +57,29 @@ describe('markNotes', () => {
     expect(musicToSave(higher)?.hands?.rh).toBe('C4+E4/2[8va] G4/2[8va] | A4/4[8va]')
   })
 
+  it('writes an expression on a span’s first onset, and holds the pedal from it to its last', () => {
+    const sweet = markNotes(
+      draft,
+      'rh',
+      { from: 0, to: 192 },
+      { kind: 'expression', expression: 'dolce' },
+    )
+    expect(marksOf(sweet.hands.rh)).toEqual([
+      { expression: 'dolce' },
+      { expression: 'dolce' },
+      undefined,
+      undefined,
+    ])
+    const held = markNotes(draft, 'rh', { from: 0, to: 192 }, { kind: 'pedal', pedal: 'down' })
+    expect(marksOf(held.hands.rh)).toEqual([
+      { pedal: 'down' },
+      { pedal: 'down' },
+      undefined,
+      { pedal: 'up' },
+    ])
+    expect(musicToSave(held)?.hands?.rh).toBe('C4+E4/2[ped] G4/2 | A4/4[pedup]')
+  })
+
   it('changes nothing where no note starts', () => {
     expect(markNotes(draft, 'rh', 24, { kind: 'arpeggio' })).toBe(draft)
   })

@@ -440,6 +440,50 @@ describe('engrave', () => {
     expect(texts).toContain('2.')
   })
 
+  it('writes the sign, the coda’s sign, Fine, To Coda and the jump over their bars', () => {
+    const host = document.createElement('div')
+    const signed = notate({
+      key: { tonic: note('C'), minor: false },
+      meter: '4/4',
+      bars: [
+        { startTick: 0, beats: 4, segno: true },
+        { startTick: 96, beats: 4, toCoda: true, fine: true },
+        { startTick: 192, beats: 4, jump: 'ds-coda' },
+        { startTick: 288, beats: 4, coda: true },
+      ],
+      notes: [],
+      chords: [],
+    })
+    engrave(signed, host, { scale: 1, fingers: false, names: false })
+    const texts = [...host.querySelectorAll('text')].map((text) => text.textContent)
+    expect(texts).toEqual(expect.arrayContaining(['Fine', 'D.S. al \ue048']))
+    expect(texts.some((text) => text?.startsWith('To'))).toBe(true)
+  })
+
+  it('writes an expression over its note in italics, and the pedal under the staff', () => {
+    const drawn = (pedal: boolean) => {
+      const host = document.createElement('div')
+      const marked = notate({
+        key: { tonic: note('C'), minor: false },
+        meter: '4/4',
+        bars: [{ startTick: 0, beats: 4 }],
+        notes: [
+          {
+            ...n(60, 'C', 0, 48),
+            marks: { expression: 'rit', ...(pedal ? { pedal: 'down' } : {}) },
+          },
+          { ...n(64, 'E', 48, 48), ...(pedal ? { marks: { pedal: 'up' } } : {}) },
+        ],
+        chords: [],
+      })
+      engrave(marked, host, { scale: 1, fingers: false, names: false })
+      return [...host.querySelectorAll('text')].map((text) => text.textContent)
+    }
+    expect(drawn(false)).toContain('rit.')
+    // Ped. and its release, two glyphs more.
+    expect(drawn(true).length).toBe(drawn(false).length + 2)
+  })
+
   it('draws a line wider than the width it may fill smaller, to fit it', () => {
     const host = () => document.createElement('div')
     const natural = engrave(score, host(), { scale: 1, fingers: false, names: false })

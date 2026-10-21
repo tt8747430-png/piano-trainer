@@ -27,6 +27,14 @@ describe('readMarks', () => {
     })
   })
 
+  it('reads an expression written over the note, and the pedal pressed, let up or changed there', () => {
+    expect(readMarks('dolce,ped')).toEqual({ expression: 'dolce', pedal: 'down' })
+    expect(readMarks('rit,pedup')).toEqual({ expression: 'rit', pedal: 'up' })
+    expect(readMarks('atempo,pedch')).toEqual({ expression: 'a-tempo', pedal: 'change' })
+    expect(readMarks('dolce,legato')).toBeNull()
+    expect(readMarks('ped,pedup')).toBeNull()
+  })
+
   it('reads grace notes with their pitches as written', () => {
     expect(readMarks('gr:D5+E5')).toEqual({
       grace: [
@@ -46,8 +54,8 @@ describe('readMarks', () => {
 
 describe('writeMarks', () => {
   it('writes every kind in one order, which reads back as it was', () => {
-    const marks = readMarks('cresc,8va,gr:D5,),tr,acc,stacc,(,p,arp')
-    expect(marks && writeMarks(marks)).toBe('acc,stacc,tr,arp,(,),8va,p,cresc,gr:D5')
+    const marks = readMarks('cresc,8va,gr:D5,),tr,acc,stacc,(,p,arp,ped,espress')
+    expect(marks && writeMarks(marks)).toBe('acc,stacc,tr,arp,(,),8va,p,cresc,espress,ped,gr:D5')
     expect(readMarks(marks ? writeMarks(marks) : '')).toEqual(marks)
   })
 })

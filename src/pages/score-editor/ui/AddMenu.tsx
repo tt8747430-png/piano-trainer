@@ -12,16 +12,26 @@ import {
 } from 'lucide-react'
 import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BAR_MARK_CHOICES, barAt, notesAt, type BarEdit } from '@/features/score-editor'
+import {
+  barAt,
+  BARLINE_CHOICES,
+  JUMP_CHOICES,
+  notesAt,
+  type BarEdit,
+  type BarMarkChoice,
+} from '@/features/score-editor'
 import { useKeyName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import {
   beatsPerBar,
+  EXPRESSION_TEXT,
+  EXPRESSIONS,
   keyParam,
   TICKS_PER_BEAT,
   timeSignature,
   timeSignatureText,
   type Key,
+  type Pedal,
   type TimeSignature,
 } from '@/shared/lib/music'
 import { EXTRA_VOICES, notate, type TimedMusic } from '@/shared/lib/notation'
@@ -34,6 +44,9 @@ import {
   keyTiles,
   LINE_TILES,
   lineMusic,
+  PEDAL_TILES,
+  pedalMusic,
+  TEMPO_TILES,
   timeTiles,
   type AddTab,
 } from '../model/add-menu'
@@ -48,6 +61,7 @@ const TAB_ICONS: Readonly<Record<AddTab, ReactNode>> = {
       <path d="M3 15 C8 6 16 6 21 15" strokeLinecap="round" />
     </svg>
   ),
+  text: <span className="font-serif text-xl leading-none italic">dol.</span>,
   key: <span className="font-music text-2xl leading-none">♯</span>,
   time: (
     <span className="font-display text-sm leading-[0.8] font-bold">
@@ -56,6 +70,12 @@ const TAB_ICONS: Readonly<Record<AddTab, ReactNode>> = {
   ),
   staves: <span className="font-music text-2xl leading-none">𝄞</span>,
 }
+
+const PEDAL_LABEL = {
+  down: 'marks.pedalDown',
+  change: 'marks.pedalChange',
+  up: 'marks.pedalUp',
+} as const satisfies Readonly<Record<Pedal, string>>
 
 /** The bar edits, each with its picture. */
 const BAR_TILES: readonly (readonly [BarEdit, LucideIcon])[] = [
@@ -176,6 +196,15 @@ export function AddMenu() {
       <Engraved music={emptyBar(key, draft.meter, 1)} noTime />
     </Tile>
   )
+  const barMarkTile = (choice: BarMarkChoice) => (
+    <Tile
+      key={choice}
+      label={t(`add.barline.${choice}`)}
+      onClick={done(() => actions.dispatch({ type: 'barMarks', choice }))}
+    >
+      <Engraved music={emptyBar(draft.key, draft.meter, 1, BARLINE_TILES[choice])} noTime />
+    </Tile>
+  )
   const { meters, lengths } = timeTiles(draft.meter)
   const panels: Readonly<Record<AddTab, ReactNode>> = {
     bars: (
@@ -193,17 +222,10 @@ export function AddMenu() {
       </Tiles>
     ),
     barlines: (
-      <Tiles>
-        {BAR_MARK_CHOICES.map((choice) => (
-          <Tile
-            key={choice}
-            label={t(`add.barline.${choice}`)}
-            onClick={done(() => actions.dispatch({ type: 'barMarks', choice }))}
-          >
-            <Engraved music={emptyBar(draft.key, draft.meter, 1, BARLINE_TILES[choice])} noTime />
-          </Tile>
-        ))}
-      </Tiles>
+      <div className="flex flex-col gap-4">
+        <Tiles heading={t('add.barlines')}>{BARLINE_CHOICES.map(barMarkTile)}</Tiles>
+        <Tiles heading={t('add.jumps')}>{JUMP_CHOICES.map(barMarkTile)}</Tiles>
+      </div>
     ),
     lines: (
       <>
@@ -221,6 +243,56 @@ export function AddMenu() {
           ))}
         </Tiles>
       </>
+    ),
+    text: (
+      <div className="flex flex-col gap-4">
+        {hasNotes ? null : <p className="text-sm text-muted-foreground">{t('add.noNotes')}</p>}
+        <Tiles heading={t('add.expressions')}>
+          {EXPRESSIONS.map((expression) => (
+            <Tile
+              key={expression}
+              label={t(`marks.${expression}`)}
+              disabled={!hasNotes}
+              onClick={done(() =>
+                actions.dispatch({ type: 'mark', mark: { kind: 'expression', expression } }),
+              )}
+            >
+              <span className="font-serif text-2xl italic">{EXPRESSION_TEXT[expression]}</span>
+            </Tile>
+          ))}
+        </Tiles>
+        <Tiles heading={t('add.pedal')}>
+          {PEDAL_TILES.map(({ pedal, marks }) => (
+            <Tile
+              key={pedal}
+              label={t(PEDAL_LABEL[pedal])}
+              disabled={!hasNotes}
+              onClick={done(() =>
+                actions.dispatch({ type: 'mark', mark: { kind: 'pedal', pedal } }),
+              )}
+            >
+              <Engraved music={pedalMusic(marks)} noTime />
+            </Tile>
+          ))}
+        </Tiles>
+        <Tiles heading={t('add.tempo')}>
+          {TEMPO_TILES.map(([word, bpm]) => (
+            <Tile
+              key={word}
+              label={t('add.tempoLabel', { word: t(`add.tempos.${word}`), bpm })}
+              pressed={draft.tempo === bpm}
+              onClick={done(() => actions.dispatch({ type: 'settings', tempo: bpm }))}
+            >
+              <span className="flex flex-col items-center gap-1">
+                <span className="font-serif text-xl font-bold">{t(`add.tempos.${word}`)}</span>
+                <span className="text-lg">
+                  <span className="font-music">♩</span> = {bpm}
+                </span>
+              </span>
+            </Tile>
+          ))}
+        </Tiles>
+      </div>
     ),
     key: (
       <div className="flex flex-col gap-4">

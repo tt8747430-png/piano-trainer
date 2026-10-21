@@ -4,11 +4,14 @@ import {
   Formatter,
   MetricsDefaults,
   Modifier,
+  PedalMarking,
   Renderer,
+  Repetition,
   Stave,
   StaveConnector,
   StaveHairpin,
   StaveNote,
+  StaveTempo,
   StaveTie,
   SVGContext,
   TextBracket,
@@ -18,11 +21,15 @@ import {
   type Voice,
 } from 'vexflow/core'
 import {
+  isCompound,
   keySignature,
   sameKey,
   timeSignatureText,
   type Barline,
+  type BarMarks,
+  type Jump,
   type Key,
+  type NoteMarks,
   type Tick,
   type TimeSignature,
 } from '@/shared/lib/music'
@@ -143,6 +150,31 @@ const END_CONNECTOR = {
   final: 'boldDoubleRight',
   repeat: 'boldDoubleRight',
 } as const
+
+const JUMP_SIGN: Readonly<Record<Jump, number>> = {
+  dc: Repetition.type.DC,
+  'dc-fine': Repetition.type.DC_AL_FINE,
+  'dc-coda': Repetition.type.DC_AL_CODA,
+  ds: Repetition.type.DS,
+  'ds-fine': Repetition.type.DS_AL_FINE,
+  'ds-coda': Repetition.type.DS_AL_CODA,
+}
+/** How far a jump stands over Fine or To Coda at the same bar's end, clear of them. */
+const JUMP_OVER = -14
+
+/**
+ * The signs over a bar, each with its height: the segno or the coda's sign at its start; Fine, To
+ * Coda and a jump at its end, the jump over the others there.
+ */
+function signsOf({ segno, coda, fine, toCoda, jump }: BarMarks): (readonly [number, number])[] {
+  const signs: (readonly [number, number])[] = []
+  if (segno) signs.push([Repetition.type.SEGNO_LEFT, 0])
+  if (coda) signs.push([Repetition.type.CODA_LEFT, 0])
+  if (fine) signs.push([Repetition.type.FINE, 0])
+  if (toCoda) signs.push([Repetition.type.TO_CODA, 0])
+  if (jump) signs.push([JUMP_SIGN[jump], fine || toCoda ? JUMP_OVER : 0])
+  return signs
+}
 
 /**
  * Where an ending's bracket stands over this bar: begun, carried on or ended, by the bars beside it
@@ -301,8 +333,13 @@ function buildMeasure(
  * fingers stand over the top staff, apart where they stand between two, and taller where they stand
  * under the bottom one.
  */
-/** The room an ending's bracket takes over the top staff. */
+/** The room an ending's bracket, the tempo or a sign takes over the top staff. */
 const VOLTA_ROOM = 32
+/** How far the tempo mark stands up from where the stave puts it, clear of the words over the notes. */
+const TEMPO_SHIFT = -10
+/** The width of the segno, and of Coda with its sign, that a tempo in their bar stands after. */
+const SEGNO_WIDTH = 28
+const CODA_WIDTH = 56
 
 /** Where each staff stands, and the height they take: an ending's bracket, where there is one, over them. */
 function placesOf(
@@ -313,7 +350,9 @@ function placesOf(
   readonly height: number
 } {
   const placed = stavesPlaced(built, shown)
-  if (!built.some((measure) => measure.measure.ending !== undefined)) return placed
+  const over = ({ measure }: BuiltMeasure) =>
+    measure.ending !== undefined || measure.tempo !== undefined || signsOf(measure).length > 0
+  if (!built.some(over)) return placed
   const y: Partial<Record<StaffId, number>> = {}
   for (const staff of shown) y[staff] = (placed.y[staff] ?? 0) + VOLTA_ROOM
   return { y, height: placed.height + VOLTA_ROOM }
@@ -479,8 +518,41 @@ function drawSpans(
     const last = chords.at(-1)?.note
     if (last) drawHairpin(last)
     drawOctave()
+    drawPedal(context, chords)
     context.closeGroup()
   }
+}
+
+/**
+ * The sustain pedal under a staff (Ped. and its release), as its notes mark it: pressed at one, let up
+ * at another, let up and pressed again at a change; one held past the line's last note let up there.
+ */
+function drawPedal(
+  context: RenderContext,
+  chords: readonly { readonly event: { readonly marks?: NoteMarks }; readonly note: StaveNote }[],
+) {
+  const marked: StaveNote[] = []
+  let down = false
+  for (const { event, note } of chords) {
+    const pedal = event.marks?.pedal
+    if (pedal === 'down' && !down) {
+      marked.push(note)
+      down = true
+    } else if (pedal === 'up' && down) {
+      marked.push(note)
+      down = false
+    } else if (pedal === 'change') {
+      // A release and a press at once: the note twice, as the pedal's own notation writes it; with
+      // the pedal up, only the press.
+      if (down) marked.push(note, note)
+      else marked.push(note)
+      down = true
+    }
+  }
+  const last = chords.at(-1)?.note
+  if (down && last) marked.push(last)
+  if (marked.length < 2) return
+  new PedalMarking(marked).setType(PedalMarking.type.TEXT).setContext(context).draw()
 }
 
 /**
@@ -675,6 +747,15 @@ function* drawn(
     // An ending's bracket over the system's top staff, numbered where it begins.
     const volta = voltaOf(built, index)
     if (volta !== VoltaType.NONE) top.stave.setVoltaType(volta, `${measure.measure.ending}.`, 0)
+    // The tempo over the music's head: a beat (a dotted quarter's in a compound meter) equals so many.
+    const { tempo } = measure.measure
+    if (tempo) {
+      // After the bar's sign where it has one, as the two stand side by side over its start.
+      const after = measure.measure.coda ? CODA_WIDTH : measure.measure.segno ? SEGNO_WIDTH : 0
+      const beat = { duration: 'q', dots: isCompound(score.meter) ? 1 : 0, bpm: tempo }
+      top.stave.addModifier(new StaveTempo(beat, top.stave.getX() + after, TEMPO_SHIFT))
+    }
+    for (const [type, shift] of signsOf(measure.measure)) top.stave.setRepetitionType(type, shift)
     for (const { stave } of drawn) stave.setNoteStartX(start).setContext(context).draw()
     // A system's staves are joined at its left; the grand staff's two by a brace and their barlines,
     // the tune's staff over it keeping its own, as a song's piano part is printed.

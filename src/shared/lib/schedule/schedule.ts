@@ -9,7 +9,9 @@ import {
   type BarsInMeter,
 } from './grid'
 import { loudness, markedSounds, rollOffsets } from './marks'
+import { pedalHeld } from './pedal-marks'
 import { swingTick } from './swing'
+import { tempoWarp } from './tempo-marks'
 
 /** Which hands the learner hears: both, or one of them. */
 export const HANDS = ['both', 'rh', 'lh'] as const
@@ -115,7 +117,11 @@ const keyAt = (performance: Performance, tick: Tick) =>
 export function schedule(performance: Performance, options: ScheduleOptions): Scheduled {
   const { hands, fromTick = 0, toTick = performance.totalTicks } = options
   const tempo = checkedTempo(options.tempo)
-  const place = placement(performance, options.swing)
+  // Swung where asked, then held back or pressed on where the notes mark the tempo (ADR 0068).
+  const swung = placement(performance, options.swing)
+  const warp = tempoWarp([...performance.notes, ...(performance.sung ?? []).flat()])
+  const place = (tick: Tick) => warp(swung(tick))
+  const pedal = pedalHeld([...performance.notes, ...(performance.sung ?? []).flat()])
   const counted = options.countIn ? countInBeats(performance, fromTick) : []
   const musicStart = secondsFor(place(fromTick) - place(counted[0]?.tick ?? fromTick), tempo)
   const at = (tick: Tick) => musicStart + secondsFor(place(tick) - place(fromTick), tempo)
@@ -136,7 +142,9 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   const played: Sound[] = performance.notes.flatMap((n, i) => {
     if (!heard(n) || !isAudible(n, hands)) return []
     const start = Math.max(fromTick, n.startTick)
-    const end = Math.min(n.startTick + n.durationTicks, toTick)
+    // Under the pedal a note sounds on until it is let up.
+    const released = pedal(n.startTick) ?? 0
+    const end = Math.min(Math.max(n.startTick + n.durationTicks, released), toTick)
     const full = at(end) - at(start)
     const sound = {
       kind: 'note' as const,

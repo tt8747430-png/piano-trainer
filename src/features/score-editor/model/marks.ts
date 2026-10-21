@@ -1,10 +1,12 @@
 import type {
   Articulation,
   Dynamic,
+  Expression,
   Hairpin,
   NoteMarks,
   OctaveLine,
   Ornament,
+  Pedal,
   Tick,
 } from '@/shared/lib/music'
 import type { Draft, DraftNote, NoteLayer } from './draft'
@@ -20,6 +22,8 @@ export type MarkChoice =
   | { readonly kind: 'octave'; readonly octave: OctaveLine }
   | { readonly kind: 'dynamic'; readonly dynamic: Dynamic }
   | { readonly kind: 'hairpin'; readonly hairpin: Hairpin }
+  | { readonly kind: 'expression'; readonly expression: Expression }
+  | { readonly kind: 'pedal'; readonly pedal: Pedal }
 
 type Writable = { -readonly [K in keyof NoteMarks]: NoteMarks[K] }
 
@@ -36,6 +40,10 @@ export function hasMark(marks: NoteMarks | undefined, mark: MarkChoice): boolean
       return marks?.dynamic === mark.dynamic
     case 'hairpin':
       return marks?.hairpin === mark.hairpin
+    case 'expression':
+      return marks?.expression === mark.expression
+    case 'pedal':
+      return marks?.pedal === mark.pedal
     default:
       return marks?.[mark.kind] === true
   }
@@ -72,6 +80,14 @@ export function withMark(
       if (on) next.hairpin = mark.hairpin
       else if (next.hairpin === mark.hairpin) delete next.hairpin
       break
+    case 'expression':
+      if (on) next.expression = mark.expression
+      else if (next.expression === mark.expression) delete next.expression
+      break
+    case 'pedal':
+      if (on) next.pedal = mark.pedal
+      else if (next.pedal === mark.pedal) delete next.pedal
+      break
     default:
       if (on) next[mark.kind] = true
       else delete next[mark.kind]
@@ -85,16 +101,21 @@ const marked = (n: DraftNote, mark: MarkChoice, on: boolean): DraftNote => {
   return marks ? { ...note, marks } : note
 }
 
-/** What a mark over a span of notes ends with: a slur its `)`, a hairpin its end; none for the rest. */
+/**
+ * What a mark over a span of notes ends with: a slur its `)`, a hairpin its end, the pedal its
+ * release; none for the rest.
+ */
 function endOf(mark: MarkChoice): MarkChoice | null {
   if (mark.kind === 'slurStart' || mark.kind === 'slurEnd') return { kind: 'slurEnd' }
   if (mark.kind === 'hairpin' && mark.hairpin !== 'end') return { kind: 'hairpin', hairpin: 'end' }
+  if (mark.kind === 'pedal' && mark.pedal === 'down') return { kind: 'pedal', pedal: 'up' }
   return null
 }
 
 /**
  * A mark toggled on the notes at the caret, or over the notes starting in a span of bars: a slur or a
- * hairpin from the first onset to the last, a dynamic on the first, any other mark on them all. On
+ * hairpin or the pedal from the first onset to the last, a dynamic or an expression on the first, any
+ * other mark on them all. On
  * where any lacks it, else off.
  */
 export function markNotes(
@@ -113,7 +134,9 @@ export function markNotes(
   const last = Math.max(...inSpan.map((n) => n.startTick))
   const end = typeof span === 'number' ? null : endOf(mark)
   const start: MarkChoice = end && mark.kind === 'slurEnd' ? { kind: 'slurStart' } : mark
-  const startsOnFirst = end !== null || (typeof span !== 'number' && mark.kind === 'dynamic')
+  const startsOnFirst =
+    end !== null ||
+    (typeof span !== 'number' && (mark.kind === 'dynamic' || mark.kind === 'expression'))
   const targets = startsOnFirst ? inSpan.filter((n) => n.startTick === first) : inSpan
   const on = !targets.every((n) => hasMark(n.marks, start))
   return withNotes(

@@ -1,5 +1,6 @@
 import type { ChartBar } from '@/shared/lib/arrangement'
 import { ticksIn } from './beats'
+import { JUMP_TOKENS } from './parse-chart'
 import {
   beatsPerBar,
   beatsToTicks,
@@ -59,10 +60,15 @@ export function writeBar(bar: ChartBar, meter: Meter): string {
     })
     .join('-')
   return [
+    ...(bar.segno ? ['Segno'] : []),
+    ...(bar.coda ? ['Coda'] : []),
     ...(bar.repeatStart ? ['|:'] : []),
     ...(bar.ending ? [`[${bar.ending}`] : []),
     chords,
     ...(bar.barline ? [END_TOKEN[bar.barline]] : []),
+    ...(bar.fine ? ['Fine'] : []),
+    ...(bar.toCoda ? ['ToCoda'] : []),
+    ...(bar.jump ? [JUMP_TOKENS[bar.jump]] : []),
   ].join(' ')
 }
 

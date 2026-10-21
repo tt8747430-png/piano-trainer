@@ -72,6 +72,8 @@ meter, note })`. It shows in Songs and never opens in the Player; no course has 
 
 Between a line's bars, barlines (ADR 0067): `|:` starts a repeat at the next bar, `:|` ends one at the bar before, `||`
 is a double barline, `|.` the final one, and `[1` or `[2` before a bar puts it in that ending: `'|: G C [1 D :| [2 D7 G |.'`.
+The jumps (ADR 0068): `Segno` or `Coda` before a bar puts its sign there; `Fine`, `ToCoda` and a jump `DC`, `DC.Fine`,
+`DC.Coda`, `DS`, `DS.Fine` or `DS.Coda` after a bar: `'Segno G C ToCoda D DS.Coda Coda D7 G |.'`.
 
 `sections` is a list of `{ kind, n?, label?, last?, detail?, key?, pattern?, lines }`:
 
@@ -152,7 +154,9 @@ where the same hand is written: it is held across the barline.
 **Marks** (ADR 0063), words joined by commas in brackets: articulations `stacc` `staccatiss` `acc` `ten` `marc`
 `ferm` (several may join); one ornament `tr` `mord` `lmord` `turn` `trem`; `arp` rolls the chord; `(` starts a slur
 and `)` ends one; `8va` writes the notes an octave lower than they sound, `8vb` higher; a dynamic `pp` `p` `mp` `mf`
-`f` `ff`; a hairpin `cresc` or `dim` starts, `/hairpin` ends; `gr:D5+E5` grace notes struck just before. A pitch is
+`f` `ff`; a hairpin `cresc` or `dim` starts, `/hairpin` ends; an expression `dolce` `cantabile` `espress` `legato`
+`leggiero` `rit` `rall` `accel` `atempo` (ADR 0068); the pedal `ped` down, `pedch` changed, `pedup` up;
+`gr:D5+E5` grace notes struck just before. A pitch is
 always the one heard. A melody's notes take the same marks (`E4/1[stacc,p]`), a rest none.
 
 ## The recording

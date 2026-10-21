@@ -49,13 +49,34 @@ describe('parseChart', () => {
     ])
     expect(errorOf([':| C']).message).toMatch(/barline before any bar/)
     expect(errorOf(['C |:']).message).toMatch(/no bar after/)
-    expect(errorOf(['C || |.']).message).toMatch(/two barlines/)
+    expect(errorOf(['C || |.']).message).toMatch(/two of a kind/)
   })
 
   it('writes a bar’s barlines back around it', () => {
     const [line = []] =
       parseChart(testSong(['|: C [1 F :| [2 G || Am |.'])).sections[0]?.lines ?? []
     expect(line.map((bar) => writeBar(bar, '4/4')).join(' ')).toBe('|: C [1 F :| [2 G || Am |.')
+  })
+
+  it('reads and writes back the signs, the jumps, Fine and To Coda', () => {
+    const text = 'C Segno F ToCoda G Fine DS.Coda Coda Am |.'
+    const [line = []] = parseChart(testSong([text])).sections[0]?.lines ?? []
+    expect(
+      line.map(({ segno, coda, jump, fine, toCoda }) => ({ segno, coda, jump, fine, toCoda })),
+    ).toEqual(
+      [{}, { segno: true, toCoda: true }, { fine: true, jump: 'ds-coda' }, { coda: true }].map(
+        (marks) => ({
+          segno: undefined,
+          coda: undefined,
+          jump: undefined,
+          fine: undefined,
+          toCoda: undefined,
+          ...marks,
+        }),
+      ),
+    )
+    expect(line.map((bar) => writeBar(bar, '4/4')).join(' ')).toBe(text)
+    expect(errorOf(['C DC DS']).message).toMatch(/two of a kind/)
   })
 
   it('shares a bar equally among chords without beats', () => {

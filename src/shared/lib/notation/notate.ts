@@ -1,4 +1,5 @@
 import {
+  barMarksOf,
   beatsBefore,
   beatsPerBar,
   beatsToTicks,
@@ -290,9 +291,8 @@ export function notate(music: TimedMusic): Score {
       ticks,
       time: timeSignature(pickup ? beatsPerBar(music.meter) : placed.beats, music.meter),
       ...(placed.key ? { key: placed.key } : {}),
-      ...(placed.repeatStart ? { repeatStart: true } : {}),
-      ...(placed.barline ? { barline: placed.barline } : {}),
-      ...(placed.ending ? { ending: placed.ending } : {}),
+      ...(placed.tempo ? { tempo: placed.tempo } : {}),
+      ...barMarksOf(placed),
       staves,
       chords: music.chords
         .filter(

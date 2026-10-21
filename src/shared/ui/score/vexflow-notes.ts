@@ -23,6 +23,7 @@ import {
 } from 'vexflow/core'
 import {
   isCompound,
+  EXPRESSION_TEXT,
   keySignature,
   TICKS_PER_BEAT,
   timeSignature,
@@ -104,6 +105,8 @@ function signatureAlter(key: Key, letter: Letter): number {
   return order.slice(0, Math.abs(count)).includes(letter) ? Math.sign(count) : 0
 }
 
+/** An expression as a score prints it over its note, in italics. */
+
 /**
  * A note's marks drawn on it (ADR 0063): articulations by its head (marcato and a fermata over the
  * staff), an ornament or tremolo, a roll's wavy line, grace notes before it, and its dynamic under it.
@@ -134,6 +137,12 @@ function addMarks(note: StaveNote, marks: NoteMarks, key: Key) {
     const group = new GraceNoteGroup(graces, true)
     if (graces.length > 1) group.beamNotes()
     note.addModifier(group, 0)
+  }
+  if (marks.expression) {
+    const words = new Annotation(EXPRESSION_TEXT[marks.expression])
+      .setFont('serif', 12, 'normal', 'italic')
+      .setVerticalJustification(AnnotationVerticalJustify.TOP)
+    note.addModifier(words, 0)
   }
   if (marks.dynamic) {
     const dynamic = new Annotation(marks.dynamic)

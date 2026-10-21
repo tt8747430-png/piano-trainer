@@ -112,9 +112,10 @@ describe('the score editor', () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     const bar = await screen.findByRole('button', { name: /^Bar 1:/ })
-    // jsdom lays nothing out: the bar's top is the chord row's, 44px over the treble's top line (F♯5 in G).
-    fireEvent.click(bar, { clientY: 84, detail: 1 })
-    fireEvent.doubleClick(bar, { clientY: 84, detail: 2 })
+    // jsdom lays nothing out: the bar's top is the chord row's, 44px over the treble's top line (F♯5 in
+    // G), and the first line's tempo stands 32px over that.
+    fireEvent.click(bar, { clientY: 116, detail: 1 })
+    fireEvent.doubleClick(bar, { clientY: 116, detail: 2 })
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         hands: { rh: expect.stringMatching(/^F#5\/1/) },
@@ -131,9 +132,9 @@ describe('the score editor', () => {
     })
     const grip = document.querySelector('[data-slot="note-grip"]')
     if (!grip) throw new Error('the note at the caret is a grip')
-    fireEvent.pointerDown(grip, { clientY: 100, pointerId: 1 })
-    fireEvent.pointerMove(grip, { clientY: 90, pointerId: 1 })
-    fireEvent.pointerUp(grip, { clientY: 90, pointerId: 1 })
+    fireEvent.pointerDown(grip, { clientY: 132, pointerId: 1 })
+    fireEvent.pointerMove(grip, { clientY: 122, pointerId: 1 })
+    fireEvent.pointerUp(grip, { clientY: 122, pointerId: 1 })
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         hands: { rh: expect.stringMatching(/^A5\/1/) },
@@ -195,6 +196,21 @@ describe('the score editor', () => {
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         sections: [{ lines: ['|: G :| G G G'] }],
+      }),
+    )
+  })
+
+  it('puts a jump and Fine on the caret’s bar, and sets the tempo from the + menu’s Text', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await screen.findByRole('status')
+    await addFrom(user, 'Barlines', 'Fine')
+    await addFrom(user, 'Barlines', 'D.C. al Fine')
+    await addFrom(user, 'Text', 'Allegro, 130 a minute')
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        tempo: 130,
+        sections: [{ lines: ['G Fine DC.Fine G G G'] }],
       }),
     )
   })

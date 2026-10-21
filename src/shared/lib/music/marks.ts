@@ -28,6 +28,39 @@ export type OctaveLine = (typeof OCTAVE_LINES)[number]
 export const HAIRPINS = ['cresc', 'dim', 'end'] as const
 export type Hairpin = (typeof HAIRPINS)[number]
 
+/**
+ * Words written over a note: how it is played (dolce, cantabile, espressivo, legato, leggiero), and
+ * the tempo from it, held back (rit., rall.), pressed on (accel.) or back to its own (a tempo).
+ */
+export const EXPRESSIONS = [
+  'dolce',
+  'cantabile',
+  'espressivo',
+  'legato',
+  'leggiero',
+  'rit',
+  'rall',
+  'accel',
+  'a-tempo',
+] as const
+export type Expression = (typeof EXPRESSIONS)[number]
+/** Each expression as a score prints it, in italics. */
+export const EXPRESSION_TEXT: Readonly<Record<Expression, string>> = {
+  dolce: 'dolce',
+  cantabile: 'cantabile',
+  espressivo: 'espress.',
+  legato: 'legato',
+  leggiero: 'leggiero',
+  rit: 'rit.',
+  rall: 'rall.',
+  accel: 'accel.',
+  'a-tempo': 'a tempo',
+}
+
+/** The sustain pedal at a note: pressed, let up, or let up and pressed again. */
+export const PEDALS = ['down', 'up', 'change'] as const
+export type Pedal = (typeof PEDALS)[number]
+
 /** A grace note: struck just before its note, taking none of its time. */
 export interface GraceNote {
   readonly midi: Midi
@@ -45,6 +78,8 @@ export interface NoteMarks {
   readonly octave?: OctaveLine
   readonly dynamic?: Dynamic
   readonly hairpin?: Hairpin
+  readonly expression?: Expression
+  readonly pedal?: Pedal
   readonly grace?: readonly GraceNote[]
 }
 

@@ -1,4 +1,6 @@
 import {
+  barMarksOf,
+  withoutBarMarks,
   beatsBefore,
   playOrder,
   beatsPerBar,
@@ -80,6 +82,8 @@ export interface ArrangeOptions {
   readonly nearest?: boolean
   /** Play the repeats taken (`playOrder`), the bars unrolled; else as written, the repeats' signs kept. */
   readonly unfold?: boolean
+  /** The tempo marked over the first bar, in beats a minute. */
+  readonly tempo?: number
 }
 
 const VELOCITY = {
@@ -144,7 +148,8 @@ function playedBars(chart: Chart, unfold: boolean): { written: number; bar: Writ
     const place = all[written]
     if (!place) return []
     if (!unfold) return [{ written, bar: place }]
-    const { repeatStart: _start, ending: _ending, barline, ...plain } = place.bar
+    const { barline } = place.bar
+    const plain = withoutBarMarks(place.bar)
     const kept = barline === 'repeat' || barline === undefined ? plain : { ...plain, barline }
     return [{ written, bar: { ...place, bar: kept } }]
   })
@@ -206,9 +211,7 @@ function layOut(chart: Chart, unfold = false): Layout {
       section: sectionIndex,
       line: lineIndex,
       chords: chordIndexes,
-      ...(bar.repeatStart ? { repeatStart: true } : {}),
-      ...(bar.barline ? { barline: bar.barline } : {}),
-      ...(bar.ending ? { ending: bar.ending } : {}),
+      ...barMarksOf(bar),
       ...(unfold ? { written: played.written } : {}),
     })
   }
@@ -654,9 +657,10 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     key,
     meter: chart.meter,
     totalTicks: layout.totalTicks,
-    bars: layout.bars.map((bar) => {
+    bars: layout.bars.map((bar, index) => {
       const own = sectionKeys[bar.section]
-      return own ? { ...bar, key: own } : bar
+      const keyed = own ? { ...bar, key: own } : bar
+      return index === 0 && options.tempo ? { ...keyed, tempo: options.tempo } : keyed
     }),
     chords,
     notes,

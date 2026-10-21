@@ -41,6 +41,8 @@ export interface TimedMusic {
   readonly key: Key
   readonly meter: Meter
   readonly bars: readonly (BarMarks & {
+    /** The tempo marked over it, at the music's head: beats a minute. */
+    readonly tempo?: number
     readonly startTick: Tick
     readonly beats: number
     /** Staves with nothing to write in this bar: each holds the time with a rest that is not printed. */
@@ -117,6 +119,8 @@ export interface ChordMark {
 
 /** A bar as written: its notes on each staff, its chords, and its barlines (a repeat, an ending). */
 export interface Measure extends BarMarks {
+  /** The tempo marked over it (♩ = n), at the music's head. */
+  readonly tempo?: number
   readonly startTick: Tick
   readonly ticks: Tick
   readonly time: TimeSignature

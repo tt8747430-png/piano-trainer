@@ -112,6 +112,28 @@ describe('schedule', () => {
     expect(voiced[0]?.kind === 'note' && voiced[0].duration).toBeCloseTo(2 * 0.95)
   })
 
+  it('holds a note under the pedal until it is let up, and slows at a rit.', () => {
+    const plain = perform('C', 'C')
+    const marked: Performance = {
+      ...plain,
+      notes: plain.notes.map((n) =>
+        n.startTick === 0
+          ? { ...n, marks: { pedal: 'down' as const, expression: 'rit' as const } }
+          : n.startTick === 96
+            ? { ...n, marks: { pedal: 'up' as const } }
+            : n,
+      ),
+    }
+    const first = (performance: Performance) =>
+      notes(schedule(performance, { tempo: 60, hands: ALL }).sounds).filter((s) => s.at === 0)
+    const held = first(marked)
+    expect(Math.max(...held.map((s) => s.duration))).toBeGreaterThan(
+      Math.max(...first(plain).map((s) => s.duration)),
+    )
+    const end = (performance: Performance) => schedule(performance, { tempo: 60, hands: ALL }).end
+    expect(end(marked)).toBeGreaterThan(end(plain))
+  })
+
   it('times a bar in seconds at 60 bpm', () => {
     const { sounds, end } = schedule(perform('C'), { tempo: 60, hands: ALL })
     expect(notes(sounds).map((sound) => sound.at)).toEqual([0, 0, 0, 0, 0])

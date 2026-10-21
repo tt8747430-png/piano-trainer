@@ -57,6 +57,7 @@ function arrangeOptions(piece: Piece, choice: PracticeChoice, book: PatternBook)
   const fromChart = choice.pattern === 'chart'
   return {
     tonic: choice.tonic,
+    tempo: piece.tempo,
     ...accompanimentOptions(
       book,
       {

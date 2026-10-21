@@ -1,4 +1,4 @@
-export { BAR_MARK_CHOICES, type BarMarkChoice } from './model/bar-marks'
+export { BARLINE_CHOICES, JUMP_CHOICES, type BarMarkChoice } from './model/bar-marks'
 export { barLengths, type BarRange } from './model/bars'
 export { keyChords, keySevenths } from './model/chords'
 export {
