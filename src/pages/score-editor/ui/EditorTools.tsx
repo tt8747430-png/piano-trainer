@@ -32,7 +32,7 @@ import { NoteKeys, PitchKeys } from './NoteKeys'
 /** Each tab's picture: the music font's where a symbol says it. */
 const TAB_ICONS: Readonly<Record<PaletteTab, ReactNode>> = {
   notes: <span className="font-music text-xl">𝅘𝅥𝅮</span>,
-  pitch: <span className="font-music text-3xl">♯</span>,
+  pitch: <span className="font-display text-2xl font-semibold">♯</span>,
   articulations: <span className="text-lg font-bold">&gt;</span>,
   dynamics: <span className="font-serif text-base font-bold italic">mf</span>,
   hand: <Hand />,

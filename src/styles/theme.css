@@ -373,7 +373,8 @@
 /* Chord buttons, as many across as fit, each at least 4.5rem. */
 @utility grid-chords {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(4.5rem, 1fr));
+  /* Wide enough for a slash chord (Cm6/G, G♭m/B♭) on one line: four to a phone's row. */
+  grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
 }
 /* The same for small tiles, at least 9rem. */
 @utility grid-tiles {
