@@ -120,7 +120,7 @@ export function ToolPaletteTab({
           <span className="grid size-6 place-items-center overflow-hidden leading-none">
             {children}
           </span>
-          <span className="max-w-full truncate text-[0.6875rem] leading-none font-semibold landscape-phone:sr-only">
+          <span className="max-w-full truncate text-xs leading-none font-semibold landscape-phone:sr-only">
             {caption}
           </span>
         </span>

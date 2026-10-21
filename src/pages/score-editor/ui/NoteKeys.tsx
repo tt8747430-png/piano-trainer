@@ -123,7 +123,7 @@ function Move({ up, by }: { up: boolean; by: string }) {
   return (
     <span aria-hidden className="flex flex-col items-center gap-0.5 leading-none">
       <Arrow className="size-5" />
-      <span className="text-[0.6875rem] font-semibold tracking-tight">{by}</span>
+      <span className="text-xs font-semibold tracking-tight">{by}</span>
     </span>
   )
 }
@@ -159,7 +159,7 @@ export function PitchKeys() {
       >
         <span aria-hidden className="flex flex-col items-center gap-0.5 leading-none">
           <span className="text-xl font-semibold tracking-tight">♯/♭</span>
-          <span className="text-[0.6875rem] font-semibold tracking-tight">
+          <span className="text-xs font-semibold tracking-tight">
             {t('pitch.respell')}
           </span>
         </span>
