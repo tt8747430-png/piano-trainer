@@ -246,6 +246,20 @@ describe('the editor', () => {
     expect(run(state, { type: 'undo' }).draft).toEqual(draftOf())
   })
 
+  it('adds a voice’s staff under the tune’s, writes it, and takes it away with its notes', () => {
+    const added = run(initialEditor(draftOf()), { type: 'voiceStaff', voice: 'voice2', on: true })
+    expect(added.draft.voices).toEqual([[]])
+    expect(added.layer).toBe('voice2')
+    const sung = run(added, key(67, 0))
+    expect(sung.draft.voices[0]?.map((n) => n.midi)).toEqual([67])
+    const third = run(sung, { type: 'voiceStaff', voice: 'voice3', on: true })
+    expect(third.draft.voices).toHaveLength(2)
+    // Taking the second voice away moves the third up into its place.
+    const gone = run(third, { type: 'voiceStaff', voice: 'voice2', on: false })
+    expect(gone.draft.voices).toEqual([[]])
+    expect(gone.layer).toBe('rh')
+  })
+
   it('moves the caret a line on and back, to its line’s start first', () => {
     const lines = initialEditor(
       draftOf({

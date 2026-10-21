@@ -83,6 +83,20 @@ describe('createPiecesStore', () => {
     expect(Object.keys(restored({ versions }).versions)).toEqual(['bz1'])
   })
 
+  it('keeps up to three more voices that read and fit the chart, dropping any that does not', () => {
+    const voices = ['D4/4', 'F#4/2 G4/2', 'B3/4', 'A3/4']
+    expect(restored({ versions: { bz1: { ...MUSIC, voices } } }).versions.bz1?.voices).toEqual([
+      'D4/4',
+      'F#4/2 G4/2',
+      'B3/4',
+    ])
+    const wrong = restored({ versions: { bz1: { ...MUSIC, voices: ['Q4/1', 'D4/4'] } } })
+    expect(wrong.versions.bz1?.voices).toEqual(['D4/4'])
+    const long = restored({ versions: { bz1: { ...MUSIC, voices: ['D4/40'] } } })
+    expect(long.versions.bz1).toBeDefined()
+    expect(long.versions.bz1).not.toHaveProperty('voices')
+  })
+
   it('drops a melody longer than its chart', () => {
     const versions = { bz1: { ...MUSIC, melody: 'B4/16 B4/1' } }
     expect(restored({ versions }).versions).toEqual({})

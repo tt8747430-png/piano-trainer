@@ -124,6 +124,9 @@ written with (`C#5` is C♯, never D♭): the sheet music prints them so, moved 
 
 ## Written hands
 
+`voices`: up to three more voices sung with the tune, each a string written as `melody` is, each on a staff of
+its own under the tune's (ADR 0066).
+
 `hands: { rh?, lh? }`: any bar of either hand written note by note, played in place of the pattern's hand there
 (the learner's versions are written so too, ADR 0027). Each hand is its bars separated by `|`, one entry for every bar
 of the chart in order:

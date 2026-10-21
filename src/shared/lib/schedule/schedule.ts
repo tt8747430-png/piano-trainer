@@ -35,6 +35,8 @@ export interface NoteSound {
   readonly at: number
   readonly duration: number
   readonly velocity: number
+  /** A more voice sung with the tune (ADR 0066), not the piano. */
+  readonly timbre?: 'voice'
 }
 export interface ClickSound {
   readonly kind: 'click'
@@ -79,6 +81,8 @@ export interface Scheduled {
 const SHORTEST_NOTE = 0.15
 /** …nor than this when one beat group is sounded on its own. */
 const SHORTEST_ALONE = 0.35
+/** How loud a more voice sings: under the hands, as a voice behind the piano. */
+const SUNG_VELOCITY = 0.09
 /** Notes in a pass release a little early, so repeated notes are heard as two. */
 const LEGATO = 0.95
 
@@ -146,6 +150,24 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
     return markedSounds(sound, marks, { key: keyAt(performance, n.startTick), thirtySecond, full })
   })
 
+  // The more voices: heard whatever hands the learner chose, as the doubled tune is.
+  const sung: Sound[] = (performance.sung ?? []).flatMap((voice) =>
+    voice.flatMap((n): Sound[] => {
+      if (!inPass(n.startTick)) return []
+      const end = Math.min(n.startTick + n.durationTicks, toTick)
+      return [
+        {
+          kind: 'note',
+          midi: n.midi,
+          at: at(n.startTick),
+          duration: Math.max(SHORTEST_NOTE, (at(end) - at(n.startTick)) * LEGATO),
+          velocity: SUNG_VELOCITY,
+          timbre: 'voice',
+        },
+      ]
+    }),
+  )
+
   const metronome: Sound[] = options.metronome
     ? performance.bars.flatMap((_, index) =>
         barClicks(performance, index).flatMap(({ tick, accent }): Sound[] =>
@@ -159,7 +181,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   )
 
   return {
-    sounds: [...countIn, ...played, ...metronome].sort((a, b) => a.at - b.at),
+    sounds: [...countIn, ...played, ...sung, ...metronome].sort((a, b) => a.at - b.at),
     cues,
     end: at(toTick),
     fromTick,

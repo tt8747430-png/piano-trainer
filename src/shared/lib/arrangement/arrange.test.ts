@@ -558,6 +558,21 @@ describe('arrange', () => {
     ])
   })
 
+  it('carries every voice sung apart from the notes the hands play, the tune first, in the key played', () => {
+    const voice = [{ midi: midi(67), spelled: note('G'), startTick: 0, durationTicks: 96 }]
+    const performance = arrange(chart([['C']]), {
+      tonic: note('D'),
+      pattern: BLOCK,
+      voices: [voice],
+    })
+    expect(performance.sung).toEqual([
+      [],
+      [{ midi: 69, spelled: note('A'), startTick: 0, durationTicks: 96 }],
+    ])
+    expect(performance.notes.every((n) => n.midi !== 69 || n.hand !== 'melody')).toBe(true)
+    expect(arrange(chart([['C']]), { tonic: C, pattern: BLOCK }).sung).toBeUndefined()
+  })
+
   it('lets a hand override replace every chord’s figure', () => {
     const performance = arrange(chart([['C:t1', 'F']]), {
       tonic: C,

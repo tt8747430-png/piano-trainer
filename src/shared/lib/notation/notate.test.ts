@@ -42,6 +42,27 @@ describe('notate', () => {
     expect(shared.measures[0]?.staves.melody).toEqual([])
   })
 
+  it('writes each more voice on a staff of its own, under the tune’s and over the piano’s', () => {
+    const notes = [
+      n(72, note('C'), 'melody', 0, 96),
+      n(67, note('G'), 'melody', 0, 96, { voice: 'voice2' }),
+      n(64, note('E'), 'melody', 0, 96, { voice: 'voice3' }),
+      n(60, note('C'), 'rh', 0, 96),
+    ]
+    const score = notate(music(notes, { melodyStaff: true, voiceStaves: ['voice2', 'voice3'] }))
+    expect(score.staves).toEqual(['melody', 'voice2', 'voice3', 'treble', 'bass'])
+    const [bar] = score.measures
+    const keys = (staff: 'melody' | 'voice2' | 'voice3' | 'treble') =>
+      bar?.staves[staff].flatMap((voice) => voice.events.flatMap(notesOf)).map((w) => w.midi)
+    expect([keys('melody'), keys('voice2'), keys('voice3'), keys('treble')]).toEqual([
+      [72],
+      [67],
+      [64],
+      [60],
+    ])
+    expect(bar?.staves.voice4).toEqual([])
+  })
+
   it('writes a pickup under the meter’s signature, as a short first bar', () => {
     const score = notate(
       music([n(60, note('C'), 'rh', 0, 24), n(64, note('E'), 'rh', 24, 96)], {

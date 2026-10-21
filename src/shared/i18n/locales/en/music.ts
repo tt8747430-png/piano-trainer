@@ -168,6 +168,8 @@ export const music = {
   // The sheet music: the Player's staff.
   sheet: {
     label: 'Sheet music',
+    // Each sung staff's name, over its start where voices are sung together (ADR 0066).
+    staff: { melody: 'Melody', voice2: 'Voice 2', voice3: 'Voice 3', voice4: 'Voice 4' },
     // A staff's own options, inline on its card (ADR 0058).
     fingers: 'Fingers',
     noteNames: 'Note names',

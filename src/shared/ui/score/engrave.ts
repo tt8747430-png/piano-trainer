@@ -222,7 +222,10 @@ function buildMeasure(
           }),
         )
       : []
-  const staves = { melody: build('melody'), treble: build('treble'), bass: build('bass') }
+  const staves = Object.fromEntries(STAVES.map((id) => [id, build(id)])) as Record<
+    StaffId,
+    BuiltVoice[]
+  >
   const formatter = new Formatter()
   for (const staff of shown) formatter.joinVoices(staves[staff].map((built) => built.voice))
   const voices = shown.flatMap((staff) => staves[staff].map((built) => built.voice))

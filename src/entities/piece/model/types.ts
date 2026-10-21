@@ -96,6 +96,8 @@ export interface ChartPiece extends PieceCommon {
   readonly sections: readonly Section[]
   /** Note, octave and beats: `E4/1 D4/.5 r/1`. */
   readonly melody?: string
+  /** More voices sung with the tune, each written as the tune is, each on a staff of its own (ADR 0066). */
+  readonly voices?: readonly string[]
   /** Bars of either hand written note by note, played in place of the pattern's hand there. */
   readonly hands?: Hands
 }

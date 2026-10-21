@@ -65,6 +65,8 @@ export interface ArrangeOptions {
   readonly lh?: EventFigure
   /** The tune, in the chart's key. */
   readonly melody?: Melody
+  /** The more voices sung with the tune (ADR 0066), in the chart's key. */
+  readonly voices?: readonly Melody[]
   /** Also play the tune an octave up (hand 'melody'). */
   readonly doubleMelody?: boolean
   /**
@@ -591,5 +593,13 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     chords,
     notes,
     beatGroups,
+    ...(options.voices?.length
+      ? {
+          sung: [
+            melody ?? [],
+            ...options.voices.map((voice) => transposeNotes(voice, chart.key.tonic, options.tonic)),
+          ],
+        }
+      : {}),
   }
 }

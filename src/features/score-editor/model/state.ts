@@ -1,4 +1,5 @@
 import type { PatternId } from '@/entities/pattern'
+import type { ExtraVoice } from '@/shared/lib/notation'
 import type { SectionKind } from '@/entities/piece'
 import type { Chord, Finger, Key, Meter, Midi, Tick } from '@/shared/lib/music'
 import type { Clip } from './bars'
@@ -80,6 +81,8 @@ export type EditorAction =
   | { readonly type: 'step'; readonly steps: number; readonly joins?: boolean }
   /** The tune's staff added over the grand staff, or taken away with its notes (ADR 0064). */
   | { readonly type: 'melodyStaff'; readonly on: boolean }
+  /** A more voice's staff added (the next one) or taken away with its notes, the later voices moving up. */
+  | { readonly type: 'voiceStaff'; readonly voice: ExtraVoice; readonly on: boolean }
   | { readonly type: 'shift'; readonly semitones: number }
   | { readonly type: 'respell' }
   | { readonly type: 'finger'; readonly midi: Midi; readonly finger: Finger | null }

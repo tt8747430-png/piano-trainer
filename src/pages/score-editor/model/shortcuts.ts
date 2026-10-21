@@ -1,3 +1,4 @@
+import { EXTRA_VOICES } from '@/shared/lib/notation'
 import type { CaretMove, ChosenValue, EditorAction, Layer } from '@/features/score-editor'
 import type { KeyPress } from '@/shared/lib/shortcuts'
 
@@ -79,16 +80,22 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
 
 /**
  * The row over (−1) or under (1) the one the caret writes, top down: the chord names (where shown),
- * the tune's staff (where it has one), the right hand's and the left's; the same row at either end.
+ * the tune's staff (where it has one), the more voices' (ADR 0066), the right hand's and the left's; the
+ * same row at either end.
  */
 export function staffNear(
   layer: Layer,
   direction: -1 | 1,
-  { chordNames, melodyStaff }: { chordNames: boolean; melodyStaff: boolean },
+  {
+    chordNames,
+    melodyStaff,
+    voices = 0,
+  }: { chordNames: boolean; melodyStaff: boolean; voices?: number },
 ): Layer {
   const rows: Layer[] = [
     ...(chordNames ? (['chords'] as const) : []),
     ...(melodyStaff ? (['melody'] as const) : []),
+    ...EXTRA_VOICES.slice(0, voices),
     'rh',
     'lh',
   ]

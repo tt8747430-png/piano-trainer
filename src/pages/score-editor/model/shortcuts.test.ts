@@ -127,6 +127,14 @@ describe('staffNear', () => {
     expect(staffNear('rh', -1, { chordNames: false, melodyStaff: false })).toBe('rh')
   })
 
+  it('goes through the more voices’ staves, between the tune’s and the piano’s', () => {
+    const sung = { chordNames: false, melodyStaff: true, voices: 2 }
+    expect(staffNear('melody', 1, sung)).toBe('voice2')
+    expect(staffNear('voice2', 1, sung)).toBe('voice3')
+    expect(staffNear('voice3', 1, sung)).toBe('rh')
+    expect(staffNear('rh', -1, sung)).toBe('voice3')
+  })
+
   it('is Alt with the up or down arrow', () => {
     expect(shortcutOf(press('ArrowUp', 'ArrowUp', { altKey: true }), 'rh')).toEqual({
       type: 'staff',

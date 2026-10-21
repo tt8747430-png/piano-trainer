@@ -60,6 +60,51 @@ const playNote: Render<NoteSound> = (context, note, at, ended) => {
   return { sources, output: envelope }
 }
 
+/** A more voice's vibrato: its rate in Hz, and how far it moves the pitch, in Hz at A4. */
+const VIBRATO = { rate: 5.5, depth: 0.012 } as const
+
+/**
+ * A more voice's note (ADR 0066), sung rather than struck: a bright and a soft tone through a vowel's
+ * low-pass, rising over 80 ms, held, with a slow vibrato, and let go over 150 ms.
+ */
+const playSung: Render<NoteSound> = (context, note, at, ended) => {
+  const frequency = frequencyOf(note.midi)
+  const end = at + note.duration
+  const filter = context.createBiquadFilter()
+  filter.type = 'lowpass'
+  filter.frequency.value = Math.min(3200, frequency * 4)
+  const envelope = context.createGain()
+  const peak = Math.max(SILENT, note.velocity)
+  envelope.gain.setValueAtTime(SILENT, at)
+  envelope.gain.exponentialRampToValueAtTime(peak, at + 0.08)
+  envelope.gain.setValueAtTime(peak, Math.max(at + 0.08, end))
+  envelope.gain.exponentialRampToValueAtTime(SILENT, end + 0.15)
+  const tones = (['sawtooth', 'triangle'] as const).map((type, i) => {
+    const oscillator = context.createOscillator()
+    const level = context.createGain()
+    oscillator.type = type
+    oscillator.frequency.value = frequency
+    level.gain.value = i === 0 ? 0.35 : 0.65
+    oscillator.connect(level).connect(filter)
+    return oscillator
+  })
+  const vibrato = context.createOscillator()
+  const depth = context.createGain()
+  vibrato.type = 'sine'
+  vibrato.frequency.value = VIBRATO.rate
+  depth.gain.value = frequency * VIBRATO.depth
+  vibrato.connect(depth)
+  for (const tone of tones) depth.connect(tone.frequency)
+  const sources = [...tones, vibrato]
+  for (const source of sources) {
+    source.start(at)
+    source.stop(end + 0.2)
+  }
+  if (sources[0]) sources[0].onended = ended
+  filter.connect(envelope).connect(context.destination)
+  return { sources, output: envelope }
+}
+
 /**
  * A key a hand holds, struck at `gain` now: it rises in 8 ms, then dies away as a string does (a
  * lower key longer) and never stops by itself: its damper stops it (`damped`).
@@ -170,7 +215,8 @@ export function createWebAudioOutput({
   }
 
   const render = (sound: Sound, at: number) => {
-    if (sound.kind === 'note' && piano) {
+    // A sung voice is the app's own: the keyboard's speaker plays a piano.
+    if (sound.kind === 'note' && piano && sound.timbre !== 'voice') {
       piano.render(sound, at)
       return
     }
@@ -178,7 +224,7 @@ export function createWebAudioOutput({
     const ended = () => voices.delete(voice)
     const voice =
       sound.kind === 'note'
-        ? playNote(context, sound, at, ended)
+        ? (sound.timbre === 'voice' ? playSung : playNote)(context, sound, at, ended)
         : playClick(context, sound, at, ended)
     voices.add(voice)
   }

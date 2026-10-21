@@ -190,4 +190,10 @@ export interface Performance {
   readonly chords: readonly PerformedChord[]
   readonly notes: readonly PerformanceNote[]
   readonly beatGroups: readonly BeatGroup[]
+  /**
+   * Where a piece has more voices (ADR 0066), every voice sung, in the key played: the tune first, then
+   * the more voices. Heard and shown, never the learner's to play, so apart from `notes` and the beat
+   * groups.
+   */
+  readonly sung?: readonly Melody[]
 }

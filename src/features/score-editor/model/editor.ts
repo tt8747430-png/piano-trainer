@@ -1,7 +1,8 @@
 import { setBarTicks } from './bars'
 import { moveCaret, placeCaret, placed, stepOf } from './caret-moves'
 import { deleteChord } from './chords'
-import { isHandLayer } from './draft'
+import { EXTRA_VOICES } from '@/shared/lib/notation'
+import { isHandLayer, isVoiceLayer, voiceIndex } from './draft'
 import { barsEdited, chordSet, selectedBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
@@ -93,6 +94,24 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         state,
         { ...draft, melodyStaff: false, melody: [] },
         { layer: layer === 'melody' ? 'rh' : layer, struck: null },
+      )
+    }
+    case 'voiceStaff': {
+      const index = voiceIndex(action.voice)
+      if (action.on) {
+        // The next voice's staff, under the last one added: a voice never stands over an empty gap.
+        const next = draft.voices.length
+        if (next >= EXTRA_VOICES.length) return state
+        const voice = EXTRA_VOICES[next] ?? action.voice
+        return commit(state, { ...draft, voices: [...draft.voices, []] }, { layer: voice })
+      }
+      if (index >= draft.voices.length) return state
+      const voices = draft.voices.filter((_, i) => i !== index)
+      const stays = !isVoiceLayer(layer) || voiceIndex(layer) < voices.length
+      return commit(
+        state,
+        { ...draft, voices },
+        stays ? { struck: null } : { layer: 'rh', struck: null },
       )
     }
     case 'shift':

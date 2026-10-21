@@ -242,6 +242,18 @@ describe('the score editor', () => {
     ).toEqual(['Intro', 'Chorus', 'Bridge', 'Ending'])
   })
 
+  it('adds a voice’s staff from the + menu, writes it, and takes it away in the settings', async () => {
+    const user = userEvent.setup({ delay: 120 })
+    const { piecesStore, settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    act(() => setKeyboard(settingsStore, { typing: true }))
+    await addFrom(user, 'Staves', 'Add a voice')
+    expect(screen.getByRole('status')).toHaveTextContent(/^Voice 2 · Bar 1/)
+    await user.keyboard('d')
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ voices: ['E4/1'] }))
+    await user.click(within(await openSettings(user)).getByRole('switch', { name: /^Voice 2/ }))
+    await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('voices'))
+  })
+
   it('gives a section a pattern of its own from its heading’s menu, named beside it', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })

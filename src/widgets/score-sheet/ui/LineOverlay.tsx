@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { isHandLayer, type BarRange, type Layer } from '@/features/score-editor'
 import { chordSymbol, type Midi, type Tick } from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
-import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
+import { StaffNames, xAtTick, type ScoreLayout } from '@/shared/ui/score'
 import { layerAt, staffOfLayer, type SheetLineBars } from '../model/line-music'
 import { nearestPlace } from '../model/nearest'
 import { noteAtStaffY, stepsDragged } from '../model/staff-pitch'
@@ -13,7 +13,6 @@ import { LineLabels } from './LineLabels'
 
 /** How far round the caret's onset a press takes hold of its notes to drag them. */
 const GRIP = { before: 14, after: 22, over: 16 } as const
-
 /**
  * Over a line's staff: its labels (with Pattern where a hand is not written, in that hand's layer),
  * the bars chosen, the caret, and each bar as a button that puts the caret where it is clicked; a
@@ -138,6 +137,7 @@ export function LineOverlay({
         chordNames={chordNames}
         patterned={patterned}
       />
+      <StaffNames layout={layout} />
       {first && first.notes > first.x ? (
         // The clef, key and time signature at the line's head: a click opens what changes them.
         <button

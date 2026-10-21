@@ -11,7 +11,8 @@ import { TappableStaff } from './TappableStaff'
 
 /** The tempo a lesson's line of notes plays at: slow enough to read along. */
 const LINE_TEMPO = 72
-const HAND_OF: Readonly<Record<StaffId, 'rh' | 'lh'>> = { melody: 'rh', treble: 'rh', bass: 'lh' }
+/** The hand a staff's line is played with: the bass's the left, every treble's the right. */
+const handOf = (staff: StaffId): 'rh' | 'lh' => (staff === 'bass' ? 'lh' : 'rh')
 
 /**
  * A line of notes to read, on the staff it is read on (with a left hand's line under it, both hands
@@ -43,7 +44,7 @@ export function NotesExample({
   const playback = usePlayback<'line'>()
   const line = useMemo(() => {
     const key = keyFromParam(keyParam)
-    if (bass === undefined) return noteLine(notes, { hand: HAND_OF[clef], meter, key })
+    if (bass === undefined) return noteLine(notes, { hand: handOf(clef), meter, key })
     return twoHands(
       noteLine(notes, { hand: 'rh', meter, key }),
       noteLine(bass, { hand: 'lh', meter, key }),

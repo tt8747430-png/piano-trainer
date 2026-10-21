@@ -13,7 +13,15 @@ import {
   type Tick,
 } from '@/shared/lib/music'
 import type { HandId } from '@/entities/piece'
-import type { Draft, DraftBar, DraftNote, NoteLayer } from './draft'
+import {
+  isHandLayer,
+  isVoiceLayer,
+  voiceIndex,
+  type Draft,
+  type DraftBar,
+  type DraftNote,
+  type NoteLayer,
+} from './draft'
 import { insertBar } from './bars'
 import { barAt, barsOf, startsIn, totalTicks } from './timeline'
 
@@ -24,14 +32,25 @@ interface Written {
 }
 
 export const notesOf = (draft: Draft, layer: NoteLayer): readonly DraftNote[] =>
-  layer === 'melody' ? draft.melody : draft.hands[layer]
+  layer === 'melody'
+    ? draft.melody
+    : isVoiceLayer(layer)
+      ? (draft.voices[voiceIndex(layer)] ?? [])
+      : draft.hands[layer]
 
 /** The draft with a layer's notes, in order. */
 export function withNotes(draft: Draft, layer: NoteLayer, notes: readonly DraftNote[]): Draft {
   const sorted = [...notes].sort((a, b) => a.startTick - b.startTick || a.midi - b.midi)
-  return layer === 'melody'
-    ? { ...draft, melody: sorted, melodyStaff: draft.melodyStaff || sorted.length > 0 }
-    : { ...draft, hands: { ...draft.hands, [layer]: sorted } }
+  if (layer === 'melody')
+    return { ...draft, melody: sorted, melodyStaff: draft.melodyStaff || sorted.length > 0 }
+  if (isVoiceLayer(layer)) {
+    const index = voiceIndex(layer)
+    const voices = [...draft.voices]
+    while (voices.length <= index) voices.push([])
+    voices[index] = sorted
+    return { ...draft, voices }
+  }
+  return { ...draft, hands: { ...draft.hands, [layer]: sorted } }
 }
 
 /** The draft with bar `index` changed; the draft itself where the change leaves the bar as it was. */
@@ -89,7 +108,7 @@ export const spelledIn = (draft: Draft, key: Midi) => ({
 function clearUnder(draft: Draft, layer: NoteLayer, at: Tick, to: Tick): DraftNote[] {
   return notesOf(draft, layer).flatMap((n) => {
     if (n.startTick >= at && n.startTick < to) return []
-    if (layer === 'melody' && n.startTick < at && n.startTick + n.durationTicks > at) {
+    if (!isHandLayer(layer) && n.startTick < at && n.startTick + n.durationTicks > at) {
       return [{ ...n, durationTicks: at - n.startTick }]
     }
     return [n]
@@ -109,10 +128,10 @@ export function writeNotes(
   ticks: Tick,
 ): Written {
   const grown = reaching(draft, at)
-  const ready = layer === 'melody' ? grown : writtenAt(grown, layer, at)
-  const reach = layer === 'melody' ? totalTicks(ready) : handReach(ready, layer, at)
+  const ready = isHandLayer(layer) ? writtenAt(grown, layer, at) : grown
+  const reach = isHandLayer(layer) ? handReach(ready, layer, at) : totalTicks(ready)
   const end = Math.min(at + ticks, reach)
-  const played = layer === 'melody' ? [Math.max(...keys)].map(midi) : [...new Set(keys)]
+  const played = isHandLayer(layer) ? [...new Set(keys)] : [Math.max(...keys)].map(midi)
   const written: DraftNote[] = played.map((key) => ({
     ...spelledIn(ready, key),
     startTick: at,
@@ -124,8 +143,8 @@ export function writeNotes(
 /** A rest at `at`: the notes starting under it are taken (a hand's bar the pattern played is written out, silent). */
 export function writeRest(draft: Draft, layer: NoteLayer, at: Tick, ticks: Tick): Written {
   if (at >= totalTicks(draft)) return { draft, end: at }
-  const ready = layer === 'melody' ? draft : writtenAt(draft, layer, at)
-  const reach = layer === 'melody' ? totalTicks(ready) : handReach(ready, layer, at)
+  const ready = isHandLayer(layer) ? writtenAt(draft, layer, at) : draft
+  const reach = isHandLayer(layer) ? handReach(ready, layer, at) : totalTicks(ready)
   const end = Math.min(at + ticks, reach)
   return { draft: withNotes(ready, layer, clearUnder(ready, layer, at, end)), end }
 }
@@ -147,7 +166,7 @@ export function addToChord(
 ): Draft {
   const [first] = notesAt(draft, layer, at)
   if (!first) return writeNotes(draft, layer, at, [key], ticks).draft
-  if (layer === 'melody') {
+  if (!isHandLayer(layer)) {
     return key > first.midi
       ? withNotes(
           draft,

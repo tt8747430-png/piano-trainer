@@ -71,7 +71,7 @@ function writtenOut(draft: Draft, hand: HandId, { from, to }: Span): Draft {
 /** One layer's part written over the span: what started there replaced by the take's notes. */
 function writePart(draft: Draft, { layer, notes }: TakePart, span: Span): Draft {
   const ready = isHandLayer(layer) ? writtenOut(draft, layer, span) : draft
-  const played = layer === 'melody' ? oneLine(notes) : notes
+  const played = isHandLayer(layer) ? notes : oneLine(notes)
   const added = played.map((n) => ({
     ...spelledIn(ready, n.midi),
     startTick: span.from + n.startTick,

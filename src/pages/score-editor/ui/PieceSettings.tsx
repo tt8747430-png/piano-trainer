@@ -3,6 +3,7 @@ import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PIECE_TEMPO } from '@/entities/piece'
 import { MidiButton } from '@/features/connect-midi'
+import { EXTRA_VOICES } from '@/shared/lib/notation'
 import { SHEET_VIEWS } from '@/shared/lib'
 import { keyFromParam, keyParam } from '@/shared/lib/music'
 import { metersFor } from '@/features/score-editor'
@@ -67,6 +68,7 @@ export function PieceSettings() {
   const key = useEditorState((state) => state.draft.key)
   const meter = useEditorState((state) => state.draft.meter)
   const melodyStaff = useEditorState((state) => state.draft.melodyStaff)
+  const voices = useEditorState((state) => state.draft.voices.length)
   return (
     <Sheet open={view.settingsOpen} onOpenChange={view.openSettings}>
       <SheetTrigger
@@ -122,6 +124,16 @@ export function PieceSettings() {
                 checked={melodyStaff}
                 onCheckedChange={(on) => actions.dispatch({ type: 'melodyStaff', on })}
               />
+              {EXTRA_VOICES.slice(0, voices).map((voice) => (
+                <SwitchRow
+                  key={voice}
+                  icon={<Music />}
+                  label={t(`layers.${voice}`)}
+                  detail={t('viewMenu.voiceDetail')}
+                  checked
+                  onCheckedChange={() => actions.dispatch({ type: 'voiceStaff', voice, on: false })}
+                />
+              ))}
               <SwitchRow
                 icon={<span className="font-display text-base font-semibold">C⁷</span>}
                 label={t('chordNames')}

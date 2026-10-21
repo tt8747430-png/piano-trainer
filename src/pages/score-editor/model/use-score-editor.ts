@@ -169,6 +169,7 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
       const next = staffNear(layer, shortcut.direction, {
         chordNames,
         melodyStaff: draft.melodyStaff,
+        voices: draft.voices.length,
       })
       if (next !== layer) store.dispatch({ type: 'layer', layer: next })
       return

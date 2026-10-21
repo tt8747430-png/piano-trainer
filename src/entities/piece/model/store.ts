@@ -2,6 +2,7 @@ import type { StoreApi } from 'zustand/vanilla'
 import { isPatternId } from '@/entities/pattern'
 import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
 import { isMeter, isWrittenKey, parseKey, type Tick } from '@/shared/lib/music'
+import type { Melody } from '@/shared/lib/arrangement'
 import { barTicksOf } from './chart'
 import { ContentError } from './content-error'
 import { musicOf, type PieceMusic } from './music'
@@ -90,6 +91,29 @@ function savedHands(saved: unknown): Hands | undefined {
   return hands.rh === undefined && hands.lh === undefined ? undefined : hands
 }
 
+/** The most voices sung besides the tune, each on its own staff (ADR 0066). */
+const MOST_VOICES = 3
+
+/** The saved more voices that read and fit the chart, the first three at most. */
+function savedVoices(
+  piece: ChartPiece,
+  saved: unknown,
+  fits: (tune: Melody | undefined) => boolean,
+): string[] {
+  if (!Array.isArray(saved)) return []
+  return saved
+    .filter(isText)
+    .filter((voice) => {
+      try {
+        return fits(parseMelody({ ...piece, melody: voice }))
+      } catch (error) {
+        if (error instanceof ContentError) return false
+        throw error
+      }
+    })
+    .slice(0, MOST_VOICES)
+}
+
 /** The ticks a piece's chart lasts. */
 const chartTicks = (piece: ChartPiece): Tick =>
   barTicksOf(piece).reduce((sum, ticks) => sum + ticks, 0)
@@ -97,7 +121,7 @@ const chartTicks = (piece: ChartPiece): Tick =>
 /** Saved music that reads as a piece's: its fields, its chart, melody and hands; null otherwise. */
 function musicOfSaved(saved: unknown): PieceMusic | null {
   if (!isRecord(saved)) return null
-  const { key, meter, tempo, pattern, sections, melody, hands } = saved
+  const { key, meter, tempo, pattern, sections, melody, voices, hands } = saved
   if (!isKeyText(key) || !isMeter(meter) || !isTempo(tempo) || !isPatternId(pattern)) return null
   if (!Array.isArray(sections) || sections.length === 0) return null
   const read = sections.map(sectionOf)
@@ -116,9 +140,11 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     ...(written ? { hands: written } : {}),
   }
   try {
-    const tune = parseMelody(piece) ?? []
-    const end = Math.max(0, ...tune.map((n) => n.startTick + n.durationTicks))
-    return end <= chartTicks(piece) ? musicOf(piece) : null
+    const fits = (tune: Melody | undefined) =>
+      Math.max(0, ...(tune ?? []).map((n) => n.startTick + n.durationTicks)) <= chartTicks(piece)
+    if (!fits(parseMelody(piece))) return null
+    const sung = savedVoices(piece, voices, fits)
+    return musicOf(sung.length > 0 ? { ...piece, voices: sung } : piece)
   } catch (error) {
     if (error instanceof ContentError) return null
     throw error

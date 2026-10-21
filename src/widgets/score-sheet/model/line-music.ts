@@ -1,8 +1,10 @@
 import {
   barsOf,
+  isVoiceLayer,
   type Draft,
   type DraftNote,
   type Layer,
+  type NoteLayer,
   type PlacedBar,
 } from '@/features/score-editor'
 import type { ScoreLayout } from '@/shared/ui/score'
@@ -14,6 +16,7 @@ import {
   type TimeSignature,
 } from '@/shared/lib/music'
 import {
+  EXTRA_VOICES,
   PIANO_STAVES,
   STAVES,
   type StaffId,
@@ -95,16 +98,31 @@ function sounding(
     }))
 }
 
-/** The staff a layer's notes are written on: the tune's own where it has one (ADR 0064). */
-export const staffOfHand = (hand: TimedNote['hand'], melodyStaff: boolean): StaffId =>
-  hand === 'lh' ? 'bass' : hand === 'melody' && melodyStaff ? 'melody' : 'treble'
+/**
+ * The staff a layer's notes are written on: a more voice's own (ADR 0066), the tune's own where it has
+ * one (ADR 0064), the treble or the bass.
+ */
+export const staffOfHand = (layer: NoteLayer, melodyStaff: boolean): StaffId =>
+  isVoiceLayer(layer)
+    ? layer
+    : layer === 'lh'
+      ? 'bass'
+      : layer === 'melody' && melodyStaff
+        ? 'melody'
+        : 'treble'
 
-/** What a click on a staff writes: the tune on its staff, the right hand on the treble, the left on the bass. */
+/**
+ * What a click on a staff writes: the tune or a more voice on its own staff, the right hand on the
+ * treble, the left on the bass.
+ */
 export const LAYER_OF_STAFF = {
   melody: 'melody',
+  voice2: 'voice2',
+  voice3: 'voice3',
+  voice4: 'voice4',
   treble: 'rh',
   bass: 'lh',
-} as const satisfies Record<StaffId, TimedNote['hand']>
+} as const satisfies Record<StaffId, NoteLayer>
 
 /**
  * The layer a point on a line's bar writes: the chord row over the staves (with chord names), else
@@ -129,8 +147,7 @@ export function staffOfLayer(
   layer: Layer,
 ): { readonly staff: StaffId; readonly top: number; readonly bottom: number } | undefined {
   if (layer === 'chords') return undefined
-  const staff: StaffId =
-    layer === 'lh' ? 'bass' : layer === 'melody' && staves.melody ? 'melody' : 'treble'
+  const staff = staffOfHand(layer, staves.melody !== undefined)
   const box = staves[staff]
   return box ? { staff, ...box } : undefined
 }
@@ -143,18 +160,26 @@ export function staffOfLayer(
 export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
   const from = line.start
   const to = endOf(line)
+  const voiceStaves = EXTRA_VOICES.slice(0, draft.voices.length)
   const notes = [
     ...sounding(draft.melody, 'melody', from, to),
+    ...voiceStaves.flatMap((voice, i) =>
+      sounding(draft.voices[i] ?? [], 'melody', from, to).map((n) => ({ ...n, voice })),
+    ),
     ...sounding(draft.hands.rh, 'rh', from, to),
     ...sounding(draft.hands.lh, 'lh', from, to),
   ]
-  const staves = draft.melodyStaff ? STAVES : PIANO_STAVES
+  const staves: StaffId[] = [
+    ...(draft.melodyStaff ? (['melody'] as const) : []),
+    ...voiceStaves,
+    ...PIANO_STAVES,
+  ]
   const bars = line.bars.map(({ start, bar }) => {
     const startTick = start - from
     const holds = (staff: StaffId) =>
       notes.some(
         (n) =>
-          staffOfHand(n.hand, draft.melodyStaff) === staff &&
+          staffOfHand(n.voice ?? n.hand, draft.melodyStaff) === staff &&
           n.startTick < startTick + bar.ticks &&
           n.startTick + n.durationTicks > startTick,
       )
@@ -178,6 +203,7 @@ export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
     notes,
     chords,
     ...(draft.melodyStaff ? { melodyStaff: true } : {}),
+    ...(voiceStaves.length > 0 ? { voiceStaves } : {}),
   }
 }
 

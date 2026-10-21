@@ -46,8 +46,8 @@ interface DraftVoice {
   readonly stem: ScoreVoice['stem']
 }
 
-const staffOf = (hand: TimedNote['hand'], melodyStaff: boolean): StaffId =>
-  hand === 'lh' ? 'bass' : hand === 'melody' && melodyStaff ? 'melody' : 'treble'
+const staffOf = ({ hand, voice }: TimedNote, melodyStaff: boolean): StaffId =>
+  voice ?? (hand === 'lh' ? 'bass' : hand === 'melody' && melodyStaff ? 'melody' : 'treble')
 
 /** A note held into the next bar, by its staff and key. */
 const heldKey = (staff: StaffId, key: number) => `${staff} ${key}`
@@ -70,8 +70,7 @@ function barChords(
     if (n.startTick >= end || noteEnd <= bar.start) continue
     const start = Math.max(n.startTick, bar.start) - bar.start
     const stop = Math.min(noteEnd, end) - bar.start
-    const tiedFrom =
-      n.startTick < bar.start && tiedOn.has(heldKey(staffOf(n.hand, melodyStaff), n.midi))
+    const tiedFrom = n.startTick < bar.start && tiedOn.has(heldKey(staffOf(n, melodyStaff), n.midi))
     const written: BarNote = {
       midi: n.midi,
       spelled: n.spelled,
@@ -80,11 +79,11 @@ function barChords(
       ...(n.finger ? { finger: n.finger } : {}),
       ...(n.marks ? { marks: n.marks } : {}),
     }
-    const id = `${n.hand} ${start} ${stop}`
+    const id = `${n.voice ?? n.hand} ${start} ${stop}`
     const group = groups.get(id)
     if (!group) {
       groups.set(id, {
-        staff: staffOf(n.hand, melodyStaff),
+        staff: staffOf(n, melodyStaff),
         chord: { hand: n.hand, start, end: stop, notes: [written] },
       })
     } else if (!group.chord.notes.some((other) => other.midi === n.midi)) {
@@ -94,7 +93,10 @@ function barChords(
       }
     }
   }
-  const staves: Record<StaffId, BarChord[]> = { melody: [], treble: [], bass: [] }
+  const staves = Object.fromEntries(STAVES.map((id) => [id, [] as BarChord[]])) as Record<
+    StaffId,
+    BarChord[]
+  >
   for (const { staff, chord } of groups.values()) staves[staff].push(chord)
   return staves
 }
@@ -251,7 +253,13 @@ function tiedOut(staves: Record<StaffId, ScoreVoice[]>): Set<string> {
  */
 export function notate(music: TimedMusic): Score {
   const melodyStaff = music.melodyStaff ?? false
-  const written: readonly StaffId[] = melodyStaff ? STAVES : PIANO_STAVES
+  const voices = music.voiceStaves ?? []
+  const written: readonly StaffId[] = STAVES.filter(
+    (id) =>
+      (id === 'melody' && melodyStaff) ||
+      voices.some((voice) => voice === id) ||
+      PIANO_STAVES.some((piano) => piano === id),
+  )
   let tiedOn = new Set<string>()
   const measures = music.bars.map((placed, index): Measure => {
     const before = beatsBefore(music.bars, index, music.meter)
@@ -272,7 +280,10 @@ export function notate(music: TimedMusic): Score {
         : placed.blank?.includes(id)
           ? blankStaff(bar)
           : writeStaff(chords[id], bar)
-    const staves = { melody: staff('melody'), treble: staff('treble'), bass: staff('bass') }
+    const staves = Object.fromEntries(STAVES.map((id) => [id, staff(id)])) as Record<
+      StaffId,
+      ScoreVoice[]
+    >
     tiedOn = tiedOut(staves)
     return {
       startTick: placed.startTick,

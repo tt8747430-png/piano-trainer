@@ -11,6 +11,7 @@ import {
   type Section,
 } from '@/entities/piece'
 import { isOneOf } from '@/shared/lib'
+import { EXTRA_VOICES, type ExtraVoice } from '@/shared/lib/notation'
 import type { HandNote } from '@/shared/lib/arrangement'
 import {
   beatsToTicks,
@@ -27,12 +28,16 @@ import {
 } from '@/shared/lib/music'
 import { barsOf, chordsAt, startsIn, type PlacedBar } from './timeline'
 
-/** What the editor writes (spec §6.1): the chords, the melody or a hand. */
-export type Layer = 'chords' | 'melody' | HandId
+/** What the editor writes (spec §6.1): the chords, the melody, a more voice's (ADR 0066) or a hand. */
+export type Layer = 'chords' | 'melody' | ExtraVoice | HandId
 /** A layer of notes: the melody or a hand. */
 export type NoteLayer = Exclude<Layer, 'chords'>
 /** Whether a layer is a hand's (written bar by bar, else the pattern's). */
 export const isHandLayer = isOneOf<HandId>(HAND_IDS)
+/** Whether a layer is a more voice's, sung with the tune on a staff of its own. */
+export const isVoiceLayer = isOneOf<ExtraVoice>(EXTRA_VOICES)
+/** A more voice's place in the draft's voices: the second voice's is 0. */
+export const voiceIndex = (voice: ExtraVoice): number => EXTRA_VOICES.indexOf(voice)
 
 /** A note of the melody or a hand on the piece's timeline. */
 export interface DraftNote {
@@ -76,6 +81,8 @@ export interface Draft {
   readonly melodyStaff: boolean
   /** One line: no note starts under another. */
   readonly melody: readonly DraftNote[]
+  /** The more voices' notes, the second voice's first, each staff there once added (ADR 0066). */
+  readonly voices: readonly (readonly DraftNote[])[]
   /** Only in bars the hand writes. */
   readonly hands: Readonly<Record<HandId, readonly DraftNote[]>>
 }
@@ -84,7 +91,7 @@ export interface Draft {
 export function readDraft(music: PieceMusic): Draft {
   const key = parseKey(music.key)
   if (!key) throw new RangeError(`The music is in no key: "${music.key}"`)
-  const { chart, melody } = readMusic(music)
+  const { chart, melody, voices } = readMusic(music)
   const hands: Record<HandId, DraftNote[]> = { rh: [], lh: [] }
   let tick = 0
   // The chart reads a section for each of the music's, in order: the headings are the music's.
@@ -124,6 +131,7 @@ export function readDraft(music: PieceMusic): Draft {
     sections,
     melodyStaff: (melody ?? []).length > 0,
     melody: melody ?? [],
+    voices: voices.slice(0, EXTRA_VOICES.length).map((voice) => [...voice]),
     hands,
   }
 }
@@ -158,10 +166,10 @@ function handBars(
 /** The draft as the content writes music. */
 export function writeDraft(draft: Draft): PieceMusic {
   const placed = barsOf(draft)
-  const melody = writeMelody(
-    draft.melody,
-    placed.map(({ start, bar }) => ({ startTick: start, ticks: bar.ticks })),
-  )
+  const timeline = placed.map(({ start, bar }) => ({ startTick: start, ticks: bar.ticks }))
+  const melody = writeMelody(draft.melody, timeline)
+  // A voice with no notes is not written: its staff goes with it, as the tune's does.
+  const voices = draft.voices.flatMap((voice) => writeMelody(voice, timeline) ?? [])
   const ticks = placed.map(({ bar }) => bar.ticks)
   const rh = writeHand(handBars(draft.hands.rh, placed, 'rh'), ticks)
   const lh = writeHand(handBars(draft.hands.lh, placed, 'lh'), ticks)
@@ -177,6 +185,7 @@ export function writeDraft(draft: Draft): PieceMusic {
       ),
     })),
     ...(melody === undefined ? {} : { melody }),
+    ...(voices.length > 0 ? { voices } : {}),
     ...(rh === undefined && lh === undefined
       ? {}
       : { hands: { ...(rh === undefined ? {} : { rh }), ...(lh === undefined ? {} : { lh }) } }),

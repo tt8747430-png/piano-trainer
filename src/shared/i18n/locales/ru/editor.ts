@@ -23,6 +23,7 @@ export const editor: LocaleResources['editor'] = {
   },
   view: 'Вид',
   viewMenu: {
+    voiceDetail: 'Голос, который поётся с мелодией; выключение удаляет его ноты',
     label: 'Вид',
     midiDetail: 'Играйте в ноты с MIDI-клавиатуры',
     midi: 'MIDI-клавиатура',
@@ -31,6 +32,7 @@ export const editor: LocaleResources['editor'] = {
   },
   // The + menu: what is added to the score (ADR 0065).
   add: {
+    voice: 'Добавить голос',
     open: 'Добавить в ноты',
     label: 'Добавить',
     tabs: 'Что добавить',
@@ -48,6 +50,9 @@ export const editor: LocaleResources['editor'] = {
     melody: 'Мелодия',
     rh: 'Правая рука',
     lh: 'Левая рука',
+    voice2: 'Голос 2',
+    voice3: 'Голос 3',
+    voice4: 'Голос 4',
   },
   voice: 'Голос',
   voices: { chords: 'Аккорды', melody: 'Мелодия', rh: 'Правая', lh: 'Левая' },

@@ -35,7 +35,7 @@ const measure = (startTick: number, count: number, voice: ScoreVoice): Measure =
   startTick,
   ticks: count * TICKS_PER_BEAT,
   time: { count, unit: 4 },
-  staves: { melody: [], treble: [voice], bass: [] },
+  staves: { melody: [], voice2: [], voice3: [], voice4: [], treble: [voice], bass: [] },
   chords: [],
 })
 

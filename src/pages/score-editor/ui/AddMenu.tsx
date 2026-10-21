@@ -24,7 +24,7 @@ import {
   type Key,
   type TimeSignature,
 } from '@/shared/lib/music'
-import { notate, type TimedMusic } from '@/shared/lib/notation'
+import { EXTRA_VOICES, notate, type TimedMusic } from '@/shared/lib/notation'
 import { LazyScoreView, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
@@ -255,6 +255,19 @@ export function AddMenu() {
           onClick={done(() => actions.dispatch({ type: 'melodyStaff', on: !draft.melodyStaff }))}
         >
           <span className="font-music text-4xl leading-none">𝄞</span>
+        </Tile>
+        <Tile
+          label={t('add.voice')}
+          disabled={draft.voices.length >= EXTRA_VOICES.length}
+          onClick={done(() => {
+            const voice = EXTRA_VOICES[draft.voices.length]
+            if (voice) actions.dispatch({ type: 'voiceStaff', voice, on: true })
+          })}
+        >
+          <span className="flex items-center gap-1">
+            <span className="font-music text-4xl leading-none">𝄞</span>
+            <Plus className="size-5" />
+          </span>
         </Tile>
         <Tile
           label={t('chordNames')}

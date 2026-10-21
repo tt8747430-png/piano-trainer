@@ -100,6 +100,18 @@ describe('schedule', () => {
     expect([counted.fromTick, counted.toTick, counted.musicStart]).toEqual([0, 192, 4])
   })
 
+  it('sings the more voices in a voice of their own, whichever hands are heard', () => {
+    const sung: Performance = {
+      ...perform('C'),
+      sung: [[{ midi: midi(67), spelled: note('G'), startTick: 24, durationTicks: 48 }]],
+    }
+    const voiced = schedule(sung, { tempo: 60, hands: audibleHands('lh') }).sounds.filter(
+      (sound) => sound.kind === 'note' && sound.timbre === 'voice',
+    )
+    expect(voiced).toMatchObject([{ midi: 67, at: 1, timbre: 'voice' }])
+    expect(voiced[0]?.kind === 'note' && voiced[0].duration).toBeCloseTo(2 * 0.95)
+  })
+
   it('times a bar in seconds at 60 bpm', () => {
     const { sounds, end } = schedule(perform('C'), { tempo: 60, hands: ALL })
     expect(notes(sounds).map((sound) => sound.at)).toEqual([0, 0, 0, 0, 0])

@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { useElementSize, type SheetView } from '@/shared/lib'
-import { midi } from '@/shared/lib/music'
 import { notate, type StaffId } from '@/shared/lib/notation'
 import { ScoreView, staffHeight, type ScoreLayout } from '@/shared/ui/score'
 import { fitScale, widestBar } from '../model/fit-scale'
+import { playedMusic } from '../model/played-music'
 import { SheetLines } from './SheetLines'
 import { SheetOverlay } from './SheetOverlay'
 
@@ -97,22 +97,7 @@ export function SheetMusic({
   const { t } = useTranslation('music')
   // The tune's own staff only where the tune is heard (the Melody switch).
   const ownStaff = view.melodyStaff && performance.notes.some((n) => n.hand === 'melody')
-  const score = useMemo(
-    () =>
-      notate(
-        ownStaff
-          ? {
-              ...performance,
-              // The Player doubles the tune an octave up to stand out; its staff writes it as the song does.
-              notes: performance.notes.map((n) =>
-                n.hand === 'melody' ? { ...n, midi: midi(n.midi - 12) } : n,
-              ),
-              melodyStaff: true,
-            }
-          : performance,
-      ),
-    [performance, ownStaff],
-  )
+  const score = useMemo(() => notate(playedMusic(performance, ownStaff)), [performance, ownStaff])
   const kept = score.staves.filter((staff) => !view.hidden.includes(staff))
   const staves = kept.length > 0 ? kept : score.staves
   const scroller = useRef<HTMLElement>(null)

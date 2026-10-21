@@ -39,3 +39,7 @@ export function parseMelody(piece: ChartPiece): Melody | undefined {
   })
   return notes
 }
+
+/** A piece's more voices (ADR 0066), each read as its tune is. */
+export const parseVoices = (piece: ChartPiece): Melody[] =>
+  (piece.voices ?? []).map((voice) => parseMelody({ ...piece, melody: voice }) ?? [])

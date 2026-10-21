@@ -12,6 +12,7 @@ import {
   melodyOf,
   patternsOfPiece,
   pieceKey,
+  voicesOf,
   type Piece,
 } from '@/entities/piece'
 import { arrange, type ArrangeOptions, type Performance } from '@/shared/lib/arrangement'
@@ -43,6 +44,7 @@ export function arrangePiece(piece: Piece, choice: PracticeChoice, book: Pattern
 /** The learner's choices as `arrange` takes them. */
 function arrangeOptions(piece: Piece, choice: PracticeChoice, book: PatternBook): ArrangeOptions {
   const melody = melodyOf(piece)
+  const voices = voicesOf(piece)
   const fromChart = choice.pattern === 'chart'
   return {
     tonic: choice.tonic,
@@ -68,5 +70,6 @@ function arrangeOptions(piece: Piece, choice: PracticeChoice, book: PatternBook)
         }
       : {}),
     ...(melody ? { melody, doubleMelody: choice.melody } : {}),
+    ...(voices.length > 0 ? { voices } : {}),
   }
 }

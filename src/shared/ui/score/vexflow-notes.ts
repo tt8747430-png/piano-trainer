@@ -52,6 +52,9 @@ const SIGN: Readonly<Record<Sign, string>> = { [-2]: 'bb', [-1]: 'b', 0: 'n', 1:
 /** Where a rest sits: in the middle of a staff alone, above or below it beside another voice. */
 const REST_KEY: Readonly<Record<StaffId, Readonly<Record<ScoreVoice['stem'], string>>>> = {
   melody: { auto: 'b/4', up: 'e/5', down: 'f/4' },
+  voice2: { auto: 'b/4', up: 'e/5', down: 'f/4' },
+  voice3: { auto: 'b/4', up: 'e/5', down: 'f/4' },
+  voice4: { auto: 'b/4', up: 'e/5', down: 'f/4' },
   treble: { auto: 'b/4', up: 'e/5', down: 'f/4' },
   bass: { auto: 'd/3', up: 'g/3', down: 'a/2' },
 }

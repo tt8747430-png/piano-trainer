@@ -2,12 +2,14 @@ export { barLengths, type BarRange } from './model/bars'
 export { keyChords, keySevenths } from './model/chords'
 export {
   isHandLayer,
+  isVoiceLayer,
   musicToSave,
   readDraft,
   writeDraft,
   type Draft,
   type DraftNote,
   type Layer,
+  type NoteLayer,
 } from './model/draft'
 export { caretTicks, placesIn } from './model/caret-moves'
 export { selectedBars } from './model/form-edits'

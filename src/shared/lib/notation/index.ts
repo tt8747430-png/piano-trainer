@@ -1,9 +1,11 @@
 export { notate } from './notate'
 export {
   clefOf,
+  EXTRA_VOICES,
   PIANO_STAVES,
   STAVES,
   type Duration,
+  type ExtraVoice,
   type Measure,
   type Score,
   type ScoreEvent,

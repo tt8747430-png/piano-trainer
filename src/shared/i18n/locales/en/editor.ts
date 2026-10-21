@@ -25,6 +25,7 @@ export const editor = {
   view: 'View',
   // What the score shows and how, from the bar (ADR 0064).
   viewMenu: {
+    voiceDetail: 'A voice sung with the tune; off takes its notes away',
     label: 'View',
     midiDetail: 'Play into the score from a keyboard',
     midi: 'MIDI keyboard',
@@ -33,6 +34,7 @@ export const editor = {
   },
   // The + menu: what is added to the score (ADR 0065).
   add: {
+    voice: 'Add a voice',
     open: 'Add to the score',
     label: 'Add',
     tabs: 'What to add',
@@ -51,6 +53,9 @@ export const editor = {
     melody: 'Melody',
     rh: 'Right hand',
     lh: 'Left hand',
+    voice2: 'Voice 2',
+    voice3: 'Voice 3',
+    voice4: 'Voice 4',
   },
   voice: 'Voice',
   // What the keys write, short under the palette's Voice.
