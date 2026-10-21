@@ -8,6 +8,7 @@ export const editor: LocaleResources['editor'] = {
   settings: 'Настройки песни',
   dock: 'Правка',
   palette: {
+    move: { left: 'Палитру влево', right: 'Палитру вправо' },
     label: 'Инструменты',
     open: 'Показать инструменты',
     close: 'Скрыть инструменты',

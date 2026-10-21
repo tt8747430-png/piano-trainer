@@ -34,6 +34,7 @@ describe('settings selectors', () => {
       recorder: DEFAULT_RECORDER,
       foldedSections: ['chords.tensions'],
       sidebar: 'collapsed',
+      paletteSide: 'right',
       midi: DEFAULT_MIDI,
       chordFinder: DEFAULT_CHORD_FINDER,
       scoreView: DEFAULT_SCORE_VIEW,

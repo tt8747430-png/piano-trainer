@@ -1,7 +1,7 @@
 import { Music } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { selectKeyboard, useSettings } from '@/entities/settings'
+import { selectKeyboard, selectPaletteSide, useSettings } from '@/entities/settings'
 import { LANDSCAPE_PHONE, useMediaQuery } from '@/shared/lib'
 import { FabPill } from '@/shared/ui'
 import { ScoreEditorContext } from '../model/editor-context'
@@ -35,12 +35,14 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
   const side = useMediaQuery(LAPTOP) || onSide
   const idle = editor.takes.stage === 'idle'
   const dock = useSettings((state) => selectKeyboard(state).dock)
+  const paletteSide = useSettings(selectPaletteSide)
   const [palette, setPalette] = useState(true)
   return (
     <ScoreEditorContext value={editor}>
       <div
         data-keys={dock}
         data-palette={palette ? (side ? 'side' : 'foot') : 'folded'}
+        data-side={paletteSide}
         className="editor-screen min-h-0 flex-1 gap-2 py-2 landscape-phone:gap-1.5 landscape-phone:py-1"
       >
         <div data-area="bar">
@@ -56,7 +58,7 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
               label={t('palette.open')}
               icon={Music}
               onClick={() => setPalette(true)}
-              className="ms-auto"
+              className={side && paletteSide === 'left' ? undefined : 'ms-auto'}
             />
           )}
         </div>

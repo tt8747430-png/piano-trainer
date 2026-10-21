@@ -715,6 +715,20 @@
     @variant xl {
       grid-template-columns: minmax(0, 1fr) 24rem;
     }
+    /* On the left, where the learner moved it (ADR 0071). */
+    &[data-side='left'] {
+      grid-template-columns: 21rem minmax(0, 1fr);
+      grid-template-areas: 'bar bar' 'palette sheet' 'palette status' 'keys keys';
+      &[data-keys='top'] {
+        grid-template-areas: 'bar bar' 'keys keys' 'palette sheet' 'palette status';
+      }
+      @variant landscape-phone {
+        grid-template-columns: 17.5rem minmax(0, 1fr);
+      }
+      @variant xl {
+        grid-template-columns: 24rem minmax(0, 1fr);
+      }
+    }
   }
 }
 

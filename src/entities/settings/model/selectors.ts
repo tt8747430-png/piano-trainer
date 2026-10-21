@@ -7,6 +7,7 @@ import type {
   PracticeToggles,
   RecorderSettings,
   SettingsState,
+  PaletteSide,
   Sidebar,
   Theme,
   TitleSize,
@@ -23,6 +24,7 @@ export const selectFloating = (state: SettingsState): FloatingSettings => state.
 export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.keyboard
 export const selectRecorder = (state: SettingsState): RecorderSettings => state.recorder
 export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar
+export const selectPaletteSide = (state: SettingsState): PaletteSide => state.paletteSide
 export const selectMidi = (state: SettingsState): MidiSettings => state.midi
 /** Whether the section `id` is folded away. */
 export const selectSectionFolded =

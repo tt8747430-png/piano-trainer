@@ -33,6 +33,7 @@ const DEFAULTS = {
   keyboard: defaultKeyboard(false),
   recorder: DEFAULT_RECORDER,
   sidebar: DEFAULT_SIDEBAR,
+  paletteSide: 'right',
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
   scoreView: DEFAULT_SCORE_VIEW,
@@ -105,6 +106,7 @@ describe('createSettingsStore', () => {
       },
       recorder: { click: false, tune: true },
       sidebar: 'collapsed',
+      paletteSide: 'right',
       midi: {
         device: 'Piano',
         sound: true,
@@ -175,6 +177,8 @@ describe('createSettingsStore', () => {
 
   it('opens a sidebar saved as anything but open or collapsed', () => {
     expect(restored({ sidebar: 'wide' }).sidebar).toBe('open')
+    expect(restored({ paletteSide: 'top' }).paletteSide).toBe('right')
+    expect(restored({ paletteSide: 'left' }).paletteSide).toBe('left')
   })
 
   it('turns a click that is not a boolean on, its default', () => {
