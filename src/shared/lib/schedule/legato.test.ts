@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest'
+import type { NoteHand } from '@/shared/lib/arrangement'
 import type { NoteMarks } from '@/shared/lib/music'
 import { joinedNotes } from './legato'
 
-const n = (startTick: number, marks?: NoteMarks, hand = 'rh') => ({
+const n = (startTick: number, marks?: NoteMarks, hand: NoteHand = 'rh') => ({
   startTick,
   hand,
   ...(marks ? { marks } : {}),

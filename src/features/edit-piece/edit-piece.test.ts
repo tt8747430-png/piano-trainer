@@ -3,7 +3,16 @@ import { createPiecesStore, readMusic, type PieceMusic } from '@/entities/piece'
 import { createTakesStore, type Take } from '@/entities/take'
 import { createMemoryStorage } from '@/shared/lib'
 import { note } from '@/shared/lib/music'
-import { chartStart, deleteSong, makeSong, renameSong, resetVersion, saveMusic } from './index'
+import {
+  chartStart,
+  deleteSong,
+  makeSong,
+  renameSong,
+  resetVersion,
+  saveMusic,
+  SCORE_TEMPLATES,
+  templateOf,
+} from './index'
 
 const fresh = () =>
   createPiecesStore({ storage: createMemoryStorage(), otherTabs: new EventTarget() })
@@ -50,6 +59,12 @@ describe('saveMusic', () => {
 })
 
 describe('the learner’s songs', () => {
+  it('names the template a setup is, and none once it has more parts', () => {
+    expect(templateOf(SCORE_TEMPLATES.leadSheet)).toBe('leadSheet')
+    expect(templateOf({ chordNames: false, melody: false, parts: [] })).toBe('piano')
+    expect(templateOf({ ...SCORE_TEMPLATES.piano, parts: ['flute'] })).toBeUndefined()
+  })
+
   it('makes a song’s score as its setup says, every staff there and readable though empty', () => {
     const store = fresh()
     const key = { tonic: note('C'), minor: false }

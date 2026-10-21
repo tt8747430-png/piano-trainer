@@ -1,27 +1,21 @@
 import { Plus, Trash2 } from 'lucide-react'
+import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   MOST_PARTS,
   SCORE_TEMPLATES,
+  TEMPLATES,
+  templateOf,
   type ScoreSetup,
-  type ScoreTemplate,
 } from '@/features/edit-piece'
-import { INSTRUMENT_FAMILIES, instrumentsIn, type Instrument } from '@/shared/lib/music'
+import {
+  DEFAULT_INSTRUMENT,
+  INSTRUMENT_FAMILIES,
+  instrumentsIn,
+  type Instrument,
+} from '@/shared/lib/music'
 import { Dropdown, Sheet, SheetContent, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-
-const TEMPLATES = Object.keys(SCORE_TEMPLATES) as ScoreTemplate[]
-
-/** The template a setup is, where it is one. */
-const templateOf = (setup: ScoreSetup): ScoreTemplate | undefined =>
-  TEMPLATES.find((each) => {
-    const template: ScoreSetup = SCORE_TEMPLATES[each]
-    return (
-      template.chordNames === setup.chordNames &&
-      template.melody === setup.melody &&
-      setup.parts.length === 0
-    )
-  })
 
 /**
  * What a new song's score holds (ADR 0072), its own sheet over New song: a template to start from,
@@ -41,6 +35,8 @@ export function ScoreSetupSheet({
 }) {
   const { t } = useTranslation(['songs', 'music'])
   const chosen = templateOf(setup)
+  const id = useId()
+  const ids = { templates: `${id}-templates`, rows: `${id}-rows`, parts: `${id}-parts` }
   const setPart = (index: number, part: Instrument | null) =>
     onChange({
       ...setup,
@@ -60,13 +56,13 @@ export function ScoreSetupSheet({
         }
       >
         <div className="flex flex-col gap-6">
-          <section aria-labelledby="setup-templates" className="flex flex-col gap-2">
-            <h3 id="setup-templates" className="text-sm font-semibold text-muted-foreground">
+          <section aria-labelledby={ids.templates} className="flex flex-col gap-2">
+            <h3 id={ids.templates} className="text-sm font-semibold text-muted-foreground">
               {t('songs:setup.templates')}
             </h3>
             <div
               role="radiogroup"
-              aria-labelledby="setup-templates"
+              aria-labelledby={ids.templates}
               className="grid gap-2 sm:grid-cols-3"
             >
               {TEMPLATES.map((template) => (
@@ -86,8 +82,8 @@ export function ScoreSetupSheet({
               ))}
             </div>
           </section>
-          <section aria-labelledby="setup-rows" className="flex flex-col">
-            <h3 id="setup-rows" className="text-sm font-semibold text-muted-foreground">
+          <section aria-labelledby={ids.rows} className="flex flex-col">
+            <h3 id={ids.rows} className="text-sm font-semibold text-muted-foreground">
               {t('songs:setup.rows')}
             </h3>
             <SwitchRow
@@ -104,8 +100,8 @@ export function ScoreSetupSheet({
               onCheckedChange={(melody) => onChange({ ...setup, melody })}
             />
           </section>
-          <section aria-labelledby="setup-parts" className="flex flex-col gap-2">
-            <h3 id="setup-parts" className="text-sm font-semibold text-muted-foreground">
+          <section aria-labelledby={ids.parts} className="flex flex-col gap-2">
+            <h3 id={ids.parts} className="text-sm font-semibold text-muted-foreground">
               {t('songs:setup.parts')}
             </h3>
             {setup.parts.map((part, index) => {
@@ -142,7 +138,7 @@ export function ScoreSetupSheet({
               <Button
                 variant="soft"
                 className="self-start"
-                onClick={() => onChange({ ...setup, parts: [...setup.parts, 'voice'] })}
+                onClick={() => onChange({ ...setup, parts: [...setup.parts, DEFAULT_INSTRUMENT] })}
               >
                 <Plus data-icon="inline-start" aria-hidden />
                 {t('songs:setup.addPart')}

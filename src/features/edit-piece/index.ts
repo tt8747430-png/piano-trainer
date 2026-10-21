@@ -5,6 +5,8 @@ export {
   makeSong,
   MOST_PARTS,
   SCORE_TEMPLATES,
+  TEMPLATES,
+  templateOf,
   type ScoreSetup,
   type ScoreTemplate,
 } from './make-song'

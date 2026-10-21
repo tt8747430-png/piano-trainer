@@ -5,7 +5,7 @@ import { cn, useElementSize } from '@/shared/lib'
 import { LazyScoreView } from '@/shared/ui'
 import { staffOfHand } from '../model/line-music'
 import type { LineSheet } from '../model/line-sheets'
-import { labelRow, labelScale } from './chord-row'
+import { labelRow, labelScale } from '../model/label-row'
 import { LineOverlay } from './LineOverlay'
 
 /** Whether an element's top is on the screen. */

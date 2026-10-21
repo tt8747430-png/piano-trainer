@@ -1,4 +1,3 @@
-import { EXTRA_VOICES } from '@/shared/lib/notation'
 import type { CaretMove, ChosenValue, EditorAction, Layer } from '@/features/score-editor'
 import type { KeyPress } from '@/shared/lib/shortcuts'
 
@@ -79,33 +78,10 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
 }
 
 /**
- * The row over (−1) or under (1) the one the caret writes, top down: the chord names (where shown),
- * the tune's staff (where it has one), the more voices' (ADR 0066), the right hand's and the left's; the
- * same row at either end.
+ * The row over (−1) or under (1) the one the caret writes among the rows shown, top down
+ * (`shownRows`): the same row at either end.
  */
-export function staffNear(
-  layer: Layer,
-  direction: -1 | 1,
-  {
-    chordNames,
-    melodyStaff,
-    voices = 0,
-    hidden = [],
-  }: {
-    chordNames: boolean
-    melodyStaff: boolean
-    voices?: number
-    /** The rows out of sight (ADR 0072): the caret passes them by. */
-    hidden?: readonly string[]
-  },
-): Layer {
-  const rows: Layer[] = [
-    ...(chordNames ? (['chords'] as const) : []),
-    ...(melodyStaff ? (['melody'] as const) : []),
-    ...EXTRA_VOICES.slice(0, voices),
-    'rh' as const,
-    'lh' as const,
-  ].filter((row) => !hidden.includes(row))
+export function staffNear(layer: Layer, direction: -1 | 1, rows: readonly Layer[]): Layer {
   const at = rows.indexOf(layer)
   return rows[Math.max(0, Math.min(rows.length - 1, at + direction))] ?? layer
 }

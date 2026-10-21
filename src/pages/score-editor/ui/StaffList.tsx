@@ -1,6 +1,7 @@
 import { Eye, EyeOff, Plus, Trash2 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useShallow } from 'zustand/react/shallow'
 import type { HiddenRow } from '@/entities/piece'
 import { EXTRA_VOICES } from '@/shared/lib/notation'
 import { Button } from '@/shared/ui/primitives/button'
@@ -78,8 +79,8 @@ export function StaffList() {
   const { actions } = useScoreEditorContext()
   const melodyStaff = useEditorState((state) => state.draft.melodyStaff)
   const voices = useEditorState((state) => state.draft.voices.length)
-  const hiddenRows = useEditorState((state) => state.draft.hidden.join())
-  const hidden = (row: HiddenRow) => hiddenRows.split(',').includes(row)
+  const hiddenRows = useEditorState(useShallow((state) => state.draft.hidden))
+  const hidden = (row: HiddenRow) => hiddenRows.includes(row)
   const chords = t('chordNames')
   const tune = t('layers.melody')
   return (

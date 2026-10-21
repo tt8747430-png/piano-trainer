@@ -1,3 +1,4 @@
+import type { NoteHand } from '@/shared/lib/arrangement'
 import type { NoteMarks, Tick } from '@/shared/lib/music'
 
 /**
@@ -6,10 +7,14 @@ import type { NoteMarks, Tick } from '@/shared/lib/music'
  * its own hand, as a player phrases them (ADR 0068).
  */
 export function joinedNotes(
-  notes: readonly { readonly startTick: Tick; readonly hand: string; readonly marks?: NoteMarks }[],
+  notes: readonly {
+    readonly startTick: Tick
+    readonly hand: NoteHand
+    readonly marks?: NoteMarks
+  }[],
 ): Set<number> {
   const joined = new Set<number>()
-  const hands = new Map<string, number[]>()
+  const hands = new Map<NoteHand, number[]>()
   notes.forEach((note, index) => hands.set(note.hand, [...(hands.get(note.hand) ?? []), index]))
   for (const indexes of hands.values()) {
     // The hand's onsets in order, the notes struck together at each.

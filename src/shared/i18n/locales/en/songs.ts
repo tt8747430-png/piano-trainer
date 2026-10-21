@@ -35,10 +35,14 @@ export const songs = {
     customize: 'Customize',
     done: 'Done',
     templates: 'Start from',
-    template: { chordsAndPiano: 'Chords and piano', leadSheet: 'Lead sheet', piano: 'Piano' },
+    template: {
+      chordsAndPiano: 'Chords and piano',
+      leadSheet: 'Melody, chords and piano',
+      piano: 'Piano',
+    },
     templateDetail: {
       chordsAndPiano: 'Chord names over the piano',
-      leadSheet: 'Chord names, the melody and the piano',
+      leadSheet: 'The melody on its own staff, chord names over the piano',
       piano: 'The piano alone',
     },
     rows: 'Rows',

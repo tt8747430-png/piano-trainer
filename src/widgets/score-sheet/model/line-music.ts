@@ -1,5 +1,6 @@
 import {
   barsOf,
+  shownRows,
   isVoiceLayer,
   type Draft,
   type DraftNote,
@@ -161,11 +162,10 @@ export function staffOfLayer(
 
 /** The sung staves the sheet shows (ADR 0072): the tune's where the score has it, each voice's, none hidden. */
 function shownStaves(draft: Draft): { tune: boolean; voices: ExtraVoice[] } {
+  const rows = shownRows(draft)
   return {
-    tune: draft.melodyStaff && !draft.hidden.includes('melody'),
-    voices: EXTRA_VOICES.slice(0, draft.voices.length).filter(
-      (voice) => !draft.hidden.includes(voice),
-    ),
+    tune: rows.includes('melody'),
+    voices: EXTRA_VOICES.filter((voice) => rows.includes(voice)),
   }
 }
 

@@ -1,5 +1,5 @@
 import { staffHeight } from '@/shared/ui/score'
-import { labelRow } from '../ui/chord-row'
+import { labelRow } from './label-row'
 
 /** A section's heading over its first line, in CSS px. */
 export const HEADING = 52

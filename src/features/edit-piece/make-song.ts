@@ -1,4 +1,5 @@
 import {
+  emptyLine,
   keyText,
   ownSongId,
   songTitle,
@@ -7,8 +8,10 @@ import {
   type PiecesStore,
   type SharedSong,
 } from '@/entities/piece'
+import { EXTRA_VOICES } from '@/shared/lib/notation'
 import {
   beatsPerBar,
+  beatsToTicks,
   DEFAULT_INSTRUMENT,
   keySymbol,
   type Instrument,
@@ -33,9 +36,21 @@ export const SCORE_TEMPLATES = {
   piano: { chordNames: false, melody: false, parts: [] },
 } as const satisfies Readonly<Record<string, ScoreSetup>>
 export type ScoreTemplate = keyof typeof SCORE_TEMPLATES
+export const TEMPLATES = Object.keys(SCORE_TEMPLATES) as ScoreTemplate[]
 
-/** The most parts a song sings besides its tune (ADR 0066). */
-export const MOST_PARTS = 3
+/** The template a setup is, where it is one: its rows as the template's, and no more parts. */
+export const templateOf = (setup: ScoreSetup): ScoreTemplate | undefined =>
+  TEMPLATES.find((each) => {
+    const template: ScoreSetup = SCORE_TEMPLATES[each]
+    return (
+      template.chordNames === setup.chordNames &&
+      template.melody === setup.melody &&
+      setup.parts.length === 0
+    )
+  })
+
+/** The most parts a song sings besides its tune: one staff for each more voice (ADR 0066). */
+export const MOST_PARTS = EXTRA_VOICES.length
 
 /** What New song asks: a title as typed, a key, a meter and what its score holds. */
 interface SongDraft {
@@ -55,7 +70,7 @@ export function chartStart(
   setup: ScoreSetup = SCORE_TEMPLATES.chordsAndPiano,
 ): PieceMusic {
   const tonic = keySymbol(key)
-  const empty = `r/${beatsPerBar(meter)}`
+  const empty = emptyLine([{ startTick: 0, ticks: beatsToTicks(beatsPerBar(meter)) }])
   const parts = setup.parts.slice(0, MOST_PARTS)
   const instruments = [DEFAULT_INSTRUMENT, ...parts]
   return {

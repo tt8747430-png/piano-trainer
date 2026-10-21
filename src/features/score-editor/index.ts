@@ -1,3 +1,4 @@
+export { hasRow, rowShown, shownRows } from './model/rows'
 export { clefAt } from './model/clefs'
 export { BARLINE_CHOICES, JUMP_CHOICES, type BarMarkChoice } from './model/bar-marks'
 export { barLengths, type BarRange } from './model/bars'

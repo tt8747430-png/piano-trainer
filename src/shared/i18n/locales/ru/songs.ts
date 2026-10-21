@@ -27,10 +27,14 @@ export const songs: LocaleResources['songs'] = {
     customize: 'Настроить',
     done: 'Готово',
     templates: 'Начать с',
-    template: { chordsAndPiano: 'Аккорды и фортепиано', leadSheet: 'Лид-шит', piano: 'Фортепиано' },
+    template: {
+      chordsAndPiano: 'Аккорды и фортепиано',
+      leadSheet: 'Мелодия, аккорды и фортепиано',
+      piano: 'Фортепиано',
+    },
     templateDetail: {
       chordsAndPiano: 'Названия аккордов над фортепиано',
-      leadSheet: 'Аккорды, мелодия и фортепиано',
+      leadSheet: 'Мелодия на своём нотоносце, аккорды над фортепиано',
       piano: 'Только фортепиано',
     },
     rows: 'Строки',

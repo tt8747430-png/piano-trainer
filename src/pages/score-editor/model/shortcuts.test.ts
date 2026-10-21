@@ -120,15 +120,15 @@ describe('shortcutOf', () => {
 
 describe('staffNear', () => {
   it('moves to the row over or under, top down, the same row at either end', () => {
-    const all = { chordNames: true, melodyStaff: true }
+    const all = ['chords', 'melody', 'rh', 'lh'] as const
     expect(staffNear('melody', -1, all)).toBe('chords')
     expect(staffNear('rh', 1, all)).toBe('lh')
     expect(staffNear('lh', 1, all)).toBe('lh')
-    expect(staffNear('rh', -1, { chordNames: false, melodyStaff: false })).toBe('rh')
+    expect(staffNear('rh', -1, ['rh', 'lh'])).toBe('rh')
   })
 
   it('goes through the more voices’ staves, between the tune’s and the piano’s', () => {
-    const sung = { chordNames: false, melodyStaff: true, voices: 2 }
+    const sung = ['melody', 'voice2', 'voice3', 'rh', 'lh'] as const
     expect(staffNear('melody', 1, sung)).toBe('voice2')
     expect(staffNear('voice2', 1, sung)).toBe('voice3')
     expect(staffNear('voice3', 1, sung)).toBe('rh')

@@ -5,8 +5,9 @@ import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 const NUMBER_INSET_PX = 4
 
 /**
- * Over a line's staff: the number of its first bar at its head, as a printed system numbers it, and
- * with chord names each chord symbol at its onset, as the Player's sheet sets them; the row as tall as
+ * Over a line's staff: the number of its first bar at its head, as a printed system numbers it (the
+ * Player's sheet, read as it plays, numbers every bar), and with chord names each chord symbol at its
+ * onset; the row as tall as
  * what it holds (`row`), drawn at the line's size.
  */
 export function LineLabels({

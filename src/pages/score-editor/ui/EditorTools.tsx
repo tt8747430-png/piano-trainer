@@ -23,7 +23,6 @@ import {
   type ChordTab,
   type PaletteTab,
 } from '../model/palette-tabs'
-import { CaretMoves } from './CaretMoves'
 import { ChordBuilt, ChordsInKey, ChordTyped } from './ChordKeys'
 import { HandKeys } from './HandKeys'
 import { ArticulationKeys, DynamicKeys } from './MarkKeys'
@@ -63,12 +62,12 @@ const TAB_KEYS: Readonly<Record<PaletteTab, ReactNode>> = {
  */
 export function EditorTools({
   side,
-  moves = false,
+  foot,
   onFold,
 }: {
   side: boolean
-  /** The caret's moves at the palette's foot, where the screen has no status row for them (a phone on its side). */
-  moves?: boolean
+  /** What stands at the palette's foot: the caret's moves, where the screen has no status row for them. */
+  foot?: ReactNode
   onFold: () => void
 }) {
   const { t } = useTranslation('editor')
@@ -124,11 +123,8 @@ export function EditorTools({
       </Button>
     </>
   )
-  // Where the screen has no status row (a phone on its side), the caret's moves at the palette's foot.
-  const foot = moves ? (
-    <div className="flex justify-end border-t border-border pt-1.5">
-      <CaretMoves />
-    </div>
+  const footRow = foot ? (
+    <div className="flex justify-end border-t border-border pt-1.5">{foot}</div>
   ) : null
   const keys = cn(
     'content-start overflow-y-auto overscroll-contain',
@@ -173,7 +169,7 @@ export function EditorTools({
               <ChordTyped focus={focusField} />
             )}
           </ToolPalettePanel>
-          {foot}
+          {footRow}
         </fieldset>
       </ToolPalette>
     )
@@ -203,7 +199,7 @@ export function EditorTools({
         <ToolPalettePanel value={tab} className={cn('grid-cols-6', keys)}>
           {TAB_KEYS[tab]}
         </ToolPalettePanel>
-        {foot}
+        {footRow}
       </fieldset>
     </ToolPalette>
   )

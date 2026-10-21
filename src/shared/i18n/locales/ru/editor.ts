@@ -213,7 +213,7 @@ export const editor: LocaleResources['editor'] = {
   on: 'Шаг вперёд',
   finger: 'Палец на {{note}}',
   noFinger: 'Нет',
-  fingers: 'Палец на каждую ноту: 1 — большой, 5 — мизинец',
+  fingers: '1 — большой · 5 — мизинец',
   noNotes: 'Здесь нет нот',
   writeOut: 'Выписать этот такт',
   backToPattern: 'Вернуть фактуру',

@@ -1,5 +1,6 @@
 import { markBars } from './bar-marks'
 import { setClef } from './clefs'
+import { hiddenWithout } from './rows'
 import { setBarTicks } from './bars'
 import { moveCaret, placeCaret, placed, stepOf } from './caret-moves'
 import { deleteChord } from './chords'
@@ -95,7 +96,13 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       if (action.on) return commit(state, { ...draft, melodyStaff: true }, { layer: 'melody' })
       return commit(
         state,
-        { ...draft, melodyStaff: false, melody: [] },
+        // Removed, it is no longer hidden: added again, it is in sight.
+        {
+          ...draft,
+          melodyStaff: false,
+          melody: [],
+          hidden: draft.hidden.filter((row) => row !== 'melody'),
+        },
         { layer: layer === 'melody' ? 'rh' : layer, struck: null },
       )
     }
@@ -138,7 +145,7 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       const stays = !isVoiceLayer(layer) || voiceIndex(layer) < voices.length
       return commit(
         state,
-        { ...draft, voices, instruments },
+        { ...draft, voices, instruments, hidden: hiddenWithout(draft.hidden, index) },
         stays ? { struck: null } : { layer: 'rh', struck: null },
       )
     }

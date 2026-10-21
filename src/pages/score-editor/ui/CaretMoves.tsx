@@ -41,7 +41,7 @@ export function CaretMoves() {
           aria-label={label}
           title={label}
           disabled={!idle}
-          className="size-10 rounded-xl landscape-phone:size-9"
+          className="size-11 rounded-xl"
           onClick={act}
         >
           {icon}

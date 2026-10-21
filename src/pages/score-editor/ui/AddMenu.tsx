@@ -18,6 +18,7 @@ import {
   clefAt,
   JUMP_CHOICES,
   notesAt,
+  rowShown,
   type BarEdit,
   type BarMarkChoice,
 } from '@/features/score-editor'
@@ -225,7 +226,7 @@ export function AddMenu() {
       <Engraved music={emptyBar(draft.key, draft.meter, 1, BARLINE_TILES[choice])} noTime />
     </Tile>
   )
-  const tuneShown = draft.melodyStaff && !draft.hidden.includes('melody')
+  const tuneShown = rowShown(draft, 'melody')
   const { meters, lengths } = timeTiles(draft.meter)
   const panels: Readonly<Record<AddTab, ReactNode>> = {
     bars: (

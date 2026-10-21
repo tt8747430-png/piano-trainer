@@ -78,7 +78,11 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
         )}
         {palette ? (
           <div data-area="palette">
-            <EditorTools side={side} moves={onSide && idle} onFold={() => setPalette(false)} />
+            <EditorTools
+              side={side}
+              foot={onSide && idle ? <CaretMoves /> : undefined}
+              onFold={() => setPalette(false)}
+            />
           </div>
         ) : null}
         <EditorKeyboard />

@@ -17,6 +17,8 @@ import {
   isHandLayer,
   readDraft,
   musicToSave,
+  rowShown,
+  shownRows,
   type EditorAction,
 } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
@@ -105,7 +107,7 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     target.kind === 'song' ? (songTitle ?? target.title) : entryTitles(target.entry, locale).primary
 
   // The chord names shown unless the song hides them (ADR 0072).
-  const chordNames = useStore(store, (state) => !state.draft.hidden.includes('chords'))
+  const chordNames = useStore(store, (state) => rowShown(state.draft, 'chords'))
   const takes = useEditorTakes(target.id, store, title)
   const recording = takes.stage !== 'idle'
 
@@ -168,12 +170,7 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     event.preventDefault()
     if (shortcut.type === 'staff') {
       const { layer, draft } = store.getState()
-      const next = staffNear(layer, shortcut.direction, {
-        chordNames: !draft.hidden.includes('chords'),
-        melodyStaff: draft.melodyStaff,
-        voices: draft.voices.length,
-        hidden: draft.hidden,
-      })
+      const next = staffNear(layer, shortcut.direction, shownRows(draft))
       if (next !== layer) store.dispatch({ type: 'layer', layer: next })
       return
     }
@@ -194,7 +191,7 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
       if (layer === 'chords')
         store.dispatch({
           type: 'layer',
-          layer: draft.melodyStaff && !draft.hidden.includes('melody') ? 'melody' : 'rh',
+          layer: rowShown(draft, 'melody') ? 'melody' : 'rh',
         })
     }
     toTune()

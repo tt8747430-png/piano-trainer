@@ -5,6 +5,7 @@ import { chordSymbol, type Midi, type Tick } from '@/shared/lib/music'
 import { staffClefAt, type TimedMusic } from '@/shared/lib/notation'
 import { StaffNames, xAtTick, type ScoreLayout } from '@/shared/ui/score'
 import { layerAt, staffOfLayer, type SheetLineBars } from '../model/line-music'
+import { chosenBox } from '../model/chosen-box'
 import { nearestPlace } from '../model/nearest'
 import { noteAtStaffY, stepsDragged } from '../model/staff-pitch'
 import { EditorCaret } from './EditorCaret'
@@ -12,8 +13,6 @@ import { LineLabels } from './LineLabels'
 
 /** How far a bar's Pattern stands in from where its notes begin. */
 const PATTERN_INSET = 6
-/** How far the bars chosen reach past their staves, and in from their barlines. */
-const CHOSEN = { over: 6, inset: 3 } as const
 /** How far round the caret's onset a press takes hold of its notes to drag them. */
 const GRIP = { before: 14, after: 22, over: 16 } as const
 /**
@@ -64,28 +63,13 @@ export function LineOverlay({
   const hand = isHandLayer(layer) ? layer : null
   const [first] = layout.measures
   const staff = hand ? layout.staves[hand === 'lh' ? 'bass' : 'treble'] : undefined
-  // The bars chosen on this line, as one box over its staves: none where no bar of it is chosen.
-  const shownStaves = Object.values(layout.staves)
-  const chosenAt = selection
-    ? layout.measures.flatMap((measure, index) => {
-        const bar = line.bars[index]?.index ?? -1
-        return bar >= selection.from && bar <= selection.to ? [measure] : []
-      })
-    : []
-  const firstChosen = chosenAt[0]
-  const lastChosen = chosenAt.at(-1)
-  const chosen =
-    firstChosen && lastChosen && shownStaves.length > 0
-      ? {
-          left: firstChosen.x + CHOSEN.inset,
-          width: lastChosen.x + lastChosen.width - firstChosen.x - 2 * CHOSEN.inset,
-          top: Math.min(...shownStaves.map((box) => box.top)) - CHOSEN.over,
-          height:
-            Math.max(...shownStaves.map((box) => box.bottom)) -
-            Math.min(...shownStaves.map((box) => box.top)) +
-            2 * CHOSEN.over,
-        }
-      : null
+  // The bars chosen on this line, as one box over its staves (and the chord row, choosing chords).
+  const chosen = chosenBox(
+    layout,
+    line.bars.map((placed) => placed.index),
+    selection,
+    { chords: layer === 'chords', row },
+  )
   // In a hand's layer, the bars it leaves to the pattern.
   const patterned =
     hand && staff ? layout.measures.map((_, index) => !line.bars[index]?.bar[hand]) : []
@@ -153,7 +137,7 @@ export function LineOverlay({
         <div
           aria-hidden
           data-slot="bars-chosen"
-          className="absolute z-0 rounded-lg bg-selected/10 ring-2 ring-selected/60"
+          className="absolute z-0 rounded-lg bg-selected/10 ring-1 ring-selected/70"
           style={chosen}
         />
       ) : null}

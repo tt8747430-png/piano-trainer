@@ -1,12 +1,12 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { barAt, type BarRange, type Draft, type Layer } from '@/features/score-editor'
+import { barAt, barsOf, type BarRange, type Draft, type Layer } from '@/features/score-editor'
 import { longestLine, PAGE, paginate, useElementSize, type SheetView } from '@/shared/lib'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { staffHeight } from '@/shared/ui/score'
 import { HEADING, lineFit } from '../model/line-fit'
 import { createLineSheets, type LineSheet } from '../model/line-sheets'
-import { labelRow } from './chord-row'
+import { labelRow } from '../model/label-row'
 import { SheetLine } from './SheetLine'
 
 /** The room between lines on a page at full size, for dealing lines onto pages. */
@@ -16,12 +16,23 @@ const LINE_GAP = 16
  * bars to a tablet's line, two to a phone's.
  */
 const BAR_SPAN = 150
+/** What a chord symbol takes across at full size: a bar of many chords is drawn wider, its names apart. */
+const CHORD_SPAN = 56
 /** How small a page is drawn, and how large: smaller, a phone shows its page's music too small to read. */
 const PAGE_SCALE = { least: 0.62, most: 1.2 } as const
 
 /** How many bars a line this wide holds at most, each readable; any where the width is not known yet. */
-const barsAcross = (width: number, scale = 1) =>
-  width <= 0 ? Infinity : Math.max(1, Math.floor(width / (BAR_SPAN * scale)))
+const barsAcross = (width: number, span: number, scale = 1) =>
+  width <= 0 ? Infinity : Math.max(1, Math.floor(width / (span * scale)))
+
+/** The least a bar takes across: wider where the piece's busiest bar names more chords than fit. */
+const barSpan = (draft: Draft, chordNames: boolean) =>
+  chordNames
+    ? Math.max(
+        BAR_SPAN,
+        CHORD_SPAN * Math.max(0, ...barsOf(draft).map((placed) => placed.bar.chords.length)),
+      )
+    : BAR_SPAN
 
 type PageItem =
   | { readonly kind: 'title' }
@@ -87,11 +98,12 @@ export function ScoreSheet({
     width > 0 ? Math.min(PAGE_SCALE.most, Math.max(PAGE_SCALE.least, width / PAGE.width)) : 1
   const paper = width > 0 ? Math.min(width, PAGE.width * pageScale) : PAGE.width
   const margin = PAGE.margin * pageScale
+  const span = useMemo(() => barSpan(draft, chordNames), [draft, chordNames])
   const most =
     view === 'scroll'
-      ? barsAcross(width)
+      ? barsAcross(width, span)
       : view === 'pages'
-        ? barsAcross(paper - 2 * margin, pageScale)
+        ? barsAcross(paper - 2 * margin, span, pageScale)
         : Infinity
   const sheets = useMemo(() => sheetsOf(draft, across, most), [sheetsOf, draft, across, most])
   const caretBar = barAt(draft, caret).index

@@ -117,7 +117,7 @@ describe('Songs: your own', () => {
     expect(screen.getByText('Chord names · Piano')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Customize' }))
     const score = await screen.findByRole('dialog', { name: 'Score' })
-    await user.click(within(score).getByRole('radio', { name: /^Lead sheet/ }))
+    await user.click(within(score).getByRole('radio', { name: /^Melody, chords and piano/ }))
     await user.click(within(score).getByRole('button', { name: 'Add a part' }))
     await user.click(within(score).getByRole('combobox', { name: 'Part 1' }))
     await user.click(await screen.findByRole('option', { name: 'Cello' }))
