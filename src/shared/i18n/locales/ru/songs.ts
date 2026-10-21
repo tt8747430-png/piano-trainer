@@ -23,6 +23,8 @@ export const songs: LocaleResources['songs'] = {
     makeAndRecord: 'Записать',
   },
   withChords: 'С аккордами',
+  level: 'Уровень',
+  anyLevel: 'Любой уровень',
   clearFilters: 'Сбросить фильтры',
   shared: {
     title: 'Песня по ссылке',

@@ -30,6 +30,7 @@ export const SheetLine = memo(function SheetLine({
   onSignature,
   scale = 1,
   justify = true,
+  share = 1,
   onWrite,
   onDrag,
 }: {
@@ -39,6 +40,8 @@ export const SheetLine = memo(function SheetLine({
   scale?: number
   /** Spread to the sheet's width, as a printed system is; a panorama's one line is left natural. */
   justify?: boolean
+  /** Its bars' share of the sheet's longest line: the part of the width it is spread to. */
+  share?: number
   sheet: LineSheet
   layer: Layer
   /** From the line's start, when the caret is on this line. */
@@ -86,6 +89,7 @@ export const SheetLine = memo(function SheetLine({
         timeBefore={sheet.timeBefore}
         selected={selected}
         fill={justify && width > 0 ? width : undefined}
+        share={share}
       >
         {(layout) => (
           <LineOverlay

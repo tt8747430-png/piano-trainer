@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { PIECE_TEMPO } from '@/entities/piece'
 import { MidiButton } from '@/features/connect-midi'
 import { EXTRA_VOICES } from '@/shared/lib/notation'
-import { SHEET_VIEWS } from '@/shared/lib'
 import { keyFromParam, keyParam } from '@/shared/lib/music'
 import { metersFor } from '@/features/score-editor'
 import {
@@ -14,7 +13,7 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
-  SheetViewIcon,
+  SheetLayoutField,
   SwitchRow,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -105,18 +104,7 @@ export function PieceSettings() {
             </Labelled>
           </Part>
           <Part title={t('viewMenu.label')}>
-            <Labelled label={t('layout.label')}>
-              <Segmented
-                label={t('layout.label')}
-                value={view.layout}
-                options={SHEET_VIEWS.map((each) => ({
-                  value: each,
-                  label: t(`layout.${each}`),
-                  icon: <SheetViewIcon view={each} />,
-                }))}
-                onChange={view.setLayout}
-              />
-            </Labelled>
+            <SheetLayoutField value={view.layout} onChange={view.setLayout} />
             <div className="flex flex-col">
               <SwitchRow
                 icon={<Music />}

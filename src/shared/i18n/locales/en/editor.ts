@@ -94,7 +94,6 @@ export const editor = {
     noNotesText: 'Words and the pedal go on notes: put the caret on a note first.',
   },
   // How the score is laid out (ADR 0064).
-  layout: { label: 'Layout', scroll: 'Scroll', pages: 'Pages', horizontal: 'Horizontal' },
   // What the tune and each more voice are played on (ADR 0070).
   instruments: { label: 'Instruments', add: 'Add an instrument' },
   // Where the caret writes: the chord row, the treble staff's two voices, the bass staff.

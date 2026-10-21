@@ -12,8 +12,6 @@ export const player = {
     notation: 'Notation',
     chordNames: 'Chord names',
     keys: 'Piano keys',
-    layout: 'Layout',
-    layouts: { horizontal: 'Across', scroll: 'Scroll', pages: 'Pages' },
   },
   key: 'Key',
   root: 'Root',

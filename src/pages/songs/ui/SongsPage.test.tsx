@@ -160,4 +160,15 @@ describe('Songs: your own', () => {
     expect(router.state.location.search).toMatchObject({ withChords: true })
     expect(screen.queryByText('No chart yet')).not.toBeInTheDocument()
   })
+
+  it('keeps the songs of one level, chosen from Level and kept in the URL', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/songs')
+    await user.click(await screen.findByRole('combobox', { name: /^Level/ }))
+    await user.click(await screen.findByRole('option', { name: 'Beginner' }))
+    expect(router.state.location.search).toMatchObject({ stage: 'beginner' })
+    expect(await screen.findByRole('link', { name: /Hot Cross Buns/ })).toBeInTheDocument()
+    // A listing belongs to no course: no level keeps it.
+    expect(screen.queryByText('No chart yet')).not.toBeInTheDocument()
+  })
 })

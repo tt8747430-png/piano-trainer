@@ -589,19 +589,16 @@ function tagNotes(host: HTMLDivElement, voice: BuiltVoice, staff: StaffId) {
   }
 }
 
-/** A line shorter than this share of the width it may fill is left as it is: a lone bar is not a page's width. */
-const LEAST_SPREAD = 0.3
-
 /**
  * The measures' notes given room alike, each by its share, so the line runs to `width` (VexFlow
  * units) as a printed system is justified; the clef, key and time keep their room. A line already as
- * wide, or far shorter, is left as it is.
+ * wide is left as it is.
  */
 function spread(built: BuiltMeasure[], width: number | undefined): BuiltMeasure[] {
   const natural = built.reduce((sum, measure) => sum + measure.width, 0)
   const notes = built.reduce((sum, measure) => sum + measure.notes, 0)
   const room = width === undefined ? 0 : width - END_MARGIN
-  if (notes <= 0 || room <= natural || natural < room * LEAST_SPREAD) return built
+  if (notes <= 0 || room <= natural) return built
   const extra = room - natural
   return built.map((measure) => {
     const more = (extra * measure.notes) / notes
@@ -618,8 +615,13 @@ export interface EngraveOptions {
   readonly staves?: readonly StaffId[] | undefined
   /** The time signature in force before the first measure: a line that continues prints it only where it changes. */
   readonly timeBefore?: TimeSignature | undefined
-  /** A width in CSS pixels the line is spread to, its measures widened alike (`spread`). */
+  /** The sheet's width in CSS pixels: a line wider is drawn smaller to fit it. */
   readonly fill?: number | undefined
+  /**
+   * The share of `fill` the line is spread to, its measures widened alike (`spread`): its bars' share
+   * of the sheet's longest line, so bars line up down the page as a chart's do. The whole of it by default.
+   */
+  readonly share?: number | undefined
 }
 
 /** How many measures are built, or drawn, between two chances for the browser to do something else. */
@@ -694,7 +696,16 @@ function* drawn(
   score: Score,
   host: HTMLDivElement,
   sheet: HTMLDivElement,
-  { scale: asked, fingers, names, staff, staves: chosen, timeBefore, fill }: EngraveOptions,
+  {
+    scale: asked,
+    fingers,
+    names,
+    staff,
+    staves: chosen,
+    timeBefore,
+    fill,
+    share = 1,
+  }: EngraveOptions,
 ): Generator<void, ScoreLayout, void> {
   const written = score.staves.length > 0 ? score.staves : STAVES
   const shown: readonly StaffId[] = staff
@@ -729,7 +740,7 @@ function* drawn(
     natural = yield* naturalAt(scale)
     scale = Math.min(scale, fill / lineWidth(natural))
   }
-  const built = spread(natural, fill === undefined ? undefined : fill / scale - lead)
+  const built = spread(natural, fill === undefined ? undefined : (fill * share) / scale - lead)
   const width = lineWidth(built)
   const places = placesOf(built, shown)
   const renderer = new Renderer(sheet, Renderer.Backends.SVG)

@@ -7,13 +7,9 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { setPracticeToggle, setScoreView, setStaffShown } from '@/features/set-preference'
-import { SHEET_VIEWS } from '@/shared/lib'
-import { Labelled, Segmented, SheetViewIcon, SwitchRow } from '@/shared/ui'
+import { SheetLayoutField, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
-
-/** The layouts in the order the menu offers them: the Player's own first. */
-const LAYOUTS = ['horizontal', ...SHEET_VIEWS.filter((each) => each !== 'horizontal')] as const
 
 /**
  * How the Player shows the score (ADR 0064, Soundslice's view settings), from its bar, remembered for
@@ -106,18 +102,10 @@ export function PlayerViewMenu() {
             className="border-b-0"
           />
         </section>
-        <Labelled label={t('view.layout')}>
-          <Segmented
-            label={t('view.layout')}
-            value={view.layout}
-            options={LAYOUTS.map((each) => ({
-              value: each,
-              label: t(`view.layouts.${each}`),
-              icon: <SheetViewIcon view={each} />,
-            }))}
-            onChange={(layout) => setScoreView(store, { layout })}
-          />
-        </Labelled>
+        <SheetLayoutField
+          value={view.layout}
+          onChange={(layout) => setScoreView(store, { layout })}
+        />
       </PopoverContent>
     </Popover>
   )

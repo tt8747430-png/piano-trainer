@@ -146,6 +146,8 @@ describe('Piece', () => {
     const listing = COLLECTIONS.flatMap((c) => c.entries).find((e) => e.kind === 'listing')
     if (!listing) throw new Error('the catalog has no listing')
     await renderApp(`/songs/${listing.id}`)
+    // It says what is missing, and what writing it gives.
+    expect(await screen.findByText('No chart yet')).toBeInTheDocument()
     expect(
       (await screen.findByRole('link', { name: 'Write the chart' })).closest(
         '[data-slot="floating-actions"]',

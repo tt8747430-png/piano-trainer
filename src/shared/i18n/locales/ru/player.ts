@@ -13,8 +13,6 @@ export const player: LocaleResources['player'] = {
     notation: 'Ноты',
     chordNames: 'Названия аккордов',
     keys: 'Клавиши',
-    layout: 'Вид нот',
-    layouts: { horizontal: 'В строку', scroll: 'Лента', pages: 'Страницы' },
   },
   key: 'Тональность',
   root: 'Основной тон',

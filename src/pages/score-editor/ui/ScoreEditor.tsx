@@ -1,8 +1,8 @@
 import { Music } from 'lucide-react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, selectPaletteSide, useSettings } from '@/entities/settings'
-import { LANDSCAPE_PHONE, useMediaQuery } from '@/shared/lib'
+import { LANDSCAPE_PHONE, useElementSize, useMediaQuery } from '@/shared/lib'
 import { FabPill } from '@/shared/ui'
 import { ScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
@@ -37,6 +37,9 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const paletteSide = useSettings(selectPaletteSide)
   const [palette, setPalette] = useState(true)
+  // The sheet's height: a line is drawn to fit it whole, both staves in sight on a phone on its side.
+  const sheet = useRef<HTMLDivElement>(null)
+  const { height: room } = useElementSize(sheet)
   return (
     <ScoreEditorContext value={editor}>
       <div
@@ -48,8 +51,10 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
         <div data-area="bar">
           <EditorHeader status={onSide && idle ? <CaretLine /> : undefined} />
         </div>
-        <div data-area="sheet" className="min-h-0 overflow-y-auto overscroll-contain">
-          <EditorSheet />
+        <div ref={sheet} data-area="sheet" className="min-h-0 overflow-y-auto overscroll-contain">
+          <EditorSheet room={room} />
+          {/* Room past the last line, so it scrolls clear of the buttons floating over the corners. */}
+          <div aria-hidden className="h-14" />
         </div>
         <div data-area="float">
           <KeysButton />

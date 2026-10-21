@@ -93,7 +93,6 @@ export const editor: LocaleResources['editor'] = {
   },
   instruments: { label: 'Инструменты', add: 'Добавить инструмент' },
   // How the score is laid out (ADR 0064).
-  layout: { label: 'Вид нот', scroll: 'Лента', pages: 'Страницы', horizontal: 'В строку' },
   layers: {
     chords: 'Аккорды',
     melody: 'Мелодия',

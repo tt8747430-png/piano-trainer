@@ -73,9 +73,10 @@ export function KeyRail({
             </p>
           ) : null}
         </div>
+        {/* Fading at an edge with more beyond it, so a row too long for a phone reads as one to swipe. */}
         <div
           data-slot="rail-controls"
-          className="flex min-w-0 overflow-x-auto overscroll-x-contain scrollbar-none"
+          className="fade-scroll-x flex min-w-0 overflow-x-auto overscroll-x-contain scrollbar-none"
         >
           {scrolls ? (
             <RailGroup className="@max-md:hidden pointer-coarse:hidden">

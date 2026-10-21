@@ -17,7 +17,8 @@ const LEAST_SCALE = 0.62
 
 /**
  * The score in the chart's lines (ADR 0064): down the screen, or dealt onto A4 pages as it will print,
- * its title on the first. Each line is justified to the width and carries its labels, the loop's part
+ * its title on the first. Each line is justified to its bars' share of the longest line's width (bars
+ * line up down the page, as a chart's do) and carries its labels, the loop's part
  * and its bars to jump to; the cursor stands on the line playing, which comes into sight as it starts.
  */
 export function SheetLines({
@@ -58,6 +59,8 @@ export function SheetLines({
   const box = useRef<HTMLElement>(null)
   const { width } = useElementSize(box)
   const lines = useMemo(() => scoreLines(score, performance), [score, performance])
+  // Each line runs to its bars' share of the longest, so bars line up down the page as a chart's do.
+  const longest = Math.max(1, ...lines.map((each) => each.score.measures.length))
   const paper = Math.min(width, PAGE.width)
   const scale = pages ? paper / PAGE.width : Math.min(1, Math.max(LEAST_SCALE, width / FULL_WIDTH))
   const margin = pages ? PAGE.margin * scale : 0
@@ -92,6 +95,7 @@ export function SheetLines({
         staves={staves}
         timeBefore={each.timeBefore}
         fill={inner > 0 ? inner : undefined}
+        share={each.score.measures.length / longest}
       >
         {(layout) => (
           <SheetOverlay

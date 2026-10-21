@@ -6,6 +6,9 @@ import type { Performance } from '@/shared/lib/arrangement'
 import { chartBar, chartSections, sectionAnchor, type SectionBars } from '../model/chart-sections'
 import { BarButton } from './BarButton'
 
+/** The widest a bar is drawn, in rem. */
+const BAR_MOST = 14
+
 /**
  * A Chart's bars with their numbers and chords, by section, line by line; each section under a
  * heading that says its bars, with what the page offers for it (`sectionAction`, Practise it); a tap
@@ -52,7 +55,9 @@ export function ChordChart({
   const longest = Math.max(1, ...sections.flatMap(({ lines }) => lines.map((line) => line.length)))
 
   return (
-    <div className="flex flex-col gap-6">
+    // A bar is at most a few chords wide: on a laptop a line of two bars reads as one glance, not
+    // across the screen; the lines keep their shares within it.
+    <div className="flex flex-col gap-6" style={{ maxWidth: `${longest * BAR_MOST}rem` }}>
       {sections.map(({ heading, lines }, section) => {
         const all = lines.flat()
         const bars = { first: Math.min(...all), last: Math.max(...all) }

@@ -477,8 +477,9 @@ nothing on the screen marks it beyond the tile.
 
 How each screen uses its width:
 
-- **Songs:** the search, the collections as tabs (All, Your songs once there are any, then the books), and the songs
-  as row cards in a grid.
+- **Songs:** the collections as tabs (All, Your songs once there are any, then the books); the search, then Level (a
+  pop-up showing its value alone: Any level, or a stage) and With chords (a labelled toggle), under the search on a
+  phone and beside it from 640px; and the songs as row cards in a grid.
 - **Piece:** one column: its facts in a line, Practise with the Learned toggle and Edit on one line (Edit its pencil
   alone on a phone), the keyboard pinned, then
   Chords (the chords it plays, to tap, with their Check) and Chart (its bars), then what is printed about it.
@@ -501,7 +502,11 @@ Stacks use gap: 24px between a screen's parts, 32px between sections, 16–20px 
 and a Piece's chart pin their keyboard to the top while the page scrolls.
 
 **The Equal Columns Rule.** A chart's lines are grids of equal columns, each line as wide as its bars' share of the
-longest line, so bars line up down the chart; a bar is parted by a 1px control line and each line closes with one.
+longest line, so bars line up down the chart; a bar is parted by a 1px control line and each line closes with one. A
+bar is at most 14rem wide, so a line of two reads at a glance on a laptop. The same rule spreads a score's lines,
+in the Player and the editor: each line is justified to its bars' share of the longest line's width. On a short
+sheet (a phone on its side) the editor draws its lines smaller, down to 0.6 of their size, so a whole system is in sight. The
+layouts are named alike wherever they are chosen: Across · Down · Pages (В строку · Строками · Страницы).
 
 ## Elevation & Depth
 

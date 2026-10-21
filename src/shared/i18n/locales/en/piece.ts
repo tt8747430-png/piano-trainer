@@ -17,6 +17,11 @@ export const piece = {
   practise: 'Practise',
   edit: 'Edit',
   writeChart: 'Write the chart',
+  // A songbook entry whose chords are not written yet.
+  noChart: {
+    title: 'No chart yet',
+    description: 'Write its chords bar by bar, and it plays in any key with any pattern.',
+  },
   yourVersion: 'Your version',
   music: 'Music',
   reset: 'Reset to the original',

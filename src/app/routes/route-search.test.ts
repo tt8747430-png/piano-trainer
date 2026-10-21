@@ -97,11 +97,14 @@ describe('search params', () => {
       lh: 'o',
       chordSize: 'ninths',
     })
-    expect(await searchAt('/songs?q=душа&collection=hymns&withChords=true')).toEqual({
-      q: 'душа',
-      collection: 'hymns',
-      withChords: true,
-    })
+    expect(await searchAt('/songs?q=душа&collection=hymns&withChords=true&stage=advanced')).toEqual(
+      {
+        q: 'душа',
+        collection: 'hymns',
+        withChords: true,
+        stage: 'advanced',
+      },
+    )
     expect(await searchAt('/practice/scales?root=Eb&kind=harmonic&chords=4')).toMatchObject({
       root: 'Eb',
       kind: 'harmonic',

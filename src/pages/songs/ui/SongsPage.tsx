@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { SONG_COLLECTIONS, useRepertoire } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
-import { FloatingActions, ScreenHeader, SearchField } from '@/shared/ui'
+import { STAGES } from '@/entities/step'
+import { Dropdown, FloatingActions, ScreenHeader, SearchField } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Toggle } from '@/shared/ui/primitives/toggle'
 import {
@@ -23,11 +24,13 @@ import { NewSongSheet } from './NewSongSheet'
 
 /**
  * Songs: the collections as tabs in its bar (the learner's own songs first, All before them), a
- * search and With chords (no song whose chart is still to come), and the songs as cards in as many
+ * search, Level (a song's course's, ADR 0005) and With chords (no song whose chart is still to come),
+ * and the songs as cards in as many
  * columns as the width holds, under their collection while All shows; New song floats.
  */
 export function SongsPage() {
   const { t } = useTranslation('songs')
+  const { t: words } = useTranslation('common')
   const locale = useLocale()
   const search = useSearch({ from: '/shell/songs' })
   const navigate = useNavigate({ from: '/songs' })
@@ -76,8 +79,9 @@ export function SongsPage() {
           </TabsList>
         }
       />
-      <div className="flex items-center gap-2 lg:max-w-xl">
-        <div className="min-w-0 flex-1">
+      {/* The search its own row on a phone, the filters under it; one row from a tablet. */}
+      <div className="flex flex-wrap items-center gap-2 lg:max-w-3xl">
+        <div className="min-w-0 basis-full sm:basis-0 sm:flex-1">
           <SearchField
             value={search.q}
             onChange={(q) => set({ q })}
@@ -85,16 +89,25 @@ export function SongsPage() {
             screen={t('title')}
           />
         </div>
-        {/* Its icon alone on a phone, beside a search that needs the width. */}
+        {/* Its value alone ("Any level", "Beginner"): it names itself, so a phone's row keeps it whole. */}
+        <Dropdown
+          bare
+          label={t('level')}
+          value={search.stage}
+          onChange={(stage) => set({ stage })}
+          options={[
+            { value: 'any', label: t('anyLevel') },
+            ...STAGES.map((stage) => ({ value: stage, label: words(`stage.${stage}`) })),
+          ]}
+          className="max-sm:min-w-0 max-sm:flex-1"
+        />
         <Toggle
           pressed={search.withChords}
           onPressedChange={(withChords) => set({ withChords })}
-          aria-label={t('withChords')}
-          title={t('withChords')}
-          className="max-sm:w-11 max-sm:px-0"
+          className="max-sm:flex-1"
         >
           <ListMusic aria-hidden />
-          <span className="max-sm:hidden">{t('withChords')}</span>
+          {t('withChords')}
         </Toggle>
       </div>
       {groups.length > 0 ? (

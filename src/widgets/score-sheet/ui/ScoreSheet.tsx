@@ -12,6 +12,11 @@ import { SheetLine } from './SheetLine'
 const HEADING = 52
 const LINE_GAP = 8
 
+/** How small a line is drawn to fit a short sheet (a phone on its side): smaller, it is not read. */
+const LEAST_FIT = 0.6
+/** The room a tempo mark over a line's first bar takes above its top staff, in VexFlow units. */
+const TEMPO_ROOM = 32
+
 /** How many bars a line down a screen this wide holds at most, readable: a phone's two, a tablet's three. */
 const mostBars = (width: number) =>
   width === 0 ? Infinity : width < 560 ? 2 : width < 860 ? 3 : Infinity
@@ -40,9 +45,12 @@ export function ScoreSheet({
   onSignature,
   view = 'scroll',
   title,
+  room,
   onWrite,
   onDrag,
 }: {
+  /** The height the sheet is seen in: a line down the screen or across is drawn smaller to fit it whole. */
+  room?: number | undefined
   /** A note written where a staff was double-clicked: its tick on the piece, its row and key. */
   onWrite?: (tick: Tick, layer: Layer, key: Midi) => void
   /** The notes at the caret dragged on their staff by steps of the key. */
@@ -74,6 +82,14 @@ export function ScoreSheet({
   const most = view === 'scroll' ? mostBars(width) : Infinity
   const sheets = useMemo(() => sheetsOf(draft, across, most), [sheetsOf, draft, across, most])
   const caretBar = barAt(draft, caret).index
+  // Each line runs to its bars' share of the longest, so bars line up down the sheet as a chart's do.
+  const longest = Math.max(1, ...sheets.map((sheet) => sheet.line.bars.length))
+  // A whole system in the height the sheet is seen in (a phone on its side): its section's heading,
+  // its labels' row and a tempo mark over it.
+  const staves = Math.max(1, ...sheets.map((sheet) => sheet.score.staves.length))
+  const system = staffHeight(undefined, staves) + TEMPO_ROOM
+  const fit =
+    room && room > 0 ? Math.min(1, Math.max(LEAST_FIT, (room - HEADING - CHORD_ROW) / system)) : 1
 
   const line = (sheet: LineSheet, scale?: number) => (
     <SheetLine
@@ -92,6 +108,7 @@ export function ScoreSheet({
       chordNames={chordNames}
       onSignature={onSignature}
       justify={!across}
+      share={sheet.line.bars.length / longest}
       onWrite={onWrite}
       onDrag={onDrag}
       {...(scale === undefined ? {} : { scale })}
@@ -156,7 +173,7 @@ export function ScoreSheet({
   if (across) {
     return (
       <section ref={box} aria-label={t('sheet.label')} className="flex flex-col gap-2">
-        {sheets.map((sheet) => line(sheet))}
+        {sheets.map((sheet) => line(sheet, fit))}
       </section>
     )
   }
@@ -166,7 +183,9 @@ export function ScoreSheet({
       {draft.sections.map((_, section) => (
         <section key={section} className="flex flex-col gap-2">
           {heading(section)}
-          {sheets.filter((sheet) => sheet.line.section === section).map((sheet) => line(sheet))}
+          {sheets
+            .filter((sheet) => sheet.line.section === section)
+            .map((sheet) => line(sheet, fit))}
         </section>
       ))}
     </section>

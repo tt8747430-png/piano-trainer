@@ -20,6 +20,11 @@ export const piece: LocaleResources['piece'] = {
   practise: 'Играть',
   edit: 'Изменить',
   writeChart: 'Записать аккорды',
+  noChart: {
+    title: 'Аккордов пока нет',
+    description:
+      'Запишите аккорды по тактам — и песня зазвучит в любой тональности и с любой фактурой.',
+  },
   yourVersion: 'Ваша версия',
   music: 'Музыка',
   reset: 'Вернуть оригинал',

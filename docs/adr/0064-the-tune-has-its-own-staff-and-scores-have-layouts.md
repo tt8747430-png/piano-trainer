@@ -27,3 +27,8 @@ Nothing saved changes: the tune's text is as it was. The Player keeps one line u
 **Later (2026-10-21):** what the sheet shows has one home. Finger numbers and Named notes are the View menu's
 switches alone, no longer the Setup's tiles too (the Setup keeps how it plays: chord positions, metronome,
 count-in, swing), and the View menu's button wears an eye, so it never reads as the Setup's sliders beside it.
+
+**Later (2026-10-21), the sheet's lines:** a line is spread to its bars' share of the longest line's width (the
+chart's Equal Columns Rule), replacing the threshold that left a line under 30% of the width natural: a line of
+empty bars in the editor now gets room to write in, and bars line up down the page. The layouts' names are one set
+in the shared `music` namespace (`SheetLayoutField`), in the order Across · Down · Pages.

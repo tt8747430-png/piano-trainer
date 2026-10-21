@@ -400,7 +400,7 @@ describe('engrave', () => {
     })
   })
 
-  it('spreads a line to the width it may fill, its measures widened; never a lone short one', () => {
+  it('spreads a line to its share of the width it may fill, its measures widened', () => {
     const host = () => document.createElement('div')
     const natural = engrave(score, host(), { scale: 1, fingers: false, names: false })
     const spread = engrave(score, host(), {
@@ -412,13 +412,24 @@ describe('engrave', () => {
     expect(spread.width).toBeCloseTo(natural.width * 1.5)
     for (const [i, measure] of spread.measures.entries())
       expect(measure.width).toBeGreaterThan(natural.measures[i]?.width ?? 0)
-    const far = engrave(score, host(), {
+    // Half the bars of the longest line: half its width, however short the line is drawn.
+    const half = engrave(score, host(), {
       scale: 1,
       fingers: false,
       names: false,
       fill: natural.width * 4,
+      share: 0.5,
     })
-    expect(far.width).toBe(natural.width)
+    expect(half.width).toBeCloseTo(natural.width * 2)
+    // A share already narrower than the line leaves it as it is.
+    const narrow = engrave(score, host(), {
+      scale: 1,
+      fingers: false,
+      names: false,
+      fill: natural.width * 1.5,
+      share: 0.25,
+    })
+    expect(narrow.width).toBe(natural.width)
   })
 
   it('draws an ending’s bracket numbered where it begins, and the repeats’ dots', () => {
