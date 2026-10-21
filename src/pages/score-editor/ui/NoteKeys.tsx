@@ -159,9 +159,7 @@ export function PitchKeys() {
       >
         <span aria-hidden className="flex flex-col items-center gap-0.5 leading-none">
           <span className="text-xl font-semibold tracking-tight">♯/♭</span>
-          <span className="text-xs font-semibold tracking-tight">
-            {t('pitch.respell')}
-          </span>
+          <span className="text-xs font-semibold tracking-tight">{t('pitch.respell')}</span>
         </span>
       </ToolKey>
     </>
