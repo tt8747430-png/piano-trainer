@@ -183,6 +183,14 @@ export const music = {
     barChords: 'Bar {{n}}: {{chords}}',
     loopStart: 'Loop start',
     loopEnd: 'Loop end',
+    // Pages floating on a canvas (ADR 0075): dragged to move, pinched or Ctrl-wheeled to zoom.
+    canvas: {
+      label: 'Pages: drag to move, pinch or Ctrl and scroll to zoom',
+      zoomIn: 'Zoom in',
+      zoomOut: 'Zoom out',
+      fit: 'Fit the page to the width',
+      zoom: '{{percent}} %',
+    },
   },
   // A list of patterns, Accompaniment's and the Setup's: the learner's shelves round the groups.
   patternShelf: { favourites: 'Favourites', own: 'Your patterns', hidden: 'Hidden' },

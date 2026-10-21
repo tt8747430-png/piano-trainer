@@ -2,7 +2,15 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { lineShare, PAGE, paginate, useElementSize, useScrollMotion } from '@/shared/lib'
+import {
+  lineShare,
+  PAGE,
+  paginate,
+  PRINT_SCALE,
+  useElementSize,
+  useScrollMotion,
+} from '@/shared/lib'
+import { PageCanvas, useCanvasReveal } from '@/shared/ui'
 import { lineLead, measureWidths, type Score, type StaffId } from '@/shared/lib/notation'
 import { ScoreView, staffHeight } from '@/shared/ui/score'
 import { scoreLines, type ScoreLine } from '../model/score-lines'
@@ -58,10 +66,10 @@ export function SheetLines({
   const { t } = useTranslation('music')
   const box = useRef<HTMLElement>(null)
   const { width } = useElementSize(box)
-  const paper = Math.min(width, PAGE.width)
-  const scale = pages ? paper / PAGE.width : Math.min(1, Math.max(LEAST_SCALE, width / FULL_WIDTH))
-  const margin = pages ? PAGE.margin * scale : 0
-  const inner = (pages ? paper : width) - 2 * margin
+  // Pages as they print, on a canvas that zooms them to the screen (ADR 0075).
+  const scale = pages ? PRINT_SCALE : Math.min(1, Math.max(LEAST_SCALE, width / FULL_WIDTH))
+  const margin = pages ? PAGE.margin : 0
+  const inner = pages ? PAGE.width - 2 * margin : width
   // Each chart line cut by width to the room a line has, less its clef and key (ADR 0074).
   const widths = useMemo(() => measureWidths(score, scale), [score, scale])
   const room = inner > 0 ? inner / scale - lineLead(score) : Infinity
@@ -81,8 +89,8 @@ export function SheetLines({
   const bar = performance.beatGroups[current]?.bar
   const playing = bar === undefined ? -1 : lines.findLastIndex((line) => line.first <= bar)
   useEffect(() => {
-    shown.current.get(playing)?.scrollIntoView({ block: 'nearest', behavior: motion })
-  }, [playing, motion])
+    if (!pages) shown.current.get(playing)?.scrollIntoView({ block: 'nearest', behavior: motion })
+  }, [pages, playing, motion])
   // No sideways scroller: each line fits the width, and a cursor's follow stays put.
   const noScroller = useRef<HTMLElement>(null)
 
@@ -142,39 +150,56 @@ export function SheetLines({
   const dealt = paginate(
     lines.map((each, index) => ({ each, index })),
     () => lineHeight,
-    PAGE.height * scale - 2 * margin - (title ? LABELS : 0),
+    PAGE.height - 2 * margin - (title ? LABELS : 0),
   )
   return (
-    <section
-      ref={box}
-      aria-label={t('sheet.label')}
-      className="flex h-full flex-col items-center gap-6 overflow-y-auto overscroll-contain pb-6"
-    >
-      {dealt.map((page, number) => (
-        <article
-          key={number}
-          data-slot="sheet-page"
-          className="relative flex w-full flex-col bg-card text-card-foreground shadow-lg shadow-foreground/10 ring-1 ring-hairline"
-          style={{
-            maxWidth: PAGE.width,
-            minHeight: PAGE.height * scale,
-            padding: margin,
-            gap: LINE_GAP,
-          }}
-        >
-          {number === 0 && title ? (
-            <h2 className="text-center font-display text-2xl">{title}</h2>
-          ) : null}
-          {page.map(({ each, index }) => line(each, index))}
-          <span
-            aria-hidden
-            className="absolute inset-x-0 text-center text-xs text-muted-foreground"
-            style={{ bottom: margin / 2 }}
+    <PageCanvas column={PAGE.width}>
+      <PlayingInSight line={() => shown.current.get(playing)} playing={playing} />
+      <section aria-label={t('sheet.label')} className="flex flex-col items-center gap-8 p-6">
+        {dealt.map((page, number) => (
+          <article
+            key={number}
+            data-slot="sheet-page"
+            className="relative flex flex-col bg-card text-card-foreground shadow-lg shadow-foreground/10 ring-1 ring-hairline"
+            style={{
+              width: PAGE.width,
+              minHeight: PAGE.height,
+              padding: margin,
+              gap: LINE_GAP,
+            }}
           >
-            {number + 1}
-          </span>
-        </article>
-      ))}
-    </section>
+            {number === 0 && title ? (
+              <h2 className="text-center font-display text-3xl">{title}</h2>
+            ) : null}
+            {page.map(({ each, index }) => line(each, index))}
+            <span
+              aria-hidden
+              className="absolute inset-x-0 text-center text-xs text-muted-foreground"
+              style={{ bottom: margin / 2 }}
+            >
+              {number + 1}
+            </span>
+          </article>
+        ))}
+      </section>
+    </PageCanvas>
   )
+}
+
+/** The line playing brought into sight on the page canvas as it starts (ADR 0075). */
+function PlayingInSight({
+  line,
+  playing,
+}: {
+  line: () => HTMLDivElement | undefined
+  playing: number
+}) {
+  const reveal = useCanvasReveal()
+  useEffect(() => {
+    const element = line()
+    if (element && reveal && playing >= 0) reveal(element)
+    // Only as the playing line changes, not as the function reading it is made again.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing, reveal])
+  return null
 }

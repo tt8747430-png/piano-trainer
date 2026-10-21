@@ -86,3 +86,5 @@ export {
 } from './ToolPalette'
 export { ToolDivider } from './ToolDivider'
 export { TypedField } from './TypedField'
+export { PageCanvas } from './PageCanvas'
+export { useCanvasReveal } from './canvas-reveal'

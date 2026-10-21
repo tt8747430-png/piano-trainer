@@ -52,11 +52,18 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
         <div data-area="bar">
           <EditorHeader status={onSide && idle ? <CaretLine /> : undefined} />
         </div>
-        <div ref={sheet} data-area="sheet" className="min-h-0 overflow-y-auto overscroll-contain">
-          <EditorSheet room={onSide ? room : undefined} />
-          {/* Room past the last line, so it scrolls clear of the buttons floating over the corners. */}
-          <div aria-hidden className="h-14" />
-        </div>
+        {editor.view.layout === 'pages' ? (
+          // Pages on their canvas (ADR 0075): it moves and zooms them itself, the area never scrolls.
+          <div ref={sheet} data-area="sheet" className="min-h-0 overflow-clip rounded-2xl">
+            <EditorSheet />
+          </div>
+        ) : (
+          <div ref={sheet} data-area="sheet" className="min-h-0 overflow-y-auto overscroll-contain">
+            <EditorSheet room={onSide ? room : undefined} />
+            {/* Room past the last line, so it scrolls clear of the buttons floating over the corners. */}
+            <div aria-hidden className="h-14" />
+          </div>
+        )}
         <div data-area="float">
           <KeysButton />
           {palette ? null : (

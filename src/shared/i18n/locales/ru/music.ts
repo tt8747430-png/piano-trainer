@@ -169,6 +169,13 @@ export const music: LocaleResources['music'] = {
     barChords: 'Такт {{n}}: {{chords}}',
     loopStart: 'Начало повтора',
     loopEnd: 'Конец повтора',
+    canvas: {
+      label: 'Страницы: перетащите, чтобы сдвинуть; сведите пальцы или Ctrl с колёсиком — масштаб',
+      zoomIn: 'Крупнее',
+      zoomOut: 'Мельче',
+      fit: 'Страница по ширине',
+      zoom: '{{percent}} %',
+    },
   },
   patternShelf: { favourites: 'Избранное', own: 'Ваши фактуры', hidden: 'Скрытые' },
   patternPart: { styles: 'Стили', yours: 'Свои' },

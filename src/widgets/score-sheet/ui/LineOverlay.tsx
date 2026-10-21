@@ -16,6 +16,15 @@ const PATTERN_INSET = 6
 /** How far round the caret's onset a press takes hold of its notes to drag them. */
 const GRIP = { before: 14, after: 22, over: 16 } as const
 /**
+ * How much larger the sheet is drawn than laid out: a page canvas's zoom (ADR 0075), 1 elsewhere. A
+ * point's place on the screen, divided by it, is its place on the line's layout.
+ */
+function zoomOf(element: HTMLElement, box: DOMRect): number {
+  const laid = element.offsetWidth
+  return laid > 0 && box.width > 0 ? box.width / laid : 1
+}
+
+/**
  * Over a line's staff: its labels (with Pattern where a hand is not written, in that hand's layer),
  * the bars chosen, the caret, and each bar as a button that puts the caret where it is clicked; a
  * double click there writes the note on the line or space clicked (ADR 0064). The notes at the caret
@@ -79,11 +88,12 @@ export function LineOverlay({
     const measure = layout.measures[index]
     if (!placed || !measure) return null
     const box = event.currentTarget.getBoundingClientRect()
-    const y = event.clientY - box.top - row
+    const zoom = zoomOf(event.currentTarget, box)
+    const y = (event.clientY - box.top) / zoom - row
     const target = layerAt(y, layout, chordNames)
     const end = placed.start + placed.bar.ticks
     const places = placesOf(target).filter((tick) => tick >= placed.start && tick < end)
-    const x = measure.x + event.clientX - box.left
+    const x = measure.x + (event.clientX - box.left) / zoom
     const tick = nearestPlace(places, x, (at) => xAtTick(layout, at - line.start))
     return { target, tick: tick ?? placed.start, y }
   }
@@ -117,7 +127,8 @@ export function LineOverlay({
     onPointerMove: (event: PointerEvent<HTMLDivElement>) => {
       const held = drag.current
       if (!held || !caretStaff || !onDrag) return
-      const steps = stepsDragged(event.clientY - held.y, caretStaff)
+      const zoom = zoomOf(event.currentTarget, event.currentTarget.getBoundingClientRect())
+      const steps = stepsDragged((event.clientY - held.y) / zoom, caretStaff)
       if (steps === held.applied) return
       onDrag(steps - held.applied, held.applied !== 0)
       drag.current = { ...held, applied: steps }

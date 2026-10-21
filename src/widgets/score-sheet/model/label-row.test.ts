@@ -14,4 +14,8 @@ describe('the labels’ row over a line', () => {
     expect(labelScale(0.85)).toBe(0.85)
     expect(labelScale(1.3)).toBe(1)
   })
+
+  it('draws a page’s chord symbols 2.6 staff spaces tall, as they print', () => {
+    expect(labelScale(0.6, true) * 18).toBeCloseTo(2.6 * 10 * 0.6)
+  })
 })

@@ -9,6 +9,13 @@ export type SheetView = (typeof SHEET_VIEWS)[number]
 export const PAGE = { width: 794, height: 1123, margin: 57 } as const
 
 /**
+ * The engraving's size on a page, as it prints (ADR 0075): a staff a 33rd of the page's width (24 px
+ * of 794), as the hymnals in `piano-data/scores` print theirs (18 pt of 612). The page canvas zooms
+ * it to the screen, so a page is never laid out again for a narrow one.
+ */
+export const PRINT_SCALE = 0.6
+
+/**
  * Items of known height dealt onto pages of `room`, in order: an item starts a new page where it does
  * not fit on the one begun; one taller than a page has a page of its own. A heading never ends a page:
  * it goes over with the item after it.

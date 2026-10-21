@@ -1,7 +1,15 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barAt, type BarRange, type Draft, type Layer } from '@/features/score-editor'
-import { lineShare, PAGE, paginate, useElementSize, type SheetView } from '@/shared/lib'
+import {
+  lineShare,
+  PAGE,
+  paginate,
+  PRINT_SCALE,
+  useElementSize,
+  type SheetView,
+} from '@/shared/lib'
+import { PageCanvas } from '@/shared/ui'
 import { lineLead, measureWidths, notate } from '@/shared/lib/notation'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { staffHeight } from '@/shared/ui/score'
@@ -13,8 +21,6 @@ import { SheetLine } from './SheetLine'
 
 /** The room between lines on a page at full size, for dealing lines onto pages. */
 const LINE_GAP = 16
-/** How small a page is drawn, and how large: smaller, a phone shows its page's music too small to read. */
-const PAGE_SCALE = { least: 0.62, most: 1.2 } as const
 /**
  * The staff's size down the screen (ADR 0074), as LilyPond sets a staff size per paper: full from a
  * sheet this wide, smaller on a phone, so a line holds more than a bar, never under `least`.
@@ -83,12 +89,8 @@ export function ScoreSheet({
   const across = view === 'horizontal'
   const box = useRef<HTMLElement>(null)
   const { width } = useElementSize(box)
-  // A page zoomed to the screen's width, as a notation app's Page Width, never under a readable size:
-  // a phone's page is then a narrower one, its lines of fewer bars.
-  const pageScale =
-    width > 0 ? Math.min(PAGE_SCALE.most, Math.max(PAGE_SCALE.least, width / PAGE.width)) : 1
-  const paper = width > 0 ? Math.min(width, PAGE.width * pageScale) : PAGE.width
-  const margin = PAGE.margin * pageScale
+  // Pages as they print, on a canvas that zooms them to the screen (ADR 0075): laid out alike on any.
+  const pages = view === 'pages'
   // The piece's music whole, for each bar's width: lines are cut by width, as an engraver cuts them.
   const whole = useMemo(() => {
     const [all] = oneLine(draft)
@@ -98,12 +100,15 @@ export function ScoreSheet({
   const staves = whole?.staves.length ?? 2
   // A whole system in the height the sheet is seen in, where it is short (a phone on its side).
   const fit = room && room > 0 ? lineFit({ room, staves, headed: !across, chordNames }) : 1
-  const sized = view === 'pages' ? pageScale : Math.min(fit, scrollScale(width))
+  const sized = pages ? PRINT_SCALE : Math.min(fit, scrollScale(width))
   const widths = useMemo(() => (whole ? measureWidths(whole, sized) : []), [whole, sized])
   const lead = whole ? lineLead(whole) : 0
   // The room a line's bars have, in the engraving's units: the sheet's or the page's, less the clef and key.
-  const roomAcross =
-    width <= 0 ? Infinity : (view === 'pages' ? paper - 2 * margin : width) / sized - lead
+  const roomAcross = pages
+    ? (PAGE.width - 2 * PAGE.margin) / sized - lead
+    : width <= 0
+      ? Infinity
+      : width / sized - lead
   const sheets = useMemo(
     () => sheetsOf(draft, across ? { across: true } : { room: roomAcross, widths }),
     [sheetsOf, draft, across, roomAcross, widths],
@@ -114,7 +119,7 @@ export function ScoreSheet({
     sheet.line.bars.reduce((sum, placed) => sum + (widths[placed.index] ?? 0), 0)
   const shareOf = (sheet: LineSheet) => lineShare(widthOf(sheet), roomAcross)
 
-  const line = (sheet: LineSheet, scale?: number) => (
+  const line = (sheet: LineSheet, scale?: number, print = false) => (
     <SheetLine
       key={`${sheet.line.section} ${sheet.line.line} ${sheet.line.start}`}
       sheet={sheet}
@@ -135,13 +140,14 @@ export function ScoreSheet({
       onWrite={onWrite}
       onDrag={onDrag}
       {...(scale === undefined ? {} : { scale })}
+      print={print}
     />
   )
 
-  if (view === 'pages') {
-    const scale = pageScale
+  if (pages) {
+    const scale = PRINT_SCALE
     const lineHeight =
-      labelRow(chordNames, scale) + (staffHeight(undefined, staves) + LINE_GAP) * scale
+      labelRow(chordNames, scale, true) + (staffHeight(undefined, staves) + LINE_GAP) * scale
     const items: PageItem[] = [
       ...(title ? [{ kind: 'title' } as const] : []),
       ...draft.sections.flatMap((_, section): PageItem[] => [
@@ -151,52 +157,50 @@ export function ScoreSheet({
           .map((sheet) => ({ kind: 'line', sheet }) as const),
       ]),
     ]
-    const pages = paginate(
+    const dealt = paginate(
       items,
       (item) => (item.kind === 'line' ? lineHeight : HEADING),
-      (paper * PAGE.height) / PAGE.width - 2 * margin,
+      PAGE.height - 2 * PAGE.margin,
       (item) => item.kind !== 'line',
     )
     return (
-      <section ref={box} aria-label={t('sheet.label')} className="flex flex-col items-center gap-6">
-        {pages.map((page, index) => (
-          <article
-            key={index}
-            aria-label={t('sheet.page', { n: index + 1, of: pages.length })}
-            data-slot="sheet-page"
-            className="relative flex flex-col bg-card text-card-foreground shadow-lg shadow-foreground/10 ring-1 ring-hairline"
-            style={{
-              width: paper,
-              minHeight: (paper * PAGE.height) / PAGE.width,
-              padding: margin,
-              gap: LINE_GAP * scale,
-            }}
-          >
-            {page.map((item) =>
-              item.kind === 'title' ? (
-                <h2
-                  key="title"
-                  className="text-center font-display"
-                  style={{ fontSize: `${1.5 * scale}rem` }}
-                >
-                  {title}
-                </h2>
-              ) : item.kind === 'heading' ? (
-                <div key={`heading ${item.section}`}>{heading(item.section)}</div>
-              ) : (
-                line(item.sheet, scale)
-              ),
-            )}
-            <span
-              aria-hidden
-              className="absolute inset-x-0 text-center text-xs text-muted-foreground"
-              style={{ bottom: margin / 2 }}
+      <PageCanvas column={PAGE.width}>
+        <section aria-label={t('sheet.label')} className="flex flex-col items-center gap-8 p-6">
+          {dealt.map((page, index) => (
+            <article
+              key={index}
+              aria-label={t('sheet.page', { n: index + 1, of: dealt.length })}
+              data-slot="sheet-page"
+              className="relative flex flex-col bg-card text-card-foreground shadow-lg shadow-foreground/10 ring-1 ring-hairline"
+              style={{
+                width: PAGE.width,
+                minHeight: PAGE.height,
+                padding: PAGE.margin,
+                gap: LINE_GAP * scale,
+              }}
             >
-              {index + 1}
-            </span>
-          </article>
-        ))}
-      </section>
+              {page.map((item) =>
+                item.kind === 'title' ? (
+                  <h2 key="title" className="text-center font-display text-3xl">
+                    {title}
+                  </h2>
+                ) : item.kind === 'heading' ? (
+                  <div key={`heading ${item.section}`}>{heading(item.section)}</div>
+                ) : (
+                  line(item.sheet, scale, true)
+                ),
+              )}
+              <span
+                aria-hidden
+                className="absolute inset-x-0 text-center text-xs text-muted-foreground"
+                style={{ bottom: PAGE.margin / 2 }}
+              >
+                {index + 1}
+              </span>
+            </article>
+          ))}
+        </section>
+      </PageCanvas>
     )
   }
 

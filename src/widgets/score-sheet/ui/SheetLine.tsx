@@ -2,7 +2,7 @@ import { memo, useEffect, useRef } from 'react'
 import type { BarRange, Layer } from '@/features/score-editor'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { cn, useElementSize } from '@/shared/lib'
-import { LazyScoreView } from '@/shared/ui'
+import { LazyScoreView, useCanvasReveal } from '@/shared/ui'
 import { staffOfHand } from '../model/line-music'
 import type { LineSheet } from '../model/line-sheets'
 import { labelRow, labelScale } from '../model/label-row'
@@ -30,6 +30,7 @@ export const SheetLine = memo(function SheetLine({
   chordNames,
   onSignature,
   scale = 1,
+  print = false,
   justify = true,
   share = 1,
   onWrite,
@@ -37,8 +38,10 @@ export const SheetLine = memo(function SheetLine({
 }: {
   onWrite?: ((tick: Tick, layer: Layer, key: Midi) => void) | undefined
   onDrag?: ((steps: number, joins: boolean) => void) | undefined
-  /** The engraving's size: a page's lines smaller on a narrow screen, as its paper is. */
+  /** The engraving's size: smaller on a phone, as it prints on a page. */
   scale?: number
+  /** On a page, its labels as they print (ADR 0075). */
+  print?: boolean
   /** Spread to the sheet's width, as a printed system is; a panorama's one line is left natural. */
   justify?: boolean
   /** Its bars' share of the sheet's longest line: the part of the width it is spread to. */
@@ -59,7 +62,7 @@ export const SheetLine = memo(function SheetLine({
   const { width } = useElementSize(ref)
   const holdsCaret = caret !== null
   // The labels' row over the staff: as tall as what it holds, at the line's size.
-  const row = labelRow(chordNames, scale)
+  const row = labelRow(chordNames, scale, print)
   // The notes at the caret on its staff are the ones chosen, marked as a notation app marks them.
   const selected =
     caret === null || layer === 'chords'
@@ -68,15 +71,21 @@ export const SheetLine = memo(function SheetLine({
   // The caret's line comes into view when the caret moves onto it; the sheet opens where it is
   // while the line is already in sight, its section's heading over it kept in view.
   const held = useRef<boolean | null>(null)
+  // On a page canvas, the canvas moves to it (ADR 0075); elsewhere the sheet scrolls.
+  const reveal = useCanvasReveal()
   useEffect(() => {
     const line = ref.current
     const before = held.current
     held.current = holdsCaret
     // The effect run again with nothing changed (a strict mode's second run) moves nothing.
     if (!holdsCaret || !line || before === true) return
+    if (reveal) {
+      reveal(line)
+      return
+    }
     if (before === null && topInSight(line)) return
     line.scrollIntoView({ block: 'nearest' })
-  }, [holdsCaret])
+  }, [holdsCaret, reveal])
   return (
     <div
       ref={ref}
@@ -105,7 +114,7 @@ export const SheetLine = memo(function SheetLine({
             placesOf={placesOf}
             chordNames={chordNames}
             row={row}
-            labels={labelScale(scale)}
+            labels={labelScale(scale, print)}
             onSignature={onSignature}
             onWrite={onWrite}
             onDrag={onDrag}
