@@ -14,15 +14,14 @@ import {
   usePieces,
   type Piece,
 } from '@/entities/piece'
-import { LiveKeyboard } from '@/features/live-keyboard'
+import { PinnedKeyboard } from '@/features/live-keyboard'
 import { LearnedButton } from '@/features/mark-learned'
 import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
 import { ShareSongButton } from '@/features/share-song'
 import { audibleHands, barSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { useLocale } from '@/shared/i18n'
-import { ButtonLink, Pinned } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { FabLink, FloatingActions, NO_KEYS, RoundButton, RoundLink } from '@/shared/ui'
 import { ChordChart } from '@/widgets/chord-chart'
 import { PieceChords } from '@/widgets/piece-chords'
 import { PieceAbout } from './PieceAbout'
@@ -32,10 +31,10 @@ import { PieceHeader } from './PieceHeader'
 import { OPEN_PLAINLY } from '@/shared/lib'
 
 /**
- * A piece with a chart, in one column: its facts, Practise with the learned toggle and Edit on one
- * line (Edit its pencil alone on a phone), the
- * keyboard pinned, showing what sounds, over the chords it plays and its chart, each to tap and hear;
- * then what is printed about it and, for the learner's own music, its way back.
+ * A piece with a chart, in one column: Edit and Learned as round buttons in its bar, its facts, the
+ * keyboard where the page's keys dock, showing what sounds, over the chords it plays and its chart,
+ * each to tap and hear; then what is printed about it and, for the learner's own music, its way back.
+ * Practise, to the Player, is the screen's one floating action.
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
@@ -56,33 +55,23 @@ export function PieceView({ piece }: { piece: Piece }) {
 
   return (
     <div className="flex flex-col gap-6 pb-4">
-      <PieceHeader entry={piece} />
+      <PieceHeader
+        entry={piece}
+        actions={
+          <div className="flex gap-2 print:hidden">
+            {isDegreePiece(piece) ? null : (
+              <RoundLink
+                label={t('edit')}
+                icon={PencilLine}
+                render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
+              />
+            )}
+            {own ? null : <LearnedButton step={pieceStepId(piece.id)} round />}
+          </div>
+        }
+      />
       <PieceFacts entry={piece} />
-      <div className="flex items-center gap-3 print:hidden">
-        <ButtonLink
-          size="pill"
-          className="min-w-0 flex-1 sm:max-w-xs"
-          render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />}
-        >
-          <Play data-icon="inline-start" />
-          {t('practise')}
-        </ButtonLink>
-        {own ? null : <LearnedButton step={pieceStepId(piece.id)} />}
-        {isDegreePiece(piece) ? null : (
-          <ButtonLink
-            variant="outline"
-            aria-label={t('edit')}
-            className="max-sm:w-11 max-sm:px-0"
-            render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
-          >
-            <PencilLine aria-hidden data-icon="inline-start" />
-            <span className="max-sm:hidden">{t('edit')}</span>
-          </ButtonLink>
-        )}
-      </div>
-      <Pinned className="print:hidden">
-        <LiveKeyboard range={playerRange(performance)} spotlight />
-      </Pinned>
+      <PinnedKeyboard shown={NO_KEYS} range={playerRange(performance)} />
       <div className="print:hidden">
         <PieceChords piece={piece} performance={performance} />
       </div>
@@ -90,10 +79,13 @@ export function PieceView({ piece }: { piece: Piece }) {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-2xl">{t('chart')}</h2>
           {/* An installed app has no browser menu to print from. */}
-          <Button variant="outline" className="print:hidden" onClick={() => window.print()}>
-            <Printer aria-hidden data-icon="inline-start" />
-            {t('print')}
-          </Button>
+          <RoundButton
+            label={t('print')}
+            title={t('print')}
+            icon={Printer}
+            className="print:hidden"
+            onClick={() => window.print()}
+          />
         </div>
         <ChordChart
           performance={performance}
@@ -115,6 +107,14 @@ export function PieceView({ piece }: { piece: Piece }) {
           <OwnMusicActions piece={{ kind: 'version', id: piece.id, title }} />
         </div>
       ) : null}
+      {/* The screen's one way on: to the keys, in the Player. */}
+      <FloatingActions>
+        <FabLink
+          label={t('practise')}
+          icon={Play}
+          render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />}
+        />
+      </FloatingActions>
     </div>
   )
 }

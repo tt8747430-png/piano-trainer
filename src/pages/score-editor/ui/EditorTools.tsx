@@ -12,7 +12,7 @@ export function EditorTools() {
   const layer = useEditorState((state) => state.layer)
   return (
     <div className="flex flex-col gap-2">
-      <div className="-mx-gutter flex items-end gap-2 overflow-x-auto px-gutter py-1 scrollbar-none landscape-phone:mx-0 landscape-phone:flex-wrap landscape-phone:overflow-visible landscape-phone:px-0 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
+      <div className="-mx-gutter flex items-end gap-2 overflow-x-auto px-gutter py-1 scrollbar-none [mask-image:linear-gradient(to_right,black_calc(100%-2.5rem),transparent)] landscape-phone:mx-0 landscape-phone:[mask-image:none] lg:[mask-image:none] landscape-phone:flex-wrap landscape-phone:overflow-visible landscape-phone:px-0 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
         {layer === 'chords' ? <ChordTools /> : <NoteTools />}
       </div>
     </div>

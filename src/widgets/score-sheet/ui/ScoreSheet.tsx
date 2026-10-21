@@ -47,26 +47,29 @@ export function ScoreSheet({
       {draft.sections.map((_, section) => (
         <section key={section} className="flex flex-col gap-2">
           {heading(section)}
-          {sheets
-            .filter((sheet) => sheet.line.section === section)
-            .map((sheet) => (
-              <SheetLine
-                key={sheet.line.line}
-                sheet={sheet}
-                layer={layer}
-                caret={
-                  sheet.line.bars.some((placed) => placed.index === caretBar)
-                    ? caret - sheet.line.start
-                    : null
-                }
-                caretTicks={caretTicks}
-                selection={selection}
-                onPlace={onPlace}
-                placesOf={placesOf}
-                chordNames={chordNames}
-                onSignature={onSignature}
-              />
-            ))}
+          {/* A section's lines flow into as many columns as the width holds, each a printed system. */}
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,26rem),1fr))] gap-x-8 gap-y-2">
+            {sheets
+              .filter((sheet) => sheet.line.section === section)
+              .map((sheet) => (
+                <SheetLine
+                  key={sheet.line.line}
+                  sheet={sheet}
+                  layer={layer}
+                  caret={
+                    sheet.line.bars.some((placed) => placed.index === caretBar)
+                      ? caret - sheet.line.start
+                      : null
+                  }
+                  caretTicks={caretTicks}
+                  selection={selection}
+                  onPlace={onPlace}
+                  placesOf={placesOf}
+                  chordNames={chordNames}
+                  onSignature={onSignature}
+                />
+              ))}
+          </div>
         </section>
       ))}
     </section>

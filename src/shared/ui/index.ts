@@ -17,6 +17,7 @@ export { PAGE_TILES, type Tile } from './page-tiles'
 export { FitWidth } from './FitWidth'
 export {
   Fab,
+  FabLink,
   FabPill,
   FloatingActions,
   FloatingHost,

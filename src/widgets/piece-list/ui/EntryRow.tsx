@@ -17,24 +17,24 @@ const KIND_TILE: Readonly<Record<Entry['kind'], { icon: LucideIcon; paint: Paint
 
 /**
  * A piece or listing in a list, linking to its page on its shelf: its number in its book on its tile
- * (else its kind's icon), its title over its second one (a listing: "no chart yet"), then its key, its
+ * (else its kind's icon; no `tile` where every row of its list would wear the same one), its title over its second one (a listing: "no chart yet"), then its key, its
  * stage's mark and, once learned, the learned badge.
  */
-export function EntryRow({ entry }: { entry: Entry }) {
+export function EntryRow({ entry, tile = true }: { entry: Entry; tile?: boolean }) {
   const { t } = useTranslation('songs')
   const locale = useLocale()
   const { primary, secondary } = entryTitles(entry, locale)
   const step = pieceStepId(entry.id)
   const learned = useProgress(selectIsLearned(step))
   const stage = pieceStage(entry.id)
-  const tile = KIND_TILE[entry.kind]
+  const kind = KIND_TILE[entry.kind]
   const number = entry.source?.number
   return (
     <li>
       <RowLink
         title={primary}
         detail={entry.kind === 'listing' ? t('noChart') : secondary}
-        {...(number === undefined ? tile : { numeral: number, paint: tile.paint })}
+        {...(!tile ? {} : number === undefined ? kind : { numeral: number, paint: kind.paint })}
         trailing={
           entry.kind === 'listing' ? null : (
             <>

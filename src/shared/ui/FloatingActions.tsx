@@ -144,6 +144,24 @@ export function Fab({
   )
 }
 
+/** The screen's main action as a link (a page of its own: the Player), round and named by its label. */
+export function FabLink({
+  label,
+  icon: Icon,
+  render,
+}: {
+  label: string
+  icon: LucideIcon
+  /** The link it is: a router `Link`. */
+  render: ReactElement
+}) {
+  return (
+    <ButtonLink size="icon" aria-label={label} title={label} className={FAB} render={render}>
+      <Icon aria-hidden />
+    </ButtonLink>
+  )
+}
+
 /**
  * A screen's one Play as its main floating button, named by what it plays, Stop while it sounds; the
  * screen's Enter plays it (`usePlayKey`).
