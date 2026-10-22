@@ -55,6 +55,7 @@ export function LoopGrip({
         move(to)
       }}
       onPointerDown={(event) => event.currentTarget.setPointerCapture(event.pointerId)}
+      data-grip
       onPointerMove={(event) => {
         if (!event.currentTarget.hasPointerCapture(event.pointerId)) return
         const box = event.currentTarget.parentElement?.getBoundingClientRect()

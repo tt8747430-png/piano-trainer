@@ -221,6 +221,7 @@ export function LineOverlay({
         <div
           aria-hidden
           data-slot="note-grip"
+          data-grip
           title={t('sheet.drag')}
           className="absolute z-30 cursor-ns-resize touch-none rounded-md"
           style={{

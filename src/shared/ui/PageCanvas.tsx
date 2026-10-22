@@ -30,7 +30,7 @@ const WHEEL_ZOOM = Math.log(2) / 6 / 100
  * Pages floating on a canvas (ADR 0075), as a notation app's page view: drawn at their print size,
  * moved by a drag (a click or a double click on them still reaches them), zoomed by a pinch, by Ctrl
  * or ⌘ with the wheel, or by its buttons; opened with a page's width fitted to the screen. A grip
- * that holds the pointer it was pressed with (a note's, the loop's) drags itself, not the canvas.
+ * (`data-grip`: a note's, the loop's) drags itself, not the canvas.
  */
 export function PageCanvas({ column, children }: { column: number; children: ReactNode }) {
   const { t } = useTranslation('music')
@@ -98,8 +98,10 @@ export function PageCanvas({ column, children }: { column: number; children: Rea
   const pointers = useRef(new Map<number, { x: number; y: number }>())
   const dragging = useRef(false)
   const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    // A grip (a note's, the loop's) drags itself. Not its pointer capture: a touch is captured by
+    // whatever it lands on, so every touch would be a grip's.
     const target = event.target as Element
-    if (event.button !== 0 || target.hasPointerCapture?.(event.pointerId)) return
+    if (event.button !== 0 || target.closest('[data-grip]')) return
     pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY })
   }
   const onPointerMove = (event: PointerEvent<HTMLDivElement>) => {
