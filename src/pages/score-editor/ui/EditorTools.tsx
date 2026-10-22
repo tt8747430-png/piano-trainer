@@ -1,15 +1,7 @@
-import {
-  ArrowLeftToLine,
-  ArrowRightToLine,
-  ChevronDown,
-  ChevronUp,
-  Keyboard,
-  Piano,
-} from 'lucide-react'
+import { ArrowLeftToLine, ArrowRightToLine, ChevronDown, ChevronUp, Keyboard } from 'lucide-react'
 import { useState, type MouseEvent, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectPaletteSide, useSettings, useSettingsStoreApi } from '@/entities/settings'
-import { useFoldKeys } from '@/features/live-keyboard'
 import { setPaletteSide } from '@/features/set-preference'
 import { ToolPalette, ToolPalettePanel, ToolPaletteTab, ToolPaletteTabs } from '@/shared/ui'
 import { cn } from '@/shared/lib'
@@ -109,8 +101,7 @@ const TAB_KEYS: Readonly<Record<PaletteTab, ReactNode>> = {
  * where the caret writes in reach and the rest greyed, the chosen tab's keys under them. A card
  * floating over the sheet (ADR 0079), as tall as its keys, scrolling them inside past a share of the
  * screen: at the foot (`side` off) or beside the sheet (`side`). Folded (`folded`), it is its row of
- * tabs alone, a tab tapped opening it there, so its tools are never more than a tap away; the row
- * also brings back folded keys. While a take records, the tools wait for Stop.
+ * tabs alone, a tab tapped opening it there, so its tools are never more than a tap away. While a take records, the tools wait for Stop.
  */
 export function EditorTools({
   side,
@@ -136,7 +127,6 @@ export function EditorTools({
     setFocusField(true)
   }
   const recording = takes.stage !== 'idle'
-  const keys = useFoldKeys()
   const settings = useSettingsStoreApi()
   const paletteSide = useSettings(selectPaletteSide)
   const tab = chosen
@@ -144,19 +134,6 @@ export function EditorTools({
   const other = left ? 'right' : 'left'
   const fold = (
     <>
-      {keys.folded ? (
-        // The keys folded come back from here, the palette's row always in sight.
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label={t('common:rail.unfold')}
-          title={t('common:rail.unfold')}
-          className="size-9 shrink-0 rounded-xl"
-          onClick={() => keys.fold(false)}
-        >
-          <Piano aria-hidden />
-        </Button>
-      ) : null}
       {side && !folded ? (
         // Beside the sheet, the palette stands on the side the learner likes (ADR 0071).
         <Button

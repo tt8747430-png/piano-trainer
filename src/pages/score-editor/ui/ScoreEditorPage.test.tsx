@@ -182,13 +182,14 @@ describe('the score editor', () => {
     expect(screen.getByRole('button', { name: 'Show the tools' })).toBeInTheDocument()
   })
 
-  it('folds its keys into a Keys button, and back', async () => {
+  it('folds its keys from their rail, and brings them back from View, as the Player does', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'Hide the keys' }))
     expect(settingsStore.getState().keyboard.folded).toBe(true)
     expect(screen.queryByRole('button', { name: 'Hide the keys' })).not.toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Keys' }))
+    await user.click(screen.getByRole('button', { name: 'View' }))
+    await user.click(await screen.findByRole('switch', { name: 'Keys' }))
     expect(settingsStore.getState().keyboard.folded).toBe(false)
     expect(screen.getByRole('button', { name: 'Hide the keys' })).toBeInTheDocument()
   })
@@ -539,7 +540,8 @@ describe('the score editor', () => {
     // The caret's line under the title, in the bar.
     const title = await screen.findByRole('heading', { level: 1, name: 'Morning' })
     expect(title.parentElement).toContainElement(screen.getByRole('status'))
-    await user.click(await screen.findByRole('button', { name: 'Keys' }))
+    await user.click(screen.getByRole('button', { name: 'View' }))
+    await user.click(await screen.findByRole('switch', { name: 'Keys' }))
     expect(settingsStore.getState().keyboard.foldedLandscape).toBe(false)
     expect(settingsStore.getState().keyboard.folded).toBe(false)
     expect(screen.getByRole('button', { name: 'Hide the keys' })).toBeInTheDocument()

@@ -130,7 +130,8 @@ export function SheetLines({
       <section
         ref={box}
         aria-label={t('sheet.label')}
-        className="flex h-full flex-col overflow-y-auto overscroll-contain"
+        // Room to scroll the last line clear of what floats over the sheet's foot (`--float-room`).
+        className="flex h-full scroll-pb-(--float-room) flex-col overflow-y-auto overscroll-contain pb-(--float-room)"
         style={{ gap: LINE_GAP }}
       >
         {lines.map(line)}

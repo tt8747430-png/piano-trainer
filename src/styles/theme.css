@@ -614,13 +614,15 @@
 @utility player-screen {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
   grid-template-areas:
     'lead actions'
     'sheet sheet'
     'status status'
-    'dock dock'
     'keys keys';
+  /* The music's scroll room under the transport floating over its foot: room to scroll into, never a
+     row kept empty. */
+  --float-room: 5.5rem;
   & > [data-area='lead'] {
     grid-area: lead;
   }
@@ -636,31 +638,43 @@
   & > [data-area='status'] {
     grid-area: status;
   }
+  /* The transport floats over the sheet's foot (ADR 0061, 0081), taking no room of its own. */
   & > [data-area='dock'] {
-    grid-area: dock;
+    grid-area: sheet;
+    align-self: end;
+    justify-self: center;
+    z-index: 30;
+    margin-bottom: 0.5rem;
   }
   &[data-keys='top'] {
-    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
     grid-template-areas:
       'lead actions'
       'keys keys'
       'sheet sheet'
-      'status status'
-      'dock dock';
+      'status status';
   }
   @variant landscape-phone {
-    grid-template-columns: minmax(0, 1fr) auto auto auto;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     grid-template-rows: auto minmax(0, 1fr) auto;
     grid-template-areas:
-      'lead status actions dock'
-      'sheet sheet sheet dock'
-      'keys keys keys keys';
+      'lead status actions'
+      'sheet sheet sheet'
+      'keys keys keys';
+    --float-room: 0px;
+    /* Upright over the sheet's end, where a thumb holds a phone on its side. */
+    & > [data-area='dock'] {
+      align-self: center;
+      justify-self: end;
+      margin-bottom: 0;
+      margin-inline-end: 0.25rem;
+    }
     &[data-keys='top'] {
       grid-template-rows: auto auto minmax(0, 1fr);
       grid-template-areas:
-        'lead status actions dock'
-        'keys keys keys dock'
-        'sheet sheet sheet dock';
+        'lead status actions'
+        'keys keys keys'
+        'sheet sheet sheet';
     }
   }
 }

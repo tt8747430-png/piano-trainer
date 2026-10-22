@@ -37,9 +37,9 @@ const GAP = 8
  * the foot or under the bar. Over the sheet floats what works on it, above everything and never
  * moving it (ADR 0079): the dock (`EditorDock`), the Player's transport in shape and place, and the
  * palette, a card that hugs its keys, at the foot on a phone held upright and a tablet, beside the
- * sheet on a laptop and a phone on its side; folded, its row of tabs alone, under the dock or beside
- * it. The sheet keeps clear of them: it scrolls its last line above them, and its lines end short
- * of the palette beside it. What floats at the foot steps aside while the music is read (dragged,
+ * sheet on a laptop and a phone on its side; folded, its row of tabs alone, where the card was.
+ * Floating, they take no room of the sheet's: it only has room to scroll its last line above the
+ * dock (ADR 0081). What floats at the foot steps aside while the music is read (dragged,
  * scrolled, pinched) and comes back at a tap on the sheet. While a take records, its strip stands
  * where the dock was.
  */
@@ -54,23 +54,16 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
   const settings = useSettingsStoreApi()
   const palette = !useSettings(selectPaletteFolded)
   const setPalette = (open: boolean) => setPaletteFolded(settings, !open)
-  // What floats over the sheet, measured: the sheet keeps its music clear of it.
+  // What floats over the sheet's foot, measured: the sheet has room to scroll its last line above it.
   const sheet = useRef<HTMLDivElement>(null)
   const foot = useRef<HTMLDivElement>(null)
-  const beside = useRef<HTMLDivElement>(null)
   const { height } = useElementSize(sheet)
   const { height: below } = useElementSize(foot)
-  const { width: across } = useElementSize(beside)
   // What floats at the foot steps aside while the music is read; a tap on the sheet brings it back.
   const floating = useHiddenWhileReading()
   // A take's strip, with its Stop, never steps aside.
   const footShown = floating.shown || !idle
-  const besides = palette && side ? across + GAP : 0
   const left = paletteSide === 'left'
-  const clear = {
-    paddingInlineStart: left ? besides : 0,
-    paddingInlineEnd: left ? 0 : besides,
-  }
   const tools = (
     <EditorTools side={side} folded={!palette} onFold={(folded) => setPalette(!folded)} />
   )
@@ -89,7 +82,6 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
             ref={sheet}
             data-area="sheet"
             className="min-h-0 overflow-clip"
-            style={{ ...clear, paddingBottom: below }}
             {...floating.reading}
             onClickCapture={floating.show}
           >
@@ -102,21 +94,21 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
             ref={sheet}
             data-area="sheet"
             className="min-h-0 overflow-y-auto overscroll-contain"
-            style={clear}
             {...floating.reading}
             onClickCapture={floating.show}
           >
-            <EditorSheet room={onSide ? Math.max(0, height - below) : undefined} />
+            <EditorSheet room={onSide ? height : undefined} />
             {/* Room past the last line, so it scrolls clear of what floats over the sheet's foot. */}
             <div aria-hidden style={{ height: below + GAP }} />
           </div>
         )}
         <div data-area="float">
-          {side && palette ? (
+          {side ? (
+            // Beside the sheet, over its edge: folded, its row of tabs stays where the card's was.
             <div
-              ref={beside}
               className={cn(
-                'pointer-events-auto absolute top-0 flex max-h-full w-84 flex-col landscape-phone:w-70 xl:w-96',
+                'pointer-events-auto absolute top-0 flex max-h-full flex-col',
+                palette ? 'w-84 landscape-phone:w-70 xl:w-96' : 'w-auto',
                 left ? 'left-0' : 'right-0',
               )}
             >
@@ -127,22 +119,10 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
             ref={foot}
             data-hidden={footShown ? undefined : true}
             inert={!footShown}
-            className="absolute inset-x-0 bottom-0 flex flex-col gap-2 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none"
-            style={clear}
+            className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-2 px-1 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none"
           >
-            <div className="flex items-end gap-2 px-1">
-              <div className="flex-1" />
-              <div className="pointer-events-auto flex justify-center">
-                {idle ? <EditorDock /> : <RecordingStrip />}
-              </div>
-              <div className="flex min-w-0 flex-1 justify-end">
-                {/* Beside the sheet, folded, its row of tabs waits by the dock. */}
-                {side && !palette ? <div className="pointer-events-auto">{tools}</div> : null}
-              </div>
-            </div>
-            {side ? null : (
-              <div className="pointer-events-auto mx-auto w-full max-w-xl">{tools}</div>
-            )}
+            <div className="pointer-events-auto">{idle ? <EditorDock /> : <RecordingStrip />}</div>
+            {side ? null : <div className="pointer-events-auto w-full max-w-xl">{tools}</div>}
           </div>
         </div>
         <EditorKeyboard />

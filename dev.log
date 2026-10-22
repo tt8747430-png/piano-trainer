@@ -1,0 +1,9 @@
+8:44:37 PM [vite] (client) Re-optimizing dependencies because vite config has changed
+
+  VITE v8.3.4  ready in 922 ms
+
+  ➜  Local:   http://localhost:5210/
+  ➜  Network: use --host to expose
+8:44:38 PM [vite] (client) [optimizer] scanning dependencies...
+8:44:42 PM [vite] (client) [optimizer] bundling dependencies...
+8:46:50 PM [vite] (client) hmr update /src/styles/index.css
