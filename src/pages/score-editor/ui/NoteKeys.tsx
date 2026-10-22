@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp } from 'lucide-react'
+import { ArrowDown, ArrowLeftRight, ArrowUp } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { NOTE_VALUES, takesDot } from '@/features/score-editor'
 import { isCompound } from '@/shared/lib/music'
@@ -117,20 +117,69 @@ function StackedNotes() {
   )
 }
 
-/** A move in pitch drawn as its arrow over what it moves by, in words: a half step, a step, an octave. */
-function Move({ up, by }: { up: boolean; by: string }) {
+/** A sharp, drawn as the staff draws it. */
+function Sharp() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-6" fill="currentColor">
+      <rect x="8.5" y="3" width="1.4" height="18" />
+      <rect x="14.1" y="2" width="1.4" height="18" />
+      <path d="M5 9.6 19 6.6v2.8L5 12.4zM5 15.6l14-3v2.8L5 18.4z" />
+    </svg>
+  )
+}
+
+/** A flat, drawn as the staff draws it. */
+function Flat() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-6" fill="currentColor">
+      <rect x="7" y="2" width="1.6" height="20" />
+      <path d="M8.6 21.5c4.5-2.6 9-5.4 8.3-8.6-.6-2.4-4-2.5-8.3.6v1.9c3-2.2 5.3-2.4 5.6-.9.4 1.8-2.3 4-5.6 6z" />
+    </svg>
+  )
+}
+
+/** A move in pitch, drawn: its arrow beside a sharp or a flat, two notes a step apart, or 8va. */
+function Move({ up, by }: { up: boolean; by: 'half' | 'step' | 'octave' }) {
   const Arrow = up ? ArrowUp : ArrowDown
   return (
-    <span aria-hidden className="flex flex-col items-center gap-0.5 leading-none">
-      <Arrow className="size-5" />
-      <span className="text-xs font-semibold tracking-tight">{by}</span>
+    <span aria-hidden className="flex items-center gap-0.5 leading-none">
+      <Arrow className="size-4" strokeWidth={2.5} />
+      {by === 'half' ? (
+        up ? (
+          <Sharp />
+        ) : (
+          <Flat />
+        )
+      ) : by === 'step' ? (
+        <svg viewBox="0 0 24 24" className="size-6" fill="currentColor">
+          <ellipse
+            cx="7"
+            cy={up ? 16 : 9}
+            rx="4"
+            ry="2.8"
+            transform={`rotate(-20 7 ${up ? 16 : 9})`}
+          />
+          <ellipse
+            cx="17"
+            cy={up ? 9 : 16}
+            rx="4"
+            ry="2.8"
+            transform={`rotate(-20 17 ${up ? 9 : 16})`}
+          />
+        </svg>
+      ) : (
+        <span className="font-display text-base leading-none font-bold italic">
+          8<sup className="text-[0.6em]">{up ? 'va' : 'vb'}</sup>
+        </span>
+      )}
     </span>
   )
 }
 
 /**
  * The Pitch keypad, each pair up then down: a half step (sharps up, flats down), a step of the key, an
- * octave; and Respell, the same keys written the other way (G♯ as A♭).
+ * octave; and Respell, the same keys written the other way (G♯ as A♭). Each key its picture alone,
+ * named in its tooltip.
  */
 export function PitchKeys() {
   const { t } = useTranslation('editor')
@@ -138,10 +187,10 @@ export function PitchKeys() {
   const shift = (semitones: number) => actions.dispatch({ type: 'shift', semitones })
   const step = (steps: number) => actions.dispatch({ type: 'step', steps })
   const pairs = [
-    { by: t('pitch.halfStep'), up: t('up'), down: t('down'), move: shift, size: 1 },
-    { by: t('pitch.step'), up: t('stepUp'), down: t('stepDown'), move: step, size: 1 },
-    { by: t('pitch.octave'), up: t('octaveUp'), down: t('octaveDown'), move: shift, size: 12 },
-  ]
+    { by: 'half', up: t('up'), down: t('down'), move: shift, size: 1 },
+    { by: 'step', up: t('stepUp'), down: t('stepDown'), move: step, size: 1 },
+    { by: 'octave', up: t('octaveUp'), down: t('octaveDown'), move: shift, size: 12 },
+  ] as const
   return (
     <>
       {pairs.flatMap(({ by, up, down, move, size }) => [
@@ -157,9 +206,10 @@ export function PitchKeys() {
         span="wide"
         onClick={() => actions.dispatch({ type: 'respell' })}
       >
-        <span aria-hidden className="flex flex-col items-center gap-0.5 leading-none">
-          <span className="text-xl font-semibold tracking-tight">♯/♭</span>
-          <span className="text-xs font-semibold tracking-tight">{t('pitch.respell')}</span>
+        <span aria-hidden className="flex items-center gap-1">
+          <Sharp />
+          <ArrowLeftRight className="size-5" strokeWidth={2.5} />
+          <Flat />
         </span>
       </ToolKey>
     </>

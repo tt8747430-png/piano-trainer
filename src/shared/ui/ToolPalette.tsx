@@ -85,19 +85,20 @@ export function ToolPaletteTabs({
   )
 }
 
-/** One kind of tools: its icon, named by its label; out of reach for what the keys write, greyed. */
+/**
+ * One kind of tools: its picture alone, in one 24 px box so the row stands level (a notation app's
+ * palette, Sibelius's), named by its label for a screen reader and in a tooltip; out of reach for
+ * what the keys write, greyed.
+ */
 export function ToolPaletteTab({
   value,
   label,
-  caption,
   disabled = false,
   className,
   children,
 }: {
   value: string
   label: string
-  /** A short word under its picture: every tab's picture in one box, so the row stands level. */
-  caption?: string
   disabled?: boolean
   className?: string
   children: ReactNode
@@ -109,22 +110,11 @@ export function ToolPaletteTab({
       title={label}
       disabled={disabled}
       className={cn(
-        'grid min-h-11 min-w-9 flex-1 shrink-0 place-items-center rounded-xl text-xl leading-none text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground aria-selected:bg-selected aria-selected:text-selected-foreground data-disabled:opacity-35 data-disabled:hover:text-muted-foreground landscape-phone:min-h-9 [&_svg]:size-5',
+        'grid h-11 min-w-11 flex-1 shrink-0 place-items-center rounded-xl text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground aria-selected:bg-selected aria-selected:text-selected-foreground data-disabled:opacity-35 data-disabled:hover:text-muted-foreground landscape-phone:h-9 [&_svg]:size-6',
         className,
       )}
     >
-      {caption === undefined ? (
-        children
-      ) : (
-        <span className="flex flex-col items-center gap-0.5">
-          <span className="grid size-6 place-items-center overflow-hidden leading-none">
-            {children}
-          </span>
-          <span className="max-w-full truncate text-xs leading-none font-semibold landscape-phone:sr-only">
-            {caption}
-          </span>
-        </span>
-      )}
+      {children}
     </Tabs.Tab>
   )
 }

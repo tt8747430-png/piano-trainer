@@ -28,20 +28,75 @@ import { HandKeys } from './HandKeys'
 import { ArticulationKeys, DynamicKeys } from './MarkKeys'
 import { NoteKeys, PitchKeys } from './NoteKeys'
 
-/** Each tab's picture: the music font's where a symbol says it. */
+/** A tab's picture: drawn in one 24-unit box, so every tab's sits level whatever it shows. */
+function Glyph({ children }: { children: ReactNode }) {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" fill="currentColor">
+      {children}
+    </svg>
+  )
+}
+
+/** A word drawn as a picture, in the box's middle: a dynamic, a numeral. */
+function Word({ text, italic = false }: { text: string; italic?: boolean }) {
+  return (
+    <text
+      x="12"
+      y="12.5"
+      textAnchor="middle"
+      dominantBaseline="middle"
+      fontSize={text.length > 2 ? 9 : 13}
+      fontWeight="700"
+      fontStyle={italic ? 'italic' : 'normal'}
+      fontFamily="var(--font-display)"
+    >
+      {text}
+    </text>
+  )
+}
+
+/** Each tab's picture: a note, a sharp, an accent, a dynamic, a hand. */
 const TAB_ICONS: Readonly<Record<PaletteTab, ReactNode>> = {
-  notes: <span className="font-music text-xl">𝅘𝅥𝅮</span>,
-  pitch: <span className="font-display text-2xl font-semibold">♯</span>,
-  articulations: <span className="text-lg font-bold">&gt;</span>,
-  dynamics: <span className="font-serif text-base font-bold italic">mf</span>,
-  hand: <Hand />,
+  notes: (
+    <Glyph>
+      <ellipse cx="9" cy="17.5" rx="4.2" ry="3" transform="rotate(-20 9 17.5)" />
+      <rect x="12.1" y="3" width="1.6" height="14.5" />
+      <path d="M13.7 3c0 3 5 4 4.5 9-.5-2.5-2.5-3.6-4.5-3.8z" />
+    </Glyph>
+  ),
+  pitch: (
+    <Glyph>
+      <rect x="8.5" y="3" width="1.4" height="18" />
+      <rect x="14.1" y="2" width="1.4" height="18" />
+      <path d="M5 9.6 19 6.6v2.8L5 12.4zM5 15.6l14-3v2.8L5 18.4z" />
+    </Glyph>
+  ),
+  articulations: (
+    <Glyph>
+      <path d="M4 7.2 20 12 4 16.8v-2.4L14.6 12 4 9.6z" />
+    </Glyph>
+  ),
+  dynamics: (
+    <Glyph>
+      <Word text="mf" italic />
+    </Glyph>
+  ),
+  hand: <Hand aria-hidden />,
 }
 
 /** Each way of writing a chord, drawn: the key's numerals, a chord's parts, the keypad. */
 const CHORD_TAB_ICONS: Readonly<Record<ChordTab, ReactNode>> = {
-  key: <span className="font-display text-base font-bold tracking-tight">I·V</span>,
-  build: <span className="font-display text-base font-bold tracking-tight">C/E</span>,
-  type: <Keyboard />,
+  key: (
+    <Glyph>
+      <Word text="I·V" />
+    </Glyph>
+  ),
+  build: (
+    <Glyph>
+      <Word text="C/E" />
+    </Glyph>
+  ),
+  type: <Keyboard aria-hidden />,
 }
 
 /** Each tab's keys. */
@@ -151,12 +206,9 @@ export function EditorTools({
                 key={each}
                 value={each}
                 label={t(`chord.tab.${each}`)}
-                caption={t(`chord.tab.${each}`)}
-                className="min-w-7 shrink"
+                className="min-w-9 shrink"
               >
-                <span aria-hidden className="contents">
-                  {CHORD_TAB_ICONS[each]}
-                </span>
+                {CHORD_TAB_ICONS[each]}
               </ToolPaletteTab>
             ))}
           </ToolPaletteTabs>
@@ -186,13 +238,10 @@ export function EditorTools({
               key={each}
               value={each}
               label={t(`palette.${each}`)}
-              caption={t(`palette.caption.${each}`)}
               disabled={!tabOpen(each, layer)}
-              className="min-w-7 shrink"
+              className="min-w-9 shrink"
             >
-              <span aria-hidden className="contents">
-                {TAB_ICONS[each]}
-              </span>
+              {TAB_ICONS[each]}
             </ToolPaletteTab>
           ))}
         </ToolPaletteTabs>

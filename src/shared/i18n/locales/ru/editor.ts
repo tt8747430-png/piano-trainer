@@ -21,13 +21,6 @@ export const editor: LocaleResources['editor'] = {
     hand: 'Аппликатура',
     chords: 'Названия аккордов',
     bars: 'Такты, строки и части',
-    caption: {
-      notes: 'Ноты',
-      pitch: 'Высота',
-      articulations: 'Штрихи',
-      dynamics: 'Динамика',
-      hand: 'Пальцы',
-    },
   },
   view: 'Вид',
   viewMenu: {
@@ -202,7 +195,6 @@ export const editor: LocaleResources['editor'] = {
   chordMode: 'Аккорд',
   deleteNotes: 'Удалить',
   respell: 'Другое написание',
-  pitch: { halfStep: 'Полутон', step: 'Ступень', octave: 'Октава', respell: 'Энгарм.' },
   up: 'На полутон выше',
   down: 'На полутон ниже',
   octaveUp: 'На октаву выше',

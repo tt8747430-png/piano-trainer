@@ -16,8 +16,9 @@ Delete left, Flat's bottom toolbars); MuseScore plays notes under a slur joined.
   palette's foot.
 - **The Notes tab** holds the values, dots, Triplet, Rest, Tie and Chord (stacked noteheads); **Pitch** holds a half
   step, a step of the key and an octave up and down, each key its arrow over the word, and Respell.
-- **Tabs** wear a picture in one box and a word under it (`ToolPaletteTab`'s `caption`), level in one row; the + menu's
-  tabs take the same box. Fingering is a hand.
+- **Tabs and keys** wear a picture alone, as Sibelius's palette does: each tab's drawn in one 24-unit SVG box so the
+  row stands level, its name in its tooltip and for a screen reader. Fingering is a hand; Pitch's keys an arrow
+  beside a sharp or a flat (a half step), two stepping notes (a step of the key) or 8va (an octave).
 - **The + menu's Staves** lists the instruments in one grid in score order.
 - **Joined notes** (`joinedNotes`): under a slur, and from legato until leggiero, in their hand, each held to the next
   (103 % of its length; others 95 %).
