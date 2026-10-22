@@ -1,4 +1,4 @@
-export { type ScoreLayout } from './engrave'
+export { type ScoreLayout } from './layout'
 export { xAtTick } from './layout'
 export { ScoreView } from './ScoreView'
 export { staffHeight } from './size'

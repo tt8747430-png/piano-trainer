@@ -1,20 +1,39 @@
-@import '@vexflow-fonts/bravura/index.css';
-
-/* VexFlow draws in currentColor (engrave.ts): the notes take the ink, the staff's lines and barlines
-   the control line. The tokens themselves: theme.css maps them to utilities `inline`, so no
+/* Verovio draws in currentColor (ADR 0078): the notes take the ink, the staff's lines and barlines the
+   control line. The tokens themselves: theme.css maps them to utilities `inline`, so no
    `--color-*` variable exists at runtime. */
 [data-slot='score'] {
   color: var(--foreground);
 }
-[data-slot='score'] :is(.vf-stave, .vf-stavebarline, .vf-staveconnector) {
+[data-slot='score'] svg.definition-scale {
+  color: inherit;
+}
+[data-slot='score'] :is(g.staff > path, g.barLine, g.ledgerLines) {
   color: var(--input);
 }
+/* The bars' numbers are the sheet's own labels. */
+[data-slot='score'] g.mNum {
+  display: none;
+}
 /* The staff of the hand not heard or practised, in soft ink, without engraving again. */
-[data-slot='score'][data-muted='treble'] .vf-staff-treble,
-[data-slot='score'][data-muted='bass'] .vf-staff-bass {
+[data-slot='score'][data-muted='treble'] g.staff[data-staff='treble'],
+[data-slot='score'][data-muted='bass'] g.staff[data-staff='bass'] {
   color: var(--muted-foreground);
 }
 /* The notes chosen in the score editor: the focus colour, as a notation app marks a selection. */
-[data-slot='score'] .vf-selected {
+[data-slot='score'] g.note-chosen {
   color: var(--ring);
+}
+/* A head's note name (Named notes), haloed by the page so it reads on a filled head. */
+[data-slot='score'] text.note-name {
+  font: 600 190px var(--font-sans);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  fill: currentColor;
+  paint-order: stroke;
+  stroke: var(--background);
+  stroke-width: 60px;
+}
+/* Chord symbols and words in the app's faces. */
+[data-slot='score'] :is(g.harm, g.dir, g.tempo) text {
+  font-family: var(--font-display);
 }

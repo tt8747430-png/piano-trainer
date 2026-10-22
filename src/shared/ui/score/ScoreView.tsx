@@ -2,10 +2,10 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Tick, TimeSignature } from '@/shared/lib/music'
 import type { Score, StaffId } from '@/shared/lib/notation'
-import { engraveInSteps, type ScoreLayout } from './engrave'
-import { loadMusicFonts } from './music-font'
 import { drawnStaves } from './drawn-staves'
+import type { ScoreLayout } from './layout'
 import { staffHeight } from './size'
+import { drawScore } from './verovio/draw'
 import './score.css'
 
 type Engraving =
@@ -14,8 +14,8 @@ type Engraving =
   | { readonly status: 'error' }
 
 /**
- * A score engraved on one line of its staves (spec §2.5; the grand staff, the tune's over it), or on
- * some or one of them, once the music font is in. What lies over it (labels, a cursor, the loop) is its children, given the engraving's
+ * A score engraved by Verovio (ADR 0078) on one line of its staves (spec §2.5; the grand staff, the
+ * tune's over it), or on some or one of them. What lies over it (labels, a cursor, the loop) is its children, given the engraving's
  * layout. The staff of `muted` is soft ink.
  */
 export function ScoreView({
@@ -59,32 +59,27 @@ export function ScoreView({
   // As one string, so a new list of the same staves engraves nothing again.
   const shownKey = drawn.join(' ')
 
-  // VexFlow draws into the DOM, outside React, a few measures at a time; the font must be in before
-  // it measures anything. What was drawn stays until the new drawing is whole.
+  // Verovio draws off the page's thread; what was drawn stays until the new drawing is whole.
   useEffect(() => {
     const element = host.current
     if (!element) return
     const stopped = new AbortController()
-    loadMusicFonts()
-      .then(() =>
-        engraveInSteps(
-          score,
-          element,
-          {
-            scale,
-            fingers,
-            names,
-            staff,
-            staves: shownKey.split(' ') as StaffId[],
-            timeBefore:
-              beforeCount === undefined || beforeUnit === undefined
-                ? undefined
-                : { count: beforeCount, unit: beforeUnit },
-            fill,
-          },
-          { signal: stopped.signal },
-        ),
-      )
+    drawScore(
+      score,
+      element,
+      {
+        scale,
+        fingers,
+        names,
+        staves: shownKey.split(' ') as StaffId[],
+        timeBefore:
+          beforeCount === undefined || beforeUnit === undefined
+            ? undefined
+            : { count: beforeCount, unit: beforeUnit },
+        fill,
+      },
+      stopped.signal,
+    )
       .then((layout) => {
         if (layout && !stopped.signal.aborted) setEngraving({ status: 'ready', layout })
       })
@@ -92,7 +87,7 @@ export function ScoreView({
         if (!stopped.signal.aborted) setEngraving({ status: 'error' })
       })
     return () => stopped.abort()
-  }, [score, scale, fingers, names, staff, shownKey, beforeCount, beforeUnit, fill])
+  }, [score, scale, fingers, names, shownKey, beforeCount, beforeUnit, fill])
 
   // The chosen notes are marked on the engraving as it is, so moving the caret engraves nothing again.
   const selectedStaff = selected?.staff
@@ -108,15 +103,16 @@ export function ScoreView({
       selectedTo === undefined
     )
       return
+    // Notes are named `n-<staff>-<tick>-<i>` (ADR 0078).
     const marked = [
-      ...element.querySelectorAll<SVGElement>(`[data-staff="${selectedStaff}"][data-tick]`),
+      ...element.querySelectorAll<SVGElement>(`g.note[id^="n-${selectedStaff}-"]`),
     ].filter((each) => {
-      const tick = Number(each.dataset.tick)
+      const tick = Number(each.id.split('-')[2])
       return tick >= selectedFrom && tick < selectedTo
     })
-    for (const each of marked) each.classList.add('vf-selected')
+    for (const each of marked) each.classList.add('note-chosen')
     return () => {
-      for (const each of marked) each.classList.remove('vf-selected')
+      for (const each of marked) each.classList.remove('note-chosen')
     }
   }, [engraving, selectedStaff, selectedFrom, selectedTo])
 

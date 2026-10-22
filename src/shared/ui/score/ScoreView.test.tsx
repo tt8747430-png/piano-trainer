@@ -1,8 +1,8 @@
 import { render, screen, waitFor } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { midi, note } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
-import { stubFonts } from '@/shared/test/fonts'
+import * as engine from './verovio/engine'
 import { ScoreView } from './ScoreView'
 
 const score = notate({
@@ -17,7 +17,7 @@ const score = notate({
 })
 
 describe('ScoreView', () => {
-  it('engraves once the music font is in, and hands its layout to what lies over it', async () => {
+  it('engraves, and hands its layout to what lies over it', async () => {
     render(
       <ScoreView score={score} scale={1} fingers={false}>
         {(layout) => <p>Bars: {layout.measures.length}</p>}
@@ -36,9 +36,9 @@ describe('ScoreView', () => {
         selected={{ staff: 'treble', from: 0, to: 1 }}
       />,
     )
-    await waitFor(() => expect(document.querySelector('.vf-selected')).toBeInTheDocument())
+    await waitFor(() => expect(document.querySelector('.note-chosen')).toBeInTheDocument())
     const engraved = document.querySelector('[data-slot="score"] svg')
-    expect(document.querySelector('.vf-selected')).toHaveAttribute('data-tick', '0')
+    expect(document.querySelector('.note-chosen')?.id).toMatch(/^n-treble-0-/)
     rerender(
       <ScoreView
         score={score}
@@ -47,7 +47,7 @@ describe('ScoreView', () => {
         selected={{ staff: 'bass', from: 0, to: 1 }}
       />,
     )
-    await waitFor(() => expect(document.querySelector('.vf-selected')).not.toBeInTheDocument())
+    await waitFor(() => expect(document.querySelector('.note-chosen')).not.toBeInTheDocument())
     expect(document.querySelector('[data-slot="score"] svg')).toBe(engraved)
     // A range: every note starting in it.
     rerender(
@@ -58,7 +58,7 @@ describe('ScoreView', () => {
         selected={{ staff: 'treble', from: 0, to: 10_000 }}
       />,
     )
-    await waitFor(() => expect(document.querySelectorAll('.vf-selected').length).toBeGreaterThan(1))
+    await waitFor(() => expect(document.querySelectorAll('.note-chosen').length).toBeGreaterThan(1))
   })
 
   it('keeps what lies over it in its own layers, under what the page pins', async () => {
@@ -77,8 +77,8 @@ describe('ScoreView', () => {
     expect(document.querySelector('[data-slot="score"]')).toHaveAttribute('data-muted', 'bass')
   })
 
-  it('says so when the music font does not load', async () => {
-    stubFonts({ loads: false })
+  it('says so when the music cannot be engraved', async () => {
+    vi.spyOn(engine, 'engrave').mockRejectedValueOnce(new Error('unreadable'))
     render(<ScoreView score={score} scale={1} fingers={false} />)
     expect(await screen.findByText('The music can’t be shown.')).toBeInTheDocument()
   })

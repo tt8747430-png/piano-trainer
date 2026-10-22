@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { DEFAULT_INSTRUMENT } from '@/shared/lib/music'
 import { EXTRA_VOICES } from '@/shared/lib/notation'
-import type { ScoreLayout } from './engrave'
+import type { ScoreLayout } from './layout'
 
 /** A sung staff's name stands this far over its top line. */
 const OVER = 16

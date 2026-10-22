@@ -1,6 +1,6 @@
 import type { StaffId } from '@/shared/lib/notation'
 import type { Tick } from '@/shared/lib/music'
-import type { ScoreLayout } from '../engrave'
+import type { ScoreLayout } from '../layout'
 
 /** The numbers in a `translate(x, y)` or a path's `M x y L x y`. */
 const numbers = (text: string | null) => (text?.match(/-?\d+(?:\.\d+)?/g) ?? []).map(Number)

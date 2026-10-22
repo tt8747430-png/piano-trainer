@@ -124,8 +124,8 @@ describe('ScoreSheet', () => {
 
   it('marks the notes at the caret on its staff as the ones chosen', async () => {
     sheet('melody')
-    await waitFor(() => expect(document.querySelector('.vf-selected')).toBeInTheDocument())
-    expect(document.querySelector('.vf-selected')).toHaveAttribute('data-staff', 'melody')
+    await waitFor(() => expect(document.querySelector('.note-chosen')).toBeInTheDocument())
+    expect(document.querySelector('.note-chosen')?.id).toMatch(/^n-melody-/)
   })
 
   it('opens where it is with the caret’s line in sight, and brings a line the caret moves onto into view', async () => {
