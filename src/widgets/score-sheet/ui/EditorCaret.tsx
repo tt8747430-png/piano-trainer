@@ -104,12 +104,12 @@ export function EditorCaret({
       ref={caret}
       aria-hidden
       data-slot="caret"
-      className="absolute z-0 rounded-md bg-secondary transition-transform duration-200 ease-out"
+      // Slid by `left`, not a transform, so the pages round it stay sharp when zoomed (SheetCursor).
+      className="absolute z-0 rounded-md bg-secondary transition-[left] duration-200 ease-out"
       style={{
         ...box,
-        left: 0,
+        left,
         width: Math.max(LEAST, right - left),
-        transform: `translateX(${left}px)`,
       }}
     />
   )

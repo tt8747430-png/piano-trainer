@@ -19,11 +19,13 @@ export function SheetCursor({
     <div
       ref={ref}
       aria-hidden
-      className="absolute left-0 z-0 w-7 rounded-md bg-secondary transition-transform duration-200 ease-out"
+      // It slides by `left`, never a transform: a transform would make the pages round it one picture,
+      // which Safari scales blurry when they are zoomed.
+      className="absolute z-0 w-7 rounded-md bg-secondary transition-[left] duration-200 ease-out"
       style={{
         top: layout.staffTop - REACH,
         height: layout.staffBottom - layout.staffTop + 2 * REACH,
-        transform: `translateX(${x - LEAD}px)`,
+        left: x - LEAD,
       }}
     />
   )
