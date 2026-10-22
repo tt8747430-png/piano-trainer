@@ -69,6 +69,7 @@ export {
   typingLetters,
 } from './typing-keys'
 export { useGoBack } from './use-go-back'
+export { READ_DISTANCE, useHiddenWhileReading } from './use-hidden-while-reading'
 export { useShownOnScrollUp } from './use-shown-on-scroll-up'
 export { LANDSCAPE_PHONE, useMediaQuery } from './use-media-query'
 export { useWakeLock } from './use-wake-lock'

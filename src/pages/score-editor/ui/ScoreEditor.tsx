@@ -7,7 +7,13 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { setPaletteFolded } from '@/features/set-preference'
-import { cn, LANDSCAPE_PHONE, useElementSize, useMediaQuery } from '@/shared/lib'
+import {
+  cn,
+  LANDSCAPE_PHONE,
+  useElementSize,
+  useHiddenWhileReading,
+  useMediaQuery,
+} from '@/shared/lib'
 import { ScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
 import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
@@ -33,7 +39,9 @@ const GAP = 8
  * palette, a card that hugs its keys, at the foot on a phone held upright and a tablet, beside the
  * sheet on a laptop and a phone on its side; folded, its row of tabs alone, under the dock or beside
  * it. The sheet keeps clear of them: it scrolls its last line above them, and its lines end short
- * of the palette beside it. While a take records, its strip stands where the dock was.
+ * of the palette beside it. What floats at the foot steps aside while the music is read (dragged,
+ * scrolled, pinched) and comes back at a tap on the sheet. While a take records, its strip stands
+ * where the dock was.
  */
 export function ScoreEditor({ target }: { target: EditorTarget }) {
   const editor = useScoreEditor(target)
@@ -53,6 +61,10 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
   const { height } = useElementSize(sheet)
   const { height: below } = useElementSize(foot)
   const { width: across } = useElementSize(beside)
+  // What floats at the foot steps aside while the music is read; a tap on the sheet brings it back.
+  const floating = useHiddenWhileReading()
+  // A take's strip, with its Stop, never steps aside.
+  const footShown = floating.shown || !idle
   const besides = palette && side ? across + GAP : 0
   const left = paletteSide === 'left'
   const clear = {
@@ -78,6 +90,8 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
             data-area="sheet"
             className="min-h-0 overflow-clip"
             style={{ ...clear, paddingBottom: below }}
+            {...floating.reading}
+            onClickCapture={floating.show}
           >
             <div className="h-full overflow-clip rounded-2xl">
               <EditorSheet />
@@ -89,6 +103,8 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
             data-area="sheet"
             className="min-h-0 overflow-y-auto overscroll-contain"
             style={clear}
+            {...floating.reading}
+            onClickCapture={floating.show}
           >
             <EditorSheet room={onSide ? Math.max(0, height - below) : undefined} />
             {/* Room past the last line, so it scrolls clear of what floats over the sheet's foot. */}
@@ -107,7 +123,13 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
               {tools}
             </div>
           ) : null}
-          <div ref={foot} className="absolute inset-x-0 bottom-0 flex flex-col gap-2" style={clear}>
+          <div
+            ref={foot}
+            data-hidden={footShown ? undefined : true}
+            inert={!footShown}
+            className="absolute inset-x-0 bottom-0 flex flex-col gap-2 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none"
+            style={clear}
+          >
             <div className="flex items-end gap-2 px-1">
               <div className="flex-1" />
               <div className="pointer-events-auto flex justify-center">
