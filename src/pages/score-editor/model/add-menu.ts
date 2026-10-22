@@ -22,9 +22,19 @@ import type { TimedMusic, TimedNote } from '@/shared/lib/notation'
  * What the + menu adds to the score, as Sibelius's does, each kind a tab of tiles: bars, lines and
  * sections; barlines (repeats, endings, a double or final barline, the signs and jumps); lines over
  * notes (slurs, hairpins, octave lines); text (expressions, the tempo, the pedal); the key signature;
- * the time signature; and the staves (the tune's, the chord names' row).
+ * a hand's fingers and its bar written out; the key signature; the time signature; and the staves (the
+ * tune's, the chord names' row, the instruments, the clefs).
  */
-export const ADD_TABS = ['bars', 'barlines', 'lines', 'text', 'key', 'time', 'staves'] as const
+export const ADD_TABS = [
+  'bars',
+  'barlines',
+  'lines',
+  'text',
+  'fingers',
+  'key',
+  'time',
+  'staves',
+] as const
 export type AddTab = (typeof ADD_TABS)[number]
 
 /** Sharps first, fewest first, then flats: a signature's place in a chooser, as a score's index lists them. */

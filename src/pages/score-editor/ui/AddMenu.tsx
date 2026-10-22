@@ -1,12 +1,13 @@
 import { Tabs } from '@base-ui/react/tabs'
 import {
+  Bookmark,
   ClipboardPaste,
   Copy,
-  Heading,
+  Hand,
   Merge,
-  Minus,
   Plus,
   Scissors,
+  Trash2,
   WrapText,
   type LucideIcon,
 } from 'lucide-react'
@@ -18,6 +19,7 @@ import {
   clefAt,
   JUMP_CHOICES,
   notesAt,
+  isHandLayer,
   rowShown,
   type BarEdit,
   type BarMarkChoice,
@@ -58,6 +60,7 @@ import {
   type AddTab,
 } from '../model/add-menu'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { HandKeys } from './HandKeys'
 
 /** Each tab's picture, as the tiles under it draw their kind. */
 const TAB_ICONS: Readonly<Record<AddTab, ReactNode>> = {
@@ -75,6 +78,7 @@ const TAB_ICONS: Readonly<Record<AddTab, ReactNode>> = {
     </svg>
   ),
   text: <span className="font-serif text-xl leading-none italic">dol.</span>,
+  fingers: <Hand aria-hidden className="size-5" />,
   key: <span className="font-music text-3xl leading-none">♯♭</span>,
   time: (
     <span className="font-display text-base leading-[0.8] font-bold">
@@ -93,24 +97,30 @@ const PEDAL_LABEL = {
 /** The bar edits, each with its picture. */
 const BAR_TILES: readonly (readonly [BarEdit, LucideIcon])[] = [
   ['insert', Plus],
-  ['delete', Minus],
+  ['delete', Trash2],
   ['newLine', WrapText],
   ['joinLine', Merge],
-  ['newSection', Heading],
+  ['newSection', Bookmark],
   ['copy', Copy],
   ['cut', Scissors],
   ['paste', ClipboardPaste],
 ]
 
-/** One thing to add: its picture over its name, as Sibelius's tiles are; pressed where it is already so. */
+/**
+ * One thing to add: its picture over its name, as Sibelius's tiles are, compact; pressed where it is
+ * already so. Its name is `label`, or `caption` under the picture where the picture says the rest (an
+ * expression's word over what it asks).
+ */
 function Tile({
   label,
+  caption = label,
   pressed,
   disabled = false,
   onClick,
   children,
 }: {
   label: string
+  caption?: string
   pressed?: boolean
   disabled?: boolean
   onClick: () => void
@@ -119,15 +129,19 @@ function Tile({
   return (
     <button
       type="button"
+      aria-label={label}
+      title={label}
       aria-pressed={pressed}
       disabled={disabled}
       onClick={onClick}
-      className="flex min-w-0 flex-col items-center gap-1 overflow-hidden rounded-2xl border border-border bg-card p-2 text-card-foreground transition-colors hover:bg-chosen aria-pressed:border-selected aria-pressed:bg-selected/10 disabled:opacity-35"
+      className="flex min-w-0 flex-col items-center gap-0.5 overflow-hidden rounded-xl border border-border bg-card px-1.5 pt-1 pb-1.5 text-card-foreground transition-colors hover:bg-chosen aria-pressed:border-selected aria-pressed:bg-selected/10 disabled:opacity-35"
     >
-      <span aria-hidden className="grid h-28 w-full place-items-center overflow-hidden">
+      <span aria-hidden className="grid h-16 w-full place-items-center overflow-hidden">
         {children}
       </span>
-      <span className="line-clamp-2 w-full text-center text-sm leading-tight">{label}</span>
+      <span aria-hidden className="w-full truncate text-center text-xs leading-tight">
+        {caption}
+      </span>
     </button>
   )
 }
@@ -161,7 +175,7 @@ function Engraved({
       <LazyScoreView
         score={score}
         staff={grand ? undefined : staff}
-        scale={grand ? 0.5 : 0.72}
+        scale={grand ? 0.42 : 0.56}
         timeBefore={noTime ? score.measures[0]?.time : undefined}
       />
     </div>
@@ -173,7 +187,7 @@ function Tiles({ heading, children }: { heading?: string; children: ReactNode })
   return (
     <section className="flex flex-col gap-2" aria-label={heading}>
       {heading ? <h3 className="text-sm font-semibold text-muted-foreground">{heading}</h3> : null}
-      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">{children}</div>
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] gap-1.5">{children}</div>
     </section>
   )
 }
@@ -181,8 +195,10 @@ function Tiles({ heading, children }: { heading?: string; children: ReactNode })
 /**
  * The + menu (ADR 0065): what is added to the score, kept apart from the palette's tools for the
  * notes, as Sibelius keeps it. Its kinds as tabs (bars and sections, lines, the key signature, the
- * time signature, the staves), each a grid of tiles drawn as the score will show them and named under
- * them; a tile chosen does its work and closes the menu. One height whatever the tab.
+ * time signature, the staves) and a hand's fingers, each named under its picture; each a grid of
+ * compact tiles drawn as the score will show them, as many to a row as the screen holds; a tile
+ * chosen does its work and closes the menu (a hand's fingers keep it open, note after note). One
+ * height whatever the tab.
  */
 export function AddMenu() {
   const { t } = useTranslation('editor')
@@ -238,7 +254,7 @@ export function AddMenu() {
             disabled={edit === 'paste' && !hasClip}
             onClick={done(() => actions.dispatch({ type: 'bars', edit }))}
           >
-            <Icon className="size-7" />
+            <Icon className="size-6" />
           </Tile>
         ))}
       </Tiles>
@@ -274,12 +290,13 @@ export function AddMenu() {
             <Tile
               key={expression}
               label={t(`marks.${expression}`)}
+              caption={t(`add.meaning.${expression}`)}
               disabled={!hasNotes}
               onClick={done(() =>
                 actions.dispatch({ type: 'mark', mark: { kind: 'expression', expression } }),
               )}
             >
-              <span className="font-serif text-2xl italic">{EXPRESSION_TEXT[expression]}</span>
+              <span className="font-serif text-xl italic">{EXPRESSION_TEXT[expression]}</span>
             </Tile>
           ))}
         </Tiles>
@@ -293,7 +310,7 @@ export function AddMenu() {
                 actions.dispatch({ type: 'mark', mark: { kind: 'pedal', pedal } }),
               )}
             >
-              <span className="font-music text-5xl leading-none">{glyph}</span>
+              <span className="font-music text-4xl leading-none">{glyph}</span>
             </Tile>
           ))}
         </Tiles>
@@ -305,9 +322,9 @@ export function AddMenu() {
               pressed={draft.tempo === bpm}
               onClick={done(() => actions.dispatch({ type: 'settings', tempo: bpm }))}
             >
-              <span className="flex flex-col items-center gap-1">
-                <span className="font-serif text-xl font-bold">{t(`add.tempos.${word}`)}</span>
-                <span className="text-lg">
+              <span className="flex flex-col items-center">
+                <span className="font-serif text-base font-bold">{t(`add.tempos.${word}`)}</span>
+                <span className="text-sm">
                   <span className="font-music">♩</span> = {bpm}
                 </span>
               </span>
@@ -315,6 +332,14 @@ export function AddMenu() {
           ))}
         </Tiles>
       </div>
+    ),
+    // A hand's own, not every note's: its fingers and its bar written out, the menu kept open.
+    fingers: isHandLayer(layer) ? (
+      <div className="grid grid-cols-6 gap-1.5">
+        <HandKeys />
+      </div>
+    ) : (
+      <p className="text-sm text-muted-foreground">{t('add.noHand')}</p>
     ),
     key: (
       <div className="flex flex-col gap-4">
@@ -371,7 +396,7 @@ export function AddMenu() {
               ),
             )}
           >
-            <span className="font-music text-4xl leading-none">𝄞</span>
+            <span className="font-music text-3xl leading-none">𝄞</span>
           </Tile>
           <Tile
             label={t('chordNames')}
@@ -381,7 +406,7 @@ export function AddMenu() {
               actions.dispatch({ type: 'layer', layer: 'chords' })
             })}
           >
-            <span className="font-display text-2xl font-semibold">C⁷</span>
+            <span className="font-display text-xl font-semibold">C⁷</span>
           </Tile>
         </Tiles>
         {/* As a notation app adds a staff: an instrument, its part a voice sung with the tune (ADR 0070). */}
@@ -396,11 +421,11 @@ export function AddMenu() {
                 if (voice) actions.dispatch({ type: 'voiceStaff', voice, on: true, instrument })
               })}
             >
-              <span className="flex items-center gap-1.5">
-                <span className="font-music text-4xl leading-none">
+              <span className="flex items-center gap-1">
+                <span className="font-music text-3xl leading-none">
                   {INSTRUMENT_OF[instrument].clef === 'bass' ? '𝄢' : '𝄞'}
                 </span>
-                <span className="font-serif text-xl italic">
+                <span className="font-serif text-base italic">
                   {tm(`instrumentShort.${instrument}`)}
                 </span>
               </span>
@@ -450,21 +475,24 @@ export function AddMenu() {
           onValueChange={(next: AddTab) => setTab(next)}
           className="flex flex-col gap-3"
         >
-          <Tabs.List aria-label={t('add.tabs')} className="flex gap-1 rounded-2xl bg-muted p-1">
+          {/* Each kind named under its picture; where they do not all fit, the row scrolls sideways. */}
+          <Tabs.List
+            aria-label={t('add.tabs')}
+            className="flex gap-1 overflow-x-auto rounded-2xl bg-muted p-1 [scrollbar-width:none] fade-scroll-x"
+          >
             {ADD_TABS.map((each) => (
               <Tabs.Tab
                 key={each}
                 value={each}
                 className={cn(
-                  'flex min-h-12 min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-1 text-xs font-semibold text-muted-foreground sm:flex-row sm:gap-1.5 sm:text-sm',
+                  'flex min-h-14 min-w-15 flex-1 shrink-0 flex-col items-center justify-center gap-0.5 rounded-xl px-2 text-xs font-semibold whitespace-nowrap text-muted-foreground',
                   'aria-selected:bg-selected aria-selected:text-selected-foreground',
                 )}
               >
                 <span aria-hidden className="grid size-7 place-items-center overflow-hidden">
                   {TAB_ICONS[each]}
                 </span>
-                {/* On a phone the pictures alone: seven names do not fit its width. */}
-                <span className="max-sm:sr-only">{t(`add.tab.${each}`)}</span>
+                {t(`add.tab.${each}`)}
               </Tabs.Tab>
             ))}
           </Tabs.List>

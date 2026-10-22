@@ -2,7 +2,6 @@ import {
   ArrowLeftToLine,
   ArrowRightToLine,
   ChevronDown,
-  Hand,
   Keyboard,
   PanelLeftClose,
   PanelRightClose,
@@ -18,13 +17,11 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import {
   CHORD_TABS,
   PALETTE_TABS,
-  shownTab,
   tabOpen,
   type ChordTab,
   type PaletteTab,
 } from '../model/palette-tabs'
 import { ChordBuilt, ChordsInKey, ChordTyped } from './ChordKeys'
-import { HandKeys } from './HandKeys'
 import { ArticulationKeys, DynamicKeys } from './MarkKeys'
 import { NoteKeys, PitchKeys } from './NoteKeys'
 
@@ -55,7 +52,7 @@ function Word({ text, italic = false }: { text: string; italic?: boolean }) {
   )
 }
 
-/** Each tab's picture: a note, a sharp, an accent, a dynamic, a hand. */
+/** Each tab's picture: a note, a sharp, an accent, a dynamic. */
 const TAB_ICONS: Readonly<Record<PaletteTab, ReactNode>> = {
   notes: (
     <Glyph>
@@ -81,7 +78,6 @@ const TAB_ICONS: Readonly<Record<PaletteTab, ReactNode>> = {
       <Word text="mf" italic />
     </Glyph>
   ),
-  hand: <Hand aria-hidden />,
 }
 
 /** Each way of writing a chord, drawn: the key's numerals, a chord's parts, the keypad. */
@@ -105,7 +101,6 @@ const TAB_KEYS: Readonly<Record<PaletteTab, ReactNode>> = {
   pitch: <PitchKeys />,
   articulations: <ArticulationKeys />,
   dynamics: <DynamicKeys />,
-  hand: <HandKeys />,
 }
 
 /**
@@ -133,7 +128,7 @@ export function EditorTools({ side, onFold }: { side: boolean; onFold: () => voi
   const recording = takes.stage !== 'idle'
   const settings = useSettingsStoreApi()
   const paletteSide = useSettings(selectPaletteSide)
-  const tab = shownTab(chosen, layer)
+  const tab = chosen
   const left = paletteSide === 'left'
   const other = left ? 'right' : 'left'
   const fold = (
@@ -225,7 +220,7 @@ export function EditorTools({ side, onFold }: { side: boolean; onFold: () => voi
               key={each}
               value={each}
               label={t(`palette.${each}`)}
-              disabled={!tabOpen(each, layer)}
+              disabled={!tabOpen(layer)}
               className="min-w-9 shrink"
             >
               {TAB_ICONS[each]}

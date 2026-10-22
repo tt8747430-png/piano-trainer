@@ -549,10 +549,8 @@ describe('the score editor', () => {
     const moves = screen.getByRole('toolbar', { name: 'Caret' })
     for (const name of ['Back a step', 'Forward a step', 'Delete'])
       expect(within(moves).getByRole('button', { name })).toBeInTheDocument()
-    expect(within(palette).getByRole('tab', { name: 'Fingering' })).toHaveAttribute(
-      'aria-disabled',
-      'true',
-    )
+    // A hand's fingers are the + menu's, not every note's palette.
+    expect(within(palette).queryByRole('tab', { name: 'Fingering' })).not.toBeInTheDocument()
     await user.click(within(palette).getByRole('tab', { name: 'Pitch' }))
     for (const name of [
       'Up a semitone',
@@ -565,11 +563,13 @@ describe('the score editor', () => {
     ])
       expect(within(palette).getByRole('button', { name })).toBeInTheDocument()
     // Bars are added from the + menu, not the palette.
-    await addFrom(user, 'Bars', 'Add a bar after')
+    await addFrom(user, 'Bars', 'Add bar')
     expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['G G G G G'] }] })
     await user.keyboard('{Alt>}{ArrowDown}{ArrowDown}{/Alt}')
-    await user.click(within(palette).getByRole('tab', { name: 'Fingering' }))
-    expect(within(palette).getByRole('button', { name: 'Write this bar out' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Add to the score' }))
+    const menu = await screen.findByRole('dialog', { name: 'Add' })
+    await user.click(within(menu).getByRole('tab', { name: 'Fingers' }))
+    expect(within(menu).getByRole('button', { name: 'Write this bar out' })).toBeInTheDocument()
   })
 
   it('marks the note at the caret from the marks’ tabs, saved with the tune', async () => {
@@ -697,12 +697,15 @@ describe('the score editor', () => {
     })
     expect(screen.getByRole('status')).toHaveTextContent(/^Left hand · /)
     expect(screen.getAllByText('Pattern').length).toBeGreaterThan(0)
-    await user.click(screen.getByRole('tab', { name: 'Fingering' }))
-    await user.click(screen.getByRole('button', { name: 'Write this bar out' }))
+    await user.click(screen.getByRole('button', { name: 'Add to the score' }))
+    const menu = await screen.findByRole('dialog', { name: 'Add' })
+    await user.click(within(menu).getByRole('tab', { name: 'Fingers' }))
+    await user.click(within(menu).getByRole('button', { name: 'Write this bar out' }))
     expect(songOf(piecesStore.getState())).toMatchObject({
       hands: { lh: expect.stringMatching(/^G1\^5\+G2\^1\/2 /) },
     })
-    expect(screen.getByRole('button', { name: 'Back to the pattern' })).toBeInTheDocument()
+    // The menu stays open on a hand's own: the bar given back to its pattern from there.
+    expect(within(menu).getByRole('button', { name: 'Back to the pattern' })).toBeInTheDocument()
   })
 
   it('shows not found for a song written in degrees', async () => {
