@@ -1,3 +1,4 @@
+import { chordLabelSizes } from '@/shared/lib'
 import type { TimedMusic } from '@/shared/lib/notation'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 
@@ -5,6 +6,8 @@ import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 const NUMBER_INSET_PX = 4
 /** A tempo at the line's head stands this far right of its bar's number. */
 const AFTER_NUMBER_PX = 24
+/** A chord name's size at full size where it has the room: smaller where many share a bar. */
+const CHORD_PX = 16
 
 /**
  * Over a line's staff: the number of its first bar at its head, as a printed system numbers it (the
@@ -33,6 +36,12 @@ export function LineLabels({
   size: number
 }) {
   const [first] = layout.measures
+  const last = layout.measures.at(-1)
+  const chords = (chordNames ? music.chords : []).map((chord) => ({
+    symbol: chord.symbol,
+    x: xAtTick(layout, chord.startTick),
+  }))
+  const sizes = chordLabelSizes(chords, last ? last.x + last.width : layout.width, CHORD_PX * size)
   return (
     <div
       aria-hidden
@@ -65,11 +74,11 @@ export function LineLabels({
           </span>
         )
       })}
-      {(chordNames ? music.chords : []).map((chord, index) => (
+      {chords.map((chord, index) => (
         <span
           key={index}
-          className="absolute bottom-0.5 font-display font-semibold whitespace-nowrap"
-          style={{ left: xAtTick(layout, chord.startTick), fontSize: `${1.125 * size}rem` }}
+          className="absolute bottom-0.5 font-display leading-none font-semibold whitespace-nowrap"
+          style={{ left: chord.x, fontSize: sizes[index] }}
         >
           {chord.symbol}
         </span>

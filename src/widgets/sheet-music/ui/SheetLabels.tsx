@@ -1,12 +1,14 @@
 import { memo, useMemo } from 'react'
 import type { Performance } from '@/shared/lib/arrangement'
-import { cn } from '@/shared/lib'
+import { chordLabelSizes, cn } from '@/shared/lib'
 import { usePositionName } from '@/shared/ui'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 import { chordPositions } from '../model/chord-positions'
 
 /** A bar's number sits this far right of its barline, clear of the line. */
 const NUMBER_INSET_PX = 4
+/** A chord name's size where it has the room: smaller where many share a bar. */
+const CHORD_PX = 16
 
 /**
  * Over the staff: each bar's number, a section's name at its first bar and a tempo mark where it
@@ -46,6 +48,21 @@ export const SheetLabels = memo(function SheetLabels({
     closing !== undefined &&
     tick >= opening.startTick &&
     tick < closing.startTick + closing.ticks
+  const shown = chordNames
+    ? performance.chords.flatMap((chord, index) =>
+        inLine(chord.startTick)
+          ? [{ index, symbol: chord.symbol, x: xAtTick(layout, chord.startTick) }]
+          : [],
+      )
+    : []
+  const sizes = chordLabelSizes(
+    shown.map(({ index, symbol, x }) => {
+      const position = placed[index]
+      return { x, symbol: position ? `${symbol} ${positionName(position)}` : symbol }
+    }),
+    closing ? closing.x + closing.width : layout.width,
+    CHORD_PX,
+  )
   return (
     <div aria-hidden className={cn('absolute inset-x-0 bottom-full', chordNames ? 'h-11' : 'h-5')}>
       {layout.measures.map((measure, index) => {
@@ -73,22 +90,20 @@ export const SheetLabels = memo(function SheetLabels({
           </span>
         )
       })}
-      {performance.chords.map((chord, index) =>
-        !chordNames || !inLine(chord.startTick) ? null : (
-          <span
-            key={index}
-            className="absolute bottom-0.5 font-display text-lg font-semibold whitespace-nowrap"
-            style={{ left: xAtTick(layout, chord.startTick) }}
-          >
-            {chord.symbol}
-            {placed[index] ? (
-              <span className="ml-1 font-sans text-xs font-normal text-muted-foreground">
-                {positionName(placed[index])}
-              </span>
-            ) : null}
-          </span>
-        ),
-      )}
+      {shown.map(({ index, symbol, x }, at) => (
+        <span
+          key={index}
+          className="absolute bottom-0.5 font-display leading-none font-semibold whitespace-nowrap"
+          style={{ left: x, fontSize: sizes[at] }}
+        >
+          {symbol}
+          {placed[index] ? (
+            <span className="ml-1 font-sans text-[0.7em] font-normal text-muted-foreground">
+              {positionName(placed[index])}
+            </span>
+          ) : null}
+        </span>
+      ))}
     </div>
   )
 })

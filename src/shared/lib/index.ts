@@ -1,3 +1,4 @@
+export { chordLabelSizes } from './chord-label'
 export { cn } from './cn'
 export {
   partsFromParams,
