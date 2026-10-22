@@ -61,6 +61,21 @@
           var viewport = document.querySelector('meta[name="viewport"]')
           if (installed && viewport)
             viewport.content = viewport.content + ', maximum-scale=1, user-scalable=no'
+          // Nor a long press's menu, a selection's loupe or Safari's own pinch: only fields keep theirs.
+          if (installed) {
+            var field = function (target) {
+              return (
+                target instanceof Element &&
+                target.closest('input, textarea, [contenteditable]') !== null
+              )
+            }
+            var hold = function (event) {
+              if (!field(event.target)) event.preventDefault()
+            }
+            document.addEventListener('contextmenu', hold)
+            document.addEventListener('selectstart', hold)
+            document.addEventListener('gesturestart', hold)
+          }
         } catch (_) {}
       })()
     </script>

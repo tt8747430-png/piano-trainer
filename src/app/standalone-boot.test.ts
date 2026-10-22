@@ -30,6 +30,23 @@ describe('the #standalone-boot script in index.html', () => {
     },
   )
 
+  it('opens no long-press menu, starts no selection and takes no Safari gesture in the installed app, outside fields', () => {
+    runBoot('standalone')
+    const press = (type: string, target: EventTarget = document.body) => {
+      const event = new Event(type, { bubbles: true, cancelable: true })
+      target.dispatchEvent(event)
+      return event.defaultPrevented
+    }
+    expect(press('contextmenu')).toBe(true)
+    expect(press('selectstart')).toBe(true)
+    expect(press('gesturestart')).toBe(true)
+    const field = document.createElement('input')
+    document.body.append(field)
+    expect(press('contextmenu', field)).toBe(false)
+    expect(press('selectstart', field)).toBe(false)
+    field.remove()
+  })
+
   it('leaves a browser tab zoomable', () => {
     expect(runBoot('browser')).toBe(viewport)
   })

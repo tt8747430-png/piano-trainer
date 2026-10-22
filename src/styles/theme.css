@@ -217,7 +217,12 @@
   }
   body {
     -webkit-tap-highlight-color: transparent;
-    /* An app, not a document: a long press selects nothing and opens no callout… */
+  }
+  /* An app, not a document: a long press selects nothing and opens no callout or loupe… On every
+     element, not the body alone: WebKit does not carry it down to an SVG's text or a button's. */
+  *,
+  *::before,
+  *::after {
     -webkit-user-select: none;
     user-select: none;
     -webkit-touch-callout: none;
@@ -230,7 +235,9 @@
     user-select: text;
     -webkit-touch-callout: default;
   }
-  img {
+  img,
+  a,
+  svg {
     -webkit-user-drag: none;
   }
   /* A control answers the first tap: no double-tap zoom waiting behind it. */
