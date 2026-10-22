@@ -70,7 +70,20 @@ export async function drawScore(
   return score.staffInstruments ? { ...layout, staffInstruments: score.staffInstruments } : layout
 }
 
-/** Each notehead with its note's name over it, haloed by the page: the Player's Named notes. */
+/** A staff space in Verovio's units, and a notehead's half width (Bravura's black head, 1.18 spaces). */
+const SPACE = 180
+const HALF_HEAD = 106
+/** A named head's radius: a little larger than a head, a third's heads still apart. */
+const NAMED_RADIUS = 96
+/** SMuFL's open heads: the whole note's and the half note's (and the breve's). */
+const OPEN_HEADS = /#E0A[023]-/
+const SVG = 'http://www.w3.org/2000/svg'
+
+/**
+ * Each notehead drawn as a round head with its note's name in it, as notation programs' note-name
+ * noteheads: a black note's in ink with the letter in the page's colour, a half or whole note's
+ * open with the letter in ink. The Player's Named notes.
+ */
 function nameHeads(svg: SVGSVGElement, score: Score) {
   const names = new Map<string, string>()
   for (const measure of score.measures)
@@ -84,18 +97,33 @@ function nameHeads(svg: SVGSVGElement, score: Score) {
                 written.spelled.letter + SIGN[written.spelled.accidental],
               ),
             )
+  const made = (tag: string, attributes: Record<string, string | number>) => {
+    const element = svg.ownerDocument.createElementNS(SVG, tag)
+    for (const [name, value] of Object.entries(attributes))
+      element.setAttribute(name, String(value))
+    return element
+  }
   for (const note of svg.querySelectorAll<SVGGElement>('g.note[id^="n-"]')) {
     const name = names.get(note.id)
     const head = note.querySelector('g.notehead use')
-    const [x = 0, y = 0] = (head?.getAttribute('transform')?.match(/-?\d+(?:\.\d+)?/g) ?? []).map(
+    if (!name || !head) continue
+    const [x = 0, y = 0] = (head.getAttribute('transform')?.match(/-?\d+(?:\.\d+)?/g) ?? []).map(
       Number,
     )
-    if (!name || !head) continue
-    const text = svg.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'text')
-    text.setAttribute('x', String(x + 140))
-    text.setAttribute('y', String(y + 60))
-    text.setAttribute('class', 'note-name')
-    text.textContent = name
-    note.append(text)
+    const open = OPEN_HEADS.test(head.getAttribute('xlink:href') ?? head.getAttribute('href') ?? '')
+    head.setAttribute('visibility', 'hidden')
+    const at = { x: x + HALF_HEAD, y }
+    const named = made('g', { class: open ? 'note-name open' : 'note-name' })
+    named.append(
+      made('circle', { cx: at.x, cy: at.y, r: NAMED_RADIUS }),
+      made('text', {
+        x: at.x,
+        y: at.y + SPACE * 0.04,
+        'font-size': name.length > 1 ? SPACE * 0.62 : SPACE * 0.8,
+      }),
+    )
+    const text = named.lastElementChild
+    if (text) text.textContent = name
+    head.after(named)
   }
 }

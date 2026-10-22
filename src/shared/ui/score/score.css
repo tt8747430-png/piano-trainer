@@ -33,15 +33,25 @@
 [data-slot='score'] g.note-chosen {
   color: var(--ring);
 }
-/* A head's note name (Named notes), haloed by the page so it reads on a filled head. */
-[data-slot='score'] text.note-name {
-  font: 600 190px var(--font-sans);
-  text-anchor: middle;
-  dominant-baseline: middle;
+/* A named head (Named notes): a black note's in ink, its letter in the page's colour; an open one's
+   ring in ink round the page's colour, its letter in ink. */
+[data-slot='score'] g.note-name circle {
   fill: currentColor;
-  paint-order: stroke;
-  stroke: var(--background);
-  stroke-width: 60px;
+  stroke: currentColor;
+  stroke-width: 18px;
+}
+[data-slot='score'] g.note-name text {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+  fill: var(--background);
+}
+[data-slot='score'] g.note-name.open circle {
+  fill: var(--background);
+}
+[data-slot='score'] g.note-name.open text {
+  fill: currentColor;
 }
 /* Chord symbols and words in the app's faces. */
 [data-slot='score'] :is(g.harm, g.dir, g.tempo) text {

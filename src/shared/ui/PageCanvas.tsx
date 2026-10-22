@@ -25,6 +25,8 @@ import { Button } from './primitives/button'
 const DRAG_START = 6
 /** How much a wheel's pixel of travel with Ctrl zooms: a notch of 100 a sixth of an octave, as MuseScore's. */
 const WHEEL_ZOOM = Math.log(2) / 6 / 100
+/** How long after the last move the pages are drawn again sharp at their zoom. */
+const SETTLE_MS = 160
 
 /**
  * Pages floating on a canvas (ADR 0075), as a notation app's page view: drawn at their print size,
@@ -43,10 +45,21 @@ export function PageCanvas({ column, children }: { column: number; children: Rea
   // Fitted until the learner moves or zooms it; fitted again when the screen or the pages change.
   const moved = useRef(false)
 
+  // While the canvas moves, its pages are one layer the browser only slides and stretches; once it
+  // settles they are drawn again at the zoom, so the music is sharp however close it is read.
+  const settle = useRef(0)
+  useEffect(() => () => window.clearTimeout(settle.current), [])
   const show = useCallback((next: CanvasView) => {
     view.current = next
     const element = content.current
-    if (element) element.style.transform = `translate(${next.x}px, ${next.y}px) scale(${next.zoom})`
+    if (element) {
+      element.style.transform = `translate(${next.x}px, ${next.y}px) scale(${next.zoom})`
+      element.style.willChange = 'transform'
+      window.clearTimeout(settle.current)
+      settle.current = window.setTimeout(() => {
+        element.style.willChange = ''
+      }, SETTLE_MS)
+    }
     setZoom(next.zoom)
   }, [])
 
@@ -179,10 +192,7 @@ export function PageCanvas({ column, children }: { column: number; children: Rea
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
-      <div
-        ref={content}
-        className="absolute top-0 left-0 w-max origin-top-left will-change-transform"
-      >
+      <div ref={content} className="absolute top-0 left-0 w-max origin-top-left">
         <RevealContext value={revealElement}>{children}</RevealContext>
       </div>
       <div className="absolute top-2 right-2 flex items-center rounded-full bg-card/95 text-card-foreground shadow-md ring-1 ring-hairline">

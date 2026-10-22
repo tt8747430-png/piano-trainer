@@ -258,8 +258,7 @@ describe('Player', () => {
 
   it('names the notes on the staff with Named notes, and saves the toggle', async () => {
     // SMuFL's note name noteheads, U+E150–U+E1AF.
-    const namedHeads = () =>
-      document.querySelectorAll('[data-slot="score"] svg text.note-name').length
+    const namedHeads = () => document.querySelectorAll('[data-slot="score"] svg g.note-name').length
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/bz5')
     await waitFor(() => expect(document.querySelector('[data-slot="score"] svg')).not.toBeNull())
