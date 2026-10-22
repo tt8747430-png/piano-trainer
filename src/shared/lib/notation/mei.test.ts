@@ -24,6 +24,12 @@ const music = (notes: TimedNote[], extra: Partial<TimedMusic> = {}): TimedMusic 
   ...extra,
 })
 
+const marked = (marks: TimedNote['marks'], finger?: TimedNote['finger']): TimedNote => ({
+  ...n(72, note('C'), 'rh', 0, 24),
+  ...(marks ? { marks } : {}),
+  ...(finger ? { finger } : {}),
+})
+
 const mei = scoreToMei(
   notate(
     music([
@@ -36,7 +42,7 @@ const mei = scoreToMei(
       n(37, note('D', -1), 'lh', 0, 192),
     ]),
   ),
-  { title: 'Wonderful Grace' },
+  { title: 'Wonderful Grace', chordSymbols: true },
 )
 
 describe('scoreToMei', () => {
@@ -69,5 +75,63 @@ describe('scoreToMei', () => {
     expect(mei).toContain('<measure xml:id="m-1" n="2" right="end">')
     expect(mei).toMatch(/<harm staff="1" tstamp="1">D♭<\/harm>/)
     expect(mei).toMatch(/<tempo staff="1" tstamp="1" mm="84" mm\.unit="4"/)
+  })
+})
+
+describe('scoreToMei, a note’s marks and the options', () => {
+  const c = (startTick: number, marks?: TimedNote['marks'], finger?: TimedNote['finger']) => ({
+    ...marked(marks, finger),
+    startTick,
+  })
+  const plain = (notes: TimedNote[]) => notate(music(notes, { chords: [] }))
+
+  it('writes a slur from its note to the one it ends on, a dynamic, the pedal and an expression', () => {
+    const written = scoreToMei(
+      plain([
+        c(0, { slurStart: true, dynamic: 'mf', pedal: 'down', expression: 'dolce' }),
+        c(24, { slurEnd: true, pedal: 'up' }),
+      ]),
+    )
+    expect(written).toContain('<slur staff="1" startid="#n-treble-0-0" endid="#n-treble-24-0"/>')
+    expect(written).toMatch(/<dynam staff="1" startid="#n-treble-0-0"[^>]*>mf<\/dynam>/)
+    expect(written).toContain('<pedal staff="1" startid="#n-treble-0-0" dir="down"/>')
+    expect(written).toContain('<pedal staff="1" startid="#n-treble-24-0" dir="up"/>')
+    expect(written).toMatch(/<rend fontstyle="italic">dolce<\/rend>/)
+  })
+
+  it('writes an articulation on its note, a hairpin to where it ends and an octave line over its notes', () => {
+    const written = scoreToMei(
+      plain([
+        c(0, { articulations: ['staccato'], hairpin: 'cresc', octave: '8va' }),
+        c(24, { octave: '8va' }),
+        c(48, { hairpin: 'end' }),
+      ]),
+    )
+    expect(written).toMatch(/<note xml:id="n-treble-0-0"[^>]*><artic artic="stacc"\/><\/note>/)
+    expect(written).toContain(
+      '<hairpin staff="1" form="cres" startid="#n-treble-0-0" endid="#n-treble-48-0"/>',
+    )
+    expect(written).toMatch(
+      /<octave staff="1" startid="#n-treble-0-0" endid="#n-treble-24-0" dis="8" dis.place="above"\/>/,
+    )
+  })
+
+  it('writes fingers only where asked, and only the staves asked for', () => {
+    const score = plain([c(0, undefined, 3), { ...n(48, note('C'), 'lh', 0, 24) }])
+    expect(scoreToMei(score)).not.toContain('<fing')
+    expect(scoreToMei(score, { fingers: true })).toContain(
+      '<fing startid="#n-treble-0-0" place="above">3</fing>',
+    )
+    const bass = scoreToMei(score, { staves: ['bass'] })
+    expect(bass).toMatch(/<staffDef n="1"[^>]*clef\.shape="F"/)
+    expect(bass).not.toContain('n-treble')
+  })
+
+  it('hides the time on a line that goes on in it, and shows it where it changes', () => {
+    const score = plain([c(0)])
+    expect(scoreToMei(score, { timeBefore: { count: 4, unit: 4 } })).toContain(
+      'meter.visible="false"',
+    )
+    expect(scoreToMei(score, { timeBefore: { count: 3, unit: 4 } })).not.toContain('meter.visible')
   })
 })
