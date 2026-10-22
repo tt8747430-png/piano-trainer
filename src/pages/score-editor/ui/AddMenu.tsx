@@ -1,48 +1,30 @@
 import { Tabs } from '@base-ui/react/tabs'
-import {
-  Bookmark,
-  ClipboardPaste,
-  Copy,
-  Hand,
-  Merge,
-  Plus,
-  Scissors,
-  Trash2,
-  WrapText,
-  type LucideIcon,
-} from 'lucide-react'
-import { useMemo, useState, type ReactNode } from 'react'
+import { Bookmark, Hand, Merge, Plus, Trash2, WrapText, type LucideIcon } from 'lucide-react'
+import { useMemo, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   barAt,
+  barLengths,
   BARLINE_CHOICES,
   clefAt,
   JUMP_CHOICES,
   notesAt,
   isHandLayer,
-  rowShown,
   type BarEdit,
   type BarMarkChoice,
 } from '@/features/score-editor'
-import { useKeyName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import {
-  beatsPerBar,
   CLEFS,
-  INSTRUMENT_FAMILIES,
-  INSTRUMENT_OF,
-  instrumentsIn,
   EXPRESSION_TEXT,
   EXPRESSIONS,
-  keyParam,
   TICKS_PER_BEAT,
   timeSignature,
   timeSignatureText,
-  type Key,
   type Pedal,
   type TimeSignature,
 } from '@/shared/lib/music'
-import { EXTRA_VOICES, notate, type StaffId, type TimedMusic } from '@/shared/lib/notation'
+import { notate, type StaffId, type TimedMusic } from '@/shared/lib/notation'
 import { LazyScoreView, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
@@ -51,12 +33,9 @@ import {
   clefBar,
   emptyBar,
   HANDS,
-  keyTiles,
   LINE_TILES,
   lineMusic,
   PEDAL_TILES,
-  TEMPO_TILES,
-  timeTiles,
   type AddTab,
 } from '../model/add-menu'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
@@ -71,7 +50,7 @@ const TAB_ICONS: Readonly<Record<AddTab, ReactNode>> = {
       <path d="M5 6 V19 M19 6 V19" strokeWidth="2" strokeLinecap="round" />
     </svg>
   ),
-  barlines: <span className="font-music text-3xl leading-none">𝄆</span>,
+  repeats: <span className="font-music text-3xl leading-none">𝄆</span>,
   lines: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-5">
       <path d="M3 15 C8 6 16 6 21 15" strokeLinecap="round" />
@@ -79,13 +58,7 @@ const TAB_ICONS: Readonly<Record<AddTab, ReactNode>> = {
   ),
   text: <span className="font-serif text-xl leading-none italic">dol.</span>,
   fingers: <Hand aria-hidden className="size-5" />,
-  key: <span className="font-music text-3xl leading-none">♯♭</span>,
-  time: (
-    <span className="font-display text-base leading-[0.8] font-bold">
-      3<br />4
-    </span>
-  ),
-  staves: <span className="font-music text-3xl leading-none">𝄞</span>,
+  clefs: <span className="font-music text-3xl leading-none">𝄞</span>,
 }
 
 const PEDAL_LABEL = {
@@ -94,22 +67,19 @@ const PEDAL_LABEL = {
   up: 'marks.pedalUp',
 } as const satisfies Readonly<Record<Pedal, string>>
 
-/** The bar edits, each with its picture. */
-const BAR_TILES: readonly (readonly [BarEdit, LucideIcon])[] = [
+/** The bar edits Insert holds, each with its picture: copy, cut and paste are a selection's. */
+const BAR_TILES: readonly (readonly [Exclude<BarEdit, 'copy' | 'cut' | 'paste'>, LucideIcon])[] = [
   ['insert', Plus],
   ['delete', Trash2],
   ['newLine', WrapText],
   ['joinLine', Merge],
   ['newSection', Bookmark],
-  ['copy', Copy],
-  ['cut', Scissors],
-  ['paste', ClipboardPaste],
 ]
 
 /**
- * One thing to add: its picture over its name, as Sibelius's tiles are, compact; pressed where it is
- * already so. Its name is `label`, or `caption` under the picture where the picture says the rest (an
- * expression's word over what it asks).
+ * One thing to insert: its picture over its name, as Sibelius's tiles are, compact; pressed where it
+ * is already so. Its name is `label`, or `caption` under the picture where the picture says the rest
+ * (an expression's word over what it asks).
  */
 function Tile({
   label,
@@ -192,19 +162,23 @@ function Tiles({ heading, children }: { heading?: string; children: ReactNode })
   )
 }
 
+/** Insert's button as the bar shows it: a round ghost icon. */
+const PLUS_TRIGGER = <Button variant="ghost" size="icon" className="rounded-full" />
+
 /**
- * The + menu (ADR 0065): what is added to the score, kept apart from the palette's tools for the
- * notes, as Sibelius keeps it. Its kinds as tabs (bars and sections, lines, the key signature, the
- * time signature, the staves) and a hand's fingers, each named under its picture; each a grid of
- * compact tiles drawn as the score will show them, as many to a row as the screen holds; a tile
- * chosen does its work and closes the menu (a hand's fingers keep it open, note after note). One
- * height whatever the tab.
+ * Insert (ADR 0065, 0080): what goes on the score at the caret, kept apart from the palette's tools
+ * for the notes, as Sibelius keeps it. Its kinds as tabs (bars, repeats, lines, text, a hand's fingers,
+ * a hand's clef), each named under its picture; each a grid of compact tiles drawn as the score will
+ * show them, as many to a row as the screen holds; a tile chosen does its work and closes the menu (a
+ * hand's fingers keep it open, note after note). One height whatever the tab. What is the song's as a
+ * whole (its key, time signature, tempo and parts) is the Song sheet's, never here.
+ *
+ * Its button is a round + by default, or `trigger` in its place (a base-ui render element), named and
+ * drawn by its caller.
  */
-export function AddMenu() {
+export function AddMenu({ trigger }: { trigger?: ReactElement } = {}) {
   const { t } = useTranslation('editor')
-  const { t: tm } = useTranslation('music')
-  const { actions, takes, view } = useScoreEditorContext()
-  const keyName = useKeyName()
+  const { actions, takes } = useScoreEditorContext()
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<AddTab>('bars')
   const draft = useEditorState((state) => state.draft)
@@ -218,21 +192,10 @@ export function AddMenu() {
     rh: useEditorState((state) => clefAt(state.draft, barAt(state.draft, state.caret).index, 'rh')),
     lh: useEditorState((state) => clefAt(state.draft, barAt(state.draft, state.caret).index, 'lh')),
   }
-  const hasClip = useEditorState((state) => state.clip !== null)
   const done = (work: () => void) => () => {
     work()
     setOpen(false)
   }
-  const keyTile = (key: Key) => (
-    <Tile
-      key={keyParam(key)}
-      label={keyName(key)}
-      pressed={keyParam(key) === keyParam(draft.key)}
-      onClick={done(() => actions.dispatch({ type: 'settings', key }))}
-    >
-      <Engraved music={emptyBar(key, draft.meter, 1)} noTime />
-    </Tile>
-  )
   const barMarkTile = (choice: BarMarkChoice) => (
     <Tile
       key={choice}
@@ -242,24 +205,42 @@ export function AddMenu() {
       <Engraved music={emptyBar(draft.key, draft.meter, 1, BARLINE_TILES[choice])} noTime />
     </Tile>
   )
-  const tuneShown = rowShown(draft, 'melody')
-  const { meters, lengths } = timeTiles(draft.meter)
   const panels: Readonly<Record<AddTab, ReactNode>> = {
     bars: (
-      <Tiles>
-        {BAR_TILES.map(([edit, Icon]) => (
-          <Tile
-            key={edit}
-            label={t(`bars.${edit}`)}
-            disabled={edit === 'paste' && !hasClip}
-            onClick={done(() => actions.dispatch({ type: 'bars', edit }))}
-          >
-            <Icon className="size-6" />
-          </Tile>
-        ))}
-      </Tiles>
+      <div className="flex flex-col gap-4">
+        <Tiles>
+          {BAR_TILES.map(([edit, Icon]) => (
+            <Tile
+              key={edit}
+              label={t(`bars.${edit}`)}
+              onClick={done(() => actions.dispatch({ type: 'bars', edit }))}
+            >
+              <Icon className="size-6" />
+            </Tile>
+          ))}
+        </Tiles>
+        {/* The caret's bar alone: shorter for a pickup, or a bar of its own length. */}
+        <Tiles heading={t('add.barLength')}>
+          {barLengths(draft.meter).map((ticks) => {
+            const beats = ticks / TICKS_PER_BEAT
+            return (
+              <Tile
+                key={ticks}
+                label={timeSignatureText(timeSignature(beats, draft.meter))}
+                pressed={ticks === barTicks}
+                onClick={done(() => actions.dispatch({ type: 'barLength', ticks }))}
+              >
+                <Engraved
+                  music={emptyBar(draft.key, draft.meter, beats)}
+                  time={timeSignature(beats, draft.meter)}
+                />
+              </Tile>
+            )
+          })}
+        </Tiles>
+      </div>
     ),
-    barlines: (
+    repeats: (
       <div className="flex flex-col gap-4">
         <Tiles heading={t('add.barlines')}>{BARLINE_CHOICES.map(barMarkTile)}</Tiles>
         <Tiles heading={t('add.jumps')}>{JUMP_CHOICES.map(barMarkTile)}</Tiles>
@@ -273,6 +254,7 @@ export function AddMenu() {
             <Tile
               key={tile.word}
               label={t(`marks.${tile.word}`)}
+              caption={t(`add.line.${tile.word}`)}
               disabled={!hasNotes}
               onClick={done(() => actions.dispatch({ type: 'mark', mark: tile.mark }))}
             >
@@ -305,29 +287,13 @@ export function AddMenu() {
             <Tile
               key={pedal}
               label={t(PEDAL_LABEL[pedal])}
+              caption={t(`add.pedalCaption.${pedal}`)}
               disabled={!hasNotes}
               onClick={done(() =>
                 actions.dispatch({ type: 'mark', mark: { kind: 'pedal', pedal } }),
               )}
             >
               <span className="font-music text-4xl leading-none">{glyph}</span>
-            </Tile>
-          ))}
-        </Tiles>
-        <Tiles heading={t('add.tempo')}>
-          {TEMPO_TILES.map(([word, bpm]) => (
-            <Tile
-              key={word}
-              label={t('add.tempoLabel', { word: t(`add.tempos.${word}`), bpm })}
-              pressed={draft.tempo === bpm}
-              onClick={done(() => actions.dispatch({ type: 'settings', tempo: bpm }))}
-            >
-              <span className="flex flex-col items-center">
-                <span className="font-serif text-base font-bold">{t(`add.tempos.${word}`)}</span>
-                <span className="text-sm">
-                  <span className="font-music">♩</span> = {bpm}
-                </span>
-              </span>
             </Tile>
           ))}
         </Tiles>
@@ -341,103 +307,16 @@ export function AddMenu() {
     ) : (
       <p className="text-sm text-muted-foreground">{t('add.noHand')}</p>
     ),
-    key: (
+    clefs: (
       <div className="flex flex-col gap-4">
-        <Tiles heading={t('add.major')}>{keyTiles(false).map(keyTile)}</Tiles>
-        <Tiles heading={t('add.minor')}>{keyTiles(true).map(keyTile)}</Tiles>
-      </div>
-    ),
-    time: (
-      <div className="flex flex-col gap-4">
-        <Tiles heading={t('add.song')}>
-          {meters.map((meter) => (
-            <Tile
-              key={meter}
-              label={meter}
-              pressed={meter === draft.meter}
-              onClick={done(() => actions.dispatch({ type: 'settings', meter }))}
-            >
-              <Engraved music={emptyBar(draft.key, meter, beatsPerBar(meter))} />
-            </Tile>
-          ))}
-        </Tiles>
-        <Tiles heading={t('add.thisBar')}>
-          {lengths.map((ticks) => {
-            const beats = ticks / TICKS_PER_BEAT
-            return (
+        <p className="text-sm text-muted-foreground">{t('add.clefs')}</p>
+        {HANDS.map((hand) => (
+          <Tiles key={hand} heading={t(`layers.${hand}`)}>
+            {CLEFS.map((clef) => (
               <Tile
-                key={ticks}
-                label={timeSignatureText(timeSignature(beats, draft.meter))}
-                pressed={ticks === barTicks}
-                onClick={done(() => actions.dispatch({ type: 'barLength', ticks }))}
-              >
-                <Engraved
-                  music={emptyBar(draft.key, draft.meter, beats)}
-                  time={timeSignature(beats, draft.meter)}
-                />
-              </Tile>
-            )
-          })}
-        </Tiles>
-      </div>
-    ),
-    staves: (
-      <div className="flex flex-col gap-4">
-        <Tiles heading={t('add.staves')}>
-          <Tile
-            label={t('viewMenu.melody')}
-            pressed={tuneShown}
-            // Adds the tune's staff, or brings a hidden one back; taking it away is the settings' Remove.
-            onClick={done(() =>
-              actions.dispatch(
-                draft.melodyStaff
-                  ? { type: 'hide', row: 'melody', hidden: false }
-                  : { type: 'melodyStaff', on: true },
-              ),
-            )}
-          >
-            <span className="font-music text-3xl leading-none">𝄞</span>
-          </Tile>
-          <Tile
-            label={t('chordNames')}
-            pressed={layer === 'chords'}
-            onClick={done(() => {
-              view.showChordNames(true)
-              actions.dispatch({ type: 'layer', layer: 'chords' })
-            })}
-          >
-            <span className="font-display text-xl font-semibold">C⁷</span>
-          </Tile>
-        </Tiles>
-        {/* As a notation app adds a staff: an instrument, its part a voice sung with the tune (ADR 0070). */}
-        <Tiles heading={t('instruments.add')}>
-          {INSTRUMENT_FAMILIES.flatMap(instrumentsIn).map((instrument) => (
-            <Tile
-              key={instrument}
-              label={tm(`instrument.${instrument}`)}
-              disabled={draft.voices.length >= EXTRA_VOICES.length}
-              onClick={done(() => {
-                const voice = EXTRA_VOICES[draft.voices.length]
-                if (voice) actions.dispatch({ type: 'voiceStaff', voice, on: true, instrument })
-              })}
-            >
-              <span className="flex items-center gap-1">
-                <span className="font-music text-3xl leading-none">
-                  {INSTRUMENT_OF[instrument].clef === 'bass' ? '𝄢' : '𝄞'}
-                </span>
-                <span className="font-serif text-base italic">
-                  {tm(`instrumentShort.${instrument}`)}
-                </span>
-              </span>
-            </Tile>
-          ))}
-        </Tiles>
-        <Tiles heading={t('add.clefs')}>
-          {HANDS.flatMap((hand) =>
-            CLEFS.map((clef) => (
-              <Tile
-                key={`${hand}-${clef}`}
+                key={clef}
                 label={t(`add.clef.${hand}.${clef}`)}
+                caption={t(`add.clefName.${clef}`)}
                 pressed={clefsHere[hand] === clef}
                 onClick={done(() => actions.dispatch({ type: 'clef', hand, clef }))}
               >
@@ -447,45 +326,43 @@ export function AddMenu() {
                   staff={hand === 'rh' ? 'treble' : 'bass'}
                 />
               </Tile>
-            )),
-          )}
-        </Tiles>
+            ))}
+          </Tiles>
+        ))}
       </div>
     ),
   }
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger
-        render={
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full"
-            aria-label={t('add.open')}
-            title={t('add.open')}
-            disabled={takes.stage !== 'idle'}
-          />
-        }
-      >
-        <Plus aria-hidden />
-      </SheetTrigger>
+      {trigger ? (
+        <SheetTrigger render={trigger} disabled={takes.stage !== 'idle'} />
+      ) : (
+        <SheetTrigger
+          render={PLUS_TRIGGER}
+          aria-label={t('add.open')}
+          title={t('add.open')}
+          disabled={takes.stage !== 'idle'}
+        >
+          <Plus aria-hidden />
+        </SheetTrigger>
+      )}
       <SheetContent title={t('add.label')}>
         <Tabs.Root
           value={tab}
           onValueChange={(next: AddTab) => setTab(next)}
           className="flex flex-col gap-3"
         >
-          {/* Each kind named under its picture; where they do not all fit, the row scrolls sideways. */}
+          {/* Each kind named under its picture, all six in a phone's width; else the row scrolls. */}
           <Tabs.List
             aria-label={t('add.tabs')}
-            className="flex gap-1 overflow-x-auto rounded-2xl bg-muted p-1 [scrollbar-width:none] fade-scroll-x"
+            className="flex gap-0.5 overflow-x-auto rounded-2xl bg-muted p-1 [scrollbar-width:none] fade-scroll-x"
           >
             {ADD_TABS.map((each) => (
               <Tabs.Tab
                 key={each}
                 value={each}
                 className={cn(
-                  'flex min-h-14 min-w-15 flex-1 shrink-0 flex-col items-center justify-center gap-0.5 rounded-xl px-2 text-xs font-semibold whitespace-nowrap text-muted-foreground',
+                  'flex min-h-14 min-w-11 flex-1 shrink-0 flex-col items-center justify-center gap-0.5 rounded-xl px-1 text-xs font-semibold whitespace-nowrap text-muted-foreground',
                   'aria-selected:bg-selected aria-selected:text-selected-foreground',
                 )}
               >

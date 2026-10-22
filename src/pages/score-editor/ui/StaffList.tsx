@@ -1,4 +1,4 @@
-import { Eye, EyeOff, Plus, Trash2 } from 'lucide-react'
+import { Eye, EyeOff, Trash2 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
@@ -72,7 +72,8 @@ function StaffRow({
 /**
  * The score's rows as a notation app's instruments panel lists them (ADR 0072): the chord names, the
  * tune's staff and each more voice's, each with its instrument; an eye shows or hides a row and keeps
- * its music; Remove takes a part away with its notes. The piano's two staves are always there.
+ * its music; Remove takes a part away with its notes. The piano's two staves are always there; a part
+ * is added by the Song sheet's Add a part beside it (ADR 0080).
  */
 export function StaffList() {
   const { t } = useTranslation('editor')
@@ -106,17 +107,7 @@ export function StaffList() {
         >
           <InstrumentChoice part={0} label={tune} />
         </StaffRow>
-      ) : (
-        <li className="flex min-h-14 items-center border-b border-border py-1.5">
-          <Button
-            variant="soft"
-            onClick={() => actions.dispatch({ type: 'melodyStaff', on: true })}
-          >
-            <Plus data-icon="inline-start" aria-hidden />
-            {t('staves.addTune')}
-          </Button>
-        </li>
-      )}
+      ) : null}
       {EXTRA_VOICES.slice(0, voices).map((voice, i) => {
         const name = t(`layers.${voice}`)
         return (

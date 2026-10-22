@@ -1,12 +1,8 @@
-import { barLengths, metersFor, type BarMarkChoice, type MarkChoice } from '@/features/score-editor'
+import type { BarMarkChoice, MarkChoice } from '@/features/score-editor'
 import {
-  keySignature,
-  LETTERS,
   midi,
   note,
-  ROOT_ACCIDENTALS,
   TICKS_PER_BEAT,
-  isWrittenKey,
   type BarMarks,
   type Clef,
   type Hand,
@@ -14,51 +10,22 @@ import {
   type Meter,
   type NoteMarks,
   type Pedal,
-  type Tick,
 } from '@/shared/lib/music'
 import type { TimedMusic, TimedNote } from '@/shared/lib/notation'
 
 /**
- * What the + menu adds to the score, as Sibelius's does, each kind a tab of tiles: bars, lines and
- * sections; barlines (repeats, endings, a double or final barline, the signs and jumps); lines over
- * notes (slurs, hairpins, octave lines); text (expressions, the tempo, the pedal); the key signature;
- * a hand's fingers and its bar written out; the key signature; the time signature; and the staves (the
- * tune's, the chord names' row, the instruments, the clefs).
+ * What the Insert menu puts at the caret (ADR 0065, 0080), as Sibelius's does, each kind a tab of
+ * tiles: bars (added, deleted, a line or section begun, the caret's bar's own length); repeats
+ * (barlines, endings, the signs and jumps); lines over notes (slurs, hairpins, octave lines); text
+ * on notes (expressions, the pedal); a hand's fingers and its bar written out; and a hand's clef from
+ * the caret's bar. What is the song's as a whole (its key, time signature, tempo, parts) is the Song
+ * sheet's alone.
  */
-export const ADD_TABS = [
-  'bars',
-  'barlines',
-  'lines',
-  'text',
-  'fingers',
-  'key',
-  'time',
-  'staves',
-] as const
+export const ADD_TABS = ['bars', 'repeats', 'lines', 'text', 'fingers', 'clefs'] as const
 export type AddTab = (typeof ADD_TABS)[number]
 
-/** Sharps first, fewest first, then flats: a signature's place in a chooser, as a score's index lists them. */
-const signatureOrder = (key: Key) => {
-  const count = keySignature(key)
-  return count >= 0 ? count : 7 - count
-}
-
-/** Every key a signature writes, in one mode: its fifteen, C (or A) first, then sharps, then flats. */
-export function keyTiles(minor: boolean): Key[] {
-  return LETTERS.flatMap((letter) =>
-    ROOT_ACCIDENTALS.map((accidental): Key => ({ tonic: note(letter, accidental), minor })),
-  )
-    .filter(isWrittenKey)
-    .sort((a, b) => signatureOrder(a) - signatureOrder(b))
-}
-
-/** The time signature tiles: the song's meters of its kind, and the lengths the caret's bar may take. */
-export function timeTiles(meter: Meter): { meters: Meter[]; lengths: Tick[] } {
-  return { meters: metersFor(meter), lengths: barLengths(meter) }
-}
-
 /**
- * The lines the + menu adds over the notes at the caret, as the palette's marks are added; each with
+ * The lines Insert puts over the notes at the caret, as the palette's marks are added; each with
  * how its tile draws it, from a first note to a second.
  */
 export const LINE_TILES = [
@@ -101,16 +68,6 @@ export const LINE_TILES = [
   },
 ] as const satisfies readonly { mark: MarkChoice; word: string; from: NoteMarks; to: NoteMarks }[]
 export type LineTile = (typeof LINE_TILES)[number]
-
-/** The tempo words a song's tempo is set by, each at its beats a minute, as a metronome marks them. */
-export const TEMPO_TILES = [
-  ['largo', 50],
-  ['adagio', 70],
-  ['andante', 90],
-  ['moderato', 110],
-  ['allegro', 130],
-  ['presto', 160],
-] as const
 
 /** The pedal's tiles: each mark as a score prints it, Ped. down and ✱ up (a change both). */
 export const PEDAL_TILES = [
