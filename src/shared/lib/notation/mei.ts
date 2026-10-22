@@ -56,9 +56,11 @@ export function scoreToMei(score: Score, options: MeiOptions = {}): string {
   const scoreDef = `<scoreDef ${meterAttrs(time, score.meter)}${continues ? ' meter.visible="false"' : ''} key.sig="${keySig(
     keySignature(first?.key ?? score.key),
   )}"><staffGrp>${sung.map(staffDef).join('')}${
-    piano.length > 0
+    piano.length > 1
       ? `<staffGrp symbol="brace" bar.thru="true">${piano.map(staffDef).join('')}</staffGrp>`
-      : ''
+      : piano.length > 0
+        ? piano.map(staffDef).join('')
+        : ''
   }</staffGrp></scoreDef>`
 
   const writer = new Writer(score, staves, options)

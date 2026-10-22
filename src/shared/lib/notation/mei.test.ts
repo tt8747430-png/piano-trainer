@@ -125,6 +125,7 @@ describe('scoreToMei, a note’s marks and the options', () => {
     const bass = scoreToMei(score, { staves: ['bass'] })
     expect(bass).toMatch(/<staffDef n="1"[^>]*clef\.shape="F"/)
     expect(bass).not.toContain('n-treble')
+    expect(bass).not.toContain('symbol="brace"')
   })
 
   it('hides the time on a line that goes on in it, and shows it where it changes', () => {
