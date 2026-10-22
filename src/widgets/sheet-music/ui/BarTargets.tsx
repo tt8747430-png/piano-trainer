@@ -2,13 +2,13 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Performance } from '@/shared/lib/arrangement'
 import { usePositionName } from '@/shared/ui'
-import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
+import type { ScoreLayout } from '@/shared/ui/score'
 import { chordPositions } from '../model/chord-positions'
-import { nearestBeatGroup } from '../model/nearest-beat-group'
+import { beatGroupAt } from '../model/beat-group-at'
 
 /**
- * Each bar as a button over the staff: a tap jumps to the beat group nearest it, Enter or Space to
- * the bar's first.
+ * Each bar as a button over the staff: a tap jumps to the beat group of the note under it, Enter
+ * or Space to the bar's first.
  */
 export function BarTargets({
   layout,
@@ -57,11 +57,16 @@ export function BarTargets({
           const target =
             event.detail === 0
               ? performance.beatGroups.findIndex((group) => group.bar === bar)
-              : nearestBeatGroup(
+              : beatGroupAt(
                   performance,
                   bar,
-                  (tick) => xAtTick(layout, tick),
-                  measure.x + event.clientX - box.left,
+                  layout.onsets.filter(
+                    (onset) =>
+                      onset.tick >= measure.startTick &&
+                      onset.tick < measure.startTick + measure.ticks,
+                  ),
+                  // The tap in the layout's px, however the sheet is zoomed on the screen.
+                  measure.x + ((event.clientX - box.left) * measure.width) / box.width,
                 )
           if (target !== null && target >= 0) onJump(target)
         }}
