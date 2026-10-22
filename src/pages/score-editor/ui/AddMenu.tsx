@@ -1,6 +1,6 @@
 import { Tabs } from '@base-ui/react/tabs'
 import { Bookmark, Hand, Merge, Plus, Trash2, WrapText, type LucideIcon } from 'lucide-react'
-import { useMemo, useState, type ReactElement, type ReactNode } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   barAt,
@@ -163,7 +163,8 @@ function Tiles({ heading, children }: { heading?: string; children: ReactNode })
 }
 
 /** Insert's button as the bar shows it: a round ghost icon. */
-const PLUS_TRIGGER = <Button variant="ghost" size="icon" className="rounded-full" />
+/** Its button, the dock's size (`EditorDock`): the bar's buttons are all one finger's reach. */
+const PLUS_TRIGGER = <Button variant="ghost" size="icon" className="size-12 rounded-full" />
 
 /**
  * Insert (ADR 0065, 0080): what goes on the score at the caret, kept apart from the palette's tools
@@ -172,11 +173,9 @@ const PLUS_TRIGGER = <Button variant="ghost" size="icon" className="rounded-full
  * show them, as many to a row as the screen holds; a tile chosen does its work and closes the menu (a
  * hand's fingers keep it open, note after note). One height whatever the tab. What is the song's as a
  * whole (its key, time signature, tempo and parts) is the Song sheet's, never here.
- *
- * Its button is a round + by default, or `trigger` in its place (a base-ui render element), named and
- * drawn by its caller.
+ * Its button, a round +, rides first in the dock.
  */
-export function AddMenu({ trigger }: { trigger?: ReactElement } = {}) {
+export function AddMenu() {
   const { t } = useTranslation('editor')
   const { actions, takes } = useScoreEditorContext()
   const [open, setOpen] = useState(false)
@@ -334,18 +333,14 @@ export function AddMenu({ trigger }: { trigger?: ReactElement } = {}) {
   }
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      {trigger ? (
-        <SheetTrigger render={trigger} disabled={takes.stage !== 'idle'} />
-      ) : (
-        <SheetTrigger
-          render={PLUS_TRIGGER}
-          aria-label={t('add.open')}
-          title={t('add.open')}
-          disabled={takes.stage !== 'idle'}
-        >
-          <Plus aria-hidden />
-        </SheetTrigger>
-      )}
+      <SheetTrigger
+        render={PLUS_TRIGGER}
+        aria-label={t('add.open')}
+        title={t('add.open')}
+        disabled={takes.stage !== 'idle'}
+      >
+        <Plus aria-hidden />
+      </SheetTrigger>
       <SheetContent title={t('add.label')}>
         <Tabs.Root
           value={tab}

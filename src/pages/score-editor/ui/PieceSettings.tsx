@@ -1,4 +1,4 @@
-import { Settings } from 'lucide-react'
+import { FileMusic } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PIECE_TEMPO } from '@/entities/piece'
@@ -69,11 +69,19 @@ function SongTempo() {
   )
 }
 
-/** One part of the sheet, under its heading. */
-function Part({ title, children }: { title: string; children: ReactNode }) {
+/** One part of the sheet, under its heading; the first, the song's own, under the sheet's title alone. */
+function Part({
+  title,
+  plain = false,
+  children,
+}: {
+  title: string
+  plain?: boolean
+  children: ReactNode
+}) {
   return (
     <section aria-label={title} className="flex flex-col gap-4">
-      <h3 className="text-sm font-semibold text-muted-foreground">{title}</h3>
+      {plain ? null : <h3 className="text-sm font-semibold text-muted-foreground">{title}</h3>}
       {children}
     </section>
   )
@@ -106,11 +114,11 @@ export function PieceSettings() {
           />
         }
       >
-        <Settings aria-hidden />
+        <FileMusic aria-hidden />
       </SheetTrigger>
       <SheetContent title={t('song.label')}>
         <div className="flex flex-col gap-8">
-          <Part title={t('song.label')}>
+          <Part title={t('song.label')} plain>
             {meta.kind === 'song' ? <SongTitleField /> : null}
             <KeyChoice
               value={keyParam(key)}
