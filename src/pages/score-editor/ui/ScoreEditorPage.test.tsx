@@ -512,7 +512,6 @@ describe('the score editor', () => {
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'Move the palette to the left' }))
     expect(settingsStore.getState().paletteSide).toBe('left')
-    expect(document.querySelector('.editor-screen')).toHaveAttribute('data-side', 'left')
     await user.click(screen.getByRole('button', { name: 'Move the palette to the right' }))
     expect(settingsStore.getState().paletteSide).toBe('right')
   })
@@ -525,7 +524,7 @@ describe('the score editor', () => {
         .getAllByRole('button')
         .map((button) => button.getAttribute('aria-label')),
     ).toEqual(['Undo', 'Redo', 'Play', 'Record'])
-    const moves = within(screen.getByRole('group', { name: 'Caret' })).getAllByRole('button')
+    const moves = within(screen.getByRole('toolbar', { name: 'Caret' })).getAllByRole('button')
     expect(moves.at(-1)).toHaveAccessibleName('Delete')
   })
 
@@ -545,9 +544,9 @@ describe('the score editor', () => {
       'Chord',
     ])
       expect(within(palette).getByRole('button', { name })).toBeInTheDocument()
-    // The caret's moves and Delete stand apart from the palette, by the caret's line.
+    // The caret's moves and Delete stand apart from the palette, floating over the sheet.
     expect(within(palette).queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument()
-    const moves = screen.getByRole('group', { name: 'Caret' })
+    const moves = screen.getByRole('toolbar', { name: 'Caret' })
     for (const name of ['Back a step', 'Forward a step', 'Delete'])
       expect(within(moves).getByRole('button', { name })).toBeInTheDocument()
     expect(within(palette).getByRole('tab', { name: 'Fingering' })).toHaveAttribute(

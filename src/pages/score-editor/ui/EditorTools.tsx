@@ -110,21 +110,12 @@ const TAB_KEYS: Readonly<Record<PaletteTab, ReactNode>> = {
 
 /**
  * The editor's palette (ADR 0064, 0065): its tools by kind as tabs of pictures, the ones that work
- * where the caret writes in reach and the rest greyed, the chosen tab's keys under them. It keeps
- * its size whatever the tab, so the sheet never jumps: at the foot (`side` off) three rows of keys,
- * more scrolling inside; beside the sheet (`side`), the column's height. It folds into a handle over
- * the sheet's corner (`onFold`). While a take records, the tools wait for Stop.
+ * where the caret writes in reach and the rest greyed, the chosen tab's keys under them. A card
+ * floating over the sheet (ADR 0079), as tall as its keys, scrolling them inside past a share of the
+ * screen: at the foot (`side` off) or beside the sheet (`side`). It folds into a button over the
+ * sheet's corner (`onFold`). While a take records, the tools wait for Stop.
  */
-export function EditorTools({
-  side,
-  foot,
-  onFold,
-}: {
-  side: boolean
-  /** What stands at the palette's foot: the caret's moves, where the screen has no status row for them. */
-  foot?: ReactNode
-  onFold: () => void
-}) {
+export function EditorTools({ side, onFold }: { side: boolean; onFold: () => void }) {
   const { t } = useTranslation('editor')
   const { takes, meta } = useScoreEditorContext()
   const layer = useEditorState((state) => state.layer)
@@ -178,14 +169,11 @@ export function EditorTools({
       </Button>
     </>
   )
-  const footRow = foot ? (
-    <div className="flex justify-end border-t border-border pt-1.5">{foot}</div>
-  ) : null
   const keys = cn(
     'content-start overflow-y-auto overscroll-contain',
-    side ? 'min-h-0 flex-1' : 'h-39',
+    side ? 'min-h-0 flex-1' : 'max-h-[34dvh]',
   )
-  const card = cn('gap-1 rounded-3xl p-1.5 shadow-none', side && 'h-full min-h-0')
+  const card = cn('gap-1 rounded-3xl p-1.5', side && 'max-h-full min-h-0')
   // In the chord names' row the palette is theirs, in place of the notes' tabs.
   if (layer === 'chords')
     return (
@@ -221,7 +209,6 @@ export function EditorTools({
               <ChordTyped focus={focusField} />
             )}
           </ToolPalettePanel>
-          {footRow}
         </fieldset>
       </ToolPalette>
     )
@@ -248,7 +235,6 @@ export function EditorTools({
         <ToolPalettePanel value={tab} className={cn('grid-cols-6', keys)}>
           {TAB_KEYS[tab]}
         </ToolPalettePanel>
-        {footRow}
       </fieldset>
     </ToolPalette>
   )
