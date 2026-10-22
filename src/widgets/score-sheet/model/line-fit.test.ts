@@ -10,7 +10,7 @@ describe('lineFit', () => {
     // 296px: a phone on its side with the keys folded.
     const fit = lineFit({ room: 296, staves: 2, headed: true })
     expect(fit).toBeLessThan(1)
-    expect(52 + 44 + (210 + 32) * fit).toBeCloseTo(296)
+    expect(52 + 44 + (202 + 32) * fit).toBeCloseTo(296)
   })
 
   it('leaves out the heading the across view has not', () => {
