@@ -218,7 +218,7 @@ export function PitchKeys() {
 
 /**
  * The Notes keypad, six keys a row: the values whole to 32nd; the dots, Triplet, Rest, Tie and Chord.
- * The caret's moves and Delete stand apart from the palette (`CaretMoves`), a note's pitch under Pitch.
+ * The caret's moves and Delete stand apart from the palette, in the dock (`EditorDock`), a note's pitch under Pitch.
  */
 export function NoteKeys() {
   const { t } = useTranslation('editor')

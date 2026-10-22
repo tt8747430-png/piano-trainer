@@ -80,18 +80,19 @@ describe('the score editor', () => {
     expect(within(chords).queryByRole('tab', { name: 'Notes' })).not.toBeInTheDocument()
   })
 
-  it('folds its palette into a button over the sheet, and opens it again', async () => {
+  it('folds its palette into its row of tabs, a tab opening it again on that tab', async () => {
     const user = userEvent.setup()
-    await renderApp('/edit/my-1', { storage: withSong() })
+    const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     const palette = await screen.findByRole('region', { name: 'Tools' })
+    const keys = () => within(palette).queryByRole('group', { name: 'Note value' })
     await user.click(within(palette).getByRole('button', { name: 'Hide the tools' }))
-    expect(screen.queryByRole('region', { name: 'Tools' })).not.toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Show the tools' }))
-    expect(
-      within(screen.getByRole('region', { name: 'Tools' })).getByRole('group', {
-        name: 'Note value',
-      }),
-    ).toBeInTheDocument()
+    expect(keys()).not.toBeInTheDocument()
+    expect(settingsStore.getState().paletteFolded).toBe(true)
+    await user.click(within(palette).getByRole('tab', { name: 'Notes' }))
+    expect(keys()).toBeInTheDocument()
+    await user.click(within(palette).getByRole('button', { name: 'Hide the tools' }))
+    await user.click(within(palette).getByRole('button', { name: 'Show the tools' }))
+    expect(keys()).toBeInTheDocument()
   })
 
   it('adds the tune’s staff, hides it keeping its notes, and removes it with them', async () => {
@@ -516,16 +517,21 @@ describe('the score editor', () => {
     expect(settingsStore.getState().paletteSide).toBe('right')
   })
 
-  it('keeps Undo, Redo, Play and Record in the bar, and Delete last of the caret’s moves', async () => {
+  it('keeps Undo and Redo in the bar, and Play between ‹ and › in the dock, as the Player’s', async () => {
     await renderApp('/edit/my-1', { storage: withSong() })
     const bar = await screen.findByRole('toolbar', { name: 'Editing' })
     expect(
       within(bar)
         .getAllByRole('button')
         .map((button) => button.getAttribute('aria-label')),
-    ).toEqual(['Undo', 'Redo', 'Play', 'Record'])
-    const moves = within(screen.getByRole('toolbar', { name: 'Caret' })).getAllByRole('button')
-    expect(moves.at(-1)).toHaveAccessibleName('Delete')
+    ).toEqual(['Undo', 'Redo'])
+    const dock = within(screen.getByRole('toolbar', { name: 'Playback' })).getAllByRole('button')
+    expect(dock.slice(1).map((button) => button.getAttribute('aria-label'))).toEqual([
+      'Back a step',
+      'Play',
+      'Forward a step',
+      'Delete',
+    ])
   })
 
   it('keeps every tool a tab away, the hand’s own only in a hand', async () => {
@@ -546,7 +552,7 @@ describe('the score editor', () => {
       expect(within(palette).getByRole('button', { name })).toBeInTheDocument()
     // The caret's moves and Delete stand apart from the palette, floating over the sheet.
     expect(within(palette).queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument()
-    const moves = screen.getByRole('toolbar', { name: 'Caret' })
+    const moves = screen.getByRole('toolbar', { name: 'Playback' })
     for (const name of ['Back a step', 'Forward a step', 'Delete'])
       expect(within(moves).getByRole('button', { name })).toBeInTheDocument()
     // A hand's fingers are the + menu's, not every note's palette.
@@ -964,8 +970,9 @@ describe('the score editor’s takes', () => {
     await user.click(await within(sheet).findByRole('button', { name: 'Record' }))
     expect(router.state.location.search).toEqual({})
 
-    // The song stopped as the take began, and the tools that change it wait for Stop.
-    expect(screen.getByRole('button', { name: 'Play' })).toBeDisabled()
+    // The song stopped as the take began, its strip in the dock's place, and the tools that change
+    // it wait for Stop.
+    expect(screen.queryByRole('button', { name: 'Play' })).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Undo' })).toBeDisabled()
     expect(screen.getByRole('button', { name: 'Settings' })).toBeDisabled()
     playArpeggio(audio, keyboard)

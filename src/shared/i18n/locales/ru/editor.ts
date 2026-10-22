@@ -20,6 +20,12 @@ export const editor: LocaleResources['editor'] = {
   },
   view: 'Вид',
   viewMenu: {
+    show: 'Показывать',
+    palette: 'Инструменты',
+    keys: 'Клавиши',
+    side: 'Инструменты рядом с нотами',
+    left: 'Слева',
+    right: 'Справа',
     label: 'Вид',
     midiDetail: 'Играйте в ноты с MIDI-клавиатуры',
     midi: 'MIDI-клавиатура',
@@ -127,7 +133,7 @@ export const editor: LocaleResources['editor'] = {
     pattern: 'Фактура',
   },
   caret: {
-    moves: 'Курсор',
+    moves: 'Воспроизведение',
     at: 'Такт {{bar}}, доля {{beat}} · {{what}}',
     notes: 'Такт {{bar}}, доля {{beat}} · {{what}} {{value}}',
     held: 'Такт {{bar}}, доля {{beat}} · {{what}} звучит',

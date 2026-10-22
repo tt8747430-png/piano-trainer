@@ -1,4 +1,4 @@
-import { CircleDot } from 'lucide-react'
+import { Circle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { selectTake, useTakes } from '@/entities/take'
 import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
@@ -37,7 +37,8 @@ export function RecorderSheet() {
           />
         }
       >
-        <CircleDot aria-hidden />
+        {/* A recorder's red dot, as every recorder's Record wears. */}
+        <Circle aria-hidden className="fill-current text-destructive" />
       </SheetTrigger>
       <SheetContent
         title={writing ? t('recorder.write') : t('recorder.title')}

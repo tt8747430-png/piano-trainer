@@ -2,13 +2,14 @@ import {
   ArrowLeftToLine,
   ArrowRightToLine,
   ChevronDown,
+  ChevronUp,
   Keyboard,
-  PanelLeftClose,
-  PanelRightClose,
+  Piano,
 } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { useState, type MouseEvent, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectPaletteSide, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { useFoldKeys } from '@/features/live-keyboard'
 import { setPaletteSide } from '@/features/set-preference'
 import { ToolPalette, ToolPalettePanel, ToolPaletteTab, ToolPaletteTabs } from '@/shared/ui'
 import { cn } from '@/shared/lib'
@@ -107,11 +108,20 @@ const TAB_KEYS: Readonly<Record<PaletteTab, ReactNode>> = {
  * The editor's palette (ADR 0064, 0065): its tools by kind as tabs of pictures, the ones that work
  * where the caret writes in reach and the rest greyed, the chosen tab's keys under them. A card
  * floating over the sheet (ADR 0079), as tall as its keys, scrolling them inside past a share of the
- * screen: at the foot (`side` off) or beside the sheet (`side`). It folds into a button over the
- * sheet's corner (`onFold`). While a take records, the tools wait for Stop.
+ * screen: at the foot (`side` off) or beside the sheet (`side`). Folded (`folded`), it is its row of
+ * tabs alone, a tab tapped opening it there, so its tools are never more than a tap away; the row
+ * also brings back folded keys. While a take records, the tools wait for Stop.
  */
-export function EditorTools({ side, onFold }: { side: boolean; onFold: () => void }) {
-  const { t } = useTranslation('editor')
+export function EditorTools({
+  side,
+  folded,
+  onFold,
+}: {
+  side: boolean
+  folded: boolean
+  onFold: (folded: boolean) => void
+}) {
+  const { t } = useTranslation(['editor', 'common'])
   const { takes, meta } = useScoreEditorContext()
   const layer = useEditorState((state) => state.layer)
   const [chosen, choose] = useState<PaletteTab>('notes')
@@ -126,6 +136,7 @@ export function EditorTools({ side, onFold }: { side: boolean; onFold: () => voi
     setFocusField(true)
   }
   const recording = takes.stage !== 'idle'
+  const keys = useFoldKeys()
   const settings = useSettingsStoreApi()
   const paletteSide = useSettings(selectPaletteSide)
   const tab = chosen
@@ -133,7 +144,20 @@ export function EditorTools({ side, onFold }: { side: boolean; onFold: () => voi
   const other = left ? 'right' : 'left'
   const fold = (
     <>
-      {side ? (
+      {keys.folded ? (
+        // The keys folded come back from here, the palette's row always in sight.
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={t('common:rail.unfold')}
+          title={t('common:rail.unfold')}
+          className="size-9 shrink-0 rounded-xl"
+          onClick={() => keys.fold(false)}
+        >
+          <Piano aria-hidden />
+        </Button>
+      ) : null}
+      {side && !folded ? (
         // Beside the sheet, the palette stands on the side the learner likes (ADR 0071).
         <Button
           variant="ghost"
@@ -149,26 +173,25 @@ export function EditorTools({ side, onFold }: { side: boolean; onFold: () => voi
       <Button
         variant="ghost"
         size="icon"
-        aria-label={t('palette.close')}
-        title={t('palette.close')}
+        aria-label={t(folded ? 'palette.open' : 'palette.close')}
+        title={t(folded ? 'palette.open' : 'palette.close')}
+        aria-expanded={!folded}
         className="size-9 shrink-0 rounded-xl"
-        onClick={onFold}
+        onClick={() => onFold(!folded)}
       >
-        {!side ? (
-          <ChevronDown aria-hidden />
-        ) : left ? (
-          <PanelLeftClose aria-hidden />
-        ) : (
-          <PanelRightClose aria-hidden />
-        )}
+        {folded ? <ChevronUp aria-hidden /> : <ChevronDown aria-hidden />}
       </Button>
     </>
   )
-  const keys = cn(
+  // Folded, a tab tapped (the chosen one too, which changes nothing) opens the palette on it.
+  const unfoldAt = (event: MouseEvent) => {
+    if (folded && (event.target as Element).closest('[role="tab"]')) onFold(false)
+  }
+  const scroll = cn(
     'content-start overflow-y-auto overscroll-contain',
     side ? 'min-h-0 flex-1' : 'max-h-[34dvh]',
   )
-  const card = cn('gap-1 rounded-3xl p-1.5', side && 'max-h-full min-h-0')
+  const card = cn('gap-1 rounded-3xl p-1.5', side && !folded && 'max-h-full min-h-0')
   // In the chord names' row the palette is theirs, in place of the notes' tabs.
   if (layer === 'chords')
     return (
@@ -178,7 +201,7 @@ export function EditorTools({ side, onFold }: { side: boolean; onFold: () => voi
         onTabChange={chooseChordTab}
         className={card}
       >
-        <fieldset disabled={recording} className="contents">
+        <fieldset disabled={recording} className="contents" onClick={unfoldAt}>
           <ToolPaletteTabs
             label={t('chord.tabs')}
             end={<div className="flex items-center gap-1">{fold}</div>}
@@ -195,21 +218,23 @@ export function EditorTools({ side, onFold }: { side: boolean; onFold: () => voi
               </ToolPaletteTab>
             ))}
           </ToolPaletteTabs>
-          <ToolPalettePanel value={chordTab} className={cn('grid-cols-6 gap-1.5', keys)}>
-            {chordTab === 'key' ? (
-              <ChordsInKey />
-            ) : chordTab === 'build' ? (
-              <ChordBuilt />
-            ) : (
-              <ChordTyped focus={focusField} />
-            )}
-          </ToolPalettePanel>
+          {folded ? null : (
+            <ToolPalettePanel value={chordTab} className={cn('grid-cols-6 gap-1.5', scroll)}>
+              {chordTab === 'key' ? (
+                <ChordsInKey />
+              ) : chordTab === 'build' ? (
+                <ChordBuilt />
+              ) : (
+                <ChordTyped focus={focusField} />
+              )}
+            </ToolPalettePanel>
+          )}
         </fieldset>
       </ToolPalette>
     )
   return (
     <ToolPalette label={t('palette.label')} tab={tab} onTabChange={choose} className={card}>
-      <fieldset disabled={recording} className="contents">
+      <fieldset disabled={recording} className="contents" onClick={unfoldAt}>
         <ToolPaletteTabs
           label={t('palette.tabs')}
           end={<div className="flex items-center gap-1">{fold}</div>}
@@ -227,9 +252,11 @@ export function EditorTools({ side, onFold }: { side: boolean; onFold: () => voi
             </ToolPaletteTab>
           ))}
         </ToolPaletteTabs>
-        <ToolPalettePanel value={tab} className={cn('grid-cols-6', keys)}>
-          {TAB_KEYS[tab]}
-        </ToolPalettePanel>
+        {folded ? null : (
+          <ToolPalettePanel value={tab} className={cn('grid-cols-6', scroll)}>
+            {TAB_KEYS[tab]}
+          </ToolPalettePanel>
+        )}
       </fieldset>
     </ToolPalette>
   )

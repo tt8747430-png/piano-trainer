@@ -22,6 +22,12 @@ export const editor = {
   view: 'View',
   // What the score shows and how, from the bar (ADR 0064).
   viewMenu: {
+    show: 'Show',
+    palette: 'Tools',
+    keys: 'Keys',
+    side: 'Tools beside the music',
+    left: 'Left',
+    right: 'Right',
     label: 'View',
     midiDetail: 'Play into the score from a keyboard',
     midi: 'MIDI keyboard',
@@ -134,7 +140,7 @@ export const editor = {
     pattern: 'Pattern',
   },
   caret: {
-    moves: 'Caret',
+    moves: 'Playback',
     at: 'Bar {{bar}}, beat {{beat}} · {{what}}',
     notes: 'Bar {{bar}}, beat {{beat}} · {{what}} {{value}}',
     held: 'Bar {{bar}}, beat {{beat}} · {{what}} held',
