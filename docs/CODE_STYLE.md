@@ -209,10 +209,11 @@ search over the raw one and a param left out would let the stale value through. 
   `spelled` note, decided where the chord is voiced; the tune keeps its written spelling. `notate(performance)` (`shared/lib/notation`) writes
   it as a Score; the Score is never played, and cutting or quantising in `notate` changes only what is written.
 - **Sheet music is `ScoreView`** (`shared/ui/score`, imported by that path, never the kit's barrel, so only the
-  Player's chunk carries VexFlow). It engraves once the music font is in, hands its children the layout (a measure's
-  x and width, an onset's x, `xAtTick`), and every colour is `currentColor` for `score.css` to set from the tokens.
+  Player's chunk carries the engraver). It writes the Score as MEI (`scoreToMei`), has Verovio engrave it in a worker
+  (ADR 0078), reads the layout from the SVG (a measure's x and width, an onset's x, `xAtTick`) and hands it to its
+  children; every colour is `currentColor` for `score.css` to set from the tokens.
   **Outside the Player a staff is `LazyScoreView`** (the kit): it loads `ScoreView` the first time a staff is on
-  screen (`loadScoreView`), keeping the staff's height meanwhile, so a Learn screen's chunk stays without VexFlow;
+  screen (`loadScoreView`), keeping the staff's height meanwhile, so a Learn screen's chunk stays without the engraver;
   `renderApp` loads it before a test renders.
 - **A run is `scaleRun`** (`shared/lib/schedule`): the notes from the Start on note up an octave and back in the
   practice rhythm, fingered, in `scaleKey`'s key (a mode in its parent's), as timed music in ticks; `runSounds(run,
@@ -279,9 +280,8 @@ tempo)` sounds it and `notate(run)` writes it.
   not an implementation detail.
 - Components: Testing Library, by role and accessible name; `userEvent.setup()` for interaction. No snapshots.
 - Ports are replaced by **fakes** (`createMemoryStorage()`, `stubMatchMedia`, `stubServiceWorker`,
-  `createFakeAudio()`, `createFakeMidi()`), not by mocking modules. jsdom has no fonts and no canvas: the setup's
-  `stubFonts()` (`src/shared/test/fonts.ts`) gives it `document.fonts` and a canvas that measures text, so VexFlow
-  engraves for real in a test (never mocked); `stubFonts({ loads: false })` is a font that fails.
+  `createFakeAudio()`, `createFakeMidi()`), not by mocking modules. Verovio engraves for real in a test: it reads
+  no fonts or layout, and where there is no `Worker` it runs in the test's own thread (ADR 0078).
 - A component under the settings store: `renderWithSettings(ui, { locale, theme })`; whole-app behaviour:
   `renderApp(path, { locale })`; both in `src/app/testing/`.
 - **A screen's test sits beside its page** (`pages/<x>/ui/<X>Page.test.tsx`) and runs the whole app through

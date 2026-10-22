@@ -283,7 +283,10 @@ class Writer {
     const dur = `dur="${event.duration.value}"${dots}`
     if (event.kind === 'rest') {
       tied.clear()
-      return event.hidden ? `<space ${dur}/>` : `<rest xml:id="r-${staff}-${event.tick}" ${dur}/>`
+      // A hidden rest is laid out as one (an empty bar has its onsets) and drawn by none: `score.css`.
+      return event.hidden
+        ? `<rest xml:id="h-${staff}-${event.tick}" ${dur} type="hidden"/>`
+        : `<rest xml:id="r-${staff}-${event.tick}" ${dur}/>`
     }
     const marks = event.marks
     const artics = (marks?.articulations ?? [])

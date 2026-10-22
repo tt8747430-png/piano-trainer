@@ -9,7 +9,7 @@ const numbers = (text: string | null) => (text?.match(/-?\d+(?:\.\d+)?/g) ?? [])
  * Where everything stands on a line Verovio engraved (ADR 0078), in CSS px, read from the SVG's own
  * coordinates, not the page's layout, so it reads the same anywhere (a test's DOM too): each measure
  * (`m-<index>`, its first staff's lines), each staff drawn (`staves`, top down) from its lines in the
- * first measure, each onset from its notes' and rests' heads (`n-` and `r-<staff>-<tick>`).
+ * first measure, each onset from its notes' and rests' heads (`n-`, `r-` and the hidden `h-<staff>-<tick>`).
  */
 export function layoutOf(
   svg: SVGSVGElement,
@@ -43,7 +43,7 @@ export function layoutOf(
     [...(measure?.children ?? [])].filter((child) => child.classList.contains('staff'))
 
   const onsets = new Map<Tick, number>()
-  for (const head of svg.querySelectorAll('g.note[id^="n-"], g.rest[id^="r-"]')) {
+  for (const head of svg.querySelectorAll('g.note[id^="n-"], g.rest[id^="r-"], g.rest[id^="h-"]')) {
     const tick = Number(head.id.split('-')[2])
     const use = head.querySelector('use')
     const at = numbers(use?.getAttribute('transform') ?? use?.getAttribute('x') ?? null)[0]

@@ -3,7 +3,7 @@ import { labelRow } from './label-row'
 
 /** A section's heading over its first line, in CSS px. */
 export const HEADING = 52
-/** The room a tempo mark over a line's first bar takes above its top staff, in VexFlow units. */
+/** The room a tempo mark over a line's first bar takes above its top staff, in the engraving's units. */
 const TEMPO_ROOM = 32
 /** How small a line is drawn to fit a short sheet: smaller, it is not read. */
 const LEAST_FIT = 0.6

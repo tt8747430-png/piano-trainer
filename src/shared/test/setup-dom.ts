@@ -2,7 +2,6 @@ import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
 import { afterEach, beforeEach, vi } from 'vitest'
 import { i18n } from '@/shared/i18n'
-import { stubFonts } from './fonts'
 import { stubIntersectionObserver } from './intersection'
 import { stubMatchMedia } from './match-media'
 import { stubServiceWorker } from './pwa-register'
@@ -26,7 +25,6 @@ export function setUpDom() {
     // scroll one into view: one asked to stays where it is.
     Element.prototype.scrollTo = vi.fn()
     Element.prototype.scrollIntoView = vi.fn()
-    stubFonts()
   })
 
   // `globals: false` means Testing Library cannot register its own cleanup.

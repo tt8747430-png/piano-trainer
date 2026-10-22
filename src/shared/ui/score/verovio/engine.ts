@@ -1,4 +1,4 @@
-import { engraveMei, loadToolkit, type EngraveOptions } from './toolkit'
+import type { EngraveOptions } from './toolkit'
 
 type Reply = { id: number; pages: string[] } | { id: number; error: string }
 
@@ -16,18 +16,24 @@ function workerOf(): Worker {
   return worker
 }
 
+/**
+ * In a test (jsdom has no Worker) Verovio runs on the test's own thread. A build leaves that branch
+ * out, and Verovio with it: the app carries it once, in the worker.
+ */
+const HERE = import.meta.env.MODE === 'test'
+
 /** The engraver started, so the first staff a screen shows need not wait on it to load. */
 export function warmEngraver(): void {
-  if (typeof Worker === 'undefined') void loadToolkit()
+  if (HERE) void import('./toolkit').then((toolkit) => toolkit.loadToolkit())
   else workerOf().postMessage({ warm: true })
 }
 
 /**
  * A score's MEI engraved by Verovio (ADR 0078): in a Web Worker, so a long score never holds the page
- * back; where there is none (tests), here. Its pages' SVG, a line's one page.
+ * back. Its pages' SVG, a line's one page.
  */
 export function engrave(mei: string, options: EngraveOptions): Promise<string[]> {
-  if (typeof Worker === 'undefined') return engraveMei(mei, options)
+  if (HERE) return import('./toolkit').then((toolkit) => toolkit.engraveMei(mei, options))
   const id = nextId++
   return new Promise((resolve, reject) => {
     waiting.set(id, (reply) =>

@@ -128,6 +128,13 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(bass).not.toContain('symbol="brace"')
   })
 
+  it('writes a blank staff’s rests as hidden ones, each named by its staff and tick', () => {
+    const tune = scoreToMei(
+      notate(music([c(0)], { chords: [], bars: [{ startTick: 0, beats: 4, blank: ['bass'] }] })),
+    )
+    expect(tune).toMatch(/<rest xml:id="h-bass-0" dur="1" type="hidden"\/>/)
+  })
+
   it('hides the time on a line that goes on in it, and shows it where it changes', () => {
     const score = plain([c(0)])
     expect(scoreToMei(score, { timeBefore: { count: 4, unit: 4 } })).toContain(

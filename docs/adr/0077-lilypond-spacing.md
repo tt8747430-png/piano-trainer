@@ -1,6 +1,6 @@
 # ADR 0077 — A bar's notes are spaced by LilyPond's rule, not VexFlow's
 
-- **Status:** accepted · **Date:** 2026-10-22
+- **Status:** superseded by ADR 0078 (Verovio spaces its own bars) · **Date:** 2026-10-22
 
 ## Context
 

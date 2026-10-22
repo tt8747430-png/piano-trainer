@@ -239,30 +239,30 @@ describe('LessonView’s worksheet', () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(WORKSHEET)
     const line = found(screen.getAllByRole('figure').at(-1), 'the line')
-    await waitFor(() => expect(line.querySelector('[data-tick]')).not.toBeNull())
+    await waitFor(() => expect(line.querySelector('g.note[id^="n-"]')).not.toBeNull())
     await user.click(within(line).getByRole('button', { name: 'Play' }))
     const started = audio.played.at(-1)
     const second = started?.sounds[1]
     act(() => audio.setNow((started?.at ?? 0) + (second?.at ?? 0)))
-    const marked = () => [...line.querySelectorAll('.vf-selected[data-tick]')]
+    const marked = () => [...line.querySelectorAll('g.note-chosen')]
     await waitFor(() => expect(marked().length).toBeGreaterThan(0))
-    const first = marked()[0]?.getAttribute('data-tick')
+    const first = marked()[0]?.id.split('-')[2]
     act(() => audio.setNow((started?.at ?? 0) + (started?.sounds[2]?.at ?? 0)))
-    await waitFor(() => expect(marked()[0]?.getAttribute('data-tick')).not.toBe(first))
+    await waitFor(() => expect(marked()[0]?.id.split('-')[2]).not.toBe(first))
   })
 
   it('keeps a question opened while a line plays, as the line reaches its next bar', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(WORKSHEET)
     const line = found(screen.getAllByRole('figure').at(-1), 'the line')
-    await waitFor(() => expect(line.querySelector('[data-tick]')).not.toBeNull())
+    await waitFor(() => expect(line.querySelector('g.note[id^="n-"]')).not.toBeNull())
     await user.click(within(line).getByRole('button', { name: 'Play' }))
     const started = audio.played.at(-1)
     const question = screen.getByRole('group', { name: 'Play E minor.' })
     await user.click(within(question).getByRole('button', { name: 'Answer' }))
     expect(within(question).getByRole('status')).toHaveTextContent('0 of 3 notes')
     act(() => audio.setNow((started?.at ?? 0) + (started?.sounds.at(-1)?.at ?? 0)))
-    await waitFor(() => expect(line.querySelector('.vf-selected[data-tick]')).not.toBeNull())
+    await waitFor(() => expect(line.querySelector('g.note-chosen')).not.toBeNull())
     expect(within(question).getByRole('status')).toHaveTextContent('0 of 3 notes')
   })
 

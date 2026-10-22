@@ -1,6 +1,6 @@
 import type { StaffId } from '@/shared/lib/notation'
 
-/** Where each staff of several stands below the one over it, in VexFlow units: the treble at 0 (lines 40–80), the bass at 90 (130–170). */
+/** Where each staff of several stands below the one over it, in the engraving's units (a staff space 10 at scale 1): the treble at 0 (lines 40–80), the bass at 90 (130–170). */
 export const STAFF_GAP = 90
 /** The room the last of several staves takes from its own top, down to its last ledger lines. */
 export const LAST_STAFF = 120

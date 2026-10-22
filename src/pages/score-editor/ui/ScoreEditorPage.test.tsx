@@ -122,12 +122,12 @@ describe('the score editor', () => {
   it('writes the note on the line double-clicked, and moves it by the key’s notes as it is dragged', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    // The first engraving of a run loads the music font and VexFlow: about a second on its own.
+    // The first engraving of a run loads Verovio: about a second on its own.
     const bar = await screen.findByRole('button', { name: /^Bar 1:/ }, { timeout: 4000 })
-    // jsdom lays nothing out: the bar's top is the chord row's, 44px over the treble's top line (F♯5 in
-    // G); the tempo stands in that row (ADR 0074), so the staff starts there.
-    fireEvent.click(bar, { clientY: 84, detail: 1 })
-    fireEvent.doubleClick(bar, { clientY: 84, detail: 2 })
+    // jsdom lays nothing out: the bar's top is the chord row's, 44px over the line's engraving, whose
+    // treble top line (F♯5 in G) Verovio draws 30px down.
+    fireEvent.click(bar, { clientY: 74, detail: 1 })
+    fireEvent.doubleClick(bar, { clientY: 74, detail: 2 })
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         hands: { rh: expect.stringMatching(/^F#5\/1/) },
@@ -193,7 +193,11 @@ describe('the score editor', () => {
   it('opens the song’s key, tempo and meter from the clef and signatures at a line’s head', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })
-    const [head] = await screen.findAllByRole('button', { name: 'Key and time signature' })
+    const [head] = await screen.findAllByRole(
+      'button',
+      { name: 'Key and time signature' },
+      { timeout: 4000 },
+    )
     if (!head) throw new Error('no line head')
     await user.click(head)
     const settings = await screen.findByRole('dialog', { name: 'Settings' })
@@ -276,7 +280,11 @@ describe('the score editor', () => {
   it('changes the time signature to another of its kind, each bar made the new one', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    const [head] = await screen.findAllByRole('button', { name: 'Key and time signature' })
+    const [head] = await screen.findAllByRole(
+      'button',
+      { name: 'Key and time signature' },
+      { timeout: 4000 },
+    )
     if (!head) throw new Error('no line head')
     await user.click(head)
     const meters = within(await screen.findByRole('dialog', { name: 'Settings' })).getByRole(

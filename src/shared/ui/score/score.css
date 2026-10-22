@@ -14,6 +14,10 @@
 [data-slot='score'] g.mNum {
   display: none;
 }
+/* A blank staff's rests hold its bar's time and its onsets' places, and are not written. */
+[data-slot='score'] g.rest.hidden {
+  visibility: hidden;
+}
 /* The staff of the hand not heard or practised, in soft ink, without engraving again. */
 [data-slot='score'][data-muted='treble'] g.staff[data-staff='treble'],
 [data-slot='score'][data-muted='bass'] g.staff[data-staff='bass'] {

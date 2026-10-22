@@ -1,6 +1,6 @@
 # ADR 0013 — Sheet music is our Score, engraved by VexFlow
 
-- **Status:** accepted · **Date:** 2026-09-27 · **Amends:** the master spec's §5 (the Player) and §6 (its params),
+- **Status:** superseded by ADR 0078 (Verovio engraves the Score) · **Date:** 2026-09-27 · **Amends:** the master spec's §5 (the Player) and §6 (its params),
   ADR 0012's "a popover only beside the keys"
 
 ## Context

@@ -1,13 +1,13 @@
 import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { melodyOf, pieceById, PIECES, PIECES_STORAGE_KEY } from '@/entities/piece'
 import { setPracticeToggle } from '@/features/set-preference'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
-import { stubFonts } from '@/shared/test/fonts'
+import * as engine from '@/shared/ui/score/verovio/engine'
 
 describe('Player', () => {
   it('says an own song is gone once another tab deletes it', async () => {
@@ -259,9 +259,7 @@ describe('Player', () => {
   it('names the notes on the staff with Named notes, and saves the toggle', async () => {
     // SMuFL's note name noteheads, U+E150–U+E1AF.
     const namedHeads = () =>
-      [...(document.querySelector('[data-slot="score"] svg')?.textContent ?? '')].filter(
-        (glyph) => glyph >= '\uE150' && glyph <= '\uE1AF',
-      ).length
+      document.querySelectorAll('[data-slot="score"] svg text.note-name').length
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/bz5')
     await waitFor(() => expect(document.querySelector('[data-slot="score"] svg')).not.toBeNull())
@@ -272,8 +270,8 @@ describe('Player', () => {
     await waitFor(() => expect(namedHeads()).toBeGreaterThan(0))
   })
 
-  it('still plays when the music font does not load', async () => {
-    stubFonts({ loads: false })
+  it('still plays when the music cannot be engraved', async () => {
+    vi.spyOn(engine, 'engrave').mockRejectedValue(new Error('unreadable'))
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/bz5')
     expect(await screen.findByText('The music can’t be shown.')).toBeInTheDocument()
