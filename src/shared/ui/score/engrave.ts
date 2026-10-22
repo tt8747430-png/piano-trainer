@@ -35,6 +35,8 @@ import {
 } from '@/shared/lib/music'
 import {
   clefIn,
+  columnGaps,
+  fitGaps,
   STAVES,
   ticksOf,
   type Measure,
@@ -243,6 +245,48 @@ function onsetsIn(built: BuiltMeasure): Map<Tick, number> {
   return onsets
 }
 
+/** The longest a bar's shortest note is taken to be, as LilyPond's 3/16: VexFlow's ticks. */
+const SHORTEST_CAP = (VexFlow.RESOLUTION * 3) / 16
+/** The least gap between a column's notes and the next's, past their heads and accidentals. */
+const COLUMN_PAD = 4
+
+/**
+ * A measure formatted to its stave, its columns then placed by LilyPond's spacing (ADR 0077): each
+ * gap the ideal space of the time to the next onset, fitted to the width VexFlow justified to, none
+ * closer than its notes and their accidentals need. VexFlow's own spacing grows by a power of a
+ * note's length and gives long notes far more room than a printed score does.
+ */
+function formatMeasure(formatter: Formatter, voices: Voice[], stave: Stave) {
+  formatter.formatToStave(voices, stave)
+  const contexts = formatter.getTickContexts()
+  if (!contexts) return
+  const columns = contexts.list.flatMap((tick) => {
+    const context = contexts.map[tick]
+    return context ? [{ tick, context }] : []
+  })
+  const [first] = columns
+  if (!first || columns.length < 2) return
+  const end = Math.max(...voices.map((voice) => voice.getTotalTicks().value()))
+  const width =
+    stave.getNoteEndX() - stave.getNoteStartX() - Stave.defaultPadding - first.context.getX()
+  const ideals = columnGaps(
+    columns.map(({ tick }) => tick),
+    end,
+    SHORTEST_CAP,
+  )
+  const least = columns.map(({ context }, i) => {
+    const here = context.getMetrics()
+    const next = columns[i + 1]?.context.getMetrics()
+    return here.notePx + here.totalRightPx + (next?.totalLeftPx ?? 0) + COLUMN_PAD
+  })
+  const gaps = fitGaps(ideals, least, width)
+  let x = first.context.getX()
+  for (const [i, { context }] of columns.entries()) {
+    context.setX(x)
+    x += gaps[i] ?? 0
+  }
+}
+
 /**
  * How many times wider a measure's notes must be for each chord symbol to end before the next one, or
  * before its barline for the last: the most any symbol needs over the room it has, 1 or less when all
@@ -257,7 +301,7 @@ function chordShortfall(
   const { chords, startTick, ticks } = built.measure
   if (chords.length === 0) return 0
   const stave = staveAt('treble', { x: 0, y: 0, width }, built, key).setNoteStartX(noteStart)
-  built.formatter.formatToStave([...voices], stave)
+  formatMeasure(built.formatter, [...voices], stave)
   // Each note on the trial stave, so its x is read as the engraving will read it (a voice's stave
   // does not reach its notes until it is drawn).
   for (const staff of STAVES) {
@@ -840,7 +884,8 @@ function* drawn(
           .setContext(context)
           .draw()
     }
-    measure.formatter.formatToStave(
+    formatMeasure(
+      measure.formatter,
       shown.flatMap((on) => measure.staves[on].map((voice) => voice.voice)),
       top.stave,
     )

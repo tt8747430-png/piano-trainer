@@ -19,3 +19,4 @@ export {
 } from './types'
 export { ticksOf, valuesOf } from './values'
 export { lineLead, measureWidths } from './measure-widths'
+export { columnGaps, fitGaps, idealSpace } from './spacing'
