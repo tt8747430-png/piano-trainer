@@ -46,7 +46,7 @@ function StaffPlace({
 }
 
 /**
- * A score engraved as the Player's is, its engraver (VexFlow) loaded only when a staff is first on
+ * A score engraved as the Player's is, its engraver (Verovio) loaded only when a staff is first on
  * screen, so a page that shows one keeps it out of its own chunk, and a lesson engraves only the
  * staves it reaches: until then, the staff's space. A staff outside the Player is at its own size
  * with no fingering unless it says so.

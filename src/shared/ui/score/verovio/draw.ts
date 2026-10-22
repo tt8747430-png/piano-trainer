@@ -21,8 +21,8 @@ const SIGN = { [-2]: '𝄫', [-1]: '♭', 0: '', 1: '♯', 2: '𝄪' } as const
 
 /**
  * A score engraved by Verovio (ADR 0078) into a sheet of its own, which `host` shows once it is
- * whole: one line of its staves, justified to `fill` (drawn again smaller once where its music is
- * wider), each staff's group named by `data-staff`, each head named where asked. Its layout says
+ * whole: one line of its staves, justified to `fill` (drawn again smaller where its music is wider,
+ * never broken in two), each staff's group named by `data-staff`, each head named where asked. Its layout says
  * where everything stands. Stopped by `signal`, it leaves what was there and says null.
  */
 export async function drawScore(
@@ -36,19 +36,27 @@ export async function drawScore(
     fingers: options.fingers,
     timeBefore: options.timeBefore,
   })
-  const drawn = async (scale: number) => {
-    const [svg = ''] = await engrave(mei, { width: options.fill, scale })
+  const drawn = async (scale: number, width = options.fill) => {
+    const [svg = ''] = await engrave(mei, { width, scale })
     const sheet = host.ownerDocument.createElement('div')
     sheet.innerHTML = svg
     const element = sheet.querySelector('svg')
     if (!element) throw new Error('Verovio drew no score')
-    return { sheet, element, layout: layoutOf(element, score.measures, options.staves) }
+    const systems = element.querySelectorAll('g.system').length
+    return { sheet, element, systems, layout: layoutOf(element, score.measures, options.staves) }
+  }
+  const endOf = (layout: ScoreLayout) => {
+    const last = layout.measures.at(-1)
+    return last ? last.x + last.width : 0
   }
   let page = await drawn(options.scale)
-  const last = page.layout.measures.at(-1)
-  const end = last ? last.x + last.width : 0
-  if (options.fill !== undefined && end > options.fill + 1)
-    page = await drawn((options.scale * options.fill) / end)
+  const { fill } = options
+  if (fill !== undefined && (page.systems > 1 || endOf(page.layout) > fill + 1)) {
+    // Wider than the line: drawn once at its own width, then again as much smaller as it is wider.
+    const natural =
+      page.systems > 1 ? endOf((await drawn(options.scale, undefined)).layout) : endOf(page.layout)
+    page = await drawn((options.scale * fill) / natural)
+  }
   if (signal.aborted) return null
   const { sheet, element, layout } = page
   element.setAttribute('width', String(layout.width))

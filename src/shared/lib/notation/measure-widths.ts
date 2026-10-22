@@ -4,14 +4,16 @@ import type { Score } from './types'
 /**
  * How much each measure's notes take across, packed as tight as they read, in the engraving's units
  * (ADR 0074): estimated from what it writes, before anything is engraved, so a sheet can break its
- * lines by width as LilyPond and abcjs do rather than by a count of bars. Measured against the
- * engraver (VexFlow's least widths, pressed to 1.2 of them): a column of notes or rests takes about
- * `PER_ONSET`, more with an accidental; a measure of many chord names, the names side by side.
+ * lines by width as LilyPond and abcjs do rather than by a count of bars. Fitted to Verovio's natural
+ * widths over the songs (ADR 0078): a measure's barline and margins take `MEASURE_BASE`, each column
+ * of notes or rests about `PER_ONSET`, more with an accidental; a measure of many chord names, the
+ * names side by side.
  */
-const PER_ONSET = 28
+const MEASURE_BASE = 60
+const PER_ONSET = 21
 const PER_ACCIDENTAL_COLUMN = 8
-/** The least a measure's notes take, a whole note's (the engraver's own least). */
-const LEAST_MEASURE = 80
+/** The least a measure takes, a whole note's. */
+const LEAST_MEASURE = 95
 /** A chord symbol's character, and the gap after each symbol, in CSS px at its own size. */
 const CHORD_CHAR = 10
 const CHORD_GAP = 8
@@ -19,7 +21,7 @@ const CHORD_GAP = 8
 const CHORD_SLACK = 1.4
 /** What every line starts with: its clef and margins, the brace; then each sharp or flat of the key. */
 const LINE_LEAD = 70
-const PER_KEY_ACCIDENTAL = 10
+const PER_KEY_ACCIDENTAL = 14
 
 /**
  * Each measure's width at `scale`: its columns of notes, or its chord names where they are shown
@@ -41,7 +43,7 @@ export function measureWidths(score: Score, scale = 1, chordNames = true): numbe
     }
     const notes = [...columns.values()].reduce(
       (sum, accidental) => sum + PER_ONSET + (accidental ? PER_ACCIDENTAL_COLUMN : 0),
-      0,
+      MEASURE_BASE,
     )
     const names = !chordNames
       ? 0

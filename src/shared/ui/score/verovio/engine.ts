@@ -1,4 +1,4 @@
-import { engraveMei, type EngraveOptions } from './toolkit'
+import { engraveMei, loadToolkit, type EngraveOptions } from './toolkit'
 
 type Reply = { id: number; pages: string[] } | { id: number; error: string }
 
@@ -14,6 +14,12 @@ function workerOf(): Worker {
     waiting.delete(event.data.id)
   }
   return worker
+}
+
+/** The engraver started, so the first staff a screen shows need not wait on it to load. */
+export function warmEngraver(): void {
+  if (typeof Worker === 'undefined') void loadToolkit()
+  else workerOf().postMessage({ warm: true })
 }
 
 /**
