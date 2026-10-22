@@ -20,9 +20,12 @@ export function SheetOverlay({
   onJump,
   onLoopChange,
   chordNames = true,
+  tempos = [],
   firstBar = 0,
 }: {
   chordNames?: boolean
+  /** Each bar of the piece's tempo mark, said in the labels' row. */
+  tempos?: readonly (number | undefined)[]
   /** The piece's bar the layout's first measure is: a line of a score laid out in lines. */
   firstBar?: number
   layout: ScoreLayout
@@ -50,6 +53,7 @@ export function SheetOverlay({
         headings={headings}
         positions={positions}
         chordNames={chordNames}
+        tempos={tempos}
         firstBar={firstBar}
       />
       <StaffNames layout={layout} />

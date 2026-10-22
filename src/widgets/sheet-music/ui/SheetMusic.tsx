@@ -97,7 +97,16 @@ export function SheetMusic({
   const { t } = useTranslation('music')
   // The tune's own staff only where the tune is heard (the Melody switch).
   const ownStaff = view.melodyStaff && performance.notes.some((n) => n.hand === 'melody')
-  const score = useMemo(() => notate(playedMusic(performance, ownStaff)), [performance, ownStaff])
+  const written = useMemo(() => notate(playedMusic(performance, ownStaff)), [performance, ownStaff])
+  // The tempo marks said in the labels' row by their bar's number, not engraved in a row of their own
+  // over the staff (ADR 0074).
+  const { score, tempos } = useMemo(
+    () => ({
+      score: { ...written, measures: written.measures.map(({ tempo: _, ...measure }) => measure) },
+      tempos: written.measures.map((measure) => measure.tempo),
+    }),
+    [written],
+  )
   const kept = score.staves.filter((staff) => !view.hidden.includes(staff))
   const staves = kept.length > 0 ? kept : score.staves
   const scroller = useRef<HTMLElement>(null)
@@ -130,6 +139,7 @@ export function SheetMusic({
         names={names}
         positions={positions}
         chordNames={view.chordNames}
+        tempos={tempos}
         muted={muted}
         onJump={onJump}
         onLoopChange={onLoopChange}
@@ -159,6 +169,7 @@ export function SheetMusic({
               headings={headings}
               positions={positions}
               chordNames={view.chordNames}
+              tempos={tempos}
               current={current}
               loop={loop}
               onJump={onJump}

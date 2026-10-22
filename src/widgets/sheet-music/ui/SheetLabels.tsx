@@ -9,7 +9,8 @@ import { chordPositions } from '../model/chord-positions'
 const NUMBER_INSET_PX = 4
 
 /**
- * Over the staff: each bar's number, a section's name at its first bar (cut short to the bar), and each chord symbol at its
+ * Over the staff: each bar's number, a section's name at its first bar and a tempo mark where it
+ * changes (cut short to the bar), and each chord symbol at its
  * onset (spec §2.6), with Chord positions how the right hand plays it. The bars' buttons carry the
  * same words for a screen reader.
  */
@@ -19,8 +20,11 @@ export const SheetLabels = memo(function SheetLabels({
   headings,
   positions,
   chordNames = true,
+  tempos = [],
   firstBar = 0,
 }: {
+  /** Each bar of the piece's tempo mark, said after its number. */
+  tempos?: readonly (number | undefined)[]
   layout: ScoreLayout
   performance: Performance
   headings: readonly string[]
@@ -60,6 +64,12 @@ export const SheetLabels = memo(function SheetLabels({
           >
             {bar + 1}
             {starts && headings[section] ? ` · ${headings[section]}` : null}
+            {tempos[bar] === undefined ? null : (
+              <>
+                {' · '}
+                <span className="font-music">{'\u{1D15F}'}</span>= {tempos[bar]}
+              </>
+            )}
           </span>
         )
       })}

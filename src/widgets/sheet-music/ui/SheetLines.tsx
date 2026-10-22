@@ -19,7 +19,7 @@ const LEAST_SCALE = 0.62
 /**
  * The score in the chart's lines (ADR 0064): down the screen, or dealt onto A4 pages as it will print,
  * its title on the first, each chart line cut by width where it is wider than the screen holds. Each
- * line is justified to the width unless that stretches it too far, and carries its labels, the loop's part
+ * line is justified to the width and carries its labels, the loop's part
  * and its bars to jump to; the cursor stands on the line playing, which comes into sight as it starts.
  */
 export function SheetLines({
@@ -35,6 +35,7 @@ export function SheetLines({
   names,
   positions,
   chordNames,
+  tempos,
   muted,
   onJump,
   onLoopChange,
@@ -52,6 +53,8 @@ export function SheetLines({
   names: boolean
   positions: boolean
   chordNames: boolean
+  /** Each bar's tempo mark, said in the labels' row. */
+  tempos: readonly (number | undefined)[]
   muted: StaffId | undefined
   onJump: (beatGroup: number) => void
   onLoopChange: (loop: BarRange) => void
@@ -110,6 +113,7 @@ export function SheetLines({
             headings={headings}
             positions={positions}
             chordNames={chordNames}
+            tempos={tempos}
             current={current}
             loop={loop}
             onJump={onJump}
