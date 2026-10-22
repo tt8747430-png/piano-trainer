@@ -27,12 +27,15 @@ const DRAG_START = 6
 const WHEEL_ZOOM = Math.log(2) / 6 / 100
 /** How long after the last move the pages are drawn again sharp at their zoom. */
 const SETTLE_MS = 160
+/** How long the zoom's buttons stay in sight once the pages are left alone. */
+const CONTROLS_MS = 2500
 
 /**
  * Pages floating on a canvas (ADR 0075), as a notation app's page view: drawn at their print size,
  * moved by a drag (a click or a double click on them still reaches them), zoomed by a pinch, by Ctrl
  * or ⌘ with the wheel, or by its buttons; opened with a page's width fitted to the screen. A grip
- * (`data-grip`: a note's, the loop's) drags itself, not the canvas.
+ * (`data-grip`: a note's, the loop's) drags itself, not the canvas. The zoom's buttons come into sight
+ * as the pages are touched, moved or zoomed, and fade once they are left alone, or at a tap on them.
  */
 export function PageCanvas({ column, children }: { column: number; children: ReactNode }) {
   const { t } = useTranslation('music')
@@ -44,6 +47,15 @@ export function PageCanvas({ column, children }: { column: number; children: Rea
   const [zoom, setZoom] = useState(1)
   // Fitted until the learner moves or zooms it; fitted again when the screen or the pages change.
   const moved = useRef(false)
+  const [controls, setControls] = useState(false)
+  const controlsTimer = useRef(0)
+  useEffect(() => () => window.clearTimeout(controlsTimer.current), [])
+  /** The zoom's buttons in sight, for a while after the pages were last touched. */
+  const showControls = useCallback(() => {
+    setControls(true)
+    window.clearTimeout(controlsTimer.current)
+    controlsTimer.current = window.setTimeout(() => setControls(false), CONTROLS_MS)
+  }, [])
 
   // While the canvas moves, its pages are one layer the browser only slides and stretches; once it
   // settles they are drawn again at the zoom, so the music is sharp however close it is read.
@@ -90,6 +102,7 @@ export function PageCanvas({ column, children }: { column: number; children: Rea
     const onWheel = (event: WheelEvent) => {
       event.preventDefault()
       moved.current = true
+      showControls()
       const box = element.getBoundingClientRect()
       const size = { width: box.width, height: box.height }
       const pages = content.current
@@ -105,7 +118,7 @@ export function PageCanvas({ column, children }: { column: number; children: Rea
     }
     element.addEventListener('wheel', onWheel, { passive: false })
     return () => element.removeEventListener('wheel', onWheel)
-  }, [show])
+  }, [show, showControls])
 
   // The pointers down on the canvas, where each was last; a drag once one has moved far enough.
   const pointers = useRef(new Map<number, { x: number; y: number }>())
@@ -114,6 +127,8 @@ export function PageCanvas({ column, children }: { column: number; children: Rea
     // A grip (a note's, the loop's) drags itself. Not its pointer capture: a touch is captured by
     // whatever it lands on, so every touch would be a grip's.
     const target = event.target as Element
+    if (target.closest('[data-slot="canvas-controls"]')) return
+    showControls()
     if (event.button !== 0 || target.closest('[data-grip]')) return
     pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY })
   }
@@ -145,7 +160,12 @@ export function PageCanvas({ column, children }: { column: number; children: Rea
     pointers.current.set(event.pointerId, now)
   }
   const onPointerUp = (event: PointerEvent<HTMLDivElement>) => {
-    pointers.current.delete(event.pointerId)
+    const tracked = pointers.current.delete(event.pointerId)
+    // A tap on the pages, not a drag: the zoom's buttons go out of the way of the music.
+    if (tracked && pointers.current.size === 0 && !dragging.current) {
+      window.clearTimeout(controlsTimer.current)
+      setControls(false)
+    }
     if (pointers.current.size > 0 || !dragging.current) return
     // The click a drag ends with is the drag's, not a click on what it was over.
     const swallow = (click: MouseEvent) => {
@@ -195,7 +215,14 @@ export function PageCanvas({ column, children }: { column: number; children: Rea
       <div ref={content} className="absolute top-0 left-0 w-max origin-top-left">
         <RevealContext value={revealElement}>{children}</RevealContext>
       </div>
-      <div className="absolute top-2 right-2 flex items-center rounded-full bg-card/95 text-card-foreground shadow-md ring-1 ring-hairline">
+      <div
+        data-slot="canvas-controls"
+        data-shown={controls || undefined}
+        // Out of sight, its buttons are out of reach, but a keyboard's Tab still brings them back.
+        onFocus={showControls}
+        className="absolute top-2 right-2 flex items-center rounded-full bg-card/95 text-card-foreground opacity-0 shadow-md ring-1 ring-hairline transition-opacity duration-300 ease-out not-data-shown:pointer-events-none focus-within:pointer-events-auto focus-within:opacity-100 data-shown:opacity-100"
+        onPointerDown={showControls}
+      >
         <Button
           variant="ghost"
           size="icon"

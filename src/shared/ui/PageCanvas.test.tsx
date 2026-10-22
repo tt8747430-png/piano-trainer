@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { PageCanvas } from './PageCanvas'
@@ -15,6 +15,22 @@ const canvas = (onClick = vi.fn()) => {
 }
 
 describe('PageCanvas', () => {
+  it('shows its zoom’s buttons as the pages are touched, and hides them once left alone or tapped', () => {
+    vi.useFakeTimers()
+    const region = canvas()
+    const controls = () => region.querySelector('[data-slot="canvas-controls"]')
+    expect(controls()).not.toHaveAttribute('data-shown')
+    fireEvent.wheel(region, { deltaY: 40 })
+    expect(controls()).toHaveAttribute('data-shown')
+    act(() => vi.advanceTimersByTime(3000))
+    expect(controls()).not.toHaveAttribute('data-shown')
+    fireEvent.pointerDown(region, { button: 0, pointerId: 1, clientX: 10, clientY: 10 })
+    expect(controls()).toHaveAttribute('data-shown')
+    fireEvent.pointerUp(region, { pointerId: 1, clientX: 10, clientY: 10 })
+    expect(controls()).not.toHaveAttribute('data-shown')
+    vi.useRealTimers()
+  })
+
   it('zooms in and out by its buttons, saying how far', async () => {
     const user = userEvent.setup()
     canvas()

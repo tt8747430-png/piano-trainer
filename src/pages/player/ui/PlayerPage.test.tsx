@@ -294,6 +294,18 @@ describe('Player', () => {
     expect(screen.queryByRole('combobox', { name: 'Through the keys' })).not.toBeInTheDocument()
   })
 
+  it('hides its transport at a tap on the screen’s free room, and brings it back', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/bz5')
+    const transport = await screen.findByRole('toolbar', { name: 'Playback' })
+    const dock = transport.closest('[data-area="dock"]')
+    await user.click(screen.getByRole('heading', { level: 1 }))
+    expect(dock).toHaveAttribute('data-hidden')
+    expect(dock).toHaveAttribute('inert')
+    await user.click(screen.getByRole('heading', { level: 1 }))
+    expect(dock).not.toHaveAttribute('data-hidden')
+  })
+
   it('opens the song in the score editor from its Setup', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
