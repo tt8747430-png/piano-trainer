@@ -74,7 +74,7 @@ const MOVES: Readonly<Partial<Record<string, (key: Midi) => Midi>>> = {
  * filling the width at Fit. A group named "Keyboard" whose keys are buttons named by note, one of
  * them in the tab order; the arrow keys walk the rest. A key plays the instant it is touched and the
  * keys hold still under a finger (Glissando plays each key a finger slides onto); the keyboard
- * scrolls from its rail, by ‹ ›, the map, a trackpad or the wheel.
+ * scrolls by a swipe on the keys (Scroll) or its rail, by ‹ ›, a trackpad or the wheel.
  */
 export function PianoKeyboard({
   range,
@@ -164,17 +164,13 @@ export function PianoKeyboard({
   })
   const press = useCallback((key: Midi) => latestPress.current(key), [])
   const letGo = useCallback((key: Midi) => latestRelease.current?.(key), [])
-  const pointers = useKeyPointers({ swipe, keys, onPress: press, onRelease: letGo })
+  const pointers = useKeyPointers({ swipe, keys, scroller, onPress: press, onRelease: letGo })
 
   const down = useMemo(() => {
     if (pointers.pressed.size === 0) return states.down
     const pressed = keyPlays ? [...pointers.pressed].flatMap(keyPlays) : pointers.pressed
     return new Set([...(states.down ?? []), ...pressed])
   }, [states.down, pointers.pressed, keyPlays])
-  const dots = useMemo(
-    () => new Set([...(states.marks?.keys() ?? []), ...(down ?? [])]),
-    [states.marks, down],
-  )
   const scrolls = keySize !== 'piano'
   const asked = useWidestAsked(fitInView ? inView : undefined, range)
   const white =
@@ -201,7 +197,7 @@ export function PianoKeyboard({
         className="flex shrink-0 flex-col"
         style={{ width: `calc(${PIANO_LAYOUT.whites} * ${white})` }}
       >
-        <KeyRail scroller={scroller} scrolls={scrolls} dots={dots} caption={caption} end={railEnd}>
+        <KeyRail scroller={scroller} scrolls={scrolls} caption={caption} end={railEnd}>
           {children}
         </KeyRail>
         <div

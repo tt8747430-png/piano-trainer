@@ -68,12 +68,10 @@ export const common = {
   moreActions: 'More actions',
   // What a Play button says while its sound plays.
   stop: 'Stop',
-  // The keyboard's rail: its buttons and its map.
+  // The keyboard's rail: its buttons.
   rail: {
     octaveDown: 'Octave down',
     octaveUp: 'Octave up',
-    map: 'Keys in view',
-    mapRange: '{{from}} to {{to}}',
     zoomOut: 'Smaller keys',
     zoomIn: 'Larger keys',
     names: { c: 'Note names: every C', all: 'Note names: every key', none: 'Note names: off' },

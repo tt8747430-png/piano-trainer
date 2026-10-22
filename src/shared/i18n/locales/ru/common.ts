@@ -64,8 +64,6 @@ export const common: LocaleResources['common'] = {
   rail: {
     octaveDown: 'Октава вниз',
     octaveUp: 'Октава вверх',
-    map: 'Клавиши на экране',
-    mapRange: '{{from}} – {{to}}',
     zoomOut: 'Клавиши мельче',
     zoomIn: 'Клавиши крупнее',
     names: {

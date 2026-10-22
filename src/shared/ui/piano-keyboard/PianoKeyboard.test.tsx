@@ -231,21 +231,19 @@ describe('PianoKeyboard', () => {
     renderKeyboard()
     const scroller = document.querySelector('[data-slot="keys-scroller"]')
     expect(scroller).toContainElement(screen.getByRole('button', { name: 'Octave up' }))
-    expect(scroller).toContainElement(screen.getByRole('slider', { name: 'Keys in view' }))
     expect(scroller).toContainElement(screen.getByRole('group', { name: 'Keyboard' }))
   })
 
-  it('keeps ‹ › together at the rail’s end, after the map and before the screen’s controls', () => {
+  it('keeps ‹ › together at the rail’s end, before the screen’s controls', () => {
     renderKeyboard({ children: <button type="button">Settings</button> })
-    const rail = [
-      screen.getByRole('slider', { name: 'Keys in view' }),
-      ...screen.getAllByRole('button').filter((button) => !/\d$/.test(button.ariaLabel ?? '')),
-    ].filter((element) => element.textContent !== 'After')
+    const rail = screen
+      .getAllByRole('button')
+      .filter((button) => !/\d$/.test(button.ariaLabel ?? ''))
+      .filter((element) => element.textContent !== 'After')
     const inOrder = [...rail].sort((a, b) =>
       a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
     )
     expect(inOrder.map((element) => element.ariaLabel ?? element.textContent)).toEqual([
-      'Keys in view',
       'Octave down',
       'Octave up',
       'Settings',

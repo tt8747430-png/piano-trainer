@@ -19,7 +19,8 @@ const chord = () => screen.queryByText('Chord played:')?.parentElement?.textCont
 describe('the keyboard’s rail', () => {
   it('holds every control in sight, as pictures: no settings button, no pop-up', () => {
     setUp()
-    expect(screen.getByRole('slider', { name: 'Keys in view' })).toBeInTheDocument()
+    // No map of the keys in view: a swipe on the keys scrolls them.
+    expect(screen.queryByRole('slider', { name: 'Keys in view' })).not.toBeInTheDocument()
     for (const name of ['Smaller keys', 'Larger keys', 'Glissando', 'Pedal']) {
       expect(screen.getByRole('button', { name })).toBeInTheDocument()
     }

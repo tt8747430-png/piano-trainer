@@ -2,8 +2,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type { ReactNode, RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PIANO_LAYOUT, scrollByOctave, useScrollMotion } from '@/shared/lib'
-import type { Midi } from '@/shared/lib/music'
-import { KeyboardMap } from './KeyboardMap'
 import { RailButton } from './RailButton'
 import { RailGroup } from './RailGroup'
 
@@ -21,27 +19,23 @@ export interface RailCaption {
 }
 
 /**
- * The rail the keys hang from, the piano's length: a swipe on it scrolls the keys, which hold still
- * under a finger. Its controls stay in view wherever the keys are scrolled, each clear of the
- * rail's edges: the keyboard map, then at its end ‹ › an octave together (one control, never a lone
- * arrow in the corner a Back takes; for a mouse on a rail long enough, which cannot swipe: a finger
- * does not see them) and `children` (the screen's `RailGroup`s of `RailButton`s). Keys that do not
- * scroll have no ‹ › and no map; the rail's `end` stays at its end, out of the buttons that scroll. Its `caption` is said beside the buttons, in the room the map
- * leaves; on a rail with no such room it starts at the rail's start, over the map, whole. On a short
- * rail the map keeps a usable width and the buttons scroll sideways.
+ * The rail the keys hang from, the piano's length: a swipe on it, or on the keys (Scroll), scrolls
+ * them. Its controls stay in view wherever the keys are scrolled, each clear of the rail's edges: at
+ * its end ‹ › an octave together (one control, never a lone arrow in the corner a Back takes; for a
+ * mouse on a rail long enough, which cannot swipe: a finger does not see them) and `children` (the
+ * screen's `RailGroup`s of `RailButton`s). Keys that do not scroll have no ‹ ›; the rail's `end`
+ * stays at its end, out of the buttons that scroll. Its `caption` is said at its start; on a short
+ * rail the buttons scroll sideways.
  */
 export function KeyRail({
   scroller,
   scrolls,
-  dots,
   caption,
   end,
   children,
 }: {
   scroller: RefObject<HTMLElement | null>
   scrolls: boolean
-  /** The keys the map dots: marked or down. */
-  dots: ReadonlySet<Midi>
   caption?: RailCaption | undefined
   /** The rail's last control (a page's Hide the keys): always in sight, never scrolled away. */
   end?: ReactNode
@@ -59,15 +53,10 @@ export function KeyRail({
       {/* The rail itself, drawn along the strip's foot: the buttons' targets reach above it. */}
       <span aria-hidden className="absolute inset-x-0 bottom-0 h-9 bg-key-rail" />
       <div className="sticky left-0 flex h-full items-end px-1" style={{ width: IN_VIEW }}>
-        {/* The map and the caption share one place: the caption at its end, or from its start when it is longer. */}
-        {/* It keeps a usable width (64px): the buttons give way first, scrolling sideways. */}
-        <div className="grid min-w-16 flex-1 grid-cols-1 items-end">
-          {/* A rail too short for its buttons and a map keeps the buttons. */}
-          <div className="col-start-1 row-start-1 flex min-w-0 @max-xs:hidden">
-            {scrolls ? <KeyboardMap scroller={scroller} dots={dots} /> : null}
-          </div>
+        {/* The caption at the rail's start; the buttons give way first, scrolling sideways. */}
+        <div className="flex min-w-16 flex-1 items-end">
           {caption?.text ? (
-            <p className="z-10 col-start-1 row-start-1 h-9 w-max justify-self-end-safe bg-key-rail px-2 font-display text-lg/9 font-semibold text-on-key-rail">
+            <p className="h-9 w-max bg-key-rail px-2 font-display text-lg/9 font-semibold text-on-key-rail">
               <span className="sr-only">{caption.label}: </span>
               {caption.text}
             </p>

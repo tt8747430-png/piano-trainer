@@ -4,7 +4,7 @@ import type { ComponentProps } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { SHORTEST_PRESS_MS } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
-import { stubBox } from '@/shared/test/layout'
+import { stubBox, stubScrolling } from '@/shared/test/layout'
 import { PianoKeyboard } from './PianoKeyboard'
 
 // The keys' group is 520 × 100: each of the 52 white keys is 10px wide, and C4 (white key 23)
@@ -140,6 +140,26 @@ describe('touching the keys', () => {
     fireEvent.pointerCancel(keys, touch(1, x(25)))
     pastTheShortestPress()
     expect(key('C4')).not.toHaveAttribute('data-down')
+  })
+
+  it('in Scroll, a finger swiped sideways lets its key go and drags the keys, another still holding its own', () => {
+    stubScrolling({ clientWidth: 200, scrollWidth: 520 })
+    const { onKeyPress, onKeyRelease, keys, key } = setUp()
+    const scroller = keys.closest<HTMLElement>('[data-slot="keys-scroller"]')
+    if (!scroller) throw new Error('the keys scroll')
+    scroller.scrollLeft = 200
+    fireEvent.pointerDown(key('E4'), touch(2, x(25)))
+    fireEvent.pointerDown(key('C4'), touch(1, x(23)))
+    fireEvent.pointerMove(keys, touch(1, x(23) + 4))
+    // A finger that has barely moved is still pressing.
+    expect(onKeyRelease).not.toHaveBeenCalled()
+    fireEvent.pointerMove(keys, touch(1, x(23) + 30))
+    expect(onKeyRelease).toHaveBeenCalledExactlyOnceWith(60)
+    fireEvent.pointerMove(keys, touch(1, x(23) + 70))
+    expect(scroller.scrollLeft).toBe(130)
+    expect(key('E4')).toHaveAttribute('data-down')
+    fireEvent.pointerUp(keys, touch(1, x(23) + 70))
+    expect(onKeyPress.mock.calls).toEqual([[64], [60]])
   })
 
   it('in Glissando, plays each key a swipe enters, once per entry', () => {
