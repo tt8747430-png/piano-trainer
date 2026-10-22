@@ -7,6 +7,12 @@
 [data-slot='score'] svg.definition-scale {
   color: inherit;
 }
+/* Verovio sets no fill: its glyphs (uses of paths), slurs, ties, beams and braces would be black. Each
+   takes the ink of what it marks, so a chosen note's head turns with its stem, and dark mode is light.
+   Not a polyline: a hairpin's and an octave line's say `fill="none"`, which CSS would override. */
+[data-slot='score'] :is(use, path, polygon, rect, ellipse) {
+  fill: currentColor;
+}
 [data-slot='score'] :is(g.staff > path, g.barLine, g.ledgerLines) {
   color: var(--input);
 }
