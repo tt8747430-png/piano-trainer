@@ -122,7 +122,12 @@ describe('chordSymbol', () => {
 
 describe('chordBass', () => {
   it('spells a bass that is a chord tone as that tone', () => {
-    expect(chordBass(note('D', 1), 'maj', note('G'))).toEqual(note('F', 2))
+    expect(chordBass(note('E'), 'maj', note('A', -1))).toEqual(note('G', 1))
+  })
+
+  it('keeps a bass as written where its tone would take a double accidental', () => {
+    expect(chordBass(note('G', -1), 'm6', note('A'))).toEqual(note('A'))
+    expect(chordBass(note('D', 1), 'maj', note('G'))).toEqual(note('G'))
   })
 
   it('keeps a bass outside the chord as written', () => {

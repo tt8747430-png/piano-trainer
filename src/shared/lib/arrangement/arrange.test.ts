@@ -790,7 +790,7 @@ describe('arrange', () => {
 
   it.each([
     ['D/F#', 'G', note('A', -1), 'E♭/G'],
-    ['D#/G', 'G#m', note('A', 1), 'E#/G𝄪'],
+    ['D#/G', 'G#m', note('A', 1), 'E#/A'],
     ['A#dim7', 'C', note('C', 1), 'A𝄪°7'],
   ])('transposes %s in %s to %j as %s', (symbol, key, to, expected) => {
     const performance = arrange(chart([[symbol]], { key }), { tonic: to, pattern: BLOCK })
