@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { breakLine, lineShare } from './line-breaks'
+import { breakLine } from './line-breaks'
 
 describe('breakLine', () => {
   it('keeps a line whole that fits', () => {
@@ -24,13 +24,5 @@ describe('breakLine', () => {
   it('keeps any number of bars on one line where the room is not known', () => {
     expect(breakLine([100, 100, 100], Infinity)).toEqual([3])
     expect(breakLine([], 300)).toEqual([])
-  })
-})
-
-describe('lineShare', () => {
-  it('justifies a line to the width unless that stretches it more than twice', () => {
-    expect(lineShare(300, 500)).toBe(1)
-    expect(lineShare(100, 500)).toBe(0.4)
-    expect(lineShare(100, Infinity)).toBe(1)
   })
 })

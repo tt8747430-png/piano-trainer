@@ -79,7 +79,7 @@ export { SHORTEST_PRESS_MS, usePresses } from './use-presses'
 export { useViewChange } from './use-view-change'
 export { morph } from './morph'
 export { longestLine } from './longest-line'
-export { breakLine, lineShare } from './line-breaks'
+export { breakLine } from './line-breaks'
 export { PAGE, paginate, PRINT_SCALE, SHEET_VIEWS, type SheetView } from './sheet-views'
 export {
   clampZoom,

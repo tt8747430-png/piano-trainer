@@ -29,7 +29,6 @@ export function ScoreView({
   timeBefore,
   selected,
   fill,
-  share,
   children,
 }: {
   score: Score
@@ -44,10 +43,8 @@ export function ScoreView({
   staves?: readonly StaffId[] | undefined
   /** The time signature before this line of music: printed again only where it changes. */
   timeBefore?: TimeSignature | undefined
-  /** The sheet's width in CSS pixels: the line is spread to its `share` of it, and drawn smaller where wider. */
+  /** The sheet's width in CSS pixels: the line is spread to it, and drawn smaller where wider. */
   fill?: number | undefined
-  /** The line's bars' share of the sheet's longest line (0–1): the part of `fill` it is spread to. */
-  share?: number | undefined
   /** The notes chosen, marked in the focus colour as a notation app marks a selection. */
   selected?: { readonly staff: StaffId; readonly tick: Tick } | undefined
   children?: (layout: ScoreLayout) => ReactNode
@@ -84,7 +81,6 @@ export function ScoreView({
                 ? undefined
                 : { count: beforeCount, unit: beforeUnit },
             fill,
-            share,
           },
           { signal: stopped.signal },
         ),
@@ -96,7 +92,7 @@ export function ScoreView({
         if (!stopped.signal.aborted) setEngraving({ status: 'error' })
       })
     return () => stopped.abort()
-  }, [score, scale, fingers, names, staff, shownKey, beforeCount, beforeUnit, fill, share])
+  }, [score, scale, fingers, names, staff, shownKey, beforeCount, beforeUnit, fill])
 
   // The chosen notes are marked on the engraving as it is, so moving the caret engraves nothing again.
   const selectedStaff = selected?.staff

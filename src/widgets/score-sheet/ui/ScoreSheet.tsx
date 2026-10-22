@@ -1,14 +1,7 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barAt, type BarRange, type Draft, type Layer } from '@/features/score-editor'
-import {
-  lineShare,
-  PAGE,
-  paginate,
-  PRINT_SCALE,
-  useElementSize,
-  type SheetView,
-} from '@/shared/lib'
+import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/shared/lib'
 import { PageCanvas } from '@/shared/ui'
 import { lineLead, measureWidths, notate } from '@/shared/lib/notation'
 import type { Midi, Tick } from '@/shared/lib/music'
@@ -101,7 +94,10 @@ export function ScoreSheet({
   // A whole system in the height the sheet is seen in, where it is short (a phone on its side).
   const fit = room && room > 0 ? lineFit({ room, staves, headed: !across, chordNames }) : 1
   const sized = pages ? PRINT_SCALE : Math.min(fit, scrollScale(width))
-  const widths = useMemo(() => (whole ? measureWidths(whole, sized) : []), [whole, sized])
+  const widths = useMemo(
+    () => (whole ? measureWidths(whole, sized, chordNames) : []),
+    [whole, sized, chordNames],
+  )
   const lead = whole ? lineLead(whole) : 0
   // The room a line's bars have, in the engraving's units: the sheet's or the page's, less the clef and key.
   const roomAcross = pages
@@ -114,10 +110,6 @@ export function ScoreSheet({
     [sheetsOf, draft, across, roomAcross, widths],
   )
   const caretBar = barAt(draft, caret).index
-  // Each line spread to the sheet's width unless that stretches it too far (`lineShare`, ADR 0074).
-  const widthOf = (sheet: LineSheet) =>
-    sheet.line.bars.reduce((sum, placed) => sum + (widths[placed.index] ?? 0), 0)
-  const shareOf = (sheet: LineSheet) => lineShare(widthOf(sheet), roomAcross)
 
   const line = (sheet: LineSheet, scale?: number, print = false) => (
     <SheetLine
@@ -136,7 +128,6 @@ export function ScoreSheet({
       chordNames={chordNames}
       onSignature={onSignature}
       justify={!across}
-      share={shareOf(sheet)}
       onWrite={onWrite}
       onDrag={onDrag}
       {...(scale === undefined ? {} : { scale })}

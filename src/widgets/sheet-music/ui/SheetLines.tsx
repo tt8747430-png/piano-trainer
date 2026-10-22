@@ -2,22 +2,15 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import {
-  lineShare,
-  PAGE,
-  paginate,
-  PRINT_SCALE,
-  useElementSize,
-  useScrollMotion,
-} from '@/shared/lib'
+import { PAGE, paginate, PRINT_SCALE, useElementSize, useScrollMotion } from '@/shared/lib'
 import { PageCanvas, useCanvasReveal } from '@/shared/ui'
 import { lineLead, measureWidths, type Score, type StaffId } from '@/shared/lib/notation'
 import { ScoreView, staffHeight } from '@/shared/ui/score'
 import { scoreLines, type ScoreLine } from '../model/score-lines'
 import { SheetOverlay } from './SheetOverlay'
 
-/** The labels' row over each line, and the room between lines. */
-const LABELS = 44
+/** The labels' row over each line: the chord names' and the bars' numbers, or the numbers alone. */
+const LABELS = { chords: 44, numbers: 20 } as const
 const LINE_GAP = 16
 /** A line's engraving on a screen this wide is at its own size; narrower, smaller, down to the least. */
 const FULL_WIDTH = 760
@@ -66,23 +59,18 @@ export function SheetLines({
   const { t } = useTranslation('music')
   const box = useRef<HTMLElement>(null)
   const { width } = useElementSize(box)
+  const labels = chordNames ? LABELS.chords : LABELS.numbers
   // Pages as they print, on a canvas that zooms them to the screen (ADR 0075).
   const scale = pages ? PRINT_SCALE : Math.min(1, Math.max(LEAST_SCALE, width / FULL_WIDTH))
   const margin = pages ? PAGE.margin : 0
   const inner = pages ? PAGE.width - 2 * margin : width
   // Each chart line cut by width to the room a line has, less its clef and key (ADR 0074).
-  const widths = useMemo(() => measureWidths(score, scale), [score, scale])
+  const widths = useMemo(() => measureWidths(score, scale, chordNames), [score, scale, chordNames])
   const room = inner > 0 ? inner / scale - lineLead(score) : Infinity
   const lines = useMemo(
     () => scoreLines(score, performance, { room, widths }),
     [score, performance, room, widths],
   )
-  // Each line spread to the sheet's width unless that stretches it too far (`lineShare`).
-  const shareOf = (line: ScoreLine) =>
-    lineShare(
-      widths.slice(line.first, line.first + line.score.measures.length).reduce((a, b) => a + b, 0),
-      room,
-    )
   // The line the cursor is on comes into sight as it starts.
   const shown = useRef(new Map<number, HTMLDivElement>())
   const motion = useScrollMotion()
@@ -102,7 +90,7 @@ export function SheetLines({
         else shown.current.delete(index)
       }}
       className="relative scroll-my-4"
-      style={{ paddingTop: LABELS }}
+      style={{ paddingTop: labels }}
     >
       <ScoreView
         score={each.score}
@@ -113,7 +101,6 @@ export function SheetLines({
         staves={staves}
         timeBefore={each.timeBefore}
         fill={inner > 0 ? inner : undefined}
-        share={shareOf(each)}
       >
         {(layout) => (
           <SheetOverlay
@@ -146,11 +133,11 @@ export function SheetLines({
       </section>
     )
 
-  const lineHeight = LABELS + staffHeight(undefined, staves.length) * scale + LINE_GAP
+  const lineHeight = labels + staffHeight(undefined, staves.length) * scale + LINE_GAP
   const dealt = paginate(
     lines.map((each, index) => ({ each, index })),
     () => lineHeight,
-    PAGE.height - 2 * margin - (title ? LABELS : 0),
+    PAGE.height - 2 * margin - (title ? LABELS.chords : 0),
   )
   return (
     <PageCanvas column={PAGE.width}>

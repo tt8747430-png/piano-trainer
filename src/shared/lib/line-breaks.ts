@@ -1,14 +1,3 @@
-/** The most a line is stretched to the sheet's width (ADR 0074); a line shorter than that is left short. */
-const MOST_STRETCH = 2
-
-/**
- * The part of the sheet's width a line of this natural width is spread to (ADR 0074): the whole of
- * it, as a printed system is justified, unless that would stretch it more than `MOST_STRETCH` times,
- * as abcjs leaves a short last line short. The whole where the room is not known.
- */
-export const lineShare = (width: number, room: number): number =>
-  Number.isFinite(room) && room > 0 ? Math.min(1, (width * MOST_STRETCH) / room) : 1
-
 /**
  * A chart line's bars cut into lines of the sheet (ADR 0074), as an engraver breaks a system: as few
  * lines as hold them in `room`, then as even as they come by width, so a line is never a full one

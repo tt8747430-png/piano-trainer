@@ -650,11 +650,6 @@ export interface EngraveOptions {
   readonly timeBefore?: TimeSignature | undefined
   /** The sheet's width in CSS pixels: a line wider is drawn smaller to fit it. */
   readonly fill?: number | undefined
-  /**
-   * The share of `fill` the line is spread to, its measures widened alike (`spread`): its bars' share
-   * of the sheet's longest line, so bars line up down the page as a chart's do. The whole of it by default.
-   */
-  readonly share?: number | undefined
 }
 
 /** How many measures are built, or drawn, between two chances for the browser to do something else. */
@@ -729,16 +724,7 @@ function* drawn(
   score: Score,
   host: HTMLDivElement,
   sheet: HTMLDivElement,
-  {
-    scale: asked,
-    fingers,
-    names,
-    staff,
-    staves: chosen,
-    timeBefore,
-    fill,
-    share = 1,
-  }: EngraveOptions,
+  { scale: asked, fingers, names, staff, staves: chosen, timeBefore, fill }: EngraveOptions,
 ): Generator<void, ScoreLayout, void> {
   const written = score.staves.length > 0 ? score.staves : STAVES
   const shown: readonly StaffId[] = staff
@@ -785,7 +771,7 @@ function* drawn(
   const built =
     fill !== undefined && lineWidth(natural) * scale > fill
       ? compress(natural, fill / scale - lead)
-      : spread(natural, fill === undefined ? undefined : (fill * share) / scale - lead)
+      : spread(natural, fill === undefined ? undefined : fill / scale - lead)
   const width = lineWidth(built)
   const places = placesOf(built, shown)
   const renderer = new Renderer(sheet, Renderer.Backends.SVG)

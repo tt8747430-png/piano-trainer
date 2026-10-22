@@ -412,24 +412,16 @@ describe('engrave', () => {
     expect(spread.width).toBeCloseTo(natural.width * 1.5)
     for (const [i, measure] of spread.measures.entries())
       expect(measure.width).toBeGreaterThan(natural.measures[i]?.width ?? 0)
-    // Half the bars of the longest line: half its width, however short the line is drawn.
-    const half = engrave(score, host(), {
+    // A line wider than the sheet is pressed toward its tightest (ADR 0074), not drawn smaller.
+    const pressed = engrave(score, host(), {
       scale: 1,
       fingers: false,
       names: false,
-      fill: natural.width * 4,
-      share: 0.5,
+      fill: natural.width * 0.9,
     })
-    expect(half.width).toBeCloseTo(natural.width * 2)
-    // A share already narrower than the line leaves it as it is.
-    const narrow = engrave(score, host(), {
-      scale: 1,
-      fingers: false,
-      names: false,
-      fill: natural.width * 1.5,
-      share: 0.25,
-    })
-    expect(narrow.width).toBe(natural.width)
+    expect(pressed.width).toBeCloseTo(natural.width * 0.9, 0)
+    for (const [i, measure] of pressed.measures.entries())
+      expect(measure.width).toBeLessThan(natural.measures[i]?.width ?? 0)
   })
 
   it('draws an ending’s bracket numbered where it begins, and the repeats’ dots', () => {

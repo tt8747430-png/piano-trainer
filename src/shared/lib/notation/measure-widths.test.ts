@@ -58,6 +58,14 @@ describe('measureWidths', () => {
     expect(named).toBeGreaterThan((bare ?? 0) * 2)
     expect(smaller).toBeCloseTo((named ?? 0) * 2)
   })
+
+  it('makes no room for chord names that are not shown', () => {
+    const chords = ['Dbmaj7/Ab', 'Gbm6/A'].map((symbol, i) => ({ startTick: i * 48, symbol }))
+    const notes = [rh(60, note('C'), 0, 96)]
+    expect(measureWidths(notate(music(notes, chords)), 1, false)).toEqual(
+      measureWidths(notate(music(notes))),
+    )
+  })
 })
 
 describe('lineLead', () => {

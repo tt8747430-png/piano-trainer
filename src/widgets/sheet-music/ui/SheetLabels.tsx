@@ -1,5 +1,6 @@
 import { memo, useMemo } from 'react'
 import type { Performance } from '@/shared/lib/arrangement'
+import { cn } from '@/shared/lib'
 import { usePositionName } from '@/shared/ui'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 import { chordPositions } from '../model/chord-positions'
@@ -42,7 +43,7 @@ export const SheetLabels = memo(function SheetLabels({
     tick >= opening.startTick &&
     tick < closing.startTick + closing.ticks
   return (
-    <div aria-hidden className="absolute inset-x-0 bottom-full h-11">
+    <div aria-hidden className={cn('absolute inset-x-0 bottom-full', chordNames ? 'h-11' : 'h-5')}>
       {layout.measures.map((measure, index) => {
         const bar = firstBar + index
         const section = performance.bars[bar]?.section

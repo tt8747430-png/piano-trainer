@@ -22,10 +22,11 @@ const LINE_LEAD = 70
 const PER_KEY_ACCIDENTAL = 10
 
 /**
- * Each measure's width at `scale`: its columns of notes, or its chord names where they take more
- * (the names keep their own size, so they take more of a smaller staff's units).
+ * Each measure's width at `scale`: its columns of notes, or its chord names where they are shown
+ * (`chordNames`) and take more (the names keep their own size, so they take more of a smaller
+ * staff's units).
  */
-export function measureWidths(score: Score, scale = 1): number[] {
+export function measureWidths(score: Score, scale = 1, chordNames = true): number[] {
   return score.measures.map((measure) => {
     const columns = new Map<number, boolean>()
     for (const staff of score.staves) {
@@ -42,9 +43,12 @@ export function measureWidths(score: Score, scale = 1): number[] {
       (sum, accidental) => sum + PER_ONSET + (accidental ? PER_ACCIDENTAL_COLUMN : 0),
       0,
     )
-    const names =
-      measure.chords.reduce((sum, chord) => sum + chord.symbol.length * CHORD_CHAR + CHORD_GAP, 0) *
-      CHORD_SLACK
+    const names = !chordNames
+      ? 0
+      : measure.chords.reduce(
+          (sum, chord) => sum + chord.symbol.length * CHORD_CHAR + CHORD_GAP,
+          0,
+        ) * CHORD_SLACK
     return Math.max(LEAST_MEASURE, notes, names / scale)
   })
 }
