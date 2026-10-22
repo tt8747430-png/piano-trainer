@@ -106,7 +106,8 @@ export function PageCanvas({ column, children }: { column: number; children: Rea
   }
   const onPointerMove = (event: PointerEvent<HTMLDivElement>) => {
     const last = pointers.current.get(event.pointerId)
-    if (!last) return
+    // A move what it is over claimed (bars chosen by a held finger) does not pan.
+    if (!last || event.defaultPrevented) return
     const now = { x: event.clientX, y: event.clientY }
     const all = [...pointers.current.entries()]
     if (all.length >= 2) {

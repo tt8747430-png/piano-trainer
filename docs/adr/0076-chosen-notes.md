@@ -12,7 +12,10 @@ by its blue notehead.
 
 ## Decision
 
-- **Shift** with an arrow or a click chooses bars in any row (`selectionTo`, `shortcutOf`).
+- **Shift** with an arrow or a click chooses bars in any row (`selectionTo`, `shortcutOf`); **by touch**, a finger
+  held still on a bar for 450 ms chooses it and, dragged on, every bar to the one under it, on any line
+  (`useHoldToChoose`, as Sibelius on a phone): the sheet and the canvas hold still while it does, and the click it
+  ends with is its own.
 - **What an edit of notes takes** is the bars chosen, else the caret (`chosenSpan` over `Where`): Delete takes the
   row's notes in them and puts the caret at their start; a half step, a step of the key and Respell move them all
   and keep them chosen, so the next edit takes them too; marks did already.

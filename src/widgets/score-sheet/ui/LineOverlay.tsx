@@ -10,6 +10,7 @@ import { nearestPlace } from '../model/nearest'
 import { noteAtStaffY, stepsDragged } from '../model/staff-pitch'
 import { EditorCaret } from './EditorCaret'
 import { LineLabels } from './LineLabels'
+import { useHoldToChoose } from './use-hold-to-choose'
 
 /** How far a bar's Pattern stands in from where its notes begin. */
 const PATTERN_INSET = 6
@@ -69,6 +70,8 @@ export function LineOverlay({
   onSignature: () => void
 }) {
   const { t } = useTranslation('editor')
+  // A bar held by a finger chooses it, and the bars a drag then reaches (ADR 0076).
+  const hold = useHoldToChoose((tick, extend) => onPlace(tick, layer, extend))
   const hand = isHandLayer(layer) ? layer : null
   const [first] = layout.measures
   const staff = hand ? layout.staves[hand === 'lh' ? 'bass' : 'treble'] : undefined
@@ -200,6 +203,7 @@ export function LineOverlay({
       ) : null}
       {layout.measures.map((measure, index) => {
         const placed = line.bars[index]
+        const held = placed ? hold(placed.start) : {}
         const chords = (placed?.bar.chords ?? []).map((chord) => chordSymbol(chord.chord))
         return (
           <button
@@ -209,6 +213,7 @@ export function LineOverlay({
             aria-label={t('sheet.bar', { n: (placed?.index ?? 0) + 1, chords: chords.join(' ') })}
             onClick={place(index)}
             onDoubleClick={write(index)}
+            {...held}
             // A pointer's target only (the arrows move the caret): it takes no focus ring round the bar.
             className="absolute bottom-0 z-20 cursor-text rounded-lg outline-none transition-colors duration-200 ease-out hover:bg-foreground/5"
             style={{ left: measure.x, width: measure.width, top: -row }}
