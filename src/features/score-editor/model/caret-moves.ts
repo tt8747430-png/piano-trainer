@@ -28,21 +28,16 @@ export const caretTicks = (state: EditorState): Tick =>
 export const placesIn = (state: EditorState, layer: Layer): Tick[] =>
   caretPlaces(state.draft, layer, stepOf(state))
 
-/** The bars chosen once the caret moves to `next` with Shift (in the chords), else none. */
-function selectionTo(
-  state: EditorState,
-  next: Tick,
-  layer: Layer,
-  extend: boolean,
-): Selection | null {
-  if (!extend || layer !== 'chords') return null
+/** The bars chosen once the caret moves to `next` with Shift, in any row (a range of notes or chords), else none. */
+function selectionTo(state: EditorState, next: Tick, extend: boolean): Selection | null {
+  if (!extend) return null
   return {
     anchor: state.selection?.anchor ?? barAt(state.draft, state.caret).index,
     head: barAt(state.draft, next).index,
   }
 }
 
-/** The caret put at a tick in a layer (a click on the sheet), Shift choosing bars in the chords. */
+/** The caret put at a tick in a layer (a click on the sheet), Shift choosing bars. */
 export function placeCaret(
   state: EditorState,
   tick: Tick,
@@ -50,7 +45,7 @@ export function placeCaret(
   extend: boolean,
 ): EditorState {
   const next = placed(state.draft, layer, tick)
-  const selection = selectionTo(state, next, layer, extend)
+  const selection = selectionTo(state, next, extend)
   return { ...state, layer, caret: next, selection, struck: null }
 }
 
@@ -69,7 +64,7 @@ function lineStart(bars: ReturnType<typeof barsOf>, caret: Tick, direction: -1 |
   return starts.findLast((start) => start < caret) ?? 0
 }
 
-/** The caret moved a step, a bar, a line or to an end, Shift choosing bars in the chords. */
+/** The caret moved a step, a bar, a line or to an end, Shift choosing bars. */
 export function moveCaret(
   state: EditorState,
   by: CaretMove,

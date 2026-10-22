@@ -41,7 +41,7 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
     type: 'move',
     by,
     direction,
-    extend: press.shiftKey && layer === 'chords',
+    extend: press.shiftKey,
   })
   switch (press.key) {
     case 'ArrowLeft':

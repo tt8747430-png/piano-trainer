@@ -45,8 +45,8 @@ export function ScoreView({
   timeBefore?: TimeSignature | undefined
   /** The sheet's width in CSS pixels: the line is spread to it, and drawn smaller where wider. */
   fill?: number | undefined
-  /** The notes chosen, marked in the focus colour as a notation app marks a selection. */
-  selected?: { readonly staff: StaffId; readonly tick: Tick } | undefined
+  /** The notes chosen on a staff, those starting in [from, to), marked in the focus colour as a notation app marks a selection. */
+  selected?: { readonly staff: StaffId; readonly from: Tick; readonly to: Tick } | undefined
   children?: (layout: ScoreLayout) => ReactNode
 }) {
   const { t } = useTranslation('music')
@@ -96,18 +96,29 @@ export function ScoreView({
 
   // The chosen notes are marked on the engraving as it is, so moving the caret engraves nothing again.
   const selectedStaff = selected?.staff
-  const selectedTick = selected?.tick
+  const selectedFrom = selected?.from
+  const selectedTo = selected?.to
   useEffect(() => {
     const element = host.current
-    if (!element || engraving.status !== 'ready' || selectedStaff === undefined) return
-    const marked = element.querySelectorAll(
-      `[data-staff="${selectedStaff}"][data-tick="${selectedTick}"]`,
+    if (
+      !element ||
+      engraving.status !== 'ready' ||
+      selectedStaff === undefined ||
+      selectedFrom === undefined ||
+      selectedTo === undefined
     )
+      return
+    const marked = [
+      ...element.querySelectorAll<SVGElement>(`[data-staff="${selectedStaff}"][data-tick]`),
+    ].filter((each) => {
+      const tick = Number(each.dataset.tick)
+      return tick >= selectedFrom && tick < selectedTo
+    })
     for (const each of marked) each.classList.add('vf-selected')
     return () => {
       for (const each of marked) each.classList.remove('vf-selected')
     }
-  }, [engraving, selectedStaff, selectedTick])
+  }, [engraving, selectedStaff, selectedFrom, selectedTo])
 
   const size =
     engraving.status === 'ready'

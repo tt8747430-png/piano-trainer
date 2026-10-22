@@ -72,12 +72,13 @@ export function LineOverlay({
   const hand = isHandLayer(layer) ? layer : null
   const [first] = layout.measures
   const staff = hand ? layout.staves[hand === 'lh' ? 'bass' : 'treble'] : undefined
-  // The bars chosen on this line, as one box over its staves (and the chord row, choosing chords).
+  // The bars chosen on this line, as one box over the staff of the row they are chosen in (the
+  // chord row, choosing chords).
   const chosen = chosenBox(
     layout,
     line.bars.map((placed) => placed.index),
     selection,
-    { chords: layer === 'chords', row },
+    { chords: layer === 'chords', row, staff: staffOfLayer(layout.staves, layer) },
   )
   // In a hand's layer, the bars it leaves to the pattern.
   const patterned =
@@ -148,7 +149,7 @@ export function LineOverlay({
         <div
           aria-hidden
           data-slot="bars-chosen"
-          className="absolute z-0 rounded-lg bg-selected/10 ring-1 ring-selected/70"
+          className="absolute z-0 rounded-xl bg-secondary/80 shadow-md ring-1 shadow-ring/15 ring-ring/45"
           style={chosen}
         />
       ) : null}

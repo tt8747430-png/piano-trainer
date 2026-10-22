@@ -29,16 +29,36 @@ describe('ScoreView', () => {
 
   it('marks the notes chosen, on their staff at their tick, without engraving again', async () => {
     const { rerender } = render(
-      <ScoreView score={score} scale={1} fingers={false} selected={{ staff: 'treble', tick: 0 }} />,
+      <ScoreView
+        score={score}
+        scale={1}
+        fingers={false}
+        selected={{ staff: 'treble', from: 0, to: 1 }}
+      />,
     )
     await waitFor(() => expect(document.querySelector('.vf-selected')).toBeInTheDocument())
     const engraved = document.querySelector('[data-slot="score"] svg')
     expect(document.querySelector('.vf-selected')).toHaveAttribute('data-tick', '0')
     rerender(
-      <ScoreView score={score} scale={1} fingers={false} selected={{ staff: 'bass', tick: 0 }} />,
+      <ScoreView
+        score={score}
+        scale={1}
+        fingers={false}
+        selected={{ staff: 'bass', from: 0, to: 1 }}
+      />,
     )
     await waitFor(() => expect(document.querySelector('.vf-selected')).not.toBeInTheDocument())
     expect(document.querySelector('[data-slot="score"] svg')).toBe(engraved)
+    // A range: every note starting in it.
+    rerender(
+      <ScoreView
+        score={score}
+        scale={1}
+        fingers={false}
+        selected={{ staff: 'treble', from: 0, to: 10_000 }}
+      />,
+    )
+    await waitFor(() => expect(document.querySelectorAll('.vf-selected').length).toBeGreaterThan(1))
   })
 
   it('keeps what lies over it in its own layers, under what the page pins', async () => {

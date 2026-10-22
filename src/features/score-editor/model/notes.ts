@@ -181,24 +181,36 @@ export function addToChord(
 }
 
 /** Takes the notes starting at `at` away. */
-export const deleteNotes = (draft: Draft, layer: NoteLayer, at: Tick): Draft =>
-  notesAt(draft, layer, at).length === 0
-    ? draft
-    : withNotes(
+/** What an edit takes: the notes at a tick (the caret's), or those starting in a span (bars chosen). */
+export type Where = Tick | { readonly from: Tick; readonly to: Tick }
+
+const isAt = (where: Where) => (n: DraftNote) =>
+  typeof where === 'number'
+    ? n.startTick === where
+    : n.startTick >= where.from && n.startTick < where.to
+
+export const deleteNotes = (draft: Draft, layer: NoteLayer, where: Where): Draft => {
+  const taken = isAt(where)
+  const notes = notesOf(draft, layer)
+  return notes.some(taken)
+    ? withNotes(
         draft,
         layer,
-        notesOf(draft, layer).filter((n) => n.startTick !== at),
+        notes.filter((n) => !taken(n)),
       )
+    : draft
+}
 
-/** The notes at `at`, each changed; the draft as it was when none is there. */
+/** The notes `where` says, each changed; the draft as it was when none is there. */
 function changeAt(
   draft: Draft,
   layer: NoteLayer,
-  at: Tick,
+  where: Where,
   change: (n: DraftNote) => DraftNote | null,
 ): Draft {
   const notes = notesOf(draft, layer)
-  const changed = notes.map((n) => (n.startTick === at ? change(n) : n))
+  const taken = isAt(where)
+  const changed = notes.map((n) => (taken(n) ? change(n) : n))
   if (changed.some((n) => n === null)) return draft
   return changed.every((n, i) => n === notes[i])
     ? draft
@@ -210,8 +222,13 @@ function changeAt(
 }
 
 /** The notes at `at` moved by semitones, spelled in the key; nothing moves past the piano's ends. */
-export const shiftNotes = (draft: Draft, layer: NoteLayer, at: Tick, semitones: number): Draft =>
-  changeAt(draft, layer, at, (n) => {
+export const shiftNotes = (
+  draft: Draft,
+  layer: NoteLayer,
+  where: Where,
+  semitones: number,
+): Draft =>
+  changeAt(draft, layer, where, (n) => {
     const moved = n.midi + semitones
     return moved < PIANO.from || moved > PIANO.to
       ? null
@@ -230,8 +247,8 @@ export function keyStep(key: Key, from: Midi, direction: 1 | -1): Midi {
  * The notes at `at` moved `steps` notes of the key up or down, as a note dragged on the staff moves
  * (ADR 0064); nothing moves past the piano's ends.
  */
-export const stepNotes = (draft: Draft, layer: NoteLayer, at: Tick, steps: number): Draft =>
-  changeAt(draft, layer, at, (n) => {
+export const stepNotes = (draft: Draft, layer: NoteLayer, where: Where, steps: number): Draft =>
+  changeAt(draft, layer, where, (n) => {
     let moved = n.midi
     for (let i = 0; i < Math.abs(steps); i++) moved = keyStep(draft.key, moved, steps > 0 ? 1 : -1)
     return moved === n.midi ? n : { ...n, ...spelledIn(draft, moved) }
@@ -257,8 +274,8 @@ export function deleteBack(
 }
 
 /** The notes at `at` written the other way (C♯ ↔ D♭). */
-export const respellNotes = (draft: Draft, layer: NoteLayer, at: Tick): Draft =>
-  changeAt(draft, layer, at, (n) => ({ ...n, spelled: otherSpelling(n.spelled) }))
+export const respellNotes = (draft: Draft, layer: NoteLayer, where: Where): Draft =>
+  changeAt(draft, layer, where, (n) => ({ ...n, spelled: otherSpelling(n.spelled) }))
 
 /** A finger on one note at `at` in a hand, or none. */
 export const setFinger = (

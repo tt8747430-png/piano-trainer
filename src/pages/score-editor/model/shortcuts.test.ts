@@ -41,6 +41,11 @@ describe('shortcutOf', () => {
       direction: 1,
       extend: true,
     })
+    // Shift chooses bars in any row: a range of notes as of chords.
+    expect(shortcutOf(press('ArrowRight', 'ArrowRight', { shiftKey: true }), 'rh')).toMatchObject({
+      type: 'move',
+      extend: true,
+    })
     expect(shortcutOf(press('End', 'End'), 'melody')).toEqual({
       type: 'move',
       by: 'end',

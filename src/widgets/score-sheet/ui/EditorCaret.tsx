@@ -4,8 +4,13 @@ import type { Tick } from '@/shared/lib/music'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 import { staffOfLayer } from '../model/line-music'
 
-/** How far left of a notehead the band starts, how far past its staff it reaches, its least width. */
-const LEAD = 8
+/**
+ * How far left of a notehead the band starts (clear of its accidental), how far before the next note
+ * it stops (clear of that note's accidental, as Sibelius's caret keeps clear of its neighbours), how
+ * far past its staff it reaches, its least width.
+ */
+const LEAD = 10
+const CLEAR_OF_NEXT = 16
 const REACH = 12
 const LEAST = 28
 /** How much of the sheet shows past the caret's staff when it scrolls to bring it into sight. */
@@ -61,7 +66,7 @@ export function EditorCaret({
   row: number
 }) {
   const left = xAtTick(layout, tick) - LEAD
-  const right = xAtTick(layout, tick + ticks) - LEAD
+  const right = xAtTick(layout, tick + ticks) - CLEAR_OF_NEXT
   const staff = staffOfLayer(layout.staves, layer)
   // A line wider than the screen scrolls sideways to keep the caret in sight as it moves.
   const caret = useRef<HTMLDivElement>(null)

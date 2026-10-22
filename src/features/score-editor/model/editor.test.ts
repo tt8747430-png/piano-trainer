@@ -311,6 +311,39 @@ describe('the editor', () => {
     expect(line(second, -1).caret).toBe(0)
   })
 
+  it('chooses bars of notes with Shift, and Delete, a half step and Respell take them all', () => {
+    const tune = (state: EditorState) => shape(state.draft.melody)
+    const written = run(
+      start('melody'),
+      { type: 'value', value: 2 },
+      key(60, 0),
+      key(62, 500),
+      key(64, 1000),
+      key(65, 1500),
+      key(67, 2000),
+      key(69, 2500),
+      { type: 'move', by: 'end', direction: -1 },
+    )
+    const chosen = run(written, { type: 'move', by: 'bar', direction: 1, extend: true })
+    expect(chosen.selection).toEqual({ anchor: 0, head: 1 })
+    expect(tune(run(chosen, { type: 'shift', semitones: 1 }))).toEqual([
+      'C#4@0/48',
+      'D#4@48/48',
+      'F4@96/48',
+      'F#4@144/48',
+      'G4@192/48',
+      'A4@240/48',
+    ])
+    // The bars stay chosen, so the next edit takes them too.
+    expect(
+      tune(run(chosen, { type: 'shift', semitones: 1 }, { type: 'respell' })).slice(0, 2),
+    ).toEqual(['D♭4@0/48', 'E♭4@48/48'])
+    const deleted = run(chosen, { type: 'delete', back: true })
+    expect(tune(deleted)).toEqual(['G4@192/48', 'A4@240/48'])
+    expect(deleted.selection).toBeNull()
+    expect(deleted.caret).toBe(0)
+  })
+
   it('selects bars with Shift, and copies, cuts and pastes them', () => {
     const chosen = run(
       run(initialEditor(draftOf({ sections: [{ kind: 'verse', lines: ['G C D'] }] })), {

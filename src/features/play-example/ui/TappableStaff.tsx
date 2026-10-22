@@ -124,7 +124,9 @@ export function TappableStaff({
       {...(scale === undefined ? {} : { scale })}
       {...(fingers === undefined ? {} : { fingers })}
       selected={
-        marked === null ? undefined : { staff: staff ?? staffAt(music, marked), tick: marked }
+        marked === null
+          ? undefined
+          : { staff: staff ?? staffAt(music, marked), from: marked, to: marked + 1 }
       }
     >
       {(layout) => {

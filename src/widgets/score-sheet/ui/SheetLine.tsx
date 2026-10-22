@@ -60,11 +60,28 @@ export const SheetLine = memo(function SheetLine({
   const holdsCaret = caret !== null
   // The labels' row over the staff: as tall as what it holds, at the line's size.
   const row = labelRow(chordNames, scale, print)
-  // The notes at the caret on its staff are the ones chosen, marked as a notation app marks them.
+  // The notes chosen, marked as a notation app marks them: those of the bars chosen on this line in
+  // the caret's row, else the ones at the caret.
+  const staff = layer === 'chords' ? null : staffOfHand(layer, sheet.music.melodyStaff ?? false)
+  const chosen = selection
+    ? sheet.line.bars.filter(
+        (placed) => placed.index >= selection.from && placed.index <= selection.to,
+      )
+    : []
+  const first = chosen[0]
+  const last = chosen.at(-1)
   const selected =
-    caret === null || layer === 'chords'
+    staff === null
       ? undefined
-      : { staff: staffOfHand(layer, sheet.music.melodyStaff ?? false), tick: caret }
+      : first && last
+        ? {
+            staff,
+            from: first.start - sheet.line.start,
+            to: last.start + last.bar.ticks - sheet.line.start,
+          }
+        : caret === null
+          ? undefined
+          : { staff, from: caret, to: caret + 1 }
   // The caret's line comes into view when the caret moves onto it; the sheet opens where it is
   // while the line is already in sight, its section's heading over it kept in view.
   const held = useRef<boolean | null>(null)

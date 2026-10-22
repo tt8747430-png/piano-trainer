@@ -22,6 +22,7 @@ import {
   tieNotes,
   writeOut,
   writeRest,
+  type Where,
 } from './notes'
 import { joinSection, setSectionKind, setSectionPattern } from './sections'
 import { setKey, setMeter, setTempo } from './settings'
@@ -29,6 +30,15 @@ import type { EditorAction, EditorState } from './state'
 import { writeTake } from './take-edits'
 import { barAt, barsOf } from './timeline'
 import { toggledDot, toggledTriplet, withValue } from './values'
+
+/** What an edit of notes takes: the bars chosen, from the first's start to the last's end, else the caret. */
+function chosenSpan(state: EditorState): Where {
+  const chosen = state.selection && selectedBars(state.selection)
+  const bars = barsOf(state.draft)
+  const from = chosen && bars[chosen.from]
+  const to = chosen && bars[chosen.to]
+  return from && to ? { from: from.start, to: to.start + to.bar.ticks } : state.caret
+}
 
 /** The editor's state after an action (spec §6). */
 export function reduce(state: EditorState, action: EditorAction): EditorState {
@@ -67,6 +77,14 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
     }
     case 'delete': {
       if (layer !== 'chords') {
+        // The bars chosen: their notes in this row taken, the caret at their start.
+        const span = chosenSpan(state)
+        if (typeof span !== 'number')
+          return commit(state, deleteNotes(draft, layer, span), {
+            caret: span.from,
+            selection: null,
+            struck: null,
+          })
         if (!action.back) return commit(state, deleteNotes(draft, layer, caret), { struck: null })
         const taken = deleteBack(draft, layer, caret)
         return commit(state, taken.draft, { caret: taken.caret, struck: null })
@@ -87,8 +105,8 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         ? state
         : commit(
             state,
-            stepNotes(draft, layer, caret, action.steps),
-            { struck: null },
+            stepNotes(draft, layer, chosenSpan(state), action.steps),
+            { struck: null, selection: state.selection },
             action.joins ?? false,
           )
     case 'melodyStaff': {
@@ -152,23 +170,24 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
     case 'shift':
       return layer === 'chords'
         ? state
-        : commit(state, shiftNotes(draft, layer, caret, action.semitones), { struck: null })
+        : commit(state, shiftNotes(draft, layer, chosenSpan(state), action.semitones), {
+            struck: null,
+            selection: state.selection,
+          })
     case 'respell':
       return layer === 'chords'
         ? state
-        : commit(state, respellNotes(draft, layer, caret), { struck: null })
+        : commit(state, respellNotes(draft, layer, chosenSpan(state)), {
+            struck: null,
+            selection: state.selection,
+          })
     case 'finger':
       return isHandLayer(layer)
         ? commit(state, setFinger(draft, layer, caret, action.midi, action.finger))
         : state
     case 'mark': {
       if (layer === 'chords') return state
-      const chosen = state.selection && selectedBars(state.selection)
-      const bars = barsOf(draft)
-      const from = chosen && bars[chosen.from]
-      const to = chosen && bars[chosen.to]
-      const span = from && to ? { from: from.start, to: to.start + to.bar.ticks } : caret
-      return commit(state, markNotes(draft, layer, span, action.mark), {
+      return commit(state, markNotes(draft, layer, chosenSpan(state), action.mark), {
         struck: null,
         selection: state.selection,
       })
