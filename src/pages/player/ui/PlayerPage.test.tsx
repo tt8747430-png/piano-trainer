@@ -293,6 +293,14 @@ describe('Player', () => {
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
     expect(screen.queryByRole('combobox', { name: 'Through the keys' })).not.toBeInTheDocument()
   })
+
+  it('opens the song in the score editor from its Setup', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/play/bz5')
+    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(screen.getByRole('link', { name: 'Edit the score' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/edit/bz5'))
+  })
   it('keeps ‹ and › pointing back and forward on a phone on its side, unlike the tempo’s ↑ ↓', async () => {
     await renderApp('/play/bz5')
     const transport = await screen.findByRole('toolbar', { name: 'Playback' })

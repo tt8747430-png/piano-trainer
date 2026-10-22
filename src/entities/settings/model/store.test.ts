@@ -34,6 +34,8 @@ const DEFAULTS = {
   recorder: DEFAULT_RECORDER,
   sidebar: DEFAULT_SIDEBAR,
   paletteSide: 'right',
+  editorLayout: 'scroll',
+  paletteFolded: false,
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
   scoreView: DEFAULT_SCORE_VIEW,
@@ -107,6 +109,8 @@ describe('createSettingsStore', () => {
       recorder: { click: false, tune: true },
       sidebar: 'collapsed',
       paletteSide: 'right',
+      editorLayout: 'scroll',
+      paletteFolded: false,
       midi: {
         device: 'Piano',
         sound: true,
@@ -179,6 +183,10 @@ describe('createSettingsStore', () => {
     expect(restored({ sidebar: 'wide' }).sidebar).toBe('open')
     expect(restored({ paletteSide: 'top' }).paletteSide).toBe('right')
     expect(restored({ paletteSide: 'left' }).paletteSide).toBe('left')
+    expect(restored({ editorLayout: 'paper' }).editorLayout).toBe('scroll')
+    expect(restored({ editorLayout: 'pages' }).editorLayout).toBe('pages')
+    expect(restored({ paletteFolded: 'yes' }).paletteFolded).toBe(false)
+    expect(restored({ paletteFolded: true }).paletteFolded).toBe(true)
   })
 
   it('turns a click that is not a boolean on, its default', () => {

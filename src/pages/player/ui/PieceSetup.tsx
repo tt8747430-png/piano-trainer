@@ -1,10 +1,12 @@
+import { Link } from '@tanstack/react-router'
+import { PencilLine } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { choosableChordSize, isOwnKey, pieceKey, type Piece } from '@/entities/piece'
+import { choosableChordSize, isDegreePiece, isOwnKey, pieceKey, type Piece } from '@/entities/piece'
 import type { PracticeChoice } from '@/features/practice'
 import type { PatternFit } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
 import { noteParam, writtenKeyAccidentals } from '@/shared/lib/music'
-import { ChordSizeField, Labelled, NoteChoice, ToggleGrid } from '@/shared/ui'
+import { ButtonLink, ChordSizeField, Labelled, NoteChoice, ToggleGrid } from '@/shared/ui'
 import {
   MelodyToggle,
   PatternCard,
@@ -14,7 +16,10 @@ import {
 } from '@/widgets/player-setup'
 import { PlayingToggles } from '@/widgets/practice-player'
 
-/** A piece's Setup: its key, the pattern and figures, its chord size, melody and recording where it has them, and how it plays. */
+/**
+ * A piece's Setup: its key, the pattern and figures, its chord size, melody and recording where it
+ * has them, and how it plays; at its foot the way into the score editor, whose Close comes back here.
+ */
 export function PieceSetup({
   piece,
   choice,
@@ -62,6 +67,16 @@ export function PieceSetup({
           <RecordingToggle ownKey={isOwnKey(piece, choice.tonic) ? null : keyName(own)} />
         ) : null}
       </ToggleGrid>
+      {isDegreePiece(piece) ? null : (
+        <ButtonLink
+          variant="outline"
+          className="self-start"
+          render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
+        >
+          <PencilLine aria-hidden />
+          {t('editScore')}
+        </ButtonLink>
+      )}
     </PlayerSetup>
   )
 }

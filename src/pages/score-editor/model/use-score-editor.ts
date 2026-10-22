@@ -1,5 +1,4 @@
 import { useStore } from 'zustand'
-import { useSearch } from '@tanstack/react-router'
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
 import {
   entryTitles,
@@ -9,8 +8,10 @@ import {
   usePieces,
   usePiecesStoreApi,
 } from '@/entities/piece'
+import { selectEditorLayout, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { renameSong, saveMusic } from '@/features/edit-piece'
+import { setEditorLayout } from '@/features/set-preference'
 import {
   barAt,
   createEditorStore,
@@ -22,13 +23,12 @@ import {
   type EditorAction,
 } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
-import { useGoBack, useViewChange, useWakeLock, type SheetView } from '@/shared/lib'
+import { useGoBack, useWakeLock, type SheetView } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { audibleHands, schedule } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { inPopUp, isTyping } from '@/shared/lib/shortcuts'
 import { arrangeDraft, playedInBar } from './arrange-draft'
-import type { EditSearch } from './edit-search'
 import type { ScoreEditorValue } from './editor-context'
 import { savedMusic, savingTo, type EditorTarget } from './editor-target'
 import { shortcutOf, staffNear } from './shortcuts'
@@ -63,10 +63,10 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   useWakeLock()
   const pieces = usePiecesStoreApi()
   const locale = useLocale()
-  // How the score is laid out is what the learner looks at: the URL's.
-  const { layout } = useSearch({ from: '/full-screen/edit/$pieceId' })
-  const changeView = useViewChange<EditSearch>()
-  const setLayout = (next: SheetView) => changeView({ layout: next })
+  // How the score is laid out is the learner's way of working, kept for every song.
+  const settings = useSettingsStoreApi()
+  const layout = useSettings(selectEditorLayout)
+  const setLayout = (next: SheetView) => setEditorLayout(settings, next)
   const [settingsOpen, openSettings] = useState(false)
   /** The music last saved here, or read: what the store holds unless another tab saved since. */
   const [saved] = useState(() => ({ music: target.music }))

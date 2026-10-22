@@ -37,6 +37,8 @@ export {
   selectRecorder,
   selectSectionFolded,
   selectPaletteSide,
+  selectEditorLayout,
+  selectPaletteFolded,
   selectSidebar,
   selectTheme,
   selectTitles,

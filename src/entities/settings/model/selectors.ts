@@ -1,3 +1,4 @@
+import type { SheetView } from '@/shared/lib'
 import type { Locale } from '@/shared/i18n/locale'
 import type {
   ChordFinderSettings,
@@ -25,6 +26,8 @@ export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.
 export const selectRecorder = (state: SettingsState): RecorderSettings => state.recorder
 export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar
 export const selectPaletteSide = (state: SettingsState): PaletteSide => state.paletteSide
+export const selectEditorLayout = (state: SettingsState): SheetView => state.editorLayout
+export const selectPaletteFolded = (state: SettingsState): boolean => state.paletteFolded
 export const selectMidi = (state: SettingsState): MidiSettings => state.midi
 /** Whether the section `id` is folded away. */
 export const selectSectionFolded =

@@ -30,7 +30,7 @@ import type {
   WalkSearch,
 } from '@/pages/player'
 import type { EditSearch } from '@/pages/score-editor'
-import { isOneOf, readNote, SHEET_VIEWS, valueOr, wholeIn } from '@/shared/lib'
+import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
 import { isInversion, keyParam, note, noteParam } from '@/shared/lib/music'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { SetupParams } from '@/widgets/player-setup'
@@ -223,11 +223,7 @@ export const EXERCISE_KEPT: readonly (keyof ExerciseSearch & string)[] = [
   'speedTraining',
 ]
 
-// The score editor: whether its takes are open, and its score's layout.
-export const EDIT_DEFAULTS: EditSearch = { record: false, layout: 'scroll' }
-const isSheetView = isOneOf(SHEET_VIEWS)
-const readEditSearch = (raw: Raw): EditSearch => ({
-  record: raw.record === true,
-  layout: valueOr(isSheetView, raw.layout, EDIT_DEFAULTS.layout),
-})
+// The score editor: whether its takes are open (its layout is a setting, `editorLayout`).
+export const EDIT_DEFAULTS: EditSearch = { record: false }
+const readEditSearch = (raw: Raw): EditSearch => ({ record: raw.record === true })
 export const editSearch = routeSearch(readEditSearch, EDIT_DEFAULTS)

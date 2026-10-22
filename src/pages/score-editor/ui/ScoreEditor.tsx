@@ -1,7 +1,14 @@
 import { Music } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { selectKeyboard, selectPaletteSide, useSettings } from '@/entities/settings'
+import {
+  selectKeyboard,
+  selectPaletteFolded,
+  selectPaletteSide,
+  useSettings,
+  useSettingsStoreApi,
+} from '@/entities/settings'
+import { setPaletteFolded } from '@/features/set-preference'
 import { LANDSCAPE_PHONE, useElementSize, useMediaQuery } from '@/shared/lib'
 import { FabPill } from '@/shared/ui'
 import { ScoreEditorContext } from '../model/editor-context'
@@ -37,7 +44,9 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
   const idle = editor.takes.stage === 'idle'
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const paletteSide = useSettings(selectPaletteSide)
-  const [palette, setPalette] = useState(true)
+  const settings = useSettingsStoreApi()
+  const palette = !useSettings(selectPaletteFolded)
+  const setPalette = (open: boolean) => setPaletteFolded(settings, !open)
   // The sheet's height on a phone on its side, where it is short: a line is drawn to fit it whole.
   const sheet = useRef<HTMLDivElement>(null)
   const { height: room } = useElementSize(sheet)

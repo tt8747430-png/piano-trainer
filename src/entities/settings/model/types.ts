@@ -184,6 +184,10 @@ export interface SettingsState {
   sidebar: Sidebar
   /** The side the score editor's palette stands on beside the sheet. */
   paletteSide: PaletteSide
+  /** How the score editor lays its score out, on every song (ADR 0064). */
+  editorLayout: SheetView
+  /** Whether the score editor's palette is folded into its button. */
+  paletteFolded: boolean
   midi: MidiSettings
   chordFinder: ChordFinderSettings
   scoreView: ScoreViewSettings
@@ -223,6 +227,7 @@ export { DEVICE_NAME_MAX } from '@/shared/api/midi'
 
 export const DEFAULT_SIDEBAR: Sidebar = 'open'
 export const DEFAULT_PALETTE_SIDE: PaletteSide = 'right'
+export const DEFAULT_EDITOR_LAYOUT: SheetView = 'scroll'
 
 /** The staff writes only the chord down now; the keys it is in are shown. */
 export const DEFAULT_CHORD_FINDER: ChordFinderSettings = {

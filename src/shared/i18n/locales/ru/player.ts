@@ -2,6 +2,7 @@ import type { LocaleResources } from '../../types'
 
 export const player: LocaleResources['player'] = {
   setup: 'Параметры',
+  editScore: 'Редактировать ноты',
   view: {
     open: 'Вид',
     staves: 'Нотоносцы',

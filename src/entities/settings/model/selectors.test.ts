@@ -35,6 +35,8 @@ describe('settings selectors', () => {
       foldedSections: ['chords.tensions'],
       sidebar: 'collapsed',
       paletteSide: 'right',
+      editorLayout: 'scroll',
+      paletteFolded: false,
       midi: DEFAULT_MIDI,
       chordFinder: DEFAULT_CHORD_FINDER,
       scoreView: DEFAULT_SCORE_VIEW,

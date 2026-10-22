@@ -154,6 +154,19 @@ describe('the score editor', () => {
     )
   })
 
+  it('keeps its layout and its palette folded for every song, as the learner left them', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await screen.findByRole('button', { name: 'Settings' })
+    const settings = await openSettings(user)
+    await user.click(within(settings).getByRole('radio', { name: 'Pages' }))
+    expect(settingsStore.getState().editorLayout).toBe('pages')
+    await user.keyboard('{Escape}')
+    await user.click(screen.getByRole('button', { name: 'Hide the tools' }))
+    expect(settingsStore.getState().paletteFolded).toBe(true)
+    expect(screen.getByRole('button', { name: 'Show the tools' })).toBeInTheDocument()
+  })
+
   it('folds its keys into a Keys button, and back', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
