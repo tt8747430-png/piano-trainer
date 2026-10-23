@@ -1,5 +1,5 @@
 import type { TimeSignature } from '@/shared/lib/music'
-import { scoreToMei, type Score, type StaffId } from '@/shared/lib/notation'
+import { scoreToMei, type NextLine, type Score, type StaffId } from '@/shared/lib/notation'
 import type { ScoreLayout } from '../layout'
 import { engrave } from './engine'
 import { layoutOf } from './svg-layout'
@@ -12,6 +12,8 @@ export interface DrawOptions {
   /** The staves drawn, top down. */
   readonly staves: readonly StaffId[]
   readonly timeBefore?: TimeSignature | undefined
+  /** What the next line starts in: a change printed after the line's end (a justified line's). */
+  readonly next?: NextLine | undefined
   /** The width the line is justified to, in CSS px; it is drawn smaller where its music is wider. */
   readonly fill?: number | undefined
 }
@@ -31,12 +33,18 @@ export async function drawScore(
   options: DrawOptions,
   signal: AbortSignal,
 ): Promise<ScoreLayout | null> {
-  const mei = scoreToMei(score, {
-    staves: options.staves,
-    fingers: options.fingers,
-    timeBefore: options.timeBefore,
-  })
+  const meiOf = (next: NextLine | undefined) =>
+    scoreToMei(score, {
+      staves: options.staves,
+      fingers: options.fingers,
+      timeBefore: options.timeBefore,
+      next,
+    })
+  // The courtesy signature follows a line broken where it is written: a line left at its own width has no break.
+  const justified = meiOf(options.next)
+  const natural = options.next ? meiOf(undefined) : justified
   const drawn = async (scale: number, width = options.fill) => {
+    const mei = width === undefined ? natural : justified
     const [svg = ''] = await engrave(mei, { width, scale })
     const sheet = host.ownerDocument.createElement('div')
     sheet.innerHTML = svg
@@ -53,9 +61,9 @@ export async function drawScore(
   const { fill } = options
   if (fill !== undefined && (page.systems > 1 || endOf(page.layout) > fill + 1)) {
     // Wider than the line: drawn once at its own width, then again as much smaller as it is wider.
-    const natural =
+    const own =
       page.systems > 1 ? endOf((await drawn(options.scale, undefined)).layout) : endOf(page.layout)
-    page = await drawn((options.scale * fill) / natural)
+    page = await drawn((options.scale * fill) / own)
   }
   if (signal.aborted) return null
   const { sheet, element, layout } = page

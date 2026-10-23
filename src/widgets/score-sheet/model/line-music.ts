@@ -17,6 +17,7 @@ import {
   DEFAULT_INSTRUMENT,
   HOME_CLEF,
   barMarksOf,
+  parseKey,
   beatsPerBar,
   chordSymbol,
   TICKS_PER_BEAT,
@@ -262,8 +263,11 @@ export function lineMusic(draft: Draft, line: SheetLineBars, played?: PlayedHand
   const inForce = first
     ? clefsInForce(barsOf(draft).map((placed) => placed.bar))[first.index]
     : undefined
-  const bars = line.bars.map(({ start, bar }, index) => {
+  const bars = line.bars.map(({ start, bar, section }, index) => {
     const startTick = start - from
+    // A section's own key: its signature printed where it starts (a key change).
+    const written = draft.sections[section]?.heading.key
+    const key = written === undefined ? null : parseKey(written)
     const holds = (staff: StaffId) =>
       notes.some(
         (n) =>
@@ -286,6 +290,7 @@ export function lineMusic(draft: Draft, line: SheetLineBars, played?: PlayedHand
       // The piece's tempo over its first bar.
       ...(index === 0 && start === 0 ? { tempo: draft.tempo } : {}),
       ...barMarksOf(bar),
+      ...(key ? { key } : {}),
       ...(index === 0 && inForce && inForce !== HOME_CLEF
         ? { clefs: inForce }
         : bar.clefs

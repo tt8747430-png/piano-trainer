@@ -37,4 +37,21 @@ describe('the sheet’s lines as written', () => {
     expect(third?.line.bars[0]?.index).toBe(2)
     expect(third?.score).toBe(second?.score)
   })
+
+  it('tells each line what the next starts in, so a key change is printed at the end of the line before', () => {
+    const sheetsOf = createLineSheets()
+    const [verse, chorus] = sheetsOf(
+      readDraft({
+        ...music,
+        sections: [
+          { kind: 'verse', lines: ['G C'] },
+          { kind: 'chorus', key: 'D', lines: ['D G'] },
+        ],
+        melody: undefined,
+      }),
+    )
+    expect(verse?.next?.key).toEqual(chorus?.score.measures[0]?.key)
+    expect(verse?.next?.key?.tonic.letter).toBe('D')
+    expect(chorus?.next).toBeUndefined()
+  })
 })

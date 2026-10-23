@@ -19,4 +19,4 @@ export {
 } from './types'
 export { ticksOf, valuesOf } from './values'
 export { lineLead, measureWidths } from './measure-widths'
-export { scoreToMei } from './mei'
+export { scoreToMei, type NextLine } from './mei'

@@ -142,6 +142,25 @@ describe('the sheet’s lines', () => {
     ])
   })
 
+  it('write a section’s key change on its bars, as the Player does', () => {
+    const changing = readDraft({
+      key: 'C',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [
+        { kind: 'verse', lines: ['C'] },
+        { kind: 'chorus', key: 'Eb', lines: ['Eb'] },
+      ],
+    })
+    const [verse, chorus] = linesOf(changing)
+    expect(lineMusic(changing, verse!).bars[0]?.key).toBeUndefined()
+    expect(lineMusic(changing, chorus!).bars[0]?.key).toEqual({
+      tonic: note('E', -1),
+      minor: false,
+    })
+  })
+
   it('print the time signature again only where it changes', () => {
     const [first, second, third] = linesOf(draft)
     if (!first || !second || !third) throw new Error('three lines')

@@ -72,6 +72,26 @@ describe('ScoreView', () => {
     expect(over.parentElement).toContainElement(document.querySelector('[data-slot="score"]'))
   })
 
+  it('ends a justified line with the key and time the next line changes to, its measure not drawn', async () => {
+    render(
+      <ScoreView
+        score={score}
+        scale={1}
+        fingers={false}
+        fill={600}
+        next={{ time: { count: 4, unit: 4 }, key: { tonic: note('D'), minor: false } }}
+      >
+        {(layout) => <p>Bars: {layout.measures.length}</p>}
+      </ScoreView>,
+    )
+    expect(await screen.findByText('Bars: 2')).toBeInTheDocument()
+    const drawn = document.querySelector('[data-slot="score"] svg')!
+    // The line's own signature and the courtesy after its last barline, on each staff.
+    expect(drawn.querySelectorAll('g.meterSig')).toHaveLength(4)
+    expect(drawn.querySelector('#m-next')).toBeNull()
+    expect(drawn.querySelectorAll('g.system')).toHaveLength(1)
+  })
+
   it('names the staff it mutes', async () => {
     render(<ScoreView score={score} scale={1} fingers={false} muted="bass" />)
     expect(document.querySelector('[data-slot="score"]')).toHaveAttribute('data-muted', 'bass')

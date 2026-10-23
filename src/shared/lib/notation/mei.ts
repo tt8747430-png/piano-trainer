@@ -28,7 +28,15 @@ export interface MeiOptions {
   readonly chordSymbols?: boolean
   /** The time in force before the first measure: a line that goes on prints its time only where it changes. */
   readonly timeBefore?: TimeSignature | undefined
+  /**
+   * What the next line starts in, its first measure's key, time and clefs: what changes there is
+   * printed after this line's last barline, a courtesy signature as LilyPond and MuseScore print one.
+   */
+  readonly next?: NextLine | undefined
 }
+
+/** What a line starts in, as the line before it ends with a courtesy signature where it changes. */
+export type NextLine = Pick<Measure, 'key' | 'time' | 'clefs'>
 
 /**
  * A Score as MEI 5 (ADR 0078), the encoding Verovio engraves: one staff per staff drawn, the piano's
@@ -74,11 +82,14 @@ export function scoreToMei(score: Score, options: MeiOptions = {}): string {
       if (measure.ending !== undefined) body.push(`<ending n="${measure.ending}">`)
       ending = measure.ending
     }
-    const changes = changedDef(score, measure, score.measures[index - 1])
-    if (changes) body.push(changes)
+    const before = score.measures[index - 1]
+    const changes = before ? changedAttrs(score, measure, before) : ''
+    if (changes) body.push(`<scoreDef${changes}/>`)
     body.push(writer.measure(measure, index))
   })
   if (ending !== undefined) body.push('</ending>')
+  const last = score.measures.at(-1)
+  if (options.next && last) body.push(courtesy(score, last, options.next, staves))
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -129,16 +140,40 @@ const meterAttrs = (time: TimeSignature | null, meter: Meter) => {
   return `meter.count="${time?.count ?? count}" meter.unit="${time?.unit ?? unit}"`
 }
 
-/** A scoreDef before a measure whose time or key is not the one before's. */
-function changedDef(score: Score, measure: Measure, before: Measure | undefined): string | null {
-  if (!before) return null
+/** A scoreDef's attributes for a measure whose time or key is not the one before's: none where both go on. */
+function changedAttrs(score: Score, measure: NextLine, before: NextLine): string {
   const time =
     before.time.count !== measure.time.count || before.time.unit !== measure.time.unit
       ? ` ${meterAttrs(measure.time, score.meter)}`
       : ''
-  const keyOf = (m: Measure) => keySignature(m.key ?? score.key)
+  const keyOf = (m: NextLine) => keySignature(m.key ?? score.key)
   const key = keyOf(before) !== keyOf(measure) ? ` key.sig="${keySig(keyOf(measure))}"` : ''
-  return time || key ? `<scoreDef${time}${key}/>` : null
+  return `${time}${key}`
+}
+
+/**
+ * The courtesy signature after a line's last barline: the key, time and clefs the next line changes
+ * to. Verovio prints one only at a system's end with a measure after it, so the next line's
+ * signature and an empty measure of it follow on a page of their own, which is never drawn (a line
+ * is its first page).
+ */
+function courtesy(score: Score, last: Measure, next: NextLine, staves: readonly StaffId[]): string {
+  const attrs = changedAttrs(score, next, last)
+  const clefs = staves
+    .map((staff, index) =>
+      clefIn(last, staff) === clefIn(next, staff)
+        ? ''
+        : `<staffDef n="${index + 1}" ${clefAttrs(clefIn(next, staff))}/>`,
+    )
+    .join('')
+  if (!attrs && !clefs) return ''
+  const def = clefs
+    ? `<scoreDef${attrs}><staffGrp>${clefs}</staffGrp></scoreDef>`
+    : `<scoreDef${attrs}/>`
+  const empty = staves
+    .map((_, index) => `<staff n="${index + 1}"><layer n="1"><mSpace/></layer></staff>`)
+    .join('')
+  return `<pb/>${def}<measure xml:id="m-next" n="${score.measures.length + 1}">${empty}</measure>`
 }
 
 /** A written note's octave from its key and spelling (B♯3 is middle C's key). */

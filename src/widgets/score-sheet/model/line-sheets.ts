@@ -1,6 +1,6 @@
 import type { Draft } from '@/features/score-editor'
 import type { TimeSignature } from '@/shared/lib/music'
-import { notate, type Score, type TimedMusic } from '@/shared/lib/notation'
+import { notate, type NextLine, type Score, type TimedMusic } from '@/shared/lib/notation'
 import {
   lineMusic,
   linesOf,
@@ -16,6 +16,8 @@ export interface LineSheet {
   readonly music: TimedMusic
   readonly score: Score
   readonly timeBefore: TimeSignature | undefined
+  /** What the next line starts in: a key, time or clef it changes to is printed at this line's end. */
+  readonly next: NextLine | undefined
 }
 
 /**
@@ -61,16 +63,20 @@ export function createLineSheets(): (
 ) => LineSheet[] {
   const scores = lastUsed<Score>()
   const sheets = lastUsed<LineSheet>()
-  return (draft, cut, played) =>
-    (cut?.across ? oneLine(draft) : linesOf(draft, cut)).map((line) => {
+  return (draft, cut, played) => {
+    const written = (cut?.across ? oneLine(draft) : linesOf(draft, cut)).map((line) => {
       const music = lineMusic(draft, line, played)
-      const timeBefore = timeBeforeLine(draft, line)
-      const written = JSON.stringify(music)
-      return sheets(`${JSON.stringify(line)} ${written} ${JSON.stringify(timeBefore)}`, () => ({
-        line,
-        music,
-        score: scores(written, () => notate(untimed(music))),
-        timeBefore,
-      }))
+      const text = JSON.stringify(music)
+      return { line, music, text, score: scores(text, () => notate(untimed(music))) }
     })
+    return written.map(({ line, music, text, score }, index) => {
+      const timeBefore = timeBeforeLine(draft, line)
+      const start = written[index + 1]?.score.measures[0]
+      const next: NextLine | undefined = start
+        ? { key: start.key, time: start.time, clefs: start.clefs }
+        : undefined
+      const key = `${JSON.stringify(line)} ${text} ${JSON.stringify(timeBefore)} ${JSON.stringify(next)}`
+      return sheets(key, () => ({ line, music, score, timeBefore, next }))
+    })
+  }
 }
