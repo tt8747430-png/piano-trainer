@@ -209,7 +209,7 @@ it. `@` → `src`.
   in one inversion (`voiceInversion`, `inversionPitchClasses`); a figure's compound version in 6/8 and 12/8 and its
   6/8 form (`inCompound`, `inSix`, ADR 0047); a bar's written hands in place of the pattern's;
   `transposeChord`, `transposeNotes`; `playsKeyTriads`), `notation` (`notate`, a
-  Performance → a Score: measures, voices, values, ties, accidentals; a bar's blank staff a hidden rest), `schedule` (a Performance → sounds in seconds,
+  Performance → a Score: measures, voices, values, ties, accidentals; a bar's blank staff a hidden rest; `beamPlan`, beams by the meter as LilyPond's, ADR 0084), `schedule` (a Performance → sounds in seconds,
   swing, Listen's loop over a passage with each pass's tempo, a bar, a chord's keys, a recording under a pass (`recordingPlay`), a take's count-in and click (`recorderClicks`, on the Player's bar grid), a walk of chords, a scale's
   run in ticks (`scaleRun`, `runSounds`), a chord written as a bar (`chordBar`), a lesson's line of notes (`noteLine`), a lesson's voicings (`voicingsMusic`), a hand's keys, an interval up, down or
   together (`intervalSounds`), which keys sound when and which were struck last; `damper.ts`, the three pedals over held keys; `velocity.ts`, `velocityGain`, `touchVelocity`), `services`
