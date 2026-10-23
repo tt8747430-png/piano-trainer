@@ -1,7 +1,7 @@
 import { useRef, type RefObject } from 'react'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { StaffNames, xAtTick, type ScoreLayout } from '@/shared/ui/score'
+import { StaffNames, xAtTick, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { BarTargets } from './BarTargets'
 import { LoopBand } from './LoopBand'
 import { SheetCursor } from './SheetCursor'
@@ -17,7 +17,10 @@ export function SheetOverlay({
   positions,
   current,
   loop,
+  cursorShown = true,
+  picked,
   onJump,
+  onPick,
   onLoopChange,
   onChoose,
   chordNames = true,
@@ -36,7 +39,13 @@ export function SheetOverlay({
   positions: boolean
   current: number
   loop: BarRange | null
+  /** Whether the cursor is marked: not while the loop stands chosen and nothing moves (ADR 0086). */
+  cursorShown?: boolean
+  /** What a click chose at the cursor: one head, or a chord on one staff. */
+  picked?: Picked | null
   onJump: (beatGroup: number) => void
+  /** A note or a chord clicked: the cursor goes to it. */
+  onPick: (picked: Picked) => void
   onLoopChange: (loop: BarRange) => void
   /** Bars chosen by Shift or a held finger: the piece's bar, extending what is chosen. */
   onChoose: (bar: number, extend: boolean) => void
@@ -63,13 +72,16 @@ export function SheetOverlay({
       {loop ? (
         <LoopBand layout={layout} loop={loop} onChange={onLoopChange} firstBar={firstBar} />
       ) : null}
-      {group && here ? <SheetCursor ref={cursor} tick={group.tick} layout={layout} /> : null}
+      {group && here && cursorShown ? (
+        <SheetCursor ref={cursor} tick={group.tick} picked={picked} layout={layout} />
+      ) : null}
       <BarTargets
         layout={layout}
         performance={performance}
         positions={positions}
         current={group?.bar}
         onJump={onJump}
+        onPick={onPick}
         onChoose={onChoose}
         firstBar={firstBar}
       />

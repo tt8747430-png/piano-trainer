@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { selectPractice, useSettings } from '@/entities/settings'
 import {
   loopParam,
@@ -17,6 +17,7 @@ import type { StaffId } from '@/shared/lib/notation'
 import { audibleHands, type Hands, type Recording } from '@/shared/lib/schedule'
 import { useWakeLock } from '@/shared/lib'
 import type { KeyMark } from '@/shared/ui'
+import { reachLoop, type LoopReach } from './loop-reach'
 import type { PracticeView } from './practice-view'
 import { waitFeedback, type WaitFeedback } from './wait-feedback'
 
@@ -55,7 +56,10 @@ export interface PracticePlayer {
   setSwing(on: boolean): void
   /** Loops the bar the cursor is in, or removes the loop. */
   toggleLoop(): void
-  setLoop(loop: BarRange): void
+  /** The loop chosen, or let go of. */
+  setLoop(loop: BarRange | null): void
+  /** The loop's far end moved by Shift with an arrow, Home or End (ADR 0086). */
+  reachLoop(by: LoopReach, direction: -1 | 1): void
   /** A key tapped on the screen: an answer in Wait mode. The keyboard sounds every tap itself. */
   tapKey(key: Midi): void
 }
@@ -122,6 +126,8 @@ export function usePracticePlayer(
     [waiting, press],
   )
   const bar = performance.beatGroups[state.beatGroup]?.bar ?? 0
+  // Where the loop chosen from the keys began: its other end moves.
+  const anchor = useRef<number | null>(null)
 
   return {
     practice,
@@ -144,7 +150,12 @@ export function usePracticePlayer(
     setHands: (next) => setView({ hands: next }),
     setSwing: (on) => setView({ swing: on }),
     toggleLoop: () => setView({ loop: loop ? undefined : loopParam({ first: bar, last: bar }) }),
-    setLoop: (next) => setView({ loop: loopParam(next) }),
+    setLoop: (next) => setView({ loop: next ? loopParam(next) : undefined }),
+    reachLoop: (by, direction) => {
+      const reached = reachLoop(loop, anchor.current, bar, by, direction, performance.bars.length)
+      anchor.current = reached.anchor
+      setView({ loop: loopParam(reached.loop) })
+    },
     tapKey,
   }
 }

@@ -329,7 +329,7 @@ describe('the editor', () => {
     expect(line(second, -1).caret).toBe(0)
   })
 
-  it('chooses bars of notes with Shift, and Delete, a half step and Respell take them all', () => {
+  it('chooses notes with Shift, and Delete, a half step and Respell take them all', () => {
     const tune = (state: EditorState) => shape(state.draft.melody)
     const written = run(
       start('melody'),
@@ -343,8 +343,9 @@ describe('the editor', () => {
       { type: 'move', by: 'end', direction: -1 },
     )
     const bar = { type: 'move', by: 'bar', direction: 1, extend: true } as const
+    // To bar 1's end, then bar 2's: four notes, from the first's start to the fourth's end.
     const chosen = run(written, bar, bar)
-    expect(chosen.selection).toEqual({ anchor: 0, head: 1 })
+    expect(chosen.selection).toEqual({ anchor: { from: 0, to: 48 }, head: { from: 144, to: 192 } })
     expect(tune(run(chosen, { type: 'shift', semitones: 1 }))).toEqual([
       'C#4@0/48',
       'D#4@48/48',
@@ -353,7 +354,7 @@ describe('the editor', () => {
       'G4@192/48',
       'A4@240/48',
     ])
-    // The bars stay chosen, so the next edit takes them too.
+    // The notes stay chosen, so the next edit takes them too.
     expect(
       tune(run(chosen, { type: 'shift', semitones: 1 }, { type: 'respell' })).slice(0, 2),
     ).toEqual(['D♭4@0/48', 'E♭4@48/48'])
@@ -361,44 +362,100 @@ describe('the editor', () => {
     expect(tune(deleted)).toEqual(['G4@192/48', 'A4@240/48'])
     expect(deleted.selection).toBeNull()
     expect(deleted.caret).toBe(0)
+    // Escape lets them go, as a notation app's.
+    expect(run(chosen, { type: 'deselect' }).selection).toBeNull()
   })
 
-  it('chooses exactly the bars gone over: to a barline, not the bar after it', () => {
-    const fourBars = run(
+  it('chooses exactly the notes gone over, by a note, to a bar’s end or start, or to an end', () => {
+    const tune = run(
       initialEditor(
         draftOf({
-          melody: 'B4/4 | C5/4 | D5/4 | E5/4',
-          sections: [{ kind: 'verse', lines: ['G C D G'] }],
+          melody: 'B4/2 C5/2 | D5/4 | E5/4',
+          sections: [{ kind: 'verse', lines: ['G C D'] }],
         }),
       ),
       { type: 'layer', layer: 'melody' },
     )
-    const bar = (direction: -1 | 1) =>
-      ({ type: 'move', by: 'bar', direction, extend: true }) as const
-    // Over bars 1, 2 and 3: the caret ends on bar 4's barline, and bar 4 is not chosen.
-    expect(run(fourBars, bar(1), bar(1), bar(1)).selection).toEqual({ anchor: 0, head: 2 })
-    // A note at a time, the same: past bar 1's whole note is its barline.
-    const step = { type: 'move', by: 'step', direction: 1, extend: true } as const
-    expect(run(fourBars, step).selection).toEqual({ anchor: 0, head: 0 })
-    // Back from bar 3's barline over bar 2: bar 2 alone.
-    const atThree = run(fourBars, { type: 'place', tick: 192, layer: 'melody' })
-    expect(run(atThree, bar(-1)).selection).toEqual({ anchor: 1, head: 1 })
-    // A note clicked with Shift is in what is chosen: its bar and no more.
+    const span = (state: EditorState) =>
+      state.selection && {
+        from: Math.min(state.selection.anchor.from, state.selection.head.from),
+        to: Math.max(state.selection.anchor.to, state.selection.head.to),
+      }
+    const move = (by: 'step' | 'bar' | 'end', direction: -1 | 1) =>
+      ({ type: 'move', by, direction, extend: true }) as const
+    // Shift and the right arrow from the first half note: it and the next, both whole.
+    expect(span(run(tune, move('step', 1)))).toEqual({ from: 0, to: 96 })
+    expect(span(run(tune, move('step', 1), move('step', 1)))).toEqual({ from: 0, to: 192 })
+    // And back again: the first alone.
+    expect(span(run(tune, move('step', 1), move('step', -1)))).toEqual({ from: 0, to: 48 })
+    // Back from bar 2's note: the note before it too.
+    const atTwo = run(tune, { type: 'place', tick: 96, layer: 'melody' })
+    expect(span(run(atTwo, move('step', -1)))).toEqual({ from: 48, to: 192 })
+    // A bar on: to the bar's last note, then the next bar's; a bar back: to its first, then before.
+    expect(span(run(tune, move('bar', 1)))).toEqual({ from: 0, to: 96 })
+    expect(span(run(tune, move('bar', 1), move('bar', 1)))).toEqual({ from: 0, to: 192 })
+    expect(span(run(atTwo, move('bar', -1)))).toEqual({ from: 0, to: 192 })
+    // To the ends: the last note, the first.
+    expect(span(run(atTwo, move('end', 1)))).toEqual({ from: 96, to: 288 })
+    expect(span(run(atTwo, move('end', -1)))).toEqual({ from: 0, to: 192 })
+    // A note clicked with Shift is the range's end: from the caret's note to it, no bar more.
+    expect(span(run(tune, { type: 'place', tick: 96, layer: 'melody', extend: true }))).toEqual({
+      from: 0,
+      to: 192,
+    })
+    // A move without Shift lets the range go.
     expect(
-      run(fourBars, { type: 'place', tick: 192, layer: 'melody', extend: true }).selection,
-    ).toEqual({ anchor: 0, head: 2 })
+      run(tune, move('step', 1), { type: 'move', by: 'step', direction: 1 }).selection,
+    ).toBeNull()
   })
 
-  it('selects bars with Shift, and copies, cuts and pastes them', () => {
+  it('chooses one note of a chord, and edits it alone (ADR 0086)', () => {
+    const chord = run(initialEditor(draftOf({ hands: { rh: 'C4+E4+G4/4 | -' } })), {
+      type: 'layer',
+      layer: 'rh',
+    })
+    const rh = (state: EditorState) => shape(state.draft.hands.rh)
+    // Its head clicked: E alone.
+    const e = run(chord, { type: 'place', tick: 0, layer: 'rh', key: midi(64) })
+    expect(e.chordNote).toBe(64)
+    expect(rh(run(e, { type: 'shift', semitones: 1 }))).toEqual(['C4@0/96', 'F4@0/96', 'G4@0/96'])
+    // It stays chosen as it moves, so the next move moves it on.
+    expect(run(e, { type: 'shift', semitones: 1 }).chordNote).toBe(65)
+    expect(rh(run(e, { type: 'step', steps: 1 }))).toEqual(['C4@0/96', 'F#4@0/96', 'G4@0/96'])
+    expect(run(e, { type: 'step', steps: 1 }).chordNote).toBe(66)
+    expect(rh(run(e, { type: 'respell' }))).toEqual(['C4@0/96', 'F♭4@0/96', 'G4@0/96'])
+    const deleted = run(e, { type: 'delete' })
+    expect(rh(deleted)).toEqual(['C4@0/96', 'G4@0/96'])
+    expect(deleted.chordNote).toBeNull()
+    const marked = run(e, {
+      type: 'mark',
+      mark: { kind: 'articulation', articulation: 'staccato' },
+    })
+    expect(marked.draft.hands.rh.map((n) => n.marks?.articulations ?? [])).toEqual([
+      [],
+      ['staccato'],
+      [],
+    ])
+    // The chord's free room, or a click with no key: the whole chord.
+    expect(run(e, { type: 'place', tick: 0, layer: 'rh' }).chordNote).toBeNull()
+    expect(run(e, { type: 'deselect' }).chordNote).toBeNull()
+    // A single note has no note of a chord to choose.
+    const single = run(initialEditor(draftOf({ hands: { rh: 'C4/4 | -' } })), {
+      type: 'layer',
+      layer: 'rh',
+    })
+    expect(run(single, { type: 'place', tick: 0, layer: 'rh', key: midi(60) }).chordNote).toBeNull()
+  })
+
+  it('selects bars with Shift, a bar at a time in the chords, and copies, cuts and pastes them', () => {
     const chosen = run(
       run(initialEditor(draftOf({ sections: [{ kind: 'verse', lines: ['G C D'] }] })), {
         type: 'layer',
         layer: 'chords',
       }),
       { type: 'move', by: 'bar', direction: 1, extend: true },
-      { type: 'move', by: 'bar', direction: 1, extend: true },
     )
-    expect(chosen.selection).toEqual({ anchor: 0, head: 1 })
+    expect(chosen.selection).toEqual({ anchor: { from: 0, to: 96 }, head: { from: 96, to: 192 } })
     const pasted = run(chosen, { type: 'bars', edit: 'copy' }, { type: 'bars', edit: 'paste' })
     expect(form(pasted.draft)).toEqual([[['G@0', 'C@0', 'G@0', 'C@0', 'D@0']]])
     const cut = run(chosen, { type: 'bars', edit: 'cut' })

@@ -4,8 +4,9 @@ import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { useElementSize, type SheetView } from '@/shared/lib'
 import { notate, type StaffId } from '@/shared/lib/notation'
-import { ScoreView, staffHeight, type ScoreLayout } from '@/shared/ui/score'
+import { ScoreView, staffHeight, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { fitScale, widestBar } from '../model/fit-scale'
+import { groupOfTick } from '../model/group-of-tick'
 import { playedMusic } from '../model/played-music'
 import { SheetLines } from './SheetLines'
 import { SheetOverlay } from './SheetOverlay'
@@ -66,6 +67,7 @@ export function SheetMusic({
   headings,
   current,
   loop,
+  playing = false,
   fingers,
   names,
   positions,
@@ -84,6 +86,8 @@ export function SheetMusic({
   /** The beat group the cursor is on. */
   current: number
   loop: BarRange | null
+  /** Whether the music plays (or waits on the keys): the cursor is marked in a loop then. */
+  playing?: boolean
   fingers: boolean
   /** Each notehead carries its note's name. */
   names: boolean
@@ -92,7 +96,8 @@ export function SheetMusic({
   /** The staff of the hand not heard or practised. */
   muted: StaffId | undefined
   onJump: (beatGroup: number) => void
-  onLoopChange: (loop: BarRange) => void
+  /** The loop chosen, or let go of (a note clicked, Escape). */
+  onLoopChange: (loop: BarRange | null) => void
 }) {
   const { t } = useTranslation('music')
   // The tune's own staff only where the tune is heard (the Melody switch).
@@ -124,16 +129,30 @@ export function SheetMusic({
   // A muted staff may leave the height: its hand is not read.
   const read = staves.filter((staff) => staff !== muted).length || 1
   const scale = fitScale(room, staffHeight(undefined, read), bar)
-  // Bars chosen as the editor chooses them (ADR 0082), the loop: from the bar held or the loop's
-  // start (else the cursor's bar) to the one reached, exactly.
+  // Bars chosen as the editor chooses notes (ADR 0082, 0086), the loop: from the bar held or the
+  // loop's start (else the cursor's bar) to the one reached, exactly.
   const anchor = useRef<number | null>(null)
-  const playing = performance.beatGroups[current]
+  const group = performance.beatGroups[current]
   const onChoose = (at: number, extend: boolean) => {
     if (!extend) anchor.current = at
-    const from = extend ? (anchor.current ?? loop?.first ?? playing?.bar ?? at) : at
+    const from = extend ? (anchor.current ?? loop?.first ?? group?.bar ?? at) : at
     onLoopChange({ first: Math.min(from, at), last: Math.max(from, at) })
   }
-  // The notes chosen, in the selection's colour on every staff: the loop's, else the cursor's.
+  // A note or a chord clicked, as the editor's click (ADR 0086): the cursor goes to its beat group,
+  // the loop is let go of, and it alone is marked until the cursor moves.
+  const [picked, setPicked] = useState<{ readonly picked: Picked; readonly group: number } | null>(
+    null,
+  )
+  const onPick = (next: Picked) => {
+    const at = groupOfTick(performance, next.tick)
+    if (at === null) return
+    anchor.current = null
+    if (loop) onLoopChange(null)
+    onJump(at)
+    setPicked({ picked: next, group: at })
+  }
+  const here = picked?.group === current ? picked.picked : null
+  // The notes chosen, in the selection's colour: the loop's, else the one clicked, else the cursor's.
   const selected = useMemo(() => {
     const first = loop ? performance.bars[loop.first] : undefined
     if (loop && first)
@@ -141,8 +160,15 @@ export function SheetMusic({
         from: first.startTick,
         to: performance.bars[loop.last + 1]?.startTick ?? performance.totalTicks,
       }
-    return playing ? { from: playing.tick, to: playing.tick + 1 } : undefined
-  }, [loop, performance, playing])
+    if (here) return { staff: here.staff, from: here.tick, to: here.tick + 1, midi: here.midi }
+    return group ? { from: group.tick, to: group.tick + 1 } : undefined
+  }, [loop, performance, group, here])
+  // While the loop stands chosen and nothing moves, its box is the mark: the cursor at its start
+  // adds nothing (ADR 0086). Playing, or stepped on, the cursor is where the music is.
+  const cursorShown =
+    !loop ||
+    playing ||
+    current !== performance.beatGroups.findIndex((each) => each.bar === loop.first)
   if (view.layout !== 'horizontal')
     return (
       <SheetLines
@@ -161,9 +187,12 @@ export function SheetMusic({
         tempos={tempos}
         muted={muted}
         onJump={onJump}
+        onPick={onPick}
         onLoopChange={onLoopChange}
         onChoose={onChoose}
         selected={selected}
+        cursorShown={cursorShown}
+        picked={here}
       />
     )
   return (
@@ -194,7 +223,10 @@ export function SheetMusic({
               tempos={tempos}
               current={current}
               loop={loop}
+              cursorShown={cursorShown}
+              picked={here}
               onJump={onJump}
+              onPick={onPick}
               onLoopChange={onLoopChange}
               onChoose={onChoose}
             />

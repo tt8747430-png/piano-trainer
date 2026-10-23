@@ -28,10 +28,19 @@ export interface Snapshot {
   readonly layer: Layer
 }
 
-/** Bars chosen with Shift: where the choice began and where it reaches. */
+/** Ticks from `from` up to, not including, `to`: a note's (or chord's, or empty place's) time. */
+export interface TickSpan {
+  readonly from: Tick
+  readonly to: Tick
+}
+
+/**
+ * Notes chosen with Shift (ADR 0086), as a notation app chooses a range: the note (or chord, or empty
+ * place) where the choice began and the one it reaches, both inside it.
+ */
 export interface Selection {
-  readonly anchor: number
-  readonly head: number
+  readonly anchor: TickSpan
+  readonly head: TickSpan
 }
 
 /** Keys struck together, written as one entry (spec §6.3). */
@@ -50,6 +59,8 @@ export interface EditorState extends Snapshot {
   /** Chord: a key played joins the notes at the caret, which stays. */
   readonly chord: boolean
   readonly selection: Selection | null
+  /** One note of the chord at the caret chosen alone, by its key (ADR 0086): else the whole chord. */
+  readonly chordNote: Midi | null
   readonly struck: Struck | null
   readonly clip: Clip | null
   readonly past: readonly Snapshot[]
@@ -85,7 +96,16 @@ export type EditorAction =
       readonly tick: Tick
       readonly layer: Layer
       readonly extend?: boolean
+      /** One note of the chord there, clicked on its head (ADR 0086). */
+      readonly key?: Midi
     }
+  /** What is chosen let go: the notes chosen, a chord's one note (Escape). */
+  | { readonly type: 'deselect' }
+  /**
+   * The note over (1) or under (−1) the one chosen in the chord at the caret, the chord's top or foot
+   * from the whole chord; past its last, the staff over or under (Alt ↑ ↓, ADR 0086).
+   */
+  | { readonly type: 'chordNote'; readonly direction: -1 | 1 }
   | { readonly type: 'key'; readonly key: Midi; readonly time: number }
   | { readonly type: 'rest' }
   /** The notes or chord at the caret; with `back`, else the ones before it (Backspace). */
@@ -150,6 +170,7 @@ export const initialEditor = (draft: Draft): EditorState => ({
   value: { value: 4, dots: 0, triplet: false },
   chord: false,
   selection: null,
+  chordNote: null,
   struck: null,
   clip: null,
   past: [],

@@ -7,10 +7,9 @@ import type {
   OctaveLine,
   Ornament,
   Pedal,
-  Tick,
 } from '@/shared/lib/music'
 import type { Draft, DraftNote, NoteLayer } from './draft'
-import { notesOf, withNotes } from './notes'
+import { isAt, notesOf, withNotes, type Where } from './notes'
 
 /** A mark the palette puts on notes (ADR 0063). */
 export type MarkChoice =
@@ -118,25 +117,18 @@ function endOf(mark: MarkChoice): MarkChoice | null {
  * other mark on them all. On
  * where any lacks it, else off.
  */
-export function markNotes(
-  draft: Draft,
-  layer: NoteLayer,
-  span: Tick | { readonly from: Tick; readonly to: Tick },
-  mark: MarkChoice,
-): Draft {
+export function markNotes(draft: Draft, layer: NoteLayer, span: Where, mark: MarkChoice): Draft {
   const notes = notesOf(draft, layer)
-  const inSpan =
-    typeof span === 'number'
-      ? notes.filter((n) => n.startTick === span)
-      : notes.filter((n) => n.startTick >= span.from && n.startTick < span.to)
+  const inSpan = notes.filter(isAt(span))
   if (inSpan.length === 0) return draft
   const first = Math.min(...inSpan.map((n) => n.startTick))
   const last = Math.max(...inSpan.map((n) => n.startTick))
-  const end = typeof span === 'number' ? null : endOf(mark)
+  // A span of notes: a note or a chord at the caret is marked as itself.
+  const spans = typeof span !== 'number' && 'from' in span
+  const end = spans ? endOf(mark) : null
   const start: MarkChoice = end && mark.kind === 'slurEnd' ? { kind: 'slurStart' } : mark
   const startsOnFirst =
-    end !== null ||
-    (typeof span !== 'number' && (mark.kind === 'dynamic' || mark.kind === 'expression'))
+    end !== null || (spans && (mark.kind === 'dynamic' || mark.kind === 'expression'))
   const targets = startsOnFirst ? inSpan.filter((n) => n.startTick === first) : inSpan
   const on = !targets.every((n) => hasMark(n.marks, start))
   return withNotes(

@@ -57,16 +57,19 @@ describe('SheetMusic', () => {
     expect(screen.getByRole('button', { name: 'Bar 2: G' })).toHaveAttribute('aria-current', 'step')
   })
 
-  it('jumps to a bar’s first beat group from the keyboard, and to the nearest one under a tap', async () => {
+  it('jumps to a bar’s first beat group from the keyboard, and nowhere at a tap on empty staff (ADR 0086)', async () => {
     const user = userEvent.setup()
-    const { onJump } = renderSheet()
+    const { onJump, onLoopChange } = renderSheet({ loop: { first: 0, last: 1 } })
     const second = await screen.findByRole('button', { name: 'Bar 2: G' })
     second.focus()
     await user.keyboard('{Enter}')
     expect(onJump).toHaveBeenLastCalledWith(4)
+    vi.spyOn(second, 'offsetWidth', 'get').mockReturnValue(400)
     stubBox(second, { left: 0, width: 400, height: 200 })
-    fireEvent.click(second, { detail: 1, clientX: 9999 })
-    expect(onJump).toHaveBeenLastCalledWith(7)
+    // Far over the staff, past every head: nothing is chosen, the loop stays.
+    fireEvent.click(second, { detail: 1, clientX: 399, clientY: 1 })
+    expect(onJump).toHaveBeenCalledTimes(1)
+    expect(onLoopChange).not.toHaveBeenCalled()
   })
 
   it('moves the loop’s ends with the arrow keys, never past each other', async () => {
@@ -99,7 +102,8 @@ describe('SheetMusic', () => {
       const touch = { pointerId: 1, pointerType: 'touch', clientX: 10, clientY: 10 }
       fireEvent.pointerDown(first, touch)
       act(() => vi.advanceTimersByTime(HOLD_MS))
-      expect(onLoopChange).toHaveBeenLastCalledWith({ first: 0, last: 0 })
+      // Held on empty staff: nothing chosen yet; dragged on, the bars from the cursor's.
+      expect(onLoopChange).not.toHaveBeenCalled()
       document.elementFromPoint = () => second
       fireEvent.pointerMove(first, { ...touch, clientX: 300 })
       expect(onLoopChange).toHaveBeenLastCalledWith({ first: 0, last: 1 })
@@ -124,6 +128,13 @@ describe('SheetMusic', () => {
       await waitFor(() => expect(document.querySelector('.note-chosen')).toBeInTheDocument())
     },
   )
+
+  it('marks no cursor while the loop stands chosen and nothing moves, as the editor hides its caret (ADR 0086)', async () => {
+    renderSheet({ current: 4, loop: { first: 1, last: 1 } })
+    await screen.findByRole('button', { name: 'Bar 2: G' })
+    expect(document.querySelectorAll('[data-mark="range"]')).toHaveLength(1)
+    expect(document.querySelector('[data-mark="note"]')).toBeNull()
+  })
 
   it('scrolls to keep the cursor in sight', async () => {
     const { scrolls } = stubScrolling({ clientWidth: 100, scrollWidth: 2000 })

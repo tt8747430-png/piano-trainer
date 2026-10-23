@@ -50,6 +50,26 @@ describe('the Player’s shortcuts', () => {
     expect(router.state.location.search).not.toHaveProperty('loop')
   })
 
+  it('moves the loop’s far end with Shift and the arrows, Home and End, and lets it go on Escape (ADR 0086)', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/play/bz5')
+    await screen.findByRole('button', { name: 'Play' })
+    await user.keyboard('{Shift>}{ArrowRight}{/Shift}')
+    expect(router.state.location.search).toMatchObject({ loop: '1-2' })
+    await user.keyboard('{Shift>}{ArrowRight}{/Shift}')
+    expect(router.state.location.search).toMatchObject({ loop: '1-3' })
+    await user.keyboard('{Shift>}{ArrowLeft}{/Shift}')
+    expect(router.state.location.search).toMatchObject({ loop: '1-2' })
+    await user.keyboard('{Shift>}{Home}{/Shift}')
+    expect(router.state.location.search).toMatchObject({ loop: '1-1' })
+    await user.keyboard('{Shift>}{End}{/Shift}')
+    expect(String(router.state.location.search.loop)).toMatch(/^1-\d+$/)
+    // Escape lets go of the loop first; the Player stays.
+    await user.keyboard('{Escape}')
+    expect(router.state.location.search).not.toHaveProperty('loop')
+    expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
+  })
+
   it('closes on Escape, back to the song', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')

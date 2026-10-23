@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Tick, TimeSignature } from '@/shared/lib/music'
+import type { Midi, Tick, TimeSignature } from '@/shared/lib/music'
 import type { Score, StaffId } from '@/shared/lib/notation'
 import { drawnStaves } from './drawn-staves'
 import type { ScoreLayout } from './layout'
@@ -47,10 +47,18 @@ export function ScoreView({
   /** The sheet's width in CSS pixels: the line is spread to it, and drawn smaller where wider. */
   fill?: number | undefined
   /**
-   * The notes chosen, those starting in [from, to) on a staff (on every staff without one), marked in
-   * the focus colour as a notation app marks a selection (ADR 0082).
+   * The notes chosen, those starting in [from, to) on a staff (on every staff without one), one key
+   * alone where `midi` says, marked in the focus colour as a notation app marks a selection (ADR 0082,
+   * 0086).
    */
-  selected?: { readonly staff?: StaffId; readonly from: Tick; readonly to: Tick } | undefined
+  selected?:
+    | {
+        readonly staff?: StaffId
+        readonly from: Tick
+        readonly to: Tick
+        readonly midi?: Midi | undefined
+      }
+    | undefined
   children?: (layout: ScoreLayout) => ReactNode
 }) {
   const { t } = useTranslation('music')
@@ -97,6 +105,7 @@ export function ScoreView({
   const selectedStaff = selected?.staff
   const selectedFrom = selected?.from
   const selectedTo = selected?.to
+  const selectedKey = selected?.midi
   useEffect(() => {
     const element = host.current
     if (
@@ -106,6 +115,15 @@ export function ScoreView({
       selectedTo === undefined
     )
       return
+    // One key of a chord: its heads' ids, as the layout read them with their keys.
+    const ids =
+      selectedKey === undefined
+        ? null
+        : new Set(
+            (engraving.layout.heads ?? [])
+              .filter((head) => head.midi === selectedKey)
+              .map((head) => head.id),
+          )
     // Notes are named `n-<staff>-<tick>-<i>` (ADR 0078).
     const marked = [
       ...element.querySelectorAll<SVGElement>(
@@ -113,13 +131,13 @@ export function ScoreView({
       ),
     ].filter((each) => {
       const tick = Number(each.id.split('-')[2])
-      return tick >= selectedFrom && tick < selectedTo
+      return tick >= selectedFrom && tick < selectedTo && (!ids || ids.has(each.id))
     })
     for (const each of marked) each.classList.add('note-chosen')
     return () => {
       for (const each of marked) each.classList.remove('note-chosen')
     }
-  }, [engraving, selectedStaff, selectedFrom, selectedTo])
+  }, [engraving, selectedStaff, selectedFrom, selectedTo, selectedKey])
 
   const size =
     engraving.status === 'ready'

@@ -2,14 +2,15 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Performance } from '@/shared/lib/arrangement'
 import { usePositionName } from '@/shared/ui'
-import { useHoldToChoose, type ScoreLayout } from '@/shared/ui/score'
+import { pickAt, useSheetChoice, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { chordPositions } from '../model/chord-positions'
-import { beatGroupAt } from '../model/beat-group-at'
 
 /**
- * Each bar as a button over the staff, as the editor's are (ADR 0082): a tap jumps to the beat group
- * of the note under it, Enter or Space to the bar's first; Shift with a click, or a finger held on a
- * bar and dragged, chooses bars (`onChoose`, the piece's bar, extending what is chosen).
+ * Each bar as a button over the staff, as the editor's are, through the one selection's gestures
+ * (ADR 0082, 0086): a click or tap on a head chooses that note (one of a chord's), on a stem or a
+ * chord's column the chord, and the cursor jumps there; on empty staff, nothing. Enter or Space goes
+ * to the bar's first beat; Shift with a click, or a finger held and dragged, chooses bars (`onChoose`,
+ * the piece's bar, extending what is chosen).
  */
 export function BarTargets({
   layout,
@@ -17,6 +18,7 @@ export function BarTargets({
   positions,
   current,
   onJump,
+  onPick,
   onChoose,
   firstBar = 0,
 }: {
@@ -29,11 +31,28 @@ export function BarTargets({
   /** The bar the cursor is in. */
   current: number | undefined
   onJump: (beatGroup: number) => void
+  /** A note or a chord clicked: the cursor goes to it, and it is what is chosen. */
+  onPick: (picked: Picked) => void
   onChoose: (bar: number, extend: boolean) => void
 }) {
   const { t } = useTranslation('music')
   const positionName = usePositionName()
-  const hold = useHoldToChoose(onChoose)
+  const choice = useSheetChoice({
+    at: (bar, point, extend) => {
+      if (extend) {
+        onChoose(bar, true)
+        return
+      }
+      if (!point) {
+        const first = performance.beatGroups.findIndex((group) => group.bar === bar)
+        if (first >= 0) onJump(first)
+        return
+      }
+      const picked = pickAt(layout, point.x, point.y)
+      if (picked) onPick(picked)
+    },
+    reach: (bar) => onChoose(bar, true),
+  })
   // Named once per score: the cursor's move re-renders the bars, and only the current one changes.
   const names = useMemo(() => {
     const placed = positions ? chordPositions(performance) : []
@@ -56,29 +75,7 @@ export function BarTargets({
         type="button"
         aria-label={names[index]}
         aria-current={bar === current ? 'step' : undefined}
-        {...hold(bar)}
-        onClick={(event) => {
-          if (event.shiftKey) {
-            onChoose(bar, true)
-            return
-          }
-          const box = event.currentTarget.getBoundingClientRect()
-          const target =
-            event.detail === 0
-              ? performance.beatGroups.findIndex((group) => group.bar === bar)
-              : beatGroupAt(
-                  performance,
-                  bar,
-                  layout.onsets.filter(
-                    (onset) =>
-                      onset.tick >= measure.startTick &&
-                      onset.tick < measure.startTick + measure.ticks,
-                  ),
-                  // The tap in the layout's px, however the sheet is zoomed on the screen.
-                  measure.x + ((event.clientX - box.left) * measure.width) / box.width,
-                )
-          if (target !== null && target >= 0) onJump(target)
-        }}
+        {...choice(bar, { x: measure.x, y: 0 })}
         // No hover wash round the bar, which a touch screen leaves standing over it (ADR 0082): the
         // cursor and the loop are the selection's marks.
         className="absolute inset-y-0 z-20 cursor-pointer rounded-md focus-visible:-outline-offset-3"

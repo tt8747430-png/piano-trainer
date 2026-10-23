@@ -1,4 +1,4 @@
-import type { Tick } from '@/shared/lib/music'
+import type { Midi, Tick } from '@/shared/lib/music'
 import type { StaffId, StaffInstruments } from '@/shared/lib/notation'
 
 /** Where an engraving's staves, bars and onsets stand, in CSS px from its top left. */
@@ -23,6 +23,34 @@ export interface ScoreLayout {
   readonly staffInstruments?: StaffInstruments
   /** Each written onset left to right: its tick and its first notehead's or rest's x. */
   readonly onsets: readonly { readonly tick: Tick; readonly x: number }[]
+  /** Each notehead drawn, with its accidental and dots (ADR 0086): what a selection hugs. */
+  readonly heads?: readonly Head[]
+  /** Each chord's (or note's) column on its staff: its heads and its stem, what a click on it chooses whole. */
+  readonly columns?: readonly Column[]
+}
+
+/** A box on the engraving, in its px: its left, right, top and foot. */
+export interface Extent {
+  readonly left: number
+  readonly right: number
+  readonly top: number
+  readonly bottom: number
+}
+
+/** A notehead drawn: its note's id (`n-<staff>-<tick>-<i>`, ADR 0078), its key where known, and its box. */
+export interface Head extends Extent {
+  readonly id: string
+  readonly staff: StaffId
+  readonly tick: Tick
+  /** Its place in its chord, lowest first. */
+  readonly index: number
+  readonly midi?: Midi
+}
+
+/** A chord's (or a note's) column on its staff: its heads with its stem. */
+export interface Column extends Extent {
+  readonly staff: StaffId
+  readonly tick: Tick
 }
 
 /**

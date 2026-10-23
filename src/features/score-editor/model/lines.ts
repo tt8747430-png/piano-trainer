@@ -1,9 +1,9 @@
 import type { NoteMarks, Tick } from '@/shared/lib/music'
 import type { Draft, DraftNote, NoteLayer } from './draft'
-import { selectedBars } from './form-edits'
+import { selectionSpan } from './caret-moves'
 import { notesOf, withNotes } from './notes'
 import type { EditorState } from './state'
-import { barAt, barsOf } from './timeline'
+import { barAt } from './timeline'
 
 /**
  * The lines Insert draws over notes, as a notation app's Lines palette does: a slur, a crescendo or
@@ -21,15 +21,11 @@ export interface Span {
 type Writable = { -readonly [K in keyof NoteMarks]: NoteMarks[K] }
 
 /**
- * Where a line goes: over the bars chosen, from the first's start to the last's end; else from the
+ * Where a line goes: over the notes chosen, from the first's start to the last's end; else from the
  * caret to the end of its bar, as a notation app draws a line from one note selected to the bar's end.
  */
 export function lineSpan(state: EditorState): Span {
-  const bars = barsOf(state.draft)
-  const chosen = state.selection && selectedBars(state.selection)
-  const first = chosen && bars[chosen.from]
-  const last = chosen && bars[chosen.to]
-  if (first && last) return { from: first.start, to: last.start + last.bar.ticks }
+  if (state.selection) return selectionSpan(state.selection)
   const bar = barAt(state.draft, state.caret)
   return { from: state.caret, to: bar.start + bar.bar.ticks }
 }

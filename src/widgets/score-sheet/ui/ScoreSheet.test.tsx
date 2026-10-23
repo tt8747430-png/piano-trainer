@@ -19,7 +19,13 @@ const draft = readDraft({
   hands: { lh: '- | - | E3/4 | - | -' },
 })
 
-const sheet = (layer: Layer, onPlace = vi.fn(), chordNames = true, onSignature = vi.fn()) =>
+const sheet = (
+  layer: Layer,
+  onPlace = vi.fn(),
+  chordNames = true,
+  onSignature = vi.fn(),
+  onDeselect = vi.fn(),
+) =>
   render(
     <ScoreSheet
       draft={draft}
@@ -28,6 +34,8 @@ const sheet = (layer: Layer, onPlace = vi.fn(), chordNames = true, onSignature =
       tapsOf={(to) => tapsIn(createEditorStore(draft, vi.fn()).getState(), to)}
       selection={null}
       onPlace={onPlace}
+      onReach={vi.fn()}
+      onDeselect={onDeselect}
       placesOf={(to) => placesIn(createEditorStore(draft, vi.fn()).getState(), to)}
       heading={(section) => <h3>{section === 0 ? 'Verse' : 'Chorus'}</h3>}
       chordNames={chordNames}
@@ -81,15 +89,17 @@ describe('ScoreSheet', () => {
     expect(rows.every((row) => row.style.height === '20px')).toBe(true)
   })
 
-  it('draws the bars chosen as one box on each line they are on', async () => {
+  it('draws the notes chosen as one box on each line they are on, and no caret with them', async () => {
     render(
       <ScoreSheet
         draft={draft}
         caret={0}
         layer="rh"
         tapsOf={() => []}
-        selection={{ from: 0, to: 2 }}
+        selection={{ from: 0, to: 288 }}
         onPlace={vi.fn()}
+        onReach={vi.fn()}
+        onDeselect={vi.fn()}
         placesOf={() => []}
         heading={() => null}
         chordNames
@@ -101,16 +111,19 @@ describe('ScoreSheet', () => {
     await waitFor(() =>
       expect(document.querySelectorAll('[data-slot="bars-chosen"]')).toHaveLength(2),
     )
+    // While notes are chosen the caret stands aside: the range is the mark (ADR 0086).
+    expect(document.querySelector('[data-slot="caret"]')).toBeNull()
   })
 
   it('writes a click over the staff into the tune when chord names are hidden', async () => {
     const user = userEvent.setup()
     const onPlace = vi.fn()
     sheet('melody', onPlace, false)
-    const [bar] = await screen.findAllByRole('button', { name: /^Bar 1/ })
+    // Bar 3, where the tune writes nothing: its start.
+    const [bar] = await screen.findAllByRole('button', { name: /^Bar 3/ })
     if (!bar) throw new Error('no bar')
     await user.click(bar)
-    expect(onPlace).toHaveBeenCalledWith(expect.any(Number), 'melody', false)
+    expect(onPlace).toHaveBeenCalledWith(192, 'melody', false)
   })
 
   it('opens what changes the clef, key and time from a line’s head', async () => {
@@ -123,19 +136,23 @@ describe('ScoreSheet', () => {
     expect(onSignature).toHaveBeenCalled()
   })
 
-  it('puts a click on a note, never on an empty step beside it, and on a bar’s start where its row writes nothing', async () => {
+  it('chooses nothing on empty staff beside a note, and a bar’s start where its row writes nothing (ADR 0086)', async () => {
     const onPlace = vi.fn()
-    sheet('melody', onPlace, false)
-    const click = async (name: RegExp) => {
+    const onDeselect = vi.fn()
+    sheet('melody', onPlace, false, vi.fn(), onDeselect)
+    const click = async (name: RegExp, x: number) => {
       const [bar] = await screen.findAllByRole('button', { name })
       if (!bar) throw new Error('no bar')
+      vi.spyOn(bar, 'offsetWidth', 'get').mockReturnValue(400)
       stubBox(bar, { width: 400, height: 200 })
-      // Far right in the bar: the room after its whole note (bar 1), an empty bar (bar 3).
-      fireEvent.click(bar, { clientX: 399, clientY: 0, detail: 1 })
+      fireEvent.click(bar, { clientX: x, clientY: 30, detail: 1 })
     }
-    await click(/^Bar 1/)
-    expect(onPlace).toHaveBeenLastCalledWith(0, 'melody', false)
-    await click(/^Bar 3/)
+    // Far right in bar 1, past its whole note's head: empty staff, nothing chosen.
+    await click(/^Bar 1/, 399)
+    expect(onPlace).not.toHaveBeenCalled()
+    expect(onDeselect).toHaveBeenCalledTimes(1)
+    // Anywhere in an empty bar: its start, as a line where the next note goes.
+    await click(/^Bar 3/, 5)
     expect(onPlace).toHaveBeenLastCalledWith(192, 'melody', false)
   })
 
@@ -168,6 +185,8 @@ describe('ScoreSheet', () => {
       tapsOf: () => [],
       selection: null,
       onPlace: vi.fn(),
+      onReach: vi.fn(),
+      onDeselect: vi.fn(),
       placesOf: () => [],
       heading: () => null,
       chordNames: true,

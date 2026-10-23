@@ -106,6 +106,7 @@ export function PlayerLayout({
             positions={player.positions}
             muted={player.muted}
             onJump={practice.jumpToBeatGroup}
+            playing={practice.state.playing}
             onLoopChange={player.setLoop}
           />
         ) : null}

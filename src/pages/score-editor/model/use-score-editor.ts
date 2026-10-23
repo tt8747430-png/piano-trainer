@@ -19,7 +19,6 @@ import {
   readDraft,
   musicToSave,
   rowShown,
-  shownRows,
   topStaff,
   type EditorAction,
 } from '@/features/score-editor'
@@ -32,7 +31,7 @@ import { inPopUp, isTyping } from '@/shared/lib/shortcuts'
 import { arrangeDraft, playedInBar } from './arrange-draft'
 import type { ScoreEditorValue } from './editor-context'
 import { savedMusic, savingTo, type EditorTarget } from './editor-target'
-import { shortcutOf, staffNear } from './shortcuts'
+import { shortcutOf } from './shortcuts'
 import { useEditorTakes } from './use-editor-takes'
 
 /** Where every key press is the field's or the open popup's own, not the editor's. */
@@ -168,13 +167,12 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
       else askChordField((asked) => asked + 1)
       return
     }
-    event.preventDefault()
-    if (shortcut.type === 'staff') {
-      const { layer, draft } = store.getState()
-      const next = staffNear(layer, shortcut.direction, shownRows(draft))
-      if (next !== layer) store.dispatch({ type: 'layer', layer: next })
-      return
+    // Escape with nothing chosen is the screen's (a sheet's, a menu's), not the editor's.
+    if (shortcut.type === 'deselect') {
+      const { selection, chordNote } = store.getState()
+      if (selection === null && chordNote === null) return
     }
+    event.preventDefault()
     store.dispatch(shortcut)
   })
   useEffect(() => {

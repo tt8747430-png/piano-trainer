@@ -1,5 +1,7 @@
 import { placed } from './caret-moves'
-import type { Draft } from './draft'
+import type { Midi, Tick } from '@/shared/lib/music'
+import type { Draft, Layer } from './draft'
+import { notesAt } from './notes'
 import type { EditorState, Snapshot } from './state'
 
 /** How many steps undo goes back. */
@@ -19,10 +21,13 @@ export function commit(
 ): EditorState {
   const next = { ...state, ...patch }
   if (draft === state.draft) return next
+  const caret = placed(draft, next.layer, next.caret)
   return {
     ...next,
     draft,
-    caret: placed(draft, next.layer, next.caret),
+    caret,
+    // A chord's one note chosen stays chosen while the chord at the caret still holds it.
+    chordNote: stillChosen(draft, next.layer, caret, next.chordNote),
     // The bars chosen stood on the music as it was: an edit ends them unless it chooses its own (a
     // paste), so Delete after a chord typed takes the chord, never bars chosen before it.
     selection: 'selection' in patch ? (patch.selection ?? null) : null,
@@ -43,6 +48,14 @@ export function undone(state: EditorState, direction: 'undo' | 'redo'): EditorSt
     past: direction === 'undo' ? state.past.slice(0, -1) : [...state.past, now],
     future: direction === 'undo' ? [now, ...state.future] : state.future.slice(1),
     selection: null,
+    chordNote: null,
     struck: null,
   }
+}
+
+/** A chord's one note, where the chord at the caret still holds it with another. */
+function stillChosen(draft: Draft, layer: Layer, caret: Tick, key: Midi | null): Midi | null {
+  if (key === null || layer === 'chords') return null
+  const chord = notesAt(draft, layer, caret)
+  return chord.length > 1 && chord.some((n) => n.midi === key) ? key : null
 }

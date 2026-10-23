@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
-import { rangeBox, ScoreMark, type ScoreLayout } from '@/shared/ui/score'
+import { rangeBox, rangeMark, ScoreMark, type ScoreLayout } from '@/shared/ui/score'
 import { LoopGrip } from './LoopGrip'
 
 /**
- * The loop: its bars marked as the one selection marks the bars chosen (ADR 0082), the editor's
- * alike, and a grip at each end (spec §2.6).
+ * The loop: its notes marked as the one selection marks notes chosen (ADR 0082, 0086), the editor's
+ * alike, hugging its heads on every staff, and a grip at each end (spec §2.6).
  */
 export function LoopBand({
   layout,
@@ -25,10 +25,14 @@ export function LoopBand({
   if (loop.last < firstBar || loop.first > lastBar) return null
   const from = Math.max(loop.first, firstBar)
   const to = Math.min(loop.last, lastBar)
-  const box = rangeBox(layout, from - firstBar, to - firstBar, {
-    top: layout.staffTop,
-    bottom: layout.staffBottom,
-  })
+  const span = { top: layout.staffTop, bottom: layout.staffBottom }
+  const first = layout.measures[from - firstBar]
+  const last = layout.measures[to - firstBar]
+  const box =
+    (first &&
+      last &&
+      rangeMark(layout, { from: first.startTick, to: last.startTick + last.ticks }, span)) ||
+    rangeBox(layout, from - firstBar, to - firstBar, span)
   const left = box.left
   const right = box.left + box.width
   // The grips move bars of this line: their measures, offset to the piece's bars.

@@ -1,18 +1,26 @@
-export { type ScoreLayout } from './layout'
+export { type Column, type Head, type ScoreLayout } from './layout'
 export { xAtTick } from './layout'
 export { ScoreView } from './ScoreView'
 export { staffHeight } from './size'
 export { StaffNames } from './StaffNames'
 export {
+  HUG,
   MARK,
   MARK_CLASS,
+  headsChosen,
   insertBox,
   noteBox,
+  noteMark,
+  pickAt,
   rangeBox,
+  rangeMark,
+  spaceOf,
   spanOf,
+  type Chosen,
   type MarkBox,
   type MarkKind,
+  type Picked,
   type Span,
 } from './selection'
 export { ScoreMark } from './ScoreMark'
-export { HOLD_MS, useHoldToChoose } from './use-hold-to-choose'
+export { HOLD_MS, useSheetChoice, type SheetChoice, type SheetPoint } from './use-sheet-choice'

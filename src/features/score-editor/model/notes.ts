@@ -180,15 +180,22 @@ export function addToChord(
   return withNotes(draft, layer, [...notesOf(draft, layer), added])
 }
 
-/** Takes the notes starting at `at` away. */
-/** What an edit takes: the notes at a tick (the caret's), or those starting in a span (bars chosen). */
-export type Where = Tick | { readonly from: Tick; readonly to: Tick }
+/**
+ * What an edit takes: the notes at a tick (the caret's), one note of the chord there (its key, chosen
+ * alone, ADR 0086), or those starting in a span (the notes chosen).
+ */
+export type Where =
+  Tick | { readonly from: Tick; readonly to: Tick } | { readonly at: Tick; readonly key: Midi }
 
-const isAt = (where: Where) => (n: DraftNote) =>
+/** Whether a note is one `where` takes. */
+export const isAt = (where: Where) => (n: DraftNote) =>
   typeof where === 'number'
     ? n.startTick === where
-    : n.startTick >= where.from && n.startTick < where.to
+    : 'key' in where
+      ? n.startTick === where.at && n.midi === where.key
+      : n.startTick >= where.from && n.startTick < where.to
 
+/** Takes the notes `where` says away. */
 export const deleteNotes = (draft: Draft, layer: NoteLayer, where: Where): Draft => {
   const taken = isAt(where)
   const notes = notesOf(draft, layer)

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import type { Layer } from '@/features/score-editor'
-import type { Tick } from '@/shared/lib/music'
-import { insertBox, noteBox, ScoreMark, type ScoreLayout, type Span } from '@/shared/ui/score'
+import type { Midi, Tick } from '@/shared/lib/music'
+import { insertBox, noteMark, ScoreMark, type ScoreLayout, type Span } from '@/shared/ui/score'
 import { staffOfLayer } from '../model/line-music'
 
 /** How much of the sheet shows past the caret's staff when it scrolls to bring it into sight. */
@@ -38,15 +38,16 @@ function revealUpright(band: HTMLElement, opening: boolean) {
 }
 
 /**
- * The caret, as the one selection marks a place (ADR 0082), the Player's cursor alike: on the notes
- * (or the chord) at it, a padded box round them on the layer's staff (or in the chord row, `chords`);
- * on an empty place, a bar the pattern plays or the room after the last note, a slim line where the
- * next goes.
+ * The caret, as the one selection marks a place (ADR 0082, 0086), the Player's cursor alike: on the
+ * notes at it, a box hugging their heads on the layer's staff, or the one head of the chord chosen
+ * alone (in the chord row, `chords`, a box round the chord's place); on an empty place, a bar the
+ * pattern plays or the room after the last note, a slim line where the next goes.
  */
 export function EditorCaret({
   layout,
   layer,
   tick,
+  chordNote,
   chords,
   empty,
 }: {
@@ -54,6 +55,8 @@ export function EditorCaret({
   layer: Layer
   /** From the line's start. */
   tick: Tick
+  /** One note of the chord there, chosen alone. */
+  chordNote: Midi | null
   /** The chord row over the staff, which the caret fills in the chords' layer. */
   chords: Span
   /** Nothing starts at the caret in its row. */
@@ -61,7 +64,18 @@ export function EditorCaret({
 }) {
   const staff = staffOfLayer(layout.staves, layer)
   const span = layer === 'chords' || !staff ? chords : staff
-  const box = (empty ? insertBox : noteBox)(layout, tick, span)
+  const box = empty
+    ? insertBox(layout, tick, span)
+    : noteMark(
+        layout,
+        {
+          staves: staff && layer !== 'chords' ? [staff.staff] : [],
+          from: tick,
+          to: tick + 1,
+          midi: chordNote ?? undefined,
+        },
+        span,
+      )
   const { left } = box
   const right = left + box.width
   // A line wider than the screen scrolls sideways to keep the caret in sight as it moves.

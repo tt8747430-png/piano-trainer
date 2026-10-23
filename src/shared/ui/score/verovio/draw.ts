@@ -1,4 +1,4 @@
-import type { TimeSignature } from '@/shared/lib/music'
+import type { Midi, TimeSignature } from '@/shared/lib/music'
 import { scoreToMei, type Score, type StaffId } from '@/shared/lib/notation'
 import type { ScoreLayout } from '../layout'
 import { engrave } from './engine'
@@ -67,7 +67,33 @@ export async function drawScore(
       .forEach((group, index) => group.setAttribute('data-staff', options.staves[index] ?? ''))
   if (options.names) nameHeads(element, score)
   host.replaceChildren(...sheet.childNodes)
-  return score.staffInstruments ? { ...layout, staffInstruments: score.staffInstruments } : layout
+  const keyed = withKeys(layout, score)
+  return score.staffInstruments ? { ...keyed, staffInstruments: score.staffInstruments } : keyed
+}
+
+/**
+ * Each head with its note's key, from the score (ADR 0086): what a head clicked chooses. Two voices'
+ * chords at one tick share their ids; they come in the voices' order, as the engraving draws them.
+ */
+export function withKeys(layout: ScoreLayout, score: Score): ScoreLayout {
+  const keys = new Map<string, Midi[]>()
+  for (const measure of score.measures)
+    for (const staff of score.staves)
+      for (const voice of measure.staves[staff])
+        for (const event of voice.events)
+          if (event.kind === 'notes')
+            event.notes.forEach((written, i) => {
+              const id = `n-${staff}-${event.tick}-${i}`
+              keys.set(id, [...(keys.get(id) ?? []), written.midi])
+            })
+  const seen = new Map<string, number>()
+  const heads = layout.heads?.map((head) => {
+    const k = seen.get(head.id) ?? 0
+    seen.set(head.id, k + 1)
+    const midi = keys.get(head.id)?.[k]
+    return midi === undefined ? head : { ...head, midi }
+  })
+  return heads ? { ...layout, heads } : layout
 }
 
 /** A staff space in Verovio's units, and a notehead's half width (Bravura's black head, 1.18 spaces). */

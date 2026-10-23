@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef } from 'react'
-import type { BarRange, Layer } from '@/features/score-editor'
+import type { Layer } from '@/features/score-editor'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { cn, useElementSize } from '@/shared/lib'
 import { LazyScoreView, useCanvasReveal } from '@/shared/ui'
@@ -23,8 +23,11 @@ export const SheetLine = memo(function SheetLine({
   sheet,
   layer,
   caret,
+  chordNote,
   selection,
   onPlace,
+  onReach,
+  onDeselect,
   placesOf,
   tapsOf,
   chordNames,
@@ -47,8 +50,13 @@ export const SheetLine = memo(function SheetLine({
   layer: Layer
   /** From the line's start, when the caret is on this line. */
   caret: Tick | null
-  selection: BarRange | null
-  onPlace: (tick: Tick, layer: Layer, extend: boolean) => void
+  /** One note of the chord at the caret chosen alone (ADR 0086). */
+  chordNote: Midi | null
+  /** The notes chosen: their span on the piece. */
+  selection: { readonly from: Tick; readonly to: Tick } | null
+  onPlace: (tick: Tick, layer: Layer, extend: boolean, key?: Midi) => void
+  onReach: (tick: Tick) => void
+  onDeselect: () => void
   placesOf: (layer: Layer) => readonly Tick[]
   /** Where a click lands in a layer: on a note or a bar's start, never an empty step (ADR 0082). */
   tapsOf: (layer: Layer) => readonly Tick[]
@@ -61,28 +69,21 @@ export const SheetLine = memo(function SheetLine({
   const holdsCaret = caret !== null
   // The labels' row over the staff: as tall as what it holds, at the line's size.
   const row = labelRow(chordNames, scale, print)
-  // The notes chosen, marked as a notation app marks them: those of the bars chosen on this line in
-  // the caret's row, else the ones at the caret.
+  // The notes chosen, marked as a notation app marks them: those chosen on this line in the caret's
+  // row, else the ones at the caret (one of a chord's, chosen alone).
   const staff = layer === 'chords' ? null : staffOfHand(layer, sheet.music.melodyStaff ?? false)
-  const chosen = selection
-    ? sheet.line.bars.filter(
-        (placed) => placed.index >= selection.from && placed.index <= selection.to,
-      )
-    : []
-  const first = chosen[0]
-  const last = chosen.at(-1)
   const selected =
     staff === null
       ? undefined
-      : first && last
+      : selection
         ? {
             staff,
-            from: first.start - sheet.line.start,
-            to: last.start + last.bar.ticks - sheet.line.start,
+            from: selection.from - sheet.line.start,
+            to: selection.to - sheet.line.start,
           }
         : caret === null
           ? undefined
-          : { staff, from: caret, to: caret + 1 }
+          : { staff, from: caret, to: caret + 1, midi: chordNote ?? undefined }
   // The caret's line comes into view when the caret moves onto it; the sheet opens where it is
   // while the line is already in sight, its section's heading over it kept in view.
   const held = useRef<boolean | null>(null)
@@ -122,9 +123,12 @@ export const SheetLine = memo(function SheetLine({
             line={sheet.line}
             layer={layer}
             caret={caret}
+            chordNote={chordNote}
             tapsOf={tapsOf}
             selection={selection}
             onPlace={onPlace}
+            onReach={onReach}
+            onDeselect={onDeselect}
             placesOf={placesOf}
             chordNames={chordNames}
             row={row}

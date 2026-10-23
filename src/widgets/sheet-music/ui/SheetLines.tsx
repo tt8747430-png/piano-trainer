@@ -2,11 +2,11 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import type { Tick } from '@/shared/lib/music'
+import type { Midi, Tick } from '@/shared/lib/music'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, useScrollMotion } from '@/shared/lib'
 import { PageCanvas, useCanvasReveal } from '@/shared/ui'
 import { lineLead, measureWidths, type Score, type StaffId } from '@/shared/lib/notation'
-import { ScoreView, staffHeight } from '@/shared/ui/score'
+import { ScoreView, staffHeight, type Picked } from '@/shared/ui/score'
 import { scoreLines, type ScoreLine } from '../model/score-lines'
 import { SheetOverlay } from './SheetOverlay'
 
@@ -39,9 +39,12 @@ export function SheetLines({
   tempos,
   muted,
   onJump,
+  onPick,
   onLoopChange,
   onChoose,
   selected,
+  cursorShown,
+  picked,
 }: {
   score: Score
   performance: Performance
@@ -60,10 +63,20 @@ export function SheetLines({
   tempos: readonly (number | undefined)[]
   muted: StaffId | undefined
   onJump: (beatGroup: number) => void
+  onPick: (picked: Picked) => void
   onLoopChange: (loop: BarRange) => void
   onChoose: (bar: number, extend: boolean) => void
-  /** The notes chosen: the loop's, else the cursor's (ADR 0082). */
-  selected: { readonly from: Tick; readonly to: Tick } | undefined
+  /** The notes chosen: the loop's, else the cursor's, one head alone where one was clicked (ADR 0082, 0086). */
+  selected:
+    | {
+        readonly staff?: StaffId
+        readonly from: Tick
+        readonly to: Tick
+        readonly midi?: Midi | undefined
+      }
+    | undefined
+  cursorShown: boolean
+  picked: Picked | null
 }) {
   const { t } = useTranslation('music')
   const box = useRef<HTMLElement>(null)
@@ -123,7 +136,10 @@ export function SheetLines({
             tempos={tempos}
             current={current}
             loop={loop}
+            cursorShown={cursorShown}
+            picked={picked}
             onJump={onJump}
+            onPick={onPick}
             onLoopChange={onLoopChange}
             onChoose={onChoose}
             firstBar={each.first}

@@ -9,5 +9,11 @@ export const PLAYER_KEYS = {
   slower: { key: 'ArrowDown' },
   loop: { code: 'KeyR' },
   start: { key: 'Home' },
+  /** The loop's far end a bar back or on, to the first or last bar (ADR 0086). */
+  reachBack: { key: 'ArrowLeft', shift: true },
+  reachNext: { key: 'ArrowRight', shift: true },
+  reachStart: { key: 'Home', shift: true },
+  reachEnd: { key: 'End', shift: true },
+  /** The loop let go of; with none, the Player closed. */
   close: { key: 'Escape' },
 } as const satisfies Record<string, Combo>

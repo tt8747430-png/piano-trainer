@@ -1,7 +1,8 @@
 import { TICKS_PER_BEAT, type Tick } from '@/shared/lib/music'
 import type { Draft, Layer, NoteLayer } from './draft'
 import { notesOf } from './notes'
-import { barsOf, totalTicks } from './timeline'
+import type { TickSpan } from './state'
+import { barAt, barsOf, totalTicks } from './timeline'
 
 const sortedUnique = (ticks: readonly Tick[]) => [...new Set(ticks)].sort((a, b) => a - b)
 
@@ -24,15 +25,26 @@ export function snapToChord(draft: Draft, tick: Tick): Tick {
   return places.findLast((place) => place <= tick) ?? places[0] ?? 0
 }
 
-/** Where the caret may stand in a layer of notes: their starts and ends, steps of the value, barlines, the ends. */
+/**
+ * Where the caret may stand in a layer of notes: their starts and ends, barlines, the ends, and steps
+ * of the value where nothing sounds (ADR 0086): never inside a note, where it would mark empty staff.
+ */
 function notePlaces(draft: Draft, layer: NoteLayer, step: Tick): Tick[] {
+  const notes = notesOf(draft, layer)
+  const edges = notes.flatMap((n) => [n.startTick, n.startTick + n.durationTicks])
+  const inside = (tick: Tick) =>
+    notes.some((n) => tick > n.startTick && tick < n.startTick + n.durationTicks)
   const steps = barsOf(draft).flatMap(({ start, bar }) =>
     Array.from({ length: Math.ceil(bar.ticks / step) }, (_, k) => start + k * step),
   )
-  const notes = notesOf(draft, layer).flatMap((n) => [n.startTick, n.startTick + n.durationTicks])
-  return sortedUnique([0, totalTicks(draft), ...steps, ...notes]).filter(
-    (tick) => tick <= totalTicks(draft),
-  )
+  const bars = barsOf(draft).map(({ start }) => start)
+  return sortedUnique([
+    0,
+    totalTicks(draft),
+    ...bars,
+    ...edges,
+    ...steps.filter((tick) => !inside(tick)),
+  ]).filter((tick) => tick <= totalTicks(draft))
 }
 
 /** Every place the caret may stand in a layer, the value's step apart in the melody or a hand. */
@@ -62,6 +74,31 @@ export function tapPlaces(draft: Draft, layer: Layer): Tick[] {
       return [...starts, ...room]
     }),
   )
+}
+
+/**
+ * What stands at a place in a layer, as a span of time (ADR 0086): the notes starting there, to the
+ * longest's end; a chord, to the next chord or beat; an empty place (a rest, a bar the pattern plays,
+ * the room after the last note), to the next note or the barline.
+ */
+export function itemAt(draft: Draft, layer: Layer, tick: Tick): TickSpan {
+  const bar = barAt(draft, tick)
+  const end = bar.start + bar.bar.ticks
+  if (tick >= totalTicks(draft)) return { from: tick, to: tick }
+  if (layer === 'chords') {
+    const at = tick - bar.start
+    const next = bar.bar.chords.some((each) => each.at === at)
+      ? bar.bar.chords.find((each) => each.at > at)?.at
+      : chordPlaces(draft).find((place) => place > tick)
+    const to = next === undefined ? end : next < tick ? bar.start + next : next
+    return { from: tick, to: Math.min(to, end) }
+  }
+  const notes = notesOf(draft, layer)
+  const here = notes.filter((n) => n.startTick === tick)
+  if (here.length > 0)
+    return { from: tick, to: Math.max(...here.map((n) => n.startTick + n.durationTicks)) }
+  const next = notes.find((n) => n.startTick > tick)?.startTick ?? end
+  return { from: tick, to: Math.min(next, end) }
 }
 
 /** The caret's next place forwards (1) or back (−1), staying where it is at either end. */

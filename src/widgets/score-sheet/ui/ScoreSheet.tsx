@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { barAt, type BarRange, type Draft, type Layer } from '@/features/score-editor'
+import { barAt, type Draft, type Layer } from '@/features/score-editor'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/shared/lib'
 import { PageCanvas } from '@/shared/ui'
 import { lineLead, measureWidths, notate } from '@/shared/lib/notation'
@@ -39,9 +39,12 @@ export function ScoreSheet({
   draft,
   played,
   caret,
+  chordNote = null,
   layer,
   selection,
   onPlace,
+  onReach,
+  onDeselect,
   placesOf,
   tapsOf,
   heading,
@@ -66,9 +69,16 @@ export function ScoreSheet({
    */
   played?: PlayedHands | undefined
   caret: Tick
+  /** One note of the chord at the caret chosen alone (ADR 0086). */
+  chordNote?: Midi | null
   layer: Layer
-  selection: BarRange | null
-  onPlace: (tick: Tick, layer: Layer, extend: boolean) => void
+  /** The notes chosen: their span on the piece (ADR 0086). */
+  selection: { readonly from: Tick; readonly to: Tick } | null
+  onPlace: (tick: Tick, layer: Layer, extend: boolean, key?: Midi) => void
+  /** A held finger dragged onto the bar starting at a tick: what is chosen reaches it. */
+  onReach: (tick: Tick) => void
+  /** A click on empty staff: what is chosen let go. */
+  onDeselect: () => void
   /** Where the caret may stand in a layer, asked when a bar is clicked. */
   placesOf: (layer: Layer) => readonly Tick[]
   /** Where a click lands in a layer: on a note or a bar's start, never an empty step (ADR 0082). */
@@ -127,9 +137,12 @@ export function ScoreSheet({
           ? caret - sheet.line.start
           : null
       }
+      chordNote={chordNote}
       tapsOf={tapsOf}
       selection={selection}
       onPlace={onPlace}
+      onReach={onReach}
+      onDeselect={onDeselect}
       placesOf={placesOf}
       chordNames={chordNames}
       onSignature={onSignature}

@@ -1,5 +1,12 @@
 import { useCallback, useMemo } from 'react'
-import { notesAt, placesIn, selectedBars, tapsIn, type Layer } from '@/features/score-editor'
+import {
+  barAt,
+  notesAt,
+  placesIn,
+  selectionSpan,
+  tapsIn,
+  type Layer,
+} from '@/features/score-editor'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { usePlay } from '@/shared/lib/services'
 import { ScoreSheet } from '@/widgets/score-sheet'
@@ -25,7 +32,8 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
   const caret = useEditorState((state) => state.caret)
   const layer = useEditorState((state) => state.layer)
   const selection = useEditorState((state) => state.selection)
-  const chosen = useMemo(() => (selection ? selectedBars(selection) : null), [selection])
+  const chordNote = useEditorState((state) => state.chordNote)
+  const chosen = useMemo(() => (selection ? selectionSpan(selection) : null), [selection])
   // What the hands play, the pattern's notes with the written, arranged once a change (ADR 0083).
   const played = useMemo(() => {
     try {
@@ -36,10 +44,28 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
     }
   }, [draft])
   const onPlace = useCallback(
-    (tick: Tick, to: Layer, extend: boolean) =>
-      dispatch({ type: 'place', tick, layer: to, extend }),
+    (tick: Tick, to: Layer, extend: boolean, key?: Midi) =>
+      dispatch(
+        key === undefined
+          ? { type: 'place', tick, layer: to, extend }
+          : { type: 'place', tick, layer: to, extend, key },
+      ),
     [dispatch],
   )
+  // A held finger dragged onto a bar: what is chosen reaches its last note on, its first back.
+  const onReach = useCallback(
+    (start: Tick) => {
+      const state = store.getState()
+      const bar = barAt(state.draft, start)
+      const end = bar.start + bar.bar.ticks
+      const taps = tapsIn(state, state.layer).filter((tick) => tick >= bar.start && tick < end)
+      const from = state.selection?.anchor.from ?? state.caret
+      const tick = start > from ? taps.at(-1) : taps[0]
+      dispatch({ type: 'place', tick: tick ?? start, layer: state.layer, extend: true })
+    },
+    [dispatch, store],
+  )
+  const onDeselect = useCallback(() => dispatch({ type: 'deselect' }), [dispatch])
   const { openSettings: open } = view
   const openSettings = useCallback(() => open(true), [open])
   // Read when a bar is clicked, so a line's row does not change with every note written elsewhere.
@@ -74,9 +100,12 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
       draft={draft}
       played={played}
       caret={caret}
+      chordNote={chordNote}
       layer={layer}
       selection={chosen}
       onPlace={onPlace}
+      onReach={onReach}
+      onDeselect={onDeselect}
       placesOf={placesOf}
       tapsOf={tapsOf}
       heading={(section) => <SectionHeading section={section} />}

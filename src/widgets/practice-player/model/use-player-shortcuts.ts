@@ -7,7 +7,9 @@ import type { PracticePlayer } from './use-practice-player'
 
 /**
  * The Player from the computer's keys: Space plays or stops, the arrows step and (in Listen) take
- * the tempo 5% up or down, R loops the bar, Home goes back to the first bar and Escape closes.
+ * the tempo 5% up or down, R loops the bar, Home goes back to the first bar; Shift with ← → moves the
+ * loop's far end a bar, with Home or End to the first or last bar, as the editor's Shift extends what
+ * is chosen (ADR 0086); Escape lets go of the loop, else closes.
  */
 export function usePlayerShortcuts(
   player: PracticePlayer,
@@ -40,6 +42,32 @@ export function usePlayerShortcuts(
       combo: PLAYER_KEYS.start,
       run: () => practice.jumpToBeatGroup(0),
     },
-    { label: t('shortcuts.close'), combo: PLAYER_KEYS.close, run: onClose },
+    {
+      label: t('shortcuts.reachBack'),
+      combo: PLAYER_KEYS.reachBack,
+      repeat: true,
+      run: () => player.reachLoop('bar', -1),
+    },
+    {
+      label: t('shortcuts.reachNext'),
+      combo: PLAYER_KEYS.reachNext,
+      repeat: true,
+      run: () => player.reachLoop('bar', 1),
+    },
+    {
+      label: t('shortcuts.reachStart'),
+      combo: PLAYER_KEYS.reachStart,
+      run: () => player.reachLoop('end', -1),
+    },
+    {
+      label: t('shortcuts.reachEnd'),
+      combo: PLAYER_KEYS.reachEnd,
+      run: () => player.reachLoop('end', 1),
+    },
+    {
+      label: t('shortcuts.close'),
+      combo: PLAYER_KEYS.close,
+      run: () => (player.loop ? player.setLoop(null) : onClose()),
+    },
   ])
 }

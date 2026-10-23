@@ -105,8 +105,15 @@ describe('lineSpan', () => {
     expect(lineSpan(drawnState(draft, { caret: 120 }))).toEqual({ from: 120, to: 192 })
   })
 
-  it('runs over the bars chosen, from the first’s start to the last’s end', () => {
-    expect(lineSpan(drawnState(draft, { caret: 24, selection: { anchor: 1, head: 0 } }))).toEqual({
+  it('runs over the notes chosen, from the first’s start to the last’s end', () => {
+    expect(
+      lineSpan(
+        drawnState(draft, {
+          caret: 24,
+          selection: { anchor: { from: 96, to: 192 }, head: { from: 0, to: 24 } },
+        }),
+      ),
+    ).toEqual({
       from: 0,
       to: 192,
     })

@@ -64,3 +64,62 @@ describe('a line engraved by Verovio, read back', () => {
     )
   }, 20_000)
 })
+
+describe('each notehead read back (ADR 0086)', () => {
+  const chordScore = notate({
+    key: { tonic: note('C'), minor: false },
+    meter: '4/4',
+    bars: [{ startTick: 0, beats: 4 }],
+    notes: [
+      n(72, 'rh', 0, 72),
+      { ...n(76, 'rh', 0, 72), spelled: note('E') },
+      { ...n(79, 'rh', 0, 72), spelled: note('G') },
+      { ...n(73, 'rh', 72, 24), spelled: note('C', 1) },
+      n(48, 'lh', 0, 96),
+    ],
+    chords: [],
+  })
+
+  async function read() {
+    const [svg = ''] = await engraveMei(scoreToMei(chordScore), { width: 600, scale: 1 })
+    const host = document.createElement('div')
+    host.innerHTML = svg
+    const element = host.querySelector('svg')
+    if (!element) throw new Error('an SVG')
+    return layoutOf(element, chordScore.measures, chordScore.staves)
+  }
+
+  it('boxes each head of a chord apart, a staff space high, by its staff, tick and place', async () => {
+    const layout = await read()
+    const chord = (layout.heads ?? []).filter((head) => head.staff === 'treble' && head.tick === 0)
+    expect(chord.map((head) => head.index)).toEqual([0, 1, 2])
+    expect(chord.map((head) => head.id)).toEqual(['n-treble-0-0', 'n-treble-0-1', 'n-treble-0-2'])
+    for (const head of chord) expect(head.bottom - head.top).toBeCloseTo(10, 0)
+    // Up the staff as the chord goes up.
+    const [c, e, g] = chord
+    expect(g?.top).toBeLessThan(e?.top ?? 0)
+    expect(e?.top).toBeLessThan(c?.top ?? 0)
+    const bass = (layout.heads ?? []).find((head) => head.staff === 'bass')
+    expect(bass?.top).toBeGreaterThan(layout.staves.bass?.top ?? Infinity)
+  }, 20_000)
+
+  it('takes in a head’s dot and its accidental, and stands each chord’s column over its stem', async () => {
+    const layout = await read()
+    const heads = layout.heads ?? []
+    const dotted = heads.find((head) => head.tick === 0 && head.staff === 'treble')
+    const sharp = heads.find((head) => head.tick === 72)
+    const plain = heads.find((head) => head.staff === 'bass')
+    if (!dotted || !sharp || !plain) throw new Error('the heads')
+    // A whole note alone: its head, 1.69 spaces wide.
+    expect(plain.right - plain.left).toBeCloseTo(16.9, 0)
+    // The dot after the dotted chord's heads: wider than a black head (11.8 px) alone.
+    expect(dotted.right - dotted.left).toBeGreaterThan(15)
+    // The sharp before C♯'s head, and taller than the head.
+    expect(sharp.bottom - sharp.top).toBeGreaterThan(20)
+    expect(sharp.right - sharp.left).toBeGreaterThan(20)
+    const column = (layout.columns ?? []).find((each) => each.tick === 0 && each.staff === 'treble')
+    if (!column) throw new Error('the chord’s column')
+    // The stem reaches past the heads.
+    expect(column.bottom - column.top).toBeGreaterThan(40)
+  }, 20_000)
+})

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { draftOf } from '../testing/test-draft'
-import { caretPlaces, nextCaret, snapToChord, tapPlaces } from './caret'
+import { caretPlaces, itemAt, nextCaret, snapToChord, tapPlaces } from './caret'
 
 describe('where a click lands', () => {
   const tune = draftOf({
@@ -32,17 +32,48 @@ const tune = draftOf({
 })
 
 describe('the caret in a voice', () => {
-  it('moves to the next note’s start or end, step of the value or barline, whichever is first', () => {
-    expect(nextCaret(tune, 'melody', 0, 24, 1)).toBe(24)
-    expect(nextCaret(tune, 'melody', 24, 24, 1)).toBe(36)
+  it('moves note to note, never inside one, where it would mark empty staff (ADR 0086)', () => {
+    expect(nextCaret(tune, 'melody', 0, 24, 1)).toBe(36)
     expect(nextCaret(tune, 'melody', 36, 48, 1)).toBe(48)
-    expect(nextCaret(tune, 'melody', 48, 96, 1)).toBe(96)
-    expect(nextCaret(tune, 'melody', 96, 24, -1)).toBe(72)
+    expect(nextCaret(tune, 'melody', 48, 24, 1)).toBe(96)
+    expect(nextCaret(tune, 'melody', 96, 24, -1)).toBe(48)
+  })
+
+  it('moves a step of the value where nothing sounds: a bar the pattern plays, the room after the last note', () => {
+    expect(nextCaret(tune, 'rh', 0, 24, 1)).toBe(24)
+    expect(nextCaret(tune, 'rh', 24, 48, 1)).toBe(48)
+    const short = draftOf({
+      melody: 'B4/1 r/3 | r/4',
+      sections: [{ kind: 'verse', lines: ['G C'] }],
+    })
+    expect(nextCaret(short, 'melody', 24, 24, 1)).toBe(48)
   })
 
   it('stops at the piece’s start and end', () => {
     expect(nextCaret(tune, 'melody', 0, 24, -1)).toBe(0)
     expect(nextCaret(tune, 'melody', 192, 24, 1)).toBe(192)
+  })
+})
+
+describe('what stands at a place', () => {
+  it('is the notes starting there, to the longest’s end', () => {
+    expect(itemAt(tune, 'melody', 0)).toEqual({ from: 0, to: 36 })
+    expect(itemAt(tune, 'melody', 96)).toEqual({ from: 96, to: 192 })
+  })
+
+  it('is an empty place to the next note or the barline', () => {
+    expect(itemAt(tune, 'rh', 24)).toEqual({ from: 24, to: 96 })
+    const room = draftOf({
+      melody: 'B4/1 r/3 | r/4',
+      sections: [{ kind: 'verse', lines: ['G C'] }],
+    })
+    expect(itemAt(room, 'melody', 24)).toEqual({ from: 24, to: 96 })
+  })
+
+  it('is a chord to the next chord or the barline, an empty beat to the next beat', () => {
+    expect(itemAt(tune, 'chords', 0)).toEqual({ from: 0, to: 96 })
+    expect(itemAt(tune, 'chords', 96)).toEqual({ from: 96, to: 144 })
+    expect(itemAt(tune, 'chords', 24)).toEqual({ from: 24, to: 48 })
   })
 })
 
