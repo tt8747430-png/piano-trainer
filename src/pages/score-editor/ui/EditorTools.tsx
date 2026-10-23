@@ -7,6 +7,7 @@ import { cn } from '@/shared/lib'
 import { Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { gripRelease } from '../model/grip'
 import { categoryOpen, PALETTE_CATEGORIES, type PaletteCategory } from '../model/palette-categories'
 import { BarKeys } from './BarKeys'
 import { ChordBuilt, ChordsInKey, ChordTyped, QuickChords } from './ChordKeys'
@@ -125,6 +126,51 @@ function Sections(chord: { way: ChordWay; setWay: (way: ChordWay) => void }) {
   )
 }
 
+/**
+ * The palette's grab handle along its top edge (Flat's sheet): dragged away from the edge the palette
+ * stands on, it opens; dragged back, it folds; a tap toggles. For a pointer only: a keyboard and a
+ * screen reader have the fold's button in the bar.
+ */
+function PaletteGrip({
+  folded,
+  opens,
+  onFold,
+}: {
+  folded: boolean
+  opens: 'up' | 'down'
+  onFold: (folded: boolean) => void
+}) {
+  const start = useRef<number | null>(null)
+  const [dragging, setDragging] = useState(false)
+  return (
+    <div
+      aria-hidden
+      data-slot="palette-grip"
+      data-dragging={dragging || undefined}
+      onPointerDown={(event) => {
+        start.current = event.clientY
+        setDragging(true)
+        event.currentTarget.setPointerCapture?.(event.pointerId)
+      }}
+      onPointerUp={(event) => {
+        const from = start.current
+        start.current = null
+        setDragging(false)
+        if (from === null) return
+        const next = gripRelease(event.clientY - from, folded, opens)
+        if (next !== null) onFold(next)
+      }}
+      onPointerCancel={() => {
+        start.current = null
+        setDragging(false)
+      }}
+      className="group -mt-1.5 -mb-1 flex h-5 shrink-0 cursor-grab touch-none items-center justify-center select-none data-dragging:cursor-grabbing"
+    >
+      <span className="h-1 w-10 rounded-full bg-muted-foreground/35 transition-colors duration-200 group-hover:bg-muted-foreground/60 group-data-dragging:bg-muted-foreground/70" />
+    </div>
+  )
+}
+
 /** A section's place in the scroller: where its top is, from the scroller's own. */
 const sectionTop = (scroller: HTMLElement, category: PaletteCategory): number | null => {
   const section = scroller.querySelector<HTMLElement>(`[data-category="${category}"]`)
@@ -230,6 +276,7 @@ export function EditorTools({
       )}
     >
       <fieldset disabled={recording} className="contents">
+        <PaletteGrip folded={folded} opens={side ? 'down' : 'up'} onFold={onFold} />
         {folded ? null : (
           <div
             ref={scroller}

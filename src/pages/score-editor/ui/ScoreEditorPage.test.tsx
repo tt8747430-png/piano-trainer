@@ -221,6 +221,20 @@ describe('the score editor', () => {
     expect(screen.getByRole('button', { name: 'Show fewer tools' })).toBeInTheDocument()
   })
 
+  it('opens its palette dragged up by its grab handle, and folds it at a tap, as Flat’s sheet', async () => {
+    await renderApp('/edit/my-1', { storage: withSong() })
+    const palette = await screen.findByRole('region', { name: 'Tools' })
+    const grip = palette.querySelector('[data-slot="palette-grip"]')
+    if (!grip) throw new Error('no grab handle')
+    fireEvent.pointerDown(grip, { clientY: 500, pointerId: 1 })
+    fireEvent.pointerMove(grip, { clientY: 440, pointerId: 1 })
+    fireEvent.pointerUp(grip, { clientY: 440, pointerId: 1 })
+    expect(await screen.findByRole('button', { name: 'Show fewer tools' })).toBeInTheDocument()
+    fireEvent.pointerDown(grip, { clientY: 300, pointerId: 1 })
+    fireEvent.pointerUp(grip, { clientY: 301, pointerId: 1 })
+    expect(await screen.findByRole('button', { name: 'Show every tool' })).toBeInTheDocument()
+  })
+
   it('opens its palette beside the sheet, on a phone on its side, where it covers no music', async () => {
     const user = userEvent.setup()
     vi.stubGlobal('matchMedia', (media: string) => ({
