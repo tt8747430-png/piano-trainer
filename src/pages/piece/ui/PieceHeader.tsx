@@ -7,7 +7,7 @@ import { BackButton, ScreenHeader } from '@/shared/ui'
 const SHELF_PAGE = { songs: '/songs', practice: '/practice/accompaniment' } as const
 
 /**
- * A song's or listing's bar: its title, Back where the learner came from (Path, Songs, Practice) or to
+ * A song's or listing's bar: its title, Back where the learner came from (Learn, Songs, Practice) or to
  * the entry's shelf, and its `actions` (a song's Learned). It spans the page, so it comes back over
  * the chart too.
  */

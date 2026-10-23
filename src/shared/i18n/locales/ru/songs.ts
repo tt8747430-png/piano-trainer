@@ -6,7 +6,6 @@ export const songs: LocaleResources['songs'] = {
   collection: 'Сборник',
   all: 'Все',
   noChart: 'Аккордов пока нет',
-  learned: 'Выучено',
   empty: 'Ничего не найдено.',
   emptyQuery: 'По запросу «{{query}}» ничего не найдено.',
   yours: 'Ваши песни',

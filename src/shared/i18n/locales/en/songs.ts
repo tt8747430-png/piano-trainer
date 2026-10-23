@@ -4,7 +4,6 @@ export const songs = {
   collection: 'Collection',
   all: 'All',
   noChart: 'No chart yet',
-  learned: 'Learned',
   empty: 'No songs match.',
   // Nothing to list for a search: it names what was searched.
   emptyQuery: 'No songs match “{{query}}”.',
