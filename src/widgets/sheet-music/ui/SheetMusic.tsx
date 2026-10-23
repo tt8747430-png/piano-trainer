@@ -7,6 +7,7 @@ import { notate, type StaffId } from '@/shared/lib/notation'
 import { ScoreView, staffHeight, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { fitScale, widestBar } from '../model/fit-scale'
 import { groupOfTick } from '../model/group-of-tick'
+import { keepsLoop } from '../model/keeps-loop'
 import { playedMusic } from '../model/played-music'
 import { SheetLines } from './SheetLines'
 import { SheetOverlay } from './SheetOverlay'
@@ -138,8 +139,8 @@ export function SheetMusic({
     const from = extend ? (anchor.current ?? loop?.first ?? group?.bar ?? at) : at
     onLoopChange({ first: Math.min(from, at), last: Math.max(from, at) })
   }
-  // A note or a chord clicked, as the editor's click (ADR 0088): the cursor goes to its beat group,
-  // the loop is let go of, and it alone is marked until the cursor moves.
+  // A note or a chord clicked, as the editor's click (ADR 0088): the cursor goes to its beat group and
+  // it alone is marked until the cursor moves; the loop stays for a note inside it (`keepsLoop`).
   const [picked, setPicked] = useState<{ readonly picked: Picked; readonly group: number } | null>(
     null,
   )
@@ -147,7 +148,7 @@ export function SheetMusic({
     const at = groupOfTick(performance, next.tick)
     if (at === null) return
     anchor.current = null
-    if (loop) onLoopChange(null)
+    if (loop && !keepsLoop(loop, performance.beatGroups[at]?.bar)) onLoopChange(null)
     onJump(at)
     setPicked({ picked: next, group: at })
   }
