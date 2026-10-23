@@ -7,6 +7,11 @@
 [data-slot='score'] svg.definition-scale {
   color: inherit;
 }
+/* A line ends on its staff's last x, where Verovio centres the closing barline: half its stroke lies
+   past the page, so nothing of the drawing is clipped at its edges (as a printed system's last barline). */
+[data-slot='score'] svg {
+  overflow: visible;
+}
 /* Verovio sets no fill: its glyphs (uses of paths), slurs, ties, beams and braces would be black. Each
    takes the ink of what it marks, so a chosen note's head turns with its stem, and dark mode is light.
    Not a polyline: a hairpin's and an octave line's say `fill="none"`, which CSS would override. */

@@ -12,6 +12,7 @@ import {
   type TimeSignature,
 } from '@/shared/lib/music'
 import { clefIn, type Measure, type Score, type ScoreEvent, type StaffId } from './types'
+import { barStartOf, beamPlan } from './beams'
 import { ticksOf } from './values'
 
 /** What a Score is written as besides its music. */
@@ -180,7 +181,7 @@ class Writer {
           : ''
       const layers = measure.staves[staff].map((voice, v) => {
         const stem = voice.stem === 'auto' ? '' : ` stem.dir="${voice.stem}"`
-        const events = this.layer(voice.events, staff, `${staff} ${v}`, stem, controls)
+        const events = this.layer(voice.events, measure, staff, `${staff} ${v}`, stem, controls)
         return `<layer n="${v + 1}">${v === 0 ? clef : ''}${events}</layer>`
       })
       // A staff the pattern plays here is typed so (a class on its drawing): drawn in soft ink.
@@ -224,52 +225,37 @@ class Writer {
     return `<measure ${attrs.join(' ')}>${staves.join('')}${controls.join('')}</measure>`
   }
 
-  /** A layer's events, eighths and shorter beamed by the beat, triplets in tuplets. */
+  /** A layer's events, beamed by the meter and each beat of triplets a tuplet (`beamPlan`, ADR 0084). */
   private layer(
     events: readonly ScoreEvent[],
+    measure: Measure,
     staff: StaffId,
     layer: string,
     stem: string,
     controls: string[],
   ): string {
-    const beat = ticksOf(
-      { value: 4, dots: isCompound(this.score.meter) ? 1 : 0, triplet: false },
+    const { beams, tuplets } = beamPlan(
+      events,
       this.score.meter,
+      measure.time,
+      barStartOf(measure, this.score.meter),
     )
-    const out: string[] = []
-    let beam: string[] = []
-    let beamBeat = -1
-    let tuplet: string[] = []
-    const endBeam = () => {
-      out.push(beam.length > 1 ? `<beam>${beam.join('')}</beam>` : beam.join(''))
-      beam = []
-    }
-    const endTuplet = () => {
-      if (tuplet.length > 0) out.push(`<tuplet num="3" numbase="2">${tuplet.join('')}</tuplet>`)
-      tuplet = []
-    }
-    for (const event of events) {
-      const written = this.event(event, staff, layer, stem, controls)
-      if (event.duration.triplet) {
-        endBeam()
-        tuplet.push(written)
-        continue
-      }
-      endTuplet()
-      const beamable = event.kind === 'notes' && event.duration.value >= 8
-      const eventBeat = Math.floor(event.tick / beat)
-      if (!beamable || eventBeat !== beamBeat) endBeam()
-      if (beamable) {
-        beam.push(written)
-        beamBeat = eventBeat
-      } else {
-        out.push(written)
-        beamBeat = -1
-      }
-    }
-    endBeam()
-    endTuplet()
-    return out.join('')
+    const opens = (groups: readonly (readonly number[])[], index: number) =>
+      groups.some((group) => group[0] === index)
+    const closes = (groups: readonly (readonly number[])[], index: number) =>
+      groups.some((group) => group.at(-1) === index)
+    return events
+      .map((event, index) => {
+        const written = this.event(event, staff, layer, stem, controls)
+        return [
+          opens(tuplets, index) ? '<tuplet num="3" numbase="2">' : '',
+          opens(beams, index) ? '<beam>' : '',
+          written,
+          closes(beams, index) ? '</beam>' : '',
+          closes(tuplets, index) ? '</tuplet>' : '',
+        ].join('')
+      })
+      .join('')
   }
 
   private event(

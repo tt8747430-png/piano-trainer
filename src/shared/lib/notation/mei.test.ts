@@ -145,6 +145,21 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(played).toMatch(/<staff n="2">/)
   })
 
+  it('beams eighths by the meter, as LilyPond: four to the half bar in 4/4 (ADR 0084)', () => {
+    const eighths = [0, 12, 24, 36].map((tick) => c(tick))
+    const written = scoreToMei(plain(eighths.map((e) => ({ ...e, durationTicks: 12 }))))
+    expect(written.match(/<beam>/g)).toHaveLength(1)
+    expect(written).toMatch(/<beam>(<note[^>]*\/>){4}<\/beam>/)
+  })
+
+  it('writes each beat of triplets as its own tuplet, its eighths beamed', () => {
+    const triplets = [0, 8, 16, 24, 32, 40].map((tick) => ({ ...c(tick), durationTicks: 8 }))
+    const written = scoreToMei(plain(triplets))
+    expect(
+      written.match(/<tuplet num="3" numbase="2"><beam>(<note[^>]*\/>){3}<\/beam><\/tuplet>/g),
+    ).toHaveLength(2)
+  })
+
   it('hides the time on a line that goes on in it, and shows it where it changes', () => {
     const score = plain([c(0)])
     expect(scoreToMei(score, { timeBefore: { count: 4, unit: 4 } })).toContain(
