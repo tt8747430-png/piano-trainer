@@ -4,7 +4,7 @@ import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, useScrollMotion } from '@/shared/lib'
-import { PageCanvas, useCanvasReveal } from '@/shared/ui'
+import { PageCanvas, SheetPage, useCanvasReveal } from '@/shared/ui'
 import { lineLead, measureWidths, type Score, type StaffId } from '@/shared/lib/notation'
 import { ScoreView, staffHeight } from '@/shared/ui/score'
 import { scoreLines, type ScoreLine } from '../model/score-lines'
@@ -109,6 +109,7 @@ export function SheetLines({
         muted={muted}
         staves={staves}
         timeBefore={each.timeBefore}
+        next={each.next}
         fill={inner > 0 ? inner : undefined}
         selected={selected}
       >
@@ -157,29 +158,26 @@ export function SheetLines({
       <PlayingInSight line={() => shown.current.get(playing)} playing={playing} />
       <section aria-label={t('sheet.label')} className="flex flex-col items-center gap-8 p-6">
         {dealt.map((page, number) => (
-          <article
+          <SheetPage
             key={number}
-            data-slot="sheet-page"
-            className="relative flex flex-col bg-card text-card-foreground shadow-lg shadow-foreground/10 ring-1 ring-hairline"
-            style={{
-              width: PAGE.width,
-              minHeight: PAGE.height,
-              padding: margin,
-              gap: LINE_GAP,
-            }}
-          >
-            {number === 0 && title ? (
-              <h2 className="text-center font-display text-3xl">{title}</h2>
-            ) : null}
-            {page.map(({ each, index }) => line(each, index))}
-            <span
-              aria-hidden
-              className="absolute inset-x-0 text-center text-xs text-muted-foreground"
-              style={{ bottom: margin / 2 }}
-            >
-              {number + 1}
-            </span>
-          </article>
+            number={number + 1}
+            // Every page but the last filled to its height (ADR 0087).
+            filled={number < dealt.length - 1}
+            gap={LINE_GAP}
+            // The title stays with the line under it as the page is spread.
+            blocks={page.map(({ each, index }, at) => ({
+              key: String(each.first),
+              content:
+                number === 0 && at === 0 && title ? (
+                  <div className="flex flex-col" style={{ gap: LINE_GAP }}>
+                    <h2 className="text-center font-display text-3xl">{title}</h2>
+                    {line(each, index)}
+                  </div>
+                ) : (
+                  line(each, index)
+                ),
+            }))}
+          />
         ))}
       </section>
     </PageCanvas>

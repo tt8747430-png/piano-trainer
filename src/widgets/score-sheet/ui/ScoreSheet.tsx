@@ -2,7 +2,7 @@ import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barAt, type BarRange, type Draft, type Layer } from '@/features/score-editor'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/shared/lib'
-import { PageCanvas } from '@/shared/ui'
+import { PageCanvas, SheetPage } from '@/shared/ui'
 import { lineLead, measureWidths, notate } from '@/shared/lib/notation'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { staffHeight } from '@/shared/ui/score'
@@ -28,6 +28,31 @@ type PageItem =
   | { readonly kind: 'title' }
   | { readonly kind: 'heading'; readonly section: number }
   | { readonly kind: 'line'; readonly sheet: LineSheet }
+
+const itemKey = (item: PageItem) =>
+  item.kind === 'title'
+    ? 'title'
+    : item.kind === 'heading'
+      ? `heading ${item.section}`
+      : `${item.sheet.line.section} ${item.sheet.line.line} ${item.sheet.line.start}`
+
+/**
+ * A page's items as the blocks that stay together as it is spread (ADR 0087): the title and a
+ * section's heading with the line under them.
+ */
+function blocksOf(page: readonly PageItem[]): PageItem[][] {
+  const blocks: PageItem[][] = []
+  let open: PageItem[] = []
+  for (const item of page) {
+    open.push(item)
+    if (item.kind === 'line') {
+      blocks.push(open)
+      open = []
+    }
+  }
+  if (open.length > 0) blocks.push(open)
+  return blocks
+}
 
 /**
  * The editor's sheet (spec §6.1, ADR 0064), as `view` lays it out: the piece by section down the
@@ -164,37 +189,32 @@ export function ScoreSheet({
       <PageCanvas column={PAGE.width}>
         <section aria-label={t('sheet.label')} className="flex flex-col items-center gap-8 p-6">
           {dealt.map((page, index) => (
-            <article
+            <SheetPage
               key={index}
-              aria-label={t('sheet.page', { n: index + 1, of: dealt.length })}
-              data-slot="sheet-page"
-              className="relative flex flex-col bg-card text-card-foreground shadow-lg shadow-foreground/10 ring-1 ring-hairline"
-              style={{
-                width: PAGE.width,
-                minHeight: PAGE.height,
-                padding: PAGE.margin,
-                gap: LINE_GAP * scale,
-              }}
-            >
-              {page.map((item) =>
-                item.kind === 'title' ? (
-                  <h2 key="title" className="text-center font-display text-3xl">
-                    {title}
-                  </h2>
-                ) : item.kind === 'heading' ? (
-                  <div key={`heading ${item.section}`}>{heading(item.section)}</div>
-                ) : (
-                  line(item.sheet, scale, true)
+              number={index + 1}
+              label={t('sheet.page', { n: index + 1, of: dealt.length })}
+              // Every page but the last filled to its height (ADR 0087).
+              filled={index < dealt.length - 1}
+              gap={LINE_GAP * scale}
+              blocks={blocksOf(page).map((block) => ({
+                key: block.map(itemKey).join(' '),
+                content: (
+                  <div className="flex flex-col" style={{ gap: LINE_GAP * scale }}>
+                    {block.map((item) =>
+                      item.kind === 'title' ? (
+                        <h2 key="title" className="text-center font-display text-3xl">
+                          {title}
+                        </h2>
+                      ) : item.kind === 'heading' ? (
+                        <div key={itemKey(item)}>{heading(item.section)}</div>
+                      ) : (
+                        line(item.sheet, scale, true)
+                      ),
+                    )}
+                  </div>
                 ),
-              )}
-              <span
-                aria-hidden
-                className="absolute inset-x-0 text-center text-xs text-muted-foreground"
-                style={{ bottom: PAGE.margin / 2 }}
-              >
-                {index + 1}
-              </span>
-            </article>
+              }))}
+            />
           ))}
         </section>
       </PageCanvas>
