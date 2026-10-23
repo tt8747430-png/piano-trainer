@@ -97,6 +97,15 @@ export interface KeyboardSettings {
 export const PALETTE_SIDES = ['right', 'left'] as const
 export type PaletteSide = (typeof PALETTE_SIDES)[number]
 
+/** Where the score editor's palette stands: beside the sheet (a laptop, a phone on its side), or at its foot. */
+export const PALETTE_PLACES = ['beside', 'foot'] as const
+export type PalettePlace = (typeof PALETTE_PLACES)[number]
+/**
+ * Whether the palette is folded, as the learner last left it in each place; a place never chosen
+ * takes its default (ADR 0089): open beside the sheet, where it covers no music, folded at the foot.
+ */
+export type PaletteFolds = Readonly<Partial<Record<PalettePlace, boolean>>>
+
 const SIDEBARS = ['open', 'collapsed'] as const
 /** A laptop's sidebar: its places named, or their icons alone. */
 export type Sidebar = (typeof SIDEBARS)[number]
@@ -184,8 +193,8 @@ export interface SettingsState {
   sidebar: Sidebar
   /** The side the score editor's palette stands on beside the sheet. */
   paletteSide: PaletteSide
-  /** Whether the score editor's palette is folded to its quick row and categories (it opens so). */
-  paletteFolded: boolean
+  /** Whether the score editor's palette is folded to its quick row and categories, by where it stands. */
+  paletteFolded: PaletteFolds
   midi: MidiSettings
   chordFinder: ChordFinderSettings
   scoreView: ScoreViewSettings

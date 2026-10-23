@@ -110,7 +110,7 @@ describe('the score editor', () => {
     expect(within(palette).getByRole('group', { name: 'Note value' })).toBeInTheDocument()
     expect(within(palette).queryByRole('region', { name: 'Notes' })).not.toBeInTheDocument()
     await openCategory(user, 'Pitch')
-    expect(settingsStore.getState().paletteFolded).toBe(false)
+    expect(settingsStore.getState().paletteFolded).toEqual({ foot: false })
     expect(within(palette).getByRole('button', { name: 'Pitch' })).toHaveAttribute(
       'aria-current',
       'true',
@@ -120,7 +120,7 @@ describe('the score editor', () => {
       expect(within(palette).getByRole('region', { name })).toBeInTheDocument()
     await user.click(within(palette).getByRole('button', { name: 'Show fewer tools' }))
     expect(within(palette).queryByRole('region', { name: 'Pitch' })).not.toBeInTheDocument()
-    expect(settingsStore.getState().paletteFolded).toBe(true)
+    expect(settingsStore.getState().paletteFolded).toEqual({ foot: true })
     expect(within(palette).getByRole('group', { name: 'Note value' })).toBeInTheDocument()
   })
 
@@ -217,8 +217,27 @@ describe('the score editor', () => {
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await screen.findByRole('status')
     await user.click(screen.getByRole('button', { name: 'Show every tool' }))
-    expect(settingsStore.getState().paletteFolded).toBe(false)
+    expect(settingsStore.getState().paletteFolded).toEqual({ foot: false })
     expect(screen.getByRole('button', { name: 'Show fewer tools' })).toBeInTheDocument()
+  })
+
+  it('opens its palette beside the sheet, on a phone on its side, where it covers no music', async () => {
+    const user = userEvent.setup()
+    vi.stubGlobal('matchMedia', (media: string) => ({
+      media,
+      matches: media === LANDSCAPE_PHONE,
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    }))
+    const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await user.click(await screen.findByRole('button', { name: 'Show fewer tools' }))
+    // Folded there, it stays folded there; at the foot it is still the foot's own.
+    expect(settingsStore.getState().paletteFolded).toEqual({ beside: true })
+    expect(screen.getByRole('button', { name: 'Show every tool' })).toBeInTheDocument()
   })
 
   it('shows and hides the keys from the palette’s bar, its Keys always there', async () => {

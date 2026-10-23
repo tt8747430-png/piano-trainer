@@ -34,7 +34,7 @@ const DEFAULTS = {
   recorder: DEFAULT_RECORDER,
   sidebar: DEFAULT_SIDEBAR,
   paletteSide: 'right',
-  paletteFolded: true,
+  paletteFolded: {},
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
   scoreView: DEFAULT_SCORE_VIEW,
@@ -108,7 +108,7 @@ describe('createSettingsStore', () => {
       recorder: { click: false, tune: true },
       sidebar: 'collapsed',
       paletteSide: 'right',
-      paletteFolded: false,
+      paletteFolded: { beside: true, foot: false },
       midi: {
         device: 'Piano',
         sound: true,
@@ -181,17 +181,19 @@ describe('createSettingsStore', () => {
     expect(restored({ sidebar: 'wide' }).sidebar).toBe('open')
     expect(restored({ paletteSide: 'top' }).paletteSide).toBe('right')
     expect(restored({ paletteSide: 'left' }).paletteSide).toBe('left')
-    expect(restored({ paletteFolded: 'yes' }).paletteFolded).toBe(true)
-    expect(restored({ paletteFolded: false }).paletteFolded).toBe(false)
+    expect(restored({ paletteFolded: true }).paletteFolded).toEqual({})
+    expect(restored({ paletteFolded: { beside: 'yes', foot: false } }).paletteFolded).toEqual({
+      foot: false,
+    })
   })
 
   it('turns a click that is not a boolean on, its default', () => {
     expect(restored({ recorder: { click: 'no' } }).recorder).toEqual(DEFAULT_RECORDER)
   })
 
-  it('starts afresh over a save of the version before, whose editor had a layout of its own', () => {
-    expect(SETTINGS_VERSION).toBe(4)
-    expect(restored({ theme: 'dark', editorLayout: 'pages' }, 3)).toEqual(
+  it('starts afresh over a save of the version before, whose palette folded the same everywhere', () => {
+    expect(SETTINGS_VERSION).toBe(5)
+    expect(restored({ theme: 'dark', paletteFolded: false }, 4)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

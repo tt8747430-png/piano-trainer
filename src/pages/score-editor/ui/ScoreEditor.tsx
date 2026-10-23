@@ -51,8 +51,10 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const paletteSide = useSettings(selectPaletteSide)
   const settings = useSettingsStoreApi()
-  const palette = !useSettings(selectPaletteFolded)
-  const setPalette = (open: boolean) => setPaletteFolded(settings, !open)
+  // Open by default beside the sheet, where it covers no music; folded at the foot (ADR 0089).
+  const place = side ? 'beside' : 'foot'
+  const palette = !useSettings(selectPaletteFolded(place))
+  const setPalette = (open: boolean) => setPaletteFolded(settings, place, !open)
   // What floats over the sheet's foot, measured: the sheet has room to scroll its last line above it.
   const sheet = useRef<HTMLDivElement>(null)
   const foot = useRef<HTMLDivElement>(null)

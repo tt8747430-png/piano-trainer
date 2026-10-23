@@ -26,9 +26,10 @@ export function EditorViewMenu() {
   const { view, takes } = useScoreEditorContext()
   const store = useSettingsStoreApi()
   const keys = useFoldKeys()
-  const palette = !useSettings(selectPaletteFolded)
   const side = useSettings(selectPaletteSide)
   const beside = usePaletteBeside()
+  const place = beside ? 'beside' : 'foot'
+  const palette = !useSettings(selectPaletteFolded(place))
   return (
     <Popover>
       <PopoverTrigger
@@ -58,7 +59,7 @@ export function EditorViewMenu() {
             icon={<Music />}
             label={t('viewMenu.palette')}
             checked={palette}
-            onCheckedChange={(on) => setPaletteFolded(store, !on)}
+            onCheckedChange={(on) => setPaletteFolded(store, place, !on)}
           />
           <SwitchRow
             icon={<Piano />}

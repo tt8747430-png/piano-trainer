@@ -38,6 +38,7 @@ import {
   isSidebar,
   isPaletteSide,
   DEFAULT_PALETTE_SIDE,
+  PALETTE_PLACES,
   isSwipe,
   isTheme,
   isTitleSize,
@@ -45,6 +46,7 @@ import {
   type ChordFinderSettings,
   type KeyboardSettings,
   type MidiSettings,
+  type PaletteFolds,
   type PracticeToggles,
   type RecorderSettings,
   type ScoreViewSettings,
@@ -55,7 +57,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 4
+export const SETTINGS_VERSION = 5
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -82,7 +84,7 @@ export function createSettingsStore({
         recorder: DEFAULT_RECORDER,
         sidebar: DEFAULT_SIDEBAR,
         paletteSide: DEFAULT_PALETTE_SIDE,
-        paletteFolded: true,
+        paletteFolded: {},
         midi: DEFAULT_MIDI,
         chordFinder: DEFAULT_CHORD_FINDER,
         scoreView: DEFAULT_SCORE_VIEW,
@@ -112,6 +114,17 @@ function floatingSettings(value: unknown): FloatingSettings {
     place: isFloatingPlace(saved.place) ? saved.place : DEFAULT_FLOATING.place,
     labels: typeof saved.labels === 'boolean' ? saved.labels : DEFAULT_FLOATING.labels,
   }
+}
+
+/** Each place's fold as saved where it is a boolean; a place never chosen stays unset. */
+function paletteFolds(value: unknown): PaletteFolds {
+  const saved = savedObject<PaletteFolds>(value)
+  return Object.fromEntries(
+    PALETTE_PLACES.flatMap((place) => {
+      const folded: unknown = saved[place]
+      return typeof folded === 'boolean' ? [[place, folded]] : []
+    }),
+  )
 }
 
 /** A trainer setting keeps what was saved; one never saved, or not valid, takes its default. */
@@ -237,8 +250,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     recorder: recorderSettings(saved.recorder),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,
     paletteSide: isPaletteSide(saved.paletteSide) ? saved.paletteSide : current.paletteSide,
-    paletteFolded:
-      typeof saved.paletteFolded === 'boolean' ? saved.paletteFolded : current.paletteFolded,
+    paletteFolded: paletteFolds(saved.paletteFolded),
     midi: midiSettings(saved.midi),
     chordFinder: chordFinderSettings(saved.chordFinder),
     scoreView: scoreViewSettings(saved.scoreView),

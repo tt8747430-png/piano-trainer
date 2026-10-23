@@ -6,6 +6,7 @@ import type {
   MidiSettings,
   PracticeToggles,
   RecorderSettings,
+  PalettePlace,
   SettingsState,
   PaletteSide,
   Sidebar,
@@ -25,7 +26,11 @@ export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.
 export const selectRecorder = (state: SettingsState): RecorderSettings => state.recorder
 export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar
 export const selectPaletteSide = (state: SettingsState): PaletteSide => state.paletteSide
-export const selectPaletteFolded = (state: SettingsState): boolean => state.paletteFolded
+/** Whether the palette is folded where it stands: as the learner left it there, else open beside the sheet. */
+export const selectPaletteFolded =
+  (place: PalettePlace) =>
+  (state: SettingsState): boolean =>
+    state.paletteFolded[place] ?? place === 'foot'
 export const selectMidi = (state: SettingsState): MidiSettings => state.midi
 /** Whether the section `id` is folded away. */
 export const selectSectionFolded =

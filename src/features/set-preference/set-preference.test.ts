@@ -53,11 +53,12 @@ describe('set-preference', () => {
     expect(saved(storage).paletteSide).toBe('left')
   })
 
-  it('setPaletteFolded folds the editor’s palette and saves it', () => {
+  it('setPaletteFolded folds the editor’s palette where it stands, and saves it', () => {
     const { storage, store } = setUp()
-    setPaletteFolded(store, true)
-    expect(store.getState().paletteFolded).toBe(true)
-    expect(saved(storage).paletteFolded).toBe(true)
+    setPaletteFolded(store, 'beside', true)
+    expect(store.getState().paletteFolded).toEqual({ beside: true })
+    setPaletteFolded(store, 'foot', false)
+    expect(saved(storage).paletteFolded).toEqual({ beside: true, foot: false })
   })
 
   it('setSidebar collapses the sidebar and saves it', () => {

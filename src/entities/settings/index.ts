@@ -15,6 +15,7 @@ export {
   type MidiSettings,
   type PracticeToggle,
   type PaletteSide,
+  type PalettePlace,
   type Sidebar,
   type Theme,
   type TitleSize,
