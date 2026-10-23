@@ -19,7 +19,7 @@ import { usePaletteBeside } from '../model/use-palette-beside'
  * headings (ADR 0085): an eye in the bar opening the layout (down the screen, on pages or across,
  * ADR 0064), whether the keys and the palette are out, and, where the palette stands beside the
  * sheet, the side it stands on (ADR 0071). What the song holds is the Song sheet's; this is only how
- * it is seen, remembered for every song.
+ * it is seen, remembered for every song; the layout is the Player's too (ADR 0090).
  */
 export function EditorViewMenu() {
   const { t } = useTranslation('editor')

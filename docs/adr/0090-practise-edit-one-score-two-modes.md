@@ -1,7 +1,7 @@
 # ADR 0090 — Practise · Edit: one score in two modes
 
 - **Status:** accepted · **Date:** 2026-10-23 · **Amends:** ADR 0027 (the Player's way into the editor), ADR
-  0085 (the bars' buttons) · Research:
+  0064 (the editor's own layout), ADR 0085 (the bars' buttons) · Research:
   [2026-10-flat-and-dorico](../research/2026-10-flat-and-dorico.md) §4
 
 ## Context
@@ -32,6 +32,10 @@ learner practising should not change the music by accident. Our Player already i
   history, so Close (`useGoBack`) still goes back where the learner came from (the song's page, a study's), and
   the editor's Close keeps doing what it did.
 - While a take records the switch waits for Stop, as the bar's other buttons do.
+- **One layout.** The Player's `scoreView.layout` and the editor's `editorLayout` were two settings, so the
+  music jumped from pages to a scroll when the mode changed. They are one: `scoreView.layout` (across ·
+  scroll · pages), written by both View menus. `editorLayout` and `setEditorLayout` are gone and `pt-settings`
+  goes to version 4 (ADR 0038: no migration, a version 3 save starts from the defaults).
 
 ## Consequences
 

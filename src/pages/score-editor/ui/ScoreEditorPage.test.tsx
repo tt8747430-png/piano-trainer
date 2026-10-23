@@ -964,6 +964,16 @@ describe('the score editor', () => {
     expect(within(settings).queryByRole('region', { name: 'MIDI keyboard' })).toBeNull()
   })
 
+  it('lays the score out as the Player does: one layout, both View menus writing it (ADR 0090)', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await user.click(await screen.findByRole('button', { name: 'View' }))
+    const view = await screen.findByRole('dialog', { name: 'View' })
+    await user.click(within(view).getByRole('radio', { name: 'Pages' }))
+    expect(settingsStore.getState().scoreView.layout).toBe('pages')
+    expect(settingsStore.getState()).not.toHaveProperty('editorLayout')
+  })
+
   it('offers the palette’s side only where it stands beside the sheet', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })

@@ -15,7 +15,6 @@ import {
   setRecorderClick,
   setRecorderTune,
   setSectionFolded,
-  setEditorLayout,
   setPaletteFolded,
   setPaletteSide,
   setSidebar,
@@ -52,13 +51,6 @@ describe('set-preference', () => {
     setPaletteSide(store, 'left')
     expect(store.getState().paletteSide).toBe('left')
     expect(saved(storage).paletteSide).toBe('left')
-  })
-
-  it('setEditorLayout lays the editor’s score out on pages for every song, and saves it', () => {
-    const { storage, store } = setUp()
-    setEditorLayout(store, 'pages')
-    expect(store.getState().editorLayout).toBe('pages')
-    expect(saved(storage).editorLayout).toBe('pages')
   })
 
   it('setPaletteFolded folds the editor’s palette and saves it', () => {

@@ -38,7 +38,6 @@ import {
   isSidebar,
   isPaletteSide,
   DEFAULT_PALETTE_SIDE,
-  DEFAULT_EDITOR_LAYOUT,
   isSwipe,
   isTheme,
   isTitleSize,
@@ -56,7 +55,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 3
+export const SETTINGS_VERSION = 4
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -83,7 +82,6 @@ export function createSettingsStore({
         recorder: DEFAULT_RECORDER,
         sidebar: DEFAULT_SIDEBAR,
         paletteSide: DEFAULT_PALETTE_SIDE,
-        editorLayout: DEFAULT_EDITOR_LAYOUT,
         paletteFolded: true,
         midi: DEFAULT_MIDI,
         chordFinder: DEFAULT_CHORD_FINDER,
@@ -239,7 +237,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     recorder: recorderSettings(saved.recorder),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,
     paletteSide: isPaletteSide(saved.paletteSide) ? saved.paletteSide : current.paletteSide,
-    editorLayout: isSheetView(saved.editorLayout) ? saved.editorLayout : current.editorLayout,
     paletteFolded:
       typeof saved.paletteFolded === 'boolean' ? saved.paletteFolded : current.paletteFolded,
     midi: midiSettings(saved.midi),

@@ -34,7 +34,6 @@ const DEFAULTS = {
   recorder: DEFAULT_RECORDER,
   sidebar: DEFAULT_SIDEBAR,
   paletteSide: 'right',
-  editorLayout: 'scroll',
   paletteFolded: true,
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
@@ -109,7 +108,6 @@ describe('createSettingsStore', () => {
       recorder: { click: false, tune: true },
       sidebar: 'collapsed',
       paletteSide: 'right',
-      editorLayout: 'scroll',
       paletteFolded: false,
       midi: {
         device: 'Piano',
@@ -183,8 +181,6 @@ describe('createSettingsStore', () => {
     expect(restored({ sidebar: 'wide' }).sidebar).toBe('open')
     expect(restored({ paletteSide: 'top' }).paletteSide).toBe('right')
     expect(restored({ paletteSide: 'left' }).paletteSide).toBe('left')
-    expect(restored({ editorLayout: 'paper' }).editorLayout).toBe('scroll')
-    expect(restored({ editorLayout: 'pages' }).editorLayout).toBe('pages')
     expect(restored({ paletteFolded: 'yes' }).paletteFolded).toBe(true)
     expect(restored({ paletteFolded: false }).paletteFolded).toBe(false)
   })
@@ -193,9 +189,9 @@ describe('createSettingsStore', () => {
     expect(restored({ recorder: { click: 'no' } }).recorder).toEqual(DEFAULT_RECORDER)
   })
 
-  it('starts afresh over a save of the version before, which had no fold for a phone on its side', () => {
-    expect(SETTINGS_VERSION).toBe(3)
-    expect(restored({ theme: 'dark', keyboard: { folded: true } }, 2)).toEqual(
+  it('starts afresh over a save of the version before, whose editor had a layout of its own', () => {
+    expect(SETTINGS_VERSION).toBe(4)
+    expect(restored({ theme: 'dark', editorLayout: 'pages' }, 3)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

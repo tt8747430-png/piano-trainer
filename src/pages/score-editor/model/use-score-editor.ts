@@ -8,10 +8,10 @@ import {
   usePieces,
   usePiecesStoreApi,
 } from '@/entities/piece'
-import { selectEditorLayout, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { selectScoreView, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { renameSong, saveMusic } from '@/features/edit-piece'
-import { setEditorLayout } from '@/features/set-preference'
+import { setScoreView } from '@/features/set-preference'
 import {
   barAt,
   barsOf,
@@ -66,10 +66,11 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   useWakeLock()
   const pieces = usePiecesStoreApi()
   const locale = useLocale()
-  // How the score is laid out is the learner's way of working, kept for every song.
+  // How the score is laid out is the learner's way of working, kept for every song, and the
+  // Player's too: the music stands still between Practise and Edit (ADR 0090).
   const settings = useSettingsStoreApi()
-  const layout = useSettings(selectEditorLayout)
-  const setLayout = (next: SheetView) => setEditorLayout(settings, next)
+  const layout = useSettings((state) => selectScoreView(state).layout)
+  const setLayout = (next: SheetView) => setScoreView(settings, { layout: next })
   const [settingsOpen, openSettings] = useState(false)
   /** The music last saved here, or read: what the store holds unless another tab saved since. */
   const [saved] = useState(() => ({ music: target.music }))
