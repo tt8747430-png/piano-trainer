@@ -15,11 +15,8 @@ import {
   GuidedSongs,
   isComplete,
   LearnedMeter,
+  openCourseStep,
 } from '@/widgets/curriculum'
-
-/** The course's first step not yet learned: a lesson, then a guided song. */
-const openStepOf = (course: Course, learned: Readonly<Record<string, string | undefined>>) =>
-  courseStepIds(course).find((id) => learned[id] === undefined)
 
 /**
  * The course's one honey way in: Start course, or Continue onto the step to take; Review, onto its
@@ -29,7 +26,7 @@ function CourseAction({ course }: { course: Course }) {
   const { t } = useTranslation('learn')
   const learned = useProgress(selectLearned)
   const progress = courseProgress(course, learned)
-  const open = openStepOf(course, learned)
+  const open = openCourseStep(course, learned)
   const step = stepOf(open ?? courseStepIds(course)[0])
   if (!step || (step.kind !== 'course-lesson' && step.kind !== 'piece')) return null
   const label = !open
@@ -76,7 +73,7 @@ export function CoursePage() {
   if (!course) return null
   const progress = courseProgress(course, learned)
   const paint = PAINT[STAGE_PAINT[course.stage]]
-  const next = openStepOf(course, learned)
+  const next = openCourseStep(course, learned)
   return (
     <div className="flex flex-col gap-8">
       <ScreenHeader

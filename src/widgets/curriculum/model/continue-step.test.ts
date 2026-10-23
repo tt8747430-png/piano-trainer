@@ -2,12 +2,28 @@ import { describe, expect, it } from 'vitest'
 import { COURSES } from '@/entities/course'
 import { JOURNEYS } from '@/entities/lesson'
 import { stepIdOf, type StepId } from '@/entities/step'
-import { continueStep, currentJourney } from './continue-step'
+import { continueStep, currentJourney, openCourseStep } from './continue-step'
 import { journeySteps } from './progress'
 
 const at = (minute: number) => `2026-10-15T10:${String(minute).padStart(2, '0')}:00.000Z`
 const firstJourney = JOURNEYS[0]!
 const firstSteps = journeySteps(firstJourney).map(stepIdOf)
+
+describe('openCourseStep', () => {
+  it('is the course’s first lesson, then its first song not learned, then nothing', () => {
+    const course = COURSES.find((each) => each.lessons.length > 1 && each.songs.length > 0)!
+    const lessons = course.lessons.map((lesson) => `course:${course.id}/${lesson.id}` as StepId)
+    expect(openCourseStep(course, {})).toBe(lessons[0])
+    expect(openCourseStep(course, { [lessons[0]!]: at(1) })).toBe(lessons[1])
+    const allLessons = Object.fromEntries(lessons.map((id) => [id, at(1)]))
+    expect(openCourseStep(course, allLessons)).toBe(`piece:${course.songs[0]}`)
+    const everything = {
+      ...allLessons,
+      ...Object.fromEntries(course.songs.map((song) => [`piece:${song}`, at(2)])),
+    }
+    expect(openCourseStep(course, everything)).toBeUndefined()
+  })
+})
 
 describe('continueStep', () => {
   it('opens the Lessons’ first step to a new learner', () => {

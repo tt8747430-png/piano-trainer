@@ -1,4 +1,9 @@
-export { continueStep, currentJourney, type ContinueStep } from './model/continue-step'
+export {
+  continueStep,
+  currentJourney,
+  openCourseStep,
+  type ContinueStep,
+} from './model/continue-step'
 export { LEARN_DEFAULTS, LEARN_VIEWS, type LearnShows, type LearnView } from './model/learn-view'
 export { courseProgress, isComplete, journeyProgress, type Progress } from './model/progress'
 export { useStepTitle, type StepTitle } from './model/use-step-title'

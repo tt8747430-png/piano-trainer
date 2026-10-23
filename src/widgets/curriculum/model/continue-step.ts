@@ -16,9 +16,13 @@ function openInJourney(journey: Journey, learned: Learned): ContinueStep | undef
   return step ? { id: stepIdOf(step), step, journey } : undefined
 }
 
-/** A course's first step not yet learned: a lesson, then a guided song. */
+/** A course's first step not yet learned: a lesson, then a guided song; none once all are. */
+export const openCourseStep = (course: Course, learned: Learned): StepId | undefined =>
+  courseStepIds(course).find((each) => learned[each] === undefined)
+
+/** A course's open step as Continue opens it. */
 function openInCourse(course: Course, learned: Learned): ContinueStep | undefined {
-  const id = courseStepIds(course).find((each) => learned[each] === undefined)
+  const id = openCourseStep(course, learned)
   const step = id === undefined ? undefined : stepOf(id)
   return id && step ? { id, step, course } : undefined
 }
