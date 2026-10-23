@@ -655,26 +655,28 @@
       'status status';
   }
   @variant landscape-phone {
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
     grid-template-rows: auto minmax(0, 1fr) auto;
     grid-template-areas:
-      'lead status actions'
-      'sheet sheet sheet'
-      'keys keys keys';
+      'lead status actions dock'
+      'sheet sheet sheet dock'
+      'keys keys keys dock';
     --float-room: 0px;
-    /* Upright over the sheet's end, where a thumb holds a phone on its side. */
+    /* Upright at the screen's end, where a thumb holds a phone on its side, in a column of its own
+       the screen's height (ADR 0085): the sheet between the bar and the keys is shorter than the
+       transport, which floating over it covered the bar's Setup and the keys' rail. */
     & > [data-area='dock'] {
+      grid-area: dock;
       align-self: center;
       justify-self: end;
       margin-bottom: 0;
-      margin-inline-end: 0.25rem;
     }
     &[data-keys='top'] {
       grid-template-rows: auto auto minmax(0, 1fr);
       grid-template-areas:
-        'lead status actions'
-        'keys keys keys'
-        'sheet sheet sheet';
+        'lead status actions dock'
+        'keys keys keys dock'
+        'sheet sheet sheet dock';
     }
   }
 }

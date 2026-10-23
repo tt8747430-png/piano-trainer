@@ -141,7 +141,7 @@ export function EditorTools({
           size="icon"
           aria-label={t(`palette.move.${other}`)}
           title={t(`palette.move.${other}`)}
-          className="size-9 shrink-0 rounded-xl"
+          className="size-11 shrink-0 rounded-xl landscape-phone:h-9"
           onClick={() => setPaletteSide(settings, other)}
         >
           {left ? <ArrowRightToLine aria-hidden /> : <ArrowLeftToLine aria-hidden />}
@@ -153,7 +153,7 @@ export function EditorTools({
         aria-label={t(folded ? 'palette.open' : 'palette.close')}
         title={t(folded ? 'palette.open' : 'palette.close')}
         aria-expanded={!folded}
-        className="size-9 shrink-0 rounded-xl"
+        className="size-11 shrink-0 rounded-xl landscape-phone:h-9"
         onClick={() => onFold(!folded)}
       >
         {folded ? <ChevronUp aria-hidden /> : <ChevronDown aria-hidden />}

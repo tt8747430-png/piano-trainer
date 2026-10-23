@@ -1,4 +1,3 @@
-import { SlidersHorizontal } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -11,10 +10,11 @@ import {
   type AccompanimentChoice,
   type PatternFit,
 } from '@/entities/pattern'
-import { RoundButton, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import { Sheet, SheetContent } from '@/shared/ui'
 import type { FigureChange } from '../model/setup-params'
 import { FigurePage } from './FigurePage'
 import { PatternPage } from './PatternPage'
+import { SetupTrigger } from './SetupTrigger'
 import { SetupContext, type SetupPage } from './setup-context'
 
 /**
@@ -60,7 +60,7 @@ export function PlayerSetup({
         setOpened(null)
       }}
     >
-      <SheetTrigger render={<RoundButton label={t('setup')} icon={SlidersHorizontal} />} />
+      <SetupTrigger />
       <SheetContent title={page === 'main' ? t('setup') : t(page)}>
         {page === 'main' ? (
           <SetupContext value={{ figures, fit, openPage, onFigures }}>

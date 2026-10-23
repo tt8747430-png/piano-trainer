@@ -28,8 +28,6 @@ export const editor = {
     left: 'Left',
     right: 'Right',
     label: 'View',
-    midiDetail: 'Play into the score from a keyboard',
-    midi: 'MIDI keyboard',
     melody: 'Melody staff',
   },
   // Insert: what goes at the caret (ADR 0065, 0080).
@@ -316,7 +314,9 @@ export const editor = {
     open: 'Record',
     record: 'Record',
     click: 'Metronome',
+    clickDetail: 'The beat goes on after the count-in',
     tune: 'Melody',
+    tuneDetail: 'The song’s melody plays while you record',
     from: 'From bar',
     full: 'Your takes are full: delete one to record another.',
     nothing: 'Nothing was played.',

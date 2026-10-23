@@ -72,7 +72,7 @@ async function openChordField(user: ReturnType<typeof userEvent.setup>) {
   return screen.findByRole('textbox', { name: 'Chord' })
 }
 
-/** Opens the Song sheet: the song as a whole, its parts and the MIDI keyboard. */
+/** Opens the Song sheet: the song as a whole and its parts. */
 async function openSettings(user: ReturnType<typeof userEvent.setup>) {
   await user.click(await screen.findByRole('button', { name: 'Song' }))
   return screen.findByRole('dialog', { name: 'Song' })
@@ -843,6 +843,31 @@ describe('the score editor', () => {
     expect(within(menu).getByRole('button', { name: 'Use the pattern again' })).toBeInTheDocument()
   })
 
+  it('keeps the MIDI keyboard in its bar, as the Player does, never in the Song sheet', async () => {
+    const user = userEvent.setup()
+    await renderApp('/edit/my-1', { storage: withSong() })
+    const midiButton = await screen.findByRole('button', { name: 'MIDI keyboard' })
+    // In the bar's order of the Player's: View, MIDI, then the song's own settings.
+    const bar = midiButton.closest('[data-area="bar"]')
+    const named = within(bar as HTMLElement)
+      .getAllByRole('button')
+      .map((button) => button.getAttribute('aria-label'))
+      .filter((name) => name === 'View' || name === 'MIDI keyboard' || name === 'Song')
+    expect(named).toEqual(['View', 'MIDI keyboard', 'Song'])
+    const settings = await openSettings(user)
+    expect(within(settings).queryByRole('region', { name: 'MIDI keyboard' })).toBeNull()
+  })
+
+  it('offers the palette’s side only where it stands beside the sheet', async () => {
+    const user = userEvent.setup()
+    await renderApp('/edit/my-1', { storage: withSong() })
+    await user.click(await screen.findByRole('button', { name: 'View' }))
+    const view = await screen.findByRole('dialog', { name: 'View' })
+    expect(within(view).getByRole('region', { name: 'Layout' })).toBeInTheDocument()
+    // A phone held upright: the palette is at the foot, it has no side.
+    expect(within(view).queryByRole('radiogroup', { name: 'Tools beside the music' })).toBeNull()
+  })
+
   it('shows not found for a song written in degrees', async () => {
     await renderApp('/edit/romashki')
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
@@ -915,7 +940,7 @@ describe('the score editor’s takes', () => {
     const { settingsStore } = await renderApp('/edit/my-1', { storage })
     await user.click(await screen.findByRole('button', { name: 'Record' }))
     const sheet = await screen.findByRole('dialog', { name: 'Takes' })
-    await user.click(within(sheet).getByRole('switch', { name: 'Melody' }))
+    await user.click(within(sheet).getByRole('switch', { name: /^Melody/ }))
     expect(settingsStore.getState().recorder.tune).toBe(true)
   })
 
@@ -924,8 +949,8 @@ describe('the score editor’s takes', () => {
     await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'Record' }))
     const sheet = await screen.findByRole('dialog', { name: 'Takes' })
-    expect(within(sheet).getByRole('switch', { name: 'Metronome' })).toBeInTheDocument()
-    expect(within(sheet).queryByRole('switch', { name: 'Melody' })).not.toBeInTheDocument()
+    expect(within(sheet).getByRole('switch', { name: /^Metronome/ })).toBeInTheDocument()
+    expect(within(sheet).queryByRole('switch', { name: /^Melody/ })).not.toBeInTheDocument()
   })
 
   it('records a take to the count-in, keeps it, plays it, and writes it into both hands', async () => {
@@ -982,7 +1007,7 @@ describe('the score editor’s takes', () => {
     const { audio, settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'Record' }))
     const sheet = await screen.findByRole('dialog', { name: 'Takes' })
-    await user.click(within(sheet).getByRole('switch', { name: 'Metronome' }))
+    await user.click(within(sheet).getByRole('switch', { name: /^Metronome/ }))
     expect(settingsStore.getState().recorder.click).toBe(false)
     await user.click(within(sheet).getByRole('button', { name: 'Connect a MIDI keyboard' }))
     await user.click(await within(sheet).findByRole('button', { name: 'Record' }))

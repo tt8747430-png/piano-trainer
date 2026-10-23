@@ -28,11 +28,10 @@ export function RecorderSheet() {
       <SheetTrigger
         render={
           <Button
-            variant="ghost"
+            variant="surface"
             size="icon"
             aria-label={t('recorder.open')}
             title={t('recorder.open')}
-            className="rounded-full"
             disabled={takes.stage !== 'idle'}
           />
         }

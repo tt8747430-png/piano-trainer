@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { CHROMATIC, CHROMATIC_DIRECTIONS, type ChromaticChoice } from '@/features/practice'
 import { CHORD_FAMILIES, noteParam, qualitiesIn, qualitySuffix } from '@/shared/lib/music'
-import { MultiDropdown, NoteChoice, Segmented, ToggleGrid } from '@/shared/ui'
+import { MultiDropdown, NoteChoice, Segmented, MenuSection, ToggleGrid } from '@/shared/ui'
 import { PatternCard, PlayerSetup } from '@/widgets/player-setup'
 import { PlayingToggles } from '@/widgets/practice-player'
 import type { ChromaticChange } from '../model/chromatic-search'
@@ -54,9 +54,11 @@ export function ChromaticSetup({
         onChange={(direction) => onChange({ direction })}
       />
       <PatternCard />
-      <ToggleGrid label={t('playing')}>
-        <PlayingToggles swing={swing} onSwing={onSwing} />
-      </ToggleGrid>
+      <MenuSection title={t('playing')}>
+        <ToggleGrid label={t('playing')}>
+          <PlayingToggles swing={swing} onSwing={onSwing} />
+        </ToggleGrid>
+      </MenuSection>
     </PlayerSetup>
   )
 }
