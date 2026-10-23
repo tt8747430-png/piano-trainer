@@ -2,6 +2,8 @@
 export const music = {
   // The major triad's label where a chord's suffix names it: its own suffix is empty.
   major: 'M',
+  // A tempo as every screen says it: a song's facts, the Player's and the editor's tempo, a take's.
+  bpm: '{{tempo}} BPM',
   inversion: { label: 'Inversion', root: 'Root', first: '1st', second: '2nd', third: '3rd' },
   // Where a row's hand stands: the first chord's inversion, then each nearest the last or all in it.
   position: {

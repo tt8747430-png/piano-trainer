@@ -258,7 +258,6 @@ export const editor = {
   song: {
     label: 'Song',
     title: 'Title',
-    bpm: '{{tempo}} BPM',
     tempo: 'Tempo',
     tempoWords: 'Tempo words',
     tempos: {
@@ -292,7 +291,7 @@ export const editor = {
     full: 'Your takes are full: delete one to record another.',
     nothing: 'Nothing was played.',
     none: 'No takes yet.',
-    detail: '{{length}} · {{tempo}} BPM',
+    detail: '{{length}} · {{bpm}}',
     play: 'Play',
     write: 'Write into the score',
     download: 'Download',

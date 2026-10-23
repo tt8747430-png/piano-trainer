@@ -38,7 +38,6 @@ export const player = {
   direction: 'Direction',
   directions: { up: 'Up', down: 'Down', both: 'Up and down' },
   tempo: 'Tempo',
-  bpm: '{{tempo}} BPM',
   hands: 'Hands',
   handsOf: 'Hands: {{hands}}',
   pattern: 'Pattern',

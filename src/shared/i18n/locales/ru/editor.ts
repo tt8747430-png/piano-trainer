@@ -241,7 +241,6 @@ export const editor: LocaleResources['editor'] = {
   song: {
     label: 'Песня',
     title: 'Название',
-    bpm: '{{tempo}} уд/мин',
     tempo: 'Темп',
     tempoWords: 'Обозначения темпа',
     tempos: {
@@ -274,7 +273,7 @@ export const editor: LocaleResources['editor'] = {
     full: 'Дубли заняли всё место: удалите один, чтобы записать новый.',
     nothing: 'Ничего не сыграно.',
     none: 'Дублей пока нет.',
-    detail: '{{length}} · {{tempo}} уд/мин',
+    detail: '{{length}} · {{bpm}}',
     play: 'Сыграть',
     write: 'Вписать в ноты',
     download: 'Скачать',

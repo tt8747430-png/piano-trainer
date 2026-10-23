@@ -56,7 +56,7 @@ export const songs: LocaleResources['songs'] = {
   shared: {
     title: 'Песня по ссылке',
     reading: 'Читаем песню…',
-    facts: '{{key}} · {{meter}} · {{tempo}} уд/мин',
+    facts: '{{key}} · {{meter}} · {{bpm}}',
     add: 'Добавить к вашим песням',
     says: 'Добавьте её к вашим песням, чтобы разучивать.',
     none: 'В этой ссылке нет песни: возможно, она обрезана.',

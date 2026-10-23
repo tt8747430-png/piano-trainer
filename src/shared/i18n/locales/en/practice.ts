@@ -92,7 +92,6 @@ export const practice = {
       'short-short-short-long': '3 short, long',
     },
     tempo: 'Tempo',
-    bpm: '{{tempo}} BPM',
     playUpDown: 'Play up and down',
     facts: { formula: 'Formula', gaps: 'Structure', relative: 'Relative', modeOf: 'Mode of' },
     chordsIn: 'Chords in this scale',

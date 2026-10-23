@@ -14,7 +14,6 @@ export const piece: LocaleResources['piece'] = {
   formBars_many: '{{count}} тактов',
   formBars_other: '{{count}} такта',
   tempo: 'Темп',
-  bpm: '{{tempo}} уд/мин',
   print: 'Распечатать',
   progression: 'Последовательность',
   more: 'Ещё',

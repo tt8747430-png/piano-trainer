@@ -13,7 +13,7 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
  * no room in the takes (Record itself is the sheet's footer, `RecordButton`).
  */
 export function RecordPanel() {
-  const { t } = useTranslation('editor')
+  const { t } = useTranslation(['editor', 'music'])
   const { takes } = useScoreEditorContext()
   const tempo = useEditorState((state) => state.draft.tempo)
   const meter = useEditorState((state) => state.draft.meter)
@@ -27,7 +27,7 @@ export function RecordPanel() {
   return (
     <section className="flex flex-col gap-4">
       <dl className="flex flex-col gap-1">
-        <Fact term={t('song.tempo')}>{t('song.bpm', { tempo })}</Fact>
+        <Fact term={t('song.tempo')}>{t('music:bpm', { tempo })}</Fact>
         <Fact term={t('song.meter')}>{meter}</Fact>
         <Fact term={t('recorder.from')}>{fromBar}</Fact>
       </dl>

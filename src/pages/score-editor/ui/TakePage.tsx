@@ -33,7 +33,7 @@ import { TakeNameField } from './TakeNameField'
  * in the dial beside it; the keys go down on the keyboard as it plays.
  */
 function TakeView({ take }: { take: Take }) {
-  const { t } = useTranslation('editor')
+  const { t } = useTranslation(['editor', 'music'])
   const title = useTakeTitle(take)
   const song = useSongTitle(take.pieceId)
   const play = useTakePlay(take)
@@ -57,7 +57,10 @@ function TakeView({ take }: { take: Take }) {
       <div className="-mt-3 flex flex-col gap-1">
         <p className="text-lg font-semibold">{song}</p>
         <p className="text-muted-foreground tabular-nums">
-          {t('recorder.detail', { length: clockTime(take.length), tempo: take.tempo })}
+          {t('recorder.detail', {
+            length: clockTime(take.length),
+            bpm: t('music:bpm', { tempo: take.tempo }),
+          })}
         </p>
       </div>
       <TakeNameField take={take} />

@@ -26,7 +26,7 @@ import { SongTitleField } from './SongTitleField'
  * Presto, as a metronome marks them): it starts from the piece's each time the sheet opens.
  */
 function SongTempo() {
-  const { t } = useTranslation('editor')
+  const { t } = useTranslation(['editor', 'music'])
   const { actions } = useScoreEditorContext()
   const saved = useEditorState((state) => state.draft.tempo)
   const [tempo, setTempo] = useState(saved)
@@ -44,7 +44,7 @@ function SongTempo() {
       >
         <div className="flex justify-between">
           <SliderLabel>{t('song.tempo')}</SliderLabel>
-          <span className="font-semibold tabular-nums">{t('song.bpm', { tempo })}</span>
+          <span className="font-semibold tabular-nums">{t('music:bpm', { tempo })}</span>
         </div>
       </Slider>
       <div role="group" aria-label={t('song.tempoWords')} className="grid grid-cols-3 gap-1.5">

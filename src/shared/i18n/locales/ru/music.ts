@@ -2,6 +2,7 @@ import type { LocaleResources } from '../../types'
 
 export const music: LocaleResources['music'] = {
   major: 'M',
+  bpm: '{{tempo}} уд/мин',
   inversion: {
     label: 'Обращение',
     root: 'Основной',
