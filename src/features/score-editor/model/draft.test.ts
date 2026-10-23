@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import {
+  HAND_IDS,
   isDegreePiece,
   musicOf,
   PIECES,
@@ -7,31 +9,30 @@ import {
   type ChartPiece,
   type PieceMusic,
 } from '@/entities/piece'
+import { arrangePiece, ownChoice } from '@/features/practice'
 import { midi, note } from '@/shared/lib/music'
-import { musicToSave, readDraft, writeDraft } from './draft'
+import { musicToSave, readDraft, writeDraft, type Draft } from './draft'
 import { barAt, barsOf, chordsAt, totalTicks } from './timeline'
 
 const CHART_PIECES = PIECES.filter((piece): piece is ChartPiece => !isDegreePiece(piece))
 
-type Hand = readonly { readonly midi: number; readonly startTick: number }[] | undefined
-const lowToHigh = (notes: Hand) =>
-  notes && [...notes].sort((a, b) => a.startTick - b.startTick || a.midi - b.midi)
-
-/** Music as it sounds: notes struck together in any order (a hymn writes them high to low, the editor low to high). */
-function heard(music: PieceMusic) {
+/** The music's chart as it sounds without its hands, and its tune: what a round trip keeps as written. */
+function chartAndTune(music: PieceMusic) {
   const { chart, melody } = readMusic(music)
   const sections = chart.sections.map((section) => ({
     ...section,
-    lines: section.lines.map((line) =>
-      line.map((bar) =>
-        bar.hands
-          ? { ...bar, hands: { rh: lowToHigh(bar.hands.rh), lh: lowToHigh(bar.hands.lh) } }
-          : bar,
-      ),
-    ),
+    lines: section.lines.map((line) => line.map(({ hands: _hands, ...bar }) => bar)),
   }))
   return { chart: { ...chart, sections }, melody }
 }
+
+/** Each hand's notes as they sound: key, onset, length and finger, struck together in any order. */
+const played = (draft: Draft) =>
+  HAND_IDS.map((hand) =>
+    [...draft.hands[hand]]
+      .sort((a, b) => a.startTick - b.startTick || a.midi - b.midi)
+      .map((n) => [n.midi, n.startTick, n.durationTicks, n.finger ?? 0]),
+  )
 
 const WRITTEN: PieceMusic = {
   key: 'G',
@@ -48,35 +49,61 @@ const WRITTEN: PieceMusic = {
 
 describe('the draft', () => {
   it.each(CHART_PIECES.map((piece) => [piece.id, piece] as const))(
-    'reads %s and writes it back the same',
+    'reads %s, every bar written, and writes it back the same',
     (_id, piece) => {
       const music = musicOf(piece)
-      expect(heard(writeDraft(readDraft(music)))).toEqual(heard(music))
+      const draft = readDraft(music)
+      const written = writeDraft(draft)
+      expect(chartAndTune(written)).toEqual(chartAndTune(music))
+      expect(played(readDraft(written))).toEqual(played(draft))
     },
   )
 
+  it('writes out the bars the pattern played as the Player plays them, each note inside its bar (ADR 0091)', () => {
+    const draft = readDraft(WRITTEN)
+    const piece: ChartPiece = { id: 'written', kind: 'song', title: '', ...WRITTEN }
+    const { notes } = arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS)
+    // The last bar, both hands the pattern's: the pattern's notes with their fingers, cut at its end.
+    const [from, to] = [216, 312]
+    const inLast = (hand: 'rh' | 'lh') =>
+      notes
+        .filter((n) => n.hand === hand && n.startTick >= from && n.startTick < to)
+        .map((n) => [n.midi, n.startTick, Math.min(n.durationTicks, to - n.startTick), n.finger])
+    for (const hand of HAND_IDS) {
+      expect(inLast(hand).length).toBeGreaterThan(0)
+      expect(
+        draft.hands[hand]
+          .filter((n) => n.startTick >= from)
+          .map((n) => [n.midi, n.startTick, n.durationTicks, n.finger]),
+      ).toEqual(inLast(hand))
+    }
+    // Written back, every bar of both hands is written: no bar is left to the pattern.
+    const written = writeDraft(draft)
+    expect(written.hands).toEqual({ rh: expect.any(String), lh: expect.any(String) })
+    expect(written.hands?.lh?.split('|')).toHaveLength(4)
+    expect(written.hands?.lh).not.toMatch(/(^|\| )- /)
+  })
+
   it('writes back written hands, a pickup, sections’ headings and method codes', () => {
     const written = writeDraft(readDraft(WRITTEN))
-    expect(readMusic(written)).toEqual(readMusic(WRITTEN))
+    expect(chartAndTune(written)).toEqual(chartAndTune(WRITTEN))
+    expect(written.hands?.lh).toMatch(/\| C3\/4 E3\+G3\^2\/1@2 \| G2\/4 \|/)
+    expect(written.hands?.rh).toMatch(/\| B3\+D4\/2 \|/)
     expect(written.sections.map(({ lines: _lines, ...heading }) => heading)).toEqual([
       { kind: 'verse', n: 1 },
       { kind: 'chorus', last: true },
     ])
   })
 
-  it('holds each more voice on the timeline, its staff added, and writes them back', () => {
-    const sung = {
-      key: 'G',
-      meter: '4/4',
-      tempo: 90,
-      pattern: 'r1',
-      sections: [{ kind: 'verse', lines: ['G C'] }],
-      melody: 'B4/4 | C5/4',
-      voices: ['G4/4 | E4/4', 'D4/2 r/2 | r/4'],
-    } as const satisfies PieceMusic
-    const draft = readDraft(sung)
-    expect(draft.voices.map((voice) => voice.map((n) => n.startTick))).toEqual([[0, 96], [0]])
-    expect(writeDraft(draft).voices).toEqual(['G4/4 | E4/4', 'D4/2'])
+  it('carries no section’s own pattern: the song’s form alone (ADR 0091)', () => {
+    const { hands: _hands, melody: _melody, ...plain } = WRITTEN
+    const patterned: PieceMusic = {
+      ...plain,
+      sections: [{ kind: 'verse', pattern: 'M3', lines: ['G C'] }],
+    }
+    const draft = readDraft(patterned)
+    expect(draft.sections[0]?.heading).toEqual({ kind: 'verse' })
+    expect(writeDraft(draft).sections[0]).not.toHaveProperty('pattern')
   })
 
   it('saves only music that reads back', () => {
@@ -85,7 +112,7 @@ describe('the draft', () => {
     const [section] = draft.sections
     if (!section) throw new Error('no section')
     // A bar with no chord writes nothing the chart can read.
-    const unread = [{ ...section, lines: [[{ ticks: 96, chords: [], rh: false, lh: false }]] }]
+    const unread = [{ ...section, lines: [[{ ticks: 96, chords: [] }]] }]
     expect(musicToSave({ ...draft, sections: unread })).toBeNull()
   })
 
@@ -102,17 +129,16 @@ describe('the draft', () => {
       startTick: 24,
       durationTicks: 48,
     })
-    expect(draft.hands.lh.map((n) => [n.midi, n.startTick, n.durationTicks, n.finger])).toEqual([
+    // The left hand's bars 2 and 3, as written.
+    expect(
+      draft.hands.lh
+        .filter((n) => n.startTick >= 24 && n.startTick < 216)
+        .map((n) => [n.midi, n.startTick, n.durationTicks, n.finger]),
+    ).toEqual([
       [48, 24, 96, undefined],
       [52, 48, 24, undefined],
       [55, 48, 24, 2],
       [43, 120, 96, undefined],
-    ])
-    expect(barsOf(draft).map(({ bar }) => [bar.rh, bar.lh])).toEqual([
-      [false, false],
-      [false, true],
-      [true, true],
-      [false, false],
     ])
   })
 

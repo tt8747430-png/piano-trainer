@@ -1,7 +1,5 @@
 import {
   barMarksOf,
-  DEFAULT_INSTRUMENT,
-  type Instrument,
   clefsInForce,
   HOME_CLEF,
   withoutBarMarks,
@@ -73,10 +71,6 @@ export interface ArrangeOptions {
   readonly lh?: EventFigure
   /** The tune, in the chart's key. */
   readonly melody?: Melody
-  /** The more voices sung with the tune (ADR 0066), in the chart's key. */
-  readonly voices?: readonly Melody[]
-  /** What the tune and each more voice are played on (ADR 0070): a tune on another instrument than the voice is sung too. */
-  readonly instruments?: readonly Instrument[]
   /** Also play the tune an octave up (hand 'melody'). */
   readonly doubleMelody?: boolean
   /**
@@ -669,13 +663,9 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     notes: members,
   }))
 
-  const voicesPlayed = (options.voices ?? []).map((voice) =>
-    played(transposeNotes(voice, chart.key.tonic, options.tonic)),
-  )
   // The tempo and the pedal as every part marks them, whichever the learner hears (ADR 0068).
-  const timing = [...(melody ?? []), ...voicesPlayed.flat(), ...notes].flatMap(
-    ({ startTick, marks }) =>
-      marks?.expression !== undefined || marks?.pedal !== undefined ? [{ startTick, marks }] : [],
+  const timing = [...(melody ?? []), ...notes].flatMap(({ startTick, marks }) =>
+    marks?.expression !== undefined || marks?.pedal !== undefined ? [{ startTick, marks }] : [],
   )
   return {
     key,
@@ -690,11 +680,5 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     chords,
     notes,
     beatGroups,
-    ...(options.voices?.length || options.instruments?.some((one) => one !== DEFAULT_INSTRUMENT)
-      ? {
-          sung: [melody ?? [], ...voicesPlayed],
-          ...(options.instruments?.length ? { instruments: options.instruments } : {}),
-        }
-      : {}),
   }
 }

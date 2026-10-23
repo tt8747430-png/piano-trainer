@@ -16,7 +16,7 @@ const draft = readDraft({
     { kind: 'chorus', lines: ['C D'] },
   ],
   melody: 'B4/4 | C5/2 A4/2',
-  hands: { lh: '- | - | E3/4 | - | -' },
+  hands: { lh: 'r/4 | r/4 | E3/4 | r/4 | r/4' },
 })
 
 const sheet = (
@@ -63,20 +63,6 @@ describe('ScoreSheet', () => {
     await user.keyboard('{Shift>}')
     await user.click(screen.getByRole('button', { name: 'Bar 4: C' }))
     expect(onPlace).toHaveBeenLastCalledWith(288, 'chords', true)
-  })
-
-  it('marks the bars a hand leaves to the pattern, in that hand’s layer', async () => {
-    sheet('lh')
-    await screen.findByRole('button', { name: 'Bar 1: G' })
-    expect(screen.getAllByText('Pattern')).toHaveLength(4)
-  })
-
-  it('says Pattern inside the hand’s empty staff, not in the labels over it', async () => {
-    sheet('rh')
-    await screen.findByRole('button', { name: 'Bar 1: G' })
-    for (const mark of screen.getAllByText('Pattern')) {
-      expect(mark.closest('[data-slot="line-labels"]')).toBeNull()
-    }
   })
 
   it('numbers each line at its head, the tempo beside it, its row only as tall as what it holds', async () => {
@@ -156,7 +142,7 @@ describe('ScoreSheet', () => {
     expect(onPlace).toHaveBeenLastCalledWith(192, 'melody', false)
   })
 
-  it('marks the caret on notes as a box, and in a bar the pattern plays as a line, never a box on empty staff', async () => {
+  it('marks the caret on notes as a box, and in an empty bar as a line, never a box on empty staff', async () => {
     sheet('melody')
     await waitFor(() =>
       expect(document.querySelector('[data-slot="caret"]')).toHaveAttribute('data-mark', 'note'),

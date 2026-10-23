@@ -16,7 +16,7 @@ import { deleteChord } from './chords'
 const sung = draftOf({
   sections: [{ kind: 'verse', lines: ['G C', 'D G'] }],
   melody: 'B4/4 | C5/2 E5/2 | D5/6 | B4/2',
-  hands: { lh: '- | C3/4 | D3/4 | -' },
+  hands: { lh: 'r/4 | C3/4 | D3/4 | r/4' },
 })
 
 describe('insertBar', () => {

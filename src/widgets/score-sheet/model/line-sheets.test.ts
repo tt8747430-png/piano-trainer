@@ -14,9 +14,10 @@ const music = {
 describe('the sheet’s lines as written', () => {
   it('keeps a line that did not change, and writes again only the one that did', () => {
     const sheetsOf = createLineSheets()
-    const [first, second] = sheetsOf(readDraft(music))
+    const silent = { rh: 'r/4 | r/4 | r/4 | r/4', lh: 'r/4 | r/4 | r/4 | r/4' }
+    const [first, second] = sheetsOf(readDraft({ ...music, hands: silent }))
     const [firstAgain, secondAgain] = sheetsOf(
-      readDraft({ ...music, melody: 'B4/4 | C5/4 | A4/4 | r/4' }),
+      readDraft({ ...music, hands: silent, melody: 'B4/4 | C5/4 | A4/4 | r/4' }),
     )
     expect(firstAgain).toBe(first)
     expect(secondAgain).not.toBe(second)

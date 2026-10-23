@@ -111,22 +111,6 @@ describe('createWebAudioOutput', () => {
     expect(context.oscillators.map((o) => Math.round(o.frequency))).toEqual([440, 880, 1320])
   })
 
-  it('sings a more voice’s note with a voice of its own, not the piano’s, its vibrato slow', () => {
-    const { context, audio } = setUp()
-    audio.play([{ ...A4, timbre: 'voice' }], 0.125)
-    expect(context.oscillators.map((o) => o.type)).toEqual(['sawtooth', 'triangle', 'sine'])
-    expect(context.oscillators.map((o) => Math.round(o.frequency * 10) / 10)).toEqual([
-      440, 440, 5.5,
-    ])
-    expect(context.oscillators.every((o) => o.start === 0.175)).toBe(true)
-  })
-
-  it('plays a part on its instrument: a clarinet’s square and triangle, with no vibrato', () => {
-    const { context, audio } = setUp()
-    audio.play([{ ...A4, timbre: 'clarinet' }], 0.125)
-    expect(context.oscillators.map((o) => o.type)).toEqual(['square', 'triangle'])
-  })
-
   it('leaves a sound beyond the lookahead for later', () => {
     const { context, audio } = setUp()
     audio.play([A4], 1)

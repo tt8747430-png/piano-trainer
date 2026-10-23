@@ -1,20 +1,8 @@
 import type { BarMarkChoice } from './bar-marks'
-import type { PatternId } from '@/entities/pattern'
-import type { ExtraVoice } from '@/shared/lib/notation'
 import type { HiddenRow, SectionKind } from '@/entities/piece'
-import type {
-  Chord,
-  Clef,
-  Finger,
-  Hand,
-  Instrument,
-  Key,
-  Meter,
-  Midi,
-  Tick,
-} from '@/shared/lib/music'
+import type { Chord, Clef, Finger, Hand, Key, Meter, Midi, Tick } from '@/shared/lib/music'
 import type { Clip } from './bars'
-import type { Draft, DraftNote, Layer } from './draft'
+import type { Draft, Layer } from './draft'
 import { topStaff } from './rows'
 import type { TakePart } from './take-edits'
 import type { Line } from './lines'
@@ -122,18 +110,8 @@ export type EditorAction =
   | { readonly type: 'step'; readonly steps: number; readonly joins?: boolean }
   /** The tune's staff added over the grand staff, or taken away with its notes (ADR 0064). */
   | { readonly type: 'melodyStaff'; readonly on: boolean }
-  /** A more voice's staff added (the next one) or taken away with its notes, the later voices moving up. */
-  | {
-      readonly type: 'voiceStaff'
-      readonly voice: ExtraVoice
-      readonly on: boolean
-      /** What the voice added is played on (ADR 0070): the voice where none. */
-      readonly instrument?: Instrument
-    }
   /** A row shown or hidden, its music kept (ADR 0072). */
   | { readonly type: 'hide'; readonly row: HiddenRow; readonly hidden: boolean }
-  /** What a sung part is played on: 0 the tune, then each more voice (ADR 0070). */
-  | { readonly type: 'instrument'; readonly part: number; readonly instrument: Instrument }
   | { readonly type: 'shift'; readonly semitones: number }
   | { readonly type: 'respell' }
   /** The notes chosen written on their letter ♯ (1), ♭ (−1) or ♮ (0). */
@@ -146,8 +124,6 @@ export type EditorAction =
   /** The notes at the caret joined to the same keys' notes after them. */
   | { readonly type: 'tie' }
   | { readonly type: 'chord'; readonly chord: Chord; readonly advance: ChordAdvance }
-  | { readonly type: 'writeOut'; readonly played: readonly DraftNote[] }
-  | { readonly type: 'backToPattern' }
   /** A take written from the caret's bar (spec 2026-10-05 §4). */
   | { readonly type: 'take'; readonly parts: readonly TakePart[] }
   | { readonly type: 'bars'; readonly edit: BarEdit }
@@ -160,11 +136,6 @@ export type EditorAction =
   | { readonly type: 'joinSection'; readonly section: number }
   /** A key change from the first bar chosen's section (else the caret's) on (ADR 0089). */
   | { readonly type: 'sectionKey'; readonly key: Key }
-  | {
-      readonly type: 'sectionPattern'
-      readonly section: number
-      readonly pattern: PatternId | null
-    }
   | {
       readonly type: 'settings'
       readonly key?: Key

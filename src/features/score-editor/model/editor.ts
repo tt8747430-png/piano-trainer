@@ -1,22 +1,20 @@
 import { markBars } from './bar-marks'
 import { setClef } from './clefs'
-import { hiddenWithout, keepsAStaff, rowShown, staffLeftFor, withAStaff } from './rows'
+import { keepsAStaff, rowShown, staffLeftFor, withAStaff } from './rows'
 import { setBarTicks } from './bars'
 import { chosenNotes, chosenSpan, shownValue } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
 import { ticksOf } from '@/shared/lib/notation'
 import { chordNoteStep, steppedKey } from './chord-note'
 import { deleteChord } from './chords'
-import { DEFAULT_INSTRUMENT, midi, PIANO, type Midi } from '@/shared/lib/music'
-import { EXTRA_VOICES } from '@/shared/lib/notation'
-import { isHandLayer, isVoiceLayer, voiceIndex } from './draft'
+import { midi, PIANO, type Midi } from '@/shared/lib/music'
+import { isHandLayer } from './draft'
 import { barsEdited, chordSet, chosenBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
 import { lineOver, lineSpan } from './lines'
 import { markNotes } from './marks'
 import {
-  backToPattern,
   deleteBack,
   deleteNotes,
   notesAt,
@@ -27,10 +25,9 @@ import {
   shiftNotes,
   stepNotes,
   tieNotes,
-  writeOut,
   writeRest,
 } from './notes'
-import { joinSection, setSectionKey, setSectionKind, setSectionPattern } from './sections'
+import { joinSection, setSectionKey, setSectionKind } from './sections'
 import { setKey, setMeter, setTempo } from './settings'
 import type { EditorAction, EditorState } from './state'
 import { writeTake } from './take-edits'
@@ -199,42 +196,6 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       const leaves = !rowShown(next, isHandLayer(layer) ? 'piano' : layer)
       return commit(state, next, leaves ? { layer: staffLeftFor(next), struck: null } : {})
     }
-    case 'instrument': {
-      if (action.part > draft.voices.length) return state
-      const instruments = draft.voices.map((_, i) => draft.instruments[i + 1] ?? DEFAULT_INSTRUMENT)
-      const all = [draft.instruments[0] ?? DEFAULT_INSTRUMENT, ...instruments]
-      all[action.part] = action.instrument
-      return commit(state, { ...draft, instruments: all })
-    }
-    case 'voiceStaff': {
-      const index = voiceIndex(action.voice)
-      if (action.on) {
-        // The next voice's staff, under the last one added: a voice never stands over an empty gap.
-        const next = draft.voices.length
-        if (next >= EXTRA_VOICES.length) return state
-        const voice = EXTRA_VOICES[next] ?? action.voice
-        const instruments = [
-          ...draft.instruments.slice(0, next + 1),
-          action.instrument ?? DEFAULT_INSTRUMENT,
-        ]
-        return commit(
-          state,
-          { ...draft, voices: [...draft.voices, []], instruments },
-          { layer: voice },
-        )
-      }
-      if (index >= draft.voices.length) return state
-      const voices = draft.voices.filter((_, i) => i !== index)
-      const instruments = draft.instruments.filter((_, i) => i !== index + 1)
-      const stays = !isVoiceLayer(layer) || voiceIndex(layer) < voices.length
-      const without = { ...draft, voices, instruments, hidden: hiddenWithout(draft.hidden, index) }
-      const next = { ...without, hidden: withAStaff(without) }
-      return commit(
-        state,
-        next,
-        stays ? { struck: null } : { layer: staffLeftFor(next), struck: null },
-      )
-    }
     case 'shift':
       return layer === 'chords'
         ? state
@@ -284,14 +245,6 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         : commit(state, tieNotes(draft, layer, caret), { struck: null })
     case 'chord':
       return chordSet(state, action.chord, action.advance)
-    case 'writeOut':
-      return isHandLayer(layer)
-        ? commit(state, writeOut(draft, layer, barAt(draft, caret).index, action.played))
-        : state
-    case 'backToPattern':
-      return isHandLayer(layer)
-        ? commit(state, backToPattern(draft, layer, barAt(draft, caret).index))
-        : state
     case 'take':
       return commit(state, writeTake(draft, barAt(draft, caret).start, action.parts), {
         struck: null,
@@ -314,8 +267,6 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       return commit(state, setSectionKind(draft, action.section, action.kind))
     case 'joinSection':
       return commit(state, joinSection(draft, action.section))
-    case 'sectionPattern':
-      return commit(state, setSectionPattern(draft, action.section, action.pattern))
     case 'sectionKey': {
       const section = barsOf(draft)[chosenBars(state).from]?.section ?? 0
       return commit(state, setSectionKey(draft, section, action.key))

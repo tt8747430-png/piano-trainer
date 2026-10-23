@@ -75,8 +75,7 @@ export async function drawScore(
       .forEach((group, index) => group.setAttribute('data-staff', options.staves[index] ?? ''))
   if (options.names) nameHeads(element, score)
   host.replaceChildren(...sheet.childNodes)
-  const keyed = withKeys(layout, score)
-  return score.staffInstruments ? { ...keyed, staffInstruments: score.staffInstruments } : keyed
+  return withKeys(layout, score)
 }
 
 /**

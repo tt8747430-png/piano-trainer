@@ -37,13 +37,14 @@ describe('a written hand', () => {
     const bars = barsOf(['C G F'], hands)
     expect(bars.map((bar) => bar.clefs)).toEqual([{ lh: 'treble' }, undefined, { lh: 'bass' }])
     expect(bars[0]?.hands?.lh).toHaveLength(3)
+    // Written back, a bar left to the pattern is a bar of rest: every bar is written (ADR 0091).
     expect(
       writeHand(
-        bars.map((bar) => bar.hands?.lh ?? null),
+        bars.map((bar) => bar.hands?.lh ?? []),
         bars.map(() => 96),
         bars.map((bar) => bar.clefs?.lh),
       ),
-    ).toBe(hands.lh)
+    ).toBe('clef:treble C4/1 E4/1 G4/2 | r/4 | clef:bass r/4')
     expect(errorOf(['C'], { rh: 'clef:alto C4/4' }).message).toMatch(/no clef "alto"/)
   })
 

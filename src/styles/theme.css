@@ -708,7 +708,7 @@
   }
 }
 
-/* The score editor's screen (pages/score-editor; spec §6, ADR 0065, 0079): its parts placed by
+/* The score editor's screen (pages/score-editor; spec §6, ADR 0079, 0089): its parts placed by
    `data-area`, one screen that never scrolls as a whole, the sheet its one scroller. The keys at the
    foot, or under the bar where the keyboard settings dock them at the top (`data-keys='top'`). What
    floats (`float`: the caret's moves, the folded keys' and palette's buttons, the palette) lies over

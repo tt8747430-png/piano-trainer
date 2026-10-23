@@ -1,5 +1,5 @@
 import type { Midi, Tick } from '@/shared/lib/music'
-import type { StaffId, StaffInstruments } from '@/shared/lib/notation'
+import type { StaffId } from '@/shared/lib/notation'
 
 /** Where an engraving's staves, bars and onsets stand, in CSS px from its top left. */
 export interface ScoreLayout {
@@ -19,8 +19,6 @@ export interface ScoreLayout {
   }[]
   /** Each staff drawn: its top and bottom lines. */
   readonly staves: Partial<Record<StaffId, { readonly top: number; readonly bottom: number }>>
-  /** What each sung staff is played on, where one is chosen (ADR 0070): its name over it. */
-  readonly staffInstruments?: StaffInstruments
   /** Each written onset left to right: its tick and its first notehead's or rest's x. */
   readonly onsets: readonly { readonly tick: Tick; readonly x: number }[]
   /** Each notehead drawn, with its accidental and dots (ADR 0088): what a selection hugs. */

@@ -1,9 +1,8 @@
-import type { HandId } from '@/entities/piece'
 import type { QuantisedNote } from '@/entities/take'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { isHandLayer, type Draft, type DraftNote, type NoteLayer } from './draft'
-import { notesOf, reaching, spelledIn, withBar, withNotes } from './notes'
-import { barAt, barsOf } from './timeline'
+import { notesOf, reaching, spelledIn, withNotes } from './notes'
+import { barAt } from './timeline'
 
 /** Where a take is written (spec 2026-10-05 §4): both hands, split at a key, or one layer. */
 export const TAKE_INTO = ['both', 'rh', 'lh', 'melody'] as const
@@ -57,33 +56,21 @@ function oneLine(notes: readonly QuantisedNote[]): QuantisedNote[] {
   })
 }
 
-/** A hand's bars in the span written out, so it plays what was played there, or silence. */
-function writtenOut(draft: Draft, hand: HandId, { from, to }: Span): Draft {
-  return barsOf(draft)
-    .filter(({ start }) => start >= from && start < to)
-    .reduce(
-      (next, { index }) =>
-        withBar(next, index, (bar) => (bar[hand] ? bar : { ...bar, [hand]: true })),
-      draft,
-    )
-}
-
 /** One layer's part written over the span: what started there replaced by the take's notes. */
 function writePart(draft: Draft, { layer, notes }: TakePart, span: Span): Draft {
-  const ready = isHandLayer(layer) ? writtenOut(draft, layer, span) : draft
   const played = isHandLayer(layer) ? notes : oneLine(notes)
   const added = played.map((n) => ({
-    ...spelledIn(ready, n.midi, span.from + n.startTick),
+    ...spelledIn(draft, n.midi, span.from + n.startTick),
     startTick: span.from + n.startTick,
     durationTicks: n.durationTicks,
   }))
-  return withNotes(ready, layer, [...clearedIn(notesOf(ready, layer), span), ...added])
+  return withNotes(draft, layer, [...clearedIn(notesOf(draft, layer), span), ...added])
 }
 
 /**
  * A take written into the draft from the bar starting at `from` (spec 2026-10-05 §4): over whole bars
  * to the bar it ends in, bars added past the piece's end; in each part's layer the notes starting
- * there are replaced, a hand's bars written out. The draft as it was for a take with no notes.
+ * there are replaced. The draft as it was for a take with no notes.
  */
 export function writeTake(draft: Draft, from: Tick, parts: readonly TakePart[]): Draft {
   const notes = parts.flatMap((part) => part.notes)

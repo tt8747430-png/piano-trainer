@@ -17,8 +17,6 @@ import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { TEMPO_WORDS } from '../model/song-sheet'
-import { AddPart } from './AddPart'
-import { StaffList } from './StaffList'
 import { SongTitleField } from './SongTitleField'
 
 /**
@@ -99,12 +97,10 @@ function Part({
 }
 
 /**
- * The Song sheet behind the bar's button (spec §6.4, ADR 0065, 0080): the song as a whole, each of its
- * settings here alone. The song (an own song's title, the key, the time signature of its kind, the
- * tempo with its words); its parts, each shown or hidden and a part removed, with what it is played
- * on (ADR 0070, 0072), and a part added. What goes at the caret is Insert's; how the score is shown
- * is the View's; the MIDI keyboard is the bar's, as in the Player (ADR 0085). Opened from the bar, or from the sheet's clef, key and time
- * signature.
+ * The Song sheet behind the bar's button (spec §6.4, ADR 0080, 0091): the song as a whole, each of its
+ * settings here alone: an own song's title, the key, the time signature of its kind, the tempo with
+ * its words. How the score is shown is the View's; the MIDI keyboard is the bar's, as in the Player
+ * (ADR 0085). Opened from the bar, or from the sheet's clef, key and time signature.
  */
 export function PieceSettings() {
   const { t } = useTranslation('editor')
@@ -146,10 +142,6 @@ export function PieceSettings() {
               />
             </Labelled>
             <SongTempo />
-          </Part>
-          <Part title={t('song.parts')}>
-            <StaffList />
-            <AddPart />
           </Part>
         </div>
       </SheetContent>

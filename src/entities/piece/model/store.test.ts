@@ -4,7 +4,7 @@ import { createMemoryStorage } from '@/shared/lib'
 import type { PieceMusic } from './music'
 import { createPiecesStore, PIECES_STORAGE_KEY } from './store'
 
-const restored = (state: unknown, version = 1) => {
+const restored = (state: unknown, version = 2) => {
   const storage = createMemoryStorage()
   storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version }))
   return createPiecesStore({ storage, otherTabs: new EventTarget() }).getState()
@@ -29,7 +29,7 @@ describe('createPiecesStore', () => {
     store.setState({ versions: { bz1: MUSIC } })
     expect(JSON.parse(storage.getItem('pt-pieces') ?? 'null')).toEqual({
       state: { versions: { bz1: MUSIC }, songs: [], nextSong: 1 },
-      version: 1,
+      version: 2,
     })
   })
 
@@ -83,46 +83,18 @@ describe('createPiecesStore', () => {
     expect(Object.keys(restored({ versions }).versions)).toEqual(['bz1'])
   })
 
-  it('keeps the tune’s and each voice’s instrument where every one names one', () => {
-    const kept = restored({
-      versions: { bz1: { ...MUSIC, voices: ['D4/4'], instruments: ['flute', 'cello', 'oboe'] } },
-    })
-    expect(kept.versions.bz1?.instruments).toEqual(['flute', 'cello'])
-    const wrong = restored({
-      versions: { bz1: { ...MUSIC, voices: ['D4/4'], instruments: ['flute', 'kazoo'] } },
-    })
-    expect(wrong.versions.bz1).not.toHaveProperty('instruments')
-    // A voice that does not read goes, and its instrument with it.
-    const dropped = restored({
-      versions: {
-        bz1: { ...MUSIC, voices: ['Q4/1', 'D4/4'], instruments: ['flute', 'oboe', 'cello'] },
-      },
-    })
-    expect(dropped.versions.bz1?.instruments).toEqual(['flute', 'cello'])
+  it('reads a save of its own version alone: one with voices or instruments is another shape (ADR 0091)', () => {
+    const sung = { ...MUSIC, voices: ['D4/4'], instruments: ['flute', 'cello'] }
+    const kept = restored({ versions: { bz1: sung } }).versions.bz1
+    expect(kept).toBeDefined()
+    expect(kept).not.toHaveProperty('voices')
+    expect(kept).not.toHaveProperty('instruments')
   })
 
-  it('keeps up to three more voices that read and fit the chart, dropping any that does not', () => {
-    const voices = ['D4/4', 'F#4/2 G4/2', 'B3/4', 'A3/4']
-    expect(restored({ versions: { bz1: { ...MUSIC, voices } } }).versions.bz1?.voices).toEqual([
-      'D4/4',
-      'F#4/2 G4/2',
-      'B3/4',
-    ])
-    const wrong = restored({ versions: { bz1: { ...MUSIC, voices: ['Q4/1', 'D4/4'] } } })
-    expect(wrong.versions.bz1?.voices).toEqual(['D4/4'])
-    const long = restored({ versions: { bz1: { ...MUSIC, voices: ['D4/40'] } } })
-    expect(long.versions.bz1).toBeDefined()
-    expect(long.versions.bz1).not.toHaveProperty('voices')
-  })
-
-  it('keeps the piano hidden only while a sung staff stays in sight (ADR 0083)', () => {
+  it('keeps the piano hidden only while the tune’s staff stays in sight (ADR 0083)', () => {
     const hidden = (music: object) => restored({ versions: { bz1: music } }).versions.bz1?.hidden
     // A lead sheet: the tune's staff and the chord names, the piano out of sight.
     expect(hidden({ ...MUSIC, hidden: ['piano'] })).toEqual(['piano'])
-    expect(hidden({ ...MUSIC, voices: ['D4/4'], hidden: ['melody', 'piano'] })).toEqual([
-      'melody',
-      'piano',
-    ])
     // Never every staff: with no other in sight, the piano is shown.
     const { melody: _, ...pianoOnly } = MUSIC
     expect(hidden({ ...pianoOnly, hidden: ['piano', 'chords'] })).toEqual(['chords'])
@@ -157,7 +129,7 @@ describe('createPiecesStore', () => {
     const store = createPiecesStore({ storage, otherTabs })
     const saved = JSON.stringify({
       state: { versions: { bz1: MUSIC }, songs: [], nextSong: 1 },
-      version: 1,
+      version: 2,
     })
     storage.setItem(PIECES_STORAGE_KEY, saved)
     otherTabs.dispatchEvent(
@@ -171,7 +143,7 @@ describe('createPiecesStore', () => {
     const otherTabs = new EventTarget()
     const store = createPiecesStore({ storage, otherTabs })
     const savedElsewhere = (state: unknown) => {
-      const newValue = JSON.stringify({ state, version: 1 })
+      const newValue = JSON.stringify({ state, version: 2 })
       storage.setItem(PIECES_STORAGE_KEY, newValue)
       otherTabs.dispatchEvent(new StorageEvent('storage', { key: PIECES_STORAGE_KEY, newValue }))
     }

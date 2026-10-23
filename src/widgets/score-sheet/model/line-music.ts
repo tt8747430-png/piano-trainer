@@ -1,9 +1,8 @@
-import { HAND_IDS, type HandId } from '@/entities/piece'
+import { HAND_IDS } from '@/entities/piece'
 import {
   barsOf,
   rowShown,
   shownRows,
-  isVoiceLayer,
   type Draft,
   type DraftNote,
   type Layer,
@@ -14,7 +13,6 @@ import { breakLine } from '@/shared/lib'
 import type { ScoreLayout } from '@/shared/ui/score'
 import {
   clefsInForce,
-  DEFAULT_INSTRUMENT,
   HOME_CLEF,
   barMarksOf,
   parseKey,
@@ -22,16 +20,12 @@ import {
   chordSymbol,
   TICKS_PER_BEAT,
   timeSignature,
-  type Instrument,
   type TimeSignature,
 } from '@/shared/lib/music'
 import {
-  EXTRA_VOICES,
   PIANO_STAVES,
   STAVES,
-  type ExtraVoice,
   type StaffId,
-  type StaffInstruments,
   type TimedMusic,
   type TimedNote,
 } from '@/shared/lib/notation'
@@ -118,27 +112,15 @@ function sounding(
 }
 
 /**
- * The staff a layer's notes are written on: a more voice's own (ADR 0066), the tune's own where it has
- * one (ADR 0064), the treble or the bass.
+ * The staff a layer's notes are written on: the tune's own where it has one (ADR 0064), the treble
+ * or the bass.
  */
 export const staffOfHand = (layer: NoteLayer, melodyStaff: boolean): StaffId =>
-  isVoiceLayer(layer)
-    ? layer
-    : layer === 'lh'
-      ? 'bass'
-      : layer === 'melody' && melodyStaff
-        ? 'melody'
-        : 'treble'
+  layer === 'lh' ? 'bass' : layer === 'melody' && melodyStaff ? 'melody' : 'treble'
 
-/**
- * What a click on a staff writes: the tune or a more voice on its own staff, the right hand on the
- * treble, the left on the bass.
- */
+/** What a click on a staff writes: the tune on its own staff, the right hand on the treble, the left on the bass. */
 export const LAYER_OF_STAFF = {
   melody: 'melody',
-  voice2: 'voice2',
-  voice3: 'voice3',
-  voice4: 'voice4',
   treble: 'rh',
   bass: 'lh',
 } as const satisfies Record<StaffId, NoteLayer>
@@ -171,93 +153,22 @@ export function staffOfLayer(
   return box ? { staff, ...box } : undefined
 }
 
-/** The sung staves the sheet shows (ADR 0072): the tune's where the score has it, each voice's, none hidden. */
-function shownStaves(draft: Draft): { tune: boolean; voices: ExtraVoice[] } {
-  const rows = shownRows(draft)
-  return {
-    tune: rows.includes('melody'),
-    voices: EXTRA_VOICES.filter((voice) => rows.includes(voice)),
-  }
-}
-
-/** Each sung staff's instrument where one other than the voice is chosen (ADR 0070). */
-function staffInstrumentsOf(
-  draft: Draft,
-  tune: boolean,
-  voiceStaves: readonly ExtraVoice[],
-): { staffInstruments?: StaffInstruments } {
-  const parts: [StaffId, Instrument | undefined][] = [
-    ...(tune ? [['melody', draft.instruments[0]] as [StaffId, Instrument | undefined]] : []),
-    ...voiceStaves.map((voice): [StaffId, Instrument | undefined] => [
-      voice,
-      draft.instruments[EXTRA_VOICES.indexOf(voice) + 1],
-    ]),
-  ]
-  const chosen = Object.fromEntries(
-    parts.filter(([, instrument]) => instrument && instrument !== DEFAULT_INSTRUMENT),
-  )
-  return Object.keys(chosen).length > 0 ? { staffInstruments: chosen } : {}
-}
-
-/** What each hand plays on the piece's timeline, as the Player arranges it: the pattern's included. */
-export type PlayedHands = Readonly<Record<HandId, readonly DraftNote[]>>
-
-const HAND_STAFF = { rh: 'treble', lh: 'bass' } as const satisfies Record<HandId, StaffId>
-
 /**
- * A hand's notes on a line: those it writes, and in each bar it leaves to the pattern what the
- * pattern plays there (`played`), cut at the bar's end (ADR 0083).
+ * A line as the sheet writes it, from its own start: the melody on its staff, the right hand on the
+ * treble staff, the left hand on the bass (every bar written, ADR 0091); the chord symbols. A staff
+ * with nothing in a bar is left blank there, a row hidden is not written at all: no piano on a lead
+ * sheet.
  */
-function handNotes(
-  draft: Draft,
-  line: SheetLineBars,
-  hand: HandId,
-  played: PlayedHands | undefined,
-): DraftNote[] {
-  const patterned = line.bars
-    .filter(({ bar }) => !bar[hand])
-    .flatMap(({ start, bar }) =>
-      (played?.[hand] ?? [])
-        .filter((n) => n.startTick >= start && n.startTick < start + bar.ticks)
-        .map(({ midi, spelled, startTick, durationTicks }) => ({
-          midi,
-          spelled,
-          startTick,
-          durationTicks: Math.min(durationTicks, start + bar.ticks - startTick),
-        })),
-    )
-  return [...draft.hands[hand], ...patterned].sort((a, b) => a.startTick - b.startTick)
-}
-
-/**
- * A line as the sheet writes it, from its own start: the melody on its staff, each voice shown on
- * its own, the written right hand on the treble staff, the written left hand on the bass, and in a
- * bar a hand leaves to the pattern what it plays there (`played`), its staff marked to be drawn
- * soft (ADR 0083); the chord symbols. A staff with nothing in a bar is left blank there, a row
- * hidden is not written at all: no piano on a lead sheet.
- */
-export function lineMusic(draft: Draft, line: SheetLineBars, played?: PlayedHands): TimedMusic {
+export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
   const from = line.start
   const to = endOf(line)
-  const { tune, voices: voiceStaves } = shownStaves(draft)
+  const tune = shownRows(draft).includes('melody')
   const piano = rowShown(draft, 'piano')
   const notes = [
     ...(tune ? sounding(draft.melody, 'melody', from, to) : []),
-    ...voiceStaves.flatMap((voice) =>
-      sounding(draft.voices[EXTRA_VOICES.indexOf(voice)] ?? [], 'melody', from, to).map((n) => ({
-        ...n,
-        voice,
-      })),
-    ),
-    ...(piano
-      ? HAND_IDS.flatMap((hand) => sounding(handNotes(draft, line, hand, played), hand, from, to))
-      : []),
+    ...(piano ? HAND_IDS.flatMap((hand) => sounding(draft.hands[hand], hand, from, to)) : []),
   ]
-  const staves: StaffId[] = [
-    ...(tune ? (['melody'] as const) : []),
-    ...voiceStaves,
-    ...(piano ? PIANO_STAVES : []),
-  ]
+  const staves: StaffId[] = [...(tune ? (['melody'] as const) : []), ...(piano ? PIANO_STAVES : [])]
   // A line starts in the clefs its first bar is in; its bars change them after.
   const [first] = line.bars
   const inForce = first
@@ -271,22 +182,15 @@ export function lineMusic(draft: Draft, line: SheetLineBars, played?: PlayedHand
     const holds = (staff: StaffId) =>
       notes.some(
         (n) =>
-          staffOfHand(n.voice ?? n.hand, tune) === staff &&
+          staffOfHand(n.hand, tune) === staff &&
           n.startTick < startTick + bar.ticks &&
           n.startTick + n.durationTicks > startTick,
       )
     const blank = staves.filter((staff) => !holds(staff))
-    // The hands' staves whose notes here are the pattern's.
-    const pattern = piano
-      ? HAND_IDS.filter((hand) => !bar[hand] && holds(HAND_STAFF[hand])).map(
-          (hand) => HAND_STAFF[hand],
-        )
-      : []
     return {
       startTick,
       beats: bar.ticks / TICKS_PER_BEAT,
       ...(blank.length > 0 ? { blank } : {}),
-      ...(pattern.length > 0 ? { pattern } : {}),
       // The piece's tempo over its first bar.
       ...(index === 0 && start === 0 ? { tempo: draft.tempo } : {}),
       ...barMarksOf(bar),
@@ -312,8 +216,6 @@ export function lineMusic(draft: Draft, line: SheetLineBars, played?: PlayedHand
     chords,
     ...(tune ? { melodyStaff: true } : {}),
     ...(piano ? {} : { piano: false }),
-    ...(voiceStaves.length > 0 ? { voiceStaves } : {}),
-    ...staffInstrumentsOf(draft, tune, voiceStaves),
   }
 }
 

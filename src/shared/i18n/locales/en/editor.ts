@@ -122,40 +122,15 @@ export const editor = {
   },
   fingering: { noNote: 'Choose a note to give it a finger.' },
   accidentals: { sharp: 'Sharp', flat: 'Flat', natural: 'Natural' },
-  // What the tune and each more voice are played on (ADR 0070).
-  instruments: { label: 'Instruments', add: 'Add an instrument' },
-  // The score's rows, each shown or hidden with its music kept, a part removed (ADR 0072), the
-  // piano among them, each saying what it is (ADR 0083).
-  staves: {
-    label: 'Parts',
-    show: 'Show {{name}}',
-    hide: 'Hide {{name}}',
-    remove: 'Remove {{name}} and its notes',
-    piano: 'Piano',
-    detail: {
-      chords: 'The chord symbols over the music',
-      melody: 'The tune on its own staff, sung or played by another instrument',
-      voice: 'Another line with the tune, on its own staff',
-      piano:
-        'Both hands: what you play. Bars you don’t write out are played by the song’s pattern from the chord names',
-    },
-    lastStaff: 'One staff always stays in sight.',
-  },
-  // Where the caret writes: the chord row, the treble staff's two voices, the bass staff.
+  // Where the caret writes (ADR 0091): the chord row, the tune's staff, the piano's two staves.
   layers: {
     chords: 'Chords',
     melody: 'Melody',
     rh: 'Right hand',
     lh: 'Left hand',
-    voice2: 'Voice 2',
-    voice3: 'Voice 3',
-    voice4: 'Voice 4',
   },
-  voice: 'Voice',
   // The edit row's head: where the next note goes, chosen there (Flat's voice badge).
   layerChip: { label: 'Next note goes in: {{layer}}', menu: 'Next note goes in' },
-  // What the keys write, short under the palette's Voice.
-  voices: { chords: 'Chords', melody: 'Melody', rh: 'Right', lh: 'Left' },
   chordNames: 'Chord names',
   sheet: {
     signature: 'Key and time signature',
@@ -163,7 +138,6 @@ export const editor = {
     page: 'Page {{n}} of {{of}}',
     bar: 'Bar {{n}}: {{chords}}',
     drag: 'Drag up or down to move the note',
-    pattern: 'Pattern',
   },
   caret: {
     moves: 'Play and move',
@@ -171,7 +145,6 @@ export const editor = {
     notes: 'Bar {{bar}}, beat {{beat}} · {{what}} {{value}}',
     held: 'Bar {{bar}}, beat {{beat}} · {{what}} held',
     rest: 'Bar {{bar}}, beat {{beat}} · rest',
-    pattern: 'Bar {{bar}}, beat {{beat}} · pattern',
     end: 'End of the song',
     values: {
       whole: 'whole',
@@ -278,17 +251,8 @@ export const editor = {
     newSection: 'New section',
     length: 'Bar length (a pickup, or a bar of its own)',
     lengthOf: 'Bar length {{time}}',
-    fromPattern:
-      'This bar is played from the chords by the song’s pattern. Write it out as notes to add fingering or change notes.',
-    writeOut: 'Write out as notes',
-    patternAgain: 'Use the pattern again',
-    patternAgainNote: 'Plays this bar from the chords again, replacing the notes written here.',
   },
   section: {
-    pattern: 'Pattern',
-    thisSong: 'This song',
-    songPattern: 'The song’s: {{name}}',
-    plays: 'Plays {{name}}',
     kind: 'Section',
     join: 'Join with the section before',
   },
@@ -309,8 +273,6 @@ export const editor = {
     },
     tempoLabel: '{{word}}, {{bpm}} a minute',
     meter: 'Time signature',
-    parts: 'Parts',
-    addPart: 'Add a part',
   },
   recorder: {
     more: 'Take actions',

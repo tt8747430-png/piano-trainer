@@ -142,10 +142,10 @@ const handNote = (
 })
 
 describe('writeHand', () => {
-  it('writes the pattern’s bars as -, chords joined, fingers, and @ only where a note starts under another', () => {
+  it('writes a silent bar as a rest, chords joined, fingers, and @ only where a note starts under another', () => {
     const written = writeHand(
       [
-        null,
+        [],
         [
           handNote(48, 0, 96, 1),
           handNote(52, 24, 24),
@@ -156,12 +156,11 @@ describe('writeHand', () => {
       ],
       [96, 96],
     )
-    expect(written).toBe('- | C3^1/4 E3+G3^3/1@2 E3+G3/1')
+    expect(written).toBe('r/4 | C3^1/4 E3+G3^3/1@2 E3+G3/1')
   })
 
-  it('writes a written bar of silence as a rest, and nothing for a hand written nowhere', () => {
-    expect(writeHand([[], null], [96, 96])).toBe('r/4 | -')
-    expect(writeHand([null, null], [96, 96])).toBeUndefined()
+  it('writes every bar, a silent one as a rest of the bar’s length', () => {
+    expect(writeHand([[], []], [96, 72])).toBe('r/4 | r/3')
   })
 
   it('reads back as written', () => {

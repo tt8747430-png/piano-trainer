@@ -14,21 +14,16 @@ describe('staffNear', () => {
     expect(staffNear('lh', 1, all)).toBe('lh')
     expect(staffNear('rh', -1, ['rh', 'lh'])).toBe('rh')
   })
-
-  it('goes through the more voices’ staves, between the tune’s and the piano’s', () => {
-    const sung = ['melody', 'voice2', 'voice3', 'rh', 'lh'] as const
-    expect(staffNear('melody', 1, sung)).toBe('voice2')
-    expect(staffNear('voice2', 1, sung)).toBe('voice3')
-    expect(staffNear('voice3', 1, sung)).toBe('rh')
-    expect(staffNear('rh', -1, sung)).toBe('voice3')
-  })
 })
 
 describe('Alt ↑ ↓ through a chord (ADR 0088)', () => {
-  const chord = run(initialEditor(draftOf({ hands: { rh: 'C4+E4+G4/4 | -', lh: 'C3/4 | -' } })), {
-    type: 'layer',
-    layer: 'rh',
-  })
+  const chord = run(
+    initialEditor(draftOf({ hands: { rh: 'C4+E4+G4/4 | r/4', lh: 'C3/4 | r/4' } })),
+    {
+      type: 'layer',
+      layer: 'rh',
+    },
+  )
 
   it('goes from the whole chord to its top or its foot, then note by note', () => {
     const top = chordNoteStep(chord, 1)

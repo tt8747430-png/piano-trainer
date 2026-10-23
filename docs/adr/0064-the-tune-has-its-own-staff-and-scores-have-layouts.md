@@ -32,3 +32,6 @@ count-in, swing), and the View menu's button wears an eye, so it never reads as 
 chart's Equal Columns Rule), replacing the threshold that left a line under 30% of the width natural: a line of
 empty bars in the editor now gets room to write in, and bars line up down the page. The layouts' names are one set
 in the shared `music` namespace (`SheetLayoutField`), in the order Across · Down · Pages.
+
+**Later (2026-10-23, ADR 0091):** the tune's staff over the grand staff are a score's only staves; the more voices'
+staves added after this decision are gone.

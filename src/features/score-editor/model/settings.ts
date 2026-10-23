@@ -59,7 +59,6 @@ export function setKey(draft: Draft, key: Key): Draft {
       ),
     })),
     melody: moved(draft.melody, from, key),
-    voices: draft.voices.map((voice) => moved(voice, from, key)),
     hands: { rh: moved(draft.hands.rh, from, key), lh: moved(draft.hands.lh, from, key) },
   }
 }

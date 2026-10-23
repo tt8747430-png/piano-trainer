@@ -4,7 +4,7 @@
 
 ## Context
 
-Beside the sheet (a laptop, a phone on its side) the score editor's palette stood on the right (ADR 0065). A
+Beside the sheet (a laptop, a phone on its side) the score editor's palette stood on the right (ADR 0065, removed by ADR 0091). A
 left-handed learner, or one whose mouse works the other side, wants it at the left, as notation apps let a palette
 be docked on either side.
 

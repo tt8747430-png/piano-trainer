@@ -1,8 +1,7 @@
-import type { Section } from '@/entities/piece'
 import type { Tick } from '@/shared/lib/music'
-import type { Draft, DraftBar, DraftNote, DraftSection } from './draft'
+import type { Draft, DraftBar, DraftHeading, DraftNote, DraftSection } from './draft'
 
-export type Heading = Omit<Section, 'lines'>
+export type Heading = DraftHeading
 
 /** A bar in the piece's order, saying whether it starts a line or a section (the first bar starts one). */
 export interface Slot {
@@ -61,11 +60,10 @@ function spliceNotes(
   })
 }
 
-/** The melody's, each more voice's and each hand's notes spliced alike. */
+/** The melody's and each hand's notes spliced alike. */
 export const spliceAll = (draft: Draft, at: Tick, removed: Tick, inserted: Tick): Draft => ({
   ...draft,
   melody: spliceNotes(draft.melody, at, removed, inserted),
-  voices: draft.voices.map((voice) => spliceNotes(voice, at, removed, inserted)),
   hands: {
     rh: spliceNotes(draft.hands.rh, at, removed, inserted),
     lh: spliceNotes(draft.hands.lh, at, removed, inserted),

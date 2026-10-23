@@ -56,20 +56,18 @@ function barText(notes: readonly HandNote[], barTicks: Tick): string {
 }
 
 /**
- * A hand as the piece writes it, bar by bar (`-` where the pattern plays), each bar that changes its
- * staff's clef starting `clef:` (ADR 0069); nothing when no bar is written or changes its clef.
+ * A hand as the piece writes it, bar by bar, every bar written (a bar with no notes a rest, ADR
+ * 0091), each bar that changes its staff's clef starting `clef:` (ADR 0069).
  */
 export function writeHand(
-  bars: readonly (readonly HandNote[] | null)[],
+  bars: readonly (readonly HandNote[])[],
   barTicks: readonly Tick[],
   clefs: readonly (Clef | undefined)[] = [],
-): string | undefined {
-  if (bars.every((bar) => bar === null) && clefs.every((clef) => clef === undefined))
-    return undefined
+): string {
   return bars
     .map((bar, i) => {
       const clef = clefs[i]
-      const text = bar === null ? '-' : barText(bar, barTicks[i] ?? 0)
+      const text = barText(bar, barTicks[i] ?? 0)
       return clef ? `${CLEF_TOKEN}${clef} ${text}` : text
     })
     .join(' | ')

@@ -3,7 +3,6 @@ export {
   addSong,
   chartStart,
   makeSong,
-  MOST_PARTS,
   SCORE_TEMPLATES,
   TEMPLATES,
   templateOf,

@@ -3,9 +3,12 @@ import { chordSymbol, noteName } from '@/shared/lib/music'
 import { readDraft, type Draft, type DraftNote } from '../model/draft'
 import { barsOf } from '../model/timeline'
 
-/** A draft to edit in tests: G major in 4/4 unless the music says otherwise. */
-export const draftOf = (music: Partial<PieceMusic> = {}): Draft =>
-  readDraft({
+/**
+ * A draft to edit in tests: G major in 4/4 unless the music says otherwise; both hands silent unless
+ * the music writes them (a bar left to the pattern is written out, ADR 0091).
+ */
+export function draftOf(music: Partial<PieceMusic> = {}): Draft {
+  const draft = readDraft({
     key: 'G',
     meter: '4/4',
     tempo: 90,
@@ -13,6 +16,8 @@ export const draftOf = (music: Partial<PieceMusic> = {}): Draft =>
     sections: [{ kind: 'verse', lines: ['G C'] }],
     ...music,
   })
+  return music.hands === undefined ? { ...draft, hands: { rh: [], lh: [] } } : draft
+}
 
 /** Notes as `F#4@24/24`: name, octave, onset and length. */
 export const shape = (notes: readonly DraftNote[]): string[] =>

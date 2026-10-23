@@ -135,16 +135,6 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(tune).toMatch(/<rest xml:id="h-bass-0" dur="1" type="hidden"\/>/)
   })
 
-  it('types a staff the pattern plays in a bar, so it is drawn in soft ink (ADR 0083)', () => {
-    const played = scoreToMei(
-      notate(
-        music([c(0)], { chords: [], bars: [{ startTick: 0, beats: 4, pattern: ['treble'] }] }),
-      ),
-    )
-    expect(played).toMatch(/<staff n="1" type="pattern">/)
-    expect(played).toMatch(/<staff n="2">/)
-  })
-
   it('beams eighths by the meter, as LilyPond: four to the half bar in 4/4 (ADR 0084)', () => {
     const eighths = [0, 12, 24, 36].map((tick) => c(tick))
     const written = scoreToMei(plain(eighths.map((e) => ({ ...e, durationTicks: 12 }))))

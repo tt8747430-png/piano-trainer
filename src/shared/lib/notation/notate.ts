@@ -1,7 +1,5 @@
 import {
   clefsInForce,
-  INSTRUMENT_OF,
-  type Instrument,
   HOME_CLEF,
   type Clef,
   type Hand,
@@ -20,7 +18,6 @@ import {
 import { printedAccidentals } from './accidentals'
 import { spellSpan, voiceGrid, type Span, type VoiceGrid } from './rhythm'
 import type {
-  StaffInstruments,
   Measure,
   NotesEvent,
   RestEvent,
@@ -54,8 +51,8 @@ interface DraftVoice {
   readonly stem: ScoreVoice['stem']
 }
 
-const staffOf = ({ hand, voice }: TimedNote, melodyStaff: boolean): StaffId =>
-  voice ?? (hand === 'lh' ? 'bass' : hand === 'melody' && melodyStaff ? 'melody' : 'treble')
+const staffOf = ({ hand }: TimedNote, melodyStaff: boolean): StaffId =>
+  hand === 'lh' ? 'bass' : hand === 'melody' && melodyStaff ? 'melody' : 'treble'
 
 /** A note held into the next bar, by its staff and key. */
 const heldKey = (staff: StaffId, key: number) => `${staff} ${key}`
@@ -87,7 +84,7 @@ function barChords(
       ...(n.finger ? { finger: n.finger } : {}),
       ...(n.marks ? { marks: n.marks } : {}),
     }
-    const id = `${n.voice ?? n.hand} ${start} ${stop}`
+    const id = `${n.hand} ${start} ${stop}`
     const group = groups.get(id)
     if (!group) {
       groups.set(id, {
@@ -260,38 +257,24 @@ function tiedOut(staves: Record<StaffId, ScoreVoice[]>): Set<string> {
  * meter's signature, a short first bar.
  */
 /** The hands' clefs on their staves, the right's on the treble and the left's on the bass, where not their own. */
-function staffClefs(
-  clefs: Readonly<Record<Hand, Clef>>,
-  instruments: StaffInstruments = {},
-): Pick<Measure, 'clefs'> {
+function staffClefs(clefs: Readonly<Record<Hand, Clef>>): Pick<Measure, 'clefs'> {
   const changed: Partial<Record<StaffId, Clef>> = {}
-  // A sung staff in its instrument's clef (ADR 0070).
-  for (const [staff, instrument] of Object.entries(instruments) as [StaffId, Instrument][])
-    if (INSTRUMENT_OF[instrument].clef !== clefOf(staff))
-      changed[staff] = INSTRUMENT_OF[instrument].clef
   if (clefs.rh !== clefOf('treble')) changed.treble = clefs.rh
   if (clefs.lh !== clefOf('bass')) changed.bass = clefs.lh
   return Object.keys(changed).length > 0 ? { clefs: changed } : {}
 }
 
-/**
- * The clef a staff is in at bar `index` of timed music: a hand's as its bars change it, a sung part's
- * its instrument's, else its own.
- */
+/** The clef a staff is in at bar `index` of timed music: a hand's as its bars change it, else its own. */
 export function staffClefAt(music: TimedMusic, index: number, staff: StaffId): Clef {
   const hand = staff === 'treble' ? 'rh' : staff === 'bass' ? 'lh' : null
-  const instrument = music.staffInstruments?.[staff]
-  if (instrument) return INSTRUMENT_OF[instrument].clef
   return (hand && clefsInForce(music.bars)[index]?.[hand]) || clefOf(staff)
 }
 
 export function notate(music: TimedMusic): Score {
   const melodyStaff = music.melodyStaff ?? false
-  const voices = music.voiceStaves ?? []
   const written: readonly StaffId[] = STAVES.filter(
     (id) =>
       (id === 'melody' && melodyStaff) ||
-      voices.some((voice) => voice === id) ||
       (music.piano !== false && PIANO_STAVES.some((piano) => piano === id)),
   )
   let tiedOn = new Set<string>()
@@ -326,9 +309,8 @@ export function notate(music: TimedMusic): Score {
       time: timeSignature(pickup ? beatsPerBar(music.meter) : placed.beats, music.meter),
       ...(placed.key ? { key: placed.key } : {}),
       ...(placed.tempo ? { tempo: placed.tempo } : {}),
-      ...(placed.pattern?.length ? { pattern: placed.pattern } : {}),
       ...barMarksOf(placed),
-      ...staffClefs(clefs[index] ?? HOME_CLEF, music.staffInstruments),
+      ...staffClefs(clefs[index] ?? HOME_CLEF),
       staves,
       chords: music.chords
         .filter(
@@ -343,6 +325,5 @@ export function notate(music: TimedMusic): Score {
     meter: music.meter,
     staves: written,
     measures,
-    ...(music.staffInstruments ? { staffInstruments: music.staffInstruments } : {}),
   }
 }

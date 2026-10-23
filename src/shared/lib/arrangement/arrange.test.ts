@@ -558,21 +558,6 @@ describe('arrange', () => {
     ])
   })
 
-  it('carries every voice sung apart from the notes the hands play, the tune first, in the key played', () => {
-    const voice = [{ midi: midi(67), spelled: note('G'), startTick: 0, durationTicks: 96 }]
-    const performance = arrange(chart([['C']]), {
-      tonic: note('D'),
-      pattern: BLOCK,
-      voices: [voice],
-    })
-    expect(performance.sung).toEqual([
-      [],
-      [{ midi: 69, spelled: note('A'), startTick: 0, durationTicks: 96 }],
-    ])
-    expect(performance.notes.every((n) => n.midi !== 69 || n.hand !== 'melody')).toBe(true)
-    expect(arrange(chart([['C']]), { tonic: C, pattern: BLOCK }).sung).toBeUndefined()
-  })
-
   it('engraves the barlines as written, or plays the repeats taken, the tune going round with them', () => {
     const marked = chart([['C', 'F', 'G']])
     const [line = []] = marked.sections[0]?.lines ?? []

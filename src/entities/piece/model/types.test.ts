@@ -30,17 +30,12 @@ describe('entries', () => {
 })
 
 describe('showsAStaff', () => {
-  it('says whether a score with these rows hidden still shows a staff (ADR 0083)', () => {
-    const none = { melody: false, voices: 0 }
-    expect(showsAStaff([], none)).toBe(true)
-    expect(showsAStaff(['chords'], none)).toBe(true)
-    expect(showsAStaff(['piano'], none)).toBe(false)
-    expect(showsAStaff(['piano'], { melody: true, voices: 0 })).toBe(true)
-    expect(showsAStaff(['piano', 'melody'], { melody: true, voices: 0 })).toBe(false)
-    expect(showsAStaff(['piano', 'melody'], { melody: true, voices: 1 })).toBe(true)
-    expect(showsAStaff(['piano', 'melody', 'voice2'], { melody: true, voices: 1 })).toBe(false)
-    // A voice the score has not is no staff.
-    expect(showsAStaff(['piano'], { melody: false, voices: 0 })).toBe(false)
+  it('is false only where the piano is hidden and no tune’s staff is in sight (ADR 0083)', () => {
+    expect(showsAStaff([], false)).toBe(true)
+    expect(showsAStaff(['chords'], false)).toBe(true)
+    expect(showsAStaff(['piano'], false)).toBe(false)
+    expect(showsAStaff(['piano'], true)).toBe(true)
+    expect(showsAStaff(['piano', 'melody'], true)).toBe(false)
   })
 })
 

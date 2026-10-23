@@ -191,8 +191,4 @@ describe('what a click chooses (ADR 0088)', () => {
     expect(pickAt(laid, 10, 60)).toBeNull()
     expect(pickAt(laid, 76, 110)).toBeNull()
   })
-
-  it('leaves out the heads `accept` turns away', () => {
-    expect(pickAt(laid, 136, 60, (each) => each.tick !== 48)).toBeNull()
-  })
 })

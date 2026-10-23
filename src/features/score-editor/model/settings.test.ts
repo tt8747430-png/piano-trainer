@@ -8,7 +8,7 @@ describe('the song’s settings', () => {
     key: 'C',
     sections: [{ kind: 'verse', lines: ['C G7/B'] }],
     melody: 'E4/4 | D4/4',
-    hands: { lh: 'C3/4 | -' },
+    hands: { lh: 'C3/4 | r/4' },
   })
 
   it('moves the music to a new tonic by the interval between them, letters kept', () => {

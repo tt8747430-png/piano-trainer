@@ -24,3 +24,7 @@ deletes the instrument and its music, and a new score starts from a template.
 ## Consequences
 
 The Player keeps its own View menu for what it shows; a song's hidden rows are the editor's.
+
+**Later (2026-10-23, ADR 0091):** the more voices and their instruments are gone, and `StaffList` with its Remove
+with them: the rows are the chord names, the tune's staff and the piano, each shown or hidden; a new song chooses
+those three rows.
