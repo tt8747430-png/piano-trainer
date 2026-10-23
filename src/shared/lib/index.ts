@@ -1,4 +1,4 @@
-export { chordLabelSizes } from './chord-label'
+export { chordLabels, type ChordLabel } from './chord-label'
 export { cn } from './cn'
 export {
   partsFromParams,

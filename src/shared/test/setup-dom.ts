@@ -40,5 +40,14 @@ export function setUpDom() {
     localStorage.clear()
     delete document.documentElement.dataset.theme
     document.documentElement.lang = 'en'
+    vi.useRealTimers()
+    // What a pop-up leaves behind once its test is unmounted (a portal, the page marked inert or
+    // aria-hidden around it, the scroll lock's styles) would hide the next test's pop-up from its
+    // queries: the page starts bare.
+    document.body.replaceChildren()
+    for (const element of [document.documentElement, document.body]) {
+      for (const name of ['style', 'inert', 'aria-hidden', 'data-base-ui-scroll-locked'])
+        element.removeAttribute(name)
+    }
   })
 }

@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import type { Performance } from '@/shared/lib/arrangement'
-import { chordLabelSizes, cn } from '@/shared/lib'
+import { chordLabels, cn } from '@/shared/lib'
 import { printedSymbol, tempoNote } from '@/shared/lib/music'
 import { usePositionName } from '@/shared/ui'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
@@ -62,7 +62,7 @@ export const SheetLabels = memo(function SheetLabels({
           : [],
       )
     : []
-  const sizes = chordLabelSizes(
+  const labels = chordLabels(
     shown.map(({ index, symbol, x }) => {
       const position = placed[index]
       return { x, symbol: position ? `${symbol} ${positionName(position)}` : symbol }
@@ -107,7 +107,7 @@ export const SheetLabels = memo(function SheetLabels({
         <span
           key={index}
           className="absolute bottom-0.5 font-display leading-none font-semibold whitespace-nowrap"
-          style={{ left: x, fontSize: sizes[at] }}
+          style={{ left: labels[at]?.x ?? x, fontSize: labels[at]?.size }}
         >
           {symbol}
           {placed[index] ? (

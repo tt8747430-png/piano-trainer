@@ -654,6 +654,37 @@
       'sheet sheet'
       'status status';
   }
+  /* On a phone held upright the bar's buttons take its row: Close stays at its start and the title
+     has a row of its own under them, as the editor's (ADR 0085). */
+  @variant max-sm {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      'close actions'
+      'title title'
+      'sheet sheet'
+      'status status'
+      'keys keys';
+    & > [data-area='lead'],
+    & > [data-area='lead'] > [data-slot='player-lead'] {
+      display: contents;
+    }
+    & [data-slot='player-lead'] > button {
+      grid-area: close;
+    }
+    & [data-slot='player-lead'] > h1 {
+      grid-area: title;
+    }
+    &[data-keys='top'] {
+      grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+      grid-template-areas:
+        'close actions'
+        'title title'
+        'keys keys'
+        'sheet sheet'
+        'status status';
+    }
+  }
   @variant landscape-phone {
     grid-template-columns: minmax(0, 1fr) auto auto;
     grid-template-rows: auto minmax(0, 1fr) auto;
