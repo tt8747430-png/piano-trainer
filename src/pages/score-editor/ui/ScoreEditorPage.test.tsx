@@ -694,12 +694,15 @@ describe('the score editor', () => {
       within(row)
         .getAllByRole('button')
         .map((button) => button.getAttribute('aria-label')),
-    ).toEqual(['Delete', 'Undo', 'Redo', 'Copy', 'Cut', 'Paste', 'Add bar'])
-    const dock = within(screen.getByRole('toolbar', { name: 'Playback' })).getAllByRole('button')
+    ).toEqual(['Delete', 'Undo', 'Redo', 'Copy bars', 'Cut bars', 'Paste bars', 'Add bar'])
+    // Named for what it does: Play, and the caret moved a note back or on.
+    const dock = within(screen.getByRole('toolbar', { name: 'Play and move' })).getAllByRole(
+      'button',
+    )
     expect(dock.map((button) => button.getAttribute('aria-label'))).toEqual([
-      'Back a step',
+      'Previous note',
       'Play',
-      'Forward a step',
+      'Next note',
     ])
   })
 
@@ -714,9 +717,9 @@ describe('the score editor', () => {
     )
     await toChordRow(user)
     const row = screen.getByRole('toolbar', { name: 'Edit' })
-    expect(within(row).getByRole('button', { name: 'Paste' })).toBeDisabled()
-    await user.click(within(row).getByRole('button', { name: 'Copy' }))
-    await user.click(within(row).getByRole('button', { name: 'Paste' }))
+    expect(within(row).getByRole('button', { name: 'Paste bars' })).toBeDisabled()
+    await user.click(within(row).getByRole('button', { name: 'Copy bars' }))
+    await user.click(within(row).getByRole('button', { name: 'Paste bars' }))
     expect(songOf(piecesStore.getState())).toMatchObject({
       sections: [{ lines: ['Em Em G G G'] }],
     })
