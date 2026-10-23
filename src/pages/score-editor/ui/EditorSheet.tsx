@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { caretTicks, notesAt, placesIn, selectedBars, type Layer } from '@/features/score-editor'
+import { notesAt, placesIn, selectedBars, tapsIn, type Layer } from '@/features/score-editor'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { usePlay } from '@/shared/lib/services'
 import { ScoreSheet } from '@/widgets/score-sheet'
@@ -23,7 +23,6 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
   const draft = useEditorState((state) => state.draft)
   const caret = useEditorState((state) => state.caret)
   const layer = useEditorState((state) => state.layer)
-  const width = useEditorState(caretTicks)
   const selection = useEditorState((state) => state.selection)
   const chosen = useMemo(() => (selection ? selectedBars(selection) : null), [selection])
   const onPlace = useCallback(
@@ -35,6 +34,7 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
   const openSettings = useCallback(() => open(true), [open])
   // Read when a bar is clicked, so a line's row does not change with every note written elsewhere.
   const placesOf = useCallback((to: Layer) => placesIn(store.getState(), to), [store])
+  const tapsOf = useCallback((to: Layer) => tapsIn(store.getState(), to), [store])
   const play = usePlay()
   const onWrite = useCallback(
     (tick: Tick, to: Layer, key: Midi) => {
@@ -64,10 +64,10 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
       draft={draft}
       caret={caret}
       layer={layer}
-      caretTicks={width}
       selection={chosen}
       onPlace={onPlace}
       placesOf={placesOf}
+      tapsOf={tapsOf}
       heading={(section) => <SectionHeading section={section} />}
       chordNames={view.chordNames}
       onSignature={openSettings}

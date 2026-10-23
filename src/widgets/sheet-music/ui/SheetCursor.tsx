@@ -1,32 +1,20 @@
 import type { Ref } from 'react'
-import type { ScoreLayout } from '@/shared/ui/score'
+import type { Tick } from '@/shared/lib/music'
+import { noteBox, ScoreMark, type ScoreLayout } from '@/shared/ui/score'
 
-/** How far left of a notehead's edge the cursor's band starts, and how far it reaches past the staff. */
-const LEAD = 8
-const REACH = 16
-
-/** The cursor: a sky-mist band behind the notes of the beat group now, moved as they move. */
+/**
+ * The cursor: the beat group now, marked as the one selection marks a note (ADR 0082), the editor's
+ * caret alike: a padded box round its column on every staff, moved as it moves.
+ */
 export function SheetCursor({
-  x,
+  tick,
   layout,
   ref,
 }: {
-  x: number
+  tick: Tick
   layout: ScoreLayout
   ref: Ref<HTMLDivElement>
 }) {
-  return (
-    <div
-      ref={ref}
-      aria-hidden
-      // It slides by `left`, never a transform: a transform would make the pages round it one picture,
-      // which Safari scales blurry when they are zoomed.
-      className="absolute z-0 w-7 rounded-md bg-secondary transition-[left] duration-200 ease-out"
-      style={{
-        top: layout.staffTop - REACH,
-        height: layout.staffBottom - layout.staffTop + 2 * REACH,
-        left: x - LEAD,
-      }}
-    />
-  )
+  const span = { top: layout.staffTop, bottom: layout.staffBottom }
+  return <ScoreMark ref={ref} slot="cursor" kind="note" box={noteBox(layout, tick, span)} />
 }

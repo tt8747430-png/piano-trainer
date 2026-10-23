@@ -23,10 +23,10 @@ export const SheetLine = memo(function SheetLine({
   sheet,
   layer,
   caret,
-  caretTicks,
   selection,
   onPlace,
   placesOf,
+  tapsOf,
   chordNames,
   onSignature,
   scale = 1,
@@ -47,10 +47,11 @@ export const SheetLine = memo(function SheetLine({
   layer: Layer
   /** From the line's start, when the caret is on this line. */
   caret: Tick | null
-  caretTicks: Tick
   selection: BarRange | null
   onPlace: (tick: Tick, layer: Layer, extend: boolean) => void
   placesOf: (layer: Layer) => readonly Tick[]
+  /** Where a click lands in a layer: on a note or a bar's start, never an empty step (ADR 0082). */
+  tapsOf: (layer: Layer) => readonly Tick[]
   chordNames: boolean
   onSignature: () => void
 }) {
@@ -121,7 +122,7 @@ export const SheetLine = memo(function SheetLine({
             line={sheet.line}
             layer={layer}
             caret={caret}
-            caretTicks={caretTicks}
+            tapsOf={tapsOf}
             selection={selection}
             onPlace={onPlace}
             placesOf={placesOf}

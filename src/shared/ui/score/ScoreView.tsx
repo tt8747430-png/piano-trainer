@@ -46,8 +46,11 @@ export function ScoreView({
   timeBefore?: TimeSignature | undefined
   /** The sheet's width in CSS pixels: the line is spread to it, and drawn smaller where wider. */
   fill?: number | undefined
-  /** The notes chosen on a staff, those starting in [from, to), marked in the focus colour as a notation app marks a selection. */
-  selected?: { readonly staff: StaffId; readonly from: Tick; readonly to: Tick } | undefined
+  /**
+   * The notes chosen, those starting in [from, to) on a staff (on every staff without one), marked in
+   * the focus colour as a notation app marks a selection (ADR 0082).
+   */
+  selected?: { readonly staff?: StaffId; readonly from: Tick; readonly to: Tick } | undefined
   children?: (layout: ScoreLayout) => ReactNode
 }) {
   const { t } = useTranslation('music')
@@ -99,14 +102,15 @@ export function ScoreView({
     if (
       !element ||
       engraving.status !== 'ready' ||
-      selectedStaff === undefined ||
       selectedFrom === undefined ||
       selectedTo === undefined
     )
       return
     // Notes are named `n-<staff>-<tick>-<i>` (ADR 0078).
     const marked = [
-      ...element.querySelectorAll<SVGElement>(`g.note[id^="n-${selectedStaff}-"]`),
+      ...element.querySelectorAll<SVGElement>(
+        `g.note[id^="n-${selectedStaff === undefined ? '' : `${selectedStaff}-`}"]`,
+      ),
     ].filter((each) => {
       const tick = Number(each.id.split('-')[2])
       return tick >= selectedFrom && tick < selectedTo

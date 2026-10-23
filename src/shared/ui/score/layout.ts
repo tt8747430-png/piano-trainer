@@ -42,7 +42,7 @@ export function xAmong(points: readonly { tick: Tick; x: number }[], tick: Tick)
  * The x of any tick: an onset's own, or in proportion between the onsets around it, its bar's start
  * where nothing is written there (where its notes begin) and its bar's end.
  */
-export function xAtTick(layout: ScoreLayout, tick: Tick): number {
+export function xAtTick(layout: Pick<ScoreLayout, 'measures' | 'onsets'>, tick: Tick): number {
   const measure =
     layout.measures.find((m) => tick < m.startTick + m.ticks) ?? layout.measures.at(-1)
   if (!measure) return 0

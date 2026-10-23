@@ -124,6 +124,25 @@ export function SheetMusic({
   // A muted staff may leave the height: its hand is not read.
   const read = staves.filter((staff) => staff !== muted).length || 1
   const scale = fitScale(room, staffHeight(undefined, read), bar)
+  // Bars chosen as the editor chooses them (ADR 0082), the loop: from the bar held or the loop's
+  // start (else the cursor's bar) to the one reached, exactly.
+  const anchor = useRef<number | null>(null)
+  const playing = performance.beatGroups[current]
+  const onChoose = (at: number, extend: boolean) => {
+    if (!extend) anchor.current = at
+    const from = extend ? (anchor.current ?? loop?.first ?? playing?.bar ?? at) : at
+    onLoopChange({ first: Math.min(from, at), last: Math.max(from, at) })
+  }
+  // The notes chosen, in the selection's colour on every staff: the loop's, else the cursor's.
+  const selected = useMemo(() => {
+    const first = loop ? performance.bars[loop.first] : undefined
+    if (loop && first)
+      return {
+        from: first.startTick,
+        to: performance.bars[loop.last + 1]?.startTick ?? performance.totalTicks,
+      }
+    return playing ? { from: playing.tick, to: playing.tick + 1 } : undefined
+  }, [loop, performance, playing])
   if (view.layout !== 'horizontal')
     return (
       <SheetLines
@@ -143,6 +162,8 @@ export function SheetMusic({
         muted={muted}
         onJump={onJump}
         onLoopChange={onLoopChange}
+        onChoose={onChoose}
+        selected={selected}
       />
     )
   return (
@@ -158,6 +179,7 @@ export function SheetMusic({
         names={names}
         muted={muted}
         staves={staves}
+        selected={selected}
       >
         {(layout) => (
           <>
@@ -174,6 +196,7 @@ export function SheetMusic({
               loop={loop}
               onJump={onJump}
               onLoopChange={onLoopChange}
+              onChoose={onChoose}
             />
           </>
         )}

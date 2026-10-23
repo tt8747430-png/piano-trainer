@@ -19,6 +19,7 @@ export function SheetOverlay({
   loop,
   onJump,
   onLoopChange,
+  onChoose,
   chordNames = true,
   tempos = [],
   firstBar = 0,
@@ -37,6 +38,8 @@ export function SheetOverlay({
   loop: BarRange | null
   onJump: (beatGroup: number) => void
   onLoopChange: (loop: BarRange) => void
+  /** Bars chosen by Shift or a held finger: the piece's bar, extending what is chosen. */
+  onChoose: (bar: number, extend: boolean) => void
 }) {
   const cursor = useRef<HTMLDivElement>(null)
   const group = performance.beatGroups[current]
@@ -60,13 +63,14 @@ export function SheetOverlay({
       {loop ? (
         <LoopBand layout={layout} loop={loop} onChange={onLoopChange} firstBar={firstBar} />
       ) : null}
-      {x === null ? null : <SheetCursor ref={cursor} x={x} layout={layout} />}
+      {group && here ? <SheetCursor ref={cursor} tick={group.tick} layout={layout} /> : null}
       <BarTargets
         layout={layout}
         performance={performance}
         positions={positions}
         current={group?.bar}
         onJump={onJump}
+        onChoose={onChoose}
         firstBar={firstBar}
       />
     </>

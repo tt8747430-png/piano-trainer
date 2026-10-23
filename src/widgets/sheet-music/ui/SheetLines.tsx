@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
+import type { Tick } from '@/shared/lib/music'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, useScrollMotion } from '@/shared/lib'
 import { PageCanvas, useCanvasReveal } from '@/shared/ui'
 import { lineLead, measureWidths, type Score, type StaffId } from '@/shared/lib/notation'
@@ -39,6 +40,8 @@ export function SheetLines({
   muted,
   onJump,
   onLoopChange,
+  onChoose,
+  selected,
 }: {
   score: Score
   performance: Performance
@@ -58,6 +61,9 @@ export function SheetLines({
   muted: StaffId | undefined
   onJump: (beatGroup: number) => void
   onLoopChange: (loop: BarRange) => void
+  onChoose: (bar: number, extend: boolean) => void
+  /** The notes chosen: the loop's, else the cursor's (ADR 0082). */
+  selected: { readonly from: Tick; readonly to: Tick } | undefined
 }) {
   const { t } = useTranslation('music')
   const box = useRef<HTMLElement>(null)
@@ -104,6 +110,7 @@ export function SheetLines({
         staves={staves}
         timeBefore={each.timeBefore}
         fill={inner > 0 ? inner : undefined}
+        selected={selected}
       >
         {(layout) => (
           <SheetOverlay
@@ -118,6 +125,7 @@ export function SheetLines({
             loop={loop}
             onJump={onJump}
             onLoopChange={onLoopChange}
+            onChoose={onChoose}
             firstBar={each.first}
           />
         )}

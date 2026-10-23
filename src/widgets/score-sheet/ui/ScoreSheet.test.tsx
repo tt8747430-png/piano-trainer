@@ -1,7 +1,8 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
-import { createEditorStore, placesIn, readDraft, type Layer } from '@/features/score-editor'
+import { createEditorStore, placesIn, readDraft, tapsIn, type Layer } from '@/features/score-editor'
+import { stubBox } from '@/shared/test/layout'
 import { loadScoreView } from '@/shared/ui'
 import { ScoreSheet } from './ScoreSheet'
 
@@ -24,7 +25,7 @@ const sheet = (layer: Layer, onPlace = vi.fn(), chordNames = true, onSignature =
       draft={draft}
       caret={96}
       layer={layer}
-      caretTicks={24}
+      tapsOf={(to) => tapsIn(createEditorStore(draft, vi.fn()).getState(), to)}
       selection={null}
       onPlace={onPlace}
       placesOf={(to) => placesIn(createEditorStore(draft, vi.fn()).getState(), to)}
@@ -86,7 +87,7 @@ describe('ScoreSheet', () => {
         draft={draft}
         caret={0}
         layer="rh"
-        caretTicks={24}
+        tapsOf={() => []}
         selection={{ from: 0, to: 2 }}
         onPlace={vi.fn()}
         placesOf={() => []}
@@ -122,6 +123,36 @@ describe('ScoreSheet', () => {
     expect(onSignature).toHaveBeenCalled()
   })
 
+  it('puts a click on a note, never on an empty step beside it, and on a bar’s start where its row writes nothing', async () => {
+    const onPlace = vi.fn()
+    sheet('melody', onPlace, false)
+    const click = async (name: RegExp) => {
+      const [bar] = await screen.findAllByRole('button', { name })
+      if (!bar) throw new Error('no bar')
+      stubBox(bar, { width: 400, height: 200 })
+      // Far right in the bar: the room after its whole note (bar 1), an empty bar (bar 3).
+      fireEvent.click(bar, { clientX: 399, clientY: 0, detail: 1 })
+    }
+    await click(/^Bar 1/)
+    expect(onPlace).toHaveBeenLastCalledWith(0, 'melody', false)
+    await click(/^Bar 3/)
+    expect(onPlace).toHaveBeenLastCalledWith(192, 'melody', false)
+  })
+
+  it('marks the caret on notes as a box, and in a bar the pattern plays as a line, never a box on empty staff', async () => {
+    sheet('melody')
+    await waitFor(() =>
+      expect(document.querySelector('[data-slot="caret"]')).toHaveAttribute('data-mark', 'note'),
+    )
+    sheet('lh')
+    await waitFor(() =>
+      expect(document.querySelectorAll('[data-slot="caret"]')[1]).toHaveAttribute(
+        'data-mark',
+        'insert',
+      ),
+    )
+  })
+
   it('marks the notes at the caret on its staff as the ones chosen', async () => {
     sheet('melody')
     await waitFor(() => expect(document.querySelector('.note-chosen')).toBeInTheDocument())
@@ -134,7 +165,7 @@ describe('ScoreSheet', () => {
     const props = {
       draft,
       layer: 'chords' as const,
-      caretTicks: 24,
+      tapsOf: () => [],
       selection: null,
       onPlace: vi.fn(),
       placesOf: () => [],

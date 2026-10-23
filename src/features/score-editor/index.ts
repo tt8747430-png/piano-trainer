@@ -14,7 +14,7 @@ export {
   type Layer,
   type NoteLayer,
 } from './model/draft'
-export { caretTicks, placesIn } from './model/caret-moves'
+export { placesIn, tapsIn } from './model/caret-moves'
 export { selectedBars } from './model/form-edits'
 export {
   type BarEdit,

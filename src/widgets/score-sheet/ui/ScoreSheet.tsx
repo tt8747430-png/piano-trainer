@@ -39,10 +39,10 @@ export function ScoreSheet({
   draft,
   caret,
   layer,
-  caretTicks,
   selection,
   onPlace,
   placesOf,
+  tapsOf,
   heading,
   chordNames,
   onSignature,
@@ -61,12 +61,12 @@ export function ScoreSheet({
   draft: Draft
   caret: Tick
   layer: Layer
-  /** How long the next note is: the caret's width. */
-  caretTicks: Tick
   selection: BarRange | null
   onPlace: (tick: Tick, layer: Layer, extend: boolean) => void
   /** Where the caret may stand in a layer, asked when a bar is clicked. */
   placesOf: (layer: Layer) => readonly Tick[]
+  /** Where a click lands in a layer: on a note or a bar's start, never an empty step (ADR 0082). */
+  tapsOf: (layer: Layer) => readonly Tick[]
   /** A section's heading. */
   heading: (section: number) => ReactNode
   /** Chord names over the staff, written in their row; without them a click there writes the staff under it. */
@@ -121,7 +121,7 @@ export function ScoreSheet({
           ? caret - sheet.line.start
           : null
       }
-      caretTicks={caretTicks}
+      tapsOf={tapsOf}
       selection={selection}
       onPlace={onPlace}
       placesOf={placesOf}

@@ -39,6 +39,31 @@ function notePlaces(draft: Draft, layer: NoteLayer, step: Tick): Tick[] {
 export const caretPlaces = (draft: Draft, layer: Layer, step: Tick): Tick[] =>
   layer === 'chords' ? chordPlaces(draft) : notePlaces(draft, layer, step)
 
+/**
+ * Where a click on the sheet lands in a layer (ADR 0082): on a note's start (a chord's in the chords),
+ * or on the room after a bar's last note where it ends before the barline (a rest's start too); in a
+ * bar whose row writes nothing (one the pattern plays), on its start. Never on an empty step between.
+ */
+export function tapPlaces(draft: Draft, layer: Layer): Tick[] {
+  const notes = layer === 'chords' ? [] : notesOf(draft, layer)
+  return sortedUnique(
+    barsOf(draft).flatMap(({ start, bar }) => {
+      const end = start + bar.ticks
+      if (layer === 'chords') {
+        const chords = bar.chords.map((chord) => start + chord.at)
+        return chords.length > 0 ? chords : [start]
+      }
+      const here = notes.filter((n) => n.startTick >= start && n.startTick < end)
+      if (here.length === 0) return [start]
+      const starts = here.map((n) => n.startTick)
+      const room = here
+        .map((n) => n.startTick + n.durationTicks)
+        .filter((tick) => tick < end && !starts.includes(tick))
+      return [...starts, ...room]
+    }),
+  )
+}
+
 /** The caret's next place forwards (1) or back (−1), staying where it is at either end. */
 export function nextCaret(
   draft: Draft,

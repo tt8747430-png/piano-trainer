@@ -1,33 +1,33 @@
 import { useEffect, useRef, type PointerEvent } from 'react'
-import type { Tick } from '@/shared/lib/music'
 
 /** How long a finger holds a bar still before it chooses it, as a notation app's long press. */
 export const HOLD_MS = 450
 /** How far a finger may move during the hold and still be holding: past it, it scrolls the sheet. */
 const STILL_PX = 8
 
-/** Where the bar under a point starts, or null where no bar is there. */
-function barStartAt(x: number, y: number): Tick | null {
-  const bar = document.elementFromPoint(x, y)?.closest<HTMLElement>('[data-bar-start]')
-  const start = bar?.dataset.barStart
-  return start === undefined ? null : Number(start)
+/** The bar under a point, or null where no bar is there. */
+function barAt(x: number, y: number): number | null {
+  const bar = document.elementFromPoint(x, y)?.closest<HTMLElement>('[data-choose-at]')
+  const at = bar?.dataset.chooseAt
+  return at === undefined ? null : Number(at)
 }
 
 /** A drag that chooses bars keeps the sheet from scrolling under it. */
 const hold = (event: TouchEvent) => event.preventDefault()
 
 /**
- * Bars chosen by touch, as Sibelius chooses them on a phone (ADR 0076): a finger held still on a bar
- * for `HOLD_MS` chooses it, and dragged on chooses every bar from it to the one under the finger,
- * on any line; the sheet holds still and the canvas does not pan while it does (its moves are
- * claimed with `preventDefault`), and the click it ends with is its own. A mouse chooses with Shift.
- * Returns the handlers for a bar that starts at a tick.
+ * Bars chosen by touch, as Sibelius chooses them on a phone (ADR 0076, 0082), in the score editor and
+ * the Player alike: a finger held still on a bar for `HOLD_MS` chooses it, and dragged on chooses
+ * every bar from it to the one under the finger, on any line; the sheet holds still and the canvas
+ * does not pan while it does (its moves are claimed with `preventDefault`), and the click it ends with
+ * is its own. A mouse chooses with Shift. Returns the handlers for the bar a value names (its start
+ * tick, or its index).
  */
-export function useHoldToChoose(choose: (tick: Tick, extend: boolean) => void) {
+export function useHoldToChoose(choose: (at: number, extend: boolean) => void) {
   const press = useRef<{ id: number; x: number; y: number; timer: number } | null>(null)
   const choosing = useRef<number | null>(null)
   /** The bar the drag last reached: it chooses again only as it reaches another. */
-  const reached = useRef<Tick | null>(null)
+  const reached = useRef<number | null>(null)
 
   const end = () => {
     if (press.current) window.clearTimeout(press.current.timer)
@@ -45,8 +45,8 @@ export function useHoldToChoose(choose: (tick: Tick, extend: boolean) => void) {
   }
   useEffect(() => end, [])
 
-  return (start: Tick) => ({
-    'data-bar-start': start,
+  return (at: number) => ({
+    'data-choose-at': at,
     onPointerDown(event: PointerEvent<HTMLElement>) {
       if (event.pointerType === 'mouse') return
       end()
@@ -56,9 +56,9 @@ export function useHoldToChoose(choose: (tick: Tick, extend: boolean) => void) {
         choosing.current = id
         document.addEventListener('touchmove', hold, { passive: false })
         navigator.vibrate?.(10)
-        reached.current = start
-        choose(start, false)
-        choose(start, true)
+        reached.current = at
+        choose(at, false)
+        choose(at, true)
       }, HOLD_MS)
       press.current = { id, x, y, timer }
     },
@@ -70,10 +70,10 @@ export function useHoldToChoose(choose: (tick: Tick, extend: boolean) => void) {
       }
       if (choosing.current !== event.pointerId) return
       event.preventDefault()
-      const tick = barStartAt(event.clientX, event.clientY)
-      if (tick === null || tick === reached.current) return
-      reached.current = tick
-      choose(tick, true)
+      const bar = barAt(event.clientX, event.clientY)
+      if (bar === null || bar === reached.current) return
+      reached.current = bar
+      choose(bar, true)
     },
     onPointerUp: end,
     onPointerCancel: end,

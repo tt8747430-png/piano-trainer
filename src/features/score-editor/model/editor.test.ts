@@ -324,7 +324,8 @@ describe('the editor', () => {
       key(69, 2500),
       { type: 'move', by: 'end', direction: -1 },
     )
-    const chosen = run(written, { type: 'move', by: 'bar', direction: 1, extend: true })
+    const bar = { type: 'move', by: 'bar', direction: 1, extend: true } as const
+    const chosen = run(written, bar, bar)
     expect(chosen.selection).toEqual({ anchor: 0, head: 1 })
     expect(tune(run(chosen, { type: 'shift', semitones: 1 }))).toEqual([
       'C#4@0/48',
@@ -344,18 +345,40 @@ describe('the editor', () => {
     expect(deleted.caret).toBe(0)
   })
 
+  it('chooses exactly the bars gone over: to a barline, not the bar after it', () => {
+    const fourBars = run(
+      initialEditor(
+        draftOf({
+          melody: 'B4/4 | C5/4 | D5/4 | E5/4',
+          sections: [{ kind: 'verse', lines: ['G C D G'] }],
+        }),
+      ),
+      { type: 'layer', layer: 'melody' },
+    )
+    const bar = (direction: -1 | 1) =>
+      ({ type: 'move', by: 'bar', direction, extend: true }) as const
+    // Over bars 1, 2 and 3: the caret ends on bar 4's barline, and bar 4 is not chosen.
+    expect(run(fourBars, bar(1), bar(1), bar(1)).selection).toEqual({ anchor: 0, head: 2 })
+    // A note at a time, the same: past bar 1's whole note is its barline.
+    const step = { type: 'move', by: 'step', direction: 1, extend: true } as const
+    expect(run(fourBars, step).selection).toEqual({ anchor: 0, head: 0 })
+    // Back from bar 3's barline over bar 2: bar 2 alone.
+    const atThree = run(fourBars, { type: 'place', tick: 192, layer: 'melody' })
+    expect(run(atThree, bar(-1)).selection).toEqual({ anchor: 1, head: 1 })
+    // A note clicked with Shift is in what is chosen: its bar and no more.
+    expect(
+      run(fourBars, { type: 'place', tick: 192, layer: 'melody', extend: true }).selection,
+    ).toEqual({ anchor: 0, head: 2 })
+  })
+
   it('selects bars with Shift, and copies, cuts and pastes them', () => {
     const chosen = run(
       run(initialEditor(draftOf({ sections: [{ kind: 'verse', lines: ['G C D'] }] })), {
         type: 'layer',
         layer: 'chords',
       }),
-      {
-        type: 'move',
-        by: 'bar',
-        direction: 1,
-        extend: true,
-      },
+      { type: 'move', by: 'bar', direction: 1, extend: true },
+      { type: 'move', by: 'bar', direction: 1, extend: true },
     )
     expect(chosen.selection).toEqual({ anchor: 0, head: 1 })
     const pasted = run(chosen, { type: 'bars', edit: 'copy' }, { type: 'bars', edit: 'paste' })

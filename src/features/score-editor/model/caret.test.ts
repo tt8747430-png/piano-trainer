@@ -1,6 +1,30 @@
 import { describe, expect, it } from 'vitest'
 import { draftOf } from '../testing/test-draft'
-import { caretPlaces, nextCaret, snapToChord } from './caret'
+import { caretPlaces, nextCaret, snapToChord, tapPlaces } from './caret'
+
+describe('where a click lands', () => {
+  const tune = draftOf({
+    melody: 'B4/1 C5/1 D5/1 r/1 | A4/2 G4/2',
+    sections: [{ kind: 'verse', lines: ['G C D'] }],
+  })
+
+  it('on a note’s start, or the place after a bar’s last note where it ends early, never an empty step', () => {
+    // Bar 1: three quarters, then room for one: the place after them.
+    expect(tapPlaces(tune, 'melody').filter((tick) => tick < 96)).toEqual([0, 24, 48, 72])
+    // Bar 2: two halves, nothing between.
+    expect(tapPlaces(tune, 'melody').filter((tick) => tick >= 96 && tick < 192)).toEqual([96, 144])
+  })
+
+  it('on a bar’s start where its row writes nothing: a bar the pattern plays', () => {
+    expect(tapPlaces(tune, 'rh')).toEqual([0, 96, 192])
+    expect(tapPlaces(tune, 'melody').filter((tick) => tick >= 192)).toEqual([192])
+  })
+
+  it('on a chord in the chords, or a bar’s start where it has none', () => {
+    const chords = draftOf({ sections: [{ kind: 'verse', lines: ['G C-D'] }] })
+    expect(tapPlaces(chords, 'chords')).toEqual([0, 96, 144])
+  })
+})
 
 const tune = draftOf({
   melody: 'B4/1.5 A4/.5 G4/2 | C5/4',

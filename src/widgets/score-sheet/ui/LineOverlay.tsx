@@ -3,14 +3,19 @@ import { useTranslation } from 'react-i18next'
 import { isHandLayer, type BarRange, type Layer } from '@/features/score-editor'
 import { chordSymbol, type Midi, type Tick } from '@/shared/lib/music'
 import { staffClefAt, type TimedMusic } from '@/shared/lib/notation'
-import { StaffNames, xAtTick, type ScoreLayout } from '@/shared/ui/score'
+import {
+  ScoreMark,
+  StaffNames,
+  useHoldToChoose,
+  xAtTick,
+  type ScoreLayout,
+} from '@/shared/ui/score'
 import { layerAt, staffOfLayer, type SheetLineBars } from '../model/line-music'
-import { chosenBox } from '../model/chosen-box'
+import { chordRow, chosenBox } from '../model/chosen-box'
 import { nearestPlace } from '../model/nearest'
 import { noteAtStaffY, stepsDragged } from '../model/staff-pitch'
 import { EditorCaret } from './EditorCaret'
 import { LineLabels } from './LineLabels'
-import { useHoldToChoose } from './use-hold-to-choose'
 
 /** How far a bar's Pattern stands in from where its notes begin. */
 const PATTERN_INSET = 6
@@ -37,10 +42,10 @@ export function LineOverlay({
   line,
   layer,
   caret,
-  caretTicks,
   selection,
   onPlace,
   placesOf,
+  tapsOf,
   chordNames,
   row,
   labels,
@@ -62,10 +67,12 @@ export function LineOverlay({
   layer: Layer
   /** From the line's start, when the caret is on this line. */
   caret: Tick | null
-  caretTicks: Tick
   selection: BarRange | null
   onPlace: (tick: Tick, layer: Layer, extend: boolean) => void
+  /** Where a note may be written in a layer: a double click writes at the nearest. */
   placesOf: (layer: Layer) => readonly Tick[]
+  /** Where a click lands in a layer, on a note or a bar's start, never an empty step (ADR 0082). */
+  tapsOf: (layer: Layer) => readonly Tick[]
   chordNames: boolean
   onSignature: () => void
 }) {
@@ -75,19 +82,34 @@ export function LineOverlay({
   const hand = isHandLayer(layer) ? layer : null
   const [first] = layout.measures
   const staff = hand ? layout.staves[hand === 'lh' ? 'bass' : 'treble'] : undefined
-  // The bars chosen on this line, as one box over the staff of the row they are chosen in (the
-  // chord row, choosing chords).
+  // The bars chosen on this line, exactly, as the one selection's box over the staff of the row they
+  // are chosen in (the chord row, choosing chords).
   const chosen = chosenBox(
     layout,
     line.bars.map((placed) => placed.index),
     selection,
-    { chords: layer === 'chords', row, staff: staffOfLayer(layout.staves, layer) },
+    { row, staff: staffOfLayer(layout.staves, layer) },
   )
+  // Whether anything starts at the caret in its row: else it marks an empty place, as a line.
+  const caretEmpty =
+    caret === null ||
+    (layer === 'chords'
+      ? !line.bars.some(({ start, bar }) =>
+          bar.chords.some((chord) => start - line.start + chord.at === caret),
+        )
+      : !music.notes.some((n) => n.hand === layer && n.startTick === caret))
   // In a hand's layer, the bars it leaves to the pattern.
   const patterned =
     hand && staff ? layout.measures.map((_, index) => !line.bars[index]?.bar[hand]) : []
-  /** Where a point on bar `index` lands: its row, the nearest place there, and its height on the line. */
-  const pointAt = (index: number, event: MouseEvent<HTMLButtonElement>) => {
+  /**
+   * Where a point on bar `index` lands: its row, the nearest of `among` there (where a click lands,
+   * else where a note is written), and its height on the line.
+   */
+  const pointAt = (
+    index: number,
+    event: MouseEvent<HTMLButtonElement>,
+    among: (layer: Layer) => readonly Tick[],
+  ) => {
     const placed = line.bars[index]
     const measure = layout.measures[index]
     if (!placed || !measure) return null
@@ -96,7 +118,7 @@ export function LineOverlay({
     const y = (event.clientY - box.top) / zoom - row
     const target = layerAt(y, layout, chordNames)
     const end = placed.start + placed.bar.ticks
-    const places = placesOf(target).filter((tick) => tick >= placed.start && tick < end)
+    const places = among(target).filter((tick) => tick >= placed.start && tick < end)
     const x = measure.x + (event.clientX - box.left) / zoom
     const tick = nearestPlace(places, x, (at) => xAtTick(layout, at - line.start))
     return { target, tick: tick ?? placed.start, y }
@@ -108,11 +130,11 @@ export function LineOverlay({
       onPlace(placed.start, layer, event.shiftKey)
       return
     }
-    const point = pointAt(index, event)
+    const point = pointAt(index, event, tapsOf)
     if (point) onPlace(point.tick, point.target, event.shiftKey)
   }
   const write = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
-    const point = pointAt(index, event)
+    const point = pointAt(index, event, placesOf)
     if (!point || !onWrite || point.target === 'chords') return
     const lines = staffOfLayer(layout.staves, point.target)
     if (!lines) return
@@ -147,18 +169,19 @@ export function LineOverlay({
   return (
     <>
       {chosen ? (
-        // The bars chosen as one box on this line, from its staves' top to their foot, inset from
-        // the barlines so the next line's or section's bars stay clear of it.
-        <div
-          aria-hidden
-          data-slot="bars-chosen"
-          className="absolute z-0 rounded-xl bg-secondary/80 shadow-md ring-1 shadow-ring/15 ring-ring/45"
-          style={chosen}
-        />
+        // The bars chosen as the one selection's box on this line (ADR 0082), inset from the
+        // barlines so the next line's or section's bars stay clear of it.
+        <ScoreMark slot="bars-chosen" kind="range" box={chosen} />
       ) : null}
       {/* The caret first, so the labels and the notes stand over it. */}
       {caret === null ? null : (
-        <EditorCaret layout={layout} layer={layer} tick={caret} ticks={caretTicks} row={row} />
+        <EditorCaret
+          layout={layout}
+          layer={layer}
+          tick={caret}
+          chords={chordRow(row)}
+          empty={caretEmpty}
+        />
       )}
       <LineLabels
         layout={layout}
@@ -214,8 +237,9 @@ export function LineOverlay({
             onClick={place(index)}
             onDoubleClick={write(index)}
             {...held}
-            // A pointer's target only (the arrows move the caret): it takes no focus ring round the bar.
-            className="absolute bottom-0 z-20 cursor-text rounded-lg outline-none transition-colors duration-200 ease-out hover:bg-foreground/5"
+            // A pointer's target only (the arrows move the caret): no focus ring and no hover wash
+            // round the bar, which a touch screen leaves standing over empty staff (ADR 0082).
+            className="absolute bottom-0 z-20 cursor-text outline-none"
             style={{ left: measure.x, width: measure.width, top: -row }}
           />
         )

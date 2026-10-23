@@ -1,18 +1,9 @@
 import { useEffect, useRef } from 'react'
 import type { Layer } from '@/features/score-editor'
 import type { Tick } from '@/shared/lib/music'
-import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
+import { insertBox, noteBox, ScoreMark, type ScoreLayout, type Span } from '@/shared/ui/score'
 import { staffOfLayer } from '../model/line-music'
 
-/**
- * How far left of a notehead the band starts (clear of its accidental), how far before the next note
- * it stops (clear of that note's accidental, as Sibelius's caret keeps clear of its neighbours), how
- * far past its staff it reaches, its least width.
- */
-const LEAD = 10
-const CLEAR_OF_NEXT = 16
-const REACH = 12
-const LEAST = 28
 /** How much of the sheet shows past the caret's staff when it scrolls to bring it into sight. */
 const CLEAR = 16
 
@@ -47,27 +38,32 @@ function revealUpright(band: HTMLElement, opening: boolean) {
 }
 
 /**
- * The caret: the Player's cursor band where the next note or chord goes, on the layer's staff (or over
- * the chord symbols), as wide as the value chosen.
+ * The caret, as the one selection marks a place (ADR 0082), the Player's cursor alike: on the notes
+ * (or the chord) at it, a padded box round them on the layer's staff (or in the chord row, `chords`);
+ * on an empty place, a bar the pattern plays or the room after the last note, a slim line where the
+ * next goes.
  */
 export function EditorCaret({
   layout,
   layer,
   tick,
-  ticks,
-  row,
+  chords,
+  empty,
 }: {
   layout: ScoreLayout
   layer: Layer
   /** From the line's start. */
   tick: Tick
-  ticks: Tick
-  /** The labels' row over the staff, the chord row the caret fills in the chords' layer. */
-  row: number
+  /** The chord row over the staff, which the caret fills in the chords' layer. */
+  chords: Span
+  /** Nothing starts at the caret in its row. */
+  empty: boolean
 }) {
-  const left = xAtTick(layout, tick) - LEAD
-  const right = xAtTick(layout, tick + ticks) - CLEAR_OF_NEXT
   const staff = staffOfLayer(layout.staves, layer)
+  const span = layer === 'chords' || !staff ? chords : staff
+  const box = (empty ? insertBox : noteBox)(layout, tick, span)
+  const { left } = box
+  const right = left + box.width
   // A line wider than the screen scrolls sideways to keep the caret in sight as it moves.
   const caret = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -85,10 +81,6 @@ export function EditorCaret({
     })
     return () => cancelAnimationFrame(frame)
   }, [left, right])
-  const box =
-    layer === 'chords' || !staff
-      ? { top: -row, height: row }
-      : { top: staff.top - REACH, height: staff.bottom - staff.top + 2 * REACH }
   // The sheet scrolls to the caret's staff as the caret comes onto it (a short screen shows less
   // than a line's grand staff), leaving the sheet as it is while the staff is in sight.
   const shown = useRef(false)
@@ -99,18 +91,5 @@ export function EditorCaret({
     })
     return () => cancelAnimationFrame(frame)
   }, [box.top, box.height])
-  return (
-    <div
-      ref={caret}
-      aria-hidden
-      data-slot="caret"
-      // Slid by `left`, not a transform, so the pages round it stay sharp when zoomed (SheetCursor).
-      className="absolute z-0 rounded-md bg-secondary transition-[left] duration-200 ease-out"
-      style={{
-        ...box,
-        left,
-        width: Math.max(LEAST, right - left),
-      }}
-    />
-  )
+  return <ScoreMark ref={caret} slot="caret" kind={empty ? 'insert' : 'note'} box={box} />
 }
