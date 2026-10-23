@@ -39,7 +39,7 @@ export function SheetOverlay({
   positions: boolean
   current: number
   loop: BarRange | null
-  /** Whether the cursor is marked: not while the loop stands chosen and nothing moves (ADR 0086). */
+  /** Whether the cursor is marked: not while the loop stands chosen and nothing moves (ADR 0088). */
   cursorShown?: boolean
   /** What a click chose at the cursor: one head, or a chord on one staff. */
   picked?: Picked | null

@@ -1,5 +1,5 @@
 import type { StaffId } from '@/shared/lib/notation'
-import type { Column, Extent, Head } from '../layout'
+import type { Column, Extent, Head, Rest } from '../layout'
 
 /** The numbers in a `translate(x, y) scale(s)` or a path's `M x y L x y`. */
 const numbers = (text: string | null) => (text?.match(/-?\d+(?:\.\d+)?/g) ?? []).map(Number)
@@ -18,6 +18,13 @@ const GLYPHS: Readonly<Record<string, readonly [number, number, number, number]>
   E262: [0, -1.392, 0.996, 1.4],
   E263: [0, -0.5, 0.988, 0.508],
   E264: [0, -0.7, 1.644, 1.756],
+  // The rests: whole, half, quarter, 8th, 16th, 32nd.
+  E4E3: [0, -0.5, 1.128, 0.04],
+  E4E4: [0, -0.04, 1.128, 0.5],
+  E4E5: [0, -1.5, 1.08, 1.5],
+  E4E6: [0, -1, 0.988, 0.75],
+  E4E7: [0, -2, 1.28, 0.75],
+  E4E8: [0, -2, 1.46, 1.75],
 }
 /** A glyph not in the table: as large as a black head. */
 const ANY = GLYPHS.E0A4 ?? [0, -0.5, 1.18, 0.5]
@@ -74,7 +81,7 @@ function stemBox(group: Element | null): Extent | null {
 }
 
 /**
- * Each notehead of a line Verovio engraved (ADR 0086), with its accidental and its dots, and each
+ * Each notehead of a line Verovio engraved (ADR 0088), with its accidental and its dots, and each
  * chord's column with its stem, in the line's px (`at` turns Verovio's units into them): read from
  * the glyphs' places and their boxes in the font, so it reads the same anywhere, a test's DOM too.
  */
@@ -82,7 +89,7 @@ export function headsOf(
   svg: SVGSVGElement,
   space: number,
   at: (box: Extent) => Extent,
-): { heads: Head[]; columns: Column[] } {
+): { heads: Head[]; columns: Column[]; rests: Rest[] } {
   const heads: Head[] = []
   /** Each head's chord (or the note itself, alone): where its stem is drawn. */
   const groups = new Map<string, Element>()
@@ -118,5 +125,11 @@ export function headsOf(
       })
     } else columns.set(key, { ...before, ...(union([before, head]) ?? before) })
   }
-  return { heads, columns: [...columns.values()] }
+  const rests: Rest[] = []
+  for (const rest of svg.querySelectorAll('g.rest[id^="r-"]')) {
+    const [, staff, tick] = rest.id.split('-')
+    const box = glyphBox(rest.querySelector('use'), space)
+    if (staff && box) rests.push({ staff: staff as StaffId, tick: Number(tick), ...at(box) })
+  }
+  return { heads, columns: [...columns.values()], rests }
 }

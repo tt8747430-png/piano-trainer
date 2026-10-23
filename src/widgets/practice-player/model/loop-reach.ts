@@ -4,7 +4,7 @@ import type { BarRange } from '@/features/practice'
 export type LoopReach = 'bar' | 'end'
 
 /**
- * The loop once Shift with an arrow moves its far end (ADR 0086), as the editor's Shift extends what
+ * The loop once Shift with an arrow moves its far end (ADR 0088), as the editor's Shift extends what
  * is chosen: from where the choice began (`anchor`, else the loop's start, else the cursor's bar) its
  * other end goes a bar back or on, or to the first or last bar, shrinking as it comes back; with no
  * loop, it begins at the cursor's bar. Its anchor is kept for the next move.

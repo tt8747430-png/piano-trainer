@@ -94,10 +94,10 @@ export function ScoreSheet({
    */
   played?: PlayedHands | undefined
   caret: Tick
-  /** One note of the chord at the caret chosen alone (ADR 0086). */
+  /** One note of the chord at the caret chosen alone (ADR 0088). */
   chordNote?: Midi | null
   layer: Layer
-  /** The notes chosen: their span on the piece (ADR 0086). */
+  /** The notes chosen: their span on the piece (ADR 0088). */
   selection: { readonly from: Tick; readonly to: Tick } | null
   onPlace: (tick: Tick, layer: Layer, extend: boolean, key?: Midi) => void
   /** A held finger dragged onto the bar starting at a tick: what is chosen reaches it. */

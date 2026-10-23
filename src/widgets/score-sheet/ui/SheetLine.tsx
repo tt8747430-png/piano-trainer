@@ -50,7 +50,7 @@ export const SheetLine = memo(function SheetLine({
   layer: Layer
   /** From the line's start, when the caret is on this line. */
   caret: Tick | null
-  /** One note of the chord at the caret chosen alone (ADR 0086). */
+  /** One note of the chord at the caret chosen alone (ADR 0088). */
   chordNote: Midi | null
   /** The notes chosen: their span on the piece. */
   selection: { readonly from: Tick; readonly to: Tick } | null

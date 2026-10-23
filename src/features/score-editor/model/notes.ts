@@ -182,7 +182,7 @@ export function addToChord(
 
 /**
  * What an edit takes: the notes at a tick (the caret's), one note of the chord there (its key, chosen
- * alone, ADR 0086), or those starting in a span (the notes chosen).
+ * alone, ADR 0088), or those starting in a span (the notes chosen).
  */
 export type Where =
   Tick | { readonly from: Tick; readonly to: Tick } | { readonly at: Tick; readonly key: Midi }

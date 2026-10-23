@@ -111,7 +111,7 @@ const laid: ScoreLayout = {
 }
 const pad = HUG.pad * 10
 
-describe('marks that hug the notes (ADR 0086)', () => {
+describe('marks that hug the notes (ADR 0088)', () => {
   it('reads a staff space from a staff’s height', () => {
     expect(spaceOf(laid)).toBe(10)
   })
@@ -149,6 +149,24 @@ describe('marks that hug the notes (ADR 0086)', () => {
     expect((box?.left ?? 0) + (box?.width ?? 0)).toBeLessThan(215)
   })
 
+  it('hugs a range’s rests with its heads', () => {
+    const rested = {
+      ...laid,
+      rests: [{ staff: 'treble' as const, tick: 144, left: 300, right: 311, top: 55, bottom: 85 }],
+    }
+    const box = rangeMark(rested, { staves: ['treble'], from: 96, to: 192 }, treble)
+    expect(box).toEqual({
+      left: 215 - pad,
+      top: 55 - pad,
+      width: 96 + 2 * pad,
+      height: 30 + 2 * pad,
+    })
+    // One key of a chord hugs its head alone.
+    expect(noteMark(rested, { from: 144, to: 145, midi: midiOf(60) }, treble)).toEqual(
+      noteBox(rested, 144, treble),
+    )
+  })
+
   it('boxes a range of no heads (the chord row) from its first place to where it ends', () => {
     const box = rangeMark(laid, { staves: [], from: 96, to: 192 }, treble)
     expect(box?.left).toBe(215 - MARK.lead)
@@ -157,7 +175,7 @@ describe('marks that hug the notes (ADR 0086)', () => {
   })
 })
 
-describe('what a click chooses (ADR 0086)', () => {
+describe('what a click chooses (ADR 0088)', () => {
   it('chooses the head under it, one note of a chord', () => {
     expect(pickAt(laid, 76, 65)).toEqual({ staff: 'treble', tick: 0, index: 1, midi: 64 })
     expect(pickAt(laid, 76, 73)).toEqual({ staff: 'treble', tick: 0, index: 0, midi: 60 })

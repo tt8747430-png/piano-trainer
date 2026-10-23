@@ -76,7 +76,7 @@ export function LineOverlay({
   layer: Layer
   /** From the line's start, when the caret is on this line. */
   caret: Tick | null
-  /** One note of the chord at the caret chosen alone (ADR 0086). */
+  /** One note of the chord at the caret chosen alone (ADR 0088). */
   chordNote: Midi | null
   /** The notes chosen, from the piece's start: their span. */
   selection: { readonly from: Tick; readonly to: Tick } | null
@@ -84,7 +84,7 @@ export function LineOverlay({
   onPlace: (tick: Tick, layer: Layer, extend: boolean, key?: Midi) => void
   /** A held finger dragged onto the bar starting at `tick`: what is chosen reaches it. */
   onReach: (tick: Tick) => void
-  /** A click on empty staff: what is chosen let go (ADR 0086). */
+  /** A click on empty staff: what is chosen let go (ADR 0088). */
   onDeselect: () => void
   /** Where a note may be written in a layer: a double click writes at the nearest. */
   placesOf: (layer: Layer) => readonly Tick[]
@@ -98,7 +98,7 @@ export function LineOverlay({
   const [first] = layout.measures
   const staff = hand ? layout.staves[hand === 'lh' ? 'bass' : 'treble'] : undefined
   // The notes chosen on this line, hugged by the one selection's box on the staff of the row they
-  // are chosen in (the chord row, choosing chords), ADR 0086.
+  // are chosen in (the chord row, choosing chords), ADR 0088.
   const chosen = chosenBox(layout, line.start, selection, {
     row,
     staff: staffOfLayer(layout.staves, layer),
@@ -157,7 +157,7 @@ export function LineOverlay({
     return line.bars[index]?.bar[own] ?? true
   }
   /**
-   * What a click (or a held finger) at a point of bar `index` chooses (ADR 0086), as the Player's
+   * What a click (or a held finger) at a point of bar `index` chooses (ADR 0088), as the Player's
    * does: the head under it (one note of a chord), the chord whose stem or column it is on, or the
    * empty place it is in (a rest, the room after the last note, a bar the pattern plays, as a line);
    * on empty staff between notes, nothing, what is chosen let go. A chord in the chord row.
@@ -252,7 +252,7 @@ export function LineOverlay({
         <ScoreMark slot="bars-chosen" kind="range" box={chosen} />
       ) : null}
       {/* The caret first, so the labels and the notes stand over it; none while notes are chosen,
-          the range their mark (ADR 0086). */}
+          the range their mark (ADR 0088). */}
       {caret === null || selection ? null : (
         <EditorCaret
           layout={layout}

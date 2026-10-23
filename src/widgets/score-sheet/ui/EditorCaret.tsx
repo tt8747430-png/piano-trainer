@@ -38,7 +38,7 @@ function revealUpright(band: HTMLElement, opening: boolean) {
 }
 
 /**
- * The caret, as the one selection marks a place (ADR 0082, 0086), the Player's cursor alike: on the
+ * The caret, as the one selection marks a place (ADR 0082, 0088), the Player's cursor alike: on the
  * notes at it, a box hugging their heads on the layer's staff, or the one head of the chord chosen
  * alone (in the chord row, `chords`, a box round the chord's place); on an empty place, a bar the
  * pattern plays or the room after the last note, a slim line where the next goes.

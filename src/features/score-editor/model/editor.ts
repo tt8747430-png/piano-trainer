@@ -34,7 +34,7 @@ import { barAt } from './timeline'
 import { toggledDot, toggledTriplet, withValue } from './values'
 
 /**
- * What an edit of notes takes (ADR 0086): the notes chosen, from the first's start to the last's end;
+ * What an edit of notes takes (ADR 0088): the notes chosen, from the first's start to the last's end;
  * else the chord's one note chosen; else the notes at the caret.
  */
 function chosenSpan(state: EditorState): Where {
@@ -94,7 +94,7 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
     case 'delete': {
       if (layer !== 'chords') {
         // The notes chosen in this row taken, the caret at their start; a chord's one note chosen,
-        // that note alone (ADR 0086).
+        // that note alone (ADR 0088).
         const span = chosenSpan(state)
         if (typeof span !== 'number' && 'from' in span)
           return commit(state, deleteNotes(draft, layer, span), {

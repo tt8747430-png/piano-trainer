@@ -80,7 +80,7 @@ export async function drawScore(
 }
 
 /**
- * Each head with its note's key, from the score (ADR 0086): what a head clicked chooses. Two voices'
+ * Each head with its note's key, from the score (ADR 0088): what a head clicked chooses. Two voices'
  * chords at one tick share their ids; they come in the voices' order, as the engraving draws them.
  */
 export function withKeys(layout: ScoreLayout, score: Score): ScoreLayout {

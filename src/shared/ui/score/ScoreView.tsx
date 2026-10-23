@@ -55,7 +55,7 @@ export function ScoreView({
   /**
    * The notes chosen, those starting in [from, to) on a staff (on every staff without one), one key
    * alone where `midi` says, marked in the focus colour as a notation app marks a selection (ADR 0082,
-   * 0086).
+   * 0088).
    */
   selected?:
     | {

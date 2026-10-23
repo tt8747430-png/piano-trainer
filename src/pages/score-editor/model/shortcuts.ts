@@ -23,7 +23,7 @@ const isBarEditKey = (code: string): code is keyof typeof BAR_EDITS =>
  * The editor's shortcut for a key press in a layer (spec §6), or null. Only keys the typing keys leave
  * free: digits, the full stop, arrows (Shift extending what is chosen by a note, with Alt by a bar,
  * with Cmd to an end; Alt with ↑ ↓ through a chord's notes, then to the staff over or under, ADR
- * 0086), Home, End, Backspace, Delete, Enter and Escape (letting go of what is chosen), and Cmd or
+ * 0088), Home, End, Backspace, Delete, Enter and Escape (letting go of what is chosen), and Cmd or
  * Ctrl with Z, Y, and C, X, V (the bars, in the chords); a letter alone plays the piano.
  */
 export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {

@@ -66,7 +66,7 @@ export function SheetLines({
   onPick: (picked: Picked) => void
   onLoopChange: (loop: BarRange) => void
   onChoose: (bar: number, extend: boolean) => void
-  /** The notes chosen: the loop's, else the cursor's, one head alone where one was clicked (ADR 0082, 0086). */
+  /** The notes chosen: the loop's, else the cursor's, one head alone where one was clicked (ADR 0082, 0088). */
   selected:
     | {
         readonly staff?: StaffId

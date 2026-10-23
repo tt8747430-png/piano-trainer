@@ -42,7 +42,9 @@ export function caretSaid({
   draft,
   caret,
   layer,
-}: Pick<EditorState, 'draft' | 'caret' | 'layer'>): CaretSaid {
+  chordNote = null,
+}: Pick<EditorState, 'draft' | 'caret' | 'layer'> &
+  Partial<Pick<EditorState, 'chordNote'>>): CaretSaid {
   if (caret >= totalTicks(draft)) return { kind: 'end' }
   const { index, start, bar } = barAt(draft, caret)
   const at = { bar: index + 1, beat: beatOf(caret - start) }
@@ -51,7 +53,10 @@ export function caretSaid({
     return { kind: 'at', ...at, what: chord ? chordSymbol(chord.chord) : '' }
   }
   if (isHandLayer(layer) && !bar[layer]) return { kind: 'pattern', ...at, what: '' }
-  const notes = notesAt(draft, layer, caret)
+  // One note of a chord chosen alone: that note (ADR 0088).
+  const all = notesAt(draft, layer, caret)
+  const one = all.filter((n) => n.midi === chordNote)
+  const notes = one.length > 0 ? one : all
   const [first] = notes
   if (first) {
     const same = notes.every((n) => n.durationTicks === first.durationTicks)

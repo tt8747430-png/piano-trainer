@@ -7,7 +7,7 @@ import { chordPositions } from '../model/chord-positions'
 
 /**
  * Each bar as a button over the staff, as the editor's are, through the one selection's gestures
- * (ADR 0082, 0086): a click or tap on a head chooses that note (one of a chord's), on a stem or a
+ * (ADR 0082, 0088): a click or tap on a head chooses that note (one of a chord's), on a stem or a
  * chord's column the chord, and the cursor jumps there; on empty staff, nothing. Enter or Space goes
  * to the bar's first beat; Shift with a click, or a finger held and dragged, chooses bars (`onChoose`,
  * the piece's bar, extending what is chosen).
@@ -73,12 +73,14 @@ export function BarTargets({
       <button
         key={bar}
         type="button"
+        tabIndex={-1}
         aria-label={names[index]}
         aria-current={bar === current ? 'step' : undefined}
         {...choice(bar, { x: measure.x, y: 0 })}
-        // No hover wash round the bar, which a touch screen leaves standing over it (ADR 0082): the
-        // cursor and the loop are the selection's marks.
-        className="absolute inset-y-0 z-20 cursor-pointer rounded-md focus-visible:-outline-offset-3"
+        // A pointer's target only, as the editor's (the arrows move the cursor): no focus ring and no
+        // hover wash round the bar, which would stand over empty staff (ADR 0082, 0088); the cursor and
+        // the loop are the selection's marks.
+        className="absolute inset-y-0 z-20 cursor-pointer outline-none"
         style={{ left: measure.x, width: measure.width }}
       />
     )

@@ -1,6 +1,7 @@
 # ADR 0082 — One selection, the editor's and the Player's, in every layout
 
-- **Status:** accepted · **Date:** 2026-10-23 · Refines [0076](0076-chosen-notes.md)
+- **Status:** accepted · **Date:** 2026-10-23 · Refines [0076](0076-chosen-notes.md) · Refined by
+  [0088](0088-precise-selection.md): marks hug the heads, a chord's one note, the editor's range by notes
 
 ## Context
 

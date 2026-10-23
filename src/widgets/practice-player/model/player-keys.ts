@@ -9,7 +9,7 @@ export const PLAYER_KEYS = {
   slower: { key: 'ArrowDown' },
   loop: { code: 'KeyR' },
   start: { key: 'Home' },
-  /** The loop's far end a bar back or on, to the first or last bar (ADR 0086). */
+  /** The loop's far end a bar back or on, to the first or last bar (ADR 0088). */
   reachBack: { key: 'ArrowLeft', shift: true },
   reachNext: { key: 'ArrowRight', shift: true },
   reachStart: { key: 'Home', shift: true },

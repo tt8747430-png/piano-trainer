@@ -23,10 +23,12 @@ export interface ScoreLayout {
   readonly staffInstruments?: StaffInstruments
   /** Each written onset left to right: its tick and its first notehead's or rest's x. */
   readonly onsets: readonly { readonly tick: Tick; readonly x: number }[]
-  /** Each notehead drawn, with its accidental and dots (ADR 0086): what a selection hugs. */
+  /** Each notehead drawn, with its accidental and dots (ADR 0088): what a selection hugs. */
   readonly heads?: readonly Head[]
   /** Each chord's (or note's) column on its staff: its heads and its stem, what a click on it chooses whole. */
   readonly columns?: readonly Column[]
+  /** Each rest drawn: notes chosen over it hug it too. */
+  readonly rests?: readonly Rest[]
 }
 
 /** A box on the engraving, in its px: its left, right, top and foot. */
@@ -45,6 +47,12 @@ export interface Head extends Extent {
   /** Its place in its chord, lowest first. */
   readonly index: number
   readonly midi?: Midi
+}
+
+/** A rest drawn on its staff. */
+export interface Rest extends Extent {
+  readonly staff: StaffId
+  readonly tick: Tick
 }
 
 /** A chord's (or a note's) column on its staff: its heads with its stem. */

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { readDraft, type EditorState } from '@/features/score-editor'
+import { midi } from '@/shared/lib/music'
 import { caretSaid } from './caret-said'
 
 const music = {
@@ -38,5 +39,16 @@ describe('caretSaid', () => {
   it('says a note is held where it sounds on from before the caret', () => {
     expect(at(24, 'melody')).toEqual({ kind: 'held', bar: 1, beat: '2', what: 'F#4' })
     expect(at(120, 'melody')).toEqual({ kind: 'held', bar: 2, beat: '2', what: 'A4' })
+  })
+
+  it('names one note of a chord chosen alone (ADR 0088)', () => {
+    const chord = readDraft({ ...music, hands: { rh: 'D4+F#4+A4/4 | -' } })
+    expect(caretSaid({ draft: chord, caret: 0, layer: 'rh', chordNote: midi(66) })).toMatchObject({
+      kind: 'notes',
+      what: 'F#4',
+    })
+    expect(caretSaid({ draft: chord, caret: 0, layer: 'rh' })).toMatchObject({
+      what: 'D4 F#4 A4',
+    })
   })
 })

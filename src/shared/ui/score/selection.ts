@@ -16,9 +16,9 @@ export const MARK = { lead: 9, width: 30, reach: 12, inset: 4, line: 3 } as cons
  * place a line in the focus colour, the bars chosen one rounded box.
  */
 export const MARK_CLASS = {
-  note: 'rounded-lg bg-secondary ring-1 ring-ring/40',
+  note: 'rounded-sm bg-secondary ring-1 ring-ring/40',
   insert: 'rounded-full bg-ring',
-  range: 'rounded-xl bg-secondary/70 ring-1 ring-ring/45',
+  range: 'rounded-md bg-secondary/70 ring-1 ring-ring/45',
 } as const
 
 export type MarkKind = keyof typeof MARK_CLASS
@@ -93,7 +93,7 @@ export function rangeBox(
 
 /**
  * How far a mark stands clear of the heads it hugs, and how far round a head a click still lands on
- * it, in staff spaces (ADR 0086): a hair's room, about 3 px on a full-size staff.
+ * it, in staff spaces (ADR 0088): a hair's room, about 3 px on a full-size staff.
  */
 export const HUG = { pad: 0.3, grab: 0.35 } as const
 
@@ -103,7 +103,7 @@ export function spaceOf(layout: Pick<ScoreLayout, 'staves'>): number {
   return staff ? (staff.bottom - staff.top) / 4 : 10
 }
 
-/** What a mark is over (ADR 0086): the notes starting in [from, to) on these staves (every staff without), one key alone where `midi` says. */
+/** What a mark is over (ADR 0088): the notes starting in [from, to) on these staves (every staff without), one key alone where `midi` says. */
 export interface Chosen {
   readonly staves?: readonly StaffId[] | undefined
   readonly from: Tick
@@ -121,6 +121,19 @@ export const headsChosen = (layout: Pick<ScoreLayout, 'heads'>, chosen: Chosen):
       (chosen.midi === undefined || head.midi === chosen.midi),
   )
 
+/** What a mark over a choice hugs: its heads, and its rests where it is no one key of a chord. */
+const hugged = (layout: Pick<ScoreLayout, 'heads' | 'rests'>, chosen: Chosen): Extent[] => [
+  ...headsChosen(layout, chosen),
+  ...(chosen.midi === undefined
+    ? (layout.rests ?? []).filter(
+        (rest) =>
+          rest.tick >= chosen.from &&
+          rest.tick < chosen.to &&
+          (!chosen.staves || chosen.staves.includes(rest.staff)),
+      )
+    : []),
+]
+
 /** A box hugging boxes, `pad` clear of them all round; none round none. */
 export function hug(boxes: readonly Extent[], pad: number): MarkBox | null {
   if (boxes.length === 0) return null
@@ -134,29 +147,28 @@ export function hug(boxes: readonly Extent[], pad: number): MarkBox | null {
   }
 }
 
-type Laid = Pick<ScoreLayout, 'measures' | 'onsets' | 'staves' | 'heads'>
+type Laid = Pick<ScoreLayout, 'measures' | 'onsets' | 'staves' | 'heads' | 'rests'>
 
 /**
- * A note, a chord or a beat chosen (ADR 0086), the editor's caret and the Player's cursor alike:
+ * A note, a chord or a beat chosen (ADR 0088), the editor's caret and the Player's cursor alike:
  * a box hugging exactly its heads, their accidentals and dots; where none is drawn (a rest), a
  * padded box round its column over `span`.
  */
 export function noteMark(layout: Laid, chosen: Chosen, span: Span): MarkBox {
   return (
-    hug(headsChosen(layout, chosen), HUG.pad * spaceOf(layout)) ??
-    noteBox(layout, chosen.from, span)
+    hug(hugged(layout, chosen), HUG.pad * spaceOf(layout)) ?? noteBox(layout, chosen.from, span)
   )
 }
 
 /**
- * Notes chosen (ADR 0086), the editor's range and the Player's loop alike: one box hugging their
+ * Notes chosen (ADR 0088), the editor's range and the Player's loop alike: one box hugging their
  * heads on this line, from the first's left to the last's right and the highest's top to the
  * lowest's foot; where none is drawn here (rests, the chord row), from the first's place to where
  * the last ends over `span`. None where the line holds none of it.
  */
 export function rangeMark(layout: Laid, chosen: Chosen, span: Span): MarkBox | null {
-  const hugged = hug(headsChosen(layout, chosen), HUG.pad * spaceOf(layout))
-  if (hugged) return hugged
+  const around = hug(hugged(layout, chosen), HUG.pad * spaceOf(layout))
+  if (around) return around
   const first = layout.measures[0]
   const last = layout.measures.at(-1)
   if (!first || !last) return null
@@ -171,7 +183,7 @@ export function rangeMark(layout: Laid, chosen: Chosen, span: Span): MarkBox | n
   return { left, width: Math.max(MARK.line, right - left), ...over(span, MARK.reach) }
 }
 
-/** What a point on the engraving lands on (ADR 0086): one head (`index`, `midi`), or a chord's column whole. */
+/** What a point on the engraving lands on (ADR 0088): one head (`index`, `midi`), or a chord's column whole. */
 export interface Picked {
   readonly staff: StaffId
   readonly tick: Tick
@@ -187,7 +199,7 @@ const centre = (box: Extent, x: number, y: number) =>
   Math.hypot((box.left + box.right) / 2 - x, (box.top + box.bottom) / 2 - y)
 
 /**
- * What a click at (x, y) on the engraving chooses (ADR 0086), the editor's and the Player's alike:
+ * What a click at (x, y) on the engraving chooses (ADR 0088), the editor's and the Player's alike:
  * the head under it (the nearest, where a chord's heads touch); else the chord whose column (its
  * heads and stem) it is on; else nothing: empty staff is never chosen. `accept` leaves heads out (a
  * bar the pattern plays, drawn soft, in the editor).

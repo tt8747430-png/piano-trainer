@@ -4,7 +4,7 @@ import { rangeBox, rangeMark, ScoreMark, type ScoreLayout } from '@/shared/ui/sc
 import { LoopGrip } from './LoopGrip'
 
 /**
- * The loop: its notes marked as the one selection marks notes chosen (ADR 0082, 0086), the editor's
+ * The loop: its notes marked as the one selection marks notes chosen (ADR 0082, 0088), the editor's
  * alike, hugging its heads on every staff, and a grip at each end (spec §2.6).
  */
 export function LoopBand({

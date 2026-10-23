@@ -27,7 +27,7 @@ export function snapToChord(draft: Draft, tick: Tick): Tick {
 
 /**
  * Where the caret may stand in a layer of notes: their starts and ends, barlines, the ends, and steps
- * of the value where nothing sounds (ADR 0086): never inside a note, where it would mark empty staff.
+ * of the value where nothing sounds (ADR 0088): never inside a note, where it would mark empty staff.
  */
 function notePlaces(draft: Draft, layer: NoteLayer, step: Tick): Tick[] {
   const notes = notesOf(draft, layer)
@@ -77,7 +77,7 @@ export function tapPlaces(draft: Draft, layer: Layer): Tick[] {
 }
 
 /**
- * What stands at a place in a layer, as a span of time (ADR 0086): the notes starting there, to the
+ * What stands at a place in a layer, as a span of time (ADR 0088): the notes starting there, to the
  * longest's end; a chord, to the next chord or beat; an empty place (a rest, a bar the pattern plays,
  * the room after the last note), to the next note or the barline.
  */

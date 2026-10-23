@@ -115,7 +115,7 @@ describe('shortcutOf', () => {
     })
   })
 
-  it('extends what is chosen with Shift: a note, Alt a bar, Cmd or Home and End to an end (ADR 0086)', () => {
+  it('extends what is chosen with Shift: a note, Alt a bar, Cmd or Home and End to an end (ADR 0088)', () => {
     const shift = { shiftKey: true }
     expect(shortcutOf(press('ArrowLeft', 'ArrowLeft', shift), 'rh')).toEqual({
       type: 'move',

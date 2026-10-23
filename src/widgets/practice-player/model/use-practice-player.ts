@@ -58,7 +58,7 @@ export interface PracticePlayer {
   toggleLoop(): void
   /** The loop chosen, or let go of. */
   setLoop(loop: BarRange | null): void
-  /** The loop's far end moved by Shift with an arrow, Home or End (ADR 0086). */
+  /** The loop's far end moved by Shift with an arrow, Home or End (ADR 0088). */
   reachLoop(by: LoopReach, direction: -1 | 1): void
   /** A key tapped on the screen: an answer in Wait mode. The keyboard sounds every tap itself. */
   tapKey(key: Midi): void

@@ -17,7 +17,7 @@ import { newSection } from './sections'
 import type { BarEdit, ChordAdvance, EditorState, Selection } from './state'
 import { barAt, barsOf } from './timeline'
 
-/** The bars the notes chosen are in, first to last: what an edit of the form acts on (ADR 0086). */
+/** The bars the notes chosen are in, first to last: what an edit of the form acts on (ADR 0088). */
 export function selectedBars(draft: Draft, selection: Selection): BarRange {
   const { from, to } = selectionSpan(selection)
   return { from: barAt(draft, from).index, to: barAt(draft, Math.max(from, to - 1)).index }

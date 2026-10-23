@@ -111,7 +111,7 @@ describe('ScoreSheet', () => {
     await waitFor(() =>
       expect(document.querySelectorAll('[data-slot="bars-chosen"]')).toHaveLength(2),
     )
-    // While notes are chosen the caret stands aside: the range is the mark (ADR 0086).
+    // While notes are chosen the caret stands aside: the range is the mark (ADR 0088).
     expect(document.querySelector('[data-slot="caret"]')).toBeNull()
   })
 
@@ -136,7 +136,7 @@ describe('ScoreSheet', () => {
     expect(onSignature).toHaveBeenCalled()
   })
 
-  it('chooses nothing on empty staff beside a note, and a bar’s start where its row writes nothing (ADR 0086)', async () => {
+  it('chooses nothing on empty staff beside a note, and a bar’s start where its row writes nothing (ADR 0088)', async () => {
     const onPlace = vi.fn()
     const onDeselect = vi.fn()
     sheet('melody', onPlace, false, vi.fn(), onDeselect)

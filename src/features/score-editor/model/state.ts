@@ -35,7 +35,7 @@ export interface TickSpan {
 }
 
 /**
- * Notes chosen with Shift (ADR 0086), as a notation app chooses a range: the note (or chord, or empty
+ * Notes chosen with Shift (ADR 0088), as a notation app chooses a range: the note (or chord, or empty
  * place) where the choice began and the one it reaches, both inside it.
  */
 export interface Selection {
@@ -59,7 +59,7 @@ export interface EditorState extends Snapshot {
   /** Chord: a key played joins the notes at the caret, which stays. */
   readonly chord: boolean
   readonly selection: Selection | null
-  /** One note of the chord at the caret chosen alone, by its key (ADR 0086): else the whole chord. */
+  /** One note of the chord at the caret chosen alone, by its key (ADR 0088): else the whole chord. */
   readonly chordNote: Midi | null
   readonly struck: Struck | null
   readonly clip: Clip | null
@@ -96,14 +96,14 @@ export type EditorAction =
       readonly tick: Tick
       readonly layer: Layer
       readonly extend?: boolean
-      /** One note of the chord there, clicked on its head (ADR 0086). */
+      /** One note of the chord there, clicked on its head (ADR 0088). */
       readonly key?: Midi
     }
   /** What is chosen let go: the notes chosen, a chord's one note (Escape). */
   | { readonly type: 'deselect' }
   /**
    * The note over (1) or under (−1) the one chosen in the chord at the caret, the chord's top or foot
-   * from the whole chord; past its last, the staff over or under (Alt ↑ ↓, ADR 0086).
+   * from the whole chord; past its last, the staff over or under (Alt ↑ ↓, ADR 0088).
    */
   | { readonly type: 'chordNote'; readonly direction: -1 | 1 }
   | { readonly type: 'key'; readonly key: Midi; readonly time: number }

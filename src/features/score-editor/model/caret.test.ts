@@ -32,7 +32,7 @@ const tune = draftOf({
 })
 
 describe('the caret in a voice', () => {
-  it('moves note to note, never inside one, where it would mark empty staff (ADR 0086)', () => {
+  it('moves note to note, never inside one, where it would mark empty staff (ADR 0088)', () => {
     expect(nextCaret(tune, 'melody', 0, 24, 1)).toBe(36)
     expect(nextCaret(tune, 'melody', 36, 48, 1)).toBe(48)
     expect(nextCaret(tune, 'melody', 48, 24, 1)).toBe(96)

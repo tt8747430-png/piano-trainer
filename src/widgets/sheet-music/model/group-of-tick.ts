@@ -2,7 +2,7 @@ import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
 
 /**
- * The beat group a note chosen on the sheet is in (ADR 0086): the last to start at or before its
+ * The beat group a note chosen on the sheet is in (ADR 0088): the last to start at or before its
  * tick. A note tied over a beat is written twice and starts no group of its own: its second half is
  * still its group's. None before the first.
  */

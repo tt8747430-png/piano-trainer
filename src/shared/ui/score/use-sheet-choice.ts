@@ -11,7 +11,7 @@ export interface SheetPoint {
   readonly y: number
 }
 
-/** What the one selection's gestures say to a sheet (ADR 0086), the editor's and the Player's alike. */
+/** What the one selection's gestures say to a sheet (ADR 0088), the editor's and the Player's alike. */
 export interface SheetChoice {
   /**
    * A click or tap on bar `bar` at a point (none: the bar's button pressed from the keys), Shift
@@ -44,7 +44,7 @@ function pointIn(element: HTMLElement, origin: SheetPoint, x: number, y: number)
 const hold = (event: TouchEvent) => event.preventDefault()
 
 /**
- * The one selection's gestures over a line's bars (ADR 0082, 0086), the same in the score editor and
+ * The one selection's gestures over a line's bars (ADR 0082, 0088), the same in the score editor and
  * the Player in every layout: a click or tap chooses what is under it (`at`, with its point on the
  * engraving), Shift with a click extends what is chosen to it, a finger held still for `HOLD_MS`
  * chooses what is under it and, dragged on, extends it to each bar it reaches (`reach`), on any line;

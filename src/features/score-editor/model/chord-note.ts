@@ -19,7 +19,7 @@ export function steppedKey(key: Key, from: Midi, steps: number): Midi {
 }
 
 /**
- * Alt ↑ ↓ as a notation app steps through a chord (ADR 0086): from the whole chord at the caret to
+ * Alt ↑ ↓ as a notation app steps through a chord (ADR 0088): from the whole chord at the caret to
  * its top note (up) or its foot (down), then note by note; past its top or foot, or on a single note,
  * to the staff over or under, the whole chord there.
  */

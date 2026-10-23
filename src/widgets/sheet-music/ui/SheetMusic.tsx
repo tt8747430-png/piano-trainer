@@ -129,7 +129,7 @@ export function SheetMusic({
   // A muted staff may leave the height: its hand is not read.
   const read = staves.filter((staff) => staff !== muted).length || 1
   const scale = fitScale(room, staffHeight(undefined, read), bar)
-  // Bars chosen as the editor chooses notes (ADR 0082, 0086), the loop: from the bar held or the
+  // Bars chosen as the editor chooses notes (ADR 0082, 0088), the loop: from the bar held or the
   // loop's start (else the cursor's bar) to the one reached, exactly.
   const anchor = useRef<number | null>(null)
   const group = performance.beatGroups[current]
@@ -138,7 +138,7 @@ export function SheetMusic({
     const from = extend ? (anchor.current ?? loop?.first ?? group?.bar ?? at) : at
     onLoopChange({ first: Math.min(from, at), last: Math.max(from, at) })
   }
-  // A note or a chord clicked, as the editor's click (ADR 0086): the cursor goes to its beat group,
+  // A note or a chord clicked, as the editor's click (ADR 0088): the cursor goes to its beat group,
   // the loop is let go of, and it alone is marked until the cursor moves.
   const [picked, setPicked] = useState<{ readonly picked: Picked; readonly group: number } | null>(
     null,
@@ -163,12 +163,12 @@ export function SheetMusic({
     if (here) return { staff: here.staff, from: here.tick, to: here.tick + 1, midi: here.midi }
     return group ? { from: group.tick, to: group.tick + 1 } : undefined
   }, [loop, performance, group, here])
-  // While the loop stands chosen and nothing moves, its box is the mark: the cursor at its start
-  // adds nothing (ADR 0086). Playing, or stepped on, the cursor is where the music is.
-  const cursorShown =
-    !loop ||
-    playing ||
-    current !== performance.beatGroups.findIndex((each) => each.bar === loop.first)
+  // While the loop stands chosen and nothing moves, its box is the mark, the cursor none (ADR 0088).
+  // Playing, or stepped on since, the cursor is where the music is.
+  const loopKey = loop ? `${loop.first}-${loop.last}` : ''
+  const [resting, setResting] = useState({ loop: loopKey, at: current })
+  if (resting.loop !== loopKey) setResting({ loop: loopKey, at: current })
+  const cursorShown = !loop || playing || current !== resting.at
   if (view.layout !== 'horizontal')
     return (
       <SheetLines

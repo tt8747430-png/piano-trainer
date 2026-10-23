@@ -9,7 +9,8 @@ export function CaretLine() {
   const draft = useEditorState((state) => state.draft)
   const caret = useEditorState((state) => state.caret)
   const layer = useEditorState((state) => state.layer)
-  const said = caretSaid({ draft, caret, layer })
+  const chordNote = useEditorState((state) => state.chordNote)
+  const said = caretSaid({ draft, caret, layer, chordNote })
   const valueWord = useValueWord()
   const where = (() => {
     if (said.kind === 'end') return t('caret.end')

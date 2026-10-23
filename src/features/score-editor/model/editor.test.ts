@@ -409,7 +409,7 @@ describe('the editor', () => {
     ).toBeNull()
   })
 
-  it('chooses one note of a chord, and edits it alone (ADR 0086)', () => {
+  it('chooses one note of a chord, and edits it alone (ADR 0088)', () => {
     const chord = run(initialEditor(draftOf({ hands: { rh: 'C4+E4+G4/4 | -' } })), {
       type: 'layer',
       layer: 'rh',

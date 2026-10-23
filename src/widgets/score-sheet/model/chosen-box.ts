@@ -3,13 +3,13 @@ import type { StaffId } from '@/shared/lib/notation'
 import { MARK, rangeMark, type MarkBox, type ScoreLayout, type Span } from '@/shared/ui/score'
 
 /**
- * The notes chosen on a line as the one selection's box (ADR 0082, 0086): hugging the heads that
+ * The notes chosen on a line as the one selection's box (ADR 0082, 0088): hugging the heads that
  * start in the piece's span `selection` on the staff of the row they are chosen in, from the first's
  * left to the last's right; in the chord row (`row` high), from the first chord's place to where the
  * last ends. None where the line (from `lineStart`) holds none of it.
  */
 export function chosenBox(
-  layout: Pick<ScoreLayout, 'measures' | 'onsets' | 'staves' | 'heads'>,
+  layout: Pick<ScoreLayout, 'measures' | 'onsets' | 'staves' | 'heads' | 'rests'>,
   lineStart: Tick,
   selection: { readonly from: Tick; readonly to: Tick } | null,
   {

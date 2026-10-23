@@ -35,7 +35,7 @@ const bars = () => {
 
 afterEach(() => vi.useRealTimers())
 
-describe('the one selection’s gestures (ADR 0086)', () => {
+describe('the one selection’s gestures (ADR 0088)', () => {
   it('says where a click lands on the engraving, Shift extending', () => {
     const { at, second } = bars()
     stubBox(second, { left: 300, top: 100, width: 100, height: 80 })

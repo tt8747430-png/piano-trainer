@@ -65,7 +65,7 @@ describe('a line engraved by Verovio, read back', () => {
   }, 20_000)
 })
 
-describe('each notehead read back (ADR 0086)', () => {
+describe('each notehead read back (ADR 0088)', () => {
   const chordScore = notate({
     key: { tonic: note('C'), minor: false },
     meter: '4/4',
@@ -121,5 +121,24 @@ describe('each notehead read back (ADR 0086)', () => {
     if (!column) throw new Error('the chord’s column')
     // The stem reaches past the heads.
     expect(column.bottom - column.top).toBeGreaterThan(40)
+  }, 20_000)
+
+  it('boxes each rest drawn, a quarter rest three spaces high', async () => {
+    const rested = notate({
+      key: { tonic: note('C'), minor: false },
+      meter: '4/4',
+      bars: [{ startTick: 0, beats: 4 }],
+      notes: [n(72, 'rh', 0, 24), n(72, 'rh', 48, 48), n(48, 'lh', 0, 96)],
+      chords: [],
+    })
+    const [svg = ''] = await engraveMei(scoreToMei(rested), { width: 600, scale: 1 })
+    const host = document.createElement('div')
+    host.innerHTML = svg
+    const element = host.querySelector('svg')
+    if (!element) throw new Error('an SVG')
+    const layout = layoutOf(element, rested.measures, rested.staves)
+    const [rest] = layout.rests ?? []
+    expect(rest).toMatchObject({ staff: 'treble', tick: 24 })
+    expect((rest?.bottom ?? 0) - (rest?.top ?? 0)).toBeCloseTo(30, 0)
   }, 20_000)
 })

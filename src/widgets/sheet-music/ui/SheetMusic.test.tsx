@@ -57,7 +57,7 @@ describe('SheetMusic', () => {
     expect(screen.getByRole('button', { name: 'Bar 2: G' })).toHaveAttribute('aria-current', 'step')
   })
 
-  it('jumps to a bar’s first beat group from the keyboard, and nowhere at a tap on empty staff (ADR 0086)', async () => {
+  it('jumps to a bar’s first beat group from the keyboard, and nowhere at a tap on empty staff (ADR 0088)', async () => {
     const user = userEvent.setup()
     const { onJump, onLoopChange } = renderSheet({ loop: { first: 0, last: 1 } })
     const second = await screen.findByRole('button', { name: 'Bar 2: G' })
@@ -122,18 +122,35 @@ describe('SheetMusic', () => {
         shown: { layout, chordNames: true, melodyStaff: false, hidden: [] },
       })
       await screen.findByRole('button', { name: 'Bar 2: G' })
-      expect(document.querySelectorAll('[data-mark="note"]')).toHaveLength(1)
+      // The loop as one box; the cursor stands aside while it stands chosen (ADR 0088).
       expect(document.querySelectorAll('[data-mark="range"]')).toHaveLength(1)
+      expect(document.querySelector('[data-mark="note"]')).toBeNull()
       // The loop's notes in the selection's colour, as the editor's chosen notes are.
       await waitFor(() => expect(document.querySelector('.note-chosen')).toBeInTheDocument())
     },
   )
 
-  it('marks no cursor while the loop stands chosen and nothing moves, as the editor hides its caret (ADR 0086)', async () => {
-    renderSheet({ current: 4, loop: { first: 1, last: 1 } })
+  it('marks no cursor while the loop stands chosen and nothing moves, then where it is stepped to (ADR 0088)', async () => {
+    const sheet = (current: number) => (
+      <SheetMusic
+        performance={TWO_BARS}
+        headings={['Verse']}
+        current={current}
+        loop={{ first: 1, last: 1 }}
+        fingers={false}
+        names={false}
+        positions={false}
+        muted={undefined}
+        onJump={vi.fn()}
+        onLoopChange={vi.fn()}
+      />
+    )
+    const { rerender } = render(sheet(4))
     await screen.findByRole('button', { name: 'Bar 2: G' })
     expect(document.querySelectorAll('[data-mark="range"]')).toHaveLength(1)
     expect(document.querySelector('[data-mark="note"]')).toBeNull()
+    rerender(sheet(5))
+    expect(document.querySelectorAll('[data-mark="note"]')).toHaveLength(1)
   })
 
   it('scrolls to keep the cursor in sight', async () => {
