@@ -159,7 +159,7 @@ export function PieceView({ piece }: { piece: Piece }) {
           sectionAction={(bars, section) => (
             <ButtonLink
               variant="outline"
-              className="h-9 rounded-full px-3 text-sm print:hidden"
+              className="rounded-full print:hidden"
               aria-label={t('practiseSectionOf', { section: headings[section] ?? '' })}
               render={
                 <Link
