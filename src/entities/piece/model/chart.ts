@@ -2,7 +2,7 @@ import { isMethodCode, METHODS, type PatternFit, type PatternId } from '@/entiti
 import type { Chart, ChartChord, Melody } from '@/shared/lib/arrangement'
 import { beatsToTicks, isCompound, type ChordSize, type Tick } from '@/shared/lib/music'
 import { parseChart } from './parse-chart'
-import { parseMelody, parseVoices } from './parse-melody'
+import { parseMelody } from './parse-melody'
 import { parseProgression } from './parse-progression'
 import { isDegreePiece, type ChartPiece, type Piece } from './types'
 
@@ -15,9 +15,6 @@ export function chartOf(piece: Piece, chordSize?: ChordSize): Chart {
 
 export const melodyOf = (piece: Piece): Melody | undefined =>
   isDegreePiece(piece) ? undefined : parseMelody(piece)
-
-/** The more voices a piece sings with its tune (ADR 0066); none in a song written in degrees. */
-export const voicesOf = (piece: Piece): Melody[] => (isDegreePiece(piece) ? [] : parseVoices(piece))
 
 /** Every chord of a chart in order. */
 export const chordsOf = (chart: Chart): ChartChord[] =>

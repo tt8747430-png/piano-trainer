@@ -4,7 +4,6 @@ import type {
   Finger,
   Hand,
   HandClefs,
-  Instrument,
   Key,
   Meter,
   Midi,
@@ -203,16 +202,8 @@ export interface Performance {
   readonly notes: readonly PerformanceNote[]
   readonly beatGroups: readonly BeatGroup[]
   /**
-   * Where a piece has more voices (ADR 0066), every voice sung, in the key played: the tune first, then
-   * the more voices. Heard and shown, never the learner's to play, so apart from `notes` and the beat
-   * groups.
-   */
-  readonly sung?: readonly Melody[]
-  /**
    * Every part's tempo and pedal marks (ADR 0068), whether the learner hears that part or not: the
    * time and the pedal the whole piece keeps.
    */
   readonly timing?: readonly { readonly startTick: Tick; readonly marks: NoteMarks }[]
-  /** What each of `sung` is played on (ADR 0070), the voice where it names none. */
-  readonly instruments?: readonly Instrument[]
 }

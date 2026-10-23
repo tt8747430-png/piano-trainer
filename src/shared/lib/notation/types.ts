@@ -5,7 +5,6 @@ import type {
   Finger,
   Hand,
   HandClefs,
-  Instrument,
   Key,
   Meter,
   Midi,
@@ -35,8 +34,6 @@ export interface TimedNote {
   readonly durationTicks: Tick
   readonly finger?: Finger
   readonly marks?: NoteMarks
-  /** A tune's note sung by another voice than the tune's: written on that voice's own staff. */
-  readonly voice?: ExtraVoice
 }
 
 /** Timed notes with their bars and chord symbols: a Performance is this. */
@@ -54,23 +51,14 @@ export interface TimedMusic {
     readonly key?: Key
     /** The clef a hand's staff changes to at this bar (ADR 0069). */
     readonly clefs?: HandClefs
-    /** Staves whose notes here the pattern plays, not written: drawn in soft ink (ADR 0083). */
-    readonly pattern?: readonly StaffId[]
   })[]
   readonly notes: readonly TimedNote[]
   readonly chords: readonly { readonly startTick: Tick; readonly symbol: string }[]
   /** The tune on a staff of its own over the grand staff (ADR 0064); else it is the treble's upper voice. */
   readonly melodyStaff?: boolean
-  /** The more voices written, each on its own staff under the tune's (ADR 0066). */
-  readonly voiceStaves?: readonly ExtraVoice[]
-  /** What a sung staff's part is played on (ADR 0070), its clef and its name: the voice where none. */
-  readonly staffInstruments?: StaffInstruments
   /** Whether the piano's grand staff is written: not on a lead sheet (ADR 0083). Written by default. */
   readonly piano?: boolean
 }
-
-/** The instrument each sung staff's part is played on, where one is chosen. */
-export type StaffInstruments = Readonly<Partial<Record<StaffId, Instrument>>>
 
 export interface WrittenNote {
   readonly midi: Midi
@@ -114,12 +102,8 @@ export interface ScoreVoice {
   readonly stem: Stem
 }
 
-/** The staves a score may write, top down: the tune's own (ADR 0064), the more voices' (ADR 0066), then the piano's grand staff. */
-/** The voices sung besides the tune, each on a staff of its own (ADR 0066): the tune is the first. */
-export const EXTRA_VOICES = ['voice2', 'voice3', 'voice4'] as const
-export type ExtraVoice = (typeof EXTRA_VOICES)[number]
-
-export const STAVES = ['melody', ...EXTRA_VOICES, 'treble', 'bass'] as const
+/** The staves a score may write, top down: the tune's own (ADR 0064), then the piano's grand staff. */
+export const STAVES = ['melody', 'treble', 'bass'] as const
 export type StaffId = (typeof STAVES)[number]
 /** The piano's grand staff: the right hand's treble and the left hand's bass. */
 export const PIANO_STAVES = ['treble', 'bass'] as const satisfies readonly StaffId[]
@@ -145,8 +129,6 @@ export interface Measure extends BarMarks {
   readonly key?: Key
   /** The clef each staff is in here, where that is not its own (`clefOf`): a hand's changed clef. */
   readonly clefs?: Readonly<Partial<Record<StaffId, Clef>>>
-  /** Staves whose notes here the pattern plays, not written: drawn in soft ink (ADR 0083). */
-  readonly pattern?: readonly StaffId[]
   /** One or two voices on each of the score's staves; none on a staff it does not write. */
   readonly staves: Readonly<Record<StaffId, readonly ScoreVoice[]>>
   readonly chords: readonly ChordMark[]
@@ -159,6 +141,4 @@ export interface Score {
   /** The staves it writes, top down. */
   readonly staves: readonly StaffId[]
   readonly measures: readonly Measure[]
-  /** What each sung staff is played on, where one is chosen (ADR 0070). */
-  readonly staffInstruments?: StaffInstruments
 }

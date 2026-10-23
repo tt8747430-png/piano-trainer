@@ -40,7 +40,7 @@ function withTake(take: object = TAKE) {
   const storage = createMemoryStorage()
   storage.setItem(
     PIECES_STORAGE_KEY,
-    JSON.stringify({ state: { songs: [SONG], nextSong: 2 }, version: 1 }),
+    JSON.stringify({ state: { songs: [SONG], nextSong: 2 }, version: 2 }),
   )
   storage.setItem(
     TAKES_STORAGE_KEY,

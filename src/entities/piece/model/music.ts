@@ -7,22 +7,13 @@ import {
 } from '@/shared/lib/music'
 import type { Chart, Melody } from '@/shared/lib/arrangement'
 import { parseChart } from './parse-chart'
-import { parseMelody, parseVoices } from './parse-melody'
+import { parseMelody } from './parse-melody'
 import type { ChartPiece, KeyText, Section } from './types'
 
 /** A song's or study's music as the content writes it: what a learner's version holds (ADR 0027). */
 export type PieceMusic = Pick<
   ChartPiece,
-  | 'key'
-  | 'meter'
-  | 'tempo'
-  | 'pattern'
-  | 'sections'
-  | 'melody'
-  | 'voices'
-  | 'instruments'
-  | 'hidden'
-  | 'hands'
+  'key' | 'meter' | 'tempo' | 'pattern' | 'sections' | 'melody' | 'hidden' | 'hands'
 >
 
 /** A piece's music, without what it leaves out. */
@@ -33,23 +24,17 @@ export const musicOf = (piece: ChartPiece): PieceMusic => ({
   pattern: piece.pattern,
   sections: piece.sections,
   ...(piece.melody === undefined ? {} : { melody: piece.melody }),
-  ...(piece.voices?.length ? { voices: piece.voices } : {}),
-  ...(piece.instruments?.length ? { instruments: piece.instruments } : {}),
   ...(piece.hidden?.length ? { hidden: piece.hidden } : {}),
   ...(piece.hands === undefined ? {} : { hands: piece.hands }),
 })
 
 /**
- * Music read as the engine reads a piece: its chart (with the written hands), its tune and its more
- * voices; a mistake throws a ContentError.
+ * Music read as the engine reads a piece: its chart (with the written hands) and its tune; a mistake
+ * throws a ContentError.
  */
-export function readMusic(music: PieceMusic): {
-  chart: Chart
-  melody: Melody | undefined
-  voices: Melody[]
-} {
+export function readMusic(music: PieceMusic): { chart: Chart; melody: Melody | undefined } {
   const piece: ChartPiece = { id: 'music', kind: 'song', title: '', ...music }
-  return { chart: parseChart(piece), melody: parseMelody(piece), voices: parseVoices(piece) }
+  return { chart: parseChart(piece), melody: parseMelody(piece) }
 }
 
 /** A piece playing this music in place of its own: its melody and hands only where the music has them. */
@@ -57,8 +42,6 @@ export const withMusic = (piece: ChartPiece, music: PieceMusic): ChartPiece => (
   ...piece,
   ...music,
   melody: music.melody,
-  voices: music.voices,
-  instruments: music.instruments,
   hidden: music.hidden,
   hands: music.hands,
 })
@@ -84,8 +67,6 @@ export const sameMusic = (a: PieceMusic, b: PieceMusic): boolean =>
   a.tempo === b.tempo &&
   a.pattern === b.pattern &&
   a.melody === b.melody &&
-  (a.voices ?? []).join('\n') === (b.voices ?? []).join('\n') &&
-  (a.instruments ?? []).join() === (b.instruments ?? []).join() &&
   (a.hidden ?? []).join() === (b.hidden ?? []).join() &&
   a.hands?.rh === b.hands?.rh &&
   a.hands?.lh === b.hands?.lh &&

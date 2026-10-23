@@ -2,14 +2,7 @@ import type { BookId } from '@/entities/book'
 import type { PatternId } from '@/entities/pattern'
 import type { LocalText } from '@/shared/i18n'
 import { isOneOf } from '@/shared/lib'
-import {
-  parseKey,
-  type ChordSize,
-  type Instrument,
-  type Key,
-  type Letter,
-  type Meter,
-} from '@/shared/lib/music'
+import { parseKey, type ChordSize, type Key, type Letter, type Meter } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
 
 /** A saved id may name a piece a later version removed, so it stays a plain name. */
@@ -92,7 +85,7 @@ interface PieceCommon extends EntryCommon {
   readonly recording?: Recording
 }
 
-/** A hand's bars written note by note, `|` between them, `-` for a bar the pattern plays: see docs/CONTENT.md. */
+/** A hand's bars written note by note, `|` between them, `-` for a bar left to the pattern: see docs/CONTENT.md. */
 export interface Hands {
   readonly rh?: string
   readonly lh?: string
@@ -103,13 +96,6 @@ export interface ChartPiece extends PieceCommon {
   readonly sections: readonly Section[]
   /** Note, octave and beats: `E4/1 D4/.5 r/1`. */
   readonly melody?: string
-  /** More voices sung with the tune, each written as the tune is, each on a staff of its own (ADR 0066). */
-  readonly voices?: readonly string[]
-  /**
-   * What each sung part is played on, the tune's first, then each more voice's (ADR 0070): `voice`
-   * where none is given.
-   */
-  readonly instruments?: readonly Instrument[]
   /** The rows the score leaves out of sight, their music kept (ADR 0072): hidden, not removed. */
   readonly hidden?: readonly HiddenRow[]
   /** Bars of either hand written note by note, played in place of the pattern's hand there. */
@@ -117,31 +103,19 @@ export interface ChartPiece extends PieceCommon {
 }
 
 /**
- * The rows a score may hide: the chord names, the tune's staff, each more voice's (ADR 0072), and the
- * piano's grand staff, which leaves a lead sheet (ADR 0083).
+ * The rows a score may hide (ADR 0072, 0091): the chord names, the tune's staff, and the piano's
+ * grand staff, which leaves a lead sheet (ADR 0083).
  */
-export const HIDDEN_ROWS = ['chords', 'melody', 'voice2', 'voice3', 'voice4', 'piano'] as const
+export const HIDDEN_ROWS = ['chords', 'melody', 'piano'] as const
 export type HiddenRow = (typeof HIDDEN_ROWS)[number]
 export const isHiddenRow = isOneOf(HIDDEN_ROWS)
 
-/** The more voices' rows, the second voice's first. */
-const VOICE_ROWS = ['voice2', 'voice3', 'voice4'] as const satisfies readonly HiddenRow[]
-
 /**
- * Whether a score with `hidden` out of sight still shows a staff (ADR 0083): the piano's, the tune's
- * where it has one, or a more voice's it has. A score never hides every staff.
+ * Whether a score with `hidden` out of sight still shows a staff (ADR 0083): the piano's, or the
+ * tune's where it has one (`melody`). A score never hides every staff.
  */
-export function showsAStaff(
-  hidden: readonly HiddenRow[],
-  staves: { readonly melody: boolean; readonly voices: number },
-): boolean {
-  const shown = (row: HiddenRow) => !hidden.includes(row)
-  return (
-    shown('piano') ||
-    (staves.melody && shown('melody')) ||
-    VOICE_ROWS.slice(0, staves.voices).some(shown)
-  )
-}
+export const showsAStaff = (hidden: readonly HiddenRow[], melody: boolean): boolean =>
+  !hidden.includes('piano') || (melody && !hidden.includes('melody'))
 
 /**
  * A song written in degrees, as its course teaches it: read in any key, its chords growing with the

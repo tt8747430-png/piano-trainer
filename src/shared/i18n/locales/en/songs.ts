@@ -52,12 +52,8 @@ export const songs = {
     melody: 'Melody',
     melodyDetail: 'A staff for the tune',
     piano: 'Piano',
-    pianoDetail: 'Both hands, played by the pattern from the chord names unless you write them out',
-    pianoKept: 'Add the melody or a part to leave the piano out',
-    parts: 'More parts',
-    part: 'Part {{n}}',
-    addPart: 'Add a part',
-    removePart: 'Remove {{part}}',
+    pianoDetail: 'Both hands on the grand staff',
+    pianoKept: 'Add the melody to leave the piano out',
   },
   // A song someone shared as a link.
   shared: {

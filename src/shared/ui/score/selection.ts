@@ -60,7 +60,7 @@ export const noteBox = (
   ...over(span, reach),
 })
 
-/** An empty place (a bar the pattern plays, the room after the last note): a slim line where the next note goes. */
+/** An empty place (a rest, the room after the last note): a slim line where the next note goes. */
 export const insertBox = (
   layout: Pick<ScoreLayout, 'measures' | 'onsets'>,
   tick: Tick,
@@ -201,17 +201,15 @@ const centre = (box: Extent, x: number, y: number) =>
 /**
  * What a click at (x, y) on the engraving chooses (ADR 0088), the editor's and the Player's alike:
  * the head under it (the nearest, where a chord's heads touch); else the chord whose column (its
- * heads and stem) it is on; else nothing: empty staff is never chosen. `accept` leaves heads out (a
- * bar the pattern plays, drawn soft, in the editor).
+ * heads and stem) it is on; else nothing: empty staff is never chosen.
  */
 export function pickAt(
   layout: Pick<ScoreLayout, 'heads' | 'columns' | 'staves'>,
   x: number,
   y: number,
-  accept: (head: Head) => boolean = () => true,
 ): Picked | null {
   const grab = HUG.grab * spaceOf(layout)
-  const heads = (layout.heads ?? []).filter(accept)
+  const heads = layout.heads ?? []
   const under = heads
     .filter((head) => holds(head, x, y, grab))
     .sort((a, b) => centre(a, x, y) - centre(b, x, y))[0]

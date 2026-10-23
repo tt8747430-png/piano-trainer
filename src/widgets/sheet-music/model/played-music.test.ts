@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart } from '@/shared/lib/arrangement'
 import { midi, note, parseChordSymbol } from '@/shared/lib/music'
-import { notate } from '@/shared/lib/notation'
 import { playedMusic } from './played-music'
 
 const C_MAJOR = { tonic: note('C'), minor: false } as const
@@ -16,7 +15,6 @@ const BLOCK = {
   lh: { kind: 'events', events: parseFigure('0/16 L1') },
 } as const
 const tune = [{ midi: midi(72), spelled: note('C'), startTick: 0, durationTicks: 96 }]
-const alto = [{ midi: midi(67), spelled: note('G'), startTick: 0, durationTicks: 96 }]
 
 describe('playedMusic', () => {
   it('writes the tune doubled an octave up as the song writes it, on its own staff', () => {
@@ -30,35 +28,5 @@ describe('playedMusic', () => {
     expect(music.melodyStaff).toBe(true)
     expect(music.notes.filter((n) => n.hand === 'melody').map((n) => n.midi)).toEqual([72])
     expect(playedMusic(performance, false)).toBe(performance)
-  })
-
-  it('writes every voice sung on its own staff, the tune’s first, whether the tune is heard or not', () => {
-    const performance = arrange(CHART, {
-      tonic: C_MAJOR.tonic,
-      pattern: BLOCK,
-      melody: tune,
-      doubleMelody: true,
-      voices: [alto],
-    })
-    const music = playedMusic(performance, false)
-    expect(music.melodyStaff).toBe(true)
-    expect(music.voiceStaves).toEqual(['voice2'])
-    expect(music.notes.filter((n) => n.hand === 'melody' && !n.voice).map((n) => n.midi)).toEqual([
-      72,
-    ])
-    expect(music.notes.filter((n) => n.voice === 'voice2').map((n) => n.midi)).toEqual([67])
-  })
-
-  it('names each sung staff’s instrument, and writes a cello’s in the bass clef', () => {
-    const performance = arrange(CHART, {
-      tonic: C_MAJOR.tonic,
-      pattern: BLOCK,
-      melody: tune,
-      voices: [alto],
-      instruments: ['flute', 'cello'],
-    })
-    const music = playedMusic(performance, false)
-    expect(music.staffInstruments).toEqual({ melody: 'flute', voice2: 'cello' })
-    expect(notate(music).measures[0]?.clefs).toEqual({ voice2: 'bass' })
   })
 })

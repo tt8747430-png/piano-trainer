@@ -87,7 +87,7 @@ describe('Songs: your own', () => {
   }
   const saved = (state: object) => {
     const storage = createMemoryStorage()
-    storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: 1 }))
+    storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: 2 }))
     return storage
   }
 
@@ -125,7 +125,7 @@ describe('Songs: your own', () => {
     expect(piecesStore.getState().songs[0]).toMatchObject({ melody: 'r/4', hidden: ['piano'] })
   })
 
-  it('makes a song with the score customized in its own sheet: piano, melody and a cello', async () => {
+  it('makes a song with the score customized in its own sheet: piano with melody, no chord names', async () => {
     const user = userEvent.setup()
     const { piecesStore, router } = await renderApp('/songs')
     await user.click(await screen.findByRole('button', { name: 'New song' }))
@@ -134,18 +134,12 @@ describe('Songs: your own', () => {
     await user.click(screen.getByRole('button', { name: 'Customize' }))
     const score = await screen.findByRole('dialog', { name: 'Score' })
     await user.click(within(score).getByRole('radio', { name: /^Piano with melody/ }))
-    await user.click(within(score).getByRole('button', { name: 'Add a part' }))
-    await user.click(within(score).getByRole('combobox', { name: 'Part 1' }))
-    await user.click(await screen.findByRole('option', { name: 'Cello' }))
+    await user.click(within(score).getByRole('switch', { name: /^Chord names/ }))
     await user.click(within(score).getByRole('button', { name: 'Done' }))
-    expect(await screen.findByText('Chord names · Melody · Cello · Piano')).toBeInTheDocument()
+    expect(await screen.findByText('Melody · Piano')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Make' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
-    expect(piecesStore.getState().songs[0]).toMatchObject({
-      melody: 'r/4',
-      voices: ['r/4'],
-      instruments: ['voice', 'cello'],
-    })
+    expect(piecesStore.getState().songs[0]).toMatchObject({ melody: 'r/4', hidden: ['chords'] })
   })
 
   it('lists your songs first, and chooses them from their tab', async () => {

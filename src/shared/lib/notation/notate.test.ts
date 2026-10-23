@@ -42,27 +42,6 @@ describe('notate', () => {
     expect(shared.measures[0]?.staves.melody).toEqual([])
   })
 
-  it('writes each more voice on a staff of its own, under the tune’s and over the piano’s', () => {
-    const notes = [
-      n(72, note('C'), 'melody', 0, 96),
-      n(67, note('G'), 'melody', 0, 96, { voice: 'voice2' }),
-      n(64, note('E'), 'melody', 0, 96, { voice: 'voice3' }),
-      n(60, note('C'), 'rh', 0, 96),
-    ]
-    const score = notate(music(notes, { melodyStaff: true, voiceStaves: ['voice2', 'voice3'] }))
-    expect(score.staves).toEqual(['melody', 'voice2', 'voice3', 'treble', 'bass'])
-    const [bar] = score.measures
-    const keys = (staff: 'melody' | 'voice2' | 'voice3' | 'treble') =>
-      bar?.staves[staff].flatMap((voice) => voice.events.flatMap(notesOf)).map((w) => w.midi)
-    expect([keys('melody'), keys('voice2'), keys('voice3'), keys('treble')]).toEqual([
-      [72],
-      [67],
-      [64],
-      [60],
-    ])
-    expect(bar?.staves.voice4).toEqual([])
-  })
-
   it('keeps each bar’s barlines: a repeat, its ending, a double or final barline', () => {
     const score = notate(
       music([n(60, note('C'), 'rh', 0, 96)], {
@@ -340,20 +319,11 @@ describe('notate with a blank staff', () => {
   })
 })
 
-describe('notate a lead sheet and a pattern’s bars (ADR 0083)', () => {
+describe('notate a lead sheet (ADR 0083)', () => {
   it('writes no piano where the music leaves it out: the tune’s staff alone', () => {
     const notes = [n(72, note('C'), 'melody', 0, 96), n(60, note('C'), 'rh', 0, 96)]
     const lead = notate(music(notes, { melodyStaff: true, piano: false }))
     expect(lead.staves).toEqual(['melody'])
     expect(lead.measures[0]?.staves.treble).toEqual([])
-  })
-
-  it('carries the staves a bar’s pattern plays to its measure', () => {
-    const score = notate(
-      music([n(48, note('C'), 'lh', 0, 96)], {
-        bars: [{ startTick: 0, beats: 4, pattern: ['bass'] }],
-      }),
-    )
-    expect(score.measures[0]?.pattern).toEqual(['bass'])
   })
 })

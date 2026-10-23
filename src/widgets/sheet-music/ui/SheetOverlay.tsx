@@ -1,7 +1,7 @@
 import { useRef, type RefObject } from 'react'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { StaffNames, xAtTick, type Picked, type ScoreLayout } from '@/shared/ui/score'
+import { xAtTick, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { BarTargets } from './BarTargets'
 import { LoopBand } from './LoopBand'
 import { SheetCursor } from './SheetCursor'
@@ -68,7 +68,6 @@ export function SheetOverlay({
         tempos={tempos}
         firstBar={firstBar}
       />
-      <StaffNames layout={layout} />
       {loop ? (
         <LoopBand layout={layout} loop={loop} onChange={onLoopChange} firstBar={firstBar} />
       ) : null}

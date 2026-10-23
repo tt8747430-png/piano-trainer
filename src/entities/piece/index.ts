@@ -22,7 +22,7 @@ export {
   type HiddenRow,
 } from './model/types'
 
-export { chartOf, hasChartPlan, melodyOf, patternsOfPiece, pieceFit, voicesOf } from './model/chart'
+export { chartOf, hasChartPlan, melodyOf, patternsOfPiece, pieceFit } from './model/chart'
 export { keyText, musicOf, readMusic, sameMusic, type PieceMusic } from './model/music'
 export { HAND_IDS, type HandId } from './model/parse-hands'
 export {

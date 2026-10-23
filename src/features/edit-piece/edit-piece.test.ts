@@ -59,13 +59,11 @@ describe('saveMusic', () => {
 })
 
 describe('the learner’s songs', () => {
-  it('names the template a setup is, and none once it has more parts', () => {
+  it('names the template a setup is, and none for rows no template has', () => {
     expect(templateOf(SCORE_TEMPLATES.leadSheet)).toBe('leadSheet')
-    expect(templateOf({ chordNames: false, melody: false, piano: true, parts: [] })).toBe('piano')
-    expect(templateOf({ chordNames: true, melody: true, piano: true, parts: [] })).toBe(
-      'pianoAndMelody',
-    )
-    expect(templateOf({ ...SCORE_TEMPLATES.piano, parts: ['flute'] })).toBeUndefined()
+    expect(templateOf({ chordNames: false, melody: false, piano: true })).toBe('piano')
+    expect(templateOf({ chordNames: true, melody: true, piano: true })).toBe('pianoAndMelody')
+    expect(templateOf({ chordNames: false, melody: true, piano: true })).toBeUndefined()
   })
 
   it('starts a lead sheet: the tune’s staff and the chord names, the piano hidden (ADR 0083)', () => {
@@ -74,24 +72,19 @@ describe('the learner’s songs', () => {
       melody: expect.any(String),
       hidden: ['piano'],
     })
-    // Never every staff: with no tune nor part, the piano stays.
+    // Never every staff: with no tune, the piano stays.
     expect(
-      chartStart(key, '4/4', { chordNames: true, melody: false, piano: false, parts: [] }),
+      chartStart(key, '4/4', { chordNames: true, melody: false, piano: false }),
     ).not.toHaveProperty('hidden')
   })
 
   it('makes a song’s score as its setup says, every staff there and readable though empty', () => {
     const store = fresh()
     const key = { tonic: note('C'), minor: false }
-    const setup = { chordNames: false, melody: true, piano: true, parts: ['cello'] } as const
+    const setup = { chordNames: false, melody: true, piano: true } as const
     const id = makeSong(store, { title: 'Hymn', key, meter: '6/8', setup })
     const song = store.getState().songs.find((each) => each.id === id)
-    expect(song).toMatchObject({
-      melody: expect.any(String),
-      voices: [expect.any(String)],
-      instruments: ['voice', 'cello'],
-      hidden: ['chords'],
-    })
+    expect(song).toMatchObject({ melody: expect.any(String), hidden: ['chords'] })
     expect(() => readMusic(song!)).not.toThrow()
     expect(readMusic(song!).melody).toEqual([])
   })

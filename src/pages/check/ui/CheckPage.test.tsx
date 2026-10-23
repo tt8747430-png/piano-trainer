@@ -85,7 +85,7 @@ describe('Check', () => {
     }
     const saved = (state: object) => {
       const storage = createMemoryStorage()
-      storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: 1 }))
+      storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: 2 }))
       return storage
     }
 

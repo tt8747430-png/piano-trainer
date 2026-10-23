@@ -23,7 +23,7 @@ describe('Player', () => {
     }
     storage.setItem(
       PIECES_STORAGE_KEY,
-      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 1 }),
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 2 }),
     )
     const { piecesStore } = await renderApp('/play/my-1', { storage })
     await screen.findByRole('button', { name: 'Play' })
@@ -46,7 +46,7 @@ describe('Player', () => {
     }
     storage.setItem(
       PIECES_STORAGE_KEY,
-      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 1 }),
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 2 }),
     )
     await renderApp('/play/my-1', { storage })
     const staves = () =>
