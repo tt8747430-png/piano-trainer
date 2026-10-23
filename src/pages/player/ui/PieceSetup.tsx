@@ -1,26 +1,10 @@
-import { Link } from '@tanstack/react-router'
-import { PencilLine } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import {
-  choosableChordSize,
-  isDegreePiece,
-  isLeadSheet,
-  isOwnKey,
-  pieceKey,
-  type Piece,
-} from '@/entities/piece'
+import { choosableChordSize, isLeadSheet, isOwnKey, pieceKey, type Piece } from '@/entities/piece'
 import type { PracticeChoice } from '@/features/practice'
 import type { PatternFit } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
 import { noteParam, writtenKeyAccidentals } from '@/shared/lib/music'
-import {
-  ButtonLink,
-  ChordSizeField,
-  Labelled,
-  NoteChoice,
-  MenuSection,
-  ToggleGrid,
-} from '@/shared/ui'
+import { ChordSizeField, Labelled, NoteChoice, MenuSection, ToggleGrid } from '@/shared/ui'
 import {
   MelodyToggle,
   PatternCard,
@@ -84,16 +68,6 @@ export function PieceSetup({
           ) : null}
         </ToggleGrid>
       </MenuSection>
-      {isDegreePiece(piece) ? null : (
-        <ButtonLink
-          variant="outline"
-          className="self-start"
-          render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
-        >
-          <PencilLine aria-hidden />
-          {t('editScore')}
-        </ButtonLink>
-      )}
     </PlayerSetup>
   )
 }

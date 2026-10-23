@@ -94,7 +94,7 @@ it. `@` → `src`.
   `testing/`.
 - **pages/<x>/ui/**: one per route; composes widgets + `shared/ui`. A page with many acts has one hook in `model/`
   (`pages/player/model/use-player.ts`: a piece → its Performance, then the Player's hook), which is its test surface.
-  `pages/player` serves a piece or a walk (a piece's Setup opens its score in the editor): one screen (`PlayerLayout`) that `PlayerPage` (`usePlayer`, `PieceSetup`),
+  `pages/player` serves a piece or a walk (a piece's bar opens its score in the editor, first of its buttons): one screen (`PlayerLayout`) that `PlayerPage` (`usePlayer`, `PieceSetup`),
   `WalkPlayerPage` (`useWalkPlayer`, `walk-search.ts`, `WalkSetup`) and `ChromaticPlayerPage` (`useChromaticPlayer`,
   `chromatic-search.ts`, `ChromaticSetup`) and `ProgressionPlayerPage` (`useProgressionPlayer`, `progression-search.ts`,
   `ProgressionSetup`) and `ExercisePlayerPage` (`useExercisePlayer`, `exercise-search.ts`, `ExerciseSetup`, the sheet of
