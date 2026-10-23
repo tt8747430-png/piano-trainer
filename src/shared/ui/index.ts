@@ -77,15 +77,7 @@ export { SwitchRow } from './SwitchRow'
 export { ToggleChips } from './ToggleChips'
 export { ToggleGrid, ToggleTile } from './ToggleTile'
 export { ToolButton } from './ToolButton'
-export {
-  ToolKey,
-  ToolPalette,
-  ToolPaletteActions,
-  ToolPaletteFoot,
-  ToolPalettePanel,
-  ToolPaletteTab,
-  ToolPaletteTabs,
-} from './ToolPalette'
+export { ToolKey } from './ToolKey'
 export { ToolDivider } from './ToolDivider'
 export { TypedField } from './TypedField'
 export { PageCanvas } from './PageCanvas'

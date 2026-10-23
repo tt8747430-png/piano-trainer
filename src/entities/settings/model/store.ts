@@ -84,7 +84,7 @@ export function createSettingsStore({
         sidebar: DEFAULT_SIDEBAR,
         paletteSide: DEFAULT_PALETTE_SIDE,
         editorLayout: DEFAULT_EDITOR_LAYOUT,
-        paletteFolded: false,
+        paletteFolded: true,
         midi: DEFAULT_MIDI,
         chordFinder: DEFAULT_CHORD_FINDER,
         scoreView: DEFAULT_SCORE_VIEW,

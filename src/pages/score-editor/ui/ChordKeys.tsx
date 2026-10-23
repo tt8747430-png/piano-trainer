@@ -44,12 +44,10 @@ export function ChordTyped({ focus }: { focus: boolean }) {
   return <ChordField key={`${caret} ${symbol}`} symbol={symbol} focus={focus} />
 }
 
-/** The key's triads and sevenths, each set at the caret with a tap, the caret on to the next bar. */
-export function ChordsInKey() {
-  const { t } = useTranslation('editor')
+/** A key for one of the key's chords: set at the caret with a tap, the caret on to the next bar. */
+function useChordKey() {
   const { actions } = useScoreEditorContext()
-  const key = useEditorState((state) => state.draft.key)
-  const tap = (each: Chord) => (
+  return (each: Chord) => (
     <ToolKey
       key={chordSymbol(each)}
       label={chordSymbol(each)}
@@ -59,6 +57,25 @@ export function ChordsInKey() {
       {chordSymbol(each)}
     </ToolKey>
   )
+}
+
+/** The palette's quick row in the chord names' row: the key's triads, in reach as the values are. */
+export function QuickChords() {
+  const { t } = useTranslation('editor')
+  const key = useEditorState((state) => state.draft.key)
+  const tap = useChordKey()
+  return (
+    <div role="group" aria-label={t('chord.keyChords')} className="grid grid-cols-7 gap-1">
+      {keyChords(key).slice(0, 7).map(tap)}
+    </div>
+  )
+}
+
+/** The key's triads and sevenths, each set at the caret with a tap, the caret on to the next bar. */
+export function ChordsInKey() {
+  const { t } = useTranslation('editor')
+  const key = useEditorState((state) => state.draft.key)
+  const tap = useChordKey()
   return (
     <div
       role="group"

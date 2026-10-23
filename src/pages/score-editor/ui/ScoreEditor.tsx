@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import {
   selectKeyboard,
   selectPaletteFolded,
@@ -58,6 +58,17 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
   const foot = useRef<HTMLDivElement>(null)
   const { height } = useElementSize(sheet)
   const { height: below } = useElementSize(foot)
+  // The sheet never leaves the caret under what floats at its foot: as the palette opens (the foot
+  // grows), the caret's staff scrolls into the room above it (spec 2026-10-23).
+  useEffect(() => {
+    const box = sheet.current
+    const caret = box?.querySelector('[data-slot="caret"]')
+    if (!box || !caret || below === 0) return
+    const mark = caret.getBoundingClientRect()
+    const view = box.getBoundingClientRect()
+    const foot = view.bottom - below - GAP
+    if (mark.bottom > foot) box.scrollTop += Math.min(mark.bottom - foot + GAP, mark.top - view.top)
+  }, [below])
   // What floats at the foot steps aside while the music is read; a tap on the sheet brings it back.
   const floating = useHiddenWhileReading()
   // A take's strip, with its Stop, never steps aside.
@@ -92,6 +103,7 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
           <div
             ref={sheet}
             data-area="sheet"
+            style={{ scrollPaddingBottom: below + GAP }}
             className="min-h-0 overflow-y-auto overscroll-contain"
             {...floating.reading}
             onClickCapture={floating.show}
@@ -107,7 +119,7 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
             <div
               className={cn(
                 'pointer-events-auto absolute top-0 flex max-h-full flex-col',
-                palette ? 'w-84 landscape-phone:w-70 xl:w-96' : 'w-auto',
+                'w-84 landscape-phone:w-80 xl:w-96',
                 left ? 'left-0' : 'right-0',
               )}
             >
@@ -118,10 +130,16 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
             ref={foot}
             data-hidden={footShown ? undefined : true}
             inert={!footShown}
-            className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-2 px-1 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none"
+            className="absolute inset-x-0 bottom-0 flex max-h-full flex-col items-center gap-2 px-1 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none"
           >
-            <div className="pointer-events-auto">{idle ? <EditorDock /> : <RecordingStrip />}</div>
-            {side ? null : <div className="pointer-events-auto w-full max-w-xl">{tools}</div>}
+            <div className="pointer-events-auto shrink-0">
+              {idle ? <EditorDock /> : <RecordingStrip />}
+            </div>
+            {side ? null : (
+              <div className="pointer-events-auto flex min-h-0 w-full max-w-xl flex-col">
+                {tools}
+              </div>
+            )}
           </div>
         </div>
         <EditorKeyboard />

@@ -23,7 +23,10 @@ export function CaretLine() {
   // Where the caret writes first: a click on the sheet chose it, so the line says which part it is.
   const text = said.kind === 'end' ? where : `${t(`layers.${layer}`)} · ${where}`
   return (
-    <p role="status" className="truncate text-sm text-muted-foreground tabular-nums">
+    <p
+      role="status"
+      className="text-sm leading-snug text-pretty text-muted-foreground tabular-nums"
+    >
       {text}
     </p>
   )

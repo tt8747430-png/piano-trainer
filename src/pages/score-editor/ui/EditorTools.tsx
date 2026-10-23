@@ -1,107 +1,147 @@
-import { ArrowLeftToLine, ArrowRightToLine, ChevronDown, ChevronUp, Keyboard } from 'lucide-react'
-import { useState, type MouseEvent, type ReactNode } from 'react'
+import { ArrowLeftToLine, ArrowRightToLine, ChevronDown, ChevronUp, Piano } from 'lucide-react'
+import { useEffect, useEffectEvent, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { chosenNotes, isHandLayer } from '@/features/score-editor'
 import { selectPaletteSide, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { useFoldKeys } from '@/features/live-keyboard'
 import { setPaletteSide } from '@/features/set-preference'
-import { ToolPalette, ToolPalettePanel, ToolPaletteTab, ToolPaletteTabs } from '@/shared/ui'
 import { cn } from '@/shared/lib'
+import { Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import {
-  CHORD_TABS,
-  PALETTE_TABS,
-  tabOpen,
-  type ChordTab,
-  type PaletteTab,
-} from '../model/palette-tabs'
-import { ChordBuilt, ChordsInKey, ChordTyped } from './ChordKeys'
+import { categoryOpen, PALETTE_CATEGORIES, type PaletteCategory } from '../model/palette-categories'
+import { BarKeys } from './BarKeys'
+import { ChordBuilt, ChordsInKey, ChordTyped, QuickChords } from './ChordKeys'
+import { FingeringPanel } from './FingeringPanel'
+import { LineKeys } from './LineKeys'
 import { ArticulationKeys, DynamicKeys } from './MarkKeys'
-import { NoteKeys, PitchKeys } from './NoteKeys'
+import { NoteKeys, PitchKeys, QuickValues } from './NoteKeys'
+import { CategoryIcon } from './palette-icons'
+import { PaletteSection } from './palette-keys'
+import { ClefKeys, RepeatKeys, SongSignature, TextKeys } from './ScoreKeys'
 
-/** A tab's picture: drawn in one 24-unit box, so every tab's sits level whatever it shows. */
-function Glyph({ children }: { children: ReactNode }) {
-  return (
-    <svg aria-hidden viewBox="0 0 24 24" fill="currentColor">
-      {children}
-    </svg>
-  )
+/** The ways the Chords category writes a chord (ADR 0065): the key's, built from its parts, typed. */
+const CHORD_WAYS = ['key', 'build', 'type'] as const
+type ChordWay = (typeof CHORD_WAYS)[number]
+
+/** The categories whose tools act on notes chosen: greyed, with their reason, where none is. */
+const ON_NOTES: readonly PaletteCategory[] = ['pitch', 'articulations', 'dynamics', 'lines', 'text']
+
+/** Why a category's tools are greyed where the caret writes, or nothing where they work. */
+function useReason(category: PaletteCategory): string | undefined {
+  const { t } = useTranslation('editor')
+  const layer = useEditorState((state) => state.layer)
+  const chosen = useEditorState((state) => chosenNotes(state).length > 0)
+  if (category === 'chords') return layer === 'chords' ? undefined : t('reason.chordRow')
+  if (!categoryOpen(category, layer))
+    return layer === 'chords' ? t('reason.staff') : t('reason.hand')
+  if (ON_NOTES.includes(category) && !chosen) return t('reason.chooseNote')
+  if (category === 'fingering' && isHandLayer(layer) && !chosen) return t('reason.chooseNote')
+  return undefined
 }
 
-/** A word drawn as a picture, in the box's middle: a dynamic, a numeral. */
-function Word({ text, italic = false }: { text: string; italic?: boolean }) {
+/** One category's section: its name, why it is greyed if it is, its tools. */
+function Section({ category, children }: { category: PaletteCategory; children: ReactNode }) {
+  const { t } = useTranslation('editor')
   return (
-    <text
-      x="12"
-      y="12.5"
-      textAnchor="middle"
-      dominantBaseline="middle"
-      fontSize={text.length > 2 ? 9 : 13}
-      fontWeight="700"
-      fontStyle={italic ? 'italic' : 'normal'}
-      fontFamily="var(--font-display)"
+    <PaletteSection
+      category={category}
+      title={t(`palette.category.${category}`)}
+      reason={useReason(category)}
     >
-      {text}
-    </text>
+      {children}
+    </PaletteSection>
   )
 }
 
-/** Each tab's picture: a note, a sharp, an accent, a dynamic. */
-const TAB_ICONS: Readonly<Record<PaletteTab, ReactNode>> = {
-  notes: (
-    <Glyph>
-      <ellipse cx="9" cy="17.5" rx="4.2" ry="3" transform="rotate(-20 9 17.5)" />
-      <rect x="12.1" y="3" width="1.6" height="14.5" />
-      <path d="M13.7 3c0 3 5 4 4.5 9-.5-2.5-2.5-3.6-4.5-3.8z" />
-    </Glyph>
-  ),
-  pitch: (
-    <Glyph>
-      <rect x="8.5" y="3" width="1.4" height="18" />
-      <rect x="14.1" y="2" width="1.4" height="18" />
-      <path d="M5 9.6 19 6.6v2.8L5 12.4zM5 15.6l14-3v2.8L5 18.4z" />
-    </Glyph>
-  ),
-  articulations: (
-    <Glyph>
-      <path d="M4 7.2 20 12 4 16.8v-2.4L14.6 12 4 9.6z" />
-    </Glyph>
-  ),
-  dynamics: (
-    <Glyph>
-      <Word text="mf" italic />
-    </Glyph>
-  ),
+/** The Chords category: a chord of the key tapped, built from its parts, or typed on its keypad. */
+function ChordWays({ way, setWay }: { way: ChordWay; setWay: (way: ChordWay) => void }) {
+  const { t } = useTranslation('editor')
+  const { meta } = useScoreEditorContext()
+  // Asked for by Enter in the chord row, the field opens with the cursor in it.
+  const focus = meta.chordFieldAsked > 0
+  return (
+    <>
+      <Segmented
+        label={t('chord.tabs')}
+        value={way}
+        options={CHORD_WAYS.map((each) => ({ value: each, label: t(`chord.tab.${each}`) }))}
+        onChange={setWay}
+      />
+      {way === 'key' ? (
+        <ChordsInKey />
+      ) : way === 'build' ? (
+        <ChordBuilt />
+      ) : (
+        <ChordTyped focus={focus} />
+      )}
+    </>
+  )
 }
 
-/** Each way of writing a chord, drawn: the key's numerals, a chord's parts, the keypad. */
-const CHORD_TAB_ICONS: Readonly<Record<ChordTab, ReactNode>> = {
-  key: (
-    <Glyph>
-      <Word text="I·V" />
-    </Glyph>
-  ),
-  build: (
-    <Glyph>
-      <Word text="C/E" />
-    </Glyph>
-  ),
-  type: <Keyboard aria-hidden />,
+/** Every category's section, in the bar's order. */
+function Sections(chord: { way: ChordWay; setWay: (way: ChordWay) => void }) {
+  return (
+    <>
+      <Section category="notes">
+        <NoteKeys />
+      </Section>
+      <Section category="pitch">
+        <PitchKeys />
+      </Section>
+      <Section category="articulations">
+        <ArticulationKeys />
+      </Section>
+      <Section category="dynamics">
+        <DynamicKeys />
+        <LineKeys lines={['cresc', 'dim']} />
+      </Section>
+      <Section category="lines">
+        <LineKeys lines={['slur', '8va', '8vb']} />
+      </Section>
+      <Section category="bar">
+        <BarKeys />
+      </Section>
+      <Section category="clef">
+        <ClefKeys />
+      </Section>
+      <Section category="key">
+        <SongSignature kind="key" />
+      </Section>
+      <Section category="time">
+        <SongSignature kind="time" />
+      </Section>
+      <Section category="repeats">
+        <RepeatKeys />
+      </Section>
+      <Section category="text">
+        <TextKeys />
+      </Section>
+      <Section category="fingering">
+        <FingeringPanel />
+      </Section>
+      <Section category="chords">
+        <ChordWays {...chord} />
+      </Section>
+    </>
+  )
 }
 
-/** Each tab's keys. */
-const TAB_KEYS: Readonly<Record<PaletteTab, ReactNode>> = {
-  notes: <NoteKeys />,
-  pitch: <PitchKeys />,
-  articulations: <ArticulationKeys />,
-  dynamics: <DynamicKeys />,
+/** A section's place in the scroller: where its top is, from the scroller's own. */
+const sectionTop = (scroller: HTMLElement, category: PaletteCategory): number | null => {
+  const section = scroller.querySelector<HTMLElement>(`[data-category="${category}"]`)
+  return section ? section.offsetTop : null
 }
 
 /**
- * The editor's palette (ADR 0064, 0065): its tools by kind as tabs of pictures, the ones that work
- * where the caret writes in reach and the rest greyed, the chosen tab's keys under them. A card
- * floating over the sheet (ADR 0079), as tall as its keys, scrolling them inside past a share of the
- * screen: at the foot (`side` off) or beside the sheet (`side`). Folded (`folded`), it is its row of
- * tabs alone, a tab tapped opening it there, so its tools are never more than a tap away. While a take records, the tools wait for Stop.
+ * The editor's one palette (spec 2026-10-23, after Flat): every tool, each acting on what is chosen
+ * (a note, a chord, a range or bars), else setting what the next note will be. A card floating over
+ * the sheet (ADR 0079, 0081), at the foot (`side` off) or beside it (`side`): the quick row of note
+ * values (the key's chords in the chord names' row), always in sight, over the category bar, a
+ * picture each, scrolling sideways where the screen is narrow, ending in the palette's fold and a
+ * Keys toggle that never comes and goes. Opened (`folded` off), every category's section stands over
+ * them, stacked and scrolling, a category tapped scrolling to its own; folded, the quick row and the
+ * bar alone, a category tapped opening it there. While a take records, the tools wait for Stop.
  */
 export function EditorTools({
   side,
@@ -115,126 +155,162 @@ export function EditorTools({
   const { t } = useTranslation(['editor', 'common'])
   const { takes, meta } = useScoreEditorContext()
   const layer = useEditorState((state) => state.layer)
-  const [chosen, choose] = useState<PaletteTab>('notes')
-  // A chord tapped from the key's first; Enter in the chord row opens the field to type one.
-  const [chordTab, chooseChordTab] = useState<ChordTab>('key')
-  // Enter in the chord row with the field shut opens it, the cursor in it.
-  const [asked, setAsked] = useState(meta.chordFieldAsked)
-  const [focusField, setFocusField] = useState(false)
-  if (meta.chordFieldAsked !== asked) {
-    setAsked(meta.chordFieldAsked)
-    chooseChordTab('type')
-    setFocusField(true)
-  }
-  const recording = takes.stage !== 'idle'
+  const keys = useFoldKeys()
   const settings = useSettingsStoreApi()
   const paletteSide = useSettings(selectPaletteSide)
-  const tab = chosen
+  const recording = takes.stage !== 'idle'
+  const scroller = useRef<HTMLDivElement>(null)
+  const [current, setCurrent] = useState<PaletteCategory>(layer === 'chords' ? 'chords' : 'notes')
+  // A category tapped while folded: scrolled to once the sections are in.
+  const pending = useRef<PaletteCategory | null>(null)
+  // Enter in the chord row asks for the chord field: the palette opens on the Chords.
+  const [chordWay, setChordWay] = useState<ChordWay>('key')
+  const [asked, setAsked] = useState(meta.chordFieldAsked)
+  if (meta.chordFieldAsked !== asked) {
+    setAsked(meta.chordFieldAsked)
+    setCurrent('chords')
+    setChordWay('type')
+  }
+  const openForChord = useEffectEvent(() => {
+    pending.current = 'chords'
+    if (folded) onFold(false)
+  })
+  useEffect(() => {
+    if (meta.chordFieldAsked > 0) openForChord()
+  }, [meta.chordFieldAsked])
+
+  const scrollTo = (category: PaletteCategory) => {
+    const box = scroller.current
+    const top = box ? sectionTop(box, category) : null
+    if (box && top !== null) box.scrollTo?.({ top, behavior: 'smooth' })
+  }
+  useEffect(() => {
+    if (folded || !pending.current) return
+    scrollTo(pending.current)
+    pending.current = null
+  })
+
+  const show = (category: PaletteCategory) => {
+    setCurrent(category)
+    if (folded) {
+      pending.current = category
+      onFold(false)
+    } else scrollTo(category)
+  }
+  // The category chosen kept in sight in its bar, which scrolls sideways on a narrow screen.
+  const bar = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const row = bar.current
+    const button = row?.querySelector<HTMLElement>(`[data-for="${current}"]`)
+    if (!row || !button) return
+    // Centred, clear of the row's faded edges.
+    const left = button.offsetLeft - row.offsetLeft
+    row.scrollLeft = left - (row.clientWidth - button.offsetWidth) / 2
+  }, [current])
+
+  // The category in sight as the sections scroll: the last whose top has passed.
+  const followScroll = () => {
+    const box = scroller.current
+    if (!box) return
+    const passed = PALETTE_CATEGORIES.filter((category) => {
+      const top = sectionTop(box, category)
+      return top !== null && top <= box.scrollTop + 8
+    })
+    const last = passed.at(-1)
+    if (last && last !== current) setCurrent(last)
+  }
+
   const left = paletteSide === 'left'
   const other = left ? 'right' : 'left'
-  const fold = (
-    <>
-      {side && !folded ? (
-        // Beside the sheet, the palette stands on the side the learner likes (ADR 0071).
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label={t(`palette.move.${other}`)}
-          title={t(`palette.move.${other}`)}
-          className="size-11 shrink-0 rounded-xl landscape-phone:h-9"
-          onClick={() => setPaletteSide(settings, other)}
-        >
-          {left ? <ArrowRightToLine aria-hidden /> : <ArrowLeftToLine aria-hidden />}
-        </Button>
-      ) : null}
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label={t(folded ? 'palette.open' : 'palette.close')}
-        title={t(folded ? 'palette.open' : 'palette.close')}
-        aria-expanded={!folded}
-        className="size-11 shrink-0 rounded-xl landscape-phone:h-9"
-        onClick={() => onFold(!folded)}
-      >
-        {folded ? <ChevronUp aria-hidden /> : <ChevronDown aria-hidden />}
-      </Button>
-    </>
-  )
-  // Folded, a tab tapped (the chosen one too, which changes nothing) opens the palette on it.
-  const unfoldAt = (event: MouseEvent) => {
-    if (folded && (event.target as Element).closest('[role="tab"]')) onFold(false)
-  }
-  const scroll = cn(
-    'content-start overflow-y-auto overscroll-contain',
-    side ? 'min-h-0 flex-1' : 'max-h-[34dvh]',
-  )
-  const card = cn('gap-1 rounded-3xl p-1.5', side && !folded && 'max-h-full min-h-0')
-  // In the chord names' row the palette is theirs, in place of the notes' tabs.
-  if (layer === 'chords')
-    return (
-      <ToolPalette
-        label={t('palette.label')}
-        tab={chordTab}
-        onTabChange={chooseChordTab}
-        className={card}
-      >
-        <fieldset disabled={recording} className="contents" onClick={unfoldAt}>
-          <ToolPaletteTabs
-            label={t('chord.tabs')}
-            end={<div className="flex items-center gap-1">{fold}</div>}
-            className="border-t-0"
-          >
-            {CHORD_TABS.map((each) => (
-              <ToolPaletteTab
-                key={each}
-                value={each}
-                label={t(`chord.tab.${each}`)}
-                className="min-w-9 shrink"
-              >
-                {CHORD_TAB_ICONS[each]}
-              </ToolPaletteTab>
-            ))}
-          </ToolPaletteTabs>
-          {folded ? null : (
-            <ToolPalettePanel value={chordTab} className={cn('grid-cols-6 gap-1.5', scroll)}>
-              {chordTab === 'key' ? (
-                <ChordsInKey />
-              ) : chordTab === 'build' ? (
-                <ChordBuilt />
-              ) : (
-                <ChordTyped focus={focusField} />
-              )}
-            </ToolPalettePanel>
-          )}
-        </fieldset>
-      </ToolPalette>
-    )
+  const barButton =
+    'size-11 shrink-0 rounded-xl text-muted-foreground hover:text-foreground landscape-phone:h-10'
   return (
-    <ToolPalette label={t('palette.label')} tab={tab} onTabChange={choose} className={card}>
-      <fieldset disabled={recording} className="contents" onClick={unfoldAt}>
-        <ToolPaletteTabs
-          label={t('palette.tabs')}
-          end={<div className="flex items-center gap-1">{fold}</div>}
-          className="border-t-0"
-        >
-          {PALETTE_TABS.map((each) => (
-            <ToolPaletteTab
-              key={each}
-              value={each}
-              label={t(`palette.${each}`)}
-              disabled={!tabOpen(layer)}
-              className="min-w-9 shrink"
-            >
-              {TAB_ICONS[each]}
-            </ToolPaletteTab>
-          ))}
-        </ToolPaletteTabs>
+    <section
+      aria-label={t('palette.label')}
+      className={cn(
+        'flex max-h-full min-h-0 flex-col gap-1.5 rounded-3xl border border-border bg-muted p-1.5 shadow-xl shadow-foreground/15',
+      )}
+    >
+      <fieldset disabled={recording} className="contents">
         {folded ? null : (
-          <ToolPalettePanel value={tab} className={cn('grid-cols-6', scroll)}>
-            {TAB_KEYS[tab]}
-          </ToolPalettePanel>
+          <div
+            ref={scroller}
+            onScroll={followScroll}
+            className={cn(
+              'relative min-h-0 overflow-y-auto overscroll-contain rounded-2xl bg-background px-2.5 pb-2',
+              side ? 'flex-1' : 'max-h-[min(30dvh,18rem)]',
+            )}
+          >
+            <Sections way={chordWay} setWay={setChordWay} />
+          </div>
         )}
+        <div className="shrink-0">{layer === 'chords' ? <QuickChords /> : <QuickValues />}</div>
+        <div className="flex shrink-0 items-center gap-0.5 border-t border-hairline pt-1.5 landscape-phone:pt-1">
+          <div
+            ref={bar}
+            role="toolbar"
+            aria-label={t('palette.categories')}
+            className="fade-scroll-x flex min-w-0 flex-1 gap-0.5 overflow-x-auto [scrollbar-width:none]"
+          >
+            {PALETTE_CATEGORIES.map((category) => {
+              const name = t(`palette.category.${category}`)
+              return (
+                <button
+                  key={category}
+                  data-for={category}
+                  type="button"
+                  aria-label={name}
+                  title={name}
+                  aria-current={!folded && current === category ? 'true' : undefined}
+                  data-off={categoryOpen(category, layer) ? undefined : true}
+                  onClick={() => show(category)}
+                  className="grid size-11 shrink-0 place-items-center rounded-xl text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground aria-[current=true]:bg-selected aria-[current=true]:text-selected-foreground data-off:opacity-40 landscape-phone:h-10 [&_svg]:size-6"
+                >
+                  <CategoryIcon category={category} />
+                </button>
+              )
+            })}
+          </div>
+          {side && !folded ? (
+            // Beside the sheet, the palette stands on the side the learner likes (ADR 0071).
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={t(`palette.move.${other}`)}
+              title={t(`palette.move.${other}`)}
+              className={barButton}
+              onClick={() => setPaletteSide(settings, other)}
+            >
+              {left ? <ArrowRightToLine aria-hidden /> : <ArrowLeftToLine aria-hidden />}
+            </Button>
+          ) : null}
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={t(folded ? 'palette.open' : 'palette.close')}
+            title={t(folded ? 'palette.open' : 'palette.close')}
+            aria-expanded={!folded}
+            className={barButton}
+            onClick={() => onFold(!folded)}
+          >
+            {folded ? <ChevronUp aria-hidden /> : <ChevronDown aria-hidden />}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={t('palette.keys')}
+            title={t('palette.keys')}
+            aria-pressed={!keys.folded}
+            className={cn(
+              barButton,
+              'aria-pressed:bg-selected aria-pressed:text-selected-foreground',
+            )}
+            onClick={() => keys.fold(!keys.folded)}
+          >
+            <Piano aria-hidden />
+          </Button>
+        </div>
       </fieldset>
-    </ToolPalette>
+    </section>
   )
 }

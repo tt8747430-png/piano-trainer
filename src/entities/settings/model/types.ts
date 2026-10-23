@@ -186,7 +186,7 @@ export interface SettingsState {
   paletteSide: PaletteSide
   /** How the score editor lays its score out, on every song (ADR 0064). */
   editorLayout: SheetView
-  /** Whether the score editor's palette is folded into its button. */
+  /** Whether the score editor's palette is folded to its quick row and categories (it opens so). */
   paletteFolded: boolean
   midi: MidiSettings
   chordFinder: ChordFinderSettings

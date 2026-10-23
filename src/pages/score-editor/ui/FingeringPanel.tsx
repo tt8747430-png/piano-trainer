@@ -7,10 +7,10 @@ import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /**
- * Insert's Fingering (ADR 0080): a finger goes on a written note, so a hand's bar the song's
+ * The palette's Fingering (ADR 0080): a finger goes on a written note, so a hand's bar the song's
  * pattern plays from the chords says so and offers to write it out as notes first. Written out, each
- * note at the caret takes a finger, 1 to 5 (pressed again, taken off); under them, the bar given
- * back to the pattern, a second action that says it replaces the notes written.
+ * note at the caret takes a finger, 1 to 5 (pressed again, taken off). Giving the bar back to the
+ * pattern is Bar's.
  */
 export function FingeringPanel() {
   const { t } = useTranslation('editor')
@@ -24,22 +24,20 @@ export function FingeringPanel() {
       isHandLayer(state.layer) ? notesAt(state.draft, state.layer, state.caret) : [],
     ),
   )
-  if (!isHandLayer(layer))
-    return <p className="text-sm text-muted-foreground">{t('add.fingering.noHand')}</p>
-  const hand = t(`layers.${layer}`)
+  if (!isHandLayer(layer)) return null
   if (!written)
     return (
-      <section aria-label={hand} className="flex flex-col items-start gap-3">
-        <h3 className="text-sm font-semibold text-muted-foreground">{hand}</h3>
-        <p className="text-base text-pretty">{t('add.fingering.fromPattern')}</p>
-        <Button onClick={actions.writeOut}>{t('add.fingering.writeOut')}</Button>
-      </section>
+      <div className="flex flex-col items-start gap-2">
+        <p className="text-sm text-pretty text-muted-foreground">{t('bars.fromPattern')}</p>
+        <Button variant="soft" onClick={actions.writeOut}>
+          {t('bars.writeOut')}
+        </Button>
+      </div>
     )
   return (
-    <section aria-label={hand} className="flex flex-col gap-3">
-      <h3 className="text-sm font-semibold text-muted-foreground">{hand}</h3>
+    <div className="flex flex-col gap-2">
       {notes.length === 0 ? (
-        <p className="text-sm text-muted-foreground">{t('add.fingering.noNote')}</p>
+        <p className="text-sm text-muted-foreground">{t('fingering.noNote')}</p>
       ) : (
         <>
           {/* What the numbers stand for, once over the notes' rows. */}
@@ -78,14 +76,6 @@ export function FingeringPanel() {
           })}
         </>
       )}
-      <div className="mt-2 flex flex-col items-start gap-2 border-t border-border pt-3">
-        <p className="text-sm text-pretty text-muted-foreground">
-          {t('add.fingering.patternAgainNote')}
-        </p>
-        <Button variant="soft" onClick={() => actions.dispatch({ type: 'backToPattern' })}>
-          {t('add.fingering.patternAgain')}
-        </Button>
-      </div>
-    </section>
+    </div>
   )
 }

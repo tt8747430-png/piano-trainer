@@ -1,9 +1,11 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { hasMark, notesAt, type MarkChoice } from '@/features/score-editor'
+import { chosenNotes, hasMark, type MarkChoice } from '@/features/score-editor'
 import { DYNAMICS } from '@/shared/lib/music'
 import { ToolKey } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { useNotesChosen } from '../model/use-notes-chosen'
+import { GlyphGrid } from './palette-keys'
 
 /** A glyph of the music font (Noto Music), at a key's size. */
 const MUSIC = 'font-music text-3xl leading-none'
@@ -41,15 +43,14 @@ function Drawn({ children }: { children: ReactNode }) {
 
 const MORDENT = 'M3 15 L7 9 L10 14 L14 8 L17 13 L21 7'
 
-/** Whether every note at the caret wears the mark: its key then stands pressed. */
+/** Whether every note chosen wears the mark: its key then stands pressed. */
 const useMarkOn = (mark: MarkChoice): boolean =>
   useEditorState((state) => {
-    if (state.layer === 'chords') return false
-    const notes = notesAt(state.draft, state.layer, state.caret)
+    const notes = chosenNotes(state)
     return notes.length > 0 && notes.every((n) => hasMark(n.marks, mark))
   })
 
-/** One mark's key: on and off at the caret, over the bars chosen. */
+/** One mark's key: on and off on the notes chosen; greyed with none chosen. */
 function MarkKey({
   mark,
   label,
@@ -64,6 +65,7 @@ function MarkKey({
     <ToolKey
       label={label}
       pressed={useMarkOn(mark)}
+      disabled={!useNotesChosen()}
       onClick={() => actions.dispatch({ type: 'mark', mark })}
     >
       {children}
@@ -75,7 +77,7 @@ function MarkKey({
 export function ArticulationKeys() {
   const { t } = useTranslation('editor')
   return (
-    <>
+    <GlyphGrid>
       <MarkKey
         mark={{ kind: 'articulation', articulation: 'staccato' }}
         label={t('marks.staccato')}
@@ -136,15 +138,15 @@ export function ArticulationKeys() {
           <path d="M12 2 C9 4 15 6 12 8 C9 10 15 12 12 14 C9 16 15 18 12 20 M9 19 L12 22 L15 19" />
         </Drawn>
       </MarkKey>
-    </>
+    </GlyphGrid>
   )
 }
 
-/** The Dynamics tab: pianissimo to fortissimo, each set from the note it stands under. */
+/** The Dynamics: pianissimo to fortissimo, each set from the note it stands under. */
 export function DynamicKeys() {
   const { t } = useTranslation('editor')
   return (
-    <>
+    <GlyphGrid>
       {DYNAMICS.map((dynamic) => (
         <MarkKey key={dynamic} mark={{ kind: 'dynamic', dynamic }} label={t(`marks.${dynamic}`)}>
           <span aria-hidden className="font-serif text-xl font-bold italic leading-none">
@@ -152,6 +154,6 @@ export function DynamicKeys() {
           </span>
         </MarkKey>
       ))}
-    </>
+    </GlyphGrid>
   )
 }

@@ -35,7 +35,7 @@ const DEFAULTS = {
   sidebar: DEFAULT_SIDEBAR,
   paletteSide: 'right',
   editorLayout: 'scroll',
-  paletteFolded: false,
+  paletteFolded: true,
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
   scoreView: DEFAULT_SCORE_VIEW,
@@ -185,8 +185,8 @@ describe('createSettingsStore', () => {
     expect(restored({ paletteSide: 'left' }).paletteSide).toBe('left')
     expect(restored({ editorLayout: 'paper' }).editorLayout).toBe('scroll')
     expect(restored({ editorLayout: 'pages' }).editorLayout).toBe('pages')
-    expect(restored({ paletteFolded: 'yes' }).paletteFolded).toBe(false)
-    expect(restored({ paletteFolded: true }).paletteFolded).toBe(true)
+    expect(restored({ paletteFolded: 'yes' }).paletteFolded).toBe(true)
+    expect(restored({ paletteFolded: false }).paletteFolded).toBe(false)
   })
 
   it('turns a click that is not a boolean on, its default', () => {
