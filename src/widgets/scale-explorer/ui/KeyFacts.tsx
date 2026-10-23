@@ -14,7 +14,11 @@ import {
 } from '@/shared/lib/music'
 import { ButtonLink, Fact } from '@/shared/ui'
 
-/** A key's signature and notes, its relative (shown as a key too) and the modes that share its notes (each as a scale). */
+/**
+ * A key's signature and notes, its relative (shown as a key too) and the modes that share its notes
+ * (each as a scale). Every link changes the scale in place, keeping the view's other choices: a mode
+ * has no Key view, so its page opens on its run.
+ */
 export function KeyFacts({ value }: { value: Key }) {
   const { t } = useTranslation('practice')
   const scaleName = useScaleName()
@@ -55,7 +59,14 @@ export function KeyFacts({ value }: { value: Key }) {
               key={kind}
               variant="link"
               className="px-0"
-              render={<Link to="/practice/scales" search={{ root: noteParam(root), kind }} />}
+              render={
+                <Link
+                  from="/practice/scales"
+                  to="/practice/scales"
+                  search={(prev) => ({ ...prev, root: noteParam(root), kind })}
+                  {...IN_PLACE}
+                />
+              }
             >
               {scaleName(root, kind)}
             </ButtonLink>

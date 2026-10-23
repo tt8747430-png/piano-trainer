@@ -415,6 +415,18 @@ describe('Practice → Scales and keys, Key view', () => {
     )
   })
 
+  it('opens a mode of the key in place, on its run, keeping the other choices', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/scales?root=Eb&show=key&hands=lh')
+    await screen.findByRole('heading', { level: 2, name: 'E♭ major' })
+    const entries = router.history.length
+    await user.click(screen.getByRole('link', { name: 'F Dorian' }))
+    // A mode has no Key view: its page opens on its run, the hands chosen kept, the entry replaced.
+    expect(router.state.location.search).toEqual({ root: 'F', kind: 'dorian', hands: 'lh' })
+    expect(await screen.findByRole('heading', { level: 2, name: 'F Dorian' })).toBeInTheDocument()
+    expect(router.history.length).toBe(entries)
+  })
+
   it('goes to a minor key as its natural minor, and keeps the minor it was on', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?show=key')
