@@ -8,7 +8,6 @@ export const editor = {
   // The one palette (spec 2026-10-23): a quick row of values, the categories as a bar of pictures,
   // every category's section stacked above them when it is opened.
   palette: {
-    move: { left: 'Move the palette to the left', right: 'Move the palette to the right' },
     label: 'Tools',
     open: 'Show every tool',
     close: 'Show fewer tools',

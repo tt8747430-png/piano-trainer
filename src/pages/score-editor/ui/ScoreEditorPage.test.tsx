@@ -648,11 +648,11 @@ describe('the score editor', () => {
       dispatchEvent: () => false,
     }))
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    // Opened, beside the sheet, it says which side it may move to.
-    await user.click(await screen.findByRole('button', { name: 'Show every tool' }))
-    await user.click(await screen.findByRole('button', { name: 'Move the palette to the left' }))
+    // Beside the sheet, its side is chosen in View, once, not in the palette's crowded bar.
+    await user.click(await screen.findByRole('button', { name: 'View' }))
+    await user.click(await screen.findByRole('radio', { name: 'Left' }))
     expect(settingsStore.getState().paletteSide).toBe('left')
-    await user.click(screen.getByRole('button', { name: 'Move the palette to the right' }))
+    await user.click(screen.getByRole('radio', { name: 'Right' }))
     expect(settingsStore.getState().paletteSide).toBe('right')
   })
 

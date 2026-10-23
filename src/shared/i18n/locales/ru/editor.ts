@@ -7,7 +7,6 @@ export const editor: LocaleResources['editor'] = {
   redo: 'Повторить',
   dock: 'Правка',
   palette: {
-    move: { left: 'Переместить палитру влево', right: 'Переместить палитру вправо' },
     label: 'Инструменты',
     open: 'Показать все инструменты',
     close: 'Показать меньше инструментов',

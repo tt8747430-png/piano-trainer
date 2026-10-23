@@ -1,10 +1,8 @@
-import { ArrowLeftToLine, ArrowRightToLine, ChevronDown, ChevronUp, Piano } from 'lucide-react'
+import { ChevronDown, ChevronUp, Piano } from 'lucide-react'
 import { useEffect, useEffectEvent, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { chosenNotes, isHandLayer } from '@/features/score-editor'
-import { selectPaletteSide, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { useFoldKeys } from '@/features/live-keyboard'
-import { setPaletteSide } from '@/features/set-preference'
 import { cn } from '@/shared/lib'
 import { Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -156,8 +154,6 @@ export function EditorTools({
   const { takes, meta } = useScoreEditorContext()
   const layer = useEditorState((state) => state.layer)
   const keys = useFoldKeys()
-  const settings = useSettingsStoreApi()
-  const paletteSide = useSettings(selectPaletteSide)
   const recording = takes.stage !== 'idle'
   const scroller = useRef<HTMLDivElement>(null)
   const [current, setCurrent] = useState<PaletteCategory>(layer === 'chords' ? 'chords' : 'notes')
@@ -224,8 +220,6 @@ export function EditorTools({
     if (last && last !== current) setCurrent(last)
   }
 
-  const left = paletteSide === 'left'
-  const other = left ? 'right' : 'left'
   const barButton =
     'size-11 shrink-0 rounded-xl text-muted-foreground hover:text-foreground landscape-phone:h-10'
   return (
@@ -277,19 +271,6 @@ export function EditorTools({
               )
             })}
           </div>
-          {side && !folded ? (
-            // Beside the sheet, the palette stands on the side the learner likes (ADR 0071).
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label={t(`palette.move.${other}`)}
-              title={t(`palette.move.${other}`)}
-              className={barButton}
-              onClick={() => setPaletteSide(settings, other)}
-            >
-              {left ? <ArrowRightToLine aria-hidden /> : <ArrowLeftToLine aria-hidden />}
-            </Button>
-          ) : null}
           <Button
             variant="ghost"
             size="icon"
