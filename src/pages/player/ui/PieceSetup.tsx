@@ -4,7 +4,7 @@ import type { PracticeChoice } from '@/features/practice'
 import type { PatternFit } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
 import { noteParam, writtenKeyAccidentals } from '@/shared/lib/music'
-import { ChordSizeField, Labelled, NoteChoice, MenuSection, ToggleGrid } from '@/shared/ui'
+import { ChordSizeField, Labelled, NoteChoice } from '@/shared/ui'
 import {
   MelodyToggle,
   PatternCard,
@@ -12,7 +12,7 @@ import {
   RecordingToggle,
   type SetupChange,
 } from '@/widgets/player-setup'
-import { PlayingToggles } from '@/widgets/practice-player'
+import { PlayingSection } from '@/widgets/practice-player'
 
 /**
  * A piece's Setup: its key, the pattern and figures, its chord size, melody and recording where it
@@ -45,7 +45,6 @@ export function PieceSetup({
         label={t('key')}
         value={noteParam(choice.tonic)}
         accidentals={(letter) => writtenKeyAccidentals(letter, own.minor)}
-
         name={(tonic) => keyName({ tonic, minor: own.minor })}
         onChange={(key) => onChange({ key })}
       />
@@ -58,16 +57,13 @@ export function PieceSetup({
         </Labelled>
       ) : null}
       <PatternCard />
-      <MenuSection title={t('playing')}>
-        <ToggleGrid label={t('playing')}>
-          <PlayingToggles swing={swing} onSwing={onSwing} />
-          {/* A lead sheet's tune is always heard (ADR 0083). */}
-          {fit.melody && !isLeadSheet(piece) ? <MelodyToggle /> : null}
-          {piece.recording ? (
-            <RecordingToggle ownKey={isOwnKey(piece, choice.tonic) ? null : keyName(own)} />
-          ) : null}
-        </ToggleGrid>
-      </MenuSection>
+      <PlayingSection swing={swing} onSwing={onSwing}>
+        {/* A lead sheet's tune is always heard (ADR 0083). */}
+        {fit.melody && !isLeadSheet(piece) ? <MelodyToggle /> : null}
+        {piece.recording ? (
+          <RecordingToggle ownKey={isOwnKey(piece, choice.tonic) ? null : keyName(own)} />
+        ) : null}
+      </PlayingSection>
     </PlayerSetup>
   )
 }

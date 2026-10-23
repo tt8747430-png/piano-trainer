@@ -21,7 +21,7 @@ const KIND_TILE: Readonly<Record<Entry['kind'], { icon: LucideIcon; paint: Paint
  * stage's mark and, once learned, the learned badge.
  */
 export function EntryRow({ entry, tile = true }: { entry: Entry; tile?: boolean }) {
-  const { t } = useTranslation('songs')
+  const { t } = useTranslation(['songs', 'common'])
   const locale = useLocale()
   const { primary, secondary } = entryTitles(entry, locale)
   const step = pieceStepId(entry.id)
@@ -33,7 +33,7 @@ export function EntryRow({ entry, tile = true }: { entry: Entry; tile?: boolean 
     <li>
       <RowLink
         title={primary}
-        detail={entry.kind === 'listing' ? t('noChart') : secondary}
+        detail={entry.kind === 'listing' ? t('songs:noChart') : secondary}
         {...(!tile ? {} : number === undefined ? kind : { numeral: number, paint: kind.paint })}
         trailing={
           entry.kind === 'listing' ? null : (
@@ -42,7 +42,7 @@ export function EntryRow({ entry, tile = true }: { entry: Entry; tile?: boolean 
                 {keySymbol(pieceKey(entry))}
               </span>
               {stage ? <StageMark stage={stage} /> : null}
-              {learned ? <LearnedBadge label={t('learned')} /> : null}
+              {learned ? <LearnedBadge label={t('common:learned.done')} /> : null}
             </>
           )
         }

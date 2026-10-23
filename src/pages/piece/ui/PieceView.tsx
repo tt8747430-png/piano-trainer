@@ -25,16 +25,13 @@ import {
 } from '@/entities/piece'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { LearnedButton } from '@/features/mark-learned'
-import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
+import { arrangePiece, loopParam, ownChoice, playerRange } from '@/features/practice'
 import { ShareSaid, useShareSong } from '@/features/share-song'
-import { loopParam } from '@/features/practice'
 import { OPEN_PLAINLY } from '@/shared/lib'
-import { audibleHands, barSounds } from '@/shared/lib/schedule'
-import { usePlayback } from '@/shared/lib/services'
 import { useLocale } from '@/shared/i18n'
 import { ActionMenu, ButtonLink, FabLink, FloatingActions, NO_KEYS, RoundLink } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { ChordChart } from '@/widgets/chord-chart'
+import { ChordChart, useChartPlayback } from '@/widgets/chord-chart'
 import { PieceChords } from '@/widgets/piece-chords'
 import { PieceAbout, PieceCredits } from './PieceAbout'
 import { PieceFacts } from './PieceFacts'
@@ -54,7 +51,6 @@ import { PieceHeader } from './PieceHeader'
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
   const locale = useLocale()
-  const playback = usePlayback<number>()
   const own = isOwnSongId(piece.id) ? piece.id : null
   const hasVersion = usePieces((state) => selectHasVersion(state, piece.id))
   const title = entryTitles(piece, locale).primary
@@ -63,16 +59,13 @@ export function PieceView({ piece }: { piece: Piece }) {
     [piece],
   )
   const headings = usePieceHeadings(piece)
+  const { playing, toggleBar } = useChartPlayback(performance, piece.tempo)
   const shared = useShareSong()
   const [asking, setAsking] = useState(false)
   // More, which takes the focus back from a dialog it opened: the action chosen is folded away.
   const more = useRef<HTMLDivElement>(null)
   const step = pieceStepId(piece.id)
   const navigate = useNavigate()
-  const toggleBar = (bar: number) =>
-    playback.toggle(bar, () =>
-      barSounds(performance, bar, { tempo: piece.tempo, hands: audibleHands('both') }),
-    )
   const ownMusic = own
     ? ({ kind: 'song', id: own, title } as const)
     : hasVersion
@@ -162,11 +155,11 @@ export function PieceView({ piece }: { piece: Piece }) {
           performance={performance}
           headings={headings}
           onBar={toggleBar}
-          playing={playback.playing}
+          playing={playing}
           sectionAction={(bars, section) => (
             <ButtonLink
               variant="outline"
-              className="h-9 rounded-full px-3 text-sm print:hidden"
+              className="rounded-full print:hidden"
               aria-label={t('practiseSectionOf', { section: headings[section] ?? '' })}
               render={
                 <Link

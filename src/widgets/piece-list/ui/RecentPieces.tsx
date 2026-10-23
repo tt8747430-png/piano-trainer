@@ -4,7 +4,7 @@ import { useRepertoire } from '@/entities/piece'
 import { byLastOpened, selectPractised, useProgress } from '@/entities/progress'
 import { EntryRow } from './EntryRow'
 
-/** How many of the pieces opened last the Path lists. */
+/** How many of the pieces opened last Learn lists. */
 const RECENT = 3
 
 /**

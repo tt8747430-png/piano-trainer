@@ -38,6 +38,12 @@ describe('A shared song', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/my-1'))
   })
 
+  it('writes its key as the song page does, a flat as a flat', async () => {
+    const data = await linkOf({ ...SONG, music: { ...SONG.music, key: 'Db' } })
+    await renderApp(`/songs/shared?song=${data}`)
+    expect(await screen.findByText('D♭ · 3/4 · 84 BPM')).toBeInTheDocument()
+  })
+
   it('floats Add, and plays a tapped bar on its keys before it is added', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp(`/songs/shared?song=${await linkOf(SONG)}`)

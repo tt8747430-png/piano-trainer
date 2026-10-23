@@ -26,7 +26,7 @@ export function PieceForm({
             <li key={section}>
               <a
                 href={`#${sectionAnchor(section)}`}
-                className="flex items-baseline gap-2 rounded-full border border-input bg-card px-3.5 py-1.5 transition-colors duration-200 ease-out hover:bg-chosen"
+                className="flex min-h-11 items-baseline gap-2 rounded-full border border-input bg-card px-3.5 py-1.5 transition-colors duration-200 ease-out hover:bg-chosen"
               >
                 <span className="font-display font-semibold">{heading}</span>
                 <span className="text-sm text-muted-foreground tabular-nums">
