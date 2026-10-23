@@ -2,10 +2,17 @@ import { SlidersHorizontal } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PIECE_TEMPO } from '@/entities/piece'
-import { MidiButton } from '@/features/connect-midi'
 import { keyFromParam, keyParam } from '@/shared/lib/music'
 import { metersFor } from '@/features/score-editor'
-import { KeyChoice, Labelled, Segmented, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import {
+  KeyChoice,
+  Labelled,
+  MenuSection,
+  Segmented,
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
@@ -79,11 +86,15 @@ function Part({
   plain?: boolean
   children: ReactNode
 }) {
-  return (
+  return plain ? (
     <section aria-label={title} className="flex flex-col gap-4">
-      {plain ? null : <h3 className="text-sm font-semibold text-muted-foreground">{title}</h3>}
       {children}
     </section>
+  ) : (
+    // The menus' one heading (ADR 0085), as the View's and the Setup's groups wear it.
+    <MenuSection title={title} className="gap-4">
+      {children}
+    </MenuSection>
   )
 }
 
@@ -91,8 +102,8 @@ function Part({
  * The Song sheet behind the bar's button (spec §6.4, ADR 0065, 0080): the song as a whole, each of its
  * settings here alone. The song (an own song's title, the key, the time signature of its kind, the
  * tempo with its words); its parts, each shown or hidden and a part removed, with what it is played
- * on (ADR 0070, 0072), and a part added; and the MIDI keyboard. What goes at the caret is Insert's;
- * how the score is shown is the View's. Opened from the bar, or from the sheet's clef, key and time
+ * on (ADR 0070, 0072), and a part added. What goes at the caret is Insert's; how the score is shown
+ * is the View's; the MIDI keyboard is the bar's, as in the Player (ADR 0085). Opened from the bar, or from the sheet's clef, key and time
  * signature.
  */
 export function PieceSettings() {
@@ -105,9 +116,9 @@ export function PieceSettings() {
       <SheetTrigger
         render={
           <Button
-            variant="ghost"
+            variant="surface"
             size="icon"
-            className="rounded-full lg:w-auto lg:gap-2 lg:px-3"
+            className="lg:w-auto lg:gap-2 lg:px-4"
             aria-label={t('song.label')}
             title={t('song.label')}
             disabled={takes.stage !== 'idle'}
@@ -139,12 +150,6 @@ export function PieceSettings() {
           <Part title={t('song.parts')}>
             <StaffList />
             <AddPart />
-          </Part>
-          <Part title={t('viewMenu.midi')}>
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-sm text-muted-foreground">{t('viewMenu.midiDetail')}</span>
-              <MidiButton />
-            </div>
           </Part>
         </div>
       </SheetContent>

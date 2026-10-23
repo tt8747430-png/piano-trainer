@@ -26,8 +26,6 @@ export const editor: LocaleResources['editor'] = {
     left: 'Слева',
     right: 'Справа',
     label: 'Вид',
-    midiDetail: 'Играйте в ноты с MIDI-клавиатуры',
-    midi: 'MIDI-клавиатура',
     melody: 'Нотоносец мелодии',
   },
   // Insert: what goes at the caret (ADR 0065, 0080).
@@ -302,7 +300,9 @@ export const editor: LocaleResources['editor'] = {
     open: 'Записать',
     record: 'Записать',
     click: 'Метроном',
+    clickDetail: 'Доли звучат и после отсчёта',
     tune: 'Мелодия',
+    tuneDetail: 'Мелодия песни звучит, пока вы записываете',
     from: 'С такта',
     full: 'Дубли заняли всё место: удалите один, чтобы записать новый.',
     nothing: 'Ничего не сыграно.',

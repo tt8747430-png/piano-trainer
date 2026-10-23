@@ -8,16 +8,18 @@ import {
 } from '@/entities/settings'
 import { setPaletteFolded, setPaletteSide } from '@/features/set-preference'
 import { useFoldKeys } from '@/features/live-keyboard'
-import { Labelled, Segmented, SheetLayoutField, SwitchRow } from '@/shared/ui'
+import { MenuSection, Segmented, SheetLayoutField, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { useScoreEditorContext } from '../model/editor-context'
+import { usePaletteBeside } from '../model/use-palette-beside'
 
 /**
- * How the editor shows its work, the Player's View menu (`PlayerViewMenu`) in shape: an eye in the
- * bar opening the layout (down the screen, on pages or across, ADR 0064), whether the keys and the
- * palette are out, and the side the palette stands on beside the sheet (ADR 0071). What the song
- * holds is the Song sheet's; this is only how it is seen, remembered for every song.
+ * How the editor shows its work, the Player's View menu (`PlayerViewMenu`) in shape, order and
+ * headings (ADR 0085): an eye in the bar opening the layout (down the screen, on pages or across,
+ * ADR 0064), whether the keys and the palette are out, and, where the palette stands beside the
+ * sheet, the side it stands on (ADR 0071). What the song holds is the Song sheet's; this is only how
+ * it is seen, remembered for every song.
  */
 export function EditorViewMenu() {
   const { t } = useTranslation('editor')
@@ -26,17 +28,18 @@ export function EditorViewMenu() {
   const keys = useFoldKeys()
   const palette = !useSettings(selectPaletteFolded)
   const side = useSettings(selectPaletteSide)
+  const beside = usePaletteBeside()
   return (
     <Popover>
       <PopoverTrigger
         render={
           <Button
-            variant="ghost"
+            variant="surface"
             size="icon"
             aria-label={t('viewMenu.label')}
             title={t('viewMenu.label')}
             disabled={takes.stage !== 'idle'}
-            className="rounded-full lg:w-auto lg:gap-2 lg:px-3"
+            className="lg:w-auto lg:gap-2 lg:px-4"
           />
         }
       >
@@ -50,8 +53,7 @@ export function EditorViewMenu() {
         className="max-h-[80dvh] w-80 max-w-[calc(100vw-2rem)] gap-4 overflow-y-auto p-4"
       >
         <SheetLayoutField value={view.layout} onChange={view.setLayout} />
-        <section aria-label={t('viewMenu.show')} className="flex flex-col">
-          <h2 className="text-sm font-semibold text-muted-foreground">{t('viewMenu.show')}</h2>
+        <MenuSection title={t('viewMenu.show')} className="gap-0">
           <SwitchRow
             icon={<Music />}
             label={t('viewMenu.palette')}
@@ -65,18 +67,20 @@ export function EditorViewMenu() {
             onCheckedChange={(on) => keys.fold(!on)}
             className="border-b-0"
           />
-        </section>
-        <Labelled label={t('viewMenu.side')}>
-          <Segmented
-            label={t('viewMenu.side')}
-            value={side}
-            options={[
-              { value: 'left', label: t('viewMenu.left') },
-              { value: 'right', label: t('viewMenu.right') },
-            ]}
-            onChange={(next) => setPaletteSide(store, next)}
-          />
-        </Labelled>
+        </MenuSection>
+        {beside ? (
+          <MenuSection title={t('viewMenu.side')}>
+            <Segmented
+              label={t('viewMenu.side')}
+              value={side}
+              options={[
+                { value: 'left', label: t('viewMenu.left') },
+                { value: 'right', label: t('viewMenu.right') },
+              ]}
+              onChange={(next) => setPaletteSide(store, next)}
+            />
+          </MenuSection>
+        ) : null}
       </PopoverContent>
     </Popover>
   )

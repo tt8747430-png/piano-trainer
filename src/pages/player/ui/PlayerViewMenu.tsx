@@ -1,4 +1,4 @@
-import { Eye, Hand, Hash, Music, Piano, Type } from 'lucide-react'
+import { Eye, Hand, Hash, Layers, Music, Piano, Type } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   selectPractice,
@@ -7,15 +7,16 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { setPracticeToggle, setScoreView, setStaffShown } from '@/features/set-preference'
-import { SheetLayoutField, SwitchRow } from '@/shared/ui'
+import { MenuSection, SheetLayoutField, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 
 /**
  * How the Player shows the score (ADR 0064, Soundslice's view settings), from its bar, remembered for
- * every piece: the staves (the tune's own over the piano while it plays, each hand's shown or hidden),
- * what is shown (the notation, chord names, finger numbers, note names, the keys) and the layout,
- * across, down the screen or on A4 pages.
+ * every piece, in the editor's View menu's order and headings (ADR 0085): the layout, across, down
+ * the screen or on A4 pages; the staves (the tune's own over the piano while it plays, each hand's
+ * shown or hidden); and what is shown (the notation, chord names and the chord positions written
+ * under them, finger numbers, note names, the keys). How it plays is the Setup's.
  */
 export function PlayerViewMenu() {
   const { t } = useTranslation('player')
@@ -45,8 +46,11 @@ export function PlayerViewMenu() {
         align="end"
         className="max-h-[80dvh] w-80 gap-4 overflow-y-auto p-4"
       >
-        <section aria-label={t('view.staves')} className="flex flex-col">
-          <h2 className="text-sm font-semibold text-muted-foreground">{t('view.staves')}</h2>
+        <SheetLayoutField
+          value={view.layout}
+          onChange={(layout) => setScoreView(store, { layout })}
+        />
+        <MenuSection title={t('view.staves')} className="gap-0">
           <SwitchRow
             icon={<Music />}
             label={t('view.melody')}
@@ -67,9 +71,8 @@ export function PlayerViewMenu() {
             onCheckedChange={(on) => setStaffShown(store, 'bass', on)}
             className="border-b-0"
           />
-        </section>
-        <section aria-label={t('view.show')} className="flex flex-col">
-          <h2 className="text-sm font-semibold text-muted-foreground">{t('view.show')}</h2>
+        </MenuSection>
+        <MenuSection title={t('view.show')} className="gap-0">
           <SwitchRow
             icon={<span className="font-music text-2xl leading-none">𝄞</span>}
             label={t('view.notation')}
@@ -81,6 +84,13 @@ export function PlayerViewMenu() {
             label={t('view.chordNames')}
             checked={view.chordNames}
             onCheckedChange={(on) => setScoreView(store, { chordNames: on })}
+          />
+          <SwitchRow
+            icon={<Layers />}
+            label={t('toggles.positions')}
+            detail={t('view.positionsDetail')}
+            checked={practice.positions}
+            onCheckedChange={(on) => setPracticeToggle(store, 'positions', on)}
           />
           <SwitchRow
             icon={<Hash />}
@@ -101,11 +111,7 @@ export function PlayerViewMenu() {
             onCheckedChange={(on) => setScoreView(store, { keys: on })}
             className="border-b-0"
           />
-        </section>
-        <SheetLayoutField
-          value={view.layout}
-          onChange={(layout) => setScoreView(store, { layout })}
-        />
+        </MenuSection>
       </PopoverContent>
     </Popover>
   )

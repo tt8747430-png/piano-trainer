@@ -17,6 +17,7 @@ import {
 import { ScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
 import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
+import { usePaletteBeside } from '../model/use-palette-beside'
 import { useScoreEditor } from '../model/use-score-editor'
 import { CaretLine } from './CaretLine'
 import { EditorDock } from './EditorDock'
@@ -26,8 +27,6 @@ import { EditorSheet } from './EditorSheet'
 import { EditorTools } from './EditorTools'
 import { RecordingStrip } from './RecordingStrip'
 
-/** A laptop's width: the palette a column beside the sheet. */
-const LAPTOP = '(min-width: 64rem)'
 /** What the sheet keeps between its music and what floats over it, in CSS px. */
 const GAP = 8
 
@@ -47,7 +46,7 @@ export function ScoreEditor({ target }: { target: EditorTarget }) {
   const editor = useScoreEditor(target)
   useEditorShortcutList()
   const onSide = useMediaQuery(LANDSCAPE_PHONE)
-  const side = useMediaQuery(LAPTOP) || onSide
+  const side = usePaletteBeside()
   const idle = editor.takes.stage === 'idle'
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const paletteSide = useSettings(selectPaletteSide)

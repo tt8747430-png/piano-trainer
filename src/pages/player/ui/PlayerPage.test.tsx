@@ -67,7 +67,7 @@ describe('Player', () => {
     expect(document.querySelector('[data-slot="sheet-page"]')).toBeInTheDocument()
     await user.click(screen.getByRole('switch', { name: 'Sheet music' }))
     expect(screen.queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
-    await user.click(screen.getByRole('switch', { name: 'Keyboard' }))
+    await user.click(screen.getByRole('switch', { name: 'Keys' }))
     expect(settingsStore.getState().scoreView).toMatchObject({ notation: false, keys: false })
   })
 
@@ -346,5 +346,27 @@ describe('Player', () => {
       const icon = within(transport).getByRole('button', { name }).querySelector('svg')
       expect(icon?.getAttribute('class')).not.toMatch(/rotate/)
     }
+  })
+
+  it('keeps what the sheet shows in the View, Chord positions among it, and how it plays in the Setup', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/play/bz5')
+    await user.click(await screen.findByRole('button', { name: 'View' }))
+    const view = await screen.findByRole('dialog', { name: 'View' })
+    // The editor's View in shape: the layout first, then the staves, then what is shown.
+    expect(
+      within(view)
+        .getAllByRole('region')
+        .map((section) => section.getAttribute('aria-label')),
+    ).toEqual(['Layout', 'Staves', 'Show'])
+    expect(within(view).getByRole('switch', { name: /^Melody staff/ })).toBeInTheDocument()
+    await user.click(within(view).getByRole('switch', { name: /^Chord positions/ }))
+    expect(settingsStore.getState().practice.positions).toBe(true)
+    await user.keyboard('{Escape}')
+    await user.click(screen.getByRole('button', { name: 'Setup' }))
+    const setup = await screen.findByRole('dialog', { name: 'Setup' })
+    expect(within(setup).queryByRole('button', { name: 'Chord positions' })).not.toBeInTheDocument()
+    const playing = within(setup).getByRole('region', { name: 'How it plays' })
+    expect(within(playing).getByRole('button', { name: 'Metronome' })).toBeInTheDocument()
   })
 })

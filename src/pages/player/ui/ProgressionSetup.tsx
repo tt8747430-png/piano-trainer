@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import type { PatternFit } from '@/entities/pattern'
 import type { ProgressionChoice } from '@/features/practice'
 import { keyParam } from '@/shared/lib/music'
-import { ChordSizeField, Labelled, KeyChoice, ToggleGrid } from '@/shared/ui'
+import { ChordSizeField, Labelled, KeyChoice, MenuSection, ToggleGrid } from '@/shared/ui'
 import { PatternCard, KeyWalkField, PlayerSetup } from '@/widgets/player-setup'
 import { PlayingToggles } from '@/widgets/practice-player'
 import type { ProgressionChange } from '../model/progression-search'
@@ -34,9 +34,11 @@ export function ProgressionSetup({
         />
       </Labelled>
       <PatternCard />
-      <ToggleGrid label={t('playing')}>
-        <PlayingToggles swing={swing} onSwing={onSwing} />
-      </ToggleGrid>
+      <MenuSection title={t('playing')}>
+        <ToggleGrid label={t('playing')}>
+          <PlayingToggles swing={swing} onSwing={onSwing} />
+        </ToggleGrid>
+      </MenuSection>
     </PlayerSetup>
   )
 }

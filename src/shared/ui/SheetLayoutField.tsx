@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import { SHEET_VIEWS, type SheetView } from '@/shared/lib'
-import { Labelled } from './Labelled'
+import { MenuSection } from './MenuSection'
 import { Segmented } from './Segmented'
 import { SheetViewIcon } from './SheetViewIcon'
 
 /**
- * How a score is laid out (ADR 0064), one choice wherever it is made (the Player's View menu, the
- * editor's settings): across on one line, in lines down the screen, or on A4 pages, each drawn.
+ * How a score is laid out (ADR 0064), one choice wherever it is made (the Player's and the editor's
+ * View menus, first in both, ADR 0085): across on one line, in lines down the screen, or on A4
+ * pages, each drawn. A menu's group, under the same heading as the groups after it.
  */
 export function SheetLayoutField({
   value,
@@ -17,7 +18,7 @@ export function SheetLayoutField({
 }) {
   const { t } = useTranslation('music')
   return (
-    <Labelled label={t('sheet.layout.label')}>
+    <MenuSection title={t('sheet.layout.label')}>
       <Segmented
         label={t('sheet.layout.label')}
         value={value}
@@ -28,6 +29,6 @@ export function SheetLayoutField({
         }))}
         onChange={onChange}
       />
-    </Labelled>
+    </MenuSection>
   )
 }

@@ -1,6 +1,7 @@
 import { Redo2, Undo2, X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { MidiButton } from '@/features/connect-midi'
 import { RoundButton, usePageHeading } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
@@ -10,9 +11,11 @@ import { RecorderSheet } from './RecorderSheet'
 
 /**
  * The editor's bar, one row at every size, as the Player's is: Close; the title (on a phone only
- * what the caret is on, `status`, or Your version); Undo and Redo; then the screen's menus, as the
- * Player's: Record, which opens the takes; the eye (`EditorViewMenu`), how the work is shown; and the
- * gear (`PieceSettings`), the song as a whole (ADR 0080). Play, ‹ › and + ride in the dock over the
+ * what the caret is on, `status`, or Your version); Undo and Redo, plain, as a notation app's edit
+ * commands; then the screen's round buttons in the Player's order and look (ADR 0085): Record, which
+ * opens the takes; the eye (`EditorViewMenu`), how the work is shown; the MIDI keyboard, where the
+ * Player has it (hidden without Web MIDI); and the sliders (`PieceSettings`), the song as a whole
+ * (ADR 0080), the two menus named on a wide screen. Play, ‹ › and + ride in the dock over the
  * sheet's foot, where the Player's transport is (`EditorDock`).
  */
 export function EditorHeader({ status }: { status?: ReactNode }) {
@@ -73,6 +76,7 @@ export function EditorHeader({ status }: { status?: ReactNode }) {
       <div className="flex items-center gap-0.5 sm:gap-1">
         <RecorderSheet />
         <EditorViewMenu />
+        <MidiButton />
         <PieceSettings />
       </div>
     </div>

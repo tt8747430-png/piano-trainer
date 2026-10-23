@@ -13,7 +13,14 @@ import type { PracticeChoice } from '@/features/practice'
 import type { PatternFit } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
 import { noteParam, writtenKeyAccidentals } from '@/shared/lib/music'
-import { ButtonLink, ChordSizeField, Labelled, NoteChoice, ToggleGrid } from '@/shared/ui'
+import {
+  ButtonLink,
+  ChordSizeField,
+  Labelled,
+  NoteChoice,
+  MenuSection,
+  ToggleGrid,
+} from '@/shared/ui'
 import {
   MelodyToggle,
   PatternCard,
@@ -67,14 +74,16 @@ export function PieceSetup({
         </Labelled>
       ) : null}
       <PatternCard />
-      <ToggleGrid label={t('playing')}>
-        <PlayingToggles swing={swing} onSwing={onSwing} />
-        {/* A lead sheet's tune is always heard (ADR 0083). */}
-        {fit.melody && !isLeadSheet(piece) ? <MelodyToggle /> : null}
-        {piece.recording ? (
-          <RecordingToggle ownKey={isOwnKey(piece, choice.tonic) ? null : keyName(own)} />
-        ) : null}
-      </ToggleGrid>
+      <MenuSection title={t('playing')}>
+        <ToggleGrid label={t('playing')}>
+          <PlayingToggles swing={swing} onSwing={onSwing} />
+          {/* A lead sheet's tune is always heard (ADR 0083). */}
+          {fit.melody && !isLeadSheet(piece) ? <MelodyToggle /> : null}
+          {piece.recording ? (
+            <RecordingToggle ownKey={isOwnKey(piece, choice.tonic) ? null : keyName(own)} />
+          ) : null}
+        </ToggleGrid>
+      </MenuSection>
       {isDegreePiece(piece) ? null : (
         <ButtonLink
           variant="outline"

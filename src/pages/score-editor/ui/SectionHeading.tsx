@@ -36,7 +36,7 @@ export function SectionHeading({ section }: { section: number }) {
         render={
           <Button
             variant="ghost"
-            className="-ml-2 h-auto gap-1 rounded-xl px-2 py-1 font-display text-xl font-semibold"
+            className="-ml-2 h-auto min-h-11 gap-1 rounded-xl px-2 py-1 font-display text-xl font-semibold"
           />
         }
         trigger={
