@@ -17,3 +17,6 @@ coverage
 
 # Agent worktrees: copies of the repo made by tooling, never committed.
 .claude/worktrees/
+
+# Local logs (a dev server run in the background)
+*.log
