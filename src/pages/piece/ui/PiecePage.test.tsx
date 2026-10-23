@@ -60,11 +60,13 @@ describe('Piece', () => {
     )
   })
 
-  it('checks the song’s chords from its row of actions', async () => {
-    await renderApp('/songs/bz5')
-    expect(
-      (await screen.findByRole('link', { name: 'Check these chords' })).getAttribute('href'),
-    ).toMatch(/^\/check\?of=piece(%3A|:)bz5$/)
+  it('checks the song’s chords from More', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/songs/bz5')
+    await openMore(user)
+    await user.click(await screen.findByRole('button', { name: 'Check these chords' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/check'))
+    expect(router.state.location.search).toEqual({ of: 'piece:bz5' })
   })
 
   it('plays a tapped bar, and shows its notes going down on the keyboard', async () => {
@@ -83,17 +85,15 @@ describe('Piece', () => {
     expect(down.every((name) => /^[GBD]\d$/.test(name ?? ''))).toBe(true)
   })
 
-  it('names what it does in one row on the page, Practise first, nothing floating over it', async () => {
+  it('floats Practise, its main action, and keeps Edit, Learned and More in its bar', async () => {
     await renderApp('/songs/bz5')
     const practise = await screen.findByRole('link', { name: 'Practise' })
-    expect(practise.closest('[data-slot="floating-actions"]')).toBeNull()
-    const row = practise.parentElement as HTMLElement
-    expect([...row.querySelectorAll('a, button')].map((each) => each.textContent)).toEqual([
-      'Practise',
-      'Edit the score',
-      'Check these chords',
-      'Learned',
-    ])
+    expect(practise.closest('[data-slot="floating-actions"]')).not.toBeNull()
+    const bar = screen.getByRole('heading', { level: 1 }).closest('header') as HTMLElement
+    for (const name of ['Edit the score', 'Learned', 'More'])
+      expect(
+        within(bar).getByRole(name === 'Edit the score' ? 'link' : 'button', { name }),
+      ).toBeInTheDocument()
   })
 
   it('docks its keys at the foot, folding them as the learner asks', async () => {
