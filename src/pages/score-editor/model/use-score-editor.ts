@@ -29,6 +29,7 @@ import type { Midi } from '@/shared/lib/music'
 import { audibleHands, schedule } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { inPopUp, isTyping } from '@/shared/lib/shortcuts'
+import { speedTempo } from '@/widgets/practice-player'
 import { arrangeDraft, playedInBar } from './arrange-draft'
 import type { ScoreEditorValue } from './editor-context'
 import type { EditSearch } from './edit-search'
@@ -106,6 +107,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     if (bar !== undefined) openAt(bar)
   }, [bar])
   const playback = usePlayback<'piece'>()
+  // The learner's speed for Play, a share of the song's tempo: this visit's, never saved.
+  const [speed, setSpeed] = useState(1)
   const chordField = useRef<HTMLInputElement | null>(null)
   const chordFieldRef = useCallback((field: HTMLInputElement | null) => {
     chordField.current = field
@@ -143,7 +146,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     playback.toggle('piece', () => {
       const { draft, caret } = store.getState()
       return schedule(arrangeDraft(draft), {
-        tempo: draft.tempo,
+        tempo: speedTempo(draft.tempo, speed),
         hands: audibleHands('both'),
         fromTick: barAt(draft, caret).start,
       }).sounds
@@ -213,7 +216,16 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     store,
     takes,
     actions: { dispatch, play, togglePlay, writeOut, close, rename },
-    view: { chordNames, showChordNames, settingsOpen, openSettings, layout, setLayout },
+    view: {
+      chordNames,
+      showChordNames,
+      settingsOpen,
+      openSettings,
+      speed,
+      setSpeed,
+      layout,
+      setLayout,
+    },
     meta: {
       id: target.id,
       title,

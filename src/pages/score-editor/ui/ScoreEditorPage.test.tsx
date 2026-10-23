@@ -714,10 +714,20 @@ describe('the score editor', () => {
       'button',
     )
     expect(dock.map((button) => button.getAttribute('aria-label'))).toEqual([
+      'Tempo: 100%',
       'Previous note',
       'Play',
       'Next note',
     ])
+  })
+
+  it('plays what was written at the learner’s speed from its dock’s tempo, the song’s own kept', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await user.click(await screen.findByRole('button', { name: 'Tempo: 100%' }))
+    await user.click(await screen.findByRole('option', { name: '50% speed' }))
+    expect(await screen.findByRole('button', { name: 'Tempo: 50%' })).toBeInTheDocument()
+    expect(songOf(piecesStore.getState())).toMatchObject({ tempo: 90 })
   })
 
   it('copies a bar and pastes it after the caret’s from the edit row, and adds a bar', async () => {
