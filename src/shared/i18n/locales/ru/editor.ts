@@ -256,6 +256,12 @@ export const editor: LocaleResources['editor'] = {
     },
     tempoLabel: '{{word}}, {{bpm}} в минуту',
     meter: 'Размер',
+    staves: 'Нотоносцы',
+    melodyDetail: 'Скрипичный нотоносец для мелодии над фортепиано',
+    piano: 'Фортепиано',
+    pianoDetail: 'Два нотоносца: обе руки',
+    chordsDetail: 'Записаны над нотами',
+    lastStaff: 'Последний нотоносец в поле зрения остаётся',
   },
   recorder: {
     more: 'Действия с дублем',

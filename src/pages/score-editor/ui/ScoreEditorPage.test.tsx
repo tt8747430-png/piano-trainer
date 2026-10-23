@@ -317,6 +317,47 @@ describe('the score editor', () => {
     expect(within(settings).queryByRole('radio', { name: 'Pages' })).not.toBeInTheDocument()
   })
 
+  it('shows and hides the staves from the Song sheet, never every one (ADR 0083, 0091)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ hands: SILENT_HANDS }),
+    })
+    const settings = await openSettings(user)
+    const staves = within(settings).getByRole('region', { name: 'Staves' })
+    const melody = within(staves).getByRole('switch', { name: /^Melody/ })
+    const piano = within(staves).getByRole('switch', { name: /^Piano/ })
+    const chords = within(staves).getByRole('switch', { name: /^Chord symbols/ })
+    expect(melody).not.toBeChecked()
+    expect(piano).toBeChecked()
+    expect(chords).toBeChecked()
+    // The piano, the only staff in sight, stays, and says so.
+    expect(piano).toHaveAttribute('aria-disabled', 'true')
+    expect(within(staves).getByText('The last staff in sight stays')).toBeInTheDocument()
+    await user.click(melody)
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ melody: 'r/4' }))
+    expect(melody).toBeChecked()
+    expect(piano).not.toHaveAttribute('aria-disabled')
+    await user.click(piano)
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ hidden: ['piano'] }))
+    // Now the tune's staff is the last in sight.
+    expect(melody).toHaveAttribute('aria-disabled', 'true')
+    await user.click(chords)
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({ hidden: ['piano', 'chords'] }),
+    )
+    await user.click(piano)
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({ hidden: ['chords'] }),
+    )
+    // The tune's staff taken away goes with its notes; the editor writes in the piano again.
+    await user.click(melody)
+    await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('melody'))
+    await user.keyboard('{Escape}')
+    await waitFor(() =>
+      expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff · Bar 1/),
+    )
+  })
+
   it('changes the caret’s staff’s clef from its bar on, from the palette’s Clef', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', {

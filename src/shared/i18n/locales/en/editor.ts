@@ -272,6 +272,13 @@ export const editor = {
     },
     tempoLabel: '{{word}}, {{bpm}} a minute',
     meter: 'Time signature',
+    // The score's staves (ADR 0091), each shown or hidden; the last staff in sight stays (ADR 0083).
+    staves: 'Staves',
+    melodyDetail: 'A treble staff for the tune, over the piano',
+    piano: 'Piano',
+    pianoDetail: 'The grand staff: both hands',
+    chordsDetail: 'Written over the music',
+    lastStaff: 'The last staff in sight stays',
   },
   recorder: {
     more: 'Take actions',
