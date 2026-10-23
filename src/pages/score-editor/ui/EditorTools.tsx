@@ -190,7 +190,11 @@ export function EditorTools({
     pending.current = null
   })
 
+  // While the sections scroll to a category tapped, the bar keeps that one chosen (the last ones
+  // can never reach the top); a hand on the sections again lets the bar follow them.
+  const following = useRef(true)
   const show = (category: PaletteCategory) => {
+    following.current = false
     setCurrent(category)
     if (folded) {
       pending.current = category
@@ -211,7 +215,7 @@ export function EditorTools({
   // The category in sight as the sections scroll: the last whose top has passed.
   const followScroll = () => {
     const box = scroller.current
-    if (!box) return
+    if (!box || !following.current) return
     const passed = PALETTE_CATEGORIES.filter((category) => {
       const top = sectionTop(box, category)
       return top !== null && top <= box.scrollTop + 8
@@ -236,6 +240,8 @@ export function EditorTools({
           <div
             ref={scroller}
             onScroll={followScroll}
+            onPointerDown={() => (following.current = true)}
+            onWheel={() => (following.current = true)}
             className={cn(
               'relative min-h-0 overflow-y-auto overscroll-contain rounded-2xl bg-background px-2.5 pb-2',
               side ? 'flex-1' : 'max-h-[min(30dvh,18rem)]',

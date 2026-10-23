@@ -1,7 +1,8 @@
 # ADR 0080 — The score editor's menus hold each option in one place
 
 - **Status:** accepted · **Date:** 2026-10-22 · **Amends:** ADR 0065 (the + menu and the gear's sheet), ADR 0064
-  (the layout's place in the editor)
+  (the layout's place in the editor) · Its Insert (the + menu) is **superseded** by
+  [ADR 0089](0089-one-palette-on-the-selection.md): its kinds are the one palette's categories
 
 ## Context
 
