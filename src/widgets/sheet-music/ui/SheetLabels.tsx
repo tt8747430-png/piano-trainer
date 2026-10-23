@@ -12,10 +12,10 @@ const NUMBER_INSET_PX = 4
 const CHORD_PX = 16
 
 /**
- * Over the staff: each bar's number, a section's name at its first bar and a tempo mark where it
- * changes (cut short to the bar), and each chord symbol at its
- * onset (spec §2.6), with Chord positions how the right hand plays it. The bars' buttons carry the
- * same words for a screen reader.
+ * Over the staff: the line's first bar's number, as LilyPond and a printed system number a line's
+ * start (each bar is still a button to tap, which says its number to a screen reader), a section's
+ * name at its first bar and a tempo mark where it changes (cut short to the bar), and each chord
+ * symbol at its onset (spec §2.6), with Chord positions how the right hand plays it.
  */
 export const SheetLabels = memo(function SheetLabels({
   layout,
@@ -76,24 +76,30 @@ export const SheetLabels = memo(function SheetLabels({
         const bar = firstBar + index
         const section = performance.bars[bar]?.section
         const starts = section !== undefined && section !== performance.bars[bar - 1]?.section
+        // The line's first bar is numbered, as a printed system is; a later bar says only a section or tempo.
+        const parts = [
+          ...(index === 0 ? [String(bar + 1)] : []),
+          ...(starts && headings[section] ? [headings[section]] : []),
+          ...(tempos[bar] === undefined
+            ? []
+            : [
+                <span key="tempo">
+                  <span className="font-music">{tempoNote(performance.meter)}</span>= {tempos[bar]}
+                </span>,
+              ]),
+        ]
+        if (parts.length === 0) return null
         return (
           <span
             key={index}
             className="absolute top-0 truncate text-xs text-muted-foreground tabular-nums"
-            // Kept to its own bar, clear of the next bar's number: a long section name is cut short.
+            // Kept to its own bar, clear of the next bar's label: a long section name is cut short.
             style={{
               left: measure.x + NUMBER_INSET_PX,
               maxWidth: Math.max(0, measure.width - 2 * NUMBER_INSET_PX),
             }}
           >
-            {bar + 1}
-            {starts && headings[section] ? ` · ${headings[section]}` : null}
-            {tempos[bar] === undefined ? null : (
-              <>
-                {' · '}
-                <span className="font-music">{tempoNote(performance.meter)}</span>= {tempos[bar]}
-              </>
-            )}
+            {parts.flatMap((part, at) => (at === 0 ? [part] : [' · ', part]))}
           </span>
         )
       })}
