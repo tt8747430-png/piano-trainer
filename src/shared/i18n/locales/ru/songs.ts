@@ -49,10 +49,10 @@ export const songs: LocaleResources['songs'] = {
   },
 
   withChords: 'С аккордами',
-  stage: 'Этап',
+  stage: 'Уровень',
   anyStage: 'Любой',
-  emptyStage: 'Здесь нет песен этапа «{{stage}}».',
-  emptyQueryStage: 'По запросу «{{query}}» на этапе «{{stage}}» ничего не найдено.',
+  emptyStage: 'Здесь нет песен уровня «{{stage}}».',
+  emptyQueryStage: 'По запросу «{{query}}» на уровне «{{stage}}» ничего не найдено.',
   clearFilters: 'Сбросить фильтры',
   shared: {
     title: 'Песня по ссылке',
