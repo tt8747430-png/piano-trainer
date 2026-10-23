@@ -71,9 +71,10 @@ function JourneyTabs({ shown }: { shown: Journey }) {
                     : 'border-transparent text-muted-foreground hover:bg-background/60 hover:text-foreground',
                 )}
               >
-                <span className="flex items-baseline gap-2">
+                {/* The count stays whole: beside the name, or under it where the tab is narrow. */}
+                <span className="flex flex-wrap items-baseline gap-x-2">
                   <span className="font-semibold">{localText(journey.title, locale)}</span>
-                  <span className="text-xs tabular-nums">
+                  <span className="text-xs whitespace-nowrap tabular-nums">
                     {t('journey.steps', { learned: progress.done, total: progress.total })}
                   </span>
                 </span>
