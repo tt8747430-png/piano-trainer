@@ -1,5 +1,7 @@
+import { HAND_IDS, type HandId } from '@/entities/piece'
 import {
   barsOf,
+  rowShown,
   shownRows,
   isVoiceLayer,
   type Draft,
@@ -196,15 +198,48 @@ function staffInstrumentsOf(
   return Object.keys(chosen).length > 0 ? { staffInstruments: chosen } : {}
 }
 
+/** What each hand plays on the piece's timeline, as the Player arranges it: the pattern's included. */
+export type PlayedHands = Readonly<Record<HandId, readonly DraftNote[]>>
+
+const HAND_STAFF = { rh: 'treble', lh: 'bass' } as const satisfies Record<HandId, StaffId>
+
+/**
+ * A hand's notes on a line: those it writes, and in each bar it leaves to the pattern what the
+ * pattern plays there (`played`), cut at the bar's end (ADR 0083).
+ */
+function handNotes(
+  draft: Draft,
+  line: SheetLineBars,
+  hand: HandId,
+  played: PlayedHands | undefined,
+): DraftNote[] {
+  const patterned = line.bars
+    .filter(({ bar }) => !bar[hand])
+    .flatMap(({ start, bar }) =>
+      (played?.[hand] ?? [])
+        .filter((n) => n.startTick >= start && n.startTick < start + bar.ticks)
+        .map(({ midi, spelled, startTick, durationTicks }) => ({
+          midi,
+          spelled,
+          startTick,
+          durationTicks: Math.min(durationTicks, start + bar.ticks - startTick),
+        })),
+    )
+  return [...draft.hands[hand], ...patterned].sort((a, b) => a.startTick - b.startTick)
+}
+
 /**
  * A line as the sheet writes it, from its own start: the melody on its staff, each voice shown on
- * its own, the written right hand on the treble staff, the written left hand on the bass, the chord
- * symbols; a staff with nothing in a bar is left blank there, a row hidden is not written at all.
+ * its own, the written right hand on the treble staff, the written left hand on the bass, and in a
+ * bar a hand leaves to the pattern what it plays there (`played`), its staff marked to be drawn
+ * soft (ADR 0083); the chord symbols. A staff with nothing in a bar is left blank there, a row
+ * hidden is not written at all: no piano on a lead sheet.
  */
-export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
+export function lineMusic(draft: Draft, line: SheetLineBars, played?: PlayedHands): TimedMusic {
   const from = line.start
   const to = endOf(line)
   const { tune, voices: voiceStaves } = shownStaves(draft)
+  const piano = rowShown(draft, 'piano')
   const notes = [
     ...(tune ? sounding(draft.melody, 'melody', from, to) : []),
     ...voiceStaves.flatMap((voice) =>
@@ -213,13 +248,14 @@ export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
         voice,
       })),
     ),
-    ...sounding(draft.hands.rh, 'rh', from, to),
-    ...sounding(draft.hands.lh, 'lh', from, to),
+    ...(piano
+      ? HAND_IDS.flatMap((hand) => sounding(handNotes(draft, line, hand, played), hand, from, to))
+      : []),
   ]
   const staves: StaffId[] = [
     ...(tune ? (['melody'] as const) : []),
     ...voiceStaves,
-    ...PIANO_STAVES,
+    ...(piano ? PIANO_STAVES : []),
   ]
   // A line starts in the clefs its first bar is in; its bars change them after.
   const [first] = line.bars
@@ -236,10 +272,17 @@ export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
           n.startTick + n.durationTicks > startTick,
       )
     const blank = staves.filter((staff) => !holds(staff))
+    // The hands' staves whose notes here are the pattern's.
+    const pattern = piano
+      ? HAND_IDS.filter((hand) => !bar[hand] && holds(HAND_STAFF[hand])).map(
+          (hand) => HAND_STAFF[hand],
+        )
+      : []
     return {
       startTick,
       beats: bar.ticks / TICKS_PER_BEAT,
       ...(blank.length > 0 ? { blank } : {}),
+      ...(pattern.length > 0 ? { pattern } : {}),
       // The piece's tempo over its first bar.
       ...(index === 0 && start === 0 ? { tempo: draft.tempo } : {}),
       ...barMarksOf(bar),
@@ -263,6 +306,7 @@ export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
     notes,
     chords,
     ...(tune ? { melodyStaff: true } : {}),
+    ...(piano ? {} : { piano: false }),
     ...(voiceStaves.length > 0 ? { voiceStaves } : {}),
     ...staffInstrumentsOf(draft, tune, voiceStaves),
   }

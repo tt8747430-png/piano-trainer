@@ -35,6 +35,8 @@ export function ScoreSetupSheet({
 }) {
   const { t } = useTranslation(['songs', 'music'])
   const chosen = templateOf(setup)
+  // No tune and no part: the piano is the only staff, kept.
+  const pianoKept = !setup.melody && setup.parts.length === 0
   const id = useId()
   const ids = { templates: `${id}-templates`, rows: `${id}-rows`, parts: `${id}-parts` }
   const setPart = (index: number, part: Instrument | null) =>
@@ -63,7 +65,7 @@ export function ScoreSetupSheet({
             <div
               role="radiogroup"
               aria-labelledby={ids.templates}
-              className="grid gap-2 sm:grid-cols-3"
+              className="grid gap-2 sm:grid-cols-2"
             >
               {TEMPLATES.map((template) => (
                 <button
@@ -98,6 +100,15 @@ export function ScoreSetupSheet({
               detail={t('songs:setup.melodyDetail')}
               checked={setup.melody}
               onCheckedChange={(melody) => onChange({ ...setup, melody })}
+            />
+            <SwitchRow
+              icon={<span className="font-music text-xl leading-none">𝄢</span>}
+              label={t('songs:setup.piano')}
+              // The piano stays where no other staff would be in sight (ADR 0083).
+              detail={pianoKept ? t('songs:setup.pianoKept') : t('songs:setup.pianoDetail')}
+              checked={setup.piano || pianoKept}
+              disabled={pianoKept}
+              onCheckedChange={(piano) => onChange({ ...setup, piano })}
             />
           </section>
           <section aria-labelledby={ids.parts} className="flex flex-col gap-2">

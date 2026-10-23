@@ -292,7 +292,7 @@ export function notate(music: TimedMusic): Score {
     (id) =>
       (id === 'melody' && melodyStaff) ||
       voices.some((voice) => voice === id) ||
-      PIANO_STAVES.some((piano) => piano === id),
+      (music.piano !== false && PIANO_STAVES.some((piano) => piano === id)),
   )
   let tiedOn = new Set<string>()
   const clefs = clefsInForce(music.bars)
@@ -326,6 +326,7 @@ export function notate(music: TimedMusic): Score {
       time: timeSignature(pickup ? beatsPerBar(music.meter) : placed.beats, music.meter),
       ...(placed.key ? { key: placed.key } : {}),
       ...(placed.tempo ? { tempo: placed.tempo } : {}),
+      ...(placed.pattern?.length ? { pattern: placed.pattern } : {}),
       ...barMarksOf(placed),
       ...staffClefs(clefs[index] ?? HOME_CLEF, music.staffInstruments),
       staves,

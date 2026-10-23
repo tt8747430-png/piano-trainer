@@ -291,6 +291,24 @@ describe('the editor', () => {
     expect(run(hidden, { type: 'hide', row: 'melody', hidden: false }).draft.hidden).toEqual([])
   })
 
+  it('hides the piano for a lead sheet, the caret leaving a hand for the tune (ADR 0083)', () => {
+    const sung = initialEditor(draftOf({ melody: 'B4/1 | D5/1', hands: { lh: 'G2/4 | -' } }))
+    const lead = run({ ...sung, layer: 'lh' }, { type: 'hide', row: 'piano', hidden: true })
+    expect(lead.draft.hidden).toEqual(['piano'])
+    expect(lead.draft.hands).toEqual(sung.draft.hands)
+    expect(lead.layer).toBe('melody')
+    expect(musicToSave(lead.draft)).toMatchObject({ hidden: ['piano'], hands: { lh: 'G2/4 | -' } })
+    // Never every staff: the tune's, the last in sight, stays.
+    expect(run(lead, { type: 'hide', row: 'melody', hidden: true })).toBe(lead)
+    // Nor the piano where it is the only staff.
+    const piano = initialEditor(draftOf())
+    expect(run(piano, { type: 'hide', row: 'piano', hidden: true })).toBe(piano)
+    // The tune taken away from a lead sheet brings the piano back, so a staff is in sight.
+    const gone = run(lead, { type: 'melodyStaff', on: false })
+    expect(gone.draft.hidden).toEqual([])
+    expect(gone.layer).toBe('rh')
+  })
+
   it('moves the caret a line on and back, to its line’s start first', () => {
     const lines = initialEditor(
       draftOf({

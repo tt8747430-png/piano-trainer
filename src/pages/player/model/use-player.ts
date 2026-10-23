@@ -1,6 +1,6 @@
 import { usePatternBook } from '@/entities/pattern'
 import { useEffect, useMemo } from 'react'
-import { isOwnKey, pieceFit, usePieceHeadings, type Piece } from '@/entities/piece'
+import { isLeadSheet, isOwnKey, pieceFit, usePieceHeadings, type Piece } from '@/entities/piece'
 import { useProgressStoreApi } from '@/entities/progress'
 import { selectPractice, useSettings } from '@/entities/settings'
 import { arrangePiece, type PracticeChoice } from '@/features/practice'
@@ -16,7 +16,9 @@ export function usePlayer(
   search: PlayerSearch,
   setSearch: (patch: Partial<PlayerSearch>) => void,
 ): WalkingPlayerOf<PracticeChoice, SetupChange> {
-  const { melody, recording: withRecording } = useSettings(selectPractice)
+  const { melody: heard, recording: withRecording } = useSettings(selectPractice)
+  // A lead sheet's tune is always heard: it is what its sheet shows (ADR 0083).
+  const melody = heard || isLeadSheet(piece)
   const progress = useProgressStoreApi()
   const book = usePatternBook()
   const { key, pattern, rh, lh, inversion, nearest, chordSize } = search

@@ -12,7 +12,14 @@ export {
   type Section,
   type SectionKind,
 } from './model/types'
-export { HIDDEN_ROWS, isHiddenRow, SONG_SECTION_KINDS, type HiddenRow } from './model/types'
+export {
+  HIDDEN_ROWS,
+  isHiddenRow,
+  isLeadSheet,
+  showsAStaff,
+  SONG_SECTION_KINDS,
+  type HiddenRow,
+} from './model/types'
 
 export { chartOf, hasChartPlan, melodyOf, patternsOfPiece, pieceFit, voicesOf } from './model/chart'
 export { keyText, musicOf, readMusic, sameMusic, type PieceMusic } from './model/music'

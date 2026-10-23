@@ -31,6 +31,32 @@ describe('Player', () => {
     expect(await screen.findByRole('link', { name: 'Go to Songs' })).toBeInTheDocument()
   })
 
+  it('shows a song that hides its piano as a lead sheet: the tune’s staff alone (ADR 0083)', async () => {
+    const storage = createMemoryStorage()
+    const song = {
+      id: 'my-1',
+      title: 'Morning',
+      key: 'G',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['G C'] }],
+      melody: 'B4/4 | C5/4',
+      hidden: ['piano'],
+    }
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 1 }),
+    )
+    await renderApp('/play/my-1', { storage })
+    const staves = () =>
+      [...document.querySelectorAll('[data-slot="score"] g.staff[data-staff]')].map((staff) =>
+        staff.getAttribute('data-staff'),
+      )
+    await waitFor(() => expect(staves().length).toBeGreaterThan(0), { timeout: 4000 })
+    expect(new Set(staves())).toEqual(new Set(['melody']))
+  })
+
   it('shows the score as its View menu says, remembered for every piece', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/romashki')

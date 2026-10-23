@@ -19,6 +19,8 @@ import { LineLabels } from './LineLabels'
 
 /** How far a bar's Pattern stands in from where its notes begin. */
 const PATTERN_INSET = 6
+/** How far a bar's Pattern stands over its staff's top line. */
+const PATTERN_RISE = 4
 /** How far round the caret's onset a press takes hold of its notes to drag them. */
 const GRIP = { before: 14, after: 22, over: 16 } as const
 /**
@@ -90,6 +92,23 @@ export function LineOverlay({
     selection,
     { row, staff: staffOfLayer(layout.staves, layer) },
   )
+  // In a hand's layer, the bars it leaves to the pattern.
+  const patterned =
+    hand && staff ? layout.measures.map((_, index) => !line.bars[index]?.bar[hand]) : []
+  // Whether a note written in the caret's row starts at the caret: the pattern's, shown soft in a
+  // bar the hand leaves to it, are not written (ADR 0083).
+  const caretBar =
+    caret === null
+      ? -1
+      : line.bars.findIndex(
+          ({ start, bar }) =>
+            caret >= start - line.start && caret < start - line.start + bar.ticks,
+        )
+  const caretOnNote =
+    caret !== null &&
+    layer !== 'chords' &&
+    !patterned[caretBar] &&
+    music.notes.some((n) => n.hand === layer && n.startTick === caret)
   // Whether anything starts at the caret in its row: else it marks an empty place, as a line.
   const caretEmpty =
     caret === null ||
@@ -97,10 +116,7 @@ export function LineOverlay({
       ? !line.bars.some(({ start, bar }) =>
           bar.chords.some((chord) => start - line.start + chord.at === caret),
         )
-      : !music.notes.some((n) => n.hand === layer && n.startTick === caret))
-  // In a hand's layer, the bars it leaves to the pattern.
-  const patterned =
-    hand && staff ? layout.measures.map((_, index) => !line.bars[index]?.bar[hand]) : []
+      : !caretOnNote)
   /**
    * Where a point on bar `index` lands: its row, the nearest of `among` there (where a click lands,
    * else where a note is written), and its height on the line.
@@ -194,16 +210,17 @@ export function LineOverlay({
       {staff
         ? patterned.map((left, index) => {
             const measure = layout.measures[index]
-            // A bar the hand leaves to the pattern says so inside its empty staff, not over the music.
+            // A bar the hand leaves to the pattern says so over its staff, whose notes, the
+            // pattern's, are drawn soft (ADR 0083).
             return left && measure ? (
               <span
                 key={`pattern-${index}`}
                 aria-hidden
-                className="pointer-events-none absolute z-10 text-xs text-muted-foreground italic"
+                className="pointer-events-none absolute z-10 text-xs leading-none text-muted-foreground italic"
                 style={{
                   left: Math.max(measure.notes, measure.x) + PATTERN_INSET,
-                  top: (staff.top + staff.bottom) / 2,
-                  transform: 'translateY(-50%)',
+                  top: staff.top - PATTERN_RISE,
+                  transform: 'translateY(-100%)',
                 }}
               >
                 {t('sheet.pattern')}
@@ -244,10 +261,7 @@ export function LineOverlay({
           />
         )
       })}
-      {caret !== null &&
-      caretStaff &&
-      onDrag &&
-      music.notes.some((n) => n.hand === layer && n.startTick === caret) ? (
+      {caret !== null && caretStaff && onDrag && caretOnNote ? (
         <div
           aria-hidden
           data-slot="note-grip"

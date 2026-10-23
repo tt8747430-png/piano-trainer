@@ -28,7 +28,7 @@ function PartRow({
 
 /**
  * The Song sheet's Add a part (ADR 0072, 0080), as a notation app adds an instrument: the tune's
- * staff, the chord names' row, or a voice sung with the tune on an instrument chosen by family (ADR
+ * staff, the chord names' row, a lead sheet's piano (ADR 0083), or a voice sung with the tune on an instrument chosen by family (ADR
  * 0070). Chosen, the part is there and the sheet closes on it, the caret in it, ready to write.
  */
 export function AddPart() {
@@ -36,11 +36,12 @@ export function AddPart() {
   const { t: tm } = useTranslation('music')
   const { actions, view } = useScoreEditorContext()
   const [open, setOpen] = useState(false)
-  const { melodyStaff, tuneShown, chordsShown, voices } = useEditorState(
+  const { melodyStaff, tuneShown, chordsShown, pianoShown, voices } = useEditorState(
     useShallow((state) => ({
       melodyStaff: state.draft.melodyStaff,
       tuneShown: rowShown(state.draft, 'melody'),
       chordsShown: rowShown(state.draft, 'chords'),
+      pianoShown: rowShown(state.draft, 'piano'),
       voices: state.draft.voices.length,
     })),
   )
@@ -85,6 +86,12 @@ export function AddPart() {
             view.showChordNames(true)
             actions.dispatch({ type: 'layer', layer: 'chords' })
           })}
+        />
+        <PartRow
+          label={t('staves.piano')}
+          // Brings a lead sheet's piano back (ADR 0083); hiding it is its row's eye.
+          disabled={pianoShown}
+          onSelect={add(() => actions.dispatch({ type: 'hide', row: 'piano', hidden: false }))}
         />
         {INSTRUMENT_FAMILIES.map((family) => (
           <section

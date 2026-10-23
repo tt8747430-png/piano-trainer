@@ -15,6 +15,7 @@ import type {
 } from '@/shared/lib/music'
 import type { Clip } from './bars'
 import type { Draft, DraftNote, Layer } from './draft'
+import { topStaff } from './rows'
 import type { TakePart } from './take-edits'
 import type { Line } from './lines'
 import type { MarkChoice } from './marks'
@@ -144,8 +145,8 @@ export type EditorAction =
 export const initialEditor = (draft: Draft): EditorState => ({
   draft,
   caret: 0,
-  // The tune where the piece has a staff for it, else the right hand.
-  layer: draft.melodyStaff ? 'melody' : 'rh',
+  // The top staff in sight: the tune's where the piece shows one, else the right hand's.
+  layer: topStaff(draft),
   value: { value: 4, dots: 0, triplet: false },
   chord: false,
   selection: null,

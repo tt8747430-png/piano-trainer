@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { barsOf, readDraft } from '@/features/score-editor'
-import { arrangeDraft, playedInBar } from './arrange-draft'
+import { arrangeDraft, playedHands, playedInBar } from './arrange-draft'
 
 const draft = readDraft({
   key: 'C',
@@ -31,5 +31,13 @@ describe('arrangeDraft', () => {
     const left = playedInBar(arrangeDraft(draft), 'lh', first)
     expect(left.length).toBeGreaterThan(0)
     expect(left.every((n) => n.startTick >= 0 && n.startTick < 96)).toBe(true)
+  })
+
+  it('gives each hand’s notes as played, the pattern’s with the written, for the sheet to show', () => {
+    const hands = playedHands(arrangeDraft(draft))
+    expect(hands.lh.some((n) => n.startTick < 96)).toBe(true)
+    expect(hands.lh.filter((n) => n.startTick >= 96).map((n) => n.midi)).toEqual([43])
+    expect(hands.rh.length).toBeGreaterThan(0)
+    expect(hands.rh.every((n) => n.finger === undefined && n.marks === undefined)).toBe(true)
   })
 })

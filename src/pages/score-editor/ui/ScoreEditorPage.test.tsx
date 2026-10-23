@@ -134,6 +134,34 @@ describe('the score editor', () => {
     await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('melody'))
   })
 
+  it('lists every part with what it is, hides the piano for a lead sheet, and keeps a staff in sight', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [{ ...SONG, melody: 'B4/4' }], nextSong: 2 }, version: 1 }),
+    )
+    const { piecesStore } = await renderApp('/edit/my-1', { storage })
+    const settings = await openSettings(user)
+    const parts = within(settings).getByRole('list', { name: 'Parts' })
+    expect(within(parts).getByText('Piano')).toBeInTheDocument()
+    expect(within(parts).getByText(/^Both hands/)).toBeInTheDocument()
+    expect(within(parts).getByText(/^The chord symbols/)).toBeInTheDocument()
+    expect(within(parts).getByText(/^The tune on its own staff/)).toBeInTheDocument()
+    await user.click(within(parts).getByRole('button', { name: 'Hide Piano' }))
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ hidden: ['piano'] }))
+    // The tune's staff is the last in sight: its eye cannot hide it, and says why.
+    const tune = within(parts).getByRole('button', { name: 'Hide Melody' })
+    expect(tune).toBeDisabled()
+    expect(within(settings).getByText('One staff always stays in sight.')).toBeInTheDocument()
+    await user.keyboard('{Escape}')
+    // The sheet writes the tune alone: no hand's staff, the caret on the tune's.
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Melody · Bar 1/))
+    const again = await openSettings(user)
+    await user.click(within(again).getByRole('button', { name: 'Show Piano' }))
+    await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('hidden'))
+  })
+
   it('keeps an empty tune’s staff the song was given', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })

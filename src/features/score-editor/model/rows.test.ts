@@ -16,6 +16,13 @@ describe('the score’s rows', () => {
     expect(hasRow(draft(false, 1), 'voice3')).toBe(false)
   })
 
+  it('leaves both hands out where the piano is hidden, a lead sheet (ADR 0083)', () => {
+    expect(shownRows(draft(true, 0, ['piano']))).toEqual(['chords', 'melody'])
+    expect(hasRow(draft(false, 0), 'piano')).toBe(true)
+    expect(rowShown(draft(true, 0, ['piano']), 'piano')).toBe(false)
+    expect(rowShown(draft(true, 0), 'piano')).toBe(true)
+  })
+
   it('moves each lower voice’s hidden mark up when a voice is taken away', () => {
     expect(hiddenWithout(['chords', 'voice2', 'voice4'], 0)).toEqual(['chords', 'voice3'])
     expect(hiddenWithout(['voice3'], 1)).toEqual([])

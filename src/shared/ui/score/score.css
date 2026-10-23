@@ -29,6 +29,16 @@
 [data-slot='score'][data-muted='bass'] g.staff[data-staff='bass'] {
   color: var(--muted-foreground);
 }
+/* A hand's bar the pattern plays (ADR 0083): its notes shown in soft ink, not written, never marked
+   chosen. Its lines and barlines keep their own colour. */
+[data-slot='score'] g.staff.pattern,
+[data-slot='score'] g.staff.pattern g.note-chosen {
+  color: color-mix(in oklab, var(--muted-foreground) 70%, var(--background));
+}
+/* The line's clef, key and time at the head of such a bar stay in ink. */
+[data-slot='score'] g.staff.pattern :is(g.clef, g.keySig, g.meterSig) {
+  color: var(--foreground);
+}
 /* The notes chosen in the score editor: the focus colour, as a notation app marks a selection. */
 [data-slot='score'] g.note-chosen {
   color: var(--ring);

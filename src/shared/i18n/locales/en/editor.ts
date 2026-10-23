@@ -133,12 +133,22 @@ export const editor = {
   },
   // What the tune and each more voice are played on (ADR 0070).
   instruments: { label: 'Instruments', add: 'Add an instrument' },
-  // The score's rows, each shown or hidden with its music kept, a part removed (ADR 0072).
+  // The score's rows, each shown or hidden with its music kept, a part removed (ADR 0072), the
+  // piano among them, each saying what it is (ADR 0083).
   staves: {
-    label: 'Staves',
+    label: 'Parts',
     show: 'Show {{name}}',
     hide: 'Hide {{name}}',
     remove: 'Remove {{name}} and its notes',
+    piano: 'Piano',
+    detail: {
+      chords: 'The chord symbols over the music',
+      melody: 'The tune on its own staff, sung or played by another instrument',
+      voice: 'Another line with the tune, on its own staff',
+      piano:
+        'Both hands: what you play. Bars you don’t write out are played by the song’s pattern from the chord names',
+    },
+    lastStaff: 'One staff always stays in sight.',
   },
   // Where the caret writes: the chord row, the treble staff's two voices, the bass staff.
   layers: {

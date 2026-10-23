@@ -9,7 +9,7 @@ import { staffHeight } from '@/shared/ui/score'
 import { HEADING, lineFit } from '../model/line-fit'
 import { createLineSheets, untimed, type LineSheet } from '../model/line-sheets'
 import { labelRow } from '../model/label-row'
-import { lineMusic, oneLine } from '../model/line-music'
+import { lineMusic, oneLine, type PlayedHands } from '../model/line-music'
 import { SheetLine } from './SheetLine'
 
 /** The room between lines on a page at full size, for dealing lines onto pages. */
@@ -37,6 +37,7 @@ type PageItem =
  */
 export function ScoreSheet({
   draft,
+  played,
   caret,
   layer,
   selection,
@@ -59,6 +60,11 @@ export function ScoreSheet({
   /** The notes at the caret dragged on their staff by steps of the key. */
   onDrag?: (steps: number, joins: boolean) => void
   draft: Draft
+  /**
+   * What each hand plays, the pattern's notes included, as the Player arranges the draft: shown soft
+   * in the bars a hand leaves to the pattern (ADR 0083).
+   */
+  played?: PlayedHands | undefined
   caret: Tick
   layer: Layer
   selection: BarRange | null
@@ -87,8 +93,8 @@ export function ScoreSheet({
   // The piece's music whole, for each bar's width: lines are cut by width, as an engraver cuts them.
   const whole = useMemo(() => {
     const [all] = oneLine(draft)
-    return all ? notate(untimed(lineMusic(draft, all))) : undefined
-  }, [draft])
+    return all ? notate(untimed(lineMusic(draft, all, played))) : undefined
+  }, [draft, played])
   // The staves a line writes: the shown sung ones over the piano's two.
   const staves = whole?.staves.length ?? 2
   // A whole system in the height the sheet is seen in, where it is short (a phone on its side).
@@ -106,8 +112,8 @@ export function ScoreSheet({
       ? Infinity
       : width / sized - lead
   const sheets = useMemo(
-    () => sheetsOf(draft, across ? { across: true } : { room: roomAcross, widths }),
-    [sheetsOf, draft, across, roomAcross, widths],
+    () => sheetsOf(draft, across ? { across: true } : { room: roomAcross, widths }, played),
+    [sheetsOf, draft, across, roomAcross, widths, played],
   )
   const caretBar = barAt(draft, caret).index
 

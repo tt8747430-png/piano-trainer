@@ -1,8 +1,9 @@
-import type { ReactNode } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import { selectKeyboard, selectScoreView, useSettings } from '@/entities/settings'
 import { MidiButton } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
+import { PIANO_STAVES } from '@/shared/lib/notation'
 import {
   HandsButton,
   LoopButton,
@@ -36,7 +37,13 @@ export function PlayerLayout({
   performance,
   headings = NO_HEADINGS,
   setup,
+  piano = true,
 }: {
+  /**
+   * Whether the sheet writes the piano's staves: not for a song that hides them, a lead sheet, its
+   * tune on its own staff (ADR 0083). The keys and what plays are the same.
+   */
+  piano?: boolean
   title: string
   onClose: () => void
   view: PracticeView
@@ -49,7 +56,14 @@ export function PlayerLayout({
 }) {
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
-  const shown = useSettings(selectScoreView)
+  const scoreView = useSettings(selectScoreView)
+  const shown = useMemo(
+    () =>
+      piano
+        ? scoreView
+        : { ...scoreView, melodyStaff: true, hidden: [...scoreView.hidden, ...PIANO_STAVES] },
+    [scoreView, piano],
+  )
   usePlayerShortcuts(player, view, onClose)
   const keys = !shown.keys ? null : (
     <PlayerArea area="keys">
