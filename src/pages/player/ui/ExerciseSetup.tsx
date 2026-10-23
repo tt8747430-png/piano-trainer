@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import type { ExerciseChoice, Exercise } from '@/entities/exercise'
-import { MenuSection, Sheet, SheetContent, ToggleGrid } from '@/shared/ui'
+import { Sheet, SheetContent } from '@/shared/ui'
 import { SetupTrigger } from '@/widgets/player-setup'
-import { PlayingToggles } from '@/widgets/practice-player'
+import { PlayingSection } from '@/widgets/practice-player'
 import type { ExerciseChange } from '../model/exercise-search'
 import { ExerciseMusicFields } from './ExerciseMusicFields'
 import { ExerciseWayFields } from './ExerciseWayFields'
@@ -32,11 +32,7 @@ export function ExerciseSetup({
         <div className="flex flex-col gap-5">
           <ExerciseMusicFields exercise={exercise} choice={choice} onChange={onChange} />
           <ExerciseWayFields exercise={exercise} choice={choice} onChange={onChange} />
-          <MenuSection title={t('playing')}>
-            <ToggleGrid label={t('playing')}>
-              <PlayingToggles swing={swing} onSwing={onSwing} />
-            </ToggleGrid>
-          </MenuSection>
+          <PlayingSection swing={swing} onSwing={onSwing} />
         </div>
       </SheetContent>
     </Sheet>

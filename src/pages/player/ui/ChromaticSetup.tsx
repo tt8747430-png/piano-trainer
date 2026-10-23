@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import { CHROMATIC, CHROMATIC_DIRECTIONS, type ChromaticChoice } from '@/features/practice'
 import { CHORD_FAMILIES, noteParam, qualitiesIn, qualitySuffix } from '@/shared/lib/music'
-import { MultiDropdown, NoteChoice, Segmented, MenuSection, ToggleGrid } from '@/shared/ui'
+import { MultiDropdown, NoteChoice, Segmented } from '@/shared/ui'
 import { PatternCard, PlayerSetup } from '@/widgets/player-setup'
-import { PlayingToggles } from '@/widgets/practice-player'
+import { PlayingSection } from '@/widgets/practice-player'
 import type { ChromaticChange } from '../model/chromatic-search'
 
 /** The chromatic walk's Setup: its chord qualities, root and direction, the pattern and figures, and how it plays. */
@@ -41,7 +41,6 @@ export function ChromaticSetup({
       <NoteChoice
         label={t('player:root')}
         value={noteParam(choice.root)}
-
         onChange={(root) => onChange({ root })}
       />
       <Segmented
@@ -54,11 +53,7 @@ export function ChromaticSetup({
         onChange={(direction) => onChange({ direction })}
       />
       <PatternCard />
-      <MenuSection title={t('playing')}>
-        <ToggleGrid label={t('playing')}>
-          <PlayingToggles swing={swing} onSwing={onSwing} />
-        </ToggleGrid>
-      </MenuSection>
+      <PlayingSection swing={swing} onSwing={onSwing} />
     </PlayerSetup>
   )
 }

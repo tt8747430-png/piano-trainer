@@ -41,7 +41,6 @@ export function ExerciseMusicFields({
       <NoteChoice
         label={fields.root === 'key' ? t('player:key') : t('player:root')}
         value={noteParam(choice.root)}
-
         onChange={(root) => onChange({ root: noteFromParam(root) })}
       />
       {fields.kind || fields.quality || fields.start ? (
