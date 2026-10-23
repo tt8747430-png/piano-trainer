@@ -13,7 +13,7 @@ export function RoundLink({
   render: useRender.RenderProp
 }) {
   return (
-    <ButtonLink variant="surface" size="icon" aria-label={label} render={render}>
+    <ButtonLink variant="surface" size="icon" aria-label={label} title={label} render={render}>
       <Icon aria-hidden />
     </ButtonLink>
   )

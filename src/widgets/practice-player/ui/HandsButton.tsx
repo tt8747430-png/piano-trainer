@@ -4,6 +4,7 @@ import type { Hands } from '@/shared/lib/schedule'
 import { Listbox } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
+import { useDockSide } from '../model/dock-side'
 import { HandsIcon } from './HandsIcon'
 
 /** The popover's order: one hand, the other, both. */
@@ -19,20 +20,28 @@ export function HandsButton({
 }) {
   const { t } = useTranslation(['player', 'common'])
   const [open, setOpen] = useState(false)
+  const side = useDockSide()
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         render={
           <Button
-            variant="surface"
+            variant="ghost"
             size="icon"
             aria-label={t('player:handsOf', { hands: t(`common:hands.${hands}`) })}
+            title={t('player:hands')}
+            className="size-12 rounded-full landscape-phone:size-10"
           />
         }
       >
         <HandsIcon hands={hands} />
       </PopoverTrigger>
-      <PopoverContent aria-label={t('player:hands')} align="end" className="w-64 gap-1 p-2">
+      <PopoverContent
+        side={side}
+        aria-label={t('player:hands')}
+        align="end"
+        className="w-64 gap-1 p-2"
+      >
         <Listbox
           label={t('player:hands')}
           optionClassName="min-h-11 rounded-lg px-2 text-base"

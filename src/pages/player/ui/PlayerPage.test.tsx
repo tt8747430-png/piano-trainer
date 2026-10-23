@@ -1,13 +1,13 @@
 import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { melodyOf, pieceById, PIECES, PIECES_STORAGE_KEY } from '@/entities/piece'
 import { setPracticeToggle } from '@/features/set-preference'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
-import { stubFonts } from '@/shared/test/fonts'
+import * as engine from '@/shared/ui/score/verovio/engine'
 
 describe('Player', () => {
   it('says an own song is gone once another tab deletes it', async () => {
@@ -29,6 +29,69 @@ describe('Player', () => {
     await screen.findByRole('button', { name: 'Play' })
     act(() => piecesStore.setState({ songs: [] }))
     expect(await screen.findByRole('link', { name: 'Go to Songs' })).toBeInTheDocument()
+  })
+
+  it('shows a song that hides its piano as a lead sheet: the tune’s staff alone (ADR 0083)', async () => {
+    const storage = createMemoryStorage()
+    const song = {
+      id: 'my-1',
+      title: 'Morning',
+      key: 'G',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['G C'] }],
+      melody: 'B4/4 | C5/4',
+      hidden: ['piano'],
+    }
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 1 }),
+    )
+    await renderApp('/play/my-1', { storage })
+    const staves = () =>
+      [...document.querySelectorAll('[data-slot="score"] g.staff[data-staff]')].map((staff) =>
+        staff.getAttribute('data-staff'),
+      )
+    await waitFor(() => expect(staves().length).toBeGreaterThan(0), { timeout: 4000 })
+    expect(new Set(staves())).toEqual(new Set(['melody']))
+  })
+
+  it('shows the score as its View menu says, remembered for every piece', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/play/romashki')
+    await user.click(await screen.findByRole('button', { name: 'View' }))
+    await user.click(await screen.findByRole('radio', { name: 'Pages' }))
+    expect(settingsStore.getState().scoreView.layout).toBe('pages')
+    expect((await screen.findAllByText('1', { selector: 'span' })).length).toBeGreaterThan(0)
+    expect(document.querySelector('[data-slot="sheet-page"]')).toBeInTheDocument()
+    await user.click(screen.getByRole('switch', { name: 'Sheet music' }))
+    expect(screen.queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('switch', { name: 'Keys' }))
+    expect(settingsStore.getState().scoreView).toMatchObject({ notation: false, keys: false })
+  })
+
+  it('holds the tempo, ‹, Play, › and the hands in one toolbar named Playback', async () => {
+    await renderApp('/play/romashki')
+    const dock = await screen.findByRole('toolbar', { name: 'Playback' })
+    const names = within(dock)
+      .getAllByRole('button')
+      .map((button) => button.getAttribute('aria-label'))
+    expect(names).toEqual(['Tempo: 100%', 'Back', 'Play', 'Next', 'Hands: Both hands'])
+    expect(within(dock).getByRole('button', { name: 'Play' })).toHaveAttribute(
+      'title',
+      'Play (Space)',
+    )
+  })
+
+  it('docks the keys at the foot, under the toolbar, unless the settings dock them at the top', async () => {
+    const { settingsStore } = await renderApp('/play/romashki')
+    const dock = await screen.findByRole('toolbar', { name: 'Playback' })
+    const keys = screen.getByRole('group', { name: 'Keyboard' })
+    expect(dock.compareDocumentPosition(keys) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    act(() => settingsStore.setState((state) => ({ keyboard: { ...state.keyboard, dock: 'top' } })))
+    const top = screen.getByRole('group', { name: 'Keyboard' })
+    expect(dock.compareDocumentPosition(top) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
   })
 
   it('plays «Ромашковые поля»’s recording along in Listen, from bar 1, slowed to the chart’s tempo', async () => {
@@ -221,25 +284,22 @@ describe('Player', () => {
 
   it('names the notes on the staff with Named notes, and saves the toggle', async () => {
     // SMuFL's note name noteheads, U+E150–U+E1AF.
-    const namedHeads = () =>
-      [...(document.querySelector('[data-slot="score"] svg')?.textContent ?? '')].filter(
-        (glyph) => glyph >= '\uE150' && glyph <= '\uE1AF',
-      ).length
+    const namedHeads = () => document.querySelectorAll('[data-slot="score"] svg g.note-name').length
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/bz5')
     await waitFor(() => expect(document.querySelector('[data-slot="score"] svg')).not.toBeNull())
     expect(namedHeads()).toBe(0)
-    await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    await user.click(await screen.findByRole('button', { name: 'Named notes' }))
+    await user.click(await screen.findByRole('button', { name: 'View' }))
+    await user.click(await screen.findByRole('switch', { name: 'Note names' }))
     expect(settingsStore.getState().practice.namedNotes).toBe(true)
     await waitFor(() => expect(namedHeads()).toBeGreaterThan(0))
   })
 
-  it('still plays when the music font does not load', async () => {
-    stubFonts({ loads: false })
+  it('still plays when the music cannot be engraved', async () => {
+    vi.spyOn(engine, 'engrave').mockRejectedValue(new Error('unreadable'))
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/bz5')
-    expect(await screen.findByText('The music can’t be shown.')).toBeInTheDocument()
+    expect((await screen.findAllByText('The music can’t be shown.')).length).toBeGreaterThan(0)
     await user.click(screen.getByRole('button', { name: 'Play' }))
     expect(audio.played).toHaveLength(1)
   })
@@ -258,5 +318,55 @@ describe('Player', () => {
     await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
     expect(screen.queryByRole('combobox', { name: 'Through the keys' })).not.toBeInTheDocument()
+  })
+
+  it('hides its transport at a tap on the screen’s free room, and brings it back', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/bz5')
+    const transport = await screen.findByRole('toolbar', { name: 'Playback' })
+    const dock = transport.closest('[data-area="dock"]')
+    await user.click(screen.getByRole('heading', { level: 1 }))
+    expect(dock).toHaveAttribute('data-hidden')
+    expect(dock).toHaveAttribute('inert')
+    await user.click(screen.getByRole('heading', { level: 1 }))
+    expect(dock).not.toHaveAttribute('data-hidden')
+  })
+
+  it('opens the song in the score editor from its bar', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/play/bz5')
+    // In the bar, first of its buttons, as on the song's page.
+    await user.click(await screen.findByRole('link', { name: 'Edit the score' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/edit/bz5'))
+  })
+  it('keeps ‹ and › pointing back and forward on a phone on its side, unlike the tempo’s ↑ ↓', async () => {
+    await renderApp('/play/bz5')
+    const transport = await screen.findByRole('toolbar', { name: 'Playback' })
+    for (const name of ['Back', 'Next']) {
+      const icon = within(transport).getByRole('button', { name }).querySelector('svg')
+      expect(icon?.getAttribute('class')).not.toMatch(/rotate/)
+    }
+  })
+
+  it('keeps what the sheet shows in the View, Chord positions among it, and how it plays in the Setup', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/play/bz5')
+    await user.click(await screen.findByRole('button', { name: 'View' }))
+    const view = await screen.findByRole('dialog', { name: 'View' })
+    // The editor's View in shape: the layout first, then the staves, then what is shown.
+    expect(
+      within(view)
+        .getAllByRole('region')
+        .map((section) => section.getAttribute('aria-label')),
+    ).toEqual(['Layout', 'Staves', 'Show'])
+    expect(within(view).getByRole('switch', { name: /^Melody staff/ })).toBeInTheDocument()
+    await user.click(within(view).getByRole('switch', { name: /^Chord positions/ }))
+    expect(settingsStore.getState().practice.positions).toBe(true)
+    await user.keyboard('{Escape}')
+    await user.click(screen.getByRole('button', { name: 'Setup' }))
+    const setup = await screen.findByRole('dialog', { name: 'Setup' })
+    expect(within(setup).queryByRole('button', { name: 'Chord positions' })).not.toBeInTheDocument()
+    const playing = within(setup).getByRole('region', { name: 'How it plays' })
+    expect(within(playing).getByRole('button', { name: 'Metronome' })).toBeInTheDocument()
   })
 })

@@ -1,37 +1,24 @@
-import { Link } from '@tanstack/react-router'
-import { Target } from 'lucide-react'
-import { useId, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { pieceStepId } from '@/entities/step'
-import type { Piece } from '@/entities/piece'
+import { useFold } from '@/features/fold-section'
 import type { Performance } from '@/shared/lib/arrangement'
 import { placeChord } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
-import { ButtonLink, ChordButton } from '@/shared/ui'
+import { ChordButton, FoldSection } from '@/shared/ui'
 import { chordsOf } from '../model/piece-chords'
 
 /**
- * The chords a piece plays, each once and by its own name, to tap and hear on the page's keys; and
- * the Check of them, where the piece is a step of the path.
+ * The chords a piece plays, each once and by its own name, to tap and hear on the page's keys; its
+ * heading folds them away, as the learner left them.
  */
-export function PieceChords({ piece, performance }: { piece: Piece; performance: Performance }) {
+export function PieceChords({ performance }: { performance: Performance }) {
   const { t } = useTranslation('piece')
-  const headingId = useId()
+  const fold = useFold('piece.chords')
   const playback = usePlayback<string>()
   const chords = useMemo(() => chordsOf(performance), [performance])
-  const step = pieceStepId(piece.id)
   return (
-    <section aria-labelledby={headingId} className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <h2 id={headingId} className="text-2xl">
-          {t('chords')}
-        </h2>
-        <ButtonLink variant="outline" render={<Link to="/check" search={{ of: step }} />}>
-          <Target data-icon="inline-start" aria-hidden />
-          {t('checkChords')}
-        </ButtonLink>
-      </div>
+    <FoldSection title={t('chords')} fold={fold}>
       <ul className="grid-chords gap-2">
         {chords.map((chord) => (
           <li key={chord.symbol} className="grid">
@@ -52,6 +39,6 @@ export function PieceChords({ piece, performance }: { piece: Piece; performance:
           </li>
         ))}
       </ul>
-    </section>
+    </FoldSection>
   )
 }

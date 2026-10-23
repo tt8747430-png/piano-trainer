@@ -5,7 +5,7 @@ import {
   type Chord,
   type ChordQuality,
 } from './chord'
-import { parseNoteName, plainRoot, type SpelledNote } from './note'
+import { parseNoteName } from './note'
 
 export class ChordSymbolError extends Error {
   override readonly name = 'ChordSymbolError'
@@ -21,6 +21,14 @@ export class ChordSymbolError extends Error {
 const normalise = (suffix: string): string =>
   suffix.replaceAll('♭', 'b').replaceAll('♯', '#').replaceAll('−', '-')
 
+/**
+ * A chord symbol as it is engraved over a staff (LilyPond's and MuseScore's chord names): `#` as ♯,
+ * and `b` as ♭ after a note's letter (`Bb`, `/Eb`) or before a degree (`b9`). The text read and
+ * stored keeps its ASCII.
+ */
+export const printedSymbol = (symbol: string): string =>
+  symbol.replaceAll('#', '♯').replace(/(?<=[A-G])b|b(?=\d)/g, '♭')
+
 const QUALITY_BY_SUFFIX = new Map<string, ChordQuality>(
   CHORD_QUALITIES.flatMap((quality) =>
     qualitySpellings(quality).map((spelling) => [normalise(spelling), quality] as const),
@@ -30,15 +38,6 @@ const QUALITY_BY_SUFFIX = new Map<string, ChordQuality>(
 /** The chord a suffix writes, in any of its spellings (`m7b5`, `maj7`, none for major); null for one the table lacks. */
 export const readQualitySuffix = (suffix: string): ChordQuality | null =>
   QUALITY_BY_SUFFIX.get(normalise(suffix)) ?? null
-
-/**
- * A slash chord's bass spelled as its chord tone, unless that writes it oddly (a double accidental,
- * a B♯ for a C: `Cdim7/A`, not `C°7/B𝄫`), as the chord finder writes a bass; then as typed.
- */
-function slashBass(root: SpelledNote, quality: ChordQuality, typed: SpelledNote): SpelledNote {
-  const tone = chordBass(root, quality, typed)
-  return plainRoot(tone) === tone ? tone : typed
-}
 
 /** Root lengths tried, longest first: `F##`, `Bbb` and `F𝄪` take three code units. */
 const ROOT_LENGTHS = [3, 2, 1]
@@ -57,7 +56,7 @@ export function parseChordSymbol(symbol: string): Chord {
     const root = parseNoteName(head.slice(0, length))
     const quality = readQualitySuffix(head.slice(length))
     if (!root || !quality) continue
-    return bass ? { root, quality, bass: slashBass(root, quality, bass) } : { root, quality }
+    return bass ? { root, quality, bass: chordBass(root, quality, bass) } : { root, quality }
   }
   throw new ChordSymbolError(symbol)
 }

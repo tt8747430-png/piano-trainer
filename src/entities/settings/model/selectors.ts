@@ -1,11 +1,14 @@
+import type { SheetView } from '@/shared/lib'
 import type { Locale } from '@/shared/i18n/locale'
 import type {
   ChordFinderSettings,
+  ScoreViewSettings,
   KeyboardSettings,
   MidiSettings,
   PracticeToggles,
   RecorderSettings,
   SettingsState,
+  PaletteSide,
   Sidebar,
   Theme,
   TitleSize,
@@ -22,6 +25,9 @@ export const selectFloating = (state: SettingsState): FloatingSettings => state.
 export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.keyboard
 export const selectRecorder = (state: SettingsState): RecorderSettings => state.recorder
 export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar
+export const selectPaletteSide = (state: SettingsState): PaletteSide => state.paletteSide
+export const selectEditorLayout = (state: SettingsState): SheetView => state.editorLayout
+export const selectPaletteFolded = (state: SettingsState): boolean => state.paletteFolded
 export const selectMidi = (state: SettingsState): MidiSettings => state.midi
 /** Whether the section `id` is folded away. */
 export const selectSectionFolded =
@@ -29,3 +35,4 @@ export const selectSectionFolded =
   (state: SettingsState): boolean =>
     state.foldedSections.includes(id)
 export const selectChordFinder = (state: SettingsState): ChordFinderSettings => state.chordFinder
+export const selectScoreView = (state: SettingsState): ScoreViewSettings => state.scoreView

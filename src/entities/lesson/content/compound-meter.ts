@@ -95,12 +95,7 @@ const compoundMeter: Lesson = {
           meter: '12/8',
           notes:
             'E4/8 G4/8 C5/8 E4/8 G4/8 C5/8 F4/8 A4/8 C5/8 F4/8 A4/8 C5/8 D4/8 G4/8 B4/8 D4/8 G4/8 B4/8 E4/8 G4/8 C5/8 C5/4.',
-        },
-        {
-          kind: 'notes',
-          clef: 'bass',
-          meter: '12/8',
-          notes: 'C3/4. C3/4. F2/4. F2/4. G2/4. G2/4. C3/2.',
+          bass: 'C3/4. C3/4. F2/4. F2/4. G2/4. G2/4. C3/2.',
         },
       ],
     },

@@ -1,5 +1,12 @@
 import type { NoteHand, Performance, PerformanceNote } from '@/shared/lib/arrangement'
-import { isCompound, TICKS_PER_BEAT, type Midi, type Tick } from '@/shared/lib/music'
+import {
+  DEFAULT_INSTRUMENT,
+  isCompound,
+  TICKS_PER_BEAT,
+  type Instrument,
+  type Midi,
+  type Tick,
+} from '@/shared/lib/music'
 import {
   barClicks,
   barGrid,
@@ -8,7 +15,11 @@ import {
   secondsFor,
   type BarsInMeter,
 } from './grid'
+import { joinedNotes } from './legato'
+import { loudness, markedSounds, rollOffsets } from './marks'
+import { pedalHeld } from './pedal-marks'
 import { swingTick } from './swing'
+import { tempoWarp } from './tempo-marks'
 
 /** Which hands the learner hears: both, or one of them. */
 export const HANDS = ['both', 'rh', 'lh'] as const
@@ -34,6 +45,8 @@ export interface NoteSound {
   readonly at: number
   readonly duration: number
   readonly velocity: number
+  /** A sung part's instrument (ADR 0066, 0070), not the piano. */
+  readonly timbre?: Instrument
 }
 export interface ClickSound {
   readonly kind: 'click'
@@ -78,8 +91,12 @@ export interface Scheduled {
 const SHORTEST_NOTE = 0.15
 /** …nor than this when one beat group is sounded on its own. */
 const SHORTEST_ALONE = 0.35
+/** How loud a more voice sings: under the hands, as a voice behind the piano. */
+const SUNG_VELOCITY = 0.09
 /** Notes in a pass release a little early, so repeated notes are heard as two. */
 const LEGATO = 0.95
+/** A joined note (under a slur, or legato) holds to the next, overlapping it as a pianist's fingers do. */
+const JOINED = 1.03
 
 const isAudible = (n: PerformanceNote, hands: Audible) => hands[n.hand]
 
@@ -102,11 +119,20 @@ const placement = (performance: Performance, swing: boolean | undefined) =>
     ? (tick: Tick) => swungOnGrid(performance, tick)
     : (tick: Tick) => tick
 
+/** The key a tick is played in: its bar's, else the piece's. */
+const keyAt = (performance: Performance, tick: Tick) =>
+  performance.bars.findLast((bar) => bar.startTick <= tick)?.key ?? performance.key
+
 /** One pass through the piece from `fromTick` to `toTick`: its notes, clicks and cues in seconds from its start. */
 export function schedule(performance: Performance, options: ScheduleOptions): Scheduled {
   const { hands, fromTick = 0, toTick = performance.totalTicks } = options
   const tempo = checkedTempo(options.tempo)
-  const place = placement(performance, options.swing)
+  // Swung where asked, then held back or pressed on where the notes mark the tempo (ADR 0068).
+  const swung = placement(performance, options.swing)
+  const marked = performance.timing ?? [...performance.notes, ...(performance.sung ?? []).flat()]
+  const warp = tempoWarp(marked)
+  const place = (tick: Tick) => warp(swung(tick))
+  const pedal = pedalHeld(marked)
   const counted = options.countIn ? countInBeats(performance, fromTick) : []
   const musicStart = secondsFor(place(fromTick) - place(counted[0]?.tick ?? fromTick), tempo)
   const at = (tick: Tick) => musicStart + secondsFor(place(tick) - place(fromTick), tempo)
@@ -120,19 +146,47 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   // A note still held where the pass starts sounds from there, for what is left of it.
   const heard = (n: PerformanceNote) =>
     inPass(n.startTick) || (n.startTick < fromTick && n.startTick + n.durationTicks > fromTick)
-  const played: Sound[] = performance.notes
-    .filter((n) => heard(n) && isAudible(n, hands))
-    .map((n) => {
-      const start = Math.max(fromTick, n.startTick)
+  // The notes' marks (ADR 0063): their dynamics, rolls, lengths, grace notes and ornaments.
+  const levels = loudness(performance.notes)
+  const rolls = rollOffsets(performance.notes)
+  const thirtySecond = secondsFor(TICKS_PER_BEAT / 8, tempo)
+  const joined = joinedNotes(performance.notes)
+  const played: Sound[] = performance.notes.flatMap((n, i) => {
+    if (!heard(n) || !isAudible(n, hands)) return []
+    const start = Math.max(fromTick, n.startTick)
+    // Under the pedal a note sounds on until it is let up.
+    const released = pedal(n.startTick) ?? 0
+    const end = Math.min(Math.max(n.startTick + n.durationTicks, released), toTick)
+    const full = at(end) - at(start)
+    const sound = {
+      kind: 'note' as const,
+      midi: n.midi,
+      at: at(start) + (rolls[i] ?? 0),
+      duration: Math.max(SHORTEST_NOTE, full * (joined.has(i) ? JOINED : LEGATO)),
+      velocity: n.velocity * (levels[i] ?? 1),
+    }
+    // A note held over from before the pass sounds plainly: its marks were where it began.
+    const marks = n.startTick >= fromTick ? n.marks : undefined
+    return markedSounds(sound, marks, { key: keyAt(performance, n.startTick), thirtySecond, full })
+  })
+
+  // The more voices: heard whatever hands the learner chose, as the doubled tune is.
+  const sung: Sound[] = (performance.sung ?? []).flatMap((voice, part) =>
+    voice.flatMap((n): Sound[] => {
+      if (!inPass(n.startTick)) return []
       const end = Math.min(n.startTick + n.durationTicks, toTick)
-      return {
-        kind: 'note',
-        midi: n.midi,
-        at: at(start),
-        duration: Math.max(SHORTEST_NOTE, (at(end) - at(start)) * LEGATO),
-        velocity: n.velocity,
-      }
-    })
+      return [
+        {
+          kind: 'note',
+          midi: n.midi,
+          at: at(n.startTick),
+          duration: Math.max(SHORTEST_NOTE, (at(end) - at(n.startTick)) * LEGATO),
+          velocity: SUNG_VELOCITY,
+          timbre: performance.instruments?.[part] ?? DEFAULT_INSTRUMENT,
+        },
+      ]
+    }),
+  )
 
   const metronome: Sound[] = options.metronome
     ? performance.bars.flatMap((_, index) =>
@@ -147,7 +201,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   )
 
   return {
-    sounds: [...countIn, ...played, ...metronome].sort((a, b) => a.at - b.at),
+    sounds: [...countIn, ...played, ...sung, ...metronome].sort((a, b) => a.at - b.at),
     cues,
     end: at(toTick),
     fromTick,

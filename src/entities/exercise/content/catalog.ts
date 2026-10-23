@@ -57,7 +57,7 @@ export const EXERCISES: readonly Exercise[] = [
     stage: 'intermediate',
     name: { en: 'In groups', ru: 'Группами' },
     trains: {
-      en: 'Four scale notes as a group, started again on each step, up and then mirrored down',
+      en: 'Four scale notes as a group, started again on each degree, up and then mirrored down',
       ru: 'Группа из четырёх нот гаммы от каждой ступени, вверх и зеркально вниз',
     },
     fields: { root: 'scale', kind: SCALE_KINDS, octaves: FEW_OCTAVES, figure: ['1234', '1324'] },
@@ -128,7 +128,7 @@ export const EXERCISES: readonly Exercise[] = [
     name: { en: '6th-diminished chords', ru: 'Секстово-уменьшённые аккорды' },
     trains: {
       en: 'Each note of the 6th-diminished scale with a chord under it, in close position or drop 2',
-      ru: 'Каждая нота секстово-уменьшённой гаммы с аккордом под ней, в тесном расположении или drop 2',
+      ru: 'Каждая нота секстово-уменьшённой гаммы с аккордом под ней, в тесном расположении или Drop 2',
     },
     fields: { root: 'key', tonality: true, voicing: true },
     own: { tonality: 'major', voicing: 'close' },
@@ -167,7 +167,7 @@ export const EXERCISES: readonly Exercise[] = [
     id: 'drop-two',
     group: 'barryHarris',
     stage: 'professional',
-    name: { en: 'Drop-2 7ths', ru: 'Септаккорды drop 2' },
+    name: { en: 'Drop-2 7ths', ru: 'Септаккорды Drop 2' },
     trains: {
       en: 'The key’s 7th chords up and down, with the second note from the top moved to the left hand',
       ru: 'Септаккорды тональности вверх и вниз, второй сверху звук перенесён в левую руку',
@@ -239,7 +239,7 @@ export const EXERCISES: readonly Exercise[] = [
     stage: 'professional',
     name: { en: 'Pattern shifting', ru: 'Перенос фигуры' },
     trains: {
-      en: 'A short figure started again on each step with its shape kept: a melodic sequence',
+      en: 'A short figure started again on each degree with its shape kept: a melodic sequence',
       ru: 'Короткая фигура от каждой ступени с той же формой: мелодическая секвенция',
     },
     fields: { root: 'key', figure: ['1235', '1353', '3212'] },

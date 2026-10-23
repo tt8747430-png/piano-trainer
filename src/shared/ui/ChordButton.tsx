@@ -1,3 +1,4 @@
+import { cn } from '@/shared/lib'
 import { PlayToggle } from './PlayToggle'
 
 /**
@@ -27,7 +28,13 @@ export function ChordButton({
       className="h-auto min-h-16 flex-col gap-0 px-1 py-2 data-holds:ring-3 data-holds:ring-ring data-holds:ring-inset"
       onClick={onClick}
     >
-      <span className="max-w-full font-display text-xl leading-tight font-semibold wrap-anywhere">
+      {/* A long symbol (G♭m6/B♭♭) a size or two down, so it stays in its square; it wraps at worst. */}
+      <span
+        className={cn(
+          'max-w-full font-display leading-tight font-semibold whitespace-normal wrap-anywhere',
+          symbol.length > 7 ? 'text-base' : symbol.length > 5 ? 'text-lg' : 'text-xl',
+        )}
+      >
         {symbol}
       </span>
       {numeral ? <span className="text-sm text-muted-foreground">{numeral}</span> : null}

@@ -138,10 +138,10 @@ export function LiveKeyboard({
       keyPlays={keyPlays}
       onKeyPress={play}
       onKeyRelease={letGo}
+      railEnd={railEnd}
     >
       {lookControls.length > 0 ? <RailGroup>{lookControls}</RailGroup> : null}
       {playControls.length > 0 ? <RailGroup>{playControls}</RailGroup> : null}
-      {railEnd}
     </PianoKeyboard>
   )
 }

@@ -34,3 +34,12 @@ export function chartBar(performance: Performance, index: number): ChartBar | nu
         : timeSignatureText(timeSignature(bar.beats, performance.meter)),
   }
 }
+
+/** A section's bars: the first and the last, by index. */
+export interface SectionBars {
+  readonly first: number
+  readonly last: number
+}
+
+/** Where a section's heading stands in the page, for a link to it (`#section-2`). */
+export const sectionAnchor = (section: number) => `section-${section}`

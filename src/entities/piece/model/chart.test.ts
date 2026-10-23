@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { chordSymbol } from '@/shared/lib/music'
 import { testProgression, testSong } from '../testing/test-pieces'
-import { chartOf, hasMethodCodes, melodyOf, patternsOfPiece, pieceFit } from './chart'
+import { chartOf, hasChartPlan, melodyOf, patternsOfPiece, pieceFit } from './chart'
 
 const firstSymbol = (...args: Parameters<typeof chartOf>) => {
   const chord = chartOf(...args).sections[0]?.lines[0]?.[0]?.chords[0]
@@ -35,11 +35,23 @@ describe('melodyOf', () => {
   })
 })
 
-describe('hasMethodCodes', () => {
-  it('is true only for a chart that names a method', () => {
-    expect(hasMethodCodes(testSong(['C:t1 F']))).toBe(true)
-    expect(hasMethodCodes(testSong(['C F']))).toBe(false)
-    expect(hasMethodCodes(testProgression('I:maj:4'))).toBe(false)
+/** A song of two sections, the second playing a pattern of its own. */
+const withSectionPattern = () => {
+  const song = testSong(['C F'])
+  const [verse] = song.sections
+  if (!verse) throw new Error('a verse')
+  return {
+    ...song,
+    sections: [verse, { ...verse, kind: 'chorus' as const, pattern: 'M3' as const }],
+  }
+}
+
+describe('hasChartPlan', () => {
+  it('is true only for a chart that names a method, or a section that has its own pattern', () => {
+    expect(hasChartPlan(withSectionPattern())).toBe(true)
+    expect(hasChartPlan(testSong(['C:t1 F']))).toBe(true)
+    expect(hasChartPlan(testSong(['C F']))).toBe(false)
+    expect(hasChartPlan(testProgression('I:maj:4'))).toBe(false)
   })
 })
 
@@ -66,5 +78,9 @@ describe('patternsOfPiece', () => {
     expect([...patternsOfPiece(testSong(['C:t1 F']))].sort()).toEqual(['r4', 't1'])
     expect([...patternsOfPiece(testSong(['C F']))]).toEqual(['r4'])
     expect([...patternsOfPiece(testProgression('I:maj:4'))]).toEqual(['block'])
+  })
+
+  it('plays a section’s own pattern in its chords', () => {
+    expect([...patternsOfPiece(withSectionPattern())].sort()).toEqual(['M3', 'r4'])
   })
 })

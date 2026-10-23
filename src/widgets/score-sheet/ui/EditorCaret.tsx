@@ -1,33 +1,69 @@
 import { useEffect, useRef } from 'react'
 import type { Layer } from '@/features/score-editor'
 import type { Tick } from '@/shared/lib/music'
-import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
-import { CHORD_ROW } from './chord-row'
+import { insertBox, noteBox, ScoreMark, type ScoreLayout, type Span } from '@/shared/ui/score'
+import { staffOfLayer } from '../model/line-music'
 
-/** How far left of a notehead the band starts, how far past its staff it reaches, its least width. */
-const LEAD = 8
-const REACH = 12
-const LEAST = 28
+/** How much of the sheet shows past the caret's staff when it scrolls to bring it into sight. */
+const CLEAR = 16
+
+/** The nearest box round a line that scrolls up and down: the sheet (a line itself scrolls sideways). */
+function scrollerOf(element: HTMLElement): HTMLElement | null {
+  const line = element.closest('[data-slot="sheet-line"]')
+  for (let box = line?.parentElement; box; box = box.parentElement) {
+    const { overflowY } = getComputedStyle(box)
+    if ((overflowY === 'auto' || overflowY === 'scroll') && box.scrollHeight > box.clientHeight)
+      return box
+  }
+  return null
+}
 
 /**
- * The caret: the Player's cursor band where the next note or chord goes, on the layer's staff (or over
- * the chord symbols), as wide as the value chosen.
+ * The sheet scrolled up or down just enough to show the caret's band, clear of what stands over its
+ * foot (its `scroll-padding-bottom`: the editor's palette); in sight already, it stays where it is,
+ * and as the sheet opens, in sight in part.
+ */
+function revealUpright(band: HTMLElement, opening: boolean) {
+  const scroller = scrollerOf(band)
+  if (!scroller) return
+  const box = band.getBoundingClientRect()
+  const view = scroller.getBoundingClientRect()
+  const foot =
+    view.bottom - (Number.parseFloat(getComputedStyle(scroller).scrollPaddingBottom) || 0)
+  // As the sheet opens, a band partly in sight is left as it is: the sheet opens at its top.
+  if (opening && box.top < foot && box.bottom > view.top) return
+  if (box.top < view.top) scroller.scrollTop -= view.top - box.top + CLEAR
+  else if (box.bottom > foot)
+    scroller.scrollTop += Math.min(box.bottom - foot + CLEAR, box.top - view.top)
+}
+
+/**
+ * The caret, as the one selection marks a place (ADR 0082), the Player's cursor alike: on the notes
+ * (or the chord) at it, a padded box round them on the layer's staff (or in the chord row, `chords`);
+ * on an empty place, a bar the pattern plays or the room after the last note, a slim line where the
+ * next goes.
  */
 export function EditorCaret({
   layout,
   layer,
   tick,
-  ticks,
+  chords,
+  empty,
 }: {
   layout: ScoreLayout
   layer: Layer
   /** From the line's start. */
   tick: Tick
-  ticks: Tick
+  /** The chord row over the staff, which the caret fills in the chords' layer. */
+  chords: Span
+  /** Nothing starts at the caret in its row. */
+  empty: boolean
 }) {
-  const left = xAtTick(layout, tick) - LEAD
-  const right = xAtTick(layout, tick + ticks) - LEAD
-  const staff = layer === 'lh' ? layout.staves.bass : layout.staves.treble
+  const staff = staffOfLayer(layout.staves, layer)
+  const span = layer === 'chords' || !staff ? chords : staff
+  const box = (empty ? insertBox : noteBox)(layout, tick, span)
+  const { left } = box
+  const right = left + box.width
   // A line wider than the screen scrolls sideways to keep the caret in sight as it moves.
   const caret = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -45,22 +81,15 @@ export function EditorCaret({
     })
     return () => cancelAnimationFrame(frame)
   }, [left, right])
-  const box =
-    layer === 'chords' || !staff
-      ? { top: -CHORD_ROW, height: CHORD_ROW }
-      : { top: staff.top - REACH, height: staff.bottom - staff.top + 2 * REACH }
-  return (
-    <div
-      ref={caret}
-      aria-hidden
-      data-slot="caret"
-      className="absolute z-0 rounded-md bg-secondary transition-transform duration-200 ease-out"
-      style={{
-        ...box,
-        left: 0,
-        width: Math.max(LEAST, right - left),
-        transform: `translateX(${left}px)`,
-      }}
-    />
-  )
+  // The sheet scrolls to the caret's staff as the caret comes onto it (a short screen shows less
+  // than a line's grand staff), leaving the sheet as it is while the staff is in sight.
+  const shown = useRef(false)
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      if (caret.current) revealUpright(caret.current, !shown.current)
+      shown.current = true
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [box.top, box.height])
+  return <ScoreMark ref={caret} slot="caret" kind={empty ? 'insert' : 'note'} box={box} />
 }

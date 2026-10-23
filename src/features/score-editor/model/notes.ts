@@ -1,15 +1,27 @@
 import {
+  keyScale,
   midi,
   otherSpelling,
   PIANO,
   pitchClass,
+  pitchClassOf,
   spellInKey,
+  spellScale,
   type Finger,
+  type Key,
   type Midi,
   type Tick,
 } from '@/shared/lib/music'
 import type { HandId } from '@/entities/piece'
-import type { Draft, DraftBar, DraftNote, NoteLayer } from './draft'
+import {
+  isHandLayer,
+  isVoiceLayer,
+  voiceIndex,
+  type Draft,
+  type DraftBar,
+  type DraftNote,
+  type NoteLayer,
+} from './draft'
 import { insertBar } from './bars'
 import { barAt, barsOf, startsIn, totalTicks } from './timeline'
 
@@ -20,14 +32,25 @@ interface Written {
 }
 
 export const notesOf = (draft: Draft, layer: NoteLayer): readonly DraftNote[] =>
-  layer === 'melody' ? draft.melody : draft.hands[layer]
+  layer === 'melody'
+    ? draft.melody
+    : isVoiceLayer(layer)
+      ? (draft.voices[voiceIndex(layer)] ?? [])
+      : draft.hands[layer]
 
 /** The draft with a layer's notes, in order. */
 export function withNotes(draft: Draft, layer: NoteLayer, notes: readonly DraftNote[]): Draft {
   const sorted = [...notes].sort((a, b) => a.startTick - b.startTick || a.midi - b.midi)
-  return layer === 'melody'
-    ? { ...draft, melody: sorted }
-    : { ...draft, hands: { ...draft.hands, [layer]: sorted } }
+  if (layer === 'melody')
+    return { ...draft, melody: sorted, melodyStaff: draft.melodyStaff || sorted.length > 0 }
+  if (isVoiceLayer(layer)) {
+    const index = voiceIndex(layer)
+    const voices = [...draft.voices]
+    while (voices.length <= index) voices.push([])
+    voices[index] = sorted
+    return { ...draft, voices }
+  }
+  return { ...draft, hands: { ...draft.hands, [layer]: sorted } }
 }
 
 /** The draft with bar `index` changed; the draft itself where the change leaves the bar as it was. */
@@ -85,7 +108,7 @@ export const spelledIn = (draft: Draft, key: Midi) => ({
 function clearUnder(draft: Draft, layer: NoteLayer, at: Tick, to: Tick): DraftNote[] {
   return notesOf(draft, layer).flatMap((n) => {
     if (n.startTick >= at && n.startTick < to) return []
-    if (layer === 'melody' && n.startTick < at && n.startTick + n.durationTicks > at) {
+    if (!isHandLayer(layer) && n.startTick < at && n.startTick + n.durationTicks > at) {
       return [{ ...n, durationTicks: at - n.startTick }]
     }
     return [n]
@@ -105,10 +128,10 @@ export function writeNotes(
   ticks: Tick,
 ): Written {
   const grown = reaching(draft, at)
-  const ready = layer === 'melody' ? grown : writtenAt(grown, layer, at)
-  const reach = layer === 'melody' ? totalTicks(ready) : handReach(ready, layer, at)
+  const ready = isHandLayer(layer) ? writtenAt(grown, layer, at) : grown
+  const reach = isHandLayer(layer) ? handReach(ready, layer, at) : totalTicks(ready)
   const end = Math.min(at + ticks, reach)
-  const played = layer === 'melody' ? [Math.max(...keys)].map(midi) : [...new Set(keys)]
+  const played = isHandLayer(layer) ? [...new Set(keys)] : [Math.max(...keys)].map(midi)
   const written: DraftNote[] = played.map((key) => ({
     ...spelledIn(ready, key),
     startTick: at,
@@ -120,8 +143,8 @@ export function writeNotes(
 /** A rest at `at`: the notes starting under it are taken (a hand's bar the pattern played is written out, silent). */
 export function writeRest(draft: Draft, layer: NoteLayer, at: Tick, ticks: Tick): Written {
   if (at >= totalTicks(draft)) return { draft, end: at }
-  const ready = layer === 'melody' ? draft : writtenAt(draft, layer, at)
-  const reach = layer === 'melody' ? totalTicks(ready) : handReach(ready, layer, at)
+  const ready = isHandLayer(layer) ? writtenAt(draft, layer, at) : draft
+  const reach = isHandLayer(layer) ? handReach(ready, layer, at) : totalTicks(ready)
   const end = Math.min(at + ticks, reach)
   return { draft: withNotes(ready, layer, clearUnder(ready, layer, at, end)), end }
 }
@@ -143,7 +166,7 @@ export function addToChord(
 ): Draft {
   const [first] = notesAt(draft, layer, at)
   if (!first) return writeNotes(draft, layer, at, [key], ticks).draft
-  if (layer === 'melody') {
+  if (!isHandLayer(layer)) {
     return key > first.midi
       ? withNotes(
           draft,
@@ -158,24 +181,36 @@ export function addToChord(
 }
 
 /** Takes the notes starting at `at` away. */
-export const deleteNotes = (draft: Draft, layer: NoteLayer, at: Tick): Draft =>
-  notesAt(draft, layer, at).length === 0
-    ? draft
-    : withNotes(
+/** What an edit takes: the notes at a tick (the caret's), or those starting in a span (bars chosen). */
+export type Where = Tick | { readonly from: Tick; readonly to: Tick }
+
+const isAt = (where: Where) => (n: DraftNote) =>
+  typeof where === 'number'
+    ? n.startTick === where
+    : n.startTick >= where.from && n.startTick < where.to
+
+export const deleteNotes = (draft: Draft, layer: NoteLayer, where: Where): Draft => {
+  const taken = isAt(where)
+  const notes = notesOf(draft, layer)
+  return notes.some(taken)
+    ? withNotes(
         draft,
         layer,
-        notesOf(draft, layer).filter((n) => n.startTick !== at),
+        notes.filter((n) => !taken(n)),
       )
+    : draft
+}
 
-/** The notes at `at`, each changed; the draft as it was when none is there. */
+/** The notes `where` says, each changed; the draft as it was when none is there. */
 function changeAt(
   draft: Draft,
   layer: NoteLayer,
-  at: Tick,
+  where: Where,
   change: (n: DraftNote) => DraftNote | null,
 ): Draft {
   const notes = notesOf(draft, layer)
-  const changed = notes.map((n) => (n.startTick === at ? change(n) : n))
+  const taken = isAt(where)
+  const changed = notes.map((n) => (taken(n) ? change(n) : n))
   if (changed.some((n) => n === null)) return draft
   return changed.every((n, i) => n === notes[i])
     ? draft
@@ -187,17 +222,60 @@ function changeAt(
 }
 
 /** The notes at `at` moved by semitones, spelled in the key; nothing moves past the piano's ends. */
-export const shiftNotes = (draft: Draft, layer: NoteLayer, at: Tick, semitones: number): Draft =>
-  changeAt(draft, layer, at, (n) => {
+export const shiftNotes = (
+  draft: Draft,
+  layer: NoteLayer,
+  where: Where,
+  semitones: number,
+): Draft =>
+  changeAt(draft, layer, where, (n) => {
     const moved = n.midi + semitones
     return moved < PIANO.from || moved > PIANO.to
       ? null
       : { ...n, ...spelledIn(draft, midi(moved)) }
   })
 
+/** The key's next note from `from`, up (1) or down (−1): a step on the staff in its key. */
+export function keyStep(key: Key, from: Midi, direction: 1 | -1): Midi {
+  const inKey = new Set(spellScale(key.tonic, keyScale(key)).map((tone) => pitchClassOf(tone.note)))
+  for (let m = from + direction; m >= PIANO.from && m <= PIANO.to; m += direction)
+    if (inKey.has(pitchClass(m))) return midi(m)
+  return from
+}
+
+/**
+ * The notes at `at` moved `steps` notes of the key up or down, as a note dragged on the staff moves
+ * (ADR 0064); nothing moves past the piano's ends.
+ */
+export const stepNotes = (draft: Draft, layer: NoteLayer, where: Where, steps: number): Draft =>
+  changeAt(draft, layer, where, (n) => {
+    let moved = n.midi
+    for (let i = 0; i < Math.abs(steps); i++) moved = keyStep(draft.key, moved, steps > 0 ? 1 : -1)
+    return moved === n.midi ? n : { ...n, ...spelledIn(draft, moved) }
+  })
+
+/**
+ * What Delete takes, as a text field's Backspace: the notes at the caret (those chosen), else the
+ * last notes before it, the caret going back to where they started; the draft as it was where there
+ * are none. Pressed again and again, it takes the notes one by one back from the end.
+ */
+export function deleteBack(
+  draft: Draft,
+  layer: NoteLayer,
+  at: Tick,
+): { readonly draft: Draft; readonly caret: Tick } {
+  if (notesAt(draft, layer, at).length > 0)
+    return { draft: deleteNotes(draft, layer, at), caret: at }
+  const before = notesOf(draft, layer).filter((n) => n.startTick < at)
+  const last = Math.max(...before.map((n) => n.startTick))
+  return before.length === 0
+    ? { draft, caret: at }
+    : { draft: deleteNotes(draft, layer, last), caret: last }
+}
+
 /** The notes at `at` written the other way (C♯ ↔ D♭). */
-export const respellNotes = (draft: Draft, layer: NoteLayer, at: Tick): Draft =>
-  changeAt(draft, layer, at, (n) => ({ ...n, spelled: otherSpelling(n.spelled) }))
+export const respellNotes = (draft: Draft, layer: NoteLayer, where: Where): Draft =>
+  changeAt(draft, layer, where, (n) => ({ ...n, spelled: otherSpelling(n.spelled) }))
 
 /** A finger on one note at `at` in a hand, or none. */
 export const setFinger = (
@@ -212,6 +290,28 @@ export const setFinger = (
     const { finger: _old, ...rest } = n
     return finger === null ? rest : { ...rest, finger }
   })
+
+/** The notes at `at` joined to the same keys' notes starting where they end: one note, tied as written. */
+export function tieNotes(draft: Draft, layer: NoteLayer, at: Tick): Draft {
+  const notes = notesOf(draft, layer)
+  const joined = new Set<DraftNote>()
+  const tied = notes.map((n) => {
+    if (n.startTick !== at) return n
+    const next = notes.find(
+      (m) => m.midi === n.midi && m.startTick === n.startTick + n.durationTicks,
+    )
+    if (!next) return n
+    joined.add(next)
+    return { ...n, durationTicks: n.durationTicks + next.durationTicks }
+  })
+  return joined.size === 0
+    ? draft
+    : withNotes(
+        draft,
+        layer,
+        tied.filter((n) => !joined.has(n)),
+      )
+}
 
 /** A hand's bar written out with what the pattern plays there, each note kept inside the bar. */
 export function writeOut(

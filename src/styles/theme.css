@@ -2,6 +2,8 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 /* A phone on its side on the music stand: short and wide (the Player's two-column layout). */
 @custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 500px) and (max-width: 1023px));
+/* The narrowest phones held upright (under 360px): a bar of round buttons gives up what it can spare. */
+@custom-variant narrow-phone (@media (max-width: 359.98px));
 /* Keys docked at the foot of a screen wide for its height (a phone on its side, a laptop): the
    screen's floating actions stand at its side, over the keys, not over the little height left. */
 @custom-variant aside {
@@ -51,6 +53,7 @@
   --color-on-paint-sky: var(--on-paint-sky);
   --color-on-paint-lilac: var(--on-paint-lilac);
   --color-thumb: var(--thumb);
+  --color-raised: var(--raised);
 
   --color-hand-rh: var(--hand-rh);
   --color-hand-lh: var(--hand-lh);
@@ -214,7 +217,12 @@
   }
   body {
     -webkit-tap-highlight-color: transparent;
-    /* An app, not a document: a long press selects nothing and opens no callout… */
+  }
+  /* An app, not a document: a long press selects nothing and opens no callout or loupe… On every
+     element, not the body alone: WebKit does not carry it down to an SVG's text or a button's. */
+  *,
+  *::before,
+  *::after {
     -webkit-user-select: none;
     user-select: none;
     -webkit-touch-callout: none;
@@ -227,7 +235,9 @@
     user-select: text;
     -webkit-touch-callout: default;
   }
-  img {
+  img,
+  a,
+  svg {
     -webkit-user-drag: none;
   }
   /* A control answers the first tap: no double-tap zoom waiting behind it. */
@@ -370,7 +380,8 @@
 /* Chord buttons, as many across as fit, each at least 4.5rem. */
 @utility grid-chords {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(4.5rem, 1fr));
+  /* Wide enough for a slash chord (Cm6/G, G♭m/B♭) on one line: four to a phone's row. */
+  grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
 }
 /* The same for small tiles, at least 9rem. */
 @utility grid-tiles {
@@ -423,6 +434,61 @@
 /* No narrower than its longest word, nor wider than its line: a title that wraps between words only. */
 @utility min-w-longest-word {
   min-width: min(100%, min-content);
+}
+/* What floats over the page casts a soft shade (`tokens.css`' `--elevation-*`): resting second
+   actions, the main action and the transport, a pointer over either. */
+@utility elevation-1 {
+  box-shadow: var(--elevation-1);
+}
+@utility elevation-2 {
+  box-shadow: var(--elevation-2);
+}
+@utility elevation-3 {
+  box-shadow: var(--elevation-3);
+}
+/* A dial's card grows from its button and its rows come up one after another, the nearest the
+   button first; they leave together. */
+@utility dial-card {
+  animation: dial-card-in 200ms var(--ease-out) both;
+  & > li {
+    animation: dial-row-in 220ms var(--ease-out) both;
+  }
+  & > li:nth-last-child(1) {
+    animation-delay: 40ms;
+  }
+  & > li:nth-last-child(2) {
+    animation-delay: 70ms;
+  }
+  & > li:nth-last-child(3) {
+    animation-delay: 100ms;
+  }
+  & > li:nth-last-child(n + 4) {
+    animation-delay: 130ms;
+  }
+  &[data-closing] {
+    animation: dial-card-out 120ms ease-in both;
+  }
+  &[data-closing] > li {
+    animation: none;
+  }
+}
+@keyframes dial-card-in {
+  from {
+    opacity: 0;
+    scale: 0.9;
+  }
+}
+@keyframes dial-card-out {
+  to {
+    opacity: 0;
+    scale: 0.95;
+  }
+}
+@keyframes dial-row-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
 }
 /* Docked over the tab bar, and what floats over the keys docked there (`--docked`, `Docked`). */
 @utility bottom-nav-bar {
@@ -538,31 +604,27 @@
   bottom: max(--spacing(4), env(safe-area-inset-bottom));
 }
 
-/* The Player's screen (widgets/practice-player; spec §2.8): its parts placed by `data-area`. Upright,
-   the tempo and hands flank the transport at the bottom, in the thumb's reach, and the toolbar's
-   title and actions span columns of their own, so neither row squeezes the other; from 640px the
-   tempo and hands join the toolbar and the transport sits under the sheet; on a phone on its side
-   the transport stands right of the sheet, where the right thumb is. The keyboard is as tall as its
-   keys' proportion makes it; what is left goes to the Wait line's row, so the transport stays at the
-   bottom. */
+/* The Player's screen (widgets/practice-player; spec §2.8, ADR 0061): its parts placed by `data-area`.
+   Upright and from a laptop's width, a column: the toolbar (its title and actions in columns of their
+   own, so neither squeezes the other), the sheet taking what is left, Wait mode's line, the transport
+   floating in the thumb's reach and the keys at the foot. On a phone on its side the transport stands
+   upright at the right edge, beside the toolbar and the sheet, and Wait mode's line joins the
+   toolbar's row, so the sheet keeps the height those rows would take. Where the keyboard settings dock the keys at the top (`data-keys='top'`), they sit under
+   the toolbar instead. */
 @utility player-screen {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
-  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
   grid-template-areas:
-    'lead lead actions actions'
-    'keys keys keys keys'
-    'sheet sheet sheet sheet'
-    'status status status status'
-    'tempo transport transport hands';
+    'lead actions'
+    'sheet sheet'
+    'status status'
+    'keys keys';
+  /* The music's scroll room under the transport floating over its foot: room to scroll into, never a
+     row kept empty. */
+  --float-room: 5.5rem;
   & > [data-area='lead'] {
     grid-area: lead;
-  }
-  & > [data-area='tempo'] {
-    grid-area: tempo;
-  }
-  & > [data-area='hands'] {
-    grid-area: hands;
   }
   & > [data-area='actions'] {
     grid-area: actions;
@@ -576,59 +638,75 @@
   & > [data-area='status'] {
     grid-area: status;
   }
-  & > [data-area='transport'] {
-    grid-area: transport;
+  /* The transport floats over the sheet's foot (ADR 0061, 0081), taking no room of its own. */
+  & > [data-area='dock'] {
+    grid-area: sheet;
+    align-self: end;
+    justify-self: center;
+    z-index: 30;
+    margin-bottom: 0.5rem;
   }
-  @variant sm {
-    grid-template-columns: minmax(0, 1fr) auto auto auto;
-    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
-    grid-template-areas:
-      'lead tempo hands actions'
-      'keys keys keys keys'
-      'sheet sheet sheet sheet'
-      'status status status status'
-      'transport transport transport transport';
-  }
-  @variant landscape-phone {
-    grid-template-columns: minmax(0, 1fr) auto auto auto;
+  &[data-keys='top'] {
     grid-template-rows: auto auto minmax(0, 1fr) auto;
     grid-template-areas:
-      'lead tempo hands actions'
-      'keys keys keys keys'
-      'sheet sheet sheet status'
-      'sheet sheet sheet transport';
+      'lead actions'
+      'keys keys'
+      'sheet sheet'
+      'status status';
+  }
+  @variant landscape-phone {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      'lead status actions'
+      'sheet sheet sheet'
+      'keys keys keys';
+    /* Along the sheet's foot, as upright and as the editor's dock (ADR 0081): the sheet between the
+       bar and the keys is shorter than an upright transport, which covered the bar and the keys. */
+    --float-room: 4rem;
+    & > [data-area='dock'] {
+      margin-bottom: 0.25rem;
+    }
+    &[data-keys='top'] {
+      grid-template-rows: auto auto minmax(0, 1fr);
+      grid-template-areas:
+        'lead status actions'
+        'keys keys keys'
+        'sheet sheet sheet';
+    }
   }
 }
 
-/* The score editor's screen (pages/score-editor; spec §6): its parts placed by `data-area`. Upright and
-   from a laptop's width, a column: the toolbar, the sheet taking what is left, the tools and the keys.
-   A phone on its side has no height for them all in a column: the sheet keeps the whole height over
-   the keys, so a line's grand staff is in sight, and the toolbar and the tools stand right of it, the
-   tools one row under the toolbar, scrolling sideways. */
+/* The score editor's screen (pages/score-editor; spec §6, ADR 0065, 0079): its parts placed by
+   `data-area`, one screen that never scrolls as a whole, the sheet its one scroller. The keys at the
+   foot, or under the bar where the keyboard settings dock them at the top (`data-keys='top'`). What
+   floats (`float`: the caret's moves, the folded keys' and palette's buttons, the palette) lies over
+   the sheet's area, above it, and only its own controls take a touch. */
 @utility editor-screen {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
-  grid-template-areas: 'bar' 'sheet' 'tools' 'keys';
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas: 'bar' 'sheet' 'keys';
   & > [data-area='bar'] {
     grid-area: bar;
+    min-width: 0;
   }
   & > [data-area='sheet'] {
     grid-area: sheet;
   }
-  & > [data-area='tools'] {
-    grid-area: tools;
-  }
   & > [data-area='keys'] {
     grid-area: keys;
   }
-  @variant landscape-phone {
-    grid-template-columns: minmax(0, 1fr) 18rem;
-    grid-template-rows: auto minmax(0, 1fr) auto;
-    grid-template-areas:
-      'sheet bar'
-      'sheet tools'
-      'keys keys';
+  & > [data-area='float'] {
+    grid-area: sheet;
+    position: relative;
+    z-index: 30;
+    min-height: 0;
+    pointer-events: none;
+  }
+  &[data-keys='top'] {
+    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-areas: 'bar' 'keys' 'sheet';
   }
 }
 

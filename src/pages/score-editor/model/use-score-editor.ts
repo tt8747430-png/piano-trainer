@@ -1,3 +1,4 @@
+import { useStore } from 'zustand'
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
 import {
   entryTitles,
@@ -7,18 +8,23 @@ import {
   usePieces,
   usePiecesStoreApi,
 } from '@/entities/piece'
+import { selectEditorLayout, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { renameSong, saveMusic } from '@/features/edit-piece'
+import { setEditorLayout } from '@/features/set-preference'
 import {
   barAt,
   createEditorStore,
   isHandLayer,
   readDraft,
   musicToSave,
+  rowShown,
+  shownRows,
+  topStaff,
   type EditorAction,
 } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
-import { useGoBack, useWakeLock } from '@/shared/lib'
+import { useGoBack, useWakeLock, type SheetView } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { audibleHands, schedule } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
@@ -26,7 +32,7 @@ import { inPopUp, isTyping } from '@/shared/lib/shortcuts'
 import { arrangeDraft, playedInBar } from './arrange-draft'
 import type { ScoreEditorValue } from './editor-context'
 import { savedMusic, savingTo, type EditorTarget } from './editor-target'
-import { shortcutOf } from './shortcuts'
+import { shortcutOf, staffNear } from './shortcuts'
 import { useEditorTakes } from './use-editor-takes'
 
 /** Where every key press is the field's or the open popup's own, not the editor's. */
@@ -58,7 +64,10 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   useWakeLock()
   const pieces = usePiecesStoreApi()
   const locale = useLocale()
-  const [chordNames, setChordNames] = useState(true)
+  // How the score is laid out is the learner's way of working, kept for every song.
+  const settings = useSettingsStoreApi()
+  const layout = useSettings(selectEditorLayout)
+  const setLayout = (next: SheetView) => setEditorLayout(settings, next)
   const [settingsOpen, openSettings] = useState(false)
   /** The music last saved here, or read: what the store holds unless another tab saved since. */
   const [saved] = useState(() => ({ music: target.music }))
@@ -87,6 +96,7 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   const chordFieldRef = useCallback((field: HTMLInputElement | null) => {
     chordField.current = field
   }, [])
+  const [chordFieldAsked, askChordField] = useState(0)
   const close = useCloseTo(target)
   const hasVersion = usePieces(
     (state) => target.kind === 'version' && selectHasVersion(state, target.id),
@@ -97,6 +107,8 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
   const title =
     target.kind === 'song' ? (songTitle ?? target.title) : entryTitles(target.entry, locale).primary
 
+  // The chord names shown unless the song hides them (ADR 0072).
+  const chordNames = useStore(store, (state) => rowShown(state.draft, 'chords'))
   const takes = useEditorTakes(target.id, store, title)
   const recording = takes.stage !== 'idle'
 
@@ -152,10 +164,17 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     if (shortcut.type === 'chordField') {
       if (event.target.closest(PRESSED)) return
       event.preventDefault()
-      chordField.current?.focus()
+      if (chordField.current) chordField.current.focus()
+      else askChordField((asked) => asked + 1)
       return
     }
     event.preventDefault()
+    if (shortcut.type === 'staff') {
+      const { layer, draft } = store.getState()
+      const next = staffNear(layer, shortcut.direction, shownRows(draft))
+      if (next !== layer) store.dispatch({ type: 'layer', layer: next })
+      return
+    }
     store.dispatch(shortcut)
   })
   useEffect(() => {
@@ -164,29 +183,31 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     return () => window.removeEventListener('keydown', listener)
   }, [])
 
-  // With no chord row there is no chord to write: the caret goes to the tune, now and whenever a
-  // step undone or redone would bring it back to the chords.
+  // With no chord row there is no chord to write: the caret goes to the top staff (the tune's, or
+  // the right hand's), now and whenever a step undone or redone would bring it back to the chords.
   useEffect(() => {
     if (chordNames) return
     const toTune = () => {
-      if (store.getState().layer === 'chords') store.dispatch({ type: 'layer', layer: 'melody' })
+      const { layer, draft } = store.getState()
+      if (layer === 'chords') store.dispatch({ type: 'layer', layer: topStaff(draft) })
     }
     toTune()
     return store.subscribe(toTune)
   }, [store, chordNames])
-  const showChordNames = (on: boolean) => setChordNames(on)
+  const showChordNames = (on: boolean) => dispatch({ type: 'hide', row: 'chords', hidden: !on })
 
   return {
     store,
     takes,
     actions: { dispatch, play, togglePlay, writeOut, close, rename },
-    view: { chordNames, showChordNames, settingsOpen, openSettings },
+    view: { chordNames, showChordNames, settingsOpen, openSettings, layout, setLayout },
     meta: {
       title,
       hasVersion,
       playing: playback.playing === 'piece',
       kind: target.kind,
       chordFieldRef,
+      chordFieldAsked,
     },
   }
 }

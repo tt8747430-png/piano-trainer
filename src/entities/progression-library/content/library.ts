@@ -48,8 +48,8 @@ const LIBRARY = [
   ),
   entry('pop', 'let-it-be', { major: 'I V vi IV I V IV I' }, 'Let It Be', 'Let It Be', {
     note: note(
-      'Only the key’s own chords, its chord family. Most pop songs need no others.',
-      'Только аккорды самой тональности, её «семья аккордов». Большинству поп-песен других не нужно.',
+      'Only the key’s own chords. Most pop songs need no others.',
+      'Только аккорды самой тональности. Большинству поп-песен других не нужно.',
     ),
   }),
   entry('pop', 'yesterday', { major: 'I V/vi vi IV V I vi V/V IV I' }, 'Yesterday', 'Yesterday', {
@@ -73,8 +73,8 @@ const LIBRARY = [
     {
       pattern: 'flow',
       note: note(
-        'From the Chord Flow sheet. The left hand stays on the bass while the right hand moves through the key’s main triads, I, IV and V, over every chord. In a minor key the same loop is heard from its vi, as R&B’s vi–IV–V–I.',
-        'Из листа Chord Flow. Левая рука остаётся на басу, а правая над каждым аккордом движется по главным трезвучиям тональности: I, IV и V. В миноре тот же круг слышат от vi, как vi–IV–V–I в R&B.',
+        'The left hand stays on the bass while the right hand moves through the key’s main triads, I, IV and V, over every chord. In a minor key the same loop is heard from its vi, as R&B’s vi–IV–V–I.',
+        'Левая рука остаётся на басу, а правая над каждым аккордом движется по главным трезвучиям тональности: I, IV и V. В миноре тот же круг слышат от vi, как vi–IV–V–I в R&B.',
       ),
     },
   ),
@@ -141,8 +141,8 @@ const LIBRARY = [
     'Цепочка ii–V',
     {
       note: note(
-        'From the 2-5-1 sheet. Each ii–V visits another key for a moment, every dominant falling a 5th, until the last one leads home.',
-        'Из листа 2-5-1. Каждый оборот ii–V ненадолго уводит в другую тональность, каждая доминанта опускается на квинту, пока последняя не приведёт домой.',
+        'Each ii–V visits another key for a moment, every dominant falling a 5th, until the last one leads home.',
+        'Каждый оборот ii–V ненадолго уводит в другую тональность, каждая доминанта опускается на квинту, пока последняя не приведёт домой.',
       ),
     },
   ),
@@ -155,8 +155,8 @@ const LIBRARY = [
     {
       size: 'sevenths',
       note: note(
-        'From the chord matrix. In C, C7 leads to F, then Bø and E7 are the minor ii–V into Am.',
-        'Из матрицы аккордов. В до мажоре C7 ведёт к F, затем Bø и E7 — минорный ii–V в Am.',
+        'In C, C7 leads to F, then Bø and E7 are the minor ii–V into Am.',
+        'В до мажоре C7 ведёт к F, затем Bø и E7 — минорный ii–V в Am.',
       ),
     },
   ),
@@ -184,7 +184,7 @@ const LIBRARY = [
     {
       size: 'sevenths',
       note: note(
-        'In C, D♭7 stands in for G7, a tritone away. Both have the same 3rd and 7th, and the bass now falls by half steps into I.',
+        'In C, D♭7 stands in for G7, a tritone away. Both have the same 3rd and 7th, and the bass now falls by semitones into I.',
         'В до мажоре D♭7 заменяет G7, который отстоит от него на тритон. У них одни и те же терция и септима, а бас теперь спускается к I по полутонам.',
       ),
     },
@@ -314,7 +314,7 @@ const LIBRARY = [
     'Госпел-подход',
     {
       note: note(
-        'The bass climbs by whole steps into I. In major, ♭VI and ♭VII are borrowed from the parallel minor.',
+        'The bass climbs by whole tones into I. In major, ♭VI and ♭VII are borrowed from the parallel minor.',
         'Бас поднимается к I целыми тонами. В мажоре ♭VI и ♭VII взяты из одноимённого минора.',
       ),
     },

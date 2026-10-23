@@ -6,6 +6,11 @@ import { readSongLink } from '@/features/share-song'
 import { COLLECTIONS, PIECES_STORAGE_KEY } from '@/entities/piece'
 import { createMemoryStorage } from '@/shared/lib'
 
+/** Opens the bar's More, where its rarer actions fold. */
+async function openMore(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(await screen.findByRole('button', { name: 'More' }))
+}
+
 describe('Piece', () => {
   it('titles a song in English over its printed title, with credits and source', async () => {
     await renderApp('/songs/bz5')
@@ -18,8 +23,10 @@ describe('Piece', () => {
 
   it('prints the chart, where an installed app has no browser menu to print from', async () => {
     const print = vi.spyOn(window, 'print').mockImplementation(() => undefined)
+    const user = userEvent.setup()
     await renderApp('/songs/bz5')
-    await userEvent.setup().click(await screen.findByRole('button', { name: 'Print the chart' }))
+    await openMore(user)
+    await user.click(await screen.findByRole('button', { name: 'Print the chart' }))
     expect(print).toHaveBeenCalledOnce()
   })
 
@@ -27,7 +34,7 @@ describe('Piece', () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/songs/bz5')
     const chords = await screen.findByRole('region', { name: 'Chords' })
-    const names = within(chords)
+    const names = within(within(chords).getByRole('list'))
       .getAllByRole('button')
       .map((button) => button.textContent)
     expect(names[0]).toBe('G')
@@ -42,12 +49,24 @@ describe('Piece', () => {
     )
   })
 
-  it('checks the song’s chords from their row', async () => {
+  it('folds the chords under their heading, as the learner leaves them', async () => {
+    const user = userEvent.setup()
     await renderApp('/songs/bz5')
     const chords = await screen.findByRole('region', { name: 'Chords' })
-    expect(
-      within(chords).getByRole('link', { name: 'Check these chords' }).getAttribute('href'),
-    ).toMatch(/^\/check\?of=piece(%3A|:)bz5$/)
+    await user.click(within(chords).getByRole('button', { name: 'Chords' }))
+    expect(within(chords).getByRole('button', { name: 'Chords' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    )
+  })
+
+  it('checks the song’s chords from More', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/songs/bz5')
+    await openMore(user)
+    await user.click(await screen.findByRole('button', { name: 'Check these chords' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/check'))
+    expect(router.state.location.search).toEqual({ of: 'piece:bz5' })
   })
 
   it('plays a tapped bar, and shows its notes going down on the keyboard', async () => {
@@ -66,11 +85,25 @@ describe('Piece', () => {
     expect(down.every((name) => /^[GBD]\d$/.test(name ?? ''))).toBe(true)
   })
 
-  it('offers Practise before the chords and the chart, in the first screenful', async () => {
+  it('floats Practise, its main action, and keeps Edit, Learned and More in its bar', async () => {
     await renderApp('/songs/bz5')
     const practise = await screen.findByRole('link', { name: 'Practise' })
-    const chords = screen.getByRole('region', { name: 'Chords' })
-    expect(practise.compareDocumentPosition(chords) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(practise.closest('[data-slot="floating-actions"]')).not.toBeNull()
+    const bar = screen.getByRole('heading', { level: 1 }).closest('header') as HTMLElement
+    for (const name of ['Edit the score', 'Learned', 'More'])
+      expect(
+        within(bar).getByRole(name === 'Edit the score' ? 'link' : 'button', { name }),
+      ).toBeInTheDocument()
+  })
+
+  it('docks its keys at the foot, folding them as the learner asks', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs/bz5')
+    const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
+    expect(keyboard.closest('[data-slot="docked"]')).not.toBeNull()
+    await user.click(screen.getByRole('button', { name: 'Hide the keys' }))
+    expect(screen.queryByRole('group', { name: 'Keyboard' })).toBeNull()
+    expect(screen.getByRole('button', { name: 'Keys' })).toBeInTheDocument()
   })
 
   it('opens the Player and marks the song learned', async () => {
@@ -95,11 +128,30 @@ describe('Piece', () => {
     expect(screen.getByRole('heading', { level: 3, name: 'Куплет' })).toBeInTheDocument()
   })
 
+  it('says a folk tune’s credit in Russian, and keeps names as printed', async () => {
+    await renderApp('/songs/hot-cross-buns', { locale: 'ru' })
+    expect(await screen.findByText('народная')).toBeInTheDocument()
+    expect(screen.queryByText('Traditional')).toBeNull()
+  })
+
+  it('says “American folk tune” in Russian beside the tune’s name', async () => {
+    await renderApp('/songs/amazing', { locale: 'ru' })
+    expect(
+      await screen.findByText('New Britain (американская народная мелодия)'),
+    ).toBeInTheDocument()
+  })
+
   it('shows a listing without a chart: its one action writes it', async () => {
     const listing = COLLECTIONS.flatMap((c) => c.entries).find((e) => e.kind === 'listing')
     if (!listing) throw new Error('the catalog has no listing')
     await renderApp(`/songs/${listing.id}`)
-    expect(await screen.findByRole('link', { name: 'Write the chart' })).toBeInTheDocument()
+    // It says what is missing, and what writing it gives.
+    expect(await screen.findByText('No chart yet')).toBeInTheDocument()
+    expect(
+      (await screen.findByRole('link', { name: 'Write the chart' })).closest(
+        '[data-slot="floating-actions"]',
+      ),
+    ).not.toBeNull()
     expect(screen.queryByRole('link', { name: 'Practise' })).not.toBeInTheDocument()
   })
 
@@ -132,7 +184,7 @@ describe('Piece: the learner’s own music', () => {
 
   it('edits a song in the score editor', async () => {
     await renderApp('/songs/amazing')
-    expect(await screen.findByRole('link', { name: 'Edit' })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: 'Edit the score' })).toHaveAttribute(
       'href',
       '/edit/amazing',
     )
@@ -145,6 +197,7 @@ describe('Piece: the learner’s own music', () => {
     })
     expect((await screen.findByText('Your version')).closest('dl')).not.toBeNull()
     expect(screen.getByRole('button', { name: /^Bar 1: Em$/ })).toBeInTheDocument()
+    await openMore(user)
     await user.click(screen.getByRole('button', { name: 'Reset to the original' }))
     await user.click(await screen.findByRole('button', { name: 'Reset' }))
     expect(piecesStore.getState().versions).toEqual({})
@@ -152,12 +205,27 @@ describe('Piece: the learner’s own music', () => {
     expect(screen.queryByText('Your version')).toBeNull()
   })
 
+  it('gives the focus back to More once Reset is not wanted', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs/amazing', { storage: saved({ versions: { amazing: MUSIC } }) })
+    await openMore(user)
+    await user.click(screen.getByRole('button', { name: 'Reset to the original' }))
+    expect(await screen.findByRole('alertdialog')).toBeInTheDocument()
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull())
+    await waitFor(() => expect(screen.getByRole('button', { name: 'More' })).toHaveFocus())
+  })
+
   it('shares an own song as a link that carries it, copied where there is no share sheet', async () => {
     const user = userEvent.setup()
     const song = { id: 'my-1', title: 'Morning', ...MUSIC }
     await renderApp('/songs/my-1', { storage: saved({ songs: [song], nextSong: 2 }) })
+    await openMore(user)
     await user.click(await screen.findByRole('button', { name: 'Share' }))
-    expect(await screen.findByRole('status', { name: '' })).toHaveTextContent('Link copied.')
+    // The status line is always there, empty until the song is deflated and copied.
+    await waitFor(() =>
+      expect(screen.getByRole('status', { name: '' })).toHaveTextContent('Link copied.'),
+    )
     const link = new URL(await navigator.clipboard.readText())
     expect(link.pathname).toBe('/songs/shared')
     expect(await readSongLink(link.searchParams.get('song') ?? '')).toEqual({
@@ -174,6 +242,7 @@ describe('Piece: the learner’s own music', () => {
     })
     expect(await screen.findByRole('heading', { level: 1, name: 'Morning' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Learned' })).toBeNull()
+    await openMore(user)
     await user.click(screen.getByRole('button', { name: 'Delete' }))
     await user.click(await screen.findByRole('button', { name: 'Delete for good' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs'))

@@ -2,7 +2,7 @@ import { chordBass, qualityIntervals, type Chord, type ChordQuality } from './ch
 import { CIRCLE_OF_FIFTHS } from './circle'
 import { isWrittenKey, keySignature, type Key } from './key'
 import { pitchClassOf } from './note'
-import { hasMinorThird, numeralOf, type Numeral } from './numerals'
+import { hasMinorThird, numeralBass, numeralOf, type Numeral } from './numerals'
 import { chordInKey } from './passing-chords'
 import { pitchClass } from './pitch'
 import { spellInKey } from './scale'
@@ -67,10 +67,12 @@ function appliedNumeral(chord: Chord, next: Chord | undefined, key: Key): Numera
   if (pitchClass(pitchClassOf(chord.root) + 5) !== pitchClassOf(next.root)) return null
   const target = numeralOf(next, key)
   if (!target || (target.degree === 0 && target.shift === 0)) return null
+  const bass = numeralBass(chord)
   return {
     degree: 4,
     shift: 0,
     quality: chord.quality,
+    ...(bass ? { bass } : {}),
     of: { degree: target.degree, shift: target.shift, minor: hasMinorThird(next.quality) },
   }
 }

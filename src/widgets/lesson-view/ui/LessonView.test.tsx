@@ -19,6 +19,12 @@ import { ServicesProvider } from '@/shared/lib/services'
 import { FloatingHost } from '@/shared/ui'
 import { LessonView, type UpLink } from './LessonView'
 
+/** What the lesson must show, else the test fails here rather than searching the whole page. */
+function found<T>(value: T | null | undefined, what: string): T {
+  if (value == null) throw new Error(`the lesson shows ${what}`)
+  return value
+}
+
 function firstLesson(): Lesson {
   const lesson = lessonById('reading-chord-symbols')
   if (!lesson) throw new Error('the first lesson is missing')
@@ -130,7 +136,7 @@ describe('LessonView', () => {
   it('writes each example as the lesson does, though the kernel names two of them alike', async () => {
     await renderLesson()
     const numbers = screen.getByRole('heading', { name: 'Chord numbers: 2 or 9? 6 or 13?' })
-    const section = numbers.parentElement ?? document.body
+    const section = found(numbers.parentElement, 'the section')
     for (const name of ['C2', 'Cadd9', 'C6']) {
       expect(
         await within(section).findByRole(
@@ -210,7 +216,7 @@ describe('LessonView’s worksheet', () => {
     await user.click(chord)
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([50, 56, 60, 65])
     const row = screen.getByRole('button', { name: /^G7♭13/ }).closest('ul')?.parentElement
-    await user.click(within(row ?? document.body).getByRole('button', { name: 'Play' }))
+    await user.click(within(found(row, 'the row')).getByRole('button', { name: 'Play' }))
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([50, 56, 60, 65, 53, 59, 63, 67])
   })
 
@@ -223,24 +229,41 @@ describe('LessonView’s worksheet', () => {
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'F4' })).toHaveTextContent('♭3')
     const figures = screen.getAllByRole('figure')
-    await user.click(within(figures.at(-1) ?? document.body).getByRole('button', { name: 'Play' }))
+    await user.click(
+      within(found(figures.at(-1), 'the line')).getByRole('button', { name: 'Play' }),
+    )
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([43, 47, 50, 53, 57])
   })
 
   it('marks each note of a line on its staff as it sounds', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(WORKSHEET)
-    const line = screen.getAllByRole('figure').at(-1) ?? document.body
-    await waitFor(() => expect(line.querySelector('[data-tick]')).not.toBeNull())
+    const line = found(screen.getAllByRole('figure').at(-1), 'the line')
+    await waitFor(() => expect(line.querySelector('g.note[id^="n-"]')).not.toBeNull())
     await user.click(within(line).getByRole('button', { name: 'Play' }))
     const started = audio.played.at(-1)
     const second = started?.sounds[1]
     act(() => audio.setNow((started?.at ?? 0) + (second?.at ?? 0)))
-    const marked = () => [...line.querySelectorAll('.vf-selected[data-tick]')]
+    const marked = () => [...line.querySelectorAll('g.note-chosen')]
     await waitFor(() => expect(marked().length).toBeGreaterThan(0))
-    const first = marked()[0]?.getAttribute('data-tick')
+    const first = marked()[0]?.id.split('-')[2]
     act(() => audio.setNow((started?.at ?? 0) + (started?.sounds[2]?.at ?? 0)))
-    await waitFor(() => expect(marked()[0]?.getAttribute('data-tick')).not.toBe(first))
+    await waitFor(() => expect(marked()[0]?.id.split('-')[2]).not.toBe(first))
+  })
+
+  it('keeps a question opened while a line plays, as the line reaches its next bar', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderLesson(WORKSHEET)
+    const line = found(screen.getAllByRole('figure').at(-1), 'the line')
+    await waitFor(() => expect(line.querySelector('g.note[id^="n-"]')).not.toBeNull())
+    await user.click(within(line).getByRole('button', { name: 'Play' }))
+    const started = audio.played.at(-1)
+    const question = screen.getByRole('group', { name: 'Play E minor.' })
+    await user.click(within(question).getByRole('button', { name: 'Answer' }))
+    expect(within(question).getByRole('status')).toHaveTextContent('0 of 3 notes')
+    act(() => audio.setNow((started?.at ?? 0) + (started?.sounds.at(-1)?.at ?? 0)))
+    await waitFor(() => expect(line.querySelector('g.note-chosen')).not.toBeNull())
+    expect(within(question).getByRole('status')).toHaveTextContent('0 of 3 notes')
   })
 
   it('answers a question on the keys: counted, judged at its last note, fixed and right', async () => {
@@ -382,7 +405,7 @@ describe('LessonView’s accompaniment', () => {
 
   it('plays a progression as the tool’s row, and opens it in Progressions', async () => {
     await renderLesson(ACCOMPANIMENT)
-    const row = screen.getAllByRole('group', { name: 'Chords' })[0] ?? document.body
+    const row = found(screen.getAllByRole('group', { name: 'Chords' })[0], 'the row')
     await waitFor(
       () =>
         expect(

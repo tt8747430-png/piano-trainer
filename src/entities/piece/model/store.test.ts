@@ -52,6 +52,20 @@ describe('createPiecesStore', () => {
     expect(sections?.map((section) => section.key)).toEqual([undefined, 'Db', undefined])
   })
 
+  it('keeps a section’s own pattern, and drops one the book has not', () => {
+    const patterned = {
+      ...MUSIC,
+      sections: [
+        { kind: 'verse', pattern: 'M3', lines: ['C'] },
+        { kind: 'verse', pattern: 'my-1', lines: ['C'] },
+        { kind: 'verse', lines: ['C'] },
+      ],
+      hands: { lh: 'B2/4 | - | -' },
+    }
+    const sections = restored({ versions: { bz1: patterned } }).versions.bz1?.sections
+    expect(sections?.map((section) => section.pattern)).toEqual(['M3', undefined, undefined])
+  })
+
   it('drops music that does not parse, or names an unknown pattern, meter, tempo or a key no signature writes', () => {
     const versions = {
       bz1: MUSIC,
@@ -67,6 +81,52 @@ describe('createPiecesStore', () => {
       bz13: 'Bm A G',
     }
     expect(Object.keys(restored({ versions }).versions)).toEqual(['bz1'])
+  })
+
+  it('keeps the tune’s and each voice’s instrument where every one names one', () => {
+    const kept = restored({
+      versions: { bz1: { ...MUSIC, voices: ['D4/4'], instruments: ['flute', 'cello', 'oboe'] } },
+    })
+    expect(kept.versions.bz1?.instruments).toEqual(['flute', 'cello'])
+    const wrong = restored({
+      versions: { bz1: { ...MUSIC, voices: ['D4/4'], instruments: ['flute', 'kazoo'] } },
+    })
+    expect(wrong.versions.bz1).not.toHaveProperty('instruments')
+    // A voice that does not read goes, and its instrument with it.
+    const dropped = restored({
+      versions: {
+        bz1: { ...MUSIC, voices: ['Q4/1', 'D4/4'], instruments: ['flute', 'oboe', 'cello'] },
+      },
+    })
+    expect(dropped.versions.bz1?.instruments).toEqual(['flute', 'cello'])
+  })
+
+  it('keeps up to three more voices that read and fit the chart, dropping any that does not', () => {
+    const voices = ['D4/4', 'F#4/2 G4/2', 'B3/4', 'A3/4']
+    expect(restored({ versions: { bz1: { ...MUSIC, voices } } }).versions.bz1?.voices).toEqual([
+      'D4/4',
+      'F#4/2 G4/2',
+      'B3/4',
+    ])
+    const wrong = restored({ versions: { bz1: { ...MUSIC, voices: ['Q4/1', 'D4/4'] } } })
+    expect(wrong.versions.bz1?.voices).toEqual(['D4/4'])
+    const long = restored({ versions: { bz1: { ...MUSIC, voices: ['D4/40'] } } })
+    expect(long.versions.bz1).toBeDefined()
+    expect(long.versions.bz1).not.toHaveProperty('voices')
+  })
+
+  it('keeps the piano hidden only while a sung staff stays in sight (ADR 0083)', () => {
+    const hidden = (music: object) => restored({ versions: { bz1: music } }).versions.bz1?.hidden
+    // A lead sheet: the tune's staff and the chord names, the piano out of sight.
+    expect(hidden({ ...MUSIC, hidden: ['piano'] })).toEqual(['piano'])
+    expect(hidden({ ...MUSIC, voices: ['D4/4'], hidden: ['melody', 'piano'] })).toEqual([
+      'melody',
+      'piano',
+    ])
+    // Never every staff: with no other in sight, the piano is shown.
+    const { melody: _, ...pianoOnly } = MUSIC
+    expect(hidden({ ...pianoOnly, hidden: ['piano', 'chords'] })).toEqual(['chords'])
+    expect(hidden({ ...MUSIC, hidden: ['melody', 'piano'] })).toEqual(['melody'])
   })
 
   it('drops a melody longer than its chart', () => {

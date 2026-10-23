@@ -119,8 +119,8 @@ const gospelProgressions: Lesson = {
           kind: 'notes',
           clef: 'treble',
           notes: 'r/8 E5/8 r/8 E5/8~ E5/8 E5/8 r/4 r/8 F5/8 r/8 F5/8~ F5/8 F5/8 r/4',
+          bass: 'C3 G2 C3 E3 F3 C3 F3 F♯3',
         },
-        { kind: 'notes', clef: 'bass', notes: 'C3 G2 C3 E3 F3 C3 F3 F♯3' },
         {
           kind: 'note',
           text: {

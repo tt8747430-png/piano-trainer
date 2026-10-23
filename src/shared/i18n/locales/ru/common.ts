@@ -44,7 +44,7 @@ export const common: LocaleResources['common'] = {
     advanced: 'Продвинутый',
     professional: 'Профессиональный',
   },
-  rating: { known: 'Знаю', gap: 'Пробел', unknown: 'Ещё не проверено' },
+  rating: { known: 'Знаю', gap: 'Не усвоено', unknown: 'Ещё не проверено' },
   hands: { both: 'Обе руки', rh: 'Правая рука', lh: 'Левая рука' },
   handsShort: { both: 'Обе', rh: 'Правая', lh: 'Левая' },
   note: { natural: '{{letter}}{{octave}}', sharp: '{{letter}}-диез {{octave}}' },
@@ -64,8 +64,6 @@ export const common: LocaleResources['common'] = {
   rail: {
     octaveDown: 'Октава вниз',
     octaveUp: 'Октава вверх',
-    map: 'Клавиши на экране',
-    mapRange: '{{from}} – {{to}}',
     zoomOut: 'Клавиши мельче',
     zoomIn: 'Клавиши крупнее',
     names: {
@@ -75,7 +73,7 @@ export const common: LocaleResources['common'] = {
     },
     glissando: 'Глиссандо',
     pedal: 'Педаль',
-    sound: 'Слышать игру в приложении',
+    sound: 'Звук MIDI-клавиатуры',
     chord: 'Сыгранный аккорд',
     fold: 'Спрятать клавиши',
     unfold: 'Клавиши',
@@ -117,6 +115,8 @@ export const common: LocaleResources['common'] = {
     },
     folded: 'Прятать клавиши страницы',
     foldedNote: 'Они сворачиваются в кнопку «Клавиши», которая их вернёт',
+    foldedLandscape: 'Прятать их на телефоне боком',
+    foldedLandscapeNote: 'В уроках, разделах практики и песнях; плеер и редактор оставляют свои',
     swipe: {
       label: 'Проведение по клавишам',
       detail: 'Прокручивает клавиатуру или играет каждую клавишу (глиссандо)',
@@ -170,7 +170,7 @@ export const common: LocaleResources['common'] = {
       any: 'Любая клавиатура',
       away: '{{device}} (не подключена)',
     },
-    sound: 'Слышать игру в приложении',
+    sound: 'Звук MIDI-клавиатуры',
     soundNote: 'Для клавиатуры без динамиков: приложение озвучивает нажатые клавиши',
     throughPiano: 'Музыка приложения на клавиатуре',
     throughPianoNote: 'Песни и примеры звучат из динамиков самой клавиатуры',
@@ -181,9 +181,9 @@ export const common: LocaleResources['common'] = {
     touch: {
       label: 'Чувствительность',
       detail: 'Насколько сильно бить по клавише, чтобы звучало громко',
-      light: 'Лёгкая',
+      light: 'Высокая',
       normal: 'Обычная',
-      heavy: 'Тяжёлая',
+      heavy: 'Низкая',
     },
     pedal: {
       label: 'Педаль',

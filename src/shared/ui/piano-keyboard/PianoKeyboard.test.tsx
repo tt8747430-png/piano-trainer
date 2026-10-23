@@ -198,6 +198,29 @@ describe('PianoKeyboard', () => {
     )
   })
 
+  it('narrows Fit’s keys, past their usual narrowest, until the keys asked to be in sight fit', () => {
+    // C2 to G4: nineteen white keys asked for, wider than the octave the keys fill.
+    const asked = { from: midi(36), to: midi(67) }
+    const { rerender } = renderKeyboard({ inView: asked, fitInView: true })
+    const keys = screen.getByRole('group', { name: 'Keyboard' })
+    expect(keys.style.height).toContain('100cqw / 19')
+    // A narrower span asked next leaves the keys as they are: they hold still (ADR 0059).
+    rerender(
+      <PianoKeyboard
+        range={ONE_OCTAVE}
+        inView={{ from: C4, to: midi(64) }}
+        fitInView
+        onKeyPress={() => {}}
+      />,
+    )
+    expect(keys.style.height).toContain('100cqw / 19')
+  })
+
+  it('keeps Fit’s narrowest keys where it is not asked to fit what is in sight', () => {
+    renderKeyboard({ inView: { from: midi(36), to: midi(67) } })
+    expect(screen.getByRole('group', { name: 'Keyboard' }).style.height).not.toContain('/ 19')
+  })
+
   it('keeps short keys within their own share of the screen too', () => {
     renderKeyboard({ keyLength: 'short' })
     const keys = screen.getByRole('group', { name: 'Keyboard' })
@@ -208,21 +231,19 @@ describe('PianoKeyboard', () => {
     renderKeyboard()
     const scroller = document.querySelector('[data-slot="keys-scroller"]')
     expect(scroller).toContainElement(screen.getByRole('button', { name: 'Octave up' }))
-    expect(scroller).toContainElement(screen.getByRole('slider', { name: 'Keys in view' }))
     expect(scroller).toContainElement(screen.getByRole('group', { name: 'Keyboard' }))
   })
 
-  it('keeps ‹ › together at the rail’s end, after the map and before the screen’s controls', () => {
+  it('keeps ‹ › together at the rail’s end, before the screen’s controls', () => {
     renderKeyboard({ children: <button type="button">Settings</button> })
-    const rail = [
-      screen.getByRole('slider', { name: 'Keys in view' }),
-      ...screen.getAllByRole('button').filter((button) => !/\d$/.test(button.ariaLabel ?? '')),
-    ].filter((element) => element.textContent !== 'After')
+    const rail = screen
+      .getAllByRole('button')
+      .filter((button) => !/\d$/.test(button.ariaLabel ?? ''))
+      .filter((element) => element.textContent !== 'After')
     const inOrder = [...rail].sort((a, b) =>
       a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
     )
     expect(inOrder.map((element) => element.ariaLabel ?? element.textContent)).toEqual([
-      'Keys in view',
       'Octave down',
       'Octave up',
       'Settings',

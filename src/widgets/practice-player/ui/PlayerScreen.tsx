@@ -1,10 +1,50 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, SyntheticEvent } from 'react'
+import type { KeyboardSettings } from '@/entities/settings'
+import { useHiddenWhileReading } from '@/shared/lib'
+import { DockShownContext } from '../model/dock-shown'
+import { dockTap } from '../model/tap-on-screen'
 
-/** The Player's screen: its areas (`PlayerArea`) placed by the `player-screen` utility (spec §2.8). */
-export function PlayerScreen({ children }: { children: ReactNode }) {
+/** Whether an event happened on the music (`data-area="sheet"`). */
+const onSheet = (event: SyntheticEvent) =>
+  event.target instanceof Element && event.target.closest('[data-area="sheet"]') !== null
+
+/**
+ * The Player's screen: its areas (`PlayerArea`) placed by the `player-screen` utility (spec §2.8),
+ * the keys at the foot or under the toolbar as the keyboard settings dock them. The floating
+ * transport steps aside as the music is read (dragged, scrolled, pinched: `useHiddenWhileReading`);
+ * a tap on the screen's free room shows or hides it, a tap on a note brings it back (`dockTap`).
+ */
+export function PlayerScreen({
+  keys,
+  children,
+}: {
+  keys: KeyboardSettings['dock']
+  children: ReactNode
+}) {
+  const { shown, setShown, show, reading } = useHiddenWhileReading()
+  // Only the music read hides it: the keys, the toolbar and the transport are worked, not read.
+  const onMusic =
+    <E extends SyntheticEvent>(handle: (event: E) => void) =>
+    (event: E) => {
+      if (onSheet(event)) handle(event)
+    }
   return (
-    <div className="player-screen min-h-0 flex-1 gap-3 py-2 landscape-phone:gap-2 landscape-phone:py-0">
-      {children}
+    // A tap anywhere is the transport's business only by `dockTap`: every control keeps its own.
+    <div
+      data-keys={keys}
+      className="player-screen min-h-0 flex-1 gap-3 py-2 landscape-phone:gap-2 landscape-phone:py-0 landscape-phone:data-[keys=top]:pb-2"
+      onPointerDown={onMusic(reading.onPointerDown)}
+      onPointerMove={onMusic(reading.onPointerMove)}
+      onTouchStart={onMusic(reading.onTouchStart)}
+      onTouchMove={onMusic(reading.onTouchMove)}
+      onWheel={onMusic(reading.onWheel)}
+      onClick={(event) => {
+        const tap = dockTap(event.target as Element)
+        if (tap === 'show') show()
+        else if (tap === 'toggle') setShown((was) => !was)
+      }}
+    >
+      <DockShownContext value={shown}>{children}</DockShownContext>
     </div>
   )
 }

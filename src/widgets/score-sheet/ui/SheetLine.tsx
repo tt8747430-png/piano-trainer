@@ -1,34 +1,57 @@
 import { memo, useEffect, useRef } from 'react'
 import type { BarRange, Layer } from '@/features/score-editor'
-import type { Tick } from '@/shared/lib/music'
-import { useElementSize } from '@/shared/lib'
-import { LazyScoreView } from '@/shared/ui'
+import type { Midi, Tick } from '@/shared/lib/music'
+import { cn, useElementSize } from '@/shared/lib'
+import { LazyScoreView, useCanvasReveal } from '@/shared/ui'
+import { staffOfHand } from '../model/line-music'
 import type { LineSheet } from '../model/line-sheets'
+import { labelRow, labelScale } from '../model/label-row'
 import { LineOverlay } from './LineOverlay'
 
+/** Whether an element's top is on the screen. */
+function topInSight(element: Element): boolean {
+  const { top } = element.getBoundingClientRect()
+  return top >= 0 && top < window.innerHeight
+}
+
 /**
- * One line of the chart as a line of grand staff, scrolling sideways where it is wider than the screen,
- * the notes at the caret marked; a row of a busy sheet, drawn again only when its props change.
+ * One line of the chart as a line of grand staff, the notes at the caret marked: justified to the
+ * sheet's width, drawn smaller where it is wider than that, so it never scrolls sideways (a
+ * panorama's one line, left natural, does); a row of a busy sheet, drawn again only when its props change.
  */
 export const SheetLine = memo(function SheetLine({
   sheet,
   layer,
   caret,
-  caretTicks,
   selection,
   onPlace,
   placesOf,
+  tapsOf,
   chordNames,
   onSignature,
+  scale = 1,
+  print = false,
+  justify = true,
+  onWrite,
+  onDrag,
 }: {
+  onWrite?: ((tick: Tick, layer: Layer, key: Midi) => void) | undefined
+  onDrag?: ((steps: number, joins: boolean) => void) | undefined
+  /** The engraving's size: smaller on a phone, as it prints on a page. */
+  scale?: number
+  /** On a page, its labels as they print (ADR 0075). */
+  print?: boolean
+  /** Spread to the sheet's width, as a printed system is; a panorama's one line is left natural. */
+  justify?: boolean
   sheet: LineSheet
   layer: Layer
   /** From the line's start, when the caret is on this line. */
   caret: Tick | null
-  caretTicks: Tick
   selection: BarRange | null
   onPlace: (tick: Tick, layer: Layer, extend: boolean) => void
   placesOf: (layer: Layer) => readonly Tick[]
+  /** Where a click lands in a layer: on a note or a bar's start, never an empty step (ADR 0082). */
+  tapsOf: (layer: Layer) => readonly Tick[]
   chordNames: boolean
   onSignature: () => void
 }) {
@@ -36,26 +59,62 @@ export const SheetLine = memo(function SheetLine({
   // A line of a few bars runs the sheet's width, as a printed page's does.
   const { width } = useElementSize(ref)
   const holdsCaret = caret !== null
-  // The notes at the caret on its staff are the ones chosen, marked as a notation app marks them.
+  // The labels' row over the staff: as tall as what it holds, at the line's size.
+  const row = labelRow(chordNames, scale, print)
+  // The notes chosen, marked as a notation app marks them: those of the bars chosen on this line in
+  // the caret's row, else the ones at the caret.
+  const staff = layer === 'chords' ? null : staffOfHand(layer, sheet.music.melodyStaff ?? false)
+  const chosen = selection
+    ? sheet.line.bars.filter(
+        (placed) => placed.index >= selection.from && placed.index <= selection.to,
+      )
+    : []
+  const first = chosen[0]
+  const last = chosen.at(-1)
   const selected =
-    caret === null || layer === 'chords'
+    staff === null
       ? undefined
-      : { staff: layer === 'lh' ? ('bass' as const) : ('treble' as const), tick: caret }
-  // The caret's line comes into view when the caret moves onto it.
+      : first && last
+        ? {
+            staff,
+            from: first.start - sheet.line.start,
+            to: last.start + last.bar.ticks - sheet.line.start,
+          }
+        : caret === null
+          ? undefined
+          : { staff, from: caret, to: caret + 1 }
+  // The caret's line comes into view when the caret moves onto it; the sheet opens where it is
+  // while the line is already in sight, its section's heading over it kept in view.
+  const held = useRef<boolean | null>(null)
+  // On a page canvas, the canvas moves to it (ADR 0075); elsewhere the sheet scrolls.
+  const reveal = useCanvasReveal()
   useEffect(() => {
-    if (holdsCaret) ref.current?.scrollIntoView({ block: 'nearest' })
-  }, [holdsCaret])
+    const line = ref.current
+    const before = held.current
+    held.current = holdsCaret
+    // The effect run again with nothing changed (a strict mode's second run) moves nothing.
+    if (!holdsCaret || !line || before === true) return
+    if (reveal) {
+      reveal(line)
+      return
+    }
+    if (before === null && topInSight(line)) return
+    line.scrollIntoView({ block: 'nearest' })
+  }, [holdsCaret, reveal])
   return (
     <div
       ref={ref}
       data-slot="sheet-line"
-      className="relative overflow-x-auto overscroll-x-contain pt-11 scrollbar-none"
+      className={cn('relative', !justify && 'overflow-x-auto overscroll-x-contain scrollbar-none')}
+      style={{ paddingTop: row }}
     >
       <LazyScoreView
+        scale={scale}
         score={sheet.score}
         timeBefore={sheet.timeBefore}
+        next={sheet.next}
         selected={selected}
-        fill={width > 0 ? width : undefined}
+        fill={justify && width > 0 ? width : undefined}
       >
         {(layout) => (
           <LineOverlay
@@ -64,12 +123,16 @@ export const SheetLine = memo(function SheetLine({
             line={sheet.line}
             layer={layer}
             caret={caret}
-            caretTicks={caretTicks}
+            tapsOf={tapsOf}
             selection={selection}
             onPlace={onPlace}
             placesOf={placesOf}
             chordNames={chordNames}
+            row={row}
+            labels={labelScale(scale, print)}
             onSignature={onSignature}
+            onWrite={onWrite}
+            onDrag={onDrag}
           />
         )}
       </LazyScoreView>

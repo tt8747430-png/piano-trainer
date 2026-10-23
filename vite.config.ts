@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 import type { Plugin } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vitest/config'
-import { PRECACHE_FILE_LIMIT } from './src/shared/config/precache.ts'
+import { PRECACHE_ENGRAVER_LIMIT } from './src/shared/config/precache.ts'
 import { THEME_COLORS } from './src/shared/config/theme-colors.ts'
 
 const fromRoot = (path: string) => fileURLToPath(new URL(path, import.meta.url))
@@ -65,7 +65,8 @@ export default defineConfig({
       workbox: {
         // The pieces' recordings too, so a recording plays offline.
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,m4a}'],
-        maximumFileSizeToCacheInBytes: PRECACHE_FILE_LIMIT,
+        // The engraver's worker is the largest file; the recordings are held to less by a test.
+        maximumFileSizeToCacheInBytes: PRECACHE_ENGRAVER_LIMIT,
         // Only the fonts' subsets the app's text reaches: a browser fetches a subset when a glyph in
         // its range is drawn. None of these ranges holds a character the app writes (Onest's latin-ext
         // does, a credit's ž; its math and symbols hold ♭ ♯ and arrows); a glyph that ever needs one

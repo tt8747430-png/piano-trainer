@@ -5,6 +5,7 @@ import {
   midi,
   note,
   parseChordSymbol,
+  TICKS_PER_BEAT,
   type Key,
 } from '@/shared/lib/music'
 import type { ChartBar, HandNote, Melody } from '@/shared/lib/arrangement'
@@ -35,6 +36,24 @@ describe('beatsText', () => {
   it('writes thirds of a beat as a fraction in its lowest terms, which reads back as them', () => {
     expect([8, 16, 4, 40].map(beatsText)).toEqual(['1:3', '2:3', '1:6', '5:3'])
     for (const ticks of [8, 4, 40]) expect(ticksIn(readBeats(beatsText(ticks)) ?? 0)).toBe(ticks)
+  })
+})
+
+describe('writeHand with marks', () => {
+  it('writes a token’s marks after its beats, and reads them back', () => {
+    const text = 'C4+E4/1[acc,stacc] G4/1@2[tr] r/1 A4/1[8va,(,p]'
+    const parsed = parseChart(testSong(['C'], { hands: { rh: text } }))
+    const bar = parsed.sections[0]?.lines[0]?.[0]
+    expect(writeHand([bar?.hands?.rh ?? []], [4 * TICKS_PER_BEAT])).toBe(
+      'C4+E4/1[acc,stacc] G4/1[tr] r/1 A4/1[(,8va,p]',
+    )
+  })
+
+  it('writes notes struck together with other marks as tokens of their own', () => {
+    const text = 'C4/4[acc] E4/4@1'
+    const parsed = parseChart(testSong(['C'], { hands: { rh: text } }))
+    const bar = parsed.sections[0]?.lines[0]?.[0]
+    expect(writeHand([bar?.hands?.rh ?? []], [4 * TICKS_PER_BEAT])).toBe('C4/4[acc] E4/4@1')
   })
 })
 
@@ -92,6 +111,14 @@ describe('writeMelody', () => {
 
   it('writes nothing for no notes', () => {
     expect(writeMelody([], bars4)).toBeUndefined()
+  })
+
+  it('writes a note’s marks after its beats, and reads them back', () => {
+    const text = 'E4/1[stacc,p] r/1 E4/2[ferm]'
+    const melody = parseMelody(testSong(['C'], { melody: text }))
+    expect(melody?.[0]?.marks).toEqual({ articulations: ['staccato'], dynamic: 'p' })
+    expect(writeMelody(melody ?? [], bars4)).toBe(text)
+    expect(() => parseMelody(testSong(['C'], { melody: 'r/1[acc]' }))).toThrow()
   })
 
   it('reads back as written', () => {

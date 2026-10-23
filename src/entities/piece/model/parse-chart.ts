@@ -7,15 +7,48 @@ import {
   parseChordSymbol,
   parseKey,
   TICKS_PER_BEAT,
+  type BarMarks,
   type Chord,
+  type Jump,
   type Key,
 } from '@/shared/lib/music'
 import { MAX_BEATS, readBeats, ticksIn } from './beats'
 import { ContentError, type ContentPosition } from './content-error'
-import { HAND_IDS, parseHands, type HandBar, type ReadHands } from './parse-hands'
+import { HAND_IDS, parseHandClefs, parseHands, type HandBar, type ReadHands } from './parse-hands'
 import { pieceKey, type ChartPiece } from './types'
 
 type Fail = (problem: string) => never
+
+/** Each jump as a chart writes it after its bar. */
+export const JUMP_TOKENS: Readonly<Record<Jump, string>> = {
+  dc: 'DC',
+  'dc-fine': 'DC.Fine',
+  'dc-coda': 'DC.Coda',
+  ds: 'DS',
+  'ds-fine': 'DS.Fine',
+  'ds-coda': 'DS.Coda',
+}
+
+/**
+ * Marks written after a bar, its end: a repeat back, a double barline, the final one; a jump, Fine,
+ * To Coda (ADR 0068).
+ */
+const END_TOKENS: Readonly<Record<string, BarMarks>> = {
+  ':|': { barline: 'repeat' },
+  '||': { barline: 'double' },
+  '|.': { barline: 'final' },
+  ...Object.fromEntries(Object.entries(JUMP_TOKENS).map(([jump, token]) => [token, { jump }])),
+  Fine: { fine: true },
+  ToCoda: { toCoda: true },
+}
+/** Marks written before a bar: a repeat starting at it, the ending it belongs to, the signs. */
+const START_TOKENS: Readonly<Record<string, BarMarks>> = {
+  '|:': { repeatStart: true },
+  '[1': { ending: 1 },
+  '[2': { ending: 2 },
+  Segno: { segno: true },
+  Coda: { coda: true },
+}
 
 /** The most bars of its meter one bar may last: a bar of chords with long `@beats`. */
 const BAR_LIMIT = 4
@@ -102,17 +135,41 @@ export function parseChart(piece: ChartPiece): Chart {
   const sections = piece.sections.map((section, s) => ({
     key: section.key === undefined ? null : sectionKey(piece, section.key, s),
     lines: section.lines.map((line, l) => {
-      const bars = line.split(/\s+/).filter(Boolean)
-      if (bars.length === 0) failAt({ section: s + 1, line: l + 1 })('empty line')
-      return bars.map((bar, b) => {
-        const position = { section: s + 1, line: l + 1, bar: b + 1 }
-        const read = readBar(bar, meterBeats, failAt(position))
+      const fail: Fail = failAt({ section: s + 1, line: l + 1 })
+      const tokens = line.split(/\s+/).filter(Boolean)
+      const bars: ChartBar[] = []
+      // Marks before a bar wait for it; a barline after one is its end.
+      let before: BarMarks = {}
+      for (const token of tokens) {
+        const end = END_TOKENS[token]
+        if (end) {
+          const last = bars.at(-1)
+          if (!last || Object.keys(before).length > 0) fail(`a barline before any bar: "${token}"`)
+          if (Object.keys(end).some((mark) => mark in last))
+            fail(`two of a kind after one bar: "${token}"`)
+          bars[bars.length - 1] = { ...last, ...end }
+          continue
+        }
+        const start = START_TOKENS[token]
+        if (start) {
+          if (Object.keys(start).some((mark) => mark in before))
+            fail(`two of a kind before one bar: "${token}"`)
+          before = { ...before, ...start }
+          continue
+        }
+        const position = { section: s + 1, line: l + 1, bar: bars.length + 1 }
+        const read = readBar(token, meterBeats, failAt(position))
         places.push({ ticks: beatsToTicks(read.beats), position })
-        return read
-      })
+        bars.push({ ...before, ...read })
+        before = {}
+      }
+      if (Object.keys(before).length > 0) fail('a repeat or ending with no bar after it')
+      if (bars.length === 0) fail('empty line')
+      return bars
     }),
   }))
   const hands = parseHands(piece, places)
+  const clefs = parseHandClefs(piece, places)
   let index = 0
   return {
     key: pieceKey(piece),
@@ -121,8 +178,13 @@ export function parseChart(piece: ChartPiece): Chart {
       ...(section.key ? { key: section.key } : {}),
       lines: section.lines.map((line) =>
         line.map((bar) => {
+          const clef = clefs[index]
           const written = barHands(hands, index++)
-          return written ? { ...bar, hands: written } : bar
+          return {
+            ...bar,
+            ...(written ? { hands: written } : {}),
+            ...(clef ? { clefs: clef } : {}),
+          }
         }),
       ),
     })),

@@ -12,9 +12,16 @@ export {
   type Section,
   type SectionKind,
 } from './model/types'
-export { SONG_SECTION_KINDS } from './model/types'
+export {
+  HIDDEN_ROWS,
+  isHiddenRow,
+  isLeadSheet,
+  showsAStaff,
+  SONG_SECTION_KINDS,
+  type HiddenRow,
+} from './model/types'
 
-export { chartOf, hasMethodCodes, melodyOf, patternsOfPiece, pieceFit } from './model/chart'
+export { chartOf, hasChartPlan, melodyOf, patternsOfPiece, pieceFit, voicesOf } from './model/chart'
 export { keyText, musicOf, readMusic, sameMusic, type PieceMusic } from './model/music'
 export { HAND_IDS, type HandId } from './model/parse-hands'
 export {
@@ -39,7 +46,7 @@ export { repertoire } from './model/repertoire'
 export { useRepertoire } from './model/use-repertoire'
 export { writeBar } from './model/write-chart'
 export { writeHand } from './model/write-hands'
-export { writeMelody } from './model/write-melody'
+export { emptyLine, writeMelody } from './model/write-melody'
 export { fourToALine, wholeBar } from './model/chart-layout'
 export { chordsOfPiece, skillsOfPiece } from './model/skills'
 export {

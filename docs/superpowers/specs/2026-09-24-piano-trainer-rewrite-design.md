@@ -271,8 +271,8 @@ Elementary, Intermediate, Advanced), an ordered list of `PathStep`s:
 `{ kind: 'piece', pieceId } | { kind: 'chords', family } | { kind: 'scale', scale }`.
 - Steps refer to content and never copy it.
 - A step's id is derived: `piece:bz5`, `chords:sev`, `scale:harmonic`.
-- Pieces carry no `level`. The Songs level filter reads a piece's level through the path selector
-  `levelOf(stepId)`.
+- Pieces carry no `level`. Songs' Stage filter reads a piece's stage through its course, `pieceStage(id)`
+  (ADR 0005, amended).
 - Every piece appears on the path exactly once; listings do not appear.
 - Phase 2 writes a first `path.ts` with everything at level 1. Phase 4 orders and levels it for real.
 
@@ -379,7 +379,7 @@ the Check are full-screen with a way back. A screen below a place's top has a ba
 | `/`                                          | **Path**: the Continue card (§4.6 ④), then levels 1–4 with progress, then step rows with a learned check                                                                                 |
 | `/songs`                                     | **Songs** (songs and listings only): search; collection and level pop-ups; rows with title (original + translation), key, level, learned check; listings marked "no chart yet"                                      |
 | `/songs/$pieceId`                            | **Piece**: title, credits, key, meter, note; "Chords in this song" + Check (§4.6 ①); the chart by section (tap a bar to hear it); **Practise** as the one primary action; Mark as learned; a link to the key's scale |
-| `/play/$pieceId`                             | **Player** (Flowkey's shape; sub-project 3, ADR 0013): a toolbar of ✕, the title, the **tempo** popover (Wait mode, 50%, 75%, 100% or any tempo, speed training), the **hands** popover, the loop, MIDI and ⚙ (the **Setup sheet**); the keyboard with hand colours; the piece as **sheet music** on a grand staff (chord symbols over numbered bars, a cursor on what sounds, a loop dragged over bars); ‹ Play/Stop › in Listen and Wait mode alike. The Setup sheet holds the piece's own choices (key, pattern, per-hand figures, chord size for progressions that allow it, melody) and how it plays (swing, finger numbers, metronome, count-in) |
+| `/play/$pieceId`                             | **Player** (Flowkey's shape; sub-project 3, ADR 0013): a toolbar of ✕, the title, the **tempo** popover (Wait mode, 50%, 75%, 100% or any tempo, speed training), the **hands** popover, the loop, MIDI and ⚙ (the **Setup sheet**); the keyboard with hand colours; the piece as **sheet music** on a grand staff (chord symbols over numbered bars, a cursor on what sounds, a loop dragged over bars); ‹ Play/Stop › in Listen and Wait mode alike. The Setup sheet holds the piece's own choices (key, pattern, per-hand figures, chord size for progressions that allow it, melody) and how it plays (swing, chord positions, metronome, count-in); what the sheet shows (finger numbers, named notes) is the View menu's (ADR 0064) |
 | `/learn`, `/learn/lessons/$lessonId`         | **Learn**: lessons (the first: reading chord symbols, its examples playing on the keys) and references                                                                                     |
 | `/learn/chords` `/learn/scales`              | **The references.** Chords: root and chord pop-ups, inversion, hands, keyboard coloured by chord role, play / arpeggio, the ways the chord is written, and Check yourself when opened from a path step. Scales: root and scale pop-ups; Scale view (degrees, fingering, rhythm practice) or Chords view (each degree's chord on its key, triads or 7ths, keys playing chords or notes and the chords that hold a note) |
 | `/practice`, `/practice/quiz/$quiz`          | **Practice**: the Theory quiz (Build chord, Name chord, Build scale, My gaps; chosen families and scales; stats), and the studies and progressions                                         |

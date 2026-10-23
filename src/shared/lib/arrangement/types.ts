@@ -1,10 +1,14 @@
 import type {
+  BarMarks,
   Chord,
   Finger,
   Hand,
+  HandClefs,
+  Instrument,
   Key,
   Meter,
   Midi,
+  NoteMarks,
   SpelledNote,
   Tick,
   Tone,
@@ -23,16 +27,20 @@ export interface HandNote {
   readonly startTick: Tick
   readonly durationTicks: Tick
   readonly finger?: Finger
+  readonly marks?: NoteMarks
 }
 /** A bar's hands written note by note: a hand here (even with no notes) is played as written, not by the pattern. */
 export interface WrittenHands {
   readonly rh?: readonly HandNote[]
   readonly lh?: readonly HandNote[]
 }
-export interface ChartBar {
+/** A bar of a chart: its chords, its beats, its written hands and its barlines (a repeat, an ending). */
+export interface ChartBar extends BarMarks {
   readonly chords: readonly ChartChord[]
   readonly beats: number
   readonly hands?: WrittenHands
+  /** The clef a hand's staff changes to at this bar (ADR 0069). */
+  readonly clefs?: HandClefs
 }
 export interface ChartSection {
   readonly lines: readonly (readonly ChartBar[])[]
@@ -51,6 +59,8 @@ export interface MelodyNote {
   readonly spelled: SpelledNote
   readonly startTick: Tick
   readonly durationTicks: Tick
+  /** What its text marks on it (ADR 0063). */
+  readonly marks?: NoteMarks
 }
 export type Melody = readonly MelodyNote[]
 
@@ -147,7 +157,11 @@ export interface PerformedChord extends Chord {
   /** The right hand's chord as voiced, where its figure plays the voiced chord (not a tune, nor its own shapes). */
   readonly hand?: readonly Midi[]
 }
-export interface PerformanceBar {
+export interface PerformanceBar extends BarMarks {
+  /** The chart's bar it plays, where the repeats are played (`unfold`): its index as written. */
+  readonly written?: number
+  /** The tempo marked over it, the first bar's: beats a minute. */
+  readonly tempo?: number
   readonly startTick: Tick
   readonly beats: number
   readonly section: number
@@ -156,6 +170,8 @@ export interface PerformanceBar {
   readonly chords: readonly number[]
   /** The key it is played in, where that is not the Performance's (a key change). */
   readonly key?: Key
+  /** The clef a hand's staff changes to at this bar. */
+  readonly clefs?: HandClefs
 }
 export interface PerformanceNote {
   readonly midi: Midi
@@ -168,6 +184,8 @@ export interface PerformanceNote {
   readonly velocity: number
   /** Index into Performance.chords: the chord this note was played for. */
   readonly chord: number
+  /** What a written note's text marks on it (ADR 0063). */
+  readonly marks?: NoteMarks
 }
 /** Notes sharing an onset: what Step mode walks through. `notes` index into Performance.notes. */
 export interface BeatGroup {
@@ -184,4 +202,17 @@ export interface Performance {
   readonly chords: readonly PerformedChord[]
   readonly notes: readonly PerformanceNote[]
   readonly beatGroups: readonly BeatGroup[]
+  /**
+   * Where a piece has more voices (ADR 0066), every voice sung, in the key played: the tune first, then
+   * the more voices. Heard and shown, never the learner's to play, so apart from `notes` and the beat
+   * groups.
+   */
+  readonly sung?: readonly Melody[]
+  /**
+   * Every part's tempo and pedal marks (ADR 0068), whether the learner hears that part or not: the
+   * time and the pedal the whole piece keeps.
+   */
+  readonly timing?: readonly { readonly startTick: Tick; readonly marks: NoteMarks }[]
+  /** What each of `sung` is played on (ADR 0070), the voice where it names none. */
+  readonly instruments?: readonly Instrument[]
 }

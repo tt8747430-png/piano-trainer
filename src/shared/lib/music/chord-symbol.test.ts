@@ -4,6 +4,7 @@ import {
   ChordSymbolError,
   chordsOfLine,
   parseChordSymbol,
+  printedSymbol,
   readChordLine,
   readChordSymbol,
 } from './chord-symbol'
@@ -128,5 +129,22 @@ describe('readChordLine', () => {
   it('names the words it cannot read, and reads nothing in an empty line', () => {
     expect(readChordLine('C Qx G Dm7/')).toMatchObject({ unread: ['Qx', 'Dm7/'] })
     expect(readChordLine(' | ')).toEqual({ chords: [], unread: [] })
+  })
+})
+
+describe('printedSymbol', () => {
+  it('prints sharps and flats as their signs, as a chord name is engraved', () => {
+    expect(printedSymbol('C#m')).toBe('C♯m')
+    expect(printedSymbol('F#m/D#')).toBe('F♯m/D♯')
+    expect(printedSymbol('Bbmaj7')).toBe('B♭maj7')
+    expect(printedSymbol('Ab/Eb')).toBe('A♭/E♭')
+    expect(printedSymbol('C7b9#11')).toBe('C7♭9♯11')
+    expect(printedSymbol('Dm7(b5)')).toBe('Dm7(♭5)')
+  })
+
+  it('leaves the letters of a quality alone', () => {
+    expect(printedSymbol('Bsus4')).toBe('Bsus4')
+    expect(printedSymbol('Bdim7')).toBe('Bdim7')
+    expect(printedSymbol('Cadd9')).toBe('Cadd9')
   })
 })

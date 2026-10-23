@@ -125,7 +125,7 @@ export const music = {
     minor: '{{tonic}} minor',
     // A row that opens something in a key.
     in: 'In {{key}}',
-    mode: 'Mode',
+    mode: 'Major or minor',
     majorMode: 'Major',
     minorMode: 'Minor',
   },
@@ -168,6 +168,11 @@ export const music = {
   // The sheet music: the Player's staff.
   sheet: {
     label: 'Sheet music',
+    // How a score is laid out (ADR 0064), the same words in the Player and the editor.
+    // As notation apps name their views: one line across, lines down the screen, A4 pages.
+    layout: { label: 'Layout', horizontal: 'Panorama', scroll: 'Scroll', pages: 'Pages' },
+    // Each sung staff's name, over its start where voices are sung together (ADR 0066).
+    staff: { melody: 'Melody', voice2: 'Voice 2', voice3: 'Voice 3', voice4: 'Voice 4' },
     // A staff's own options, inline on its card (ADR 0058).
     fingers: 'Fingers',
     noteNames: 'Note names',
@@ -178,6 +183,14 @@ export const music = {
     barChords: 'Bar {{n}}: {{chords}}',
     loopStart: 'Loop start',
     loopEnd: 'Loop end',
+    // Pages floating on a canvas (ADR 0075): dragged to move, pinched or Ctrl-wheeled to zoom.
+    canvas: {
+      label: 'Pages: drag to move, pinch or Ctrl and scroll to zoom',
+      zoomIn: 'Zoom in',
+      zoomOut: 'Zoom out',
+      fit: 'Fit the page to the width',
+      zoom: '{{percent}} %',
+    },
   },
   // A list of patterns, Accompaniment's and the Setup's: the learner's shelves round the groups.
   patternShelf: { favourites: 'Favourites', own: 'Your patterns', hidden: 'Hidden' },
@@ -193,10 +206,43 @@ export const music = {
   // An interval's card: how far it is, the chords it is heard in, and the ways it is played.
   intervalCard: {
     semitones: 'Semitones: {{n}}',
-    tones: 'Tones: {{n}}',
+    semitone: 'Size: a semitone',
+    tones_one: 'Size: {{n}} tone',
+    tones_other: 'Size: {{n}} tones',
     inChords: 'In chords: {{degree}}',
     up: 'Up',
     down: 'Down',
     together: 'Together',
+  },
+  // What a sung part is played on, and the families they are found under (ADR 0070).
+  instrument: {
+    voice: 'Voice',
+    violin: 'Violin',
+    cello: 'Cello',
+    flute: 'Flute',
+    oboe: 'Oboe',
+    clarinet: 'Clarinet',
+    trumpet: 'Trumpet',
+    horn: 'Horn',
+    guitar: 'Guitar',
+  },
+  // As a score names a part at its staff.
+  instrumentShort: {
+    voice: 'V.',
+    violin: 'Vln.',
+    cello: 'Vc.',
+    flute: 'Fl.',
+    oboe: 'Ob.',
+    clarinet: 'Cl.',
+    trumpet: 'Tpt.',
+    horn: 'Hn.',
+    guitar: 'Gtr.',
+  },
+  instrumentFamily: {
+    voices: 'Voices',
+    strings: 'Strings',
+    woodwind: 'Woodwind',
+    brass: 'Brass',
+    plucked: 'Plucked',
   },
 } as const

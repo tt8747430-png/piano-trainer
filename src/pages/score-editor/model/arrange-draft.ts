@@ -30,5 +30,23 @@ export function playedInBar(
       startTick: n.startTick,
       durationTicks: n.durationTicks,
       ...(n.finger === undefined ? {} : { finger: n.finger }),
+      ...(n.marks ? { marks: n.marks } : {}),
     }))
+}
+
+/**
+ * What each hand plays, on the piece's timeline, as the Player arranges it: the sheet shows the
+ * pattern's notes in a bar a hand leaves to it, soft (ADR 0083). Notes alone, no fingers or marks.
+ */
+export function playedHands(performance: Performance): Record<HandId, DraftNote[]> {
+  const of = (hand: HandId) =>
+    performance.notes
+      .filter((n) => n.hand === hand)
+      .map(({ midi, spelled, startTick, durationTicks }) => ({
+        midi,
+        spelled,
+        startTick,
+        durationTicks,
+      }))
+  return { rh: of('rh'), lh: of('lh') }
 }

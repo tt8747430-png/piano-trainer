@@ -1,9 +1,18 @@
 import { describe, expect, it } from 'vitest'
-import { createPiecesStore, type PieceMusic } from '@/entities/piece'
+import { createPiecesStore, readMusic, type PieceMusic } from '@/entities/piece'
 import { createTakesStore, type Take } from '@/entities/take'
 import { createMemoryStorage } from '@/shared/lib'
 import { note } from '@/shared/lib/music'
-import { chartStart, deleteSong, makeSong, renameSong, resetVersion, saveMusic } from './index'
+import {
+  chartStart,
+  deleteSong,
+  makeSong,
+  renameSong,
+  resetVersion,
+  saveMusic,
+  SCORE_TEMPLATES,
+  templateOf,
+} from './index'
 
 const fresh = () =>
   createPiecesStore({ storage: createMemoryStorage(), otherTabs: new EventTarget() })
@@ -50,6 +59,43 @@ describe('saveMusic', () => {
 })
 
 describe('the learner’s songs', () => {
+  it('names the template a setup is, and none once it has more parts', () => {
+    expect(templateOf(SCORE_TEMPLATES.leadSheet)).toBe('leadSheet')
+    expect(templateOf({ chordNames: false, melody: false, piano: true, parts: [] })).toBe('piano')
+    expect(templateOf({ chordNames: true, melody: true, piano: true, parts: [] })).toBe(
+      'pianoAndMelody',
+    )
+    expect(templateOf({ ...SCORE_TEMPLATES.piano, parts: ['flute'] })).toBeUndefined()
+  })
+
+  it('starts a lead sheet: the tune’s staff and the chord names, the piano hidden (ADR 0083)', () => {
+    const key = { tonic: note('C'), minor: false }
+    expect(chartStart(key, '4/4', SCORE_TEMPLATES.leadSheet)).toMatchObject({
+      melody: expect.any(String),
+      hidden: ['piano'],
+    })
+    // Never every staff: with no tune nor part, the piano stays.
+    expect(
+      chartStart(key, '4/4', { chordNames: true, melody: false, piano: false, parts: [] }),
+    ).not.toHaveProperty('hidden')
+  })
+
+  it('makes a song’s score as its setup says, every staff there and readable though empty', () => {
+    const store = fresh()
+    const key = { tonic: note('C'), minor: false }
+    const setup = { chordNames: false, melody: true, piano: true, parts: ['cello'] } as const
+    const id = makeSong(store, { title: 'Hymn', key, meter: '6/8', setup })
+    const song = store.getState().songs.find((each) => each.id === id)
+    expect(song).toMatchObject({
+      melody: expect.any(String),
+      voices: [expect.any(String)],
+      instruments: ['voice', 'cello'],
+      hidden: ['chords'],
+    })
+    expect(() => readMusic(song!)).not.toThrow()
+    expect(readMusic(song!).melody).toEqual([])
+  })
+
   it('makes a song of four bars of its key’s tonic chord, under the next number', () => {
     const store = fresh()
     const minor = { tonic: note('E', -1), minor: true }

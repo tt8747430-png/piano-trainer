@@ -1,7 +1,7 @@
-import { SlidersHorizontal } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { ExerciseChoice, Exercise } from '@/entities/exercise'
-import { RoundButton, Sheet, SheetContent, SheetTrigger, ToggleGrid } from '@/shared/ui'
+import { MenuSection, Sheet, SheetContent, ToggleGrid } from '@/shared/ui'
+import { SetupTrigger } from '@/widgets/player-setup'
 import { PlayingToggles } from '@/widgets/practice-player'
 import type { ExerciseChange } from '../model/exercise-search'
 import { ExerciseMusicFields } from './ExerciseMusicFields'
@@ -27,14 +27,16 @@ export function ExerciseSetup({
   const { t } = useTranslation('player')
   return (
     <Sheet>
-      <SheetTrigger render={<RoundButton label={t('setup')} icon={SlidersHorizontal} />} />
+      <SetupTrigger />
       <SheetContent title={t('setup')}>
         <div className="flex flex-col gap-5">
           <ExerciseMusicFields exercise={exercise} choice={choice} onChange={onChange} />
           <ExerciseWayFields exercise={exercise} choice={choice} onChange={onChange} />
-          <ToggleGrid label={t('playing')}>
-            <PlayingToggles swing={swing} onSwing={onSwing} />
-          </ToggleGrid>
+          <MenuSection title={t('playing')}>
+            <ToggleGrid label={t('playing')}>
+              <PlayingToggles swing={swing} onSwing={onSwing} />
+            </ToggleGrid>
+          </MenuSection>
         </div>
       </SheetContent>
     </Sheet>

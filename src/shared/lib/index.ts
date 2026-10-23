@@ -1,3 +1,4 @@
+export { chordLabelSizes } from './chord-label'
 export { cn } from './cn'
 export {
   partsFromParams,
@@ -68,12 +69,35 @@ export {
   typingLetters,
 } from './typing-keys'
 export { useGoBack } from './use-go-back'
+export { READ_DISTANCE, useHiddenWhileReading } from './use-hidden-while-reading'
 export { useShownOnScrollUp } from './use-shown-on-scroll-up'
-export { useMediaQuery } from './use-media-query'
+export { LANDSCAPE_PHONE, useMediaQuery } from './use-media-query'
 export { useWakeLock } from './use-wake-lock'
 export { useElementSize } from './use-element-size'
+export { fitZoom, useFitZoom } from './use-fit-zoom'
 export { toggled } from './toggled'
 export { useScrollMotion } from './use-scroll-motion'
 export { SHORTEST_PRESS_MS, usePresses } from './use-presses'
 export { useViewChange } from './use-view-change'
 export { morph } from './morph'
+export { longestLine } from './longest-line'
+export { breakLine } from './line-breaks'
+export {
+  PAGE,
+  PAGE_STRETCH,
+  paginate,
+  PRINT_SCALE,
+  SHEET_VIEWS,
+  type SheetView,
+} from './sheet-views'
+export {
+  clampZoom,
+  fitWidth,
+  panBy,
+  reveal,
+  zoomAt,
+  ZOOM,
+  ZOOM_STEP,
+  type CanvasView,
+  type Size,
+} from './pan-zoom'

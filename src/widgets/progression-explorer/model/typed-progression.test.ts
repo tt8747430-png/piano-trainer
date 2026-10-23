@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { keyParam, note, numeralText, type Key } from '@/shared/lib/music'
-import { readProgression } from './typed-progression'
+import { keyParam, note, numeralText, parseNumerals, type Key } from '@/shared/lib/music'
+import { readProgression, tonicMinor, typedSearch } from './typed-progression'
 
 const C = { tonic: note('C'), minor: false }
 const read = (text: string, key: Key = C) => {
@@ -35,6 +35,11 @@ describe('readProgression', () => {
     })
   })
 
+  it('keeps a slash chord’s bass as the chord tone it is', () => {
+    expect(read('F C/G')).toEqual({ numerals: ['IV', 'I/5'], key: 'C' })
+    expect(typedSearch('F C/G', C)).toEqual({ key: 'C', p: 'IV-I/5' })
+  })
+
   it('holds the key still while the first chords are typed', () => {
     expect(read('A')).toEqual({ numerals: ['VI'], key: 'C' })
     expect(read('Dm7 Gm9')).toEqual({ numerals: ['ii7', 'v9'], key: 'C' })
@@ -44,5 +49,21 @@ describe('readProgression', () => {
     expect(read('Am Qx')).toBeNull()
     expect(read('Qx')).toBeNull()
     expect(read('')).toBeNull()
+  })
+})
+
+describe('tonicMinor', () => {
+  const minorOf = (line: string) => tonicMinor(parseNumerals(line) ?? [])
+  it('says the mode a line’s own tonic chord is in', () => {
+    expect(minorOf('ii V I')).toBe(false)
+    expect(minorOf('ii7 V7 IMaj7')).toBe(false)
+    expect(minorOf('i VI III VII')).toBe(true)
+    expect(minorOf('iiø7 V7 i')).toBe(true)
+  })
+
+  it('says nothing for a line with no tonic chord, nor for one applied to another', () => {
+    expect(minorOf('ii V')).toBeNull()
+    expect(minorOf('V/V V')).toBeNull()
+    expect(minorOf('bVII IV')).toBeNull()
   })
 })

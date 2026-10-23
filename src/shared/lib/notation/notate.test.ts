@@ -27,6 +27,59 @@ const shape = (events: readonly ScoreEvent[]) =>
 const notesOf = (event: ScoreEvent | undefined) => (event?.kind === 'notes' ? event.notes : [])
 
 describe('notate', () => {
+  it('writes the tune on a staff of its own over the grand staff where the music asks', () => {
+    const notes = [n(72, note('C'), 'melody', 0, 96), n(60, note('C'), 'rh', 0, 96)]
+    const own = notate(music(notes, { melodyStaff: true }))
+    expect(own.staves).toEqual(['melody', 'treble', 'bass'])
+    const [bar] = own.measures
+    expect(bar?.staves.melody.flatMap((voice) => voice.events.flatMap(notesOf))).toMatchObject([
+      { midi: 72 },
+    ])
+    expect(bar?.staves.treble).toHaveLength(1)
+    const shared = notate(music(notes))
+    expect(shared.staves).toEqual(['treble', 'bass'])
+    expect(shared.measures[0]?.staves.treble).toHaveLength(2)
+    expect(shared.measures[0]?.staves.melody).toEqual([])
+  })
+
+  it('writes each more voice on a staff of its own, under the tune’s and over the piano’s', () => {
+    const notes = [
+      n(72, note('C'), 'melody', 0, 96),
+      n(67, note('G'), 'melody', 0, 96, { voice: 'voice2' }),
+      n(64, note('E'), 'melody', 0, 96, { voice: 'voice3' }),
+      n(60, note('C'), 'rh', 0, 96),
+    ]
+    const score = notate(music(notes, { melodyStaff: true, voiceStaves: ['voice2', 'voice3'] }))
+    expect(score.staves).toEqual(['melody', 'voice2', 'voice3', 'treble', 'bass'])
+    const [bar] = score.measures
+    const keys = (staff: 'melody' | 'voice2' | 'voice3' | 'treble') =>
+      bar?.staves[staff].flatMap((voice) => voice.events.flatMap(notesOf)).map((w) => w.midi)
+    expect([keys('melody'), keys('voice2'), keys('voice3'), keys('treble')]).toEqual([
+      [72],
+      [67],
+      [64],
+      [60],
+    ])
+    expect(bar?.staves.voice4).toEqual([])
+  })
+
+  it('keeps each bar’s barlines: a repeat, its ending, a double or final barline', () => {
+    const score = notate(
+      music([n(60, note('C'), 'rh', 0, 96)], {
+        bars: [
+          { startTick: 0, beats: 4, repeatStart: true, ending: 1, barline: 'repeat' },
+          { startTick: 96, beats: 4, barline: 'final' },
+        ],
+      }),
+    )
+    expect(
+      score.measures.map(({ repeatStart, ending, barline }) => [repeatStart, ending, barline]),
+    ).toEqual([
+      [true, 1, 'repeat'],
+      [undefined, undefined, 'final'],
+    ])
+  })
+
   it('writes a pickup under the meter’s signature, as a short first bar', () => {
     const score = notate(
       music([n(60, note('C'), 'rh', 0, 24), n(64, note('E'), 'rh', 24, 96)], {
@@ -167,6 +220,33 @@ describe('notate', () => {
     expect(accidentals).toEqual([-1, null])
   })
 
+  it('puts a note’s marks on the piece it starts, its slur’s end on the piece it ends', () => {
+    const beat = TICKS_PER_BEAT
+    const marks = {
+      articulations: ['accent' as const],
+      slurStart: true as const,
+      slurEnd: true as const,
+    }
+    // A note from beat 2 to beat 4 is written as two tied quarters (spec §2.4).
+    const score = notate(music([n(72, note('C'), 'rh', beat, 2 * beat, { marks })]))
+    const events = score.measures[0]?.staves.treble[0]?.events.filter((e) => e.kind === 'notes')
+    expect(events?.map((event) => event.kind === 'notes' && event.marks)).toEqual([
+      { articulations: ['accent'], slurStart: true },
+      { slurEnd: true },
+    ])
+  })
+
+  it('writes a note under an 8va line an octave lower than it sounds, every piece marked', () => {
+    const score = notate(
+      music([n(84, note('C'), 'rh', 0, 4 * TICKS_PER_BEAT, { marks: { octave: '8va' } })]),
+    )
+    const [event] = score.measures[0]?.staves.treble[0]?.events ?? []
+    expect(event?.kind === 'notes' && [event.notes[0]?.octave, event.notes[0]?.midi]).toEqual([
+      5, 84,
+    ])
+    expect(event?.kind === 'notes' && event.marks).toEqual({ octave: '8va' })
+  })
+
   it('prints the accidentals the key and the bar do not say', () => {
     const score = notate(
       music(
@@ -257,5 +337,23 @@ describe('notate with a blank staff', () => {
       { events: [expect.objectContaining({ kind: 'rest', tick: 0, hidden: true })], stem: 'auto' },
     ])
     expect(measure?.staves.bass[0]?.events).toHaveLength(1)
+  })
+})
+
+describe('notate a lead sheet and a pattern’s bars (ADR 0083)', () => {
+  it('writes no piano where the music leaves it out: the tune’s staff alone', () => {
+    const notes = [n(72, note('C'), 'melody', 0, 96), n(60, note('C'), 'rh', 0, 96)]
+    const lead = notate(music(notes, { melodyStaff: true, piano: false }))
+    expect(lead.staves).toEqual(['melody'])
+    expect(lead.measures[0]?.staves.treble).toEqual([])
+  })
+
+  it('carries the staves a bar’s pattern plays to its measure', () => {
+    const score = notate(
+      music([n(48, note('C'), 'lh', 0, 96)], {
+        bars: [{ startTick: 0, beats: 4, pattern: ['bass'] }],
+      }),
+    )
+    expect(score.measures[0]?.pattern).toEqual(['bass'])
   })
 })

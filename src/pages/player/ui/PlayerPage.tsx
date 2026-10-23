@@ -1,10 +1,17 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
+import { PencilLine } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { entryTitles, useRepertoire, type Piece } from '@/entities/piece'
+import {
+  entryTitles,
+  isDegreePiece,
+  isLeadSheet,
+  useRepertoire,
+  type Piece,
+} from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
 import { isCompound } from '@/shared/lib/music'
-import { ButtonLink, NotFound } from '@/shared/ui'
+import { ButtonLink, NotFound, RoundLink } from '@/shared/ui'
 import { useClose } from '../model/use-close'
 import type { PlayerSearch } from '../model/player-search'
 import { usePlayer } from '../model/use-player'
@@ -12,6 +19,7 @@ import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
 
 function PiecePlayer({ piece }: { piece: Piece }) {
+  const { t } = useTranslation('player')
   const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
   const close = useClose(piece)
@@ -30,6 +38,17 @@ function PiecePlayer({ piece }: { piece: Piece }) {
       player={player}
       performance={performance}
       headings={headings}
+      // A song that hides its piano is a lead sheet (ADR 0083).
+      piano={!isLeadSheet(piece)}
+      edit={
+        isDegreePiece(piece) ? null : (
+          <RoundLink
+            label={t('editScore')}
+            icon={PencilLine}
+            render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
+          />
+        )
+      }
       setup={
         <PieceSetup
           piece={piece}

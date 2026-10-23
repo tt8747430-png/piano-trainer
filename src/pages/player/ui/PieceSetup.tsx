@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next'
-import { choosableChordSize, isOwnKey, pieceKey, type Piece } from '@/entities/piece'
+import { choosableChordSize, isLeadSheet, isOwnKey, pieceKey, type Piece } from '@/entities/piece'
 import type { PracticeChoice } from '@/features/practice'
 import type { PatternFit } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
 import { noteParam, writtenKeyAccidentals } from '@/shared/lib/music'
-import { ChordSizeField, Labelled, NoteChoice, ToggleGrid } from '@/shared/ui'
+import { ChordSizeField, Labelled, NoteChoice, MenuSection, ToggleGrid } from '@/shared/ui'
 import {
   MelodyToggle,
   PatternCard,
@@ -14,7 +14,10 @@ import {
 } from '@/widgets/player-setup'
 import { PlayingToggles } from '@/widgets/practice-player'
 
-/** A piece's Setup: its key, the pattern and figures, its chord size, melody and recording where it has them, and how it plays. */
+/**
+ * A piece's Setup: its key, the pattern and figures, its chord size, melody and recording where it
+ * has them, and how it plays; at its foot the way into the score editor, whose Close comes back here.
+ */
 export function PieceSetup({
   piece,
   choice,
@@ -55,13 +58,16 @@ export function PieceSetup({
         </Labelled>
       ) : null}
       <PatternCard />
-      <ToggleGrid label={t('playing')}>
-        <PlayingToggles swing={swing} onSwing={onSwing} />
-        {fit.melody ? <MelodyToggle /> : null}
-        {piece.recording ? (
-          <RecordingToggle ownKey={isOwnKey(piece, choice.tonic) ? null : keyName(own)} />
-        ) : null}
-      </ToggleGrid>
+      <MenuSection title={t('playing')}>
+        <ToggleGrid label={t('playing')}>
+          <PlayingToggles swing={swing} onSwing={onSwing} />
+          {/* A lead sheet's tune is always heard (ADR 0083). */}
+          {fit.melody && !isLeadSheet(piece) ? <MelodyToggle /> : null}
+          {piece.recording ? (
+            <RecordingToggle ownKey={isOwnKey(piece, choice.tonic) ? null : keyName(own)} />
+          ) : null}
+        </ToggleGrid>
+      </MenuSection>
     </PlayerSetup>
   )
 }

@@ -7,17 +7,20 @@ const NOTE_VALUES: readonly NoteValue[] = [1, 2, 4, 8, 16, 32]
 const eighthTicks = (meter: Meter): Tick =>
   isCompound(meter) ? TICKS_PER_BEAT / 3 : TICKS_PER_BEAT / 2
 
+/** A value's length in quarters of it, with its dots: plain, dotted, double dotted. */
+const DOTTED = [4, 6, 7] as const
+
 /**
- * A value's length in the meter's ticks: eighths in it, times a dot's 3/2 and a triplet's 2/3,
+ * A value's length in the meter's ticks: eighths in it, times its dots' 3/2 or 7/4 and a triplet's 2/3,
  * worked out in whole numbers and divided once, so a value that falls between ticks is never
  * rounded into one.
  */
 export const ticksOf = (duration: Duration, meter: Meter): number =>
-  (8 * eighthTicks(meter) * (duration.dots === 1 ? 3 : 2) * (duration.triplet ? 2 : 3)) /
-  (duration.value * 6)
+  (8 * eighthTicks(meter) * DOTTED[duration.dots] * (duration.triplet ? 2 : 3)) /
+  (duration.value * 12)
 
 /**
- * Every value the meter writes in whole ticks, longest first: plain and dotted; or, in a triplet
+ * Every value the meter writes in whole ticks, longest first: plain, dotted and double dotted; or, in a triplet
  * beat, the triplets (x/4 only).
  */
 export function valuesOf(meter: Meter, triplet: boolean): Duration[] {
@@ -26,6 +29,7 @@ export function valuesOf(meter: Meter, triplet: boolean): Duration[] {
     triplet
       ? [{ value, dots: 0, triplet: true }]
       : [
+          { value, dots: 2, triplet: false },
           { value, dots: 1, triplet: false },
           { value, dots: 0, triplet: false },
         ],

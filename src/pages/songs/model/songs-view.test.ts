@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest'
+import { pieceStage } from '@/entities/course'
 import { COLLECTIONS } from '@/entities/piece'
-import { songsView } from './songs-view'
+import { songsView, stagesIn } from './songs-view'
 
 const ids = (groups: ReturnType<typeof songsView>) =>
   groups.flatMap((g) => g.entries.map((e) => e.id))
-const ALL = { q: '', collection: 'all', withChords: false } as const
+const ALL = { q: '', collection: 'all', withChords: false, stage: 'any' } as const
 
 describe('songsView', () => {
   it('shows every entry, by collection, when nothing filters', () => {
@@ -34,5 +35,28 @@ describe('songsView', () => {
     expect(every.some((entry) => entry.kind === 'listing')).toBe(true)
     expect(playable.some((entry) => entry.kind === 'listing')).toBe(false)
     expect(playable).toHaveLength(every.filter((entry) => entry.kind !== 'listing').length)
+  })
+
+  it('keeps the songs of one stage, as their courses place them (ADR 0005)', () => {
+    const every = songsView(COLLECTIONS, ALL).flatMap((g) => g.entries)
+    for (const stage of stagesIn(COLLECTIONS, ALL)) {
+      const kept = songsView(COLLECTIONS, { ...ALL, stage }).flatMap((g) => g.entries)
+      expect(kept.length).toBeGreaterThan(0)
+      expect(kept.every((entry) => pieceStage(entry.id) === stage)).toBe(true)
+      expect(kept).toHaveLength(every.filter((entry) => pieceStage(entry.id) === stage).length)
+    }
+  })
+
+  it('offers only the stages the shelves shown hold, whatever is searched or chosen', () => {
+    const all = stagesIn(COLLECTIONS, ALL)
+    expect(all.length).toBeGreaterThan(0)
+    // Each one offered keeps a song.
+    for (const stage of all)
+      expect(songsView(COLLECTIONS, { ...ALL, stage }).length).toBeGreaterThan(0)
+    expect(
+      stagesIn(COLLECTIONS, { ...ALL, stage: 'beginner', q: 'zzzz', withChords: true }),
+    ).toEqual(all)
+    // A shelf whose songs no course places offers none.
+    expect(stagesIn([{ id: 'none', entries: [] }], ALL)).toEqual([])
   })
 })

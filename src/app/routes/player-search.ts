@@ -223,7 +223,7 @@ export const EXERCISE_KEPT: readonly (keyof ExerciseSearch & string)[] = [
   'speedTraining',
 ]
 
-// The score editor: whether its takes are open.
+// The score editor: whether its takes are open (its layout is a setting, `editorLayout`).
 export const EDIT_DEFAULTS: EditSearch = { record: false }
 const readEditSearch = (raw: Raw): EditSearch => ({ record: raw.record === true })
 export const editSearch = routeSearch(readEditSearch, EDIT_DEFAULTS)

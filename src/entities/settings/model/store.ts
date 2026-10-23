@@ -1,8 +1,11 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isLocale } from '@/shared/i18n/locale'
+import { STAVES } from '@/shared/lib/notation'
 import {
   createSavedStore,
+  isOneOf,
   railControls,
+  SHEET_VIEWS,
   readKeyList,
   savedObject,
   type SavingOptions,
@@ -12,6 +15,7 @@ import {
   CHORD_KEYS_MAX,
   DEFAULT_CHORD_FINDER,
   DEFAULT_MIDI,
+  DEFAULT_SCORE_VIEW,
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
@@ -32,6 +36,9 @@ import {
   isOctaveShift,
   isPedalWay,
   isSidebar,
+  isPaletteSide,
+  DEFAULT_PALETTE_SIDE,
+  DEFAULT_EDITOR_LAYOUT,
   isSwipe,
   isTheme,
   isTitleSize,
@@ -41,6 +48,7 @@ import {
   type MidiSettings,
   type PracticeToggles,
   type RecorderSettings,
+  type ScoreViewSettings,
   type SettingsState,
   type FloatingSettings,
   type TrainerSettings,
@@ -48,7 +56,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 2
+export const SETTINGS_VERSION = 3
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -74,8 +82,12 @@ export function createSettingsStore({
         keyboard: defaultKeyboard(finePointer),
         recorder: DEFAULT_RECORDER,
         sidebar: DEFAULT_SIDEBAR,
+        paletteSide: DEFAULT_PALETTE_SIDE,
+        editorLayout: DEFAULT_EDITOR_LAYOUT,
+        paletteFolded: false,
         midi: DEFAULT_MIDI,
         chordFinder: DEFAULT_CHORD_FINDER,
+        scoreView: DEFAULT_SCORE_VIEW,
         foldedSections: [],
       },
       read: sanitize,
@@ -162,6 +174,25 @@ function chordFinderSettings(value: unknown): ChordFinderSettings {
   }
 }
 
+const isSheetView = isOneOf(SHEET_VIEWS)
+const isStaff = isOneOf(STAVES)
+
+/** The Player's view: each switch and the layout as saved where still valid, the staves hidden each once. */
+function scoreViewSettings(value: unknown): ScoreViewSettings {
+  const saved = savedObject<ScoreViewSettings>(value)
+  const switched = (key: 'notation' | 'chordNames' | 'melodyStaff' | 'keys') =>
+    typeof saved[key] === 'boolean' ? saved[key] : DEFAULT_SCORE_VIEW[key]
+  const hidden: unknown = saved.hidden
+  return {
+    layout: isSheetView(saved.layout) ? saved.layout : DEFAULT_SCORE_VIEW.layout,
+    notation: switched('notation'),
+    chordNames: switched('chordNames'),
+    melodyStaff: switched('melodyStaff'),
+    keys: switched('keys'),
+    hidden: Array.isArray(hidden) ? [...new Set(hidden.filter(isStaff))] : [],
+  }
+}
+
 /** The sections folded: each an id a section could have, once; the newest kept. */
 function foldedSections(value: unknown): string[] {
   if (!Array.isArray(value)) return []
@@ -183,6 +214,8 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
     typing: typeof saved.typing === 'boolean' ? saved.typing : current.typing,
     dock: isKeyDock(saved.dock) ? saved.dock : current.dock,
     folded: typeof saved.folded === 'boolean' ? saved.folded : current.folded,
+    foldedLandscape:
+      typeof saved.foldedLandscape === 'boolean' ? saved.foldedLandscape : current.foldedLandscape,
     keyLength: isKeyLength(saved.keyLength) ? saved.keyLength : current.keyLength,
     railControls: railControls(saved.railControls, current.railControls),
   }
@@ -205,8 +238,13 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),
     recorder: recorderSettings(saved.recorder),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,
+    paletteSide: isPaletteSide(saved.paletteSide) ? saved.paletteSide : current.paletteSide,
+    editorLayout: isSheetView(saved.editorLayout) ? saved.editorLayout : current.editorLayout,
+    paletteFolded:
+      typeof saved.paletteFolded === 'boolean' ? saved.paletteFolded : current.paletteFolded,
     midi: midiSettings(saved.midi),
     chordFinder: chordFinderSettings(saved.chordFinder),
+    scoreView: scoreViewSettings(saved.scoreView),
     foldedSections: foldedSections(saved.foldedSections),
   }
 }

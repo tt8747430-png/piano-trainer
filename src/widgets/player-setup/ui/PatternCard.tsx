@@ -109,7 +109,8 @@ export function PatternCard() {
             <span className="block truncate text-lg font-semibold">{name}</span>
             <span
               className={cn(
-                'block truncate text-sm',
+                // Its idea in two lines at most: a phone reads it whole, never cut mid-word.
+                'line-clamp-2 text-sm text-pretty',
                 changed ? 'font-semibold text-foreground' : 'text-muted-foreground',
               )}
             >

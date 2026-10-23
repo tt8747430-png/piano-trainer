@@ -1,20 +1,74 @@
-@import '@vexflow-fonts/bravura/index.css';
-
-/* VexFlow draws in currentColor (engrave.ts): the notes take the ink, the staff's lines and barlines
-   the control line. The tokens themselves: theme.css maps them to utilities `inline`, so no
+/* Verovio draws in currentColor (ADR 0078): the notes take the ink, the staff's lines and barlines the
+   control line. The tokens themselves: theme.css maps them to utilities `inline`, so no
    `--color-*` variable exists at runtime. */
 [data-slot='score'] {
   color: var(--foreground);
 }
-[data-slot='score'] :is(.vf-stave, .vf-stavebarline, .vf-staveconnector) {
+[data-slot='score'] svg.definition-scale {
+  color: inherit;
+}
+/* A line ends on its staff's last x, where Verovio centres the closing barline: half its stroke lies
+   past the page, so nothing of the drawing is clipped at its edges (as a printed system's last barline). */
+[data-slot='score'] svg {
+  overflow: visible;
+}
+/* Verovio sets no fill: its glyphs (uses of paths), slurs, ties, beams and braces would be black. Each
+   takes the ink of what it marks, so a chosen note's head turns with its stem, and dark mode is light.
+   Not a polyline: a hairpin's and an octave line's say `fill="none"`, which CSS would override. */
+[data-slot='score'] :is(use, path, polygon, rect, ellipse) {
+  fill: currentColor;
+}
+[data-slot='score'] :is(g.staff > path, g.barLine, g.ledgerLines) {
   color: var(--input);
 }
+/* The bars' numbers are the sheet's own labels. */
+[data-slot='score'] g.mNum {
+  display: none;
+}
+/* A blank staff's rests hold its bar's time and its onsets' places, and are not written. */
+[data-slot='score'] g.rest.hidden {
+  visibility: hidden;
+}
 /* The staff of the hand not heard or practised, in soft ink, without engraving again. */
-[data-slot='score'][data-muted='treble'] .vf-staff-treble,
-[data-slot='score'][data-muted='bass'] .vf-staff-bass {
+[data-slot='score'][data-muted='treble'] g.staff[data-staff='treble'],
+[data-slot='score'][data-muted='bass'] g.staff[data-staff='bass'] {
   color: var(--muted-foreground);
 }
+/* A hand's bar the pattern plays (ADR 0083): its notes shown in soft ink, not written, never marked
+   chosen. Its lines and barlines keep their own colour. */
+[data-slot='score'] g.staff.pattern,
+[data-slot='score'] g.staff.pattern g.note-chosen {
+  color: color-mix(in oklab, var(--muted-foreground) 70%, var(--background));
+}
+/* The line's clef, key and time at the head of such a bar stay in ink. */
+[data-slot='score'] g.staff.pattern :is(g.clef, g.keySig, g.meterSig) {
+  color: var(--foreground);
+}
 /* The notes chosen in the score editor: the focus colour, as a notation app marks a selection. */
-[data-slot='score'] .vf-selected {
+[data-slot='score'] g.note-chosen {
   color: var(--ring);
+}
+/* A named head (Named notes): a black note's in ink, its letter in the page's colour; an open one's
+   ring in ink round the page's colour, its letter in ink. */
+[data-slot='score'] g.note-name circle {
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 18px;
+}
+[data-slot='score'] g.note-name text {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+  fill: var(--background);
+}
+[data-slot='score'] g.note-name.open circle {
+  fill: var(--background);
+}
+[data-slot='score'] g.note-name.open text {
+  fill: currentColor;
+}
+/* Chord symbols and words in the app's faces. */
+[data-slot='score'] :is(g.harm, g.dir, g.tempo) text {
+  font-family: var(--font-display);
 }

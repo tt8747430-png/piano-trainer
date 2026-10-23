@@ -33,7 +33,7 @@ describe('Practice → Intervals', () => {
     ])
     const third = screen.getByRole('article', { name: 'Minor third' })
     expect(third).toHaveTextContent('m3')
-    expect(third).toHaveTextContent('Semitones: 3 · Tones: 1½')
+    expect(third).toHaveTextContent('Semitones: 3 · Size: 1½ tones')
     expect(third).toHaveTextContent('Imperfect consonance')
     expect(screen.getByRole('article', { name: 'Tritone' })).toHaveTextContent('A4 · d5')
     const compound = screen.getByRole('region', { name: 'Past the octave' })
@@ -42,6 +42,35 @@ describe('Practice → Intervals', () => {
     expect(within(compound).getByRole('article', { name: 'Augmented ninth' })).toHaveTextContent(
       'In chords: #9',
     )
+  })
+
+  it('says each size in tones as it is said: a semitone, one tone, tones', async () => {
+    await renderApp('/practice/intervals')
+    expect(await screen.findByRole('article', { name: 'Minor second' })).toHaveTextContent(
+      'Semitones: 1 · Size: a semitone',
+    )
+    expect(screen.getByRole('article', { name: 'Major second' })).toHaveTextContent(
+      'Semitones: 2 · Size: 1 tone ·',
+    )
+    expect(screen.getByRole('article', { name: 'Major third' })).toHaveTextContent(
+      'Semitones: 4 · Size: 2 tones',
+    )
+  })
+
+  it('says each size in tones in Russian', async () => {
+    await renderApp('/practice/intervals', { locale: 'ru' })
+    const simple = await screen.findByRole('region', { name: 'В пределах октавы' })
+    const sizes = within(simple)
+      .getAllByRole('article')
+      .map((card) => /Величина: [^·]+/.exec(card.textContent)?.[0].trim())
+    expect(sizes.slice(1, 7)).toEqual([
+      'Величина: полутон',
+      'Величина: 1 тон',
+      'Величина: 1½ тона',
+      'Величина: 2 тона',
+      'Величина: 2½ тона',
+      'Величина: 3 тона',
+    ])
   })
 
   it('plays an interval up, down and together, and shows it on the keys', async () => {

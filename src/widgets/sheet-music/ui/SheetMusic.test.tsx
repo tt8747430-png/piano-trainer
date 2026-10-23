@@ -1,15 +1,22 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import type { ComponentProps } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { TWO_BARS } from '@/features/practice/testing/performances'
 import type { BarRange } from '@/features/practice'
 import { stubBox, stubScrolling } from '@/shared/test/layout'
+import { HOLD_MS } from '@/shared/ui/score'
 import { SheetMusic } from './SheetMusic'
 
 function renderSheet({
   current = 0,
   loop = null,
-}: { current?: number; loop?: BarRange | null } = {}) {
+  shown,
+}: {
+  current?: number
+  loop?: BarRange | null
+  shown?: ComponentProps<typeof SheetMusic>['view']
+} = {}) {
   const onJump = vi.fn()
   const onLoopChange = vi.fn()
   const view = render(
@@ -24,12 +31,25 @@ function renderSheet({
       muted={undefined}
       onJump={onJump}
       onLoopChange={onLoopChange}
+      {...(shown ? { view: shown } : {})}
     />,
   )
   return { ...view, onJump, onLoopChange }
 }
 
 describe('SheetMusic', () => {
+  it('lays the score out in the chart’s lines, each with its bars, the chord names hidden where asked', async () => {
+    renderSheet({
+      current: 5,
+      shown: { layout: 'scroll', chordNames: false, melodyStaff: true, hidden: ['bass'] },
+    })
+    expect(await screen.findByRole('button', { name: 'Bar 2: G' })).toHaveAttribute(
+      'aria-current',
+      'step',
+    )
+    expect(screen.queryByText('G', { selector: 'span' })).not.toBeInTheDocument()
+  })
+
   it('names each bar by its chords, the cursor’s marked', async () => {
     renderSheet({ current: 5 })
     expect(await screen.findByRole('region', { name: 'Sheet music' })).toBeInTheDocument()
@@ -61,6 +81,49 @@ describe('SheetMusic', () => {
     await user.keyboard('{ArrowRight}')
     expect(onLoopChange).toHaveBeenCalledTimes(1)
   })
+
+  it('chooses exactly the bars from the cursor’s to the one Shift-clicked as the loop, jumping nowhere', async () => {
+    const { onLoopChange, onJump } = renderSheet({ current: 0 })
+    const second = await screen.findByRole('button', { name: 'Bar 2: G' })
+    fireEvent.click(second, { detail: 1, shiftKey: true })
+    expect(onLoopChange).toHaveBeenLastCalledWith({ first: 0, last: 1 })
+    expect(onJump).not.toHaveBeenCalled()
+  })
+
+  it('chooses bars as the loop by a finger held on one and dragged to another', async () => {
+    const { onLoopChange } = renderSheet({ current: 0 })
+    const first = await screen.findByRole('button', { name: 'Bar 1: C' })
+    const second = screen.getByRole('button', { name: 'Bar 2: G' })
+    vi.useFakeTimers()
+    try {
+      const touch = { pointerId: 1, pointerType: 'touch', clientX: 10, clientY: 10 }
+      fireEvent.pointerDown(first, touch)
+      act(() => vi.advanceTimersByTime(HOLD_MS))
+      expect(onLoopChange).toHaveBeenLastCalledWith({ first: 0, last: 0 })
+      document.elementFromPoint = () => second
+      fireEvent.pointerMove(first, { ...touch, clientX: 300 })
+      expect(onLoopChange).toHaveBeenLastCalledWith({ first: 0, last: 1 })
+      fireEvent.pointerUp(first, touch)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it.each(['horizontal', 'scroll', 'pages'] as const)(
+    'draws the cursor and the loop as the editor draws its caret and bars chosen, %s',
+    async (layout) => {
+      renderSheet({
+        current: 5,
+        loop: { first: 1, last: 1 },
+        shown: { layout, chordNames: true, melodyStaff: false, hidden: [] },
+      })
+      await screen.findByRole('button', { name: 'Bar 2: G' })
+      expect(document.querySelectorAll('[data-mark="note"]')).toHaveLength(1)
+      expect(document.querySelectorAll('[data-mark="range"]')).toHaveLength(1)
+      // The loop's notes in the selection's colour, as the editor's chosen notes are.
+      await waitFor(() => expect(document.querySelector('.note-chosen')).toBeInTheDocument())
+    },
+  )
 
   it('scrolls to keep the cursor in sight', async () => {
     const { scrolls } = stubScrolling({ clientWidth: 100, scrollWidth: 2000 })

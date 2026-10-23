@@ -27,7 +27,7 @@ export function ContinueAction() {
     <FloatingActions>
       <ButtonLink
         aria-label={name}
-        className="h-14 max-w-[min(20rem,calc(100vw-2*var(--gutter)))] gap-3 rounded-full pr-6 pl-2 shadow-lg shadow-foreground/15"
+        className="h-14 max-w-[min(20rem,calc(100vw-2*var(--gutter)))] gap-3 rounded-full pr-6 pl-2 elevation-2 transition-[scale,box-shadow,filter] duration-150 ease-out hover:elevation-3 active:scale-96 active:elevation-1"
         render={
           step.kind === 'piece' ? (
             <PieceLink entry={pieceById(step.pieceId) ?? { id: step.pieceId, kind: 'song' }} />

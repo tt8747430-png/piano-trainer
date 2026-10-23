@@ -12,6 +12,8 @@ const STEPS: Readonly<Record<string, number>> = {
 export function LoopGrip({
   label,
   x,
+  top,
+  height,
   bar,
   min,
   max,
@@ -20,6 +22,9 @@ export function LoopGrip({
 }: {
   label: string
   x: number
+  /** The loop's box, which the grip runs down the edge of. */
+  top: number
+  height: number
   bar: number
   min: number
   max: number
@@ -55,17 +60,23 @@ export function LoopGrip({
         move(to)
       }}
       onPointerDown={(event) => event.currentTarget.setPointerCapture(event.pointerId)}
+      data-grip
       onPointerMove={(event) => {
         if (!event.currentTarget.hasPointerCapture(event.pointerId)) return
-        const box = event.currentTarget.parentElement?.getBoundingClientRect()
-        if (box) move(barAt(measures, event.clientX - box.left))
+        const parent = event.currentTarget.parentElement
+        const box = parent?.getBoundingClientRect()
+        if (!parent || !box) return
+        // In the layout's px, however the sheet is zoomed on the screen (a page canvas's zoom).
+        const zoom = parent.offsetWidth > 0 && box.width > 0 ? box.width / parent.offsetWidth : 1
+        move(barAt(measures, (event.clientX - box.left) / zoom))
       }}
-      className="group absolute inset-y-0 z-30 flex w-11 -translate-x-1/2 cursor-ew-resize touch-none justify-center rounded-md"
-      style={{ left: x }}
+      className="group absolute z-30 flex w-11 -translate-x-1/2 cursor-ew-resize touch-none justify-center rounded-md"
+      style={{ left: x, top, height }}
     >
+      {/* In the selection's ring colour, down its box's edge (ADR 0082). */}
       <span
         aria-hidden
-        className="h-full w-1 rounded-full bg-selected transition-transform duration-200 ease-out group-hover:scale-x-150"
+        className="h-full w-1 rounded-full bg-ring transition-transform duration-200 ease-out group-hover:scale-x-150"
       />
     </div>
   )

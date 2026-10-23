@@ -1,6 +1,7 @@
 import type { Melody } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
 import { pitchText } from './music'
+import { writeMarks } from './note-marks'
 import { beatsText } from './write-chart'
 
 /** A bar's place on the timeline. */
@@ -33,8 +34,17 @@ export function writeMelody(melody: Melody, bars: readonly BarSpan[]): string | 
     if (n.startTick < running)
       throw new RangeError(`A tune's note at ${n.startTick} starts under another`)
     for (const rest of rests(running, n.startTick, bars)) at(rest.at, `r/${beatsText(rest.ticks)}`)
-    at(n.startTick, `${pitchText(n)}/${beatsText(n.durationTicks)}`)
+    const marks = n.marks ? writeMarks(n.marks) : ''
+    at(n.startTick, `${pitchText(n)}/${beatsText(n.durationTicks)}${marks ? `[${marks}]` : ''}`)
     running = n.startTick + n.durationTicks
   }
   return tokens.join(' ')
+}
+
+/**
+ * A staff the score keeps with nothing written on it yet (ADR 0072): its first bar's rest, so the
+ * staff is saved and read back as there.
+ */
+export function emptyLine(bars: readonly BarSpan[]): string {
+  return `r/${beatsText(bars[0]?.ticks ?? 0)}`
 }

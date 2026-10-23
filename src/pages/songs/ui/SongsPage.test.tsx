@@ -36,10 +36,10 @@ describe('Songs', () => {
     expect(box).toHaveValue('ду')
   })
 
-  it('says so when nothing matches, and clears the filters', async () => {
+  it('names the search that found nothing, and clears the filters', async () => {
     const user = userEvent.setup()
     await renderApp('/songs?q=zzzz')
-    expect(await screen.findByText('No songs match.')).toBeInTheDocument()
+    expect(await screen.findByText('No songs match “zzzz”.')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Clear filters' }))
     expect(
       await screen.findByRole('heading', { level: 2, name: '«Боже, спасибо»' }),
@@ -109,6 +109,45 @@ describe('Songs: your own', () => {
     ])
   })
 
+  it('makes a lead sheet, the melody and chords alone, the piano hidden (ADR 0083)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore, router } = await renderApp('/songs')
+    await user.click(await screen.findByRole('button', { name: 'New song' }))
+    await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Hymn')
+    await user.click(screen.getByRole('button', { name: 'Customize' }))
+    const score = await screen.findByRole('dialog', { name: 'Score' })
+    await user.click(within(score).getByRole('radio', { name: /^Melody and chords/ }))
+    expect(within(score).getByRole('switch', { name: /^Piano/ })).not.toBeChecked()
+    await user.click(within(score).getByRole('button', { name: 'Done' }))
+    expect(await screen.findByText('Chord names · Melody')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Make' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
+    expect(piecesStore.getState().songs[0]).toMatchObject({ melody: 'r/4', hidden: ['piano'] })
+  })
+
+  it('makes a song with the score customized in its own sheet: piano, melody and a cello', async () => {
+    const user = userEvent.setup()
+    const { piecesStore, router } = await renderApp('/songs')
+    await user.click(await screen.findByRole('button', { name: 'New song' }))
+    await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Hymn')
+    expect(screen.getByText('Chord names · Piano')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Customize' }))
+    const score = await screen.findByRole('dialog', { name: 'Score' })
+    await user.click(within(score).getByRole('radio', { name: /^Piano with melody/ }))
+    await user.click(within(score).getByRole('button', { name: 'Add a part' }))
+    await user.click(within(score).getByRole('combobox', { name: 'Part 1' }))
+    await user.click(await screen.findByRole('option', { name: 'Cello' }))
+    await user.click(within(score).getByRole('button', { name: 'Done' }))
+    expect(await screen.findByText('Chord names · Melody · Cello · Piano')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Make' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
+    expect(piecesStore.getState().songs[0]).toMatchObject({
+      melody: 'r/4',
+      voices: ['r/4'],
+      instruments: ['voice', 'cello'],
+    })
+  })
+
   it('lists your songs first, and chooses them from their tab', async () => {
     const { router } = await renderApp('/songs', { storage: saved({ songs: [SONG], nextSong: 2 }) })
     const headings = await screen.findAllByRole('heading', { level: 2 })
@@ -126,7 +165,7 @@ describe('Songs: your own', () => {
     await renderApp('/songs?collection=mine')
     const empty = (await screen.findByText('No songs of your own yet')).closest('[data-slot=empty]')
     if (!(empty instanceof HTMLElement)) throw new Error('an empty shelf says so')
-    expect(screen.queryByText('No songs match.')).not.toBeInTheDocument()
+    expect(screen.queryByText(/No songs match/)).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Clear filters' })).not.toBeInTheDocument()
     expect(screen.getByRole('tab', { name: 'Your songs' })).toHaveAttribute('aria-selected', 'true')
     await user.click(within(empty).getByRole('button', { name: 'New song' }))
@@ -159,5 +198,42 @@ describe('Songs: your own', () => {
     await user.click(screen.getByRole('button', { name: 'With chords' }))
     expect(router.state.location.search).toMatchObject({ withChords: true })
     expect(screen.queryByText('No chart yet')).not.toBeInTheDocument()
+  })
+
+  it('keeps the songs of one stage, chosen from Level and kept in the URL', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/songs')
+    await user.click(await screen.findByRole('combobox', { name: /^Level/ }))
+    await user.click(await screen.findByRole('option', { name: 'Beginner' }))
+    expect(router.state.location.search).toMatchObject({ stage: 'beginner' })
+    expect(await screen.findByRole('link', { name: /Hot Cross Buns/ })).toBeInTheDocument()
+    // A listing belongs to no course: no stage keeps it.
+    expect(screen.queryByText('No chart yet')).not.toBeInTheDocument()
+  })
+
+  it('offers no stage where no song has one, and says which stage found nothing', async () => {
+    await renderApp('/songs?collection=mine', {
+      storage: createMemoryStorage(),
+    })
+    expect(await screen.findByText('No songs of your own yet')).toBeInTheDocument()
+    // Your songs are in no course: Level is not offered over them.
+    expect(screen.queryByRole('combobox', { name: /^Level/ })).not.toBeInTheDocument()
+    cleanup()
+    await renderApp('/songs?collection=hymns&stage=advanced')
+    expect(await screen.findByText('No songs here at the “Advanced” level.')).toBeInTheDocument()
+    cleanup()
+    await renderApp('/songs?q=zzzz&stage=beginner')
+    expect(
+      await screen.findByText('No songs match “zzzz” at the “Beginner” level.'),
+    ).toBeInTheDocument()
+    cleanup()
+    await renderApp('/songs?collection=hymns&stage=advanced')
+    await screen.findByText('No songs here at the “Advanced” level.')
+    // Clear filters keeps the shelf.
+    await userEvent.setup().click(screen.getByRole('button', { name: 'Clear filters' }))
+    expect(await screen.findByRole('tab', { name: 'Hymns' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    )
   })
 })

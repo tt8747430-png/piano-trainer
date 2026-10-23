@@ -165,7 +165,7 @@ describe('the notation kernel (eslint)', { timeout: 60_000 }, () => {
   it('refuses notation importing a package', async () => {
     const broken = await rulesBrokenBy(
       'src/shared/lib/notation/example.ts',
-      "import { Stave } from 'vexflow/core'\nexport const example = Stave\n",
+      "import { VerovioToolkit } from 'verovio/esm'\nexport const example = VerovioToolkit\n",
     )
     expect(broken).toContain('no-restricted-imports')
   })

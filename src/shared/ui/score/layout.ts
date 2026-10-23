@@ -1,5 +1,29 @@
 import type { Tick } from '@/shared/lib/music'
-import type { ScoreLayout } from './engrave'
+import type { StaffId, StaffInstruments } from '@/shared/lib/notation'
+
+/** Where an engraving's staves, bars and onsets stand, in CSS px from its top left. */
+export interface ScoreLayout {
+  /** The engraving's size in CSS pixels. */
+  readonly width: number
+  readonly height: number
+  /** The top staff's top line and the bottom staff's bottom line. */
+  readonly staffTop: number
+  readonly staffBottom: number
+  readonly measures: readonly {
+    readonly startTick: Tick
+    readonly ticks: Tick
+    readonly x: number
+    readonly width: number
+    /** Where its notes begin, after any clef, key and time signature. */
+    readonly notes: number
+  }[]
+  /** Each staff drawn: its top and bottom lines. */
+  readonly staves: Partial<Record<StaffId, { readonly top: number; readonly bottom: number }>>
+  /** What each sung staff is played on, where one is chosen (ADR 0070): its name over it. */
+  readonly staffInstruments?: StaffInstruments
+  /** Each written onset left to right: its tick and its first notehead's or rest's x. */
+  readonly onsets: readonly { readonly tick: Tick; readonly x: number }[]
+}
 
 /**
  * The x of a tick among a bar's points in tick order (its onsets, then its end): a point's own, or in
@@ -18,7 +42,7 @@ export function xAmong(points: readonly { tick: Tick; x: number }[], tick: Tick)
  * The x of any tick: an onset's own, or in proportion between the onsets around it, its bar's start
  * where nothing is written there (where its notes begin) and its bar's end.
  */
-export function xAtTick(layout: ScoreLayout, tick: Tick): number {
+export function xAtTick(layout: Pick<ScoreLayout, 'measures' | 'onsets'>, tick: Tick): number {
   const measure =
     layout.measures.find((m) => tick < m.startTick + m.ticks) ?? layout.measures.at(-1)
   if (!measure) return 0

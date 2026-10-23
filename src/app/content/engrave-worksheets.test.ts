@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { note, placeScale, scaleKey } from '@/shared/lib/music'
 import { notate, ticksOf, type Score } from '@/shared/lib/notation'
 import { noteLine, scaleRun, voicingsMusic } from '@/shared/lib/schedule'
-import { engrave } from '@/shared/ui/score/engrave'
+import { drawScore } from '@/shared/ui/score/verovio/draw'
 import { COURSES } from '@/entities/course'
 import { LESSONS } from '@/entities/lesson'
 
@@ -11,6 +11,15 @@ import { LESSONS } from '@/entities/lesson'
 const WORKSHEETS = [...LESSONS, ...COURSES.flatMap((course) => course.lessons)]
 
 const C_MAJOR = { tonic: note('C'), minor: false }
+
+/** A score engraved by Verovio on the staves asked, its measures all drawn. */
+async function expectEngraved(score: Score, staves: Score['staves'], what: string) {
+  const host = document.createElement('div')
+  const options = { scale: 1, fingers: false, names: false, staves }
+  const layout = await drawScore(score, host, options, new AbortController().signal)
+  expect(host.querySelectorAll('g.measure').length, what).toBe(score.measures.length)
+  expect(layout?.measures.length, what).toBe(score.measures.length)
+}
 
 /** Every voice of every measure fills its bar, its events end to end. */
 function expectWritten(score: Score) {
@@ -26,8 +35,9 @@ function expectWritten(score: Score) {
   }
 }
 
-describe('every lesson’s staves, a journey’s or a course’s', () => {
-  it('write each line of notes whole, on its one staff', () => {
+// Every lesson engraved: seconds alone, longer beside other workers.
+describe('every lesson’s staves, a journey’s or a course’s', { timeout: 60_000 }, () => {
+  it('write each line of notes whole, on its one staff', async () => {
     for (const lesson of WORKSHEETS) {
       for (const section of lesson.sections) {
         for (const block of section.blocks) {
@@ -40,15 +50,13 @@ describe('every lesson’s staves, a journey’s or a course’s', () => {
             }),
           )
           expectWritten(score)
-          const host = document.createElement('div')
-          engrave(score, host, { scale: 1, fingers: false, names: false, staff: block.clef })
-          expect(host.querySelector('svg'), `${lesson.id}: ${block.notes}`).not.toBeNull()
+          await expectEngraved(score, [block.clef], `${lesson.id}: ${block.notes}`)
         }
       }
     }
   })
 
-  it('write each scale’s run whole, on the treble staff', () => {
+  it('write each scale’s run whole, on the treble staff', async () => {
     for (const lesson of WORKSHEETS) {
       for (const section of lesson.sections) {
         for (const block of section.blocks) {
@@ -64,24 +72,20 @@ describe('every lesson’s staves, a journey’s or a course’s', () => {
             ),
           )
           expectWritten(score)
-          const host = document.createElement('div')
-          engrave(score, host, { scale: 1, fingers: false, names: false, staff: 'treble' })
-          expect(host.querySelector('svg'), lesson.id).not.toBeNull()
+          await expectEngraved(score, ['treble'], lesson.id)
         }
       }
     }
   })
 
-  it('write each row of voicings whole, on the grand staff', () => {
+  it('write each row of voicings whole, on the grand staff', async () => {
     for (const lesson of WORKSHEETS) {
       for (const section of lesson.sections) {
         for (const block of section.blocks) {
           if (block.kind !== 'voicings') continue
           const score = notate(voicingsMusic(block.voicings, block.key))
           expectWritten(score)
-          const host = document.createElement('div')
-          engrave(score, host, { scale: 1, fingers: false, names: false })
-          expect(host.querySelector('svg'), `${lesson.id}: ${section.heading.en}`).not.toBeNull()
+          await expectEngraved(score, score.staves, `${lesson.id}: ${section.heading.en}`)
         }
       }
     }

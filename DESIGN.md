@@ -454,7 +454,7 @@ height and width, scrolling inside when their content is taller.
 the `player-screen` grid. The keyboard is as tall as its keys' proportion makes it (below), and Wait mode's line
 takes the height left, so the transport keeps the bottom:
 
-- **Upright phone:** the toolbar holds ✕, the title (truncated), the loop, MIDI and ⚙ (Setup); the tempo and hands
+- **Upright phone:** the toolbar holds ✕, the title (truncated; under 360px read, not shown), the loop, the View menu (an eye), MIDI and ⚙ (Setup); the tempo and hands
   buttons flank ‹ ▶ › at the bottom, in the thumb's reach, the transport's buttons 8px apart.
 - **A phone on its side** (a landscape screen under 500px tall, judged first): one toolbar with the tempo and hands;
   the keyboard (about 120px on a 390px-tall phone); the sheet at 0.7, with Wait mode's line and ‹ ▶ › in a column at
@@ -467,8 +467,9 @@ hands, left then right, each a row of its own on a phone and side by side where 
 whole with a chevron to that hand's list; a changed hand has a way back to the pattern's own beside it, and the
 pattern's line then reads "Left hand changed", "Right hand changed" or "Both hands changed" in ink in place of its
 idea, so a changed pattern never passes for the pattern itself), the inversion as five drawn segments (Nearest, then Root to 3rd as
-stacks of noteheads), the chord size as segments, and how it plays as a grid of toggle tiles (Finger numbers, Named
-notes, Metronome, Count-in, Swing, and a piece's Melody and Recording).
+stacks of noteheads), the chord size as segments, and how it plays as a grid of toggle tiles (Chord positions,
+Metronome, Count-in, Swing, and a piece's Melody and Recording). What the sheet shows (finger numbers, named notes,
+chord names, the staves, the layout) is the View menu's alone, behind its eye beside the Setup's sliders.
 
 A piece with a recording has a **Recording** toggle tile in its Setup, on by default; in another key it is
 disabled with "Only in D minor" (the key as `keyOf` writes it) under its name. The recording plays in Listen only;
@@ -476,8 +477,9 @@ nothing on the screen marks it beyond the tile.
 
 How each screen uses its width:
 
-- **Songs:** the search, the collections as tabs (All, Your songs once there are any, then the books), and the songs
-  as row cards in a grid.
+- **Songs:** the collections as tabs (All, Your songs once there are any, then the books); the search, then Stage (a
+  pop-up of only the stages its shelves hold, absent where none does) and With chords (a labelled toggle), under the
+  search on a phone and beside it from 640px; and the songs as row cards in a grid.
 - **Piece:** one column: its facts in a line, Practise with the Learned toggle and Edit on one line (Edit its pencil
   alone on a phone), the keyboard pinned, then
   Chords (the chords it plays, to tap, with their Check) and Chart (its bars), then what is printed about it.
@@ -500,7 +502,11 @@ Stacks use gap: 24px between a screen's parts, 32px between sections, 16–20px 
 and a Piece's chart pin their keyboard to the top while the page scrolls.
 
 **The Equal Columns Rule.** A chart's lines are grids of equal columns, each line as wide as its bars' share of the
-longest line, so bars line up down the chart; a bar is parted by a 1px control line and each line closes with one.
+longest line, so bars line up down the chart; a bar is parted by a 1px control line and each line closes with one. A
+bar is at most 14rem wide, so a line of two reads at a glance on a laptop. The same rule spreads a score's lines,
+in the Player and the editor: each line is justified to its bars' share of the longest line's width. On a short
+sheet (a phone on its side) the editor draws its lines smaller, down to 0.6 of their size, so a whole system is in sight. The
+layouts are named alike wherever they are chosen: Across · Down · Pages (В строку · Строками · Страницы).
 
 ## Elevation & Depth
 
@@ -511,6 +517,11 @@ press fill with sand or darken a shade (brightness 95%). Shadows appear only on 
   hands popovers.
 - **Floating banner** (`shadow-lg`, over its 1px line): the update banner.
 - **Slider thumb** (`shadow-md` with a 1px soft-line ring).
+- **Floating controls** (the floating buttons, a dial's card, the floating bar): the raised paper (`bg-raised`,
+  a step lighter than a card by night) or honey, and a soft layered shade (`elevation-1` resting second actions and
+  rows, `elevation-2` the main action and the bar, `elevation-3` a pointer over them and a dial's card), ink by day
+  and a deeper shade by night. The main action is 56px, a second one 48px; pressed, either gives to 96%. A dial
+  opens as a card of 48px rows, each its icon and its name, growing from its button over a page dimmed to half.
 
 Bottom sheets rise over a page dimmed to 10% black and need no shadow.
 
@@ -874,7 +885,7 @@ exponential ease-out. Under reduced motion every transition is instant.
 - **Don't** put a chrome paint at full strength on the chrome: a place's tint is its wash, with its deep shade on it.
 - **Don't** set a control, a tab or a key label in the serif.
 - **Don't** draw a 2px line round a card or control, or lift a surface with a shadow (only popovers, the update
-  banner and the slider thumb float).
+  banner, the slider thumb and the floating controls float).
 - **Don't** draw a key that does nothing: every key sounds.
 - **Don't** stack a sheet over a sheet; open a list as a page of the sheet.
 - **Don't** write how-to paragraphs; the labelled keyboard and the layout teach.

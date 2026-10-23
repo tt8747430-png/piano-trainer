@@ -11,7 +11,7 @@ const PIPS = [
 /** A rank of four as rising pips, the first `rank` filled, named for a screen reader by `label`. */
 export function RankMark({ rank, label }: { rank: 1 | 2 | 3 | 4; label: string }) {
   return (
-    <span role="img" aria-label={label} className="inline-flex items-end gap-0.5">
+    <span role="img" aria-label={label} title={label} className="inline-flex items-end gap-0.5">
       {PIPS.map(({ pip, height }) => (
         <span
           key={pip}

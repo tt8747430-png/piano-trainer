@@ -1,5 +1,5 @@
 import type { Performance } from '@/shared/lib/arrangement'
-import type { Midi } from '@/shared/lib/music'
+import { TICKS_PER_BEAT, type Midi } from '@/shared/lib/music'
 import { schedule, type Audible, type NoteSound, type Sound } from './schedule'
 
 /** One bar on its own at a tempo: what a tap on a bar plays. */
@@ -10,8 +10,9 @@ export function barSounds(
 ): Sound[] {
   const placed = performance.bars[bar]
   if (!placed) return []
-  const { sounds } = schedule(performance, { ...options, fromTick: placed.startTick })
-  const end = (placed.beats * 60) / options.tempo
+  const toTick = placed.startTick + placed.beats * TICKS_PER_BEAT
+  // The pass's own end: a bar the tempo marks hold back lasts longer than its beats.
+  const { sounds, end } = schedule(performance, { ...options, fromTick: placed.startTick, toTick })
   return sounds.filter((sound) => sound.at < end - 1e-9)
 }
 

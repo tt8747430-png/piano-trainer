@@ -1,5 +1,21 @@
 export const player = {
   setup: 'Setup',
+  /** The Setup's way into the score editor, for the piece played. */
+  editScore: 'Edit the score',
+  // How the score is shown (ADR 0064), from the bar: remembered for every piece.
+  view: {
+    open: 'View',
+    staves: 'Staves',
+    melody: 'Melody staff',
+    melodyDetail: 'Its own staff over the piano, while the melody plays',
+    rh: 'Right hand',
+    lh: 'Left hand',
+    show: 'Show',
+    notation: 'Sheet music',
+    chordNames: 'Chord names',
+    positionsDetail: 'Beside each chord’s name, the position the right hand plays it in',
+    keys: 'Keys',
+  },
   key: 'Key',
   root: 'Root',
   walk: { title: 'Walk the chords in {{scale}}' },
@@ -27,7 +43,7 @@ export const player = {
   handsOf: 'Hands: {{hands}}',
   pattern: 'Pattern',
   fromChart: 'From the chart',
-  fromChartDescription: 'Each chord as the song marks it.',
+  fromChartDescription: 'Each section and chord as the song marks it.',
   rh: 'Right hand',
   lh: 'Left hand',
   ownFigure: 'The pattern’s own',
@@ -76,7 +92,7 @@ export const player = {
   },
   toggles: {
     fingerNumbers: 'Finger numbers',
-    namedNotes: 'Named notes',
+    namedNotes: 'Note names',
     positions: 'Chord positions',
     melody: 'Melody',
     metronome: 'Metronome',
@@ -112,6 +128,8 @@ export const player = {
   next: 'Next',
   play: 'Play',
   stop: 'Stop',
+  /** The floating bar of ‹ Play › with the tempo and the hands, as a screen reader names it. */
+  transport: 'Playback',
   playThese: 'Play {{notes}}',
   right: 'Correct',
   notThat: 'Not {{note}}',

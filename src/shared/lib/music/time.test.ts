@@ -3,6 +3,7 @@ import {
   beatsBefore,
   beatsToTicks,
   isMeter,
+  tempoNote,
   beatsPerBar,
   isCompound,
   METERS,
@@ -50,5 +51,13 @@ describe('isMeter', () => {
   it('tells the five meters from anything else', () => {
     expect(METERS.every(isMeter)).toBe(true)
     expect(['5/4', 4, null].some(isMeter)).toBe(false)
+  })
+})
+
+describe('tempoNote', () => {
+  it('is a quarter in x/4 and a dotted quarter in x/8, the beat a tempo counts', () => {
+    expect(tempoNote('4/4')).toBe('\u{1D15F}')
+    expect(tempoNote('6/8')).toBe('\u{1D15F}\u{1D16D}')
+    expect(tempoNote('12/8')).toBe('\u{1D15F}\u{1D16D}')
   })
 })

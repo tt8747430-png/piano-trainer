@@ -10,8 +10,8 @@ import {
   parseChordSymbol,
   type Meter,
 } from '@/shared/lib/music'
-import { notate, ticksOf, type Score } from '@/shared/lib/notation'
-import { engrave } from '@/shared/ui/score/engrave'
+import { notate, scoreToMei, STAVES, ticksOf, type Score } from '@/shared/lib/notation'
+import { drawScore } from '@/shared/ui/score/verovio/draw'
 import { arrangePiece, ownChoice } from './arrange-piece'
 import { arrangeChromatic } from './chromatic'
 import { CHROMATIC } from './chromatic-choice'
@@ -99,46 +99,55 @@ describe('notation of the content', () => {
   })
 })
 
-/** The finger numbers drawn off the page: a digit stands 9 over its baseline. */
-function fingersOffThePage(performance: Parameters<typeof notate>[0]) {
+/** How many of a score's notes carry a finger. */
+const fingersOf = (score: Score) =>
+  score.measures
+    .flatMap((measure) => STAVES.flatMap((staff) => measure.staves[staff]))
+    .flatMap((voice) => voice.events)
+    .flatMap((event) => (event.kind === 'notes' ? event.notes : []))
+    .filter((written) => written.finger !== undefined).length
+
+/** How many fingers a performance writes, and how many Verovio draws of them. */
+async function fingersDrawn(performance: Parameters<typeof notate>[0]) {
+  const score = notate(performance)
   const host = document.createElement('div')
-  const layout = engrave(notate(performance), host, { scale: 1, fingers: true, names: false })
-  expect(layout.measures.length).toBeGreaterThan(0)
-  return [...host.querySelectorAll('text')]
-    .filter((text) => /^[1-5]$/.test(text.textContent ?? ''))
-    .map((text) => Number(text.getAttribute('y')))
-    .filter((y) => y - 9 < 0 || y > layout.height)
+  const options = { scale: 1, fingers: true, names: false, staves: score.staves }
+  const layout = await drawScore(score, host, options, new AbortController().signal)
+  expect(layout?.measures.length).toBeGreaterThan(0)
+  return { written: fingersOf(score), drawn: host.querySelectorAll('g.fing').length }
 }
 
 describe('engraving of the content', () => {
   it.each(PIECES.map((piece) => [piece.id, piece] as const))(
-    'engraves %s with every finger on the page',
-    (_id, piece) => {
-      expect(fingersOffThePage(arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS))).toEqual(
-        [],
+    'engraves %s with every finger it writes',
+    async (_id, piece) => {
+      const { written, drawn } = await fingersDrawn(
+        arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS),
       )
+      expect(drawn).toBe(written)
     },
   )
 
-  it('engraves a chromatic walk of every chord with every finger on the page', () => {
+  // Too long a line to engrave whole (the Player engraves it a line at a time): its MEI is checked.
+  it('writes a chromatic walk of every chord with every finger for the engraver', () => {
     const [first, ...rest] = CHORD_QUALITIES
     if (!first) throw new Error('the table is empty')
-    expect(
-      fingersOffThePage(
-        arrangeChromatic(
-          {
-            root: note('C'),
-            chords: [first, ...rest],
-            direction: 'up',
-            pattern: CHROMATIC.pattern,
-            rh: null,
-            lh: null,
-            inversion: null,
-            nearest: true,
-          },
-          BUILT_IN_PATTERNS,
-        ),
+    const score = notate(
+      arrangeChromatic(
+        {
+          root: note('C'),
+          chords: [first, ...rest],
+          direction: 'up',
+          pattern: CHROMATIC.pattern,
+          rh: null,
+          lh: null,
+          inversion: null,
+          nearest: true,
+        },
+        BUILT_IN_PATTERNS,
       ),
-    ).toEqual([])
+    )
+    const mei = scoreToMei(score, { staves: score.staves, fingers: true })
+    expect(mei.match(/<fing /g)?.length).toBe(fingersOf(score))
   })
 })

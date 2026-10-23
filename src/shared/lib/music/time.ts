@@ -41,6 +41,13 @@ export function beatsBefore(
 /** A meter in eighths whose beat is a dotted quarter. */
 export const isCompound = (meter: Meter): boolean => meter.endsWith('/8')
 
+/**
+ * The note a tempo counts, as a metronome mark prints it (LilyPond's `\tempo 4. = 58`): the beat, a
+ * quarter in x/4 and a dotted quarter in x/8.
+ */
+export const tempoNote = (meter: Meter): string =>
+  isCompound(meter) ? '\u{1D15F}\u{1D16D}' : '\u{1D15F}'
+
 export interface TimeSignature {
   readonly count: number
   readonly unit: 4 | 8 | 16

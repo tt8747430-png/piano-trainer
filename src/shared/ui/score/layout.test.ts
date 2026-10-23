@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { xAtTick } from './layout'
-import type { ScoreLayout } from './engrave'
+import type { ScoreLayout } from './layout'
 
 const layout: ScoreLayout = {
   width: 400,

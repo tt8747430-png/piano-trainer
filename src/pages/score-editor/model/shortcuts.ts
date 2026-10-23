@@ -1,16 +1,20 @@
 import type { CaretMove, ChosenValue, EditorAction, Layer } from '@/features/score-editor'
 import type { KeyPress } from '@/shared/lib/shortcuts'
 
-/** A shortcut: an editor action, or the Chord field to type in. */
-type Shortcut = EditorAction | { readonly type: 'chordField' }
+/** A shortcut: an editor action, the Chord field to type in, or the staff over or under the caret's. */
+type Shortcut =
+  | EditorAction
+  | { readonly type: 'chordField' }
+  | { readonly type: 'staff'; readonly direction: -1 | 1 }
 
-/** The value keys, by physical key so every layout chooses the same: 1 a whole note to 5 a sixteenth. */
+/** The value keys, by physical key so every layout chooses the same: 1 a whole note to 6 a 32nd. */
 const VALUES: Readonly<Record<string, ChosenValue['value']>> = {
   Digit1: 1,
   Digit2: 2,
   Digit3: 4,
   Digit4: 8,
   Digit5: 16,
+  Digit6: 32,
 }
 
 /** The bar edits by letter, with Cmd or Ctrl (the platform's own copy, cut and paste). */
@@ -20,7 +24,8 @@ const isBarEditKey = (code: string): code is keyof typeof BAR_EDITS =>
 
 /**
  * The editor's shortcut for a key press in a layer (spec §6), or null. Only keys the typing keys leave
- * free: digits, the full stop, arrows, Home, End, Backspace, Delete and Enter, and Cmd or Ctrl with
+ * free: digits, the full stop, arrows (Alt with ↑ ↓ to the staff over or under), Home, End, Backspace,
+ * Delete and Enter, and Cmd or Ctrl with
  * Z, Y, and C, X, V (the bars, in the chords); a letter alone plays the piano.
  */
 export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
@@ -36,7 +41,7 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
     type: 'move',
     by,
     direction,
-    extend: press.shiftKey && layer === 'chords',
+    extend: press.shiftKey,
   })
   switch (press.key) {
     case 'ArrowLeft':
@@ -50,13 +55,19 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
       return move('end', 1)
     case 'ArrowUp':
     case 'ArrowDown':
+      if (press.altKey) return { type: 'staff', direction: press.key === 'ArrowUp' ? -1 : 1 }
       if (layer === 'chords') return null
       return { type: 'shift', semitones: (press.key === 'ArrowUp' ? 1 : -1) * (mod ? 12 : 1) }
+    // Backspace as a text field's: the notes chosen, else the last before the caret; Delete, those chosen.
     case 'Backspace':
+      return mod ? null : { type: 'delete', back: true }
     case 'Delete':
       return mod ? null : { type: 'delete' }
+    // Enter goes on a line (Shift, back a line); in the chords it opens the field to type one in.
     case 'Enter':
-      return layer === 'chords' && !mod ? { type: 'chordField' } : null
+      if (mod) return null
+      if (layer === 'chords' && !press.shiftKey) return { type: 'chordField' }
+      return { type: 'move', by: 'line', direction: press.shiftKey ? -1 : 1, extend: false }
   }
   if (mod || press.altKey) return null
   const value = VALUES[press.code]
@@ -64,4 +75,13 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
   if (press.code === 'Period') return { type: 'dot' }
   if (press.code === 'Digit0') return { type: 'rest' }
   return null
+}
+
+/**
+ * The row over (−1) or under (1) the one the caret writes among the rows shown, top down
+ * (`shownRows`): the same row at either end.
+ */
+export function staffNear(layer: Layer, direction: -1 | 1, rows: readonly Layer[]): Layer {
+  const at = rows.indexOf(layer)
+  return rows[Math.max(0, Math.min(rows.length - 1, at + direction))] ?? layer
 }

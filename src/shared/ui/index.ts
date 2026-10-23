@@ -11,12 +11,13 @@ export { usePositionName } from './use-position-name'
 export { NotFound } from './NotFound'
 export { KeyChoice } from './KeyChoice'
 export { Labelled } from './Labelled'
+export { MenuSection } from './MenuSection'
 export { LazyScoreView } from './LazyScoreView'
 export { LearnedBadge } from './LearnedBadge'
 export { PAGE_TILES, type Tile } from './page-tiles'
-export { FitWidth } from './FitWidth'
 export {
   Fab,
+  FabLink,
   FabPill,
   FloatingActions,
   FloatingHost,
@@ -24,6 +25,8 @@ export {
   SpeedDial,
   SpeedDialAction,
 } from './FloatingActions'
+export { ActionMenu } from './ActionMenu'
+export { FloatingBar, FloatingBarButton, FloatingBarPlay } from './FloatingBar'
 export { useFloatingLabels, type FloatingPlace } from './floating-context'
 export { RankMark } from './RankMark'
 export { Listbox } from './Listbox'
@@ -66,11 +69,25 @@ export { ScreenHeader } from './ScreenHeader'
 export { SearchField } from './SearchField'
 export { usePageHeading } from './use-page-heading'
 export { Segmented } from './Segmented'
+export { SheetLayoutField } from './SheetLayoutField'
+export { SheetViewIcon } from './SheetViewIcon'
 export { Sheet, SheetContent, SheetTrigger } from './Sheet'
 export { SettingField } from './SettingField'
 export { SwitchRow } from './SwitchRow'
 export { ToggleChips } from './ToggleChips'
 export { ToggleGrid, ToggleTile } from './ToggleTile'
 export { ToolButton } from './ToolButton'
+export {
+  ToolKey,
+  ToolPalette,
+  ToolPaletteActions,
+  ToolPaletteFoot,
+  ToolPalettePanel,
+  ToolPaletteTab,
+  ToolPaletteTabs,
+} from './ToolPalette'
 export { ToolDivider } from './ToolDivider'
 export { TypedField } from './TypedField'
+export { PageCanvas } from './PageCanvas'
+export { SheetPage, type PageBlock } from './SheetPage'
+export { useCanvasReveal } from './canvas-reveal'

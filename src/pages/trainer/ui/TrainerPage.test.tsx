@@ -145,7 +145,7 @@ describe('A trainer', () => {
   it('shows Custom’s choices when Custom is the level, each written to the URL', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/quiz/intervals-by-ear?level=custom')
-    const heard = await screen.findByRole('group', { name: 'Heard' })
+    const heard = await screen.findByRole('group', { name: 'How they sound' })
     await user.click(within(heard).getByRole('button', { name: 'Together' }))
     expect(router.state.location.search).toMatchObject({ ways: 'up.together' })
   })
@@ -164,7 +164,7 @@ describe('A trainer', () => {
   it('asks Build chord’s types as the chord trainer’s sheet names them, each in sight', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/quiz/build-chord?level=custom')
-    const sizes = await screen.findByRole('group', { name: 'Sizes' })
+    const sizes = await screen.findByRole('group', { name: 'Chord sizes' })
     expect(
       within(sizes)
         .getAllByRole('button')

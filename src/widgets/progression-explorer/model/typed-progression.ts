@@ -1,5 +1,6 @@
 import {
   chordsOfLine,
+  hasMinorThird,
   keyParam,
   keysOfChords,
   numeralsParam,
@@ -53,4 +54,15 @@ export function readProgression(text: string, key: Key): TypedProgression | null
 export function typedSearch(text: string, key: Key): { key: KeyParam; p: string } | null {
   const read = readProgression(text, key)
   return read && { key: keyParam(read.key), p: numeralsParam(read.numerals) }
+}
+
+/**
+ * Whether a line's own tonic chord (its I or i, not one applied to another chord) is minor: the mode
+ * its numerals are written in. Null for a line with no tonic chord, which fits either mode.
+ */
+export function tonicMinor(numerals: readonly Numeral[]): boolean | null {
+  const tonic = numerals.find(
+    (numeral) => numeral.degree === 0 && numeral.shift === 0 && numeral.of === undefined,
+  )
+  return tonic ? hasMinorThird(tonic.quality) : null
 }

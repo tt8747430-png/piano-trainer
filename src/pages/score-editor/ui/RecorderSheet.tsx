@@ -1,4 +1,4 @@
-import { CircleDot } from 'lucide-react'
+import { Circle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { selectTake, useTakes } from '@/entities/take'
 import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
@@ -11,7 +11,7 @@ import { TakeList } from './TakeList'
 import { WriteTakePage } from './WriteTakePage'
 
 /**
- * The takes (ADR 0028): Record over the caret's bar, in the footer, in reach however long the list;
+ * The takes (ADR 0028), opened from the bar's Record: Record over the caret's bar, in the footer, in reach however long the list;
  * and the piece's takes, each heard, written into the score, downloaded or deleted; a take's form to
  * write it is a page of the sheet.
  */
@@ -30,14 +30,14 @@ export function RecorderSheet() {
           <Button
             variant="surface"
             size="icon"
-            className="lg:w-auto lg:gap-2 lg:px-4"
+            aria-label={t('recorder.open')}
+            title={t('recorder.open')}
             disabled={takes.stage !== 'idle'}
           />
         }
       >
-        <CircleDot aria-hidden />
-        {/* Named on a laptop's toolbar, where there is room; its icon alone on a phone. */}
-        <span className="max-lg:sr-only">{t('recorder.open')}</span>
+        {/* A recorder's red dot, as every recorder's Record wears. */}
+        <Circle aria-hidden className="fill-current text-destructive" />
       </SheetTrigger>
       <SheetContent
         title={writing ? t('recorder.write') : t('recorder.title')}

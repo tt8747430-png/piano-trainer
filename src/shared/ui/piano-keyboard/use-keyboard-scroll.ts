@@ -26,6 +26,8 @@ export function useKeyboardScroll(
   span: KeySpan,
   inView: KeyRange | undefined,
   keySize: KeySize,
+  /** A white key's width as drawn: narrowed to fit what is asked, the keys are measured anew. */
+  white = '',
 ) {
   const motion = useScrollMotion()
   const opened = useRef(false)
@@ -71,10 +73,21 @@ export function useKeyboardScroll(
 
   const viewFrom = inView?.from
   const viewTo = inView?.to
+  const measuredWhite = useRef(white)
   useEffect(() => {
     const element = scroller.current
     if (!element || viewFrom === undefined || viewTo === undefined) return
-    const left = scrollToReveal(metrics.read(), spanOf(keys, { from: viewFrom, to: viewTo }))
+    // Keys just narrowed to fit: what was kept of their width is stale, so they are measured now.
+    const resized = measuredWhite.current !== white
+    measuredWhite.current = white
+    const now = resized
+      ? {
+          scrollLeft: element.scrollLeft,
+          clientWidth: element.clientWidth,
+          scrollWidth: element.scrollWidth,
+        }
+      : metrics.read()
+    const left = scrollToReveal(now, spanOf(keys, { from: viewFrom, to: viewTo }))
     if (left !== null) element.scrollTo({ left, behavior: motion })
-  }, [scroller, metrics, keys, viewFrom, viewTo, motion])
+  }, [scroller, metrics, keys, viewFrom, viewTo, motion, white])
 }

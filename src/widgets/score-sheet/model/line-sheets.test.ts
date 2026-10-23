@@ -25,11 +25,33 @@ describe('the sheet’s lines as written', () => {
 
   it('keeps a line whose music is the same but stands later in the piece apart from it', () => {
     const sheetsOf = createLineSheets()
-    const [first, second] = sheetsOf(
-      readDraft({ ...music, sections: [{ kind: 'verse', lines: ['G', 'G'] }], melody: undefined }),
+    // The first line's tempo sets it apart: the second and third are the same music.
+    const [, second, third] = sheetsOf(
+      readDraft({
+        ...music,
+        sections: [{ kind: 'verse', lines: ['G', 'G', 'G'] }],
+        melody: undefined,
+      }),
     )
-    expect(second).not.toBe(first)
-    expect(second?.line.bars[0]?.index).toBe(1)
-    expect(second?.score).toBe(first?.score)
+    expect(third).not.toBe(second)
+    expect(third?.line.bars[0]?.index).toBe(2)
+    expect(third?.score).toBe(second?.score)
+  })
+
+  it('tells each line what the next starts in, so a key change is printed at the end of the line before', () => {
+    const sheetsOf = createLineSheets()
+    const [verse, chorus] = sheetsOf(
+      readDraft({
+        ...music,
+        sections: [
+          { kind: 'verse', lines: ['G C'] },
+          { kind: 'chorus', key: 'D', lines: ['D G'] },
+        ],
+        melody: undefined,
+      }),
+    )
+    expect(verse?.next?.key).toEqual(chorus?.score.measures[0]?.key)
+    expect(verse?.next?.key?.tonic.letter).toBe('D')
+    expect(chorus?.next).toBeUndefined()
   })
 })

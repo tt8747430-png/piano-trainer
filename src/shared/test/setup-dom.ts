@@ -1,12 +1,15 @@
 import '@testing-library/jest-dom/vitest'
-import { cleanup } from '@testing-library/react'
+import { cleanup, configure } from '@testing-library/react'
 import { afterEach, beforeEach, vi } from 'vitest'
 import { i18n } from '@/shared/i18n'
-import { stubFonts } from './fonts'
 import { stubIntersectionObserver } from './intersection'
 import { stubMatchMedia } from './match-media'
 import { stubServiceWorker } from './pwa-register'
 import { stubResizeObserver } from './resize'
+
+// A `findBy` waits as long as a busy runner needs: four workers engraving at once can take a staff past
+// the one second it waits by default, failing a test that passes alone.
+configure({ asyncUtilTimeout: 5_000 })
 
 /**
  * The browser's stand-ins round every test with a DOM. The setup calls it for each file: with
@@ -26,7 +29,6 @@ export function setUpDom() {
     // scroll one into view: one asked to stays where it is.
     Element.prototype.scrollTo = vi.fn()
     Element.prototype.scrollIntoView = vi.fn()
-    stubFonts()
   })
 
   // `globals: false` means Testing Library cannot register its own cleanup.

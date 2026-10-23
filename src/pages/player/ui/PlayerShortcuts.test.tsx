@@ -58,7 +58,7 @@ describe('the Player’s shortcuts', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Still, my soul, be still' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /Practise/ })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Practise' })).toBeInTheDocument()
   })
 
   it('says each button’s key on hover', async () => {

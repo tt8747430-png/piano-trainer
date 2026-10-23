@@ -9,12 +9,15 @@ export function useEditorShortcutList(): void {
   const { t } = useTranslation('editor')
   const { mod, alt, shift } = modifierCaps(useShortcutsPlatform())
   useShortcuts(t('shortcuts.group'), [
-    { label: t('shortcuts.value'), shown: ['1', '–', '5'] },
+    { label: t('shortcuts.value'), shown: ['1', '–', '6'] },
     { label: t('shortcuts.dot'), shown: ['.'] },
     { label: t('shortcuts.rest'), shown: ['0'] },
     { label: t('shortcuts.step'), shown: ['←', '→'] },
     { label: t('shortcuts.bar'), shown: [alt, '←', '→'] },
+    { label: t('shortcuts.line'), shown: ['Enter'] },
+    { label: t('shortcuts.lineBack'), shown: [shift, 'Enter'] },
     { label: t('shortcuts.ends'), shown: ['Home', 'End'] },
+    { label: t('shortcuts.staff'), shown: [alt, '↑', '↓'] },
     { label: t('shortcuts.semitone'), shown: ['↑', '↓'] },
     { label: t('shortcuts.octave'), shown: [mod, '↑', '↓'] },
     { label: t('shortcuts.delete'), shown: ['Backspace'] },

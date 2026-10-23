@@ -19,7 +19,7 @@ import {
   METHOD_BOOK_PIECES,
   PIECES,
   chartOf,
-  hasMethodCodes,
+  hasChartPlan,
   isDegreePiece,
   isPiece,
   melodyOf,
@@ -102,7 +102,7 @@ function problemsIn(performance: Performance): string[] {
 function accompaniments(piece: Piece) {
   const own = BUILT_IN_PATTERNS.require(piece.pattern).pattern
   return [
-    { pattern: own, methods: hasMethodCodes(piece) ? METHOD_PATTERNS : undefined },
+    { pattern: own, methods: hasChartPlan(piece) ? METHOD_PATTERNS : undefined },
     ...PATTERN_IDS.map((id) => ({
       pattern: BUILT_IN_PATTERNS.require(id).pattern,
       methods: undefined,

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { WALK, type WalkChoice } from '@/features/practice'
 import { noteParam } from '@/shared/lib/music'
-import { ChordSizeField, Labelled, NoteChoice, ToggleGrid } from '@/shared/ui'
+import { ChordSizeField, Labelled, NoteChoice, MenuSection, ToggleGrid } from '@/shared/ui'
 import { PatternCard, PlayerSetup } from '@/widgets/player-setup'
 import { PlayingToggles } from '@/widgets/practice-player'
 import type { WalkChange } from '../model/walk-search'
@@ -34,9 +34,11 @@ export function WalkSetup({
         />
       </Labelled>
       <PatternCard />
-      <ToggleGrid label={t('playing')}>
-        <PlayingToggles swing={swing} onSwing={onSwing} />
-      </ToggleGrid>
+      <MenuSection title={t('playing')}>
+        <ToggleGrid label={t('playing')}>
+          <PlayingToggles swing={swing} onSwing={onSwing} />
+        </ToggleGrid>
+      </MenuSection>
     </PlayerSetup>
   )
 }

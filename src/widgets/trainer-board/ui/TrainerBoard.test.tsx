@@ -201,7 +201,7 @@ describe('TrainerBoard', () => {
     const user = userEvent.setup()
     renderBoard({ kind: 'signatures', keys: [{ tonic: note('D'), minor: false }] })
     expect(
-      screen.getByRole('heading', { name: 'How many sharps or flats in D major?' }),
+      screen.getByRole('heading', { name: 'How many sharps or flats does D major have?' }),
     ).toBeInTheDocument()
     const answers = screen.getByRole('group', { name: 'Answers' })
     await user.click(within(answers).getByRole('button', { name: '2 ♯' }))

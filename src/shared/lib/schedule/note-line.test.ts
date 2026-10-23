@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { note } from '@/shared/lib/music'
-import { noteLine, type NoteLineMeter } from './note-line'
+import { noteLine, twoHands, type NoteLineMeter } from './note-line'
 
 const C_MAJOR = { tonic: note('C'), minor: false }
 const timed = (text: string, meter: NoteLineMeter = '4/4') =>
@@ -118,5 +118,21 @@ describe('noteLine', () => {
 
   it('needs a note, not only rests', () => {
     expect(() => timed('r/1')).toThrow(RangeError)
+  })
+})
+
+describe('twoHands', () => {
+  it('puts two hands’ lines together, as long as the longer', () => {
+    const options = { meter: '4/4', key: { tonic: note('C'), minor: false } } as const
+    const both = twoHands(
+      noteLine('C5/1', { ...options, hand: 'rh' }),
+      noteLine('C3/1 G2/1', { ...options, hand: 'lh' }),
+    )
+    expect(both.bars).toHaveLength(2)
+    expect(both.notes.map((n) => [n.hand, n.midi])).toEqual([
+      ['rh', 72],
+      ['lh', 48],
+      ['lh', 43],
+    ])
   })
 })

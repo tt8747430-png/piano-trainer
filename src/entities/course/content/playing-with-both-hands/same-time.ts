@@ -25,8 +25,8 @@ const sameTime: Lesson = {
           clef: 'treble',
           notes:
             'E4 E4 E4/2 E4 E4 E4/2 E4 G4 C4/4. D4/8 E4/1 F4 F4 F4/4. F4/8 F4 E4 E4 E4/8 E4/8 E4 D4 D4 E4 D4/2 G4/2',
+          bass: 'C3/1 C3/1 C3/1 C3/1 F3/1 C3/1 G3/1 G3/1',
         },
-        { kind: 'notes', clef: 'bass', notes: 'C3/1 C3/1 C3/1 C3/1 F3/1 C3/1 G3/1 G3/1' },
         {
           kind: 'link',
           title: { en: 'Jingle Bells in the Player', ru: '«Бубенцы» в плеере' },
@@ -52,8 +52,12 @@ const sameTime: Lesson = {
             ru: 'В «Святых» мелодия тянет долгие ноты. Под ними левая рука продолжает шагать, по ноте на каждую долю.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'r/4 C4 E4 F4 G4/1 r/4 C4 E4 F4 G4/1' },
-        { kind: 'notes', clef: 'bass', notes: 'C3/1 C3 E3 G3 E3 C3/1 C3 E3 G3 E3' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'r/4 C4 E4 F4 G4/1 r/4 C4 E4 F4 G4/1',
+          bass: 'C3/1 C3 E3 G3 E3 C3/1 C3 E3 G3 E3',
+        },
         {
           kind: 'link',
           title: { en: 'The Saints in the Player', ru: '«Святые» в плеере' },
@@ -72,8 +76,12 @@ const sameTime: Lesson = {
             ru: '— обе руки идут в одну сторону на октаву друг от друга. Ноты одни и те же, а пальцы зеркальные: правый большой идёт вместе с левым мизинцем.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 F4 E4 D4 C4/1' },
-        { kind: 'notes', clef: 'bass', notes: 'C3 D3 E3 F3 G3 F3 E3 D3 C3/1' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'C4 D4 E4 F4 G4 F4 E4 D4 C4/1',
+          bass: 'C3 D3 E3 F3 G3 F3 E3 D3 C3/1',
+        },
       ],
     },
     {
@@ -87,8 +95,12 @@ const sameTime: Lesson = {
             ru: '— руки идут в разные стороны. Начните с больших пальцев: левый на соль, правый на до первой октавы. Дальше обе руки играют одинаковыми пальцами.',
           },
         },
-        { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4 F4 E4 D4 C4/1' },
-        { kind: 'notes', clef: 'bass', notes: 'G3 F3 E3 D3 C3 D3 E3 F3 G3/1' },
+        {
+          kind: 'notes',
+          clef: 'treble',
+          notes: 'C4 D4 E4 F4 G4 F4 E4 D4 C4/1',
+          bass: 'G3 F3 E3 D3 C3 D3 E3 F3 G3/1',
+        },
         {
           kind: 'link',
           title: { en: 'Contrary motion in the Player', ru: 'Противоположное движение в плеере' },

@@ -1,6 +1,7 @@
 import { createContext, use } from 'react'
 import { useStore } from 'zustand'
 import type { EditorAction, EditorState, EditorStore } from '@/features/score-editor'
+import type { SheetView } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import type { EditorTakes } from './use-editor-takes'
 
@@ -29,6 +30,9 @@ export interface ScoreEditorValue {
     /** The song's settings sheet, opened from the toolbar or the sheet's clef, key and time. */
     readonly settingsOpen: boolean
     readonly openSettings: (open: boolean) => void
+    /** How the score is laid out: down the screen, on A4 pages, or as one line across. */
+    readonly layout: SheetView
+    readonly setLayout: (layout: SheetView) => void
   }
   readonly meta: {
     readonly title: string
@@ -38,6 +42,8 @@ export interface ScoreEditorValue {
     readonly kind: 'version' | 'song'
     /** The Chord field's ref: Enter in the chords puts the focus there. */
     readonly chordFieldRef: (field: HTMLInputElement | null) => void
+    /** Counts the times Enter in the chords asked for the field while it was not open: the palette opens it. */
+    readonly chordFieldAsked: number
   }
 }
 

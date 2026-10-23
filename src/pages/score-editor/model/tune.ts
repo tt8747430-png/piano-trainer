@@ -8,14 +8,20 @@ const TUNE_ONLY = { rh: false, lh: false, melody: true } as const
 /**
  * The song's tune from its bar `from` (an index) at its tempo, its first note at 0 s: what plays
  * under a take from its downbeat (spec 2026-10-09 §4.2), so an accompaniment is recorded against
- * the song it accompanies.
+ * the song it accompanies; in strict time, its tempo marks left to the Player.
  */
 export function tuneOf(draft: Draft, from: number): NoteSound[] {
   const fromTick = barsOf(draft)[from]?.start ?? 0
-  const { sounds } = schedule(arrangeDraft(draft), {
-    tempo: draft.tempo,
-    hands: TUNE_ONLY,
-    fromTick,
-  })
+  const performance = arrangeDraft(draft)
+  // In strict time, as the click and the take's bars keep it: a rit. would leave them behind.
+  const timing = (performance.timing ?? []).filter(({ marks }) => marks.expression === undefined)
+  const { sounds } = schedule(
+    { ...performance, timing },
+    {
+      tempo: draft.tempo,
+      hands: TUNE_ONLY,
+      fromTick,
+    },
+  )
   return sounds.filter((sound): sound is NoteSound => sound.kind === 'note')
 }

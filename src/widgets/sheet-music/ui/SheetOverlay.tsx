@@ -1,7 +1,7 @@
 import { useRef, type RefObject } from 'react'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
+import { StaffNames, xAtTick, type ScoreLayout } from '@/shared/ui/score'
 import { BarTargets } from './BarTargets'
 import { LoopBand } from './LoopBand'
 import { SheetCursor } from './SheetCursor'
@@ -19,7 +19,16 @@ export function SheetOverlay({
   loop,
   onJump,
   onLoopChange,
+  onChoose,
+  chordNames = true,
+  tempos = [],
+  firstBar = 0,
 }: {
+  chordNames?: boolean
+  /** Each bar of the piece's tempo mark, said in the labels' row. */
+  tempos?: readonly (number | undefined)[]
+  /** The piece's bar the layout's first measure is: a line of a score laid out in lines. */
+  firstBar?: number
   layout: ScoreLayout
   scroller: RefObject<HTMLElement | null>
   performance: Performance
@@ -29,10 +38,15 @@ export function SheetOverlay({
   loop: BarRange | null
   onJump: (beatGroup: number) => void
   onLoopChange: (loop: BarRange) => void
+  /** Bars chosen by Shift or a held finger: the piece's bar, extending what is chosen. */
+  onChoose: (bar: number, extend: boolean) => void
 }) {
   const cursor = useRef<HTMLDivElement>(null)
   const group = performance.beatGroups[current]
-  const x = group ? xAtTick(layout, group.tick) : null
+  // On a line, the cursor only where the beat group is.
+  const here =
+    group !== undefined && group.bar >= firstBar && group.bar < firstBar + layout.measures.length
+  const x = group && here ? xAtTick(layout, group.tick) : null
   useFollow(scroller, cursor, x)
   return (
     <>
@@ -41,15 +55,23 @@ export function SheetOverlay({
         performance={performance}
         headings={headings}
         positions={positions}
+        chordNames={chordNames}
+        tempos={tempos}
+        firstBar={firstBar}
       />
-      {loop ? <LoopBand layout={layout} loop={loop} onChange={onLoopChange} /> : null}
-      {x === null ? null : <SheetCursor ref={cursor} x={x} layout={layout} />}
+      <StaffNames layout={layout} />
+      {loop ? (
+        <LoopBand layout={layout} loop={loop} onChange={onLoopChange} firstBar={firstBar} />
+      ) : null}
+      {group && here ? <SheetCursor ref={cursor} tick={group.tick} layout={layout} /> : null}
       <BarTargets
         layout={layout}
         performance={performance}
         positions={positions}
         current={group?.bar}
         onJump={onJump}
+        onChoose={onChoose}
+        firstBar={firstBar}
       />
     </>
   )

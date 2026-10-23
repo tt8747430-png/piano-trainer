@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { draftOf, form } from '../testing/test-draft'
-import { joinSection, newSection, setSectionKind } from './sections'
+import { joinSection, newSection, setSectionKind, setSectionPattern } from './sections'
 
 const headings = (draft: ReturnType<typeof draftOf>) =>
   draft.sections.map((section) => section.heading)
@@ -16,6 +16,16 @@ describe('sections', () => {
       { kind: 'verse', n: 2 },
     ])
     expect(newSection(verse, 0)).toBe(verse)
+  })
+
+  it('gives a section a pattern of its own, kept when it is named again, and gives it back', () => {
+    const patterned = setSectionPattern(verse, 0, 'M3')
+    expect(headings(patterned)).toEqual([{ kind: 'verse', n: 1, pattern: 'M3' }])
+    expect(setSectionPattern(patterned, 0, 'M3')).toBe(patterned)
+    expect(headings(setSectionKind(patterned, 0, 'chorus'))).toEqual([
+      { kind: 'chorus', pattern: 'M3' },
+    ])
+    expect(headings(setSectionPattern(patterned, 0, null))).toEqual([{ kind: 'verse', n: 1 }])
   })
 
   it('leaves a section given the kind and name it has as it was', () => {

@@ -148,9 +148,9 @@ describe('Settings', () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings')
     await user.click(await screen.findByRole('button', { name: 'Connect a MIDI keyboard' }))
-    await user.click(await screen.findByRole('combobox', { name: 'Keyboard listened to' }))
+    await user.click(await screen.findByRole('combobox', { name: 'Listen to' }))
     await user.click(await screen.findByRole('option', { name: 'Keyboard' }))
-    await user.click(screen.getByRole('switch', { name: /Hear what you play in the app/ }))
+    await user.click(screen.getByRole('switch', { name: /Sound the MIDI keyboard/ }))
     await user.click(screen.getByRole('switch', { name: /Play the app’s music on the keyboard/ }))
     const choose = (group: string, value: string) =>
       user.click(
@@ -176,7 +176,7 @@ describe('Settings', () => {
     act(() => setMidi(settingsStore, { device: 'Piano' }))
     act(() => midi.setStatus({ state: 'away', device: 'Piano', devices: ['Keyboard'] }))
     expect(await screen.findByText('Piano is not connected.')).toBeInTheDocument()
-    await user.click(screen.getByRole('combobox', { name: 'Keyboard listened to' }))
+    await user.click(screen.getByRole('combobox', { name: 'Listen to' }))
     expect(await screen.findByRole('option', { name: 'Piano (not connected)' })).toBeInTheDocument()
     await user.click(screen.getByRole('option', { name: 'Any keyboard' }))
     expect(settingsStore.getState().midi.device).toBeNull()

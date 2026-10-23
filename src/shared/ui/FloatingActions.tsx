@@ -22,21 +22,22 @@ import { Button } from './primitives/button'
  * right for the middle, over the keys.
  */
 const ALIGN: Readonly<Record<FloatingPlace, string>> = {
-  left: 'flex-row items-end aside:flex-col aside:items-start',
-  center: 'flex-row items-end aside:flex-col aside:items-end',
-  right: 'flex-row items-end aside:flex-col aside:items-end',
+  left: 'flex-row items-center aside:flex-col',
+  center: 'flex-row items-center aside:flex-col',
+  right: 'flex-row items-center aside:flex-col',
 }
 /**
- * A dial's own stack stands over its button at the foot; beside the page, where the height is short,
- * beside its button towards the page, level with it.
+ * A dial opens as a card over its button at the foot, growing from it: at the left its left edge
+ * on the button's, in the middle centred on it, at the right its right edge on the button's. Beside
+ * the page, where the height is short, it opens beside its button towards the page, from its top down.
  */
 const DIAL_ALIGN: Readonly<Record<FloatingPlace, string>> = {
-  left: 'left-0 items-start aside:left-full aside:ml-3',
+  left: 'left-0 origin-bottom-left aside:left-full aside:ml-3 aside:origin-top-left',
   center:
-    'left-1/2 -translate-x-1/2 items-center aside:right-full aside:left-auto aside:mr-3 aside:translate-x-0 aside:items-end',
-  right: 'right-0 items-end aside:right-full aside:mr-3',
+    'left-1/2 -translate-x-1/2 origin-bottom aside:right-full aside:left-auto aside:mr-3 aside:translate-x-0 aside:origin-top-right',
+  right: 'right-0 origin-bottom-right aside:right-full aside:mr-3 aside:origin-top-right',
 }
-const DIAL_ASIDE = 'aside:top-1/2 aside:bottom-auto aside:mb-0 aside:-translate-y-1/2'
+const DIAL_ASIDE = 'aside:top-0 aside:bottom-auto aside:mb-0'
 /** The page keeps this far clear of the actions: their row's margin over the foot. */
 const FLOATING_GAP_PX = 12
 /** The room the actions take along one side, their gap included; none while there are none. */
@@ -44,7 +45,7 @@ const room = (px: number | undefined) => `${px ? px + FLOATING_GAP_PX : 0}px`
 
 /** What a tap may land on and still be the page's own, not a tap on the page: a control or the keys. */
 const CONTROLS =
-  'a,button,input,select,textarea,label,summary,[role=button],[role=link],[role=radio],[role=switch],[role=slider],[role=tab],[role=option],[role=checkbox],[role=dialog],[contenteditable],[data-slot=docked],[data-slot=pinned]'
+  'a,button,input,select,textarea,label,summary,[role=button],[role=link],[role=radio],[role=switch],[role=slider],[role=tab],[role=option],[role=checkbox],[role=menuitem],[role=combobox],[role=listbox],[role=toolbar],[role=dialog],[tabindex]:not([tabindex="-1"]),[contenteditable],[data-slot=docked],[data-slot=pinned]'
 
 /**
  * The one row every screen's floating actions stand in, at the foot of the screen over the tab bar
@@ -69,8 +70,13 @@ export function FloatingHost({
   children: ReactNode
 }) {
   const [column, setColumn] = useState<HTMLElement | null>(null)
-  const [hiddenOn, setHiddenOn] = useState<string | null>(null)
-  const hidden = hiddenOn === screen
+  const [hidden, setHidden] = useState(false)
+  // Another screen shows them, and so does coming back to one they were folded on.
+  const [shownScreen, setShownScreen] = useState(screen)
+  if (shownScreen !== screen) {
+    setShownScreen(screen)
+    setHidden(false)
+  }
   // A tap on the screen's page, heard at the document: the page's own markup stays as it is.
   useEffect(() => {
     const tap = (event: MouseEvent) => {
@@ -79,11 +85,11 @@ export function FloatingHost({
         return
       // A word chosen to read is no tap.
       if (window.getSelection()?.toString()) return
-      setHiddenOn((was) => (was === screen ? null : screen))
+      setHidden((was) => !was)
     }
     document.addEventListener('click', tap)
     return () => document.removeEventListener('click', tap)
-  }, [screen])
+  }, [])
   useEffect(() => {
     if (!column) return
     const root = document.documentElement.style
@@ -158,22 +164,72 @@ export function FloatingActions({
   )
 }
 
-const FAB = 'size-14 rounded-full shadow-lg shadow-foreground/15 [&_svg:not([class*=size-])]:size-6'
+/**
+ * A floating control gives under the finger (96%) and its shade settles; a pointer over it lifts it
+ * a step. Reduced motion keeps the change and drops the movement (`theme.css`).
+ */
+const PRESS =
+  'transition-[scale,box-shadow,background-color,filter] duration-150 ease-out active:scale-96 active:not-aria-[haspopup]:translate-y-0'
+/** The main floating action: 56px, honey, the highest shade. */
+const FAB = `size-14 rounded-full elevation-2 hover:elevation-3 active:elevation-1 [&_svg:not([class*=size-])]:size-6 ${PRESS}`
+/** The main action with its name beside its icon (an extended FAB). */
+const FAB_EXTENDED = `h-14 gap-2 rounded-full px-5 pl-4 elevation-2 hover:elevation-3 active:elevation-1 [&_svg:not([class*=size-])]:size-6 ${PRESS}`
+/** A second action: 48px, the raised paper with its soft line, a lower shade. */
+export const MINI_FAB = `size-12 rounded-full border-border bg-raised elevation-1 hover:bg-muted hover:elevation-2 [&_svg:not([class*=size-])]:size-5 ${PRESS}`
+/** A second action with its words: a 48px pill of the same paper. */
+const MINI_PILL = `h-12 gap-2 rounded-full border-border bg-raised px-4 elevation-1 hover:bg-muted hover:elevation-2 ${PRESS}`
 
-/** The screen's main action, a large round button named by its label: Play, New song. */
+/**
+ * The screen's main action, a large round button named by its label: Play, New song. `extended`, its
+ * name stands beside its icon, for an action no icon says alone (New song's +).
+ */
 export function Fab({
+  label,
+  icon: Icon,
+  extended = false,
+  className,
+  ...props
+}: { label: string; icon: LucideIcon; extended?: boolean } & Omit<
+  ComponentProps<typeof Button>,
+  'children' | 'size' | 'aria-label'
+>) {
+  if (extended)
+    return (
+      <Button size="lg" className={cn(FAB_EXTENDED, className)} {...props}>
+        <Icon data-icon="inline-start" aria-hidden />
+        {label}
+      </Button>
+    )
+  return (
+    <Button size="icon" aria-label={label} title={label} className={cn(FAB, className)} {...props}>
+      <Icon aria-hidden />
+    </Button>
+  )
+}
+
+/**
+ * The screen's main action where it opens a page (Practise, Write the chart): the `Fab` as a link,
+ * `render` the link (a router `Link`).
+ */
+export function FabLink({
   label,
   icon: Icon,
   className,
   ...props
 }: { label: string; icon: LucideIcon } & Omit<
-  ComponentProps<typeof Button>,
+  ComponentProps<typeof ButtonLink>,
   'children' | 'size' | 'aria-label'
 >) {
   return (
-    <Button size="icon" aria-label={label} title={label} className={cn(FAB, className)} {...props}>
+    <ButtonLink
+      size="icon"
+      aria-label={label}
+      title={label}
+      className={cn(FAB, className)}
+      {...props}
+    >
       <Icon aria-hidden />
-    </Button>
+    </ButtonLink>
   )
 }
 
@@ -222,19 +278,14 @@ export function FabPill({
         size="icon"
         aria-label={label}
         title={label}
-        className={cn(FAB, className)}
+        className={cn(MINI_FAB, className)}
         {...props}
       >
         <Icon aria-hidden />
       </Button>
     )
   return (
-    <Button
-      variant="surface"
-      size="lg"
-      className={cn('h-14 rounded-full px-5 shadow-md shadow-foreground/10', className)}
-      {...props}
-    >
+    <Button variant="surface" size="lg" className={cn(MINI_PILL, className)} {...props}>
       {label}
       <Icon data-icon="inline-end" aria-hidden />
     </Button>
@@ -244,9 +295,13 @@ export function FabPill({
 /** Closes the dial once one of its actions is chosen. */
 const CloseDial = createContext<() => void>(() => {})
 
+/** How long a dial's actions take to leave (`theme.css`' `dial-out`). */
+const DIAL_OUT_MS = 120
+
 /**
- * The screen's other actions, folded into one round button: open, each stands over it named in
- * words, the nearest first; one chosen, or Escape, or a tap elsewhere folds them again.
+ * The screen's other actions, folded into one round button: open, each comes up over it named in
+ * words, the nearest first; one chosen, or Escape, or a tap elsewhere folds them again, and they
+ * leave together.
  */
 export function SpeedDial({
   label,
@@ -261,37 +316,34 @@ export function SpeedDial({
 }) {
   const { t } = useTranslation('common')
   const { place } = useContext(FloatingContext)
-  const [open, setOpen] = useState(false)
+  const [shown, setShown] = useState<'open' | 'closing' | 'closed'>('closed')
+  const open = shown === 'open'
+  const close = () => setShown((was) => (was === 'open' ? 'closing' : was))
+  useEffect(() => {
+    if (shown !== 'closing') return
+    const done = setTimeout(() => setShown('closed'), DIAL_OUT_MS)
+    return () => clearTimeout(done)
+  }, [shown])
   const id = useId()
   const name = label ?? t('moreActions')
   return (
-    <CloseDial.Provider value={() => setOpen(false)}>
+    <CloseDial.Provider value={close}>
       {open ? (
         // A tap anywhere else folds the dial, and does nothing else.
-        <div aria-hidden className="fixed inset-0 -z-10" onClick={() => setOpen(false)} />
+        <div
+          aria-hidden
+          className="fixed inset-0 -z-10 bg-background/55 motion-safe:animate-in motion-safe:fade-in motion-safe:duration-200"
+          onClick={close}
+        />
       ) : null}
       <div
         className="relative flex"
         onKeyDown={(event) => {
           if (event.key !== 'Escape' || !open) return
           event.stopPropagation()
-          setOpen(false)
+          close()
         }}
       >
-        {open ? (
-          // Over the button, out of the column's flow: opened, it moves neither the actions nor the page.
-          <ul
-            id={id}
-            aria-label={name}
-            className={cn(
-              'absolute bottom-full mb-3 flex w-max flex-col gap-1.5',
-              DIAL_ASIDE,
-              DIAL_ALIGN[place],
-            )}
-          >
-            {children}
-          </ul>
-        ) : null}
         <Button
           variant="surface"
           size="icon"
@@ -299,20 +351,44 @@ export function SpeedDial({
           title={name}
           aria-expanded={open}
           aria-controls={open ? id : undefined}
-          onClick={() => setOpen((was) => !was)}
-          className={FAB}
+          onClick={() => (open ? close() : setShown('open'))}
+          className={cn(MINI_FAB, open && 'bg-muted elevation-2')}
         >
-          <Icon aria-hidden className={cn('transition-transform', open && 'rotate-90')} />
+          <Icon
+            aria-hidden
+            className="transition-[rotate] duration-200 ease-out"
+            style={open ? { rotate: '90deg' } : undefined}
+          />
         </Button>
+        {shown !== 'closed' ? (
+          // Over the button, out of the column's flow: opened, it moves neither the actions nor the page.
+          // After it in the document, so the button is the first thing in the dial (a dialog's way back).
+          <ul
+            id={id}
+            aria-label={name}
+            aria-hidden={!open || undefined}
+            inert={!open}
+            data-closing={!open || undefined}
+            className={cn(
+              'dial-card absolute bottom-full mb-3 flex w-max max-w-[calc(100vw-2*var(--gutter))] flex-col rounded-3xl border border-border bg-raised p-1.5 elevation-3',
+              DIAL_ASIDE,
+              DIAL_ALIGN[place],
+            )}
+          >
+            {children}
+          </ul>
+        ) : null}
       </div>
     </CloseDial.Provider>
   )
 }
 
 /**
- * One of a dial's actions: a small round icon with its name in a quiet chip beside it, the two one
- * target; the icon alone where the floating actions say no names. A button, or what `render` makes it (a link, which may do something on the way,
- * `onClick`); either folds the dial once chosen.
+ * One of a dial's actions: a row of its card, its icon and its name, the two one 48px target. The
+ * name is always in sight: an open dial is where the learner looks for words. A button, or what `render` makes it (a link, which may do something on the way,
+ * `onClick`); either folds the dial once chosen. One that opens a dialog (Delete, Reset) sets the
+ * page's own `open` state in `onClick`: the dialog is the page's, controlled and with no trigger, so
+ * it stays open once the dial has folded.
  */
 export function SpeedDialAction({
   label,
@@ -329,48 +405,26 @@ export function SpeedDialAction({
   disabled?: boolean
 }) {
   const close = useContext(CloseDial)
-  const { place, labels } = useContext(FloatingContext)
   const look =
-    'group/action h-12 gap-2 rounded-full border-0 bg-transparent p-0 shadow-none hover:bg-transparent motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-150'
+    'h-12 w-full justify-start gap-3 rounded-2xl px-3 pr-5 text-base font-semibold text-foreground transition-colors active:not-aria-[haspopup]:translate-y-0 active:bg-muted'
   const choose = () => {
     onClick?.()
     close()
   }
   const face = (
     <>
-      <span
-        className={cn(
-          'rounded-full border border-border bg-card px-2.5 py-1 text-sm font-medium shadow-sm shadow-foreground/10',
-          !labels && 'sr-only',
-        )}
-      >
-        {label}
-      </span>
-      <span className="grid size-12 place-items-center rounded-full border border-input bg-card shadow-md shadow-foreground/10 transition-colors group-hover/action:bg-muted">
-        <Icon aria-hidden className="size-5" />
-      </span>
+      <Icon aria-hidden className="size-5 text-muted-foreground" />
+      <span className="truncate">{label}</span>
     </>
   )
   return (
     <li>
       {render ? (
-        <ButtonLink
-          variant="ghost"
-          render={render}
-          onClick={choose}
-          title={labels ? undefined : label}
-          className={cn(look, place === 'left' && 'flex-row-reverse')}
-        >
+        <ButtonLink variant="ghost" render={render} onClick={choose} className={look}>
           {face}
         </ButtonLink>
       ) : (
-        <Button
-          variant="ghost"
-          disabled={disabled}
-          onClick={choose}
-          title={labels ? undefined : label}
-          className={cn(look, place === 'left' && 'flex-row-reverse')}
-        >
+        <Button variant="ghost" disabled={disabled} onClick={choose} className={look}>
           {face}
         </Button>
       )}

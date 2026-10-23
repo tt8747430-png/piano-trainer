@@ -64,6 +64,21 @@ describe('the draft', () => {
     ])
   })
 
+  it('holds each more voice on the timeline, its staff added, and writes them back', () => {
+    const sung = {
+      key: 'G',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['G C'] }],
+      melody: 'B4/4 | C5/4',
+      voices: ['G4/4 | E4/4', 'D4/2 r/2 | r/4'],
+    } as const satisfies PieceMusic
+    const draft = readDraft(sung)
+    expect(draft.voices.map((voice) => voice.map((n) => n.startTick))).toEqual([[0, 96], [0]])
+    expect(writeDraft(draft).voices).toEqual(['G4/4 | E4/4', 'D4/2'])
+  })
+
   it('saves only music that reads back', () => {
     const draft = readDraft(WRITTEN)
     expect(musicToSave(draft)).toEqual(writeDraft(draft))

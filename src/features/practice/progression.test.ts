@@ -1,12 +1,21 @@
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
+import { libraryParam, libraryProgression } from '@/entities/progression-library'
 import { describe, expect, it } from 'vitest'
 import { chordSymbol, note, parseNumerals } from '@/shared/lib/music'
 import { arrangeProgression, progressionChart } from './progression'
+import { PROGRESSION } from './progression-choice'
 
 const G = { tonic: note('G'), minor: false }
 const C = { tonic: note('C'), minor: false }
 const numerals = (text: string) => parseNumerals(text) ?? []
 const TWELVE_BAR = 'I7 I7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7'
+
+describe('PROGRESSION', () => {
+  it('opens a minor key on the minor line of the library’s same progression', () => {
+    const shown = libraryProgression(PROGRESSION.numerals, false)
+    expect(shown && libraryParam(shown, true)).toBe(PROGRESSION.minorNumerals)
+  })
+})
 
 describe('progressionChart', () => {
   it('writes a chord a bar of 4/4, four bars a line, in the key', () => {

@@ -1,5 +1,12 @@
 import { INTERVALS, type IntervalName, type LabelledInterval } from './interval'
-import { noteName, pitchClassOf, plainSpelling, rootSpelling, type SpelledNote } from './note'
+import {
+  noteName,
+  pitchClassOf,
+  plainRoot,
+  plainSpelling,
+  rootSpelling,
+  type SpelledNote,
+} from './note'
 import type { PitchClass } from './pitch'
 import { toneAbove, type Tone } from './tone'
 
@@ -309,12 +316,17 @@ export const writtenSymbol = (
 export const chordSymbol = (chord: Chord): string =>
   writtenSymbol({ root: chord.root, suffix: qualitySuffix(chord.quality) }, chord.bass)
 
-/** A bass that is a chord tone is spelled as that tone (`D#/G` is `D#/F𝄪`); any other as written. */
+/**
+ * A bass that is a chord tone is spelled as that tone (`E/Ab` is `E/G#`), unless that writes it
+ * oddly, a double accidental or a B♯ for a C, as no lead sheet does (`Gbm6/A`, not `G♭m6/B𝄫`); then,
+ * and for any other bass, as written.
+ */
 export function chordBass(
   root: SpelledNote,
   quality: ChordQuality,
   bass: SpelledNote,
 ): SpelledNote {
   const pc = pitchClassOf(bass)
-  return spellChord(root, quality).find((tone) => tone.pitchClass === pc)?.note ?? bass
+  const tone = spellChord(root, quality).find((each) => each.pitchClass === pc)?.note
+  return tone && plainRoot(tone) === tone ? tone : bass
 }

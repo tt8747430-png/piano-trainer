@@ -26,10 +26,10 @@
         var theme = 'system'
         try {
           var saved = JSON.parse(localStorage.getItem('pt-settings') || 'null')
-          var chosen = saved && saved.version === 2 && saved.state && saved.state.theme
+          var chosen = saved && saved.version === 3 && saved.state && saved.state.theme
           if (chosen === 'light' || chosen === 'dark') theme = chosen
           // Small titles too, so a screen's title never jumps a size as the app starts (TitlesSync).
-          if (saved && saved.version === 2 && saved.state && saved.state.titles === 'small')
+          if (saved && saved.version === 3 && saved.state && saved.state.titles === 'small')
             document.documentElement.dataset.titles = 'small'
         } catch (_) {}
         if (theme === 'system') {
@@ -61,6 +61,21 @@
           var viewport = document.querySelector('meta[name="viewport"]')
           if (installed && viewport)
             viewport.content = viewport.content + ', maximum-scale=1, user-scalable=no'
+          // Nor a long press's menu, a selection's loupe or Safari's own pinch: only fields keep theirs.
+          if (installed) {
+            var field = function (target) {
+              return (
+                target instanceof Element &&
+                target.closest('input, textarea, [contenteditable]') !== null
+              )
+            }
+            var hold = function (event) {
+              if (!field(event.target)) event.preventDefault()
+            }
+            document.addEventListener('contextmenu', hold)
+            document.addEventListener('selectstart', hold)
+            document.addEventListener('gesturestart', hold)
+          }
         } catch (_) {}
       })()
     </script>
