@@ -100,7 +100,8 @@ export function TempoButton({
                 ]
               : []),
             {
-              label: t('pace.playAlong'),
+              // Without Wait mode it only sets how fast the music plays back: a plain Playback speed.
+              label: t(onWait ? 'pace.playAlong' : 'pace.playback'),
               options: SPEEDS.map((share) => {
                 const speed = speedTempo(ownTempo, share)
                 return {

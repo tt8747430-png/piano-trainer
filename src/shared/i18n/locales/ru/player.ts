@@ -96,6 +96,7 @@ export const player: LocaleResources['player'] = {
     of: 'Темп: {{value}}',
     ownPace: 'Ждёт ваших нот',
     wait: 'Режим ожидания',
+    playback: 'Скорость воспроизведения',
     playAlong: 'Слушать и играть вместе',
     speed: 'Скорость {{percent}}',
     own: 'Исходный темп',

@@ -104,6 +104,7 @@ export const player = {
     of: 'Tempo: {{value}}',
     ownPace: 'Waits for your notes',
     wait: 'Wait mode',
+    playback: 'Playback speed',
     playAlong: 'Listen and play along',
     speed: '{{percent}} speed',
     own: 'Original tempo',
