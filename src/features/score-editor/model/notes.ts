@@ -11,7 +11,9 @@ import {
   type Accidental,
   type Finger,
   type Key,
+  type Letter,
   type Midi,
+  type SpelledNote,
   type Tick,
 } from '@/shared/lib/music'
 import type { HandId } from '@/entities/piece'
@@ -225,23 +227,37 @@ export function setDuration(draft: Draft, layer: NoteLayer, where: Where, ticks:
   return next
 }
 
+/** Whether notes all carry a sign, ♯ (1), ♭ (−1) or ♮ (0): the palette shows it pressed, and a tap takes it off. */
+export const carriesAccidental = (notes: readonly DraftNote[], accidental: Accidental): boolean =>
+  notes.length > 0 && notes.every((n) => n.spelled.accidental === accidental)
+
+/** A letter as the key spells it: its note of the key's scale (G major's F is F♯), else plain. */
+const letterInKey = (letter: Letter, key: Key): SpelledNote =>
+  spellScale(key.tonic, keyScale(key)).find((tone) => tone.note.letter === letter)?.note ??
+  note(letter)
+
 /**
- * The notes `where` takes written on their letter with an accidental: ♯ (1), ♭ (−1) or ♮ (0), their
- * key following; nothing moves past the piano's ends.
+ * Flat's accidentals (ADR 0091): the notes `where` takes written on their letter with the sign, ♯
+ * (1), ♭ (−1) or ♮ (0), their key following; where every one carries it already, the sign comes off
+ * and each letter is spelled as its key spells it, the note back at the key's pitch. Nothing moves
+ * past the piano's ends.
  */
-export const setAccidental = (
+export function toggleAccidental(
   draft: Draft,
   layer: NoteLayer,
   where: Where,
   accidental: Accidental,
-): Draft =>
-  changeAt(draft, layer, where, (n) => {
-    if (n.spelled.accidental === accidental) return n
-    const moved = n.midi + accidental - n.spelled.accidental
-    return moved < PIANO.from || moved > PIANO.to
-      ? null
-      : { ...n, midi: midi(moved), spelled: note(n.spelled.letter, accidental) }
+): Draft {
+  const off = carriesAccidental(notesOf(draft, layer).filter(isAt(where)), accidental)
+  return changeAt(draft, layer, where, (n) => {
+    const spelled = off
+      ? letterInKey(n.spelled.letter, keyAt(draft, n.startTick))
+      : note(n.spelled.letter, accidental)
+    if (spelled.accidental === n.spelled.accidental) return n
+    const moved = n.midi + spelled.accidental - n.spelled.accidental
+    return moved < PIANO.from || moved > PIANO.to ? null : { ...n, midi: midi(moved), spelled }
   })
+}
 
 /** The notes at `at` moved by semitones, spelled in the key; nothing moves past the piano's ends. */
 export const shiftNotes = (

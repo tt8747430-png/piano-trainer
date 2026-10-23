@@ -817,6 +817,40 @@ describe('the score editor', () => {
     expect(within(fingering).getByText('Choose a note to give it a finger.')).toBeInTheDocument()
   })
 
+  it('toggles a sign on the note chosen from Notes: pressed while it carries it, off at a second tap (Flat’s)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ hands: { rh: 'Eb4/4 | r/4 | r/4 | r/4', lh: EMPTY_TUNE } }),
+    })
+    await waitFor(() =>
+      expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff · Bar 1, beat 1 · E♭4/),
+    )
+    const notes = await openCategory(user, 'Notes')
+    const flat = within(notes).getByRole('button', { name: 'Flat' })
+    const natural = within(notes).getByRole('button', { name: 'Natural' })
+    expect(flat).toHaveAttribute('aria-pressed', 'true')
+    expect(natural).toHaveAttribute('aria-pressed', 'false')
+    // ♭ again: off, the note as the key spells E.
+    await user.click(flat)
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        hands: { rh: 'E4/4 | r/4 | r/4 | r/4' },
+      }),
+    )
+    expect(flat).toHaveAttribute('aria-pressed', 'false')
+    expect(natural).toHaveAttribute('aria-pressed', 'true')
+    await user.click(within(notes).getByRole('button', { name: 'Sharp' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        hands: { rh: 'E#4/4 | r/4 | r/4 | r/4' },
+      }),
+    )
+    expect(within(notes).getByRole('button', { name: 'Sharp' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+  })
+
   it('marks the note at the caret from the palette’s categories, saved with the tune', async () => {
     const user = userEvent.setup({ delay: 120 })
     const { piecesStore, settingsStore } = await renderApp('/edit/my-1', {

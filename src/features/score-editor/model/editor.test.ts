@@ -546,9 +546,25 @@ describe('the palette on what is chosen', () => {
     expect(state.caret).toBe(0)
   })
 
-  it('writes the note chosen sharp, flat or natural', () => {
-    const state = run(at(tune(), 72), { type: 'accidental', accidental: 0 })
-    expect(shape(state.draft.melody).at(-1)).toBe('F4@72/24')
+  it('writes the note chosen sharp, flat or natural, and the same sign again takes it off (Flat’s)', () => {
+    const natural = run(at(tune(), 72), { type: 'accidental', accidental: 0 })
+    expect(shape(natural.draft.melody).at(-1)).toBe('F4@72/24')
+    // ♮ again: back to the key's F♯.
+    expect(shape(run(natural, { type: 'accidental', accidental: 0 }).draft.melody).at(-1)).toBe(
+      'F#4@72/24',
+    )
+    // The chord's one note chosen follows its sign on and off.
+    const chord = run(
+      initialEditor(draftOf({ hands: { rh: 'C4+E4/4 | r/4' } })),
+      { type: 'layer', layer: 'rh' },
+      { type: 'place', tick: 0, layer: 'rh', key: midi(64) },
+    )
+    const flat = run(chord, { type: 'accidental', accidental: -1 })
+    expect(shape(flat.draft.hands.rh)).toEqual(['C4@0/96', 'E♭4@0/96'])
+    expect(flat.chordNote).toBe(63)
+    const back = run(flat, { type: 'accidental', accidental: -1 })
+    expect(shape(back.draft.hands.rh)).toEqual(['C4@0/96', 'E4@0/96'])
+    expect(back.chordNote).toBe(64)
   })
 
   it('adds a bar before the caret’s, and gives each bar chosen a length and the first a clef', () => {

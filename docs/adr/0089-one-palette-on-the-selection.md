@@ -24,7 +24,7 @@ insertion point, notes chosen are edited by the same tools that write them, and 
   chord's one note takes its chord), shorter leaving a rest, longer taking the notes under it as writing does,
   stopping where the hand stops being written or the piece ends. The quick row shows the chosen note's own value
   pressed (`shownValue`). A rest makes a range's notes rests. ♯ ♭ ♮ write the chosen notes' letter so
-  (`setAccidental`).
+  (`setAccidental`; since ADR 0091 toggles, `toggleAccidental`).
 - **The palette** (`EditorTools`): a quick row of the values and Dotted (the key's triads in the chord row),
   always in sight; under it the category bar, a picture each, scrolling sideways, ending in the palette's fold
   and a Keys toggle that never comes and goes; opened, every category's section stacked over them, scrolling, a

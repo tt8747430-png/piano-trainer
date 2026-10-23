@@ -22,7 +22,7 @@ export {
   type EditorAction,
   type EditorState,
 } from './model/state'
-export { notesAt, notesOf } from './model/notes'
+export { carriesAccidental, notesAt, notesOf } from './model/notes'
 export { metersFor } from './model/settings'
 export { createEditorStore, type EditorStore } from './model/store'
 export { TAKE_INTO, takeParts, type TakeInto } from './model/take-edits'
