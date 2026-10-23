@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Midi, Tick, TimeSignature } from '@/shared/lib/music'
-import type { Score, StaffId } from '@/shared/lib/notation'
+import type { NextLine, Score, StaffId } from '@/shared/lib/notation'
 import { drawnStaves } from './drawn-staves'
 import type { ScoreLayout } from './layout'
 import { staffHeight } from './size'
@@ -28,6 +28,7 @@ export function ScoreView({
   staff,
   staves,
   timeBefore,
+  next,
   selected,
   fill,
   children,
@@ -44,6 +45,11 @@ export function ScoreView({
   staves?: readonly StaffId[] | undefined
   /** The time signature before this line of music: printed again only where it changes. */
   timeBefore?: TimeSignature | undefined
+  /**
+   * What the next line starts in: a key, time or clef it changes to printed after this line's last
+   * barline, as a courtesy (a justified line's).
+   */
+  next?: NextLine | undefined
   /** The sheet's width in CSS pixels: the line is spread to it, and drawn smaller where wider. */
   fill?: number | undefined
   /**
@@ -67,6 +73,10 @@ export function ScoreView({
   // As numbers, so a new object of the same time engraves nothing again.
   const beforeCount = timeBefore?.count
   const beforeUnit = timeBefore?.unit
+  // As one string, so a new object of the same signature engraves nothing again.
+  const nextKey = next
+    ? JSON.stringify({ key: next.key, time: next.time, clefs: next.clefs } satisfies NextLine)
+    : ''
   const drawn = drawnStaves(score, staff, staves)
   // As one string, so a new list of the same staves engraves nothing again.
   const shownKey = drawn.join(' ')
@@ -88,6 +98,7 @@ export function ScoreView({
           beforeCount === undefined || beforeUnit === undefined
             ? undefined
             : { count: beforeCount, unit: beforeUnit },
+        next: nextKey ? (JSON.parse(nextKey) as NextLine) : undefined,
         fill,
       },
       stopped.signal,
@@ -99,7 +110,7 @@ export function ScoreView({
         if (!stopped.signal.aborted) setEngraving({ status: 'error' })
       })
     return () => stopped.abort()
-  }, [score, scale, fingers, names, shownKey, beforeCount, beforeUnit, fill])
+  }, [score, scale, fingers, names, shownKey, beforeCount, beforeUnit, nextKey, fill])
 
   // The chosen notes are marked on the engraving as it is, so moving the caret engraves nothing again.
   const selectedStaff = selected?.staff

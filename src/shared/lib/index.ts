@@ -82,7 +82,14 @@ export { useViewChange } from './use-view-change'
 export { morph } from './morph'
 export { longestLine } from './longest-line'
 export { breakLine } from './line-breaks'
-export { PAGE, paginate, PRINT_SCALE, SHEET_VIEWS, type SheetView } from './sheet-views'
+export {
+  PAGE,
+  PAGE_STRETCH,
+  paginate,
+  PRINT_SCALE,
+  SHEET_VIEWS,
+  type SheetView,
+} from './sheet-views'
 export {
   clampZoom,
   fitWidth,

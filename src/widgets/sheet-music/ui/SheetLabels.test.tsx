@@ -37,6 +37,24 @@ describe('SheetLabels', () => {
     expect(label).toHaveStyle({ left: '4px', maxWidth: '52px' })
   })
 
+  it('numbers a line’s first bar only, as LilyPond numbers a system’s start (each bar still tapped)', () => {
+    const { container } = render(
+      <SheetLabels
+        layout={layout}
+        performance={TWO_BARS}
+        headings={[]}
+        positions={false}
+        chordNames={false}
+        firstBar={4}
+        tempos={[undefined, undefined, undefined, undefined, undefined, 72]}
+      />,
+    )
+    expect(screen.getByText('5')).toBeInTheDocument()
+    expect(screen.queryByText('6')).not.toBeInTheDocument()
+    // A tempo on a later bar of the line is still said there, without the bar's number.
+    expect(container).toHaveTextContent(/^5\u{1D15F}= 72$/u)
+  })
+
   it('prints a chord name’s sharps and flats as signs, and a 6/8 tempo by its dotted quarter', () => {
     const { container } = render(
       <SheetLabels

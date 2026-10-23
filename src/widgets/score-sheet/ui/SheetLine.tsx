@@ -113,6 +113,7 @@ export const SheetLine = memo(function SheetLine({
         scale={scale}
         score={sheet.score}
         timeBefore={sheet.timeBefore}
+        next={sheet.next}
         selected={selected}
         fill={justify && width > 0 ? width : undefined}
       >

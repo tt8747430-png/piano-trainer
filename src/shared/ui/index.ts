@@ -89,4 +89,5 @@ export {
 export { ToolDivider } from './ToolDivider'
 export { TypedField } from './TypedField'
 export { PageCanvas } from './PageCanvas'
+export { SheetPage, type PageBlock } from './SheetPage'
 export { useCanvasReveal } from './canvas-reveal'

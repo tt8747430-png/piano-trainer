@@ -1,7 +1,7 @@
 import type { Performance } from '@/shared/lib/arrangement'
 import type { TimeSignature } from '@/shared/lib/music'
 import { breakLine } from '@/shared/lib'
-import type { Score } from '@/shared/lib/notation'
+import type { NextLine, Score } from '@/shared/lib/notation'
 
 /** A line of a score laid out in lines: the piece's bars it holds, and its own score. */
 export interface ScoreLine {
@@ -10,6 +10,8 @@ export interface ScoreLine {
   readonly score: Score
   /** The time signature in force before it: printed again only where it changes. */
   readonly timeBefore: TimeSignature | undefined
+  /** What the next line starts in: a key, time or clef it changes to is printed at this line's end. */
+  readonly next: NextLine | undefined
 }
 
 /**
@@ -29,6 +31,7 @@ export function scoreLines(
       first: from,
       score: { ...score, measures: score.measures.slice(from, to) },
       timeBefore: score.measures[from - 1]?.time,
+      next: score.measures[to],
     })
   let start = 0
   score.measures.forEach((_, index) => {

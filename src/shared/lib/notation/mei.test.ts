@@ -167,4 +167,44 @@ describe('scoreToMei, a note’s marks and the options', () => {
     )
     expect(scoreToMei(score, { timeBefore: { count: 3, unit: 4 } })).not.toContain('meter.visible')
   })
+
+  describe('a courtesy signature at the line’s end, as LilyPond prints one before a change', () => {
+    const score = plain([c(0)])
+    const last = score.measures.at(-1)!
+    // What follows the line's last measure: a page break, the next line's signature, a measure of it.
+    const courtesy = (written: string) =>
+      written.match(/<\/measure><pb\/>(<scoreDef[^]*?)<measure xml:id="m-next"/)?.[1]
+
+    it('ends the line with the key and time the next line starts in', () => {
+      const written = scoreToMei(score, {
+        next: { time: { count: 3, unit: 4 }, key: { tonic: note('D'), minor: false } },
+      })
+      expect(courtesy(written)).toBe('<scoreDef meter.count="3" meter.unit="4" key.sig="2s"/>')
+      // Drawn on a page of its own, the next line's measure holds no note to be read back.
+      expect(written).toMatch(
+        /<measure xml:id="m-next"[^>]*>(<staff n="\d"><layer n="1"><mSpace\/><\/layer><\/staff>)+<\/measure><\/section>/,
+      )
+    })
+
+    it('prints only what changes: the key alone, or the time alone', () => {
+      expect(
+        courtesy(scoreToMei(score, { next: { ...last, key: { tonic: note('E'), minor: false } } })),
+      ).toBe('<scoreDef key.sig="4s"/>')
+      expect(courtesy(scoreToMei(score, { next: { ...last, time: { count: 2, unit: 4 } } }))).toBe(
+        '<scoreDef meter.count="2" meter.unit="4"/>',
+      )
+    })
+
+    it('prints the clef a staff changes to', () => {
+      expect(courtesy(scoreToMei(score, { next: { ...last, clefs: { treble: 'bass' } } }))).toBe(
+        '<scoreDef><staffGrp><staffDef n="1" clef.shape="F" clef.line="4"/></staffGrp></scoreDef>',
+      )
+    })
+
+    it('writes nothing after the line when the next goes on as it ends', () => {
+      const written = scoreToMei(score, { next: last })
+      expect(written).not.toContain('m-next')
+      expect(written).not.toContain('<pb/>')
+    })
+  })
 })
