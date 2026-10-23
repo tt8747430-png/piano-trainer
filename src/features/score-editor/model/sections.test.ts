@@ -1,6 +1,20 @@
 import { describe, expect, it } from 'vitest'
+import { parseKey, type Key } from '@/shared/lib/music'
 import { draftOf, form } from '../testing/test-draft'
-import { joinSection, newSection, setSectionKind, setSectionPattern } from './sections'
+import {
+  joinSection,
+  newSection,
+  setSectionKey,
+  setSectionKind,
+  setSectionPattern,
+} from './sections'
+import { keyAt } from './timeline'
+
+const key = (text: string): Key => {
+  const parsed = parseKey(text)
+  if (!parsed) throw new Error(text)
+  return parsed
+}
 
 const headings = (draft: ReturnType<typeof draftOf>) =>
   draft.sections.map((section) => section.heading)
@@ -90,5 +104,40 @@ describe('sections', () => {
       { kind: 'part', label: 'A' },
     ])
     expect(headings(joinSection(form, 1)).map((heading) => heading.label)).toEqual(['A', 'B', 'A'])
+  })
+
+  describe('a key change at a section (ADR 0089)', () => {
+    const song = draftOf({
+      sections: [
+        { kind: 'verse', n: 1, lines: ['G C'] },
+        { kind: 'chorus', lines: ['C G'] },
+        { kind: 'verse', n: 2, lines: ['G D'] },
+        { kind: 'bridge', key: 'E', lines: ['E A'] },
+        { kind: 'chorus', last: true, lines: ['C G'] },
+      ],
+    })
+    const keys = (draft: typeof song) => draft.sections.map((section) => section.heading.key)
+
+    it('runs from the section on, until the next change of key', () => {
+      expect(keys(setSectionKey(song, 1, key('A')))).toEqual([undefined, 'A', 'A', 'E', undefined])
+    })
+
+    it('writes no key where the section goes back to the song’s', () => {
+      expect(keys(setSectionKey(song, 3, key('G')))).toEqual([
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ])
+      expect(setSectionKey(song, 0, key('G'))).toBe(song)
+    })
+
+    it('is the key at a tick: a section’s own, else the song’s', () => {
+      expect(keyAt(song, 0)).toEqual(key('G'))
+      // Each bar a whole note: the bridge starts at its seventh bar.
+      expect(keyAt(song, 6 * 96)).toEqual(key('E'))
+      expect(keyAt(song, 8 * 96)).toEqual(key('G'))
+    })
   })
 })

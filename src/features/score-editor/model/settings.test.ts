@@ -19,6 +19,18 @@ describe('the song’s settings', () => {
     expect(shape(moved.hands.lh)).toEqual(['E♭3@0/96'])
   })
 
+  it('moves a section’s own key with the music (ADR 0089)', () => {
+    const changing = draftOf({
+      key: 'C',
+      sections: [
+        { kind: 'verse', lines: ['C'] },
+        { kind: 'chorus', key: 'Eb', lines: ['Eb'] },
+      ],
+    })
+    const moved = setKey(changing, { tonic: note('D'), minor: false })
+    expect(moved.sections.map((section) => section.heading.key)).toEqual([undefined, 'F'])
+  })
+
   it('changes only the key for the other mode of the same tonic', () => {
     const minor = setKey(draft, { tonic: note('C'), minor: true })
     expect(minor.key.minor).toBe(true)

@@ -39,6 +39,31 @@ describe('the editor', () => {
     expect(shape(run(written, { type: 'step', steps: -1 }).draft.melody)).toEqual(['F#4@0/24'])
   })
 
+  it('changes key from the caret’s section on, its notes written and stepped in that key (ADR 0089)', () => {
+    const twoParts = initialEditor(
+      draftOf({
+        sections: [
+          { kind: 'verse', lines: ['G C'] },
+          { kind: 'chorus', lines: ['F C'] },
+        ],
+      }),
+    )
+    const chorus = run(
+      twoParts,
+      { type: 'layer', layer: 'melody' },
+      { type: 'place', tick: 192, layer: 'melody' },
+      { type: 'sectionKey', key: { tonic: note('F'), minor: false } },
+    )
+    expect(chorus.draft.sections.map((section) => section.heading.key)).toEqual([undefined, 'F'])
+    // A B♭ in F, not the A♯ G major would write; a step up from A in F is B♭ too.
+    const written = run(chorus, key(70, 0), { type: 'place', tick: 192, layer: 'melody' })
+    expect(shape(written.draft.melody)).toEqual(['B♭4@192/24'])
+    const a = run(chorus, key(69, 0), { type: 'place', tick: 192, layer: 'melody' })
+    expect(shape(run(a, { type: 'step', steps: 1 }).draft.melody)).toEqual(['B♭4@192/24'])
+    // Undone, the chorus is in the song's key again.
+    expect(run(chorus, { type: 'undo' }).draft.sections[1]?.heading.key).toBeUndefined()
+  })
+
   it('adds the tune’s staff and takes it away with its notes, one undo step each', () => {
     const added = run(start('rh'), { type: 'melodyStaff', on: true })
     expect(added.draft.melodyStaff).toBe(true)

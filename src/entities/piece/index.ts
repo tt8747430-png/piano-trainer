@@ -10,6 +10,7 @@ export {
   type Piece,
   type PieceId,
   type Section,
+  type KeyText,
   type SectionKind,
 } from './model/types'
 export {

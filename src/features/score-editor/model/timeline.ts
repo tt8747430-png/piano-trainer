@@ -1,4 +1,4 @@
-import type { Chord, Tick } from '@/shared/lib/music'
+import { parseKey, type Chord, type Key, type Tick } from '@/shared/lib/music'
 import type { Draft, DraftBar } from './draft'
 
 /** A bar where it is: its index in the piece, its section and line, and its first tick. */
@@ -51,3 +51,13 @@ export function chordsAt(
     ticks: (bar.chords[i + 1]?.at ?? bar.ticks) - chord.at,
   }))
 }
+
+/** The key a section is written in: its own (a key change, ADR 0089), else the song's. */
+export function sectionKey(draft: Draft, section: number): Key {
+  const written = draft.sections[section]?.heading.key
+  return (written === undefined ? null : parseKey(written)) ?? draft.key
+}
+
+/** The key at a tick: its section's. */
+export const keyAt = (draft: Draft, tick: Tick): Key =>
+  sectionKey(draft, barAt(draft, tick).section)

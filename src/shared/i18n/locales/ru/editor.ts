@@ -83,7 +83,12 @@ export const editor: LocaleResources['editor'] = {
     treble: 'Скрипичный ключ',
     bass: 'Басовый ключ',
   },
-  signature: { change: 'Изменить для всей песни' },
+  signature: {
+    change: 'Изменить для всей песни',
+    fromSection: 'С раздела «{{section}}» (такт {{bar}})',
+    song: 'Тональность песни',
+    timeLater: 'Смену размера внутри песни пока не записать: здесь размер всей песни.',
+  },
   lines: {
     slur: 'Лига',
     cresc: 'Крещендо',

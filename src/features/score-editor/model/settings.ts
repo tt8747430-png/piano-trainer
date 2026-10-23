@@ -1,12 +1,15 @@
-import { keyText, PIECE_TEMPO } from '@/entities/piece'
+import { keyText, PIECE_TEMPO, type KeyText } from '@/entities/piece'
 import { transposeChord, transposeNotes } from '@/shared/lib/arrangement'
 import {
   beatsPerBar,
   isCompound,
   METERS,
   midi,
+  parseKey,
   PIANO,
+  transposeNote,
   TICKS_PER_BEAT,
+  writtenKey,
   type Key,
   type Meter,
 } from '@/shared/lib/music'
@@ -29,11 +32,22 @@ function moved(notes: readonly DraftNote[], from: Key, to: Key): DraftNote[] {
 export function setKey(draft: Draft, key: Key): Draft {
   const from = draft.key
   if (keyText(from) === keyText(key)) return draft
+  // A section's own key moves with its music (ADR 0089).
+  const sectionKey = (written: KeyText): KeyText => {
+    const own = parseKey(written)
+    return own
+      ? keyText(writtenKey({ ...own, tonic: transposeNote(own.tonic, from.tonic, key.tonic) }))
+      : written
+  }
   return {
     ...draft,
     key,
     sections: draft.sections.map((section) => ({
       ...section,
+      heading:
+        section.heading.key === undefined
+          ? section.heading
+          : { ...section.heading, key: sectionKey(section.heading.key) },
       lines: section.lines.map((line) =>
         line.map((bar) => ({
           ...bar,

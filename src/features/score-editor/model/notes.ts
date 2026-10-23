@@ -25,7 +25,7 @@ import {
   type NoteLayer,
 } from './draft'
 import { insertBar } from './bars'
-import { barAt, barsOf, startsIn, totalTicks } from './timeline'
+import { barAt, barsOf, keyAt, startsIn, totalTicks } from './timeline'
 
 /** A draft after writing, and where the caret goes next. */
 interface Written {
@@ -97,10 +97,10 @@ function writtenAt(draft: Draft, hand: HandId, at: Tick): Draft {
   return bar[hand] ? draft : withBar(draft, index, (written) => ({ ...written, [hand]: true }))
 }
 
-/** A key as the draft writes it: spelled in its key. */
-export const spelledIn = (draft: Draft, key: Midi) => ({
+/** A key as the draft writes it at a tick: spelled in the key there (a section's own, ADR 0089). */
+export const spelledIn = (draft: Draft, key: Midi, at: Tick) => ({
   midi: key,
-  spelled: spellInKey(pitchClass(key), draft.key),
+  spelled: spellInKey(pitchClass(key), keyAt(draft, at)),
 })
 
 /**
@@ -135,7 +135,7 @@ export function writeNotes(
   const end = Math.min(at + ticks, reach)
   const played = isHandLayer(layer) ? [...new Set(keys)] : [Math.max(...keys)].map(midi)
   const written: DraftNote[] = played.map((key) => ({
-    ...spelledIn(ready, key),
+    ...spelledIn(ready, key, at),
     startTick: at,
     durationTicks: end - at,
   }))
@@ -173,12 +173,14 @@ export function addToChord(
       ? withNotes(
           draft,
           layer,
-          notesOf(draft, layer).map((n) => (n === first ? { ...n, ...spelledIn(draft, key) } : n)),
+          notesOf(draft, layer).map((n) =>
+            n === first ? { ...n, ...spelledIn(draft, key, at) } : n,
+          ),
         )
       : draft
   }
   if (notesAt(draft, layer, at).some((n) => n.midi === key)) return draft
-  const added = { ...spelledIn(draft, key), startTick: at, durationTicks: first.durationTicks }
+  const added = { ...spelledIn(draft, key, at), startTick: at, durationTicks: first.durationTicks }
   return withNotes(draft, layer, [...notesOf(draft, layer), added])
 }
 
@@ -294,7 +296,7 @@ export const shiftNotes = (
     const moved = n.midi + semitones
     return moved < PIANO.from || moved > PIANO.to
       ? null
-      : { ...n, ...spelledIn(draft, midi(moved)) }
+      : { ...n, ...spelledIn(draft, midi(moved), n.startTick) }
   })
 
 /** The key's next note from `from`, up (1) or down (−1): a step on the staff in its key. */
@@ -312,8 +314,9 @@ export function keyStep(key: Key, from: Midi, direction: 1 | -1): Midi {
 export const stepNotes = (draft: Draft, layer: NoteLayer, where: Where, steps: number): Draft =>
   changeAt(draft, layer, where, (n) => {
     let moved = n.midi
-    for (let i = 0; i < Math.abs(steps); i++) moved = keyStep(draft.key, moved, steps > 0 ? 1 : -1)
-    return moved === n.midi ? n : { ...n, ...spelledIn(draft, moved) }
+    const key = keyAt(draft, n.startTick)
+    for (let i = 0; i < Math.abs(steps); i++) moved = keyStep(key, moved, steps > 0 ? 1 : -1)
+    return moved === n.midi ? n : { ...n, ...spelledIn(draft, moved, n.startTick) }
   })
 
 /**

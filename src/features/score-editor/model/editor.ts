@@ -30,11 +30,11 @@ import {
   writeOut,
   writeRest,
 } from './notes'
-import { joinSection, setSectionKind, setSectionPattern } from './sections'
+import { joinSection, setSectionKey, setSectionKind, setSectionPattern } from './sections'
 import { setKey, setMeter, setTempo } from './settings'
 import type { EditorAction, EditorState } from './state'
 import { writeTake } from './take-edits'
-import { barAt } from './timeline'
+import { barAt, barsOf, keyAt } from './timeline'
 import { toggledDot, toggledTriplet, withValue, type ChosenValue } from './values'
 
 /** The chord's one note chosen, moved by `move` (null where it went past the piano's ends). */
@@ -164,7 +164,9 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
             {
               struck: null,
               selection: state.selection,
-              ...movedNote(state, (key) => steppedKey(draft.key, key, action.steps)),
+              ...movedNote(state, (key) =>
+                steppedKey(keyAt(draft, state.caret), key, action.steps),
+              ),
             },
             action.joins ?? false,
           )
@@ -314,6 +316,10 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       return commit(state, joinSection(draft, action.section))
     case 'sectionPattern':
       return commit(state, setSectionPattern(draft, action.section, action.pattern))
+    case 'sectionKey': {
+      const section = barsOf(draft)[chosenBars(state).from]?.section ?? 0
+      return commit(state, setSectionKey(draft, section, action.key))
+    }
     case 'settings': {
       let next = draft
       if (action.key) next = setKey(next, action.key)

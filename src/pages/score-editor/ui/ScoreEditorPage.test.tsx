@@ -285,13 +285,25 @@ describe('the score editor', () => {
     expect(within(settings).queryByRole('combobox', { name: 'Pattern' })).not.toBeInTheDocument()
   })
 
-  it('has no Insert menu: the key and time signature are the song’s, changed in the Song sheet', async () => {
+  it('changes key from the caret’s section on, or for the whole song in the Song sheet (ADR 0089)', async () => {
     const user = userEvent.setup()
-    await renderApp('/edit/my-1', { storage: withSong() })
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await screen.findByRole('status')
     expect(screen.queryByRole('button', { name: 'Insert' })).not.toBeInTheDocument()
     const key = await openCategory(user, 'Key signature')
-    expect(within(key).getByText('G major')).toBeInTheDocument()
+    expect(within(key).getByText('From Verse on (bar 1)')).toBeInTheDocument()
+    const here = within(key).getByRole('group', { name: 'Key' })
+    await user.click(within(here).getByRole('radio', { name: 'D' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        key: 'G',
+        sections: [{ key: 'D', lines: ['G G G G'] }],
+      }),
+    )
+    // A change of time inside the song is not written yet, and the section says so.
+    const time = await openCategory(user, 'Time signature')
+    expect(within(time).getByText(/whole song’s/)).toBeInTheDocument()
+    await openCategory(user, 'Key signature')
     await user.click(within(key).getByRole('button', { name: 'Change for the whole song' }))
     const song = await screen.findByRole('dialog', { name: 'Song' })
     expect(within(song).getByRole('group', { name: 'Key' })).toBeInTheDocument()

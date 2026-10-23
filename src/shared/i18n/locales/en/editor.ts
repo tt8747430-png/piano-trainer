@@ -91,7 +91,13 @@ export const editor = {
     bass: 'Bass clef',
   },
   // The palette's Key and Time: the song's own, changed in the Song sheet.
-  signature: { change: 'Change for the whole song' },
+  signature: {
+    change: 'Change for the whole song',
+    // A key change from a section on, up to the next change (ADR 0089).
+    fromSection: 'From {{section}} on (bar {{bar}})',
+    song: 'The song’s key',
+    timeLater: 'A change of time inside the song is not written yet: this is the whole song’s.',
+  },
   // The lines drawn over notes, each a key.
   lines: {
     slur: 'Slur',

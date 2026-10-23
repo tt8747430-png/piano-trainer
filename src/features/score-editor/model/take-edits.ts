@@ -73,7 +73,7 @@ function writePart(draft: Draft, { layer, notes }: TakePart, span: Span): Draft 
   const ready = isHandLayer(layer) ? writtenOut(draft, layer, span) : draft
   const played = isHandLayer(layer) ? notes : oneLine(notes)
   const added = played.map((n) => ({
-    ...spelledIn(ready, n.midi),
+    ...spelledIn(ready, n.midi, span.from + n.startTick),
     startTick: span.from + n.startTick,
     durationTicks: n.durationTicks,
   }))

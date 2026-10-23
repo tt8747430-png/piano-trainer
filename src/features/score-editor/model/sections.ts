@@ -1,7 +1,9 @@
 import type { PatternId } from '@/entities/pattern'
-import type { SectionKind } from '@/entities/piece'
+import { keyText, type SectionKind } from '@/entities/piece'
+import type { Key } from '@/shared/lib/music'
 import type { Draft, DraftSection } from './draft'
 import { slotsOf, withSlots, type Heading } from './structure'
+import { sectionKey } from './timeline'
 
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -110,6 +112,30 @@ export function setSectionPattern(draft: Draft, index: number, pattern: PatternI
     ...draft,
     sections: draft.sections.map((other) => (other === section ? { ...other, heading } : other)),
   }
+}
+
+/**
+ * A key change at section `index` (ADR 0089), as Flat changes key from a bar: that section and those
+ * after it in the same key, up to the next change of key, written in `key`; a section in the song's
+ * key writes none. The notes stay where they are: only their signature and spelling change.
+ */
+export function setSectionKey(draft: Draft, index: number, key: Key): Draft {
+  if (!draft.sections[index]) return draft
+  const was = keyText(sectionKey(draft, index))
+  const now = keyText(key)
+  if (was === now) return draft
+  const home = keyText(draft.key)
+  let running = true
+  const sections = draft.sections.map((section, i) => {
+    if (i < index || !running) return section
+    if (keyText(sectionKey(draft, i)) !== was) {
+      running = false
+      return section
+    }
+    const { key: _was, ...rest } = section.heading
+    return { ...section, heading: now === home ? rest : { ...rest, key: now } }
+  })
+  return { ...draft, sections }
 }
 
 /** A new section from bar `index`, of the kind it was in, named next; a bar starting one changes nothing. */

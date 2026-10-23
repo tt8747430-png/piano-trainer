@@ -158,6 +158,8 @@ export type EditorAction =
   | { readonly type: 'clef'; readonly hand: Hand; readonly clef: Clef }
   | { readonly type: 'sectionKind'; readonly section: number; readonly kind: SectionKind }
   | { readonly type: 'joinSection'; readonly section: number }
+  /** A key change from the first bar chosen's section (else the caret's) on (ADR 0089). */
+  | { readonly type: 'sectionKey'; readonly key: Key }
   | {
       readonly type: 'sectionPattern'
       readonly section: number

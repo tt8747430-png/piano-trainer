@@ -1,10 +1,13 @@
 import { useTranslation } from 'react-i18next'
+import { useSectionHeading } from '@/entities/piece'
 import {
   barAt,
+  barsOf,
   BARLINE_CHOICES,
   clefAt,
   isHandLayer,
   JUMP_CHOICES,
+  sectionKey,
   selectedBars,
   type BarMarkChoice,
 } from '@/features/score-editor'
@@ -14,9 +17,12 @@ import {
   EXPRESSION_TEXT,
   EXPRESSIONS,
   beatsPerBar,
+  keyFromParam,
+  keyParam,
   timeSignature,
   type Pedal,
 } from '@/shared/lib/music'
+import { KeyChoice } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { isJumpWords, JUMP_SIGNS, JUMP_WORDS } from '../model/palette-categories'
@@ -70,11 +76,8 @@ export function ClefKeys() {
   )
 }
 
-/**
- * Key or Time: the song's own, one for every bar (the draft holds no change of key or time inside the
- * song), named as it is with a way to the Song sheet, where it is changed.
- */
-export function SongSignature({ kind }: { kind: 'key' | 'time' }) {
+/** The song's own key or time, named as it is, with a way to the Song sheet, where it is changed. */
+function SongSignature({ kind }: { kind: 'key' | 'time' }) {
   const { t } = useTranslation('editor')
   const { view } = useScoreEditorContext()
   const keyName = useKeyName()
@@ -90,6 +93,57 @@ export function SongSignature({ kind }: { kind: 'key' | 'time' }) {
         {t('signature.change')}
       </Button>
     </div>
+  )
+}
+
+/**
+ * Key signature (ADR 0089): a key change from the section of the first bar chosen (else the caret's)
+ * on, up to the next change, as Flat changes key from a bar; then the song's own key, changed for the
+ * whole song in the Song sheet.
+ */
+export function KeySignatureKeys() {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const named = useSectionHeading()
+  const at = useEditorState((state) => {
+    const from = state.selection
+      ? selectedBars(state.draft, state.selection).from
+      : barAt(state.draft, state.caret).index
+    const placed = barsOf(state.draft)[from]
+    return placed ? placed.section : 0
+  })
+  const heading = useEditorState((state) => state.draft.sections[at]?.heading)
+  // The section's first bar, as printed.
+  const first = useEditorState(
+    (state) => (barsOf(state.draft).find((placed) => placed.section === at)?.index ?? 0) + 1,
+  )
+  const key = useEditorState((state) => keyParam(sectionKey(state.draft, at)))
+  return (
+    <>
+      <h4 className="text-sm text-muted-foreground">
+        {t('signature.fromSection', {
+          section: heading ? named({ ...heading, lines: [] }) : '',
+          bar: first,
+        })}
+      </h4>
+      <KeyChoice
+        value={key}
+        onChange={(next) => actions.dispatch({ type: 'sectionKey', key: keyFromParam(next) })}
+      />
+      <h4 className="pt-1 text-sm text-muted-foreground">{t('signature.song')}</h4>
+      <SongSignature kind="key" />
+    </>
+  )
+}
+
+/** Time signature: the song's own, one for every bar; a change of time inside the song is for later. */
+export function TimeSignatureKeys() {
+  const { t } = useTranslation('editor')
+  return (
+    <>
+      <SongSignature kind="time" />
+      <p className="text-sm text-pretty text-muted-foreground">{t('signature.timeLater')}</p>
+    </>
   )
 }
 

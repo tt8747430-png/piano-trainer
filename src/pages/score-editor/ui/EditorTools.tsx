@@ -16,7 +16,7 @@ import { ArticulationKeys, DynamicKeys } from './MarkKeys'
 import { NoteKeys, PitchKeys, QuickValues } from './NoteKeys'
 import { CategoryIcon } from './palette-icons'
 import { PaletteSection } from './palette-keys'
-import { ClefKeys, RepeatKeys, SongSignature, TextKeys } from './ScoreKeys'
+import { ClefKeys, KeySignatureKeys, RepeatKeys, TextKeys, TimeSignatureKeys } from './ScoreKeys'
 
 /** The ways the Chords category writes a chord (ADR 0065): the key's, built from its parts, typed. */
 const CHORD_WAYS = ['key', 'build', 'type'] as const
@@ -104,10 +104,10 @@ function Sections(chord: { way: ChordWay; setWay: (way: ChordWay) => void }) {
         <ClefKeys />
       </Section>
       <Section category="key">
-        <SongSignature kind="key" />
+        <KeySignatureKeys />
       </Section>
       <Section category="time">
-        <SongSignature kind="time" />
+        <TimeSignatureKeys />
       </Section>
       <Section category="repeats">
         <RepeatKeys />
