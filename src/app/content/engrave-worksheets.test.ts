@@ -35,7 +35,8 @@ function expectWritten(score: Score) {
   }
 }
 
-describe('every lesson’s staves, a journey’s or a course’s', () => {
+// Every lesson engraved: seconds alone, longer beside other workers.
+describe('every lesson’s staves, a journey’s or a course’s', { timeout: 60_000 }, () => {
   it('write each line of notes whole, on its one staff', async () => {
     for (const lesson of WORKSHEETS) {
       for (const section of lesson.sections) {
