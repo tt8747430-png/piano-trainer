@@ -3,10 +3,11 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { isDegreePiece, musicOf, pieceById, PIECES_STORAGE_KEY } from '@/entities/piece'
+import { chartStart } from '@/features/edit-piece'
 import { readDraft } from '@/features/score-editor'
 import { setKeyboard } from '@/features/set-preference'
 import { createMemoryStorage, LANDSCAPE_PHONE } from '@/shared/lib'
-import { midi } from '@/shared/lib/music'
+import { midi, note } from '@/shared/lib/music'
 import { notate, scoreToMei } from '@/shared/lib/notation'
 import { arrangeDraft } from '../model/arrange-draft'
 
@@ -92,6 +93,19 @@ describe('the score editor', () => {
     expect(
       within(ways).getByRole('radiogroup', { name: 'Ways to write a chord' }),
     ).toBeInTheDocument()
+  })
+
+  it('opens a new song on empty bars, nothing written in either staff, as a new score (ADR 0091)', async () => {
+    const user = userEvent.setup()
+    const made = chartStart({ tonic: note('G'), minor: false }, '4/4')
+    await renderApp('/edit/my-1', { storage: withSong(made) })
+    await waitFor(() =>
+      expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff · Bar 1, beat 1 · rest$/),
+    )
+    await user.keyboard('{Alt>}{ArrowDown}{/Alt}')
+    expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1, beat 1 · rest$/)
+    await user.keyboard('{ArrowRight}')
+    expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1, beat 2 · rest$/)
   })
 
   it('opens folded to its quick row and categories, a category opening every tool at its own', async () => {

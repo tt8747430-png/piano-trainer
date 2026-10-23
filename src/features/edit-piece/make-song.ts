@@ -9,6 +9,7 @@ import {
   type PieceMusic,
   type PiecesStore,
   type SharedSong,
+  writeHand,
 } from '@/entities/piece'
 import { beatsPerBar, beatsToTicks, keySymbol, type Key, type Meter } from '@/shared/lib/music'
 
@@ -55,9 +56,10 @@ interface SongDraft {
 }
 
 /**
- * Where a new chart starts: a verse of four bars of the key's tonic chord, at 90, the harmonic basis;
- * its score as `setup` says, a staff with nothing on it yet a rest (ADR 0072), never every staff
- * hidden (ADR 0083).
+ * Where a new song starts: a verse of four empty bars at 90, as a notation app's new score (ADR
+ * 0091): both hands written silent, so the editor opens on empty bars rather than the pattern's
+ * notes; its score as `setup` says, a staff with nothing on it yet a rest (ADR 0072), never every
+ * staff hidden (ADR 0083). Each bar names the key's tonic chord: the chart holds no bar without one.
  */
 export function chartStart(
   key: Key,
@@ -65,7 +67,13 @@ export function chartStart(
   setup: ScoreSetup = SCORE_TEMPLATES.chordsAndPiano,
 ): PieceMusic {
   const tonic = keySymbol(key)
-  const empty = emptyLine([{ startTick: 0, ticks: beatsToTicks(beatsPerBar(meter)) }])
+  const ticks = beatsToTicks(beatsPerBar(meter))
+  const bars = [ticks, ticks, ticks, ticks]
+  const empty = emptyLine([{ startTick: 0, ticks }])
+  const silent = writeHand(
+    bars.map(() => []),
+    bars,
+  )
   // The piano hidden only while the tune's staff is in sight (ADR 0083).
   const named: HiddenRow[] = [
     ...(setup.chordNames ? [] : ['chords' as const]),
@@ -77,9 +85,10 @@ export function chartStart(
     meter,
     tempo: 90,
     pattern: 'r1',
-    sections: [{ kind: 'verse', lines: [[tonic, tonic, tonic, tonic].join(' ')] }],
+    sections: [{ kind: 'verse', lines: [bars.map(() => tonic).join(' ')] }],
     ...(setup.melody ? { melody: empty } : {}),
     ...(hidden.length > 0 ? { hidden } : {}),
+    hands: { rh: silent, lh: silent },
   }
 }
 
