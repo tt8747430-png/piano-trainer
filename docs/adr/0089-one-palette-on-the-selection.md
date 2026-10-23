@@ -1,7 +1,7 @@
 # ADR 0089 — The editor's one palette acts on what is chosen
 
 - **Status:** accepted · **Date:** 2026-10-23 · **Supersedes:** ADR 0080's Insert (the + menu and its six
-  tabs) · **Amends:** ADR 0065 (the palette's tabs), ADR 0079 and 0081 (what floats over the sheet), ADR 0085
+  tabs) · **Amends:** ADR 0065 (the palette's tabs; removed by ADR 0091), ADR 0079 and 0081 (what floats over the sheet), ADR 0085
   (Undo and Redo in the bar) · Spec:
   [2026-10-23-editor-one-palette-like-flat](../superpowers/specs/2026-10-23-editor-one-palette-like-flat.md) ·
   **Amended** the same day after [2026-10-flat-and-dorico](../research/2026-10-flat-and-dorico.md) (below)

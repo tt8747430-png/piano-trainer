@@ -33,3 +33,7 @@ false`) and the caret leaves a hand for the top staff (`staffLeftFor`, `topStaff
 
 A lead sheet reads as one in both screens. A hand's staff is never blank where the pattern plays. Writing out a bar
 replaces the soft notes with the written ones.
+
+**Later (2026-10-23, ADR 0091):** the pattern's notes drawn soft, and `StaffList`'s parts, are gone: every bar of
+the editor's score is written, so a hand's staff holds its own notes everywhere; the lead sheet and the piano's eye
+stay.

@@ -13,8 +13,9 @@
 - **Built:** sub-projects 1, 2, 3, 4, 5, 7, 8 and 9 (the owner asked on 2026-10-01 to skip 6, the Path as a course,
   which stays planned). Sub-project 7 (exercises and trainers): its spec `2026-10-01-practice-exercises-and-trainers-design.md`,
   ADRs 0024 and 0025. Sub-project 8 (patterns): its spec `2026-10-01-patterns-design.md`, ADR 0026. Sub-project 9 (the
-  score editor): its spec `2026-10-01-score-editor-design.md`, ADR 0027. The specs and plans of 1 to 4 were removed once built, on 2026-09-27 (`git log
-  --diff-filter=D -- docs/superpowers` finds them). Sub-project 1: `DESIGN.md`'s keyboard and ADRs 0009 and 0010.
+  score editor): its spec `2026-10-01-score-editor-design.md` (removed once built, on 2026-10-23, superseded by ADR
+  0091), ADR 0027. The specs and plans of 1 to 4 were removed once built, on 2026-09-27, and every finished plan on
+  2026-10-23 (`git log --diff-filter=D -- docs/superpowers` finds them). Sub-project 1: `DESIGN.md`'s keyboard and ADRs 0009 and 0010.
   Sub-project 2 (navigation and options): ADR 0012, `DESIGN.md` (the Choosing Rule, pop-up buttons, rows, the four
   places) and the glossary (Learn, Practice, Lesson, Reference, Shelf, Chords view, Keys play, Holds). Sub-project 3
   (notation and the sheet-music Player): ADR 0013, `DESIGN.md` (the Player's layout, the sheet), `docs/CODE_STYLE.md`

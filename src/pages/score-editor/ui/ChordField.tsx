@@ -14,7 +14,7 @@ const KEYPAD = 'h-8 px-0 landscape-phone:h-8'
 const TOUCH = '(pointer: coarse)'
 
 /**
- * The chord at the caret, typed (ADR 0065): a field in the lead sheet's serif over the chord keypad,
+ * The chord at the caret, typed (ADR 0089): a field in the lead sheet's serif over the chord keypad,
  * the letters, sharp and flat, qualities and numbers a symbol is made of. Enter (or ↵) sets it and
  * moves to the next bar, adding one past the last; Tab to the next beat; Escape leaves the field. On
  * a touch screen the keypad types and the phone's keyboard stays down; on a computer the keyboard

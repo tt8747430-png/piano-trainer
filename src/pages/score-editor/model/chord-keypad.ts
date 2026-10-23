@@ -1,5 +1,5 @@
 /**
- * The chord keypad's keys (ADR 0065): what each types into the chord field, drawn as a lead sheet
+ * The chord keypad's keys (ADR 0089): what each types into the chord field, drawn as a lead sheet
  * writes it. Three rows: the letters with the sharp and the flat, the qualities with the slash, the
  * numbers. A phone types a chord on these, its own keyboard kept down, so nothing covers the row.
  */

@@ -57,8 +57,9 @@ export default definePiece({
 
 A chart that names method codes, or a section with a `pattern` of its own, starts the Player on its own plan:
 each coded chord plays its method's pattern, every other chord its section's `pattern`, else the piece's. A
-section's `pattern` (`{ kind: 'chorus', pattern: 'M3', lines: […] }`) is a built-in pattern id, as the piece's is
-(ADR 0065).
+section's `pattern` (`{ kind: 'chorus', pattern: 'M3', lines: […] }`) is a built-in pattern id, as the piece's is.
+It is content for the Player of a piece no one has edited: the editor opens every bar written and saves no section
+pattern (ADR 0091).
 
 ## Add a listing, a collection
 
@@ -82,7 +83,7 @@ The jumps (ADR 0068): `Segno` or `Coda` before a bar puts its sign there; `Fine`
   `LocalText` for anything else (`{ en: 'in 2/4', ru: 'на 2/4' }`, `{ en: 'and ending', ru: 'и окончание' }`).
 - `key` is a key change: the key the section is written in where it is not the piece's (`'Db'`), its signature
   printed where it starts; a learner's other key moves it with the piece's (ADR 0060).
-- `pattern` is the accompaniment the section's chords play where it is not the piece's (ADR 0065).
+- `pattern` is the accompaniment the section's chords play where it is not the piece's; the editor never writes one (ADR 0091).
 - `lines`: each line is bars separated by spaces.
 
 A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:method]`:
@@ -129,17 +130,14 @@ written with (`C#5` is C♯, never D♭): the sheet music prints them so, moved 
 
 ## Written hands
 
-`voices`: up to three more voices sung with the tune, each a string written as `melody` is, each on a staff of
-its own under the tune's (ADR 0066). `instruments` names what the tune and each voice are played on, in that order: `voice`, `violin`, `cello`,
-`flute`, `oboe`, `clarinet`, `trumpet`, `horn` or `guitar` (ADR 0070).
-
-`hands: { rh?, lh? }`: any bar of either hand written note by note, played in place of the pattern's hand there
-(the learner's versions are written so too, ADR 0027). Each hand is its bars separated by `|`, one entry for every bar
-of the chart in order:
+`hands: { rh?, lh? }`: any bar of either hand written note by note, played in place of the pattern's hand there.
+A learner's version or own song writes every bar of both hands (ADR 0027, 0091): the editor opens a piece with its
+pattern's bars written out as the Player plays them, and saves it so. Each hand is its bars separated by `|`, one
+entry for every bar of the chart in order:
 
 | Written                  | Means                                                                                                                                                     |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-`                      | The pattern plays this hand in this bar                                                                                                                   |
+| `-`                      | The pattern plays this hand in this bar (built-in content only: a version writes every bar, ADR 0091)                                                     |
 | `C4/1 E4/1 G4/2`         | Notes one after another, each a pitch and its beats, as the melody writes them                                                                            |
 | `C4+E4+G4/2`             | Notes struck together                                                                                                                                     |
 | `E4^3`                   | A finger (1–5), as the figure notation writes it                                                                                                          |

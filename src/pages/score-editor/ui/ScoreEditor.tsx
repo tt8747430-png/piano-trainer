@@ -31,7 +31,7 @@ import { RecordingStrip } from './RecordingStrip'
 const GAP = 8
 
 /**
- * The score editor (spec §6, ADR 0064, 0065), laid out as a notation app, one screen that never
+ * The score editor (spec §6, ADR 0064, 0089, 0091), laid out as a notation app, one screen that never
  * scrolls as a whole: the bar, saying where the caret is; the sheet, its one scroller; the keys at
  * the foot or under the bar. Over the sheet floats what works on it, above everything and never
  * moving it (ADR 0079): the dock (`EditorDock`), the Player's transport in shape and place, and the

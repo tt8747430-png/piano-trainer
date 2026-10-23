@@ -37,7 +37,7 @@ function useCaretChord(): { chord: Chord; symbol: string } {
   }
 }
 
-/** The chord typed (ADR 0065): the field over the chord keypad, opened at the caret's chord. */
+/** The chord typed (ADR 0089): the field over the chord keypad, opened at the caret's chord. */
 export function ChordTyped({ focus }: { focus: boolean }) {
   const caret = useEditorState((state) => state.caret)
   const { symbol } = useCaretChord()

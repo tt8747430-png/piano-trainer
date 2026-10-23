@@ -19,7 +19,7 @@ import { CategoryIcon } from './palette-icons'
 import { PaletteSection } from './palette-keys'
 import { ClefKeys, KeySignatureKeys, RepeatKeys, TextKeys, TimeSignatureKeys } from './ScoreKeys'
 
-/** The ways the Chords category writes a chord (ADR 0065): the key's, built from its parts, typed. */
+/** The ways the Chords category writes a chord (ADR 0089): the key's, built from its parts, typed. */
 const CHORD_WAYS = ['key', 'build', 'type'] as const
 type ChordWay = (typeof CHORD_WAYS)[number]
 

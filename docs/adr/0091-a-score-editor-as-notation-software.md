@@ -1,7 +1,8 @@
 # ADR 0091 — The score editor edits a score, as notation software does
 
 - **Status:** accepted · **Date:** 2026-10-23 · **Supersedes:** ADR 0065 (a section's pattern in the editor), ADR
-  0066 and 0070 (more voices and their instruments), ADR 0083's pattern notes drawn soft · **Amends:** ADR 0027
+  0066 and 0070 (more voices and their instruments), their files removed (`git log --diff-filter=D -- docs/adr`
+  finds them), and ADR 0083's pattern notes drawn soft · **Amends:** ADR 0027
   (what an edit saves), ADR 0064, 0072, 0089 · Research: [2026-10-flat-and-dorico](../research/2026-10-flat-and-dorico.md),
   [Dorico's Write mode](https://www.steinberg.help/r/dorico-pro/6.2/en/dorico/topics/write_mode/write_mode_introduction_c.html),
   [Flat's accidentals](https://help.flat.io/en/music-notation-software/accidental/)
