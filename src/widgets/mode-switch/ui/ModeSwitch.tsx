@@ -9,8 +9,9 @@ export type ScoreMode = 'practise' | 'edit'
 
 const ICONS: Readonly<Record<ScoreMode, LucideIcon>> = { practise: Music, edit: PencilLine }
 
+// Drawn 36px on the 44px track; its reach grows to the track's edge (a 44px touch target, CODE_STYLE §5).
 const SEGMENT =
-  'inline-flex h-9 min-w-9 items-center justify-center gap-1.5 rounded-full border border-transparent px-2 text-sm font-semibold text-muted-foreground transition-colors duration-200 ease-out select-none lg:px-3 [&_svg]:size-5'
+  'relative inline-flex h-9 min-w-9 items-center justify-center gap-1.5 rounded-full border border-transparent px-2 text-sm font-semibold text-muted-foreground transition-colors duration-200 ease-out select-none before:absolute before:-inset-1 before:content-[""] lg:px-3 [&_svg]:size-5'
 
 /** One mode: the one shown a card on the track, the other a link to it. */
 function Segment({
