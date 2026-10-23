@@ -20,6 +20,7 @@ import {
   musicToSave,
   rowShown,
   shownRows,
+  topStaff,
   type EditorAction,
 } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
@@ -188,11 +189,7 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     if (chordNames) return
     const toTune = () => {
       const { layer, draft } = store.getState()
-      if (layer === 'chords')
-        store.dispatch({
-          type: 'layer',
-          layer: rowShown(draft, 'melody') ? 'melody' : 'rh',
-        })
+      if (layer === 'chords') store.dispatch({ type: 'layer', layer: topStaff(draft) })
     }
     toTune()
     return store.subscribe(toTune)

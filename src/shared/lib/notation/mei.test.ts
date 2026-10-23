@@ -135,6 +135,16 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(tune).toMatch(/<rest xml:id="h-bass-0" dur="1" type="hidden"\/>/)
   })
 
+  it('types a staff the pattern plays in a bar, so it is drawn in soft ink (ADR 0083)', () => {
+    const played = scoreToMei(
+      notate(
+        music([c(0)], { chords: [], bars: [{ startTick: 0, beats: 4, pattern: ['treble'] }] }),
+      ),
+    )
+    expect(played).toMatch(/<staff n="1" type="pattern">/)
+    expect(played).toMatch(/<staff n="2">/)
+  })
+
   it('hides the time on a line that goes on in it, and shows it where it changes', () => {
     const score = plain([c(0)])
     expect(scoreToMei(score, { timeBefore: { count: 4, unit: 4 } })).toContain(

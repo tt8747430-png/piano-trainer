@@ -115,6 +115,20 @@ describe('createPiecesStore', () => {
     expect(long.versions.bz1).not.toHaveProperty('voices')
   })
 
+  it('keeps the piano hidden only while a sung staff stays in sight (ADR 0083)', () => {
+    const hidden = (music: object) => restored({ versions: { bz1: music } }).versions.bz1?.hidden
+    // A lead sheet: the tune's staff and the chord names, the piano out of sight.
+    expect(hidden({ ...MUSIC, hidden: ['piano'] })).toEqual(['piano'])
+    expect(hidden({ ...MUSIC, voices: ['D4/4'], hidden: ['melody', 'piano'] })).toEqual([
+      'melody',
+      'piano',
+    ])
+    // Never every staff: with no other in sight, the piano is shown.
+    const { melody: _, ...pianoOnly } = MUSIC
+    expect(hidden({ ...pianoOnly, hidden: ['piano', 'chords'] })).toEqual(['chords'])
+    expect(hidden({ ...MUSIC, hidden: ['melody', 'piano'] })).toEqual(['melody'])
+  })
+
   it('drops a melody longer than its chart', () => {
     const versions = { bz1: { ...MUSIC, melody: 'B4/16 B4/1' } }
     expect(restored({ versions }).versions).toEqual({})

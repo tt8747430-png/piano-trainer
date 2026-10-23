@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { readDraft } from '@/features/score-editor'
+import { midi, note } from '@/shared/lib/music'
 import { layerAt, linesOf, lineMusic, timeBeforeLine } from './line-music'
 
 const draft = readDraft({
@@ -93,6 +94,51 @@ describe('the sheet’s lines', () => {
     expect(music.bars).toEqual([{ startTick: 0, beats: 2, blank: ['melody', 'bass'] }])
     expect(music.notes.map((n) => [n.hand, n.midi, n.startTick, n.durationTicks])).toEqual([
       ['rh', 55, 0, 48],
+    ])
+  })
+
+  it('write what the pattern plays in a bar a hand leaves to it, its staff marked so (ADR 0083)', () => {
+    const [, second] = linesOf(draft)
+    if (!second) throw new Error('a second line')
+    const at = (key: number, startTick: number, durationTicks: number) => ({
+      midi: midi(key),
+      spelled: note('C'),
+      startTick,
+      durationTicks,
+    })
+    const played = {
+      // The last held past its bar's end: cut at the barline.
+      rh: [at(64, 24, 96), at(67, 120, 200)],
+      // Bar 2's left hand is written: the pattern's there is not shown.
+      lh: [at(36, 24, 96), at(43, 120, 96)],
+    }
+    const music = lineMusic(draft, second, played)
+    expect(music.bars).toEqual([
+      { startTick: 0, beats: 4, pattern: ['treble'] },
+      { startTick: 96, beats: 4, pattern: ['treble', 'bass'] },
+    ])
+    expect(
+      music.notes
+        .filter((n) => n.hand !== 'melody')
+        .map((n) => [n.hand, n.midi, n.startTick, n.durationTicks]),
+    ).toEqual([
+      ['rh', 64, 0, 96],
+      ['rh', 67, 96, 96],
+      ['lh', 48, 0, 96],
+      ['lh', 43, 96, 96],
+    ])
+  })
+
+  it('write no piano on a lead sheet: the tune’s staff alone (ADR 0083)', () => {
+    const lead = { ...draft, hidden: ['piano' as const] }
+    const [, second] = linesOf(lead)
+    if (!second) throw new Error('a second line')
+    const music = lineMusic(lead, second, { rh: [], lh: [] })
+    expect(music.piano).toBe(false)
+    expect(music.notes.every((n) => n.hand === 'melody')).toBe(true)
+    expect(music.bars).toEqual([
+      { startTick: 0, beats: 4 },
+      { startTick: 96, beats: 4 },
     ])
   })
 

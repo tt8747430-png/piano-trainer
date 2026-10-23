@@ -116,10 +116,32 @@ export interface ChartPiece extends PieceCommon {
   readonly hands?: Hands
 }
 
-/** The rows a score may hide: the chord names, the tune's staff and each more voice's (ADR 0072). */
-export const HIDDEN_ROWS = ['chords', 'melody', 'voice2', 'voice3', 'voice4'] as const
+/**
+ * The rows a score may hide: the chord names, the tune's staff, each more voice's (ADR 0072), and the
+ * piano's grand staff, which leaves a lead sheet (ADR 0083).
+ */
+export const HIDDEN_ROWS = ['chords', 'melody', 'voice2', 'voice3', 'voice4', 'piano'] as const
 export type HiddenRow = (typeof HIDDEN_ROWS)[number]
 export const isHiddenRow = isOneOf(HIDDEN_ROWS)
+
+/** The more voices' rows, the second voice's first. */
+const VOICE_ROWS = ['voice2', 'voice3', 'voice4'] as const satisfies readonly HiddenRow[]
+
+/**
+ * Whether a score with `hidden` out of sight still shows a staff (ADR 0083): the piano's, the tune's
+ * where it has one, or a more voice's it has. A score never hides every staff.
+ */
+export function showsAStaff(
+  hidden: readonly HiddenRow[],
+  staves: { readonly melody: boolean; readonly voices: number },
+): boolean {
+  const shown = (row: HiddenRow) => !hidden.includes(row)
+  return (
+    shown('piano') ||
+    (staves.melody && shown('melody')) ||
+    VOICE_ROWS.slice(0, staves.voices).some(shown)
+  )
+}
 
 /**
  * A song written in degrees, as its course teaches it: read in any key, its chords growing with the
@@ -139,6 +161,13 @@ export type Piece = ChartPiece | DegreePiece
 
 /** Whether a piece is written in degrees, not as a chart in its key. */
 export const isDegreePiece = (piece: Entry): piece is DegreePiece => 'progression' in piece
+
+/**
+ * Whether a piece is a lead sheet: it hides the piano's staves, its tune and chord names shown (ADR
+ * 0083). The Player writes its tune's staff alone, the tune heard.
+ */
+export const isLeadSheet = (piece: Piece): boolean =>
+  !isDegreePiece(piece) && piece.hidden?.includes('piano') === true
 
 /** A songbook entry with no chart yet: shown in Songs, never opened in the Player. */
 export interface Listing extends EntryCommon {

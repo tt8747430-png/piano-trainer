@@ -2,7 +2,9 @@ import {
   emptyLine,
   keyText,
   ownSongId,
+  showsAStaff,
   songTitle,
+  type HiddenRow,
   type OwnSongId,
   type PieceMusic,
   type PiecesStore,
@@ -20,20 +22,25 @@ import {
 } from '@/shared/lib/music'
 
 /**
- * What a new song's score holds besides the piano's two staves (ADR 0072): the chord names shown,
- * the tune's staff, and more parts each on an instrument.
+ * What a new song's score holds (ADR 0072, 0083): the chord names shown, the tune's staff, more parts
+ * each on an instrument, and the piano's two staves shown (hidden, a lead sheet).
  */
 export interface ScoreSetup {
   readonly chordNames: boolean
   readonly melody: boolean
+  readonly piano: boolean
   readonly parts: readonly Instrument[]
 }
 
-/** The scores New song starts from, as a notation app's templates: chords and piano first. */
+/**
+ * The scores New song starts from, as a notation app's templates: chords and piano first; the
+ * melody and chords alone, a lead sheet (ADR 0083); the piano with the melody; the piano alone.
+ */
 export const SCORE_TEMPLATES = {
-  chordsAndPiano: { chordNames: true, melody: false, parts: [] },
-  leadSheet: { chordNames: true, melody: true, parts: [] },
-  piano: { chordNames: false, melody: false, parts: [] },
+  chordsAndPiano: { chordNames: true, melody: false, piano: true, parts: [] },
+  leadSheet: { chordNames: true, melody: true, piano: false, parts: [] },
+  pianoAndMelody: { chordNames: true, melody: true, piano: true, parts: [] },
+  piano: { chordNames: false, melody: false, piano: true, parts: [] },
 } as const satisfies Readonly<Record<string, ScoreSetup>>
 export type ScoreTemplate = keyof typeof SCORE_TEMPLATES
 export const TEMPLATES = Object.keys(SCORE_TEMPLATES) as ScoreTemplate[]
@@ -45,6 +52,7 @@ export const templateOf = (setup: ScoreSetup): ScoreTemplate | undefined =>
     return (
       template.chordNames === setup.chordNames &&
       template.melody === setup.melody &&
+      template.piano === setup.piano &&
       setup.parts.length === 0
     )
   })
@@ -62,7 +70,8 @@ interface SongDraft {
 
 /**
  * Where a new chart starts: a verse of four bars of the key's tonic chord, at 90, the harmonic basis;
- * its score as `setup` says, a staff with nothing on it yet a rest (ADR 0072).
+ * its score as `setup` says, a staff with nothing on it yet a rest (ADR 0072), never every staff
+ * hidden (ADR 0083).
  */
 export function chartStart(
   key: Key,
@@ -73,6 +82,13 @@ export function chartStart(
   const empty = emptyLine([{ startTick: 0, ticks: beatsToTicks(beatsPerBar(meter)) }])
   const parts = setup.parts.slice(0, MOST_PARTS)
   const instruments = [DEFAULT_INSTRUMENT, ...parts]
+  // The piano hidden only while another staff is in sight (ADR 0083).
+  const named: HiddenRow[] = [
+    ...(setup.chordNames ? [] : ['chords' as const]),
+    ...(setup.piano ? [] : ['piano' as const]),
+  ]
+  const staves = { melody: setup.melody, voices: parts.length }
+  const hidden = showsAStaff(named, staves) ? named : named.filter((row) => row !== 'piano')
   return {
     key: keyText(key),
     meter,
@@ -82,7 +98,7 @@ export function chartStart(
     ...(setup.melody ? { melody: empty } : {}),
     ...(parts.length > 0 ? { voices: parts.map(() => empty) } : {}),
     ...(instruments.some((one) => one !== DEFAULT_INSTRUMENT) ? { instruments } : {}),
-    ...(setup.chordNames ? {} : { hidden: ['chords'] as const }),
+    ...(hidden.length > 0 ? { hidden } : {}),
   }
 }
 

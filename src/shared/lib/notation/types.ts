@@ -54,6 +54,8 @@ export interface TimedMusic {
     readonly key?: Key
     /** The clef a hand's staff changes to at this bar (ADR 0069). */
     readonly clefs?: HandClefs
+    /** Staves whose notes here the pattern plays, not written: drawn in soft ink (ADR 0083). */
+    readonly pattern?: readonly StaffId[]
   })[]
   readonly notes: readonly TimedNote[]
   readonly chords: readonly { readonly startTick: Tick; readonly symbol: string }[]
@@ -63,6 +65,8 @@ export interface TimedMusic {
   readonly voiceStaves?: readonly ExtraVoice[]
   /** What a sung staff's part is played on (ADR 0070), its clef and its name: the voice where none. */
   readonly staffInstruments?: StaffInstruments
+  /** Whether the piano's grand staff is written: not on a lead sheet (ADR 0083). Written by default. */
+  readonly piano?: boolean
 }
 
 /** The instrument each sung staff's part is played on, where one is chosen. */
@@ -141,6 +145,8 @@ export interface Measure extends BarMarks {
   readonly key?: Key
   /** The clef each staff is in here, where that is not its own (`clefOf`): a hand's changed clef. */
   readonly clefs?: Readonly<Partial<Record<StaffId, Clef>>>
+  /** Staves whose notes here the pattern plays, not written: drawn in soft ink (ADR 0083). */
+  readonly pattern?: readonly StaffId[]
   /** One or two voices on each of the score's staves; none on a staff it does not write. */
   readonly staves: Readonly<Record<StaffId, readonly ScoreVoice[]>>
   readonly chords: readonly ChordMark[]

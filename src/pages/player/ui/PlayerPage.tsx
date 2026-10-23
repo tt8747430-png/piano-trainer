@@ -1,6 +1,6 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { entryTitles, useRepertoire, type Piece } from '@/entities/piece'
+import { entryTitles, isLeadSheet, useRepertoire, type Piece } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
 import { isCompound } from '@/shared/lib/music'
@@ -30,6 +30,8 @@ function PiecePlayer({ piece }: { piece: Piece }) {
       player={player}
       performance={performance}
       headings={headings}
+      // A song that hides its piano is a lead sheet (ADR 0083).
+      piano={!isLeadSheet(piece)}
       setup={
         <PieceSetup
           piece={piece}

@@ -183,7 +183,9 @@ class Writer {
         const events = this.layer(voice.events, staff, `${staff} ${v}`, stem, controls)
         return `<layer n="${v + 1}">${v === 0 ? clef : ''}${events}</layer>`
       })
-      return `<staff n="${this.number(staff)}">${layers.join('') || '<layer n="1"/>'}</staff>`
+      // A staff the pattern plays here is typed so (a class on its drawing): drawn in soft ink.
+      const played = measure.pattern?.includes(staff) ? ' type="pattern"' : ''
+      return `<staff n="${this.number(staff)}"${played}>${layers.join('') || '<layer n="1"/>'}</staff>`
     })
     const top = this.number(this.staves[0] ?? 'treble')
     const unitTicks = ticksOf(

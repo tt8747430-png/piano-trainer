@@ -339,3 +339,21 @@ describe('notate with a blank staff', () => {
     expect(measure?.staves.bass[0]?.events).toHaveLength(1)
   })
 })
+
+describe('notate a lead sheet and a pattern’s bars (ADR 0083)', () => {
+  it('writes no piano where the music leaves it out: the tune’s staff alone', () => {
+    const notes = [n(72, note('C'), 'melody', 0, 96), n(60, note('C'), 'rh', 0, 96)]
+    const lead = notate(music(notes, { melodyStaff: true, piano: false }))
+    expect(lead.staves).toEqual(['melody'])
+    expect(lead.measures[0]?.staves.treble).toEqual([])
+  })
+
+  it('carries the staves a bar’s pattern plays to its measure', () => {
+    const score = notate(
+      music([n(48, note('C'), 'lh', 0, 96)], {
+        bars: [{ startTick: 0, beats: 4, pattern: ['bass'] }],
+      }),
+    )
+    expect(score.measures[0]?.pattern).toEqual(['bass'])
+  })
+})

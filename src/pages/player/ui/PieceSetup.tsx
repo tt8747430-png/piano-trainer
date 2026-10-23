@@ -1,7 +1,14 @@
 import { Link } from '@tanstack/react-router'
 import { PencilLine } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { choosableChordSize, isDegreePiece, isOwnKey, pieceKey, type Piece } from '@/entities/piece'
+import {
+  choosableChordSize,
+  isDegreePiece,
+  isLeadSheet,
+  isOwnKey,
+  pieceKey,
+  type Piece,
+} from '@/entities/piece'
 import type { PracticeChoice } from '@/features/practice'
 import type { PatternFit } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
@@ -62,7 +69,8 @@ export function PieceSetup({
       <PatternCard />
       <ToggleGrid label={t('playing')}>
         <PlayingToggles swing={swing} onSwing={onSwing} />
-        {fit.melody ? <MelodyToggle /> : null}
+        {/* A lead sheet's tune is always heard (ADR 0083). */}
+        {fit.melody && !isLeadSheet(piece) ? <MelodyToggle /> : null}
         {piece.recording ? (
           <RecordingToggle ownKey={isOwnKey(piece, choice.tonic) ? null : keyName(own)} />
         ) : null}

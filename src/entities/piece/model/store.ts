@@ -24,6 +24,7 @@ import {
 import { parseMelody } from './parse-melody'
 import {
   HIDDEN_ROWS,
+  showsAStaff,
   SECTION_KINDS,
   type ChartPiece,
   type Hands,
@@ -126,10 +127,17 @@ function savedVoices(
     .slice(0, MOST_VOICES)
 }
 
-/** The rows a save hides, those it names once each (ADR 0072). */
-function savedHidden(saved: unknown): { hidden?: HiddenRow[] } {
+/**
+ * The rows a save hides, those it names once each (ADR 0072); the piano only while another staff is
+ * in sight, so a score never hides every staff (ADR 0083).
+ */
+function savedHidden(
+  saved: unknown,
+  staves: { readonly melody: boolean; readonly voices: number },
+): { hidden?: HiddenRow[] } {
   if (!Array.isArray(saved)) return {}
-  const rows = HIDDEN_ROWS.filter((row) => saved.includes(row))
+  const named = HIDDEN_ROWS.filter((row) => saved.includes(row))
+  const rows = showsAStaff(named, staves) ? named : named.filter((row) => row !== 'piano')
   return rows.length > 0 ? { hidden: rows } : {}
 }
 
@@ -174,7 +182,7 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
       ...piece,
       ...(sung.length > 0 ? { voices: sung.map(({ voice }) => voice) } : {}),
       ...(played.length > 0 && played.every(isInstrument) ? { instruments: played } : {}),
-      ...savedHidden(hidden),
+      ...savedHidden(hidden, { melody: piece.melody !== undefined, voices: sung.length }),
     })
   } catch (error) {
     if (error instanceof ContentError) return null

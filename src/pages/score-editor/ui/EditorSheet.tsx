@@ -3,6 +3,7 @@ import { notesAt, placesIn, selectedBars, tapsIn, type Layer } from '@/features/
 import type { Midi, Tick } from '@/shared/lib/music'
 import { usePlay } from '@/shared/lib/services'
 import { ScoreSheet } from '@/widgets/score-sheet'
+import { arrangeDraft, playedHands } from '../model/arrange-draft'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { SectionHeading } from './SectionHeading'
 
@@ -25,6 +26,15 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
   const layer = useEditorState((state) => state.layer)
   const selection = useEditorState((state) => state.selection)
   const chosen = useMemo(() => (selection ? selectedBars(selection) : null), [selection])
+  // What the hands play, the pattern's notes with the written, arranged once a change (ADR 0083).
+  const played = useMemo(() => {
+    try {
+      return playedHands(arrangeDraft(draft))
+    } catch {
+      // A draft the Player cannot arrange yet shows its written notes alone.
+      return undefined
+    }
+  }, [draft])
   const onPlace = useCallback(
     (tick: Tick, to: Layer, extend: boolean) =>
       dispatch({ type: 'place', tick, layer: to, extend }),
@@ -62,6 +72,7 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
   return (
     <ScoreSheet
       draft={draft}
+      played={played}
       caret={caret}
       layer={layer}
       selection={chosen}
