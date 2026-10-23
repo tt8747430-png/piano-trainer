@@ -4,12 +4,12 @@ import { keyHint } from '@/shared/lib/shortcuts'
 import { RoundButton, usePageHeading } from '@/shared/ui'
 import { PLAYER_KEYS } from '../model/player-keys'
 
-/** Close, and the piece's title: the toolbar's lead. */
+/** Close, and the piece's title: the toolbar's lead; on a phone held upright the title's row is its own. */
 export function PlayerTitle({ title, onClose }: { title: string; onClose: () => void }) {
   const { t } = useTranslation('common')
   const heading = usePageHeading<HTMLHeadingElement>(title)
   return (
-    <div className="flex min-w-0 items-center gap-3 narrow-phone:gap-0">
+    <div data-slot="player-lead" className="flex min-w-0 items-center gap-3">
       <RoundButton
         label={t('close')}
         title={keyHint(t('close'), PLAYER_KEYS.close)}
@@ -18,8 +18,7 @@ export function PlayerTitle({ title, onClose }: { title: string; onClose: () => 
       />
       <h1
         {...heading}
-        // Under 360px the bar's buttons leave the title a word's width: it is read, not shown.
-        className="line-clamp-2 min-w-0 flex-1 text-lg leading-snug outline-none narrow-phone:sr-only sm:truncate landscape-phone:truncate"
+        className="min-w-0 flex-1 truncate text-lg leading-snug outline-none max-sm:px-1"
       >
         {title}
       </h1>

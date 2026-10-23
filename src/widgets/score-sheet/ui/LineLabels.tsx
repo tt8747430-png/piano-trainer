@@ -1,4 +1,4 @@
-import { chordLabelSizes } from '@/shared/lib'
+import { chordLabels } from '@/shared/lib'
 import { printedSymbol, tempoNote } from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
@@ -42,7 +42,7 @@ export function LineLabels({
     symbol: printedSymbol(chord.symbol),
     x: xAtTick(layout, chord.startTick),
   }))
-  const sizes = chordLabelSizes(chords, last ? last.x + last.width : layout.width, CHORD_PX * size)
+  const labels = chordLabels(chords, last ? last.x + last.width : layout.width, CHORD_PX * size)
   return (
     <div
       aria-hidden
@@ -79,7 +79,7 @@ export function LineLabels({
         <span
           key={index}
           className="absolute bottom-0.5 font-display leading-none font-semibold whitespace-nowrap"
-          style={{ left: chord.x, fontSize: sizes[index] }}
+          style={{ left: labels[index]?.x ?? chord.x, fontSize: labels[index]?.size }}
         >
           {chord.symbol}
         </span>
