@@ -26,11 +26,22 @@ describe('the staff’s taps', () => {
       { tick: 0, left: 20, width: 50 },
       { tick: 48, left: 70, width: 50 },
     ])
+    // Two close onsets: each column a finger wide (44px), centred on its note.
     const [close] = noteColumns([
       { tick: 0, x: 40 },
       { tick: 24, x: 46 },
     ])
-    expect(close?.width).toBe(24)
+    expect(close).toEqual({ tick: 0, left: 18, width: 44 })
+    // Two half notes on a card's small staff (43px apart): each column grown to a finger's width.
+    expect(
+      noteColumns([
+        { tick: 0, x: 30 },
+        { tick: 48, x: 76 },
+      ]),
+    ).toEqual([
+      { tick: 0, left: 8, width: 44 },
+      { tick: 48, left: 54, width: 44 },
+    ])
   })
 
   it('takes the notes struck in a stretch as music of their own, from its start', () => {
