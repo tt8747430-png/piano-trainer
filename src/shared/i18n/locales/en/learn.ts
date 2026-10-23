@@ -29,10 +29,6 @@ export const learn = {
   current: 'You are here',
   // Continue: the next lesson of the journey or the course in progress, in one tap.
   continue: 'Continue',
-  allLearned: 'Everything is learned.',
-  toSongs: 'Open Songs',
-  // The count after a colon reads right for any number, in both languages.
-  toCheck: 'Chords to check: {{count}}',
   known: '{{known}} of {{total}} known',
   recent: 'Recently practised',
   // The days practised: opening a piece in the Player, or answering a quiz round.
@@ -86,7 +82,6 @@ export const learn = {
   },
   // The way on, at a lesson's end: the next lesson, or back to the journey or the course.
   track: {
-    label: 'Ways out of this lesson',
     previous: 'Previous lesson',
     next: 'Next lesson',
     toCourseLessons: 'The course',

@@ -25,9 +25,6 @@ export const learn: LocaleResources['learn'] = {
   learned: 'изучено',
   current: 'Вы здесь',
   continue: 'Продолжить',
-  allLearned: 'Всё изучено.',
-  toSongs: 'Открыть песни',
-  toCheck: 'Аккордов на проверку: {{count}}',
   known: 'Знаю {{known}} из {{total}}',
   recent: 'Недавно играли',
   days: {
@@ -81,7 +78,6 @@ export const learn: LocaleResources['learn'] = {
     inProgressions: 'Открыть в последовательностях',
   },
   track: {
-    label: 'Куда дальше из урока',
     previous: 'Предыдущий урок',
     next: 'Следующий урок',
     toCourseLessons: 'Курс',
