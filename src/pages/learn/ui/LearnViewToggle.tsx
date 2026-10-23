@@ -26,8 +26,10 @@ export function LearnViewToggle({ shown }: { shown: LearnShows }) {
                 replace
                 aria-current={current ? 'page' : undefined}
                 aria-label={t(`views.${view}`)}
+                // Drawn 40px on the 48px track; its reach grows to the track's edge (a 44px
+                // touch target, CODE_STYLE §5).
                 className={cn(
-                  'flex h-10 min-w-10 items-center justify-center gap-2 rounded-full px-2.5 font-semibold transition-colors duration-200 ease-out sm:px-4',
+                  'relative flex h-10 min-w-10 items-center justify-center gap-2 rounded-full px-2.5 font-semibold transition-colors duration-200 ease-out before:absolute before:-inset-1 before:content-[""] sm:px-4',
                   current
                     ? 'bg-primary text-primary-foreground shadow-sm'
                     : 'text-muted-foreground hover:bg-background/70 hover:text-foreground',
