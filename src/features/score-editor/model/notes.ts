@@ -11,7 +11,9 @@ import {
   type Accidental,
   type Finger,
   type Key,
+  type Letter,
   type Midi,
+  type SpelledNote,
   type Tick,
 } from '@/shared/lib/music'
 import type { HandId } from '@/entities/piece'
@@ -225,23 +227,37 @@ export function setDuration(draft: Draft, layer: NoteLayer, where: Where, ticks:
   return next
 }
 
+/** Whether notes all carry a sign, ♯ (1), ♭ (−1) or ♮ (0): the palette shows it pressed, and a tap takes it off. */
+export const carriesAccidental = (notes: readonly DraftNote[], accidental: Accidental): boolean =>
+  notes.length > 0 && notes.every((n) => n.spelled.accidental === accidental)
+
+/** A letter as the key spells it: its note of the key's scale (G major's F is F♯), else plain. */
+const letterInKey = (letter: Letter, key: Key): SpelledNote =>
+  spellScale(key.tonic, keyScale(key)).find((tone) => tone.note.letter === letter)?.note ??
+  note(letter)
+
 /**
- * The notes `where` takes written on their letter with an accidental: ♯ (1), ♭ (−1) or ♮ (0), their
- * key following; nothing moves past the piano's ends.
+ * Flat's accidentals (ADR 0091): the notes `where` takes written on their letter with the sign, ♯
+ * (1), ♭ (−1) or ♮ (0), their key following; where every one carries it already, the sign comes off
+ * and each letter is spelled as its key spells it, the note back at the key's pitch. Nothing moves
+ * past the piano's ends.
  */
-export const setAccidental = (
+export function toggleAccidental(
   draft: Draft,
   layer: NoteLayer,
   where: Where,
   accidental: Accidental,
-): Draft =>
-  changeAt(draft, layer, where, (n) => {
-    if (n.spelled.accidental === accidental) return n
-    const moved = n.midi + accidental - n.spelled.accidental
-    return moved < PIANO.from || moved > PIANO.to
-      ? null
-      : { ...n, midi: midi(moved), spelled: note(n.spelled.letter, accidental) }
+): Draft {
+  const off = carriesAccidental(notesOf(draft, layer).filter(isAt(where)), accidental)
+  return changeAt(draft, layer, where, (n) => {
+    const spelled = off
+      ? letterInKey(n.spelled.letter, keyAt(draft, n.startTick))
+      : note(n.spelled.letter, accidental)
+    if (spelled.accidental === n.spelled.accidental) return n
+    const moved = n.midi + spelled.accidental - n.spelled.accidental
+    return moved < PIANO.from || moved > PIANO.to ? null : { ...n, midi: midi(moved), spelled }
   })
+}
 
 /** The notes at `at` moved by semitones, spelled in the key; nothing moves past the piano's ends. */
 export const shiftNotes = (
@@ -300,19 +316,26 @@ export function deleteBack(
 export const respellNotes = (draft: Draft, layer: NoteLayer, where: Where): Draft =>
   changeAt(draft, layer, where, (n) => ({ ...n, spelled: otherSpelling(n.spelled) }))
 
-/** A finger on one note at `at` in a hand, or none. */
-export const setFinger = (
-  draft: Draft,
-  hand: HandId,
-  at: Tick,
-  key: Midi,
-  finger: Finger | null,
-): Draft =>
-  changeAt(draft, hand, at, (n) => {
-    if (n.midi !== key) return n
+/**
+ * The notes a finger goes on (ADR 0091, Flat's), of those `where` takes: a note alone at its place,
+ * or the chord's one note chosen alone; a whole chord's notes take none, each fingered in turn (Alt
+ * ↑ ↓, `chordNote`).
+ */
+export function fingeredNotes(draft: Draft, layer: NoteLayer, where: Where): DraftNote[] {
+  const taken = notesOf(draft, layer).filter(isAt(where))
+  if (typeof where !== 'number' && 'key' in where) return taken
+  return taken.filter((n) => notesAt(draft, layer, n.startTick).length === 1)
+}
+
+/** A finger on the notes `where` gives one to (`fingeredNotes`), or none. */
+export function setFinger(draft: Draft, hand: HandId, where: Where, finger: Finger | null): Draft {
+  const fingered = new Set(fingeredNotes(draft, hand, where))
+  return changeAt(draft, hand, where, (n) => {
+    if (!fingered.has(n) || (n.finger ?? null) === finger) return n
     const { finger: _old, ...rest } = n
     return finger === null ? rest : { ...rest, finger }
   })
+}
 
 /** The notes at `at` joined to the same keys' notes starting where they end: one note, tied as written. */
 export function tieNotes(draft: Draft, layer: NoteLayer, at: Tick): Draft {

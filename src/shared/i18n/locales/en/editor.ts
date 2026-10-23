@@ -33,8 +33,9 @@ export const editor = {
   reason: {
     chooseNote: 'Choose a note first: these change the notes chosen.',
     staff: 'These are for notes: tap a note on a staff.',
-    hand: 'For the piano’s staves: tap a note in the right or left hand.',
+    hand: 'For the piano’s staves: tap a note on the upper or lower staff.',
     chordRow: 'Chords are written over the staff: tap a chord name, or the space over the staff.',
+    chordNote: 'Choose one note of the chord: each takes its own finger.',
   },
   // The edit row under the bar: what is done to what is chosen.
   editRow: 'Edit',
@@ -49,7 +50,6 @@ export const editor = {
     left: 'Left',
     right: 'Right',
     label: 'View',
-    melody: 'Melody staff',
   },
   // The palette's Barlines & repeats (ADR 0068).
   barline: {
@@ -86,7 +86,7 @@ export const editor = {
   },
   // The palette's Clef: the caret's staff changes clef from the bar chosen on (ADR 0069).
   clef: {
-    from: '{{hand}}, from bar {{bar}} on',
+    from: '{{staff}}, from bar {{bar}} on',
     treble: 'Treble clef',
     bass: 'Bass clef',
   },
@@ -120,18 +120,17 @@ export const editor = {
     accel: 'gradually faster',
     'a-tempo': 'back to the tempo',
   },
-  fingering: { noNote: 'Choose a note to give it a finger.' },
   accidentals: { sharp: 'Sharp', flat: 'Flat', natural: 'Natural' },
-  // Where the caret writes (ADR 0091): the chord row, the tune's staff, the piano's two staves.
+  // Where the caret writes, named as a score names its staves (ADR 0091): the chord symbols' row, the
+  // tune's staff, the piano's two staves. Never a hand: the hands are the Player's.
   layers: {
-    chords: 'Chords',
+    chords: 'Chord symbols',
     melody: 'Melody',
-    rh: 'Right hand',
-    lh: 'Left hand',
+    rh: 'Upper staff',
+    lh: 'Lower staff',
   },
   // The edit row's head: where the next note goes, chosen there (Flat's voice badge).
   layerChip: { label: 'Next note goes in: {{layer}}', menu: 'Next note goes in' },
-  chordNames: 'Chord names',
   sheet: {
     signature: 'Key and time signature',
     label: 'Score',
@@ -218,9 +217,8 @@ export const editor = {
   stepDown: 'Down a diatonic step',
   back: 'Previous note',
   on: 'Next note',
-  finger: 'Finger on {{note}}',
-  noFinger: 'None',
-  fingers: '1 thumb · 5 little finger',
+  // The Fingering keys, 1 to 5, on the notes chosen (ADR 0091).
+  fingerOf: 'Finger {{finger}}',
   chord: {
     set: 'Set the chord and go to the next bar',
     setShort: 'Set',
@@ -260,7 +258,6 @@ export const editor = {
   song: {
     label: 'Song',
     title: 'Title',
-    bpm: '{{tempo}} BPM',
     tempo: 'Tempo',
     tempoWords: 'Tempo words',
     tempos: {
@@ -273,6 +270,13 @@ export const editor = {
     },
     tempoLabel: '{{word}}, {{bpm}} a minute',
     meter: 'Time signature',
+    // The score's staves (ADR 0091), each shown or hidden; the last staff in sight stays (ADR 0083).
+    staves: 'Staves',
+    melodyDetail: 'A treble staff for the tune, over the piano',
+    piano: 'Piano',
+    pianoDetail: 'The grand staff: both hands',
+    chordsDetail: 'Written over the music',
+    lastStaff: 'The last staff in sight stays',
   },
   recorder: {
     more: 'Take actions',
@@ -287,7 +291,7 @@ export const editor = {
     full: 'Your takes are full: delete one to record another.',
     nothing: 'Nothing was played.',
     none: 'No takes yet.',
-    detail: '{{length}} · {{tempo}} BPM',
+    detail: '{{length}} · {{bpm}}',
     play: 'Play',
     write: 'Write into the score',
     download: 'Download',
@@ -300,9 +304,9 @@ export const editor = {
     back: 'Back',
     into: {
       label: 'Into',
-      both: 'Both hands',
-      rh: 'Right hand',
-      lh: 'Left hand',
+      both: 'Both staves',
+      rh: 'Upper staff',
+      lh: 'Lower staff',
       melody: 'Melody',
     },
     split: 'Split hands at',
@@ -349,7 +353,7 @@ export const editor = {
     semitone: 'A semitone up, down',
     octave: 'An octave up, down',
     delete: 'Delete',
-    chord: 'Type a chord (in the chord names)',
+    chord: 'Type a chord (in the chord symbols)',
     undo: 'Undo',
     redo: 'Redo',
     bars: 'Copy, cut, paste the bars',

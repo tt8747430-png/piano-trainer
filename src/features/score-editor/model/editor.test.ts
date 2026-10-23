@@ -229,18 +229,27 @@ describe('the editor', () => {
     expect(run(back, { type: 'delete' }).draft.melody).toEqual([])
   })
 
-  it('sets a finger on a note of a hand', () => {
-    const state = run(
-      start('rh'),
-      key(60, 0),
+  it('fingers the note chosen in a hand, the same finger again taking it off (ADR 0091)', () => {
+    const fingers = (state: EditorState) => state.draft.hands.rh.map((n) => n.finger)
+    const one = run(start('rh'), key(60, 0), { type: 'place', tick: 0, layer: 'rh' })
+    const thumb = run(one, { type: 'finger', finger: 1 })
+    expect(fingers(thumb)).toEqual([1])
+    expect(fingers(run(thumb, { type: 'finger', finger: 1 }))).toEqual([undefined])
+    expect(fingers(run(thumb, { type: 'finger', finger: 2 }))).toEqual([2])
+    // A whole chord takes none; its one note chosen (Alt ↑) does.
+    const chord = run(
+      initialEditor(draftOf({ hands: { rh: 'C4+E4/4 | G4/4' } })),
+      { type: 'layer', layer: 'rh' },
       { type: 'place', tick: 0, layer: 'rh' },
-      {
-        type: 'finger',
-        midi: midi(60),
-        finger: 1,
-      },
     )
-    expect(state.draft.hands.rh[0]?.finger).toBe(1)
+    expect(run(chord, { type: 'finger', finger: 3 })).toBe(chord)
+    const top = run(chord, { type: 'chordNote', direction: 1 })
+    expect(fingers(run(top, { type: 'finger', finger: 3 }))).toEqual([undefined, 3, undefined])
+    // A range fingers each place's single note; in the melody, nothing.
+    const range = run(chord, { type: 'move', by: 'bar', direction: 1, extend: true })
+    expect(fingers(run(range, { type: 'finger', finger: 5 }))).toEqual([undefined, undefined, 5])
+    const tune = run(initialEditor(draftOf({ melody: 'B4/1' })), { type: 'layer', layer: 'melody' })
+    expect(run(tune, { type: 'finger', finger: 1 })).toBe(tune)
   })
 
   it('sets a chord at the caret and moves on a beat or to the next bar', () => {
@@ -546,9 +555,25 @@ describe('the palette on what is chosen', () => {
     expect(state.caret).toBe(0)
   })
 
-  it('writes the note chosen sharp, flat or natural', () => {
-    const state = run(at(tune(), 72), { type: 'accidental', accidental: 0 })
-    expect(shape(state.draft.melody).at(-1)).toBe('F4@72/24')
+  it('writes the note chosen sharp, flat or natural, and the same sign again takes it off (Flat’s)', () => {
+    const natural = run(at(tune(), 72), { type: 'accidental', accidental: 0 })
+    expect(shape(natural.draft.melody).at(-1)).toBe('F4@72/24')
+    // ♮ again: back to the key's F♯.
+    expect(shape(run(natural, { type: 'accidental', accidental: 0 }).draft.melody).at(-1)).toBe(
+      'F#4@72/24',
+    )
+    // The chord's one note chosen follows its sign on and off.
+    const chord = run(
+      initialEditor(draftOf({ hands: { rh: 'C4+E4/4 | r/4' } })),
+      { type: 'layer', layer: 'rh' },
+      { type: 'place', tick: 0, layer: 'rh', key: midi(64) },
+    )
+    const flat = run(chord, { type: 'accidental', accidental: -1 })
+    expect(shape(flat.draft.hands.rh)).toEqual(['C4@0/96', 'E♭4@0/96'])
+    expect(flat.chordNote).toBe(63)
+    const back = run(flat, { type: 'accidental', accidental: -1 })
+    expect(shape(back.draft.hands.rh)).toEqual(['C4@0/96', 'E4@0/96'])
+    expect(back.chordNote).toBe(64)
   })
 
   it('adds a bar before the caret’s, and gives each bar chosen a length and the first a clef', () => {

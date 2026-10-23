@@ -54,7 +54,7 @@ export function ClefKeys() {
     <>
       {isHandLayer(layer) ? (
         <p className="text-sm text-muted-foreground">
-          {t('clef.from', { hand: t(`layers.${layer}`), bar: bar + 1 })}
+          {t('clef.from', { staff: t(`layers.${layer}`), bar: bar + 1 })}
         </p>
       ) : null}
       <CaptionGrid>

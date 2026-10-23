@@ -2,6 +2,7 @@ import type { LocaleResources } from '../../types'
 
 export const music: LocaleResources['music'] = {
   major: 'M',
+  bpm: '{{tempo}} уд/мин',
   inversion: {
     label: 'Обращение',
     root: 'Основной',
@@ -161,7 +162,7 @@ export const music: LocaleResources['music'] = {
     layout: { label: 'Вид нот', horizontal: 'Панорама', scroll: 'Прокрутка', pages: 'Страницы' },
     fingers: 'Аппликатура',
     noteNames: 'Названия нот',
-    chordNames: 'Названия аккордов',
+    chordNames: 'Аккордовые символы',
     loading: 'Загрузка нот',
     error: 'Ноты не удаётся показать.',
     bar: 'Такт {{n}}',

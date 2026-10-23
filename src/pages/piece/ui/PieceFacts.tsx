@@ -11,7 +11,7 @@ import { keySymbol } from '@/shared/lib/music'
  * Your version where the learner has one.
  */
 export function PieceFacts({ entry }: { entry: Entry }) {
-  const { t } = useTranslation('piece')
+  const { t } = useTranslation(['piece', 'music'])
   const locale = useLocale()
   const { secondary } = entryTitles(entry, locale)
   const stage = entry.kind === 'listing' ? undefined : pieceStage(entry.id)
@@ -33,7 +33,7 @@ export function PieceFacts({ entry }: { entry: Entry }) {
             <dd aria-hidden>·</dd>
             <dt className="sr-only">{t('tempo')}</dt>
             <dd className="font-medium text-foreground tabular-nums">
-              {t('bpm', { tempo: entry.tempo })}
+              {t('music:bpm', { tempo: entry.tempo })}
             </dd>
           </>
         )}

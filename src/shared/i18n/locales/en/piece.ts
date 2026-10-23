@@ -11,7 +11,6 @@ export const piece = {
   formBars_one: '{{count}} bar',
   formBars_other: '{{count}} bars',
   tempo: 'Tempo',
-  bpm: '{{tempo}} BPM',
   print: 'Print the chart',
   progression: 'Progression',
   more: 'More',

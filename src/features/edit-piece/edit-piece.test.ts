@@ -109,6 +109,17 @@ describe('the learner’s songs', () => {
     })
   })
 
+  it('starts a song empty: both hands written silent, so the editor opens on empty bars (ADR 0091)', () => {
+    const key = { tonic: note('C'), minor: false }
+    const silent = 'r/4 | r/4 | r/4 | r/4'
+    expect(chartStart(key, '4/4')).toMatchObject({ hands: { rh: silent, lh: silent } })
+    // In any meter, each bar's rest the bar's length, as the tune's empty staff is written.
+    const waltz = chartStart(key, '3/4', SCORE_TEMPLATES.pianoAndMelody)
+    expect(waltz.hands?.rh).toBe(Array(4).fill(waltz.melody).join(' | '))
+    const { chart } = readMusic(waltz)
+    expect(chart.sections[0]?.lines[0]?.every((bar) => bar.hands?.rh?.length === 0)).toBe(true)
+  })
+
   it('makes nothing without a title', () => {
     const store = fresh()
     expect(

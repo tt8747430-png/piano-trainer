@@ -1,9 +1,10 @@
 import { SlidersHorizontal } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useShallow } from 'zustand/react/shallow'
 import { PIECE_TEMPO } from '@/entities/piece'
 import { keyFromParam, keyParam } from '@/shared/lib/music'
-import { metersFor } from '@/features/score-editor'
+import { metersFor, rowShown } from '@/features/score-editor'
 import {
   KeyChoice,
   Labelled,
@@ -12,6 +13,7 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
+  SwitchRow,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
@@ -24,7 +26,7 @@ import { SongTitleField } from './SongTitleField'
  * Presto, as a metronome marks them): it starts from the piece's each time the sheet opens.
  */
 function SongTempo() {
-  const { t } = useTranslation('editor')
+  const { t } = useTranslation(['editor', 'music'])
   const { actions } = useScoreEditorContext()
   const saved = useEditorState((state) => state.draft.tempo)
   const [tempo, setTempo] = useState(saved)
@@ -42,7 +44,7 @@ function SongTempo() {
       >
         <div className="flex justify-between">
           <SliderLabel>{t('song.tempo')}</SliderLabel>
-          <span className="font-semibold tabular-nums">{t('song.bpm', { tempo })}</span>
+          <span className="font-semibold tabular-nums">{t('music:bpm', { tempo })}</span>
         </div>
       </Slider>
       <div role="group" aria-label={t('song.tempoWords')} className="grid grid-cols-3 gap-1.5">
@@ -74,6 +76,62 @@ function SongTempo() {
   )
 }
 
+/**
+ * The score's staves (ADR 0091), each shown or hidden in its row: the tune's treble staff over the
+ * piano (added, or taken away with its notes), the piano's grand staff and the chord symbols' row
+ * (hidden, their music kept, ADR 0072). A score never hides every staff (ADR 0083): the last one in
+ * sight has its switch greyed and says so.
+ */
+function Staves() {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const rows = useEditorState(
+    useShallow((state) => ({
+      melody: rowShown(state.draft, 'melody'),
+      piano: rowShown(state.draft, 'piano'),
+      chords: rowShown(state.draft, 'chords'),
+      melodyStaff: state.draft.melodyStaff,
+    })),
+  )
+  // One staff in sight: it is the last, and stays.
+  const last = rows.melody !== rows.piano
+  const dispatch = actions.dispatch
+  return (
+    <MenuSection title={t('song.staves')} className="gap-0">
+      <SwitchRow
+        icon={<span className="font-music text-xl leading-none">𝄞</span>}
+        label={t('layers.melody')}
+        detail={last && rows.melody ? t('song.lastStaff') : t('song.melodyDetail')}
+        checked={rows.melody}
+        disabled={last && rows.melody}
+        onCheckedChange={(on) =>
+          dispatch(
+            on && rows.melodyStaff
+              ? { type: 'hide', row: 'melody', hidden: false }
+              : { type: 'melodyStaff', on },
+          )
+        }
+      />
+      <SwitchRow
+        icon={<span className="font-music text-xl leading-none">𝄢</span>}
+        label={t('song.piano')}
+        detail={last && rows.piano ? t('song.lastStaff') : t('song.pianoDetail')}
+        checked={rows.piano}
+        disabled={last && rows.piano}
+        onCheckedChange={(on) => dispatch({ type: 'hide', row: 'piano', hidden: !on })}
+      />
+      <SwitchRow
+        icon={<span className="font-display text-base font-semibold">C⁷</span>}
+        label={t('layers.chords')}
+        detail={t('song.chordsDetail')}
+        checked={rows.chords}
+        onCheckedChange={(on) => dispatch({ type: 'hide', row: 'chords', hidden: !on })}
+        className="border-b-0"
+      />
+    </MenuSection>
+  )
+}
+
 /** One part of the sheet, under its heading; the first, the song's own, under the sheet's title alone. */
 function Part({
   title,
@@ -99,7 +157,7 @@ function Part({
 /**
  * The Song sheet behind the bar's button (spec §6.4, ADR 0080, 0091): the song as a whole, each of its
  * settings here alone: an own song's title, the key, the time signature of its kind, the tempo with
- * its words. How the score is shown is the View's; the MIDI keyboard is the bar's, as in the Player
+ * its words; then its staves, each shown or hidden. How the score is shown is the View's; the MIDI keyboard is the bar's, as in the Player
  * (ADR 0085). Opened from the bar, or from the sheet's clef, key and time signature.
  */
 export function PieceSettings() {
@@ -143,6 +201,7 @@ export function PieceSettings() {
             </Labelled>
             <SongTempo />
           </Part>
+          <Staves />
         </div>
       </SheetContent>
     </Sheet>

@@ -3,14 +3,16 @@ import { midi, noteName } from '@/shared/lib/music'
 import { draftOf, shape } from '../testing/test-draft'
 import {
   addToChord,
+  carriesAccidental,
   deleteNotes,
+  fingeredNotes,
   notesAt,
   respellNotes,
-  setAccidental,
   setDuration,
   setFinger,
   shiftNotes,
   tieNotes,
+  toggleAccidental,
   writeNotes,
   writeRest,
 } from './notes'
@@ -127,13 +129,21 @@ describe('the notes at the caret', () => {
     expect(respellNotes(sharp, 'rh', 0).hands.rh[0]?.midi).toBe(61)
   })
 
-  it('sets and clears a finger in a hand', () => {
-    const fingered = setFinger(draft, 'rh', 0, midi(64), 3)
-    expect(fingered.hands.rh.map((n) => n.finger)).toEqual([undefined, 3])
-    expect(setFinger(fingered, 'rh', 0, midi(64), null).hands.rh.map((n) => n.finger)).toEqual([
+  it('fingers a note alone at its place, or the chord’s one note chosen, never a whole chord', () => {
+    const fingers = (d: typeof draft) => d.hands.rh.map((n) => n.finger)
+    // The whole chord: no note takes a finger, each is fingered in turn.
+    expect(fingeredNotes(draft, 'rh', 0)).toEqual([])
+    expect(setFinger(draft, 'rh', 0, 3)).toBe(draft)
+    const fingered = setFinger(draft, 'rh', { at: 0, key: midi(64) }, 3)
+    expect(fingers(fingered)).toEqual([undefined, 3])
+    expect(fingers(setFinger(fingered, 'rh', { at: 0, key: midi(64) }, null))).toEqual([
       undefined,
       undefined,
     ])
+    // A range: each place's single note, a chord's left alone.
+    const line = writeNotes(fingered, 'rh', 48, keys(67), 24).draft
+    expect(shape(fingeredNotes(line, 'rh', { from: 0, to: 96 }))).toEqual(['G4@48/24'])
+    expect(fingers(setFinger(line, 'rh', { from: 0, to: 96 }, 5))).toEqual([undefined, 3, 5])
   })
 })
 
@@ -204,15 +214,41 @@ describe('setDuration', () => {
   })
 })
 
-describe('setAccidental', () => {
+describe('toggleAccidental', () => {
+  // E and F♯ in G major.
   const draft = writeNotes(draftOf(), 'rh', 0, keys(64, 66), 24).draft
 
   it('writes the note’s letter sharp, flat or natural, its key following', () => {
-    expect(shape(setAccidental(draft, 'rh', { at: 0, key: midi(64) }, -1).hands.rh)).toEqual([
+    expect(shape(toggleAccidental(draft, 'rh', { at: 0, key: midi(64) }, -1).hands.rh)).toEqual([
       'E♭4@0/24',
       'F#4@0/24',
     ])
-    expect(shape(setAccidental(draft, 'rh', 0, 0).hands.rh)).toEqual(['E4@0/24', 'F4@0/24'])
-    expect(shape(setAccidental(draft, 'rh', 0, 1).hands.rh)).toEqual(['E#4@0/24', 'F#4@0/24'])
+    expect(shape(toggleAccidental(draft, 'rh', 0, 0).hands.rh)).toEqual(['E4@0/24', 'F4@0/24'])
+    expect(shape(toggleAccidental(draft, 'rh', 0, 1).hands.rh)).toEqual(['E#4@0/24', 'F#4@0/24'])
+  })
+
+  it('takes the sign off notes that all carry it, each letter spelled as the key spells it (Flat’s)', () => {
+    const flat = toggleAccidental(draft, 'rh', { at: 0, key: midi(64) }, -1)
+    expect(carriesAccidental(notesAt(flat, 'rh', 0), -1)).toBe(false)
+    expect(carriesAccidental(notesAt(flat, 'rh', 0).slice(0, 1), -1)).toBe(true)
+    expect(shape(toggleAccidental(flat, 'rh', { at: 0, key: midi(63) }, -1).hands.rh)).toEqual([
+      'E4@0/24',
+      'F#4@0/24',
+    ])
+    // ♮ on the key's F♯ writes F; ♮ again returns it to the key: F♯, as the key spells F.
+    const natural = toggleAccidental(draft, 'rh', { at: 0, key: midi(66) }, 0)
+    expect(shape(natural.hands.rh)).toEqual(['E4@0/24', 'F4@0/24'])
+    expect(shape(toggleAccidental(natural, 'rh', { at: 0, key: midi(65) }, 0).hands.rh)).toEqual([
+      'E4@0/24',
+      'F#4@0/24',
+    ])
+    // A sharp the key writes already stays where ♯ is tapped on it.
+    expect(toggleAccidental(draft, 'rh', { at: 0, key: midi(66) }, 1)).toBe(draft)
+    // A chord of which only one note carries the sign takes it on every note.
+    expect(shape(toggleAccidental(draft, 'rh', 0, 1).hands.rh)).toEqual(['E#4@0/24', 'F#4@0/24'])
+  })
+
+  it('carries a sign only where notes are chosen', () => {
+    expect(carriesAccidental([], 0)).toBe(false)
   })
 })

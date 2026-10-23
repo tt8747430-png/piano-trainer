@@ -46,7 +46,7 @@ export function TempoButton({
   /** Speed training on or off; without it, none is offered. */
   onSpeedTraining?: (on: boolean) => void
 }) {
-  const { t } = useTranslation('player')
+  const { t } = useTranslation(['player', 'music'])
   const locale = useLocale()
   const [open, setOpen] = useState(false)
   const dockSide = useDockSide()
@@ -128,7 +128,7 @@ export function TempoButton({
         >
           <div className="flex justify-between">
             <SliderLabel>{t('tempo')}</SliderLabel>
-            <span className="font-semibold tabular-nums">{t('bpm', { tempo })}</span>
+            <span className="font-semibold tabular-nums">{t('music:bpm', { tempo })}</span>
           </div>
         </Slider>
         {onSpeedTraining && mode === 'listen' && tempo < ownTempo ? (

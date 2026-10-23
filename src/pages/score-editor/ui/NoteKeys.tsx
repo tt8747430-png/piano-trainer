@@ -1,8 +1,14 @@
 import { ArrowDown, ArrowLeftRight, ArrowUp } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
-import { NOTE_VALUES, shownValue, takesDot } from '@/features/score-editor'
-import { isCompound } from '@/shared/lib/music'
+import {
+  carriesAccidental,
+  chosenNotes,
+  NOTE_VALUES,
+  shownValue,
+  takesDot,
+} from '@/features/score-editor'
+import { isCompound, type Accidental } from '@/shared/lib/music'
 import { ToolKey } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
@@ -70,26 +76,43 @@ function Natural() {
   )
 }
 
-/** The accidentals, each writing the chosen notes' letter so: greyed with no note chosen. */
+/** The accidentals' keys, ♯ ♭ ♮, in the palette's order. */
+const ACCIDENTAL_KEYS = [1, -1, 0] as const satisfies readonly Accidental[]
+
+/**
+ * The accidentals, Flat's (ADR 0091): each a toggle on the notes chosen, pressed while every one
+ * carries its sign, a tap writing the sign or taking it off (the note back as the key spells it);
+ * greyed with no note chosen.
+ */
 function AccidentalKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const chosen = useNotesChosen()
-  const keys = [
-    { accidental: 1, label: t('accidentals.sharp'), picture: <Sharp /> },
-    { accidental: -1, label: t('accidentals.flat'), picture: <Flat /> },
-    { accidental: 0, label: t('accidentals.natural'), picture: <Natural /> },
-  ] as const
-  return keys.map(({ accidental, label, picture }) => (
-    <ToolKey
-      key={label}
-      label={label}
-      disabled={!chosen}
-      onClick={() => actions.dispatch({ type: 'accidental', accidental })}
-    >
-      <span aria-hidden>{picture}</span>
-    </ToolKey>
-  ))
+  const carried = useEditorState(
+    useShallow((state) => {
+      const notes = chosenNotes(state)
+      return ACCIDENTAL_KEYS.map((accidental) => carriesAccidental(notes, accidental))
+    }),
+  )
+  const keys = {
+    1: { label: t('accidentals.sharp'), picture: <Sharp /> },
+    [-1]: { label: t('accidentals.flat'), picture: <Flat /> },
+    0: { label: t('accidentals.natural'), picture: <Natural /> },
+  } as const
+  return ACCIDENTAL_KEYS.map((accidental, i) => {
+    const { label, picture } = keys[accidental]
+    return (
+      <ToolKey
+        key={label}
+        label={label}
+        pressed={carried[i] ?? false}
+        disabled={!chosen}
+        onClick={() => actions.dispatch({ type: 'accidental', accidental })}
+      >
+        <span aria-hidden>{picture}</span>
+      </ToolKey>
+    )
+  })
 }
 
 /**

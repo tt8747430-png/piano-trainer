@@ -1,7 +1,7 @@
 import { ChevronDown, ChevronUp, Piano } from 'lucide-react'
 import { useEffect, useEffectEvent, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { chosenNotes, isHandLayer } from '@/features/score-editor'
+import { chosenNotes, fingerableNotes, isHandLayer } from '@/features/score-editor'
 import { useFoldKeys } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
 import { Segmented } from '@/shared/ui'
@@ -11,7 +11,7 @@ import { gripRelease } from '../model/grip'
 import { categoryOpen, PALETTE_CATEGORIES, type PaletteCategory } from '../model/palette-categories'
 import { BarKeys } from './BarKeys'
 import { ChordBuilt, ChordsInKey, ChordTyped, QuickChords } from './ChordKeys'
-import { FingeringPanel } from './FingeringPanel'
+import { FingeringKeys } from './FingeringKeys'
 import { LineKeys } from './LineKeys'
 import { ArticulationKeys, DynamicKeys } from './MarkKeys'
 import { NoteKeys, PitchKeys, QuickValues } from './NoteKeys'
@@ -31,11 +31,16 @@ function useReason(category: PaletteCategory): string | undefined {
   const { t } = useTranslation('editor')
   const layer = useEditorState((state) => state.layer)
   const chosen = useEditorState((state) => chosenNotes(state).length > 0)
+  const fingerable = useEditorState((state) => fingerableNotes(state).length > 0)
   if (category === 'chords') return layer === 'chords' ? undefined : t('reason.chordRow')
   if (!categoryOpen(category, layer))
     return layer === 'chords' ? t('reason.staff') : t('reason.hand')
   if (ON_NOTES.includes(category) && !chosen) return t('reason.chooseNote')
-  if (category === 'fingering' && isHandLayer(layer) && !chosen) return t('reason.chooseNote')
+  // A finger goes on one note: a whole chord chosen takes none (ADR 0091).
+  if (category === 'fingering' && isHandLayer(layer)) {
+    if (!chosen) return t('reason.chooseNote')
+    if (!fingerable) return t('reason.chordNote')
+  }
   return undefined
 }
 
@@ -117,7 +122,7 @@ function Sections(chord: { way: ChordWay; setWay: (way: ChordWay) => void }) {
         <TextKeys />
       </Section>
       <Section category="fingering">
-        <FingeringPanel />
+        <FingeringKeys />
       </Section>
       <Section category="chords">
         <ChordWays {...chord} />

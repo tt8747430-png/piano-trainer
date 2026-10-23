@@ -1,6 +1,7 @@
 import { selectionSpan } from './caret-moves'
 import type { DraftNote } from './draft'
-import { isAt, notesOf, type Where } from './notes'
+import { isHandLayer } from './draft'
+import { fingeredNotes, isAt, notesOf, type Where } from './notes'
 import type { EditorState } from './state'
 import { valueOf, type ChosenValue } from './values'
 
@@ -20,6 +21,13 @@ export function chosenSpan(state: EditorState): Where {
  */
 export const chosenNotes = (state: EditorState): DraftNote[] =>
   state.layer === 'chords' ? [] : notesOf(state.draft, state.layer).filter(isAt(chosenSpan(state)))
+
+/**
+ * The notes the Fingering keys act on (ADR 0091): of the notes chosen in a hand, those a finger goes
+ * on (`fingeredNotes`); none in the tune or the chord symbols.
+ */
+export const fingerableNotes = (state: EditorState): DraftNote[] =>
+  isHandLayer(state.layer) ? fingeredNotes(state.draft, state.layer, chosenSpan(state)) : []
 
 /**
  * The value the palette shows pressed: the first chosen note's (none for a length no one value

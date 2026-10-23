@@ -30,7 +30,7 @@ type Reading =
  * before adding it.
  */
 function SharedChart({ song }: { song: SharedSong }) {
-  const { t } = useTranslation('songs')
+  const { t } = useTranslation(['songs', 'music'])
   const piece = useMemo<ChartPiece>(
     () => ({ id: 'shared', kind: 'song', title: song.title, ...song.music }),
     [song],
@@ -47,7 +47,7 @@ function SharedChart({ song }: { song: SharedSong }) {
         {t('shared.facts', {
           key: keySymbol(pieceKey(piece)),
           meter: piece.meter,
-          tempo: piece.tempo,
+          bpm: t('music:bpm', { tempo: piece.tempo }),
         })}
       </p>
       <p>{t('shared.says')}</p>

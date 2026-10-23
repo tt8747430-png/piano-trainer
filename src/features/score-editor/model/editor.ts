@@ -8,7 +8,7 @@ import { ticksOf } from '@/shared/lib/notation'
 import { chordNoteStep, steppedKey } from './chord-note'
 import { deleteChord } from './chords'
 import { midi, PIANO, type Midi } from '@/shared/lib/music'
-import { isHandLayer } from './draft'
+import { isHandLayer, type Draft } from './draft'
 import { barsEdited, chordSet, chosenBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
@@ -17,14 +17,15 @@ import { markNotes } from './marks'
 import {
   deleteBack,
   deleteNotes,
+  fingeredNotes,
   notesAt,
   respellNotes,
-  setAccidental,
   setDuration,
   setFinger,
   shiftNotes,
   stepNotes,
   tieNotes,
+  toggleAccidental,
   writeRest,
 } from './notes'
 import { joinSection, setSectionKey, setSectionKind } from './sections'
@@ -55,15 +56,16 @@ function valueChosen(state: EditorState, value: ChosenValue): EditorState {
   })
 }
 
-/** The chord's one note chosen, where an accidental moved it: its new key. */
-function accidentalMoved(state: EditorState, accidental: number): Partial<EditorState> {
+/** The chord's one note chosen, where a sign moved it: the note of its letter at the caret in `next`. */
+function accidentalMoved(state: EditorState, next: Draft): Partial<EditorState> {
   if (state.chordNote === null || state.layer === 'chords') return {}
   const chosen = notesAt(state.draft, state.layer, state.caret).find(
     (n) => n.midi === state.chordNote,
   )
-  if (!chosen) return {}
-  const moved = chosen.midi + accidental - chosen.spelled.accidental
-  return { chordNote: moved < PIANO.from || moved > PIANO.to ? chosen.midi : midi(moved) }
+  const moved =
+    chosen &&
+    notesAt(next, state.layer, state.caret).find((n) => n.spelled.letter === chosen.spelled.letter)
+  return moved ? { chordNote: moved.midi } : {}
 }
 
 /** The editor's state after an action (spec §6). */
@@ -207,14 +209,15 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
               return moved < PIANO.from || moved > PIANO.to ? key : midi(moved)
             }),
           })
-    case 'accidental':
-      return layer === 'chords'
-        ? state
-        : commit(state, setAccidental(draft, layer, chosenSpan(state), action.accidental), {
-            struck: null,
-            selection: state.selection,
-            ...accidentalMoved(state, action.accidental),
-          })
+    case 'accidental': {
+      if (layer === 'chords') return state
+      const next = toggleAccidental(draft, layer, chosenSpan(state), action.accidental)
+      return commit(state, next, {
+        struck: null,
+        selection: state.selection,
+        ...accidentalMoved(state, next),
+      })
+    }
     case 'respell':
       return layer === 'chords'
         ? state
@@ -222,10 +225,18 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
             struck: null,
             selection: state.selection,
           })
-    case 'finger':
-      return isHandLayer(layer)
-        ? commit(state, setFinger(draft, layer, caret, action.midi, action.finger))
-        : state
+    case 'finger': {
+      if (!isHandLayer(layer)) return state
+      const where = chosenSpan(state)
+      const fingered = fingeredNotes(draft, layer, where)
+      if (fingered.length === 0) return state
+      // Every note the finger goes on wears it already: off.
+      const on = fingered.every((n) => n.finger === action.finger)
+      return commit(state, setFinger(draft, layer, where, on ? null : action.finger), {
+        struck: null,
+        selection: state.selection,
+      })
+    }
     case 'mark': {
       if (layer === 'chords') return state
       return commit(state, markNotes(draft, layer, chosenSpan(state), action.mark), {

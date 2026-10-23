@@ -10,7 +10,7 @@ export function TempoSlider({
   tempo: number
   onChange: (tempo: number) => void
 }) {
-  const { t } = useTranslation('practice')
+  const { t } = useTranslation(['practice', 'music'])
   return (
     <Slider
       min={TEMPO_RANGE.min}
@@ -22,7 +22,7 @@ export function TempoSlider({
     >
       <div className="flex justify-between">
         <SliderLabel>{t('scales.tempo')}</SliderLabel>
-        <span className="font-semibold tabular-nums">{t('scales.bpm', { tempo })}</span>
+        <span className="font-semibold tabular-nums">{t('music:bpm', { tempo })}</span>
       </div>
     </Slider>
   )
