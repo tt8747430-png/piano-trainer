@@ -5,6 +5,7 @@ import {
   addToChord,
   carriesAccidental,
   deleteNotes,
+  fingeredNotes,
   notesAt,
   respellNotes,
   setDuration,
@@ -128,13 +129,21 @@ describe('the notes at the caret', () => {
     expect(respellNotes(sharp, 'rh', 0).hands.rh[0]?.midi).toBe(61)
   })
 
-  it('sets and clears a finger in a hand', () => {
-    const fingered = setFinger(draft, 'rh', 0, midi(64), 3)
-    expect(fingered.hands.rh.map((n) => n.finger)).toEqual([undefined, 3])
-    expect(setFinger(fingered, 'rh', 0, midi(64), null).hands.rh.map((n) => n.finger)).toEqual([
+  it('fingers a note alone at its place, or the chord’s one note chosen, never a whole chord', () => {
+    const fingers = (d: typeof draft) => d.hands.rh.map((n) => n.finger)
+    // The whole chord: no note takes a finger, each is fingered in turn.
+    expect(fingeredNotes(draft, 'rh', 0)).toEqual([])
+    expect(setFinger(draft, 'rh', 0, 3)).toBe(draft)
+    const fingered = setFinger(draft, 'rh', { at: 0, key: midi(64) }, 3)
+    expect(fingers(fingered)).toEqual([undefined, 3])
+    expect(fingers(setFinger(fingered, 'rh', { at: 0, key: midi(64) }, null))).toEqual([
       undefined,
       undefined,
     ])
+    // A range: each place's single note, a chord's left alone.
+    const line = writeNotes(fingered, 'rh', 48, keys(67), 24).draft
+    expect(shape(fingeredNotes(line, 'rh', { from: 0, to: 96 }))).toEqual(['G4@48/24'])
+    expect(fingers(setFinger(line, 'rh', { from: 0, to: 96 }, 5))).toEqual([undefined, 3, 5])
   })
 })
 

@@ -35,6 +35,7 @@ export const editor = {
     staff: 'These are for notes: tap a note on a staff.',
     hand: 'For the piano’s staves: tap a note on the upper or lower staff.',
     chordRow: 'Chords are written over the staff: tap a chord name, or the space over the staff.',
+    chordNote: 'Choose one note of the chord: each takes its own finger.',
   },
   // The edit row under the bar: what is done to what is chosen.
   editRow: 'Edit',
@@ -119,7 +120,6 @@ export const editor = {
     accel: 'gradually faster',
     'a-tempo': 'back to the tempo',
   },
-  fingering: { noNote: 'Choose a note to give it a finger.' },
   accidentals: { sharp: 'Sharp', flat: 'Flat', natural: 'Natural' },
   // Where the caret writes, named as a score names its staves (ADR 0091): the chord symbols' row, the
   // tune's staff, the piano's two staves. Never a hand: the hands are the Player's.
@@ -217,9 +217,8 @@ export const editor = {
   stepDown: 'Down a diatonic step',
   back: 'Previous note',
   on: 'Next note',
-  finger: 'Finger on {{note}}',
-  noFinger: 'None',
-  fingers: '1 thumb · 5 little finger',
+  // The Fingering keys, 1 to 5, on the notes chosen (ADR 0091).
+  fingerOf: 'Finger {{finger}}',
   chord: {
     set: 'Set the chord and go to the next bar',
     setShort: 'Set',

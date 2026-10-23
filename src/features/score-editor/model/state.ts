@@ -116,7 +116,11 @@ export type EditorAction =
   | { readonly type: 'respell' }
   /** The notes chosen written on their letter ♯ (1), ♭ (−1) or ♮ (0). */
   | { readonly type: 'accidental'; readonly accidental: -1 | 0 | 1 }
-  | { readonly type: 'finger'; readonly midi: Midi; readonly finger: Finger | null }
+  /**
+   * A finger on the notes chosen in a hand: a place's single note, or the chord's one note chosen;
+   * the same finger again takes it off (ADR 0091).
+   */
+  | { readonly type: 'finger'; readonly finger: Finger }
   /** A mark put on the notes at the caret, or those of the bars chosen, or taken off them all (ADR 0063). */
   | { readonly type: 'mark'; readonly mark: MarkChoice }
   /** A line drawn over the bars chosen, else from the caret to its bar's end, or taken away (ADR 0080). */

@@ -34,6 +34,7 @@ export const editor: LocaleResources['editor'] = {
     hand: 'Для нотоносцев фортепиано: коснитесь ноты на верхнем или нижнем нотоносце.',
     chordRow:
       'Аккорды пишутся над нотоносцем: коснитесь названия аккорда или места над нотоносцем.',
+    chordNote: 'Выберите одну ноту аккорда: у каждой свой палец.',
   },
   editRow: 'Правка',
   view: 'Вид',
@@ -108,7 +109,6 @@ export const editor: LocaleResources['editor'] = {
     accel: 'постепенно ускоряя',
     'a-tempo': 'в прежнем темпе',
   },
-  fingering: { noNote: 'Выберите ноту, чтобы указать палец.' },
   accidentals: { sharp: 'Диез', flat: 'Бемоль', natural: 'Бекар' },
   layers: {
     chords: 'Аккордовые символы',
@@ -202,9 +202,7 @@ export const editor: LocaleResources['editor'] = {
   stepDown: 'На ступень ниже',
   back: 'Предыдущая нота',
   on: 'Следующая нота',
-  finger: 'Палец на {{note}}',
-  noFinger: 'Нет',
-  fingers: '1 — большой · 5 — мизинец',
+  fingerOf: 'Палец {{finger}}',
   chord: {
     set: 'Поставить аккорд и перейти к следующему такту',
     setShort: 'Ввод',

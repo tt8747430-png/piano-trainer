@@ -814,7 +814,51 @@ describe('the score editor', () => {
       'data-off',
     )
     const fingering = await openCategory(user, 'Fingering')
-    expect(within(fingering).getByText('Choose a note to give it a finger.')).toBeInTheDocument()
+    expect(
+      within(fingering).getByText('Choose a note first: these change the notes chosen.'),
+    ).toBeInTheDocument()
+    expect(within(fingering).getByRole('button', { name: 'Finger 1' })).toBeDisabled()
+  })
+
+  it('fingers the note chosen with 1–5, one note of a chord at a time, as Flat’s (ADR 0091)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ hands: { rh: 'C4+E4/4 | G4/4 | r/4 | r/4', lh: EMPTY_TUNE } }),
+    })
+    await waitFor(() =>
+      expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff · Bar 1/),
+    )
+    const fingering = await openCategory(user, 'Fingering')
+    const finger = (n: number) => within(fingering).getByRole('button', { name: `Finger ${n}` })
+    // The whole chord chosen: no finger, and the reason.
+    expect(finger(3)).toBeDisabled()
+    expect(
+      within(fingering).getByText('Choose one note of the chord: each takes its own finger.'),
+    ).toBeInTheDocument()
+    // Alt ↑ chooses its top note, E, which takes the finger; the same finger again takes it off.
+    await user.keyboard('{Alt>}{ArrowUp}{/Alt}')
+    expect(finger(3)).toBeEnabled()
+    await user.click(finger(3))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        hands: { rh: 'C4+E4^3/4 | G4/4 | r/4 | r/4' },
+      }),
+    )
+    expect(finger(3)).toHaveAttribute('aria-pressed', 'true')
+    await user.click(finger(3))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        hands: { rh: 'C4+E4/4 | G4/4 | r/4 | r/4' },
+      }),
+    )
+    // A note alone at its place takes it at once.
+    await user.keyboard('{Escape}{ArrowRight}')
+    await user.click(finger(5))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        hands: { rh: 'C4+E4/4 | G4^5/4 | r/4 | r/4' },
+      }),
+    )
   })
 
   it('toggles a sign on the note chosen from Notes: pressed while it carries it, off at a second tap (Flat’s)', async () => {

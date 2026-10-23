@@ -36,6 +36,6 @@ export {
   type PlacedBar,
 } from './model/timeline'
 export { NOTE_VALUES, takesDot, valueOf, type ChosenValue, type Dots } from './model/values'
-export { chosenNotes, shownValue } from './model/chosen'
+export { chosenNotes, fingerableNotes, shownValue } from './model/chosen'
 export { hasMark, type MarkChoice } from './model/marks'
 export { lineDrawn, LINES, type Line } from './model/lines'

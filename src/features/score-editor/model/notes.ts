@@ -316,19 +316,26 @@ export function deleteBack(
 export const respellNotes = (draft: Draft, layer: NoteLayer, where: Where): Draft =>
   changeAt(draft, layer, where, (n) => ({ ...n, spelled: otherSpelling(n.spelled) }))
 
-/** A finger on one note at `at` in a hand, or none. */
-export const setFinger = (
-  draft: Draft,
-  hand: HandId,
-  at: Tick,
-  key: Midi,
-  finger: Finger | null,
-): Draft =>
-  changeAt(draft, hand, at, (n) => {
-    if (n.midi !== key) return n
+/**
+ * The notes a finger goes on (ADR 0091, Flat's), of those `where` takes: a note alone at its place,
+ * or the chord's one note chosen alone; a whole chord's notes take none, each fingered in turn (Alt
+ * ↑ ↓, `chordNote`).
+ */
+export function fingeredNotes(draft: Draft, layer: NoteLayer, where: Where): DraftNote[] {
+  const taken = notesOf(draft, layer).filter(isAt(where))
+  if (typeof where !== 'number' && 'key' in where) return taken
+  return taken.filter((n) => notesAt(draft, layer, n.startTick).length === 1)
+}
+
+/** A finger on the notes `where` gives one to (`fingeredNotes`), or none. */
+export function setFinger(draft: Draft, hand: HandId, where: Where, finger: Finger | null): Draft {
+  const fingered = new Set(fingeredNotes(draft, hand, where))
+  return changeAt(draft, hand, where, (n) => {
+    if (!fingered.has(n) || (n.finger ?? null) === finger) return n
     const { finger: _old, ...rest } = n
     return finger === null ? rest : { ...rest, finger }
   })
+}
 
 /** The notes at `at` joined to the same keys' notes starting where they end: one note, tied as written. */
 export function tieNotes(draft: Draft, layer: NoteLayer, at: Tick): Draft {

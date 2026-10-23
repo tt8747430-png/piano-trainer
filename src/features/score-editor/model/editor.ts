@@ -17,6 +17,7 @@ import { markNotes } from './marks'
 import {
   deleteBack,
   deleteNotes,
+  fingeredNotes,
   notesAt,
   respellNotes,
   setDuration,
@@ -224,10 +225,18 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
             struck: null,
             selection: state.selection,
           })
-    case 'finger':
-      return isHandLayer(layer)
-        ? commit(state, setFinger(draft, layer, caret, action.midi, action.finger))
-        : state
+    case 'finger': {
+      if (!isHandLayer(layer)) return state
+      const where = chosenSpan(state)
+      const fingered = fingeredNotes(draft, layer, where)
+      if (fingered.length === 0) return state
+      // Every note the finger goes on wears it already: off.
+      const on = fingered.every((n) => n.finger === action.finger)
+      return commit(state, setFinger(draft, layer, where, on ? null : action.finger), {
+        struck: null,
+        selection: state.selection,
+      })
+    }
     case 'mark': {
       if (layer === 'chords') return state
       return commit(state, markNotes(draft, layer, chosenSpan(state), action.mark), {
