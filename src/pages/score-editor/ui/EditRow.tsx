@@ -6,6 +6,7 @@ import { cn } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { LayerChip } from './LayerChip'
 import { BarIcon } from './palette-icons'
 
 /** One of the row's commands: its icon, named for a screen reader and in a tooltip. */
@@ -42,8 +43,8 @@ function EditButton({
 }
 
 /**
- * The edit row (spec 2026-10-23, Flat's second toolbar): what is done to what is chosen, never a mark
- * put on it: Delete (the notes or chord chosen, else the ones before the caret, as Backspace), Undo
+ * The edit row (spec 2026-10-23, Flat's second toolbar): at its head the layer chip, where the next
+ * note goes (`LayerChip`); then what is done to what is chosen, never a mark put on it: Delete (the notes or chord chosen, else the ones before the caret, as Backspace), Undo
  * and Redo, Copy, Cut and Paste of the bars chosen (else the caret's), and Add bar after them. In
  * sight under the bar on a phone, in the bar's row where it has room; scrolling sideways where even a
  * phone's row is too narrow. While a take records, it waits for Stop.
@@ -67,6 +68,7 @@ export function EditRow({ className }: { className?: string }) {
         className,
       )}
     >
+      <LayerChip />
       <EditButton
         label={t(chords ? 'chord.delete' : 'deleteNotes')}
         disabled={recording}

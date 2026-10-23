@@ -137,6 +137,7 @@ export const editor: LocaleResources['editor'] = {
     voice4: 'Голос 4',
   },
   voice: 'Голос',
+  layerChip: { label: 'Следующая нота: {{layer}}', menu: 'Куда пишется следующая нота' },
   voices: { chords: 'Аккорды', melody: 'Мелодия', rh: 'Правая', lh: 'Левая' },
   chordNames: 'Названия аккордов',
   sheet: {

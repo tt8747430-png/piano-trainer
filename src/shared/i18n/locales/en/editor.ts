@@ -152,6 +152,8 @@ export const editor = {
     voice4: 'Voice 4',
   },
   voice: 'Voice',
+  // The edit row's head: where the next note goes, chosen there (Flat's voice badge).
+  layerChip: { label: 'Next note goes in: {{layer}}', menu: 'Next note goes in' },
   // What the keys write, short under the palette's Voice.
   voices: { chords: 'Chords', melody: 'Melody', rh: 'Right', lh: 'Left' },
   chordNames: 'Chord names',

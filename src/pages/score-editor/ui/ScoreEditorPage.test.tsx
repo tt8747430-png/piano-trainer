@@ -708,7 +708,16 @@ describe('the score editor', () => {
       within(row)
         .getAllByRole('button')
         .map((button) => button.getAttribute('aria-label')),
-    ).toEqual(['Delete', 'Undo', 'Redo', 'Copy bars', 'Cut bars', 'Paste bars', 'Add bar'])
+    ).toEqual([
+      'Next note goes in: Right hand',
+      'Delete',
+      'Undo',
+      'Redo',
+      'Copy bars',
+      'Cut bars',
+      'Paste bars',
+      'Add bar',
+    ])
     // Named for what it does: Play, and the caret moved a note back or on.
     const dock = within(screen.getByRole('toolbar', { name: 'Play and move' })).getAllByRole(
       'button',
@@ -719,6 +728,23 @@ describe('the score editor', () => {
       'Play',
       'Next note',
     ])
+  })
+
+  it('says at the edit row’s head where the next note goes, and chooses the staff there, as Flat’s voice badge', async () => {
+    const user = userEvent.setup()
+    await renderApp('/edit/my-1', { storage: withSong() })
+    const row = await screen.findByRole('toolbar', { name: 'Edit' })
+    await user.click(within(row).getByRole('button', { name: 'Next note goes in: Right hand' }))
+    const staves = await screen.findByRole('listbox', { name: 'Next note goes in' })
+    // The staves in sight, top down, each with its sign.
+    const options = within(staves).getAllByRole('option')
+    expect(options).toHaveLength(3)
+    ;['Chords', 'Right hand', 'Left hand'].forEach((name, i) =>
+      expect(options[i]).toHaveAccessibleName(name),
+    )
+    await user.click(within(staves).getByRole('option', { name: 'Left hand' }))
+    expect(screen.getByRole('status')).toHaveTextContent(/^Left hand · Bar 1/)
+    expect(within(row).getByRole('button', { name: 'Next note goes in: Left hand' })).toBeVisible()
   })
 
   it('plays what was written at the learner’s speed from its dock’s tempo, the song’s own kept', async () => {
