@@ -318,3 +318,33 @@ Three differences remain:
 11. **Insert mode (Melody · Insert · Chord):** `features/score-editor` reduce, `NoteKeys`. Later; it needs its
     own ADR.
 12. **A first-visit editor walkthrough:** `pages/score-editor`. Dorico's tutorials show that it works. Later.
+
+## 7. Flat's help, read for ADR 0091 (2026-10-23, later)
+
+Fetched: [accidentals](https://help.flat.io/en/music-notation-software/accidental/),
+[fingerings](https://help.flat.io/en/music-notation-software/fingerings/),
+[enharmonic switch](https://help.flat.io/en/music-notation-software/enharmonic-switch/),
+[chords](https://help.flat.io/en/music-notation-software/chords/),
+[articulations](https://help.flat.io/en/music-notation-software/articulation/),
+[dynamics](https://help.flat.io/en/music-notation-software/dynamics/). Dorico's pages are a JavaScript app and give
+WebFetch only their navigation.
+
+- **Accidentals** sit beside the durations and stay in sight whichever tab is open; 0 is ♮, = is ♯, − is ♭. On a
+  note, a tap writes the sign; the same sign tapped again makes it double, a third tap takes it off, a fourth
+  writes it as a courtesy (in brackets), a fifth starts over. ♮ on an altered note takes the sign off. On a rest,
+  an accidental is prepared for the next note written.
+- **Enharmonic switch** (J) respells one chosen note (C♯ ↔ D♭); the pitch stays.
+- **Fingering** is under Articulations (Fingerings). It acts on the note under the cursor; each tap raises the
+  number by one, and a tap past the highest takes it off. A chord is fingered note by note.
+- **Articulations** (staccato, staccatissimo, tenuto, detached legato, accent, marcato; fermata; breath, caesura)
+  are toggles: the same one again takes it off; a range takes it on every note at once.
+- **Dynamics** go under the staff at the cursor or the chosen note and hold until the next; the default _mp_ is
+  not printed; the same dynamic tapped again takes it off. Hairpins span several notes (a range).
+- **Chord symbols** (Text › Chord, Cmd+K): a text field at the chosen note with suggestions as one types; → or
+  Enter the next chord, ← the previous, Esc back to the note. Flat stores the chord's meaning, so only chords it
+  knows are taken. Chord symbols do not play back on their own.
+
+**What ours takes (ADR 0091):** accidentals as toggles with ♮ returning to the key (no doubles, no courtesy yet);
+fingering as a tap that raises the chosen note's finger, past 5 none, one note of a chord at a time
+(`chordNote`); articulations and dynamics as toggles over the notes chosen; the chord field at the chosen bar with
+→ ← Enter as Flat's.
