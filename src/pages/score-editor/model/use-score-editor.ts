@@ -14,6 +14,7 @@ import { renameSong, saveMusic } from '@/features/edit-piece'
 import { setEditorLayout } from '@/features/set-preference'
 import {
   barAt,
+  barsOf,
   createEditorStore,
   isHandLayer,
   readDraft,
@@ -23,13 +24,14 @@ import {
   type EditorAction,
 } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
-import { useGoBack, useWakeLock, type SheetView } from '@/shared/lib'
+import { useGoBack, useViewChange, useWakeLock, type SheetView } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { audibleHands, schedule } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { inPopUp, isTyping } from '@/shared/lib/shortcuts'
 import { arrangeDraft, playedInBar } from './arrange-draft'
 import type { ScoreEditorValue } from './editor-context'
+import type { EditSearch } from './edit-search'
 import { savedMusic, savingTo, type EditorTarget } from './editor-target'
 import { shortcutOf } from './shortcuts'
 import { useEditorTakes } from './use-editor-takes'
@@ -57,8 +59,9 @@ function useCloseTo(target: EditorTarget): () => void {
  * The score editor's visit (spec §6): its store over the target's draft, saving each change; keys from
  * the keyboard, the computer keyboard and MIDI written at the caret; the shortcuts; Play; Write out;
  * and the takes (ADR 0028): while one records, its keys write nothing and Space or Escape stops it.
+ * Opened at `bar` (as printed), the caret starts there.
  */
-export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
+export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorValue {
   // The screen stays on while this screen is open: a phone on the stand does not lock mid-song.
   useWakeLock()
   const pieces = usePiecesStoreApi()
@@ -90,6 +93,17 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
       }),
     [pieces, store, target, saved],
   )
+  // Opened at a bar (Edit from the Player's cursor, ADR 0090): the caret goes to its start, once,
+  // and the URL forgets it.
+  const setSearch = useViewChange<EditSearch>()
+  const openAt = useEffectEvent((printed: number) => {
+    const placed = barsOf(store.getState().draft)[printed - 1]
+    if (placed) store.dispatch({ type: 'place', tick: placed.start, layer: store.getState().layer })
+    setSearch({ bar: undefined })
+  })
+  useEffect(() => {
+    if (bar !== undefined) openAt(bar)
+  }, [bar])
   const playback = usePlayback<'piece'>()
   const chordField = useRef<HTMLInputElement | null>(null)
   const chordFieldRef = useCallback((field: HTMLInputElement | null) => {
@@ -200,6 +214,7 @@ export function useScoreEditor(target: EditorTarget): ScoreEditorValue {
     actions: { dispatch, play, togglePlay, writeOut, close, rename },
     view: { chordNames, showChordNames, settingsOpen, openSettings, layout, setLayout },
     meta: {
+      id: target.id,
       title,
       hasVersion,
       playing: playback.playing === 'piece',

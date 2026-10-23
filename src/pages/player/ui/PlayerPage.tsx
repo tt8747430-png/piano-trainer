@@ -1,5 +1,5 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { PencilLine } from 'lucide-react'
+import { useEffect, useEffectEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   entryTitles,
@@ -8,10 +8,12 @@ import {
   useRepertoire,
   type Piece,
 } from '@/entities/piece'
+import { beatGroupInBar, writtenBarAt } from '@/features/practice'
 import { useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
 import { isCompound } from '@/shared/lib/music'
-import { ButtonLink, NotFound, RoundLink } from '@/shared/ui'
+import { ButtonLink, NotFound } from '@/shared/ui'
+import { ModeSwitch } from '@/widgets/mode-switch'
 import { useClose } from '../model/use-close'
 import type { PlayerSearch } from '../model/player-search'
 import { usePlayer } from '../model/use-player'
@@ -19,7 +21,6 @@ import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
 
 function PiecePlayer({ piece }: { piece: Piece }) {
-  const { t } = useTranslation('player')
   const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
   const close = useClose(piece)
@@ -30,6 +31,17 @@ function PiecePlayer({ piece }: { piece: Piece }) {
     setSearch,
   )
   const title = entryTitles(piece, locale).primary
+  // Opened at a bar (Practise from the editor's caret, ADR 0090): the cursor goes there, once, and
+  // the URL forgets it, so the view remembered never holds it.
+  const { jumpToBeatGroup } = player.practice
+  const openAt = useEffectEvent((bar: number) => {
+    const group = beatGroupInBar(performance, bar - 1)
+    if (group !== null) jumpToBeatGroup(group)
+    setSearch({ bar: undefined })
+  })
+  useEffect(() => {
+    if (search.bar !== undefined) openAt(search.bar)
+  }, [search.bar])
   return (
     <PlayerLayout
       title={title}
@@ -40,12 +52,13 @@ function PiecePlayer({ piece }: { piece: Piece }) {
       headings={headings}
       // A song that hides its piano is a lead sheet (ADR 0083).
       piano={!isLeadSheet(piece)}
-      edit={
+      modes={
+        // A piece written in degrees has no score to edit.
         isDegreePiece(piece) ? null : (
-          <RoundLink
-            label={t('editScore')}
-            icon={PencilLine}
-            render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
+          <ModeSwitch
+            pieceId={piece.id}
+            mode="practise"
+            bar={writtenBarAt(performance, player.practice.state.beatGroup) + 1}
           />
         )
       }

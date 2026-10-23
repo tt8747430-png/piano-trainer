@@ -8,6 +8,7 @@ export {
 export { PRACTICE_MODES, type PracticeMode } from './practice-mode'
 export { usePractice, type Practice } from './use-practice'
 export { isLoopParam, loopParam, readLoop, type BarRange, type LoopParam } from './loop'
+export { beatGroupInBar, writtenBarAt } from './written-bar'
 
 export { arrangePiece, ownChoice } from './arrange-piece'
 export type { PracticeChoice } from './choice'

@@ -1,7 +1,7 @@
 export const player = {
   setup: 'Setup',
-  /** The Setup's way into the score editor, for the piece played. */
-  editScore: 'Edit the score',
+  /** A piece's score in its two modes, the Player and the score editor (ADR 0090). */
+  mode: { label: 'Practise or edit', practise: 'Practise', edit: 'Edit' },
   // How the score is shown (ADR 0064), from the bar: remembered for every piece.
   view: {
     open: 'View',

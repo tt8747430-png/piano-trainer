@@ -51,6 +51,15 @@ describe('search params', () => {
     expect(await searchAt('/edit/bz5?record=yes')).toEqual({ record: false })
   })
 
+  it('carry the bar between the Player and the score editor, a bar as printed (ADR 0090)', async () => {
+    expect(await searchAt('/edit/bz5?bar=4')).toEqual({ record: false, bar: 4 })
+    expect(await searchAt('/play/bz5?bar=3')).toEqual({ ...PLAYER_DEFAULTS, bar: 3 })
+    for (const bar of ['0', '-2', '2.5', 'x']) {
+      expect(await searchAt(`/edit/bz5?bar=${bar}`)).toEqual(EDIT_DEFAULTS)
+      expect(await searchAt(`/play/bz5?bar=${bar}`)).toEqual(PLAYER_DEFAULTS)
+    }
+  })
+
   it('keep what is valid', async () => {
     expect(
       await searchAt(

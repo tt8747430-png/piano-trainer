@@ -37,7 +37,7 @@ export function PlayerLayout({
   performance,
   headings = NO_HEADINGS,
   setup,
-  edit,
+  modes,
   piano = true,
 }: {
   /**
@@ -54,8 +54,8 @@ export function PlayerLayout({
   headings?: readonly string[]
   /** The Setup: its button, in the toolbar, and the sheet it opens. */
   setup: ReactNode
-  /** Edit the score, first of the bar's buttons, as on a song's page: a piece's own, none for a walk. */
-  edit?: ReactNode
+  /** Practise · Edit (ADR 0090), first of the bar's buttons: a piece's own, none for a walk. */
+  modes?: ReactNode
 }) {
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
@@ -89,7 +89,7 @@ export function PlayerLayout({
         <PlayerTitle title={title} onClose={onClose} />
       </PlayerArea>
       <PlayerArea area="actions" className="flex items-center justify-end gap-2 narrow-phone:gap-1">
-        {edit}
+        {modes}
         <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />
         <PlayerViewMenu />
         <MidiButton />

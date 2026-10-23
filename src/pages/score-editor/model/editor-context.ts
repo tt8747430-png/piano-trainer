@@ -35,6 +35,8 @@ export interface ScoreEditorValue {
     readonly setLayout: (layout: SheetView) => void
   }
   readonly meta: {
+    /** The piece's id: its Player's and its editor's. */
+    readonly id: string
     readonly title: string
     readonly hasVersion: boolean
     readonly playing: boolean

@@ -2,8 +2,10 @@ import { X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
+import { barAt } from '@/features/score-editor'
 import { RoundButton, usePageHeading } from '@/shared/ui'
-import { useScoreEditorContext } from '../model/editor-context'
+import { ModeSwitch } from '@/widgets/mode-switch'
+import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { EditorViewMenu } from './EditorViewMenu'
 import { EditRow } from './EditRow'
 import { PieceSettings } from './PieceSettings'
@@ -12,7 +14,7 @@ import { RecorderSheet } from './RecorderSheet'
 /**
  * The editor's bar, as the Player's (ADR 0085): Close; the title (on a phone only what the caret is
  * on, `status`, or Your version); then the screen's round buttons in the Player's order and look:
- * Record, which opens the takes; the eye (`EditorViewMenu`), how the work is shown; the MIDI keyboard
+ * Practise · Edit (ADR 0090), the Player at the caret's bar; Record, which opens the takes; the eye (`EditorViewMenu`), how the work is shown; the MIDI keyboard
  * (hidden without Web MIDI); and the sliders (`PieceSettings`), the song as a whole (ADR 0080). The
  * edit row (`EditRow`: Delete, Undo, Redo, Copy, Cut, Paste, Add bar) stands under it on a phone and
  * in its row, before the round buttons, where there is room (spec 2026-10-23). Play and ‹ › ride in
@@ -20,7 +22,8 @@ import { RecorderSheet } from './RecorderSheet'
  */
 export function EditorHeader({ status }: { status?: ReactNode }) {
   const { t } = useTranslation(['editor', 'common'])
-  const { actions, meta } = useScoreEditorContext()
+  const { actions, meta, takes } = useScoreEditorContext()
+  const bar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
   const heading = usePageHeading<HTMLHeadingElement>(meta.title)
   return (
     <div className="flex flex-wrap items-center gap-x-1 gap-y-1 sm:flex-nowrap sm:gap-x-2">
@@ -45,6 +48,7 @@ export function EditorHeader({ status }: { status?: ReactNode }) {
       </div>
       <EditRow className="max-sm:order-last max-sm:basis-full max-sm:justify-between" />
       <div className="ms-auto flex items-center gap-0.5 sm:ms-0 sm:gap-1">
+        <ModeSwitch pieceId={meta.id} mode="edit" bar={bar} disabled={takes.stage !== 'idle'} />
         <RecorderSheet />
         <EditorViewMenu />
         <MidiButton />

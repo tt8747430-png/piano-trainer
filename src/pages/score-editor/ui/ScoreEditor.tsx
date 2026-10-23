@@ -42,8 +42,8 @@ const GAP = 8
  * scrolled, pinched) and comes back at a tap on the sheet. While a take records, its strip stands
  * where the dock was.
  */
-export function ScoreEditor({ target }: { target: EditorTarget }) {
-  const editor = useScoreEditor(target)
+export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: number | undefined }) {
+  const editor = useScoreEditor(target, bar)
   useEditorShortcutList()
   const onSide = useMediaQuery(LANDSCAPE_PHONE)
   const side = usePaletteBeside()

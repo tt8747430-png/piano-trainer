@@ -890,6 +890,20 @@ describe('the score editor', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/my-1'))
   })
 
+  it('opens at the bar its URL names, and turns to Practise at its caret’s bar (ADR 0090)', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/edit/my-1?bar=3', { storage: withSong() })
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Bar 3, beat 1/))
+    await waitFor(() => expect(router.state.location.search).not.toHaveProperty('bar'))
+    const modes = screen.getByRole('navigation', { name: 'Practise or edit' })
+    expect(within(modes).getByText('Edit').closest('[aria-current="page"]')).not.toBeNull()
+    await user.keyboard('{Alt>}{ArrowRight}{/Alt}')
+    const practise = within(modes).getByRole('link', { name: 'Practise' })
+    expect(practise.getAttribute('href')).toBe('/play/my-1?bar=4')
+    await user.click(practise)
+    await waitFor(() => expect(router.state.location.pathname).toBe('/play/my-1'))
+  })
+
   it('saves a version of a catalog song, played in the Player, and gone once undone to the original', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()

@@ -332,12 +332,18 @@ describe('Player', () => {
     expect(dock).not.toHaveAttribute('data-hidden')
   })
 
-  it('opens the song in the score editor from its bar', async () => {
+  it('turns to Edit at its cursor’s bar from the Practise · Edit switch, first of its buttons (ADR 0090)', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/play/bz5')
-    // In the bar, first of its buttons, as on the song's page.
-    await user.click(await screen.findByRole('link', { name: 'Edit the score' }))
+    const { router } = await renderApp('/play/bz5?bar=3')
+    const modes = await screen.findByRole('navigation', { name: 'Practise or edit' })
+    expect(within(modes).getByText('Practise').closest('[aria-current="page"]')).not.toBeNull()
+    // The bar it opened on is read once: the URL forgets it, the cursor stands there.
+    await waitFor(() => expect(router.state.location.search).not.toHaveProperty('bar'))
+    const edit = within(modes).getByRole('link', { name: 'Edit' })
+    expect(edit.getAttribute('href')).toBe('/edit/bz5?bar=3')
+    await user.click(edit)
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/bz5'))
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Bar 3, beat 1/))
   })
   it('keeps ‹ and › pointing back and forward on a phone on its side, unlike the tempo’s ↑ ↓', async () => {
     await renderApp('/play/bz5')
