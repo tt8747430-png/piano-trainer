@@ -1,7 +1,7 @@
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isVoiceLayer, shownRows, type Layer } from '@/features/score-editor'
+import { shownRows, type Layer } from '@/features/score-editor'
 import { cn } from '@/shared/lib'
 import { Listbox } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -9,17 +9,15 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /** Each staff's sign, as its staff begins: the chord names' letter, a tune's note, the hands' clefs. */
-const SIGNS: Readonly<Record<Exclude<Layer, `voice${number}`>, string>> = {
+const SIGNS: Readonly<Record<Layer, string>> = {
   chords: 'C',
   melody: '\u{1D160}',
   rh: '\u{1D11E}',
   lh: '\u{1D122}',
 }
 
-/** A staff's sign: a more voice's note with its number. */
+/** A staff's sign. */
 function StaffSign({ layer }: { layer: Layer }) {
-  const voice = isVoiceLayer(layer)
-  const sign = voice ? SIGNS.melody : SIGNS[layer]
   return (
     <span
       aria-hidden
@@ -28,21 +26,16 @@ function StaffSign({ layer }: { layer: Layer }) {
         layer === 'chords' ? 'font-serif text-base font-bold' : 'font-music text-2xl',
       )}
     >
-      {sign}
-      {voice ? (
-        <span className="absolute -right-1 -bottom-0.5 font-sans text-[0.6rem] font-bold">
-          {layer.slice(-1)}
-        </span>
-      ) : null}
+      {SIGNS[layer]}
     </span>
   )
 }
 
 /**
  * The layer chip at the edit row's head (Flat's voice badge): where the next note goes, the chord
- * names, the tune, a more voice or a hand, in the caret's colour with its staff's sign; tapped, the
- * staves in sight top down, to write in another (as a click on its staff or Alt ↑ ↓ does). Its sign
- * alone but on a wide screen: the caret's line beside the title names it.
+ * names, the tune or a hand, in the caret's colour with its staff's sign; tapped, the staves in sight
+ * top down, to write in another (as a click on its staff or Alt ↑ ↓ does). Its sign alone but on a
+ * wide screen: the caret's line beside the title names it.
  */
 export function LayerChip() {
   const { t } = useTranslation('editor')

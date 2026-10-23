@@ -273,39 +273,6 @@ describe('the editor', () => {
     expect(run(state, { type: 'undo' }).draft).toEqual(draftOf())
   })
 
-  it('adds a voice’s staff under the tune’s, writes it, and takes it away with its notes', () => {
-    const added = run(initialEditor(draftOf()), { type: 'voiceStaff', voice: 'voice2', on: true })
-    expect(added.draft.voices).toEqual([[]])
-    expect(added.layer).toBe('voice2')
-    const sung = run(added, key(67, 0))
-    expect(sung.draft.voices[0]?.map((n) => n.midi)).toEqual([67])
-    const third = run(sung, { type: 'voiceStaff', voice: 'voice3', on: true })
-    expect(third.draft.voices).toHaveLength(2)
-    // Taking the second voice away moves the third up into its place.
-    const gone = run(third, { type: 'voiceStaff', voice: 'voice2', on: false })
-    expect(gone.draft.voices).toEqual([[]])
-    expect(gone.layer).toBe('rh')
-  })
-
-  it('adds a voice on an instrument, changes the tune’s, and keeps an empty part as a rest', () => {
-    const added = run(initialEditor(draftOf({ melody: 'B4/1 | D5/1' })), {
-      type: 'voiceStaff',
-      voice: 'voice2',
-      on: true,
-      instrument: 'cello',
-    })
-    expect(added.draft.instruments).toEqual(['voice', 'cello'])
-    const flute = run(added, { type: 'instrument', part: 0, instrument: 'flute' })
-    expect(flute.draft.instruments).toEqual(['flute', 'cello'])
-    // The cello wrote nothing yet: its staff stays, a rest, with its instrument (ADR 0072).
-    expect(musicToSave(flute.draft)).toMatchObject({
-      voices: ['r/4'],
-      instruments: ['flute', 'cello'],
-    })
-    const gone = run(flute, { type: 'voiceStaff', voice: 'voice2', on: false })
-    expect(gone.draft.instruments).toEqual(['flute'])
-  })
-
   it('hides a row keeping its notes, saved and read back hidden, and shows it again', () => {
     const sung = initialEditor(draftOf({ melody: 'B4/1 | D5/1' }))
     const hidden = run({ ...sung, layer: 'melody' }, { type: 'hide', row: 'melody', hidden: true })
@@ -318,12 +285,15 @@ describe('the editor', () => {
   })
 
   it('hides the piano for a lead sheet, the caret leaving a hand for the tune (ADR 0083)', () => {
-    const sung = initialEditor(draftOf({ melody: 'B4/1 | D5/1', hands: { lh: 'G2/4 | -' } }))
+    const sung = initialEditor(draftOf({ melody: 'B4/1 | D5/1', hands: { lh: 'G2/4 | r/4' } }))
     const lead = run({ ...sung, layer: 'lh' }, { type: 'hide', row: 'piano', hidden: true })
     expect(lead.draft.hidden).toEqual(['piano'])
     expect(lead.draft.hands).toEqual(sung.draft.hands)
     expect(lead.layer).toBe('melody')
-    expect(musicToSave(lead.draft)).toMatchObject({ hidden: ['piano'], hands: { lh: 'G2/4 | -' } })
+    expect(musicToSave(lead.draft)).toMatchObject({
+      hidden: ['piano'],
+      hands: { lh: 'G2/4 | r/4' },
+    })
     // Never every staff: the tune's, the last in sight, stays.
     expect(run(lead, { type: 'hide', row: 'melody', hidden: true })).toBe(lead)
     // Nor the piano where it is the only staff.
@@ -436,7 +406,7 @@ describe('the editor', () => {
   })
 
   it('chooses one note of a chord, and edits it alone (ADR 0088)', () => {
-    const chord = run(initialEditor(draftOf({ hands: { rh: 'C4+E4+G4/4 | -' } })), {
+    const chord = run(initialEditor(draftOf({ hands: { rh: 'C4+E4+G4/4 | r/4' } })), {
       type: 'layer',
       layer: 'rh',
     })
@@ -466,7 +436,7 @@ describe('the editor', () => {
     expect(run(e, { type: 'place', tick: 0, layer: 'rh' }).chordNote).toBeNull()
     expect(run(e, { type: 'deselect' }).chordNote).toBeNull()
     // A single note has no note of a chord to choose.
-    const single = run(initialEditor(draftOf({ hands: { rh: 'C4/4 | -' } })), {
+    const single = run(initialEditor(draftOf({ hands: { rh: 'C4/4 | r/4' } })), {
       type: 'layer',
       layer: 'rh',
     })
@@ -512,13 +482,6 @@ describe('the editor', () => {
       [['G@0'], ['G@0', 'C@0']],
     ])
     expect(run(state, { type: 'bars', edit: 'newSection' }).draft.sections).toHaveLength(2)
-  })
-
-  it('writes a hand’s bar out from the pattern, and gives it back', () => {
-    const played = [{ midi: midi(43), spelled: note('G'), startTick: 0, durationTicks: 96 }]
-    const out = run(start('lh'), { type: 'writeOut', played })
-    expect(shape(out.draft.hands.lh)).toEqual(['G2@0/96'])
-    expect(run(out, { type: 'backToPattern' }).draft.hands.lh).toEqual([])
   })
 
   it('changes the song’s settings', () => {
@@ -625,7 +588,6 @@ describe('createEditorStore', () => {
       { type: 'delete' },
       { type: 'settings', tempo: 90, key: store.getState().draft.key },
       { type: 'layer', layer: 'rh' },
-      { type: 'backToPattern' },
       { type: 'layer', layer: 'chords' },
       { type: 'delete' },
       { type: 'bars', edit: 'newLine' },

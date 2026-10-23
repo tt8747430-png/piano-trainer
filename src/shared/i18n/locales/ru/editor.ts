@@ -111,34 +111,13 @@ export const editor: LocaleResources['editor'] = {
   },
   fingering: { noNote: 'Выберите ноту, чтобы указать палец.' },
   accidentals: { sharp: 'Диез', flat: 'Бемоль', natural: 'Бекар' },
-  instruments: { label: 'Инструменты', add: 'Добавить инструмент' },
-  staves: {
-    label: 'Партии',
-    show: 'Показать: {{name}}',
-    hide: 'Скрыть: {{name}}',
-    remove: 'Удалить «{{name}}» вместе с нотами',
-    piano: 'Фортепиано',
-    detail: {
-      chords: 'Буквенные обозначения аккордов над нотами',
-      melody: 'Мелодия на своём нотоносце: поёт голос или играет другой инструмент',
-      voice: 'Ещё одна линия вместе с мелодией, на своём нотоносце',
-      piano:
-        'Обе руки: то, что играете вы. Такты, которые вы не выписали, играет фактура песни по аккордам',
-    },
-    lastStaff: 'Хотя бы один нотоносец всегда виден.',
-  },
   layers: {
     chords: 'Аккорды',
     melody: 'Мелодия',
     rh: 'Правая рука',
     lh: 'Левая рука',
-    voice2: 'Голос 2',
-    voice3: 'Голос 3',
-    voice4: 'Голос 4',
   },
-  voice: 'Голос',
   layerChip: { label: 'Следующая нота: {{layer}}', menu: 'Куда пишется следующая нота' },
-  voices: { chords: 'Аккорды', melody: 'Мелодия', rh: 'Правая', lh: 'Левая' },
   chordNames: 'Названия аккордов',
   sheet: {
     signature: 'Тональность и размер',
@@ -146,7 +125,6 @@ export const editor: LocaleResources['editor'] = {
     page: 'Страница {{n}} из {{of}}',
     bar: 'Такт {{n}}: {{chords}}',
     drag: 'Потяните вверх или вниз, чтобы сдвинуть ноту',
-    pattern: 'Фактура',
   },
   caret: {
     moves: 'Играть и перемещать курсор',
@@ -154,7 +132,6 @@ export const editor: LocaleResources['editor'] = {
     notes: 'Такт {{bar}}, доля {{beat}} · {{what}} {{value}}',
     held: 'Такт {{bar}}, доля {{beat}} · {{what}} звучит',
     rest: 'Такт {{bar}}, доля {{beat}} · пауза',
-    pattern: 'Такт {{bar}}, доля {{beat}} · фактура',
     end: 'Конец песни',
     values: {
       whole: 'целая',
@@ -260,17 +237,8 @@ export const editor: LocaleResources['editor'] = {
     newSection: 'Новый раздел',
     length: 'Длина такта (затакт или такт другой длины)',
     lengthOf: 'Длина такта {{time}}',
-    fromPattern:
-      'Этот такт играется по аккордам в фактуре песни. Выпишите его нотами, чтобы проставить аппликатуру или изменить ноты.',
-    writeOut: 'Выписать нотами',
-    patternAgain: 'Вернуть фактуру',
-    patternAgainNote: 'Такт снова играется по аккордам, а выписанные здесь ноты удаляются.',
   },
   section: {
-    pattern: 'Фактура',
-    thisSong: 'Эта песня',
-    songPattern: 'Как в песне: {{name}}',
-    plays: 'Фактура: {{name}}',
     kind: 'Раздел',
     join: 'Соединить с предыдущим разделом',
   },
@@ -290,8 +258,6 @@ export const editor: LocaleResources['editor'] = {
     },
     tempoLabel: '{{word}}, {{bpm}} в минуту',
     meter: 'Размер',
-    parts: 'Партии',
-    addPart: 'Добавить партию',
   },
   recorder: {
     more: 'Действия с дублем',

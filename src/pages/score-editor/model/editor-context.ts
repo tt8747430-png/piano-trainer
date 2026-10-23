@@ -16,8 +16,6 @@ export interface ScoreEditorValue {
     readonly play: (key: Midi) => void
     /** Play from the caret's bar to the end, or Stop. */
     readonly togglePlay: () => void
-    /** The caret's bar of its hand written out from what the pattern plays. */
-    readonly writeOut: () => void
     readonly close: () => void
     /** An own song's title, given anew; an empty one changes nothing. */
     readonly rename: (title: string) => void
@@ -26,7 +24,6 @@ export interface ScoreEditorValue {
   readonly view: {
     /** Chord names over the staff, and the chord row they are written in. */
     readonly chordNames: boolean
-    readonly showChordNames: (on: boolean) => void
     /** The song's settings sheet, opened from the toolbar or the sheet's clef, key and time. */
     readonly settingsOpen: boolean
     readonly openSettings: (open: boolean) => void

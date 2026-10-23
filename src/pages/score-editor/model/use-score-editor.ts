@@ -16,7 +16,6 @@ import {
   barAt,
   barsOf,
   createEditorStore,
-  isHandLayer,
   readDraft,
   musicToSave,
   rowShown,
@@ -30,7 +29,7 @@ import { audibleHands, schedule } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { inPopUp, isTyping } from '@/shared/lib/shortcuts'
 import { speedTempo } from '@/widgets/practice-player'
-import { arrangeDraft, playedInBar } from './arrange-draft'
+import { arrangeDraft } from './arrange-draft'
 import type { ScoreEditorValue } from './editor-context'
 import type { EditSearch } from './edit-search'
 import { savedMusic, savingTo, type EditorTarget } from './editor-target'
@@ -58,8 +57,8 @@ function useCloseTo(target: EditorTarget): () => void {
 
 /**
  * The score editor's visit (spec §6): its store over the target's draft, saving each change; keys from
- * the keyboard, the computer keyboard and MIDI written at the caret; the shortcuts; Play; Write out;
- * and the takes (ADR 0028): while one records, its keys write nothing and Space or Escape stops it.
+ * the keyboard, the computer keyboard and MIDI written at the caret; the shortcuts; Play; and the
+ * takes (ADR 0028): while one records, its keys write nothing and Space or Escape stops it.
  * Opened at `bar` (as printed), the caret starts there.
  */
 export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorValue {
@@ -156,13 +155,6 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     if (target.kind === 'song') renameSong(pieces, target.id, text)
   }
 
-  const writeOut = () => {
-    const { draft, caret, layer } = store.getState()
-    if (!isHandLayer(layer)) return
-    const played = playedInBar(arrangeDraft(draft), layer, barAt(draft, caret))
-    store.dispatch({ type: 'writeOut', played })
-  }
-
   // The editor reads its keys layer by layer (`shortcutOf`), and lists them for the sheet
   // (`useEditorShortcutList`); a key another listener took, or one an IME is composing, is not its.
   const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
@@ -210,15 +202,13 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     toTune()
     return store.subscribe(toTune)
   }, [store, chordNames])
-  const showChordNames = (on: boolean) => dispatch({ type: 'hide', row: 'chords', hidden: !on })
 
   return {
     store,
     takes,
-    actions: { dispatch, play, togglePlay, writeOut, close, rename },
+    actions: { dispatch, play, togglePlay, close, rename },
     view: {
       chordNames,
-      showChordNames,
       settingsOpen,
       openSettings,
       speed,

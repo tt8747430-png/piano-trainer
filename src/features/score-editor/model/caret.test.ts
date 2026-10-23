@@ -15,7 +15,7 @@ describe('where a click lands', () => {
     expect(tapPlaces(tune, 'melody').filter((tick) => tick >= 96 && tick < 192)).toEqual([96, 144])
   })
 
-  it('on a bar’s start where its row writes nothing: a bar the pattern plays', () => {
+  it('on a bar’s start where its row writes nothing: an empty bar', () => {
     expect(tapPlaces(tune, 'rh')).toEqual([0, 96, 192])
     expect(tapPlaces(tune, 'melody').filter((tick) => tick >= 192)).toEqual([192])
   })
@@ -39,7 +39,7 @@ describe('the caret in a voice', () => {
     expect(nextCaret(tune, 'melody', 96, 24, -1)).toBe(48)
   })
 
-  it('moves a step of the value where nothing sounds: a bar the pattern plays, the room after the last note', () => {
+  it('moves a step of the value where nothing sounds: an empty bar, the room after the last note', () => {
     expect(nextCaret(tune, 'rh', 0, 24, 1)).toBe(24)
     expect(nextCaret(tune, 'rh', 24, 48, 1)).toBe(48)
     const short = draftOf({

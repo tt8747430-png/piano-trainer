@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { midi, note, noteName } from '@/shared/lib/music'
+import { midi, noteName } from '@/shared/lib/music'
 import { draftOf, shape } from '../testing/test-draft'
 import {
   addToChord,
-  backToPattern,
   deleteNotes,
   notesAt,
   respellNotes,
@@ -13,7 +12,6 @@ import {
   shiftNotes,
   tieNotes,
   writeNotes,
-  writeOut,
   writeRest,
 } from './notes'
 import { barsOf, totalTicks } from './timeline'
@@ -65,10 +63,9 @@ describe('writeNotes in the melody', () => {
 })
 
 describe('writeNotes in a hand', () => {
-  it('writes out a bar the pattern played, then the notes struck together', () => {
+  it('writes the keys struck together', () => {
     const written = writeNotes(draftOf(), 'lh', 0, keys(43, 55), 96)
     expect(shape(written.draft.hands.lh)).toEqual(['G2@0/96', 'G3@0/96'])
-    expect(barsOf(written.draft).map(({ bar }) => bar.lh)).toEqual([true, false])
   })
 
   it('keeps a held bass sounding under a chord written over it', () => {
@@ -77,15 +74,10 @@ describe('writeNotes in a hand', () => {
     expect(shape(chord.draft.hands.lh)).toEqual(['G2@0/96', 'B3@24/24', 'D4@24/24'])
   })
 
-  it('stops a note at a bar the pattern plays', () => {
+  it('holds a note into the next bar, every bar being written (ADR 0091)', () => {
     const written = writeNotes(draftOf(), 'rh', 48, keys(67), 96)
-    expect(shape(written.draft.hands.rh)).toEqual(['G4@48/48'])
-    expect(written.end).toBe(96)
-  })
-
-  it('holds a note into the next bar when the hand writes it too', () => {
-    const both = writeOut(draftOf(), 'rh', 1, [])
-    expect(shape(writeNotes(both, 'rh', 48, keys(67), 96).draft.hands.rh)).toEqual(['G4@48/96'])
+    expect(shape(written.draft.hands.rh)).toEqual(['G4@48/96'])
+    expect(written.end).toBe(144)
   })
 })
 
@@ -153,36 +145,16 @@ describe('rests', () => {
     expect(rested.end).toBe(72)
   })
 
-  it('write out a bar the pattern played as silence', () => {
-    const rested = writeRest(draftOf(), 'lh', 96, 96)
-    expect(barsOf(rested.draft).map(({ bar }) => bar.lh)).toEqual([false, true])
-    expect(rested.draft.hands.lh).toEqual([])
-  })
-})
-
-describe('writing a bar out, and back to the pattern', () => {
-  const played = [
-    { midi: midi(43), spelled: note('G'), startTick: 0, durationTicks: 96 },
-    { midi: midi(55), spelled: note('G'), startTick: 0, durationTicks: 120 },
-  ]
-
-  it('writes out what the pattern plays there, inside the bar', () => {
-    const out = writeOut(draftOf(), 'lh', 0, played)
-    expect(shape(out.hands.lh)).toEqual(['G2@0/96', 'G3@0/96'])
-    expect(barsOf(out).map(({ bar }) => bar.lh)).toEqual([true, false])
-  })
-
-  it('gives the bar back to the pattern, cutting a note held into it', () => {
-    const held = writeNotes(writeOut(draftOf(), 'rh', 1, []), 'rh', 48, keys(67), 96).draft
-    const back = backToPattern(held, 'rh', 1)
-    expect(shape(back.hands.rh)).toEqual(['G4@48/48'])
-    expect(barsOf(back).map(({ bar }) => bar.rh)).toEqual([true, false])
+  it('takes a hand’s notes under a rest of a whole bar', () => {
+    const rested = writeRest(draftOf({ hands: { lh: 'G2/4 | G2/4' } }), 'lh', 96, 96)
+    expect(shape(rested.draft.hands.lh)).toEqual(['G2@0/96'])
+    expect(rested.end).toBe(192)
   })
 })
 
 describe('tieNotes', () => {
   it('joins the notes at the caret to the same keys after them', () => {
-    const draft = draftOf({ hands: { rh: 'C4+E4/2 C4+G4/2 | -' } })
+    const draft = draftOf({ hands: { rh: 'C4+E4/2 C4+G4/2 | r/4' } })
     expect(shape(tieNotes(draft, 'rh', 0).hands.rh)).toEqual(['C4@0/96', 'E4@0/48', 'G4@48/48'])
   })
 

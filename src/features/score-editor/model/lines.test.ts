@@ -7,7 +7,7 @@ import { initialEditor, type EditorState } from './state'
 const marksOf = (notes: readonly { readonly marks?: unknown }[]) => notes.map((n) => n.marks)
 
 // A beat is 24 ticks: C4 E4 G4 A4 quarters in bar 1, then B4 C5 halves in bar 2.
-const draft = draftOf({ hands: { rh: 'C4/1 E4/1 G4/1 A4/1 | B4/2 C5/2' } })
+const draft = draftOf({ hands: { rh: 'C4/1 E4/1 G4/1 A4/1 | B4/2 C5/2', lh: 'r/4 | r/4' } })
 const BAR = { from: 0, to: 96 }
 
 describe('lineOver', () => {

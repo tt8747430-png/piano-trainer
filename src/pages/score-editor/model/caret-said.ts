@@ -1,6 +1,5 @@
 import {
   barAt,
-  isHandLayer,
   notesAt,
   notesOf,
   totalTicks,
@@ -24,7 +23,7 @@ type CaretSaid =
       /** The value they are written as; none for a length no one value writes (tied over). */
       readonly value: Duration | null
     })
-  | (Place & { readonly kind: 'at' | 'held' | 'rest' | 'pattern'; readonly what: string })
+  | (Place & { readonly kind: 'at' | 'held' | 'rest'; readonly what: string })
 
 /** A beat counted from 1, a part of one as a decimal: 1, 2.5. */
 const beatOf = (ticks: number) => String(Math.round((ticks / TICKS_PER_BEAT + 1) * 100) / 100)
@@ -52,7 +51,6 @@ export function caretSaid({
     const chord = bar.chords.findLast((placed) => placed.at <= caret - start)
     return { kind: 'at', ...at, what: chord ? chordSymbol(chord.chord) : '' }
   }
-  if (isHandLayer(layer) && !bar[layer]) return { kind: 'pattern', ...at, what: '' }
   // One note of a chord chosen alone: that note (ADR 0088).
   const all = notesAt(draft, layer, caret)
   const one = all.filter((n) => n.midi === chordNote)

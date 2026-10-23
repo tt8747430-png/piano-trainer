@@ -9,6 +9,7 @@ const music = {
   tempo: 90,
   pattern: 'r1',
   sections: [{ kind: 'verse', lines: ['D A7'] }],
+  hands: { rh: 'r/4 | r/4', lh: 'r/4 | r/4' },
 } as const
 const draft = readDraft({ ...music, melody: 'F#4/1.5 r/2.5 | A4/4' })
 const at = (caret: number, layer: EditorState['layer']) => caretSaid({ draft, caret, layer })
@@ -24,7 +25,7 @@ describe('caretSaid', () => {
     })
     expect(at(36, 'melody')).toEqual({ kind: 'rest', bar: 1, beat: '2.5', what: '' })
     expect(at(96, 'chords')).toEqual({ kind: 'at', bar: 2, beat: '1', what: 'A7' })
-    expect(at(120, 'lh')).toEqual({ kind: 'pattern', bar: 2, beat: '2', what: '' })
+    expect(at(120, 'lh')).toEqual({ kind: 'rest', bar: 2, beat: '2', what: '' })
     expect(at(192, 'melody')).toEqual({ kind: 'end' })
   })
 
@@ -42,7 +43,7 @@ describe('caretSaid', () => {
   })
 
   it('names one note of a chord chosen alone (ADR 0088)', () => {
-    const chord = readDraft({ ...music, hands: { rh: 'D4+F#4+A4/4 | -' } })
+    const chord = readDraft({ ...music, hands: { ...music.hands, rh: 'D4+F#4+A4/4 | r/4' } })
     expect(caretSaid({ draft: chord, caret: 0, layer: 'rh', chordNote: midi(66) })).toMatchObject({
       kind: 'notes',
       what: 'F#4',

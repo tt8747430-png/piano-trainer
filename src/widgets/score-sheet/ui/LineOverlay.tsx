@@ -1,16 +1,14 @@
 import { useRef, type MouseEvent, type PointerEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isHandLayer, type Layer } from '@/features/score-editor'
+import type { Layer } from '@/features/score-editor'
 import { chordSymbol, type Midi, type Tick } from '@/shared/lib/music'
 import { staffClefAt, type TimedMusic } from '@/shared/lib/notation'
 import {
   MARK,
   pickAt,
   ScoreMark,
-  StaffNames,
   useSheetChoice,
   xAtTick,
-  type Head,
   type ScoreLayout,
   type SheetPoint,
 } from '@/shared/ui/score'
@@ -21,10 +19,6 @@ import { noteAtStaffY, stepsDragged } from '../model/staff-pitch'
 import { EditorCaret } from './EditorCaret'
 import { LineLabels } from './LineLabels'
 
-/** How far a bar's Pattern stands in from where its notes begin. */
-const PATTERN_INSET = 6
-/** How far a bar's Pattern stands over its staff's top line. */
-const PATTERN_RISE = 4
 /** How far round the caret's onset a press takes hold of its notes to drag them. */
 const GRIP = { before: 14, after: 22, over: 16 } as const
 /**
@@ -37,10 +31,9 @@ function zoomOf(element: HTMLElement, box: DOMRect): number {
 }
 
 /**
- * Over a line's staff: its labels (with Pattern where a hand is not written, in that hand's layer),
- * the bars chosen, the caret, and each bar as a button that puts the caret where it is clicked; a
- * double click there writes the note on the line or space clicked (ADR 0064). The notes at the caret
- * are a grip: dragged up or down, they move by notes of the key.
+ * Over a line's staff: its labels, the bars chosen, the caret, and each bar as a button that puts the
+ * caret where it is clicked; a double click there writes the note on the line or space clicked (ADR
+ * 0064). The notes at the caret are a grip: dragged up or down, they move by notes of the key.
  */
 export function LineOverlay({
   layout,
@@ -94,30 +87,17 @@ export function LineOverlay({
   onSignature: () => void
 }) {
   const { t } = useTranslation('editor')
-  const hand = isHandLayer(layer) ? layer : null
   const [first] = layout.measures
-  const staff = hand ? layout.staves[hand === 'lh' ? 'bass' : 'treble'] : undefined
   // The notes chosen on this line, hugged by the one selection's box on the staff of the row they
   // are chosen in (the chord row, choosing chords), ADR 0088.
   const chosen = chosenBox(layout, line.start, selection, {
     row,
     staff: staffOfLayer(layout.staves, layer),
   })
-  // In a hand's layer, the bars it leaves to the pattern.
-  const patterned =
-    hand && staff ? layout.measures.map((_, index) => !line.bars[index]?.bar[hand]) : []
-  // Whether a note written in the caret's row starts at the caret: the pattern's, shown soft in a
-  // bar the hand leaves to it, are not written (ADR 0083).
-  const caretBar =
-    caret === null
-      ? -1
-      : line.bars.findIndex(
-          ({ start, bar }) => caret >= start - line.start && caret < start - line.start + bar.ticks,
-        )
+  // Whether a note written in the caret's row starts at the caret.
   const caretOnNote =
     caret !== null &&
     layer !== 'chords' &&
-    !patterned[caretBar] &&
     music.notes.some((n) => n.hand === layer && n.startTick === caret)
   // Whether anything starts at the caret in its row: else it marks an empty place, as a line.
   const caretEmpty =
@@ -147,20 +127,11 @@ export function LineOverlay({
     const tick = nearestPlace(places, x, (at) => xAtTick(layout, at - line.start))
     return { target, tick: tick ?? placed.start, y }
   }
-  // A head is chosen where its hand writes it: the pattern's, drawn soft, are empty staff (ADR 0083).
-  const written = (head: Head) => {
-    const own = LAYER_OF_STAFF[head.staff]
-    if (!isHandLayer(own)) return true
-    const index = layout.measures.findIndex(
-      (m) => head.tick >= m.startTick && head.tick < m.startTick + m.ticks,
-    )
-    return line.bars[index]?.bar[own] ?? true
-  }
   /**
    * What a click (or a held finger) at a point of bar `index` chooses (ADR 0088), as the Player's
    * does: the head under it (one note of a chord), the chord whose stem or column it is on, or the
-   * empty place it is in (a rest, the room after the last note, a bar the pattern plays, as a line);
-   * on empty staff between notes, nothing, what is chosen let go. A chord in the chord row.
+   * empty place it is in (a rest, the room after the last note, as a line); on empty staff between
+   * notes, nothing, what is chosen let go. A chord in the chord row.
    */
   const chooseAt = (index: number, point: SheetPoint | null, extend: boolean) => {
     const placed = line.bars[index]
@@ -179,21 +150,16 @@ export function LineOverlay({
       onPlace(tick ?? placed.start, 'chords', extend)
       return
     }
-    const picked = pickAt(layout, point.x, point.y, written)
+    const picked = pickAt(layout, point.x, point.y)
     if (picked) {
       const key = picked.index === undefined ? undefined : picked.midi
       onPlace(line.start + picked.tick, LAYER_OF_STAFF[picked.staff], extend, key)
       return
     }
-    const hand = isHandLayer(target) ? target : null
-    const leftToPattern = hand !== null && !placed.bar[hand]
     const notes = music.notes.filter((n) => n.hand === target)
     const places = tapsOf(target)
       .filter(inBar)
-      .map((tick) => ({
-        tick,
-        empty: leftToPattern || !notes.some((n) => n.startTick === tick - line.start),
-      }))
+      .map((tick) => ({ tick, empty: !notes.some((n) => n.startTick === tick - line.start) }))
     const room = roomAt(places, point.x, xOf, {
       start: measure.x,
       end: measure.x + measure.width,
@@ -271,28 +237,6 @@ export function LineOverlay({
         row={row}
         size={labels}
       />
-      {staff
-        ? patterned.map((left, index) => {
-            const measure = layout.measures[index]
-            // A bar the hand leaves to the pattern says so over its staff, whose notes, the
-            // pattern's, are drawn soft (ADR 0083).
-            return left && measure ? (
-              <span
-                key={`pattern-${index}`}
-                aria-hidden
-                className="pointer-events-none absolute z-10 text-xs leading-none text-muted-foreground italic"
-                style={{
-                  left: Math.max(measure.notes, measure.x) + PATTERN_INSET,
-                  top: staff.top - PATTERN_RISE,
-                  transform: 'translateY(-100%)',
-                }}
-              >
-                {t('sheet.pattern')}
-              </span>
-            ) : null
-          })
-        : null}
-      <StaffNames layout={layout} />
       {first && first.notes > first.x ? (
         // The clef, key and time signature at the line's head: a click opens what changes them.
         <button

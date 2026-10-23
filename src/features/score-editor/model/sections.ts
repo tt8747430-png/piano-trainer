@@ -1,4 +1,3 @@
-import type { PatternId } from '@/entities/pattern'
 import { keyText, type SectionKind } from '@/entities/piece'
 import type { Key } from '@/shared/lib/music'
 import type { Draft, DraftSection } from './draft'
@@ -14,8 +13,7 @@ const sameHeading = (a: Heading, b: Heading): boolean =>
   a.last === b.last &&
   a.detail?.en === b.detail?.en &&
   a.detail?.ru === b.detail?.ru &&
-  a.key === b.key &&
-  a.pattern === b.pattern
+  a.key === b.key
 
 /**
  * A new section's heading as its kind and place name it: a verse the number after the verses before
@@ -87,12 +85,11 @@ export function setSectionKind(draft: Draft, index: number, kind: SectionKind): 
   const section = draft.sections[index]
   if (!section) return draft
   const others = draft.sections.filter((other) => other !== section)
-  // Named afresh, it keeps what it plays: its key and its own pattern.
-  const { key, pattern } = section.heading
+  // Named afresh, it keeps its key.
+  const { key } = section.heading
   const heading: Heading = {
     ...named(kind, draft.sections.slice(0, index), others),
     ...(key === undefined ? {} : { key }),
-    ...(pattern === undefined ? {} : { pattern }),
   }
   if (sameHeading(heading, section.heading)) return draft
   const renamed: Draft = {
@@ -100,18 +97,6 @@ export function setSectionKind(draft: Draft, index: number, kind: SectionKind): 
     sections: draft.sections.map((other) => (other === section ? { ...other, heading } : other)),
   }
   return withVerse(withoutVerse(renamed, index, section.heading), index, heading)
-}
-
-/** Section `index` playing a pattern of its own (ADR 0065), or the piece's again (`null`). */
-export function setSectionPattern(draft: Draft, index: number, pattern: PatternId | null): Draft {
-  const section = draft.sections[index]
-  if (!section || (section.heading.pattern ?? null) === pattern) return draft
-  const { pattern: _was, ...rest } = section.heading
-  const heading: Heading = pattern === null ? rest : { ...rest, pattern }
-  return {
-    ...draft,
-    sections: draft.sections.map((other) => (other === section ? { ...other, heading } : other)),
-  }
 }
 
 /**

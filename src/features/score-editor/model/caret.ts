@@ -54,7 +54,7 @@ export const caretPlaces = (draft: Draft, layer: Layer, step: Tick): Tick[] =>
 /**
  * Where a click on the sheet lands in a layer (ADR 0082): on a note's start (a chord's in the chords),
  * or on the room after a bar's last note where it ends before the barline (a rest's start too); in a
- * bar whose row writes nothing (one the pattern plays), on its start. Never on an empty step between.
+ * bar whose row writes nothing, on its start. Never on an empty step between.
  */
 export function tapPlaces(draft: Draft, layer: Layer): Tick[] {
   const notes = layer === 'chords' ? [] : notesOf(draft, layer)
@@ -78,8 +78,8 @@ export function tapPlaces(draft: Draft, layer: Layer): Tick[] {
 
 /**
  * What stands at a place in a layer, as a span of time (ADR 0088): the notes starting there, to the
- * longest's end; a chord, to the next chord or beat; an empty place (a rest, a bar the pattern plays,
- * the room after the last note), to the next note or the barline.
+ * longest's end; a chord, to the next chord or beat; an empty place (a rest, the room after the last
+ * note), to the next note or the barline.
  */
 export function itemAt(draft: Draft, layer: Layer, tick: Tick): TickSpan {
   const bar = barAt(draft, tick)

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { readDraft } from '@/features/score-editor'
-import { midi, note } from '@/shared/lib/music'
+import { note } from '@/shared/lib/music'
 import { layerAt, linesOf, lineMusic, timeBeforeLine } from './line-music'
 
 const draft = readDraft({
@@ -13,7 +13,7 @@ const draft = readDraft({
     { kind: 'chorus', lines: ['Em@2'] },
   ],
   melody: 'D4/1 | G4/2 A4/1 B4/3 | C5/2',
-  hands: { lh: '- | C3/4 | - | -', rh: '- | - | - | G3/2' },
+  hands: { lh: 'r/1 | C3/4 | r/4 | r/4', rh: 'r/1 | r/4 | r/4 | G3/2' },
 })
 
 describe('the sheet’s lines', () => {
@@ -97,43 +97,11 @@ describe('the sheet’s lines', () => {
     ])
   })
 
-  it('write what the pattern plays in a bar a hand leaves to it, its staff marked so (ADR 0083)', () => {
-    const [, second] = linesOf(draft)
-    if (!second) throw new Error('a second line')
-    const at = (key: number, startTick: number, durationTicks: number) => ({
-      midi: midi(key),
-      spelled: note('C'),
-      startTick,
-      durationTicks,
-    })
-    const played = {
-      // The last held past its bar's end: cut at the barline.
-      rh: [at(64, 24, 96), at(67, 120, 200)],
-      // Bar 2's left hand is written: the pattern's there is not shown.
-      lh: [at(36, 24, 96), at(43, 120, 96)],
-    }
-    const music = lineMusic(draft, second, played)
-    expect(music.bars).toEqual([
-      { startTick: 0, beats: 4, pattern: ['treble'] },
-      { startTick: 96, beats: 4, pattern: ['treble', 'bass'] },
-    ])
-    expect(
-      music.notes
-        .filter((n) => n.hand !== 'melody')
-        .map((n) => [n.hand, n.midi, n.startTick, n.durationTicks]),
-    ).toEqual([
-      ['rh', 64, 0, 96],
-      ['rh', 67, 96, 96],
-      ['lh', 48, 0, 96],
-      ['lh', 43, 96, 96],
-    ])
-  })
-
   it('write no piano on a lead sheet: the tune’s staff alone (ADR 0083)', () => {
     const lead = { ...draft, hidden: ['piano' as const] }
     const [, second] = linesOf(lead)
     if (!second) throw new Error('a second line')
-    const music = lineMusic(lead, second, { rh: [], lh: [] })
+    const music = lineMusic(lead, second)
     expect(music.piano).toBe(false)
     expect(music.notes.every((n) => n.hand === 'melody')).toBe(true)
     expect(music.bars).toEqual([
