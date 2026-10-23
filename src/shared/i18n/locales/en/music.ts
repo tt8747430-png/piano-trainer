@@ -174,7 +174,7 @@ export const music = {
     // A staff's own options, inline on its card (ADR 0058).
     fingers: 'Fingers',
     noteNames: 'Note names',
-    chordNames: 'Chord names',
+    chordNames: 'Chord symbols',
     loading: 'Loading the music',
     error: 'The music can’t be shown.',
     bar: 'Bar {{n}}',

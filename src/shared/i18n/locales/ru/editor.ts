@@ -31,7 +31,7 @@ export const editor: LocaleResources['editor'] = {
   reason: {
     chooseNote: 'Сначала выберите ноту: эти инструменты меняют выбранные ноты.',
     staff: 'Это для нот: коснитесь ноты на нотоносце.',
-    hand: 'Для нотоносцев фортепиано: коснитесь ноты правой или левой руки.',
+    hand: 'Для нотоносцев фортепиано: коснитесь ноты на верхнем или нижнем нотоносце.',
     chordRow:
       'Аккорды пишутся над нотоносцем: коснитесь названия аккорда или места над нотоносцем.',
   },
@@ -45,7 +45,6 @@ export const editor: LocaleResources['editor'] = {
     left: 'Слева',
     right: 'Справа',
     label: 'Вид',
-    melody: 'Нотоносец мелодии',
   },
   barline: {
     repeatStart: 'Начало повтора',
@@ -79,7 +78,7 @@ export const editor: LocaleResources['editor'] = {
     'ds-coda': 'От знака, затем к коде',
   },
   clef: {
-    from: '{{hand}}, с такта {{bar}}',
+    from: '{{staff}}, с такта {{bar}}',
     treble: 'Скрипичный ключ',
     bass: 'Басовый ключ',
   },
@@ -112,13 +111,12 @@ export const editor: LocaleResources['editor'] = {
   fingering: { noNote: 'Выберите ноту, чтобы указать палец.' },
   accidentals: { sharp: 'Диез', flat: 'Бемоль', natural: 'Бекар' },
   layers: {
-    chords: 'Аккорды',
+    chords: 'Аккордовые символы',
     melody: 'Мелодия',
-    rh: 'Правая рука',
-    lh: 'Левая рука',
+    rh: 'Верхний нотоносец',
+    lh: 'Нижний нотоносец',
   },
   layerChip: { label: 'Следующая нота: {{layer}}', menu: 'Куда пишется следующая нота' },
-  chordNames: 'Названия аккордов',
   sheet: {
     signature: 'Тональность и размер',
     label: 'Ноты',
@@ -285,9 +283,9 @@ export const editor: LocaleResources['editor'] = {
     back: 'Назад',
     into: {
       label: 'Куда',
-      both: 'Обе руки',
-      rh: 'Правая рука',
-      lh: 'Левая рука',
+      both: 'Оба нотоносца',
+      rh: 'Верхний нотоносец',
+      lh: 'Нижний нотоносец',
       melody: 'Мелодия',
     },
     split: 'Граница рук',
@@ -331,7 +329,7 @@ export const editor: LocaleResources['editor'] = {
     semitone: 'На полутон выше, ниже',
     octave: 'На октаву выше, ниже',
     delete: 'Удалить',
-    chord: 'Ввести аккорд (в строке аккордов)',
+    chord: 'Ввести аккорд (в строке аккордовых символов)',
     undo: 'Отменить',
     redo: 'Повторить',
     bars: 'Копировать, вырезать, вставить такты',

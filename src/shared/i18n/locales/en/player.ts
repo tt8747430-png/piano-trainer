@@ -12,7 +12,7 @@ export const player = {
     lh: 'Left hand',
     show: 'Show',
     notation: 'Sheet music',
-    chordNames: 'Chord names',
+    chordNames: 'Chord symbols',
     positionsDetail: 'Beside each chord’s name, the position the right hand plays it in',
     keys: 'Keys',
   },

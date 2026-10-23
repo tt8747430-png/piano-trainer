@@ -72,16 +72,18 @@ const songOf = (state: { songs: readonly { id: string }[] }) =>
   state.songs.find((song) => song.id === 'my-1')
 
 describe('the score editor', () => {
-  it('opens on the right hand of a song with no tune, Alt with the arrows choosing the row it writes', async () => {
+  it('opens on the upper staff of a song with no tune, Alt with the arrows choosing the row it writes', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong({ hands: SILENT_HANDS }) })
-    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Right hand · Bar 1/))
+    await waitFor(() =>
+      expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff · Bar 1/),
+    )
     const palette = screen.getByRole('region', { name: 'Tools' })
     expect(within(palette).queryByRole('radiogroup', { name: 'Voice' })).not.toBeInTheDocument()
     await user.keyboard('{Alt>}{ArrowDown}{/Alt}')
-    expect(screen.getByRole('status')).toHaveTextContent(/^Left hand · Bar 1/)
+    expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1/)
     await user.keyboard('{Alt>}{ArrowUp}{ArrowUp}{/Alt}')
-    expect(screen.getByRole('status')).toHaveTextContent(/^Chords · /)
+    expect(screen.getByRole('status')).toHaveTextContent(/^Chord symbols · /)
     // In the chord names' row the quick row is the key's chords, not the values.
     const chords = screen.getByRole('region', { name: 'Tools' })
     expect(within(chords).getByRole('group', { name: 'Chords in the key' })).toBeInTheDocument()
@@ -326,7 +328,7 @@ describe('the score editor', () => {
       detail: 1,
     })
     const clef = await openCategory(user, 'Clef')
-    expect(within(clef).getByText('Left hand, from bar 1 on')).toBeInTheDocument()
+    expect(within(clef).getByText('Lower staff, from bar 1 on')).toBeInTheDocument()
     expect(within(clef).getByRole('button', { name: 'Bass clef' })).toHaveAttribute(
       'aria-pressed',
       'true',
@@ -579,7 +581,7 @@ describe('the score editor', () => {
         .getAllByRole('button')
         .map((button) => button.getAttribute('aria-label')),
     ).toEqual([
-      'Next note goes in: Right hand',
+      'Next note goes in: Upper staff',
       'Delete',
       'Undo',
       'Redo',
@@ -604,17 +606,19 @@ describe('the score editor', () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })
     const row = await screen.findByRole('toolbar', { name: 'Edit' })
-    await user.click(within(row).getByRole('button', { name: 'Next note goes in: Right hand' }))
+    await user.click(within(row).getByRole('button', { name: 'Next note goes in: Upper staff' }))
     const staves = await screen.findByRole('listbox', { name: 'Next note goes in' })
     // The staves in sight, top down, each with its sign.
     const options = within(staves).getAllByRole('option')
     expect(options).toHaveLength(3)
-    ;['Chords', 'Right hand', 'Left hand'].forEach((name, i) =>
+    ;['Chord symbols', 'Upper staff', 'Lower staff'].forEach((name, i) =>
       expect(options[i]).toHaveAccessibleName(name),
     )
-    await user.click(within(staves).getByRole('option', { name: 'Left hand' }))
-    expect(screen.getByRole('status')).toHaveTextContent(/^Left hand · Bar 1/)
-    expect(within(row).getByRole('button', { name: 'Next note goes in: Left hand' })).toBeVisible()
+    await user.click(within(staves).getByRole('option', { name: 'Lower staff' }))
+    expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1/)
+    expect(
+      within(row).getByRole('button', { name: 'Next note goes in: Lower staff' }),
+    ).toBeVisible()
   })
 
   it('plays what was written at the learner’s speed from its dock’s tempo, the song’s own kept', async () => {
@@ -1041,7 +1045,7 @@ describe('the score editor’s takes', () => {
 
     await takeAction(user, take, 'Write into the score')
     const form = await screen.findByRole('dialog', { name: 'Write into the score' })
-    expect(within(form).getByRole('radio', { name: 'Both hands' })).toBeChecked()
+    expect(within(form).getByRole('radio', { name: 'Both staves' })).toBeChecked()
     expect(within(form).getByRole('radio', { name: 'eighth' })).toBeChecked()
     await user.click(within(form).getByRole('button', { name: 'Write' }))
     await waitFor(() =>

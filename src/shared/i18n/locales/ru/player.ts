@@ -12,7 +12,7 @@ export const player: LocaleResources['player'] = {
     lh: 'Левая рука',
     show: 'Показывать',
     notation: 'Ноты',
-    chordNames: 'Названия аккордов',
+    chordNames: 'Аккордовые символы',
     positionsDetail: 'Рядом с названием аккорда — в каком обращении его берёт правая рука',
     keys: 'Клавиши',
   },

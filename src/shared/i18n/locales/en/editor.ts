@@ -33,7 +33,7 @@ export const editor = {
   reason: {
     chooseNote: 'Choose a note first: these change the notes chosen.',
     staff: 'These are for notes: tap a note on a staff.',
-    hand: 'For the piano’s staves: tap a note in the right or left hand.',
+    hand: 'For the piano’s staves: tap a note on the upper or lower staff.',
     chordRow: 'Chords are written over the staff: tap a chord name, or the space over the staff.',
   },
   // The edit row under the bar: what is done to what is chosen.
@@ -49,7 +49,6 @@ export const editor = {
     left: 'Left',
     right: 'Right',
     label: 'View',
-    melody: 'Melody staff',
   },
   // The palette's Barlines & repeats (ADR 0068).
   barline: {
@@ -86,7 +85,7 @@ export const editor = {
   },
   // The palette's Clef: the caret's staff changes clef from the bar chosen on (ADR 0069).
   clef: {
-    from: '{{hand}}, from bar {{bar}} on',
+    from: '{{staff}}, from bar {{bar}} on',
     treble: 'Treble clef',
     bass: 'Bass clef',
   },
@@ -122,16 +121,16 @@ export const editor = {
   },
   fingering: { noNote: 'Choose a note to give it a finger.' },
   accidentals: { sharp: 'Sharp', flat: 'Flat', natural: 'Natural' },
-  // Where the caret writes (ADR 0091): the chord row, the tune's staff, the piano's two staves.
+  // Where the caret writes, named as a score names its staves (ADR 0091): the chord symbols' row, the
+  // tune's staff, the piano's two staves. Never a hand: the hands are the Player's.
   layers: {
-    chords: 'Chords',
+    chords: 'Chord symbols',
     melody: 'Melody',
-    rh: 'Right hand',
-    lh: 'Left hand',
+    rh: 'Upper staff',
+    lh: 'Lower staff',
   },
   // The edit row's head: where the next note goes, chosen there (Flat's voice badge).
   layerChip: { label: 'Next note goes in: {{layer}}', menu: 'Next note goes in' },
-  chordNames: 'Chord names',
   sheet: {
     signature: 'Key and time signature',
     label: 'Score',
@@ -300,9 +299,9 @@ export const editor = {
     back: 'Back',
     into: {
       label: 'Into',
-      both: 'Both hands',
-      rh: 'Right hand',
-      lh: 'Left hand',
+      both: 'Both staves',
+      rh: 'Upper staff',
+      lh: 'Lower staff',
       melody: 'Melody',
     },
     split: 'Split hands at',
@@ -349,7 +348,7 @@ export const editor = {
     semitone: 'A semitone up, down',
     octave: 'An octave up, down',
     delete: 'Delete',
-    chord: 'Type a chord (in the chord names)',
+    chord: 'Type a chord (in the chord symbols)',
     undo: 'Undo',
     redo: 'Redo',
     bars: 'Copy, cut, paste the bars',
