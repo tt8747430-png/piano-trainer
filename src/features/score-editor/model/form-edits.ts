@@ -3,6 +3,7 @@ import {
   copyBars,
   deleteBars,
   insertBar,
+  insertBarBefore,
   joinLine,
   newLine,
   pasteBars,
@@ -32,7 +33,7 @@ export function barsChosen(draft: Draft, first: number, last: number): Selection
 }
 
 /** The bars an edit of the form acts on: those chosen, else the caret's. */
-function chosenBars(state: EditorState): BarRange {
+export function chosenBars(state: EditorState): BarRange {
   if (state.selection) return selectedBars(state.draft, state.selection)
   const { index } = barAt(state.draft, state.caret)
   return { from: index, to: index }
@@ -63,6 +64,10 @@ export function barsEdited(state: EditorState, edit: BarEdit): EditorState {
     case 'insert': {
       const next = insertBar(draft, range.to)
       return commit(state, next, { caret: startOf(next, range.to + 1), selection: null })
+    }
+    case 'insertBefore': {
+      const next = insertBarBefore(draft, range.from)
+      return commit(state, next, { caret: startOf(next, range.from), selection: null })
     }
     case 'delete': {
       const next = deleteBars(draft, range)

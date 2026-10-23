@@ -63,6 +63,36 @@ export function insertBar(draft: Draft, after: number): Draft {
 }
 
 /**
+ * A bar added before bar `index`, in its place: starting its line or section where it did, the
+ * chord sounding into it (the bar before's last, else its own first), the notes from there moved on.
+ */
+export function insertBarBefore(draft: Draft, index: number): Draft {
+  const placed = barsOf(draft)[index]
+  const chord = barsOf(draft)[index - 1]?.bar.chords.at(-1) ?? placed?.bar.chords[0]
+  if (!placed || !chord) return draft
+  const bar: DraftBar = {
+    ticks: beatsPerBar(draft.meter) * TICKS_PER_BEAT,
+    chords: [{ at: 0, chord: chord.chord, ...(chord.method ? { method: chord.method } : {}) }],
+    rh: false,
+    lh: false,
+  }
+  const slots = slotsOf(draft)
+  const slot = slots[index]
+  if (!slot) return draft
+  return spliceAll(
+    withSlots(draft, [
+      ...slots.slice(0, index),
+      { ...slot, bar },
+      { bar: slot.bar, newLine: false, newSection: null },
+      ...slots.slice(index + 1),
+    ]),
+    placed.start,
+    0,
+    bar.ticks,
+  )
+}
+
+/**
  * Bars taken with their notes, a note held into them cut, the rest moved back; a line or section left
  * empty goes, and what followed takes its start. The piece keeps one bar.
  */

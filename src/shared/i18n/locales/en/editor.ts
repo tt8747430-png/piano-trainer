@@ -271,7 +271,8 @@ export const editor = {
   },
   bars: {
     label: 'Bar',
-    insert: 'Add bar',
+    insert: 'Add bar after',
+    insertBefore: 'Add bar before',
     delete: 'Delete bars',
     copy: 'Copy',
     cut: 'Cut',

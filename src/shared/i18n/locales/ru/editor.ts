@@ -258,7 +258,8 @@ export const editor: LocaleResources['editor'] = {
   },
   bars: {
     label: 'Такт',
-    insert: 'Добавить такт',
+    insert: 'Добавить такт после',
+    insertBefore: 'Добавить такт перед',
     delete: 'Удалить такты',
     copy: 'Копировать',
     cut: 'Вырезать',

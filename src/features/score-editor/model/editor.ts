@@ -2,13 +2,15 @@ import { markBars } from './bar-marks'
 import { setClef } from './clefs'
 import { hiddenWithout, keepsAStaff, rowShown, staffLeftFor, withAStaff } from './rows'
 import { setBarTicks } from './bars'
+import { chosenNotes, chosenSpan, shownValue } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
+import { ticksOf } from '@/shared/lib/notation'
 import { chordNoteStep, steppedKey } from './chord-note'
 import { deleteChord } from './chords'
 import { DEFAULT_INSTRUMENT, midi, PIANO, type Midi } from '@/shared/lib/music'
 import { EXTRA_VOICES } from '@/shared/lib/notation'
 import { isHandLayer, isVoiceLayer, voiceIndex } from './draft'
-import { barsEdited, chordSet, selectedBars } from './form-edits'
+import { barsEdited, chordSet, chosenBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
 import { lineOver, lineSpan } from './lines'
@@ -17,36 +19,54 @@ import {
   backToPattern,
   deleteBack,
   deleteNotes,
+  notesAt,
   respellNotes,
+  setAccidental,
+  setDuration,
   setFinger,
   shiftNotes,
   stepNotes,
   tieNotes,
   writeOut,
   writeRest,
-  type Where,
 } from './notes'
 import { joinSection, setSectionKind, setSectionPattern } from './sections'
 import { setKey, setMeter, setTempo } from './settings'
 import type { EditorAction, EditorState } from './state'
 import { writeTake } from './take-edits'
 import { barAt } from './timeline'
-import { toggledDot, toggledTriplet, withValue } from './values'
-
-/**
- * What an edit of notes takes (ADR 0088): the notes chosen, from the first's start to the last's end;
- * else the chord's one note chosen; else the notes at the caret.
- */
-function chosenSpan(state: EditorState): Where {
-  if (state.selection) return selectionSpan(state.selection)
-  if (state.chordNote !== null) return { at: state.caret, key: state.chordNote }
-  return state.caret
-}
+import { toggledDot, toggledTriplet, withValue, type ChosenValue } from './values'
 
 /** The chord's one note chosen, moved by `move` (null where it went past the piano's ends). */
 function movedNote(state: EditorState, move: (key: Midi) => Midi | null): Partial<EditorState> {
   if (state.chordNote === null) return {}
   return { chordNote: move(state.chordNote) }
+}
+
+/**
+ * A value chosen in the palette (spec 2026-10-23): the notes chosen made that long, else the next
+ * note's; either way the value the next note is written as.
+ */
+function valueChosen(state: EditorState, value: ChosenValue): EditorState {
+  if (state.layer === 'chords' || chosenNotes(state).length === 0)
+    return { ...state, value, struck: null }
+  const ticks = ticksOf(value, state.draft.meter)
+  return commit(state, setDuration(state.draft, state.layer, chosenSpan(state), ticks), {
+    value,
+    struck: null,
+    selection: state.selection,
+  })
+}
+
+/** The chord's one note chosen, where an accidental moved it: its new key. */
+function accidentalMoved(state: EditorState, accidental: number): Partial<EditorState> {
+  if (state.chordNote === null || state.layer === 'chords') return {}
+  const chosen = notesAt(state.draft, state.layer, state.caret).find(
+    (n) => n.midi === state.chordNote,
+  )
+  if (!chosen) return {}
+  const moved = chosen.midi + accidental - chosen.spelled.accidental
+  return { chordNote: moved < PIANO.from || moved > PIANO.to ? chosen.midi : midi(moved) }
 }
 
 /** The editor's state after an action (spec §6). */
@@ -63,14 +83,18 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         struck: null,
       }
     case 'value':
-      return { ...state, value: withValue(state.value, action.value, draft.meter), struck: null }
+      return valueChosen(
+        state,
+        withValue(shownValue(state) ?? state.value, action.value, draft.meter),
+      )
     case 'dot':
     case 'triplet': {
+      const shown = shownValue(state) ?? state.value
       const value =
         action.type === 'dot'
-          ? toggledDot(state.value, draft.meter, action.dots)
-          : toggledTriplet(state.value, draft.meter)
-      return value === state.value ? state : { ...state, value }
+          ? toggledDot(shown, draft.meter, action.dots)
+          : toggledTriplet(shown, draft.meter)
+      return value === shown ? state : valueChosen(state, value)
     }
     case 'chordMode':
       return { ...state, chord: !state.chord, struck: null }
@@ -88,6 +112,15 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       return keyPlayed(state, action.key, action.time)
     case 'rest': {
       if (layer === 'chords') return state
+      // The notes chosen made rests, still chosen.
+      if (state.selection) {
+        const span = selectionSpan(state.selection)
+        return commit(state, deleteNotes(draft, layer, span), {
+          caret: span.from,
+          selection: state.selection,
+          struck: null,
+        })
+      }
       const result = writeRest(draft, layer, caret, stepOf(state))
       return commit(state, result.draft, { caret: result.end, struck: null })
     }
@@ -211,6 +244,14 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
               return moved < PIANO.from || moved > PIANO.to ? key : midi(moved)
             }),
           })
+    case 'accidental':
+      return layer === 'chords'
+        ? state
+        : commit(state, setAccidental(draft, layer, chosenSpan(state), action.accidental), {
+            struck: null,
+            selection: state.selection,
+            ...accidentalMoved(state, action.accidental),
+          })
     case 'respell':
       return layer === 'chords'
         ? state
@@ -255,16 +296,18 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       })
     case 'bars':
       return barsEdited(state, action.edit)
-    case 'barMarks': {
-      const range = state.selection
-        ? selectedBars(draft, state.selection)
-        : { from: barAt(draft, caret).index, to: barAt(draft, caret).index }
-      return commit(state, markBars(draft, range, action.choice))
-    }
+    case 'barMarks':
+      return commit(state, markBars(draft, chosenBars(state), action.choice))
+    // From the first bar chosen, else the caret's.
     case 'clef':
-      return commit(state, setClef(draft, barAt(draft, caret).index, action.hand, action.clef))
-    case 'barLength':
-      return commit(state, setBarTicks(draft, barAt(draft, caret).index, action.ticks))
+      return commit(state, setClef(draft, chosenBars(state).from, action.hand, action.clef))
+    // Each bar chosen, else the caret's.
+    case 'barLength': {
+      const { from, to } = chosenBars(state)
+      let next = draft
+      for (let index = from; index <= to; index++) next = setBarTicks(next, index, action.ticks)
+      return commit(state, next)
+    }
     case 'sectionKind':
       return commit(state, setSectionKind(draft, action.section, action.kind))
     case 'joinSection':

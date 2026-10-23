@@ -4,6 +4,7 @@ import { chordSymbol, midi, note, parseChordSymbol, type Meter } from '@/shared/
 import { ticksOf } from '@/shared/lib/notation'
 import { draftOf, form, lengths, shape } from '../testing/test-draft'
 import { reduce } from './editor'
+import { shownValue } from './chosen'
 import { initialEditor, type EditorAction, type EditorState } from './state'
 import { createEditorStore } from './store'
 
@@ -508,6 +509,76 @@ describe('the editor', () => {
     expect(run(undone, { type: 'redo' }).draft).toBe(written.draft)
     expect(run(undone, key(71, 900)).future).toEqual([])
     expect(run(initialEditor(draftOf()), { type: 'undo' })).toEqual(initialEditor(draftOf()))
+  })
+})
+
+describe('the palette on what is chosen', () => {
+  const tune = () =>
+    initialEditor(
+      draftOf({ melody: 'B4/1 A4/1 G4/1 F#4/1', sections: [{ kind: 'verse', lines: ['G C'] }] }),
+    )
+  const at = (state: EditorState, tick: number) =>
+    run(state, { type: 'layer', layer: 'melody' }, { type: 'place', tick, layer: 'melody' })
+
+  it('makes the note chosen the value tapped, the next notes too, the caret staying', () => {
+    const state = run(at(tune(), 24), { type: 'value', value: 8 })
+    expect(shape(state.draft.melody)).toEqual(['B4@0/24', 'A4@24/12', 'G4@48/24', 'F#4@72/24'])
+    expect(state.caret).toBe(24)
+    expect(state.value).toEqual({ value: 8, dots: 0, triplet: false })
+    expect(shownValue(state)).toEqual({ value: 8, dots: 0, triplet: false })
+    expect(run(state, { type: 'undo' }).draft.melody[1]?.durationTicks).toBe(24)
+  })
+
+  it('dots the note chosen, and makes it a triplet’s', () => {
+    const dotted = run(at(tune(), 0), { type: 'value', value: 8 }, { type: 'dot' })
+    expect(shape(dotted.draft.melody).slice(0, 2)).toEqual(['B4@0/18', 'A4@24/24'])
+    const triplet = run(at(tune(), 0), { type: 'value', value: 8 }, { type: 'triplet' })
+    expect(triplet.draft.melody[0]?.durationTicks).toBe(8)
+  })
+
+  it('changes every note of a range, keeping it chosen', () => {
+    const chosen = run(at(tune(), 0), { type: 'move', by: 'step', direction: 1, extend: true })
+    const state = run(chosen, { type: 'value', value: 8 })
+    expect(shape(state.draft.melody)).toEqual(['B4@0/12', 'A4@24/12', 'G4@48/24', 'F#4@72/24'])
+    expect(state.selection).not.toBeNull()
+  })
+
+  it('shows the value chosen for the next note where no note is chosen', () => {
+    const end = at(tune(), 96)
+    const state = run(end, { type: 'value', value: 2 })
+    expect(state.draft).toBe(end.draft)
+    expect(shownValue(state)).toEqual({ value: 2, dots: 0, triplet: false })
+    expect(shownValue(at(tune(), 0))).toEqual({ value: 4, dots: 0, triplet: false })
+  })
+
+  it('makes the notes of a range rests', () => {
+    const chosen = run(at(tune(), 0), { type: 'move', by: 'step', direction: 1, extend: true })
+    const state = run(chosen, { type: 'rest' })
+    expect(shape(state.draft.melody)).toEqual(['G4@48/24', 'F#4@72/24'])
+    expect(state.caret).toBe(0)
+  })
+
+  it('writes the note chosen sharp, flat or natural', () => {
+    const state = run(at(tune(), 72), { type: 'accidental', accidental: 0 })
+    expect(shape(state.draft.melody).at(-1)).toBe('F4@72/24')
+  })
+
+  it('adds a bar before the caret’s, and gives each bar chosen a length and the first a clef', () => {
+    const before = run(initialEditor(draftOf()), { type: 'bars', edit: 'insertBefore' })
+    expect(form(before.draft)).toEqual([[['G@0', 'G@0', 'C@0']]])
+    expect(before.caret).toBe(0)
+    const both = run(
+      initialEditor(draftOf()),
+      { type: 'layer', layer: 'chords' },
+      { type: 'move', by: 'bar', direction: 1, extend: true },
+    )
+    expect(lengths(run(both, { type: 'barLength', ticks: 48 }).draft)).toEqual([48, 48])
+    const clef = run(
+      initialEditor(draftOf()),
+      { type: 'place', tick: 96, layer: 'rh' },
+      { type: 'clef', hand: 'rh', clef: 'bass' },
+    )
+    expect(clef.draft.sections[0]?.lines[0]?.[1]?.clefs).toEqual({ rh: 'bass' })
   })
 })
 

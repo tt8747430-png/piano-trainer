@@ -7,6 +7,8 @@ import {
   deleteNotes,
   notesAt,
   respellNotes,
+  setAccidental,
+  setDuration,
   setFinger,
   shiftNotes,
   tieNotes,
@@ -187,5 +189,58 @@ describe('tieNotes', () => {
   it('changes nothing where no same key follows', () => {
     const draft = draftOf({ melody: 'B4/2 A4/2' })
     expect(tieNotes(draft, 'melody', 0)).toBe(draft)
+  })
+})
+
+describe('setDuration', () => {
+  it('makes a quarter an eighth, the time it leaves a rest', () => {
+    const draft = draftOf({ melody: 'B4/1 A4/1' })
+    expect(shape(setDuration(draft, 'melody', 0, 12).melody)).toEqual(['B4@0/12', 'A4@24/24'])
+  })
+
+  it('makes a note longer over the notes after it, as a note written there would', () => {
+    const draft = draftOf({ melody: 'B4/1 A4/1 G4/1' })
+    expect(shape(setDuration(draft, 'melody', 0, 48).melody)).toEqual(['B4@0/48', 'G4@48/24'])
+  })
+
+  it('changes each note chosen, the first ones first', () => {
+    const draft = draftOf({ melody: 'B4/1 A4/1 G4/1 F#4/1' })
+    expect(shape(setDuration(draft, 'melody', { from: 0, to: 72 }, 12).melody)).toEqual([
+      'B4@0/12',
+      'A4@24/12',
+      'G4@48/12',
+      'F#4@72/24',
+    ])
+    expect(shape(setDuration(draft, 'melody', { from: 0, to: 96 }, 48).melody)).toEqual([
+      'B4@0/48',
+      'G4@48/48',
+    ])
+  })
+
+  it('changes a chord’s notes together, the chord’s one note chosen taking the chord', () => {
+    const draft = writeNotes(draftOf(), 'rh', 0, keys(60, 64), 24).draft
+    expect(shape(setDuration(draft, 'rh', { at: 0, key: midi(64) }, 48).hands.rh)).toEqual([
+      'C4@0/48',
+      'E4@0/48',
+    ])
+  })
+
+  it('stops a note at the piece’s end, and changes nothing where no note is', () => {
+    const draft = draftOf({ melody: 'B4/4 A4/3 G4/1' })
+    expect(shape(setDuration(draft, 'melody', 168, 48).melody)).toContain('G4@168/24')
+    expect(setDuration(draft, 'lh', 0, 48)).toBe(draft)
+  })
+})
+
+describe('setAccidental', () => {
+  const draft = writeNotes(draftOf(), 'rh', 0, keys(64, 66), 24).draft
+
+  it('writes the note’s letter sharp, flat or natural, its key following', () => {
+    expect(shape(setAccidental(draft, 'rh', { at: 0, key: midi(64) }, -1).hands.rh)).toEqual([
+      'E♭4@0/24',
+      'F#4@0/24',
+    ])
+    expect(shape(setAccidental(draft, 'rh', 0, 0).hands.rh)).toEqual(['E4@0/24', 'F4@0/24'])
+    expect(shape(setAccidental(draft, 'rh', 0, 1).hands.rh)).toEqual(['E#4@0/24', 'F#4@0/24'])
   })
 })

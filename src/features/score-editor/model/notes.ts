@@ -1,12 +1,14 @@
 import {
   keyScale,
   midi,
+  note,
   otherSpelling,
   PIANO,
   pitchClass,
   pitchClassOf,
   spellInKey,
   spellScale,
+  type Accidental,
   type Finger,
   type Key,
   type Midi,
@@ -227,6 +229,59 @@ function changeAt(
         changed.flatMap((n) => (n ? [n] : [])),
       )
 }
+
+/**
+ * The notes `where` takes made `ticks` long, as the palette's value tapped with notes chosen makes
+ * them (spec 2026-10-23): each onset's notes together (a chord's one note chosen takes its chord, a
+ * chord's notes being one length), the first onsets first. Shorter, the time they leave is a rest;
+ * longer, the notes starting under them are taken, as writing a note there takes them; a note stops
+ * where its hand stops being written, or at the piece's end.
+ */
+export function setDuration(draft: Draft, layer: NoteLayer, where: Where, ticks: Tick): Draft {
+  const taken = isAt(where)
+  const onsets = [
+    ...new Set(
+      notesOf(draft, layer)
+        .filter(taken)
+        .map((n) => n.startTick),
+    ),
+  ].sort((a, b) => a - b)
+  let next = draft
+  for (const at of onsets) {
+    const chord = notesAt(next, layer, at)
+    // Taken by a longer note before it.
+    if (chord.length === 0) continue
+    const reach = isHandLayer(layer) ? handReach(next, layer, at) : totalTicks(next)
+    const end = Math.min(at + ticks, reach)
+    const others = notesOf(next, layer).filter((n) => n.startTick !== at)
+    const under = others.some((n) => n.startTick > at && n.startTick < end)
+    if (!under && chord.every((n) => n.durationTicks === end - at)) continue
+    const without = withNotes(next, layer, others)
+    next = withNotes(next, layer, [
+      ...clearUnder(without, layer, at, end),
+      ...chord.map((n) => ({ ...n, durationTicks: end - at })),
+    ])
+  }
+  return next
+}
+
+/**
+ * The notes `where` takes written on their letter with an accidental: ♯ (1), ♭ (−1) or ♮ (0), their
+ * key following; nothing moves past the piano's ends.
+ */
+export const setAccidental = (
+  draft: Draft,
+  layer: NoteLayer,
+  where: Where,
+  accidental: Accidental,
+): Draft =>
+  changeAt(draft, layer, where, (n) => {
+    if (n.spelled.accidental === accidental) return n
+    const moved = n.midi + accidental - n.spelled.accidental
+    return moved < PIANO.from || moved > PIANO.to
+      ? null
+      : { ...n, midi: midi(moved), spelled: note(n.spelled.letter, accidental) }
+  })
 
 /** The notes at `at` moved by semitones, spelled in the key; nothing moves past the piano's ends. */
 export const shiftNotes = (

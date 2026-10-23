@@ -68,7 +68,15 @@ export interface EditorState extends Snapshot {
 }
 
 export type BarEdit =
-  'insert' | 'delete' | 'copy' | 'cut' | 'paste' | 'newLine' | 'joinLine' | 'newSection'
+  | 'insert'
+  | 'insertBefore'
+  | 'delete'
+  | 'copy'
+  | 'cut'
+  | 'paste'
+  | 'newLine'
+  | 'joinLine'
+  | 'newSection'
 
 /** How far the caret moves: a step of the value (or to the next place), a bar, or to an end. */
 export type CaretMove = 'step' | 'bar' | 'line' | 'end'
@@ -128,6 +136,8 @@ export type EditorAction =
   | { readonly type: 'instrument'; readonly part: number; readonly instrument: Instrument }
   | { readonly type: 'shift'; readonly semitones: number }
   | { readonly type: 'respell' }
+  /** The notes chosen written on their letter ♯ (1), ♭ (−1) or ♮ (0). */
+  | { readonly type: 'accidental'; readonly accidental: -1 | 0 | 1 }
   | { readonly type: 'finger'; readonly midi: Midi; readonly finger: Finger | null }
   /** A mark put on the notes at the caret, or those of the bars chosen, or taken off them all (ADR 0063). */
   | { readonly type: 'mark'; readonly mark: MarkChoice }

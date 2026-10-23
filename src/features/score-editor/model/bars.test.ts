@@ -5,6 +5,7 @@ import {
   copyBars,
   deleteBars,
   insertBar,
+  insertBarBefore,
   joinLine,
   newLine,
   pasteBars,
@@ -39,6 +40,28 @@ describe('insertBar', () => {
 
   it('cuts a note held across where the bar goes in', () => {
     expect(shape(insertBar(sung, 2).melody)).toContain('D5@192/96')
+  })
+})
+
+describe('insertBarBefore', () => {
+  it('adds a bar before, starting its line, with the chord before it, the notes moved on', () => {
+    const inserted = insertBarBefore(sung, 2)
+    expect(form(inserted)).toEqual([
+      [
+        ['G@0', 'C@0'],
+        ['C@0', 'D@0', 'G@0'],
+      ],
+    ])
+    expect(shape(inserted.hands.lh)).toEqual(['C3@96/96', 'D3@288/96'])
+  })
+
+  it('adds a bar before the first, with its chord', () => {
+    expect(form(insertBarBefore(sung, 0))).toEqual([
+      [
+        ['G@0', 'G@0', 'C@0'],
+        ['D@0', 'G@0'],
+      ],
+    ])
   })
 })
 

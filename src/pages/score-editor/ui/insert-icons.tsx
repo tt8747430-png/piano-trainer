@@ -137,6 +137,14 @@ const BAR_ICONS: Readonly<Record<InsertBarEdit, ReactNode>> = {
       <path d="M17 8 V16 M13 12 H21" strokeWidth="2.25" />
     </Icon>
   ),
+  // A new bar before a barline, its +.
+  insertBefore: (
+    <Icon>
+      {STAFF}
+      <path d="M13 6 V18 M21 6 V18" strokeWidth="1.5" />
+      <path d="M7 8 V16 M3 12 H11" strokeWidth="2.25" />
+    </Icon>
+  ),
   // A bar crossed out.
   delete: (
     <Icon>

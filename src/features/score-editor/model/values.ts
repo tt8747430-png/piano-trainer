@@ -41,3 +41,15 @@ export function toggledTriplet(chosen: ChosenValue, meter: Meter): ChosenValue {
   if (chosen.triplet) return { ...chosen, triplet: false }
   return isCompound(meter) ? chosen : { ...chosen, triplet: true, dots: 0 }
 }
+
+/** The value a length is written as in the meter (plain, dotted, double dotted or a triplet's), or none. */
+export function valueOf(ticks: number, meter: Meter): ChosenValue | null {
+  for (const value of NOTE_VALUES)
+    for (const triplet of [false, true])
+      for (const dots of [0, 1, 2] as const) {
+        if (triplet && dots > 0) continue
+        const chosen = { value, dots, triplet }
+        if (ticksOf(chosen, meter) === ticks) return chosen
+      }
+  return null
+}
