@@ -16,6 +16,7 @@ import type {
 import type { Clip } from './bars'
 import type { Draft, DraftNote, Layer } from './draft'
 import type { TakePart } from './take-edits'
+import type { Line } from './lines'
 import type { MarkChoice } from './marks'
 import type { ChosenValue, Dots } from './values'
 
@@ -109,6 +110,8 @@ export type EditorAction =
   | { readonly type: 'finger'; readonly midi: Midi; readonly finger: Finger | null }
   /** A mark put on the notes at the caret, or those of the bars chosen, or taken off them all (ADR 0063). */
   | { readonly type: 'mark'; readonly mark: MarkChoice }
+  /** A line drawn over the bars chosen, else from the caret to its bar's end, or taken away (ADR 0080). */
+  | { readonly type: 'line'; readonly line: Line }
   /** The notes at the caret joined to the same keys' notes after them. */
   | { readonly type: 'tie' }
   | { readonly type: 'chord'; readonly chord: Chord; readonly advance: ChordAdvance }

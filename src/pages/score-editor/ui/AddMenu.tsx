@@ -1,16 +1,16 @@
 import { Tabs } from '@base-ui/react/tabs'
-import { Bookmark, Hand, Merge, Plus, Trash2, WrapText, type LucideIcon } from 'lucide-react'
-import { useMemo, useState, type ReactNode } from 'react'
+import { Plus } from 'lucide-react'
+import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   barAt,
   barLengths,
   BARLINE_CHOICES,
   clefAt,
-  JUMP_CHOICES,
-  notesAt,
   isHandLayer,
-  type BarEdit,
+  JUMP_CHOICES,
+  lineDrawn,
+  notesAt,
   type BarMarkChoice,
 } from '@/features/score-editor'
 import { cn } from '@/shared/lib'
@@ -22,44 +22,28 @@ import {
   timeSignature,
   timeSignatureText,
   type Pedal,
-  type TimeSignature,
 } from '@/shared/lib/music'
-import { notate, type StaffId, type TimedMusic } from '@/shared/lib/notation'
-import { LazyScoreView, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   ADD_TABS,
   BARLINE_TILES,
   clefBar,
   emptyBar,
-  HANDS,
+  isJumpSign,
+  isJumpWords,
+  JUMP_SIGNS,
+  JUMP_WORDS,
   LINE_TILES,
   lineMusic,
   PEDAL_TILES,
   type AddTab,
+  type LineTile,
 } from '../model/add-menu'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { HandKeys } from './HandKeys'
-
-/** Each tab's picture, as the tiles under it draw their kind. */
-const TAB_ICONS: Readonly<Record<AddTab, ReactNode>> = {
-  // A bar between its barlines, on a staff's lines.
-  bars: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="size-6">
-      <path d="M2 7 H22 M2 10.5 H22 M2 14 H22 M2 17.5 H22" strokeWidth="1" opacity="0.55" />
-      <path d="M5 6 V19 M19 6 V19" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  ),
-  repeats: <span className="font-music text-3xl leading-none">𝄆</span>,
-  lines: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-5">
-      <path d="M3 15 C8 6 16 6 21 15" strokeLinecap="round" />
-    </svg>
-  ),
-  text: <span className="font-serif text-xl leading-none italic">dol.</span>,
-  fingers: <Hand aria-hidden className="size-5" />,
-  clefs: <span className="font-music text-3xl leading-none">𝄞</span>,
-}
+import { FingeringPanel } from './FingeringPanel'
+import { BarIcon, CodaSign, TabIcon, type InsertBarEdit } from './insert-icons'
+import { Engraved, IconPicture, TextPicture, Tile, Tiles } from './InsertTiles'
 
 const PEDAL_LABEL = {
   down: 'marks.pedalDown',
@@ -67,172 +51,162 @@ const PEDAL_LABEL = {
   up: 'marks.pedalUp',
 } as const satisfies Readonly<Record<Pedal, string>>
 
-/** The bar edits Insert holds, each with its picture: copy, cut and paste are a selection's. */
-const BAR_TILES: readonly (readonly [Exclude<BarEdit, 'copy' | 'cut' | 'paste'>, LucideIcon])[] = [
-  ['insert', Plus],
-  ['delete', Trash2],
-  ['newLine', WrapText],
-  ['joinLine', Merge],
-  ['newSection', Bookmark],
+/** The bar edits Insert holds, in order: copy, cut and paste are a selection's. */
+const BAR_TILES: readonly InsertBarEdit[] = [
+  'insert',
+  'delete',
+  'newLine',
+  'joinLine',
+  'newSection',
 ]
 
-/**
- * One thing to insert: its picture over its name, as Sibelius's tiles are, compact; pressed where it
- * is already so. Its name is `label`, or `caption` under the picture where the picture says the rest
- * (an expression's word over what it asks).
- */
-function Tile({
-  label,
-  caption = label,
-  pressed,
-  disabled = false,
-  onClick,
-  children,
-}: {
-  label: string
-  caption?: string
-  pressed?: boolean
-  disabled?: boolean
-  onClick: () => void
-  children: ReactNode
-}) {
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      title={label}
-      aria-pressed={pressed}
-      disabled={disabled}
-      onClick={onClick}
-      className="flex min-w-0 flex-col items-center gap-0.5 overflow-hidden rounded-xl border border-border bg-card px-1.5 pt-1 pb-1.5 text-card-foreground transition-colors hover:bg-chosen aria-pressed:border-selected aria-pressed:bg-selected/10 disabled:opacity-35"
-    >
-      <span aria-hidden className="grid h-16 w-full place-items-center overflow-hidden">
-        {children}
-      </span>
-      <span aria-hidden className="w-full truncate text-center text-xs leading-tight">
-        {caption}
-      </span>
-    </button>
-  )
-}
-
-/**
- * A tile's picture engraved on one staff: the signature or the line as the score will show it; `time`
- * the bar's own signature where it is not the meter's (a bar of another length).
- */
-function Engraved({
-  music,
-  noTime = false,
-  time,
-  grand = false,
-  staff = 'treble',
-}: {
-  music: TimedMusic
-  noTime?: boolean
-  time?: TimeSignature
-  /** On the grand staff, its foot cut away: a hairpin stands between the hands' staves. */
-  grand?: boolean
-  /** The one staff drawn, where not the grand staff. */
-  staff?: StaffId
-}) {
-  const score = useMemo(() => {
-    const notated = notate(music)
-    const [first] = notated.measures
-    return time && first ? { ...notated, measures: [{ ...first, time }] } : notated
-  }, [music, time])
-  return (
-    <div className={cn('pointer-events-none', grand && 'self-start pt-1')}>
-      <LazyScoreView
-        score={score}
-        staff={grand ? undefined : staff}
-        scale={grand ? 0.42 : 0.56}
-        timeBefore={noTime ? score.measures[0]?.time : undefined}
-      />
-    </div>
-  )
-}
-
-/** The grid of a tab's tiles, under an optional heading. */
-function Tiles({ heading, children }: { heading?: string; children: ReactNode }) {
-  return (
-    <section className="flex flex-col gap-2" aria-label={heading}>
-      {heading ? <h3 className="text-sm font-semibold text-muted-foreground">{heading}</h3> : null}
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] gap-1.5">{children}</div>
-    </section>
-  )
-}
-
-/** Insert's button as the bar shows it: a round ghost icon. */
 /** Its button, the dock's size (`EditorDock`): the bar's buttons are all one finger's reach. */
 const PLUS_TRIGGER = <Button variant="ghost" size="icon" className="size-12 rounded-full" />
 
+/** A line's tile: pressed where the line is drawn where it would go, greyed where it has no notes. */
+function LineTileButton({ tile, onDone }: { tile: LineTile; onDone: () => void }) {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const drawn = useEditorState((state) => lineDrawn(state, tile.line))
+  return (
+    <Tile
+      label={t(`add.line.${tile.line}`)}
+      caption={t(`add.lineCaption.${tile.line}`)}
+      pressed={drawn === true}
+      disabled={drawn === null}
+      onClick={() => {
+        actions.dispatch({ type: 'line', line: tile.line })
+        onDone()
+      }}
+    >
+      <Engraved music={lineMusic(tile)} noTime />
+    </Tile>
+  )
+}
+
+/**
+ * The clef change of the caret's staff, from its bar on: Treble or Bass, the one it is in pressed.
+ * Only the piano's two staves change clef (ADR 0069).
+ */
+function ClefPanel({ onDone }: { onDone: () => void }) {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const layer = useEditorState((state) => state.layer)
+  const bar = useEditorState((state) => barAt(state.draft, state.caret).index)
+  const current = useEditorState((state) =>
+    isHandLayer(state.layer)
+      ? clefAt(state.draft, barAt(state.draft, state.caret).index, state.layer)
+      : null,
+  )
+  if (!isHandLayer(layer))
+    return <p className="text-sm text-muted-foreground">{t('add.clefChange.noHand')}</p>
+  return (
+    <Tiles
+      heading={t('add.clefChange.heading', { hand: t(`layers.${layer}`) })}
+      note={t('add.clefChange.note', { bar: bar + 1 })}
+    >
+      {CLEFS.map((clef) => (
+        <Tile
+          key={clef}
+          label={t(`add.clefName.${clef}`)}
+          pressed={current === clef}
+          onClick={() => {
+            actions.dispatch({ type: 'clef', hand: layer, clef })
+            onDone()
+          }}
+        >
+          <Engraved
+            music={clefBar(layer, clef)}
+            noTime
+            staff={layer === 'rh' ? 'treble' : 'bass'}
+          />
+        </Tile>
+      ))}
+    </Tiles>
+  )
+}
+
 /**
  * Insert (ADR 0065, 0080): what goes on the score at the caret, kept apart from the palette's tools
- * for the notes, as Sibelius keeps it. Its kinds as tabs (bars, repeats, lines, text, a hand's fingers,
- * a hand's clef), each named under its picture; each a grid of compact tiles drawn as the score will
- * show them, as many to a row as the screen holds; a tile chosen does its work and closes the menu (a
- * hand's fingers keep it open, note after note). One height whatever the tab. What is the song's as a
- * whole (its key, time signature, tempo and parts) is the Song sheet's, never here.
- * Its button, a round +, rides first in the dock.
+ * for the notes, as Sibelius keeps it. Its kinds as tabs named as MuseScore names its palettes (bars,
+ * repeats and jumps, slurs and hairpins, expression and pedal, fingering, a clef change), each a
+ * grid of compact tiles drawn as the score will show them, in C so no signature crowds them, as many
+ * to a row as the screen holds; a tile chosen does its work and closes the menu (fingering keeps it
+ * open, note after note). One height whatever the tab. What is the song's as a whole (its key, time
+ * signature, tempo and parts) is the Song sheet's, never here. Its button, a round +, rides first in
+ * the dock.
  */
 export function AddMenu() {
   const { t } = useTranslation('editor')
   const { actions, takes } = useScoreEditorContext()
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<AddTab>('bars')
-  const draft = useEditorState((state) => state.draft)
-  const layer = useEditorState((state) => state.layer)
+  const meter = useEditorState((state) => state.draft.meter)
   const hasNotes = useEditorState(
     (state) =>
       state.layer !== 'chords' && notesAt(state.draft, state.layer, state.caret).length > 0,
   )
   const barTicks = useEditorState((state) => barAt(state.draft, state.caret).bar.ticks)
-  const clefsHere = {
-    rh: useEditorState((state) => clefAt(state.draft, barAt(state.draft, state.caret).index, 'rh')),
-    lh: useEditorState((state) => clefAt(state.draft, barAt(state.draft, state.caret).index, 'lh')),
-  }
+  const close = () => setOpen(false)
   const done = (work: () => void) => () => {
     work()
-    setOpen(false)
+    close()
   }
+  // A jump's words or a sign as printed (a gloss under the words); a barline engraved on its bar.
   const barMarkTile = (choice: BarMarkChoice) => (
     <Tile
       key={choice}
       label={t(`add.barline.${choice}`)}
+      caption={isJumpWords(choice) ? t(`add.jumpMeaning.${choice}`) : undefined}
       onClick={done(() => actions.dispatch({ type: 'barMarks', choice }))}
     >
-      <Engraved music={emptyBar(draft.key, draft.meter, 1, BARLINE_TILES[choice])} noTime />
+      {isJumpWords(choice) ? (
+        <TextPicture text={JUMP_WORDS[choice]}>
+          {choice === 'toCoda' ? (
+            <span className="ms-1 inline-block size-[1.1em] align-[-0.2em]">
+              <CodaSign />
+            </span>
+          ) : null}
+        </TextPicture>
+      ) : choice === 'coda' ? (
+        <IconPicture>
+          <CodaSign />
+        </IconPicture>
+      ) : isJumpSign(choice) ? (
+        <TextPicture text={JUMP_SIGNS[choice]} music />
+      ) : (
+        <Engraved music={emptyBar(meter, 1, BARLINE_TILES[choice])} noTime />
+      )}
     </Tile>
   )
   const panels: Readonly<Record<AddTab, ReactNode>> = {
     bars: (
       <div className="flex flex-col gap-4">
         <Tiles>
-          {BAR_TILES.map(([edit, Icon]) => (
+          {BAR_TILES.map((edit) => (
             <Tile
               key={edit}
               label={t(`bars.${edit}`)}
               onClick={done(() => actions.dispatch({ type: 'bars', edit }))}
             >
-              <Icon className="size-6" />
+              <IconPicture>
+                <BarIcon edit={edit} />
+              </IconPicture>
             </Tile>
           ))}
         </Tiles>
         {/* The caret's bar alone: shorter for a pickup, or a bar of its own length. */}
         <Tiles heading={t('add.barLength')}>
-          {barLengths(draft.meter).map((ticks) => {
+          {barLengths(meter).map((ticks) => {
             const beats = ticks / TICKS_PER_BEAT
             return (
               <Tile
                 key={ticks}
-                label={timeSignatureText(timeSignature(beats, draft.meter))}
+                label={timeSignatureText(timeSignature(beats, meter))}
                 pressed={ticks === barTicks}
                 onClick={done(() => actions.dispatch({ type: 'barLength', ticks }))}
               >
-                <Engraved
-                  music={emptyBar(draft.key, draft.meter, beats)}
-                  time={timeSignature(beats, draft.meter)}
-                />
+                <Engraved music={emptyBar(meter, beats)} time={timeSignature(beats, meter)} />
               </Tile>
             )
           })}
@@ -246,24 +220,18 @@ export function AddMenu() {
       </div>
     ),
     lines: (
-      <>
-        {hasNotes ? null : <p className="text-sm text-muted-foreground">{t('add.noNotes')}</p>}
-        <Tiles>
-          {LINE_TILES.map((tile) => (
-            <Tile
-              key={tile.word}
-              label={t(`marks.${tile.word}`)}
-              caption={t(`add.line.${tile.word}`)}
-              disabled={!hasNotes}
-              onClick={done(() => actions.dispatch({ type: 'mark', mark: tile.mark }))}
-            >
-              <Engraved music={lineMusic(tile)} noTime grand={tile.mark.kind === 'hairpin'} />
-            </Tile>
-          ))}
-        </Tiles>
-      </>
+      <div className="flex flex-col gap-4">
+        <p className="text-sm text-pretty text-muted-foreground">{t('add.linesNote')}</p>
+        {(['slurs', 'octaves'] as const).map((group) => (
+          <Tiles key={group} heading={t(`add.lineGroup.${group}`)}>
+            {LINE_TILES.filter((tile) => tile.group === group).map((tile) => (
+              <LineTileButton key={tile.line} tile={tile} onDone={close} />
+            ))}
+          </Tiles>
+        ))}
+      </div>
     ),
-    text: (
+    expression: (
       <div className="flex flex-col gap-4">
         {hasNotes ? null : <p className="text-sm text-muted-foreground">{t('add.noNotesText')}</p>}
         <Tiles heading={t('add.expressions')}>
@@ -277,7 +245,7 @@ export function AddMenu() {
                 actions.dispatch({ type: 'mark', mark: { kind: 'expression', expression } }),
               )}
             >
-              <span className="font-serif text-xl italic">{EXPRESSION_TEXT[expression]}</span>
+              <TextPicture text={EXPRESSION_TEXT[expression]} />
             </Tile>
           ))}
         </Tiles>
@@ -286,50 +254,20 @@ export function AddMenu() {
             <Tile
               key={pedal}
               label={t(PEDAL_LABEL[pedal])}
-              caption={t(`add.pedalCaption.${pedal}`)}
               disabled={!hasNotes}
               onClick={done(() =>
                 actions.dispatch({ type: 'mark', mark: { kind: 'pedal', pedal } }),
               )}
             >
-              <span className="font-music text-4xl leading-none">{glyph}</span>
+              <TextPicture text={glyph} music />
             </Tile>
           ))}
         </Tiles>
       </div>
     ),
-    // A hand's own, not every note's: its fingers and its bar written out, the menu kept open.
-    fingers: isHandLayer(layer) ? (
-      <div className="grid grid-cols-6 gap-1.5">
-        <HandKeys />
-      </div>
-    ) : (
-      <p className="text-sm text-muted-foreground">{t('add.noHand')}</p>
-    ),
-    clefs: (
-      <div className="flex flex-col gap-4">
-        <p className="text-sm text-muted-foreground">{t('add.clefs')}</p>
-        {HANDS.map((hand) => (
-          <Tiles key={hand} heading={t(`layers.${hand}`)}>
-            {CLEFS.map((clef) => (
-              <Tile
-                key={clef}
-                label={t(`add.clef.${hand}.${clef}`)}
-                caption={t(`add.clefName.${clef}`)}
-                pressed={clefsHere[hand] === clef}
-                onClick={done(() => actions.dispatch({ type: 'clef', hand, clef }))}
-              >
-                <Engraved
-                  music={clefBar(draft.key, hand, clef)}
-                  noTime
-                  staff={hand === 'rh' ? 'treble' : 'bass'}
-                />
-              </Tile>
-            ))}
-          </Tiles>
-        ))}
-      </div>
-    ),
+    // A hand's own, not every note's: its fingers, once its bar is written out; the menu kept open.
+    fingering: <FingeringPanel />,
+    clef: <ClefPanel onDone={close} />,
   }
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -347,22 +285,22 @@ export function AddMenu() {
           onValueChange={(next: AddTab) => setTab(next)}
           className="flex flex-col gap-3"
         >
-          {/* Each kind named under its picture, all six in a phone's width; else the row scrolls. */}
+          {/* Each kind named under its picture: three to a row on a phone, all six on a wider screen. */}
           <Tabs.List
             aria-label={t('add.tabs')}
-            className="flex gap-0.5 overflow-x-auto rounded-2xl bg-muted p-1 [scrollbar-width:none] fade-scroll-x"
+            className="grid grid-cols-3 gap-1 rounded-2xl bg-muted p-1 sm:grid-cols-6"
           >
             {ADD_TABS.map((each) => (
               <Tabs.Tab
                 key={each}
                 value={each}
                 className={cn(
-                  'flex min-h-14 min-w-11 flex-1 shrink-0 flex-col items-center justify-center gap-0.5 rounded-xl px-1 text-xs font-semibold whitespace-nowrap text-muted-foreground',
+                  'flex min-h-14 min-w-0 flex-col items-center justify-start gap-1 rounded-xl px-1 py-1.5 text-center text-xs leading-tight font-semibold text-balance text-muted-foreground',
                   'aria-selected:bg-selected aria-selected:text-selected-foreground',
                 )}
               >
-                <span aria-hidden className="grid size-7 place-items-center overflow-hidden">
-                  {TAB_ICONS[each]}
+                <span aria-hidden className="grid size-7 shrink-0 place-items-center">
+                  <TabIcon tab={each} />
                 </span>
                 {t(`add.tab.${each}`)}
               </Tabs.Tab>
@@ -370,7 +308,7 @@ export function AddMenu() {
           </Tabs.List>
           <Tabs.Panel
             value={tab}
-            className="h-[min(26rem,55dvh)] overflow-y-auto overscroll-contain outline-none landscape-phone:h-[calc(100dvh-9rem)]"
+            className="h-[min(26rem,50dvh)] overflow-y-auto overscroll-contain outline-none landscape-phone:h-[calc(100dvh-9rem)]"
           >
             {panels[tab]}
           </Tabs.Panel>

@@ -3,9 +3,12 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { isDegreePiece, musicOf, pieceById, PIECES_STORAGE_KEY } from '@/entities/piece'
+import { readDraft } from '@/features/score-editor'
 import { setKeyboard } from '@/features/set-preference'
 import { createMemoryStorage, LANDSCAPE_PHONE } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
+import { notate, scoreToMei } from '@/shared/lib/notation'
+import { arrangeDraft } from '../model/arrange-draft'
 
 const SONG = {
   id: 'my-1',
@@ -241,13 +244,20 @@ describe('the score editor', () => {
     await user.click(screen.getByRole('button', { name: 'Insert' }))
     const menu = await screen.findByRole('dialog', { name: 'Insert' })
     expect(within(menu).getAllByRole('tab')).toHaveLength(6)
-    for (const name of ['Bars', 'Repeats', 'Lines', 'Text', 'Fingers', 'Clefs'])
+    for (const name of [
+      'Bars',
+      'Repeats & jumps',
+      'Slurs & hairpins',
+      'Expression & pedal',
+      'Fingering',
+      'Clef change',
+    ])
       expect(within(menu).getByRole('tab', { name })).toBeInTheDocument()
     for (const name of ['Key', 'Time', 'Staves'])
       expect(within(menu).queryByRole('tab', { name })).not.toBeInTheDocument()
     expect(within(menu).queryByRole('button', { name: 'Copy' })).not.toBeInTheDocument()
     expect(within(menu).queryByRole('button', { name: 'Paste' })).not.toBeInTheDocument()
-    await user.click(within(menu).getByRole('tab', { name: 'Text' }))
+    await user.click(within(menu).getByRole('tab', { name: 'Expression & pedal' }))
     expect(
       within(menu).queryByRole('button', { name: 'Allegro, 130 a minute' }),
     ).not.toBeInTheDocument()
@@ -257,8 +267,8 @@ describe('the score editor', () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await screen.findByRole('status')
-    await addFrom(user, 'Repeats', 'Start repeat')
-    await addFrom(user, 'Repeats', 'End repeat')
+    await addFrom(user, 'Repeats & jumps', 'Start repeat')
+    await addFrom(user, 'Repeats & jumps', 'End repeat')
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         sections: [{ lines: ['|: G :| G G G'] }],
@@ -270,8 +280,8 @@ describe('the score editor', () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await screen.findByRole('status')
-    await addFrom(user, 'Repeats', 'Fine')
-    await addFrom(user, 'Repeats', 'D.C. al Fine')
+    await addFrom(user, 'Repeats & jumps', 'Fine')
+    await addFrom(user, 'Repeats & jumps', 'D.C. al Fine')
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         sections: [{ lines: ['G Fine DC.Fine G G G'] }],
@@ -294,20 +304,66 @@ describe('the score editor', () => {
     expect(within(settings).queryByRole('radio', { name: 'Pages' })).not.toBeInTheDocument()
   })
 
-  it('changes the left hand’s clef at the caret’s bar from Insert’s Clefs', async () => {
+  it('changes the caret’s staff’s clef from its bar on, from Insert’s Clef change', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    await screen.findByRole('status')
-    await addFrom(user, 'Clefs', 'Left hand, treble clef')
+    // A click low in a bar lands on its bass staff: the left hand.
+    fireEvent.click(await screen.findByRole('button', { name: /^Bar 1:/ }), {
+      clientY: 400,
+      detail: 1,
+    })
+    let menu = await openInsert(user, 'Clef change')
+    expect(within(menu).getByRole('button', { name: 'Bass clef' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    await user.click(within(menu).getByRole('button', { name: 'Treble clef' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         hands: { lh: 'clef:treble - | - | - | -' },
       }),
     )
-    const menu = await openInsert(user, 'Clefs')
-    expect(within(menu).getByRole('button', { name: 'Left hand, treble clef' })).toHaveAttribute(
+    menu = await openInsert(user, 'Clef change')
+    expect(within(menu).getByRole('region', { name: 'Left hand: clef change' })).toBeInTheDocument()
+    expect(within(menu).getByRole('button', { name: 'Treble clef' })).toHaveAttribute(
       'aria-pressed',
       'true',
+    )
+  })
+
+  it('draws a crescendo over the bars chosen in one go, engraved as a hairpin', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const song = { ...SONG, melody: 'C4/1 D4/1 E4/1 F4/1 | G4/2 A4/2' }
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 1 }),
+    )
+    const { piecesStore } = await renderApp('/edit/my-1', { storage })
+    expect(await screen.findByRole('status')).toHaveTextContent(/^Melody · /)
+    // Bars 1 and 2 chosen from the caret's: Shift with Alt, a bar at a time.
+    await user.keyboard('{Shift>}{Alt>}{ArrowRight}{ArrowRight}{/Alt}{/Shift}')
+    await addFrom(user, 'Slurs & hairpins', 'Crescendo')
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        melody: 'C4/1[cresc] D4/1 E4/1 F4/1 | G4/2 A4/2[/hairpin]',
+      }),
+    )
+    const saved = piecesStore.getState().songs.find((each) => each.id === 'my-1')
+    if (!saved) throw new Error('the song')
+    const mei = scoreToMei(notate(arrangeDraft(readDraft(saved))))
+    expect(mei).toMatch(/<hairpin [^>]*form="cres"/)
+    // Drawn there already, its tile shows it pressed: tapped again, it is taken away.
+    const menu = await openInsert(user, 'Slurs & hairpins')
+    expect(within(menu).getByRole('button', { name: 'Crescendo' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    await user.click(within(menu).getByRole('button', { name: 'Crescendo' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        melody: 'C4/1 D4/1 E4/1 F4/1 | G4/2 A4/2',
+      }),
     )
   })
 
@@ -595,7 +651,7 @@ describe('the score editor', () => {
       'Double dotted',
       'Triplet',
       'Rest',
-      'Tie to the next note',
+      'Tie',
       'Chord',
     ])
       expect(within(palette).getByRole('button', { name })).toBeInTheDocument()
@@ -612,17 +668,17 @@ describe('the score editor', () => {
       'Down a semitone',
       'Up an octave',
       'Down an octave',
-      'Up a note of the key',
-      'Down a note of the key',
-      'Other spelling',
+      'Up a diatonic step',
+      'Down a diatonic step',
+      'Enharmonic spelling',
     ])
       expect(within(palette).getByRole('button', { name })).toBeInTheDocument()
     // Bars are added from Insert, not the palette.
     await addFrom(user, 'Bars', 'Add bar')
     expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['G G G G G'] }] })
     await user.keyboard('{Alt>}{ArrowDown}{ArrowDown}{/Alt}')
-    const menu = await openInsert(user, 'Fingers')
-    expect(within(menu).getByRole('button', { name: 'Write this bar out' })).toBeInTheDocument()
+    const menu = await openInsert(user, 'Fingering')
+    expect(within(menu).getByRole('button', { name: 'Write out as notes' })).toBeInTheDocument()
   })
 
   it('marks the note at the caret from the marks’ tabs, saved with the tune', async () => {
@@ -640,7 +696,7 @@ describe('the score editor', () => {
       'true',
     )
     // A line over the notes is added from Insert.
-    await addFrom(user, 'Lines', '8va: an octave higher')
+    await addFrom(user, 'Slurs & hairpins', '8va: an octave higher')
     await user.click(within(palette).getByRole('tab', { name: 'Dynamics' }))
     await user.click(within(palette).getByRole('button', { name: 'Forte' }))
     await waitFor(() =>
@@ -750,13 +806,13 @@ describe('the score editor', () => {
     })
     expect(screen.getByRole('status')).toHaveTextContent(/^Left hand · /)
     expect(screen.getAllByText('Pattern').length).toBeGreaterThan(0)
-    const menu = await openInsert(user, 'Fingers')
-    await user.click(within(menu).getByRole('button', { name: 'Write this bar out' }))
+    const menu = await openInsert(user, 'Fingering')
+    await user.click(within(menu).getByRole('button', { name: 'Write out as notes' }))
     expect(songOf(piecesStore.getState())).toMatchObject({
       hands: { lh: expect.stringMatching(/^G1\^5\+G2\^1\/2 /) },
     })
     // The menu stays open on a hand's own: the bar given back to its pattern from there.
-    expect(within(menu).getByRole('button', { name: 'Back to the pattern' })).toBeInTheDocument()
+    expect(within(menu).getByRole('button', { name: 'Use the pattern again' })).toBeInTheDocument()
   })
 
   it('shows not found for a song written in degrees', async () => {

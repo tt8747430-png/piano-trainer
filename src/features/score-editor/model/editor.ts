@@ -10,6 +10,7 @@ import { isHandLayer, isVoiceLayer, voiceIndex } from './draft'
 import { barsEdited, chordSet, selectedBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
+import { lineOver, lineSpan } from './lines'
 import { markNotes } from './marks'
 import {
   backToPattern,
@@ -192,6 +193,12 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         selection: state.selection,
       })
     }
+    case 'line':
+      if (layer === 'chords') return state
+      return commit(state, lineOver(draft, layer, lineSpan(state), action.line), {
+        struck: null,
+        selection: state.selection,
+      })
     case 'tie':
       return layer === 'chords'
         ? state

@@ -1,4 +1,5 @@
-import type { BarMarkChoice, MarkChoice } from '@/features/score-editor'
+import type { BarMarkChoice, Line } from '@/features/score-editor'
+import { isOneOf } from '@/shared/lib'
 import {
   midi,
   note,
@@ -14,59 +15,33 @@ import {
 import type { TimedMusic, TimedNote } from '@/shared/lib/notation'
 
 /**
- * What the Insert menu puts at the caret (ADR 0065, 0080), as Sibelius's does, each kind a tab of
- * tiles: bars (added, deleted, a line or section begun, the caret's bar's own length); repeats
- * (barlines, endings, the signs and jumps); lines over notes (slurs, hairpins, octave lines); text
- * on notes (expressions, the pedal); a hand's fingers and its bar written out; and a hand's clef from
- * the caret's bar. What is the song's as a whole (its key, time signature, tempo, parts) is the Song
+ * What the Insert menu puts at the caret (ADR 0065, 0080), as a notation app's palettes do, each kind
+ * a tab of tiles named as MuseScore and Dorico name them: bars (added, deleted, a line or section
+ * begun, the caret's bar's own length); repeats (barlines, endings, the signs and jumps); slurs and
+ * hairpins (with the octave lines), each one tile drawn over the notes in one go; expression text and
+ * the pedal; a hand's fingering (its bar written out as notes first); and the clef change of the
+ * caret's staff. What is the song's as a whole (its key, time signature, tempo, parts) is the Song
  * sheet's alone.
  */
-export const ADD_TABS = ['bars', 'repeats', 'lines', 'text', 'fingers', 'clefs'] as const
+export const ADD_TABS = ['bars', 'repeats', 'lines', 'expression', 'fingering', 'clef'] as const
 export type AddTab = (typeof ADD_TABS)[number]
 
 /**
- * The lines Insert puts over the notes at the caret, as the palette's marks are added; each with
- * how its tile draws it, from a first note to a second.
+ * The lines Insert draws, one tile each, in two groups: slurs and hairpins, then the octave lines;
+ * each with how its tile draws it, from a first note to a last.
  */
 export const LINE_TILES = [
-  {
-    mark: { kind: 'slurStart' },
-    word: 'slurStart',
-    from: { slurStart: true },
-    to: { slurEnd: true },
-  },
-  { mark: { kind: 'slurEnd' }, word: 'slurEnd', from: { slurStart: true }, to: { slurEnd: true } },
-  {
-    mark: { kind: 'hairpin', hairpin: 'cresc' },
-    word: 'cresc',
-    from: { hairpin: 'cresc' },
-    to: { hairpin: 'end' },
-  },
-  {
-    mark: { kind: 'hairpin', hairpin: 'dim' },
-    word: 'dim',
-    from: { hairpin: 'dim' },
-    to: { hairpin: 'end' },
-  },
-  {
-    mark: { kind: 'hairpin', hairpin: 'end' },
-    word: 'hairpinEnd',
-    from: { hairpin: 'cresc' },
-    to: { hairpin: 'end' },
-  },
-  {
-    mark: { kind: 'octave', octave: '8va' },
-    word: 'ottava',
-    from: { octave: '8va' },
-    to: { octave: '8va' },
-  },
-  {
-    mark: { kind: 'octave', octave: '8vb' },
-    word: 'ottavaBassa',
-    from: { octave: '8vb' },
-    to: { octave: '8vb' },
-  },
-] as const satisfies readonly { mark: MarkChoice; word: string; from: NoteMarks; to: NoteMarks }[]
+  { line: 'slur', group: 'slurs', from: { slurStart: true }, to: { slurEnd: true } },
+  { line: 'cresc', group: 'slurs', from: { hairpin: 'cresc' }, to: { hairpin: 'end' } },
+  { line: 'dim', group: 'slurs', from: { hairpin: 'dim' }, to: { hairpin: 'end' } },
+  { line: '8va', group: 'octaves', from: { octave: '8va' }, to: { octave: '8va' } },
+  { line: '8vb', group: 'octaves', from: { octave: '8vb' }, to: { octave: '8vb' } },
+] as const satisfies readonly {
+  line: Line
+  group: 'slurs' | 'octaves'
+  from: NoteMarks
+  to: NoteMarks
+}[]
 export type LineTile = (typeof LINE_TILES)[number]
 
 /** The pedal's tiles: each mark as a score prints it, Ped. down and ✱ up (a change both). */
@@ -99,13 +74,35 @@ export const BARLINE_TILES: Readonly<Record<BarMarkChoice, BarMarks>> = {
   'ds-coda': { jump: 'ds-coda' },
 }
 
-/** The hands whose staff a clef tile changes. */
-export const HANDS = ['rh', 'lh'] as const satisfies readonly Hand[]
+/**
+ * The repeats' marks a score prints as a sign or words (as `scoreToMei` prints them), which their
+ * tiles show as such rather than engraved over a bar: a bar wide enough for "D.S. al Coda" would not
+ * fit a phone's tile.
+ */
+export const JUMP_SIGNS = {
+  segno: '\u{1D10B}',
+  coda: '\u{1D10C}',
+} as const satisfies Partial<Readonly<Record<BarMarkChoice, string>>>
+/** The jumps printed as words, each glossed under them in its tile. */
+export const JUMP_WORDS = {
+  toCoda: 'To Coda',
+  fine: 'Fine',
+  dc: 'D.C.',
+  'dc-fine': 'D.C. al Fine',
+  'dc-coda': 'D.C. al Coda',
+  ds: 'D.S.',
+  'ds-fine': 'D.S. al Fine',
+  'ds-coda': 'D.S. al Coda',
+} as const satisfies Partial<Readonly<Record<BarMarkChoice, string>>>
+export type JumpWords = keyof typeof JUMP_WORDS
+export type JumpSign = keyof typeof JUMP_SIGNS
+export const isJumpWords = isOneOf(Object.keys(JUMP_WORDS) as JumpWords[])
+export const isJumpSign = isOneOf(Object.keys(JUMP_SIGNS) as JumpSign[])
 
-/** A clef tile's picture: an empty bar whose hand's staff is in the clef. */
-export function clefBar(key: Key, hand: Hand, clef: Clef): TimedMusic {
+/** A clef tile's picture: an empty bar in C whose hand's staff is in the clef. */
+export function clefBar(hand: Hand, clef: Clef): TimedMusic {
   return {
-    key,
+    key: C_MAJOR,
     meter: '4/4',
     bars: [{ startTick: 0, beats: 1, blank: ['treble', 'bass'], clefs: { [hand]: clef } }],
     notes: [],
@@ -113,10 +110,13 @@ export function clefBar(key: Key, hand: Hand, clef: Clef): TimedMusic {
   }
 }
 
-/** A tile's empty bar of `beats`, in `key` and `meter`: what a signature's tile engraves. */
-export function emptyBar(key: Key, meter: Meter, beats: number, marks: BarMarks = {}): TimedMusic {
+/**
+ * A tile's empty bar of `beats` in `meter`: what a barline's or a bar length's tile engraves. In C,
+ * whatever the song's key, so no signature crowds the mark out of its tile.
+ */
+export function emptyBar(meter: Meter, beats: number, marks: BarMarks = {}): TimedMusic {
   return {
-    key,
+    key: C_MAJOR,
     meter,
     bars: [{ startTick: 0, beats, blank: ['treble', 'bass'], ...marks }],
     notes: [],
