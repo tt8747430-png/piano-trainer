@@ -87,7 +87,23 @@ const CATEGORY_ICONS: Readonly<Record<PaletteCategory, ReactNode>> = {
       </g>
     </Icon>
   ),
-  pitch: <Icon>{SHARP}</Icon>,
+  // Flat's ♭•↕: a note moved up or down, its accidental beside it; a sharp alone would read as
+  // the accidentals, which are the Notes' (research 2026-10-flat-and-dorico §1).
+  pitch: (
+    <Icon>
+      <path d="M3.5 3.5V18.5c3.4-1.5 4.7-4 3.4-5.4-1-.9-2.5-.5-3.4.8" />
+      <ellipse
+        cx="12.6"
+        cy="14"
+        rx="3.2"
+        ry="2.3"
+        transform="rotate(-20 12.6 14)"
+        fill="currentColor"
+        stroke="none"
+      />
+      <path d="M19.5 3.5V20.5M17 6l2.5-2.5L22 6M17 18l2.5 2.5L22 18" />
+    </Icon>
+  ),
   // An accent over a notehead.
   articulations: (
     <Icon>
