@@ -243,8 +243,9 @@ export function PitchKeys() {
   const step = (steps: number) => actions.dispatch({ type: 'step', steps })
   const off = !useNotesChosen()
   const pairs = [
-    { by: 'half', up: t('up'), down: t('down'), move: shift, size: 1 },
+    // In the keys' order: ↑ ↓ a step in the key, with Shift a semitone, with Cmd an octave.
     { by: 'step', up: t('stepUp'), down: t('stepDown'), move: step, size: 1 },
+    { by: 'half', up: t('up'), down: t('down'), move: shift, size: 1 },
     { by: 'octave', up: t('octaveUp'), down: t('octaveDown'), move: shift, size: 12 },
   ] as const
   return (

@@ -381,6 +381,7 @@ export const editor = {
     extendBar: 'Choose to the bar’s end, its start',
     extendEnds: 'Choose to the start, the end',
     deselect: 'Let go of what is chosen',
+    keyStep: 'A step in the key up, down',
     semitone: 'A semitone up, down',
     octave: 'An octave up, down',
     delete: 'Delete',

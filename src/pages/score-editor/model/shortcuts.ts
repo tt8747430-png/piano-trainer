@@ -23,7 +23,7 @@ const isBarEditKey = (code: string): code is keyof typeof BAR_EDITS =>
  * The editor's shortcut for a key press in a layer (spec §6), or null. Only keys the typing keys leave
  * free: digits, the full stop, arrows (Shift extending what is chosen by a note, with Alt by a bar,
  * with Cmd to an end; Alt with ↑ ↓ through a chord's notes, then to the staff over or under, ADR
- * 0088), Home, End, Backspace, Delete, Enter and Escape (letting go of what is chosen), and Cmd or
+ * 0088; ↑ ↓ the notes a step in the key, with Shift a semitone, with Cmd an octave), Home, End, Backspace, Delete, Enter and Escape (letting go of what is chosen), and Cmd or
  * Ctrl with Z, Y, and C, X, V (the bars, in the chords); a letter alone plays the piano.
  */
 export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
@@ -52,10 +52,15 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
     case 'End':
       return move('end', 1)
     case 'ArrowUp':
-    case 'ArrowDown':
-      if (press.altKey) return { type: 'chordNote', direction: press.key === 'ArrowUp' ? 1 : -1 }
+    case 'ArrowDown': {
+      const direction = press.key === 'ArrowUp' ? 1 : -1
+      if (press.altKey) return { type: 'chordNote', direction }
       if (layer === 'chords') return null
-      return { type: 'shift', semitones: (press.key === 'ArrowUp' ? 1 : -1) * (mod ? 12 : 1) }
+      // A step in the key, as Flat and Dorico move a note; Shift a semitone, Cmd an octave.
+      if (mod) return { type: 'shift', semitones: direction * 12 }
+      if (press.shiftKey) return { type: 'shift', semitones: direction }
+      return { type: 'step', steps: direction }
+    }
     // Backspace as a text field's: the notes chosen, else the last before the caret; Delete, those chosen.
     case 'Backspace':
       return mod ? null : { type: 'delete', back: true }

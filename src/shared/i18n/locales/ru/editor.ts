@@ -360,6 +360,7 @@ export const editor: LocaleResources['editor'] = {
     extendBar: 'Выделить до конца такта, до его начала',
     extendEnds: 'Выделить до начала, до конца',
     deselect: 'Снять выделение',
+    keyStep: 'На ступень лада выше, ниже',
     semitone: 'На полутон выше, ниже',
     octave: 'На октаву выше, ниже',
     delete: 'Удалить',

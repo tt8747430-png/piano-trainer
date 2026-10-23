@@ -60,14 +60,21 @@ describe('shortcutOf', () => {
     })
   })
 
-  it('moves notes by a semitone, or an octave with Cmd or Ctrl, but not chords', () => {
-    expect(shortcutOf(press('ArrowUp', 'ArrowUp'), 'melody')).toEqual({
+  it('moves notes a step in the key, a semitone with Shift, an octave with Cmd or Ctrl, but not chords', () => {
+    expect(shortcutOf(press('ArrowUp', 'ArrowUp'), 'melody')).toEqual({ type: 'step', steps: 1 })
+    expect(shortcutOf(press('ArrowDown', 'ArrowDown'), 'rh')).toEqual({ type: 'step', steps: -1 })
+    expect(shortcutOf(press('ArrowUp', 'ArrowUp', { shiftKey: true }), 'melody')).toEqual({
       type: 'shift',
       semitones: 1,
     })
     expect(shortcutOf(press('ArrowDown', 'ArrowDown', { ctrlKey: true }), 'lh')).toEqual({
       type: 'shift',
       semitones: -12,
+    })
+    // Alt keeps going through a chord's notes (ADR 0088).
+    expect(shortcutOf(press('ArrowUp', 'ArrowUp', { altKey: true }), 'rh')).toEqual({
+      type: 'chordNote',
+      direction: 1,
     })
     expect(shortcutOf(press('ArrowUp', 'ArrowUp'), 'chords')).toBeNull()
   })
