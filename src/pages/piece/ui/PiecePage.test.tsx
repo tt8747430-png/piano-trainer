@@ -6,9 +6,9 @@ import { readSongLink } from '@/features/share-song'
 import { COLLECTIONS, PIECES_STORAGE_KEY } from '@/entities/piece'
 import { createMemoryStorage } from '@/shared/lib'
 
-/** Opens the page's More actions, where its rarer actions fold. */
+/** Opens the bar's More, where its rarer actions fold. */
 async function openMore(user: ReturnType<typeof userEvent.setup>) {
-  await user.click(await screen.findByRole('button', { name: 'More actions' }))
+  await user.click(await screen.findByRole('button', { name: 'More' }))
 }
 
 describe('Piece', () => {
@@ -60,10 +60,8 @@ describe('Piece', () => {
     )
   })
 
-  it('checks the song’s chords from More actions', async () => {
-    const user = userEvent.setup()
+  it('checks the song’s chords from its row of actions', async () => {
     await renderApp('/songs/bz5')
-    await openMore(user)
     expect(
       (await screen.findByRole('link', { name: 'Check these chords' })).getAttribute('href'),
     ).toMatch(/^\/check\?of=piece(%3A|:)bz5$/)
@@ -85,14 +83,17 @@ describe('Piece', () => {
     expect(down.every((name) => /^[GBD]\d$/.test(name ?? ''))).toBe(true)
   })
 
-  it('floats Practise, its main action, beside More actions', async () => {
+  it('names what it does in one row on the page, Practise first, nothing floating over it', async () => {
     await renderApp('/songs/bz5')
     const practise = await screen.findByRole('link', { name: 'Practise' })
-    const floating = practise.closest('[data-slot="floating-actions"]')
-    expect(floating).not.toBeNull()
-    expect(
-      within(floating as HTMLElement).getByRole('button', { name: 'More actions' }),
-    ).toBeInTheDocument()
+    expect(practise.closest('[data-slot="floating-actions"]')).toBeNull()
+    const row = practise.parentElement as HTMLElement
+    expect([...row.querySelectorAll('a, button')].map((each) => each.textContent)).toEqual([
+      'Practise',
+      'Edit the score',
+      'Check these chords',
+      'Learned',
+    ])
   })
 
   it('docks its keys at the foot, folding them as the learner asks', async () => {
@@ -113,8 +114,6 @@ describe('Piece', () => {
       '/play/bz5',
     )
     const learned = screen.getByRole('button', { name: 'Learned' })
-    // The bar's round check, as on a lesson.
-    expect(learned.closest('header')).not.toBeNull()
     expect(learned).toHaveAttribute('aria-pressed', 'false')
     await user.click(learned)
     expect(learned).toHaveAttribute('aria-pressed', 'true')
@@ -185,8 +184,7 @@ describe('Piece: the learner’s own music', () => {
 
   it('edits a song in the score editor', async () => {
     await renderApp('/songs/amazing')
-    await openMore(userEvent.setup())
-    expect(await screen.findByRole('link', { name: 'Edit' })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: 'Edit the score' })).toHaveAttribute(
       'href',
       '/edit/amazing',
     )
@@ -207,7 +205,7 @@ describe('Piece: the learner’s own music', () => {
     expect(screen.queryByText('Your version')).toBeNull()
   })
 
-  it('gives the focus back to More actions once Reset is not wanted', async () => {
+  it('gives the focus back to More once Reset is not wanted', async () => {
     const user = userEvent.setup()
     await renderApp('/songs/amazing', { storage: saved({ versions: { amazing: MUSIC } }) })
     await openMore(user)
@@ -215,7 +213,7 @@ describe('Piece: the learner’s own music', () => {
     expect(await screen.findByRole('alertdialog')).toBeInTheDocument()
     await user.keyboard('{Escape}')
     await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull())
-    await waitFor(() => expect(screen.getByRole('button', { name: 'More actions' })).toHaveFocus())
+    await waitFor(() => expect(screen.getByRole('button', { name: 'More' })).toHaveFocus())
   })
 
   it('shares an own song as a link that carries it, copied where there is no share sheet', async () => {

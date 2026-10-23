@@ -14,8 +14,9 @@ export const piece = {
   bpm: '{{tempo}} BPM',
   print: 'Print the chart',
   progression: 'Progression',
+  more: 'More',
   practise: 'Practise',
-  edit: 'Edit',
+  edit: 'Edit the score',
   writeChart: 'Write the chart',
   // A songbook entry whose chords are not written yet.
   noChart: {

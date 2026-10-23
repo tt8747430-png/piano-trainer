@@ -1,6 +1,8 @@
+import type { LucideIcon } from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
-import { Button } from '@/shared/ui/primitives/button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
+import { cn } from '@/shared/lib'
+import { Button } from './primitives/button'
+import { Popover, PopoverContent, PopoverTrigger } from './primitives/popover'
 
 /** One action of a pull-down: a row that acts and closes it. */
 interface MenuAction {
@@ -8,6 +10,10 @@ interface MenuAction {
   readonly label: string
   readonly onSelect: () => void
   readonly disabled?: boolean
+  /** Its picture, before its name. */
+  readonly icon?: LucideIcon
+  /** An action that destroys (Delete): its row in the warning colour. */
+  readonly destructive?: boolean
 }
 
 /**
@@ -41,12 +47,13 @@ export function ActionMenu({
             key={action.key}
             variant="ghost"
             disabled={action.disabled}
-            className="w-full justify-start"
+            className={cn('w-full justify-start', action.destructive && 'text-destructive')}
             onClick={() => {
               action.onSelect()
               setOpen(false)
             }}
           >
+            {action.icon ? <action.icon data-icon="inline-start" aria-hidden /> : null}
             {action.label}
           </Button>
         ))}

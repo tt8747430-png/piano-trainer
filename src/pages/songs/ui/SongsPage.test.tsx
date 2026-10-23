@@ -184,10 +184,10 @@ describe('Songs: your own', () => {
     expect(screen.queryByText('No chart yet')).not.toBeInTheDocument()
   })
 
-  it('keeps the songs of one stage, chosen from Stage and kept in the URL', async () => {
+  it('keeps the songs of one stage, chosen from Level and kept in the URL', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs')
-    await user.click(await screen.findByRole('combobox', { name: /^Stage/ }))
+    await user.click(await screen.findByRole('combobox', { name: /^Level/ }))
     await user.click(await screen.findByRole('option', { name: 'Beginner' }))
     expect(router.state.location.search).toMatchObject({ stage: 'beginner' })
     expect(await screen.findByRole('link', { name: /Hot Cross Buns/ })).toBeInTheDocument()
@@ -200,19 +200,19 @@ describe('Songs: your own', () => {
       storage: createMemoryStorage(),
     })
     expect(await screen.findByText('No songs of your own yet')).toBeInTheDocument()
-    // Your songs are in no course: Stage is not offered over them.
-    expect(screen.queryByRole('combobox', { name: /^Stage/ })).not.toBeInTheDocument()
+    // Your songs are in no course: Level is not offered over them.
+    expect(screen.queryByRole('combobox', { name: /^Level/ })).not.toBeInTheDocument()
     cleanup()
     await renderApp('/songs?collection=hymns&stage=advanced')
-    expect(await screen.findByText('No songs here at the “Advanced” stage.')).toBeInTheDocument()
+    expect(await screen.findByText('No songs here at the “Advanced” level.')).toBeInTheDocument()
     cleanup()
     await renderApp('/songs?q=zzzz&stage=beginner')
     expect(
-      await screen.findByText('No songs match “zzzz” at the “Beginner” stage.'),
+      await screen.findByText('No songs match “zzzz” at the “Beginner” level.'),
     ).toBeInTheDocument()
     cleanup()
     await renderApp('/songs?collection=hymns&stage=advanced')
-    await screen.findByText('No songs here at the “Advanced” stage.')
+    await screen.findByText('No songs here at the “Advanced” level.')
     // Clear filters keeps the shelf.
     await userEvent.setup().click(screen.getByRole('button', { name: 'Clear filters' }))
     expect(await screen.findByRole('tab', { name: 'Hymns' })).toHaveAttribute(

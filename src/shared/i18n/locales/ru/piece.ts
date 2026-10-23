@@ -17,8 +17,9 @@ export const piece: LocaleResources['piece'] = {
   bpm: '{{tempo}} уд/мин',
   print: 'Распечатать',
   progression: 'Последовательность',
+  more: 'Ещё',
   practise: 'Играть',
-  edit: 'Изменить',
+  edit: 'Редактировать ноты',
   writeChart: 'Записать аккорды',
   noChart: {
     title: 'Аккордов пока нет',

@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { BUILT_IN_PATTERNS, isPatternId, pickerShelves, useFullShelfName } from '@/entities/pattern'
 import { SONG_SECTION_KINDS, useSectionHeading } from '@/entities/piece'
 import { localText, useLocale } from '@/shared/i18n'
-import { Dropdown } from '@/shared/ui'
+import { ActionMenu, Dropdown } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { ActionMenu } from './ActionMenu'
 
 /** The song's own pattern, in the section's choice: the section plays what the song plays. */
 const SONG = 'song'

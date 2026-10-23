@@ -1,4 +1,4 @@
-import { FileMusic } from 'lucide-react'
+import { SlidersHorizontal } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PIECE_TEMPO } from '@/entities/piece'
@@ -107,14 +107,16 @@ export function PieceSettings() {
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full"
+            className="rounded-full lg:w-auto lg:gap-2 lg:px-3"
             aria-label={t('song.label')}
             title={t('song.label')}
             disabled={takes.stage !== 'idle'}
           />
         }
       >
-        <FileMusic aria-hidden />
+        {/* The Player's Setup wears the same sliders: the song's own settings, in either screen. */}
+        <SlidersHorizontal aria-hidden />
+        <span className="max-lg:sr-only">{t('song.label')}</span>
       </SheetTrigger>
       <SheetContent title={t('song.label')}>
         <div className="flex flex-col gap-8">
