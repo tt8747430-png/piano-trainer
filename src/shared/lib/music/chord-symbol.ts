@@ -21,6 +21,14 @@ export class ChordSymbolError extends Error {
 const normalise = (suffix: string): string =>
   suffix.replaceAll('♭', 'b').replaceAll('♯', '#').replaceAll('−', '-')
 
+/**
+ * A chord symbol as it is engraved over a staff (LilyPond's and MuseScore's chord names): `#` as ♯,
+ * and `b` as ♭ after a note's letter (`Bb`, `/Eb`) or before a degree (`b9`). The text read and
+ * stored keeps its ASCII.
+ */
+export const printedSymbol = (symbol: string): string =>
+  symbol.replaceAll('#', '♯').replace(/(?<=[A-G])b|b(?=\d)/g, '♭')
+
 const QUALITY_BY_SUFFIX = new Map<string, ChordQuality>(
   CHORD_QUALITIES.flatMap((quality) =>
     qualitySpellings(quality).map((spelling) => [normalise(spelling), quality] as const),

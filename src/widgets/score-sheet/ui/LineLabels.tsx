@@ -1,4 +1,5 @@
 import { chordLabelSizes } from '@/shared/lib'
+import { printedSymbol, tempoNote } from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 
@@ -38,7 +39,7 @@ export function LineLabels({
   const [first] = layout.measures
   const last = layout.measures.at(-1)
   const chords = (chordNames ? music.chords : []).map((chord) => ({
-    symbol: chord.symbol,
+    symbol: printedSymbol(chord.symbol),
     x: xAtTick(layout, chord.startTick),
   }))
   const sizes = chordLabelSizes(chords, last ? last.x + last.width : layout.width, CHORD_PX * size)
@@ -70,7 +71,7 @@ export function LineLabels({
               fontSize: `${0.875 * size}rem`,
             }}
           >
-            <span className="font-music leading-none">{'\u{1D15F}'}</span>= {bar.tempo}
+            <span className="font-music leading-none">{tempoNote(music.meter)}</span>= {bar.tempo}
           </span>
         )
       })}

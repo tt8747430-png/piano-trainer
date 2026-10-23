@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react'
 import type { Performance } from '@/shared/lib/arrangement'
 import { chordLabelSizes, cn } from '@/shared/lib'
+import { printedSymbol, tempoNote } from '@/shared/lib/music'
 import { usePositionName } from '@/shared/ui'
 import { xAtTick, type ScoreLayout } from '@/shared/ui/score'
 import { chordPositions } from '../model/chord-positions'
@@ -51,7 +52,13 @@ export const SheetLabels = memo(function SheetLabels({
   const shown = chordNames
     ? performance.chords.flatMap((chord, index) =>
         inLine(chord.startTick)
-          ? [{ index, symbol: chord.symbol, x: xAtTick(layout, chord.startTick) }]
+          ? [
+              {
+                index,
+                symbol: printedSymbol(chord.symbol),
+                x: xAtTick(layout, chord.startTick),
+              },
+            ]
           : [],
       )
     : []
@@ -84,7 +91,7 @@ export const SheetLabels = memo(function SheetLabels({
             {tempos[bar] === undefined ? null : (
               <>
                 {' · '}
-                <span className="font-music">{'\u{1D15F}'}</span>= {tempos[bar]}
+                <span className="font-music">{tempoNote(performance.meter)}</span>= {tempos[bar]}
               </>
             )}
           </span>

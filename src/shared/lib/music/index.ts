@@ -6,6 +6,7 @@ export {
   isCompound,
   isMeter,
   METERS,
+  tempoNote,
   TICKS_PER_BEAT,
   timeSignature,
   timeSignatureText,
@@ -123,6 +124,7 @@ export {
   readChordLine,
   readChordSymbol,
   type ChordLine,
+  printedSymbol,
 } from './chord-symbol'
 export { nameChords, type FoundChord, type LeftOut } from './chord-finder'
 export { alteredSymbol, voicingKind, VOICING_KINDS, type VoicingKind } from './voicing-kind'

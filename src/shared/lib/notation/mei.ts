@@ -10,6 +10,7 @@ import {
   type NoteMarks,
   type Ornament,
   type TimeSignature,
+  tempoNote,
 } from '@/shared/lib/music'
 import { clefIn, type Measure, type Score, type ScoreEvent, type StaffId } from './types'
 import { barStartOf, beamPlan } from './beams'
@@ -203,7 +204,7 @@ class Writer {
     if (measure.tempo !== undefined) {
       const dots = isCompound(this.score.meter) ? ' mm.dots="1"' : ''
       controls.push(
-        `<tempo staff="${top}" tstamp="1" mm="${measure.tempo}" mm.unit="4"${dots} place="above">♩ = ${measure.tempo}</tempo>`,
+        `<tempo staff="${top}" tstamp="1" mm="${measure.tempo}" mm.unit="4"${dots} place="above">${tempoNote(this.score.meter)} = ${measure.tempo}</tempo>`,
       )
     }
     if (measure.segno) controls.push(`<dir staff="${top}" tstamp="1" place="above">𝄋</dir>`)

@@ -36,4 +36,22 @@ describe('SheetLabels', () => {
     // The bar's width less the number's inset on either side: clear of the next bar's number.
     expect(label).toHaveStyle({ left: '4px', maxWidth: '52px' })
   })
+
+  it('prints a chord name’s sharps and flats as signs, and a 6/8 tempo by its dotted quarter', () => {
+    const { container } = render(
+      <SheetLabels
+        layout={layout}
+        performance={{
+          ...TWO_BARS,
+          meter: '6/8',
+          chords: [{ ...TWO_BARS.chords[0]!, startTick: 0, symbol: 'F#m/Bb' }],
+        }}
+        headings={[]}
+        positions={false}
+        tempos={[58]}
+      />,
+    )
+    expect(screen.getByText('F♯m/B♭')).toBeInTheDocument()
+    expect(container).toHaveTextContent('\u{1D15F}\u{1D16D}= 58')
+  })
 })
