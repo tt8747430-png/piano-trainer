@@ -30,7 +30,7 @@ const tensions: Lesson = {
           kind: 'text',
           text: {
             en: 'A tension a whole step above a chord tone fits. One a half step above a chord tone clashes. It is called an avoid note.',
-            ru: 'Тенсия на тон выше звука аккорда подходит. На полутон выше — режет слух. Такую ноту называют нотой избегания.',
+            ru: 'Тенсия на тон выше звука аккорда подходит. На полутон выше — режет слух. Такую ноту называют избегаемой.',
           },
         },
         {
