@@ -6,13 +6,13 @@ import { keyHint } from '@/shared/lib/shortcuts'
 import { FloatingBar, FloatingBarButton, FloatingBarPlay } from '@/shared/ui'
 import { PLAYER_KEYS } from '../model/player-keys'
 
-/** A step button's size: a little smaller upright on a phone on its side, where height is short. */
+/** A step button's size: a little smaller on a phone on its side, where height is short. */
 const STEP = 'landscape-phone:size-10'
 
 /**
  * The transport (ADR 0061): the tempo, ‹, Play or Stop (honey), › and the hands in one floating pill,
- * always in sight. Along the foot on a phone, upright beside the sheet on a phone on its side, where
- * ‹ › still point back and forward: turned, they would read as ↑ ↓, the tempo's keys.
+ * floating along the sheet's foot at every size, a phone on its side too, where the sheet is too short
+ * for it upright (ADR 0081, 0085).
  */
 export function PlayerDock({
   practice,
@@ -29,11 +29,7 @@ export function PlayerDock({
   const { playing } = practice.state
   const action = playing ? t('stop') : t('play')
   return (
-    <FloatingBar
-      label={t('transport')}
-      orientation="landscape-phone"
-      className="gap-1 landscape-phone:gap-0"
-    >
+    <FloatingBar label={t('transport')} className="gap-1 landscape-phone:gap-0.5">
       {tempo}
       <FloatingBarButton
         label={t('back')}

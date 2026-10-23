@@ -28,15 +28,16 @@ export function EditorHeader({ status }: { status?: ReactNode }) {
   return (
     <div className="flex flex-wrap items-center gap-x-1 gap-y-1 sm:flex-nowrap sm:gap-x-2">
       <RoundButton label={t('common:close')} icon={X} onClick={actions.close} />
-      {/* The title over what the caret is on; on a phone that line has a row of its own, at the foot. */}
-      <div className="flex min-w-0 flex-col pl-1 max-sm:contents sm:flex-1">
+      {/* The title over what the caret is on; on a phone, where the buttons fill the first row, both
+          share a row of their own under them, the title first. */}
+      <div className="flex min-w-0 flex-col pl-1 max-sm:order-last max-sm:basis-full max-sm:flex-row max-sm:items-baseline max-sm:gap-2 max-sm:px-2 sm:flex-1">
         <h1
           {...heading}
-          className="truncate text-lg leading-tight outline-none max-sm:min-w-0 max-sm:flex-1 max-sm:pl-1"
+          className="truncate text-lg leading-tight outline-none max-sm:max-w-[45%] max-sm:shrink-0 max-sm:text-base"
         >
           {meta.title}
         </h1>
-        <div className="flex min-w-0 items-baseline gap-2 max-sm:order-last max-sm:basis-full max-sm:px-2">
+        <div className="flex min-w-0 items-baseline gap-2">
           {meta.hasVersion ? (
             <span className="shrink-0 text-sm font-medium text-muted-foreground">
               {t('editor:yourVersion')}
@@ -48,7 +49,7 @@ export function EditorHeader({ status }: { status?: ReactNode }) {
       <div
         role="toolbar"
         aria-label={t('editor:dock')}
-        className="flex items-center gap-0.5 sm:gap-1"
+        className="ms-auto flex items-center gap-0.5 sm:gap-1"
       >
         <Button
           variant="ghost"

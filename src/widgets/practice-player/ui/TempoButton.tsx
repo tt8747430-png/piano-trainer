@@ -13,8 +13,7 @@ import { useDockSide } from '../model/dock-side'
 import { percentOf, SPEEDS, speedTempo } from '../model/speeds'
 
 /** The transport's round look: a pill along the bar, a circle saying the value upright. */
-const TRIGGER =
-  'h-12 rounded-full px-3 landscape-phone:size-10 landscape-phone:px-0 landscape-phone:text-xs'
+const TRIGGER = 'h-12 rounded-full px-3 landscape-phone:h-10'
 
 /**
  * The tempo button and its popover (spec §2.7): Wait mode, or a speed of the piece's tempo, or any

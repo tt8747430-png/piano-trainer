@@ -299,7 +299,7 @@ describe('Player', () => {
     vi.spyOn(engine, 'engrave').mockRejectedValue(new Error('unreadable'))
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/bz5')
-    expect(await screen.findByText('The music can’t be shown.')).toBeInTheDocument()
+    expect((await screen.findAllByText('The music can’t be shown.')).length).toBeGreaterThan(0)
     await user.click(screen.getByRole('button', { name: 'Play' }))
     expect(audio.played).toHaveLength(1)
   })

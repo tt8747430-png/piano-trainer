@@ -159,9 +159,12 @@ export interface ScoreViewSettings {
   readonly keys: boolean
 }
 
-/** As the Player was: one line across, every staff, the chord names, the tune on its staff. */
+/**
+ * Down the screen, a line at a time, as a phone held upright reads best (one line across shows a bar
+ * or two there); every staff, the chord names, the tune on its staff.
+ */
 export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
-  layout: 'horizontal',
+  layout: 'scroll',
   notation: true,
   chordNames: true,
   melodyStaff: true,

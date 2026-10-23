@@ -27,12 +27,11 @@ transport on a phone on its side lying over the bar's Setup and the keys' rail.
   where the music has them), under a visible "How it plays".
 - **Names say which:** the View's "Melody staff", the Setup's Melody under How it plays, the takes' switches each
   with a line; "Keys" in both Views.
-- **The transport on a phone on its side has a column of its own,** the screen's height, at its right edge: the
-  sheet between the bar and the keys is shorter than the upright pill, so floating over it, as ADR 0081 has it at
-  every other size, covered the controls round it.
+- **The transport on a phone on its side lies along the sheet's foot,** as it does upright and as the editor's
+  dock does: the sheet between the bar and the keys is shorter than an upright pill, which, floating over it,
+  covered the controls round it. Lying down it fits, and still takes no room of its own (ADR 0081).
 
 ## Consequences
 
 The two screens can be learned once. A new option has one home by what it does: the sheet's look (View), how the
-music plays (Setup) or the song itself (Song), the device (the bar's MIDI). On a phone on its side the sheet and the
-keys are a pill's width narrower.
+music plays (Setup) or the song itself (Song), the device (the bar's MIDI).
