@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { note, parseNumerals } from '@/shared/lib/music'
+import { C_MAJOR, parseNumerals } from '@/shared/lib/music'
 import { walkPreview } from './walk-preview'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const TWO_FIVE_ONE = parseNumerals('ii V I') ?? []
 
 describe('walkPreview', () => {

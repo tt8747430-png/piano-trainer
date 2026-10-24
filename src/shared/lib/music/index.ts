@@ -59,6 +59,7 @@ export {
   type ReferenceInterval,
 } from './interval-facts'
 export {
+  C_MAJOR,
   keyFromParam,
   keySymbol,
   keyParam,

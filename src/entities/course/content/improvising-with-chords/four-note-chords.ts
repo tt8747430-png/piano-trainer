@@ -1,7 +1,5 @@
-import { note } from '@/shared/lib/music'
+import { C_MAJOR } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
-
-const C_MAJOR = { tonic: note('C'), minor: false }
 
 /** Improvising with Chords, lesson 2: three 7th chords as three colours in a song. */
 const fourNoteChords: Lesson = {

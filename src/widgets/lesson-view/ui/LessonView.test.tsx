@@ -13,7 +13,7 @@ import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { createFakeAudio } from '@/shared/api/audio'
 import { createFakeMidi } from '@/shared/api/midi'
 import { createMemoryStorage } from '@/shared/lib'
-import { note } from '@/shared/lib/music'
+import { C_MAJOR, note } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from '@/shared/lib/services'
 import { FloatingHost } from '@/shared/ui'
@@ -324,8 +324,6 @@ describe('LessonView’s worksheet', () => {
     expect(chords).toMatch(/[?&]size=7(&|$)/)
   })
 })
-
-const C_MAJOR = { tonic: note('C'), minor: false }
 
 /** A lesson with a pattern over its piece, a progression, and links into the tools and the Player. */
 const ACCOMPANIMENT: Lesson = {

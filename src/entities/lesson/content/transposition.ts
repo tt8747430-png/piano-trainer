@@ -1,7 +1,6 @@
-import { note } from '@/shared/lib/music'
+import { C_MAJOR, note } from '@/shared/lib/music'
 import type { Lesson } from '../model/types'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const D_MAJOR = { tonic: note('D'), minor: false }
 const F_MAJOR = { tonic: note('F'), minor: false }
 const G_MAJOR = { tonic: note('G'), minor: false }

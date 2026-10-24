@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { note, parseNumerals } from '@/shared/lib/music'
+import { C_MAJOR, parseNumerals } from '@/shared/lib/music'
 import { readProgression } from './progression'
-
-const C_MAJOR = { tonic: note('C'), minor: false }
 
 describe('readProgression', () => {
   it('reads a lesson’s numerals in its key, at the size it names', () => {

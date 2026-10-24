@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
+import { C_MAJOR } from './key'
 import { note, noteName, parseNoteName, pitchClassOf } from './note'
 import { chordsHolding, type HoldingGroup } from './reharmonise'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const symbols = (group: HoldingGroup) =>
   chordsHolding(note('G'), C_MAJOR)[group].map(
     (each) => `${noteName(each.chord.root)}${each.chord.suffix} ${each.degree}`,

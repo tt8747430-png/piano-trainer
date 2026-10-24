@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { midi, note, noteName } from '@/shared/lib/music'
+import { C_MAJOR, midi, note, noteName } from '@/shared/lib/music'
 import { findChord, readingAt, readingMarks } from './finding'
 
 const keys = (...numbers: number[]) => numbers.map((n) => midi(n))
-const C_MAJOR = { tonic: note('C'), minor: false }
 const symbols = (numbers: number[], key = C_MAJOR) => {
   const found = findChord(keys(...numbers), key)
   return found.kind === 'chord' ? found.readings.map((reading) => reading.symbol) : []

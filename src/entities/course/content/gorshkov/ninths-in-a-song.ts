@@ -1,11 +1,9 @@
-import { note } from '@/shared/lib/music'
+import { C_MAJOR, note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
 const G_MAJOR = { tonic: note('G'), minor: false }
 const G_MINOR = { tonic: note('G'), minor: true }
 const D_MINOR = { tonic: note('D'), minor: true }
-const C_MAJOR = { tonic: note('C'), minor: false }
-
 /** Gorshkov's lesson 2, its practice sheet: Exercise 2, the 9ths on «Ромашковые поля», the dominant 9th. */
 const ninthsInASong: Lesson = {
   id: 'ninths-in-a-song',

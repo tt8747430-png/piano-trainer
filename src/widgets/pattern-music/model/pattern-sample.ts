@@ -2,7 +2,7 @@ import { accompanimentOptions, type BookPattern, type PatternBook } from '@/enti
 import { pieceById, wholeBar, type Piece } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import { arrange, type Chart, type Performance } from '@/shared/lib/arrangement'
-import { note, type Key } from '@/shared/lib/music'
+import { C_MAJOR, note } from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
 import { audibleHands, schedule, type Sound } from '@/shared/lib/schedule'
 import { unmarked, type ShownKeys } from '@/shared/ui'
@@ -11,7 +11,6 @@ import { unmarked, type ShownKeys } from '@/shared/ui'
 const TUNE_PIECE = 'otche'
 /** A bar of C heard at a steady walk. */
 const SAMPLE_TEMPO = 80
-const C_MAJOR: Key = { tonic: note('C'), minor: false }
 const C_BAR: Chart = {
   key: C_MAJOR,
   meter: '4/4',

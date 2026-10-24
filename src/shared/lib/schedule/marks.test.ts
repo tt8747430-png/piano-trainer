@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import type { PerformanceNote } from '@/shared/lib/arrangement'
-import { midi, note, type NoteMarks } from '@/shared/lib/music'
+import { C_MAJOR, midi, note, type NoteMarks } from '@/shared/lib/music'
 import { loudness, markedSounds, rollOffsets } from './marks'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const played = (m: number, startTick: number, marks?: NoteMarks): PerformanceNote => ({
   midi: midi(m),
   spelled: note('C'),

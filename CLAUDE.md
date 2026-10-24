@@ -193,7 +193,7 @@ it. `@` → `src`.
   `PIANO_LAYOUT` and `keyAt` (the key under a point), `keyboard-choices` (the keyboard settings' options, the key sizes smallest first: `zoomKeySize`, `nextNamedKeys`), `midi-choices` (the MIDI keyboard's),
   `keyboard-view` (the view's frame, an octave's scroll, `scrollToReveal` and `keepCentre`: keys that hold still, ADR 0059), `typing-keys`, the search-param readers and `chord-params` (a chord's parts as the Chords explorer's URL holds
   them), `foldText`; and with
-  barrels of their own: `music` the theory kernel (the piano's ranges; thirteen scale kinds in three families,
+  barrels of their own: `music` the theory kernel (the piano's ranges; `C_MAJOR`, the one key a tool, a progression or an example opens in; thirteen scale kinds in three families,
   `scaleKey`, `relatedScale`; fingerings from any start and over several octaves, `thumbFingering`, `arpeggioFingering`; `scale-chord.ts`, a scale's chords stacked
   to 13ths and named by `stackSuffix`, `scaleChordAt`, `borrowedChords`; `chord-parts.ts`, a chord built from its parts
   (`buildChord`, `fitParts`), and `chord-name.ts`, the naming tables both share; `writtenSymbol`, `qualityRootSpelling`,

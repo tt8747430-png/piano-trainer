@@ -1,7 +1,5 @@
-import { note } from '@/shared/lib/music'
+import { C_MAJOR } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
-
-const C_MAJOR = { tonic: note('C'), minor: false }
 
 const whenToChange: Lesson = {
   id: 'when-to-change',

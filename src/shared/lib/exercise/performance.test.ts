@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { midi, note, TICKS_PER_BEAT } from '@/shared/lib/music'
+import { C_MAJOR, midi, note, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { exercisePerformance } from './performance'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const EIGHTH = TICKS_PER_BEAT / 2
 const at = (i: number, key: number, hand: 'rh' | 'lh' = 'rh') => ({
   midi: midi(key),
