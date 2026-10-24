@@ -106,7 +106,7 @@ describe('the learner’s songs', () => {
     expect(readMusic(song!).melody).toEqual([])
   })
 
-  it('makes a song of four bars of its key’s tonic chord, under the next number', () => {
+  it('makes a song of four bars of no chord, as a notation app’s new score, under the next number (ADR 0094)', () => {
     const store = fresh()
     const minor = { tonic: note('E', -1), minor: true }
     expect(makeSong(store, { title: '  Evening  ', key: minor, meter: '6/8' })).toBe('my-1')
@@ -119,7 +119,7 @@ describe('the learner’s songs', () => {
           meter: '6/8',
           tempo: 90,
           pattern: 'r1',
-          sections: [{ kind: 'verse', lines: ['E♭m E♭m E♭m E♭m'] }],
+          sections: [{ kind: 'verse', lines: ['_ _ _ _'] }],
         },
       ],
       nextSong: 2,

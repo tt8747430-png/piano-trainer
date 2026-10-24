@@ -103,7 +103,8 @@ A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:met
 | `C _ G`, `_@2`             | No chord at all (ADR 0094): nothing printed over the bar, nothing a pattern plays there          |
 
 `_` stands alone in its bar, its `@beats` given as a chord's where it is not the meter's length. A bar of no chord
-sounds only what a hand writes in it ([Written hands](#written-hands)).
+sounds only what a hand writes in it ([Written hands](#written-hands)). A learner's new song starts as four such
+bars, as a notation app's new score, and a bar the editor adds has no chord either.
 
 Beats per bar by meter: `2/4` 2, `3/4` 3, `4/4` 4, `6/8` 2, `12/8` 4. Beats must fall on whole ticks (24 per beat:
 `.5`, `.25`, `.125` a 32nd, `1.5`, not `.3`); a third of a beat is written as a fraction, `1:3` (a triplet 8th), `2:3`,

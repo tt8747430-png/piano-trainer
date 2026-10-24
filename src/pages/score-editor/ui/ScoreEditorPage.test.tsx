@@ -46,7 +46,7 @@ const withSong = (music: object = {}) => {
  * click lands at the bar's top, in the chord row.
  */
 const toChordRow = async (user: ReturnType<typeof userEvent.setup>) =>
-  user.click(await screen.findByRole('button', { name: /^Bar 1:/ }))
+  user.click(await screen.findByRole('button', { name: /^Bar 1(:|$)/ }))
 
 /**
  * Opens a category of the palette from its bar (the palette opening where it was folded): its
@@ -624,6 +624,27 @@ describe('the score editor', () => {
     expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['Am G G G'] }] })
   })
 
+  it('types a chord into a bar of no chord, as a new song’s bars are (ADR 0094)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', {
+      storage: withSong(chartStart({ tonic: note('G'), minor: false }, '4/4')),
+    })
+    expect(await screen.findByRole('button', { name: 'Bar 1' })).toBeInTheDocument()
+    await toChordRow(user)
+    expect(screen.getByRole('status')).toHaveTextContent('Bar 1, beat 1 · no chord')
+    // Build has no part of a chord pressed: there is none at the caret.
+    const chords = await openCategory(user, 'Chords')
+    await user.click(within(chords).getByRole('radio', { name: 'Build' }))
+    const roots = within(chords).getByRole('group', { name: 'Root' })
+    expect(within(roots).queryAllByRole('button', { pressed: true })).toEqual([])
+    const field = await openChordField(user)
+    expect(field).toHaveValue('')
+    await user.type(field, 'Em{Enter}')
+    expect(await screen.findByRole('button', { name: 'Bar 1: Em' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Bar 2' })).toBeInTheDocument()
+    expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['Em _ _ _'] }] })
+  })
+
   it('types a chord on the chord keypad, the phone’s keyboard kept down', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
@@ -848,8 +869,9 @@ describe('the score editor', () => {
     // No Add bar in the row: the palette's Bar adds one after the caret's (or before).
     expect(within(row).queryByRole('button', { name: /bar/i })).not.toBeInTheDocument()
     await tapIn(user, 'Bar', 'Add bar after')
+    // A bar added has no chord, as a notation app adds one (ADR 0094).
     expect(songOf(piecesStore.getState())).toMatchObject({
-      sections: [{ lines: ['Em Em Em G G G'] }],
+      sections: [{ lines: ['Em Em _ G G G'] }],
     })
   })
 
@@ -979,11 +1001,12 @@ describe('the score editor', () => {
     expect(within(palette).queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument()
     // A hand's fingers and clef are greyed in the tune, saying why.
     expect(within(palette).getByRole('button', { name: 'Fingering' })).toHaveAttribute('data-off')
+    // A bar added has no chord, as a notation app adds one (ADR 0094).
     const bar = await tapIn(user, 'Bar', 'Add bar after')
-    expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['G G G G G'] }] })
+    expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['G _ G G G'] }] })
     await user.click(within(bar).getByRole('button', { name: 'Add bar before' }))
     expect(songOf(piecesStore.getState())).toMatchObject({
-      sections: [{ lines: ['G G G G G G'] }],
+      sections: [{ lines: ['G _ _ G G G'] }],
     })
     await user.keyboard('{Alt>}{ArrowDown}{ArrowDown}{/Alt}')
     expect(within(palette).getByRole('button', { name: 'Fingering' })).not.toHaveAttribute(
@@ -1219,7 +1242,7 @@ describe('the score editor', () => {
     await toChordRow(user)
     const chords = await screen.findByRole('group', { name: 'Chords in the key' })
     await user.click(within(chords).getByRole('button', { name: 'Fm' }))
-    expect(piecesStore.getState().versions.bz4?.sections[0]?.lines[0]).toBe('Fm Cm Cm Cm')
+    expect(piecesStore.getState().versions.bz4?.sections[0]?.lines[0]).toBe('Fm _ _ _')
   })
 
   it('keeps the MIDI keyboard in its bar, last, as the Player does, and no Song sheet (ADR 0094)', async () => {

@@ -25,6 +25,8 @@ type CaretPlace =
       readonly value: Duration | null
     })
   | (Place & { readonly kind: 'at' | 'held' | 'rest'; readonly what: string })
+  /** The chord row of a bar of no chord (ADR 0094). */
+  | (Place & { readonly kind: 'noChord' })
 
 /** What the caret line says: the place, and the editing mode where it is not Replace (ADR 0092). */
 type CaretSaid = CaretPlace & { readonly mode?: Exclude<EditMode, 'replace'> }
@@ -65,7 +67,9 @@ function placeSaid(
   const at = { bar: index + 1, beat: beatOf(caret - start) }
   if (layer === 'chords') {
     const chord = bar.chords.findLast((placed) => placed.at <= caret - start)
-    return { kind: 'at', ...at, what: chord ? chordSymbol(chord.chord) : '' }
+    return chord
+      ? { kind: 'at', ...at, what: chordSymbol(chord.chord) }
+      : { kind: 'noChord', ...at }
   }
   // One note of a chord chosen alone: that note (ADR 0088).
   const all = notesAt(draft, layer, caret)

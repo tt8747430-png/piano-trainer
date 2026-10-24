@@ -29,6 +29,15 @@ describe('caretSaid', () => {
     expect(at(192, 'melody')).toEqual({ kind: 'end' })
   })
 
+  it('says a bar of no chord has none in the chord row (ADR 0094)', () => {
+    const empty = readDraft({ ...music, sections: [{ kind: 'verse', lines: ['D _'] }] })
+    expect(caretSaid({ draft: empty, caret: 96, layer: 'chords' })).toEqual({
+      kind: 'noChord',
+      bar: 2,
+      beat: '1',
+    })
+  })
+
   it('names a length no one value writes by no value', () => {
     const tied = readDraft({ ...music, melody: 'F#4/2.5 r/1.5 | A4/4' })
     expect(caretSaid({ draft: tied, caret: 0, layer: 'melody' })).toMatchObject({

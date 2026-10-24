@@ -9,9 +9,10 @@ import {
   type PieceMusic,
   type PiecesStore,
   type SharedSong,
+  writeBar,
   writeHand,
 } from '@/entities/piece'
-import { beatsPerBar, beatsToTicks, keySymbol, type Key, type Meter } from '@/shared/lib/music'
+import { beatsPerBar, beatsToTicks, type Key, type Meter } from '@/shared/lib/music'
 
 /**
  * What a new song's score holds (ADR 0072, 0083, 0091): the chord names shown, the tune's staff, and
@@ -57,23 +58,24 @@ interface SongDraft {
 
 /**
  * Where a new song starts: a verse of four empty bars at 90, as a notation app's new score (ADR
- * 0091): both hands written silent, so the editor opens on empty bars rather than the pattern's
- * notes; its score as `setup` says, a staff with nothing on it yet a rest (ADR 0072), never every
- * staff hidden (ADR 0083). Each bar names the key's tonic chord: the chart holds no bar without one.
+ * 0091, 0094): no chord symbol, both hands written silent, so the editor opens on empty bars rather
+ * than the pattern's notes; its score as `setup` says, a staff with nothing on it yet a rest (ADR
+ * 0072), never every staff hidden (ADR 0083).
  */
 export function chartStart(
   key: Key,
   meter: Meter,
   setup: ScoreSetup = SCORE_TEMPLATES.chordsAndPiano,
 ): PieceMusic {
-  const tonic = keySymbol(key)
-  const ticks = beatsToTicks(beatsPerBar(meter))
+  const beats = beatsPerBar(meter)
+  const ticks = beatsToTicks(beats)
   const bars = [ticks, ticks, ticks, ticks]
   const empty = emptyLine([{ startTick: 0, ticks }])
   const silent = writeHand(
     bars.map(() => []),
     bars,
   )
+  const bar = writeBar({ chords: [], beats }, meter)
   // The piano hidden only while the tune's staff is in sight (ADR 0083).
   const named: HiddenRow[] = [
     ...(setup.chordNames ? [] : ['chords' as const]),
@@ -85,7 +87,7 @@ export function chartStart(
     meter,
     tempo: 90,
     pattern: 'r1',
-    sections: [{ kind: 'verse', lines: [bars.map(() => tonic).join(' ')] }],
+    sections: [{ kind: 'verse', lines: [bars.map(() => bar).join(' ')] }],
     ...(setup.melody ? { melody: empty } : {}),
     ...(hidden.length > 0 ? { hidden } : {}),
     hands: { rh: silent, lh: silent },

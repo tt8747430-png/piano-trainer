@@ -24,7 +24,10 @@ const CHORD_KEY = 'px-0 font-display text-lg font-semibold'
 /** A root's key: its letter, or a sharp or flat on it. */
 const ROOT_KEY = 'h-10 px-0 text-base font-semibold landscape-phone:h-9'
 
-/** The chord at the caret, or the key's first where there is none. */
+/**
+ * The chord at the caret, or the key's first where there is none (a bar of no chord, ADR 0094):
+ * what a part changed builds on; `symbol` empty where the caret has none.
+ */
 function useCaretChord(): { chord: Chord; symbol: string } {
   const key = useEditorState((state) => state.draft.key)
   const current = useEditorState((state) => {
@@ -96,7 +99,9 @@ export function ChordBuilt() {
   const { t } = useTranslation(['editor', 'music'])
   const { actions } = useScoreEditorContext()
   const key = useEditorState((state) => state.draft.key)
-  const { chord } = useCaretChord()
+  const { chord, symbol } = useCaretChord()
+  // Its parts pressed where the caret has a chord: a bar of no chord builds on the key's first.
+  const built = symbol !== ''
   const set = (next: Chord) => actions.dispatch({ type: 'chord', chord: next, advance: 'stay' })
   const bassNotes = Array.from({ length: 12 }, (_, pc) => spellInKey(pitchClass(pc), key))
   return (
@@ -106,7 +111,7 @@ export function ChordBuilt() {
           <ToolKey
             key={letter}
             label={letter}
-            pressed={chord.root.letter === letter}
+            pressed={built && chord.root.letter === letter}
             className={ROOT_KEY}
             onClick={() => set({ ...chord, root: note(letter, chord.root.accidental) })}
           >
@@ -117,7 +122,7 @@ export function ChordBuilt() {
           <ToolKey
             key={accidental}
             label={t(accidental > 0 ? 'music:note.sharp' : 'music:note.flat')}
-            pressed={chord.root.accidental === accidental}
+            pressed={built && chord.root.accidental === accidental}
             className={cn(ROOT_KEY, 'text-lg')}
             onClick={() =>
               set({

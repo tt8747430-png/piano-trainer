@@ -132,7 +132,6 @@ export const editor: LocaleResources['editor'] = {
   sheet: {
     label: 'Ноты',
     page: 'Страница {{n}} из {{of}}',
-    bar: 'Такт {{n}}: {{chords}}',
     drag: 'Потяните вверх или вниз, чтобы сдвинуть ноту',
   },
   caret: {
@@ -140,6 +139,7 @@ export const editor: LocaleResources['editor'] = {
     notes: 'Такт {{bar}}, доля {{beat}} · {{what}} {{value}}',
     held: 'Такт {{bar}}, доля {{beat}} · {{what}} звучит',
     rest: 'Такт {{bar}}, доля {{beat}} · пауза',
+    noChord: 'Такт {{bar}}, доля {{beat}} · без аккорда',
     end: 'Конец песни',
     mode: 'Режим «{{mode}}»',
     values: {

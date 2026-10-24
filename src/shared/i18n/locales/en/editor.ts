@@ -145,7 +145,6 @@ export const editor = {
   sheet: {
     label: 'Score',
     page: 'Page {{n}} of {{of}}',
-    bar: 'Bar {{n}}: {{chords}}',
     drag: 'Drag up or down to move the note',
   },
   caret: {
@@ -153,6 +152,8 @@ export const editor = {
     notes: 'Bar {{bar}}, beat {{beat}} · {{what}} {{value}}',
     held: 'Bar {{bar}}, beat {{beat}} · {{what}} held',
     rest: 'Bar {{bar}}, beat {{beat}} · rest',
+    // The chord row of a bar with no chord symbol (ADR 0094).
+    noChord: 'Bar {{bar}}, beat {{beat}} · no chord',
     end: 'End of the song',
     // The editing mode, where it is not Replace (ADR 0092).
     mode: '{{mode}} mode',

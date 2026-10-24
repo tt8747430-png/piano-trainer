@@ -385,8 +385,21 @@ describe('the editor', () => {
     expect(form(stays.draft)).toEqual([[['G@0', 'Am@0']]])
     expect(stays.caret).toBe(96)
     const typed = run(onLast, { type: 'chord', chord: am, advance: 'barAdding' })
-    expect(form(typed.draft)).toEqual([[['G@0', 'Am@0', 'Am@0']]])
+    expect(form(typed.draft)).toEqual([[['G@0', 'Am@0', '']]])
     expect(typed.caret).toBe(192)
+  })
+
+  it('takes a bar’s only chord with Delete, the bar left to type a chord into (ADR 0094)', () => {
+    const am = parseChordSymbol('Am')
+    const onLast = run(initialEditor(draftOf()), { type: 'place', tick: 96, layer: 'chords' })
+    const deleted = run(onLast, { type: 'delete' })
+    expect(form(deleted.draft)).toEqual([[['G@0', '']]])
+    expect(deleted.caret).toBe(96)
+    // Its places in the chord row: its start alone, where the next chord goes.
+    const moved = run(deleted, { type: 'move', by: 'step', direction: 1 })
+    expect(moved.caret).toBe(96)
+    const typed = run(moved, { type: 'chord', chord: am, advance: 'stay' })
+    expect(form(typed.draft)).toEqual([[['G@0', 'Am@0']]])
   })
 
   it('names keys struck together in the chords as a chord, and stays', () => {
@@ -751,12 +764,12 @@ describe('the editor', () => {
 
   it('adds and deletes bars, changes a bar’s length and starts a line and a section', () => {
     const state = run(initialEditor(draftOf()), { type: 'bars', edit: 'insert' })
-    expect(form(state.draft)).toEqual([[['G@0', 'G@0', 'C@0']]])
+    expect(form(state.draft)).toEqual([[['G@0', '', 'C@0']]])
     expect(state.caret).toBe(96)
     expect(lengths(run(state, { type: 'barLength', ticks: 48 }).draft)).toEqual([96, 48, 96])
     expect(form(run(state, { type: 'bars', edit: 'delete' }).draft)).toEqual([[['G@0', 'C@0']]])
     expect(form(run(state, { type: 'bars', edit: 'newLine' }).draft)).toEqual([
-      [['G@0'], ['G@0', 'C@0']],
+      [['G@0'], ['', 'C@0']],
     ])
     expect(run(state, { type: 'bars', edit: 'newSection' }).draft.sections).toHaveLength(2)
   })
@@ -861,7 +874,7 @@ describe('the palette on what is chosen', () => {
 
   it('adds a bar before the caret’s, and gives each bar chosen a length and the first a clef', () => {
     const before = run(initialEditor(draftOf()), { type: 'bars', edit: 'insertBefore' })
-    expect(form(before.draft)).toEqual([[['G@0', 'G@0', 'C@0']]])
+    expect(form(before.draft)).toEqual([[['', 'G@0', 'C@0']]])
     expect(before.caret).toBe(0)
     const both = run(
       initialEditor(draftOf()),
@@ -893,8 +906,10 @@ describe('createEditorStore', () => {
       { type: 'delete' },
       { type: 'settings', tempo: 90, key: store.getState().draft.key },
       { type: 'layer', layer: 'rh' },
-      { type: 'layer', layer: 'chords' },
+      // A beat no chord starts on.
+      { type: 'place', tick: 24, layer: 'chords' },
       { type: 'delete' },
+      { type: 'place', tick: 0, layer: 'chords' },
       { type: 'bars', edit: 'newLine' },
       { type: 'barLength', ticks: 96 },
       { type: 'chord', chord: parseChordSymbol('G'), advance: 'bar' },

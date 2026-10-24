@@ -41,32 +41,28 @@ function insertSlots(draft: Draft, after: number, bars: readonly DraftBar[]): Dr
   )
 }
 
-/** A bar added after `after`: the meter's length, the chord before it again, both hands silent. */
+/** A new bar, as notation software adds one: the meter's length, no chord (ADR 0094). */
+const newBar = (draft: Draft): DraftBar => ({
+  ticks: beatsPerBar(draft.meter) * TICKS_PER_BEAT,
+  chords: [],
+})
+
+/** A new bar added after `after`, both hands silent, the notes after it moved on. */
 export function insertBar(draft: Draft, after: number): Draft {
-  const chord = barsOf(draft)[after]?.bar.chords.at(-1)
-  if (!chord) return draft
-  const bar: DraftBar = {
-    ticks: beatsPerBar(draft.meter) * TICKS_PER_BEAT,
-    chords: [{ at: 0, chord: chord.chord, ...(chord.method ? { method: chord.method } : {}) }],
-  }
-  return insertSlots(draft, after, [bar])
+  if (!barsOf(draft)[after]) return draft
+  return insertSlots(draft, after, [newBar(draft)])
 }
 
 /**
- * A bar added before bar `index`, in its place: starting its line or section where it did, the
- * chord sounding into it (the bar before's last, else its own first), the notes from there moved on.
+ * A new bar added before bar `index`, in its place: starting its line or section where it did, the
+ * notes from there moved on.
  */
 export function insertBarBefore(draft: Draft, index: number): Draft {
   const placed = barsOf(draft)[index]
-  const chord = barsOf(draft)[index - 1]?.bar.chords.at(-1) ?? placed?.bar.chords[0]
-  if (!placed || !chord) return draft
-  const bar: DraftBar = {
-    ticks: beatsPerBar(draft.meter) * TICKS_PER_BEAT,
-    chords: [{ at: 0, chord: chord.chord, ...(chord.method ? { method: chord.method } : {}) }],
-  }
   const slots = slotsOf(draft)
   const slot = slots[index]
-  if (!slot) return draft
+  if (!placed || !slot) return draft
+  const bar = newBar(draft)
   return spliceAll(
     withSlots(draft, [
       ...slots.slice(0, index),

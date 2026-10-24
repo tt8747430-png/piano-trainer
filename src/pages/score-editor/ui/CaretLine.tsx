@@ -21,6 +21,7 @@ export function CaretLine() {
   const valueWord = useValueWord()
   const where = (() => {
     if (said.kind === 'end') return t('caret.end')
+    if (said.kind === 'noChord') return t('caret.noChord', { bar: said.bar, beat: said.beat })
     const { bar, beat, what } = said
     if (said.kind !== 'notes') return t(`caret.${said.kind}`, { bar, beat, what })
     return said.value

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { midi, noteName } from '@/shared/lib/music'
+import { midi } from '@/shared/lib/music'
 import { draftOf, shape } from '../testing/test-draft'
 import { musicToSave } from './draft'
 import {
@@ -49,13 +49,13 @@ describe('writeNotes in the melody', () => {
     expect(shape(written.draft.melody)).toEqual(['G4@72/48'])
   })
 
-  it('adds a bar for a note past the end: the last chord again, the meter’s length', () => {
+  it('adds a bar for a note past the end: the meter’s length, no chord (ADR 0094)', () => {
     const draft = draftOf()
     const written = writeNotes(draft, 'melody', totalTicks(draft), keys(67), 24)
     expect(totalTicks(written.draft)).toBe(288)
     const last = barsOf(written.draft).at(-1)
     expect(last?.line).toBe(0)
-    expect(last?.bar.chords.map((chord) => noteName(chord.chord.root))).toEqual(['C'])
+    expect(last?.bar.chords).toEqual([])
     expect(shape(written.draft.melody)).toEqual(['G4@192/24'])
   })
 
