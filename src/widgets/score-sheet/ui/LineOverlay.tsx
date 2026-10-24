@@ -190,7 +190,8 @@ export function LineOverlay({
     const lines = staffOfLayer(layout.staves, point.target)
     if (!lines) return
     const clef = staffClefAt(music, index, lines.staff)
-    const { midi } = noteAtStaffY(clef, point.y, lines, music.key)
+    // The bar's own key, where its section changes key (ADR 0089): its signature's sharps and flats.
+    const { midi } = noteAtStaffY(clef, point.y, lines, music.bars[index]?.key ?? music.key)
     onWrite(point.tick, point.target, midi)
   }
   // The caret's notes as a grip: a drag up or down moves them a step of the key at a time.

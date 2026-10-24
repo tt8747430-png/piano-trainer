@@ -146,6 +146,50 @@ describe('ScoreSheet', () => {
     ).toBeGreaterThan(0)
   })
 
+  it('writes the line double-clicked in its bar’s own key: F♯ on the F line where a section is in E', async () => {
+    const changing = readDraft({
+      key: 'C',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [
+        { kind: 'verse', lines: ['C'] },
+        { kind: 'chorus', key: 'E', lines: ['E'] },
+      ],
+      hands: { rh: 'r/4 | r/4', lh: 'r/4 | r/4' },
+    })
+    const onWrite = vi.fn()
+    render(
+      <ScoreSheet
+        draft={changing}
+        caret={0}
+        layer="rh"
+        tapsOf={() => []}
+        selection={null}
+        onPlace={vi.fn()}
+        onReach={vi.fn()}
+        onDeselect={vi.fn()}
+        placesOf={() => []}
+        heading={() => null}
+        chordNames
+        edit={editing(vi.fn())}
+        title={() => null}
+        onWrite={onWrite}
+      />,
+    )
+    // jsdom lays nothing out: the bar's top is the chord row's, 44px over the line's engraving,
+    // whose treble top line (F5) Verovio draws 30px down.
+    const chorus = await screen.findByRole('button', { name: 'Bar 2: E' })
+    fireEvent.doubleClick(chorus, { clientY: 74, detail: 2 })
+    expect(onWrite).toHaveBeenCalledWith(96, 'rh', 78)
+    // The verse, in C: F♮.
+    fireEvent.doubleClick(screen.getByRole('button', { name: 'Bar 1: C' }), {
+      clientY: 74,
+      detail: 2,
+    })
+    expect(onWrite).toHaveBeenLastCalledWith(0, 'rh', 77)
+  })
+
   it('puts the caret where a bar is clicked, Shift keeping the bars chosen', async () => {
     const user = userEvent.setup()
     const onPlace = vi.fn()
