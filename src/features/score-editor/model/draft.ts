@@ -68,7 +68,7 @@ export interface DraftChord {
 /** A bar as the editor holds it: its length, its chords and its barlines; every bar is written (ADR 0091). */
 export interface DraftBar extends BarMarks {
   readonly ticks: Tick
-  /** In order, the first at 0. */
+  /** In order, the first at 0; none in a bar of no chord (ADR 0094). */
   readonly chords: readonly DraftChord[]
   /** The clef a hand's staff changes to here (ADR 0069). */
   readonly clefs?: HandClefs
