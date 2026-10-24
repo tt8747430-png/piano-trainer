@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { barAt, keyChords, keySevenths } from '@/features/score-editor'
+import { chordAt, keyChords, keySevenths } from '@/features/score-editor'
 import {
   CHORD_FAMILIES,
   chordSymbol,
@@ -30,10 +30,7 @@ const ROOT_KEY = 'h-10 px-0 text-base font-semibold landscape-phone:h-9'
  */
 function useCaretChord(): { chord: Chord; symbol: string } {
   const key = useEditorState((state) => state.draft.key)
-  const current = useEditorState((state) => {
-    const { start, bar } = barAt(state.draft, state.caret)
-    return bar.chords.findLast((placed) => placed.at <= state.caret - start)?.chord
-  })
+  const current = useEditorState((state) => chordAt(state.draft, state.caret))
   return {
     chord: current ?? keyChords(key)[0] ?? { root: key.tonic, quality: 'maj' },
     symbol: current ? chordSymbol(current) : '',

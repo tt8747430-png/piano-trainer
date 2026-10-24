@@ -10,9 +10,9 @@ import {
   type PieceMusic,
 } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
-import { midi, note } from '@/shared/lib/music'
+import { chordSymbol, midi, note } from '@/shared/lib/music'
 import { musicToSave, readDraft, writeDraft, type Draft } from './draft'
-import { barAt, barsOf, chordsAt, totalTicks } from './timeline'
+import { barAt, barsOf, chordAt, chordsAt, totalTicks } from './timeline'
 
 const CHART_PIECES = PIECES.filter((piece): piece is ChartPiece => !isDegreePiece(piece))
 
@@ -156,6 +156,23 @@ describe('the draft', () => {
     expect(barAt(draft, 24).index).toBe(1)
     expect(barAt(draft, 23).index).toBe(0)
     expect(barAt(draft, totalTicks(draft)).index).toBe(3)
+  })
+
+  it('finds the chord sounding at a tick in its bar; none in a bar of no chord (ADR 0094)', () => {
+    const draft = readDraft({ ...WRITTEN, sections: [{ kind: 'verse', lines: ['G@1 C-D _ Em'] }] })
+    const at = (tick: number) => {
+      const chord = chordAt(draft, tick)
+      return chord && chordSymbol(chord)
+    }
+    expect([0, 24, 71, 72, 120, 216, 312].map(at)).toEqual([
+      'G',
+      'C',
+      'C',
+      'D',
+      undefined,
+      'Em',
+      'Em',
+    ])
   })
 
   it('gives each chord of a bar its length', () => {

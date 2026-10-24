@@ -29,7 +29,15 @@ export { carriesAccidental, notesAt, notesOf } from './model/notes'
 export { metersFor } from './model/settings'
 export { createEditorStore, type EditorStore } from './model/store'
 export { TAKE_INTO, takeParts, type TakeInto } from './model/take-edits'
-export { barAt, barsOf, keyAt, sectionKey, totalTicks, type PlacedBar } from './model/timeline'
+export {
+  barAt,
+  barsOf,
+  chordAt,
+  keyAt,
+  sectionKey,
+  totalTicks,
+  type PlacedBar,
+} from './model/timeline'
 export { NOTE_VALUES, takesDot, valueOf, type ChosenValue } from './model/values'
 export { chosenNotes, fingerableNotes, shownValue } from './model/chosen'
 export { hasMark, type MarkChoice } from './model/marks'
