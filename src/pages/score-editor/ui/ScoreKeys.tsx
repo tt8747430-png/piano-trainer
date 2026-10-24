@@ -76,7 +76,7 @@ export function ClefKeys() {
   )
 }
 
-/** The song's own key, changed for the whole song: its music moves with it (ADR 0094: no Song sheet). */
+/** The song's own key, changed for the whole song, its music moving with it (ADR 0094). */
 function SongKey() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
