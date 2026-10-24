@@ -95,15 +95,16 @@ export function PlayerLayout({
   )
   return (
     <PlayerScreen keys={dock}>
-      {/* Close, then Practise · Edit, as the editor's bar has them (ADR 0090, 0094). */}
-      <PlayerArea area="lead" className="flex items-center gap-2 narrow-phone:gap-1">
+      {/* Close, then Practise · Edit, as the editor's bar has them (ADR 0090, 0094), level with the
+          bar's first row of buttons where they wrap. */}
+      <PlayerArea area="lead" className="flex items-center gap-2 self-start narrow-phone:gap-1">
         <PlayerClose onClose={onClose} />
         {modes}
       </PlayerArea>
       {/* Where the bar is too narrow for them all, its buttons wrap rather than cover Close. */}
       <PlayerArea
         area="actions"
-        className="flex flex-wrap items-center justify-end gap-2 narrow-phone:gap-1"
+        className="flex flex-wrap items-center justify-end gap-2 self-start narrow-phone:gap-1"
       >
         <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />
         <ScoreViewMenu

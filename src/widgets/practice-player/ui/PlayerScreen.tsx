@@ -29,10 +29,11 @@ export function PlayerScreen({
       if (onSheet(event)) handle(event)
     }
   return (
-    // A tap anywhere is the transport's business only by `dockTap`: every control keeps its own.
+    // A tap anywhere is the transport's business only by `dockTap`: every control keeps its own. On
+    // a phone held upright the bar's two groups closer, so a 375-pixel phone has its buttons in a row.
     <div
       data-keys={keys}
-      className="player-screen min-h-0 flex-1 gap-3 py-2 landscape-phone:gap-2 landscape-phone:py-0 landscape-phone:data-[keys=top]:pb-2"
+      className="player-screen min-h-0 flex-1 gap-3 py-2 max-sm:gap-x-2 landscape-phone:gap-2 landscape-phone:py-0 landscape-phone:data-[keys=top]:pb-2"
       onPointerDown={onMusic(reading.onPointerDown)}
       onPointerMove={onMusic(reading.onPointerMove)}
       onTouchStart={onMusic(reading.onTouchStart)}
