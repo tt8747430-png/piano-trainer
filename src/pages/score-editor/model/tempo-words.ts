@@ -1,6 +1,6 @@
 /**
- * The tempo words the Song sheet sets the tempo by, slowest first, each at its beats a minute as a
- * metronome marks them: chips under its slider (ADR 0080).
+ * The tempo words the tempo mark's popover sets the tempo by (ADR 0094), slowest first, each at its
+ * beats a minute as a metronome marks them.
  */
 export const TEMPO_WORDS = [
   ['largo', 50],

@@ -6,7 +6,7 @@ import { tempoNote } from '@/shared/lib/music'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { TEMPO_WORDS } from '../model/song-sheet'
+import { TEMPO_WORDS } from '../model/tempo-words'
 import { SignPopover } from './SignPopover'
 
 /**
@@ -73,10 +73,10 @@ function TempoWords() {
   const tempo = useEditorState((state) => state.draft.tempo)
   const note = useEditorState((state) => tempoNote(state.draft.meter))
   return (
-    <div role="group" aria-label={t('printed.tempoWords')} className="grid grid-cols-3 gap-1.5">
+    <div role="group" aria-label={t('song.tempoWords')} className="grid grid-cols-3 gap-1.5">
       {TEMPO_WORDS.map(([word, bpm]) => {
-        const name = t(`printed.tempos.${word}`)
-        const label = t('printed.tempoWord', { word: name, bpm })
+        const name = t(`song.tempos.${word}`)
+        const label = t('song.tempoLabel', { word: name, bpm })
         return (
           <Button
             key={word}
@@ -105,7 +105,7 @@ function TempoWords() {
 export function TempoPopover({ trigger }: { trigger: ReactElement }) {
   const { t } = useTranslation('editor')
   return (
-    <SignPopover label={t('printed.tempo')} trigger={trigger}>
+    <SignPopover label={t('song.tempo')} trigger={trigger}>
       <TempoField />
       <TempoWords />
     </SignPopover>

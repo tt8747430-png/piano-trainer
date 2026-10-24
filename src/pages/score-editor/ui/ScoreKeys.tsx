@@ -128,7 +128,7 @@ export function TimeSignatureKeys() {
   return (
     <>
       <Segmented
-        label={t('palette.category.time')}
+        label={t('song.meter')}
         value={meter}
         options={metersFor(meter).map((each) => ({ value: each, label: each }))}
         onChange={(next) => actions.dispatch({ type: 'settings', meter: next })}

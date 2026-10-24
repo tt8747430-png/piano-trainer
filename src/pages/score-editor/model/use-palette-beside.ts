@@ -4,8 +4,8 @@ import { LANDSCAPE_PHONE, useMediaQuery } from '@/shared/lib'
 const LAPTOP = '(min-width: 64rem)'
 
 /**
- * Whether the palette stands beside the sheet (ADR 0071): on a laptop and on a phone on its side; at
- * the foot otherwise, where it has no side to choose (ADR 0085).
+ * Whether the palette stands beside the sheet, at its right (ADR 0071, 0094): on a laptop and on a
+ * phone on its side; at the foot otherwise.
  */
 export function usePaletteBeside(): boolean {
   const onSide = useMediaQuery(LANDSCAPE_PHONE)

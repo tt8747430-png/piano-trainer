@@ -12,8 +12,11 @@ import { Switch } from '@/shared/ui/primitives/switch'
 import { useDockSide } from '../model/dock-side'
 import { percentOf, SPEEDS, speedTempo } from '../model/speeds'
 
-/** The transport's round look: a pill along the bar, a circle saying the value upright. */
-const TRIGGER = 'h-12 rounded-full px-3 landscape-phone:h-10'
+/**
+ * The transport's round look: a pill along the bar, a little smaller under 360px and on a phone on
+ * its side, so the transport fits with the gauge beside the value at every size (ADR 0094).
+ */
+const TRIGGER = 'h-12 rounded-full px-3 narrow-phone:h-11 narrow-phone:px-2 landscape-phone:h-10'
 
 /**
  * The tempo button and its popover (spec §2.7): Wait mode, or a speed of the piece's tempo, or any
@@ -69,8 +72,8 @@ export function TempoButton({
           />
         }
       >
-        {/* The value alone where the pill would not fit beside it: on its side, and under 360px. */}
-        <Gauge data-icon="inline-start" className="narrow-phone:hidden landscape-phone:hidden" />
+        {/* The gauge beside the value at every size (ADR 0094): the pill is sized to fit it. */}
+        <Gauge data-icon="inline-start" />
         <span className="tabular-nums">{value}</span>
       </PopoverTrigger>
       <PopoverContent

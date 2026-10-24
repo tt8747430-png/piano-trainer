@@ -8,7 +8,6 @@ import type {
   RecorderSettings,
   PalettePlace,
   SettingsState,
-  PaletteSide,
   Sidebar,
   Theme,
   TitleSize,
@@ -25,7 +24,6 @@ export const selectFloating = (state: SettingsState): FloatingSettings => state.
 export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.keyboard
 export const selectRecorder = (state: SettingsState): RecorderSettings => state.recorder
 export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar
-export const selectPaletteSide = (state: SettingsState): PaletteSide => state.paletteSide
 /** Whether the palette is folded where it stands: as the learner left it there, else open beside the sheet. */
 export const selectPaletteFolded =
   (place: PalettePlace) =>

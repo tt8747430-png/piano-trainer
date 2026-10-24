@@ -27,6 +27,13 @@ describe('TempoButton', () => {
     expect(screen.getByRole('button', { name: 'Tempo: 75%' })).toBeInTheDocument()
   })
 
+  it('wears its gauge beside the value at every size, the pill sized to fit (ADR 0094)', () => {
+    renderTempo()
+    const gauge = screen.getByRole('button', { name: 'Tempo: 100%' }).querySelector('svg')
+    expect(gauge).not.toBeNull()
+    expect(gauge?.getAttribute('class')).not.toMatch(/:hidden/)
+  })
+
   it('chooses Wait mode or a speed', async () => {
     const user = userEvent.setup()
     const { onWait, onTempo } = renderTempo()

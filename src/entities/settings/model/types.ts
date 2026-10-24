@@ -93,11 +93,10 @@ export interface KeyboardSettings {
   readonly railControls: readonly RailControl[]
 }
 
-/** The side of the sheet the score editor's palette stands on, where it stands beside it (ADR 0071). */
-export const PALETTE_SIDES = ['right', 'left'] as const
-export type PaletteSide = (typeof PALETTE_SIDES)[number]
-
-/** Where the score editor's palette stands: beside the sheet (a laptop, a phone on its side), or at its foot. */
+/**
+ * Where the score editor's palette stands: beside the sheet (a laptop, a phone on its side), at its
+ * right (ADR 0094), or at its foot.
+ */
 export const PALETTE_PLACES = ['beside', 'foot'] as const
 export type PalettePlace = (typeof PALETTE_PLACES)[number]
 /**
@@ -195,8 +194,6 @@ export interface SettingsState {
   keyboard: KeyboardSettings
   recorder: RecorderSettings
   sidebar: Sidebar
-  /** The side the score editor's palette stands on beside the sheet. */
-  paletteSide: PaletteSide
   /** Whether the score editor's palette is folded to its quick row and categories, by where it stands. */
   paletteFolded: PaletteFolds
   midi: MidiSettings
@@ -237,7 +234,6 @@ export const DEFAULT_MIDI: MidiSettings = {
 export { DEVICE_NAME_MAX } from '@/shared/api/midi'
 
 export const DEFAULT_SIDEBAR: Sidebar = 'open'
-export const DEFAULT_PALETTE_SIDE: PaletteSide = 'right'
 
 /** The staff writes only the chord down now; the keys it is in are shown. */
 export const DEFAULT_CHORD_FINDER: ChordFinderSettings = {
@@ -270,7 +266,6 @@ export const isKeyDock = isOneOf(KEY_DOCKS)
 export const isKeyLength = isOneOf(KEY_LENGTHS)
 export const isNamedKeys = isOneOf(NAMED_KEYS)
 export const isSidebar = isOneOf(SIDEBARS)
-export const isPaletteSide = isOneOf(PALETTE_SIDES)
 export const isOctaveShift = isOneOf(OCTAVE_SHIFTS)
 export const isTouch = isOneOf(TOUCHES)
 export const isPedalWay = isOneOf(PEDAL_WAYS)

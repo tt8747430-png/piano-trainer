@@ -4,6 +4,12 @@ import { TITLE_MAX } from '@/entities/piece'
 import { SheetTitle, type TitlePlace } from '@/shared/ui'
 import { useScoreEditorContext } from '../model/editor-context'
 
+/** The title over Your version: at the line's head across, else centred. */
+const STACKED = {
+  across: 'flex flex-col gap-0.5',
+  centred: 'flex flex-col items-center gap-0.5',
+} as const
+
 /**
  * The title printed at the sheet's head (ADR 0094), edited where it is, as Flat's: a click turns it
  * into a field in its place, the title chosen; Enter or leaving the field saves what it holds with the
@@ -39,40 +45,44 @@ export function TitleField({ place }: { place: TitlePlace }) {
     close(event.key === 'Enter')
   }
   return (
-    <SheetTitle title={meta.title} place={place}>
-      {editing ? (
-        <input
-          ref={field}
-          aria-label={t('printed.title')}
-          value={typed}
-          maxLength={TITLE_MAX}
-          autoComplete="off"
-          enterKeyHint="done"
-          onChange={(event) => setTyped(event.target.value)}
-          onKeyDown={onKeyDown}
-          onBlur={() => {
-            if (!settled.current) close(true)
-          }}
-          className={
-            place === 'across'
-              ? 'w-full min-w-0 rounded-lg border border-input bg-card px-1'
-              : 'w-full min-w-0 rounded-lg border border-input bg-card px-1 text-center'
-          }
-        />
-      ) : (
-        <button
-          ref={button}
-          type="button"
-          title={t('printed.rename')}
-          onClick={() => {
-            settled.current = false
-            setTyped(meta.title)
-          }}
-          className="max-w-full cursor-text rounded-lg px-1 text-balance wrap-break-word transition-colors duration-200 ease-out hover:bg-foreground/5"
-        >
-          {meta.title}
-        </button>
-      )}
-    </SheetTitle>
+    // A version of a catalog song says so under its title, as its page does.
+    <div className={place === 'across' ? STACKED.across : STACKED.centred}>
+      <SheetTitle title={meta.title} place={place}>
+        {editing ? (
+          <input
+            ref={field}
+            aria-label={t('song.title')}
+            value={typed}
+            maxLength={TITLE_MAX}
+            autoComplete="off"
+            enterKeyHint="done"
+            onChange={(event) => setTyped(event.target.value)}
+            onKeyDown={onKeyDown}
+            onBlur={() => {
+              if (!settled.current) close(true)
+            }}
+            className={
+              place === 'across'
+                ? 'w-full min-w-0 rounded-lg border border-input bg-card px-1'
+                : 'w-full min-w-0 rounded-lg border border-input bg-card px-1 text-center'
+            }
+          />
+        ) : (
+          <button
+            ref={button}
+            type="button"
+            title={t('printed.rename')}
+            onClick={() => {
+              settled.current = false
+              setTyped(meta.title)
+            }}
+            className="max-w-full cursor-text rounded-lg px-1 text-balance wrap-break-word transition-colors duration-200 ease-out hover:bg-foreground/5"
+          >
+            {meta.title}
+          </button>
+        )}
+      </SheetTitle>
+      {meta.hasVersion ? <p className="text-sm text-muted-foreground">{t('yourVersion')}</p> : null}
+    </div>
   )
 }

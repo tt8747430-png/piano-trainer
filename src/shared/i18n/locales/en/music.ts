@@ -202,6 +202,18 @@ export const music = {
       zoom: '{{percent}} %',
     },
   },
+  // The View (ADR 0094): how a score is shown, one menu in the Player and the editor; its staves
+  // named as a score names them (Upper staff, Lower staff), never a hand.
+  view: {
+    label: 'View',
+    staves: 'Staves',
+    melody: 'Melody',
+    upper: 'Upper staff',
+    lower: 'Lower staff',
+    show: 'Show',
+    lyrics: 'Lyrics',
+    keys: 'Keys',
+  },
   // A list of patterns, Accompaniment's and the Setup's: the learner's shelves round the groups.
   patternShelf: { favourites: 'Favourites', own: 'Your patterns', hidden: 'Hidden' },
   // Accompaniment's parts after its method books', which their books name.
