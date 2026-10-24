@@ -213,8 +213,7 @@ export const practice = {
     rememberDetail: 'The last {{count}}',
     inKeysShown: 'Keys it is in',
     slash: 'Over the bass',
-    // An inversion said in words where the name leaves its bass out, or a bass beyond the 7th.
-    inversion: { first: '1st inversion', second: '2nd inversion', third: '3rd inversion' },
+    // The bass where the name leaves it out and it is no inversion: a bass beyond the 7th.
     bass: '{{note}} in the bass',
     // How the keys are laid out, as jazz pianists name it.
     voicing: {

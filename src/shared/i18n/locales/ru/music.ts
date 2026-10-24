@@ -10,6 +10,12 @@ export const music: LocaleResources['music'] = {
     second: '2-е',
     third: '3-е',
   },
+  inversionName: {
+    root: 'Основной вид',
+    first: '1-е обращение',
+    second: '2-е обращение',
+    third: '3-е обращение',
+  },
   // Where a row's hand stands: the first chord's inversion, then each nearest the last or all in it.
   position: {
     from: {
