@@ -10,6 +10,7 @@ import {
   timeSignature,
   writtenOctave,
   writtenShift,
+  type NoteLyrics,
   type NoteMarks,
   type Key,
   type Meter,
@@ -60,13 +61,15 @@ const heldKey = (staff: StaffId, key: number) => `${staff} ${key}`
 /**
  * The notes sounding in a bar, cut at its lines, as each staff's chords (spec §2.4 steps 1–2). A note
  * from the bar before goes on from it only where that bar's writing tied it on (`tiedOn`); one written
- * cut short there starts afresh, its accidental printed.
+ * cut short there starts afresh, its accidental printed. The words go under the tune's staff alone
+ * (`sung`, ADR 0093): a note's syllables elsewhere are not written.
  */
 function barChords(
   notes: readonly TimedNote[],
   bar: Bar,
   tiedOn: ReadonlySet<string>,
   melodyStaff: boolean,
+  sung: StaffId,
 ): Record<StaffId, BarChord[]> {
   const end = bar.start + bar.ticks
   const groups = new Map<string, { staff: StaffId; chord: BarChord }>()
@@ -75,7 +78,8 @@ function barChords(
     if (n.startTick >= end || noteEnd <= bar.start) continue
     const start = Math.max(n.startTick, bar.start) - bar.start
     const stop = Math.min(noteEnd, end) - bar.start
-    const tiedFrom = n.startTick < bar.start && tiedOn.has(heldKey(staffOf(n, melodyStaff), n.midi))
+    const staff = staffOf(n, melodyStaff)
+    const tiedFrom = n.startTick < bar.start && tiedOn.has(heldKey(staff, n.midi))
     const written: BarNote = {
       midi: n.midi,
       spelled: n.spelled,
@@ -83,12 +87,13 @@ function barChords(
       tiedTo: noteEnd > end,
       ...(n.finger ? { finger: n.finger } : {}),
       ...(n.marks ? { marks: n.marks } : {}),
+      ...(n.lyrics && staff === sung ? { lyrics: n.lyrics } : {}),
     }
     const id = `${n.hand} ${start} ${stop}`
     const group = groups.get(id)
     if (!group) {
       groups.set(id, {
-        staff: staffOf(n, melodyStaff),
+        staff,
         chord: { hand: n.hand, start, end: stop, notes: [written] },
       })
     } else if (!group.chord.notes.some((other) => other.midi === n.midi)) {
@@ -138,6 +143,14 @@ function pieceMarks(notes: readonly BarNote[], first: boolean, last: boolean): N
   return Object.keys(marks).length > 0 ? marks : null
 }
 
+/**
+ * What a written piece sings: its chord's one note's syllables, on the piece that starts the notes,
+ * in a staff's first voice alone (a second voice under the tune sings nothing, so no syllable prints
+ * twice).
+ */
+const pieceLyrics = (notes: readonly BarNote[], first: boolean): NoteLyrics | null =>
+  (first ? notes.find((n) => n.lyrics && !n.tiedFrom)?.lyrics : undefined) ?? null
+
 /** A voice's chords as values end to end: gaps as rests, a chord as tied pieces (spec §2.4 steps 4–5). */
 function writeVoice(voice: VoiceChords, bar: Bar, second: boolean): DraftVoice {
   const grid = voiceGrid(voice.chords, bar.meter)
@@ -152,11 +165,13 @@ function writeVoice(voice: VoiceChords, bar: Bar, second: boolean): DraftVoice {
     pieces.forEach((piece, i) => {
       const last = i === pieces.length - 1
       const marks = pieceMarks(chord.notes, i === 0, last)
+      const lyrics = second ? null : pieceLyrics(chord.notes, i === 0)
       events.push({
         kind: 'notes',
         tick: bar.start + piece.tick,
         duration: piece.duration,
         ...(marks ? { marks } : {}),
+        ...(lyrics ? { lyrics } : {}),
         notes: chord.notes.map((n) => ({
           midi: n.midi,
           spelled: n.spelled,
@@ -277,6 +292,8 @@ export function notate(music: TimedMusic): Score {
       (id === 'melody' && melodyStaff) ||
       (music.piano !== false && PIANO_STAVES.some((piano) => piano === id)),
   )
+  // The words go under the tune's staff: its own where written, else the piano's upper (ADR 0093).
+  const sung: StaffId = written.includes('melody') ? 'melody' : 'treble'
   let tiedOn = new Set<string>()
   const clefs = clefsInForce(music.bars)
   const measures = music.bars.map((placed, index): Measure => {
@@ -291,7 +308,7 @@ export function notate(music: TimedMusic): Score {
       meter: music.meter,
       key: placed.key ?? music.key,
     }
-    const chords = barChords(music.notes, bar, tiedOn, melodyStaff)
+    const chords = barChords(music.notes, bar, tiedOn, melodyStaff, sung)
     const staff = (id: StaffId) =>
       !written.includes(id)
         ? []

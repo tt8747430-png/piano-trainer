@@ -327,3 +327,69 @@ describe('notate a lead sheet (ADR 0083)', () => {
     expect(lead.measures[0]?.staves.treble).toEqual([])
   })
 })
+
+describe('notate the words (ADR 0093)', () => {
+  const sung = (text: string, hyphen = false, melisma = false) => ({ text, hyphen, melisma })
+  /** Each voice's written notes' syllables in order, rests left out. */
+  const verses = (score: ReturnType<typeof notate>, staff: 'melody' | 'treble') =>
+    score.measures.flatMap((measure) =>
+      measure.staves[staff].flatMap((voice) =>
+        voice.events.flatMap((event) => (event.kind === 'notes' ? [event.lyrics ?? null] : [])),
+      ),
+    )
+
+  it('writes each syllable on the piece that starts its note, none on a tied continuation', () => {
+    const score = notate(
+      music(
+        [
+          n(72, note('C'), 'melody', 0, 48, { lyrics: [sung('Si', true, true)] }),
+          n(74, note('D'), 'melody', 48, 24),
+          n(76, note('E'), 'melody', 72, 48, { lyrics: [sung('lent'), sung('ho', true)] }),
+        ],
+        {
+          bars: [
+            { startTick: 0, beats: 4 },
+            { startTick: 96, beats: 4 },
+          ],
+          melodyStaff: true,
+        },
+      ),
+    )
+    expect(verses(score, 'melody')).toEqual([
+      [sung('Si', true, true)],
+      null,
+      [sung('lent'), sung('ho', true)],
+      null,
+    ])
+  })
+
+  it('writes the words under the tune’s staff alone, in its first voice: the piano’s upper staff without one', () => {
+    const notes = [
+      n(72, note('C'), 'melody', 0, 96, { lyrics: [sung('one')] }),
+      n(64, note('E'), 'rh', 0, 96, { lyrics: [sung('one')] }),
+      n(48, note('C'), 'lh', 0, 96, { lyrics: [sung('one')] }),
+    ]
+    const own = notate(music(notes, { melodyStaff: true }))
+    expect(verses(own, 'melody')).toEqual([[sung('one')]])
+    expect(verses(own, 'treble')).toEqual([null])
+    const shared = notate(music(notes))
+    // Two voices on the treble: the upper sings, the lower under it is silent.
+    expect(verses(shared, 'treble')).toEqual([[sung('one')], null])
+    expect(
+      shared.measures[0]?.staves.bass.flatMap((voice) =>
+        voice.events.map((event) => (event.kind === 'notes' ? event.lyrics : undefined)),
+      ),
+    ).toEqual([undefined])
+  })
+
+  it('lets a chord’s one note sing for the chord', () => {
+    const score = notate(
+      music([
+        n(72, note('C'), 'rh', 0, 96, { lyrics: [sung('one')] }),
+        n(76, note('E'), 'rh', 0, 96),
+        n(60, note('C'), 'rh', 0, 96),
+      ]),
+    )
+    expect(verses(score, 'treble')).toEqual([[sung('one')]])
+  })
+})

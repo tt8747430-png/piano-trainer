@@ -8,6 +8,7 @@ import type {
   Key,
   Meter,
   Midi,
+  NoteLyrics,
   NoteMarks,
   SpelledNote,
   Tick,
@@ -34,6 +35,8 @@ export interface TimedNote {
   readonly durationTicks: Tick
   readonly finger?: Finger
   readonly marks?: NoteMarks
+  /** What it sings, by verse (ADR 0093): written under the tune's staff alone. */
+  readonly lyrics?: NoteLyrics
 }
 
 /** Timed notes with their bars and chord symbols: a Performance is this. */
@@ -82,6 +85,11 @@ export interface NotesEvent {
    * octave line on every piece under it.
    */
   readonly marks?: NoteMarks
+  /**
+   * The syllables sung on it, by verse (ADR 0093): the tune's, on the piece that starts its notes, a
+   * chord's one note singing for the chord; none on a tied continuation.
+   */
+  readonly lyrics?: NoteLyrics
 }
 
 export interface RestEvent {
