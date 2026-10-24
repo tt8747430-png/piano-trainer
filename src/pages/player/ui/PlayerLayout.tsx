@@ -1,7 +1,13 @@
 import { useMemo, type ReactNode } from 'react'
-import { selectKeyboard, selectScoreView, useSettings } from '@/entities/settings'
+import {
+  selectKeyboard,
+  selectScoreView,
+  useSettings,
+  useSettingsStoreApi,
+} from '@/entities/settings'
 import { MidiButton } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
+import { setScoreView } from '@/features/set-preference'
 import type { Performance } from '@/shared/lib/arrangement'
 import { PIANO_STAVES } from '@/shared/lib/notation'
 import {
@@ -17,8 +23,9 @@ import {
   type PracticePlayer,
   type PracticeView,
 } from '@/widgets/practice-player'
+import { ScoreViewMenu } from '@/widgets/score-view-menu'
 import { SheetMusic } from '@/widgets/sheet-music'
-import { PlayerViewMenu } from './PlayerViewMenu'
+import { PracticeSwitches } from './PracticeSwitches'
 
 /** A walk or a progression: one section, named nowhere. */
 const NO_HEADINGS: readonly string[] = []
@@ -59,6 +66,7 @@ export function PlayerLayout({
 }) {
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
+  const settings = useSettingsStoreApi()
   const scoreView = useSettings(selectScoreView)
   const shown = useMemo(
     () =>
@@ -91,7 +99,11 @@ export function PlayerLayout({
       <PlayerArea area="actions" className="flex items-center justify-end gap-2 narrow-phone:gap-1">
         {modes}
         <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />
-        <PlayerViewMenu />
+        <ScoreViewMenu
+          keys={{ shown: scoreView.keys, show: (on) => setScoreView(settings, { keys: on }) }}
+        >
+          <PracticeSwitches />
+        </ScoreViewMenu>
         <MidiButton />
         {setup}
       </PlayerArea>

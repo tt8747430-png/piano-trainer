@@ -202,7 +202,7 @@ export function EditorTools({
   onFold: (folded: boolean) => void
 }) {
   const { t } = useTranslation(['editor', 'common'])
-  const { takes, meta } = useScoreEditorContext()
+  const { takes, meta, view } = useScoreEditorContext()
   const layer = useEditorState((state) => state.layer)
   const keys = useFoldKeys()
   const recording = takes.stage !== 'idle'
@@ -248,6 +248,15 @@ export function EditorTools({
       onFold(false)
     } else scrollTo(category)
   }
+  // Asked for from the sheet (its signatures clicked): the palette opens at that category; an ask
+  // made before it stood here (beside the sheet, or at its foot) is not made again.
+  const answered = useRef(view.toolsAsked)
+  const showAsked = useEffectEvent((category: PaletteCategory) => show(category))
+  useEffect(() => {
+    if (!view.toolsAsked || view.toolsAsked === answered.current) return
+    answered.current = view.toolsAsked
+    showAsked(view.toolsAsked.category)
+  }, [view.toolsAsked])
   // The category chosen kept in sight in its bar, which scrolls sideways on a narrow screen.
   const bar = useRef<HTMLDivElement>(null)
   useEffect(() => {

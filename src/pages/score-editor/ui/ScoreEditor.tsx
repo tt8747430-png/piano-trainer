@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react'
 import {
   selectKeyboard,
   selectPaletteFolded,
-  selectPaletteSide,
   useSettings,
   useSettingsStoreApi,
 } from '@/entities/settings'
@@ -36,7 +35,8 @@ const GAP = 8
  * the foot or under the bar. Over the sheet floats what works on it, above everything and never
  * moving it (ADR 0079): the dock (`EditorDock`), the Player's transport in shape and place, and the
  * palette, a card that hugs its keys, at the foot on a phone held upright and a tablet, beside the
- * sheet on a laptop and a phone on its side; folded, its row of tabs alone, where the card was.
+ * sheet at its right on a laptop and a phone on its side (ADR 0094); folded, its row of tabs alone,
+ * where the card was.
  * Floating, they take no room of the sheet's: it only has room to scroll its last line above the
  * dock (ADR 0081). What floats at the foot steps aside while the music is read (dragged,
  * scrolled, pinched) and comes back at a tap on the sheet. While a take records, its strip stands
@@ -46,13 +46,12 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
   const editor = useScoreEditor(target, bar)
   useEditorShortcutList()
   const onSide = useMediaQuery(LANDSCAPE_PHONE)
-  const side = usePaletteBeside()
+  const beside = usePaletteBeside()
   const idle = editor.takes.stage === 'idle'
   const dock = useSettings((state) => selectKeyboard(state).dock)
-  const paletteSide = useSettings(selectPaletteSide)
   const settings = useSettingsStoreApi()
   // Open by default beside the sheet, where it covers no music; folded at the foot (ADR 0089).
-  const place = side ? 'beside' : 'foot'
+  const place = beside ? 'beside' : 'foot'
   const palette = !useSettings(selectPaletteFolded(place))
   const setPalette = (open: boolean) => setPaletteFolded(settings, place, !open)
   // What floats over the sheet's foot, measured: the sheet has room to scroll its last line above it.
@@ -75,9 +74,8 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
   const floating = useHiddenWhileReading()
   // A take's strip, with its Stop, never steps aside.
   const footShown = floating.shown || !idle
-  const left = paletteSide === 'left'
   const tools = (
-    <EditorTools side={side} folded={!palette} onFold={(folded) => setPalette(!folded)} />
+    <EditorTools side={beside} folded={!palette} onFold={(folded) => setPalette(!folded)} />
   )
   return (
     <ScoreEditorContext value={editor}>
@@ -116,15 +114,10 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
           </div>
         )}
         <div data-area="float">
-          {side ? (
-            // Beside the sheet, over its edge: folded, its row of tabs stays where the card's was.
-            <div
-              className={cn(
-                'pointer-events-auto absolute top-0 flex max-h-full flex-col',
-                'w-84 landscape-phone:w-80 xl:w-96',
-                left ? 'left-0' : 'right-0',
-              )}
-            >
+          {beside ? (
+            // Beside the sheet, over its right edge (ADR 0094): folded, its row of tabs stays where
+            // the card's was.
+            <div className="pointer-events-auto absolute top-0 right-0 flex max-h-full w-84 flex-col landscape-phone:w-80 xl:w-96">
               {tools}
             </div>
           ) : null}
@@ -135,16 +128,13 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
             className={cn(
               'absolute inset-x-0 bottom-0 flex max-h-full flex-col items-center gap-2 px-1 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none',
               // The dock centred in the room the palette beside the sheet leaves, never under it.
-              side &&
-                (left
-                  ? 'pl-84 landscape-phone:pl-80 xl:pl-96'
-                  : 'pr-84 landscape-phone:pr-80 xl:pr-96'),
+              beside && 'pr-84 landscape-phone:pr-80 xl:pr-96',
             )}
           >
             <div className="pointer-events-auto shrink-0">
               {idle ? <EditorDock /> : <RecordingStrip />}
             </div>
-            {side ? null : (
+            {beside ? null : (
               <div className="pointer-events-auto flex min-h-0 w-full max-w-xl flex-col">
                 {tools}
               </div>

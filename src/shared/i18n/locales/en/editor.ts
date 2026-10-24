@@ -3,8 +3,8 @@ export const editor = {
   play: 'Play',
   undo: 'Undo',
   redo: 'Redo',
-  // Play and Record, in the screen's bar.
-  dock: 'Editing',
+  // The dock over the sheet's foot (ADR 0094): the tempo, ‹ Play ›, and Record.
+  dock: 'Play, move and record',
   // The one palette (spec 2026-10-23): a quick row of values, the categories as a bar of pictures,
   // every category's section stacked above them when it is opened.
   palette: {
@@ -56,19 +56,6 @@ export const editor = {
     toStaff: 'The notes copied go on a staff',
     toChords: 'The bars copied go in the chord symbols',
   },
-  // The song's settings: what the sheet shows.
-  view: 'View',
-  // What the score shows and how, from the bar (ADR 0064).
-  viewMenu: {
-    show: 'Show',
-    lyrics: 'Lyrics',
-    palette: 'Every tool',
-    keys: 'Keys',
-    side: 'Tools beside the music',
-    left: 'Left',
-    right: 'Right',
-    label: 'View',
-  },
   // The palette's Barlines & repeats (ADR 0068).
   barline: {
     repeatStart: 'Start repeat',
@@ -108,9 +95,8 @@ export const editor = {
     treble: 'Treble clef',
     bass: 'Bass clef',
   },
-  // The palette's Key and Time: the song's own, changed in the Song sheet.
+  // The palette's Key and Time: a section's key, and the song's own, changed there (ADR 0094).
   signature: {
-    change: 'Change for the whole song',
     // A key change from a section on, up to the next change (ADR 0089).
     fromSection: 'From {{section}} on (bar {{bar}})',
     song: 'The song’s key',
@@ -156,8 +142,6 @@ export const editor = {
     rh: 'Upper staff',
     lh: 'Lower staff',
   },
-  // The edit row's head: where the next note goes, chosen there (Flat's voice badge).
-  layerChip: { label: 'Next note goes in: {{layer}}', menu: 'Next note goes in' },
   sheet: {
     signature: 'Key and time signature',
     label: 'Score',
@@ -166,7 +150,6 @@ export const editor = {
     drag: 'Drag up or down to move the note',
   },
   caret: {
-    moves: 'Play and move',
     at: 'Bar {{bar}}, beat {{beat}} · {{what}}',
     notes: 'Bar {{bar}}, beat {{beat}} · {{what}} {{value}}',
     held: 'Bar {{bar}}, beat {{beat}} · {{what}} held',
@@ -278,7 +261,6 @@ export const editor = {
     label: 'Bar',
     insert: 'Add bar after',
     insertBefore: 'Add bar before',
-    add: 'Add bar',
     delete: 'Delete bars',
     newLine: 'Line break',
     joinLine: 'Join lines',
@@ -290,9 +272,9 @@ export const editor = {
     kind: 'Section',
     join: 'Join with the section before',
   },
-  // The Song sheet: the song as a whole, its parts and the MIDI keyboard (ADR 0080).
+  // The song as a whole (ADR 0094: edited where it is printed and in the palette): its title, its
+  // tempo with the tempo words, its time signature.
   song: {
-    label: 'Song',
     title: 'Title',
     tempo: 'Tempo',
     tempoWords: 'Tempo words',
@@ -306,13 +288,6 @@ export const editor = {
     },
     tempoLabel: '{{word}}, {{bpm}} a minute',
     meter: 'Time signature',
-    // The score's staves (ADR 0091), each shown or hidden; the last staff in sight stays (ADR 0083).
-    staves: 'Staves',
-    melodyDetail: 'A treble staff for the tune, over the piano',
-    piano: 'Piano',
-    pianoDetail: 'The grand staff: both hands',
-    chordsDetail: 'Written over the music',
-    lastStaff: 'The last staff in sight stays',
   },
   recorder: {
     more: 'Take actions',

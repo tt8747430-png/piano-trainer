@@ -16,7 +16,6 @@ import {
   setRecorderTune,
   setSectionFolded,
   setPaletteFolded,
-  setPaletteSide,
   setSidebar,
   setTheme,
 } from './index'
@@ -44,13 +43,6 @@ describe('set-preference', () => {
     expect(saved(storage).foldedSections).toEqual(['chords.tensions', 'progressions.between'])
     setSectionFolded(store, 'chords.tensions', false)
     expect(store.getState().foldedSections).toEqual(['progressions.between'])
-  })
-
-  it('setPaletteSide moves the editor’s palette to the left and saves it', () => {
-    const { storage, store } = setUp()
-    setPaletteSide(store, 'left')
-    expect(store.getState().paletteSide).toBe('left')
-    expect(saved(storage).paletteSide).toBe('left')
   })
 
   it('setPaletteFolded folds the editor’s palette where it stands, and saves it', () => {

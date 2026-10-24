@@ -5,7 +5,7 @@ export const editor: LocaleResources['editor'] = {
   play: 'Сыграть',
   undo: 'Отменить',
   redo: 'Повторить',
-  dock: 'Правка',
+  dock: 'Играть, перемещать курсор и записывать',
   palette: {
     label: 'Инструменты',
     open: 'Показать все инструменты',
@@ -53,17 +53,6 @@ export const editor: LocaleResources['editor'] = {
     toStaff: 'Скопированные ноты вставляются на нотоносец',
     toChords: 'Скопированные такты вставляются в аккордовые символы',
   },
-  view: 'Вид',
-  viewMenu: {
-    show: 'Показывать',
-    lyrics: 'Текст',
-    palette: 'Все инструменты',
-    keys: 'Клавиши',
-    side: 'Инструменты рядом с нотами',
-    left: 'Слева',
-    right: 'Справа',
-    label: 'Вид',
-  },
   barline: {
     repeatStart: 'Начало повтора',
     repeatEnd: 'Конец повтора',
@@ -101,7 +90,6 @@ export const editor: LocaleResources['editor'] = {
     bass: 'Басовый ключ',
   },
   signature: {
-    change: 'Изменить для всей песни',
     fromSection: 'С раздела «{{section}}» (такт {{bar}})',
     song: 'Тональность песни',
     timeLater: 'Смену размера внутри песни пока не записать: здесь размер всей песни.',
@@ -141,7 +129,6 @@ export const editor: LocaleResources['editor'] = {
     rh: 'Верхний нотоносец',
     lh: 'Нижний нотоносец',
   },
-  layerChip: { label: 'Следующая нота: {{layer}}', menu: 'Куда пишется следующая нота' },
   sheet: {
     signature: 'Тональность и размер',
     label: 'Ноты',
@@ -150,7 +137,6 @@ export const editor: LocaleResources['editor'] = {
     drag: 'Потяните вверх или вниз, чтобы сдвинуть ноту',
   },
   caret: {
-    moves: 'Играть и перемещать курсор',
     at: 'Такт {{bar}}, доля {{beat}} · {{what}}',
     notes: 'Такт {{bar}}, доля {{beat}} · {{what}} {{value}}',
     held: 'Такт {{bar}}, доля {{beat}} · {{what}} звучит',
@@ -257,7 +243,6 @@ export const editor: LocaleResources['editor'] = {
     label: 'Такт',
     insert: 'Добавить такт после',
     insertBefore: 'Добавить такт перед',
-    add: 'Добавить такт',
     delete: 'Удалить такты',
     newLine: 'Разрыв строки',
     joinLine: 'Соединить строки',
@@ -270,7 +255,6 @@ export const editor: LocaleResources['editor'] = {
     join: 'Соединить с предыдущим разделом',
   },
   song: {
-    label: 'Песня',
     title: 'Название',
     tempo: 'Темп',
     tempoWords: 'Обозначения темпа',
@@ -284,12 +268,6 @@ export const editor: LocaleResources['editor'] = {
     },
     tempoLabel: '{{word}}, {{bpm}} в минуту',
     meter: 'Размер',
-    staves: 'Нотоносцы',
-    melodyDetail: 'Скрипичный нотоносец для мелодии над фортепиано',
-    piano: 'Фортепиано',
-    pianoDetail: 'Два нотоносца: обе руки',
-    chordsDetail: 'Записаны над нотами',
-    lastStaff: 'Последний нотоносец в поле зрения остаётся',
   },
   recorder: {
     more: 'Действия с дублем',

@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react'
+import { selectScoreView, useSettings } from '@/entities/settings'
 import {
   barAt,
   notesAt,
@@ -11,14 +12,16 @@ import type { Midi, Tick } from '@/shared/lib/music'
 import { usePlay } from '@/shared/lib/services'
 import { ScoreSheet } from '@/widgets/score-sheet'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { seenDraft } from '../model/seen-draft'
 import { SectionHeading } from './SectionHeading'
 
 /** How a note moved on its staff is heard: short and soft, as a notation app sounds it. */
 const HEARD = { duration: 0.35, velocity: 0.15 } as const
 
 /**
- * The sheet the editor writes on: the caret where the next note or chord goes; a double click on a
- * staff writes the note there, and a note dragged up or down moves by the key's notes, heard as it goes.
+ * The sheet the editor writes on, as the View shows the score (ADR 0094: its staves, its chord
+ * symbols): the caret where the next note or chord goes; a double click on a staff writes the note
+ * there, and a note dragged up or down moves by the key's notes, heard as it goes.
  */
 export function EditorSheet({ room }: { room?: number | undefined }) {
   const {
@@ -28,6 +31,8 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
     meta,
   } = useScoreEditorContext()
   const draft = useEditorState((state) => state.draft)
+  const shown = useSettings(selectScoreView)
+  const seen = useMemo(() => seenDraft(draft, shown), [draft, shown])
   const caret = useEditorState((state) => state.caret)
   const layer = useEditorState((state) => state.layer)
   const selection = useEditorState((state) => state.selection)
@@ -56,8 +61,9 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
     [dispatch, store],
   )
   const onDeselect = useCallback(() => dispatch({ type: 'deselect' }), [dispatch])
-  const { openSettings: open } = view
-  const openSettings = useCallback(() => open(true), [open])
+  // The clef, key and time at a line's head: the palette opens at the key, the time under it.
+  const { askTools } = view
+  const onSignature = useCallback(() => askTools('key'), [askTools])
   // Read when a bar is clicked, so a line's row does not change with every note written elsewhere.
   const placesOf = useCallback((to: Layer) => placesIn(store.getState(), to), [store])
   const tapsOf = useCallback((to: Layer) => tapsIn(store.getState(), to), [store])
@@ -87,7 +93,7 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
   )
   return (
     <ScoreSheet
-      draft={draft}
+      draft={seen}
       caret={caret}
       chordNote={chordNote}
       layer={layer}
@@ -100,7 +106,7 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
       heading={(section) => <SectionHeading section={section} />}
       chordNames={view.chordNames}
       lyrics={view.lyrics}
-      onSignature={openSettings}
+      onSignature={onSignature}
       view={view.layout}
       title={meta.title}
       room={room}

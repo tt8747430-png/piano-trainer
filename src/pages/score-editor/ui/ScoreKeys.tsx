@@ -8,28 +8,24 @@ import {
   clefAt,
   isHandLayer,
   JUMP_CHOICES,
+  metersFor,
   sectionKey,
   selectedBars,
   singsHere,
   verseCount,
   type BarMarkChoice,
 } from '@/features/score-editor'
-import { useKeyName } from '@/shared/i18n'
 import {
   CLEFS,
   EXPRESSION_TEXT,
   EXPRESSIONS,
-  beatsPerBar,
   keyFromParam,
   keyParam,
-  timeSignature,
   type Pedal,
 } from '@/shared/lib/music'
-import { KeyChoice } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { KeyChoice, Segmented } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { isJumpWords, JUMP_SIGNS, JUMP_WORDS } from '../model/palette-categories'
-import { Figures } from './BarKeys'
 import { useNotesChosen } from '../model/use-notes-chosen'
 import { LyricsField } from './LyricsField'
 import { BarlineIcon, CodaSign } from './palette-icons'
@@ -80,22 +76,17 @@ export function ClefKeys() {
   )
 }
 
-/** The song's own key or time, named as it is, with a way to the Song sheet, where it is changed. */
-function SongSignature({ kind }: { kind: 'key' | 'time' }) {
+/** The song's own key, changed for the whole song, its music moving with it (ADR 0094). */
+function SongKey() {
   const { t } = useTranslation('editor')
-  const { view } = useScoreEditorContext()
-  const keyName = useKeyName()
+  const { actions } = useScoreEditorContext()
   const key = useEditorState((state) => state.draft.key)
-  const meter = useEditorState((state) => state.draft.meter)
   return (
-    <div className="flex flex-wrap items-center gap-3">
-      <span className="flex min-w-0 items-center gap-2">
-        {kind === 'time' ? <Figures time={timeSignature(beatsPerBar(meter), meter)} /> : null}
-        <span className="text-base font-semibold">{kind === 'key' ? keyName(key) : meter}</span>
-      </span>
-      <Button variant="soft" onClick={() => view.openSettings(true)}>
-        {t('signature.change')}
-      </Button>
+    <div role="group" aria-label={t('signature.song')}>
+      <KeyChoice
+        value={keyParam(key)}
+        onChange={(next) => actions.dispatch({ type: 'settings', key: keyFromParam(next) })}
+      />
     </div>
   )
 }
@@ -103,7 +94,7 @@ function SongSignature({ kind }: { kind: 'key' | 'time' }) {
 /**
  * Key signature (ADR 0089): a key change from the section of the first bar chosen (else the caret's)
  * on, up to the next change, as Flat changes key from a bar; then the song's own key, changed for the
- * whole song in the Song sheet.
+ * whole song (`SongKey`).
  */
 export function KeySignatureKeys() {
   const { t } = useTranslation('editor')
@@ -135,17 +126,27 @@ export function KeySignatureKeys() {
         onChange={(next) => actions.dispatch({ type: 'sectionKey', key: keyFromParam(next) })}
       />
       <h4 className="pt-1 text-sm text-muted-foreground">{t('signature.song')}</h4>
-      <SongSignature kind="key" />
+      <SongKey />
     </>
   )
 }
 
-/** Time signature: the song's own, one for every bar; a change of time inside the song is for later. */
+/**
+ * Time signature: the song's own, one for every bar, another of its kind (each bar made the new
+ * one); a change of time inside the song is for later.
+ */
 export function TimeSignatureKeys() {
   const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const meter = useEditorState((state) => state.draft.meter)
   return (
     <>
-      <SongSignature kind="time" />
+      <Segmented
+        label={t('song.meter')}
+        value={meter}
+        options={metersFor(meter).map((each) => ({ value: each, label: each }))}
+        onChange={(next) => actions.dispatch({ type: 'settings', meter: next })}
+      />
       <p className="text-sm text-pretty text-muted-foreground">{t('signature.timeLater')}</p>
     </>
   )
