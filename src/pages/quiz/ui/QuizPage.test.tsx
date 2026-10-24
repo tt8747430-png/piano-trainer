@@ -45,7 +45,7 @@ describe('Practice → Quiz', () => {
     })
     expect(
       screen.getByRole('link', {
-        name: 'Reading notes Read a note on the staff, play it · Runs: 2',
+        name: 'Note reading Read a note on the staff, play it · Runs: 2',
       }),
     ).toBeInTheDocument()
   })
@@ -62,9 +62,9 @@ describe('Practice → Quiz', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice')
     await user.click(await screen.findByRole('link', { name: /^Quiz / }))
-    await user.click(await screen.findByRole('link', { name: /^Build chord/ }))
+    await user.click(await screen.findByRole('link', { name: /^Chord building/ }))
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Build chord' }),
+      await screen.findByRole('heading', { level: 1, name: 'Chord building' }),
     ).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Back' }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Quiz' })).toBeInTheDocument()

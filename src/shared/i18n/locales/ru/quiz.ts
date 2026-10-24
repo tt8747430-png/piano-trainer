@@ -2,9 +2,9 @@ import type { LocaleResources } from '../../types'
 
 export const quiz: LocaleResources['quiz'] = {
   trainers: {
-    'build-chord': 'Построить аккорд',
-    'name-chord': 'Назвать аккорд',
-    'build-scale': 'Построить гамму',
+    'build-chord': 'Построение аккорда',
+    'name-chord': 'Определение аккорда',
+    'build-scale': 'Построение гаммы',
     gaps: 'Мои пробелы',
     'intervals-by-ear': 'Интервалы на слух',
     'chords-by-ear': 'Аккорды на слух',
@@ -13,7 +13,7 @@ export const quiz: LocaleResources['quiz'] = {
     'reading-notes': 'Чтение нот',
     'key-signatures': 'Ключевые знаки',
     'key-degrees': 'Ступени тональности',
-    'chord-role': 'Роль аккорда',
+    'chord-role': 'Роли аккордов',
   },
   about: {
     'build-chord': 'Сыграйте названный аккорд на клавишах',

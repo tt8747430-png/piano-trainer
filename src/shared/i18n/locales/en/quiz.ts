@@ -1,18 +1,18 @@
 export const quiz = {
-  // Practice's trainers.
+  // Practice's trainers, each named as a thing practised, never an order.
   trainers: {
-    'build-chord': 'Build chord',
-    'name-chord': 'Name chord',
-    'build-scale': 'Build scale',
+    'build-chord': 'Chord building',
+    'name-chord': 'Chord naming',
+    'build-scale': 'Scale building',
     gaps: 'My gaps',
     'intervals-by-ear': 'Intervals by ear',
     'chords-by-ear': 'Chords by ear',
     'scales-by-ear': 'Scales by ear',
     'progressions-by-ear': 'Progressions by ear',
-    'reading-notes': 'Reading notes',
+    'reading-notes': 'Note reading',
     'key-signatures': 'Key signatures',
-    'key-degrees': 'The degrees of a key',
-    'chord-role': 'A chord’s role',
+    'key-degrees': 'Key degrees',
+    'chord-role': 'Chord roles',
   },
   /** What each trainer asks, a line under its name. */
   about: {
