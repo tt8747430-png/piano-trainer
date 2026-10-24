@@ -36,8 +36,6 @@ import {
   isOctaveShift,
   isPedalWay,
   isSidebar,
-  isPaletteSide,
-  DEFAULT_PALETTE_SIDE,
   PALETTE_PLACES,
   isSwipe,
   isTheme,
@@ -57,7 +55,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 6
+export const SETTINGS_VERSION = 7
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -83,7 +81,6 @@ export function createSettingsStore({
         keyboard: defaultKeyboard(finePointer),
         recorder: DEFAULT_RECORDER,
         sidebar: DEFAULT_SIDEBAR,
-        paletteSide: DEFAULT_PALETTE_SIDE,
         paletteFolded: {},
         midi: DEFAULT_MIDI,
         chordFinder: DEFAULT_CHORD_FINDER,
@@ -250,7 +247,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),
     recorder: recorderSettings(saved.recorder),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,
-    paletteSide: isPaletteSide(saved.paletteSide) ? saved.paletteSide : current.paletteSide,
     paletteFolded: paletteFolds(saved.paletteFolded),
     midi: midiSettings(saved.midi),
     chordFinder: chordFinderSettings(saved.chordFinder),

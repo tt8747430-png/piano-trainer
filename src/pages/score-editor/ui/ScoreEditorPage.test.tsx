@@ -596,12 +596,14 @@ describe('the score editor', () => {
   it('offers no side for its palette beside the sheet, nor a switch for it, in the View (ADR 0094)', async () => {
     const user = userEvent.setup()
     sizedAs(LANDSCAPE_PHONE)
-    await renderApp('/edit/my-1', { storage: withSong() })
+    const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'View' }))
     const view = await screen.findByRole('dialog', { name: 'View' })
     expect(within(view).queryByRole('radio', { name: 'Left' })).not.toBeInTheDocument()
     expect(within(view).queryByRole('switch', { name: 'Every tool' })).not.toBeInTheDocument()
     expect(within(view).getAllByRole('switch')).toHaveLength(6)
+    // Beside the sheet it stands at its right: no side is kept for it.
+    expect(settingsStore.getState()).not.toHaveProperty('paletteSide')
   })
 
   it.each([

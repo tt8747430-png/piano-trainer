@@ -33,7 +33,6 @@ const DEFAULTS = {
   keyboard: defaultKeyboard(false),
   recorder: DEFAULT_RECORDER,
   sidebar: DEFAULT_SIDEBAR,
-  paletteSide: 'right',
   paletteFolded: {},
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
@@ -107,7 +106,6 @@ describe('createSettingsStore', () => {
       },
       recorder: { click: false, tune: true },
       sidebar: 'collapsed',
-      paletteSide: 'right',
       paletteFolded: { beside: true, foot: false },
       midi: {
         device: 'Piano',
@@ -181,8 +179,6 @@ describe('createSettingsStore', () => {
 
   it('opens a sidebar saved as anything but open or collapsed', () => {
     expect(restored({ sidebar: 'wide' }).sidebar).toBe('open')
-    expect(restored({ paletteSide: 'top' }).paletteSide).toBe('right')
-    expect(restored({ paletteSide: 'left' }).paletteSide).toBe('left')
     expect(restored({ paletteFolded: true }).paletteFolded).toEqual({})
     expect(restored({ paletteFolded: { beside: 'yes', foot: false } }).paletteFolded).toEqual({
       foot: false,
@@ -193,11 +189,15 @@ describe('createSettingsStore', () => {
     expect(restored({ recorder: { click: 'no' } }).recorder).toEqual(DEFAULT_RECORDER)
   })
 
-  it('starts afresh over a save of the version before, whose view had no words to show (ADR 0093)', () => {
-    expect(SETTINGS_VERSION).toBe(6)
-    expect(restored({ theme: 'dark', paletteFolded: false }, 5)).toEqual(
+  it('starts afresh over a save of the version before, whose palette had a side (ADR 0094)', () => {
+    expect(SETTINGS_VERSION).toBe(7)
+    expect(restored({ theme: 'dark', paletteSide: 'left' }, 6)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
+  })
+
+  it('keeps no side for the palette: beside the sheet it stands at its right (ADR 0094)', () => {
+    expect(restored({ paletteSide: 'left' })).not.toHaveProperty('paletteSide')
   })
 
   it('plays from the computer keyboard by default only where the pointer is fine', () => {
