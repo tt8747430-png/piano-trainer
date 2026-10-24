@@ -30,7 +30,7 @@ export function MidiSettingsFields() {
   const away = midi.device !== null && !connected.includes(midi.device) ? [midi.device] : []
   return (
     <div className="flex flex-col gap-4">
-      <SettingField label={t('midiSettings.device.label')} detail={t('midiSettings.device.detail')}>
+      <SettingField label={t('midiSettings.device.label')} info={t('midiSettings.device.detail')}>
         <Dropdown
           label={t('midiSettings.device.label')}
           bare
@@ -50,13 +50,13 @@ export function MidiSettingsFields() {
       <div>
         <SwitchRow
           label={t('midiSettings.sound')}
-          detail={t('midiSettings.soundNote')}
+          info={t('midiSettings.soundNote')}
           checked={midi.sound}
           onCheckedChange={(sound) => setMidi(store, { sound })}
         />
         <SwitchRow
           label={t('midiSettings.throughPiano')}
-          detail={t('midiSettings.throughPianoNote')}
+          info={t('midiSettings.throughPianoNote')}
           checked={midi.throughPiano}
           onCheckedChange={(throughPiano) => setMidi(store, { throughPiano })}
           className="border-b-0"
@@ -64,7 +64,7 @@ export function MidiSettingsFields() {
       </div>
       <SettingField
         label={t('midiSettings.octaveShift.label')}
-        detail={t('midiSettings.octaveShift.detail')}
+        info={t('midiSettings.octaveShift.detail')}
       >
         <Segmented
           label={t('midiSettings.octaveShift.label')}
@@ -73,7 +73,7 @@ export function MidiSettingsFields() {
           onChange={(octaveShift) => setMidi(store, { octaveShift })}
         />
       </SettingField>
-      <SettingField label={t('midiSettings.touch.label')} detail={t('midiSettings.touch.detail')}>
+      <SettingField label={t('midiSettings.touch.label')} info={t('midiSettings.touch.detail')}>
         <Segmented
           label={t('midiSettings.touch.label')}
           value={midi.touch}
@@ -81,7 +81,7 @@ export function MidiSettingsFields() {
           onChange={(touch) => setMidi(store, { touch })}
         />
       </SettingField>
-      <SettingField label={t('midiSettings.pedal.label')} detail={t('midiSettings.pedal.detail')}>
+      <SettingField label={t('midiSettings.pedal.label')} info={t('midiSettings.pedal.detail')}>
         <Segmented
           label={t('midiSettings.pedal.label')}
           value={midi.pedal}

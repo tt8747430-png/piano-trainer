@@ -1,15 +1,17 @@
-import type { ReactNode } from 'react'
+import { useId, type ReactNode } from 'react'
 import { cn } from '@/shared/lib'
+import { InfoTip } from './InfoTip'
 import { Switch } from './primitives/switch'
 
 /**
- * On or off in its row of a list: its picture where it has one, the label, a note under it where
- * there is one, and the switch.
+ * On or off in its row of a list: its picture where it has one, the label, what it does in an
+ * `InfoTip` beside the label where it says more than its name (ADR 0096, never a line under it), and
+ * the switch. A tap anywhere on the row turns it, but on the ⓘ.
  */
 export function SwitchRow({
   icon,
   label,
-  detail,
+  info,
   checked,
   disabled = false,
   onCheckedChange,
@@ -18,16 +20,19 @@ export function SwitchRow({
   /** What it turns on, drawn: an icon or a glyph. */
   icon?: ReactNode
   label: string
-  detail?: string | undefined
+  /** What it does, opened from the ⓘ beside the label. */
+  info?: ReactNode
   checked: boolean
   disabled?: boolean
   onCheckedChange: (on: boolean) => void
   className?: string
 }) {
+  const id = useId()
   return (
-    <label
+    <div
+      data-slot="switch-row"
       className={cn(
-        'flex min-h-14 items-center justify-between gap-4 border-b border-border py-2 text-lg',
+        'relative flex min-h-14 items-center justify-between gap-4 border-b border-border py-2 text-lg',
         className,
       )}
     >
@@ -39,11 +44,14 @@ export function SwitchRow({
           {icon}
         </span>
       ) : null}
-      <span className="flex flex-1 flex-col">
-        {label}
-        {detail ? <span className="text-sm text-muted-foreground">{detail}</span> : null}
+      <span className="flex min-w-0 flex-1 items-center gap-1.5">
+        {/* The label stretches over the row, so a tap anywhere on it turns the switch. */}
+        <label htmlFor={id} className="min-w-0 after:absolute after:inset-0 after:content-['']">
+          {label}
+        </label>
+        {info ? <InfoTip name={label}>{info}</InfoTip> : null}
       </span>
-      <Switch checked={checked} disabled={disabled} onCheckedChange={onCheckedChange} />
-    </label>
+      <Switch id={id} checked={checked} disabled={disabled} onCheckedChange={onCheckedChange} />
+    </div>
   )
 }

@@ -134,7 +134,7 @@ export function SettingsPage() {
           </SettingField>
           <SwitchRow
             label={t('floating.labels')}
-            detail={t('floating.labelsNote')}
+            info={t('floating.labelsNote')}
             checked={floating.labels}
             onCheckedChange={(labels) => setFloating(settings, { labels })}
             className="border-b-0"

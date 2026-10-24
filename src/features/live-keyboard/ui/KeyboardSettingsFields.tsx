@@ -33,7 +33,7 @@ export function KeyboardSettingsFields() {
       <Part title={t('keyboardSettings.look')}>
         <SettingField
           label={t('keyboardSettings.keySize.label')}
-          detail={t('keyboardSettings.keySize.detail')}
+          info={t('keyboardSettings.keySize.detail')}
         >
           <Segmented
             label={t('keyboardSettings.keySize.label')}
@@ -47,7 +47,7 @@ export function KeyboardSettingsFields() {
         </SettingField>
         <SettingField
           label={t('keyboardSettings.keyLength.label')}
-          detail={t('keyboardSettings.keyLength.detail')}
+          info={t('keyboardSettings.keyLength.detail')}
         >
           <Segmented
             label={t('keyboardSettings.keyLength.label')}
@@ -61,7 +61,7 @@ export function KeyboardSettingsFields() {
         </SettingField>
         <SettingField
           label={t('keyboardSettings.namedKeys.label')}
-          detail={t('keyboardSettings.namedKeys.detail')}
+          info={t('keyboardSettings.namedKeys.detail')}
         >
           <Segmented
             label={t('keyboardSettings.namedKeys.label')}
@@ -76,13 +76,13 @@ export function KeyboardSettingsFields() {
         <div>
           <SwitchRow
             label={t('keyboardSettings.markNotes')}
-            detail={t('keyboardSettings.markNotesNote')}
+            info={t('keyboardSettings.markNotesNote')}
             checked={keyboard.markNotes}
             onCheckedChange={(markNotes) => setKeyboard(store, { markNotes })}
           />
           <SwitchRow
             label={t('keyboardSettings.chordNames')}
-            detail={t('keyboardSettings.chordNamesNote')}
+            info={t('keyboardSettings.chordNamesNote')}
             checked={keyboard.chordNames}
             onCheckedChange={(chordNames) => setKeyboard(store, { chordNames })}
             className="border-b-0"
@@ -92,7 +92,7 @@ export function KeyboardSettingsFields() {
       <Part title={t('keyboardSettings.place')}>
         <SettingField
           label={t('keyboardSettings.dock.label')}
-          detail={t('keyboardSettings.dock.detail')}
+          info={t('keyboardSettings.dock.detail')}
         >
           <Segmented
             label={t('keyboardSettings.dock.label')}
@@ -106,13 +106,13 @@ export function KeyboardSettingsFields() {
         </SettingField>
         <SwitchRow
           label={t('keyboardSettings.folded')}
-          detail={t('keyboardSettings.foldedNote')}
+          info={t('keyboardSettings.foldedNote')}
           checked={keyboard.folded}
           onCheckedChange={(folded) => setKeyboard(store, { folded })}
         />
         <SwitchRow
           label={t('keyboardSettings.foldedLandscape')}
-          detail={t('keyboardSettings.foldedLandscapeNote')}
+          info={t('keyboardSettings.foldedLandscapeNote')}
           checked={keyboard.foldedLandscape}
           onCheckedChange={(foldedLandscape) => setKeyboard(store, { foldedLandscape })}
           className="border-b-0"
@@ -121,7 +121,7 @@ export function KeyboardSettingsFields() {
       <Part title={t('keyboardSettings.play')}>
         <SettingField
           label={t('keyboardSettings.swipe.label')}
-          detail={t('keyboardSettings.swipe.detail')}
+          info={t('keyboardSettings.swipe.detail')}
         >
           <Segmented
             label={t('keyboardSettings.swipe.label')}
@@ -135,9 +135,12 @@ export function KeyboardSettingsFields() {
         </SettingField>
         <SwitchRow
           label={t('keyboardSettings.typing')}
-          detail={t(
-            keyboard.typing ? 'keyboardSettings.typingHint' : 'keyboardSettings.typingNote',
-          )}
+          info={
+            <>
+              <p>{t('keyboardSettings.typingNote')}</p>
+              <p>{t('keyboardSettings.typingHint')}</p>
+            </>
+          }
           checked={keyboard.typing}
           onCheckedChange={(typing) => setKeyboard(store, { typing })}
           className="border-b-0"

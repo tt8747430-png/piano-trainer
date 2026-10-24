@@ -39,6 +39,8 @@ export function PieceSetup({
   const keyName = useKeyName()
   const own = pieceKey(piece)
   const chordSize = choosableChordSize(piece)
+  // The recording plays in its own key alone: elsewhere its tile is closed, and says why.
+  const ownKey = piece.recording && !isOwnKey(piece, choice.tonic) ? keyName(own) : null
   return (
     <PlayerSetup figures={choice} fit={fit} onFigures={onChange}>
       <NoteChoice
@@ -57,12 +59,14 @@ export function PieceSetup({
         </Labelled>
       ) : null}
       <PatternCard />
-      <PlayingSection swing={swing} onSwing={onSwing}>
+      <PlayingSection
+        swing={swing}
+        onSwing={onSwing}
+        info={ownKey ? t('recordingOnlyIn', { key: ownKey }) : undefined}
+      >
         {/* A lead sheet's tune is always heard (ADR 0083). */}
         {fit.melody && !isLeadSheet(piece) ? <MelodyToggle /> : null}
-        {piece.recording ? (
-          <RecordingToggle ownKey={isOwnKey(piece, choice.tonic) ? null : keyName(own)} />
-        ) : null}
+        {piece.recording ? <RecordingToggle ownKey={ownKey} /> : null}
       </PlayingSection>
     </PlayerSetup>
   )

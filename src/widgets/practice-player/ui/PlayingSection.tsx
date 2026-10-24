@@ -20,23 +20,25 @@ const TOGGLE_ICON: Readonly<Record<(typeof PLAYING_TOGGLES)[number], LucideIcon>
 /**
  * How the Player plays, the Setup's last section (ADR 0085), a grid of tiles: the saved toggles
  * (the metronome, the count-in), swing (null where the meter cannot swing), and the music's own
- * tiles after them (`children`: a piece's melody and recording). What the sheet shows is the View
- * menu's.
+ * tiles after them (`children`: a piece's melody and recording); `info`, why a tile of the music's is
+ * closed, beside its heading (ADR 0096). What the sheet shows is the View menu's.
  */
 export function PlayingSection({
   swing,
   onSwing,
+  info,
   children,
 }: {
   swing: boolean | null
   onSwing: (on: boolean) => void
+  info?: ReactNode
   children?: ReactNode
 }) {
   const { t } = useTranslation('player')
   const settings = useSettingsStoreApi()
   const toggles = useSettings(selectPractice)
   return (
-    <MenuSection title={t('playing')}>
+    <MenuSection title={t('playing')} info={info}>
       <ToggleGrid label={t('playing')}>
         {PLAYING_TOGGLES.map((toggle) => (
           <ToggleTile

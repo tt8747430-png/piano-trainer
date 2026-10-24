@@ -1,13 +1,14 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SCORE_TEMPLATES, TEMPLATES, templateOf, type ScoreSetup } from '@/features/edit-piece'
-import { Sheet, SheetContent, SwitchRow } from '@/shared/ui'
+import { InfoTip, Sheet, SheetContent, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
  * What a new song's score holds (ADR 0072, 0091, 0094), its own sheet over New song: a template to
  * start from, as a notation app offers them, then its staves as the score names them: the melody's
  * and the piano's (hidden, a lead sheet). Its chord symbols are typed into it, shown by the View.
+ * What each template and staff holds is an ⓘ beside its name (ADR 0096).
  */
 export function ScoreSetupSheet({
   open,
@@ -38,9 +39,24 @@ export function ScoreSetupSheet({
       >
         <div className="flex flex-col gap-6">
           <section aria-labelledby={ids.templates} className="flex flex-col gap-2">
-            <h3 id={ids.templates} className="text-sm font-semibold text-muted-foreground">
-              {t('setup.templates')}
-            </h3>
+            <div className="flex items-center gap-1.5">
+              <h3 id={ids.templates} className="text-sm font-semibold text-muted-foreground">
+                {t('setup.templates')}
+              </h3>
+              {/* What each template holds, out of the way until asked for (ADR 0096). */}
+              <InfoTip name={t('setup.templates')}>
+                <dl className="flex flex-col gap-2">
+                  {TEMPLATES.map((template) => (
+                    <div key={template}>
+                      <dt className="font-semibold">{t(`setup.template.${template}`)}</dt>
+                      <dd className="text-muted-foreground">
+                        {t(`setup.templateDetail.${template}`)}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </InfoTip>
+            </div>
             <div
               role="radiogroup"
               aria-labelledby={ids.templates}
@@ -53,12 +69,9 @@ export function ScoreSetupSheet({
                   role="radio"
                   aria-checked={chosen === template}
                   onClick={() => onChange(SCORE_TEMPLATES[template])}
-                  className="flex flex-col items-start gap-0.5 rounded-2xl border border-border bg-card p-3 text-left transition-colors hover:bg-chosen aria-checked:border-selected aria-checked:bg-selected/10"
+                  className="flex min-h-14 items-center rounded-2xl border border-border bg-card px-3 py-2 text-left font-semibold transition-colors hover:bg-chosen aria-checked:border-selected aria-checked:bg-selected/10"
                 >
-                  <span className="font-semibold">{t(`setup.template.${template}`)}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {t(`setup.templateDetail.${template}`)}
-                  </span>
+                  {t(`setup.template.${template}`)}
                 </button>
               ))}
             </div>
@@ -70,7 +83,7 @@ export function ScoreSetupSheet({
             <SwitchRow
               icon={<span className="font-music text-xl leading-none">𝄞</span>}
               label={t('setup.melody')}
-              detail={t('setup.melodyDetail')}
+              info={t('setup.melodyDetail')}
               checked={setup.melody}
               onCheckedChange={(melody) => onChange({ ...setup, melody })}
             />
@@ -78,7 +91,7 @@ export function ScoreSetupSheet({
               icon={<span className="font-music text-xl leading-none">𝄢</span>}
               label={t('setup.piano')}
               // The piano stays where no other staff would be in sight (ADR 0083).
-              detail={pianoKept ? t('setup.pianoKept') : t('setup.pianoDetail')}
+              info={pianoKept ? t('setup.pianoKept') : t('setup.pianoDetail')}
               checked={setup.piano || pianoKept}
               disabled={pianoKept}
               onCheckedChange={(piano) => onChange({ ...setup, piano })}

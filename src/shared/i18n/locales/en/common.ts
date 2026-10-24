@@ -39,6 +39,8 @@ export const common = {
   notice: { close: 'Close the notice' },
   // A search box's button that empties it.
   clearSearch: 'Clear search',
+  // The ⓘ beside a control's name, opening its explanation (ADR 0096).
+  infoTip: 'About {{name}}',
   loading: 'Loading',
   // The four levels, a journey's and a course's (ADR 0053).
   stage: {

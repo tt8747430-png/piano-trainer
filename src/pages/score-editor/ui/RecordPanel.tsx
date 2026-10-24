@@ -34,14 +34,14 @@ export function RecordPanel() {
       <div>
         <SwitchRow
           label={t('recorder.click')}
-          detail={t('recorder.clickDetail')}
+          info={t('recorder.clickDetail')}
           checked={click}
           onCheckedChange={(on) => setRecorderClick(settings, on)}
         />
         {hasTune ? (
           <SwitchRow
             label={t('recorder.tune')}
-            detail={t('recorder.tuneDetail')}
+            info={t('recorder.tuneDetail')}
             checked={tune}
             onCheckedChange={(on) => setRecorderTune(settings, on)}
           />

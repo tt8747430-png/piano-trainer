@@ -38,6 +38,7 @@ export const common: LocaleResources['common'] = {
   close: 'Закрыть',
   notice: { close: 'Закрыть уведомление' },
   clearSearch: 'Очистить поиск',
+  infoTip: 'Подробнее: {{name}}',
   loading: 'Загрузка',
   stage: {
     beginner: 'Начальный',

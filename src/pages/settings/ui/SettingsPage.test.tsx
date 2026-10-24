@@ -93,11 +93,15 @@ describe('Settings', () => {
     })
   })
 
-  it('says what each keyboard choice does, under its name', async () => {
+  it('says what a keyboard choice does in a popover beside its name, never in a line under it', async () => {
+    const user = userEvent.setup()
     await renderApp('/settings')
-    const [keys] = await screen.findAllByText('Key size')
-    expect(keys).toHaveClass('text-foreground')
-    expect(keys?.nextElementSibling).toHaveTextContent(/fills the width/)
+    await user.click(await screen.findByRole('button', { name: 'About Key size' }))
+    expect(await screen.findByRole('dialog', { name: 'Key size' })).toHaveTextContent(
+      /fills the width/,
+    )
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByText(/fills the width/)).toBeNull())
   })
 
   it('keeps on the bar over the keys only the buttons chosen, in the bar’s order', async () => {
