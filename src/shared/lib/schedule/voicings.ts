@@ -1,5 +1,5 @@
 import {
-  note,
+  C_MAJOR,
   parseNoteInOctave,
   TICKS_PER_BEAT,
   type Hand,
@@ -64,10 +64,7 @@ const STAFF_OF: Readonly<Record<Hand, StaffId>> = { lh: 'bass', rh: 'treble' }
  * with its symbol over it, each hand on its own staff with its keys spelled as written, a staff with
  * no hand left blank; in a key, whose signature it writes.
  */
-export function voicingsMusic(
-  voicings: readonly WrittenVoicing[],
-  key: Key = { tonic: note('C'), minor: false },
-): TimedMusic {
+export function voicingsMusic(voicings: readonly WrittenVoicing[], key: Key = C_MAJOR): TimedMusic {
   const read = voicings.map(({ hands }) => readHands(hands))
   return {
     key,

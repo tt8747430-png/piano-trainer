@@ -1,6 +1,6 @@
 import {
+  C_MAJOR,
   nameChords,
-  note,
   noteName,
   pitchClass,
   spanInterval,
@@ -72,8 +72,6 @@ export function namesChord(keys: readonly Midi[]): boolean {
 }
 
 /** Any key: whether keys name a chord is not a matter of how they are spelled. */
-const C_MAJOR: Key = { tonic: note('C'), minor: false }
-
 /** The tone of a reading a key plays. */
 export const toneOfKey = (found: FoundChord, key: Midi): Tone | undefined =>
   found.chord.tones.find((tone) => tone.pitchClass === pitchClass(key))

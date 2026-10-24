@@ -4,7 +4,7 @@ import { useId, useState, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { songTitle, TITLE_MAX, usePiecesStoreApi } from '@/entities/piece'
 import { makeSong, SCORE_TEMPLATES, type ScoreSetup } from '@/features/edit-piece'
-import { keyFromParam, keyParam, METERS, note, type Meter } from '@/shared/lib/music'
+import { C_MAJOR, keyFromParam, keyParam, METERS, type Meter } from '@/shared/lib/music'
 import {
   Fab,
   KeyChoice,
@@ -18,8 +18,6 @@ import { Button } from '@/shared/ui/primitives/button'
 import { useSetupSummary } from '../model/setup-summary'
 import { ScoreSetupSheet } from './ScoreSetupSheet'
 
-const C_MAJOR = keyParam({ tonic: note('C'), minor: false })
-
 /**
  * New song, the Songs page's floating button: its title, its key among the twelve notes and its meter, each a tap; then Make, which
  * opens it in the score editor, or Record beside it, which opens it on its takes. Its `trigger` is
@@ -31,7 +29,7 @@ export function NewSongSheet({ trigger }: { trigger?: ReactElement }) {
   const navigate = useNavigate()
   const meterId = useId()
   const [title, setTitle] = useState('')
-  const [key, setKey] = useState(C_MAJOR)
+  const [key, setKey] = useState(keyParam(C_MAJOR))
   const [meter, setMeter] = useState<Meter>('4/4')
   const [setup, setSetup] = useState<ScoreSetup>(SCORE_TEMPLATES.chordsAndPiano)
   const [customizing, customize] = useState(false)

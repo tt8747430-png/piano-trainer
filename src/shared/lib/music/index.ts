@@ -59,6 +59,7 @@ export {
   type ReferenceInterval,
 } from './interval-facts'
 export {
+  C_MAJOR,
   keyFromParam,
   keySymbol,
   keyParam,
@@ -195,6 +196,7 @@ export {
 export {
   CHORD_NOTES,
   CHORD_SIZES,
+  ROMAN_NUMERALS,
   SIZE_NOTES,
   STACK_SIZES,
   sizeOfNotes,

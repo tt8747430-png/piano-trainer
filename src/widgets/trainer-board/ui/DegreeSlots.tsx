@@ -1,9 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import type { Question } from '@/features/trainer'
-import { noteName, pitchClass, type Midi } from '@/shared/lib/music'
+import { noteName, pitchClass, ROMAN_NUMERALS, type Midi } from '@/shared/lib/music'
 import { cn } from '@/shared/lib'
-
-const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const
 
 /**
  * The degrees of a key as seven slots, I to VII, each filled with its note as it is played: the
@@ -27,13 +25,13 @@ export function DegreeSlots({
         const shown = key !== undefined || answered
         return (
           <li
-            key={NUMERALS[i]}
+            key={ROMAN_NUMERALS[i]}
             className={cn(
               'flex min-h-14 flex-col items-center justify-center rounded-lg border border-input',
               wrong ? 'border-destructive text-destructive' : shown ? 'bg-muted' : undefined,
             )}
           >
-            <span className="text-xs text-muted-foreground">{NUMERALS[i]}</span>
+            <span className="text-xs text-muted-foreground">{ROMAN_NUMERALS[i]}</span>
             <span className="font-display text-lg font-semibold">
               {shown ? noteName(tone.note) : ' '}
             </span>

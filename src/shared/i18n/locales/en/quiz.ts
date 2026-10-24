@@ -45,13 +45,6 @@ export const quiz = {
     chordRole: 'In {{key}}: which chord is this?',
     nameProgression: 'In {{key}}: which progression is this?',
   },
-  // Where a chord asked in an inversion has its lowest note.
-  position: {
-    root: 'root position',
-    first: '1st inversion',
-    second: '2nd inversion',
-    third: '3rd inversion',
-  },
   // A key signature's count, as an answer.
   signature: { none: 'None', sharps: '{{count}} ♯', flats: '{{count}} ♭' },
   degrees: 'Degrees',

@@ -1,7 +1,6 @@
-import { note } from '@/shared/lib/music'
+import { C_MAJOR, note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const C_MINOR = { tonic: note('C'), minor: true }
 
 /** Gorshkov's lesson 1, its practice sheet «Септаккорды»: 7th chords on «Ромашковые поля», and Exercise 1. */

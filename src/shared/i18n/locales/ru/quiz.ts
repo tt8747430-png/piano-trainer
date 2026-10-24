@@ -45,12 +45,6 @@ export const quiz: LocaleResources['quiz'] = {
     chordRole: '{{key}}: какой это аккорд?',
     nameProgression: '{{key}}: что это за последовательность?',
   },
-  position: {
-    root: 'основной вид',
-    first: '1-е обращение',
-    second: '2-е обращение',
-    third: '3-е обращение',
-  },
   signature: { none: 'Нет', sharps: '{{count}} ♯', flats: '{{count}} ♭' },
   degrees: 'Ступени',
   shortcuts: {

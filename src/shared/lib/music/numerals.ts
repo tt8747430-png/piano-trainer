@@ -12,7 +12,13 @@ import type { Key } from './key'
 import { letterIndex, pitchClassOf, plainRoot, type SpelledNote } from './note'
 import { pitchClass } from './pitch'
 import { keyScale, spellScale } from './scale'
-import { scaleChordAt, scaleChords, SIZE_NOTES, type ChordSize } from './scale-chord'
+import {
+  ROMAN_NUMERALS,
+  scaleChordAt,
+  scaleChords,
+  SIZE_NOTES,
+  type ChordSize,
+} from './scale-chord'
 import { availableTensions } from './tensions'
 import type { Tone } from './tone'
 
@@ -50,7 +56,6 @@ export interface AppliedDegree {
   readonly minor: boolean
 }
 
-const ROMANS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const
 const TOKEN = /^([b♭#♯]?)(VII|VI|V|IV|III|II|I|vii|vi|v|iv|iii|ii|i)(.*)$/
 /** What follows an applied numeral's slash: a degree alone, so a `6/9` is still a chord. */
 const APPLIED = /^(.*)\/([b♭#♯]?)(VII|VI|V|IV|III|II|I|vii|vi|v|iv|iii|ii|i)$/
@@ -139,7 +144,7 @@ export function readDegree(
   sign: string,
   roman: string,
 ): { readonly degree: number; readonly shift: -1 | 0 | 1 } | null {
-  const degree = ROMANS.findIndex((each) => each === roman.toUpperCase())
+  const degree = ROMAN_NUMERALS.findIndex((each) => each === roman.toUpperCase())
   const shift = SHIFTS.get(sign)
   return degree < 0 || shift === undefined ? null : { degree, shift }
 }
@@ -199,7 +204,7 @@ export function parseNumerals(text: string): Numeral[] | null {
  */
 export function numeralText(numeral: Numeral): string {
   const sign = numeral.shift < 0 ? '♭' : numeral.shift > 0 ? '#' : ''
-  const roman = ROMANS[numeral.degree] ?? ''
+  const roman = ROMAN_NUMERALS[numeral.degree] ?? ''
   const tail = LOWER_TAILS.get(numeral.quality)
   const own =
     sign +
@@ -210,7 +215,7 @@ export function numeralText(numeral: Numeral): string {
 
 /** The degree after an applied numeral's slash, lower case for a minor key. */
 function appliedText(of: AppliedDegree): string {
-  const roman = ROMANS[of.degree] ?? ''
+  const roman = ROMAN_NUMERALS[of.degree] ?? ''
   return (of.shift < 0 ? '♭' : of.shift > 0 ? '#' : '') + (of.minor ? roman.toLowerCase() : roman)
 }
 

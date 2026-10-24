@@ -2,9 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { signatureOption, type ChoiceQuestion, type Question } from '@/features/trainer'
 import { useKeyName, useScaleName } from '@/shared/i18n'
 import { noteName, parseKey, writtenName } from '@/shared/lib/music'
-
-/** Where a chord asked in an inversion has its lowest note, by inversion. */
-const POSITION = ['root', 'first', 'second', 'third'] as const
+import { INVERSION_NAMES } from '@/shared/ui'
 
 /** A key signature's count as the options write it (`3♯`, `2♭`, `0`), read back. */
 const COUNT = /^(\d)(♯|♭)$/
@@ -34,7 +32,7 @@ export function useRoundWords() {
           ? t('quiz:prompt.buildChord', { symbol: question.symbol })
           : t('quiz:prompt.buildChordIn', {
               symbol: question.symbol,
-              position: t(`quiz:position.${POSITION[question.inversion] ?? 'root'}`),
+              position: t(`music:inversionName.${INVERSION_NAMES[question.inversion] ?? 'root'}`),
             })
       case 'name-chord':
         return t('quiz:prompt.nameChord')

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  C_MAJOR,
   keyFromParam,
   keySymbol,
   keyParam,
@@ -21,6 +22,14 @@ const key = (text: string): Key => {
   if (!parsed) throw new Error(`test key ${text} did not parse`)
   return parsed
 }
+
+describe('C_MAJOR', () => {
+  it('is the key of C, major, as a URL and a symbol write it', () => {
+    expect(keySymbol(C_MAJOR)).toBe('C')
+    expect(keyParam(C_MAJOR)).toBe('C')
+    expect(keySignature(C_MAJOR)).toBe(0)
+  })
+})
 
 describe('parseKey', () => {
   it.each([

@@ -6,6 +6,7 @@ import { isTrainerId } from '@/features/trainer'
 import { readProgressionsSearch } from '@/app/routes/explorer-search'
 import { typedSearch } from '@/widgets/progression-explorer'
 import {
+  C_MAJOR,
   chordsHolding,
   chordSymbol,
   HOLDING_GROUPS,
@@ -33,8 +34,6 @@ import { stepIdOf } from '@/entities/step'
 
 /** Every lesson a learner reads: the journeys', then each course's own. */
 const WORKSHEETS: readonly Lesson[] = [...LESSONS, ...COURSES.flatMap((course) => course.lessons)]
-
-const C_MAJOR = { tonic: note('C'), minor: false }
 
 /** Every text a learner reads in a lesson. */
 const texts = (lesson: Lesson) => [

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart, type Performance } from '@/shared/lib/arrangement'
-import { midi, note, parseChordSymbol } from '@/shared/lib/music'
+import { C_MAJOR, midi, note, parseChordSymbol } from '@/shared/lib/music'
 import {
   audibleHands,
   beatGroupSounds,
@@ -11,7 +11,6 @@ import {
   type Sound,
 } from './schedule'
 
-const C_MAJOR = { tonic: note('C'), minor: false } as const
 const oneChordBar = (symbol: string) => ({
   chords: [{ ...parseChordSymbol(symbol), beats: 4 }],
   beats: 4,

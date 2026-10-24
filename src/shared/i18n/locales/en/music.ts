@@ -4,7 +4,15 @@ export const music = {
   major: 'M',
   // A tempo as every screen says it: a song's facts, the Player's and the editor's tempo, a take's.
   bpm: '{{tempo}} BPM',
+  // An inversion as a chooser's short option, and said in full where it stands as a name: a quiz's
+  // prompt, a found chord's words.
   inversion: { label: 'Inversion', root: 'Root', first: '1st', second: '2nd', third: '3rd' },
+  inversionName: {
+    root: 'Root position',
+    first: '1st inversion',
+    second: '2nd inversion',
+    third: '3rd inversion',
+  },
   // Where a row's hand stands: the first chord's inversion, then each nearest the last or all in it.
   position: {
     from: {

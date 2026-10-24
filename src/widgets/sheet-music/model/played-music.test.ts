@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart } from '@/shared/lib/arrangement'
-import { midi, note, parseChordSymbol } from '@/shared/lib/music'
+import { C_MAJOR, midi, note, parseChordSymbol } from '@/shared/lib/music'
 import { playedMusic } from './played-music'
 
-const C_MAJOR = { tonic: note('C'), minor: false } as const
 const CHART: Chart = {
   key: C_MAJOR,
   meter: '4/4',

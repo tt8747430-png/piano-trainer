@@ -57,7 +57,8 @@ const ALTERATIONS = new Map([
   [-1, '♭'],
   [1, '#'],
 ])
-const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
+/** The seven degrees of a scale as Roman numerals, upper case: a numeral's case is its chord's to set. */
+export const ROMAN_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const
 
 /**
  * A stack's suffix by one rule: its triad, or its 7th chord carrying the highest natural extension,
@@ -103,7 +104,7 @@ export function scaleChords(root: SpelledNote, kind: ScaleKind, notes: ChordNote
       const semitones = above + 12 * Math.floor(index / 7) - degreeTone.semitones
       return toneAbove(degreeTone.note, labelled(2 * third, semitones))
     })
-    const numeral = NUMERALS[degree] ?? ''
+    const numeral = ROMAN_NUMERALS[degree] ?? ''
     const quality = qualityWithIntervals(tones)
     return {
       degree,

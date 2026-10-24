@@ -1,12 +1,12 @@
 import { stripSearchParams, type SearchSchemaInput } from '@tanstack/react-router'
 import { isOneOf } from '@/shared/lib'
 import {
+  C_MAJOR,
   CHORD_SIZES,
   type Key,
   KEY_WALKS,
   keyParam,
   LEAD_INS,
-  note,
   numeralsParam,
   parseKey,
   parseNumerals,
@@ -45,8 +45,7 @@ export const isChordSize = isOneOf(CHORD_SIZES)
 export const isKeyWalk = isOneOf(KEY_WALKS)
 export const isLeadIn = isOneOf(LEAD_INS)
 
-/** The key a tool or a progression opens in. */
-export const C_MAJOR: Key = { tonic: note('C'), minor: false }
+/** The key a tool or a progression opens in, as a URL writes it. */
 export const C_MAJOR_PARAM = keyParam(C_MAJOR)
 
 /** A key from the URL as written, respelled only where no signature writes it; null if none reads. */

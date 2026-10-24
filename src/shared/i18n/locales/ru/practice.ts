@@ -200,7 +200,6 @@ export const practice: LocaleResources['practice'] = {
     remember: 'Запоминать',
     rememberDetail: 'Последние {{count}}',
     slash: 'Над басом',
-    inversion: { first: 'Первое обращение', second: 'Второе обращение', third: 'Третье обращение' },
     bass: 'В басу {{note}}',
     voicing: {
       quartal: 'Кварты',

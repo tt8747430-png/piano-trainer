@@ -1,7 +1,6 @@
-import { note, numeralsParam, parseNumerals, withLeadIns } from '@/shared/lib/music'
+import { C_MAJOR, note, numeralsParam, parseNumerals, withLeadIns } from '@/shared/lib/music'
 import type { Lesson } from '../model/types'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const C_MINOR = { tonic: note('C'), minor: true }
 const D_MAJOR = { tonic: note('D'), minor: false }
 

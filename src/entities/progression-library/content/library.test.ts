@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  C_MAJOR,
   chordSymbol,
   note,
   numeralChord,
@@ -19,7 +20,6 @@ import {
 import { PROGRESSION_STYLES, type LibraryProgression } from '../model/types'
 import { PROGRESSION_LIBRARY } from './library'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const C_MINOR = { tonic: note('C'), minor: true }
 const A_MINOR = { tonic: note('A'), minor: true }
 

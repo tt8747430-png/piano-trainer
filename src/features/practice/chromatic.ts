@@ -2,8 +2,8 @@ import { accompanimentOptions, type PatternBook } from '@/entities/pattern'
 import { fourToALine, wholeBar } from '@/entities/piece'
 import { arrange, type Chart, type Performance } from '@/shared/lib/arrangement'
 import {
+  C_MAJOR,
   type ChordQuality,
-  note,
   pitchClass,
   pitchClassOf,
   qualityRootSpelling,
@@ -17,8 +17,6 @@ const STEPS: Readonly<Record<ChromaticDirection, readonly number[]>> = {
   down: Array.from({ length: 13 }, (_, i) => -i),
   both: Array.from({ length: 25 }, (_, i) => 12 - Math.abs(12 - i)),
 }
-const C_MAJOR = { tonic: note('C'), minor: false }
-
 /**
  * The chosen qualities root by root, a semitone at a time from `root`, a bar of 4/4 each, four bars
  * a line; in C, so the sheet music writes each chord's accidentals.
