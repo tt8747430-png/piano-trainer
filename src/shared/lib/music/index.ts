@@ -74,6 +74,7 @@ export {
   type KeyParam,
 } from './key'
 export { CHORD_ROLES, type ChordRole, type Tone } from './tone'
+export { type NoteLyrics, type Syllable } from './lyrics'
 export {
   CHORD_FAMILIES,
   CHORD_QUALITIES,

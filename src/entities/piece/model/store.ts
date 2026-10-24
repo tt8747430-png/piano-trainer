@@ -4,6 +4,7 @@ import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } 
 import { isMeter, isWrittenKey, parseKey, type Tick } from '@/shared/lib/music'
 import { barTicksOf } from './chart'
 import { ContentError } from './content-error'
+import { chartOf, melodyOf } from './chart'
 import { musicOf, type PieceMusic } from './music'
 import {
   isOwnSongId,
@@ -13,7 +14,6 @@ import {
   type OwnSong,
   type OwnSongId,
 } from './own'
-import { parseMelody } from './parse-melody'
 import {
   HIDDEN_ROWS,
   showsAStaff,
@@ -27,7 +27,7 @@ import {
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-export const PIECES_VERSION = 2
+export const PIECES_VERSION = 3
 
 /** The learner's pieces (spec 2026-10-01-score-editor §4). */
 export interface PiecesState {
@@ -108,10 +108,25 @@ function savedHidden(saved: unknown, melody: boolean): { hidden?: HiddenRow[] } 
 const chartTicks = (piece: ChartPiece): Tick =>
   barTicksOf(piece).reduce((sum, ticks) => sum + ticks, 0)
 
-/** Saved music that reads as a piece's: its fields, its chart, melody and hands; null otherwise. */
+/** Whether a piece's words read on its tune (ADR 0093): a verse longer than the tune does not. */
+function singsLyrics(piece: ChartPiece): boolean {
+  try {
+    melodyOf(piece)
+    chartOf(piece)
+    return true
+  } catch (error) {
+    if (error instanceof ContentError) return false
+    throw error
+  }
+}
+
+/**
+ * Saved music that reads as a piece's: its fields, its chart, melody and hands; null otherwise. Its
+ * words are kept where they read on its tune.
+ */
 function musicOfSaved(saved: unknown): PieceMusic | null {
   if (!isRecord(saved)) return null
-  const { key, meter, tempo, pattern, sections, melody, hidden, hands } = saved
+  const { key, meter, tempo, pattern, sections, melody, hidden, hands, lyrics } = saved
   if (!isKeyText(key) || !isMeter(meter) || !isTempo(tempo) || !isPatternId(pattern)) return null
   if (!Array.isArray(sections) || sections.length === 0) return null
   const read = sections.map(sectionOf)
@@ -130,11 +145,13 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     ...(written ? { hands: written } : {}),
   }
   try {
-    const tune = parseMelody(piece)
+    const tune = melodyOf(piece)
     const fits =
       Math.max(0, ...(tune ?? []).map((n) => n.startTick + n.durationTicks)) <= chartTicks(piece)
     if (!fits) return null
-    return musicOf({ ...piece, ...savedHidden(hidden, piece.melody !== undefined) })
+    const verses = Array.isArray(lyrics) && lyrics.every(isText) ? lyrics : undefined
+    const sung = verses && singsLyrics({ ...piece, lyrics: verses }) ? { lyrics: verses } : {}
+    return musicOf({ ...piece, ...sung, ...savedHidden(hidden, piece.melody !== undefined) })
   } catch (error) {
     if (error instanceof ContentError) return null
     throw error

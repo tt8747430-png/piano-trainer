@@ -7,6 +7,7 @@ import type {
   Key,
   Meter,
   Midi,
+  NoteLyrics,
   NoteMarks,
   SpelledNote,
   Tick,
@@ -27,6 +28,8 @@ export interface HandNote {
   readonly durationTicks: Tick
   readonly finger?: Finger
   readonly marks?: NoteMarks
+  /** What it sings, by verse, where the right hand is the tune (ADR 0093). */
+  readonly lyrics?: NoteLyrics
 }
 /** A bar's hands written note by note: a hand here (even with no notes) is played as written, not by the pattern. */
 export interface WrittenHands {
@@ -60,6 +63,8 @@ export interface MelodyNote {
   readonly durationTicks: Tick
   /** What its text marks on it (ADR 0063). */
   readonly marks?: NoteMarks
+  /** What it sings, by verse (ADR 0093). */
+  readonly lyrics?: NoteLyrics
 }
 export type Melody = readonly MelodyNote[]
 
@@ -185,6 +190,8 @@ export interface PerformanceNote {
   readonly chord: number
   /** What a written note's text marks on it (ADR 0063). */
   readonly marks?: NoteMarks
+  /** What it sings, by verse: a tune's note (ADR 0093). */
+  readonly lyrics?: NoteLyrics
 }
 /** Notes sharing an onset: what Step mode walks through. `notes` index into Performance.notes. */
 export interface BeatGroup {

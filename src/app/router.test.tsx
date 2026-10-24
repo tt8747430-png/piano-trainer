@@ -2,7 +2,7 @@ import { createMemoryHistory } from '@tanstack/react-router'
 import { act, cleanup, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { COLLECTIONS, PIECES_STORAGE_KEY } from '@/entities/piece'
+import { COLLECTIONS, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from '@/entities/settings'
 import { createMemoryStorage, safeLocalStorage } from '@/shared/lib'
 import { stubServiceWorker } from '@/shared/test/pwa-register'
@@ -389,7 +389,7 @@ describe('shelves', () => {
 describe('the learner’s pieces', () => {
   const saved = (state: object) => {
     const storage = createMemoryStorage()
-    storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: 2 }))
+    storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: PIECES_VERSION }))
     return storage
   }
   const SONG = {

@@ -2,11 +2,14 @@ import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { PatternId } from '@/entities/pattern'
 import {
   emptyLine,
+  gatherLyrics,
   HAND_IDS,
   keyText,
   readMusic,
+  singingNotes,
   writeBar,
   writeHand,
+  writeLyrics,
   writeMelody,
   type ChartPiece,
   type HandId,
@@ -30,6 +33,7 @@ import {
   type Key,
   type Meter,
   type Midi,
+  type NoteLyrics,
   type NoteMarks,
   type SpelledNote,
   type Tick,
@@ -52,6 +56,8 @@ export interface DraftNote {
   readonly durationTicks: Tick
   readonly finger?: Finger
   readonly marks?: NoteMarks
+  /** What it sings, by verse (ADR 0093): a note of the tune's staff, or of the right hand's chord where that is the tune. */
+  readonly lyrics?: NoteLyrics
 }
 
 /** A chord from where it starts in its bar; it lasts until the next one or the barline. */
@@ -104,6 +110,7 @@ const playedNote = (n: Performance['notes'][number], end: Tick): DraftNote => ({
   durationTicks: Math.min(n.durationTicks, end - n.startTick),
   ...(n.finger === undefined ? {} : { finger: n.finger }),
   ...(n.marks ? { marks: n.marks } : {}),
+  ...(n.lyrics ? { lyrics: n.lyrics } : {}),
 })
 
 /** The Player's performance of the music as written: its own key and pattern, the built-in book's. */
@@ -205,7 +212,14 @@ function handBars(notes: readonly DraftNote[], bars: readonly PlacedBar[]): Hand
   )
 }
 
-/** The draft as the content writes music: every bar of both hands written (ADR 0091). */
+/**
+ * The notes the words go under (ADR 0093): the tune's where the score has its staff, else the right
+ * hand's, a chord of them one note.
+ */
+export const tuneNotes = (draft: Draft): DraftNote[] =>
+  draft.melodyStaff ? [...draft.melody] : singingNotes(draft.hands.rh)
+
+/** The draft as the content writes music: every bar of both hands written (ADR 0091), its words as verses. */
 export function writeDraft(draft: Draft): PieceMusic {
   const placed = barsOf(draft)
   const timeline = placed.map(({ start, bar }) => ({ startTick: start, ticks: bar.ticks }))
@@ -216,6 +230,7 @@ export function writeDraft(draft: Draft): PieceMusic {
   const hidden = draft.hidden.filter((row) => hasRow(draft, row))
   const ticks = placed.map(({ bar }) => bar.ticks)
   const clefs = (hand: Hand) => placed.map(({ bar }) => bar.clefs?.[hand])
+  const lyrics = gatherLyrics(tuneNotes(draft)).map(writeLyrics)
   return {
     key: keyText(draft.key),
     meter: draft.meter,
@@ -229,6 +244,7 @@ export function writeDraft(draft: Draft): PieceMusic {
     })),
     ...(melody === undefined ? {} : { melody }),
     ...(hidden.length > 0 ? { hidden } : {}),
+    ...(lyrics.length > 0 ? { lyrics } : {}),
     hands: {
       rh: writeHand(handBars(draft.hands.rh, placed), ticks, clefs('rh')),
       lh: writeHand(handBars(draft.hands.lh, placed), ticks, clefs('lh')),

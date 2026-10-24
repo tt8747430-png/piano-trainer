@@ -1,20 +1,33 @@
 import { isMethodCode, METHODS, type PatternFit, type PatternId } from '@/entities/pattern'
 import type { Chart, ChartChord, Melody } from '@/shared/lib/arrangement'
 import { beatsToTicks, isCompound, type ChordSize, type Tick } from '@/shared/lib/music'
+import { parseLyrics, tuneLength, withHandLyrics, withMelodyLyrics } from './lyrics'
 import { parseChart } from './parse-chart'
 import { parseMelody } from './parse-melody'
 import { parseProgression } from './parse-progression'
 import { isDegreePiece, type ChartPiece, type Piece } from './types'
 
-/** A piece's chart; one written in degrees at the chosen chord size when it lets the learner choose. */
+/**
+ * A piece's chart; one written in degrees at the chosen chord size when it lets the learner choose.
+ * A piece without a melody sings its words on the right hand's notes (ADR 0093).
+ */
 export function chartOf(piece: Piece, chordSize?: ChordSize): Chart {
-  if (!isDegreePiece(piece)) return parseChart(piece)
-  const { choosable, default: fixed } = piece.chordSize
-  return parseProgression(piece, choosable ? (chordSize ?? fixed) : fixed)
+  if (isDegreePiece(piece)) {
+    const { choosable, default: fixed } = piece.chordSize
+    return parseProgression(piece, choosable ? (chordSize ?? fixed) : fixed)
+  }
+  const chart = parseChart(piece)
+  if (piece.lyrics === undefined || piece.melody !== undefined) return chart
+  return withHandLyrics(chart, parseLyrics(piece, tuneLength(chart, undefined)) ?? [])
 }
 
-export const melodyOf = (piece: Piece): Melody | undefined =>
-  isDegreePiece(piece) ? undefined : parseMelody(piece)
+/** A piece's tune, singing its words where it has them (ADR 0093). */
+export function melodyOf(piece: Piece): Melody | undefined {
+  if (isDegreePiece(piece)) return undefined
+  const melody = parseMelody(piece)
+  if (melody === undefined || piece.lyrics === undefined) return melody
+  return withMelodyLyrics(melody, parseLyrics(piece, melody.length) ?? [])
+}
 
 /** Every chord of a chart in order. */
 export const chordsOf = (chart: Chart): ChartChord[] =>

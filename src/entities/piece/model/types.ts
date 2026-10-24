@@ -100,6 +100,12 @@ export interface ChartPiece extends PieceCommon {
   readonly hidden?: readonly HiddenRow[]
   /** Bars of either hand written note by note, played in place of the pattern's hand there. */
   readonly hands?: Hands
+  /**
+   * Its words, a verse a string (ADR 0093): syllables parted by spaces, aligned to the tune's notes
+   * in order (the melody's, else the right hand's), `-` ending a syllable its word carries on, `_`
+   * holding one over the next note, `~` an empty place: see docs/CONTENT.md.
+   */
+  readonly lyrics?: readonly string[]
 }
 
 /**
