@@ -98,16 +98,20 @@ export const withMelodyLyrics = (melody: Melody, verses: readonly Verse[]): Melo
     return lyrics ? { ...n, lyrics } : n
   })
 
-/** The chart with its verses on the right hand's notes, the highest at each onset singing. */
+/**
+ * The chart with its verses on the right hand's notes, the highest at each onset singing, in time
+ * order however the bar writes them (a voice written after another from its `@beat`).
+ */
 export function withHandLyrics(chart: Chart, verses: readonly Verse[]): Chart {
   let index = 0
   const sung = (bar: ChartBar): ChartBar => {
     const rh = bar.hands?.rh
     if (!rh) return bar
-    const tops = new Set(singingNotes(rh))
+    const places = new Map(singingNotes(rh).map((n, i) => [n, index + i]))
+    index += places.size
     const notes = rh.map((n) => {
-      if (!tops.has(n)) return n
-      const lyrics = sungAt(verses, index++)
+      const place = places.get(n)
+      const lyrics = place === undefined ? undefined : sungAt(verses, place)
       return lyrics ? { ...n, lyrics } : n
     })
     return { ...bar, hands: { ...bar.hands, rh: notes } }

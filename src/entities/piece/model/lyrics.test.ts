@@ -102,6 +102,21 @@ describe('the tune a piece sings on', () => {
     expect(gatherLyrics(tune).map(writeLyrics)).toEqual(['a- b_ c d'])
   })
 
+  it('gives the verse to the right hand’s singing notes in time, however the bar writes them', () => {
+    // The lower voice written first, then the upper from beat 1 (`@`): the upper sings first.
+    const voiced = testSong(['C'], { hands: { rh: 'C4/2 D4/2 E5/1@1 F5/1@2' } })
+    const chart = withHandLyrics(parseChart(voiced), [readLyrics('one two three')])
+    const rh = chart.sections
+      .flatMap((section) => section.lines.flat())
+      .flatMap((bar) => bar.hands?.rh ?? [])
+    expect(rh.map((n) => [n.midi, n.lyrics?.[0]?.text ?? null])).toEqual([
+      [60, null],
+      [62, 'three'],
+      [76, 'one'],
+      [77, 'two'],
+    ])
+  })
+
   it('sings a chord on the note that carries words, else its highest', () => {
     const low = { startTick: 0, midi: 60, lyrics: [syl('a')] }
     const high = { startTick: 0, midi: 64 }
