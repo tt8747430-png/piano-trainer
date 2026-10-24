@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { qualityParams } from '@/shared/lib'
+import { OPEN_PLAINLY, qualityParams } from '@/shared/lib'
 import { keyParam, note, noteParam } from '@/shared/lib/music'
 import { PAGE_TILES, RowLink } from '@/shared/ui'
 import { PageRow } from '@/widgets/practice-pages'
@@ -7,7 +7,8 @@ import type { IndexTarget } from '../model/index-entries'
 
 /**
  * An entry's row: its name, its line, the tile of the page it opens, and the link there, on what it
- * names. A song has its own row, the one Songs shows it in.
+ * names. A song has its own row, the one Songs shows it in. A trainer and an exercise, named alone,
+ * open as they were left (`OPEN_PLAINLY`), as their own pages' rows open them.
  */
 export function IndexRow({
   title,
@@ -107,7 +108,13 @@ export function IndexRow({
         <RowLink
           {...row}
           {...PAGE_TILES.exercises}
-          render={<Link to="/play/exercise/$exerciseId" params={{ exerciseId: target.exercise }} />}
+          render={
+            <Link
+              to="/play/exercise/$exerciseId"
+              params={{ exerciseId: target.exercise }}
+              state={OPEN_PLAINLY}
+            />
+          }
         />
       )
     case 'typed-line':
@@ -123,7 +130,13 @@ export function IndexRow({
         <RowLink
           {...row}
           {...PAGE_TILES.quiz}
-          render={<Link to="/practice/quiz/$trainerId" params={{ trainerId: target.trainer }} />}
+          render={
+            <Link
+              to="/practice/quiz/$trainerId"
+              params={{ trainerId: target.trainer }}
+              state={OPEN_PLAINLY}
+            />
+          }
         />
       )
   }

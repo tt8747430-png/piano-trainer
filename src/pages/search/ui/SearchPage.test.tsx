@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -65,6 +65,16 @@ describe('Search', () => {
     expect(hrefOf('Patterns', /^1 · Bass \+ chords/)).toBe('/practice/accompaniment/patterns/M1')
     expect(hrefOf('Exercises', /^Hanon No\. 1/)).toBe('/play/exercise/hanon')
     expect(hrefOf('Quiz', /^Build chord/)).toBe('/practice/quiz/build-chord')
+  })
+
+  it('opens a trainer and an exercise as they were left, like their own pages’ rows', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/quiz/reading-notes?level=treble')
+    await screen.findByRole('heading', { level: 1, name: 'Reading notes' })
+    await act(() => router.navigate({ to: '/search', search: { q: 'reading notes' } }))
+    await user.click(await screen.findByRole('link', { name: /^Reading notes/ }))
+    expect(router.state.location.pathname).toBe('/practice/quiz/reading-notes')
+    expect(router.state.location.search).toEqual({ level: 'treble' })
   })
 
   it('finds what is typed, by kind, and keeps it in the URL', async () => {
