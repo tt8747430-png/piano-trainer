@@ -44,6 +44,31 @@ describe('ScreenHeader', () => {
     const bar = screen.getByRole('banner')
     expect(within(bar).getByRole('navigation', { name: 'Chords' })).toBeInTheDocument()
   })
+
+  it('keeps the title beside one or two actions, and under three or more on a phone, two lines at most', () => {
+    const { rerender } = render(
+      <ScreenHeader
+        title="Wonderful Grace of Jesus"
+        actions={<button type="button">Edit</button>}
+      />,
+    )
+    const title = screen.getByRole('heading', { level: 1 })
+    expect(title).not.toHaveClass('max-sm:basis-full')
+    rerender(
+      <ScreenHeader
+        title="Wonderful Grace of Jesus"
+        crowded
+        actions={
+          <>
+            <button type="button">Edit</button>
+            <button type="button">Learned</button>
+            <button type="button">More</button>
+          </>
+        }
+      />,
+    )
+    expect(title).toHaveClass('max-sm:order-last', 'max-sm:basis-full', 'max-sm:line-clamp-2')
+  })
   const scrollTo = (y: number) => {
     vi.spyOn(window, 'scrollY', 'get').mockReturnValue(y)
     act(() => void window.dispatchEvent(new Event('scroll')))

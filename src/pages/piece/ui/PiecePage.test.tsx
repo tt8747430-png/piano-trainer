@@ -94,6 +94,8 @@ describe('Piece', () => {
       expect(
         within(bar).getByRole(name === 'Edit the score' ? 'link' : 'button', { name }),
       ).toBeInTheDocument()
+    // Three actions beside Back: on a phone the title takes a row of its own under them.
+    expect(screen.getByRole('heading', { level: 1 })).toHaveClass('max-sm:basis-full')
   })
 
   it('docks its keys at the foot, folding them as the learner asks', async () => {

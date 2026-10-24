@@ -76,6 +76,7 @@ export function PieceView({ piece }: { piece: Piece }) {
     <div className="flex flex-col gap-6 pb-4">
       <PieceHeader
         entry={piece}
+        crowded
         actions={
           <>
             {isDegreePiece(piece) ? null : (
