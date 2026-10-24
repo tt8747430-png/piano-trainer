@@ -9,10 +9,13 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/
  */
 export function SignPopover({
   label,
+  info,
   trigger,
   children,
 }: {
   label: string
+  /** What its tools do, where their names alone do not say: the ⓘ beside its name (ADR 0096). */
+  info?: ReactNode
   trigger: ReactElement
   children: ReactNode
 }) {
@@ -25,7 +28,7 @@ export function SignPopover({
         align="start"
         className="w-92 max-w-[calc(100vw-1rem)] gap-3 p-3"
       >
-        <MenuSection title={label} className="gap-3">
+        <MenuSection title={label} info={info} className="gap-3">
           {children}
         </MenuSection>
       </PopoverContent>

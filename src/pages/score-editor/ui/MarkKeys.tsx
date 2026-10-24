@@ -6,6 +6,7 @@ import { ToolKey } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
 import { GlyphGrid } from './palette-keys'
+import { usePaletteReason } from './palette-reason'
 
 /** A glyph of the music font (Noto Music), at a key's size. */
 const MUSIC = 'font-music text-3xl leading-none'
@@ -50,7 +51,7 @@ const useMarkOn = (mark: MarkChoice): boolean =>
     return notes.length > 0 && notes.every((n) => hasMark(n.marks, mark))
   })
 
-/** One mark's key: on and off on the notes chosen; greyed with none chosen. */
+/** One mark's key: on and off on the notes chosen; greyed with none chosen, saying why. */
 function MarkKey({
   mark,
   label,
@@ -64,6 +65,7 @@ function MarkKey({
   return (
     <ToolKey
       label={label}
+      reason={usePaletteReason()}
       pressed={useMarkOn(mark)}
       disabled={!useNotesChosen()}
       onClick={() => actions.dispatch({ type: 'mark', mark })}

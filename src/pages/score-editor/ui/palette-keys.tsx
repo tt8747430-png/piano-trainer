@@ -1,21 +1,22 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib'
+import { InfoTip, ToolKey } from '@/shared/ui'
 import type { PaletteCategory } from '../model/palette-categories'
 
 /**
  * One category's tools in the opened palette, under its name: a titled section the category bar
- * scrolls to; `reason`, one line saying why its tools are greyed where they are (no note chosen, not
- * a hand's staff).
+ * scrolls to; `info`, what its tools do or why they are greyed where they are (no note chosen, not a
+ * hand's staff), is the ⓘ beside its name, never a line in it (ADR 0096).
  */
 export function PaletteSection({
   category,
   title,
-  reason,
+  info,
   children,
 }: {
   category: PaletteCategory
   title: string
-  reason?: ReactNode
+  info?: ReactNode
   children: ReactNode
 }) {
   return (
@@ -24,10 +25,22 @@ export function PaletteSection({
       data-category={category}
       className="flex scroll-mt-1 flex-col gap-2 py-1.5"
     >
-      <h3 className="text-sm leading-tight font-semibold">{title}</h3>
-      {reason ? <p className="text-sm text-pretty text-muted-foreground">{reason}</p> : null}
+      <div className="flex min-h-5 items-center gap-1.5">
+        <h3 className="text-sm leading-tight font-semibold">{title}</h3>
+        {info ? <InfoTip name={title}>{info}</InfoTip> : null}
+      </div>
       {children}
     </section>
+  )
+}
+
+/** A group's name inside a section (Pedal, Lyrics), with what it is for where it says more. */
+export function GroupName({ name, info }: { name: string; info?: ReactNode }) {
+  return (
+    <div className="flex min-h-5 items-center gap-1.5 pt-1">
+      <h4 className="text-sm text-muted-foreground">{name}</h4>
+      {info ? <InfoTip name={name}>{info}</InfoTip> : null}
+    </div>
   )
 }
 
@@ -55,19 +68,20 @@ export function CaptionGrid({ label, children }: { label?: string; children: Rea
 
 /**
  * A key that says what it does: its picture over its name (a standard musical term), the name
- * wrapping inside its box, never cut; `caption` a gloss in a softer ink where the picture already
- * prints the name (a jump's words); pressed where it is so already.
+ * wrapping inside its box, never cut; pressed where it is so already; greyed, its tooltip says why
+ * (`reason`, ADR 0096).
  */
 export function CaptionKey({
   label,
-  caption,
+  reason,
   pressed,
   disabled = false,
   onClick,
   children,
 }: {
   label: string
-  caption?: string
+  /** Why it is greyed, said in its tooltip while it is. */
+  reason?: string | undefined
   pressed?: boolean
   disabled?: boolean
   onClick: () => void
@@ -77,25 +91,68 @@ export function CaptionKey({
     <button
       type="button"
       aria-label={label}
-      title={caption ? `${label}: ${caption}` : label}
+      title={disabled && reason ? reason : label}
       aria-pressed={pressed}
       disabled={disabled}
       onClick={onClick}
-      className="flex min-h-16 min-w-0 flex-col items-center justify-start gap-1 rounded-xl border border-border bg-card px-1 pt-2 pb-1.5 text-card-foreground transition-colors hover:bg-chosen aria-pressed:border-selected aria-pressed:bg-selected aria-pressed:text-selected-foreground disabled:opacity-35"
+      className="flex min-h-16 min-w-0 flex-col items-center justify-start gap-1 rounded-xl border border-border bg-card px-1 pt-2 pb-1.5 text-card-foreground transition-colors hover:bg-chosen aria-pressed:border-selected aria-pressed:bg-selected aria-pressed:text-selected-foreground disabled:opacity-35 disabled:hover:bg-card"
     >
       <span aria-hidden className="grid min-h-7 w-full shrink-0 place-items-center [&_svg]:size-7">
         {children}
       </span>
       <span
         aria-hidden
-        className={cn(
-          'w-full text-center text-xs leading-tight text-balance break-words hyphens-auto',
-          caption && 'text-muted-foreground aria-pressed:text-inherit',
-        )}
+        className="w-full text-center text-xs leading-tight text-balance break-words hyphens-auto"
       >
-        {caption ?? label}
+        {label}
       </span>
     </button>
+  )
+}
+
+/** Terms as a score prints them (dolce, rit., D.C. al Fine), as many to a row as fit. */
+export function TermGrid({ label, children }: { label?: string; children: ReactNode }) {
+  return (
+    <div
+      role={label ? 'group' : undefined}
+      aria-label={label}
+      className="grid grid-cols-[repeat(auto-fill,minmax(4.5rem,1fr))] gap-1.5"
+    >
+      {children}
+    </div>
+  )
+}
+
+/**
+ * A term's key (ADR 0096): the term alone as a score prints it, its name for a screen reader, what it
+ * means (`meaning`: dolce, sweetly) its tooltip and a screen reader's description; greyed, why.
+ */
+export function TermKey({
+  label,
+  term,
+  meaning,
+  reason,
+  disabled = false,
+  onClick,
+}: {
+  label: string
+  term: string
+  meaning: string
+  reason?: string | undefined
+  disabled?: boolean
+  onClick: () => void
+}) {
+  return (
+    <ToolKey
+      label={label}
+      description={meaning}
+      reason={reason}
+      disabled={disabled}
+      onClick={onClick}
+      className="whitespace-normal"
+    >
+      <Printed text={term} />
+    </ToolKey>
   )
 }
 
@@ -104,8 +161,10 @@ export function Printed({ text, music = false }: { text: string; music?: boolean
   return (
     <span
       className={cn(
-        'text-center leading-none',
-        music ? 'font-music text-3xl' : 'font-serif text-sm font-semibold italic',
+        'text-center',
+        music
+          ? 'font-music text-3xl leading-none'
+          : 'font-serif text-sm leading-tight font-semibold italic',
       )}
     >
       {text}

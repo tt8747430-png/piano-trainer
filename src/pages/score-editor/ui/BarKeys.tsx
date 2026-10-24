@@ -9,7 +9,7 @@ import {
 import { ToolKey } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { BarIcon, type BarKeyEdit } from './palette-icons'
-import { CaptionGrid, CaptionKey, GlyphGrid } from './palette-keys'
+import { CaptionGrid, CaptionKey, GlyphGrid, GroupName } from './palette-keys'
 
 /** What the Bar section does to the bars chosen, else the caret's, in order. */
 const BAR_KEYS: readonly BarKeyEdit[] = [
@@ -34,7 +34,7 @@ function Figures({ time }: { time: TimeSignature }) {
 /**
  * Bar (spec 2026-10-23): what acts on the bars chosen, else the caret's: a bar added before or after,
  * the bars deleted, a line or a section begun there or the lines joined; their length (a pickup, or a
- * bar of another length), each saying what it does.
+ * bar of another length, as the ⓘ beside its name says), each saying what it does.
  */
 export function BarKeys() {
   const { t } = useTranslation('editor')
@@ -54,7 +54,7 @@ export function BarKeys() {
           </CaptionKey>
         ))}
       </CaptionGrid>
-      <h4 className="pt-1 text-sm text-muted-foreground">{t('bars.length')}</h4>
+      <GroupName name={t('bars.length')} info={t('bars.lengthInfo')} />
       <GlyphGrid label={t('bars.length')}>
         {barLengths(meter).map((ticks) => {
           const time = timeSignature(ticks / TICKS_PER_BEAT, meter)

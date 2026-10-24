@@ -29,7 +29,8 @@ import { isJumpWords, JUMP_SIGNS, JUMP_WORDS } from '../model/palette-categories
 import { useNotesChosen } from '../model/use-notes-chosen'
 import { LyricsField } from './LyricsField'
 import { BarlineIcon, CodaSign } from './palette-icons'
-import { CaptionGrid, CaptionKey, Printed } from './palette-keys'
+import { CaptionGrid, CaptionKey, GroupName, Printed, TermGrid, TermKey } from './palette-keys'
+import { usePaletteReason } from './palette-reason'
 
 /** Each clef as the music font draws it. */
 const CLEF_GLYPHS = { treble: '\u{1D11E}', bass: '\u{1D122}' } as const
@@ -47,6 +48,7 @@ export function ClefKeys({ at }: { at?: { readonly hand: Hand; readonly bar: num
   const hand = at ? at.hand : caret
   const bar = at ? at.bar : chosen
   const current = useEditorState((state) => (hand ? clefAt(state.draft, bar, hand) : null))
+  const reason = usePaletteReason()
   return (
     <>
       {hand ? (
@@ -59,6 +61,7 @@ export function ClefKeys({ at }: { at?: { readonly hand: Hand; readonly bar: num
           <CaptionKey
             key={clef}
             label={t(`clef.${clef}`)}
+            reason={reason}
             pressed={current === clef}
             disabled={!hand}
             onClick={() => hand && actions.dispatch({ type: 'clef', hand, clef, bar })}
@@ -119,58 +122,63 @@ export function KeySignatureKeys({ bar }: { bar?: number }) {
 
 /**
  * Time signature (ADR 0094): the song's own, one for every bar, another of its kind; a change of time
- * inside the song is for later.
+ * inside the song is for later, as the ⓘ beside the section's name says (ADR 0096).
  */
 export function TimeSignatureKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const meter = useEditorState((state) => state.draft.meter)
   return (
-    <>
-      <Segmented
-        label={t('song.meter')}
-        value={meter}
-        options={metersFor(meter).map((each) => ({ value: each, label: each }))}
-        onChange={(next) => actions.dispatch({ type: 'settings', meter: next })}
-      />
-      <p className="text-sm text-pretty text-muted-foreground">{t('signature.timeLater')}</p>
-    </>
+    <Segmented
+      label={t('song.meter')}
+      value={meter}
+      options={metersFor(meter).map((each) => ({ value: each, label: each }))}
+      onChange={(next) => actions.dispatch({ type: 'settings', meter: next })}
+    />
   )
 }
 
 /**
  * Barlines & repeats: the barlines and endings, then the signs and jumps, on the bars chosen, else the
- * caret's: a barline drawn on its staff, a sign as printed, a jump's words with what they ask under
- * them.
+ * caret's: a barline drawn on its staff and a sign as printed, each over its name; a jump's words
+ * alone, what they ask its tooltip (ADR 0096).
  */
 export function RepeatKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
-  const key = (choice: BarMarkChoice) => (
-    <CaptionKey
-      key={choice}
-      label={t(`barline.${choice}`)}
-      caption={isJumpWords(choice) ? t(`jumpMeaning.${choice}`) : undefined}
-      onClick={() => actions.dispatch({ type: 'barMarks', choice })}
-    >
-      {isJumpWords(choice) ? (
-        <Printed text={JUMP_WORDS[choice]} />
-      ) : choice === 'coda' ? (
-        <span className="size-7">
-          <CodaSign />
-        </span>
-      ) : choice === 'segno' ? (
-        <Printed text={JUMP_SIGNS.segno} music />
-      ) : (
-        <BarlineIcon choice={choice} />
-      )}
-    </CaptionKey>
-  )
+  const mark = (choice: BarMarkChoice) => () => actions.dispatch({ type: 'barMarks', choice })
+  const key = (choice: BarMarkChoice) =>
+    isJumpWords(choice) ? (
+      <TermKey
+        key={choice}
+        label={t(`barline.${choice}`)}
+        term={JUMP_WORDS[choice]}
+        meaning={t(`jumpMeaning.${choice}`)}
+        onClick={mark(choice)}
+      />
+    ) : (
+      <CaptionKey key={choice} label={t(`barline.${choice}`)} onClick={mark(choice)}>
+        {choice === 'coda' ? (
+          <span className="size-7">
+            <CodaSign />
+          </span>
+        ) : choice === 'segno' ? (
+          <Printed text={JUMP_SIGNS.segno} music />
+        ) : (
+          <BarlineIcon choice={choice} />
+        )}
+      </CaptionKey>
+    )
+  const words = JUMP_CHOICES.filter(isJumpWords)
+  const signs = JUMP_CHOICES.filter((choice) => !isJumpWords(choice))
   return (
     <>
       <CaptionGrid label={t('barlines')}>{BARLINE_CHOICES.map(key)}</CaptionGrid>
-      <h4 className="pt-1 text-sm text-muted-foreground">{t('jumps')}</h4>
-      <CaptionGrid label={t('jumps')}>{JUMP_CHOICES.map(key)}</CaptionGrid>
+      <GroupName name={t('jumps')} />
+      <div role="group" aria-label={t('jumps')} className="flex flex-col gap-1.5">
+        <CaptionGrid>{signs.map(key)}</CaptionGrid>
+        <TermGrid>{words.map(key)}</TermGrid>
+      </div>
     </>
   )
 }
@@ -187,11 +195,15 @@ const PEDAL_LABEL = {
   up: 'marks.pedalUp',
 } as const satisfies Readonly<Record<Pedal, string>>
 
-/** Text & pedal: the expression words as printed, what each asks under it, and the pedal's marks. */
+/**
+ * Text & pedal: the expression words alone as printed, what each asks its tooltip (ADR 0096); the
+ * pedal's marks; the lyrics, greyed off the staff they go on, saying where they go.
+ */
 export function TextKeys() {
   const { t } = useTranslation('editor')
   const { actions, view } = useScoreEditorContext()
   const chosen = useNotesChosen()
+  const reason = usePaletteReason()
   // The lyrics are written on their own staff alone (ADR 0093); the verse open is clamped to one
   // past the last.
   const sings = useEditorState((state) => singsHere(state.draft, state.layer))
@@ -199,29 +211,32 @@ export function TextKeys() {
   const count = useEditorState((state) => verseCount(state.draft))
   const caret = useEditorState((state) => state.caret)
   const verse = view.lyricsVerse === null ? null : Math.min(view.lyricsVerse, count)
+  // Where the words go, said where the caret is on another staff (ADR 0093).
+  const elsewhere = sings ? undefined : t(`reason.lyricsOn.${lyricsOn}`)
   return (
     <>
-      <CaptionGrid label={t('expressions')}>
+      <TermGrid label={t('expressions')}>
         {EXPRESSIONS.map((expression) => (
-          <CaptionKey
+          <TermKey
             key={expression}
             label={t(`marks.${expression}`)}
-            caption={t(`meaning.${expression}`)}
+            term={EXPRESSION_TEXT[expression]}
+            meaning={t(`meaning.${expression}`)}
+            reason={reason}
             disabled={!chosen}
             onClick={() =>
               actions.dispatch({ type: 'mark', mark: { kind: 'expression', expression } })
             }
-          >
-            <Printed text={EXPRESSION_TEXT[expression]} />
-          </CaptionKey>
+          />
         ))}
-      </CaptionGrid>
-      <h4 className="pt-1 text-sm text-muted-foreground">{t('pedal')}</h4>
+      </TermGrid>
+      <GroupName name={t('pedal')} />
       <CaptionGrid label={t('pedal')}>
         {PEDALS.map(({ pedal, glyph }) => (
           <CaptionKey
             key={pedal}
             label={t(PEDAL_LABEL[pedal])}
+            reason={reason}
             disabled={!chosen}
             onClick={() => actions.dispatch({ type: 'mark', mark: { kind: 'pedal', pedal } })}
           >
@@ -229,15 +244,11 @@ export function TextKeys() {
           </CaptionKey>
         ))}
       </CaptionGrid>
-      <h4 className="pt-1 text-sm text-muted-foreground">{t('lyrics.label')}</h4>
-      {sings ? null : (
-        <p className="text-sm text-pretty text-muted-foreground">
-          {t(`reason.lyricsOn.${lyricsOn}`)}
-        </p>
-      )}
+      <GroupName name={t('lyrics.label')} info={elsewhere} />
       <CaptionGrid label={t('lyrics.label')}>
         <CaptionKey
           label={t('lyrics.label')}
+          reason={elsewhere}
           pressed={verse !== null}
           disabled={!sings}
           onClick={() => view.openLyrics(verse === null ? 0 : null)}

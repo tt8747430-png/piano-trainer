@@ -1,14 +1,19 @@
 import { ChevronDown, ChevronUp, Piano } from 'lucide-react'
 import { useEffect, useEffectEvent, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { chosenNotes, fingerableNotes, isHandLayer } from '@/features/score-editor'
+import { chosenNotes, EDIT_MODES, fingerableNotes } from '@/features/score-editor'
 import { useFoldKeys } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
 import { Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { gripRelease } from '../model/grip'
-import { categoryOpen, PALETTE_CATEGORIES, type PaletteCategory } from '../model/palette-categories'
+import {
+  closedBy,
+  greyedBy,
+  PALETTE_CATEGORIES,
+  type PaletteCategory,
+} from '../model/palette-categories'
 import { BarKeys } from './BarKeys'
 import { ChordBuilt, ChordsInKey, ChordTyped, QuickChords } from './ChordKeys'
 import { FingeringKeys } from './FingeringKeys'
@@ -17,43 +22,66 @@ import { ArticulationKeys, DynamicKeys } from './MarkKeys'
 import { NoteKeys, PitchKeys, QuickValues } from './NoteKeys'
 import { CategoryIcon } from './palette-icons'
 import { PaletteSection } from './palette-keys'
+import { PaletteReason } from './palette-reason'
 import { ClefKeys, KeySignatureKeys, RepeatKeys, TextKeys, TimeSignatureKeys } from './ScoreKeys'
 
 /** The ways the Chords category writes a chord (ADR 0089): the key's, built from its parts, typed. */
 const CHORD_WAYS = ['key', 'build', 'type'] as const
 type ChordWay = (typeof CHORD_WAYS)[number]
 
-/** The categories whose tools act on notes chosen: greyed, with their reason, where none is. */
-const ON_NOTES: readonly PaletteCategory[] = ['pitch', 'articulations', 'dynamics', 'lines', 'text']
-
 /** Why a category's tools are greyed where the caret writes, or nothing where they work. */
 function useReason(category: PaletteCategory): string | undefined {
   const { t } = useTranslation('editor')
   const layer = useEditorState((state) => state.layer)
   const chosen = useEditorState((state) => chosenNotes(state).length > 0)
-  const fingerable = useEditorState((state) => fingerableNotes(state).length > 0)
-  if (category === 'chords') return layer === 'chords' ? undefined : t('reason.chordRow')
-  if (!categoryOpen(category, layer))
-    return layer === 'chords' ? t('reason.staff') : t('reason.hand')
-  if (ON_NOTES.includes(category) && !chosen) return t('reason.chooseNote')
   // A finger goes on one note: a whole chord chosen takes none (ADR 0091).
-  if (category === 'fingering' && isHandLayer(layer)) {
-    if (!chosen) return t('reason.chooseNote')
-    if (!fingerable) return t('reason.chordNote')
-  }
-  return undefined
+  const fingerable = useEditorState((state) => fingerableNotes(state).length > 0)
+  const why = greyedBy(category, { layer, chosen, fingerable })
+  return why ? t(`reason.${why}`) : undefined
 }
 
-/** One category's section: its name, why it is greyed if it is, its tools. */
+/** The categories whose tools say more than their names: the editing modes, the song's one time. */
+const EXPLAINED: readonly PaletteCategory[] = ['notes', 'time']
+
+/** What a category's tools do, where their names alone do not say. */
+function About({ category }: { category: PaletteCategory }) {
+  const { t } = useTranslation('editor')
+  if (category === 'time') return <p>{t('signature.timeLater')}</p>
+  // What a key played does in each editing mode (ADR 0092).
+  return (
+    <dl className="flex flex-col gap-2">
+      {EDIT_MODES.map((mode) => (
+        <div key={mode}>
+          <dt className="font-semibold">{t(`mode.${mode}`)}</dt>
+          <dd className="text-muted-foreground">{t(`mode.${mode}Detail`)}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}
+
+/**
+ * One category's section: its name, with what its tools do and why they are greyed, where they are,
+ * in the ⓘ beside it (ADR 0096); its tools, each greyed key saying why in its tooltip.
+ */
 function Section({ category, children }: { category: PaletteCategory; children: ReactNode }) {
   const { t } = useTranslation('editor')
+  const reason = useReason(category)
+  const explained = EXPLAINED.includes(category)
   return (
     <PaletteSection
       category={category}
       title={t(`palette.category.${category}`)}
-      reason={useReason(category)}
+      info={
+        reason || explained ? (
+          <>
+            {reason ? <p>{reason}</p> : null}
+            {explained ? <About category={category} /> : null}
+          </>
+        ) : undefined
+      }
     >
-      {children}
+      <PaletteReason value={reason}>{children}</PaletteReason>
     </PaletteSection>
   )
 }
@@ -306,15 +334,17 @@ export function EditorTools({
           >
             {PALETTE_CATEGORIES.map((category) => {
               const name = t(`palette.category.${category}`)
+              // Greyed where the caret writes, its tooltip says why under its name (ADR 0096).
+              const closed = closedBy(category, layer)
               return (
                 <button
                   key={category}
                   data-for={category}
                   type="button"
                   aria-label={name}
-                  title={name}
+                  title={closed ? `${name}\n${t(`reason.${closed}`)}` : name}
                   aria-current={!folded && current === category ? 'true' : undefined}
-                  data-off={categoryOpen(category, layer) ? undefined : true}
+                  data-off={closed ? true : undefined}
                   onClick={() => show(category)}
                   className="grid size-11 shrink-0 place-items-center rounded-xl text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground aria-[current=true]:bg-selected aria-[current=true]:text-selected-foreground data-off:opacity-40 landscape-phone:h-10 [&_svg]:size-6"
                 >

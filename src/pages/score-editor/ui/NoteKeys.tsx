@@ -16,6 +16,7 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
 import { VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
 import { GlyphGrid } from './palette-keys'
+import { usePaletteReason } from './palette-reason'
 
 /** A key drawn as notation: a glyph of the music font, at a note value's size. */
 const GLYPH = 'font-sans text-3xl leading-none'
@@ -54,6 +55,7 @@ export function QuickValues() {
       ))}
       <ToolKey
         label={t('dot')}
+        reason={t('reason.noDot')}
         pressed={shown?.dots === 1}
         disabled={!dottable}
         className="h-11"
@@ -107,6 +109,7 @@ function AccidentalKeys() {
       <ToolKey
         key={label}
         label={label}
+        reason={t('reason.chooseNote')}
         pressed={carried[i] ?? false}
         disabled={!chosen}
         onClick={() => actions.dispatch({ type: 'accidental', accidental })}
@@ -162,27 +165,24 @@ function ModeIcon({ mode }: { mode: EditMode }) {
 }
 
 /**
- * The editing modes (ADR 0092, Flat's Melody · Insert · Chord): one always chosen, the line under
- * it saying what a key played does; I cycles them.
+ * The editing modes (ADR 0092, Flat's Melody · Insert · Chord): one always chosen; what a key played
+ * does in each is the ⓘ beside the section's name (ADR 0096); I cycles them.
  */
 function ModeChoice() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const mode = useEditorState((state) => state.mode)
   return (
-    <div className="flex flex-col gap-1.5">
-      <Segmented
-        label={t('mode.label')}
-        value={mode}
-        options={EDIT_MODES.map((each) => ({
-          value: each,
-          label: t(`mode.${each}`),
-          icon: <ModeIcon mode={each} />,
-        }))}
-        onChange={(next) => actions.dispatch({ type: 'mode', mode: next })}
-      />
-      <p className="text-sm text-pretty text-muted-foreground">{t(`mode.${mode}Detail`)}</p>
-    </div>
+    <Segmented
+      label={t('mode.label')}
+      value={mode}
+      options={EDIT_MODES.map((each) => ({
+        value: each,
+        label: t(`mode.${each}`),
+        icon: <ModeIcon mode={each} />,
+      }))}
+      onChange={(next) => actions.dispatch({ type: 'mode', mode: next })}
+    />
   )
 }
 
@@ -205,6 +205,7 @@ export function NoteKeys() {
       <GlyphGrid>
         <ToolKey
           label={t('doubleDot')}
+          reason={t('reason.noDot')}
           pressed={shown?.dots === 2}
           disabled={!doubleDottable}
           onClick={() => dispatch({ type: 'dot', dots: 2 })}
@@ -215,6 +216,7 @@ export function NoteKeys() {
         </ToolKey>
         <ToolKey
           label={t('triplet')}
+          reason={t('reason.compound')}
           pressed={shown?.triplet === true}
           disabled={compound}
           onClick={() => dispatch({ type: 'triplet' })}
@@ -331,6 +333,7 @@ export function PitchKeys() {
   const shift = (semitones: number) => actions.dispatch({ type: 'shift', semitones })
   const step = (steps: number) => actions.dispatch({ type: 'step', steps })
   const off = !useNotesChosen()
+  const reason = usePaletteReason()
   const pairs = [
     // In the keys' order: ↑ ↓ a step in the key, with Shift a semitone, with Cmd an octave.
     { by: 'step', up: t('stepUp'), down: t('stepDown'), move: step, size: 1 },
@@ -340,15 +343,16 @@ export function PitchKeys() {
   return (
     <GlyphGrid>
       {pairs.flatMap(({ by, up, down, move, size }) => [
-        <ToolKey key={up} label={up} disabled={off} onClick={() => move(size)}>
+        <ToolKey key={up} label={up} reason={reason} disabled={off} onClick={() => move(size)}>
           <Move up by={by} />
         </ToolKey>,
-        <ToolKey key={down} label={down} disabled={off} onClick={() => move(-size)}>
+        <ToolKey key={down} label={down} reason={reason} disabled={off} onClick={() => move(-size)}>
           <Move up={false} by={by} />
         </ToolKey>,
       ])}
       <ToolKey
         label={t('respell')}
+        reason={reason}
         span="wide"
         disabled={off}
         onClick={() => actions.dispatch({ type: 'respell' })}
