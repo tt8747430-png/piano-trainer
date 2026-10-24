@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart } from '@/shared/lib/arrangement'
 import { note, parseChordSymbol } from '@/shared/lib/music'
 import { TWO_BARS } from './testing/performances'
-import { beatGroupInBar, writtenBarAt } from './written-bar'
+import { beatGroupInBar, firstPlayedBar, writtenBarAt, writtenBarOf } from './written-bar'
 
 const BEATS = {
   id: 'beats',
@@ -46,5 +46,13 @@ describe('the bar as written, between the Player and the editor', () => {
   it('finds none past the last bar', () => {
     expect(beatGroupInBar(TWO_BARS, 2)).toBeNull()
     expect(beatGroupInBar(TWO_BARS, -1)).toBeNull()
+  })
+
+  it('reads a bar played as written, and where a written bar is first played', () => {
+    expect([0, 1, 2, 3, 4].map((played) => writtenBarOf(PLAYED, played))).toEqual([0, 1, 0, 1, 2])
+    expect(writtenBarOf(TWO_BARS, 1)).toBe(1)
+    expect(firstPlayedBar(PLAYED, 1)).toBe(1)
+    expect(firstPlayedBar(PLAYED, 2)).toBe(4)
+    expect(firstPlayedBar(PLAYED, 3)).toBeNull()
   })
 })

@@ -11,6 +11,7 @@ export const player: LocaleResources['player'] = {
   root: 'Основной тон',
   walk: { title: 'Аккорды по ступеням: {{scale}}' },
   progression: { title: '{{numerals}}: {{key}}', walking: '{{numerals}} от {{key}}, {{walk}}' },
+  chart: 'Аккорды по тактам',
   walking: {
     'semitones-up': 'вверх по полутонам',
     'semitones-down': 'вниз по полутонам',

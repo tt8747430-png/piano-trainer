@@ -23,6 +23,28 @@ describe('chartSections', () => {
     const performance = arrange(CHART, { tonic: note('C'), pattern: BLOCK })
     expect(chartSections(performance)).toEqual([[[0, 1], [2]], [[3, 4, 5]]])
   })
+
+  it('keeps each bar as written once, where the Player plays the repeats (ADR 0067, 0098)', () => {
+    const repeated: Chart = {
+      ...CHART,
+      sections: [
+        {
+          lines: [
+            [
+              { ...bar('C'), repeatStart: true },
+              { ...bar('F'), barline: 'repeat' },
+            ],
+            [bar('G')],
+          ],
+        },
+      ],
+    }
+    const played = arrange(repeated, { tonic: note('C'), pattern: BLOCK, unfold: true })
+    // Played C F C F G.
+    expect(played.bars).toHaveLength(5)
+    expect(chartSections(played)).toEqual([[[0, 1], [2]]])
+    expect(chartBar(played, 2)).toEqual({ symbols: ['G'], methods: [], signature: null })
+  })
 })
 
 describe('sectionBars', () => {

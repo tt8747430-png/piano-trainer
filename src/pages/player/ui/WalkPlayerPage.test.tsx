@@ -1,7 +1,8 @@
-import { screen, within } from '@testing-library/react'
+import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { setScoreView } from '@/features/set-preference'
 
 describe('Walk the chords in the Player', () => {
   it('walks a scale’s chords as sheet music, titled by its scale', async () => {
@@ -11,6 +12,17 @@ describe('Walk the chords in the Player', () => {
     ).toBeInTheDocument()
     expect(await screen.findByRole('button', { name: 'Bar 1: Dm' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Bar 8: Dm' })).toBeInTheDocument()
+  })
+
+  it('keeps its title alone where the sheet was with the sheet music off: a song’s chart is no walk’s (ADR 0098)', async () => {
+    const { settingsStore } = await renderApp('/play/walk?root=D&kind=dorian')
+    const title = { level: 1, name: 'Walk the chords in D Dorian' }
+    await screen.findByRole('heading', title)
+    act(() => setScoreView(settingsStore, { notation: false }))
+    expect(screen.queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'Chord chart' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /^Bar / })).not.toBeInTheDocument()
+    expect(screen.getByRole('heading', title)).toBeInTheDocument()
   })
 
   it('plays and stops', async () => {

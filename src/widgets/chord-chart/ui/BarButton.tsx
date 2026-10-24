@@ -1,44 +1,60 @@
 import { Square } from 'lucide-react'
+import type { Ref } from 'react'
 import { useBarName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 
 /**
+ * What a tap on a chart's bar does: plays it, a toggle pressed while it sounds (a song's chart); or
+ * takes the Player there, its bar current while the cursor is in it (ADR 0098).
+ */
+export type BarTap = 'play' | 'go'
+
+/**
  * One bar of a chart's line: its number, its chords, and under them its method labels or short
- * length; a bar of no chord its number alone (ADR 0094). A tap plays the bar: it is a toggle, pressed
- * while the bar sounds.
+ * length; a bar of no chord its number alone (ADR 0094). `marked` while it plays: the bar sounding,
+ * with a square to stop it, or the bar the Player is in, which is a pointer's target only, as the
+ * sheet's bars are (the arrows move the cursor).
  */
 export function BarButton({
+  tap,
   number,
   symbols,
   notes,
-  pressed,
+  marked,
   onClick,
+  ref,
 }: {
+  tap: BarTap
   number: number
   symbols: readonly string[]
   /** Method labels and a short bar's length, under the chords. */
   notes: readonly string[]
-  /** Pressed while its sound plays. */
-  pressed: boolean
+  marked: boolean
   onClick: () => void
+  ref?: Ref<HTMLButtonElement> | undefined
 }) {
   const barName = useBarName()
   return (
     <button
+      ref={ref}
       type="button"
       // Named by all it prints: its number, its chords, and the notes under them.
       aria-label={barName(
         number,
         [symbols.join(' '), ...notes].filter((said) => said !== '').join(' · '),
       )}
-      aria-pressed={pressed}
+      {...(tap === 'play'
+        ? { 'aria-pressed': marked }
+        : { 'aria-current': marked ? ('step' as const) : undefined, tabIndex: -1 })}
       onClick={onClick}
       className={cn(
         'relative flex min-h-18 min-w-0 flex-col items-start justify-end gap-0.5 overflow-hidden border-l border-input px-2.5 pt-5 pb-2 text-left landscape-phone:min-h-14 landscape-phone:pb-1 transition-colors duration-200 ease-out focus-visible:-outline-offset-3',
-        pressed ? 'bg-secondary text-secondary-foreground' : 'hover:bg-muted/60',
+        marked ? 'bg-secondary text-secondary-foreground' : 'hover:bg-muted/60',
       )}
     >
-      {pressed ? <Square aria-hidden className="absolute top-1.5 right-2 size-3" /> : null}
+      {marked && tap === 'play' ? (
+        <Square aria-hidden className="absolute top-1.5 right-2 size-3" />
+      ) : null}
       <span
         aria-hidden
         className="absolute top-1 left-2 text-xs text-muted-foreground tabular-nums"

@@ -1,14 +1,22 @@
 import { isMethodCode, type MethodCode } from '@/entities/pattern'
+import { firstPlayedBar, writtenBarOf } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { beatsPerBar, beatsToTicks, timeSignature, timeSignatureText } from '@/shared/lib/music'
 
-/** The performance's bars (their indexes) by section, then line by line as the chart writes them. */
+/**
+ * The performance's bars as written (their indexes, counted from 0) by section, then line by line as
+ * the chart writes them: each once, where the Player plays the repeats (ADR 0067, 0098).
+ */
 export function chartSections(performance: Performance): number[][][] {
   const sections: number[][][] = []
-  performance.bars.forEach((bar, index) => {
+  const shown = new Set<number>()
+  performance.bars.forEach((bar, played) => {
+    const written = writtenBarOf(performance, played)
+    if (shown.has(written)) return
+    shown.add(written)
     const lines = (sections[bar.section] ??= [])
     const line = (lines[bar.line] ??= [])
-    line.push(index)
+    line.push(written)
   })
   return sections.map((lines) => lines.filter((line) => line !== undefined))
 }
@@ -20,9 +28,10 @@ interface ChartBar {
   readonly signature: string | null
 }
 
-/** The performance's bar at `index` as the chart shows it; null past its last bar. */
-export function chartBar(performance: Performance, index: number): ChartBar | null {
-  const bar = performance.bars[index]
+/** A bar as written, as the chart shows it: as it is played the first time; null past the last. */
+export function chartBar(performance: Performance, written: number): ChartBar | null {
+  const played = firstPlayedBar(performance, written)
+  const bar = played === null ? undefined : performance.bars[played]
   if (!bar) return null
   const chords = bar.chords.flatMap((i) => performance.chords[i] ?? [])
   return {

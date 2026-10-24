@@ -48,6 +48,7 @@ export function PlayerLayout({
   setup,
   modes,
   piano = true,
+  chart,
 }: {
   /**
    * Whether the sheet writes the piano's staves: not for a song that hides them, a lead sheet, its
@@ -65,6 +66,11 @@ export function PlayerLayout({
   setup: ReactNode
   /** Practise · Edit (ADR 0090), after Close: a piece's own, none for a walk. */
   modes?: ReactNode
+  /**
+   * What stands where the sheet music is with the View's Sheet music off: a piece's chord chart
+   * under its title (ADR 0098); none for a walk, which keeps its title alone there.
+   */
+  chart?: ReactNode
 }) {
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
@@ -134,8 +140,8 @@ export function PlayerLayout({
             onLoopChange={player.setLoop}
           />
         ) : (
-          // No notation: the title alone where the sheet was (ADR 0094).
-          <SheetTitle title={title} place="lines" />
+          // No notation: a piece's chord chart (ADR 0098), else the title alone (ADR 0094).
+          (chart ?? <SheetTitle title={title} place="lines" />)
         )}
       </PlayerArea>
       <PlayerArea

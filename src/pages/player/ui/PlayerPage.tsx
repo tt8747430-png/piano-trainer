@@ -17,6 +17,7 @@ import { ModeSwitch } from '@/widgets/mode-switch'
 import { useClose } from '../model/use-close'
 import type { PlayerSearch } from '../model/player-search'
 import { usePlayer } from '../model/use-player'
+import { PieceChart } from './PieceChart'
 import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
 
@@ -31,12 +32,17 @@ function PiecePlayer({ piece }: { piece: Piece }) {
     setSearch,
   )
   const title = entryTitles(piece, locale).primary
+  // The bar as written the cursor is in, and the cursor taken to one (ADR 0090).
+  const bar = writtenBarAt(performance, player.practice.state.beatGroup)
+  const { jumpToBeatGroup } = player.practice
+  const goToBar = (written: number) => {
+    const group = beatGroupInBar(performance, written)
+    if (group !== null) jumpToBeatGroup(group)
+  }
   // Opened at a bar (Practise from the editor's caret, ADR 0090): the cursor goes there, once, and
   // the URL forgets it, so the view remembered never holds it.
-  const { jumpToBeatGroup } = player.practice
-  const openAt = useEffectEvent((bar: number) => {
-    const group = beatGroupInBar(performance, bar - 1)
-    if (group !== null) jumpToBeatGroup(group)
+  const openAt = useEffectEvent((at: number) => {
+    goToBar(at - 1)
     setSearch({ bar: undefined })
   })
   useEffect(() => {
@@ -55,12 +61,17 @@ function PiecePlayer({ piece }: { piece: Piece }) {
       modes={
         // A piece written in degrees has no score to edit.
         isDegreePiece(piece) ? null : (
-          <ModeSwitch
-            pieceId={piece.id}
-            mode="practise"
-            bar={writtenBarAt(performance, player.practice.state.beatGroup) + 1}
-          />
+          <ModeSwitch pieceId={piece.id} mode="practise" bar={bar + 1} />
         )
+      }
+      chart={
+        <PieceChart
+          title={title}
+          performance={performance}
+          headings={headings}
+          playing={bar}
+          onBar={goToBar}
+        />
       }
       setup={
         <PieceSetup

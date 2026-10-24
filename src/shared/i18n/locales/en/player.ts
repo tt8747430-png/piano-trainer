@@ -12,6 +12,8 @@ export const player = {
   root: 'Root',
   walk: { title: 'Walk the chords in {{scale}}' },
   progression: { title: '{{numerals}} in {{key}}', walking: '{{numerals}} from {{key}}, {{walk}}' },
+  /** A piece's chords by bar, where its sheet music is with the View's Sheet music off (ADR 0098). */
+  chart: 'Chord chart',
   /** A piece walked through the keys, from the learner's key. */
   /** A walk through the keys, as a title says it. */
   walking: {
