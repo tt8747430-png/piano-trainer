@@ -14,26 +14,24 @@ const VALUES: Readonly<Record<string, ChosenValue['value']>> = {
   Digit6: 32,
 }
 
-/** The bar edits by letter, with Cmd or Ctrl (the platform's own copy, cut and paste). */
-const BAR_EDITS = { KeyC: 'copy', KeyX: 'cut', KeyV: 'paste' } as const
-const isBarEditKey = (code: string): code is keyof typeof BAR_EDITS =>
-  Object.hasOwn(BAR_EDITS, code)
+/** The clipboard's edits by letter, with Cmd or Ctrl (the platform's own copy, cut and paste). */
+const CLIP_EDITS = { KeyC: 'copy', KeyX: 'cut', KeyV: 'paste' } as const
+const isClipKey = (code: string): code is keyof typeof CLIP_EDITS => Object.hasOwn(CLIP_EDITS, code)
 
 /**
  * The editor's shortcut for a key press in a layer (spec §6), or null. Only keys the typing keys leave
  * free: digits, the full stop, arrows (Shift extending what is chosen by a note, with Alt by a bar,
  * with Cmd to an end; Alt with ↑ ↓ through a chord's notes, then to the staff over or under, ADR
  * 0088; ↑ ↓ the notes a step in the key, with Shift a semitone, with Cmd an octave), Home, End, Backspace, Delete, Enter and Escape (letting go of what is chosen), and Cmd or
- * Ctrl with Z, Y, and C, X, V (the bars, in the chords); a letter alone plays the piano.
+ * Ctrl with Z, Y, and C, X, V (what is chosen, ADR 0092); a letter alone plays the piano, but for I,
+ * which typing leaves free: on a staff it cycles the editing modes, as Dorico's I does (ADR 0092).
  */
 export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
   const mod = press.metaKey || press.ctrlKey
   if (mod) {
     if (press.code === 'KeyZ') return { type: press.shiftKey ? 'redo' : 'undo' }
     if (press.code === 'KeyY' && press.ctrlKey) return { type: 'redo' }
-    if (isBarEditKey(press.code)) {
-      return layer === 'chords' ? { type: 'bars', edit: BAR_EDITS[press.code] } : null
-    }
+    if (isClipKey(press.code)) return { type: 'clip', edit: CLIP_EDITS[press.code] }
   }
   const move = (by: CaretMove, direction: -1 | 1): Shortcut => ({
     type: 'move',
@@ -79,5 +77,6 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
   if (value !== undefined) return { type: 'value', value }
   if (press.code === 'Period') return { type: 'dot' }
   if (press.code === 'Digit0') return { type: 'rest' }
+  if (press.code === 'KeyI') return layer === 'chords' ? null : { type: 'mode' }
   return null
 }

@@ -92,19 +92,25 @@ describe('shortcutOf', () => {
     expect(shortcutOf(press('KeyY', 'y', { ctrlKey: true }), 'melody')).toEqual({ type: 'redo' })
   })
 
-  it('copies, cuts and pastes bars, and opens the chord field with Enter in the chords', () => {
+  it('copies, cuts and pastes what is chosen in any row, and opens the chord field with Enter in the chords', () => {
     expect(shortcutOf(press('KeyC', 'c', { metaKey: true }), 'chords')).toEqual({
-      type: 'bars',
+      type: 'clip',
       edit: 'copy',
     })
     expect(shortcutOf(press('KeyX', 'x', { ctrlKey: true }), 'chords')).toEqual({
-      type: 'bars',
+      type: 'clip',
       edit: 'cut',
     })
-    expect(shortcutOf(press('KeyX', 'x', { ctrlKey: true }), 'melody')).toBeNull()
-    expect(shortcutOf(press('KeyC', 'c', { metaKey: true }), 'rh')).toBeNull()
+    expect(shortcutOf(press('KeyX', 'x', { ctrlKey: true }), 'melody')).toEqual({
+      type: 'clip',
+      edit: 'cut',
+    })
+    expect(shortcutOf(press('KeyC', 'c', { metaKey: true }), 'rh')).toEqual({
+      type: 'clip',
+      edit: 'copy',
+    })
     expect(shortcutOf(press('KeyV', 'v', { metaKey: true }), 'chords')).toEqual({
-      type: 'bars',
+      type: 'clip',
       edit: 'paste',
     })
     expect(shortcutOf(press('Enter', 'Enter'), 'chords')).toEqual({ type: 'chordField' })
@@ -160,6 +166,13 @@ describe('shortcutOf', () => {
       direction: -1,
     })
     expect(shortcutOf(press('Escape', 'Escape'), 'melody')).toEqual({ type: 'deselect' })
+  })
+
+  it('cycles the editing modes with I, a letter typing leaves free, on a staff alone (ADR 0092)', () => {
+    expect(shortcutOf(press('KeyI', 'i'), 'melody')).toEqual({ type: 'mode' })
+    expect(shortcutOf(press('KeyI', 'i'), 'lh')).toEqual({ type: 'mode' })
+    expect(shortcutOf(press('KeyI', 'i'), 'chords')).toBeNull()
+    expect(shortcutOf(press('KeyI', 'i', { metaKey: true }), 'melody')).toBeNull()
   })
 
   it('leaves every typing key to the piano, and a plain letter or Cmd with another key alone', () => {

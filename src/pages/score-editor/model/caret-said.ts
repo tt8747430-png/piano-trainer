@@ -4,6 +4,7 @@ import {
   notesOf,
   totalTicks,
   type DraftNote,
+  type EditMode,
   type EditorState,
 } from '@/features/score-editor'
 import { chordSymbol, TICKS_PER_BEAT, writtenName, type Meter, type Tick } from '@/shared/lib/music'
@@ -14,8 +15,8 @@ interface Place {
   readonly beat: string
 }
 
-/** What the caret line says: where the caret is, and what is there. */
-type CaretSaid =
+/** Where the caret is, and what is there. */
+type CaretPlace =
   | { readonly kind: 'end' }
   | (Place & {
       readonly kind: 'notes'
@@ -24,6 +25,9 @@ type CaretSaid =
       readonly value: Duration | null
     })
   | (Place & { readonly kind: 'at' | 'held' | 'rest'; readonly what: string })
+
+/** What the caret line says: the place, and the editing mode where it is not Replace (ADR 0092). */
+type CaretSaid = CaretPlace & { readonly mode?: Exclude<EditMode, 'replace'> }
 
 /** A beat counted from 1, a part of one as a decimal: 1, 2.5. */
 const beatOf = (ticks: number) => String(Math.round((ticks / TICKS_PER_BEAT + 1) * 100) / 100)
@@ -42,8 +46,20 @@ export function caretSaid({
   caret,
   layer,
   chordNote = null,
+  mode = 'replace',
 }: Pick<EditorState, 'draft' | 'caret' | 'layer'> &
-  Partial<Pick<EditorState, 'chordNote'>>): CaretSaid {
+  Partial<Pick<EditorState, 'chordNote' | 'mode'>>): CaretSaid {
+  // The mode is a staff's: the chord row writes chords whatever it is.
+  const said = mode === 'replace' || layer === 'chords' ? {} : { mode }
+  return { ...placeSaid(draft, caret, layer, chordNote), ...said }
+}
+
+function placeSaid(
+  draft: EditorState['draft'],
+  caret: Tick,
+  layer: EditorState['layer'],
+  chordNote: EditorState['chordNote'],
+): CaretPlace {
   if (caret >= totalTicks(draft)) return { kind: 'end' }
   const { index, start, bar } = barAt(draft, caret)
   const at = { bar: index + 1, beat: beatOf(caret - start) }

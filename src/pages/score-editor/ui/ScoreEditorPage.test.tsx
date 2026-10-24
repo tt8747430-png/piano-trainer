@@ -49,6 +49,10 @@ async function openCategory(user: ReturnType<typeof userEvent.setup>, category: 
   return screen.findByRole('region', { name: category })
 }
 
+/** The Notes section's editing modes (ADR 0092). */
+const modesOf = (notes: HTMLElement) =>
+  within(notes).getByRole('radiogroup', { name: 'Editing mode' })
+
 /** Opens a category of the palette and taps one of its keys. */
 async function tapIn(user: ReturnType<typeof userEvent.setup>, category: string, key: string) {
   const section = await openCategory(user, category)
@@ -584,6 +588,39 @@ describe('the score editor', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Bar 1, beat 4 · F4 half')
   })
 
+  it('cycles the editing modes with I, the caret line naming the mode; Insert pushes the later notes right (ADR 0092)', async () => {
+    const user = userEvent.setup({ delay: 120 })
+    const { piecesStore, settingsStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ melody: EMPTY_TUNE }),
+    })
+    act(() => setKeyboard(settingsStore, { typing: true }))
+    await user.keyboard('asd')
+    const three = { melody: expect.stringMatching(/^C4\/1 D4\/1 E4\/1( r\/1)?$/) as string }
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject(three))
+    await user.keyboard('{Home}{ArrowRight}i')
+    expect(screen.getByRole('status')).toHaveTextContent(
+      /^Melody · Bar 1, beat 2 · D4 quarter · Insert mode$/,
+    )
+    await user.keyboard('g')
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({ melody: 'C4/1 G4/1 D4/1 E4/1' }),
+    )
+    const notes = await openCategory(user, 'Notes')
+    expect(within(notes).getByRole('radio', { name: 'Insert' })).toBeChecked()
+    expect(
+      within(notes).getByText(
+        'A note written pushes the notes after it to the right; Delete closes the gap.',
+      ),
+    ).toBeInTheDocument()
+    // The G taken back, Delete closes the gap it leaves.
+    await user.keyboard('{ArrowLeft}{Backspace}')
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject(three))
+    await user.click(within(notes).getByRole('radio', { name: 'Chord' }))
+    expect(screen.getByRole('status')).toHaveTextContent(/· Chord mode$/)
+    await user.keyboard('i')
+    expect(screen.getByRole('status')).not.toHaveTextContent('mode')
+  })
+
   it('opens with its keys folded on a phone on its side, its caret’s line in the bar', async () => {
     const user = userEvent.setup()
     vi.stubGlobal('matchMedia', (media: string) => ({
@@ -640,9 +677,9 @@ describe('the score editor', () => {
       'Delete',
       'Undo',
       'Redo',
-      'Copy bars',
-      'Cut bars',
-      'Paste bars',
+      'Copy',
+      'Cut',
+      'Paste',
       'Add bar',
     ])
     // Named for what it does: Play, and the caret moved a note back or on.
@@ -696,9 +733,13 @@ describe('the score editor', () => {
     )
     await toChordRow(user)
     const row = screen.getByRole('toolbar', { name: 'Edit' })
-    expect(within(row).getByRole('button', { name: 'Paste bars' })).toBeDisabled()
-    await user.click(within(row).getByRole('button', { name: 'Copy bars' }))
-    await user.click(within(row).getByRole('button', { name: 'Paste bars' }))
+    // Nothing copied yet: Paste is greyed (its tooltip saying so).
+    expect(within(row).getByRole('button', { name: 'Paste' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
+    await user.click(within(row).getByRole('button', { name: 'Copy' }))
+    await user.click(within(row).getByRole('button', { name: 'Paste' }))
     expect(songOf(piecesStore.getState())).toMatchObject({
       sections: [{ lines: ['Em Em G G G'] }],
     })
@@ -706,6 +747,39 @@ describe('the score editor', () => {
     expect(songOf(piecesStore.getState())).toMatchObject({
       sections: [{ lines: ['Em Em Em G G G'] }],
     })
+  })
+
+  it('copies the notes chosen on a staff and pastes them at the caret, the bars’ clip staying the chord row’s (ADR 0092)', async () => {
+    const user = userEvent.setup({ delay: 120 })
+    const { piecesStore, settingsStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ melody: 'B4/1 A4/1 G4/1 F#4/1' }),
+    })
+    act(() => setKeyboard(settingsStore, { typing: true }))
+    expect(await screen.findByRole('status')).toHaveTextContent('B4 quarter')
+    const row = screen.getByRole('toolbar', { name: 'Edit' })
+    await user.keyboard('{Shift>}{ArrowRight}{/Shift}')
+    await user.keyboard('{Meta>}c{/Meta}')
+    await user.keyboard('{Escape}{Alt>}{ArrowRight}{/Alt}')
+    await user.click(within(row).getByRole('button', { name: 'Paste' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        melody: 'B4/1 A4/1 G4/1 F#4/1 | B4/1 A4/1',
+      }),
+    )
+    // In the chord row the clip's notes have no place: Paste says so.
+    await toChordRow(user)
+    expect(within(row).getByRole('button', { name: 'Paste' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
+    // Cut takes the notes chosen and leaves their time as a rest.
+    await user.keyboard('{Alt>}{ArrowDown}{/Alt}{Home}')
+    await user.click(within(row).getByRole('button', { name: 'Cut' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        melody: 'r/1 A4/1 G4/1 F#4/1 | B4/1 A4/1',
+      }),
+    )
   })
 
   it('makes the note chosen an eighth from the quick row, and the next one too', async () => {
@@ -777,17 +851,15 @@ describe('the score editor', () => {
     for (const name of ['Quarter note', '32nd note', 'Dotted'])
       expect(within(palette).getByRole('button', { name })).toBeInTheDocument()
     const notes = await openCategory(user, 'Notes')
-    for (const name of [
-      'Double dotted',
-      'Triplet',
-      'Rest',
-      'Tie',
-      'Chord',
-      'Sharp',
-      'Flat',
-      'Natural',
-    ])
+    for (const name of ['Double dotted', 'Triplet', 'Rest', 'Tie', 'Sharp', 'Flat', 'Natural'])
       expect(within(notes).getByRole('button', { name })).toBeInTheDocument()
+    // The editing modes, Flat's, one always chosen (ADR 0092).
+    const modes = within(modesOf(notes)).getAllByRole('radio')
+    expect(modes).toHaveLength(3)
+    ;['Replace', 'Insert', 'Chord'].forEach((name, i) =>
+      expect(modes[i]).toHaveAccessibleName(name),
+    )
+    expect(modes[0]).toBeChecked()
     const pitch = screen.getByRole('region', { name: 'Pitch' })
     for (const name of [
       'Up a semitone',

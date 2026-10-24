@@ -3,14 +3,18 @@ import { caretSaid } from '../model/caret-said'
 import { useEditorState } from '../model/editor-context'
 import { useValueWord } from './use-value-word'
 
-/** One line saying which part the caret writes, where it is and what is there; a screen reader hears it as it moves. */
+/**
+ * One line saying which part the caret writes, where it is and what is there, and the editing mode
+ * where it is not Replace (ADR 0092); a screen reader hears it as it moves.
+ */
 export function CaretLine() {
   const { t } = useTranslation('editor')
   const draft = useEditorState((state) => state.draft)
   const caret = useEditorState((state) => state.caret)
   const layer = useEditorState((state) => state.layer)
   const chordNote = useEditorState((state) => state.chordNote)
-  const said = caretSaid({ draft, caret, layer, chordNote })
+  const mode = useEditorState((state) => state.mode)
+  const said = caretSaid({ draft, caret, layer, chordNote, mode })
   const valueWord = useValueWord()
   const where = (() => {
     if (said.kind === 'end') return t('caret.end')
@@ -21,7 +25,10 @@ export function CaretLine() {
       : t('caret.at', { bar, beat, what })
   })()
   // Where the caret writes first: a click on the sheet chose it, so the line says which part it is.
-  const text = said.kind === 'end' ? where : `${t(`layers.${layer}`)} · ${where}`
+  const placed = said.kind === 'end' ? where : `${t(`layers.${layer}`)} · ${where}`
+  const text = said.mode
+    ? `${placed} · ${t('caret.mode', { mode: t(`mode.${said.mode}`) })}`
+    : placed
   return (
     <p
       role="status"

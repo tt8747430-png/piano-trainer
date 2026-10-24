@@ -1,7 +1,7 @@
 import type { BarMarkChoice } from './bar-marks'
 import type { HiddenRow, SectionKind } from '@/entities/piece'
 import type { Chord, Clef, Finger, Hand, Key, Meter, Midi, Tick } from '@/shared/lib/music'
-import type { Clip } from './bars'
+import type { Clip } from './clip'
 import type { Draft, Layer } from './draft'
 import { topStaff } from './rows'
 import type { TakePart } from './take-edits'
@@ -42,10 +42,21 @@ export interface Struck {
   readonly written: boolean
 }
 
+/**
+ * How a key played is written at the caret (ADR 0092, Flat's editing modes): Replace, over what is
+ * there; Insert, pushing the staff's later notes right, and Delete closing the gap; Chord, joining
+ * the chord there, the caret staying.
+ */
+export type EditMode = 'replace' | 'insert' | 'chord'
+export const EDIT_MODES = ['replace', 'insert', 'chord'] as const satisfies readonly EditMode[]
+
+/** The mode after `mode`, round: what I cycles. */
+export const nextMode = (mode: EditMode): EditMode =>
+  EDIT_MODES[(EDIT_MODES.indexOf(mode) + 1) % EDIT_MODES.length] ?? 'replace'
+
 export interface EditorState extends Snapshot {
   readonly value: ChosenValue
-  /** Chord: a key played joins the notes at the caret, which stays. */
-  readonly chord: boolean
+  readonly mode: EditMode
   readonly selection: Selection | null
   /** One note of the chord at the caret chosen alone, by its key (ADR 0088): else the whole chord. */
   readonly chordNote: Midi | null
@@ -55,16 +66,10 @@ export interface EditorState extends Snapshot {
   readonly future: readonly Snapshot[]
 }
 
-export type BarEdit =
-  | 'insert'
-  | 'insertBefore'
-  | 'delete'
-  | 'copy'
-  | 'cut'
-  | 'paste'
-  | 'newLine'
-  | 'joinLine'
-  | 'newSection'
+export type BarEdit = 'insert' | 'insertBefore' | 'delete' | 'newLine' | 'joinLine' | 'newSection'
+
+/** The clipboard's edits, on what is chosen (ADR 0092): the bars in the chord row, the notes on a staff. */
+export type ClipEdit = 'copy' | 'cut' | 'paste'
 
 /** How far the caret moves: a step of the value (or to the next place), a bar, or to an end. */
 export type CaretMove = 'step' | 'bar' | 'line' | 'end'
@@ -80,7 +85,8 @@ export type EditorAction =
   | { readonly type: 'value'; readonly value: ChosenValue['value'] }
   | { readonly type: 'dot'; readonly dots?: Dots }
   | { readonly type: 'triplet' }
-  | { readonly type: 'chordMode' }
+  /** The editing mode chosen; none, the next round (I). */
+  | { readonly type: 'mode'; readonly mode?: EditMode }
   | {
       readonly type: 'move'
       readonly by: CaretMove
@@ -131,6 +137,7 @@ export type EditorAction =
   /** A take written from the caret's bar (spec 2026-10-05 §4). */
   | { readonly type: 'take'; readonly parts: readonly TakePart[] }
   | { readonly type: 'bars'; readonly edit: BarEdit }
+  | { readonly type: 'clip'; readonly edit: ClipEdit }
   | { readonly type: 'barLength'; readonly ticks: Tick }
   /** Barlines on the bars chosen, else the caret's (a repeat, an ending, a double or final barline). */
   | { readonly type: 'barMarks'; readonly choice: BarMarkChoice }
@@ -155,7 +162,7 @@ export const initialEditor = (draft: Draft): EditorState => ({
   // The top staff in sight: the tune's where the piece shows one, else the right hand's.
   layer: topStaff(draft),
   value: { value: 4, dots: 0, triplet: false },
-  chord: false,
+  mode: 'replace',
   selection: null,
   chordNote: null,
   struck: null,
