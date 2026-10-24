@@ -111,6 +111,25 @@ export function clearUnder(draft: Draft, layer: NoteLayer, at: Tick, to: Tick): 
 }
 
 /**
+ * Notes as the tune holds them, one line (a hand's played into the melody, a take's): the highest at
+ * each onset, each cut where the next starts, so no note sounds under another.
+ */
+export function oneLine<N extends Pick<DraftNote, 'midi' | 'startTick' | 'durationTicks'>>(
+  notes: readonly N[],
+): N[] {
+  const highest = new Map<Tick, N>()
+  for (const n of notes) {
+    const top = highest.get(n.startTick)
+    if (!top || n.midi > top.midi) highest.set(n.startTick, n)
+  }
+  const line = [...highest.values()].sort((a, b) => a.startTick - b.startTick)
+  return line.map((n, i) => {
+    const end = Math.min(n.startTick + n.durationTicks, line[i + 1]?.startTick ?? Infinity)
+    return end === n.startTick + n.durationTicks ? n : { ...n, durationTicks: end - n.startTick }
+  })
+}
+
+/**
  * Writes keys at `at` for `ticks`: the melody one note (the highest key), a hand all of them. A note
  * past the end adds bars; a note stops at the piece's end.
  */

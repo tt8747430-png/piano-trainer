@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { midi, note } from '@/shared/lib/music'
 import { draftOf, shape } from '../testing/test-draft'
 import { clipFits, copyNotes, pasteNotes, type NotesClip } from './clip'
+import { musicToSave } from './draft'
 
 describe('the notes clipboard (ADR 0092)', () => {
   it('copies the notes starting in a span, timed from its start, with its length', () => {
@@ -19,6 +20,15 @@ describe('the notes clipboard (ADR 0092)', () => {
     expect(shape(pasted.draft.melody)).toEqual(['G4@0/96'])
     expect(pasted.draft.melody[0]?.finger).toBeUndefined()
     expect(pasted.end).toBe(96)
+  })
+
+  it('pastes a hand’s notes into the melody as one line: each cut where the next starts', () => {
+    // A whole note with a quarter struck under it on beat 3: the tune cannot hold both.
+    const held = draftOf({ hands: { rh: 'C5/4 E4/1@3 | r/4' } })
+    const clip = copyNotes(held, 'rh', { from: 0, to: 96 })
+    const pasted = pasteNotes(draftOf({ melody: 'r/4 | r/4' }), 'melody', 0, clip, false)
+    expect(shape(pasted.draft.melody)).toEqual(['C5@0/48', 'E4@48/24'])
+    expect(musicToSave(pasted.draft)).not.toBeNull()
   })
 
   it('spells the pasted notes in the key where they land', () => {

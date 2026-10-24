@@ -8,7 +8,7 @@ import {
   type Layer,
   type NoteLayer,
 } from './draft'
-import { clearUnder, makeRoom, notesOf, reaching, spelledIn, withNotes } from './notes'
+import { clearUnder, makeRoom, notesOf, oneLine, reaching, spelledIn, withNotes } from './notes'
 import type { TickSpan } from './state'
 import { totalTicks } from './timeline'
 
@@ -43,15 +43,10 @@ export function copyNotes(draft: Draft, layer: NoteLayer, { from, to }: TickSpan
   return { kind: 'notes', layer, notes, ticks: to - from }
 }
 
-/** The clip's notes as a staff takes them: a hand every note, the melody each onset's highest, with no finger. */
+/** The clip's notes as a staff takes them: a hand every note, the melody one line (`oneLine`), with no finger. */
 function fitTo(notes: readonly DraftNote[], layer: NoteLayer): DraftNote[] {
   if (isHandLayer(layer)) return [...notes]
-  const highest = new Map<Tick, DraftNote>()
-  for (const n of notes) {
-    const held = highest.get(n.startTick)
-    if (!held || n.midi > held.midi) highest.set(n.startTick, n)
-  }
-  return [...highest.values()].map(({ finger: _finger, ...n }) => n)
+  return oneLine(notes).map(({ finger: _finger, ...n }) => n)
 }
 
 /**
