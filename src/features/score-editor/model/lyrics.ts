@@ -9,7 +9,7 @@ export const tuneLayer = (draft: Draft): NoteLayer => (draft.melodyStaff ? 'melo
 
 /** Whether the Lyrics tool works where the caret writes: on the tune's staff, in sight. */
 export const singsHere = (draft: Draft, layer: Layer): boolean =>
-  layer === tuneLayer(draft) && rowShown(draft, layer === 'melody' ? 'melody' : 'piano')
+  layer === tuneLayer(draft) && (layer === 'melody' ? draft.melodyStaff : rowShown(draft, 'piano'))
 
 /** How many verses the song has: as many as any note of its tune sings. */
 export const verseCount = (draft: Draft): number => gatherLyrics(tuneNotes(draft)).length

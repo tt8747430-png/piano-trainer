@@ -109,10 +109,11 @@ export interface ChartPiece extends PieceCommon {
 }
 
 /**
- * The rows a score may hide (ADR 0072, 0091): the chord names, the tune's staff, and the piano's
- * grand staff, which leaves a lead sheet (ADR 0083).
+ * The rows a score may hide (ADR 0072, 0094): the chord names, and the piano's grand staff, which
+ * leaves a lead sheet (ADR 0083). The tune's staff the score adds or takes away; hiding it is the
+ * View's.
  */
-export const HIDDEN_ROWS = ['chords', 'melody', 'piano'] as const
+export const HIDDEN_ROWS = ['chords', 'piano'] as const
 export type HiddenRow = (typeof HIDDEN_ROWS)[number]
 export const isHiddenRow = isOneOf(HIDDEN_ROWS)
 
@@ -121,7 +122,7 @@ export const isHiddenRow = isOneOf(HIDDEN_ROWS)
  * tune's where it has one (`melody`). A score never hides every staff.
  */
 export const showsAStaff = (hidden: readonly HiddenRow[], melody: boolean): boolean =>
-  !hidden.includes('piano') || (melody && !hidden.includes('melody'))
+  !hidden.includes('piano') || melody
 
 /**
  * A song written in degrees, as its course teaches it: read in any key, its chords growing with the

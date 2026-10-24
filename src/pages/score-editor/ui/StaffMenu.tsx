@@ -33,7 +33,7 @@ export function StaffMenu({
     key: 'showPiano',
     label: t('printed.showPiano'),
     icon: Piano,
-    onSelect: () => dispatch({ type: 'hide', row: 'piano', hidden: false }),
+    onSelect: () => dispatch({ type: 'piano', hidden: false }),
   }
   const removeMelody = {
     key: 'removeMelody',
@@ -52,7 +52,7 @@ export function StaffMenu({
     key: 'hidePiano',
     label: t('printed.hidePiano'),
     icon: EyeOff,
-    onSelect: () => dispatch({ type: 'hide', row: 'piano', hidden: true }),
+    onSelect: () => dispatch({ type: 'piano', hidden: true }),
   }
   const items =
     staves === 'melody'

@@ -4,30 +4,20 @@ import type { Draft, Layer } from './draft'
 type Rows = Pick<Draft, 'melodyStaff' | 'hidden'>
 
 /**
- * Whether the score has a row (ADR 0072): the chord names and the piano always, the tune's staff
- * once added.
- */
-export function hasRow(draft: Rows, row: HiddenRow): boolean {
-  if (row === 'chords' || row === 'piano') return true
-  return draft.melodyStaff
-}
-
-/** The row a layer is shown in: a hand's is the piano's. */
-const rowOf = (layer: Layer): HiddenRow => (layer === 'rh' || layer === 'lh' ? 'piano' : layer)
-
-/**
- * The rows the sheet shows and the caret writes, top down (ADR 0072, 0091): the chord names, the
- * tune's staff, the right hand's and the left's; a row the score has not, or hides, left out (both
- * hands where the piano is hidden, ADR 0083).
+ * The rows the sheet shows and the caret writes, top down (ADR 0072, 0091, 0094): the chord names
+ * unless the score hides them, the tune's staff where the score has one, the right hand's and the
+ * left's unless the piano is hidden (a lead sheet, ADR 0083).
  */
 export function shownRows(draft: Rows): Layer[] {
-  const rows: Layer[] = ['chords', 'melody', 'rh', 'lh']
-  return rows.filter((row) => rowShown(draft, rowOf(row)))
+  return [
+    ...(rowShown(draft, 'chords') ? (['chords'] as const) : []),
+    ...(draft.melodyStaff ? (['melody'] as const) : []),
+    ...(rowShown(draft, 'piano') ? (['rh', 'lh'] as const) : []),
+  ]
 }
 
-/** Whether a row is on the sheet: the score has it and does not hide it. */
-export const rowShown = (draft: Rows, row: HiddenRow): boolean =>
-  hasRow(draft, row) && !draft.hidden.includes(row)
+/** Whether a row the score may hide is on the sheet. */
+export const rowShown = (draft: Rows, row: HiddenRow): boolean => !draft.hidden.includes(row)
 
 /** Whether a score with `hidden` out of sight still shows a staff: it never hides every one (ADR 0083). */
 export const keepsAStaff = (draft: Rows, hidden: readonly HiddenRow[]): boolean =>

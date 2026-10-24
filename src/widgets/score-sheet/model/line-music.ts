@@ -2,7 +2,6 @@ import { HAND_IDS } from '@/entities/piece'
 import {
   barsOf,
   rowShown,
-  shownRows,
   type Draft,
   type DraftNote,
   type Layer,
@@ -164,7 +163,7 @@ export function staffOfLayer(
 export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): TimedMusic {
   const from = line.start
   const to = endOf(line)
-  const tune = shownRows(draft).includes('melody')
+  const tune = draft.melodyStaff
   const piano = rowShown(draft, 'piano')
   const notes = [
     ...(tune ? sounding(draft.melody, 'melody', from, to, lyrics) : []),

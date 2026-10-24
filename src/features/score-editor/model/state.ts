@@ -1,5 +1,5 @@
 import type { BarMarkChoice } from './bar-marks'
-import type { HiddenRow, SectionKind } from '@/entities/piece'
+import type { SectionKind } from '@/entities/piece'
 import type { Chord, Clef, Finger, Hand, Key, Meter, Midi, Tick } from '@/shared/lib/music'
 import type { Clip } from './clip'
 import type { Draft, Layer } from './draft'
@@ -117,10 +117,10 @@ export type EditorAction =
   | { readonly type: 'delete'; readonly back?: boolean }
   /** The notes chosen (else at the caret) moved by notes of the key: ↑ ↓, or a note dragged on its staff. */
   | { readonly type: 'step'; readonly steps: number; readonly joins?: boolean }
-  /** The tune's staff added over the grand staff, or taken away with its notes (ADR 0064). */
+  /** The tune's staff added over the grand staff, or taken away with its notes (ADR 0064, 0094). */
   | { readonly type: 'melodyStaff'; readonly on: boolean }
-  /** A row shown or hidden, its music kept (ADR 0072). */
-  | { readonly type: 'hide'; readonly row: HiddenRow; readonly hidden: boolean }
+  /** The piano's grand staff hidden, a lead sheet, its music kept and played, or shown (ADR 0083). */
+  | { readonly type: 'piano'; readonly hidden: boolean }
   | { readonly type: 'shift'; readonly semitones: number }
   | { readonly type: 'respell' }
   /**

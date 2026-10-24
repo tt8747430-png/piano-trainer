@@ -1,7 +1,7 @@
 import { songTitle } from '@/entities/piece'
 import { markBars } from './bar-marks'
 import { setClef } from './clefs'
-import { keepsAStaff, rowShown, staffLeftFor, withAStaff } from './rows'
+import { keepsAStaff, staffLeftFor, withAStaff } from './rows'
 import { setBarTicks } from './bars'
 import { chosenNotes, chosenSpan, shownValue, takenAway } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
@@ -181,30 +181,24 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
     case 'melodyStaff': {
       if (action.on === draft.melodyStaff) return state
       if (action.on) return commit(state, { ...draft, melodyStaff: true }, { layer: 'melody' })
-      // Removed, it is no longer hidden: added again, it is in sight. A lead sheet's tune taken
-      // away brings the piano back, so a staff is in sight (ADR 0083).
-      const without = {
-        ...draft,
-        melodyStaff: false,
-        melody: [],
-        hidden: draft.hidden.filter((row) => row !== 'melody'),
-      }
+      // A lead sheet's tune taken away brings the piano back, so a staff is in sight (ADR 0083).
+      const without = { ...draft, melodyStaff: false, melody: [] }
       const next = { ...without, hidden: withAStaff(without) }
       return commit(state, next, {
         layer: layer === 'melody' ? staffLeftFor(next) : layer,
         struck: null,
       })
     }
-    case 'hide': {
-      if (draft.hidden.includes(action.row) === action.hidden) return state
+    case 'piano': {
+      if (draft.hidden.includes('piano') === action.hidden) return state
       const hidden = action.hidden
-        ? [...draft.hidden, action.row]
-        : draft.hidden.filter((row) => row !== action.row)
+        ? [...draft.hidden, 'piano' as const]
+        : draft.hidden.filter((row) => row !== 'piano')
       // Never every staff out of sight (ADR 0083).
       if (!keepsAStaff(draft, hidden)) return state
       const next = { ...draft, hidden }
-      // The caret leaves a row put out of sight (a hand's, with the piano) for the top staff's.
-      const leaves = !rowShown(next, isHandLayer(layer) ? 'piano' : layer)
+      // The caret leaves a hand put out of sight for the top staff's.
+      const leaves = action.hidden && isHandLayer(layer)
       return commit(state, next, leaves ? { layer: staffLeftFor(next), struck: null } : {})
     }
     case 'shift':

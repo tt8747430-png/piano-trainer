@@ -38,7 +38,7 @@ export const songs: LocaleResources['songs'] = {
       pianoAndMelody: 'Мелодия на своём нотоносце над фортепиано, с аккордовыми символами',
       piano: 'Только фортепиано',
     },
-    rows: 'Строки',
+    staves: 'Нотоносцы',
     chordNames: 'Аккордовые символы',
     melody: 'Мелодия',
     melodyDetail: 'Нотоносец для мелодии',

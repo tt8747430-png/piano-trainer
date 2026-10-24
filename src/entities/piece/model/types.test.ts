@@ -30,12 +30,11 @@ describe('entries', () => {
 })
 
 describe('showsAStaff', () => {
-  it('is false only where the piano is hidden and no tune’s staff is in sight (ADR 0083)', () => {
+  it('is false only where the piano is hidden and the score has no tune’s staff (ADR 0083, 0094)', () => {
     expect(showsAStaff([], false)).toBe(true)
     expect(showsAStaff(['chords'], false)).toBe(true)
     expect(showsAStaff(['piano'], false)).toBe(false)
     expect(showsAStaff(['piano'], true)).toBe(true)
-    expect(showsAStaff(['piano', 'melody'], true)).toBe(false)
   })
 })
 

@@ -38,7 +38,6 @@ import {
   type SpelledNote,
   type Tick,
 } from '@/shared/lib/music'
-import { hasRow } from './rows'
 import { barsOf, chordsAt, startsIn, type PlacedBar } from './timeline'
 
 /** What the editor writes (spec §6.1, ADR 0091): the chords, the melody or a hand. */
@@ -230,7 +229,6 @@ export function writeDraft(draft: Draft): PieceMusic {
   const melody = draft.melodyStaff
     ? (writeMelody(draft.melody, timeline) ?? emptyLine(timeline))
     : undefined
-  const hidden = draft.hidden.filter((row) => hasRow(draft, row))
   const ticks = placed.map(({ bar }) => bar.ticks)
   const clefs = (hand: Hand) => placed.map(({ bar }) => bar.clefs?.[hand])
   const lyrics = gatherLyrics(tuneNotes(draft)).map(writeLyrics)
@@ -247,7 +245,7 @@ export function writeDraft(draft: Draft): PieceMusic {
       ),
     })),
     ...(melody === undefined ? {} : { melody }),
-    ...(hidden.length > 0 ? { hidden } : {}),
+    ...(draft.hidden.length > 0 ? { hidden: draft.hidden } : {}),
     ...(lyrics.length > 0 ? { lyrics } : {}),
     hands: {
       rh: writeHand(handBars(draft.hands.rh, placed), ticks, clefs('rh')),

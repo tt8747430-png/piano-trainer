@@ -5,8 +5,9 @@ import { Sheet, SheetContent, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
- * What a new song's score holds (ADR 0072, 0091), its own sheet over New song: a template to start
- * from, as a notation app offers them, then each row on or off.
+ * What a new song's score holds (ADR 0072, 0091, 0094), its own sheet over New song: a template to
+ * start from, as a notation app offers them, then its staves as the score names them: the melody's,
+ * the piano's (hidden, a lead sheet) and the chord symbols.
  */
 export function ScoreSetupSheet({
   open,
@@ -24,7 +25,7 @@ export function ScoreSetupSheet({
   // No tune: the piano is the only staff, kept.
   const pianoKept = !setup.melody
   const id = useId()
-  const ids = { templates: `${id}-templates`, rows: `${id}-rows` }
+  const ids = { templates: `${id}-templates`, staves: `${id}-staves` }
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
@@ -62,16 +63,10 @@ export function ScoreSetupSheet({
               ))}
             </div>
           </section>
-          <section aria-labelledby={ids.rows} className="flex flex-col">
-            <h3 id={ids.rows} className="text-sm font-semibold text-muted-foreground">
-              {t('setup.rows')}
+          <section aria-labelledby={ids.staves} className="flex flex-col">
+            <h3 id={ids.staves} className="text-sm font-semibold text-muted-foreground">
+              {t('setup.staves')}
             </h3>
-            <SwitchRow
-              icon={<span className="font-display text-base font-semibold">C⁷</span>}
-              label={t('setup.chordNames')}
-              checked={setup.chordNames}
-              onCheckedChange={(chordNames) => onChange({ ...setup, chordNames })}
-            />
             <SwitchRow
               icon={<span className="font-music text-xl leading-none">𝄞</span>}
               label={t('setup.melody')}
@@ -87,6 +82,12 @@ export function ScoreSetupSheet({
               checked={setup.piano || pianoKept}
               disabled={pianoKept}
               onCheckedChange={(piano) => onChange({ ...setup, piano })}
+            />
+            <SwitchRow
+              icon={<span className="font-display text-base font-semibold">C⁷</span>}
+              label={t('setup.chordNames')}
+              checked={setup.chordNames}
+              onCheckedChange={(chordNames) => onChange({ ...setup, chordNames })}
             />
           </section>
         </div>

@@ -94,8 +94,8 @@ function savedHands(saved: unknown): Hands | undefined {
 }
 
 /**
- * The rows a save hides, those it names once each (ADR 0072); the piano only while the tune's staff
- * is in sight, so a score never hides every staff (ADR 0083).
+ * The rows a save hides, those it names once each (ADR 0072); the piano only where the score has the
+ * tune's staff, so a score never hides every staff (ADR 0083).
  */
 function savedHidden(saved: unknown, melody: boolean): { hidden?: HiddenRow[] } {
   if (!Array.isArray(saved)) return {}

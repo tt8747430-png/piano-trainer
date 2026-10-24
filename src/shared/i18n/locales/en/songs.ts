@@ -46,7 +46,7 @@ export const songs = {
       pianoAndMelody: 'The tune on its own staff over the piano, with chord symbols',
       piano: 'The piano alone',
     },
-    rows: 'Rows',
+    staves: 'Staves',
     chordNames: 'Chord symbols',
     melody: 'Melody',
     melodyDetail: 'A staff for the tune',

@@ -27,7 +27,7 @@ describe('the words in the editor (ADR 0093)', () => {
     expect(tuneLayer(sung)).toBe('melody')
     expect(singsHere(sung, 'melody')).toBe(true)
     expect(singsHere(sung, 'rh')).toBe(false)
-    expect(singsHere({ ...sung, hidden: ['melody'] }, 'melody')).toBe(false)
+    expect(singsHere({ ...sung, melodyStaff: false }, 'melody')).toBe(false)
     const piano = draftOf({ hands: { rh: 'G4+B4/2 D5/2 | r/4', lh: 'r/4 | r/4' } })
     expect(tuneLayer(piano)).toBe('rh')
     expect(singsHere(piano, 'rh')).toBe(true)
