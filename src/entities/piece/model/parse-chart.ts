@@ -53,13 +53,17 @@ const START_TOKENS: Readonly<Record<string, BarMarks>> = {
 /** The most bars of its meter one bar may last: a bar of chords with long `@beats`. */
 const BAR_LIMIT = 4
 
+/** A bar with no chord symbol (ADR 0094): nothing printed over it, nothing a pattern plays there. */
+export const NO_CHORD = '_'
+
 interface WrittenChord {
-  readonly chord: Chord
+  /** None for `_`, a bar of no chord. */
+  readonly chord: Chord | null
   readonly beats: number | null
   readonly method: MethodCode | undefined
 }
 
-/** `symbol[@beats][:method]` */
+/** `symbol[@beats][:method]`, or `_[@beats]` for no chord. */
 function readChord(text: string, fail: Fail): WrittenChord {
   const [head = '', method, ...afterMethod] = text.split(':')
   const [symbol = '', beatsText, ...afterBeats] = head.split('@')
@@ -72,6 +76,7 @@ function readChord(text: string, fail: Fail): WrittenChord {
   if (read !== null && ticks === null) fail(`"${beatsText}" beats fall between ticks`)
   // Kept as the whole ticks they are, so `.3333333333` is a third of a beat exactly.
   const beats = ticks === null ? null : ticks / TICKS_PER_BEAT
+  if (symbol === NO_CHORD) return { chord: null, beats, method }
   try {
     return { chord: parseChordSymbol(symbol), beats, method }
   } catch (error) {
@@ -80,12 +85,19 @@ function readChord(text: string, fail: Fail): WrittenChord {
   }
 }
 
+/** `_`, a bar of no chord (ADR 0094): the meter's length or its own `@beats`, written alone. */
+function emptyBar(written: readonly WrittenChord[], meterBeats: number, fail: Fail): ChartBar {
+  const [only] = written
+  if (written.length > 1 || only?.method !== undefined)
+    fail(`"${NO_CHORD}" is a bar of no chord, written alone`)
+  return { chords: [], beats: only?.beats ?? meterBeats }
+}
+
 /**
  * Chords joined by `-` share the meter's beats, except those that give their own `@beats`; a bar in
  * which every chord gives beats lasts their sum. A chord without a method code takes its bar's first.
  */
-function readBar(text: string, meterBeats: number, fail: Fail): ChartBar {
-  const written = text.split('-').map((part) => readChord(part, fail))
+function chordBar(written: readonly WrittenChord[], meterBeats: number, fail: Fail): ChartBar {
   const given = written.reduce((sum, chord) => sum + (chord.beats ?? 0), 0)
   const sharing = written.filter((chord) => chord.beats === null).length
   const left = meterBeats - given
@@ -95,15 +107,23 @@ function readBar(text: string, meterBeats: number, fail: Fail): ChartBar {
     fail(`${sharing} chords cannot share ${left} beats in whole ticks`)
   }
   const barMethod = written.find((chord) => chord.method)?.method
-  const chords = written.map(({ chord, beats, method = barMethod }): ChartChord => ({
-    ...chord,
-    beats: beats ?? share,
-    ...(method ? { method } : {}),
-  }))
+  const chords = written.flatMap(({ chord, beats, method = barMethod }): ChartChord[] =>
+    chord ? [{ ...chord, beats: beats ?? share, ...(method ? { method } : {}) }] : [],
+  )
   // Summed in ticks: six chords sharing 4/4 make 4 beats, never 3.9999999999999996 (a pickup).
   const ticks = chords.reduce((sum, chord) => sum + beatsToTicks(chord.beats), 0)
-  if (ticks > BAR_LIMIT * beatsToTicks(meterBeats)) fail(`a bar longer than four bars of its meter`)
   return { chords, beats: ticks / TICKS_PER_BEAT }
+}
+
+/** A bar of chords, or of none (`_`), at most four bars of its meter long. */
+function readBar(text: string, meterBeats: number, fail: Fail): ChartBar {
+  const written = text.split('-').map((part) => readChord(part, fail))
+  const bar = written.some(({ chord }) => chord === null)
+    ? emptyBar(written, meterBeats, fail)
+    : chordBar(written, meterBeats, fail)
+  if (beatsToTicks(bar.beats) > BAR_LIMIT * beatsToTicks(meterBeats))
+    fail(`a bar longer than four bars of its meter`)
+  return bar
 }
 
 /** The hands a bar writes, from what was read for every bar; none when it writes neither. */

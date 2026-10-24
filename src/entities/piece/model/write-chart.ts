@@ -1,6 +1,6 @@
 import type { ChartBar } from '@/shared/lib/arrangement'
 import { ticksIn } from './beats'
-import { JUMP_TOKENS } from './parse-chart'
+import { JUMP_TOKENS, NO_CHORD } from './parse-chart'
 import {
   beatsPerBar,
   beatsToTicks,
@@ -43,22 +43,31 @@ function chordBeatsText(ticks: Tick): string {
 }
 
 /**
- * A bar as the chart writes it: its chords joined by `-`, without beats where they share the meter's
- * bar equally, else each with its own; a method code once when every chord shares it.
+ * A bar's chords as the chart writes them: joined by `-`, without beats where they share the meter's
+ * bar equally, else each with its own; a method code once when every chord shares it. A bar of no
+ * chord is `_`, with its beats where it is not the meter's length (ADR 0094).
  */
-export function writeBar(bar: ChartBar, meter: Meter): string {
+function chordsText(bar: ChartBar, meter: Meter): string {
+  const full = beatsToTicks(bar.beats) === beatsToTicks(beatsPerBar(meter))
+  if (bar.chords.length === 0)
+    return full ? NO_CHORD : `${NO_CHORD}@${chordBeatsText(beatsToTicks(bar.beats))}`
   const [first] = bar.chords
   const sharing =
-    beatsToTicks(bar.beats) === beatsToTicks(beatsPerBar(meter)) &&
+    full &&
     bar.chords.every((chord) => beatsToTicks(chord.beats) === beatsToTicks(first?.beats ?? 0))
   const oneMethod = bar.chords.every((chord) => chord.method === first?.method)
-  const chords = bar.chords
+  return bar.chords
     .map((chord, i) => {
       const beats = sharing ? '' : `@${chordBeatsText(beatsToTicks(chord.beats))}`
       const method = chord.method && (!oneMethod || i === 0) ? `:${chord.method}` : ''
       return `${chordSymbol(chord)}${beats}${method}`
     })
     .join('-')
+}
+
+/** A bar as the chart writes it: its chords (`chordsText`) between the marks before and after it. */
+export function writeBar(bar: ChartBar, meter: Meter): string {
+  const chords = chordsText(bar, meter)
   return [
     ...(bar.segno ? ['Segno'] : []),
     ...(bar.coda ? ['Coda'] : []),

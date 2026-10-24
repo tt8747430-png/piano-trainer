@@ -89,7 +89,7 @@ The jumps (ADR 0068): `Segno` or `Coda` before a bar puts its sign there; `Fine`
 - `pattern` is the accompaniment the section's chords play where it is not the piece's; the editor never writes one (ADR 0091).
 - `lines`: each line is bars separated by spaces.
 
-A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:method]`:
+A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:method]`, or `_` for none:
 
 | Written                    | Means                                                                                            |
 | -------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -100,6 +100,10 @@ A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:met
 | `Fm@1`                     | A first bar shorter than the meter is a pickup: the end of a bar, played, counted and written so |
 | `C:t1 F`, `C-G:1`          | A method code; a chord without one takes its bar's first code                                    |
 | `D/F#`                     | A slash chord; a bass that is a chord tone is spelled as that tone (`D#/G` → `D#/F𝄪`)            |
+| `C _ G`, `_@2`             | No chord at all (ADR 0094): nothing printed over the bar, nothing a pattern plays there          |
+
+`_` stands alone in its bar, its `@beats` given as a chord's where it is not the meter's length. A bar of no chord
+sounds only what a hand writes in it ([Written hands](#written-hands)).
 
 Beats per bar by meter: `2/4` 2, `3/4` 3, `4/4` 4, `6/8` 2, `12/8` 4. Beats must fall on whole ticks (24 per beat:
 `.5`, `.25`, `.125` a 32nd, `1.5`, not `.3`); a third of a beat is written as a fraction, `1:3` (a triplet 8th), `2:3`,

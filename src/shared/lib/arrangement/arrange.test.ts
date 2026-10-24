@@ -46,8 +46,12 @@ const pattern = (id: string, rh: string, lh: string): EventPattern => ({
 const BLOCK = pattern('block', '0/16 C', '0/16 L1')
 const BEATS = pattern('beats', '0/4 C,4/4 C,8/4 C,12/4 C', '0/16 L1+L8')
 
-/** A bar written `C`, `F@2-G@2` or `C:t1`; chords without @beats share what is left equally. */
+/**
+ * A bar written `C`, `F@2-G@2` or `C:t1`; chords without @beats share what is left equally. `_` is a
+ * bar of no chord (ADR 0094).
+ */
 function bar(text: string, barBeats: number): ChartBar {
+  if (text === '_') return { chords: [], beats: barBeats }
   const parts = text.split('-').map((part) => {
     const [head = '', method] = part.split(':')
     const [symbol = '', beats] = head.split('@')
@@ -181,6 +185,22 @@ describe('arrange', () => {
     expect(performance.chords.map((chord) => chord.startTick)).toEqual([0, 96, 144, 192, 240, 264])
     expect(performance.chords.map((chord) => chord.bar)).toEqual([0, 1, 1, 2, 2, 2])
     expect(performance.bars.map((b) => b.chords)).toEqual([[0], [1, 2], [3, 4, 5]])
+    expect(performance.totalTicks).toBe(288)
+  })
+
+  it('lays a bar of no chord end to end with the others, the pattern playing nothing there (ADR 0094)', () => {
+    const performance = arrange(chart([['C', '_', 'G']]), { tonic: C, pattern: BEATS })
+    expect(performance.bars.map((b) => [b.startTick, b.chords])).toEqual([
+      [0, [0]],
+      [96, []],
+      [192, [1]],
+    ])
+    expect(performance.chords.map((chord) => [chord.symbol, chord.startTick])).toEqual([
+      ['C', 0],
+      ['G', 192],
+    ])
+    expect(onsets(performance, 'rh')).toEqual([0, 24, 48, 72, 192, 216, 240, 264])
+    expect(onsets(performance, 'lh')).toEqual([0, 192])
     expect(performance.totalTicks).toBe(288)
   })
 
@@ -715,6 +735,22 @@ describe('arrange', () => {
     expect(notesOf(alreadyPlayed, 'rh')[0]?.velocity).toBe(0.19)
   })
 
+  it('doubles the tune in a bar of no chord, where no pattern plays it (ADR 0094)', () => {
+    const melody = tune([64, 0, 96], [62, 96, 96])
+    const performance = arrange(chart([['C', '_']]), {
+      tonic: C,
+      pattern: BLOCK,
+      rh: DOUBLE,
+      melody,
+      doubleMelody: true,
+    })
+    expect(midisAt(performance, 'rh', 0)).toEqual([64])
+    expect(onsets(performance, 'rh')).toEqual([0])
+    expect(notesOf(performance, 'melody').map((n) => [n.midi, n.startTick, n.chord])).toEqual([
+      [74, 96, undefined],
+    ])
+  })
+
   it('harmonises long tune notes with chord tones below', () => {
     const harmony: MelodyFigure = {
       kind: 'melody',
@@ -936,6 +972,29 @@ describe('a hand written into a bar', () => {
       { tonic: C, pattern: BLOCK },
     )
     expect(notesOf(performance, 'lh').map((n) => n.chord)).toEqual([0, 1])
+  })
+
+  it('plays a bar of no chord’s written notes, for no chord, and groups them so (ADR 0094)', () => {
+    const plain = chart([['C', '_']])
+    const [first, second] = plain.sections[0]?.lines[0] ?? []
+    if (!first || !second) throw new Error('two bars')
+    const performance = arrange(
+      {
+        ...plain,
+        sections: [{ lines: [[first, writing(second, { lh: hand([43, 0, 48], [36, 48, 48]) })]] }],
+      },
+      { tonic: C, pattern: BLOCK },
+    )
+    expect(notesOf(performance, 'lh').map((n) => [n.midi, n.startTick, n.chord])).toEqual([
+      [36, 0, 0],
+      [43, 96, undefined],
+      [36, 144, undefined],
+    ])
+    expect(performance.beatGroups.map(({ tick, bar, chord }) => [tick, bar, chord])).toEqual([
+      [0, 0, 0],
+      [96, 1, undefined],
+      [144, 1, undefined],
+    ])
   })
 
   it('holds a written note across the barline into a bar the hand writes too', () => {

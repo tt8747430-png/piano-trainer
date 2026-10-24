@@ -209,6 +209,8 @@ function layOut(chart: Chart, unfold = false): Layout {
       tick += durationTicks
       return chords.length - 1
     })
+    // Its chords fill it end to end; a bar of no chord lasts its beats all the same (ADR 0094).
+    tick = barStart + beatsToTicks(bar.beats)
     hands.push(bar.hands)
     bars.push({
       startTick: barStart,
@@ -238,6 +240,18 @@ function sounding(starts: readonly Tick[], tick: Tick): number {
     else high = middle - 1
   }
   return low
+}
+
+/**
+ * The chord sounding at `tick`, whose time holds it: its index among the chords placed in order; none
+ * in a bar of no chord (ADR 0094), where the chord before has ended.
+ */
+function chordAt(chords: readonly PlacedChord[], starts: readonly Tick[], tick: Tick) {
+  const index = sounding(starts, tick)
+  const placed = chords[index]
+  return placed && placed.startTick <= tick && tick < placed.startTick + placed.durationTicks
+    ? index
+    : undefined
 }
 
 /**
@@ -434,16 +448,19 @@ function playTune(
 
 const HANDS: readonly Hand[] = ['rh', 'lh']
 
-/** A hand's written notes on the timeline, in the chosen key, each under the chord sounding at its onset. */
 /** A written note moved past either end of the piano, an octave back onto it. */
 const onThePiano = (key: Midi): Midi =>
   key < PIANO.from ? midi(key + 12) : key > PIANO.to ? midi(key - 12) : key
 
+/**
+ * A hand's written notes on the timeline, in the chosen key, each under the chord sounding at its
+ * onset (`chordOf`): none in a bar of no chord.
+ */
 function playWritten(
   written: readonly HandNote[],
   hand: Hand,
   barStart: Tick,
-  chordStarts: readonly Tick[],
+  chordOf: (tick: Tick) => number | undefined,
   from: SpelledNote,
   to: SpelledNote,
 ): PerformanceNote[] {
@@ -456,6 +473,7 @@ function playWritten(
           grace: transposeNotes(grace, from, to).map((g) => ({ ...g, midi: onThePiano(g.midi) })),
         }
       : n.marks
+    const chord = chordOf(startTick)
     return {
       ...(marks ? { marks } : {}),
       midi: onThePiano(n.midi),
@@ -466,7 +484,7 @@ function playWritten(
       startTick,
       durationTicks: n.durationTicks,
       velocity: hand === 'lh' ? VELOCITY.left : VELOCITY.right,
-      chord: sounding(chordStarts, startTick),
+      ...(chord === undefined ? {} : { chord }),
     }
   })
 }
@@ -555,7 +573,13 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     const { bass, root } = transposeChord(chord, chart.key.tonic, options.tonic)
     return pitchClassOf(bass ?? root)
   })
-  const nextBasses = basses.map((_, index) => basses[index + 1])
+  // The next chord's, where it follows straight on: a bar of no chord between leaves none to lead to.
+  const nextBasses = basses.map((_, index) => {
+    const [here, next] = [layout.chords[index], layout.chords[index + 1]]
+    return here && next?.startTick === here.startTick + here.durationTicks
+      ? basses[index + 1]
+      : undefined
+  })
 
   layout.chords.forEach((placed, index) => {
     const chord = transposeChord(placed.chord, chart.key.tonic, options.tonic)
@@ -622,20 +646,20 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
   })
 
   const chordStarts = layout.chords.map((placed) => placed.startTick)
+  const chordOf = (tick: Tick) => chordAt(layout.chords, chordStarts, tick)
   layout.hands.forEach((written, bar) => {
     const barStart = layout.bars[bar]?.startTick ?? 0
     for (const hand of HANDS) {
       const played = written?.[hand]
       if (played)
-        notes.push(
-          ...playWritten(played, hand, barStart, chordStarts, chart.key.tonic, options.tonic),
-        )
+        notes.push(...playWritten(played, hand, barStart, chordOf, chart.key.tonic, options.tonic))
     }
   })
   if (options.doubleMelody && melody) {
     for (const n of melody) {
-      const chord = sounding(chordStarts, n.startTick)
-      if (playsTune[chord]) continue
+      // Where no chord's pattern plays the tune (a bar of no chord too), it is doubled.
+      const chord = chordOf(n.startTick)
+      if (chord !== undefined && playsTune[chord]) continue
       notes.push({
         midi: midi(n.midi + 12),
         spelled: n.spelled,
@@ -643,7 +667,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
         startTick: n.startTick,
         durationTicks: n.durationTicks,
         velocity: VELOCITY.doubled,
-        chord,
+        ...(chord === undefined ? {} : { chord }),
         ...(n.marks ? { marks: n.marks } : {}),
         ...(n.lyrics ? { lyrics: n.lyrics } : {}),
       })
@@ -659,12 +683,15 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     if (members) members.push(i)
     else onsets.set(n.startTick, [i])
   })
-  const beatGroups = [...onsets].map(([tick, members]): BeatGroup => ({
-    tick,
-    bar: sounding(barStarts, tick),
-    chord: sounding(chordStarts, tick),
-    notes: members,
-  }))
+  const beatGroups = [...onsets].map(([tick, members]): BeatGroup => {
+    const chord = chordOf(tick)
+    return {
+      tick,
+      bar: sounding(barStarts, tick),
+      ...(chord === undefined ? {} : { chord }),
+      notes: members,
+    }
+  })
 
   // The tempo and the pedal as every part marks them, whichever the learner hears (ADR 0068).
   const timing = [...(melody ?? []), ...notes].flatMap(({ startTick, marks }) =>

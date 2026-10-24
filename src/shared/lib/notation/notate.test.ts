@@ -98,6 +98,21 @@ describe('notate', () => {
     ])
   })
 
+  it('writes no chord symbol over a bar of no chord (ADR 0094)', () => {
+    const score = notate(
+      music([n(60, note('C'), 'rh', 0, 96), n(62, note('D'), 'rh', 96, 96)], {
+        bars: [
+          { startTick: 0, beats: 4 },
+          { startTick: 96, beats: 4 },
+        ],
+      }),
+    )
+    expect(score.measures.map((measure) => measure.chords)).toEqual([
+      [{ tick: 0, symbol: 'C' }],
+      [],
+    ])
+  })
+
   it('writes a bar of C on a grand staff, with its chord symbol and time signature', () => {
     const score = notate(
       music([

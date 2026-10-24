@@ -90,6 +90,23 @@ describe('parseChart', () => {
     expect(compound.sections[0]?.lines[0]?.[0]?.beats).toBe(2)
   })
 
+  it('reads `_` as a bar of no chord, the meter’s length or its own given beats (ADR 0094)', () => {
+    expect(read(['C _ G'])).toEqual([['C 4'], [], ['G 4']])
+    const beats = (line: string, meter: '4/4' | '3/4' = '4/4') =>
+      parseChart(testSong([line], { meter })).sections[0]?.lines[0]?.map((bar) => bar.beats)
+    expect(beats('_ _@2 _@1.5')).toEqual([4, 2, 1.5])
+    expect(beats('_', '3/4')).toEqual([3])
+    expect(errorOf(['C _-G']).message).toMatch(/no chord, written alone/)
+    expect(errorOf(['_:t1']).message).toMatch(/no chord, written alone/)
+    expect(errorOf(['_@20']).message).toContain('"20"')
+  })
+
+  it('writes a bar of no chord back as `_`, its beats where they are not the meter’s', () => {
+    const text = '|: _ :| _@2 Segno _@1.5 |.'
+    const [line = []] = parseChart(testSong([text])).sections[0]?.lines ?? []
+    expect(line.map((bar) => writeBar(bar, '4/4')).join(' ')).toBe(text)
+  })
+
   it('reads given beats', () => {
     const chart = parseChart(testSong(['C@1-C/E@1-Dsus4@1-D/F#@1']))
     const bar = chart.sections[0]?.lines[0]?.[0]

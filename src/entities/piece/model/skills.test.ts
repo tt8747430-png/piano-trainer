@@ -29,4 +29,13 @@ describe('chordsOfPiece', () => {
       ),
     ).toEqual(['C maj', 'A m7', 'F maj', 'G d7', 'A♭ maj'])
   })
+
+  it('passes over a bar of no chord, and lists none for a song of none (ADR 0094)', () => {
+    expect(chordsOfPiece(testSong(['C _ G7'])).map(({ root }) => noteName(root))).toEqual([
+      'C',
+      'G',
+    ])
+    expect(chordsOfPiece(testSong(['_ _']))).toEqual([])
+    expect(skillsOfPiece(testSong(['_ _']))).toEqual([])
+  })
 })
