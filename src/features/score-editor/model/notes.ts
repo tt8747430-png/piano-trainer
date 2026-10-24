@@ -217,7 +217,24 @@ export const isAt = (where: Where) => (n: DraftNote) =>
       ? n.startTick === where.at && n.midi === where.key
       : n.startTick >= where.from && n.startTick < where.to
 
-/** Takes the notes `where` says away. */
+/**
+ * Notes kept where some of a chord's were taken: what a note taken sang goes to its chord's highest
+ * note left, where none of them sings, so the chord still sings it (a chord is one note of the tune,
+ * ADR 0093).
+ */
+function stillSinging(kept: readonly DraftNote[], taken: readonly DraftNote[]): DraftNote[] {
+  let notes = [...kept]
+  for (const { startTick, lyrics } of taken) {
+    if (!lyrics) continue
+    const chord = notes.filter((n) => n.startTick === startTick)
+    if (chord.length === 0 || chord.some((n) => n.lyrics)) continue
+    const top = chord.reduce((high, n) => (n.midi > high.midi ? n : high))
+    notes = notes.map((n) => (n === top ? { ...n, lyrics } : n))
+  }
+  return notes
+}
+
+/** Takes the notes `where` says away; a chord left by one of its notes keeps what it sang. */
 export const deleteNotes = (draft: Draft, layer: NoteLayer, where: Where): Draft => {
   const taken = isAt(where)
   const notes = notesOf(draft, layer)
@@ -225,7 +242,10 @@ export const deleteNotes = (draft: Draft, layer: NoteLayer, where: Where): Draft
     ? withNotes(
         draft,
         layer,
-        notes.filter((n) => !taken(n)),
+        stillSinging(
+          notes.filter((n) => !taken(n)),
+          notes.filter(taken),
+        ),
       )
     : draft
 }

@@ -963,4 +963,23 @@ describe('the words (ADR 0093)', () => {
     const gone = run(first, { type: 'delete' })
     expect(verses(gone)).toBeUndefined()
   })
+
+  it('keeps a chord’s syllable where the note singing it is taken alone: a chord is one note of the tune', () => {
+    // No tune's staff: the upper staff sings, each chord on its highest note.
+    const hymn = initialEditor(
+      draftOf({
+        key: 'C',
+        sections: [{ kind: 'verse', lines: ['C G'] }],
+        hands: { rh: 'C4+E4+G4/2 D4+G4/2 | C4+E4/4', lh: 'r/4 | r/4' },
+        lyrics: ['Hal- le- lu'],
+      }),
+    )
+    const top = run(
+      hymn,
+      { type: 'place', tick: 0, layer: 'rh', key: midi(67) },
+      { type: 'delete' },
+    )
+    expect(shape(top.draft.hands.rh).slice(0, 2)).toEqual(['C4@0/48', 'E4@0/48'])
+    expect(verses(top)).toEqual(['Hal- le- lu'])
+  })
 })
