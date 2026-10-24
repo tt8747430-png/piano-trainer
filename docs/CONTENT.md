@@ -61,6 +61,9 @@ section's `pattern` (`{ kind: 'chorus', pattern: 'M3', lines: […] }`) is a bui
 It is content for the Player of a piece no one has edited: the editor opens every bar written and saves no section
 pattern (ADR 0091).
 
+A learner's version of a piece may give it a `title` of its own, typed where the editor prints it (ADR 0094): it
+shows in every language in place of `title`, `titleEn` and `titleRu`, until Reset brings back the piece's.
+
 ## Add a listing, a collection
 
 - **A listing** is a songbook entry with no chart yet: `defineListing({ id, title, titleEn, credits, source, key,
