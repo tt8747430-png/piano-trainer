@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ScoreLayout } from '@/shared/ui/score'
-import { fitScale, SHEET_SCALE, widestBar } from './fit-scale'
+import { fitScale, SHEET_SCALE, systemFit, widestBar } from './fit-scale'
 
 const WIDE = 1440
 
@@ -34,6 +34,25 @@ describe('fitScale, with the music’s own bars', () => {
   it('stays at 1 where even one busy bar fills the screen, and fills no more than the height', () => {
     expect(fitScale({ width: 390, height: 600 }, 210, 400)).toBe(1)
     expect(fitScale({ width: 390, height: 252 }, 210, 100)).toBe(1.2)
+  })
+})
+
+describe('systemFit', () => {
+  it('draws a line down a short sheet small enough to show its system whole, its labels over it', () => {
+    // A phone on its side: 178px of sheet, the chord row 44px, a grand staff 202 at its own size.
+    const fit = systemFit({ room: 178, natural: 202, labels: 44 })
+    expect(fit).toBeLessThan(1)
+    expect(44 + 202 * fit).toBeCloseTo(178)
+  })
+
+  it('is no larger than its width allows, nor than its own size', () => {
+    expect(systemFit({ room: 900, natural: 202, labels: 44 })).toBe(1)
+    expect(systemFit({ room: 900, natural: 202, labels: 44, most: 0.8 })).toBe(0.8)
+  })
+
+  it('never draws it smaller than a panorama’s least, nor before the sheet is measured', () => {
+    expect(systemFit({ room: 178, natural: 325, labels: 44 })).toBe(SHEET_SCALE.min)
+    expect(systemFit({ room: 0, natural: 202, labels: 44, most: 0.9 })).toBe(0.9)
   })
 })
 

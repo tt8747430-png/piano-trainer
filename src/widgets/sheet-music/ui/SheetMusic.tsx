@@ -5,7 +5,7 @@ import type { Performance } from '@/shared/lib/arrangement'
 import { useElementSize, type SheetView } from '@/shared/lib'
 import { notate, type StaffId } from '@/shared/lib/notation'
 import { ScoreView, scoreHeight, type Picked, type ScoreLayout } from '@/shared/ui/score'
-import { fitScale, widestBar } from '../model/fit-scale'
+import { FINGERS, fitScale, widestBar } from '../model/fit-scale'
 import { groupOfTick } from '../model/group-of-tick'
 import { keepsLoop } from '../model/keeps-loop'
 import { playedMusic } from '../model/played-music'
@@ -33,8 +33,6 @@ const ACROSS: SheetViewChoice = {
   hidden: [],
 }
 
-/** The room fingers take under and over the staff (the labels' row is the section's padding). */
-const FINGERS = 36
 /** A bar measured this much wider or narrower than before engraves the staff again; less does not. */
 const BAR_CHANGE = 0.1
 

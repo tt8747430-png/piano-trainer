@@ -3,10 +3,19 @@ import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Midi, Tick } from '@/shared/lib/music'
-import { PAGE, paginate, PRINT_SCALE, useElementSize, useScrollMotion } from '@/shared/lib'
+import {
+  LANDSCAPE_PHONE,
+  PAGE,
+  paginate,
+  PRINT_SCALE,
+  useElementSize,
+  useMediaQuery,
+  useScrollMotion,
+} from '@/shared/lib'
 import { PageCanvas, SheetPage, useCanvasReveal } from '@/shared/ui'
 import { lineLead, measureWidths, type Score, type StaffId } from '@/shared/lib/notation'
 import { ScoreView, scoreHeight, type Picked } from '@/shared/ui/score'
+import { FINGERS, systemFit } from '../model/fit-scale'
 import { scoreLines, type ScoreLine } from '../model/score-lines'
 import { SheetOverlay } from './SheetOverlay'
 
@@ -22,6 +31,8 @@ const LEAST_SCALE = 0.62
  * its title on the first, each chart line cut by width where it is wider than the screen holds. Each
  * line is justified to the width and carries its labels, the loop's part
  * and its bars to jump to; the cursor stands on the line playing, which comes into sight as it starts.
+ * On a phone on its side, a line down the screen is drawn small enough that its whole system is in
+ * sight, as the editor's is.
  */
 export function SheetLines({
   score,
@@ -80,10 +91,23 @@ export function SheetLines({
 }) {
   const { t } = useTranslation('music')
   const box = useRef<HTMLElement>(null)
-  const { width } = useElementSize(box)
+  const { width, height } = useElementSize(box)
+  const onSide = useMediaQuery(LANDSCAPE_PHONE)
   const labels = chordNames ? LABELS.chords : LABELS.numbers
-  // Pages as they print, on a canvas that zooms them to the screen (ADR 0075).
-  const scale = pages ? PRINT_SCALE : Math.min(1, Math.max(LEAST_SCALE, width / FULL_WIDTH))
+  // Down the screen as large as the width allows; on a phone on its side, a whole system, its
+  // fingers and the verses under its tune in the sheet's height. Pages as they print, on a canvas
+  // that zooms them to the screen (ADR 0075).
+  const across = Math.min(1, Math.max(LEAST_SCALE, width / FULL_WIDTH))
+  const scale = pages
+    ? PRINT_SCALE
+    : onSide
+      ? systemFit({
+          room: height - (fingers ? FINGERS : 0),
+          natural: scoreHeight(score, staves),
+          labels,
+          most: across,
+        })
+      : across
   const margin = pages ? PAGE.margin : 0
   const inner = pages ? PAGE.width - 2 * margin : width
   // Each chart line cut by width to the room a line has, less its clef and key (ADR 0074).
@@ -155,11 +179,13 @@ export function SheetLines({
       <section
         ref={box}
         aria-label={t('sheet.label')}
-        // Room to scroll the last line clear of what floats over the sheet's foot (`--float-room`).
-        className="flex h-full scroll-pb-(--float-room) flex-col overflow-y-auto overscroll-contain pb-(--float-room)"
+        className="flex h-full scroll-pb-(--float-room) flex-col overflow-y-auto overscroll-contain"
         style={{ gap: LINE_GAP }}
       >
         {lines.map(line)}
+        {/* Room to scroll the last line clear of what floats over the sheet's foot (`--float-room`),
+            a part of the list, so the sheet's own height is all it shows. */}
+        <div aria-hidden className="h-(--float-room) shrink-0" style={{ marginTop: -LINE_GAP }} />
       </section>
     )
 
