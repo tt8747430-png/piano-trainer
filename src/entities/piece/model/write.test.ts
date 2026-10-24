@@ -202,5 +202,7 @@ describe('the music of a piece', () => {
     expect(sameMusic(music, { ...music, hands: { lh: '- | r/4' } })).toBe(false)
     // A version's own title is its music's (ADR 0094).
     expect(sameMusic(music, { ...music, title: 'Mine' })).toBe(false)
+    expect(sameMusic(music, { ...music, leadSheet: true })).toBe(false)
+    expect(musicOf({ ...song, leadSheet: true })).toEqual({ ...music, leadSheet: true })
   })
 })

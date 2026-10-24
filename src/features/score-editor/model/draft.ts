@@ -13,7 +13,6 @@ import {
   writeMelody,
   type ChartPiece,
   type HandId,
-  type HiddenRow,
   type PieceMusic,
   type Section,
 } from '@/entities/piece'
@@ -95,8 +94,8 @@ export interface Draft {
   readonly sections: readonly DraftSection[]
   /** Whether the score has the tune's staff over the grand staff (ADR 0064): kept though empty (ADR 0072). */
   readonly melodyStaff: boolean
-  /** The rows left out of sight, their music kept (ADR 0072). */
-  readonly hidden: readonly HiddenRow[]
+  /** A lead sheet: the piano's staves out of sight, their music kept (ADR 0072, 0083). */
+  readonly leadSheet: boolean
   /** One line: no note starts under another. */
   readonly melody: readonly DraftNote[]
   /** Each hand's notes, in every bar. */
@@ -186,7 +185,7 @@ export function readDraft(music: PieceMusic): Draft {
     sections,
     // The tune's staff is there wherever the music writes a line for it, rests alone included.
     melodyStaff: music.melody !== undefined,
-    hidden: music.hidden ?? [],
+    leadSheet: music.leadSheet === true,
     melody: melody ?? [],
     hands: { rh: inOrder(hands.rh), lh: inOrder(hands.lh) },
   }
@@ -245,7 +244,7 @@ export function writeDraft(draft: Draft): PieceMusic {
       ),
     })),
     ...(melody === undefined ? {} : { melody }),
-    ...(draft.hidden.length > 0 ? { hidden: draft.hidden } : {}),
+    ...(draft.leadSheet ? { leadSheet: true } : {}),
     ...(lyrics.length > 0 ? { lyrics } : {}),
     hands: {
       rh: writeHand(handBars(draft.hands.rh, placed), ticks, clefs('rh')),

@@ -98,7 +98,7 @@ describe('the sheet’s lines', () => {
   })
 
   it('write no piano on a lead sheet: the tune’s staff alone (ADR 0083)', () => {
-    const lead = { ...draft, hidden: ['piano' as const] }
+    const lead = { ...draft, leadSheet: true }
     const [, second] = linesOf(lead)
     if (!second) throw new Error('a second line')
     const music = lineMusic(lead, second)

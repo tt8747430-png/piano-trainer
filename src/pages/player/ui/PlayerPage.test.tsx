@@ -98,7 +98,7 @@ describe('Player', () => {
       pattern: 'r1',
       sections: [{ kind: 'verse', lines: ['G C'] }],
       melody: 'B4/4 | C5/4',
-      hidden: ['piano'],
+      leadSheet: true,
     }
     storage.setItem(
       PIECES_STORAGE_KEY,

@@ -170,10 +170,10 @@ describe('the score editor', () => {
     }
     // With a tune, the piano may be hidden: a lead sheet, its music kept.
     await menu('Piano staves', 'Hide the piano')
-    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ hidden: ['piano'] }))
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ leadSheet: true }))
     expect(songOf(piecesStore.getState())).toMatchObject({ hands: SILENT_HANDS })
     await menu('Melody staff', 'Show the piano')
-    await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('hidden'))
+    await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('leadSheet'))
     // The tune's staff taken away with its notes; Undo brings them back.
     await menu('Melody staff', 'Remove the melody staff')
     await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('melody'))

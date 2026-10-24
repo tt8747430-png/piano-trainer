@@ -91,15 +91,14 @@ describe('createPiecesStore', () => {
     expect(kept).not.toHaveProperty('instruments')
   })
 
-  it('keeps the piano hidden only where the score has the tune’s staff (ADR 0083, 0094)', () => {
-    const hidden = (music: object) => restored({ versions: { bz1: music } }).versions.bz1?.hidden
-    // A lead sheet: the tune's staff and the chord names, the piano out of sight.
-    expect(hidden({ ...MUSIC, hidden: ['piano'] })).toEqual(['piano'])
+  it('keeps a lead sheet only where the score has the tune’s staff (ADR 0083, 0094)', () => {
+    const read = (music: object) => restored({ versions: { bz1: music } }).versions.bz1
+    // A lead sheet: the tune's staff and the chord symbols, the piano out of sight.
+    expect(read({ ...MUSIC, leadSheet: true })).toEqual({ ...MUSIC, leadSheet: true })
     // Never every staff: with no other, the piano is shown.
     const { melody: _, ...pianoOnly } = MUSIC
-    expect(hidden({ ...pianoOnly, hidden: ['piano', 'chords'] })).toEqual(['chords'])
-    // Hiding the tune is the View's, not the score's.
-    expect(hidden({ ...MUSIC, hidden: ['melody', 'piano'] })).toEqual(['piano'])
+    expect(read({ ...pianoOnly, leadSheet: true })).toEqual(pianoOnly)
+    expect(read({ ...MUSIC, leadSheet: 'yes' })).toEqual(MUSIC)
   })
 
   it('keeps the words that read on the tune, and drops a verse longer than it (ADR 0093)', () => {

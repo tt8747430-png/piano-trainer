@@ -15,7 +15,7 @@ import type { ChartPiece, KeyText, Section } from './types'
  */
 export type PieceMusic = Pick<
   ChartPiece,
-  'key' | 'meter' | 'tempo' | 'pattern' | 'sections' | 'melody' | 'hidden' | 'hands' | 'lyrics'
+  'key' | 'meter' | 'tempo' | 'pattern' | 'sections' | 'melody' | 'leadSheet' | 'hands' | 'lyrics'
 > & {
   /** The learner's own title: a version's, shown in every language in place of the catalog's. */
   readonly title?: string
@@ -29,7 +29,7 @@ export const musicOf = (piece: ChartPiece): PieceMusic => ({
   pattern: piece.pattern,
   sections: piece.sections,
   ...(piece.melody === undefined ? {} : { melody: piece.melody }),
-  ...(piece.hidden?.length ? { hidden: piece.hidden } : {}),
+  ...(piece.leadSheet ? { leadSheet: true } : {}),
   ...(piece.hands === undefined ? {} : { hands: piece.hands }),
   ...(piece.lyrics?.length ? { lyrics: piece.lyrics } : {}),
 })
@@ -63,7 +63,7 @@ export const withMusic = (piece: ChartPiece, { title, ...music }: PieceMusic): C
       ...piece,
       ...music,
       melody: music.melody,
-      hidden: music.hidden,
+      leadSheet: music.leadSheet,
       hands: music.hands,
       lyrics: music.lyrics,
     },
@@ -92,7 +92,7 @@ export const sameMusic = (a: PieceMusic, b: PieceMusic): boolean =>
   a.tempo === b.tempo &&
   a.pattern === b.pattern &&
   a.melody === b.melody &&
-  (a.hidden ?? []).join() === (b.hidden ?? []).join() &&
+  (a.leadSheet ?? false) === (b.leadSheet ?? false) &&
   a.hands?.rh === b.hands?.rh &&
   a.hands?.lh === b.hands?.lh &&
   (a.lyrics ?? []).join('\n') === (b.lyrics ?? []).join('\n') &&

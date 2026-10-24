@@ -31,7 +31,7 @@ export function NewSongSheet({ trigger }: { trigger?: ReactElement }) {
   const [title, setTitle] = useState('')
   const [key, setKey] = useState(keyParam(C_MAJOR))
   const [meter, setMeter] = useState<Meter>('4/4')
-  const [setup, setSetup] = useState<ScoreSetup>(SCORE_TEMPLATES.chordsAndPiano)
+  const [setup, setSetup] = useState<ScoreSetup>(SCORE_TEMPLATES.piano)
   const [customizing, customize] = useState(false)
   const summary = useSetupSummary(setup)
   /** Makes the song and opens it in the score editor, its takes open to record into it. */

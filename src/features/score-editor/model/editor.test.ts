@@ -414,19 +414,22 @@ describe('the editor', () => {
   it('hides the piano for a lead sheet, the caret leaving a hand for the tune, and shows it again (ADR 0083)', () => {
     const sung = initialEditor(draftOf({ melody: 'B4/1 | D5/1', hands: { lh: 'G2/4 | r/4' } }))
     const lead = run({ ...sung, layer: 'lh' }, { type: 'piano', hidden: true })
-    expect(lead.draft.hidden).toEqual(['piano'])
+    expect(lead.draft.leadSheet).toBe(true)
     expect(lead.draft.hands).toEqual(sung.draft.hands)
     expect(lead.layer).toBe('melody')
     const saved = musicToSave(lead.draft)
-    expect(saved).toMatchObject({ hidden: ['piano'], hands: { lh: 'G2/4 | r/4' } })
-    expect(readDraft(saved!).hidden).toEqual(['piano'])
-    expect(run(lead, { type: 'piano', hidden: false }).draft.hidden).toEqual([])
+    expect(saved).toMatchObject({ leadSheet: true, hands: { lh: 'G2/4 | r/4' } })
+    expect(readDraft(saved!).leadSheet).toBe(true)
+    expect(run(lead, { type: 'piano', hidden: false }).draft.leadSheet).toBe(false)
+    expect(musicToSave(run(lead, { type: 'piano', hidden: false }).draft)).not.toHaveProperty(
+      'leadSheet',
+    )
     // Never every staff: not the piano where the score has no tune's staff.
     const piano = initialEditor(draftOf())
     expect(run(piano, { type: 'piano', hidden: true })).toBe(piano)
     // The tune taken away from a lead sheet brings the piano back, so a staff is in sight.
     const gone = run(lead, { type: 'melodyStaff', on: false })
-    expect(gone.draft.hidden).toEqual([])
+    expect(gone.draft.leadSheet).toBe(false)
     expect(gone.layer).toBe('rh')
   })
 

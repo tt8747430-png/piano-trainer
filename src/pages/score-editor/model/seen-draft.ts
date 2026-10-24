@@ -1,10 +1,9 @@
-import type { HiddenRow } from '@/entities/piece'
 import type { ScoreViewSettings } from '@/entities/settings'
-import { keepsAStaff, shownRows, type Draft, type Layer } from '@/features/score-editor'
+import { shownRows, type Draft, type Layer } from '@/features/score-editor'
 import { PIANO_STAVES } from '@/shared/lib/notation'
 
-/** What a score says of its staves: the tune's added or not, the rows it hides. */
-type Staves = Pick<Draft, 'melodyStaff' | 'hidden'>
+/** What a score says of its staves: the tune's added or not, the piano hidden or not. */
+type Staves = Pick<Draft, 'melodyStaff' | 'leadSheet'>
 /** What the View says it shows (ADR 0094): the chord symbols, the tune's staff, the staves hidden. */
 type Shown = Pick<ScoreViewSettings, 'chordNames' | 'melodyStaff' | 'hidden'>
 
@@ -19,11 +18,9 @@ const ROWS: readonly Layer[] = ['chords', 'melody', 'rh', 'lh']
  */
 export function seenDraft<Score extends Staves>(draft: Score, view: Shown): Score {
   const melodyStaff = draft.melodyStaff && view.melodyStaff
-  const piano = PIANO_STAVES.every((staff) => view.hidden.includes(staff))
-  const hidden: HiddenRow[] =
-    piano && !draft.hidden.includes('piano') ? [...draft.hidden, 'piano'] : [...draft.hidden]
-  if (!keepsAStaff({ melodyStaff, hidden }, hidden)) return draft
-  return { ...draft, melodyStaff, hidden }
+  const leadSheet = draft.leadSheet || PIANO_STAVES.every((staff) => view.hidden.includes(staff))
+  if (leadSheet && !melodyStaff) return draft
+  return { ...draft, melodyStaff, leadSheet }
 }
 
 /** The hand that writes on each of the piano's staves. */

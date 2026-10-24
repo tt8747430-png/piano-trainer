@@ -16,7 +16,6 @@ import {
   createEditorStore,
   readDraft,
   musicToSave,
-  rowShown,
   type EditorAction,
 } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
@@ -119,8 +118,6 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     useStore(store, (state) => state.draft.title) ??
     (target.kind === 'song' ? target.music.title : entryTitles(target.entry, locale).primary)
 
-  // The chord names shown unless the song hides them (ADR 0072) or the View does (ADR 0094).
-  const chordNames = useStore(store, (state) => rowShown(state.draft, 'chords')) && shown.chordNames
   const takes = useEditorTakes(target.id, store, title)
   const recording = takes.stage !== 'idle'
 
@@ -183,8 +180,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     return () => window.removeEventListener('keydown', listener)
   }, [])
 
-  // The caret writes only in a row in sight (ADR 0094): a row the song or the View hides (the chord
-  // symbols, the tune's staff) is stepped over the way the caret was going, else it stays; a row put
+  // The caret writes only in a row in sight (ADR 0094): a row the View hides (the chord symbols, the
+  // tune's staff) is stepped over the way the caret was going, else it stays; a row put
   // out of sight under it sends it to the staff under it. Now, and whenever a step, an Undo or a Redo
   // would bring it back there.
   useEffect(() => {
@@ -204,7 +201,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     takes,
     actions: { dispatch, play, togglePlay, close },
     view: {
-      chordNames,
+      // The chord symbols shown or not are the View's (ADR 0094).
+      chordNames: shown.chordNames,
       lyrics: shown.lyrics,
       lyricsVerse,
       openLyrics,

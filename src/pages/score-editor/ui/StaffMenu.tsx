@@ -2,7 +2,6 @@ import { EyeOff, Piano, Plus, Trash2 } from 'lucide-react'
 import type { ComponentProps, ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
-import { rowShown } from '@/features/score-editor'
 import { ActionMenu } from '@/shared/ui'
 import type { Printed } from '@/widgets/score-sheet'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
@@ -25,7 +24,7 @@ export function StaffMenu({
   const { melody, piano } = useEditorState(
     useShallow((state) => ({
       melody: state.draft.melodyStaff,
-      piano: rowShown(state.draft, 'piano'),
+      piano: !state.draft.leadSheet,
     })),
   )
   const { dispatch } = actions

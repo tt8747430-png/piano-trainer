@@ -1,4 +1,4 @@
-export { keepsAStaff, rowShown, shownRows, topStaff } from './model/rows'
+export { shownRows } from './model/rows'
 export { clefAt } from './model/clefs'
 export { BARLINE_CHOICES, JUMP_CHOICES, type BarMarkChoice } from './model/bar-marks'
 export { barLengths } from './model/bars'

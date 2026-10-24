@@ -96,8 +96,11 @@ export interface ChartPiece extends PieceCommon {
   readonly sections: readonly Section[]
   /** Note, octave and beats: `E4/1 D4/.5 r/1`. */
   readonly melody?: string
-  /** The rows the score leaves out of sight, their music kept (ADR 0072): hidden, not removed. */
-  readonly hidden?: readonly HiddenRow[]
+  /**
+   * A lead sheet (ADR 0083, 0094): the piano's grand staff hidden, its music kept and played, the
+   * tune's staff and the chord symbols in sight. Only a piece with a melody is one.
+   */
+  readonly leadSheet?: boolean
   /** Bars of either hand written note by note, played in place of the pattern's hand there. */
   readonly hands?: Hands
   /**
@@ -107,22 +110,6 @@ export interface ChartPiece extends PieceCommon {
    */
   readonly lyrics?: readonly string[]
 }
-
-/**
- * The rows a score may hide (ADR 0072, 0094): the chord names, and the piano's grand staff, which
- * leaves a lead sheet (ADR 0083). The tune's staff the score adds or takes away; hiding it is the
- * View's.
- */
-export const HIDDEN_ROWS = ['chords', 'piano'] as const
-export type HiddenRow = (typeof HIDDEN_ROWS)[number]
-export const isHiddenRow = isOneOf(HIDDEN_ROWS)
-
-/**
- * Whether a score with `hidden` out of sight still shows a staff (ADR 0083): the piano's, or the
- * tune's where it has one (`melody`). A score never hides every staff.
- */
-export const showsAStaff = (hidden: readonly HiddenRow[], melody: boolean): boolean =>
-  !hidden.includes('piano') || melody
 
 /**
  * A song written in degrees, as its course teaches it: read in any key, its chords growing with the
@@ -148,7 +135,7 @@ export const isDegreePiece = (piece: Entry): piece is DegreePiece => 'progressio
  * 0083). The Player writes its tune's staff alone, the tune heard.
  */
 export const isLeadSheet = (piece: Piece): boolean =>
-  !isDegreePiece(piece) && piece.hidden?.includes('piano') === true
+  !isDegreePiece(piece) && piece.leadSheet === true
 
 /** A songbook entry with no chart yet: shown in Songs, never opened in the Player. */
 export interface Listing extends EntryCommon {
