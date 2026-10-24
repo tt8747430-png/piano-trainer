@@ -563,4 +563,38 @@ describe('the chord chart, with the sheet music off (ADR 0098)', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Припев' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
   })
+
+  it('shows a bar of no chord as an empty bar named by its number, which a tap goes to (ADR 0094)', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const song = {
+      id: 'my-1',
+      title: 'Morning',
+      key: 'G',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['G _ D _'] }],
+      hands: { rh: 'B4/4 | D5/4 | A4/4 | G4/4', lh: 'r/4 | r/4 | r/4 | r/4' },
+    }
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
+    )
+    await withoutNotation('/play/my-1', { storage })
+    const chart = screen.getByRole('region', { name: 'Chord chart' })
+    expect(
+      within(chart)
+        .getAllByRole('button', { name: /^Bar / })
+        .map((bar) => [bar.getAttribute('aria-label'), bar.textContent]),
+    ).toEqual([
+      ['Bar 1: G', '1G'],
+      ['Bar 2', '2'],
+      ['Bar 3: D', '3D'],
+      ['Bar 4', '4'],
+    ])
+    const empty = within(chart).getByRole('button', { name: 'Bar 4' })
+    await user.click(empty)
+    expect(empty).toHaveAttribute('aria-current', 'step')
+  })
 })
