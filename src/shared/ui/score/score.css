@@ -62,3 +62,16 @@
 [data-slot='score'] :is(g.harm, g.dir, g.tempo) text {
   font-family: var(--font-display);
 }
+/* The words under the tune (ADR 0093) stay in the face Verovio spaces them by (Times): in the app's
+   wider serif, neighbours a word apart touch on a panorama's natural spacing. Verovio sets no fill on
+   their text either, so a verse takes the ink (dark mode is light), and stays in it under a chosen
+   note, as a notation app marks the note alone; soft with the staff of the hand not heard. */
+[data-slot='score'] g.verse text {
+  fill: currentColor;
+}
+[data-slot='score'] g.note-chosen g.verse {
+  color: var(--foreground);
+}
+[data-slot='score'][data-muted='treble'] g.staff[data-staff='treble'] g.note-chosen g.verse {
+  color: var(--muted-foreground);
+}
