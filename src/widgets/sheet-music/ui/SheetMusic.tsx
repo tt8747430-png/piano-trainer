@@ -12,18 +12,23 @@ import { playedMusic } from '../model/played-music'
 import { SheetLines } from './SheetLines'
 import { SheetOverlay } from './SheetOverlay'
 
-/** How the sheet shows its score (ADR 0064): its layout, its chord names, the tune's staff, the staves hidden. */
+/**
+ * How the sheet shows its score (ADR 0064): its layout, its chord names, the words under the tune
+ * (ADR 0093), the tune's staff, the staves hidden.
+ */
 export interface SheetViewChoice {
   readonly layout: SheetView
   readonly chordNames: boolean
+  readonly lyrics: boolean
   readonly melodyStaff: boolean
   readonly hidden: readonly StaffId[]
 }
 
-/** As the Player always was: one line across, every staff, the chord names. */
+/** As the Player always was: one line across, every staff, the chord names, the words. */
 const ACROSS: SheetViewChoice = {
   layout: 'horizontal',
   chordNames: true,
+  lyrics: true,
   melodyStaff: false,
   hidden: [],
 }
@@ -103,7 +108,10 @@ export function SheetMusic({
   const { t } = useTranslation('music')
   // The tune's own staff only where the tune is heard (the Melody switch).
   const ownStaff = view.melodyStaff && performance.notes.some((n) => n.hand === 'melody')
-  const written = useMemo(() => notate(playedMusic(performance, ownStaff)), [performance, ownStaff])
+  const written = useMemo(
+    () => notate(playedMusic(performance, ownStaff, view.lyrics)),
+    [performance, ownStaff, view.lyrics],
+  )
   // The tempo marks said in the labels' row by their bar's number, not engraved in a row of their own
   // over the staff (ADR 0074).
   const { score, tempos } = useMemo(

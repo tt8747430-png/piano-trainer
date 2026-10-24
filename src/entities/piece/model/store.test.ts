@@ -2,9 +2,9 @@
 import { describe, expect, it } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import type { PieceMusic } from './music'
-import { createPiecesStore, PIECES_STORAGE_KEY } from './store'
+import { createPiecesStore, PIECES_STORAGE_KEY, PIECES_VERSION } from './store'
 
-const restored = (state: unknown, version = 2) => {
+const restored = (state: unknown, version = PIECES_VERSION) => {
   const storage = createMemoryStorage()
   storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version }))
   return createPiecesStore({ storage, otherTabs: new EventTarget() }).getState()
@@ -29,7 +29,7 @@ describe('createPiecesStore', () => {
     store.setState({ versions: { bz1: MUSIC } })
     expect(JSON.parse(storage.getItem('pt-pieces') ?? 'null')).toEqual({
       state: { versions: { bz1: MUSIC }, songs: [], nextSong: 1 },
-      version: 2,
+      version: PIECES_VERSION,
     })
   })
 
@@ -101,6 +101,20 @@ describe('createPiecesStore', () => {
     expect(hidden({ ...MUSIC, hidden: ['melody', 'piano'] })).toEqual(['melody'])
   })
 
+  it('keeps the words that read on the tune, and drops a verse longer than it (ADR 0093)', () => {
+    const sung = { ...MUSIC, melody: 'B4/2 A4/2', lyrics: ['one two', 'eins'] }
+    expect(restored({ versions: { bz1: sung } }).versions.bz1?.lyrics).toEqual(['one two', 'eins'])
+    const long = { ...sung, lyrics: ['one two three'] }
+    expect(restored({ versions: { bz1: long } }).versions.bz1).toEqual({
+      ...MUSIC,
+      melody: 'B4/2 A4/2',
+    })
+    expect(restored({ versions: { bz1: { ...sung, lyrics: 'one two' } } }).versions.bz1).toEqual({
+      ...MUSIC,
+      melody: 'B4/2 A4/2',
+    })
+  })
+
   it('drops a melody longer than its chart', () => {
     const versions = { bz1: { ...MUSIC, melody: 'B4/16 B4/1' } }
     expect(restored({ versions }).versions).toEqual({})
@@ -129,7 +143,7 @@ describe('createPiecesStore', () => {
     const store = createPiecesStore({ storage, otherTabs })
     const saved = JSON.stringify({
       state: { versions: { bz1: MUSIC }, songs: [], nextSong: 1 },
-      version: 2,
+      version: PIECES_VERSION,
     })
     storage.setItem(PIECES_STORAGE_KEY, saved)
     otherTabs.dispatchEvent(
@@ -143,7 +157,7 @@ describe('createPiecesStore', () => {
     const otherTabs = new EventTarget()
     const store = createPiecesStore({ storage, otherTabs })
     const savedElsewhere = (state: unknown) => {
-      const newValue = JSON.stringify({ state, version: 2 })
+      const newValue = JSON.stringify({ state, version: PIECES_VERSION })
       storage.setItem(PIECES_STORAGE_KEY, newValue)
       otherTabs.dispatchEvent(new StorageEvent('storage', { key: PIECES_STORAGE_KEY, newValue }))
     }

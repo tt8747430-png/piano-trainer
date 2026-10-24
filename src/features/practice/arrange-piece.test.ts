@@ -127,3 +127,23 @@ describe('arrangePiece', () => {
     expect(symbols('ninths')[0]).toBe('Dm9')
   })
 })
+
+describe('the words a piece sings (ADR 0093)', () => {
+  const silent = piece('silent')
+  const sungBy = (
+    notes: readonly { readonly lyrics?: readonly unknown[]; readonly hand: string }[],
+  ) => notes.filter((n) => n.lyrics !== undefined).map((n) => n.hand)
+
+  it('carries each syllable on the tune’s note: doubled, or played by the right hand’s melody figure', () => {
+    const doubled = arrangePiece(silent, { ...ownChoice(silent), melody: true }, BUILT_IN_PATTERNS)
+    const sung = doubled.notes.filter((n) => n.lyrics !== undefined)
+    expect(new Set(sungBy(sung))).toEqual(new Set(['melody']))
+    expect(sung[0]?.lyrics?.[0]).toEqual({ text: 'Si', hyphen: true, held: 1 })
+    // The five notes a syllable is held over sing nothing: 46 notes of the tune, 41 with a verse.
+    expect(sung).toHaveLength(41)
+    const played = arrangePiece(silent, { ...ownChoice(silent), pattern: 'r5' }, BUILT_IN_PATTERNS)
+    expect(new Set(sungBy(played.notes))).toEqual(new Set(['rh']))
+    // The accompaniment alone sings nothing.
+    expect(sungBy(arrangePiece(silent, ownChoice(silent), BUILT_IN_PATTERNS).notes)).toEqual([])
+  })
+})

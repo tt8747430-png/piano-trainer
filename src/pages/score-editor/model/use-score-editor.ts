@@ -71,6 +71,11 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   const settings = useSettingsStoreApi()
   const layout = useSettings((state) => selectScoreView(state).layout)
   const setLayout = (next: SheetView) => setScoreView(settings, { layout: next })
+  // The words shown or hidden as in the Player (ADR 0093).
+  const lyrics = useSettings((state) => selectScoreView(state).lyrics)
+  const setLyrics = (shown: boolean) => setScoreView(settings, { lyrics: shown })
+  // The Lyrics field, on the verse it writes, while the learner has it open.
+  const [lyricsVerse, openLyrics] = useState<number | null>(null)
   const [settingsOpen, openSettings] = useState(false)
   /** The music last saved here, or read: what the store holds unless another tab saved since. */
   const [saved] = useState(() => ({ music: target.music }))
@@ -209,6 +214,10 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     actions: { dispatch, play, togglePlay, close, rename },
     view: {
       chordNames,
+      lyrics,
+      setLyrics,
+      lyricsVerse,
+      openLyrics,
       settingsOpen,
       openSettings,
       speed,

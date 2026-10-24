@@ -36,6 +36,7 @@ export const editor = {
     hand: 'For the piano’s staves: tap a note on the upper or lower staff.',
     chordRow: 'Chords are written over the staff: tap a chord name, or the space over the staff.',
     chordNote: 'Choose one note of the chord: each takes its own finger.',
+    lyrics: 'Lyrics go under the tune: choose the melody or upper staff.',
   },
   // The edit row under the bar: what is done to what is chosen.
   editRow: 'Edit',
@@ -60,6 +61,7 @@ export const editor = {
   // What the score shows and how, from the bar (ADR 0064).
   viewMenu: {
     show: 'Show',
+    lyrics: 'Lyrics',
     palette: 'Every tool',
     keys: 'Keys',
     side: 'Tools beside the music',
@@ -124,6 +126,15 @@ export const editor = {
   },
   expressions: 'Expression text',
   pedal: 'Pedal',
+  // The words under the tune (ADR 0093), one syllable at a time in the Lyrics field.
+  lyrics: {
+    label: 'Lyrics',
+    field: 'Syllable',
+    verse: 'Verse {{n}}',
+    nextVerse: 'Next verse',
+    previousVerse: 'Previous verse',
+    noNote: 'No note of the tune here',
+  },
   // An expression's key shows the word as printed; under it, what it asks.
   meaning: {
     dolce: 'sweetly',

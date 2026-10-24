@@ -41,7 +41,13 @@ describe('SheetMusic', () => {
   it('lays the score out in the chart’s lines, each with its bars, the chord names hidden where asked', async () => {
     renderSheet({
       current: 5,
-      shown: { layout: 'scroll', chordNames: false, melodyStaff: true, hidden: ['bass'] },
+      shown: {
+        layout: 'scroll',
+        chordNames: false,
+        lyrics: true,
+        melodyStaff: true,
+        hidden: ['bass'],
+      },
     })
     expect(await screen.findByRole('button', { name: 'Bar 2: G' })).toHaveAttribute(
       'aria-current',
@@ -119,7 +125,7 @@ describe('SheetMusic', () => {
       renderSheet({
         current: 5,
         loop: { first: 1, last: 1 },
-        shown: { layout, chordNames: true, melodyStaff: false, hidden: [] },
+        shown: { layout, chordNames: true, lyrics: true, melodyStaff: false, hidden: [] },
       })
       await screen.findByRole('button', { name: 'Bar 2: G' })
       // The loop as one box; the cursor stands aside while it stands chosen (ADR 0088).

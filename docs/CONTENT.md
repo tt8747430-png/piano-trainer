@@ -128,6 +128,16 @@ rest; `|` may mark bars and is ignored. It is written in the piece's key and is 
 lets the tune be doubled and makes the patterns that play it (r5–r7) available. Its notes keep the spelling they are
 written with (`C#5` is C♯, never D♭): the sheet music prints them so, moved into another key by interval.
 
+### Lyrics
+
+`lyrics: ['Si-_ lent night, ho-_ ly night, …']`: the words, a verse a string (ADR 0093). A verse is syllables
+parted by spaces, each under the tune's next note in order: the melody's notes where the piece has a melody, else
+the right hand's onsets, a chord of them one note. A rest takes none. `-` ends a syllable its word carries on (a
+hyphen is printed to the next: `A- ma- zing`); `_` holds the syllable over the next note (a melisma, one `_` a note:
+`Si-_ lent` sings "Si" on two notes); `~` leaves a note's place empty. Punctuation stays with its syllable. A verse is
+no longer than the tune; a shorter one leaves the last notes without words. The sheet prints every verse under the
+tune's staff (the melody's, else the piano's upper staff), and the View menu's Lyrics switch hides them.
+
 ## Written hands
 
 `hands: { rh?, lh? }`: any bar of either hand written note by note, played in place of the pattern's hand there.
@@ -378,8 +388,8 @@ entry's alone: `tsc` holds every id a table names.
 - **Catalog** (`src/entities/piece/content/catalog.test.ts`): the counts; every piece parses at every chord size it
   allows; every piece arranges in all 12 keys with its own accompaniment and each of the 48 patterns, its melody
   doubled, with every note on the piano (21–108) and inside the piece, every root spelled with at most one
-  accidental, and no silent bar; melodies fit their charts; tempos 40–160; credit names; every `LocalText` in both
-  languages.
+  accidental, and no silent bar; melodies fit their charts; every verse fits its tune; tempos 40–160; credit names;
+  every `LocalText` in both languages.
 - **Notation** (`src/features/practice/notate-pieces.test.ts`): every piece is written as sheet music and engraved in
   its own key and pattern (its tune doubled too), and every pattern in 4/4, 3/4 and 12/8, each voice filling its bar.
 - **Curriculum** (`src/entities/course/content/courses.test.ts`): every lesson in one course, every step names a piece

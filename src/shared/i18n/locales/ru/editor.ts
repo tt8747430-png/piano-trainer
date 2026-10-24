@@ -35,6 +35,7 @@ export const editor: LocaleResources['editor'] = {
     chordRow:
       'Аккорды пишутся над нотоносцем: коснитесь названия аккорда или места над нотоносцем.',
     chordNote: 'Выберите одну ноту аккорда: у каждой свой палец.',
+    lyrics: 'Текст пишется под мелодией: выберите мелодию или верхний нотоносец.',
   },
   editRow: 'Правка',
   copy: 'Копировать',
@@ -55,6 +56,7 @@ export const editor: LocaleResources['editor'] = {
   view: 'Вид',
   viewMenu: {
     show: 'Показывать',
+    lyrics: 'Текст',
     palette: 'Все инструменты',
     keys: 'Клавиши',
     side: 'Инструменты рядом с нотами',
@@ -113,6 +115,14 @@ export const editor: LocaleResources['editor'] = {
   },
   expressions: 'Ремарки',
   pedal: 'Педаль',
+  lyrics: {
+    label: 'Текст',
+    field: 'Слог',
+    verse: 'Куплет {{n}}',
+    nextVerse: 'Следующий куплет',
+    previousVerse: 'Предыдущий куплет',
+    noNote: 'Здесь нет ноты мелодии',
+  },
   meaning: {
     dolce: 'нежно',
     cantabile: 'певуче',

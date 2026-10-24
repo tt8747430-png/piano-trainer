@@ -91,12 +91,13 @@ const endOf = (line: SheetLineBars) => {
   return last ? last.start + last.bar.ticks : line.start
 }
 
-/** A layer's notes sounding in [from, to), timed from `from`. */
+/** A layer's notes sounding in [from, to), timed from `from`, with their words where `lyrics` asks. */
 function sounding(
   notes: readonly DraftNote[],
   hand: TimedNote['hand'],
   from: number,
   to: number,
+  lyrics: boolean,
 ): TimedNote[] {
   return notes
     .filter((n) => n.startTick < to && n.startTick + n.durationTicks > from)
@@ -108,6 +109,7 @@ function sounding(
       durationTicks: n.durationTicks,
       ...(n.finger === undefined ? {} : { finger: n.finger }),
       ...(n.marks ? { marks: n.marks } : {}),
+      ...(lyrics && n.lyrics ? { lyrics: n.lyrics } : {}),
     }))
 }
 
@@ -155,18 +157,20 @@ export function staffOfLayer(
 
 /**
  * A line as the sheet writes it, from its own start: the melody on its staff, the right hand on the
- * treble staff, the left hand on the bass (every bar written, ADR 0091); the chord symbols. A staff
- * with nothing in a bar is left blank there, a row hidden is not written at all: no piano on a lead
- * sheet.
+ * treble staff, the left hand on the bass (every bar written, ADR 0091); the chord symbols; the
+ * words under the tune unless the View hides them (`lyrics` off, ADR 0093). A staff with nothing in
+ * a bar is left blank there, a row hidden is not written at all: no piano on a lead sheet.
  */
-export function lineMusic(draft: Draft, line: SheetLineBars): TimedMusic {
+export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): TimedMusic {
   const from = line.start
   const to = endOf(line)
   const tune = shownRows(draft).includes('melody')
   const piano = rowShown(draft, 'piano')
   const notes = [
-    ...(tune ? sounding(draft.melody, 'melody', from, to) : []),
-    ...(piano ? HAND_IDS.flatMap((hand) => sounding(draft.hands[hand], hand, from, to)) : []),
+    ...(tune ? sounding(draft.melody, 'melody', from, to, lyrics) : []),
+    ...(piano
+      ? HAND_IDS.flatMap((hand) => sounding(draft.hands[hand], hand, from, to, lyrics))
+      : []),
   ]
   const staves: StaffId[] = [...(tune ? (['melody'] as const) : []), ...(piano ? PIANO_STAVES : [])]
   // A line starts in the clefs its first bar is in; its bars change them after.

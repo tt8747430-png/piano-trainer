@@ -142,3 +142,72 @@ describe('each notehead read back (ADR 0088)', () => {
     expect((rest?.bottom ?? 0) - (rest?.top ?? 0)).toBeCloseTo(30, 0)
   }, 20_000)
 })
+
+describe('a line with words (ADR 0093)', () => {
+  const sung = (text: string) => ({ text, hyphen: false, held: 0 })
+  const worded = notate({
+    key: { tonic: note('C'), minor: false },
+    meter: '4/4',
+    bars: [{ startTick: 0, beats: 4 }],
+    notes: [
+      { ...n(72, 'rh', 0, 48), lyrics: [sung('Si'), sung('Stil')] },
+      { ...n(74, 'rh', 48, 48), lyrics: [sung('lent'), sung('le')] },
+      n(48, 'lh', 0, 96),
+    ],
+    chords: [],
+  })
+  const read = async (score: typeof worded) => {
+    const [svg = ''] = await engraveMei(scoreToMei(score), { width: 600, scale: 1 })
+    const host = document.createElement('div')
+    host.innerHTML = svg
+    const element = host.querySelector('svg')
+    if (!element) throw new Error('an SVG')
+    return { element, layout: layoutOf(element, score.measures, score.staves) }
+  }
+
+  /** Each syllable's baseline in Verovio's units, verse by verse at the first note. */
+  const baselines = (element: SVGSVGElement) =>
+    [...element.querySelectorAll('.verse text')].map((text) => Number(text.getAttribute('y')))
+
+  it('prints the verses between the staves, under the upper one, and reads the heads as before', async () => {
+    const { element, layout } = await read(worded)
+    const syllables = [...element.querySelectorAll('.syl')].map((syl) => syl.textContent?.trim())
+    expect(syllables).toEqual(['Si', 'Stil', 'lent', 'le'])
+    expect(layout.onsets.map((onset) => onset.tick)).toEqual([0, 48])
+    expect((layout.heads ?? []).filter((head) => head.staff === 'treble')).toHaveLength(2)
+    const { treble, bass } = layout.staves
+    if (!treble || !bass) throw new Error('the grand staff')
+    // Verovio's units are 18 to our 1 at this scale: the staff lines stand at 1260 and 2340.
+    const [first = 0, second = 0] = baselines(element)
+    expect(first / 18).toBeGreaterThan(treble.bottom)
+    expect(second).toBeGreaterThan(first)
+    expect(second / 18).toBeLessThan(bass.top)
+  }, 20_000)
+
+  it('moves the lower staff down to hold the verses where two staves’ room does not', async () => {
+    const many = notate({
+      key: { tonic: note('C'), minor: false },
+      meter: '4/4',
+      bars: [{ startTick: 0, beats: 4 }],
+      notes: [
+        { ...n(72, 'rh', 0, 96), lyrics: [sung('one'), sung('two'), sung('three'), sung('four')] },
+        n(48, 'lh', 0, 96),
+      ],
+      chords: [],
+    })
+    const { layout: wide } = await read(many)
+    const { layout: plain } = await read(
+      notate({
+        key: { tonic: note('C'), minor: false },
+        meter: '4/4',
+        bars: [{ startTick: 0, beats: 4 }],
+        notes: [n(72, 'rh', 0, 96), n(48, 'lh', 0, 96)],
+        chords: [],
+      }),
+    )
+    const gap = (staves: typeof wide.staves) =>
+      (staves.bass?.top ?? 0) - (staves.treble?.bottom ?? 0)
+    expect(gap(wide.staves)).toBeGreaterThan(gap(plain.staves))
+    expect(wide.height).toBeGreaterThan(plain.height)
+  }, 20_000)
+})

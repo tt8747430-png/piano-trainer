@@ -48,6 +48,7 @@ export { useRepertoire } from './model/use-repertoire'
 export { writeBar } from './model/write-chart'
 export { writeHand } from './model/write-hands'
 export { emptyLine, writeMelody } from './model/write-melody'
+export { gatherLyrics, readLyrics, singingNotes, writeLyrics, type Verse } from './model/lyrics'
 export { fourToALine, wholeBar } from './model/chart-layout'
 export { chordsOfPiece, skillsOfPiece } from './model/skills'
 export {

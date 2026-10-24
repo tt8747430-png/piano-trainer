@@ -13,6 +13,7 @@ export const player: LocaleResources['player'] = {
     show: 'Показывать',
     notation: 'Ноты',
     chordNames: 'Аккордовые символы',
+    lyrics: 'Текст',
     positionsDetail: 'Рядом с названием аккорда — в каком обращении его берёт правая рука',
     keys: 'Клавиши',
   },

@@ -7,6 +7,7 @@ import {
   type Barline,
   type Jump,
   type Meter,
+  type NoteLyrics,
   type NoteMarks,
   type Ornament,
   type TimeSignature,
@@ -43,7 +44,8 @@ export type NextLine = Pick<Measure, 'key' | 'time' | 'clefs'>
  * two braced; each measure's voices as layers, eighths and shorter beamed by the beat, triplets in
  * tuplets, ties across barlines; its key, time and clef changes, barlines, repeats and endings, the
  * signs and jumps, the tempo; each note's marks: articulations, ornaments, arpeggios, grace notes,
- * slurs, dynamics, hairpins, octave lines, the pedal, expressions and fingers. Every measure is named
+ * slurs, dynamics, hairpins, octave lines, the pedal, expressions and fingers; the tune's syllables as
+ * verses under their notes (ADR 0093). Every measure is named
  * `m-<index>`, every chord `c-<staff>-<tick>`, note `n-<staff>-<tick>-<i>` and rest
  * `r-<staff>-<tick>`, so the drawing is read back by them: where each bar and onset stands, a bar
  * tapped, the notes chosen or playing.
@@ -190,6 +192,8 @@ interface Open {
 class Writer {
   private readonly tied = new Map<string, Set<number>>()
   private readonly open = new Map<StaffId, Open>()
+  /** By verse, whether its last syllable's word goes on: the next is its middle or end. */
+  private readonly words = new Map<number, boolean>()
 
   constructor(
     private readonly score: Score,
@@ -317,6 +321,8 @@ class Writer {
     const single = event.notes.length === 1
     const id = single ? `n-${staff}-${event.tick}-0` : `c-${staff}-${event.tick}`
     const below = staff === 'bass'
+    const verses = event.lyrics ? this.verses(event.lyrics) : ''
+    const inside = artics + verses
     const notes = event.notes.map((written, i) => {
       const ends = tied.delete(written.midi)
       if (written.tie) tied.add(written.midi)
@@ -338,7 +344,7 @@ class Writer {
         single ? `${dur}${stem}${tremolo(marks?.ornament)}` : '',
         tie ? `tie="${tie}"` : '',
       ].filter(Boolean)
-      return `<note ${attrs.join(' ')}${single && artics ? `>${artics}</note>` : '/>'}`
+      return `<note ${attrs.join(' ')}${single && inside ? `>${inside}</note>` : '/>'}`
     })
     this.marks(marks, id, staff, controls)
     const graces = (marks?.grace ?? [])
@@ -354,8 +360,27 @@ class Writer {
       graces +
       (single
         ? (notes[0] ?? '')
-        : `<chord xml:id="${id}" ${dur}${stem}${tremolo(marks?.ornament)}>${notes.join('')}${artics}</chord>`)
+        : `<chord xml:id="${id}" ${dur}${stem}${tremolo(marks?.ornament)}>${notes.join('')}${inside}</chord>`)
     )
+  }
+
+  /**
+   * A note's syllables as verses (MEI 5): each syllable's place in its word (`wordpos`: its start,
+   * middle or end, none for a whole word) and what joins it to the next note (`con`: a dash to its
+   * word's next syllable, an underscore while it is held).
+   */
+  private verses(lyrics: NoteLyrics): string {
+    return lyrics
+      .map((syllable, verse) => {
+        if (!syllable) return ''
+        const open = this.words.get(verse) ?? false
+        this.words.set(verse, syllable.hyphen)
+        const wordpos = open ? (syllable.hyphen ? 'm' : 't') : syllable.hyphen ? 'i' : null
+        const con = syllable.hyphen ? 'd' : syllable.held > 0 ? 'u' : null
+        const attrs = [wordpos ? ` wordpos="${wordpos}"` : '', con ? ` con="${con}"` : ''].join('')
+        return `<verse n="${verse + 1}"><syl${attrs}>${escape(syllable.text)}</syl></verse>`
+      })
+      .join('')
   }
 
   /** A note's or chord's marks as MEI's control events, the spans among them closed where they end. */

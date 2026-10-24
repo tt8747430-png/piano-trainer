@@ -28,4 +28,20 @@ describe('playedMusic', () => {
     expect(music.notes.filter((n) => n.hand === 'melody').map((n) => n.midi)).toEqual([72])
     expect(playedMusic(performance, false)).toBe(performance)
   })
+
+  it('leaves the words out where the View hides them (ADR 0093)', () => {
+    const sung = { text: 'one', hyphen: false, held: 0 }
+    const performance = arrange(CHART, {
+      tonic: C_MAJOR.tonic,
+      pattern: BLOCK,
+      melody: [{ ...tune[0]!, lyrics: [sung] }],
+      doubleMelody: true,
+    })
+    const words = (music: { notes: readonly { lyrics?: unknown }[] }) =>
+      music.notes.filter((n) => n.lyrics !== undefined).length
+    expect(words(performance)).toBe(1)
+    expect(words(playedMusic(performance, true))).toBe(1)
+    expect(words(playedMusic(performance, true, false))).toBe(0)
+    expect(words(playedMusic(performance, false, false))).toBe(0)
+  })
 })

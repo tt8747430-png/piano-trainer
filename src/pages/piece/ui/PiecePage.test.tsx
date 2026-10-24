@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { readSongLink } from '@/features/share-song'
-import { COLLECTIONS, PIECES_STORAGE_KEY } from '@/entities/piece'
+import { COLLECTIONS, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { createMemoryStorage } from '@/shared/lib'
 
 /** Opens the bar's More, where its rarer actions fold. */
@@ -180,7 +180,7 @@ describe('Piece: the learner’s own music', () => {
   }
   const saved = (state: object) => {
     const storage = createMemoryStorage()
-    storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: 2 }))
+    storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: PIECES_VERSION }))
     return storage
   }
 

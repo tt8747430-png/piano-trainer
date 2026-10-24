@@ -2,7 +2,13 @@ import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { isDegreePiece, musicOf, pieceById, PIECES_STORAGE_KEY } from '@/entities/piece'
+import {
+  isDegreePiece,
+  musicOf,
+  pieceById,
+  PIECES_STORAGE_KEY,
+  PIECES_VERSION,
+} from '@/entities/piece'
 import { chartStart } from '@/features/edit-piece'
 import { readDraft } from '@/features/score-editor'
 import { setKeyboard } from '@/features/set-preference'
@@ -28,7 +34,10 @@ const withSong = (music: object = {}) => {
   const storage = createMemoryStorage()
   storage.setItem(
     PIECES_STORAGE_KEY,
-    JSON.stringify({ state: { songs: [{ ...SONG, ...music }], nextSong: 2 }, version: 2 }),
+    JSON.stringify({
+      state: { songs: [{ ...SONG, ...music }], nextSong: 2 },
+      version: PIECES_VERSION,
+    }),
   )
   return storage
 }
@@ -410,7 +419,7 @@ describe('the score editor', () => {
     const song = { ...SONG, melody: 'C4/1 D4/1 E4/1 F4/1 | G4/2 A4/2' }
     storage.setItem(
       PIECES_STORAGE_KEY,
-      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 2 }),
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
     )
     const { piecesStore } = await renderApp('/edit/my-1', { storage })
     expect(await screen.findByRole('status')).toHaveTextContent(/^Melody · /)
@@ -788,7 +797,7 @@ describe('the score editor', () => {
     const song = { ...SONG, melody: 'B4/1 A4/1 G4/1 F#4/1' }
     storage.setItem(
       PIECES_STORAGE_KEY,
-      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 2 }),
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
     )
     const { piecesStore } = await renderApp('/edit/my-1', { storage })
     expect(await screen.findByRole('status')).toHaveTextContent('B4 quarter')
@@ -816,7 +825,7 @@ describe('the score editor', () => {
     const song = { ...SONG, melody: 'B4/1 A4/1 G4/1 F#4/1' }
     storage.setItem(
       PIECES_STORAGE_KEY,
-      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 2 }),
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
     )
     const { piecesStore } = await renderApp('/edit/my-1', { storage })
     await screen.findByRole('status')
@@ -1022,7 +1031,7 @@ describe('the score editor', () => {
     const song = { ...SONG, hands: { lh: 'C3/4 | - | - | -' } }
     storage.setItem(
       PIECES_STORAGE_KEY,
-      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 2 }),
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
     )
     const { audio } = await renderApp('/play/my-1?key=A', { storage })
     await user.click(await screen.findByRole('button', { name: 'Play' }))
@@ -1039,7 +1048,7 @@ describe('the score editor', () => {
     const song = { ...SONG, melody: 'B4/4 | D5/4 | G4/4 | G4/4' }
     storage.setItem(
       PIECES_STORAGE_KEY,
-      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 2 }),
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
     )
     await renderApp('/play/my-1', { storage })
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
@@ -1195,7 +1204,7 @@ describe('the score editor’s takes', () => {
     const song = { ...SONG, melody: 'B4/4 | D5/4 | G4/4 | G4/4' }
     storage.setItem(
       PIECES_STORAGE_KEY,
-      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 2 }),
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
     )
     const { settingsStore } = await renderApp('/edit/my-1', { storage })
     await user.click(await screen.findByRole('button', { name: 'Record' }))
@@ -1439,5 +1448,58 @@ describe('the score editor’s takes', () => {
     await user.keyboard('{Escape}')
     await waitFor(() => expect(sheet).not.toBeInTheDocument())
     expect(router.state.location.search).toEqual({})
+  })
+})
+
+describe('the words under the tune (ADR 0093)', () => {
+  const sung = () =>
+    withSong({
+      melody: 'G4/4 | A4/4 | B4/4 | C5/4',
+      hands: SILENT_HANDS,
+    })
+
+  it('writes a verse syllable by syllable from the Text & pedal section, the caret line naming the verse', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: sung() })
+    const text = await openCategory(user, 'Text & pedal')
+    await user.click(within(text).getByRole('button', { name: 'Lyrics' }))
+    const field = await screen.findByRole('textbox', { name: 'Syllable' })
+    expect(field).toHaveFocus()
+    expect(screen.getByRole('status')).toHaveTextContent(/^Lyrics · Verse 1 · Bar 1/)
+    await user.keyboard('A-')
+    // The dash saves the syllable and moves on to the next note of the tune.
+    await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- ~ ~ ~']))
+    expect(screen.getByRole('status')).toHaveTextContent(/Bar 2/)
+    const next = screen.getByRole('textbox', { name: 'Syllable' })
+    await user.type(next, 'men ')
+    await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- men ~ ~']))
+    expect(screen.getByRole('status')).toHaveTextContent(/Bar 3/)
+    // ↓ starts the second verse; ↑ comes back to the first, whose syllable the field shows.
+    await user.keyboard('{ArrowDown}')
+    expect(screen.getByRole('status')).toHaveTextContent(/^Lyrics · Verse 2/)
+    await user.type(screen.getByRole('textbox', { name: 'Syllable' }), 'la{ArrowUp}')
+    await waitFor(() =>
+      expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- men ~ ~', '~ ~ la ~']),
+    )
+    expect(screen.getByRole('status')).toHaveTextContent(/^Lyrics · Verse 1/)
+    await user.keyboard('{ArrowLeft}')
+    expect(screen.getByRole('textbox', { name: 'Syllable' })).toHaveValue('men')
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('textbox', { name: 'Syllable' })).not.toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent(/^Melody · Bar 2/)
+    // The verse is engraved under the tune.
+    await waitFor(() => expect(document.querySelectorAll('.syl').length).toBeGreaterThan(0))
+  })
+
+  it('is greyed off the tune’s staff, saying where the words go', async () => {
+    const user = userEvent.setup()
+    await renderApp('/edit/my-1', { storage: sung() })
+    await openCategory(user, 'Text & pedal')
+    const row = await screen.findByRole('toolbar', { name: 'Edit' })
+    await user.click(within(row).getByRole('button', { name: 'Next note goes in: Melody' }))
+    await user.click(await screen.findByRole('option', { name: 'Lower staff' }))
+    const text = await screen.findByRole('region', { name: 'Text & pedal' })
+    expect(within(text).getByRole('button', { name: 'Lyrics' })).toBeDisabled()
+    expect(text).toHaveTextContent('Lyrics go under the tune: choose the melody or upper staff.')
   })
 })

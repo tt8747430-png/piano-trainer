@@ -13,6 +13,7 @@ export const player = {
     show: 'Show',
     notation: 'Sheet music',
     chordNames: 'Chord symbols',
+    lyrics: 'Lyrics',
     positionsDetail: 'Beside each chord’s name, the position the right hand plays it in',
     keys: 'Keys',
   },

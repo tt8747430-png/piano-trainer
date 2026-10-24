@@ -7,9 +7,10 @@ export interface ContentPosition {
   readonly bar?: number
   readonly chord?: number
   readonly note?: number
+  readonly verse?: number
 }
 
-const ORDER = ['section', 'line', 'bar', 'chord', 'note'] as const
+const ORDER = ['section', 'line', 'bar', 'chord', 'note', 'verse'] as const
 
 const where = (position: ContentPosition): string =>
   ORDER.flatMap((part) => (position[part] === undefined ? [] : [`${part} ${position[part]}`])).join(

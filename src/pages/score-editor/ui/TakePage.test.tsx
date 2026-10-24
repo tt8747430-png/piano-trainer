@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
-import { PIECES_STORAGE_KEY } from '@/entities/piece'
+import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { TAKES_STORAGE_KEY } from '@/entities/take'
 import { createMemoryStorage } from '@/shared/lib'
 
@@ -40,7 +40,7 @@ function withTake(take: object = TAKE) {
   const storage = createMemoryStorage()
   storage.setItem(
     PIECES_STORAGE_KEY,
-    JSON.stringify({ state: { songs: [SONG], nextSong: 2 }, version: 2 }),
+    JSON.stringify({ state: { songs: [SONG], nextSong: 2 }, version: PIECES_VERSION }),
   )
   storage.setItem(
     TAKES_STORAGE_KEY,

@@ -6,14 +6,13 @@ import {
   type SpelledNote,
 } from '@/shared/lib/music'
 import type { Chart, Melody } from '@/shared/lib/arrangement'
-import { parseChart } from './parse-chart'
-import { parseMelody } from './parse-melody'
+import { chartOf, melodyOf } from './chart'
 import type { ChartPiece, KeyText, Section } from './types'
 
 /** A song's or study's music as the content writes it: what a learner's version holds (ADR 0027). */
 export type PieceMusic = Pick<
   ChartPiece,
-  'key' | 'meter' | 'tempo' | 'pattern' | 'sections' | 'melody' | 'hidden' | 'hands'
+  'key' | 'meter' | 'tempo' | 'pattern' | 'sections' | 'melody' | 'hidden' | 'hands' | 'lyrics'
 >
 
 /** A piece's music, without what it leaves out. */
@@ -26,24 +25,26 @@ export const musicOf = (piece: ChartPiece): PieceMusic => ({
   ...(piece.melody === undefined ? {} : { melody: piece.melody }),
   ...(piece.hidden?.length ? { hidden: piece.hidden } : {}),
   ...(piece.hands === undefined ? {} : { hands: piece.hands }),
+  ...(piece.lyrics?.length ? { lyrics: piece.lyrics } : {}),
 })
 
 /**
- * Music read as the engine reads a piece: its chart (with the written hands) and its tune; a mistake
- * throws a ContentError.
+ * Music read as the engine reads a piece: its chart (with the written hands) and its tune, its words
+ * on the tune's notes (ADR 0093); a mistake throws a ContentError.
  */
 export function readMusic(music: PieceMusic): { chart: Chart; melody: Melody | undefined } {
   const piece: ChartPiece = { id: 'music', kind: 'song', title: '', ...music }
-  return { chart: parseChart(piece), melody: parseMelody(piece) }
+  return { chart: chartOf(piece), melody: melodyOf(piece) }
 }
 
-/** A piece playing this music in place of its own: its melody and hands only where the music has them. */
+/** A piece playing this music in place of its own: its melody, hands and words only where the music has them. */
 export const withMusic = (piece: ChartPiece, music: PieceMusic): ChartPiece => ({
   ...piece,
   ...music,
   melody: music.melody,
   hidden: music.hidden,
   hands: music.hands,
+  lyrics: music.lyrics,
 })
 
 const sameText = (a: { en: string; ru: string } | undefined, b: typeof a) =>
@@ -70,6 +71,7 @@ export const sameMusic = (a: PieceMusic, b: PieceMusic): boolean =>
   (a.hidden ?? []).join() === (b.hidden ?? []).join() &&
   a.hands?.rh === b.hands?.rh &&
   a.hands?.lh === b.hands?.lh &&
+  (a.lyrics ?? []).join('\n') === (b.lyrics ?? []).join('\n') &&
   a.sections.length === b.sections.length &&
   a.sections.every((section, i) => {
     const other = b.sections[i]

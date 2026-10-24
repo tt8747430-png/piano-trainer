@@ -1,4 +1,12 @@
-import type { Finger, Hand, Midi, NoteMarks, SpelledNote, Tick } from '@/shared/lib/music'
+import type {
+  Finger,
+  Hand,
+  Midi,
+  NoteLyrics,
+  NoteMarks,
+  SpelledNote,
+  Tick,
+} from '@/shared/lib/music'
 import type { Stem } from './types'
 
 /** A note of a chord in one bar: whether it goes on from the bar before, or into the next. */
@@ -7,6 +15,8 @@ export interface BarNote {
   readonly spelled: SpelledNote
   readonly finger?: Finger
   readonly marks?: NoteMarks
+  /** What it sings, by verse: a tune's note on the staff the words go under. */
+  readonly lyrics?: NoteLyrics
   readonly tiedFrom: boolean
   readonly tiedTo: boolean
 }
