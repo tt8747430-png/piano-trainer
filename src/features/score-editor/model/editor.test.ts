@@ -879,6 +879,29 @@ describe('createEditorStore', () => {
     expect(onChange).not.toHaveBeenCalled()
     expect(store.getState().past).toEqual([])
   })
+
+  it('takes a rest or Insert mode’s Delete on empty staff as no step, the caret moving as it would', () => {
+    const onEmpty = run(initialEditor(draftOf({ sections: [{ kind: 'verse', lines: ['G'] }] })), {
+      type: 'layer',
+      layer: 'melody',
+    })
+    const rested = run(onEmpty, { type: 'rest' })
+    expect(rested.draft).toBe(onEmpty.draft)
+    expect(rested.caret).toBe(24)
+    const insert = run(
+      onEmpty,
+      { type: 'mode', mode: 'insert' },
+      { type: 'place', tick: 72, layer: 'melody' },
+      { type: 'value', value: 2 },
+    )
+    // Nothing after the caret to push: the rest stops at the song's end, as Replace writes it.
+    const pushed = run(insert, { type: 'rest' })
+    expect(pushed.draft).toBe(onEmpty.draft)
+    expect(pushed.caret).toBe(96)
+    const closed = run(insert, { type: 'delete' })
+    expect(closed.draft).toBe(onEmpty.draft)
+    expect(closed.past).toEqual([])
+  })
 })
 
 describe('the words (ADR 0093)', () => {

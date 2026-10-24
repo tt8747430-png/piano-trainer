@@ -31,9 +31,11 @@ interface Written {
 export const notesOf = (draft: Draft, layer: NoteLayer): readonly DraftNote[] =>
   layer === 'melody' ? draft.melody : draft.hands[layer]
 
-/** The draft with a layer's notes, in order. */
+/** The draft with a layer's notes, in order; the draft itself where they are the notes it has. */
 export function withNotes(draft: Draft, layer: NoteLayer, notes: readonly DraftNote[]): Draft {
   const sorted = [...notes].sort((a, b) => a.startTick - b.startTick || a.midi - b.midi)
+  const now = notesOf(draft, layer)
+  if (sorted.length === now.length && sorted.every((n, i) => n === now[i])) return draft
   if (layer === 'melody')
     return { ...draft, melody: sorted, melodyStaff: draft.melodyStaff || sorted.length > 0 }
   return { ...draft, hands: { ...draft.hands, [layer]: sorted } }
