@@ -1,7 +1,7 @@
 import { useRef, type MouseEvent, type PointerEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Layer } from '@/features/score-editor'
-import { chordSymbol, type Midi, type Tick } from '@/shared/lib/music'
+import { chordSymbol, keySignature, type Midi, type Tick } from '@/shared/lib/music'
 import { staffClefAt, type TimedMusic } from '@/shared/lib/notation'
 import {
   MARK,
@@ -245,7 +245,12 @@ export function LineOverlay({
         row={row}
         size={labels}
       />
-      <PrintedSigns layout={layout} bars={line.bars.map((placed) => placed.index)} edit={edit} />
+      <PrintedSigns
+        layout={layout}
+        bars={line.bars.map((placed) => placed.index)}
+        keyless={keySignature(music.bars[0]?.key ?? music.key) === 0}
+        edit={edit}
+      />
       <StaffNames layout={layout} edit={edit} />
       {music.bars.map((bar, index) => {
         const at = layout.measures[index]

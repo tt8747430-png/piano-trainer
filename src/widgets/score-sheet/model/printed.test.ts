@@ -55,4 +55,28 @@ describe('signTargets (ADR 0094)', () => {
     expect(key.box.bottom).toBeGreaterThan(170)
     expect(clef.box).toMatchObject({ top: 115, bottom: 190 })
   })
+
+  it('takes the place of a key printing no sharps or flats, after a line’s head clefs, for its key', () => {
+    // C major: the head's clefs and time signatures alone printed.
+    const keyless: ScoreLayout = {
+      ...layout,
+      signs: (layout.signs ?? []).filter((sign) => sign.kind !== 'key'),
+    }
+    const targets = signTargets(keyless, [0, 1], true)
+    expect(targets.map((target) => target.printed)).toEqual([
+      { kind: 'key', bar: 0 },
+      { kind: 'time', bar: 0 },
+      { kind: 'clef', bar: 0, staff: 'treble' },
+      { kind: 'key', bar: 0 },
+      { kind: 'time', bar: 0 },
+      { kind: 'clef', bar: 1, staff: 'bass' },
+    ])
+    // Between the treble clef and the time signature: the room no signature takes.
+    const [, , clef, key, time] = targets
+    expect(key?.box.left).toBe(clef?.box.right)
+    expect(key?.box.right).toBe(time?.box.left)
+    expect(key?.box.right).toBeGreaterThan(key?.box.left ?? Infinity)
+    // A key with its signature takes no place besides it.
+    expect(signTargets(layout, [0, 1], true)).toEqual(signTargets(layout, [0, 1]))
+  })
 })

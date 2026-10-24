@@ -1,14 +1,21 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TITLE_MAX } from '@/entities/piece'
+import { cn } from '@/shared/lib'
 import { SheetTitle, type TitlePlace } from '@/shared/ui'
 import { useScoreEditorContext } from '../model/editor-context'
+import { usePaletteBeside } from '../model/use-palette-beside'
 
-/** The title over Your version: at the line's head across, else centred. */
+/** The title over Your version: at the line's head across, else centred, its field as wide as the sheet. */
 const STACKED = {
   across: 'flex flex-col gap-0.5',
-  centred: 'flex flex-col items-center gap-0.5',
+  centred: 'flex flex-col gap-0.5 text-center',
 } as const
+/**
+ * The room the palette leaves beside the sheet, which it covers at its right (ADR 0094): the title
+ * keeps to it, as the dock does; a page's title is the page's.
+ */
+const BESIDE = 'pr-84 landscape-phone:pr-80 xl:pr-96'
 
 /**
  * The title printed at the sheet's head (ADR 0094), edited where it is, as Flat's: a click turns it
@@ -19,6 +26,7 @@ const STACKED = {
 export function TitleField({ place }: { place: TitlePlace }) {
   const { t } = useTranslation('editor')
   const { actions, meta } = useScoreEditorContext()
+  const beside = usePaletteBeside() && place !== 'page'
   // What the field holds while it is open; null while the title is printed.
   const [typed, setTyped] = useState<string | null>(null)
   const editing = typed !== null
@@ -46,7 +54,7 @@ export function TitleField({ place }: { place: TitlePlace }) {
   }
   return (
     // A version of a catalog song says so under its title, as its page does.
-    <div className={place === 'across' ? STACKED.across : STACKED.centred}>
+    <div className={cn(place === 'across' ? STACKED.across : STACKED.centred, beside && BESIDE)}>
       <SheetTitle title={meta.title} place={place}>
         {editing ? (
           <input

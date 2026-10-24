@@ -6,17 +6,21 @@ import { signTargets, type EditPrinted, type Printed } from '../model/printed'
 
 /**
  * A button over each clef, key and time signature printed on a line (ADR 0094), as Flat's: a tap on
- * one opens what changes it there (`edit`). A pointer's target, as a bar's: the keyboard has the
- * palette's Clef, Key signature and Time signature.
+ * one opens what changes it there (`edit`); a key printing no sharps or flats has its place after
+ * the line's clefs. A pointer's target, as a bar's: the keyboard has the palette's Clef, Key
+ * signature and Time signature.
  */
 export function PrintedSigns({
   layout,
   bars,
+  keyless,
   edit,
 }: {
   layout: ScoreLayout
   /** The piece's bar each of the line's measures is. */
   bars: readonly number[]
+  /** Whether the line starts in a key printing no sharps or flats: its place is a target too. */
+  keyless: boolean
   edit: EditPrinted
 }) {
   const { t } = useTranslation('editor')
@@ -26,7 +30,7 @@ export function PrintedSigns({
       return t('printed.clefAt', { staff: t(`layers.${LAYER_OF_STAFF[printed.staff]}`), bar })
     return printed.kind === 'time' ? t('printed.timeAt', { bar }) : t('printed.keyAt', { bar })
   }
-  return signTargets(layout, bars).map(({ printed, box, staff }) => (
+  return signTargets(layout, bars, keyless).map(({ printed, box, staff }) => (
     <Fragment key={`${printed.kind} ${staff} ${'bar' in printed ? printed.bar : ''}`}>
       {edit(
         printed,

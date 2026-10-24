@@ -38,13 +38,46 @@ const printedOf = (sign: Sign, bar: number): Printed =>
   sign.kind === 'clef' ? { kind: 'clef', bar, staff: sign.staff } : { kind: sign.kind, bar }
 
 /**
+ * A line's signs and, where its key prints no sharps or flats (`keyless`: C major, A minor), the
+ * key's place after each clef at its head: from the clef to what follows it, where a signature
+ * would stand.
+ */
+function withKeyPlaces(layout: ScoreLayout, keyless: boolean): readonly Sign[] {
+  const signs = layout.signs ?? []
+  if (!keyless) return signs
+  return signs.flatMap((sign, index): Sign[] => {
+    const lines = layout.staves[sign.staff]
+    const measure = layout.measures[sign.measure]
+    if (sign.kind !== 'clef' || sign.measure !== 0 || !lines || !measure) return [sign]
+    const next = signs[index + 1]
+    const beside = next?.staff === sign.staff && next.measure === sign.measure ? next : undefined
+    if (beside?.kind === 'key') return [sign]
+    const right = Math.max(sign.right, beside?.left ?? measure.notes - REACH)
+    const place: Sign = {
+      kind: 'key',
+      staff: sign.staff,
+      measure: 0,
+      left: sign.right,
+      right,
+      ...lines,
+    }
+    return [sign, place]
+  })
+}
+
+/**
  * The targets over a line's clefs, key and time signatures (ADR 0094), `bars` the piece's bar of each
  * of its measures: each sign's box grown to meet its neighbours on its staff halfway, from the line's
- * start to short of its measure's first note, and over its staff's lines at least. The tune's staff
- * keeps its clef: only the piano's two change clef.
+ * start to short of its measure's first note, and over its staff's lines at least; a key printing
+ * no sharps or flats (`keyless`) its place after the head's clefs. The tune's staff keeps its clef:
+ * only the piano's two change clef.
  */
-export function signTargets(layout: ScoreLayout, bars: readonly number[]): PrintedTarget[] {
-  const signs = layout.signs ?? []
+export function signTargets(
+  layout: ScoreLayout,
+  bars: readonly number[],
+  keyless = false,
+): PrintedTarget[] {
+  const signs = withKeyPlaces(layout, keyless)
   return signs.flatMap((sign, index) => {
     const bar = bars[sign.measure]
     const lines = layout.staves[sign.staff]

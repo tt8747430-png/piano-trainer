@@ -19,7 +19,12 @@ export function SignPopover({
   return (
     <Popover>
       <PopoverTrigger render={trigger} />
-      <PopoverContent aria-label={label} align="start" className="w-80 gap-3 p-4">
+      {/* As wide as a key's seven letters, on the narrowest phone the screen's width. */}
+      <PopoverContent
+        aria-label={label}
+        align="start"
+        className="w-92 max-w-[calc(100vw-1rem)] gap-3 p-3"
+      >
         <MenuSection title={label} className="gap-3">
           {children}
         </MenuSection>
