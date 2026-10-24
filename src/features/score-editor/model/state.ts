@@ -110,9 +110,12 @@ export type EditorAction =
   | { readonly type: 'chordNote'; readonly direction: -1 | 1 }
   | { readonly type: 'key'; readonly key: Midi; readonly time: number }
   | { readonly type: 'rest' }
-  /** The notes or chord at the caret; with `back`, else the ones before it (Backspace). */
+  /**
+   * The notes chosen, a chord's one note, else the notes or chord at the caret; with `back`, where
+   * none is there, the ones before it (Backspace).
+   */
   | { readonly type: 'delete'; readonly back?: boolean }
-  /** The notes at the caret moved by notes of the key: a note dragged on its staff. */
+  /** The notes chosen (else at the caret) moved by notes of the key: ↑ ↓, or a note dragged on its staff. */
   | { readonly type: 'step'; readonly steps: number; readonly joins?: boolean }
   /** The tune's staff added over the grand staff, or taken away with its notes (ADR 0064). */
   | { readonly type: 'melodyStaff'; readonly on: boolean }
@@ -120,16 +123,19 @@ export type EditorAction =
   | { readonly type: 'hide'; readonly row: HiddenRow; readonly hidden: boolean }
   | { readonly type: 'shift'; readonly semitones: number }
   | { readonly type: 'respell' }
-  /** The notes chosen written on their letter ♯ (1), ♭ (−1) or ♮ (0). */
+  /**
+   * The notes chosen written on their letter ♯ (1), ♭ (−1) or ♮ (0); where every one carries the
+   * sign already, taken off, each spelled as its key spells it (ADR 0091).
+   */
   | { readonly type: 'accidental'; readonly accidental: -1 | 0 | 1 }
   /**
    * A finger on the notes chosen in a hand: a place's single note, or the chord's one note chosen;
    * the same finger again takes it off (ADR 0091).
    */
   | { readonly type: 'finger'; readonly finger: Finger }
-  /** A mark put on the notes at the caret, or those of the bars chosen, or taken off them all (ADR 0063). */
+  /** A mark put on the notes chosen (else at the caret), or taken off them all (ADR 0063). */
   | { readonly type: 'mark'; readonly mark: MarkChoice }
-  /** A line drawn over the bars chosen, else from the caret to its bar's end, or taken away (ADR 0080). */
+  /** A line drawn over the notes chosen, else from the caret to its bar's end, or taken away (ADR 0080). */
   | { readonly type: 'line'; readonly line: Line }
   /**
    * What the tune's note at the caret sings in a verse, as the Lyrics field writes it (ADR 0093):

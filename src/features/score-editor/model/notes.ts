@@ -316,7 +316,7 @@ export function toggleAccidental(
   })
 }
 
-/** The notes at `at` moved by semitones, spelled in the key; nothing moves past the piano's ends. */
+/** The notes `where` takes moved by semitones, spelled in the key; nothing moves past the piano's ends. */
 export const shiftNotes = (
   draft: Draft,
   layer: NoteLayer,
@@ -339,8 +339,8 @@ export function keyStep(key: Key, from: Midi, direction: 1 | -1): Midi {
 }
 
 /**
- * The notes at `at` moved `steps` notes of the key up or down, as a note dragged on the staff moves
- * (ADR 0064); nothing moves past the piano's ends.
+ * The notes `where` takes moved `steps` notes of the key up or down, as a note dragged on the staff
+ * moves (ADR 0064); nothing moves past the piano's ends.
  */
 export const stepNotes = (draft: Draft, layer: NoteLayer, where: Where, steps: number): Draft =>
   changeAt(draft, layer, where, (n) => {
@@ -361,7 +361,7 @@ export function backFrom(draft: Draft, layer: NoteLayer, at: Tick): Tick | null 
   return before.length === 0 ? null : Math.max(...before.map((n) => n.startTick))
 }
 
-/** The notes at `at` written the other way (C♯ ↔ D♭). */
+/** The notes `where` takes written the other way (C♯ ↔ D♭). */
 export const respellNotes = (draft: Draft, layer: NoteLayer, where: Where): Draft =>
   changeAt(draft, layer, where, (n) => ({ ...n, spelled: otherSpelling(n.spelled) }))
 

@@ -6,8 +6,9 @@ import type { EditorState } from './state'
 import { barAt } from './timeline'
 
 /**
- * The lines Insert draws over notes, as a notation app's Lines palette does: a slur, a crescendo or
- * diminuendo hairpin, an octave line up or down (ADR 0080).
+ * The lines the palette draws over notes (Slurs & lines, Dynamics & hairpins, ADR 0089), as a
+ * notation app's Lines palette does: a slur, a crescendo or diminuendo hairpin, an octave line up or
+ * down.
  */
 export const LINES = ['slur', 'cresc', 'dim', '8va', '8vb'] as const
 export type Line = (typeof LINES)[number]
@@ -118,7 +119,7 @@ export function lineOver(draft: Draft, layer: NoteLayer, span: Span, line: Line)
 }
 
 /**
- * Whether a line is drawn where Insert would draw it now; null where it has no notes to go over
+ * Whether a line is drawn where its key would draw it now; null where it has no notes to go over
  * (the chord row, or no note from the caret on in its bar).
  */
 export function lineDrawn(state: EditorState, line: Line): boolean | null {

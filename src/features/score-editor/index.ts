@@ -1,15 +1,13 @@
-export { hasRow, keepsAStaff, rowShown, shownRows, topStaff } from './model/rows'
+export { rowShown, shownRows, topStaff } from './model/rows'
 export { clefAt } from './model/clefs'
 export { BARLINE_CHOICES, JUMP_CHOICES, type BarMarkChoice } from './model/bar-marks'
-export { barLengths, type BarRange } from './model/bars'
-export { type Clip } from './model/clip'
+export { barLengths } from './model/bars'
 export { copyTarget, whyNoPaste } from './model/clip-edits'
 export { keyChords, keySevenths } from './model/chords'
 export {
   isHandLayer,
   musicToSave,
   readDraft,
-  tuneNotes,
   writeDraft,
   type Draft,
   type DraftNote,
@@ -22,7 +20,6 @@ export {
   EDIT_MODES,
   type BarEdit,
   type CaretMove,
-  type ChordAdvance,
   type ClipEdit,
   type EditMode,
   type EditorAction,
@@ -32,17 +29,9 @@ export { carriesAccidental, notesAt, notesOf } from './model/notes'
 export { metersFor } from './model/settings'
 export { createEditorStore, type EditorStore } from './model/store'
 export { TAKE_INTO, takeParts, type TakeInto } from './model/take-edits'
-export {
-  barAt,
-  barsOf,
-  keyAt,
-  sectionKey,
-  startsIn,
-  totalTicks,
-  type PlacedBar,
-} from './model/timeline'
-export { NOTE_VALUES, takesDot, valueOf, type ChosenValue, type Dots } from './model/values'
+export { barAt, barsOf, keyAt, sectionKey, totalTicks, type PlacedBar } from './model/timeline'
+export { NOTE_VALUES, takesDot, valueOf, type ChosenValue } from './model/values'
 export { chosenNotes, fingerableNotes, shownValue } from './model/chosen'
 export { hasMark, type MarkChoice } from './model/marks'
-export { singsHere, sungAt, sungNear, syllableAt, tuneLayer, verseCount } from './model/lyrics'
-export { lineDrawn, LINES, type Line } from './model/lines'
+export { singsHere, sungAt, sungNear, syllableAt, verseCount } from './model/lyrics'
+export { lineDrawn, type Line } from './model/lines'

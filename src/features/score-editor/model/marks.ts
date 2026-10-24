@@ -112,10 +112,10 @@ function endOf(mark: MarkChoice): MarkChoice | null {
 }
 
 /**
- * A mark toggled on the notes at the caret, or over the notes starting in a span of bars: a slur or a
- * hairpin or the pedal from the first onset to the last, a dynamic or an expression on the first, any
- * other mark on them all. On
- * where any lacks it, else off.
+ * A mark toggled on the notes `span` takes: at the caret (or a chord's one note) each marked as
+ * itself; over a span of notes chosen, a slur or a hairpin or the pedal from the first onset to the
+ * last, a dynamic or an expression on the first, any other mark on them all. On where any lacks it,
+ * else off.
  */
 export function markNotes(draft: Draft, layer: NoteLayer, span: Where, mark: MarkChoice): Draft {
   const notes = notesOf(draft, layer)

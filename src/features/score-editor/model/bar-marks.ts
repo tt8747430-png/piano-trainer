@@ -10,7 +10,7 @@ import type { BarRange } from './bars'
 import type { Draft, DraftBar } from './draft'
 import { withBar } from './notes'
 
-/** What the + menu's Barlines put on the bars chosen (or the caret's): the barlines and endings. */
+/** What the palette's Barlines & repeats puts on the bars chosen (or the caret's): the barlines and endings. */
 export const BARLINE_CHOICES = [
   'repeatStart',
   'repeatEnd',
