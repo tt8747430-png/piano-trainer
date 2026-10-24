@@ -44,7 +44,6 @@ export const piece = {
     cancel: 'Keep it',
   },
   scaleOf: 'Scale: {{scale}}',
-  key: 'Key',
   meter: 'Time signature',
   credit: {
     authors: 'Authors',

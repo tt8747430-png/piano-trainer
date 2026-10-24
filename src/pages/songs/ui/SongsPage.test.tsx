@@ -60,7 +60,8 @@ describe('Songs', () => {
   it('shows a song’s key, its stage and, once learned, that it is', async () => {
     const { progressStore } = await renderApp('/songs')
     const song = await screen.findByRole('link', { name: /Still, my soul, be still/ })
-    expect(song).toHaveTextContent('G')
+    // Its key named for a screen reader, which else hears a bare letter after the title.
+    expect(song).toHaveAccessibleName(/Key G/)
     expect(within(song).getByRole('img', { name: 'Intermediate' })).toBeInTheDocument()
     expect(within(song).queryByRole('img', { name: 'Learned' })).not.toBeInTheDocument()
     act(() => markLearned(progressStore, 'piece:bz5', new Date()))

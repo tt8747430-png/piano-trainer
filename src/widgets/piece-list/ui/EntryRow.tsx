@@ -17,11 +17,11 @@ const KIND_TILE: Readonly<Record<Entry['kind'], { icon: LucideIcon; paint: Paint
 
 /**
  * A piece or listing in a list, linking to its page on its shelf: its number in its book on its tile
- * (else its kind's icon; no `tile` where every row of its list would wear the same one), its title over its second one (a listing: "no chart yet"), then its key, its
- * stage's mark and, once learned, the learned badge.
+ * (else its kind's icon; no `tile` where every row of its list would wear the same one), its title over its second one (a listing: "no chart yet"), then its key (named
+ * for a screen reader, as `PieceFacts` names it), its stage's mark and, once learned, the learned badge.
  */
 export function EntryRow({ entry, tile = true }: { entry: Entry; tile?: boolean }) {
-  const { t } = useTranslation(['songs', 'common'])
+  const { t } = useTranslation(['songs', 'common', 'music'])
   const locale = useLocale()
   const { primary, secondary } = entryTitles(entry, locale)
   const step = pieceStepId(entry.id)
@@ -38,6 +38,7 @@ export function EntryRow({ entry, tile = true }: { entry: Entry; tile?: boolean 
         trailing={
           entry.kind === 'listing' ? null : (
             <>
+              <span className="sr-only">{t('music:key.label')}</span>{' '}
               <span className="shrink-0 font-display font-semibold tabular-nums">
                 {keySymbol(pieceKey(entry))}
               </span>

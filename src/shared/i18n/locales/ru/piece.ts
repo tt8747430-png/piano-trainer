@@ -46,7 +46,6 @@ export const piece: LocaleResources['piece'] = {
     cancel: 'Оставить',
   },
   scaleOf: 'Гамма: {{scale}}',
-  key: 'Тональность',
   meter: 'Размер',
   credit: {
     authors: 'Авторы',

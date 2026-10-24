@@ -20,7 +20,7 @@ export function PieceFacts({ entry }: { entry: Entry }) {
     <div className="-mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-lg text-muted-foreground">
       {secondary ? <p>{secondary}</p> : null}
       <dl className="flex flex-wrap items-center gap-x-2 gap-y-1">
-        <dt className="sr-only">{t('key')}</dt>
+        <dt className="sr-only">{t('music:key.label')}</dt>
         <dd className="font-display font-semibold text-foreground tabular-nums">
           {keySymbol(pieceKey(entry))}
         </dd>
