@@ -87,10 +87,13 @@ export function itemAt(draft: Draft, layer: Layer, tick: Tick): TickSpan {
   if (tick >= totalTicks(draft)) return { from: tick, to: tick }
   if (layer === 'chords') {
     const at = tick - bar.start
-    const next = bar.bar.chords.some((each) => each.at === at)
+    // On a chord, to the next chord of its bar (its place in the bar, put on the timeline); on an
+    // empty beat, to the next place the caret stands on.
+    const onChord = bar.bar.chords.some((each) => each.at === at)
+    const next = onChord
       ? bar.bar.chords.find((each) => each.at > at)?.at
       : chordPlaces(draft).find((place) => place > tick)
-    const to = next === undefined ? end : next < tick ? bar.start + next : next
+    const to = next === undefined ? end : onChord ? bar.start + next : next
     return { from: tick, to: Math.min(to, end) }
   }
   const notes = notesOf(draft, layer)
