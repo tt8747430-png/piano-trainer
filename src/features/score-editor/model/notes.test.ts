@@ -177,7 +177,7 @@ describe('closeGap (Insert mode’s Delete, ADR 0092)', () => {
   it('cuts the melody’s note held into the gap, so the notes pulled left never sound under it', () => {
     // A half note tied over the barline, a quarter after it: the tie's second half taken.
     const draft = draftOf({
-      melody: 'r/3 C5/2 | D5/1 r/3',
+      melody: 'r/3 C5/2 | D5/1 r/2',
       sections: [{ kind: 'verse', lines: ['G C'] }],
     })
     const closed = closeGap(draft, 'melody', { from: 96, to: 120 })

@@ -6,7 +6,7 @@ import { chosenNotes, chosenSpan, shownValue, takenAway } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
 import { clipEdited } from './clip-edits'
 import { ticksOf } from '@/shared/lib/notation'
-import { chordNoteStep, steppedKey } from './chord-note'
+import { chordNoteStep } from './chord-note'
 import { deleteChord } from './chords'
 import { midi, PIANO, type Midi } from '@/shared/lib/music'
 import { isHandLayer, type Draft } from './draft'
@@ -27,6 +27,7 @@ import {
   setFinger,
   shiftNotes,
   stepNotes,
+  steppedKey,
   tieNotes,
   toggleAccidental,
   writeRest,

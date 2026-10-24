@@ -206,8 +206,7 @@ export function addToChord(
  * What an edit takes: the notes at a tick (the caret's), one note of the chord there (its key, chosen
  * alone, ADR 0088), or those starting in a span (the notes chosen).
  */
-export type Where =
-  Tick | { readonly from: Tick; readonly to: Tick } | { readonly at: Tick; readonly key: Midi }
+export type Where = Tick | TickSpan | { readonly at: Tick; readonly key: Midi }
 
 /** Whether a note is one `where` takes. */
 export const isAt = (where: Where) => (n: DraftNote) =>
@@ -351,11 +350,18 @@ export const shiftNotes = (
   })
 
 /** The key's next note from `from`, up (1) or down (−1): a step on the staff in its key. */
-export function keyStep(key: Key, from: Midi, direction: 1 | -1): Midi {
+function keyStep(key: Key, from: Midi, direction: 1 | -1): Midi {
   const inKey = new Set(spellScale(key.tonic, keyScale(key)).map((tone) => pitchClassOf(tone.note)))
   for (let m = from + direction; m >= PIANO.from && m <= PIANO.to; m += direction)
     if (inKey.has(pitchClass(m))) return midi(m)
   return from
+}
+
+/** A key moved `steps` notes of the key up or down, as a note dragged on its staff; never past the piano's ends. */
+export function steppedKey(key: Key, from: Midi, steps: number): Midi {
+  let moved = from
+  for (let i = 0; i < Math.abs(steps); i++) moved = keyStep(key, moved, steps > 0 ? 1 : -1)
+  return moved
 }
 
 /**
@@ -364,9 +370,7 @@ export function keyStep(key: Key, from: Midi, direction: 1 | -1): Midi {
  */
 export const stepNotes = (draft: Draft, layer: NoteLayer, where: Where, steps: number): Draft =>
   changeAt(draft, layer, where, (n) => {
-    let moved = n.midi
-    const key = keyAt(draft, n.startTick)
-    for (let i = 0; i < Math.abs(steps); i++) moved = keyStep(key, moved, steps > 0 ? 1 : -1)
+    const moved = steppedKey(keyAt(draft, n.startTick), n.midi, steps)
     return moved === n.midi ? n : { ...n, ...spelledIn(draft, moved, n.startTick) }
   })
 

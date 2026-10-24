@@ -2,6 +2,7 @@ import type { QuantisedNote } from '@/entities/take'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { isHandLayer, type Draft, type DraftNote, type NoteLayer } from './draft'
 import { notesOf, oneLine, reaching, spelledIn, withNotes } from './notes'
+import type { TickSpan } from './state'
 import { barAt } from './timeline'
 
 /** Where a take is written (spec 2026-10-05 §4): both hands, split at a key, or one layer. */
@@ -27,14 +28,11 @@ export function takeParts(
   ]
 }
 
-/** The ticks a take's notes cover: from the bar it is written from to the end of the bar it ends in. */
-interface Span {
-  readonly from: Tick
-  readonly to: Tick
-}
-
-/** A layer's notes with those starting in the span taken, and one sounding into it cut at its start. */
-const clearedIn = (notes: readonly DraftNote[], { from, to }: Span): DraftNote[] =>
+/**
+ * A layer's notes with those starting in the take's span (from the bar it is written from to the end
+ * of the bar it ends in) taken, and one sounding into it cut at its start.
+ */
+const clearedIn = (notes: readonly DraftNote[], { from, to }: TickSpan): DraftNote[] =>
   notes.flatMap((n) => {
     if (n.startTick >= from && n.startTick < to) return []
     return n.startTick < from && n.startTick + n.durationTicks > from
@@ -43,7 +41,7 @@ const clearedIn = (notes: readonly DraftNote[], { from, to }: Span): DraftNote[]
   })
 
 /** One layer's part written over the span: what started there replaced by the take's notes; the tune one line. */
-function writePart(draft: Draft, { layer, notes }: TakePart, span: Span): Draft {
+function writePart(draft: Draft, { layer, notes }: TakePart, span: TickSpan): Draft {
   const played = isHandLayer(layer) ? notes : oneLine(notes)
   const added = played.map((n) => ({
     ...spelledIn(draft, n.midi, span.from + n.startTick),
