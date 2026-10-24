@@ -662,6 +662,21 @@ describe('the editor', () => {
     expect(empty.clip).toBe(one.clip)
   })
 
+  it('copies and cuts the chord at the caret alone, as Delete takes it, never a note starting under it', () => {
+    // The upper staff in two voices: a half note, and a note from beat 2 held on past it.
+    const voices = run(
+      initialEditor(draftOf({ hands: { rh: 'C5/2 E4/3@2 | r/4', lh: 'r/4 | r/4' } })),
+      { type: 'place', tick: 0, layer: 'rh' },
+    )
+    const copied = run(voices, { type: 'clip', edit: 'copy' })
+    expect(copied.clip).toMatchObject({ kind: 'notes', ticks: 48 })
+    expect(copied.clip?.kind === 'notes' && shape(copied.clip.notes)).toEqual(['C5@0/48'])
+    expect(copyTarget(voices)).toEqual({ kind: 'notes', count: 1 })
+    const cut = run(voices, { type: 'clip', edit: 'cut' })
+    expect(shape(cut.draft.hands.rh)).toEqual(['E4@24/72'])
+    expect(cut.draft).toEqual(run(voices, { type: 'delete' }).draft)
+  })
+
   it('cuts the notes chosen, leaving a rest in Replace mode and closing the gap in Insert mode', () => {
     const four = run(start(), key(60, 0), key(62, 500), key(64, 1000), key(65, 1500))
     const atD = run(four, { type: 'place', tick: 24, layer: 'melody' })

@@ -1,7 +1,6 @@
 import { copyBars, deleteBars, pasteBars } from './bars'
-import { itemAt } from './caret'
 import { selectionSpan, startOf } from './caret-moves'
-import { takenAway } from './chosen'
+import { chosenSpan, takenAway } from './chosen'
 import { clipFits, copyNotes, pasteNotes, type NotesClip } from './clip'
 import type { NoteLayer } from './draft'
 import { barsChosen, chosenBars } from './form-edits'
@@ -11,7 +10,8 @@ import type { ClipEdit, EditorState } from './state'
 
 /**
  * What Copy takes on a staff, timed from where it stands: the notes chosen, the chord's one note
- * chosen, or the chord at the caret; null where there is nothing to take.
+ * chosen, or the chord at the caret alone (never a note starting under it, another voice of the
+ * hand, as Delete takes it); null where there is nothing to take.
  */
 function copied(state: EditorState, layer: NoteLayer): NotesClip | null {
   const { draft, caret } = state
@@ -20,11 +20,15 @@ function copied(state: EditorState, layer: NoteLayer): NotesClip | null {
     return clip.notes.length > 0 ? clip : null
   }
   const chord = notesAt(draft, layer, caret)
-  if (chord.length === 0) return null
-  const one = chord.find((n) => n.midi === state.chordNote)
-  if (one)
-    return { kind: 'notes', layer, notes: [{ ...one, startTick: 0 }], ticks: one.durationTicks }
-  return copyNotes(draft, layer, itemAt(draft, layer, caret))
+  const one = chord.filter((n) => n.midi === state.chordNote)
+  const taken = one.length > 0 ? one : chord
+  if (taken.length === 0) return null
+  return {
+    kind: 'notes',
+    layer,
+    notes: taken.map((n) => ({ ...n, startTick: 0 })),
+    ticks: Math.max(...taken.map((n) => n.durationTicks)),
+  }
 }
 
 /** What Copy would take (ADR 0092): the bars chosen (as printed, from 1), the notes chosen, or nothing. */
@@ -104,11 +108,11 @@ export function clipEdited(state: EditorState, edit: ClipEdit): EditorState {
   if (!clip) return state
   if (edit === 'copy') return { ...state, clip }
   const from = state.selection ? selectionSpan(state.selection).from : caret
-  // The chord's one note taken leaves the chord, so no gap closes.
-  const key = state.selection === null ? state.chordNote : null
+  // What Delete takes; the chord's one note taken leaves the chord, so no gap closes.
+  const where = chosenSpan(state)
   const next =
-    key === null
-      ? takenAway(state, layer, { from, to: from + clip.ticks })
-      : deleteNotes(draft, layer, { at: caret, key })
+    typeof where !== 'number' && 'key' in where
+      ? deleteNotes(draft, layer, where)
+      : takenAway(state, layer, where)
   return commit(state, next, { clip, caret: from, selection: null, chordNote: null, struck: null })
 }
