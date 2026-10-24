@@ -25,6 +25,7 @@ import { EditorKeyboard } from './EditorKeyboard'
 import { EditorSheet } from './EditorSheet'
 import { EditorTools } from './EditorTools'
 import { RecordingStrip } from './RecordingStrip'
+import { UnsavedNotice } from './UnsavedNotice'
 
 /** What the sheet keeps between its music and what floats over it, in CSS px. */
 const GAP = 8
@@ -114,6 +115,17 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
           </div>
         )}
         <div data-area="float">
+          {/* A change that could not be saved, said at the sheet's head, clear of the palette. */}
+          <div
+            className={cn(
+              'absolute inset-x-0 top-2 flex justify-center px-2',
+              beside && 'pr-84 landscape-phone:pr-80 xl:pr-96',
+            )}
+          >
+            <div className="w-full max-w-md">
+              <UnsavedNotice />
+            </div>
+          </div>
           {beside ? (
             // Beside the sheet, over its right edge (ADR 0094): folded, its row of tabs stays where
             // the card's was.

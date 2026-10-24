@@ -3,6 +3,8 @@ export const editor = {
   play: 'Play',
   undo: 'Undo',
   redo: 'Redo',
+  // A change the song's music cannot be written with: nothing saved over what was.
+  unsaved: 'This change can’t be saved: the song stays as it was last saved.',
   // The dock over the sheet's foot (ADR 0094): the tempo, ‹ Play ›, and Record.
   dock: 'Play, move and record',
   // The one palette (spec 2026-10-23): a quick row of values, the categories as a bar of pictures,

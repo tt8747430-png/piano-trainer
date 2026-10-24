@@ -109,11 +109,19 @@ describe('the draft', () => {
   it('saves only music that reads back', () => {
     const draft = readDraft(WRITTEN)
     expect(musicToSave(draft)).toEqual(writeDraft(draft))
-    const [section] = draft.sections
-    if (!section) throw new Error('no section')
-    // A bar with no chord writes nothing the chart can read.
-    const unread = [{ ...section, lines: [[{ ticks: 96, chords: [] }]] }]
-    expect(musicToSave({ ...draft, sections: unread })).toBeNull()
+    // A note of twenty beats, five bars tied, is longer than the music writes a note.
+    const five = readDraft({
+      key: 'G',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['G G G G G'] }],
+      melody: 'D4/4 | D4/4 | D4/4 | D4/4 | D4/4',
+    })
+    const [first] = five.melody
+    if (!first) throw new Error('a note')
+    expect(musicToSave(five)).not.toBeNull()
+    expect(musicToSave({ ...five, melody: [{ ...first, durationTicks: 20 * 24 }] })).toBeNull()
   })
 
   it('holds chords by where they start in their bar, the tune and hands on the timeline', () => {

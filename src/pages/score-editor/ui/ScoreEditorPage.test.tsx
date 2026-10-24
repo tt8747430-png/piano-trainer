@@ -681,6 +681,39 @@ describe('the score editor', () => {
     expect(await screen.findByRole('button', { name: 'Bar 1: F' })).toBeInTheDocument()
   })
 
+  it('says a change the song cannot be saved with, keeping the music last saved, until one saves', async () => {
+    const user = userEvent.setup()
+    const silent = 'r/4 | r/4 | r/4 | r/4 | r/4'
+    const { piecesStore } = await renderApp('/edit/my-1', {
+      storage: withSong({
+        sections: [{ kind: 'verse', lines: ['G G G G G'] }],
+        melody: 'C4/4 | C4/4 | C4/4 | C4/4 | C4/4',
+        hands: { rh: silent, lh: silent },
+      }),
+    })
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Melody · Bar 1/))
+    const notes = await openCategory(user, 'Notes')
+    const tie = () => user.click(within(notes).getByRole('button', { name: 'Tie' }))
+    // Four whole notes tied: sixteen beats, the longest a note is written.
+    for (const _ of [1, 2, 3]) await tie()
+    await waitFor(() => expect(piecesStore.getState().songs[0]?.melody).not.toMatch(/^C4\/4 /))
+    const saved = songOf(piecesStore.getState())
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    // A fifth: twenty beats, more than a song is written with.
+    await tie()
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'This change can’t be saved: the song stays as it was last saved.',
+    )
+    expect(songOf(piecesStore.getState())).toEqual(saved)
+    // Undone, the music saves again and the notice goes.
+    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    await waitFor(() => expect(screen.queryByRole('alert')).not.toBeInTheDocument())
+    // Closed, it stays away until a change cannot be saved again.
+    await tie()
+    await user.click(await screen.findByRole('button', { name: 'Close the notice' }))
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  })
+
   it('writes nothing from a MIDI keyboard behind an open menu', async () => {
     const user = userEvent.setup()
     const { midi: keyboard, piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })

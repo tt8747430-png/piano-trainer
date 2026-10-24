@@ -70,9 +70,13 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   const [lyricsVerse, openLyrics] = useState<number | null>(null)
   /** The music last saved here, or read: what the store holds unless another tab saved since. */
   const [saved] = useState(() => ({ music: target.music }))
+  // A change the song's music cannot be written with: said so, the music last saved kept, until a
+  // change saves or the notice is closed.
+  const [unsaved, setUnsaved] = useState(false)
   const [store] = useState(() =>
     createEditorStore(readDraft(target.music), (draft) => {
       const music = musicToSave(draft)
+      setUnsaved(music === null)
       if (!music) return
       saved.music = music
       saveMusic(pieces, savingTo(target), music)
@@ -199,7 +203,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   return {
     store,
     takes,
-    actions: { dispatch, play, togglePlay, close },
+    actions: { dispatch, play, togglePlay, close, dismissUnsaved: () => setUnsaved(false) },
     view: {
       // The chord symbols shown or not are the View's (ADR 0094).
       chordNames: shown.chordNames,
@@ -218,6 +222,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       kind: target.kind,
       chordFieldRef,
       chordFieldAsked,
+      unsaved,
     },
   }
 }
