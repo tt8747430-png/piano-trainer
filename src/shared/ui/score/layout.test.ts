@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { xAtTick } from './layout'
+import { leftAt, xAtTick } from './layout'
 import type { ScoreLayout } from './layout'
 
 const layout: ScoreLayout = {
@@ -31,5 +31,49 @@ describe('xAtTick', () => {
   it('runs past a bar’s last onset toward its end', () => {
     expect(xAtTick(layout, 72)).toBe(310)
     expect(xAtTick(layout, 999)).toBe(400)
+  })
+})
+
+describe('leftAt (ADR 0096)', () => {
+  const drawn: ScoreLayout = {
+    ...layout,
+    heads: [
+      // The treble's head at the bar's start with a sharp before it, the bass's under it.
+      {
+        id: 'n-treble-0-0',
+        staff: 'treble',
+        tick: 0,
+        index: 0,
+        left: 48,
+        right: 72,
+        top: 50,
+        bottom: 60,
+      },
+      {
+        id: 'n-bass-0-0',
+        staff: 'bass',
+        tick: 0,
+        index: 0,
+        left: 60,
+        right: 72,
+        top: 140,
+        bottom: 150,
+      },
+    ],
+    rests: [{ staff: 'bass', tick: 24, left: 128, right: 138, top: 140, bottom: 160 }],
+  }
+
+  it('is the left edge of what is drawn at a tick: its heads with their accidentals, on every staff', () => {
+    expect(leftAt(drawn, 0)).toBe(48)
+  })
+
+  it('is one staff’s alone where it is asked for', () => {
+    expect(leftAt(drawn, 0, ['bass'])).toBe(60)
+  })
+
+  it('takes a rest drawn there, and the tick’s own x where nothing is', () => {
+    expect(leftAt(drawn, 24)).toBe(128)
+    expect(leftAt(drawn, 24, ['treble'])).toBe(130)
+    expect(leftAt(drawn, 12)).toBe(95)
   })
 })

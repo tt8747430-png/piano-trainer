@@ -336,4 +336,43 @@ describe('ScoreSheet', () => {
     rerender(<ScoreSheet {...props} caret={288} />)
     expect(scrolled).toHaveBeenCalledWith({ block: 'nearest' })
   })
+
+  it.each(['scroll', 'pages', 'horizontal'] as const)(
+    'draws the playhead on the line Play is on, over its staves, apart from the caret, %s (ADR 0096)',
+    async (view) => {
+      const props = {
+        draft,
+        caret: 0,
+        layer: 'rh' as const,
+        tapsOf: () => [],
+        selection: null,
+        onPlace: vi.fn(),
+        onReach: vi.fn(),
+        onDeselect: vi.fn(),
+        placesOf: () => [],
+        heading: () => null,
+        chordNames: true,
+        edit: editing(vi.fn()),
+        title: () => null,
+        view,
+      }
+      const { rerender } = render(
+        <ScoreSheet {...props} playhead={{ tick: 192, clock: () => null }} />,
+      )
+      await screen.findAllByRole('button', { name: /^Bar 3/ })
+      await waitFor(() =>
+        expect(document.querySelectorAll('[data-slot="playhead"]')).toHaveLength(1),
+      )
+      const playhead = document.querySelector('[data-slot="playhead"]')
+      const lines = [...document.querySelectorAll('[data-slot="sheet-line"]')]
+      // Bar 3 opens the verse's second line down the screen and on a page; across, the one line.
+      expect(playhead?.closest('[data-slot="sheet-line"]')).toBe(
+        view === 'horizontal' ? lines[0] : lines[1],
+      )
+      // The caret stays at bar 1, the playhead apart from it.
+      expect(lines[0]?.querySelector('[data-slot="caret"]')).not.toBeNull()
+      rerender(<ScoreSheet {...props} playhead={null} />)
+      expect(document.querySelector('[data-slot="playhead"]')).toBeNull()
+    },
+  )
 })

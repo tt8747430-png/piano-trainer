@@ -1,15 +1,25 @@
 import { createContext, use } from 'react'
 import { useStore } from 'zustand'
 import type { EditorAction, EditorState, EditorStore } from '@/features/score-editor'
+import type { PlayHandle } from '@/shared/api/audio'
 import type { SheetView } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
+import type { Scheduled } from '@/shared/lib/schedule'
 import type { EditorTakes } from './use-editor-takes'
+
+/** What Play plays, while it plays: its pass, and where it started on the audio clock. */
+export interface Heard {
+  readonly handle: PlayHandle
+  readonly pass: Scheduled
+}
 
 /** What the editor's parts share (composition: each reads what it needs, none knows how it is kept). */
 export interface ScoreEditorValue {
   readonly store: EditorStore
   /** The recorder and the piece's takes. */
   readonly takes: EditorTakes
+  /** What Play plays while it plays, which the playhead follows (ADR 0096); null while it does not. */
+  readonly heard: Heard | null
   readonly actions: {
     readonly dispatch: (action: EditorAction) => void
     /** A key played on the keys, the computer keyboard or MIDI: written at the caret, unless a take records. */

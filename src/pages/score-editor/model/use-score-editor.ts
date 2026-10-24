@@ -1,5 +1,5 @@
 import { useStore } from 'zustand'
-import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
+import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import {
   entryTitles,
   sameMusic,
@@ -21,7 +21,7 @@ import {
 import { useLocale } from '@/shared/i18n'
 import { useGoBack, useViewChange, useWakeLock } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
-import { audibleHands, schedule } from '@/shared/lib/schedule'
+import { audibleHands, schedule, type Scheduled } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { inPopUp, isTyping } from '@/shared/lib/shortcuts'
 import { speedTempo } from '@/widgets/practice-player'
@@ -138,15 +138,21 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   )
   useMidiKeyDown(play)
 
+  // What Play plays, kept while it sounds: the playhead follows it, apart from the caret (ADR 0096).
+  const [pass, setPass] = useState<Scheduled | null>(null)
   const togglePlay = () =>
     playback.toggle('piece', () => {
       const { draft, caret } = store.getState()
-      return schedule(arrangeDraft(draft), {
+      const played = schedule(arrangeDraft(draft), {
         tempo: speedTempo(draft.tempo, speed),
         hands: audibleHands('both'),
         fromTick: barAt(draft, caret).start,
-      }).sounds
+      })
+      setPass(played)
+      return played.sounds
     })
+  const { handle } = playback
+  const heard = useMemo(() => (handle && pass ? { handle, pass } : null), [handle, pass])
 
   // The editor reads its keys layer by layer (`shortcutOf`), and lists them for the sheet
   // (`useEditorShortcutList`); a key another listener took, or one an IME is composing, is not its.
@@ -203,6 +209,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   return {
     store,
     takes,
+    heard,
     actions: { dispatch, play, togglePlay, close, dismissUnsaved: () => setUnsaved(false) },
     view: {
       // The chord symbols shown or not are the View's (ADR 0094).

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { useElementSize, type SheetView } from '@/shared/lib'
+import type { Tick } from '@/shared/lib/music'
 import { notate, type StaffId } from '@/shared/lib/notation'
 import { SheetTitle } from '@/shared/ui'
 import {
@@ -67,8 +68,9 @@ function BarWidth({
 
 /**
  * A Performance as sheet music (spec §2.6): its title at its head, the page's heading (ADR 0094);
- * chord symbols over numbered bars, the cursor on the beat group now, the loop, bars to jump to; the
- * tune on its own staff where the view asks, the staves it hides left out. Laid out across (the
+ * chord symbols over numbered bars, the playhead at the beat group now (moving with the music while
+ * Listen plays, ADR 0096), the loop, bars to jump to; the tune on its own staff where the view asks,
+ * the staves it hides left out. Laid out across (the
  * default), on one scrolling line under the title that takes the height left and engraves the staff
  * to fill it (`fitScale`) while two of its bars still show, so music read from a stand is as large as
  * the screen allows; or in the chart's lines, down the screen or on A4 pages (`SheetLines`).
@@ -77,6 +79,7 @@ export function SheetMusic({
   performance,
   headings,
   current,
+  clock,
   loop,
   playing = false,
   fingers,
@@ -94,10 +97,12 @@ export function SheetMusic({
   performance: Performance
   /** Each section's name, by section: shown at its first bar. */
   headings: readonly string[]
-  /** The beat group the cursor is on. */
+  /** The beat group the cursor is on: where the playhead stands. */
   current: number
+  /** Where Listen's music is while it plays, read every frame: the playhead moves with it. */
+  clock?: (() => Tick | null) | null | undefined
   loop: BarRange | null
-  /** Whether the music plays (or waits on the keys): the cursor is marked in a loop then. */
+  /** Whether the music plays (or waits on the keys): the playhead is shown in a loop then. */
   playing?: boolean
   fingers: boolean
   /** Each notehead carries its note's name. */
@@ -168,7 +173,8 @@ export function SheetMusic({
     setPicked({ picked: next, group: at })
   }
   const here = picked?.group === current ? picked.picked : null
-  // The notes chosen, in the selection's colour: the loop's, else the one clicked, else the cursor's.
+  // What is chosen, in the selection's colour (ADR 0096): the loop's notes, else the one clicked; the
+  // notes the playhead is at are not chosen.
   const selected = useMemo(() => {
     const first = loop ? performance.bars[loop.first] : undefined
     if (loop && first)
@@ -176,11 +182,12 @@ export function SheetMusic({
         from: first.startTick,
         to: performance.bars[loop.last + 1]?.startTick ?? performance.totalTicks,
       }
-    if (here) return { staff: here.staff, from: here.tick, to: here.tick + 1, midi: here.midi }
-    return group ? { from: group.tick, to: group.tick + 1 } : undefined
-  }, [loop, performance, group, here])
-  // While the loop stands chosen and nothing moves, its box is the mark, the cursor none (ADR 0088).
-  // Playing, or stepped on since, the cursor is where the music is.
+    return here
+      ? { staff: here.staff, from: here.tick, to: here.tick + 1, midi: here.midi }
+      : undefined
+  }, [loop, performance, here])
+  // While the loop stands chosen and nothing moves, the loop is the mark, the playhead out of sight
+  // (ADR 0088). Playing, or stepped on since, the playhead is where the music is.
   const loopKey = loop ? `${loop.first}-${loop.last}` : ''
   const [resting, setResting] = useState({ loop: loopKey, at: current })
   if (resting.loop !== loopKey) setResting({ loop: loopKey, at: current })
@@ -196,6 +203,7 @@ export function SheetMusic({
         title={title}
         headings={headings}
         current={current}
+        clock={clock}
         loop={loop}
         fingers={fingers}
         names={names}
@@ -209,7 +217,6 @@ export function SheetMusic({
         onChoose={onChoose}
         selected={selected}
         cursorShown={cursorShown}
-        picked={here}
       />
     )
   return (
@@ -242,9 +249,9 @@ export function SheetMusic({
                 chordNames={view.chordNames}
                 tempos={tempos}
                 current={current}
+                clock={clock}
                 loop={loop}
                 cursorShown={cursorShown}
-                picked={here}
                 onJump={onJump}
                 onPick={onPick}
                 onLoopChange={onLoopChange}

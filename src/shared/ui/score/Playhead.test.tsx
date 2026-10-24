@@ -1,0 +1,167 @@
+import { act, render, screen } from '@testing-library/react'
+import { useEffect, useRef, type ComponentProps, type ReactNode } from 'react'
+import { describe, expect, it, vi } from 'vitest'
+import { midi, note, type Tick } from '@/shared/lib/music'
+import { notate, type StaffId, type TimedNote } from '@/shared/lib/notation'
+import { stubScrolling } from '@/shared/test/layout'
+import { RevealContext } from '../canvas-reveal'
+import type { ScoreLayout } from './layout'
+import { Playhead } from './Playhead'
+import { playheadSpan, playheadX } from './playhead-place'
+import { ScoreView } from './ScoreView'
+
+const n = (key: number, hand: TimedNote['hand'], startTick: number, durationTicks: number) => ({
+  midi: midi(key),
+  spelled: note('C'),
+  hand,
+  startTick,
+  durationTicks,
+})
+
+/** Two bars on the grand staff: quarters over the first bar's whole note, a whole note each in the second. */
+const score = notate({
+  key: { tonic: note('C'), minor: false },
+  meter: '4/4',
+  bars: [
+    { startTick: 0, beats: 4 },
+    { startTick: 96, beats: 4 },
+  ],
+  notes: [
+    n(72, 'rh', 0, 24),
+    n(72, 'rh', 24, 24),
+    n(72, 'rh', 48, 24),
+    n(72, 'rh', 72, 24),
+    n(48, 'lh', 0, 96),
+    n(72, 'rh', 96, 96),
+    n(48, 'lh', 96, 96),
+  ],
+  chords: [],
+})
+
+type PlayheadProps = Omit<ComponentProps<typeof Playhead>, 'layout'>
+
+/** The engraving's layout, as the playhead is handed it. */
+let laid: ScoreLayout | undefined
+
+/** Tells the test the layout the engraving handed the playhead. */
+function Laid({ layout }: { layout: ScoreLayout }) {
+  useEffect(() => {
+    laid = layout
+  }, [layout])
+  return <p>Engraved</p>
+}
+
+function Sheet({
+  props,
+  staves,
+  around = (sheet) => sheet,
+}: {
+  props: PlayheadProps
+  staves?: readonly StaffId[]
+  around?: (sheet: ReactNode) => ReactNode
+}) {
+  const scroller = useRef<HTMLDivElement>(null)
+  return around(
+    <div ref={scroller} data-slot="sheet-line">
+      <ScoreView score={score} scale={1} fingers={false} staves={staves}>
+        {(layout) => (
+          <>
+            <Playhead layout={layout} scroller={scroller} {...props} />
+            <Laid layout={layout} />
+          </>
+        )}
+      </ScoreView>
+    </div>,
+  )
+}
+
+async function renderPlayhead(props: PlayheadProps, staves?: readonly StaffId[]) {
+  const view = render(<Sheet props={props} staves={staves} />)
+  await screen.findByText('Engraved')
+  const line = document.querySelector<HTMLElement>('[data-slot="playhead"]')
+  if (!line || !laid) throw new Error('a playhead on an engraving')
+  return { ...view, line, layout: laid }
+}
+
+const leftOf = (line: HTMLElement) => Number.parseFloat(line.style.left)
+
+describe('Playhead (ADR 0096)', () => {
+  it('spans every staff in sight, its height the same wherever it stands', async () => {
+    const { line, layout, rerender } = await renderPlayhead({ tick: 0 })
+    const span = playheadSpan(layout)
+    expect(line.style.top).toBe(`${span.top}px`)
+    expect(line.style.height).toBe(`${span.height}px`)
+    // From the treble's top line past the bass's foot: both staves.
+    expect(span.top).toBeLessThan(layout.staves.treble?.top ?? 0)
+    expect(span.top + span.height).toBeGreaterThan(layout.staves.bass?.bottom ?? 0)
+    rerender(<Sheet props={{ tick: 96 }} />)
+    expect(line.style.height).toBe(`${span.height}px`)
+  })
+
+  it('spans only the staves drawn', async () => {
+    const { line, layout } = await renderPlayhead({ tick: 0 }, ['treble'])
+    expect(line.style.height).toBe(`${playheadSpan(layout).height}px`)
+    expect(playheadSpan(layout).height).toBeLessThan(60)
+  })
+
+  it('stands just before the notes it is at, and slides there as it is moved', async () => {
+    const { line, layout, rerender } = await renderPlayhead({ tick: 24 })
+    const heads = (layout.heads ?? []).filter((head) => head.tick === 24)
+    expect(leftOf(line)).toBe(playheadX(layout, 24))
+    expect(leftOf(line)).toBeLessThan(Math.min(...heads.map((head) => head.left)))
+    expect(line).toHaveClass('transition-[left]')
+    rerender(<Sheet props={{ tick: 48 }} />)
+    expect(leftOf(line)).toBe(playheadX(layout, 48))
+  })
+
+  it('moves with the music’s clock every frame between the onsets, by its left', async () => {
+    const { line, layout, rerender } = await renderPlayhead({ tick: 0 })
+    let heard: Tick | null = 12
+    vi.useFakeTimers()
+    rerender(<Sheet props={{ tick: 0, clock: () => heard }} />)
+    // Half way from the first quarter to the second, and with no sliding behind the music.
+    expect(leftOf(line)).toBe(playheadX(layout, 12))
+    expect(line).not.toHaveClass('transition-[left]')
+    heard = 30
+    act(() => vi.advanceTimersToNextFrame())
+    expect(leftOf(line)).toBe(playheadX(layout, 30))
+    expect(leftOf(line)).toBeGreaterThan(playheadX(layout, 24))
+    expect(line.style.transform).toBe('')
+    // Past the line's end, it waits at its last barline; before its start, where it was.
+    heard = 500
+    act(() => vi.advanceTimersToNextFrame())
+    expect(leftOf(line)).toBe(playheadX(layout, 192))
+    heard = -10
+    act(() => vi.advanceTimersToNextFrame())
+    expect(leftOf(line)).toBe(playheadX(layout, 192))
+  })
+
+  it('brings its line into sight as it comes onto it, on a page canvas by the canvas', async () => {
+    const scrolled = vi.mocked(Element.prototype.scrollIntoView)
+    scrolled.mockClear()
+    await renderPlayhead({ tick: 0 })
+    expect(scrolled).toHaveBeenCalledWith(expect.objectContaining({ block: 'nearest' }))
+    expect(scrolled.mock.contexts.at(-1)).toBe(document.querySelector('[data-slot="sheet-line"]'))
+    const reveal = vi.fn()
+    render(
+      <Sheet
+        props={{ tick: 0 }}
+        around={(sheet) => <RevealContext value={reveal}>{sheet}</RevealContext>}
+      />,
+    )
+    await vi.waitFor(() => expect(reveal).toHaveBeenCalled())
+    expect(reveal.mock.calls[0]?.[0]).toHaveAttribute('data-slot', 'sheet-line')
+  })
+
+  it('keeps itself in the middle half of a line wider than its scroller', async () => {
+    const { scrolls } = stubScrolling({ clientWidth: 100, scrollWidth: 2000 })
+    const { rerender } = await renderPlayhead({ tick: 0 })
+    rerender(<Sheet props={{ tick: 96 }} />)
+    expect(scrolls.at(-1)).toBeGreaterThan(0)
+  })
+
+  it('is out of sight where it is hidden, and still followed', async () => {
+    const { line } = await renderPlayhead({ tick: 0, hidden: true })
+    expect(line).toHaveClass('invisible')
+  })
+})

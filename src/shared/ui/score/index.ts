@@ -8,7 +8,8 @@ export {
   type SignKind,
   type StaffLabel,
 } from './layout'
-export { xAtTick } from './layout'
+export { leftAt, xAtTick } from './layout'
+export { Playhead } from './Playhead'
 export { ScoreView } from './ScoreView'
 export { scoreHeight, staffHeight, versesOf } from './size'
 export {

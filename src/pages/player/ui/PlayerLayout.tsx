@@ -124,6 +124,7 @@ export function PlayerLayout({
             performance={performance}
             headings={headings}
             current={practice.state.beatGroup}
+            clock={practice.clock}
             loop={player.loop}
             fingers={player.fingers}
             names={player.names}

@@ -116,3 +116,21 @@ export function xAtTick(layout: Pick<ScoreLayout, 'measures' | 'onsets'>, tick: 
     : [{ tick: measure.startTick, x: measure.notes }]
   return xAmong([...opening, ...onsets, { tick: end, x: measure.x + measure.width }], tick)
 }
+
+/**
+ * The left edge of what is drawn at a tick (ADR 0096): its heads with their accidentals and its
+ * rests, on `staves` (every staff without); where nothing is drawn there, the tick's own x. What a
+ * playhead and a caret stand just before.
+ */
+export function leftAt(
+  layout: Pick<ScoreLayout, 'measures' | 'onsets' | 'heads' | 'rests'>,
+  tick: Tick,
+  staves?: readonly StaffId[],
+): number {
+  const here = (drawn: { readonly staff: StaffId; readonly tick: Tick }) =>
+    drawn.tick === tick && (!staves || staves.includes(drawn.staff))
+  const edges = [...(layout.heads ?? []), ...(layout.rests ?? [])]
+    .filter(here)
+    .map((drawn) => drawn.left)
+  return edges.length > 0 ? Math.min(...edges) : xAtTick(layout, tick)
+}

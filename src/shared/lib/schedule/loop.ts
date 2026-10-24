@@ -1,5 +1,6 @@
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
+import { passTickAt } from './playhead'
 import { schedule, type Audible, type Scheduled } from './schedule'
 
 /** Speed training: each pass `step` BPM faster, up to `until`. */
@@ -115,4 +116,13 @@ export function beatGroupAt(loop: Loop, time: number): number | null {
 /** The tempo of the pass sounding at `time`, or null before any has started. */
 export function tempoAt(loop: Loop, time: number): number | null {
   return loop.passes.findLast((pass) => pass.start <= time)?.tempo ?? null
+}
+
+/**
+ * The tick sounding at `time` on the clock, between its beat groups (`passTickAt`): what the
+ * playhead follows. Null before the music starts.
+ */
+export function tickAt(loop: Loop, time: number): Tick | null {
+  const pass = loop.passes.findLast((each) => each.start + (each.cues[0]?.at ?? Infinity) <= time)
+  return pass ? passTickAt(pass, time - pass.start) : null
 }

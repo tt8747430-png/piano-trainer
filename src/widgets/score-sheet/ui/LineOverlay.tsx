@@ -1,4 +1,4 @@
-import { useRef, type MouseEvent, type PointerEvent } from 'react'
+import { useRef, type MouseEvent, type PointerEvent, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Layer } from '@/features/score-editor'
 import { useBarName } from '@/shared/i18n'
@@ -7,6 +7,7 @@ import { staffClefAt, type TimedMusic } from '@/shared/lib/notation'
 import {
   MARK,
   pickAt,
+  Playhead,
   ScoreMark,
   useSheetChoice,
   xAtTick,
@@ -37,9 +38,9 @@ function zoomOf(element: HTMLElement, box: DOMRect): number {
 }
 
 /**
- * Over a line's staff: its labels, the bars chosen, the caret, and each bar as a button that puts the
- * caret where it is clicked; a double click there writes the note on the line or space clicked (ADR
- * 0064). The notes at the caret are a grip: dragged up or down, they move by notes of the key. The
+ * Over a line's staff: its labels, the bars chosen, the caret, the playhead while Play plays here (ADR
+ * 0096), and each bar as a button that puts the caret where it is clicked; a double click there
+ * writes the note on the line or space clicked (ADR 0064). The notes at the caret are a grip: dragged up or down, they move by notes of the key. The
  * tempo mark, each clef, key and time signature and the staves' names are buttons too, each opening
  * what changes it there (`edit`, ADR 0094).
  */
@@ -49,6 +50,8 @@ export function LineOverlay({
   line,
   layer,
   caret,
+  playhead,
+  scroller,
   chordNote,
   selection,
   onPlace,
@@ -77,6 +80,10 @@ export function LineOverlay({
   layer: Layer
   /** From the line's start, when the caret is on this line. */
   caret: Tick | null
+  /** Where Play is, on the piece's ticks, while it plays on this line (ADR 0096). */
+  playhead: { readonly tick: Tick; readonly clock: () => Tick | null } | null
+  /** The line's own sideways scroller (a line across), which keeps the playhead in sight. */
+  scroller?: RefObject<HTMLElement | null> | undefined
   /** One note of the chord at the caret chosen alone (ADR 0088). */
   chordNote: Midi | null
   /** The notes chosen, from the piece's start: their span. */
@@ -239,6 +246,18 @@ export function LineOverlay({
           empty={caretEmpty}
         />
       )}
+      {playhead ? (
+        // On the line's own ticks, from its start.
+        <Playhead
+          layout={layout}
+          tick={playhead.tick - line.start}
+          clock={() => {
+            const at = playhead.clock()
+            return at === null ? null : at - line.start
+          }}
+          scroller={scroller}
+        />
+      ) : null}
       <LineLabels
         layout={layout}
         music={music}
