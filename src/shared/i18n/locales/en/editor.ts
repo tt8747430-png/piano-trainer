@@ -188,8 +188,6 @@ export const editor = {
   doubleDot: 'Double dotted',
   // A note's marks (ADR 0063), each a key that puts it on the notes at the caret or takes it off.
   marks: {
-    articulations: 'Articulations',
-    ornaments: 'Ornaments',
     staccato: 'Staccato',
     staccatissimo: 'Staccatissimo',
     accent: 'Accent',
@@ -264,7 +262,6 @@ export const editor = {
     noBass: 'Root in the bass',
   },
   bars: {
-    label: 'Bar',
     insert: 'Add bar after',
     insertBefore: 'Add bar before',
     delete: 'Delete bars',
