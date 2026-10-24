@@ -159,3 +159,24 @@ describe('layerAt', () => {
     expect(layerAt(-5, layout, false)).toBe('melody')
   })
 })
+
+describe('the words on a line (ADR 0093)', () => {
+  const worded = readDraft({
+    key: 'C',
+    meter: '4/4',
+    tempo: 90,
+    pattern: 'r1',
+    sections: [{ kind: 'verse', lines: ['C G'] }],
+    melody: 'C4/2 D4/2 | E4/4',
+    lyrics: ['one two three'],
+  })
+  const sung = (music: ReturnType<typeof lineMusic>) =>
+    music.notes.flatMap((n) => (n.lyrics ? [n.lyrics[0]?.text] : []))
+
+  it('carries each note’s syllables, left out where the View hides the words', () => {
+    const [line] = linesOf(worded)
+    if (!line) throw new Error('a line')
+    expect(sung(lineMusic(worded, line))).toEqual(['one', 'two', 'three'])
+    expect(sung(lineMusic(worded, line, false))).toEqual([])
+  })
+})

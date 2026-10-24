@@ -99,6 +99,7 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
       tapsOf={tapsOf}
       heading={(section) => <SectionHeading section={section} />}
       chordNames={view.chordNames}
+      lyrics={view.lyrics}
       onSignature={openSettings}
       view={view.layout}
       title={meta.title}

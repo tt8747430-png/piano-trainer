@@ -55,6 +55,7 @@ export const editor: LocaleResources['editor'] = {
   view: 'Вид',
   viewMenu: {
     show: 'Показывать',
+    lyrics: 'Текст',
     palette: 'Все инструменты',
     keys: 'Клавиши',
     side: 'Инструменты рядом с нотами',

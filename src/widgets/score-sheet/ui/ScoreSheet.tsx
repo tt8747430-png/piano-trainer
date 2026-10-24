@@ -73,6 +73,7 @@ export function ScoreSheet({
   tapsOf,
   heading,
   chordNames,
+  lyrics = true,
   onSignature,
   view = 'scroll',
   title,
@@ -106,6 +107,8 @@ export function ScoreSheet({
   heading: (section: number) => ReactNode
   /** Chord names over the staff, written in their row; without them a click there writes the staff under it. */
   chordNames: boolean
+  /** The words under the tune, where the song has them (ADR 0093). */
+  lyrics?: boolean
   /** The clef, key and time signature clicked: what changes them. */
   onSignature: () => void
   view?: SheetView
@@ -122,8 +125,8 @@ export function ScoreSheet({
   // The piece's music whole, for each bar's width: lines are cut by width, as an engraver cuts them.
   const whole = useMemo(() => {
     const [all] = oneLine(draft)
-    return all ? notate(untimed(lineMusic(draft, all))) : undefined
-  }, [draft])
+    return all ? notate(untimed(lineMusic(draft, all, lyrics))) : undefined
+  }, [draft, lyrics])
   // The staves a line writes: the tune's where shown over the piano's two.
   const staves = whole?.staves.length ?? 2
   // A whole system in the height the sheet is seen in, where it is short (a phone on its side).
@@ -141,8 +144,8 @@ export function ScoreSheet({
       ? Infinity
       : width / sized - lead
   const sheets = useMemo(
-    () => sheetsOf(draft, across ? { across: true } : { room: roomAcross, widths }),
-    [sheetsOf, draft, across, roomAcross, widths],
+    () => sheetsOf(draft, across ? { across: true } : { room: roomAcross, widths }, lyrics),
+    [sheetsOf, draft, across, roomAcross, widths, lyrics],
   )
   const caretBar = barAt(draft, caret).index
 

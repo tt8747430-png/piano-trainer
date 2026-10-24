@@ -1,4 +1,4 @@
-import { Eye, Hand, Hash, Layers, Music, Piano, Type } from 'lucide-react'
+import { Eye, Hand, Hash, Layers, Music, Piano, Type, WholeWord } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   selectPractice,
@@ -16,7 +16,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/
  * every piece, in the editor's View menu's order and headings (ADR 0085): the layout, across, down
  * the screen or on A4 pages; the staves (the tune's own over the piano while it plays, each hand's
  * shown or hidden); and what is shown (the notation, chord names and the chord positions written
- * under them, finger numbers, note names, the keys). How it plays is the Setup's.
+ * under them, the words under the tune (ADR 0093), finger numbers, note names, the keys). How it
+ * plays is the Setup's.
  */
 export function PlayerViewMenu() {
   const { t } = useTranslation('player')
@@ -84,6 +85,12 @@ export function PlayerViewMenu() {
             label={t('view.chordNames')}
             checked={view.chordNames}
             onCheckedChange={(on) => setScoreView(store, { chordNames: on })}
+          />
+          <SwitchRow
+            icon={<WholeWord />}
+            label={t('view.lyrics')}
+            checked={view.lyrics}
+            onCheckedChange={(on) => setScoreView(store, { lyrics: on })}
           />
           <SwitchRow
             icon={<Layers />}

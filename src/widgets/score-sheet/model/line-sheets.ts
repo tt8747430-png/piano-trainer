@@ -45,15 +45,16 @@ export type LineCut =
 
 /**
  * The draft's lines as the sheet shows them (each chart line cut to fit its room; or all its bars
- * as one line); a line that did not change always the same object (so its row is not drawn again)
- * and the same music always the same score (never engraved again).
+ * as one line), with or without their words (`lyrics`); a line that did not change always the same
+ * object (so its row is not drawn again) and the same music always the same score (never engraved
+ * again).
  */
-export function createLineSheets(): (draft: Draft, cut?: LineCut) => LineSheet[] {
+export function createLineSheets(): (draft: Draft, cut?: LineCut, lyrics?: boolean) => LineSheet[] {
   const scores = lastUsed<Score>()
   const sheets = lastUsed<LineSheet>()
-  return (draft, cut) => {
+  return (draft, cut, lyrics = true) => {
     const written = (cut?.across ? oneLine(draft) : linesOf(draft, cut)).map((line) => {
-      const music = lineMusic(draft, line)
+      const music = lineMusic(draft, line, lyrics)
       const text = JSON.stringify(music)
       return { line, music, text, score: scores(text, () => notate(untimed(music))) }
     })

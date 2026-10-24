@@ -24,6 +24,9 @@ export interface ScoreEditorValue {
   readonly view: {
     /** Chord names over the staff, and the chord row they are written in. */
     readonly chordNames: boolean
+    /** The words under the tune, the Player's View switch (ADR 0093). */
+    readonly lyrics: boolean
+    readonly setLyrics: (shown: boolean) => void
     /** The song's settings sheet, opened from the toolbar or the sheet's clef, key and time. */
     readonly settingsOpen: boolean
     readonly openSettings: (open: boolean) => void

@@ -1,4 +1,4 @@
-import { Eye, Music, Piano } from 'lucide-react'
+import { Eye, Music, Piano, WholeWord } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   selectPaletteFolded,
@@ -17,8 +17,8 @@ import { usePaletteBeside } from '../model/use-palette-beside'
 /**
  * How the editor shows its work, the Player's View menu (`PlayerViewMenu`) in shape, order and
  * headings (ADR 0085): an eye in the bar opening the layout (down the screen, on pages or across,
- * ADR 0064), whether the keys and the palette are out, and, where the palette stands beside the
- * sheet, the side it stands on (ADR 0071). What the song holds is the Song sheet's; this is only how
+ * ADR 0064), whether the words under the tune (ADR 0093), the keys and the palette are out, and,
+ * where the palette stands beside the sheet, the side it stands on (ADR 0071). What the song holds is the Song sheet's; this is only how
  * it is seen, remembered for every song; the layout is the Player's too (ADR 0090).
  */
 export function EditorViewMenu() {
@@ -55,6 +55,12 @@ export function EditorViewMenu() {
       >
         <SheetLayoutField value={view.layout} onChange={view.setLayout} />
         <MenuSection title={t('viewMenu.show')} className="gap-0">
+          <SwitchRow
+            icon={<WholeWord />}
+            label={t('viewMenu.lyrics')}
+            checked={view.lyrics}
+            onCheckedChange={view.setLyrics}
+          />
           <SwitchRow
             icon={<Music />}
             label={t('viewMenu.palette')}

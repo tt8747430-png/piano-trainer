@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
-import { melodyOf, pieceById, PIECES, PIECES_STORAGE_KEY } from '@/entities/piece'
+import { melodyOf, pieceById, PIECES, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { setPracticeToggle } from '@/features/set-preference'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
@@ -23,7 +23,7 @@ describe('Player', () => {
     }
     storage.setItem(
       PIECES_STORAGE_KEY,
-      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 2 }),
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
     )
     const { piecesStore } = await renderApp('/play/my-1', { storage })
     await screen.findByRole('button', { name: 'Play' })
@@ -46,7 +46,7 @@ describe('Player', () => {
     }
     storage.setItem(
       PIECES_STORAGE_KEY,
-      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: 2 }),
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
     )
     await renderApp('/play/my-1', { storage })
     const staves = () =>
@@ -374,5 +374,22 @@ describe('Player', () => {
     expect(within(setup).queryByRole('button', { name: 'Chord positions' })).not.toBeInTheDocument()
     const playing = within(setup).getByRole('region', { name: 'How it plays' })
     expect(within(playing).getByRole('button', { name: 'Metronome' })).toBeInTheDocument()
+  })
+})
+
+describe('the words under the tune (ADR 0093)', () => {
+  it('prints the verse under the melody while it plays, and hides it from the View', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/play/silent')
+    act(() => setPracticeToggle(settingsStore, 'melody', true))
+    await waitFor(() => expect(document.querySelectorAll('.syl').length).toBeGreaterThan(0))
+    expect(document.querySelector('.syl')?.textContent?.trim()).toBe('Si')
+    await user.click(await screen.findByRole('button', { name: 'View' }))
+    const view = await screen.findByRole('dialog', { name: 'View' })
+    const lyrics = within(view).getByRole('switch', { name: 'Lyrics' })
+    expect(lyrics).toBeChecked()
+    await user.click(lyrics)
+    expect(settingsStore.getState().scoreView.lyrics).toBe(false)
+    await waitFor(() => expect(document.querySelectorAll('.syl')).toHaveLength(0))
   })
 })

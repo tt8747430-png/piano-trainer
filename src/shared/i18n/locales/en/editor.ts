@@ -60,6 +60,7 @@ export const editor = {
   // What the score shows and how, from the bar (ADR 0064).
   viewMenu: {
     show: 'Show',
+    lyrics: 'Lyrics',
     palette: 'Every tool',
     keys: 'Keys',
     side: 'Tools beside the music',

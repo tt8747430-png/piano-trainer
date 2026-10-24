@@ -130,6 +130,7 @@ describe('createSettingsStore', () => {
         layout: 'scroll',
         notation: true,
         chordNames: false,
+        lyrics: false,
         melodyStaff: false,
         hidden: ['treble'],
         keys: false,
@@ -170,6 +171,7 @@ describe('createSettingsStore', () => {
       layout: 'pages',
       notation: true,
       chordNames: false,
+      lyrics: true,
       melodyStaff: true,
       hidden: ['bass'],
       keys: true,
@@ -191,9 +193,9 @@ describe('createSettingsStore', () => {
     expect(restored({ recorder: { click: 'no' } }).recorder).toEqual(DEFAULT_RECORDER)
   })
 
-  it('starts afresh over a save of the version before, whose palette folded the same everywhere', () => {
-    expect(SETTINGS_VERSION).toBe(5)
-    expect(restored({ theme: 'dark', paletteFolded: false }, 4)).toEqual(
+  it('starts afresh over a save of the version before, whose view had no words to show (ADR 0093)', () => {
+    expect(SETTINGS_VERSION).toBe(6)
+    expect(restored({ theme: 'dark', paletteFolded: false }, 5)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })
