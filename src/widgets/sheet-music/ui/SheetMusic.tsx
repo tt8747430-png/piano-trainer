@@ -4,8 +4,8 @@ import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { useElementSize, type SheetView } from '@/shared/lib'
 import { notate, type StaffId } from '@/shared/lib/notation'
-import { ScoreView, staffHeight, type Picked, type ScoreLayout } from '@/shared/ui/score'
-import { fitScale, widestBar } from '../model/fit-scale'
+import { ScoreView, scoreHeight, type Picked, type ScoreLayout } from '@/shared/ui/score'
+import { FINGERS, fitScale, widestBar } from '../model/fit-scale'
 import { groupOfTick } from '../model/group-of-tick'
 import { keepsLoop } from '../model/keeps-loop'
 import { playedMusic } from '../model/played-music'
@@ -33,8 +33,6 @@ const ACROSS: SheetViewChoice = {
   hidden: [],
 }
 
-/** The room fingers take under and over the staff (the labels' row is the section's padding). */
-const FINGERS = 36
 /** A bar measured this much wider or narrower than before engraves the staff again; less does not. */
 const BAR_CHANGE = 0.1
 
@@ -135,9 +133,9 @@ export function SheetMusic({
       ),
     [],
   )
-  // A muted staff may leave the height: its hand is not read.
-  const read = staves.filter((staff) => staff !== muted).length || 1
-  const scale = fitScale(room, staffHeight(undefined, read), bar)
+  // A muted staff may leave the height: its hand is not read. The verses under the tune stay in it.
+  const read = staves.filter((staff) => staff !== muted)
+  const scale = fitScale(room, scoreHeight(score, read.length > 0 ? read : staves), bar)
   // Bars chosen as the editor chooses notes (ADR 0082, 0088), the loop: from the bar held or the
   // loop's start (else the cursor's bar) to the one reached, exactly.
   const anchor = useRef<number | null>(null)

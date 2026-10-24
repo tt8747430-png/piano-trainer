@@ -4,7 +4,7 @@ import type { Midi, Tick, TimeSignature } from '@/shared/lib/music'
 import type { NextLine, Score, StaffId } from '@/shared/lib/notation'
 import { drawnStaves } from './drawn-staves'
 import type { ScoreLayout } from './layout'
-import { staffHeight } from './size'
+import { scoreHeight } from './size'
 import { StaffPlace } from './StaffPlace'
 import { drawScore } from './verovio/draw'
 import './score.css'
@@ -153,7 +153,7 @@ export function ScoreView({
   const size =
     engraving.status === 'ready'
       ? { width: engraving.layout.width, height: engraving.layout.height }
-      : { height: staffHeight(undefined, drawn.length) * scale, width: fill }
+      : { height: scoreHeight(score, drawn) * scale, width: fill }
   return (
     // Its layers are its own: what lies over the engraving stays under what the page pins.
     <div className="relative isolate" style={size}>
@@ -167,11 +167,7 @@ export function ScoreView({
       {engraving.status === 'loading' ? (
         // Its lines, faint, until the first engraving is in: the music on its way, not a gap.
         <div className="absolute inset-x-0 top-0">
-          <StaffPlace
-            height={staffHeight(undefined, drawn.length)}
-            scale={scale}
-            count={drawn.length}
-          />
+          <StaffPlace height={scoreHeight(score, drawn)} scale={scale} count={drawn.length} />
           <p className="sr-only">{t('sheet.loading')}</p>
         </div>
       ) : null}
