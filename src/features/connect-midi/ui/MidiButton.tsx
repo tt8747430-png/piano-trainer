@@ -12,14 +12,15 @@ import { isMidiConnected, useMidiConnection } from '../use-midi-connection'
 import { MidiControl } from './MidiControl'
 
 /**
- * The Player's MIDI button: a dot shows the status and the name says it; the popover connects.
- * Hidden without Web MIDI.
+ * The Player's MIDI button: a dot shows the status and the name says it (when pointed at too, as
+ * every round button does); the popover connects. Hidden without Web MIDI.
  */
 export function MidiButton() {
   const { t } = useTranslation('common')
   const { connection } = useMidiConnection()
   if (connection.kind === 'unsupported') return null
   const connected = isMidiConnected(connection)
+  const label = connected ? t('midi.labelConnected') : t('midi.label')
   return (
     <Popover>
       <PopoverTrigger
@@ -27,7 +28,8 @@ export function MidiButton() {
           <Button
             variant="surface"
             size="icon"
-            aria-label={connected ? t('midi.labelConnected') : t('midi.label')}
+            aria-label={label}
+            title={label}
             className="relative"
           />
         }

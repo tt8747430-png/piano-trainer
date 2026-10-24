@@ -113,9 +113,11 @@ describe('PlayLabel', () => {
 })
 
 describe('RoundButton', () => {
-  it('is named by its label, not its icon', () => {
+  it('is named by its label, not its icon, and says it when pointed at, as a round link does', () => {
     render(<RoundButton label="Settings" icon={Settings} />)
-    expect(screen.getByRole('button', { name: 'Settings' })).toHaveClass('rounded-full')
+    const button = screen.getByRole('button', { name: 'Settings' })
+    expect(button).toHaveClass('rounded-full')
+    expect(button).toHaveAttribute('title', 'Settings')
   })
 })
 

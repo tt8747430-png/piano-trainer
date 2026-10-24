@@ -23,9 +23,15 @@ describe('MidiButton', () => {
   it('says in its name when a keyboard is connected, not by the dot’s colour alone', async () => {
     const midi = createFakeMidi()
     renderButton(midi)
-    expect(screen.getByRole('button', { name: 'MIDI keyboard' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'MIDI keyboard' })).toHaveAttribute(
+      'title',
+      'MIDI keyboard',
+    )
     await act(() => midi.connect())
-    expect(screen.getByRole('button', { name: 'MIDI keyboard, connected' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'MIDI keyboard, connected' })).toHaveAttribute(
+      'title',
+      'MIDI keyboard, connected',
+    )
   })
 
   it('opens the connect control', async () => {
