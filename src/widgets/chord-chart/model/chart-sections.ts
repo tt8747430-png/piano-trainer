@@ -41,5 +41,11 @@ export interface SectionBars {
   readonly last: number
 }
 
-/** Where a section's heading stands in the page, for a link to it (`#section-2`). */
+/** A section's bars from its lines (`chartSections`): its first and last; none where it has no bars. */
+export function sectionBars(lines: readonly (readonly number[])[]): SectionBars | null {
+  const all = lines.flat()
+  return all.length === 0 ? null : { first: Math.min(...all), last: Math.max(...all) }
+}
+
+/** A section's place in the chart, which its heading's id names (`section-2`). */
 export const sectionAnchor = (section: number) => `section-${section}`

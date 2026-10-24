@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart } from '@/shared/lib/arrangement'
 import { note, parseChordSymbol } from '@/shared/lib/music'
-import { chartBar, chartSections } from './chart-sections'
+import { chartBar, chartSections, sectionBars } from './chart-sections'
 
 const bar = (symbol: string) => ({ chords: [{ ...parseChordSymbol(symbol), beats: 4 }], beats: 4 })
 const CHART: Chart = {
@@ -22,6 +22,14 @@ describe('chartSections', () => {
   it('groups the bars by section, then line by line as the chart writes them', () => {
     const performance = arrange(CHART, { tonic: note('C'), pattern: BLOCK })
     expect(chartSections(performance)).toEqual([[[0, 1], [2]], [[3, 4, 5]]])
+  })
+})
+
+describe('sectionBars', () => {
+  it('spans a section from its first bar to its last, and none where it has no bars', () => {
+    expect(sectionBars([[3, 4], [5]])).toEqual({ first: 3, last: 5 })
+    expect(sectionBars([[7]])).toEqual({ first: 7, last: 7 })
+    expect(sectionBars([])).toBeNull()
   })
 })
 
