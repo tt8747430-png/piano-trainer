@@ -17,7 +17,7 @@ export function SheetOverlay({
   current,
   clock,
   loop,
-  cursorShown = true,
+  playheadShown = true,
   onJump,
   onPick,
   onLoopChange,
@@ -42,7 +42,7 @@ export function SheetOverlay({
   clock?: (() => Tick | null) | null | undefined
   loop: BarRange | null
   /** Whether the playhead is in sight: not while the loop stands chosen and nothing moves (ADR 0088). */
-  cursorShown?: boolean
+  playheadShown?: boolean
   onJump: (beatGroup: number) => void
   /** A note or a chord clicked: the cursor goes to it. */
   onPick: (picked: Picked) => void
@@ -74,7 +74,7 @@ export function SheetOverlay({
           tick={group.tick}
           clock={clock}
           scroller={scroller}
-          hidden={!cursorShown}
+          hidden={!playheadShown}
         />
       ) : null}
       <BarTargets

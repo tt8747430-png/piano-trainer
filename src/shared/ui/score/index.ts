@@ -13,18 +13,14 @@ export { Playhead } from './Playhead'
 export { ScoreView } from './ScoreView'
 export { scoreHeight, staffHeight, versesOf } from './size'
 export {
-  HUG,
+  barsBand,
+  caretLine,
   MARK,
-  MARK_CLASS,
-  headsChosen,
-  insertBox,
-  noteBox,
-  noteMark,
   pickAt,
-  rangeBox,
-  rangeMark,
+  rangeBand,
   spaceOf,
   spanOf,
+  type BandBox,
   type Chosen,
   type MarkBox,
   type MarkKind,

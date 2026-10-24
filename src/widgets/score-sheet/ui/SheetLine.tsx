@@ -140,7 +140,6 @@ export const SheetLine = memo(function SheetLine({
             caret={caret}
             playhead={playhead}
             scroller={justify ? undefined : ref}
-            chordNote={chordNote}
             tapsOf={tapsOf}
             selection={selection}
             onPlace={onPlace}

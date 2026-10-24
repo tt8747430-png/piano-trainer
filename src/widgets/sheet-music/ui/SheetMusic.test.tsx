@@ -174,7 +174,7 @@ describe('SheetMusic', () => {
   )
 
   it.each(['horizontal', 'scroll', 'pages'] as const)(
-    'draws the loop as the editor draws its notes chosen, %s',
+    'draws the loop as one band over every staff, its notes coloured as the editor’s chosen, %s (ADR 0096)',
     async (layout) => {
       renderSheet({
         current: 5,
@@ -182,9 +182,19 @@ describe('SheetMusic', () => {
         shown: { layout, chordNames: true, lyrics: true, melodyStaff: false, hidden: [] },
       })
       await screen.findByRole('button', { name: 'Bar 2: G' })
-      expect(document.querySelectorAll('[data-mark="range"]')).toHaveLength(1)
-      // The loop's notes in the selection's colour, as the editor's chosen notes are.
-      await waitFor(() => expect(document.querySelector('.note-chosen')).toBeInTheDocument())
+      const bands = document.querySelectorAll<HTMLElement>('[data-mark="band"]')
+      expect(bands).toHaveLength(1)
+      expect(bands[0]).toHaveAttribute('data-slot', 'loop')
+      // As tall as the playhead is over the same staves: every staff, never a box round notes.
+      const playhead = document.querySelector<HTMLElement>('[data-slot="playhead"]')
+      expect(Number.parseFloat(bands[0]?.style.height ?? '')).toBe(
+        Number.parseFloat(playhead?.style.height ?? ''),
+      )
+      // Its grips at its ends, down its edges.
+      expect(screen.getByRole('slider', { name: 'Loop start' })).toHaveStyle({
+        top: bands[0]?.style.top,
+      })
+      await waitFor(() => expect(document.querySelector('g.note.note-chosen')).toBeInTheDocument())
     },
   )
 
@@ -206,7 +216,7 @@ describe('SheetMusic', () => {
     )
     const { rerender } = render(sheet(4))
     await screen.findByRole('button', { name: 'Bar 2: G' })
-    expect(document.querySelectorAll('[data-mark="range"]')).toHaveLength(1)
+    expect(document.querySelectorAll('[data-mark="band"]')).toHaveLength(1)
     expect(document.querySelector('[data-slot="playhead"]')).toHaveClass('invisible')
     rerender(sheet(5))
     expect(document.querySelector('[data-slot="playhead"]')).not.toHaveClass('invisible')

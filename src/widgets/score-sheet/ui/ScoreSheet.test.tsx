@@ -212,7 +212,7 @@ describe('ScoreSheet', () => {
     expect(rows.every((row) => row.style.height === '20px')).toBe(true)
   })
 
-  it('draws the notes chosen as one box on each line they are on, and no caret with them', async () => {
+  it('draws the notes chosen as one band on each line they are on, and no caret with them (ADR 0096)', async () => {
     render(
       <ScoreSheet
         draft={draft}
@@ -231,9 +231,17 @@ describe('ScoreSheet', () => {
       />,
     )
     await screen.findByRole('button', { name: 'Bar 1: G' })
-    // Bars 1–2 on the verse's first line, bar 3 on its second: a box each, the chorus none.
+    // Bars 1–2 on the verse's first line, bar 3 on its second: a band each, the chorus none.
     await waitFor(() =>
-      expect(document.querySelectorAll('[data-slot="bars-chosen"]')).toHaveLength(2),
+      expect(document.querySelectorAll('[data-slot="notes-chosen"]')).toHaveLength(2),
+    )
+    expect(document.querySelector('[data-slot="notes-chosen"]')).toHaveAttribute(
+      'data-mark',
+      'band',
+    )
+    // The notes chosen themselves coloured, on the right hand's staff.
+    await waitFor(() =>
+      expect(document.querySelector('g.note.note-chosen')?.id).toMatch(/^n-treble-/),
     )
     // While notes are chosen the caret stands aside: the range is the mark (ADR 0088).
     expect(document.querySelector('[data-slot="caret"]')).toBeNull()
@@ -293,24 +301,25 @@ describe('ScoreSheet', () => {
     expect(onPlace).toHaveBeenLastCalledWith(192, 'melody', false)
   })
 
-  it('marks the caret on notes as a box, and in an empty bar as a line, never a box on empty staff', async () => {
+  it('marks the caret as a line on its staff, on notes and in an empty bar, never a box (ADR 0096)', async () => {
     sheet('melody')
     await waitFor(() =>
-      expect(document.querySelector('[data-slot="caret"]')).toHaveAttribute('data-mark', 'note'),
+      expect(document.querySelector('[data-slot="caret"]')).toHaveAttribute('data-mark', 'line'),
     )
     sheet('lh')
     await waitFor(() =>
       expect(document.querySelectorAll('[data-slot="caret"]')[1]).toHaveAttribute(
         'data-mark',
-        'insert',
+        'line',
       ),
     )
+    expect(document.querySelector('[data-mark="band"]')).toBeNull()
   })
 
-  it('marks the notes at the caret on its staff as the ones chosen', async () => {
+  it('colours the notes at the caret on its staff as the ones chosen', async () => {
     sheet('melody')
-    await waitFor(() => expect(document.querySelector('.note-chosen')).toBeInTheDocument())
-    expect(document.querySelector('.note-chosen')?.id).toMatch(/^n-melody-/)
+    await waitFor(() => expect(document.querySelector('g.note.note-chosen')).toBeInTheDocument())
+    expect(document.querySelector('g.note.note-chosen')?.id).toMatch(/^n-melody-/)
   })
 
   it('opens where it is with the caret’s line in sight, and brings a line the caret moves onto into view', async () => {

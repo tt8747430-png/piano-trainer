@@ -1,26 +1,20 @@
 import type { Tick } from '@/shared/lib/music'
 import { leftAt, xAmong, type ScoreLayout } from './layout'
-import { spaceOf } from './selection'
-
-/**
- * The playhead's measures, in staff spaces (ADR 0096): how far before what sounds it stands, clear
- * of the heads and their accidentals, and how far past the system's outer lines it reaches.
- */
-export const PLAYHEAD = { lead: 0.5, reach: 0.5 } as const
+import { MARK, spaceOf } from './selection'
 
 type Laid = Pick<ScoreLayout, 'measures' | 'onsets' | 'staves' | 'heads' | 'rests'>
 
 /**
  * Where the playhead stands at a tick (ADR 0096): just before what is drawn there on every staff in
- * sight (`leftAt`), between two onsets in proportion to the ticks between them, toward the barline
- * after a bar's last onset.
+ * sight (`leftAt`), as the caret stands before its notes; between two onsets in proportion to the
+ * ticks between them, toward the barline after a bar's last onset.
  */
 export function playheadX(layout: Laid, tick: Tick): number {
   const measure =
     layout.measures.find((m) => tick < m.startTick + m.ticks) ?? layout.measures.at(-1)
   if (!measure) return 0
   const end = measure.startTick + measure.ticks
-  const lead = PLAYHEAD.lead * spaceOf(layout)
+  const lead = MARK.lead * spaceOf(layout)
   const onsets = layout.onsets
     .filter((onset) => onset.tick >= measure.startTick && onset.tick < end)
     .map((onset) => ({ tick: onset.tick, x: leftAt(layout, onset.tick) - lead }))
@@ -38,7 +32,7 @@ export function playheadSpan(layout: Pick<ScoreLayout, 'staffTop' | 'staffBottom
   readonly top: number
   readonly height: number
 } {
-  const reach = PLAYHEAD.reach * spaceOf(layout)
+  const reach = MARK.reach * spaceOf(layout)
   return { top: layout.staffTop - reach, height: layout.staffBottom - layout.staffTop + 2 * reach }
 }
 

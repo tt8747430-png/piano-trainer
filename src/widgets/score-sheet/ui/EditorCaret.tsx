@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import type { Layer } from '@/features/score-editor'
-import type { Midi, Tick } from '@/shared/lib/music'
-import { insertBox, noteMark, ScoreMark, type ScoreLayout, type Span } from '@/shared/ui/score'
+import type { Tick } from '@/shared/lib/music'
+import { caretLine, ScoreMark, type ScoreLayout, type Span } from '@/shared/ui/score'
 import { staffOfLayer } from '../model/line-music'
 
 /** How much of the sheet shows past the caret's staff when it scrolls to bring it into sight. */
@@ -38,46 +38,27 @@ function revealUpright(band: HTMLElement, opening: boolean) {
 }
 
 /**
- * The caret, as the one selection marks a place (ADR 0082, 0088), the Player's cursor alike: on the
- * notes at it, a box hugging their heads on the layer's staff, or the one head of the chord chosen
- * alone (in the chord row, `chords`, a box round the chord's place); on an empty place, a rest or the
- * room after the last note, a slim line where the next goes.
+ * The caret (ADR 0096): a thin line on the layer's staff (in the chord row, `chords`, over the row)
+ * just before the notes it stands on, which are coloured as chosen (ScoreView's `selected`), or where
+ * the next note goes on an empty place: a rest, the room after the last note.
  */
 export function EditorCaret({
   layout,
   layer,
   tick,
-  chordNote,
   chords,
-  empty,
 }: {
   layout: ScoreLayout
   layer: Layer
   /** From the line's start. */
   tick: Tick
-  /** One note of the chord there, chosen alone. */
-  chordNote: Midi | null
-  /** The chord row over the staff, which the caret fills in the chords' layer. */
+  /** The chord row over the staff, which the caret stands in in the chords' layer. */
   chords: Span
-  /** Nothing starts at the caret in its row. */
-  empty: boolean
 }) {
   const staff = staffOfLayer(layout.staves, layer)
-  const span = layer === 'chords' || !staff ? chords : staff
-  const box = empty
-    ? insertBox(layout, tick, span)
-    : noteMark(
-        layout,
-        {
-          staves: staff && layer !== 'chords' ? [staff.staff] : [],
-          from: tick,
-          to: tick + 1,
-          midi: chordNote ?? undefined,
-        },
-        span,
-      )
+  const onStaff = layer !== 'chords' && staff
+  const box = caretLine(layout, tick, onStaff ? [staff.staff] : [], onStaff ? staff : chords)
   const { left } = box
-  const right = left + box.width
   // A line wider than the screen scrolls sideways to keep the caret in sight as it moves.
   const caret = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -89,12 +70,12 @@ export function EditorCaret({
       const margin = line.clientWidth / 4
       if (
         left < line.scrollLeft + margin / 2 ||
-        right > line.scrollLeft + line.clientWidth - margin / 2
+        left > line.scrollLeft + line.clientWidth - margin / 2
       )
         line.scrollLeft = Math.max(0, left - margin)
     })
     return () => cancelAnimationFrame(frame)
-  }, [left, right])
+  }, [left])
   // The sheet scrolls to the caret's staff as the caret comes onto it (a short screen shows less
   // than a line's grand staff), leaving the sheet as it is while the staff is in sight.
   const shown = useRef(false)
@@ -105,5 +86,5 @@ export function EditorCaret({
     })
     return () => cancelAnimationFrame(frame)
   }, [box.top, box.height])
-  return <ScoreMark ref={caret} slot="caret" kind={empty ? 'insert' : 'note'} box={box} />
+  return <ScoreMark ref={caret} slot="caret" kind="line" box={box} />
 }

@@ -34,8 +34,10 @@
 [data-slot='score'][data-muted='bass'] g.staff[data-staff='bass'] {
   color: var(--muted-foreground);
 }
-/* The notes chosen in the score editor: the focus colour, as a notation app marks a selection. */
-[data-slot='score'] g.note-chosen {
+/* What is chosen, in the editor and the Player (ADR 0096): drawn in the selection colour, as a
+   notation app draws a selection: a note (its head, accidental, stem and flag), a chord whole with
+   its dots, one key's dot, a rest, the ledger lines out to a head chosen. */
+[data-slot='score'] .note-chosen {
   color: var(--ring);
 }
 /* A named head (Named notes): a black note's in ink, its letter in the page's colour; an open one's

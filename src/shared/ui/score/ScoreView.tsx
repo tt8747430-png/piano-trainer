@@ -7,6 +7,7 @@ import type { ScoreLayout } from './layout'
 import { scoreHeight } from './size'
 import { StaffPlace } from './StaffPlace'
 import { drawScore } from './verovio/draw'
+import { chosenParts } from './verovio/svg-chosen'
 import './score.css'
 
 type Engraving =
@@ -16,8 +17,8 @@ type Engraving =
 
 /**
  * A score engraved by Verovio (ADR 0078) on one line of its staves (spec §2.5; the grand staff, the
- * tune's over it), or on some or one of them. What lies over it (labels, a cursor, the loop) is its children, given the engraving's
- * layout. The staff of `muted` is soft ink.
+ * tune's over it), or on some or one of them. What lies over it (labels, the playhead, the loop) is
+ * its children, given the engraving's layout. The staff of `muted` is soft ink.
  */
 export function ScoreView({
   score,
@@ -57,8 +58,8 @@ export function ScoreView({
   fill?: number | undefined
   /**
    * The notes chosen, those starting in [from, to) on a staff (on every staff without one), one key
-   * alone where `midi` says, marked in the focus colour as a notation app marks a selection (ADR 0082,
-   * 0088).
+   * alone where `midi` says, drawn in the selection colour as a notation app draws a selection (ADR
+   * 0096): their heads, stems, flags, accidentals, dots and ledger lines, and the rests chosen.
    */
   selected?:
     | {
@@ -133,7 +134,7 @@ export function ScoreView({
     )
       return
     // One key of a chord: its heads' ids, as the layout read them with their keys.
-    const ids =
+    const keys =
       selectedKey === undefined
         ? null
         : new Set(
@@ -141,15 +142,15 @@ export function ScoreView({
               .filter((head) => head.midi === selectedKey)
               .map((head) => head.id),
           )
-    // Notes are named `n-<staff>-<tick>-<i>` (ADR 0078).
-    const marked = [
-      ...element.querySelectorAll<SVGElement>(
-        `g.note[id^="n-${selectedStaff === undefined ? '' : `${selectedStaff}-`}"]`,
-      ),
-    ].filter((each) => {
-      const tick = Number(each.id.split('-')[2])
-      return tick >= selectedFrom && tick < selectedTo && (!ids || ids.has(each.id))
-    })
+    const marked = chosenParts(
+      element,
+      {
+        staves: selectedStaff === undefined ? undefined : [selectedStaff],
+        from: selectedFrom,
+        to: selectedTo,
+      },
+      keys,
+    )
     for (const each of marked) each.classList.add('note-chosen')
     return () => {
       for (const each of marked) each.classList.remove('note-chosen')

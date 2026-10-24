@@ -22,7 +22,7 @@ export function LoopGrip({
 }: {
   label: string
   x: number
-  /** The loop's box, which the grip runs down the edge of. */
+  /** The loop's band, which the grip runs down the edge of. */
   top: number
   height: number
   bar: number
@@ -73,7 +73,7 @@ export function LoopGrip({
       className="group absolute z-30 flex w-11 -translate-x-1/2 cursor-ew-resize touch-none justify-center rounded-md"
       style={{ left: x, top, height }}
     >
-      {/* In the selection's ring colour, down its box's edge (ADR 0082). */}
+      {/* In the selection colour, down its band’s edge (ADR 0096). */}
       <span
         aria-hidden
         className="h-full w-1 rounded-full bg-ring transition-transform duration-200 ease-out group-hover:scale-x-150"

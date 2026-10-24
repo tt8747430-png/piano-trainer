@@ -63,7 +63,7 @@ export function SheetLines({
   onLoopChange,
   onChoose,
   selected,
-  cursorShown,
+  playheadShown,
 }: {
   score: Score
   performance: Performance
@@ -99,7 +99,7 @@ export function SheetLines({
         readonly midi?: Midi | undefined
       }
     | undefined
-  cursorShown: boolean
+  playheadShown: boolean
 }) {
   const { t } = useTranslation('music')
   const box = useRef<HTMLElement>(null)
@@ -165,7 +165,7 @@ export function SheetLines({
             current={current}
             clock={clock}
             loop={loop}
-            cursorShown={cursorShown}
+            playheadShown={playheadShown}
             onJump={onJump}
             onPick={onPick}
             onLoopChange={onLoopChange}

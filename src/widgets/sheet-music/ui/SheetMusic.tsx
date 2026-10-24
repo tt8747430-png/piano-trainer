@@ -191,7 +191,7 @@ export function SheetMusic({
   const loopKey = loop ? `${loop.first}-${loop.last}` : ''
   const [resting, setResting] = useState({ loop: loopKey, at: current })
   if (resting.loop !== loopKey) setResting({ loop: loopKey, at: current })
-  const cursorShown = !loop || playing || current !== resting.at
+  const playheadShown = !loop || playing || current !== resting.at
   if (view.layout !== 'horizontal')
     return (
       <SheetLines
@@ -216,7 +216,7 @@ export function SheetMusic({
         onLoopChange={onLoopChange}
         onChoose={onChoose}
         selected={selected}
-        cursorShown={cursorShown}
+        playheadShown={playheadShown}
       />
     )
   return (
@@ -251,7 +251,7 @@ export function SheetMusic({
                 current={current}
                 clock={clock}
                 loop={loop}
-                cursorShown={cursorShown}
+                playheadShown={playheadShown}
                 onJump={onJump}
                 onPick={onPick}
                 onLoopChange={onLoopChange}

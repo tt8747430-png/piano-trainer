@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { Head, ScoreLayout } from './layout'
-import { followScroll, PLAYHEAD, playheadSpan, playheadX } from './playhead-place'
+import { followScroll, playheadSpan, playheadX } from './playhead-place'
+import { MARK } from './selection'
 
 /** A head 12 px wide and 10 high. */
 const head = (staff: Head['staff'], tick: number, left: number, top: number): Head => ({
@@ -41,7 +42,7 @@ const layout: ScoreLayout = {
 }
 /** A staff space here: a quarter of a staff's height. */
 const space = 10
-const lead = PLAYHEAD.lead * space
+const lead = MARK.lead * space
 
 describe('the playhead (ADR 0096)', () => {
   it('stands just before what sounds, clear of its accidentals, on every staff', () => {
@@ -59,7 +60,7 @@ describe('the playhead (ADR 0096)', () => {
   })
 
   it('spans the system, its highest staff’s top line to its lowest’s foot, wherever it stands', () => {
-    const reach = PLAYHEAD.reach * space
+    const reach = MARK.reach * space
     expect(playheadSpan(layout)).toEqual({ top: 40 - reach, height: 120 + 2 * reach })
   })
 })

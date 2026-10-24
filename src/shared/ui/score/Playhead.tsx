@@ -4,6 +4,7 @@ import type { Tick } from '@/shared/lib/music'
 import { useCanvasReveal } from '../canvas-reveal'
 import type { ScoreLayout } from './layout'
 import { followScroll, playheadSpan, playheadX } from './playhead-place'
+import { MARK_CLASS } from './selection'
 
 /**
  * The playhead (ADR 0096), the Player's and the editor's alike in every layout: one thin line across
@@ -92,7 +93,8 @@ export function Playhead({
       aria-hidden
       data-slot="playhead"
       className={cn(
-        'pointer-events-none absolute z-0 w-0.5 rounded-full bg-ring',
+        'pointer-events-none absolute z-0',
+        MARK_CLASS.line,
         !moving && 'transition-[left] duration-200 ease-out motion-reduce:transition-none',
         hidden && 'invisible',
       )}

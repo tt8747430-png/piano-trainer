@@ -1,34 +1,41 @@
 import type { Midi, Tick } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
-import { xAtTick, type Extent, type Head, type ScoreLayout } from './layout'
+import { leftAt, xAtTick, type Extent, type Head, type ScoreLayout } from './layout'
 
 /**
- * The one selection's measures (ADR 0082), the score editor's and the Player's alike in every layout:
- * how far left of a notehead a note's box starts (clear of its accidental), its width, how far past
- * its staves any mark reaches (a staff space, as Sibelius's and Flat's do), how far in from their
- * barlines the bars chosen stand, and an empty place's line.
+ * The one selection's measures, in staff spaces (ADR 0096), the score editor's and the Player's
+ * alike in every layout: how far past its staves' outer lines a mark reaches, how far clear of the
+ * notes a band stands, how far before its notes a line (the caret, the playhead) stands, and how far
+ * in from their barlines the bars chosen stand.
  */
-export const MARK = { lead: 9, width: 30, reach: 12, inset: 4, line: 3 } as const
+export const MARK = { reach: 0.5, pad: 0.3, lead: 0.5, inset: 0.4 } as const
+
+/** How far round a head a click still lands on it, in staff spaces (ADR 0088). */
+export const GRAB = 0.35
 
 /**
- * The one selection's look: the sky-mist of the cursor with the focus colour's ring, the notes inside
- * it in the focus colour (ScoreView's `selected`). A note is a padded box round its column, an empty
- * place a line in the focus colour, the bars chosen one rounded box.
+ * The marks' look (ADR 0096): what is chosen is coloured (the notes themselves, ScoreView's
+ * `selected`); a range is a light band of the selection colour; the caret and the playhead a thin
+ * line of it, its ends rounded.
  */
 export const MARK_CLASS = {
-  note: 'rounded-sm bg-secondary ring-1 ring-ring/40',
-  insert: 'rounded-full bg-ring',
-  range: 'rounded-md bg-secondary/70 ring-1 ring-ring/45',
+  band: 'rounded-xs bg-ring/15',
+  line: 'w-0.5 rounded-full bg-ring',
 } as const
 
 export type MarkKind = keyof typeof MARK_CLASS
 
-/** A mark's box over the engraving, in its layout's px. */
+/** A mark's place over the engraving, in its layout's px: a line's width is its look's. */
 export interface MarkBox {
   readonly left: number
-  readonly width: number
+  readonly width?: number
   readonly top: number
   readonly height: number
+}
+
+/** A band's box: as wide as what it is over. */
+export interface BandBox extends MarkBox {
+  readonly width: number
 }
 
 /** A staff's (or a row's) top and foot. */
@@ -43,65 +50,17 @@ export const spanOf = (staves: readonly Span[]): Span => ({
   bottom: Math.max(...staves.map((staff) => staff.bottom)),
 })
 
-const over = ({ top, bottom }: Span, reach: number) => ({
-  top: top - reach,
-  height: bottom - top + 2 * reach,
-})
-
-/** One note (or chord, or beat group) chosen: a padded box round its column on the staves. */
-export const noteBox = (
-  layout: Pick<ScoreLayout, 'measures' | 'onsets'>,
-  tick: Tick,
-  span: Span,
-  reach: number = MARK.reach,
-): MarkBox => ({
-  left: xAtTick(layout, tick) - MARK.lead,
-  width: MARK.width,
-  ...over(span, reach),
-})
-
-/** An empty place (a rest, the room after the last note): a slim line where the next note goes. */
-export const insertBox = (
-  layout: Pick<ScoreLayout, 'measures' | 'onsets'>,
-  tick: Tick,
-  span: Span,
-  reach: number = MARK.reach,
-): MarkBox => ({
-  left: xAtTick(layout, tick) - MARK.lead,
-  width: MARK.line,
-  ...over(span, reach),
-})
-
-/**
- * The bars chosen on a line, measures `first` to `last` of its layout, as one box: from the first's
- * notes (a line's clef and key left out) to the last's barline, in from the barlines so a neighbour's
- * bars stay clear.
- */
-export function rangeBox(
-  layout: Pick<ScoreLayout, 'measures'>,
-  first: number,
-  last: number,
-  span: Span,
-  reach: number = MARK.reach,
-): MarkBox {
-  const from = layout.measures[first]
-  const to = layout.measures[last]
-  if (!from || !to) return { left: 0, width: 0, ...over(span, reach) }
-  const left = Math.max(from.x + MARK.inset, from.notes - MARK.lead)
-  return { left, width: to.x + to.width - MARK.inset - left, ...over(span, reach) }
-}
-
-/**
- * How far a mark stands clear of the heads it hugs, and how far round a head a click still lands on
- * it, in staff spaces (ADR 0088): a hair's room, about 3 px on a full-size staff.
- */
-export const HUG = { pad: 0.3, grab: 0.35 } as const
-
 /** A staff space on this engraving, in its px: a quarter of a staff's height (10 at full size). */
 export function spaceOf(layout: Pick<ScoreLayout, 'staves'>): number {
   const [staff] = Object.values(layout.staves)
   return staff ? (staff.bottom - staff.top) / 4 : 10
 }
+
+/** A mark's height over its staves: their top line to their foot, a little past them. */
+const over = ({ top, bottom }: Span, space: number) => ({
+  top: top - MARK.reach * space,
+  height: bottom - top + 2 * MARK.reach * space,
+})
 
 /** What a mark is over (ADR 0088): the notes starting in [from, to) on these staves (every staff without), one key alone where `midi` says. */
 export interface Chosen {
@@ -121,8 +80,8 @@ export const headsChosen = (layout: Pick<ScoreLayout, 'heads'>, chosen: Chosen):
       (chosen.midi === undefined || head.midi === chosen.midi),
   )
 
-/** What a mark over a choice hugs: its heads, and its rests where it is no one key of a chord. */
-const hugged = (layout: Pick<ScoreLayout, 'heads' | 'rests'>, chosen: Chosen): Extent[] => [
+/** What is drawn of a choice: its heads, and its rests where it is no one key of a chord. */
+const drawnChosen = (layout: Pick<ScoreLayout, 'heads' | 'rests'>, chosen: Chosen): Extent[] => [
   ...headsChosen(layout, chosen),
   ...(chosen.midi === undefined
     ? (layout.rests ?? []).filter(
@@ -134,53 +93,66 @@ const hugged = (layout: Pick<ScoreLayout, 'heads' | 'rests'>, chosen: Chosen): E
     : []),
 ]
 
-/** A box hugging boxes, `pad` clear of them all round; none round none. */
-export function hug(boxes: readonly Extent[], pad: number): MarkBox | null {
-  if (boxes.length === 0) return null
-  const left = Math.min(...boxes.map((box) => box.left)) - pad
-  const top = Math.min(...boxes.map((box) => box.top)) - pad
-  return {
-    left,
-    top,
-    width: Math.max(...boxes.map((box) => box.right)) + pad - left,
-    height: Math.max(...boxes.map((box) => box.bottom)) + pad - top,
-  }
-}
-
 type Laid = Pick<ScoreLayout, 'measures' | 'onsets' | 'staves' | 'heads' | 'rests'>
 
 /**
- * A note, a chord or a beat chosen (ADR 0088), the editor's caret and the Player's cursor alike:
- * a box hugging exactly its heads, their accidentals and dots; where none is drawn (a rest), a
- * padded box round its column over `span`.
+ * A range chosen (ADR 0096), the editor's notes: a light band over the staves `span` takes, from
+ * its first note's left edge to its last note's right edge (its rests too), top line to foot and a
+ * little past them; where nothing chosen is drawn here (the chord row), from its first place to
+ * where its last ends. None where the line holds none of it.
  */
-export function noteMark(layout: Laid, chosen: Chosen, span: Span): MarkBox {
-  return (
-    hug(hugged(layout, chosen), HUG.pad * spaceOf(layout)) ?? noteBox(layout, chosen.from, span)
-  )
-}
-
-/**
- * Notes chosen (ADR 0088), the editor's range and the Player's loop alike: one box hugging their
- * heads on this line, from the first's left to the last's right and the highest's top to the
- * lowest's foot; where none is drawn here (rests, the chord row), from the first's place to where
- * the last ends over `span`. None where the line holds none of it.
- */
-export function rangeMark(layout: Laid, chosen: Chosen, span: Span): MarkBox | null {
-  const around = hug(hugged(layout, chosen), HUG.pad * spaceOf(layout))
-  if (around) return around
+export function rangeBand(layout: Laid, chosen: Chosen, span: Span): BandBox | null {
+  const space = spaceOf(layout)
+  const drawn = drawnChosen(layout, chosen)
+  if (drawn.length > 0) {
+    const left = Math.min(...drawn.map((box) => box.left)) - MARK.pad * space
+    const right = Math.max(...drawn.map((box) => box.right)) + MARK.pad * space
+    return { left, width: right - left, ...over(span, space) }
+  }
   const first = layout.measures[0]
   const last = layout.measures.at(-1)
   if (!first || !last) return null
-  const end = last.startTick + last.ticks
   const from = Math.max(chosen.from, first.startTick)
-  const to = Math.min(chosen.to, end)
+  const to = Math.min(chosen.to, last.startTick + last.ticks)
   if (from >= to) return null
-  const left = xAtTick(layout, from) - MARK.lead
+  const left = xAtTick(layout, from) - MARK.lead * space
   // To a barline: in from it, so the next bar stays clear.
   const atBar = layout.measures.find((m) => m.startTick + m.ticks === to)
-  const right = atBar ? atBar.x + atBar.width - MARK.inset : xAtTick(layout, to) - MARK.lead
-  return { left, width: Math.max(MARK.line, right - left), ...over(span, MARK.reach) }
+  const right = atBar
+    ? atBar.x + atBar.width - MARK.inset * space
+    : xAtTick(layout, to) - MARK.lead * space
+  return { left, width: Math.max(MARK.pad * space, right - left), ...over(span, space) }
+}
+
+/**
+ * Bars chosen (ADR 0096), the Player's loop: one band over the staves `span` takes, measures
+ * `first` to `last` of its layout, from the first's notes (a line's clef and key left out, clear of
+ * their accidentals) to the last's barline, in from it so the bar after stays clear.
+ */
+export function barsBand(layout: Laid, first: number, last: number, span: Span): BandBox {
+  const space = spaceOf(layout)
+  const from = layout.measures[first]
+  const to = layout.measures[last]
+  if (!from || !to) return { left: 0, width: 0, ...over(span, space) }
+  const left = Math.max(
+    from.x + MARK.inset * space,
+    leftAt(layout, from.startTick) - MARK.lead * space,
+  )
+  return { left, width: to.x + to.width - MARK.inset * space - left, ...over(span, space) }
+}
+
+/**
+ * The caret (ADR 0096): a thin line on its staff (`staves`, over `span`) just before the notes it
+ * stands on and their accidentals, or where the next note goes on an empty place.
+ */
+export function caretLine(
+  layout: Laid,
+  tick: Tick,
+  staves: readonly StaffId[],
+  span: Span,
+): MarkBox {
+  const space = spaceOf(layout)
+  return { left: leftAt(layout, tick, staves) - MARK.lead * space, ...over(span, space) }
 }
 
 /** What a point on the engraving lands on (ADR 0088): one head (`index`, `midi`), or a chord's column whole. */
@@ -208,7 +180,7 @@ export function pickAt(
   x: number,
   y: number,
 ): Picked | null {
-  const grab = HUG.grab * spaceOf(layout)
+  const grab = GRAB * spaceOf(layout)
   const heads = layout.heads ?? []
   const under = heads
     .filter((head) => holds(head, x, y, grab))
