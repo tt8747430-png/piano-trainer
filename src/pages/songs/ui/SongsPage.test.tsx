@@ -2,7 +2,7 @@ import { act, cleanup, fireEvent, screen, waitFor, within } from '@testing-libra
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { PIECES_STORAGE_KEY } from '@/entities/piece'
+import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { markLearned } from '@/features/mark-learned/mark-learned'
 import { createMemoryStorage } from '@/shared/lib'
 
@@ -87,7 +87,7 @@ describe('Songs: your own', () => {
   }
   const saved = (state: object) => {
     const storage = createMemoryStorage()
-    storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: 2 }))
+    storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: PIECES_VERSION }))
     return storage
   }
 
