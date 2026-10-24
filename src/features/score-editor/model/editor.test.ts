@@ -222,6 +222,15 @@ describe('the editor', () => {
     )
     expect(shape(rested.draft.melody)).toEqual(['C4@0/24', 'D4@48/24', 'E4@72/24', 'F4@96/24'])
     expect(rested.caret).toBe(48)
+    // At a barline inside a tied note, the rest cuts the tie there, as a note written there does.
+    const tied = run(
+      initialEditor(draftOf({ melody: 'r/3 C5/2 | D5/1 r/2' })),
+      { type: 'move', by: 'bar', direction: 1 },
+      { type: 'mode', mode: 'insert' },
+      { type: 'rest' },
+    )
+    expect(shape(tied.draft.melody)).toEqual(['C5@72/24', 'D5@144/24'])
+    expect(tied.caret).toBe(120)
   })
 
   it('in Insert mode Delete closes the gap, pulling the later notes left; in Replace it leaves a rest', () => {

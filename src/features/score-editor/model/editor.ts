@@ -35,7 +35,7 @@ import { joinSection, setSectionKey, setSectionKind } from './sections'
 import { setKey, setMeter, setTempo } from './settings'
 import { nextMode, type EditorAction, type EditorState } from './state'
 import { writeTake } from './take-edits'
-import { barAt, barsOf, keyAt, totalTicks } from './timeline'
+import { barAt, barsOf, keyAt } from './timeline'
 import { toggledDot, toggledTriplet, withValue, type ChosenValue } from './values'
 
 /** The chord's one note chosen, moved by `move` (null where it went past the piano's ends). */
@@ -123,14 +123,10 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
           struck: null,
         })
       }
-      // In Insert mode a rest, like a note, pushes the later notes right (ADR 0092); with none to
-      // push it is written as Replace writes it, stopping at the song's end.
-      if (state.mode === 'insert' && caret < totalTicks(draft)) {
-        const roomy = makeRoom(draft, layer, caret, stepOf(state))
-        if (roomy !== draft)
-          return commit(state, roomy, { caret: caret + stepOf(state), struck: null })
-      }
-      const result = writeRest(draft, layer, caret, stepOf(state))
+      // In Insert mode a rest, like a note, is written in room made for it, the later notes pushed
+      // right (ADR 0092); with none to push, as Replace writes it, stopping at the song's end.
+      const room = state.mode === 'insert' ? makeRoom(draft, layer, caret, stepOf(state)) : draft
+      const result = writeRest(room, layer, caret, stepOf(state))
       return commit(state, result.draft, { caret: result.end, struck: null })
     }
     case 'delete': {
