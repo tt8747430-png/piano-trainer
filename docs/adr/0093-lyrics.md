@@ -41,4 +41,4 @@ by default where the score has its staff, else the upper staff. A melody staff a
 upper staff leaves them there (`lyricsOn: 'rh'`, saved with the music), where before the next save dropped them; one
 added to a song with none takes them; the tune's staff taken away takes its lyrics with its notes. The sheet prints
 the verses under the staff whose notes sing them. The Lyrics field writes on that staff; on another it is greyed,
-its line saying where the lyrics are.
+its line saying where lyrics go (in a song with none yet too).

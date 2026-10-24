@@ -1737,7 +1737,17 @@ describe('the words under the tune (ADR 0093)', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1/)
     const text = await screen.findByRole('region', { name: 'Text & pedal' })
     expect(within(text).getByRole('button', { name: 'Lyrics' })).toBeDisabled()
-    expect(text).toHaveTextContent('The lyrics are on the melody staff: tap a note there.')
+    expect(text).toHaveTextContent('Lyrics go on the melody staff: tap a note there.')
+  })
+
+  it('says where lyrics go in a song with none yet: the upper staff, where it has no tune', async () => {
+    const user = userEvent.setup()
+    await renderApp('/edit/my-1', { storage: withSong({ hands: SILENT_HANDS }) })
+    await toChordRow(user)
+    expect(screen.getByRole('status')).toHaveTextContent(/^Chord symbols · Bar 1/)
+    const text = await openCategory(user, 'Text & pedal')
+    expect(within(text).getByRole('button', { name: 'Lyrics' })).toBeDisabled()
+    expect(text).toHaveTextContent('Lyrics go on the upper staff: tap a note there.')
   })
 
   it('keeps lyrics written on the upper staff there as a melody staff is added, saved with the song', async () => {
@@ -1764,6 +1774,6 @@ describe('the words under the tune (ADR 0093)', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/^Melody/)
     const section = await screen.findByRole('region', { name: 'Text & pedal' })
     expect(within(section).getByRole('button', { name: 'Lyrics' })).toBeDisabled()
-    expect(section).toHaveTextContent('The lyrics are on the upper staff: tap a note there.')
+    expect(section).toHaveTextContent('Lyrics go on the upper staff: tap a note there.')
   })
 })
