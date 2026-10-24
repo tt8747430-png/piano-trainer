@@ -108,9 +108,8 @@ export const editor = {
     treble: 'Treble clef',
     bass: 'Bass clef',
   },
-  // The palette's Key and Time: the song's own, changed in the Song sheet.
+  // The palette's Key and Time: a section's key, and the song's own, changed there (ADR 0094).
   signature: {
-    change: 'Change for the whole song',
     // A key change from a section on, up to the next change (ADR 0089).
     fromSection: 'From {{section}} on (bar {{bar}})',
     song: 'The song’s key',
@@ -287,9 +286,9 @@ export const editor = {
     kind: 'Section',
     join: 'Join with the section before',
   },
-  // The Song sheet: the song as a whole, its parts and the MIDI keyboard (ADR 0080).
+  // The song as a whole (ADR 0094: edited where it is printed and in the palette): its title, its
+  // tempo with the tempo words, its time signature.
   song: {
-    label: 'Song',
     title: 'Title',
     tempo: 'Tempo',
     tempoWords: 'Tempo words',
@@ -303,13 +302,6 @@ export const editor = {
     },
     tempoLabel: '{{word}}, {{bpm}} a minute',
     meter: 'Time signature',
-    // The score's staves (ADR 0091), each shown or hidden; the last staff in sight stays (ADR 0083).
-    staves: 'Staves',
-    melodyDetail: 'A treble staff for the tune, over the piano',
-    piano: 'Piano',
-    pianoDetail: 'The grand staff: both hands',
-    chordsDetail: 'Written over the music',
-    lastStaff: 'The last staff in sight stays',
   },
   recorder: {
     more: 'Take actions',

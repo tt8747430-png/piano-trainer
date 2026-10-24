@@ -56,8 +56,9 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
     [dispatch, store],
   )
   const onDeselect = useCallback(() => dispatch({ type: 'deselect' }), [dispatch])
-  const { openSettings: open } = view
-  const openSettings = useCallback(() => open(true), [open])
+  // The clef, key and time at a line's head: the palette opens at the key, the time under it.
+  const { askTools } = view
+  const onSignature = useCallback(() => askTools('key'), [askTools])
   // Read when a bar is clicked, so a line's row does not change with every note written elsewhere.
   const placesOf = useCallback((to: Layer) => placesIn(store.getState(), to), [store])
   const tapsOf = useCallback((to: Layer) => tapsIn(store.getState(), to), [store])
@@ -100,7 +101,7 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
       heading={(section) => <SectionHeading section={section} />}
       chordNames={view.chordNames}
       lyrics={view.lyrics}
-      onSignature={openSettings}
+      onSignature={onSignature}
       view={view.layout}
       title={meta.title}
       room={room}

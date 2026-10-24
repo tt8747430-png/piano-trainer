@@ -3,6 +3,7 @@ import { useStore } from 'zustand'
 import type { EditorAction, EditorState, EditorStore } from '@/features/score-editor'
 import type { SheetView } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
+import type { PaletteCategory } from './palette-categories'
 import type { EditorTakes } from './use-editor-takes'
 
 /** What the editor's parts share (composition: each reads what it needs, none knows how it is kept). */
@@ -30,9 +31,12 @@ export interface ScoreEditorValue {
     /** The verse the Lyrics field writes, from 0, while it is open; null while it is closed. */
     readonly lyricsVerse: number | null
     readonly openLyrics: (verse: number | null) => void
-    /** The song's settings sheet, opened from the toolbar or the sheet's clef, key and time. */
-    readonly settingsOpen: boolean
-    readonly openSettings: (open: boolean) => void
+    /**
+     * A category of the palette asked for from the sheet (the clef, key and time at a line's head),
+     * each ask a new value: the palette opens at it.
+     */
+    readonly toolsAsked: { readonly category: PaletteCategory } | null
+    readonly askTools: (category: PaletteCategory) => void
     /**
      * How fast Play plays, as a share of the song's tempo (1 its own): the learner's speed to check
      * what was written at, never the song's tempo (ADR 0089).

@@ -33,6 +33,7 @@ import { arrangeDraft } from './arrange-draft'
 import type { ScoreEditorValue } from './editor-context'
 import type { EditSearch } from './edit-search'
 import { savedMusic, savingTo, type EditorTarget } from './editor-target'
+import type { PaletteCategory } from './palette-categories'
 import { shortcutOf } from './shortcuts'
 import { useEditorTakes } from './use-editor-takes'
 
@@ -76,7 +77,9 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   const setLyrics = (shown: boolean) => setScoreView(settings, { lyrics: shown })
   // The Lyrics field, on the verse it writes, while the learner has it open.
   const [lyricsVerse, openLyrics] = useState<number | null>(null)
-  const [settingsOpen, openSettings] = useState(false)
+  // A category of the palette the sheet asked for: each ask a new value, so the same one opens again.
+  const [toolsAsked, setToolsAsked] = useState<{ readonly category: PaletteCategory } | null>(null)
+  const askTools = useCallback((category: PaletteCategory) => setToolsAsked({ category }), [])
   /** The music last saved here, or read: what the store holds unless another tab saved since. */
   const [saved] = useState(() => ({ music: target.music }))
   const [store] = useState(() =>
@@ -218,8 +221,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       setLyrics,
       lyricsVerse,
       openLyrics,
-      settingsOpen,
-      openSettings,
+      toolsAsked,
+      askTools,
       speed,
       setSpeed,
       layout,
