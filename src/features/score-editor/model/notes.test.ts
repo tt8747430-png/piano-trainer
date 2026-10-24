@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { midi, noteName } from '@/shared/lib/music'
 import { draftOf, shape } from '../testing/test-draft'
+import { musicToSave } from './draft'
 import {
   addToChord,
   carriesAccidental,
+  closeGap,
   deleteNotes,
   fingeredNotes,
   notesAt,
@@ -159,6 +161,34 @@ describe('rests', () => {
     const rested = writeRest(draftOf({ hands: { lh: 'G2/4 | G2/4' } }), 'lh', 96, 96)
     expect(shape(rested.draft.hands.lh)).toEqual(['G2@0/96'])
     expect(rested.end).toBe(192)
+  })
+})
+
+describe('closeGap (Insert mode’s Delete, ADR 0092)', () => {
+  it('pulls the later notes left by the gap', () => {
+    const draft = draftOf({ melody: 'B4/1 A4/1 G4/1 F#4/1' })
+    expect(shape(closeGap(draft, 'melody', { from: 24, to: 48 }).melody)).toEqual([
+      'B4@0/24',
+      'G4@24/24',
+      'F#4@48/24',
+    ])
+  })
+
+  it('cuts the melody’s note held into the gap, so the notes pulled left never sound under it', () => {
+    // A half note tied over the barline, a quarter after it: the tie's second half taken.
+    const draft = draftOf({
+      melody: 'r/3 C5/2 | D5/1 r/3',
+      sections: [{ kind: 'verse', lines: ['G C'] }],
+    })
+    const closed = closeGap(draft, 'melody', { from: 96, to: 120 })
+    expect(shape(closed.melody)).toEqual(['C5@72/24', 'D5@96/24'])
+    expect(musicToSave(closed)).not.toBeNull()
+    // A hand's held note keeps sounding under what is pulled over it, as writing leaves it.
+    const hand = draftOf({ hands: { rh: 'C4/4 | r/1 E4/1 r/2' } })
+    expect(shape(closeGap(hand, 'rh', { from: 96, to: 120 }).hands.rh)).toEqual([
+      'C4@0/96',
+      'E4@96/24',
+    ])
   })
 })
 

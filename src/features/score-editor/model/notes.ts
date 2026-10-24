@@ -82,12 +82,12 @@ export function makeRoom(draft: Draft, layer: NoteLayer, at: Tick, ticks: Tick):
 
 /**
  * Insert mode's Delete (ADR 0092): the notes starting in `span` taken and the later notes pulled
- * left by its length, closing the gap as Flat's does.
+ * left by its length, closing the gap as Flat's does. In the melody a note held into the gap (a
+ * tie over the barline) is cut there, so the notes pulled left never sound under it.
  */
 export function closeGap(draft: Draft, layer: NoteLayer, { from, to }: TickSpan): Draft {
   if (to <= from) return draft
-  const kept = notesOf(draft, layer).filter((n) => n.startTick < from || n.startTick >= to)
-  return withNotes(draft, layer, shifted(kept, to, from - to))
+  return withNotes(draft, layer, shifted(clearUnder(draft, layer, from, to), to, from - to))
 }
 
 /** A key as the draft writes it at a tick: spelled in the key there (a section's own, ADR 0089). */
