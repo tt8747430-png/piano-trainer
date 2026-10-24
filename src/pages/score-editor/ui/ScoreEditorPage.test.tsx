@@ -632,15 +632,14 @@ describe('the score editor', () => {
     },
   )
 
-  it('keeps only ‹ Play › in the dock, as the Player’s', async () => {
+  it('keeps ‹ Play › in the dock, as the Player’s, and Record after them, as Dorico’s transport (ADR 0094)', async () => {
+    const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })
-    // Named for what it does: Play, and the caret moved a note back or on.
-    expect(namesIn(await screen.findByRole('toolbar', { name: 'Play and move' }))).toEqual([
-      'Tempo: 100%',
-      'Previous note',
-      'Play',
-      'Next note',
-    ])
+    // Named for what it does: Play, the caret moved a note back or on, and a take recorded.
+    const dock = await screen.findByRole('toolbar', { name: 'Play, move and record' })
+    expect(namesIn(dock)).toEqual(['Tempo: 100%', 'Previous note', 'Play', 'Next note', 'Record'])
+    await user.click(within(dock).getByRole('button', { name: 'Record' }))
+    expect(await screen.findByRole('dialog', { name: 'Takes' })).toBeInTheDocument()
   })
 
   it('plays what was written at the learner’s speed from its dock’s tempo, the song’s own kept', async () => {
@@ -1037,7 +1036,6 @@ describe('the score editor', () => {
       'Copy',
       'Cut',
       'Paste',
-      'Record',
       'View',
       'MIDI keyboard',
     ])

@@ -8,18 +8,16 @@ import { ModeSwitch } from '@/widgets/mode-switch'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { EditorViewMenu } from './EditorViewMenu'
 import { EditRow } from './EditRow'
-import { RecorderSheet } from './RecorderSheet'
 
 /**
  * The editor's bar, one at every size (ADR 0094): Close; Practise · Edit (ADR 0090), the Player at
  * the caret's bar; the edit row (`EditRow`: Delete, Undo, Redo, Copy, Cut, Paste); then the screen's
- * own round buttons in the Player's order and look: Record, which opens the takes; the eye
- * (`EditorViewMenu`), how the work is shown; and the MIDI keyboard (hidden without Web MIDI). No
- * Song sheet: the song is edited where it is printed and in the palette. On a phone the edit row
- * wraps under the rest. The sheet shows the title and the caret: here they are a screen reader's
- * alone, the page's heading (with Your version) and a live line saying where the caret is
- * (`status`). Play and ‹ › ride in the dock over the sheet's foot, where the Player's transport is
- * (`EditorDock`).
+ * own round buttons in the Player's order and look: the eye (`EditorViewMenu`), how the work is
+ * shown, and the MIDI keyboard (hidden without Web MIDI). No Song sheet: the song is edited where it
+ * is printed and in the palette. On a phone the edit row wraps under the rest. The sheet shows the
+ * title and the caret: here they are a screen reader's alone, the page's heading (with Your
+ * version) and a live line saying where the caret is (`status`). Play, ‹ › and Record ride in the
+ * dock over the sheet's foot, where the Player's transport is (`EditorDock`).
  */
 export function EditorHeader({ status }: { status?: ReactNode }) {
   const { t } = useTranslation(['editor', 'common'])
@@ -37,7 +35,6 @@ export function EditorHeader({ status }: { status?: ReactNode }) {
       <ModeSwitch pieceId={meta.id} mode="edit" bar={bar} disabled={takes.stage !== 'idle'} />
       <EditRow className="max-sm:order-last max-sm:basis-full max-sm:justify-between" />
       <div className="ms-auto flex items-center gap-1">
-        <RecorderSheet />
         <EditorViewMenu />
         <MidiButton />
       </div>

@@ -3,8 +3,8 @@ export const editor = {
   play: 'Play',
   undo: 'Undo',
   redo: 'Redo',
-  // Play and Record, in the screen's bar.
-  dock: 'Editing',
+  // The dock over the sheet's foot (ADR 0094): the tempo, ‹ Play ›, and Record.
+  dock: 'Play, move and record',
   // The one palette (spec 2026-10-23): a quick row of values, the categories as a bar of pictures,
   // every category's section stacked above them when it is opened.
   palette: {
@@ -163,7 +163,6 @@ export const editor = {
     drag: 'Drag up or down to move the note',
   },
   caret: {
-    moves: 'Play and move',
     at: 'Bar {{bar}}, beat {{beat}} · {{what}}',
     notes: 'Bar {{bar}}, beat {{beat}} · {{what}} {{value}}',
     held: 'Bar {{bar}}, beat {{beat}} · {{what}} held',

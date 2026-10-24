@@ -5,7 +5,7 @@ export const editor: LocaleResources['editor'] = {
   play: 'Сыграть',
   undo: 'Отменить',
   redo: 'Повторить',
-  dock: 'Правка',
+  dock: 'Играть, перемещать курсор и записывать',
   palette: {
     label: 'Инструменты',
     open: 'Показать все инструменты',
@@ -148,7 +148,6 @@ export const editor: LocaleResources['editor'] = {
     drag: 'Потяните вверх или вниз, чтобы сдвинуть ноту',
   },
   caret: {
-    moves: 'Играть и перемещать курсор',
     at: 'Такт {{bar}}, доля {{beat}} · {{what}}',
     notes: 'Такт {{bar}}, доля {{beat}} · {{what}} {{value}}',
     held: 'Такт {{bar}}, доля {{beat}} · {{what}} звучит',

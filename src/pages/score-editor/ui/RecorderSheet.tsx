@@ -1,8 +1,7 @@
 import { Circle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { selectTake, useTakes } from '@/entities/take'
-import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { FloatingBarButton, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
 import { useScoreEditorContext } from '../model/editor-context'
 import { TAKES_PAGE } from '../model/use-editor-takes'
 import { RecordButton } from './RecordButton'
@@ -11,9 +10,9 @@ import { TakeList } from './TakeList'
 import { WriteTakePage } from './WriteTakePage'
 
 /**
- * The takes (ADR 0028), opened from the bar's Record: Record over the caret's bar, in the footer, in reach however long the list;
- * and the piece's takes, each heard, written into the score, downloaded or deleted; a take's form to
- * write it is a page of the sheet.
+ * The takes (ADR 0028), opened from the dock's Record, the transport's last (ADR 0094): Record over
+ * the caret's bar, in the footer, in reach however long the list; and the piece's takes, each heard,
+ * written into the score, downloaded or deleted; a take's form to write it is a page of the sheet.
  */
 export function RecorderSheet() {
   const { t } = useTranslation('editor')
@@ -27,18 +26,12 @@ export function RecorderSheet() {
     <Sheet open={takes.open} onOpenChange={(open) => takes.show(open ? TAKES_PAGE : null)}>
       <SheetTrigger
         render={
-          <Button
-            variant="surface"
-            size="icon"
-            aria-label={t('recorder.open')}
-            title={t('recorder.open')}
-            disabled={takes.stage !== 'idle'}
-          />
+          <FloatingBarButton label={t('recorder.open')}>
+            {/* A recorder's red dot, as every recorder's Record wears. */}
+            <Circle aria-hidden className="fill-current text-destructive" />
+          </FloatingBarButton>
         }
-      >
-        {/* A recorder's red dot, as every recorder's Record wears. */}
-        <Circle aria-hidden className="fill-current text-destructive" />
-      </SheetTrigger>
+      />
       <SheetContent
         title={writing ? t('recorder.write') : t('recorder.title')}
         footer={writing ? undefined : <RecordButton />}
