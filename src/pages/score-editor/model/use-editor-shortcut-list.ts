@@ -12,6 +12,7 @@ export function useEditorShortcutList(): void {
     { label: t('shortcuts.value'), shown: ['1', '–', '6'] },
     { label: t('shortcuts.dot'), shown: ['.'] },
     { label: t('shortcuts.rest'), shown: ['0'] },
+    { label: t('shortcuts.mode'), shown: ['I'] },
     { label: t('shortcuts.step'), shown: ['←', '→'] },
     { label: t('shortcuts.bar'), shown: [alt, '←', '→'] },
     { label: t('shortcuts.line'), shown: ['Enter'] },

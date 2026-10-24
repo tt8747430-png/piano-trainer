@@ -107,7 +107,7 @@ describe('the editor', () => {
       layer: 'rh',
       caret: 0,
       value: { value: 4, dots: 0, triplet: false },
-      chord: false,
+      mode: 'replace',
       past: [],
       future: [],
     })
@@ -151,9 +151,114 @@ describe('the editor', () => {
   })
 
   it('keeps the caret in Chord mode, so each key joins the notes there', () => {
-    const state = run(start('lh'), { type: 'chordMode' }, key(48, 0), key(55, 900), key(64, 2000))
+    const state = run(
+      start('lh'),
+      { type: 'mode', mode: 'chord' },
+      key(48, 0),
+      key(55, 900),
+      key(64, 2000),
+    )
     expect(shape(state.draft.hands.lh)).toEqual(['C3@0/24', 'G3@0/24', 'E4@0/24'])
     expect(state.caret).toBe(0)
+  })
+
+  it('cycles the modes round, Replace, Insert, Chord, as I does (ADR 0092)', () => {
+    const once = run(start(), { type: 'mode' })
+    expect(once.mode).toBe('insert')
+    expect(run(once, { type: 'mode' }).mode).toBe('chord')
+    expect(run(once, { type: 'mode' }, { type: 'mode' }).mode).toBe('replace')
+    expect(run(once, { type: 'mode', mode: 'replace' }).mode).toBe('replace')
+  })
+
+  it('in Insert mode writes at the caret and pushes the staff’s later notes right, bars added at the end to hold them', () => {
+    const four = run(start(), key(60, 0), key(62, 500), key(64, 1000), key(65, 1500))
+    const inserted = run(
+      four,
+      { type: 'place', tick: 24, layer: 'melody' },
+      { type: 'mode', mode: 'insert' },
+      key(67, 2000),
+    )
+    expect(shape(inserted.draft.melody)).toEqual([
+      'C4@0/24',
+      'G4@24/24',
+      'D4@48/24',
+      'E4@72/24',
+      'F4@96/24',
+    ])
+    expect(inserted.caret).toBe(48)
+    expect(lengths(inserted.draft)).toEqual([96, 96])
+    // Another staff's notes stay where they are.
+    const both = run(
+      run(start('rh'), key(72, 0)),
+      { type: 'layer', layer: 'lh' },
+      { type: 'mode', mode: 'insert' },
+      key(48, 500),
+    )
+    expect(shape(both.draft.hands.rh)).toEqual(['C5@0/24'])
+    // Pushed past the last bar, the notes get a bar of their own: nothing is lost.
+    const full = run(start(), ...[60, 62, 64, 65, 67, 69, 71, 72].map((n, i) => key(n, i * 500)))
+    expect(full.caret).toBe(192)
+    const grown = run(
+      full,
+      { type: 'place', tick: 0, layer: 'melody' },
+      { type: 'mode', mode: 'insert' },
+      key(59, 5000),
+    )
+    expect(lengths(grown.draft)).toEqual([96, 96, 96])
+    expect(shape(grown.draft.melody).at(-1)).toBe('C5@192/24')
+    expect(grown.draft.melody).toHaveLength(9)
+    // Undone as one step, the bar added goes too.
+    expect(lengths(run(grown, { type: 'undo' }).draft)).toEqual([96, 96])
+  })
+
+  it('in Insert mode a rest pushes the later notes right too', () => {
+    const four = run(start(), key(60, 0), key(62, 500), key(64, 1000), key(65, 1500))
+    const rested = run(
+      four,
+      { type: 'place', tick: 24, layer: 'melody' },
+      { type: 'mode', mode: 'insert' },
+      { type: 'rest' },
+    )
+    expect(shape(rested.draft.melody)).toEqual(['C4@0/24', 'D4@48/24', 'E4@72/24', 'F4@96/24'])
+    expect(rested.caret).toBe(48)
+  })
+
+  it('in Insert mode Delete closes the gap, pulling the later notes left; in Replace it leaves a rest', () => {
+    const four = run(start(), key(60, 0), key(62, 500), key(64, 1000), key(65, 1500))
+    const atD = run(four, { type: 'place', tick: 24, layer: 'melody' })
+    expect(shape(run(atD, { type: 'delete' }).draft.melody)).toEqual([
+      'C4@0/24',
+      'E4@48/24',
+      'F4@72/24',
+    ])
+    const insert = run(atD, { type: 'mode', mode: 'insert' })
+    const pulled = run(insert, { type: 'delete' })
+    expect(shape(pulled.draft.melody)).toEqual(['C4@0/24', 'E4@24/24', 'F4@48/24'])
+    expect(pulled.caret).toBe(24)
+    // Backspace with nothing at the caret takes the note before and closes its gap.
+    const back = run(
+      insert,
+      { type: 'place', tick: 96, layer: 'melody' },
+      { type: 'delete', back: true },
+    )
+    expect(shape(back.draft.melody)).toEqual(['C4@0/24', 'D4@24/24', 'E4@48/24'])
+    expect(back.caret).toBe(72)
+    // A range chosen closes as one gap.
+    const range = run(
+      insert,
+      { type: 'move', by: 'step', direction: 1, extend: true },
+      { type: 'delete' },
+    )
+    expect(shape(range.draft.melody)).toEqual(['C4@0/24', 'F4@24/24'])
+    // One note of a chord taken leaves the chord, so no gap closes.
+    const chord = run(start('rh'), key(60, 0), key(64, 30), key(67, 60), key(62, 500))
+    const one = run(
+      chord,
+      { type: 'place', tick: 0, layer: 'rh', key: midi(64) },
+      { type: 'mode', mode: 'insert' },
+      { type: 'delete' },
+    )
+    expect(shape(one.draft.hands.rh)).toEqual(['C4@0/24', 'G4@0/24', 'D4@24/24'])
   })
 
   it('takes the value, dot and triplet for the next note', () => {

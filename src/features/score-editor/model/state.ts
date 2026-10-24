@@ -42,10 +42,21 @@ export interface Struck {
   readonly written: boolean
 }
 
+/**
+ * How a key played is written at the caret (ADR 0092, Flat's editing modes): Replace, over what is
+ * there; Insert, pushing the staff's later notes right, and Delete closing the gap; Chord, joining
+ * the chord there, the caret staying.
+ */
+export type EditMode = 'replace' | 'insert' | 'chord'
+export const EDIT_MODES = ['replace', 'insert', 'chord'] as const satisfies readonly EditMode[]
+
+/** The mode after `mode`, round: what I cycles. */
+export const nextMode = (mode: EditMode): EditMode =>
+  EDIT_MODES[(EDIT_MODES.indexOf(mode) + 1) % EDIT_MODES.length] ?? 'replace'
+
 export interface EditorState extends Snapshot {
   readonly value: ChosenValue
-  /** Chord: a key played joins the notes at the caret, which stays. */
-  readonly chord: boolean
+  readonly mode: EditMode
   readonly selection: Selection | null
   /** One note of the chord at the caret chosen alone, by its key (ADR 0088): else the whole chord. */
   readonly chordNote: Midi | null
@@ -80,7 +91,8 @@ export type EditorAction =
   | { readonly type: 'value'; readonly value: ChosenValue['value'] }
   | { readonly type: 'dot'; readonly dots?: Dots }
   | { readonly type: 'triplet' }
-  | { readonly type: 'chordMode' }
+  /** The editing mode chosen; none, the next round (I). */
+  | { readonly type: 'mode'; readonly mode?: EditMode }
   | {
       readonly type: 'move'
       readonly by: CaretMove
@@ -155,7 +167,7 @@ export const initialEditor = (draft: Draft): EditorState => ({
   // The top staff in sight: the tune's where the piece shows one, else the right hand's.
   layer: topStaff(draft),
   value: { value: 4, dots: 0, triplet: false },
-  chord: false,
+  mode: 'replace',
   selection: null,
   chordNote: null,
   struck: null,

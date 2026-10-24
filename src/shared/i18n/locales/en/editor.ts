@@ -145,6 +145,8 @@ export const editor = {
     held: 'Bar {{bar}}, beat {{beat}} · {{what}} held',
     rest: 'Bar {{bar}}, beat {{beat}} · rest',
     end: 'End of the song',
+    // The editing mode, where it is not Replace (ADR 0092).
+    mode: '{{mode}} mode',
     values: {
       whole: 'whole',
       half: 'half',
@@ -206,7 +208,17 @@ export const editor = {
   },
   triplet: 'Triplet',
   rest: 'Rest',
-  chordMode: 'Chord',
+  // The editing modes (ADR 0092, Flat's Melody · Insert · Chord), one chosen in the Notes section,
+  // its line saying what a key played does.
+  mode: {
+    label: 'Editing mode',
+    replace: 'Replace',
+    insert: 'Insert',
+    chord: 'Chord',
+    replaceDetail: 'A note written takes the place of what is at the caret.',
+    insertDetail: 'A note written pushes the notes after it to the right; Delete closes the gap.',
+    chordDetail: 'A note written joins the chord at the caret; the caret stays.',
+  },
   deleteNotes: 'Delete',
   respell: 'Enharmonic spelling',
   up: 'Up a semitone',
@@ -339,6 +351,7 @@ export const editor = {
     value: 'A note value, whole to 32nd',
     dot: 'Dotted',
     rest: 'A rest',
+    mode: 'Replace, Insert or Chord: the next mode',
     step: 'Move the caret',
     bar: 'A bar back or forward',
     line: 'The next line',

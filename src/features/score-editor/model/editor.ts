@@ -4,20 +4,23 @@ import { keepsAStaff, rowShown, staffLeftFor, withAStaff } from './rows'
 import { setBarTicks } from './bars'
 import { chosenNotes, chosenSpan, shownValue } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
+import { itemAt } from './caret'
 import { ticksOf } from '@/shared/lib/notation'
 import { chordNoteStep, steppedKey } from './chord-note'
 import { deleteChord } from './chords'
-import { midi, PIANO, type Midi } from '@/shared/lib/music'
-import { isHandLayer, type Draft } from './draft'
+import { midi, PIANO, type Midi, type Tick } from '@/shared/lib/music'
+import { isHandLayer, type Draft, type NoteLayer } from './draft'
 import { barsEdited, chordSet, chosenBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
 import { lineOver, lineSpan } from './lines'
 import { markNotes } from './marks'
 import {
-  deleteBack,
+  backFrom,
+  closeGap,
   deleteNotes,
   fingeredNotes,
+  makeRoom,
   notesAt,
   respellNotes,
   setDuration,
@@ -30,9 +33,9 @@ import {
 } from './notes'
 import { joinSection, setSectionKey, setSectionKind } from './sections'
 import { setKey, setMeter, setTempo } from './settings'
-import type { EditorAction, EditorState } from './state'
+import { nextMode, type EditorAction, type EditorState, type TickSpan } from './state'
 import { writeTake } from './take-edits'
-import { barAt, barsOf, keyAt } from './timeline'
+import { barAt, barsOf, keyAt, totalTicks } from './timeline'
 import { toggledDot, toggledTriplet, withValue, type ChosenValue } from './values'
 
 /** The chord's one note chosen, moved by `move` (null where it went past the piano's ends). */
@@ -68,6 +71,17 @@ function accidentalMoved(state: EditorState, next: Draft): Partial<EditorState> 
   return moved ? { chordNote: moved.midi } : {}
 }
 
+/**
+ * What Delete takes away (ADR 0092): in Replace mode the notes at a tick or in a span, their time
+ * left as a rest; in Insert mode what stands there (the notes, or the empty place), the later notes
+ * pulled left to close the gap.
+ */
+function takenAway(state: EditorState, layer: NoteLayer, where: Tick | TickSpan): Draft {
+  const { draft } = state
+  if (state.mode !== 'insert') return deleteNotes(draft, layer, where)
+  return closeGap(draft, layer, typeof where === 'number' ? itemAt(draft, layer, where) : where)
+}
+
 /** The editor's state after an action (spec §6). */
 export function reduce(state: EditorState, action: EditorAction): EditorState {
   const { draft, layer, caret } = state
@@ -95,8 +109,8 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
           : toggledTriplet(shown, draft.meter)
       return value === shown ? state : valueChosen(state, value)
     }
-    case 'chordMode':
-      return { ...state, chord: !state.chord, struck: null }
+    case 'mode':
+      return { ...state, mode: action.mode ?? nextMode(state.mode), struck: null }
     case 'move':
       return moveCaret(state, action.by, action.direction, action.extend ?? false)
     case 'place':
@@ -120,6 +134,12 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
           struck: null,
         })
       }
+      // In Insert mode a rest, like a note, pushes the later notes right (ADR 0092).
+      if (state.mode === 'insert' && caret < totalTicks(draft))
+        return commit(state, makeRoom(draft, layer, caret, stepOf(state)), {
+          caret: caret + stepOf(state),
+          struck: null,
+        })
       const result = writeRest(draft, layer, caret, stepOf(state))
       return commit(state, result.draft, { caret: result.end, struck: null })
     }
@@ -129,19 +149,20 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         // that note alone (ADR 0088).
         const span = chosenSpan(state)
         if (typeof span !== 'number' && 'from' in span)
-          return commit(state, deleteNotes(draft, layer, span), {
+          return commit(state, takenAway(state, layer, span), {
             caret: span.from,
             selection: null,
             struck: null,
           })
+        // The chord stays, so there is no gap to close.
         if (typeof span !== 'number')
           return commit(state, deleteNotes(draft, layer, span), {
             chordNote: null,
             struck: null,
           })
-        if (!action.back) return commit(state, deleteNotes(draft, layer, caret), { struck: null })
-        const taken = deleteBack(draft, layer, caret)
-        return commit(state, taken.draft, { caret: taken.caret, struck: null })
+        const at = action.back ? backFrom(draft, layer, caret) : caret
+        if (at === null) return { ...state, struck: null }
+        return commit(state, takenAway(state, layer, at), { caret: at, struck: null })
       }
       if (state.selection) return barsEdited(state, 'delete')
       const bar = barAt(draft, caret)

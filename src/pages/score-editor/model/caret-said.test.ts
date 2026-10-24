@@ -42,6 +42,26 @@ describe('caretSaid', () => {
     expect(at(120, 'melody')).toEqual({ kind: 'held', bar: 2, beat: '2', what: 'A4' })
   })
 
+  it('names the mode where it is not Replace, on a staff alone (ADR 0092)', () => {
+    expect(caretSaid({ draft, caret: 36, layer: 'melody', mode: 'insert' })).toEqual({
+      kind: 'rest',
+      bar: 1,
+      beat: '2.5',
+      what: '',
+      mode: 'insert',
+    })
+    expect(caretSaid({ draft, caret: 192, layer: 'melody', mode: 'chord' })).toEqual({
+      kind: 'end',
+      mode: 'chord',
+    })
+    expect(caretSaid({ draft, caret: 0, layer: 'melody', mode: 'replace' })).not.toHaveProperty(
+      'mode',
+    )
+    expect(caretSaid({ draft, caret: 96, layer: 'chords', mode: 'insert' })).not.toHaveProperty(
+      'mode',
+    )
+  })
+
   it('names one note of a chord chosen alone (ADR 0088)', () => {
     const chord = readDraft({ ...music, hands: { ...music.hands, rh: 'D4+F#4+A4/4 | r/4' } })
     expect(caretSaid({ draft: chord, caret: 0, layer: 'rh', chordNote: midi(66) })).toMatchObject({

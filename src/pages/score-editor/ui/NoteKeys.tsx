@@ -4,12 +4,14 @@ import { useShallow } from 'zustand/react/shallow'
 import {
   carriesAccidental,
   chosenNotes,
+  EDIT_MODES,
   NOTE_VALUES,
   shownValue,
   takesDot,
+  type EditMode,
 } from '@/features/score-editor'
 import { isCompound, type Accidental } from '@/shared/lib/music'
-import { ToolKey } from '@/shared/ui'
+import { Segmented, ToolKey } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
 import { VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
@@ -115,71 +117,135 @@ function AccidentalKeys() {
   })
 }
 
+/** A notehead, as the mode pictures draw it. */
+const Head = ({ cx, cy, soft = false }: { cx: number; cy: number; soft?: boolean }) => (
+  <ellipse
+    cx={cx}
+    cy={cy}
+    rx="4"
+    ry="2.8"
+    opacity={soft ? 0.45 : 1}
+    transform={`rotate(-20 ${cx} ${cy})`}
+  />
+)
+
 /**
- * The Notes section, under the quick row's values: Double dotted and Triplet (out of reach where the
- * meter takes none), Rest, Tie and Chord, then the accidentals.
+ * A mode's picture (ADR 0092): Replace, the caret before a note it writes over; Insert, a note with
+ * the arrow the later notes move by; Chord, noteheads stacked on one stem.
+ */
+function ModeIcon({ mode }: { mode: EditMode }) {
+  if (mode === 'chord') return <StackedNotes />
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="currentColor">
+      {mode === 'replace' ? (
+        <>
+          <rect x="4" y="3" width="1.6" height="18" rx="0.8" />
+          <Head cx={14} cy={15} />
+          <rect x="17.4" y="3" width="1.4" height="12" />
+        </>
+      ) : (
+        <>
+          <Head cx={7} cy={15} />
+          <rect x="10.4" y="3" width="1.4" height="12" />
+          <path
+            d="M14 15h6m-2.5-2.5L20 15l-2.5 2.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </>
+      )}
+    </svg>
+  )
+}
+
+/**
+ * The editing modes (ADR 0092, Flat's Melody · Insert · Chord): one always chosen, the line under
+ * it saying what a key played does; I cycles them.
+ */
+function ModeChoice() {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const mode = useEditorState((state) => state.mode)
+  return (
+    <div className="flex flex-col gap-1.5">
+      <Segmented
+        label={t('mode.label')}
+        value={mode}
+        options={EDIT_MODES.map((each) => ({
+          value: each,
+          label: t(`mode.${each}`),
+          icon: <ModeIcon mode={each} />,
+        }))}
+        onChange={(next) => actions.dispatch({ type: 'mode', mode: next })}
+      />
+      <p className="text-sm text-pretty text-muted-foreground">{t(`mode.${mode}Detail`)}</p>
+    </div>
+  )
+}
+
+/**
+ * The Notes section, under the quick row's values: the editing modes, then Double dotted and
+ * Triplet (out of reach where the meter takes none), Rest and Tie, then the accidentals.
  */
 export function NoteKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const dispatch = actions.dispatch
   const shown = useShown()
-  const chord = useEditorState((state) => state.chord)
   const doubleDottable = useEditorState((state) =>
     takesDot((shownValue(state) ?? state.value).value, state.draft.meter, 2),
   )
   const compound = useEditorState((state) => isCompound(state.draft.meter))
   return (
-    <GlyphGrid>
-      <ToolKey
-        label={t('doubleDot')}
-        pressed={shown?.dots === 2}
-        disabled={!doubleDottable}
-        onClick={() => dispatch({ type: 'dot', dots: 2 })}
-      >
-        <span aria-hidden className={GLYPH}>
-          {VALUE_GLYPHS[4]}..
-        </span>
-      </ToolKey>
-      <ToolKey
-        label={t('triplet')}
-        pressed={shown?.triplet === true}
-        disabled={compound}
-        onClick={() => dispatch({ type: 'triplet' })}
-      >
-        <span aria-hidden className="font-display text-xl font-semibold italic">
-          3
-        </span>
-      </ToolKey>
-      <ToolKey label={t('rest')} onClick={() => dispatch({ type: 'rest' })}>
-        <span aria-hidden className={GLYPH}>
-          {REST}
-        </span>
-      </ToolKey>
-      <ToolKey label={t('marks.tie')} onClick={() => dispatch({ type: 'tie' })}>
-        <svg
-          aria-hidden
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          className="size-6"
+    <>
+      <ModeChoice />
+      <GlyphGrid>
+        <ToolKey
+          label={t('doubleDot')}
+          pressed={shown?.dots === 2}
+          disabled={!doubleDottable}
+          onClick={() => dispatch({ type: 'dot', dots: 2 })}
         >
-          <circle cx="5" cy="9" r="2" fill="currentColor" />
-          <circle cx="19" cy="9" r="2" fill="currentColor" />
-          <path d="M5 13 C9 18 15 18 19 13" />
-        </svg>
-      </ToolKey>
-      <ToolKey
-        label={t('chordMode')}
-        pressed={chord}
-        onClick={() => dispatch({ type: 'chordMode' })}
-      >
-        <StackedNotes />
-      </ToolKey>
-      <AccidentalKeys />
-    </GlyphGrid>
+          <span aria-hidden className={GLYPH}>
+            {VALUE_GLYPHS[4]}..
+          </span>
+        </ToolKey>
+        <ToolKey
+          label={t('triplet')}
+          pressed={shown?.triplet === true}
+          disabled={compound}
+          onClick={() => dispatch({ type: 'triplet' })}
+        >
+          <span aria-hidden className="font-display text-xl font-semibold italic">
+            3
+          </span>
+        </ToolKey>
+        <ToolKey label={t('rest')} onClick={() => dispatch({ type: 'rest' })}>
+          <span aria-hidden className={GLYPH}>
+            {REST}
+          </span>
+        </ToolKey>
+        <ToolKey label={t('marks.tie')} onClick={() => dispatch({ type: 'tie' })}>
+          <svg
+            aria-hidden
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            className="size-6"
+          >
+            <circle cx="5" cy="9" r="2" fill="currentColor" />
+            <circle cx="19" cy="9" r="2" fill="currentColor" />
+            <path d="M5 13 C9 18 15 18 19 13" />
+          </svg>
+        </ToolKey>
+        <AccidentalKeys />
+      </GlyphGrid>
+    </>
   )
 }
 

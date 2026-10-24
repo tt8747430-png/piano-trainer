@@ -19,6 +19,7 @@ import {
 import type { HandId } from '@/entities/piece'
 import { isHandLayer, type Draft, type DraftBar, type DraftNote, type NoteLayer } from './draft'
 import { insertBar } from './bars'
+import type { TickSpan } from './state'
 import { barsOf, keyAt, totalTicks } from './timeline'
 
 /** A draft after writing, and where the caret goes next. */
@@ -63,6 +64,32 @@ export function reaching(draft: Draft, at: Tick): Draft {
   return grown
 }
 
+/** A layer's notes with those starting at `from` or later moved `by` ticks. */
+const shifted = (notes: readonly DraftNote[], from: Tick, by: Tick): DraftNote[] =>
+  notes.map((n) => (n.startTick >= from ? { ...n, startTick: n.startTick + by } : n))
+
+/**
+ * Insert mode's room (ADR 0092, Flat's): the notes of a layer from `at` on pushed `ticks` to the
+ * right, bars added at the end of the song first to hold what is pushed past it, so nothing is
+ * lost. A note sounding into `at` from before stays.
+ */
+export function makeRoom(draft: Draft, layer: NoteLayer, at: Tick, ticks: Tick): Draft {
+  const pushed = notesOf(draft, layer).filter((n) => n.startTick >= at)
+  const end = Math.max(0, ...pushed.map((n) => n.startTick + n.durationTicks)) + ticks
+  const grown = pushed.length > 0 && end > totalTicks(draft) ? reaching(draft, end - 1) : draft
+  return withNotes(grown, layer, shifted(notesOf(grown, layer), at, ticks))
+}
+
+/**
+ * Insert mode's Delete (ADR 0092): the notes starting in `span` taken and the later notes pulled
+ * left by its length, closing the gap as Flat's does.
+ */
+export function closeGap(draft: Draft, layer: NoteLayer, { from, to }: TickSpan): Draft {
+  if (to <= from) return draft
+  const kept = notesOf(draft, layer).filter((n) => n.startTick < from || n.startTick >= to)
+  return withNotes(draft, layer, shifted(kept, to, from - to))
+}
+
 /** A key as the draft writes it at a tick: spelled in the key there (a section's own, ADR 0089). */
 export const spelledIn = (draft: Draft, key: Midi, at: Tick) => ({
   midi: key,
@@ -104,6 +131,15 @@ export function writeNotes(
   }))
   return { draft: withNotes(grown, layer, [...clearUnder(grown, layer, at, end), ...written]), end }
 }
+
+/** Insert mode's writing (ADR 0092): keys written at `at` in the room made for them. */
+export const insertNotes = (
+  draft: Draft,
+  layer: NoteLayer,
+  at: Tick,
+  keys: readonly Midi[],
+  ticks: Tick,
+): Written => writeNotes(makeRoom(draft, layer, at, ticks), layer, at, keys, ticks)
 
 /** A rest at `at`: the notes starting under it are taken. */
 export function writeRest(draft: Draft, layer: NoteLayer, at: Tick, ticks: Tick): Written {
@@ -294,22 +330,14 @@ export const stepNotes = (draft: Draft, layer: NoteLayer, where: Where, steps: n
   })
 
 /**
- * What Delete takes, as a text field's Backspace: the notes at the caret (those chosen), else the
- * last notes before it, the caret going back to where they started; the draft as it was where there
- * are none. Pressed again and again, it takes the notes one by one back from the end.
+ * Where Backspace takes from, as a text field's: the caret, where notes start there, else where the
+ * last notes before it start, the caret going back there; null where there are none. Pressed again
+ * and again, it takes the notes one by one back from the end.
  */
-export function deleteBack(
-  draft: Draft,
-  layer: NoteLayer,
-  at: Tick,
-): { readonly draft: Draft; readonly caret: Tick } {
-  if (notesAt(draft, layer, at).length > 0)
-    return { draft: deleteNotes(draft, layer, at), caret: at }
+export function backFrom(draft: Draft, layer: NoteLayer, at: Tick): Tick | null {
+  if (notesAt(draft, layer, at).length > 0) return at
   const before = notesOf(draft, layer).filter((n) => n.startTick < at)
-  const last = Math.max(...before.map((n) => n.startTick))
-  return before.length === 0
-    ? { draft, caret: at }
-    : { draft: deleteNotes(draft, layer, last), caret: last }
+  return before.length === 0 ? null : Math.max(...before.map((n) => n.startTick))
 }
 
 /** The notes at `at` written the other way (C♯ ↔ D♭). */

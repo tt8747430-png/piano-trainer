@@ -162,6 +162,13 @@ describe('shortcutOf', () => {
     expect(shortcutOf(press('Escape', 'Escape'), 'melody')).toEqual({ type: 'deselect' })
   })
 
+  it('cycles the editing modes with I, a letter typing leaves free, on a staff alone (ADR 0092)', () => {
+    expect(shortcutOf(press('KeyI', 'i'), 'melody')).toEqual({ type: 'mode' })
+    expect(shortcutOf(press('KeyI', 'i'), 'lh')).toEqual({ type: 'mode' })
+    expect(shortcutOf(press('KeyI', 'i'), 'chords')).toBeNull()
+    expect(shortcutOf(press('KeyI', 'i', { metaKey: true }), 'melody')).toBeNull()
+  })
+
   it('leaves every typing key to the piano, and a plain letter or Cmd with another key alone', () => {
     for (const code of ['KeyA', 'KeyW', 'KeyZ', 'KeyX', 'Semicolon', 'Quote']) {
       expect(shortcutOf(press(code, code.slice(-1).toLowerCase()), 'melody')).toBeNull()

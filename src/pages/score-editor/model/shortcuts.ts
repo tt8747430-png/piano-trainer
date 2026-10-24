@@ -24,7 +24,8 @@ const isBarEditKey = (code: string): code is keyof typeof BAR_EDITS =>
  * free: digits, the full stop, arrows (Shift extending what is chosen by a note, with Alt by a bar,
  * with Cmd to an end; Alt with ↑ ↓ through a chord's notes, then to the staff over or under, ADR
  * 0088; ↑ ↓ the notes a step in the key, with Shift a semitone, with Cmd an octave), Home, End, Backspace, Delete, Enter and Escape (letting go of what is chosen), and Cmd or
- * Ctrl with Z, Y, and C, X, V (the bars, in the chords); a letter alone plays the piano.
+ * Ctrl with Z, Y, and C, X, V (the bars, in the chords); a letter alone plays the piano, but for I,
+ * which typing leaves free: on a staff it cycles the editing modes, as Dorico's I does (ADR 0092).
  */
 export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
   const mod = press.metaKey || press.ctrlKey
@@ -79,5 +80,6 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
   if (value !== undefined) return { type: 'value', value }
   if (press.code === 'Period') return { type: 'dot' }
   if (press.code === 'Digit0') return { type: 'rest' }
+  if (press.code === 'KeyI') return layer === 'chords' ? null : { type: 'mode' }
   return null
 }

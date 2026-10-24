@@ -16,9 +16,11 @@ export {
 export { placesIn, selectionSpan, tapsIn } from './model/caret-moves'
 export { selectedBars } from './model/form-edits'
 export {
+  EDIT_MODES,
   type BarEdit,
   type CaretMove,
   type ChordAdvance,
+  type EditMode,
   type EditorAction,
   type EditorState,
 } from './model/state'
