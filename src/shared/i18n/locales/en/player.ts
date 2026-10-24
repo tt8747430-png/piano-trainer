@@ -3,19 +3,10 @@ export const player = {
   /** A piece's score in its two modes, the Player and the score editor (ADR 0090). */
   mode: { label: 'Practise or edit', practise: 'Practise', edit: 'Edit' },
   // How the score is shown (ADR 0064), from the bar: remembered for every piece.
+  // The View's switches only practice has (ADR 0094); the rest of the View is music's.
   view: {
-    open: 'View',
-    staves: 'Staves',
-    melody: 'Melody staff',
-    melodyDetail: 'Its own staff over the piano, while the melody plays',
-    rh: 'Right hand',
-    lh: 'Left hand',
-    show: 'Show',
     notation: 'Sheet music',
-    chordNames: 'Chord symbols',
-    lyrics: 'Lyrics',
     positionsDetail: 'Beside each chord’s name, the position the right hand plays it in',
-    keys: 'Keys',
   },
   key: 'Key',
   root: 'Root',

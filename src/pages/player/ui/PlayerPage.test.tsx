@@ -354,18 +354,34 @@ describe('Player', () => {
     }
   })
 
-  it('keeps what the sheet shows in the View, Chord positions among it, and how it plays in the Setup', async () => {
+  it('keeps what the sheet shows in the View, the editor’s with what only practice has, and how it plays in the Setup', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'View' }))
     const view = await screen.findByRole('dialog', { name: 'View' })
-    // The editor's View in shape: the layout first, then the staves, then what is shown.
+    // The editor's View, one menu (ADR 0094): the layout, the staves, what is shown, then the
+    // Player's own.
     expect(
       within(view)
         .getAllByRole('region')
         .map((section) => section.getAttribute('aria-label')),
     ).toEqual(['Layout', 'Staves', 'Show'])
-    expect(within(view).getByRole('switch', { name: /^Melody staff/ })).toBeInTheDocument()
+    const switches = within(view).getAllByRole('switch')
+    expect(switches).toHaveLength(10)
+    ;[
+      'Melody',
+      'Upper staff',
+      'Lower staff',
+      'Chord symbols',
+      'Lyrics',
+      'Keys',
+      'Sheet music',
+      /^Chord positions/,
+      'Finger numbers',
+      'Note names',
+    ].forEach((name, i) => expect(switches[i]).toHaveAccessibleName(name))
+    await user.click(within(view).getByRole('switch', { name: 'Upper staff' }))
+    expect(settingsStore.getState().scoreView.hidden).toEqual(['treble'])
     await user.click(within(view).getByRole('switch', { name: /^Chord positions/ }))
     expect(settingsStore.getState().practice.positions).toBe(true)
     await user.keyboard('{Escape}')

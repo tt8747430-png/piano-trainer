@@ -8,10 +8,9 @@ import {
   usePieces,
   usePiecesStoreApi,
 } from '@/entities/piece'
-import { selectScoreView, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { selectScoreView, useSettings } from '@/entities/settings'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { renameSong, saveMusic } from '@/features/edit-piece'
-import { setScoreView } from '@/features/set-preference'
 import {
   barAt,
   barsOf,
@@ -19,11 +18,10 @@ import {
   readDraft,
   musicToSave,
   rowShown,
-  topStaff,
   type EditorAction,
 } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
-import { useGoBack, useViewChange, useWakeLock, type SheetView } from '@/shared/lib'
+import { useGoBack, useViewChange, useWakeLock } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import { audibleHands, schedule } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
@@ -34,6 +32,7 @@ import type { ScoreEditorValue } from './editor-context'
 import type { EditSearch } from './edit-search'
 import { savedMusic, savingTo, type EditorTarget } from './editor-target'
 import type { PaletteCategory } from './palette-categories'
+import { layerInSight, rowsInSight } from './seen-draft'
 import { shortcutOf } from './shortcuts'
 import { useEditorTakes } from './use-editor-takes'
 
@@ -67,14 +66,9 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   useWakeLock()
   const pieces = usePiecesStoreApi()
   const locale = useLocale()
-  // How the score is laid out is the learner's way of working, kept for every song, and the
-  // Player's too: the music stands still between Practise and Edit (ADR 0090).
-  const settings = useSettingsStoreApi()
-  const layout = useSettings((state) => selectScoreView(state).layout)
-  const setLayout = (next: SheetView) => setScoreView(settings, { layout: next })
-  // The words shown or hidden as in the Player (ADR 0093).
-  const lyrics = useSettings((state) => selectScoreView(state).lyrics)
-  const setLyrics = (shown: boolean) => setScoreView(settings, { lyrics: shown })
+  // How the score is shown is the View's, the Player's too (ADR 0090, 0094): its layout (the music
+  // stands still between Practise and Edit), its words (ADR 0093), staves and chord symbols.
+  const shown = useSettings(selectScoreView)
   // The Lyrics field, on the verse it writes, while the learner has it open.
   const [lyricsVerse, openLyrics] = useState<number | null>(null)
   // A category of the palette the sheet asked for: each ask a new value, so the same one opens again.
@@ -131,8 +125,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   const title =
     target.kind === 'song' ? (songTitle ?? target.title) : entryTitles(target.entry, locale).primary
 
-  // The chord names shown unless the song hides them (ADR 0072).
-  const chordNames = useStore(store, (state) => rowShown(state.draft, 'chords'))
+  // The chord names shown unless the song hides them (ADR 0072) or the View does (ADR 0094).
+  const chordNames = useStore(store, (state) => rowShown(state.draft, 'chords')) && shown.chordNames
   const takes = useEditorTakes(target.id, store, title)
   const recording = takes.stage !== 'idle'
 
@@ -199,17 +193,21 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     return () => window.removeEventListener('keydown', listener)
   }, [])
 
-  // With no chord row there is no chord to write: the caret goes to the top staff (the tune's, or
-  // the right hand's), now and whenever a step undone or redone would bring it back to the chords.
+  // The caret writes only in a row in sight (ADR 0094): a row the song or the View hides (the chord
+  // symbols, the tune's staff) is stepped over the way the caret was going, else it stays; a row put
+  // out of sight under it sends it to the staff under it. Now, and whenever a step, an Undo or a Redo
+  // would bring it back there.
   useEffect(() => {
-    if (chordNames) return
-    const toTune = () => {
+    let from = store.getState().layer
+    const keepInSight = () => {
       const { layer, draft } = store.getState()
-      if (layer === 'chords') store.dispatch({ type: 'layer', layer: topStaff(draft) })
+      const to = layerInSight(rowsInSight(draft, shown), from, layer)
+      from = to
+      if (to !== layer) store.dispatch({ type: 'layer', layer: to })
     }
-    toTune()
-    return store.subscribe(toTune)
-  }, [store, chordNames])
+    keepInSight()
+    return store.subscribe(keepInSight)
+  }, [store, shown])
 
   return {
     store,
@@ -217,16 +215,14 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     actions: { dispatch, play, togglePlay, close, rename },
     view: {
       chordNames,
-      lyrics,
-      setLyrics,
+      lyrics: shown.lyrics,
       lyricsVerse,
       openLyrics,
       toolsAsked,
       askTools,
       speed,
       setSpeed,
-      layout,
-      setLayout,
+      layout: shown.layout,
     },
     meta: {
       id: target.id,

@@ -53,17 +53,6 @@ export const editor: LocaleResources['editor'] = {
     toStaff: 'Скопированные ноты вставляются на нотоносец',
     toChords: 'Скопированные такты вставляются в аккордовые символы',
   },
-  view: 'Вид',
-  viewMenu: {
-    show: 'Показывать',
-    lyrics: 'Текст',
-    palette: 'Все инструменты',
-    keys: 'Клавиши',
-    side: 'Инструменты рядом с нотами',
-    left: 'Слева',
-    right: 'Справа',
-    label: 'Вид',
-  },
   barline: {
     repeatStart: 'Начало повтора',
     repeatEnd: 'Конец повтора',

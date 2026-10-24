@@ -56,19 +56,6 @@ export const editor = {
     toStaff: 'The notes copied go on a staff',
     toChords: 'The bars copied go in the chord symbols',
   },
-  // The song's settings: what the sheet shows.
-  view: 'View',
-  // What the score shows and how, from the bar (ADR 0064).
-  viewMenu: {
-    show: 'Show',
-    lyrics: 'Lyrics',
-    palette: 'Every tool',
-    keys: 'Keys',
-    side: 'Tools beside the music',
-    left: 'Left',
-    right: 'Right',
-    label: 'View',
-  },
   // The palette's Barlines & repeats (ADR 0068).
   barline: {
     repeatStart: 'Start repeat',

@@ -593,16 +593,15 @@ describe('the score editor', () => {
     expect(screen.getByRole('button', { name: 'Hide the keys' })).toBeInTheDocument()
   })
 
-  it('moves its palette beside the sheet to the left and back, saved', async () => {
+  it('offers no side for its palette beside the sheet, nor a switch for it, in the View (ADR 0094)', async () => {
     const user = userEvent.setup()
     sizedAs(LANDSCAPE_PHONE)
-    const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    // Beside the sheet, its side is chosen in View, once, not in the palette's crowded bar.
+    await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'View' }))
-    await user.click(await screen.findByRole('radio', { name: 'Left' }))
-    expect(settingsStore.getState().paletteSide).toBe('left')
-    await user.click(screen.getByRole('radio', { name: 'Right' }))
-    expect(settingsStore.getState().paletteSide).toBe('right')
+    const view = await screen.findByRole('dialog', { name: 'View' })
+    expect(within(view).queryByRole('radio', { name: 'Left' })).not.toBeInTheDocument()
+    expect(within(view).queryByRole('switch', { name: 'Every tool' })).not.toBeInTheDocument()
+    expect(within(view).getAllByRole('switch')).toHaveLength(6)
   })
 
   it.each([
@@ -1041,24 +1040,62 @@ describe('the score editor', () => {
     ])
   })
 
-  it('lays the score out as the Player does: one layout, both View menus writing it (ADR 0090)', async () => {
+  it('shows the score through the Player’s View, one menu, but what only practice has (ADR 0090, 0094)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'View' }))
     const view = await screen.findByRole('dialog', { name: 'View' })
+    expect(
+      within(view)
+        .getAllByRole('region')
+        .map((section) => section.getAttribute('aria-label')),
+    ).toEqual(['Layout', 'Staves', 'Show'])
+    // Nothing in it twice: the palette folds by its own handle, and stands at the sheet's right.
+    const switches = within(view).getAllByRole('switch')
+    expect(switches).toHaveLength(6)
+    ;['Melody', 'Upper staff', 'Lower staff', 'Chord symbols', 'Lyrics', 'Keys'].forEach(
+      (name, i) => expect(switches[i]).toHaveAccessibleName(name),
+    )
+    expect(within(view).queryByRole('radiogroup', { name: /beside/ })).not.toBeInTheDocument()
     await user.click(within(view).getByRole('radio', { name: 'Pages' }))
     expect(settingsStore.getState().scoreView.layout).toBe('pages')
     expect(settingsStore.getState()).not.toHaveProperty('editorLayout')
   })
 
-  it('offers the palette’s side only where it stands beside the sheet', async () => {
+  it('shows the tune’s staff and the chord symbols as the View says, the caret kept in sight (ADR 0094)', async () => {
     const user = userEvent.setup()
-    await renderApp('/edit/my-1', { storage: withSong() })
-    await user.click(await screen.findByRole('button', { name: 'View' }))
+    const { settingsStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ melody: 'B4/4 | D5/4 | G4/4 | G4/4' }),
+    })
+    const staves = () =>
+      new Set(
+        [...document.querySelectorAll('[data-slot="score"] g.staff[data-staff]')].map((staff) =>
+          staff.getAttribute('data-staff'),
+        ),
+      )
+    const chordNames = () =>
+      [...document.querySelectorAll('[data-slot="line-labels"]')].map((labels) =>
+        /G/.test(labels.textContent),
+      )
+    await waitFor(() => expect(staves()).toEqual(new Set(['melody', 'treble', 'bass'])), {
+      timeout: 4000,
+    })
+    expect(chordNames()).toContain(true)
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Melody · Bar 1/))
+    await user.click(screen.getByRole('button', { name: 'View' }))
     const view = await screen.findByRole('dialog', { name: 'View' })
-    expect(within(view).getByRole('region', { name: 'Layout' })).toBeInTheDocument()
-    // A phone held upright: the palette is at the foot, it has no side.
-    expect(within(view).queryByRole('radiogroup', { name: 'Tools beside the music' })).toBeNull()
+    await user.click(within(view).getByRole('switch', { name: 'Melody' }))
+    expect(settingsStore.getState().scoreView.melodyStaff).toBe(false)
+    await waitFor(() => expect(staves()).toEqual(new Set(['treble', 'bass'])))
+    // The caret leaves the staff out of sight for the one under it; its notes are kept.
+    expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff · Bar 1/)
+    await user.click(within(view).getByRole('switch', { name: 'Chord symbols' }))
+    expect(settingsStore.getState().scoreView.chordNames).toBe(false)
+    await waitFor(() => expect(chordNames()).not.toContain(true))
+    await user.keyboard('{Escape}')
+    // Up from the top staff in sight there is no row to write: the caret stays.
+    await user.keyboard('{Alt>}{ArrowUp}{/Alt}')
+    expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff · Bar 1/)
   })
 
   it('shows not found for a song written in degrees', async () => {
