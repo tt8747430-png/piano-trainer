@@ -132,7 +132,14 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
             ref={foot}
             data-hidden={footShown ? undefined : true}
             inert={!footShown}
-            className="absolute inset-x-0 bottom-0 flex max-h-full flex-col items-center gap-2 px-1 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none"
+            className={cn(
+              'absolute inset-x-0 bottom-0 flex max-h-full flex-col items-center gap-2 px-1 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none',
+              // The dock centred in the room the palette beside the sheet leaves, never under it.
+              side &&
+                (left
+                  ? 'pl-84 landscape-phone:pl-80 xl:pl-96'
+                  : 'pr-84 landscape-phone:pr-80 xl:pr-96'),
+            )}
           >
             <div className="pointer-events-auto shrink-0">
               {idle ? <EditorDock /> : <RecordingStrip />}
