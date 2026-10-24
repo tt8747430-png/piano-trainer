@@ -138,7 +138,7 @@ describe('the words a piece sings (ADR 0093)', () => {
     const doubled = arrangePiece(silent, { ...ownChoice(silent), melody: true }, BUILT_IN_PATTERNS)
     const sung = doubled.notes.filter((n) => n.lyrics !== undefined)
     expect(new Set(sungBy(sung))).toEqual(new Set(['melody']))
-    expect(sung[0]?.lyrics?.[0]).toEqual({ text: 'Si', hyphen: true, melisma: true })
+    expect(sung[0]?.lyrics?.[0]).toEqual({ text: 'Si', hyphen: true, held: 1 })
     // The five notes a syllable is held over sing nothing: 46 notes of the tune, 41 with a verse.
     expect(sung).toHaveLength(41)
     const played = arrangePiece(silent, { ...ownChoice(silent), pattern: 'r5' }, BUILT_IN_PATTERNS)

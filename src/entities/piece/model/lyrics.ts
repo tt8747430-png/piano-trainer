@@ -22,13 +22,16 @@ export function readLyrics(text: string): Verse {
       if (token === '~') return [null]
       const [, word = '', hyphen, held = ''] = TOKEN.exec(token) ?? []
       return [
-        { text: word, hyphen: hyphen === '-', melisma: held.length > 0 },
+        { text: word, hyphen: hyphen === '-', held: held.length },
         ...Array.from(held, () => null),
       ]
     })
 }
 
-/** A verse written back as `readLyrics` reads it: a melisma over the empty places that follow it. */
+/**
+ * A verse written back as `readLyrics` reads it: a syllable held over no more than the empty places
+ * that follow it (a note taken away shortens the melisma).
+ */
 export function writeLyrics(verse: Verse): string {
   const tokens: string[] = []
   for (let i = 0; i < verse.length; i++) {
@@ -38,7 +41,7 @@ export function writeLyrics(verse: Verse): string {
       continue
     }
     let held = 0
-    if (sung.melisma) while (i + 1 + held < verse.length && verse[i + 1 + held] === null) held++
+    while (held < sung.held && i + 1 + held < verse.length && verse[i + 1 + held] === null) held++
     tokens.push(`${sung.text}${sung.hyphen ? '-' : ''}${'_'.repeat(held)}`)
     i += held
   }
@@ -52,7 +55,10 @@ function sungAt(verses: readonly Verse[], index: number): NoteLyrics | undefined
   return sung.length > 0 ? sung : undefined
 }
 
-/** The verses the tune's notes sing, in order, as many as any note has; each note's place filled. */
+/**
+ * The verses the tune's notes sing, in order, as many as any note has; every note's place filled,
+ * so a melisma held to the tune's end keeps the notes it is held over.
+ */
 export function gatherLyrics(tune: readonly { readonly lyrics?: NoteLyrics }[]): Verse[] {
   const count = Math.max(0, ...tune.map((n) => n.lyrics?.length ?? 0))
   return Array.from({ length: count }, (_, verse) => tune.map((n) => n.lyrics?.[verse] ?? null))

@@ -31,7 +31,7 @@ describe('playedMusic', () => {
   })
 
   it('leaves the words out where the View hides them (ADR 0093)', () => {
-    const sung = { text: 'one', hyphen: false, melisma: false }
+    const sung = { text: 'one', hyphen: false, held: 0 }
     const performance = arrange(CHART, {
       tonic: C_MAJOR.tonic,
       pattern: BLOCK,

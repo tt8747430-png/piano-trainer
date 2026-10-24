@@ -329,7 +329,7 @@ describe('notate a lead sheet (ADR 0083)', () => {
 })
 
 describe('notate the words (ADR 0093)', () => {
-  const sung = (text: string, hyphen = false, melisma = false) => ({ text, hyphen, melisma })
+  const sung = (text: string, hyphen = false, held = 0) => ({ text, hyphen, held })
   /** Each voice's written notes' syllables in order, rests left out. */
   const verses = (score: ReturnType<typeof notate>, staff: 'melody' | 'treble') =>
     score.measures.flatMap((measure) =>
@@ -342,7 +342,7 @@ describe('notate the words (ADR 0093)', () => {
     const score = notate(
       music(
         [
-          n(72, note('C'), 'melody', 0, 48, { lyrics: [sung('Si', true, true)] }),
+          n(72, note('C'), 'melody', 0, 48, { lyrics: [sung('Si', true, 1)] }),
           n(74, note('D'), 'melody', 48, 24),
           n(76, note('E'), 'melody', 72, 48, { lyrics: [sung('lent'), sung('ho', true)] }),
         ],
@@ -356,7 +356,7 @@ describe('notate the words (ADR 0093)', () => {
       ),
     )
     expect(verses(score, 'melody')).toEqual([
-      [sung('Si', true, true)],
+      [sung('Si', true, 1)],
       null,
       [sung('lent'), sung('ho', true)],
       null,

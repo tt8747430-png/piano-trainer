@@ -6,8 +6,8 @@ export interface Syllable {
   readonly text: string
   /** Its word goes on in the next syllable sung: a hyphen is drawn to it (`A- ma- zing`). */
   readonly hyphen: boolean
-  /** Held over the notes after it that sing nothing (a melisma): a line is drawn from it. */
-  readonly melisma: boolean
+  /** How many notes after it the syllable is held over (a melisma): a line is drawn from it; 0 none. */
+  readonly held: number
 }
 
 /** What a note sings, by verse: null where a verse sings nothing on it (a rest in the words, a melisma). */

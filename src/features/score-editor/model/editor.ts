@@ -14,6 +14,7 @@ import { barsEdited, chordSet, chosenBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
 import { lineOver, lineSpan } from './lines'
+import { setSyllable, singsHere } from './lyrics'
 import { markNotes } from './marks'
 import {
   backFrom,
@@ -263,6 +264,11 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       return layer === 'chords'
         ? state
         : commit(state, tieNotes(draft, layer, caret), { struck: null })
+    // The words go under the tune's staff alone (ADR 0093).
+    case 'syllable':
+      return singsHere(draft, layer)
+        ? commit(state, setSyllable(draft, caret, action.verse, action.text), { struck: null })
+        : state
     case 'chord':
       return chordSet(state, action.chord, action.advance)
     case 'take':

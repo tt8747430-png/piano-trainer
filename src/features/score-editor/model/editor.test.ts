@@ -880,3 +880,40 @@ describe('createEditorStore', () => {
     expect(store.getState().past).toEqual([])
   })
 })
+
+describe('the words (ADR 0093)', () => {
+  const sung = () =>
+    initialEditor(
+      draftOf({
+        key: 'C',
+        sections: [{ kind: 'verse', lines: ['C G'] }],
+        melody: 'C4/1 D4/1 E4/1 F4/1 | r/4',
+        hands: { rh: 'r/4 | r/4', lh: 'r/4 | r/4' },
+      }),
+    )
+  const verses = (state: EditorState) => musicToSave(state.draft)?.lyrics
+
+  it('writes a syllable on the tune’s note at the caret, undone as one step, nowhere else', () => {
+    const first = run(sung(), { type: 'syllable', verse: 0, text: 'Si-_' })
+    expect(first.layer).toBe('melody')
+    expect(verses(first)).toEqual(['Si-_ ~ ~'])
+    const on = run(
+      first,
+      { type: 'move', by: 'step', direction: 1 },
+      { type: 'move', by: 'step', direction: 1 },
+    )
+    const second = run(on, { type: 'syllable', verse: 0, text: 'lent' })
+    expect(verses(second)).toEqual(['Si-_ lent ~'])
+    expect(verses(run(second, { type: 'undo' }))).toEqual(['Si-_ ~ ~'])
+    // The upper staff is not the tune where the score has the tune's own staff.
+    const elsewhere = run(
+      sung(),
+      { type: 'layer', layer: 'rh' },
+      { type: 'syllable', verse: 0, text: 'x' },
+    )
+    expect(verses(elsewhere)).toBeUndefined()
+    // A note deleted takes its syllable with it.
+    const gone = run(first, { type: 'delete' })
+    expect(verses(gone)).toBeUndefined()
+  })
+})

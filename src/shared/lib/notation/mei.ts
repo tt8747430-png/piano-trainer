@@ -376,7 +376,7 @@ class Writer {
         const open = this.words.get(verse) ?? false
         this.words.set(verse, syllable.hyphen)
         const wordpos = open ? (syllable.hyphen ? 'm' : 't') : syllable.hyphen ? 'i' : null
-        const con = syllable.hyphen ? 'd' : syllable.melisma ? 'u' : null
+        const con = syllable.hyphen ? 'd' : syllable.held > 0 ? 'u' : null
         const attrs = [wordpos ? ` wordpos="${wordpos}"` : '', con ? ` con="${con}"` : ''].join('')
         return `<verse n="${verse + 1}"><syl${attrs}>${escape(syllable.text)}</syl></verse>`
       })

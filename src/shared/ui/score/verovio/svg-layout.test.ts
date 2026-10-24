@@ -144,7 +144,7 @@ describe('each notehead read back (ADR 0088)', () => {
 })
 
 describe('a line with words (ADR 0093)', () => {
-  const sung = (text: string) => ({ text, hyphen: false, melisma: false })
+  const sung = (text: string) => ({ text, hyphen: false, held: 0 })
   const worded = notate({
     key: { tonic: note('C'), minor: false },
     meter: '4/4',

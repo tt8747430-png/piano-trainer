@@ -9,6 +9,7 @@ export {
   isHandLayer,
   musicToSave,
   readDraft,
+  tuneNotes,
   writeDraft,
   type Draft,
   type DraftNote,
@@ -43,4 +44,5 @@ export {
 export { NOTE_VALUES, takesDot, valueOf, type ChosenValue, type Dots } from './model/values'
 export { chosenNotes, fingerableNotes, shownValue } from './model/chosen'
 export { hasMark, type MarkChoice } from './model/marks'
+export { singsHere, sungAt, sungNear, syllableAt, tuneLayer, verseCount } from './model/lyrics'
 export { lineDrawn, LINES, type Line } from './model/lines'

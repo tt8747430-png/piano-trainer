@@ -1450,3 +1450,56 @@ describe('the score editor’s takes', () => {
     expect(router.state.location.search).toEqual({})
   })
 })
+
+describe('the words under the tune (ADR 0093)', () => {
+  const sung = () =>
+    withSong({
+      melody: 'G4/4 | A4/4 | B4/4 | C5/4',
+      hands: SILENT_HANDS,
+    })
+
+  it('writes a verse syllable by syllable from the Text & pedal section, the caret line naming the verse', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: sung() })
+    const text = await openCategory(user, 'Text & pedal')
+    await user.click(within(text).getByRole('button', { name: 'Lyrics' }))
+    const field = await screen.findByRole('textbox', { name: 'Syllable' })
+    expect(field).toHaveFocus()
+    expect(screen.getByRole('status')).toHaveTextContent(/^Lyrics · Verse 1 · Bar 1/)
+    await user.keyboard('A-')
+    // The dash saves the syllable and moves on to the next note of the tune.
+    await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- ~ ~ ~']))
+    expect(screen.getByRole('status')).toHaveTextContent(/Bar 2/)
+    const next = screen.getByRole('textbox', { name: 'Syllable' })
+    await user.type(next, 'men ')
+    await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- men ~ ~']))
+    expect(screen.getByRole('status')).toHaveTextContent(/Bar 3/)
+    // ↓ starts the second verse; ↑ comes back to the first, whose syllable the field shows.
+    await user.keyboard('{ArrowDown}')
+    expect(screen.getByRole('status')).toHaveTextContent(/^Lyrics · Verse 2/)
+    await user.type(screen.getByRole('textbox', { name: 'Syllable' }), 'la{ArrowUp}')
+    await waitFor(() =>
+      expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- men ~ ~', '~ ~ la ~']),
+    )
+    expect(screen.getByRole('status')).toHaveTextContent(/^Lyrics · Verse 1/)
+    await user.keyboard('{ArrowLeft}')
+    expect(screen.getByRole('textbox', { name: 'Syllable' })).toHaveValue('men')
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('textbox', { name: 'Syllable' })).not.toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent(/^Melody · Bar 2/)
+    // The verse is engraved under the tune.
+    await waitFor(() => expect(document.querySelectorAll('.syl').length).toBeGreaterThan(0))
+  })
+
+  it('is greyed off the tune’s staff, saying where the words go', async () => {
+    const user = userEvent.setup()
+    await renderApp('/edit/my-1', { storage: sung() })
+    await openCategory(user, 'Text & pedal')
+    const row = await screen.findByRole('toolbar', { name: 'Edit' })
+    await user.click(within(row).getByRole('button', { name: 'Next note goes in: Melody' }))
+    await user.click(await screen.findByRole('option', { name: 'Lower staff' }))
+    const text = await screen.findByRole('region', { name: 'Text & pedal' })
+    expect(within(text).getByRole('button', { name: 'Lyrics' })).toBeDisabled()
+    expect(text).toHaveTextContent('Lyrics go under the tune: choose the melody or upper staff.')
+  })
+})

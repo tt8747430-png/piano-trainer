@@ -131,6 +131,11 @@ export type EditorAction =
   | { readonly type: 'mark'; readonly mark: MarkChoice }
   /** A line drawn over the bars chosen, else from the caret to its bar's end, or taken away (ADR 0080). */
   | { readonly type: 'line'; readonly line: Line }
+  /**
+   * What the tune's note at the caret sings in a verse, as the Lyrics field writes it (ADR 0093):
+   * `-` where the word goes on, `_` holding it over the next notes, nothing for silence.
+   */
+  | { readonly type: 'syllable'; readonly verse: number; readonly text: string }
   /** The notes at the caret joined to the same keys' notes after them. */
   | { readonly type: 'tie' }
   | { readonly type: 'chord'; readonly chord: Chord; readonly advance: ChordAdvance }

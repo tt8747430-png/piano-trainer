@@ -200,7 +200,7 @@ describe('scoreToMei, a note’s marks and the options', () => {
 })
 
 describe('the words (ADR 0093)', () => {
-  const sung = (text: string, hyphen = false, melisma = false) => ({ text, hyphen, melisma })
+  const sung = (text: string, hyphen = false, held = 0) => ({ text, hyphen, held })
   const verses = (lyrics: (ReturnType<typeof sung> | null)[][]) =>
     scoreToMei(
       notate(
@@ -219,7 +219,7 @@ describe('the words (ADR 0093)', () => {
       [sung('A', true)],
       [sung('ma', true)],
       [sung('zing')],
-      [sung('grace', false, true)],
+      [sung('grace', false, 1)],
     ])
     expect(mei).toContain('<verse n="1"><syl wordpos="i" con="d">A</syl></verse>')
     expect(mei).toContain('<verse n="1"><syl wordpos="m" con="d">ma</syl></verse>')

@@ -15,11 +15,7 @@ import {
 } from './lyrics'
 import { testSong } from '../testing/test-pieces'
 
-const syl = (text: string, hyphen = false, melisma = false): Syllable => ({
-  text,
-  hyphen,
-  melisma,
-})
+const syl = (text: string, hyphen = false, held = 0): Syllable => ({ text, hyphen, held })
 
 describe('readLyrics', () => {
   it('reads a verse as syllables under the tune’s notes in order, a dash where a word goes on', () => {
@@ -33,12 +29,12 @@ describe('readLyrics', () => {
 
   it('holds a syllable over the next notes with an underscore each (a melisma), and leaves a place empty with ~', () => {
     expect(readLyrics('Si-_ lent night, ~ sleep__')).toEqual([
-      syl('Si', true, true),
+      syl('Si', true, 1),
       null,
       syl('lent'),
       syl('night,'),
       null,
-      syl('sleep', false, true),
+      syl('sleep', false, 2),
       null,
       null,
     ])
@@ -56,9 +52,10 @@ describe('writeLyrics', () => {
       expect(writeLyrics(readLyrics(text))).toBe(text)
   })
 
-  it('writes a melisma over the empty places that follow it, and drops one over none', () => {
-    expect(writeLyrics([syl('a', false, true), null, syl('b')])).toBe('a_ b')
-    expect(writeLyrics([syl('a', false, true), syl('b')])).toBe('a b')
+  it('writes a melisma over no more than the empty places that follow it', () => {
+    expect(writeLyrics([syl('a', false, 1), null, syl('b')])).toBe('a_ b')
+    expect(writeLyrics([syl('a', false, 1), syl('b')])).toBe('a b')
+    expect(writeLyrics([syl('a', false, 1), null, null])).toBe('a_ ~')
     expect(writeLyrics([syl('a'), null, syl('b')])).toBe('a ~ b')
   })
 })

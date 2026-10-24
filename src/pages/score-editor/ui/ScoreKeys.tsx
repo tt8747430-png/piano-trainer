@@ -1,3 +1,4 @@
+import { WholeWord } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useSectionHeading } from '@/entities/piece'
 import {
@@ -9,6 +10,8 @@ import {
   JUMP_CHOICES,
   sectionKey,
   selectedBars,
+  singsHere,
+  verseCount,
   type BarMarkChoice,
 } from '@/features/score-editor'
 import { useKeyName } from '@/shared/i18n'
@@ -28,6 +31,7 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { isJumpWords, JUMP_SIGNS, JUMP_WORDS } from '../model/palette-categories'
 import { Figures } from './BarKeys'
 import { useNotesChosen } from '../model/use-notes-chosen'
+import { LyricsField } from './LyricsField'
 import { BarlineIcon, CodaSign } from './palette-icons'
 import { CaptionGrid, CaptionKey, Printed } from './palette-keys'
 
@@ -199,8 +203,13 @@ const PEDAL_LABEL = {
 /** Text & pedal: the expression words as printed, what each asks under it, and the pedal's marks. */
 export function TextKeys() {
   const { t } = useTranslation('editor')
-  const { actions } = useScoreEditorContext()
+  const { actions, view } = useScoreEditorContext()
   const chosen = useNotesChosen()
+  // The words go under the tune's staff alone (ADR 0093); the verse open is clamped to one past the last.
+  const sings = useEditorState((state) => singsHere(state.draft, state.layer))
+  const count = useEditorState((state) => verseCount(state.draft))
+  const caret = useEditorState((state) => state.caret)
+  const verse = view.lyricsVerse === null ? null : Math.min(view.lyricsVerse, count)
   return (
     <>
       <CaptionGrid label={t('expressions')}>
@@ -231,6 +240,21 @@ export function TextKeys() {
           </CaptionKey>
         ))}
       </CaptionGrid>
+      <h4 className="pt-1 text-sm text-muted-foreground">{t('lyrics.label')}</h4>
+      {sings ? null : (
+        <p className="text-sm text-pretty text-muted-foreground">{t('reason.lyrics')}</p>
+      )}
+      <CaptionGrid label={t('lyrics.label')}>
+        <CaptionKey
+          label={t('lyrics.label')}
+          pressed={verse !== null}
+          disabled={!sings}
+          onClick={() => view.openLyrics(verse === null ? 0 : null)}
+        >
+          <WholeWord />
+        </CaptionKey>
+      </CaptionGrid>
+      {sings && verse !== null ? <LyricsField key={`${caret} ${verse}`} verse={verse} /> : null}
     </>
   )
 }
