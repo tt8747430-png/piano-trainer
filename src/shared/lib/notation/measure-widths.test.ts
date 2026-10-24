@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { midi, note, type SpelledNote } from '@/shared/lib/music'
-import { lineLead, measureWidths } from './measure-widths'
+import { labelLead, lineLead, measureWidths } from './measure-widths'
 import { notate } from './notate'
 import type { TimedMusic, TimedNote } from './types'
 
@@ -73,5 +73,31 @@ describe('lineLead', () => {
     expect(lineLead({ key: { tonic: note('D', -1), minor: false } })).toBeGreaterThan(
       lineLead({ key: { tonic: note('C'), minor: false } }),
     )
+  })
+})
+
+describe('labelLead (ADR 0094)', () => {
+  it('gives the first line the room its staves’ names take, the longest, as Verovio indents it', () => {
+    expect(labelLead({})).toBe(0)
+    // Verovio's indents at scale 1: Piano 73, Melody 75, Фортепиано 122 px.
+    const piano = labelLead({ piano: 'Piano' })
+    expect(Math.abs(piano - 73)).toBeLessThan(6)
+    const both = labelLead({ melody: 'Melody', piano: 'Piano' })
+    expect(Math.abs(both - 75)).toBeLessThan(6)
+    const russian = labelLead({ melody: 'Мелодия', piano: 'Фортепиано' })
+    expect(Math.abs(russian - 122)).toBeLessThan(8)
+  })
+
+  it('takes that room in the first measure alone, so the first line holds as much less', () => {
+    const score = notate({
+      ...music([rh(60, note('C'), 0, 96), rh(62, note('D'), 96, 96)]),
+      bars: [
+        { startTick: 0, beats: 4 },
+        { startTick: 96, beats: 4 },
+      ],
+    })
+    const [first = 0, second = 0] = measureWidths(score)
+    const labels = { piano: 'Piano' }
+    expect(measureWidths(score, 1, true, labels)).toEqual([first + labelLead(labels), second])
   })
 })

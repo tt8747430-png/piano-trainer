@@ -421,5 +421,11 @@ export const editor = {
       allegro: 'Allegro',
       presto: 'Presto',
     },
+    // A staff's name at the first line's head, opening its menu.
+    staves: { melody: 'Melody staff', piano: 'Piano staves' },
+    removeMelody: 'Remove the melody staff',
+    addMelody: 'Add a melody staff',
+    hidePiano: 'Hide the piano',
+    showPiano: 'Show the piano',
   },
 } as const

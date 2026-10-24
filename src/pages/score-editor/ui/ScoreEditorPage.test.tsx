@@ -139,6 +139,33 @@ describe('the score editor', () => {
     )
   })
 
+  it('opens each staff’s menu from its name: the piano hidden and shown, the melody taken away and back (ADR 0094)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ melody: 'B4/4 | r/4 | r/4 | r/4', hands: SILENT_HANDS }),
+    })
+    const menu = async (staff: string, action: string) => {
+      await user.click(await screen.findByRole('button', { name: staff }, { timeout: 4000 }))
+      await user.click(await screen.findByRole('button', { name: action }))
+    }
+    // With a tune, the piano may be hidden: a lead sheet, its music kept.
+    await menu('Piano staves', 'Hide the piano')
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ hidden: ['piano'] }))
+    expect(songOf(piecesStore.getState())).toMatchObject({ hands: SILENT_HANDS })
+    await menu('Melody staff', 'Show the piano')
+    await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('hidden'))
+    // The tune's staff taken away with its notes; Undo brings them back.
+    await menu('Melody staff', 'Remove the melody staff')
+    await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('melody'))
+    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ melody: 'B4/4' }))
+    await user.click(screen.getByRole('button', { name: 'Redo' }))
+    await waitFor(() => expect(songOf(piecesStore.getState())).not.toHaveProperty('melody'))
+    // With none, the piano's menu adds one.
+    await menu('Piano staves', 'Add a melody staff')
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ melody: 'r/4' }))
+  })
+
   it('opens a new song on empty bars, nothing written in either staff, as a new score (ADR 0091)', async () => {
     const user = userEvent.setup()
     const made = chartStart({ tonic: note('G'), minor: false }, '4/4')

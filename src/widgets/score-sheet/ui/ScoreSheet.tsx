@@ -5,7 +5,7 @@ import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/s
 import { PageCanvas, SheetPage, type TitlePlace } from '@/shared/ui'
 import { lineLead, measureWidths, notate } from '@/shared/lib/notation'
 import type { Midi, Tick } from '@/shared/lib/music'
-import { scoreHeight, versesOf } from '@/shared/ui/score'
+import { scoreHeight, useStaffLabels, versesOf } from '@/shared/ui/score'
 import { HEADING, lineFit } from '../model/line-fit'
 import { createLineSheets, untimed, type LineSheet } from '../model/line-sheets'
 import { labelRow } from '../model/label-row'
@@ -138,12 +138,14 @@ export function ScoreSheet({
   // The staves a line writes: the tune's where shown over the piano's two; the verses under the tune.
   const staves = whole?.staves.length ?? 2
   const verses = whole ? versesOf(whole) : 0
+  // The staves' names at the first line's head (ADR 0094).
+  const labels = useStaffLabels(whole?.staves ?? [])
   // A whole system in the height the sheet is seen in, where it is short (a phone on its side).
   const fit = room && room > 0 ? lineFit({ room, staves, headed: !across, chordNames, verses }) : 1
   const sized = pages ? PRINT_SCALE : Math.min(fit, scrollScale(width))
   const widths = useMemo(
-    () => (whole ? measureWidths(whole, sized, chordNames) : []),
-    [whole, sized, chordNames],
+    () => (whole ? measureWidths(whole, sized, chordNames, labels) : []),
+    [whole, sized, chordNames, labels],
   )
   const lead = whole ? lineLead(whole) : 0
   // The room a line's bars have, in the engraving's units: the sheet's or the page's, less the clef and key.
@@ -177,6 +179,7 @@ export function ScoreSheet({
       placesOf={placesOf}
       chordNames={chordNames}
       edit={edit}
+      labels={sheet.line.bars[0]?.index === 0 ? labels : undefined}
       justify={!across}
       onWrite={onWrite}
       onDrag={onDrag}

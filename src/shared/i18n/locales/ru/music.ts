@@ -175,6 +175,7 @@ export const music: LocaleResources['music'] = {
     barChords: 'Такт {{n}}: {{chords}}',
     loopStart: 'Начало повтора',
     loopEnd: 'Конец повтора',
+    staves: { melody: 'Мелодия', piano: 'Фортепиано' },
     canvas: {
       label: 'Страницы: перетащите, чтобы сдвинуть; сведите пальцы или Ctrl с колёсиком — масштаб',
       zoomIn: 'Крупнее',

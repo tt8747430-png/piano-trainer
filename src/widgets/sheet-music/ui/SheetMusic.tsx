@@ -5,7 +5,13 @@ import type { Performance } from '@/shared/lib/arrangement'
 import { useElementSize, type SheetView } from '@/shared/lib'
 import { notate, type StaffId } from '@/shared/lib/notation'
 import { SheetTitle } from '@/shared/ui'
-import { ScoreView, scoreHeight, type Picked, type ScoreLayout } from '@/shared/ui/score'
+import {
+  ScoreView,
+  scoreHeight,
+  useStaffLabels,
+  type Picked,
+  type ScoreLayout,
+} from '@/shared/ui/score'
 import { FINGERS, fitScale, widestBar } from '../model/fit-scale'
 import { groupOfTick } from '../model/group-of-tick'
 import { keepsLoop } from '../model/keeps-loop'
@@ -122,6 +128,8 @@ export function SheetMusic({
   )
   const kept = score.staves.filter((staff) => !view.hidden.includes(staff))
   const staves = kept.length > 0 ? kept : score.staves
+  // The staves' names at the first line's head (ADR 0094).
+  const labels = useStaffLabels(staves)
   const scroller = useRef<HTMLDivElement>(null)
   const { width, height } = useElementSize(scroller)
   const room = { width, height: height - (fingers ? FINGERS : 0) }
@@ -183,6 +191,7 @@ export function SheetMusic({
         score={score}
         performance={performance}
         staves={staves}
+        staffNames={labels}
         pages={view.layout === 'pages'}
         title={title}
         headings={headings}
@@ -218,6 +227,7 @@ export function SheetMusic({
           names={names}
           muted={muted}
           staves={staves}
+          labels={labels}
           selected={selected}
         >
           {(layout) => (

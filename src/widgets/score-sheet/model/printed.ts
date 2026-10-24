@@ -1,16 +1,18 @@
 import type { ComponentProps, ReactElement, ReactNode } from 'react'
 import type { StaffId } from '@/shared/lib/notation'
-import type { Extent, ScoreLayout, Sign } from '@/shared/ui/score'
+import type { Extent, ScoreLayout, Sign, StaffLabel } from '@/shared/ui/score'
 
 /**
  * What is printed on the sheet and edited where it is (ADR 0094), as Flat's and Dorico's: the tempo
- * mark; a key or time signature, from the piece's bar it stands at; a staff's clef there.
+ * mark; a key or time signature, from the piece's bar it stands at; a staff's clef there; a staff's
+ * name at the first line's head, the tune's or the piano's.
  */
 export type Printed =
   | { readonly kind: 'tempo' }
   | { readonly kind: 'key'; readonly bar: number }
   | { readonly kind: 'time'; readonly bar: number }
   | { readonly kind: 'clef'; readonly bar: number; readonly staff: StaffId }
+  | { readonly kind: 'staff'; readonly staves: StaffLabel['staves'] }
 
 /**
  * What edits a thing printed: the page wraps the sheet's button over it (`trigger`) in what opens

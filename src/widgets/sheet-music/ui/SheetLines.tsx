@@ -13,7 +13,13 @@ import {
   useScrollMotion,
 } from '@/shared/lib'
 import { PageCanvas, SheetPage, SheetTitle, useCanvasReveal } from '@/shared/ui'
-import { lineLead, measureWidths, type Score, type StaffId } from '@/shared/lib/notation'
+import {
+  lineLead,
+  measureWidths,
+  type Score,
+  type StaffId,
+  type StaffLabels,
+} from '@/shared/lib/notation'
 import { ScoreView, scoreHeight, type Picked } from '@/shared/ui/score'
 import { FINGERS, systemFit } from '../model/fit-scale'
 import { scoreLines, type ScoreLine } from '../model/score-lines'
@@ -40,6 +46,7 @@ export function SheetLines({
   score,
   performance,
   staves,
+  staffNames,
   pages,
   title,
   headings,
@@ -62,6 +69,8 @@ export function SheetLines({
   score: Score
   performance: Performance
   staves: readonly StaffId[]
+  /** The staves' names, printed at the first line's head (ADR 0094). */
+  staffNames: StaffLabels
   /** On A4 pages; else lines down the screen. */
   pages: boolean
   /** Printed at the head of the first line, the page's heading. */
@@ -114,7 +123,10 @@ export function SheetLines({
   const margin = pages ? PAGE.margin : 0
   const inner = pages ? PAGE.width - 2 * margin : width
   // Each chart line cut by width to the room a line has, less its clef and key (ADR 0074).
-  const widths = useMemo(() => measureWidths(score, scale, chordNames), [score, scale, chordNames])
+  const widths = useMemo(
+    () => measureWidths(score, scale, chordNames, staffNames),
+    [score, scale, chordNames, staffNames],
+  )
   const room = inner > 0 ? inner / scale - lineLead(score) : Infinity
   const lines = useMemo(
     () => scoreLines(score, performance, { room, widths }),
@@ -150,6 +162,7 @@ export function SheetLines({
         staves={staves}
         timeBefore={each.timeBefore}
         next={each.next}
+        labels={each.first === 0 ? staffNames : undefined}
         fill={inner > 0 ? inner : undefined}
         selected={selected}
       >

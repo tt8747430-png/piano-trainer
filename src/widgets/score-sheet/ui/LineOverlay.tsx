@@ -21,6 +21,7 @@ import type { EditPrinted } from '../model/printed'
 import { EditorCaret } from './EditorCaret'
 import { LineLabels } from './LineLabels'
 import { PrintedSigns } from './PrintedSigns'
+import { StaffNames } from './StaffNames'
 import { TempoMark } from './TempoMark'
 
 /** How far round the caret's onset a press takes hold of its notes to drag them. */
@@ -38,8 +39,8 @@ function zoomOf(element: HTMLElement, box: DOMRect): number {
  * Over a line's staff: its labels, the bars chosen, the caret, and each bar as a button that puts the
  * caret where it is clicked; a double click there writes the note on the line or space clicked (ADR
  * 0064). The notes at the caret are a grip: dragged up or down, they move by notes of the key. The
- * tempo mark and each clef, key and time signature are buttons too, each opening what changes it
- * there (`edit`, ADR 0094).
+ * tempo mark, each clef, key and time signature and the staves' names are buttons too, each opening
+ * what changes it there (`edit`, ADR 0094).
  */
 export function LineOverlay({
   layout,
@@ -244,6 +245,7 @@ export function LineOverlay({
         size={labels}
       />
       <PrintedSigns layout={layout} bars={line.bars.map((placed) => placed.index)} edit={edit} />
+      <StaffNames layout={layout} edit={edit} />
       {music.bars.map((bar, index) => {
         const at = layout.measures[index]
         return bar.tempo === undefined || !at ? null : (

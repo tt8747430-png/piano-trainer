@@ -1,6 +1,7 @@
 import { memo, useEffect, useRef } from 'react'
 import type { Layer } from '@/features/score-editor'
 import type { Midi, Tick } from '@/shared/lib/music'
+import type { StaffLabels } from '@/shared/lib/notation'
 import { cn, useElementSize } from '@/shared/lib'
 import { LazyScoreView, useCanvasReveal } from '@/shared/ui'
 import { staffOfHand } from '../model/line-music'
@@ -33,6 +34,7 @@ export const SheetLine = memo(function SheetLine({
   tapsOf,
   chordNames,
   edit,
+  labels,
   scale = 1,
   print = false,
   justify = true,
@@ -64,6 +66,8 @@ export const SheetLine = memo(function SheetLine({
   chordNames: boolean
   /** What edits a thing printed (ADR 0094). */
   edit: EditPrinted
+  /** The staves' names, printed at the line's head: the piece's first line (ADR 0094). */
+  labels?: StaffLabels | undefined
 }) {
   const ref = useRef<HTMLDivElement>(null)
   // A line of a few bars runs the sheet's width, as a printed page's does.
@@ -116,6 +120,7 @@ export const SheetLine = memo(function SheetLine({
         score={sheet.score}
         timeBefore={sheet.timeBefore}
         next={sheet.next}
+        labels={labels}
         selected={selected}
         fill={justify && width > 0 ? width : undefined}
       >

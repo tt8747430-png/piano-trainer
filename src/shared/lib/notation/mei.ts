@@ -34,7 +34,12 @@ export interface MeiOptions {
    * printed after this line's last barline, a courtesy signature as LilyPond and MuseScore print one.
    */
   readonly next?: NextLine | undefined
+  /** The staves' names, printed at the line's head (a score's first line, ADR 0094). */
+  readonly labels?: StaffLabels | undefined
 }
+
+/** The names a score's staves are printed with: the tune's, and the piano's over its two staves. */
+export type StaffLabels = Readonly<Partial<Record<'melody' | 'piano', string>>>
 
 /** What a line starts in, as the line before it ends with a courtesy signature where it changes. */
 export type NextLine = Pick<Measure, 'key' | 'time' | 'clefs'>
@@ -45,20 +50,28 @@ export type NextLine = Pick<Measure, 'key' | 'time' | 'clefs'>
  * tuplets, ties across barlines; its key, time and clef changes, barlines, repeats and endings, the
  * signs and jumps, the tempo; each note's marks: articulations, ornaments, arpeggios, grace notes,
  * slurs, dynamics, hairpins, octave lines, the pedal, expressions and fingers; the tune's syllables as
- * verses under their notes (ADR 0093). Every measure is named
+ * verses under their notes (ADR 0093); the staves' names where asked (ADR 0094). Every measure is named
  * `m-<index>`, every chord `c-<staff>-<tick>`, note `n-<staff>-<tick>-<i>` and rest
  * `r-<staff>-<tick>`, so the drawing is read back by them: where each bar and onset stands, a bar
  * tapped, the notes chosen or playing.
  */
 export function scoreToMei(score: Score, options: MeiOptions = {}): string {
-  const { title = '', timeBefore } = options
+  const { title = '', timeBefore, labels = {} } = options
   const staves = (options.staves ?? score.staves).filter((staff) => score.staves.includes(staff))
   const number = (staff: StaffId) => staves.indexOf(staff) + 1
   const piano: readonly StaffId[] = staves.filter((staff) => staff === 'treble' || staff === 'bass')
   const sung = staves.filter((staff) => !piano.includes(staff))
   const first = score.measures[0]
-  const staffDef = (staff: StaffId) =>
-    `<staffDef n="${number(staff)}" lines="5" ${clefAttrs(clefIn(first ?? {}, staff))}/>`
+  // The piano's name over its brace, or on its one staff drawn.
+  const nameOf = (staff: StaffId) =>
+    staff === 'melody' ? labels.melody : piano.length === 1 ? labels.piano : undefined
+  const staffDef = (staff: StaffId) => {
+    const attrs = `n="${number(staff)}" lines="5" ${clefAttrs(clefIn(first ?? {}, staff))}`
+    const name = nameOf(staff)
+    return name === undefined
+      ? `<staffDef ${attrs}/>`
+      : `<staffDef ${attrs}>${label(name)}</staffDef>`
+  }
   const time = first?.time ?? null
   const continues =
     timeBefore !== undefined &&
@@ -69,7 +82,9 @@ export function scoreToMei(score: Score, options: MeiOptions = {}): string {
     keySignature(first?.key ?? score.key),
   )}"><staffGrp>${sung.map(staffDef).join('')}${
     piano.length > 1
-      ? `<staffGrp symbol="brace" bar.thru="true">${piano.map(staffDef).join('')}</staffGrp>`
+      ? `<staffGrp symbol="brace" bar.thru="true">${
+          labels.piano === undefined ? '' : label(labels.piano)
+        }${piano.map(staffDef).join('')}</staffGrp>`
       : piano.length > 0
         ? piano.map(staffDef).join('')
         : ''
@@ -130,6 +145,9 @@ const JUMP_TEXT: Readonly<Record<Jump, string>> = {
 
 const escape = (text: string) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+
+/** A staff's name as Verovio prints it at the line's head, smaller than its words. */
+const label = (name: string) => `<label><rend fontsize="small">${escape(name)}</rend></label>`
 
 const keySig = (fifths: number) =>
   fifths === 0 ? '0' : `${Math.abs(fifths)}${fifths > 0 ? 's' : 'f'}`

@@ -29,6 +29,8 @@ export interface ScoreLayout {
   readonly rests?: readonly Rest[]
   /** Each clef, key and time signature printed, at a staff's head or where it changes (ADR 0094). */
   readonly signs?: readonly Sign[]
+  /** The staves' names printed at a score's first line's head (ADR 0094). */
+  readonly labels?: readonly StaffLabel[]
 }
 
 /** A box on the engraving, in its px: its left, right, top and foot. */
@@ -74,6 +76,14 @@ export interface Sign extends Extent {
   readonly staff: StaffId
   /** The line's measure it stands in, from 0. */
   readonly measure: number
+}
+
+/**
+ * A staff's name printed at a score's first line's head (ADR 0094): the tune's beside its staff, the
+ * piano's beside its two (or the one drawn); its box.
+ */
+export interface StaffLabel extends Extent {
+  readonly staves: 'melody' | 'piano'
 }
 
 /**

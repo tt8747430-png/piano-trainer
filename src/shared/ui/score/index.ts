@@ -6,6 +6,7 @@ export {
   type ScoreLayout,
   type Sign,
   type SignKind,
+  type StaffLabel,
 } from './layout'
 export { xAtTick } from './layout'
 export { ScoreView } from './ScoreView'
@@ -30,4 +31,5 @@ export {
   type Span,
 } from './selection'
 export { ScoreMark } from './ScoreMark'
+export { useStaffLabels } from './use-staff-labels'
 export { HOLD_MS, useSheetChoice, type SheetChoice, type SheetPoint } from './use-sheet-choice'

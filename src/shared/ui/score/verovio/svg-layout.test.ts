@@ -212,6 +212,50 @@ describe('a line with words (ADR 0093)', () => {
   }, 20_000)
 })
 
+describe('the staves’ names at a first line’s head (ADR 0094)', () => {
+  const tuned = notate({
+    key: { tonic: note('C'), minor: false },
+    meter: '4/4',
+    bars: [{ startTick: 0, beats: 4 }],
+    notes: [n(76, 'melody', 0, 96), n(72, 'rh', 0, 96), n(48, 'lh', 0, 96)],
+    chords: [],
+    melodyStaff: true,
+  })
+
+  async function read(labels: Parameters<typeof scoreToMei>[1]) {
+    const [svg = ''] = await engraveMei(scoreToMei(tuned, labels), { width: 600, scale: 1 })
+    const host = document.createElement('div')
+    host.innerHTML = svg
+    const element = host.querySelector('svg')
+    if (!element) throw new Error('an SVG')
+    return layoutOf(element, tuned.measures, tuned.staves)
+  }
+
+  it('reads each name with the staves it names, left of them, and the line indented to hold it', async () => {
+    const plain = await read({})
+    const named = await read({ labels: { melody: 'Melody', piano: 'Piano' } })
+    expect(plain.labels).toEqual([])
+    const [first] = named.measures
+    const { melody, treble, bass } = named.staves
+    if (!first || !melody || !treble || !bass) throw new Error('the line')
+    expect(first.x).toBeGreaterThan((plain.measures[0]?.x ?? 0) + 50)
+    const labels = [...(named.labels ?? [])].sort((a, b) => a.top - b.top)
+    expect(labels.map((label) => label.staves)).toEqual(['melody', 'piano'])
+    const [tune, piano] = labels
+    if (!tune || !piano) throw new Error('two names')
+    for (const label of labels) {
+      expect(label.right).toBeLessThan(first.x)
+      expect(label.left).toBeGreaterThanOrEqual(0)
+      expect(label.right - label.left).toBeGreaterThan(30)
+    }
+    // Beside its staff; the piano's between its two.
+    expect(tune.bottom).toBeGreaterThan(melody.top)
+    expect(tune.top).toBeLessThan(melody.bottom)
+    expect(piano.top).toBeGreaterThan(treble.top)
+    expect(piano.bottom).toBeLessThan(bass.bottom)
+  }, 20_000)
+})
+
 describe('the signs printed on a line (ADR 0094)', () => {
   const signed = notate({
     key: { tonic: note('D'), minor: false },

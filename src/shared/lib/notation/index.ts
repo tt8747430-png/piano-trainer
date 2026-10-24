@@ -15,5 +15,5 @@ export {
   type WrittenNote,
 } from './types'
 export { ticksOf, valuesOf } from './values'
-export { lineLead, measureWidths } from './measure-widths'
-export { scoreToMei, type NextLine } from './mei'
+export { labelLead, lineLead, measureWidths } from './measure-widths'
+export { scoreToMei, type NextLine, type StaffLabels } from './mei'

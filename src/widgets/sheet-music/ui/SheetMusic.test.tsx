@@ -72,6 +72,22 @@ describe('SheetMusic', () => {
     },
   )
 
+  it.each(['horizontal', 'scroll', 'pages'] as const)(
+    'names the piano’s staves at the first line’s head, %s (ADR 0094)',
+    async (layout) => {
+      renderSheet({
+        shown: { layout, chordNames: true, lyrics: true, melodyStaff: false, hidden: [] },
+      })
+      await waitFor(() =>
+        expect(
+          [...document.querySelectorAll('[data-slot="score"] g.label')].map((label) =>
+            label.textContent?.trim(),
+          ),
+        ).toEqual(['Piano']),
+      )
+    },
+  )
+
   it('names each bar by its chords, the cursor’s marked', async () => {
     renderSheet({ current: 5 })
     expect(await screen.findByRole('region', { name: 'Sheet music' })).toBeInTheDocument()

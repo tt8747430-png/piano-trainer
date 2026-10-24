@@ -390,5 +390,10 @@ export const editor: LocaleResources['editor'] = {
       allegro: 'Аллегро',
       presto: 'Престо',
     },
+    staves: { melody: 'Нотоносец мелодии', piano: 'Нотоносцы фортепиано' },
+    removeMelody: 'Убрать нотоносец мелодии',
+    addMelody: 'Добавить нотоносец мелодии',
+    hidePiano: 'Скрыть фортепиано',
+    showPiano: 'Показать фортепиано',
   },
 }

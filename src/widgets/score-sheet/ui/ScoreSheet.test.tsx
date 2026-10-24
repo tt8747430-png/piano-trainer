@@ -90,6 +90,30 @@ describe('ScoreSheet', () => {
     },
   )
 
+  it('names the staves at the first line’s head alone, the tune’s and the piano’s (ADR 0094)', async () => {
+    sheet('melody')
+    const names = (line: Element | undefined) =>
+      [...(line?.querySelectorAll('[data-slot="score"] g.label') ?? [])]
+        .map((label) => label.textContent?.trim())
+        .sort()
+    await waitFor(() => {
+      const lines = [...document.querySelectorAll('[data-slot="sheet-line"]')]
+      expect(lines).toHaveLength(3)
+      expect(names(lines[0])).toEqual(['Melody', 'Piano'])
+      expect(lines.slice(1).map(names)).toEqual([[], []])
+    })
+  })
+
+  it('puts a button over each staff’s name, opening what edits that staff (ADR 0094)', async () => {
+    const user = userEvent.setup()
+    const edited = vi.fn()
+    sheet('melody', vi.fn(), true, edited)
+    await user.click(await screen.findByRole('button', { name: 'Melody staff' }))
+    expect(edited).toHaveBeenLastCalledWith({ kind: 'staff', staves: 'melody' })
+    await user.click(screen.getByRole('button', { name: 'Piano staves' }))
+    expect(edited).toHaveBeenLastCalledWith({ kind: 'staff', staves: 'piano' })
+  })
+
   it('puts the caret where a bar is clicked, Shift keeping the bars chosen', async () => {
     const user = userEvent.setup()
     const onPlace = vi.fn()

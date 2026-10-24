@@ -3,6 +3,7 @@ import type { Tick } from '@/shared/lib/music'
 import type { Extent, ScoreLayout } from '../layout'
 import { headsOf } from './svg-heads'
 import { numbers } from './svg-glyphs'
+import { labelsOf } from './svg-labels'
 import { signsOf } from './svg-signs'
 
 /**
@@ -10,8 +11,8 @@ import { signsOf } from './svg-signs'
  * coordinates, not the page's layout, so it reads the same anywhere (a test's DOM too): each measure
  * (`m-<index>`, its first staff's lines), each staff drawn (`staves`, top down) from its lines in the
  * first measure, each onset from its notes' and rests' heads (`n-`, `r-` and the hidden `h-<staff>-<tick>`),
- * each head's box with its chord's column (`headsOf`, ADR 0088), and each clef, key and time
- * signature printed (`signsOf`, ADR 0094).
+ * each head's box with its chord's column (`headsOf`, ADR 0088), each clef, key and time signature
+ * printed (`signsOf`, ADR 0094) and the staves' names at a first line's head (`labelsOf`).
  */
 export function layoutOf(
   svg: SVGSVGElement,
@@ -85,6 +86,7 @@ export function layoutOf(
   })
   const { heads, columns, rests } = headsOf(svg, space, inPx)
   const signs = signsOf(svg, space, inPx, staves, (index) => laid[index]?.notes ?? Infinity)
+  const labels = labelsOf(svg, inPx, placed)
   return {
     width,
     height,
@@ -97,5 +99,6 @@ export function layoutOf(
     columns,
     rests,
     signs,
+    labels,
   }
 }

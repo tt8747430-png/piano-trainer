@@ -1,5 +1,11 @@
 import type { Midi, TimeSignature } from '@/shared/lib/music'
-import { scoreToMei, type NextLine, type Score, type StaffId } from '@/shared/lib/notation'
+import {
+  scoreToMei,
+  type NextLine,
+  type Score,
+  type StaffId,
+  type StaffLabels,
+} from '@/shared/lib/notation'
 import type { ScoreLayout } from '../layout'
 import { engrave } from './engine'
 import { layoutOf } from './svg-layout'
@@ -16,6 +22,8 @@ export interface DrawOptions {
   readonly next?: NextLine | undefined
   /** The width the line is justified to, in CSS px; it is drawn smaller where its music is wider. */
   readonly fill?: number | undefined
+  /** The staves' names, printed at the line's head (ADR 0094). */
+  readonly labels?: StaffLabels | undefined
 }
 
 /** The names a note's head may carry: its letter and its sign. */
@@ -39,6 +47,7 @@ export async function drawScore(
       fingers: options.fingers,
       timeBefore: options.timeBefore,
       next,
+      labels: options.labels,
     })
   // The courtesy signature follows a line broken where it is written: a line left at its own width has no break.
   const justified = meiOf(options.next)

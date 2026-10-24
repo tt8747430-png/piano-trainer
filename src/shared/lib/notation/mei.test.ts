@@ -128,6 +128,29 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(bass).not.toContain('symbol="brace"')
   })
 
+  it('names the staves drawn at the first line’s head: the tune’s, the piano’s over its brace (ADR 0094)', () => {
+    const score = notate(
+      music([c(0), { ...n(76, note('E'), 'melody', 0, 24) }, n(48, note('C'), 'lh', 0, 24)], {
+        chords: [],
+        melodyStaff: true,
+      }),
+    )
+    const labels = { melody: 'Melody', piano: 'Piano' } as const
+    const named = scoreToMei(score, { labels })
+    expect(named).toMatch(
+      /<staffDef n="1"[^>]*>\s*<label><rend fontsize="small">Melody<\/rend><\/label>\s*<\/staffDef>/,
+    )
+    expect(named).toMatch(
+      /<staffGrp symbol="brace" bar\.thru="true">\s*<label><rend fontsize="small">Piano<\/rend><\/label>\s*<staffDef n="2"/,
+    )
+    // A staff not drawn has no name; the piano's one staff drawn takes the piano's.
+    const bass = scoreToMei(score, { labels, staves: ['bass'] })
+    expect(bass).not.toContain('Melody')
+    expect(bass).toMatch(/<staffDef n="1"[^>]*>\s*<label><rend fontsize="small">Piano</)
+    expect(scoreToMei(score)).not.toContain('<label')
+    expect(scoreToMei(score, { labels: { piano: 'A & B' } })).toContain('A &amp; B')
+  })
+
   it('writes a blank staff’s rests as hidden ones, each named by its staff and tick', () => {
     const tune = scoreToMei(
       notate(music([c(0)], { chords: [], bars: [{ startTick: 0, beats: 4, blank: ['bass'] }] })),
