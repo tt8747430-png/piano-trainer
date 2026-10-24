@@ -11,9 +11,12 @@ const ICONS: Readonly<Record<ScoreMode, LucideIcon>> = { practise: Music, edit: 
 
 // Drawn 36px on the 44px track; its reach grows to the track's edge (a 44px touch target, CODE_STYLE §5).
 const SEGMENT =
-  'relative inline-flex h-9 min-w-9 items-center justify-center gap-1.5 rounded-full border border-transparent px-2 text-sm font-semibold text-muted-foreground transition-colors duration-200 ease-out select-none before:absolute before:-inset-1 before:content-[""] lg:px-3 [&_svg]:size-5'
+  'relative inline-flex size-9 items-center justify-center rounded-full border border-transparent text-muted-foreground transition-colors duration-200 ease-out select-none before:absolute before:-inset-1 before:content-[""] [&_svg]:size-5'
 
-/** One mode: the one shown a card on the track, the other a link to it. */
+/**
+ * One mode, its icon at every size, its name its tooltip and a screen reader's (ADR 0094): the one
+ * shown a card on the track, the other a link to it.
+ */
 function Segment({
   mode,
   current,
@@ -31,7 +34,7 @@ function Segment({
   const children = (
     <>
       <Icon aria-hidden />
-      <span className="max-lg:sr-only">{label}</span>
+      <span className="sr-only">{label}</span>
     </>
   )
   if (current)

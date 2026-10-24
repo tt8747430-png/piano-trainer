@@ -5,11 +5,63 @@ import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { melodyOf, pieceById, PIECES, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { setPracticeToggle } from '@/features/set-preference'
-import { createMemoryStorage } from '@/shared/lib'
+import { createMemoryStorage, LANDSCAPE_PHONE } from '@/shared/lib'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
 import * as engine from '@/shared/ui/score/verovio/engine'
 
+/** A screen of a size, as `matchMedia` answers it: a phone on its side, a laptop; else a phone upright. */
+const sizedAs = (query: string) =>
+  vi.stubGlobal('matchMedia', (media: string) => ({
+    media,
+    matches: media === query,
+    onchange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    addListener: () => {},
+    removeListener: () => {},
+    dispatchEvent: () => false,
+  }))
+
+/** What a control shows in words, a screen reader's alone left out: nothing, for an icon. */
+const shownText = (control: Element) => {
+  const seen = control.cloneNode(true) as Element
+  seen.querySelectorAll('.sr-only').forEach((hidden) => hidden.remove())
+  return seen.textContent?.trim() ?? ''
+}
+
 describe('Player', () => {
+  it.each([
+    ['a phone held upright', 'none'],
+    ['a phone on its side', LANDSCAPE_PHONE],
+    ['a laptop', '(min-width: 64rem)'],
+  ])(
+    'keeps one bar on %s: each control its icon, named by its label and title (ADR 0094)',
+    async (_size, query) => {
+      sizedAs(query)
+      await renderApp('/play/bz5')
+      const view = await screen.findByRole('button', { name: 'View' })
+      const controls = [
+        ...(view.closest('[data-area="actions"]')?.querySelectorAll('button, a') ?? []),
+      ]
+      expect(controls.map((control) => control.getAttribute('aria-label'))).toEqual([
+        'Edit',
+        'Loop',
+        'View',
+        'MIDI keyboard',
+        'Setup',
+      ])
+      for (const control of controls) {
+        const name = control.getAttribute('aria-label') ?? ''
+        expect(shownText(control), name).toBe('')
+        expect(control.getAttribute('title'), name).toMatch(new RegExp(`^${name}`))
+      }
+      // The current mode too: its icon, its name a screen reader's and its tooltip's.
+      const practise = screen.getByText('Practise').closest('[aria-current="page"]')
+      expect(practise).toHaveAttribute('title', 'Practise')
+      expect(shownText(practise as Element)).toBe('')
+    },
+  )
+
   it('says an own song is gone once another tab deletes it', async () => {
     const storage = createMemoryStorage()
     const song = {

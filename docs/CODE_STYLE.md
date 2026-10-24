@@ -151,6 +151,11 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
 - Interactive elements: hover, `focus-visible`, `disabled`, and a transition. Icon-only controls get an
   `aria-label`, and their icons are 20px. Minimum target 44px (`min-h-11`, `size-11`); every size of `Button`,
   `Toggle`, `Input`, `InputGroup`, `Switch` and `Slider` already meets it, so the CLI's smaller sizes are removed.
+- **A control has the same name and does the same thing at every size; a size changes only where it stands and
+  how big it is** (ADR 0094, Flat's phone has the laptop's tools in the same places). A bar's or a dock's button
+  is its icon at every size, named by its `aria-label` and its tooltip (`title`): no name shown on a laptop
+  alone (`max-lg:sr-only`), no icon hidden on a phone alone, no option offered at one size only. Where a row
+  does not fit, it wraps or its controls shrink to the 44px target, never lose a word or a control.
 - **A link is a link.** Base UI's `Button` always sets `role="button"`, so a link that looks like a button is the
   kit's `ButtonLink` (or `RoundLink`) rendering the router's `Link`, never `<Button render={<Link />}>`. A control
   that acts (plays, closes, confirms) stays a `Button`.

@@ -92,6 +92,13 @@ const sizedAs = (query: string) =>
     dispatchEvent: () => false,
   }))
 
+/** What a control shows in words, a screen reader's alone left out: nothing, for an icon. */
+const shownText = (control: Element) => {
+  const seen = control.cloneNode(true) as Element
+  seen.querySelectorAll('.sr-only').forEach((hidden) => hidden.remove())
+  return seen.textContent?.trim() ?? ''
+}
+
 /** The buttons of a toolbar, by their names. */
 const namesIn = (toolbar: HTMLElement) =>
   within(toolbar)
@@ -630,6 +637,36 @@ describe('the score editor', () => {
       expect(caret).toHaveClass('sr-only')
       expect(caret).toHaveAttribute('aria-live', 'polite')
       expect(caret).toHaveTextContent(/^Upper staff · Bar 1/)
+    },
+  )
+
+  it.each([
+    ['a phone held upright', 'none'],
+    ['a phone on its side', LANDSCAPE_PHONE],
+    ['a laptop', '(min-width: 64rem)'],
+  ])(
+    'shows each control of its bar and dock as its icon on %s, named by its label and a tooltip (ADR 0094)',
+    async (_size, query) => {
+      sizedAs(query)
+      await renderApp('/edit/my-1', { storage: withSong() })
+      const midiButton = await screen.findByRole('button', { name: 'MIDI keyboard' })
+      const bar = [
+        ...(midiButton.closest('[data-area="bar"]')?.querySelectorAll('button, a') ?? []),
+      ]
+      const dock = [
+        ...screen
+          .getByRole('toolbar', { name: 'Play, move and record' })
+          .querySelectorAll('button:not([aria-label^="Tempo"])'),
+      ]
+      expect(bar).toHaveLength(10)
+      for (const control of [...bar, ...dock]) {
+        const name = control.getAttribute('aria-label') ?? ''
+        expect(shownText(control), name).toBe('')
+        // Its name in a tooltip: the browser's (`title`), or the edit row's own, which adds what
+        // the command acts on.
+        const tooltip = control.getAttribute('title') ?? control.getAttribute('data-slot')
+        expect(tooltip, name).toMatch(new RegExp(`^(${name}|tooltip-trigger)`))
+      }
     },
   )
 

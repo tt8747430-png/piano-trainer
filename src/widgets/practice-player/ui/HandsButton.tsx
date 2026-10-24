@@ -30,7 +30,7 @@ export function HandsButton({
             size="icon"
             aria-label={t('player:handsOf', { hands: t(`common:hands.${hands}`) })}
             title={t('player:hands')}
-            className="size-12 rounded-full landscape-phone:size-10"
+            className="size-12 rounded-full narrow-phone:size-11 landscape-phone:size-10"
           />
         }
       >

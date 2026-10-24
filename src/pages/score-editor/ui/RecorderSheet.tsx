@@ -14,7 +14,7 @@ import { WriteTakePage } from './WriteTakePage'
  * the caret's bar, in the footer, in reach however long the list; and the piece's takes, each heard,
  * written into the score, downloaded or deleted; a take's form to write it is a page of the sheet.
  */
-export function RecorderSheet() {
+export function RecorderSheet({ className }: { className?: string }) {
   const { t } = useTranslation('editor')
   const { takes } = useScoreEditorContext()
   const { page } = takes
@@ -26,7 +26,7 @@ export function RecorderSheet() {
     <Sheet open={takes.open} onOpenChange={(open) => takes.show(open ? TAKES_PAGE : null)}>
       <SheetTrigger
         render={
-          <FloatingBarButton label={t('recorder.open')}>
+          <FloatingBarButton label={t('recorder.open')} className={className}>
             {/* A recorder's red dot, as every recorder's Record wears. */}
             <Circle aria-hidden className="fill-current text-destructive" />
           </FloatingBarButton>
