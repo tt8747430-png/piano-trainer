@@ -19,6 +19,12 @@ describe('lineFit', () => {
     )
   })
 
+  it('keeps the verses under the tune in sight too (ADR 0093)', () => {
+    const fit = lineFit({ room: 296, staves: 2, headed: true, verses: 2 })
+    expect(fit).toBeLessThan(lineFit({ room: 296, staves: 2, headed: true }))
+    expect(52 + 44 + (202 + 2 * 22 + 32) * fit).toBeCloseTo(296)
+  })
+
   it('never draws it smaller than it is read', () => {
     expect(lineFit({ room: 120, staves: 3, headed: true })).toBe(0.6)
   })

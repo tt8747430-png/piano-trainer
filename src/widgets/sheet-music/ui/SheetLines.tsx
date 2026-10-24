@@ -6,7 +6,7 @@ import type { Midi, Tick } from '@/shared/lib/music'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, useScrollMotion } from '@/shared/lib'
 import { PageCanvas, SheetPage, useCanvasReveal } from '@/shared/ui'
 import { lineLead, measureWidths, type Score, type StaffId } from '@/shared/lib/notation'
-import { ScoreView, staffHeight, type Picked } from '@/shared/ui/score'
+import { ScoreView, scoreHeight, type Picked } from '@/shared/ui/score'
 import { scoreLines, type ScoreLine } from '../model/score-lines'
 import { SheetOverlay } from './SheetOverlay'
 
@@ -163,10 +163,10 @@ export function SheetLines({
       </section>
     )
 
-  const lineHeight = labels + staffHeight(undefined, staves.length) * scale + LINE_GAP
+  // A line's height as engraved: its staves and the verses under its tune (ADR 0093).
   const dealt = paginate(
     lines.map((each, index) => ({ each, index })),
-    () => lineHeight,
+    ({ each }) => labels + scoreHeight(each.score, staves) * scale + LINE_GAP,
     PAGE.height - 2 * margin - (title ? LABELS.chords : 0),
   )
   return (

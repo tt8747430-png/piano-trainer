@@ -5,7 +5,7 @@ import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/s
 import { PageCanvas, SheetPage } from '@/shared/ui'
 import { lineLead, measureWidths, notate } from '@/shared/lib/notation'
 import type { Midi, Tick } from '@/shared/lib/music'
-import { staffHeight } from '@/shared/ui/score'
+import { scoreHeight, versesOf } from '@/shared/ui/score'
 import { HEADING, lineFit } from '../model/line-fit'
 import { createLineSheets, untimed, type LineSheet } from '../model/line-sheets'
 import { labelRow } from '../model/label-row'
@@ -127,10 +127,11 @@ export function ScoreSheet({
     const [all] = oneLine(draft)
     return all ? notate(untimed(lineMusic(draft, all, lyrics))) : undefined
   }, [draft, lyrics])
-  // The staves a line writes: the tune's where shown over the piano's two.
+  // The staves a line writes: the tune's where shown over the piano's two; the verses under the tune.
   const staves = whole?.staves.length ?? 2
+  const verses = whole ? versesOf(whole) : 0
   // A whole system in the height the sheet is seen in, where it is short (a phone on its side).
-  const fit = room && room > 0 ? lineFit({ room, staves, headed: !across, chordNames }) : 1
+  const fit = room && room > 0 ? lineFit({ room, staves, headed: !across, chordNames, verses }) : 1
   const sized = pages ? PRINT_SCALE : Math.min(fit, scrollScale(width))
   const widths = useMemo(
     () => (whole ? measureWidths(whole, sized, chordNames) : []),
@@ -178,8 +179,9 @@ export function ScoreSheet({
 
   if (pages) {
     const scale = PRINT_SCALE
-    const lineHeight =
-      labelRow(chordNames, scale, true) + (staffHeight(undefined, staves) + LINE_GAP) * scale
+    // A line's height as engraved: its staves and the verses under its tune (ADR 0093).
+    const lineHeight = (sheet: LineSheet) =>
+      labelRow(chordNames, scale, true) + (scoreHeight(sheet.score) + LINE_GAP) * scale
     const items: PageItem[] = [
       ...(title ? [{ kind: 'title' } as const] : []),
       ...draft.sections.flatMap((_, section): PageItem[] => [
@@ -191,7 +193,7 @@ export function ScoreSheet({
     ]
     const dealt = paginate(
       items,
-      (item) => (item.kind === 'line' ? lineHeight : HEADING),
+      (item) => (item.kind === 'line' ? lineHeight(item.sheet) : HEADING),
       PAGE.height - 2 * PAGE.margin,
       (item) => item.kind !== 'line',
     )

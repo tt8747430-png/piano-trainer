@@ -1,7 +1,7 @@
 export { type Column, type Head, type Rest, type ScoreLayout } from './layout'
 export { xAtTick } from './layout'
 export { ScoreView } from './ScoreView'
-export { staffHeight } from './size'
+export { scoreHeight, staffHeight, versesOf } from './size'
 export {
   HUG,
   MARK,
