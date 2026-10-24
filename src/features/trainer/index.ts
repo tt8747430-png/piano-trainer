@@ -37,3 +37,4 @@ export {
 } from './trainer-view'
 export { useTrainer, type TrainerRun } from './use-trainer'
 export { TYPE_ADDED, TYPE_SUSPENDED } from './chord-types'
+export { NOTE_RANGE } from './ladders/notes'
