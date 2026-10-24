@@ -43,10 +43,15 @@ export function copyNotes(draft: Draft, layer: NoteLayer, { from, to }: TickSpan
   return { kind: 'notes', layer, notes, ticks: to - from }
 }
 
-/** The clip's notes as a staff takes them: a hand every note, the melody one line (`oneLine`), with no finger. */
-function fitTo(notes: readonly DraftNote[], layer: NoteLayer): DraftNote[] {
+/**
+ * The clip's notes as a staff takes them: a hand every note; the melody one line (`oneLine`) ending
+ * by the clip's end, so it never sounds over the tune's notes after it, with no finger.
+ */
+function fitTo({ notes, ticks }: NotesClip, layer: NoteLayer): DraftNote[] {
   if (isHandLayer(layer)) return [...notes]
-  return oneLine(notes).map(({ finger: _finger, ...n }) => n)
+  return oneLine(notes).map(({ finger: _finger, ...n }) =>
+    n.startTick + n.durationTicks > ticks ? { ...n, durationTicks: ticks - n.startTick } : n,
+  )
 }
 
 /**
@@ -62,7 +67,7 @@ export function pasteNotes(
   insert: boolean,
 ): { readonly draft: Draft; readonly end: Tick } {
   const end = at + clip.ticks
-  const placed = fitTo(clip.notes, layer).map((n) => ({ ...n, startTick: n.startTick + at }))
+  const placed = fitTo(clip, layer).map((n) => ({ ...n, startTick: n.startTick + at }))
   const last = Math.max(end, ...placed.map((n) => n.startTick + n.durationTicks))
   const roomy = insert ? makeRoom(draft, layer, at, clip.ticks) : draft
   const grown = last > totalTicks(roomy) ? reaching(roomy, last - 1) : roomy

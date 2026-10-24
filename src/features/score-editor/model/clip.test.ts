@@ -31,6 +31,23 @@ describe('the notes clipboard (ADR 0092)', () => {
     expect(musicToSave(pasted.draft)).not.toBeNull()
   })
 
+  it('pastes into the melody no further than the clip’s end, the tune’s later notes kept', () => {
+    // The half note's span chosen: the note from beat 2 starts inside it and is held past it.
+    const voices = draftOf({ hands: { rh: 'C5/2 E4/3@2 | r/4' } })
+    const clip = copyNotes(voices, 'rh', { from: 0, to: 48 })
+    expect(shape(clip.notes)).toEqual(['C5@0/48', 'E4@24/72'])
+    const tune = draftOf({ melody: 'G4/1 A4/1 B4/1 C5/1 | D5/4' })
+    const pasted = pasteNotes(tune, 'melody', 0, clip, false)
+    expect(shape(pasted.draft.melody)).toEqual([
+      'C5@0/24',
+      'E4@24/24',
+      'B4@48/24',
+      'C5@72/24',
+      'D5@96/96',
+    ])
+    expect(musicToSave(pasted.draft)).not.toBeNull()
+  })
+
   it('spells the pasted notes in the key where they land', () => {
     const inF: NotesClip = {
       kind: 'notes',
