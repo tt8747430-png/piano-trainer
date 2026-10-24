@@ -1,10 +1,11 @@
 import { Square } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useBarName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 
 /**
  * One bar of a chart's line: its number, its chords, and under them its method labels or short
- * length. A tap plays the bar: it is a toggle, pressed while the bar sounds.
+ * length; a bar of no chord its number alone (ADR 0094). A tap plays the bar: it is a toggle, pressed
+ * while the bar sounds.
  */
 export function BarButton({
   number,
@@ -21,15 +22,15 @@ export function BarButton({
   pressed: boolean
   onClick: () => void
 }) {
-  const { t } = useTranslation('music')
+  const barName = useBarName()
   return (
     <button
       type="button"
       // Named by all it prints: its number, its chords, and the notes under them.
-      aria-label={t('sheet.barChords', {
-        n: number,
-        chords: [symbols.join(' '), ...notes].join(' · '),
-      })}
+      aria-label={barName(
+        number,
+        [symbols.join(' '), ...notes].filter((said) => said !== '').join(' · '),
+      )}
       aria-pressed={pressed}
       onClick={onClick}
       className={cn(

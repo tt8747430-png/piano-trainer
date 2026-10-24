@@ -113,6 +113,27 @@ describe('Player', () => {
     expect(new Set(staves())).toEqual(new Set(['melody']))
   })
 
+  it('plays a song of bars of no chord: its written notes, each bar named by its number (ADR 0094)', async () => {
+    const storage = createMemoryStorage()
+    const song = {
+      id: 'my-1',
+      title: 'Morning',
+      key: 'G',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['G _'] }],
+      hands: { rh: 'B4/4 | D5/4', lh: 'r/4 | r/4' },
+    }
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [song], nextSong: 2 }, version: PIECES_VERSION }),
+    )
+    await renderApp('/play/my-1', { storage })
+    expect(await screen.findByRole('button', { name: 'Bar 1: G' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Bar 2' })).toBeInTheDocument()
+  })
+
   it('shows the score as its View menu says, remembered for every piece', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/romashki')

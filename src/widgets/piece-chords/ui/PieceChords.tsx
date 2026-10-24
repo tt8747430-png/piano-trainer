@@ -10,13 +10,15 @@ import { chordsOf } from '../model/piece-chords'
 
 /**
  * The chords a piece plays, each once and by its own name, to tap and hear on the page's keys; its
- * heading folds them away, as the learner left them.
+ * heading folds them away, as the learner left them. A piece of no chord symbol (ADR 0094) has none
+ * to list.
  */
 export function PieceChords({ performance }: { performance: Performance }) {
   const { t } = useTranslation('piece')
   const fold = useFold('piece.chords')
   const playback = usePlayback<string>()
   const chords = useMemo(() => chordsOf(performance), [performance])
+  if (chords.length === 0) return null
   return (
     <FoldSection title={t('chords')} fold={fold}>
       <ul className="grid-chords gap-2">

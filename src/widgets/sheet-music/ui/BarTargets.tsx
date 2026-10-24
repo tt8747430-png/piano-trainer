@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useBarName } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
 import { usePositionName } from '@/shared/ui'
 import { pickAt, useSheetChoice, type Picked, type ScoreLayout } from '@/shared/ui/score'
@@ -35,7 +35,7 @@ export function BarTargets({
   onPick: (picked: Picked) => void
   onChoose: (bar: number, extend: boolean) => void
 }) {
-  const { t } = useTranslation('music')
+  const barName = useBarName()
   const positionName = usePositionName()
   const choice = useSheetChoice({
     at: (bar, point, extend) => {
@@ -64,9 +64,10 @@ export function BarTargets({
         const position = placed[index]
         return position ? `${symbol} ${positionName(position)}` : symbol
       })
-      return t('sheet.barChords', { n: bar + 1, chords: chords.join(' ') })
+      // A bar of no chord is named by its number alone (ADR 0094).
+      return barName(bar + 1, chords.join(' '))
     })
-  }, [layout, performance, positions, positionName, t, firstBar])
+  }, [layout, performance, positions, positionName, barName, firstBar])
   return layout.measures.map((measure, index) => {
     const bar = firstBar + index
     return (
