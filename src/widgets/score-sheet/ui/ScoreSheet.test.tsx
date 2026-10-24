@@ -114,6 +114,38 @@ describe('ScoreSheet', () => {
     expect(edited).toHaveBeenLastCalledWith({ kind: 'staff', staves: 'piano' })
   })
 
+  it('draws one piano staff alone where the View hides the other (ADR 0094)', async () => {
+    render(
+      <ScoreSheet
+        draft={draft}
+        caret={0}
+        layer="rh"
+        tapsOf={() => []}
+        selection={null}
+        onPlace={vi.fn()}
+        onReach={vi.fn()}
+        onDeselect={vi.fn()}
+        placesOf={() => []}
+        heading={() => null}
+        chordNames
+        edit={editing(vi.fn())}
+        title={() => null}
+        hidden={['bass']}
+      />,
+    )
+    await waitFor(() =>
+      expect(
+        document.querySelectorAll('[data-slot="score"] g.staff[data-staff="treble"]').length,
+      ).toBeGreaterThan(0),
+    )
+    expect(
+      document.querySelectorAll('[data-slot="score"] g.staff[data-staff="bass"]'),
+    ).toHaveLength(0)
+    expect(
+      document.querySelectorAll('[data-slot="score"] g.staff[data-staff="melody"]').length,
+    ).toBeGreaterThan(0)
+  })
+
   it('puts the caret where a bar is clicked, Shift keeping the bars chosen', async () => {
     const user = userEvent.setup()
     const onPlace = vi.fn()

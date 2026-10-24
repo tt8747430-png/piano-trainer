@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { barAt, type Draft, type Layer } from '@/features/score-editor'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/shared/lib'
 import { PageCanvas, SheetPage, type TitlePlace } from '@/shared/ui'
-import { lineLead, measureWidths, notate } from '@/shared/lib/notation'
+import { lineLead, measureWidths, notate, type StaffId } from '@/shared/lib/notation'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { scoreHeight, useStaffLabels, versesOf } from '@/shared/ui/score'
 import { HEADING, lineFit } from '../model/line-fit'
@@ -13,6 +13,8 @@ import { lineMusic, oneLine } from '../model/line-music'
 import type { EditPrinted } from '../model/printed'
 import { SheetLine } from './SheetLine'
 
+/** No staff hidden. */
+const NO_STAVES: readonly StaffId[] = []
 /** The room between lines on a page at full size, for dealing lines onto pages. */
 const LINE_GAP = 16
 /**
@@ -77,6 +79,7 @@ export function ScoreSheet({
   chordNames,
   lyrics = true,
   edit,
+  hidden = NO_STAVES,
   view = 'scroll',
   title,
   room,
@@ -116,6 +119,11 @@ export function ScoreSheet({
    * mark, a clef, a key or time signature.
    */
   edit: EditPrinted
+  /**
+   * The staves the View hides (ADR 0094): one of the piano's alone is left out of the drawing, its
+   * notes kept; never every staff.
+   */
+  hidden?: readonly StaffId[]
   view?: SheetView
   /**
    * The piece's title as the page prints it, its heading (ADR 0094), where it is printed: at the head
@@ -135,17 +143,25 @@ export function ScoreSheet({
     const [all] = oneLine(draft)
     return all ? notate(untimed(lineMusic(draft, all, lyrics))) : undefined
   }, [draft, lyrics])
-  // The staves a line writes: the tune's where shown over the piano's two; the verses under the tune.
-  const staves = whole?.staves.length ?? 2
-  const verses = whole ? versesOf(whole) : 0
+  // The staves a line draws: the tune's where shown over the piano's two, less one of the piano's
+  // the View hides alone (ADR 0094); the verses under the tune.
+  const written = whole?.staves.join(' ') ?? ''
+  const hiddenKey = hidden.join(' ')
+  const drawn = useMemo(() => {
+    const staves = written ? (written.split(' ') as StaffId[]) : []
+    const kept = staves.filter((staff) => !hiddenKey.split(' ').includes(staff))
+    return kept.length > 0 ? kept : staves
+  }, [written, hiddenKey])
+  const staves = drawn.length > 0 ? drawn.length : 2
+  const verses = whole ? versesOf(whole, drawn) : 0
   // The staves' names at the first line's head (ADR 0094).
-  const labels = useStaffLabels(whole?.staves ?? [])
+  const labels = useStaffLabels(drawn)
   // A whole system in the height the sheet is seen in, where it is short (a phone on its side).
   const fit = room && room > 0 ? lineFit({ room, staves, headed: !across, chordNames, verses }) : 1
   const sized = pages ? PRINT_SCALE : Math.min(fit, scrollScale(width))
   const widths = useMemo(
-    () => (whole ? measureWidths(whole, sized, chordNames, labels) : []),
-    [whole, sized, chordNames, labels],
+    () => (whole ? measureWidths({ ...whole, staves: drawn }, sized, chordNames, labels) : []),
+    [whole, drawn, sized, chordNames, labels],
   )
   const lead = whole ? lineLead(whole) : 0
   // The room a line's bars have, in the engraving's units: the sheet's or the page's, less the clef and key.
@@ -180,6 +196,7 @@ export function ScoreSheet({
       chordNames={chordNames}
       edit={edit}
       labels={sheet.line.bars[0]?.index === 0 ? labels : undefined}
+      staves={drawn}
       justify={!across}
       onWrite={onWrite}
       onDrag={onDrag}
@@ -192,7 +209,7 @@ export function ScoreSheet({
     const scale = PRINT_SCALE
     // A line's height as engraved: its staves and the verses under its tune (ADR 0093).
     const lineHeight = (sheet: LineSheet) =>
-      labelRow(chordNames, scale, true) + (scoreHeight(sheet.score) + LINE_GAP) * scale
+      labelRow(chordNames, scale, true) + (scoreHeight(sheet.score, drawn) + LINE_GAP) * scale
     const items: PageItem[] = [
       { kind: 'title' },
       ...draft.sections.flatMap((_, section): PageItem[] => [

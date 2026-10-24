@@ -1297,6 +1297,27 @@ describe('the score editor', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff · Bar 1/)
   })
 
+  it('draws one piano staff alone where the View hides the other, the caret kept on the one in sight (ADR 0094)', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ hands: SILENT_HANDS }),
+    })
+    const staves = () =>
+      new Set(
+        [...document.querySelectorAll('[data-slot="score"] g.staff[data-staff]')].map((staff) =>
+          staff.getAttribute('data-staff'),
+        ),
+      )
+    await waitFor(() => expect(staves()).toEqual(new Set(['treble', 'bass'])), { timeout: 4000 })
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff/))
+    await user.click(screen.getByRole('button', { name: 'View' }))
+    const view = await screen.findByRole('dialog', { name: 'View' })
+    await user.click(within(view).getByRole('switch', { name: 'Upper staff' }))
+    expect(settingsStore.getState().scoreView.hidden).toEqual(['treble'])
+    await waitFor(() => expect(staves()).toEqual(new Set(['bass'])))
+    expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1/)
+  })
+
   it('shows not found for a song written in degrees', async () => {
     await renderApp('/edit/romashki')
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()

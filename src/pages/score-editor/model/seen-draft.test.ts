@@ -34,6 +34,25 @@ describe('the score as the View shows it (ADR 0094)', () => {
     ])
     expect(rowsInSight(score(false, ['chords']), view())).toEqual(['rh', 'lh'])
   })
+
+  it('leaves out one piano staff the View hides, the other in sight; both, as the piano (ADR 0094)', () => {
+    expect(rowsInSight(score(true), view({ hidden: ['treble'] }))).toEqual([
+      'chords',
+      'melody',
+      'lh',
+    ])
+    expect(rowsInSight(score(false), view({ hidden: ['bass'] }))).toEqual(['chords', 'rh'])
+    expect(rowsInSight(score(true), view({ hidden: ['treble', 'bass'] }))).toEqual([
+      'chords',
+      'melody',
+    ])
+    // With no tune, the piano stays whole: never every staff out of sight.
+    expect(rowsInSight(score(false), view({ hidden: ['treble', 'bass'] }))).toEqual([
+      'chords',
+      'rh',
+      'lh',
+    ])
+  })
 })
 
 describe('the caret kept in sight', () => {

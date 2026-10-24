@@ -26,9 +26,23 @@ export function seenDraft<Score extends Staves>(draft: Score, view: Shown): Scor
   return { ...draft, melodyStaff, hidden }
 }
 
-/** The rows the caret writes in, top down, as the View shows the score: the chord symbols too. */
+/** The hand that writes on each of the piano's staves. */
+const HAND_OF = { treble: 'rh', bass: 'lh' } as const satisfies Record<
+  (typeof PIANO_STAVES)[number],
+  Layer
+>
+
+/**
+ * The rows the caret writes in, top down, as the View shows the score: the chord symbols too, and
+ * one of the piano's staves the View hides alone left out, as the sheet draws the other alone (both
+ * hidden are the piano's, `seenDraft`).
+ */
 export function rowsInSight(draft: Staves, view: Shown): Layer[] {
-  return shownRows(seenDraft(draft, view)).filter((row) => row !== 'chords' || view.chordNames)
+  const hidden = PIANO_STAVES.filter((staff) => view.hidden.includes(staff))
+  const alone: readonly Layer[] = hidden.length === 1 ? hidden.map((staff) => HAND_OF[staff]) : []
+  return shownRows(seenDraft(draft, view)).filter(
+    (row) => (row !== 'chords' || view.chordNames) && !alone.includes(row),
+  )
 }
 
 /**

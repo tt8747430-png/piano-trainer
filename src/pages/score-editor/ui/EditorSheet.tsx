@@ -113,6 +113,7 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
       chordNames={view.chordNames}
       lyrics={view.lyrics}
       edit={editPrinted}
+      hidden={shown.hidden}
       view={view.layout}
       title={titleAt}
       room={room}
