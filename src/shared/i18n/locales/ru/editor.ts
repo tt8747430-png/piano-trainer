@@ -370,4 +370,8 @@ export const editor: LocaleResources['editor'] = {
     clip: 'Копировать, вырезать, вставить выбранное',
   },
   roll: { label: 'Нот: {{notes}} · тактов: {{bars}}', playFrom: 'Играть с такта {{n}}' },
+  printed: {
+    title: 'Название',
+    rename: 'Изменить название',
+  },
 }

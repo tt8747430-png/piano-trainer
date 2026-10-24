@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { createEditorStore, placesIn, readDraft, tapsIn, type Layer } from '@/features/score-editor'
@@ -40,6 +40,7 @@ const sheet = (
       heading={(section) => <h3>{section === 0 ? 'Verse' : 'Chorus'}</h3>}
       chordNames={chordNames}
       onSignature={onSignature}
+      title={() => null}
     />,
   )
 
@@ -53,6 +54,33 @@ describe('ScoreSheet', () => {
     expect(await screen.findByRole('button', { name: 'Bar 2: C D' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Bar 5: D' })).toBeInTheDocument()
   })
+
+  it.each(['scroll', 'pages', 'horizontal'] as const)(
+    'prints the title it is given at the sheet’s head, %s (ADR 0094)',
+    async (view) => {
+      render(
+        <ScoreSheet
+          draft={draft}
+          caret={0}
+          layer="rh"
+          tapsOf={() => []}
+          selection={null}
+          onPlace={vi.fn()}
+          onReach={vi.fn()}
+          onDeselect={vi.fn()}
+          placesOf={() => []}
+          heading={() => null}
+          chordNames
+          onSignature={vi.fn()}
+          view={view}
+          title={() => <h1>Morning</h1>}
+        />,
+      )
+      await screen.findAllByRole('button', { name: /^Bar 1/ })
+      const sheet = screen.getByRole('region', { name: 'Score' })
+      expect(within(sheet).getByRole('heading', { level: 1, name: 'Morning' })).toBeInTheDocument()
+    },
+  )
 
   it('puts the caret where a bar is clicked, Shift keeping the bars chosen', async () => {
     const user = userEvent.setup()
@@ -90,6 +118,7 @@ describe('ScoreSheet', () => {
         heading={() => null}
         chordNames
         onSignature={vi.fn()}
+        title={() => null}
       />,
     )
     await screen.findByRole('button', { name: 'Bar 1: G' })
@@ -177,6 +206,7 @@ describe('ScoreSheet', () => {
       heading: () => null,
       chordNames: true,
       onSignature: vi.fn(),
+      title: () => null,
     }
     const { rerender } = render(<ScoreSheet {...props} caret={96} />)
     await screen.findByRole('button', { name: 'Bar 2: C D' })

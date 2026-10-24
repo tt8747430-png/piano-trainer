@@ -10,8 +10,13 @@ import {
 import type { Midi, Tick } from '@/shared/lib/music'
 import { usePlay } from '@/shared/lib/services'
 import { ScoreSheet } from '@/widgets/score-sheet'
+import type { TitlePlace } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { SectionHeading } from './SectionHeading'
+import { TitleField } from './TitleField'
+
+/** The title printed where the sheet prints it, edited there (ADR 0094). */
+const titleAt = (place: TitlePlace) => <TitleField place={place} />
 
 /** How a note moved on its staff is heard: short and soft, as a notation app sounds it. */
 const HEARD = { duration: 0.35, velocity: 0.15 } as const
@@ -25,7 +30,6 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
     store,
     actions: { dispatch },
     view,
-    meta,
   } = useScoreEditorContext()
   const draft = useEditorState((state) => state.draft)
   const caret = useEditorState((state) => state.caret)
@@ -102,7 +106,7 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
       lyrics={view.lyrics}
       onSignature={openSettings}
       view={view.layout}
-      title={meta.title}
+      title={titleAt}
       room={room}
       onWrite={onWrite}
       onDrag={onDrag}

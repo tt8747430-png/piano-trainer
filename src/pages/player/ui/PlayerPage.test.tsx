@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { melodyOf, pieceById, PIECES, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
-import { setPracticeToggle } from '@/features/set-preference'
+import { setPracticeToggle, setScoreView } from '@/features/set-preference'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
 import * as engine from '@/shared/ui/score/verovio/engine'
@@ -145,13 +145,27 @@ describe('Player', () => {
 
   it('opens a song with its title, tempo, hands and sheet music, and records it as practised', async () => {
     const { progressStore } = await renderApp('/play/bz5')
+    // The title printed at the sheet's head, the bar holding Close and the screen's buttons (ADR 0094).
+    const sheet = await screen.findByRole('region', { name: 'Sheet music' })
     expect(
-      await screen.findByRole('heading', { name: 'Still, my soul, be still' }),
+      within(sheet).getByRole('heading', { level: 1, name: 'Still, my soul, be still' }),
     ).toBeInTheDocument()
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1)
+    expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Tempo: 100%' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Hands: Both hands' })).toBeInTheDocument()
     expect(await screen.findByRole('button', { name: 'Bar 1: G' })).toBeInTheDocument()
     expect(progressStore.getState().practised.bz5).toBeDefined()
+  })
+
+  it('prints the title alone where the sheet was with the View’s Notation off', async () => {
+    const { settingsStore } = await renderApp('/play/bz5')
+    await screen.findByRole('region', { name: 'Sheet music' })
+    act(() => setScoreView(settingsStore, { notation: false }))
+    expect(screen.queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Still, my soul, be still' }),
+    ).toBeInTheDocument()
   })
 
   it('reads a stale URL as the piece’s own setup', async () => {

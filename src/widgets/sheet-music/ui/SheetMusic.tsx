@@ -4,6 +4,7 @@ import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { useElementSize, type SheetView } from '@/shared/lib'
 import { notate, type StaffId } from '@/shared/lib/notation'
+import { SheetTitle } from '@/shared/ui'
 import { ScoreView, scoreHeight, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { FINGERS, fitScale, widestBar } from '../model/fit-scale'
 import { groupOfTick } from '../model/group-of-tick'
@@ -59,12 +60,12 @@ function BarWidth({
 }
 
 /**
- * A Performance as sheet music (spec §2.6): chord symbols over numbered bars, the cursor on the beat
- * group now, the loop, bars to jump to; the tune on its own staff where the view asks, the staves it
- * hides left out. Laid out across (the default), on one scrolling line that takes the height it is
- * given and engraves the staff to fill it (`fitScale`) while two of its bars still show, so music read
- * from a stand is as large as the screen allows; or in the chart's lines, down the screen or on A4
- * pages (`SheetLines`).
+ * A Performance as sheet music (spec §2.6): its title at its head, the page's heading (ADR 0094);
+ * chord symbols over numbered bars, the cursor on the beat group now, the loop, bars to jump to; the
+ * tune on its own staff where the view asks, the staves it hides left out. Laid out across (the
+ * default), on one scrolling line under the title that takes the height left and engraves the staff
+ * to fill it (`fitScale`) while two of its bars still show, so music read from a stand is as large as
+ * the screen allows; or in the chart's lines, down the screen or on A4 pages (`SheetLines`).
  */
 export function SheetMusic({
   performance,
@@ -82,8 +83,8 @@ export function SheetMusic({
   title,
 }: {
   view?: SheetViewChoice
-  /** The piece's title, at the head of the first page. */
-  title?: string
+  /** The piece's title, printed at the sheet's head in every layout: the page's heading (ADR 0094). */
+  title: string
   performance: Performance
   /** Each section's name, by section: shown at its first bar. */
   headings: readonly string[]
@@ -121,7 +122,7 @@ export function SheetMusic({
   )
   const kept = score.staves.filter((staff) => !view.hidden.includes(staff))
   const staves = kept.length > 0 ? kept : score.staves
-  const scroller = useRef<HTMLElement>(null)
+  const scroller = useRef<HTMLDivElement>(null)
   const { width, height } = useElementSize(scroller)
   const room = { width, height: height - (fingers ? FINGERS : 0) }
   // The music's own widest bar, once engraved: a line of plain bars grows where a busy one cannot.
@@ -203,43 +204,46 @@ export function SheetMusic({
       />
     )
   return (
-    <section
-      ref={scroller}
-      aria-label={t('sheet.label')}
-      className="relative -mx-gutter h-full overflow-x-auto overscroll-x-contain px-gutter pt-11 scrollbar-none landscape-phone:mx-0 landscape-phone:px-0"
-    >
-      <ScoreView
-        score={score}
-        scale={scale}
-        fingers={fingers}
-        names={names}
-        muted={muted}
-        staves={staves}
-        selected={selected}
+    // The title at the line's head (ADR 0094), the line scrolling sideways under it in the height left.
+    <section aria-label={t('sheet.label')} className="flex h-full flex-col">
+      <SheetTitle title={title} place="across" />
+      <div
+        ref={scroller}
+        className="relative -mx-gutter min-h-0 flex-1 overflow-x-auto overscroll-x-contain px-gutter pt-11 scrollbar-none landscape-phone:mx-0 landscape-phone:px-0"
       >
-        {(layout) => (
-          <>
-            <BarWidth layout={layout} scale={scale} onBar={onBar} />
-            <SheetOverlay
-              layout={layout}
-              scroller={scroller}
-              performance={performance}
-              headings={headings}
-              positions={positions}
-              chordNames={view.chordNames}
-              tempos={tempos}
-              current={current}
-              loop={loop}
-              cursorShown={cursorShown}
-              picked={here}
-              onJump={onJump}
-              onPick={onPick}
-              onLoopChange={onLoopChange}
-              onChoose={onChoose}
-            />
-          </>
-        )}
-      </ScoreView>
+        <ScoreView
+          score={score}
+          scale={scale}
+          fingers={fingers}
+          names={names}
+          muted={muted}
+          staves={staves}
+          selected={selected}
+        >
+          {(layout) => (
+            <>
+              <BarWidth layout={layout} scale={scale} onBar={onBar} />
+              <SheetOverlay
+                layout={layout}
+                scroller={scroller}
+                performance={performance}
+                headings={headings}
+                positions={positions}
+                chordNames={view.chordNames}
+                tempos={tempos}
+                current={current}
+                loop={loop}
+                cursorShown={cursorShown}
+                picked={here}
+                onJump={onJump}
+                onPick={onPick}
+                onLoopChange={onLoopChange}
+                onChoose={onChoose}
+              />
+            </>
+          )}
+        </ScoreView>
+      </div>
     </section>
   )
 }

@@ -2,7 +2,7 @@ import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barAt, type Draft, type Layer } from '@/features/score-editor'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/shared/lib'
-import { PageCanvas, SheetPage } from '@/shared/ui'
+import { PageCanvas, SheetPage, type TitlePlace } from '@/shared/ui'
 import { lineLead, measureWidths, notate } from '@/shared/lib/notation'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { scoreHeight, versesOf } from '@/shared/ui/score'
@@ -55,10 +55,11 @@ function blocksOf(page: readonly PageItem[]): PageItem[][] {
 }
 
 /**
- * The editor's sheet (spec §6.1, ADR 0064), as `view` lays it out: the piece by section down the
- * screen, each chart line a system of its staves; the same on A4 pages as it will print, its title
- * on the first; or all of it as one line across. Each bar numbered, its chord symbols over it, the
- * caret on its layer's staff. A line is drawn again only when what it shows changes.
+ * The editor's sheet (spec §6.1, ADR 0064), as `view` lays it out: its title at its head (ADR 0094);
+ * the piece by section down the screen, each chart line a system of its staves; the same on A4 pages
+ * as it will print, its title on the first; or all of it as one line across. Each bar numbered, its
+ * chord symbols over it, the caret on its layer's staff. A line is drawn again only when what it
+ * shows changes.
  */
 export function ScoreSheet({
   draft,
@@ -112,8 +113,11 @@ export function ScoreSheet({
   /** The clef, key and time signature clicked: what changes them. */
   onSignature: () => void
   view?: SheetView
-  /** The piece's title, at the head of its first page. */
-  title?: string
+  /**
+   * The piece's title as the page prints it, its heading (ADR 0094), where it is printed: at the head
+   * of the first page, of the lines down the screen, or of the line across.
+   */
+  title: (place: TitlePlace) => ReactNode
 }) {
   const { t } = useTranslation('editor')
   const [sheetsOf] = useState(createLineSheets)
@@ -183,7 +187,7 @@ export function ScoreSheet({
     const lineHeight = (sheet: LineSheet) =>
       labelRow(chordNames, scale, true) + (scoreHeight(sheet.score) + LINE_GAP) * scale
     const items: PageItem[] = [
-      ...(title ? [{ kind: 'title' } as const] : []),
+      { kind: 'title' },
       ...draft.sections.flatMap((_, section): PageItem[] => [
         { kind: 'heading', section },
         ...sheets
@@ -214,9 +218,7 @@ export function ScoreSheet({
                   <div className="flex flex-col" style={{ gap: LINE_GAP * scale }}>
                     {block.map((item) =>
                       item.kind === 'title' ? (
-                        <h2 key="title" className="text-center font-display text-3xl">
-                          {title}
-                        </h2>
+                        <div key="title">{title('page')}</div>
                       ) : item.kind === 'heading' ? (
                         <div key={itemKey(item)}>{heading(item.section)}</div>
                       ) : (
@@ -236,6 +238,7 @@ export function ScoreSheet({
   if (across) {
     return (
       <section ref={box} aria-label={t('sheet.label')} className="flex flex-col gap-2">
+        {title('across')}
         {sheets.map((sheet) => line(sheet, fit))}
       </section>
     )
@@ -243,6 +246,7 @@ export function ScoreSheet({
 
   return (
     <section ref={box} aria-label={t('sheet.label')} className="flex flex-col gap-8">
+      {title('lines')}
       {draft.sections.map((_, section) => (
         <section key={section} className="flex flex-col gap-2">
           {heading(section)}

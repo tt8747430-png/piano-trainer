@@ -396,4 +396,10 @@ export const editor = {
     clip: 'Copy, cut, paste what is chosen',
   },
   roll: { label: 'Notes: {{notes}} · bars: {{bars}}', playFrom: 'Play from bar {{n}}' },
+  // What is printed on the score, edited where it is (ADR 0094): the title, a click turning it into a
+  // field in its place.
+  printed: {
+    title: 'Title',
+    rename: 'Change the title',
+  },
 } as const

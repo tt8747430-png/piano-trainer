@@ -12,7 +12,7 @@ import {
   useMediaQuery,
   useScrollMotion,
 } from '@/shared/lib'
-import { PageCanvas, SheetPage, useCanvasReveal } from '@/shared/ui'
+import { PageCanvas, SheetPage, SheetTitle, useCanvasReveal } from '@/shared/ui'
 import { lineLead, measureWidths, type Score, type StaffId } from '@/shared/lib/notation'
 import { ScoreView, scoreHeight, type Picked } from '@/shared/ui/score'
 import { FINGERS, systemFit } from '../model/fit-scale'
@@ -22,14 +22,16 @@ import { SheetOverlay } from './SheetOverlay'
 /** The labels' row over each line: the chord names' and the bars' numbers, or the numbers alone. */
 const LABELS = { chords: 44, numbers: 20 } as const
 const LINE_GAP = 16
+/** The title's room over the first page's first line, at print size. */
+const TITLE_ROOM = 44
 /** A line's engraving on a screen this wide is at its own size; narrower, smaller, down to the least. */
 const FULL_WIDTH = 760
 const LEAST_SCALE = 0.62
 
 /**
  * The score in the chart's lines (ADR 0064): down the screen, or dealt onto A4 pages as it will print,
- * its title on the first, each chart line cut by width where it is wider than the screen holds. Each
- * line is justified to the width and carries its labels, the loop's part
+ * its title at the head of the first line (ADR 0094), each chart line cut by width where it is wider
+ * than the screen holds. Each line is justified to the width and carries its labels, the loop's part
  * and its bars to jump to; the cursor stands on the line playing, which comes into sight as it starts.
  * On a phone on its side, a line down the screen is drawn small enough that its whole system is in
  * sight, as the editor's is.
@@ -62,7 +64,8 @@ export function SheetLines({
   staves: readonly StaffId[]
   /** On A4 pages; else lines down the screen. */
   pages: boolean
-  title?: string | undefined
+  /** Printed at the head of the first line, the page's heading. */
+  title: string
   headings: readonly string[]
   current: number
   loop: BarRange | null
@@ -182,6 +185,7 @@ export function SheetLines({
         className="flex h-full scroll-pb-(--float-room) flex-col overflow-y-auto overscroll-contain"
         style={{ gap: LINE_GAP }}
       >
+        <SheetTitle title={title} place="lines" />
         {lines.map(line)}
         {/* Room to scroll the last line clear of what floats over the sheet's foot (`--float-room`),
             a part of the list, so the sheet's own height is all it shows. */}
@@ -193,7 +197,7 @@ export function SheetLines({
   const dealt = paginate(
     lines.map((each, index) => ({ each, index })),
     ({ each }) => labels + scoreHeight(each.score, staves) * scale + LINE_GAP,
-    PAGE.height - 2 * margin - (title ? LABELS.chords : 0),
+    PAGE.height - 2 * margin - TITLE_ROOM,
   )
   return (
     <PageCanvas column={PAGE.width}>
@@ -210,9 +214,9 @@ export function SheetLines({
             blocks={page.map(({ each, index }, at) => ({
               key: String(each.first),
               content:
-                number === 0 && at === 0 && title ? (
+                number === 0 && at === 0 ? (
                   <div className="flex flex-col" style={{ gap: LINE_GAP }}>
-                    <h2 className="text-center font-display text-3xl">{title}</h2>
+                    <SheetTitle title={title} place="page" />
                     {line(each, index)}
                   </div>
                 ) : (

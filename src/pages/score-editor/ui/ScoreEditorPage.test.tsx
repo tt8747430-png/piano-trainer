@@ -108,6 +108,37 @@ describe('the score editor', () => {
     ).toBeInTheDocument()
   })
 
+  it('prints the title at the sheet’s head, a click turning it into a field in its place (ADR 0094)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    const sheet = await screen.findByRole('region', { name: 'Score' })
+    const heading = within(sheet).getByRole('heading', { level: 1, name: 'Morning' })
+    await user.click(within(heading).getByRole('button', { name: 'Morning' }))
+    // Enter saves.
+    const field = within(sheet).getByRole('textbox', { name: 'Title' })
+    expect(field).toHaveFocus()
+    expect(field).toHaveAttribute('maxlength', '80')
+    await user.clear(field)
+    await user.type(field, 'Evening{Enter}')
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ title: 'Evening' }))
+    expect(within(sheet).getByRole('heading', { level: 1, name: 'Evening' })).toBeInTheDocument()
+    // Escape keeps the title it had.
+    await user.click(within(sheet).getByRole('button', { name: 'Evening' }))
+    await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), ' song{Escape}')
+    expect(within(sheet).getByRole('button', { name: 'Evening' })).toBeInTheDocument()
+    // An empty title keeps the old one; leaving the field saves what it holds.
+    await user.click(within(sheet).getByRole('button', { name: 'Evening' }))
+    await user.clear(within(sheet).getByRole('textbox', { name: 'Title' }))
+    await user.keyboard('{Enter}')
+    expect(songOf(piecesStore.getState())).toMatchObject({ title: 'Evening' })
+    await user.click(within(sheet).getByRole('button', { name: 'Evening' }))
+    await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), ' star')
+    await user.click(document.body)
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({ title: 'Evening star' }),
+    )
+  })
+
   it('opens a new song on empty bars, nothing written in either staff, as a new score (ADR 0091)', async () => {
     const user = userEvent.setup()
     const made = chartStart({ tonic: note('G'), minor: false }, '4/4')
@@ -643,9 +674,9 @@ describe('the score editor', () => {
       dispatchEvent: () => false,
     }))
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    // The caret's line under the title, in the bar.
-    const title = await screen.findByRole('heading', { level: 1, name: 'Morning' })
-    expect(title.parentElement).toContainElement(screen.getByRole('status'))
+    // The caret's line under the title, in the bar (the sheet prints the title too, ADR 0094).
+    const [title] = await screen.findAllByRole('heading', { level: 1, name: 'Morning' })
+    expect(title?.parentElement).toContainElement(screen.getByRole('status'))
     await user.click(screen.getByRole('button', { name: 'View' }))
     await user.click(await screen.findByRole('switch', { name: 'Keys' }))
     expect(settingsStore.getState().keyboard.foldedLandscape).toBe(false)

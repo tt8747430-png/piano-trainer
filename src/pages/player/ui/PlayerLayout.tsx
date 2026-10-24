@@ -4,13 +4,14 @@ import { MidiButton } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
 import { PIANO_STAVES } from '@/shared/lib/notation'
+import { SheetTitle } from '@/shared/ui'
 import {
   HandsButton,
   LoopButton,
   PlayerArea,
   PlayerScreen,
+  PlayerClose,
   PlayerDock,
-  PlayerTitle,
   TempoButton,
   usePlayerShortcuts,
   WaitLine,
@@ -86,7 +87,7 @@ export function PlayerLayout({
   return (
     <PlayerScreen keys={dock}>
       <PlayerArea area="lead">
-        <PlayerTitle title={title} onClose={onClose} />
+        <PlayerClose onClose={onClose} />
       </PlayerArea>
       <PlayerArea area="actions" className="flex items-center justify-end gap-2 narrow-phone:gap-1">
         {modes}
@@ -113,7 +114,10 @@ export function PlayerLayout({
             playing={practice.state.playing}
             onLoopChange={player.setLoop}
           />
-        ) : null}
+        ) : (
+          // No notation: the title alone where the sheet was (ADR 0094).
+          <SheetTitle title={title} place="lines" />
+        )}
       </PlayerArea>
       <PlayerArea
         area="status"
