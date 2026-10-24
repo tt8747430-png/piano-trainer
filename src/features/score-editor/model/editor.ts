@@ -280,9 +280,8 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       return clipEdited(state, action.edit)
     case 'barMarks':
       return commit(state, markBars(draft, chosenBars(state), action.choice))
-    // From the first bar chosen, else the caret's.
     case 'clef':
-      return commit(state, setClef(draft, chosenBars(state).from, action.hand, action.clef))
+      return commit(state, setClef(draft, action.bar, action.hand, action.clef))
     // Each bar chosen, else the caret's.
     case 'barLength': {
       const { from, to } = chosenBars(state)
@@ -295,7 +294,7 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
     case 'joinSection':
       return commit(state, joinSection(draft, action.section))
     case 'sectionKey': {
-      const section = barsOf(draft)[chosenBars(state).from]?.section ?? 0
+      const section = barsOf(draft)[action.bar]?.section ?? 0
       return commit(state, setSectionKey(draft, section, action.key))
     }
     case 'settings': {

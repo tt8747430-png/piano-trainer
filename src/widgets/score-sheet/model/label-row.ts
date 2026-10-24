@@ -4,6 +4,10 @@ import { PRINT_SCALE } from '@/shared/lib'
 export const CHORD_ROW = 44
 /** The row a line's first bar number takes over its staff where no chord names are shown. */
 const NUMBER_ROW = 20
+/** A bar's number sits this far right of its barline, clear of the line. */
+export const NUMBER_INSET_PX = 4
+/** A tempo at the line's head stands this far right of its bar's number. */
+export const AFTER_NUMBER_PX = 24
 /** The least a line's labels are drawn at: smaller, a chord symbol on a page held at arm's length is not read. */
 const LEAST_LABELS = 0.7
 

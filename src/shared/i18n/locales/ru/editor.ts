@@ -143,7 +143,6 @@ export const editor: LocaleResources['editor'] = {
   },
   layerChip: { label: 'Следующая нота: {{layer}}', menu: 'Куда пишется следующая нота' },
   sheet: {
-    signature: 'Тональность и размер',
     label: 'Ноты',
     page: 'Страница {{n}} из {{of}}',
     bar: 'Такт {{n}}: {{chords}}',
@@ -373,5 +372,23 @@ export const editor: LocaleResources['editor'] = {
   printed: {
     title: 'Название',
     rename: 'Изменить название',
+    tempoMark: 'Темп: {{bpm}}',
+    keyAt: 'Ключевые знаки, такт {{bar}}',
+    timeAt: 'Размер, такт {{bar}}',
+    clefAt: 'Ключ, {{staff}}, такт {{bar}}',
+    tempo: 'Темп',
+    bpm: 'Ударов в минуту',
+    slower: 'На удар в минуту медленнее',
+    faster: 'На удар в минуту быстрее',
+    tempoWords: 'Обозначения темпа',
+    tempoWord: '{{word}}, {{bpm}} в минуту',
+    tempos: {
+      largo: 'Ларго',
+      adagio: 'Адажио',
+      andante: 'Анданте',
+      moderato: 'Модерато',
+      allegro: 'Аллегро',
+      presto: 'Престо',
+    },
   },
 }

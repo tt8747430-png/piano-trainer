@@ -211,3 +211,81 @@ describe('a line with words (ADR 0093)', () => {
     expect(wide.height).toBeGreaterThan(plain.height)
   }, 20_000)
 })
+
+describe('the signs printed on a line (ADR 0094)', () => {
+  const signed = notate({
+    key: { tonic: note('D'), minor: false },
+    meter: '4/4',
+    bars: [
+      { startTick: 0, beats: 4 },
+      // A key change, then the left hand's staff in the treble clef.
+      { startTick: 96, beats: 4, key: { tonic: note('E', -1), minor: false } },
+      {
+        startTick: 192,
+        beats: 4,
+        key: { tonic: note('E', -1), minor: false },
+        clefs: { lh: 'treble' },
+      },
+    ],
+    notes: [n(74, 'rh', 0, 96), n(75, 'rh', 96, 96), n(75, 'rh', 192, 96), n(50, 'lh', 0, 288)],
+    chords: [],
+  })
+
+  async function read() {
+    // What the next line starts in, printed as a courtesy at this one's end: not one of its signs.
+    const next = { key: { tonic: note('G'), minor: false }, time: { count: 4, unit: 4 } } as const
+    const [svg = ''] = await engraveMei(scoreToMei(signed, { next }), { width: 800, scale: 1 })
+    const host = document.createElement('div')
+    host.innerHTML = svg
+    const element = host.querySelector('svg')
+    if (!element) throw new Error('an SVG')
+    return layoutOf(element, signed.measures, signed.staves)
+  }
+
+  it('reads each clef, key and time signature with its staff and measure, at a line’s head and where it changes', async () => {
+    const layout = await read()
+    const signs = (layout.signs ?? []).map(
+      ({ kind, staff, measure }) => `${kind} ${staff} ${measure}`,
+    )
+    expect(signs).toEqual([
+      'clef treble 0',
+      'key treble 0',
+      'time treble 0',
+      'clef bass 0',
+      'key bass 0',
+      'time bass 0',
+      'key treble 1',
+      'key bass 1',
+      'clef bass 2',
+    ])
+  }, 20_000)
+
+  it('boxes each sign where it is drawn: over its staff, before its measure’s notes, left to right', async () => {
+    const layout = await read()
+    const at = (kind: string, staff: string, measure: number) => {
+      const sign = (layout.signs ?? []).find(
+        (each) => each.kind === kind && each.staff === staff && each.measure === measure,
+      )
+      if (!sign) throw new Error(`no ${kind} on the ${staff} staff in measure ${measure}`)
+      return sign
+    }
+    const [first, second] = layout.measures
+    const treble = layout.staves.treble
+    if (!first || !second || !treble) throw new Error('the line')
+    const clef = at('clef', 'treble', 0)
+    const key = at('key', 'treble', 0)
+    const time = at('time', 'treble', 0)
+    // Side by side, in the order printed, before the first note.
+    expect(clef.right).toBeLessThanOrEqual(key.left + 1)
+    expect(key.right).toBeLessThanOrEqual(time.left + 1)
+    expect(time.right).toBeLessThan(first.notes)
+    // A treble clef reaches over and under its staff; two sharps are two accidentals wide.
+    expect(clef.top).toBeLessThan(treble.top)
+    expect(clef.bottom).toBeGreaterThan(treble.bottom)
+    expect(key.right - key.left).toBeGreaterThan(15)
+    // The key change in the second measure, before its notes.
+    const change = at('key', 'treble', 1)
+    expect(change.left).toBeGreaterThanOrEqual(second.x)
+    expect(change.right).toBeLessThan(second.notes)
+  }, 20_000)
+})

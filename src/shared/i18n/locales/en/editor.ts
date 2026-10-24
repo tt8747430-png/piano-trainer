@@ -159,7 +159,6 @@ export const editor = {
   // The edit row's head: where the next note goes, chosen there (Flat's voice badge).
   layerChip: { label: 'Next note goes in: {{layer}}', menu: 'Next note goes in' },
   sheet: {
-    signature: 'Key and time signature',
     label: 'Score',
     page: 'Page {{n}} of {{of}}',
     bar: 'Bar {{n}}: {{chords}}',
@@ -401,5 +400,26 @@ export const editor = {
   printed: {
     title: 'Title',
     rename: 'Change the title',
+    // The tempo mark, a key or time signature, a clef: each a button opening its popover there.
+    tempoMark: 'Tempo: {{bpm}}',
+    keyAt: 'Key signature, bar {{bar}}',
+    timeAt: 'Time signature, bar {{bar}}',
+    clefAt: 'Clef, {{staff}}, bar {{bar}}',
+    // The tempo's popover: the beats a minute, a beat less or more, or a tempo word as a metronome
+    // marks it.
+    tempo: 'Tempo',
+    bpm: 'Beats a minute',
+    slower: 'A beat a minute slower',
+    faster: 'A beat a minute faster',
+    tempoWords: 'Tempo words',
+    tempoWord: '{{word}}, {{bpm}} a minute',
+    tempos: {
+      largo: 'Largo',
+      adagio: 'Adagio',
+      andante: 'Andante',
+      moderato: 'Moderato',
+      allegro: 'Allegro',
+      presto: 'Presto',
+    },
   },
 } as const

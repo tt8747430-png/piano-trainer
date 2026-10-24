@@ -1,9 +1,11 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { cloneElement } from 'react'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { createEditorStore, placesIn, readDraft, tapsIn, type Layer } from '@/features/score-editor'
 import { stubBox } from '@/shared/test/layout'
 import { loadScoreView } from '@/shared/ui'
+import type { EditPrinted, Printed } from '../model/printed'
 import { ScoreSheet } from './ScoreSheet'
 
 const draft = readDraft({
@@ -19,11 +21,17 @@ const draft = readDraft({
   hands: { lh: 'r/4 | r/4 | E3/4 | r/4 | r/4' },
 })
 
+/** What edits a thing printed, in a test: a click on its button says what it is. */
+const editing =
+  (edited: (printed: Printed) => void): EditPrinted =>
+  (printed, trigger) =>
+    cloneElement(trigger, { onClick: () => edited(printed) })
+
 const sheet = (
   layer: Layer,
   onPlace = vi.fn(),
   chordNames = true,
-  onSignature = vi.fn(),
+  edited = vi.fn(),
   onDeselect = vi.fn(),
 ) =>
   render(
@@ -39,7 +47,7 @@ const sheet = (
       placesOf={(to) => placesIn(createEditorStore(draft, vi.fn()).getState(), to)}
       heading={(section) => <h3>{section === 0 ? 'Verse' : 'Chorus'}</h3>}
       chordNames={chordNames}
-      onSignature={onSignature}
+      edit={editing(edited)}
       title={() => null}
     />,
   )
@@ -71,7 +79,7 @@ describe('ScoreSheet', () => {
           placesOf={() => []}
           heading={() => null}
           chordNames
-          onSignature={vi.fn()}
+          edit={editing(vi.fn())}
           view={view}
           title={() => <h1>Morning</h1>}
         />,
@@ -97,8 +105,9 @@ describe('ScoreSheet', () => {
     sheet('rh', vi.fn(), false)
     await screen.findByRole('button', { name: 'Bar 1: G' })
     const rows = [...document.querySelectorAll<HTMLElement>('[data-slot="line-labels"]')]
-    // The tempo in the row, not a row of its own over the staff (ADR 0074).
-    expect(rows.map((row) => row.textContent)).toEqual(['1\u{1D15F}= 90', '3', '4'])
+    expect(rows.map((row) => row.textContent)).toEqual(['1', '3', '4'])
+    // The tempo in the row, not a row of its own over the staff (ADR 0074), a button there.
+    expect(screen.getByRole('button', { name: 'Tempo: 90 BPM' })).toHaveTextContent('\u{1D15F}= 90')
     // No chord names: the row holds a number alone, not the chords' room (ADR 0072).
     expect(rows.every((row) => row.style.height === '20px')).toBe(true)
   })
@@ -117,7 +126,7 @@ describe('ScoreSheet', () => {
         placesOf={() => []}
         heading={() => null}
         chordNames
-        onSignature={vi.fn()}
+        edit={editing(vi.fn())}
         title={() => null}
       />,
     )
@@ -141,14 +150,27 @@ describe('ScoreSheet', () => {
     expect(onPlace).toHaveBeenCalledWith(192, 'melody', false)
   })
 
-  it('opens what changes the clef, key and time from a line’s head', async () => {
+  it('puts a button over the tempo mark and each clef, key and time signature, edited there (ADR 0094)', async () => {
     const user = userEvent.setup()
-    const onSignature = vi.fn()
-    sheet('melody', vi.fn(), true, onSignature)
-    const [head] = await screen.findAllByRole('button', { name: 'Key and time signature' })
-    if (!head) throw new Error('no line head')
-    await user.click(head)
-    expect(onSignature).toHaveBeenCalled()
+    const edited = vi.fn()
+    sheet('melody', vi.fn(), true, edited)
+    await user.click(await screen.findByRole('button', { name: 'Tempo: 90 BPM' }))
+    expect(edited).toHaveBeenLastCalledWith({ kind: 'tempo' })
+    // The verse's first line's head, each sign on each staff it is printed on.
+    const [key] = await screen.findAllByRole('button', { name: 'Key signature, bar 1' })
+    if (!key) throw new Error('no key signature')
+    await user.click(key)
+    expect(edited).toHaveBeenLastCalledWith({ kind: 'key', bar: 0 })
+    const [time] = screen.getAllByRole('button', { name: 'Time signature, bar 1' })
+    if (!time) throw new Error('no time signature')
+    await user.click(time)
+    expect(edited).toHaveBeenLastCalledWith({ kind: 'time', bar: 0 })
+    // The verse's second line starts at bar 3: its lower staff's clef.
+    await user.click(screen.getByRole('button', { name: 'Clef, Lower staff, bar 3' }))
+    expect(edited).toHaveBeenLastCalledWith({ kind: 'clef', bar: 2, staff: 'bass' })
+    // Only the piano's staves change clef: the tune's is printed alone.
+    expect(screen.queryByRole('button', { name: /^Clef, Melody/ })).not.toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: /^Clef, Upper staff/ })).toHaveLength(3)
   })
 
   it('chooses nothing on empty staff beside a note, and a bar’s start where its row writes nothing (ADR 0088)', async () => {
@@ -205,7 +227,7 @@ describe('ScoreSheet', () => {
       placesOf: () => [],
       heading: () => null,
       chordNames: true,
-      onSignature: vi.fn(),
+      edit: editing(vi.fn()),
       title: () => null,
     }
     const { rerender } = render(<ScoreSheet {...props} caret={96} />)

@@ -27,6 +27,8 @@ export interface ScoreLayout {
   readonly columns?: readonly Column[]
   /** Each rest drawn: notes chosen over it hug it too. */
   readonly rests?: readonly Rest[]
+  /** Each clef, key and time signature printed, at a staff's head or where it changes (ADR 0094). */
+  readonly signs?: readonly Sign[]
 }
 
 /** A box on the engraving, in its px: its left, right, top and foot. */
@@ -57,6 +59,21 @@ export interface Rest extends Extent {
 export interface Column extends Extent {
   readonly staff: StaffId
   readonly tick: Tick
+}
+
+/** What a sign printed on a staff is. */
+export type SignKind = 'clef' | 'key' | 'time'
+
+/**
+ * A clef, key or time signature printed on a staff (ADR 0094): at a line's head, or at the start of the
+ * measure it changes in; its box round its glyphs. A courtesy sign at a line's end, the next line's,
+ * is not one.
+ */
+export interface Sign extends Extent {
+  readonly kind: SignKind
+  readonly staff: StaffId
+  /** The line's measure it stands in, from 0. */
+  readonly measure: number
 }
 
 /**

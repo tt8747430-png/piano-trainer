@@ -1,4 +1,12 @@
-export { type Column, type Head, type Rest, type ScoreLayout } from './layout'
+export {
+  type Column,
+  type Extent,
+  type Head,
+  type Rest,
+  type ScoreLayout,
+  type Sign,
+  type SignKind,
+} from './layout'
 export { xAtTick } from './layout'
 export { ScoreView } from './ScoreView'
 export { scoreHeight, staffHeight, versesOf } from './size'

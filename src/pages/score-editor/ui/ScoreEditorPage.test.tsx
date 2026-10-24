@@ -295,43 +295,96 @@ describe('the score editor', () => {
     expect(await screen.findByRole('link', { name: 'Go to Songs' })).toBeInTheDocument()
   })
 
-  it('opens the song’s key, tempo and meter from the clef and signatures at a line’s head', async () => {
+  it('opens the tempo’s popover from the tempo mark: a beat less or more, typed, or a tempo word (ADR 0094)', async () => {
     const user = userEvent.setup()
-    await renderApp('/edit/my-1', { storage: withSong() })
-    const [head] = await screen.findAllByRole(
-      'button',
-      { name: 'Key and time signature' },
-      { timeout: 4000 },
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    await user.click(
+      await screen.findByRole('button', { name: 'Tempo: 90 BPM' }, { timeout: 4000 }),
     )
-    if (!head) throw new Error('no line head')
-    await user.click(head)
-    const settings = await screen.findByRole('dialog', { name: 'Song' })
-    expect(within(settings).getByRole('group', { name: 'Key' })).toBeInTheDocument()
-    expect(within(settings).queryByRole('combobox', { name: 'Pattern' })).not.toBeInTheDocument()
+    const tempo = await screen.findByRole('dialog', { name: 'Tempo' })
+    await user.click(within(tempo).getByRole('button', { name: 'A beat a minute faster' }))
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ tempo: 91 }))
+    const bpm = within(tempo).getByRole('spinbutton', { name: 'Beats a minute' })
+    expect(bpm).toHaveValue(91)
+    await user.clear(bpm)
+    await user.type(bpm, '72{Enter}')
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ tempo: 72 }))
+    await user.click(within(tempo).getByRole('button', { name: 'Allegro, 130 a minute' }))
+    await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject({ tempo: 130 }))
+    expect(within(tempo).getByRole('button', { name: 'Allegro, 130 a minute' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(bpm).toHaveValue(130)
+    // The mark printed says the new tempo.
+    expect(await screen.findByRole('button', { name: 'Tempo: 130 BPM' })).toBeInTheDocument()
   })
 
-  it('changes key from the caret’s section on, or for the whole song in the Song sheet (ADR 0089)', async () => {
+  it('changes the song’s key at its first key signature, a later section’s from its own (ADR 0094)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', {
+      storage: withSong({
+        sections: [
+          { kind: 'verse', lines: ['G G G G'] },
+          { kind: 'chorus', lines: ['C C C C'] },
+        ],
+      }),
+    })
+    // The verse's: the song's own key, the music moved with it.
+    const [first] = await screen.findAllByRole(
+      'button',
+      { name: 'Key signature, bar 1' },
+      { timeout: 4000 },
+    )
+    if (!first) throw new Error('no key signature at the head')
+    await user.click(first)
+    const song = await screen.findByRole('dialog', { name: 'Key signature' })
+    expect(within(song).getByText('The song’s key')).toBeInTheDocument()
+    await user.click(
+      within(within(song).getByRole('group', { name: 'Key' })).getByRole('radio', { name: 'A' }),
+    )
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        key: 'A',
+        sections: [{ lines: ['A A A A'] }, { lines: ['D D D D'] }],
+      }),
+    )
+    await user.keyboard('{Escape}')
+    // The chorus's: a key change from it on, its notes where they are.
+    const [chorus] = await screen.findAllByRole('button', { name: 'Key signature, bar 5' })
+    if (!chorus) throw new Error('no key signature at the chorus')
+    await user.click(chorus)
+    const change = await screen.findByRole('dialog', { name: 'Key signature' })
+    expect(within(change).getByText('From Chorus on (bar 5)')).toBeInTheDocument()
+    await user.click(
+      within(within(change).getByRole('group', { name: 'Key' })).getByRole('radio', { name: 'D' }),
+    )
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        key: 'A',
+        sections: [{ lines: ['A A A A'] }, { key: 'D', lines: ['D D D D'] }],
+      }),
+    )
+  })
+
+  it('changes key from the caret’s section on in the palette, the song’s own in its first (ADR 0089)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await screen.findByRole('status')
     expect(screen.queryByRole('button', { name: 'Insert' })).not.toBeInTheDocument()
     const key = await openCategory(user, 'Key signature')
-    expect(within(key).getByText('From Verse on (bar 1)')).toBeInTheDocument()
+    expect(within(key).getByText('The song’s key')).toBeInTheDocument()
     const here = within(key).getByRole('group', { name: 'Key' })
     await user.click(within(here).getByRole('radio', { name: 'D' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
-        key: 'G',
-        sections: [{ key: 'D', lines: ['G G G G'] }],
+        key: 'D',
+        sections: [{ lines: ['D D D D'] }],
       }),
     )
     // A change of time inside the song is not written yet, and the section says so.
     const time = await openCategory(user, 'Time signature')
     expect(within(time).getByText(/whole song’s/)).toBeInTheDocument()
-    await openCategory(user, 'Key signature')
-    await user.click(within(key).getByRole('button', { name: 'Change for the whole song' }))
-    const song = await screen.findByRole('dialog', { name: 'Song' })
-    expect(within(song).getByRole('group', { name: 'Key' })).toBeInTheDocument()
   })
 
   it('puts a repeat round the caret’s bar from Barlines & repeats, saved in the chart', async () => {
@@ -496,17 +549,17 @@ describe('the score editor', () => {
     )
   })
 
-  it('changes the time signature to another of its kind, each bar made the new one', async () => {
+  it('changes the time signature to another of its kind from the one printed, each bar made the new one', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    const [head] = await screen.findAllByRole(
+    const [time] = await screen.findAllByRole(
       'button',
-      { name: 'Key and time signature' },
+      { name: 'Time signature, bar 1' },
       { timeout: 4000 },
     )
-    if (!head) throw new Error('no line head')
-    await user.click(head)
-    const meters = within(await screen.findByRole('dialog', { name: 'Song' })).getByRole(
+    if (!time) throw new Error('no time signature')
+    await user.click(time)
+    const meters = within(await screen.findByRole('dialog', { name: 'Time signature' })).getByRole(
       'radiogroup',
       { name: 'Time signature' },
     )
@@ -517,6 +570,28 @@ describe('the score editor', () => {
     ).toEqual(['2/4', '3/4', '4/4'])
     await user.click(within(meters).getByRole('radio', { name: '3/4' }))
     expect(songOf(piecesStore.getState())).toMatchObject({ meter: '3/4' })
+  })
+
+  it('changes a staff’s clef from its bar on, from its clef printed there (ADR 0094)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ hands: SILENT_HANDS }),
+    })
+    await user.click(
+      await screen.findByRole('button', { name: 'Clef, Lower staff, bar 1' }, { timeout: 4000 }),
+    )
+    const clef = await screen.findByRole('dialog', { name: 'Clef' })
+    expect(within(clef).getByText('Lower staff, from bar 1 on')).toBeInTheDocument()
+    expect(within(clef).getByRole('button', { name: 'Bass clef' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    await user.click(within(clef).getByRole('button', { name: 'Treble clef' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        hands: { lh: 'clef:treble r/4 | r/4 | r/4 | r/4' },
+      }),
+    )
   })
 
   it('names a section as a song’s part, nothing a songbook calls its own', async () => {

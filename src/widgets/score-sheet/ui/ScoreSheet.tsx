@@ -10,6 +10,7 @@ import { HEADING, lineFit } from '../model/line-fit'
 import { createLineSheets, untimed, type LineSheet } from '../model/line-sheets'
 import { labelRow } from '../model/label-row'
 import { lineMusic, oneLine } from '../model/line-music'
+import type { EditPrinted } from '../model/printed'
 import { SheetLine } from './SheetLine'
 
 /** The room between lines on a page at full size, for dealing lines onto pages. */
@@ -75,7 +76,7 @@ export function ScoreSheet({
   heading,
   chordNames,
   lyrics = true,
-  onSignature,
+  edit,
   view = 'scroll',
   title,
   room,
@@ -110,8 +111,11 @@ export function ScoreSheet({
   chordNames: boolean
   /** The words under the tune, where the song has them (ADR 0093). */
   lyrics?: boolean
-  /** The clef, key and time signature clicked: what changes them. */
-  onSignature: () => void
+  /**
+   * What edits a thing printed, opened from its button where it is printed (ADR 0094): the tempo
+   * mark, a clef, a key or time signature.
+   */
+  edit: EditPrinted
   view?: SheetView
   /**
    * The piece's title as the page prints it, its heading (ADR 0094), where it is printed: at the head
@@ -172,7 +176,7 @@ export function ScoreSheet({
       onDeselect={onDeselect}
       placesOf={placesOf}
       chordNames={chordNames}
-      onSignature={onSignature}
+      edit={edit}
       justify={!across}
       onWrite={onWrite}
       onDrag={onDrag}

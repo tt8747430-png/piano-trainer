@@ -2,34 +2,30 @@ import { WholeWord } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useSectionHeading } from '@/entities/piece'
 import {
-  barAt,
   barsOf,
   BARLINE_CHOICES,
+  chosenBars,
   clefAt,
   isHandLayer,
   JUMP_CHOICES,
+  metersFor,
   sectionKey,
-  selectedBars,
   singsHere,
   verseCount,
   type BarMarkChoice,
 } from '@/features/score-editor'
-import { useKeyName } from '@/shared/i18n'
 import {
   CLEFS,
   EXPRESSION_TEXT,
   EXPRESSIONS,
-  beatsPerBar,
   keyFromParam,
   keyParam,
-  timeSignature,
+  type Hand,
   type Pedal,
 } from '@/shared/lib/music'
-import { KeyChoice } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { KeyChoice, Segmented } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { isJumpWords, JUMP_SIGNS, JUMP_WORDS } from '../model/palette-categories'
-import { Figures } from './BarKeys'
 import { useNotesChosen } from '../model/use-notes-chosen'
 import { LyricsField } from './LyricsField'
 import { BarlineIcon, CodaSign } from './palette-icons'
@@ -39,26 +35,23 @@ import { CaptionGrid, CaptionKey, Printed } from './palette-keys'
 const CLEF_GLYPHS = { treble: '\u{1D11E}', bass: '\u{1D122}' } as const
 
 /**
- * Clef (ADR 0069): the caret's staff, from the first bar chosen (else the caret's) on, Treble or
- * Bass, the one it is in pressed. Only the piano's two staves change clef.
+ * Clef (ADR 0069): a staff's clef from a bar on, Treble or Bass, the one it is in pressed; only the
+ * piano's two staves change clef. In the palette the caret's staff from the first bar chosen (else
+ * the caret's); over a clef printed on the sheet (ADR 0094), its staff from its bar (`at`).
  */
-export function ClefKeys() {
+export function ClefKeys({ at }: { at?: { readonly hand: Hand; readonly bar: number } }) {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
-  const layer = useEditorState((state) => state.layer)
-  const bar = useEditorState((state) =>
-    state.selection
-      ? selectedBars(state.draft, state.selection).from
-      : barAt(state.draft, state.caret).index,
-  )
-  const current = useEditorState((state) =>
-    isHandLayer(state.layer) ? clefAt(state.draft, bar, state.layer) : null,
-  )
+  const caret = useEditorState((state) => (isHandLayer(state.layer) ? state.layer : null))
+  const chosen = useEditorState((state) => chosenBars(state).from)
+  const hand = at ? at.hand : caret
+  const bar = at ? at.bar : chosen
+  const current = useEditorState((state) => (hand ? clefAt(state.draft, bar, hand) : null))
   return (
     <>
-      {isHandLayer(layer) ? (
+      {hand ? (
         <p className="text-sm text-muted-foreground">
-          {t('clef.from', { staff: t(`layers.${layer}`), bar: bar + 1 })}
+          {t('clef.from', { staff: t(`layers.${hand}`), bar: bar + 1 })}
         </p>
       ) : null}
       <CaptionGrid>
@@ -67,10 +60,8 @@ export function ClefKeys() {
             key={clef}
             label={t(`clef.${clef}`)}
             pressed={current === clef}
-            disabled={!isHandLayer(layer)}
-            onClick={() =>
-              isHandLayer(layer) && actions.dispatch({ type: 'clef', hand: layer, clef })
-            }
+            disabled={!hand}
+            onClick={() => hand && actions.dispatch({ type: 'clef', hand, clef, bar })}
           >
             <Printed text={CLEF_GLYPHS[clef]} music />
           </CaptionKey>
@@ -80,72 +71,68 @@ export function ClefKeys() {
   )
 }
 
-/** The song's own key or time, named as it is, with a way to the Song sheet, where it is changed. */
-function SongSignature({ kind }: { kind: 'key' | 'time' }) {
-  const { t } = useTranslation('editor')
-  const { view } = useScoreEditorContext()
-  const keyName = useKeyName()
-  const key = useEditorState((state) => state.draft.key)
-  const meter = useEditorState((state) => state.draft.meter)
-  return (
-    <div className="flex flex-wrap items-center gap-3">
-      <span className="flex min-w-0 items-center gap-2">
-        {kind === 'time' ? <Figures time={timeSignature(beatsPerBar(meter), meter)} /> : null}
-        <span className="text-base font-semibold">{kind === 'key' ? keyName(key) : meter}</span>
-      </span>
-      <Button variant="soft" onClick={() => view.openSettings(true)}>
-        {t('signature.change')}
-      </Button>
-    </div>
-  )
-}
-
 /**
- * Key signature (ADR 0089): a key change from the section of the first bar chosen (else the caret's)
- * on, up to the next change, as Flat changes key from a bar; then the song's own key, changed for the
- * whole song in the Song sheet.
+ * Key signature (ADR 0089, 0094): from a bar's section on, up to the next change, as Flat changes key
+ * from a bar; in the song's first section its own key, the music moved with it. In the palette the
+ * first bar chosen's (else the caret's); over a key signature printed on the sheet, its bar (`bar`).
  */
-export function KeySignatureKeys() {
+export function KeySignatureKeys({ bar }: { bar?: number }) {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const named = useSectionHeading()
-  const at = useEditorState((state) => {
-    const from = state.selection
-      ? selectedBars(state.draft, state.selection).from
-      : barAt(state.draft, state.caret).index
-    const placed = barsOf(state.draft)[from]
-    return placed ? placed.section : 0
-  })
-  const heading = useEditorState((state) => state.draft.sections[at]?.heading)
+  const chosen = useEditorState((state) => chosenBars(state).from)
+  const from = bar ?? chosen
+  const section = useEditorState((state) => barsOf(state.draft)[from]?.section ?? 0)
+  const heading = useEditorState((state) => state.draft.sections[section]?.heading)
   // The section's first bar, as printed.
   const first = useEditorState(
-    (state) => (barsOf(state.draft).find((placed) => placed.section === at)?.index ?? 0) + 1,
+    (state) => (barsOf(state.draft).find((placed) => placed.section === section)?.index ?? 0) + 1,
   )
-  const key = useEditorState((state) => keyParam(sectionKey(state.draft, at)))
+  // The song's own key at its head; a later section's from there on.
+  const song = section === 0
+  const key = useEditorState((state) =>
+    keyParam(song ? state.draft.key : sectionKey(state.draft, section)),
+  )
   return (
     <>
       <h4 className="text-sm text-muted-foreground">
-        {t('signature.fromSection', {
-          section: heading ? named({ ...heading, lines: [] }) : '',
-          bar: first,
-        })}
+        {song
+          ? t('signature.song')
+          : t('signature.fromSection', {
+              section: heading ? named({ ...heading, lines: [] }) : '',
+              bar: first,
+            })}
       </h4>
       <KeyChoice
         value={key}
-        onChange={(next) => actions.dispatch({ type: 'sectionKey', key: keyFromParam(next) })}
+        onChange={(next) =>
+          actions.dispatch(
+            song
+              ? { type: 'settings', key: keyFromParam(next) }
+              : { type: 'sectionKey', bar: from, key: keyFromParam(next) },
+          )
+        }
       />
-      <h4 className="pt-1 text-sm text-muted-foreground">{t('signature.song')}</h4>
-      <SongSignature kind="key" />
     </>
   )
 }
 
-/** Time signature: the song's own, one for every bar; a change of time inside the song is for later. */
+/**
+ * Time signature (ADR 0094): the song's own, one for every bar, another of its kind; a change of time
+ * inside the song is for later.
+ */
 export function TimeSignatureKeys() {
   const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const meter = useEditorState((state) => state.draft.meter)
   return (
     <>
-      <SongSignature kind="time" />
+      <Segmented
+        label={t('palette.category.time')}
+        value={meter}
+        options={metersFor(meter).map((each) => ({ value: each, label: each }))}
+        onChange={(next) => actions.dispatch({ type: 'settings', meter: next })}
+      />
       <p className="text-sm text-pretty text-muted-foreground">{t('signature.timeLater')}</p>
     </>
   )

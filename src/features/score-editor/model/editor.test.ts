@@ -49,11 +49,12 @@ describe('the editor', () => {
         ],
       }),
     )
+    // From the bar given, the chorus's first, wherever the caret is (a key signature on the sheet).
     const chorus = run(
       twoParts,
       { type: 'layer', layer: 'melody' },
+      { type: 'sectionKey', bar: 2, key: { tonic: note('F'), minor: false } },
       { type: 'place', tick: 192, layer: 'melody' },
-      { type: 'sectionKey', key: { tonic: note('F'), minor: false } },
     )
     expect(chorus.draft.sections.map((section) => section.heading.key)).toEqual([undefined, 'F'])
     // A B♭ in F, not the A♯ G major would write; a step up from A in F is B♭ too.
@@ -881,11 +882,8 @@ describe('the palette on what is chosen', () => {
       { type: 'move', by: 'bar', direction: 1, extend: true },
     )
     expect(lengths(run(both, { type: 'barLength', ticks: 48 }).draft)).toEqual([48, 48])
-    const clef = run(
-      initialEditor(draftOf()),
-      { type: 'place', tick: 96, layer: 'rh' },
-      { type: 'clef', hand: 'rh', clef: 'bass' },
-    )
+    // From the bar given, wherever the caret is (a clef on the sheet, ADR 0094).
+    const clef = run(initialEditor(draftOf()), { type: 'clef', hand: 'rh', clef: 'bass', bar: 1 })
     expect(clef.draft.sections[0]?.lines[0]?.[1]?.clefs).toEqual({ rh: 'bass' })
   })
 })

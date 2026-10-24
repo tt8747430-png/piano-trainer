@@ -9,14 +9,19 @@ import {
 } from '@/features/score-editor'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { usePlay } from '@/shared/lib/services'
-import { ScoreSheet } from '@/widgets/score-sheet'
+import { ScoreSheet, type EditPrinted } from '@/widgets/score-sheet'
 import type { TitlePlace } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { PrintedEdit } from './PrintedEdit'
 import { SectionHeading } from './SectionHeading'
 import { TitleField } from './TitleField'
 
 /** The title printed where the sheet prints it, edited there (ADR 0094). */
 const titleAt = (place: TitlePlace) => <TitleField place={place} />
+/** The tempo mark, a key or time signature, a clef: each opening its popover where it is printed. */
+const editPrinted: EditPrinted = (printed, trigger) => (
+  <PrintedEdit printed={printed} trigger={trigger} />
+)
 
 /** How a note moved on its staff is heard: short and soft, as a notation app sounds it. */
 const HEARD = { duration: 0.35, velocity: 0.15 } as const
@@ -60,8 +65,6 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
     [dispatch, store],
   )
   const onDeselect = useCallback(() => dispatch({ type: 'deselect' }), [dispatch])
-  const { openSettings: open } = view
-  const openSettings = useCallback(() => open(true), [open])
   // Read when a bar is clicked, so a line's row does not change with every note written elsewhere.
   const placesOf = useCallback((to: Layer) => placesIn(store.getState(), to), [store])
   const tapsOf = useCallback((to: Layer) => tapsIn(store.getState(), to), [store])
@@ -104,7 +107,7 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
       heading={(section) => <SectionHeading section={section} />}
       chordNames={view.chordNames}
       lyrics={view.lyrics}
-      onSignature={openSettings}
+      edit={editPrinted}
       view={view.layout}
       title={titleAt}
       room={room}

@@ -5,6 +5,7 @@ import { cn, useElementSize } from '@/shared/lib'
 import { LazyScoreView, useCanvasReveal } from '@/shared/ui'
 import { staffOfHand } from '../model/line-music'
 import type { LineSheet } from '../model/line-sheets'
+import type { EditPrinted } from '../model/printed'
 import { labelRow, labelScale } from '../model/label-row'
 import { LineOverlay } from './LineOverlay'
 
@@ -31,7 +32,7 @@ export const SheetLine = memo(function SheetLine({
   placesOf,
   tapsOf,
   chordNames,
-  onSignature,
+  edit,
   scale = 1,
   print = false,
   justify = true,
@@ -61,7 +62,8 @@ export const SheetLine = memo(function SheetLine({
   /** Where a click lands in a layer: on a note or a bar's start, never an empty step (ADR 0082). */
   tapsOf: (layer: Layer) => readonly Tick[]
   chordNames: boolean
-  onSignature: () => void
+  /** What edits a thing printed (ADR 0094). */
+  edit: EditPrinted
 }) {
   const ref = useRef<HTMLDivElement>(null)
   // A line of a few bars runs the sheet's width, as a printed page's does.
@@ -134,7 +136,7 @@ export const SheetLine = memo(function SheetLine({
             chordNames={chordNames}
             row={row}
             labels={labelScale(scale, print)}
-            onSignature={onSignature}
+            edit={edit}
             onWrite={onWrite}
             onDrag={onDrag}
           />

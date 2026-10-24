@@ -22,7 +22,7 @@ const BAR_KEYS: readonly BarKeyEdit[] = [
 ]
 
 /** A time signature drawn as printed: its figures one over the other. */
-export function Figures({ time }: { time: TimeSignature }) {
+function Figures({ time }: { time: TimeSignature }) {
   return (
     <span className="flex flex-col items-center font-serif text-base leading-[0.85] font-bold">
       <span>{time.count}</span>

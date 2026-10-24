@@ -1,17 +1,17 @@
 import type { StaffId } from '@/shared/lib/notation'
 import type { Tick } from '@/shared/lib/music'
-import type { ScoreLayout } from '../layout'
+import type { Extent, ScoreLayout } from '../layout'
 import { headsOf } from './svg-heads'
-
-/** The numbers in a `translate(x, y)` or a path's `M x y L x y`. */
-const numbers = (text: string | null) => (text?.match(/-?\d+(?:\.\d+)?/g) ?? []).map(Number)
+import { numbers } from './svg-glyphs'
+import { signsOf } from './svg-signs'
 
 /**
  * Where everything stands on a line Verovio engraved (ADR 0078), in CSS px, read from the SVG's own
  * coordinates, not the page's layout, so it reads the same anywhere (a test's DOM too): each measure
  * (`m-<index>`, its first staff's lines), each staff drawn (`staves`, top down) from its lines in the
  * first measure, each onset from its notes' and rests' heads (`n-`, `r-` and the hidden `h-<staff>-<tick>`),
- * and each head's box with its chord's column (`headsOf`, ADR 0088).
+ * each head's box with its chord's column (`headsOf`, ADR 0088), and each clef, key and time
+ * signature printed (`signsOf`, ADR 0094).
  */
 export function layoutOf(
   svg: SVGSVGElement,
@@ -77,12 +77,14 @@ export function layoutOf(
   const boxes = Object.values(placed)
   const firstLines = linesOf(staffGroups(svg.querySelector('#m-0'))[0])
   const space = (firstLines.bottom - firstLines.top) / 4 || 180
-  const { heads, columns, rests } = headsOf(svg, space, (box) => ({
+  const inPx = (box: Extent): Extent => ({
     left: x(box.left),
     right: x(box.right),
     top: y(box.top),
     bottom: y(box.bottom),
-  }))
+  })
+  const { heads, columns, rests } = headsOf(svg, space, inPx)
+  const signs = signsOf(svg, space, inPx, staves, (index) => laid[index]?.notes ?? Infinity)
   return {
     width,
     height,
@@ -94,5 +96,6 @@ export function layoutOf(
     heads,
     columns,
     rests,
+    signs,
   }
 }

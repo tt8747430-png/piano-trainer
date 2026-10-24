@@ -152,12 +152,15 @@ export type EditorAction =
   | { readonly type: 'barLength'; readonly ticks: Tick }
   /** Barlines on the bars chosen, else the caret's (a repeat, an ending, a double or final barline). */
   | { readonly type: 'barMarks'; readonly choice: BarMarkChoice }
-  /** A hand's staff changes clef at the caret's bar (ADR 0069). */
-  | { readonly type: 'clef'; readonly hand: Hand; readonly clef: Clef }
+  /** A hand's staff changes clef from a bar on (ADR 0069): the first chosen, or a clef's on the sheet. */
+  | { readonly type: 'clef'; readonly hand: Hand; readonly clef: Clef; readonly bar: number }
   | { readonly type: 'sectionKind'; readonly section: number; readonly kind: SectionKind }
   | { readonly type: 'joinSection'; readonly section: number }
-  /** A key change from the first bar chosen's section (else the caret's) on (ADR 0089). */
-  | { readonly type: 'sectionKey'; readonly key: Key }
+  /**
+   * A key change from a bar's section on (ADR 0089): the first bar chosen's, or a key signature's on
+   * the sheet (ADR 0094).
+   */
+  | { readonly type: 'sectionKey'; readonly bar: number; readonly key: Key }
   | {
       readonly type: 'settings'
       readonly key?: Key

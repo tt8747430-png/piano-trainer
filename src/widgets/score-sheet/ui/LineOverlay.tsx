@@ -16,8 +16,12 @@ import { LAYER_OF_STAFF, layerAt, staffOfLayer, type SheetLineBars } from '../mo
 import { chordRow, chosenBox } from '../model/chosen-box'
 import { nearestPlace, roomAt } from '../model/nearest'
 import { noteAtStaffY, stepsDragged } from '../model/staff-pitch'
+import { AFTER_NUMBER_PX, NUMBER_INSET_PX } from '../model/label-row'
+import type { EditPrinted } from '../model/printed'
 import { EditorCaret } from './EditorCaret'
 import { LineLabels } from './LineLabels'
+import { PrintedSigns } from './PrintedSigns'
+import { TempoMark } from './TempoMark'
 
 /** How far round the caret's onset a press takes hold of its notes to drag them. */
 const GRIP = { before: 14, after: 22, over: 16 } as const
@@ -33,7 +37,9 @@ function zoomOf(element: HTMLElement, box: DOMRect): number {
 /**
  * Over a line's staff: its labels, the bars chosen, the caret, and each bar as a button that puts the
  * caret where it is clicked; a double click there writes the note on the line or space clicked (ADR
- * 0064). The notes at the caret are a grip: dragged up or down, they move by notes of the key.
+ * 0064). The notes at the caret are a grip: dragged up or down, they move by notes of the key. The
+ * tempo mark and each clef, key and time signature are buttons too, each opening what changes it
+ * there (`edit`, ADR 0094).
  */
 export function LineOverlay({
   layout,
@@ -51,7 +57,7 @@ export function LineOverlay({
   chordNames,
   row,
   labels,
-  onSignature,
+  edit,
   onWrite,
   onDrag,
 }: {
@@ -84,10 +90,10 @@ export function LineOverlay({
   /** Where a click lands in a layer, on a note or a bar's start, never an empty step (ADR 0082). */
   tapsOf: (layer: Layer) => readonly Tick[]
   chordNames: boolean
-  onSignature: () => void
+  /** What edits a thing printed, opened from its button (ADR 0094). */
+  edit: EditPrinted
 }) {
   const { t } = useTranslation('editor')
-  const [first] = layout.measures
   // The notes chosen on this line, hugged by the one selection's box on the staff of the row they
   // are chosen in (the chord row, choosing chords), ADR 0088.
   const chosen = chosenBox(layout, line.start, selection, {
@@ -237,18 +243,21 @@ export function LineOverlay({
         row={row}
         size={labels}
       />
-      {first && first.notes > first.x ? (
-        // The clef, key and time signature at the line's head: a click opens what changes them.
-        <button
-          type="button"
-          tabIndex={-1}
-          aria-label={t('sheet.signature')}
-          title={t('sheet.signature')}
-          onClick={onSignature}
-          className="absolute bottom-0 z-30 cursor-pointer rounded-lg outline-none transition-colors duration-200 ease-out hover:bg-foreground/5"
-          style={{ left: first.x, width: first.notes - first.x, top: 0 }}
-        />
-      ) : null}
+      <PrintedSigns layout={layout} bars={line.bars.map((placed) => placed.index)} edit={edit} />
+      {music.bars.map((bar, index) => {
+        const at = layout.measures[index]
+        return bar.tempo === undefined || !at ? null : (
+          <TempoMark
+            key={`tempo ${index}`}
+            tempo={bar.tempo}
+            meter={music.meter}
+            left={at.x + NUMBER_INSET_PX + (index === 0 ? AFTER_NUMBER_PX * labels : 0)}
+            row={row}
+            size={labels}
+            edit={edit}
+          />
+        )
+      })}
       {layout.measures.map((measure, index) => {
         const placed = line.bars[index]
         const chosenBy = placed ? choice(placed.start, { x: measure.x, y: -row }) : {}
