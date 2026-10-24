@@ -39,11 +39,15 @@ describe('Player', () => {
     async (_size, query) => {
       sizedAs(query)
       await renderApp('/play/bz5')
-      const view = await screen.findByRole('button', { name: 'View' })
+      await screen.findByRole('button', { name: 'View' })
+      // Close, then Practise · Edit, as the editor's bar has them; the title is on the sheet.
       const controls = [
-        ...(view.closest('[data-area="actions"]')?.querySelectorAll('button, a') ?? []),
+        ...document.querySelectorAll(
+          ':is([data-area="lead"], [data-area="actions"]) :is(button, a)',
+        ),
       ]
       expect(controls.map((control) => control.getAttribute('aria-label'))).toEqual([
+        'Close',
         'Edit',
         'Loop',
         'View',
@@ -398,7 +402,7 @@ describe('Player', () => {
     expect(dock).not.toHaveAttribute('data-hidden')
   })
 
-  it('turns to Edit at its cursor’s bar from the Practise · Edit switch, first of its buttons (ADR 0090)', async () => {
+  it('turns to Edit at its cursor’s bar from the Practise · Edit switch, after Close (ADR 0090)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5?bar=3')
     const modes = await screen.findByRole('navigation', { name: 'Practise or edit' })

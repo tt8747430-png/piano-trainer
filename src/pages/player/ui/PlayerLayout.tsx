@@ -32,10 +32,11 @@ import { PracticeSwitches } from './PracticeSwitches'
 const NO_HEADINGS: readonly string[] = []
 
 /**
- * The Player's screen over any Performance (Flowkey's shape, ADR 0061): the toolbar with the loop,
- * MIDI and Setup, the sheet music, Wait mode's line, the transport floating under it (the tempo, ‹ ▶ ›
- * and the hands) and the keys at the foot, or under the toolbar where the keyboard settings dock them
- * at the top; the computer's keys drive it (`usePlayerShortcuts`).
+ * The Player's screen over any Performance (Flowkey's shape, ADR 0061): the toolbar (Close, Practise ·
+ * Edit, then the loop, the View, MIDI and Setup), the sheet music under its title (ADR 0094), Wait
+ * mode's line, the transport floating under it (the tempo, ‹ ▶ › and the hands) and the keys at the
+ * foot, or under the toolbar where the keyboard settings dock them at the top; the computer's keys
+ * drive it (`usePlayerShortcuts`).
  */
 export function PlayerLayout({
   title,
@@ -62,7 +63,7 @@ export function PlayerLayout({
   headings?: readonly string[]
   /** The Setup: its button, in the toolbar, and the sheet it opens. */
   setup: ReactNode
-  /** Practise · Edit (ADR 0090), first of the bar's buttons: a piece's own, none for a walk. */
+  /** Practise · Edit (ADR 0090), after Close: a piece's own, none for a walk. */
   modes?: ReactNode
 }) {
   const { practice } = player
@@ -94,11 +95,16 @@ export function PlayerLayout({
   )
   return (
     <PlayerScreen keys={dock}>
-      <PlayerArea area="lead">
+      {/* Close, then Practise · Edit, as the editor's bar has them (ADR 0090, 0094). */}
+      <PlayerArea area="lead" className="flex items-center gap-2 narrow-phone:gap-1">
         <PlayerClose onClose={onClose} />
-      </PlayerArea>
-      <PlayerArea area="actions" className="flex items-center justify-end gap-2 narrow-phone:gap-1">
         {modes}
+      </PlayerArea>
+      {/* Where the bar is too narrow for them all, its buttons wrap rather than cover Close. */}
+      <PlayerArea
+        area="actions"
+        className="flex flex-wrap items-center justify-end gap-2 narrow-phone:gap-1"
+      >
         <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />
         <ScoreViewMenu
           keys={{ shown: scoreView.keys, show: (on) => setScoreView(settings, { keys: on }) }}
