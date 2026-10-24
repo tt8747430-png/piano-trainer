@@ -17,8 +17,6 @@ export interface ScoreEditorValue {
     /** Play from the caret's bar to the end, or Stop. */
     readonly togglePlay: () => void
     readonly close: () => void
-    /** An own song's title, given anew; an empty one changes nothing. */
-    readonly rename: (title: string) => void
   }
   /** What the sheet shows and which of the page's sheets is open: chosen here, never saved. */
   readonly view: {
@@ -49,7 +47,7 @@ export interface ScoreEditorValue {
     readonly title: string
     readonly hasVersion: boolean
     readonly playing: boolean
-    /** Whose music: an own song has a title of its own. */
+    /** Whose music: a catalog piece's version, or an own song. */
     readonly kind: 'version' | 'song'
     /** The Chord field's ref: Enter in the chords puts the focus there. */
     readonly chordFieldRef: (field: HTMLInputElement | null) => void

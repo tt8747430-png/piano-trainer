@@ -7,7 +7,6 @@ import {
   chartStart,
   deleteSong,
   makeSong,
-  renameSong,
   resetVersion,
   saveMusic,
   SCORE_TEMPLATES,
@@ -55,6 +54,24 @@ describe('saveMusic', () => {
     if (!id) throw new Error('made')
     saveMusic(store, { kind: 'song', id }, CHANGED)
     expect(store.getState().songs).toEqual([{ id, title: 'Morning', ...CHANGED }])
+  })
+
+  it('saves the title with the music, an own song’s and a version’s alike (ADR 0094)', () => {
+    const store = fresh()
+    const id = makeSong(store, {
+      title: 'Morning',
+      key: { tonic: note('G'), minor: false },
+      meter: '3/4',
+    })
+    if (!id) throw new Error('made')
+    saveMusic(store, { kind: 'song', id }, { ...CHANGED, title: 'Evening' })
+    expect(store.getState().songs).toEqual([{ id, ...CHANGED, title: 'Evening' }])
+    // A version whose title alone changed is a version; Reset takes it away with the music.
+    const target = { kind: 'version', id: 'amazing', original: ORIGINAL } as const
+    saveMusic(store, target, { ...ORIGINAL, title: 'Grace' })
+    expect(store.getState().versions).toEqual({ amazing: { ...ORIGINAL, title: 'Grace' } })
+    resetVersion(store, 'amazing')
+    expect(store.getState().versions).toEqual({})
   })
 })
 
@@ -128,15 +145,11 @@ describe('the learner’s songs', () => {
     expect(store.getState().songs).toEqual([])
   })
 
-  it('renames a song, and deletes it without giving its number again', () => {
+  it('deletes a song without giving its number again', () => {
     const store = fresh()
     const key = { tonic: note('C'), minor: false }
     const first = makeSong(store, { title: 'One', key, meter: '4/4' })
     if (!first) throw new Error('made')
-    renameSong(store, first, ' Two ')
-    expect(store.getState().songs[0]?.title).toBe('Two')
-    renameSong(store, first, '')
-    expect(store.getState().songs[0]?.title).toBe('Two')
     deleteSong(store, freshTakes(), first)
     expect(store.getState().songs).toEqual([])
     expect(makeSong(store, { title: 'Three', key, meter: '4/4' })).toBe('my-2')

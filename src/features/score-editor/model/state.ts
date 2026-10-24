@@ -164,6 +164,8 @@ export type EditorAction =
       readonly tempo?: number
       readonly meter?: Meter
     }
+  /** The title printed at the sheet's head, given anew (ADR 0094): an empty one changes nothing. */
+  | { readonly type: 'title'; readonly title: string }
   | { readonly type: 'undo' }
   | { readonly type: 'redo' }
 

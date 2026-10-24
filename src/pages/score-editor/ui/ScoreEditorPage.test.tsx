@@ -1123,6 +1123,31 @@ describe('the score editor', () => {
     expect(musicOf(original).sections[0]?.lines[0]).toBe('G G7 C G')
   })
 
+  it('gives a catalog song a title of the learner’s own from the sheet, saved as its version (ADR 0094)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/amazing', { locale: 'ru' })
+    const sheet = await screen.findByRole('region', { name: 'Ноты' })
+    await user.click(within(sheet).getByRole('button', { name: 'О, благодать' }))
+    // The same title again is no title of the learner's own: no version.
+    await user.keyboard('{Enter}')
+    expect(piecesStore.getState().versions).toEqual({})
+    await user.click(within(sheet).getByRole('button', { name: 'О, благодать' }))
+    const field = within(sheet).getByRole('textbox', { name: 'Название' })
+    await user.clear(field)
+    await user.type(field, 'Благодать{Enter}')
+    await waitFor(() =>
+      expect(piecesStore.getState().versions.amazing).toMatchObject({ title: 'Благодать' }),
+    )
+    expect(within(sheet).getByRole('heading', { level: 1, name: 'Благодать' })).toBeInTheDocument()
+    expect(await screen.findByText('Ваша версия')).toBeInTheDocument()
+    // Undone, the catalog's title, and no version.
+    await user.click(screen.getByRole('button', { name: 'Отменить' }))
+    await waitFor(() => expect(piecesStore.getState().versions).toEqual({}))
+    expect(
+      within(sheet).getByRole('heading', { level: 1, name: 'О, благодать' }),
+    ).toBeInTheDocument()
+  })
+
   it('writes a listing’s chart, which then opens in the Player', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()

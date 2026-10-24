@@ -9,11 +9,17 @@ import type { Chart, Melody } from '@/shared/lib/arrangement'
 import { chartOf, melodyOf } from './chart'
 import type { ChartPiece, KeyText, Section } from './types'
 
-/** A song's or study's music as the content writes it: what a learner's version holds (ADR 0027). */
+/**
+ * A song's or study's music as the content writes it: what a learner's version holds (ADR 0027),
+ * under the learner's own title where they gave one (ADR 0094).
+ */
 export type PieceMusic = Pick<
   ChartPiece,
   'key' | 'meter' | 'tempo' | 'pattern' | 'sections' | 'melody' | 'hidden' | 'hands' | 'lyrics'
->
+> & {
+  /** The learner's own title: a version's, shown in every language in place of the catalog's. */
+  readonly title?: string
+}
 
 /** A piece's music, without what it leaves out. */
 export const musicOf = (piece: ChartPiece): PieceMusic => ({
@@ -37,15 +43,32 @@ export function readMusic(music: PieceMusic): { chart: Chart; melody: Melody | u
   return { chart: chartOf(piece), melody: melodyOf(piece) }
 }
 
-/** A piece playing this music in place of its own: its melody, hands and words only where the music has them. */
-export const withMusic = (piece: ChartPiece, music: PieceMusic): ChartPiece => ({
-  ...piece,
-  ...music,
-  melody: music.melody,
-  hidden: music.hidden,
-  hands: music.hands,
-  lyrics: music.lyrics,
-})
+/**
+ * An entry under the learner's own title (ADR 0094), the same in every language: the printed title's
+ * translations go with it.
+ */
+function retitled(entry: ChartPiece, title: string | undefined): ChartPiece {
+  if (title === undefined) return entry
+  const { titleEn: _en, titleRu: _ru, ...untranslated } = entry
+  return { ...untranslated, title }
+}
+
+/**
+ * A piece playing this music in place of its own: its melody, hands and words only where the music
+ * has them, under the music's own title where it has one.
+ */
+export const withMusic = (piece: ChartPiece, { title, ...music }: PieceMusic): ChartPiece =>
+  retitled(
+    {
+      ...piece,
+      ...music,
+      melody: music.melody,
+      hidden: music.hidden,
+      hands: music.hands,
+      lyrics: music.lyrics,
+    },
+    title,
+  )
 
 const sameText = (a: { en: string; ru: string } | undefined, b: typeof a) =>
   a?.en === b?.en && a?.ru === b?.ru
@@ -63,6 +86,7 @@ const sameSection = (a: Section, b: Section) =>
 
 /** Whether two pieces' music is written the same. */
 export const sameMusic = (a: PieceMusic, b: PieceMusic): boolean =>
+  a.title === b.title &&
   a.key === b.key &&
   a.meter === b.meter &&
   a.tempo === b.tempo &&

@@ -200,5 +200,7 @@ describe('the music of a piece', () => {
     expect(sameMusic(music, { ...music, sections: [{ lines: ['C G'], kind: 'verse' }] })).toBe(true)
     expect(sameMusic(music, { ...music, tempo: 80 })).toBe(false)
     expect(sameMusic(music, { ...music, hands: { lh: '- | r/4' } })).toBe(false)
+    // A version's own title is its music's (ADR 0094).
+    expect(sameMusic(music, { ...music, title: 'Mine' })).toBe(false)
   })
 })

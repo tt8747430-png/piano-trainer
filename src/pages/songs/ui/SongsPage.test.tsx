@@ -174,8 +174,10 @@ describe('Songs: your own', () => {
   })
 
   it('lists a listing whose chart the learner wrote as a song', async () => {
+    // A version's music, under the listing's own title (no title of the learner's, ADR 0094).
+    const { id: _id, title: _title, ...music } = SONG
     const version = {
-      ...SONG,
+      ...music,
       key: 'Cm',
       meter: '3/4',
       sections: [{ kind: 'verse', lines: ['Cm'] }],

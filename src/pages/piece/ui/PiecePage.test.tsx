@@ -207,6 +207,27 @@ describe('Piece: the learner’s own music', () => {
     expect(screen.queryByText('Your version')).toBeNull()
   })
 
+  it('names a version by the learner’s own title in Songs, Search and on its page; Reset brings back the catalog’s (ADR 0094)', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/songs?collection=hymns', {
+      storage: saved({ versions: { amazing: { ...MUSIC, title: 'My grace' } } }),
+    })
+    expect(await screen.findByRole('link', { name: /My grace/ })).toHaveAttribute(
+      'href',
+      '/songs/amazing',
+    )
+    await act(() => router.navigate({ to: '/search', search: { q: 'my grace' } }))
+    expect(await screen.findByRole('link', { name: /My grace/ })).toBeInTheDocument()
+    await act(() => router.navigate({ to: '/songs/$pieceId', params: { pieceId: 'amazing' } }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'My grace' })).toBeInTheDocument()
+    await openMore(user)
+    await user.click(screen.getByRole('button', { name: 'Reset to the original' }))
+    await user.click(await screen.findByRole('button', { name: 'Reset' }))
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Amazing Grace' }),
+    ).toBeInTheDocument()
+  })
+
   it('gives the focus back to More once Reset is not wanted', async () => {
     const user = userEvent.setup()
     await renderApp('/songs/amazing', { storage: saved({ versions: { amazing: MUSIC } }) })

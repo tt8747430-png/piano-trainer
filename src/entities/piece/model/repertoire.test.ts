@@ -3,6 +3,7 @@ import { chordSymbol } from '@/shared/lib/music'
 import { chartOf } from './chart'
 import { musicOf, type PieceMusic } from './music'
 import { repertoire, versionOf } from './repertoire'
+import { entryTitles } from './titles'
 import { testSong } from '../testing/test-pieces'
 import { entryById, pieceById } from './selectors'
 import { isDegreePiece, isPiece, type ChartPiece, type Piece } from './types'
@@ -46,6 +47,21 @@ describe('repertoire', () => {
     expect(version).toMatchObject({ id: 'bz1', kind: 'song', title: 'Боже, спасибо' })
     expect(version?.credits).toEqual(chartPiece('bz1').credits)
     expect(pieces.original('bz1')).toBe(entryById('bz1'))
+  })
+
+  it('names a version by the learner’s own title in every language, the catalog’s without one (ADR 0094)', () => {
+    const pieces = repertoire({ versions: { bz1: { ...VERSION, title: 'Thanks' } }, songs: [] })
+    const version = pieces.piece('bz1')
+    if (!version) throw new Error('the version')
+    expect(version.title).toBe('Thanks')
+    expect(version).not.toHaveProperty('titleEn')
+    expect(entryTitles(version, 'en')).toEqual({ primary: 'Thanks' })
+    expect(entryTitles(version, 'ru')).toEqual({ primary: 'Thanks' })
+    // Its music alone changed, the catalog's titles stay.
+    expect(repertoire({ versions: { bz1: VERSION }, songs: [] }).piece('bz1')).toMatchObject({
+      title: 'Боже, спасибо',
+      titleEn: 'Thank you, God',
+    })
   })
 
   it('gives the same version each time it is asked, so what is worked out from it stays', () => {

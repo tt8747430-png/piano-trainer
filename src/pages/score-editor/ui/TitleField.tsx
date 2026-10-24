@@ -6,8 +6,9 @@ import { useScoreEditorContext } from '../model/editor-context'
 
 /**
  * The title printed at the sheet's head (ADR 0094), edited where it is, as Flat's: a click turns it
- * into a field in its place, the title chosen; Enter or leaving the field saves what it holds, Escape
- * keeps the title it had, and an empty field changes nothing.
+ * into a field in its place, the title chosen; Enter or leaving the field saves what it holds with the
+ * music (an own song's title, or a version's in place of the catalog's), Escape keeps the title it
+ * had, and an empty field changes nothing.
  */
 export function TitleField({ place }: { place: TitlePlace }) {
   const { t } = useTranslation('editor')
@@ -27,7 +28,8 @@ export function TitleField({ place }: { place: TitlePlace }) {
   }, [editing])
   const close = (save: boolean) => {
     if (typed === null) return
-    if (save) actions.rename(typed)
+    // The title as it was is no title of the learner's own: a catalog song keeps no version for it.
+    if (save && typed.trim() !== meta.title) actions.dispatch({ type: 'title', title: typed })
     setTyped(null)
   }
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -36,8 +38,6 @@ export function TitleField({ place }: { place: TitlePlace }) {
     settled.current = true
     close(event.key === 'Enter')
   }
-  // An own song's title is the learner's to give.
-  if (meta.kind !== 'song') return <SheetTitle title={meta.title} place={place} />
   return (
     <SheetTitle title={meta.title} place={place}>
       {editing ? (

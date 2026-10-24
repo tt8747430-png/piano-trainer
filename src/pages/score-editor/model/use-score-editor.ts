@@ -4,13 +4,12 @@ import {
   entryTitles,
   sameMusic,
   selectHasVersion,
-  selectOwnSong,
   usePieces,
   usePiecesStoreApi,
 } from '@/entities/piece'
 import { selectScoreView, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { useMidiKeyDown } from '@/features/connect-midi'
-import { renameSong, saveMusic } from '@/features/edit-piece'
+import { saveMusic } from '@/features/edit-piece'
 import { setScoreView } from '@/features/set-preference'
 import {
   barAt,
@@ -122,11 +121,10 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   const hasVersion = usePieces(
     (state) => target.kind === 'version' && selectHasVersion(state, target.id),
   )
-  const songTitle = usePieces((state) =>
-    target.kind === 'song' ? selectOwnSong(state, target.id)?.title : undefined,
-  )
+  // The learner's own title, saved with the music (ADR 0094); else the catalog's, in their language.
   const title =
-    target.kind === 'song' ? (songTitle ?? target.title) : entryTitles(target.entry, locale).primary
+    useStore(store, (state) => state.draft.title) ??
+    (target.kind === 'song' ? target.music.title : entryTitles(target.entry, locale).primary)
 
   // The chord names shown unless the song hides them (ADR 0072).
   const chordNames = useStore(store, (state) => rowShown(state.draft, 'chords'))
@@ -155,10 +153,6 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
         fromTick: barAt(draft, caret).start,
       }).sounds
     })
-
-  const rename = (text: string) => {
-    if (target.kind === 'song') renameSong(pieces, target.id, text)
-  }
 
   // The editor reads its keys layer by layer (`shortcutOf`), and lists them for the sheet
   // (`useEditorShortcutList`); a key another listener took, or one an IME is composing, is not its.
@@ -211,7 +205,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   return {
     store,
     takes,
-    actions: { dispatch, play, togglePlay, close, rename },
+    actions: { dispatch, play, togglePlay, close },
     view: {
       chordNames,
       lyrics,

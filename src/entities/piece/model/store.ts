@@ -27,7 +27,7 @@ import {
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-export const PIECES_VERSION = 3
+export const PIECES_VERSION = 4
 
 /** The learner's pieces (spec 2026-10-01-score-editor §4). */
 export interface PiecesState {
@@ -122,11 +122,11 @@ function singsLyrics(piece: ChartPiece): boolean {
 
 /**
  * Saved music that reads as a piece's: its fields, its chart, melody and hands; null otherwise. Its
- * words are kept where they read on its tune.
+ * words are kept where they read on its tune, its own title where it is one (ADR 0094).
  */
 function musicOfSaved(saved: unknown): PieceMusic | null {
   if (!isRecord(saved)) return null
-  const { key, meter, tempo, pattern, sections, melody, hidden, hands, lyrics } = saved
+  const { key, meter, tempo, pattern, sections, melody, hidden, hands, lyrics, title } = saved
   if (!isKeyText(key) || !isMeter(meter) || !isTempo(tempo) || !isPatternId(pattern)) return null
   if (!Array.isArray(sections) || sections.length === 0) return null
   const read = sections.map(sectionOf)
@@ -151,7 +151,11 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     if (!fits) return null
     const verses = Array.isArray(lyrics) && lyrics.every(isText) ? lyrics : undefined
     const sung = verses && singsLyrics({ ...piece, lyrics: verses }) ? { lyrics: verses } : {}
-    return musicOf({ ...piece, ...sung, ...savedHidden(hidden, piece.melody !== undefined) })
+    const named = isText(title) ? songTitle(title) : null
+    return {
+      ...(named === null ? {} : { title: named }),
+      ...musicOf({ ...piece, ...sung, ...savedHidden(hidden, piece.melody !== undefined) }),
+    }
   } catch (error) {
     if (error instanceof ContentError) return null
     throw error
@@ -168,8 +172,10 @@ export interface SharedSong {
 export function readSharedSong(saved: unknown): SharedSong | null {
   if (!isRecord(saved) || !isText(saved.title)) return null
   const title = songTitle(saved.title)
-  const music = musicOfSaved(saved)
-  return title && music ? { title, music } : null
+  const read = musicOfSaved(saved)
+  if (!title || !read) return null
+  const { title: _title, ...music } = read
+  return { title, music }
 }
 
 function songOf(saved: unknown): OwnSong | null {

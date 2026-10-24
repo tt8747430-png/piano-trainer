@@ -19,7 +19,6 @@ import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { TEMPO_WORDS } from '../model/song-sheet'
-import { SongTitleField } from './SongTitleField'
 
 /**
  * The tempo, moved freely and saved when let go, or set at once by a tempo word under it (Largo …
@@ -162,7 +161,7 @@ function Part({
  */
 export function PieceSettings() {
   const { t } = useTranslation('editor')
-  const { actions, meta, takes, view } = useScoreEditorContext()
+  const { actions, takes, view } = useScoreEditorContext()
   const key = useEditorState((state) => state.draft.key)
   const meter = useEditorState((state) => state.draft.meter)
   return (
@@ -186,7 +185,6 @@ export function PieceSettings() {
       <SheetContent title={t('song.label')}>
         <div className="flex flex-col gap-8">
           <Part title={t('song.label')} plain>
-            {meta.kind === 'song' ? <SongTitleField /> : null}
             <KeyChoice
               value={keyParam(key)}
               onChange={(key) => actions.dispatch({ type: 'settings', key: keyFromParam(key) })}

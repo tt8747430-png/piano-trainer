@@ -1,3 +1,4 @@
+import { songTitle } from '@/entities/piece'
 import { markBars } from './bar-marks'
 import { setClef } from './clefs'
 import { keepsAStaff, rowShown, staffLeftFor, withAStaff } from './rows'
@@ -303,6 +304,10 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       if (action.tempo !== undefined) next = setTempo(next, action.tempo)
       if (action.meter) next = setMeter(next, action.meter)
       return commit(state, next)
+    }
+    case 'title': {
+      const title = songTitle(action.title)
+      return title === null || title === draft.title ? state : commit(state, { ...draft, title })
     }
     case 'undo':
     case 'redo':

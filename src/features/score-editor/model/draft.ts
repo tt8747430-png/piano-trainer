@@ -86,6 +86,8 @@ export interface DraftSection {
 
 /** A piece's music as the editor holds it: bars of chords, and notes on the timeline. */
 export interface Draft {
+  /** The learner's own title (ADR 0094): an own song's, or a version's in place of the catalog's. */
+  readonly title?: string
   readonly key: Key
   readonly meter: Meter
   readonly tempo: number
@@ -177,6 +179,7 @@ export function readDraft(music: PieceMusic): Draft {
     }
   }
   return {
+    ...(music.title === undefined ? {} : { title: music.title }),
     key,
     meter: music.meter,
     tempo: music.tempo,
@@ -232,6 +235,7 @@ export function writeDraft(draft: Draft): PieceMusic {
   const clefs = (hand: Hand) => placed.map(({ bar }) => bar.clefs?.[hand])
   const lyrics = gatherLyrics(tuneNotes(draft)).map(writeLyrics)
   return {
+    ...(draft.title === undefined ? {} : { title: draft.title }),
     key: keyText(draft.key),
     meter: draft.meter,
     tempo: draft.tempo,

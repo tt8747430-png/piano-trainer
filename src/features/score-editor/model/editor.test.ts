@@ -778,6 +778,21 @@ describe('the editor', () => {
     expect(state.draft).toMatchObject({ tempo: 120 })
   })
 
+  it('gives the song a title of the learner’s own, saved with its music, an empty one changing nothing (ADR 0094)', () => {
+    const named = run(initialEditor(draftOf()), { type: 'title', title: '  Evening  ' })
+    expect(named.draft.title).toBe('Evening')
+    const saved = musicToSave(named.draft)
+    if (!saved) throw new Error('music that reads')
+    expect(saved.title).toBe('Evening')
+    expect(readDraft(saved).title).toBe('Evening')
+    expect(run(named, { type: 'title', title: '   ' })).toBe(named)
+    expect(run(named, { type: 'title', title: 'x'.repeat(81) })).toBe(named)
+    expect(run(named, { type: 'title', title: 'Evening' })).toBe(named)
+    // Undone, the title it had: none of its own, the catalog's.
+    expect(run(named, { type: 'undo' }).draft.title).toBeUndefined()
+    expect(musicToSave(draftOf())).not.toHaveProperty('title')
+  })
+
   it('undoes and redoes the changes with the caret, and a new change drops the redo', () => {
     const written = run(start(), key(67, 0), key(69, 500))
     const undone = run(written, { type: 'undo' })

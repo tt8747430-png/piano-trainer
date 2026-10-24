@@ -115,6 +115,18 @@ describe('createPiecesStore', () => {
     })
   })
 
+  it('keeps a version’s own title of 1 to 80 characters, trimmed, and drops another (ADR 0094)', () => {
+    const versions = {
+      bz1: { ...MUSIC, title: '  Thanks  ' },
+      bz2: { ...MUSIC, title: '   ' },
+      bz3: { ...MUSIC, title: 'x'.repeat(81) },
+      bz5: { ...MUSIC, title: 5 },
+    }
+    const read = restored({ versions }).versions
+    expect(read.bz1).toEqual({ ...MUSIC, title: 'Thanks' })
+    for (const id of ['bz2', 'bz3', 'bz5']) expect(read[id]).toEqual(MUSIC)
+  })
+
   it('drops a melody longer than its chart', () => {
     const versions = { bz1: { ...MUSIC, melody: 'B4/16 B4/1' } }
     expect(restored({ versions }).versions).toEqual({})
