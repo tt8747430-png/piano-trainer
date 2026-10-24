@@ -85,6 +85,25 @@ async function openSettings(user: ReturnType<typeof userEvent.setup>) {
 const songOf = (state: { songs: readonly { id: string }[] }) =>
   state.songs.find((song) => song.id === 'my-1')
 
+/** A screen of a size, as `matchMedia` answers it: a phone on its side; else a phone held upright. */
+const sizedAs = (query: string) =>
+  vi.stubGlobal('matchMedia', (media: string) => ({
+    media,
+    matches: media === query,
+    onchange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    addListener: () => {},
+    removeListener: () => {},
+    dispatchEvent: () => false,
+  }))
+
+/** The buttons of a toolbar, by their names. */
+const namesIn = (toolbar: HTMLElement) =>
+  within(toolbar)
+    .getAllByRole('button')
+    .map((button) => button.getAttribute('aria-label'))
+
 describe('the score editor', () => {
   it('opens on the upper staff of a song with no tune, Alt with the arrows choosing the row it writes', async () => {
     const user = userEvent.setup()
@@ -216,16 +235,7 @@ describe('the score editor', () => {
 
   it('opens its palette beside the sheet, on a phone on its side, where it covers no music', async () => {
     const user = userEvent.setup()
-    vi.stubGlobal('matchMedia', (media: string) => ({
-      media,
-      matches: media === LANDSCAPE_PHONE,
-      onchange: null,
-      addEventListener: () => {},
-      removeEventListener: () => {},
-      addListener: () => {},
-      removeListener: () => {},
-      dispatchEvent: () => false,
-    }))
+    sizedAs(LANDSCAPE_PHONE)
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'Show fewer tools' }))
     // Folded there, it stays folded there; at the foot it is still the foot's own.
@@ -630,23 +640,11 @@ describe('the score editor', () => {
     expect(screen.getByRole('status')).not.toHaveTextContent('mode')
   })
 
-  it('opens with its keys folded on a phone on its side, its caret’s line in the bar', async () => {
+  it('opens with its keys folded on a phone on its side', async () => {
     const user = userEvent.setup()
-    vi.stubGlobal('matchMedia', (media: string) => ({
-      media,
-      matches: media === LANDSCAPE_PHONE,
-      onchange: null,
-      addEventListener: () => {},
-      removeEventListener: () => {},
-      addListener: () => {},
-      removeListener: () => {},
-      dispatchEvent: () => false,
-    }))
+    sizedAs(LANDSCAPE_PHONE)
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    // The caret's line under the title, in the bar.
-    const title = await screen.findByRole('heading', { level: 1, name: 'Morning' })
-    expect(title.parentElement).toContainElement(screen.getByRole('status'))
-    await user.click(screen.getByRole('button', { name: 'View' }))
+    await user.click(await screen.findByRole('button', { name: 'View' }))
     await user.click(await screen.findByRole('switch', { name: 'Keys' }))
     expect(settingsStore.getState().keyboard.foldedLandscape).toBe(false)
     expect(settingsStore.getState().keyboard.folded).toBe(false)
@@ -655,16 +653,7 @@ describe('the score editor', () => {
 
   it('moves its palette beside the sheet to the left and back, saved', async () => {
     const user = userEvent.setup()
-    vi.stubGlobal('matchMedia', (media: string) => ({
-      media,
-      matches: media === LANDSCAPE_PHONE,
-      onchange: null,
-      addEventListener: () => {},
-      removeEventListener: () => {},
-      addListener: () => {},
-      removeListener: () => {},
-      dispatchEvent: () => false,
-    }))
+    sizedAs(LANDSCAPE_PHONE)
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     // Beside the sheet, its side is chosen in View, once, not in the palette's crowded bar.
     await user.click(await screen.findByRole('button', { name: 'View' }))
@@ -674,52 +663,42 @@ describe('the score editor', () => {
     expect(settingsStore.getState().paletteSide).toBe('right')
   })
 
-  it('keeps the edits in a row under the bar, and only ‹ Play › in the dock, as the Player’s', async () => {
+  it.each([
+    ['a phone held upright', 'none'],
+    ['a phone on its side', LANDSCAPE_PHONE],
+  ])(
+    'keeps one bar on %s: the edits, the title and the caret’s place for a screen reader alone (ADR 0094)',
+    async (_size, query) => {
+      sizedAs(query)
+      await renderApp('/edit/my-1', { storage: withSong() })
+      // What is done to what is chosen; the staff written is chosen on the sheet (a click, Alt ↑ ↓).
+      expect(namesIn(await screen.findByRole('toolbar', { name: 'Edit' }))).toEqual([
+        'Delete',
+        'Undo',
+        'Redo',
+        'Copy',
+        'Cut',
+        'Paste',
+      ])
+      expect(screen.queryByRole('button', { name: /^Next note goes in/ })).not.toBeInTheDocument()
+      // The sheet shows the title and the caret: the bar keeps them for a screen reader.
+      expect(screen.getByRole('heading', { level: 1, name: 'Morning' })).toHaveClass('sr-only')
+      const caret = screen.getByRole('status')
+      expect(caret).toHaveClass('sr-only')
+      expect(caret).toHaveAttribute('aria-live', 'polite')
+      expect(caret).toHaveTextContent(/^Upper staff · Bar 1/)
+    },
+  )
+
+  it('keeps only ‹ Play › in the dock, as the Player’s', async () => {
     await renderApp('/edit/my-1', { storage: withSong() })
-    const row = await screen.findByRole('toolbar', { name: 'Edit' })
-    expect(
-      within(row)
-        .getAllByRole('button')
-        .map((button) => button.getAttribute('aria-label')),
-    ).toEqual([
-      'Next note goes in: Upper staff',
-      'Delete',
-      'Undo',
-      'Redo',
-      'Copy',
-      'Cut',
-      'Paste',
-      'Add bar',
-    ])
     // Named for what it does: Play, and the caret moved a note back or on.
-    const dock = within(screen.getByRole('toolbar', { name: 'Play and move' })).getAllByRole(
-      'button',
-    )
-    expect(dock.map((button) => button.getAttribute('aria-label'))).toEqual([
+    expect(namesIn(await screen.findByRole('toolbar', { name: 'Play and move' }))).toEqual([
       'Tempo: 100%',
       'Previous note',
       'Play',
       'Next note',
     ])
-  })
-
-  it('says at the edit row’s head where the next note goes, and chooses the staff there, as Flat’s voice badge', async () => {
-    const user = userEvent.setup()
-    await renderApp('/edit/my-1', { storage: withSong() })
-    const row = await screen.findByRole('toolbar', { name: 'Edit' })
-    await user.click(within(row).getByRole('button', { name: 'Next note goes in: Upper staff' }))
-    const staves = await screen.findByRole('listbox', { name: 'Next note goes in' })
-    // The staves in sight, top down, each with its sign.
-    const options = within(staves).getAllByRole('option')
-    expect(options).toHaveLength(3)
-    ;['Chord symbols', 'Upper staff', 'Lower staff'].forEach((name, i) =>
-      expect(options[i]).toHaveAccessibleName(name),
-    )
-    await user.click(within(staves).getByRole('option', { name: 'Lower staff' }))
-    expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1/)
-    expect(
-      within(row).getByRole('button', { name: 'Next note goes in: Lower staff' }),
-    ).toBeVisible()
   })
 
   it('plays what was written at the learner’s speed from its dock’s tempo, the song’s own kept', async () => {
@@ -731,7 +710,7 @@ describe('the score editor', () => {
     expect(songOf(piecesStore.getState())).toMatchObject({ tempo: 90 })
   })
 
-  it('copies a bar and pastes it after the caret’s from the edit row, and adds a bar', async () => {
+  it('copies a bar and pastes it after the caret’s from the edit row, and adds a bar from the palette’s Bar', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await toChordRow(user)
@@ -752,7 +731,9 @@ describe('the score editor', () => {
     expect(songOf(piecesStore.getState())).toMatchObject({
       sections: [{ lines: ['Em Em G G G'] }],
     })
-    await user.click(within(row).getByRole('button', { name: 'Add bar' }))
+    // No Add bar in the row: the palette's Bar adds one after the caret's (or before).
+    expect(within(row).queryByRole('button', { name: /bar/i })).not.toBeInTheDocument()
+    await tapIn(user, 'Bar', 'Add bar after')
     expect(songOf(piecesStore.getState())).toMatchObject({
       sections: [{ lines: ['Em Em Em G G G'] }],
     })
@@ -1495,9 +1476,9 @@ describe('the words under the tune (ADR 0093)', () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: sung() })
     await openCategory(user, 'Text & pedal')
-    const row = await screen.findByRole('toolbar', { name: 'Edit' })
-    await user.click(within(row).getByRole('button', { name: 'Next note goes in: Melody' }))
-    await user.click(await screen.findByRole('option', { name: 'Lower staff' }))
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Melody · Bar 1/))
+    await user.keyboard('{Alt>}{ArrowDown}{ArrowDown}{/Alt}')
+    expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1/)
     const text = await screen.findByRole('region', { name: 'Text & pedal' })
     expect(within(text).getByRole('button', { name: 'Lyrics' })).toBeDisabled()
     expect(text).toHaveTextContent('Lyrics go under the tune: choose the melody or upper staff.')

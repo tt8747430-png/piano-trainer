@@ -156,8 +156,6 @@ export const editor = {
     rh: 'Upper staff',
     lh: 'Lower staff',
   },
-  // The edit row's head: where the next note goes, chosen there (Flat's voice badge).
-  layerChip: { label: 'Next note goes in: {{layer}}', menu: 'Next note goes in' },
   sheet: {
     signature: 'Key and time signature',
     label: 'Score',
@@ -278,7 +276,6 @@ export const editor = {
     label: 'Bar',
     insert: 'Add bar after',
     insertBefore: 'Add bar before',
-    add: 'Add bar',
     delete: 'Delete bars',
     newLine: 'Line break',
     joinLine: 'Join lines',

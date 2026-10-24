@@ -6,8 +6,8 @@ import { useValueWord } from './use-value-word'
 
 /**
  * One line saying which part the caret writes (the verse, while the Lyrics field is open, ADR
- * 0093), where it is and what is there, and the editing mode where it is not Replace (ADR 0092); a
- * screen reader hears it as it moves.
+ * 0093), where it is and what is there, and the editing mode where it is not Replace (ADR 0092): a
+ * screen reader's alone, heard as the caret moves, at every size; the sheet shows the same (ADR 0094).
  */
 export function CaretLine() {
   const { t } = useTranslation('editor')
@@ -38,10 +38,7 @@ export function CaretLine() {
     ? `${placed} · ${t('caret.mode', { mode: t(`mode.${said.mode}`) })}`
     : placed
   return (
-    <p
-      role="status"
-      className="text-sm leading-snug text-pretty text-muted-foreground tabular-nums"
-    >
+    <p role="status" aria-live="polite" className="sr-only">
       {text}
     </p>
   )

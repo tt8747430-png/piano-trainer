@@ -7,8 +7,6 @@ import { cn } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { LayerChip } from './LayerChip'
-import { BarIcon } from './palette-icons'
 
 /**
  * One of the row's commands: its icon, named for a screen reader and in a tooltip, which adds `hint`,
@@ -77,13 +75,13 @@ function usePasteSaid(): { readonly hint?: string; readonly blocked?: string } {
 }
 
 /**
- * The edit row (spec 2026-10-23, Flat's second toolbar): at its head the layer chip, where the next
- * note goes (`LayerChip`); then what is done to what is chosen, never a mark put on it: Delete (the
- * notes or chord chosen, else the ones before the caret, as Backspace), Undo and Redo, Copy, Cut and
- * Paste of what is chosen (the bars in the chord row, the notes on a staff; Paste greyed with its
- * reason where the clip cannot go, ADR 0092), and Add bar after the caret's. In sight under the bar
- * on a phone, in the bar's row where it has room; scrolling sideways where even a phone's row is too
- * narrow. While a take records, it waits for Stop.
+ * The edit row (spec 2026-10-23, Flat's second toolbar): what is done to what is chosen, never a mark
+ * put on it: Delete (the notes or chord chosen, else the ones before the caret, as Backspace), Undo
+ * and Redo, Copy, Cut and Paste of what is chosen (the bars in the chord row, the notes on a staff;
+ * Paste greyed with its reason where the clip cannot go, ADR 0092). The staff written is chosen on
+ * the sheet, a bar added by writing past the last or from the palette's Bar (ADR 0094). In the bar's
+ * row where it has room, wrapped under it on a phone; scrolling sideways where even a phone's row is
+ * too narrow. While a take records, it waits for Stop.
  */
 export function EditRow({ className }: { className?: string }) {
   const { t } = useTranslation('editor')
@@ -105,7 +103,6 @@ export function EditRow({ className }: { className?: string }) {
         className,
       )}
     >
-      <LayerChip />
       <EditButton
         label={t(chords ? 'chord.delete' : 'deleteNotes')}
         disabled={recording}
@@ -135,15 +132,6 @@ export function EditRow({ className }: { className?: string }) {
       </EditButton>
       <EditButton label={t('paste')} {...paste} disabled={recording} onClick={clip('paste')}>
         <ClipboardPaste aria-hidden />
-      </EditButton>
-      <EditButton
-        label={t('bars.add')}
-        disabled={recording}
-        onClick={() => dispatch({ type: 'bars', edit: 'insert' })}
-      >
-        <span aria-hidden className="size-6">
-          <BarIcon edit="insert" />
-        </span>
       </EditButton>
     </div>
   )

@@ -141,7 +141,6 @@ export const editor: LocaleResources['editor'] = {
     rh: 'Верхний нотоносец',
     lh: 'Нижний нотоносец',
   },
-  layerChip: { label: 'Следующая нота: {{layer}}', menu: 'Куда пишется следующая нота' },
   sheet: {
     signature: 'Тональность и размер',
     label: 'Ноты',
@@ -257,7 +256,6 @@ export const editor: LocaleResources['editor'] = {
     label: 'Такт',
     insert: 'Добавить такт после',
     insertBefore: 'Добавить такт перед',
-    add: 'Добавить такт',
     delete: 'Удалить такты',
     newLine: 'Разрыв строки',
     joinLine: 'Соединить строки',
