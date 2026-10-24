@@ -196,6 +196,7 @@ export {
 export {
   CHORD_NOTES,
   CHORD_SIZES,
+  ROMAN_NUMERALS,
   SIZE_NOTES,
   STACK_SIZES,
   sizeOfNotes,
