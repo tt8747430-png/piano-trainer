@@ -37,3 +37,7 @@ replaces the soft notes with the written ones.
 **Later (2026-10-23, ADR 0091):** the pattern's notes drawn soft, and `StaffList`'s parts, are gone: every bar of
 the editor's score is written, so a hand's staff holds its own notes everywhere; the lead sheet and the piano's eye
 stay.
+
+**Later (2026-10-24, ADR 0094):** a lead sheet is one boolean, `leadSheet`, read only where the piece has a tune, so
+a score never hides every staff without `HIDDEN_ROWS` or `showsAStaff`. The chord names are the View's; New song's
+templates are Piano (the default), Melody and chords, and Piano with melody.

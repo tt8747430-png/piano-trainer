@@ -61,8 +61,8 @@ const heldKey = (staff: StaffId, key: number) => `${staff} ${key}`
 /**
  * The notes sounding in a bar, cut at its lines, as each staff's chords (spec §2.4 steps 1–2). A note
  * from the bar before goes on from it only where that bar's writing tied it on (`tiedOn`); one written
- * cut short there starts afresh, its accidental printed. The words go under the tune's staff alone
- * (`sung`, ADR 0093): a note's syllables elsewhere are not written.
+ * cut short there starts afresh, its accidental printed. The words go under one staff alone (`sung`,
+ * ADR 0093): a note's syllables elsewhere are not written.
  */
 function barChords(
   notes: readonly TimedNote[],
@@ -292,8 +292,12 @@ export function notate(music: TimedMusic): Score {
       (id === 'melody' && melodyStaff) ||
       (music.piano !== false && PIANO_STAVES.some((piano) => piano === id)),
   )
-  // The words go under the tune's staff: its own where written, else the piano's upper (ADR 0093).
-  const sung: StaffId = written.includes('melody') ? 'melody' : 'treble'
+  // The words go under the staff whose notes sing them: the top one where two do (the tune's own
+  // over the piano's upper, a melody pattern playing the tune), ADR 0093.
+  const sung: StaffId =
+    written.find((staff) =>
+      music.notes.some((n) => n.lyrics !== undefined && staffOf(n, melodyStaff) === staff),
+    ) ?? 'treble'
   let tiedOn = new Set<string>()
   const clefs = clefsInForce(music.bars)
   const measures = music.bars.map((placed, index): Measure => {

@@ -5,6 +5,7 @@ import {
   gatherLyrics,
   HAND_IDS,
   keyText,
+  lyricsStaff,
   readMusic,
   singingNotes,
   writeBar,
@@ -13,7 +14,7 @@ import {
   writeMelody,
   type ChartPiece,
   type HandId,
-  type HiddenRow,
+  type LyricsStaff,
   type PieceMusic,
   type Section,
 } from '@/entities/piece'
@@ -69,7 +70,7 @@ export interface DraftChord {
 /** A bar as the editor holds it: its length, its chords and its barlines; every bar is written (ADR 0091). */
 export interface DraftBar extends BarMarks {
   readonly ticks: Tick
-  /** In order, the first at 0. */
+  /** In order, the first at 0; none in a bar of no chord (ADR 0094). */
   readonly chords: readonly DraftChord[]
   /** The clef a hand's staff changes to here (ADR 0069). */
   readonly clefs?: HandClefs
@@ -95,8 +96,13 @@ export interface Draft {
   readonly sections: readonly DraftSection[]
   /** Whether the score has the tune's staff over the grand staff (ADR 0064): kept though empty (ADR 0072). */
   readonly melodyStaff: boolean
-  /** The rows left out of sight, their music kept (ADR 0072). */
-  readonly hidden: readonly HiddenRow[]
+  /** A lead sheet: the piano's staves out of sight, their music kept (ADR 0072, 0083). */
+  readonly leadSheet: boolean
+  /**
+   * The staff the lyrics are written on (ADR 0093): the tune's where the score has it (`melodyStaff`)
+   * and they were not written on the upper staff before it came, else the upper staff.
+   */
+  readonly lyricsOn: LyricsStaff
   /** One line: no note starts under another. */
   readonly melody: readonly DraftNote[]
   /** Each hand's notes, in every bar. */
@@ -186,7 +192,8 @@ export function readDraft(music: PieceMusic): Draft {
     sections,
     // The tune's staff is there wherever the music writes a line for it, rests alone included.
     melodyStaff: music.melody !== undefined,
-    hidden: music.hidden ?? [],
+    leadSheet: music.leadSheet === true,
+    lyricsOn: lyricsStaff(music),
     melody: melody ?? [],
     hands: { rh: inOrder(hands.rh), lh: inOrder(hands.lh) },
   }
@@ -215,11 +222,11 @@ function handBars(notes: readonly DraftNote[], bars: readonly PlacedBar[]): Hand
 }
 
 /**
- * The notes the words go under (ADR 0093): the tune's where the score has its staff, else the right
- * hand's, a chord of them one note.
+ * The notes the lyrics go under (ADR 0093): the tune's, or the right hand's where they are on the
+ * upper staff, a chord of them one note.
  */
 export const tuneNotes = (draft: Draft): DraftNote[] =>
-  draft.melodyStaff ? [...draft.melody] : singingNotes(draft.hands.rh)
+  draft.lyricsOn === 'melody' ? [...draft.melody] : singingNotes(draft.hands.rh)
 
 /** The draft as the content writes music: every bar of both hands written (ADR 0091), its words as verses. */
 export function writeDraft(draft: Draft): PieceMusic {
@@ -245,8 +252,12 @@ export function writeDraft(draft: Draft): PieceMusic {
       ),
     })),
     ...(melody === undefined ? {} : { melody }),
-    ...(draft.hidden.length > 0 ? { hidden: draft.hidden } : {}),
+    ...(draft.leadSheet ? { leadSheet: true } : {}),
     ...(lyrics.length > 0 ? { lyrics } : {}),
+    // On the upper staff of a score with a tune's staff: written, the melody's being the default.
+    ...(lyrics.length > 0 && draft.melodyStaff && draft.lyricsOn === 'rh'
+      ? { lyricsOn: 'rh' }
+      : {}),
     hands: {
       rh: writeHand(handBars(draft.hands.rh, placed), ticks, clefs('rh')),
       lh: writeHand(handBars(draft.hands.lh, placed), ticks, clefs('lh')),

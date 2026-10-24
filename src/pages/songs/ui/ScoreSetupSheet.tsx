@@ -6,8 +6,8 @@ import { Button } from '@/shared/ui/primitives/button'
 
 /**
  * What a new song's score holds (ADR 0072, 0091, 0094), its own sheet over New song: a template to
- * start from, as a notation app offers them, then its staves as the score names them: the melody's,
- * the piano's (hidden, a lead sheet) and the chord symbols.
+ * start from, as a notation app offers them, then its staves as the score names them: the melody's
+ * and the piano's (hidden, a lead sheet). Its chord symbols are typed into it, shown by the View.
  */
 export function ScoreSetupSheet({
   open,
@@ -82,12 +82,6 @@ export function ScoreSetupSheet({
               checked={setup.piano || pianoKept}
               disabled={pianoKept}
               onCheckedChange={(piano) => onChange({ ...setup, piano })}
-            />
-            <SwitchRow
-              icon={<span className="font-display text-base font-semibold">C⁷</span>}
-              label={t('setup.chordNames')}
-              checked={setup.chordNames}
-              onCheckedChange={(chordNames) => onChange({ ...setup, chordNames })}
             />
           </section>
         </div>

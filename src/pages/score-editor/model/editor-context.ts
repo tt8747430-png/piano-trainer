@@ -17,6 +17,8 @@ export interface ScoreEditorValue {
     /** Play from the caret's bar to the end, or Stop. */
     readonly togglePlay: () => void
     readonly close: () => void
+    /** Closes the notice of a change that could not be saved. */
+    readonly dismissUnsaved: () => void
   }
   /** What the sheet shows and which of the page's sheets is open: chosen here, never saved. */
   readonly view: {
@@ -48,6 +50,11 @@ export interface ScoreEditorValue {
     readonly chordFieldRef: (field: HTMLInputElement | null) => void
     /** Counts the times Enter in the chords asked for the field while it was not open: the palette opens it. */
     readonly chordFieldAsked: number
+    /**
+     * Whether the last change could not be saved (an edit the song's music cannot be written with):
+     * the song keeps the music last saved.
+     */
+    readonly unsaved: boolean
   }
 }
 

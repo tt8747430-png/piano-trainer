@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { readDraft } from '@/features/score-editor'
-import { note } from '@/shared/lib/music'
+import { midi, note } from '@/shared/lib/music'
 import { layerAt, linesOf, lineMusic, timeBeforeLine } from './line-music'
 
 const draft = readDraft({
@@ -98,7 +98,7 @@ describe('the sheet’s lines', () => {
   })
 
   it('write no piano on a lead sheet: the tune’s staff alone (ADR 0083)', () => {
-    const lead = { ...draft, hidden: ['piano' as const] }
+    const lead = { ...draft, leadSheet: true }
     const [, second] = linesOf(lead)
     if (!second) throw new Error('a second line')
     const music = lineMusic(lead, second)
@@ -178,5 +178,15 @@ describe('the words on a line (ADR 0093)', () => {
     if (!line) throw new Error('a line')
     expect(sung(lineMusic(worded, line))).toEqual(['one', 'two', 'three'])
     expect(sung(lineMusic(worded, line, false))).toEqual([])
+  })
+
+  it('carries the syllables of the staff the lyrics are on alone: the upper staff’s under a tune', () => {
+    // The same syllables on both staves: the upper staff's sing, the tune's are not its lyrics.
+    const rh = worded.melody.map((n) => ({ ...n, midi: midi(n.midi + 12) }))
+    const upper = { ...worded, lyricsOn: 'rh' as const, hands: { ...worded.hands, rh } }
+    const [line] = linesOf(upper)
+    if (!line) throw new Error('a line')
+    const music = lineMusic(upper, line)
+    expect(music.notes.filter((n) => n.lyrics).map((n) => n.hand)).toEqual(['rh', 'rh', 'rh'])
   })
 })

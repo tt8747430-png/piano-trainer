@@ -89,7 +89,7 @@ The jumps (ADR 0068): `Segno` or `Coda` before a bar puts its sign there; `Fine`
 - `pattern` is the accompaniment the section's chords play where it is not the piece's; the editor never writes one (ADR 0091).
 - `lines`: each line is bars separated by spaces.
 
-A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:method]`:
+A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:method]`, or `_` for none:
 
 | Written                    | Means                                                                                            |
 | -------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -100,6 +100,11 @@ A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:met
 | `Fm@1`                     | A first bar shorter than the meter is a pickup: the end of a bar, played, counted and written so |
 | `C:t1 F`, `C-G:1`          | A method code; a chord without one takes its bar's first code                                    |
 | `D/F#`                     | A slash chord; a bass that is a chord tone is spelled as that tone (`D#/G` → `D#/F𝄪`)            |
+| `C _ G`, `_@2`             | No chord at all (ADR 0094): nothing printed over the bar, nothing a pattern plays there          |
+
+`_` stands alone in its bar, its `@beats` given as a chord's where it is not the meter's length. A bar of no chord
+sounds only what a hand writes in it ([Written hands](#written-hands)). A learner's new song starts as four such
+bars, as a notation app's new score, and a bar the editor adds has no chord either.
 
 Beats per bar by meter: `2/4` 2, `3/4` 3, `4/4` 4, `6/8` 2, `12/8` 4. Beats must fall on whole ticks (24 per beat:
 `.5`, `.25`, `.125` a 32nd, `1.5`, not `.3`); a third of a beat is written as a fraction, `1:3` (a triplet 8th), `2:3`,
@@ -140,6 +145,10 @@ hyphen is printed to the next: `A- ma- zing`); `_` holds the syllable over the n
 `Si-_ lent` sings "Si" on two notes); `~` leaves a note's place empty. Punctuation stays with its syllable. A verse is
 no longer than the tune; a shorter one leaves the last notes without words. The sheet prints every verse under the
 tune's staff (the melody's, else the piano's upper staff), and the View menu's Lyrics switch hides them.
+
+The lyrics belong to the staff they are written on: `lyricsOn: 'rh'` keeps them on the upper staff of a piece that
+has a melody (a learner's song whose words were written there before its melody staff came), sung on the right hand's
+onsets as above. The melody's is the default and is not written.
 
 ## Written hands
 

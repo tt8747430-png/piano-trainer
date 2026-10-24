@@ -1,14 +1,16 @@
 import {
   barAt,
+  chordAt,
   notesAt,
   notesOf,
   totalTicks,
+  valueOf,
   type DraftNote,
   type EditMode,
   type EditorState,
 } from '@/features/score-editor'
-import { chordSymbol, TICKS_PER_BEAT, writtenName, type Meter, type Tick } from '@/shared/lib/music'
-import { ticksOf, valuesOf, type Duration } from '@/shared/lib/notation'
+import { chordSymbol, TICKS_PER_BEAT, writtenName, type Tick } from '@/shared/lib/music'
+import type { Duration } from '@/shared/lib/notation'
 
 interface Place {
   readonly bar: number
@@ -25,18 +27,14 @@ type CaretPlace =
       readonly value: Duration | null
     })
   | (Place & { readonly kind: 'at' | 'held' | 'rest'; readonly what: string })
+  /** The chord row of a bar of no chord (ADR 0094). */
+  | (Place & { readonly kind: 'noChord' })
 
 /** What the caret line says: the place, and the editing mode where it is not Replace (ADR 0092). */
 type CaretSaid = CaretPlace & { readonly mode?: Exclude<EditMode, 'replace'> }
 
 /** A beat counted from 1, a part of one as a decimal: 1, 2.5. */
 const beatOf = (ticks: number) => String(Math.round((ticks / TICKS_PER_BEAT + 1) * 100) / 100)
-
-/** The one value a length is written as in the meter, plain, dotted or a triplet's; or none. */
-const valueOf = (ticks: Tick, meter: Meter): Duration | null =>
-  [...valuesOf(meter, false), ...valuesOf(meter, true)].find(
-    (duration) => ticksOf(duration, meter) === ticks,
-  ) ?? null
 
 const names = (notes: readonly DraftNote[]) =>
   notes.map((n) => writtenName(n.midi, n.spelled)).join(' ')
@@ -61,11 +59,11 @@ function placeSaid(
   chordNote: EditorState['chordNote'],
 ): CaretPlace {
   if (caret >= totalTicks(draft)) return { kind: 'end' }
-  const { index, start, bar } = barAt(draft, caret)
+  const { index, start } = barAt(draft, caret)
   const at = { bar: index + 1, beat: beatOf(caret - start) }
   if (layer === 'chords') {
-    const chord = bar.chords.findLast((placed) => placed.at <= caret - start)
-    return { kind: 'at', ...at, what: chord ? chordSymbol(chord.chord) : '' }
+    const chord = chordAt(draft, caret)
+    return chord ? { kind: 'at', ...at, what: chordSymbol(chord) } : { kind: 'noChord', ...at }
   }
   // One note of a chord chosen alone: that note (ADR 0088).
   const all = notesAt(draft, layer, caret)

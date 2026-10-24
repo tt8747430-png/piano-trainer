@@ -1,7 +1,7 @@
 import { songTitle } from '@/entities/piece'
 import { markBars } from './bar-marks'
 import { setClef } from './clefs'
-import { keepsAStaff, staffLeftFor, withAStaff } from './rows'
+import { staffLeftFor } from './rows'
 import { setBarTicks } from './bars'
 import { chosenNotes, chosenSpan, shownValue, takenAway } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
@@ -15,7 +15,7 @@ import { barsEdited, chordSet, chosenBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
 import { lineOver, lineSpan } from './lines'
-import { setSyllable, singsHere } from './lyrics'
+import { setSyllable, singsHere, verseCount } from './lyrics'
 import { markNotes } from './marks'
 import {
   backFrom,
@@ -180,23 +180,29 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
           )
     case 'melodyStaff': {
       if (action.on === draft.melodyStaff) return state
-      if (action.on) return commit(state, { ...draft, melodyStaff: true }, { layer: 'melody' })
-      // A lead sheet's tune taken away brings the piano back, so a staff is in sight (ADR 0083).
-      const without = { ...draft, melodyStaff: false, melody: [] }
-      const next = { ...without, hidden: withAStaff(without) }
+      // Lyrics written on the upper staff stay there; a song with none yet takes them on the tune's.
+      if (action.on) {
+        const lyricsOn = verseCount(draft) > 0 ? draft.lyricsOn : 'melody'
+        return commit(state, { ...draft, melodyStaff: true, lyricsOn }, { layer: 'melody' })
+      }
+      // A lead sheet's tune taken away brings the piano back, so a staff is in sight (ADR 0083);
+      // its lyrics go with its notes, and the upper staff is the one left to take them.
+      const next = {
+        ...draft,
+        melodyStaff: false,
+        melody: [],
+        leadSheet: false,
+        lyricsOn: 'rh' as const,
+      }
       return commit(state, next, {
         layer: layer === 'melody' ? staffLeftFor(next) : layer,
         struck: null,
       })
     }
     case 'piano': {
-      if (draft.hidden.includes('piano') === action.hidden) return state
-      const hidden = action.hidden
-        ? [...draft.hidden, 'piano' as const]
-        : draft.hidden.filter((row) => row !== 'piano')
-      // Never every staff out of sight (ADR 0083).
-      if (!keepsAStaff(draft, hidden)) return state
-      const next = { ...draft, hidden }
+      // Never every staff out of sight: a lead sheet keeps its tune's staff (ADR 0083).
+      if (draft.leadSheet === action.hidden || (action.hidden && !draft.melodyStaff)) return state
+      const next = { ...draft, leadSheet: action.hidden }
       // The caret leaves a hand put out of sight for the top staff's.
       const leaves = action.hidden && isHandLayer(layer)
       return commit(state, next, leaves ? { layer: staffLeftFor(next), struck: null } : {})

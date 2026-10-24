@@ -385,8 +385,21 @@ describe('the editor', () => {
     expect(form(stays.draft)).toEqual([[['G@0', 'Am@0']]])
     expect(stays.caret).toBe(96)
     const typed = run(onLast, { type: 'chord', chord: am, advance: 'barAdding' })
-    expect(form(typed.draft)).toEqual([[['G@0', 'Am@0', 'Am@0']]])
+    expect(form(typed.draft)).toEqual([[['G@0', 'Am@0', '']]])
     expect(typed.caret).toBe(192)
+  })
+
+  it('takes a bar’s only chord with Delete, the bar left to type a chord into (ADR 0094)', () => {
+    const am = parseChordSymbol('Am')
+    const onLast = run(initialEditor(draftOf()), { type: 'place', tick: 96, layer: 'chords' })
+    const deleted = run(onLast, { type: 'delete' })
+    expect(form(deleted.draft)).toEqual([[['G@0', '']]])
+    expect(deleted.caret).toBe(96)
+    // Its places in the chord row: its start alone, where the next chord goes.
+    const moved = run(deleted, { type: 'move', by: 'step', direction: 1 })
+    expect(moved.caret).toBe(96)
+    const typed = run(moved, { type: 'chord', chord: am, advance: 'stay' })
+    expect(form(typed.draft)).toEqual([[['G@0', 'Am@0']]])
   })
 
   it('names keys struck together in the chords as a chord, and stays', () => {
@@ -401,20 +414,39 @@ describe('the editor', () => {
   it('hides the piano for a lead sheet, the caret leaving a hand for the tune, and shows it again (ADR 0083)', () => {
     const sung = initialEditor(draftOf({ melody: 'B4/1 | D5/1', hands: { lh: 'G2/4 | r/4' } }))
     const lead = run({ ...sung, layer: 'lh' }, { type: 'piano', hidden: true })
-    expect(lead.draft.hidden).toEqual(['piano'])
+    expect(lead.draft.leadSheet).toBe(true)
     expect(lead.draft.hands).toEqual(sung.draft.hands)
     expect(lead.layer).toBe('melody')
     const saved = musicToSave(lead.draft)
-    expect(saved).toMatchObject({ hidden: ['piano'], hands: { lh: 'G2/4 | r/4' } })
-    expect(readDraft(saved!).hidden).toEqual(['piano'])
-    expect(run(lead, { type: 'piano', hidden: false }).draft.hidden).toEqual([])
+    expect(saved).toMatchObject({ leadSheet: true, hands: { lh: 'G2/4 | r/4' } })
+    expect(readDraft(saved!).leadSheet).toBe(true)
+    expect(run(lead, { type: 'piano', hidden: false }).draft.leadSheet).toBe(false)
+    expect(musicToSave(run(lead, { type: 'piano', hidden: false }).draft)).not.toHaveProperty(
+      'leadSheet',
+    )
     // Never every staff: not the piano where the score has no tune's staff.
     const piano = initialEditor(draftOf())
     expect(run(piano, { type: 'piano', hidden: true })).toBe(piano)
     // The tune taken away from a lead sheet brings the piano back, so a staff is in sight.
     const gone = run(lead, { type: 'melodyStaff', on: false })
-    expect(gone.draft.hidden).toEqual([])
+    expect(gone.draft.leadSheet).toBe(false)
     expect(gone.layer).toBe('rh')
+  })
+
+  it('keeps the lyrics on the upper staff as a melody staff is added: saved with the music (ADR 0093)', () => {
+    const piano = initialEditor(
+      draftOf({ hands: { rh: 'G4+B4/2 D5/2 | r/4', lh: 'r/4 | r/4' }, lyrics: ['A- men'] }),
+    )
+    const tuned = run(piano, { type: 'melodyStaff', on: true })
+    expect(tuned.draft.lyricsOn).toBe('rh')
+    const saved = musicToSave(tuned.draft)
+    expect(saved).toMatchObject({ melody: 'r/4', lyrics: ['A- men'], lyricsOn: 'rh' })
+    expect(readDraft(saved!).lyricsOn).toBe('rh')
+    // A song with no lyrics yet takes them on the melody staff added, as a score with a tune does.
+    const silent = run(initialEditor(draftOf()), { type: 'melodyStaff', on: true })
+    expect(silent.draft.lyricsOn).toBe('melody')
+    // The tune's staff taken away, its notes and their lyrics with it, the upper staff is the one left.
+    expect(run(silent, { type: 'melodyStaff', on: false }).draft.lyricsOn).toBe('rh')
   })
 
   it('moves the caret a line on and back, to its line’s start first', () => {
@@ -751,12 +783,12 @@ describe('the editor', () => {
 
   it('adds and deletes bars, changes a bar’s length and starts a line and a section', () => {
     const state = run(initialEditor(draftOf()), { type: 'bars', edit: 'insert' })
-    expect(form(state.draft)).toEqual([[['G@0', 'G@0', 'C@0']]])
+    expect(form(state.draft)).toEqual([[['G@0', '', 'C@0']]])
     expect(state.caret).toBe(96)
     expect(lengths(run(state, { type: 'barLength', ticks: 48 }).draft)).toEqual([96, 48, 96])
     expect(form(run(state, { type: 'bars', edit: 'delete' }).draft)).toEqual([[['G@0', 'C@0']]])
     expect(form(run(state, { type: 'bars', edit: 'newLine' }).draft)).toEqual([
-      [['G@0'], ['G@0', 'C@0']],
+      [['G@0'], ['', 'C@0']],
     ])
     expect(run(state, { type: 'bars', edit: 'newSection' }).draft.sections).toHaveLength(2)
   })
@@ -861,7 +893,7 @@ describe('the palette on what is chosen', () => {
 
   it('adds a bar before the caret’s, and gives each bar chosen a length and the first a clef', () => {
     const before = run(initialEditor(draftOf()), { type: 'bars', edit: 'insertBefore' })
-    expect(form(before.draft)).toEqual([[['G@0', 'G@0', 'C@0']]])
+    expect(form(before.draft)).toEqual([[['', 'G@0', 'C@0']]])
     expect(before.caret).toBe(0)
     const both = run(
       initialEditor(draftOf()),
@@ -893,8 +925,10 @@ describe('createEditorStore', () => {
       { type: 'delete' },
       { type: 'settings', tempo: 90, key: store.getState().draft.key },
       { type: 'layer', layer: 'rh' },
-      { type: 'layer', layer: 'chords' },
+      // A beat no chord starts on.
+      { type: 'place', tick: 24, layer: 'chords' },
       { type: 'delete' },
+      { type: 'place', tick: 0, layer: 'chords' },
       { type: 'bars', edit: 'newLine' },
       { type: 'barLength', ticks: 96 },
       { type: 'chord', chord: parseChordSymbol('G'), advance: 'bar' },

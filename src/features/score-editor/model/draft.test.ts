@@ -10,9 +10,9 @@ import {
   type PieceMusic,
 } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
-import { midi, note } from '@/shared/lib/music'
+import { chordSymbol, midi, note } from '@/shared/lib/music'
 import { musicToSave, readDraft, writeDraft, type Draft } from './draft'
-import { barAt, barsOf, chordsAt, totalTicks } from './timeline'
+import { barAt, barsOf, chordAt, chordsAt, totalTicks } from './timeline'
 
 const CHART_PIECES = PIECES.filter((piece): piece is ChartPiece => !isDegreePiece(piece))
 
@@ -109,11 +109,19 @@ describe('the draft', () => {
   it('saves only music that reads back', () => {
     const draft = readDraft(WRITTEN)
     expect(musicToSave(draft)).toEqual(writeDraft(draft))
-    const [section] = draft.sections
-    if (!section) throw new Error('no section')
-    // A bar with no chord writes nothing the chart can read.
-    const unread = [{ ...section, lines: [[{ ticks: 96, chords: [] }]] }]
-    expect(musicToSave({ ...draft, sections: unread })).toBeNull()
+    // A note of twenty beats, five bars tied, is longer than the music writes a note.
+    const five = readDraft({
+      key: 'G',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['G G G G G'] }],
+      melody: 'D4/4 | D4/4 | D4/4 | D4/4 | D4/4',
+    })
+    const [first] = five.melody
+    if (!first) throw new Error('a note')
+    expect(musicToSave(five)).not.toBeNull()
+    expect(musicToSave({ ...five, melody: [{ ...first, durationTicks: 20 * 24 }] })).toBeNull()
   })
 
   it('holds chords by where they start in their bar, the tune and hands on the timeline', () => {
@@ -148,6 +156,23 @@ describe('the draft', () => {
     expect(barAt(draft, 24).index).toBe(1)
     expect(barAt(draft, 23).index).toBe(0)
     expect(barAt(draft, totalTicks(draft)).index).toBe(3)
+  })
+
+  it('finds the chord sounding at a tick in its bar; none in a bar of no chord (ADR 0094)', () => {
+    const draft = readDraft({ ...WRITTEN, sections: [{ kind: 'verse', lines: ['G@1 C-D _ Em'] }] })
+    const at = (tick: number) => {
+      const chord = chordAt(draft, tick)
+      return chord && chordSymbol(chord)
+    }
+    expect([0, 24, 71, 72, 120, 216, 312].map(at)).toEqual([
+      'G',
+      'C',
+      'C',
+      'D',
+      undefined,
+      'Em',
+      'Em',
+    ])
   })
 
   it('gives each chord of a bar its length', () => {

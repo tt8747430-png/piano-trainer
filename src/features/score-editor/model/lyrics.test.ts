@@ -34,6 +34,22 @@ describe('the words in the editor (ADR 0093)', () => {
     expect(singsHere(piano, 'lh')).toBe(false)
   })
 
+  it('go under the staff they are written on: the upper staff though the score has a melody', () => {
+    const upper = draftOf({
+      key: 'C',
+      sections: [{ kind: 'verse', lines: ['C G'] }],
+      melody: 'C4/1 D4/1 E4/1 F4/1 | r/4',
+      hands: { rh: 'E5/2 G5/2 | r/4', lh: 'r/4 | r/4' },
+      lyrics: ['one two'],
+      lyricsOn: 'rh',
+    })
+    expect(tuneLayer(upper)).toBe('rh')
+    expect(singsHere(upper, 'rh')).toBe(true)
+    expect(singsHere(upper, 'melody')).toBe(false)
+    expect(verses(upper)).toEqual(['one two'])
+    expect(writeDraft(upper)).toMatchObject({ lyrics: ['one two'], lyricsOn: 'rh' })
+  })
+
   it('count the verses, find the note singing at a tick and the tune’s notes on either side', () => {
     expect(verseCount(sung)).toBe(1)
     expect(verseCount(draftOf())).toBe(0)

@@ -5,11 +5,11 @@ import { parseLyrics, tuneLength, withHandLyrics, withMelodyLyrics } from './lyr
 import { parseChart } from './parse-chart'
 import { parseMelody } from './parse-melody'
 import { parseProgression } from './parse-progression'
-import { isDegreePiece, type ChartPiece, type Piece } from './types'
+import { isDegreePiece, lyricsStaff, type ChartPiece, type Piece } from './types'
 
 /**
  * A piece's chart; one written in degrees at the chosen chord size when it lets the learner choose.
- * A piece without a melody sings its words on the right hand's notes (ADR 0093).
+ * Lyrics on the upper staff (`lyricsStaff`) are sung on the right hand's notes (ADR 0093).
  */
 export function chartOf(piece: Piece, chordSize?: ChordSize): Chart {
   if (isDegreePiece(piece)) {
@@ -17,15 +17,16 @@ export function chartOf(piece: Piece, chordSize?: ChordSize): Chart {
     return parseProgression(piece, choosable ? (chordSize ?? fixed) : fixed)
   }
   const chart = parseChart(piece)
-  if (piece.lyrics === undefined || piece.melody !== undefined) return chart
+  if (piece.lyrics === undefined || lyricsStaff(piece) !== 'rh') return chart
   return withHandLyrics(chart, parseLyrics(piece, tuneLength(chart, undefined)) ?? [])
 }
 
-/** A piece's tune, singing its words where it has them (ADR 0093). */
+/** A piece's tune, singing its words where they are on its staff (ADR 0093). */
 export function melodyOf(piece: Piece): Melody | undefined {
   if (isDegreePiece(piece)) return undefined
   const melody = parseMelody(piece)
-  if (melody === undefined || piece.lyrics === undefined) return melody
+  if (melody === undefined || piece.lyrics === undefined || lyricsStaff(piece) !== 'melody')
+    return melody
   return withMelodyLyrics(melody, parseLyrics(piece, melody.length) ?? [])
 }
 

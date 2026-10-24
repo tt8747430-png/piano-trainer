@@ -1,6 +1,7 @@
 import { useRef, type MouseEvent, type PointerEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Layer } from '@/features/score-editor'
+import { useBarName } from '@/shared/i18n'
 import { chordSymbol, keySignature, type Midi, type Tick } from '@/shared/lib/music'
 import { staffClefAt, type TimedMusic } from '@/shared/lib/notation'
 import {
@@ -95,6 +96,7 @@ export function LineOverlay({
   edit: EditPrinted
 }) {
   const { t } = useTranslation('editor')
+  const barName = useBarName()
   // The notes chosen on this line, hugged by the one selection's box on the staff of the row they
   // are chosen in (the chord row, choosing chords), ADR 0088.
   const chosen = chosenBox(layout, line.start, selection, {
@@ -275,7 +277,7 @@ export function LineOverlay({
             key={index}
             type="button"
             tabIndex={-1}
-            aria-label={t('sheet.bar', { n: (placed?.index ?? 0) + 1, chords: chords.join(' ') })}
+            aria-label={barName((placed?.index ?? 0) + 1, chords.join(' '))}
             onDoubleClick={write(index)}
             {...chosenBy}
             // A pointer's target only (the arrows move the caret): no focus ring and no hover wash

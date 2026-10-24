@@ -14,6 +14,12 @@ describe('setChord', () => {
     ])
   })
 
+  it('sets a chord into a bar of no chord at its start, where a bar’s chords begin (ADR 0094)', () => {
+    const empty = draftOf({ sections: [{ kind: 'verse', lines: ['G _'] }] })
+    expect(form(setChord(empty, 1, 0, parseChordSymbol('Em')))).toEqual([[['G@0', 'Em@0']]])
+    expect(form(setChord(empty, 1, 48, parseChordSymbol('Em')))).toEqual([[['G@0', 'Em@0']]])
+  })
+
   it('keeps a chord’s method code, and gives a new one its bar’s', () => {
     const coded = draftOf({ sections: [{ kind: 'verse', lines: ['G:t1 C'] }] })
     const replaced = setChord(coded, 0, 0, parseChordSymbol('Em'))
@@ -34,9 +40,15 @@ describe('deleteChord', () => {
     expect(form(deleteChord(split, 0, 0))).toEqual([[['D@0 Em@48', 'C@0']]])
   })
 
-  it('keeps a bar’s only chord', () => {
+  it('takes a bar’s only chord, leaving a bar of no chord (ADR 0094)', () => {
+    expect(form(deleteChord(draftOf(), 1, 0))).toEqual([[['G@0', '']]])
+  })
+
+  it('changes nothing where no chord starts', () => {
     const draft = draftOf()
-    expect(deleteChord(draft, 1, 0)).toBe(draft)
+    expect(deleteChord(draft, 1, 24)).toBe(draft)
+    const empty = draftOf({ sections: [{ kind: 'verse', lines: ['G _'] }] })
+    expect(deleteChord(empty, 1, 0)).toBe(empty)
   })
 })
 

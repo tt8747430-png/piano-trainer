@@ -35,6 +35,8 @@ export const common = {
     settings: 'Settings',
   },
   close: 'Close',
+  // A notice's Close, named apart from the screen's own Close.
+  notice: { close: 'Close the notice' },
   // A search box's button that empties it.
   clearSearch: 'Clear search',
   loading: 'Loading',

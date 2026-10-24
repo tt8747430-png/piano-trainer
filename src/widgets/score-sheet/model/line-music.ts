@@ -1,7 +1,6 @@
 import { HAND_IDS } from '@/entities/piece'
 import {
   barsOf,
-  rowShown,
   type Draft,
   type DraftNote,
   type Layer,
@@ -157,18 +156,20 @@ export function staffOfLayer(
 /**
  * A line as the sheet writes it, from its own start: the melody on its staff, the right hand on the
  * treble staff, the left hand on the bass (every bar written, ADR 0091); the chord symbols; the
- * words under the tune unless the View hides them (`lyrics` off, ADR 0093). A staff with nothing in
- * a bar is left blank there, a row hidden is not written at all: no piano on a lead sheet.
+ * lyrics under the staff they are on unless the View hides them (`lyrics` off, ADR 0093). A staff
+ * with nothing in a bar is left blank there, a row hidden is not written at all: no piano on a lead
+ * sheet.
  */
 export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): TimedMusic {
   const from = line.start
   const to = endOf(line)
   const tune = draft.melodyStaff
-  const piano = rowShown(draft, 'piano')
+  const piano = !draft.leadSheet
+  const sings = (layer: NoteLayer) => lyrics && draft.lyricsOn === layer
   const notes = [
-    ...(tune ? sounding(draft.melody, 'melody', from, to, lyrics) : []),
+    ...(tune ? sounding(draft.melody, 'melody', from, to, sings('melody')) : []),
     ...(piano
-      ? HAND_IDS.flatMap((hand) => sounding(draft.hands[hand], hand, from, to, lyrics))
+      ? HAND_IDS.flatMap((hand) => sounding(draft.hands[hand], hand, from, to, sings(hand)))
       : []),
   ]
   const staves: StaffId[] = [...(tune ? (['melody'] as const) : []), ...(piano ? PIANO_STAVES : [])]

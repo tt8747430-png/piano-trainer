@@ -5,6 +5,7 @@ export const editor: LocaleResources['editor'] = {
   play: 'Сыграть',
   undo: 'Отменить',
   redo: 'Повторить',
+  unsaved: 'Это изменение нельзя сохранить: песня остаётся такой, какой была сохранена.',
   dock: 'Играть, перемещать курсор и записывать',
   palette: {
     label: 'Инструменты',
@@ -29,13 +30,16 @@ export const editor: LocaleResources['editor'] = {
     },
   },
   reason: {
-    chooseNote: 'Сначала выберите ноту: эти инструменты меняют выбранные ноты.',
+    chooseNote: 'Сначала выделите ноту: эти инструменты меняют выделенные ноты.',
     staff: 'Это для нот: коснитесь ноты на нотоносце.',
     hand: 'Для нотоносцев фортепиано: коснитесь ноты на верхнем или нижнем нотоносце.',
     chordRow:
       'Аккорды пишутся над нотоносцем: коснитесь названия аккорда или места над нотоносцем.',
-    chordNote: 'Выберите одну ноту аккорда: у каждой свой палец.',
-    lyrics: 'Текст пишется под мелодией: выберите мелодию или верхний нотоносец.',
+    chordNote: 'Выделите одну ноту аккорда: у каждой свой палец.',
+    lyricsOn: {
+      melody: 'Текст пишется на нотоносце мелодии: коснитесь ноты на нём.',
+      rh: 'Текст пишется на верхнем нотоносце: коснитесь ноты на нём.',
+    },
   },
   editRow: 'Правка',
   copy: 'Копировать',
@@ -45,7 +49,7 @@ export const editor: LocaleResources['editor'] = {
     bar: 'Такт {{n}}',
     bars: 'Такты {{from}}–{{to}}',
     note: 'Нота под кареткой',
-    notes: 'Выбрано нот: {{n}}',
+    notes: 'Выделено нот: {{n}}',
     nothing: 'Под кареткой нечего копировать',
     holdsBars: 'Скопировано тактов: {{n}}',
     holdsNotes: 'Скопировано нот: {{n}}',
@@ -132,7 +136,6 @@ export const editor: LocaleResources['editor'] = {
   sheet: {
     label: 'Ноты',
     page: 'Страница {{n}} из {{of}}',
-    bar: 'Такт {{n}}: {{chords}}',
     drag: 'Потяните вверх или вниз, чтобы сдвинуть ноту',
   },
   caret: {
@@ -140,6 +143,7 @@ export const editor: LocaleResources['editor'] = {
     notes: 'Такт {{bar}}, доля {{beat}} · {{what}} {{value}}',
     held: 'Такт {{bar}}, доля {{beat}} · {{what}} звучит',
     rest: 'Такт {{bar}}, доля {{beat}} · пауза',
+    noChord: 'Такт {{bar}}, доля {{beat}} · без аккорда',
     end: 'Конец песни',
     mode: 'Режим «{{mode}}»',
     values: {
@@ -166,8 +170,6 @@ export const editor: LocaleResources['editor'] = {
   dot: 'С точкой',
   doubleDot: 'С двумя точками',
   marks: {
-    articulations: 'Штрихи',
-    ornaments: 'Мелизмы',
     staccato: 'Стаккато',
     staccatissimo: 'Стаккатиссимо',
     accent: 'Акцент',
@@ -239,7 +241,6 @@ export const editor: LocaleResources['editor'] = {
     noBass: 'Основной тон в басу',
   },
   bars: {
-    label: 'Такт',
     insert: 'Добавить такт после',
     insertBefore: 'Добавить такт перед',
     delete: 'Удалить такты',
@@ -344,7 +345,7 @@ export const editor: LocaleResources['editor'] = {
     chord: 'Ввести аккорд (в строке аккордовых символов)',
     undo: 'Отменить',
     redo: 'Повторить',
-    clip: 'Копировать, вырезать, вставить выбранное',
+    clip: 'Копировать, вырезать, вставить выделенное',
   },
   roll: { label: 'Нот: {{notes}} · тактов: {{bars}}', playFrom: 'Играть с такта {{n}}' },
   printed: {

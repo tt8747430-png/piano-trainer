@@ -184,6 +184,29 @@ describe('Piece: the learner’s own music', () => {
     return storage
   }
 
+  it('shows a new song’s bars of no chord as empty bars, with no chords to list or check (ADR 0094)', async () => {
+    const user = userEvent.setup()
+    const silent = { rh: 'r/3 | r/3 | r/3 | r/3', lh: 'r/3 | r/3 | r/3 | r/3' }
+    const song = {
+      ...MUSIC,
+      id: 'my-1',
+      title: 'Morning',
+      sections: [{ kind: 'verse', lines: ['_ _ _ _'] }],
+      hands: silent,
+    }
+    await renderApp('/songs/my-1', { storage: saved({ songs: [song], nextSong: 2 }) })
+    const chart = await screen.findByRole('region', { name: 'Verse' })
+    expect(
+      within(chart)
+        .getAllByRole('button', { name: /^Bar/ })
+        .map((bar) => bar.getAttribute('aria-label')),
+    ).toEqual(['Bar 1', 'Bar 2', 'Bar 3', 'Bar 4'])
+    expect(screen.queryByRole('region', { name: 'Chords' })).not.toBeInTheDocument()
+    await openMore(user)
+    await screen.findByRole('button', { name: 'Print the chart' })
+    expect(screen.queryByRole('button', { name: 'Check these chords' })).not.toBeInTheDocument()
+  })
+
   it('edits a song in the score editor', async () => {
     await renderApp('/songs/amazing')
     expect(await screen.findByRole('link', { name: 'Edit the score' })).toHaveAttribute(

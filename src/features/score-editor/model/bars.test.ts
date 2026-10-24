@@ -20,11 +20,11 @@ const sung = draftOf({
 })
 
 describe('insertBar', () => {
-  it('adds a bar after, with the chord before it again, and moves the notes after it on', () => {
+  it('adds a bar of no chord after, as notation software does, and moves the notes after it on', () => {
     const inserted = insertBar(sung, 0)
     expect(form(inserted)).toEqual([
       [
-        ['G@0', 'G@0', 'C@0'],
+        ['G@0', '', 'C@0'],
         ['D@0', 'G@0'],
       ],
     ])
@@ -41,24 +41,29 @@ describe('insertBar', () => {
   it('cuts a note held across where the bar goes in', () => {
     expect(shape(insertBar(sung, 2).melody)).toContain('D5@192/96')
   })
+
+  it('adds a bar after a bar of no chord too', () => {
+    const empty = draftOf({ sections: [{ kind: 'verse', lines: ['_'] }] })
+    expect(form(insertBar(empty, 0))).toEqual([[['', '']]])
+  })
 })
 
 describe('insertBarBefore', () => {
-  it('adds a bar before, starting its line, with the chord before it, the notes moved on', () => {
+  it('adds a bar of no chord before, starting its line, the notes moved on', () => {
     const inserted = insertBarBefore(sung, 2)
     expect(form(inserted)).toEqual([
       [
         ['G@0', 'C@0'],
-        ['C@0', 'D@0', 'G@0'],
+        ['', 'D@0', 'G@0'],
       ],
     ])
     expect(shape(inserted.hands.lh)).toEqual(['C3@96/96', 'D3@288/96'])
   })
 
-  it('adds a bar before the first, with its chord', () => {
+  it('adds a bar before the first', () => {
     expect(form(insertBarBefore(sung, 0))).toEqual([
       [
-        ['G@0', 'G@0', 'C@0'],
+        ['', 'G@0', 'C@0'],
         ['D@0', 'G@0'],
       ],
     ])

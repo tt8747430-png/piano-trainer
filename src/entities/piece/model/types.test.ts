@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { note } from '@/shared/lib/music'
 import { testSong } from '../testing/test-pieces'
-import { defineListing, isLeadSheet, isPiece, pieceKey, showsAStaff } from './types'
+import { defineListing, isLeadSheet, isPiece, pieceKey } from './types'
 
 describe('pieceKey', () => {
   it('reads the key a piece is written in', () => {
@@ -29,20 +29,10 @@ describe('entries', () => {
   })
 })
 
-describe('showsAStaff', () => {
-  it('is false only where the piano is hidden and the score has no tune’s staff (ADR 0083, 0094)', () => {
-    expect(showsAStaff([], false)).toBe(true)
-    expect(showsAStaff(['chords'], false)).toBe(true)
-    expect(showsAStaff(['piano'], false)).toBe(false)
-    expect(showsAStaff(['piano'], true)).toBe(true)
-  })
-})
-
 describe('isLeadSheet', () => {
-  it('is a piece that hides its piano: the tune and the chord names (ADR 0083)', () => {
+  it('is a piece that hides its piano: the tune and the chord names (ADR 0083, 0094)', () => {
     const song = testSong(['C'])
     expect(isLeadSheet(song)).toBe(false)
-    expect(isLeadSheet({ ...song, melody: 'C4/4', hidden: ['piano'] })).toBe(true)
-    expect(isLeadSheet({ ...song, hidden: ['chords'] })).toBe(false)
+    expect(isLeadSheet({ ...song, melody: 'C4/4', leadSheet: true })).toBe(true)
   })
 })

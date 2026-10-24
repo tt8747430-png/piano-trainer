@@ -90,6 +90,14 @@ describe('the caret in the chords', () => {
     expect(caretPlaces(halves, 'chords', 24)).toEqual([0, 24, 36, 48, 72])
   })
 
+  it('stands at a bar of no chord’s start alone, where its chord would go (ADR 0094)', () => {
+    const empty = draftOf({ sections: [{ kind: 'verse', lines: ['G _ D'] }] })
+    expect(caretPlaces(empty, 'chords', 24)).toEqual([0, 24, 48, 72, 96, 192, 216, 240, 264])
+    expect(snapToChord(empty, 150)).toBe(96)
+    expect(tapPlaces(empty, 'chords')).toEqual([0, 96, 192])
+    expect(itemAt(empty, 'chords', 96)).toEqual({ from: 96, to: 192 })
+  })
+
   it('moves among them, and snaps down onto one', () => {
     expect(nextCaret(tune, 'chords', 72, 24, 1)).toBe(96)
     expect(nextCaret(tune, 'chords', 168, 24, 1)).toBe(168)

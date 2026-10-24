@@ -3,6 +3,8 @@ export const editor = {
   play: 'Play',
   undo: 'Undo',
   redo: 'Redo',
+  // A change the song's music cannot be written with: nothing saved over what was.
+  unsaved: 'This change can’t be saved: the song stays as it was last saved.',
   // The dock over the sheet's foot (ADR 0094): the tempo, ‹ Play ›, and Record.
   dock: 'Play, move and record',
   // The one palette (spec 2026-10-23): a quick row of values, the categories as a bar of pictures,
@@ -36,7 +38,12 @@ export const editor = {
     hand: 'For the piano’s staves: tap a note on the upper or lower staff.',
     chordRow: 'Chords are written over the staff: tap a chord name, or the space over the staff.',
     chordNote: 'Choose one note of the chord: each takes its own finger.',
-    lyrics: 'Lyrics go under the tune: choose the melody or upper staff.',
+    // Where the lyrics go (where they are, or will be in a song with none yet), said where the caret
+    // is on another staff (ADR 0093).
+    lyricsOn: {
+      melody: 'Lyrics go on the melody staff: tap a note there.',
+      rh: 'Lyrics go on the upper staff: tap a note there.',
+    },
   },
   // The edit row under the bar: what is done to what is chosen.
   editRow: 'Edit',
@@ -145,7 +152,6 @@ export const editor = {
   sheet: {
     label: 'Score',
     page: 'Page {{n}} of {{of}}',
-    bar: 'Bar {{n}}: {{chords}}',
     drag: 'Drag up or down to move the note',
   },
   caret: {
@@ -153,6 +159,8 @@ export const editor = {
     notes: 'Bar {{bar}}, beat {{beat}} · {{what}} {{value}}',
     held: 'Bar {{bar}}, beat {{beat}} · {{what}} held',
     rest: 'Bar {{bar}}, beat {{beat}} · rest',
+    // The chord row of a bar with no chord symbol (ADR 0094).
+    noChord: 'Bar {{bar}}, beat {{beat}} · no chord',
     end: 'End of the song',
     // The editing mode, where it is not Replace (ADR 0092).
     mode: '{{mode}} mode',
@@ -181,8 +189,6 @@ export const editor = {
   doubleDot: 'Double dotted',
   // A note's marks (ADR 0063), each a key that puts it on the notes at the caret or takes it off.
   marks: {
-    articulations: 'Articulations',
-    ornaments: 'Ornaments',
     staccato: 'Staccato',
     staccatissimo: 'Staccatissimo',
     accent: 'Accent',
@@ -257,7 +263,6 @@ export const editor = {
     noBass: 'Root in the bass',
   },
   bars: {
-    label: 'Bar',
     insert: 'Add bar after',
     insertBefore: 'Add bar before',
     delete: 'Delete bars',

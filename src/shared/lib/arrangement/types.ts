@@ -38,6 +38,7 @@ export interface WrittenHands {
 }
 /** A bar of a chart: its chords, its beats, its written hands and its barlines (a repeat, an ending). */
 export interface ChartBar extends BarMarks {
+  /** End to end from its start, lasting its beats; none in a bar of no chord symbol (ADR 0094). */
   readonly chords: readonly ChartChord[]
   readonly beats: number
   readonly hands?: WrittenHands
@@ -186,8 +187,8 @@ export interface PerformanceNote {
   readonly startTick: Tick
   readonly durationTicks: Tick
   readonly velocity: number
-  /** Index into Performance.chords: the chord this note was played for. */
-  readonly chord: number
+  /** Index into Performance.chords: the chord this note was played for; none in a bar of no chord. */
+  readonly chord?: number
   /** What a written note's text marks on it (ADR 0063). */
   readonly marks?: NoteMarks
   /** What it sings, by verse: a tune's note (ADR 0093). */
@@ -197,7 +198,8 @@ export interface PerformanceNote {
 export interface BeatGroup {
   readonly tick: Tick
   readonly bar: number
-  readonly chord: number
+  /** The chord sounding then; none in a bar of no chord (ADR 0094). */
+  readonly chord?: number
   readonly notes: readonly number[]
 }
 export interface Performance {

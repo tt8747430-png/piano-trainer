@@ -102,12 +102,17 @@ export function PieceView({ piece }: { piece: Piece }) {
                   />
                 }
                 actions={[
-                  {
-                    key: 'check',
-                    label: t('checkChords'),
-                    icon: Target,
-                    onSelect: () => void navigate({ to: '/check', search: { of: step } }),
-                  },
+                  // A piece of no chord symbol has none to check (ADR 0094).
+                  ...(performance.chords.length > 0
+                    ? [
+                        {
+                          key: 'check',
+                          label: t('checkChords'),
+                          icon: Target,
+                          onSelect: () => void navigate({ to: '/check', search: { of: step } }),
+                        },
+                      ]
+                    : []),
                   // An installed app has no browser menu to print from.
                   {
                     key: 'print',

@@ -98,6 +98,21 @@ describe('notate', () => {
     ])
   })
 
+  it('writes no chord symbol over a bar of no chord (ADR 0094)', () => {
+    const score = notate(
+      music([n(60, note('C'), 'rh', 0, 96), n(62, note('D'), 'rh', 96, 96)], {
+        bars: [
+          { startTick: 0, beats: 4 },
+          { startTick: 96, beats: 4 },
+        ],
+      }),
+    )
+    expect(score.measures.map((measure) => measure.chords)).toEqual([
+      [{ tick: 0, symbol: 'C' }],
+      [],
+    ])
+  })
+
   it('writes a bar of C on a grand staff, with its chord symbol and time signature', () => {
     const score = notate(
       music([
@@ -380,6 +395,16 @@ describe('notate the words (ADR 0093)', () => {
         voice.events.map((event) => (event.kind === 'notes' ? event.lyrics : undefined)),
       ),
     ).toEqual([undefined])
+  })
+
+  it('writes them under the upper staff where its notes sing them, the tune’s staff over it silent', () => {
+    const notes = [
+      n(72, note('C'), 'melody', 0, 96),
+      n(64, note('E'), 'rh', 0, 96, { lyrics: [sung('one')] }),
+    ]
+    const own = notate(music(notes, { melodyStaff: true }))
+    expect(verses(own, 'treble')).toEqual([[sung('one')]])
+    expect(verses(own, 'melody')).toEqual([null])
   })
 
   it('lets a chord’s one note sing for the chord', () => {

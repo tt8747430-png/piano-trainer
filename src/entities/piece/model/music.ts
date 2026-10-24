@@ -7,7 +7,7 @@ import {
 } from '@/shared/lib/music'
 import type { Chart, Melody } from '@/shared/lib/arrangement'
 import { chartOf, melodyOf } from './chart'
-import type { ChartPiece, KeyText, Section } from './types'
+import { lyricsStaff, type ChartPiece, type KeyText, type Section } from './types'
 
 /**
  * A song's or study's music as the content writes it: what a learner's version holds (ADR 0027),
@@ -15,13 +15,25 @@ import type { ChartPiece, KeyText, Section } from './types'
  */
 export type PieceMusic = Pick<
   ChartPiece,
-  'key' | 'meter' | 'tempo' | 'pattern' | 'sections' | 'melody' | 'hidden' | 'hands' | 'lyrics'
+  | 'key'
+  | 'meter'
+  | 'tempo'
+  | 'pattern'
+  | 'sections'
+  | 'melody'
+  | 'leadSheet'
+  | 'hands'
+  | 'lyrics'
+  | 'lyricsOn'
 > & {
   /** The learner's own title: a version's, shown in every language in place of the catalog's. */
   readonly title?: string
 }
 
-/** A piece's music, without what it leaves out. */
+/**
+ * A piece's music, without what it leaves out: its lyrics' staff only where they are, and it is not
+ * the melody's (ADR 0093).
+ */
 export const musicOf = (piece: ChartPiece): PieceMusic => ({
   key: piece.key,
   meter: piece.meter,
@@ -29,9 +41,12 @@ export const musicOf = (piece: ChartPiece): PieceMusic => ({
   pattern: piece.pattern,
   sections: piece.sections,
   ...(piece.melody === undefined ? {} : { melody: piece.melody }),
-  ...(piece.hidden?.length ? { hidden: piece.hidden } : {}),
+  ...(piece.leadSheet ? { leadSheet: true } : {}),
   ...(piece.hands === undefined ? {} : { hands: piece.hands }),
   ...(piece.lyrics?.length ? { lyrics: piece.lyrics } : {}),
+  ...(piece.lyrics?.length && piece.melody !== undefined && lyricsStaff(piece) === 'rh'
+    ? { lyricsOn: 'rh' }
+    : {}),
 })
 
 /**
@@ -63,9 +78,10 @@ export const withMusic = (piece: ChartPiece, { title, ...music }: PieceMusic): C
       ...piece,
       ...music,
       melody: music.melody,
-      hidden: music.hidden,
+      leadSheet: music.leadSheet,
       hands: music.hands,
       lyrics: music.lyrics,
+      lyricsOn: music.lyricsOn,
     },
     title,
   )
@@ -92,10 +108,11 @@ export const sameMusic = (a: PieceMusic, b: PieceMusic): boolean =>
   a.tempo === b.tempo &&
   a.pattern === b.pattern &&
   a.melody === b.melody &&
-  (a.hidden ?? []).join() === (b.hidden ?? []).join() &&
+  (a.leadSheet ?? false) === (b.leadSheet ?? false) &&
   a.hands?.rh === b.hands?.rh &&
   a.hands?.lh === b.hands?.lh &&
   (a.lyrics ?? []).join('\n') === (b.lyrics ?? []).join('\n') &&
+  a.lyricsOn === b.lyricsOn &&
   a.sections.length === b.sections.length &&
   a.sections.every((section, i) => {
     const other = b.sections[i]

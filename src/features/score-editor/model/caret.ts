@@ -6,16 +6,23 @@ import { barAt, barsOf, totalTicks } from './timeline'
 
 const sortedUnique = (ticks: readonly Tick[]) => [...new Set(ticks)].sort((a, b) => a - b)
 
-/** Where the caret stands in the chords: every beat of every bar, and every chord's start. */
+/**
+ * Where the caret stands in the chords: every beat of a bar, and every chord's start; a bar of no
+ * chord's start alone, where its chord goes (ADR 0094).
+ */
 function chordPlaces(draft: Draft): Tick[] {
   return sortedUnique(
-    barsOf(draft).flatMap(({ start, bar }) => [
-      ...Array.from(
-        { length: Math.ceil(bar.ticks / TICKS_PER_BEAT) },
-        (_, k) => start + k * TICKS_PER_BEAT,
-      ),
-      ...bar.chords.map((chord) => start + chord.at),
-    ]),
+    barsOf(draft).flatMap(({ start, bar }) =>
+      bar.chords.length === 0
+        ? [start]
+        : [
+            ...Array.from(
+              { length: Math.ceil(bar.ticks / TICKS_PER_BEAT) },
+              (_, k) => start + k * TICKS_PER_BEAT,
+            ),
+            ...bar.chords.map((chord) => start + chord.at),
+          ],
+    ),
   )
 }
 

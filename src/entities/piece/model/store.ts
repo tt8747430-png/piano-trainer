@@ -15,19 +15,17 @@ import {
   type OwnSongId,
 } from './own'
 import {
-  HIDDEN_ROWS,
-  showsAStaff,
   SECTION_KINDS,
   type ChartPiece,
   type Hands,
-  type HiddenRow,
   type KeyText,
+  type LyricsStaff,
   type PieceId,
   type Section,
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-export const PIECES_VERSION = 4
+export const PIECES_VERSION = 5
 
 /** The learner's pieces (spec 2026-10-01-score-editor §4). */
 export interface PiecesState {
@@ -57,6 +55,7 @@ const isKeyText = (value: unknown): value is KeyText => {
   return key !== null && isWrittenKey(key)
 }
 const isSectionKind = isOneOf(SECTION_KINDS)
+const isLyricsStaff = isOneOf<LyricsStaff>(['melody', 'rh'])
 const isText = (value: unknown): value is string => typeof value === 'string'
 const isTempo = (value: unknown): value is number =>
   typeof value === 'number' &&
@@ -93,17 +92,6 @@ function savedHands(saved: unknown): Hands | undefined {
   return hands.rh === undefined && hands.lh === undefined ? undefined : hands
 }
 
-/**
- * The rows a save hides, those it names once each (ADR 0072); the piano only where the score has the
- * tune's staff, so a score never hides every staff (ADR 0083).
- */
-function savedHidden(saved: unknown, melody: boolean): { hidden?: HiddenRow[] } {
-  if (!Array.isArray(saved)) return {}
-  const named = HIDDEN_ROWS.filter((row) => saved.includes(row))
-  const rows = showsAStaff(named, melody) ? named : named.filter((row) => row !== 'piano')
-  return rows.length > 0 ? { hidden: rows } : {}
-}
-
 /** The ticks a piece's chart lasts. */
 const chartTicks = (piece: ChartPiece): Tick =>
   barTicksOf(piece).reduce((sum, ticks) => sum + ticks, 0)
@@ -122,11 +110,13 @@ function singsLyrics(piece: ChartPiece): boolean {
 
 /**
  * Saved music that reads as a piece's: its fields, its chart, melody and hands; null otherwise. Its
- * words are kept where they read on its tune, its own title where it is one (ADR 0094).
+ * words are kept where they read on the staff they are on (ADR 0093), its own title where it is one
+ * (ADR 0094), a lead sheet only where it has a tune's staff: a score never hides every staff (ADR
+ * 0083).
  */
 function musicOfSaved(saved: unknown): PieceMusic | null {
   if (!isRecord(saved)) return null
-  const { key, meter, tempo, pattern, sections, melody, hidden, hands, lyrics, title } = saved
+  const { key, meter, tempo, pattern, sections, melody, leadSheet, hands, lyrics, lyricsOn } = saved
   if (!isKeyText(key) || !isMeter(meter) || !isTempo(tempo) || !isPatternId(pattern)) return null
   if (!Array.isArray(sections) || sections.length === 0) return null
   const read = sections.map(sectionOf)
@@ -142,7 +132,9 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     pattern,
     sections: read,
     ...(isText(melody) ? { melody } : {}),
+    ...(isText(melody) && leadSheet === true ? { leadSheet } : {}),
     ...(written ? { hands: written } : {}),
+    ...(isLyricsStaff(lyricsOn) ? { lyricsOn } : {}),
   }
   try {
     const tune = melodyOf(piece)
@@ -151,11 +143,8 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     if (!fits) return null
     const verses = Array.isArray(lyrics) && lyrics.every(isText) ? lyrics : undefined
     const sung = verses && singsLyrics({ ...piece, lyrics: verses }) ? { lyrics: verses } : {}
-    const named = isText(title) ? songTitle(title) : null
-    return {
-      ...(named === null ? {} : { title: named }),
-      ...musicOf({ ...piece, ...sung, ...savedHidden(hidden, piece.melody !== undefined) }),
-    }
+    const named = isText(saved.title) ? songTitle(saved.title) : null
+    return { ...(named === null ? {} : { title: named }), ...musicOf({ ...piece, ...sung }) }
   } catch (error) {
     if (error instanceof ContentError) return null
     throw error

@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import type { HiddenRow } from '@/entities/piece'
 import { layerInSight, rowsInSight, seenDraft } from './seen-draft'
 
-/** A score's staves: the tune's added or not, the rows it hides. */
-const score = (melodyStaff: boolean, hidden: readonly HiddenRow[] = []) => ({ melodyStaff, hidden })
+/** A score's staves: the tune's added or not, the piano hidden (a lead sheet) or not. */
+const score = (melodyStaff: boolean, leadSheet = false) => ({ melodyStaff, leadSheet })
 
 /** The View: every staff and the chord symbols, unless said. */
 const view = (
@@ -13,26 +12,22 @@ const view = (
 describe('the score as the View shows it (ADR 0094)', () => {
   it('leaves out the tune’s staff the View hides, and the piano where both its staves are hidden', () => {
     expect(seenDraft(score(true), view({ melodyStaff: false }))).toEqual(score(false))
-    expect(seenDraft(score(true), view({ hidden: ['treble', 'bass'] }))).toEqual(
-      score(true, ['piano']),
-    )
-    expect(seenDraft(score(true, ['chords']), view())).toEqual(score(true, ['chords']))
+    expect(seenDraft(score(true), view({ hidden: ['treble', 'bass'] }))).toEqual(score(true, true))
+    expect(seenDraft(score(true), view())).toEqual(score(true))
   })
 
   it('never leaves every staff out: a lead sheet keeps its tune, as the Player’s sheet does', () => {
-    expect(seenDraft(score(true, ['piano']), view({ melodyStaff: false }))).toEqual(
-      score(true, ['piano']),
-    )
+    expect(seenDraft(score(true, true), view({ melodyStaff: false }))).toEqual(score(true, true))
     expect(seenDraft(score(false), view({ hidden: ['treble', 'bass'] }))).toEqual(score(false))
   })
 
-  it('lets the caret write in the rows in sight alone, the chord symbols too', () => {
+  it('lets the caret write in the rows in sight alone, the chord symbols the View’s (ADR 0094)', () => {
     expect(rowsInSight(score(true), view())).toEqual(['chords', 'melody', 'rh', 'lh'])
     expect(rowsInSight(score(true), view({ chordNames: false, melodyStaff: false }))).toEqual([
       'rh',
       'lh',
     ])
-    expect(rowsInSight(score(false, ['chords']), view())).toEqual(['rh', 'lh'])
+    expect(rowsInSight(score(false), view({ chordNames: false }))).toEqual(['rh', 'lh'])
   })
 
   it('leaves out one piano staff the View hides, the other in sight; both, as the piano (ADR 0094)', () => {

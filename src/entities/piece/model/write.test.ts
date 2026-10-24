@@ -202,5 +202,12 @@ describe('the music of a piece', () => {
     expect(sameMusic(music, { ...music, hands: { lh: '- | r/4' } })).toBe(false)
     // A version's own title is its music's (ADR 0094).
     expect(sameMusic(music, { ...music, title: 'Mine' })).toBe(false)
+    expect(sameMusic(music, { ...music, leadSheet: true })).toBe(false)
+    expect(musicOf({ ...song, leadSheet: true })).toEqual({ ...music, leadSheet: true })
+    // The lyrics' staff, written where it is not the melody's (ADR 0093).
+    const upper = { ...song, lyrics: ['one'], lyricsOn: 'rh' as const }
+    expect(musicOf(upper)).toEqual({ ...music, lyrics: ['one'], lyricsOn: 'rh' })
+    expect(musicOf({ ...upper, lyricsOn: 'melody' })).toEqual({ ...music, lyrics: ['one'] })
+    expect(sameMusic(musicOf(upper), { ...musicOf(upper), lyricsOn: undefined })).toBe(false)
   })
 })

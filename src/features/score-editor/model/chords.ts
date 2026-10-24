@@ -9,10 +9,14 @@ import {
 import type { Draft, DraftChord } from './draft'
 import { withBar } from './notes'
 
-/** A chord set where it starts in a bar: the one there replaced (its method kept), or the bar split. */
-export const setChord = (draft: Draft, index: number, at: Tick, chord: Chord): Draft =>
+/**
+ * A chord set where it starts in a bar: the one there replaced (its method kept), or the bar split; in
+ * a bar of no chord, at its start, where a bar's chords begin (ADR 0094).
+ */
+export const setChord = (draft: Draft, index: number, from: Tick, chord: Chord): Draft =>
   withBar(draft, index, (bar) => {
-    if (at < 0 || at >= bar.ticks) return bar
+    if (from < 0 || from >= bar.ticks) return bar
+    const at = bar.chords.length === 0 ? 0 : from
     const there = bar.chords.find((placed) => placed.at === at)
     if (there && chordSymbol(there.chord) === chordSymbol(chord)) return bar
     const method = there?.method ?? bar.chords[0]?.method
@@ -27,12 +31,12 @@ export const setChord = (draft: Draft, index: number, at: Tick, chord: Chord): D
 
 /**
  * A chord taken from its bar: its beats go to the chord before it; a bar's first chord's to the one
- * after, which then starts the bar; a bar's only chord stays.
+ * after, which then starts the bar; a bar's only chord leaves a bar of no chord (ADR 0094).
  */
 export function deleteChord(draft: Draft, index: number, at: Tick): Draft {
   let changed = false
   const next = withBar(draft, index, (bar) => {
-    if (bar.chords.length < 2 || !bar.chords.some((chord) => chord.at === at)) return bar
+    if (!bar.chords.some((chord) => chord.at === at)) return bar
     changed = true
     const kept = bar.chords.filter((chord) => chord.at !== at)
     return { ...bar, chords: kept.map((chord, i) => (i === 0 ? { ...chord, at: 0 } : chord)) }

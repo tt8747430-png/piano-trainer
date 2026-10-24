@@ -42,6 +42,15 @@ export function barAt(draft: Draft, tick: Tick): PlacedBar {
   return found
 }
 
+/**
+ * The chord sounding at a tick: its bar's last starting at or before it; none in a bar of no chord
+ * (ADR 0094).
+ */
+export function chordAt(draft: Draft, tick: Tick): Chord | undefined {
+  const { start, bar } = barAt(draft, tick)
+  return bar.chords.findLast((placed) => placed.at <= tick - start)?.chord
+}
+
 /** Each chord of a bar with its length: until the next chord or the barline. */
 export function chordsAt(
   bar: DraftBar,
