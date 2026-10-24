@@ -102,7 +102,8 @@ export function setSectionKind(draft: Draft, index: number, kind: SectionKind): 
 /**
  * A key change at section `index` (ADR 0089), as Flat changes key from a bar: that section and those
  * after it in the same key, up to the next change of key, written in `key`; a section in the song's
- * key writes none. The notes stay where they are: only their signature and spelling change.
+ * key writes none. The notes stay as they are, spelling and all: only their signature changes, and
+ * a note written or stepped there after is spelled in the new key (`keyAt`).
  */
 export function setSectionKey(draft: Draft, index: number, key: Key): Draft {
   if (!draft.sections[index]) return draft
@@ -123,14 +124,20 @@ export function setSectionKey(draft: Draft, index: number, key: Key): Draft {
   return { ...draft, sections }
 }
 
-/** A new section from bar `index`, of the kind it was in, named next; a bar starting one changes nothing. */
+/**
+ * A new section from bar `index`, of the kind it was in, named next, in the key it was in (a key
+ * change goes on past it); a bar starting one changes nothing.
+ */
 export function newSection(draft: Draft, index: number): Draft {
   const slots = slotsOf(draft)
   const slot = slots[index]
   if (!slot || slot.newSection) return draft
   const containing = slots.slice(0, index).filter((other) => other.newSection).length - 1
-  const kind = draft.sections[containing]?.heading.kind ?? 'verse'
-  const heading = named(kind, draft.sections.slice(0, containing + 1), draft.sections)
+  const { kind = 'verse', key } = draft.sections[containing]?.heading ?? {}
+  const heading: Heading = {
+    ...named(kind, draft.sections.slice(0, containing + 1), draft.sections),
+    ...(key === undefined ? {} : { key }),
+  }
   const split = withSlots(
     draft,
     slots.map((other, i) =>

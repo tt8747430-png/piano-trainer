@@ -28,8 +28,8 @@ export function commit(
     caret,
     // A chord's one note chosen stays chosen while the chord at the caret still holds it.
     chordNote: stillChosen(draft, next.layer, caret, next.chordNote),
-    // The bars chosen stood on the music as it was: an edit ends them unless it chooses its own (a
-    // paste), so Delete after a chord typed takes the chord, never bars chosen before it.
+    // What was chosen stood on the music as it was: an edit ends it unless it keeps or chooses its
+    // own (a paste), so Delete after a chord typed takes the chord, never what was chosen before it.
     selection: 'selection' in patch ? (patch.selection ?? null) : null,
     past: joins ? state.past : [...state.past, snapshotOf(state)].slice(-HISTORY),
     future: [],

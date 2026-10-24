@@ -6,7 +6,7 @@ import { chosenNotes, chosenSpan, shownValue, takenAway } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
 import { clipEdited } from './clip-edits'
 import { ticksOf } from '@/shared/lib/notation'
-import { chordNoteStep, steppedKey } from './chord-note'
+import { chordNoteStep } from './chord-note'
 import { deleteChord } from './chords'
 import { midi, PIANO, type Midi } from '@/shared/lib/music'
 import { isHandLayer, type Draft } from './draft'
@@ -27,6 +27,7 @@ import {
   setFinger,
   shiftNotes,
   stepNotes,
+  steppedKey,
   tieNotes,
   toggleAccidental,
   writeRest,
@@ -35,7 +36,7 @@ import { joinSection, setSectionKey, setSectionKind } from './sections'
 import { setKey, setMeter, setTempo } from './settings'
 import { nextMode, type EditorAction, type EditorState } from './state'
 import { writeTake } from './take-edits'
-import { barAt, barsOf, keyAt, totalTicks } from './timeline'
+import { barAt, barsOf, keyAt } from './timeline'
 import { toggledDot, toggledTriplet, withValue, type ChosenValue } from './values'
 
 /** The chord's one note chosen, moved by `move` (null where it went past the piano's ends). */
@@ -123,13 +124,10 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
           struck: null,
         })
       }
-      // In Insert mode a rest, like a note, pushes the later notes right (ADR 0092).
-      if (state.mode === 'insert' && caret < totalTicks(draft))
-        return commit(state, makeRoom(draft, layer, caret, stepOf(state)), {
-          caret: caret + stepOf(state),
-          struck: null,
-        })
-      const result = writeRest(draft, layer, caret, stepOf(state))
+      // In Insert mode a rest, like a note, is written in room made for it, the later notes pushed
+      // right (ADR 0092); with none to push, as Replace writes it, stopping at the song's end.
+      const room = state.mode === 'insert' ? makeRoom(draft, layer, caret, stepOf(state)) : draft
+      const result = writeRest(room, layer, caret, stepOf(state))
       return commit(state, result.draft, { caret: result.end, struck: null })
     }
     case 'delete': {

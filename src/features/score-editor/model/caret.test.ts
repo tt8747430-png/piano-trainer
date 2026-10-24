@@ -75,6 +75,12 @@ describe('what stands at a place', () => {
     expect(itemAt(tune, 'chords', 96)).toEqual({ from: 96, to: 144 })
     expect(itemAt(tune, 'chords', 24)).toEqual({ from: 24, to: 48 })
   })
+
+  it('is a chord to the next chord of its bar after a pickup too, the bar not starting at 0', () => {
+    const pickup = draftOf({ sections: [{ kind: 'verse', lines: ['G@1 C-D'] }] })
+    expect(itemAt(pickup, 'chords', 24)).toEqual({ from: 24, to: 72 })
+    expect(itemAt(pickup, 'chords', 72)).toEqual({ from: 72, to: 120 })
+  })
 })
 
 describe('the caret in the chords', () => {

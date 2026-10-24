@@ -222,6 +222,15 @@ describe('the editor', () => {
     )
     expect(shape(rested.draft.melody)).toEqual(['C4@0/24', 'D4@48/24', 'E4@72/24', 'F4@96/24'])
     expect(rested.caret).toBe(48)
+    // At a barline inside a tied note, the rest cuts the tie there, as a note written there does.
+    const tied = run(
+      initialEditor(draftOf({ melody: 'r/3 C5/2 | D5/1 r/2' })),
+      { type: 'move', by: 'bar', direction: 1 },
+      { type: 'mode', mode: 'insert' },
+      { type: 'rest' },
+    )
+    expect(shape(tied.draft.melody)).toEqual(['C5@72/24', 'D5@144/24'])
+    expect(tied.caret).toBe(120)
   })
 
   it('in Insert mode Delete closes the gap, pulling the later notes left; in Replace it leaves a rest', () => {
@@ -662,6 +671,21 @@ describe('the editor', () => {
     expect(empty.clip).toBe(one.clip)
   })
 
+  it('copies and cuts the chord at the caret alone, as Delete takes it, never a note starting under it', () => {
+    // The upper staff in two voices: a half note, and a note from beat 2 held on past it.
+    const voices = run(
+      initialEditor(draftOf({ hands: { rh: 'C5/2 E4/3@2 | r/4', lh: 'r/4 | r/4' } })),
+      { type: 'place', tick: 0, layer: 'rh' },
+    )
+    const copied = run(voices, { type: 'clip', edit: 'copy' })
+    expect(copied.clip).toMatchObject({ kind: 'notes', ticks: 48 })
+    expect(copied.clip?.kind === 'notes' && shape(copied.clip.notes)).toEqual(['C5@0/48'])
+    expect(copyTarget(voices)).toEqual({ kind: 'notes', count: 1 })
+    const cut = run(voices, { type: 'clip', edit: 'cut' })
+    expect(shape(cut.draft.hands.rh)).toEqual(['E4@24/72'])
+    expect(cut.draft).toEqual(run(voices, { type: 'delete' }).draft)
+  })
+
   it('cuts the notes chosen, leaving a rest in Replace mode and closing the gap in Insert mode', () => {
     const four = run(start(), key(60, 0), key(62, 500), key(64, 1000), key(65, 1500))
     const atD = run(four, { type: 'place', tick: 24, layer: 'melody' })
@@ -879,6 +903,29 @@ describe('createEditorStore', () => {
     expect(onChange).not.toHaveBeenCalled()
     expect(store.getState().past).toEqual([])
   })
+
+  it('takes a rest or Insert mode’s Delete on empty staff as no step, the caret moving as it would', () => {
+    const onEmpty = run(initialEditor(draftOf({ sections: [{ kind: 'verse', lines: ['G'] }] })), {
+      type: 'layer',
+      layer: 'melody',
+    })
+    const rested = run(onEmpty, { type: 'rest' })
+    expect(rested.draft).toBe(onEmpty.draft)
+    expect(rested.caret).toBe(24)
+    const insert = run(
+      onEmpty,
+      { type: 'mode', mode: 'insert' },
+      { type: 'place', tick: 72, layer: 'melody' },
+      { type: 'value', value: 2 },
+    )
+    // Nothing after the caret to push: the rest stops at the song's end, as Replace writes it.
+    const pushed = run(insert, { type: 'rest' })
+    expect(pushed.draft).toBe(onEmpty.draft)
+    expect(pushed.caret).toBe(96)
+    const closed = run(insert, { type: 'delete' })
+    expect(closed.draft).toBe(onEmpty.draft)
+    expect(closed.past).toEqual([])
+  })
 })
 
 describe('the words (ADR 0093)', () => {
@@ -915,5 +962,24 @@ describe('the words (ADR 0093)', () => {
     // A note deleted takes its syllable with it.
     const gone = run(first, { type: 'delete' })
     expect(verses(gone)).toBeUndefined()
+  })
+
+  it('keeps a chord’s syllable where the note singing it is taken alone: a chord is one note of the tune', () => {
+    // No tune's staff: the upper staff sings, each chord on its highest note.
+    const hymn = initialEditor(
+      draftOf({
+        key: 'C',
+        sections: [{ kind: 'verse', lines: ['C G'] }],
+        hands: { rh: 'C4+E4+G4/2 D4+G4/2 | C4+E4/4', lh: 'r/4 | r/4' },
+        lyrics: ['Hal- le- lu'],
+      }),
+    )
+    const top = run(
+      hymn,
+      { type: 'place', tick: 0, layer: 'rh', key: midi(67) },
+      { type: 'delete' },
+    )
+    expect(shape(top.draft.hands.rh).slice(0, 2)).toEqual(['C4@0/48', 'E4@0/48'])
+    expect(verses(top)).toEqual(['Hal- le- lu'])
   })
 })
