@@ -17,3 +17,12 @@ Rounds, each its own commits, merged to main:
    note, the chord's notes top down when several), Clear; `FingeringPanel` replaced.
 4. **Song pages consistency:** the piece page, Songs, Player and editor share rows, headers, menus, icons
    (one `ActionMenu`, one `RoundLink`, one empty state); no duplicated helpers.
+
+## Later rounds
+
+5. **Editing modes and the selection clipboard** (ADR 0092): Replace · Insert · Chord; Copy · Cut · Paste on the notes
+   chosen.
+6. **Lyrics** (ADR 0093): `ChartPiece.lyrics`, verses of syllables under the tune; MEI `<verse><syl>`; the palette's
+   Lyrics field with Flat's keys; the View menu's Lyrics switch.
+7. **Code review** of `features/score-editor`, `pages/score-editor`, `widgets/score-sheet`, `shared/ui/score` for
+   bugs, duplication and dead code after the rounds above.
