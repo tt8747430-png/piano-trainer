@@ -1,7 +1,7 @@
 import type { BarMarkChoice } from './bar-marks'
 import type { HiddenRow, SectionKind } from '@/entities/piece'
 import type { Chord, Clef, Finger, Hand, Key, Meter, Midi, Tick } from '@/shared/lib/music'
-import type { Clip } from './bars'
+import type { Clip } from './clip'
 import type { Draft, Layer } from './draft'
 import { topStaff } from './rows'
 import type { TakePart } from './take-edits'
@@ -66,16 +66,10 @@ export interface EditorState extends Snapshot {
   readonly future: readonly Snapshot[]
 }
 
-export type BarEdit =
-  | 'insert'
-  | 'insertBefore'
-  | 'delete'
-  | 'copy'
-  | 'cut'
-  | 'paste'
-  | 'newLine'
-  | 'joinLine'
-  | 'newSection'
+export type BarEdit = 'insert' | 'insertBefore' | 'delete' | 'newLine' | 'joinLine' | 'newSection'
+
+/** The clipboard's edits, on what is chosen (ADR 0092): the bars in the chord row, the notes on a staff. */
+export type ClipEdit = 'copy' | 'cut' | 'paste'
 
 /** How far the caret moves: a step of the value (or to the next place), a bar, or to an end. */
 export type CaretMove = 'step' | 'bar' | 'line' | 'end'
@@ -143,6 +137,7 @@ export type EditorAction =
   /** A take written from the caret's bar (spec 2026-10-05 §4). */
   | { readonly type: 'take'; readonly parts: readonly TakePart[] }
   | { readonly type: 'bars'; readonly edit: BarEdit }
+  | { readonly type: 'clip'; readonly edit: ClipEdit }
   | { readonly type: 'barLength'; readonly ticks: Tick }
   /** Barlines on the bars chosen, else the caret's (a repeat, an ending, a double or final barline). */
   | { readonly type: 'barMarks'; readonly choice: BarMarkChoice }

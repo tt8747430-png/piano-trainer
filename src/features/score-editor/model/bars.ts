@@ -1,6 +1,6 @@
 import { beatsPerBar, TICKS_PER_BEAT, type Meter, type Tick } from '@/shared/lib/music'
 import { ticksOf } from '@/shared/lib/notation'
-import type { HandId } from '@/entities/piece'
+import type { BarsClip } from './clip'
 import type { Draft, DraftBar, DraftNote } from './draft'
 import { versesInOrder } from './sections'
 import { barsOf } from './timeline'
@@ -10,13 +10,6 @@ import { slotsOf, spliceAll, withSlots, type Slot } from './structure'
 export interface BarRange {
   readonly from: number
   readonly to: number
-}
-
-/** Bars copied with their notes, which are timed from the first bar's start. */
-export interface Clip {
-  readonly bars: readonly DraftBar[]
-  readonly melody: readonly DraftNote[]
-  readonly hands: Readonly<Record<HandId, readonly DraftNote[]>>
 }
 
 const plain = (bar: DraftBar): Slot => ({ bar, newLine: false, newSection: null })
@@ -112,7 +105,7 @@ export function deleteBars(draft: Draft, { from, to }: BarRange): Draft {
 }
 
 /** Bars and the notes starting in them, each note kept inside them. */
-export function copyBars(draft: Draft, { from, to }: BarRange): Clip {
+export function copyBars(draft: Draft, { from, to }: BarRange): BarsClip {
   const bars = barsOf(draft).slice(from, to + 1)
   const start = bars[0]?.start ?? 0
   const end = start + bars.reduce((sum, placed) => sum + placed.bar.ticks, 0)
@@ -125,6 +118,7 @@ export function copyBars(draft: Draft, { from, to }: BarRange): Clip {
         durationTicks: Math.min(n.durationTicks, end - n.startTick),
       }))
   return {
+    kind: 'bars',
     bars: bars.map((placed) => placed.bar),
     melody: inside(draft.melody),
     hands: { rh: inside(draft.hands.rh), lh: inside(draft.hands.lh) },
@@ -132,7 +126,7 @@ export function copyBars(draft: Draft, { from, to }: BarRange): Clip {
 }
 
 /** Copied bars put in after `after` with their notes. */
-export function pasteBars(draft: Draft, after: number, clip: Clip): Draft {
+export function pasteBars(draft: Draft, after: number, clip: BarsClip): Draft {
   if (clip.bars.length === 0) return draft
   const at = endOf(draft, after)
   const moved = (notes: readonly DraftNote[]) =>

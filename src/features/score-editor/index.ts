@@ -2,6 +2,8 @@ export { hasRow, keepsAStaff, rowShown, shownRows, topStaff } from './model/rows
 export { clefAt } from './model/clefs'
 export { BARLINE_CHOICES, JUMP_CHOICES, type BarMarkChoice } from './model/bar-marks'
 export { barLengths, type BarRange } from './model/bars'
+export { type Clip } from './model/clip'
+export { copyTarget, whyNoPaste } from './model/clip-edits'
 export { keyChords, keySevenths } from './model/chords'
 export {
   isHandLayer,
@@ -20,6 +22,7 @@ export {
   type BarEdit,
   type CaretMove,
   type ChordAdvance,
+  type ClipEdit,
   type EditMode,
   type EditorAction,
   type EditorState,

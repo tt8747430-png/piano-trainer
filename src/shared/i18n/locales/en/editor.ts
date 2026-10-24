@@ -39,6 +39,22 @@ export const editor = {
   },
   // The edit row under the bar: what is done to what is chosen.
   editRow: 'Edit',
+  copy: 'Copy',
+  cut: 'Cut',
+  paste: 'Paste',
+  // What Copy and Cut take, and what Paste holds, or why it is greyed (ADR 0092).
+  clip: {
+    bar: 'Bar {{n}}',
+    bars: 'Bars {{from}}–{{to}}',
+    note: 'The note at the caret',
+    notes: 'Notes chosen: {{n}}',
+    nothing: 'Nothing at the caret to copy',
+    holdsBars: 'Bars copied: {{n}}',
+    holdsNotes: 'Notes copied: {{n}}',
+    empty: 'Nothing copied yet',
+    toStaff: 'The notes copied go on a staff',
+    toChords: 'The bars copied go in the chord symbols',
+  },
   // The song's settings: what the sheet shows.
   view: 'View',
   // What the score shows and how, from the bar (ADR 0064).
@@ -253,9 +269,6 @@ export const editor = {
     insertBefore: 'Add bar before',
     add: 'Add bar',
     delete: 'Delete bars',
-    copy: 'Copy bars',
-    cut: 'Cut bars',
-    paste: 'Paste bars',
     newLine: 'Line break',
     joinLine: 'Join lines',
     newSection: 'New section',
@@ -369,7 +382,7 @@ export const editor = {
     chord: 'Type a chord (in the chord symbols)',
     undo: 'Undo',
     redo: 'Redo',
-    bars: 'Copy, cut, paste the bars',
+    clip: 'Copy, cut, paste what is chosen',
   },
   roll: { label: 'Notes: {{notes}} · bars: {{bars}}', playFrom: 'Play from bar {{n}}' },
 } as const

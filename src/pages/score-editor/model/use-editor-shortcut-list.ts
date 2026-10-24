@@ -30,6 +30,6 @@ export function useEditorShortcutList(): void {
     { label: t('shortcuts.chord'), shown: ['Enter'] },
     { label: t('shortcuts.undo'), shown: [mod, 'Z'] },
     { label: t('shortcuts.redo'), shown: [shift, mod, 'Z'] },
-    { label: t('shortcuts.bars'), shown: [mod, 'C', 'X', 'V'] },
+    { label: t('shortcuts.clip'), shown: [mod, 'C', 'X', 'V'] },
   ])
 }

@@ -2,14 +2,14 @@ import { markBars } from './bar-marks'
 import { setClef } from './clefs'
 import { keepsAStaff, rowShown, staffLeftFor, withAStaff } from './rows'
 import { setBarTicks } from './bars'
-import { chosenNotes, chosenSpan, shownValue } from './chosen'
+import { chosenNotes, chosenSpan, shownValue, takenAway } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
-import { itemAt } from './caret'
+import { clipEdited } from './clip-edits'
 import { ticksOf } from '@/shared/lib/notation'
 import { chordNoteStep, steppedKey } from './chord-note'
 import { deleteChord } from './chords'
-import { midi, PIANO, type Midi, type Tick } from '@/shared/lib/music'
-import { isHandLayer, type Draft, type NoteLayer } from './draft'
+import { midi, PIANO, type Midi } from '@/shared/lib/music'
+import { isHandLayer, type Draft } from './draft'
 import { barsEdited, chordSet, chosenBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
@@ -17,7 +17,6 @@ import { lineOver, lineSpan } from './lines'
 import { markNotes } from './marks'
 import {
   backFrom,
-  closeGap,
   deleteNotes,
   fingeredNotes,
   makeRoom,
@@ -33,7 +32,7 @@ import {
 } from './notes'
 import { joinSection, setSectionKey, setSectionKind } from './sections'
 import { setKey, setMeter, setTempo } from './settings'
-import { nextMode, type EditorAction, type EditorState, type TickSpan } from './state'
+import { nextMode, type EditorAction, type EditorState } from './state'
 import { writeTake } from './take-edits'
 import { barAt, barsOf, keyAt, totalTicks } from './timeline'
 import { toggledDot, toggledTriplet, withValue, type ChosenValue } from './values'
@@ -69,17 +68,6 @@ function accidentalMoved(state: EditorState, next: Draft): Partial<EditorState> 
     chosen &&
     notesAt(next, state.layer, state.caret).find((n) => n.spelled.letter === chosen.spelled.letter)
   return moved ? { chordNote: moved.midi } : {}
-}
-
-/**
- * What Delete takes away (ADR 0092): in Replace mode the notes at a tick or in a span, their time
- * left as a rest; in Insert mode what stands there (the notes, or the empty place), the later notes
- * pulled left to close the gap.
- */
-function takenAway(state: EditorState, layer: NoteLayer, where: Tick | TickSpan): Draft {
-  const { draft } = state
-  if (state.mode !== 'insert') return deleteNotes(draft, layer, where)
-  return closeGap(draft, layer, typeof where === 'number' ? itemAt(draft, layer, where) : where)
 }
 
 /** The editor's state after an action (spec §6). */
@@ -283,6 +271,8 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       })
     case 'bars':
       return barsEdited(state, action.edit)
+    case 'clip':
+      return clipEdited(state, action.edit)
     case 'barMarks':
       return commit(state, markBars(draft, chosenBars(state), action.choice))
     // From the first bar chosen, else the caret's.

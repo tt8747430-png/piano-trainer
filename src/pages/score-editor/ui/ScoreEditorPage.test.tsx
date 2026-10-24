@@ -677,9 +677,9 @@ describe('the score editor', () => {
       'Delete',
       'Undo',
       'Redo',
-      'Copy bars',
-      'Cut bars',
-      'Paste bars',
+      'Copy',
+      'Cut',
+      'Paste',
       'Add bar',
     ])
     // Named for what it does: Play, and the caret moved a note back or on.
@@ -733,9 +733,13 @@ describe('the score editor', () => {
     )
     await toChordRow(user)
     const row = screen.getByRole('toolbar', { name: 'Edit' })
-    expect(within(row).getByRole('button', { name: 'Paste bars' })).toBeDisabled()
-    await user.click(within(row).getByRole('button', { name: 'Copy bars' }))
-    await user.click(within(row).getByRole('button', { name: 'Paste bars' }))
+    // Nothing copied yet: Paste is greyed (its tooltip saying so).
+    expect(within(row).getByRole('button', { name: 'Paste' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
+    await user.click(within(row).getByRole('button', { name: 'Copy' }))
+    await user.click(within(row).getByRole('button', { name: 'Paste' }))
     expect(songOf(piecesStore.getState())).toMatchObject({
       sections: [{ lines: ['Em Em G G G'] }],
     })
@@ -743,6 +747,39 @@ describe('the score editor', () => {
     expect(songOf(piecesStore.getState())).toMatchObject({
       sections: [{ lines: ['Em Em Em G G G'] }],
     })
+  })
+
+  it('copies the notes chosen on a staff and pastes them at the caret, the bars’ clip staying the chord row’s (ADR 0092)', async () => {
+    const user = userEvent.setup({ delay: 120 })
+    const { piecesStore, settingsStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ melody: 'B4/1 A4/1 G4/1 F#4/1' }),
+    })
+    act(() => setKeyboard(settingsStore, { typing: true }))
+    expect(await screen.findByRole('status')).toHaveTextContent('B4 quarter')
+    const row = screen.getByRole('toolbar', { name: 'Edit' })
+    await user.keyboard('{Shift>}{ArrowRight}{/Shift}')
+    await user.keyboard('{Meta>}c{/Meta}')
+    await user.keyboard('{Escape}{Alt>}{ArrowRight}{/Alt}')
+    await user.click(within(row).getByRole('button', { name: 'Paste' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        melody: 'B4/1 A4/1 G4/1 F#4/1 | B4/1 A4/1',
+      }),
+    )
+    // In the chord row the clip's notes have no place: Paste says so.
+    await toChordRow(user)
+    expect(within(row).getByRole('button', { name: 'Paste' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
+    // Cut takes the notes chosen and leaves their time as a rest.
+    await user.keyboard('{Alt>}{ArrowDown}{/Alt}{Home}')
+    await user.click(within(row).getByRole('button', { name: 'Cut' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        melody: 'r/1 A4/1 G4/1 F#4/1 | B4/1 A4/1',
+      }),
+    )
   })
 
   it('makes the note chosen an eighth from the quick row, and the next one too', async () => {

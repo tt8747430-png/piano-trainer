@@ -1,14 +1,5 @@
 import { TICKS_PER_BEAT, type Chord } from '@/shared/lib/music'
-import {
-  copyBars,
-  deleteBars,
-  insertBar,
-  insertBarBefore,
-  joinLine,
-  newLine,
-  pasteBars,
-  type BarRange,
-} from './bars'
+import { deleteBars, insertBar, insertBarBefore, joinLine, newLine, type BarRange } from './bars'
 import { nextCaret, snapToChord } from './caret'
 import { selectionSpan, startOf } from './caret-moves'
 import type { Draft } from './draft'
@@ -72,25 +63,6 @@ export function barsEdited(state: EditorState, edit: BarEdit): EditorState {
     case 'delete': {
       const next = deleteBars(draft, range)
       return commit(state, next, { caret: startOf(next, range.from), selection: null })
-    }
-    case 'copy':
-      return { ...state, clip: copyBars(draft, range) }
-    case 'cut': {
-      const next = deleteBars(draft, range)
-      return commit(state, next, {
-        clip: copyBars(draft, range),
-        caret: startOf(next, range.from),
-        selection: null,
-      })
-    }
-    case 'paste': {
-      if (!state.clip) return state
-      const next = pasteBars(draft, range.to, state.clip)
-      const first = range.to + 1
-      return commit(state, next, {
-        caret: startOf(next, first),
-        selection: barsChosen(next, first, first + state.clip.bars.length - 1),
-      })
     }
     case 'newLine':
       return commit(state, newLine(draft, range.from), { selection: null })

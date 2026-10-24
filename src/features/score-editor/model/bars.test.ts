@@ -91,6 +91,7 @@ describe('deleteBars', () => {
 describe('copy and paste', () => {
   it('pastes bars with their notes after a bar', () => {
     const clip = copyBars(sung, { from: 1, to: 2 })
+    expect(clip.kind).toBe('bars')
     const pasted = pasteBars(sung, 3, clip)
     expect(form(pasted)).toEqual([
       [

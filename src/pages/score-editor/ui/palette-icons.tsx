@@ -227,8 +227,8 @@ export function CategoryIcon({ category }: { category: PaletteCategory }) {
   return CATEGORY_ICONS[category]
 }
 
-/** The bar edits the palette's Bar holds: copy, cut and paste are the edit row's. */
-export type BarKeyEdit = Exclude<BarEdit, 'copy' | 'cut' | 'paste'>
+/** The bar edits the palette's Bar holds, each with a picture. */
+export type BarKeyEdit = BarEdit
 
 /** Each bar edit's picture, drawn on a staff as the edit changes it. */
 const BAR_ICONS: Readonly<Record<BarKeyEdit, ReactNode>> = {

@@ -100,7 +100,7 @@ export const spelledIn = (draft: Draft, key: Midi, at: Tick) => ({
  * Takes the notes starting in [at, to) from a layer; in the melody, a note sounding into `at` is cut
  * there, so the tune stays one line.
  */
-function clearUnder(draft: Draft, layer: NoteLayer, at: Tick, to: Tick): DraftNote[] {
+export function clearUnder(draft: Draft, layer: NoteLayer, at: Tick, to: Tick): DraftNote[] {
   return notesOf(draft, layer).flatMap((n) => {
     if (n.startTick >= at && n.startTick < to) return []
     if (!isHandLayer(layer) && n.startTick < at && n.startTick + n.durationTicks > at) {
