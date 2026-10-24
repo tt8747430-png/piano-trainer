@@ -19,6 +19,7 @@ import {
   type ChartPiece,
   type Hands,
   type KeyText,
+  type LyricsStaff,
   type PieceId,
   type Section,
 } from './types'
@@ -54,6 +55,7 @@ const isKeyText = (value: unknown): value is KeyText => {
   return key !== null && isWrittenKey(key)
 }
 const isSectionKind = isOneOf(SECTION_KINDS)
+const isLyricsStaff = isOneOf<LyricsStaff>(['melody', 'rh'])
 const isText = (value: unknown): value is string => typeof value === 'string'
 const isTempo = (value: unknown): value is number =>
   typeof value === 'number' &&
@@ -108,12 +110,13 @@ function singsLyrics(piece: ChartPiece): boolean {
 
 /**
  * Saved music that reads as a piece's: its fields, its chart, melody and hands; null otherwise. Its
- * words are kept where they read on its tune, its own title where it is one (ADR 0094), a lead sheet
- * only where it has a tune's staff: a score never hides every staff (ADR 0083).
+ * words are kept where they read on the staff they are on (ADR 0093), its own title where it is one
+ * (ADR 0094), a lead sheet only where it has a tune's staff: a score never hides every staff (ADR
+ * 0083).
  */
 function musicOfSaved(saved: unknown): PieceMusic | null {
   if (!isRecord(saved)) return null
-  const { key, meter, tempo, pattern, sections, melody, leadSheet, hands, lyrics, title } = saved
+  const { key, meter, tempo, pattern, sections, melody, leadSheet, hands, lyrics, lyricsOn } = saved
   if (!isKeyText(key) || !isMeter(meter) || !isTempo(tempo) || !isPatternId(pattern)) return null
   if (!Array.isArray(sections) || sections.length === 0) return null
   const read = sections.map(sectionOf)
@@ -131,6 +134,7 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     ...(isText(melody) ? { melody } : {}),
     ...(isText(melody) && leadSheet === true ? { leadSheet } : {}),
     ...(written ? { hands: written } : {}),
+    ...(isLyricsStaff(lyricsOn) ? { lyricsOn } : {}),
   }
   try {
     const tune = melodyOf(piece)
@@ -139,7 +143,7 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     if (!fits) return null
     const verses = Array.isArray(lyrics) && lyrics.every(isText) ? lyrics : undefined
     const sung = verses && singsLyrics({ ...piece, lyrics: verses }) ? { lyrics: verses } : {}
-    const named = isText(title) ? songTitle(title) : null
+    const named = isText(saved.title) ? songTitle(saved.title) : null
     return { ...(named === null ? {} : { title: named }), ...musicOf({ ...piece, ...sung }) }
   } catch (error) {
     if (error instanceof ContentError) return null

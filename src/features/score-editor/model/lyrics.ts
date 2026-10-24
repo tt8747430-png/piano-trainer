@@ -3,8 +3,8 @@ import type { NoteLyrics, Tick } from '@/shared/lib/music'
 import { tuneNotes, type Draft, type DraftNote, type Layer, type NoteLayer } from './draft'
 import { notesOf, withNotes } from './notes'
 
-/** The staff the words go under (ADR 0093): the tune's where the score has it, else the right hand's. */
-export const tuneLayer = (draft: Draft): NoteLayer => (draft.melodyStaff ? 'melody' : 'rh')
+/** The staff the lyrics are on (ADR 0093): the tune's, or the upper staff's (the right hand's). */
+export const tuneLayer = (draft: Draft): NoteLayer => draft.lyricsOn
 
 /** Whether the Lyrics tool works where the caret writes: on the tune's staff, in sight. */
 export const singsHere = (draft: Draft, layer: Layer): boolean =>

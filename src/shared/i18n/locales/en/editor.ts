@@ -36,7 +36,11 @@ export const editor = {
     hand: 'For the piano’s staves: tap a note on the upper or lower staff.',
     chordRow: 'Chords are written over the staff: tap a chord name, or the space over the staff.',
     chordNote: 'Choose one note of the chord: each takes its own finger.',
-    lyrics: 'Lyrics go under the tune: choose the melody or upper staff.',
+    // Where the lyrics are, said where the caret is on another staff (ADR 0093).
+    lyricsOn: {
+      melody: 'The lyrics are on the melody staff: tap a note there.',
+      rh: 'The lyrics are on the upper staff: tap a note there.',
+    },
   },
   // The edit row under the bar: what is done to what is chosen.
   editRow: 'Edit',

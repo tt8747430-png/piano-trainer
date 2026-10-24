@@ -109,7 +109,22 @@ export interface ChartPiece extends PieceCommon {
    * holding one over the next note, `~` an empty place: see docs/CONTENT.md.
    */
   readonly lyrics?: readonly string[]
+  /**
+   * The staff its lyrics are written on (`lyricsStaff`): the melody's where it has one, else the
+   * upper staff; written only where they are on the upper staff of a piece with a melody.
+   */
+  readonly lyricsOn?: LyricsStaff
 }
+
+/** A staff lyrics are written on: the tune's own, or the piano's upper staff (the right hand's). */
+export type LyricsStaff = 'melody' | 'rh'
+
+/**
+ * The staff a piece's lyrics are on (ADR 0093): the melody's where it has one, unless they were
+ * written on the upper staff (`lyricsOn`) and stay there as a melody comes; else the upper staff.
+ */
+export const lyricsStaff = (piece: Pick<ChartPiece, 'melody' | 'lyricsOn'>): LyricsStaff =>
+  piece.melody !== undefined && piece.lyricsOn !== 'rh' ? 'melody' : 'rh'
 
 /**
  * A song written in degrees, as its course teaches it: read in any key, its chords growing with the

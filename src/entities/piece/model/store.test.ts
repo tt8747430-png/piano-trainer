@@ -115,6 +115,21 @@ describe('createPiecesStore', () => {
     })
   })
 
+  it('keeps lyrics on the upper staff of a piece with a melody, read on its notes (ADR 0093)', () => {
+    const hands = { rh: 'B4/2 A4/2 | - | - | -', lh: 'B2/4 | - | - | -' }
+    const upper = { ...MUSIC, hands, lyrics: ['one two'], lyricsOn: 'rh' }
+    expect(restored({ versions: { bz1: upper } }).versions.bz1).toEqual(upper)
+    // Too long for the upper staff's notes: the words go, as a verse longer than its tune does.
+    const long = { ...upper, lyrics: ['one two three'] }
+    expect(restored({ versions: { bz1: long } }).versions.bz1).toEqual({ ...MUSIC, hands })
+    // On the melody, where a piece with one has them, is not written.
+    const tuned = { ...MUSIC, lyrics: ['one'], lyricsOn: 'melody' }
+    expect(restored({ versions: { bz1: tuned } }).versions.bz1).toEqual({
+      ...MUSIC,
+      lyrics: ['one'],
+    })
+  })
+
   it('keeps a version’s own title of 1 to 80 characters, trimmed, and drops another (ADR 0094)', () => {
     const versions = {
       bz1: { ...MUSIC, title: '  Thanks  ' },

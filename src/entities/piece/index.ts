@@ -13,7 +13,7 @@ export {
   type KeyText,
   type SectionKind,
 } from './model/types'
-export { isLeadSheet, SONG_SECTION_KINDS } from './model/types'
+export { isLeadSheet, lyricsStaff, SONG_SECTION_KINDS, type LyricsStaff } from './model/types'
 
 export { chartOf, hasChartPlan, melodyOf, patternsOfPiece, pieceFit } from './model/chart'
 export { keyText, musicOf, readMusic, sameMusic, type PieceMusic } from './model/music'

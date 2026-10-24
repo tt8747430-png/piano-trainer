@@ -192,8 +192,10 @@ export function TextKeys() {
   const { t } = useTranslation('editor')
   const { actions, view } = useScoreEditorContext()
   const chosen = useNotesChosen()
-  // The words go under the tune's staff alone (ADR 0093); the verse open is clamped to one past the last.
+  // The lyrics are written on their own staff alone (ADR 0093); the verse open is clamped to one
+  // past the last.
   const sings = useEditorState((state) => singsHere(state.draft, state.layer))
+  const lyricsOn = useEditorState((state) => state.draft.lyricsOn)
   const count = useEditorState((state) => verseCount(state.draft))
   const caret = useEditorState((state) => state.caret)
   const verse = view.lyricsVerse === null ? null : Math.min(view.lyricsVerse, count)
@@ -229,7 +231,9 @@ export function TextKeys() {
       </CaptionGrid>
       <h4 className="pt-1 text-sm text-muted-foreground">{t('lyrics.label')}</h4>
       {sings ? null : (
-        <p className="text-sm text-pretty text-muted-foreground">{t('reason.lyrics')}</p>
+        <p className="text-sm text-pretty text-muted-foreground">
+          {t(`reason.lyricsOn.${lyricsOn}`)}
+        </p>
       )}
       <CaptionGrid label={t('lyrics.label')}>
         <CaptionKey

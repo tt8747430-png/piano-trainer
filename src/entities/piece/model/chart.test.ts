@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { chordSymbol } from '@/shared/lib/music'
 import { testProgression, testSong } from '../testing/test-pieces'
 import { chartOf, hasChartPlan, melodyOf, patternsOfPiece, pieceFit } from './chart'
+import { lyricsStaff } from './types'
 
 const firstSymbol = (...args: Parameters<typeof chartOf>) => {
   const chord = chartOf(...args).sections[0]?.lines[0]?.[0]?.chords[0]
@@ -32,6 +33,40 @@ describe('melodyOf', () => {
     expect(melodyOf(testSong(['C'], { melody: 'C4/4' }))).toHaveLength(1)
     expect(melodyOf(testSong(['C']))).toBeUndefined()
     expect(melodyOf(testProgression('I:maj:4'))).toBeUndefined()
+  })
+})
+
+describe('the staff a piece’s lyrics are on (ADR 0093)', () => {
+  const hands = { rh: 'C4/2 D4/2 | E4/4' }
+  /** What the upper staff's notes sing, in order. */
+  const upper = (piece: Parameters<typeof chartOf>[0]) =>
+    chartOf(piece)
+      .sections.flatMap((section) => section.lines.flat())
+      .flatMap((bar) => bar.hands?.rh ?? [])
+      .flatMap((n) => n.lyrics?.[0]?.text ?? [])
+
+  it('is the melody’s where the piece has one, else the upper staff’s', () => {
+    const tuned = testSong(['C G'], { melody: 'G4/4 | A4/4', hands, lyrics: ['one two'] })
+    expect(lyricsStaff(tuned)).toBe('melody')
+    expect(melodyOf(tuned)?.map((n) => n.lyrics?.[0]?.text)).toEqual(['one', 'two'])
+    expect(upper(tuned)).toEqual([])
+    const untuned = testSong(['C G'], { hands, lyrics: ['one two three'] })
+    expect(lyricsStaff(untuned)).toBe('rh')
+    expect(upper(untuned)).toEqual(['one', 'two', 'three'])
+  })
+
+  it('stays the upper staff where a melody comes to a song whose words are there (`lyricsOn`)', () => {
+    const kept = testSong(['C G'], {
+      melody: 'G4/4 | A4/4',
+      hands,
+      lyrics: ['one two three'],
+      lyricsOn: 'rh',
+    })
+    expect(lyricsStaff(kept)).toBe('rh')
+    expect(melodyOf(kept)?.some((n) => n.lyrics)).toBe(false)
+    expect(upper(kept)).toEqual(['one', 'two', 'three'])
+    // On the melody where there is none: the upper staff, the only one there.
+    expect(lyricsStaff(testSong(['C'], { hands, lyricsOn: 'melody' }))).toBe('rh')
   })
 })
 

@@ -397,6 +397,16 @@ describe('notate the words (ADR 0093)', () => {
     ).toEqual([undefined])
   })
 
+  it('writes them under the upper staff where its notes sing them, the tune’s staff over it silent', () => {
+    const notes = [
+      n(72, note('C'), 'melody', 0, 96),
+      n(64, note('E'), 'rh', 0, 96, { lyrics: [sung('one')] }),
+    ]
+    const own = notate(music(notes, { melodyStaff: true }))
+    expect(verses(own, 'treble')).toEqual([[sung('one')]])
+    expect(verses(own, 'melody')).toEqual([null])
+  })
+
   it('lets a chord’s one note sing for the chord', () => {
     const score = notate(
       music([

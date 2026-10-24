@@ -14,12 +14,12 @@ its words.
 
 ## Decision
 
-- **A piece's lyrics are verses of syllables, aligned to the tune's notes in order.** `ChartPiece.lyrics?: readonly
-  string[]`: each verse one string, syllables parted by spaces, `-` ending a syllable that a word carries on
-  (`A- ma- zing`), `_` a syllable held over the next note (a melisma); a rest and a tied note's continuation take
-  none; `~` an empty place under a note. The tune is the melody staff where the score has one, else the upper
-  staff of the piano, its chords counting as one note. Content writes them as text (docs/CONTENT.md); the editor
-  writes and reads the same string.
+- **A piece's lyrics are verses of syllables, aligned to the tune's notes in order.**
+  `ChartPiece.lyrics?: readonly string[]`: each verse one string, syllables parted by spaces, `-` ending a syllable
+  that a word carries on (`A- ma- zing`), `_` a syllable held over the next note (a melisma); a rest and a tied
+  note's continuation take none; `~` an empty place under a note. The tune is the melody staff where the score has
+  one, else the upper staff of the piano, its chords counting as one note. Content writes them as text
+  (docs/CONTENT.md); the editor writes and reads the same string.
 - **Engraved with the music.** `scoreToMei` writes each syllable as `<verse n><syl wordpos con>` on its note, so
   both sheets print them in every layout, and a line's height grows with its verses. The Player shows them under
   the tune; the View menu's "Chord symbols" gains a sibling, "Lyrics", shown or hidden (`scoreView.lyrics`).
@@ -35,3 +35,10 @@ its words.
   `pages/score-editor` (the Lyrics field), `widgets/practice-player` (the View menu), `entities/settings`
   (`scoreView.lyrics`, version 6).
 - Built-in hymns may now carry their words; none must.
+
+**Later (2026-10-24):** the lyrics belong to the staff they are written on (`lyricsOn`, `lyricsStaff`): the tune's
+by default where the score has its staff, else the upper staff. A melody staff added to a song whose lyrics are on the
+upper staff leaves them there (`lyricsOn: 'rh'`, saved with the music), where before the next save dropped them; one
+added to a song with none takes them; the tune's staff taken away takes its lyrics with its notes. The sheet prints
+the verses under the staff whose notes sing them. The Lyrics field writes on that staff; on another it is greyed,
+its line saying where the lyrics are.

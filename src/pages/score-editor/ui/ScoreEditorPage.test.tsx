@@ -1695,7 +1695,7 @@ describe('the words under the tune (ADR 0093)', () => {
     await waitFor(() => expect(document.querySelectorAll('.syl').length).toBeGreaterThan(0))
   })
 
-  it('is greyed off the tune’s staff, saying where the words go', async () => {
+  it('is greyed off the staff the lyrics are on, saying where they are', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: sung() })
     await openCategory(user, 'Text & pedal')
@@ -1704,6 +1704,33 @@ describe('the words under the tune (ADR 0093)', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1/)
     const text = await screen.findByRole('region', { name: 'Text & pedal' })
     expect(within(text).getByRole('button', { name: 'Lyrics' })).toBeDisabled()
-    expect(text).toHaveTextContent('Lyrics go under the tune: choose the melody or upper staff.')
+    expect(text).toHaveTextContent('The lyrics are on the melody staff: tap a note there.')
+  })
+
+  it('keeps lyrics written on the upper staff there as a melody staff is added, saved with the song', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ hands: { rh: 'G4/4 | A4/4 | B4/4 | C5/4', lh: EMPTY_TUNE } }),
+    })
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff/))
+    const text = await openCategory(user, 'Text & pedal')
+    await user.click(within(text).getByRole('button', { name: 'Lyrics' }))
+    await screen.findByRole('textbox', { name: 'Syllable' })
+    await user.keyboard('A-')
+    await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- ~ ~ ~']))
+    await user.type(screen.getByRole('textbox', { name: 'Syllable' }), 'men{Escape}')
+    await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- men ~ ~']))
+    await user.click(await screen.findByRole('button', { name: 'Piano staves' }))
+    await user.click(await screen.findByRole('button', { name: 'Add a melody staff' }))
+    await waitFor(() => expect(songOf(piecesStore.getState())).toHaveProperty('melody'))
+    expect(songOf(piecesStore.getState())).toMatchObject({
+      lyrics: ['A- men ~ ~'],
+      lyricsOn: 'rh',
+    })
+    // On the melody staff the Lyrics are greyed, saying where they are.
+    expect(screen.getByRole('status')).toHaveTextContent(/^Melody/)
+    const section = await screen.findByRole('region', { name: 'Text & pedal' })
+    expect(within(section).getByRole('button', { name: 'Lyrics' })).toBeDisabled()
+    expect(section).toHaveTextContent('The lyrics are on the upper staff: tap a note there.')
   })
 })

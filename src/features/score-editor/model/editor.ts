@@ -15,7 +15,7 @@ import { barsEdited, chordSet, chosenBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
 import { lineOver, lineSpan } from './lines'
-import { setSyllable, singsHere } from './lyrics'
+import { setSyllable, singsHere, verseCount } from './lyrics'
 import { markNotes } from './marks'
 import {
   backFrom,
@@ -180,9 +180,20 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
           )
     case 'melodyStaff': {
       if (action.on === draft.melodyStaff) return state
-      if (action.on) return commit(state, { ...draft, melodyStaff: true }, { layer: 'melody' })
-      // A lead sheet's tune taken away brings the piano back, so a staff is in sight (ADR 0083).
-      const next = { ...draft, melodyStaff: false, melody: [], leadSheet: false }
+      // Lyrics written on the upper staff stay there; a song with none yet takes them on the tune's.
+      if (action.on) {
+        const lyricsOn = verseCount(draft) > 0 ? draft.lyricsOn : 'melody'
+        return commit(state, { ...draft, melodyStaff: true, lyricsOn }, { layer: 'melody' })
+      }
+      // A lead sheet's tune taken away brings the piano back, so a staff is in sight (ADR 0083);
+      // its lyrics go with its notes, and the upper staff is the one left to take them.
+      const next = {
+        ...draft,
+        melodyStaff: false,
+        melody: [],
+        leadSheet: false,
+        lyricsOn: 'rh' as const,
+      }
       return commit(state, next, {
         layer: layer === 'melody' ? staffLeftFor(next) : layer,
         struck: null,

@@ -433,6 +433,22 @@ describe('the editor', () => {
     expect(gone.layer).toBe('rh')
   })
 
+  it('keeps the lyrics on the upper staff as a melody staff is added: saved with the music (ADR 0093)', () => {
+    const piano = initialEditor(
+      draftOf({ hands: { rh: 'G4+B4/2 D5/2 | r/4', lh: 'r/4 | r/4' }, lyrics: ['A- men'] }),
+    )
+    const tuned = run(piano, { type: 'melodyStaff', on: true })
+    expect(tuned.draft.lyricsOn).toBe('rh')
+    const saved = musicToSave(tuned.draft)
+    expect(saved).toMatchObject({ melody: 'r/4', lyrics: ['A- men'], lyricsOn: 'rh' })
+    expect(readDraft(saved!).lyricsOn).toBe('rh')
+    // A song with no lyrics yet takes them on the melody staff added, as a score with a tune does.
+    const silent = run(initialEditor(draftOf()), { type: 'melodyStaff', on: true })
+    expect(silent.draft.lyricsOn).toBe('melody')
+    // The tune's staff taken away, its notes and their lyrics with it, the upper staff is the one left.
+    expect(run(silent, { type: 'melodyStaff', on: false }).draft.lyricsOn).toBe('rh')
+  })
+
   it('moves the caret a line on and back, to its line’s start first', () => {
     const lines = initialEditor(
       draftOf({

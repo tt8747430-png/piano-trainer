@@ -146,6 +146,10 @@ hyphen is printed to the next: `A- ma- zing`); `_` holds the syllable over the n
 no longer than the tune; a shorter one leaves the last notes without words. The sheet prints every verse under the
 tune's staff (the melody's, else the piano's upper staff), and the View menu's Lyrics switch hides them.
 
+The lyrics belong to the staff they are written on: `lyricsOn: 'rh'` keeps them on the upper staff of a piece that
+has a melody (a learner's song whose words were written there before its melody staff came), sung on the right hand's
+onsets as above. The melody's is the default and is not written.
+
 ## Written hands
 
 `hands: { rh?, lh? }`: any bar of either hand written note by note, played in place of the pattern's hand there.
