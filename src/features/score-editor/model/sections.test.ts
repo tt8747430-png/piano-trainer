@@ -123,5 +123,12 @@ describe('sections', () => {
       expect(keyAt(song, 6 * 96)).toEqual(key('E'))
       expect(keyAt(song, 8 * 96)).toEqual(key('G'))
     })
+
+    it('stays in a section split by a new section: its second half keeps its key', () => {
+      // The bridge, in E, split at its second bar.
+      const split = newSection(song, 7)
+      expect(keys(split)).toEqual([undefined, undefined, undefined, 'E', 'E', undefined])
+      expect(keyAt(split, 7 * 96)).toEqual(key('E'))
+    })
   })
 })
