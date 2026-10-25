@@ -1,7 +1,7 @@
 import { keyText, PIECE_TEMPO, type KeyText } from '@/entities/piece'
 import { transposeChord, transposeNotes } from '@/shared/lib/arrangement'
 import { midi, parseKey, PIANO, transposeNote, writtenKey, type Key } from '@/shared/lib/music'
-import type { Draft, DraftNote } from './draft'
+import { withEveryStaff, type Draft, type DraftNote } from './draft'
 
 /** Notes moved to a new tonic, each kept on the piano by octaves. */
 function moved(notes: readonly DraftNote[], from: Key, to: Key): DraftNote[] {
@@ -25,28 +25,29 @@ export function setKey(draft: Draft, key: Key): Draft {
       ? keyText(writtenKey({ ...own, tonic: transposeNote(own.tonic, from.tonic, key.tonic) }))
       : written
   }
-  return {
-    ...draft,
-    key,
-    sections: draft.sections.map((section) => ({
-      ...section,
-      heading:
-        section.heading.key === undefined
-          ? section.heading
-          : { ...section.heading, key: sectionKey(section.heading.key) },
-      lines: section.lines.map((line) =>
-        line.map((bar) => ({
-          ...bar,
-          chords: bar.chords.map((placed) => ({
-            ...placed,
-            chord: transposeChord(placed.chord, from.tonic, key.tonic),
+  return withEveryStaff(
+    {
+      ...draft,
+      key,
+      sections: draft.sections.map((section) => ({
+        ...section,
+        heading:
+          section.heading.key === undefined
+            ? section.heading
+            : { ...section.heading, key: sectionKey(section.heading.key) },
+        lines: section.lines.map((line) =>
+          line.map((bar) => ({
+            ...bar,
+            chords: bar.chords.map((placed) => ({
+              ...placed,
+              chord: transposeChord(placed.chord, from.tonic, key.tonic),
+            })),
           })),
-        })),
-      ),
-    })),
-    melody: moved(draft.melody, from, key),
-    hands: { rh: moved(draft.hands.rh, from, key), lh: moved(draft.hands.lh, from, key) },
-  }
+        ),
+      })),
+    },
+    (notes) => moved(notes, from, key),
+  )
 }
 
 /** The tempo, kept within the tempos a piece is written at. */

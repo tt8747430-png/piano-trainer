@@ -8,8 +8,8 @@ const run = (state: EditorState, ...actions: EditorAction[]) => actions.reduce(r
 
 describe('staffNear', () => {
   it('moves to the row over or under, top down, the same row at either end', () => {
-    const all = ['chords', 'melody', 'rh', 'lh'] as const
-    expect(staffNear('melody', -1, all)).toBe('chords')
+    const all = ['chords', 'staff0', 'rh', 'lh'] as const
+    expect(staffNear('staff0', -1, all)).toBe('chords')
     expect(staffNear('rh', 1, all)).toBe('lh')
     expect(staffNear('lh', 1, all)).toBe('lh')
     expect(staffNear('rh', -1, ['rh', 'lh'])).toBe('rh')

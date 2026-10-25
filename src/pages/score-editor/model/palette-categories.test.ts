@@ -18,13 +18,12 @@ describe('the palette’s categories', () => {
     ])
   })
 
-  it('opens what works where the caret writes: the notes’ tools on a staff, a hand’s in a hand', () => {
+  it('opens what works where the caret writes: every tool on a staff, a single one too (ADR 0097)', () => {
     const open = (layer: Parameters<typeof categoryOpen>[1]) =>
       PALETTE_CATEGORIES.filter((category) => categoryOpen(category, layer))
     // Text & pedal's Chord symbol key opens its field from any row (ADR 0096).
     expect(open('chords')).toEqual(['bar', 'key', 'time', 'repeats', 'text'])
-    expect(open('melody')).not.toContain('clef')
-    expect(open('melody')).toContain('text')
+    expect(open('staff0')).toEqual(PALETTE_CATEGORIES)
     expect(open('lh')).toEqual(PALETTE_CATEGORIES)
   })
 
@@ -32,7 +31,8 @@ describe('the palette’s categories', () => {
     const where = { chosen: true }
     expect(greyedBy('text', { ...where, layer: 'chords' })).toBeNull()
     expect(greyedBy('pitch', { ...where, layer: 'chords' })).toBe('staff')
-    expect(greyedBy('clef', { ...where, layer: 'melody' })).toBe('hand')
+    expect(greyedBy('clef', { ...where, layer: 'chords' })).toBe('staff')
+    expect(greyedBy('clef', { ...where, layer: 'staff1' })).toBeNull()
     expect(greyedBy('bar', { ...where, layer: 'chords' })).toBeNull()
   })
 

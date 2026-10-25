@@ -21,14 +21,13 @@ import { SheetLines } from './SheetLines'
 import { SheetOverlay } from './SheetOverlay'
 
 /**
- * How the sheet shows its score (ADR 0064): its layout, its chord names, the words under the tune
- * (ADR 0093), the tune's staff, the staves hidden.
+ * How the sheet shows its score (ADR 0064): its layout, its chord names, the words under the staff
+ * that sings them (ADR 0093), the staves hidden (ADR 0097).
  */
 export interface SheetViewChoice {
   readonly layout: SheetView
   readonly chordNames: boolean
   readonly lyrics: boolean
-  readonly melodyStaff: boolean
   readonly hidden: readonly StaffId[]
 }
 
@@ -37,9 +36,11 @@ const ACROSS: SheetViewChoice = {
   layout: 'horizontal',
   chordNames: true,
   lyrics: true,
-  melodyStaff: false,
   hidden: [],
 }
+
+/** No single staff named. */
+const NO_NAMES: readonly (string | undefined)[] = []
 
 /** A bar measured this much wider or narrower than before engraves the staff again; less does not. */
 const BAR_CHANGE = 0.1
@@ -69,8 +70,9 @@ function BarWidth({
 /**
  * A Performance as sheet music (spec §2.6): its title at its head, the page's heading (ADR 0094);
  * chord symbols over numbered bars, the playhead at the beat group now (moving with the music while
- * Listen plays, ADR 0096), the loop, bars to jump to; the tune on its own staff where the view asks,
- * the staves it hides left out. Laid out across (the default), on one scrolling line under the title
+ * Listen plays, ADR 0096), the loop, bars to jump to; its single staves over the piano, each named by
+ * its own name (ADR 0097), the piano's left out of a lead sheet, the staves the view hides left out.
+ * Laid out across (the default), on one scrolling line under the title
  * that takes the height left and engraves the staff to fill it (`fitScale`) while two of its bars
  * still show, so music read from a stand is as large as the screen allows; or in the chart's lines,
  * down the screen or on A4 pages (`SheetLines`).
@@ -90,10 +92,16 @@ export function SheetMusic({
   onLoopChange,
   view = ACROSS,
   title,
+  piano = true,
+  staffNames = NO_NAMES,
 }: {
   view?: SheetViewChoice
   /** The piece's title, printed at the sheet's head in every layout: the page's heading (ADR 0094). */
   title: string
+  /** Whether the piano's staves are written: not on a lead sheet (ADR 0083). */
+  piano?: boolean
+  /** Each single staff's name by its place, as printed at the first line's head (ADR 0097). */
+  staffNames?: readonly (string | undefined)[]
   performance: Performance
   /** Each section's name, by section: shown at its first bar. */
   headings: readonly string[]
@@ -116,11 +124,9 @@ export function SheetMusic({
   onLoopChange: (loop: BarRange | null) => void
 }) {
   const { t } = useTranslation('music')
-  // The tune's own staff only where the tune is heard (the Melody switch).
-  const ownStaff = view.melodyStaff && performance.notes.some((n) => n.hand === 'melody')
   const written = useMemo(
-    () => notate(playedMusic(performance, ownStaff, view.lyrics)),
-    [performance, ownStaff, view.lyrics],
+    () => notate(playedMusic(performance, { lyrics: view.lyrics, piano })),
+    [performance, view.lyrics, piano],
   )
   // The tempo marks said in the labels' row by their bar's number, not engraved in a row of their own
   // over the staff (ADR 0074).
@@ -133,8 +139,11 @@ export function SheetMusic({
   )
   const kept = score.staves.filter((staff) => !view.hidden.includes(staff))
   const staves = kept.length > 0 ? kept : score.staves
-  // The staves' names at the first line's head (ADR 0094).
-  const labels = useStaffLabels(staves)
+  // The staves' names at the first line's head (ADR 0094, 0097).
+  const labels = useStaffLabels(
+    staves,
+    staffNames.map((text) => (text === undefined ? undefined : { text })),
+  )
   const scroller = useRef<HTMLDivElement>(null)
   const { width, height } = useElementSize(scroller)
   const room = { width, height: height - (fingers ? FINGERS : 0) }

@@ -1,7 +1,10 @@
 import { HAND_IDS } from '@/entities/piece'
 import {
   barsOf,
+  layerStaff,
+  lyricsLayer,
   sectionMeter,
+  staffLayer,
   type Draft,
   type DraftNote,
   type Layer,
@@ -22,8 +25,12 @@ import {
   type TimeSignature,
 } from '@/shared/lib/music'
 import {
+  isSingleStaff,
+  isStaffId,
   PIANO_STAVES,
-  STAVES,
+  singleStaff,
+  staffOf,
+  staffPlace,
   type StaffId,
   type TimedMusic,
   type TimedNote,
@@ -107,10 +114,14 @@ const endOf = (line: SheetLineBars) => {
   return last ? last.start + last.bar.ticks : line.start
 }
 
+/** How a layer's notes are timed: a hand's, or a single staff's by its place (ADR 0097). */
+const playedBy = (layer: NoteLayer): Pick<TimedNote, 'hand' | 'staff'> =>
+  isSingleStaff(layer) ? { hand: 'staff', staff: staffPlace(layer) } : { hand: layer }
+
 /** A layer's notes sounding in [from, to), timed from `from`, with their words where `lyrics` asks. */
 function sounding(
   notes: readonly DraftNote[],
-  hand: TimedNote['hand'],
+  layer: NoteLayer,
   from: number,
   to: number,
   lyrics: boolean,
@@ -120,7 +131,7 @@ function sounding(
     .map((n) => ({
       midi: n.midi,
       spelled: n.spelled,
-      hand,
+      ...playedBy(layer),
       startTick: n.startTick - from,
       durationTicks: n.durationTicks,
       ...(n.finger === undefined ? {} : { finger: n.finger }),
@@ -129,19 +140,9 @@ function sounding(
     }))
 }
 
-/**
- * The staff a layer's notes are written on: the tune's own where it has one (ADR 0064), the treble
- * or the bass.
- */
-export const staffOfHand = (layer: NoteLayer, melodyStaff: boolean): StaffId =>
-  layer === 'lh' ? 'bass' : layer === 'melody' && melodyStaff ? 'melody' : 'treble'
-
-/** What a click on a staff writes: the tune on its own staff, the right hand on the treble, the left on the bass. */
-export const LAYER_OF_STAFF = {
-  melody: 'melody',
-  treble: 'rh',
-  bass: 'lh',
-} as const satisfies Record<StaffId, NoteLayer>
+/** The layer a note on the sheet is written in: its single staff's, else its hand's. */
+export const layerOfNote = (n: Pick<TimedNote, 'hand' | 'staff'>): NoteLayer =>
+  staffLayer(staffOf(n))
 
 /**
  * The layer a point on a line's bar writes: the chord row over the staves (with chord names), else
@@ -149,15 +150,14 @@ export const LAYER_OF_STAFF = {
  */
 export function layerAt(y: number, layout: ScoreLayout, chordNames: boolean): Layer {
   if (y < 0 && chordNames) return 'chords'
-  const drawn = STAVES.flatMap((staff) => {
-    const box = layout.staves[staff]
-    return box ? [{ staff, ...box }] : []
-  })
+  const drawn = Object.entries(layout.staves)
+    .flatMap(([staff, box]) => (box && isStaffId(staff) ? [{ staff, ...box }] : []))
+    .sort((a, b) => a.top - b.top)
   const at = drawn.findLast((each, index) => {
     const above = drawn[index - 1]
     return !above || y >= (above.bottom + each.top) / 2
   })
-  return LAYER_OF_STAFF[at?.staff ?? 'treble']
+  return staffLayer(at?.staff ?? 'treble')
 }
 
 /** The staff a layer writes on, as a line's engraving drew it; none for the chord row. */
@@ -166,31 +166,36 @@ export function staffOfLayer(
   layer: Layer,
 ): { readonly staff: StaffId; readonly top: number; readonly bottom: number } | undefined {
   if (layer === 'chords') return undefined
-  const staff = staffOfHand(layer, staves.melody !== undefined)
+  const staff = layerStaff(layer)
   const box = staves[staff]
   return box ? { staff, ...box } : undefined
 }
 
 /**
- * A line as the sheet writes it, from its own start: the melody on its staff, the right hand on the
- * treble staff, the left hand on the bass (every bar written, ADR 0091); the chord symbols; the
- * lyrics under the staff they are on unless the View hides them (`lyrics` off, ADR 0093). A staff
- * with nothing in a bar is left blank there, a row hidden is not written at all: no piano on a lead
- * sheet.
+ * A line as the sheet writes it, from its own start: each single staff's notes on it (ADR 0097), the
+ * right hand on the treble staff, the left hand on the bass (every bar written, ADR 0091); the chord
+ * symbols; the lyrics under the staff they are on unless the View hides them (`lyrics` off, ADR
+ * 0093). A staff with nothing in a bar is left blank there, a row hidden is not written at all: no
+ * piano on a lead sheet.
  */
 export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): TimedMusic {
   const from = line.start
   const to = endOf(line)
-  const tune = draft.melodyStaff
   const piano = !draft.leadSheet
-  const sings = (layer: NoteLayer) => lyrics && draft.lyricsOn === layer
+  const sung = lyricsLayer(draft)
+  const sings = (layer: NoteLayer) => lyrics && sung === layer
   const notes = [
-    ...(tune ? sounding(draft.melody, 'melody', from, to, sings('melody')) : []),
+    ...draft.staves.flatMap((staff, place) =>
+      sounding(staff.notes, singleStaff(place), from, to, sings(singleStaff(place))),
+    ),
     ...(piano
       ? HAND_IDS.flatMap((hand) => sounding(draft.hands[hand], hand, from, to, sings(hand)))
       : []),
   ]
-  const staves: StaffId[] = [...(tune ? (['melody'] as const) : []), ...(piano ? PIANO_STAVES : [])]
+  const staves: StaffId[] = [
+    ...draft.staves.map((_, place) => singleStaff(place)),
+    ...(piano ? PIANO_STAVES : []),
+  ]
   // A line starts in the clefs its first bar is in; its bars change them after.
   const [first] = line.bars
   const inForce = first
@@ -205,7 +210,7 @@ export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): Tim
     const holds = (staff: StaffId) =>
       notes.some(
         (n) =>
-          staffOfHand(n.hand, tune) === staff &&
+          staffOf(n) === staff &&
           n.startTick < startTick + bar.ticks &&
           n.startTick + n.durationTicks > startTick,
       )
@@ -238,7 +243,7 @@ export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): Tim
     bars,
     notes,
     chords,
-    ...(tune ? { melodyStaff: true } : {}),
+    ...(draft.staves.length > 0 ? { staves: draft.staves.map(({ clef }) => ({ clef })) } : {}),
     ...(piano ? {} : { piano: false }),
     // A later line goes on from the bars before it: its first bar, short, is no pickup.
     ...(from > 0 ? { continued: true } : {}),

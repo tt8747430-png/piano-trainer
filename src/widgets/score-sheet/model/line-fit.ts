@@ -20,7 +20,7 @@ export function lineFit({
   staves: number
   /** Whether the line has its chord row over it. */
   chordNames?: boolean
-  /** The verses of words under the tune's staff (ADR 0093). */
+  /** The verses of words under the staff that sings them (ADR 0093). */
   verses?: number
 }): number {
   const system = staffHeight(undefined, staves, verses) + TEMPO_ROOM

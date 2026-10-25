@@ -11,6 +11,7 @@ export {
 export { passTickAt } from './playhead'
 export {
   audibleHands,
+  isAudible,
   beatGroupSounds,
   HANDS,
   schedule,

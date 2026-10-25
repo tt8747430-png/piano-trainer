@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { takeGrids, type Take } from '@/entities/take'
-import { barAt, TAKE_INTO, type TakeInto } from '@/features/score-editor'
+import { barAt, type TakeInto } from '@/features/score-editor'
 import { midi, MIDDLE_C, printedKeyName, type Midi } from '@/shared/lib/music'
-import type { Duration } from '@/shared/lib/notation'
-import { Dropdown, NamedSegmented, Segmented } from '@/shared/ui'
+import { singleStaff, type Duration } from '@/shared/lib/notation'
+import { Dropdown, NamedSegmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { useLayerName } from '@/widgets/score-sheet'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { TAKES_PAGE } from '../model/use-editor-takes'
+import { useStaffHeads } from '../model/use-staff-heads'
 import { VALUE_GLYPHS } from '../model/value-words'
 import { SheetBack } from './SheetBack'
 import { TakeName } from './TakeName'
@@ -34,19 +36,24 @@ const gridKey = ({ value, dots, triplet }: Duration): string =>
 const gridGlyph = ({ value, dots, triplet }: Duration): string =>
   `${VALUE_GLYPHS[value]}${dots === 1 ? '.' : ''}${triplet ? '³' : ''}`
 
+/** Where a take goes on the piano: split between its staves, or on one. */
+const PIANO_INTO = ['both', 'rh', 'lh'] as const
+
 /** An eighth: the shortest note a take is snapped to unless the learner says. */
 const EIGHTH = gridKey({ value: 8, dots: 0, triplet: false })
 
 /**
- * A take's page of the sheet (spec 2026-10-05 §4): where it goes, the key the hands split at, the
- * shortest note it is snapped to (a value of the meter it was played in), and Write from the caret's
- * bar, which names it.
+ * A take's page of the sheet (spec 2026-10-05 §4): where it goes (the piano's staves, or a single
+ * staff by its name, ADR 0097), the key the hands split at, the shortest note it is snapped to (a
+ * value of the meter it was played in), and Write from the caret's bar, which names it.
  */
 export function WriteTakePage({ take }: { take: Take }) {
   const { t } = useTranslation('editor')
   const { takes } = useScoreEditorContext()
   const fromBar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
   const valueWord = useValueWord()
+  const staves = useStaffHeads()
+  const layerName = useLayerName(staves)
   const [into, setInto] = useState<TakeInto>('both')
   const [split, setSplit] = useState<Midi>(MIDDLE_C)
   const [chosen, setChosen] = useState(EIGHTH)
@@ -56,10 +63,29 @@ export function WriteTakePage({ take }: { take: Take }) {
     <div className="flex flex-col gap-5 pt-2">
       <SheetBack onBack={() => takes.show(TAKES_PAGE)} />
       <TakeName take={take} />
-      <Segmented
+      <Dropdown
         label={t('recorder.into.label')}
         value={into}
-        options={TAKE_INTO.map((value) => ({ value, label: t(`recorder.into.${value}`) }))}
+        groups={[
+          {
+            label: t('recorder.into.piano'),
+            options: PIANO_INTO.map((value) => ({
+              value,
+              label: t(`recorder.into.${value}`),
+            })),
+          },
+          ...(staves.length > 0
+            ? [
+                {
+                  label: t('recorder.into.staves'),
+                  options: staves.map((_, place) => ({
+                    value: singleStaff(place),
+                    label: layerName(singleStaff(place)),
+                  })),
+                },
+              ]
+            : []),
+        ]}
         onChange={setInto}
       />
       {into === 'both' ? (

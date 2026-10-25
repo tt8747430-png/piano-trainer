@@ -3,15 +3,7 @@ import { createPiecesStore, readMusic, type PieceMusic } from '@/entities/piece'
 import { createTakesStore, type Take } from '@/entities/take'
 import { createMemoryStorage } from '@/shared/lib'
 import { note } from '@/shared/lib/music'
-import {
-  chartStart,
-  deleteSong,
-  makeSong,
-  resetVersion,
-  saveMusic,
-  SCORE_TEMPLATES,
-  templateOf,
-} from './index'
+import { chartStart, deleteSong, makeSong, resetVersion, saveMusic, SCORE_SETUPS } from './index'
 
 const fresh = () =>
   createPiecesStore({ storage: createMemoryStorage(), otherTabs: new EventTarget() })
@@ -76,33 +68,27 @@ describe('saveMusic', () => {
 })
 
 describe('the learner’s songs', () => {
-  it('names the template a setup is, its staves, and none for staves no template has', () => {
-    expect(templateOf(SCORE_TEMPLATES.leadSheet)).toBe('leadSheet')
-    expect(templateOf({ melody: false, piano: true })).toBe('piano')
-    expect(templateOf({ melody: true, piano: true })).toBe('pianoAndMelody')
-    expect(templateOf({ melody: false, piano: false })).toBeUndefined()
-  })
-
-  it('starts a lead sheet: the tune’s staff, the piano hidden (ADR 0083)', () => {
+  it('starts a score of the piano, a staff over the piano, or a staff alone: a lead sheet (ADR 0083, 0097)', () => {
     const key = { tonic: note('C'), minor: false }
-    expect(chartStart(key, '4/4', SCORE_TEMPLATES.leadSheet)).toMatchObject({
-      melody: expect.any(String),
+    expect(SCORE_SETUPS).toEqual(['piano', 'staffAndPiano', 'staff'])
+    expect(chartStart(key, '4/4')).not.toHaveProperty('staves')
+    expect(chartStart(key, '4/4', 'staffAndPiano')).toMatchObject({ staves: [{ notes: 'r/4' }] })
+    expect(chartStart(key, '4/4', 'staffAndPiano')).not.toHaveProperty('leadSheet')
+    expect(chartStart(key, '4/4', 'staff')).toMatchObject({
+      staves: [{ notes: 'r/4' }],
       leadSheet: true,
     })
-    // Never every staff: with no tune, the piano stays.
-    expect(chartStart(key, '4/4', { melody: false, piano: false })).not.toHaveProperty('leadSheet')
   })
 
   it('makes a song’s score as its setup says, every staff there and readable though empty', () => {
     const store = fresh()
     const key = { tonic: note('C'), minor: false }
-    const setup = { melody: true, piano: true } as const
-    const id = makeSong(store, { title: 'Hymn', key, meter: '6/8', setup })
+    const id = makeSong(store, { title: 'Hymn', key, meter: '6/8', setup: 'staffAndPiano' })
     const song = store.getState().songs.find((each) => each.id === id)
-    expect(song).toMatchObject({ melody: expect.any(String) })
+    expect(song?.staves).toHaveLength(1)
     expect(song).not.toHaveProperty('leadSheet')
     expect(() => readMusic(song!)).not.toThrow()
-    expect(readMusic(song!).melody).toEqual([])
+    expect(readMusic(song!).staves).toEqual([{ clef: 'treble', notes: [] }])
   })
 
   it('makes a song of four bars of no chord, as a notation app’s new score, under the next number (ADR 0094)', () => {
@@ -129,9 +115,9 @@ describe('the learner’s songs', () => {
     const key = { tonic: note('C'), minor: false }
     const silent = 'r/4 | r/4 | r/4 | r/4'
     expect(chartStart(key, '4/4')).toMatchObject({ hands: { rh: silent, lh: silent } })
-    // In any meter, each bar's rest the bar's length, as the tune's empty staff is written.
-    const waltz = chartStart(key, '3/4', SCORE_TEMPLATES.pianoAndMelody)
-    expect(waltz.hands?.rh).toBe(Array(4).fill(waltz.melody).join(' | '))
+    // In any meter, each bar's rest the bar's length, as an empty single staff is written.
+    const waltz = chartStart(key, '3/4', 'staffAndPiano')
+    expect(waltz.hands?.rh).toBe(Array(4).fill(waltz.staves?.[0]?.notes).join(' | '))
     const { chart } = readMusic(waltz)
     expect(chart.sections[0]?.lines[0]?.every((bar) => bar.hands?.rh?.length === 0)).toBe(true)
   })

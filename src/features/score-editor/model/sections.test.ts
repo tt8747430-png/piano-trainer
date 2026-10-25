@@ -140,7 +140,7 @@ describe('sections', () => {
         { kind: 'bridge', meter: '3/4', lines: ['E A'] },
         { kind: 'chorus', last: true, lines: ['C G'] },
       ],
-      melody: 'B4/4 | C5/4 | E5/2 E5/2 | G5/4 | B4/3 | A4/3 | G4/4 | G4/4',
+      staves: [{ notes: 'B4/4 | C5/4 | E5/2 E5/2 | G5/4 | B4/3 | A4/3 | G4/4 | G4/4' }],
     })
     const meters = (draft: typeof song) => draft.sections.map((section) => section.heading.meter)
 

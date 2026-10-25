@@ -1,4 +1,4 @@
-import type { Chart, ChartBar, HandNote, Melody } from '@/shared/lib/arrangement'
+import type { Chart, ChartBar, HandNote, StaffNote } from '@/shared/lib/arrangement'
 import type { NoteLyrics, Syllable } from '@/shared/lib/music'
 import { ContentError } from './content-error'
 import type { ChartPiece } from './types'
@@ -87,13 +87,19 @@ const barsOf = (chart: Chart): ChartBar[] =>
 const handTune = (chart: Chart): HandNote[][] =>
   barsOf(chart).map((bar) => singingNotes(bar.hands?.rh ?? []))
 
-/** How many notes the tune a piece sings on has: the melody's, else the right hand's onsets. */
-export const tuneLength = (chart: Chart, melody: Melody | undefined): number =>
-  melody ? melody.length : handTune(chart).reduce((sum, bar) => sum + bar.length, 0)
+/**
+ * How many notes the tune a piece sings on has: the single staff's its words are on (`staff`), else
+ * the right hand's onsets.
+ */
+export const tuneLength = (chart: Chart, staff: readonly StaffNote[] | undefined): number =>
+  staff ? staff.length : handTune(chart).reduce((sum, bar) => sum + bar.length, 0)
 
-/** The melody with its verses on its notes. */
-export const withMelodyLyrics = (melody: Melody, verses: readonly Verse[]): Melody =>
-  melody.map((n, i) => {
+/** A single staff's notes with its verses on them, in order (ADR 0093, 0097). */
+export const withStaffLyrics = (
+  notes: readonly StaffNote[],
+  verses: readonly Verse[],
+): StaffNote[] =>
+  notes.map((n, i) => {
     const lyrics = sungAt(verses, i)
     return lyrics ? { ...n, lyrics } : n
   })

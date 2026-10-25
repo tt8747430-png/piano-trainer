@@ -7,6 +7,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { clockTime } from '../model/clock-time'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { hasTune } from '../model/tune'
 
 /**
  * How the take sounds, changed while it records (ADR 0096): the metronome after the count-in and the
@@ -15,7 +16,7 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
  */
 function RecordingSettings() {
   const { t } = useTranslation('editor')
-  const hasTune = useEditorState((state) => state.draft.melody.length > 0)
+  const tune = useEditorState((state) => hasTune(state.draft))
   return (
     <Popover>
       <PopoverTrigger
@@ -39,7 +40,7 @@ function RecordingSettings() {
       >
         <SettingRows>
           <MetronomeSwitch />
-          {hasTune ? <TuneSwitch /> : null}
+          {tune ? <TuneSwitch /> : null}
         </SettingRows>
       </PopoverContent>
     </Popover>

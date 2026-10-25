@@ -110,30 +110,33 @@ describe('Songs: your own', () => {
     ])
   })
 
-  it('makes a lead sheet, the melody alone, the piano hidden (ADR 0083)', async () => {
+  it('makes a lead sheet: a staff alone, the piano hidden (ADR 0083, 0097)', async () => {
     const user = userEvent.setup()
     const { piecesStore, router } = await renderApp('/songs')
     await user.click(await screen.findByRole('button', { name: 'New song' }))
     await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Hymn')
     await user.click(screen.getByRole('button', { name: 'Customize' }))
     const score = await screen.findByRole('dialog', { name: 'Score' })
-    // The staves as the score names them (ADR 0094): the melody's, then the piano's. The chord
-    // symbols are typed into the score and shown by the View, never chosen here.
-    const staves = within(score).getByRole('region', { name: 'Staves' })
-    expect(within(staves).getAllByRole('switch')).toEqual([
-      within(staves).getByRole('switch', { name: /^Melody/ }),
-      within(staves).getByRole('switch', { name: /^Piano/ }),
-    ])
-    await user.click(within(score).getByRole('radio', { name: /^Melody and chords/ }))
-    expect(within(score).getByRole('switch', { name: /^Piano/ })).not.toBeChecked()
+    // The staves a score starts with, no melody of the app's: more are added on the score.
+    const staves = within(score).getByRole('radiogroup', { name: 'Staves' })
+    expect(
+      within(staves)
+        .getAllByRole('radio')
+        .map((choice) => choice.textContent),
+    ).toEqual(['Piano', 'A staff and piano', 'A staff'])
+    expect(within(staves).getByRole('radio', { name: 'Piano' })).toBeChecked()
+    await user.click(within(staves).getByRole('radio', { name: 'A staff' }))
     await user.click(within(score).getByRole('button', { name: 'Done' }))
-    expect(await screen.findByText('Melody')).toBeInTheDocument()
+    expect(await screen.findByText('A staff')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Make' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
-    expect(piecesStore.getState().songs[0]).toMatchObject({ melody: 'r/4', leadSheet: true })
+    expect(piecesStore.getState().songs[0]).toMatchObject({
+      staves: [{ notes: 'r/4' }],
+      leadSheet: true,
+    })
   })
 
-  it('makes a song with the score customized in its own sheet: piano with melody', async () => {
+  it('makes a song with the score customized in its own sheet: a staff over the piano', async () => {
     const user = userEvent.setup()
     const { piecesStore, router } = await renderApp('/songs')
     await user.click(await screen.findByRole('button', { name: 'New song' }))
@@ -141,13 +144,13 @@ describe('Songs: your own', () => {
     expect(screen.getByText('Piano')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Customize' }))
     const score = await screen.findByRole('dialog', { name: 'Score' })
-    await user.click(within(score).getByRole('radio', { name: /^Piano with melody/ }))
+    await user.click(within(score).getByRole('radio', { name: 'A staff and piano' }))
     await user.click(within(score).getByRole('button', { name: 'Done' }))
-    expect(await screen.findByText('Melody · Piano')).toBeInTheDocument()
+    expect(await screen.findByText('A staff and piano')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Make' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
     const [song] = piecesStore.getState().songs
-    expect(song).toMatchObject({ melody: 'r/4', sections: [{ lines: ['_ _ _ _'] }] })
+    expect(song).toMatchObject({ staves: [{ notes: 'r/4' }], sections: [{ lines: ['_ _ _ _'] }] })
     expect(song).not.toHaveProperty('leadSheet')
   })
 

@@ -1,10 +1,9 @@
 import { memo, useEffect, useRef, type Ref } from 'react'
-import type { Layer } from '@/features/score-editor'
+import { layerStaff, type Layer } from '@/features/score-editor'
 import type { Midi, Tick } from '@/shared/lib/music'
 import type { StaffId, StaffLabels } from '@/shared/lib/notation'
 import { cn, useElementSize } from '@/shared/lib'
 import { LazyScoreView, useCanvasReveal } from '@/shared/ui'
-import { staffOfHand } from '../model/line-music'
 import type { LineSheet } from '../model/line-sheets'
 import { labelRow, labelScale } from '@/shared/ui/score'
 import type { SheetField } from '../model/field-place'
@@ -99,7 +98,7 @@ export const SheetLine = memo(function SheetLine({
   const row = labelRow(chordNames, scale, print)
   // The notes chosen, marked as a notation app marks them: those chosen on this line in the caret's
   // row, else the ones at the caret (one of a chord's, chosen alone).
-  const staff = layer === 'chords' ? null : staffOfHand(layer, sheet.music.melodyStaff ?? false)
+  const staff = layer === 'chords' ? null : layerStaff(layer)
   const selected =
     staff === null
       ? undefined

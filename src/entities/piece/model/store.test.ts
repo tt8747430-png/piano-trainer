@@ -16,7 +16,7 @@ const MUSIC: PieceMusic = {
   tempo: 56,
   pattern: 'r1',
   sections: [{ kind: 'verse', n: 1, lines: ['Bm A G-Em F#7'] }],
-  melody: 'B4/4',
+  staves: [{ notes: 'B4/4' }],
   hands: { lh: 'B2/4 | - | - | -' },
 }
 const SONG = { id: 'my-1', title: 'Morning', ...MUSIC }
@@ -86,7 +86,9 @@ describe('createPiecesStore', () => {
     const versions = {
       bz1: MUSIC,
       bz2: { ...MUSIC, sections: [{ kind: 'verse', lines: ['Qm'] }] },
-      bz3: { ...MUSIC, melody: 'Q4/1' },
+      bz3: { ...MUSIC, staves: [{ notes: 'Q4/1' }] },
+      bz4: { ...MUSIC, staves: [{ notes: 'B4/4' }, { name: 'Two' }] },
+      bz7: { ...MUSIC, staves: 'B4/4' },
       bz5: { ...MUSIC, hands: { rh: 'C4/4' } },
       bz6: { ...MUSIC, pattern: 'nope' },
       bz8: { ...MUSIC, meter: '5/4' },
@@ -107,39 +109,72 @@ describe('createPiecesStore', () => {
     expect(kept).not.toHaveProperty('instruments')
   })
 
-  it('keeps a lead sheet only where the score has the tune’s staff (ADR 0083, 0094)', () => {
+  it('keeps each single staff with its name and clef, top down (ADR 0097)', () => {
+    const named = {
+      ...MUSIC,
+      staves: [
+        { name: 'Voice', notes: 'B4/4' },
+        { name: { en: 'Cello', ru: 'Виолончель' }, clef: 'bass', notes: 'B2/4' },
+        { name: '   ', clef: 'alto', notes: 'r/4' },
+        { name: `  ${'Flute'.repeat(10)}  `, notes: 'r/4' },
+      ],
+    }
+    expect(restored({ versions: { bz1: named } }).versions.bz1?.staves).toEqual([
+      { name: 'Voice', notes: 'B4/4' },
+      { name: { en: 'Cello', ru: 'Виолончель' }, clef: 'bass', notes: 'B2/4' },
+      { notes: 'r/4' },
+      // A name as the editor keeps one: trimmed, at most its letters.
+      { name: 'Flute'.repeat(8), notes: 'r/4' },
+    ])
+  })
+
+  it('keeps a lead sheet only where the score has a single staff (ADR 0083, 0094, 0097)', () => {
     const read = (music: object) => restored({ versions: { bz1: music } }).versions.bz1
-    // A lead sheet: the tune's staff and the chord symbols, the piano out of sight.
+    // A lead sheet: the single staves and the chord symbols, the piano out of sight.
     expect(read({ ...MUSIC, leadSheet: true })).toEqual({ ...MUSIC, leadSheet: true })
     // Never every staff: with no other, the piano is shown.
-    const { melody: _, ...pianoOnly } = MUSIC
+    const { staves: _, ...pianoOnly } = MUSIC
     expect(read({ ...pianoOnly, leadSheet: true })).toEqual(pianoOnly)
+    expect(read({ ...MUSIC, staves: [], leadSheet: true })).toEqual(pianoOnly)
     expect(read({ ...MUSIC, leadSheet: 'yes' })).toEqual(MUSIC)
   })
 
-  it('keeps the words that read on the tune, and drops a verse longer than it (ADR 0093)', () => {
-    const sung = { ...MUSIC, melody: 'B4/2 A4/2', lyrics: ['one two', 'eins'] }
+  it('keeps the words that read on the staff they are on, and drops a verse longer than it (ADR 0093)', () => {
+    const staves = [{ notes: 'B4/2 A4/2' }]
+    const sung = { ...MUSIC, staves, lyrics: ['one two', 'eins'] }
     expect(restored({ versions: { bz1: sung } }).versions.bz1?.lyrics).toEqual(['one two', 'eins'])
     const long = { ...sung, lyrics: ['one two three'] }
-    expect(restored({ versions: { bz1: long } }).versions.bz1).toEqual({
-      ...MUSIC,
-      melody: 'B4/2 A4/2',
-    })
+    expect(restored({ versions: { bz1: long } }).versions.bz1).toEqual({ ...MUSIC, staves })
     expect(restored({ versions: { bz1: { ...sung, lyrics: 'one two' } } }).versions.bz1).toEqual({
       ...MUSIC,
-      melody: 'B4/2 A4/2',
+      staves,
+    })
+    // On the second staff, by its place.
+    const second = {
+      ...MUSIC,
+      staves: [...MUSIC.staves!, ...staves],
+      lyrics: ['one two'],
+      lyricsOn: 1,
+    }
+    expect(restored({ versions: { bz1: second } }).versions.bz1).toEqual(second)
+    // On a staff the music has not: the words are read on the top one.
+    const lost = { ...sung, lyrics: ['one'], lyricsOn: 3 }
+    expect(restored({ versions: { bz1: lost } }).versions.bz1).toEqual({
+      ...MUSIC,
+      staves,
+      lyrics: ['one'],
     })
   })
 
-  it('keeps lyrics on the upper staff of a piece with a melody, read on its notes (ADR 0093)', () => {
+  it('keeps lyrics on the upper staff of a piece with a single staff, read on its notes (ADR 0093)', () => {
     const hands = { rh: 'B4/2 A4/2 | - | - | -', lh: 'B2/4 | - | - | -' }
     const upper = { ...MUSIC, hands, lyrics: ['one two'], lyricsOn: 'rh' }
     expect(restored({ versions: { bz1: upper } }).versions.bz1).toEqual(upper)
     // Too long for the upper staff's notes: the words go, as a verse longer than its tune does.
     const long = { ...upper, lyrics: ['one two three'] }
     expect(restored({ versions: { bz1: long } }).versions.bz1).toEqual({ ...MUSIC, hands })
-    // On the melody, where a piece with one has them, is not written.
-    const tuned = { ...MUSIC, lyrics: ['one'], lyricsOn: 'melody' }
+    // On the top single staff, where a piece with one has them, is not written.
+    const tuned = { ...MUSIC, lyrics: ['one'], lyricsOn: 0 }
     expect(restored({ versions: { bz1: tuned } }).versions.bz1).toEqual({
       ...MUSIC,
       lyrics: ['one'],
@@ -158,8 +193,8 @@ describe('createPiecesStore', () => {
     for (const id of ['bz2', 'bz3', 'bz5']) expect(read[id]).toEqual(MUSIC)
   })
 
-  it('drops a melody longer than its chart', () => {
-    const versions = { bz1: { ...MUSIC, melody: 'B4/16 B4/1' } }
+  it('drops a single staff longer than its chart', () => {
+    const versions = { bz1: { ...MUSIC, staves: [{ notes: 'B4/4' }, { notes: 'B4/16 B4/1' }] } }
     expect(restored({ versions }).versions).toEqual({})
   })
 

@@ -2,13 +2,14 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import userEvent from '@testing-library/user-event'
 import { cloneElement } from 'react'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
+import type { PieceMusic } from '@/entities/piece'
 import { createEditorStore, placesIn, readDraft, tapsIn, type Layer } from '@/features/score-editor'
 import { stubBox } from '@/shared/test/layout'
 import { loadScoreView } from '@/shared/ui'
 import type { EditPrinted, Printed } from '../model/printed'
 import { ScoreSheet } from './ScoreSheet'
 
-const draft = readDraft({
+const writtenMusic = {
   key: 'G',
   meter: '4/4',
   tempo: 90,
@@ -17,9 +18,10 @@ const draft = readDraft({
     { kind: 'verse', lines: ['G C-D', 'Em'] },
     { kind: 'chorus', lines: ['C D'] },
   ],
-  melody: 'B4/4 | C5/2 A4/2',
+  staves: [{ notes: 'B4/4 | C5/2 A4/2' }],
   hands: { lh: 'r/4 | r/4 | E3/4 | r/4 | r/4' },
-})
+} as const satisfies PieceMusic
+const draft = readDraft(writtenMusic)
 
 /** What edits a thing printed, in a test: a click on its button says what it is. */
 const editing =
@@ -96,8 +98,8 @@ describe('ScoreSheet', () => {
     },
   )
 
-  it('names the staves at the first line’s head alone, the tune’s and the piano’s (ADR 0094)', async () => {
-    sheet('melody')
+  it('names the staves at the first line’s head alone, a nameless one by its place, muted (ADR 0094, 0097)', async () => {
+    sheet('staff0')
     const names = (line: Element | undefined) =>
       [...(line?.querySelectorAll('[data-slot="score"] g.label') ?? [])]
         .map((label) => label.textContent?.trim())
@@ -105,17 +107,58 @@ describe('ScoreSheet', () => {
     await waitFor(() => {
       const lines = [...document.querySelectorAll('[data-slot="sheet-line"]')]
       expect(lines).toHaveLength(3)
-      expect(names(lines[0])).toEqual(['Melody', 'Piano'])
+      expect(names(lines[0])).toEqual(['Piano', 'Staff 1'])
       expect(lines.slice(1).map(names)).toEqual([[], []])
     })
+    // The staff of no name shows its place's in italics, as an empty score's placeholder.
+    const placeholder = document.querySelector('[data-slot="score"] g.label [font-style="italic"]')
+    expect(placeholder?.textContent?.trim()).toBe('Staff 1')
+  })
+
+  it('names each staff by its own name, over the piano (ADR 0097)', async () => {
+    const named = readDraft({
+      ...writtenMusic,
+      staves: [
+        { name: 'Voice', notes: 'B4/4 | C5/2 A4/2' },
+        { clef: 'bass', notes: 'G2/4' },
+      ],
+    })
+    render(
+      <ScoreSheet
+        draft={named}
+        caret={0}
+        layer="rh"
+        tapsOf={() => []}
+        selection={null}
+        onPlace={vi.fn()}
+        onReach={vi.fn()}
+        onDeselect={vi.fn()}
+        placesOf={() => []}
+        chordNames
+        edit={editing(vi.fn())}
+        title={() => null}
+      />,
+    )
+    expect(await screen.findByRole('button', { name: 'Voice' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Staff 2' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Piano staves' })).toBeInTheDocument()
+    // Top down, each measure's: the single staves over the piano's.
+    const [first] = document.querySelectorAll('[data-slot="sheet-line"]')
+    const drawn = [...(first?.querySelectorAll('g.staff') ?? [])]
+    expect([...new Set(drawn.map((staff) => staff.getAttribute('data-staff')))]).toEqual([
+      'staff0',
+      'staff1',
+      'treble',
+      'bass',
+    ])
   })
 
   it('puts a button over each staff’s name, opening what edits that staff (ADR 0094)', async () => {
     const user = userEvent.setup()
     const edited = vi.fn()
-    sheet('melody', vi.fn(), true, edited)
-    await user.click(await screen.findByRole('button', { name: 'Melody staff' }))
-    expect(edited).toHaveBeenLastCalledWith({ kind: 'staff', staves: 'melody' })
+    sheet('staff0', vi.fn(), true, edited)
+    await user.click(await screen.findByRole('button', { name: 'Staff 1' }))
+    expect(edited).toHaveBeenLastCalledWith({ kind: 'staff', staves: 'staff0' })
     await user.click(screen.getByRole('button', { name: 'Piano staves' }))
     expect(edited).toHaveBeenLastCalledWith({ kind: 'staff', staves: 'piano' })
   })
@@ -147,7 +190,7 @@ describe('ScoreSheet', () => {
       document.querySelectorAll('[data-slot="score"] g.staff[data-staff="bass"]'),
     ).toHaveLength(0)
     expect(
-      document.querySelectorAll('[data-slot="score"] g.staff[data-staff="melody"]').length,
+      document.querySelectorAll('[data-slot="score"] g.staff[data-staff="staff0"]').length,
     ).toBeGreaterThan(0)
   })
 
@@ -270,7 +313,7 @@ describe('ScoreSheet', () => {
       tempo: 90,
       pattern: 'r1',
       sections: [{ kind: 'verse', lines: ['G C'] }],
-      melody: 'B4/4 | C5/4',
+      staves: [{ notes: 'B4/4 | C5/4' }],
       lyrics: ['One two'],
       hands: { rh: 'r/4 | r/4', lh: 'r/4 | r/4' },
     })
@@ -280,7 +323,7 @@ describe('ScoreSheet', () => {
       <ScoreSheet
         draft={sung}
         caret={96}
-        layer="melody"
+        layer="staff0"
         tapsOf={() => []}
         selection={null}
         onPlace={vi.fn()}
@@ -310,7 +353,7 @@ describe('ScoreSheet', () => {
       clientY: Number.parseFloat(place.style.top) + 4 - Number.parseFloat(bar.style.top),
       detail: 1,
     })
-    expect(onField).toHaveBeenLastCalledWith({ kind: 'lyrics', verse: 0 }, 96, 'melody')
+    expect(onField).toHaveBeenLastCalledWith({ kind: 'lyrics', verse: 0 }, 96, 'staff0')
   })
 
   it('numbers each line at its head, a section’s name and the tempo beside it, its row only as tall as what it holds', async () => {
@@ -373,18 +416,18 @@ describe('ScoreSheet', () => {
   it('writes a click over the staff into the tune when chord names are hidden', async () => {
     const user = userEvent.setup()
     const onPlace = vi.fn()
-    sheet('melody', onPlace, false)
+    sheet('staff0', onPlace, false)
     // Bar 3, where the tune writes nothing: its start.
     const [bar] = await screen.findAllByRole('button', { name: /^Bar 3/ })
     if (!bar) throw new Error('no bar')
     await user.click(bar)
-    expect(onPlace).toHaveBeenCalledWith(192, 'melody', false)
+    expect(onPlace).toHaveBeenCalledWith(192, 'staff0', false)
   })
 
   it('puts a button over the tempo mark and each clef, key and time signature, edited there (ADR 0094)', async () => {
     const user = userEvent.setup()
     const edited = vi.fn()
-    sheet('melody', vi.fn(), true, edited)
+    sheet('staff0', vi.fn(), true, edited)
     await user.click(await screen.findByRole('button', { name: 'Tempo: 90 BPM' }))
     expect(edited).toHaveBeenLastCalledWith({ kind: 'tempo' })
     // The verse's first line's head, each sign on each staff it is printed on.
@@ -399,15 +442,16 @@ describe('ScoreSheet', () => {
     // The verse's second line starts at bar 3: its lower staff's clef.
     await user.click(screen.getByRole('button', { name: 'Clef, Lower staff, bar 3' }))
     expect(edited).toHaveBeenLastCalledWith({ kind: 'clef', bar: 2, staff: 'bass' })
-    // Only the piano's staves change clef: the tune's is printed alone.
-    expect(screen.queryByRole('button', { name: /^Clef, Melody/ })).not.toBeInTheDocument()
+    // A single staff's clef is a target too, the whole staff's (ADR 0097).
+    await user.click(screen.getAllByRole('button', { name: 'Clef, Staff 1, bar 1' })[0]!)
+    expect(edited).toHaveBeenLastCalledWith({ kind: 'clef', bar: 0, staff: 'staff0' })
     expect(screen.getAllByRole('button', { name: /^Clef, Upper staff/ })).toHaveLength(3)
   })
 
   it('chooses nothing on empty staff beside a note, and a bar’s start where its row writes nothing (ADR 0088)', async () => {
     const onPlace = vi.fn()
     const onDeselect = vi.fn()
-    sheet('melody', onPlace, false, vi.fn(), onDeselect)
+    sheet('staff0', onPlace, false, vi.fn(), onDeselect)
     const click = async (name: RegExp, x: number) => {
       const [bar] = await screen.findAllByRole('button', { name })
       if (!bar) throw new Error('no bar')
@@ -421,11 +465,11 @@ describe('ScoreSheet', () => {
     expect(onDeselect).toHaveBeenCalledTimes(1)
     // Anywhere in an empty bar: its start, as a line where the next note goes.
     await click(/^Bar 3/, 5)
-    expect(onPlace).toHaveBeenLastCalledWith(192, 'melody', false)
+    expect(onPlace).toHaveBeenLastCalledWith(192, 'staff0', false)
   })
 
   it('marks the caret as a line on its staff, on notes and in an empty bar, never a box (ADR 0096)', async () => {
-    sheet('melody')
+    sheet('staff0')
     await waitFor(() =>
       expect(document.querySelector('[data-slot="caret"]')).toHaveAttribute('data-mark', 'line'),
     )
@@ -475,9 +519,9 @@ describe('ScoreSheet', () => {
   })
 
   it('colours the notes at the caret on its staff as the ones chosen', async () => {
-    sheet('melody')
+    sheet('staff0')
     await waitFor(() => expect(document.querySelector('g.note.note-chosen')).toBeInTheDocument())
-    expect(document.querySelector('g.note.note-chosen')?.id).toMatch(/^n-melody-/)
+    expect(document.querySelector('g.note.note-chosen')?.id).toMatch(/^n-staff0-/)
   })
 
   it('opens where it is with the caret’s line in sight, and brings a line the caret moves onto into view', async () => {

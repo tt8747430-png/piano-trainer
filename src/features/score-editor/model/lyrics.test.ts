@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { gatherLyrics, writeLyrics } from '@/entities/piece'
 import { draftOf } from '../testing/test-draft'
-import { tuneNotes, writeDraft } from './draft'
+import { lyricsLayer, tuneNotes, writeDraft } from './draft'
 import {
   setSyllable,
   singsHere,
@@ -9,7 +9,6 @@ import {
   sungFrom,
   sungNear,
   syllableAt,
-  tuneLayer,
   verseCount,
 } from './lyrics'
 
@@ -17,36 +16,46 @@ import {
 const sungMusic = {
   key: 'C' as const,
   sections: [{ kind: 'verse' as const, lines: ['C G'] }],
-  melody: 'C4/1 D4/1 E4/1 F4/1 | r/4',
+  staves: [{ notes: 'C4/1 D4/1 E4/1 F4/1 | r/4' }],
   hands: { rh: 'r/4 | r/4', lh: 'r/4 | r/4' },
 }
 const sung = draftOf({ ...sungMusic, lyrics: ['Si-_ lent night,'] })
 const verses = (draft: typeof sung) => gatherLyrics(tuneNotes(draft)).map(writeLyrics)
 
 describe('the words in the editor (ADR 0093)', () => {
-  it('go under the tune’s staff: the melody’s where the score has it, else the upper staff, in sight', () => {
-    expect(tuneLayer(sung)).toBe('melody')
-    expect(singsHere(sung, 'melody')).toBe(true)
+  it('go under the staff they are written on: the top single staff’s, else the upper staff (ADR 0097)', () => {
+    expect(lyricsLayer(sung)).toBe('staff0')
+    expect(singsHere(sung, 'staff0')).toBe(true)
     expect(singsHere(sung, 'rh')).toBe(false)
-    expect(singsHere({ ...sung, melodyStaff: false }, 'melody')).toBe(false)
     const piano = draftOf({ hands: { rh: 'G4+B4/2 D5/2 | r/4', lh: 'r/4 | r/4' } })
-    expect(tuneLayer(piano)).toBe('rh')
+    expect(lyricsLayer(piano)).toBe('rh')
     expect(singsHere(piano, 'rh')).toBe(true)
     expect(singsHere(piano, 'lh')).toBe(false)
+    // On the second staff where they are written there; never on a hand hidden.
+    const second = draftOf({
+      ...sungMusic,
+      staves: [...sungMusic.staves, { notes: 'G3/2 G3/2 | r/4' }],
+      lyrics: ['one two'],
+      lyricsOn: 1,
+    })
+    expect(lyricsLayer(second)).toBe('staff1')
+    expect(singsHere(second, 'staff1')).toBe(true)
+    expect(singsHere(second, 'staff0')).toBe(false)
+    expect(singsHere({ ...piano, leadSheet: true }, 'rh')).toBe(false)
   })
 
-  it('go under the staff they are written on: the upper staff though the score has a melody', () => {
+  it('go under the staff they are written on: the upper staff though the score has a single staff', () => {
     const upper = draftOf({
       key: 'C',
       sections: [{ kind: 'verse', lines: ['C G'] }],
-      melody: 'C4/1 D4/1 E4/1 F4/1 | r/4',
+      staves: [{ notes: 'C4/1 D4/1 E4/1 F4/1 | r/4' }],
       hands: { rh: 'E5/2 G5/2 | r/4', lh: 'r/4 | r/4' },
       lyrics: ['one two'],
       lyricsOn: 'rh',
     })
-    expect(tuneLayer(upper)).toBe('rh')
+    expect(lyricsLayer(upper)).toBe('rh')
     expect(singsHere(upper, 'rh')).toBe(true)
-    expect(singsHere(upper, 'melody')).toBe(false)
+    expect(singsHere(upper, 'staff0')).toBe(false)
     expect(verses(upper)).toEqual(['one two'])
     expect(writeDraft(upper)).toMatchObject({ lyrics: ['one two'], lyricsOn: 'rh' })
   })
@@ -55,9 +64,9 @@ describe('the words in the editor (ADR 0093)', () => {
     expect(sungFrom(sung, 24)).toBe(24)
     // From bar 2's rest, with no note after it: the last before.
     expect(sungFrom(sung, 96)).toBe(72)
-    const late = draftOf({ ...sungMusic, melody: 'r/4 | C4/4' })
+    const late = draftOf({ ...sungMusic, staves: [{ notes: 'r/4 | C4/4' }] })
     expect(sungFrom(late, 0)).toBe(96)
-    expect(sungFrom(draftOf({ ...sungMusic, melody: 'r/4 | r/4' }), 0)).toBeNull()
+    expect(sungFrom(draftOf({ ...sungMusic, staves: [{ notes: 'r/4 | r/4' }] }), 0)).toBeNull()
   })
 
   it('count the verses, find the note singing at a tick and the tune’s notes on either side', () => {

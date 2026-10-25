@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import { verseCount } from '@/features/score-editor'
+import { useLayerName } from '@/widgets/score-sheet'
 import { caretSaid } from '../model/caret-said'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { useStaffHeads } from '../model/use-staff-heads'
 import { useValueWord } from './use-value-word'
 
 /**
@@ -20,6 +22,7 @@ export function CaretLine() {
   const mode = useEditorState((state) => state.mode)
   const said = caretSaid({ draft, caret, layer, chordNote, mode })
   const valueWord = useValueWord()
+  const layerName = useLayerName(useStaffHeads())
   const where = (() => {
     if (said.kind === 'end') return t('caret.end')
     if (said.kind === 'noChord') return t('caret.noChord', { bar: said.bar, beat: said.beat })
@@ -38,8 +41,8 @@ export function CaretLine() {
       : field?.kind === 'lyrics'
         ? `${t('lyrics.label')} · ${t('lyrics.verse', { n: Math.min(field.verse, verseCount(draft)) + 1 })}`
         : field?.kind === 'fingering'
-          ? `${t('fingering')} · ${t(`layers.${layer}`)}`
-          : t(`layers.${layer}`)
+          ? `${t('fingering')} · ${layerName(layer)}`
+          : layerName(layer)
   const placed = said.kind === 'end' ? where : `${part} · ${where}`
   const text = said.mode
     ? `${placed} · ${t('caret.mode', { mode: t(`mode.${said.mode}`) })}`

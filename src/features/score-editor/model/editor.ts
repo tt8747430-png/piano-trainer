@@ -1,21 +1,21 @@
 import { songTitle } from '@/entities/piece'
 import { markBars } from './bar-marks'
 import { setClef } from './clefs'
-import { staffLeftFor } from './rows'
+import { shownRows, staffLeftFor } from './rows'
 import { setBarTicks } from './bars'
 import { chosenNotes, chosenSpan, fingerPlace, shownValue, takenAway } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
 import { clipEdited } from './clip-edits'
-import { ticksOf } from '@/shared/lib/notation'
+import { singleStaff, staffPlace, ticksOf } from '@/shared/lib/notation'
 import { chordNoteStep } from './chord-note'
 import { deleteChord } from './chords'
 import { midi, PIANO, type Midi } from '@/shared/lib/music'
-import { isHandLayer, type Draft } from './draft'
+import { isHandLayer, type Draft, type Layer } from './draft'
 import { barsEdited, chordSet, chosenBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
 import { lineOver, lineSpan } from './lines'
-import { setSyllable, singsHere, verseCount } from './lyrics'
+import { setSyllable, singsHere } from './lyrics'
 import { markNotes } from './marks'
 import {
   backFrom,
@@ -34,11 +34,26 @@ import {
 } from './notes'
 import { setMeter, setSectionMeter } from './meters'
 import { joinSection, setSectionKey, setSectionKind } from './sections'
+import { addStaff, removeStaff, renameStaff, setStaffClef } from './staves'
 import { setKey, setTempo } from './settings'
 import { nextMode, type EditorAction, type EditorState } from './state'
 import { writeTake } from './take-edits'
 import { barAt, barsOf, keyAt } from './timeline'
 import { toggledDot, toggledTriplet, withValue, type ChosenValue } from './values'
+
+/**
+ * Where the caret goes once the single staff at `place` is taken away (ADR 0097): from it, to the
+ * staff that was under it (the piano's upper staff under the last), else the one over it; from a
+ * staff under it, up with that staff; elsewhere, where it was.
+ */
+function rowAfterRemoving(next: Draft, layer: Layer, place: number): Layer {
+  if (layer === 'chords' || isHandLayer(layer)) return layer
+  const at = staffPlace(layer)
+  if (at > place) return singleStaff(at - 1)
+  if (at < place) return layer
+  const staves = shownRows(next).filter((row) => row !== 'chords')
+  return staves[place] ?? staves.at(-1) ?? staffLeftFor(next)
+}
 
 /** The chord's one note chosen, moved by `move` (null where it went past the piano's ends). */
 function movedNote(state: EditorState, move: (key: Midi) => Midi | null): Partial<EditorState> {
@@ -178,30 +193,34 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
             },
             action.joins ?? false,
           )
-    case 'melodyStaff': {
-      if (action.on === draft.melodyStaff) return state
-      // Lyrics written on the upper staff stay there; a song with none yet takes them on the tune's.
-      if (action.on) {
-        const lyricsOn = verseCount(draft) > 0 ? draft.lyricsOn : 'melody'
-        return commit(state, { ...draft, melodyStaff: true, lyricsOn }, { layer: 'melody' })
-      }
-      // A lead sheet's tune taken away brings the piano back, so a staff is in sight (ADR 0083);
-      // its lyrics go with its notes, and the upper staff is the one left to take them.
-      const next = {
-        ...draft,
-        melodyStaff: false,
-        melody: [],
-        leadSheet: false,
-        lyricsOn: 'rh' as const,
-      }
+    case 'addStaff': {
+      const next = addStaff(draft, action.place)
+      // The caret on the staff added, where it was in time.
+      const added = singleStaff(Math.max(0, Math.min(action.place, draft.staves.length)))
       return commit(state, next, {
-        layer: layer === 'melody' ? staffLeftFor(next) : layer,
+        layer: added,
+        caret: placed(next, added, caret),
+        selection: null,
+        chordNote: null,
         struck: null,
       })
     }
+    case 'removeStaff': {
+      const next = removeStaff(draft, action.place)
+      if (next === draft) return state
+      return commit(state, next, {
+        layer: rowAfterRemoving(next, layer, action.place),
+        selection: null,
+        chordNote: null,
+        struck: null,
+      })
+    }
+    case 'renameStaff':
+      return commit(state, renameStaff(draft, action.place, action.name))
     case 'piano': {
-      // Never every staff out of sight: a lead sheet keeps its tune's staff (ADR 0083).
-      if (draft.leadSheet === action.hidden || (action.hidden && !draft.melodyStaff)) return state
+      // Never every staff out of sight: a lead sheet keeps its single staves (ADR 0083).
+      if (draft.leadSheet === action.hidden || (action.hidden && draft.staves.length === 0))
+        return state
       const next = { ...draft, leadSheet: action.hidden }
       // The caret leaves a hand put out of sight for the top staff's.
       const leaves = action.hidden && isHandLayer(layer)
@@ -257,7 +276,7 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       return layer === 'chords'
         ? state
         : commit(state, tieNotes(draft, layer, caret), { struck: null })
-    // The words go under the tune's staff alone (ADR 0093).
+    // The words go under the staff they are written on alone (ADR 0093, 0097).
     case 'syllable':
       return singsHere(draft, layer)
         ? commit(state, setSyllable(draft, caret, action.verse, action.text), { struck: null })
@@ -275,7 +294,12 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
     case 'barMarks':
       return commit(state, markBars(draft, chosenBars(state), action.choice))
     case 'clef':
-      return commit(state, setClef(draft, action.bar, action.hand, action.clef))
+      return commit(
+        state,
+        isHandLayer(action.staff)
+          ? setClef(draft, action.bar, action.staff, action.clef)
+          : setStaffClef(draft, staffPlace(action.staff), action.clef),
+      )
     // Each bar chosen, else the caret's.
     case 'barLength': {
       const { from, to } = chosenBars(state)

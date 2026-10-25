@@ -1,10 +1,9 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isPatternId } from '@/entities/pattern'
 import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
-import { isMeter, isWrittenKey, parseKey, type Tick } from '@/shared/lib/music'
-import { barTicksOf } from './chart'
+import { CLEFS, isMeter, isWrittenKey, parseKey, type Tick } from '@/shared/lib/music'
+import { barTicksOf, chartOf, stavesOf } from './chart'
 import { ContentError } from './content-error'
-import { chartOf, melodyOf } from './chart'
 import { musicOf, type PieceMusic } from './music'
 import {
   isOwnSongId,
@@ -16,16 +15,18 @@ import {
 } from './own'
 import {
   SECTION_KINDS,
+  staffName,
   type ChartPiece,
   type Hands,
   type KeyText,
   type LyricsStaff,
   type PieceId,
+  type PieceStaff,
   type Section,
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-export const PIECES_VERSION = 6
+export const PIECES_VERSION = 7
 
 /** The learner's pieces (spec 2026-10-01-score-editor §4). */
 export interface PiecesState {
@@ -55,8 +56,12 @@ const isKeyText = (value: unknown): value is KeyText => {
   return key !== null && isWrittenKey(key)
 }
 const isSectionKind = isOneOf(SECTION_KINDS)
-const isLyricsStaff = isOneOf<LyricsStaff>(['melody', 'rh'])
+const isClef = isOneOf(CLEFS)
 const isText = (value: unknown): value is string => typeof value === 'string'
+/** A staff the lyrics are on, of `staves` single staves: one of them by its place, or the upper staff. */
+const isLyricsStaff = (value: unknown, staves: number): value is LyricsStaff =>
+  value === 'rh' ||
+  (typeof value === 'number' && Number.isInteger(value) && value >= 0 && value < staves)
 const isTempo = (value: unknown): value is number =>
   typeof value === 'number' &&
   Number.isInteger(value) &&
@@ -84,6 +89,27 @@ function sectionOf(saved: unknown): Section | null {
   }
 }
 
+/**
+ * A saved single staff whose fields read (ADR 0097): its notes, its clef, its name as typed (as the
+ * editor keeps one: trimmed, at most its letters) or in both languages.
+ */
+function staffOf(saved: unknown): PieceStaff | null {
+  if (!isRecord(saved) || !isText(saved.notes)) return null
+  const { name, clef } = saved
+  const typed = isText(name) ? staffName(name) : undefined
+  const en = isRecord(name) ? name.en : undefined
+  const ru = isRecord(name) ? name.ru : undefined
+  return {
+    ...(typed !== undefined
+      ? { name: typed }
+      : isText(en) && isText(ru)
+        ? { name: { en, ru } }
+        : {}),
+    ...(isClef(clef) && clef !== 'treble' ? { clef } : {}),
+    notes: saved.notes,
+  }
+}
+
 function savedHands(saved: unknown): Hands | undefined {
   if (!isRecord(saved)) return undefined
   const hands = {
@@ -97,10 +123,10 @@ function savedHands(saved: unknown): Hands | undefined {
 const chartTicks = (piece: ChartPiece): Tick =>
   barTicksOf(piece).reduce((sum, ticks) => sum + ticks, 0)
 
-/** Whether a piece's words read on its tune (ADR 0093): a verse longer than the tune does not. */
+/** Whether a piece's words read on the staff they are on (ADR 0093): a verse longer than its tune does not. */
 function singsLyrics(piece: ChartPiece): boolean {
   try {
-    melodyOf(piece)
+    stavesOf(piece)
     chartOf(piece)
     return true
   } catch (error) {
@@ -110,18 +136,20 @@ function singsLyrics(piece: ChartPiece): boolean {
 }
 
 /**
- * Saved music that reads as a piece's: its fields, its chart, melody and hands; null otherwise. Its
- * words are kept where they read on the staff they are on (ADR 0093), its own title where it is one
- * (ADR 0094), a lead sheet only where it has a tune's staff: a score never hides every staff (ADR
- * 0083).
+ * Saved music that reads as a piece's: its fields, its chart, single staves and hands; null
+ * otherwise. Its words are kept where they read on the staff they are on (ADR 0093), its own title
+ * where it is one (ADR 0094), a lead sheet only where it has a single staff: a score never hides
+ * every staff (ADR 0083, 0097).
  */
 function musicOfSaved(saved: unknown): PieceMusic | null {
   if (!isRecord(saved)) return null
-  const { key, meter, tempo, pattern, sections, melody, leadSheet, hands, lyrics, lyricsOn } = saved
+  const { key, meter, tempo, pattern, sections, staves, leadSheet, hands, lyrics, lyricsOn } = saved
   if (!isKeyText(key) || !isMeter(meter) || !isTempo(tempo) || !isPatternId(pattern)) return null
   if (!Array.isArray(sections) || sections.length === 0) return null
   const read = sections.map(sectionOf)
   if (!read.every((section) => section !== null)) return null
+  const single = staves === undefined ? [] : Array.isArray(staves) ? staves.map(staffOf) : [null]
+  if (!single.every((staff) => staff !== null)) return null
   const written = savedHands(hands)
   const piece: ChartPiece = {
     id: 'saved',
@@ -132,15 +160,16 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     tempo,
     pattern,
     sections: read,
-    ...(isText(melody) ? { melody } : {}),
-    ...(isText(melody) && leadSheet === true ? { leadSheet } : {}),
+    ...(single.length > 0 ? { staves: single } : {}),
+    ...(single.length > 0 && leadSheet === true ? { leadSheet } : {}),
     ...(written ? { hands: written } : {}),
-    ...(isLyricsStaff(lyricsOn) ? { lyricsOn } : {}),
+    ...(isLyricsStaff(lyricsOn, single.length) ? { lyricsOn } : {}),
   }
   try {
-    const tune = melodyOf(piece)
-    const fits =
-      Math.max(0, ...(tune ?? []).map((n) => n.startTick + n.durationTicks)) <= chartTicks(piece)
+    const ends = stavesOf(piece).flatMap(({ notes }) =>
+      notes.map((n) => n.startTick + n.durationTicks),
+    )
+    const fits = Math.max(0, ...ends) <= chartTicks(piece)
     if (!fits) return null
     const verses = Array.isArray(lyrics) && lyrics.every(isText) ? lyrics : undefined
     const sung = verses && singsLyrics({ ...piece, lyrics: verses }) ? { lyrics: verses } : {}

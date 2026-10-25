@@ -10,16 +10,16 @@ import type { SheetField } from '@/widgets/score-sheet'
 
 /**
  * Why a field cannot open where the caret is (ADR 0096), its palette key greyed, saying it: the View
- * hides what it writes, the words go on another staff (ADR 0093), the tune has no note to sing,
- * fingers go on the piano's staves (ADR 0091), on a note.
+ * hides what it writes, the words go on another staff (ADR 0093: a single staff, or the upper staff),
+ * the staff has no note to sing, fingers go on the piano's staves (ADR 0091), on a note.
  */
 export type FieldReason =
   | 'chordsHidden'
   | 'lyricsHidden'
   | 'fingersHidden'
-  | 'lyricsOn.melody'
+  | 'lyricsOn.staff'
   | 'lyricsOn.rh'
-  | 'noTune'
+  | 'noNotes'
   | 'hand'
   | 'chooseNote'
 
@@ -45,8 +45,9 @@ export function fieldClosedBy(
       return shown.chordNames ? null : 'chordsHidden'
     case 'lyrics':
       if (!shown.lyrics) return 'lyricsHidden'
-      if (!singsHere(draft, layer)) return `lyricsOn.${draft.lyricsOn}`
-      return sungFrom(draft, caret) === null ? 'noTune' : null
+      if (!singsHere(draft, layer))
+        return draft.lyricsOn === 'rh' ? 'lyricsOn.rh' : 'lyricsOn.staff'
+      return sungFrom(draft, caret) === null ? 'noNotes' : null
     case 'fingering':
       if (!shown.fingers) return 'fingersHidden'
       if (!isHandLayer(layer)) return 'hand'

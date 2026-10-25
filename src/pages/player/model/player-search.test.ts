@@ -1,7 +1,7 @@
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
 import { LEFT_FIGURE_IDS, LEFT_FIGURES, RIGHT_FIGURE_IDS, RIGHT_FIGURES } from '@/entities/pattern'
-import { hasChartPlan, melodyOf, PIECES, pieceById } from '@/entities/piece'
+import { hasChartPlan, PIECES, pieceById, stavesOf } from '@/entities/piece'
 import { splitsTheBeat } from '@/shared/lib/arrangement'
 import { ownChoice } from '@/features/practice'
 import { isCompound, note, noteParam } from '@/shared/lib/music'
@@ -61,7 +61,7 @@ describe('resolveChoice', () => {
 
   it('plays a piece without a tune by its own pattern when the URL names one that plays it', () => {
     const tuneless = PIECES.find(
-      (p) => melodyOf(p) === undefined && !hasChartPlan(p) && !isCompound(p.meter),
+      (p) => stavesOf(p).length === 0 && !hasChartPlan(p) && !isCompound(p.meter),
     )
     if (!tuneless) throw new Error('a piece in simple time without a melody')
     expect(

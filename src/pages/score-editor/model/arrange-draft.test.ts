@@ -8,20 +8,20 @@ const draft = readDraft({
   tempo: 90,
   pattern: 'block',
   sections: [{ kind: 'verse', lines: ['C G'] }],
-  melody: 'E4/4 | D4/4',
+  staves: [{ notes: 'E4/4 | D4/4' }],
   hands: { rh: 'r/4 | r/4', lh: 'r/4 | G2/4' },
 })
 
 describe('arrangeDraft', () => {
-  it('plays the draft as written: the hands’ notes alone, and the melody heard', () => {
+  it('plays the draft as written: the hands’ notes alone, and its single staff heard (ADR 0097)', () => {
     const performance = arrangeDraft(draft)
-    expect(performance.notes.filter((n) => n.hand === 'melody').map((n) => n.startTick)).toEqual([
-      0, 96,
+    const staff = performance.notes.filter((n) => n.hand === 'staff')
+    expect(staff.map((n) => [n.startTick, n.silent])).toEqual([
+      [0, undefined],
+      [96, undefined],
     ])
     expect(
-      performance.notes
-        .filter((n) => n.hand !== 'melody')
-        .map((n) => [n.hand, n.midi, n.startTick]),
+      performance.notes.filter((n) => n.hand !== 'staff').map((n) => [n.hand, n.midi, n.startTick]),
     ).toEqual([['lh', 43, 96]])
   })
 })

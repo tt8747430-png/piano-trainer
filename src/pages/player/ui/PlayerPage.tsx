@@ -58,6 +58,8 @@ function PiecePlayer({ piece }: { piece: Piece }) {
       headings={headings}
       // A song that hides its piano is a lead sheet (ADR 0083).
       piano={!isLeadSheet(piece)}
+      // A piece written in degrees has the piano's staves alone.
+      staves={isDegreePiece(piece) ? undefined : piece.staves}
       modes={
         // A piece written in degrees has no score to edit.
         isDegreePiece(piece) ? null : (

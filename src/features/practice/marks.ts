@@ -8,12 +8,12 @@ import {
   type Midi,
   type PitchClass,
 } from '@/shared/lib/music'
-import type { Audible } from '@/shared/lib/schedule'
+import { isAudible, type Audible } from '@/shared/lib/schedule'
 import type { KeyMark } from '@/shared/ui'
 
 /**
  * The Player's keyboard: the beat group's notes in the hands asked for (the ones heard, or in Wait
- * mode the ones practised), by hand, the tune under them.
+ * mode the ones practised), by hand, a staff's heard over the piano (ADR 0097) under them.
  */
 export function practiceMarks(
   performance: Performance,
@@ -27,9 +27,9 @@ export function practiceMarks(
   const marks = new Map<Midi, KeyMark>()
   const notes = (performance.beatGroups[beatGroup]?.notes ?? [])
     .map((index) => performance.notes[index])
-    .filter((n): n is PerformanceNote => n !== undefined && options.hands[n.hand])
-    // The tune first, so a hand playing the same key wins it.
-    .sort((a, b) => Number(b.hand === 'melody') - Number(a.hand === 'melody'))
+    .filter((n): n is PerformanceNote => n !== undefined && isAudible(n, options.hands))
+    // A staff's first, so a hand playing the same key wins it.
+    .sort((a, b) => Number(b.hand === 'staff') - Number(a.hand === 'staff'))
   for (const played of notes) {
     const label = options.received?.includes(pitchClass(played.midi))
       ? '✓'

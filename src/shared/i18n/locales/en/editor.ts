@@ -37,15 +37,15 @@ export const editor = {
     chordsHidden: 'Chord symbols are hidden: show them from View.',
     lyricsHidden: 'Lyrics are hidden: show them from View.',
     fingersHidden: 'Finger numbers are hidden: show them from View.',
-    // The Lyrics field opens under a note of the tune.
-    noTune: 'Write the tune’s notes first: the words go under them.',
+    // The Lyrics field opens under a note of the staff the words are on.
+    noNotes: 'Write notes on this staff first: the words go under them.',
     // A value's dot, or a triplet, that the song's meter cannot write.
     noDot: 'This value is too short to dot.',
     compound: 'A compound meter divides each beat in three already.',
     // Where the lyrics go (where they are, or will be in a song with none yet), said where the caret
-    // is on another staff (ADR 0093).
+    // is on another staff (ADR 0093): a single staff by its name (ADR 0097), or the upper staff.
     lyricsOn: {
-      melody: 'Lyrics go on the melody staff: tap a note there.',
+      staff: 'Lyrics go on {{staff}}: tap a note there.',
       rh: 'Lyrics go on the upper staff: tap a note there.',
     },
   },
@@ -146,11 +146,11 @@ export const editor = {
     'a-tempo': 'Back to the tempo',
   },
   accidentals: { sharp: 'Sharp', flat: 'Flat', natural: 'Natural' },
-  // Where the caret writes, named as a score names its staves (ADR 0091): the chord symbols' row, the
-  // tune's staff, the piano's two staves. Never a hand: the hands are the Player's.
+  // Where the caret writes, named as a score names its staves (ADR 0091, 0097): the chord symbols'
+  // row, the piano's two staves (a single staff by its own name). Never a hand: the hands are the
+  // Player's.
   layers: {
     chords: 'Chord symbols',
-    melody: 'Melody',
     rh: 'Upper staff',
     lh: 'Lower staff',
   },
@@ -317,12 +317,14 @@ export const editor = {
       cancel: 'Keep it',
     },
     back: 'Back',
+    // Where a take is written: the piano's staves, or a single staff by its name (ADR 0097).
     into: {
       label: 'Into',
+      piano: 'Piano',
+      staves: 'Staves',
       both: 'Both staves',
       rh: 'Upper staff',
       lh: 'Lower staff',
-      melody: 'Melody',
     },
     split: 'Split hands at',
     grid: 'Shortest note',
@@ -390,11 +392,18 @@ export const editor = {
     bpm: 'Beats a minute',
     slower: 'A beat a minute slower',
     faster: 'A beat a minute faster',
-    // A staff's name at the first line's head, opening its menu.
-    staves: { melody: 'Melody staff', piano: 'Piano staves' },
-    removeMelody: 'Remove the melody staff',
-    addMelody: 'Add a melody staff',
+    // A staff's name at the first line's head, opening its menu (ADR 0097): a single staff renamed
+    // in place, another added over or under it, or it removed; the piano's, a staff added over it,
+    // the piano hidden or shown.
+    pianoStaves: 'Piano staves',
+    renameStaff: 'Rename',
+    staffName: 'Staff name',
+    addStaffOver: 'Add a staff over',
+    addStaffUnder: 'Add a staff under',
+    removeStaff: 'Remove',
+    addStaffOverPiano: 'Add a staff over the piano',
     hidePiano: 'Hide the piano',
     showPiano: 'Show the piano',
+    lastInSight: 'A score keeps a staff in sight.',
   },
 } as const

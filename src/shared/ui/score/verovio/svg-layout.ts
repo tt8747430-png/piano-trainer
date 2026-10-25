@@ -71,13 +71,15 @@ export function layoutOf(
   })
 
   const placed: Partial<Record<StaffId, { top: number; bottom: number }>> = {}
+  const boxes: { top: number; bottom: number }[] = []
   staffGroups(svg.querySelector('#m-0')).forEach((group, index) => {
     const staff = staves[index]
     if (!staff) return
     const lines = linesOf(group)
-    placed[staff] = { top: y(lines.top), bottom: y(lines.bottom) }
+    const box = { top: y(lines.top), bottom: y(lines.bottom) }
+    placed[staff] = box
+    boxes.push(box)
   })
-  const boxes = Object.values(placed)
   const firstLines = linesOf(staffGroups(svg.querySelector('#m-0'))[0])
   const space = (firstLines.bottom - firstLines.top) / 4 || 180
   const inPx = (box: Extent): Extent => ({

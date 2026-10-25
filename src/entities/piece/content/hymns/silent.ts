@@ -23,8 +23,12 @@ export default definePiece({
       lines: ['C C C C', 'G7 G7 C C', 'F F C C', 'F F C C', 'G7 G7 C C', 'C G7 C C'],
     },
   ],
-  melody:
-    'G4/1.5 A4/.5 G4/1 | E4/3 | G4/1.5 A4/.5 G4/1 | E4/3 | D5/2 D5/1 | B4/3 | C5/2 C5/1 | G4/3 | A4/2 A4/1 | C5/1.5 B4/.5 A4/1 | G4/1.5 A4/.5 G4/1 | E4/3 | A4/2 A4/1 | C5/1.5 B4/.5 A4/1 | G4/1.5 A4/.5 G4/1 | E4/3 | D5/2 D5/1 | F5/1.5 D5/.5 B4/1 | C5/3 | E5/3 | C5/1.5 G4/.5 E4/1 | G4/1.5 F4/.5 D4/1 | C4/3 | r/3',
+  staves: [
+    {
+      notes:
+        'G4/1.5 A4/.5 G4/1 | E4/3 | G4/1.5 A4/.5 G4/1 | E4/3 | D5/2 D5/1 | B4/3 | C5/2 C5/1 | G4/3 | A4/2 A4/1 | C5/1.5 B4/.5 A4/1 | G4/1.5 A4/.5 G4/1 | E4/3 | A4/2 A4/1 | C5/1.5 B4/.5 A4/1 | G4/1.5 A4/.5 G4/1 | E4/3 | D5/2 D5/1 | F5/1.5 D5/.5 B4/1 | C5/3 | E5/3 | C5/1.5 G4/.5 E4/1 | G4/1.5 F4/.5 D4/1 | C4/3 | r/3',
+    },
+  ],
   // John Freeman Young's English words (1859), the first verse, a syllable under each note of the tune.
   lyrics: [
     'Si-_ lent night, ho-_ ly night, All is calm, all is bright Round yon vir-_ gin moth- er and child. Ho- ly in- fant so ten- der and mild, Sleep in heav- en- ly peace, Sleep in_ heav- en- ly peace_',

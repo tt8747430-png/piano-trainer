@@ -153,18 +153,18 @@ export const REMEMBERED_CHORDS = 24
 export const CHORD_KEYS_MAX = 10
 
 /**
- * How the Player shows a score (ADR 0064, Soundslice's view settings): laid out as one line across,
- * lines down the screen or A4 pages; the score itself, or only the keys; the chord names; the words
- * under the tune (ADR 0093); the tune on its own staff; the staves hidden; and the keys, or the score
- * alone.
+ * How the Player and the score editor show a score (ADR 0064, Soundslice's view settings): laid out
+ * as one line across, lines down the screen or A4 pages; the score itself, or only the keys; the
+ * chord names; the words under the staff they are written on (ADR 0093); the staves hidden, each by
+ * its place (ADR 0097); and the keys, or the score alone.
  */
 export interface ScoreViewSettings {
   readonly layout: SheetView
   readonly notation: boolean
   readonly chordNames: boolean
-  /** The verses under the tune's staff, where the song has words. */
+  /** The verses under the staff they are written on, where the song has words. */
   readonly lyrics: boolean
-  readonly melodyStaff: boolean
+  /** The staves out of sight: a single staff by its place, the piano's upper or lower staff. */
   readonly hidden: readonly StaffId[]
   /** The keys under the score: off, the score has the screen. */
   readonly keys: boolean
@@ -172,14 +172,13 @@ export interface ScoreViewSettings {
 
 /**
  * Down the screen, a line at a time, as a phone held upright reads best (one line across shows a bar
- * or two there); every staff, the chord names, the words, the tune on its staff.
+ * or two there); every staff, the chord names, the words.
  */
 export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   layout: 'scroll',
   notation: true,
   chordNames: true,
   lyrics: true,
-  melodyStaff: true,
   hidden: [],
   keys: true,
 }

@@ -19,11 +19,11 @@ export const HANDS = ['both', 'rh', 'lh'] as const
 export type Hands = (typeof HANDS)[number]
 export type Audible = Readonly<Record<NoteHand, boolean>>
 
-/** The one table of which hands each choice plays; the doubled tune always sounds. */
+/** The one table of which hands each choice plays; the staves over the piano always sound (ADR 0097). */
 const AUDIBLE: Readonly<Record<Hands, Audible>> = {
-  both: { rh: true, lh: true, melody: true },
-  rh: { rh: true, lh: false, melody: true },
-  lh: { rh: false, lh: true, melody: true },
+  both: { rh: true, lh: true, staff: true },
+  rh: { rh: true, lh: false, staff: true },
+  lh: { rh: false, lh: true, staff: true },
 }
 
 export const audibleHands = (hands: Hands): Audible => AUDIBLE[hands]
@@ -84,13 +84,14 @@ export interface Scheduled {
 const SHORTEST_NOTE = 0.15
 /** …nor than this when one beat group is sounded on its own. */
 const SHORTEST_ALONE = 0.35
-/** How loud a more voice sings: under the hands, as a voice behind the piano. */
 /** Notes in a pass release a little early, so repeated notes are heard as two. */
 const LEGATO = 0.95
 /** A joined note (under a slur, or legato) holds to the next, overlapping it as a pianist's fingers do. */
 const JOINED = 1.03
 
-const isAudible = (n: PerformanceNote, hands: Audible) => hands[n.hand]
+/** Whether a note sounds: its hand's or its staff's heard, and not written silent (ADR 0097). */
+export const isAudible = (n: PerformanceNote, hands: Audible): boolean =>
+  hands[n.hand] && n.silent !== true
 
 /**
  * Where a tick sounds swung, on its bar's beats: a pickup's beats are the full bar's it ends, and a

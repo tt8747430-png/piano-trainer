@@ -13,17 +13,18 @@ import { arrangePiece, ownChoice } from '@/features/practice'
 import { chordSymbol, midi, note } from '@/shared/lib/music'
 import { musicToSave, readDraft, writeDraft, type Draft } from './draft'
 import { barAt, barsOf, chordAt, chordsAt, chordWrittenAt, totalTicks } from './timeline'
+import { shape, staffNotes } from '../testing/test-draft'
 
 const CHART_PIECES = PIECES.filter((piece): piece is ChartPiece => !isDegreePiece(piece))
 
-/** The music's chart as it sounds without its hands, and its tune: what a round trip keeps as written. */
-function chartAndTune(music: PieceMusic) {
-  const { chart, melody } = readMusic(music)
+/** The music's chart as it sounds without its hands, and its staves: what a round trip keeps as written. */
+function chartAndStaves(music: PieceMusic) {
+  const { chart, staves } = readMusic(music)
   const sections = chart.sections.map((section) => ({
     ...section,
     lines: section.lines.map((line) => line.map(({ hands: _hands, ...bar }) => bar)),
   }))
-  return { chart: { ...chart, sections }, melody }
+  return { chart: { ...chart, sections }, staves }
 }
 
 /** Each hand's notes as they sound: key, onset, length and finger, struck together in any order. */
@@ -43,7 +44,7 @@ const WRITTEN: PieceMusic = {
     { kind: 'verse', n: 1, lines: ['G@1', 'C-D G'] },
     { kind: 'chorus', last: true, lines: ['Em@2-Am@1-D7@1:t1'] },
   ],
-  melody: 'D4/1 | G4/2 A4/1 B4/1 | C5/4',
+  staves: [{ notes: 'D4/1 | G4/2 A4/1 B4/1 | C5/4' }],
   hands: { lh: '- | C3/4 E3+G3^2/1@2 | G2/4 | -', rh: '- | - | B3+D4/2 r/2 | -' },
 }
 
@@ -70,7 +71,7 @@ describe('the draft', () => {
       const music = musicOf(piece)
       const draft = readDraft(music)
       const written = writeDraft(draft)
-      expect(chartAndTune(written)).toEqual(chartAndTune(music))
+      expect(chartAndStaves(written)).toEqual(chartAndStaves(music))
       expect(played(readDraft(written))).toEqual(played(draft))
     },
   )
@@ -102,7 +103,7 @@ describe('the draft', () => {
 
   it('writes back written hands, a pickup, sections’ headings and method codes', () => {
     const written = writeDraft(readDraft(WRITTEN))
-    expect(chartAndTune(written)).toEqual(chartAndTune(WRITTEN))
+    expect(chartAndStaves(written)).toEqual(chartAndStaves(WRITTEN))
     expect(written.hands?.lh).toMatch(/\| C3\/4 E3\+G3\^2\/1@2 \| G2\/4 \|/)
     expect(written.hands?.rh).toMatch(/\| B3\+D4\/2 \|/)
     expect(written.sections.map(({ lines: _lines, ...heading }) => heading)).toEqual([
@@ -112,7 +113,7 @@ describe('the draft', () => {
   })
 
   it('carries no section’s own pattern: the song’s form alone (ADR 0091)', () => {
-    const { hands: _hands, melody: _melody, ...plain } = WRITTEN
+    const { hands: _hands, staves: _staves, ...plain } = WRITTEN
     const patterned: PieceMusic = {
       ...plain,
       sections: [{ kind: 'verse', pattern: 'M3', lines: ['G C'] }],
@@ -132,22 +133,50 @@ describe('the draft', () => {
       tempo: 90,
       pattern: 'r1',
       sections: [{ kind: 'verse', lines: ['G G G G G'] }],
-      melody: 'D4/4 | D4/4 | D4/4 | D4/4 | D4/4',
+      staves: [{ notes: 'D4/4 | D4/4 | D4/4 | D4/4 | D4/4' }],
     })
-    const [first] = five.melody
+    const [first] = staffNotes(five)
     if (!first) throw new Error('a note')
     expect(musicToSave(five)).not.toBeNull()
-    expect(musicToSave({ ...five, melody: [{ ...first, durationTicks: 20 * 24 }] })).toBeNull()
+    const long = {
+      ...five,
+      staves: [{ clef: 'treble' as const, notes: [{ ...first, durationTicks: 20 * 24 }] }],
+    }
+    expect(musicToSave(long)).toBeNull()
   })
 
-  it('holds chords by where they start in their bar, the tune and hands on the timeline', () => {
+  it('holds each single staff by its place, its name and clef with its notes (ADR 0097)', () => {
+    const music: PieceMusic = {
+      ...WRITTEN,
+      staves: [
+        { name: 'Voice', notes: 'D4/1 | G4/2 A4/1 B4/1 | C5/4' },
+        { name: { en: 'Cello', ru: 'Виолончель' }, clef: 'bass', notes: 'r/1 | G2/4 | C3/4' },
+        { notes: 'r/1 | r/4 | r/4' },
+      ],
+      leadSheet: true,
+    }
+    const draft = readDraft(music)
+    expect(draft.staves.map(({ name, clef }) => [name, clef])).toEqual([
+      ['Voice', 'treble'],
+      [{ en: 'Cello', ru: 'Виолончель' }, 'bass'],
+      [undefined, 'treble'],
+    ])
+    expect(shape(staffNotes(draft, 1))).toEqual(['G2@24/96', 'C3@120/96'])
+    expect(staffNotes(draft, 2)).toEqual([])
+    expect(draft.leadSheet).toBe(true)
+    // An empty staff is written as a rest, so it stays (ADR 0072).
+    const [voice, cello] = music.staves ?? []
+    expect(writeDraft(draft).staves).toEqual([voice, cello, { notes: 'r/1' }])
+  })
+
+  it('holds chords by where they start in their bar, the staves and hands on the timeline', () => {
     const draft = readDraft(WRITTEN)
     expect(draft.key).toEqual({ tonic: note('G'), minor: false })
     const [pickup, second] = barsOf(draft)
     expect(pickup).toMatchObject({ index: 0, section: 0, line: 0, start: 0 })
     expect(pickup?.bar.ticks).toBe(24)
     expect(second?.bar.chords.map((chord) => chord.at)).toEqual([0, 48])
-    expect(draft.melody[1]).toEqual({
+    expect(staffNotes(draft)[1]).toEqual({
       midi: midi(67),
       spelled: note('G'),
       startTick: 24,

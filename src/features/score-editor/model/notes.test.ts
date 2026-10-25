@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { midi } from '@/shared/lib/music'
-import { draftOf, shape } from '../testing/test-draft'
+import { draftOf, oneStaff, shape, staffNotes } from '../testing/test-draft'
 import { musicToSave } from './draft'
 import {
   addToChord,
@@ -23,22 +23,22 @@ import { barsOf, totalTicks } from './timeline'
 
 const keys = (...numbers: number[]) => numbers.map((n) => midi(n))
 
-describe('writeNotes in the melody', () => {
+describe('writeNotes on a single staff', () => {
   it('writes a note at the caret, spelled in the key, and says where the next goes', () => {
-    const written = writeNotes(draftOf(), 'melody', 24, keys(66), 24)
-    expect(shape(written.draft.melody)).toEqual(['F#4@24/24'])
+    const written = writeNotes(oneStaff(), 'staff0', 24, keys(66), 24)
+    expect(shape(staffNotes(written.draft))).toEqual(['F#4@24/24'])
     expect(written.end).toBe(48)
   })
 
   it('keeps the highest of keys struck together', () => {
-    expect(shape(writeNotes(draftOf(), 'melody', 0, keys(60, 67, 64), 24).draft.melody)).toEqual([
-      'G4@0/24',
-    ])
+    expect(
+      shape(staffNotes(writeNotes(oneStaff(), 'staff0', 0, keys(60, 67, 64), 24).draft)),
+    ).toEqual(['G4@0/24'])
   })
 
   it('cuts the note sounding into it and replaces those starting under it', () => {
-    const draft = draftOf({ melody: 'B4/2 A4/1 G4/1' })
-    expect(shape(writeNotes(draft, 'melody', 24, keys(74), 48).draft.melody)).toEqual([
+    const draft = draftOf({ staves: [{ notes: 'B4/2 A4/1 G4/1' }] })
+    expect(shape(staffNotes(writeNotes(draft, 'staff0', 24, keys(74), 48).draft))).toEqual([
       'B4@0/24',
       'D5@24/48',
       'G4@72/24',
@@ -46,23 +46,23 @@ describe('writeNotes in the melody', () => {
   })
 
   it('lets a note cross a barline', () => {
-    const written = writeNotes(draftOf(), 'melody', 72, keys(67), 48)
-    expect(shape(written.draft.melody)).toEqual(['G4@72/48'])
+    const written = writeNotes(oneStaff(), 'staff0', 72, keys(67), 48)
+    expect(shape(staffNotes(written.draft))).toEqual(['G4@72/48'])
   })
 
   it('adds a bar for a note past the end: the meter’s length, no chord (ADR 0094)', () => {
-    const draft = draftOf()
-    const written = writeNotes(draft, 'melody', totalTicks(draft), keys(67), 24)
+    const draft = oneStaff()
+    const written = writeNotes(draft, 'staff0', totalTicks(draft), keys(67), 24)
     expect(totalTicks(written.draft)).toBe(288)
     const last = barsOf(written.draft).at(-1)
     expect(last?.line).toBe(0)
     expect(last?.bar.chords).toEqual([])
-    expect(shape(written.draft.melody)).toEqual(['G4@192/24'])
+    expect(shape(staffNotes(written.draft))).toEqual(['G4@192/24'])
   })
 
   it('stops a note at the piece’s end', () => {
-    const written = writeNotes(draftOf(), 'melody', 168, keys(67), 96)
-    expect(shape(written.draft.melody)).toEqual(['G4@168/24'])
+    const written = writeNotes(oneStaff(), 'staff0', 168, keys(67), 96)
+    expect(shape(staffNotes(written.draft))).toEqual(['G4@168/24'])
     expect(written.end).toBe(192)
   })
 })
@@ -105,10 +105,10 @@ describe('the notes at the caret', () => {
     ])
   })
 
-  it('keeps the melody one line: a higher key takes the note’s place, a lower one leaves it', () => {
-    const tune = writeNotes(draftOf(), 'melody', 0, keys(64), 24).draft
-    expect(shape(addToChord(tune, 'melody', 0, midi(67), 24).melody)).toEqual(['G4@0/24'])
-    expect(shape(addToChord(tune, 'melody', 0, midi(60), 24).melody)).toEqual(['E4@0/24'])
+  it('keeps a single staff one line: a higher key takes the note’s place, a lower one leaves it', () => {
+    const tune = writeNotes(oneStaff(), 'staff0', 0, keys(64), 24).draft
+    expect(shape(staffNotes(addToChord(tune, 'staff0', 0, midi(67), 24)))).toEqual(['G4@0/24'])
+    expect(shape(staffNotes(addToChord(tune, 'staff0', 0, midi(60), 24)))).toEqual(['E4@0/24'])
   })
 
   it('finds and deletes them', () => {
@@ -155,10 +155,10 @@ describe('the notes at the caret', () => {
 })
 
 describe('rests', () => {
-  it('cut the melody’s note sounding into them and take the notes under them', () => {
-    const draft = draftOf({ melody: 'B4/2 A4/1 G4/1' })
-    const rested = writeRest(draft, 'melody', 24, 48)
-    expect(shape(rested.draft.melody)).toEqual(['B4@0/24', 'G4@72/24'])
+  it('cut a single staff’s note sounding into them and take the notes under them', () => {
+    const draft = draftOf({ staves: [{ notes: 'B4/2 A4/1 G4/1' }] })
+    const rested = writeRest(draft, 'staff0', 24, 48)
+    expect(shape(staffNotes(rested.draft))).toEqual(['B4@0/24', 'G4@72/24'])
     expect(rested.end).toBe(72)
   })
 
@@ -171,22 +171,22 @@ describe('rests', () => {
 
 describe('closeGap (Insert mode’s Delete, ADR 0092)', () => {
   it('pulls the later notes left by the gap', () => {
-    const draft = draftOf({ melody: 'B4/1 A4/1 G4/1 F#4/1' })
-    expect(shape(closeGap(draft, 'melody', { from: 24, to: 48 }).melody)).toEqual([
+    const draft = draftOf({ staves: [{ notes: 'B4/1 A4/1 G4/1 F#4/1' }] })
+    expect(shape(staffNotes(closeGap(draft, 'staff0', { from: 24, to: 48 })))).toEqual([
       'B4@0/24',
       'G4@24/24',
       'F#4@48/24',
     ])
   })
 
-  it('cuts the melody’s note held into the gap, so the notes pulled left never sound under it', () => {
+  it('cuts a single staff’s note held into the gap, so the notes pulled left never sound under it', () => {
     // A half note tied over the barline, a quarter after it: the tie's second half taken.
     const draft = draftOf({
-      melody: 'r/3 C5/2 | D5/1 r/2',
+      staves: [{ notes: 'r/3 C5/2 | D5/1 r/2' }],
       sections: [{ kind: 'verse', lines: ['G C'] }],
     })
-    const closed = closeGap(draft, 'melody', { from: 96, to: 120 })
-    expect(shape(closed.melody)).toEqual(['C5@72/24', 'D5@96/24'])
+    const closed = closeGap(draft, 'staff0', { from: 96, to: 120 })
+    expect(shape(staffNotes(closed))).toEqual(['C5@72/24', 'D5@96/24'])
     expect(musicToSave(closed)).not.toBeNull()
     // A hand's held note keeps sounding under what is pulled over it, as writing leaves it.
     const hand = draftOf({ hands: { rh: 'C4/4 | r/1 E4/1 r/2' } })
@@ -204,31 +204,31 @@ describe('tieNotes', () => {
   })
 
   it('changes nothing where no same key follows', () => {
-    const draft = draftOf({ melody: 'B4/2 A4/2' })
-    expect(tieNotes(draft, 'melody', 0)).toBe(draft)
+    const draft = draftOf({ staves: [{ notes: 'B4/2 A4/2' }] })
+    expect(tieNotes(draft, 'staff0', 0)).toBe(draft)
   })
 })
 
 describe('setDuration', () => {
   it('makes a quarter an eighth, the time it leaves a rest', () => {
-    const draft = draftOf({ melody: 'B4/1 A4/1' })
-    expect(shape(setDuration(draft, 'melody', 0, 12).melody)).toEqual(['B4@0/12', 'A4@24/24'])
+    const draft = draftOf({ staves: [{ notes: 'B4/1 A4/1' }] })
+    expect(shape(staffNotes(setDuration(draft, 'staff0', 0, 12)))).toEqual(['B4@0/12', 'A4@24/24'])
   })
 
   it('makes a note longer over the notes after it, as a note written there would', () => {
-    const draft = draftOf({ melody: 'B4/1 A4/1 G4/1' })
-    expect(shape(setDuration(draft, 'melody', 0, 48).melody)).toEqual(['B4@0/48', 'G4@48/24'])
+    const draft = draftOf({ staves: [{ notes: 'B4/1 A4/1 G4/1' }] })
+    expect(shape(staffNotes(setDuration(draft, 'staff0', 0, 48)))).toEqual(['B4@0/48', 'G4@48/24'])
   })
 
   it('changes each note chosen, the first ones first', () => {
-    const draft = draftOf({ melody: 'B4/1 A4/1 G4/1 F#4/1' })
-    expect(shape(setDuration(draft, 'melody', { from: 0, to: 72 }, 12).melody)).toEqual([
+    const draft = draftOf({ staves: [{ notes: 'B4/1 A4/1 G4/1 F#4/1' }] })
+    expect(shape(staffNotes(setDuration(draft, 'staff0', { from: 0, to: 72 }, 12)))).toEqual([
       'B4@0/12',
       'A4@24/12',
       'G4@48/12',
       'F#4@72/24',
     ])
-    expect(shape(setDuration(draft, 'melody', { from: 0, to: 96 }, 48).melody)).toEqual([
+    expect(shape(staffNotes(setDuration(draft, 'staff0', { from: 0, to: 96 }, 48)))).toEqual([
       'B4@0/48',
       'G4@48/48',
     ])
@@ -243,8 +243,8 @@ describe('setDuration', () => {
   })
 
   it('stops a note at the piece’s end, and changes nothing where no note is', () => {
-    const draft = draftOf({ melody: 'B4/4 A4/3 G4/1' })
-    expect(shape(setDuration(draft, 'melody', 168, 48).melody)).toContain('G4@168/24')
+    const draft = draftOf({ staves: [{ notes: 'B4/4 A4/3 G4/1' }] })
+    expect(shape(staffNotes(setDuration(draft, 'staff0', 168, 48)))).toContain('G4@168/24')
     expect(setDuration(draft, 'lh', 0, 48)).toBe(draft)
   })
 })

@@ -6,11 +6,16 @@ export { copyTarget, whyNoPaste } from './model/clip-edits'
 export { chordSuggestions } from './model/chords'
 export {
   isHandLayer,
+  layerStaff,
+  lyricsLayer,
   musicToSave,
   readDraft,
+  singleStaffOf,
+  staffLayer,
   writeDraft,
   type Draft,
   type DraftNote,
+  type DraftStaff,
   type Layer,
   type NoteLayer,
 } from './model/draft'
@@ -28,7 +33,7 @@ export {
 export { carriesAccidental, notesAt, notesOf, startNear } from './model/notes'
 export { metersFor } from './model/meters'
 export { createEditorStore, type EditorStore } from './model/store'
-export { TAKE_INTO, takeParts, type TakeInto } from './model/take-edits'
+export { takeParts, type TakeInto } from './model/take-edits'
 export {
   barAt,
   barsOf,

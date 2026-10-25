@@ -1,10 +1,11 @@
 import { isMethodCode, METHODS, type PatternFit, type PatternId } from '@/entities/pattern'
-import type { Chart, ChartChord, Melody } from '@/shared/lib/arrangement'
+import type { Chart, ChartChord, StaffMusic } from '@/shared/lib/arrangement'
 import { beatsToTicks, isCompound, type ChordSize, type Tick } from '@/shared/lib/music'
-import { parseLyrics, tuneLength, withHandLyrics, withMelodyLyrics } from './lyrics'
+import { ContentError } from './content-error'
+import { parseLyrics, tuneLength, withHandLyrics, withStaffLyrics } from './lyrics'
 import { parseChart } from './parse-chart'
-import { parseMelody } from './parse-melody'
 import { parseProgression } from './parse-progression'
+import { parseStaff } from './parse-staff'
 import { isDegreePiece, lyricsStaff, type ChartPiece, type Piece } from './types'
 
 /**
@@ -21,13 +22,25 @@ export function chartOf(piece: Piece, chordSize?: ChordSize): Chart {
   return withHandLyrics(chart, parseLyrics(piece, tuneLength(chart, undefined)) ?? [])
 }
 
-/** A piece's tune, singing its words where they are on its staff (ADR 0093). */
-export function melodyOf(piece: Piece): Melody | undefined {
-  if (isDegreePiece(piece)) return undefined
-  const melody = parseMelody(piece)
-  if (melody === undefined || piece.lyrics === undefined || lyricsStaff(piece) !== 'melody')
-    return melody
-  return withMelodyLyrics(melody, parseLyrics(piece, melody.length) ?? [])
+/**
+ * A piece's single staves over the piano, top down (ADR 0097): each its clef and its notes, the
+ * staff its words are on singing them (ADR 0093). Words on a staff the piece has not are the
+ * content's mistake: a ContentError names it.
+ */
+export function stavesOf(piece: Piece): StaffMusic[] {
+  if (isDegreePiece(piece)) return []
+  const written = piece.staves ?? []
+  const on = lyricsStaff(piece)
+  if (piece.lyrics !== undefined && typeof on === 'number' && written[on] === undefined)
+    throw new ContentError(piece.id, {}, `the lyrics are on staff ${on + 1}, which it has not`)
+  return written.map((staff, place) => {
+    const notes = parseStaff(piece, place)
+    const sung = piece.lyrics !== undefined && on === place
+    return {
+      clef: staff.clef ?? 'treble',
+      notes: sung ? withStaffLyrics(notes, parseLyrics(piece, notes.length) ?? []) : notes,
+    }
+  })
 }
 
 /** Every chord of a chart in order. */
@@ -55,7 +68,7 @@ export const hasChartPlan = (piece: Piece): boolean =>
 export const pieceFit = (piece: Piece): PatternFit => ({
   methodCodes: hasChartPlan(piece),
   ...(hasChartPlan(piece) ? { chart: [...patternsOfPiece(piece)] } : {}),
-  melody: melodyOf(piece) !== undefined,
+  melody: stavesOf(piece).length > 0,
   key: true,
   simpleTime: !isCompound(piece.meter),
 })

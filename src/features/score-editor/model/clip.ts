@@ -12,11 +12,14 @@ import { clearUnder, makeRoom, notesOf, oneLine, reaching, spelledIn, withNotes 
 import type { TickSpan } from './state'
 import { totalTicks } from './timeline'
 
-/** Bars copied with their notes, which are timed from the first bar's start: the chord row's clip. */
+/**
+ * Bars copied with their notes, which are timed from the first bar's start: the chord row's clip,
+ * each single staff's notes by its place (ADR 0097) and each hand's.
+ */
 export interface BarsClip {
   readonly kind: 'bars'
   readonly bars: readonly DraftBar[]
-  readonly melody: readonly DraftNote[]
+  readonly staves: readonly (readonly DraftNote[])[]
   readonly hands: Readonly<Record<HandId, readonly DraftNote[]>>
 }
 
@@ -44,8 +47,8 @@ export function copyNotes(draft: Draft, layer: NoteLayer, { from, to }: TickSpan
 }
 
 /**
- * The clip's notes as a staff takes them: a hand every note; the melody one line (`oneLine`) ending
- * by the clip's end, so it never sounds over the tune's notes after it, with no finger.
+ * The clip's notes as a staff takes them: a hand every note; a single staff one line (`oneLine`)
+ * ending by the clip's end, so it never sounds over its notes after it, with no finger.
  */
 function fitTo({ notes, ticks }: NotesClip, layer: NoteLayer): DraftNote[] {
   if (isHandLayer(layer)) return [...notes]

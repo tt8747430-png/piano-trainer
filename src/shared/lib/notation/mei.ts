@@ -13,7 +13,15 @@ import {
   type TimeSignature,
   tempoNote,
 } from '@/shared/lib/music'
-import { clefIn, type Measure, type Score, type ScoreEvent, type StaffId } from './types'
+import {
+  clefIn,
+  isSingleStaff,
+  type Measure,
+  type Score,
+  type ScoreEvent,
+  type SingleStaff,
+  type StaffId,
+} from './types'
 import { barStartOf, beamPlan } from './beams'
 import { ticksOf } from './values'
 
@@ -38,8 +46,17 @@ export interface MeiOptions {
   readonly labels?: StaffLabels | undefined
 }
 
-/** The names a score's staves are printed with: the tune's, and the piano's over its two staves. */
-export type StaffLabels = Readonly<Partial<Record<'melody' | 'piano', string>>>
+/**
+ * A staff's name as printed at a line's head (ADR 0094, 0097): the learner's, or a placeholder (the
+ * editor's, for a staff with none, so it has a name to click) printed soft, in italics.
+ */
+export interface PrintedName {
+  readonly text: string
+  readonly placeholder?: boolean
+}
+
+/** The names a score's staves are printed with: each single staff's, and the piano's over its two. */
+export type StaffLabels = Readonly<Partial<Record<SingleStaff | 'piano', PrintedName>>>
 
 /** What a line starts in, as the line before it ends with a courtesy signature where it changes. */
 export type NextLine = Pick<Measure, 'key' | 'time' | 'clefs'>
@@ -59,12 +76,12 @@ export function scoreToMei(score: Score, options: MeiOptions = {}): string {
   const { title = '', timeBefore, labels = {} } = options
   const staves = (options.staves ?? score.staves).filter((staff) => score.staves.includes(staff))
   const number = (staff: StaffId) => staves.indexOf(staff) + 1
-  const piano: readonly StaffId[] = staves.filter((staff) => staff === 'treble' || staff === 'bass')
-  const sung = staves.filter((staff) => !piano.includes(staff))
+  const piano: readonly StaffId[] = staves.filter((staff) => !isSingleStaff(staff))
+  const single = staves.filter(isSingleStaff)
   const first = score.measures[0]
-  // The piano's name over its brace, or on its one staff drawn.
+  // A single staff's own name; the piano's over its brace, or on its one staff drawn.
   const nameOf = (staff: StaffId) =>
-    staff === 'melody' ? labels.melody : piano.length === 1 ? labels.piano : undefined
+    isSingleStaff(staff) ? labels[staff] : piano.length === 1 ? labels.piano : undefined
   const staffDef = (staff: StaffId) => {
     const attrs = `n="${number(staff)}" lines="5" ${clefAttrs(clefIn(first ?? {}, staff))}`
     const name = nameOf(staff)
@@ -80,7 +97,7 @@ export function scoreToMei(score: Score, options: MeiOptions = {}): string {
     timeBefore.unit === time.unit
   const scoreDef = `<scoreDef ${meterAttrs(time, score.meter)}${continues ? ' meter.visible="false"' : ''} key.sig="${keySig(
     keySignature(first?.key ?? score.key),
-  )}"><staffGrp>${sung.map(staffDef).join('')}${
+  )}"><staffGrp>${single.map(staffDef).join('')}${
     piano.length > 1
       ? `<staffGrp symbol="brace" bar.thru="true">${
           labels.piano === undefined ? '' : label(labels.piano)
@@ -146,8 +163,9 @@ const JUMP_TEXT: Readonly<Record<Jump, string>> = {
 const escape = (text: string) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
-/** A staff's name as Verovio prints it at the line's head, smaller than its words. */
-const label = (name: string) => `<label><rend fontsize="small">${escape(name)}</rend></label>`
+/** A staff's name as Verovio prints it at the line's head, smaller than its words; a placeholder in italics. */
+const label = ({ text, placeholder }: PrintedName) =>
+  `<label><rend fontsize="small"${placeholder ? ' fontstyle="italic"' : ''}>${escape(text)}</rend></label>`
 
 const keySig = (fifths: number) =>
   fifths === 0 ? '0' : `${Math.abs(fifths)}${fifths > 0 ? 's' : 'f'}`
@@ -237,7 +255,7 @@ class Writer {
         before && clefIn(before, staff) !== clefIn(measure, staff)
           ? `<clef ${clefAttrs(clefIn(measure, staff), '')}/>`
           : ''
-      const layers = measure.staves[staff].map((voice, v) => {
+      const layers = (measure.staves[staff] ?? []).map((voice, v) => {
         const stem = voice.stem === 'auto' ? '' : ` stem.dir="${voice.stem}"`
         const events = this.layer(voice.events, measure, staff, `${staff} ${v}`, stem, controls)
         return `<layer n="${v + 1}">${v === 0 ? clef : ''}${events}</layer>`

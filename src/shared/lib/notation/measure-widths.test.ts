@@ -80,11 +80,15 @@ describe('labelLead (ADR 0094)', () => {
   it('gives the first line the room its staves’ names take, the longest, as Verovio indents it', () => {
     expect(labelLead({})).toBe(0)
     // Verovio's indents at scale 1: Piano 73, Melody 75, Фортепиано 122 px.
-    const piano = labelLead({ piano: 'Piano' })
+    const piano = labelLead({ piano: { text: 'Piano' } })
     expect(Math.abs(piano - 73)).toBeLessThan(6)
-    const both = labelLead({ melody: 'Melody', piano: 'Piano' })
+    const both = labelLead({ staff0: { text: 'Melody' }, piano: { text: 'Piano' } })
     expect(Math.abs(both - 75)).toBeLessThan(6)
-    const russian = labelLead({ melody: 'Мелодия', piano: 'Фортепиано' })
+    const russian = labelLead({
+      staff0: { text: 'Мелодия' },
+      staff1: { text: 'Голос', placeholder: true },
+      piano: { text: 'Фортепиано' },
+    })
     expect(Math.abs(russian - 122)).toBeLessThan(8)
   })
 
@@ -97,7 +101,7 @@ describe('labelLead (ADR 0094)', () => {
       ],
     })
     const [first = 0, second = 0] = measureWidths(score)
-    const labels = { piano: 'Piano' }
+    const labels = { piano: { text: 'Piano' } }
     expect(measureWidths(score, 1, true, labels)).toEqual([first + labelLead(labels), second])
   })
 })

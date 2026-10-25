@@ -128,7 +128,7 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
   `prefers-contrast: more` layer: a new role gets all three where it is a line or a secondary ink.
 - **Chord-tone colours are role tokens** (`--role-root` … `--role-13th`, each with its `-wash`). A coloured key always
   also shows its degree or finger label, so colour is never the only cue. **Palette law:** role colours only on chord
-  tones (keys, a chord's tone chips); hand colours (`--hand-rh`, `--hand-lh`, `--hand-melody`, each with its `-wash`)
+  tones (keys, a chord's tone chips); hand colours (`--hand-rh`, `--hand-lh`, `--hand-staff`, each with its `-wash`)
   only in the Player; `--attention` only for a gap or "to check" (the dot, never the text beside it); the chrome's
   paints (`--paint-*`, each paint's wash, with `--on-paint-*` its deep shade for the icon on it) name places and kinds
   of step, never a chord tone. The keys have their own

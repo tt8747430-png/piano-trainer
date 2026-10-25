@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type { Syllable } from '@/shared/lib/music'
 import { ContentError } from './content-error'
 import { parseChart } from './parse-chart'
-import { parseMelody } from './parse-melody'
+import { parseStaff } from './parse-staff'
 import {
   gatherLyrics,
   parseLyrics,
@@ -10,7 +10,7 @@ import {
   singingNotes,
   tuneLength,
   withHandLyrics,
-  withMelodyLyrics,
+  withStaffLyrics,
   writeLyrics,
 } from './lyrics'
 import { testSong } from '../testing/test-pieces'
@@ -61,30 +61,30 @@ describe('writeLyrics', () => {
 })
 
 describe('the tune a piece sings on', () => {
-  const sung = testSong(['C G', 'C G'], { melody: 'C4/2 D4/2 | E4/4 | r/4 | G4/4' })
+  const sung = testSong(['C G', 'C G'], { staves: [{ notes: 'C4/2 D4/2 | E4/4 | r/4 | G4/4' }] })
 
-  it('is the melody’s notes where the piece has one, else the right hand’s onsets, each chord one note', () => {
-    expect(tuneLength(parseChart(sung), parseMelody(sung))).toBe(4)
+  it('is its single staff’s notes where the words are on one, else the right hand’s onsets, each chord one note', () => {
+    expect(tuneLength(parseChart(sung), parseStaff(sung, 0))).toBe(4)
     const played = testSong(['C G'], { hands: { rh: 'C4+E4/1 G4/1 r/1 E4/.5 F4/.5 | C4/4' } })
     expect(tuneLength(parseChart(played), undefined)).toBe(5)
     expect(tuneLength(parseChart(testSong(['C'])), undefined)).toBe(0)
   })
 
-  it('puts each verse on the melody’s notes, trailing a verse that sings nothing there', () => {
-    const melody = withMelodyLyrics(parseMelody(sung) ?? [], [
+  it('puts each verse on a single staff’s notes, trailing a verse that sings nothing there', () => {
+    const staff = withStaffLyrics(parseStaff(sung, 0), [
       readLyrics('one two three four'),
       readLyrics('eins zwei'),
     ])
-    expect(melody.map((n) => n.lyrics)).toEqual([
+    expect(staff.map((n) => n.lyrics)).toEqual([
       [syl('one'), syl('eins')],
       [syl('two'), syl('zwei')],
       [syl('three')],
       [syl('four')],
     ])
-    expect(gatherLyrics(melody).map(writeLyrics)).toEqual(['one two three four', 'eins zwei ~ ~'])
+    expect(gatherLyrics(staff).map(writeLyrics)).toEqual(['one two three four', 'eins zwei ~ ~'])
   })
 
-  it('puts a verse on the right hand’s highest note at each onset where the piece has no melody', () => {
+  it('puts a verse on the right hand’s highest note at each onset where the words are on the upper staff', () => {
     const played = testSong(['C G'], { hands: { rh: 'C4+E4/1 G4/1 r/1 E4/.5 F4/.5 | C4/4' } })
     const chart = withHandLyrics(parseChart(played), [readLyrics('a- b_ c d')])
     const bars = chart.sections.flatMap((section) => section.lines.flat())

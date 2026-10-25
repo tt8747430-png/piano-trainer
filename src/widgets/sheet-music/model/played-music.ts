@@ -1,25 +1,21 @@
 import type { Performance } from '@/shared/lib/arrangement'
-import { midi } from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
 
 /**
- * The music the Player's sheet writes: the tune on its own staff where it is heard (`ownStaff`; the
- * Player doubles it an octave up to stand out, its staff writes it as the song does), its words
- * left out where the View hides them (`lyrics` off, ADR 0093); else the performance itself.
+ * The music the Player's sheet writes: the performance itself, its single staves over the piano as
+ * the song writes them, heard or not (ADR 0097); the piano's staves left out of a lead sheet (`piano`
+ * off, ADR 0083); its words left out where the View hides them (`lyrics` off, ADR 0093).
  */
 export function playedMusic(
   performance: Performance,
-  ownStaff: boolean,
-  lyrics = true,
+  { lyrics = true, piano = true }: { readonly lyrics?: boolean; readonly piano?: boolean } = {},
 ): TimedMusic {
-  if (!ownStaff && lyrics) return performance
+  if (lyrics && piano) return performance
   return {
     ...performance,
-    notes: performance.notes.map((n) => {
-      const { lyrics: _sung, ...silent } = n
-      const written = lyrics ? n : silent
-      return ownStaff && n.hand === 'melody' ? { ...written, midi: midi(n.midi - 12) } : written
-    }),
-    ...(ownStaff ? { melodyStaff: true } : {}),
+    ...(piano ? {} : { piano: false }),
+    notes: lyrics
+      ? performance.notes
+      : performance.notes.map(({ lyrics: _sung, ...silent }) => silent),
   }
 }

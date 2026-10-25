@@ -4,7 +4,7 @@ import { arrangePiece, ownChoice } from '@/features/practice'
 import { arrange, type Chart, type Performance } from '@/shared/lib/arrangement'
 import { C_MAJOR, note } from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
-import { audibleHands, schedule, type Sound } from '@/shared/lib/schedule'
+import { audibleHands, isAudible, schedule, type Sound } from '@/shared/lib/schedule'
 import { unmarked, type ShownKeys } from '@/shared/ui'
 
 /** The piece a pattern that plays the tune is heard over: its lesson's (ADR 0021). */
@@ -26,20 +26,27 @@ export interface PatternSample {
   readonly piece: Piece | null
 }
 
-/** The performance from its first note to where its second line begins: the first line's music. */
+/** Both hands heard. */
+const BOTH = audibleHands('both')
+
+/**
+ * The performance from its first sound to where its second line begins: the first line's music, the
+ * pattern's two hands on the grand staff (a piece's own staves are its page's, ADR 0097).
+ */
 function firstLine(performance: Performance): { music: TimedMusic; from: number; to: number } {
   const to =
     performance.bars.find((bar) => bar.section > 0 || bar.line > 0)?.startTick ??
     performance.totalTicks
   const before = (tick: number) => tick < to
+  const { staves: _staves, ...piano } = performance
   return {
     music: {
-      ...performance,
+      ...piano,
       bars: performance.bars.filter((bar) => before(bar.startTick)),
-      notes: performance.notes.filter((n) => before(n.startTick)),
+      notes: performance.notes.filter((n) => n.hand !== 'staff' && before(n.startTick)),
       chords: performance.chords.filter((chord) => before(chord.startTick)),
     },
-    from: performance.beatGroups[0]?.tick ?? 0,
+    from: performance.notes.find((n) => isAudible(n, BOTH))?.startTick ?? 0,
     to,
   }
 }
@@ -65,7 +72,7 @@ export function patternSample(pattern: BookPattern, book: PatternBook): PatternS
   const { music, from, to } = firstLine(performance)
   const { sounds } = schedule(performance, {
     tempo: tunePiece?.tempo ?? SAMPLE_TEMPO,
-    hands: audibleHands('both'),
+    hands: BOTH,
     fromTick: from,
     toTick: to,
   })

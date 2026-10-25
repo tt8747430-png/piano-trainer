@@ -4,20 +4,20 @@ import { caretPlaces, itemAt, nextCaret, snapToChord, tapPlaces } from './caret'
 
 describe('where a click lands', () => {
   const tune = draftOf({
-    melody: 'B4/1 C5/1 D5/1 r/1 | A4/2 G4/2',
+    staves: [{ notes: 'B4/1 C5/1 D5/1 r/1 | A4/2 G4/2' }],
     sections: [{ kind: 'verse', lines: ['G C D'] }],
   })
 
   it('on a note’s start, or the place after a bar’s last note where it ends early, never an empty step', () => {
     // Bar 1: three quarters, then room for one: the place after them.
-    expect(tapPlaces(tune, 'melody').filter((tick) => tick < 96)).toEqual([0, 24, 48, 72])
+    expect(tapPlaces(tune, 'staff0').filter((tick) => tick < 96)).toEqual([0, 24, 48, 72])
     // Bar 2: two halves, nothing between.
-    expect(tapPlaces(tune, 'melody').filter((tick) => tick >= 96 && tick < 192)).toEqual([96, 144])
+    expect(tapPlaces(tune, 'staff0').filter((tick) => tick >= 96 && tick < 192)).toEqual([96, 144])
   })
 
   it('on a bar’s start where its row writes nothing: an empty bar', () => {
     expect(tapPlaces(tune, 'rh')).toEqual([0, 96, 192])
-    expect(tapPlaces(tune, 'melody').filter((tick) => tick >= 192)).toEqual([192])
+    expect(tapPlaces(tune, 'staff0').filter((tick) => tick >= 192)).toEqual([192])
   })
 
   it('on a chord in the chords, or a bar’s start where it has none', () => {
@@ -27,47 +27,47 @@ describe('where a click lands', () => {
 })
 
 const tune = draftOf({
-  melody: 'B4/1.5 A4/.5 G4/2 | C5/4',
+  staves: [{ notes: 'B4/1.5 A4/.5 G4/2 | C5/4' }],
   sections: [{ kind: 'verse', lines: ['G C-D'] }],
 })
 
 describe('the caret in a voice', () => {
   it('moves note to note, never inside one, where it would mark empty staff (ADR 0088)', () => {
-    expect(nextCaret(tune, 'melody', 0, 24, 1)).toBe(36)
-    expect(nextCaret(tune, 'melody', 36, 48, 1)).toBe(48)
-    expect(nextCaret(tune, 'melody', 48, 24, 1)).toBe(96)
-    expect(nextCaret(tune, 'melody', 96, 24, -1)).toBe(48)
+    expect(nextCaret(tune, 'staff0', 0, 24, 1)).toBe(36)
+    expect(nextCaret(tune, 'staff0', 36, 48, 1)).toBe(48)
+    expect(nextCaret(tune, 'staff0', 48, 24, 1)).toBe(96)
+    expect(nextCaret(tune, 'staff0', 96, 24, -1)).toBe(48)
   })
 
   it('moves a step of the value where nothing sounds: an empty bar, the room after the last note', () => {
     expect(nextCaret(tune, 'rh', 0, 24, 1)).toBe(24)
     expect(nextCaret(tune, 'rh', 24, 48, 1)).toBe(48)
     const short = draftOf({
-      melody: 'B4/1 r/3 | r/4',
+      staves: [{ notes: 'B4/1 r/3 | r/4' }],
       sections: [{ kind: 'verse', lines: ['G C'] }],
     })
-    expect(nextCaret(short, 'melody', 24, 24, 1)).toBe(48)
+    expect(nextCaret(short, 'staff0', 24, 24, 1)).toBe(48)
   })
 
   it('stops at the piece’s start and end', () => {
-    expect(nextCaret(tune, 'melody', 0, 24, -1)).toBe(0)
-    expect(nextCaret(tune, 'melody', 192, 24, 1)).toBe(192)
+    expect(nextCaret(tune, 'staff0', 0, 24, -1)).toBe(0)
+    expect(nextCaret(tune, 'staff0', 192, 24, 1)).toBe(192)
   })
 })
 
 describe('what stands at a place', () => {
   it('is the notes starting there, to the longest’s end', () => {
-    expect(itemAt(tune, 'melody', 0)).toEqual({ from: 0, to: 36 })
-    expect(itemAt(tune, 'melody', 96)).toEqual({ from: 96, to: 192 })
+    expect(itemAt(tune, 'staff0', 0)).toEqual({ from: 0, to: 36 })
+    expect(itemAt(tune, 'staff0', 96)).toEqual({ from: 96, to: 192 })
   })
 
   it('is an empty place to the next note or the barline', () => {
     expect(itemAt(tune, 'rh', 24)).toEqual({ from: 24, to: 96 })
     const room = draftOf({
-      melody: 'B4/1 r/3 | r/4',
+      staves: [{ notes: 'B4/1 r/3 | r/4' }],
       sections: [{ kind: 'verse', lines: ['G C'] }],
     })
-    expect(itemAt(room, 'melody', 24)).toEqual({ from: 24, to: 96 })
+    expect(itemAt(room, 'staff0', 24)).toEqual({ from: 24, to: 96 })
   })
 
   it('is a chord to the next chord or the barline, an empty beat to the next beat', () => {

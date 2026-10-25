@@ -16,6 +16,10 @@ export default definePiece({
     { kind: 'part', label: 'B', lines: ['G7 Dm G G7'] },
     { kind: 'part', label: 'A', lines: ['C C-G C-G C'] },
   ],
-  melody:
-    'C4/1 C4/1 C4/1 D4/1 | E4/2 D4/2 | C4/1 E4/1 D4/1 D4/1 | C4/4 | C4/1 C4/1 C4/1 D4/1 | E4/2 D4/2 | C4/1 E4/1 D4/1 D4/1 | C4/4 | D4/1 D4/1 D4/1 D4/1 | A3/2 A3/2 | D4/1 C4/1 B3/1 A3/1 | G3/4 | C4/1 C4/1 C4/1 D4/1 | E4/2 D4/2 | C4/1 E4/1 D4/1 D4/1 | C4/4',
+  staves: [
+    {
+      notes:
+        'C4/1 C4/1 C4/1 D4/1 | E4/2 D4/2 | C4/1 E4/1 D4/1 D4/1 | C4/4 | C4/1 C4/1 C4/1 D4/1 | E4/2 D4/2 | C4/1 E4/1 D4/1 D4/1 | C4/4 | D4/1 D4/1 D4/1 D4/1 | A3/2 A3/2 | D4/1 C4/1 B3/1 A3/1 | G3/4 | C4/1 C4/1 C4/1 D4/1 | E4/2 D4/2 | C4/1 E4/1 D4/1 D4/1 | C4/4',
+    },
+  ],
 })

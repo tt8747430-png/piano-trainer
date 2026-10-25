@@ -1,8 +1,9 @@
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
+import { staffLayer } from '@/features/score-editor'
 import type { ScoreLayout } from '@/shared/ui/score'
-import { LAYER_OF_STAFF } from '../model/line-music'
 import { signTargets, type EditPrinted, type Printed } from '../model/printed'
+import { useSheetLayerName } from '../model/use-layer-name'
 
 /**
  * A button over each clef, key and time signature printed on a line (ADR 0094), as Flat's: a tap on
@@ -24,10 +25,11 @@ export function PrintedSigns({
   edit: EditPrinted
 }) {
   const { t } = useTranslation('editor')
+  const layerName = useSheetLayerName()
   const name = (printed: Printed) => {
     const bar = 'bar' in printed ? printed.bar + 1 : 1
     if (printed.kind === 'clef')
-      return t('printed.clefAt', { staff: t(`layers.${LAYER_OF_STAFF[printed.staff]}`), bar })
+      return t('printed.clefAt', { staff: layerName(staffLayer(printed.staff)), bar })
     return printed.kind === 'time' ? t('printed.timeAt', { bar }) : t('printed.keyAt', { bar })
   }
   return signTargets(layout, bars, keyless).map(({ printed, box, staff }) => (

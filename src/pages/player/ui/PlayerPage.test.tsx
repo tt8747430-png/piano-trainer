@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
-import { melodyOf, pieceById, PIECES, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
+import { pieceById, PIECES, PIECES_STORAGE_KEY, PIECES_VERSION, stavesOf } from '@/entities/piece'
 import { setPracticeToggle, setScoreView } from '@/features/set-preference'
 import { createMemoryStorage, LANDSCAPE_PHONE } from '@/shared/lib'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
@@ -97,7 +97,7 @@ describe('Player', () => {
       tempo: 90,
       pattern: 'r1',
       sections: [{ kind: 'verse', lines: ['G C'] }],
-      melody: 'B4/4 | C5/4',
+      staves: [{ notes: 'B4/4 | C5/4' }],
       leadSheet: true,
     }
     storage.setItem(
@@ -110,7 +110,7 @@ describe('Player', () => {
         staff.getAttribute('data-staff'),
       )
     await waitFor(() => expect(staves().length).toBeGreaterThan(0), { timeout: 4000 })
-    expect(new Set(staves())).toEqual(new Set(['melody']))
+    expect(new Set(staves())).toEqual(new Set(['staff0']))
   })
 
   it('plays a song of bars of no chord: its written notes, each bar named by its number (ADR 0094)', async () => {
@@ -372,7 +372,7 @@ describe('Player', () => {
   })
 
   it('shows Melody in the Setup of a piece with a tune', async () => {
-    const withTune = PIECES.find((piece) => melodyOf(piece) !== undefined)
+    const withTune = PIECES.find((piece) => stavesOf(piece).length > 0)
     if (!withTune) throw new Error('no piece has a tune')
     const user = userEvent.setup()
     await renderApp(`/play/${withTune.id}`)
@@ -462,7 +462,7 @@ describe('Player', () => {
 
   it('keeps what the sheet shows in the View, the editor’s with what only practice has, and how it plays in the Setup', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/play/bz5')
+    const { settingsStore } = await renderApp('/play/silent')
     await user.click(await screen.findByRole('button', { name: 'View' }))
     const view = await screen.findByRole('dialog', { name: 'View' })
     // The editor's View, one menu (ADR 0094): the layout, the staves, what is shown, then the
@@ -474,8 +474,9 @@ describe('Player', () => {
     ).toEqual(['Layout', 'Staves', 'Show'])
     const switches = within(view).getAllByRole('switch')
     expect(switches).toHaveLength(10)
+    // Each single staff by its name, its place's where it has none (ADR 0097), then the piano's.
     ;[
-      'Melody',
+      'Staff 1',
       'Upper staff',
       'Lower staff',
       'Chord symbols',
@@ -488,6 +489,13 @@ describe('Player', () => {
     ].forEach((name, i) => expect(switches[i]).toHaveAccessibleName(name))
     await user.click(within(view).getByRole('switch', { name: 'Upper staff' }))
     expect(settingsStore.getState().scoreView.hidden).toEqual(['treble'])
+    await user.click(within(view).getByRole('switch', { name: 'Staff 1' }))
+    expect(settingsStore.getState().scoreView.hidden).toEqual(['treble', 'staff0'])
+    // The last staff in sight stays.
+    expect(within(view).getByRole('switch', { name: 'Lower staff' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
     await user.click(within(view).getByRole('switch', { name: /^Chord positions/ }))
     expect(settingsStore.getState().practice.positions).toBe(true)
     await user.keyboard('{Escape}')

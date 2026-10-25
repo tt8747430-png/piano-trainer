@@ -1,5 +1,5 @@
 import type { Midi, Tick } from '@/shared/lib/music'
-import type { StaffId } from '@/shared/lib/notation'
+import type { SingleStaff, StaffId } from '@/shared/lib/notation'
 
 /** Where an engraving's staves, bars and onsets stand, in CSS px from its top left. */
 export interface ScoreLayout {
@@ -88,11 +88,11 @@ export interface Lyric extends Extent {
 }
 
 /**
- * A staff's name printed at a score's first line's head (ADR 0094): the tune's beside its staff, the
- * piano's beside its two (or the one drawn); its box.
+ * A staff's name printed at a score's first line's head (ADR 0094): a single staff's beside it (ADR
+ * 0097), the piano's beside its two (or the one drawn); its box.
  */
 export interface StaffLabel extends Extent {
-  readonly staves: 'melody' | 'piano'
+  readonly staves: SingleStaff | 'piano'
 }
 
 /**

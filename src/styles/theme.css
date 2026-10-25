@@ -57,10 +57,10 @@
 
   --color-hand-rh: var(--hand-rh);
   --color-hand-lh: var(--hand-lh);
-  --color-hand-melody: var(--hand-melody);
+  --color-hand-staff: var(--hand-staff);
   --color-hand-rh-wash: var(--hand-rh-wash);
   --color-hand-lh-wash: var(--hand-lh-wash);
-  --color-hand-melody-wash: var(--hand-melody-wash);
+  --color-hand-staff-wash: var(--hand-staff-wash);
 
   --color-key-white: var(--key-white);
   --color-key-black: var(--key-black);

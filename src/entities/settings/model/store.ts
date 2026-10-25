@@ -1,6 +1,6 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isLocale } from '@/shared/i18n/locale'
-import { STAVES } from '@/shared/lib/notation'
+import { isStaffId } from '@/shared/lib/notation'
 import {
   createSavedStore,
   isOneOf,
@@ -55,7 +55,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 7
+export const SETTINGS_VERSION = 8
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -183,12 +183,11 @@ function chordFinderSettings(value: unknown): ChordFinderSettings {
 }
 
 const isSheetView = isOneOf(SHEET_VIEWS)
-const isStaff = isOneOf(STAVES)
 
 /** The Player's view: each switch and the layout as saved where still valid, the staves hidden each once. */
 function scoreViewSettings(value: unknown): ScoreViewSettings {
   const saved = savedObject<ScoreViewSettings>(value)
-  const switched = (key: 'notation' | 'chordNames' | 'lyrics' | 'melodyStaff' | 'keys') =>
+  const switched = (key: 'notation' | 'chordNames' | 'lyrics' | 'keys') =>
     typeof saved[key] === 'boolean' ? saved[key] : DEFAULT_SCORE_VIEW[key]
   const hidden: unknown = saved.hidden
   return {
@@ -196,9 +195,8 @@ function scoreViewSettings(value: unknown): ScoreViewSettings {
     notation: switched('notation'),
     chordNames: switched('chordNames'),
     lyrics: switched('lyrics'),
-    melodyStaff: switched('melodyStaff'),
     keys: switched('keys'),
-    hidden: Array.isArray(hidden) ? [...new Set(hidden.filter(isStaff))] : [],
+    hidden: Array.isArray(hidden) ? [...new Set(hidden.filter(isStaffId))] : [],
   }
 }
 

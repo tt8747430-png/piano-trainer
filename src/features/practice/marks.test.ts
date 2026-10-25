@@ -4,6 +4,7 @@ import { pieceById } from '@/entities/piece'
 import { noteName, pitchClass } from '@/shared/lib/music'
 import { audibleHands } from '@/shared/lib/schedule'
 import { arrangePiece, ownChoice } from './arrange-piece'
+import { TWO_BARS_UNDER_A_STAFF } from './testing/performances'
 import { playerRange, practiceMarks } from './marks'
 
 const bz5 = pieceById('bz5')
@@ -19,7 +20,7 @@ describe('practiceMarks', () => {
     const left = played.filter((n) => n?.hand === 'lh').map((n) => n?.midi)
     expect(left.length).toBeGreaterThan(0)
     const marks = practiceMarks(performance, 0, {
-      hands: { rh: false, lh: true, melody: false },
+      hands: { rh: false, lh: true, staff: false },
       fingers: false,
     })
     expect([...marks.keys()].sort()).toEqual([...left].sort())
@@ -32,7 +33,7 @@ describe('practiceMarks', () => {
     const group = performance.beatGroups[0]
     for (const index of group?.notes ?? []) {
       const played = performance.notes[index]
-      if (!played || played.hand === 'melody') continue
+      if (!played || played.hand === 'staff') continue
       const mark = fingered.get(played.midi)
       expect(mark?.label).toBe(noteName(played.spelled))
       expect(mark?.finger).toBe(played.finger)
@@ -46,11 +47,27 @@ describe('practiceMarks', () => {
     expect(marks.size).toBeGreaterThan(0)
     for (const index of group?.notes ?? []) {
       const played = performance.notes[index]
-      if (!played || played.hand === 'melody') continue
+      if (!played || played.hand === 'staff') continue
       const mark = marks.get(played.midi)
       expect(mark?.tone).toBe(played.hand)
       expect(mark?.label).toBe(noteName(played.spelled))
     }
+  })
+
+  it('marks a single staff’s notes where it is heard, never the tune left unheard (ADR 0097)', () => {
+    const tones = (played: typeof performance) =>
+      played.beatGroups.flatMap((_, group) =>
+        [...practiceMarks(played, group, { hands: BOTH, fingers: false }).values()].map(
+          (mark) => mark.tone,
+        ),
+      )
+    const heard = TWO_BARS_UNDER_A_STAFF
+    const unheard = {
+      ...heard,
+      notes: heard.notes.map((n) => (n.hand === 'staff' ? { ...n, silent: true as const } : n)),
+    }
+    expect(tones(heard)).toContain('staff')
+    expect(tones(unheard)).not.toContain('staff')
   })
 
   it('labels a note already played in Wait mode with a tick', () => {

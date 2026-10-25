@@ -109,7 +109,7 @@ export function withKeys(layout: ScoreLayout, score: Score): ScoreLayout {
   const keys = new Map<string, Midi[]>()
   for (const measure of score.measures)
     for (const staff of score.staves)
-      for (const voice of measure.staves[staff])
+      for (const voice of measure.staves[staff] ?? [])
         for (const event of voice.events)
           if (event.kind === 'notes')
             event.notes.forEach((written, i) => {
@@ -144,7 +144,7 @@ function nameHeads(svg: SVGSVGElement, score: Score) {
   const names = new Map<string, string>()
   for (const measure of score.measures)
     for (const staff of score.staves)
-      for (const voice of measure.staves[staff])
+      for (const voice of measure.staves[staff] ?? [])
         for (const event of voice.events)
           if (event.kind === 'notes')
             event.notes.forEach((written, i) =>

@@ -31,7 +31,7 @@ import { TICKS_PER_BEAT, type Midi } from '@/shared/lib/music'
 import type { Duration } from '@/shared/lib/notation'
 import type { GridBar } from '@/shared/lib/schedule'
 import type { EditSearch } from './edit-search'
-import { tuneOf } from './tune'
+import { hasTune, tuneOf } from './tune'
 
 /** How a take is written into the score: where, split at which key, and snapped to which value. */
 export interface WriteChoice {
@@ -143,7 +143,7 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
       tempo: draft.tempo,
       room: selectRoomLeft(takes.getState()),
       // The song's tune whether it plays or not: it may be turned on while the take records.
-      tune: draft.melody.length > 0 ? tuneOf(draft, from) : [],
+      tune: hasTune(draft) ? tuneOf(draft, from) : [],
       along: settings.getState().recorder,
     })
   }

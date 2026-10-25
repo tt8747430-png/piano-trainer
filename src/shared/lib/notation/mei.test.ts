@@ -128,27 +128,40 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(bass).not.toContain('symbol="brace"')
   })
 
-  it('names the staves drawn at the first line’s head: the tune’s, the piano’s over its brace (ADR 0094)', () => {
+  it('names the staves drawn at the first line’s head: each single staff’s, the piano’s over its brace (ADR 0094, 0097)', () => {
     const score = notate(
-      music([c(0), { ...n(76, note('E'), 'melody', 0, 24) }, n(48, note('C'), 'lh', 0, 24)], {
-        chords: [],
-        melodyStaff: true,
-      }),
+      music(
+        [
+          c(0),
+          { ...n(76, note('E'), 'staff', 0, 24), staff: 0 },
+          { ...n(43, note('G'), 'staff', 0, 24), staff: 1 },
+          n(48, note('C'), 'lh', 0, 24),
+        ],
+        { chords: [], staves: [{ clef: 'treble' }, { clef: 'bass' }] },
+      ),
     )
-    const labels = { melody: 'Melody', piano: 'Piano' } as const
+    const labels = {
+      staff0: { text: 'Voice' },
+      staff1: { text: 'Staff 2', placeholder: true },
+      piano: { text: 'Piano' },
+    } as const
     const named = scoreToMei(score, { labels })
     expect(named).toMatch(
-      /<staffDef n="1"[^>]*>\s*<label><rend fontsize="small">Melody<\/rend><\/label>\s*<\/staffDef>/,
+      /<staffDef n="1"[^>]*clef\.shape="G"[^>]*>\s*<label><rend fontsize="small">Voice<\/rend><\/label>\s*<\/staffDef>/,
+    )
+    // A placeholder for a staff with no name of its own, in italics; the staff's clef its own.
+    expect(named).toMatch(
+      /<staffDef n="2"[^>]*clef\.shape="F"[^>]*>\s*<label><rend fontsize="small" fontstyle="italic">Staff 2<\/rend><\/label>/,
     )
     expect(named).toMatch(
-      /<staffGrp symbol="brace" bar\.thru="true">\s*<label><rend fontsize="small">Piano<\/rend><\/label>\s*<staffDef n="2"/,
+      /<staffGrp symbol="brace" bar\.thru="true">\s*<label><rend fontsize="small">Piano<\/rend><\/label>\s*<staffDef n="3"/,
     )
     // A staff not drawn has no name; the piano's one staff drawn takes the piano's.
     const bass = scoreToMei(score, { labels, staves: ['bass'] })
-    expect(bass).not.toContain('Melody')
+    expect(bass).not.toContain('Voice')
     expect(bass).toMatch(/<staffDef n="1"[^>]*>\s*<label><rend fontsize="small">Piano</)
     expect(scoreToMei(score)).not.toContain('<label')
-    expect(scoreToMei(score, { labels: { piano: 'A & B' } })).toContain('A &amp; B')
+    expect(scoreToMei(score, { labels: { piano: { text: 'A & B' } } })).toContain('A &amp; B')
   })
 
   it('writes a blank staff’s rests as hidden ones, each named by its staff and tick', () => {
@@ -229,10 +242,11 @@ describe('the words (ADR 0093)', () => {
       notate(
         music(
           lyrics.map((each, i) => ({
-            ...n(72, note('C'), 'melody', i * 24, 24),
+            ...n(72, note('C'), 'staff', i * 24, 24),
+            staff: 0,
             lyrics: each,
           })),
-          { melodyStaff: true },
+          { staves: [{ clef: 'treble' }] },
         ),
       ),
     )
@@ -245,14 +259,14 @@ describe('the words (ADR 0093)', () => {
       [sung('grace', false, 1)],
     ])
     expect(mei).toContain(
-      '<verse xml:id="v-melody-0-0" n="1"><syl wordpos="i" con="d">A</syl></verse>',
+      '<verse xml:id="v-staff0-0-0" n="1"><syl wordpos="i" con="d">A</syl></verse>',
     )
     expect(mei).toContain(
-      '<verse xml:id="v-melody-24-0" n="1"><syl wordpos="m" con="d">ma</syl></verse>',
+      '<verse xml:id="v-staff0-24-0" n="1"><syl wordpos="m" con="d">ma</syl></verse>',
     )
-    expect(mei).toContain('<verse xml:id="v-melody-48-0" n="1"><syl wordpos="t">zing</syl></verse>')
-    expect(mei).toContain('<verse xml:id="v-melody-72-0" n="1"><syl con="u">grace</syl></verse>')
-    expect(mei).toMatch(/<note xml:id="n-melody-0-0"[^>]*>\s*<verse xml:id="v-melody-0-0" n="1">/)
+    expect(mei).toContain('<verse xml:id="v-staff0-48-0" n="1"><syl wordpos="t">zing</syl></verse>')
+    expect(mei).toContain('<verse xml:id="v-staff0-72-0" n="1"><syl con="u">grace</syl></verse>')
+    expect(mei).toMatch(/<note xml:id="n-staff0-0-0"[^>]*>\s*<verse xml:id="v-staff0-0-0" n="1">/)
   })
 
   it('numbers the verses, skipping one that sings nothing on the note, and escapes the text', () => {
@@ -261,10 +275,10 @@ describe('the words (ADR 0093)', () => {
       [null, sung('zwei')],
     ])
     expect(mei).toContain(
-      '<verse xml:id="v-melody-0-0" n="1"><syl>one</syl></verse><verse xml:id="v-melody-0-1" n="2"><syl>&lt;eins&gt;</syl></verse>',
+      '<verse xml:id="v-staff0-0-0" n="1"><syl>one</syl></verse><verse xml:id="v-staff0-0-1" n="2"><syl>&lt;eins&gt;</syl></verse>',
     )
     expect(mei).toContain(
-      '<note xml:id="n-melody-24-0" pname="c" oct="5" dur="4"><verse xml:id="v-melody-24-1" n="2"><syl>zwei</syl></verse></note>',
+      '<note xml:id="n-staff0-24-0" pname="c" oct="5" dur="4"><verse xml:id="v-staff0-24-1" n="2"><syl>zwei</syl></verse></note>',
     )
   })
 

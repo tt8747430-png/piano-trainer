@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen, waitFor, within } from '@testing-librar
 import userEvent from '@testing-library/user-event'
 import type { ComponentProps } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { TWO_BARS } from '@/features/practice/testing/performances'
+import { TWO_BARS, TWO_BARS_UNDER_A_STAFF } from '@/features/practice/testing/performances'
 import type { BarRange } from '@/features/practice'
 import type { StaffId } from '@/shared/lib/notation'
 import { stubBox, stubScrolling } from '@/shared/test/layout'
@@ -13,17 +13,21 @@ function renderSheet({
   current = 0,
   loop = null,
   shown,
+  performance = TWO_BARS,
+  staffNames,
 }: {
   current?: number
   loop?: BarRange | null
   shown?: ComponentProps<typeof SheetMusic>['view']
+  performance?: ComponentProps<typeof SheetMusic>['performance']
+  staffNames?: readonly (string | undefined)[]
 } = {}) {
   const onJump = vi.fn()
   const onLoopChange = vi.fn()
   const view = render(
     <SheetMusic
       title="Morning"
-      performance={TWO_BARS}
+      performance={performance}
       headings={['Verse']}
       current={current}
       loop={loop}
@@ -34,6 +38,7 @@ function renderSheet({
       onJump={onJump}
       onLoopChange={onLoopChange}
       {...(shown ? { view: shown } : {})}
+      {...(staffNames ? { staffNames } : {})}
     />,
   )
   return { ...view, onJump, onLoopChange }
@@ -47,7 +52,6 @@ describe('SheetMusic', () => {
         layout: 'scroll',
         chordNames: false,
         lyrics: true,
-        melodyStaff: true,
         hidden: ['bass'],
       },
     })
@@ -62,7 +66,7 @@ describe('SheetMusic', () => {
     'prints the title at the sheet’s head as the page’s heading, %s (ADR 0094)',
     async (layout) => {
       renderSheet({
-        shown: { layout, chordNames: true, lyrics: true, melodyStaff: false, hidden: [] },
+        shown: { layout, chordNames: true, lyrics: true, hidden: [] },
       })
       const sheet = await screen.findByRole('region', { name: 'Sheet music' })
       expect(within(sheet).getByRole('heading', { level: 1, name: 'Morning' })).toHaveAttribute(
@@ -77,7 +81,7 @@ describe('SheetMusic', () => {
     'names the piano’s staves at the first line’s head, %s (ADR 0094)',
     async (layout) => {
       renderSheet({
-        shown: { layout, chordNames: true, lyrics: true, melodyStaff: false, hidden: [] },
+        shown: { layout, chordNames: true, lyrics: true, hidden: [] },
       })
       await waitFor(() =>
         expect(
@@ -88,6 +92,28 @@ describe('SheetMusic', () => {
       )
     },
   )
+
+  it('names each single staff by its own name over the piano’s, a staff the View hides left out (ADR 0097)', async () => {
+    const labels = () =>
+      [...document.querySelectorAll('[data-slot="score"] g.label')]
+        .map((label) => label.textContent?.trim())
+        .sort()
+    const shown = (hidden: StaffId[]) =>
+      ({ layout: 'scroll', chordNames: true, lyrics: true, hidden }) as const
+    const { unmount } = renderSheet({
+      performance: TWO_BARS_UNDER_A_STAFF,
+      staffNames: ['Voice'],
+      shown: shown([]),
+    })
+    await waitFor(() => expect(labels()).toEqual(['Piano', 'Voice']))
+    unmount()
+    renderSheet({
+      performance: TWO_BARS_UNDER_A_STAFF,
+      staffNames: ['Voice'],
+      shown: shown(['staff0']),
+    })
+    await waitFor(() => expect(labels()).toEqual(['Piano']))
+  })
 
   it('names each bar by its chords, the cursor’s marked', async () => {
     renderSheet({ current: 5 })
@@ -155,7 +181,7 @@ describe('SheetMusic', () => {
   it.each(['horizontal', 'scroll', 'pages'] as const)(
     'draws the playhead as one line over every staff, the notes at it not chosen, %s (ADR 0096)',
     async (layout) => {
-      const shown = { layout, chordNames: true, lyrics: true, melodyStaff: false }
+      const shown = { layout, chordNames: true, lyrics: true }
       const tall = async (hidden: readonly StaffId[]) => {
         const { unmount } = renderSheet({ current: 5, shown: { ...shown, hidden } })
         await screen.findByRole('button', { name: 'Bar 2: G' })
@@ -179,7 +205,7 @@ describe('SheetMusic', () => {
       renderSheet({
         current: 5,
         loop: { first: 1, last: 1 },
-        shown: { layout, chordNames: true, lyrics: true, melodyStaff: false, hidden: [] },
+        shown: { layout, chordNames: true, lyrics: true, hidden: [] },
       })
       await screen.findByRole('button', { name: 'Bar 2: G' })
       const bands = document.querySelectorAll<HTMLElement>('[data-mark="band"]')

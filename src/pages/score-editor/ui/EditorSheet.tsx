@@ -13,7 +13,6 @@ import { usePlay } from '@/shared/lib/services'
 import { ScoreSheet, type EditPrinted, type SheetField } from '@/widgets/score-sheet'
 import type { TitlePlace } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { seenDraft } from '../model/seen-draft'
 import { useHeardPlayhead } from '../model/use-heard-playhead'
 import { PrintedEdit } from './PrintedEdit'
 import { TitleField } from './TitleField'
@@ -32,8 +31,8 @@ const editPrinted: EditPrinted = (printed, trigger) => (
 const HEARD = { duration: 0.35, velocity: 0.15 } as const
 
 /**
- * The sheet the editor writes on, as the View shows the score (ADR 0094: its staves, its chord
- * symbols): the caret where the next note or chord goes; a double click on a staff writes the note
+ * The sheet the editor writes on, as the View shows the score (ADR 0094, 0097: its staves, its
+ * chord symbols): the caret where the next note or chord goes; a double click on a staff writes the note
  * there, and a note dragged up or down moves by the key's notes, heard as it goes. While Play plays,
  * the playhead follows the music apart from the caret (ADR 0096). A tap on what a field types where
  * it is printed (the chord row) opens the field there, at the place the sheet draws for it
@@ -55,8 +54,7 @@ export function EditorSheet({
   } = useScoreEditorContext()
   const playhead = useHeardPlayhead(heard)
   const draft = useEditorState((state) => state.draft)
-  const shown = useSettings(selectScoreView)
-  const seen = useMemo(() => seenDraft(draft, shown), [draft, shown])
+  const hidden = useSettings((state) => selectScoreView(state).hidden)
   const caret = useEditorState((state) => state.caret)
   const layer = useEditorState((state) => state.layer)
   const selection = useEditorState((state) => state.selection)
@@ -122,7 +120,7 @@ export function EditorSheet({
   )
   return (
     <ScoreSheet
-      draft={seen}
+      draft={draft}
       caret={caret}
       playhead={playhead}
       chordNote={chordNote}
@@ -137,7 +135,7 @@ export function EditorSheet({
       fingers={view.fingers}
       lyrics={view.lyrics}
       edit={editPrinted}
-      hidden={shown.hidden}
+      hidden={hidden}
       view={view.layout}
       title={titleAt}
       room={room}

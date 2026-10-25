@@ -1,4 +1,5 @@
-import { useMemo, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
+import { useStaffNames, type StaffName } from '@/entities/piece'
 import {
   selectKeyboard,
   selectScoreView,
@@ -9,7 +10,6 @@ import { MidiButton } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import { setScoreView } from '@/features/set-preference'
 import type { Performance } from '@/shared/lib/arrangement'
-import { PIANO_STAVES } from '@/shared/lib/notation'
 import { SheetTitle } from '@/shared/ui'
 import {
   HandsButton,
@@ -30,6 +30,8 @@ import { PracticeSwitches } from './PracticeSwitches'
 
 /** A walk or a progression: one section, named nowhere. */
 const NO_HEADINGS: readonly string[] = []
+/** A walk or a progression: the piano's staves alone. */
+const NO_STAVES: readonly { readonly name?: StaffName }[] = []
 
 /**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): the toolbar (Close, Practise ·
@@ -48,13 +50,16 @@ export function PlayerLayout({
   setup,
   modes,
   piano = true,
+  staves = NO_STAVES,
   chart,
 }: {
   /**
-   * Whether the sheet writes the piano's staves: not for a song that hides them, a lead sheet, its
-   * tune on its own staff (ADR 0083). The keys and what plays are the same.
+   * Whether the sheet writes the piano's staves: not for a song that hides them, a lead sheet (ADR
+   * 0083). The keys and what plays are the same.
    */
   piano?: boolean
+  /** The piece's single staves, top down, each printed and switched in the View by its name (ADR 0097). */
+  staves?: readonly { readonly name?: StaffName }[]
   title: string
   onClose: () => void
   view: PracticeView
@@ -76,15 +81,14 @@ export function PlayerLayout({
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const settings = useSettingsStoreApi()
   const scoreView = useSettings(selectScoreView)
-  const shown = useMemo(
-    () =>
-      piano
-        ? scoreView
-        : { ...scoreView, melodyStaff: true, hidden: [...scoreView.hidden, ...PIANO_STAVES] },
-    [scoreView, piano],
-  )
+  const names = useStaffNames(staves)
+  // The score's single staves as the View switches them: each its clef as the music reads it.
+  const viewed = (performance.staves ?? []).map(({ clef }, place) => ({
+    clef,
+    name: staves[place]?.name,
+  }))
   usePlayerShortcuts(player, view, onClose)
-  const keys = !shown.keys ? null : (
+  const keys = !scoreView.keys ? null : (
     <PlayerArea area="keys">
       <LiveKeyboard
         range={player.range}
@@ -115,6 +119,8 @@ export function PlayerLayout({
         <LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />
         <ScoreViewMenu
           keys={{ shown: scoreView.keys, show: (on) => setScoreView(settings, { keys: on }) }}
+          staves={viewed}
+          piano={piano}
         >
           <PracticeSwitches />
         </ScoreViewMenu>
@@ -123,9 +129,11 @@ export function PlayerLayout({
       </PlayerArea>
       {dock === 'top' ? keys : null}
       <PlayerArea area="sheet">
-        {shown.notation ? (
+        {scoreView.notation ? (
           <SheetMusic
-            view={shown}
+            view={scoreView}
+            piano={piano}
+            staffNames={names}
             title={title}
             performance={performance}
             headings={headings}

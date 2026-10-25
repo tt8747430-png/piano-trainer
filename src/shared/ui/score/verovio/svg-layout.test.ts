@@ -235,14 +235,19 @@ describe('a line with words (ADR 0093)', () => {
   }, 20_000)
 })
 
-describe('the staves’ names at a first line’s head (ADR 0094)', () => {
+describe('the staves’ names at a first line’s head (ADR 0094, 0097)', () => {
   const tuned = notate({
     key: { tonic: note('C'), minor: false },
     meter: '4/4',
     bars: [{ startTick: 0, beats: 4 }],
-    notes: [n(76, 'melody', 0, 96), n(72, 'rh', 0, 96), n(48, 'lh', 0, 96)],
+    notes: [
+      { ...n(76, 'staff', 0, 96), staff: 0 },
+      { ...n(43, 'staff', 0, 96), staff: 1 },
+      n(72, 'rh', 0, 96),
+      n(48, 'lh', 0, 96),
+    ],
     chords: [],
-    melodyStaff: true,
+    staves: [{ clef: 'treble' }, { clef: 'bass' }],
   })
 
   async function read(labels: Parameters<typeof scoreToMei>[1]) {
@@ -256,24 +261,32 @@ describe('the staves’ names at a first line’s head (ADR 0094)', () => {
 
   it('reads each name with the staves it names, left of them, and the line indented to hold it', async () => {
     const plain = await read({})
-    const named = await read({ labels: { melody: 'Melody', piano: 'Piano' } })
+    const named = await read({
+      labels: {
+        staff0: { text: 'Voice' },
+        staff1: { text: 'Staff 2', placeholder: true },
+        piano: { text: 'Piano' },
+      },
+    })
     expect(plain.labels).toEqual([])
     const [first] = named.measures
-    const { melody, treble, bass } = named.staves
-    if (!first || !melody || !treble || !bass) throw new Error('the line')
+    const { staff0, staff1, treble, bass } = named.staves
+    if (!first || !staff0 || !staff1 || !treble || !bass) throw new Error('the line')
     expect(first.x).toBeGreaterThan((plain.measures[0]?.x ?? 0) + 50)
     const labels = [...(named.labels ?? [])].sort((a, b) => a.top - b.top)
-    expect(labels.map((label) => label.staves)).toEqual(['melody', 'piano'])
-    const [tune, piano] = labels
-    if (!tune || !piano) throw new Error('two names')
+    expect(labels.map((label) => label.staves)).toEqual(['staff0', 'staff1', 'piano'])
+    const [voice, second, piano] = labels
+    if (!voice || !second || !piano) throw new Error('three names')
     for (const label of labels) {
       expect(label.right).toBeLessThan(first.x)
       expect(label.left).toBeGreaterThanOrEqual(0)
       expect(label.right - label.left).toBeGreaterThan(30)
     }
     // Beside its staff; the piano's between its two.
-    expect(tune.bottom).toBeGreaterThan(melody.top)
-    expect(tune.top).toBeLessThan(melody.bottom)
+    expect(voice.bottom).toBeGreaterThan(staff0.top)
+    expect(voice.top).toBeLessThan(staff0.bottom)
+    expect(second.bottom).toBeGreaterThan(staff1.top)
+    expect(second.top).toBeLessThan(staff1.bottom)
     expect(piano.top).toBeGreaterThan(treble.top)
     expect(piano.bottom).toBeLessThan(bass.bottom)
   }, 20_000)

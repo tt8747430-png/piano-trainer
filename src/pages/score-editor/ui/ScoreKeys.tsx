@@ -11,6 +11,7 @@ import {
   sectionKey,
   sectionMeter,
   type BarMarkChoice,
+  type NoteLayer,
 } from '@/features/score-editor'
 import {
   CLEFS,
@@ -18,14 +19,15 @@ import {
   EXPRESSIONS,
   keyFromParam,
   keyParam,
-  type Hand,
   type Pedal,
 } from '@/shared/lib/music'
 import { KeyChoice, Segmented } from '@/shared/ui'
+import { useLayerName } from '@/widgets/score-sheet'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { isJumpWords, JUMP_SIGNS, JUMP_WORDS } from '../model/palette-categories'
 import { useFieldReason } from '../model/use-field-reason'
 import { useNotesChosen } from '../model/use-notes-chosen'
+import { useStaffHeads } from '../model/use-staff-heads'
 import { FieldKey } from './FieldKey'
 import { BarlineIcon, CodaSign } from './palette-icons'
 import { CaptionGrid, CaptionKey, GroupName, Printed, TermGrid, TermKey } from './palette-keys'
@@ -35,24 +37,27 @@ import { usePaletteReason } from './palette-reason'
 const CLEF_GLYPHS = { treble: '\u{1D11E}', bass: '\u{1D122}' } as const
 
 /**
- * Clef (ADR 0069): a staff's clef from a bar on, Treble or Bass, the one it is in pressed; only the
- * piano's two staves change clef. In the palette the caret's staff from the first bar chosen (else
- * the caret's); over a clef printed on the sheet (ADR 0094), its staff from its bar (`at`).
+ * Clef (ADR 0069, 0097): a staff's clef, Treble or Bass, the one it is in pressed: one of the piano's
+ * from a bar on, a single staff's whole. In the palette the caret's staff from the first bar chosen
+ * (else the caret's); over a clef printed on the sheet (ADR 0094), its staff from its bar (`at`).
  */
-export function ClefKeys({ at }: { at?: { readonly hand: Hand; readonly bar: number } }) {
+export function ClefKeys({ at }: { at?: { readonly staff: NoteLayer; readonly bar: number } }) {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
-  const caret = useEditorState((state) => (isHandLayer(state.layer) ? state.layer : null))
+  const caret = useEditorState((state) => (state.layer === 'chords' ? null : state.layer))
   const chosen = useEditorState((state) => chosenBars(state).from)
-  const hand = at ? at.hand : caret
+  const staff = at ? at.staff : caret
   const bar = at ? at.bar : chosen
-  const current = useEditorState((state) => (hand ? clefAt(state.draft, bar, hand) : null))
+  const current = useEditorState((state) => (staff ? clefAt(state.draft, bar, staff) : null))
+  const layerName = useLayerName(useStaffHeads())
   const reason = usePaletteReason()
   return (
     <>
-      {hand ? (
+      {staff ? (
         <p className="text-sm text-muted-foreground">
-          {t('clef.from', { staff: t(`layers.${hand}`), bar: bar + 1 })}
+          {isHandLayer(staff)
+            ? t('clef.from', { staff: layerName(staff), bar: bar + 1 })
+            : layerName(staff)}
         </p>
       ) : null}
       <CaptionGrid>
@@ -62,8 +67,8 @@ export function ClefKeys({ at }: { at?: { readonly hand: Hand; readonly bar: num
             label={t(`clef.${clef}`)}
             reason={reason}
             pressed={current === clef}
-            disabled={!hand}
-            onClick={() => hand && actions.dispatch({ type: 'clef', hand, clef, bar })}
+            disabled={!staff}
+            onClick={() => staff && actions.dispatch({ type: 'clef', staff, clef, bar })}
           >
             <Printed text={CLEF_GLYPHS[clef]} music />
           </CaptionKey>

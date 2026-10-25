@@ -9,16 +9,17 @@ export const TOP_LINE = 30
 export const STAFF_GAP = 101
 export const LAST_STAFF = 101
 /**
- * A verse of the words under the tune's staff (ADR 0093): Verovio's lyric size, 4.5 half-spaces.
- * Each verse pushes the staff under it (or the engraving's foot) down by as much, less what the gap
- * already held: the first verse under a lone staff, or the first two under the tune's staff over the
- * grand staff, mostly fit the room there already, so a system of them is estimated a little tall.
+ * A verse of the words under the staff they are written on (ADR 0093): Verovio's lyric size, 4.5
+ * half-spaces. Each verse pushes the staff under it (or the engraving's foot) down by as much, less
+ * what the gap already held: the first verse under a lone staff, or the first two under a single
+ * staff over the grand staff, mostly fit the room there already, so a system of them is estimated a
+ * little tall.
  */
 export const VERSE = 22
 
 /**
  * The height a score takes before fingers: `count` staves' (the grand staff's by default, one for
- * `staff`), and its `verses` under the tune.
+ * `staff`), and its `verses` under the staff that sings them.
  */
 export const staffHeight = (staff: StaffId | undefined, count = 2, verses = 0): number =>
   STAFF_GAP * ((staff ? 1 : count) - 1) + LAST_STAFF + verses * VERSE
@@ -29,7 +30,7 @@ export function versesOf(score: Score, staves: readonly StaffId[] = score.staves
   const written = staves.filter((staff) => score.staves.includes(staff))
   for (const measure of score.measures)
     for (const staff of written)
-      for (const voice of measure.staves[staff])
+      for (const voice of measure.staves[staff] ?? [])
         for (const event of voice.events)
           if (event.kind === 'notes') verses = Math.max(verses, event.lyrics?.length ?? 0)
   return verses

@@ -1,6 +1,6 @@
 import { useRef, type MouseEvent, type PointerEvent, type Ref, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Layer } from '@/features/score-editor'
+import { staffLayer, type Layer } from '@/features/score-editor'
 import { useBarName } from '@/shared/i18n'
 import { chordSymbol, keySignature, type Midi, type Tick } from '@/shared/lib/music'
 import { staffClefAt, type TimedMusic } from '@/shared/lib/notation'
@@ -16,7 +16,7 @@ import {
   type ScoreLayout,
   type SheetPoint,
 } from '@/shared/ui/score'
-import { LAYER_OF_STAFF, layerAt, staffOfLayer, type SheetLineBars } from '../model/line-music'
+import { layerAt, layerOfNote, staffOfLayer, type SheetLineBars } from '../model/line-music'
 import { chordRow, chosenBand } from '../model/chosen-band'
 import {
   chordFieldBox,
@@ -151,7 +151,7 @@ export function LineOverlay({
   const caretOnNote =
     caret !== null &&
     layer !== 'chords' &&
-    music.notes.some((n) => n.hand === layer && n.startTick === caret)
+    music.notes.some((n) => layerOfNote(n) === layer && n.startTick === caret)
   /** A point on a bar's button in the line's layout px: a page canvas's zoom taken out. */
   const pointOf = (event: MouseEvent<HTMLButtonElement>, index: number): SheetPoint => {
     const measure = layout.measures[index]
@@ -191,11 +191,7 @@ export function LineOverlay({
     // A tap on a syllable printed: the Lyrics field there, on its verse.
     const sung = onField && !extend && !held ? lyricAt(layout, point) : null
     if (sung && onField) {
-      onField(
-        { kind: 'lyrics', verse: sung.verse },
-        line.start + sung.tick,
-        LAYER_OF_STAFF[sung.staff],
-      )
+      onField({ kind: 'lyrics', verse: sung.verse }, line.start + sung.tick, staffLayer(sung.staff))
       return
     }
     const target = layerAt(point.y, layout, chordNames)
@@ -218,10 +214,10 @@ export function LineOverlay({
     const picked = pickAt(layout, point.x, point.y)
     if (picked) {
       const key = picked.index === undefined ? undefined : picked.midi
-      onPlace(line.start + picked.tick, LAYER_OF_STAFF[picked.staff], extend, key)
+      onPlace(line.start + picked.tick, staffLayer(picked.staff), extend, key)
       return
     }
-    const notes = music.notes.filter((n) => n.hand === target)
+    const notes = music.notes.filter((n) => layerOfNote(n) === target)
     const places = tapsOf(target)
       .filter(inBar)
       .map((tick) => ({ tick, empty: !notes.some((n) => n.startTick === tick - line.start) }))

@@ -8,7 +8,7 @@ const music = {
   tempo: 90,
   pattern: 'r1',
   sections: [{ kind: 'verse', lines: ['G C', 'D G'] }],
-  melody: 'B4/4 | C5/4 | r/4 | r/4',
+  staves: [{ notes: 'B4/4 | C5/4 | r/4 | r/4' }],
 } as const
 
 describe('the sheet’s lines as written', () => {
@@ -17,7 +17,7 @@ describe('the sheet’s lines as written', () => {
     const silent = { rh: 'r/4 | r/4 | r/4 | r/4', lh: 'r/4 | r/4 | r/4 | r/4' }
     const [first, second] = sheetsOf(readDraft({ ...music, hands: silent }))
     const [firstAgain, secondAgain] = sheetsOf(
-      readDraft({ ...music, hands: silent, melody: 'B4/4 | C5/4 | A4/4 | r/4' }),
+      readDraft({ ...music, hands: silent, staves: [{ notes: 'B4/4 | C5/4 | A4/4 | r/4' }] }),
     )
     expect(firstAgain).toBe(first)
     expect(secondAgain).not.toBe(second)
@@ -31,7 +31,7 @@ describe('the sheet’s lines as written', () => {
       readDraft({
         ...music,
         sections: [{ kind: 'verse', lines: ['G', 'G', 'G'] }],
-        melody: undefined,
+        staves: undefined,
       }),
     )
     expect(third).not.toBe(second)
@@ -48,7 +48,7 @@ describe('the sheet’s lines as written', () => {
           { kind: 'verse', lines: ['G C'] },
           { kind: 'chorus', key: 'D', lines: ['D G'] },
         ],
-        melody: undefined,
+        staves: undefined,
       }),
     )
     expect(verse?.next?.key).toEqual(chorus?.score.measures[0]?.key)
@@ -65,7 +65,7 @@ describe('the sheet’s lines as written', () => {
           { kind: 'verse', lines: ['G C'] },
           { kind: 'chorus', meter: '3/4', lines: ['D G'] },
         ],
-        melody: undefined,
+        staves: undefined,
       }),
     )
     expect(chorus?.score.measures.map((measure) => measure.time)).toEqual([

@@ -30,7 +30,7 @@ const options: DrawOptions = {
   fingers: false,
   names: false,
   staves: score.staves,
-  labels: { piano: 'Piano' },
+  labels: { piano: { text: 'Piano' } },
 }
 
 async function draw(fill: number | undefined) {

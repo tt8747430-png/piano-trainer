@@ -60,6 +60,14 @@
 [data-slot='score'] g.note-name.open text {
   fill: currentColor;
 }
+/* A staff's name at a line's head takes the ink (Verovio sets no fill on its text); the editor's
+   placeholder for a staff with no name of its own, printed in italics, is soft (ADR 0097). */
+[data-slot='score'] g.label text {
+  fill: currentColor;
+}
+[data-slot='score'] g.label tspan[font-style='italic'] {
+  fill: var(--muted-foreground);
+}
 /* Chord symbols and words in the app's faces. */
 [data-slot='score'] :is(g.harm, g.dir, g.tempo) text {
   font-family: var(--font-display);

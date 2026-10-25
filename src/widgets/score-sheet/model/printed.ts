@@ -5,7 +5,8 @@ import type { Extent, ScoreLayout, Sign, StaffLabel } from '@/shared/ui/score'
 /**
  * What is printed on the sheet and edited where it is (ADR 0094), as Flat's and Dorico's: the tempo
  * mark; a section's name at its first bar (ADR 0095); a key or time signature, from the piece's bar it
- * stands at; a staff's clef there; a staff's name at the first line's head, the tune's or the piano's.
+ * stands at; a staff's clef there; a staff's name at the first line's head, a single staff's or the
+ * piano's (ADR 0097).
  */
 export type Printed =
   | { readonly kind: 'tempo' }
@@ -13,6 +14,7 @@ export type Printed =
   | { readonly kind: 'key'; readonly bar: number }
   | { readonly kind: 'time'; readonly bar: number }
   | { readonly kind: 'clef'; readonly bar: number; readonly staff: StaffId }
+  /** A staff's name at the first line's head: a single staff's (ADR 0097), or the piano's. */
   | { readonly kind: 'staff'; readonly staves: StaffLabel['staves'] }
 
 /**
@@ -70,8 +72,8 @@ function withKeyPlaces(layout: ScoreLayout, keyless: boolean): readonly Sign[] {
  * The targets over a line's clefs, key and time signatures (ADR 0094), `bars` the piece's bar of each
  * of its measures: each sign's box grown to meet its neighbours on its staff halfway, from the line's
  * start to short of its measure's first note, and over its staff's lines at least; a key printing
- * no sharps or flats (`keyless`) its place after the head's clefs. The tune's staff keeps its clef:
- * only the piano's two change clef.
+ * no sharps or flats (`keyless`) its place after the head's clefs; a single staff's clef too, which
+ * writes the staff in another clef (ADR 0097).
  */
 export function signTargets(
   layout: ScoreLayout,
@@ -84,7 +86,6 @@ export function signTargets(
     const lines = layout.staves[sign.staff]
     const measure = layout.measures[sign.measure]
     if (bar === undefined || !lines || !measure) return []
-    if (sign.kind === 'clef' && sign.staff === 'melody') return []
     const beside = (other: Sign | undefined): other is Sign =>
       other !== undefined && other.staff === sign.staff && other.measure === sign.measure
     const before = signs[index - 1]

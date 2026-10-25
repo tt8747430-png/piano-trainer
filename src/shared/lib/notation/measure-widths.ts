@@ -39,7 +39,7 @@ export function measureWidths(
   return score.measures.map((measure, index) => {
     const columns = new Map<number, boolean>()
     for (const staff of score.staves) {
-      for (const voice of measure.staves[staff]) {
+      for (const voice of measure.staves[staff] ?? []) {
         for (const event of voice.events) {
           if (event.kind === 'rest' && event.hidden) continue
           const accidental =
@@ -71,7 +71,7 @@ export const lineLead = (score: Pick<Score, 'key'>): number =>
  * the piano's takes its brace's too.
  */
 const LABEL_CHAR = 10.5
-const LABEL_GAP = { melody: 10, piano: 22 } as const
+const LABEL_GAP = { single: 10, piano: 22 } as const
 
 /**
  * What the staves' names take before a line's clef (ADR 0094), in the engraving's units: the longest
@@ -80,8 +80,9 @@ const LABEL_GAP = { melody: 10, piano: 22 } as const
 export const labelLead = (labels: StaffLabels): number =>
   Math.max(
     0,
-    ...(['melody', 'piano'] as const).map((staff) => {
-      const name = labels[staff]
-      return name === undefined ? 0 : name.length * LABEL_CHAR + LABEL_GAP[staff]
-    }),
+    ...Object.entries(labels).map(([staff, name]) =>
+      name === undefined
+        ? 0
+        : name.text.length * LABEL_CHAR + LABEL_GAP[staff === 'piano' ? 'piano' : 'single'],
+    ),
   )

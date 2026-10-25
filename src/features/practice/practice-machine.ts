@@ -56,13 +56,13 @@ export type PracticeEvent =
   | { readonly type: 'jumpToBeatGroup'; readonly beatGroup: number }
   | { readonly type: 'noteOn'; readonly midi: Midi }
 
-/** The hands Wait mode waits for: the audible ones, never the doubled tune. */
-export const practisedHands = (hands: Hands): Audible => ({ ...audibleHands(hands), melody: false })
+/** The hands Wait mode waits for: the audible ones, never a staff over the piano (ADR 0097). */
+export const practisedHands = (hands: Hands): Audible => ({ ...audibleHands(hands), staff: false })
 
-/** What the app plays in Wait mode: the hands not practised, and the tune. */
+/** What the app plays in Wait mode: the hands not practised, and the staves over the piano. */
 export function accompanyingHands(hands: Hands): Audible {
   const practised = practisedHands(hands)
-  return { rh: !practised.rh, lh: !practised.lh, melody: true }
+  return { rh: !practised.rh, lh: !practised.lh, staff: true }
 }
 
 function expectedAt(performance: Performance, beatGroup: number, hands: Hands): PitchClass[] {

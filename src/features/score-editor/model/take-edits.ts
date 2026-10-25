@@ -5,9 +5,8 @@ import { notesOf, oneLine, reaching, spelledIn, withNotes } from './notes'
 import type { TickSpan } from './state'
 import { barAt } from './timeline'
 
-/** Where a take is written (spec 2026-10-05 §4): both hands, split at a key, or one layer. */
-export const TAKE_INTO = ['both', 'rh', 'lh', 'melody'] as const
-export type TakeInto = (typeof TAKE_INTO)[number]
+/** Where a take is written (spec 2026-10-05 §4): both hands, split at a key, or one staff. */
+export type TakeInto = 'both' | NoteLayer
 
 /** A take's notes for one layer, in ticks from the take's first downbeat. */
 export interface TakePart {
@@ -40,7 +39,7 @@ const clearedIn = (notes: readonly DraftNote[], { from, to }: TickSpan): DraftNo
       : [n]
   })
 
-/** One layer's part written over the span: what started there replaced by the take's notes; the tune one line. */
+/** One layer's part written over the span: what started there replaced by the take's notes; a single staff one line. */
 function writePart(draft: Draft, { layer, notes }: TakePart, span: TickSpan): Draft {
   const played = isHandLayer(layer) ? notes : oneLine(notes)
   const added = played.map((n) => ({

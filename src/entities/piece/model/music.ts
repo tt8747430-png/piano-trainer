@@ -5,9 +5,17 @@ import {
   type Midi,
   type SpelledNote,
 } from '@/shared/lib/music'
-import type { Chart, Melody } from '@/shared/lib/arrangement'
-import { chartOf, melodyOf } from './chart'
-import { lyricsStaff, type ChartPiece, type KeyText, type Section } from './types'
+import type { Chart, StaffMusic } from '@/shared/lib/arrangement'
+import { chartOf, stavesOf } from './chart'
+import {
+  defaultLyricsStaff,
+  lyricsStaff,
+  type ChartPiece,
+  type KeyText,
+  type PieceStaff,
+  type Section,
+  type StaffName,
+} from './types'
 
 /**
  * A song's or study's music as the content writes it: what a learner's version holds (ADR 0027),
@@ -20,7 +28,7 @@ export type PieceMusic = Pick<
   | 'tempo'
   | 'pattern'
   | 'sections'
-  | 'melody'
+  | 'staves'
   | 'leadSheet'
   | 'hands'
   | 'lyrics'
@@ -31,31 +39,35 @@ export type PieceMusic = Pick<
 }
 
 /**
- * A piece's music, without what it leaves out: its lyrics' staff only where they are, and it is not
- * the melody's (ADR 0093).
+ * A piece's music, without what it leaves out: its single staves where it has any, a lead sheet only
+ * with one (ADR 0083, 0097), its lyrics' staff only where they are and it is not the top single
+ * staff (ADR 0093).
  */
-export const musicOf = (piece: ChartPiece): PieceMusic => ({
-  key: piece.key,
-  meter: piece.meter,
-  tempo: piece.tempo,
-  pattern: piece.pattern,
-  sections: piece.sections,
-  ...(piece.melody === undefined ? {} : { melody: piece.melody }),
-  ...(piece.leadSheet ? { leadSheet: true } : {}),
-  ...(piece.hands === undefined ? {} : { hands: piece.hands }),
-  ...(piece.lyrics?.length ? { lyrics: piece.lyrics } : {}),
-  ...(piece.lyrics?.length && piece.melody !== undefined && lyricsStaff(piece) === 'rh'
-    ? { lyricsOn: 'rh' }
-    : {}),
-})
+export function musicOf(piece: ChartPiece): PieceMusic {
+  const staves = piece.staves?.length ? { staves: piece.staves } : {}
+  const sung = piece.lyrics?.length ? piece.lyrics : undefined
+  const on = lyricsStaff(piece)
+  return {
+    key: piece.key,
+    meter: piece.meter,
+    tempo: piece.tempo,
+    pattern: piece.pattern,
+    sections: piece.sections,
+    ...staves,
+    ...(piece.leadSheet && staves.staves ? { leadSheet: true } : {}),
+    ...(piece.hands === undefined ? {} : { hands: piece.hands }),
+    ...(sung ? { lyrics: sung } : {}),
+    ...(sung && on !== defaultLyricsStaff(piece) ? { lyricsOn: on } : {}),
+  }
+}
 
 /**
- * Music read as the engine reads a piece: its chart (with the written hands) and its tune, its words
- * on the tune's notes (ADR 0093); a mistake throws a ContentError.
+ * Music read as the engine reads a piece: its chart (with the written hands) and its single staves,
+ * its words on the notes of the staff they are on (ADR 0093, 0097); a mistake throws a ContentError.
  */
-export function readMusic(music: PieceMusic): { chart: Chart; melody: Melody | undefined } {
+export function readMusic(music: PieceMusic): { chart: Chart; staves: StaffMusic[] } {
   const piece: ChartPiece = { id: 'music', kind: 'song', title: '', ...music }
-  return { chart: chartOf(piece), melody: melodyOf(piece) }
+  return { chart: chartOf(piece), staves: stavesOf(piece) }
 }
 
 /**
@@ -69,15 +81,15 @@ function retitled(entry: ChartPiece, title: string | undefined): ChartPiece {
 }
 
 /**
- * A piece playing this music in place of its own: its melody, hands and words only where the music
- * has them, under the music's own title where it has one.
+ * A piece playing this music in place of its own: its single staves, hands and words only where the
+ * music has them, under the music's own title where it has one.
  */
 export const withMusic = (piece: ChartPiece, { title, ...music }: PieceMusic): ChartPiece =>
   retitled(
     {
       ...piece,
       ...music,
-      melody: music.melody,
+      staves: music.staves,
       leadSheet: music.leadSheet,
       hands: music.hands,
       lyrics: music.lyrics,
@@ -88,6 +100,13 @@ export const withMusic = (piece: ChartPiece, { title, ...music }: PieceMusic): C
 
 const sameText = (a: { en: string; ru: string } | undefined, b: typeof a) =>
   a?.en === b?.en && a?.ru === b?.ru
+
+/** Whether two staves' names are one: the same text, or the same in both languages. */
+const sameName = (a: StaffName | undefined, b: StaffName | undefined) =>
+  typeof a === 'object' && typeof b === 'object' ? sameText(a, b) : a === b
+
+const sameStaff = (a: PieceStaff, b: PieceStaff) =>
+  sameName(a.name, b.name) && (a.clef ?? 'treble') === (b.clef ?? 'treble') && a.notes === b.notes
 
 const sameSection = (a: Section, b: Section) =>
   a.kind === b.kind &&
@@ -108,7 +127,11 @@ export const sameMusic = (a: PieceMusic, b: PieceMusic): boolean =>
   a.meter === b.meter &&
   a.tempo === b.tempo &&
   a.pattern === b.pattern &&
-  a.melody === b.melody &&
+  (a.staves?.length ?? 0) === (b.staves?.length ?? 0) &&
+  (a.staves ?? []).every((staff, i) => {
+    const other = b.staves?.[i]
+    return other !== undefined && sameStaff(staff, other)
+  }) &&
   (a.leadSheet ?? false) === (b.leadSheet ?? false) &&
   a.hands?.rh === b.hands?.rh &&
   a.hands?.lh === b.hands?.lh &&

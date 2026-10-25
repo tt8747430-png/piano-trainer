@@ -17,6 +17,7 @@ import {
   type Tick,
 } from '@/shared/lib/music'
 import type { HandId } from '@/entities/piece'
+import { staffPlace } from '@/shared/lib/notation'
 import { isHandLayer, type Draft, type DraftBar, type DraftNote, type NoteLayer } from './draft'
 import { insertBar } from './bars'
 import type { TickSpan } from './state'
@@ -28,17 +29,25 @@ interface Written {
   readonly end: Tick
 }
 
+/** A layer's notes: a hand's, or a single staff's (none for a staff the draft has not). */
 export const notesOf = (draft: Draft, layer: NoteLayer): readonly DraftNote[] =>
-  layer === 'melody' ? draft.melody : draft.hands[layer]
+  isHandLayer(layer) ? draft.hands[layer] : (draft.staves[staffPlace(layer)]?.notes ?? [])
 
-/** The draft with a layer's notes, in order; the draft itself where they are the notes it has. */
+/**
+ * The draft with a layer's notes, in order; the draft itself where they are the notes it has, or the
+ * layer is a staff it has not.
+ */
 export function withNotes(draft: Draft, layer: NoteLayer, notes: readonly DraftNote[]): Draft {
   const sorted = [...notes].sort((a, b) => a.startTick - b.startTick || a.midi - b.midi)
   const now = notesOf(draft, layer)
   if (sorted.length === now.length && sorted.every((n, i) => n === now[i])) return draft
-  if (layer === 'melody')
-    return { ...draft, melody: sorted, melodyStaff: draft.melodyStaff || sorted.length > 0 }
-  return { ...draft, hands: { ...draft.hands, [layer]: sorted } }
+  if (isHandLayer(layer)) return { ...draft, hands: { ...draft.hands, [layer]: sorted } }
+  const place = staffPlace(layer)
+  if (!draft.staves[place]) return draft
+  return {
+    ...draft,
+    staves: draft.staves.map((staff, i) => (i === place ? { ...staff, notes: sorted } : staff)),
+  }
 }
 
 /** The draft with bar `index` changed; the draft itself where the change leaves the bar as it was. */
@@ -84,7 +93,7 @@ export function makeRoom(draft: Draft, layer: NoteLayer, at: Tick, ticks: Tick):
 
 /**
  * Insert mode's Delete (ADR 0092): the notes starting in `span` taken and the later notes pulled
- * left by its length, closing the gap as Flat's does. In the melody a note held into the gap (a
+ * left by its length, closing the gap as Flat's does. On a single staff a note held into the gap (a
  * tie over the barline) is cut there, so the notes pulled left never sound under it.
  */
 export function closeGap(draft: Draft, layer: NoteLayer, { from, to }: TickSpan): Draft {
@@ -99,8 +108,8 @@ export const spelledIn = (draft: Draft, key: Midi, at: Tick) => ({
 })
 
 /**
- * Takes the notes starting in [at, to) from a layer; in the melody, a note sounding into `at` is cut
- * there, so the tune stays one line.
+ * Takes the notes starting in [at, to) from a layer; on a single staff, a note sounding into `at` is
+ * cut there, so the staff stays one line.
  */
 export function clearUnder(draft: Draft, layer: NoteLayer, at: Tick, to: Tick): DraftNote[] {
   return notesOf(draft, layer).flatMap((n) => {
@@ -113,7 +122,7 @@ export function clearUnder(draft: Draft, layer: NoteLayer, at: Tick, to: Tick): 
 }
 
 /**
- * Notes as the tune holds them, one line (a hand's played into the melody, a take's): the highest at
+ * Notes as a single staff holds them, one line (a hand's played onto one, a take's): the highest at
  * each onset, each cut where the next starts, so no note sounds under another.
  */
 export function oneLine<N extends Pick<DraftNote, 'midi' | 'startTick' | 'durationTicks'>>(
@@ -132,7 +141,7 @@ export function oneLine<N extends Pick<DraftNote, 'midi' | 'startTick' | 'durati
 }
 
 /**
- * Writes keys at `at` for `ticks`: the melody one note (the highest key), a hand all of them. A note
+ * Writes keys at `at` for `ticks`: a single staff one note (the highest key), a hand all of them. A note
  * past the end adds bars; a note stops at the piece's end.
  */
 export function writeNotes(
@@ -174,7 +183,7 @@ export const notesAt = (draft: Draft, layer: NoteLayer, at: Tick): DraftNote[] =
   notesOf(draft, layer).filter((n) => n.startTick === at)
 
 /**
- * A key joining the notes at `at`, at their length: the melody keeps its highest; where nothing starts
+ * A key joining the notes at `at`, at their length: a single staff keeps its highest; where nothing starts
  * at `at` the key is written as a note of `ticks`.
  */
 export function addToChord(

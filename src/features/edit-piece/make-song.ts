@@ -1,5 +1,4 @@
 import {
-  emptyLine,
   keyText,
   ownSongId,
   songTitle,
@@ -9,36 +8,18 @@ import {
   type SharedSong,
   writeBar,
   writeHand,
+  writeStaff,
 } from '@/entities/piece'
 import { beatsPerBar, beatsToTicks, type Key, type Meter } from '@/shared/lib/music'
 
 /**
- * What a new song's score holds (ADR 0072, 0083, 0091, 0094): the tune's staff, and the piano's two
- * staves shown (hidden, a lead sheet). Its chord symbols are typed into it; shown or not, the View's.
+ * The staves a new song's score starts with (ADR 0083, 0094, 0097), as a notation app's new score
+ * asks: the piano's grand staff; a single staff over it; or a single staff alone, the piano out of
+ * sight (a lead sheet). More are added, named and taken away on the score. Its chord symbols are
+ * typed into it; shown or not, the View's.
  */
-export interface ScoreSetup {
-  readonly melody: boolean
-  readonly piano: boolean
-}
-
-/**
- * The scores New song starts from, as a notation app's templates: the piano first; the melody
- * alone, a lead sheet (ADR 0083); the piano with the melody.
- */
-export const SCORE_TEMPLATES = {
-  piano: { melody: false, piano: true },
-  leadSheet: { melody: true, piano: false },
-  pianoAndMelody: { melody: true, piano: true },
-} as const satisfies Readonly<Record<string, ScoreSetup>>
-export type ScoreTemplate = keyof typeof SCORE_TEMPLATES
-export const TEMPLATES = Object.keys(SCORE_TEMPLATES) as ScoreTemplate[]
-
-/** The template a setup is, where it is one: its staves as the template's. */
-export const templateOf = (setup: ScoreSetup): ScoreTemplate | undefined =>
-  TEMPLATES.find((each) => {
-    const template: ScoreSetup = SCORE_TEMPLATES[each]
-    return template.melody === setup.melody && template.piano === setup.piano
-  })
+export const SCORE_SETUPS = ['piano', 'staffAndPiano', 'staff'] as const
+export type ScoreSetup = (typeof SCORE_SETUPS)[number]
 
 /** What New song asks: a title as typed, a key, a meter and what its score holds. */
 interface SongDraft {
@@ -51,18 +32,13 @@ interface SongDraft {
 /**
  * Where a new song starts: a verse of four empty bars at 90, as a notation app's new score (ADR
  * 0091, 0094): no chord symbol, both hands written silent, so the editor opens on empty bars rather
- * than the pattern's notes; its score as `setup` says, a staff with nothing on it yet a rest (ADR
- * 0072), never every staff hidden: the piano hidden only with the tune's staff (ADR 0083).
+ * than the pattern's notes; its staves as `setup` says, a single staff with nothing on it yet a rest
+ * (ADR 0072, 0097), never every staff hidden: the piano hidden only under a single staff (ADR 0083).
  */
-export function chartStart(
-  key: Key,
-  meter: Meter,
-  setup: ScoreSetup = SCORE_TEMPLATES.piano,
-): PieceMusic {
+export function chartStart(key: Key, meter: Meter, setup: ScoreSetup = 'piano'): PieceMusic {
   const beats = beatsPerBar(meter)
   const ticks = beatsToTicks(beats)
   const bars = [ticks, ticks, ticks, ticks]
-  const empty = emptyLine([{ startTick: 0, ticks }])
   const silent = writeHand(
     bars.map(() => []),
     bars,
@@ -74,8 +50,10 @@ export function chartStart(
     tempo: 90,
     pattern: 'r1',
     sections: [{ kind: 'verse', lines: [bars.map(() => bar).join(' ')] }],
-    ...(setup.melody ? { melody: empty } : {}),
-    ...(setup.melody && !setup.piano ? { leadSheet: true } : {}),
+    ...(setup === 'piano'
+      ? {}
+      : { staves: [{ notes: writeStaff([], [{ startTick: 0, ticks }]) }] }),
+    ...(setup === 'staff' ? { leadSheet: true } : {}),
     hands: { rh: silent, lh: silent },
   }
 }

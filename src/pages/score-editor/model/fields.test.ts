@@ -14,7 +14,7 @@ const caretOn = (layer: Layer, music: Partial<PieceMusic> = {}) => ({
       tempo: 90,
       pattern: 'r1',
       sections: [{ kind: 'verse', lines: ['G C'] }],
-      melody: 'G4/4 | A4/4',
+      staves: [{ notes: 'G4/4 | A4/4' }],
       hands: { rh: 'r/4 | r/4', lh: 'r/4 | r/4' },
       ...music,
     }),
@@ -31,15 +31,22 @@ describe('the fields over the sheet (ADR 0096)', () => {
     )
   })
 
-  it('opens the Lyrics field on the staff the words go on, where the View shows them and the tune has a note', () => {
-    expect(fieldClosedBy('lyrics', caretOn('melody'), shown)).toBeNull()
-    expect(fieldClosedBy('lyrics', caretOn('lh'), shown)).toBe('lyricsOn.melody')
-    expect(fieldClosedBy('lyrics', caretOn('melody'), { ...shown, lyrics: false })).toBe(
+  it('opens the Lyrics field on the staff the words go on, where the View shows them and the staff has a note', () => {
+    expect(fieldClosedBy('lyrics', caretOn('staff0'), shown)).toBeNull()
+    expect(fieldClosedBy('lyrics', caretOn('lh'), shown)).toBe('lyricsOn.staff')
+    // On the upper staff where they are written there (ADR 0093).
+    const upper = {
+      hands: { rh: 'G4/4 | r/4', lh: 'r/4 | r/4' },
+      lyrics: ['one'],
+      lyricsOn: 'rh' as const,
+    }
+    expect(fieldClosedBy('lyrics', caretOn('staff0', upper), shown)).toBe('lyricsOn.rh')
+    expect(fieldClosedBy('lyrics', caretOn('staff0'), { ...shown, lyrics: false })).toBe(
       'lyricsHidden',
     )
-    expect(fieldClosedBy('lyrics', caretOn('melody', { melody: 'r/4 | r/4' }), shown)).toBe(
-      'noTune',
-    )
+    expect(
+      fieldClosedBy('lyrics', caretOn('staff0', { staves: [{ notes: 'r/4 | r/4' }] }), shown),
+    ).toBe('noNotes')
   })
 
   it('opens the fingering field on a note of the piano’s staves, a chord’s too, where the View shows the fingers', () => {
@@ -48,7 +55,7 @@ describe('the fields over the sheet (ADR 0096)', () => {
     expect(fieldClosedBy('fingering', caretOn('rh', chord), { ...shown, fingers: false })).toBe(
       'fingersHidden',
     )
-    expect(fieldClosedBy('fingering', caretOn('melody', chord), shown)).toBe('hand')
+    expect(fieldClosedBy('fingering', caretOn('staff0', chord), shown)).toBe('hand')
     expect(fieldClosedBy('fingering', caretOn('lh', chord), shown)).toBe('chooseNote')
   })
 })

@@ -191,8 +191,10 @@ export const music = {
     barChords: 'Bar {{n}}: {{chords}}',
     loopStart: 'Loop start',
     loopEnd: 'Loop end',
-    // The staves' names at a score's first line's head (ADR 0094), as a printed score names them.
-    staves: { melody: 'Melody', piano: 'Piano' },
+    // The piano's name at a score's first line's head (ADR 0094), as a printed score names it; a
+    // single staff's is its own (ADR 0097), else, in the editor and the View, its place's.
+    staves: { piano: 'Piano' },
+    staff: 'Staff {{n}}',
     // Pages floating on a canvas (ADR 0075): dragged to move, pinched or Ctrl-wheeled to zoom.
     canvas: {
       label: 'Pages: drag to move, pinch or Ctrl and scroll to zoom',
@@ -207,7 +209,6 @@ export const music = {
   view: {
     label: 'View',
     staves: 'Staves',
-    melody: 'Melody',
     upper: 'Upper staff',
     lower: 'Lower staff',
     show: 'Show',

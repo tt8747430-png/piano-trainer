@@ -8,6 +8,7 @@ import { RoundButton } from '@/shared/ui'
 import { ModeSwitch } from '@/widgets/mode-switch'
 import { ScoreViewMenu } from '@/widgets/score-view-menu'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { useStaffHeads } from '../model/use-staff-heads'
 import { EditRow } from './EditRow'
 
 /**
@@ -25,6 +26,8 @@ export function EditorHeader({ status }: { status?: ReactNode }) {
   const { actions, meta, takes } = useScoreEditorContext()
   const bar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
   const keys = useFoldKeys()
+  const staves = useStaffHeads()
+  const piano = useEditorState((state) => !state.draft.leadSheet)
   const recording = takes.stage !== 'idle'
   return (
     <div className="flex flex-wrap items-center gap-1 sm:flex-nowrap sm:gap-2">
@@ -35,6 +38,8 @@ export function EditorHeader({ status }: { status?: ReactNode }) {
       <div className="ms-auto flex items-center gap-1">
         <ScoreViewMenu
           keys={{ shown: !keys.folded, show: (on) => keys.fold(!on) }}
+          staves={staves}
+          piano={piano}
           disabled={recording}
         />
         <MidiButton />

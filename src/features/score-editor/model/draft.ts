@@ -1,7 +1,7 @@
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { PatternId } from '@/entities/pattern'
 import {
-  emptyLine,
+  defaultLyricsStaff,
   gatherLyrics,
   HAND_IDS,
   keyText,
@@ -11,17 +11,19 @@ import {
   writeBar,
   writeHand,
   writeLyrics,
-  writeMelody,
+  writeStaff,
   type ChartPiece,
   type HandId,
   type LyricsStaff,
   type PieceMusic,
   type Section,
+  type StaffName,
 } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import { isOneOf } from '@/shared/lib'
 import type { HandNote, Performance } from '@/shared/lib/arrangement'
 import {
+  type Clef,
   type Hand,
   type HandClefs,
   barMarksOf,
@@ -39,16 +41,26 @@ import {
   type SpelledNote,
   type Tick,
 } from '@/shared/lib/music'
+import {
+  isSingleStaff,
+  singleStaff,
+  staffPlace,
+  type SingleStaff,
+  type StaffId,
+} from '@/shared/lib/notation'
 import { barsOf, chordsAt, sectionMeter, startsIn, type PlacedBar } from './timeline'
 
-/** What the editor writes (spec §6.1, ADR 0091): the chords, the melody or a hand. */
-export type Layer = 'chords' | 'melody' | HandId
-/** A layer of notes: the melody or a hand. */
+/**
+ * What the editor writes (spec §6.1, ADR 0091, 0097): the chord symbols, a single staff by its place,
+ * or one of the piano's two staves (a hand's).
+ */
+export type Layer = 'chords' | SingleStaff | HandId
+/** A layer of notes: a single staff or a hand. */
 export type NoteLayer = Exclude<Layer, 'chords'>
 /** Whether a layer is a hand's: one of the piano's two staves. */
 export const isHandLayer = isOneOf<HandId>(HAND_IDS)
 
-/** A note of the melody or a hand on the piece's timeline. */
+/** A note of a staff or a hand on the piece's timeline. */
 export interface DraftNote {
   readonly midi: Midi
   readonly spelled: SpelledNote
@@ -56,7 +68,7 @@ export interface DraftNote {
   readonly durationTicks: Tick
   readonly finger?: Finger
   readonly marks?: NoteMarks
-  /** What it sings, by verse (ADR 0093): a note of the tune's staff, or of the right hand's chord where that is the tune. */
+  /** What it sings, by verse (ADR 0093): a note of the staff the words are on, a chord's one note on the upper staff. */
   readonly lyrics?: NoteLyrics
 }
 
@@ -84,6 +96,15 @@ export interface DraftSection {
   readonly lines: readonly (readonly DraftBar[])[]
 }
 
+/** A single staff over the piano's grand staff, as the editor holds it (ADR 0097). */
+export interface DraftStaff {
+  /** Its printed name: the content's in both languages, or the learner's; none prints none. */
+  readonly name?: StaffName
+  readonly clef: Clef
+  /** One line: no note starts under another. */
+  readonly notes: readonly DraftNote[]
+}
+
 /** A piece's music as the editor holds it: bars of chords, and notes on the timeline. */
 export interface Draft {
   /** The learner's own title (ADR 0094): an own song's, or a version's in place of the catalog's. */
@@ -94,17 +115,18 @@ export interface Draft {
   /** The piece's pattern, kept for the Player's Setup; the editor's bars are all written (ADR 0091). */
   readonly pattern: PatternId
   readonly sections: readonly DraftSection[]
-  /** Whether the score has the tune's staff over the grand staff (ADR 0064): kept though empty (ADR 0072). */
-  readonly melodyStaff: boolean
+  /**
+   * The single staves over the grand staff, top down (ADR 0097): each kept though empty (ADR 0072),
+   * as many as the learner adds.
+   */
+  readonly staves: readonly DraftStaff[]
   /** A lead sheet: the piano's staves out of sight, their music kept (ADR 0072, 0083). */
   readonly leadSheet: boolean
   /**
-   * The staff the lyrics are written on (ADR 0093): the tune's where the score has it (`melodyStaff`)
-   * and they were not written on the upper staff before it came, else the upper staff.
+   * The staff the lyrics are written on (ADR 0093, 0097): a single staff by its place, or the
+   * piano's upper staff.
    */
   readonly lyricsOn: LyricsStaff
-  /** One line: no note starts under another. */
-  readonly melody: readonly DraftNote[]
   /** Each hand's notes, in every bar. */
   readonly hands: Readonly<Record<HandId, readonly DraftNote[]>>
 }
@@ -138,7 +160,7 @@ const inOrder = (notes: DraftNote[]): DraftNote[] =>
 export function readDraft(music: PieceMusic): Draft {
   const key = parseKey(music.key)
   if (!key) throw new RangeError(`The music is in no key: "${music.key}"`)
-  const { chart, melody } = readMusic(music)
+  const { chart, staves } = readMusic(music)
   const hands: Record<HandId, DraftNote[]> = { rh: [], lh: [] }
   /** The bars each hand leaves to the pattern, on the timeline. */
   const left: { readonly hand: HandId; readonly start: Tick; readonly end: Tick }[] = []
@@ -190,11 +212,14 @@ export function readDraft(music: PieceMusic): Draft {
     tempo: music.tempo,
     pattern: music.pattern,
     sections,
-    // The tune's staff is there wherever the music writes a line for it, rests alone included.
-    melodyStaff: music.melody !== undefined,
-    leadSheet: music.leadSheet === true,
+    // Each single staff the music writes, rests alone included.
+    staves: (music.staves ?? []).map(({ name }, place) => ({
+      ...(name === undefined ? {} : { name }),
+      clef: staves[place]?.clef ?? 'treble',
+      notes: [...(staves[place]?.notes ?? [])],
+    })),
+    leadSheet: music.leadSheet === true && (music.staves?.length ?? 0) > 0,
     lyricsOn: lyricsStaff(music),
-    melody: melody ?? [],
     hands: { rh: inOrder(hands.rh), lh: inOrder(hands.lh) },
   }
 }
@@ -221,24 +246,32 @@ function handBars(notes: readonly DraftNote[], bars: readonly PlacedBar[]): Hand
   )
 }
 
+/** The single staff the lyrics are written on, as a layer; the upper staff's where they are on it. */
+export const lyricsLayer = (draft: Pick<Draft, 'lyricsOn'>): NoteLayer =>
+  draft.lyricsOn === 'rh' ? 'rh' : singleStaff(draft.lyricsOn)
+
 /**
- * The notes the lyrics go under (ADR 0093): the tune's, or the right hand's where they are on the
- * upper staff, a chord of them one note.
+ * The notes the lyrics go under (ADR 0093, 0097): the single staff's they are on, or the right
+ * hand's where they are on the upper staff, a chord of them one note.
  */
 export const tuneNotes = (draft: Draft): DraftNote[] =>
-  draft.lyricsOn === 'melody' ? [...draft.melody] : singingNotes(draft.hands.rh)
+  draft.lyricsOn === 'rh'
+    ? singingNotes(draft.hands.rh)
+    : [...(draft.staves[draft.lyricsOn]?.notes ?? [])]
 
 /** The draft as the content writes music: every bar of both hands written (ADR 0091), its words as verses. */
 export function writeDraft(draft: Draft): PieceMusic {
   const placed = barsOf(draft)
   const timeline = placed.map(({ start, bar }) => ({ startTick: start, ticks: bar.ticks }))
-  // A staff the score has is written though empty, as a rest, so it stays (ADR 0072).
-  const melody = draft.melodyStaff
-    ? (writeMelody(draft.melody, timeline) ?? emptyLine(timeline))
-    : undefined
   const ticks = placed.map(({ bar }) => bar.ticks)
   const clefs = (hand: Hand) => placed.map(({ bar }) => bar.clefs?.[hand])
   const lyrics = gatherLyrics(tuneNotes(draft)).map(writeLyrics)
+  // A staff the score has is written though empty, as a rest, so it stays (ADR 0072).
+  const staves = draft.staves.map(({ name, clef, notes }) => ({
+    ...(name === undefined ? {} : { name }),
+    ...(clef === 'treble' ? {} : { clef }),
+    notes: writeStaff(notes, timeline),
+  }))
   return {
     ...(draft.title === undefined ? {} : { title: draft.title }),
     key: keyText(draft.key),
@@ -252,12 +285,12 @@ export function writeDraft(draft: Draft): PieceMusic {
         line.map((bar) => writeBar(chartBar(bar), sectionMeter(draft, s))).join(' '),
       ),
     })),
-    ...(melody === undefined ? {} : { melody }),
-    ...(draft.leadSheet ? { leadSheet: true } : {}),
+    ...(staves.length > 0 ? { staves } : {}),
+    ...(draft.leadSheet && staves.length > 0 ? { leadSheet: true } : {}),
     ...(lyrics.length > 0 ? { lyrics } : {}),
-    // On the upper staff of a score with a tune's staff: written, the melody's being the default.
-    ...(lyrics.length > 0 && draft.melodyStaff && draft.lyricsOn === 'rh'
-      ? { lyricsOn: 'rh' }
+    // Where they are not on the top single staff, where the music would put them: written.
+    ...(lyrics.length > 0 && draft.lyricsOn !== defaultLyricsStaff({ staves })
+      ? { lyricsOn: draft.lyricsOn }
       : {}),
     hands: {
       rh: writeHand(handBars(draft.hands.rh, placed), ticks, clefs('rh')),
@@ -279,3 +312,34 @@ export function musicToSave(draft: Draft): PieceMusic | null {
     return null
   }
 }
+
+/** The draft with every staff's notes changed alike: each single staff's, then each hand's. */
+export const withEveryStaff = (
+  draft: Draft,
+  change: (notes: readonly DraftNote[], layer: NoteLayer) => DraftNote[],
+): Draft => ({
+  ...draft,
+  staves: draft.staves.map((staff, place) => ({
+    ...staff,
+    notes: change(staff.notes, singleStaff(place)),
+  })),
+  hands: { rh: change(draft.hands.rh, 'rh'), lh: change(draft.hands.lh, 'lh') },
+})
+
+/** The single staff a layer is, where it is one the draft has. */
+export const singleStaffOf = (
+  draft: Pick<Draft, 'staves'>,
+  layer: Layer,
+): DraftStaff | undefined =>
+  layer === 'chords' || isHandLayer(layer) ? undefined : draft.staves[staffPlace(layer)]
+
+/**
+ * The staff a layer of notes writes on (ADR 0097): a single staff its own, the right hand the
+ * treble, the left the bass.
+ */
+export const layerStaff = (layer: NoteLayer): StaffId =>
+  isHandLayer(layer) ? (layer === 'lh' ? 'bass' : 'treble') : layer
+
+/** The layer that writes on a staff: a single staff its own, the treble the right hand, the bass the left. */
+export const staffLayer = (staff: StaffId): NoteLayer =>
+  isSingleStaff(staff) ? staff : staff === 'bass' ? 'lh' : 'rh'

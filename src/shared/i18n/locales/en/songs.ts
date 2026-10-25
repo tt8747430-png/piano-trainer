@@ -28,28 +28,23 @@ export const songs = {
     make: 'Make',
     makeAndRecord: 'Record',
   },
-  // What a new song's score holds, its own sheet (ADR 0072).
+  // The staves a new song's score starts with, its own sheet (ADR 0072, 0097).
   setup: {
     title: 'Score',
     customize: 'Customize',
     done: 'Done',
-    templates: 'Start from',
-    template: {
-      piano: 'Piano',
-      leadSheet: 'Melody and chords',
-      pianoAndMelody: 'Piano with melody',
-    },
-    templateDetail: {
-      piano: 'The piano alone',
-      leadSheet: 'A lead sheet: the tune with chord symbols, no piano staves',
-      pianoAndMelody: 'The tune on its own staff over the piano',
-    },
     staves: 'Staves',
-    melody: 'Melody',
-    melodyDetail: 'A staff for the tune',
-    piano: 'Piano',
-    pianoDetail: 'Both hands on the grand staff',
-    pianoKept: 'Add the melody to leave the piano out',
+    choice: {
+      piano: 'Piano',
+      staffAndPiano: 'A staff and piano',
+      staff: 'A staff',
+    },
+    choiceDetail: {
+      piano: 'The piano’s two staves',
+      staffAndPiano: 'A staff over the piano, for a voice or another part',
+      staff: 'A lead sheet: one staff with chord symbols, the piano out of sight',
+    },
+    more: 'Add more staves, name them and take them away on the score.',
   },
   // A song someone shared as a link.
   shared: {

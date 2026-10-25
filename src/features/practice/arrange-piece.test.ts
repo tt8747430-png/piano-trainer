@@ -71,7 +71,7 @@ describe('arrangePiece', () => {
 
   it('plays the repeats taken in the Player, and the bars as written elsewhere', () => {
     if (!('sections' in bz5)) throw new Error('bz5 is a chart')
-    const { melody: _tune, hands: _hands, ...rest } = bz5
+    const { staves: _staves, hands: _hands, ...rest } = bz5
     const plain = { ...rest, sections: [{ kind: 'verse' as const, lines: ['|: G C :| D'] }] }
     const written = arrangePiece(plain, ownChoice(plain), BUILT_IN_PATTERNS)
     expect(written.chords.map((c) => c.symbol)).toEqual(['G', 'C', 'D'])
@@ -134,16 +134,18 @@ describe('the words a piece sings (ADR 0093)', () => {
     notes: readonly { readonly lyrics?: readonly unknown[]; readonly hand: string }[],
   ) => notes.filter((n) => n.lyrics !== undefined).map((n) => n.hand)
 
-  it('carries each syllable on the tune’s note: doubled, or played by the right hand’s melody figure', () => {
-    const doubled = arrangePiece(silent, { ...ownChoice(silent), melody: true }, BUILT_IN_PATTERNS)
-    const sung = doubled.notes.filter((n) => n.lyrics !== undefined)
-    expect(new Set(sungBy(sung))).toEqual(new Set(['melody']))
+  it('carries each syllable on the tune’s note, heard or not, and on the right hand’s melody figure (ADR 0097)', () => {
+    const heard = arrangePiece(silent, { ...ownChoice(silent), melody: true }, BUILT_IN_PATTERNS)
+    const sung = heard.notes.filter((n) => n.lyrics !== undefined)
+    expect(new Set(sungBy(sung))).toEqual(new Set(['staff']))
     expect(sung[0]?.lyrics?.[0]).toEqual({ text: 'Si', hyphen: true, held: 1 })
     // The five notes a syllable is held over sing nothing: 46 notes of the tune, 41 with a verse.
     expect(sung).toHaveLength(41)
+    // The tune's staff sings though it is not heard; a hand playing it sings with it.
+    const unheard = arrangePiece(silent, ownChoice(silent), BUILT_IN_PATTERNS).notes
+    expect(unheard.filter((n) => n.lyrics !== undefined).every((n) => n.silent)).toBe(true)
+    expect(new Set(sungBy(unheard))).toEqual(new Set(['staff']))
     const played = arrangePiece(silent, { ...ownChoice(silent), pattern: 'r5' }, BUILT_IN_PATTERNS)
-    expect(new Set(sungBy(played.notes))).toEqual(new Set(['rh']))
-    // The accompaniment alone sings nothing.
-    expect(sungBy(arrangePiece(silent, ownChoice(silent), BUILT_IN_PATTERNS).notes)).toEqual([])
+    expect(new Set(sungBy(played.notes))).toEqual(new Set(['staff', 'rh']))
   })
 })

@@ -30,9 +30,10 @@ describe('entries', () => {
 })
 
 describe('isLeadSheet', () => {
-  it('is a piece that hides its piano: the tune and the chord names (ADR 0083, 0094)', () => {
+  it('is a piece that hides its piano: its single staves and the chord names (ADR 0083, 0097)', () => {
     const song = testSong(['C'])
     expect(isLeadSheet(song)).toBe(false)
-    expect(isLeadSheet({ ...song, melody: 'C4/4', leadSheet: true })).toBe(true)
+    expect(isLeadSheet({ ...song, staves: [{ notes: 'C4/4' }], leadSheet: true })).toBe(true)
+    expect(isLeadSheet({ ...song, leadSheet: true })).toBe(false)
   })
 })

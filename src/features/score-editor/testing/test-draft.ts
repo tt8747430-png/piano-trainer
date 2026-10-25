@@ -19,6 +19,14 @@ export function draftOf(music: Partial<PieceMusic> = {}): Draft {
   return music.hands === undefined ? { ...draft, hands: { rh: [], lh: [] } } : draft
 }
 
+/** A draft of one single staff over the piano, empty unless the music writes it (ADR 0097). */
+export const oneStaff = (music: Partial<PieceMusic> = {}): Draft =>
+  draftOf({ staves: [{ notes: 'r/1' }], ...music })
+
+/** A single staff's notes, by its place: the top one's unless said (ADR 0097). */
+export const staffNotes = (draft: Pick<Draft, 'staves'>, place = 0): readonly DraftNote[] =>
+  draft.staves[place]?.notes ?? []
+
 /** Notes as `F#4@24/24`: name, octave, onset and length. */
 export const shape = (notes: readonly DraftNote[]): string[] =>
   notes.map(

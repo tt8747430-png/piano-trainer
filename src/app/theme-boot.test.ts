@@ -1,10 +1,15 @@
 // @vitest-environment jsdom
 import { readFileSync } from 'node:fs'
-import { describe, expect, it, onTestFinished } from 'vitest'
+import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { createSettingsStore, SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from '@/entities/settings'
 import { setTheme, setTitles } from '@/features/set-preference'
 import { THEME_COLORS } from '@/shared/config'
 import { stubMatchMedia } from '@/shared/test/match-media'
+
+// The storage is chosen once a page, and a file before this one in its worker may have chosen it
+// (another page's localStorage, or memory): this file loads the app's modules afresh, as a page would,
+// so the store saves where the script reads.
+vi.hoisted(() => vi.resetModules())
 
 const html = readFileSync('index.html', 'utf8')
 const boot = html.match(/<script id="theme-boot">([\s\S]*?)<\/script>/)?.[1]

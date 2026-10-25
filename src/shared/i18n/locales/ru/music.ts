@@ -175,7 +175,8 @@ export const music: LocaleResources['music'] = {
     barChords: 'Такт {{n}}: {{chords}}',
     loopStart: 'Начало повтора',
     loopEnd: 'Конец повтора',
-    staves: { melody: 'Мелодия', piano: 'Фортепиано' },
+    staves: { piano: 'Фортепиано' },
+    staff: 'Нотоносец {{n}}',
     canvas: {
       label: 'Страницы: перетащите, чтобы сдвинуть; сведите пальцы или Ctrl с колёсиком — масштаб',
       zoomIn: 'Крупнее',
@@ -187,7 +188,6 @@ export const music: LocaleResources['music'] = {
   view: {
     label: 'Вид',
     staves: 'Нотоносцы',
-    melody: 'Мелодия',
     upper: 'Верхний нотоносец',
     lower: 'Нижний нотоносец',
     show: 'Показывать',

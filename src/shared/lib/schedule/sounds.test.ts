@@ -29,13 +29,18 @@ describe('barSounds', () => {
     const slowed = arrange(TWO_BARS_CHART, {
       tonic: note('C'),
       pattern: BEATS,
-      melody: [
+      staves: [
         {
-          midi: midi(72),
-          spelled: note('C'),
-          startTick: 0,
-          durationTicks: 96,
-          marks: { expression: 'rit' },
+          clef: 'treble',
+          notes: [
+            {
+              midi: midi(72),
+              spelled: note('C'),
+              startTick: 0,
+              durationTicks: 96,
+              marks: { expression: 'rit' },
+            },
+          ],
         },
       ],
     })

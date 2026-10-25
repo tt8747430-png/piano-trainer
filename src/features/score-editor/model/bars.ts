@@ -1,7 +1,14 @@
 import { beatsPerBar, TICKS_PER_BEAT, type Meter, type Tick } from '@/shared/lib/music'
-import { ticksOf } from '@/shared/lib/notation'
+import { staffPlace, ticksOf } from '@/shared/lib/notation'
 import type { BarsClip } from './clip'
-import type { Draft, DraftBar, DraftNote } from './draft'
+import {
+  isHandLayer,
+  withEveryStaff,
+  type Draft,
+  type DraftBar,
+  type DraftNote,
+  type NoteLayer,
+} from './draft'
 import { versesInOrder } from './sections'
 import { barsOf, sectionMeter } from './timeline'
 import { slotsOf, spliceAll, withSlots, type Slot } from './structure'
@@ -120,28 +127,25 @@ export function copyBars(draft: Draft, { from, to }: BarRange): BarsClip {
   return {
     kind: 'bars',
     bars: bars.map((placed) => placed.bar),
-    melody: inside(draft.melody),
+    staves: draft.staves.map((staff) => inside(staff.notes)),
     hands: { rh: inside(draft.hands.rh), lh: inside(draft.hands.lh) },
   }
 }
 
-/** Copied bars put in after `after` with their notes. */
+/**
+ * Copied bars put in after `after` with their notes, each single staff's on the staff at its place
+ * (ADR 0097), where the score still has one.
+ */
 export function pasteBars(draft: Draft, after: number, clip: BarsClip): Draft {
   if (clip.bars.length === 0) return draft
   const at = endOf(draft, after)
-  const moved = (notes: readonly DraftNote[]) =>
-    notes.map((n) => ({ ...n, startTick: n.startTick + at }))
-  const inserted = insertSlots(draft, after, clip.bars)
-  const order = (notes: DraftNote[]) =>
-    notes.sort((a, b) => a.startTick - b.startTick || a.midi - b.midi)
-  return {
-    ...inserted,
-    melody: order([...inserted.melody, ...moved(clip.melody)]),
-    hands: {
-      rh: order([...inserted.hands.rh, ...moved(clip.hands.rh)]),
-      lh: order([...inserted.hands.lh, ...moved(clip.hands.lh)]),
-    },
-  }
+  const copied = (layer: NoteLayer): readonly DraftNote[] =>
+    isHandLayer(layer) ? clip.hands[layer] : (clip.staves[staffPlace(layer)] ?? [])
+  return withEveryStaff(insertSlots(draft, after, clip.bars), (notes, layer) =>
+    [...notes, ...copied(layer).map((n) => ({ ...n, startTick: n.startTick + at }))].sort(
+      (a, b) => a.startTick - b.startTick || a.midi - b.midi,
+    ),
+  )
 }
 
 /** A bar's lengths to choose: an eighth at a time up to the meter's bar. */

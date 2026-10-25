@@ -8,15 +8,15 @@ import {
   TICKS_PER_BEAT,
   type Key,
 } from '@/shared/lib/music'
-import type { ChartBar, HandNote, Melody } from '@/shared/lib/arrangement'
+import type { ChartBar, HandNote, StaffNote } from '@/shared/lib/arrangement'
 import { readBeats, ticksIn } from './beats'
 import { keyText, musicOf, pitchText, sameMusic } from './music'
 import { parseChart } from './parse-chart'
-import { parseMelody } from './parse-melody'
+import { parseStaff } from './parse-staff'
 import { testSong } from '../testing/test-pieces'
 import { beatsText, writeBar } from './write-chart'
 import { writeHand } from './write-hands'
-import { writeMelody } from './write-melody'
+import { writeStaff } from './write-staff'
 
 const bar = (...chords: [string, number, string?][]): ChartBar => ({
   chords: chords.map(([symbol, beats, method]) => ({
@@ -92,39 +92,41 @@ const bars4 = [
   { startTick: 0, ticks: 96 },
   { startTick: 96, ticks: 96 },
 ]
-const melodyNote = (m: number, startTick: number, durationTicks: number) => ({
+const staffNote = (m: number, startTick: number, durationTicks: number) => ({
   midi: midi(m),
   spelled: m === 61 ? note('C', 1) : note('E'),
   startTick,
   durationTicks,
 })
+const staffOf = (lines: string[], notes: string) =>
+  parseStaff(testSong(lines, { staves: [{ notes }] }), 0)
 
-describe('writeMelody', () => {
+describe('writeStaff', () => {
   it('writes notes and the rests between them, a bar line where one falls between notes', () => {
-    const melody: Melody = [melodyNote(64, 24, 48), melodyNote(64, 96, 96)]
-    expect(writeMelody(melody, bars4)).toBe('r/1 E4/2 r/1 | E4/4')
+    const notes: StaffNote[] = [staffNote(64, 24, 48), staffNote(64, 96, 96)]
+    expect(writeStaff(notes, bars4)).toBe('r/1 E4/2 r/1 | E4/4')
   })
 
   it('writes a note across a bar line as one note', () => {
-    expect(writeMelody([melodyNote(61, 48, 96)], bars4)).toBe('r/2 C#4/4')
+    expect(writeStaff([staffNote(61, 48, 96)], bars4)).toBe('r/2 C#4/4')
   })
 
-  it('writes nothing for no notes', () => {
-    expect(writeMelody([], bars4)).toBeUndefined()
+  it('writes a staff with nothing on it as its first bar’s rest, so it stays (ADR 0072)', () => {
+    expect(writeStaff([], bars4)).toBe('r/4')
+    expect(staffOf(['C'], writeStaff([], bars4))).toEqual([])
   })
 
   it('writes a note’s marks after its beats, and reads them back', () => {
     const text = 'E4/1[stacc,p] r/1 E4/2[ferm]'
-    const melody = parseMelody(testSong(['C'], { melody: text }))
-    expect(melody?.[0]?.marks).toEqual({ articulations: ['staccato'], dynamic: 'p' })
-    expect(writeMelody(melody ?? [], bars4)).toBe(text)
-    expect(() => parseMelody(testSong(['C'], { melody: 'r/1[acc]' }))).toThrow()
+    const notes = staffOf(['C'], text)
+    expect(notes[0]?.marks).toEqual({ articulations: ['staccato'], dynamic: 'p' })
+    expect(writeStaff(notes, bars4)).toBe(text)
+    expect(() => staffOf(['C'], 'r/1[acc]')).toThrow()
   })
 
   it('reads back as written', () => {
-    const melody: Melody = [melodyNote(64, 0, 8), melodyNote(61, 8, 88), melodyNote(64, 120, 24)]
-    const text = writeMelody(melody, bars4)
-    expect(parseMelody(testSong(['C C'], { melody: text }))).toEqual(melody)
+    const notes: StaffNote[] = [staffNote(64, 0, 8), staffNote(61, 8, 88), staffNote(64, 120, 24)]
+    expect(staffOf(['C C'], writeStaff(notes, bars4))).toEqual(notes)
   })
 })
 
@@ -187,7 +189,7 @@ describe('the music of a piece', () => {
   })
 
   it('takes a piece’s music, and tells equal music apart from changed', () => {
-    const song = testSong(['C G'], { melody: 'E4/4' })
+    const song = testSong(['C G'], { staves: [{ notes: 'E4/4' }] })
     const music = musicOf(song)
     expect(music).toEqual({
       key: 'C',
@@ -195,7 +197,7 @@ describe('the music of a piece', () => {
       tempo: 72,
       pattern: 'r4',
       sections: [{ kind: 'verse', lines: ['C G'] }],
-      melody: 'E4/4',
+      staves: [{ notes: 'E4/4' }],
     })
     expect(sameMusic(music, { ...music, sections: [{ lines: ['C G'], kind: 'verse' }] })).toBe(true)
     expect(sameMusic(music, { ...music, tempo: 80 })).toBe(false)
@@ -210,10 +212,30 @@ describe('the music of a piece', () => {
     }
     expect(sameMusic(music, changed)).toBe(false)
     expect(musicOf({ ...song, leadSheet: true })).toEqual({ ...music, leadSheet: true })
-    // The lyrics' staff, written where it is not the melody's (ADR 0093).
+    // The lyrics' staff, written where it is not the top single staff (ADR 0093, 0097).
     const upper = { ...song, lyrics: ['one'], lyricsOn: 'rh' as const }
     expect(musicOf(upper)).toEqual({ ...music, lyrics: ['one'], lyricsOn: 'rh' })
-    expect(musicOf({ ...upper, lyricsOn: 'melody' })).toEqual({ ...music, lyrics: ['one'] })
+    expect(musicOf({ ...upper, lyricsOn: 0 })).toEqual({ ...music, lyrics: ['one'] })
     expect(sameMusic(musicOf(upper), { ...musicOf(upper), lyricsOn: undefined })).toBe(false)
+  })
+
+  it('tells a staff added, named, renamed or put in another clef apart (ADR 0097)', () => {
+    const music = musicOf(testSong(['C G'], { staves: [{ notes: 'E4/4' }] }))
+    const staves = (...each: NonNullable<typeof music.staves>) => ({ ...music, staves: each })
+    expect(sameMusic(music, staves({ notes: 'E4/4' }))).toBe(true)
+    expect(sameMusic(music, staves({ notes: 'E4/4' }, { notes: 'r/4' }))).toBe(false)
+    expect(sameMusic(music, staves({ name: 'Voice', notes: 'E4/4' }))).toBe(false)
+    const voice = { en: 'Voice', ru: 'Голос' }
+    expect(
+      sameMusic(
+        staves({ name: voice, notes: 'E4/4' }),
+        staves({ name: { ...voice }, notes: 'E4/4' }),
+      ),
+    ).toBe(true)
+    expect(
+      sameMusic(staves({ name: voice, notes: 'E4/4' }), staves({ name: 'Voice', notes: 'E4/4' })),
+    ).toBe(false)
+    expect(sameMusic(music, staves({ clef: 'bass', notes: 'E4/4' }))).toBe(false)
+    expect(sameMusic(music, { ...music, staves: undefined })).toBe(false)
   })
 })

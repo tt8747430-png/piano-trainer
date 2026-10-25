@@ -10,6 +10,7 @@ import {
   createEditorStore,
   readDraft,
   musicToSave,
+  shownRows,
   type EditorAction,
 } from '@/features/score-editor'
 import { useLocale } from '@/shared/i18n'
@@ -23,7 +24,7 @@ import { arrangeDraft } from './arrange-draft'
 import type { ScoreEditorValue } from './editor-context'
 import type { EditSearch } from './edit-search'
 import { savedMusic, savingTo, type EditorTarget } from './editor-target'
-import { layerInSight, rowsInSight } from './seen-draft'
+import { layerInSight, rowsInSight } from './rows-in-sight'
 import { shortcutOf } from './shortcuts'
 import { fieldOf } from './fields'
 import { useEditorTakes } from './use-editor-takes'
@@ -182,15 +183,15 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     return () => window.removeEventListener('keydown', listener)
   }, [])
 
-  // The caret writes only in a row in sight (ADR 0094): a row the View hides (the chord symbols, the
-  // tune's staff) is stepped over the way the caret was going, else it stays; a row put
-  // out of sight under it sends it to the staff under it. Now, and whenever a step, an Undo or a Redo
-  // would bring it back there.
+  // The caret writes only in a row in sight (ADR 0094, 0097): a row the View hides (the chord
+  // symbols, a staff) is stepped over the way the caret was going, else it stays; a row put out of
+  // sight under it sends it to the staff under it. Now, and whenever a step, an Undo or a Redo would
+  // bring it back there.
   useEffect(() => {
     let from = store.getState().layer
     const keepInSight = () => {
       const { layer, draft } = store.getState()
-      const to = layerInSight(rowsInSight(draft, shown), from, layer)
+      const to = layerInSight(shownRows(draft), rowsInSight(draft, shown), from, layer)
       from = to
       if (to !== layer) store.dispatch({ type: 'layer', layer: to })
     }

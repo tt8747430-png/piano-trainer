@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { midi } from '@/shared/lib/music'
-import { draftOf, shape } from '../testing/test-draft'
+import { draftOf, shape, staffNotes } from '../testing/test-draft'
 import { takeParts, writeTake, type TakePart } from './take-edits'
 import { totalTicks } from './timeline'
 
@@ -17,7 +17,7 @@ describe('takeParts', () => {
       { layer: 'rh', notes: [note(60, 0, 24), note(67, 24, 24)] },
       { layer: 'lh', notes: [note(48, 0, 24)] },
     ])
-    expect(takeParts(notes, 'melody', midi(60))).toEqual([{ layer: 'melody', notes }])
+    expect(takeParts(notes, 'staff0', midi(60))).toEqual([{ layer: 'staff0', notes }])
   })
 })
 
@@ -55,12 +55,12 @@ describe('writeTake', () => {
     expect(shape(draft.hands.lh)).toEqual(['G2@96/192'])
   })
 
-  it('keeps the melody one line: the highest key at each onset, a note cut where the next starts', () => {
-    const draft = draftOf({ melody: 'B4/2 A4/4 G4/2' })
+  it('keeps a single staff one line: the highest key at each onset, a note cut where the next starts', () => {
+    const draft = draftOf({ staves: [{ notes: 'B4/2 A4/4 G4/2' }] })
     const parts: TakePart[] = [
-      { layer: 'melody', notes: [note(60, 0, 48), note(64, 0, 24), note(67, 12, 24)] },
+      { layer: 'staff0', notes: [note(60, 0, 48), note(64, 0, 24), note(67, 12, 24)] },
     ]
-    expect(shape(writeTake(draft, 96, parts).melody)).toEqual([
+    expect(shape(staffNotes(writeTake(draft, 96, parts)))).toEqual([
       'B4@0/48',
       'A4@48/48',
       'E4@96/12',

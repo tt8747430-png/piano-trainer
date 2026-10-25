@@ -30,12 +30,19 @@ const BEATS = {
   rh: { kind: 'events', events: parseFigure('0/4 C,4/4 C,8/4 C,12/4 C') },
   lh: { kind: 'events', events: parseFigure('0/16 L1') },
 } as const
+/** A staff over the piano of a C5 held `ticks`. */
+const tuneOf = (ticks: number) => [
+  {
+    clef: 'treble' as const,
+    notes: [{ midi: midi(72), spelled: note('C'), startTick: 0, durationTicks: ticks }],
+  },
+]
 const perform = (...symbols: string[]): Performance =>
   arrange(chart(...symbols), {
     tonic: note('C'),
     pattern: BLOCK,
-    melody: [{ midi: midi(72), spelled: note('C'), startTick: 0, durationTicks: 96 }],
-    doubleMelody: true,
+    staves: tuneOf(96),
+    hearTune: true,
   })
 
 const ALL = audibleHands('both')
@@ -49,15 +56,15 @@ describe('schedule', () => {
     const marked: Performance = {
       ...plain,
       notes: plain.notes.map((n) =>
-        n.hand === 'melody' ? { ...n, marks: { ornament: 'trill', dynamic: 'f' } } : n,
+        n.hand === 'staff' ? { ...n, marks: { ornament: 'trill', dynamic: 'f' } } : n,
       ),
     }
     const tune = (performance: Performance) =>
       notes(schedule(performance, { tempo: 60, hands: ALL }).sounds).filter((s) => s.at < 0.5)
-    const before = tune(plain).find((s) => s.midi === 84)
-    const trill = tune(marked).filter((s) => s.midi === 84 || s.midi === 86)
+    const before = tune(plain).find((s) => s.midi === 72)
+    const trill = tune(marked).filter((s) => s.midi === 72 || s.midi === 74)
     expect(trill.map((s) => s.at)).toContain(0.125)
-    expect(trill.some((s) => s.midi === 86)).toBe(true)
+    expect(trill.some((s) => s.midi === 74)).toBe(true)
     expect(trill[0]?.velocity).toBeGreaterThan(before?.velocity ?? 1)
   })
 
@@ -114,28 +121,33 @@ describe('schedule', () => {
             rh: { kind: 'events', events: [] },
             lh: { kind: 'events', events: [] },
           },
-          melody: [
+          staves: [
             {
-              midi: midi(72),
-              spelled: note('C'),
-              startTick: 0,
-              durationTicks: 24,
-              ...(marks ? { marks: { slurStart: true } } : {}),
-            },
-            {
-              midi: midi(74),
-              spelled: note('D'),
-              startTick: 24,
-              durationTicks: 24,
-              ...(marks ? { marks: { slurEnd: true } } : {}),
+              clef: 'treble',
+              notes: [
+                {
+                  midi: midi(72),
+                  spelled: note('C'),
+                  startTick: 0,
+                  durationTicks: 24,
+                  ...(marks ? { marks: { slurStart: true } } : {}),
+                },
+                {
+                  midi: midi(74),
+                  spelled: note('D'),
+                  startTick: 24,
+                  durationTicks: 24,
+                  ...(marks ? { marks: { slurEnd: true } } : {}),
+                },
+              ],
             },
           ],
-          doubleMelody: true,
+          hearTune: true,
         },
       )
     const first = (marks: object | undefined) =>
       schedule(tune(marks), { tempo: 60, hands: ALL }).sounds.find(
-        (sound) => sound.kind === 'note' && sound.midi === 84,
+        (sound) => sound.kind === 'note' && sound.midi === 72,
       )
     expect(first(undefined)).toMatchObject({ duration: expect.closeTo(0.95, 3) })
     expect(first({})).toMatchObject({ duration: expect.closeTo(1.03, 3) })
@@ -189,11 +201,11 @@ describe('schedule', () => {
     const held = arrange(chart('C', 'F'), {
       tonic: note('C'),
       pattern: BLOCK,
-      melody: [{ midi: midi(72), spelled: note('C'), startTick: 0, durationTicks: 192 }],
-      doubleMelody: true,
+      staves: tuneOf(192),
+      hearTune: true,
     })
     const { sounds } = schedule(held, { tempo: 60, hands: ALL, fromTick: 96 })
-    const tied = notes(sounds).find((sound) => sound.midi === 84)
+    const tied = notes(sounds).find((sound) => sound.midi === 72)
     expect(tied?.at).toBe(0)
     expect(tied?.duration).toBeCloseTo(4 * 0.95)
   })
@@ -278,11 +290,20 @@ describe('schedule', () => {
     expect(counted.musicStart).toBe(3)
   })
 
-  it('plays only the audible hands, and always the tune', () => {
-    expect(audibleHands('rh')).toEqual({ rh: true, lh: false, melody: true })
-    expect(audibleHands('lh')).toEqual({ rh: false, lh: true, melody: true })
+  it('plays only the audible hands, and always the staves over the piano', () => {
+    expect(audibleHands('rh')).toEqual({ rh: true, lh: false, staff: true })
+    expect(audibleHands('lh')).toEqual({ rh: false, lh: true, staff: true })
     const { sounds } = schedule(perform('C'), { tempo: 60, hands: audibleHands('rh') })
-    expect(notes(sounds).map((sound) => sound.midi)).toEqual([60, 64, 67, 84])
+    expect(notes(sounds).map((sound) => sound.midi)).toEqual([60, 64, 67, 72])
+  })
+
+  it('plays nothing of a note written silent: a tune not played along (ADR 0097)', () => {
+    const silent = arrange(chart('C'), { tonic: note('C'), pattern: BLOCK, staves: tuneOf(96) })
+    const { sounds } = schedule(silent, { tempo: 60, hands: ALL })
+    expect(notes(sounds).map((sound) => sound.midi)).toEqual([36, 60, 64, 67])
+    expect(beatGroupSounds(silent, 0, { tempo: 60, hands: ALL }).map((s) => s.midi)).toEqual([
+      36, 60, 64, 67,
+    ])
   })
 
   it('cues each beat group from the start tick', () => {

@@ -1,8 +1,8 @@
 import type { BarMarkChoice } from './bar-marks'
 import type { SectionKind } from '@/entities/piece'
-import type { Chord, Clef, Finger, Hand, Key, Meter, Midi, Tick } from '@/shared/lib/music'
+import type { Chord, Clef, Finger, Key, Meter, Midi, Tick } from '@/shared/lib/music'
 import type { Clip } from './clip'
-import type { Draft, Layer } from './draft'
+import type { Draft, Layer, NoteLayer } from './draft'
 import { topStaff } from './rows'
 import type { TakePart } from './take-edits'
 import type { Line } from './lines'
@@ -111,8 +111,15 @@ export type EditorAction =
   | { readonly type: 'delete'; readonly back?: boolean }
   /** The notes chosen (else at the caret) moved by notes of the key: ↑ ↓, or a note dragged on its staff. */
   | { readonly type: 'step'; readonly steps: number; readonly joins?: boolean }
-  /** The tune's staff added over the grand staff, or taken away with its notes (ADR 0064, 0094). */
-  | { readonly type: 'melodyStaff'; readonly on: boolean }
+  /**
+   * A single staff added at a place top down (ADR 0097): over a staff, or after the last, over the
+   * piano; the caret goes to it.
+   */
+  | { readonly type: 'addStaff'; readonly place: number }
+  /** A single staff taken away with its notes (ADR 0097); Undo brings them back. */
+  | { readonly type: 'removeStaff'; readonly place: number }
+  /** A single staff's printed name as typed (ADR 0097): an empty one takes it away. */
+  | { readonly type: 'renameStaff'; readonly place: number; readonly name: string }
   /** The piano's grand staff hidden, a lead sheet, its music kept and played, or shown (ADR 0083). */
   | { readonly type: 'piano'; readonly hidden: boolean }
   | { readonly type: 'shift'; readonly semitones: number }
@@ -147,8 +154,12 @@ export type EditorAction =
   | { readonly type: 'barLength'; readonly ticks: Tick }
   /** Barlines on the bars chosen, else the caret's (a repeat, an ending, a double or final barline). */
   | { readonly type: 'barMarks'; readonly choice: BarMarkChoice }
-  /** A hand's staff changes clef from a bar on (ADR 0069): the first chosen, or a clef's on the sheet. */
-  | { readonly type: 'clef'; readonly hand: Hand; readonly clef: Clef; readonly bar: number }
+  /**
+   * A staff's clef (a clef's on the sheet, else the caret's staff from the first bar chosen): a
+   * hand's staff changes clef from that bar on (ADR 0069), a single staff is written in it whole
+   * (ADR 0097).
+   */
+  | { readonly type: 'clef'; readonly staff: NoteLayer; readonly clef: Clef; readonly bar: number }
   | { readonly type: 'sectionKind'; readonly section: number; readonly kind: SectionKind }
   | { readonly type: 'joinSection'; readonly section: number }
   /**
@@ -175,7 +186,7 @@ export type EditorAction =
 export const initialEditor = (draft: Draft): EditorState => ({
   draft,
   caret: 0,
-  // The top staff in sight: the tune's where the piece shows one, else the right hand's.
+  // The top staff: the top single staff's where the score has one, else the right hand's.
   layer: topStaff(draft),
   value: { value: 4, dots: 0, triplet: false },
   mode: 'replace',

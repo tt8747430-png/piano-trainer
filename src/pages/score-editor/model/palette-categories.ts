@@ -1,4 +1,4 @@
-import { isHandLayer, type Layer } from '@/features/score-editor'
+import type { Layer } from '@/features/score-editor'
 import { isOneOf } from '@/shared/lib'
 import type { BarMarkChoice } from '@/features/score-editor'
 
@@ -30,30 +30,26 @@ export type PaletteCategory = (typeof PALETTE_CATEGORIES)[number]
  * takes the caret to the chord row (ADR 0096).
  */
 const ANY_ROW: readonly PaletteCategory[] = ['bar', 'key', 'time', 'repeats', 'text']
-/** A hand's own: a clef change is the piano's staves'. */
-const HANDS: readonly PaletteCategory[] = ['clef']
 
-/** Whether a category works where the caret writes: greyed elsewhere, never hidden. */
-export function categoryOpen(category: PaletteCategory, layer: Layer): boolean {
-  if (ANY_ROW.includes(category)) return true
-  if (layer === 'chords') return false
-  return HANDS.includes(category) ? isHandLayer(layer) : true
-}
+/**
+ * Whether a category works where the caret writes: greyed elsewhere, never hidden. On a staff every
+ * one does, a single staff's clef its whole staff's (ADR 0097).
+ */
+export const categoryOpen = (category: PaletteCategory, layer: Layer): boolean =>
+  ANY_ROW.includes(category) || layer !== 'chords'
 
 /** The categories whose tools act on notes chosen: greyed while none is. */
 const ON_NOTES: readonly PaletteCategory[] = ['pitch', 'articulations', 'dynamics', 'lines', 'text']
 
 /**
  * Why a category's tools are greyed (ADR 0096: each greyed key says it in its tooltip, its section
- * beside its name): not on this staff, not a hand's staff, no note chosen.
+ * beside its name): not on a staff, no note chosen.
  */
-export type GreyedReason = 'staff' | 'hand' | 'chooseNote'
+export type GreyedReason = 'staff' | 'chooseNote'
 
 /** Why a category is closed where the caret writes, whatever is chosen; null where it is open. */
-export function closedBy(category: PaletteCategory, layer: Layer): 'staff' | 'hand' | null {
-  if (categoryOpen(category, layer)) return null
-  return layer === 'chords' ? 'staff' : 'hand'
-}
+export const closedBy = (category: PaletteCategory, layer: Layer): 'staff' | null =>
+  categoryOpen(category, layer) ? null : 'staff'
 
 /** Why a category's tools are greyed where the caret is, given what is chosen; null where they work. */
 export function greyedBy(

@@ -1,4 +1,4 @@
-import type { Melody } from '@/shared/lib/arrangement'
+import type { StaffNote } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
 import { pitchText } from './music'
 import { writeMarks } from './note-marks'
@@ -18,11 +18,13 @@ function rests(from: Tick, to: Tick, bars: readonly BarSpan[]): { at: Tick; tick
 }
 
 /**
- * A tune as the melody writes it: notes and the rests between them in time order, `|` where a bar line
- * falls between them; nothing for no notes. The tune is one line: no note starts under another.
+ * A single staff's notes as content writes them (ADR 0097): notes and the rests between them in time
+ * order, `|` where a bar line falls between them; a staff with nothing written on it yet its first
+ * bar's rest, so it is saved and read back as there (ADR 0072). A staff is one line: no note starts
+ * under another.
  */
-export function writeMelody(melody: Melody, bars: readonly BarSpan[]): string | undefined {
-  if (melody.length === 0) return undefined
+export function writeStaff(notes: readonly StaffNote[], bars: readonly BarSpan[]): string {
+  if (notes.length === 0) return `r/${beatsText(bars[0]?.ticks ?? 0)}`
   const starts = new Set(bars.map((bar) => bar.startTick).filter((start) => start > 0))
   const tokens: string[] = []
   const at = (tick: Tick, token: string) => {
@@ -30,21 +32,13 @@ export function writeMelody(melody: Melody, bars: readonly BarSpan[]): string | 
     tokens.push(token)
   }
   let running: Tick = 0
-  for (const n of [...melody].sort((a, b) => a.startTick - b.startTick)) {
+  for (const n of [...notes].sort((a, b) => a.startTick - b.startTick)) {
     if (n.startTick < running)
-      throw new RangeError(`A tune's note at ${n.startTick} starts under another`)
+      throw new RangeError(`A staff's note at ${n.startTick} starts under another`)
     for (const rest of rests(running, n.startTick, bars)) at(rest.at, `r/${beatsText(rest.ticks)}`)
     const marks = n.marks ? writeMarks(n.marks) : ''
     at(n.startTick, `${pitchText(n)}/${beatsText(n.durationTicks)}${marks ? `[${marks}]` : ''}`)
     running = n.startTick + n.durationTicks
   }
   return tokens.join(' ')
-}
-
-/**
- * A staff the score keeps with nothing written on it yet (ADR 0072): its first bar's rest, so the
- * staff is saved and read back as there.
- */
-export function emptyLine(bars: readonly BarSpan[]): string {
-  return `r/${beatsText(bars[0]?.ticks ?? 0)}`
 }

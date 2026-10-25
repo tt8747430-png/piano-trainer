@@ -1,14 +1,23 @@
 import { gatherLyrics, readLyrics } from '@/entities/piece'
 import type { NoteLyrics, Tick } from '@/shared/lib/music'
-import { tuneNotes, type Draft, type DraftNote, type Layer, type NoteLayer } from './draft'
+import {
+  isHandLayer,
+  lyricsLayer,
+  singleStaffOf,
+  tuneNotes,
+  type Draft,
+  type DraftNote,
+  type Layer,
+} from './draft'
 import { notesOf, startNear, withNotes } from './notes'
 
-/** The staff the lyrics are on (ADR 0093): the tune's, or the upper staff's (the right hand's). */
-export const tuneLayer = (draft: Draft): NoteLayer => draft.lyricsOn
-
-/** Whether the Lyrics tool works where the caret writes: on the tune's staff, in sight. */
+/**
+ * Whether the Lyrics tool works where the caret writes (ADR 0093, 0097): on the staff the words are
+ * on, a single staff the score has, or the upper staff in sight.
+ */
 export const singsHere = (draft: Draft, layer: Layer): boolean =>
-  layer === tuneLayer(draft) && (layer === 'melody' ? draft.melodyStaff : !draft.leadSheet)
+  layer === lyricsLayer(draft) &&
+  (isHandLayer(layer) ? !draft.leadSheet : singleStaffOf(draft, layer) !== undefined)
 
 /**
  * Where the Lyrics field opens from a tick (ADR 0096): the tune's note there, else the next one, else
@@ -83,7 +92,7 @@ function singing(n: DraftNote, lyrics: NoteLyrics | undefined): DraftNote {
  * no note of the tune changes nothing.
  */
 export function setSyllable(draft: Draft, tick: Tick, verse: number, text: string): Draft {
-  const layer = tuneLayer(draft)
+  const layer = lyricsLayer(draft)
   const tune = tuneNotes(draft)
   const index = tune.findIndex((n) => n.startTick === tick)
   if (index < 0) return draft

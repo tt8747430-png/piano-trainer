@@ -129,8 +129,7 @@ describe('createSettingsStore', () => {
         notation: true,
         chordNames: false,
         lyrics: false,
-        melodyStaff: false,
-        hidden: ['treble'],
+        hidden: ['treble', 'staff0'],
         keys: false,
       },
       foldedSections: ['chords.tensions'],
@@ -155,14 +154,14 @@ describe('createSettingsStore', () => {
     expect(kept.at(-1)).toEqual([69])
   })
 
-  it('keeps the Player’s view where still valid, each staff hidden once', () => {
+  it('keeps the Player’s view where still valid, each staff hidden once (ADR 0097)', () => {
     expect(
       restored({
         scoreView: {
           layout: 'pages',
           notation: 'no',
           chordNames: false,
-          hidden: ['bass', 'x', 'bass'],
+          hidden: ['bass', 'x', 'bass', 'staff1', 'staff-1', 'melody'],
         },
       }).scoreView,
     ).toEqual({
@@ -170,8 +169,7 @@ describe('createSettingsStore', () => {
       notation: true,
       chordNames: false,
       lyrics: true,
-      melodyStaff: true,
-      hidden: ['bass'],
+      hidden: ['bass', 'staff1'],
       keys: true,
     })
     expect(restored({ scoreView: { layout: 'paper' } }).scoreView).toEqual(DEFAULT_SCORE_VIEW)
@@ -189,9 +187,9 @@ describe('createSettingsStore', () => {
     expect(restored({ recorder: { click: 'no' } }).recorder).toEqual(DEFAULT_RECORDER)
   })
 
-  it('starts afresh over a save of the version before, whose palette had a side (ADR 0094)', () => {
-    expect(SETTINGS_VERSION).toBe(7)
-    expect(restored({ theme: 'dark', paletteSide: 'left' }, 6)).toEqual(
+  it('starts afresh over a save of the version before, whose View had a Melody (ADR 0097)', () => {
+    expect(SETTINGS_VERSION).toBe(8)
+    expect(restored({ theme: 'dark', scoreView: { melodyStaff: false } }, 7)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

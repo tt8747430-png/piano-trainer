@@ -11,7 +11,8 @@ import { Input } from '@/shared/ui/primitives/input'
 import { Popover, PopoverContent } from '@/shared/ui/primitives/popover'
 import type { SheetField as Field } from '@/widgets/score-sheet'
 
-type Kind = Field['kind']
+/** What it types: a field at the caret, or a staff's name where it is printed (ADR 0097). */
+type Kind = Field['kind'] | 'staffName'
 
 /**
  * On what it types: over the place the sheet drew, covering what is printed there (a chord symbol, a
@@ -33,20 +34,24 @@ const UNDER = { side: 'bottom', align: 'center', sideOffset: 6 } as const
 /**
  * Where each field stands at the place the sheet drew for it (ADR 0096): the chord symbol's over the
  * chord row, the Lyrics field on its verse's line under the note, the fingering field over the note
- * (under it where the field says so: the lower staff's).
+ * (under it where the field says so: the lower staff's), a staff's name over the name printed.
  */
-const PLACES = { chord: ON, lyrics: ON, fingering: OVER } as const satisfies Readonly<
-  Record<Kind, object>
->
+const PLACES = {
+  chord: ON,
+  lyrics: ON,
+  fingering: OVER,
+  staffName: ON,
+} as const satisfies Readonly<Record<Kind, object>>
 
 /**
  * The face each field types in, as the sheet prints what it writes: a chord symbol's, a verse's, a
- * finger's numbers.
+ * finger's numbers, a staff's name.
  */
 const FACES = {
   chord: 'w-36 font-display font-semibold',
   lyrics: 'w-32 font-serif',
   fingering: 'w-24 text-center font-display font-semibold tabular-nums',
+  staffName: 'w-44 font-serif',
 } as const satisfies Readonly<Record<Kind, string>>
 
 /** What a phone's own keyboard offers for each field as it opens: digits for the fingers. */
@@ -54,6 +59,7 @@ const INPUT_MODES = {
   chord: 'text',
   lyrics: 'text',
   fingering: 'numeric',
+  staffName: 'text',
 } as const satisfies Readonly<Record<Kind, 'text' | 'numeric'>>
 
 /** The selection covers the whole text, or is a caret at the end (`end`) or the start. */
@@ -87,6 +93,7 @@ export function SheetField({
   onClose,
   onKey,
   under = false,
+  maxLength,
   beside,
   children,
 }: {
@@ -105,6 +112,8 @@ export function SheetField({
   onKey?: (event: KeyboardEvent<HTMLInputElement>) => boolean
   /** It opens under its place, not over it: the lower staff's fingers, printed under its notes. */
   under?: boolean
+  /** The most it holds: a name's letters. */
+  maxLength?: number | undefined
   beside?: ReactNode
   children?: ReactNode
 }) {
@@ -156,6 +165,7 @@ export function SheetField({
             aria-errormessage={error === undefined ? undefined : errorId}
             title={error}
             value={text}
+            maxLength={maxLength}
             inputMode={INPUT_MODES[kind]}
             enterKeyHint="next"
             autoCapitalize="off"

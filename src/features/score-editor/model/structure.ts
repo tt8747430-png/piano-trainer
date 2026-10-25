@@ -1,5 +1,12 @@
 import type { Tick } from '@/shared/lib/music'
-import type { Draft, DraftBar, DraftHeading, DraftNote, DraftSection } from './draft'
+import {
+  withEveryStaff,
+  type Draft,
+  type DraftBar,
+  type DraftHeading,
+  type DraftNote,
+  type DraftSection,
+} from './draft'
 
 export type Heading = DraftHeading
 
@@ -60,12 +67,6 @@ function spliceNotes(
   })
 }
 
-/** The melody's and each hand's notes spliced alike. */
-export const spliceAll = (draft: Draft, at: Tick, removed: Tick, inserted: Tick): Draft => ({
-  ...draft,
-  melody: spliceNotes(draft.melody, at, removed, inserted),
-  hands: {
-    rh: spliceNotes(draft.hands.rh, at, removed, inserted),
-    lh: spliceNotes(draft.hands.lh, at, removed, inserted),
-  },
-})
+/** Each single staff's and each hand's notes spliced alike. */
+export const spliceAll = (draft: Draft, at: Tick, removed: Tick, inserted: Tick): Draft =>
+  withEveryStaff(draft, (notes) => spliceNotes(notes, at, removed, inserted))

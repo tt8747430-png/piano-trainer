@@ -283,9 +283,9 @@ describe('the practice machine', () => {
 
 describe('the hands of Wait mode', () => {
   it.each([
-    ['both', { rh: true, lh: true, melody: false }, { rh: false, lh: false, melody: true }],
-    ['rh', { rh: true, lh: false, melody: false }, { rh: false, lh: true, melody: true }],
-    ['lh', { rh: false, lh: true, melody: false }, { rh: true, lh: false, melody: true }],
+    ['both', { rh: true, lh: true, staff: false }, { rh: false, lh: false, staff: true }],
+    ['rh', { rh: true, lh: false, staff: false }, { rh: false, lh: true, staff: true }],
+    ['lh', { rh: false, lh: true, staff: false }, { rh: true, lh: false, staff: true }],
   ] as const)('%s: practised and accompanying', (hands, practised, accompanying) => {
     expect(practisedHands(hands)).toEqual(practised)
     expect(accompanyingHands(hands)).toEqual(accompanying)

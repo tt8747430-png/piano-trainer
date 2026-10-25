@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart } from '@/shared/lib/arrangement'
 import { C_MAJOR, midi, note, parseChordSymbol } from '@/shared/lib/music'
+import { notate } from '@/shared/lib/notation'
 import { playedMusic } from './played-music'
 
 const CHART: Chart = {
@@ -16,17 +17,26 @@ const BLOCK = {
 const tune = [{ midi: midi(72), spelled: note('C'), startTick: 0, durationTicks: 96 }]
 
 describe('playedMusic', () => {
-  it('writes the tune doubled an octave up as the song writes it, on its own staff', () => {
+  it('writes the single staves as the song writes them, heard or not, over the piano (ADR 0097)', () => {
     const performance = arrange(CHART, {
       tonic: C_MAJOR.tonic,
       pattern: BLOCK,
-      melody: tune,
-      doubleMelody: true,
+      staves: [{ clef: 'treble', notes: tune }],
     })
-    const music = playedMusic(performance, true)
-    expect(music.melodyStaff).toBe(true)
-    expect(music.notes.filter((n) => n.hand === 'melody').map((n) => n.midi)).toEqual([72])
-    expect(playedMusic(performance, false)).toBe(performance)
+    const music = playedMusic(performance)
+    expect(music).toBe(performance)
+    expect(notate(music).staves).toEqual(['staff0', 'treble', 'bass'])
+    expect(music.notes.filter((n) => n.hand === 'staff').map((n) => n.midi)).toEqual([72])
+  })
+
+  it('writes a lead sheet’s staves alone, the piano left out (ADR 0083)', () => {
+    const performance = arrange(CHART, {
+      tonic: C_MAJOR.tonic,
+      pattern: BLOCK,
+      staves: [{ clef: 'treble', notes: tune }],
+      hearTune: true,
+    })
+    expect(notate(playedMusic(performance, { piano: false })).staves).toEqual(['staff0'])
   })
 
   it('leaves the words out where the View hides them (ADR 0093)', () => {
@@ -34,14 +44,11 @@ describe('playedMusic', () => {
     const performance = arrange(CHART, {
       tonic: C_MAJOR.tonic,
       pattern: BLOCK,
-      melody: [{ ...tune[0]!, lyrics: [sung] }],
-      doubleMelody: true,
+      staves: [{ clef: 'treble', notes: [{ ...tune[0]!, lyrics: [sung] }] }],
     })
     const words = (music: { notes: readonly { lyrics?: unknown }[] }) =>
       music.notes.filter((n) => n.lyrics !== undefined).length
-    expect(words(performance)).toBe(1)
-    expect(words(playedMusic(performance, true))).toBe(1)
-    expect(words(playedMusic(performance, true, false))).toBe(0)
-    expect(words(playedMusic(performance, false, false))).toBe(0)
+    expect(words(playedMusic(performance))).toBe(1)
+    expect(words(playedMusic(performance, { lyrics: false }))).toBe(0)
   })
 })

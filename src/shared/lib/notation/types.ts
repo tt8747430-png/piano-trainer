@@ -30,12 +30,15 @@ export interface Duration {
 export interface TimedNote {
   readonly midi: Midi
   readonly spelled: SpelledNote
-  readonly hand: Hand | 'melody'
+  /** Who plays it: a hand of the piano, or a single staff over it (ADR 0097). */
+  readonly hand: Hand | 'staff'
+  /** A single staff's note: its staff's place, top down from 0. */
+  readonly staff?: number
   readonly startTick: Tick
   readonly durationTicks: Tick
   readonly finger?: Finger
   readonly marks?: NoteMarks
-  /** What it sings, by verse (ADR 0093): written under the tune's staff alone. */
+  /** What it sings, by verse (ADR 0093): written under the staff whose notes sing it. */
   readonly lyrics?: NoteLyrics
 }
 
@@ -59,8 +62,8 @@ export interface TimedMusic {
   })[]
   readonly notes: readonly TimedNote[]
   readonly chords: readonly { readonly startTick: Tick; readonly symbol: string }[]
-  /** The tune on a staff of its own over the grand staff (ADR 0064); else it is the treble's upper voice. */
-  readonly melodyStaff?: boolean
+  /** The single staves over the grand staff, top down (ADR 0097): each one's clef. None by default. */
+  readonly staves?: readonly { readonly clef: Clef }[]
   /** Whether the piano's grand staff is written: not on a lead sheet (ADR 0083). Written by default. */
   readonly piano?: boolean
   /**
@@ -117,14 +120,28 @@ export interface ScoreVoice {
   readonly stem: Stem
 }
 
-/** The staves a score may write, top down: the tune's own (ADR 0064), then the piano's grand staff. */
-export const STAVES = ['melody', 'treble', 'bass'] as const
-export type StaffId = (typeof STAVES)[number]
+/** A single staff over the piano's grand staff, by its place top down (ADR 0097): `staff0` the top. */
+export type SingleStaff = `staff${number}`
 /** The piano's grand staff: the right hand's treble and the left hand's bass. */
-export const PIANO_STAVES = ['treble', 'bass'] as const satisfies readonly StaffId[]
-/** The clef a staff is written in: the tune's is a treble. */
+export const PIANO_STAVES = ['treble', 'bass'] as const
+export type PianoStaff = (typeof PIANO_STAVES)[number]
+/** The staves a score may write, top down: its single staves, then the piano's grand staff. */
+export type StaffId = SingleStaff | PianoStaff
+/** The single staff at a place, top down from 0. */
+export const singleStaff = (place: number): SingleStaff => `staff${place}`
+/** Whether a staff is a single staff, not one of the piano's. */
+export const isSingleStaff = (staff: string): staff is SingleStaff => /^staff\d+$/.test(staff)
+/** A single staff's place, top down from 0. */
+export const staffPlace = (staff: SingleStaff): number => Number(staff.slice('staff'.length))
+/** Whether a value names a staff a score may write (a saved one, say). */
+export const isStaffId = (value: unknown): value is StaffId =>
+  typeof value === 'string' && (isSingleStaff(value) || value === 'treble' || value === 'bass')
+/**
+ * The clef a staff is written in where nothing says otherwise: the piano's bass staff's is a bass,
+ * every other a treble (a single staff written in the bass clef says so in its measures' `clefs`).
+ */
 export const clefOf = (staff: StaffId): Clef => (staff === 'bass' ? 'bass' : 'treble')
-/** The clef a staff is in at a measure: a hand's changed clef (ADR 0069), else its own. */
+/** The clef a staff is in at a measure: its own (a single staff's, ADR 0097), or a hand's changed clef (ADR 0069). */
 export const clefIn = (measure: Pick<Measure, 'clefs'>, staff: StaffId): Clef =>
   measure.clefs?.[staff] ?? clefOf(staff)
 
@@ -142,14 +159,21 @@ export interface Measure extends BarMarks {
   readonly time: TimeSignature
   /** The key it is written in, where that is not the score's (a key change). */
   readonly key?: Key
-  /** The clef each staff is in here, where that is not its own (`clefOf`): a hand's changed clef. */
+  /**
+   * The clef each staff is in here, where that is not `clefOf`'s: a single staff's written in the
+   * bass clef, a hand's changed clef.
+   */
   readonly clefs?: Readonly<Partial<Record<StaffId, Clef>>>
-  /** One or two voices on each of the score's staves; none on a staff it does not write. */
-  readonly staves: Readonly<Record<StaffId, readonly ScoreVoice[]>>
+  /** One or two voices on each of the score's staves; none on a piano's staff it does not write. */
+  readonly staves: StaffVoices
   readonly chords: readonly ChordMark[]
 }
 
-/** Music as it is written: measures on its staves (the grand staff, the tune's over it) in a key and a meter. */
+/** Each staff's voices in a measure: the piano's two always there, a single staff's where it is written. */
+export type StaffVoices = Readonly<Record<PianoStaff, readonly ScoreVoice[]>> &
+  Readonly<Partial<Record<SingleStaff, readonly ScoreVoice[]>>>
+
+/** Music as it is written: measures on its staves (its single staves over the grand staff) in a key and a meter. */
 export interface Score {
   readonly key: Key
   readonly meter: Meter

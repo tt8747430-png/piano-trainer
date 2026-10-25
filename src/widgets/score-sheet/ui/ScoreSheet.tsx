@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSectionHeading } from '@/entities/piece'
+import { useSectionHeading, useStaffNames, useStaffTitle } from '@/entities/piece'
 import { barAt, type Draft, type Layer } from '@/features/score-editor'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/shared/lib'
 import { PageCanvas, SheetPage, type TitlePlace } from '@/shared/ui'
@@ -12,6 +12,7 @@ import { lineFit } from '../model/line-fit'
 import { createLineSheets, untimed, type LineSheet } from '../model/line-sheets'
 import { lineMusic, oneLine } from '../model/line-music'
 import type { EditPrinted } from '../model/printed'
+import { LayerNames, useLayerName } from '../model/use-layer-name'
 import { SheetLine } from './SheetLine'
 
 /** No staff hidden. */
@@ -91,7 +92,7 @@ export function ScoreSheet({
   edit,
   hidden = NO_STAVES,
   view = 'scroll',
-  title,
+  title: heading,
   room,
   onWrite,
   onDrag,
@@ -170,8 +171,8 @@ export function ScoreSheet({
     const [all] = oneLine(draft)
     return all ? notate(untimed(lineMusic(draft, all, lyrics))) : undefined
   }, [draft, lyrics])
-  // The staves a line draws: the tune's where shown over the piano's two, less one of the piano's
-  // the View hides alone (ADR 0094); the verses under the tune.
+  // The staves a line draws: the score's, less those the View hides (ADR 0094, 0097), never every
+  // one; the verses under the staff that sings them.
   const written = whole?.staves.join(' ') ?? ''
   const hiddenKey = hidden.join(' ')
   const drawn = useMemo(() => {
@@ -181,8 +182,17 @@ export function ScoreSheet({
   }, [written, hiddenKey])
   const staves = drawn.length > 0 ? drawn.length : 2
   const verses = whole ? versesOf(whole, drawn) : 0
-  // The staves' names at the first line's head (ADR 0094).
-  const labels = useStaffLabels(drawn)
+  // The staves' names at the first line's head (ADR 0094, 0097): each single staff's own, else its
+  // place's printed soft, so a staff with no name has one to click (as Flat prints "Title").
+  const own = useStaffNames(draft.staves)
+  const title = useStaffTitle()
+  const labels = useStaffLabels(
+    drawn,
+    own.map((name, place) =>
+      name === undefined ? { text: title(undefined, place), placeholder: true } : { text: name },
+    ),
+  )
+  const layerName = useLayerName(draft.staves)
   const headings = useHeadings(draft)
   // A whole system in the height the sheet is seen in, where it is short (a phone on its side).
   const fit = room && room > 0 ? lineFit({ room, staves, chordNames, verses }) : 1
@@ -257,56 +267,62 @@ export function ScoreSheet({
       (item) => item.kind !== 'line',
     )
     return (
-      <PageCanvas column={PAGE.width}>
-        <section aria-label={t('sheet.label')} className="flex flex-col items-center gap-8 p-6">
-          {dealt.map((page, index) => (
-            <SheetPage
-              key={index}
-              number={index + 1}
-              label={t('sheet.page', { n: index + 1, of: dealt.length })}
-              // Every page but the last filled to its height (ADR 0087).
-              filled={index < dealt.length - 1}
-              gap={LINE_GAP * scale}
-              blocks={blocksOf(page).map((block) => ({
-                key: block.map(itemKey).join(' '),
-                content: (
-                  <div className="flex flex-col" style={{ gap: LINE_GAP * scale }}>
-                    {block.map((item) =>
-                      item.kind === 'title' ? (
-                        <div key="title">{title('page')}</div>
-                      ) : (
-                        line(item.sheet, scale, true)
-                      ),
-                    )}
-                  </div>
-                ),
-              }))}
-            />
-          ))}
-        </section>
-      </PageCanvas>
+      <LayerNames value={layerName}>
+        <PageCanvas column={PAGE.width}>
+          <section aria-label={t('sheet.label')} className="flex flex-col items-center gap-8 p-6">
+            {dealt.map((page, index) => (
+              <SheetPage
+                key={index}
+                number={index + 1}
+                label={t('sheet.page', { n: index + 1, of: dealt.length })}
+                // Every page but the last filled to its height (ADR 0087).
+                filled={index < dealt.length - 1}
+                gap={LINE_GAP * scale}
+                blocks={blocksOf(page).map((block) => ({
+                  key: block.map(itemKey).join(' '),
+                  content: (
+                    <div className="flex flex-col" style={{ gap: LINE_GAP * scale }}>
+                      {block.map((item) =>
+                        item.kind === 'title' ? (
+                          <div key="title">{heading('page')}</div>
+                        ) : (
+                          line(item.sheet, scale, true)
+                        ),
+                      )}
+                    </div>
+                  ),
+                }))}
+              />
+            ))}
+          </section>
+        </PageCanvas>
+      </LayerNames>
     )
   }
 
   if (across) {
     return (
-      <section ref={box} aria-label={t('sheet.label')} className="flex flex-col gap-2">
-        {title('across')}
-        {sheets.map((sheet) => line(sheet, fit))}
-      </section>
+      <LayerNames value={layerName}>
+        <section ref={box} aria-label={t('sheet.label')} className="flex flex-col gap-2">
+          {heading('across')}
+          {sheets.map((sheet) => line(sheet, fit))}
+        </section>
+      </LayerNames>
     )
   }
 
   // The lines down the screen as the Player's are, each section named in its first line's labels.
   return (
-    <section
-      ref={box}
-      aria-label={t('sheet.label')}
-      className="flex flex-col"
-      style={{ gap: LINE_GAP }}
-    >
-      {title('lines')}
-      {sheets.map((sheet) => line(sheet, sized))}
-    </section>
+    <LayerNames value={layerName}>
+      <section
+        ref={box}
+        aria-label={t('sheet.label')}
+        className="flex flex-col"
+        style={{ gap: LINE_GAP }}
+      >
+        {heading('lines')}
+        {sheets.map((sheet) => line(sheet, sized))}
+      </section>
+    </LayerNames>
   )
 }
