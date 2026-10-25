@@ -1,5 +1,5 @@
 import { Square } from 'lucide-react'
-import type { CSSProperties, Ref } from 'react'
+import type { CSSProperties } from 'react'
 import { useBarName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { CellChords } from './CellChords'
@@ -36,7 +36,6 @@ export function BarButton({
   looped,
   onTap,
   style,
-  ref,
 }: {
   tap: BarTap
   number: number
@@ -53,13 +52,11 @@ export function BarButton({
   /** A tap, on the beat it landed on. */
   onTap: (beat: number) => void
   style?: CSSProperties
-  ref?: Ref<HTMLButtonElement> | undefined
 }) {
   const barName = useBarName()
   const playing = marked && tap === 'play'
   return (
     <button
-      ref={ref}
       type="button"
       // Named by all it prints: its number, its chords, and the notes under them.
       aria-label={barName(

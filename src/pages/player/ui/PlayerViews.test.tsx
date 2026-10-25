@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
-import type { MusicView } from '@/entities/settings'
+import { SETTINGS_STORAGE_KEY, SETTINGS_VERSION, type MusicView } from '@/entities/settings'
 import { setScoreView } from '@/features/set-preference'
 import { createMemoryStorage } from '@/shared/lib'
 import { stubBox } from '@/shared/test/layout'
@@ -205,6 +205,29 @@ describe('the Grid (ADR 0098, 0099)', () => {
         cell.hasAttribute('data-looped'),
       )
     expect(['Bar 1: G', 'Bar 2: C', 'Bar 3: Em G/B'].map(looped)).toEqual([false, true, true])
+  })
+
+  it('opens at its top, and at a loop further on with the loop’s bar brought into sight', async () => {
+    const scrolled = vi.mocked(Element.prototype.scrollIntoView)
+    const storage = createMemoryStorage()
+    storage.setItem(
+      SETTINGS_STORAGE_KEY,
+      JSON.stringify({ version: SETTINGS_VERSION, state: { scoreView: { music: 'grid' } } }),
+    )
+    const opened = await renderApp('/play/bz5', { storage })
+    await screen.findByRole('region', { name: 'Grid' })
+    expect(scrolled).not.toHaveBeenCalled()
+    opened.unmount()
+    // Laid out, the loop's first bar stands below the room the Grid shows.
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (
+      this: Element,
+    ) {
+      const top = this.getAttribute('aria-current') === 'step' ? 2000 : 0
+      return DOMRect.fromRect({ x: 0, y: top, width: 300, height: 50 })
+    })
+    await renderApp('/play/bz5?loop=10-12', { storage })
+    await screen.findByRole('region', { name: 'Grid' })
+    expect(scrolled.mock.contexts).toContain(screen.getByRole('button', { name: 'Bar 10: G' }))
   })
 })
 

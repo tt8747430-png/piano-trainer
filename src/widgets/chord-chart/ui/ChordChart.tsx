@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { METHODS } from '@/entities/pattern'
 import { beatCells } from '@/features/practice'
 import { localText, useLocale } from '@/shared/i18n'
-import { cn, useScrollMotion } from '@/shared/lib'
+import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
 import {
@@ -28,7 +28,7 @@ const NO_BARS: ReadonlySet<number> = new Set()
  * more rows, every beat as wide as every other so bars line up down the chart. The bar playing is
  * marked: on a song's chart a tap plays a bar, pressed while it sounds; on the Player's (`tap="go"`,
  * ADR 0098) a tap goes to the beat tapped (`onBar`, the bar and the tick of that beat, its first
- * time), the beat sounding filled, the bar the Player is in kept in sight as the music moves on.
+ * time), the bar the Player is in current and its beat sounding filled.
  */
 export function ChordChart({
   performance,
@@ -99,16 +99,6 @@ export function ChordChart({
   const beats = (row: readonly { cells: readonly unknown[] }[]) =>
     row.reduce((sum, bar) => sum + bar.cells.length, 0)
   const widest = Math.max(1, ...rows.flat().map(beats))
-  // The bar the Player is in, brought into sight as it moves on, as its sheet brings the line playing;
-  // the chart opens at its top, its title in sight.
-  const here = useRef<HTMLButtonElement>(null)
-  const kept = useRef(playing)
-  const motion = useScrollMotion()
-  useEffect(() => {
-    if (tap !== 'go' || kept.current === playing) return
-    kept.current = playing
-    here.current?.scrollIntoView({ block: 'nearest', behavior: motion })
-  }, [tap, playing, motion])
 
   return (
     <div
@@ -148,7 +138,6 @@ export function ChordChart({
               {row.map(({ written, symbols, notes, cells, starts }) => (
                 <BarButton
                   key={written}
-                  ref={playing === written ? here : undefined}
                   tap={tap}
                   number={written + 1}
                   symbols={symbols}

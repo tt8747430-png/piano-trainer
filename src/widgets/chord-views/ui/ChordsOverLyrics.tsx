@@ -13,6 +13,7 @@ import type { Tick } from '@/shared/lib/music'
 import { SheetTitle } from '@/shared/ui'
 import { ChordSummary } from '@/widgets/chord-diagrams'
 import { loopedBars } from '../model/beat-span'
+import { inSight } from '../model/in-sight'
 import { lyricLines, soundingChip, type Span } from '../model/lyric-lines'
 import { BeatStrip } from './BeatStrip'
 import { LyricRow } from './LyricRow'
@@ -61,15 +62,19 @@ export function ChordsOverLyrics({
   const looped = loopedBars(performance, loop)
   const scroller = useRef<HTMLElement>(null)
   const strip = useRef<HTMLDivElement>(null)
-  const kept = useRef(playing)
+  // The line last kept in sight; none before the view opens.
+  const kept = useRef<number | null>(null)
   const motion = useScrollMotion()
   // The line playing brought into the top third of the room under the strip as the music reaches
-  // it, where it is not there already; the view opens at its top, its title in sight.
+  // it, where it is not there already. Opening, the view stays at its top, its title in sight, where
+  // that line is in sight there (a loop's further on is brought to).
   useEffect(() => {
     const box = scroller.current
     const line = box?.querySelector(`[data-line="${playing}"]`)
     if (!box || !line || kept.current === playing) return
+    const opening = kept.current === null
     kept.current = playing
+    if (opening && inSight(line, box)) return
     const held = strip.current?.offsetHeight ?? 0
     const top = line.getBoundingClientRect().top - box.getBoundingClientRect().top
     const room = box.clientHeight - held
@@ -88,7 +93,7 @@ export function ChordsOverLyrics({
       <SheetTitle title={title} place="lines" />
       <div
         ref={strip}
-        className="sticky top-0 z-20 -mx-gutter bg-background px-gutter py-2 landscape-phone:mx-0 landscape-phone:px-0"
+        className="sticky top-0 z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0"
       >
         <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} />
       </div>

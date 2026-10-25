@@ -43,10 +43,9 @@ describe('ChordChart', () => {
     expect(document.querySelector('[data-sounding]')).not.toBeInTheDocument()
   })
 
-  it('goes to a beat tapped as the Player’s chart: the beat sounding filled, its bar current, kept in sight', async () => {
+  it('goes to a beat tapped as the Player’s chart: the beat sounding filled, its bar current', async () => {
     const user = userEvent.setup()
     const onBar = vi.fn()
-    const scrolled = vi.mocked(Element.prototype.scrollIntoView)
     const props = { performance, headings: ['Verse', 'Chorus'], tap: 'go', onBar } as const
     const { rerender } = render(<ChordChart {...props} playing={0} beat={2} />)
     const first = screen.getByRole('button', { name: /^Bar 1:/ })
@@ -64,11 +63,11 @@ describe('ChordChart', () => {
     expect(onBar).toHaveBeenLastCalledWith(2, 2 * 96 + 72)
     await user.click(third)
     expect(onBar).toHaveBeenLastCalledWith(2, 2 * 96)
-    scrolled.mockClear()
-    rerender(<ChordChart {...props} playing={9} beat={0} />)
+    rerender(<ChordChart {...props} playing={9} beat={1} />)
     const tenth = screen.getByRole('button', { name: /^Bar 10:/ })
     expect(tenth).toHaveAttribute('aria-current', 'step')
-    expect(scrolled.mock.contexts).toEqual([tenth])
+    expect(tenth.querySelector('[data-sounding]')).toHaveAttribute('data-beat', '1')
+    expect(first).not.toHaveAttribute('aria-current')
   })
 
   it('marks the loop’s bars, every beat on its band', () => {
