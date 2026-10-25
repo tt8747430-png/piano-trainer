@@ -144,6 +144,22 @@ describe('PageCanvas', () => {
     expect(placed(region).y).toBeLessThan(0)
   })
 
+  it('fits the pages with their first line in sight where none was brought there (a short screen)', async () => {
+    // A phone on its side: the page's margin and title fill the canvas, its first line under them.
+    stubResizeObserver({ width: 804, height: 179 })
+    render(
+      <PageCanvas column={794}>
+        <h1>Morning</h1>
+        <div data-slot="sheet-line" data-testid="line" />
+      </PageCanvas>,
+    )
+    const region = screen.getByRole('region', { name: /^Pages/ })
+    stubBox(screen.getByTestId('line'), { top: 150, width: 700, height: 120 })
+    stubBox(region.firstElementChild as HTMLElement, { top: 0, width: 842, height: 1200 })
+    await act(async () => {})
+    expect(placed(region).y).toBeLessThan(0)
+  })
+
   it('lets a click reach what it holds', async () => {
     const user = userEvent.setup()
     const onClick = vi.fn()

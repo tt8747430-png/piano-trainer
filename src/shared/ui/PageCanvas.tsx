@@ -101,13 +101,11 @@ export function PageCanvas({
     setZoom(next.zoom)
   }, [])
 
-  // The line last brought into sight: it stays in sight as the pages are fitted again.
-  const revealed = useRef<Element | null>(null)
-  const revealElement = useCallback(
+  /** Moves the least that brings what is shown into sight, clear of what floats over the canvas. */
+  const bring = useCallback(
     (target: Revealed) => {
       const pages = content.current
       if (!pages) return
-      if (target instanceof Element) revealed.current = target
       const box = target instanceof Element ? target.getBoundingClientRect() : target
       const origin = pages.getBoundingClientRect()
       const { zoom: at } = view.current
@@ -120,21 +118,33 @@ export function PageCanvas({
             left: (box.left - origin.left) / at,
             right: (box.right - origin.left) / at,
           },
-          // Clear of what floats over the canvas.
           { width: screen.width - right, height: screen.height - bottom },
         ),
       )
     },
     [show, screen.width, screen.height, right, bottom],
   )
+  // The line last brought into sight: it stays in sight as the pages are fitted again.
+  const revealed = useRef<Element | null>(null)
+  const revealElement = useCallback(
+    (target: Revealed) => {
+      if (target instanceof Element) revealed.current = target
+      bring(target)
+    },
+    [bring],
+  )
 
   const fit = useCallback(() => {
     if (screen.width <= 0 || sheet.width <= 0) return
     show(fitWidth(sheet, column, screen, { right, line: tallestLine(content.current) }))
     // Fitted again (the screen turned, the pages engraved), the caret's line or the playhead's stays
-    // in sight.
-    if (revealed.current?.isConnected) revealElement(revealed.current)
-  }, [show, sheet, column, screen, right, revealElement])
+    // in sight; before one is, the first line is: the music, not a page's margin and title, on a short
+    // screen.
+    const line = revealed.current?.isConnected
+      ? revealed.current
+      : content.current?.querySelector('[data-slot="sheet-line"]')
+    if (line) bring(line)
+  }, [show, sheet, column, screen, right, bring])
 
   useLayoutEffect(() => {
     if (!moved.current) fit()
