@@ -16,7 +16,7 @@ const NOTES = [
 function Sheet() {
   return (
     <>
-      <g strokeWidth={0.7} className="stroke-current opacity-50">
+      <g strokeWidth={0.8} className="stroke-current opacity-60">
         {STAFF.map((y) => (
           <line key={y} x1={2} x2={62} y1={y} y2={y} />
         ))}
@@ -26,8 +26,8 @@ function Sheet() {
       </g>
       {NOTES.map(([x, y]) => (
         <g key={x} className="fill-current stroke-current">
-          <ellipse cx={x} cy={y} rx={2.3} ry={1.7} transform={`rotate(-20 ${x} ${y})`} />
-          <line x1={x + 2.1} x2={x + 2.1} y1={y - 0.5} y2={y - 11} strokeWidth={0.8} />
+          <ellipse cx={x} cy={y} rx={2.6} ry={1.9} transform={`rotate(-20 ${x} ${y})`} />
+          <line x1={x + 2.3} x2={x + 2.3} y1={y - 0.5} y2={y - 11} strokeWidth={1} />
         </g>
       ))}
     </>
@@ -85,9 +85,9 @@ function Keys({
   width: number
   held: readonly number[]
 }) {
-  const whites = 7
+  const whites = 5
   const key = width / whites
-  const height = width * 0.5
+  const height = width * 0.6
   return (
     <g>
       <rect
@@ -96,7 +96,7 @@ function Keys({
         width={width}
         height={height}
         rx={1}
-        strokeWidth={0.7}
+        strokeWidth={0.9}
         className="fill-none stroke-current"
       />
       {Array.from({ length: whites - 1 }, (_, i) => (
@@ -106,11 +106,12 @@ function Keys({
           x2={x + key * (i + 1)}
           y1={y}
           y2={y + height}
-          strokeWidth={0.5}
+          strokeWidth={0.6}
           className="stroke-current"
         />
       ))}
-      {[1, 2, 4, 5, 6].map((place) => (
+      {/* C♯, D♯ and F♯ over the white keys C to G. */}
+      {[1, 2, 4].map((place) => (
         <rect
           key={place}
           x={x + key * place - key * 0.3}
@@ -144,7 +145,7 @@ function Beats({ y, filled, count = 8 }: { y: number; filled: number; count?: nu
         width={width - 0.8}
         height={width - 0.8}
         rx={0.6}
-        className={i === filled ? 'fill-current' : 'fill-current opacity-15'}
+        className={i === filled ? 'fill-current' : 'fill-current opacity-20'}
       />
       {i % 4 === 0 ? (
         <line
@@ -164,11 +165,11 @@ function Beats({ y, filled, count = 8 }: { y: number; filled: number; count?: nu
 function Diagrams() {
   return (
     <>
-      <Keys x={4} y={3} width={30} held={[0, 2, 4]} />
+      <Keys x={4} y={2} width={30} held={[0, 2, 4]} />
       <g className="opacity-35">
-        <Keys x={40} y={7} width={20} held={[1, 3, 5]} />
+        <Keys x={40} y={7} width={20} held={[0, 3]} />
       </g>
-      <Beats y={28} filled={2} />
+      <Beats y={29} filled={2} />
     </>
   )
 }
@@ -193,7 +194,7 @@ const PICTURES = { sheet: Sheet, lyrics: Lyrics, diagrams: Diagrams, grid: Grid 
 export function ViewPicture({ view }: { view: MusicView }) {
   const Picture = PICTURES[view]
   return (
-    <svg aria-hidden viewBox="0 0 64 40" className="h-10 w-16 overflow-visible">
+    <svg aria-hidden viewBox="0 0 64 40" className="h-12 w-20 overflow-visible">
       <Picture />
     </svg>
   )

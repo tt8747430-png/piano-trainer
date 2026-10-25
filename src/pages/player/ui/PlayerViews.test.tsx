@@ -7,6 +7,7 @@ import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import type { MusicView } from '@/entities/settings'
 import { setScoreView } from '@/features/set-preference'
 import { createMemoryStorage } from '@/shared/lib'
+import { stubBox } from '@/shared/test/layout'
 
 /** A piece in the Player in one of its views of the music, chosen once it is open. */
 async function inView(music: MusicView, path: string, options?: Parameters<typeof renderApp>[1]) {
@@ -302,9 +303,45 @@ describe('Chords over lyrics (ADR 0099)', () => {
     await waitFor(() => expect(stripBeat()).toBe('7'))
     await user.click(screen.getByRole('button', { name: 'Stop' }))
   })
+
+  it('keeps the line playing in the top third under its strip as the music reaches it', async () => {
+    const user = userEvent.setup()
+    await inView('lyrics', '/play/silent')
+    const view = screen.getByRole('region', { name: 'Chords over lyrics' })
+    stubBox(view, { width: 390, height: 600 })
+    vi.spyOn(view, 'clientHeight', 'get').mockReturnValue(600)
+    const later = line('Bars 13–16')
+    stubBox(later.shown, { top: 900, width: 390, height: 80 })
+    const scrolled = vi.mocked(Element.prototype.scrollTo)
+    await user.click(later.button)
+    const call = scrolled.mock.contexts.lastIndexOf(view)
+    // A quarter of the way down the 600 pixels under the strip (none tall where nothing is laid out).
+    expect(scrolled.mock.calls[call]).toEqual([{ top: 900 - 150, behavior: 'smooth' }])
+  })
 })
 
 describe('Diagrams (ADR 0099)', () => {
+  it('follows the chord sounding as Listen plays', async () => {
+    const user = userEvent.setup()
+    const { audio } = await inView('diagrams', '/play/bz5')
+    const view = screen.getByRole('region', { name: 'Diagrams' })
+    const shown = () =>
+      within(view)
+        .getAllByRole('img')
+        .map((diagram) => diagram.getAttribute('aria-label')?.split(':')[0])
+    expect(shown()).toEqual(['G', 'C'])
+    await user.click(screen.getByRole('button', { name: 'Play' }))
+    const start = audio.played[0]?.at ?? 0
+    // Bar 2 of 4/4 at 72 BPM: C, then Em.
+    act(() => audio.setNow(start + (4 * 60) / 72 + 0.1))
+    await waitFor(() => expect(shown()).toEqual(['C', 'Em']))
+    expect(view.querySelector('[data-slot="beat-strip"] [data-sounding]')).toHaveAttribute(
+      'data-cell',
+      '4',
+    )
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
+  })
+
   it('shows the chord sounding as its keys beside the next, and the line sung under the strip', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await inView('diagrams', '/play/silent')

@@ -10,14 +10,15 @@ import {
   type DiagramChord,
   type PlayedBeat,
 } from '@/features/practice'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { cn, LANDSCAPE_PHONE, useMediaQuery } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { printedSymbol, type Tick } from '@/shared/lib/music'
 import { SheetTitle } from '@/shared/ui'
 import { ChordDiagram } from '@/widgets/chord-diagrams'
 import { chordsFrom } from '../model/chords-from'
-import { lineProgress, lineWords, lyricLines, type Span } from '../model/lyric-lines'
+import { lyricLines, type Span } from '../model/lyric-lines'
 import { BeatStrip } from './BeatStrip'
+import { SungLines } from './SungLines'
 
 /** From a tablet's width, the two chords after the next too. */
 const WIDE = '(min-width: 40rem)'
@@ -74,9 +75,9 @@ function Diagram({
  * Diagrams (ADR 0099, Chordify's): the chord sounding as a large keyboard diagram over its symbol, the
  * next beside it greyed (from a tablet's width the two after it too, smaller and greyer); where no
  * chord sounds yet (a pickup, a bar of none) the next alone, greyed, saying it is next. Under them the
- * beat strip; under it, with the View's Lyrics on, the line being sung, bold, a bar filling under it
- * as the line goes, and the next line sung, muted. A diagram opens its chord's sheet (`onChord`); a
- * beat tapped takes the cursor there (`onGo`).
+ * beat strip; under it, with the View's Lyrics on, the line being sung and the next (`SungLines`);
+ * on a phone on its side, the strip and the words beside the chords (`diagrams-view`). A diagram
+ * opens its chord's sheet (`onChord`); a beat tapped takes the cursor there (`onGo`).
  */
 export function ChordDiagrams({
   title,
@@ -103,7 +104,10 @@ export function ChordDiagrams({
   onChord: (chord: number) => void
 }) {
   const { t } = useTranslation('player')
-  const wide = useMediaQuery(WIDE)
+  // On a phone on its side the room is short: the chord sounding and the next alone.
+  const tablet = useMediaQuery(WIDE)
+  const onSide = useMediaQuery(LANDSCAPE_PHONE)
+  const wide = tablet && !onSide
   const { now, next } = chordsFrom(
     performance,
     played,
@@ -115,8 +119,6 @@ export function ChordDiagrams({
   const bar = writtenBarOf(performance, beat.bar)
   const at = lines.findIndex((line) => line.bars.includes(bar))
   const line = lines[at]
-  const sung = line?.sung ? line : undefined
-  const coming = lines.slice(at + 1).find((each) => each.sung)
   const chord = (index: number | undefined) =>
     index === undefined ? null : diagramChord(performance, index)
   const first = chord(now ?? undefined)
@@ -124,10 +126,15 @@ export function ChordDiagrams({
   return (
     <section
       aria-label={t('views.diagrams')}
-      className="flex h-full flex-col gap-4 overflow-y-auto overscroll-contain landscape-phone:gap-2"
+      className="diagrams-view h-full gap-4 overflow-y-auto overscroll-contain pb-(--float-room) landscape-phone:gap-x-4 landscape-phone:gap-y-2"
     >
-      <SheetTitle title={title} place="lines" />
-      <div className="flex min-h-24 items-end justify-center gap-3 sm:gap-6">
+      <div data-area="title">
+        <SheetTitle title={title} place="lines" />
+      </div>
+      <div
+        data-area="chords"
+        className="flex min-h-24 items-end justify-center gap-3 sm:gap-6 landscape-phone:items-start"
+      >
         {first ? (
           <>
             <Diagram
@@ -172,33 +179,17 @@ export function ChordDiagrams({
           />
         ) : null}
       </div>
-      <BeatStrip
-        className="-mx-gutter py-1 landscape-phone:mx-0"
-        performance={performance}
-        bars={bars}
-        beat={beat}
-        loop={loop}
-        onBeat={onGo}
-      />
-      {words && (sung || coming) ? (
-        <div className="flex flex-col gap-2 text-lg sm:text-xl">
-          {sung ? (
-            <>
-              <p className="font-semibold text-foreground">{lineWords(sung)}</p>
-              <div aria-hidden className="h-1 overflow-hidden rounded-full bg-muted">
-                <div
-                  className="h-full origin-left rounded-full bg-foreground transition-transform duration-200 ease-out motion-reduce:transition-none"
-                  style={{
-                    transform: `scaleX(${lineProgress(sung, written, { written: bar, beat: beat.beat })})`,
-                  }}
-                />
-              </div>
-            </>
-          ) : null}
-          {coming ? <p className="text-muted-foreground">{lineWords(coming)}</p> : null}
-        </div>
+      <div data-area="strip" className="-mx-gutter landscape-phone:mx-0">
+        <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} />
+      </div>
+      {words ? (
+        <SungLines
+          sung={line?.sung ? line : undefined}
+          coming={lines.slice(at + 1).find((each) => each.sung)}
+          bars={written}
+          at={{ written: bar, beat: beat.beat }}
+        />
       ) : null}
-      <div aria-hidden className="h-(--float-room) shrink-0" />
     </section>
   )
 }

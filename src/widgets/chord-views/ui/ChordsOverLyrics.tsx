@@ -18,6 +18,7 @@ import { BeatStrip } from './BeatStrip'
 import { LyricRow } from './LyricRow'
 
 /** How far down the room under the strip the line playing is kept: in its top third. */
+const THIRD = 1 / 3
 const KEPT_AT = 1 / 4
 
 /**
@@ -60,22 +61,29 @@ export function ChordsOverLyrics({
   const looped = loopedBars(performance, loop)
   const scroller = useRef<HTMLElement>(null)
   const strip = useRef<HTMLDivElement>(null)
+  const kept = useRef(playing)
   const motion = useScrollMotion()
-  // The line playing brought to the top third of the room under the strip as the music reaches it.
+  // The line playing brought into the top third of the room under the strip as the music reaches
+  // it, where it is not there already; the view opens at its top, its title in sight.
   useEffect(() => {
     const box = scroller.current
     const line = box?.querySelector(`[data-line="${playing}"]`)
-    if (!box || !line) return
+    if (!box || !line || kept.current === playing) return
+    kept.current = playing
     const held = strip.current?.offsetHeight ?? 0
-    const top = line.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop
+    const top = line.getBoundingClientRect().top - box.getBoundingClientRect().top
     const room = box.clientHeight - held
-    box.scrollTo({ top: Math.max(0, top - held - room * KEPT_AT), behavior: motion })
+    if (top >= held && top <= held + room * THIRD) return
+    box.scrollTo({
+      top: Math.max(0, box.scrollTop + top - held - room * KEPT_AT),
+      behavior: motion,
+    })
   }, [playing, motion])
   return (
     <section
       ref={scroller}
       aria-label={t('views.lyrics')}
-      className="-mx-gutter flex h-full flex-col gap-4 overflow-y-auto overscroll-contain px-gutter text-base sm:text-lg landscape-phone:mx-0 landscape-phone:px-0"
+      className="-mx-gutter flex h-full flex-col gap-4 overflow-y-auto overscroll-contain px-gutter text-base *:shrink-0 sm:text-lg landscape-phone:mx-0 landscape-phone:px-0"
     >
       <SheetTitle title={title} place="lines" />
       <div

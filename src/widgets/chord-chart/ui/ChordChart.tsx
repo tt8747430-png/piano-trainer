@@ -99,11 +99,15 @@ export function ChordChart({
   const beats = (row: readonly { cells: readonly unknown[] }[]) =>
     row.reduce((sum, bar) => sum + bar.cells.length, 0)
   const widest = Math.max(1, ...rows.flat().map(beats))
-  // The bar the Player is in, brought into sight as it moves on, as its sheet brings the line playing.
+  // The bar the Player is in, brought into sight as it moves on, as its sheet brings the line playing;
+  // the chart opens at its top, its title in sight.
   const here = useRef<HTMLButtonElement>(null)
+  const kept = useRef(playing)
   const motion = useScrollMotion()
   useEffect(() => {
-    if (tap === 'go') here.current?.scrollIntoView({ block: 'nearest', behavior: motion })
+    if (tap !== 'go' || kept.current === playing) return
+    kept.current = playing
+    here.current?.scrollIntoView({ block: 'nearest', behavior: motion })
   }, [tap, playing, motion])
 
   return (

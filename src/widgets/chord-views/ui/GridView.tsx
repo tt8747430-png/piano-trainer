@@ -32,7 +32,7 @@ export function GridView({
   return (
     <section
       aria-label={t('views.grid')}
-      className="flex h-full scroll-pb-(--float-room) flex-col gap-6 overflow-y-auto overscroll-contain"
+      className="flex h-full scroll-pb-(--float-room) flex-col gap-6 overflow-y-auto overscroll-contain *:shrink-0"
     >
       <SheetTitle title={title} place="lines" />
       <ChordChart
