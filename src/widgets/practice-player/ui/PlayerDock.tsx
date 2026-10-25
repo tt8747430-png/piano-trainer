@@ -11,7 +11,7 @@ import { DOCK_BUTTON } from './dock-sizes'
  * The transport (ADR 0061, 0099): the tempo, ‹, Play or Stop (honey), ›, the loop and the hands in
  * one floating pill, floating along the sheet's foot at every size, a phone on its side too, where
  * the sheet is too short for it upright (ADR 0081, 0085). On a phone held upright its controls stand
- * shoulder to shoulder, so the six fit the width.
+ * shoulder to shoulder, so the six fit the width, from 320px.
  */
 export function PlayerDock({
   practice,
@@ -31,7 +31,11 @@ export function PlayerDock({
   const { playing } = practice.state
   const action = playing ? t('stop') : t('play')
   return (
-    <FloatingBar label={t('transport')} className="gap-1 max-sm:gap-0 landscape-phone:gap-0.5">
+    // Under 360px its controls are 40px and the pill hugs them, so the six fit a 320px screen.
+    <FloatingBar
+      label={t('transport')}
+      className="gap-1 max-sm:gap-0 narrow-phone:px-0.5 landscape-phone:gap-0.5"
+    >
       {tempo}
       <FloatingBarButton
         label={t('back')}
