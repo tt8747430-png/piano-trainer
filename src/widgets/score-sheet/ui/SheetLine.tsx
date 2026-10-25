@@ -35,6 +35,7 @@ export const SheetLine = memo(function SheetLine({
   placesOf,
   tapsOf,
   chordNames,
+  fingers,
   edit,
   labels,
   staves,
@@ -78,6 +79,8 @@ export const SheetLine = memo(function SheetLine({
   /** Where a click lands in a layer: on a note or a bar's start, never an empty step (ADR 0082). */
   tapsOf: (layer: Layer) => readonly Tick[]
   chordNames: boolean
+  /** The fingers written on the notes, printed: the fingering field types them there (ADR 0096). */
+  fingers: boolean
   /** What edits a thing printed (ADR 0094). */
   edit: EditPrinted
   /** The staves' names, printed at the line's head: the piece's first line (ADR 0094). */
@@ -133,6 +136,7 @@ export const SheetLine = memo(function SheetLine({
     >
       <LazyScoreView
         scale={scale}
+        fingers={fingers}
         score={sheet.score}
         timeBefore={sheet.timeBefore}
         next={sheet.next}
@@ -148,6 +152,7 @@ export const SheetLine = memo(function SheetLine({
             line={sheet.line}
             layer={layer}
             caret={caret}
+            chordNote={chordNote}
             playhead={playhead}
             scroller={justify ? undefined : ref}
             tapsOf={tapsOf}

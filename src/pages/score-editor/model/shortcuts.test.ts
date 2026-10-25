@@ -188,6 +188,16 @@ describe('shortcutOf', () => {
     expect(shortcutOf(press('KeyL', 'l'), 'melody')).toBeNull()
   })
 
+  it('opens the fingering field with Shift and F, which typing leaves free (ADR 0036, 0096)', () => {
+    for (const layer of ['rh', 'lh', 'melody'] as const)
+      expect(shortcutOf(press('KeyF', 'F', { shiftKey: true }), layer)).toEqual({
+        type: 'field',
+        field: 'fingering',
+      })
+    expect(shortcutOf(press('KeyF', 'f'), 'rh')).toBeNull()
+    expect(shortcutOf(press('KeyF', 'f', { metaKey: true, shiftKey: true }), 'rh')).toBeNull()
+  })
+
   it('cycles the editing modes with I, a letter typing leaves free, on a staff alone (ADR 0092)', () => {
     expect(shortcutOf(press('KeyI', 'i'), 'melody')).toEqual({ type: 'mode' })
     expect(shortcutOf(press('KeyI', 'i'), 'lh')).toEqual({ type: 'mode' })

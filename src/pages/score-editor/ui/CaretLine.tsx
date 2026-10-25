@@ -37,7 +37,9 @@ export function CaretLine() {
       ? t('chord.symbol')
       : field?.kind === 'lyrics'
         ? `${t('lyrics.label')} · ${t('lyrics.verse', { n: Math.min(field.verse, verseCount(draft)) + 1 })}`
-        : t(`layers.${layer}`)
+        : field?.kind === 'fingering'
+          ? `${t('fingering')} · ${t(`layers.${layer}`)}`
+          : t(`layers.${layer}`)
   const placed = said.kind === 'end' ? where : `${part} · ${where}`
   const text = said.mode
     ? `${placed} · ${t('caret.mode', { mode: t(`mode.${said.mode}`) })}`

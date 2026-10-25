@@ -434,6 +434,42 @@ describe('ScoreSheet', () => {
     expect(document.querySelector('[data-mark="band"]')).toBeNull()
   })
 
+  it('prints the fingers written on the notes where the View shows them, a chord’s each on its own note (ADR 0096)', async () => {
+    const fingered = readDraft({
+      key: 'C',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['C'] }],
+      hands: { rh: 'C4^1+E4^3+G4^5/4', lh: 'C3^5/4' },
+    })
+    render(
+      <ScoreSheet
+        draft={fingered}
+        caret={0}
+        layer="rh"
+        tapsOf={() => []}
+        selection={null}
+        onPlace={vi.fn()}
+        onReach={vi.fn()}
+        onDeselect={vi.fn()}
+        placesOf={() => []}
+        heading={() => null}
+        chordNames
+        fingers
+        edit={editing(vi.fn())}
+        title={() => null}
+      />,
+    )
+    await waitFor(() =>
+      expect(
+        [...document.querySelectorAll('[data-slot="score"] g.fing')].map((g) =>
+          g.textContent?.trim(),
+        ),
+      ).toEqual(['1', '3', '5', '5']),
+    )
+  })
+
   it('colours the notes at the caret on its staff as the ones chosen', async () => {
     sheet('melody')
     await waitFor(() => expect(document.querySelector('g.note.note-chosen')).toBeInTheDocument())

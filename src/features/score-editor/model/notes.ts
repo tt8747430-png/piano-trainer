@@ -390,21 +390,40 @@ export const respellNotes = (draft: Draft, layer: NoteLayer, where: Where): Draf
   changeAt(draft, layer, where, (n) => ({ ...n, spelled: otherSpelling(n.spelled) }))
 
 /**
- * The notes a finger goes on (ADR 0091, Flat's), of those `where` takes: a note alone at its place,
- * or the chord's one note chosen alone; a whole chord's notes take none, each fingered in turn (Alt
- * ↑ ↓, `chordNote`).
+ * The start of the first of `notes` (in order) after `tick` (1), or of the last before it (−1),
+ * where the Lyrics and fingering fields go on (ADR 0096); none past the ends.
  */
-export function fingeredNotes(draft: Draft, layer: NoteLayer, where: Where): DraftNote[] {
-  const taken = notesOf(draft, layer).filter(isAt(where))
-  if (typeof where !== 'number' && 'key' in where) return taken
-  return taken.filter((n) => notesAt(draft, layer, n.startTick).length === 1)
+export function startNear(notes: readonly DraftNote[], tick: Tick, direction: -1 | 1): Tick | null {
+  const next =
+    direction > 0
+      ? notes.find((n) => n.startTick > tick)
+      : notes.findLast((n) => n.startTick < tick)
+  return next?.startTick ?? null
 }
 
-/** A finger on the notes `where` gives one to (`fingeredNotes`), or none. */
-export function setFinger(draft: Draft, hand: HandId, where: Where, finger: Finger | null): Draft {
-  const fingered = new Set(fingeredNotes(draft, hand, where))
+/**
+ * The notes the fingering field fingers (ADR 0096, Dorico's): those `where` takes, a chord's bottom
+ * up, or the chord's one note chosen alone (Alt ↑ ↓, `chordNote`).
+ */
+export const fingeredNotes = (draft: Draft, layer: NoteLayer, where: Where): DraftNote[] =>
+  notesOf(draft, layer)
+    .filter(isAt(where))
+    .toSorted((a, b) => a.midi - b.midi)
+
+/**
+ * Fingers on the notes `where` takes (`fingeredNotes`), bottom up, as `1 3 5` is typed: those past
+ * the last finger take none, so no finger takes them all off.
+ */
+export function setFingers(
+  draft: Draft,
+  hand: HandId,
+  where: Where,
+  fingers: readonly Finger[],
+): Draft {
+  const fingered = fingeredNotes(draft, hand, where)
   return changeAt(draft, hand, where, (n) => {
-    if (!fingered.has(n) || (n.finger ?? null) === finger) return n
+    const finger = fingers[fingered.indexOf(n)] ?? null
+    if ((n.finger ?? null) === finger) return n
     const { finger: _old, ...rest } = n
     return finger === null ? rest : { ...rest, finger }
   })

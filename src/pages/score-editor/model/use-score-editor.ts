@@ -1,7 +1,7 @@
 import { useStore } from 'zustand'
 import { useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { entryTitles, sameMusic, usePiecesStoreApi } from '@/entities/piece'
-import { selectScoreView, useSettings } from '@/entities/settings'
+import { selectPractice, selectScoreView, useSettings } from '@/entities/settings'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { saveMusic } from '@/features/edit-piece'
 import {
@@ -58,8 +58,9 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   const pieces = usePiecesStoreApi()
   const locale = useLocale()
   // How the score is shown is the View's, the Player's too (ADR 0090, 0094): its layout (the music
-  // stands still between Practise and Edit), its words (ADR 0093), staves and chord symbols.
+  // stands still between Practise and Edit), its words (ADR 0093), staves, chord symbols and fingers.
   const shown = useSettings(selectScoreView)
+  const fingers = useSettings((state) => selectPractice(state).fingerNumbers)
   /** The music last saved here, or read: what the store holds unless another tab saved since. */
   const [saved] = useState(() => ({ music: target.music }))
   // A change the song's music cannot be written with: said so, the music last saved kept, until a
@@ -100,8 +101,13 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   const playback = usePlayback<'piece'>()
   // The learner's speed for Play, a share of the song's tempo: this visit's, never saved.
   const [speed, setSpeed] = useState(1)
-  // The field open over the sheet, typing a chord symbol or a syllable where it prints (ADR 0096).
-  const { field, openField } = useOpenField(store, shown)
+  // The field open over the sheet, typing a chord symbol, a syllable or fingers where they print
+  // (ADR 0096), each where the View shows it.
+  const fieldsShown = useMemo(
+    () => ({ chordNames: shown.chordNames, lyrics: shown.lyrics, fingers }),
+    [shown.chordNames, shown.lyrics, fingers],
+  )
+  const { field, openField } = useOpenField(store, fieldsShown)
   const close = useCloseTo(target)
   // The learner's own title, saved with the music (ADR 0094); else the catalog's, in their language.
   const title =
@@ -201,6 +207,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       // The chord symbols shown or not are the View's (ADR 0094).
       chordNames: shown.chordNames,
       lyrics: shown.lyrics,
+      fingers,
       speed,
       setSpeed,
       layout: shown.layout,

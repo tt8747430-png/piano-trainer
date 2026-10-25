@@ -24,22 +24,36 @@ const ON = {
   sideOffset: ({ anchor }: { anchor: { height: number } }) => -anchor.height,
 } as const
 
+/** Over a note, clear of its heads and stem, as a finger's number prints over an upper staff. */
+const OVER = { side: 'top', align: 'center', sideOffset: 6 } as const
+
+/** Under a note, as a finger's number prints under the lower staff. */
+const UNDER = { side: 'bottom', align: 'center', sideOffset: 6 } as const
+
 /**
  * Where each field stands at the place the sheet drew for it (ADR 0096): the chord symbol's over the
- * chord row, the Lyrics field on its verse's line under the note.
+ * chord row, the Lyrics field on its verse's line under the note, the fingering field over the note
+ * (under it where the field says so: the lower staff's).
  */
-const PLACES = { chord: ON, lyrics: ON } as const satisfies Readonly<Record<Kind, object>>
+const PLACES = { chord: ON, lyrics: ON, fingering: OVER } as const satisfies Readonly<
+  Record<Kind, object>
+>
 
-/** The face each field types in, as the sheet prints what it writes: a chord symbol's, a verse's. */
+/**
+ * The face each field types in, as the sheet prints what it writes: a chord symbol's, a verse's, a
+ * finger's numbers.
+ */
 const FACES = {
   chord: 'w-36 font-display font-semibold',
   lyrics: 'w-32 font-serif',
+  fingering: 'w-24 text-center font-display font-semibold tabular-nums',
 } as const satisfies Readonly<Record<Kind, string>>
 
-/** What a phone's own keyboard offers for each field as it opens. */
+/** What a phone's own keyboard offers for each field as it opens: digits for the fingers. */
 const INPUT_MODES = {
   chord: 'text',
   lyrics: 'text',
+  fingering: 'numeric',
 } as const satisfies Readonly<Record<Kind, 'text' | 'numeric'>>
 
 /** The selection covers the whole text, or is a caret at the end (`end`) or the start. */
@@ -72,6 +86,7 @@ export function SheetField({
   onGo,
   onClose,
   onKey,
+  under = false,
   beside,
   children,
 }: {
@@ -88,6 +103,8 @@ export function SheetField({
   onClose: () => void
   /** The field's own keys, before going on and back: true where it took the key. */
   onKey?: (event: KeyboardEvent<HTMLInputElement>) => boolean
+  /** It opens under its place, not over it: the lower staff's fingers, printed under its notes. */
+  under?: boolean
   beside?: ReactNode
   children?: ReactNode
 }) {
@@ -125,7 +142,7 @@ export function SheetField({
     >
       <PopoverContent
         anchor={anchor}
-        {...PLACES[kind]}
+        {...(under ? UNDER : PLACES[kind])}
         aria-label={label}
         initialFocus={input}
         finalFocus={false}

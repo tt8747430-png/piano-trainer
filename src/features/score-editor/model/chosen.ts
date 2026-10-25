@@ -24,12 +24,21 @@ export function chosenSpan(state: EditorState): Where {
 export const chosenNotes = (state: EditorState): DraftNote[] =>
   state.layer === 'chords' ? [] : notesOf(state.draft, state.layer).filter(isAt(chosenSpan(state)))
 
+/** Where the fingering field writes (ADR 0096): the chord's one note chosen, else the notes at the caret. */
+export const fingerPlace = ({
+  caret,
+  chordNote,
+}: Pick<EditorState, 'caret' | 'chordNote'>): Where =>
+  chordNote === null ? caret : { at: caret, key: chordNote }
+
 /**
- * The notes the Fingering keys act on (ADR 0091): of the notes chosen in a hand, those a finger goes
- * on (`fingeredNotes`); none in the tune or the chord symbols.
+ * The notes the fingering field writes at the caret (ADR 0096): a hand's, a chord's bottom up, or its
+ * one note chosen; none in the tune or the chord symbols.
  */
-export const fingerableNotes = (state: EditorState): DraftNote[] =>
-  isHandLayer(state.layer) ? fingeredNotes(state.draft, state.layer, chosenSpan(state)) : []
+export const fingeredAt = (
+  state: Pick<EditorState, 'draft' | 'layer' | 'caret' | 'chordNote'>,
+): DraftNote[] =>
+  isHandLayer(state.layer) ? fingeredNotes(state.draft, state.layer, fingerPlace(state)) : []
 
 /**
  * What Delete or Cut takes away (ADR 0092): in Replace mode the notes at a tick or in a span, their

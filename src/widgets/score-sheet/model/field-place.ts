@@ -1,5 +1,5 @@
 import { chordLabels, chordLabelWidth } from '@/shared/lib'
-import { printedSymbol, type Tick } from '@/shared/lib/music'
+import { printedSymbol, type Midi, type Tick } from '@/shared/lib/music'
 import type { StaffId, TimedMusic } from '@/shared/lib/notation'
 import {
   leftAt,
@@ -14,10 +14,12 @@ import { nearestPlace } from './nearest'
 
 /**
  * A field the editor types in where it is printed (ADR 0096): a chord symbol over the staff, a
- * verse's syllable under its note.
+ * verse's syllable under its note, a note's fingers over it.
  */
 export type SheetField =
-  { readonly kind: 'chord' } | { readonly kind: 'lyrics'; readonly verse: number }
+  | { readonly kind: 'chord' }
+  | { readonly kind: 'lyrics'; readonly verse: number }
+  | { readonly kind: 'fingering' }
 
 /** Where a field stands on a line, in its layout's px from the engraving's top left. */
 export interface FieldBox {
@@ -132,6 +134,40 @@ export function lyricsFieldBox(layout: Sung, staff: StaffId, tick: Tick, verse: 
     top,
     width: EMPTY_PLACE,
     height: near ? near.bottom - near.top : step,
+  }
+}
+
+/**
+ * The fingering field's place on a line (ADR 0096): over the notes at `tick` on `staff`, their
+ * chord's column (its heads and stem), or the one head of `midi` chosen alone; at the caret's line
+ * on the staff where none is drawn.
+ */
+export function fingeringFieldBox(
+  layout: Pick<ScoreLayout, 'measures' | 'onsets' | 'staves' | 'heads' | 'rests' | 'columns'>,
+  staff: StaffId,
+  tick: Tick,
+  midi?: Midi,
+): FieldBox {
+  const at = (drawn: { readonly staff: StaffId; readonly tick: Tick }) =>
+    drawn.staff === staff && drawn.tick === tick
+  const box =
+    (midi === undefined
+      ? undefined
+      : (layout.heads ?? []).find((head) => at(head) && head.midi === midi)) ??
+    (layout.columns ?? []).find(at)
+  if (box)
+    return {
+      left: box.left,
+      top: box.top,
+      width: box.right - box.left,
+      height: box.bottom - box.top,
+    }
+  const lines = layout.staves[staff] ?? { top: 0, bottom: 0 }
+  return {
+    left: leftAt(layout, tick, [staff]),
+    top: lines.top,
+    width: EMPTY_PLACE,
+    height: lines.bottom - lines.top,
   }
 }
 

@@ -1,4 +1,4 @@
-import { FileMusic, Hash, Layers, Type } from 'lucide-react'
+import { FileMusic, Layers, Type } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   selectPractice,
@@ -12,7 +12,7 @@ import { SwitchRow } from '@/shared/ui'
 /**
  * What only practice has in the View (ADR 0094), after the switches the editor's has too: the
  * sheet music itself (off, the keys have the screen), the chord positions written beside the chord
- * symbols, finger numbers and note names.
+ * symbols and note names.
  */
 export function PracticeSwitches() {
   const { t } = useTranslation('player')
@@ -33,12 +33,6 @@ export function PracticeSwitches() {
         info={t('view.positionsDetail')}
         checked={practice.positions}
         onCheckedChange={(on) => setPracticeToggle(store, 'positions', on)}
-      />
-      <SwitchRow
-        icon={<Hash />}
-        label={t('toggles.fingerNumbers')}
-        checked={practice.fingerNumbers}
-        onCheckedChange={(on) => setPracticeToggle(store, 'fingerNumbers', on)}
       />
       <SwitchRow
         icon={<Type />}

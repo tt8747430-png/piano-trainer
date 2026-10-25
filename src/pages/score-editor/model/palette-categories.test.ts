@@ -32,7 +32,7 @@ describe('the palette’s categories', () => {
   })
 
   it('says why a category is greyed where the caret writes, and nothing where it works', () => {
-    const where = { chosen: true, fingerable: true }
+    const where = { chosen: true }
     expect(greyedBy('chords', { ...where, layer: 'melody' })).toBeNull()
     expect(greyedBy('chords', { ...where, layer: 'chords' })).toBeNull()
     expect(greyedBy('pitch', { ...where, layer: 'chords' })).toBe('staff')
@@ -40,15 +40,12 @@ describe('the palette’s categories', () => {
     expect(greyedBy('bar', { ...where, layer: 'chords' })).toBeNull()
   })
 
-  it('greys the tools that change notes until a note is chosen, a finger until one note of a chord is', () => {
-    const none = { chosen: false, fingerable: false }
+  it('greys the tools that change notes until a note is chosen, a chord’s fingers too', () => {
+    const none = { chosen: false }
     for (const category of ['pitch', 'articulations', 'dynamics', 'lines', 'text'] as const)
       expect(greyedBy(category, { ...none, layer: 'rh' })).toBe('chooseNote')
     expect(greyedBy('notes', { ...none, layer: 'rh' })).toBeNull()
     expect(greyedBy('fingering', { ...none, layer: 'rh' })).toBe('chooseNote')
-    expect(greyedBy('fingering', { chosen: true, fingerable: false, layer: 'lh' })).toBe(
-      'chordNote',
-    )
-    expect(greyedBy('fingering', { chosen: true, fingerable: true, layer: 'lh' })).toBeNull()
+    expect(greyedBy('fingering', { chosen: true, layer: 'lh' })).toBeNull()
   })
 })

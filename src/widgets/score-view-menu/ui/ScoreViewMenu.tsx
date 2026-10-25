@@ -1,8 +1,13 @@
-import { Eye, Music, Piano, WholeWord } from 'lucide-react'
+import { Eye, Hash, Music, Piano, WholeWord } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { selectScoreView, useSettings, useSettingsStoreApi } from '@/entities/settings'
-import { setScoreView, setStaffShown } from '@/features/set-preference'
+import {
+  selectPractice,
+  selectScoreView,
+  useSettings,
+  useSettingsStoreApi,
+} from '@/entities/settings'
+import { setPracticeToggle, setScoreView, setStaffShown } from '@/features/set-preference'
 import { MenuSection, SheetLayoutField, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
@@ -19,8 +24,9 @@ function Clef({ glyph }: { glyph: string }) {
  * How a score is shown (ADR 0064, 0094, Soundslice's view settings): one menu, the Player's and the
  * score editor's, behind the eye in each bar, remembered for every piece. The layout (across, down
  * the screen or on A4 pages); the staves (the tune's own over the piano, the upper and the lower);
- * then what is shown: the chord symbols, the words under the tune (ADR 0093) and the keys (`keys`,
- * each screen's own), then a screen's own switches (`children`: the Player's, what only practice
+ * then what is shown: the chord symbols, the words under the tune (ADR 0093), the notes' fingers (the
+ * editor's fingering field types them where they print, ADR 0096) and the keys (`keys`, each
+ * screen's own), then a screen's own switches (`children`: the Player's, what only practice
  * has). What the score holds is edited on it, and how it plays is the Setup's: nothing is here twice.
  */
 export function ScoreViewMenu({
@@ -38,6 +44,7 @@ export function ScoreViewMenu({
   const { t } = useTranslation('music')
   const store = useSettingsStoreApi()
   const view = useSettings(selectScoreView)
+  const fingers = useSettings((state) => selectPractice(state).fingerNumbers)
   const shown = (staff: 'treble' | 'bass') => !view.hidden.includes(staff)
   return (
     <Popover>
@@ -96,6 +103,12 @@ export function ScoreViewMenu({
             label={t('view.lyrics')}
             checked={view.lyrics}
             onCheckedChange={(on) => setScoreView(store, { lyrics: on })}
+          />
+          <SwitchRow
+            icon={<Hash />}
+            label={t('view.fingers')}
+            checked={fingers}
+            onCheckedChange={(on) => setPracticeToggle(store, 'fingerNumbers', on)}
           />
           <SwitchRow
             icon={<Piano />}

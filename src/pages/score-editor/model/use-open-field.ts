@@ -1,8 +1,7 @@
 import { useCallback, useRef, useState } from 'react'
-import type { ScoreViewSettings } from '@/entities/settings'
 import { sungFrom, type EditorStore, type Layer } from '@/features/score-editor'
 import type { SheetField } from '@/widgets/score-sheet'
-import { fieldClosedBy } from './fields'
+import { fieldClosedBy, type FieldsShown } from './fields'
 
 /**
  * The field open over the sheet (ADR 0096), and how one opens: at the caret, where it can (the
@@ -10,10 +9,7 @@ import { fieldClosedBy } from './fields'
  * there as it closes; the Lyrics field to the tune's note there, else the next); what was chosen let
  * go, a field typing at one place.
  */
-export function useOpenField(
-  store: EditorStore,
-  shown: Pick<ScoreViewSettings, 'chordNames' | 'lyrics'>,
-) {
+export function useOpenField(store: EditorStore, shown: FieldsShown) {
   const [field, setField] = useState<SheetField | null>(null)
   // The staff the chord-symbol field took the caret from.
   const back = useRef<Layer | null>(null)

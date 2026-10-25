@@ -80,6 +80,7 @@ export function ScoreSheet({
   heading,
   chordNames,
   lyrics = true,
+  fingers = false,
   edit,
   hidden = NO_STAVES,
   view = 'scroll',
@@ -133,6 +134,8 @@ export function ScoreSheet({
   chordNames: boolean
   /** The words under the tune, where the song has them (ADR 0093). */
   lyrics?: boolean
+  /** The fingers written on the notes, printed (the View's Finger numbers): typed there (ADR 0096). */
+  fingers?: boolean
   /**
    * What edits a thing printed, opened from its button where it is printed (ADR 0094): the tempo
    * mark, a clef, a key or time signature.
@@ -218,6 +221,7 @@ export function ScoreSheet({
         onDeselect={onDeselect}
         placesOf={placesOf}
         chordNames={chordNames}
+        fingers={fingers}
         edit={edit}
         labels={sheet.line.bars[0]?.index === 0 ? labels : undefined}
         staves={drawn}

@@ -133,6 +133,7 @@ export function EditorSheet({
       tapsOf={tapsOf}
       heading={(section) => <SectionHeading section={section} />}
       chordNames={view.chordNames}
+      fingers={view.fingers}
       lyrics={view.lyrics}
       edit={editPrinted}
       hidden={shown.hidden}

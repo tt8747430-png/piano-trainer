@@ -75,7 +75,6 @@ export const player: LocaleResources['player'] = {
     styles: 'Стили',
   },
   toggles: {
-    fingerNumbers: 'Аппликатура',
     namedNotes: 'Названия нот',
     positions: 'Положения аккордов',
     melody: 'Мелодия',

@@ -20,6 +20,7 @@ import { chordRow, chosenBand } from '../model/chosen-band'
 import {
   chordFieldBox,
   chordRowTick,
+  fingeringFieldBox,
   lyricAt,
   lyricsFieldBox,
   printedChords,
@@ -62,6 +63,7 @@ export function LineOverlay({
   line,
   layer,
   caret,
+  chordNote = null,
   playhead,
   scroller,
   selection,
@@ -100,6 +102,8 @@ export function LineOverlay({
   layer: Layer
   /** From the line's start, when the caret is on this line. */
   caret: Tick | null
+  /** One note of the chord at the caret chosen alone (ADR 0088): the fingering field stands over it. */
+  chordNote?: Midi | null
   /** Where Play is, on the piece's ticks, while it plays on this line (ADR 0096). */
   playhead: { readonly tick: Tick; readonly clock: () => Tick | null } | null
   /** The line's own sideways scroller (a line across), which keeps the playhead in sight. */
@@ -125,16 +129,17 @@ export function LineOverlay({
   // The chord symbols printed over the line, where a tap on one opens its field (ADR 0096).
   const printed = chordNames ? printedChords(layout, music.chords, CHORD_PX * labels) : []
   // The caret's staff: its notes a grip; the open field's place at the caret, over the chord row at
-  // its beat, or under its note in a verse.
+  // its beat, under its note in a verse, over its note (or the chord's one note chosen) for fingers.
   const caretStaff = staffOfLayer(layout.staves, layer)
-  const fieldBox: FieldBox | null =
-    caret === null
-      ? null
-      : field?.kind === 'chord' && layer === 'chords' && chordNames
-        ? chordFieldBox(layout, printed, caret, row)
-        : field?.kind === 'lyrics' && caretStaff
-          ? lyricsFieldBox(layout, caretStaff.staff, caret, field.verse)
-          : null
+  const placeOf = (open: SheetField, at: Tick): FieldBox | null => {
+    if (open.kind === 'chord')
+      return layer === 'chords' && chordNames ? chordFieldBox(layout, printed, at, row) : null
+    if (!caretStaff) return null
+    return open.kind === 'lyrics'
+      ? lyricsFieldBox(layout, caretStaff.staff, at, open.verse)
+      : fingeringFieldBox(layout, caretStaff.staff, at, chordNote ?? undefined)
+  }
+  const fieldBox = field && caret !== null ? placeOf(field, caret) : null
   // The notes chosen on this line as the one selection's band over the staff of the row they are
   // chosen in (the chord row, choosing chords), ADR 0096: the notes themselves coloured.
   const chosen = chosenBand(layout, line.start, selection, {

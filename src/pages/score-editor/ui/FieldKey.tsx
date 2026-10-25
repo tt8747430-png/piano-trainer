@@ -14,6 +14,7 @@ type Kind = SheetField['kind']
 const KEYS = {
   chord: { label: 'chord.symbol', picture: <CategoryIcon category="chords" /> },
   lyrics: { label: 'lyrics.label', picture: <WholeWord /> },
+  fingering: { label: 'fingering', picture: <CategoryIcon category="fingering" /> },
 } as const satisfies Readonly<Record<Kind, { label: string; picture: ReactNode }>>
 
 /**

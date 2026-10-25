@@ -192,6 +192,7 @@ export const music: LocaleResources['music'] = {
     lower: 'Нижний нотоносец',
     show: 'Показывать',
     lyrics: 'Текст',
+    fingers: 'Аппликатура',
     keys: 'Клавиши',
   },
   patternShelf: { favourites: 'Избранное', own: 'Ваши фактуры', hidden: 'Скрытые' },

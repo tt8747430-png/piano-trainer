@@ -11,7 +11,7 @@ import {
 } from '@/entities/piece'
 import { chartStart } from '@/features/edit-piece'
 import { readDraft } from '@/features/score-editor'
-import { setKeyboard, setScoreView } from '@/features/set-preference'
+import { setKeyboard, setPracticeToggle, setScoreView } from '@/features/set-preference'
 import { createMemoryStorage, LANDSCAPE_PHONE } from '@/shared/lib'
 import { midi, note } from '@/shared/lib/music'
 import { notate, scoreToMei } from '@/shared/lib/notation'
@@ -839,7 +839,7 @@ describe('the score editor', () => {
     const view = await screen.findByRole('dialog', { name: 'View' })
     expect(within(view).queryByRole('radio', { name: 'Left' })).not.toBeInTheDocument()
     expect(within(view).queryByRole('switch', { name: 'Every tool' })).not.toBeInTheDocument()
-    expect(within(view).getAllByRole('switch')).toHaveLength(6)
+    expect(within(view).getAllByRole('switch')).toHaveLength(7)
     // Beside the sheet it stands at its right: no side is kept for it.
     expect(settingsStore.getState()).not.toHaveProperty('paletteSide')
   })
@@ -1052,7 +1052,7 @@ describe('the score editor', () => {
 
   it('keeps every tool in one palette, the hand’s own only in a hand', async () => {
     const user = userEvent.setup()
-    const { piecesStore } = await renderApp('/edit/my-1', {
+    const { piecesStore, settingsStore } = await renderApp('/edit/my-1', {
       storage: withSong({ melody: EMPTY_TUNE }),
     })
     const palette = await screen.findByRole('region', { name: 'Tools' })
@@ -1082,7 +1082,8 @@ describe('the score editor', () => {
     // The caret's moves stand apart from the palette, floating over the sheet; Delete is the edit row's.
     expect(within(palette).queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument()
     // A hand's fingers and clef are greyed in the tune, saying why.
-    expect(within(palette).getByRole('button', { name: 'Fingering' })).toHaveAttribute('data-off')
+    const kinds = screen.getByRole('toolbar', { name: 'Kinds of tools' })
+    expect(within(kinds).getByRole('button', { name: 'Fingering' })).toHaveAttribute('data-off')
     // A bar added has no chord, as a notation app adds one (ADR 0094).
     const bar = await tapIn(user, 'Bar', 'Add bar after')
     expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['G _ G G G'] }] })
@@ -1091,52 +1092,99 @@ describe('the score editor', () => {
       sections: [{ lines: ['G _ _ G G G'] }],
     })
     await user.keyboard('{Alt>}{ArrowDown}{ArrowDown}{/Alt}')
-    expect(within(palette).getByRole('button', { name: 'Fingering' })).not.toHaveAttribute(
-      'data-off',
-    )
+    expect(within(kinds).getByRole('button', { name: 'Fingering' })).not.toHaveAttribute('data-off')
+    act(() => setPracticeToggle(settingsStore, 'fingerNumbers', true))
     const fingering = await openCategory(user, 'Fingering')
-    const first = within(fingering).getByRole('button', { name: 'Finger 1' })
-    expect(first).toBeDisabled()
-    expect(first).toHaveAccessibleDescription('Choose a note first: these change the notes chosen.')
+    const key = within(fingering).getByRole('button', { name: 'Fingering' })
+    expect(key).toBeDisabled()
+    expect(key).toHaveAccessibleDescription('Choose a note first: these change the notes chosen.')
   })
 
-  it('fingers the note chosen with 1–5, one note of a chord at a time, as Flat’s (ADR 0091)', async () => {
+  it('types fingers over the note from Shift+F, a chord’s bottom up, Enter going on (ADR 0096)', async () => {
     const user = userEvent.setup()
-    const { piecesStore } = await renderApp('/edit/my-1', {
-      storage: withSong({ hands: { rh: 'C4+E4/4 | G4/4 | r/4 | r/4', lh: EMPTY_TUNE } }),
+    const { piecesStore, settingsStore } = await renderApp('/edit/my-1', {
+      storage: withSong({
+        hands: { rh: 'C4+E4+G4/4 | G4/4 | r/4 | r/4', lh: 'r/4 | C3/4 | r/4 | r/4' },
+      }),
+    })
+    const status = () => screen.getByRole('status')
+    const hands = () => songOf(piecesStore.getState())
+    await waitFor(() => expect(status()).toHaveTextContent(/^Upper staff · Bar 1/))
+    // Typed where they print: nowhere while the View hides the finger numbers.
+    await user.keyboard('{Shift>}F{/Shift}')
+    expect(screen.queryByRole('textbox', { name: 'Fingering' })).not.toBeInTheDocument()
+    act(() => setPracticeToggle(settingsStore, 'fingerNumbers', true))
+    await user.keyboard('{Shift>}F{/Shift}')
+    const field = await screen.findByRole('textbox', { name: 'Fingering' })
+    await waitFor(() => expect(field).toHaveFocus())
+    // Over the upper staff's notes, where their fingers print.
+    expect(field.closest('[data-side]')).toHaveAttribute('data-side', 'top')
+    // A phone's digits keyboard; the caret line says what it writes.
+    expect(field).toHaveAttribute('inputmode', 'numeric')
+    expect(status()).toHaveTextContent(/^Fingering · Upper staff · Bar 1/)
+    // Digits 1 to 5 and spaces alone: what else is typed is left out.
+    await user.keyboard('1 3x 5{Enter}')
+    await waitFor(() =>
+      expect(hands()).toMatchObject({ hands: { rh: 'C4^1+E4^3+G4^5/4 | G4/4 | r/4 | r/4' } }),
+    )
+    // Printed over the chord's notes.
+    await waitFor(() =>
+      expect(
+        [...document.querySelectorAll('[data-slot="score"] g.fing')].map((g) =>
+          g.textContent?.trim(),
+        ),
+      ).toEqual(['1', '3', '5']),
+    )
+    // On to the staff's next note.
+    expect(status()).toHaveTextContent(/^Fingering · Upper staff · Bar 2/)
+    await user.keyboard('4{Enter}')
+    await waitFor(() =>
+      expect(hands()).toMatchObject({ hands: { rh: 'C4^1+E4^3+G4^5/4 | G4^4/4 | r/4 | r/4' } }),
+    )
+    // More fingers than notes mark it and write nothing.
+    await user.keyboard('{Home}{ArrowLeft}')
+    expect(field).toHaveValue('1 3 5')
+    await user.keyboard('1 2 3 4{Enter}')
+    expect(field).toHaveAttribute('aria-invalid', 'true')
+    expect(status()).toHaveTextContent(/Bar 1/)
+    // Emptied, Enter takes the fingers off; Escape closes it.
+    await user.clear(field)
+    await user.keyboard('{Enter}{Escape}')
+    await waitFor(() =>
+      expect(hands()).toMatchObject({ hands: { rh: 'C4+E4+G4/4 | G4^4/4 | r/4 | r/4' } }),
+    )
+    expect(screen.queryByRole('textbox', { name: 'Fingering' })).not.toBeInTheDocument()
+    expect(status()).toHaveTextContent(/^Upper staff · Bar 2/)
+    // Under the lower staff's notes, where theirs print.
+    await user.keyboard('{Alt>}{ArrowDown}{/Alt}{Shift>}F{/Shift}')
+    const under = await screen.findByRole('textbox', { name: 'Fingering' })
+    expect(status()).toHaveTextContent(/^Fingering · Lower staff · Bar 2/)
+    expect(under.closest('[data-side]')).toHaveAttribute('data-side', 'bottom')
+  })
+
+  it('opens the fingering field from the palette’s one key, over the one note of a chord chosen (ADR 0096)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore, settingsStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ hands: { rh: 'C4+E4+G4/4 | G4/4 | r/4 | r/4', lh: EMPTY_TUNE } }),
     })
     await waitFor(() =>
       expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff · Bar 1/),
     )
-    const fingering = await openCategory(user, 'Fingering')
-    const finger = (n: number) => within(fingering).getByRole('button', { name: `Finger ${n}` })
-    // The whole chord chosen: no finger, each key saying why.
-    expect(finger(3)).toBeDisabled()
-    expect(finger(3)).toHaveAccessibleDescription(
-      'Choose one note of the chord: each takes its own finger.',
-    )
-    // Alt ↑ chooses its top note, E, which takes the finger; the same finger again takes it off.
+    // Alt ↑ chooses the chord's top note, G.
     await user.keyboard('{Alt>}{ArrowUp}{/Alt}')
-    expect(finger(3)).toBeEnabled()
-    await user.click(finger(3))
+    const fingering = await openCategory(user, 'Fingering')
+    // Greyed while the View hides the finger numbers, saying where they are shown.
+    const key = within(fingering).getByRole('button', { name: 'Fingering' })
+    expect(key).toBeDisabled()
+    expect(key).toHaveAccessibleDescription('Finger numbers are hidden: show them from View.')
+    act(() => setPracticeToggle(settingsStore, 'fingerNumbers', true))
+    await user.click(within(fingering).getByRole('button', { name: 'Fingering' }))
+    expect(await screen.findByRole('textbox', { name: 'Fingering' })).toHaveValue('')
+    // Leaving it keeps what it holds.
+    await user.keyboard('5{Escape}')
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
-        hands: { rh: 'C4+E4^3/4 | G4/4 | r/4 | r/4' },
-      }),
-    )
-    expect(finger(3)).toHaveAttribute('aria-pressed', 'true')
-    await user.click(finger(3))
-    await waitFor(() =>
-      expect(songOf(piecesStore.getState())).toMatchObject({
-        hands: { rh: 'C4+E4/4 | G4/4 | r/4 | r/4' },
-      }),
-    )
-    // A note alone at its place takes it at once.
-    await user.keyboard('{Escape}{ArrowRight}')
-    await user.click(finger(5))
-    await waitFor(() =>
-      expect(songOf(piecesStore.getState())).toMatchObject({
-        hands: { rh: 'C4+E4/4 | G4^5/4 | r/4 | r/4' },
+        hands: { rh: 'C4+E4+G4^5/4 | G4/4 | r/4 | r/4' },
       }),
     )
   })
@@ -1415,11 +1463,20 @@ describe('the score editor', () => {
         .map((section) => section.getAttribute('aria-label')),
     ).toEqual(['Layout', 'Staves', 'Show'])
     // Nothing in it twice: the palette folds by its own handle, and stands at the sheet's right.
+    // What the sheet prints, the fingers too: the fingering field types them there (ADR 0096).
     const switches = within(view).getAllByRole('switch')
-    expect(switches).toHaveLength(6)
-    ;['Melody', 'Upper staff', 'Lower staff', 'Chord symbols', 'Lyrics', 'Keys'].forEach(
-      (name, i) => expect(switches[i]).toHaveAccessibleName(name),
-    )
+    expect(switches).toHaveLength(7)
+    ;[
+      'Melody',
+      'Upper staff',
+      'Lower staff',
+      'Chord symbols',
+      'Lyrics',
+      'Finger numbers',
+      'Keys',
+    ].forEach((name, i) => expect(switches[i]).toHaveAccessibleName(name))
+    await user.click(within(view).getByRole('switch', { name: 'Finger numbers' }))
+    expect(settingsStore.getState().practice.fingerNumbers).toBe(true)
     expect(within(view).queryByRole('radiogroup', { name: /beside/ })).not.toBeInTheDocument()
     await user.click(within(view).getByRole('radio', { name: 'Pages' }))
     expect(settingsStore.getState().scoreView.layout).toBe('pages')

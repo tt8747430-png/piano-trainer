@@ -480,10 +480,10 @@ describe('Player', () => {
       'Lower staff',
       'Chord symbols',
       'Lyrics',
+      'Finger numbers',
       'Keys',
       'Sheet music',
       /^Chord positions/,
-      'Finger numbers',
       'Note names',
     ].forEach((name, i) => expect(switches[i]).toHaveAccessibleName(name))
     await user.click(within(view).getByRole('switch', { name: 'Upper staff' }))

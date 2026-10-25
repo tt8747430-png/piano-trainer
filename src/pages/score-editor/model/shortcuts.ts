@@ -31,7 +31,7 @@ const isClipKey = (code: string): code is keyof typeof CLIP_EDITS => Object.hasO
  * free: digits, the full stop, arrows (Shift extending what is chosen by a note, with Alt by a bar,
  * with Cmd to an end; Alt with ↑ ↓ through a chord's notes, then to the staff over or under, ADR
  * 0088; ↑ ↓ the notes a step in the key, with Shift a semitone, with Cmd an octave), Home, End, Backspace, Delete, Enter and Escape (letting go of what is chosen), and Cmd or
- * Ctrl with Z, Y, and C, X, V (what is chosen, ADR 0092), K and L (the chord-symbol and Lyrics fields, ADR 0096); a letter alone plays the piano, but for I,
+ * Ctrl with Z, Y, and C, X, V (what is chosen, ADR 0092), K and L (the chord-symbol and Lyrics fields, ADR 0096), and Shift with F (the fingering field); a letter alone plays the piano, but for I,
  * which typing leaves free: on a staff it cycles the editing modes, as Dorico's I does (ADR 0092).
  */
 export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
@@ -82,6 +82,8 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
       return { type: 'move', by: 'line', direction: press.shiftKey ? -1 : 1, extend: false }
   }
   if (mod || press.altKey) return null
+  // F with Shift, a letter typing leaves free so, the fingering field (ADR 0036, 0096; Dorico's).
+  if (press.code === 'KeyF' && press.shiftKey) return { type: 'field', field: 'fingering' }
   const value = VALUES[press.code]
   if (value !== undefined) return { type: 'value', value }
   if (press.code === 'Period') return { type: 'dot' }

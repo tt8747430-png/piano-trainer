@@ -123,10 +123,10 @@ export type EditorAction =
    */
   | { readonly type: 'accidental'; readonly accidental: -1 | 0 | 1 }
   /**
-   * A finger on the notes chosen in a hand: a place's single note, or the chord's one note chosen;
-   * the same finger again takes it off (ADR 0091).
+   * Fingers on the notes at the caret in a hand, bottom up, or on the chord's one note chosen, as
+   * the fingering field writes them (ADR 0096); none takes them off.
    */
-  | { readonly type: 'finger'; readonly finger: Finger }
+  | { readonly type: 'fingers'; readonly fingers: readonly Finger[] }
   /** A mark put on the notes chosen (else at the caret), or taken off them all (ADR 0063). */
   | { readonly type: 'mark'; readonly mark: MarkChoice }
   /** A line drawn over the notes chosen, else from the caret to its bar's end, or taken away (ADR 0080). */

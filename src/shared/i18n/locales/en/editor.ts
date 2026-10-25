@@ -38,9 +38,9 @@ export const editor = {
     // The chord-symbol and Lyrics fields write what the View may hide (ADR 0096).
     chordsHidden: 'Chord symbols are hidden: show them from View.',
     lyricsHidden: 'Lyrics are hidden: show them from View.',
+    fingersHidden: 'Finger numbers are hidden: show them from View.',
     // The Lyrics field opens under a note of the tune.
     noTune: 'Write the tune’s notes first: the words go under them.',
-    chordNote: 'Choose one note of the chord: each takes its own finger.',
     // A value's dot, or a triplet, that the song's meter cannot write.
     noDot: 'This value is too short to dot.',
     compound: 'A compound meter divides each beat in three already.',
@@ -249,8 +249,9 @@ export const editor = {
   stepDown: 'Down a diatonic step',
   back: 'Previous note',
   on: 'Next note',
-  // The Fingering keys, 1 to 5, on the notes chosen (ADR 0091).
-  fingerOf: 'Finger {{finger}}',
+  // The fingering field over the note and its palette key (ADR 0096): a chord's fingers bottom up.
+  fingering: 'Fingering',
+  tooManyFingers: 'More fingers than notes here.',
   // The chord-symbol field over the staff and its palette key (ADR 0096): the chords it suggests,
   // and its mark where what is typed cannot be read.
   chord: {
@@ -370,6 +371,7 @@ export const editor = {
     delete: 'Delete',
     chord: 'Type a chord symbol',
     lyrics: 'Type the lyrics',
+    fingering: 'Type the fingering',
     undo: 'Undo',
     redo: 'Redo',
     clip: 'Copy, cut, paste what is chosen',

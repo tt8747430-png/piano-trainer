@@ -212,6 +212,7 @@ export const music = {
     lower: 'Lower staff',
     show: 'Show',
     lyrics: 'Lyrics',
+    fingers: 'Finger numbers',
     keys: 'Keys',
   },
   // A list of patterns, Accompaniment's and the Setup's: the learner's shelves round the groups.

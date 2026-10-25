@@ -37,6 +37,8 @@ export interface ScoreEditorValue {
     readonly chordNames: boolean
     /** The words under the tune, the View's switch (ADR 0093). */
     readonly lyrics: boolean
+    /** The notes' fingers printed, the View's Finger numbers: the fingering field types them there. */
+    readonly fingers: boolean
     /**
      * How fast Play plays, as a share of the song's tempo (1 its own): the learner's speed to check
      * what was written at, never the song's tempo (ADR 0089).

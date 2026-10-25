@@ -11,8 +11,9 @@ import {
   notesAt,
   respellNotes,
   setDuration,
-  setFinger,
+  setFingers,
   shiftNotes,
+  startNear,
   tieNotes,
   toggleAccidental,
   writeNotes,
@@ -131,21 +132,25 @@ describe('the notes at the caret', () => {
     expect(respellNotes(sharp, 'rh', 0).hands.rh[0]?.midi).toBe(61)
   })
 
-  it('fingers a note alone at its place, or the chord’s one note chosen, never a whole chord', () => {
+  it('fingers the notes at a place bottom up, or the chord’s one note chosen (ADR 0096)', () => {
     const fingers = (d: typeof draft) => d.hands.rh.map((n) => n.finger)
-    // The whole chord: no note takes a finger, each is fingered in turn.
-    expect(fingeredNotes(draft, 'rh', 0)).toEqual([])
-    expect(setFinger(draft, 'rh', 0, 3)).toBe(draft)
-    const fingered = setFinger(draft, 'rh', { at: 0, key: midi(64) }, 3)
-    expect(fingers(fingered)).toEqual([undefined, 3])
-    expect(fingers(setFinger(fingered, 'rh', { at: 0, key: midi(64) }, null))).toEqual([
-      undefined,
-      undefined,
-    ])
-    // A range: each place's single note, a chord's left alone.
-    const line = writeNotes(fingered, 'rh', 48, keys(67), 24).draft
-    expect(shape(fingeredNotes(line, 'rh', { from: 0, to: 96 }))).toEqual(['G4@48/24'])
-    expect(fingers(setFinger(line, 'rh', { from: 0, to: 96 }, 5))).toEqual([undefined, 3, 5])
+    expect(shape(fingeredNotes(draft, 'rh', 0))).toEqual(['C4@0/48', 'E4@0/48'])
+    const both = setFingers(draft, 'rh', 0, [1, 3])
+    expect(fingers(both)).toEqual([1, 3])
+    // Fewer fingers than notes: those over them take none; none takes them all off.
+    expect(fingers(setFingers(both, 'rh', 0, [2]))).toEqual([2, undefined])
+    expect(fingers(setFingers(both, 'rh', 0, []))).toEqual([undefined, undefined])
+    expect(fingers(setFingers(both, 'rh', { at: 0, key: midi(64) }, [4]))).toEqual([1, 4])
+    expect(setFingers(both, 'rh', 0, [1, 3])).toBe(both)
+  })
+
+  it('finds the next notes’ start on a staff and the last before, where the fingering field goes', () => {
+    const line = draftOf({ hands: { rh: 'C4+E4/2 r/1 G4/1 | r/4', lh: 'r/4 | r/4' } })
+    const notes = line.hands.rh
+    expect(startNear(notes, 0, 1)).toBe(72)
+    expect(startNear(notes, 72, -1)).toBe(0)
+    expect(startNear(notes, 72, 1)).toBeNull()
+    expect(startNear(notes, 0, -1)).toBeNull()
   })
 })
 

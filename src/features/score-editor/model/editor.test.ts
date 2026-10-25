@@ -345,27 +345,35 @@ describe('the editor', () => {
     expect(run(back, { type: 'delete' }).draft.melody).toEqual([])
   })
 
-  it('fingers the note chosen in a hand, the same finger again taking it off (ADR 0091)', () => {
+  it('puts fingers on the notes at the caret bottom up, a chord’s one note alone, none taking them off (ADR 0096)', () => {
     const fingers = (state: EditorState) => state.draft.hands.rh.map((n) => n.finger)
-    const one = run(start('rh'), key(60, 0), { type: 'place', tick: 0, layer: 'rh' })
-    const thumb = run(one, { type: 'finger', finger: 1 })
-    expect(fingers(thumb)).toEqual([1])
-    expect(fingers(run(thumb, { type: 'finger', finger: 1 }))).toEqual([undefined])
-    expect(fingers(run(thumb, { type: 'finger', finger: 2 }))).toEqual([2])
-    // A whole chord takes none; its one note chosen (Alt ↑) does.
     const chord = run(
-      initialEditor(draftOf({ hands: { rh: 'C4+E4/4 | G4/4' } })),
+      initialEditor(draftOf({ hands: { rh: 'C4+E4+G4/4 | B4/4' } })),
       { type: 'layer', layer: 'rh' },
       { type: 'place', tick: 0, layer: 'rh' },
     )
-    expect(run(chord, { type: 'finger', finger: 3 })).toBe(chord)
-    const top = run(chord, { type: 'chordNote', direction: 1 })
-    expect(fingers(run(top, { type: 'finger', finger: 3 }))).toEqual([undefined, 3, undefined])
-    // A range fingers each place's single note; in the melody, nothing.
-    const range = run(chord, { type: 'move', by: 'bar', direction: 1, extend: true })
-    expect(fingers(run(range, { type: 'finger', finger: 5 }))).toEqual([undefined, undefined, 5])
+    const fingered = run(chord, { type: 'fingers', fingers: [1, 3, 5] })
+    expect(fingers(fingered)).toEqual([1, 3, 5, undefined])
+    // Fewer fingers than notes: those over them take none.
+    expect(fingers(run(fingered, { type: 'fingers', fingers: [2] }))).toEqual([
+      2,
+      undefined,
+      undefined,
+      undefined,
+    ])
+    // The chord's one note chosen (Alt ↑, its top): that note alone.
+    const top = run(fingered, { type: 'chordNote', direction: 1 })
+    expect(fingers(run(top, { type: 'fingers', fingers: [4] }))).toEqual([1, 3, 4, undefined])
+    expect(fingers(run(fingered, { type: 'fingers', fingers: [] }))).toEqual([
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+    ])
+    // The same fingers again are no change; the tune takes none.
+    expect(run(fingered, { type: 'fingers', fingers: [1, 3, 5] }).past).toBe(fingered.past)
     const tune = run(initialEditor(draftOf({ melody: 'B4/1' })), { type: 'layer', layer: 'melody' })
-    expect(run(tune, { type: 'finger', finger: 1 })).toBe(tune)
+    expect(run(tune, { type: 'fingers', fingers: [1] })).toBe(tune)
   })
 
   it('sets a chord at the caret’s beat, the caret staying there, a step going on a beat', () => {

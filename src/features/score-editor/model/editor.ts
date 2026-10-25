@@ -3,7 +3,7 @@ import { markBars } from './bar-marks'
 import { setClef } from './clefs'
 import { staffLeftFor } from './rows'
 import { setBarTicks } from './bars'
-import { chosenNotes, chosenSpan, shownValue, takenAway } from './chosen'
+import { chosenNotes, chosenSpan, fingerPlace, shownValue, takenAway } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
 import { clipEdited } from './clip-edits'
 import { ticksOf } from '@/shared/lib/notation'
@@ -20,12 +20,11 @@ import { markNotes } from './marks'
 import {
   backFrom,
   deleteNotes,
-  fingeredNotes,
   makeRoom,
   notesAt,
   respellNotes,
   setDuration,
-  setFinger,
+  setFingers,
   shiftNotes,
   stepNotes,
   steppedKey,
@@ -234,18 +233,12 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
             struck: null,
             selection: state.selection,
           })
-    case 'finger': {
-      if (!isHandLayer(layer)) return state
-      const where = chosenSpan(state)
-      const fingered = fingeredNotes(draft, layer, where)
-      if (fingered.length === 0) return state
-      // Every note the finger goes on wears it already: off.
-      const on = fingered.every((n) => n.finger === action.finger)
-      return commit(state, setFinger(draft, layer, where, on ? null : action.finger), {
-        struck: null,
-        selection: state.selection,
-      })
-    }
+    case 'fingers':
+      return isHandLayer(layer)
+        ? commit(state, setFingers(draft, layer, fingerPlace(state), action.fingers), {
+            struck: null,
+          })
+        : state
     case 'mark': {
       if (layer === 'chords') return state
       return commit(state, markNotes(draft, layer, chosenSpan(state), action.mark), {

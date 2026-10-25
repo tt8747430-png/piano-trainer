@@ -1,7 +1,7 @@
 import { ChevronDown, ChevronUp, Piano } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { chosenNotes, EDIT_MODES, fingerableNotes } from '@/features/score-editor'
+import { chosenNotes, EDIT_MODES } from '@/features/score-editor'
 import { useFoldKeys } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
@@ -15,7 +15,6 @@ import {
 } from '../model/palette-categories'
 import { BarKeys } from './BarKeys'
 import { FieldKey } from './FieldKey'
-import { FingeringKeys } from './FingeringKeys'
 import { LineKeys } from './LineKeys'
 import { ArticulationKeys, DynamicKeys } from './MarkKeys'
 import { NoteKeys, PitchKeys, QuickValues } from './NoteKeys'
@@ -36,9 +35,7 @@ function useReason(category: PaletteCategory): string | undefined {
   const { t } = useTranslation('editor')
   const layer = useEditorState((state) => state.layer)
   const chosen = useEditorState((state) => chosenNotes(state).length > 0)
-  // A finger goes on one note: a whole chord chosen takes none (ADR 0091).
-  const fingerable = useEditorState((state) => fingerableNotes(state).length > 0)
-  const why = greyedBy(category, { layer, chosen, fingerable })
+  const why = greyedBy(category, { layer, chosen })
   return why ? t(`reason.${why}`) : undefined
 }
 
@@ -128,7 +125,9 @@ function Sections() {
         <WordKeys />
       </Section>
       <Section category="fingering">
-        <FingeringKeys />
+        <CaptionGrid>
+          <FieldKey field="fingering" />
+        </CaptionGrid>
       </Section>
       <Section category="chords">
         <CaptionGrid>

@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import { chordLabelWidth } from '@/shared/lib'
+import type { Midi } from '@/shared/lib/music'
 import { xAtTick, type Lyric } from '@/shared/ui/score'
-import { chordFieldBox, chordRowTick, lyricAt, lyricsFieldBox, printedChords } from './field-place'
+import {
+  chordFieldBox,
+  chordRowTick,
+  fingeringFieldBox,
+  lyricAt,
+  lyricsFieldBox,
+  printedChords,
+} from './field-place'
 
 const layout = {
   width: 300,
@@ -116,5 +124,43 @@ describe('the Lyrics field’s place (ADR 0096)', () => {
     expect(lyricAt(sung, { x: 40, y: 90 })).toMatchObject({ tick: 0, verse: 1 })
     expect(lyricAt(sung, { x: 110, y: 70 })).toMatchObject({ tick: 96, verse: 0 })
     expect(lyricAt(sung, { x: 80, y: 70 })).toBeNull()
+  })
+})
+
+describe('the fingering field’s place (ADR 0096)', () => {
+  const head = (index: number, top: number, midi: number) => ({
+    id: `n-treble-0-${index}`,
+    staff: 'treble' as const,
+    tick: 0,
+    index,
+    left: 40,
+    right: 52,
+    top,
+    bottom: top + 10,
+    midi: midi as Midi,
+  })
+  const chord = {
+    ...layout,
+    staves: { treble: { top: 10, bottom: 50 } },
+    heads: [head(0, 45, 60), head(1, 35, 64), head(2, 25, 67)],
+    columns: [{ staff: 'treble' as const, tick: 0, left: 40, right: 53, top: -5, bottom: 55 }],
+  }
+
+  it('stands over the chord at the caret, its heads and stem', () => {
+    expect(fingeringFieldBox(chord, 'treble', 0)).toEqual({
+      left: 40,
+      top: -5,
+      width: 13,
+      height: 60,
+    })
+  })
+
+  it('stands over the one note of the chord chosen', () => {
+    expect(fingeringFieldBox(chord, 'treble', 0, 64 as Midi)).toEqual({
+      left: 40,
+      top: 35,
+      width: 12,
+      height: 10,
+    })
   })
 })

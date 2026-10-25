@@ -86,7 +86,6 @@ export const player = {
     styles: 'Styles',
   },
   toggles: {
-    fingerNumbers: 'Finger numbers',
     namedNotes: 'Note names',
     positions: 'Chord positions',
     melody: 'Melody',

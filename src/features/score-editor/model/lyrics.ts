@@ -1,7 +1,7 @@
 import { gatherLyrics, readLyrics } from '@/entities/piece'
 import type { NoteLyrics, Tick } from '@/shared/lib/music'
 import { tuneNotes, type Draft, type DraftNote, type Layer, type NoteLayer } from './draft'
-import { notesOf, withNotes } from './notes'
+import { notesOf, startNear, withNotes } from './notes'
 
 /** The staff the lyrics are on (ADR 0093): the tune's, or the upper staff's (the right hand's). */
 export const tuneLayer = (draft: Draft): NoteLayer => draft.lyricsOn
@@ -28,12 +28,8 @@ export const sungAt = (draft: Draft, tick: Tick): DraftNote | null =>
   tuneNotes(draft).find((n) => n.startTick === tick) ?? null
 
 /** The tune's note after (1) or before (−1) `tick`, where the Lyrics field moves on: none past the ends. */
-export function sungNear(draft: Draft, tick: Tick, direction: -1 | 1): Tick | null {
-  const tune = tuneNotes(draft)
-  const next =
-    direction > 0 ? tune.find((n) => n.startTick > tick) : tune.findLast((n) => n.startTick < tick)
-  return next?.startTick ?? null
-}
+export const sungNear = (draft: Draft, tick: Tick, direction: -1 | 1): Tick | null =>
+  startNear(tuneNotes(draft), tick, direction)
 
 /** The notes a syllable at index `from` is held over: no more of the empty places after it than it holds. */
 function heldOver(tune: readonly DraftNote[], from: number, verse: number, most: number): number {
