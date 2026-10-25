@@ -4,6 +4,7 @@ import { ToolKey } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { GlyphGrid } from './palette-keys'
 import { LineIcon } from './palette-icons'
+import { usePaletteReason } from './palette-reason'
 
 /**
  * A line's key (ADR 0080): drawn in one go over the notes chosen, else from the note at the caret to
@@ -17,6 +18,7 @@ function LineKey({ line }: { line: Line }) {
   return (
     <ToolKey
       label={t(`lines.${line}`)}
+      reason={usePaletteReason()}
       pressed={drawn === true}
       disabled={drawn === null}
       onClick={() => actions.dispatch({ type: 'line', line })}

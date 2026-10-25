@@ -19,21 +19,21 @@ const PICTURE: Readonly<Record<RailControl, { icon: LucideIcon } | { glyph: Reac
 }
 
 /**
- * Which controls the keys' rail holds, chosen one by one: each a tile wearing the rail's own picture
- * and saying what it does, on while the rail keeps it. Whatever the rail leaves out stays in Settings.
+ * Which controls the keys' rail holds, chosen one by one: each a tile wearing the rail's own picture,
+ * what it does its tooltip, on while the rail keeps it. Whatever the rail leaves out stays in Settings.
  */
 export function RailControlsField() {
   const { t } = useTranslation('common')
   const store = useSettingsStoreApi()
   const kept = useSettings((state) => selectKeyboard(state).railControls)
   return (
-    <SettingField label={t('railControls.label')} detail={t('railControls.detail')}>
+    <SettingField label={t('railControls.label')} info={t('railControls.detail')}>
       <ToggleGrid label={t('railControls.label')}>
         {RAIL_CONTROLS.map((control) => (
           <ToggleTile
             key={control}
             label={t(`railControls.${control}.label`)}
-            detail={t(`railControls.${control}.detail`)}
+            tip={t(`railControls.${control}.detail`)}
             pressed={kept.includes(control)}
             onPressedChange={(on) =>
               setKeyboard(store, { railControls: railControls(toggled(kept, control, on), []) })

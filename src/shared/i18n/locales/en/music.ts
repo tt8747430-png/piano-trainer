@@ -25,8 +25,8 @@ export const music = {
     },
     first: 'First chord',
     nearest: 'Nearest',
-    nearestOn: 'Each next chord moves the least it can',
-    nearestOff: 'Every chord in the first one’s position',
+    nearestInfo:
+      'On, each next chord moves the least it can; off, every chord stays in the first one’s position.',
   },
   // How big a chord is: its stack of notes, triads to 13ths.
   chordSize: {

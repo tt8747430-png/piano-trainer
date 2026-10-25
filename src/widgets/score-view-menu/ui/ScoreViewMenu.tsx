@@ -8,7 +8,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 
 /** A group's switches, one under the other, the last with no line under it. */
-const SWITCHES = 'gap-0 [&>label:last-child]:border-b-0'
+const SWITCHES = 'gap-0 [&>[data-slot=switch-row]:last-child]:border-b-0'
 
 /** A staff's clef, as the music font draws it, for its switch's picture. */
 function Clef({ glyph }: { glyph: string }) {

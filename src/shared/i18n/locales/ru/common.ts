@@ -38,6 +38,7 @@ export const common: LocaleResources['common'] = {
   close: 'Закрыть',
   notice: { close: 'Закрыть уведомление' },
   clearSearch: 'Очистить поиск',
+  infoTip: 'Подробнее: {{name}}',
   loading: 'Загрузка',
   stage: {
     beginner: 'Начальный',
@@ -163,6 +164,12 @@ export const common: LocaleResources['common'] = {
     noDevice: 'MIDI-клавиатура не найдена.',
     denied: 'Доступ к MIDI запрещён.',
     unsupported: 'Этот браузер не может подключить MIDI-клавиатуру.',
+  },
+  recorderSettings: {
+    click: 'Метроном',
+    clickInfo: 'Доли звучат и после отсчёта',
+    tune: 'Мелодия',
+    tuneInfo: 'Под дубль звучит мелодия песни, если она есть',
   },
   midiSettings: {
     device: {

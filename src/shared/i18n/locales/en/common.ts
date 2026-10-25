@@ -39,6 +39,8 @@ export const common = {
   notice: { close: 'Close the notice' },
   // A search box's button that empties it.
   clearSearch: 'Clear search',
+  // The ⓘ beside a control's name, opening its explanation (ADR 0096).
+  infoTip: 'About {{name}}',
   loading: 'Loading',
   // The four levels, a journey's and a course's (ADR 0053).
   stage: {
@@ -171,6 +173,13 @@ export const common = {
     noDevice: 'No MIDI keyboard found.',
     denied: 'MIDI access was blocked.',
     unsupported: 'This browser can’t connect a MIDI keyboard.',
+  },
+  // How a take is recorded (ADR 0028): in Settings › Recording and the recording strip's settings.
+  recorderSettings: {
+    click: 'Metronome',
+    clickInfo: 'The beat goes on after the count-in',
+    tune: 'Melody',
+    tuneInfo: 'The song’s melody plays under the take, where it has one',
   },
   // The MIDI keyboard's settings, in Settings under its connection.
   midiSettings: {

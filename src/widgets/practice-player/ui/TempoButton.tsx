@@ -4,11 +4,10 @@ import { useTranslation } from 'react-i18next'
 import type { PracticeMode } from '@/features/practice'
 import { formatPercent, useLocale } from '@/shared/i18n'
 import { TEMPO_RANGE } from '@/shared/lib/schedule'
-import { Listbox } from '@/shared/ui'
+import { Listbox, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
-import { Switch } from '@/shared/ui/primitives/switch'
 import { useDockSide } from '../model/dock-side'
 import { percentOf, SPEEDS, speedTempo } from '../model/speeds'
 
@@ -135,13 +134,13 @@ export function TempoButton({
           </div>
         </Slider>
         {onSpeedTraining && mode === 'listen' && tempo < ownTempo ? (
-          <label className="flex min-h-11 items-center justify-between gap-3">
-            <span className="flex flex-col">
-              <span>{t('pace.speedTraining')}</span>
-              <span className="text-sm text-muted-foreground">{t('pace.speedTrainingDetail')}</span>
-            </span>
-            <Switch checked={speedTraining} onCheckedChange={onSpeedTraining} />
-          </label>
+          <SwitchRow
+            label={t('pace.speedTraining')}
+            info={t('pace.speedTrainingDetail')}
+            checked={speedTraining}
+            onCheckedChange={onSpeedTraining}
+            className="min-h-11 border-b-0 py-0 text-base"
+          />
         ) : null}
       </PopoverContent>
     </Popover>

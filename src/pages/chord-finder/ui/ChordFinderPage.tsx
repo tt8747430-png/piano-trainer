@@ -77,7 +77,7 @@ function FinderSettings({
             <ToggleTile
               icon={History}
               label={t('chordFinder.remember')}
-              detail={t('chordFinder.rememberDetail', { count: REMEMBERED_CHORDS })}
+              tip={t('chordFinder.rememberDetail', { count: REMEMBERED_CHORDS })}
               pressed={finder.remember}
               onPressedChange={finder.setRemember}
             />

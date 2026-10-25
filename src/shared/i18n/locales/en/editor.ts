@@ -1,5 +1,4 @@
 export const editor = {
-  yourVersion: 'Your version',
   play: 'Play',
   undo: 'Undo',
   redo: 'Redo',
@@ -31,13 +30,16 @@ export const editor = {
       chords: 'Chords',
     },
   },
-  // Why a category's tools are greyed.
+  // Why a category's tools are greyed: each greyed key's tooltip, and its section's ⓘ (ADR 0096).
   reason: {
     chooseNote: 'Choose a note first: these change the notes chosen.',
     staff: 'These are for notes: tap a note on a staff.',
     hand: 'For the piano’s staves: tap a note on the upper or lower staff.',
     chordRow: 'Chords are written over the staff: tap a chord name, or the space over the staff.',
     chordNote: 'Choose one note of the chord: each takes its own finger.',
+    // A value's dot, or a triplet, that the song's meter cannot write.
+    noDot: 'This value is too short to dot.',
+    compound: 'A compound meter divides each beat in three already.',
     // Where the lyrics go (where they are, or will be in a song with none yet), said where the caret
     // is on another staff (ADR 0093).
     lyricsOn: {
@@ -85,7 +87,7 @@ export const editor = {
   },
   barlines: 'Barlines and endings',
   jumps: 'Signs and jumps',
-  // A jump's key prints its words; what they ask, short, under them.
+  // A jump's key prints its words; what they ask is its tooltip (ADR 0096).
   jumpMeaning: {
     toCoda: 'Jump to the coda',
     fine: 'The end',
@@ -128,17 +130,17 @@ export const editor = {
     previousVerse: 'Previous verse',
     noNote: 'No note of the tune here',
   },
-  // An expression's key shows the word as printed; under it, what it asks.
+  // An expression's key shows the word as printed; what it asks is its tooltip (ADR 0096).
   meaning: {
-    dolce: 'sweetly',
-    cantabile: 'in a singing style',
-    espressivo: 'expressively',
-    legato: 'smoothly',
-    leggiero: 'lightly',
-    rit: 'gradually slower',
-    rall: 'gradually slower',
-    accel: 'gradually faster',
-    'a-tempo': 'back to the tempo',
+    dolce: 'Sweetly',
+    cantabile: 'In a singing style',
+    espressivo: 'Expressively',
+    legato: 'Smoothly',
+    leggiero: 'Lightly',
+    rit: 'Gradually slower',
+    rall: 'Gradually slower',
+    accel: 'Gradually faster',
+    'a-tempo': 'Back to the tempo',
   },
   accidentals: { sharp: 'Sharp', flat: 'Flat', natural: 'Natural' },
   // Where the caret writes, named as a score names its staves (ADR 0091): the chord symbols' row, the
@@ -208,15 +210,15 @@ export const editor = {
     mf: 'Mezzo-forte',
     f: 'Forte',
     ff: 'Fortissimo',
-    dolce: 'Dolce: sweetly',
-    cantabile: 'Cantabile: in a singing style',
-    espressivo: 'Espressivo: expressively',
-    legato: 'Legato: smoothly',
-    leggiero: 'Leggiero: lightly',
-    rit: 'Ritardando: gradually slower',
-    rall: 'Rallentando: gradually slower',
-    accel: 'Accelerando: gradually faster',
-    'a-tempo': 'A tempo: back to the tempo',
+    dolce: 'Dolce',
+    cantabile: 'Cantabile',
+    espressivo: 'Espressivo',
+    legato: 'Legato',
+    leggiero: 'Leggiero',
+    rit: 'Ritardando',
+    rall: 'Rallentando',
+    accel: 'Accelerando',
+    'a-tempo': 'A tempo',
     pedalDown: 'Pedal down',
     pedalChange: 'Pedal change',
     pedalUp: 'Pedal up',
@@ -224,7 +226,7 @@ export const editor = {
   triplet: 'Triplet',
   rest: 'Rest',
   // The editing modes (ADR 0092, Flat's Melody · Insert · Chord), one chosen in the Notes section,
-  // its line saying what a key played does.
+  // the ⓘ beside its name saying what a key played does in each (ADR 0096).
   mode: {
     label: 'Editing mode',
     replace: 'Replace',
@@ -269,7 +271,8 @@ export const editor = {
     newLine: 'Line break',
     joinLine: 'Join lines',
     newSection: 'New section',
-    length: 'Bar length (a pickup, or a bar of its own)',
+    length: 'Bar length',
+    lengthInfo: 'A pickup, or a bar longer or shorter than the meter’s.',
     lengthOf: 'Bar length {{time}}',
   },
   section: {
@@ -293,16 +296,17 @@ export const editor = {
     tempoLabel: '{{word}}, {{bpm}} a minute',
     meter: 'Time signature',
   },
+  // Record in the dock, the recording strip, and the takes' own sheet (ADR 0028, 0096).
   recorder: {
     more: 'Take actions',
     title: 'Takes',
-    open: 'Record',
     record: 'Record',
-    click: 'Metronome',
-    clickDetail: 'The beat goes on after the count-in',
-    tune: 'Melody',
-    tuneDetail: 'The song’s melody plays while you record',
-    from: 'From bar',
+    // Record's popover, where no MIDI keyboard is connected.
+    needsMidi: 'Recording needs a MIDI keyboard.',
+    // The takes' button beside Record, with how many there are.
+    takes: 'Takes: {{count}}',
+    // The recording strip's settings: Settings › Recording's switches.
+    settings: 'Recording settings',
     full: 'Your takes are full: delete one to record another.',
     nothing: 'Nothing was played.',
     none: 'No takes yet.',
@@ -326,7 +330,7 @@ export const editor = {
     },
     split: 'Split hands at',
     grid: 'Shortest note',
-    writeIt: 'Write',
+    writeFrom: 'Write from bar {{n}}',
     counting: 'Count-in',
     recording: 'Recording',
     bar: 'Bar {{n}}',

@@ -45,7 +45,7 @@ function TakeView({ take }: { take: Take }) {
   const takes = {
     to: '/edit/$pieceId',
     params: { pieceId: take.pieceId },
-    search: { record: true },
+    search: { takes: true },
   }
   // Back to the takes first: deleted while shown, the page would say it is not found.
   const remove = () =>
@@ -96,7 +96,7 @@ export function TakePage() {
   ) : (
     <NotFound>
       <ButtonLink
-        render={<Link to="/edit/$pieceId" params={{ pieceId }} search={{ record: true }} />}
+        render={<Link to="/edit/$pieceId" params={{ pieceId }} search={{ takes: true }} />}
       >
         {t('notFound.toTakes')}
       </ButtonLink>

@@ -1,12 +1,6 @@
 import { useStore } from 'zustand'
 import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
-import {
-  entryTitles,
-  sameMusic,
-  selectHasVersion,
-  usePieces,
-  usePiecesStoreApi,
-} from '@/entities/piece'
+import { entryTitles, sameMusic, usePiecesStoreApi } from '@/entities/piece'
 import { selectScoreView, useSettings } from '@/entities/settings'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { saveMusic } from '@/features/edit-piece'
@@ -114,9 +108,6 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   }, [])
   const [chordFieldAsked, askChordField] = useState(0)
   const close = useCloseTo(target)
-  const hasVersion = usePieces(
-    (state) => target.kind === 'version' && selectHasVersion(state, target.id),
-  )
   // The learner's own title, saved with the music (ADR 0094); else the catalog's, in their language.
   const title =
     useStore(store, (state) => state.draft.title) ??
@@ -159,6 +150,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
     if (event.defaultPrevented || event.isComposing) return
     if (recording) {
+      // The recording strip's settings keep their own keys: Escape closes them, Space turns a switch.
+      if (event.target instanceof Element && event.target.closest(OWN_KEYS)) return
       if (!STOPS_A_TAKE.has(event.key)) return
       event.preventDefault()
       takes.stop()
@@ -224,7 +217,6 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     meta: {
       id: target.id,
       title,
-      hasVersion,
       playing: playback.playing === 'piece',
       kind: target.kind,
       chordFieldRef,

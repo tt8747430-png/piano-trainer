@@ -33,7 +33,13 @@ const bars = () => {
   return { at, reach, first, second, third }
 }
 
-afterEach(() => vi.useRealTimers())
+// jsdom lays nothing out: a test stands in for the point a finger is over, and puts the document back.
+const elementFromPoint = Object.getOwnPropertyDescriptor(document, 'elementFromPoint')
+afterEach(() => {
+  vi.useRealTimers()
+  if (elementFromPoint) Object.defineProperty(document, 'elementFromPoint', elementFromPoint)
+  else Reflect.deleteProperty(document, 'elementFromPoint')
+})
 
 describe('the one selection’s gestures (ADR 0088)', () => {
   it('says where a click lands on the engraving, Shift extending', () => {

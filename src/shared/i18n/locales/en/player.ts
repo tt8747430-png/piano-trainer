@@ -65,6 +65,8 @@ export const player = {
     'major-thirds': 'Up by major thirds',
   },
   ownKeyOnly: 'Only in {{key}}',
+  /** Why the recording's tile is closed, beside How it plays' heading. */
+  recordingOnlyIn: 'The recording plays only in {{key}}, its own key.',
   /** Why a pattern or figure is closed to the music. */
   needs: { melody: 'Needs a melody', key: 'Needs a key', simpleTime: 'Needs simple time' },
   /** The right hand's figures in the Setup, by what they do. */

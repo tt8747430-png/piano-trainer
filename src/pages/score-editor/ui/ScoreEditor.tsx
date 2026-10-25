@@ -25,6 +25,7 @@ import { EditorKeyboard } from './EditorKeyboard'
 import { EditorSheet } from './EditorSheet'
 import { EditorTools } from './EditorTools'
 import { RecordingStrip } from './RecordingStrip'
+import { TakesSheet } from './TakesSheet'
 import { UnsavedNotice } from './UnsavedNotice'
 
 /** What the sheet keeps between its music and what floats over it, in CSS px. */
@@ -155,6 +156,7 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
         </div>
         <EditorKeyboard />
       </div>
+      <TakesSheet />
     </ScoreEditorContext>
   )
 }

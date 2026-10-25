@@ -32,6 +32,7 @@ const keepStorage = () => void navigator.storage?.persist?.().catch(() => {})
 /**
  * Settings' backup: everything the learner made and practised saved as one file, and a file put back
  * in place of what is on the device, once they say so; the app opens again over it (`onRestored`).
+ * What a backup holds is the ⓘ beside the group's heading (ADR 0096).
  */
 export function BackupFields({
   storage = safeLocalStorage(),
@@ -91,7 +92,6 @@ export function BackupFields({
 
   return (
     <>
-      <p className="text-muted-foreground">{t('backup.says')}</p>
       <div className="flex flex-wrap gap-2">
         <Button variant="outline" onClick={save}>
           {t('backup.save')}

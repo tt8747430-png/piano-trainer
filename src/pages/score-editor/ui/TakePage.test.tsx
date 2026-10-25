@@ -139,13 +139,13 @@ describe('A take’s page', () => {
     const asking = await screen.findByRole('alertdialog', { name: 'Delete this take?' })
     await user.click(within(asking).getByRole('button', { name: 'Delete' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
-    expect(router.state.location.search).toEqual({ record: true })
+    expect(router.state.location.search).toEqual({ takes: true })
     expect(takesStore.getState().takes).toEqual([])
   })
 
   it('opens from its row in the takes', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/edit/my-1?record=true', { storage: withTake() })
+    const { router } = await renderApp('/edit/my-1?takes=true', { storage: withTake() })
     const sheet = await screen.findByRole('dialog', { name: 'Takes' })
     await user.click(within(sheet).getByRole('link', { name: 'First go' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1/takes/take-1'))

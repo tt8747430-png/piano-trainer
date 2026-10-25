@@ -5,17 +5,19 @@ import { FINGERS } from '@/shared/lib/music'
 import { ToolKey } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { GlyphGrid } from './palette-keys'
+import { usePaletteReason } from './palette-reason'
 
 /**
  * The palette's Fingering, Flat's (ADR 0091): five keys, 1 to 5, each putting its finger on the
  * notes chosen in a hand (a note alone at its place, the chord's one note chosen with Alt ↑ ↓, a
  * range's single notes), the chosen note's finger pressed, the same key again taking it off. Greyed
- * where no note takes one: the section says why.
+ * where no note takes one, each key and the section's ⓘ saying why (ADR 0096).
  */
 export function FingeringKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const any = useEditorState((state) => fingerableNotes(state).length > 0)
+  const reason = usePaletteReason()
   // Each finger's key pressed where every note it would go on wears that finger.
   const pressed = useEditorState(
     useShallow((state) => {
@@ -29,6 +31,7 @@ export function FingeringKeys() {
         <ToolKey
           key={finger}
           label={t('fingerOf', { finger })}
+          reason={reason}
           pressed={pressed[i] ?? false}
           disabled={!any}
           className="font-display text-xl font-semibold"

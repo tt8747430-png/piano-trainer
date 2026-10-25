@@ -4,7 +4,7 @@ import { takeGrids, type Take } from '@/entities/take'
 import { barAt, TAKE_INTO, type TakeInto } from '@/features/score-editor'
 import { midi, MIDDLE_C, printedKeyName, type Midi } from '@/shared/lib/music'
 import type { Duration } from '@/shared/lib/notation'
-import { Dropdown, Fact, NamedSegmented, Segmented } from '@/shared/ui'
+import { Dropdown, NamedSegmented, Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { TAKES_PAGE } from '../model/use-editor-takes'
@@ -40,7 +40,7 @@ const EIGHTH = gridKey({ value: 8, dots: 0, triplet: false })
 /**
  * A take's page of the sheet (spec 2026-10-05 §4): where it goes, the key the hands split at, the
  * shortest note it is snapped to (a value of the meter it was played in), and Write from the caret's
- * bar.
+ * bar, which names it.
  */
 export function WriteTakePage({ take }: { take: Take }) {
   const { t } = useTranslation('editor')
@@ -75,11 +75,8 @@ export function WriteTakePage({ take }: { take: Take }) {
         }))}
         onChange={setChosen}
       />
-      <dl>
-        <Fact term={t('recorder.from')}>{fromBar}</Fact>
-      </dl>
       <Button size="lg" onClick={() => takes.write(take, { into, split, grid })}>
-        {t('recorder.writeIt')}
+        {t('recorder.writeFrom', { n: fromBar })}
       </Button>
     </div>
   )

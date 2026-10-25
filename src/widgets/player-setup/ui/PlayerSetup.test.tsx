@@ -95,19 +95,23 @@ describe('PlayerSetup', () => {
     expect(onFigures).toHaveBeenCalledWith({ nearest: false })
   })
 
-  it('fades the position From the chart only where no pattern the chart plays follows it', async () => {
+  it('fades the position From the chart only where no pattern the chart plays follows it, saying why beside it', async () => {
     const fromChart = { pattern: 'chart' } as const
-    const { unmount } = await renderSetup({ methodCodes: true, chart: ['flow'] }, fromChart)
-    expect(screen.getByText('This pattern plays its own shapes.')).toBeInTheDocument()
+    const { user, unmount } = await renderSetup({ methodCodes: true, chart: ['flow'] }, fromChart)
+    expect(screen.getByRole('switch', { name: 'Nearest' })).toHaveAttribute('aria-disabled', 'true')
+    await user.click(screen.getByRole('button', { name: 'About First chord' }))
+    expect(await screen.findByRole('dialog', { name: 'First chord' })).toHaveTextContent(
+      'This pattern plays its own shapes.',
+    )
     unmount()
     await renderSetup({ methodCodes: true, chart: ['flow', 'block'] }, fromChart)
-    expect(screen.queryByText('This pattern plays its own shapes.')).toBeNull()
+    expect(screen.queryByRole('button', { name: 'About First chord' })).toBeNull()
   })
 
   it('turns Nearest back on, the URL’s own', async () => {
     const { user, onFigures } = await renderSetup({}, { inversion: 2, nearest: false })
     expect(screen.getByRole('radio', { name: '2nd' })).toBeChecked()
-    expect(screen.getByText('Every chord in the first one’s position')).toBeInTheDocument()
+    expect(screen.getByRole('switch', { name: 'Nearest' })).not.toBeChecked()
     await user.click(screen.getByRole('switch', { name: /Nearest/ }))
     expect(onFigures).toHaveBeenCalledWith({ nearest: undefined })
   })

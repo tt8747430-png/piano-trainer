@@ -52,7 +52,6 @@ export interface ScoreEditorValue {
     /** The piece's id: its Player's and its editor's. */
     readonly id: string
     readonly title: string
-    readonly hasVersion: boolean
     readonly playing: boolean
     /** Whose music: a catalog piece's version, or an own song. */
     readonly kind: 'version' | 'song'

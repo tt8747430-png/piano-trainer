@@ -28,8 +28,8 @@ export const music: LocaleResources['music'] = {
     },
     first: 'Первый аккорд',
     nearest: 'Плавно',
-    nearestOn: 'Каждый следующий аккорд сдвигается как можно меньше',
-    nearestOff: 'Все аккорды в положении первого',
+    nearestInfo:
+      'Включено — каждый следующий аккорд сдвигается как можно меньше; выключено — все аккорды остаются в положении первого.',
   },
   // How big a chord is: its stack of notes, triads to 13ths.
   chordSize: {

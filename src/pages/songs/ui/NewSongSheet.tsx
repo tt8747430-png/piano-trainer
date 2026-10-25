@@ -20,8 +20,9 @@ import { ScoreSetupSheet } from './ScoreSetupSheet'
 
 /**
  * New song, the Songs page's floating button: its title, its key among the twelve notes and its meter, each a tap; then Make, which
- * opens it in the score editor, or Record beside it, which opens it on its takes. Its `trigger` is
- * the floating button unless another is given (an empty shelf's).
+ * opens it in the score editor, or Record beside it, which opens it with Record pressed (ADR 0096):
+ * counting in at once with a MIDI keyboard, else saying it needs one. Its `trigger` is the floating
+ * button unless another is given (an empty shelf's).
  */
 export function NewSongSheet({ trigger }: { trigger?: ReactElement }) {
   const { t } = useTranslation('songs')
@@ -34,7 +35,7 @@ export function NewSongSheet({ trigger }: { trigger?: ReactElement }) {
   const [setup, setSetup] = useState<ScoreSetup>(SCORE_TEMPLATES.piano)
   const [customizing, customize] = useState(false)
   const summary = useSetupSummary(setup)
-  /** Makes the song and opens it in the score editor, its takes open to record into it. */
+  /** Makes the song and opens it in the score editor, Record pressed where it was made to record. */
   const make = (record: boolean) => {
     const id = makeSong(store, { title, key: keyFromParam(key), meter, setup })
     if (id) void navigate({ to: '/edit/$pieceId', params: { pieceId: id }, search: { record } })

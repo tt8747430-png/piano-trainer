@@ -61,6 +61,8 @@ export function useSheetChoice(choice: SheetChoice) {
     latest.current = choice
   })
 
+  /** Lets go of the click a drag ended with, while it is still waited for. */
+  const unswallow = useRef<(() => void) | null>(null)
   const end = () => {
     if (press.current) window.clearTimeout(press.current.timer)
     press.current = null
@@ -73,9 +75,21 @@ export function useSheetChoice(choice: SheetChoice) {
       click.preventDefault()
     }
     window.addEventListener('click', swallow, { capture: true, once: true })
-    window.setTimeout(() => window.removeEventListener('click', swallow, { capture: true }), 0)
+    const release = () => {
+      window.removeEventListener('click', swallow, { capture: true })
+      unswallow.current = null
+    }
+    unswallow.current = release
+    window.setTimeout(release, 0)
   }
-  useEffect(() => end, [])
+  // Leaving, nothing waits for a click: a sheet gone takes no later click with it.
+  useEffect(
+    () => () => {
+      end()
+      unswallow.current?.()
+    },
+    [],
+  )
 
   return (bar: number, origin: SheetPoint) => ({
     'data-choose-at': bar,

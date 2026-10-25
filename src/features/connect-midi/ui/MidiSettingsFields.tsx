@@ -3,7 +3,7 @@ import { selectMidi, useSettings, useSettingsStoreApi } from '@/entities/setting
 import { setMidi } from '@/features/set-preference'
 import { OCTAVE_SHIFTS, PEDAL_WAYS, type OctaveShift } from '@/shared/lib'
 import { TOUCHES } from '@/shared/lib/schedule'
-import { Dropdown, Segmented, SettingField, SwitchRow } from '@/shared/ui'
+import { Dropdown, Segmented, SettingField, SettingRows, SwitchRow } from '@/shared/ui'
 import { useMidiConnection } from '../use-midi-connection'
 
 /** Any keyboard, in the Keyboard choice: a name no keyboard has. */
@@ -14,10 +14,11 @@ const shiftLabel = (shift: OctaveShift) =>
   shift > 0 ? `+${shift}` : shift < 0 ? `−${-shift}` : '0'
 
 /**
- * The MIDI keyboard's settings, as Settings lists them under its connection (spec 2026-10-09 §3.1):
- * the keyboard heard (the ones connected now, and the one chosen while it is away), whether the app
- * sounds its keys or its own music through it, its octave shift, its touch and its pedal's way round.
- * Nothing where the browser cannot connect a keyboard.
+ * The MIDI keyboard's settings, as Settings lists them under its connection (spec 2026-10-09 §3.1),
+ * each one row whose ⓘ says what it does (ADR 0096): the keyboard heard (the ones connected now, and
+ * the one chosen while it is away), whether the app sounds its keys or its own music through it, its
+ * octave shift, its touch and its pedal's way round. Nothing where the browser cannot connect a
+ * keyboard.
  */
 export function MidiSettingsFields() {
   const { t } = useTranslation('common')
@@ -29,8 +30,12 @@ export function MidiSettingsFields() {
   const connected = status && 'devices' in status ? status.devices : []
   const away = midi.device !== null && !connected.includes(midi.device) ? [midi.device] : []
   return (
-    <div className="flex flex-col gap-4">
-      <SettingField label={t('midiSettings.device.label')} detail={t('midiSettings.device.detail')}>
+    <SettingRows>
+      <SettingField
+        label={t('midiSettings.device.label')}
+        info={t('midiSettings.device.detail')}
+        layout="beside"
+      >
         <Dropdown
           label={t('midiSettings.device.label')}
           bare
@@ -44,27 +49,23 @@ export function MidiSettingsFields() {
             })),
           ]}
           onChange={(device) => setMidi(store, { device: device === ANY ? null : device })}
-          className="self-start"
         />
       </SettingField>
-      <div>
-        <SwitchRow
-          label={t('midiSettings.sound')}
-          detail={t('midiSettings.soundNote')}
-          checked={midi.sound}
-          onCheckedChange={(sound) => setMidi(store, { sound })}
-        />
-        <SwitchRow
-          label={t('midiSettings.throughPiano')}
-          detail={t('midiSettings.throughPianoNote')}
-          checked={midi.throughPiano}
-          onCheckedChange={(throughPiano) => setMidi(store, { throughPiano })}
-          className="border-b-0"
-        />
-      </div>
+      <SwitchRow
+        label={t('midiSettings.sound')}
+        info={t('midiSettings.soundNote')}
+        checked={midi.sound}
+        onCheckedChange={(sound) => setMidi(store, { sound })}
+      />
+      <SwitchRow
+        label={t('midiSettings.throughPiano')}
+        info={t('midiSettings.throughPianoNote')}
+        checked={midi.throughPiano}
+        onCheckedChange={(throughPiano) => setMidi(store, { throughPiano })}
+      />
       <SettingField
         label={t('midiSettings.octaveShift.label')}
-        detail={t('midiSettings.octaveShift.detail')}
+        info={t('midiSettings.octaveShift.detail')}
       >
         <Segmented
           label={t('midiSettings.octaveShift.label')}
@@ -73,7 +74,7 @@ export function MidiSettingsFields() {
           onChange={(octaveShift) => setMidi(store, { octaveShift })}
         />
       </SettingField>
-      <SettingField label={t('midiSettings.touch.label')} detail={t('midiSettings.touch.detail')}>
+      <SettingField label={t('midiSettings.touch.label')} info={t('midiSettings.touch.detail')}>
         <Segmented
           label={t('midiSettings.touch.label')}
           value={midi.touch}
@@ -81,7 +82,7 @@ export function MidiSettingsFields() {
           onChange={(touch) => setMidi(store, { touch })}
         />
       </SettingField>
-      <SettingField label={t('midiSettings.pedal.label')} detail={t('midiSettings.pedal.detail')}>
+      <SettingField label={t('midiSettings.pedal.label')} info={t('midiSettings.pedal.detail')}>
         <Segmented
           label={t('midiSettings.pedal.label')}
           value={midi.pedal}
@@ -89,6 +90,6 @@ export function MidiSettingsFields() {
           onChange={(pedal) => setMidi(store, { pedal })}
         />
       </SettingField>
-    </div>
+    </SettingRows>
   )
 }

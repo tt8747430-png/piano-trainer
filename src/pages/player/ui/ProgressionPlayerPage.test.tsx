@@ -70,12 +70,16 @@ describe('A progression in the Player', () => {
     expect(changes.slice(0, 3)).toEqual([5, 11, 4]) // F, B, E: each from its 3rd
   })
 
-  it('fades the inversion under a pattern that plays its own shapes', async () => {
+  it('fades the inversion under a pattern that plays its own shapes, saying why beside it', async () => {
     const user = userEvent.setup()
     await renderApp('/play/progression?p=ii-V-I&key=C&pattern=flow')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
     expect(screen.getByRole('radio', { name: '1st' })).toHaveAttribute('data-disabled')
-    expect(screen.getByText('This pattern plays its own shapes.')).toBeInTheDocument()
+    expect(screen.queryByText('This pattern plays its own shapes.')).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'About First chord' }))
+    expect(await screen.findByRole('dialog', { name: 'First chord' })).toHaveTextContent(
+      'This pattern plays its own shapes.',
+    )
   })
 
   it('walks the progression through the keys chosen in the Setup, titled by the walk', async () => {

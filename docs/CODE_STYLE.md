@@ -30,7 +30,7 @@ A container wires data to presentational children. One job each.
   made), `NoteChoice` (a note as written: its letter, then ♮ # ♭) and `KeyChoice` (a key as written: its tonic so,
   then Major · Minor, only the keys a signature writes), `Labelled` (a choice under its name:
   one field of a page's `grid-fields`), `NavTabs` with `NavTab` (one thing's views as tabs that are router links; the page says which is shown, never the router's active match), `InversionChoice` (each inversion drawn by `InversionGlyph`), `ChordSizeField`, `SwitchRow` (on or off in
-  its row), `ToggleTile` in a `ToggleGrid` (on or off as an icon over its name), `ToolButton` (a palette's tool: an
+  its row), `InfoTip` (a control's explanation: an ⓘ beside its name opening a popover, §10), `ToggleTile` in a `ToggleGrid` (on or off as an icon over its name), `ToolButton` (a palette's tool: an
   icon or glyph, named in a tooltip), `LearnedBadge`, `TypedField`
   (music typed by name, in the book serif) and `NameField` (a name the learner gives, in the controls' face), `PlayToggle` (a chord or note pressed while it sounds) and `ChordButton` over it, `PlayLabel`,
   `ToneChip`, `Fact`, `RowLink` and `RowGroup` (a row that leads to a page: a titled grid of row cards), `PAGE_TILES`, `SearchField` (a screen's search box), `PAINT`
@@ -307,6 +307,10 @@ box)` gives an element its box, and `stubScrolling({ clientWidth, scrollWidth })
 - **No sentence that repeats what a label, icon or layout already says. No how-to paragraphs.** Empty states and
   errors get one short line. The one exception is **lessons** (`entities/lesson`, Learn): a lesson teaches music, in
   prose with examples that play, and never explains a button.
+- **An explanation is an ⓘ** (ADR 0096): what a control does, where its name does not say, is the `InfoTip` beside
+  its name (`info` on `SwitchRow`, `SettingField`, `Labelled`, `MenuSection`, a palette's section), never a line
+  under it; a term's meaning (dolce: sweetly) and why a tool is greyed are its tooltip. A list of things to choose
+  still says what each is in its row (a pattern's idea, a song's credit).
 - Every interface string goes through i18next, in **both** `en` and `ru`
   (`src/shared/i18n/locales/{en,ru}/<namespace>.ts`; Russian is typed against English). A namespace is a place's:
   `learn` holds Learn's and a lesson's, `practice` Practice's pages', and a word two places share is `music`'s

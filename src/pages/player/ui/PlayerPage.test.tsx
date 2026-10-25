@@ -196,10 +196,15 @@ describe('Player', () => {
     await user.click(await screen.findByRole('button', { name: 'Play' }))
     expect(audio.recordings).toEqual([])
     await user.click(screen.getByRole('button', { name: 'Setup' }))
-    const recording = await screen.findByRole('button', { name: /^Recording/ })
+    const recording = await screen.findByRole('button', { name: 'Recording' })
     expect(recording).toBeDisabled()
     expect(recording).toHaveAttribute('aria-pressed', 'false')
-    expect(recording).toHaveTextContent('Only in D minor')
+    // Its tooltip says why, and so does the ⓘ beside How it plays, which a finger can reach.
+    expect(recording).toHaveAccessibleDescription('Only in D minor')
+    await user.click(screen.getByRole('button', { name: 'About How it plays' }))
+    expect(await screen.findByRole('dialog', { name: 'How it plays' })).toHaveTextContent(
+      'The recording plays only in D minor, its own key.',
+    )
   })
 
   it('plays no recording in Wait mode', async () => {

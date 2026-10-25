@@ -30,7 +30,7 @@ export function PracticeSwitches() {
       <SwitchRow
         icon={<Layers />}
         label={t('toggles.positions')}
-        detail={t('view.positionsDetail')}
+        info={t('view.positionsDetail')}
         checked={practice.positions}
         onCheckedChange={(on) => setPracticeToggle(store, 'positions', on)}
       />

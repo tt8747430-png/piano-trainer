@@ -34,7 +34,7 @@ describe('Settings', () => {
     expect(screen.getByRole('radio', { name: 'System' })).toHaveAttribute('aria-checked', 'true')
   })
 
-  it('groups each choice under its own heading', async () => {
+  it('groups the settings as an app’s settings page reads, each under its own heading', async () => {
     await renderApp('/settings')
     const language = await screen.findByRole('radiogroup', { name: 'Language' })
     expect(
@@ -49,12 +49,26 @@ describe('Settings', () => {
         .map((b) => b.textContent),
     ).toEqual(['System', 'Light', 'Dark'])
     const headings = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
-    expect(headings.slice(headings.indexOf('Theme'), headings.indexOf('Theme') + 5)).toEqual([
+    expect(headings.slice(headings.indexOf('Language'))).toEqual([
+      'Language',
       'Theme',
-      'Layout',
+      'Appearance',
       'Keyboard',
-      'Floating buttons',
       'MIDI keyboard',
+      'Recording',
+      'Backup',
+      'Progress',
+    ])
+    // How the keys look, where a page's keys sit, how they play, and the bar over them.
+    expect(
+      within(screen.getByRole('region', { name: 'Keyboard' }))
+        .getAllByRole('heading', { level: 3 })
+        .map((h) => h.textContent),
+    ).toEqual([
+      'How the keys look',
+      'Where a page’s keys sit',
+      'How they play',
+      'The bar over the keys',
     ])
   })
 
@@ -63,8 +77,33 @@ describe('Settings', () => {
     const { settingsStore } = await renderApp('/settings')
     await user.click(await screen.findByRole('radio', { name: 'Right' }))
     expect(settingsStore.getState().floating.place).toBe('right')
-    await user.click(screen.getByRole('switch', { name: /^Show their names/ }))
+    const appearance = screen.getByRole('region', { name: 'Appearance' })
+    await user.click(within(appearance).getByRole('switch', { name: 'Name the floating buttons' }))
     expect(settingsStore.getState().floating.labels).toBe(true)
+  })
+
+  it('keeps how a take is recorded under Recording: the metronome and the melody, saved', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/settings')
+    const recording = await screen.findByRole('region', { name: 'Recording' })
+    await user.click(within(recording).getByRole('switch', { name: 'Metronome' }))
+    await user.click(within(recording).getByRole('switch', { name: 'Melody' }))
+    expect(settingsStore.getState().recorder).toEqual({ click: false, tune: true })
+    await user.click(within(recording).getByRole('button', { name: 'About Metronome' }))
+    expect(await screen.findByRole('dialog', { name: 'Metronome' })).toHaveTextContent(
+      'The beat goes on after the count-in',
+    )
+  })
+
+  it('says what a backup holds beside its heading, never in a line under it', async () => {
+    const user = userEvent.setup()
+    await renderApp('/settings')
+    const backup = await screen.findByRole('region', { name: 'Backup' })
+    expect(backup).not.toHaveTextContent('live on this device only')
+    await user.click(within(backup).getByRole('button', { name: 'About Backup' }))
+    expect(await screen.findByRole('dialog', { name: 'Backup' })).toHaveTextContent(
+      'live on this device only',
+    )
   })
 
   it('makes every screen’s title small, saved', async () => {
@@ -93,11 +132,15 @@ describe('Settings', () => {
     })
   })
 
-  it('says what each keyboard choice does, under its name', async () => {
+  it('says what a keyboard choice does in a popover beside its name, never in a line under it', async () => {
+    const user = userEvent.setup()
     await renderApp('/settings')
-    const [keys] = await screen.findAllByText('Key size')
-    expect(keys).toHaveClass('text-foreground')
-    expect(keys?.nextElementSibling).toHaveTextContent(/fills the width/)
+    await user.click(await screen.findByRole('button', { name: 'About Key size' }))
+    expect(await screen.findByRole('dialog', { name: 'Key size' })).toHaveTextContent(
+      /fills the width/,
+    )
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByText(/fills the width/)).toBeNull())
   })
 
   it('keeps on the bar over the keys only the buttons chosen, in the bar’s order', async () => {
