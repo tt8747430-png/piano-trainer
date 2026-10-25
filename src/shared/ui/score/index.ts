@@ -20,6 +20,7 @@ export { scoreHeight, staffHeight, VERSE, versesOf } from './size'
 export {
   barsBand,
   caretLine,
+  loopEnds,
   MARK,
   pickAt,
   rangeBand,

@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
-import { barsBand, ScoreMark, type ScoreLayout } from '@/shared/ui/score'
+import { barsBand, loopEnds, ScoreMark, type ScoreLayout } from '@/shared/ui/score'
 import { LoopGrip } from './LoopGrip'
 
 /**
  * The loop, the Player's bars chosen (ADR 0096): one light band of the selection colour over every
  * staff in sight for its bars, its notes coloured as the editor's chosen notes are, and a grip at
- * each end (spec §2.6).
+ * each end on its barline (spec §2.6), clear of an accidental after the first.
  */
 export function LoopBand({
   layout,
@@ -30,8 +30,8 @@ export function LoopBand({
     top: layout.staffTop,
     bottom: layout.staffBottom,
   })
-  const left = box.left
-  const right = box.left + box.width
+  // Each grip on its barline, down the band's edge.
+  const ends = loopEnds(layout, from - firstBar, to - firstBar)
   // The grips move bars of this line: their measures, offset to the piece's bars.
   const along = (bar: number) => bar - firstBar
   return (
@@ -40,7 +40,7 @@ export function LoopBand({
       {from === loop.first ? (
         <LoopGrip
           label={t('sheet.loopStart')}
-          x={left}
+          x={ends.start}
           top={box.top}
           height={box.height}
           bar={along(loop.first)}
@@ -53,7 +53,7 @@ export function LoopBand({
       {to === loop.last ? (
         <LoopGrip
           label={t('sheet.loopEnd')}
-          x={right}
+          x={ends.end}
           top={box.top}
           height={box.height}
           bar={along(loop.last)}
