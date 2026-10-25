@@ -36,11 +36,14 @@ export function useRegisterSW(options: RegisterOptions = {}) {
   }
 }
 
-/** Whether a new version is waiting from the next render on; the setup makes it none per test. */
+/**
+ * Whether a new version is waiting from the next render on; the setup makes it none per test. Its
+ * two mocks are the same ones every time, reset as new: a worker keeps every mock made in it.
+ */
 export function stubServiceWorker({ waiting }: { waiting: boolean }) {
   registration.waiting = waiting
-  registration.updateServiceWorker = vi.fn(async (_reloadPage?: boolean) => {})
-  registration.worker = { update: vi.fn(async () => undefined) }
+  registration.updateServiceWorker.mockReset()
+  registration.worker.update.mockReset()
   registeredWith = {}
   return {
     updateServiceWorker: registration.updateServiceWorker,
