@@ -616,6 +616,18 @@ describe('RowLink', () => {
     expect(link).toHaveAttribute('href', '/practice/chords')
     expect(link.querySelector('[data-slot="row-tile"]')).toHaveClass('bg-paint-sand')
   })
+
+  it('shows what it holds under its title and detail', () => {
+    render(
+      <RowLink title="Amazing Grace" detail="Hymn" render={<a href="/songs/amazing" />}>
+        <span>G G7 C D</span>
+      </RowLink>,
+    )
+    const link = screen.getByRole('link', { name: 'Amazing Grace Hymn G G7 C D' })
+    expect(
+      within(link).getByText('Hymn').compareDocumentPosition(within(link).getByText('G G7 C D')),
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+  })
 })
 
 describe('RowGroup', () => {

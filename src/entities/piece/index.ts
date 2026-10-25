@@ -54,6 +54,7 @@ export { writeStaff } from './model/write-staff'
 export { gatherLyrics, readLyrics, singingNotes, writeLyrics, type Verse } from './model/lyrics'
 export { fourToALine, wholeBar } from './model/chart-layout'
 export { chordsOfPiece, skillsOfPiece } from './model/skills'
+export { pieceChords } from './model/piece-chords'
 export {
   choosableChordSize,
   entriesInKey,

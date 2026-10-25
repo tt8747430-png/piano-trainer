@@ -68,6 +68,16 @@ describe('Songs', () => {
     expect(within(song).getByRole('img', { name: 'Learned' })).toBeInTheDocument()
   })
 
+  it('lists a song’s first chords under its title, which its name leaves to its page', async () => {
+    await renderApp('/songs')
+    const song = await screen.findByRole('link', { name: /Still, my soul, be still/ })
+    expect(within(song).getByText('G C Em G/B')).toBeVisible()
+    expect(song).not.toHaveAccessibleName(/G\/B/)
+    // A listing has no chart, so no chords.
+    const listing = screen.getAllByRole('link', { name: /No chart yet/ })[0]
+    expect(listing?.querySelector('[data-slot="row-chords"]')).toBeNull()
+  })
+
   it('lists songs only: no study or progression', async () => {
     await renderApp('/songs')
     expect(await screen.findByRole('heading', { level: 2, name: 'Hymns' })).toBeInTheDocument()
