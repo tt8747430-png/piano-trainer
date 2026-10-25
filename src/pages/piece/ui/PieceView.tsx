@@ -21,7 +21,8 @@ import { Button } from '@/shared/ui/primitives/button'
 import { sectionPaint } from '../model/section-paint'
 import { useSongLessons } from '../model/use-song-lessons'
 import { LearnCard } from './LearnCard'
-import { PieceAbout, PieceCredits } from './PieceAbout'
+import { PieceAbout } from './PieceAbout'
+import { PieceByline } from './PieceByline'
 import { PieceChords } from './PieceChords'
 import { PieceFactCards } from './PieceFactCards'
 import { OwnMusicAsk } from './OwnMusicAsk'
@@ -33,12 +34,13 @@ import { SectionRows } from './SectionRows'
 /**
  * A piece with a chart, in one column: Learn the song (ADR 0100). Its bar (Back, the title, then
  * Edit the score, Learned and More: Check these chords, and for the learner's own music Share and
- * its way back, asked first); the learning card, where to go next and its lessons done; its key, time
- * and tempo as cards, and who wrote it; its chords as diagrams, each opening its sheet, and its
- * sections, each a row to its page of lessons (a song of one section has that section's lessons
- * here, its chords to learn among them); Play along, the whole song; then its note and the way to its
- * key's scale. Its chart is the Player's: the page shows no keys but a chord's sheet's. Practise floats
- * in the thumb's reach, opening the Player as it was left.
+ * its way back, asked first); under the title its byline (what else it is called, Your version, its
+ * stage, who wrote it); the learning card, where to go next and its lessons done; its key, time and
+ * tempo as cards; its chords as diagrams, each opening its sheet, and its sections, each a row to its
+ * page of lessons (a song of one section has that section's lessons here, its chords to learn among
+ * them); Play along, the whole song; then its note and the way to its key's scale. Its chart is the
+ * Player's: the page shows no keys but a chord's sheet's. Practise floats in the thumb's reach,
+ * opening the Player as it was left.
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
@@ -132,10 +134,10 @@ export function PieceView({ piece }: { piece: Piece }) {
           </>
         }
       />
+      <PieceByline piece={piece} />
+      <ShareSaid said={shared.said} />
       <LearnCard piece={piece} headings={headings} sections={sections} />
       <PieceFactCards piece={piece} />
-      <PieceCredits entry={piece} />
-      <ShareSaid said={shared.said} />
       {/* A song of one section has its lessons here, its chords among them to learn. */}
       {only ? (
         <SectionLessonGroups

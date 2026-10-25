@@ -43,8 +43,10 @@ export const piece = {
     change: 'From {{from}} to {{to}}',
     bar: 'Bar {{n}}',
     bars: 'Bars {{first}}–{{last}}',
-    pattern: 'Pattern',
-    patternOn: 'Play the pattern on {{chord}}',
+    // Each pattern the section is played with, by its name; where it is looped, on its chord.
+    pattern_one: 'Pattern',
+    pattern_other: 'Patterns',
+    patternAt: 'On {{chord}} · {{bars}}',
     done: 'Done',
   },
   tempo: 'Tempo',

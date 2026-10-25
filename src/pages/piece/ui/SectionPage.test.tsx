@@ -73,7 +73,7 @@ describe('a section’s page (ADR 0100)', () => {
       ['From G to Am Bars 10–11', '/play/bz5?loop=10-11'],
     ])
     expect(rowsOf('Pattern')).toEqual([
-      ['Play the pattern on Em 4 · Harmonic figuration', '/play/bz5?loop=9-9'],
+      ['4 · Harmonic figuration On Em · Bar 9', '/play/bz5?loop=9-9'],
     ])
     // Every lesson's tile in the chorus's paint.
     const tiles = document.querySelectorAll('[data-slot="row-tile"]')
@@ -83,9 +83,12 @@ describe('a section’s page (ADR 0100)', () => {
 
   it('says how many times a section of one run goes round, and loops one round', async () => {
     await renderApp('/songs/bz5/sections/1')
-    expect(
-      await screen.findByText('G · C · Em · G/B · C/E · Dsus4 · D/F#', { exact: false }),
-    ).toHaveTextContent('2 × G · C · Em · G/B · C/E · Dsus4 · D/F#')
+    // The run as it goes round, its C held back to (as its whole-section row has it): not the
+    // chords it has, each once.
+    const [card] = await screen.findAllByText('G · C · Em · G/B · C · C/E · Dsus4 · D/F#', {
+      exact: false,
+    })
+    expect(card).toHaveTextContent('2 × G · C · Em · G/B · C · C/E · Dsus4 · D/F#')
     expect(rowsOf('Play the chords in time')).toEqual([
       ['The whole section G · C · Em · G/B · C · C/E · Dsus4 · D/F#', '/play/bz5?loop=1-4'],
     ])

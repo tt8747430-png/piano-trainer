@@ -174,9 +174,10 @@ describe('Piece', () => {
       ['1st sequence C · Dm · G · C', '/play/ex3?loop=1-4'],
       ['2nd sequence F · C · G · C', '/play/ex3?loop=5-8'],
     ])
-    expect(
-      screen.getByRole('link', { name: 'Play the pattern on C 1 · Bass + chords' }),
-    ).toHaveAttribute('href', '/play/ex3?loop=1-1')
+    expect(screen.getByRole('link', { name: '1 · Bass + chords On C · Bar 1' })).toHaveAttribute(
+      'href',
+      '/play/ex3?loop=1-1',
+    )
   })
 
   it('checks the song’s chords from More, its one action there', async () => {

@@ -83,14 +83,18 @@ export function SectionLessonGroups({
         </section>
       ) : null}
       {patterns.length > 0 ? (
-        <RowGroup title={t('learnSection.pattern')}>
+        <RowGroup title={t('learnSection.pattern', { count: patterns.length })}>
+          {/* A pattern is named by what it is; where it is looped, by its chord and bar. */}
           {patterns.map((pattern) => (
             <LessonRow
               key={pattern.pattern}
               pieceId={piece.id}
               lesson={pattern}
-              title={t('learnSection.patternOn', { chord: pattern.symbol })}
-              detail={patternName(pattern.pattern)}
+              title={patternName(pattern.pattern) ?? t('learnSection.pattern', { count: 1 })}
+              detail={t('learnSection.patternAt', {
+                chord: pattern.symbol,
+                bars: barsName(pattern.bars),
+              })}
               icon={AudioWaveform}
               paint={paint}
             />

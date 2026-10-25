@@ -7,13 +7,13 @@ import type { LessonProgress } from '../model/song-progress'
 import { LessonsMeter } from './LessonsMeter'
 
 /**
- * A section's card (spec §3.2): its tile in its paint beside the song's title, the section's chords in
- * the order they first sound (`3 ×` before them where it is one run played round), and its lessons
- * done.
+ * A section's card (spec §3.2): its tile in its paint beside the song's title, the section's chords
+ * (where it is one run played round, `3 ×` before the run as it goes; else its chords in the order
+ * they first sound), and its lessons done.
  */
 export function SectionCard({
   title,
-  lessons: { chords, rounds },
+  lessons: { chords, rounds, sequences },
   paint,
   progress,
 }: {
@@ -24,6 +24,8 @@ export function SectionCard({
   progress: LessonProgress
 }) {
   const { t } = useTranslation('piece')
+  const [round] = sequences
+  const shown = rounds > 1 && round ? round.symbols : chords.map((chord) => chord.symbol)
   return (
     <div className="flex items-start gap-4 card p-5">
       <span
@@ -45,7 +47,7 @@ export function SectionCard({
                 {t('learnSection.rounds', { n: rounds })}{' '}
               </span>
             ) : null}
-            {chords.map((chord) => chord.symbol).join(' · ')}
+            {shown.join(' · ')}
           </p>
         ) : (
           <p className="text-lg text-muted-foreground">{t('learnSection.noChords')}</p>
