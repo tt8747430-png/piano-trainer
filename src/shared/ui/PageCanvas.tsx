@@ -30,19 +30,45 @@ const SETTLE_MS = 160
 /** How long the zoom's buttons stay in sight once the pages are left alone. */
 const CONTROLS_MS = 2500
 
+/** The tallest line on the pages (`data-slot="sheet-line"`), at their size: a fit keeps one whole in sight. */
+function tallestLine(pages: HTMLElement | null): number | undefined {
+  let tallest = 0
+  for (const line of pages?.querySelectorAll<HTMLElement>('[data-slot="sheet-line"]') ?? [])
+    tallest = Math.max(tallest, line.offsetHeight)
+  return tallest > 0 ? tallest : undefined
+}
+
 /**
  * Pages floating on a canvas (ADR 0075), as a notation app's page view: drawn at their print size,
  * moved by a drag (a click or a double click on them still reaches them), zoomed by a pinch, by Ctrl
- * or ⌘ with the wheel, or by its buttons; opened with a page's width fitted to the screen. A grip
- * (`data-grip`: a note's, the loop's) drags itself, not the canvas. The zoom's buttons come into sight
- * as the pages are touched, moved or zoomed, and fade once they are left alone, or at a tap on them.
+ * or ⌘ with the wheel, or by its buttons; opened with a page's width fitted to the screen, in the room
+ * what floats over its right edge leaves (`covered`: the editor's palette beside the pages), and no
+ * larger than shows a whole line in the screen's height (a phone on its side). What is brought into
+ * sight (the caret's line, the playhead's) comes clear of what floats over it, and stays in sight as
+ * the pages are fitted again. A grip (`data-grip`: a note's, the loop's) drags itself, not the canvas.
+ * The zoom's buttons come into sight as the pages are touched, moved or zoomed, and fade once they are
+ * left alone, or at a tap on them.
  */
-export function PageCanvas({ column, children }: { column: number; children: ReactNode }) {
+export function PageCanvas({
+  column,
+  covered,
+  children,
+}: {
+  column: number
+  /**
+   * What floats over the canvas without moving with it (ADR 0081): over its right edge (the editor's
+   * palette beside the pages) and its foot (the dock), in CSS px.
+   */
+  covered?: { readonly right?: number; readonly bottom?: number } | undefined
+  children: ReactNode
+}) {
   const { t } = useTranslation('music')
   const viewport = useRef<HTMLDivElement>(null)
   const content = useRef<HTMLDivElement>(null)
   const screen = useElementSize(viewport)
   const sheet = useElementSize(content)
+  const right = covered?.right ?? 0
+  const bottom = covered?.bottom ?? 0
   const view = useRef<CanvasView>({ x: 0, y: 0, zoom: 1 })
   const [zoom, setZoom] = useState(1)
   // Fitted until the learner moves or zooms it; fitted again when the screen or the pages change.
@@ -75,10 +101,40 @@ export function PageCanvas({ column, children }: { column: number; children: Rea
     setZoom(next.zoom)
   }, [])
 
+  // The line last brought into sight: it stays in sight as the pages are fitted again.
+  const revealed = useRef<Element | null>(null)
+  const revealElement = useCallback(
+    (target: Revealed) => {
+      const pages = content.current
+      if (!pages) return
+      if (target instanceof Element) revealed.current = target
+      const box = target instanceof Element ? target.getBoundingClientRect() : target
+      const origin = pages.getBoundingClientRect()
+      const { zoom: at } = view.current
+      show(
+        reveal(
+          view.current,
+          {
+            top: (box.top - origin.top) / at,
+            bottom: (box.bottom - origin.top) / at,
+            left: (box.left - origin.left) / at,
+            right: (box.right - origin.left) / at,
+          },
+          // Clear of what floats over the canvas.
+          { width: screen.width - right, height: screen.height - bottom },
+        ),
+      )
+    },
+    [show, screen.width, screen.height, right, bottom],
+  )
+
   const fit = useCallback(() => {
     if (screen.width <= 0 || sheet.width <= 0) return
-    show(fitWidth(sheet, column, screen))
-  }, [show, sheet, column, screen])
+    show(fitWidth(sheet, column, screen, { right, line: tallestLine(content.current) }))
+    // Fitted again (the screen turned, the pages engraved), the caret's line or the playhead's stays
+    // in sight.
+    if (revealed.current?.isConnected) revealElement(revealed.current)
+  }, [show, sheet, column, screen, right, revealElement])
 
   useLayoutEffect(() => {
     if (!moved.current) fit()
@@ -176,29 +232,6 @@ export function PageCanvas({ column, children }: { column: number; children: Rea
     setTimeout(() => window.removeEventListener('click', swallow, { capture: true }), 0)
     dragging.current = false
   }
-
-  const revealElement = useCallback(
-    (revealed: Revealed) => {
-      const pages = content.current
-      if (!pages) return
-      const box = revealed instanceof Element ? revealed.getBoundingClientRect() : revealed
-      const origin = pages.getBoundingClientRect()
-      const { zoom: at } = view.current
-      show(
-        reveal(
-          view.current,
-          {
-            top: (box.top - origin.top) / at,
-            bottom: (box.bottom - origin.top) / at,
-            left: (box.left - origin.left) / at,
-            right: (box.right - origin.left) / at,
-          },
-          screen,
-        ),
-      )
-    },
-    [show, screen],
-  )
 
   return (
     <div

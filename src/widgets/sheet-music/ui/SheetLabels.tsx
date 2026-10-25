@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react'
 import type { Performance } from '@/shared/lib/arrangement'
 import { usePositionName } from '@/shared/ui'
-import { barLabels, LabelRow, labelRow, type ScoreLayout } from '@/shared/ui/score'
+import { barLabels, LabelRow, labelRow, labelScale, type ScoreLayout } from '@/shared/ui/score'
 import { chordPositions } from '../model/chord-positions'
 
 /**
@@ -19,7 +19,10 @@ export const SheetLabels = memo(function SheetLabels({
   chordNames = true,
   tempos = [],
   firstBar = 0,
+  size = 1,
 }: {
+  /** The line's size: its labels drawn with it, never under `labelScale`'s least. */
+  size?: number
   /** Each bar of the piece's tempo mark, said after its number. */
   tempos?: readonly (number | undefined)[]
   layout: ScoreLayout
@@ -62,7 +65,8 @@ export const SheetLabels = memo(function SheetLabels({
       headings={headings}
       chords={chords}
       meter={performance.meter}
-      row={labelRow(chordNames)}
+      row={labelRow(chordNames, size)}
+      size={labelScale(size)}
     />
   )
 })

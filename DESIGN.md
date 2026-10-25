@@ -505,8 +505,11 @@ and a Piece's chart pin their keyboard to the top while the page scrolls.
 longest line, so bars line up down the chart; a bar is parted by a 1px control line and each line closes with one. A
 bar is at most 14rem wide, so a line of two reads at a glance on a laptop. The same rule spreads a score's lines,
 in the Player and the editor: each line is justified to its bars' share of the longest line's width. On a short
-sheet (a phone on its side) the editor draws its lines smaller, down to 0.6 of their size, so a whole system is in sight. The
-layouts are named alike wherever they are chosen: Across · Down · Pages (В строку · Строками · Страницы).
+sheet (a phone on its side) both screens draw a line smaller, down to 0.4 of its size, so a whole system is in sight
+over the keys (Panorama's one line as engraved, its notes far over or under its staves anywhere in the piece, its
+labels' row smaller with it); Pages open with a page's width fitted beside what floats over its right edge (the
+editor's palette) and no larger than shows a whole line, the caret's or the playhead's line kept in sight. The
+layouts are named alike wherever they are chosen: Panorama · Scroll · Pages (Панорама · Прокрутка · Страницы).
 
 ## Elevation & Depth
 

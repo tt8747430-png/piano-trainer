@@ -60,8 +60,10 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
   // What floats over the sheet's foot, measured: the sheet has room to scroll its last line above it.
   const sheet = useRef<HTMLDivElement>(null)
   const foot = useRef<HTMLDivElement>(null)
+  const side = useRef<HTMLDivElement>(null)
   const { height } = useElementSize(sheet)
   const { height: below } = useElementSize(foot)
+  const { width: besideWidth } = useElementSize(side)
   // The sheet never leaves the caret under what floats at its foot: as the palette opens (the foot
   // grows), the caret's staff scrolls into the room above it (spec 2026-10-23).
   useEffect(() => {
@@ -101,7 +103,12 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
             onClickCapture={floating.show}
           >
             <div className="h-full overflow-clip rounded-2xl">
-              <EditorSheet onAnchor={setAnchor} />
+              <EditorSheet
+                onAnchor={setAnchor}
+                // The pages fitted in the room the palette open beside them leaves, what is brought
+                // into sight clear of it and of the dock.
+                covered={{ right: beside && palette ? besideWidth : 0, bottom: below + GAP }}
+              />
             </div>
           </div>
         ) : (
@@ -133,7 +140,10 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
           {beside ? (
             // Beside the sheet, over its right edge (ADR 0094): folded, its row of tabs stays where
             // the card's was.
-            <div className="pointer-events-auto absolute top-0 right-0 flex max-h-full w-84 flex-col landscape-phone:w-80 xl:w-96">
+            <div
+              ref={side}
+              className="pointer-events-auto absolute top-0 right-0 flex max-h-full w-84 flex-col landscape-phone:w-80 xl:w-96"
+            >
               {tools}
             </div>
           ) : null}

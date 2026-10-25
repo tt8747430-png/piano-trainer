@@ -1,7 +1,32 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { useEffect, useRef } from 'react'
 import { describe, expect, it, vi } from 'vitest'
+import { stubBox } from '@/shared/test/layout'
+import { stubResizeObserver } from '@/shared/test/resize'
+import { useCanvasReveal } from './canvas-reveal'
 import { PageCanvas } from './PageCanvas'
+
+/** The pages' place on the canvas as its transform says: moved by x and y, drawn at zoom. */
+function placed(region: HTMLElement) {
+  const pages = region.firstElementChild as HTMLElement
+  const [, x = '0', y = '0', zoom = '1'] =
+    /translate\((-?[\d.]+)px, (-?[\d.]+)px\) scale\(([\d.]+)\)/.exec(pages.style.transform) ?? []
+  return { x: Number(x), y: Number(y), zoom: Number(zoom) }
+}
+
+/** A line of the pages that brings itself into sight once, as it comes, as the caret's line does. */
+function RevealedLine() {
+  const reveal = useCanvasReveal()
+  const line = useRef<HTMLDivElement>(null)
+  const brought = useRef(false)
+  useEffect(() => {
+    if (!line.current || !reveal || brought.current) return
+    brought.current = true
+    reveal(line.current)
+  }, [reveal])
+  return <div ref={line} data-slot="sheet-line" data-testid="line" />
+}
 
 const canvas = (onClick = vi.fn()) => {
   render(
@@ -74,6 +99,49 @@ describe('PageCanvas', () => {
     fireEvent.pointerDown(grip, { pointerId: 1, clientX: 100, clientY: 100, button: 0 })
     fireEvent.pointerMove(grip, { pointerId: 1, clientX: 140, clientY: 160 })
     expect(pages.style.transform).toBe('')
+  })
+
+  it('fits the pages in the room what floats over its right edge leaves (a palette beside them)', async () => {
+    // A phone on its side: 804 by 305, a palette 320 wide at the right.
+    stubResizeObserver({ width: 804, height: 305 })
+    render(
+      <PageCanvas column={794} covered={{ right: 320 }}>
+        <p>Page 1</p>
+      </PageCanvas>,
+    )
+    const region = screen.getByRole('region', { name: /^Pages/ })
+    await act(async () => {})
+    expect(placed(region).zoom).toBeCloseTo((484 - 32) / 794, 3)
+  })
+
+  it('fits the pages no larger than shows a whole line in the screen’s height', async () => {
+    // A phone on its side, the keys out: 179 high; each line 200 high at full size.
+    stubResizeObserver({ width: 804, height: 179 })
+    vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(200)
+    render(
+      <PageCanvas column={794}>
+        <div data-slot="sheet-line" />
+      </PageCanvas>,
+    )
+    const region = screen.getByRole('region', { name: /^Pages/ })
+    await act(async () => {})
+    expect(placed(region).zoom).toBeCloseTo((179 - 32) / 200, 3)
+  })
+
+  it('keeps the line brought into sight in sight as the pages are fitted', async () => {
+    stubResizeObserver({ width: 804, height: 305 })
+    render(
+      <PageCanvas column={794}>
+        <RevealedLine />
+      </PageCanvas>,
+    )
+    const region = screen.getByRole('region', { name: /^Pages/ })
+    // The line far down the first page, brought into sight before the canvas knew its size.
+    stubBox(screen.getByTestId('line'), { top: 700, width: 700, height: 200 })
+    stubBox(region.firstElementChild as HTMLElement, { top: 0, width: 842, height: 1200 })
+    await act(async () => {})
+    // Fitted, the pages' top would be in sight; the line is instead.
+    expect(placed(region).y).toBeLessThan(0)
   })
 
   it('lets a click reach what it holds', async () => {
