@@ -456,12 +456,16 @@ height and width, scrolling inside when their content is taller.
 as its keys' proportion makes it (below), at the foot or under the bar as the keyboard settings dock it; the View's
 Keys takes it away.
 
-- **The bar,** one at every size (ADR 0094): ✕ and Practise · Edit at its start; the loop, the View (an eye), MIDI
-  and ⚙ (Setup) at its end, each its icon named in a tooltip, wrapping where the bar is narrow. The title is printed
-  on the sheet.
+- **The bar,** one at every size and one row from 360px (ADR 0094, 0099): ✕ and Practise · Edit at its start; the
+  View (an eye), MIDI, ⚙ (Setup) and More (…) at its end, each its icon named in a tooltip, 4px apart on a phone held
+  upright, wrapping only under 360px. More holds a piece's Song information (a sheet: its chords as diagrams, then
+  its key as played, time and tempo as the song page's cards, its second title and who wrote it), Export to MIDI and
+  an own song's Share. The title is printed on the sheet.
 - **The transport** (`PlayerDock`): one pill floating along the sheet's foot at every size, a phone on its side too:
-  the tempo, ‹ ▶ › (Play in honey) and the hands. It steps aside while the music is read and comes back at a tap on
-  a note; a tap on the screen's free room shows or hides it.
+  the tempo, ‹ ▶ › (Play in honey), the loop (pressed: a muted fill; R) and the hands. On a phone held upright its
+  controls are the 44px target, side by side, and it may stand into the gutters, so the six fit from 360px in
+  either language. It steps aside while the music is read and comes back at a tap on a note; a tap on the screen's
+  free room shows or hides it.
 - **A phone on its side** (a landscape screen under 500px tall): Wait mode's line stands in the bar's row, between
   its two groups; the sheet takes the height between the bar and the keys.
 
@@ -558,8 +562,9 @@ Plain, clear, one of them coloured.
 - **Secondary:** sky mist with its ink, no line.
 - **Destructive:** card paper with a crimson line and label.
 - **Link:** Onest 600, deep sky, underline on hover.
-- **Round** (44px, card paper, the control line, 20px icon): close, back and next, settings, MIDI, the loop (pressed:
-  a sand fill), the hands (one hand, the other mirrored, or both); always labelled.
+- **Round** (44px, card paper, the control line, 20px icon): close, back and next, settings, MIDI, More; always
+  labelled. In the transport a control is the floating bar's (48px, no line): ‹ ›, the loop (pressed: a muted fill),
+  the hands (one hand, the other mirrored, or both).
 - **Play** (72px circle, honey; 56px on a phone on its side): the Player's one Play/Stop.
 - **Focus:** a 3px deep-sky ring, 2px outside: one ring for every control, the base layer's own; inset only where a
   scroller would cut it (a bar of a chart, a key rail's button, a tab).

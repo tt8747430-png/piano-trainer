@@ -1,7 +1,8 @@
 # ADR 0099 — The Player's chord views: Sheet music, Chords over lyrics, Diagrams, Grid
 
 - **Status:** accepted · **Date:** 2026-10-25 · **Amends:** ADR 0064 (the View), ADR 0098 (the Player's chord
-  chart) · **Spec:** [chord views and song lessons](../superpowers/specs/2026-10-25-chord-views-and-song-lessons.md)
+  chart), ADR 0094 and 0085 (the Player's bar and transport: the loop moves to the transport) · **Spec:** [chord
+  views and song lessons](../superpowers/specs/2026-10-25-chord-views-and-song-lessons.md)
 
 ## Context
 
@@ -24,6 +25,11 @@ menu with Song information and Export to MIDI. The Player had the sheet music or
   diagram large, Close and Play. A piece's **chord summary** is its chords as diagrams in the order they first sound.
 - **More.** The Player's bar ends in More: Song information (the summary, key, time, tempo), Export to MIDI (the
   music as played) and an own song's Share. A song's row lists its first chords.
+- **The loop is the transport's.** Seven round buttons (Close, Practise · Edit, the loop, View, MIDI, Setup, More)
+  do not keep one row on a 375px phone, and the bar is the same at every size; Chordify's transport carries its
+  loop beside the tempo, so the loop moves from the bar into the floating transport: the tempo, ‹ ▶ ›, the loop and
+  the hands. Its key (R), tooltip and pressed look stay. On a phone held upright the transport's controls are the
+  44px target, side by side, and it may stand into the gutters, so the six fit from 360px.
 - **Not Chordify's:** no view picker on opening, no instrument but the piano, no capo or tuning, no Transpose or
   Simplify items (the Setup's key transposes), no volume.
 
@@ -31,5 +37,6 @@ menu with Song information and Export to MIDI. The Player had the sheet music or
 
 `entities/settings` (`scoreView.music`, version up), `widgets/score-view-menu` (a `views` slot), `widgets/chord-chart`
 (beats), new `widgets/chord-views` and `widgets/chord-diagrams`, `shared/ui` (`KeyDiagram`), `pages/player`
-(`PlayerLayout` shows the view chosen; More), `entities/take`'s MIDI writer shared with a performance's. ADR 0098's
-"Sheet music off shows the chord chart" becomes the Grid view.
+(`PlayerLayout` shows the view chosen; More), `widgets/practice-player` (the loop in `PlayerDock`), `entities/piece`
+(`PieceFactCards`, the song page's and Song information's), `entities/take`'s MIDI writer shared with a
+performance's. ADR 0098's "Sheet music off shows the chord chart" becomes the Grid view.
