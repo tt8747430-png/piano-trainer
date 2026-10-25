@@ -32,7 +32,9 @@ export {
 export { OCTAVE_SHIFTS, PEDAL_WAYS, type OctaveShift, type PedalWay } from './midi-choices'
 export {
   BLACK_HEIGHT,
+  diagramRange,
   keyAt,
+  keyboardLayout,
   PIANO_LAYOUT,
   spanOf,
   type KeyGeometry,

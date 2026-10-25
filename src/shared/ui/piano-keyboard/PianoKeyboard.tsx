@@ -33,8 +33,11 @@ const NARROWEST_FIT_PX = 22
 const MAX_WHITE_PX = 48
 /** Large keys: about an octave in view on a phone. */
 const LARGE_WHITE_PX = 56
-/** A key is this many times as long as a white key is wide, on every screen: a piano's proportion… */
-const KEY_LENGTH = 4.4
+/**
+ * A key is this many times as long as a white key is wide, on every screen and in a chord's diagram:
+ * a piano's proportion…
+ */
+export const KEY_LENGTH = 4.4
 /** Short keys: about two thirds as long, leaving the page more of the screen. */
 const SHORT_KEY_LENGTH = 3
 /** …never shorter than this, unless the screen's share for them is less… */
