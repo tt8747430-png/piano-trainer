@@ -13,22 +13,17 @@ import type { Tick } from '@/shared/lib/music'
 import { SheetTitle } from '@/shared/ui'
 import { ChordSummary } from '@/widgets/chord-diagrams'
 import { loopedBars } from '../model/beat-span'
-import { inSight } from '../model/in-sight'
+import { footRoom, inSight, lineScroll } from '../model/in-sight'
 import { lyricLines, soundingChip, type Span } from '../model/lyric-lines'
 import { BeatStrip } from './BeatStrip'
 import { LyricRow } from './LyricRow'
-
-/** How far down the room under the strip the line playing is kept: in its top third. */
-const THIRD = 1 / 3
-const KEPT_AT = 1 / 4
 
 /**
  * Chords over lyrics (ADR 0099, Chordify's): under the title the beat strip across the view, held at
  * the top as the song scrolls under it, then in one column in its middle the song's chords as
  * diagrams and the song by section, each under its name in spaced capitals, each line its chords as
- * chips over its words (`LyricRow`). The line
- * playing is kept in sight, a third of the way down under the strip; the chip of the chord sounding
- * is filled. A chip, or a summary's diagram, opens the chord's sheet (`onChord`); a line or a beat
+ * chips over its words (`LyricRow`). The line playing is kept in sight, in the top third of the room
+ * between the strip and the transport (`lineScroll`); the chip of the chord sounding is filled. A chip, or a summary's diagram, opens the chord's sheet (`onChord`); a line or a beat
  * tapped takes the cursor there (`onGo`, the tick it is first played at).
  */
 export function ChordsOverLyrics({
@@ -66,9 +61,9 @@ export function ChordsOverLyrics({
   // The line last kept in sight; none before the view opens.
   const kept = useRef<number | null>(null)
   const motion = useScrollMotion()
-  // The line playing brought into the top third of the room under the strip as the music reaches
-  // it, where it is not there already. Opening, the view stays at its top, its title in sight, where
-  // that line is in sight there (a loop's further on is brought to).
+  // The line playing brought into the top third of the room between the strip and the transport as
+  // the music reaches it, where it is not there already. Opening, the view stays at its top, its
+  // title in sight, where that line is in sight there (a loop's further on is brought to).
   useEffect(() => {
     const box = scroller.current
     const line = box?.querySelector(`[data-line="${playing}"]`)
@@ -77,19 +72,20 @@ export function ChordsOverLyrics({
     kept.current = playing
     if (opening && inSight(line, box)) return
     const held = strip.current?.offsetHeight ?? 0
-    const top = line.getBoundingClientRect().top - box.getBoundingClientRect().top
-    const room = box.clientHeight - held
-    if (top >= held && top <= held + room * THIRD) return
-    box.scrollTo({
-      top: Math.max(0, box.scrollTop + top - held - room * KEPT_AT),
-      behavior: motion,
+    const { top, height } = line.getBoundingClientRect()
+    const by = lineScroll({
+      top: top - box.getBoundingClientRect().top,
+      height,
+      held,
+      room: box.clientHeight - held - footRoom(box),
     })
+    if (by !== null) box.scrollTo({ top: Math.max(0, box.scrollTop + by), behavior: motion })
   }, [playing, motion])
   return (
     <section
       ref={scroller}
       aria-label={t('views.lyrics')}
-      className="-mx-gutter flex h-full flex-col gap-4 overflow-y-auto overscroll-contain px-gutter text-base *:shrink-0 sm:text-lg landscape-phone:mx-0 landscape-phone:px-0"
+      className="-mx-gutter flex h-full scroll-pb-(--float-room) flex-col gap-4 overflow-y-auto overscroll-contain px-gutter text-base *:shrink-0 sm:text-lg landscape-phone:mx-0 landscape-phone:px-0"
     >
       <SheetTitle title={title} place="lines" />
       <div
