@@ -1,6 +1,6 @@
 import { Clock, KeyRound, Metronome } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { keySymbol, type Key } from '@/shared/lib/music'
+import { keySymbol, printedSymbol, type Key } from '@/shared/lib/music'
 import { FactCard } from '@/shared/ui'
 import { pieceKey, type Piece } from '../model/types'
 
@@ -14,8 +14,9 @@ export function PieceFactCards({ piece, played }: { piece: Piece; played?: Key }
   return (
     <dl className="grid grid-cols-3 gap-2">
       <FactCard icon={KeyRound} name={t('music:key.label')}>
-        {/* The key names a chord, in the serif; the time and tempo are numbers. */}
-        <span className="font-display">{keySymbol(played ?? pieceKey(piece))}</span>
+        {/* The key is written as a chord is, in the serif and as the sheet prints it (`C♯m`); the
+            time and tempo are numbers. */}
+        <span className="font-display">{printedSymbol(keySymbol(played ?? pieceKey(piece)))}</span>
       </FactCard>
       <FactCard icon={Clock} name={t('time')}>
         {piece.meter}

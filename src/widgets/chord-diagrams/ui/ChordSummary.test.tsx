@@ -37,12 +37,17 @@ const renderSummary = (chords: readonly DiagramChord[]) =>
   )
 
 describe('ChordSummary', () => {
-  it('lists the chords in order, each its keys over its symbol', () => {
+  it('lists the chords in order, each its keys over its symbol as the sheet prints it', () => {
     renderSummary(CHORDS)
     const list = screen.getByRole('list', { name: 'Chords' })
     const chords = within(list).getAllByRole('button')
-    expect(chords.map((chord) => chord.textContent)).toEqual(['C#m7', 'EMaj7'])
-    expect(within(chords[1] as HTMLElement).getByRole('img')).toHaveAccessibleName('EMaj7: E B D# G#')
+    expect(chords.map((chord) => chord.textContent)).toEqual(['C♯m7', 'EMaj7'])
+    expect(within(chords[0] as HTMLElement).getByRole('img')).toHaveAccessibleName(
+      'C♯m7: C# B E G#',
+    )
+    expect(within(chords[1] as HTMLElement).getByRole('img')).toHaveAccessibleName(
+      'EMaj7: E B D# G#',
+    )
   })
 
   it('opens a chord’s sheet from its diagram, and closes it', async () => {

@@ -45,7 +45,7 @@ describe('a section’s page (ADR 0100)', () => {
     ).toBeInTheDocument()
     // The card: the song, the section's chords as they first sound, its lessons done.
     expect(screen.getByText('Still, my soul, be still')).toBeInTheDocument()
-    expect(screen.getByText('Em · D/F# · G · Am · C · Dsus4 · D7 · D')).toBeInTheDocument()
+    expect(screen.getByText('Em · D/F♯ · G · Am · C · Dsus4 · D7 · D')).toBeInTheDocument()
     expect(screen.getByText('Lessons done: 0 of 20')).toBeInTheDocument()
     expect(
       within(screen.getByRole('region', { name: 'Chords' }))
@@ -53,7 +53,7 @@ describe('a section’s page (ADR 0100)', () => {
         .map((row) => row.textContent),
     ).toEqual([
       'Learn Em',
-      'Learn D/F#',
+      'Learn D/F♯',
       'Learn G',
       'Learn Am',
       'Learn C',
@@ -63,13 +63,13 @@ describe('a section’s page (ADR 0100)', () => {
     ])
     expect(screen.getByRole('heading', { level: 2, name: 'Changes' })).toBeInTheDocument()
     expect(rowsOf('Play the chords in time')).toEqual([
-      ['1st sequence Em · D/F# · G · Am · Em · C · Dsus4 · D7', '/play/bz5?loop=9-12'],
-      ['2nd sequence Em · D/F# · G · Am · Em · C · D', '/play/bz5?loop=13-16'],
+      ['1st sequence Em · D/F♯ · G · Am · Em · C · Dsus4 · D7', '/play/bz5?loop=9-12'],
+      ['2nd sequence Em · D/F♯ · G · Am · Em · C · D', '/play/bz5?loop=13-16'],
       ['3rd sequence Em · C · D', '/play/bz5?loop=17-18'],
     ])
     expect(rowsOf('One change at a time').slice(0, 3)).toEqual([
-      ['From Em to D/F# Bar 9', '/play/bz5?loop=9-9'],
-      ['From D/F# to G Bars 9–10', '/play/bz5?loop=9-10'],
+      ['From Em to D/F♯ Bar 9', '/play/bz5?loop=9-9'],
+      ['From D/F♯ to G Bars 9–10', '/play/bz5?loop=9-10'],
       ['From G to Am Bars 10–11', '/play/bz5?loop=10-11'],
     ])
     expect(rowsOf('Pattern')).toEqual([
@@ -85,12 +85,12 @@ describe('a section’s page (ADR 0100)', () => {
     await renderApp('/songs/bz5/sections/1')
     // The run as it goes round, its C held back to (as its whole-section row has it): not the
     // chords it has, each once.
-    const [card] = await screen.findAllByText('G · C · Em · G/B · C · C/E · Dsus4 · D/F#', {
+    const [card] = await screen.findAllByText('G · C · Em · G/B · C · C/E · Dsus4 · D/F♯', {
       exact: false,
     })
-    expect(card).toHaveTextContent('2 × G · C · Em · G/B · C · C/E · Dsus4 · D/F#')
+    expect(card).toHaveTextContent('2 × G · C · Em · G/B · C · C/E · Dsus4 · D/F♯')
     expect(rowsOf('Play the chords in time')).toEqual([
-      ['The whole section G · C · Em · G/B · C · C/E · Dsus4 · D/F#', '/play/bz5?loop=1-4'],
+      ['The whole section G · C · Em · G/B · C · C/E · Dsus4 · D/F♯', '/play/bz5?loop=1-4'],
     ])
     expect(screen.getByRole('link', { name: 'Practise' })).toHaveAttribute(
       'href',
@@ -104,7 +104,7 @@ describe('a section’s page (ADR 0100)', () => {
     const first = await screen.findByRole('link', { name: /^1st sequence/ })
     expect(tileIcon(first)).toBe('lucide-list-music')
     act(() => progressStore.setState({ lessons: { 'bz5:bars:9-12': DAY } }))
-    expect(first).toHaveAccessibleName('1st sequence Em · D/F# · G · Am · Em · C · Dsus4 · D7 Done')
+    expect(first).toHaveAccessibleName('1st sequence Em · D/F♯ · G · Am · Em · C · Dsus4 · D7 Done')
     expect(tileIcon(first)).toBe('lucide-check')
     expect(screen.getByText('Lessons done: 1 of 20')).toBeInTheDocument()
     await user.click(first)
@@ -138,6 +138,26 @@ describe('a section’s page (ADR 0100)', () => {
         'That’s it.',
       ),
     ).toBeInTheDocument()
+  })
+
+  it('prints its chords with ♯ and ♭, keeping a chord learned under its symbol as written', async () => {
+    const user = userEvent.setup()
+    const { midi: keyboard, progressStore } = await renderApp('/songs/bz2/sections/1')
+    const [card] = await screen.findAllByText('C♯m · F♯m · F♯m/D♯ · G♯ · C♯m', { exact: false })
+    expect(card).toHaveTextContent('2 × C♯m · F♯m · F♯m/D♯ · G♯ · C♯m')
+    expect(rowsOf('One change at a time')[0]).toEqual([
+      'From C♯m to F♯m Bars 2–3',
+      '/play/bz2?loop=2-3',
+    ])
+    expect(rowsOf('Pattern')[0]?.[0]).toMatch(/On C♯m · Bar 1$/)
+    await user.click(screen.getByRole('button', { name: 'Learn F♯m/D♯' }))
+    const sheet = await screen.findByRole('dialog', { name: 'F♯m/D♯ chord' })
+    // D♯ under F♯ minor's notes, held together.
+    act(() => {
+      for (const key of [51, 54, 57, 61]) keyboard.press(midi(key))
+    })
+    expect(await within(sheet).findByText('That’s it.')).toBeInTheDocument()
+    expect(Object.keys(progressStore.getState().lessons)).toEqual(['bz2:chord:F#m/D#'])
   })
 
   it('goes back to the song’s page, opened directly', async () => {
@@ -216,7 +236,7 @@ describe('a section’s page (ADR 0100)', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Учим раздел «Припев»' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /^С Em на D\/F# Такт 9/ })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /^С Em на D\/F♯ Такт 9/ })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '3-й оборот Em · C · D' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Учим Em' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])

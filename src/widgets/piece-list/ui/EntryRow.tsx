@@ -5,7 +5,7 @@ import { pieceStepId, StageMark } from '@/entities/step'
 import { entryTitles, PieceLink, pieceChords, pieceKey, type Entry } from '@/entities/piece'
 import { selectIsLearned, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
-import { keySymbol } from '@/shared/lib/music'
+import { keySymbol, printedSymbol } from '@/shared/lib/music'
 import { LearnedBadge, RowLink, type Paint } from '@/shared/ui'
 
 /** Between a row's chords: an en space, half the type's size, so each chord stands apart. */
@@ -46,7 +46,7 @@ export function EntryRow({ entry, tile = true }: { entry: Entry; tile?: boolean 
             <>
               <span className="sr-only">{t('music:key.label')}</span>{' '}
               <span className="shrink-0 font-display font-semibold tabular-nums">
-                {keySymbol(pieceKey(entry))}
+                {printedSymbol(keySymbol(pieceKey(entry)))}
               </span>
               {stage ? <StageMark stage={stage} /> : null}
               {learned ? <LearnedBadge label={t('common:learned.done')} /> : null}
@@ -57,13 +57,13 @@ export function EntryRow({ entry, tile = true }: { entry: Entry; tile?: boolean 
       >
         {chords.length > 0 ? (
           // A screen reader passes them by: the row names the song, its page lists its chords, and
-          // a symbol read aloud (`C#m`) says little.
+          // a symbol read aloud (`C♯m`) says little.
           <span
             data-slot="row-chords"
             aria-hidden
             className="block truncate font-display text-sm font-medium text-muted-foreground"
           >
-            {chords.join(CHORD_SPACE)}
+            {chords.map(printedSymbol).join(CHORD_SPACE)}
           </span>
         ) : null}
       </RowLink>
