@@ -9,8 +9,8 @@ import { TimePopover } from './TimePopover'
 
 /**
  * What a thing printed on the sheet opens where it is (ADR 0094), over its button there (`trigger`):
- * the tempo mark its tempo, a section's name its menu (ADR 0095), a key signature its key, the time
- * signature the meter, a clef its staff's clef, a staff's name its menu.
+ * the tempo mark its tempo, a section's name its menu (ADR 0095), a key signature its key and a time
+ * signature its meter, each from its section on, a clef its staff's clef, a staff's name its menu.
  */
 export function PrintedEdit({
   printed,
@@ -27,7 +27,7 @@ export function PrintedEdit({
     case 'key':
       return <KeyPopover bar={printed.bar} trigger={trigger} />
     case 'time':
-      return <TimePopover trigger={trigger} />
+      return <TimePopover bar={printed.bar} trigger={trigger} />
     case 'clef':
       return <ClefPopover bar={printed.bar} staff={printed.staff} trigger={trigger} />
     case 'staff':

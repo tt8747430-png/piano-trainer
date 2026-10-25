@@ -79,13 +79,17 @@ is a double barline, `|.` the final one, and `[1` or `[2` before a bar puts it i
 The jumps (ADR 0068): `Segno` or `Coda` before a bar puts its sign there; `Fine`, `ToCoda` and a jump `DC`, `DC.Fine`,
 `DC.Coda`, `DS`, `DS.Fine` or `DS.Coda` after a bar: `'Segno G C ToCoda D DS.Coda Coda D7 G |.'`.
 
-`sections` is a list of `{ kind, n?, label?, last?, detail?, key?, pattern?, lines }`:
+`sections` is a list of `{ kind, n?, label?, last?, detail?, key?, meter?, pattern?, lines }`:
 
 - `kind`: `'intro' | 'verse' | 'chorus' | 'ending' | 'practice' | 'hymn' | 'part'`. The interface writes the heading.
 - `n` numbers a verse; `label` names a part (`'A'`); `last` marks a last chorus or last ending; `detail` is a
-  `LocalText` for anything else (`{ en: 'in 2/4', ru: 'на 2/4' }`, `{ en: 'and ending', ru: 'и окончание' }`).
+  `LocalText` for anything else (`{ en: 'and ending', ru: 'и окончание' }`).
 - `key` is a key change: the key the section is written in where it is not the piece's (`'Db'`), its signature
   printed where it starts; a learner's other key moves it with the piece's (ADR 0060).
+- `meter` is a change of time (ADR 0095): the meter the section's bars are counted in where it is not the
+  piece's (`'2/4'`), of the piece's kind (`2/4`, `3/4` and `4/4` count quarters, `6/8` and `12/8` dotted
+  quarters), its time signature printed where it starts. Its bars are written whole in it (`Dm-Edim Gm`, not
+  `Dm@1-Edim@1 Gm@2`), and the Player counts, clicks and plays them so.
 - `pattern` is the accompaniment the section's chords play where it is not the piece's; the editor never writes one (ADR 0091).
 - `lines`: each line is bars separated by spaces.
 
@@ -106,9 +110,9 @@ A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:met
 sounds only what a hand writes in it ([Written hands](#written-hands)). A learner's new song starts as four such
 bars, as a notation app's new score, and a bar the editor adds has no chord either.
 
-Beats per bar by meter: `2/4` 2, `3/4` 3, `4/4` 4, `6/8` 2, `12/8` 4. Beats must fall on whole ticks (24 per beat:
-`.5`, `.25`, `.125` a 32nd, `1.5`, not `.3`); a third of a beat is written as a fraction, `1:3` (a triplet 8th), `2:3`,
-`1:6` (a triplet 16th) (ADR 0060).
+Beats per bar by meter, the section's own or the piece's: `2/4` 2, `3/4` 3, `4/4` 4, `6/8` 2, `12/8` 4. Beats must
+fall on whole ticks (24 per beat: `.5`, `.25`, `.125` a 32nd, `1.5`, not `.3`); a third of a beat is written as a
+fraction, `1:3` (a triplet 8th), `2:3`, `1:6` (a triplet 16th) (ADR 0060).
 
 **Chord symbols** are read in every spelling `qualitySpellings` lists (`src/shared/lib/music/chord.ts`): `m`, `7`,
 `Maj7`/`maj7`/`M7`/`Δ`, `m7♭5`/`m7b5`/`ø`, `°`/`dim`, `°7`/`dim7`, `sus`/`sus4`, `sus2`, `6`, `m6`, `6/9`,

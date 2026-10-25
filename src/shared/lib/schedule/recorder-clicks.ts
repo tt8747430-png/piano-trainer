@@ -27,7 +27,8 @@ interface RecorderClicks {
 /**
  * A take's clicks (spec 2026-10-05 §2): the Player's count-in before the take's first bar (a pickup
  * comes in on its beat), then, with the click on, a click on each beat of the piece's bars from there
- * (each bar's first accented), and of the meter's bars past the piece's end, until the take's longest.
+ * (each bar's first accented), and past the piece's end of bars of the meter its last bar is in (ADR
+ * 0095), until the take's longest.
  */
 export function recorderClicks({
   bars,
@@ -44,10 +45,10 @@ export function recorderClicks({
   /** Seconds after the downbeat. */
   const after = (tick: Tick) => secondsFor(tick - fromTick, tempo)
 
-  // The piece's bars, then the meter's past its end.
+  // The piece's bars, then its last bar's meter's past its end.
   const timeline: GridBar[] = [...bars]
-  const beats = beatsPerBar(meter)
   const last = bars.at(-1)
+  const beats = beatsPerBar(last?.meter ?? meter)
   let end = last ? last.startTick + last.beats * TICKS_PER_BEAT : 0
   while (after(end) < longest) {
     timeline.push({ startTick: end, beats })

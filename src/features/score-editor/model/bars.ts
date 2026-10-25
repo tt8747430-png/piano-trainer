@@ -3,7 +3,7 @@ import { ticksOf } from '@/shared/lib/notation'
 import type { BarsClip } from './clip'
 import type { Draft, DraftBar, DraftNote } from './draft'
 import { versesInOrder } from './sections'
-import { barsOf } from './timeline'
+import { barsOf, sectionMeter } from './timeline'
 import { slotsOf, spliceAll, withSlots, type Slot } from './structure'
 
 /** Bars chosen together, by their indexes, both ends kept. */
@@ -41,16 +41,20 @@ function insertSlots(draft: Draft, after: number, bars: readonly DraftBar[]): Dr
   )
 }
 
-/** A new bar, as notation software adds one: the meter's length, no chord (ADR 0094). */
-const newBar = (draft: Draft): DraftBar => ({
-  ticks: beatsPerBar(draft.meter) * TICKS_PER_BEAT,
+/**
+ * A new bar in a section, as notation software adds one: its meter's length (ADR 0095), no chord
+ * (ADR 0094).
+ */
+const newBar = (draft: Draft, section: number): DraftBar => ({
+  ticks: beatsPerBar(sectionMeter(draft, section)) * TICKS_PER_BEAT,
   chords: [],
 })
 
-/** A new bar added after `after`, both hands silent, the notes after it moved on. */
+/** A new bar added after `after`, in its section, both hands silent, the notes after it moved on. */
 export function insertBar(draft: Draft, after: number): Draft {
-  if (!barsOf(draft)[after]) return draft
-  return insertSlots(draft, after, [newBar(draft)])
+  const placed = barsOf(draft)[after]
+  if (!placed) return draft
+  return insertSlots(draft, after, [newBar(draft, placed.section)])
 }
 
 /**
@@ -62,7 +66,7 @@ export function insertBarBefore(draft: Draft, index: number): Draft {
   const slots = slotsOf(draft)
   const slot = slots[index]
   if (!placed || !slot) return draft
-  const bar = newBar(draft)
+  const bar = newBar(draft, placed.section)
   return spliceAll(
     withSlots(draft, [
       ...slots.slice(0, index),
@@ -147,9 +151,12 @@ export function barLengths(meter: Meter): Tick[] {
   return Array.from({ length: full / eighth }, (_, i) => (i + 1) * eighth)
 }
 
-/** Whether bar `index` is a pickup: the first bar, shorter than the meter's. */
+/** A bar of the first section's meter, its own or the song's (ADR 0095): what a pickup is short of. */
+const firstBar = (draft: Draft): Tick => beatsPerBar(sectionMeter(draft, 0)) * TICKS_PER_BEAT
+
+/** Whether bar `index` is a pickup: the first bar, shorter than its meter's. */
 const isPickup = (draft: Draft, index: number, ticks: Tick): boolean =>
-  index === 0 && ticks < beatsPerBar(draft.meter) * TICKS_PER_BEAT
+  index === 0 && ticks < firstBar(draft)
 
 /**
  * A pickup made `ticks` long from its start, as it leads into the downbeat: shorter, its first beats
@@ -186,7 +193,7 @@ function setPickupTicks(draft: Draft, ticks: Tick): Draft {
 export function setBarTicks(draft: Draft, index: number, ticks: Tick): Draft {
   const placed = barsOf(draft)[index]
   if (!placed || ticks <= 0 || ticks === placed.bar.ticks) return draft
-  if (isPickup(draft, index, placed.bar.ticks) && ticks < beatsPerBar(draft.meter) * TICKS_PER_BEAT)
+  if (isPickup(draft, index, placed.bar.ticks) && ticks < firstBar(draft))
     return setPickupTicks(draft, ticks)
   const slots = slotsOf(draft)
   const bar: DraftBar = {

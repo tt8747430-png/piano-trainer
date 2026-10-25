@@ -21,26 +21,36 @@ export function chartSections(performance: Performance): number[][][] {
   return sections.map((lines) => lines.filter((line) => line !== undefined))
 }
 
-/** What a bar's button shows: its chords' symbols, the methods they name, and a short bar's time signature (a pickup's). */
+/**
+ * What a bar's button shows: its chords' symbols, the methods they name, and its time signature where
+ * it is short of its meter's bar (a pickup's) or its meter changes there (ADR 0095).
+ */
 interface ChartBar {
   readonly symbols: readonly string[]
   readonly methods: readonly MethodCode[]
   readonly signature: string | null
 }
 
+/** A bar as written as it is played the first time; none past the last. */
+function writtenBar(performance: Performance, written: number) {
+  const played = firstPlayedBar(performance, written)
+  return played === null ? undefined : performance.bars[played]
+}
+
 /** A bar as written, as the chart shows it: as it is played the first time; null past the last. */
 export function chartBar(performance: Performance, written: number): ChartBar | null {
-  const played = firstPlayedBar(performance, written)
-  const bar = played === null ? undefined : performance.bars[played]
+  const bar = writtenBar(performance, written)
   if (!bar) return null
   const chords = bar.chords.flatMap((i) => performance.chords[i] ?? [])
+  // Its section's meter, else the piece's.
+  const meter = bar.meter ?? performance.meter
+  const before = written > 0 ? writtenBar(performance, written - 1) : undefined
+  const changes = before !== undefined && (before.meter ?? performance.meter) !== meter
+  const full = beatsToTicks(bar.beats) === beatsToTicks(beatsPerBar(meter))
   return {
     symbols: chords.map((chord) => chord.symbol),
     methods: [...new Set(chords.flatMap((chord) => chord.method ?? []))].filter(isMethodCode),
-    signature:
-      beatsToTicks(bar.beats) === beatsToTicks(beatsPerBar(performance.meter))
-        ? null
-        : timeSignatureText(timeSignature(bar.beats, performance.meter)),
+    signature: full && !changes ? null : timeSignatureText(timeSignature(bar.beats, meter)),
   }
 }
 

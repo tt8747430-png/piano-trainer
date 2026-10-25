@@ -377,7 +377,7 @@ describe('the score editor', () => {
     if (!first) throw new Error('no key signature at the head')
     await user.click(first)
     const song = await screen.findByRole('dialog', { name: 'Key signature' })
-    expect(within(song).getByText('The song’s key')).toBeInTheDocument()
+    expect(within(song).getByText('The whole song')).toBeInTheDocument()
     await user.click(
       within(within(song).getByRole('group', { name: 'Key' })).getByRole('radio', { name: 'A' }),
     )
@@ -411,7 +411,7 @@ describe('the score editor', () => {
     await screen.findByRole('status')
     expect(screen.queryByRole('button', { name: 'Insert' })).not.toBeInTheDocument()
     const key = await openCategory(user, 'Key signature')
-    expect(within(key).getByText('The song’s key')).toBeInTheDocument()
+    expect(within(key).getByText('The whole song')).toBeInTheDocument()
     const here = within(key).getByRole('group', { name: 'Key' })
     await user.click(within(here).getByRole('radio', { name: 'D' }))
     await waitFor(() =>
@@ -420,13 +420,50 @@ describe('the score editor', () => {
         sections: [{ lines: ['D D D D'] }],
       }),
     )
-    // A change of time inside the song is not written yet: the ⓘ beside the section's name says so.
+  })
+
+  it('changes time from the caret’s section on in the palette and where it is printed, the song’s in its first (ADR 0095)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', {
+      storage: withSong({
+        sections: [
+          { kind: 'verse', lines: ['G G G G'] },
+          { kind: 'chorus', lines: ['C C C C'] },
+        ],
+        hands: { rh: `${EMPTY_TUNE} | ${EMPTY_TUNE}`, lh: `${EMPTY_TUNE} | ${EMPTY_TUNE}` },
+      }),
+    })
+    // The caret in the chorus's first bar: the Time signature from there on.
+    await user.click(await screen.findByRole('button', { name: 'Bar 5: C' }))
     const time = await openCategory(user, 'Time signature')
-    expect(time).not.toHaveTextContent(/whole song’s/)
-    await user.click(within(time).getByRole('button', { name: 'About Time signature' }))
-    expect(await screen.findByRole('dialog', { name: 'Time signature' })).toHaveTextContent(
-      /whole song’s/,
+    expect(within(time).getByText('From Chorus on (bar 5)')).toBeInTheDocument()
+    const meters = within(time).getByRole('radiogroup', { name: 'Time signature' })
+    expect(within(meters).getByRole('radio', { name: '4/4' })).toBeChecked()
+    await user.click(within(meters).getByRole('radio', { name: '3/4' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        meter: '4/4',
+        sections: [{ lines: ['G G G G'] }, { kind: 'chorus', meter: '3/4', lines: ['C C C C'] }],
+        hands: { lh: 'r/4 | r/4 | r/4 | r/4 | r/3 | r/3 | r/3 | r/3' },
+      }),
     )
+    // Its 3/4 printed where the chorus starts, opening the same: back to the song's 4/4 there.
+    const [printed] = await screen.findAllByRole(
+      'button',
+      { name: 'Time signature, bar 5' },
+      { timeout: 4000 },
+    )
+    if (!printed) throw new Error('no time signature at the chorus')
+    await user.click(printed)
+    const change = await screen.findByRole('dialog', { name: 'Time signature' })
+    expect(within(change).getByText('From Chorus on (bar 5)')).toBeInTheDocument()
+    await user.click(within(change).getByRole('radio', { name: '4/4' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        sections: [{ lines: ['G G G G'] }, { lines: ['C C C C'] }],
+      }),
+    )
+    expect(piecesStore.getState().songs[0]?.sections[1]).not.toHaveProperty('meter')
   })
 
   it('puts a repeat round the caret’s bar from Barlines & repeats, saved in the chart', async () => {
@@ -545,10 +582,10 @@ describe('the score editor', () => {
     )
     if (!time) throw new Error('no time signature')
     await user.click(time)
-    const meters = within(await screen.findByRole('dialog', { name: 'Time signature' })).getByRole(
-      'radiogroup',
-      { name: 'Time signature' },
-    )
+    const popover = await screen.findByRole('dialog', { name: 'Time signature' })
+    // At the song's first bar, the whole song's (ADR 0095).
+    expect(within(popover).getByText('The whole song')).toBeInTheDocument()
+    const meters = within(popover).getByRole('radiogroup', { name: 'Time signature' })
     expect(
       within(meters)
         .getAllByRole('radio')

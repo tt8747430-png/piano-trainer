@@ -39,7 +39,7 @@ import {
   type SpelledNote,
   type Tick,
 } from '@/shared/lib/music'
-import { barsOf, chordsAt, startsIn, type PlacedBar } from './timeline'
+import { barsOf, chordsAt, sectionMeter, startsIn, type PlacedBar } from './timeline'
 
 /** What the editor writes (spec §6.1, ADR 0091): the chords, the melody or a hand. */
 export type Layer = 'chords' | 'melody' | HandId
@@ -245,10 +245,11 @@ export function writeDraft(draft: Draft): PieceMusic {
     meter: draft.meter,
     tempo: draft.tempo,
     pattern: draft.pattern,
-    sections: draft.sections.map((section) => ({
+    // Each bar in its section's meter (ADR 0095).
+    sections: draft.sections.map((section, s) => ({
       ...section.heading,
       lines: section.lines.map((line) =>
-        line.map((bar) => writeBar(chartBar(bar), draft.meter)).join(' '),
+        line.map((bar) => writeBar(chartBar(bar), sectionMeter(draft, s))).join(' '),
       ),
     })),
     ...(melody === undefined ? {} : { melody }),

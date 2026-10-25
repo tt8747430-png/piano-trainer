@@ -40,14 +40,12 @@ function useReason(category: PaletteCategory): string | undefined {
   return why ? t(`reason.${why}`) : undefined
 }
 
-/** The categories whose tools say more than their names: the editing modes, the song's one time. */
-const EXPLAINED: readonly PaletteCategory[] = ['notes', 'time']
+/** The categories whose tools say more than their names: the editing modes. */
+const EXPLAINED: readonly PaletteCategory[] = ['notes']
 
-/** What a category's tools do, where their names alone do not say. */
-function About({ category }: { category: PaletteCategory }) {
+/** What a key played does in each editing mode (ADR 0092), where their names alone do not say. */
+function About() {
   const { t } = useTranslation('editor')
-  if (category === 'time') return <p>{t('signature.timeLater')}</p>
-  // What a key played does in each editing mode (ADR 0092).
   return (
     <dl className="flex flex-col gap-2">
       {EDIT_MODES.map((mode) => (
@@ -76,7 +74,7 @@ function Section({ category, children }: { category: PaletteCategory; children: 
         reason || explained ? (
           <>
             {reason ? <p>{reason}</p> : null}
-            {explained ? <About category={category} /> : null}
+            {explained ? <About /> : null}
           </>
         ) : undefined
       }

@@ -4,6 +4,8 @@ import { beatsBefore, beatsPerBar, TICKS_PER_BEAT, type Meter, type Tick } from 
 export interface GridBar {
   readonly startTick: Tick
   readonly beats: number
+  /** The meter it is counted in, where that is not the piece's (a change of time, ADR 0095). */
+  readonly meter?: Meter | undefined
 }
 
 /** A piece's bars in its meter: what a count-in and a click follow. */
@@ -27,7 +29,7 @@ export function checkedTempo(tempo: number): number {
 export const secondsFor = (ticks: Tick, tempo: number): number =>
   (ticks * 60) / (checkedTempo(tempo) * TICKS_PER_BEAT)
 
-/** A bar's beats on the meter's grid: a pickup counts from where its bar would begin. */
+/** A bar's beats on its meter's grid: a pickup counts from where its bar would begin. */
 export function barGrid(
   { bars, meter }: BarsInMeter,
   index: number,
@@ -36,7 +38,7 @@ export function barGrid(
   if (!bar) return { start: 0, beats: beatsPerBar(meter) }
   const before = beatsBefore(bars, index, meter)
   return before > 0
-    ? { start: bar.startTick - before * TICKS_PER_BEAT, beats: beatsPerBar(meter) }
+    ? { start: bar.startTick - before * TICKS_PER_BEAT, beats: beatsPerBar(bar.meter ?? meter) }
     : { start: bar.startTick, beats: Math.ceil(bar.beats) }
 }
 

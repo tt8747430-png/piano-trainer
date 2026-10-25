@@ -80,9 +80,12 @@ export interface EditorTakes {
   readonly remove: (id: TakeId) => void
 }
 
-/** The draft's bars on the meter's grid, as the click follows them. */
+/** The draft's bars on the meter's grid, each in its section's (ADR 0095), as the click follows them. */
 const gridBars = (draft: Draft): GridBar[] =>
-  barsOf(draft).map(({ start, bar }) => ({ startTick: start, beats: bar.ticks / TICKS_PER_BEAT }))
+  barsOf(draft).map(({ start, bar, section }) => {
+    const meter = draft.sections[section]?.heading.meter
+    return { startTick: start, beats: bar.ticks / TICKS_PER_BEAT, ...(meter ? { meter } : {}) }
+  })
 
 /**
  * The score editor's takes (ADR 0028, 0096): the recorder over the caret's bar, each take kept as it

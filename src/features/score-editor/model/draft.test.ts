@@ -48,6 +48,22 @@ const WRITTEN: PieceMusic = {
 }
 
 describe('the draft', () => {
+  it('writes a section’s bars in its own meter, whole bars without their beats (ADR 0095)', () => {
+    const music: PieceMusic = {
+      key: 'C',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [
+        { kind: 'verse', lines: ['C G'] },
+        { kind: 'chorus', meter: '3/4', lines: ['F G-C'] },
+      ],
+    }
+    const draft = readDraft(music)
+    expect(barsOf(draft).map(({ bar }) => bar.ticks)).toEqual([96, 96, 72, 72])
+    expect(writeDraft(draft).sections).toEqual(music.sections)
+  })
+
   it.each(CHART_PIECES.map((piece) => [piece.id, piece] as const))(
     'reads %s, every bar written, and writes it back the same',
     (_id, piece) => {

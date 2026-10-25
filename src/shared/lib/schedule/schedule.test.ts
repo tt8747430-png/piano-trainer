@@ -256,6 +256,28 @@ describe('schedule', () => {
     ])
   })
 
+  it('clicks and counts in a section in a meter of its own by its own beats (ADR 0095)', () => {
+    const changing: Chart = {
+      ...chart('C'),
+      sections: [
+        ...chart('C').sections,
+        {
+          meter: '3/4',
+          lines: [[{ chords: [{ ...parseChordSymbol('F'), beats: 3 }], beats: 3 }]],
+        },
+      ],
+    }
+    const performance = arrange(changing, { tonic: note('C'), pattern: BLOCK })
+    const whole = schedule(performance, { tempo: 60, hands: ALL, metronome: true })
+    expect(clicks(whole.sounds).map(({ at, accent }) => `${at}${accent ? '!' : ''}`)).toEqual([
+      ...['0!', '1', '2', '3'],
+      ...['4!', '5', '6'],
+    ])
+    const counted = schedule(performance, { tempo: 60, hands: ALL, countIn: true, fromTick: 96 })
+    expect(clicks(counted.sounds)).toHaveLength(3)
+    expect(counted.musicStart).toBe(3)
+  })
+
   it('plays only the audible hands, and always the tune', () => {
     expect(audibleHands('rh')).toEqual({ rh: true, lh: false, melody: true })
     expect(audibleHands('lh')).toEqual({ rh: false, lh: true, melody: true })

@@ -52,6 +52,22 @@ describe('createPiecesStore', () => {
     expect(sections?.map((section) => section.key)).toEqual([undefined, 'Db', undefined])
   })
 
+  it('keeps a section’s own meter, and drops music whose section is counted in another kind (ADR 0095)', () => {
+    const changing = {
+      ...MUSIC,
+      sections: [
+        { kind: 'verse', lines: ['Bm'] },
+        { kind: 'chorus', meter: '6/8', lines: ['G A'] },
+        { kind: 'ending', meter: '7/8', lines: ['Bm'] },
+      ],
+      hands: { lh: 'B2/4 | - | - | -' },
+    }
+    const sections = restored({ versions: { bz1: changing } }).versions.bz1?.sections
+    expect(sections?.map((section) => section.meter)).toEqual([undefined, '6/8', undefined])
+    const simple = { ...changing, sections: [{ kind: 'verse', meter: '3/4', lines: ['Bm'] }] }
+    expect(restored({ versions: { bz1: simple } }).versions).toEqual({})
+  })
+
   it('keeps a section’s own pattern, and drops one the book has not', () => {
     const patterned = {
       ...MUSIC,

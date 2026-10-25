@@ -55,4 +55,38 @@ describe('the sheet’s lines as written', () => {
     expect(verse?.next?.key?.tonic.letter).toBe('D')
     expect(chorus?.next).toBeUndefined()
   })
+
+  it('prints a change of time where a section starts in its own meter, and at the line before (ADR 0095)', () => {
+    const sheetsOf = createLineSheets()
+    const [verse, chorus] = sheetsOf(
+      readDraft({
+        ...music,
+        sections: [
+          { kind: 'verse', lines: ['G C'] },
+          { kind: 'chorus', meter: '3/4', lines: ['D G'] },
+        ],
+        melody: undefined,
+      }),
+    )
+    expect(chorus?.score.measures.map((measure) => measure.time)).toEqual([
+      { count: 3, unit: 4 },
+      { count: 3, unit: 4 },
+    ])
+    expect(chorus?.timeBefore).toEqual({ count: 4, unit: 4 })
+    expect(verse?.next?.time).toEqual({ count: 3, unit: 4 })
+  })
+
+  it('writes a short bar starting a later line as the Player does: its own time, no pickup', () => {
+    const sheetsOf = createLineSheets()
+    const [first, short, last] = sheetsOf(
+      readDraft({ ...music, sections: [{ kind: 'verse', lines: ['G C', 'D@2', 'G'] }] }),
+    )
+    expect(short?.score.measures.map((measure) => [measure.time, measure.ticks])).toEqual([
+      [{ count: 2, unit: 4 }, 48],
+    ])
+    // Its 2/4 printed at the end of the line before, and the 4/4 after it again.
+    expect(first?.next?.time).toEqual({ count: 2, unit: 4 })
+    expect(last?.timeBefore).toEqual({ count: 2, unit: 4 })
+    expect(last?.score.measures[0]?.time).toEqual({ count: 4, unit: 4 })
+  })
 })

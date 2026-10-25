@@ -1,6 +1,7 @@
 import { HAND_IDS } from '@/entities/piece'
 import {
   barsOf,
+  sectionMeter,
   type Draft,
   type DraftNote,
   type Layer,
@@ -197,8 +198,9 @@ export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): Tim
     : undefined
   const bars = line.bars.map(({ start, bar, section }, index) => {
     const startTick = start - from
-    // A section's own key: its signature printed where it starts (a key change).
-    const written = draft.sections[section]?.heading.key
+    // A section's own key and meter: its signature and its time printed where it starts (a key
+    // change, a change of time, ADR 0095).
+    const { key: written, meter } = draft.sections[section]?.heading ?? {}
     const key = written === undefined ? null : parseKey(written)
     const holds = (staff: StaffId) =>
       notes.some(
@@ -216,6 +218,7 @@ export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): Tim
       ...(index === 0 && start === 0 ? { tempo: draft.tempo } : {}),
       ...barMarksOf(bar),
       ...(key ? { key } : {}),
+      ...(meter ? { meter } : {}),
       ...(index === 0 && inForce && inForce !== HOME_CLEF
         ? { clefs: inForce }
         : bar.clefs
@@ -237,18 +240,21 @@ export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): Tim
     chords,
     ...(tune ? { melodyStaff: true } : {}),
     ...(piano ? {} : { piano: false }),
+    // A later line goes on from the bars before it: its first bar, short, is no pickup.
+    ...(from > 0 ? { continued: true } : {}),
   }
 }
 
 /**
- * The time signature in force where a line begins: the last bar before it (the piece's first bar,
- * when short, counts as the meter's); none before the first line.
+ * The time signature in force where a line begins: the last bar before it, in its section's meter
+ * (the piece's first bar, when short, counts as its meter's); none before the first line.
  */
 export function timeBeforeLine(draft: Draft, line: SheetLineBars): TimeSignature | undefined {
   const index = line.bars[0]?.index ?? 0
   const before = barsOf(draft)[index - 1]
   if (!before) return undefined
-  const full = beatsPerBar(draft.meter)
+  const meter = sectionMeter(draft, before.section)
+  const full = beatsPerBar(meter)
   const beats = before.bar.ticks / TICKS_PER_BEAT
-  return timeSignature(before.index === 0 && beats < full ? full : beats, draft.meter)
+  return timeSignature(before.index === 0 && beats < full ? full : beats, meter)
 }

@@ -52,6 +52,8 @@ export interface TimedMusic {
     readonly blank?: readonly StaffId[]
     /** The key it is written in, where that is not the music's (a key change). */
     readonly key?: Key
+    /** The meter it is counted in, where that is not the music's (a change of time, ADR 0095). */
+    readonly meter?: Meter
     /** The clef a hand's staff changes to at this bar (ADR 0069). */
     readonly clefs?: HandClefs
   })[]
@@ -61,6 +63,11 @@ export interface TimedMusic {
   readonly melodyStaff?: boolean
   /** Whether the piano's grand staff is written: not on a lead sheet (ADR 0083). Written by default. */
   readonly piano?: boolean
+  /**
+   * Music going on from bars before it, a later line of a piece written alone (the editor's): its
+   * first bar is never a pickup, which only a piece's first bar is.
+   */
+  readonly continued?: boolean
 }
 
 export interface WrittenNote {

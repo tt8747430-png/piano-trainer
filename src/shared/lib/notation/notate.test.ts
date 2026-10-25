@@ -285,6 +285,55 @@ describe('notate', () => {
     ])
   })
 
+  it('writes a bar in its own meter whole, a pickup only where it is short of that meter (ADR 0095)', () => {
+    const score = notate(
+      music([n(60, note('C'), 'rh', 0, 72)], {
+        bars: [
+          { startTick: 0, beats: 3, meter: '3/4' },
+          { startTick: 72, beats: 2, meter: '3/4' },
+          { startTick: 120, beats: 4 },
+        ],
+      }),
+    )
+    expect(score.measures.map((measure) => [measure.time, measure.ticks])).toEqual([
+      [{ count: 3, unit: 4 }, 72],
+      [{ count: 2, unit: 4 }, 48],
+      [{ count: 4, unit: 4 }, 96],
+    ])
+    // Its note from the bar's first beat: a dotted half, no rest before it.
+    expect(score.measures[0]?.staves.treble.map((voice) => shape(voice.events))).toEqual([
+      [['notes', 0, 72]],
+    ])
+    const pickup = notate(
+      music([], {
+        bars: [
+          { startTick: 0, beats: 1, meter: '3/4' },
+          { startTick: 24, beats: 3, meter: '3/4' },
+        ],
+      }),
+    )
+    expect(pickup.measures.map((measure) => measure.time)).toEqual([
+      { count: 3, unit: 4 },
+      { count: 3, unit: 4 },
+    ])
+  })
+
+  it('writes a short first bar of music going on from bars before as a short bar, no pickup', () => {
+    const score = notate(
+      music([n(60, note('C'), 'rh', 0, 48)], {
+        bars: [
+          { startTick: 0, beats: 2 },
+          { startTick: 48, beats: 4 },
+        ],
+        continued: true,
+      }),
+    )
+    expect(score.measures.map((measure) => measure.time)).toEqual([
+      { count: 2, unit: 4 },
+      { count: 4, unit: 4 },
+    ])
+  })
+
   it('writes each bar’s time signature', () => {
     const score = notate(
       music([], {

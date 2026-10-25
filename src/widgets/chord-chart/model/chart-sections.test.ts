@@ -86,4 +86,30 @@ describe('chartBar', () => {
     })
     expect(chartBar(performance, 2)).toBeNull()
   })
+
+  it('gives a section’s first bar in a meter of its own its signature, and the bar back in the piece’s (ADR 0095)', () => {
+    const changing: Chart = {
+      ...CHART,
+      sections: [
+        { lines: [[bar('C')]] },
+        {
+          meter: '2/4',
+          lines: [
+            [
+              { chords: [{ ...parseChordSymbol('F'), beats: 2 }], beats: 2 },
+              { chords: [{ ...parseChordSymbol('G'), beats: 2 }], beats: 2 },
+            ],
+          ],
+        },
+        { lines: [[bar('C')]] },
+      ],
+    }
+    const performance = arrange(changing, { tonic: note('C'), pattern: BLOCK })
+    expect([0, 1, 2, 3].map((written) => chartBar(performance, written)?.signature)).toEqual([
+      null,
+      '2/4',
+      null,
+      '4/4',
+    ])
+  })
 })

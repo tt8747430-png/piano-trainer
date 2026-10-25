@@ -39,10 +39,15 @@ export interface Section {
   readonly label?: string
   /** A last chorus or a last ending. */
   readonly last?: boolean
-  /** Anything else the heading says: 'in 2/4', 'and ending'. */
+  /** Anything else the heading says: 'and ending'. */
   readonly detail?: LocalText
   /** The key its bars are written in, where that is not the piece's: a key change. */
   readonly key?: KeyText
+  /**
+   * The meter its bars are counted in, where that is not the piece's: a change of time (ADR 0095),
+   * of the piece's kind (a quarter's beat, or a dotted quarter's).
+   */
+  readonly meter?: Meter
   /** The accompaniment its chords play, where it is not the piece's (a chord's method code still wins). */
   readonly pattern?: PatternId
   /** A chart's bars separated by spaces, or a sectioned progression's chords; see docs/CONTENT.md. */

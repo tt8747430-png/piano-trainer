@@ -19,6 +19,11 @@ describe('time', () => {
     expect(beatsBefore([{ beats: 3 }], 0, '3/4')).toBe(0)
   })
 
+  it('reads a first bar against its own meter where it has one (ADR 0095)', () => {
+    expect(beatsBefore([{ beats: 3, meter: '3/4' }], 0, '4/4')).toBe(0)
+    expect(beatsBefore([{ beats: 2, meter: '3/4' }], 0, '4/4')).toBe(1)
+  })
+
   it('counts beats in whole ticks', () => {
     expect([1, 0.5, 1 / 3, 2.25, 0.125].map(beatsToTicks)).toEqual([24, 12, 8, 54, 3])
   })

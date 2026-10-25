@@ -151,6 +151,26 @@ describe('the sheet’s lines', () => {
     expect(timeBeforeLine(draft, second)).toEqual({ count: 4, unit: 4 })
     expect(timeBeforeLine(draft, third)).toEqual({ count: 4, unit: 4 })
   })
+
+  it('write a section’s own meter on its bars, its time printed where it starts (ADR 0095)', () => {
+    const changing = readDraft({
+      key: 'C',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [
+        { kind: 'verse', meter: '3/4', lines: ['C@1', 'G'] },
+        { kind: 'chorus', lines: ['F'] },
+      ],
+    })
+    const [pickup, verse, chorus] = linesOf(changing)
+    if (!pickup || !verse || !chorus) throw new Error('three lines')
+    expect(lineMusic(changing, verse).bars[0]).toMatchObject({ beats: 3, meter: '3/4' })
+    expect(lineMusic(changing, chorus).bars[0]?.meter).toBeUndefined()
+    // The verse's pickup is short of its own 3/4, and its bars are 3/4's.
+    expect(timeBeforeLine(changing, verse)).toEqual({ count: 3, unit: 4 })
+    expect(timeBeforeLine(changing, chorus)).toEqual({ count: 3, unit: 4 })
+  })
 })
 
 describe('layerAt', () => {

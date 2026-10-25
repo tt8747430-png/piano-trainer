@@ -13,7 +13,14 @@ const sameHeading = (a: Heading, b: Heading): boolean =>
   a.last === b.last &&
   a.detail?.en === b.detail?.en &&
   a.detail?.ru === b.detail?.ru &&
-  a.key === b.key
+  a.key === b.key &&
+  a.meter === b.meter
+
+/** What a section's heading keeps through a new name or a split: its key and its meter. */
+const keptOf = ({ key, meter }: Heading): Pick<Heading, 'key' | 'meter'> => ({
+  ...(key === undefined ? {} : { key }),
+  ...(meter === undefined ? {} : { meter }),
+})
 
 /**
  * A new section's heading as its kind and place name it: a verse the number after the verses before
@@ -85,11 +92,10 @@ export function setSectionKind(draft: Draft, index: number, kind: SectionKind): 
   const section = draft.sections[index]
   if (!section) return draft
   const others = draft.sections.filter((other) => other !== section)
-  // Named afresh, it keeps its key.
-  const { key } = section.heading
+  // Named afresh, it keeps its key and its meter.
   const heading: Heading = {
     ...named(kind, draft.sections.slice(0, index), others),
-    ...(key === undefined ? {} : { key }),
+    ...keptOf(section.heading),
   }
   if (sameHeading(heading, section.heading)) return draft
   const renamed: Draft = {
@@ -125,18 +131,18 @@ export function setSectionKey(draft: Draft, index: number, key: Key): Draft {
 }
 
 /**
- * A new section from bar `index`, of the kind it was in, named next, in the key it was in (a key
- * change goes on past it); a bar starting one changes nothing.
+ * A new section from bar `index`, of the kind it was in, named next, in the key and the meter it was
+ * in (a change of key or time goes on past it); a bar starting one changes nothing.
  */
 export function newSection(draft: Draft, index: number): Draft {
   const slots = slotsOf(draft)
   const slot = slots[index]
   if (!slot || slot.newSection) return draft
   const containing = slots.slice(0, index).filter((other) => other.newSection).length - 1
-  const { kind = 'verse', key } = draft.sections[containing]?.heading ?? {}
+  const was = draft.sections[containing]?.heading ?? { kind: 'verse' }
   const heading: Heading = {
-    ...named(kind, draft.sections.slice(0, containing + 1), draft.sections),
-    ...(key === undefined ? {} : { key }),
+    ...named(was.kind, draft.sections.slice(0, containing + 1), draft.sections),
+    ...keptOf(was),
   }
   const split = withSlots(
     draft,

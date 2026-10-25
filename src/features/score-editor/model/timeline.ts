@@ -1,4 +1,4 @@
-import { parseKey, type Chord, type Key, type Tick } from '@/shared/lib/music'
+import { parseKey, type Chord, type Key, type Meter, type Tick } from '@/shared/lib/music'
 import type { Draft, DraftBar } from './draft'
 
 /** A bar where it is: its index in the piece, its section and line, and its first tick. */
@@ -70,3 +70,11 @@ export function sectionKey(draft: Draft, section: number): Key {
 /** The key at a tick: its section's. */
 export const keyAt = (draft: Draft, tick: Tick): Key =>
   sectionKey(draft, barAt(draft, tick).section)
+
+/** The meter a section's bars are counted in: its own (a change of time, ADR 0095), else the song's. */
+export const sectionMeter = (draft: Draft, section: number): Meter =>
+  draft.sections[section]?.heading.meter ?? draft.meter
+
+/** The meter at a tick: its section's. */
+export const meterAt = (draft: Draft, tick: Tick): Meter =>
+  sectionMeter(draft, barAt(draft, tick).section)

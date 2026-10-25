@@ -25,7 +25,7 @@ import {
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-export const PIECES_VERSION = 5
+export const PIECES_VERSION = 6
 
 /** The learner's pieces (spec 2026-10-01-score-editor §4). */
 export interface PiecesState {
@@ -63,10 +63,10 @@ const isTempo = (value: unknown): value is number =>
   value >= PIECE_TEMPO.min &&
   value <= PIECE_TEMPO.max
 
-/** A saved section whose fields read; its chart is read with the piece's. */
+/** A saved section whose fields read; its chart is read with the piece's, in its own meter. */
 function sectionOf(saved: unknown): Section | null {
   if (!isRecord(saved)) return null
-  const { kind, n, label, last, detail, key, pattern, lines } = saved
+  const { kind, n, label, last, detail, key, meter, pattern, lines } = saved
   if (!isSectionKind(kind) || !Array.isArray(lines) || !lines.every(isText)) return null
   const number = typeof n === 'number' && Number.isInteger(n) && n > 0 ? n : undefined
   const en = isRecord(detail) ? detail.en : undefined
@@ -78,6 +78,7 @@ function sectionOf(saved: unknown): Section | null {
     ...(last === true ? { last } : {}),
     ...(isText(en) && isText(ru) ? { detail: { en, ru } } : {}),
     ...(isKeyText(key) ? { key } : {}),
+    ...(isMeter(meter) ? { meter } : {}),
     ...(isPatternId(pattern) ? { pattern } : {}),
     lines,
   }
