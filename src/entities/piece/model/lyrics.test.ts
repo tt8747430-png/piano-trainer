@@ -55,8 +55,18 @@ describe('writeLyrics', () => {
   it('writes a melisma over no more than the empty places that follow it', () => {
     expect(writeLyrics([syl('a', false, 1), null, syl('b')])).toBe('a_ b')
     expect(writeLyrics([syl('a', false, 1), syl('b')])).toBe('a b')
-    expect(writeLyrics([syl('a', false, 1), null, null])).toBe('a_ ~')
+    expect(writeLyrics([syl('a', false, 1), null, null])).toBe('a_')
     expect(writeLyrics([syl('a'), null, syl('b')])).toBe('a ~ b')
+  })
+
+  it('ends a verse where its words do: no empty place written after its last syllable', () => {
+    // One word begun in a verse of a long tune: the word, not an empty place for every note after it.
+    expect(
+      writeLyrics([syl('Ho', true), syl('ly'), ...Array.from({ length: 70 }, () => null)]),
+    ).toBe('Ho- ly')
+    expect(writeLyrics([null, syl('a'), null])).toBe('~ a')
+    expect(writeLyrics([syl('a', false, 2), null, null, null])).toBe('a__')
+    expect(writeLyrics([null, null])).toBe('')
   })
 })
 
@@ -81,7 +91,28 @@ describe('the tune a piece sings on', () => {
       [syl('three')],
       [syl('four')],
     ])
-    expect(gatherLyrics(staff).map(writeLyrics)).toEqual(['one two three four', 'eins zwei ~ ~'])
+    expect(gatherLyrics(staff).map(writeLyrics)).toEqual(['one two three four', 'eins zwei'])
+  })
+
+  it('gathers each verse to its last syllable, keeping the notes a melisma there is held over', () => {
+    const staff = withStaffLyrics(parseStaff(sung, 0), [
+      readLyrics('one two three four'),
+      readLyrics('eins_'),
+      readLyrics('~ zwei'),
+    ])
+    expect(gatherLyrics(staff)).toEqual([
+      [syl('one'), syl('two'), syl('three'), syl('four')],
+      [syl('eins', false, 1), null],
+      [null, syl('zwei')],
+    ])
+  })
+
+  it('reads a verse shorter than its staff onto its first notes, and writes it back as short', () => {
+    const written = ['one two three four', 'Ho- ly']
+    const verses = parseLyrics({ ...sung, lyrics: written }, 4) ?? []
+    const staff = withStaffLyrics(parseStaff(sung, 0), verses)
+    expect(staff.map((n) => n.lyrics?.[1]?.text ?? null)).toEqual(['Ho', 'ly', null, null])
+    expect(gatherLyrics(staff).map(writeLyrics)).toEqual(written)
   })
 
   it('puts a verse on the right hand’s highest note at each onset where the words are on the upper staff', () => {

@@ -30,7 +30,8 @@ export function readLyrics(text: string): Verse {
 
 /**
  * A verse written back as `readLyrics` reads it: a syllable held over no more than the empty places
- * that follow it (a note taken away shortens the melisma).
+ * that follow it (a note taken away shortens the melisma), and no empty place after its last
+ * syllable: a verse ends where its words do, the notes after it singing nothing as they read.
  */
 export function writeLyrics(verse: Verse): string {
   const tokens: string[] = []
@@ -45,7 +46,14 @@ export function writeLyrics(verse: Verse): string {
     tokens.push(`${sung.text}${sung.hyphen ? '-' : ''}${'_'.repeat(held)}`)
     i += held
   }
+  while (tokens.at(-1) === '~') tokens.pop()
   return tokens.join(' ')
+}
+
+/** A verse to its last syllable and the empty places that syllable is held over: nothing after it. */
+function toItsWords(verse: Verse): Verse {
+  const last = verse.findLastIndex((sung) => sung !== null)
+  return last < 0 ? [] : verse.slice(0, last + 1 + (verse[last]?.held ?? 0))
 }
 
 /** What each verse sings on the tune's note `index`, by verse; none where every verse sings nothing. */
@@ -56,12 +64,15 @@ function sungAt(verses: readonly Verse[], index: number): NoteLyrics | undefined
 }
 
 /**
- * The verses the tune's notes sing, in order, as many as any note has; every note's place filled,
- * so a melisma held to the tune's end keeps the notes it is held over.
+ * The verses the tune's notes sing, in order, as many as any note has; each to its last syllable,
+ * so a verse begun on a long tune is its words alone, a melisma held at its end keeping the notes it
+ * is held over.
  */
 export function gatherLyrics(tune: readonly { readonly lyrics?: NoteLyrics }[]): Verse[] {
   const count = Math.max(0, ...tune.map((n) => n.lyrics?.length ?? 0))
-  return Array.from({ length: count }, (_, verse) => tune.map((n) => n.lyrics?.[verse] ?? null))
+  return Array.from({ length: count }, (_, verse) =>
+    toItsWords(tune.map((n) => n.lyrics?.[verse] ?? null)),
+  )
 }
 
 /**
