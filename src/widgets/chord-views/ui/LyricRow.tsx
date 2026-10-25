@@ -4,12 +4,14 @@ import type { Performance } from '@/shared/lib/arrangement'
 import type { LyricLine, SungWords } from '../model/lyric-lines'
 import { ChordChip } from './ChordChip'
 
+/** A place where a verse sings nothing: a no-break space, so the verses under it stay level. */
+const EMPTY_PLACE = String.fromCharCode(0xa0)
+
 /** A verse's words in a segment: a word the next segment carries on drawn on by a hyphen. */
 function Words({ words }: { words: SungWords | undefined }) {
   return (
     <span className="flex whitespace-pre">
-      {/* An empty place keeps its line, so the verses under it stay level. */}
-      <span>{words?.text || ' '}</span>
+      <span>{words?.text || EMPTY_PLACE}</span>
       {words?.goesOn ? (
         <span aria-hidden className="grow px-0.5 text-center">
           -
