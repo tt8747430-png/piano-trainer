@@ -6,7 +6,7 @@ import {
   type RightFigureId,
 } from '../model/types'
 
-// Figure notation: see docs/CONTENT.md. The melody figures fall back to r4 (and `ends` plays r4b
+// Figure notation: see docs/CONTENT.md. The tune figures fall back to r4 (and `ends` plays r4b
 // between a line's ends), so those two are written first.
 const R4 = eventFigure('6/2 v1,8/2 v3,10/2 v2,12/2 v4,14/2 v3', {
   inThree: '6/2 v1,8/2 v3,10/2 v2',
@@ -195,15 +195,15 @@ export const RIGHT_FIGURES = {
   },
   mel: {
     name: { en: 'Melody (doubling the tune)', ru: 'Мелодия (дублирование напева)' },
-    figure: { kind: 'melody', use: 'double', withoutMelody: R4 },
+    figure: { kind: 'tune', use: 'double', withoutTune: R4 },
   },
   melE: {
     name: { en: 'Melody at phrase starts and ends', ru: 'Мелодия в начале и в конце фраз' },
-    figure: { kind: 'melody', use: 'ends', between: R4B, withoutMelody: R4 },
+    figure: { kind: 'tune', use: 'ends', between: R4B, withoutTune: R4 },
   },
   melH: {
     name: { en: 'Melody with chord notes under it', ru: 'Мелодия с аккордовыми звуками под ней' },
-    figure: { kind: 'melody', use: 'harmony', withoutMelody: R4 },
+    figure: { kind: 'tune', use: 'harmony', withoutTune: R4 },
   },
   x1: {
     name: { en: 'Whole-note chord', ru: 'Аккорд целыми нотами' },
@@ -430,6 +430,6 @@ export const RIGHT_FIGURE_GROUPS = [
       'flow',
     ],
   },
-  { id: 'melody', figures: ['mel', 'melE', 'melH'] },
+  { id: 'tune', figures: ['mel', 'melE', 'melH'] },
   { id: 'styles', figures: ['rock', 'blu', 'rnb', 'jaz', 'hip', 'sal', 'fun', 'cty'] },
 ] as const satisfies readonly { id: string; figures: readonly RightFigureId[] }[]

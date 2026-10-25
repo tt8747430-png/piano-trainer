@@ -169,7 +169,7 @@ export const common: LocaleResources['common'] = {
     click: 'Метроном',
     clickInfo: 'Доли звучат и после отсчёта',
     tune: 'Мелодия',
-    tuneInfo: 'Под дубль звучит мелодия песни, если она есть',
+    tuneInfo: 'Под дубль звучат нотоносцы песни над фортепиано, если они есть',
   },
   midiSettings: {
     device: {

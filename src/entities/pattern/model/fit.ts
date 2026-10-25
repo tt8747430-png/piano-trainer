@@ -5,7 +5,7 @@ import type { PatternBook } from './book'
 import type { FigureEntry } from './types'
 
 /** What a pattern or figure may need that not all music has, in the order a closed one names it. */
-const FIGURE_NEEDS = ['melody', 'key', 'simpleTime'] as const
+const FIGURE_NEEDS = ['tune', 'key', 'simpleTime'] as const
 export type FigureNeed = (typeof FIGURE_NEEDS)[number]
 
 /**
@@ -20,7 +20,7 @@ export interface PatternFit extends Readonly<Record<FigureNeed, boolean>> {
 }
 
 const NEEDS: Readonly<Record<FigureNeed, (figure: Figure) => boolean>> = {
-  melody: (figure) => figure.kind === 'melody',
+  tune: (figure) => figure.kind === 'tune',
   key: playsKeyTriads,
   simpleTime: splitsTheBeat,
 }

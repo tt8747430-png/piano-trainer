@@ -4,17 +4,20 @@ import { selectPractice, useSettings, useSettingsStoreApi } from '@/entities/set
 import { setPracticeToggle } from '@/features/set-preference'
 import { ToggleTile } from '@/shared/ui'
 
-/** The melody toggle: a piece's tune an octave up as well, saved for every piece with one. */
-export function MelodyToggle() {
+/**
+ * The Tune toggle (ADR 0097): a piece's tune, its top single staff, heard along with the hands; saved
+ * for every piece with one.
+ */
+export function TuneToggle() {
   const { t } = useTranslation('player')
   const settings = useSettingsStoreApi()
-  const { melody } = useSettings(selectPractice)
+  const { tune } = useSettings(selectPractice)
   return (
     <ToggleTile
-      label={t('toggles.melody')}
+      label={t('toggles.tune')}
       icon={Music}
-      pressed={melody}
-      onPressedChange={(on) => setPracticeToggle(settings, 'melody', on)}
+      pressed={tune}
+      onPressedChange={(on) => setPracticeToggle(settings, 'tune', on)}
     />
   )
 }

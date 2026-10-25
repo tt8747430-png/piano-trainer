@@ -16,16 +16,15 @@ export function usePlayer(
   search: PlayerSearch,
   setSearch: (patch: Partial<PlayerSearch>) => void,
 ): WalkingPlayerOf<PracticeChoice, SetupChange> {
-  const { melody: heard, recording: withRecording } = useSettings(selectPractice)
+  const { tune: heard, recording: withRecording } = useSettings(selectPractice)
   // A lead sheet's tune is always heard: it is what its sheet shows (ADR 0083).
-  const melody = heard || isLeadSheet(piece)
+  const tune = heard || isLeadSheet(piece)
   const progress = useProgressStoreApi()
   const book = usePatternBook()
   const { key, pattern, rh, lh, inversion, nearest, chordSize } = search
   const choice = useMemo(
-    () =>
-      resolveChoice(piece, { key, pattern, rh, lh, inversion, nearest, chordSize }, melody, book),
-    [piece, key, pattern, rh, lh, inversion, nearest, chordSize, melody, book],
+    () => resolveChoice(piece, { key, pattern, rh, lh, inversion, nearest, chordSize }, tune, book),
+    [piece, key, pattern, rh, lh, inversion, nearest, chordSize, tune, book],
   )
   // The Player plays the repeats taken, the bars unrolled as they are played.
   const performance = useMemo(

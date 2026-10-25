@@ -35,7 +35,7 @@ describe('ownChoice', () => {
       inversion: null,
       nearest: true,
       chordSize: null,
-      melody: false,
+      tune: false,
     })
   })
 })
@@ -112,7 +112,7 @@ describe('arrangePiece', () => {
     }
   })
 
-  it('falls back to r4 for a melody pattern on a piece without a melody', () => {
+  it('falls back to r4 for a tune pattern on a piece without a tune', () => {
     const performance = arrangePiece(bz5, { ...ownChoice(bz5), pattern: 'r5' }, BUILT_IN_PATTERNS)
     expect(performance.chords.every((c) => c.pattern === 'r4')).toBe(true)
   })
@@ -134,8 +134,8 @@ describe('the words a piece sings (ADR 0093)', () => {
     notes: readonly { readonly lyrics?: readonly unknown[]; readonly hand: string }[],
   ) => notes.filter((n) => n.lyrics !== undefined).map((n) => n.hand)
 
-  it('carries each syllable on the tune’s note, heard or not, and on the right hand’s melody figure (ADR 0097)', () => {
-    const heard = arrangePiece(silent, { ...ownChoice(silent), melody: true }, BUILT_IN_PATTERNS)
+  it('carries each syllable on the tune’s note, heard or not, and on the right hand’s tune figure (ADR 0097)', () => {
+    const heard = arrangePiece(silent, { ...ownChoice(silent), tune: true }, BUILT_IN_PATTERNS)
     const sung = heard.notes.filter((n) => n.lyrics !== undefined)
     expect(new Set(sungBy(sung))).toEqual(new Set(['staff']))
     expect(sung[0]?.lyrics?.[0]).toEqual({ text: 'Si', hyphen: true, held: 1 })

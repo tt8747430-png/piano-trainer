@@ -20,7 +20,7 @@ export const CHROMATIC = {
   direction: 'up',
   tempo: 72,
   pattern: 'block',
-  fit: { methodCodes: false, melody: false, key: false, simpleTime: true },
+  fit: { methodCodes: false, tune: false, key: false, simpleTime: true },
 } as const satisfies {
   readonly chords: ChromaticChords
   readonly direction: ChromaticDirection

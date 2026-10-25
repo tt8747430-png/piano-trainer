@@ -74,7 +74,7 @@ describe('set-preference', () => {
       fingerNumbers: false,
       namedNotes: false,
       positions: false,
-      melody: false,
+      tune: false,
       metronome: true,
       countIn: false,
       recording: true,

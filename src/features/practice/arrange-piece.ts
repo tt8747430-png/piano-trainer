@@ -21,7 +21,7 @@ import type { PracticeChoice } from './choice'
 export const defaultPattern = (piece: Piece): PatternChoice =>
   hasChartPlan(piece) ? 'chart' : piece.pattern
 
-/** The piece as written: its key, its default pattern and chord size, no figures swapped, no doubled melody. */
+/** The piece as written: its key, its default pattern and chord size, no figures swapped, its tune unheard. */
 export const ownChoice = (piece: Piece): PracticeChoice => ({
   tonic: pieceKey(piece).tonic,
   pattern: defaultPattern(piece),
@@ -30,11 +30,11 @@ export const ownChoice = (piece: Piece): PracticeChoice => ({
   inversion: null,
   nearest: true,
   chordSize: null,
-  melody: false,
+  tune: false,
 })
 
 /**
- * A piece as the Player plays it: the learner's key, pattern, hands' figures, chord size and melody;
+ * A piece as the Player plays it: the learner's key, pattern, hands' figures, chord size and tune;
  * its bars as written, or in the order they are played (`unfold`: the repeats taken, the Player's).
  */
 export function arrangePiece(
@@ -77,6 +77,6 @@ function arrangeOptions(piece: Piece, choice: PracticeChoice, book: PatternBook)
               ),
         }
       : {}),
-    ...(staves.length > 0 ? { staves, hearTune: choice.melody } : {}),
+    ...(staves.length > 0 ? { staves, hearTune: choice.tune } : {}),
   }
 }

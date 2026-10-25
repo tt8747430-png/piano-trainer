@@ -131,34 +131,34 @@ export interface EventFigure {
 }
 /**
  * A right hand that plays the tune: doubled, only at a line's ends, or harmonised under long notes.
- * `withoutMelody` plays when this figure is chosen on its own for a piece with no melody.
+ * `withoutTune` plays when this figure is chosen on its own for a piece with no tune.
  */
-export type MelodyFigure =
+export type TuneFigure =
   | {
-      readonly kind: 'melody'
+      readonly kind: 'tune'
       readonly use: 'double' | 'harmony'
-      readonly withoutMelody: EventFigure
+      readonly withoutTune: EventFigure
     }
   | {
-      readonly kind: 'melody'
+      readonly kind: 'tune'
       readonly use: 'ends'
       readonly between: EventFigure
-      readonly withoutMelody: EventFigure
+      readonly withoutTune: EventFigure
     }
-export type Figure = EventFigure | MelodyFigure
+export type Figure = EventFigure | TuneFigure
 export interface EventPattern {
   readonly id: string
   readonly rh: EventFigure
   readonly lh: EventFigure
 }
-/** A pattern whose right hand plays the tune; on a piece with no melody `withoutMelody` plays instead, both hands. */
-export interface MelodyPattern {
+/** A pattern whose right hand plays the tune; on a piece with no tune `withoutTune` plays instead, both hands. */
+export interface TunePattern {
   readonly id: string
-  readonly rh: MelodyFigure
+  readonly rh: TuneFigure
   readonly lh: EventFigure
-  readonly withoutMelody: EventPattern
+  readonly withoutTune: EventPattern
 }
-export type Pattern = EventPattern | MelodyPattern
+export type Pattern = EventPattern | TunePattern
 
 /** Who plays a note: a hand of the piano, or a single staff over it (ADR 0097). */
 export type NoteHand = Hand | 'staff'

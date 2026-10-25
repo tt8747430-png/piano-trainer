@@ -45,8 +45,8 @@ import type {
   Figure,
   FigureEvent,
   HandNote,
-  MelodyFigure,
-  MelodyPattern,
+  TuneFigure,
+  TunePattern,
   Pattern,
   Performance,
   PerformanceBar,
@@ -303,26 +303,26 @@ const VOICED_TOKENS = new Set(['chord', 'upper-voices', 'voice'])
 const playsVoiced = (figure: EventFigure): boolean =>
   figure.events.some((event) => event.tones.some((tone) => VOICED_TOKENS.has(tone.token.kind)))
 
-const isMelodyPattern = (pattern: Pattern): pattern is MelodyPattern => pattern.rh.kind === 'melody'
+const isTunePattern = (pattern: Pattern): pattern is TunePattern => pattern.rh.kind === 'tune'
 
 function patternFor(
   method: string | undefined,
   section: number,
   options: ArrangeOptions,
-  hasMelody: boolean,
+  hasTune: boolean,
 ) {
   const planned = method === undefined ? undefined : options.methods?.get(method)
   const pattern = planned ?? options.sections?.[section] ?? options.pattern
-  return isMelodyPattern(pattern) && !hasMelody ? pattern.withoutMelody : pattern
+  return isTunePattern(pattern) && !hasTune ? pattern.withoutTune : pattern
 }
 
 /** A right hand that plays the tune plays its fallback when there is no tune. */
-const playable = (figure: Figure, hasMelody: boolean): Figure =>
-  figure.kind === 'melody' && !hasMelody ? figure.withoutMelody : figure
+const playable = (figure: Figure, hasTune: boolean): Figure =>
+  figure.kind === 'tune' && !hasTune ? figure.withoutTune : figure
 
 /** What the right hand plays in a bar: `ends` plays the tune in a line's first and last bars only. */
 const inBar = (figure: Figure, atLineEnd: boolean): Figure =>
-  figure.kind === 'melody' && figure.use === 'ends' && !atLineEnd ? figure.between : figure
+  figure.kind === 'tune' && figure.use === 'ends' && !atLineEnd ? figure.between : figure
 
 /** Where a stretch of a chord sits in pattern time and on the timeline. */
 interface Window {
@@ -431,7 +431,7 @@ function harmonyUnder(tune: Midi, context: ChordContext): Midi[] {
 
 /** The tune in the right hand, over a window of its chord: doubled as written, or harmonised under. */
 function playTune(
-  figure: MelodyFigure,
+  figure: TuneFigure,
   tune: readonly StaffNote[],
   context: ChordContext,
   window: Window,
@@ -612,19 +612,14 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     )
     previous = context.voiced
     const { method } = placed.chord
-    const pattern: EventPattern | MelodyPattern = patternFor(
-      method,
-      section,
-      options,
-      tune !== null,
-    )
+    const pattern: EventPattern | TunePattern = patternFor(method, section, options, tune !== null)
     const rh = inBar(
       playable(options.rh ?? pattern.rh, tune !== null),
       layout.lineEnds.has(placed.bar),
     )
     const lh = options.lh ?? pattern.lh
     const written = layout.hands[placed.bar]
-    playsTune.push(rh.kind === 'melody' && !written?.rh)
+    playsTune.push(rh.kind === 'tune' && !written?.rh)
     chords.push({
       ...chord,
       symbol: chordSymbol(chord),

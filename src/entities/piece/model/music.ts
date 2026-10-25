@@ -162,6 +162,6 @@ const ASCII_ACCIDENTALS: Readonly<Record<Accidental, string>> = {
   2: '##',
 }
 
-/** A note as the melody and the hands write it: its name in ASCII and its written octave (`C#5`, `B#3`). */
+/** A note as a single staff and the hands write it: its name in ASCII and its written octave (`C#5`, `B#3`). */
 export const pitchText = (n: { readonly midi: Midi; readonly spelled: SpelledNote }): string =>
   `${n.spelled.letter}${ASCII_ACCIDENTALS[n.spelled.accidental]}${writtenOctave(n.midi, n.spelled)}`

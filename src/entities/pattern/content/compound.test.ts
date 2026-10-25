@@ -319,7 +319,7 @@ describe('the octaves and chords of lesson 2', () => {
 
 describe('the methods in compound time', () => {
   it('all play in 6/8 and 12/8', () => {
-    const compound = { methodCodes: true, melody: false, key: true, simpleTime: false }
+    const compound = { methodCodes: true, tune: false, key: true, simpleTime: false }
     for (const code of METHOD_CODES) {
       const entry = BUILT_IN_PATTERNS.require(METHODS[code].pattern)
       expect(patternNeed(entry, compound), code).toBeNull()

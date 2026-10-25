@@ -6,7 +6,7 @@ import { useKeyName } from '@/shared/i18n'
 import { noteParam, writtenKeyAccidentals } from '@/shared/lib/music'
 import { ChordSizeField, Labelled, NoteChoice } from '@/shared/ui'
 import {
-  MelodyToggle,
+  TuneToggle,
   PatternCard,
   PlayerSetup,
   RecordingToggle,
@@ -15,7 +15,7 @@ import {
 import { PlayingSection } from '@/widgets/practice-player'
 
 /**
- * A piece's Setup: its key, the pattern and figures, its chord size, melody and recording where it
+ * A piece's Setup: its key, the pattern and figures, its chord size, tune and recording where it
  * has them, and how it plays; at its foot the way into the score editor, whose Close comes back here.
  */
 export function PieceSetup({
@@ -65,7 +65,7 @@ export function PieceSetup({
         info={ownKey ? t('recordingOnlyIn', { key: ownKey }) : undefined}
       >
         {/* A lead sheet's tune is always heard (ADR 0083). */}
-        {fit.melody && !isLeadSheet(piece) ? <MelodyToggle /> : null}
+        {fit.tune && !isLeadSheet(piece) ? <TuneToggle /> : null}
         {piece.recording ? <RecordingToggle ownKey={ownKey} /> : null}
       </PlayingSection>
     </PlayerSetup>

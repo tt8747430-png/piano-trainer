@@ -56,7 +56,7 @@ function firstLine(performance: Performance): { music: TimedMusic; from: number;
  * tune over the first line of «Отче наш», as its piece plays it.
  */
 export function patternSample(pattern: BookPattern, book: PatternBook): PatternSample {
-  const tunePiece = pattern.pattern.rh.kind === 'melody' ? pieceById(TUNE_PIECE) : undefined
+  const tunePiece = pattern.pattern.rh.kind === 'tune' ? pieceById(TUNE_PIECE) : undefined
   const performance = tunePiece
     ? arrangePiece(tunePiece, { ...ownChoice(tunePiece), pattern: pattern.ref }, book)
     : arrange(C_BAR, {

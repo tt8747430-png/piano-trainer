@@ -7,5 +7,5 @@ import type { Performance } from '@/shared/lib/arrangement'
 /** The draft as the Player plays it as written: its key, every bar's written hands, its tune heard. */
 export function arrangeDraft(draft: Draft): Performance {
   const piece: ChartPiece = { id: 'draft', kind: 'song', title: '', ...writeDraft(draft) }
-  return arrangePiece(piece, { ...ownChoice(piece), melody: true }, BUILT_IN_PATTERNS)
+  return arrangePiece(piece, { ...ownChoice(piece), tune: true }, BUILT_IN_PATTERNS)
 }

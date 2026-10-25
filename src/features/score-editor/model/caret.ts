@@ -54,7 +54,7 @@ function notePlaces(draft: Draft, layer: NoteLayer, step: Tick): Tick[] {
   ]).filter((tick) => tick <= totalTicks(draft))
 }
 
-/** Every place the caret may stand in a layer, the value's step apart in the melody or a hand. */
+/** Every place the caret may stand in a layer, the value's step apart on a single staff or a hand. */
 export const caretPlaces = (draft: Draft, layer: Layer, step: Tick): Tick[] =>
   layer === 'chords' ? chordPlaces(draft) : notePlaces(draft, layer, step)
 

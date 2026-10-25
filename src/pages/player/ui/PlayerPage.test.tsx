@@ -361,23 +361,23 @@ describe('Player', () => {
     expect(router.state.location.search).toMatchObject({ key: 'A', swing: true })
   })
 
-  it('shows all twelve keys in the Setup, the piece’s chosen, and Melody only for a piece with a tune', async () => {
+  it('shows all twelve keys in the Setup, the piece’s chosen, and Tune only for a piece with a tune', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
     const key = await screen.findByRole('group', { name: 'Key' })
     expect(within(key).getByRole('radio', { name: 'G' })).toBeChecked()
     expect(within(key).getByText('G major')).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Melody' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Tune' })).not.toBeInTheDocument()
   })
 
-  it('shows Melody in the Setup of a piece with a tune', async () => {
+  it('shows Tune in the Setup of a piece with a tune', async () => {
     const withTune = PIECES.find((piece) => stavesOf(piece).length > 0)
     if (!withTune) throw new Error('no piece has a tune')
     const user = userEvent.setup()
     await renderApp(`/play/${withTune.id}`)
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    expect(await screen.findByRole('button', { name: 'Melody' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'Tune' })).toBeInTheDocument()
   })
 
   it('puts the fingers under the keys with Finger numbers', async () => {
@@ -508,10 +508,10 @@ describe('Player', () => {
 })
 
 describe('the words under the tune (ADR 0093)', () => {
-  it('prints the verse under the melody while it plays, and hides it from the View', async () => {
+  it('prints the verse under the tune while it plays, and hides it from the View', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
-    act(() => setPracticeToggle(settingsStore, 'melody', true))
+    act(() => setPracticeToggle(settingsStore, 'tune', true))
     await waitFor(() => expect(document.querySelectorAll('.syl').length).toBeGreaterThan(0))
     expect(document.querySelector('.syl')?.textContent?.trim()).toBe('Si')
     await user.click(await screen.findByRole('button', { name: 'View' }))

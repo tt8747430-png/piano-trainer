@@ -82,12 +82,12 @@ describe('Settings', () => {
     expect(settingsStore.getState().floating.labels).toBe(true)
   })
 
-  it('keeps how a take is recorded under Recording: the metronome and the melody, saved', async () => {
+  it('keeps how a take is recorded under Recording: the metronome and the tune, saved', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings')
     const recording = await screen.findByRole('region', { name: 'Recording' })
     await user.click(within(recording).getByRole('switch', { name: 'Metronome' }))
-    await user.click(within(recording).getByRole('switch', { name: 'Melody' }))
+    await user.click(within(recording).getByRole('switch', { name: 'Tune' }))
     expect(settingsStore.getState().recorder).toEqual({ click: false, tune: true })
     await user.click(within(recording).getByRole('button', { name: 'About Metronome' }))
     expect(await screen.findByRole('dialog', { name: 'Metronome' })).toHaveTextContent(

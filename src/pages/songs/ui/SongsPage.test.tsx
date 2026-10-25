@@ -117,7 +117,7 @@ describe('Songs: your own', () => {
     await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Hymn')
     await user.click(screen.getByRole('button', { name: 'Customize' }))
     const score = await screen.findByRole('dialog', { name: 'Score' })
-    // The staves a score starts with, no melody of the app's: more are added on the score.
+    // The staves a score starts with: more are added, named and taken away on the score.
     const staves = within(score).getByRole('radiogroup', { name: 'Staves' })
     expect(
       within(staves)

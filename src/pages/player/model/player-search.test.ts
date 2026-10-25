@@ -20,14 +20,14 @@ describe('resolveChoice', () => {
     expect(resolveChoice(bz5, {}, false, BUILT_IN_PATTERNS)).toEqual(ownChoice(bz5))
   })
 
-  it('takes the key, figures and melody the learner chose', () => {
+  it('takes the key, figures and tune the learner chose', () => {
     expect(
       resolveChoice(bz5, { key: noteParam(note('A')), rh: 't1', lh: 'o' }, true, BUILT_IN_PATTERNS),
     ).toMatchObject({
       tonic: note('A'),
       rh: 't1',
       lh: 'o',
-      melody: true,
+      tune: true,
     })
   })
 
@@ -63,7 +63,7 @@ describe('resolveChoice', () => {
     const tuneless = PIECES.find(
       (p) => stavesOf(p).length === 0 && !hasChartPlan(p) && !isCompound(p.meter),
     )
-    if (!tuneless) throw new Error('a piece in simple time without a melody')
+    if (!tuneless) throw new Error('a piece in simple time without a tune')
     expect(
       resolveChoice(tuneless, { pattern: 'r6', rh: 'mel' }, false, BUILT_IN_PATTERNS),
     ).toMatchObject({

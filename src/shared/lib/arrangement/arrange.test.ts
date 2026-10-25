@@ -25,8 +25,8 @@ import type {
   EventFigure,
   EventPattern,
   HandNote,
-  MelodyFigure,
-  MelodyPattern,
+  TuneFigure,
+  TunePattern,
   NoteHand,
   Performance,
   StaffMusic,
@@ -690,23 +690,23 @@ describe('arrange', () => {
     expect(onsets(performance, 'lh')).toEqual([0, 24, 96, 120])
   })
 
-  const DOUBLE: MelodyFigure = { kind: 'melody', use: 'double', withoutMelody: figure('0/16 C') }
+  const DOUBLE: TuneFigure = { kind: 'tune', use: 'double', withoutTune: figure('0/16 C') }
   const plain = pattern('plain', '0/4 C,4/4 C,8/4 C,12/4 C', '0/16 L1')
-  const TUNE_PATTERN: MelodyPattern = {
+  const TUNE_PATTERN: TunePattern = {
     id: 'tune',
     rh: DOUBLE,
     lh: figure('0/16 L1+L8'),
-    withoutMelody: plain,
+    withoutTune: plain,
   }
 
-  it('falls back to the plain pattern, both hands, without a melody', () => {
+  it('falls back to the plain pattern, both hands, without a tune', () => {
     const performance = arrange(chart([['C']]), { tonic: C, pattern: TUNE_PATTERN })
     expect(onsets(performance, 'rh')).toEqual([0, 24, 48, 72])
     expect(midisAt(performance, 'lh', 0)).toEqual([36])
     expect(performance.chords[0]?.pattern).toBe('plain')
   })
 
-  it('plays a chosen melody figure’s fallback without a melody', () => {
+  it('plays a chosen tune figure’s fallback without a tune', () => {
     const performance = arrange(chart([['C']]), { tonic: C, pattern: BEATS, rh: DOUBLE })
     expect(onsets(performance, 'rh')).toEqual([0])
     expect(midisAt(performance, 'rh', 0)).toEqual([60, 64, 67])
@@ -818,10 +818,10 @@ describe('arrange', () => {
   })
 
   it('harmonises long tune notes with chord tones below', () => {
-    const harmony: MelodyFigure = {
-      kind: 'melody',
+    const harmony: TuneFigure = {
+      kind: 'tune',
       use: 'harmony',
-      withoutMelody: figure('0/16 C'),
+      withoutTune: figure('0/16 C'),
     }
     const long = arrange(chart([['C']]), {
       tonic: C,
@@ -841,11 +841,11 @@ describe('arrange', () => {
   })
 
   it('plays the tune only at the ends of a line', () => {
-    const ends: MelodyFigure = {
-      kind: 'melody',
+    const ends: TuneFigure = {
+      kind: 'tune',
       use: 'ends',
       between: figure('0/8 C'),
-      withoutMelody: figure('0/16 C'),
+      withoutTune: figure('0/16 C'),
     }
     const performance = arrange(chart([['C', 'F', 'G']]), {
       tonic: C,
@@ -859,11 +859,11 @@ describe('arrange', () => {
   })
 
   it('hears the tune’s staff where a line’s middle plays the figure between its ends', () => {
-    const ends: MelodyFigure = {
-      kind: 'melody',
+    const ends: TuneFigure = {
+      kind: 'tune',
       use: 'ends',
       between: figure('0/8 C'),
-      withoutMelody: figure('0/16 C'),
+      withoutTune: figure('0/16 C'),
     }
     const performance = arrange(chart([['C', 'F', 'G']]), {
       tonic: C,
@@ -997,12 +997,12 @@ describe('a hand written into a bar', () => {
     expect(played?.marks?.grace?.map((g) => [g.midi, noteName(g.spelled)])).toEqual([[64, 'E']])
   })
 
-  it('plays the written right hand in place of the tune a melody pattern gives it', () => {
-    const DOUBLING: MelodyPattern = {
+  it('plays the written right hand in place of the tune a tune pattern gives it', () => {
+    const DOUBLING: TunePattern = {
       id: 'tune',
-      rh: { kind: 'melody', use: 'double', withoutMelody: figure('0/16 C') },
+      rh: { kind: 'tune', use: 'double', withoutTune: figure('0/16 C') },
       lh: figure('0/16 L1'),
-      withoutMelody: BLOCK,
+      withoutTune: BLOCK,
     }
     const tune: StaffMusic = {
       clef: 'treble',

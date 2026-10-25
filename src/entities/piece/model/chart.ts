@@ -68,7 +68,7 @@ export const hasChartPlan = (piece: Piece): boolean =>
 export const pieceFit = (piece: Piece): PatternFit => ({
   methodCodes: hasChartPlan(piece),
   ...(hasChartPlan(piece) ? { chart: [...patternsOfPiece(piece)] } : {}),
-  melody: stavesOf(piece).length > 0,
+  tune: stavesOf(piece).length > 0,
   key: true,
   simpleTime: !isCompound(piece.meter),
 })

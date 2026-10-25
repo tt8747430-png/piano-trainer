@@ -59,12 +59,12 @@ export const player: LocaleResources['player'] = {
   ownKeyOnly: 'Только в тональности {{key}}',
   recordingOnlyIn: 'Запись звучит только в своей тональности — {{key}}.',
   /** Why a pattern or figure is closed to the music. */
-  needs: { melody: 'Нужна мелодия', key: 'Нужна тональность', simpleTime: 'Нужен простой размер' },
+  needs: { tune: 'Нужна мелодия', key: 'Нужна тональность', simpleTime: 'Нужен простой размер' },
   rhGroup: {
     chords: 'Аккорды',
     broken: 'Ломаные аккорды',
     moving: 'Движение голосов',
-    melody: 'С мелодией',
+    tune: 'С мелодией',
     styles: 'Стили',
   },
   lhGroup: {
@@ -77,7 +77,7 @@ export const player: LocaleResources['player'] = {
   toggles: {
     namedNotes: 'Названия нот',
     positions: 'Положения аккордов',
-    melody: 'Мелодия',
+    tune: 'Мелодия',
     metronome: 'Метроном',
     countIn: 'Отсчёт',
     swing: 'Свинг',

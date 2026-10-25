@@ -24,12 +24,12 @@ export const piece = {
   reset: 'Reset to the original',
   resetting: {
     title: 'Reset {{title}}?',
-    says: 'Your chords, melody and written-out hands are removed, and it goes back to the book’s version.',
+    says: 'Your chords, staves and written-out hands are removed, and it goes back to the book’s version.',
     confirm: 'Reset',
     cancel: 'Keep mine',
   },
   delete: 'Delete',
-  // An own song sent on as a link: its chart, tune and written hands inside it.
+  // An own song sent on as a link: its chart, staves and written hands inside it.
   share: 'Share',
   shareCopied: 'Link copied. Anyone who opens it can add the song to their own.',
   shareFailed: 'The link could not be made here.',

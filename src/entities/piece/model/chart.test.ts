@@ -110,13 +110,13 @@ describe('pieceFit', () => {
     expect(pieceFit(testSong(['C:t1 F'], { staves: [{ notes: 'C4/4' }] }))).toEqual({
       methodCodes: true,
       chart: ['t1', 'r4'],
-      melody: true,
+      tune: true,
       key: true,
       simpleTime: true,
     })
     expect(pieceFit(testSong(['C'], { meter: '6/8' }))).toMatchObject({
       methodCodes: false,
-      melody: false,
+      tune: false,
       simpleTime: false,
     })
   })

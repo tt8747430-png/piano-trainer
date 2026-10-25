@@ -4,12 +4,12 @@ import { BUILT_IN_PATTERNS } from './book'
 import { figureNeed, patternNeed, playableFigure, playablePattern, type PatternFit } from './fit'
 import { LEFT_FIGURE_IDS, PATTERN_IDS, RIGHT_FIGURE_IDS } from './types'
 
-const EVERYTHING: PatternFit = { methodCodes: true, melody: true, key: true, simpleTime: true }
-const NOTHING: PatternFit = { methodCodes: false, melody: false, key: false, simpleTime: false }
+const EVERYTHING: PatternFit = { methodCodes: true, tune: true, key: true, simpleTime: true }
+const NOTHING: PatternFit = { methodCodes: false, tune: false, key: false, simpleTime: false }
 
 describe('figureNeed', () => {
   it('closes a figure that plays the tune to music without one', () => {
-    expect(figureNeed(RIGHT_FIGURES.mel.figure, { ...EVERYTHING, melody: false })).toBe('melody')
+    expect(figureNeed(RIGHT_FIGURES.mel.figure, { ...EVERYTHING, tune: false })).toBe('tune')
     expect(figureNeed(RIGHT_FIGURES.mel.figure, EVERYTHING)).toBeNull()
   })
 
@@ -28,8 +28,8 @@ describe('figureNeed', () => {
 
 describe('patternNeed', () => {
   it('names the first need of either hand that the music lacks', () => {
-    expect(patternNeed(BUILT_IN_PATTERNS.require('r6'), NOTHING)).toBe('melody')
-    expect(patternNeed(BUILT_IN_PATTERNS.require('r6'), { ...NOTHING, melody: true })).toBe(
+    expect(patternNeed(BUILT_IN_PATTERNS.require('r6'), NOTHING)).toBe('tune')
+    expect(patternNeed(BUILT_IN_PATTERNS.require('r6'), { ...NOTHING, tune: true })).toBe(
       'simpleTime',
     )
     expect(patternNeed(BUILT_IN_PATTERNS.require('flow'), { ...EVERYTHING, key: false })).toBe(
@@ -42,9 +42,9 @@ describe('patternNeed', () => {
 describe('playablePattern', () => {
   it('takes a pattern the music can play, else the music’s own', () => {
     expect(playablePattern(BUILT_IN_PATTERNS, 'r6', 'block', EVERYTHING)).toBe('r6')
-    expect(
-      playablePattern(BUILT_IN_PATTERNS, 'r6', 'block', { ...EVERYTHING, melody: false }),
-    ).toBe('block')
+    expect(playablePattern(BUILT_IN_PATTERNS, 'r6', 'block', { ...EVERYTHING, tune: false })).toBe(
+      'block',
+    )
     expect(playablePattern(BUILT_IN_PATTERNS, undefined, 'ballad', EVERYTHING)).toBe('ballad')
   })
 
@@ -57,7 +57,7 @@ describe('playablePattern', () => {
 describe('playableFigure', () => {
   it('takes a figure the music can play, else the pattern’s own', () => {
     expect(playableFigure('mel', RIGHT_FIGURES, EVERYTHING)).toBe('mel')
-    expect(playableFigure('mel', RIGHT_FIGURES, { ...EVERYTHING, melody: false })).toBeNull()
+    expect(playableFigure('mel', RIGHT_FIGURES, { ...EVERYTHING, tune: false })).toBeNull()
     expect(playableFigure(undefined, LEFT_FIGURES, EVERYTHING)).toBeNull()
   })
 })

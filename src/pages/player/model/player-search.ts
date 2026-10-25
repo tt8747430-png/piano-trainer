@@ -26,7 +26,7 @@ export type PlayerSearch = PracticeView & SetupParams & { readonly bar?: number 
 export function resolveChoice(
   piece: Piece,
   search: SetupParams,
-  melody: boolean,
+  tune: boolean,
   book: PatternBook,
 ): PracticeChoice {
   const own = ownChoice(piece)
@@ -40,7 +40,7 @@ export function resolveChoice(
     inversion: search.inversion ?? null,
     nearest: search.nearest !== false,
     chordSize: choosableChordSize(piece) === null ? null : (search.chordSize ?? null),
-    melody,
+    tune,
   }
 }
 
