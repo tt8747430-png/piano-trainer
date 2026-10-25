@@ -269,7 +269,7 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         ? commit(state, setSyllable(draft, caret, action.verse, action.text), { struck: null })
         : state
     case 'chord':
-      return chordSet(state, action.chord, action.advance)
+      return chordSet(state, action.chord)
     case 'take':
       return commit(state, writeTake(draft, barAt(draft, caret).start, action.parts), {
         struck: null,

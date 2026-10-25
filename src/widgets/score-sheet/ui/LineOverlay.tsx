@@ -1,4 +1,4 @@
-import { useRef, type MouseEvent, type PointerEvent, type RefObject } from 'react'
+import { useRef, type MouseEvent, type PointerEvent, type Ref, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Layer } from '@/features/score-editor'
 import { useBarName } from '@/shared/i18n'
@@ -17,9 +17,16 @@ import {
 } from '@/shared/ui/score'
 import { LAYER_OF_STAFF, layerAt, staffOfLayer, type SheetLineBars } from '../model/line-music'
 import { chordRow, chosenBand } from '../model/chosen-band'
+import {
+  chordFieldBox,
+  chordRowTick,
+  printedChords,
+  type FieldBox,
+  type SheetField,
+} from '../model/field-place'
 import { nearestPlace, roomAt } from '../model/nearest'
 import { noteAtStaffY, stepsDragged } from '../model/staff-pitch'
-import { AFTER_NUMBER_PX, NUMBER_INSET_PX } from '../model/label-row'
+import { AFTER_NUMBER_PX, CHORD_PX, NUMBER_INSET_PX } from '../model/label-row'
 import type { EditPrinted } from '../model/printed'
 import { EditorCaret } from './EditorCaret'
 import { LineLabels } from './LineLabels'
@@ -43,7 +50,9 @@ function zoomOf(element: HTMLElement, box: DOMRect): number {
  * 0096), and each bar as a button that puts the caret where it is clicked; a double click there
  * writes the note on the line or space clicked (ADR 0064). The notes at the caret are a grip: dragged up or down, they move by notes of the key. The
  * tempo mark, each clef, key and time signature and the staves' names are buttons too, each opening
- * what changes it there (`edit`, ADR 0094).
+ * what changes it there (`edit`, ADR 0094). A tap on the chord row opens the chord-symbol field at
+ * the beat or the symbol tapped (`onField`), and the field open on this line has its place there
+ * (`fieldAnchor`, ADR 0096).
  */
 export function LineOverlay({
   layout,
@@ -65,7 +74,16 @@ export function LineOverlay({
   edit,
   onWrite,
   onDrag,
+  field = null,
+  fieldAnchor,
+  onField,
 }: {
+  /** The field open at the caret on this line, its place drawn for it to stand at (ADR 0096). */
+  field?: SheetField | null | undefined
+  /** The element marking the open field's place, as it comes and goes. */
+  fieldAnchor?: Ref<HTMLDivElement> | undefined
+  /** A tap on what a field types where it is printed: its tick on the piece, and its row. */
+  onField?: ((field: SheetField, tick: Tick, layer: Layer) => void) | undefined
   /** The labels' row over the staff, in CSS px. */
   row: number
   /** The labels' size. */
@@ -102,6 +120,13 @@ export function LineOverlay({
 }) {
   const { t } = useTranslation('editor')
   const barName = useBarName()
+  // The chord symbols printed over the line, where a tap on one opens its field (ADR 0096).
+  const printed = chordNames ? printedChords(layout, music.chords, CHORD_PX * labels) : []
+  // The open field's place at the caret: over the chord row at its beat.
+  const fieldBox: FieldBox | null =
+    field?.kind === 'chord' && caret !== null && layer === 'chords' && chordNames
+      ? chordFieldBox(layout, printed, caret, row)
+      : null
   // The notes chosen on this line as the one selection's band over the staff of the row they are
   // chosen in (the chord row, choosing chords), ADR 0096: the notes themselves coloured.
   const chosen = chosenBand(layout, line.start, selection, {
@@ -137,9 +162,10 @@ export function LineOverlay({
    * What a click (or a held finger) at a point of bar `index` chooses (ADR 0088), as the Player's
    * does: the head under it (one note of a chord), the chord whose stem or column it is on, or the
    * empty place it is in (a rest, the room after the last note, as a line); on empty staff between
-   * notes, nothing, what is chosen let go. A chord in the chord row.
+   * notes, nothing, what is chosen let go. A chord in the chord row, where a tap opens the
+   * chord-symbol field at the symbol printed there or the beat it is nearest (ADR 0096).
    */
-  const chooseAt = (index: number, point: SheetPoint | null, extend: boolean) => {
+  const chooseAt = (index: number, point: SheetPoint | null, extend: boolean, held: boolean) => {
     const placed = line.bars[index]
     const measure = layout.measures[index]
     if (!placed || !measure) return
@@ -151,6 +177,14 @@ export function LineOverlay({
     const end = placed.start + placed.bar.ticks
     const inBar = (tick: Tick) => tick >= placed.start && tick < end
     const xOf = (at: Tick) => xAtTick(layout, at - line.start)
+    if (target === 'chords' && onField && !extend && !held) {
+      const places = placesOf('chords')
+        .filter(inBar)
+        .map((tick) => tick - line.start)
+      const tick = chordRowTick(printed, places, point.x, (at) => xAtTick(layout, at))
+      onField({ kind: 'chord' }, tick === undefined ? placed.start : line.start + tick, 'chords')
+      return
+    }
     if (target === 'chords') {
       const tick = nearestPlace(tapsOf('chords').filter(inBar), point.x, xOf)
       onPlace(tick ?? placed.start, 'chords', extend)
@@ -175,11 +209,12 @@ export function LineOverlay({
     else if (!extend) onDeselect()
   }
   const choice = useSheetChoice({
-    at: (start, point, extend) =>
+    at: (start, point, extend, held) =>
       chooseAt(
         line.bars.findIndex((placed) => placed.start === start),
         point,
         extend,
+        held,
       ),
     reach: onReach,
   })
@@ -242,12 +277,21 @@ export function LineOverlay({
       ) : null}
       <LineLabels
         layout={layout}
-        music={music}
+        chords={printed}
         firstBar={(line.bars[0]?.index ?? 0) + 1}
-        chordNames={chordNames}
         row={row}
         size={labels}
       />
+      {fieldBox ? (
+        // Where the open field stands (ADR 0096): its page's popover is anchored to it.
+        <div
+          ref={fieldAnchor}
+          aria-hidden
+          data-slot="field-anchor"
+          className="pointer-events-none absolute"
+          style={fieldBox}
+        />
+      ) : null}
       <PrintedSigns
         layout={layout}
         bars={line.bars.map((placed) => placed.index)}

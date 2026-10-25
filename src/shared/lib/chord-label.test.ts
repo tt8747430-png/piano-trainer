@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { chordLabels } from './chord-label'
+import { chordLabels, chordLabelWidth } from './chord-label'
 
 /** Where each name ends, at the width `chordLabels` reckons. */
 const ends = (placed: { x: number; size: number }[], symbols: string[]) =>
@@ -58,5 +58,10 @@ describe('chordLabels', () => {
     const [, lastEnd = 0] = ends(placed, symbols)
     expect(lastEnd).toBeLessThanOrEqual(110)
     expect(placed[1]?.size).toBeGreaterThanOrEqual(16 * 0.85)
+  })
+
+  it('reckons a name as wide as its letters at its size: where a tap on it lands', () => {
+    expect(chordLabelWidth('C', 20)).toBe(13)
+    expect(chordLabelWidth('Am7', 20)).toBe(39)
   })
 })

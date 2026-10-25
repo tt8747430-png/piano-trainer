@@ -92,7 +92,7 @@ describe('shortcutOf', () => {
     expect(shortcutOf(press('KeyY', 'y', { ctrlKey: true }), 'melody')).toEqual({ type: 'redo' })
   })
 
-  it('copies, cuts and pastes what is chosen in any row, and opens the chord field with Enter in the chords', () => {
+  it('copies, cuts and pastes what is chosen in any row, Enter going on a line in each', () => {
     expect(shortcutOf(press('KeyC', 'c', { metaKey: true }), 'chords')).toEqual({
       type: 'clip',
       edit: 'copy',
@@ -113,7 +113,7 @@ describe('shortcutOf', () => {
       type: 'clip',
       edit: 'paste',
     })
-    expect(shortcutOf(press('Enter', 'Enter'), 'chords')).toEqual({ type: 'chordField' })
+    expect(shortcutOf(press('Enter', 'Enter'), 'chords')).toMatchObject({ by: 'line' })
     expect(shortcutOf(press('Enter', 'Enter'), 'melody')).toEqual({
       type: 'move',
       by: 'line',
@@ -166,6 +166,21 @@ describe('shortcutOf', () => {
       direction: -1,
     })
     expect(shortcutOf(press('Escape', 'Escape'), 'melody')).toEqual({ type: 'deselect' })
+  })
+
+  it('opens the chord-symbol field with Cmd or Ctrl and K, from any row, as Flat’s (ADR 0096)', () => {
+    for (const layer of ['chords', 'melody', 'lh'] as const) {
+      expect(shortcutOf(press('KeyK', 'k', { metaKey: true }), layer)).toEqual({
+        type: 'field',
+        field: 'chord',
+      })
+      expect(shortcutOf(press('KeyK', 'k', { ctrlKey: true }), layer)).toEqual({
+        type: 'field',
+        field: 'chord',
+      })
+    }
+    // K alone is the piano's.
+    expect(shortcutOf(press('KeyK', 'k'), 'melody')).toBeNull()
   })
 
   it('cycles the editing modes with I, a letter typing leaves free, on a staff alone (ADR 0092)', () => {

@@ -74,12 +74,6 @@ export type ClipEdit = 'copy' | 'cut' | 'paste'
 /** How far the caret moves: a step of the value (or to the next place), a bar, or to an end. */
 export type CaretMove = 'step' | 'bar' | 'line' | 'end'
 
-/**
- * Where the caret goes after a chord: nowhere (a chord built part by part); the next beat; the next
- * bar (staying on the last, a tapped chord); or the next bar, one added past the last (a chart typed on).
- */
-export type ChordAdvance = 'stay' | 'beat' | 'bar' | 'barAdding'
-
 export type EditorAction =
   | { readonly type: 'layer'; readonly layer: Layer }
   | { readonly type: 'value'; readonly value: ChosenValue['value'] }
@@ -144,7 +138,8 @@ export type EditorAction =
   | { readonly type: 'syllable'; readonly verse: number; readonly text: string }
   /** The notes at the caret joined to the same keys' notes after them. */
   | { readonly type: 'tie' }
-  | { readonly type: 'chord'; readonly chord: Chord; readonly advance: ChordAdvance }
+  /** A chord set at the caret's place in the chords (the chord-symbol field's), the caret staying. */
+  | { readonly type: 'chord'; readonly chord: Chord }
   /** A take written from the caret's bar (spec 2026-10-05 §4). */
   | { readonly type: 'take'; readonly parts: readonly TakePart[] }
   | { readonly type: 'bars'; readonly edit: BarEdit }

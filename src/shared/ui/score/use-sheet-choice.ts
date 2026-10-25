@@ -15,9 +15,10 @@ export interface SheetPoint {
 export interface SheetChoice {
   /**
    * A click or tap on bar `bar` at a point (none: the bar's button pressed from the keys), Shift
-   * extending what is chosen; a finger held still there, the same without Shift.
+   * extending what is chosen; a finger held still there, the same without Shift, `held` (a tap may
+   * open what is printed there, ADR 0096; a hold only chooses).
    */
-  readonly at: (bar: number, point: SheetPoint | null, extend: boolean) => void
+  readonly at: (bar: number, point: SheetPoint | null, extend: boolean, held: boolean) => void
   /** The held finger dragged on to another bar, on any line: what is chosen reaches it. */
   readonly reach: (bar: number) => void
 }
@@ -99,7 +100,7 @@ export function useSheetChoice(choice: SheetChoice) {
         event.detail === 0
           ? null
           : pointIn(event.currentTarget, origin, event.clientX, event.clientY)
-      latest.current.at(bar, point, event.shiftKey)
+      latest.current.at(bar, point, event.shiftKey, false)
     },
     onPointerDown(event: PointerEvent<HTMLElement>) {
       if (event.pointerType === 'mouse') return
@@ -112,7 +113,7 @@ export function useSheetChoice(choice: SheetChoice) {
         document.addEventListener('touchmove', hold, { passive: false })
         navigator.vibrate?.(10)
         reached.current = bar
-        latest.current.at(bar, pointIn(element, origin, x, y), false)
+        latest.current.at(bar, pointIn(element, origin, x, y), false, true)
       }, HOLD_MS)
       press.current = { id, x, y, timer }
     },

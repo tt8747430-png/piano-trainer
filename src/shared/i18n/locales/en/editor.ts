@@ -35,7 +35,8 @@ export const editor = {
     chooseNote: 'Choose a note first: these change the notes chosen.',
     staff: 'These are for notes: tap a note on a staff.',
     hand: 'For the piano’s staves: tap a note on the upper or lower staff.',
-    chordRow: 'Chords are written over the staff: tap a chord name, or the space over the staff.',
+    // The chord-symbol field opens in the chord symbols' row, which the View may hide (ADR 0096).
+    chordsHidden: 'Chord symbols are hidden: show them from View.',
     chordNote: 'Choose one note of the chord: each takes its own finger.',
     // A value's dot, or a triplet, that the song's meter cannot write.
     noDot: 'This value is too short to dot.',
@@ -248,21 +249,13 @@ export const editor = {
   on: 'Next note',
   // The Fingering keys, 1 to 5, on the notes chosen (ADR 0091).
   fingerOf: 'Finger {{finger}}',
+  // The chord-symbol field over the staff and its palette key (ADR 0096): the chords it suggests,
+  // and its mark where what is typed cannot be read.
   chord: {
-    set: 'Set the chord and go to the next bar',
-    setShort: 'Set',
-    keypad: 'Chord keypad',
-    backspace: 'Take back the last character',
-    tabs: 'Ways to write a chord',
-    tab: { key: 'In the key', build: 'Build', type: 'Type' },
-    field: 'Chord',
+    symbol: 'Chord symbol',
+    suggested: 'Suggested chords',
     invalid: 'Chord not recognised',
-    keyChords: 'Chords in the key',
     delete: 'Delete chord',
-    root: 'Root',
-    quality: 'Quality',
-    bass: 'Bass',
-    noBass: 'Root in the bass',
   },
   bars: {
     insert: 'Add bar after',
@@ -373,7 +366,7 @@ export const editor = {
     semitone: 'A semitone up, down',
     octave: 'An octave up, down',
     delete: 'Delete',
-    chord: 'Type a chord (in the chord symbols)',
+    chord: 'Type a chord symbol',
     undo: 'Undo',
     redo: 'Redo',
     clip: 'Copy, cut, paste what is chosen',

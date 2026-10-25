@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from 'react'
+import { memo, useEffect, useRef, type Ref } from 'react'
 import type { Layer } from '@/features/score-editor'
 import type { Midi, Tick } from '@/shared/lib/music'
 import type { StaffId, StaffLabels } from '@/shared/lib/notation'
@@ -6,6 +6,7 @@ import { cn, useElementSize } from '@/shared/lib'
 import { LazyScoreView, useCanvasReveal } from '@/shared/ui'
 import { staffOfHand } from '../model/line-music'
 import type { LineSheet } from '../model/line-sheets'
+import type { SheetField } from '../model/field-place'
 import type { EditPrinted } from '../model/printed'
 import { labelRow, labelScale } from '../model/label-row'
 import { LineOverlay } from './LineOverlay'
@@ -42,7 +43,16 @@ export const SheetLine = memo(function SheetLine({
   justify = true,
   onWrite,
   onDrag,
+  field = null,
+  fieldAnchor,
+  onField,
 }: {
+  /** The field open at the caret, where this line holds it (ADR 0096). */
+  field?: SheetField | null
+  /** The element marking the open field's place. */
+  fieldAnchor?: Ref<HTMLDivElement> | undefined
+  /** A tap on what a field types where it is printed (ADR 0096). */
+  onField?: ((field: SheetField, tick: Tick, layer: Layer) => void) | undefined
   onWrite?: ((tick: Tick, layer: Layer, key: Midi) => void) | undefined
   onDrag?: ((steps: number, joins: boolean) => void) | undefined
   /** The engraving's size: smaller on a phone, as it prints on a page. */
@@ -152,6 +162,9 @@ export const SheetLine = memo(function SheetLine({
             edit={edit}
             onWrite={onWrite}
             onDrag={onDrag}
+            field={field}
+            fieldAnchor={fieldAnchor}
+            onField={onField}
           />
         )}
       </LazyScoreView>

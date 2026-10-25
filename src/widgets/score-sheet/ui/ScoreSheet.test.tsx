@@ -190,16 +190,76 @@ describe('ScoreSheet', () => {
     expect(onWrite).toHaveBeenLastCalledWith(0, 'rh', 77)
   })
 
-  it('puts the caret where a bar is clicked, Shift keeping the bars chosen', async () => {
+  it('opens the chord-symbol field where the chord row is clicked, Shift choosing the bars (ADR 0096)', async () => {
     const user = userEvent.setup()
     const onPlace = vi.fn()
-    sheet('chords', onPlace)
+    const onField = vi.fn()
+    render(
+      <ScoreSheet
+        draft={draft}
+        caret={96}
+        layer="chords"
+        tapsOf={(to) => tapsIn(createEditorStore(draft, vi.fn()).getState(), to)}
+        selection={null}
+        onPlace={onPlace}
+        onReach={vi.fn()}
+        onDeselect={vi.fn()}
+        placesOf={(to) => placesIn(createEditorStore(draft, vi.fn()).getState(), to)}
+        heading={() => null}
+        chordNames
+        edit={editing(vi.fn())}
+        title={() => null}
+        onField={onField}
+      />,
+    )
+    // jsdom lays nothing out: a click lands at the bar's top left, in the chord row at its first beat.
     await user.click(await screen.findByRole('button', { name: 'Bar 3: Em' }))
-    expect(onPlace).toHaveBeenLastCalledWith(192, 'chords', false)
+    expect(onField).toHaveBeenLastCalledWith({ kind: 'chord' }, 192, 'chords')
+    expect(onPlace).not.toHaveBeenCalled()
     await user.keyboard('{Shift>}')
     await user.click(screen.getByRole('button', { name: 'Bar 4: C' }))
     expect(onPlace).toHaveBeenLastCalledWith(288, 'chords', true)
+    expect(onField).toHaveBeenCalledTimes(1)
   })
+
+  it.each(['scroll', 'pages', 'horizontal'] as const)(
+    'puts the open field’s place over the chord row at the caret’s beat, on its line, %s (ADR 0096)',
+    async (view) => {
+      const anchors: (HTMLElement | null)[] = []
+      render(
+        <ScoreSheet
+          draft={draft}
+          caret={240}
+          layer="chords"
+          tapsOf={() => []}
+          selection={null}
+          onPlace={vi.fn()}
+          onReach={vi.fn()}
+          onDeselect={vi.fn()}
+          placesOf={() => []}
+          heading={() => null}
+          chordNames
+          edit={editing(vi.fn())}
+          title={() => null}
+          view={view}
+          field={{ kind: 'chord' }}
+          fieldAnchor={(element) => {
+            anchors.push(element)
+          }}
+        />,
+      )
+      await screen.findAllByRole('button', { name: /^Bar 3/ })
+      await waitFor(() => expect(anchors.at(-1)).toBeInstanceOf(HTMLElement))
+      const anchor = anchors.at(-1)
+      // Bar 3's third beat, on the verse's second line down the screen and on a page; across, the one line.
+      const lines = [...document.querySelectorAll('[data-slot="sheet-line"]')]
+      expect(anchor?.closest('[data-slot="sheet-line"]')).toBe(
+        view === 'horizontal' ? lines[0] : lines[1],
+      )
+      expect(anchor).toHaveAttribute('data-slot', 'field-anchor')
+      expect(anchor?.style.top).toMatch(/^-\d/)
+    },
+  )
 
   it('numbers each line at its head, the tempo beside it, its row only as tall as what it holds', async () => {
     sheet('rh', vi.fn(), false)

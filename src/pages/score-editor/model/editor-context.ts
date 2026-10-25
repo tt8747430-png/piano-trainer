@@ -5,6 +5,7 @@ import type { PlayHandle } from '@/shared/api/audio'
 import type { SheetView } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import type { Scheduled } from '@/shared/lib/schedule'
+import type { SheetField } from '@/widgets/score-sheet'
 import type { EditorTakes } from './use-editor-takes'
 
 /** What Play plays, while it plays: its pass, and where it started on the audio clock. */
@@ -47,6 +48,13 @@ export interface ScoreEditorValue {
     readonly setSpeed: (speed: number) => void
     /** How the score is laid out, the View's: down the screen, on A4 pages, or as one line across. */
     readonly layout: SheetView
+    /** The field open over the sheet at the caret, typing what is printed there (ADR 0096); null while none is. */
+    readonly field: SheetField | null
+    /**
+     * Opens a field at the caret where it can open (the chord symbol's taking the caret to its beat in
+     * the chord row), or closes the one open (null), the caret back on the staff it came from.
+     */
+    readonly openField: (field: SheetField | null) => void
   }
   readonly meta: {
     /** The piece's id: its Player's and its editor's. */
@@ -55,10 +63,6 @@ export interface ScoreEditorValue {
     readonly playing: boolean
     /** Whose music: a catalog piece's version, or an own song. */
     readonly kind: 'version' | 'song'
-    /** The Chord field's ref: Enter in the chords puts the focus there. */
-    readonly chordFieldRef: (field: HTMLInputElement | null) => void
-    /** Counts the times Enter in the chords asked for the field while it was not open: the palette opens it. */
-    readonly chordFieldAsked: number
     /**
      * Whether the last change could not be saved (an edit the song's music cannot be written with):
      * the song keeps the music last saved.

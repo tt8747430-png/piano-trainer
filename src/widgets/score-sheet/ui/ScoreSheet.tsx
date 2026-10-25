@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, type ReactNode } from 'react'
+import { useMemo, useRef, useState, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
 import { barAt, type Draft, type Layer } from '@/features/score-editor'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/shared/lib'
@@ -7,6 +7,7 @@ import { lineLead, measureWidths, notate, type StaffId } from '@/shared/lib/nota
 import type { Midi, Tick } from '@/shared/lib/music'
 import { scoreHeight, useStaffLabels, versesOf } from '@/shared/ui/score'
 import { HEADING, lineFit } from '../model/line-fit'
+import type { SheetField } from '../model/field-place'
 import { createLineSheets, untimed, type LineSheet } from '../model/line-sheets'
 import { labelRow } from '../model/label-row'
 import { lineMusic, oneLine } from '../model/line-music'
@@ -86,7 +87,19 @@ export function ScoreSheet({
   room,
   onWrite,
   onDrag,
+  field = null,
+  fieldAnchor,
+  onField,
 }: {
+  /**
+   * The field open at the caret, typing what is printed there (ADR 0096): its place is drawn on the
+   * caret's line (`fieldAnchor`) for the page's field to stand at.
+   */
+  field?: SheetField | null
+  /** The element marking the open field's place, as it comes and goes. */
+  fieldAnchor?: Ref<HTMLDivElement> | undefined
+  /** A tap on what a field types where it is printed (the chord row): its tick on the piece and row. */
+  onField?: ((field: SheetField, tick: Tick, layer: Layer) => void) | undefined
   /** The height the sheet is seen in, where it is short: a line down the screen or across is drawn smaller to fit it whole. */
   room?: number | undefined
   /** A note written where a staff was double-clicked: its tick on the piece, its row and key. */
@@ -183,37 +196,39 @@ export function ScoreSheet({
   const caretBar = barAt(draft, caret).index
   const playBar = playhead ? barAt(draft, playhead.tick).index : null
 
-  const line = (sheet: LineSheet, scale?: number, print = false) => (
-    <SheetLine
-      key={`${sheet.line.section} ${sheet.line.line} ${sheet.line.start}`}
-      sheet={sheet}
-      layer={layer}
-      caret={
-        sheet.line.bars.some((placed) => placed.index === caretBar)
-          ? caret - sheet.line.start
-          : null
-      }
-      playhead={
-        playhead && sheet.line.bars.some((placed) => placed.index === playBar) ? playhead : null
-      }
-      chordNote={chordNote}
-      tapsOf={tapsOf}
-      selection={selection}
-      onPlace={onPlace}
-      onReach={onReach}
-      onDeselect={onDeselect}
-      placesOf={placesOf}
-      chordNames={chordNames}
-      edit={edit}
-      labels={sheet.line.bars[0]?.index === 0 ? labels : undefined}
-      staves={drawn}
-      justify={!across}
-      onWrite={onWrite}
-      onDrag={onDrag}
-      {...(scale === undefined ? {} : { scale })}
-      print={print}
-    />
-  )
+  const line = (sheet: LineSheet, scale?: number, print = false) => {
+    const holdsCaret = sheet.line.bars.some((placed) => placed.index === caretBar)
+    return (
+      <SheetLine
+        key={`${sheet.line.section} ${sheet.line.line} ${sheet.line.start}`}
+        sheet={sheet}
+        layer={layer}
+        caret={holdsCaret ? caret - sheet.line.start : null}
+        field={holdsCaret ? field : null}
+        fieldAnchor={fieldAnchor}
+        onField={onField}
+        playhead={
+          playhead && sheet.line.bars.some((placed) => placed.index === playBar) ? playhead : null
+        }
+        chordNote={chordNote}
+        tapsOf={tapsOf}
+        selection={selection}
+        onPlace={onPlace}
+        onReach={onReach}
+        onDeselect={onDeselect}
+        placesOf={placesOf}
+        chordNames={chordNames}
+        edit={edit}
+        labels={sheet.line.bars[0]?.index === 0 ? labels : undefined}
+        staves={drawn}
+        justify={!across}
+        onWrite={onWrite}
+        onDrag={onDrag}
+        {...(scale === undefined ? {} : { scale })}
+        print={print}
+      />
+    )
+  }
 
   if (pages) {
     const scale = PRINT_SCALE

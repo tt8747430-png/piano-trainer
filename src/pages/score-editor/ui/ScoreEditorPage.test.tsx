@@ -42,11 +42,27 @@ const withSong = (music: object = {}) => {
   return storage
 }
 /**
- * Puts the caret in bar 1's chord row, as a click over its staff does: jsdom lays nothing out, so a
- * click lands at the bar's top, in the chord row.
+ * Opens the chord-symbol field over bar `bar` (1 the first) as a tap over its staff does (ADR 0096):
+ * jsdom lays nothing out, so a tap lands at the bar's top, in the chord row, at its first beat.
  */
-const toChordRow = async (user: ReturnType<typeof userEvent.setup>) =>
-  user.click(await screen.findByRole('button', { name: /^Bar 1(:|$)/ }))
+async function chordFieldAt(user: ReturnType<typeof userEvent.setup>, bar: number) {
+  await user.click(await screen.findByRole('button', { name: new RegExp(`^Bar ${bar}(:|$)`) }))
+  return screen.findByRole('textbox', { name: 'Chord symbol' })
+}
+
+/** Puts the caret in bar 1's chord row: a tap there, its field closed with Escape. */
+async function toChordRow(user: ReturnType<typeof userEvent.setup>) {
+  await chordFieldAt(user, 1)
+  await user.keyboard('{Escape}')
+}
+
+/** Writes a chord symbol over bar `bar` in the field a tap there opens, then closes it. */
+async function writeChord(user: ReturnType<typeof userEvent.setup>, bar: number, symbol: string) {
+  const field = await chordFieldAt(user, bar)
+  await user.clear(field)
+  await user.type(field, `${symbol}{Enter}`)
+  await user.keyboard('{Escape}')
+}
 
 /**
  * Opens a category of the palette from its bar (the palette opening where it was folded): its
@@ -67,13 +83,6 @@ async function tapIn(user: ReturnType<typeof userEvent.setup>, category: string,
   const section = await openCategory(user, category)
   await user.click(within(section).getByRole('button', { name: key }))
   return section
-}
-
-/** The chords' Type, and its field. */
-async function openChordField(user: ReturnType<typeof userEvent.setup>) {
-  const chords = await openCategory(user, 'Chords')
-  await user.click(within(chords).getByRole('radio', { name: 'Type' }))
-  return screen.findByRole('textbox', { name: 'Chord' })
 }
 
 const songOf = (state: { songs: readonly { id: string }[] }) =>
@@ -118,14 +127,8 @@ describe('the score editor', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1/)
     await user.keyboard('{Alt>}{ArrowUp}{ArrowUp}{/Alt}')
     expect(screen.getByRole('status')).toHaveTextContent(/^Chord symbols · /)
-    // In the chord names' row the quick row is the key's chords, not the values.
-    const chords = screen.getByRole('region', { name: 'Tools' })
-    expect(within(chords).getByRole('group', { name: 'Chords in the key' })).toBeInTheDocument()
-    expect(within(chords).queryByRole('group', { name: 'Note value' })).not.toBeInTheDocument()
-    const ways = await openCategory(user, 'Chords')
-    expect(
-      within(ways).getByRole('radiogroup', { name: 'Ways to write a chord' }),
-    ).toBeInTheDocument()
+    // The quick row is the values wherever the caret is: a chord symbol is typed over the staff.
+    expect(within(palette).getByRole('group', { name: 'Note value' })).toBeInTheDocument()
   })
 
   it('prints the title at the sheet’s head, a click turning it into a field in its place (ADR 0094)', async () => {
@@ -603,82 +606,117 @@ describe('the score editor', () => {
           .songs.map((song) => ({ ...song, sections: [{ kind: 'verse', lines: ['G G G D'] }] })),
       }),
     )
-    await toChordRow(user)
-    const field = await openChordField(user)
-    await user.clear(field)
-    await user.type(field, 'Am{Enter}')
+    await writeChord(user, 1, 'Am')
     expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['Am G G D'] }] })
   })
 
-  it('sets a typed chord at the caret and moves to the next bar, Enter opening the field', async () => {
+  it('types a chord symbol over the staff from Cmd+K: Enter or → a beat on, ← back, Escape out (ADR 0096)', async () => {
     const user = userEvent.setup()
-    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    await toChordRow(user)
-    // Enter on a button presses it: off the bar, Enter opens the chord field.
-    act(() => {
-      if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+    const { piecesStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ hands: SILENT_HANDS }),
     })
-    await user.keyboard('{Enter}')
-    const field = await screen.findByRole('textbox', { name: 'Chord' })
+    const status = () => screen.getByRole('status')
+    await waitFor(() => expect(status()).toHaveTextContent(/^Upper staff · Bar 1/))
+    await user.keyboard('{Control>}k{/Control}')
+    const field = await screen.findByRole('textbox', { name: 'Chord symbol' })
     await waitFor(() => expect(field).toHaveFocus())
+    // It holds the chord written there, chosen, so what is typed writes over it.
+    expect(field).toHaveValue('G')
+    expect(status()).toHaveTextContent('Chord symbol · Bar 1, beat 1 · G')
+    await user.keyboard('Am7{Enter}')
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        sections: [{ lines: ['Am7 G G G'] }],
+      }),
+    )
+    // On a beat: no chord starts there, so the field is empty.
+    expect(status()).toHaveTextContent('Chord symbol · Bar 1, beat 2 · Am7')
+    expect(field).toHaveValue('')
+    // A chord typed on a beat splits the bar; → at the text's end goes on too.
+    await user.keyboard('D{ArrowRight}')
+    expect(await screen.findByRole('button', { name: 'Bar 1: Am7 D' })).toBeInTheDocument()
+    expect(status()).toHaveTextContent('Bar 1, beat 3')
+    // ← at its start goes back a beat, to the chord there.
+    await user.keyboard('{ArrowLeft}')
+    expect(status()).toHaveTextContent('Bar 1, beat 2')
+    expect(field).toHaveValue('D')
+    // A symbol that cannot be read marks the field, writes nothing, and stays.
+    await user.keyboard('Hm{Enter}')
+    expect(field).toHaveAttribute('aria-invalid', 'true')
+    expect(status()).toHaveTextContent('Bar 1, beat 2')
+    // Emptied, Enter takes the chord there off.
     await user.clear(field)
-    await user.type(field, 'Am{Enter}')
-    expect(await screen.findByRole('button', { name: 'Bar 1: Am' })).toBeInTheDocument()
-    expect(screen.getByRole('status')).toHaveTextContent('Bar 2, beat 1 · G')
-    expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['Am G G G'] }] })
+    expect(field).toHaveAttribute('aria-invalid', 'false')
+    await user.keyboard('{Enter}')
+    expect(await screen.findByRole('button', { name: 'Bar 1: Am7' })).toBeInTheDocument()
+    // Escape closes it, the caret back on the staff it came from.
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('textbox', { name: 'Chord symbol' })).not.toBeInTheDocument()
+    expect(status()).toHaveTextContent(/^Upper staff · Bar 1, beat 3/)
   })
 
-  it('types a chord into a bar of no chord, as a new song’s bars are (ADR 0094)', async () => {
+  it('opens the chord-symbol field from a tap over the staff, the key’s chords suggested as one types (ADR 0096)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    const field = await chordFieldAt(user, 2)
+    expect(field).toHaveValue('G')
+    const suggested = screen.getByRole('group', { name: 'Suggested chords' })
+    const offered = () =>
+      within(suggested)
+        .getAllByRole('button')
+        .map((each) => each.textContent)
+    // The key's chords, I to vii, then their sevenths.
+    expect(offered()).toEqual([
+      ...['G', 'Am', 'Bm', 'C', 'D', 'Em', 'F♯°'],
+      ...['GMaj7', 'Am7', 'Bm7', 'CMaj7', 'D7', 'Em7', 'F♯m7♭5'],
+    ])
+    await user.keyboard('b')
+    expect(offered()).toEqual(['Bm', 'Bm7'])
+    // A tap writes one, and the field goes on a beat, open.
+    await user.click(within(suggested).getByRole('button', { name: 'Bm7' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        sections: [{ lines: ['G Bm7 G G'] }],
+      }),
+    )
+    expect(screen.getByRole('status')).toHaveTextContent('Chord symbol · Bar 2, beat 2')
+    expect(screen.getByRole('textbox', { name: 'Chord symbol' })).toHaveFocus()
+  })
+
+  it('types a chord into a bar of no chord, at its start, as a new song’s bars are (ADR 0094)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', {
       storage: withSong(chartStart({ tonic: note('G'), minor: false }, '4/4')),
     })
-    expect(await screen.findByRole('button', { name: 'Bar 1' })).toBeInTheDocument()
-    await toChordRow(user)
+    const field = await chordFieldAt(user, 1)
     expect(screen.getByRole('status')).toHaveTextContent('Bar 1, beat 1 · no chord')
-    // Build has no part of a chord pressed: there is none at the caret.
-    const chords = await openCategory(user, 'Chords')
-    await user.click(within(chords).getByRole('radio', { name: 'Build' }))
-    const roots = within(chords).getByRole('group', { name: 'Root' })
-    expect(within(roots).queryAllByRole('button', { pressed: true })).toEqual([])
-    const field = await openChordField(user)
     expect(field).toHaveValue('')
     await user.type(field, 'Em{Enter}')
     expect(await screen.findByRole('button', { name: 'Bar 1: Em' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Bar 2' })).toBeInTheDocument()
     expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['Em _ _ _'] }] })
   })
 
-  it('types a chord on the chord keypad, the phone’s keyboard kept down', async () => {
+  it('opens the chord-symbol field from the palette’s one key, greyed where the View hides the chord symbols', async () => {
     const user = userEvent.setup()
-    const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    await toChordRow(user)
-    const field = await openChordField(user)
-    await user.clear(field)
-    const keypad = screen.getByRole('region', { name: 'Tools' })
-    for (const key of ['F', '♯', 'm', '7'])
-      await user.click(within(keypad).getAllByRole('button', { name: key })[0] ?? keypad)
-    expect(field).toHaveValue('F#m7')
-    await user.click(
-      within(keypad).getByRole('button', { name: 'Set the chord and go to the next bar' }),
-    )
-    expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['F#m7 G G G'] }] })
-  })
-
-  it('taps a chord of the key into the bar at the caret', async () => {
-    const user = userEvent.setup()
-    await renderApp('/edit/my-1', { storage: withSong() })
-    await toChordRow(user)
-    const chords = await screen.findByRole('group', { name: 'Chords in the key' })
-    await user.click(within(chords).getByRole('button', { name: 'Em' }))
-    expect(await screen.findByRole('button', { name: 'Bar 1: Em' })).toBeInTheDocument()
+    const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
+    const chords = await openCategory(user, 'Chords')
+    expect(within(chords).getAllByRole('button')).toHaveLength(1)
+    await user.click(within(chords).getByRole('button', { name: 'Chord symbol' }))
+    expect(await screen.findByRole('textbox', { name: 'Chord symbol' })).toHaveFocus()
+    await user.keyboard('{Escape}')
+    act(() => setScoreView(settingsStore, { chordNames: false }))
+    const key = within(chords).getByRole('button', { name: 'Chord symbol' })
+    expect(key).toBeDisabled()
+    expect(key).toHaveAttribute('title', 'Chord symbols are hidden: show them from View.')
+    await user.keyboard('{Control>}k{/Control}')
+    expect(screen.queryByRole('textbox', { name: 'Chord symbol' })).not.toBeInTheDocument()
   })
 
   it('names a chord played on a MIDI keyboard', async () => {
     const user = userEvent.setup()
     const { midi: keyboard } = await renderApp('/edit/my-1', { storage: withSong() })
     await toChordRow(user)
-    await screen.findByRole('group', { name: 'Chords in the key' })
+    expect(screen.getByRole('status')).toHaveTextContent(/^Chord symbols · Bar 1/)
     act(() => {
       for (const key of [53, 57, 60]) keyboard.press(midi(key))
     })
@@ -891,12 +929,7 @@ describe('the score editor', () => {
   it('copies a bar and pastes it after the caret’s from the edit row, and adds a bar from the palette’s Bar', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    await toChordRow(user)
-    await user.click(
-      within(await screen.findByRole('group', { name: 'Chords in the key' })).getByRole('button', {
-        name: 'Em',
-      }),
-    )
+    await writeChord(user, 1, 'Em')
     await toChordRow(user)
     const row = screen.getByRole('toolbar', { name: 'Edit' })
     // Nothing copied yet: Paste is greyed (its tooltip saying so).
@@ -1198,9 +1231,7 @@ describe('the score editor', () => {
   it('undoes and redoes by button and by Cmd+Z', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    await toChordRow(user)
-    const chords = await screen.findByRole('group', { name: 'Chords in the key' })
-    await user.click(within(chords).getByRole('button', { name: 'C' }))
+    await writeChord(user, 1, 'C')
     await user.click(screen.getByRole('button', { name: 'Undo' }))
     expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['G G G G'] }] })
     await user.click(screen.getByRole('button', { name: 'Redo' }))
@@ -1229,7 +1260,9 @@ describe('the score editor', () => {
       const user = userEvent.setup()
       const { audio, settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
       act(() => setScoreView(settingsStore, { layout }))
-      await user.click(await screen.findByRole('button', { name: 'Bar 3: G' }))
+      // The caret in bar 3's chord row: a tap there, its chord-symbol field closed.
+      await chordFieldAt(user, 3)
+      await user.keyboard('{Escape}')
       const said = screen.getByRole('status').textContent
       expect(document.querySelector('[data-slot="playhead"]')).toBeNull()
       await user.click(screen.getByRole('button', { name: 'Play' }))
@@ -1307,9 +1340,7 @@ describe('the score editor', () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
     const { piecesStore } = await renderApp('/edit/amazing', { storage })
-    await toChordRow(user)
-    const chords = await screen.findByRole('group', { name: 'Chords in the key' })
-    await user.click(within(chords).getByRole('button', { name: 'Em' }))
+    await writeChord(user, 1, 'Em')
     await waitFor(() =>
       expect(piecesStore.getState().versions.amazing?.sections[0]?.lines[0]).toBe('Em G7 C G'),
     )
@@ -1352,9 +1383,7 @@ describe('the score editor', () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
     const { piecesStore } = await renderApp('/edit/bz4', { storage })
-    await toChordRow(user)
-    const chords = await screen.findByRole('group', { name: 'Chords in the key' })
-    await user.click(within(chords).getByRole('button', { name: 'Fm' }))
+    await writeChord(user, 1, 'Fm')
     expect(piecesStore.getState().versions.bz4?.sections[0]?.lines[0]).toBe('Fm _ _ _')
   })
 

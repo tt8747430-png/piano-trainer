@@ -1,10 +1,9 @@
 import { ChevronDown, ChevronUp, Piano } from 'lucide-react'
-import { useEffect, useEffectEvent, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { chosenNotes, EDIT_MODES, fingerableNotes } from '@/features/score-editor'
 import { useFoldKeys } from '@/features/live-keyboard'
 import { cn } from '@/shared/lib'
-import { Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { gripRelease } from '../model/grip'
@@ -15,19 +14,15 @@ import {
   type PaletteCategory,
 } from '../model/palette-categories'
 import { BarKeys } from './BarKeys'
-import { ChordBuilt, ChordsInKey, ChordTyped, QuickChords } from './ChordKeys'
+import { FieldKey } from './FieldKey'
 import { FingeringKeys } from './FingeringKeys'
 import { LineKeys } from './LineKeys'
 import { ArticulationKeys, DynamicKeys } from './MarkKeys'
 import { NoteKeys, PitchKeys, QuickValues } from './NoteKeys'
 import { CategoryIcon } from './palette-icons'
-import { PaletteSection } from './palette-keys'
+import { CaptionGrid, PaletteSection } from './palette-keys'
 import { PaletteReason } from './palette-reason'
 import { ClefKeys, KeySignatureKeys, RepeatKeys, TextKeys, TimeSignatureKeys } from './ScoreKeys'
-
-/** The ways the Chords category writes a chord (ADR 0089): the key's, built from its parts, typed. */
-const CHORD_WAYS = ['key', 'build', 'type'] as const
-type ChordWay = (typeof CHORD_WAYS)[number]
 
 /** Why a category's tools are greyed where the caret writes, or nothing where they work. */
 function useReason(category: PaletteCategory): string | undefined {
@@ -86,33 +81,8 @@ function Section({ category, children }: { category: PaletteCategory; children: 
   )
 }
 
-/** The Chords category: a chord of the key tapped, built from its parts, or typed on its keypad. */
-function ChordWays({ way, setWay }: { way: ChordWay; setWay: (way: ChordWay) => void }) {
-  const { t } = useTranslation('editor')
-  const { meta } = useScoreEditorContext()
-  // Asked for by Enter in the chord row, the field opens with the cursor in it.
-  const focus = meta.chordFieldAsked > 0
-  return (
-    <>
-      <Segmented
-        label={t('chord.tabs')}
-        value={way}
-        options={CHORD_WAYS.map((each) => ({ value: each, label: t(`chord.tab.${each}`) }))}
-        onChange={setWay}
-      />
-      {way === 'key' ? (
-        <ChordsInKey />
-      ) : way === 'build' ? (
-        <ChordBuilt />
-      ) : (
-        <ChordTyped focus={focus} />
-      )}
-    </>
-  )
-}
-
 /** Every category's section, in the bar's order. */
-function Sections(chord: { way: ChordWay; setWay: (way: ChordWay) => void }) {
+function Sections() {
   return (
     <>
       <Section category="notes">
@@ -153,7 +123,9 @@ function Sections(chord: { way: ChordWay; setWay: (way: ChordWay) => void }) {
         <FingeringKeys />
       </Section>
       <Section category="chords">
-        <ChordWays {...chord} />
+        <CaptionGrid>
+          <FieldKey field="chord" />
+        </CaptionGrid>
       </Section>
     </>
   )
@@ -214,7 +186,7 @@ const sectionTop = (scroller: HTMLElement, category: PaletteCategory): number | 
  * The editor's one palette (spec 2026-10-23, after Flat): every tool, each acting on what is chosen
  * (a note, a chord, a range or bars), else setting what the next note will be. A card floating over
  * the sheet (ADR 0079, 0081), at the foot (`side` off) or beside it (`side`): the quick row of note
- * values (the key's chords in the chord names' row), always in sight, over the category bar, a
+ * values, always in sight, over the category bar, a
  * picture each, scrolling sideways where the screen is narrow, ending in the palette's fold and a
  * Keys toggle that never comes and goes. Opened (`folded` off), every category's section stands over
  * them, stacked and scrolling, a category tapped scrolling to its own; folded, the quick row and the
@@ -230,7 +202,7 @@ export function EditorTools({
   onFold: (folded: boolean) => void
 }) {
   const { t } = useTranslation(['editor', 'common'])
-  const { takes, meta } = useScoreEditorContext()
+  const { takes } = useScoreEditorContext()
   const layer = useEditorState((state) => state.layer)
   const keys = useFoldKeys()
   const recording = takes.stage !== 'idle'
@@ -238,21 +210,6 @@ export function EditorTools({
   const [current, setCurrent] = useState<PaletteCategory>(layer === 'chords' ? 'chords' : 'notes')
   // A category tapped while folded: scrolled to once the sections are in.
   const pending = useRef<PaletteCategory | null>(null)
-  // Enter in the chord row asks for the chord field: the palette opens on the Chords.
-  const [chordWay, setChordWay] = useState<ChordWay>('key')
-  const [asked, setAsked] = useState(meta.chordFieldAsked)
-  if (meta.chordFieldAsked !== asked) {
-    setAsked(meta.chordFieldAsked)
-    setCurrent('chords')
-    setChordWay('type')
-  }
-  const openForChord = useEffectEvent(() => {
-    pending.current = 'chords'
-    if (folded) onFold(false)
-  })
-  useEffect(() => {
-    if (meta.chordFieldAsked > 0) openForChord()
-  }, [meta.chordFieldAsked])
 
   const scrollTo = (category: PaletteCategory) => {
     const box = scroller.current
@@ -321,10 +278,12 @@ export function EditorTools({
               side ? 'flex-1' : 'max-h-[min(30dvh,18rem)]',
             )}
           >
-            <Sections way={chordWay} setWay={setChordWay} />
+            <Sections />
           </div>
         )}
-        <div className="shrink-0">{layer === 'chords' ? <QuickChords /> : <QuickValues />}</div>
+        <div className="shrink-0">
+          <QuickValues />
+        </div>
         <div className="flex shrink-0 items-center gap-0.5 border-t border-hairline pt-1.5 landscape-phone:pt-1">
           <div
             ref={bar}

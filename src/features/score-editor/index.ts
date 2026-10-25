@@ -3,7 +3,7 @@ export { clefAt } from './model/clefs'
 export { BARLINE_CHOICES, JUMP_CHOICES, type BarMarkChoice } from './model/bar-marks'
 export { barLengths } from './model/bars'
 export { copyTarget, whyNoPaste } from './model/clip-edits'
-export { keyChords, keySevenths } from './model/chords'
+export { chordSuggestions } from './model/chords'
 export {
   isHandLayer,
   musicToSave,
@@ -33,6 +33,7 @@ export {
   barAt,
   barsOf,
   chordAt,
+  chordWrittenAt,
   keyAt,
   sectionKey,
   totalTicks,

@@ -27,7 +27,7 @@ export function useEditorShortcutList(): void {
     { label: t('shortcuts.semitone'), shown: [shift, '↑', '↓'] },
     { label: t('shortcuts.octave'), shown: [mod, '↑', '↓'] },
     { label: t('shortcuts.delete'), shown: ['Backspace'] },
-    { label: t('shortcuts.chord'), shown: ['Enter'] },
+    { label: t('shortcuts.chord'), shown: [mod, 'K'] },
     { label: t('shortcuts.undo'), shown: [mod, 'Z'] },
     { label: t('shortcuts.redo'), shown: [shift, mod, 'Z'] },
     { label: t('shortcuts.clip'), shown: [mod, 'C', 'X', 'V'] },

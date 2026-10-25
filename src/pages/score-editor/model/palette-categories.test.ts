@@ -26,13 +26,14 @@ describe('the palette’s categories', () => {
     expect(open('chords')).toEqual(['bar', 'key', 'time', 'repeats', 'chords'])
     expect(open('melody')).not.toContain('fingering')
     expect(open('melody')).not.toContain('clef')
-    expect(open('melody')).not.toContain('chords')
-    expect(open('lh')).toEqual(PALETTE_CATEGORIES.filter((category) => category !== 'chords'))
+    // Its one key opens the chord-symbol field from any row (ADR 0096).
+    expect(open('melody')).toContain('chords')
+    expect(open('lh')).toEqual(PALETTE_CATEGORIES)
   })
 
   it('says why a category is greyed where the caret writes, and nothing where it works', () => {
     const where = { chosen: true, fingerable: true }
-    expect(greyedBy('chords', { ...where, layer: 'melody' })).toBe('chordRow')
+    expect(greyedBy('chords', { ...where, layer: 'melody' })).toBeNull()
     expect(greyedBy('chords', { ...where, layer: 'chords' })).toBeNull()
     expect(greyedBy('pitch', { ...where, layer: 'chords' })).toBe('staff')
     expect(greyedBy('fingering', { ...where, layer: 'melody' })).toBe('hand')

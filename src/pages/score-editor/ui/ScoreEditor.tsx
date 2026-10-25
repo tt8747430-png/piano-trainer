@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   selectKeyboard,
   selectPaletteFolded,
@@ -24,6 +24,7 @@ import { EditorHeader } from './EditorHeader'
 import { EditorKeyboard } from './EditorKeyboard'
 import { EditorSheet } from './EditorSheet'
 import { EditorTools } from './EditorTools'
+import { OpenField } from './OpenField'
 import { RecordingStrip } from './RecordingStrip'
 import { TakesSheet } from './TakesSheet'
 import { UnsavedNotice } from './UnsavedNotice'
@@ -74,6 +75,8 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
   }, [below])
   // What floats at the foot steps aside while the music is read; a tap on the sheet brings it back.
   const floating = useHiddenWhileReading()
+  // Where the field open over the sheet stands: the place the caret's line draws for it (ADR 0096).
+  const [anchor, setAnchor] = useState<HTMLDivElement | null>(null)
   // A take's strip, with its Stop, never steps aside.
   const footShown = floating.shown || !idle
   const tools = (
@@ -98,7 +101,7 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
             onClickCapture={floating.show}
           >
             <div className="h-full overflow-clip rounded-2xl">
-              <EditorSheet />
+              <EditorSheet onAnchor={setAnchor} />
             </div>
           </div>
         ) : (
@@ -110,7 +113,7 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
             {...floating.reading}
             onClickCapture={floating.show}
           >
-            <EditorSheet room={onSide ? height : undefined} />
+            <EditorSheet room={onSide ? height : undefined} onAnchor={setAnchor} />
             {/* Room past the last line, so it scrolls clear of what floats over the sheet's foot. */}
             <div aria-hidden style={{ height: below + GAP }} />
           </div>
@@ -156,6 +159,7 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
         </div>
         <EditorKeyboard />
       </div>
+      <OpenField anchor={anchor} />
       <TakesSheet />
     </ScoreEditorContext>
   )

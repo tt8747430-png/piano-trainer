@@ -51,6 +51,15 @@ export function chordAt(draft: Draft, tick: Tick): Chord | undefined {
   return bar.chords.findLast((placed) => placed.at <= tick - start)?.chord
 }
 
+/**
+ * The chord written at a tick: the one starting there; none on a beat a chord sounds through, where
+ * a chord typed starts a new one (ADR 0096).
+ */
+export function chordWrittenAt(draft: Draft, tick: Tick): Chord | undefined {
+  const { start, bar } = barAt(draft, tick)
+  return bar.chords.find((placed) => placed.at === tick - start)?.chord
+}
+
 /** Each chord of a bar with its length: until the next chord or the barline. */
 export function chordsAt(
   bar: DraftBar,

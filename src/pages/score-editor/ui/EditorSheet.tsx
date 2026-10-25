@@ -10,7 +10,7 @@ import {
 } from '@/features/score-editor'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { usePlay } from '@/shared/lib/services'
-import { ScoreSheet, type EditPrinted } from '@/widgets/score-sheet'
+import { ScoreSheet, type EditPrinted, type SheetField } from '@/widgets/score-sheet'
 import type { TitlePlace } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { seenDraft } from '../model/seen-draft'
@@ -33,9 +33,18 @@ const HEARD = { duration: 0.35, velocity: 0.15 } as const
  * The sheet the editor writes on, as the View shows the score (ADR 0094: its staves, its chord
  * symbols): the caret where the next note or chord goes; a double click on a staff writes the note
  * there, and a note dragged up or down moves by the key's notes, heard as it goes. While Play plays,
- * the playhead follows the music apart from the caret (ADR 0096).
+ * the playhead follows the music apart from the caret (ADR 0096). A tap on what a field types where
+ * it is printed (the chord row) opens the field there, at the place the sheet draws for it
+ * (`onAnchor`).
  */
-export function EditorSheet({ room }: { room?: number | undefined }) {
+export function EditorSheet({
+  room,
+  onAnchor,
+}: {
+  room?: number | undefined
+  /** The place of the field open at the caret, on its line, as it comes and goes (ADR 0096). */
+  onAnchor: (anchor: HTMLDivElement | null) => void
+}) {
   const {
     store,
     heard,
@@ -74,6 +83,14 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
     [dispatch, store],
   )
   const onDeselect = useCallback(() => dispatch({ type: 'deselect' }), [dispatch])
+  const { openField } = view
+  const onField = useCallback(
+    (field: SheetField, tick: Tick, to: Layer) => {
+      dispatch({ type: 'place', tick, layer: to })
+      openField(field)
+    },
+    [dispatch, openField],
+  )
   // Read when a bar is clicked, so a line's row does not change with every note written elsewhere.
   const placesOf = useCallback((to: Layer) => placesIn(store.getState(), to), [store])
   const tapsOf = useCallback((to: Layer) => tapsIn(store.getState(), to), [store])
@@ -124,6 +141,9 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
       room={room}
       onWrite={onWrite}
       onDrag={onDrag}
+      field={view.field}
+      fieldAnchor={onAnchor}
+      onField={onField}
     />
   )
 }

@@ -46,9 +46,9 @@ describe('the one selection’s gestures (ADR 0088)', () => {
     const { at, second } = bars()
     stubBox(second, { left: 300, top: 100, width: 100, height: 80 })
     fireEvent.click(second, { clientX: 330, clientY: 150, detail: 1 })
-    expect(at).toHaveBeenLastCalledWith(1, { x: 180, y: 30 }, false)
+    expect(at).toHaveBeenLastCalledWith(1, { x: 180, y: 30 }, false, false)
     fireEvent.click(second, { clientX: 330, clientY: 150, detail: 1, shiftKey: true })
-    expect(at).toHaveBeenLastCalledWith(1, { x: 180, y: 30 }, true)
+    expect(at).toHaveBeenLastCalledWith(1, { x: 180, y: 30 }, true, false)
   })
 
   it('reads a zoomed page’s click on its layout, as large as it is drawn', () => {
@@ -56,23 +56,23 @@ describe('the one selection’s gestures (ADR 0088)', () => {
     vi.spyOn(first, 'offsetWidth', 'get').mockReturnValue(100)
     stubBox(first, { left: 0, top: 0, width: 200, height: 160 })
     fireEvent.click(first, { clientX: 40, clientY: 60, detail: 1 })
-    expect(at).toHaveBeenLastCalledWith(0, { x: 70, y: 10 }, false)
+    expect(at).toHaveBeenLastCalledWith(0, { x: 70, y: 10 }, false, false)
   })
 
   it('gives the bar itself to a press from the keys', () => {
     const { at, third } = bars()
     fireEvent.click(third, { detail: 0 })
-    expect(at).toHaveBeenLastCalledWith(2, null, false)
+    expect(at).toHaveBeenLastCalledWith(2, null, false, false)
   })
 
-  it('chooses what a finger holds, then reaches each bar it is dragged across', () => {
+  it('chooses what a finger holds, saying it held, then reaches each bar it is dragged across', () => {
     vi.useFakeTimers()
     const { at, reach, first, third } = bars()
     stubBox(first, { left: 0, top: 0, width: 100, height: 80 })
     fireEvent.pointerDown(first, touch(10))
     expect(at).not.toHaveBeenCalled()
     act(() => vi.advanceTimersByTime(HOLD_MS))
-    expect(at).toHaveBeenCalledWith(0, { x: 60, y: -10 }, false)
+    expect(at).toHaveBeenCalledWith(0, { x: 60, y: -10 }, false, true)
     document.elementFromPoint = () => third
     fireEvent.pointerMove(first, touch(200))
     expect(reach).toHaveBeenLastCalledWith(2)

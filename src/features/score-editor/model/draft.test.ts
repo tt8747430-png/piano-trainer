@@ -12,7 +12,7 @@ import {
 import { arrangePiece, ownChoice } from '@/features/practice'
 import { chordSymbol, midi, note } from '@/shared/lib/music'
 import { musicToSave, readDraft, writeDraft, type Draft } from './draft'
-import { barAt, barsOf, chordAt, chordsAt, totalTicks } from './timeline'
+import { barAt, barsOf, chordAt, chordsAt, chordWrittenAt, totalTicks } from './timeline'
 
 const CHART_PIECES = PIECES.filter((piece): piece is ChartPiece => !isDegreePiece(piece))
 
@@ -172,6 +172,23 @@ describe('the draft', () => {
       undefined,
       'Em',
       'Em',
+    ])
+  })
+
+  it('finds the chord written at a tick where one starts, none on a beat a chord sounds through', () => {
+    const draft = readDraft({ ...WRITTEN, sections: [{ kind: 'verse', lines: ['G@1 C-D _ Em'] }] })
+    const at = (tick: number) => {
+      const chord = chordWrittenAt(draft, tick)
+      return chord && chordSymbol(chord)
+    }
+    expect([0, 24, 48, 72, 120, 216, 240].map(at)).toEqual([
+      'G',
+      'C',
+      undefined,
+      'D',
+      undefined,
+      'Em',
+      undefined,
     ])
   })
 

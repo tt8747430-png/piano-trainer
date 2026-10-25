@@ -368,25 +368,13 @@ describe('the editor', () => {
     expect(run(tune, { type: 'finger', finger: 1 })).toBe(tune)
   })
 
-  it('sets a chord at the caret and moves on a beat or to the next bar', () => {
+  it('sets a chord at the caret’s beat, the caret staying there, a step going on a beat', () => {
     const am = parseChordSymbol('Am')
-    const beat = run(initialEditor(draftOf()), { type: 'chord', chord: am, advance: 'beat' })
-    expect(form(beat.draft)).toEqual([[['Am@0', 'C@0']]])
-    expect(beat.caret).toBe(24)
-    const bar = run(initialEditor(draftOf()), { type: 'chord', chord: am, advance: 'bar' })
-    expect(form(bar.draft)).toEqual([[['Am@0', 'C@0']]])
-    expect(bar.caret).toBe(96)
-  })
-
-  it('stays on the last bar after a chord, or adds a bar past it when typing on', () => {
-    const am = parseChordSymbol('Am')
-    const onLast = run(initialEditor(draftOf()), { type: 'place', tick: 96, layer: 'chords' })
-    const stays = run(onLast, { type: 'chord', chord: am, advance: 'bar' })
-    expect(form(stays.draft)).toEqual([[['G@0', 'Am@0']]])
-    expect(stays.caret).toBe(96)
-    const typed = run(onLast, { type: 'chord', chord: am, advance: 'barAdding' })
-    expect(form(typed.draft)).toEqual([[['G@0', 'Am@0', '']]])
-    expect(typed.caret).toBe(192)
+    const onThird = run(initialEditor(draftOf()), { type: 'place', tick: 48, layer: 'chords' })
+    const typed = run(onThird, { type: 'chord', chord: am })
+    expect(form(typed.draft)).toEqual([[['G@0 Am@48', 'C@0']]])
+    expect(typed.caret).toBe(48)
+    expect(run(typed, { type: 'move', by: 'step', direction: 1 }).caret).toBe(72)
   })
 
   it('takes a bar’s only chord with Delete, the bar left to type a chord into (ADR 0094)', () => {
@@ -398,7 +386,7 @@ describe('the editor', () => {
     // Its places in the chord row: its start alone, where the next chord goes.
     const moved = run(deleted, { type: 'move', by: 'step', direction: 1 })
     expect(moved.caret).toBe(96)
-    const typed = run(moved, { type: 'chord', chord: am, advance: 'stay' })
+    const typed = run(moved, { type: 'chord', chord: am })
     expect(form(typed.draft)).toEqual([[['G@0', 'Am@0']]])
   })
 
@@ -775,7 +763,7 @@ describe('the editor', () => {
     )
     const pasted = run(chords, { type: 'clip', edit: 'copy' }, { type: 'clip', edit: 'paste' })
     expect(pasted.selection).not.toBeNull()
-    const typed = run(pasted, { type: 'chord', chord: parseChordSymbol('Am'), advance: 'beat' })
+    const typed = run(pasted, { type: 'chord', chord: parseChordSymbol('Am') })
     expect(typed.selection).toBeNull()
     const deleted = run(typed, { type: 'delete' })
     expect(form(deleted.draft)[0]?.[0]).toHaveLength(4)
@@ -931,7 +919,7 @@ describe('createEditorStore', () => {
       { type: 'place', tick: 0, layer: 'chords' },
       { type: 'bars', edit: 'newLine' },
       { type: 'barLength', ticks: 96 },
-      { type: 'chord', chord: parseChordSymbol('G'), advance: 'bar' },
+      { type: 'chord', chord: parseChordSymbol('G') },
     ]
     for (const action of nothing) store.dispatch(action)
     expect(onChange).not.toHaveBeenCalled()

@@ -2,6 +2,8 @@ import { PRINT_SCALE } from '@/shared/lib'
 
 /** The chord symbols' row over a line's staff at full size: the caret and a bar reach into it. */
 export const CHORD_ROW = 44
+/** A chord symbol's size at full size where it has the room: smaller where many share a bar. */
+export const CHORD_PX = 16
 /** The row a line's first bar number takes over its staff where no chord names are shown. */
 const NUMBER_ROW = 20
 /** A bar's number sits this far right of its barline, clear of the line. */

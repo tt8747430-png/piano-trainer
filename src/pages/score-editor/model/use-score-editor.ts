@@ -1,5 +1,5 @@
 import { useStore } from 'zustand'
-import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { entryTitles, sameMusic, usePiecesStoreApi } from '@/entities/piece'
 import { selectScoreView, useSettings } from '@/entities/settings'
 import { useMidiKeyDown } from '@/features/connect-midi'
@@ -26,6 +26,7 @@ import { savedMusic, savingTo, type EditorTarget } from './editor-target'
 import { layerInSight, rowsInSight } from './seen-draft'
 import { shortcutOf } from './shortcuts'
 import { useEditorTakes } from './use-editor-takes'
+import { useOpenField } from './use-open-field'
 
 /** Where every key press is the field's or the open popup's own, not the editor's. */
 const OWN_KEYS =
@@ -33,8 +34,6 @@ const OWN_KEYS =
 /** Where the arrows, Home and End move the control's own choice or focus (the segments, a slider, the keys). */
 const OWN_ARROWS = '[role="radiogroup"], [role="slider"], [data-slot="keys-scroller"]'
 const ARROWS = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'])
-/** Where Enter presses what has the focus. */
-const PRESSED = 'button, a'
 /** The keys that stop a take: everything else waits until it has stopped. */
 const STOPS_A_TAKE = new Set([' ', 'Escape'])
 
@@ -102,11 +101,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   const playback = usePlayback<'piece'>()
   // The learner's speed for Play, a share of the song's tempo: this visit's, never saved.
   const [speed, setSpeed] = useState(1)
-  const chordField = useRef<HTMLInputElement | null>(null)
-  const chordFieldRef = useCallback((field: HTMLInputElement | null) => {
-    chordField.current = field
-  }, [])
-  const [chordFieldAsked, askChordField] = useState(0)
+  // The field open over the sheet, typing a chord symbol where it is printed (ADR 0096).
+  const { field, openField } = useOpenField(store, shown)
   const close = useCloseTo(target)
   // The learner's own title, saved with the music (ADR 0094); else the catalog's, in their language.
   const title =
@@ -162,11 +158,9 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     if (ARROWS.has(event.key) && event.target.closest(OWN_ARROWS)) return
     const shortcut = shortcutOf(event, store.getState().layer)
     if (!shortcut) return
-    if (shortcut.type === 'chordField') {
-      if (event.target.closest(PRESSED)) return
+    if (shortcut.type === 'field') {
       event.preventDefault()
-      if (chordField.current) chordField.current.focus()
-      else askChordField((asked) => asked + 1)
+      openField({ kind: shortcut.field })
       return
     }
     // Escape with nothing chosen is the screen's (a sheet's, a menu's), not the editor's.
@@ -213,14 +207,14 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       speed,
       setSpeed,
       layout: shown.layout,
+      field,
+      openField,
     },
     meta: {
       id: target.id,
       title,
       playing: playback.playing === 'piece',
       kind: target.kind,
-      chordFieldRef,
-      chordFieldAsked,
       unsaved,
     },
   }

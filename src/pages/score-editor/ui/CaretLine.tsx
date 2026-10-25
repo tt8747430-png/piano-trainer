@@ -5,9 +5,10 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useValueWord } from './use-value-word'
 
 /**
- * One line saying which part the caret writes (the verse, while the Lyrics field is open, ADR
- * 0093), where it is and what is there, and the editing mode where it is not Replace (ADR 0092): a
- * screen reader's alone, heard as the caret moves, at every size; the sheet shows the same (ADR 0094).
+ * One line saying which part the caret writes (what the field open over the sheet types, ADR 0096;
+ * the verse, while the Lyrics field is open, ADR 0093), where it is and what is there, and the
+ * editing mode where it is not Replace (ADR 0092): a screen reader's alone, heard as the caret
+ * moves, at every size; the sheet shows the same (ADR 0094).
  */
 export function CaretLine() {
   const { t } = useTranslation('editor')
@@ -29,11 +30,13 @@ export function CaretLine() {
       : t('caret.at', { bar, beat, what })
   })()
   // Where the caret writes first: a click on the sheet chose it, so the line says which part it is;
-  // the words being written, the verse.
+  // a field open, what it types; the words being written, the verse.
   const part =
-    view.lyricsVerse === null
-      ? t(`layers.${layer}`)
-      : `${t('lyrics.label')} · ${t('lyrics.verse', { n: Math.min(view.lyricsVerse, verseCount(draft)) + 1 })}`
+    view.field?.kind === 'chord'
+      ? t('chord.symbol')
+      : view.lyricsVerse === null
+        ? t(`layers.${layer}`)
+        : `${t('lyrics.label')} · ${t('lyrics.verse', { n: Math.min(view.lyricsVerse, verseCount(draft)) + 1 })}`
   const placed = said.kind === 'end' ? where : `${part} · ${where}`
   const text = said.mode
     ? `${placed} · ${t('caret.mode', { mode: t(`mode.${said.mode}`) })}`
