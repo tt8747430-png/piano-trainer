@@ -25,7 +25,14 @@ export {
   type StaffName,
 } from './model/types'
 
-export { chartOf, hasChartPlan, patternsOfPiece, pieceFit, stavesOf } from './model/chart'
+export {
+  chartOf,
+  hasChartPlan,
+  patternsOfPiece,
+  pieceFit,
+  sectionCount,
+  stavesOf,
+} from './model/chart'
 export { keyText, musicOf, readMusic, sameMusic, type PieceMusic } from './model/music'
 export { HAND_IDS, type HandId } from './model/parse-hands'
 export {

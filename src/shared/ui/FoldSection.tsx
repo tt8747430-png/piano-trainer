@@ -9,10 +9,13 @@ export interface Fold {
   toggle(): void
 }
 
+/** A section's heading by its rank: a page's section, or one inside another (a level 3). */
+const HEADINGS = { 2: 'h2', 3: 'h3' } as const
+
 /**
  * A titled section of a page; given a `fold`, its heading is the button that folds its body away,
  * a chevron saying which way it is, the heading itself staying in sight. Its `detail` is a line
- * under the heading that folds with the body.
+ * under the heading that folds with the body. A section inside another heads itself at `level` 3.
  */
 export function FoldSection({
   title,
@@ -20,6 +23,7 @@ export function FoldSection({
   detail,
   className,
   headingClassName = 'text-2xl',
+  level = 2,
   children,
 }: {
   title: string
@@ -28,14 +32,16 @@ export function FoldSection({
   /** The section's own look (a card) and the room between its parts. */
   className?: string
   headingClassName?: string
+  level?: keyof typeof HEADINGS
   children: ReactNode
 }) {
   const headingId = useId()
   const bodyId = useId()
   const open = fold?.open ?? true
+  const Heading = HEADINGS[level]
   return (
     <section aria-labelledby={headingId} className={cn('flex flex-col gap-3', className)}>
-      <h2 id={headingId} className={headingClassName}>
+      <Heading id={headingId} className={headingClassName}>
         {fold ? (
           <button
             type="button"
@@ -57,7 +63,7 @@ export function FoldSection({
         ) : (
           title
         )}
-      </h2>
+      </Heading>
       <FoldBody id={bodyId} open={open} className="flex flex-col gap-3">
         {detail}
         {children}

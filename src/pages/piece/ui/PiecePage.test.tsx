@@ -4,8 +4,20 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { readSongLink } from '@/features/share-song'
-import { COLLECTIONS, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
+import { BUILT_IN_PATTERNS } from '@/entities/pattern'
+import { COLLECTIONS, pieceById, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
+import { arrangePiece, ownChoice } from '@/features/practice'
 import { createMemoryStorage } from '@/shared/lib'
+import { lessonKeys, sectionLessons } from '../model/section-lessons'
+
+const DAY = '2026-10-25T10:00:00.000Z'
+
+/** bz5 as the Player plays it, its repeats taken: what its lessons are read from. */
+function bz5Played() {
+  const piece = pieceById('bz5')
+  if (!piece) throw new Error('no bz5')
+  return arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS, { unfold: true })
+}
 
 /** Opens the bar's More, where its rarer actions fold. */
 async function openMore(user: ReturnType<typeof userEvent.setup>) {
@@ -35,25 +47,117 @@ describe('Piece', () => {
     expect(audio.played).toEqual([])
   })
 
-  it('opens the Player at a section from its form, looping it (ADR 0098)', async () => {
+  it('puts its key, time and tempo on three cards, its second title under them (ADR 0100)', async () => {
+    await renderApp('/songs/bz5')
+    const facts = (await screen.findByText('Tempo')).closest('dl') as HTMLElement
+    expect(
+      within(facts)
+        .getAllByRole('term')
+        .map((term) => [term.textContent, term.nextElementSibling?.textContent]),
+    ).toEqual([
+      ['Key', 'G'],
+      ['Time', '4/4'],
+      ['Tempo', '72 BPM'],
+    ])
+    expect(screen.getByText('Мир, душа, храни')).toBeInTheDocument()
+  })
+
+  it('lists its sections, each a row to its page of lessons in its paint (ADR 0100)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs/bz5')
-    const form = await screen.findByRole('navigation', { name: 'Form' })
-    expect(
-      within(form)
-        .getAllByRole('link')
-        .map((section) => [section.getAttribute('aria-label'), section.getAttribute('href')]),
-    ).toEqual([
-      ['Practise Verse', '/play/bz5?loop=1-8'],
-      ['Practise Chorus', '/play/bz5?loop=9-18'],
-      ['Practise Ending', '/play/bz5?loop=19-19'],
+    const sections = await screen.findByRole('region', { name: 'Sections' })
+    const rows = within(sections).getAllByRole('link')
+    expect(rows.map((row) => [row.textContent, row.getAttribute('href')])).toEqual([
+      ['Verse 15 lessons · 0 done', '/songs/bz5/sections/1'],
+      ['Chorus 20 lessons · 0 done', '/songs/bz5/sections/2'],
+      ['Ending 2 lessons · 0 done', '/songs/bz5/sections/3'],
     ])
-    // Each chip says its section and how long it is.
-    const chorus = within(form).getByRole('link', { name: 'Practise Chorus' })
-    expect(chorus).toHaveTextContent('Chorus10 bars')
-    await user.click(chorus)
-    await waitFor(() => expect(router.state.location.pathname).toBe('/play/bz5'))
-    expect(router.state.location.search).toEqual({ loop: '9-18' })
+    const paints = rows.map(
+      (row) => row.querySelector('[data-slot="row-tile"]')?.className.match(/bg-paint-[a-z]+/)?.[0],
+    )
+    expect(paints).toEqual(['bg-paint-sky', 'bg-paint-grass', 'bg-paint-sand'])
+    await user.click(rows[1] as HTMLElement)
+    await waitFor(() => expect(router.state.location.pathname).toBe('/songs/bz5/sections/2'))
+  })
+
+  it('says where to start learning it, and how much of it is done (ADR 0100)', async () => {
+    await renderApp('/songs/bz5')
+    expect(
+      await screen.findByRole('link', { name: 'Learn it step by step: start with the Verse.' }),
+    ).toHaveAttribute('href', '/songs/bz5/sections/1')
+    expect(screen.getByText('Lessons done: 0 of 31')).toBeInTheDocument()
+  })
+
+  it('goes on to the first section with a lesson not done, a lesson two share counted once', async () => {
+    const { progressStore } = await renderApp('/songs/bz5')
+    await screen.findByRole('heading', { level: 1 })
+    // The verse played through, every chord of it learned: the chorus and the ending play some.
+    const verse = sectionLessons(bz5Played(), 'bz5', 0)
+    if (!verse) throw new Error('bz5 has a verse')
+    act(() =>
+      progressStore.setState({
+        lessons: Object.fromEntries(lessonKeys(verse).map((key) => [key, DAY])),
+      }),
+    )
+    expect(screen.getByRole('link', { name: 'Next: the Chorus.' })).toHaveAttribute(
+      'href',
+      '/songs/bz5/sections/2',
+    )
+    expect(screen.getByText('Lessons done: 15 of 31')).toBeInTheDocument()
+    const sections = screen.getByRole('region', { name: 'Sections' })
+    expect(
+      within(sections)
+        .getAllByRole('link')
+        .map((row) => row.textContent),
+    ).toEqual([
+      'Verse 15 lessons · 15 done',
+      'Chorus 20 lessons · 5 done',
+      'Ending 2 lessons · 1 done',
+    ])
+  })
+
+  it('says to play it through once every lesson is done, opening the whole song', async () => {
+    const { progressStore } = await renderApp('/songs/bz5')
+    await screen.findByRole('heading', { level: 1 })
+    const keys = [0, 1, 2].flatMap((section) => {
+      const lessons = sectionLessons(bz5Played(), 'bz5', section)
+      return lessons ? lessonKeys(lessons) : []
+    })
+    act(() =>
+      progressStore.setState({ lessons: Object.fromEntries(keys.map((key) => [key, DAY])) }),
+    )
+    expect(
+      screen.getByRole('link', { name: 'Every section learned. Play it through.' }),
+    ).toHaveAttribute('href', '/play/bz5')
+    expect(screen.getByText('Lessons done: 31 of 31')).toBeInTheDocument()
+  })
+
+  it('plays it along, the whole song, from a row at its foot', async () => {
+    await renderApp('/songs/bz5')
+    expect(
+      await screen.findByRole('link', { name: 'Play along The whole song in the Player' }),
+    ).toHaveAttribute('href', '/play/bz5')
+  })
+
+  it('shows a study of one section its lessons in place, on its shelf (ADR 0100)', async () => {
+    await renderApp('/practice/accompaniment/studies/ex3')
+    expect(
+      await screen.findByRole('link', { name: 'Learn it step by step: start with the Practice.' }),
+    ).toHaveAttribute('href', '/practice/accompaniment/studies/ex3/sections/1')
+    expect(screen.queryByRole('region', { name: 'Sections' })).not.toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: 'Changes' })).toBeInTheDocument()
+    const inTime = screen.getByRole('region', { name: 'Play the chords in time' })
+    expect(
+      within(inTime)
+        .getAllByRole('link')
+        .map((row) => [row.textContent, row.getAttribute('href')]),
+    ).toEqual([
+      ['1st sequence C · Dm · G · C', '/play/ex3?loop=1-4'],
+      ['2nd sequence F · C · G · C', '/play/ex3?loop=5-8'],
+    ])
+    expect(
+      screen.getByRole('link', { name: 'Play the pattern on C 1 · Bass + chords' }),
+    ).toHaveAttribute('href', '/play/ex3?loop=1-1')
   })
 
   it('checks the song’s chords from More, its one action there', async () => {
@@ -98,12 +202,25 @@ describe('Piece', () => {
     expect(progressStore.getState().learned['piece:bz5']).toBeDefined()
   })
 
-  it('reads in Russian, its form’s sections too', async () => {
+  it('reads in Russian, its sections too', async () => {
     await renderApp('/songs/bz5', { locale: 'ru' })
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Мир, душа, храни' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Играть: Куплет' })).toHaveTextContent('Куплет8 тактов')
+    const sections = screen.getByRole('region', { name: 'Разделы' })
+    expect(within(sections).getAllByRole('link')[0]).toHaveTextContent(
+      'Куплет 15 уроков · пройдено: 0',
+    )
+    expect(
+      screen.getByRole('link', { name: 'Учите песню по шагам: начните с раздела «Куплет».' }),
+    ).toBeInTheDocument()
+    expect(untranslated(document.body)).toEqual([])
+  })
+
+  it('reads a study’s lessons in Russian', async () => {
+    await renderApp('/practice/accompaniment/studies/ex3', { locale: 'ru' })
+    expect(await screen.findByRole('heading', { level: 2, name: 'Переходы' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '1-й оборот C · Dm · G · C' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
   })
 
@@ -169,27 +286,26 @@ describe('Piece: the learner’s own music', () => {
     ).toEqual(['Share', 'Delete'])
   })
 
-  it('loops a section with its repeats as the Player plays it, every pass (ADR 0067, 0098)', async () => {
-    // The verse's first two bars repeated, then the chorus: played Em D Em D C, then G D.
+  it('has nothing to learn in a song of no chord symbol: no learning card, its sections say so', async () => {
     const song = {
       ...MUSIC,
       id: 'my-1',
       title: 'Morning',
       sections: [
-        { kind: 'verse', lines: ['|: Em D :| C'] },
-        { kind: 'chorus', lines: ['G D'] },
+        { kind: 'verse', lines: ['_'] },
+        { kind: 'chorus', lines: ['_'] },
       ],
+      hands: { rh: 'r/3 | r/3', lh: 'r/3 | r/3' },
     }
     await renderApp('/songs/my-1', { storage: saved({ songs: [song], nextSong: 2 }) })
-    const form = await screen.findByRole('navigation', { name: 'Form' })
+    const sections = await screen.findByRole('region', { name: 'Sections' })
     expect(
-      within(form)
+      within(sections)
         .getAllByRole('link')
-        .map((section) => [section.getAttribute('href'), section.textContent]),
-    ).toEqual([
-      ['/play/my-1?loop=1-5', 'Verse5 bars'],
-      ['/play/my-1?loop=6-7', 'Chorus2 bars'],
-    ])
+        .map((row) => row.textContent),
+    ).toEqual(['Verse No chords to learn', 'Chorus No chords to learn'])
+    expect(screen.queryByText(/^Lessons done/)).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /^Learn it step by step/ })).not.toBeInTheDocument()
   })
 
   it('edits a song in the score editor', async () => {

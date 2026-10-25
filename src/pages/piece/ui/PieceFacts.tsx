@@ -6,9 +6,9 @@ import { useLocale } from '@/shared/i18n'
 import { keySymbol } from '@/shared/lib/music'
 
 /**
- * A song's or listing's facts under its bar (`PieceHeader`), in one quiet line that reads and is not
- * pressed: its second title, then its key, meter and tempo, named for a screen reader, its stage's mark, and
- * Your version where the learner has one.
+ * A listing's facts under its bar (`PieceHeader`), in one quiet line that reads and is not pressed:
+ * its second title, then its key, meter and tempo, named for a screen reader, its stage's mark, and
+ * Your version where the learner has one. A song's page has them as cards (`PieceFactCards`).
  */
 export function PieceFacts({ entry }: { entry: Entry }) {
   const { t } = useTranslation(['piece', 'music'])

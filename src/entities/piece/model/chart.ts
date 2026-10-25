@@ -43,6 +43,12 @@ export function stavesOf(piece: Piece): StaffMusic[] {
   })
 }
 
+/** How many sections a piece's chart has: a progression written in one line is one. */
+export function sectionCount(piece: Piece): number {
+  if (!isDegreePiece(piece)) return piece.sections.length
+  return typeof piece.progression === 'string' ? 1 : piece.progression.length
+}
+
 /** Every chord of a chart in order. */
 export const chordsOf = (chart: Chart): ChartChord[] =>
   chart.sections.flatMap((section) =>

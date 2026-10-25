@@ -1,8 +1,7 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Ellipsis, PencilLine, Play, RotateCcw, Share2, Target, Trash2 } from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { pieceStepId } from '@/entities/step'
 import {
   entryTitles,
@@ -10,30 +9,34 @@ import {
   isOwnSongId,
   musicOf,
   selectHasVersion,
-  usePieceHeadings,
   usePieces,
   type Piece,
 } from '@/entities/piece'
 import { LearnedButton } from '@/features/mark-learned'
-import { arrangePiece, ownChoice } from '@/features/practice'
 import { ShareSaid, useShareSong } from '@/features/share-song'
 import { OPEN_PLAINLY } from '@/shared/lib'
 import { useLocale } from '@/shared/i18n'
 import { ActionMenu, FabLink, FloatingActions, RoundLink } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { sectionPaint } from '../model/section-paint'
+import { useSongLessons } from '../model/use-song-lessons'
+import { LearnCard } from './LearnCard'
 import { PieceAbout, PieceCredits } from './PieceAbout'
-import { PieceFacts } from './PieceFacts'
-import { PieceForm } from './PieceForm'
+import { PieceFactCards } from './PieceFactCards'
 import { OwnMusicAsk } from './OwnMusicAsk'
 import { PieceHeader } from './PieceHeader'
+import { PlayAlong } from './PlayAlong'
+import { SectionLessonGroups } from './SectionLessonGroups'
+import { SectionRows } from './SectionRows'
 
 /**
- * A piece with a chart, in one column, saying what the song is (ADR 0098): its bar (Back, the title,
- * then Edit the score, Learned and More: Check these chords, and for the learner's own music Share
- * and its way back, asked first); its facts (key, time, tempo) and who wrote it; its form, the
- * sections in order, each opening the Player there; then its note and the way to its key's scale.
- * Its chords and chart are the Player's (with the sheet music off), so the page plays nothing and
- * shows no keys. Practise, what the page is for, floats in the thumb's reach.
+ * A piece with a chart, in one column: Learn the song (ADR 0100). Its bar (Back, the title, then
+ * Edit the score, Learned and More: Check these chords, and for the learner's own music Share and
+ * its way back, asked first); the learning card, where to go next and its lessons done; its key, time
+ * and tempo as cards, and who wrote it; its sections, each a row to its page of lessons (a song of
+ * one section shows that section's lessons here); Play along, the whole song; then its note and the
+ * way to its key's scale. Its chords and chart are the Player's, so the page plays nothing and shows
+ * no keys. Practise floats in the thumb's reach, opening the Player as it was left.
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
@@ -41,12 +44,8 @@ export function PieceView({ piece }: { piece: Piece }) {
   const own = isOwnSongId(piece.id) ? piece.id : null
   const hasVersion = usePieces((state) => selectHasVersion(state, piece.id))
   const title = entryTitles(piece, locale).primary
-  // As the Player plays it, its repeats taken: each section of the form loops the bars it plays.
-  const performance = useMemo(
-    () => arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS, { unfold: true }),
-    [piece],
-  )
-  const headings = usePieceHeadings(piece)
+  const { performance, headings, sections } = useSongLessons(piece)
+  const [only] = sections.length === 1 ? sections : []
   const shared = useShareSong()
   const [asking, setAsking] = useState(false)
   // More, which takes the focus back from a dialog it opened: the action chosen is folded away.
@@ -131,10 +130,21 @@ export function PieceView({ piece }: { piece: Piece }) {
           </>
         }
       />
-      <PieceFacts entry={piece} />
+      <LearnCard piece={piece} headings={headings} sections={sections} />
+      <PieceFactCards piece={piece} />
       <PieceCredits entry={piece} />
       <ShareSaid said={shared.said} />
-      <PieceForm pieceId={piece.id} performance={performance} headings={headings} />
+      {/*
+       * CHORDS (spec §3.1, round 3's chord part): the chord summary, headed "Chords", each chord's
+       * diagram opening its `ChordSheet` (`ChordSummary` from `widgets/chord-diagrams`), goes here
+       * once the diagrams are in; a piece of no chord symbol has none.
+       */}
+      {only ? (
+        <SectionLessonGroups piece={piece} lessons={only} paint={sectionPaint(headings[0] ?? '')} />
+      ) : (
+        <SectionRows piece={piece} headings={headings} sections={sections} />
+      )}
+      <PlayAlong piece={piece} />
       <PieceAbout entry={piece} />
       {ownMusic ? (
         <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} returnTo={more} />

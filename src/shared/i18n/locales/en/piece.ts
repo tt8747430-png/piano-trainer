@@ -3,12 +3,50 @@ export const piece = {
   // A chord chart's section says its bars.
   barOne: 'bar {{n}}',
   barsFromTo: 'bars {{first}}–{{last}}',
-  // The song's form: each section opening the Player there.
-  practiseSectionOf: 'Practise {{section}}',
-  form: 'Form',
-  formBars_one: '{{count}} bar',
-  formBars_other: '{{count}} bars',
+  // The song's page, Learn the song (ADR 0100): where to go next and the song's lessons done, its
+  // sections each with its lessons, and the whole song to play along with.
+  learnSong: {
+    progress: '{{done}} of {{total}}',
+    progressSaid: 'Lessons done: {{done}} of {{total}}',
+    start: 'Learn it step by step: start with the {{section}}.',
+    next: 'Next: the {{section}}.',
+    done: 'Every section learned. Play it through.',
+    sections: 'Sections',
+    lessons_one: '{{count}} lesson',
+    lessons_other: '{{count}} lessons',
+    lessonsDone: '{{lessons}} · {{done}} done',
+    noLessons: 'No chords to learn',
+    playAlong: 'Play along',
+    playAlongDetail: 'The whole song in the Player',
+  },
+  // A section's page: its chords in order, its changes, its pattern; each lesson looped in the Player.
+  learnSection: {
+    title: 'Learn the {{section}}',
+    rounds: '{{n}} ×',
+    noChords: 'No chord symbols',
+    changes: 'Changes',
+    inTime: 'Play the chords in time',
+    // A chord sequence by its place in the section, by the ordinal's plural form (Russian says
+    // «оборот»: its «последовательность» is a Progression).
+    sequence: {
+      zero: '{{n}}th sequence',
+      one: '{{n}}st sequence',
+      two: '{{n}}nd sequence',
+      few: '{{n}}rd sequence',
+      many: '{{n}}th sequence',
+      other: '{{n}}th sequence',
+    },
+    wholeSection: 'The whole section',
+    oneChange: 'One change at a time',
+    change: 'From {{from}} to {{to}}',
+    bar: 'Bar {{n}}',
+    bars: 'Bars {{first}}–{{last}}',
+    pattern: 'Pattern',
+    patternOn: 'Play the pattern on {{chord}}',
+    done: 'Done',
+  },
   tempo: 'Tempo',
+  time: 'Time',
   progression: 'Progression',
   more: 'More',
   practise: 'Practise',
