@@ -1,32 +1,19 @@
-import { FileMusic, Layers, Type } from 'lucide-react'
+import { Layers, Type } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import {
-  selectPractice,
-  selectScoreView,
-  useSettings,
-  useSettingsStoreApi,
-} from '@/entities/settings'
-import { setPracticeToggle, setScoreView } from '@/features/set-preference'
+import { selectPractice, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { setPracticeToggle } from '@/features/set-preference'
 import { SwitchRow } from '@/shared/ui'
 
 /**
- * What only practice has in the View (ADR 0094), after the switches the editor's has too: the
- * sheet music itself (off, the keys have the screen), the chord positions written beside the chord
- * symbols and note names.
+ * What only practice has in the View (ADR 0094), after the switches the editor's has too, while the
+ * sheet music is shown: the chord positions written beside the chord symbols and note names.
  */
 export function PracticeSwitches() {
   const { t } = useTranslation('player')
   const store = useSettingsStoreApi()
-  const notation = useSettings((state) => selectScoreView(state).notation)
   const practice = useSettings(selectPractice)
   return (
     <>
-      <SwitchRow
-        icon={<FileMusic />}
-        label={t('view.notation')}
-        checked={notation}
-        onCheckedChange={(on) => setScoreView(store, { notation: on })}
-      />
       <SwitchRow
         icon={<Layers />}
         label={t('toggles.positions')}

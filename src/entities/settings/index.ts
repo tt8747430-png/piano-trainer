@@ -8,6 +8,8 @@ export {
   FLOATING_PLACES,
   type ChordFinderSettings,
   DEFAULT_SCORE_VIEW,
+  MUSIC_VIEWS,
+  type MusicView,
   type ScoreViewSettings,
   type FloatingPlace,
   type FloatingSettings,

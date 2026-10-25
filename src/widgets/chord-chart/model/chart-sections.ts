@@ -66,5 +66,25 @@ export function sectionBars(lines: readonly (readonly number[])[]): SectionBars 
   return all.length === 0 ? null : { first: Math.min(...all), last: Math.max(...all) }
 }
 
+/**
+ * A line's bars, by their beats, in rows of as many whole bars as `room` beats hold (ADR 0099: two
+ * 4-beat bars on a phone held upright): indexes into the line, a bar never split, one at least.
+ */
+export function rowsOf(beats: readonly number[], room: number): number[][] {
+  const rows: number[][] = []
+  let used = Infinity
+  beats.forEach((bar, index) => {
+    const row = rows.at(-1)
+    if (row && used + bar <= room) {
+      row.push(index)
+      used += bar
+    } else {
+      rows.push([index])
+      used = bar
+    }
+  })
+  return rows
+}
+
 /** A section's place in the chart, which its heading's id names (`section-2`). */
 export const sectionAnchor = (section: number) => `section-${section}`

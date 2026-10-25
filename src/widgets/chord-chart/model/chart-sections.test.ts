@@ -1,7 +1,24 @@
 import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart } from '@/shared/lib/arrangement'
 import { note, parseChordSymbol } from '@/shared/lib/music'
-import { chartBar, chartSections, sectionBars } from './chart-sections'
+import { chartBar, chartSections, rowsOf, sectionBars } from './chart-sections'
+
+describe('rowsOf', () => {
+  it('wraps a line’s bars into rows of as many whole bars as the room’s beats hold', () => {
+    expect(rowsOf([4, 4, 4, 4], 8)).toEqual([
+      [0, 1],
+      [2, 3],
+    ])
+    expect(rowsOf([3, 3, 3], 8)).toEqual([[0, 1], [2]])
+    expect(rowsOf([4, 4, 4, 4], 16)).toEqual([[0, 1, 2, 3]])
+    expect(rowsOf([2, 4, 4], 8)).toEqual([[0, 1], [2]])
+  })
+
+  it('gives a bar wider than the room a row of its own, and a line of none no row', () => {
+    expect(rowsOf([12, 4], 8)).toEqual([[0], [1]])
+    expect(rowsOf([], 8)).toEqual([])
+  })
+})
 
 const bar = (symbol: string) => ({ chords: [{ ...parseChordSymbol(symbol), beats: 4 }], beats: 4 })
 const CHART: Chart = {

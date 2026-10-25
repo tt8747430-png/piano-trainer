@@ -17,7 +17,6 @@ import { ModeSwitch } from '@/widgets/mode-switch'
 import { useClose } from '../model/use-close'
 import type { PlayerSearch } from '../model/player-search'
 import { usePlayer } from '../model/use-player'
-import { PieceChart } from './PieceChart'
 import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
 
@@ -65,15 +64,6 @@ function PiecePlayer({ piece }: { piece: Piece }) {
         isDegreePiece(piece) ? null : (
           <ModeSwitch pieceId={piece.id} mode="practise" bar={bar + 1} />
         )
-      }
-      chart={
-        <PieceChart
-          title={title}
-          performance={performance}
-          headings={headings}
-          playing={bar}
-          onBar={goToBar}
-        />
       }
       setup={
         <PieceSetup
