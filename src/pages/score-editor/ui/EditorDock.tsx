@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { FloatingBar, FloatingBarButton, FloatingBarPlay } from '@/shared/ui'
 import { speedTempo, TempoButton } from '@/widgets/practice-player'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { RecorderSheet } from './RecorderSheet'
+import { RecordButton } from './RecordButton'
+import { TakesButton } from './TakesButton'
 
 /** A step button's size: a little smaller under 360px, where the width is short. */
 const STEP = 'narrow-phone:size-11'
@@ -11,9 +12,10 @@ const STEP = 'narrow-phone:size-11'
 /**
  * The editor's transport, the Player's (`PlayerDock`, ADR 0061) in shape and place: one pill floating
  * over the sheet's foot, the tempo then ‹ Play ›, so the two screens are worked the same way, and
- * Record after them, as Dorico's transport has it (ADR 0094), opening the takes. Play plays from the
- * caret's bar at the tempo's speed (the learner's, never the song's tempo); ‹ › move the caret. What
- * changes the music is the edit row's and the palette's. While a take records, its strip stands here.
+ * Record after them, as Dorico's transport has it (ADR 0094), which records (ADR 0096), and the takes
+ * beside it once the song has any. Play plays from the caret's bar at the tempo's speed (the
+ * learner's, never the song's tempo); ‹ › move the caret. What changes the music is the edit row's
+ * and the palette's. While a take records, its strip stands here.
  */
 export function EditorDock() {
   const { t } = useTranslation('editor')
@@ -49,7 +51,8 @@ export function EditorDock() {
       >
         <ChevronRight aria-hidden />
       </FloatingBarButton>
-      <RecorderSheet className={STEP} />
+      <RecordButton className={STEP} />
+      <TakesButton className={STEP} />
     </FloatingBar>
   )
 }

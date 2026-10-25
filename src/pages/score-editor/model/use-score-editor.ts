@@ -153,6 +153,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
     if (event.defaultPrevented || event.isComposing) return
     if (recording) {
+      // The recording strip's settings keep their own keys: Escape closes them, Space turns a switch.
+      if (event.target instanceof Element && event.target.closest(OWN_KEYS)) return
       if (!STOPS_A_TAKE.has(event.key)) return
       event.preventDefault()
       takes.stop()

@@ -13,9 +13,9 @@ const PLAN: RecorderPlan = {
   meter: '4/4',
   from: 0,
   tempo: 120,
-  click: true,
   room: 100,
   tune: [],
+  along: { click: true, tune: false },
 }
 
 function renderRecorder({ webMidi = true }: { webMidi?: boolean } = {}) {
@@ -97,6 +97,17 @@ describe('useRecorder', () => {
     expect(result.current.stage).toBe('idle')
     expect(onTake).toHaveBeenCalledOnce()
     expect(onTake.mock.calls[0]?.[2]).toBe('stopped')
+  })
+
+  it('turns the click off while a take records, and changes nothing between takes', () => {
+    const { audio, result } = renderRecorder()
+    act(() => result.current.along({ click: false, tune: false }))
+    expect(audio.stops).toBe(0)
+    act(() => result.current.start(PLAN))
+    act(() => audio.setNow(1.2))
+    act(() => result.current.along({ click: false, tune: false }))
+    // The count-in's last beat, at 1.6 s, and nothing after it.
+    expect(audio.played.at(-1)?.sounds.map((click) => click.at)).toEqual([1.5])
   })
 
   it('records nothing without a MIDI keyboard', () => {

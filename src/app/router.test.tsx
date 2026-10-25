@@ -218,7 +218,7 @@ describe('the app shell', () => {
     ['/play/exercise/nothing', 'Go to Exercises', '/practice/exercises'],
     ['/play/walk?kind=blues', 'Go to Scales and keys', '/practice/scales'],
     ['/check?of=nothing', 'Go to Learn', '/'],
-    ['/edit/bz1/takes/nothing', 'Go to the takes', '/edit/bz1?record=true'],
+    ['/edit/bz1/takes/nothing', 'Go to the takes', '/edit/bz1?takes=true'],
     ['/edit/nothing/takes/nothing', 'Go to Songs', '/songs'],
   ])('shows not found at %s with the way back to its place', async (path, way, href) => {
     await renderApp(path)

@@ -297,16 +297,17 @@ export const editor = {
     tempoLabel: '{{word}}, {{bpm}} a minute',
     meter: 'Time signature',
   },
+  // Record in the dock, the recording strip, and the takes' own sheet (ADR 0028, 0096).
   recorder: {
     more: 'Take actions',
     title: 'Takes',
-    open: 'Record',
     record: 'Record',
-    click: 'Metronome',
-    clickDetail: 'The beat goes on after the count-in',
-    tune: 'Melody',
-    tuneDetail: 'The song’s melody plays while you record',
-    from: 'From bar',
+    // Record's popover, where no MIDI keyboard is connected.
+    needsMidi: 'Recording needs a MIDI keyboard.',
+    // The takes' button beside Record, with how many there are.
+    takes: 'Takes: {{count}}',
+    // The recording strip's settings: Settings › Recording's switches.
+    settings: 'Recording settings',
     full: 'Your takes are full: delete one to record another.',
     nothing: 'Nothing was played.',
     none: 'No takes yet.',
@@ -330,7 +331,7 @@ export const editor = {
     },
     split: 'Split hands at',
     grid: 'Shortest note',
-    writeIt: 'Write',
+    writeFrom: 'Write from bar {{n}}',
     counting: 'Count-in',
     recording: 'Recording',
     bar: 'Bar {{n}}',

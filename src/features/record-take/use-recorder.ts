@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Played } from '@/entities/take'
 import { useServices } from '@/shared/lib/services'
-import { startRecorder, type RecorderPlan, type RecorderProgress } from './model/recorder'
+import {
+  startRecorder,
+  type Along,
+  type RecorderPlan,
+  type RecorderProgress,
+  type RecorderSession,
+} from './model/recorder'
 
 /** Whether a take records: not, in its count-in, or recording. */
 export type RecorderStage = 'idle' | RecorderProgress['stage']
@@ -28,6 +34,8 @@ interface Recorder {
   /** Records a take to `plan`; nothing where there is no MIDI keyboard or a take records already. */
   readonly start: (plan: RecorderPlan) => void
   readonly stop: () => void
+  /** The click and the tune under the take on or off from now on; nothing while none records. */
+  readonly along: (along: Along) => void
 }
 
 /** A progress source and the function that moves it. */
@@ -60,7 +68,7 @@ export function useRecorder(
   const { audio, midi } = useServices()
   const [stage, setStage] = useState<RecorderStage>('idle')
   const [progress] = useState(createProgressSource)
-  const session = useRef<(() => void) | null>(null)
+  const session = useRef<RecorderSession | null>(null)
   const left = useRef(false)
   // The latest `onTake`: a take may end in a timer, a key's handler or the screen's cleanup.
   const latestOnTake = useRef(onTake)
@@ -71,13 +79,13 @@ export function useRecorder(
     left.current = false
     // A hidden page may be closed without another word: the take stops, and is kept, now.
     const onHidden = () => {
-      if (document.visibilityState === 'hidden') session.current?.()
+      if (document.visibilityState === 'hidden') session.current?.stop()
     }
     document.addEventListener('visibilitychange', onHidden)
     return () => {
       document.removeEventListener('visibilitychange', onHidden)
       left.current = true
-      session.current?.()
+      session.current?.stop()
     }
   }, [])
 
@@ -98,6 +106,7 @@ export function useRecorder(
       },
     })
   }
-  const stop = () => session.current?.()
-  return { stage, progress, start, stop }
+  const stop = () => session.current?.stop()
+  const along = (next: Along) => session.current?.along(next)
+  return { stage, progress, start, stop, along }
 }

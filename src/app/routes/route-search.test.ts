@@ -46,13 +46,14 @@ describe('search params', () => {
     expect(await searchAt('/practice/chord-finder?keys=x-500&key=H')).toEqual(CHORD_FINDER_DEFAULTS)
   })
 
-  it('open the score editor’s takes only when the URL says so', async () => {
-    expect(await searchAt('/edit/bz5?record=true')).toEqual({ record: true })
-    expect(await searchAt('/edit/bz5?record=yes')).toEqual({ record: false })
+  it('open the score editor’s takes, or press its Record as it opens, only when the URL says so', async () => {
+    expect(await searchAt('/edit/bz5?takes=true')).toEqual({ takes: true, record: false })
+    expect(await searchAt('/edit/bz5?record=true')).toEqual({ takes: false, record: true })
+    expect(await searchAt('/edit/bz5?takes=yes&record=1')).toEqual(EDIT_DEFAULTS)
   })
 
   it('carry the bar between the Player and the score editor, a bar as printed (ADR 0090)', async () => {
-    expect(await searchAt('/edit/bz5?bar=4')).toEqual({ record: false, bar: 4 })
+    expect(await searchAt('/edit/bz5?bar=4')).toEqual({ ...EDIT_DEFAULTS, bar: 4 })
     expect(await searchAt('/play/bz5?bar=3')).toEqual({ ...PLAYER_DEFAULTS, bar: 3 })
     for (const bar of ['0', '-2', '2.5', 'x']) {
       expect(await searchAt(`/edit/bz5?bar=${bar}`)).toEqual(EDIT_DEFAULTS)

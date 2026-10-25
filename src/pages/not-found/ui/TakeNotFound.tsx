@@ -9,7 +9,7 @@ export function TakeNotFound() {
   return (
     <NotFound>
       <ButtonLink
-        render={<Link to="/edit/$pieceId" params={{ pieceId }} search={{ record: true }} />}
+        render={<Link to="/edit/$pieceId" params={{ pieceId }} search={{ takes: true }} />}
       >
         {t('notFound.toTakes')}
       </ButtonLink>
