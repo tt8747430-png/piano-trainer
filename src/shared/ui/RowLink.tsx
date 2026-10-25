@@ -12,8 +12,10 @@ type RowTile =
 
 /**
  * A list row that leads to a page: a tile in its paint with an icon, or its number in a sequence (a
- * list of one kind goes without, every row's tile alike), a title of up to two lines, an optional detail of up to two, what it carries at its end (a level,
- * a mark) and a chevron (Apple's disclosure indicator). `render` is the link (a router `Link`).
+ * list of one kind goes without, every row's tile alike), a title of up to two lines, an optional
+ * detail of up to two, what it holds under them (a song's chords), what it carries at its end (a
+ * level, a mark) and a chevron (Apple's disclosure indicator). `render` is the link (a router
+ * `Link`).
  */
 export function RowLink({
   title,
@@ -23,11 +25,14 @@ export function RowLink({
   paint,
   trailing,
   render,
+  children,
 }: {
   title: string
   detail?: string | undefined
   trailing?: ReactNode
   render: useRender.RenderProp
+  /** What it shows under its title and detail. */
+  children?: ReactNode
 } & RowTile) {
   return useRender({
     defaultTagName: 'a',
@@ -67,6 +72,7 @@ export function RowLink({
                 </span>
               </>
             ) : null}
+            {children ? <> {children}</> : null}
           </span>
           {trailing ? <> {trailing}</> : null}
           <ChevronRight

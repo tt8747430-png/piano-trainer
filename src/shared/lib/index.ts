@@ -60,6 +60,16 @@ export {
 export { isRecord, savedObject } from './saved'
 export { createSavedStore, type SavingOptions } from './saved-store'
 export { downloadFile } from './download-file'
+export {
+  MIDI_DIVISION,
+  midiFileName,
+  noteEvents,
+  standardMidiFile,
+  type MidiEvent,
+  type MidiNote,
+  type MidiTrack,
+  type TimedMidiEvent,
+} from './standard-midi-file'
 export { keyListParam, readKeyList, readNote, readText, valueOr, wholeIn } from './search-params'
 export { createStoreContext } from './store-context'
 export {

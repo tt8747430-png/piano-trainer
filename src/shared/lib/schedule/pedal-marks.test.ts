@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { pedalHeld } from './pedal-marks'
+import { pedalHeld, pedalSpans } from './pedal-marks'
 
 const at = (startTick: number, pedal?: 'down' | 'up' | 'change') => ({
   startTick,
@@ -19,5 +19,19 @@ describe('pedalHeld', () => {
     const held = pedalHeld([at(0, 'down'), at(24)])
     expect(held(24)).toBe(Infinity)
     expect(pedalHeld([at(0), at(24, 'up')])(0)).toBeNull()
+  })
+})
+
+describe('pedalSpans', () => {
+  it('reads the spans the pedal is down, a change ending one and starting the next', () => {
+    expect(pedalSpans([at(96, 'up'), at(0, 'down'), at(48, 'change'), at(24)])).toEqual([
+      { from: 0, to: 48 },
+      { from: 48, to: 96 },
+    ])
+  })
+
+  it('reads a pedal never let up as down to the end, and none where nothing is marked', () => {
+    expect(pedalSpans([at(24, 'down')])).toEqual([{ from: 24, to: Infinity }])
+    expect(pedalSpans([at(0), at(24)])).toEqual([])
   })
 })
