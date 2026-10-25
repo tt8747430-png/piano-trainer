@@ -17,6 +17,18 @@ const press = (...keys: number[]): PracticeEvent[] =>
 const waiting = (hands: 'rh' | 'lh' | 'both') =>
   run(initialPractice(ONE_BAR, 'wait', hands), { type: 'play' })
 
+/** › pressed. */
+const NEXT: PracticeEvent = { type: 'next' }
+
+/** Each beat group's keys played and moved on from, `count` times: a pass played in Wait mode. */
+function playOn(state: PracticeState, count: number): PracticeState {
+  let at = state
+  for (let i = 0; i < count; i++) {
+    at = run(at, ...press(...at.expected.map((pc) => 60 + pc)), { type: 'advance' })
+  }
+  return at
+}
+
 describe('the practice machine', () => {
   it('starts at the first beat group, stopped', () => {
     const state = initialPractice(ONE_BAR, 'listen', 'both')
@@ -198,29 +210,35 @@ describe('the practice machine', () => {
     })
 
     it('counts a pass played to its end, and none stepped through while stopped (ADR 0100)', () => {
-      const played = run(waiting('rh'), { type: 'jumpToBeatGroup', beatGroup: 3 }, { type: 'next' })
+      const played = playOn(waiting('rh'), 4)
       expect(played).toMatchObject({ outcome: 'finished', passes: 1 })
       expect(run(played, { type: 'play' }).passes).toBe(1)
-      const stepped = run(
-        initialPractice(ONE_BAR, 'wait', 'rh'),
-        { type: 'jumpToBeatGroup', beatGroup: 3 },
-        { type: 'next' },
-      )
+      const stepped = run(initialPractice(ONE_BAR, 'wait', 'rh'), ...Array(4).fill(NEXT))
       expect(stepped).toMatchObject({ outcome: 'finished', passes: 0 })
     })
 
+    it('counts no pass moved on by hand, nor one begun ahead of the start', () => {
+      // › past a beat group, then the rest played.
+      const skippedOne = playOn(run(waiting('rh'), NEXT), 3)
+      expect(skippedOne).toMatchObject({ outcome: 'finished', passes: 0 })
+      // A place ahead tapped, the rest played.
+      const tappedAhead = playOn(run(waiting('rh'), { type: 'jumpToBeatGroup', beatGroup: 2 }), 2)
+      expect(tappedAhead).toMatchObject({ outcome: 'finished', passes: 0 })
+      // Back a beat and on again: every beat group still played.
+      const backAgain = playOn(run(playOn(waiting('rh'), 2), { type: 'prev' }), 3)
+      expect(backAgain).toMatchObject({ outcome: 'finished', passes: 1 })
+    })
+
     it('counts each lap of a loop as a pass, and none in Listen', () => {
-      const lap = (state: PracticeState) =>
-        run(state, { type: 'jumpToBeatGroup', beatGroup: 7 }, { type: 'advance' })
       const looped = run(initialPractice(TWO_BARS, 'wait', 'rh', { first: 4, last: 7 }), {
         type: 'play',
       })
-      expect(lap(looped)).toMatchObject({ beatGroup: 4, passes: 1 })
-      expect(lap(lap(looped)).passes).toBe(2)
+      expect(playOn(looped, 4)).toMatchObject({ beatGroup: 4, passes: 1 })
+      expect(playOn(looped, 8).passes).toBe(2)
       const listening = run(initialPractice(TWO_BARS, 'listen', 'both', { first: 4, last: 7 }), {
         type: 'play',
       })
-      expect(lap(listening).passes).toBe(0)
+      expect(run(listening, ...Array(4).fill({ type: 'advance' })).passes).toBe(0)
     })
 
     it('stays at the start going back', () => {

@@ -39,6 +39,11 @@ export interface PracticeState {
    * Player records as a lesson done (ADR 0100).
    */
   readonly passes: number
+  /**
+   * Wait mode: this pass was moved on by hand (› or a place ahead tapped), or begun part way, so it
+   * is not counted as played.
+   */
+  readonly skipped: boolean
 }
 
 export type PracticeEvent =
@@ -107,8 +112,10 @@ function moveTo(state: PracticeState, beatGroup: number): PracticeState {
   return {
     ...state,
     beatGroup,
-    // A pass begins at the start, its slips counted afresh: a loop's lap, a pass begun again.
+    // A pass begins at the start, its slips counted afresh and nothing of it skipped: a loop's lap,
+    // a pass begun again.
     slips: beatGroup === bounds(state).first ? {} : state.slips,
+    skipped: beatGroup === bounds(state).first ? false : state.skipped,
     arrival: state.arrival + 1,
     expected: state.mode === 'wait' ? expectedAt(state.performance, beatGroup, state.hands) : [],
     received: [],
@@ -155,19 +162,22 @@ export function initialPractice(
     wrong: null,
     slips: {},
     passes: 0,
+    skipped: false,
   }
   return moveTo(state, bounds(state).first)
 }
 
 /**
  * On past the end: Listen and a loop go round; Wait mode through the whole piece finishes, stopped.
- * Wait mode counts a pass it played to the end, round a loop or finished.
+ * Wait mode counts a pass it played to the end, round a loop or finished, where nothing of it was
+ * skipped.
  */
 function next(state: PracticeState): PracticeState {
   if (state.performance.beatGroups.length === 0) return state
   const { first, last } = bounds(state)
   if (state.beatGroup < last) return moveTo(state, state.beatGroup + 1)
-  const passes = state.mode === 'wait' && state.playing ? state.passes + 1 : state.passes
+  const played = state.mode === 'wait' && state.playing && !state.skipped
+  const passes = played ? state.passes + 1 : state.passes
   if (state.mode === 'listen' || state.loop) return { ...moveTo(state, first), passes }
   return {
     ...state,
@@ -217,8 +227,10 @@ export function practiceReducer(state: PracticeState, event: PracticeEvent): Pra
         hands: event.hands,
         loop: event.loop,
         playing: state.playing && event.mode === state.mode,
-        // Other music, hands or loop: the slips counted were another pass's.
+        // Other music, hands or loop: the slips counted were another pass's, and a pass from here
+        // on is begun part way unless it is at the start.
         slips: {},
+        skipped: true,
       }
       // A finished pass starts again at the start.
       if (state.outcome === 'finished') return moveTo(configured, bounds(configured).first)
@@ -244,15 +256,19 @@ export function practiceReducer(state: PracticeState, event: PracticeEvent): Pra
         : state
     }
     case 'next':
-      return next(state)
+      // Moved on by hand: the beat group left is not played.
+      return next({ ...state, skipped: true })
     case 'advance':
       return advance(state)
     case 'prev':
       return prev(state)
-    case 'jumpToBeatGroup':
-      return event.beatGroup >= 0 && event.beatGroup < state.performance.beatGroups.length
-        ? moveTo(state, clamp(state, event.beatGroup))
-        : state
+    case 'jumpToBeatGroup': {
+      if (event.beatGroup < 0 || event.beatGroup >= state.performance.beatGroups.length)
+        return state
+      const to = clamp(state, event.beatGroup)
+      // A place ahead leaves the beat groups between it and here unplayed; one behind plays them again.
+      return moveTo({ ...state, skipped: state.skipped || to > state.beatGroup }, to)
+    }
     case 'noteOn':
       return noteOn(state, event.midi)
   }
