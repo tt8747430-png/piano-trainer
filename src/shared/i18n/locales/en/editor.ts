@@ -1,5 +1,4 @@
 export const editor = {
-  yourVersion: 'Your version',
   play: 'Play',
   undo: 'Undo',
   redo: 'Redo',

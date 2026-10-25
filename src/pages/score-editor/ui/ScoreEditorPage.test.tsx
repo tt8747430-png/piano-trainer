@@ -1282,8 +1282,11 @@ describe('the score editor', () => {
     await toChordRow(user)
     const chords = await screen.findByRole('group', { name: 'Chords in the key' })
     await user.click(within(chords).getByRole('button', { name: 'Em' }))
-    expect(await screen.findByText('Your version')).toBeInTheDocument()
-    expect(piecesStore.getState().versions.amazing?.sections[0]?.lines[0]).toBe('Em G7 C G')
+    await waitFor(() =>
+      expect(piecesStore.getState().versions.amazing?.sections[0]?.lines[0]).toBe('Em G7 C G'),
+    )
+    // The sheet prints only what the learner wrote: the song's page says it is their version (ADR 0096).
+    expect(screen.queryByText('Your version')).toBeNull()
     await user.click(screen.getByRole('button', { name: 'Undo' }))
     await waitFor(() => expect(piecesStore.getState().versions).toEqual({}))
     const original = pieceById('amazing')
@@ -1307,7 +1310,8 @@ describe('the score editor', () => {
       expect(piecesStore.getState().versions.amazing).toMatchObject({ title: 'Благодать' }),
     )
     expect(within(sheet).getByRole('heading', { level: 1, name: 'Благодать' })).toBeInTheDocument()
-    expect(await screen.findByText('Ваша версия')).toBeInTheDocument()
+    // Only the title the learner wrote: no "Your version" printed under it (ADR 0096).
+    expect(screen.queryByText('Ваша версия')).toBeNull()
     // Undone, the catalog's title, and no version.
     await user.click(screen.getByRole('button', { name: 'Отменить' }))
     await waitFor(() => expect(piecesStore.getState().versions).toEqual({}))

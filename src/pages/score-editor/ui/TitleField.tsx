@@ -6,11 +6,8 @@ import { SheetTitle, type TitlePlace } from '@/shared/ui'
 import { useScoreEditorContext } from '../model/editor-context'
 import { usePaletteBeside } from '../model/use-palette-beside'
 
-/** The title over Your version: at the line's head across, else centred, its field as wide as the sheet. */
-const STACKED = {
-  across: 'flex flex-col gap-0.5',
-  centred: 'flex flex-col gap-0.5 text-center',
-} as const
+/** The title: at the line's head across, else centred, its field as wide as the sheet. */
+const PLACED = { across: '', centred: 'text-center' } as const
 /**
  * The room the palette leaves beside the sheet, which it covers at its right (ADR 0094): the title
  * keeps to it, as the dock does; a page's title is the page's.
@@ -21,7 +18,8 @@ const BESIDE = 'pr-84 landscape-phone:pr-80 xl:pr-96'
  * The title printed at the sheet's head (ADR 0094), edited where it is, as Flat's: a click turns it
  * into a field in its place, the title chosen; Enter or leaving the field saves what it holds with the
  * music (an own song's title, or a version's in place of the catalog's), Escape keeps the title it
- * had, and an empty field changes nothing.
+ * had, and an empty field changes nothing. Nothing is printed under it the learner did not write: a
+ * version says it is theirs on the song's page (ADR 0096).
  */
 export function TitleField({ place }: { place: TitlePlace }) {
   const { t } = useTranslation('editor')
@@ -53,8 +51,7 @@ export function TitleField({ place }: { place: TitlePlace }) {
     close(event.key === 'Enter')
   }
   return (
-    // A version of a catalog song says so under its title, as its page does.
-    <div className={cn(place === 'across' ? STACKED.across : STACKED.centred, beside && BESIDE)}>
+    <div className={cn(place === 'across' ? PLACED.across : PLACED.centred, beside && BESIDE)}>
       <SheetTitle title={meta.title} place={place}>
         {editing ? (
           <input
@@ -90,7 +87,6 @@ export function TitleField({ place }: { place: TitlePlace }) {
           </button>
         )}
       </SheetTitle>
-      {meta.hasVersion ? <p className="text-sm text-muted-foreground">{t('yourVersion')}</p> : null}
     </div>
   )
 }

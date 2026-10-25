@@ -1,7 +1,6 @@
 import type { LocaleResources } from '../../types'
 
 export const editor: LocaleResources['editor'] = {
-  yourVersion: 'Ваша версия',
   play: 'Сыграть',
   undo: 'Отменить',
   redo: 'Повторить',

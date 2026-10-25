@@ -1,12 +1,6 @@
 import { useStore } from 'zustand'
 import { useCallback, useEffect, useEffectEvent, useRef, useState } from 'react'
-import {
-  entryTitles,
-  sameMusic,
-  selectHasVersion,
-  usePieces,
-  usePiecesStoreApi,
-} from '@/entities/piece'
+import { entryTitles, sameMusic, usePiecesStoreApi } from '@/entities/piece'
 import { selectScoreView, useSettings } from '@/entities/settings'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { saveMusic } from '@/features/edit-piece'
@@ -114,9 +108,6 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   }, [])
   const [chordFieldAsked, askChordField] = useState(0)
   const close = useCloseTo(target)
-  const hasVersion = usePieces(
-    (state) => target.kind === 'version' && selectHasVersion(state, target.id),
-  )
   // The learner's own title, saved with the music (ADR 0094); else the catalog's, in their language.
   const title =
     useStore(store, (state) => state.draft.title) ??
@@ -219,7 +210,6 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     meta: {
       id: target.id,
       title,
-      hasVersion,
       playing: playback.playing === 'piece',
       kind: target.kind,
       chordFieldRef,
