@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowDownLeft, ArrowDownRight } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { useId, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
 import {
@@ -17,11 +17,20 @@ import {
 import { BackupFields } from '@/features/backup-data'
 import { MidiControl, MidiSettingsFields } from '@/features/connect-midi'
 import { KeyboardSettingsFields } from '@/features/live-keyboard'
+import { MetronomeSwitch, TuneSwitch } from '@/features/record-take'
 import { resetProgress } from '@/features/reset-progress'
 import { setFloating, setLocale, setTheme, setTitles } from '@/features/set-preference'
 import { LOCALES, type Locale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { BackButton, ScreenHeader, Segmented, SettingField, SwitchRow } from '@/shared/ui'
+import {
+  BackButton,
+  InfoTip,
+  ScreenHeader,
+  Segmented,
+  SettingField,
+  SettingRows,
+  SwitchRow,
+} from '@/shared/ui'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,20 +54,31 @@ const THEME_LABEL = {
   dark: 'theme.dark',
 } as const satisfies Record<Theme, string>
 
-/** A group of settings, boxed as the book boxes a thing: its title in a band across the top. */
+/**
+ * A group of settings, boxed as the book boxes a thing: its title in a band across the top, what the
+ * group is for in the ⓘ beside it where its title does not say (ADR 0096), its rows under it.
+ */
 function Group({
   title,
+  info,
   children,
   className,
 }: {
   title: string
+  info?: ReactNode
   children: ReactNode
   className?: string
 }) {
+  const id = useId()
   return (
-    <section className={cn('overflow-hidden card', className)}>
-      <h2 className="border-b border-border bg-muted px-5 py-2 text-xl">{title}</h2>
-      <div className="flex flex-col gap-3 p-5">{children}</div>
+    <section aria-labelledby={id} className={cn('overflow-hidden card', className)}>
+      <div className="flex items-center gap-1.5 border-b border-border bg-muted px-5 py-2">
+        <h2 id={id} className="text-xl">
+          {title}
+        </h2>
+        {info ? <InfoTip name={title}>{info}</InfoTip> : null}
+      </div>
+      <div className="flex flex-col gap-3 px-5 py-4">{children}</div>
     </section>
   )
 }
@@ -70,6 +90,12 @@ const PLACE_ICON = {
   right: ArrowDownRight,
 } as const
 
+/**
+ * Settings, as an app's settings page reads (ADR 0096): Language, Theme, Appearance (the page titles,
+ * the floating buttons), the Keyboard, the MIDI keyboard, Recording, Backup and Progress, each choice
+ * one compact row (its name with its ⓘ, the control at its right or under it), two columns from a
+ * laptop's width.
+ */
 export function SettingsPage() {
   const { t } = useTranslation('settings')
   const settings = useSettingsStoreApi()
@@ -103,46 +129,57 @@ export function SettingsPage() {
             onChange={(value) => setTheme(settings, value)}
           />
         </Group>
-        <Group title={t('layout.label')}>
-          <SettingField label={t('layout.titles.label')}>
-            <Segmented
-              label={t('layout.titles.label')}
-              value={titles}
-              options={TITLE_SIZES.map((value) => ({ value, label: t(`layout.titles.${value}`) }))}
-              onChange={(value) => setTitles(settings, value)}
-            />
-          </SettingField>
-        </Group>
-        <Group title={t('keyboard')} className="lg:col-start-2 lg:row-span-4 lg:row-start-2">
-          <KeyboardSettingsFields />
-        </Group>
-        <Group title={t('floating.label')}>
-          <SettingField label={t('floating.place')}>
-            <Segmented
-              label={t('floating.place')}
-              value={floating.place}
-              options={FLOATING_PLACES.map((value) => {
-                const Icon = PLACE_ICON[value]
-                return {
+        <Group title={t('appearance.label')}>
+          <SettingRows>
+            <SettingField label={t('appearance.titles.label')}>
+              <Segmented
+                label={t('appearance.titles.label')}
+                value={titles}
+                options={TITLE_SIZES.map((value) => ({
                   value,
-                  label: t(`floating.places.${value}`),
-                  icon: <Icon aria-hidden className="size-5" />,
-                }
-              })}
-              onChange={(place) => setFloating(settings, { place })}
+                  label: t(`appearance.titles.${value}`),
+                }))}
+                onChange={(value) => setTitles(settings, value)}
+              />
+            </SettingField>
+            <SettingField label={t('floating.place')} info={t('floating.placeInfo')}>
+              <Segmented
+                label={t('floating.place')}
+                value={floating.place}
+                options={FLOATING_PLACES.map((value) => {
+                  const Icon = PLACE_ICON[value]
+                  return {
+                    value,
+                    label: t(`floating.places.${value}`),
+                    icon: <Icon aria-hidden className="size-5" />,
+                  }
+                })}
+                onChange={(place) => setFloating(settings, { place })}
+              />
+            </SettingField>
+            <SwitchRow
+              label={t('floating.labels')}
+              info={t('floating.labelsNote')}
+              checked={floating.labels}
+              onCheckedChange={(labels) => setFloating(settings, { labels })}
             />
-          </SettingField>
-          <SwitchRow
-            label={t('floating.labels')}
-            info={t('floating.labelsNote')}
-            checked={floating.labels}
-            onCheckedChange={(labels) => setFloating(settings, { labels })}
-            className="border-b-0"
-          />
+          </SettingRows>
+        </Group>
+        <Group title={t('keyboard')} className="lg:col-start-2 lg:row-span-6 lg:row-start-2">
+          <KeyboardSettingsFields />
         </Group>
         <Group title={t('midi')}>
           <MidiControl />
           <MidiSettingsFields />
+        </Group>
+        <Group title={t('recording')}>
+          <SettingRows>
+            <MetronomeSwitch />
+            <TuneSwitch />
+          </SettingRows>
+        </Group>
+        <Group title={t('backup.label')} info={t('backup.says')}>
+          <BackupFields />
         </Group>
         <Group title={t('progress.label')}>
           <AlertDialog open={confirming} onOpenChange={setConfirming}>
@@ -162,9 +199,6 @@ export function SettingsPage() {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-        </Group>
-        <Group title={t('backup.label')}>
-          <BackupFields />
         </Group>
       </div>
     </div>

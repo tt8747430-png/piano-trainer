@@ -2,15 +2,21 @@ export const settings = {
   title: 'Settings',
   language: { label: 'Language', en: 'English', ru: 'Русский' },
   theme: { label: 'Theme', system: 'System', light: 'Light', dark: 'Dark' },
-  layout: { label: 'Layout', titles: { label: 'Page titles', large: 'Large', small: 'Small' } },
+  // How the screens look: their titles, and the floating buttons.
+  appearance: {
+    label: 'Appearance',
+    titles: { label: 'Page titles', large: 'Large', small: 'Small' },
+  },
   keyboard: 'Keyboard',
   midi: 'MIDI keyboard',
+  // How a take is recorded in the score editor (ADR 0028), as its recording strip's settings say too.
+  recording: 'Recording',
   // A screen's floating actions (ADR 0058): where they stand, and whether they say their names.
   floating: {
-    label: 'Floating buttons',
-    place: 'Where they stand',
+    place: 'Floating buttons',
+    placeInfo: 'Where the buttons that float over a screen stand along its foot',
     places: { left: 'Left', center: 'Middle', right: 'Right' },
-    labels: 'Show their names',
+    labels: 'Name the floating buttons',
     labelsNote: 'Otherwise each shows its icon only, and its name appears when you point at it',
   },
   progress: {

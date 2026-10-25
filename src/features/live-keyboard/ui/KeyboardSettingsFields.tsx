@@ -4,32 +4,33 @@ import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/set
 import { setKeyboard } from '@/features/set-preference'
 import { ShortcutsButton } from '@/features/shortcuts-help'
 import { KEY_DOCKS, KEY_LENGTHS, KEY_SIZES, NAMED_KEYS, SWIPES } from '@/shared/lib'
-import { Segmented, SettingField, SwitchRow } from '@/shared/ui'
+import { Segmented, SettingField, SettingRows, SwitchRow } from '@/shared/ui'
 import { RailControlsField } from './RailControlsField'
 
-/** A part of the keyboard settings under its own small heading. */
+/** A part of the keyboard settings under its own small heading, its choices as rows. */
 function Part({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex flex-col gap-3">
       <h3 className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">
         {title}
       </h3>
-      {children}
+      <SettingRows>{children}</SettingRows>
     </section>
   )
 }
 
 /**
- * The keyboard settings, saved for every keyboard, as Settings lists them, each saying what it does:
- * how the keys look, where a page's keys sit, how they play, and which controls the bar over the keys
- * holds (it sets the same settings in place, as pictures). Under them, the way to the shortcuts.
+ * The keyboard settings, saved for every keyboard, as Settings lists them, each one row whose ⓘ says
+ * what it does (ADR 0096): how the keys look, where a page's keys sit, how they play, and which
+ * controls the bar over the keys holds (it sets the same settings in place, as pictures). Under them,
+ * the way to the shortcuts.
  */
 export function KeyboardSettingsFields() {
   const { t } = useTranslation('common')
   const store = useSettingsStoreApi()
   const keyboard = useSettings(selectKeyboard)
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <Part title={t('keyboardSettings.look')}>
         <SettingField
           label={t('keyboardSettings.keySize.label')}
@@ -73,21 +74,18 @@ export function KeyboardSettingsFields() {
             onChange={(namedKeys) => setKeyboard(store, { namedKeys })}
           />
         </SettingField>
-        <div>
-          <SwitchRow
-            label={t('keyboardSettings.markNotes')}
-            info={t('keyboardSettings.markNotesNote')}
-            checked={keyboard.markNotes}
-            onCheckedChange={(markNotes) => setKeyboard(store, { markNotes })}
-          />
-          <SwitchRow
-            label={t('keyboardSettings.chordNames')}
-            info={t('keyboardSettings.chordNamesNote')}
-            checked={keyboard.chordNames}
-            onCheckedChange={(chordNames) => setKeyboard(store, { chordNames })}
-            className="border-b-0"
-          />
-        </div>
+        <SwitchRow
+          label={t('keyboardSettings.markNotes')}
+          info={t('keyboardSettings.markNotesNote')}
+          checked={keyboard.markNotes}
+          onCheckedChange={(markNotes) => setKeyboard(store, { markNotes })}
+        />
+        <SwitchRow
+          label={t('keyboardSettings.chordNames')}
+          info={t('keyboardSettings.chordNamesNote')}
+          checked={keyboard.chordNames}
+          onCheckedChange={(chordNames) => setKeyboard(store, { chordNames })}
+        />
       </Part>
       <Part title={t('keyboardSettings.place')}>
         <SettingField
@@ -115,7 +113,6 @@ export function KeyboardSettingsFields() {
           info={t('keyboardSettings.foldedLandscapeNote')}
           checked={keyboard.foldedLandscape}
           onCheckedChange={(foldedLandscape) => setKeyboard(store, { foldedLandscape })}
-          className="border-b-0"
         />
       </Part>
       <Part title={t('keyboardSettings.play')}>
@@ -143,7 +140,6 @@ export function KeyboardSettingsFields() {
           }
           checked={keyboard.typing}
           onCheckedChange={(typing) => setKeyboard(store, { typing })}
-          className="border-b-0"
         />
       </Part>
       <Part title={t('keyboardSettings.bar')}>

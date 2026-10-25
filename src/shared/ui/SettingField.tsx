@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { InfoTip } from './InfoTip'
+import { lastWord } from './last-word'
 
 /**
  * Where a setting's control stands: under its name (a segmented choice, a grid of tiles), or at the
@@ -27,11 +28,20 @@ export function SettingField({
   layout?: keyof typeof LAYOUT
   children: ReactNode
 }) {
+  const { head, last } = lastWord(label)
   return (
     <div data-slot="setting-field" className={LAYOUT[layout]}>
-      <span className="flex min-w-0 items-center gap-1.5">
-        <span className="text-foreground">{label}</span>
-        {info ? <InfoTip name={label}>{info}</InfoTip> : null}
+      {/* The ⓘ goes with the name's last word, never alone at a line's start. */}
+      <span className="min-w-0 text-foreground">
+        {head ? `${head} ` : null}
+        <span className="whitespace-nowrap">
+          {last}
+          {info ? (
+            <InfoTip name={label} className="ms-1.5 align-middle">
+              {info}
+            </InfoTip>
+          ) : null}
+        </span>
       </span>
       {children}
     </div>

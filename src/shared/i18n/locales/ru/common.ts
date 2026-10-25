@@ -165,6 +165,12 @@ export const common: LocaleResources['common'] = {
     denied: 'Доступ к MIDI запрещён.',
     unsupported: 'Этот браузер не может подключить MIDI-клавиатуру.',
   },
+  recorderSettings: {
+    click: 'Метроном',
+    clickInfo: 'Доли звучат и после отсчёта',
+    tune: 'Мелодия',
+    tuneInfo: 'Под дубль звучит мелодия песни, если она есть',
+  },
   midiSettings: {
     device: {
       label: 'Слушать клавиатуру',
