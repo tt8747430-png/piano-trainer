@@ -202,6 +202,13 @@ export const music: LocaleResources['music'] = {
   playBar: 'Сыграть такт {{n}}',
   playBarChord: 'Сыграть такт {{n}}, {{symbol}}',
   rowChords: 'Аккорды',
+  chordDiagram: '{{symbol}}: {{notes}}',
+  chordSummary: 'Аккорды',
+  chordSheet: {
+    title: 'Аккорд {{symbol}}',
+    learn: 'Сыграйте его на клавишах',
+    learned: 'Именно так.',
+  },
   intervalCard: {
     semitones: 'Полутонов: {{n}}',
     semitone: 'Величина: полутон',
