@@ -57,7 +57,7 @@ export function LyricsField({ anchor, verse }: { anchor: HTMLElement | null; ver
   const shown = syllableAt(draft, caret, verse)
   const count = verseCount(draft)
   const at = `${caret} ${verse}`
-  const [text, setText] = useFieldText(shown, at)
+  const { text, setText } = useFieldText(shown, at)
   const save = (typed = text) => {
     if (sungAt(draft, caret) && typed.trim() !== shown)
       dispatch({ type: 'syllable', verse, text: typed })

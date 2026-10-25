@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { chordSuggestions, chordWrittenAt } from '@/features/score-editor'
 import { chordSymbol, printedSymbol, readChordSymbol, type Chord } from '@/shared/lib/music'
@@ -25,9 +24,8 @@ export function ChordSymbolField({ anchor }: { anchor: HTMLElement | null }) {
   const at = String(caret)
   const written = chordWrittenAt(draft, caret)
   const shown = written ? chordSymbol(written) : ''
-  const [text, setText] = useFieldText(shown, at)
-  // The place where what was typed could not be read: marked there until it changes.
-  const [wrongAt, setWrongAt] = useState<string | null>(null)
+  // What was typed marked where it cannot be read, until it changes.
+  const { text, setText, wrong, markWrong } = useFieldText(shown, at)
   const typed = text.trim()
 
   /** What is typed written at the caret's beat; false where it cannot be read. */
@@ -43,7 +41,7 @@ export function ChordSymbolField({ anchor }: { anchor: HTMLElement | null }) {
     return true
   }
   const go = (direction: -1 | 1) => {
-    if (!write()) setWrongAt(at)
+    if (!write()) markWrong()
     else dispatch({ type: 'move', by: 'step', direction })
   }
   const choose = (chord: Chord) => {
@@ -58,12 +56,9 @@ export function ChordSymbolField({ anchor }: { anchor: HTMLElement | null }) {
       anchor={anchor}
       label={t('chord.symbol')}
       text={text}
-      onText={(next) => {
-        setText(next)
-        setWrongAt(null)
-      }}
+      onText={setText}
       at={at}
-      error={wrongAt === at ? t('chord.invalid') : undefined}
+      error={wrong ? t('chord.invalid') : undefined}
       onGo={go}
       onClose={() => {
         write()

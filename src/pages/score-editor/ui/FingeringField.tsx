@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import { fingeredAt, isHandLayer, notesOf, startNear } from '@/features/score-editor'
@@ -33,9 +32,8 @@ export function FingeringField({ anchor }: { anchor: HTMLElement | null }) {
   // The lower staff's fingers print under its notes, as a piano score prints them: typed there.
   const under = useEditorState((state) => state.layer === 'lh')
   const shown = notes.flatMap((n) => (n.finger === undefined ? [] : [n.finger])).join(' ')
-  const [text, setText] = useFieldText(shown, at)
-  // The place where more fingers were typed than it has notes: marked there until it changes.
-  const [wrongAt, setWrongAt] = useState<string | null>(null)
+  // More fingers typed than the place has notes: marked until it changes.
+  const { text, setText, wrong, markWrong } = useFieldText(shown, at)
 
   /** The fingers typed written on the notes; false where there are more than notes. */
   const write = (): boolean => {
@@ -47,7 +45,7 @@ export function FingeringField({ anchor }: { anchor: HTMLElement | null }) {
   }
   const go = (direction: -1 | 1) => {
     if (!write()) {
-      setWrongAt(at)
+      markWrong()
       return
     }
     const { draft, layer, caret } = store.getState()
@@ -62,12 +60,9 @@ export function FingeringField({ anchor }: { anchor: HTMLElement | null }) {
       under={under}
       label={t('fingering')}
       text={text}
-      onText={(next) => {
-        setText(typedFingers(next))
-        setWrongAt(null)
-      }}
+      onText={(next) => setText(typedFingers(next))}
       at={at}
-      error={wrongAt === at ? t('tooManyFingers') : undefined}
+      error={wrong ? t('tooManyFingers') : undefined}
       onGo={go}
       onClose={() => {
         write()
