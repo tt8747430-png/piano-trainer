@@ -199,6 +199,21 @@ const CATEGORY_ICONS: Readonly<Record<PaletteCategory, ReactNode>> = {
       <Word text="espr." y={16} size={10.5} italic />
     </Icon>
   ),
+}
+
+/** A category's picture. */
+export function CategoryIcon({ category }: { category: PaletteCategory }) {
+  return CATEGORY_ICONS[category]
+}
+
+/** The pictures of the keys that open a field typed where it prints (ADR 0096), drawn as it prints. */
+const FIELD_ICONS = {
+  // A chord symbol.
+  chord: (
+    <Icon>
+      <Word text="C7" y={16} size={11} />
+    </Icon>
+  ),
   // A note with its finger's number over it.
   fingering: (
     <Icon>
@@ -214,17 +229,11 @@ const CATEGORY_ICONS: Readonly<Record<PaletteCategory, ReactNode>> = {
       />
     </Icon>
   ),
-  // A chord symbol.
-  chords: (
-    <Icon>
-      <Word text="C7" y={16} size={11} />
-    </Icon>
-  ),
-}
+} as const
 
-/** A category's picture. */
-export function CategoryIcon({ category }: { category: PaletteCategory }) {
-  return CATEGORY_ICONS[category]
+/** The picture of a field's key: a chord symbol's, a finger's. */
+export function FieldIcon({ field }: { field: keyof typeof FIELD_ICONS }) {
+  return FIELD_ICONS[field]
 }
 
 /** The bar edits the palette's Bar holds, each with a picture. */

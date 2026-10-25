@@ -26,8 +26,6 @@ export const editor = {
       time: 'Time signature',
       repeats: 'Barlines & repeats',
       text: 'Text & pedal',
-      fingering: 'Fingering',
-      chords: 'Chords',
     },
   },
   // Why a category's tools are greyed: each greyed key's tooltip, and its section's ⓘ (ADR 0096).
@@ -125,6 +123,8 @@ export const editor = {
   },
   expressions: 'Expression text',
   pedal: 'Pedal',
+  // Text & pedal's keys for what is typed where it prints (ADR 0096).
+  chordsAndLyrics: 'Chord symbols and lyrics',
   // The words under the tune (ADR 0093), one syllable at a time in the Lyrics field under its note.
   lyrics: {
     label: 'Lyrics',

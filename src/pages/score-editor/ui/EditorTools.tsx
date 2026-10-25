@@ -22,12 +22,12 @@ import { CategoryIcon } from './palette-icons'
 import { CaptionGrid, PaletteSection } from './palette-keys'
 import { PaletteReason } from './palette-reason'
 import {
+  ChordAndLyricsKeys,
   ClefKeys,
   KeySignatureKeys,
   RepeatKeys,
   TextKeys,
   TimeSignatureKeys,
-  WordKeys,
 } from './ScoreKeys'
 
 /** Why a category's tools are greyed where the caret writes, or nothing where they work. */
@@ -97,6 +97,10 @@ function Sections() {
       </Section>
       <Section category="articulations">
         <ArticulationKeys />
+        {/* The notes' fingers, typed over them (ADR 0096). */}
+        <CaptionGrid>
+          <FieldKey field="fingering" />
+        </CaptionGrid>
       </Section>
       <Section category="dynamics">
         <DynamicKeys />
@@ -122,17 +126,7 @@ function Sections() {
       </Section>
       <Section category="text">
         <TextKeys />
-        <WordKeys />
-      </Section>
-      <Section category="fingering">
-        <CaptionGrid>
-          <FieldKey field="fingering" />
-        </CaptionGrid>
-      </Section>
-      <Section category="chords">
-        <CaptionGrid>
-          <FieldKey field="chord" />
-        </CaptionGrid>
+        <ChordAndLyricsKeys />
       </Section>
     </>
   )
@@ -214,7 +208,8 @@ export function EditorTools({
   const keys = useFoldKeys()
   const recording = takes.stage !== 'idle'
   const scroller = useRef<HTMLDivElement>(null)
-  const [current, setCurrent] = useState<PaletteCategory>(layer === 'chords' ? 'chords' : 'notes')
+  // Opened at what the caret's row writes: the chord row's Chord symbol key is Text & pedal's.
+  const [current, setCurrent] = useState<PaletteCategory>(layer === 'chords' ? 'text' : 'notes')
   // A category tapped while folded: scrolled to once the sections are in.
   const pending = useRef<PaletteCategory | null>(null)
 

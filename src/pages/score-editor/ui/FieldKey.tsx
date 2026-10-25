@@ -5,16 +5,16 @@ import type { SheetField } from '@/widgets/score-sheet'
 import { useScoreEditorContext } from '../model/editor-context'
 import { fieldOf } from '../model/fields'
 import { useFieldReason } from '../model/use-field-reason'
-import { CategoryIcon } from './palette-icons'
+import { FieldIcon } from './palette-icons'
 import { CaptionKey } from './palette-keys'
 
 type Kind = SheetField['kind']
 
 /** Each field's key: its name and its picture. */
 const KEYS = {
-  chord: { label: 'chord.symbol', picture: <CategoryIcon category="chords" /> },
+  chord: { label: 'chord.symbol', picture: <FieldIcon field="chord" /> },
   lyrics: { label: 'lyrics.label', picture: <WholeWord /> },
-  fingering: { label: 'fingering', picture: <CategoryIcon category="fingering" /> },
+  fingering: { label: 'fingering', picture: <FieldIcon field="fingering" /> },
 } as const satisfies Readonly<Record<Kind, { label: string; picture: ReactNode }>>
 
 /**

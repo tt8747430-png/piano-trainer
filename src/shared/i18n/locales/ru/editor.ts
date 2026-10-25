@@ -24,8 +24,6 @@ export const editor: LocaleResources['editor'] = {
       time: 'Размер',
       repeats: 'Тактовые черты и повторы',
       text: 'Ремарки и педаль',
-      fingering: 'Аппликатура',
-      chords: 'Аккорды',
     },
   },
   reason: {
@@ -109,6 +107,7 @@ export const editor: LocaleResources['editor'] = {
   },
   expressions: 'Ремарки',
   pedal: 'Педаль',
+  chordsAndLyrics: 'Аккордовые символы и текст',
   lyrics: {
     label: 'Текст',
     field: 'Слог',

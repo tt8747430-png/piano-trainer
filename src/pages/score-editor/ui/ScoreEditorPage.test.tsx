@@ -699,8 +699,17 @@ describe('the score editor', () => {
   it('opens the chord-symbol field from the palette’s one key, greyed where the View hides the chord symbols', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
-    const chords = await openCategory(user, 'Chords')
-    expect(within(chords).getAllByRole('button')).toHaveLength(1)
+    // No category of its own: Text & pedal holds its key, beside the Lyrics' (ADR 0096).
+    const kinds = await screen.findByRole('toolbar', { name: 'Kinds of tools' })
+    expect(within(kinds).queryByRole('button', { name: 'Chords' })).not.toBeInTheDocument()
+    expect(within(kinds).queryByRole('button', { name: 'Fingering' })).not.toBeInTheDocument()
+    const text = await openCategory(user, 'Text & pedal')
+    const chords = within(text).getByRole('group', { name: 'Chord symbols and lyrics' })
+    expect(
+      within(chords)
+        .getAllByRole('button')
+        .map((key) => key.getAttribute('aria-label')),
+    ).toEqual(['Chord symbol', 'Lyrics'])
     await user.click(within(chords).getByRole('button', { name: 'Chord symbol' }))
     expect(await screen.findByRole('textbox', { name: 'Chord symbol' })).toHaveFocus()
     await user.keyboard('{Escape}')
@@ -1081,9 +1090,16 @@ describe('the score editor', () => {
       expect(within(pitch).getByRole('button', { name })).toBeInTheDocument()
     // The caret's moves stand apart from the palette, floating over the sheet; Delete is the edit row's.
     expect(within(palette).queryByRole('button', { name: 'Delete' })).not.toBeInTheDocument()
-    // A hand's fingers and clef are greyed in the tune, saying why.
+    // A hand's clef is greyed in the tune, saying why, and so is its fingers' key.
     const kinds = screen.getByRole('toolbar', { name: 'Kinds of tools' })
-    expect(within(kinds).getByRole('button', { name: 'Fingering' })).toHaveAttribute('data-off')
+    expect(within(kinds).getByRole('button', { name: 'Clef' })).toHaveAttribute('data-off')
+    act(() => setPracticeToggle(settingsStore, 'fingerNumbers', true))
+    const articulations = await openCategory(user, 'Articulations')
+    const fingers = within(articulations).getByRole('button', { name: 'Fingering' })
+    expect(fingers).toBeDisabled()
+    expect(fingers).toHaveAccessibleDescription(
+      'For the piano’s staves: tap a note on the upper or lower staff.',
+    )
     // A bar added has no chord, as a notation app adds one (ADR 0094).
     const bar = await tapIn(user, 'Bar', 'Add bar after')
     expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['G _ G G G'] }] })
@@ -1092,10 +1108,8 @@ describe('the score editor', () => {
       sections: [{ lines: ['G _ _ G G G'] }],
     })
     await user.keyboard('{Alt>}{ArrowDown}{ArrowDown}{/Alt}')
-    expect(within(kinds).getByRole('button', { name: 'Fingering' })).not.toHaveAttribute('data-off')
-    act(() => setPracticeToggle(settingsStore, 'fingerNumbers', true))
-    const fingering = await openCategory(user, 'Fingering')
-    const key = within(fingering).getByRole('button', { name: 'Fingering' })
+    expect(within(kinds).getByRole('button', { name: 'Clef' })).not.toHaveAttribute('data-off')
+    const key = within(articulations).getByRole('button', { name: 'Fingering' })
     expect(key).toBeDisabled()
     expect(key).toHaveAccessibleDescription('Choose a note first: these change the notes chosen.')
   })
@@ -1172,7 +1186,7 @@ describe('the score editor', () => {
     )
     // Alt ↑ chooses the chord's top note, G.
     await user.keyboard('{Alt>}{ArrowUp}{/Alt}')
-    const fingering = await openCategory(user, 'Fingering')
+    const fingering = await openCategory(user, 'Articulations')
     // Greyed while the View hides the finger numbers, saying where they are shown.
     const key = within(fingering).getByRole('button', { name: 'Fingering' })
     expect(key).toBeDisabled()
@@ -1942,10 +1956,10 @@ describe('the words under the tune (ADR 0093)', () => {
     const lyrics = within(text).getByRole('button', { name: 'Lyrics' })
     expect(lyrics).toBeDisabled()
     expect(lyrics).toHaveAttribute('title', 'Lyrics go on the melody staff: tap a note there.')
-    await user.click(within(text).getByRole('button', { name: 'About Lyrics' }))
-    expect(await screen.findByRole('dialog', { name: 'Lyrics' })).toHaveTextContent(
-      'Lyrics go on the melody staff: tap a note there.',
-    )
+    await user.click(within(text).getByRole('button', { name: 'About Chord symbols and lyrics' }))
+    expect(
+      await screen.findByRole('dialog', { name: 'Chord symbols and lyrics' }),
+    ).toHaveTextContent('Lyrics go on the melody staff: tap a note there.')
   })
 
   it('says where lyrics go in a song with none yet: the upper staff, where it has no tune', async () => {

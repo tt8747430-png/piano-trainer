@@ -238,16 +238,24 @@ export function TextKeys() {
 }
 
 /**
- * The words typed under the tune where they print (ADR 0096): one key opening the Lyrics field at
- * the caret's note; greyed off the staff they go on, its tooltip and the ⓘ beside them saying where.
+ * The chord symbols and the words, typed where they print (ADR 0096): one key each, opening its field
+ * at the caret (the chord symbol's over the staff at its beat, the Lyrics field under its note);
+ * greyed where it cannot open, its tooltip and the ⓘ beside the group's name saying why.
  */
-export function WordKeys() {
+export function ChordAndLyricsKeys() {
   const { t } = useTranslation('editor')
-  const why = useFieldReason('lyrics')
+  const reasons = [useFieldReason('chord'), useFieldReason('lyrics')].filter(
+    (why) => why !== undefined,
+  )
+  const name = t('chordsAndLyrics')
   return (
     <>
-      <GroupName name={t('lyrics.label')} info={why} />
-      <CaptionGrid label={t('lyrics.label')}>
+      <GroupName
+        name={name}
+        info={reasons.length > 0 ? reasons.map((why) => <p key={why}>{why}</p>) : undefined}
+      />
+      <CaptionGrid label={name}>
+        <FieldKey field="chord" />
         <FieldKey field="lyrics" />
       </CaptionGrid>
     </>

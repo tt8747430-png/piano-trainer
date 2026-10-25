@@ -6,8 +6,9 @@ import type { BarMarkChoice } from '@/features/score-editor'
  * The palette's categories (spec 2026-10-23), one palette for every tool as Flat's is, each acting on
  * what is chosen: the notes' values and rhythm, their pitch, their marks and dynamics with the
  * hairpins, the slurs and octave lines; the bars chosen (added, removed, broken, their length, written
- * out), their clef, the song's key and time signature, barlines and repeats; text and the pedal; a
- * hand's fingering; and the chord symbols, typed over the staff (ADR 0096).
+ * out), their clef, the song's key and time signature, barlines and repeats; text and the pedal. What
+ * is typed where it prints (ADR 0096) is a key among its kin: the chord symbols and the lyrics in Text
+ * & pedal, the fingering in Articulations.
  */
 export const PALETTE_CATEGORIES = [
   'notes',
@@ -21,18 +22,16 @@ export const PALETTE_CATEGORIES = [
   'time',
   'repeats',
   'text',
-  'fingering',
-  'chords',
 ] as const
 export type PaletteCategory = (typeof PALETTE_CATEGORIES)[number]
 
 /**
- * What works in any row: what acts on bars, the chord names' too; the chord symbol's key, which takes
- * the caret to the chord row (ADR 0096).
+ * What works in any row: what acts on bars, the chord names' too; Text & pedal, whose Chord symbol key
+ * takes the caret to the chord row (ADR 0096).
  */
-const ANY_ROW: readonly PaletteCategory[] = ['bar', 'key', 'time', 'repeats', 'chords']
-/** A hand's own: a clef change and fingers are the piano's staves'. */
-const HANDS: readonly PaletteCategory[] = ['clef', 'fingering']
+const ANY_ROW: readonly PaletteCategory[] = ['bar', 'key', 'time', 'repeats', 'text']
+/** A hand's own: a clef change is the piano's staves'. */
+const HANDS: readonly PaletteCategory[] = ['clef']
 
 /** Whether a category works where the caret writes: greyed elsewhere, never hidden. */
 export function categoryOpen(category: PaletteCategory, layer: Layer): boolean {
@@ -42,14 +41,7 @@ export function categoryOpen(category: PaletteCategory, layer: Layer): boolean {
 }
 
 /** The categories whose tools act on notes chosen: greyed while none is. */
-const ON_NOTES: readonly PaletteCategory[] = [
-  'pitch',
-  'articulations',
-  'dynamics',
-  'lines',
-  'text',
-  'fingering',
-]
+const ON_NOTES: readonly PaletteCategory[] = ['pitch', 'articulations', 'dynamics', 'lines', 'text']
 
 /**
  * Why a category's tools are greyed (ADR 0096: each greyed key says it in its tooltip, its section
