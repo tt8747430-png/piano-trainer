@@ -185,7 +185,7 @@ it. `@` → `src`.
   changes in `model/changes.ts`; `ratingOf` rates a skill, `continueStep` (`widgets/curriculum`) is Continue), `views` (`pt-views`:
   each remembered screen's last view, at most 200, `selectView`, `viewOf`, `sameView`, `withView`; written by `features/remember-view`).
 - **shared/**: `lib` (`cn`, `safeLocalStorage`, `savedObject`, `createSavedStore` (a zustand `persist` store read
-  by one sanitiser for its version, saved as its `write` makes it, following other tabs' saves), `downloadFile`, `isOneOf`, `toggled`, `createStoreContext`, `useMediaQuery`,
+  by one sanitiser for its version, saved as its `write` makes it, following other tabs' saves until its `signal` aborts), `downloadFile`, `isOneOf`, `toggled`, `createStoreContext`, `useMediaQuery`,
   `useScrollMotion`, `useWakeLock` (the screen kept on while the Player, the editor, the Chord finder or a round is open), `useElementSize`, `useFitZoom` (a staff shrunk to the width it is given), `useHiddenWhileReading` (what floats over music steps aside while it is read: dragged, scrolled, pinched), `useShownOnScrollUp` (the screen bar's hide and show, once the page has scrolled past it), `IN_PLACE` (a navigation that changes the
   screen in place: replace, keep the scroll) and `useViewChange` (a screen's choices written to its URL with it), `morph` (a change made in a view transition, at once under reduced motion), `OPEN_PLAINLY` (a link's history state: open a remembered screen as
   left), `useGoBack`, `usePresses` (the keys a hand holds, each down at least the shortest press), `keyboardLayout` with
@@ -256,14 +256,20 @@ wait on controls (Mindscape's PWA setup; `src/app/standalone-boot.test.ts`).
   on its first line; pure logic never does. Setup: `src/shared/test/setup.ts`, and for a DOM `setup-dom.ts`
   (jest-dom, cleanup, English, and per-test fakes: `stubMatchMedia` for the OS
   scheme, `stubServiceWorker` for a waiting version, `stubIntersectionObserver` with everything on screen).
-  **`isolate: false`**: a worker's files share their modules, so a test leaves no state behind (the setup puts back
-  mocks, globals, localStorage and the language); a file that needs module state fresh (`safeLocalStorage`'s choice,
-  once a page) starts with `vi.hoisted(() => vi.resetModules())`. With the settings store:
+  **`isolate: false`**: a worker's files share their modules, the window and the document, so a test leaves no state
+  behind (the setup puts back mocks and forgets their calls, globals, localStorage and the language, and takes apart
+  every tree the test put on the page or took off it, which jsdom's selector cache would keep for the run
+  (`watchTrees`; a page there as the test began, its file's own, stays); a worker keeps every mock made in it, so a
+  stub the setup makes for each test is one mock, reset); what a test sets listening
+  on the window or the document stops once it is over (`src/shared/test/listeners.ts`: `untilTestEnds()`, a saved
+  store's `signal`; `heardUntil`, round a router, whose scroll restoration cannot stop); a file that needs module
+  state fresh (`safeLocalStorage`'s choice, once a page) starts with `vi.hoisted(() => vi.resetModules())`. With the
+  settings store:
   `renderWithSettings(ui, { locale, theme })`; the whole app: `await renderApp(path, { locale, storage, webMidi })` (its `viewsStore`, `patternsStore`, `piecesStore` and `takesStore` too); a widget that
   leads elsewhere, `await renderRouted(ui)`; which
   loads every screen's chunk before it renders (so a test never waits on the runner) and returns its fake `audio` and
   `midi` for the test to drive (moving the fake audio's clock with `setNow` moves the keys that sound); both in
-  `src/app/testing/`. A screen's test sits beside its page and runs the app through `renderApp`. jsdom lays nothing
+  `src/app/testing/`, with `testRouter(path)`, the app's router alone over a test's own stores. A screen's test sits beside its page and runs the app through `renderApp`. jsdom lays nothing
   out: where a pointer's position or a scroll matters, `stubBox` and `stubScrolling` (`src/shared/test/layout.ts`).
 - Prettier: no semicolons, single quotes, trailing commas `all`, printWidth 100.
 - i18n: interface strings in `src/shared/i18n/locales/{en,ru}/<namespace>.ts`. Russian is typed against English,
