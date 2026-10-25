@@ -41,6 +41,7 @@ export { voicingKeys, voicingsMusic, type VoicedKey, type WrittenVoicing } from 
 export { keysSoundingAt, keysStruckAt, keyWindows, type KeyWindow } from './sounding'
 export { recordingPlay, type Recording, type RecordingPlay } from './recording'
 export { recorderClicks, type ClickPlan } from './recorder-clicks'
+export { performanceMidi, type PerformanceMidiOptions } from './performance-midi'
 export type { GridBar } from './grid'
 export {
   gainVelocity,

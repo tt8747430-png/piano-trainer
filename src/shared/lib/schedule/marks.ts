@@ -21,6 +21,9 @@ const DYNAMIC_LEVEL: Readonly<Record<Dynamic, number>> = {
   f: 1.25,
   ff: 1.5,
 }
+/** How much harder an accent and a marcato strike their note. */
+const ACCENT = 1.3
+const MARCATO = 1.4
 /** Where a hairpin with no dynamic after it ends, against where it began. */
 const OPEN_HAIRPIN = { cresc: 1.25, dim: 0.8 } as const
 /** A rolled chord's keys follow each other by this, from the lowest up. */
@@ -45,6 +48,11 @@ function neighbour(key: Key, from: Midi, step: 1 | -1): Midi {
   for (let m = from + step; ; m += step) if (inKey.has(pitchClass(m))) return midi(m)
 }
 
+/** How much harder a note's marks strike it than it is arranged: an accent, a marcato, or both. */
+export const stressOf = (marks: NoteMarks | undefined): number =>
+  (marks?.articulations?.includes('accent') ? ACCENT : 1) *
+  (marks?.articulations?.includes('marcato') ? MARCATO : 1)
+
 /** A note's sound and its marks' sounds: its length and loudness, grace notes and ornaments. */
 export function markedSounds(
   sound: NoteSound,
@@ -54,15 +62,17 @@ export function markedSounds(
   if (!marks) return [sound]
   const has = (articulation: NonNullable<NoteMarks['articulations']>[number]) =>
     marks.articulations?.includes(articulation) ?? false
-  let { duration, velocity } = sound
+  let { duration } = sound
   if (has('tenuto')) duration = timing.full
   if (has('staccato')) duration /= 2
   if (has('staccatissimo')) duration /= 4
   if (has('marcato')) duration *= 0.75
   if (has('fermata')) duration *= 1.5
-  if (has('accent')) velocity *= 1.3
-  if (has('marcato')) velocity *= 1.4
-  const main: NoteSound = { ...sound, duration: Math.max(SHORTEST, duration), velocity }
+  const main: NoteSound = {
+    ...sound,
+    duration: Math.max(SHORTEST, duration),
+    velocity: sound.velocity * stressOf(marks),
+  }
 
   const grace = (marks.grace ?? []).map((g, i, all): NoteSound => ({
     ...main,
