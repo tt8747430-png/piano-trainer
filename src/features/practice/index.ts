@@ -15,6 +15,7 @@ export {
   writtenBarAt,
   writtenBarOf,
 } from './written-bar'
+export { chordSummary, diagramChord, diagramKeys, type DiagramChord } from './chord-diagram'
 
 export { arrangePiece, ownChoice } from './arrange-piece'
 export type { PracticeChoice } from './choice'

@@ -77,7 +77,7 @@ export function KeyDiagram({
 }: {
   /** The keys held. */
   keys: readonly Midi[]
-  /** Its chord and its notes: "C♯m7: E G♯ B". */
+  /** Its chord and its notes: "C#m7: E G# B". */
   label: string
   /** The lowest key held is the chord's bass: a ring rather than a dot. */
   bass?: boolean
