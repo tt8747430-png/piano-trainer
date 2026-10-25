@@ -39,8 +39,15 @@ describe('diagramKeys', () => {
   it('shows a chord as the right hand plays it', () => {
     // G after C, led to the nearest keys: B3 D4 G4.
     expect(diagramKeys(ONE_BAR, 1)).toEqual([59, 62, 67])
-    // A 7th chord's root is the bass's: C♯m7 in the right hand is B3 E4 G♯4.
-    expect(diagramKeys(played(VOICED, 'C#m7'), 0)).toEqual([59, 64, 68])
+    // A 7th chord's root is the bass's: C♯m7 in the right hand is B3 E4 G♯4, its root C♯3 under them.
+    expect(diagramKeys(played(VOICED, 'C#m7'), 0)).toEqual([49, 59, 64, 68])
+  })
+
+  it('draws a slash chord’s bass under the hand where the hand leaves it out', () => {
+    // C E G in the hand, its bass B♭3 under them.
+    expect(diagramKeys(played(VOICED, 'C/Bb'), 0)).toEqual([58, 60, 64, 67])
+    // E is the hand's own: nothing drawn under it.
+    expect(diagramKeys(played(VOICED, 'C/E'), 0)).toEqual([60, 64, 67])
   })
 
   it('shows a chord the right hand voices none of close from its root, from middle C up', () => {
@@ -58,9 +65,18 @@ describe('diagramChord', () => {
   it('names its keys as the chord spells them, and knows every note of the chord', () => {
     const chord = diagramChord(played(VOICED, 'C#m7'), 0)
     expect(chord?.symbol).toBe('C#m7')
-    expect(chord?.notes.map(noteName)).toEqual(['B', 'E', 'G#'])
-    // C♯ E G♯ B, the root among them though the hand leaves it to the bass.
+    // Its root under the hand, a ring: the bass the hand leaves to the left.
+    expect(chord?.notes.map(noteName)).toEqual(['C#', 'B', 'E', 'G#'])
+    expect(chord?.bass).toBe(true)
     expect(chord?.pitchClasses).toEqual([1, 4, 8, 11])
+  })
+
+  it('draws no bass under a hand that plays the chord’s root', () => {
+    expect(diagramChord(ONE_BAR, 1)?.bass).toBe(false)
+  })
+
+  it('spells a slash chord’s bass as its symbol writes it', () => {
+    expect(diagramChord(played(VOICED, 'C/Bb'), 0)?.notes.map(noteName)[0]).toBe('B♭')
   })
 
   it('counts a slash chord’s bass among its notes', () => {

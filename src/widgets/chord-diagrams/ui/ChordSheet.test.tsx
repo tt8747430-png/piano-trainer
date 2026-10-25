@@ -10,12 +10,13 @@ import { midi, note, pitchClass } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
 import { ChordSheet } from './ChordSheet'
 
-/** C#m7 as the Player's right hand plays it: B3 E4 G#4, its root left to the bass. */
+/** C#m7 as its diagram draws it: the right hand's B3 E4 G#4 over its root C#3, the bass's. */
 const C_SHARP_M7: DiagramChord = {
   chord: 0,
   symbol: 'C#m7',
-  keys: [59, 64, 68].map(midi),
-  notes: [note('B'), note('E'), note('G', 1)],
+  keys: [49, 59, 64, 68].map(midi),
+  bass: true,
+  notes: [note('C', 1), note('B'), note('E'), note('G', 1)],
   pitchClasses: [1, 4, 8, 11].map(pitchClass),
 }
 
@@ -41,7 +42,7 @@ const hold = (keyboard: ReturnType<typeof createFakeMidi>, ...keys: number[]) =>
 describe('ChordSheet', () => {
   it('shows the chord as its keys, named by its notes', async () => {
     const { sheet } = await openSheet()
-    expect(within(sheet).getByRole('img', { name: 'C#m7: B E G#' })).toBeInTheDocument()
+    expect(within(sheet).getByRole('img', { name: 'C#m7: C# B E G#' })).toBeInTheDocument()
   })
 
   it('plays the chord’s keys together, Play turning into Stop while they sound', async () => {
@@ -50,6 +51,7 @@ describe('ChordSheet', () => {
     await user.click(within(sheet).getByRole('button', { name: 'Play' }))
     const sounds = audio.played.at(-1)?.sounds ?? []
     expect(sounds.map((sound) => (sound.kind === 'note' ? [sound.midi, sound.at] : null))).toEqual([
+      [49, 0],
       [59, 0],
       [64, 0],
       [68, 0],
@@ -78,12 +80,15 @@ describe('ChordSheet, learning the chord', () => {
     const onLearned = vi.fn()
     const { sheet, keyboard } = await openSheet({ learn: { learned: false, onLearned } })
     expect(within(sheet).getByText('Play it on the keys')).toBeInTheDocument()
-    // E3 G#3 B3: the hand's notes an octave down, in another order.
+    // E3 G#3 B3: the hand's notes an octave down, in another order; not yet the chord, its root
+    // missing.
     hold(keyboard, 52, 56, 47)
+    expect(onLearned).not.toHaveBeenCalled()
+    hold(keyboard, 61)
     expect(onLearned).toHaveBeenCalledTimes(1)
     expect(within(sheet).getByText('That’s it.')).toBeInTheDocument()
-    // Its root as well is still the chord: learned once.
-    hold(keyboard, 49)
+    // Another octave of it is still the chord: learned once.
+    hold(keyboard, 73)
     expect(onLearned).toHaveBeenCalledTimes(1)
   })
 
@@ -92,9 +97,10 @@ describe('ChordSheet, learning the chord', () => {
     const { sheet } = await openSheet({ learn: { learned: false, onLearned } })
     const keys = within(sheet).getByRole('group', { name: 'Keyboard' })
     for (const [pointerId, name] of [
-      [1, 'B3'],
-      [2, 'E4'],
-      [3, 'G sharp 4'],
+      [1, 'C sharp 3'],
+      [2, 'B3'],
+      [3, 'E4'],
+      [4, 'G sharp 4'],
     ] as const)
       fireEvent.pointerDown(within(keys).getByRole('button', { name }), {
         pointerId,
@@ -106,7 +112,7 @@ describe('ChordSheet, learning the chord', () => {
   it('waits while a key the chord has not is held with its keys', async () => {
     const onLearned = vi.fn()
     const { sheet, keyboard } = await openSheet({ learn: { learned: false, onLearned } })
-    hold(keyboard, 62, 59, 64, 68)
+    hold(keyboard, 62, 49, 59, 64, 68)
     expect(onLearned).not.toHaveBeenCalled()
     expect(within(sheet).getByText('Play it on the keys')).toBeInTheDocument()
   })
@@ -115,7 +121,7 @@ describe('ChordSheet, learning the chord', () => {
     const onLearned = vi.fn()
     const { sheet, keyboard } = await openSheet({ learn: { learned: true, onLearned } })
     expect(within(sheet).getByText('That’s it.')).toBeInTheDocument()
-    hold(keyboard, 59, 64, 68)
+    hold(keyboard, 49, 59, 64, 68)
     expect(onLearned).not.toHaveBeenCalled()
   })
 })
