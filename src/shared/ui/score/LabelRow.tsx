@@ -23,7 +23,10 @@ export type PrintedPart =
 /** How a sheet that edits what is printed prints a part of a label: its own button round it. */
 export type PrintLabel = (part: PrintedPart, content: ReactNode) => ReactNode
 
-/** A part only read: a bar's number, which the bar's own button says, or a part not edited here. */
+/**
+ * A part a sheet only prints, as the Player prints its row: kept from a screen reader, which reads the
+ * bars' buttons.
+ */
 const plain: PrintLabel = (_part, content) => <span aria-hidden>{content}</span>
 
 /** What a bar's label says, in the order it is printed, each part as the sheet prints it. */
