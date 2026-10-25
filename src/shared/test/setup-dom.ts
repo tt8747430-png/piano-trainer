@@ -35,6 +35,9 @@ export function setUpDom() {
   afterEach(async () => {
     cleanup()
     vi.restoreAllMocks()
+    // A worker keeps every mock made in it (`isolate: false`): what each was called with, and on,
+    // would keep the elements, and the app, of every test before.
+    vi.clearAllMocks()
     vi.unstubAllGlobals()
     await i18n.changeLanguage('en')
     localStorage.clear()
