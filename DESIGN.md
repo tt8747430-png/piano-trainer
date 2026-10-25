@@ -313,21 +313,22 @@ colours mean something wherever they appear.
 ### Primary
 
 - **Honey** (`honey`; night `honey-night`, a step lower so it never glares in a dim hall): the one action on a screen
-  (Continue, Play, Practise, Check, Next, Apply), borderless, with the ink on it (`dusk-ground` by night). Also the caret, the text selection (22%), a quiz's chosen
+  (Continue, Play, Practise, Check, Next, Apply), borderless, with the ink on it (`dusk-ground` by night). Also a field's text caret, the text selection (22%), a quiz's chosen
   keys and Name chord's lit keys.
 
 ### Secondary
 
 - **Umber** (`umber` with card-paper text; night `dusk-muted` with `dusk-ground` text): what is chosen: the check on
-  a pop-up's chosen item, a popover's and a Setup list's, the loop's grips on the sheet. Never an action and never a
-  colour.
+  a pop-up's chosen item, a popover's and a Setup list's. Never an action and never a colour.
 - **Sky Mist** (`sky-mist`, ink `sky-mist-ink`; night `sky-night`, ink `sky-night-ink`): the playing bar of a
-  chart, the cursor on the Player's sheet, a pressed chord of a scale, the secondary button. Sky on the chrome is one family, the accent: a link,
+  chart, a pressed chord of a scale, the secondary button. Sky on the chrome is one family, the accent: a link,
   focus, where you are.
 
 ### Tertiary: meaning colours
 
-- **Deep Sky** (`sky-deep`; night `sky-light`): links and every focus ring.
+- **Deep Sky** (`sky-deep`; night `sky-light`): links, every focus ring, and what is chosen on a sheet (ADR
+  0096): the chosen notes drawn in it, a range's and the loop's band in a 15% wash of it, the caret's and the
+  playhead's thin lines and the loop's grips.
 - **Grass Deep** (`grass-deep` with white; night `grass-light` with dusk ground): learned, known, on, connected.
 - **Ochre** (`ochre`; night `ochre-light`): attention, the dot of a gap or a "to check" count; never text.
 - **Crimson** (`crimson`; night `crimson-light`): wrong and destructive (a wrong key, Reset progress).
@@ -450,18 +451,21 @@ name in Literata, the four places and Settings at its foot, or collapsed to 72px
 at least 18rem as fit. The Player, the score editor and the Check are full screen with no navigation: the viewport's
 height and width, scrolling inside when their content is taller.
 
-**The Player** (Flowkey's shape) is a toolbar, the keyboard, the sheet, Wait mode's line and the transport, placed by
-the `player-screen` grid. The keyboard is as tall as its keys' proportion makes it (below), and Wait mode's line
-takes the height left, so the transport keeps the bottom:
+**The Player** (Flowkey's shape) is its bar, the sheet, Wait mode's line and the keys, placed by the
+`player-screen` grid, the transport floating over the sheet's foot (ADR 0061, 0081, 0085). The keyboard is as tall
+as its keys' proportion makes it (below), at the foot or under the bar as the keyboard settings dock it; the View's
+Keys takes it away.
 
-- **Upright phone:** the toolbar holds ✕, the title (truncated; under 360px read, not shown), the loop, the View menu (an eye), MIDI and ⚙ (Setup); the tempo and hands
-  buttons flank ‹ ▶ › at the bottom, in the thumb's reach, the transport's buttons 8px apart.
-- **A phone on its side** (a landscape screen under 500px tall, judged first): one toolbar with the tempo and hands;
-  the keyboard (about 120px on a 390px-tall phone); the sheet at 0.7, with Wait mode's line and ‹ ▶ › in a column at
-  its right, where the right thumb is. Play is 56px there.
-- **From 640px** (tablet, laptop): as on its side, the transport centred under the sheet, the sheet at 1.
+- **The bar,** one at every size (ADR 0094): ✕ and Practise · Edit at its start; the loop, the View (an eye), MIDI
+  and ⚙ (Setup) at its end, each its icon named in a tooltip, wrapping where the bar is narrow. The title is printed
+  on the sheet.
+- **The transport** (`PlayerDock`): one pill floating along the sheet's foot at every size, a phone on its side too:
+  the tempo, ‹ ▶ › (Play in honey) and the hands. It steps aside while the music is read and comes back at a tap on
+  a note; a tap on the screen's free room shows or hides it.
+- **A phone on its side** (a landscape screen under 500px tall): Wait mode's line stands in the bar's row, between
+  its two groups; the sheet takes the height between the bar and the keys.
 
-**The Setup** (the toolbar's ⚙, a sheet) reads top to bottom as pictures: the key as a note picker (the piece's
+**The Setup** (the bar's ⚙, a sheet) reads top to bottom as pictures: the key as a note picker (the piece's
 mode named over it, a key choice in the piece's mode), the **pattern card** (its name and idea on a row that opens the pattern list; under it its two
 hands, left then right, each a row of its own on a phone and side by side where they fit, naming the figure it plays
 whole with a chevron to that hand's list; a changed hand has a way back to the pattern's own beside it, and the
@@ -480,9 +484,8 @@ How each screen uses its width:
 - **Songs:** the collections as tabs (All, Your songs once there are any, then the books); the search, then Stage (a
   pop-up of only the stages its shelves hold, absent where none does) and With chords (a labelled toggle), under the
   search on a phone and beside it from 640px; and the songs as row cards in a grid.
-- **Piece:** one column: its facts in a line, Practise with the Learned toggle and Edit on one line (Edit its pencil
-  alone on a phone), the keyboard pinned, then
-  Chords (the chords it plays, to tap, with their Check) and Chart (its bars), then what is printed about it.
+- **Piece** (ADR 0098): one column: its bar (Edit, Learned, More), its facts and credits, its form as chips, its
+  note; Practise floats. It plays nothing and shows no keys: its chords are the Player's chart.
 - **Learn:** the journeys as tabs over the shown journey's chapters, each folding under its heading, its lessons a
   zigzag of nodes; or the courses, shelf by shelf, as compact cards (icon tile, name, facts as pictures); Continue
   floats. A lesson's bar floats too: sections ‹ n/m ›, the lessons either side at its ends, its tools.
@@ -734,9 +737,9 @@ pointer's), and a rail too short keeps its buttons: ‹ › go below 28rem, the 
   chord, stacked from it, and every key of it is down while the hand holds the key. The keyboard then spans every
   key the walk of the chords plays (C4 to G5 for C major's triads, the tonic's chord an octave up included), so a
   chord a key plays or the walk strikes is in sight on a phone.
-- **Spotlight** (the explorers, a lesson, a Piece's chart): the keys the app puts down are the ones struck last: an
-  arpeggio's or a run's key alone, a chord's keys together. Every mark stays; the key played stands out by going
-  down, never by hiding the rest.
+- **Spotlight** (the explorers, a lesson, a shared song's chart): the keys the app puts down are the ones struck
+  last: an arpeggio's or a run's key alone, a chord's keys together. Every mark stays; the key played stands out by
+  going down, never by hiding the rest.
 - **Access:** keys are buttons named by note ("F sharp 4"), one in the tab order, the arrow keys, Home and End walking
   the rest. The focused key keeps its place under its neighbours: its two-tone ring outlines the face a finger
   touches (a black key whole, a white key below the black keys).
@@ -754,35 +757,43 @@ its name (Onest 600 14px) over its numeral where it holds one of the key's chord
 in Literata 600 18px. A dice round button in the header takes a random key. Beside it: the signature on a staff, the
 key's notes, relative and modes, the chords it borrows, and under them the songs and studies in the key.
 
-### The sheet (the Player)
+### The sheet (the Player and the editor)
 
-The piece as it is played, engraved on a grand staff (VexFlow, the Bravura music font) in one line that scrolls
-sideways, as Flowkey shows it: ADR 0013.
+The score engraved by Verovio in a worker (ADR 0078), laid out as the View says: Panorama, one line across as large
+as its height allows with two bars at least in sight; Scroll, the chart's lines down the screen, each justified to
+its width; Pages, A4 pages at their print size on a canvas that pans and zooms (ADR 0075, 0087). The title is
+printed at its head, the staves' names at its first line's head (ADR 0094).
 
 - **Ink:** notes, rests, clefs, beams and ties in ink; the staff's lines and barlines in the control line
   (`--input`); the staff of the hand not heard or practised in soft ink (hands: right → the bass staff soft). Dark
   mode and increased contrast follow the tokens.
-- **Labels over it** (real text): each bar's number (Onest 12px, soft ink, tabular) at its start, a section's name
-  after its first bar's number (1 · Verse); each chord symbol at its onset (Literata 600, 17px).
-- **The cursor:** a sky-mist band (28px, 10px corners) behind the notes of the beat group now, moved by transform
-  (ease-out 200ms; at once under reduced motion). The sheet scrolls itself to keep it a quarter in from the left once
-  it leaves the middle half.
-- **Bars:** each bar is a button (a 1px control-line ring on hover): a tap jumps to the beat group nearest it, Enter
-  or Space to the bar's first.
-- **The loop:** a sand band behind its bars, and an umber grip at each end (a 4px line in a 44px slider) dragged over
-  bars or moved by the arrow keys, never past the other end.
+- **Labels over each line** (`LabelRow`, ADR 0087, 0095): the line's first bar's number, a section's name at its
+  first bar and a tempo where it is marked, `·` between (Onest 12px, soft ink, tabular); each chord symbol at its
+  onset (Literata 600, 17px at full size).
+- **The playhead** (ADR 0096): one thin line of the selection colour across the system's staves in sight, just
+  before what sounds, the same height wherever it stands. It moves with the audio clock while Listen or the editor's
+  Play plays and stands at the notes awaited in Wait mode; it brings its line into sight (a scroller's middle half,
+  a page canvas's line). While the loop stands chosen and nothing moves, it is out of sight.
+- **What is chosen** is coloured, never boxed (ADR 0088, 0096): a chosen note's head, stem, flag, accidental, dots
+  and ledger lines in the selection colour; a range a light band of it over the staves it takes, from its first
+  note's left edge to its last's right edge. A click chooses the head under it (one key of a chord) or a chord's
+  column; Shift-click or a held finger reaches on; empty staff chooses nothing.
+- **Bars:** each bar is a button: a tap jumps to the beat group nearest it, Enter or Space to the bar's first.
+- **The loop:** a band of the selection colour over every staff in sight for its bars, its notes coloured, and a
+  grip at each end on its barline (at a line's start, between its clef and key and its first notes): a 4px line in
+  a 44px slider, dragged over bars or moved by the arrow keys, never past the other end.
 - **Finger numbers** (the Finger numbers toggle): a chord's fingers stand in one column on its voice's outer side, a
   staff space apart, the top note's finger on top as printed piano music stacks them: over a lone treble voice or an
   upper voice, under a lone bass voice or a lower voice. The staves move down, apart or the page grows so every
   column stays on the page.
-- **Named notes** (the Named notes toggle): each head carries its note's name as spelled, in Bravura's note name
-  noteheads: the letter cut out of a filled head, inside a half or whole note's hollow one, so it reads in either
-  theme. A double sharp or flat keeps a plain head (the font has none). The Player's staff only.
-- **Sizes:** 1 CSS px a unit, 0.7 on a phone on its side; a bar is as wide as its notes need (VexFlow's least × 1.4)
-  and its chord symbols need, never under 80 units.
-- **Loading** keeps the staff's space, quiet; if the music font cannot load, one line says the music can't be shown,
-  and the keys, Play and Wait mode still work.
-- **Outside the Player** a staff is `LazyScoreView`, VexFlow loaded the first time one is on screen: the Scales
+- **Named notes** (the Named notes toggle): each head drawn round with its note's name in it as spelled, as
+  notation programs' note-name heads: a filled note's in ink with the letter in the page's colour, a half or whole
+  note's open with the letter in ink. The Player's sheet only.
+- **Sizes:** Panorama fills its height, 0.4 to 1.6 of full size; Scroll's lines are as large as the width allows,
+  smaller on a phone on its side so a whole system is in sight; Pages print at 0.6, the canvas zooming them.
+- **Loading** keeps the staff's space, its lines faint; if it cannot be engraved, one line says the music can't be
+  shown, and the keys, Play and Wait mode still work.
+- **Outside the Player** a staff is `LazyScoreView`, the engraver loaded the first time one is on screen: the Scales
   explorer engraves the run from its start note in the scale's key (a mode in its parent's), the other hand's staff
   soft, finger numbers while Fingers shows a hand; the key page engraves its signature with its scale; the Chords
   explorer writes its chord as a bar of whole notes (the left hand's root on the bass staff) with no key signature,
@@ -791,51 +802,45 @@ sideways, as Flowkey shows it: ADR 0013.
 
 ### The score editor
 
-The page where a learner writes their version of a piece or a song of their own (ADR 0027), full screen like the
-Player and a laptop's first: a toolbar (✕, the title with "Your version" in soft ink under it once there is one,
-Undo and Redo round, MIDI, Record and Song settings (each named beside its icon from 1024px, its icon alone below),
-Play in honey: the screen's one action, Stop while it sounds; on a phone the round tools take a row of their own under
-the title and Play), the sheet scrolling under it, then the
-**tool dock**, a line of soft text saying where the caret is, and the keys at their own proportion.
+The page where a learner writes their version of a piece or a song of their own (ADR 0027), one screen that never
+scrolls as a whole, as notation software is (ADR 0089, 0091, 0094): its bar, the sheet (its one scroller) and the
+keys, with the dock and the palette floating over the sheet.
 
-- **The sheet:** each section's heading a pull-down (its kind, Join with the section before) over its lines, each chart
-  line one line of grand staff with its bars numbered and its chord symbols as the Player's sheet sets them; the
-  single staves over the grand staff (ADR 0097), a written right hand on the treble, a written left hand on the bass, a staff with nothing in a bar left
-  empty. The caret is the Player's cursor band (sky mist) on the layer's staff, as wide as the value chosen (over the
-  chord symbols in Chords); bars chosen with Shift sit on a sand band; in a hand's layer, a bar the pattern plays reads
-  **Pattern** in soft ink on that staff. A click puts the caret where it lands.
-- **Where the caret writes** is chosen by a click, as in a notation app: the chord row over a staff (with Chord names
-  on), the treble staff or the bass staff; there is no control for it. The caret's line names the part first
-  ("Staff 1 · Bar 1, beat 2 · rest"). **Chord names** is a toolbar toggle (a T, named beside it from 1024px): off, the
-  chord symbols and their row leave the sheet and a click there writes the tune. The clef, key and time signature at
-  each line's head open the song's settings (a sand wash on hover). A bar under the pointer takes a 5% ink wash, no
-  ring, and no focus ring when clicked (the arrows move the caret). **The notes at the caret** on its staff are drawn
-  in deep sky, as a notation app marks a selection, on the engraving as it is (nothing is engraved again).
-- **The tool dock,** over the keys: on the treble staff, its two voices first, **Melody · Right hand** as segments
-  with their pictures (a note, a hand); then that place's tools as a palette, one row
-  that scrolls sideways on a phone, its groups parted by a 32px hairline (`ToolDivider`). Every tool is a 44px square of an icon or a notation glyph, named in a tooltip
-  and for a screen reader, a toggle filled sand in an ink line while on: in the notes, the values as segments of
-  their glyphs (Noto Music), then a dotted note, an italic 3 (x/4 only), a rest and Chord (stacked layers), ← →, then
-  ↑ ↓, ♯♭ (Respell) and ⌫; in a hand, Write out or Back to the pattern and a Finger pop-up for each note at the
-  caret; in the chords, the Chord field (Literata), the key's chords as outline buttons with their symbols in
-  Literata, ⌫, ← →, and the Bar pull-down (its actions as 44px rows and the bar's Length pop-up). A bar of the sheet
-  shows the focus ring inside it.
-- **Pull-downs** are a popover anchored to an outline button, its actions 44px ghost rows.
-- **The song's settings** (a sheet, from the toolbar or a line's head): an own song's Title, the key choice, the Tempo
-  slider (40–160, set on release) and the Time signature as segments of its own kind (2/4 · 3/4 · 4/4, or 6/8 · 12/8:
-  across kinds every written value would be another note). Changing it makes each full bar the new one, a pickup kept. The pattern is the Player's Setup's, where it is heard;
-  its list ends with Make your own pattern.
-- **Sections** are named as a song's parts: Intro · Verse · Chorus · Bridge · Ending; a songbook's own kinds (Practice,
-  Hymn, Part) stay on its pieces and are not offered.
-- **The takes** (the toolbar's Record, a round button with a dot, ADR 0028): a sheet titled Takes with the tempo,
-  meter and the caret's bar as facts, the Click switch, the MIDI control while no keyboard is connected, and Record in
-  honey; under it the piece's takes, the newest first, each its time made (semibold) over its length and tempo in soft
-  ink, with Play and Write into the score (soft) and Download and Delete (round). Write into the score is a page of
-  the sheet (‹ Back; Into as segments, Split at a pop-up grouped by octave, Shortest note as glyph segments named on
-  screen, Write in honey); Delete asks in an alert, as every deletion does (the take named, Delete in its crimson
-  beside Keep it). While a take records, the tools and the caret's line give way to the recording strip: a card with
-  a softly pulsing ink dot, Count-in and its beat or Recording, the bar and the time in tabular figures, and Stop in
-  honey; Undo, Redo, the song's settings, Record and Play wait.
+- **The bar,** one at every size (ADR 0094): ✕ · Practise | Edit · the edit row (Delete · Undo · Redo · Copy · Cut ·
+  Paste, wrapping under the bar on a phone) · View · MIDI, each its icon named by its tooltip. No title in it (the
+  sheet prints it) and no caret line in sight: a live region tells a screen reader where the caret is.
+- **The sheet** shows the score as the View does (its staves, chord symbols, words and fingers), laid out as the
+  Player's (above), and what is printed is edited where it is (ADR 0094, Flat's): a click on the title turns it into
+  a field in its place; the tempo mark, a key or time signature, a clef, a section's name and a staff's name each
+  open their popover or menu there; a chord symbol, a syllable and a finger are typed in one field floating where
+  they print (ADR 0096). Under a mouse each wears a 5% ink wash; a finger leaves none.
+- **The caret** (ADR 0096) is a thin line of the selection colour on its staff, just before the notes it stands on,
+  which are drawn in it; notes chosen are coloured, a light band on each line they are on. A click on a staff
+  chooses it (or Alt ↑ ↓), a double click writes the note there, and the notes at the caret drag by the key's steps.
+- **The dock** (`EditorDock`), the Player's transport in shape and place: the tempo · ‹ · Play · › · Record, then
+  Takes once the song has any, floating over the sheet's foot in the room the palette beside it leaves; it steps
+  aside while the music is read. Record counts in and records at once with a MIDI keyboard, else its popover says it
+  needs one and connects it. While a take records, the recording strip stands in its place: a softly pulsing ink
+  dot, the count-in's beat or the bar and the time in tabular figures, its settings (the metronome and the tune
+  under the take) and Stop in honey.
+- **The palette** (`EditorTools`, ADR 0089): one card floating over the sheet, at the foot on a phone held upright
+  and a tablet, beside the sheet at its right on a laptop and a phone on its side (open there, folded at the foot
+  until the learner chooses), with a grab handle on its top edge. Folded, a quick row of the note values and Dotted
+  over a bar of categories as pictures (Notes, Pitch, Articulations, Dynamics & hairpins, Slurs & lines, Bar, Clef,
+  Key signature, Time signature, Barlines & repeats, Text & pedal), ending in its fold and a Keys toggle; opened,
+  every category's section stacked and scrolling, Notes first with its editing modes (Replace · Insert · Chord, a
+  segment of pictures). Each key is a 44px picture or glyph named in its tooltip (`ToolKey`), pressed while on; what
+  a section's tools do is the ⓘ beside its name, and a greyed key says why in its tooltip.
+- **Pull-downs** (a section's menu, a staff's) are a popover anchored to what they edit, their actions 44px ghost
+  rows.
+- **Sections** are named as a song's parts: Intro · Verse · Chorus · Bridge · Ending; a songbook's own kinds
+  (Practice, Hymn, Part) stay on its pieces and are not offered.
+- **The takes** (ADR 0028, 0096): their sheet, from Takes in the dock or by itself on a take just kept, holding no
+  Record and no facts the learner cannot change: the piece's takes, the newest first, each a row: Play at its start,
+  its name (a link to its page) over its length and tempo in soft ink, and a menu at its end of Write into the score,
+  Download and Delete. Write into the score is a page of the sheet (‹ Back; Into as segments, Split at a pop-up
+  grouped by octave, Shortest note as glyph segments named on screen, Write in honey); Delete asks in an alert, as
+  every deletion does (the take named, Delete in its crimson beside Keep it).
 - **A take's page** (its row's name a link; in the shell, under its screen bar): the Name field (the time made as its
   placeholder), Play (soft) beside its length and tempo, the **piano roll** on a card scrolling sideways (96px a bar,
   an 8px lane a key, black keys' lanes in muted paper, notes in ink at four strengths by velocity, the sustain,
@@ -843,11 +848,13 @@ the title and Play), the sheet scrolling under it, then the
   each bar a full-height button numbered as the piece numbers it), then **Keep bars**: First and Last bar pop-up
   buttons and Keep (outline) once they cut something, the bars that go dimmed on the roll, asked first in an alert.
   The keyboard over it goes down as the take plays.
-- **New song** (Songs' round +) is a sheet: the Title field (Literata, its name as its placeholder), the key choice, the five meters as segments, and at its foot Make in honey with Record (soft, a
-  microphone) beside it.
-- **A piece's page:** Edit (outline, a pencil) beside Practise; a version's "Your version" and Reset to the original
-  (crimson line, asks first); an own song's Delete (crimson line, asks first). A listing's one action is Write the
-  chart (the honey pill).
+- **New song** (Songs' floating +) is a sheet: the Title field, the key choice, the five meters as segments, the
+  staves its score starts with (the piano, a staff over it, or a staff alone, its own sheet), and at its foot Make in
+  honey with Record (soft, a microphone) beside it, which opens the editor with Record pressed.
+- **A piece's page** (ADR 0098): its bar (Back, the title, Edit, Learned, More: Check these chords, an own song's
+  Share, Reset to the original or Delete, asked first), its facts and who wrote it, its form (each section a chip
+  opening the Player looping it) and its note; Practise floats. A listing's one action is Write the chart (the honey
+  pill).
 
 ### Free play
 
