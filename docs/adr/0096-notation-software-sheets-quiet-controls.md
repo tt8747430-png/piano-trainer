@@ -46,3 +46,10 @@ Settings). "Your version" printed under the title is text the learner cannot cha
 caret), `pages/score-editor` (the palette's keys, the fields over the sheet, the recorder), `shared/ui` (`InfoTip`;
 `SwitchRow`, `SettingField`, `MenuSection` and the palette's sections take `info` in place of a detail line),
 `pages/settings`.
+
+**Later (2026-10-25), typed where it prints:** the three fields are one (`SheetField`), floating at the place the
+caret's line draws for it. The fingers are printed on the editor's sheet as the View's Finger numbers says, now both
+screens' switch (it was the Player's alone): the fingering field opens over the note where they print (under it on the
+lower staff), and, like the chord-symbol and Lyrics fields while the View hides what they write, is greyed while they
+are hidden, its key saying so. With one key each, the palette's Chords and Fingering categories go: the Chord symbol
+key stands beside the Lyrics key in Text & pedal, the Fingering key in Articulations.
