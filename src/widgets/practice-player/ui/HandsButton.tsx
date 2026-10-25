@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/shared/lib'
 import type { Hands } from '@/shared/lib/schedule'
 import { Listbox } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { useDockSide } from '../model/dock-side'
+import { DOCK_BUTTON } from './dock-sizes'
 import { HandsIcon } from './HandsIcon'
 
 /** The popover's order: one hand, the other, both. */
@@ -30,7 +32,7 @@ export function HandsButton({
             size="icon"
             aria-label={t('player:handsOf', { hands: t(`common:hands.${hands}`) })}
             title={t('player:hands')}
-            className="size-12 rounded-full narrow-phone:size-11 landscape-phone:size-10"
+            className={cn('size-12 rounded-full', DOCK_BUTTON)}
           />
         }
       >

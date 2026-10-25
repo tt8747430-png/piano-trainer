@@ -49,10 +49,10 @@ describe('Player', () => {
       expect(controls.map((control) => control.getAttribute('aria-label'))).toEqual([
         'Close',
         'Edit',
-        'Loop',
         'View',
         'MIDI keyboard',
         'Setup',
+        'More',
       ])
       for (const control of controls) {
         const name = control.getAttribute('aria-label') ?? ''
@@ -149,13 +149,13 @@ describe('Player', () => {
     expect(settingsStore.getState().scoreView).toMatchObject({ music: 'grid', keys: false })
   })
 
-  it('holds the tempo, ‹, Play, › and the hands in one toolbar named Playback', async () => {
+  it('holds the tempo, ‹, Play, ›, the loop and the hands in one toolbar named Playback (ADR 0099)', async () => {
     await renderApp('/play/romashki')
     const dock = await screen.findByRole('toolbar', { name: 'Playback' })
     const names = within(dock)
       .getAllByRole('button')
       .map((button) => button.getAttribute('aria-label'))
-    expect(names).toEqual(['Tempo: 100%', 'Back', 'Play', 'Next', 'Hands: Both hands'])
+    expect(names).toEqual(['Tempo: 100%', 'Back', 'Play', 'Next', 'Loop', 'Hands: Both hands'])
     expect(within(dock).getByRole('button', { name: 'Play' })).toHaveAttribute(
       'title',
       'Play (Space)',
@@ -340,14 +340,18 @@ describe('Player', () => {
     expect(document.querySelector('[data-slot="score"]')).toHaveAttribute('data-muted', 'treble')
   })
 
-  it('loops the bar the cursor is in, and removes the loop', async () => {
+  it('loops the bar the cursor is in from the transport, pressed while it loops, and removes the loop', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
-    await user.click(await screen.findByRole('button', { name: 'Loop' }))
+    const transport = await screen.findByRole('toolbar', { name: 'Playback' })
+    const loop = within(transport).getByRole('button', { name: 'Loop' })
+    await user.click(loop)
     expect(router.state.location.search).toMatchObject({ loop: '1-1' })
+    expect(loop).toHaveAttribute('aria-pressed', 'true')
     expect(await screen.findByRole('slider', { name: 'Loop end' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Loop' }))
+    await user.click(loop)
     expect(router.state.location.search).not.toHaveProperty('loop')
+    expect(loop).toHaveAttribute('aria-pressed', 'false')
   })
 
   it('changes the key and swing in the Setup sheet', async () => {

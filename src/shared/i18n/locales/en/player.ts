@@ -1,5 +1,10 @@
 export const player = {
   setup: 'Setup',
+  // The bar's More (ADR 0099): a piece's information as a sheet, the music as a MIDI file; an own
+  // song's Share is the song page's.
+  more: 'More',
+  info: { song: 'Song information', study: 'Study information' },
+  exportMidi: 'Export to MIDI',
   /** A piece's score in its two modes, the Player and the score editor (ADR 0090). */
   mode: { label: 'Practise or edit', practise: 'Practise', edit: 'Edit' },
   // How the score is shown (ADR 0064), from the bar: remembered for every piece.

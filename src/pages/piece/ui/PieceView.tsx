@@ -8,6 +8,7 @@ import {
   isDegreePiece,
   isOwnSongId,
   musicOf,
+  PieceFactCards,
   selectHasVersion,
   usePieces,
   type Piece,
@@ -24,7 +25,6 @@ import { LearnCard } from './LearnCard'
 import { PieceAbout } from './PieceAbout'
 import { PieceByline } from './PieceByline'
 import { PieceChords } from './PieceChords'
-import { PieceFactCards } from './PieceFactCards'
 import { OwnMusicAsk } from './OwnMusicAsk'
 import { PieceHeader } from './PieceHeader'
 import { PlayAlong } from './PlayAlong'

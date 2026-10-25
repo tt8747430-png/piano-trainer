@@ -2,6 +2,9 @@ import type { LocaleResources } from '../../types'
 
 export const player: LocaleResources['player'] = {
   setup: 'Параметры',
+  more: 'Ещё',
+  info: { song: 'О песне', study: 'Об этюде' },
+  exportMidi: 'Экспорт в MIDI',
   mode: { label: 'Играть или править', practise: 'Играть', edit: 'Править' },
   view: {
     positionsDetail: 'Рядом с названием аккорда — в каком обращении его берёт правая рука',
