@@ -448,6 +448,33 @@ describe('ScoreSheet', () => {
     expect(screen.getAllByRole('button', { name: /^Clef, Upper staff/ })).toHaveLength(3)
   })
 
+  it('stands what is printed over the grip of the caret’s notes, a tap on a sign beside them opening it', async () => {
+    render(
+      <ScoreSheet
+        draft={draft}
+        caret={0}
+        layer="staff0"
+        tapsOf={(to) => tapsIn(createEditorStore(draft, vi.fn()).getState(), to)}
+        selection={null}
+        onPlace={vi.fn()}
+        onReach={vi.fn()}
+        onDeselect={vi.fn()}
+        placesOf={(to) => placesIn(createEditorStore(draft, vi.fn()).getState(), to)}
+        chordNames
+        edit={editing(vi.fn())}
+        title={() => null}
+        onDrag={vi.fn()}
+      />,
+    )
+    const [time] = await screen.findAllByRole('button', { name: 'Time signature, bar 1' })
+    const grip = document.querySelector('[data-slot="note-grip"]')
+    if (!time || !grip) throw new Error('the first note is a grip, the time signature a button')
+    // On one layer, what comes later in the page is drawn over what comes before: the grip first.
+    for (const printed of [time, screen.getByRole('button', { name: 'Staff 1' })]) {
+      expect(grip.compareDocumentPosition(printed) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    }
+  })
+
   it('chooses nothing on empty staff beside a note, and a bar’s start where its row writes nothing (ADR 0088)', async () => {
     const onPlace = vi.fn()
     const onDeselect = vi.fn()

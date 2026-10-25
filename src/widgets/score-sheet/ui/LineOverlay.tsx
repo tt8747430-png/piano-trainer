@@ -315,6 +315,24 @@ export function LineOverlay({
           style={fieldBox}
         />
       ) : null}
+      {/* The caret's notes' grip, under what is printed before them (a time signature, a clef):
+          a tap on a sign opens it, however close the notes stand on a page zoomed out. */}
+      {caret !== null && caretStaff && onDrag && caretOnNote ? (
+        <div
+          aria-hidden
+          data-slot="note-grip"
+          data-grip
+          title={t('sheet.drag')}
+          className="absolute z-30 cursor-ns-resize touch-none rounded-md"
+          style={{
+            left: xAtTick(layout, caret) - GRIP.before,
+            width: GRIP.before + GRIP.after,
+            top: caretStaff.top - GRIP.over,
+            height: caretStaff.bottom - caretStaff.top + 2 * GRIP.over,
+          }}
+          {...grip}
+        />
+      ) : null}
       <PrintedSigns
         layout={layout}
         bars={line.bars.map((placed) => placed.index)}
@@ -341,22 +359,6 @@ export function LineOverlay({
           />
         )
       })}
-      {caret !== null && caretStaff && onDrag && caretOnNote ? (
-        <div
-          aria-hidden
-          data-slot="note-grip"
-          data-grip
-          title={t('sheet.drag')}
-          className="absolute z-30 cursor-ns-resize touch-none rounded-md"
-          style={{
-            left: xAtTick(layout, caret) - GRIP.before,
-            width: GRIP.before + GRIP.after,
-            top: caretStaff.top - GRIP.over,
-            height: caretStaff.bottom - caretStaff.top + 2 * GRIP.over,
-          }}
-          {...grip}
-        />
-      ) : null}
     </>
   )
 }
