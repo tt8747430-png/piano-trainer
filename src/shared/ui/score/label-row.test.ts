@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { labelRow, labelScale } from './label-row'
 
 describe('the labels’ row over a line', () => {
-  it('is the chord row’s height with chord names, a number’s without, at the line’s size', () => {
+  it('is the chord row’s height with chord names, its bars’ labels’ alone without, at the line’s size', () => {
     expect(labelRow(true)).toBe(44)
     expect(labelRow(false)).toBe(20)
     expect(labelRow(true, 1.2)).toBe(44)

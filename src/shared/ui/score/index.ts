@@ -9,6 +9,9 @@ export {
   type StaffLabel,
 } from './layout'
 export { leftAt, xAtTick } from './layout'
+export { barLabels, type BarLabel, type LabelledBar } from './bar-labels'
+export { labelRow, labelScale } from './label-row'
+export { LabelRow, type PrintedPart, type PrintLabel, type RowChord } from './LabelRow'
 export { Playhead } from './Playhead'
 export { ScoreView } from './ScoreView'
 export { scoreHeight, staffHeight, versesOf } from './size'

@@ -19,13 +19,11 @@ import { LAYER_OF_STAFF, layerAt, staffOfLayer, type SheetLineBars } from '../mo
 import { chordRow, chosenBand } from '../model/chosen-band'
 import { nearestPlace, roomAt } from '../model/nearest'
 import { noteAtStaffY, stepsDragged } from '../model/staff-pitch'
-import { AFTER_NUMBER_PX, NUMBER_INSET_PX } from '../model/label-row'
 import type { EditPrinted } from '../model/printed'
 import { EditorCaret } from './EditorCaret'
 import { LineLabels } from './LineLabels'
 import { PrintedSigns } from './PrintedSigns'
 import { StaffNames } from './StaffNames'
-import { TempoMark } from './TempoMark'
 
 /** How far round the caret's onset a press takes hold of its notes to drag them. */
 const GRIP = { before: 14, after: 22, over: 16 } as const
@@ -42,8 +40,8 @@ function zoomOf(element: HTMLElement, box: DOMRect): number {
  * Over a line's staff: its labels, the bars chosen, the caret, the playhead while Play plays here (ADR
  * 0096), and each bar as a button that puts the caret where it is clicked; a double click there
  * writes the note on the line or space clicked (ADR 0064). The notes at the caret are a grip: dragged up or down, they move by notes of the key. The
- * tempo mark, each clef, key and time signature and the staves' names are buttons too, each opening
- * what changes it there (`edit`, ADR 0094).
+ * tempo mark, a section's name (ADR 0095), each clef, key and time signature and the staves' names are
+ * buttons too, each opening what changes it there (`edit`, ADR 0094).
  */
 export function LineOverlay({
   layout,
@@ -62,6 +60,7 @@ export function LineOverlay({
   chordNames,
   row,
   labels,
+  headings,
   edit,
   onWrite,
   onDrag,
@@ -70,6 +69,8 @@ export function LineOverlay({
   row: number
   /** The labels' size. */
   labels: number
+  /** Each section's name, by section: printed at its first bar (ADR 0095). */
+  headings: readonly string[]
   /** A note written where a staff was double-clicked: its tick, row and key. */
   onWrite?: ((tick: Tick, layer: Layer, key: Midi) => void) | undefined
   /** The notes at the caret dragged by steps of the key, the first step of a drag not `joins`. */
@@ -243,10 +244,12 @@ export function LineOverlay({
       <LineLabels
         layout={layout}
         music={music}
-        firstBar={(line.bars[0]?.index ?? 0) + 1}
+        labels={line.labels}
+        headings={headings}
         chordNames={chordNames}
         row={row}
         size={labels}
+        edit={edit}
       />
       <PrintedSigns
         layout={layout}
@@ -255,20 +258,6 @@ export function LineOverlay({
         edit={edit}
       />
       <StaffNames layout={layout} edit={edit} />
-      {music.bars.map((bar, index) => {
-        const at = layout.measures[index]
-        return bar.tempo === undefined || !at ? null : (
-          <TempoMark
-            key={`tempo ${index}`}
-            tempo={bar.tempo}
-            meter={music.meter}
-            left={at.x + NUMBER_INSET_PX + (index === 0 ? AFTER_NUMBER_PX * labels : 0)}
-            row={row}
-            size={labels}
-            edit={edit}
-          />
-        )
-      })}
       {layout.measures.map((measure, index) => {
         const placed = line.bars[index]
         const chosenBy = placed ? choice(placed.start, { x: measure.x, y: -row }) : {}

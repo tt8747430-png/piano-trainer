@@ -592,6 +592,30 @@ describe('the score editor', () => {
     ).toEqual(['Intro', 'Chorus', 'Bridge', 'Ending'])
   })
 
+  it('prints a section’s name in the labels’ row as the Player does, its menu opened there (ADR 0095)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/edit/my-1', {
+      storage: withSong({
+        sections: [
+          { kind: 'verse', lines: ['G G G G'] },
+          { kind: 'chorus', lines: ['C C C C'] },
+        ],
+      }),
+    })
+    const chorus = await screen.findByRole('button', { name: 'Chorus' })
+    // No heading over its lines: its name at its first bar, beside the line's number.
+    expect(chorus.closest('[data-slot="bar-label"]')).toHaveTextContent(/^5 · Chorus$/)
+    expect(screen.queryByRole('heading', { name: /Chorus/ })).not.toBeInTheDocument()
+    await user.click(chorus)
+    const menu = await screen.findByRole('dialog', { name: 'Section' })
+    await user.click(within(menu).getByRole('button', { name: 'Join with the section before' }))
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({
+        sections: [{ kind: 'verse', lines: ['G G G G', 'C C C C'] }],
+      }),
+    )
+  })
+
   it('opens on what another tab saved, so its next change keeps it', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
