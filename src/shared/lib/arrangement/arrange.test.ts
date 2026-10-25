@@ -1028,6 +1028,17 @@ describe('a hand written into a bar', () => {
     ])
   })
 
+  it('names the pattern each chord is played by, none where its bar writes both hands (ADR 0100)', () => {
+    const written = arrange(twoBars({ rh: hand([72, 0, 96]), lh: hand([36, 0, 96]) }), {
+      tonic: C,
+      pattern: BEATS,
+    })
+    expect(written.chords.map((chord) => chord.pattern)).toEqual([undefined, 'beats'])
+    // A hand left to it is still the pattern's.
+    const left = arrange(twoBars({ rh: hand([72, 0, 96]) }), { tonic: C, pattern: BEATS })
+    expect(left.chords.map((chord) => chord.pattern)).toEqual(['beats', 'beats'])
+  })
+
   it('moves the written notes to the chosen key, letters with it, fingers kept', () => {
     const performance = arrange(twoBars({ rh: hand([64, 0, 96, 3]) }), {
       tonic: note('E', -1),

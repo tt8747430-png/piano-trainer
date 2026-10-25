@@ -631,3 +631,58 @@ describe('the chord chart, with the sheet music off (ADR 0098)', () => {
     expect(empty).toHaveAttribute('aria-current', 'step')
   })
 })
+
+describe('a pass played in Wait mode, a lesson done (ADR 0100)', () => {
+  // Both hands written: C4 over C3, then D4 over G2, a beat group a bar.
+  const SONG = {
+    id: 'my-1',
+    title: 'Morning',
+    key: 'C',
+    meter: '4/4',
+    tempo: 90,
+    pattern: 'block',
+    sections: [{ kind: 'verse', lines: ['C G'] }],
+    hands: { rh: 'C4/4 | D4/4', lh: 'C3/4 | G2/4' },
+  }
+  const saved = () => {
+    const storage = createMemoryStorage()
+    storage.setItem(
+      PIECES_STORAGE_KEY,
+      JSON.stringify({ state: { songs: [SONG], nextSong: 2 }, version: PIECES_VERSION }),
+    )
+    return storage
+  }
+
+  it('records a lap of the loop as its bars done', async () => {
+    const user = userEvent.setup()
+    const { midi: keyboard, progressStore } = await renderApp('/play/my-1?mode=wait&loop=2-2', {
+      storage: saved(),
+    })
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    expect(await screen.findByText('Play G D')).toBeInTheDocument()
+    act(() => {
+      keyboard.press(midi(67))
+      keyboard.press(midi(62))
+    })
+    await waitFor(() =>
+      expect(Object.keys(progressStore.getState().lessons)).toEqual(['my-1:bars:2-2']),
+    )
+  })
+
+  it('records the whole piece played through without a loop', async () => {
+    const user = userEvent.setup()
+    const { midi: keyboard, progressStore } = await renderApp('/play/my-1?mode=wait', {
+      storage: saved(),
+    })
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    act(() => keyboard.press(midi(60)))
+    expect(await screen.findByText('Play G D')).toBeInTheDocument()
+    act(() => {
+      keyboard.press(midi(55))
+      keyboard.press(midi(74))
+    })
+    await waitFor(() =>
+      expect(Object.keys(progressStore.getState().lessons)).toEqual(['my-1:bars:1-2']),
+    )
+  })
+})

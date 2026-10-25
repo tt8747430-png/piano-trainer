@@ -1,6 +1,7 @@
 import type { StepId } from '@/entities/step'
 import type { PieceId } from '@/entities/piece'
 import type { SkillId } from '@/shared/lib/music'
+import type { LessonKey } from './lessons'
 
 /** One quiz answer on a skill. `at` is an ISO date. */
 export interface Answer {
@@ -43,6 +44,8 @@ export interface ProgressState {
   readonly trainers: Readonly<Partial<Record<RunKey, TrainerRecord>>>
   /** The days on the learner's calendar they practised (`2026-10-11`), oldest first, the latest DAYS_KEPT. */
   readonly days: readonly string[]
+  /** When each song lesson was first done (ADR 0100), the latest LESSONS_KEPT. */
+  readonly lessons: Readonly<Partial<Record<LessonKey, string>>>
 }
 
 export const EMPTY_PROGRESS: ProgressState = {
@@ -51,4 +54,5 @@ export const EMPTY_PROGRESS: ProgressState = {
   answers: {},
   trainers: {},
   days: [],
+  lessons: {},
 }

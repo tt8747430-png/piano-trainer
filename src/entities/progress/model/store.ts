@@ -3,6 +3,7 @@ import { isStepId, type StepId } from '@/entities/step'
 import { isSkillId, type SkillId } from '@/shared/lib/music'
 import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
 import { keptDays } from './days'
+import { isLessonKey, keptLessons, type LessonKey } from './lessons'
 import { latestEvidence } from './mastery'
 import {
   EMPTY_PROGRESS,
@@ -13,7 +14,7 @@ import {
 } from './types'
 
 export const PROGRESS_STORAGE_KEY = 'pt-progress'
-export const PROGRESS_VERSION = 1
+export const PROGRESS_VERSION = 2
 
 export type ProgressStore = StoreApi<ProgressState>
 
@@ -86,5 +87,6 @@ function sanitize(persisted: unknown): ProgressState {
     answers: kept<SkillId, readonly Answer[]>(saved.answers, isSkillId, evidenceOrNothing),
     trainers: kept(saved.trainers, isRunKey, trainerRecord),
     days: Array.isArray(saved.days) ? keptDays(saved.days) : [],
+    lessons: keptLessons(kept<LessonKey, string>(saved.lessons, isLessonKey, dateOrNothing)),
   }
 }

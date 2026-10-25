@@ -34,6 +34,11 @@ export interface PracticeState {
   readonly wrong: Midi | null
   /** Wait mode: the wrong keys of this pass, by bar (from 0): what its report says. */
   readonly slips: Readonly<Partial<Record<number, number>>>
+  /**
+   * Wait mode: the passes played to their end while it played, a loop's every lap: what a piece's
+   * Player records as a lesson done (ADR 0100).
+   */
+  readonly passes: number
 }
 
 export type PracticeEvent =
@@ -149,18 +154,24 @@ export function initialPractice(
     outcome: 'waiting',
     wrong: null,
     slips: {},
+    passes: 0,
   }
   return moveTo(state, bounds(state).first)
 }
 
-/** On past the end: Listen and a loop go round; Wait mode through the whole piece finishes, stopped. */
+/**
+ * On past the end: Listen and a loop go round; Wait mode through the whole piece finishes, stopped.
+ * Wait mode counts a pass it played to the end, round a loop or finished.
+ */
 function next(state: PracticeState): PracticeState {
   if (state.performance.beatGroups.length === 0) return state
   const { first, last } = bounds(state)
   if (state.beatGroup < last) return moveTo(state, state.beatGroup + 1)
-  if (state.mode === 'listen' || state.loop) return moveTo(state, first)
+  const passes = state.mode === 'wait' && state.playing ? state.passes + 1 : state.passes
+  if (state.mode === 'listen' || state.loop) return { ...moveTo(state, first), passes }
   return {
     ...state,
+    passes,
     playing: false,
     expected: [],
     received: [],

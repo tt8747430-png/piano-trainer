@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
+import { LESSONS_KEPT } from './lessons'
 import { createProgressStore, PROGRESS_STORAGE_KEY, PROGRESS_VERSION } from './store'
 import { EMPTY_PROGRESS } from './types'
 
@@ -35,6 +36,7 @@ describe('createProgressStore', () => {
       answers: { 'chord:m7': [{ correct: true, at: DAY }] },
       trainers: { 'build-chord:1': { runs: 3, last: 70, best: 90, bestStreak: 8 } },
       days: ['2026-10-10', '2026-10-11'],
+      lessons: { 'bz5:chord:C': DAY, 'bz5:bars:9-18': DAY },
     }
     writeSaved(storage, saved)
     expect(createProgressStore({ storage }).getState()).toEqual(saved)
@@ -65,6 +67,13 @@ describe('createProgressStore', () => {
         'reading-notes:1': { runs: 1, last: 120, best: 120, bestStreak: 1 },
       },
       days: ['2026-10-11', 'Monday', '2026-10-09', 7, '2026-10-11'],
+      lessons: {
+        'bz5:chord:D/F♯': DAY,
+        'bz5:bars:9-18': DAY,
+        'bz5:bars:18-9': DAY,
+        'bz5:loop:1-2': DAY,
+        'bz5:chord:G': 'today',
+      },
       extra: true,
     })
     expect(createProgressStore({ storage }).getState()).toEqual({
@@ -76,16 +85,33 @@ describe('createProgressStore', () => {
       },
       trainers: { 'name-chord:3': { runs: 2, last: 80, best: 80, bestStreak: 5 } },
       days: ['2026-10-09', '2026-10-11'],
+      lessons: { 'bz5:chord:D/F♯': DAY, 'bz5:bars:9-18': DAY },
     })
   })
 
-  it('reads a save from before the days were kept as no days practised', () => {
+  it('keeps the latest song lessons, as many as it keeps', () => {
     const storage = createMemoryStorage()
-    writeSaved(storage, { learned: { 'piece:bz5': DAY } })
-    expect(createProgressStore({ storage }).getState().days).toEqual([])
+    const lessons = Object.fromEntries(
+      Array.from({ length: LESSONS_KEPT + 1 }, (_, i) => [
+        `bz5:bars:${i + 1}-${i + 1}`,
+        new Date(Date.UTC(2026, 0, 1, 0, i)).toISOString(),
+      ]),
+    )
+    writeSaved(storage, { lessons })
+    const kept = createProgressStore({ storage }).getState().lessons
+    expect(Object.keys(kept)).toHaveLength(LESSONS_KEPT)
+    expect(kept['bz5:bars:1-1']).toBeUndefined()
   })
 
-  it.each([0, 2])('does not read a version-%i save', (version) => {
+  it('reads a save without days or lessons as none practised and none done', () => {
+    const storage = createMemoryStorage()
+    writeSaved(storage, { learned: { 'piece:bz5': DAY } })
+    const state = createProgressStore({ storage }).getState()
+    expect(state.days).toEqual([])
+    expect(state.lessons).toEqual({})
+  })
+
+  it.each([1, 3])('does not read a version-%i save', (version) => {
     const storage = createMemoryStorage()
     writeSaved(storage, { learned: { 'piece:bz5': DAY } }, version)
     expect(createProgressStore({ storage }).getState()).toEqual(EMPTY_PROGRESS)
