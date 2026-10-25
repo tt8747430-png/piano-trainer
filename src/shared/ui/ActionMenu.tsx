@@ -5,7 +5,7 @@ import { Button } from './primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from './primitives/popover'
 
 /** One action of a pull-down: a row that acts and closes it. */
-interface MenuAction {
+export interface MenuAction {
   readonly key: string
   readonly label: string
   readonly onSelect: () => void

@@ -30,7 +30,7 @@ export {
   SpeedDial,
   SpeedDialAction,
 } from './FloatingActions'
-export { ActionMenu } from './ActionMenu'
+export { ActionMenu, type MenuAction } from './ActionMenu'
 export { FloatingBar, FloatingBarButton, FloatingBarPlay } from './FloatingBar'
 export { useFloatingLabels, type FloatingPlace } from './floating-context'
 export { RankMark } from './RankMark'

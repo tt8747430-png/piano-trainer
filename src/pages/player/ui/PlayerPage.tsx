@@ -1,14 +1,18 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { useEffect, useEffectEvent } from 'react'
+import { Info, Share2 } from 'lucide-react'
+import { useEffect, useEffectEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   entryTitles,
   isDegreePiece,
   isLeadSheet,
+  isOwnSongId,
+  musicOf,
   useRepertoire,
   type Piece,
 } from '@/entities/piece'
 import { beatGroupInBar, writtenBarAt } from '@/features/practice'
+import { ShareSaid, useShareSong } from '@/features/share-song'
 import { useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
 import { isCompound } from '@/shared/lib/music'
@@ -20,8 +24,10 @@ import { usePlayer } from '../model/use-player'
 import { PieceChart } from './PieceChart'
 import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
+import { SongInfo } from './SongInfo'
 
 function PiecePlayer({ piece }: { piece: Piece }) {
+  const { t } = useTranslation(['player', 'piece'])
   const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
   const close = useClose(piece)
@@ -48,44 +54,74 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   useEffect(() => {
     if (search.bar !== undefined) openAt(search.bar)
   }, [search.bar])
+  // More's own (ADR 0099): the piece's information as a sheet, and an own song's Share, as its page
+  // shares it, saying so where the status line is.
+  const [showingInfo, setShowingInfo] = useState(false)
+  const shared = useShareSong()
+  const sharing = isOwnSongId(piece.id) && !isDegreePiece(piece)
   return (
-    <PlayerLayout
-      title={title}
-      onClose={close}
-      view={search}
-      player={player}
-      performance={performance}
-      headings={headings}
-      // A song that hides its piano is a lead sheet (ADR 0083).
-      piano={!isLeadSheet(piece)}
-      // A piece written in degrees has the piano's staves alone.
-      staves={isDegreePiece(piece) ? undefined : piece.staves}
-      modes={
-        // A piece written in degrees has no score to edit.
-        isDegreePiece(piece) ? null : (
-          <ModeSwitch pieceId={piece.id} mode="practise" bar={bar + 1} />
-        )
-      }
-      chart={
-        <PieceChart
-          title={title}
-          performance={performance}
-          headings={headings}
-          playing={bar}
-          onBar={goToBar}
-        />
-      }
-      setup={
-        <PieceSetup
-          piece={piece}
-          choice={choice}
-          fit={fit}
-          swing={isCompound(piece.meter) ? null : search.swing}
-          onChange={changeSetup}
-          onSwing={player.setSwing}
-        />
-      }
-    />
+    <>
+      <PlayerLayout
+        title={title}
+        onClose={close}
+        view={search}
+        player={player}
+        performance={performance}
+        headings={headings}
+        // A song that hides its piano is a lead sheet (ADR 0083).
+        piano={!isLeadSheet(piece)}
+        // A piece written in degrees has the piano's staves alone.
+        staves={isDegreePiece(piece) ? undefined : piece.staves}
+        modes={
+          // A piece written in degrees has no score to edit.
+          isDegreePiece(piece) ? null : (
+            <ModeSwitch pieceId={piece.id} mode="practise" bar={bar + 1} />
+          )
+        }
+        chart={
+          <PieceChart
+            title={title}
+            performance={performance}
+            headings={headings}
+            playing={bar}
+            onBar={goToBar}
+          />
+        }
+        setup={
+          <PieceSetup
+            piece={piece}
+            choice={choice}
+            fit={fit}
+            swing={isCompound(piece.meter) ? null : search.swing}
+            onChange={changeSetup}
+            onSwing={player.setSwing}
+          />
+        }
+        info={{
+          key: 'info',
+          label: t(`player:info.${piece.kind}`),
+          icon: Info,
+          onSelect: () => setShowingInfo(true),
+        }}
+        share={
+          sharing
+            ? {
+                key: 'share',
+                label: t('piece:share'),
+                icon: Share2,
+                onSelect: () => shared.share({ title, music: musicOf(piece) }),
+              }
+            : undefined
+        }
+        status={sharing ? <ShareSaid said={shared.said} /> : null}
+      />
+      <SongInfo
+        piece={piece}
+        performance={performance}
+        open={showingInfo}
+        onOpenChange={setShowingInfo}
+      />
+    </>
   )
 }
 
