@@ -47,6 +47,7 @@ export function LoopBand({
           min={0}
           max={Math.min(loop.last, lastBar) - firstBar}
           measures={layout.measures}
+          firstBar={firstBar}
           onMove={(bar) => onChange({ first: bar + firstBar, last: loop.last })}
         />
       ) : null}
@@ -60,6 +61,7 @@ export function LoopBand({
           min={Math.max(loop.first, firstBar) - firstBar}
           max={layout.measures.length - 1}
           measures={layout.measures}
+          firstBar={firstBar}
           onMove={(bar) => onChange({ first: loop.first, last: bar + firstBar })}
         />
       ) : null}
