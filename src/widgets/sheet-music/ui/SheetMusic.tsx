@@ -7,13 +7,14 @@ import type { Tick } from '@/shared/lib/music'
 import { notate, type StaffId } from '@/shared/lib/notation'
 import { SheetTitle } from '@/shared/ui'
 import {
+  labelRow,
   ScoreView,
   scoreHeight,
   useStaffLabels,
   type Picked,
   type ScoreLayout,
 } from '@/shared/ui/score'
-import { FINGERS, fitScale, widestBar } from '../model/fit-scale'
+import { engravedHeight, FINGERS, fitScale, widestBar } from '../model/fit-scale'
 import { groupOfTick } from '../model/group-of-tick'
 import { keepsLoop } from '../model/keeps-loop'
 import { playedMusic } from '../model/played-music'
@@ -42,27 +43,46 @@ const ACROSS: SheetViewChoice = {
 /** No single staff named. */
 const NO_NAMES: readonly (string | undefined)[] = []
 
-/** A bar measured this much wider or narrower than before engraves the staff again; less does not. */
-const BAR_CHANGE = 0.1
+/**
+ * A bar measured this much wider or narrower than before engraves the staff again; less does not.
+ * The engraving's height is its own at any size, so the least change of it counts.
+ */
+const CHANGE = { bar: 0.1, height: 0.02 } as const
+
+/** The music's own measures once engraved, at scale 1: its widest bar and its height as read. */
+interface Engraved {
+  readonly bar?: number | undefined
+  readonly height?: number | undefined
+}
+
+/** A measure kept where the new one is within `change` of it: the staff is not engraved again. */
+const steady = (was: number | undefined, next: number | undefined, change: number) =>
+  next === undefined || (was !== undefined && Math.abs(next - was) <= was * change) ? was : next
 
 /**
- * Tells the widest bar, at scale 1, of each engraving as it is drawn: the next is scaled by it. Read
- * as a new engraving comes, at the scale it was drawn at; the one before stays up while the next is
- * drawn, under the new scale.
+ * Tells the music's own measures (`Engraved`) of each engraving as it is drawn: the next is scaled by
+ * them. Read as a new engraving comes, at the scale it was drawn at; the one before stays up while
+ * the next is drawn, under the new scale.
  */
-function BarWidth({
+function EngravedSize({
   layout,
   scale,
-  onBar,
+  staves,
+  read,
+  onEngraved,
 }: {
   layout: ScoreLayout
   scale: number
-  onBar: (bar: number) => void
+  staves: readonly StaffId[]
+  read: readonly StaffId[]
+  onEngraved: (engraved: Engraved) => void
 }) {
-  const tell = useEffectEvent((engraved: ScoreLayout) => {
-    const bar = widestBar(engraved, scale)
-    if (bar !== undefined) onBar(bar)
-  })
+  const tell = useEffectEvent((engraving: ScoreLayout) =>
+    onEngraved({
+      bar: widestBar(engraving, scale),
+      height: engravedHeight(engraving, staves, read, scale),
+    }),
+  )
   useEffect(() => tell(layout), [layout])
   return null
 }
@@ -145,20 +165,30 @@ export function SheetMusic({
     staffNames.map((text) => (text === undefined ? undefined : { text })),
   )
   const scroller = useRef<HTMLDivElement>(null)
-  const { width, height } = useElementSize(scroller)
-  const room = { width, height: height - (fingers ? FINGERS : 0) }
-  // The music's own widest bar, once engraved: a line of plain bars grows where a busy one cannot.
-  const [bar, setBar] = useState<number>()
-  const onBar = useMemo(
-    () => (next: number) =>
-      setBar((kept) =>
-        kept !== undefined && Math.abs(next - kept) <= kept * BAR_CHANGE ? kept : next,
-      ),
+  // The room under the title, the labels' row's and the engraving's to fill.
+  const room = useElementSize(scroller)
+  // The music's own measures, once engraved: a line of plain bars grows where a busy one cannot, and
+  // a line whose notes go far over or under its staves (anywhere in the piece) is drawn smaller, so
+  // its whole system is in the room, never under the keys (a phone on its side).
+  const [own, setOwn] = useState<Engraved>({})
+  const onEngraved = useMemo(
+    () => (next: Engraved) =>
+      setOwn((was) => {
+        const bar = steady(was.bar, next.bar, CHANGE.bar)
+        const height = steady(was.height, next.height, CHANGE.height)
+        return bar === was.bar && height === was.height ? was : { bar, height }
+      }),
     [],
   )
   // A muted staff may leave the height: its hand is not read. The verses under the tune stay in it.
   const read = staves.filter((staff) => staff !== muted)
-  const scale = fitScale(room, scoreHeight(score, read.length > 0 ? read : staves), bar)
+  const reading = read.length > 0 ? read : staves
+  // Before it is engraved, its staves' least room and the fingers'.
+  const natural = own.height ?? scoreHeight(score, reading) + (fingers ? FINGERS : 0)
+  // The labels' row over the staff, as the editor's lines draw it: as tall as what it holds (the
+  // chord symbols' or the bars'), smaller with a staff drawn smaller.
+  const rowAt = (size: number) => labelRow(view.chordNames, size)
+  const scale = fitScale(room, natural, own.bar, rowAt)
   // Bars chosen as the editor chooses notes (ADR 0082, 0088), the loop: from the bar held or the
   // loop's start (else the cursor's bar) to the one reached, exactly.
   const anchor = useRef<number | null>(null)
@@ -234,41 +264,50 @@ export function SheetMusic({
       <SheetTitle title={title} place="across" />
       <div
         ref={scroller}
-        className="relative -mx-gutter min-h-0 flex-1 overflow-x-auto overscroll-x-contain px-gutter pt-11 scrollbar-none landscape-phone:mx-0 landscape-phone:px-0"
+        className="relative -mx-gutter min-h-0 flex-1 overflow-x-auto overscroll-x-contain px-gutter scrollbar-none landscape-phone:mx-0 landscape-phone:px-0"
       >
-        <ScoreView
-          score={score}
-          scale={scale}
-          fingers={fingers}
-          names={names}
-          muted={muted}
-          staves={staves}
-          labels={labels}
-          selected={selected}
-        >
-          {(layout) => (
-            <>
-              <BarWidth layout={layout} scale={scale} onBar={onBar} />
-              <SheetOverlay
-                layout={layout}
-                scroller={scroller}
-                performance={performance}
-                headings={headings}
-                positions={positions}
-                chordNames={view.chordNames}
-                tempos={tempos}
-                current={current}
-                clock={clock}
-                loop={loop}
-                playheadShown={playheadShown}
-                onJump={onJump}
-                onPick={onPick}
-                onLoopChange={onLoopChange}
-                onChoose={onChoose}
-              />
-            </>
-          )}
-        </ScoreView>
+        <div className="w-max" style={{ paddingTop: rowAt(scale) }}>
+          <ScoreView
+            score={score}
+            scale={scale}
+            fingers={fingers}
+            names={names}
+            muted={muted}
+            staves={staves}
+            labels={labels}
+            selected={selected}
+          >
+            {(layout) => (
+              <>
+                <EngravedSize
+                  layout={layout}
+                  scale={scale}
+                  staves={staves}
+                  read={reading}
+                  onEngraved={onEngraved}
+                />
+                <SheetOverlay
+                  layout={layout}
+                  labelSize={scale}
+                  scroller={scroller}
+                  performance={performance}
+                  headings={headings}
+                  positions={positions}
+                  chordNames={view.chordNames}
+                  tempos={tempos}
+                  current={current}
+                  clock={clock}
+                  loop={loop}
+                  playheadShown={playheadShown}
+                  onJump={onJump}
+                  onPick={onPick}
+                  onLoopChange={onLoopChange}
+                  onChoose={onChoose}
+                />
+              </>
+            )}
+          </ScoreView>
+        </div>
       </div>
     </section>
   )

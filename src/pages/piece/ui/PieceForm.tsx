@@ -2,14 +2,16 @@ import { Link } from '@tanstack/react-router'
 import { Play } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { PieceId } from '@/entities/piece'
-import { loopParam } from '@/features/practice'
+import { loopParam, playedBars } from '@/features/practice'
 import { OPEN_PLAINLY } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { chartSections, sectionBars } from '@/widgets/chord-chart'
 
 /**
  * The song's form at a glance: its sections in order, each with its bars, each opening the Player
- * there, looping it (ADR 0098).
+ * there, looping it (ADR 0098). The Player's loop is its bars as played, so a section's written bars
+ * are read as the bars the Player plays (`playedBars`), every pass of a repeat inside it, and counted
+ * so.
  */
 export function PieceForm({
   pieceId,
@@ -17,6 +19,7 @@ export function PieceForm({
   headings,
 }: {
   pieceId: PieceId
+  /** The piece as the Player plays it, its repeats taken (`unfold`). */
   performance: Performance
   headings: readonly string[]
 }) {
@@ -28,7 +31,8 @@ export function PieceForm({
       <h2 className="text-sm font-semibold text-muted-foreground">{t('form')}</h2>
       <ol className="flex flex-wrap gap-2">
         {headings.map((heading, section) => {
-          const bars = sectionBars(sections[section] ?? [])
+          const written = sectionBars(sections[section] ?? [])
+          const bars = written ? playedBars(performance, written) : null
           if (!bars) return null
           return (
             <li key={section}>

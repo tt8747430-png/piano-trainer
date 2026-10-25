@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { gatherLyrics, writeLyrics } from '@/entities/piece'
+import { gatherLyrics, isDegreePiece, musicOf, PIECES, writeLyrics } from '@/entities/piece'
 import { draftOf } from '../testing/test-draft'
-import { lyricsLayer, tuneNotes, writeDraft } from './draft'
+import { lyricsLayer, readDraft, tuneNotes, writeDraft } from './draft'
 import {
   setSyllable,
   singsHere,
@@ -96,17 +96,33 @@ describe('the words in the editor (ADR 0093)', () => {
     const held = setSyllable(sung, 0, 0, 'Si__')
     expect(verses(held)).toEqual(['Si__ night,'])
     expect(verses(setSyllable(held, 24, 0, 'x'))).toEqual(['Si x ~ night,'])
-    expect(verses(setSyllable(sung, 72, 0, ''))).toEqual(['Si-_ lent ~'])
-    expect(verses(setSyllable(sung, 72, 0, '~'))).toEqual(['Si-_ lent ~'])
+    // The last word taken off: the verse ends where its words do.
+    expect(verses(setSyllable(sung, 72, 0, ''))).toEqual(['Si-_ lent'])
+    expect(verses(setSyllable(sung, 72, 0, '~'))).toEqual(['Si-_ lent'])
     expect(setSyllable(sung, 96, 0, 'x')).toBe(sung)
   })
 
   it('start a verse where none was, written with the music', () => {
     const second = setSyllable(sung, 48, 1, 'Nacht')
     expect(verseCount(second)).toBe(2)
-    expect(writeDraft(second).lyrics).toEqual(['Si-_ lent night,', '~ ~ Nacht ~'])
+    expect(writeDraft(second).lyrics).toEqual(['Si-_ lent night,', '~ ~ Nacht'])
     // Taken back, the verse goes.
     expect(writeDraft(setSyllable(second, 48, 1, '')).lyrics).toEqual(['Si-_ lent night,'])
+  })
+
+  it('save a verse begun on a long tune as its words alone, no empty place for every note after', () => {
+    const silent = PIECES.find((piece) => piece.id === 'silent')
+    if (!silent || isDegreePiece(silent)) throw new Error('the catalog has no Silent Night')
+    const draft = readDraft(musicOf(silent))
+    const [first, second] = tuneNotes(draft)
+    if (!first || !second) throw new Error('Silent Night has no tune')
+    const holy = setSyllable(
+      setSyllable(draft, first.startTick, 1, 'Ho-'),
+      second.startTick,
+      1,
+      'ly',
+    )
+    expect(writeDraft(holy).lyrics?.[1]).toBe('Ho- ly')
   })
 
   it('sing a chord of the upper staff on one note where the piano is the tune', () => {

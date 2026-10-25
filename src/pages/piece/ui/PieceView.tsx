@@ -41,8 +41,9 @@ export function PieceView({ piece }: { piece: Piece }) {
   const own = isOwnSongId(piece.id) ? piece.id : null
   const hasVersion = usePieces((state) => selectHasVersion(state, piece.id))
   const title = entryTitles(piece, locale).primary
+  // As the Player plays it, its repeats taken: each section of the form loops the bars it plays.
   const performance = useMemo(
-    () => arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS),
+    () => arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS, { unfold: true }),
     [piece],
   )
   const headings = usePieceHeadings(piece)

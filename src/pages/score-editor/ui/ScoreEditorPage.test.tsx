@@ -2006,18 +2006,18 @@ describe('the words under the tune (ADR 0093)', () => {
     expect(place?.closest('[data-slot="sheet-line"]')).not.toBeNull()
     await user.keyboard('A-')
     // The dash saves the syllable and moves on to the next note of the tune.
-    await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- ~ ~ ~']))
+    await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A-']))
     expect(screen.getByRole('status')).toHaveTextContent(/Bar 2/)
     const next = screen.getByRole('textbox', { name: 'Syllable' })
     await user.type(next, 'men ')
-    await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- men ~ ~']))
+    await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- men']))
     expect(screen.getByRole('status')).toHaveTextContent(/Bar 3/)
     // ↓ starts the second verse; ↑ comes back to the first, whose syllable the field shows.
     await user.keyboard('{ArrowDown}')
     expect(screen.getByRole('status')).toHaveTextContent(/^Lyrics · Verse 2/)
     await user.type(screen.getByRole('textbox', { name: 'Syllable' }), 'la{ArrowUp}')
     await waitFor(() =>
-      expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- men ~ ~', '~ ~ la ~']),
+      expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- men', '~ ~ la']),
     )
     expect(screen.getByRole('status')).toHaveTextContent(/^Lyrics · Verse 1/)
     await user.keyboard('{ArrowLeft}')
@@ -2078,14 +2078,14 @@ describe('the words under the tune (ADR 0093)', () => {
     await user.click(within(text).getByRole('button', { name: 'Lyrics' }))
     await screen.findByRole('textbox', { name: 'Syllable' })
     await user.keyboard('A-')
-    await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- ~ ~ ~']))
+    await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A-']))
     await user.type(screen.getByRole('textbox', { name: 'Syllable' }), 'men{Escape}')
-    await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- men ~ ~']))
+    await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- men']))
     await user.click(await screen.findByRole('button', { name: 'Piano staves' }))
     await user.click(await screen.findByRole('button', { name: 'Add a staff over the piano' }))
     await waitFor(() => expect(songOf(piecesStore.getState())).toHaveProperty('staves'))
     expect(songOf(piecesStore.getState())).toMatchObject({
-      lyrics: ['A- men ~ ~'],
+      lyrics: ['A- men'],
       lyricsOn: 'rh',
     })
     // On the staff added the Lyrics are greyed, saying where they are.

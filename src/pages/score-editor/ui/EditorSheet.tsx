@@ -41,7 +41,10 @@ const HEARD = { duration: 0.35, velocity: 0.15 } as const
 export function EditorSheet({
   room,
   onAnchor,
+  covered,
 }: {
+  /** What floats over the pages' right edge and foot (the palette beside them, the dock). */
+  covered?: { readonly right?: number; readonly bottom?: number } | undefined
   room?: number | undefined
   /** The place of the field open at the caret, on its line, as it comes and goes (ADR 0096). */
   onAnchor: (anchor: HTMLDivElement | null) => void
@@ -139,6 +142,7 @@ export function EditorSheet({
       view={view.layout}
       title={titleAt}
       room={room}
+      covered={covered}
       onWrite={onWrite}
       onDrag={onDrag}
       field={view.field}

@@ -25,7 +25,10 @@ export function SheetOverlay({
   chordNames = true,
   tempos = [],
   firstBar = 0,
+  labelSize = 1,
 }: {
+  /** The size its labels are drawn at: the line's, smaller with a staff drawn smaller. */
+  labelSize?: number
   chordNames?: boolean
   /** Each bar of the piece's tempo mark, said in the labels' row. */
   tempos?: readonly (number | undefined)[]
@@ -64,6 +67,7 @@ export function SheetOverlay({
         chordNames={chordNames}
         tempos={tempos}
         firstBar={firstBar}
+        size={labelSize}
       />
       {loop ? (
         <LoopBand layout={layout} loop={loop} onChange={onLoopChange} firstBar={firstBar} />

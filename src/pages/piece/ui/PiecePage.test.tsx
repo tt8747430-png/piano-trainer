@@ -169,6 +169,29 @@ describe('Piece: the learner’s own music', () => {
     ).toEqual(['Share', 'Delete'])
   })
 
+  it('loops a section with its repeats as the Player plays it, every pass (ADR 0067, 0098)', async () => {
+    // The verse's first two bars repeated, then the chorus: played Em D Em D C, then G D.
+    const song = {
+      ...MUSIC,
+      id: 'my-1',
+      title: 'Morning',
+      sections: [
+        { kind: 'verse', lines: ['|: Em D :| C'] },
+        { kind: 'chorus', lines: ['G D'] },
+      ],
+    }
+    await renderApp('/songs/my-1', { storage: saved({ songs: [song], nextSong: 2 }) })
+    const form = await screen.findByRole('navigation', { name: 'Form' })
+    expect(
+      within(form)
+        .getAllByRole('link')
+        .map((section) => [section.getAttribute('href'), section.textContent]),
+    ).toEqual([
+      ['/play/my-1?loop=1-5', 'Verse5 bars'],
+      ['/play/my-1?loop=6-7', 'Chorus2 bars'],
+    ])
+  })
+
   it('edits a song in the score editor', async () => {
     await renderApp('/songs/amazing')
     expect(await screen.findByRole('link', { name: 'Edit the score' })).toHaveAttribute(

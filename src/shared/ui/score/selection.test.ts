@@ -1,7 +1,16 @@
 import { describe, expect, it } from 'vitest'
 import { midi as midiOf } from '@/shared/lib/music'
 import type { Head, ScoreLayout } from './layout'
-import { barsBand, caretLine, MARK, pickAt, rangeBand, spaceOf, spanOf } from './selection'
+import {
+  barsBand,
+  caretLine,
+  loopEnds,
+  MARK,
+  pickAt,
+  rangeBand,
+  spaceOf,
+  spanOf,
+} from './selection'
 
 /** A head 12 px wide and 10 high, its top `top`. */
 const head = (
@@ -62,6 +71,11 @@ const laid: ScoreLayout = {
     { staff: 'treble', tick: 96, left: 215, right: 227, top: 30, bottom: 70 },
   ],
   rests: [{ staff: 'treble', tick: 144, left: 300, right: 311, top: 55, bottom: 85 }],
+  // The line's head: its clef, then its key, before its first notes at 70.
+  signs: [
+    { kind: 'clef', staff: 'treble', measure: 0, left: 5, right: 25, top: 30, bottom: 90 },
+    { kind: 'key', staff: 'treble', measure: 0, left: 30, right: 50, top: 40, bottom: 70 },
+  ],
 }
 const space = 10
 const reach = MARK.reach * space
@@ -102,17 +116,30 @@ describe('the one selection’s marks (ADR 0096)', () => {
     expect(rangeBand(laid, { staves: [], from: 300, to: 400 }, row)).toBeNull()
   })
 
-  it('bands the bars of a loop over every staff, from the first’s notes to the last’s barline', () => {
+  it('bands the bars of a loop over every staff, barline to barline, its line’s clef and key left out', () => {
     const band = barsBand(laid, 0, 1, spanOf([treble, bass]))
-    // Its clef and key left out.
-    expect(band.left).toBe(70 - lead)
+    // From between the line's key and its notes.
+    expect(band.left).toBe(60)
     expect(band.left + band.width).toBe(350 - MARK.inset * space)
     expect(band.top).toBe(40 - reach)
     expect(band.height).toBe(120 + 2 * reach)
-    // One bar: its own.
+    // One bar: its own, in from its barlines so the bars beside it stay clear.
     const one = barsBand(laid, 2, 2, spanOf([treble, bass]))
-    expect(one.left).toBe(365 - lead)
+    expect(one.left).toBe(350 + MARK.inset * space)
     expect(one.left + one.width).toBe(500 - MARK.inset * space)
+  })
+
+  it('stands the loop’s ends on its barlines, clear of a sharp after the first', () => {
+    // Bar 2 starts with a sharp right after its barline: the start stands on the barline.
+    const sharp = {
+      ...laid,
+      heads: [...(laid.heads ?? []), { ...head('treble', 96, 1, 215, 50, 73), left: 203 }],
+    }
+    expect(loopEnds(sharp, 1, 2)).toEqual({ start: 200, end: 500 })
+    // At a line's start, between its clef and key and its first notes.
+    expect(loopEnds(laid, 0, 0)).toEqual({ start: 60, end: 200 })
+    // A line read with no signs: just before its first notes.
+    expect(loopEnds({ ...laid, signs: [] }, 0, 1)).toEqual({ start: 70 - lead, end: 350 })
   })
 
   it('draws the caret as a line on its staff, just before the notes it is on and their sharps', () => {

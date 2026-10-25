@@ -1,11 +1,11 @@
-import { memo, useEffect, useRef, type Ref } from 'react'
+import { memo, useEffect, useEffectEvent, useRef, type Ref } from 'react'
 import { layerStaff, type Layer } from '@/features/score-editor'
 import type { Midi, Tick } from '@/shared/lib/music'
 import type { StaffId, StaffLabels } from '@/shared/lib/notation'
 import { cn, useElementSize } from '@/shared/lib'
 import { LazyScoreView, useCanvasReveal } from '@/shared/ui'
 import type { LineSheet } from '../model/line-sheets'
-import { labelRow, labelScale } from '@/shared/ui/score'
+import { labelRow, labelScale, type ScoreLayout } from '@/shared/ui/score'
 import type { SheetField } from '../model/field-place'
 import type { EditPrinted } from '../model/printed'
 import { LineOverlay } from './LineOverlay'
@@ -14,6 +14,23 @@ import { LineOverlay } from './LineOverlay'
 function topInSight(element: Element): boolean {
   const { top } = element.getBoundingClientRect()
   return top >= 0 && top < window.innerHeight
+}
+
+/** Tells each engraving's height at the line's own size, as it is drawn (`scale` the size drawn at). */
+function EngravedHeight({
+  layout,
+  scale,
+  onHeight,
+}: {
+  layout: ScoreLayout
+  scale: number
+  onHeight: (height: number) => void
+}) {
+  const tell = useEffectEvent((engraving: ScoreLayout) => {
+    if (engraving.height > 0 && scale > 0) onHeight(engraving.height / scale)
+  })
+  useEffect(() => tell(layout), [layout])
+  return null
 }
 
 /**
@@ -47,7 +64,13 @@ export const SheetLine = memo(function SheetLine({
   field = null,
   fieldAnchor,
   onField,
+  onEngraved,
 }: {
+  /**
+   * Its height as engraved at its own size, told as it is drawn: a line across, the whole piece's,
+   * reaches as far over and under its staves as any of its notes, which a sheet fits.
+   */
+  onEngraved?: ((height: number) => void) | undefined
   /** The field open at the caret, where this line holds it (ADR 0096). */
   field?: SheetField | null
   /** The element marking the open field's place. */
@@ -148,32 +171,37 @@ export const SheetLine = memo(function SheetLine({
         fill={justify && width > 0 ? width : undefined}
       >
         {(layout) => (
-          <LineOverlay
-            layout={layout}
-            music={sheet.music}
-            line={sheet.line}
-            layer={layer}
-            caret={caret}
-            chordNote={chordNote}
-            playhead={playhead}
-            scroller={justify ? undefined : ref}
-            tapsOf={tapsOf}
-            selection={selection}
-            onPlace={onPlace}
-            onReach={onReach}
-            onDeselect={onDeselect}
-            placesOf={placesOf}
-            chordNames={chordNames}
-            row={row}
-            labels={labelScale(scale, print)}
-            headings={headings}
-            edit={edit}
-            onWrite={onWrite}
-            onDrag={onDrag}
-            field={field}
-            fieldAnchor={fieldAnchor}
-            onField={onField}
-          />
+          <>
+            {onEngraved ? (
+              <EngravedHeight layout={layout} scale={scale} onHeight={onEngraved} />
+            ) : null}
+            <LineOverlay
+              layout={layout}
+              music={sheet.music}
+              line={sheet.line}
+              layer={layer}
+              caret={caret}
+              chordNote={chordNote}
+              playhead={playhead}
+              scroller={justify ? undefined : ref}
+              tapsOf={tapsOf}
+              selection={selection}
+              onPlace={onPlace}
+              onReach={onReach}
+              onDeselect={onDeselect}
+              placesOf={placesOf}
+              chordNames={chordNames}
+              row={row}
+              labels={labelScale(scale, print)}
+              headings={headings}
+              edit={edit}
+              onWrite={onWrite}
+              onDrag={onDrag}
+              field={field}
+              fieldAnchor={fieldAnchor}
+              onField={onField}
+            />
+          </>
         )}
       </LazyScoreView>
     </div>

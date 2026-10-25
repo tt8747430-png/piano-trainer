@@ -125,7 +125,7 @@ export const common = {
     folded: 'Hide a page’s keys',
     foldedNote: 'They fold into a Keys button that brings them back',
     foldedLandscape: 'Hide them on a phone on its side',
-    foldedLandscapeNote: 'Lessons, explorers and songs; the Player and the editor keep theirs',
+    foldedLandscapeNote: 'Lessons, explorers, songs and the editor; the Player keeps its own',
     swipe: {
       label: 'A swipe on the keys',
       detail: 'Scrolls the keyboard, or plays each key it crosses (glissando)',

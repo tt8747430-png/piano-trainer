@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, type ReactNode, type Ref } from 'react'
+import { useCallback, useMemo, useRef, useState, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSectionHeading, useStaffNames, useStaffTitle } from '@/entities/piece'
 import { barAt, type Draft, type Layer } from '@/features/score-editor'
@@ -19,6 +19,10 @@ import { SheetLine } from './SheetLine'
 const NO_STAVES: readonly StaffId[] = []
 /** The room between lines on a page at full size, for dealing lines onto pages. */
 const LINE_GAP = 16
+/** The room between the title and the line across, as `gap-2` keeps it. */
+const ACROSS_GAP = 8
+/** A line across measured this much taller or shorter than before is fitted again; less is not. */
+const HEIGHT_CHANGE = 0.02
 /** The title's room over the first page's first line, for dealing lines onto pages. */
 const TITLE_ROOM = 52
 /**
@@ -94,6 +98,7 @@ export function ScoreSheet({
   view = 'scroll',
   title: heading,
   room,
+  covered,
   onWrite,
   onDrag,
   field = null,
@@ -111,6 +116,11 @@ export function ScoreSheet({
   onField?: ((field: SheetField, tick: Tick, layer: Layer) => void) | undefined
   /** The height the sheet is seen in, where it is short: a line down the screen or across is drawn smaller to fit it whole. */
   room?: number | undefined
+  /**
+   * What floats over the sheet's right edge and foot (the palette beside it, the dock), in CSS px:
+   * the pages are fitted in the room it leaves, and the caret's line comes into sight clear of it.
+   */
+  covered?: { readonly right?: number; readonly bottom?: number } | undefined
   /** A note written where a staff was double-clicked: its tick on the piece, its row and key. */
   onWrite?: (tick: Tick, layer: Layer, key: Midi) => void
   /** The notes at the caret dragged on their staff by steps of the key. */
@@ -194,8 +204,32 @@ export function ScoreSheet({
   )
   const layerName = useLayerName(draft.staves)
   const headings = useHeadings(draft)
-  // A whole system in the height the sheet is seen in, where it is short (a phone on its side).
-  const fit = room && room > 0 ? lineFit({ room, staves, chordNames, verses }) : 1
+  // The line across as engraved, its height at its own size: the whole piece's notes reach over and
+  // under its staves, more than a staff's least, and the title stands over it.
+  const [acrossHeight, setAcrossHeight] = useState<number>()
+  const onAcross = useCallback(
+    (height: number) =>
+      setAcrossHeight((was) =>
+        was !== undefined && Math.abs(height - was) <= was * HEIGHT_CHANGE ? was : height,
+      ),
+    [],
+  )
+  const titleBox = useRef<HTMLDivElement>(null)
+  const { height: titleHeight } = useElementSize(titleBox)
+  // A whole system in the height the sheet is seen in, where it is short (a phone on its side); a
+  // line across under its title, as engraved, never under the keys.
+  const fit =
+    room && room > 0
+      ? across
+        ? lineFit({
+            room: room - titleHeight - ACROSS_GAP,
+            staves,
+            chordNames,
+            verses,
+            natural: acrossHeight,
+          })
+        : lineFit({ room, staves, chordNames, verses })
+      : 1
   const sized = pages ? PRINT_SCALE : Math.min(fit, scrollScale(width))
   const widths = useMemo(
     () => (whole ? measureWidths({ ...whole, staves: drawn }, sized, chordNames, labels) : []),
@@ -215,7 +249,12 @@ export function ScoreSheet({
   const caretBar = barAt(draft, caret).index
   const playBar = playhead ? barAt(draft, playhead.tick).index : null
 
-  const line = (sheet: LineSheet, scale?: number, print = false) => {
+  const line = (
+    sheet: LineSheet,
+    scale?: number,
+    print = false,
+    onEngraved?: (height: number) => void,
+  ) => {
     const holdsCaret = sheet.line.bars.some((placed) => placed.index === caretBar)
     return (
       <SheetLine
@@ -247,6 +286,7 @@ export function ScoreSheet({
         onDrag={onDrag}
         {...(scale === undefined ? {} : { scale })}
         print={print}
+        onEngraved={onEngraved}
       />
     )
   }
@@ -268,7 +308,7 @@ export function ScoreSheet({
     )
     return (
       <LayerNames value={layerName}>
-        <PageCanvas column={PAGE.width}>
+        <PageCanvas column={PAGE.width} covered={covered}>
           <section aria-label={t('sheet.label')} className="flex flex-col items-center gap-8 p-6">
             {dealt.map((page, index) => (
               <SheetPage
@@ -304,8 +344,8 @@ export function ScoreSheet({
     return (
       <LayerNames value={layerName}>
         <section ref={box} aria-label={t('sheet.label')} className="flex flex-col gap-2">
-          {heading('across')}
-          {sheets.map((sheet) => line(sheet, fit))}
+          <div ref={titleBox}>{heading('across')}</div>
+          {sheets.map((sheet) => line(sheet, fit, false, onAcross))}
         </section>
       </LayerNames>
     )

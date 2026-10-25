@@ -4,6 +4,8 @@ import type { ComponentProps } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { TWO_BARS, TWO_BARS_UNDER_A_STAFF } from '@/features/practice/testing/performances'
 import type { BarRange } from '@/features/practice'
+import { arrange, parseFigure } from '@/shared/lib/arrangement'
+import { note, parseChordSymbol } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import { stubBox, stubScrolling } from '@/shared/test/layout'
 import { HOLD_MS } from '@/shared/ui/score'
@@ -148,6 +150,40 @@ describe('SheetMusic', () => {
     screen.getByRole('slider', { name: 'Loop start' }).focus()
     await user.keyboard('{ArrowRight}')
     expect(onLoopChange).toHaveBeenCalledTimes(1)
+  })
+
+  it('says the loop’s ends by the piece’s bars on a line after the first', async () => {
+    const bar = (symbol: string) => ({
+      chords: [{ ...parseChordSymbol(symbol), beats: 4 }],
+      beats: 4,
+    })
+    // C on the first line, G and F on the second.
+    const twoLines = arrange(
+      {
+        key: { tonic: note('C'), minor: false },
+        meter: '4/4',
+        sections: [{ lines: [[bar('C')], [bar('G'), bar('F')]] }],
+      },
+      {
+        tonic: note('C'),
+        pattern: {
+          id: 'beats',
+          rh: { kind: 'events', events: parseFigure('0/4 C,4/4 C,8/4 C,12/4 C') },
+          lh: { kind: 'events', events: parseFigure('0/16 L1+L8') },
+        },
+      },
+    )
+    renderSheet({
+      performance: twoLines,
+      loop: { first: 1, last: 2 },
+      shown: { layout: 'scroll', chordNames: true, lyrics: true, hidden: [] },
+    })
+    const start = await screen.findByRole('slider', { name: 'Loop start' })
+    expect(start).toHaveAttribute('aria-valuetext', 'Bar 2')
+    expect(start).toHaveAttribute('aria-valuenow', '2')
+    const end = screen.getByRole('slider', { name: 'Loop end' })
+    expect(end).toHaveAttribute('aria-valuetext', 'Bar 3')
+    expect(end).toHaveAttribute('aria-valuemax', '3')
   })
 
   it('chooses exactly the bars from the cursor’s to the one Shift-clicked as the loop, jumping nowhere', async () => {

@@ -20,7 +20,17 @@ describe('lineFit', () => {
     expect(44 + (202 + 2 * 22 + 32) * fit).toBeCloseTo(296)
   })
 
-  it('never draws it smaller than it is read', () => {
-    expect(lineFit({ room: 120, staves: 3 })).toBe(0.6)
+  it('draws it as small as the Player’s, its whole system over the keys, never smaller', () => {
+    // A phone on its side with the keys out: 142px under the title.
+    const fit = lineFit({ room: 142, staves: 2, natural: 266 })
+    expect(fit).toBeLessThan(0.6)
+    expect(lineFit({ room: 120, staves: 3 })).toBe(0.4)
+  })
+
+  it('fits the line as engraved where it is known: its notes far over or under its staves', () => {
+    // A line across of the whole piece: 266px at its own size, ledger lines under the bass.
+    const fit = lineFit({ room: 264, staves: 2, natural: 266 })
+    expect(44 + 266 * fit).toBeCloseTo(264)
+    expect(fit).toBeLessThan(lineFit({ room: 264, staves: 2 }))
   })
 })

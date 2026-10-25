@@ -41,11 +41,26 @@ export function zoomAt(
 
 /**
  * The content's `column` (the width a page takes) fitted to the viewport's width, its top in sight:
- * a page read across as a PDF viewer opens it, never larger than full size.
+ * a page read across as a PDF viewer opens it, never larger than full size; in the room left of what
+ * floats over the viewport's right edge (`right`: a palette beside the pages), centred there; and
+ * never so large that a whole `line` of it (its tallest, at full size) is taller than the screen (a
+ * phone on its side).
  */
-export function fitWidth(content: Size, column: number, viewport: Size): CanvasView {
-  const zoom = clampZoom(Math.min(1, (viewport.width - 2 * FIT_MARGIN) / column))
-  return { x: (viewport.width - content.width * zoom) / 2, y: FIT_MARGIN, zoom }
+export function fitWidth(
+  content: Size,
+  column: number,
+  viewport: Size,
+  { right = 0, line }: { right?: number; line?: number | undefined } = {},
+): CanvasView {
+  const room = viewport.width - right
+  const zoom = clampZoom(
+    Math.min(
+      1,
+      (room - 2 * FIT_MARGIN) / column,
+      line && line > 0 ? (viewport.height - 2 * FIT_MARGIN) / line : Infinity,
+    ),
+  )
+  return { x: (room - content.width * zoom) / 2, y: FIT_MARGIN, zoom }
 }
 
 /** The view moved by `dx`, `dy`, some of the content always kept in sight: it is never lost off the canvas. */

@@ -1048,15 +1048,15 @@ describe('the words (ADR 0093)', () => {
   it('writes a syllable on the tune’s note at the caret, undone as one step, nowhere else', () => {
     const first = run(sung(), { type: 'syllable', verse: 0, text: 'Si-_' })
     expect(first.layer).toBe('staff0')
-    expect(verses(first)).toEqual(['Si-_ ~ ~'])
+    expect(verses(first)).toEqual(['Si-_'])
     const on = run(
       first,
       { type: 'move', by: 'step', direction: 1 },
       { type: 'move', by: 'step', direction: 1 },
     )
     const second = run(on, { type: 'syllable', verse: 0, text: 'lent' })
-    expect(verses(second)).toEqual(['Si-_ lent ~'])
-    expect(verses(run(second, { type: 'undo' }))).toEqual(['Si-_ ~ ~'])
+    expect(verses(second)).toEqual(['Si-_ lent'])
+    expect(verses(run(second, { type: 'undo' }))).toEqual(['Si-_'])
     // The upper staff is not the tune where the score has the tune's own staff.
     const elsewhere = run(
       sung(),

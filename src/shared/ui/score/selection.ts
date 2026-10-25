@@ -93,7 +93,7 @@ const drawnChosen = (layout: Pick<ScoreLayout, 'heads' | 'rests'>, chosen: Chose
     : []),
 ]
 
-type Laid = Pick<ScoreLayout, 'measures' | 'onsets' | 'staves' | 'heads' | 'rests'>
+type Laid = Pick<ScoreLayout, 'measures' | 'onsets' | 'staves' | 'heads' | 'rests' | 'signs'>
 
 /**
  * A range chosen (ADR 0096), the editor's notes: a light band over the staves `span` takes, from
@@ -125,20 +125,44 @@ export function rangeBand(layout: Laid, chosen: Chosen, span: Span): BandBox | n
 }
 
 /**
+ * Where bars `first` to `last` of a layout start and end, as the loop's grips stand on them (ADR
+ * 0096): on the first's barline, clear of what follows it (an accidental), or at a line's start
+ * between its clef, key and time and its first notes (just before those where the line's head is
+ * not read); on the last's closing barline.
+ */
+export function loopEnds(
+  layout: Laid,
+  first: number,
+  last: number,
+): { start: number; end: number } {
+  const from = layout.measures[first]
+  const to = layout.measures[last]
+  if (!from || !to) return { start: 0, end: 0 }
+  const end = to.x + to.width
+  if (first > 0) return { start: from.x, end }
+  const notes = leftAt(layout, from.startTick)
+  const head = (layout.signs ?? []).filter((sign) => sign.measure === 0)
+  return {
+    start:
+      head.length > 0
+        ? (Math.max(...head.map((sign) => sign.right)) + notes) / 2
+        : notes - MARK.lead * spaceOf(layout),
+    end,
+  }
+}
+
+/**
  * Bars chosen (ADR 0096), the Player's loop: one band over the staves `span` takes, measures
- * `first` to `last` of its layout, from the first's notes (a line's clef and key left out, clear of
- * their accidentals) to the last's barline, in from it so the bar after stays clear.
+ * `first` to `last` of its layout, from where they start (`loopEnds`: a line's clef and key left
+ * out) to the last's barline, in from its barlines so the bars beside it stay clear.
  */
 export function barsBand(layout: Laid, first: number, last: number, span: Span): BandBox {
   const space = spaceOf(layout)
-  const from = layout.measures[first]
-  const to = layout.measures[last]
-  if (!from || !to) return { left: 0, width: 0, ...over(span, space) }
-  const left = Math.max(
-    from.x + MARK.inset * space,
-    leftAt(layout, from.startTick) - MARK.lead * space,
-  )
-  return { left, width: to.x + to.width - MARK.inset * space - left, ...over(span, space) }
+  if (!layout.measures[first] || !layout.measures[last])
+    return { left: 0, width: 0, ...over(span, space) }
+  const { start, end } = loopEnds(layout, first, last)
+  const left = first > 0 ? start + MARK.inset * space : start
+  return { left, width: end - MARK.inset * space - left, ...over(span, space) }
 }
 
 /**
