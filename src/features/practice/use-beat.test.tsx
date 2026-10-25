@@ -1,9 +1,11 @@
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { Tick } from '@/shared/lib/music'
+import type { PlayedBeat } from './beats'
 import { initialPractice } from './practice-machine'
 import { TWO_BARS } from './testing/performances'
 import { useBeat } from './use-beat'
+import type { Practice } from './use-practice'
 
 /** The cursor on a beat group of the two bars, C and G, a beat group to each beat. */
 const standingOn = (beatGroup: number) => ({
@@ -46,8 +48,8 @@ describe('useBeat', () => {
   it('stands on the cursor’s beat until the music first sounds, and once Listen stops', () => {
     vi.useFakeTimers()
     const state = standingOn(2)
-    const { result, rerender } = renderHook(
-      ({ clock }: { clock: (() => Tick | null) | null }) => useBeat(TWO_BARS, { state, clock }),
+    const { result, rerender } = renderHook<PlayedBeat, { clock: Practice['clock'] }>(
+      ({ clock }) => useBeat(TWO_BARS, { state, clock }),
       { initialProps: { clock: () => null } },
     )
     act(() => vi.advanceTimersToNextFrame())
