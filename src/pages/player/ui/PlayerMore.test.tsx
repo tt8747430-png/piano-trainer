@@ -226,6 +226,20 @@ describe('the Player’s More (ADR 0099)', () => {
     )
   })
 
+  it('names the file’s tracks as the screen names the parts, in the learner’s language', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/silent', { locale: 'ru' })
+    const saved = catchDownloads()
+    await user.click(await screen.findByRole('button', { name: 'Ещё' }))
+    await user.click(await screen.findByRole('button', { name: 'Экспорт в MIDI' }))
+    const [file] = saved.files
+    if (!file) throw new Error('a file is saved')
+    const text = new TextDecoder().decode(await file.arrayBuffer())
+    // Silent Night's staff of no name of its own, by its place; then the hands.
+    for (const name of ['Нотоносец 1', 'Правая рука', 'Левая рука']) expect(text).toContain(name)
+    expect(text).not.toContain('Right hand')
+  })
+
   it('reads in Russian, its menu and the song’s information', async () => {
     const user = userEvent.setup()
     await renderApp('/play/my-1', { storage: withSong(), locale: 'ru' })

@@ -27,13 +27,23 @@ const LEFT_CHANNEL = 1
 const DRUMS = 9
 const LAST_CHANNEL = 15
 
+/**
+ * Each part's name as the screen names it, in the learner's language: a single staff's by its place,
+ * top down (ADR 0097: its own name, else its place's), and each hand's.
+ */
+export interface PartNames {
+  readonly staff: (place: number) => string
+  readonly rh: string
+  readonly lh: string
+}
+
 export interface PerformanceMidiOptions {
   /** Beats a minute in the meter's beat, a compound meter's a dotted quarter: the Player's tempo. */
   readonly tempo: number
   /** The music's name, the first track's. */
   readonly title: string
-  /** Each single staff's own name, top down (ADR 0097); a staff of none is named by its place. */
-  readonly staves?: readonly (string | undefined)[]
+  /** The parts' tracks' names. */
+  readonly names: PartNames
 }
 
 /** A part of the score as a track: its name, its channel, its notes (by index), the pedal's or not. */
@@ -51,10 +61,10 @@ function staffChannel(place: number): number {
 }
 
 /**
- * The parts top down as the score prints them, named as the screen names them: each single staff
- * (its own name, else its place's, "Staff 2"), then the right and the left hand, the pedal's.
+ * The parts top down as the score prints them, named as the screen names them: each single staff,
+ * then the right and the left hand, the pedal's.
  */
-function partsOf(performance: Performance, names: PerformanceMidiOptions['staves']): Part[] {
+function partsOf(performance: Performance, names: PartNames): Part[] {
   const playing = (part: (n: PerformanceNote) => boolean) =>
     performance.notes.flatMap((n, i) => (part(n) ? [i] : []))
   const staves = performance.notes.reduce(
@@ -63,19 +73,19 @@ function partsOf(performance: Performance, names: PerformanceMidiOptions['staves
   )
   return [
     ...Array.from({ length: staves }, (_, place) => ({
-      name: names?.[place] || `Staff ${place + 1}`,
+      name: names.staff(place),
       channel: staffChannel(place),
       notes: playing((n) => n.hand === 'staff' && (n.staff ?? 0) === place),
       pedal: false,
     })),
     {
-      name: 'Right hand',
+      name: names.rh,
       channel: RIGHT_CHANNEL,
       notes: playing((n) => n.hand === 'rh'),
       pedal: true,
     },
     {
-      name: 'Left hand',
+      name: names.lh,
       channel: LEFT_CHANNEL,
       notes: playing((n) => n.hand === 'lh'),
       pedal: true,
@@ -178,7 +188,7 @@ export function performanceMidi(
 
   return standardMidiFile([
     { events: music, end },
-    ...partsOf(performance, options.staves).map((part) => ({
+    ...partsOf(performance, options.names).map((part) => ({
       events: [
         { tick: 0, kind: 'name', text: part.name } satisfies TimedMidiEvent,
         ...noteEvents(notesOf(part), part.channel),

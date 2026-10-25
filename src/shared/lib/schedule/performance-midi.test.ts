@@ -8,7 +8,7 @@ import {
   type StaffNote,
 } from '@/shared/lib/arrangement'
 import { midi, note, parseChordSymbol, type NoteMarks } from '@/shared/lib/music'
-import { performanceMidi } from './performance-midi'
+import { performanceMidi, type PartNames } from './performance-midi'
 import { gainVelocity } from './velocity'
 
 const BEATS: EventPattern = {
@@ -184,9 +184,16 @@ const expected = (performance: Performance, part: (n: Performance['notes'][numbe
     }))
     .sort((a, b) => a.on - b.on || a.key - b.key)
 
+/** Each part named as an English screen names it: a staff by its own name, else its place's. */
+const NAMES: PartNames = {
+  staff: (place) => (place === 0 ? 'Voice' : `Staff ${place + 1}`),
+  rh: 'Right hand',
+  lh: 'Left hand',
+}
+
 describe('performanceMidi', () => {
   const file = readMidi(
-    performanceMidi(PICKUP_AND_THREE, { tempo: 90, title: 'Ромашки', staves: ['Voice'] }),
+    performanceMidi(PICKUP_AND_THREE, { tempo: 90, title: 'Ромашки', names: NAMES }),
   )
   const [conductor = [], staff = [], right = [], left = []] = file.tracks
 
@@ -251,7 +258,7 @@ describe('performanceMidi', () => {
 
   it('counts a compound meter’s beat as a dotted quarter', () => {
     const [music = [], right = []] = readMidi(
-      performanceMidi(SIX_EIGHT, { tempo: 60, title: '6/8' }),
+      performanceMidi(SIX_EIGHT, { tempo: 60, title: '6/8', names: NAMES }),
     ).tracks
     expect(signaturesOf(music)).toEqual([[0, 6, 8, 36]])
     // A dotted quarter a second: a quarter in 666,667 µs.
@@ -260,11 +267,15 @@ describe('performanceMidi', () => {
     expect(new Set(notesOf(right).map((n) => n.on))).toEqual(new Set([0, 720]))
   })
 
-  it('names a staff of no name by its place', () => {
+  it('names each part as the screen names it, in the learner’s language', () => {
     const names = readMidi(
-      performanceMidi(PICKUP_AND_THREE, { tempo: 90, title: 'Song' }),
+      performanceMidi(PICKUP_AND_THREE, {
+        tempo: 90,
+        title: 'Песня',
+        names: { staff: (place) => `Нотоносец ${place + 1}`, rh: 'Правая рука', lh: 'Левая рука' },
+      }),
     ).tracks.map(nameOf)
-    expect(names[1]).toBe('Staff 1')
+    expect(names).toEqual(['Песня', 'Нотоносец 1', 'Правая рука', 'Левая рука'])
   })
 
   it('strikes a note as loud as its dynamics and accents play it', () => {
@@ -273,7 +284,7 @@ describe('performanceMidi', () => {
     if (!n) throw new Error('no right hand')
     const struck = (marks?: NoteMarks) => {
       const notes = TWO.notes.map((each, i) => (i === at && marks ? { ...each, marks } : each))
-      const midiFile = performanceMidi({ ...TWO, notes }, { tempo: 90, title: '' })
+      const midiFile = performanceMidi({ ...TWO, notes }, { tempo: 90, title: '', names: NAMES })
       return notesOf(readMidi(midiFile).tracks[1] ?? []).find(
         (each) => each.key === n.midi && each.on === n.startTick * 20,
       )?.velocity
@@ -292,7 +303,7 @@ describe('performanceMidi', () => {
       ...TWO,
       notes: [...TWO.notes, { ...n, durationTicks: n.durationTicks / 2, velocity: n.velocity / 2 }],
     }
-    const midiFile = performanceMidi(doubled, { tempo: 90, title: '' })
+    const midiFile = performanceMidi(doubled, { tempo: 90, title: '', names: NAMES })
     const right = notesOf(readMidi(midiFile).tracks[1] ?? [])
     expect(right.filter((each) => each.key === n.midi && each.on === n.startTick * 20)).toEqual([
       {
