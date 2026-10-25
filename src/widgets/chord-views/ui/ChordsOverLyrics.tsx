@@ -23,9 +23,10 @@ const THIRD = 1 / 3
 const KEPT_AT = 1 / 4
 
 /**
- * Chords over lyrics (ADR 0099, Chordify's): under the title the beat strip, held at the top as the
- * song scrolls under it, then the song's chords as diagrams, then the song by section, each under its
- * name in spaced capitals, each line its chords as chips over its words (`LyricRow`). The line
+ * Chords over lyrics (ADR 0099, Chordify's): under the title the beat strip across the view, held at
+ * the top as the song scrolls under it, then in one column in its middle the song's chords as
+ * diagrams and the song by section, each under its name in spaced capitals, each line its chords as
+ * chips over its words (`LyricRow`). The line
  * playing is kept in sight, a third of the way down under the strip; the chip of the chord sounding
  * is filled. A chip, or a summary's diagram, opens the chord's sheet (`onChord`); a line or a beat
  * tapped takes the cursor there (`onGo`, the tick it is first played at).
@@ -97,31 +98,35 @@ export function ChordsOverLyrics({
       >
         <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} />
       </div>
-      <ChordSummary chords={summary} />
-      <div className="flex flex-col gap-3">
-        {lines.map((line, index) => {
-          const heading = headings[line.section]
-          const starts = index === 0 || lines[index - 1]?.section !== line.section
-          return (
-            <Fragment key={index}>
-              {starts && heading ? (
-                <h2 className="pt-3 text-sm tracking-[0.3em] text-muted-foreground uppercase">
-                  {heading}
-                </h2>
-              ) : null}
-              <LyricRow
-                line={line}
-                index={index}
-                performance={performance}
-                playing={index === playing}
-                sounding={chip?.line === index ? chip.segment : null}
-                looped={line.bars.some((each) => looped.has(each))}
-                onGo={() => onGo(line.from)}
-                onChord={onChord}
-              />
-            </Fragment>
-          )
-        })}
+      {/* The chords and the song in one column, in the middle of a wide screen as the Grid's chart
+          is, at a reading width; the strip above runs across the view. */}
+      <div className="mx-auto flex w-full max-w-prose flex-col gap-4">
+        <ChordSummary chords={summary} />
+        <div className="flex flex-col gap-3">
+          {lines.map((line, index) => {
+            const heading = headings[line.section]
+            const starts = index === 0 || lines[index - 1]?.section !== line.section
+            return (
+              <Fragment key={index}>
+                {starts && heading ? (
+                  <h2 className="pt-3 text-sm tracking-[0.3em] text-muted-foreground uppercase">
+                    {heading}
+                  </h2>
+                ) : null}
+                <LyricRow
+                  line={line}
+                  index={index}
+                  performance={performance}
+                  playing={index === playing}
+                  sounding={chip?.line === index ? chip.segment : null}
+                  looped={line.bars.some((each) => looped.has(each))}
+                  onGo={() => onGo(line.from)}
+                  onChord={onChord}
+                />
+              </Fragment>
+            )
+          })}
+        </div>
       </div>
       {/* Room to scroll the last line clear of the transport floating over the foot. */}
       <div aria-hidden className="h-(--float-room) shrink-0" />
