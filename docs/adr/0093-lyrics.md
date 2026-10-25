@@ -42,3 +42,8 @@ upper staff leaves them there (`lyricsOn: 'rh'`, saved with the music), where be
 added to a song with none takes them; the tune's staff taken away takes its lyrics with its notes. The sheet prints
 the verses under the staff whose notes sing them. The Lyrics field writes on that staff; on another it is greyed,
 its line saying where lyrics go (in a song with none yet too).
+
+**Later (2026-10-25, ADR 0097):** `lyricsOn` names a single staff by its place (`0`, the top one, the default where
+the score has one, so never written) or `'rh'`, the upper staff. A staff added over the one they are on moves them
+down with it; a staff taken away takes its words with its notes, the top single staff (else the upper staff) taking
+them next; a song with none yet takes them on its top single staff as one is added.

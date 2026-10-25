@@ -41,3 +41,8 @@ stay.
 **Later (2026-10-24, ADR 0094):** a lead sheet is one boolean, `leadSheet`, read only where the piece has a tune, so
 a score never hides every staff without `HIDDEN_ROWS` or `showsAStaff`. The chord names are the View's; New song's
 templates are Piano (the default), Melody and chords, and Piano with melody.
+
+**Later (2026-10-25, ADR 0097):** a lead sheet's single staves are staves like any other, as many as the learner
+adds. The piano is hidden from its name's menu (Hide the piano, while a single staff is in sight) and shown again from
+a single staff's (Show the piano); the last staff in sight is never removed or hidden. New song's choices are Piano
+(the default), A staff and piano, and A staff.

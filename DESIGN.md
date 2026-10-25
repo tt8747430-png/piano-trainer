@@ -468,7 +468,7 @@ whole with a chevron to that hand's list; a changed hand has a way back to the p
 pattern's line then reads "Left hand changed", "Right hand changed" or "Both hands changed" in ink in place of its
 idea, so a changed pattern never passes for the pattern itself), the inversion as five drawn segments (Nearest, then Root to 3rd as
 stacks of noteheads), the chord size as segments, and how it plays as a grid of toggle tiles (Chord positions,
-Metronome, Count-in, Swing, and a piece's Melody and Recording). What the sheet shows (finger numbers, named notes,
+Metronome, Count-in, Swing, and a piece's Tune and Recording). What the sheet shows (finger numbers, named notes,
 chord names, the staves, the layout) is the View menu's alone, behind its eye beside the Setup's sliders.
 
 A piece with a recording has a **Recording** toggle tile in its Setup, on by default; in another key it is
@@ -598,7 +598,7 @@ and how an interval is heard). A pop-up button stays for long lists and beside o
 - **Only what applies is offered:** a choice the thing shown cannot take is left out, never disabled and never
   explained (the Chords explorer's 7th under a triad, Added tones over an 11th chord, Alterations on a minor chord;
   Fingering for a scale with one). One exception, the Player's Setup lists: a pattern or figure the music cannot play
-  stays in its list, closed, with what it needs ("Needs a melody"), so the catalog reads the same over every piece.
+  stays in its list, closed, with what it needs ("Needs a tune"), so the catalog reads the same over every piece.
 - **Switch** (52 by 32px, a sand track in the control line; on: grass): a setting that is on or off.
 
 ### Cards and sheets
@@ -797,13 +797,13 @@ the title and Play), the sheet scrolling under it, then the
 
 - **The sheet:** each section's heading a pull-down (its kind, Join with the section before) over its lines, each chart
   line one line of grand staff with its bars numbered and its chord symbols as the Player's sheet sets them; the
-  melody and a written right hand on the treble, a written left hand on the bass, a staff with nothing in a bar left
+  single staves over the grand staff (ADR 0097), a written right hand on the treble, a written left hand on the bass, a staff with nothing in a bar left
   empty. The caret is the Player's cursor band (sky mist) on the layer's staff, as wide as the value chosen (over the
   chord symbols in Chords); bars chosen with Shift sit on a sand band; in a hand's layer, a bar the pattern plays reads
   **Pattern** in soft ink on that staff. A click puts the caret where it lands.
 - **Where the caret writes** is chosen by a click, as in a notation app: the chord row over a staff (with Chord names
   on), the treble staff or the bass staff; there is no control for it. The caret's line names the part first
-  ("Melody · Bar 1, beat 2 · rest"). **Chord names** is a toolbar toggle (a T, named beside it from 1024px): off, the
+  ("Staff 1 · Bar 1, beat 2 · rest"). **Chord names** is a toolbar toggle (a T, named beside it from 1024px): off, the
   chord symbols and their row leave the sheet and a click there writes the tune. The clef, key and time signature at
   each line's head open the song's settings (a sand wash on hover). A bar under the pointer takes a 5% ink wash, no
   ring, and no focus ring when clicked (the arrows move the caret). **The notes at the caret** on its staff are drawn

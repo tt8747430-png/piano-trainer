@@ -35,3 +35,8 @@ in the shared `music` namespace (`SheetLayoutField`), in the order Across · Dow
 
 **Later (2026-10-23, ADR 0091):** the tune's staff over the grand staff are a score's only staves; the more voices'
 staves added after this decision are gone.
+
+**Later (2026-10-25, ADR 0097):** the tune's staff is a staff like any other. A score has any number of single
+staves over the grand staff, each named by the learner; the View menu has a switch for each by its name (its place's,
+"Staff 2", where it has none), then the piano's upper and lower, the last in sight kept. Its Melody switch and
+`scoreView.melodyStaff` are gone (`pt-settings` version 8); the Player's tune is the top single staff.
