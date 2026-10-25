@@ -186,7 +186,7 @@ export function SheetLines({
         style={{ gap: LINE_GAP }}
       >
         <SheetTitle title={title} place="lines" />
-        {lines.map((each) => line(each))}
+        {lines.map(line)}
         {/* Room to scroll the last line clear of what floats over the sheet's foot (`--float-room`),
             a part of the list, so the sheet's own height is all it shows. */}
         <div aria-hidden className="h-(--float-room) shrink-0" style={{ marginTop: -LINE_GAP }} />

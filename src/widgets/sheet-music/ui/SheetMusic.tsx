@@ -70,10 +70,10 @@ function BarWidth({
  * A Performance as sheet music (spec §2.6): its title at its head, the page's heading (ADR 0094);
  * chord symbols over numbered bars, the playhead at the beat group now (moving with the music while
  * Listen plays, ADR 0096), the loop, bars to jump to; the tune on its own staff where the view asks,
- * the staves it hides left out. Laid out across (the
- * default), on one scrolling line under the title that takes the height left and engraves the staff
- * to fill it (`fitScale`) while two of its bars still show, so music read from a stand is as large as
- * the screen allows; or in the chart's lines, down the screen or on A4 pages (`SheetLines`).
+ * the staves it hides left out. Laid out across (the default), on one scrolling line under the title
+ * that takes the height left and engraves the staff to fill it (`fitScale`) while two of its bars
+ * still show, so music read from a stand is as large as the screen allows; or in the chart's lines,
+ * down the screen or on A4 pages (`SheetLines`).
  */
 export function SheetMusic({
   performance,
