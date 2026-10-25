@@ -197,6 +197,32 @@ describe('the practice machine', () => {
       })
     })
 
+    it('counts a pass played to its end, and none stepped through while stopped (ADR 0100)', () => {
+      const played = run(waiting('rh'), { type: 'jumpToBeatGroup', beatGroup: 3 }, { type: 'next' })
+      expect(played).toMatchObject({ outcome: 'finished', passes: 1 })
+      expect(run(played, { type: 'play' }).passes).toBe(1)
+      const stepped = run(
+        initialPractice(ONE_BAR, 'wait', 'rh'),
+        { type: 'jumpToBeatGroup', beatGroup: 3 },
+        { type: 'next' },
+      )
+      expect(stepped).toMatchObject({ outcome: 'finished', passes: 0 })
+    })
+
+    it('counts each lap of a loop as a pass, and none in Listen', () => {
+      const lap = (state: PracticeState) =>
+        run(state, { type: 'jumpToBeatGroup', beatGroup: 7 }, { type: 'advance' })
+      const looped = run(initialPractice(TWO_BARS, 'wait', 'rh', { first: 4, last: 7 }), {
+        type: 'play',
+      })
+      expect(lap(looped)).toMatchObject({ beatGroup: 4, passes: 1 })
+      expect(lap(lap(looped)).passes).toBe(2)
+      const listening = run(initialPractice(TWO_BARS, 'listen', 'both', { first: 4, last: 7 }), {
+        type: 'play',
+      })
+      expect(lap(listening).passes).toBe(0)
+    })
+
     it('stays at the start going back', () => {
       expect(run(waiting('rh'), { type: 'prev' }).beatGroup).toBe(0)
     })

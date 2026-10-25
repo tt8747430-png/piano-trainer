@@ -6,6 +6,7 @@ import { keyParam, note, noteName, noteParam, writtenKeyAccidentals } from '@/sh
 import { ButtonLink } from './ButtonLink'
 import { ChordSizeField } from './ChordSizeField'
 import { Dropdown } from './Dropdown'
+import { FactCard } from './FactCard'
 import { InversionChoice } from './InversionChoice'
 import { RankMark } from './RankMark'
 import { NamedSegmented } from './NamedSegmented'
@@ -628,6 +629,31 @@ describe('RowGroup', () => {
     expect(screen.getByRole('region', { name: 'References' })).toContainElement(
       screen.getByText('Chords'),
     )
+  })
+
+  it('heads itself a level down inside a section of its page', () => {
+    render(
+      <RowGroup title="One change at a time" level={3}>
+        <li>From C to G</li>
+      </RowGroup>,
+    )
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'One change at a time' }),
+    ).toBeInTheDocument()
+  })
+})
+
+describe('FactCard', () => {
+  it('names its fact under its icon, in a list of facts', () => {
+    render(
+      <dl>
+        <FactCard icon={Settings} name="Tempo">
+          72 BPM
+        </FactCard>
+      </dl>,
+    )
+    expect(screen.getByRole('term')).toHaveTextContent('Tempo')
+    expect(screen.getByRole('definition')).toHaveTextContent('72 BPM')
   })
 })
 

@@ -1,3 +1,4 @@
+import { keptLessons, type LessonKey } from './lessons'
 import { latestEvidence, stepCompletedBy } from './mastery'
 import { selectAnswers, selectIsLearned } from './selectors'
 import type { ProgressState, QuizAnswer, RunKey, RunResult } from './types'
@@ -38,3 +39,9 @@ export function withRun(state: ProgressState, key: RunKey, run: RunResult): Prog
     },
   }
 }
+
+/** The progress with a song lesson done on `at` (an ISO date), keeping the day it was first done. */
+export const withLesson = (state: ProgressState, key: LessonKey, at: string): ProgressState =>
+  state.lessons[key] !== undefined
+    ? state
+    : { ...state, lessons: keptLessons({ ...state.lessons, [key]: at }) }

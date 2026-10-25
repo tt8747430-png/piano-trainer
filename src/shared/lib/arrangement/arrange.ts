@@ -628,7 +628,8 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       durationTicks: placed.durationTicks,
       bar: placed.bar,
       ...(method ? { method } : {}),
-      pattern: pattern.id,
+      // A bar that writes both hands plays its notes, and no pattern.
+      ...(written?.rh && written.lh ? {} : { pattern: pattern.id }),
       ...(rh.kind === 'events' && !written?.rh && playsVoiced(rh) ? { hand: context.voiced } : {}),
     })
 

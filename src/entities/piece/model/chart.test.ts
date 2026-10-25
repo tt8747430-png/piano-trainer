@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { chordSymbol } from '@/shared/lib/music'
 import { testProgression, testSong } from '../testing/test-pieces'
-import { chartOf, hasChartPlan, patternsOfPiece, pieceFit, stavesOf } from './chart'
+import { chartOf, hasChartPlan, patternsOfPiece, pieceFit, sectionCount, stavesOf } from './chart'
 import { lyricsStaff } from './types'
 
 const firstSymbol = (...args: Parameters<typeof chartOf>) => {
@@ -25,6 +25,15 @@ describe('chartOf', () => {
       chordSize: { default: 'triads', choosable: false },
     })
     expect(firstSymbol(fixed, 'ninths')).toBe('Dm')
+  })
+})
+
+describe('sectionCount', () => {
+  it('counts a chart’s sections, a progression of one line as one', () => {
+    const verse = { kind: 'verse', lines: ['C G'] } as const
+    expect(sectionCount(testSong(['C'], { sections: [verse, verse, verse] }))).toBe(3)
+    expect(sectionCount(testProgression('ii:min:4 V:dom:4'))).toBe(1)
+    expect(sectionCount(testProgression([verse, verse]))).toBe(2)
   })
 })
 

@@ -37,6 +37,11 @@ const ROUTES = [
   ['/practice/accompaniment?show=seven-types', '/practice/accompaniment'],
   ['/practice/accompaniment/patterns/M1', '/practice/accompaniment/patterns/$patternRef'],
   ['/practice/accompaniment/studies/ex3', '/practice/accompaniment/studies/$pieceId'],
+  ['/songs/bz5/sections/2', '/songs/$pieceId/sections/$section'],
+  [
+    '/practice/accompaniment/studies/ex3/sections/1',
+    '/practice/accompaniment/studies/$pieceId/sections/$section',
+  ],
 ] as const
 
 async function open(path: string) {
@@ -214,6 +219,12 @@ describe('the app shell', () => {
       '/practice/accompaniment',
     ],
     ['/practice/accompaniment/studies/nothing', 'Go to Accompaniment', '/practice/accompaniment'],
+    ['/songs/bz5/sections/9', 'Go to Songs', '/songs'],
+    [
+      '/practice/accompaniment/studies/ex3/sections/9',
+      'Go to Accompaniment',
+      '/practice/accompaniment',
+    ],
     ['/play/exercise/nothing', 'Go to Exercises', '/practice/exercises'],
     ['/play/walk?kind=blues', 'Go to Scales and keys', '/practice/scales'],
     ['/check?of=nothing', 'Go to Learn', '/'],

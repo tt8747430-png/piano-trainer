@@ -19,6 +19,7 @@ const state: ProgressState = {
   answers: { 'chord:m7': [{ correct: true, at: '2026-09-24T10:00:00.000Z' }] },
   trainers: { 'name-chord:3': { runs: 2, last: 80, best: 90, bestStreak: 6 } },
   days: [],
+  lessons: {},
 }
 
 describe('progress selectors', () => {
