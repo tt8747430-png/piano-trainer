@@ -514,7 +514,8 @@ Flat, grouped by surface. Depth is the book's: a card paper on a darker paper, a
 press fill with sand or darken a shade (brightness 95%). Shadows appear only on what floats over the page:
 
 - **Popover** (12px corners, `shadow-md` with a 1px ring of ink at 10%): the MIDI, keyboard-settings, tempo and
-  hands popovers.
+  hands popovers, and a control's explanation from the ⓘ beside its name (`InfoTip`, a 16px icon in soft ink, ink
+  while open; ADR 0096: no line of explanation stands under a control).
 - **Floating banner** (`shadow-lg`, over its 1px line): the update banner.
 - **Slider thumb** (`shadow-md` with a 1px soft-line ring).
 - **Floating controls** (the floating buttons, a dial's card, the floating bar): the raised paper (`bg-raised`,
