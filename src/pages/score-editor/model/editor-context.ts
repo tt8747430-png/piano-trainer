@@ -37,9 +37,6 @@ export interface ScoreEditorValue {
     readonly chordNames: boolean
     /** The words under the tune, the View's switch (ADR 0093). */
     readonly lyrics: boolean
-    /** The verse the Lyrics field writes, from 0, while it is open; null while it is closed. */
-    readonly lyricsVerse: number | null
-    readonly openLyrics: (verse: number | null) => void
     /**
      * How fast Play plays, as a share of the song's tempo (1 its own): the learner's speed to check
      * what was written at, never the song's tempo (ADR 0089).
@@ -52,7 +49,8 @@ export interface ScoreEditorValue {
     readonly field: SheetField | null
     /**
      * Opens a field at the caret where it can open (the chord symbol's taking the caret to its beat in
-     * the chord row), or closes the one open (null), the caret back on the staff it came from.
+     * the chord row, the Lyrics field to the tune's note), or closes the one open (null), the caret
+     * back on the staff it came from.
      */
     readonly openField: (field: SheetField | null) => void
   }

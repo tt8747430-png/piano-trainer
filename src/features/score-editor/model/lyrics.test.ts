@@ -6,6 +6,7 @@ import {
   setSyllable,
   singsHere,
   sungAt,
+  sungFrom,
   sungNear,
   syllableAt,
   tuneLayer,
@@ -13,13 +14,13 @@ import {
 } from './lyrics'
 
 /** A tune of four quarters in bar 1, bar 2 silent; the piano written and silent. */
-const sung = draftOf({
-  key: 'C',
-  sections: [{ kind: 'verse', lines: ['C G'] }],
+const sungMusic = {
+  key: 'C' as const,
+  sections: [{ kind: 'verse' as const, lines: ['C G'] }],
   melody: 'C4/1 D4/1 E4/1 F4/1 | r/4',
   hands: { rh: 'r/4 | r/4', lh: 'r/4 | r/4' },
-  lyrics: ['Si-_ lent night,'],
-})
+}
+const sung = draftOf({ ...sungMusic, lyrics: ['Si-_ lent night,'] })
 const verses = (draft: typeof sung) => gatherLyrics(tuneNotes(draft)).map(writeLyrics)
 
 describe('the words in the editor (ADR 0093)', () => {
@@ -48,6 +49,15 @@ describe('the words in the editor (ADR 0093)', () => {
     expect(singsHere(upper, 'melody')).toBe(false)
     expect(verses(upper)).toEqual(['one two'])
     expect(writeDraft(upper)).toMatchObject({ lyrics: ['one two'], lyricsOn: 'rh' })
+  })
+
+  it('find where the Lyrics field opens: the tune’s note at a tick, else the next, else the last before (ADR 0096)', () => {
+    expect(sungFrom(sung, 24)).toBe(24)
+    // From bar 2's rest, with no note after it: the last before.
+    expect(sungFrom(sung, 96)).toBe(72)
+    const late = draftOf({ ...sungMusic, melody: 'r/4 | C4/4' })
+    expect(sungFrom(late, 0)).toBe(96)
+    expect(sungFrom(draftOf({ ...sungMusic, melody: 'r/4 | r/4' }), 0)).toBeNull()
   })
 
   it('count the verses, find the note singing at a tick and the tune’s notes on either side', () => {

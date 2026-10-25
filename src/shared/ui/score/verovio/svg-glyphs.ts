@@ -65,3 +65,26 @@ export const union = (boxes: readonly (Extent | null)[]): Extent | null =>
             },
     null,
   )
+
+/** A text's character, as wide as Verovio reckons its text font's: a share of its size. */
+const CHAR = 0.6
+/** How far a text's letters reach over its baseline and under it, as shares of its size. */
+const ASCENT = 0.75
+const DESCENT = 0.25
+
+/**
+ * Where a text Verovio printed stands (a staff's name, a syllable), in its units: from its x (its
+ * start, or its end where it is set to end there) and its baseline, as wide as its letters at its
+ * size and as tall as its font reaches; none for an empty one.
+ */
+export function textBox(text: Element | null | undefined, from: 'start' | 'end'): Extent | null {
+  const [x] = numbers(text?.getAttribute('x') ?? null)
+  const [y] = numbers(text?.getAttribute('y') ?? null)
+  const sized = [...(text?.querySelectorAll('tspan[font-size]') ?? [])].at(-1)
+  const [size] = numbers(sized?.getAttribute('font-size') ?? null)
+  const letters = text?.textContent?.trim().length ?? 0
+  if (x === undefined || y === undefined || !size || letters === 0) return null
+  const width = letters * CHAR * size
+  const left = from === 'start' ? x : x - width
+  return { left, right: left + width, top: y - ASCENT * size, bottom: y + DESCENT * size }
+}

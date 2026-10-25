@@ -168,7 +168,7 @@ describe('shortcutOf', () => {
     expect(shortcutOf(press('Escape', 'Escape'), 'melody')).toEqual({ type: 'deselect' })
   })
 
-  it('opens the chord-symbol field with Cmd or Ctrl and K, from any row, as Flat’s (ADR 0096)', () => {
+  it('opens the chord-symbol field with Cmd or Ctrl and K, the Lyrics field with L, from any row, as Flat’s (ADR 0096)', () => {
     for (const layer of ['chords', 'melody', 'lh'] as const) {
       expect(shortcutOf(press('KeyK', 'k', { metaKey: true }), layer)).toEqual({
         type: 'field',
@@ -178,9 +178,14 @@ describe('shortcutOf', () => {
         type: 'field',
         field: 'chord',
       })
+      expect(shortcutOf(press('KeyL', 'l', { metaKey: true }), layer)).toEqual({
+        type: 'field',
+        field: 'lyrics',
+      })
     }
-    // K alone is the piano's.
+    // K and L alone are the piano's.
     expect(shortcutOf(press('KeyK', 'k'), 'melody')).toBeNull()
+    expect(shortcutOf(press('KeyL', 'l'), 'melody')).toBeNull()
   })
 
   it('cycles the editing modes with I, a letter typing leaves free, on a staff alone (ADR 0092)', () => {

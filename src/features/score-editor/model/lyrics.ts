@@ -10,6 +10,16 @@ export const tuneLayer = (draft: Draft): NoteLayer => draft.lyricsOn
 export const singsHere = (draft: Draft, layer: Layer): boolean =>
   layer === tuneLayer(draft) && (layer === 'melody' ? draft.melodyStaff : !draft.leadSheet)
 
+/**
+ * Where the Lyrics field opens from a tick (ADR 0096): the tune's note there, else the next one, else
+ * the last before; none where the tune has no note.
+ */
+export function sungFrom(draft: Draft, tick: Tick): Tick | null {
+  const tune = tuneNotes(draft)
+  const from = tune.find((n) => n.startTick >= tick) ?? tune.at(-1)
+  return from?.startTick ?? null
+}
+
 /** How many verses the song has: as many as any note of its tune sings. */
 export const verseCount = (draft: Draft): number => gatherLyrics(tuneNotes(draft)).length
 

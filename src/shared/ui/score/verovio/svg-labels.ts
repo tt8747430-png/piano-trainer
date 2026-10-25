@@ -1,11 +1,5 @@
 import type { Extent, ScoreLayout, StaffLabel } from '../layout'
-import { numbers } from './svg-glyphs'
-
-/** A name's character, as wide as Verovio reckons its text font's: a share of its size. */
-const CHAR = 0.6
-/** How far a name's letters reach over its baseline and under it, as shares of its size. */
-const ASCENT = 0.75
-const DESCENT = 0.25
+import { textBox } from './svg-glyphs'
 
 /** The middle of the staves' boxes given, top to bottom; none where none is drawn. */
 function middleOf(boxes: readonly ({ top: number; bottom: number } | undefined)[]): number | null {
@@ -29,18 +23,9 @@ export function labelsOf(
   const tune = middleOf([staves.melody])
   const piano = middleOf([staves.treble, staves.bass])
   return [...svg.querySelectorAll('g.label text')].flatMap((text) => {
-    const [x] = numbers(text.getAttribute('x'))
-    const [y] = numbers(text.getAttribute('y'))
-    const sized = [...text.querySelectorAll('tspan[font-size]')].at(-1)
-    const [size] = numbers(sized?.getAttribute('font-size') ?? null)
-    const name = text.textContent?.trim() ?? ''
-    if (x === undefined || y === undefined || !size || name === '') return []
-    const drawn = at({
-      left: x - name.length * CHAR * size,
-      right: x,
-      top: y - ASCENT * size,
-      bottom: y + DESCENT * size,
-    })
+    const printed = textBox(text, 'end')
+    if (!printed) return []
+    const drawn = at(printed)
     // No further left than the engraving's edge.
     const box = { ...drawn, left: Math.max(0, drawn.left) }
     const middle = (box.top + box.bottom) / 2

@@ -31,12 +31,13 @@ export function CaretLine() {
   })()
   // Where the caret writes first: a click on the sheet chose it, so the line says which part it is;
   // a field open, what it types; the words being written, the verse.
+  const { field } = view
   const part =
-    view.field?.kind === 'chord'
+    field?.kind === 'chord'
       ? t('chord.symbol')
-      : view.lyricsVerse === null
-        ? t(`layers.${layer}`)
-        : `${t('lyrics.label')} · ${t('lyrics.verse', { n: Math.min(view.lyricsVerse, verseCount(draft)) + 1 })}`
+      : field?.kind === 'lyrics'
+        ? `${t('lyrics.label')} · ${t('lyrics.verse', { n: Math.min(field.verse, verseCount(draft)) + 1 })}`
+        : t(`layers.${layer}`)
   const placed = said.kind === 'end' ? where : `${part} · ${where}`
   const text = said.mode
     ? `${placed} · ${t('caret.mode', { mode: t(`mode.${said.mode}`) })}`

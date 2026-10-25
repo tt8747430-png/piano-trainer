@@ -184,6 +184,29 @@ describe('a line with words (ADR 0093)', () => {
     expect(second / 18).toBeLessThan(bass.top)
   }, 20_000)
 
+  it('reads each syllable printed: its staff, its note’s tick, its verse and its box (ADR 0096)', async () => {
+    const { layout } = await read(worded)
+    const syllables = layout.syllables ?? []
+    expect(syllables.map(({ staff, tick, verse }) => [staff, tick, verse])).toEqual([
+      ['treble', 0, 0],
+      ['treble', 0, 1],
+      ['treble', 48, 0],
+      ['treble', 48, 1],
+    ])
+    const { treble, bass } = layout.staves
+    const [si, stil, lent] = syllables
+    const head = (layout.heads ?? []).find((each) => each.tick === 48 && each.staff === 'treble')
+    if (!treble || !bass || !si || !stil || !lent || !head) throw new Error('the words')
+    // Under the upper staff, the second verse under the first, over the lower staff.
+    expect(si.top).toBeGreaterThan(treble.bottom)
+    expect(stil.top).toBeGreaterThanOrEqual(si.bottom - 1)
+    expect(stil.bottom).toBeLessThan(bass.top)
+    // Under its note, as wide as its letters.
+    expect(lent.left).toBeLessThan(head.right)
+    expect(lent.right).toBeGreaterThan(head.left)
+    expect(lent.right - lent.left).toBeGreaterThan(si.right - si.left)
+  }, 20_000)
+
   it('moves the lower staff down to hold the verses where two staves’ room does not', async () => {
     const many = notate({
       key: { tonic: note('C'), minor: false },

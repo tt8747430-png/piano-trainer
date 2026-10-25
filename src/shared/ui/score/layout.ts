@@ -31,6 +31,8 @@ export interface ScoreLayout {
   readonly signs?: readonly Sign[]
   /** The staves' names printed at a score's first line's head (ADR 0094). */
   readonly labels?: readonly StaffLabel[]
+  /** Each syllable printed under its note (ADR 0093): where a tap types it (ADR 0096). */
+  readonly syllables?: readonly Lyric[]
 }
 
 /** A box on the engraving, in its px: its left, right, top and foot. */
@@ -76,6 +78,13 @@ export interface Sign extends Extent {
   readonly staff: StaffId
   /** The line's measure it stands in, from 0. */
   readonly measure: number
+}
+
+/** A syllable printed under its note in a verse (ADR 0093): the note's staff and tick, its verse from 0, its box. */
+export interface Lyric extends Extent {
+  readonly staff: StaffId
+  readonly tick: Tick
+  readonly verse: number
 }
 
 /**

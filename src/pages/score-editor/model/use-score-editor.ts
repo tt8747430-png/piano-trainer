@@ -25,6 +25,7 @@ import type { EditSearch } from './edit-search'
 import { savedMusic, savingTo, type EditorTarget } from './editor-target'
 import { layerInSight, rowsInSight } from './seen-draft'
 import { shortcutOf } from './shortcuts'
+import { fieldOf } from './fields'
 import { useEditorTakes } from './use-editor-takes'
 import { useOpenField } from './use-open-field'
 
@@ -59,8 +60,6 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   // How the score is shown is the View's, the Player's too (ADR 0090, 0094): its layout (the music
   // stands still between Practise and Edit), its words (ADR 0093), staves and chord symbols.
   const shown = useSettings(selectScoreView)
-  // The Lyrics field, on the verse it writes, while the learner has it open.
-  const [lyricsVerse, openLyrics] = useState<number | null>(null)
   /** The music last saved here, or read: what the store holds unless another tab saved since. */
   const [saved] = useState(() => ({ music: target.music }))
   // A change the song's music cannot be written with: said so, the music last saved kept, until a
@@ -101,7 +100,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   const playback = usePlayback<'piece'>()
   // The learner's speed for Play, a share of the song's tempo: this visit's, never saved.
   const [speed, setSpeed] = useState(1)
-  // The field open over the sheet, typing a chord symbol where it is printed (ADR 0096).
+  // The field open over the sheet, typing a chord symbol or a syllable where it prints (ADR 0096).
   const { field, openField } = useOpenField(store, shown)
   const close = useCloseTo(target)
   // The learner's own title, saved with the music (ADR 0094); else the catalog's, in their language.
@@ -160,7 +159,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     if (!shortcut) return
     if (shortcut.type === 'field') {
       event.preventDefault()
-      openField({ kind: shortcut.field })
+      openField(fieldOf(shortcut.field))
       return
     }
     // Escape with nothing chosen is the screen's (a sheet's, a menu's), not the editor's.
@@ -202,8 +201,6 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       // The chord symbols shown or not are the View's (ADR 0094).
       chordNames: shown.chordNames,
       lyrics: shown.lyrics,
-      lyricsVerse,
-      openLyrics,
       speed,
       setSpeed,
       layout: shown.layout,

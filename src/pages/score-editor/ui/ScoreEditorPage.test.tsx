@@ -1827,14 +1827,17 @@ describe('the words under the tune (ADR 0093)', () => {
       hands: SILENT_HANDS,
     })
 
-  it('writes a verse syllable by syllable from the Text & pedal section, the caret line naming the verse', async () => {
+  it('types a verse syllable by syllable under the notes from Cmd+L, the caret line naming the verse (ADR 0096)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: sung() })
-    const text = await openCategory(user, 'Text & pedal')
-    await user.click(within(text).getByRole('button', { name: 'Lyrics' }))
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Melody · Bar 1/))
+    await user.keyboard('{Meta>}l{/Meta}')
     const field = await screen.findByRole('textbox', { name: 'Syllable' })
-    expect(field).toHaveFocus()
+    await waitFor(() => expect(field).toHaveFocus())
     expect(screen.getByRole('status')).toHaveTextContent(/^Lyrics · Verse 1 · Bar 1/)
+    // Its place is the sheet's: under the note on the tune's staff.
+    const place = document.querySelector('[data-slot="field-anchor"]')
+    expect(place?.closest('[data-slot="sheet-line"]')).not.toBeNull()
     await user.keyboard('A-')
     // The dash saves the syllable and moves on to the next note of the tune.
     await waitFor(() => expect(piecesStore.getState().songs[0]?.lyrics).toEqual(['A- ~ ~ ~']))
@@ -1858,6 +1861,17 @@ describe('the words under the tune (ADR 0093)', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/^Melody · Bar 2/)
     // The verse is engraved under the tune.
     await waitFor(() => expect(document.querySelectorAll('.syl').length).toBeGreaterThan(0))
+  })
+
+  it('opens the Lyrics field from the palette’s one key, under the tune’s next note from a rest (ADR 0096)', async () => {
+    const user = userEvent.setup()
+    await renderApp('/edit/my-1', {
+      storage: withSong({ melody: 'r/4 | A4/4 | B4/4 | C5/4', hands: SILENT_HANDS }),
+    })
+    const text = await openCategory(user, 'Text & pedal')
+    await user.click(within(text).getByRole('button', { name: 'Lyrics' }))
+    expect(await screen.findByRole('textbox', { name: 'Syllable' })).toHaveValue('')
+    expect(screen.getByRole('status')).toHaveTextContent(/^Lyrics · Verse 1 · Bar 2, beat 1 · A4/)
   })
 
   it('is greyed off the staff the lyrics are on, saying where they are', async () => {

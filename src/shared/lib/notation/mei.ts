@@ -339,7 +339,7 @@ class Writer {
     const single = event.notes.length === 1
     const id = single ? `n-${staff}-${event.tick}-0` : `c-${staff}-${event.tick}`
     const below = staff === 'bass'
-    const verses = event.lyrics ? this.verses(event.lyrics) : ''
+    const verses = event.lyrics ? this.verses(event.lyrics, `${staff}-${event.tick}`) : ''
     const inside = artics + verses
     const notes = event.notes.map((written, i) => {
       const ends = tied.delete(written.midi)
@@ -383,11 +383,12 @@ class Writer {
   }
 
   /**
-   * A note's syllables as verses (MEI 5): each syllable's place in its word (`wordpos`: its start,
-   * middle or end, none for a whole word) and what joins it to the next note (`con`: a dash to its
-   * word's next syllable, an underscore while it is held).
+   * A note's syllables as verses (MEI 5): each named by its note's staff and tick and its verse
+   * (`v-<staff>-<tick>-<verse>`, where a sheet finds it printed, ADR 0096), with its place in its word
+   * (`wordpos`: its start, middle or end, none for a whole word) and what joins it to the next note
+   * (`con`: a dash to its word's next syllable, an underscore while it is held).
    */
-  private verses(lyrics: NoteLyrics): string {
+  private verses(lyrics: NoteLyrics, at: string): string {
     return lyrics
       .map((syllable, verse) => {
         if (!syllable) return ''
@@ -396,7 +397,7 @@ class Writer {
         const wordpos = open ? (syllable.hyphen ? 'm' : 't') : syllable.hyphen ? 'i' : null
         const con = syllable.hyphen ? 'd' : syllable.held > 0 ? 'u' : null
         const attrs = [wordpos ? ` wordpos="${wordpos}"` : '', con ? ` con="${con}"` : ''].join('')
-        return `<verse n="${verse + 1}"><syl${attrs}>${escape(syllable.text)}</syl></verse>`
+        return `<verse xml:id="v-${at}-${verse}" n="${verse + 1}"><syl${attrs}>${escape(syllable.text)}</syl></verse>`
       })
       .join('')
   }

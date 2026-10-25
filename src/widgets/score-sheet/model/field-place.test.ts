@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { chordLabelWidth } from '@/shared/lib'
-import { xAtTick } from '@/shared/ui/score'
-import { chordFieldBox, chordRowTick, printedChords } from './field-place'
+import { xAtTick, type Lyric } from '@/shared/ui/score'
+import { chordFieldBox, chordRowTick, lyricAt, lyricsFieldBox, printedChords } from './field-place'
 
 const layout = {
   width: 300,
@@ -57,5 +57,64 @@ describe('the chord-symbol field’s place (ADR 0096)', () => {
   it('takes a click on the empty row for the beat nearest it', () => {
     expect(chordRowTick(printed, places, 196, xOf)).toBe(144)
     expect(chordRowTick(printed, places, 160, xOf)).toBe(120)
+  })
+})
+
+describe('the Lyrics field’s place (ADR 0096)', () => {
+  const syllable = (tick: number, verse: number, left: number, top: number): Lyric => ({
+    staff: 'melody',
+    tick,
+    verse,
+    left,
+    right: left + 24,
+    top,
+    bottom: top + 22,
+  })
+  const sung = {
+    ...layout,
+    staves: { melody: { top: 10, bottom: 50 }, treble: { top: 150, bottom: 190 } },
+    heads: [
+      {
+        id: 'n-melody-96-0',
+        staff: 'melody' as const,
+        tick: 96,
+        index: 0,
+        left: 110,
+        right: 122,
+        top: 30,
+        bottom: 40,
+      },
+    ],
+    syllables: [syllable(0, 0, 32, 64), syllable(0, 1, 32, 86), syllable(96, 0, 104, 64)],
+  }
+
+  it('stands on the syllable printed under the note in the verse', () => {
+    expect(lyricsFieldBox(sung, 'melody', 96, 0)).toEqual({
+      left: 104,
+      top: 64,
+      width: 24,
+      height: 22,
+    })
+  })
+
+  it('stands under the note on its verse’s line where it sings nothing yet', () => {
+    // Verse 2's line, where its first syllable stands; under the note's head.
+    expect(lyricsFieldBox(sung, 'melody', 96, 1)).toMatchObject({ left: 110, top: 86, height: 22 })
+    // A verse not begun on the line: a verse's height under the last one.
+    expect(lyricsFieldBox(sung, 'melody', 96, 2)).toMatchObject({ top: 86 + 22 })
+  })
+
+  it('stands under the staff where no word is printed on the line', () => {
+    const bare = { ...sung, syllables: [] }
+    const box = lyricsFieldBox(bare, 'melody', 96, 0)
+    expect(box.top).toBeGreaterThan(50)
+    expect(box.top).toBeLessThan(150)
+    expect(lyricsFieldBox(bare, 'melody', 96, 1).top).toBeGreaterThan(box.top)
+  })
+
+  it('finds the syllable a tap is on, by its note and verse', () => {
+    expect(lyricAt(sung, { x: 40, y: 90 })).toMatchObject({ tick: 0, verse: 1 })
+    expect(lyricAt(sung, { x: 110, y: 70 })).toMatchObject({ tick: 96, verse: 0 })
+    expect(lyricAt(sung, { x: 80, y: 70 })).toBeNull()
   })
 })

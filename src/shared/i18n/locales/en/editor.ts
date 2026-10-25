@@ -35,8 +35,11 @@ export const editor = {
     chooseNote: 'Choose a note first: these change the notes chosen.',
     staff: 'These are for notes: tap a note on a staff.',
     hand: 'For the piano’s staves: tap a note on the upper or lower staff.',
-    // The chord-symbol field opens in the chord symbols' row, which the View may hide (ADR 0096).
+    // The chord-symbol and Lyrics fields write what the View may hide (ADR 0096).
     chordsHidden: 'Chord symbols are hidden: show them from View.',
+    lyricsHidden: 'Lyrics are hidden: show them from View.',
+    // The Lyrics field opens under a note of the tune.
+    noTune: 'Write the tune’s notes first: the words go under them.',
     chordNote: 'Choose one note of the chord: each takes its own finger.',
     // A value's dot, or a triplet, that the song's meter cannot write.
     noDot: 'This value is too short to dot.',
@@ -122,14 +125,13 @@ export const editor = {
   },
   expressions: 'Expression text',
   pedal: 'Pedal',
-  // The words under the tune (ADR 0093), one syllable at a time in the Lyrics field.
+  // The words under the tune (ADR 0093), one syllable at a time in the Lyrics field under its note.
   lyrics: {
     label: 'Lyrics',
     field: 'Syllable',
     verse: 'Verse {{n}}',
     nextVerse: 'Next verse',
     previousVerse: 'Previous verse',
-    noNote: 'No note of the tune here',
   },
   // An expression's key shows the word as printed; what it asks is its tooltip (ADR 0096).
   meaning: {
@@ -367,6 +369,7 @@ export const editor = {
     octave: 'An octave up, down',
     delete: 'Delete',
     chord: 'Type a chord symbol',
+    lyrics: 'Type the lyrics',
     undo: 'Undo',
     redo: 'Redo',
     clip: 'Copy, cut, paste what is chosen',

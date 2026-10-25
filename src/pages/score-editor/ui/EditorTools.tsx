@@ -22,7 +22,14 @@ import { NoteKeys, PitchKeys, QuickValues } from './NoteKeys'
 import { CategoryIcon } from './palette-icons'
 import { CaptionGrid, PaletteSection } from './palette-keys'
 import { PaletteReason } from './palette-reason'
-import { ClefKeys, KeySignatureKeys, RepeatKeys, TextKeys, TimeSignatureKeys } from './ScoreKeys'
+import {
+  ClefKeys,
+  KeySignatureKeys,
+  RepeatKeys,
+  TextKeys,
+  TimeSignatureKeys,
+  WordKeys,
+} from './ScoreKeys'
 
 /** Why a category's tools are greyed where the caret writes, or nothing where they work. */
 function useReason(category: PaletteCategory): string | undefined {
@@ -118,6 +125,7 @@ function Sections() {
       </Section>
       <Section category="text">
         <TextKeys />
+        <WordKeys />
       </Section>
       <Section category="fingering">
         <FingeringKeys />

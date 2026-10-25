@@ -14,26 +14,32 @@ import type { SheetField as Field } from '@/widgets/score-sheet'
 type Kind = Field['kind']
 
 /**
- * Where each field stands at the place the sheet drew for it (ADR 0096): the chord symbol's over the
- * chord row, covering the symbol printed there, its suggestions under it (over it where it is flipped
- * above, the field still on the row).
+ * On what it types: over the place the sheet drew, covering what is printed there (a chord symbol, a
+ * syllable), what it offers under it (over it where it is flipped above, the field still on the
+ * place).
  */
-const PLACES = {
-  chord: {
-    side: 'bottom',
-    align: 'start',
-    sideOffset: ({ anchor }: { anchor: { height: number } }) => -anchor.height,
-  },
-} as const satisfies Readonly<Record<Kind, object>>
+const ON = {
+  side: 'bottom',
+  align: 'start',
+  sideOffset: ({ anchor }: { anchor: { height: number } }) => -anchor.height,
+} as const
 
-/** The face each field types in, as the sheet prints what it writes: a chord symbol's serif. */
+/**
+ * Where each field stands at the place the sheet drew for it (ADR 0096): the chord symbol's over the
+ * chord row, the Lyrics field on its verse's line under the note.
+ */
+const PLACES = { chord: ON, lyrics: ON } as const satisfies Readonly<Record<Kind, object>>
+
+/** The face each field types in, as the sheet prints what it writes: a chord symbol's, a verse's. */
 const FACES = {
   chord: 'w-36 font-display font-semibold',
+  lyrics: 'w-32 font-serif',
 } as const satisfies Readonly<Record<Kind, string>>
 
 /** What a phone's own keyboard offers for each field as it opens. */
 const INPUT_MODES = {
   chord: 'text',
+  lyrics: 'text',
 } as const satisfies Readonly<Record<Kind, 'text' | 'numeric'>>
 
 /** The selection covers the whole text, or is a caret at the end (`end`) or the start. */
@@ -52,8 +58,8 @@ function atEdge(input: HTMLInputElement, end: boolean): boolean {
  * phone, whose own keyboard opens. What it holds is chosen as it opens and at each place it goes to,
  * so what is typed writes over it. Enter, or → at the text's end, goes on (`onGo(1)`); ← at its
  * start goes back (`onGo(-1)`); its own keys come first (`onKey`); Escape or a tap elsewhere leaves
- * it (`onClose`). Marked while what was typed cannot be written (`error`). What it offers to tap
- * stands under it (`children`).
+ * it (`onClose`). Marked while what was typed cannot be written (`error`). Its own controls stand
+ * beside it (`beside`: the verses), what it offers to tap under it (`children`).
  */
 export function SheetField({
   kind,
@@ -66,6 +72,7 @@ export function SheetField({
   onGo,
   onClose,
   onKey,
+  beside,
   children,
 }: {
   kind: Kind
@@ -81,6 +88,7 @@ export function SheetField({
   onClose: () => void
   /** The field's own keys, before going on and back: true where it took the key. */
   onKey?: (event: KeyboardEvent<HTMLInputElement>) => boolean
+  beside?: ReactNode
   children?: ReactNode
 }) {
   const id = useId()
@@ -123,23 +131,26 @@ export function SheetField({
         finalFocus={false}
         className="w-auto max-w-[min(24rem,calc(100vw-1rem))] gap-1.5 p-1.5 data-[side=top]:flex-col-reverse"
       >
-        <Input
-          ref={opened}
-          aria-label={label}
-          aria-invalid={error !== undefined}
-          aria-errormessage={error === undefined ? undefined : errorId}
-          title={error}
-          value={text}
-          inputMode={INPUT_MODES[kind]}
-          enterKeyHint="next"
-          autoCapitalize="off"
-          autoComplete="off"
-          autoCorrect="off"
-          spellCheck={false}
-          onChange={(event) => onText(event.target.value)}
-          onKeyDown={onKeyDown}
-          className={cn('h-11 rounded-xl bg-card px-2 text-xl md:text-xl', FACES[kind])}
-        />
+        <div className="flex items-center gap-1">
+          <Input
+            ref={opened}
+            aria-label={label}
+            aria-invalid={error !== undefined}
+            aria-errormessage={error === undefined ? undefined : errorId}
+            title={error}
+            value={text}
+            inputMode={INPUT_MODES[kind]}
+            enterKeyHint="next"
+            autoCapitalize="off"
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
+            onChange={(event) => onText(event.target.value)}
+            onKeyDown={onKeyDown}
+            className={cn('h-11 rounded-xl bg-card px-2 text-xl md:text-xl', FACES[kind])}
+          />
+          {beside}
+        </div>
         {error === undefined ? null : (
           <span id={errorId} className="sr-only">
             {error}

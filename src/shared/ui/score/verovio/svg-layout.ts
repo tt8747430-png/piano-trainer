@@ -5,6 +5,7 @@ import { headsOf } from './svg-heads'
 import { numbers } from './svg-glyphs'
 import { labelsOf } from './svg-labels'
 import { signsOf } from './svg-signs'
+import { syllablesOf } from './svg-syllables'
 
 /**
  * Where everything stands on a line Verovio engraved (ADR 0078), in CSS px, read from the SVG's own
@@ -12,7 +13,8 @@ import { signsOf } from './svg-signs'
  * (`m-<index>`, its first staff's lines), each staff drawn (`staves`, top down) from its lines in the
  * first measure, each onset from its notes' and rests' heads (`n-`, `r-` and the hidden `h-<staff>-<tick>`),
  * each head's box with its chord's column (`headsOf`, ADR 0088), each clef, key and time signature
- * printed (`signsOf`, ADR 0094) and the staves' names at a first line's head (`labelsOf`).
+ * printed (`signsOf`, ADR 0094), the staves' names at a first line's head (`labelsOf`) and each
+ * syllable printed under its note (`syllablesOf`, ADR 0096).
  */
 export function layoutOf(
   svg: SVGSVGElement,
@@ -87,6 +89,7 @@ export function layoutOf(
   const { heads, columns, rests } = headsOf(svg, space, inPx)
   const signs = signsOf(svg, space, inPx, staves, (index) => laid[index]?.notes ?? Infinity)
   const labels = labelsOf(svg, inPx, placed)
+  const syllables = syllablesOf(svg, inPx)
   return {
     width,
     height,
@@ -100,5 +103,6 @@ export function layoutOf(
     rests,
     signs,
     labels,
+    syllables,
   }
 }

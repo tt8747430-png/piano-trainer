@@ -1,98 +1,116 @@
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
+import type { KeyboardEvent, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { sungAt, sungNear, syllableAt, verseCount } from '@/features/score-editor'
-import { cn } from '@/shared/lib'
-import { ToolKey } from '@/shared/ui'
-import { InputGroup, InputGroupInput } from '@/shared/ui/primitives/input-group'
+import { Button } from '@/shared/ui/primitives/button'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { useFieldText } from '../model/use-field-text'
+import { SheetField } from './SheetField'
 
-/** The keys that save the syllable and move to the tune's next note, as Flat's Lyrics field does. */
-const ON = new Set([' ', 'ArrowRight', 'Enter'])
 /** A mark typed at the end of a syllable saves it with the mark and moves on: `-` a word going on, `_` a melisma. */
 const MARKS = new Set(['-', '_'])
 
+/** A step to another verse beside the field: a tap leaves the cursor in it. */
+function VerseStep({
+  label,
+  disabled,
+  onClick,
+  children,
+}: {
+  label: string
+  disabled: boolean
+  onClick: () => void
+  children: ReactNode
+}) {
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      aria-label={label}
+      title={label}
+      disabled={disabled}
+      onPointerDown={(event) => event.preventDefault()}
+      onClick={onClick}
+      className="rounded-xl"
+    >
+      {children}
+    </Button>
+  )
+}
+
 /**
- * The words under the tune, written one syllable at a time (ADR 0093, Flat's Lyrics): the field
- * shows what the tune's note at the caret sings in the verse, and saves it as the caret leaves.
- * Space, → or Enter save and go to the next note of the tune, ← back; `-` or `_` typed save with the
- * mark and go on; ↓ the next verse (a new one past the last), ↑ the one before; Escape closes.
- * Greyed where the caret stands on no note of the tune (a rest, an empty place).
+ * The words under the tune, typed one syllable at a time under the note they are sung on (ADR 0093,
+ * 0096, Flat's Lyrics): the field stands on the caret's note's syllable in its verse, on the staff the
+ * words are on, and writes what it holds there as it moves on or is left. Space, → or Enter go to the
+ * tune's next note, ← back; `-` or `_` typed save with the mark and go on; ↓ the next verse (a new
+ * one past the last), ↑ the one before, as its steps beside it do; Escape out.
  */
-export function LyricsField({ verse }: { verse: number }) {
+export function LyricsField({ anchor, verse }: { anchor: HTMLElement | null; verse: number }) {
   const { t } = useTranslation('editor')
-  const { actions, view } = useScoreEditorContext()
+  const {
+    actions: { dispatch },
+    view,
+  } = useScoreEditorContext()
   const draft = useEditorState((state) => state.draft)
   const caret = useEditorState((state) => state.caret)
   const layer = useEditorState((state) => state.layer)
-  const note = sungAt(draft, caret)
   const shown = syllableAt(draft, caret, verse)
   const count = verseCount(draft)
-  const [text, setText] = useState(shown)
-  const field = useRef<HTMLInputElement | null>(null)
-  useEffect(() => field.current?.focus(), [])
+  const at = `${caret} ${verse}`
+  const [text, setText] = useFieldText(shown, at)
   const save = (typed = text) => {
-    if (note && typed.trim() !== shown) actions.dispatch({ type: 'syllable', verse, text: typed })
+    if (sungAt(draft, caret) && typed.trim() !== shown)
+      dispatch({ type: 'syllable', verse, text: typed })
   }
   const go = (direction: -1 | 1, typed = text) => {
     save(typed)
     const next = sungNear(draft, caret, direction)
-    if (next !== null) actions.dispatch({ type: 'place', tick: next, layer })
+    if (next !== null) dispatch({ type: 'place', tick: next, layer })
   }
   const toVerse = (next: number) => {
     save()
-    view.openLyrics(Math.max(0, next))
+    view.openField({ kind: 'lyrics', verse: Math.max(0, Math.min(next, count)) })
   }
-  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    const { key } = event
-    if (ON.has(key)) go(1)
-    else if (key === 'ArrowLeft') go(-1)
+  const onKey = ({ key }: KeyboardEvent<HTMLInputElement>): boolean => {
+    if (key === ' ') go(1)
     else if (key === 'ArrowDown') toVerse(verse + 1)
     else if (key === 'ArrowUp') toVerse(verse - 1)
-    else if (key === 'Escape') {
-      save()
-      view.openLyrics(null)
-    } else if (MARKS.has(key) && text.trim() !== '' && !text.endsWith('_')) go(1, text + key)
-    else return
-    event.preventDefault()
+    else if (MARKS.has(key) && text.trim() !== '' && !text.endsWith('_')) go(1, text + key)
+    else return false
+    return true
   }
   return (
-    <div className="flex items-center gap-1">
-      <span className="min-w-16 text-sm text-muted-foreground">
-        {t('lyrics.verse', { n: verse + 1 })}
-      </span>
-      <InputGroup className={cn('h-10 flex-1 rounded-xl bg-card')}>
-        <InputGroupInput
-          ref={field}
-          aria-label={t('lyrics.field')}
-          value={text}
-          disabled={note === null}
-          placeholder={note === null ? t('lyrics.noNote') : undefined}
-          autoCapitalize="off"
-          autoComplete="off"
-          spellCheck={false}
-          onChange={(event) => setText(event.target.value)}
-          onKeyDown={onKeyDown}
-          onBlur={() => save()}
-          className="font-serif text-lg md:text-lg"
-        />
-      </InputGroup>
-      <ToolKey
-        label={t('lyrics.previousVerse')}
-        disabled={verse === 0}
-        className="h-10 w-10 flex-none landscape-phone:h-10"
-        onClick={() => toVerse(verse - 1)}
-      >
-        <ChevronUp aria-hidden />
-      </ToolKey>
-      <ToolKey
-        label={t('lyrics.nextVerse')}
-        disabled={verse >= count}
-        className="h-10 w-10 flex-none landscape-phone:h-10"
-        onClick={() => toVerse(verse + 1)}
-      >
-        <ChevronDown aria-hidden />
-      </ToolKey>
-    </div>
+    <SheetField
+      kind="lyrics"
+      anchor={anchor}
+      label={t('lyrics.field')}
+      text={text}
+      onText={setText}
+      at={at}
+      onGo={go}
+      onKey={onKey}
+      onClose={() => {
+        save()
+        view.openField(null)
+      }}
+      beside={
+        <>
+          <VerseStep
+            label={t('lyrics.previousVerse')}
+            disabled={verse === 0}
+            onClick={() => toVerse(verse - 1)}
+          >
+            <ChevronUp aria-hidden />
+          </VerseStep>
+          <VerseStep
+            label={t('lyrics.nextVerse')}
+            disabled={verse >= count}
+            onClick={() => toVerse(verse + 1)}
+          >
+            <ChevronDown aria-hidden />
+          </VerseStep>
+        </>
+      }
+    />
   )
 }

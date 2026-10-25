@@ -5,8 +5,10 @@ import type { SheetField } from '@/widgets/score-sheet'
 /** A shortcut: an editor action, or a field opened to type in where it is printed (ADR 0096). */
 type Shortcut = EditorAction | { readonly type: 'field'; readonly field: SheetField['kind'] }
 
-/** The fields opened with Cmd or Ctrl and a letter, as Flat's: K a chord symbol. */
-const FIELD_KEYS = { KeyK: 'chord' } as const satisfies Readonly<Record<string, SheetField['kind']>>
+/** The fields opened with Cmd or Ctrl and a letter, as Flat's: K a chord symbol, L the lyrics. */
+const FIELD_KEYS = { KeyK: 'chord', KeyL: 'lyrics' } as const satisfies Readonly<
+  Record<string, SheetField['kind']>
+>
 const isFieldKey = (code: string): code is keyof typeof FIELD_KEYS =>
   Object.hasOwn(FIELD_KEYS, code)
 
@@ -29,7 +31,7 @@ const isClipKey = (code: string): code is keyof typeof CLIP_EDITS => Object.hasO
  * free: digits, the full stop, arrows (Shift extending what is chosen by a note, with Alt by a bar,
  * with Cmd to an end; Alt with ↑ ↓ through a chord's notes, then to the staff over or under, ADR
  * 0088; ↑ ↓ the notes a step in the key, with Shift a semitone, with Cmd an octave), Home, End, Backspace, Delete, Enter and Escape (letting go of what is chosen), and Cmd or
- * Ctrl with Z, Y, and C, X, V (what is chosen, ADR 0092), K (the chord-symbol field, ADR 0096); a letter alone plays the piano, but for I,
+ * Ctrl with Z, Y, and C, X, V (what is chosen, ADR 0092), K and L (the chord-symbol and Lyrics fields, ADR 0096); a letter alone plays the piano, but for I,
  * which typing leaves free: on a staff it cycles the editing modes, as Dorico's I does (ADR 0092).
  */
 export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {

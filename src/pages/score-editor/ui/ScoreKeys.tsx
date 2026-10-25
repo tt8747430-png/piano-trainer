@@ -1,4 +1,3 @@
-import { WholeWord } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useSectionHeading } from '@/entities/piece'
 import {
@@ -10,8 +9,6 @@ import {
   JUMP_CHOICES,
   metersFor,
   sectionKey,
-  singsHere,
-  verseCount,
   type BarMarkChoice,
 } from '@/features/score-editor'
 import {
@@ -26,8 +23,9 @@ import {
 import { KeyChoice, Segmented } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { isJumpWords, JUMP_SIGNS, JUMP_WORDS } from '../model/palette-categories'
+import { useFieldReason } from '../model/use-field-reason'
 import { useNotesChosen } from '../model/use-notes-chosen'
-import { LyricsField } from './LyricsField'
+import { FieldKey } from './FieldKey'
 import { BarlineIcon, CodaSign } from './palette-icons'
 import { CaptionGrid, CaptionKey, GroupName, Printed, TermGrid, TermKey } from './palette-keys'
 import { usePaletteReason } from './palette-reason'
@@ -197,22 +195,13 @@ const PEDAL_LABEL = {
 
 /**
  * Text & pedal: the expression words alone as printed, what each asks its tooltip (ADR 0096); the
- * pedal's marks; the lyrics, greyed off the staff they go on, saying where they go.
+ * pedal's marks.
  */
 export function TextKeys() {
   const { t } = useTranslation('editor')
-  const { actions, view } = useScoreEditorContext()
+  const { actions } = useScoreEditorContext()
   const chosen = useNotesChosen()
   const reason = usePaletteReason()
-  // The lyrics are written on their own staff alone (ADR 0093); the verse open is clamped to one
-  // past the last.
-  const sings = useEditorState((state) => singsHere(state.draft, state.layer))
-  const lyricsOn = useEditorState((state) => state.draft.lyricsOn)
-  const count = useEditorState((state) => verseCount(state.draft))
-  const caret = useEditorState((state) => state.caret)
-  const verse = view.lyricsVerse === null ? null : Math.min(view.lyricsVerse, count)
-  // Where the words go, said where the caret is on another staff (ADR 0093).
-  const elsewhere = sings ? undefined : t(`reason.lyricsOn.${lyricsOn}`)
   return (
     <>
       <TermGrid label={t('expressions')}>
@@ -244,19 +233,23 @@ export function TextKeys() {
           </CaptionKey>
         ))}
       </CaptionGrid>
-      <GroupName name={t('lyrics.label')} info={elsewhere} />
+    </>
+  )
+}
+
+/**
+ * The words typed under the tune where they print (ADR 0096): one key opening the Lyrics field at
+ * the caret's note; greyed off the staff they go on, its tooltip and the ⓘ beside them saying where.
+ */
+export function WordKeys() {
+  const { t } = useTranslation('editor')
+  const why = useFieldReason('lyrics')
+  return (
+    <>
+      <GroupName name={t('lyrics.label')} info={why} />
       <CaptionGrid label={t('lyrics.label')}>
-        <CaptionKey
-          label={t('lyrics.label')}
-          reason={elsewhere}
-          pressed={verse !== null}
-          disabled={!sings}
-          onClick={() => view.openLyrics(verse === null ? 0 : null)}
-        >
-          <WholeWord />
-        </CaptionKey>
+        <FieldKey field="lyrics" />
       </CaptionGrid>
-      {sings && verse !== null ? <LyricsField key={`${caret} ${verse}`} verse={verse} /> : null}
     </>
   )
 }

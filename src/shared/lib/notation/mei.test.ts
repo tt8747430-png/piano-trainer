@@ -237,18 +237,22 @@ describe('the words (ADR 0093)', () => {
       ),
     )
 
-  it('writes each syllable as a verse of its note, its place in the word and what joins it on', () => {
+  it('writes each syllable as a verse of its note, named by its staff, tick and verse, its place in the word and what joins it on', () => {
     const mei = verses([
       [sung('A', true)],
       [sung('ma', true)],
       [sung('zing')],
       [sung('grace', false, 1)],
     ])
-    expect(mei).toContain('<verse n="1"><syl wordpos="i" con="d">A</syl></verse>')
-    expect(mei).toContain('<verse n="1"><syl wordpos="m" con="d">ma</syl></verse>')
-    expect(mei).toContain('<verse n="1"><syl wordpos="t">zing</syl></verse>')
-    expect(mei).toContain('<verse n="1"><syl con="u">grace</syl></verse>')
-    expect(mei).toMatch(/<note xml:id="n-melody-0-0"[^>]*>\s*<verse n="1">/)
+    expect(mei).toContain(
+      '<verse xml:id="v-melody-0-0" n="1"><syl wordpos="i" con="d">A</syl></verse>',
+    )
+    expect(mei).toContain(
+      '<verse xml:id="v-melody-24-0" n="1"><syl wordpos="m" con="d">ma</syl></verse>',
+    )
+    expect(mei).toContain('<verse xml:id="v-melody-48-0" n="1"><syl wordpos="t">zing</syl></verse>')
+    expect(mei).toContain('<verse xml:id="v-melody-72-0" n="1"><syl con="u">grace</syl></verse>')
+    expect(mei).toMatch(/<note xml:id="n-melody-0-0"[^>]*>\s*<verse xml:id="v-melody-0-0" n="1">/)
   })
 
   it('numbers the verses, skipping one that sings nothing on the note, and escapes the text', () => {
@@ -257,10 +261,10 @@ describe('the words (ADR 0093)', () => {
       [null, sung('zwei')],
     ])
     expect(mei).toContain(
-      '<verse n="1"><syl>one</syl></verse><verse n="2"><syl>&lt;eins&gt;</syl></verse>',
+      '<verse xml:id="v-melody-0-0" n="1"><syl>one</syl></verse><verse xml:id="v-melody-0-1" n="2"><syl>&lt;eins&gt;</syl></verse>',
     )
     expect(mei).toContain(
-      '<note xml:id="n-melody-24-0" pname="c" oct="5" dur="4"><verse n="2"><syl>zwei</syl></verse></note>',
+      '<note xml:id="n-melody-24-0" pname="c" oct="5" dur="4"><verse xml:id="v-melody-24-1" n="2"><syl>zwei</syl></verse></note>',
     )
   })
 
@@ -274,7 +278,7 @@ describe('the words (ADR 0093)', () => {
       ),
     )
     expect(mei).toMatch(
-      /<chord xml:id="c-treble-0"[^>]*>(<note [^>]*\/>){2}<verse n="1"><syl>one<\/syl><\/verse><\/chord>/,
+      /<chord xml:id="c-treble-0"[^>]*>(<note [^>]*\/>){2}<verse xml:id="v-treble-0-0" n="1"><syl>one<\/syl><\/verse><\/chord>/,
     )
   })
 })

@@ -42,5 +42,5 @@ export {
 export { NOTE_VALUES, takesDot, valueOf, type ChosenValue } from './model/values'
 export { chosenNotes, fingerableNotes, shownValue } from './model/chosen'
 export { hasMark, type MarkChoice } from './model/marks'
-export { singsHere, sungAt, sungNear, syllableAt, verseCount } from './model/lyrics'
+export { singsHere, sungAt, sungFrom, sungNear, syllableAt, verseCount } from './model/lyrics'
 export { lineDrawn, type Line } from './model/lines'

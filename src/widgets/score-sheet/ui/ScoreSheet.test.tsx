@@ -261,6 +261,57 @@ describe('ScoreSheet', () => {
     },
   )
 
+  it('puts the Lyrics field’s place on the syllable printed, and opens it from a tap there (ADR 0096)', async () => {
+    const sung = readDraft({
+      key: 'G',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['G C'] }],
+      melody: 'B4/4 | C5/4',
+      lyrics: ['One two'],
+      hands: { rh: 'r/4 | r/4', lh: 'r/4 | r/4' },
+    })
+    const onField = vi.fn()
+    const anchors: (HTMLElement | null)[] = []
+    render(
+      <ScoreSheet
+        draft={sung}
+        caret={96}
+        layer="melody"
+        tapsOf={() => []}
+        selection={null}
+        onPlace={vi.fn()}
+        onReach={vi.fn()}
+        onDeselect={vi.fn()}
+        placesOf={() => []}
+        heading={() => null}
+        chordNames
+        edit={editing(vi.fn())}
+        title={() => null}
+        field={{ kind: 'lyrics', verse: 0 }}
+        fieldAnchor={(element) => {
+          anchors.push(element)
+        }}
+        onField={onField}
+      />,
+    )
+    await waitFor(() => expect(anchors.at(-1)).toBeInstanceOf(HTMLElement))
+    const place = anchors.at(-1)
+    if (!place) throw new Error('the field’s place')
+    // Under the staff, on bar 2's syllable: a tap there opens its field, on its note and verse.
+    const bar = screen.getByRole('button', { name: 'Bar 2: C' })
+    const width = Number.parseFloat(bar.style.width)
+    vi.spyOn(bar, 'offsetWidth', 'get').mockReturnValue(width)
+    stubBox(bar, { width, height: 200 })
+    fireEvent.click(bar, {
+      clientX: Number.parseFloat(place.style.left) + 4 - Number.parseFloat(bar.style.left),
+      clientY: Number.parseFloat(place.style.top) + 4 - Number.parseFloat(bar.style.top),
+      detail: 1,
+    })
+    expect(onField).toHaveBeenLastCalledWith({ kind: 'lyrics', verse: 0 }, 96, 'melody')
+  })
+
   it('numbers each line at its head, the tempo beside it, its row only as tall as what it holds', async () => {
     sheet('rh', vi.fn(), false)
     await screen.findByRole('button', { name: 'Bar 1: G' })

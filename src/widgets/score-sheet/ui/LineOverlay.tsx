@@ -20,6 +20,8 @@ import { chordRow, chosenBand } from '../model/chosen-band'
 import {
   chordFieldBox,
   chordRowTick,
+  lyricAt,
+  lyricsFieldBox,
   printedChords,
   type FieldBox,
   type SheetField,
@@ -51,8 +53,8 @@ function zoomOf(element: HTMLElement, box: DOMRect): number {
  * writes the note on the line or space clicked (ADR 0064). The notes at the caret are a grip: dragged up or down, they move by notes of the key. The
  * tempo mark, each clef, key and time signature and the staves' names are buttons too, each opening
  * what changes it there (`edit`, ADR 0094). A tap on the chord row opens the chord-symbol field at
- * the beat or the symbol tapped (`onField`), and the field open on this line has its place there
- * (`fieldAnchor`, ADR 0096).
+ * the beat or the symbol tapped, one on a syllable the Lyrics field there (`onField`); the field
+ * open on this line has its place drawn (`fieldAnchor`, ADR 0096).
  */
 export function LineOverlay({
   layout,
@@ -122,11 +124,17 @@ export function LineOverlay({
   const barName = useBarName()
   // The chord symbols printed over the line, where a tap on one opens its field (ADR 0096).
   const printed = chordNames ? printedChords(layout, music.chords, CHORD_PX * labels) : []
-  // The open field's place at the caret: over the chord row at its beat.
+  // The caret's staff: its notes a grip; the open field's place at the caret, over the chord row at
+  // its beat, or under its note in a verse.
+  const caretStaff = staffOfLayer(layout.staves, layer)
   const fieldBox: FieldBox | null =
-    field?.kind === 'chord' && caret !== null && layer === 'chords' && chordNames
-      ? chordFieldBox(layout, printed, caret, row)
-      : null
+    caret === null
+      ? null
+      : field?.kind === 'chord' && layer === 'chords' && chordNames
+        ? chordFieldBox(layout, printed, caret, row)
+        : field?.kind === 'lyrics' && caretStaff
+          ? lyricsFieldBox(layout, caretStaff.staff, caret, field.verse)
+          : null
   // The notes chosen on this line as the one selection's band over the staff of the row they are
   // chosen in (the chord row, choosing chords), ADR 0096: the notes themselves coloured.
   const chosen = chosenBand(layout, line.start, selection, {
@@ -163,7 +171,8 @@ export function LineOverlay({
    * does: the head under it (one note of a chord), the chord whose stem or column it is on, or the
    * empty place it is in (a rest, the room after the last note, as a line); on empty staff between
    * notes, nothing, what is chosen let go. A chord in the chord row, where a tap opens the
-   * chord-symbol field at the symbol printed there or the beat it is nearest (ADR 0096).
+   * chord-symbol field at the symbol printed there or the beat it is nearest; a tap on a syllable
+   * printed opens the Lyrics field there (ADR 0096).
    */
   const chooseAt = (index: number, point: SheetPoint | null, extend: boolean, held: boolean) => {
     const placed = line.bars[index]
@@ -171,6 +180,16 @@ export function LineOverlay({
     if (!placed || !measure) return
     if (!point) {
       onPlace(placed.start, layer, extend)
+      return
+    }
+    // A tap on a syllable printed: the Lyrics field there, on its verse.
+    const sung = onField && !extend && !held ? lyricAt(layout, point) : null
+    if (sung && onField) {
+      onField(
+        { kind: 'lyrics', verse: sung.verse },
+        line.start + sung.tick,
+        LAYER_OF_STAFF[sung.staff],
+      )
       return
     }
     const target = layerAt(point.y, layout, chordNames)
@@ -229,7 +248,6 @@ export function LineOverlay({
     onWrite(point.tick, point.target, midi)
   }
   // The caret's notes as a grip: a drag up or down moves them a step of the key at a time.
-  const caretStaff = staffOfLayer(layout.staves, layer)
   const drag = useRef<{ y: number; applied: number } | null>(null)
   const grip = {
     onPointerDown: (event: PointerEvent<HTMLDivElement>) => {

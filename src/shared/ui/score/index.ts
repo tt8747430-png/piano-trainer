@@ -2,6 +2,7 @@ export {
   type Column,
   type Extent,
   type Head,
+  type Lyric,
   type Rest,
   type ScoreLayout,
   type Sign,
@@ -11,7 +12,7 @@ export {
 export { leftAt, xAtTick } from './layout'
 export { Playhead } from './Playhead'
 export { ScoreView } from './ScoreView'
-export { scoreHeight, staffHeight, versesOf } from './size'
+export { scoreHeight, staffHeight, VERSE, versesOf } from './size'
 export {
   barsBand,
   caretLine,
