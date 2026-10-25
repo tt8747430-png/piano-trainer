@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { note } from '@/shared/lib/music'
 import { draftOf, form, shape } from '../testing/test-draft'
-import { metersFor, setKey, setMeter, setTempo } from './settings'
+import { setKey, setTempo } from './settings'
 
 describe('the song’s settings', () => {
   const draft = draftOf({
@@ -41,44 +41,5 @@ describe('the song’s settings', () => {
   it('sets the tempo within 40 to 160', () => {
     expect(setTempo(draft, 200).tempo).toBe(160)
     expect(setTempo(draft, 72).tempo).toBe(72)
-  })
-
-  it('offers the meters of the same kind: a quarter keeps its length in 2/4, 3/4 and 4/4', () => {
-    expect(metersFor('4/4')).toEqual(['2/4', '3/4', '4/4'])
-    expect(metersFor('6/8')).toEqual(['6/8', '12/8'])
-  })
-
-  it('makes each full bar the new meter’s, its notes and chords past the new end taken', () => {
-    const three = setMeter(draft, '3/4')
-    expect(three.meter).toBe('3/4')
-    expect(three.sections[0]?.lines[0]?.map((bar) => bar.ticks)).toEqual([72, 72])
-    expect(shape(three.melody)).toEqual(['E4@0/72', 'D4@72/72'])
-    expect(form(three)).toEqual([[['C@0', 'G7/B@0']]])
-  })
-
-  it('lengthens each full bar to a longer meter, its last chord held on', () => {
-    const two = setMeter(setMeter(draft, '2/4'), '4/4')
-    expect(two.sections[0]?.lines[0]?.map((bar) => bar.ticks)).toEqual([96, 96])
-    expect(shape(two.melody)).toEqual(['E4@0/48', 'D4@96/48'])
-  })
-
-  it('keeps a pickup one, cut from its start, so the beats leading into the downbeat stay', () => {
-    const pickup = draftOf({
-      sections: [{ kind: 'verse', lines: ['G@3 C'] }],
-      melody: 'C4/1 D4/1 E4/1 | F4/4',
-    })
-    const two = setMeter(pickup, '2/4')
-    expect(two.sections[0]?.lines[0]?.[0]?.ticks).toBe(24)
-    expect(shape(two.melody)[0]).toBe('E4@0/24')
-    const three = setMeter(pickup, '3/4')
-    expect(three.sections[0]?.lines[0]?.[0]?.ticks).toBe(48)
-    expect(shape(three.melody).slice(0, 2)).toEqual(['D4@0/24', 'E4@24/24'])
-  })
-
-  it('keeps a pickup bar shorter than the meter’s as it is, and changes nothing across kinds', () => {
-    const pickup = draftOf({ sections: [{ kind: 'verse', lines: ['G@1 C'] }] })
-    const before = pickup.sections[0]?.lines[0]?.[0]?.ticks
-    expect(setMeter(pickup, '3/4').sections[0]?.lines[0]?.[0]?.ticks).toBe(before)
-    expect(setMeter(draft, '6/8')).toBe(draft)
   })
 })

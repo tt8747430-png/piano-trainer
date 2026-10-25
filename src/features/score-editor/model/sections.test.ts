@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { parseKey, type Key } from '@/shared/lib/music'
 import { draftOf, form } from '../testing/test-draft'
 import { joinSection, newSection, setSectionKey, setSectionKind } from './sections'
-import { keyAt } from './timeline'
+import { keyAt, meterAt } from './timeline'
 
 const key = (text: string): Key => {
   const parsed = parseKey(text)
@@ -129,6 +129,32 @@ describe('sections', () => {
       const split = newSection(song, 7)
       expect(keys(split)).toEqual([undefined, undefined, undefined, 'E', 'E', undefined])
       expect(keyAt(split, 7 * 96)).toEqual(key('E'))
+    })
+  })
+
+  describe('a change of time at a section (ADR 0095)', () => {
+    const song = draftOf({
+      sections: [
+        { kind: 'verse', n: 1, lines: ['G C'] },
+        { kind: 'chorus', lines: ['C G'] },
+        { kind: 'bridge', meter: '3/4', lines: ['E A'] },
+        { kind: 'chorus', last: true, lines: ['C G'] },
+      ],
+      melody: 'B4/4 | C5/4 | E5/2 E5/2 | G5/4 | B4/3 | A4/3 | G4/4 | G4/4',
+    })
+    const meters = (draft: typeof song) => draft.sections.map((section) => section.heading.meter)
+
+    it('is the meter at a tick: a section’s own, else the song’s', () => {
+      expect(meterAt(song, 0)).toBe('4/4')
+      // The bridge starts at its fifth bar, after four of 4/4.
+      expect(meterAt(song, 4 * 96)).toBe('3/4')
+      expect(meterAt(song, 4 * 96 + 2 * 72)).toBe('4/4')
+    })
+
+    it('stays in a section split by a new section, and in one named afresh', () => {
+      const split = newSection(song, 5)
+      expect(meters(split)).toEqual([undefined, undefined, '3/4', '3/4', undefined])
+      expect(meters(setSectionKind(song, 2, 'verse'))[2]).toBe('3/4')
     })
   })
 })

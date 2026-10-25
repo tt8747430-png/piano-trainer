@@ -1,15 +1,15 @@
 import { useMemo, useRef, useState, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSectionHeading } from '@/entities/piece'
 import { barAt, type Draft, type Layer } from '@/features/score-editor'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/shared/lib'
 import { PageCanvas, SheetPage, type TitlePlace } from '@/shared/ui'
 import { lineLead, measureWidths, notate, type StaffId } from '@/shared/lib/notation'
 import type { Midi, Tick } from '@/shared/lib/music'
-import { scoreHeight, useStaffLabels, versesOf } from '@/shared/ui/score'
-import { HEADING, lineFit } from '../model/line-fit'
+import { labelRow, scoreHeight, useStaffLabels, versesOf } from '@/shared/ui/score'
 import type { SheetField } from '../model/field-place'
+import { lineFit } from '../model/line-fit'
 import { createLineSheets, untimed, type LineSheet } from '../model/line-sheets'
-import { labelRow } from '../model/label-row'
 import { lineMusic, oneLine } from '../model/line-music'
 import type { EditPrinted } from '../model/printed'
 import { SheetLine } from './SheetLine'
@@ -18,6 +18,8 @@ import { SheetLine } from './SheetLine'
 const NO_STAVES: readonly StaffId[] = []
 /** The room between lines on a page at full size, for dealing lines onto pages. */
 const LINE_GAP = 16
+/** The title's room over the first page's first line, for dealing lines onto pages. */
+const TITLE_ROOM = 52
 /**
  * The staff's size down the screen (ADR 0074), as LilyPond sets a staff size per paper: full from a
  * sheet this wide, smaller on a phone, so a line holds more than a bar, never under `least`.
@@ -28,21 +30,26 @@ const SCROLL_SCALE = { full: 600, least: 0.72 } as const
 const scrollScale = (width: number) =>
   width > 0 ? Math.min(1, Math.max(SCROLL_SCALE.least, width / SCROLL_SCALE.full)) : 1
 
-type PageItem =
-  | { readonly kind: 'title' }
-  | { readonly kind: 'heading'; readonly section: number }
-  | { readonly kind: 'line'; readonly sheet: LineSheet }
+type PageItem = { readonly kind: 'title' } | { readonly kind: 'line'; readonly sheet: LineSheet }
 
 const itemKey = (item: PageItem) =>
   item.kind === 'title'
     ? 'title'
-    : item.kind === 'heading'
-      ? `heading ${item.section}`
-      : `${item.sheet.line.section} ${item.sheet.line.line} ${item.sheet.line.start}`
+    : `${item.sheet.line.section} ${item.sheet.line.line} ${item.sheet.line.start}`
 
 /**
- * A page's items as the blocks that stay together as it is spread (ADR 0087): the title and a
- * section's heading with the line under them.
+ * Each section's name in the learner's language, by section: printed at its first bar (ADR 0095).
+ * The same array while the names are, so a line's row is not drawn again for every edit.
+ */
+function useHeadings(draft: Draft): readonly string[] {
+  const named = useSectionHeading()
+  const said = draft.sections.map((section) => named({ ...section.heading, lines: [] })).join('\n')
+  return useMemo(() => said.split('\n'), [said])
+}
+
+/**
+ * A page's items as the blocks that stay together as it is spread (ADR 0087): the title with the
+ * line under it.
  */
 function blocksOf(page: readonly PageItem[]): PageItem[][] {
   const blocks: PageItem[][] = []
@@ -60,9 +67,10 @@ function blocksOf(page: readonly PageItem[]): PageItem[][] {
 
 /**
  * The editor's sheet (spec §6.1, ADR 0064), as `view` lays it out: its title at its head (ADR 0094);
- * the piece by section down the screen, each chart line a system of its staves; the same on A4 pages
- * as it will print, its title on the first; or all of it as one line across. Each bar numbered, its
- * chord symbols over it, the caret on its layer's staff; while Play plays, the playhead apart from it
+ * the piece down the screen, each chart line a system of its staves; the same on A4 pages as it will
+ * print, its title on the first; or all of it as one line across. Over each line its labels' row, as
+ * the Player's: its first bar's number, a section's name at its first bar (ADR 0095), the tempo and
+ * the chord symbols; the caret on its layer's staff; while Play plays, the playhead apart from it
  * (ADR 0096). A line is drawn again only when what it shows changes.
  */
 export function ScoreSheet({
@@ -77,7 +85,6 @@ export function ScoreSheet({
   onDeselect,
   placesOf,
   tapsOf,
-  heading,
   chordNames,
   lyrics = true,
   fingers = false,
@@ -128,8 +135,6 @@ export function ScoreSheet({
   placesOf: (layer: Layer) => readonly Tick[]
   /** Where a click lands in a layer: on a note or a bar's start, never an empty step (ADR 0082). */
   tapsOf: (layer: Layer) => readonly Tick[]
-  /** A section's heading. */
-  heading: (section: number) => ReactNode
   /** Chord names over the staff, written in their row; without them a click there writes the staff under it. */
   chordNames: boolean
   /** The words under the tune, where the song has them (ADR 0093). */
@@ -138,7 +143,7 @@ export function ScoreSheet({
   fingers?: boolean
   /**
    * What edits a thing printed, opened from its button where it is printed (ADR 0094): the tempo
-   * mark, a clef, a key or time signature.
+   * mark, a section's name (ADR 0095), a clef, a key or time signature, a staff's name.
    */
   edit: EditPrinted
   /**
@@ -178,8 +183,9 @@ export function ScoreSheet({
   const verses = whole ? versesOf(whole, drawn) : 0
   // The staves' names at the first line's head (ADR 0094).
   const labels = useStaffLabels(drawn)
+  const headings = useHeadings(draft)
   // A whole system in the height the sheet is seen in, where it is short (a phone on its side).
-  const fit = room && room > 0 ? lineFit({ room, staves, headed: !across, chordNames, verses }) : 1
+  const fit = room && room > 0 ? lineFit({ room, staves, chordNames, verses }) : 1
   const sized = pages ? PRINT_SCALE : Math.min(fit, scrollScale(width))
   const widths = useMemo(
     () => (whole ? measureWidths({ ...whole, staves: drawn }, sized, chordNames, labels) : []),
@@ -222,6 +228,7 @@ export function ScoreSheet({
         placesOf={placesOf}
         chordNames={chordNames}
         fingers={fingers}
+        headings={headings}
         edit={edit}
         labels={sheet.line.bars[0]?.index === 0 ? labels : undefined}
         staves={drawn}
@@ -241,16 +248,11 @@ export function ScoreSheet({
       labelRow(chordNames, scale, true) + (scoreHeight(sheet.score, drawn) + LINE_GAP) * scale
     const items: PageItem[] = [
       { kind: 'title' },
-      ...draft.sections.flatMap((_, section): PageItem[] => [
-        { kind: 'heading', section },
-        ...sheets
-          .filter((sheet) => sheet.line.section === section)
-          .map((sheet) => ({ kind: 'line', sheet }) as const),
-      ]),
+      ...sheets.map((sheet) => ({ kind: 'line', sheet }) as const),
     ]
     const dealt = paginate(
       items,
-      (item) => (item.kind === 'line' ? lineHeight(item.sheet) : HEADING),
+      (item) => (item.kind === 'line' ? lineHeight(item.sheet) : TITLE_ROOM),
       PAGE.height - 2 * PAGE.margin,
       (item) => item.kind !== 'line',
     )
@@ -272,8 +274,6 @@ export function ScoreSheet({
                     {block.map((item) =>
                       item.kind === 'title' ? (
                         <div key="title">{title('page')}</div>
-                      ) : item.kind === 'heading' ? (
-                        <div key={itemKey(item)}>{heading(item.section)}</div>
                       ) : (
                         line(item.sheet, scale, true)
                       ),
@@ -297,17 +297,16 @@ export function ScoreSheet({
     )
   }
 
+  // The lines down the screen as the Player's are, each section named in its first line's labels.
   return (
-    <section ref={box} aria-label={t('sheet.label')} className="flex flex-col gap-8">
+    <section
+      ref={box}
+      aria-label={t('sheet.label')}
+      className="flex flex-col"
+      style={{ gap: LINE_GAP }}
+    >
       {title('lines')}
-      {draft.sections.map((_, section) => (
-        <section key={section} className="flex flex-col gap-2">
-          {heading(section)}
-          {sheets
-            .filter((sheet) => sheet.line.section === section)
-            .map((sheet) => line(sheet, sized))}
-        </section>
-      ))}
+      {sheets.map((sheet) => line(sheet, sized))}
     </section>
   )
 }

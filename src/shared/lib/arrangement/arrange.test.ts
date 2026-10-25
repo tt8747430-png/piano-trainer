@@ -230,6 +230,39 @@ describe('arrange', () => {
     expect(performance.totalTicks).toBe(72)
   })
 
+  it('plays a section in a meter of its own as its meter plays it: its 3/4 variant in three (ADR 0095)', () => {
+    const waltz: EventPattern = {
+      id: 'waltz',
+      rh: figure('4/4 C,12/4 C', { inThree: parseFigure('4/4 C,8/4 C') }),
+      lh: figure('0/4 L1'),
+    }
+    const base = chart([['C']])
+    const changing: Chart = {
+      ...base,
+      sections: [...base.sections, { meter: '3/4', lines: [[bar('F', 3), bar('G', 3)]] }],
+    }
+    const performance = arrange(changing, { tonic: C, pattern: waltz })
+    expect(performance.bars.map((b) => [b.startTick, b.beats, b.meter])).toEqual([
+      [0, 4, undefined],
+      [96, 3, '3/4'],
+      [168, 3, '3/4'],
+    ])
+    // The 4/4 bar's figure, then each 3/4 bar's own: beats 2 and 3 of each.
+    expect(onsets(performance, 'rh')).toEqual([24, 72, 120, 144, 192, 216])
+    expect(performance.totalTicks).toBe(240)
+  })
+
+  it('counts a first section in a meter of its own from its own whole bar, no pickup (ADR 0095)', () => {
+    const waltz = chart([['C', 'G']])
+    const three: Chart = {
+      ...waltz,
+      sections: [{ meter: '3/4', lines: [[bar('C', 3), bar('G', 3)]] }],
+    }
+    const performance = arrange(three, { tonic: C, pattern: BLOCK })
+    // Each bar's chord on its downbeat: as a pickup, the first bar would leave its downbeat out.
+    expect(onsets(performance, 'rh')).toEqual([0, 72])
+  })
+
   it('plays a figure’s compound version in 12/8, and its first half in 6/8', () => {
     const rocking: EventPattern = {
       id: 'rocking',

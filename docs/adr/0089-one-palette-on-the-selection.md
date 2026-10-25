@@ -38,6 +38,11 @@ insertion point, notes chosen are edited by the same tools that write them, and 
 - **Key and Time signature:** a key change from a section on (see the amendment); the song's own key and its
   one meter are named and changed in the Song sheet ("Change for the whole song"). A change of time inside the
   song is future work.
+  **Later (2026-10-25, ADR 0095):** a change of time is written as a key change is: the Time signature section
+  and the time signature's popover change the meter, of the song's kind, from the section of the first bar
+  chosen (else the caret's, or the sign's own) on, up to the next change (`setSectionMeter`, the `sectionMeter`
+  action, `Section.meter`), or at the song's first section the whole song's, every section counted in it
+  (`setMeter`); each says which over its meters, and the line saying a change of time is for later goes.
 - **The edit row** (`EditRow`): Delete, Undo, Redo, Copy, Cut, Paste (the bars chosen, else the caret's) and Add
   bar, icons with tooltips, under the bar on a phone and in its row where there is room. Undo and Redo leave the
   bar's middle; the dock is the tempo then ‹ Play › (see the amendment). The staff written is chosen by a click

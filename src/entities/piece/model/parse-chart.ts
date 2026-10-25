@@ -4,6 +4,7 @@ import {
   beatsPerBar,
   beatsToTicks,
   ChordSymbolError,
+  isCompound,
   parseChordSymbol,
   parseKey,
   TICKS_PER_BEAT,
@@ -11,6 +12,7 @@ import {
   type Chord,
   type Jump,
   type Key,
+  type Meter,
 } from '@/shared/lib/music'
 import { MAX_BEATS, readBeats, ticksIn } from './beats'
 import { ContentError, type ContentPosition } from './content-error'
@@ -136,7 +138,6 @@ function barHands(read: ReadHands, index: number): WrittenHands | undefined {
   return hands.rh || hands.lh ? hands : undefined
 }
 
-/** Reads a song's or study's chart, its written hands in its bars, naming the bar of any mistake in a ContentError. */
 /** A section's own key, read; one that names no key is the content's mistake. */
 function sectionKey(piece: ChartPiece, text: string, s: number): Key {
   const key = parseKey(text)
@@ -144,16 +145,37 @@ function sectionKey(piece: ChartPiece, text: string, s: number): Key {
   return key
 }
 
+/**
+ * The meter a section's bars are counted in (ADR 0095): its own, else the piece's. One of the other
+ * kind is the content's mistake: its beat would be another note, a dotted quarter for a quarter.
+ */
+function sectionMeter(piece: ChartPiece, meter: Meter | undefined, s: number): Meter {
+  if (meter === undefined) return piece.meter
+  if (isCompound(meter) !== isCompound(piece.meter))
+    throw new ContentError(
+      piece.id,
+      { section: s + 1 },
+      `"${meter}" is a meter of another kind than the piece’s "${piece.meter}"`,
+    )
+  return meter
+}
+
+/**
+ * Reads a song's or study's chart, each section's bars in its meter and its written hands in its
+ * bars, naming the bar of any mistake in a ContentError.
+ */
 export function parseChart(piece: ChartPiece): Chart {
-  const meterBeats = beatsPerBar(piece.meter)
   const failAt =
     (position: ContentPosition): Fail =>
     (problem) => {
       throw new ContentError(piece.id, position, problem)
     }
   const places: HandBar[] = []
+  // Each section's bars counted in its own meter, else the piece's (ADR 0095).
+  const meters = piece.sections.map((section, s) => sectionMeter(piece, section.meter, s))
   const sections = piece.sections.map((section, s) => ({
     key: section.key === undefined ? null : sectionKey(piece, section.key, s),
+    meter: meters[s] === piece.meter ? undefined : meters[s],
     lines: section.lines.map((line, l) => {
       const fail: Fail = failAt({ section: s + 1, line: l + 1 })
       const tokens = line.split(/\s+/).filter(Boolean)
@@ -178,6 +200,7 @@ export function parseChart(piece: ChartPiece): Chart {
           continue
         }
         const position = { section: s + 1, line: l + 1, bar: bars.length + 1 }
+        const meterBeats = beatsPerBar(meters[s] ?? piece.meter)
         const read = readBar(token, meterBeats, failAt(position))
         places.push({ ticks: beatsToTicks(read.beats), position })
         bars.push({ ...before, ...read })
@@ -196,6 +219,7 @@ export function parseChart(piece: ChartPiece): Chart {
     meter: piece.meter,
     sections: sections.map((section) => ({
       ...(section.key ? { key: section.key } : {}),
+      ...(section.meter ? { meter: section.meter } : {}),
       lines: section.lines.map((line) =>
         line.map((bar) => {
           const clef = clefs[index]

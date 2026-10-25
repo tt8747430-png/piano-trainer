@@ -21,27 +21,30 @@ const layout: ScoreLayout = {
   ],
 }
 
-describe('SheetLabels', () => {
-  it('keeps a bar’s number and section name to its own bar, cut short where it is longer', () => {
-    render(
-      <SheetLabels
-        layout={layout}
-        performance={TWO_BARS}
-        headings={['A long section name']}
-        positions={false}
-      />,
-    )
-    const label = screen.getByText('1 · A long section name')
-    expect(label).toHaveClass('truncate')
-    // The bar's width less the number's inset on either side: clear of the next bar's number.
-    expect(label).toHaveStyle({ left: '4px', maxWidth: '52px' })
-  })
+const labelsOf = (container: HTMLElement) =>
+  [...container.querySelectorAll('[data-slot="bar-label"]')].map((label) => label.textContent)
 
-  it('numbers a line’s first bar only, as LilyPond numbers a system’s start (each bar still tapped)', () => {
+describe('SheetLabels', () => {
+  it('prints a section’s name at its first bar beside the line’s number, a tempo after them (ADR 0095)', () => {
     const { container } = render(
       <SheetLabels
         layout={layout}
         performance={TWO_BARS}
+        headings={['Verse 1']}
+        positions={false}
+        tempos={[84]}
+      />,
+    )
+    expect(labelsOf(container)).toEqual(['1 · Verse 1 · \u{1D15F}= 84'])
+  })
+
+  it('numbers a line’s first bar only, as LilyPond numbers a system’s start (each bar still tapped)', () => {
+    // The piece's bars 5 and 6, a line of a score laid out in lines.
+    const sixBars = { ...TWO_BARS, bars: [0, 1, 2].flatMap(() => TWO_BARS.bars) }
+    const { container } = render(
+      <SheetLabels
+        layout={layout}
+        performance={sixBars}
         headings={[]}
         positions={false}
         chordNames={false}
@@ -71,5 +74,13 @@ describe('SheetLabels', () => {
     )
     expect(screen.getByText('F♯m/B♭')).toBeInTheDocument()
     expect(container).toHaveTextContent('\u{1D15F}\u{1D16D}= 58')
+  })
+
+  it('says how the right hand plays each chord after its name, with Chord positions', () => {
+    render(<SheetLabels layout={layout} performance={TWO_BARS} headings={[]} positions />)
+    // Each chord's inversion as the right hand voices it, after its name, smaller.
+    const named = screen.getAllByText(/^(Root|1st|2nd)$/)
+    expect(named).toHaveLength(2)
+    expect(named[0]).toHaveClass('text-muted-foreground')
   })
 })

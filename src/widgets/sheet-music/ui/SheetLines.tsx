@@ -19,13 +19,11 @@ import {
   type StaffId,
   type StaffLabels,
 } from '@/shared/lib/notation'
-import { ScoreView, scoreHeight, type Picked } from '@/shared/ui/score'
+import { labelRow, ScoreView, scoreHeight, type Picked } from '@/shared/ui/score'
 import { FINGERS, systemFit } from '../model/fit-scale'
 import { scoreLines, type ScoreLine } from '../model/score-lines'
 import { SheetOverlay } from './SheetOverlay'
 
-/** The labels' row over each line: the chord names' and the bars' numbers, or the numbers alone. */
-const LABELS = { chords: 44, numbers: 20 } as const
 const LINE_GAP = 16
 /** The title's room over the first page's first line, at print size. */
 const TITLE_ROOM = 44
@@ -105,7 +103,9 @@ export function SheetLines({
   const box = useRef<HTMLElement>(null)
   const { width, height } = useElementSize(box)
   const onSide = useMediaQuery(LANDSCAPE_PHONE)
-  const labels = chordNames ? LABELS.chords : LABELS.numbers
+  // The labels' row over each line, the editor's height: the chord names' and the bars' labels, or the
+  // labels alone.
+  const labels = labelRow(chordNames)
   // Down the screen as large as the width allows; on a phone on its side, a whole system, its
   // fingers and the verses under its tune in the sheet's height. Pages as they print, on a canvas
   // that zooms them to the screen (ADR 0075).

@@ -22,16 +22,17 @@ const BEATS_PER_BAR: Readonly<Record<Meter, number>> = {
 export const beatsPerBar = (meter: Meter): number => BEATS_PER_BAR[meter]
 
 /**
- * A pickup: a first bar shorter than the meter's, which is the end of a bar (its first note an
- * upbeat). The beats of the meter's bar it leaves out before it; none for any other bar.
+ * A pickup: a first bar shorter than its meter's (its own, ADR 0095, else `meter`), which is the end
+ * of a bar (its first note an upbeat). The beats of the meter's bar it leaves out before it; none for
+ * any other bar.
  */
 export function beatsBefore(
-  bars: readonly { readonly beats: number }[],
+  bars: readonly { readonly beats: number; readonly meter?: Meter | undefined }[],
   index: number,
   meter: Meter,
 ): number {
   const bar = bars[index]
-  const full = beatsPerBar(meter)
+  const full = beatsPerBar(bar?.meter ?? meter)
   // In ticks: a bar's beats summed as fractions is a pickup only when it is a tick short.
   return index === 0 && bar !== undefined && beatsToTicks(bar.beats) < beatsToTicks(full)
     ? full - bar.beats

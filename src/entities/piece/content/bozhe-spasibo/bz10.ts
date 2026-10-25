@@ -25,12 +25,12 @@ export default definePiece({
     },
     {
       kind: 'chorus',
-      detail: { en: 'in 2/4', ru: 'на 2/4' },
+      meter: '2/4',
       lines: [
-        'Dm@1-Edim@1 Dm/F@1-F#dim@1 Gm@2 Gm@2',
-        'C@2 C@2 F@2 Asus4@1-A7@1',
-        'Dm@1-Edim@1 Dm/F@1-F#dim@1 Gm@2 Edim@2',
-        'Asus4@2 A@2',
+        'Dm-Edim Dm/F-F#dim Gm Gm',
+        'C C F Asus4-A7',
+        'Dm-Edim Dm/F-F#dim Gm Edim',
+        'Asus4 A',
       ],
     },
     { kind: 'ending', lines: ['Dm Dm'] },

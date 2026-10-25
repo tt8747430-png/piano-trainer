@@ -66,6 +66,35 @@ describe('the editor', () => {
     expect(run(chorus, { type: 'undo' }).draft.sections[1]?.heading.key).toBeUndefined()
   })
 
+  it('changes time from a bar’s section on, a bar added there counted in it (ADR 0095)', () => {
+    const twoParts = initialEditor(
+      draftOf({
+        sections: [
+          { kind: 'verse', lines: ['G C'] },
+          { kind: 'chorus', lines: ['F C'] },
+        ],
+      }),
+    )
+    // From the bar given, the chorus's first, wherever the caret is (a time signature on the sheet).
+    const chorus = run(twoParts, { type: 'sectionMeter', bar: 2, meter: '3/4' })
+    expect(chorus.draft.sections.map((section) => section.heading.meter)).toEqual([
+      undefined,
+      '3/4',
+    ])
+    expect(lengths(chorus.draft)).toEqual([96, 96, 72, 72])
+    // A bar added in the chorus is a bar of its 3/4; one in the verse, of the song's 4/4.
+    const added = run(
+      chorus,
+      { type: 'place', tick: 192, layer: 'chords' },
+      { type: 'bars', edit: 'insert' },
+      { type: 'place', tick: 0, layer: 'chords' },
+      { type: 'bars', edit: 'insert' },
+    )
+    expect(lengths(added.draft)).toEqual([96, 96, 96, 72, 72, 72])
+    // Undone, the chorus is counted in the song's meter again.
+    expect(run(chorus, { type: 'undo' }).draft).toEqual(twoParts.draft)
+  })
+
   it('adds the tune’s staff and takes it away with its notes, one undo step each', () => {
     const added = run(start('rh'), { type: 'melodyStaff', on: true })
     expect(added.draft.melodyStaff).toBe(true)

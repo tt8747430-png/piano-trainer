@@ -22,6 +22,7 @@ import {
   type Hand,
   type Inversion,
   type Key,
+  type Meter,
   type Midi,
   type SpelledNote,
   type Tick,
@@ -183,8 +184,9 @@ function layOut(chart: Chart, unfold = false): Layout {
   const hands: (WrittenHands | undefined)[] = []
   const lineEnds = new Set<number>()
   const written = chart.sections.flatMap((section) => section.lines.flat())
-  // A pickup is the end of a bar: its chords sit where they fall in the meter's bar.
-  const pickup = beatsToTicks(beatsBefore(written, 0, chart.meter))
+  // A pickup is the end of a bar: its chords sit where they fall in its meter's bar, the first
+  // section's (ADR 0095).
+  const pickup = beatsToTicks(beatsBefore(written, 0, chart.sections[0]?.meter ?? chart.meter))
   let tick = 0
   // Where the order goes back, each hand's clef as it stands at the bar gone back to.
   const clefs = clefsInForce(written)
@@ -212,12 +214,14 @@ function layOut(chart: Chart, unfold = false): Layout {
     // Its chords fill it end to end; a bar of no chord lasts its beats all the same (ADR 0094).
     tick = barStart + beatsToTicks(bar.beats)
     hands.push(bar.hands)
+    const meter = chart.sections[sectionIndex]?.meter
     bars.push({
       startTick: barStart,
       beats: bar.beats,
       section: sectionIndex,
       line: lineIndex,
       chords: chordIndexes,
+      ...(meter ? { meter } : {}),
       ...barMarksOf(bar),
       ...(jumped && index > 0
         ? { clefs: clefs[played.written] ?? HOME_CLEF }
@@ -327,6 +331,11 @@ interface BarMeter {
   readonly beats: number
   readonly compound: boolean
 }
+
+const barMeterOf = (meter: Meter): BarMeter => ({
+  beats: beatsPerBar(meter),
+  compound: isCompound(meter),
+})
 
 /**
  * The events a figure plays in a meter: in compound time its 6/8 form in a two-beat bar, else its
@@ -559,9 +568,8 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
         (a, b) => a.startTick - b.startTick,
       )
     : null
-  const barBeats = beatsPerBar(chart.meter)
-  const meterTicks = barBeats * TICKS_PER_BEAT
-  const barMeter: BarMeter = { beats: barBeats, compound: isCompound(chart.meter) }
+  // How each section's bars play a figure: in its own meter, else the chart's (ADR 0095).
+  const barMeters = chart.sections.map((section) => barMeterOf(section.meter ?? chart.meter))
   const chords: PerformedChord[] = []
   const notes: PerformanceNote[] = []
   // The left hand's notes its figure plays, kept under the right hand once both are placed.
@@ -618,9 +626,11 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       ...(rh.kind === 'events' && !written?.rh && playsVoiced(rh) ? { hand: context.voiced } : {}),
     })
 
-    // A chord plays its pattern in windows of one meter bar. A chord shorter than two beats, or in a
-    // pickup, picks the pattern up where it sits in the bar; every other window starts at the
-    // pattern's beginning.
+    // A chord plays its pattern in windows of one bar of its section's meter. A chord shorter than
+    // two beats, or in a pickup, picks the pattern up where it sits in the bar; every other window
+    // starts at the pattern's beginning.
+    const barMeter = barMeters[section] ?? barMeterOf(chart.meter)
+    const meterTicks = barMeter.beats * TICKS_PER_BEAT
     const end = placed.startTick + placed.durationTicks
     const picksUp = placed.chord.beats < 2 || (placed.bar === 0 && layout.pickup > 0)
     let at = placed.startTick

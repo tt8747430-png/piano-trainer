@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { readDraft } from '@/features/score-editor'
 import { midi, note } from '@/shared/lib/music'
-import { layerAt, linesOf, lineMusic, timeBeforeLine } from './line-music'
+import { layerAt, linesOf, lineMusic, oneLine, timeBeforeLine } from './line-music'
 
 const draft = readDraft({
   key: 'G',
@@ -24,6 +24,21 @@ describe('the sheet’s lines', () => {
       [0, 0, [0]],
       [0, 1, [1, 2]],
       [1, 0, [3]],
+    ])
+  })
+
+  it('say what each bar’s label prints: a line’s first number, a section’s name, the tempo (ADR 0095)', () => {
+    expect(linesOf(draft).map((line) => line.labels)).toEqual([
+      [{ number: 1, section: 0, tempo: 90 }],
+      [{ number: 2 }, {}],
+      [{ number: 4, section: 1 }],
+    ])
+    // All of it as one line, across: each section named where it starts.
+    expect(oneLine(draft)[0]?.labels).toEqual([
+      { number: 1, section: 0, tempo: 90 },
+      {},
+      {},
+      { section: 1 },
     ])
   })
 
@@ -135,6 +150,26 @@ describe('the sheet’s lines', () => {
     expect(timeBeforeLine(draft, first)).toBeUndefined()
     expect(timeBeforeLine(draft, second)).toEqual({ count: 4, unit: 4 })
     expect(timeBeforeLine(draft, third)).toEqual({ count: 4, unit: 4 })
+  })
+
+  it('write a section’s own meter on its bars, its time printed where it starts (ADR 0095)', () => {
+    const changing = readDraft({
+      key: 'C',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [
+        { kind: 'verse', meter: '3/4', lines: ['C@1', 'G'] },
+        { kind: 'chorus', lines: ['F'] },
+      ],
+    })
+    const [pickup, verse, chorus] = linesOf(changing)
+    if (!pickup || !verse || !chorus) throw new Error('three lines')
+    expect(lineMusic(changing, verse).bars[0]).toMatchObject({ beats: 3, meter: '3/4' })
+    expect(lineMusic(changing, chorus).bars[0]?.meter).toBeUndefined()
+    // The verse's pickup is short of its own 3/4, and its bars are 3/4's.
+    expect(timeBeforeLine(changing, verse)).toEqual({ count: 3, unit: 4 })
+    expect(timeBeforeLine(changing, chorus)).toEqual({ count: 3, unit: 4 })
   })
 })
 

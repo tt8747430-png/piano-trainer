@@ -4,11 +4,12 @@ import type { Extent, ScoreLayout, Sign, StaffLabel } from '@/shared/ui/score'
 
 /**
  * What is printed on the sheet and edited where it is (ADR 0094), as Flat's and Dorico's: the tempo
- * mark; a key or time signature, from the piece's bar it stands at; a staff's clef there; a staff's
- * name at the first line's head, the tune's or the piano's.
+ * mark; a section's name at its first bar (ADR 0095); a key or time signature, from the piece's bar it
+ * stands at; a staff's clef there; a staff's name at the first line's head, the tune's or the piano's.
  */
 export type Printed =
   | { readonly kind: 'tempo' }
+  | { readonly kind: 'section'; readonly section: number }
   | { readonly kind: 'key'; readonly bar: number }
   | { readonly kind: 'time'; readonly bar: number }
   | { readonly kind: 'clef'; readonly bar: number; readonly staff: StaffId }

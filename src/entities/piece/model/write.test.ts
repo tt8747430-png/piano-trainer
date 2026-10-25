@@ -203,6 +203,12 @@ describe('the music of a piece', () => {
     // A version's own title is its music's (ADR 0094).
     expect(sameMusic(music, { ...music, title: 'Mine' })).toBe(false)
     expect(sameMusic(music, { ...music, leadSheet: true })).toBe(false)
+    // A section counted in a meter of its own (ADR 0095).
+    const changed = {
+      ...music,
+      sections: [{ kind: 'verse' as const, meter: '3/4' as const, lines: ['C G'] }],
+    }
+    expect(sameMusic(music, changed)).toBe(false)
     expect(musicOf({ ...song, leadSheet: true })).toEqual({ ...music, leadSheet: true })
     // The lyrics' staff, written where it is not the melody's (ADR 0093).
     const upper = { ...song, lyrics: ['one'], lyricsOn: 'rh' as const }

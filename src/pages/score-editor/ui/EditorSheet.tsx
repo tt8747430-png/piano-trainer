@@ -16,12 +16,14 @@ import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { seenDraft } from '../model/seen-draft'
 import { useHeardPlayhead } from '../model/use-heard-playhead'
 import { PrintedEdit } from './PrintedEdit'
-import { SectionHeading } from './SectionHeading'
 import { TitleField } from './TitleField'
 
 /** The title printed where the sheet prints it, edited there (ADR 0094). */
 const titleAt = (place: TitlePlace) => <TitleField place={place} />
-/** The tempo mark, a key or time signature, a clef: each opening its popover where it is printed. */
+/**
+ * The tempo mark, a section's name, a key or time signature, a clef, a staff's name: each opening
+ * its popover or menu where it is printed.
+ */
 const editPrinted: EditPrinted = (printed, trigger) => (
   <PrintedEdit printed={printed} trigger={trigger} />
 )
@@ -131,7 +133,6 @@ export function EditorSheet({
       onDeselect={onDeselect}
       placesOf={placesOf}
       tapsOf={tapsOf}
-      heading={(section) => <SectionHeading section={section} />}
       chordNames={view.chordNames}
       fingers={view.fingers}
       lyrics={view.lyrics}

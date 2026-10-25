@@ -96,6 +96,7 @@ const sameSection = (a: Section, b: Section) =>
   a.last === b.last &&
   sameText(a.detail, b.detail) &&
   a.key === b.key &&
+  a.meter === b.meter &&
   a.pattern === b.pattern &&
   a.lines.length === b.lines.length &&
   a.lines.every((line, i) => line === b.lines[i])

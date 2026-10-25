@@ -9,6 +9,7 @@ import {
   JUMP_CHOICES,
   metersFor,
   sectionKey,
+  sectionMeter,
   type BarMarkChoice,
 } from '@/features/score-editor'
 import {
@@ -73,13 +74,13 @@ export function ClefKeys({ at }: { at?: { readonly hand: Hand; readonly bar: num
 }
 
 /**
- * Key signature (ADR 0089, 0094): from a bar's section on, up to the next change, as Flat changes key
- * from a bar; in the song's first section its own key, the music moved with it. In the palette the
- * first bar chosen's (else the caret's); over a key signature printed on the sheet, its bar (`bar`).
+ * Where a key or time signature changes from (ADR 0089, 0095), as Flat changes either from a bar: the
+ * section of the bar given (its sign on the sheet), else of the first bar chosen (or the caret's), from
+ * there on up to the next change; in the song's first section, the whole song. `said` names which,
+ * over the choice.
  */
-export function KeySignatureKeys({ bar }: { bar?: number }) {
+function useSignatureFrom(bar: number | undefined) {
   const { t } = useTranslation('editor')
-  const { actions } = useScoreEditorContext()
   const named = useSectionHeading()
   const chosen = useEditorState((state) => chosenBars(state).from)
   const from = bar ?? chosen
@@ -89,21 +90,31 @@ export function KeySignatureKeys({ bar }: { bar?: number }) {
   const first = useEditorState(
     (state) => (barsOf(state.draft).find((placed) => placed.section === section)?.index ?? 0) + 1,
   )
-  // The song's own key at its head; a later section's from there on.
   const song = section === 0
+  const said = song
+    ? t('signature.song')
+    : t('signature.fromSection', {
+        section: heading ? named({ ...heading, lines: [] }) : '',
+        bar: first,
+      })
+  return { from, section, song, said }
+}
+
+/**
+ * Key signature (ADR 0089, 0094): from a bar's section on, up to the next change, as Flat changes key
+ * from a bar; in the song's first section its own key, the music moved with it. In the palette the
+ * first bar chosen's (else the caret's); over a key signature printed on the sheet, its bar (`bar`).
+ */
+export function KeySignatureKeys({ bar }: { bar?: number }) {
+  const { actions } = useScoreEditorContext()
+  const { from, section, song, said } = useSignatureFrom(bar)
+  // The song's own key at its head; a later section's from there on.
   const key = useEditorState((state) =>
     keyParam(song ? state.draft.key : sectionKey(state.draft, section)),
   )
   return (
     <>
-      <h4 className="text-sm text-muted-foreground">
-        {song
-          ? t('signature.song')
-          : t('signature.fromSection', {
-              section: heading ? named({ ...heading, lines: [] }) : '',
-              bar: first,
-            })}
-      </h4>
+      <h4 className="text-sm text-muted-foreground">{said}</h4>
       <KeyChoice
         value={key}
         onChange={(next) =>
@@ -119,20 +130,33 @@ export function KeySignatureKeys({ bar }: { bar?: number }) {
 }
 
 /**
- * Time signature (ADR 0094): the song's own, one for every bar, another of its kind; a change of time
- * inside the song is for later, as the ⓘ beside the section's name says (ADR 0096).
+ * Time signature (ADR 0094, 0095): the meters of the song's kind, from a bar's section on up to the
+ * next change, as Flat changes time from a measure; in the song's first section the whole song's, every
+ * bar counted in it. In the palette the first bar chosen's (else the caret's); over a time signature
+ * printed on the sheet, its bar (`bar`).
  */
-export function TimeSignatureKeys() {
+export function TimeSignatureKeys({ bar }: { bar?: number }) {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
-  const meter = useEditorState((state) => state.draft.meter)
+  const { from, section, song, said } = useSignatureFrom(bar)
+  const kind = useEditorState((state) => state.draft.meter)
+  const meter = useEditorState((state) => sectionMeter(state.draft, section))
   return (
-    <Segmented
-      label={t('song.meter')}
-      value={meter}
-      options={metersFor(meter).map((each) => ({ value: each, label: each }))}
-      onChange={(next) => actions.dispatch({ type: 'settings', meter: next })}
-    />
+    <>
+      <h4 className="text-sm text-muted-foreground">{said}</h4>
+      <Segmented
+        label={t('song.meter')}
+        value={meter}
+        options={metersFor(kind).map((each) => ({ value: each, label: each }))}
+        onChange={(next) =>
+          actions.dispatch(
+            song
+              ? { type: 'settings', meter: next }
+              : { type: 'sectionMeter', bar: from, meter: next },
+          )
+        }
+      />
+    </>
   )
 }
 

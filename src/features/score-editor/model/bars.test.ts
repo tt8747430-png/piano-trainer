@@ -122,6 +122,15 @@ describe('setBarTicks, a pickup', () => {
     expect(form(long)).toEqual([[['D@0', 'C@0']]])
     expect(lengths(long)).toEqual([48, 96])
   })
+
+  it('reads a first bar against its section’s own meter: a whole bar of it is none (ADR 0095)', () => {
+    const waltz = draftOf({
+      sections: [{ kind: 'verse', meter: '3/4', lines: ['G C'] }],
+      melody: 'C4/1 D4/1 E4/1 | F4/3',
+    })
+    // A whole 3/4 bar made shorter is cut at its end, as any bar is: its first beats stay.
+    expect(shape(setBarTicks(waltz, 0, 48).melody).slice(0, 2)).toEqual(['C4@0/24', 'D4@24/24'])
+  })
 })
 
 describe('deleteBars, verses', () => {

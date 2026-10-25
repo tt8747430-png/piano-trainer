@@ -156,6 +156,11 @@ export type EditorAction =
    * the sheet (ADR 0094).
    */
   | { readonly type: 'sectionKey'; readonly bar: number; readonly key: Key }
+  /**
+   * A change of time from a bar's section on (ADR 0095): the first bar chosen's, or a time
+   * signature's on the sheet.
+   */
+  | { readonly type: 'sectionMeter'; readonly bar: number; readonly meter: Meter }
   | {
       readonly type: 'settings'
       readonly key?: Key

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { barAt, barLengths } from '@/features/score-editor'
+import { barAt, barLengths, meterAt } from '@/features/score-editor'
 import {
   TICKS_PER_BEAT,
   timeSignature,
@@ -39,7 +39,8 @@ function Figures({ time }: { time: TimeSignature }) {
 export function BarKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
-  const meter = useEditorState((state) => state.draft.meter)
+  // The caret's section's meter, its own or the song's (ADR 0095).
+  const meter = useEditorState((state) => meterAt(state.draft, state.caret))
   const barTicks = useEditorState((state) => barAt(state.draft, state.caret).bar.ticks)
   return (
     <>

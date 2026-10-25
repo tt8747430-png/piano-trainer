@@ -49,6 +49,8 @@ export interface ChartSection {
   readonly lines: readonly (readonly ChartBar[])[]
   /** The key its bars are written in, where that is not the chart's (a key change). */
   readonly key?: Key
+  /** The meter its bars are counted in, where that is not the chart's (a change of time, ADR 0095). */
+  readonly meter?: Meter
 }
 export interface Chart {
   readonly key: Key
@@ -175,6 +177,8 @@ export interface PerformanceBar extends BarMarks {
   readonly chords: readonly number[]
   /** The key it is played in, where that is not the Performance's (a key change). */
   readonly key?: Key
+  /** The meter it is counted in, where that is not the Performance's (a change of time, ADR 0095). */
+  readonly meter?: Meter
   /** The clef a hand's staff changes to at this bar. */
   readonly clefs?: HandClefs
 }

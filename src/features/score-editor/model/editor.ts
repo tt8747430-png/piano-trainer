@@ -32,8 +32,9 @@ import {
   toggleAccidental,
   writeRest,
 } from './notes'
+import { setMeter, setSectionMeter } from './meters'
 import { joinSection, setSectionKey, setSectionKind } from './sections'
-import { setKey, setMeter, setTempo } from './settings'
+import { setKey, setTempo } from './settings'
 import { nextMode, type EditorAction, type EditorState } from './state'
 import { writeTake } from './take-edits'
 import { barAt, barsOf, keyAt } from './timeline'
@@ -289,6 +290,10 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
     case 'sectionKey': {
       const section = barsOf(draft)[action.bar]?.section ?? 0
       return commit(state, setSectionKey(draft, section, action.key))
+    }
+    case 'sectionMeter': {
+      const section = barsOf(draft)[action.bar]?.section ?? 0
+      return commit(state, setSectionMeter(draft, section, action.meter))
     }
     case 'settings': {
       let next = draft

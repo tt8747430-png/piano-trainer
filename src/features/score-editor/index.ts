@@ -26,7 +26,7 @@ export {
   type EditorState,
 } from './model/state'
 export { carriesAccidental, notesAt, notesOf, startNear } from './model/notes'
-export { metersFor } from './model/settings'
+export { metersFor } from './model/meters'
 export { createEditorStore, type EditorStore } from './model/store'
 export { TAKE_INTO, takeParts, type TakeInto } from './model/take-edits'
 export {
@@ -35,7 +35,9 @@ export {
   chordAt,
   chordWrittenAt,
   keyAt,
+  meterAt,
   sectionKey,
+  sectionMeter,
   totalTicks,
   type PlacedBar,
 } from './model/timeline'

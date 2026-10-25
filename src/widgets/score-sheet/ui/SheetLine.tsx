@@ -6,9 +6,9 @@ import { cn, useElementSize } from '@/shared/lib'
 import { LazyScoreView, useCanvasReveal } from '@/shared/ui'
 import { staffOfHand } from '../model/line-music'
 import type { LineSheet } from '../model/line-sheets'
+import { labelRow, labelScale } from '@/shared/ui/score'
 import type { SheetField } from '../model/field-place'
 import type { EditPrinted } from '../model/printed'
-import { labelRow, labelScale } from '../model/label-row'
 import { LineOverlay } from './LineOverlay'
 
 /** Whether an element's top is on the screen. */
@@ -36,6 +36,7 @@ export const SheetLine = memo(function SheetLine({
   tapsOf,
   chordNames,
   fingers,
+  headings,
   edit,
   labels,
   staves,
@@ -81,6 +82,8 @@ export const SheetLine = memo(function SheetLine({
   chordNames: boolean
   /** The fingers written on the notes, printed: the fingering field types them there (ADR 0096). */
   fingers: boolean
+  /** Each section's name, by section: printed at its first bar (ADR 0095). */
+  headings: readonly string[]
   /** What edits a thing printed (ADR 0094). */
   edit: EditPrinted
   /** The staves' names, printed at the line's head: the piece's first line (ADR 0094). */
@@ -110,7 +113,7 @@ export const SheetLine = memo(function SheetLine({
           ? undefined
           : { staff, from: caret, to: caret + 1, midi: chordNote ?? undefined }
   // The caret's line comes into view when the caret moves onto it; the sheet opens where it is
-  // while the line is already in sight, its section's heading over it kept in view.
+  // while the line is already in sight.
   const held = useRef<boolean | null>(null)
   // On a page canvas, the canvas moves to it (ADR 0075); elsewhere the sheet scrolls.
   const reveal = useCanvasReveal()
@@ -164,6 +167,7 @@ export const SheetLine = memo(function SheetLine({
             chordNames={chordNames}
             row={row}
             labels={labelScale(scale, print)}
+            headings={headings}
             edit={edit}
             onWrite={onWrite}
             onDrag={onDrag}

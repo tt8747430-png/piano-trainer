@@ -45,7 +45,6 @@ const sheet = (
       onReach={vi.fn()}
       onDeselect={onDeselect}
       placesOf={(to) => placesIn(createEditorStore(draft, vi.fn()).getState(), to)}
-      heading={(section) => <h3>{section === 0 ? 'Verse' : 'Chorus'}</h3>}
       chordNames={chordNames}
       edit={editing(edited)}
       title={() => null}
@@ -55,12 +54,20 @@ const sheet = (
 describe('ScoreSheet', () => {
   beforeAll(loadScoreView)
 
-  it('shows each section’s heading over its lines, each bar named by its chords', async () => {
-    sheet('chords')
-    expect(screen.getByRole('heading', { name: 'Verse' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Chorus' })).toBeInTheDocument()
+  it('names each section in the labels’ row at its first bar, no heading over its lines (ADR 0095)', async () => {
+    const user = userEvent.setup()
+    const edited = vi.fn()
+    sheet('chords', vi.fn(), true, edited)
     expect(await screen.findByRole('button', { name: 'Bar 2: C D' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Bar 5: D' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Verse' })).not.toBeInTheDocument()
+    // Printed where it starts, a button opening the section's menu.
+    const chorus = screen.getByRole('button', { name: 'Chorus' })
+    expect(chorus.closest('[data-slot="line-labels"]')).not.toBeNull()
+    await user.click(chorus)
+    expect(edited).toHaveBeenLastCalledWith({ kind: 'section', section: 1 })
+    await user.click(screen.getByRole('button', { name: 'Verse' }))
+    expect(edited).toHaveBeenLastCalledWith({ kind: 'section', section: 0 })
   })
 
   it.each(['scroll', 'pages', 'horizontal'] as const)(
@@ -77,7 +84,6 @@ describe('ScoreSheet', () => {
           onReach={vi.fn()}
           onDeselect={vi.fn()}
           placesOf={() => []}
-          heading={() => null}
           chordNames
           edit={editing(vi.fn())}
           view={view}
@@ -126,7 +132,6 @@ describe('ScoreSheet', () => {
         onReach={vi.fn()}
         onDeselect={vi.fn()}
         placesOf={() => []}
-        heading={() => null}
         chordNames
         edit={editing(vi.fn())}
         title={() => null}
@@ -170,7 +175,6 @@ describe('ScoreSheet', () => {
         onReach={vi.fn()}
         onDeselect={vi.fn()}
         placesOf={() => []}
-        heading={() => null}
         chordNames
         edit={editing(vi.fn())}
         title={() => null}
@@ -205,7 +209,6 @@ describe('ScoreSheet', () => {
         onReach={vi.fn()}
         onDeselect={vi.fn()}
         placesOf={(to) => placesIn(createEditorStore(draft, vi.fn()).getState(), to)}
-        heading={() => null}
         chordNames
         edit={editing(vi.fn())}
         title={() => null}
@@ -237,7 +240,6 @@ describe('ScoreSheet', () => {
           onReach={vi.fn()}
           onDeselect={vi.fn()}
           placesOf={() => []}
-          heading={() => null}
           chordNames
           edit={editing(vi.fn())}
           title={() => null}
@@ -285,7 +287,6 @@ describe('ScoreSheet', () => {
         onReach={vi.fn()}
         onDeselect={vi.fn()}
         placesOf={() => []}
-        heading={() => null}
         chordNames
         edit={editing(vi.fn())}
         title={() => null}
@@ -312,11 +313,16 @@ describe('ScoreSheet', () => {
     expect(onField).toHaveBeenLastCalledWith({ kind: 'lyrics', verse: 0 }, 96, 'melody')
   })
 
-  it('numbers each line at its head, the tempo beside it, its row only as tall as what it holds', async () => {
+  it('numbers each line at its head, a section’s name and the tempo beside it, its row only as tall as what it holds', async () => {
     sheet('rh', vi.fn(), false)
     await screen.findByRole('button', { name: 'Bar 1: G' })
     const rows = [...document.querySelectorAll<HTMLElement>('[data-slot="line-labels"]')]
-    expect(rows.map((row) => row.textContent)).toEqual(['1', '3', '4'])
+    // As the Player prints them (ADR 0095).
+    expect(rows.map((row) => row.textContent)).toEqual([
+      '1 · Verse · \u{1D15F}= 90',
+      '3',
+      '4 · Chorus',
+    ])
     // The tempo in the row, not a row of its own over the staff (ADR 0074), a button there.
     expect(screen.getByRole('button', { name: 'Tempo: 90 BPM' })).toHaveTextContent('\u{1D15F}= 90')
     // No chord names: the row holds a number alone, not the chords' room (ADR 0072).
@@ -341,7 +347,6 @@ describe('ScoreSheet', () => {
           onReach={vi.fn()}
           onDeselect={vi.fn()}
           placesOf={() => []}
-          heading={() => null}
           chordNames
           edit={editing(vi.fn())}
           title={() => null}
@@ -454,7 +459,6 @@ describe('ScoreSheet', () => {
         onReach={vi.fn()}
         onDeselect={vi.fn()}
         placesOf={() => []}
-        heading={() => null}
         chordNames
         fingers
         edit={editing(vi.fn())}
@@ -488,7 +492,6 @@ describe('ScoreSheet', () => {
       onReach: vi.fn(),
       onDeselect: vi.fn(),
       placesOf: () => [],
-      heading: () => null,
       chordNames: true,
       edit: editing(vi.fn()),
       title: () => null,
@@ -513,7 +516,6 @@ describe('ScoreSheet', () => {
         onReach: vi.fn(),
         onDeselect: vi.fn(),
         placesOf: () => [],
-        heading: () => null,
         chordNames: true,
         edit: editing(vi.fn()),
         title: () => null,

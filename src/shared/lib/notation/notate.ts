@@ -301,7 +301,9 @@ export function notate(music: TimedMusic): Score {
   let tiedOn = new Set<string>()
   const clefs = clefsInForce(music.bars)
   const measures = music.bars.map((placed, index): Measure => {
-    const before = beatsBefore(music.bars, index, music.meter)
+    // Counted in its own meter where it has one (ADR 0095).
+    const meter = placed.meter ?? music.meter
+    const before = music.continued ? 0 : beatsBefore(music.bars, index, music.meter)
     const pickup = before > 0
     const from = beatsToTicks(before)
     const ticks = beatsToTicks(placed.beats)
@@ -309,7 +311,7 @@ export function notate(music: TimedMusic): Score {
       start: placed.startTick - from,
       ticks: from + ticks,
       from,
-      meter: music.meter,
+      meter,
       key: placed.key ?? music.key,
     }
     const chords = barChords(music.notes, bar, tiedOn, melodyStaff, sung)
@@ -327,7 +329,7 @@ export function notate(music: TimedMusic): Score {
     return {
       startTick: placed.startTick,
       ticks,
-      time: timeSignature(pickup ? beatsPerBar(music.meter) : placed.beats, music.meter),
+      time: timeSignature(pickup ? beatsPerBar(meter) : placed.beats, meter),
       ...(placed.key ? { key: placed.key } : {}),
       ...(placed.tempo ? { tempo: placed.tempo } : {}),
       ...barMarksOf(placed),

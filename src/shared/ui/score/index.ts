@@ -10,6 +10,10 @@ export {
   type StaffLabel,
 } from './layout'
 export { leftAt, xAtTick } from './layout'
+export { barLabels, type BarLabel, type LabelledBar } from './bar-labels'
+export { labelRow, labelScale } from './label-row'
+export { LabelRow, type PrintedPart, type PrintLabel } from './LabelRow'
+export { rowChords, type PrintedChord, type RowChord } from './row-chords'
 export { Playhead } from './Playhead'
 export { ScoreView } from './ScoreView'
 export { scoreHeight, staffHeight, VERSE, versesOf } from './size'

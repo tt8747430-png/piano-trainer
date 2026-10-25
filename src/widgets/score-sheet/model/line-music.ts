@@ -1,6 +1,7 @@
 import { HAND_IDS } from '@/entities/piece'
 import {
   barsOf,
+  sectionMeter,
   type Draft,
   type DraftNote,
   type Layer,
@@ -8,7 +9,7 @@ import {
   type PlacedBar,
 } from '@/features/score-editor'
 import { breakLine } from '@/shared/lib'
-import type { ScoreLayout } from '@/shared/ui/score'
+import { barLabels, type BarLabel, type LabelledBar, type ScoreLayout } from '@/shared/ui/score'
 import {
   clefsInForce,
   HOME_CLEF,
@@ -28,13 +29,29 @@ import {
   type TimedNote,
 } from '@/shared/lib/notation'
 
-/** One line of the chart: its section, its place there, and its bars. */
+/** One line of the chart: its section, its place there, its bars and what their labels print. */
 export interface SheetLineBars {
   readonly section: number
   readonly line: number
   readonly bars: readonly PlacedBar[]
   /** Where it starts on the piece's timeline. */
   readonly start: number
+  /** Each bar's label (ADR 0095): the line's first number, a section's name, the tempo. */
+  readonly labels: readonly BarLabel[]
+}
+
+type UnlabelledLine = Omit<SheetLineBars, 'labels'>
+
+/** The lines with their bars' labels, read from the piece's bars: each one's section, the tempo over the first. */
+function labelled(draft: Draft, lines: readonly UnlabelledLine[]): SheetLineBars[] {
+  const bars: LabelledBar[] = barsOf(draft).map((placed) => ({
+    section: placed.section,
+    ...(placed.index === 0 ? { tempo: draft.tempo } : {}),
+  }))
+  return lines.map((line) => {
+    const first = line.bars[0]?.index ?? 0
+    return { ...line, labels: barLabels(bars, first, first + line.bars.length) }
+  })
 }
 
 /**
@@ -45,7 +62,7 @@ export function linesOf(
   draft: Draft,
   fit?: { readonly room: number; readonly widths: readonly number[] },
 ): SheetLineBars[] {
-  return chartLines(draft).flatMap((line) => {
+  const cut = chartLines(draft).flatMap((line) => {
     if (!fit) return [line]
     const sizes = breakLine(
       line.bars.map((placed) => fit.widths[placed.index] ?? 0),
@@ -58,10 +75,11 @@ export function linesOf(
       return { ...line, bars, start: bars[0]?.start ?? line.start }
     })
   })
+  return labelled(draft, cut)
 }
 
-function chartLines(draft: Draft): SheetLineBars[] {
-  const lines: SheetLineBars[] = []
+function chartLines(draft: Draft): UnlabelledLine[] {
+  const lines: UnlabelledLine[] = []
   for (const placed of barsOf(draft)) {
     const current = lines.at(-1)
     if (current && current.section === placed.section && current.line === placed.line) {
@@ -81,7 +99,7 @@ function chartLines(draft: Draft): SheetLineBars[] {
 /** The whole piece as one line, a panorama's: its sections and lines run on. */
 export function oneLine(draft: Draft): SheetLineBars[] {
   const bars = barsOf(draft)
-  return bars.length === 0 ? [] : [{ section: 0, line: 0, bars, start: 0 }]
+  return bars.length === 0 ? [] : labelled(draft, [{ section: 0, line: 0, bars, start: 0 }])
 }
 
 const endOf = (line: SheetLineBars) => {
@@ -180,8 +198,9 @@ export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): Tim
     : undefined
   const bars = line.bars.map(({ start, bar, section }, index) => {
     const startTick = start - from
-    // A section's own key: its signature printed where it starts (a key change).
-    const written = draft.sections[section]?.heading.key
+    // A section's own key and meter: its signature and its time printed where it starts (a key
+    // change, a change of time, ADR 0095).
+    const { key: written, meter } = draft.sections[section]?.heading ?? {}
     const key = written === undefined ? null : parseKey(written)
     const holds = (staff: StaffId) =>
       notes.some(
@@ -199,6 +218,7 @@ export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): Tim
       ...(index === 0 && start === 0 ? { tempo: draft.tempo } : {}),
       ...barMarksOf(bar),
       ...(key ? { key } : {}),
+      ...(meter ? { meter } : {}),
       ...(index === 0 && inForce && inForce !== HOME_CLEF
         ? { clefs: inForce }
         : bar.clefs
@@ -220,18 +240,21 @@ export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): Tim
     chords,
     ...(tune ? { melodyStaff: true } : {}),
     ...(piano ? {} : { piano: false }),
+    // A later line goes on from the bars before it: its first bar, short, is no pickup.
+    ...(from > 0 ? { continued: true } : {}),
   }
 }
 
 /**
- * The time signature in force where a line begins: the last bar before it (the piece's first bar,
- * when short, counts as the meter's); none before the first line.
+ * The time signature in force where a line begins: the last bar before it, in its section's meter
+ * (the piece's first bar, when short, counts as its meter's); none before the first line.
  */
 export function timeBeforeLine(draft: Draft, line: SheetLineBars): TimeSignature | undefined {
   const index = line.bars[0]?.index ?? 0
   const before = barsOf(draft)[index - 1]
   if (!before) return undefined
-  const full = beatsPerBar(draft.meter)
+  const meter = sectionMeter(draft, before.section)
+  const full = beatsPerBar(meter)
   const beats = before.bar.ticks / TICKS_PER_BEAT
-  return timeSignature(before.index === 0 && beats < full ? full : beats, draft.meter)
+  return timeSignature(before.index === 0 && beats < full ? full : beats, meter)
 }

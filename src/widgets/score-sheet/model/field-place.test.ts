@@ -1,14 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { chordLabelWidth } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
-import { xAtTick, type Lyric } from '@/shared/ui/score'
+import { rowChords, xAtTick, type Lyric } from '@/shared/ui/score'
 import {
   chordFieldBox,
   chordRowTick,
   fingeringFieldBox,
   lyricAt,
   lyricsFieldBox,
-  printedChords,
 } from './field-place'
 
 const layout = {
@@ -28,17 +27,9 @@ const chords = [
   { startTick: 96, symbol: 'Bb7' },
 ]
 
-describe('the chord symbols printed over a line', () => {
-  it('stands each at its chord’s onset, printed as a lead sheet prints it, with its width', () => {
-    expect(printedChords(layout, chords, 16)).toEqual([
-      { tick: 0, symbol: 'G', x: 40, size: 16, width: chordLabelWidth('G', 16) },
-      { tick: 96, symbol: 'B♭7', x: 110, size: 16, width: chordLabelWidth('B♭7', 16) },
-    ])
-  })
-})
-
 describe('the chord-symbol field’s place (ADR 0096)', () => {
-  const printed = printedChords(layout, chords, 16)
+  // The symbols as the labels' row prints them, at full size.
+  const printed = rowChords(layout, chords, 1)
   // Every beat of the line, where a chord may start.
   const places = [0, 24, 48, 72, 96, 120, 144, 168]
   const xOf = (tick: number) => xAtTick(layout, tick)

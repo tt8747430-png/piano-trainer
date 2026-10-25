@@ -106,12 +106,12 @@ export const editor = {
     treble: 'Treble clef',
     bass: 'Bass clef',
   },
-  // The palette's Key and Time: a section's key, and the song's own, changed there (ADR 0094).
+  // The palette's Key and Time and their popovers: a section's key or meter, or the whole song's,
+  // changed there (ADR 0094, 0095).
   signature: {
-    // A key change from a section on, up to the next change (ADR 0089).
+    // A change of key or time from a section on, up to the next change (ADR 0089, 0095).
     fromSection: 'From {{section}} on (bar {{bar}})',
-    song: 'The song’s key',
-    timeLater: 'A change of time inside the song is not written yet: this is the whole song’s.',
+    song: 'The whole song',
   },
   // The lines drawn over notes, each a key.
   lines: {

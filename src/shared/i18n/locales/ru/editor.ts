@@ -95,8 +95,7 @@ export const editor: LocaleResources['editor'] = {
   },
   signature: {
     fromSection: 'С раздела «{{section}}» (такт {{bar}})',
-    song: 'Тональность песни',
-    timeLater: 'Смену размера внутри песни пока не записать: здесь размер всей песни.',
+    song: 'Вся песня',
   },
   lines: {
     slur: 'Лига',
