@@ -126,7 +126,7 @@ describe('createSettingsStore', () => {
       },
       scoreView: {
         layout: 'scroll',
-        notation: true,
+        music: 'grid',
         chordNames: false,
         lyrics: false,
         hidden: ['treble', 'staff0'],
@@ -159,14 +159,14 @@ describe('createSettingsStore', () => {
       restored({
         scoreView: {
           layout: 'pages',
-          notation: 'no',
+          music: 'chart',
           chordNames: false,
           hidden: ['bass', 'x', 'bass', 'staff1', 'staff-1', 'melody'],
         },
       }).scoreView,
     ).toEqual({
       layout: 'pages',
-      notation: true,
+      music: 'sheet',
       chordNames: false,
       lyrics: true,
       hidden: ['bass', 'staff1'],
@@ -187,9 +187,15 @@ describe('createSettingsStore', () => {
     expect(restored({ recorder: { click: 'no' } }).recorder).toEqual(DEFAULT_RECORDER)
   })
 
-  it('starts afresh over a save of the version before, whose View had a Melody (ADR 0097)', () => {
-    expect(SETTINGS_VERSION).toBe(8)
-    expect(restored({ theme: 'dark', scoreView: { melodyStaff: false } }, 7)).toEqual(
+  it('opens the Player in the sheet music, its view saved as any of the four (ADR 0099)', () => {
+    expect(DEFAULT_SCORE_VIEW.music).toBe('sheet')
+    for (const music of ['sheet', 'lyrics', 'diagrams', 'grid'])
+      expect(restored({ scoreView: { music } }).scoreView.music).toBe(music)
+  })
+
+  it('starts afresh over a save of the version before, whose View had a Sheet music switch (ADR 0099)', () => {
+    expect(SETTINGS_VERSION).toBe(9)
+    expect(restored({ theme: 'dark', scoreView: { notation: false } }, 8)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

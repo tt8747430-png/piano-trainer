@@ -51,6 +51,23 @@ function beatSpans(performance: Performance, played: number): { from: Tick; to: 
   return spans
 }
 
+/** A bar played in beats, with its own chords; none past the last. */
+function cellBar(performance: Performance, played: number): CellBar | null {
+  const bar = performance.bars[played]
+  if (!bar) return null
+  const startsIn = (chord: number, from: Tick, to: Tick) => {
+    const start = (performance.chords[chord]?.startTick ?? -1) - bar.startTick
+    return start >= from && start < to
+  }
+  const cells = beatSpans(performance, played).map(({ from, to }) => ({
+    from,
+    to,
+    chords: bar.chords.filter((chord) => startsIn(chord, from, to)),
+  }))
+  const written = writtenBarOf(performance, played)
+  return { written, played, section: bar.section, line: bar.line, cells }
+}
+
 /** Every bar as written, each once (its first pass, where the repeats are played), in beats. */
 export function beatCells(performance: Performance): CellBar[] {
   const written = new Set(performance.bars.map((_, played) => writtenBarOf(performance, played)))
@@ -58,19 +75,24 @@ export function beatCells(performance: Performance): CellBar[] {
     .sort((a, b) => a - b)
     .flatMap((each) => {
       const played = firstPlayedBar(performance, each)
-      const bar = played === null ? undefined : performance.bars[played]
-      if (played === null || !bar) return []
-      const startsIn = (chord: number, from: Tick, to: Tick) => {
-        const start = (performance.chords[chord]?.startTick ?? -1) - bar.startTick
-        return start >= from && start < to
-      }
-      const cells = beatSpans(performance, played).map(({ from, to }) => ({
-        from,
-        to,
-        chords: bar.chords.filter((chord) => startsIn(chord, from, to)),
-      }))
-      return [{ written: each, played, section: bar.section, line: bar.line, cells }]
+      return (played === null ? null : cellBar(performance, played)) ?? []
     })
+}
+
+/** Every bar as played, the repeats taken (the beat strip's, ADR 0099), in beats. */
+export function playedBeatCells(performance: Performance): CellBar[] {
+  return performance.bars.flatMap((_, played) => cellBar(performance, played) ?? [])
+}
+
+/**
+ * The beat group at a tick, else the first after it: where a beat tapped takes the cursor (ADR
+ * 0099). Past the last, the last; none in music of no notes.
+ */
+export function beatGroupFrom(performance: Performance, tick: Tick): number | null {
+  const { beatGroups } = performance
+  if (beatGroups.length === 0) return null
+  const from = beatGroups.findIndex((group) => group.tick >= tick)
+  return from < 0 ? beatGroups.length - 1 : from
 }
 
 /**

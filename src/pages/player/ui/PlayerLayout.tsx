@@ -5,12 +5,13 @@ import {
   selectScoreView,
   useSettings,
   useSettingsStoreApi,
+  type MusicView,
 } from '@/entities/settings'
 import { MidiButton } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import { setScoreView } from '@/features/set-preference'
 import type { Performance } from '@/shared/lib/arrangement'
-import { SheetTitle } from '@/shared/ui'
+import { ChordView, ViewTiles } from '@/widgets/chord-views'
 import {
   HandsButton,
   LoopButton,
@@ -24,7 +25,7 @@ import {
   type PracticePlayer,
   type PracticeView,
 } from '@/widgets/practice-player'
-import { ScoreViewMenu } from '@/widgets/score-view-menu'
+import { SCORE_PARTS, ScoreViewMenu, type ScorePart } from '@/widgets/score-view-menu'
 import { SheetMusic } from '@/widgets/sheet-music'
 import { PracticeSwitches } from './PracticeSwitches'
 
@@ -34,11 +35,24 @@ const NO_HEADINGS: readonly string[] = []
 const NO_STAVES: readonly { readonly name?: StaffName }[] = []
 
 /**
+ * What of the score each view of the music offers in the View (ADR 0099): the sheet music its every
+ * part; Diagrams the words it shows under its strip; Chords over lyrics and the Grid none, the chords
+ * and the words being the view.
+ */
+const VIEW_PARTS: Readonly<Record<MusicView, readonly ScorePart[]>> = {
+  sheet: SCORE_PARTS,
+  lyrics: [],
+  diagrams: ['lyrics'],
+  grid: [],
+}
+
+/**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): the toolbar (Close, Practise ·
- * Edit, then the loop, the View, MIDI and Setup), the sheet music under its title (ADR 0094), Wait
- * mode's line, the transport floating under it (the tempo, ‹ ▶ › and the hands) and the keys at the
- * foot, or under the toolbar where the keyboard settings dock them at the top; the computer's keys
- * drive it (`usePlayerShortcuts`).
+ * Edit, then the loop, the View, MIDI and Setup), the music under its title (ADR 0094) as the View
+ * shows it (ADR 0099: the sheet music, Chords over lyrics, Diagrams or the Grid), Wait mode's line,
+ * the transport floating under it (the tempo, ‹ ▶ › and the hands) and the keys at the foot, or under
+ * the toolbar where the keyboard settings dock them at the top; the computer's keys drive it
+ * (`usePlayerShortcuts`).
  */
 export function PlayerLayout({
   title,
@@ -51,7 +65,6 @@ export function PlayerLayout({
   modes,
   piano = true,
   staves = NO_STAVES,
-  chart,
 }: {
   /**
    * Whether the sheet writes the piano's staves: not for a song that hides them, a lead sheet (ADR
@@ -71,11 +84,6 @@ export function PlayerLayout({
   setup: ReactNode
   /** Practise · Edit (ADR 0090), after Close: a piece's own, none for a walk. */
   modes?: ReactNode
-  /**
-   * What stands where the sheet music is with the View's Sheet music off: a piece's chord chart
-   * under its title (ADR 0098); none for a walk, which keeps its title alone there.
-   */
-  chart?: ReactNode
 }) {
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
@@ -121,15 +129,22 @@ export function PlayerLayout({
           keys={{ shown: scoreView.keys, show: (on) => setScoreView(settings, { keys: on }) }}
           staves={viewed}
           piano={piano}
+          views={
+            <ViewTiles
+              value={scoreView.music}
+              onChange={(music) => setScoreView(settings, { music })}
+            />
+          }
+          parts={VIEW_PARTS[scoreView.music]}
         >
-          <PracticeSwitches />
+          {scoreView.music === 'sheet' ? <PracticeSwitches /> : null}
         </ScoreViewMenu>
         <MidiButton />
         {setup}
       </PlayerArea>
       {dock === 'top' ? keys : null}
       <PlayerArea area="sheet">
-        {scoreView.notation ? (
+        {scoreView.music === 'sheet' ? (
           <SheetMusic
             view={scoreView}
             piano={piano}
@@ -149,8 +164,16 @@ export function PlayerLayout({
             onLoopChange={player.setLoop}
           />
         ) : (
-          // No notation: a piece's chord chart (ADR 0098), else the title alone (ADR 0094).
-          (chart ?? <SheetTitle title={title} place="lines" />)
+          <ChordView
+            view={scoreView.music}
+            title={title}
+            performance={performance}
+            headings={headings}
+            practice={practice}
+            loop={player.loop}
+            words={scoreView.lyrics}
+            onSheet={() => setScoreView(settings, { music: 'sheet' })}
+          />
         )}
       </PlayerArea>
       <PlayerArea

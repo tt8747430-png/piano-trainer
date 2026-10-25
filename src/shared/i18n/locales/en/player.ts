@@ -5,15 +5,28 @@ export const player = {
   // How the score is shown (ADR 0064), from the bar: remembered for every piece.
   // The View's switches only practice has (ADR 0094); the rest of the View is music's.
   view: {
-    notation: 'Sheet music',
     positionsDetail: 'Beside each chord’s name, the position the right hand plays it in',
   },
+  // The Player's views of the music (ADR 0099), the View's tiles; each names its own part of the
+  // screen.
+  views: {
+    label: 'Show the music as',
+    sheet: 'Sheet music',
+    lyrics: 'Chords over lyrics',
+    diagrams: 'Diagrams',
+    grid: 'Grid',
+  },
+  /** Music of no chord symbol in a view of its chords (ADR 0094, 0099), and the way to its sheet. */
+  noChords: 'This music has no chord symbols.',
+  toSheet: 'Show the sheet music',
+  /** The Diagrams view's chord to come, where none sounds yet: a pickup, a bar of no chord. */
+  nextChord: 'Next: {{symbol}}',
+  /** A line of Chords over lyrics, by its bars: a tap takes the Player there. */
+  line: { one: 'Bar {{n}}', many: 'Bars {{first}}–{{last}}' },
   key: 'Key',
   root: 'Root',
   walk: { title: 'Walk the chords in {{scale}}' },
   progression: { title: '{{numerals}} in {{key}}', walking: '{{numerals}} from {{key}}, {{walk}}' },
-  /** A piece's chords by bar, where its sheet music is with the View's Sheet music off (ADR 0098). */
-  chart: 'Chord chart',
   /** A piece walked through the keys, from the learner's key. */
   /** A walk through the keys, as a title says it. */
   walking: {

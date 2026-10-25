@@ -7,7 +7,7 @@ import {
   type Performance,
 } from '@/shared/lib/arrangement'
 import { note, parseChordSymbol, type Meter } from '@/shared/lib/music'
-import { beatAt, beatCells } from './beats'
+import { beatAt, beatCells, beatGroupFrom, playedBeatCells } from './beats'
 
 const BEATS: EventPattern = {
   id: 'beats',
@@ -152,5 +152,77 @@ describe('beatAt', () => {
       true,
     )
     expect(beatAt(repeated, 200)).toEqual({ bar: 2, beat: 0, startTick: 192 })
+  })
+})
+
+describe('playedBeatCells', () => {
+  it('counts every bar as played, a repeat each time, each with its own chords', () => {
+    // C F-Dm repeated, then G: played C F-Dm C F-Dm G.
+    const repeated = played(
+      '4/4',
+      [
+        [
+          [
+            { ...bar(4, ['C', 4]), repeatStart: true },
+            { ...bar(2, ['F', 1], ['Dm', 1]), barline: 'repeat' },
+          ],
+          [bar(4, ['G', 4])],
+        ],
+      ],
+      true,
+    )
+    const cells = playedBeatCells(repeated)
+    expect(
+      cells.map(({ written, played, line, cells }) => ({
+        written,
+        played,
+        line,
+        cells: cells.map(({ from, chords }) => [
+          from,
+          ...chords.map((chord) => repeated.chords[chord]?.symbol),
+        ]),
+      })),
+    ).toEqual([
+      { written: 0, played: 0, line: 0, cells: [[0, 'C'], [24], [48], [72]] },
+      {
+        written: 1,
+        played: 1,
+        line: 0,
+        cells: [
+          [0, 'F'],
+          [24, 'Dm'],
+        ],
+      },
+      { written: 0, played: 2, line: 0, cells: [[0, 'C'], [24], [48], [72]] },
+      {
+        written: 1,
+        played: 3,
+        line: 0,
+        cells: [
+          [0, 'F'],
+          [24, 'Dm'],
+        ],
+      },
+      { written: 2, played: 4, line: 1, cells: [[0, 'G'], [24], [48], [72]] },
+    ])
+    // The second pass's chords are its own.
+    expect(cells[2]?.cells[0]?.chords).toEqual([3])
+  })
+})
+
+describe('beatGroupFrom', () => {
+  // Beat groups on every beat of two bars, C and G: at 0, 24, … 168.
+  const four = played('4/4', [[[bar(4, ['C', 4]), bar(4, ['G', 4])]]])
+
+  it('is the beat group at a tick, else the next after it: where a beat tapped takes the cursor', () => {
+    expect(beatGroupFrom(four, 0)).toBe(0)
+    expect(beatGroupFrom(four, 24)).toBe(1)
+    expect(beatGroupFrom(four, 25)).toBe(2)
+    expect(beatGroupFrom(four, 96)).toBe(4)
+  })
+
+  it('is the last past the last beat group, and none in music of no notes', () => {
+    expect(beatGroupFrom(four, 170)).toBe(7)
+    expect(beatGroupFrom({ ...four, beatGroups: [] }, 0)).toBeNull()
   })
 })

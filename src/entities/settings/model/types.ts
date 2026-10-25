@@ -153,14 +153,21 @@ export const REMEMBERED_CHORDS = 24
 export const CHORD_KEYS_MAX = 10
 
 /**
+ * The Player's four views of the music (ADR 0099, Chordify's): the sheet music; the chords as chips
+ * over the words; the chord sounding as a diagram beside the next; the chart in beat cells.
+ */
+export const MUSIC_VIEWS = ['sheet', 'lyrics', 'diagrams', 'grid'] as const
+export type MusicView = (typeof MUSIC_VIEWS)[number]
+
+/**
  * How the Player and the score editor show a score (ADR 0064, Soundslice's view settings): laid out
- * as one line across, lines down the screen or A4 pages; the score itself, or only the keys; the
- * chord names; the words under the staff they are written on (ADR 0093); the staves hidden, each by
- * its place (ADR 0097); and the keys, or the score alone.
+ * as one line across, lines down the screen or A4 pages; the Player's view of it (ADR 0099: the
+ * editor always shows the score); the chord names; the words under the staff they are written on
+ * (ADR 0093); the staves hidden, each by its place (ADR 0097); and the keys, or the score alone.
  */
 export interface ScoreViewSettings {
   readonly layout: SheetView
-  readonly notation: boolean
+  readonly music: MusicView
   readonly chordNames: boolean
   /** The verses under the staff they are written on, where the song has words. */
   readonly lyrics: boolean
@@ -176,7 +183,7 @@ export interface ScoreViewSettings {
  */
 export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   layout: 'scroll',
-  notation: true,
+  music: 'sheet',
   chordNames: true,
   lyrics: true,
   hidden: [],
@@ -268,6 +275,7 @@ export const isSidebar = isOneOf(SIDEBARS)
 export const isOctaveShift = isOneOf(OCTAVE_SHIFTS)
 export const isTouch = isOneOf(TOUCHES)
 export const isPedalWay = isOneOf(PEDAL_WAYS)
+export const isMusicView = isOneOf(MUSIC_VIEWS)
 
 /** The first of the browser's preferred languages the app speaks decides; English otherwise. */
 export function detectLocale(languages: readonly string[] | undefined): Locale {

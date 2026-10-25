@@ -7,7 +7,7 @@ export {
 } from './practice-machine'
 export { PRACTICE_MODES, type PracticeMode } from './practice-mode'
 export { usePractice, type Practice } from './use-practice'
-export { isLoopParam, loopParam, readLoop, type BarRange, type LoopParam } from './loop'
+export { isLoopParam, loopParam, loopTicks, readLoop, type BarRange, type LoopParam } from './loop'
 export {
   beatGroupInBar,
   firstPlayedBar,
@@ -16,7 +16,15 @@ export {
   writtenBarOf,
 } from './written-bar'
 export { chordSummary, diagramChord, diagramKeys, type DiagramChord } from './chord-diagram'
-export { beatAt, beatCells, type BeatCell, type CellBar, type PlayedBeat } from './beats'
+export {
+  beatAt,
+  beatCells,
+  beatGroupFrom,
+  playedBeatCells,
+  type BeatCell,
+  type CellBar,
+  type PlayedBeat,
+} from './beats'
 export { useBeat } from './use-beat'
 
 export { arrangePiece, ownChoice } from './arrange-piece'

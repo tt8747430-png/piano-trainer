@@ -14,6 +14,7 @@ import { singleStaff, type StaffId } from '@/shared/lib/notation'
 import { MenuSection, SheetLayoutField, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
+import { SCORE_PARTS, type ScorePart } from '../model/score-parts'
 
 /** A group's switches, one under the other, the last with no line under it. */
 const SWITCHES = 'gap-0 [&>[data-slot=switch-row]:last-child]:border-b-0'
@@ -28,19 +29,23 @@ function ClefGlyph({ clef }: { clef: Clef }) {
 
 /**
  * How a score is shown (ADR 0064, 0094, Soundslice's view settings): one menu, the Player's and the
- * score editor's, behind the eye in each bar, remembered for every piece. The layout (across, down
- * the screen or on A4 pages); the score's staves, each switched by its name (ADR 0097: a single
- * staff's own, else its place's, then the piano's upper and lower), the last in sight kept; then
- * what is shown: the chord symbols, the words (ADR 0093), the notes' fingers (the editor's fingering
- * field types them where they print, ADR 0096) and the keys (`keys`, each screen's own), then a
- * screen's own switches (`children`: the Player's, what only practice has). What the score holds is
- * edited on it, and how it plays is the Setup's: nothing is here twice.
+ * score editor's, behind the eye in each bar, remembered for every piece. A screen's own views of the
+ * music first (`views`: the Player's tiles, ADR 0099); the layout (across, down the screen or on A4
+ * pages); the score's staves, each switched by its name (ADR 0097: a single staff's own, else its
+ * place's, then the piano's upper and lower), the last in sight kept; then what is shown: the chord
+ * symbols, the words (ADR 0093), the notes' fingers (the editor's fingering field types them where
+ * they print, ADR 0096) and the keys (`keys`, each screen's own), then a screen's own switches
+ * (`children`: the Player's, what only practice has). Of the score's parts, those the view shown has
+ * (`parts`). What the score holds is edited on it, and how it plays is the Setup's: nothing is here
+ * twice.
  */
 export function ScoreViewMenu({
   keys,
   staves,
   piano,
   disabled = false,
+  views,
+  parts = SCORE_PARTS,
   children,
 }: {
   /** The keys under the score: whether they are out, and putting them away or back. */
@@ -51,6 +56,10 @@ export function ScoreViewMenu({
   piano: boolean
   /** Waiting on something else first: the editor's while a take records. */
   disabled?: boolean
+  /** A screen's own views of the music, at the menu's top: the Player's. */
+  views?: ReactNode
+  /** The score's parts the view shown has: the sheet's, every one. */
+  parts?: readonly ScorePart[]
   /** A screen's own switches, after the keys. */
   children?: ReactNode
 }) {
@@ -97,41 +106,52 @@ export function ScoreViewMenu({
         align="end"
         className="max-h-[80dvh] w-80 max-w-[calc(100vw-2rem)] gap-4 overflow-y-auto p-4"
       >
-        <SheetLayoutField
-          value={view.layout}
-          onChange={(layout) => setScoreView(store, { layout })}
-        />
-        <MenuSection title={t('view.staves')} className={SWITCHES}>
-          {switches.map(({ staff, label, clef }) => (
-            <SwitchRow
-              key={staff}
-              icon={<ClefGlyph clef={clef} />}
-              label={label}
-              checked={shown(staff)}
-              disabled={shown(staff) && inSight === 1}
-              onCheckedChange={(on) => setStaffShown(store, staff, on)}
-            />
-          ))}
-        </MenuSection>
+        {views}
+        {parts.includes('layout') ? (
+          <SheetLayoutField
+            value={view.layout}
+            onChange={(layout) => setScoreView(store, { layout })}
+          />
+        ) : null}
+        {parts.includes('staves') ? (
+          <MenuSection title={t('view.staves')} className={SWITCHES}>
+            {switches.map(({ staff, label, clef }) => (
+              <SwitchRow
+                key={staff}
+                icon={<ClefGlyph clef={clef} />}
+                label={label}
+                checked={shown(staff)}
+                disabled={shown(staff) && inSight === 1}
+                onCheckedChange={(on) => setStaffShown(store, staff, on)}
+              />
+            ))}
+          </MenuSection>
+        ) : null}
         <MenuSection title={t('view.show')} className={SWITCHES}>
-          <SwitchRow
-            icon={<span className="font-display text-base font-semibold">C⁷</span>}
-            label={t('sheet.chordNames')}
-            checked={view.chordNames}
-            onCheckedChange={(on) => setScoreView(store, { chordNames: on })}
-          />
-          <SwitchRow
-            icon={<WholeWord />}
-            label={t('view.lyrics')}
-            checked={view.lyrics}
-            onCheckedChange={(on) => setScoreView(store, { lyrics: on })}
-          />
-          <SwitchRow
-            icon={<Hash />}
-            label={t('view.fingers')}
-            checked={fingers}
-            onCheckedChange={(on) => setPracticeToggle(store, 'fingerNumbers', on)}
-          />
+          {parts.includes('chordNames') ? (
+            <SwitchRow
+              icon={<span className="font-display text-base font-semibold">C⁷</span>}
+              label={t('sheet.chordNames')}
+              checked={view.chordNames}
+              onCheckedChange={(on) => setScoreView(store, { chordNames: on })}
+            />
+          ) : null}
+          {parts.includes('lyrics') ? (
+            <SwitchRow
+              icon={<WholeWord />}
+              label={t('view.lyrics')}
+              checked={view.lyrics}
+              onCheckedChange={(on) => setScoreView(store, { lyrics: on })}
+            />
+          ) : null}
+          {parts.includes('fingers') ? (
+            <SwitchRow
+              icon={<Hash />}
+              label={t('view.fingers')}
+              checked={fingers}
+              onCheckedChange={(on) => setPracticeToggle(store, 'fingerNumbers', on)}
+            />
+          ) : null}
           <SwitchRow
             icon={<Piano />}
             label={t('view.keys')}

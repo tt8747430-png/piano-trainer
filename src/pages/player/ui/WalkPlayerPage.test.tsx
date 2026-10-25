@@ -14,15 +14,22 @@ describe('Walk the chords in the Player', () => {
     expect(screen.getByRole('button', { name: 'Bar 8: Dm' })).toBeInTheDocument()
   })
 
-  it('keeps its title alone where the sheet was with the sheet music off: a song’s chart is no walk’s (ADR 0098)', async () => {
+  it('shows its chords in the views of them, its one section named nowhere (ADR 0099)', async () => {
     const { settingsStore } = await renderApp('/play/walk?root=D&kind=dorian')
     const title = { level: 1, name: 'Walk the chords in D Dorian' }
     await screen.findByRole('heading', title)
-    act(() => setScoreView(settingsStore, { notation: false }))
+    act(() => setScoreView(settingsStore, { music: 'grid' }))
     expect(screen.queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('region', { name: 'Chord chart' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: /^Bar / })).not.toBeInTheDocument()
-    expect(screen.getByRole('heading', title)).toBeInTheDocument()
+    const grid = screen.getByRole('region', { name: 'Grid' })
+    expect(within(grid).getByRole('heading', title)).toBeInTheDocument()
+    expect(within(grid).queryByRole('heading', { level: 2 })).not.toBeInTheDocument()
+    expect(within(grid).getByRole('button', { name: 'Bar 1: Dm' })).toHaveAttribute(
+      'aria-current',
+      'step',
+    )
+    act(() => setScoreView(settingsStore, { music: 'diagrams' }))
+    const diagrams = screen.getByRole('region', { name: 'Diagrams' })
+    expect(within(diagrams).getAllByRole('img')[0]).toHaveAccessibleName(/^Dm: /)
   })
 
   it('plays and stops', async () => {

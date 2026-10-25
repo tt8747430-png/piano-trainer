@@ -725,6 +725,32 @@
   }
 }
 
+/* The Player's Diagrams view (widgets/chord-views, ADR 0099): its parts placed by `data-area`. Down
+   the screen the title, the chords, the beat strip and the words sung; on a phone on its side, where
+   the bar and the keys leave a short room, the chords beside the strip and the words. */
+@utility diagrams-view {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'title' 'chords' 'strip' 'words';
+  align-content: start;
+  & > [data-area='title'] {
+    grid-area: title;
+  }
+  & > [data-area='chords'] {
+    grid-area: chords;
+  }
+  & > [data-area='strip'] {
+    grid-area: strip;
+  }
+  & > [data-area='words'] {
+    grid-area: words;
+  }
+  @variant landscape-phone {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas: 'title title' 'chords strip' 'chords words';
+  }
+}
+
 /* A row that scrolls sideways fades at an edge with more beyond it, where the browser can tell. */
 @utility fade-scroll-x {
   @supports (animation-timeline: scroll()) {
