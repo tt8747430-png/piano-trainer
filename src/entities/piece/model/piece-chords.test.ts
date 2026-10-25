@@ -8,8 +8,14 @@ describe('pieceChords', () => {
     expect(pieceChords(testSong(['G Cm Fm Eb', 'G Cm Ab Bb']))).toEqual(['G', 'Cm', 'Fm', 'E♭'])
   })
 
-  it('lists each symbol once, a slash chord as its own', () => {
-    expect(pieceChords(testSong(['C Am-C F G7 C/E C']), 8)).toEqual(['C', 'Am', 'F', 'G7', 'C/E'])
+  it('lists each chord once, a slash chord as its chord over any bass', () => {
+    expect(pieceChords(testSong(['C Am-C F G7 C/E C D/F#']), 8)).toEqual([
+      'C',
+      'Am',
+      'F',
+      'G7',
+      'D',
+    ])
     const song = testSong(['C Am F G7 C/E'])
     expect(pieceChords(song, 2)).toEqual(['C', 'Am'])
     expect(pieceChords(song)).toEqual(['C', 'Am', 'F', 'G7'])

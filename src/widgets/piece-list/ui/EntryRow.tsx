@@ -61,7 +61,7 @@ export function EntryRow({ entry, tile = true }: { entry: Entry; tile?: boolean 
           <span
             data-slot="row-chords"
             aria-hidden
-            className="block truncate font-display text-sm font-semibold text-muted-foreground"
+            className="block truncate font-display text-sm font-medium text-muted-foreground"
           >
             {chords.join(CHORD_SPACE)}
           </span>

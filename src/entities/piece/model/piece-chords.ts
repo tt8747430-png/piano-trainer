@@ -6,14 +6,21 @@ import { isPiece, type Entry } from './types'
 const symbols = new WeakMap<Entry, readonly string[]>()
 
 /**
- * A piece's chord symbols as its chart writes them, in the order they first come, each once (a slash
- * chord its own), the first `count`: what a song's row lists. A song written in degrees is read in
- * its key; a listing or a song of no chord symbol (ADR 0094) has none.
+ * A piece's chords as its chart writes them, in the order they first come, each once over any bass
+ * (`C/E` is C: a row says which chords, the song's page how they sit), the first `count`: what a
+ * song's row lists. A song written in degrees is read in its key; a listing or a song of no chord
+ * symbol (ADR 0094) has none.
  */
 export function pieceChords(entry: Entry, count = 4): readonly string[] {
   let known = symbols.get(entry)
   if (!known) {
-    known = isPiece(entry) ? [...new Set(chordsOf(chartOf(entry)).map(chordSymbol))] : []
+    known = isPiece(entry)
+      ? [
+          ...new Set(
+            chordsOf(chartOf(entry)).map(({ root, quality }) => chordSymbol({ root, quality })),
+          ),
+        ]
+      : []
     symbols.set(entry, known)
   }
   return known.slice(0, count)

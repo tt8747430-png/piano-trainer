@@ -71,8 +71,9 @@ describe('Songs', () => {
   it('lists a song’s first chords under its title, which its name leaves to its page', async () => {
     await renderApp('/songs')
     const song = await screen.findByRole('link', { name: /Still, my soul, be still/ })
-    expect(within(song).getByText('G C Em G/B')).toBeVisible()
-    expect(song).not.toHaveAccessibleName(/G\/B/)
+    // Each chord once over any bass: its G/B is G.
+    expect(within(song).getByText('G C Em Dsus4')).toBeVisible()
+    expect(song).not.toHaveAccessibleName(/Dsus4/)
     // A listing has no chart, so no chords.
     const listing = screen.getAllByRole('link', { name: /No chart yet/ })[0]
     expect(listing?.querySelector('[data-slot="row-chords"]')).toBeNull()
