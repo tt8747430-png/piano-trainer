@@ -1,5 +1,5 @@
 import { act, render, screen } from '@testing-library/react'
-import { useEffect, useRef, type ComponentProps, type ReactNode } from 'react'
+import { useLayoutEffect, useRef, type ComponentProps, type ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { midi, note, type Tick } from '@/shared/lib/music'
 import { notate, type StaffId, type TimedNote } from '@/shared/lib/notation'
@@ -43,9 +43,12 @@ type PlayheadProps = Omit<ComponentProps<typeof Playhead>, 'layout'>
 /** The engraving's layout, as the playhead is handed it. */
 let laid: ScoreLayout | undefined
 
-/** Tells the test the layout the engraving handed the playhead. */
+/**
+ * Tells the test the layout the engraving handed the playhead, before "Engraved" can be found: a
+ * passive effect may run after the test has read the layout of the test before.
+ */
 function Laid({ layout }: { layout: ScoreLayout }) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     laid = layout
   }, [layout])
   return <p>Engraved</p>
