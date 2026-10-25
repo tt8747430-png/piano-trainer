@@ -15,6 +15,7 @@ export {
   type Performance,
   type PerformanceBar,
   type PerformanceNote,
+  type PerformedChord,
   type StaffMusic,
   type StaffNote,
   type WrittenHands,

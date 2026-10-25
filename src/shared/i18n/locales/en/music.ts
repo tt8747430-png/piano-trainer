@@ -227,6 +227,16 @@ export const music = {
   playBarChord: 'Play bar {{n}}, {{symbol}}',
   // A row of chords that play, named for a screen reader.
   rowChords: 'Chords',
+  // A chord drawn as keys (ADR 0099), named for a screen reader by its notes; a piece's chords as
+  // diagrams, in the order they first sound.
+  chordDiagram: '{{symbol}}: {{notes}}',
+  chordSummary: 'Chords',
+  // A chord's sheet: its diagram large, and Play; where it is learned, played on the keys under it.
+  chordSheet: {
+    title: '{{symbol}} chord',
+    learn: 'Play it on the keys',
+    learned: 'That’s it.',
+  },
   // An interval's card: how far it is, the chords it is heard in, and the ways it is played.
   intervalCard: {
     semitones: 'Semitones: {{n}}',
