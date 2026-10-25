@@ -4,6 +4,16 @@
 @custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 500px) and (max-width: 1023px));
 /* The narrowest phones held upright (under 360px): a bar of round buttons gives up what it can spare. */
 @custom-variant narrow-phone (@media (max-width: 359.98px));
+/* A wash under the pointer only where a mouse or a trackpad hovers, at every size: a phone keeps a
+   tapped element hovered, and some say they hover, so a tap would leave its wash behind (the
+   printed title's, a palette key's). */
+@custom-variant hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
 /* Keys docked at the foot of a screen wide for its height (a phone on its side, a laptop): the
    screen's floating actions stand at its side, over the keys, not over the little height left. */
 @custom-variant aside {

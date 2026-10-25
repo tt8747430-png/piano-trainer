@@ -148,7 +148,9 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
   · `4xl` 34 · `5xl` 44 (headline, title 3, title 2, title 1, large title, display), Tailwind's `7xl` 72 for the
   chord display; `ease-out` is the one
   curve. Numerals that change in place are `tabular-nums`.
-- Interactive elements: hover, `focus-visible`, `disabled`, and a transition. Icon-only controls get an
+- Interactive elements: hover, `focus-visible`, `disabled`, and a transition. Hover is a mouse's or a
+  trackpad's (`theme.css` makes `hover:` `(hover: hover) and (pointer: fine)`): a tap on a phone that says it
+  hovers leaves no wash behind (an edit mark's on the sheet). Icon-only controls get an
   `aria-label`, and their icons are 20px. Minimum target 44px (`min-h-11`, `size-11`); every size of `Button`,
   `Toggle`, `Input`, `InputGroup`, `Switch` and `Slider` already meets it, so the CLI's smaller sizes are removed.
 - **A control has the same name and does the same thing at every size; a size changes only where it stands and
