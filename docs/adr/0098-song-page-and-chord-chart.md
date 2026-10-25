@@ -18,5 +18,7 @@ with the sheet music off, the chords alone, showing what is played.
 
 ## Consequences
 
-`pages/piece`, `widgets/chord-chart` (followed by the Player), `widgets/piece-chords` (in the Player's chart where a
-chord is tapped), the Player's sheet area.
+`pages/piece`, `widgets/chord-chart` (followed by the Player), the Player's sheet area. The song's page plays nothing
+any more, so its keys go too, and Print with the chart it printed. `widgets/piece-chords` goes: a bar tapped in the
+Player's chart takes its cursor there, and the Player shows the chord there on its keys as it shows any place it goes
+(sounded while nothing plays), so the grid's way of sounding a chord would be a second one, beside the music played.

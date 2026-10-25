@@ -1,17 +1,14 @@
 export const piece = {
-  // The chords a piece plays, each once, to tap; then its chart, bar by bar.
-  chords: 'Chords',
   checkChords: 'Check these chords',
-  chart: 'Chart',
+  // A chord chart's section says its bars.
   barOne: 'bar {{n}}',
   barsFromTo: 'bars {{first}}–{{last}}',
-  practiseSection: 'Practise',
+  // The song's form: each section opening the Player there.
   practiseSectionOf: 'Practise {{section}}',
   form: 'Form',
   formBars_one: '{{count}} bar',
   formBars_other: '{{count}} bars',
   tempo: 'Tempo',
-  print: 'Print the chart',
   progression: 'Progression',
   more: 'More',
   practise: 'Practise',

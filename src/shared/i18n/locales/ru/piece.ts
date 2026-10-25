@@ -1,12 +1,9 @@
 import type { LocaleResources } from '../../types'
 
 export const piece: LocaleResources['piece'] = {
-  chords: 'Аккорды',
   checkChords: 'Проверить эти аккорды',
-  chart: 'По тактам',
   barOne: 'такт {{n}}',
   barsFromTo: 'такты {{first}}–{{last}}',
-  practiseSection: 'Играть',
   practiseSectionOf: 'Играть: {{section}}',
   form: 'Форма',
   formBars_one: '{{count}} такт',
@@ -14,7 +11,6 @@ export const piece: LocaleResources['piece'] = {
   formBars_many: '{{count}} тактов',
   formBars_other: '{{count}} такта',
   tempo: 'Темп',
-  print: 'Распечатать',
   progression: 'Последовательность',
   more: 'Ещё',
   practise: 'Играть',

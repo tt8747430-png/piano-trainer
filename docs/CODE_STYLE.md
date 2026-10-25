@@ -66,15 +66,15 @@ A container wires data to presentational children. One job each.
   (key size, note names, chord names, typing; and how a swipe plays, the rail's `GlissandoToggle`), saved for every
   keyboard and set from the rail or Settings (`KeyboardSettingsFields`, one component in both places); a screen never
   passes them itself, and the keyboard keeps its own proportion on every screen (no screen sizes it). The
-  explorers, a lesson and a Piece's chart pass `spotlight`: the keys the app puts down are the ones struck last (an
-  arpeggio's key alone, a chord's together), every mark kept; the Player and the quiz do not, and every key sounding
-  is down there. A screen may make a key play more than itself (`keyPlays`: in the Scales explorer's Chords view a
+  explorers, a lesson and a shared song's chart pass `spotlight`: the keys the app puts down are the ones struck last
+  (an arpeggio's key alone, a chord's together), every mark kept; the Player and the quiz do not, and every key
+  sounding is down there. A screen may make a key play more than itself (`keyPlays`: in the Scales explorer's Chords view a
   degree's key plays its chord), and every key it plays is down while the hand holds it.
   `PianoKeyboard` itself requires an `onKeyPress`, so no key is a dead end. Anything that plays sound on a screen shows
   it on that screen's keyboard (pin it when the page scrolls away from it).
-- **Every button that plays turns into Stop while its sound plays** (`usePlayback`, §8); in a grid of items (a Piece's
-  bars, a scale's chords) the item is a toggle instead, `aria-pressed` while it plays. A sound a screen makes by itself
-  (a choice sounding, a quiz's question) has no button and no Stop.
+- **Every button that plays turns into Stop while its sound plays** (`usePlayback`, §8); in a grid of items (a shared
+  song's bars, a scale's chords) the item is a toggle instead, `aria-pressed` while it plays. A sound a screen makes by
+  itself (a choice sounding, a quiz's question) has no button and no Stop.
 - A widget whose view a route's URL holds owns that view's type in its `model/` (`ChordView`, `ScaleView`,
   `SetupParams`); its place's validator in `app/routes` imports it with `import type`.
 
