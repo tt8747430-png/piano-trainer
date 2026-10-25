@@ -91,13 +91,13 @@ export function LyricRow({
       <div
         className={cn(
           'pointer-events-none relative flex flex-wrap',
-          line.sung ? 'items-end gap-y-2' : 'gap-x-1.5 gap-y-2.5 py-1',
+          line.sung ? 'items-end gap-y-2' : 'gap-x-3 gap-y-3 py-1',
         )}
       >
         {line.segments.map(({ chord, verses: sung }, segment) =>
           line.sung ? (
             <span key={segment} className="flex flex-col">
-              <span className="flex h-9 items-end pr-1.5 pb-1.5">{chip(chord, segment)}</span>
+              <span className="flex h-9 items-end pr-2 pb-1.5">{chip(chord, segment)}</span>
               {verses.map((verse) => (
                 <span key={verse} className={cn(verse > 0 && 'font-normal text-muted-foreground')}>
                   <Words words={sung[verse]} />
