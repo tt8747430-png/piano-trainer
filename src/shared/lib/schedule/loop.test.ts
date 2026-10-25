@@ -70,7 +70,7 @@ describe('advanceLoop', () => {
     )
     const again = advanceLoop(late, 15.5).passes[1]
     expect(again).toMatchObject({ start: 16, end: 4 })
-    expect(again?.cues[0]).toEqual({ beatGroup: 0, at: 0 })
+    expect(again?.cues[0]).toEqual({ beatGroup: 0, tick: 0, at: 0 })
     expect(again?.sounds.filter((sound) => sound.kind === 'click')).toHaveLength(4)
   })
 

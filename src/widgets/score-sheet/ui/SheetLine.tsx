@@ -25,6 +25,7 @@ export const SheetLine = memo(function SheetLine({
   sheet,
   layer,
   caret,
+  playhead,
   chordNote,
   selection,
   onPlace,
@@ -54,6 +55,8 @@ export const SheetLine = memo(function SheetLine({
   layer: Layer
   /** From the line's start, when the caret is on this line. */
   caret: Tick | null
+  /** Where Play is, on the piece's ticks, while it plays on this line (ADR 0096). */
+  playhead: { readonly tick: Tick; readonly clock: () => Tick | null } | null
   /** One note of the chord at the caret chosen alone (ADR 0088). */
   chordNote: Midi | null
   /** The notes chosen: their span on the piece. */
@@ -135,7 +138,8 @@ export const SheetLine = memo(function SheetLine({
             line={sheet.line}
             layer={layer}
             caret={caret}
-            chordNote={chordNote}
+            playhead={playhead}
+            scroller={justify ? undefined : ref}
             tapsOf={tapsOf}
             selection={selection}
             onPlace={onPlace}

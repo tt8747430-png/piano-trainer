@@ -73,6 +73,18 @@ describe('usePractice: Listen', () => {
     expect(result.current.state.beatGroup).toBe(2)
   })
 
+  it('says where its music is between the beat groups while it plays: the playhead’s clock (ADR 0096)', () => {
+    const { result } = renderPractice(ONE_BAR)
+    expect(result.current.clock).toBeNull()
+    act(() => result.current.play())
+    clockTo(0.1 + 0.5)
+    expect(result.current.clock?.()).toBe(12)
+    act(() => audio.setNow(0.1 + 2.75))
+    expect(result.current.clock?.()).toBe(66)
+    act(() => result.current.stop())
+    expect(result.current.clock).toBeNull()
+  })
+
   it('loops, queueing the next pass half a second before the end', () => {
     const { result } = renderPractice(ONE_BAR)
     act(() => result.current.play())
@@ -169,6 +181,12 @@ describe('usePractice: moving', () => {
 })
 
 describe('usePractice: Wait mode', () => {
+  it('has no clock: the playhead stands at the notes awaited', () => {
+    const { result } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'rh' })
+    act(() => result.current.play())
+    expect(result.current.clock).toBeNull()
+  })
+
   it('waits for the practised hand, then plays the other and moves on', () => {
     const { result } = renderPractice(ONE_BAR, { mode: 'wait', hands: 'rh' })
     expect(result.current.state.expected).toEqual([0, 4, 7])

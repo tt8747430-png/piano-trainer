@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
@@ -10,9 +10,8 @@ import {
   PRINT_SCALE,
   useElementSize,
   useMediaQuery,
-  useScrollMotion,
 } from '@/shared/lib'
-import { PageCanvas, SheetPage, SheetTitle, useCanvasReveal } from '@/shared/ui'
+import { PageCanvas, SheetPage, SheetTitle } from '@/shared/ui'
 import {
   lineLead,
   measureWidths,
@@ -38,9 +37,9 @@ const LEAST_SCALE = 0.62
  * The score in the chart's lines (ADR 0064): down the screen, or dealt onto A4 pages as it will print,
  * its title at the head of the first line (ADR 0094), each chart line cut by width where it is wider
  * than the screen holds. Each line is justified to the width and carries its labels, the loop's part
- * and its bars to jump to; the cursor stands on the line playing, which comes into sight as it starts.
- * On a phone on its side, a line down the screen is drawn small enough that its whole system is in
- * sight, as the editor's is.
+ * and its bars to jump to; the playhead stands on the line playing, which comes into sight as it
+ * starts (ADR 0096). On a phone on its side, a line down the screen is drawn small enough that its
+ * whole system is in sight, as the editor's is.
  */
 export function SheetLines({
   score,
@@ -51,6 +50,7 @@ export function SheetLines({
   title,
   headings,
   current,
+  clock,
   loop,
   fingers,
   names,
@@ -63,8 +63,7 @@ export function SheetLines({
   onLoopChange,
   onChoose,
   selected,
-  cursorShown,
-  picked,
+  playheadShown,
 }: {
   score: Score
   performance: Performance
@@ -77,6 +76,8 @@ export function SheetLines({
   title: string
   headings: readonly string[]
   current: number
+  /** Where Listen's music is while it plays: the playhead moves with it. */
+  clock?: (() => Tick | null) | null | undefined
   loop: BarRange | null
   fingers: boolean
   names: boolean
@@ -89,7 +90,7 @@ export function SheetLines({
   onPick: (picked: Picked) => void
   onLoopChange: (loop: BarRange) => void
   onChoose: (bar: number, extend: boolean) => void
-  /** The notes chosen: the loop's, else the cursor's, one head alone where one was clicked (ADR 0082, 0088). */
+  /** The notes chosen: the loop's, else the one clicked, one head of a chord alone (ADR 0088, 0096). */
   selected:
     | {
         readonly staff?: StaffId
@@ -98,8 +99,7 @@ export function SheetLines({
         readonly midi?: Midi | undefined
       }
     | undefined
-  cursorShown: boolean
-  picked: Picked | null
+  playheadShown: boolean
 }) {
   const { t } = useTranslation('music')
   const box = useRef<HTMLElement>(null)
@@ -132,24 +132,12 @@ export function SheetLines({
     () => scoreLines(score, performance, { room, widths }),
     [score, performance, room, widths],
   )
-  // The line the cursor is on comes into sight as it starts.
-  const shown = useRef(new Map<number, HTMLDivElement>())
-  const motion = useScrollMotion()
-  const bar = performance.beatGroups[current]?.bar
-  const playing = bar === undefined ? -1 : lines.findLastIndex((line) => line.first <= bar)
-  useEffect(() => {
-    if (!pages) shown.current.get(playing)?.scrollIntoView({ block: 'nearest', behavior: motion })
-  }, [pages, playing, motion])
-  // No sideways scroller: each line fits the width, and a cursor's follow stays put.
-  const noScroller = useRef<HTMLElement>(null)
 
-  const line = (each: ScoreLine, index: number) => (
+  // A line the playhead comes onto comes into sight: the playhead brings its line (ADR 0096).
+  const line = (each: ScoreLine) => (
     <div
       key={each.first}
-      ref={(element) => {
-        if (element) shown.current.set(index, element)
-        else shown.current.delete(index)
-      }}
+      data-slot="sheet-line"
       className="relative scroll-my-4"
       style={{ paddingTop: labels }}
     >
@@ -169,16 +157,15 @@ export function SheetLines({
         {(layout) => (
           <SheetOverlay
             layout={layout}
-            scroller={noScroller}
             performance={performance}
             headings={headings}
             positions={positions}
             chordNames={chordNames}
             tempos={tempos}
             current={current}
+            clock={clock}
             loop={loop}
-            cursorShown={cursorShown}
-            picked={picked}
+            playheadShown={playheadShown}
             onJump={onJump}
             onPick={onPick}
             onLoopChange={onLoopChange}
@@ -208,13 +195,12 @@ export function SheetLines({
 
   // A line's height as engraved: its staves and the verses under its tune (ADR 0093).
   const dealt = paginate(
-    lines.map((each, index) => ({ each, index })),
-    ({ each }) => labels + scoreHeight(each.score, staves) * scale + LINE_GAP,
+    lines,
+    (each) => labels + scoreHeight(each.score, staves) * scale + LINE_GAP,
     PAGE.height - 2 * margin - TITLE_ROOM,
   )
   return (
     <PageCanvas column={PAGE.width}>
-      <PlayingInSight line={() => shown.current.get(playing)} playing={playing} />
       <section aria-label={t('sheet.label')} className="flex flex-col items-center gap-8 p-6">
         {dealt.map((page, number) => (
           <SheetPage
@@ -224,16 +210,16 @@ export function SheetLines({
             filled={number < dealt.length - 1}
             gap={LINE_GAP}
             // The title stays with the line under it as the page is spread.
-            blocks={page.map(({ each, index }, at) => ({
+            blocks={page.map((each, at) => ({
               key: String(each.first),
               content:
                 number === 0 && at === 0 ? (
                   <div className="flex flex-col" style={{ gap: LINE_GAP }}>
                     <SheetTitle title={title} place="page" />
-                    {line(each, index)}
+                    {line(each)}
                   </div>
                 ) : (
-                  line(each, index)
+                  line(each)
                 ),
             }))}
           />
@@ -241,22 +227,4 @@ export function SheetLines({
       </section>
     </PageCanvas>
   )
-}
-
-/** The line playing brought into sight on the page canvas as it starts (ADR 0075). */
-function PlayingInSight({
-  line,
-  playing,
-}: {
-  line: () => HTMLDivElement | undefined
-  playing: number
-}) {
-  const reveal = useCanvasReveal()
-  useEffect(() => {
-    const element = line()
-    if (element && reveal && playing >= 0) reveal(element)
-    // Only as the playing line changes, not as the function reading it is made again.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playing, reveal])
-  return null
 }

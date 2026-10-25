@@ -251,6 +251,26 @@ describe('Player', () => {
     expect(audio.stops).toBeGreaterThan(0)
   })
 
+  it.each(['scroll', 'pages', 'horizontal'] as const)(
+    'moves the playhead with the music as Listen plays, every frame between the notes, %s (ADR 0096)',
+    async (layout) => {
+      const user = userEvent.setup()
+      const { audio, settingsStore } = await renderApp('/play/bz5')
+      act(() => setScoreView(settingsStore, { layout }))
+      const playhead = await waitFor(() => {
+        const line = document.querySelector<HTMLElement>('[data-slot="playhead"]')
+        if (!line) throw new Error('the playhead')
+        return line
+      })
+      const standing = Number.parseFloat(playhead.style.left)
+      await user.click(screen.getByRole('button', { name: 'Play' }))
+      const started = audio.played.at(-1)?.at ?? 0
+      act(() => audio.setNow(started + 0.3))
+      await waitFor(() => expect(Number.parseFloat(playhead.style.left)).toBeGreaterThan(standing))
+      await user.click(screen.getByRole('button', { name: 'Stop' }))
+    },
+  )
+
   it('falls silent, every key up, when the learner leaves while Listen plays the recording', async () => {
     const user = userEvent.setup()
     const { audio, router } = await renderApp('/play/romashki')

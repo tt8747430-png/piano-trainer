@@ -1,4 +1,4 @@
-import { useRef, type MouseEvent, type PointerEvent } from 'react'
+import { useRef, type MouseEvent, type PointerEvent, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Layer } from '@/features/score-editor'
 import { useBarName } from '@/shared/i18n'
@@ -7,14 +7,16 @@ import { staffClefAt, type TimedMusic } from '@/shared/lib/notation'
 import {
   MARK,
   pickAt,
+  Playhead,
   ScoreMark,
+  spaceOf,
   useSheetChoice,
   xAtTick,
   type ScoreLayout,
   type SheetPoint,
 } from '@/shared/ui/score'
 import { LAYER_OF_STAFF, layerAt, staffOfLayer, type SheetLineBars } from '../model/line-music'
-import { chordRow, chosenBox } from '../model/chosen-box'
+import { chordRow, chosenBand } from '../model/chosen-band'
 import { nearestPlace, roomAt } from '../model/nearest'
 import { noteAtStaffY, stepsDragged } from '../model/staff-pitch'
 import { AFTER_NUMBER_PX, NUMBER_INSET_PX } from '../model/label-row'
@@ -37,9 +39,9 @@ function zoomOf(element: HTMLElement, box: DOMRect): number {
 }
 
 /**
- * Over a line's staff: its labels, the bars chosen, the caret, and each bar as a button that puts the
- * caret where it is clicked; a double click there writes the note on the line or space clicked (ADR
- * 0064). The notes at the caret are a grip: dragged up or down, they move by notes of the key. The
+ * Over a line's staff: its labels, the bars chosen, the caret, the playhead while Play plays here (ADR
+ * 0096), and each bar as a button that puts the caret where it is clicked; a double click there
+ * writes the note on the line or space clicked (ADR 0064). The notes at the caret are a grip: dragged up or down, they move by notes of the key. The
  * tempo mark, each clef, key and time signature and the staves' names are buttons too, each opening
  * what changes it there (`edit`, ADR 0094).
  */
@@ -49,7 +51,8 @@ export function LineOverlay({
   line,
   layer,
   caret,
-  chordNote,
+  playhead,
+  scroller,
   selection,
   onPlace,
   onReach,
@@ -77,8 +80,10 @@ export function LineOverlay({
   layer: Layer
   /** From the line's start, when the caret is on this line. */
   caret: Tick | null
-  /** One note of the chord at the caret chosen alone (ADR 0088). */
-  chordNote: Midi | null
+  /** Where Play is, on the piece's ticks, while it plays on this line (ADR 0096). */
+  playhead: { readonly tick: Tick; readonly clock: () => Tick | null } | null
+  /** The line's own sideways scroller (a line across), which keeps the playhead in sight. */
+  scroller?: RefObject<HTMLElement | null> | undefined
   /** The notes chosen, from the piece's start: their span. */
   selection: { readonly from: Tick; readonly to: Tick } | null
   /** A click on the sheet: the caret to a note (one of a chord's, `key`) or an empty place, Shift extending. */
@@ -97,25 +102,17 @@ export function LineOverlay({
 }) {
   const { t } = useTranslation('editor')
   const barName = useBarName()
-  // The notes chosen on this line, hugged by the one selection's box on the staff of the row they
-  // are chosen in (the chord row, choosing chords), ADR 0088.
-  const chosen = chosenBox(layout, line.start, selection, {
+  // The notes chosen on this line as the one selection's band over the staff of the row they are
+  // chosen in (the chord row, choosing chords), ADR 0096: the notes themselves coloured.
+  const chosen = chosenBand(layout, line.start, selection, {
     row,
     staff: staffOfLayer(layout.staves, layer),
   })
-  // Whether a note written in the caret's row starts at the caret.
+  // Whether a note written in the caret's row starts at the caret: its notes are a grip.
   const caretOnNote =
     caret !== null &&
     layer !== 'chords' &&
     music.notes.some((n) => n.hand === layer && n.startTick === caret)
-  // Whether anything starts at the caret in its row: else it marks an empty place, as a line.
-  const caretEmpty =
-    caret === null ||
-    (layer === 'chords'
-      ? !line.bars.some(({ start, bar }) =>
-          bar.chords.some((chord) => start - line.start + chord.at === caret),
-        )
-      : !caretOnNote)
   /** A point on a bar's button in the line's layout px: a page canvas's zoom taken out. */
   const pointOf = (event: MouseEvent<HTMLButtonElement>, index: number): SheetPoint => {
     const measure = layout.measures[index]
@@ -172,7 +169,7 @@ export function LineOverlay({
     const room = roomAt(places, point.x, xOf, {
       start: measure.x,
       end: measure.x + measure.width,
-      lead: MARK.lead,
+      lead: MARK.lead * spaceOf(layout),
     })
     if (room !== undefined) onPlace(room, target, extend)
     else if (!extend) onDeselect()
@@ -223,22 +220,26 @@ export function LineOverlay({
   return (
     <>
       {chosen ? (
-        // The bars chosen as the one selection's box on this line (ADR 0082), inset from the
-        // barlines so the next line's or section's bars stay clear of it.
-        <ScoreMark slot="bars-chosen" kind="range" box={chosen} />
+        // The notes chosen as the one selection's band on this line (ADR 0096).
+        <ScoreMark slot="notes-chosen" kind="band" box={chosen} />
       ) : null}
       {/* The caret first, so the labels and the notes stand over it; none while notes are chosen,
           the range their mark (ADR 0088). */}
       {caret === null || selection ? null : (
-        <EditorCaret
-          layout={layout}
-          layer={layer}
-          tick={caret}
-          chordNote={chordNote}
-          chords={chordRow(row)}
-          empty={caretEmpty}
-        />
+        <EditorCaret layout={layout} layer={layer} tick={caret} chords={chordRow(layout, row)} />
       )}
+      {playhead ? (
+        // On the line's own ticks, from its start.
+        <Playhead
+          layout={layout}
+          tick={playhead.tick - line.start}
+          clock={() => {
+            const at = playhead.clock()
+            return at === null ? null : at - line.start
+          }}
+          scroller={scroller}
+        />
+      ) : null}
       <LineLabels
         layout={layout}
         music={music}

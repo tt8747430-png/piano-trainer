@@ -1,7 +1,15 @@
-import { useEffect, useEffectEvent, useMemo, useReducer, useRef, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react'
 import { PLAY_DELAY } from '@/shared/api/audio'
 import type { Performance } from '@/shared/lib/arrangement'
-import type { Midi } from '@/shared/lib/music'
+import type { Midi, Tick } from '@/shared/lib/music'
 import {
   audibleHands,
   beatGroupSounds,
@@ -20,7 +28,7 @@ import {
 } from './practice-machine'
 import type { PracticeMode } from './practice-mode'
 import { speedUp } from './speed'
-import { startTransport } from './transport'
+import { startTransport, type Transport } from './transport'
 
 export interface PracticeSetup {
   readonly mode: PracticeMode
@@ -43,6 +51,12 @@ export interface Practice {
   readonly state: PracticeState
   /** The tempo of the pass sounding while Listen plays; null otherwise. */
   readonly passTempo: number | null
+  /**
+   * While Listen plays, where its music is now on the audio clock, in ticks between its beat groups:
+   * what the playhead follows every frame (ADR 0096), null before its first sounds. None otherwise:
+   * in Wait mode the playhead stands at the notes awaited.
+   */
+  readonly clock: (() => Tick | null) | null
   /** Plays, or in Wait mode starts waiting; after Finished, again from the start. */
   play(): void
   stop(): void
@@ -109,6 +123,8 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   // plays carries speed training's climb on from the tempo sounding, with no count-in; Play, a new
   // tempo, or speed training turned off starts again from the tempo chosen.
   const run = useRef<{ readonly tempo: number; readonly sounding: number | null } | null>(null)
+  // The transport running, for the playhead's clock to read.
+  const transport = useRef<Transport | null>(null)
   // Read as a pass starts, never a reason to start one again.
   const passFrom = useEffectEvent(() => ({
     tick: state.performance.beatGroups[state.beatGroup]?.tick,
@@ -127,7 +143,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
       run.current?.tempo === tempo && upStep !== undefined ? run.current.sounding : null
     run.current = { tempo, sounding: carried }
     const from = passFrom()
-    const stop = startTransport(
+    const started = startTransport(
       audio,
       state.performance,
       {
@@ -152,9 +168,11 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
       },
       recording,
     )
+    transport.current = started
     // A stopped transport's last pass is no longer sounding: the next says its own tempo.
     return () => {
-      stop()
+      started.stop()
+      if (transport.current === started) transport.current = null
       setPassTempo(null)
     }
   }, [
@@ -244,5 +262,12 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     press: (key: Midi) => dispatch({ type: 'noteOn', midi: key }),
   }
 
-  return { state, passTempo: listening ? passTempo : null, ...actions }
+  const clock = useCallback(() => transport.current?.tickAt(audio.now()) ?? null, [audio])
+
+  return {
+    state,
+    passTempo: listening ? passTempo : null,
+    clock: listening ? clock : null,
+    ...actions,
+  }
 }

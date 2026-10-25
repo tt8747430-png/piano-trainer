@@ -267,10 +267,10 @@ describe('schedule', () => {
     const performance = arrange(chart('C', 'F'), { tonic: note('C'), pattern: BEATS })
     const { cues } = schedule(performance, { tempo: 60, hands: ALL, fromTick: 96 })
     expect(cues).toEqual([
-      { beatGroup: 4, at: 0 },
-      { beatGroup: 5, at: 1 },
-      { beatGroup: 6, at: 2 },
-      { beatGroup: 7, at: 3 },
+      { beatGroup: 4, tick: 96, at: 0 },
+      { beatGroup: 5, tick: 120, at: 1 },
+      { beatGroup: 6, tick: 144, at: 2 },
+      { beatGroup: 7, tick: 168, at: 3 },
     ])
   })
 

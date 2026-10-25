@@ -4,6 +4,7 @@ import type { ComponentProps } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { TWO_BARS } from '@/features/practice/testing/performances'
 import type { BarRange } from '@/features/practice'
+import type { StaffId } from '@/shared/lib/notation'
 import { stubBox, stubScrolling } from '@/shared/test/layout'
 import { HOLD_MS } from '@/shared/ui/score'
 import { SheetMusic } from './SheetMusic'
@@ -152,7 +153,28 @@ describe('SheetMusic', () => {
   })
 
   it.each(['horizontal', 'scroll', 'pages'] as const)(
-    'draws the cursor and the loop as the editor draws its caret and bars chosen, %s',
+    'draws the playhead as one line over every staff, the notes at it not chosen, %s (ADR 0096)',
+    async (layout) => {
+      const shown = { layout, chordNames: true, lyrics: true, melodyStaff: false }
+      const tall = async (hidden: readonly StaffId[]) => {
+        const { unmount } = renderSheet({ current: 5, shown: { ...shown, hidden } })
+        await screen.findByRole('button', { name: 'Bar 2: G' })
+        const playheads = document.querySelectorAll<HTMLElement>('[data-slot="playhead"]')
+        expect(playheads).toHaveLength(1)
+        expect(playheads[0]).toHaveClass('w-0.5')
+        expect(document.querySelector('.note-chosen')).toBeNull()
+        const height = Number.parseFloat(playheads[0]?.style.height ?? '')
+        unmount()
+        return height
+      }
+      // From the treble's top line to the bass's foot: over both staves, more than twice one's.
+      const one = await tall(['bass'])
+      expect(await tall([])).toBeGreaterThan(2 * one)
+    },
+  )
+
+  it.each(['horizontal', 'scroll', 'pages'] as const)(
+    'draws the loop as one band over every staff, its notes coloured as the editor’s chosen, %s (ADR 0096)',
     async (layout) => {
       renderSheet({
         current: 5,
@@ -160,15 +182,23 @@ describe('SheetMusic', () => {
         shown: { layout, chordNames: true, lyrics: true, melodyStaff: false, hidden: [] },
       })
       await screen.findByRole('button', { name: 'Bar 2: G' })
-      // The loop as one box; the cursor stands aside while it stands chosen (ADR 0088).
-      expect(document.querySelectorAll('[data-mark="range"]')).toHaveLength(1)
-      expect(document.querySelector('[data-mark="note"]')).toBeNull()
-      // The loop's notes in the selection's colour, as the editor's chosen notes are.
-      await waitFor(() => expect(document.querySelector('.note-chosen')).toBeInTheDocument())
+      const bands = document.querySelectorAll<HTMLElement>('[data-mark="band"]')
+      expect(bands).toHaveLength(1)
+      expect(bands[0]).toHaveAttribute('data-slot', 'loop')
+      // As tall as the playhead is over the same staves: every staff, never a box round notes.
+      const playhead = document.querySelector<HTMLElement>('[data-slot="playhead"]')
+      expect(Number.parseFloat(bands[0]?.style.height ?? '')).toBe(
+        Number.parseFloat(playhead?.style.height ?? ''),
+      )
+      // Its grips at its ends, down its edges.
+      expect(screen.getByRole('slider', { name: 'Loop start' })).toHaveStyle({
+        top: bands[0]?.style.top,
+      })
+      await waitFor(() => expect(document.querySelector('g.note.note-chosen')).toBeInTheDocument())
     },
   )
 
-  it('marks no cursor while the loop stands chosen and nothing moves, then where it is stepped to (ADR 0088)', async () => {
+  it('keeps the playhead out of sight while the loop stands chosen and nothing moves, then where it is stepped to (ADR 0088)', async () => {
     const sheet = (current: number) => (
       <SheetMusic
         title="Morning"
@@ -186,13 +216,47 @@ describe('SheetMusic', () => {
     )
     const { rerender } = render(sheet(4))
     await screen.findByRole('button', { name: 'Bar 2: G' })
-    expect(document.querySelectorAll('[data-mark="range"]')).toHaveLength(1)
-    expect(document.querySelector('[data-mark="note"]')).toBeNull()
+    expect(document.querySelectorAll('[data-mark="band"]')).toHaveLength(1)
+    expect(document.querySelector('[data-slot="playhead"]')).toHaveClass('invisible')
     rerender(sheet(5))
-    expect(document.querySelectorAll('[data-mark="note"]')).toHaveLength(1)
+    expect(document.querySelector('[data-slot="playhead"]')).not.toHaveClass('invisible')
   })
 
-  it('scrolls to keep the cursor in sight', async () => {
+  it('moves the playhead with the music’s clock while it plays, between the onsets (ADR 0096)', async () => {
+    let heard = 0
+    const sheet = (clock: (() => number) | null) => (
+      <SheetMusic
+        title="Morning"
+        performance={TWO_BARS}
+        headings={['Verse']}
+        current={0}
+        clock={clock}
+        loop={null}
+        playing={clock !== null}
+        fingers={false}
+        names={false}
+        positions={false}
+        muted={undefined}
+        onJump={vi.fn()}
+        onLoopChange={vi.fn()}
+      />
+    )
+    const { rerender } = render(sheet(null))
+    await screen.findByRole('button', { name: 'Bar 2: G' })
+    const playhead = document.querySelector<HTMLElement>('[data-slot="playhead"]')
+    const standing = Number.parseFloat(playhead?.style.left ?? '')
+    vi.useFakeTimers()
+    rerender(sheet(() => heard))
+    heard = 12
+    act(() => vi.advanceTimersToNextFrame())
+    const moved = Number.parseFloat(playhead?.style.left ?? '')
+    expect(moved).toBeGreaterThan(standing)
+    heard = 18
+    act(() => vi.advanceTimersToNextFrame())
+    expect(Number.parseFloat(playhead?.style.left ?? '')).toBeGreaterThan(moved)
+  })
+
+  it('scrolls to keep the playhead in sight', async () => {
     const { scrolls } = stubScrolling({ clientWidth: 100, scrollWidth: 2000 })
     const { rerender, onJump, onLoopChange } = renderSheet({ current: 0 })
     await screen.findByRole('button', { name: 'Bar 2: G' })

@@ -36,9 +36,11 @@ describe('ScoreView', () => {
         selected={{ staff: 'treble', from: 0, to: 1 }}
       />,
     )
-    await waitFor(() => expect(document.querySelector('.note-chosen')).toBeInTheDocument())
+    await waitFor(() => expect(document.querySelector('g.note.note-chosen')).toBeInTheDocument())
     const engraved = document.querySelector('[data-slot="score"] svg')
-    expect(document.querySelector('.note-chosen')?.id).toMatch(/^n-treble-0-/)
+    expect(document.querySelector('g.note.note-chosen')?.id).toMatch(/^n-treble-0-/)
+    // Middle C's ledger line under the staff with it, in the selection colour (ADR 0096).
+    expect(document.querySelector('g.ledgerLines > path.note-chosen')).toBeInTheDocument()
     rerender(
       <ScoreView
         score={score}
@@ -47,7 +49,11 @@ describe('ScoreView', () => {
         selected={{ staff: 'bass', from: 0, to: 1 }}
       />,
     )
-    await waitFor(() => expect(document.querySelector('.note-chosen')).not.toBeInTheDocument())
+    // The bass at that tick: its rest, the treble's note no longer.
+    await waitFor(() =>
+      expect(document.querySelector('g.note.note-chosen')).not.toBeInTheDocument(),
+    )
+    expect(document.querySelector('g.rest.note-chosen')?.id).toMatch(/^r-bass-0/)
     expect(document.querySelector('[data-slot="score"] svg')).toBe(engraved)
     // A range: every note starting in it.
     rerender(
@@ -58,7 +64,9 @@ describe('ScoreView', () => {
         selected={{ staff: 'treble', from: 0, to: 10_000 }}
       />,
     )
-    await waitFor(() => expect(document.querySelectorAll('.note-chosen').length).toBeGreaterThan(1))
+    await waitFor(() =>
+      expect(document.querySelectorAll('g.note.note-chosen').length).toBeGreaterThan(1),
+    )
   })
 
   it('keeps what lies over it in its own layers, under what the page pins', async () => {

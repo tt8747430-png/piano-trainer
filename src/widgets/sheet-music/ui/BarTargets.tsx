@@ -79,8 +79,8 @@ export function BarTargets({
         aria-current={bar === current ? 'step' : undefined}
         {...choice(bar, { x: measure.x, y: 0 })}
         // A pointer's target only, as the editor's (the arrows move the cursor): no focus ring and no
-        // hover wash round the bar, which would stand over empty staff (ADR 0082, 0088); the cursor and
-        // the loop are the selection's marks.
+        // hover wash round the bar, which would stand over empty staff (ADR 0082, 0088); the playhead
+        // and the loop are the sheet's marks (ADR 0096).
         className="absolute inset-y-0 z-20 cursor-pointer outline-none"
         style={{ left: measure.x, width: measure.width }}
       />

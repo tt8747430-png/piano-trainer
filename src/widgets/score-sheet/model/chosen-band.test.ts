@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { HUG, MARK, type Head } from '@/shared/ui/score'
-import { chosenBox } from './chosen-box'
+import { MARK, type Head } from '@/shared/ui/score'
+import { chordRow, chosenBand } from './chosen-band'
 
 const head = (staff: Head['staff'], tick: number, left: number, top: number): Head => ({
   id: `n-${staff}-${tick}-0`,
@@ -35,31 +35,37 @@ const layout = {
   ],
 }
 const bass = { staff: 'bass' as const, top: 90, bottom: 130 }
-const pad = HUG.pad * 10
+/** A staff space here, and the marks' measures in it. */
+const pad = MARK.pad * 10
+const reach = MARK.reach * 10
 
-describe('chosenBox', () => {
-  it('hugs exactly the notes chosen on the row’s staff, no neighbour, from the line’s start', () => {
+describe('chosenBand (ADR 0096)', () => {
+  it('bands the notes chosen on the row’s staff, first’s left to last’s right, from the line’s start', () => {
     // The piece's 384 to 480, on a line from 288: its bar 2.
-    expect(chosenBox(layout, 288, { from: 384, to: 480 }, { staff: bass })).toEqual({
+    expect(chosenBand(layout, 288, { from: 384, to: 480 }, { staff: bass })).toEqual({
       left: 110 - pad,
-      width: 52 + 2 * pad,
-      top: 95 - pad,
-      height: 30 + 2 * pad,
+      width: 162 + pad - (110 - pad),
+      top: 90 - reach,
+      height: 40 + 2 * reach,
     })
     // Over the line's end: its part alone.
-    expect(chosenBox(layout, 288, { from: 432, to: 900 }, { staff: bass })).toMatchObject({
+    expect(chosenBand(layout, 288, { from: 432, to: 900 }, { staff: bass })).toMatchObject({
       left: 150 - pad,
-      width: 72 + 2 * pad,
+      width: 222 + pad - (150 - pad),
     })
   })
 
   it('fills the chord row where the chords are chosen, and is none off the line', () => {
-    expect(chosenBox(layout, 0, { from: 0, to: 96 }, { row: 44 })).toMatchObject({
-      left: 40 - MARK.lead,
+    expect(chosenBand(layout, 0, { from: 0, to: 96 }, { row: 44 })).toMatchObject({
+      left: 40 - MARK.lead * 10,
       top: -44,
       height: 44,
     })
-    expect(chosenBox(layout, 0, { from: 400, to: 500 }, { staff: bass })).toBeNull()
-    expect(chosenBox(layout, 0, null, { staff: bass })).toBeNull()
+    expect(chosenBand(layout, 0, { from: 400, to: 500 }, { staff: bass })).toBeNull()
+    expect(chosenBand(layout, 0, null, { staff: bass })).toBeNull()
+  })
+
+  it('takes the chord row as a span the marks fill, over the staff', () => {
+    expect(chordRow(layout, 44)).toEqual({ top: -44 + reach, bottom: -reach })
   })
 })

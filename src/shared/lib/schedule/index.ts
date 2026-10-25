@@ -3,10 +3,12 @@ export {
   beatGroupAt,
   startLoop,
   tempoAt,
+  tickAt,
   type LoopOptions,
   type Pass,
   type SpeedUp,
 } from './loop'
+export { passTickAt } from './playhead'
 export {
   audibleHands,
   beatGroupSounds,
@@ -18,6 +20,7 @@ export {
   type ClickSound,
   type Hands,
   type NoteSound,
+  type Scheduled,
   type Sound,
 } from './schedule'
 export {

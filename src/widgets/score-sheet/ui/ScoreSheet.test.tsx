@@ -212,32 +212,47 @@ describe('ScoreSheet', () => {
     expect(rows.every((row) => row.style.height === '20px')).toBe(true)
   })
 
-  it('draws the notes chosen as one box on each line they are on, and no caret with them', async () => {
-    render(
-      <ScoreSheet
-        draft={draft}
-        caret={0}
-        layer="rh"
-        tapsOf={() => []}
-        selection={{ from: 0, to: 288 }}
-        onPlace={vi.fn()}
-        onReach={vi.fn()}
-        onDeselect={vi.fn()}
-        placesOf={() => []}
-        heading={() => null}
-        chordNames
-        edit={editing(vi.fn())}
-        title={() => null}
-      />,
-    )
-    await screen.findByRole('button', { name: 'Bar 1: G' })
-    // Bars 1–2 on the verse's first line, bar 3 on its second: a box each, the chorus none.
-    await waitFor(() =>
-      expect(document.querySelectorAll('[data-slot="bars-chosen"]')).toHaveLength(2),
-    )
-    // While notes are chosen the caret stands aside: the range is the mark (ADR 0088).
-    expect(document.querySelector('[data-slot="caret"]')).toBeNull()
-  })
+  it.each([
+    ['scroll', 2],
+    ['pages', 2],
+    ['horizontal', 1],
+  ] as const)(
+    'draws the notes chosen as one band on each line they are on, coloured, no caret with them, %s (ADR 0096)',
+    async (view, lines) => {
+      render(
+        <ScoreSheet
+          draft={draft}
+          caret={0}
+          layer="rh"
+          tapsOf={() => []}
+          selection={{ from: 0, to: 288 }}
+          onPlace={vi.fn()}
+          onReach={vi.fn()}
+          onDeselect={vi.fn()}
+          placesOf={() => []}
+          heading={() => null}
+          chordNames
+          edit={editing(vi.fn())}
+          title={() => null}
+          view={view}
+        />,
+      )
+      await screen.findByRole('button', { name: 'Bar 1: G' })
+      // Bars 1–2 on the verse's first line, bar 3 on its second (across, all on one): a band each,
+      // the chorus none.
+      await waitFor(() =>
+        expect(document.querySelectorAll('[data-slot="notes-chosen"]')).toHaveLength(lines),
+      )
+      for (const band of document.querySelectorAll('[data-slot="notes-chosen"]'))
+        expect(band).toHaveAttribute('data-mark', 'band')
+      // The notes chosen themselves coloured, on the right hand's staff.
+      await waitFor(() =>
+        expect(document.querySelector('g.note.note-chosen')?.id).toMatch(/^n-treble-/),
+      )
+      // While notes are chosen the caret stands aside: the range is the mark (ADR 0088).
+      expect(document.querySelector('[data-slot="caret"]')).toBeNull()
+    },
+  )
 
   it('writes a click over the staff into the tune when chord names are hidden', async () => {
     const user = userEvent.setup()
@@ -293,24 +308,25 @@ describe('ScoreSheet', () => {
     expect(onPlace).toHaveBeenLastCalledWith(192, 'melody', false)
   })
 
-  it('marks the caret on notes as a box, and in an empty bar as a line, never a box on empty staff', async () => {
+  it('marks the caret as a line on its staff, on notes and in an empty bar, never a box (ADR 0096)', async () => {
     sheet('melody')
     await waitFor(() =>
-      expect(document.querySelector('[data-slot="caret"]')).toHaveAttribute('data-mark', 'note'),
+      expect(document.querySelector('[data-slot="caret"]')).toHaveAttribute('data-mark', 'line'),
     )
     sheet('lh')
     await waitFor(() =>
       expect(document.querySelectorAll('[data-slot="caret"]')[1]).toHaveAttribute(
         'data-mark',
-        'insert',
+        'line',
       ),
     )
+    expect(document.querySelector('[data-mark="band"]')).toBeNull()
   })
 
-  it('marks the notes at the caret on its staff as the ones chosen', async () => {
+  it('colours the notes at the caret on its staff as the ones chosen', async () => {
     sheet('melody')
-    await waitFor(() => expect(document.querySelector('.note-chosen')).toBeInTheDocument())
-    expect(document.querySelector('.note-chosen')?.id).toMatch(/^n-melody-/)
+    await waitFor(() => expect(document.querySelector('g.note.note-chosen')).toBeInTheDocument())
+    expect(document.querySelector('g.note.note-chosen')?.id).toMatch(/^n-melody-/)
   })
 
   it('opens where it is with the caret’s line in sight, and brings a line the caret moves onto into view', async () => {
@@ -336,4 +352,43 @@ describe('ScoreSheet', () => {
     rerender(<ScoreSheet {...props} caret={288} />)
     expect(scrolled).toHaveBeenCalledWith({ block: 'nearest' })
   })
+
+  it.each(['scroll', 'pages', 'horizontal'] as const)(
+    'draws the playhead on the line Play is on, over its staves, apart from the caret, %s (ADR 0096)',
+    async (view) => {
+      const props = {
+        draft,
+        caret: 0,
+        layer: 'rh' as const,
+        tapsOf: () => [],
+        selection: null,
+        onPlace: vi.fn(),
+        onReach: vi.fn(),
+        onDeselect: vi.fn(),
+        placesOf: () => [],
+        heading: () => null,
+        chordNames: true,
+        edit: editing(vi.fn()),
+        title: () => null,
+        view,
+      }
+      const { rerender } = render(
+        <ScoreSheet {...props} playhead={{ tick: 192, clock: () => null }} />,
+      )
+      await screen.findAllByRole('button', { name: /^Bar 3/ })
+      await waitFor(() =>
+        expect(document.querySelectorAll('[data-slot="playhead"]')).toHaveLength(1),
+      )
+      const playhead = document.querySelector('[data-slot="playhead"]')
+      const lines = [...document.querySelectorAll('[data-slot="sheet-line"]')]
+      // Bar 3 opens the verse's second line down the screen and on a page; across, the one line.
+      expect(playhead?.closest('[data-slot="sheet-line"]')).toBe(
+        view === 'horizontal' ? lines[0] : lines[1],
+      )
+      // The caret stays at bar 1, the playhead apart from it.
+      expect(lines[0]?.querySelector('[data-slot="caret"]')).not.toBeNull()
+      rerender(<ScoreSheet {...props} playhead={null} />)
+      expect(document.querySelector('[data-slot="playhead"]')).toBeNull()
+    },
+  )
 })

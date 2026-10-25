@@ -63,6 +63,8 @@ interface ScheduleOptions {
 /** When each beat group sounds, so the Player can follow the music. */
 export interface Cue {
   readonly beatGroup: number
+  /** The beat group's tick, where the playhead stands as it sounds. */
+  readonly tick: Tick
   readonly at: number
 }
 
@@ -169,7 +171,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
     : []
 
   const cues = performance.beatGroups.flatMap((group, beatGroup) =>
-    inPass(group.tick) ? [{ beatGroup, at: at(group.tick) }] : [],
+    inPass(group.tick) ? [{ beatGroup, tick: group.tick, at: at(group.tick) }] : [],
   )
 
   return {

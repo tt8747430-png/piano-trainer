@@ -35,7 +35,7 @@ describe('startTransport', () => {
 
   it('plays the recording with every pass, each from the passage’s first bar', async () => {
     const audio = createFakeAudio()
-    const stop = startTransport(
+    const transport = startTransport(
       audio,
       performance,
       { hands: audibleHands('both'), tempo: 60, range: { from: 96, to: 288 }, fromTick: 192 },
@@ -50,7 +50,7 @@ describe('startTransport', () => {
     expect(audio.recordings.every(({ src, play }) => src === 'vocal.m4a' && play.rate === 1)).toBe(
       true,
     )
-    stop()
+    transport.stop()
   })
 
   it('plays none without a recording', () => {
@@ -61,7 +61,22 @@ describe('startTransport', () => {
       { hands: audibleHands('both'), tempo: 60, range: { from: 0, to: 384 }, fromTick: 0 },
       { reach: () => {}, tempo: () => {} },
       null,
-    )()
+    ).stop()
     expect(audio.recordings).toEqual([])
+  })
+
+  it('says the tick its music sounds at a time on the clock, between the beat groups (ADR 0096)', () => {
+    const audio = createFakeAudio()
+    const transport = startTransport(
+      audio,
+      performance,
+      { hands: audibleHands('both'), tempo: 60, range: { from: 0, to: 384 }, fromTick: 96 },
+      { reach: () => {}, tempo: () => {} },
+      null,
+    )
+    // From bar 2, a beat group of a bar's chord every four seconds at 60.
+    expect(transport.tickAt(0)).toBeNull()
+    expect(transport.tickAt(0.1 + 2)).toBe(144)
+    transport.stop()
   })
 })

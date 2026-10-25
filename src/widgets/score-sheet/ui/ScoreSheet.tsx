@@ -61,12 +61,13 @@ function blocksOf(page: readonly PageItem[]): PageItem[][] {
  * The editor's sheet (spec §6.1, ADR 0064), as `view` lays it out: its title at its head (ADR 0094);
  * the piece by section down the screen, each chart line a system of its staves; the same on A4 pages
  * as it will print, its title on the first; or all of it as one line across. Each bar numbered, its
- * chord symbols over it, the caret on its layer's staff. A line is drawn again only when what it
- * shows changes.
+ * chord symbols over it, the caret on its layer's staff; while Play plays, the playhead apart from it
+ * (ADR 0096). A line is drawn again only when what it shows changes.
  */
 export function ScoreSheet({
   draft,
   caret,
+  playhead = null,
   chordNote = null,
   layer,
   selection,
@@ -94,6 +95,11 @@ export function ScoreSheet({
   onDrag?: (steps: number, joins: boolean) => void
   draft: Draft
   caret: Tick
+  /**
+   * Where Play is while it plays, on the piece's ticks: the playhead stands there and follows the
+   * clock, the sheet following it, the caret and what is chosen left where they are (ADR 0096).
+   */
+  playhead?: { readonly tick: Tick; readonly clock: () => Tick | null } | null
   /** One note of the chord at the caret chosen alone (ADR 0088). */
   chordNote?: Midi | null
   layer: Layer
@@ -175,6 +181,7 @@ export function ScoreSheet({
     [sheetsOf, draft, across, roomAcross, widths, lyrics],
   )
   const caretBar = barAt(draft, caret).index
+  const playBar = playhead ? barAt(draft, playhead.tick).index : null
 
   const line = (sheet: LineSheet, scale?: number, print = false) => (
     <SheetLine
@@ -185,6 +192,9 @@ export function ScoreSheet({
         sheet.line.bars.some((placed) => placed.index === caretBar)
           ? caret - sheet.line.start
           : null
+      }
+      playhead={
+        playhead && sheet.line.bars.some((placed) => placed.index === playBar) ? playhead : null
       }
       chordNote={chordNote}
       tapsOf={tapsOf}

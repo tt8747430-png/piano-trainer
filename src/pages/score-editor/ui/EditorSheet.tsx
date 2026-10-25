@@ -14,6 +14,7 @@ import { ScoreSheet, type EditPrinted } from '@/widgets/score-sheet'
 import type { TitlePlace } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { seenDraft } from '../model/seen-draft'
+import { useHeardPlayhead } from '../model/use-heard-playhead'
 import { PrintedEdit } from './PrintedEdit'
 import { SectionHeading } from './SectionHeading'
 import { TitleField } from './TitleField'
@@ -31,14 +32,17 @@ const HEARD = { duration: 0.35, velocity: 0.15 } as const
 /**
  * The sheet the editor writes on, as the View shows the score (ADR 0094: its staves, its chord
  * symbols): the caret where the next note or chord goes; a double click on a staff writes the note
- * there, and a note dragged up or down moves by the key's notes, heard as it goes.
+ * there, and a note dragged up or down moves by the key's notes, heard as it goes. While Play plays,
+ * the playhead follows the music apart from the caret (ADR 0096).
  */
 export function EditorSheet({ room }: { room?: number | undefined }) {
   const {
     store,
+    heard,
     actions: { dispatch },
     view,
   } = useScoreEditorContext()
+  const playhead = useHeardPlayhead(heard)
   const draft = useEditorState((state) => state.draft)
   const shown = useSettings(selectScoreView)
   const seen = useMemo(() => seenDraft(draft, shown), [draft, shown])
@@ -101,6 +105,7 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
     <ScoreSheet
       draft={seen}
       caret={caret}
+      playhead={playhead}
       chordNote={chordNote}
       layer={layer}
       selection={chosen}
