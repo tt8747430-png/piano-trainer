@@ -12,8 +12,9 @@ import { MARK_CLASS } from './selection'
  * same height wherever it stands. It stands at `tick`; while the music plays it follows `clock` every
  * frame, between the onsets. It moves by `left`, never a transform: a transform would make the pages
  * round it one picture, which Safari scales blurry when they are zoomed. The sheet follows it: its
- * line comes into sight as it comes onto it (on a page canvas, the canvas moves to it), and a line
- * wider than its `scroller` scrolls to keep it in its middle half.
+ * line comes into sight as it comes onto it (on a page canvas, the canvas moves to it); a line wider
+ * than its `scroller` scrolls to keep it in its middle half, and a page zoomed wider than the screen
+ * moves to put it a quarter in once it passes three quarters.
  */
 export function Playhead({
   layout,
@@ -86,6 +87,27 @@ export function Playhead({
     })
     if (left !== null) view.scrollTo({ left, behavior: motion })
   }, [scroller, x, motion])
+  // On a page canvas zoomed wider than the screen, the same along the line: past three quarters of
+  // the screen with more of its line out of sight after it, the canvas brings it a quarter in, never
+  // past the line's end; off the screen to its left (the pages moved by hand), back into sight.
+  useEffect(() => {
+    const element = line.current
+    const canvas = element?.closest('[data-slot="page-canvas"]')
+    const shown = element?.closest('[data-slot="sheet-line"]')
+    if (!reveal || !element || !canvas || !shown) return
+    const view = canvas.getBoundingClientRect()
+    const box = element.getBoundingClientRect()
+    const after = shown.getBoundingClientRect().right
+    const quarter = view.width / 4
+    if (box.left > view.right - quarter && after > view.right)
+      reveal({
+        left: box.left - quarter,
+        right: Math.min(box.left + 3 * quarter, after),
+        top: box.top,
+        bottom: box.bottom,
+      })
+    else if (box.right < view.left) reveal(element)
+  }, [reveal, x])
 
   return (
     <div

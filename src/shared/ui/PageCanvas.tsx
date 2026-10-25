@@ -18,7 +18,7 @@ import {
   ZOOM_STEP,
   type CanvasView,
 } from '@/shared/lib'
-import { RevealContext } from './canvas-reveal'
+import { RevealContext, type Revealed } from './canvas-reveal'
 import { Button } from './primitives/button'
 
 /** How far a press moves before it is a drag of the canvas, not a click on what it holds. */
@@ -178,10 +178,10 @@ export function PageCanvas({ column, children }: { column: number; children: Rea
   }
 
   const revealElement = useCallback(
-    (element: Element) => {
+    (revealed: Revealed) => {
       const pages = content.current
       if (!pages) return
-      const box = element.getBoundingClientRect()
+      const box = revealed instanceof Element ? revealed.getBoundingClientRect() : revealed
       const origin = pages.getBoundingClientRect()
       const { zoom: at } = view.current
       show(

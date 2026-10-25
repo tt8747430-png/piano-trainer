@@ -11,7 +11,7 @@ import {
 } from '@/entities/piece'
 import { chartStart } from '@/features/edit-piece'
 import { readDraft } from '@/features/score-editor'
-import { setKeyboard } from '@/features/set-preference'
+import { setKeyboard, setScoreView } from '@/features/set-preference'
 import { createMemoryStorage, LANDSCAPE_PHONE } from '@/shared/lib'
 import { midi, note } from '@/shared/lib/music'
 import { notate, scoreToMei } from '@/shared/lib/notation'
@@ -1175,28 +1175,33 @@ describe('the score editor', () => {
     expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
   })
 
-  it('draws the playhead as Play plays, moving with the music, the caret left where it was (ADR 0096)', async () => {
-    const user = userEvent.setup()
-    const { audio } = await renderApp('/edit/my-1', { storage: withSong() })
-    await user.click(await screen.findByRole('button', { name: 'Bar 3: G' }))
-    const said = screen.getByRole('status').textContent
-    expect(document.querySelector('[data-slot="playhead"]')).toBeNull()
-    await user.click(screen.getByRole('button', { name: 'Play' }))
-    const playhead = await waitFor(() => {
-      const line = document.querySelector<HTMLElement>('[data-slot="playhead"]')
-      if (!line) throw new Error('the playhead')
-      return line
-    })
-    const standing = Number.parseFloat(playhead.style.left)
-    // Half a beat in, the music has moved on: so has the playhead, every frame.
-    const started = audio.played.at(-1)?.at ?? 0
-    act(() => audio.setNow(started + 1 / 3))
-    await waitFor(() => expect(Number.parseFloat(playhead.style.left)).toBeGreaterThan(standing))
-    // The caret where it was, its line saying so; the playhead gone with Stop.
-    expect(screen.getByRole('status').textContent).toBe(said)
-    await user.click(screen.getByRole('button', { name: 'Stop' }))
-    expect(document.querySelector('[data-slot="playhead"]')).toBeNull()
-  })
+  it.each(['scroll', 'pages', 'horizontal'] as const)(
+    'draws the playhead as Play plays, moving with the music, the caret left where it was, %s (ADR 0096)',
+    async (layout) => {
+      const user = userEvent.setup()
+      const { audio, settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
+      act(() => setScoreView(settingsStore, { layout }))
+      await user.click(await screen.findByRole('button', { name: 'Bar 3: G' }))
+      const said = screen.getByRole('status').textContent
+      expect(document.querySelector('[data-slot="playhead"]')).toBeNull()
+      await user.click(screen.getByRole('button', { name: 'Play' }))
+      const playhead = await waitFor(() => {
+        const line = document.querySelector<HTMLElement>('[data-slot="playhead"]')
+        if (!line) throw new Error('the playhead')
+        return line
+      })
+      const standing = Number.parseFloat(playhead.style.left)
+      // Half a beat in, the music has moved on: so has the playhead, every frame.
+      const started = audio.played.at(-1)?.at ?? 0
+      act(() => audio.setNow(started + 1 / 3))
+      await waitFor(() => expect(Number.parseFloat(playhead.style.left)).toBeGreaterThan(standing))
+      // The caret where it was, its line saying so, a line on its staff; the playhead gone with Stop.
+      expect(screen.getByRole('status').textContent).toBe(said)
+      expect(document.querySelector('[data-slot="caret"]')).toHaveAttribute('data-mark', 'line')
+      await user.click(screen.getByRole('button', { name: 'Stop' }))
+      expect(document.querySelector('[data-slot="playhead"]')).toBeNull()
+    },
+  )
 
   it('plays a written left hand in the Player, in any key', async () => {
     const user = userEvent.setup()

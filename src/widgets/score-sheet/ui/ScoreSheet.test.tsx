@@ -212,40 +212,47 @@ describe('ScoreSheet', () => {
     expect(rows.every((row) => row.style.height === '20px')).toBe(true)
   })
 
-  it('draws the notes chosen as one band on each line they are on, and no caret with them (ADR 0096)', async () => {
-    render(
-      <ScoreSheet
-        draft={draft}
-        caret={0}
-        layer="rh"
-        tapsOf={() => []}
-        selection={{ from: 0, to: 288 }}
-        onPlace={vi.fn()}
-        onReach={vi.fn()}
-        onDeselect={vi.fn()}
-        placesOf={() => []}
-        heading={() => null}
-        chordNames
-        edit={editing(vi.fn())}
-        title={() => null}
-      />,
-    )
-    await screen.findByRole('button', { name: 'Bar 1: G' })
-    // Bars 1–2 on the verse's first line, bar 3 on its second: a band each, the chorus none.
-    await waitFor(() =>
-      expect(document.querySelectorAll('[data-slot="notes-chosen"]')).toHaveLength(2),
-    )
-    expect(document.querySelector('[data-slot="notes-chosen"]')).toHaveAttribute(
-      'data-mark',
-      'band',
-    )
-    // The notes chosen themselves coloured, on the right hand's staff.
-    await waitFor(() =>
-      expect(document.querySelector('g.note.note-chosen')?.id).toMatch(/^n-treble-/),
-    )
-    // While notes are chosen the caret stands aside: the range is the mark (ADR 0088).
-    expect(document.querySelector('[data-slot="caret"]')).toBeNull()
-  })
+  it.each([
+    ['scroll', 2],
+    ['pages', 2],
+    ['horizontal', 1],
+  ] as const)(
+    'draws the notes chosen as one band on each line they are on, coloured, no caret with them, %s (ADR 0096)',
+    async (view, lines) => {
+      render(
+        <ScoreSheet
+          draft={draft}
+          caret={0}
+          layer="rh"
+          tapsOf={() => []}
+          selection={{ from: 0, to: 288 }}
+          onPlace={vi.fn()}
+          onReach={vi.fn()}
+          onDeselect={vi.fn()}
+          placesOf={() => []}
+          heading={() => null}
+          chordNames
+          edit={editing(vi.fn())}
+          title={() => null}
+          view={view}
+        />,
+      )
+      await screen.findByRole('button', { name: 'Bar 1: G' })
+      // Bars 1–2 on the verse's first line, bar 3 on its second (across, all on one): a band each,
+      // the chorus none.
+      await waitFor(() =>
+        expect(document.querySelectorAll('[data-slot="notes-chosen"]')).toHaveLength(lines),
+      )
+      for (const band of document.querySelectorAll('[data-slot="notes-chosen"]'))
+        expect(band).toHaveAttribute('data-mark', 'band')
+      // The notes chosen themselves coloured, on the right hand's staff.
+      await waitFor(() =>
+        expect(document.querySelector('g.note.note-chosen')?.id).toMatch(/^n-treble-/),
+      )
+      // While notes are chosen the caret stands aside: the range is the mark (ADR 0088).
+      expect(document.querySelector('[data-slot="caret"]')).toBeNull()
+    },
+  )
 
   it('writes a click over the staff into the tune when chord names are hidden', async () => {
     const user = userEvent.setup()

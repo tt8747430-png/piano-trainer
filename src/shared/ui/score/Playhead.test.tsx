@@ -3,7 +3,7 @@ import { useEffect, useRef, type ComponentProps, type ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { midi, note, type Tick } from '@/shared/lib/music'
 import { notate, type StaffId, type TimedNote } from '@/shared/lib/notation'
-import { stubScrolling } from '@/shared/test/layout'
+import { stubBox, stubScrolling } from '@/shared/test/layout'
 import { RevealContext } from '../canvas-reveal'
 import type { ScoreLayout } from './layout'
 import { Playhead } from './Playhead'
@@ -158,6 +158,39 @@ describe('Playhead (ADR 0096)', () => {
     const { rerender } = await renderPlayhead({ tick: 0 })
     rerender(<Sheet props={{ tick: 96 }} />)
     expect(scrolls.at(-1)).toBeGreaterThan(0)
+  })
+
+  it('has a zoomed page canvas follow it along its line, a quarter in once past three quarters', async () => {
+    const reveal = vi.fn()
+    const onCanvas = (sheet: ReactNode) => (
+      <RevealContext value={reveal}>
+        <div data-slot="page-canvas">{sheet}</div>
+      </RevealContext>
+    )
+    const { rerender } = render(<Sheet props={{ tick: 0 }} around={onCanvas} />)
+    await screen.findByText('Engraved')
+    const canvas = document.querySelector('[data-slot="page-canvas"]')
+    const shown = document.querySelector('[data-slot="sheet-line"]')
+    const line = document.querySelector('[data-slot="playhead"]')
+    if (!canvas || !shown || !line) throw new Error('a playhead on a canvas')
+    // A screen 400 wide, a line zoomed to 1000 from 0; the playhead moved on to 350, past three
+    // quarters: a quarter in, with the room after it.
+    stubBox(canvas, { left: 0, top: 0, width: 400, height: 300 })
+    stubBox(shown, { left: 0, top: 0, width: 1000, height: 200 })
+    stubBox(line, { left: 350, top: 20, width: 2, height: 100 })
+    reveal.mockClear()
+    rerender(<Sheet props={{ tick: 24 }} around={onCanvas} />)
+    expect(reveal).toHaveBeenCalledWith({ left: 250, right: 650, top: 20, bottom: 120 })
+    // In the middle half, the canvas stays.
+    stubBox(line, { left: 200, top: 20, width: 2, height: 100 })
+    reveal.mockClear()
+    rerender(<Sheet props={{ tick: 48 }} around={onCanvas} />)
+    expect(reveal).not.toHaveBeenCalled()
+    // Its line's end in sight already (a page fitted to the screen): the canvas stays.
+    stubBox(shown, { left: 0, top: 0, width: 390, height: 200 })
+    stubBox(line, { left: 350, top: 20, width: 2, height: 100 })
+    rerender(<Sheet props={{ tick: 72 }} around={onCanvas} />)
+    expect(reveal).not.toHaveBeenCalled()
   })
 
   it('is out of sight where it is hidden, and still followed', async () => {
