@@ -59,16 +59,21 @@ export interface MidiNote {
  * then the keys let go, the pedals let up and pressed, and the keys struck, so a key struck again
  * sounds again and a pedal changed at a chord holds it.
  */
-const ORDER: Readonly<Record<MidiEvent['kind'], number>> = {
+const ORDER = {
   name: 0,
   time: 1,
   tempo: 2,
   off: 3,
-  control: 4,
+  lifted: 4,
+  pressed: 5,
   on: 6,
-}
+} as const
 const orderOf = (event: MidiEvent): number =>
-  event.kind === 'control' && event.value >= PRESSED ? 5 : ORDER[event.kind]
+  event.kind !== 'control'
+    ? ORDER[event.kind]
+    : event.value >= PRESSED
+      ? ORDER.pressed
+      : ORDER.lifted
 
 /** A number as MIDI's variable-length quantity: seven bits a byte, the high bit on all but the last. */
 function variableLength(value: number): number[] {
