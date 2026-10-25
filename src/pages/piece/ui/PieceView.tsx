@@ -22,6 +22,7 @@ import { sectionPaint } from '../model/section-paint'
 import { useSongLessons } from '../model/use-song-lessons'
 import { LearnCard } from './LearnCard'
 import { PieceAbout, PieceCredits } from './PieceAbout'
+import { PieceChords } from './PieceChords'
 import { PieceFactCards } from './PieceFactCards'
 import { OwnMusicAsk } from './OwnMusicAsk'
 import { PieceHeader } from './PieceHeader'
@@ -33,10 +34,11 @@ import { SectionRows } from './SectionRows'
  * A piece with a chart, in one column: Learn the song (ADR 0100). Its bar (Back, the title, then
  * Edit the score, Learned and More: Check these chords, and for the learner's own music Share and
  * its way back, asked first); the learning card, where to go next and its lessons done; its key, time
- * and tempo as cards, and who wrote it; its sections, each a row to its page of lessons (a song of
- * one section shows that section's lessons here); Play along, the whole song; then its note and the
- * way to its key's scale. Its chords and chart are the Player's, so the page plays nothing and shows
- * no keys. Practise floats in the thumb's reach, opening the Player as it was left.
+ * and tempo as cards, and who wrote it; its chords as diagrams, each opening its sheet, and its
+ * sections, each a row to its page of lessons (a song of one section has that section's lessons
+ * here, its chords to learn among them); Play along, the whole song; then its note and the way to its
+ * key's scale. Its chart is the Player's: the page shows no keys but a chord's sheet's. Practise floats
+ * in the thumb's reach, opening the Player as it was left.
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
@@ -134,15 +136,19 @@ export function PieceView({ piece }: { piece: Piece }) {
       <PieceFactCards piece={piece} />
       <PieceCredits entry={piece} />
       <ShareSaid said={shared.said} />
-      {/*
-       * CHORDS (spec §3.1, round 3's chord part): the chord summary, headed "Chords", each chord's
-       * diagram opening its `ChordSheet` (`ChordSummary` from `widgets/chord-diagrams`), goes here
-       * once the diagrams are in; a piece of no chord symbol has none.
-       */}
+      {/* A song of one section has its lessons here, its chords among them to learn. */}
       {only ? (
-        <SectionLessonGroups piece={piece} lessons={only} paint={sectionPaint(headings[0] ?? '')} />
+        <SectionLessonGroups
+          piece={piece}
+          performance={performance}
+          lessons={only}
+          paint={sectionPaint(headings[0] ?? '')}
+        />
       ) : (
-        <SectionRows piece={piece} headings={headings} sections={sections} />
+        <>
+          <PieceChords performance={performance} />
+          <SectionRows piece={piece} headings={headings} sections={sections} />
+        </>
       )}
       <PlayAlong piece={piece} />
       <PieceAbout entry={piece} />

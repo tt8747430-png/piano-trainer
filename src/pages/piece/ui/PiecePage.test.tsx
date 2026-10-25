@@ -34,17 +34,30 @@ describe('Piece', () => {
     expect(screen.getByText('«Боже, спасибо» · No. 5 · p. 16')).toBeInTheDocument()
   })
 
-  it('says what the song is, and plays nothing: no chords, chart or keys (ADR 0098)', async () => {
+  it('says what the song is, and plays nothing: no chart or keys (ADR 0098)', async () => {
     const { audio } = await renderApp('/songs/bz5')
     await screen.findByRole('heading', { level: 1, name: 'Still, my soul, be still' })
     expect(screen.getByText('72 BPM')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Scale: G major' })).toBeInTheDocument()
-    expect(screen.queryByRole('region', { name: 'Chords' })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /^Bar 1/ })).not.toBeInTheDocument()
     // A page that plays nothing shows no keys, folded or not.
     expect(screen.queryByRole('group', { name: 'Keyboard' })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Keys' })).not.toBeInTheDocument()
     expect(audio.played).toEqual([])
+  })
+
+  it('shows its chords as diagrams as they first sound, each opening its sheet, which learns nothing here', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs/bz5')
+    const chords = await screen.findByRole('region', { name: 'Chords' })
+    expect(
+      within(chords)
+        .getAllByRole('button')
+        .map((chord) => chord.textContent),
+    ).toEqual(['G', 'C', 'Em', 'G/B', 'C/E', 'Dsus4', 'D/F#', 'Am', 'D7', 'D'])
+    await user.click(within(chords).getAllByRole('button')[2] as HTMLElement)
+    const sheet = await screen.findByRole('dialog', { name: 'Em chord' })
+    expect(within(sheet).queryByText('Play it on the keys')).not.toBeInTheDocument()
   })
 
   it('puts its key, time and tempo on three cards, its second title under them (ADR 0100)', async () => {
@@ -145,6 +158,12 @@ describe('Piece', () => {
       await screen.findByRole('link', { name: 'Learn it step by step: start with the Practice.' }),
     ).toHaveAttribute('href', '/practice/accompaniment/studies/ex3/sections/1')
     expect(screen.queryByRole('region', { name: 'Sections' })).not.toBeInTheDocument()
+    // Its chords are the section's to learn, in place of the summary.
+    expect(
+      within(screen.getByRole('region', { name: 'Chords' }))
+        .getAllByRole('button')
+        .map((row) => row.textContent),
+    ).toEqual(['Learn C', 'Learn Dm', 'Learn G', 'Learn F'])
     expect(screen.getByRole('heading', { level: 2, name: 'Changes' })).toBeInTheDocument()
     const inTime = screen.getByRole('region', { name: 'Play the chords in time' })
     expect(

@@ -99,8 +99,16 @@ describe('sectionLessons', () => {
   })
 
   it('teaches a section of different lines a sequence each, played once', () => {
-    const chorus = sectionLessons(played('bz5'), 'bz5', 1)
+    const performance = played('bz5')
+    const chorus = sectionLessons(performance, 'bz5', 1)
     expect(chorus).toMatchObject({ bars: { first: 8, last: 17 }, rounds: 1 })
+    // Each chord where it first sounds in the chorus: its sheet shows it voiced there.
+    for (const lesson of chorus?.chords ?? []) {
+      const first = performance.chords.findIndex(
+        (chord) => chord.symbol === lesson.symbol && chord.bar >= 8,
+      )
+      expect(lesson.chord, lesson.symbol).toBe(first)
+    }
     expect(chorus?.sequences.map((sequence) => sequence.key)).toEqual([
       'bz5:bars:9-12',
       'bz5:bars:13-16',

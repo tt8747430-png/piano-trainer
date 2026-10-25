@@ -32,7 +32,7 @@ function SectionBack({ piece }: { piece: Pick<Piece, 'id' | 'kind'> }) {
 function SectionView({ piece, section }: { piece: Piece; section: number }) {
   const { t } = useTranslation('piece')
   const locale = useLocale()
-  const { headings, sections } = useSongLessons(piece)
+  const { performance, headings, sections } = useSongLessons(piece)
   const done = useProgress(selectLessons)
   const lessons = sections[section]
   // The route found no section the piece has not.
@@ -65,7 +65,12 @@ function SectionView({ piece, section }: { piece: Piece; section: number }) {
         paint={paint}
         progress={progressOf(lessonKeys(lessons), done)}
       />
-      <SectionLessonGroups piece={piece} lessons={lessons} paint={paint} />
+      <SectionLessonGroups
+        piece={piece}
+        performance={performance}
+        lessons={lessons}
+        paint={paint}
+      />
     </div>
   )
 }

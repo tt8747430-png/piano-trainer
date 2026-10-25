@@ -5,6 +5,7 @@ import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { createMemoryStorage } from '@/shared/lib'
+import { midi } from '@/shared/lib/music'
 
 const DAY = '2026-10-25T10:00:00.000Z'
 
@@ -46,6 +47,20 @@ describe('a section’s page (ADR 0100)', () => {
     expect(screen.getByText('Still, my soul, be still')).toBeInTheDocument()
     expect(screen.getByText('Em · D/F# · G · Am · C · Dsus4 · D7 · D')).toBeInTheDocument()
     expect(screen.getByText('Lessons done: 0 of 20')).toBeInTheDocument()
+    expect(
+      within(screen.getByRole('region', { name: 'Chords' }))
+        .getAllByRole('button')
+        .map((row) => row.textContent),
+    ).toEqual([
+      'Learn Em',
+      'Learn D/F#',
+      'Learn G',
+      'Learn Am',
+      'Learn C',
+      'Learn Dsus4',
+      'Learn D7',
+      'Learn D',
+    ])
     expect(screen.getByRole('heading', { level: 2, name: 'Changes' })).toBeInTheDocument()
     expect(rowsOf('Play the chords in time')).toEqual([
       ['1st sequence Em · D/F# · G · Am · Em · C · Dsus4 · D7', '/play/bz5?loop=9-12'],
@@ -92,6 +107,34 @@ describe('a section’s page (ADR 0100)', () => {
     await user.click(first)
     await waitFor(() => expect(router.state.location.pathname).toBe('/play/bz5'))
     expect(router.state.location.search).toMatchObject({ loop: '9-12' })
+  })
+
+  it('learns a chord played in its sheet, on a MIDI keyboard, and checks it', async () => {
+    const user = userEvent.setup()
+    const { midi: keyboard, progressStore } = await renderApp('/songs/bz5/sections/2')
+    const row = await screen.findByRole('button', { name: 'Learn Em' })
+    expect(tileIcon(row)).toBe('lucide-piano')
+    await user.click(row)
+    const sheet = await screen.findByRole('dialog', { name: 'Em chord' })
+    expect(within(sheet).getByText('Play it on the keys')).toBeInTheDocument()
+    // E minor's notes held together, in any octave.
+    act(() => {
+      for (const key of [52, 67, 71]) keyboard.press(midi(key))
+    })
+    expect(await within(sheet).findByText('That’s it.')).toBeInTheDocument()
+    expect(Object.keys(progressStore.getState().lessons)).toEqual(['bz5:chord:Em'])
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+    expect(row).toHaveAccessibleName('Learn Em Done')
+    expect(tileIcon(row)).toBe('lucide-check')
+    expect(screen.getByText('Lessons done: 1 of 20')).toBeInTheDocument()
+    // Learned once, its sheet says so from the start.
+    await user.click(row)
+    expect(
+      await within(await screen.findByRole('dialog', { name: 'Em chord' })).findByText(
+        'That’s it.',
+      ),
+    ).toBeInTheDocument()
   })
 
   it('goes back to the song’s page, opened directly', async () => {
@@ -172,6 +215,7 @@ describe('a section’s page (ADR 0100)', () => {
     ).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /^С Em на D\/F# Такт 9/ })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '3-й оборот Em · C · D' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Учим Em' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
   })
 })

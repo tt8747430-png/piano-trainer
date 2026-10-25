@@ -15,7 +15,10 @@ interface Looped {
 /** A chord of the section, learned by playing it in its sheet. */
 export interface ChordLesson {
   readonly kind: 'chord'
+  /** As the performance writes it (`PerformedChord.symbol`): what its sheet shows and its key holds. */
   readonly symbol: string
+  /** Where it first sounds in the section: its index among the performance's chords, as voiced there. */
+  readonly chord: number
   readonly key: LessonKey
 }
 /** A chord sequence played in time: its chords as they come, the same chord held over a barline once. */
@@ -207,6 +210,20 @@ function patternsOf(performance: Performance, pieceId: PieceId, bars: BarRange):
   return [...patterns.values()]
 }
 
+/** The section's chords in the order they first sound, each once, where it first sounds. */
+function chordsOf(performance: Performance, pieceId: PieceId, bars: BarRange): ChordLesson[] {
+  const firsts = new Map<string, number>()
+  performance.chords.forEach(({ symbol, bar }, chord) => {
+    if (bar >= bars.first && bar <= bars.last && !firsts.has(symbol)) firsts.set(symbol, chord)
+  })
+  return [...firsts].map(([symbol, chord]) => ({
+    kind: 'chord',
+    symbol,
+    chord,
+    key: chordLessonKey(pieceId, symbol),
+  }))
+}
+
 /**
  * A section's lessons (spec §3.2), from the piece as the Player plays it (its repeats taken) and the
  * section's index: none for a section the piece has not.
@@ -220,14 +237,9 @@ export function sectionLessons(
   if (!bars) return null
   const run = chordRun(performance, bars)
   const round = roundsOf(performance, bars, run)
-  const symbols = [...new Set(symbolsOf(run))]
   return {
     bars,
-    chords: symbols.map((symbol) => ({
-      kind: 'chord',
-      symbol,
-      key: chordLessonKey(pieceId, symbol),
-    })),
+    chords: chordsOf(performance, pieceId, bars),
     rounds: round?.rounds ?? 1,
     sequences: sequencesOf(performance, pieceId, bars, round?.bars ?? null),
     changes: changesOf(pieceId, run),

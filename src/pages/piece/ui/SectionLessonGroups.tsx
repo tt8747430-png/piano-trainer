@@ -5,21 +5,27 @@ import { usePatternName } from '@/entities/pattern'
 import type { Piece } from '@/entities/piece'
 import type { BarRange } from '@/features/practice'
 import { useLocale } from '@/shared/i18n'
+import type { Performance } from '@/shared/lib/arrangement'
 import { RowGroup, type Paint } from '@/shared/ui'
 import type { SectionLessons } from '../model/section-lessons'
+import { ChordLessons } from './ChordLessons'
 import { LessonRow } from './LessonRow'
 
 /**
- * A section's lessons as its page teaches them (spec §3.2), each a row into the Player looping it,
- * in the section's paint: its changes (each chord sequence in time, then one change at a time) and
- * the pattern its chords are played by. A song of one section shows them on its own page.
+ * A section's lessons as its page teaches them (spec §3.2), in the section's paint: its chords, each
+ * learned in its sheet; its changes (each chord sequence in time, then one change at a time) and the
+ * pattern its chords are played by, each a row into the Player looping it. A song of one section
+ * shows them on its own page.
  */
 export function SectionLessonGroups({
   piece,
-  lessons: { sequences, changes, patterns },
+  performance,
+  lessons: { chords, sequences, changes, patterns },
   paint,
 }: {
   piece: Pick<Piece, 'id'>
+  /** The piece as the Player plays it, its repeats taken: what the lessons were read from. */
+  performance: Performance
   lessons: SectionLessons
   paint: Paint
 }) {
@@ -36,11 +42,7 @@ export function SectionLessonGroups({
       : t('learnSection.bars', { first: first + 1, last: last + 1 })
   return (
     <>
-      {/*
-       * CHORDS (spec §3.2, round 3's chord part): "Learn C♯m⁷" for each of `lessons.chords`, a row
-       * opening the chord's `ChordSheet` with its `learn` wired to `recordChord`, goes here once the
-       * chord diagrams (`widgets/chord-diagrams`) are in. Its lessons count in the progress already.
-       */}
+      <ChordLessons pieceId={piece.id} performance={performance} chords={chords} paint={paint} />
       {sequences.length + changes.length > 0 ? (
         <section aria-labelledby={changesId} className="flex flex-col gap-4">
           <h2 id={changesId} className="text-2xl">

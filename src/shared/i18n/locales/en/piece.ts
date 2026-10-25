@@ -24,6 +24,8 @@ export const piece = {
     title: 'Learn the {{section}}',
     rounds: '{{n}} ×',
     noChords: 'No chord symbols',
+    chords: 'Chords',
+    learnChord: 'Learn {{chord}}',
     changes: 'Changes',
     inTime: 'Play the chords in time',
     // A chord sequence by its place in the section, by the ordinal's plural form (Russian says
