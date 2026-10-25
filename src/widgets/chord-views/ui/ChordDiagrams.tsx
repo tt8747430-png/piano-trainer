@@ -36,7 +36,10 @@ const PLACES = {
   later: { box: 'basis-1/6 max-w-48 opacity-70', symbol: 'text-xl text-muted-foreground' },
 } as const
 
-/** A chord of the row: its keys over its symbol, a button opening its sheet. */
+/**
+ * A chord of the row: its keys over its symbol, a button opening its sheet. In a room too short for
+ * them as drawn, its keys shrink to it, its symbol kept whole.
+ */
 function Diagram({
   chord,
   place,
@@ -56,14 +59,14 @@ function Diagram({
       type="button"
       onClick={onOpen}
       className={cn(
-        'flex min-w-0 shrink flex-col items-center gap-2 rounded-xl p-1.5 transition-colors duration-200 ease-out hover:bg-muted',
+        'flex max-h-full min-w-0 shrink flex-col items-center gap-2 rounded-xl p-1.5 transition-colors duration-200 ease-out hover:bg-muted',
         PLACES[place].box,
       )}
     >
-      <ChordDiagram chord={chord} muted={muted} />
+      <ChordDiagram chord={chord} muted={muted} className="min-h-0" />
       <span
         aria-hidden
-        className={cn('font-display leading-none font-semibold', PLACES[place].symbol)}
+        className={cn('shrink-0 font-display leading-none font-semibold', PLACES[place].symbol)}
       >
         {label}
       </span>
@@ -76,8 +79,10 @@ function Diagram({
  * next beside it greyed (from a tablet's width the two after it too, smaller and greyer); where no
  * chord sounds yet (a pickup, a bar of none) the next alone, greyed, saying it is next. Under them the
  * beat strip; under it, with the View's Lyrics on, the line being sung and the next (`SungLines`);
- * on a phone on its side, the strip and the words beside the chords (`diagrams-view`). A diagram
- * opens its chord's sheet (`onChord`); a beat tapped takes the cursor there (`onGo`).
+ * on a phone on its side, the title, the strip and the words beside the chords. All of it stands in
+ * the room above the transport, in the middle of it, the chords shrinking where it is short
+ * (`diagrams-view`). A diagram opens its chord's sheet (`onChord`); a beat tapped takes the cursor
+ * there (`onGo`).
  */
 export function ChordDiagrams({
   title,
@@ -126,14 +131,14 @@ export function ChordDiagrams({
   return (
     <section
       aria-label={t('views.diagrams')}
-      className="diagrams-view h-full gap-4 overflow-y-auto overscroll-contain pb-(--float-room) landscape-phone:gap-x-4 landscape-phone:gap-y-2"
+      className="diagrams-view h-full overflow-y-auto overscroll-contain pb-(--float-room)"
     >
       <div data-area="title">
         <SheetTitle title={title} place="lines" />
       </div>
       <div
         data-area="chords"
-        className="flex min-h-24 items-end justify-center gap-3 sm:gap-6 landscape-phone:items-start"
+        className="flex items-end justify-center gap-3 sm:gap-6 landscape-phone:items-center"
       >
         {first ? (
           <>

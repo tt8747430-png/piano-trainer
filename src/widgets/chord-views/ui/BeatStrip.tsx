@@ -89,7 +89,7 @@ export function BeatStrip({
                     data-looped={looped ? '' : undefined}
                     onClick={() => onBeat(start + from)}
                     className={cn(
-                      '@container flex size-14 items-end border-l border-hairline px-1 pb-1.5 first:border-l-0 sm:size-16 landscape-phone:size-12',
+                      '@container flex size-14 items-end border-l border-hairline px-1 pb-1.5 first:border-l-0 sm:size-16 landscape-phone:size-10',
                       cell === sounding
                         ? 'bg-foreground text-background'
                         : looped

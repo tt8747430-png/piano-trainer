@@ -725,29 +725,65 @@
   }
 }
 
-/* The Player's Diagrams view (widgets/chord-views, ADR 0099): its parts placed by `data-area`. Down
-   the screen the title, the chords, the beat strip and the words sung; on a phone on its side, where
-   the bar and the keys leave a short room, the chords beside the strip and the words. */
+/* The Player's Diagrams view (widgets/chord-views, ADR 0099): its parts placed by `data-area` in the
+   room above the transport floating over its foot (the view's padding is `--float-room`), never under
+   it. Down the screen the title at the head, then the chords, the beat strip and the words sung, in
+   the middle of the room under the title (the rows either side share what is left); on a phone on
+   its side, where the bar and the keys leave a short room, the chords down its whole height, and
+   beside them the title, the strip and the words, in the middle of it. A short room keeps the line
+   sung and leaves out the next before the chords give anything up; then the chords take what the
+   rest leaves them, never more than they are drawn at: their diagrams shrink to it (`max-h-full`). */
 @utility diagrams-view {
+  container-type: size;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-areas: 'title' 'chords' 'strip' 'words';
-  align-content: start;
+  grid-template-rows: auto minmax(0, 1fr) minmax(5rem, auto) auto auto minmax(0, 1fr);
+  grid-template-areas: 'title' '.' 'chords' 'strip' 'words' '.';
   & > [data-area='title'] {
     grid-area: title;
+    margin-bottom: --spacing(2);
   }
   & > [data-area='chords'] {
     grid-area: chords;
+    min-height: 0;
   }
   & > [data-area='strip'] {
     grid-area: strip;
+    margin-top: --spacing(4);
   }
   & > [data-area='words'] {
     grid-area: words;
+    margin-top: --spacing(4);
+  }
+  /* Too short a room for both lines and the chords as drawn (a 667px-tall phone, any phone on its
+     side): the line the music is in alone, the next only where it is the one line shown. */
+  @container (height < 19rem) {
+    & > [data-area='words'] > [data-slot='coming-line']:not(:first-child) {
+      display: none;
+    }
   }
   @variant landscape-phone {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-areas: 'title title' 'chords strip' 'chords words';
+    grid-template-rows: minmax(0, 1fr) auto auto auto minmax(0, 1fr);
+    grid-template-areas: 'chords .' 'chords title' 'chords strip' 'chords words' 'chords .';
+    column-gap: --spacing(4);
+    /* One line of the title beside the chords, cut short where it is longer: with the strip and
+       the line sung, it fits the room a 375px-tall phone on its side leaves. */
+    & > [data-area='title'] {
+      margin-bottom: 0;
+      & > h1 {
+        overflow: hidden;
+        line-height: 1.1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+    & > [data-area='strip'] {
+      margin-top: --spacing(0.5);
+    }
+    & > [data-area='words'] {
+      margin-top: --spacing(1);
+    }
   }
 }
 
