@@ -6,6 +6,7 @@ import { stubIntersectionObserver } from './intersection'
 import { stubMatchMedia } from './match-media'
 import { stubServiceWorker } from './pwa-register'
 import { stubResizeObserver } from './resize'
+import { watchTrees } from './trees'
 
 // A `findBy` waits as long as a busy runner needs: four workers engraving at once can take a staff past
 // the one second it waits by default, failing a test that passes alone.
@@ -17,7 +18,10 @@ configure({ asyncUtilTimeout: 5_000 })
  * module would round only the first file.
  */
 export function setUpDom() {
+  let takeTreesApart = () => {}
+
   beforeEach(() => {
+    takeTreesApart = watchTrees()
     stubMatchMedia({ dark: false })
     stubServiceWorker({ waiting: false })
     // jsdom lays nothing out: everything a test renders is on screen.
@@ -52,5 +56,6 @@ export function setUpDom() {
       for (const name of ['style', 'inert', 'aria-hidden', 'data-base-ui-scroll-locked'])
         element.removeAttribute(name)
     }
+    takeTreesApart()
   })
 }
