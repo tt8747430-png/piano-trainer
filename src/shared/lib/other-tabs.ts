@@ -10,17 +10,23 @@ interface Rehydrates {
  * so its own next save carries the other tab's changes instead of writing over them. It follows a
  * save of its own version only: another version's is left to the tab that wrote it. Were tabs of two
  * versions to follow each other's, each would write the save back in its own version and wake the
- * other, for as long as both were open.
+ * other, for as long as both were open. It stops once `signal` aborts: the window holds what hears
+ * it, so a store that is done with (a test's) is let go.
  */
 export function followOtherTabs(
   store: Rehydrates,
   { key, version }: { key: string; version: number },
   tabs: EventTarget,
+  signal?: AbortSignal,
 ): void {
-  tabs.addEventListener('storage', (event) => {
-    if (!(event instanceof StorageEvent) || event.key !== key) return
-    if (versionOf(event.newValue) === version) void store.rehydrate()
-  })
+  tabs.addEventListener(
+    'storage',
+    (event) => {
+      if (!(event instanceof StorageEvent) || event.key !== key) return
+      if (versionOf(event.newValue) === version) void store.rehydrate()
+    },
+    { signal },
+  )
 }
 
 /** The version a save was written in, where it can be read. */

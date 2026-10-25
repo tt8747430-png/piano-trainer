@@ -6,8 +6,8 @@ import { COLLECTIONS, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piec
 import { SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from '@/entities/settings'
 import { createMemoryStorage, safeLocalStorage } from '@/shared/lib'
 import { stubServiceWorker } from '@/shared/test/pwa-register'
-import { testContext } from '@/app/testing/test-context'
-import { createAppRouter } from './router'
+import { testContext, testRouter } from '@/app/testing/test-context'
+import { heardUntil, untilTestEnds } from '@/shared/test/listeners'
 import { renderApp } from './testing/render-app'
 
 // The storage is chosen once a page, and a file before this one in its worker may have chosen it:
@@ -40,10 +40,7 @@ const ROUTES = [
 ] as const
 
 async function open(path: string) {
-  const router = createAppRouter({
-    history: createMemoryHistory({ initialEntries: [path] }),
-    ...testContext(),
-  })
+  const router = testRouter(path)
   await router.load()
   return router
 }
@@ -108,7 +105,9 @@ describe('routes', () => {
     // module shows screens nothing has loaded yet.
     vi.resetModules()
     const fresh = await import('./router')
-    const router = fresh.createAppRouter({ history: createMemoryHistory(), ...testContext() })
+    const router = heardUntil(untilTestEnds(), () =>
+      fresh.createAppRouter({ history: createMemoryHistory(), ...testContext() }),
+    )
     for (const [path, route] of Object.entries(router.routesByPath)) {
       expect(route.options.component, path).toHaveProperty('preload', expect.any(Function))
     }

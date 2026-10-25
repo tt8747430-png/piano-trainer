@@ -8,8 +8,7 @@ import {
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { testContext } from '@/app/testing/test-context'
-import { createAppRouter } from './router'
+import { testRouter } from '@/app/testing/test-context'
 import { RouteError } from './RouteError'
 
 /** Path, and a full-screen screen that throws as it renders, under the app's error screen. */
@@ -72,7 +71,7 @@ describe('RouteError', () => {
   })
 
   it('is the router’s default error screen', () => {
-    const router = createAppRouter({ history: createMemoryHistory(), ...testContext() })
+    const router = testRouter()
     expect(router.options.defaultErrorComponent).toBe(RouteError)
   })
 })

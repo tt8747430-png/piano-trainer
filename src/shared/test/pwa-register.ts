@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { vi } from 'vitest'
+import { heardUntil, untilTestEnds } from './listeners'
 
 /** What the app asks of `useRegisterSW`, as far as a test can see it. */
 interface RegisterOptions {
@@ -21,10 +22,12 @@ const registration = {
 let registeredWith: RegisterOptions = {}
 
 export function useRegisterSW(options: RegisterOptions = {}) {
-  // Registers once, as the real hook does in its state's initialiser.
+  // Registers once, as the real hook does in its state's initialiser. What the app then sets
+  // listening on the page (a look for a new version on each return) stops once the test is over,
+  // as a closed page's would: the document outlives every test of a worker.
   useState(() => {
     registeredWith = options
-    options.onRegisteredSW?.('/sw.js', registration.worker)
+    heardUntil(untilTestEnds(), () => options.onRegisteredSW?.('/sw.js', registration.worker))
   })
   return {
     needRefresh: useState(registration.waiting),

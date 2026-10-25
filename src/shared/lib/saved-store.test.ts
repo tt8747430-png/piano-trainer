@@ -19,11 +19,11 @@ function save(storage: Storage, state: unknown, version: number) {
   return json
 }
 
-function counter(storage = createMemoryStorage()) {
+function counter(storage = createMemoryStorage(), signal?: AbortSignal) {
   const otherTabs = new EventTarget()
   const store = createSavedStore(
     { key: KEY, version: 2, initial: { count: 0 }, read },
-    { storage, otherTabs },
+    { storage, otherTabs, signal },
   )
   /** Another tab saves `state` in `version`, and this tab hears of it. */
   const savedElsewhere = (state: unknown, version: number) =>
@@ -105,6 +105,14 @@ describe('createSavedStore', () => {
     const { store, savedElsewhere } = counter()
     savedElsewhere({ count: 5 }, 2)
     expect(store.getState()).toEqual({ count: 5 })
+  })
+
+  it('stops following other tabs once its signal aborts, so nothing there holds it', () => {
+    const following = new AbortController()
+    const { store, savedElsewhere } = counter(createMemoryStorage(), following.signal)
+    following.abort()
+    savedElsewhere({ count: 5 }, 2)
+    expect(store.getState()).toEqual({ count: 0 })
   })
 
   it('leaves another version’s save in another tab alone, never writing it back in its own', () => {

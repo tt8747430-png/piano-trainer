@@ -5,6 +5,7 @@ import { createFakeMidi } from '@/shared/api/midi'
 import { createMemoryStorage } from '@/shared/lib'
 import { midi, type Midi } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
+import { untilTestEnds } from '@/shared/test/listeners'
 import type { KeyMark } from '@/shared/ui'
 import { LiveKeyboard } from '../ui/LiveKeyboard'
 
@@ -26,6 +27,7 @@ export function renderLiveKeyboard({
   const midiKeyboard = createFakeMidi()
   const settingsStore = createSettingsStore({
     storage: createMemoryStorage(),
+    signal: untilTestEnds(),
     languages: ['en'],
     finePointer: false,
   })

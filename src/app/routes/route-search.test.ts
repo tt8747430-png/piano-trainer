@@ -1,9 +1,7 @@
 // @vitest-environment jsdom
-import { createMemoryHistory } from '@tanstack/react-router'
 import { describe, expect, it } from 'vitest'
-import { testContext } from '@/app/testing/test-context'
+import { testRouter } from '@/app/testing/test-context'
 import { keyParam, note } from '@/shared/lib/music'
-import { createAppRouter } from '../router'
 import {
   CHORDS_DEFAULTS,
   INTERVALS_DEFAULTS,
@@ -16,10 +14,7 @@ import { SONGS_DEFAULTS } from './songs-search'
 
 /** What a route reads from a URL, however it was typed, kept or edited. */
 async function searchAt(url: string) {
-  const router = createAppRouter({
-    history: createMemoryHistory({ initialEntries: [url] }),
-    ...testContext(),
-  })
+  const router = testRouter(url)
   await router.load()
   return router.state.matches.at(-1)?.search
 }
@@ -296,10 +291,7 @@ describe('search params', () => {
 
   it('leave out of the URL only the line its key opens on', async () => {
     const F_SHARP_MINOR = keyParam({ tonic: note('F', 1), minor: true })
-    const router = createAppRouter({
-      history: createMemoryHistory({ initialEntries: ['/practice/progressions'] }),
-      ...testContext(),
-    })
+    const router = testRouter('/practice/progressions')
     await router.load()
     await router.navigate({
       to: '/practice/progressions',
