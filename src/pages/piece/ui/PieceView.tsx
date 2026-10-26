@@ -22,7 +22,6 @@ import { ActionMenu, FabLink, FloatingActions, RoundLink } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { sectionPaint } from '../model/section-paint'
 import { useSongLessons } from '../model/use-song-lessons'
-import { LearnCard } from './LearnCard'
 import { PieceAbout } from './PieceAbout'
 import { PieceByline } from './PieceByline'
 import { PieceChords } from './PieceChords'
@@ -37,7 +36,7 @@ import { SectionRows } from './SectionRows'
  * Edit the score, Learned, its ♡ (ADR 0103) and More: Move to… and Archive (Restore while it is
  * archived; a study is in no library, ADR 0106), Check these chords, and for
  * the learner's own music Share and its way back, asked first); under the title its byline (what else it is called, Your version, its
- * stage, who wrote it); the learning card, where to go next and its lessons done; its key, time and
+ * stage, who wrote it); its key, time and
  * tempo as cards; its chords as diagrams, each opening its sheet, and its sections, each a row to its
  * page of lessons (a song of one section has that section's lessons here, its chords to learn among
  * them); Play along, the whole song; then its note and the way to its key's scale. Its chart is the
@@ -140,7 +139,6 @@ export function PieceView({ piece }: { piece: Piece }) {
       />
       <PieceByline piece={piece} />
       <ShareSaid said={shared.said} />
-      <LearnCard piece={piece} headings={headings} sections={sections} />
       <PieceFactCards piece={piece} />
       {/* A song of one section has its lessons here, its chords among them to learn. */}
       {only ? (

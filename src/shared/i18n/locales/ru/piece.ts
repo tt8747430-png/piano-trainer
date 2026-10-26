@@ -7,15 +7,6 @@ export const piece: LocaleResources['piece'] = {
   learnSong: {
     progress: '{{done}} из {{total}}',
     progressSaid: 'Пройдено уроков: {{done}} из {{total}}',
-    start: {
-      song: 'Учите песню по шагам: начните с раздела «{{section}}».',
-      study: 'Учите этюд по шагам: начните с раздела «{{section}}».',
-    },
-    next: 'Дальше: раздел «{{section}}».',
-    done: {
-      song: 'Все разделы пройдены. Сыграйте песню целиком.',
-      study: 'Все разделы пройдены. Сыграйте этюд целиком.',
-    },
     sections: 'Разделы',
     lessons_one: '{{count}} урок',
     lessons_few: '{{count}} урока',

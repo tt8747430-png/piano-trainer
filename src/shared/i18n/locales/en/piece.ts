@@ -3,21 +3,12 @@ export const piece = {
   // A chord chart's section says its bars.
   barOne: 'bar {{n}}',
   barsFromTo: 'bars {{first}}–{{last}}',
-  // The song's page, Learn the song (ADR 0100): where to go next and the song's lessons done, its
-  // sections each with its lessons, and the whole song to play along with. What names the piece is
-  // a song's or a study's, by its kind: Russian names it.
+  // The song's page, Learn the song (ADR 0100): its sections each with its lessons done, and the
+  // whole song to play along with. What names the piece is a song's or a study's, by its kind:
+  // Russian names it.
   learnSong: {
     progress: '{{done}} of {{total}}',
     progressSaid: 'Lessons done: {{done}} of {{total}}',
-    start: {
-      song: 'Learn it step by step: start with the {{section}}.',
-      study: 'Learn it step by step: start with the {{section}}.',
-    },
-    next: 'Next: the {{section}}.',
-    done: {
-      song: 'Every section learned. Play it through.',
-      study: 'Every section learned. Play it through.',
-    },
     sections: 'Sections',
     lessons_one: '{{count}} lesson',
     lessons_other: '{{count}} lessons',

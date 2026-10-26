@@ -1,6 +1,7 @@
 # ADR 0100 — A song is learned by its sections: its chords, its changes, its sequences, its pattern
 
-- **Status:** accepted · **Date:** 2026-10-25 · **Amends:** ADR 0098 (the song's page) · **Spec:**
+- **Status:** accepted · **Date:** 2026-10-25 · **Amends:** ADR 0098 (the song's page) · **Amended by:** ADR 0106
+  (the learning card goes) · **Spec:**
   [chord views and song lessons](../superpowers/specs/2026-10-25-chord-views-and-song-lessons.md)
 
 ## Context
@@ -16,6 +17,10 @@ a whole piece's Learned mark.
 - **The song's page is "Learn the song".** Under its bar: a card with where to go next and the song's lesson
   progress, its key, time and tempo as fact cards, its chords as diagrams (each opening its sheet), its sections as
   rows (a tile in the section's paint, its lessons done of all), and Play along; its note last.
+
+  **Amended** (2026-10-26, ADR 0106's second round): the owner did not want the card on top. It goes, with
+  `LearnCard`, `nextStep` and `songProgress`; each section's row still says its lessons done, and a section's page
+  its own.
 - **A section's page** (`…/$pieceId/sections/$section`) teaches it in order: each chord (learned by playing it in
   its sheet, on a MIDI keyboard or the sheet's keys), each change between two chords (the Player looping the bars it
   is in), each chord sequence in time (the Player looping it), and each pattern it is played with (the Player
