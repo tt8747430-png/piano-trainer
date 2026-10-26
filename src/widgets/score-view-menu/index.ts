@@ -1,2 +1,5 @@
+export { KeysSwitch } from './ui/KeysSwitch'
 export { ScoreViewMenu } from './ui/ScoreViewMenu'
-export { SCORE_PARTS, type ScorePart } from './model/score-parts'
+export { SheetViewFields } from './ui/SheetViewFields'
+export { ViewSection } from './ui/ViewSection'
+export { PRINTED_PARTS } from './model/score-parts'
