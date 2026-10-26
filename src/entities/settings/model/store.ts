@@ -31,6 +31,7 @@ import {
   isFloatingPlace,
   isKeyDock,
   isKeyLength,
+  isDiagramsMode,
   isKeySize,
   isMusicView,
   isNamedKeys,
@@ -56,7 +57,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 9
+export const SETTINGS_VERSION = 10
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -186,17 +187,19 @@ function chordFinderSettings(value: unknown): ChordFinderSettings {
 const isSheetView = isOneOf(SHEET_VIEWS)
 
 /**
- * The Player's view: the music's view, each switch and the layout as saved where still valid, the
- * staves hidden each once.
+ * The Player's view: the music's view and Diagrams' mode, each switch and the layout as saved where
+ * still valid, the staves hidden each once.
  */
 function scoreViewSettings(value: unknown): ScoreViewSettings {
   const saved = savedObject<ScoreViewSettings>(value)
-  const switched = (key: 'chordNames' | 'lyrics' | 'keys') =>
+  const switched = (key: 'askOnOpen' | 'chordNames' | 'lyrics' | 'keys') =>
     typeof saved[key] === 'boolean' ? saved[key] : DEFAULT_SCORE_VIEW[key]
   const hidden: unknown = saved.hidden
   return {
     layout: isSheetView(saved.layout) ? saved.layout : DEFAULT_SCORE_VIEW.layout,
     music: isMusicView(saved.music) ? saved.music : DEFAULT_SCORE_VIEW.music,
+    diagrams: isDiagramsMode(saved.diagrams) ? saved.diagrams : DEFAULT_SCORE_VIEW.diagrams,
+    askOnOpen: switched('askOnOpen'),
     chordNames: switched('chordNames'),
     lyrics: switched('lyrics'),
     keys: switched('keys'),
