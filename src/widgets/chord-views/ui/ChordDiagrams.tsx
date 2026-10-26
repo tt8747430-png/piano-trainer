@@ -1,94 +1,36 @@
-import { useLayoutEffect, useMemo, useRef, type CSSProperties } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DiagramsMode } from '@/entities/settings'
 import { usePieceInversions } from '@/features/choose-diagram-inversion'
 import {
   chordSummary,
-  diagramChord,
   loopTicks,
   type BarRange,
   type CellBar,
-  type DiagramChord,
   type PlayedBeat,
 } from '@/features/practice'
-import { cn, useMediaQuery } from '@/shared/lib'
+import { useMediaQuery } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
-import { printedSymbol, type Tick } from '@/shared/lib/music'
+import type { Tick } from '@/shared/lib/music'
 import { SheetTitle } from '@/shared/ui'
-import { ChordDiagram } from '@/widgets/chord-diagrams'
-import { chordsFrom, pairSlide } from '../model/chords-from'
+import { chordsFrom } from '../model/chords-from'
 import { lyricLines, type Span } from '../model/lyric-lines'
 import { sungPlace } from '../model/sung-place'
-import { useEveryFrame } from '../model/use-every-frame'
 import { BeatStrip } from './BeatStrip'
+import { ChordPair } from './ChordPair'
 import { SummaryGrid } from './SummaryGrid'
 import { SungLines } from './SungLines'
 
-/** A diagram's place in the pair: the one sounding's, the next's, or past the room's right edge. */
-type Slot = 0 | 0.5 | 1 | 2
-
-/**
- * A chord of the pair, the one sounding or the next, each half the pair's room and 28rem at most:
- * its keys over its symbol, a button taking the cursor to it (`onGo`). The next (`muted`) is greyed
- * and its symbol muted, named for a screen reader as the next; the one sounding by its keys' notes,
- * its symbol in ink. In a room too short for them as drawn, its keys shrink to it, its symbol kept
- * whole. It stands in its `slot`, moved on by the pair's slide (`--slide`); one past the room's edge
- * is coming, hidden and out of reach.
- */
-function Diagram({
-  chord,
-  muted,
-  label,
-  slot,
-  onGo,
-}: {
-  chord: DiagramChord
-  muted: boolean
-  /** What its symbol says: the symbol, or that it comes next. */
-  label: string
-  slot: Slot
-  onGo: () => void
-}) {
-  const { t } = useTranslation('player')
-  const coming = slot === 2
-  return (
-    <button
-      type="button"
-      aria-label={muted ? t('nextChord', { symbol: printedSymbol(chord.symbol) }) : undefined}
-      aria-hidden={coming || undefined}
-      inert={coming}
-      onClick={onGo}
-      // The one coming shows as it slides in: at rest it is out of sight, even in the gutters' fade.
-      style={{ '--slot': slot, ...(coming ? { opacity: 'var(--slide, 0)' } : {}) } as CSSProperties}
-      className="col-start-1 row-start-1 flex max-h-full min-h-0 min-w-0 translate-x-[calc((var(--slot)-var(--slide,0))*100%)] flex-col items-center gap-2 self-end rounded-xl p-1.5 transition-[translate,background-color] duration-300 ease-out group-data-moving/pair:transition-[background-color] hover:bg-muted motion-reduce:transition-none landscape-phone:self-center"
-    >
-      <ChordDiagram chord={chord} muted={muted} className="min-h-0" />
-      <span
-        aria-hidden
-        className={cn(
-          'shrink-0 font-display text-3xl leading-none font-semibold landscape-phone:text-2xl',
-          muted ? 'text-muted-foreground' : 'text-foreground',
-        )}
-      >
-        {label}
-      </span>
-    </button>
-  )
-}
-
 /**
  * Diagrams (ADR 0099, 0101, 0108, Chordify's), every chord on the same keys, each in the inversion
- * its piece chose. Animated, the chord sounding and the next beside it, the same size, the next
- * greyed; where no chord sounds yet (a pickup, a bar of none) the next alone, saying it is next. As a
- * change comes the pair slides with Listen's clock frame by frame (`pairSlide`), the next into the
- * place of the one sounding, the one after it in from the right, the page itself still; taken to a
- * chord it slides there; under reduced motion it stands still. Under them the beat strip, and under
- * it, with the View's Lyrics on, the line sung (`SungLines`). On a phone on its side, the title, the
- * strip and the words beside the chords. All of it stands in the room above the transport, in the
- * middle of it, the chords shrinking where it is short (`diagrams-view`), nothing scrolling. In its
- * summary mode, the strip and the words over the song's chords at once (`SummaryGrid`), the one
- * sounding marked, scrolling down. A diagram, a card or a beat tapped takes the cursor there
- * (`onGo`, `onChord`).
+ * its piece chose. Animated, the pair (`ChordPair`): the chord sounding and the next beside it,
+ * sliding with Listen's clock and swiped to the next chord or the one before, the page itself still.
+ * Under them the beat strip, dragged to scrub, and under it, with the View's Lyrics on, the line sung
+ * (`SungLines`). On a phone on its side, the title, the strip and the words beside the chords. All of
+ * it stands in the room above the transport, in the middle of it, the chords shrinking where it is
+ * short (`diagrams-view`), nothing scrolling. In its summary mode, the strip and the words over the
+ * song's chords at once (`SummaryGrid`), the one sounding marked, scrolling down. A diagram, a card
+ * or a beat tapped takes the cursor there (`onGo`, `onChord`).
  */
 export function ChordDiagrams({
   title,
@@ -125,21 +67,12 @@ export function ChordDiagrams({
   const chosen = usePieceInversions()?.chosen
   const still = useMediaQuery('(prefers-reduced-motion: reduce)')
   const looped = loop ? loopTicks(performance, loop) : null
-  const pairOf = chordsFrom(performance, span.played, looped)
-  const { now, next } = pairOf
-  // The chord after the next, coming in from the right as the pair slides.
-  const nextStart = next === null ? null : (performance.chords[next]?.startTick ?? null)
-  const later =
-    now === null || nextStart === null
-      ? null
-      : chordsFrom(performance, { from: nextStart, to: nextStart + 1 }, looped).next
+  const { now } = chordsFrom(performance, span.played, looped)
   const lines = useMemo(() => lyricLines(performance), [performance])
   const summary = useMemo(() => chordSummary(performance, chosen), [performance, chosen])
   const place = words
     ? sungPlace(performance, lines, { bar: beat.bar, played: span.played }, loop)
     : null
-  const chord = (index: number | null) =>
-    index === null ? null : diagramChord(performance, index, chosen)
   const strip = (
     <BeatStrip
       performance={performance}
@@ -151,19 +84,6 @@ export function ChordDiagrams({
     />
   )
   const sung = place ? <SungLines place={place} written={span.written} /> : null
-  // The pair's slide, set as each frame is drawn and again as the pair changes, before it is painted.
-  const pair = useRef<HTMLDivElement>(null)
-  const moving = clock !== null && !still && mode === 'animated'
-  const slide = () => {
-    const tick = clock?.()
-    const by =
-      moving && tick !== null && tick !== undefined
-        ? pairSlide(performance, pairOf, looped, tick)
-        : 0
-    pair.current?.style.setProperty('--slide', String(by))
-  }
-  useLayoutEffect(slide)
-  useEveryFrame(slide, moving)
   if (mode === 'summary') {
     return (
       <section
@@ -183,10 +103,6 @@ export function ChordDiagrams({
       </section>
     )
   }
-  const first = chord(now)
-  const second = chord(next)
-  const third = chord(later)
-  const go = (drawn: DiagramChord) => () => onGo(performance.chords[drawn.chord]?.startTick ?? 0)
   return (
     <section
       aria-label={t('views.diagrams')}
@@ -195,57 +111,15 @@ export function ChordDiagrams({
       <div data-area="title">
         <SheetTitle title={title} place="lines" />
       </div>
-      {/* Two diagrams' room, clipped there: one past it is out of sight. On a phone held upright it
-          runs into the gutters, fading there, so a diagram sliding past is never cut hard. */}
-      <div
-        ref={pair}
-        data-area="chords"
-        data-moving={moving ? '' : undefined}
-        className="group/pair -mx-gutter grid w-[calc(100%+2*var(--gutter))] max-w-[calc(56rem+2*var(--gutter))] grid-cols-2 justify-self-center overflow-hidden px-gutter [mask-image:linear-gradient(to_right,transparent,#000_var(--gutter),#000_calc(100%-var(--gutter)),transparent)] landscape-phone:mx-0 landscape-phone:w-full landscape-phone:max-w-[28rem] landscape-phone:px-0 landscape-phone:mask-none"
-      >
-        {first ? (
-          <>
-            <Diagram
-              key={first.chord}
-              chord={first}
-              muted={false}
-              label={printedSymbol(first.symbol)}
-              slot={second ? 0 : 0.5}
-              onGo={go(first)}
-            />
-            {second ? (
-              <Diagram
-                key={second.chord}
-                chord={second}
-                muted
-                label={printedSymbol(second.symbol)}
-                slot={1}
-                onGo={go(second)}
-              />
-            ) : null}
-            {second && third && third.chord !== first.chord ? (
-              <Diagram
-                key={third.chord}
-                chord={third}
-                muted
-                label={printedSymbol(third.symbol)}
-                slot={2}
-                onGo={go(third)}
-              />
-            ) : null}
-          </>
-        ) : second ? (
-          // No chord yet: the next alone, greyed, saying so.
-          <Diagram
-            key={second.chord}
-            chord={second}
-            muted
-            label={t('nextChord', { symbol: printedSymbol(second.symbol) })}
-            slot={0.5}
-            onGo={go(second)}
-          />
-        ) : null}
-      </div>
+      <ChordPair
+        performance={performance}
+        played={span.played}
+        looped={looped}
+        clock={clock}
+        moving={clock !== null && !still}
+        still={still}
+        onGo={onGo}
+      />
       <div data-area="strip" className="-mx-gutter landscape-phone:mx-0">
         {strip}
       </div>
