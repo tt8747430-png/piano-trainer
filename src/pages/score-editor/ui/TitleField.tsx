@@ -54,24 +54,35 @@ export function TitleField({ place }: { place: TitlePlace }) {
     <div className={cn(place === 'across' ? PLACED.across : PLACED.centred, beside && BESIDE)}>
       <SheetTitle title={meta.title} place={place}>
         {editing ? (
-          <input
-            ref={field}
-            aria-label={t('song.title')}
-            value={typed}
-            maxLength={TITLE_MAX}
-            autoComplete="off"
-            enterKeyHint="done"
-            onChange={(event) => setTyped(event.target.value)}
-            onKeyDown={onKeyDown}
-            onBlur={() => {
-              if (!settled.current) close(true)
-            }}
-            className={
-              place === 'across'
-                ? 'w-full min-w-0 rounded-lg border border-input bg-card px-1'
-                : 'w-full min-w-0 rounded-lg border border-input bg-card px-1 text-center'
-            }
-          />
+          // In place, at the title's size, as wide as what it holds (a copy of it, unseen, sizes
+          // the cell the field fills): no box round it, its line under it, so a phone's handles
+          // stay on the text and nothing under the title is covered (ADR 0110).
+          <span className="inline-grid max-w-full align-top">
+            <span aria-hidden className="invisible col-start-1 row-start-1 px-1 whitespace-pre">
+              {typed === '' ? ' ' : typed}
+            </span>
+            <input
+              ref={field}
+              aria-label={t('song.title')}
+              value={typed}
+              maxLength={TITLE_MAX}
+              // Its own width the copy's, never the browser's twenty characters.
+              size={1}
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
+              enterKeyHint="done"
+              onChange={(event) => setTyped(event.target.value)}
+              onKeyDown={onKeyDown}
+              onBlur={() => {
+                if (!settled.current) close(true)
+              }}
+              className={cn(
+                'col-start-1 row-start-1 w-full min-w-0 rounded-none border-0 bg-transparent px-1 font-[inherit] leading-[inherit] text-inherit shadow-[inset_0_-2px_0_var(--color-ring)] outline-none',
+                place !== 'across' && 'text-center',
+              )}
+            />
+          </span>
         ) : (
           <button
             ref={button}

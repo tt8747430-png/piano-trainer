@@ -22,6 +22,13 @@ const BEATS_PER_BAR: Readonly<Record<Meter, number>> = {
 export const beatsPerBar = (meter: Meter): number => BEATS_PER_BAR[meter]
 
 /**
+ * How a bar's eighths fall into its beats (ADR 0110, as notation apps print it under a time
+ * signature): two to a quarter's beat, three to a dotted quarter's; 3/4 is 2, 2, 2 and 6/8 3, 3.
+ */
+export const beatGrouping = (meter: Meter): number[] =>
+  Array.from({ length: beatsPerBar(meter) }, () => (isCompound(meter) ? 3 : 2))
+
+/**
  * A pickup: a first bar shorter than its meter's (its own, ADR 0095, else `meter`), which is the end
  * of a bar (its first note an upbeat). The beats of the meter's bar it leaves out before it; none for
  * any other bar.

@@ -7,7 +7,9 @@ import {
   keyPrefersSharps,
   keySignature,
   parseKey,
+  signatureKey,
   signatureNotes,
+  SIGNATURE_COUNTS,
   tonicSpelling,
   transposedKey,
   transposeNote,
@@ -206,5 +208,22 @@ describe('the written keys', () => {
     expect(writtenKey(key('C#'))).toEqual(key('C#'))
     expect(writtenKey(key('Dbm'))).toEqual(key('C#m'))
     expect(writtenKey(key('D#'))).toEqual(key('Eb'))
+  })
+})
+
+describe('signatureKey (ADR 0110)', () => {
+  it('names the key each signature writes, major or minor', () => {
+    expect(signatureKey(0, false)).toEqual({ tonic: note('C'), minor: false })
+    expect(signatureKey(0, true)).toEqual({ tonic: note('A'), minor: true })
+    expect(signatureKey(3, true)).toEqual({ tonic: note('F', 1), minor: true })
+    expect(signatureKey(-3, false)).toEqual({ tonic: note('E', -1), minor: false })
+    expect(signatureKey(7, false)).toEqual({ tonic: note('C', 1), minor: false })
+    expect(signatureKey(-7, true)).toEqual({ tonic: note('A', -1), minor: true })
+  })
+
+  it('is the key whose signature it is, for each of the fifteen', () => {
+    for (const count of SIGNATURE_COUNTS)
+      for (const minor of [false, true])
+        expect(keySignature(signatureKey(count, minor))).toBe(count)
   })
 })

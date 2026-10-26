@@ -394,7 +394,9 @@ describe('the score editor', () => {
     const song = await screen.findByRole('dialog', { name: 'Key signature' })
     expect(within(song).getByText('The whole song')).toBeInTheDocument()
     await user.click(
-      within(within(song).getByRole('group', { name: 'Key' })).getByRole('radio', { name: 'A' }),
+      within(within(song).getByRole('group', { name: 'Key' })).getByRole('button', {
+        name: 'A major',
+      }),
     )
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
@@ -410,7 +412,9 @@ describe('the score editor', () => {
     const change = await screen.findByRole('dialog', { name: 'Key signature' })
     expect(within(change).getByText('From Chorus on (bar 5)')).toBeInTheDocument()
     await user.click(
-      within(within(change).getByRole('group', { name: 'Key' })).getByRole('radio', { name: 'D' }),
+      within(within(change).getByRole('group', { name: 'Key' })).getByRole('button', {
+        name: 'D major',
+      }),
     )
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
@@ -428,7 +432,16 @@ describe('the score editor', () => {
     const key = await openCategory(user, 'Key signature')
     expect(within(key).getByText('The whole song')).toBeInTheDocument()
     const here = within(key).getByRole('group', { name: 'Key' })
-    await user.click(within(here).getByRole('radio', { name: 'D' }))
+    // Each signature a tile, named by its major key, its relative minor under it (ADR 0110).
+    expect(within(here).getAllByRole('button')).toHaveLength(15)
+    expect(within(here).getByRole('button', { name: 'G major' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(within(here).getByRole('button', { name: 'G major' })).toHaveTextContent(
+      'G majorE minor',
+    )
+    await user.click(within(here).getByRole('button', { name: 'D major' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         key: 'D',
@@ -452,9 +465,12 @@ describe('the score editor', () => {
     await user.click(await screen.findByRole('button', { name: 'Bar 5: C' }))
     const time = await openCategory(user, 'Time signature')
     expect(within(time).getByText('From Chorus on (bar 5)')).toBeInTheDocument()
-    const meters = within(time).getByRole('radiogroup', { name: 'Time signature' })
-    expect(within(meters).getByRole('radio', { name: '4/4' })).toBeChecked()
-    await user.click(within(meters).getByRole('radio', { name: '3/4' }))
+    const meters = within(time).getByRole('group', { name: 'Time signature' })
+    expect(within(meters).getByRole('button', { name: '4/4' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    await user.click(within(meters).getByRole('button', { name: '3/4' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         meter: '4/4',
@@ -472,7 +488,7 @@ describe('the score editor', () => {
     await user.click(printed)
     const change = await screen.findByRole('dialog', { name: 'Time signature' })
     expect(within(change).getByText('From Chorus on (bar 5)')).toBeInTheDocument()
-    await user.click(within(change).getByRole('radio', { name: '4/4' }))
+    await user.click(within(change).getByRole('button', { name: '4/4' }))
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         sections: [{ lines: ['G G G G'] }, { lines: ['C C C C'] }],
@@ -600,13 +616,18 @@ describe('the score editor', () => {
     const popover = await screen.findByRole('dialog', { name: 'Time signature' })
     // At the song's first bar, the whole song's (ADR 0095).
     expect(within(popover).getByText('The whole song')).toBeInTheDocument()
-    const meters = within(popover).getByRole('radiogroup', { name: 'Time signature' })
+    // Each a tile, its eighths by beat in small type under it (ADR 0110).
+    const meters = within(popover).getByRole('group', { name: 'Time signature' })
     expect(
       within(meters)
-        .getAllByRole('radio')
-        .map((meter) => meter.textContent),
-    ).toEqual(['2/4', '3/4', '4/4'])
-    await user.click(within(meters).getByRole('radio', { name: '3/4' }))
+        .getAllByRole('button')
+        .map((meter) => [meter.getAttribute('aria-label'), meter.lastElementChild?.textContent]),
+    ).toEqual([
+      ['2/4', '2, 2'],
+      ['3/4', '2, 2, 2'],
+      ['4/4', '2, 2, 2, 2'],
+    ])
+    await user.click(within(meters).getByRole('button', { name: '3/4' }))
     expect(songOf(piecesStore.getState())).toMatchObject({ meter: '3/4' })
   })
 
