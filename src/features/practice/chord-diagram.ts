@@ -55,7 +55,10 @@ export interface DiagramChord {
   readonly symbol: string
   /** The keys its diagram marks, lowest first. */
   readonly keys: readonly Midi[]
-  /** A slash chord's bass drawn as a ring, where it is not one of its tones (C/B♭); else none. */
+  /**
+   * A slash chord's bass drawn as a ring: one the chord has not (C/B♭), or one that cannot stand
+   * lowest on the keys (C/E); else none.
+   */
   readonly ring: Midi | null
   /** Those keys' notes as the chord spells them, lowest first. */
   readonly notes: readonly SpelledNote[]

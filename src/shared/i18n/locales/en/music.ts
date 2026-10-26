@@ -238,7 +238,7 @@ export const music = {
     learn: 'Play it on the keys',
     learned: 'That’s it.',
     inversionInfo:
-      'Every diagram of this chord in this song is drawn in the inversion chosen. What plays stays as it is.',
+      'Every diagram of this chord in this music is drawn in the inversion chosen. What plays stays as it is.',
     offKeys: 'Doesn’t fit the keys shown',
     drawnOneWay: {
       slash: 'Its bass is in its name: the note after the slash',

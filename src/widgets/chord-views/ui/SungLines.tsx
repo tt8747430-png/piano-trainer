@@ -35,20 +35,15 @@ function Wait({ progress }: { progress: number }) {
 export function SungLines({
   place,
   written,
-  className,
 }: {
   place: SungPlace
   /** The beat sounding, as its bar is written: the words sung up to its end are in ink. */
   written: Span
-  className?: string
 }) {
   return (
     <div
       data-area="words"
-      className={cn(
-        'flex flex-col gap-2 text-center text-lg sm:text-xl landscape-phone:gap-1 landscape-phone:text-base landscape-phone:leading-snug',
-        className,
-      )}
+      className="flex flex-col gap-2 text-center text-lg sm:text-xl landscape-phone:gap-1 landscape-phone:text-base landscape-phone:leading-snug"
     >
       {place.kind === 'line' ? (
         <p data-slot="sung-line" className="font-semibold landscape-phone:truncate">
