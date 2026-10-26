@@ -1,8 +1,6 @@
 export const songs = {
   title: 'Songs',
   search: 'Search songs',
-  collection: 'Collection',
-  all: 'All',
   noChart: 'No chart yet',
   empty: 'No songs match.',
   // Nothing to list for a search: it names what was searched.
@@ -13,7 +11,10 @@ export const songs = {
   anyStage: 'Any',
   emptyStage: 'No songs here at the “{{stage}}” level.',
   emptyQueryStage: 'No songs match “{{query}}” at the “{{stage}}” level.',
+  emptyFavourites: 'No favourites here yet.',
   clearFilters: 'Clear filters',
+  // What the filters hide (Mindscape's FilteredNotice).
+  filtered: 'Shown: {{shown}} of {{total}}',
   // A song's row counts its chords, each once over any bass (Chordify's 7 Tips: three to five for a
   // beginner).
   chordCount_one: '{{count}} chord',
@@ -26,70 +27,153 @@ export const songs = {
     clear: 'Clear',
   },
   emptyKnown: 'No songs here use only the chords you know.',
-  // The learner's library (ADR 0103): their favourites and their setlists, Songs' tabs after All.
   favourites: 'Favourites',
-  setlists: 'Setlists',
-  favouritesEmpty: {
-    title: 'No favourites yet',
-    description: 'Tap ♡ on a song’s page to keep it here.',
+  // The library's sort, kept (ADR 0106).
+  sort: {
+    label: 'Sort',
+    manual: 'Manual',
+    name: 'Name',
+    recent: 'Recently played',
   },
-  setlistsEmpty: {
-    title: 'No setlists yet',
-    description: 'Gather songs to play in your own order: for a service, a lesson or an evening.',
-  },
-  searchSetlists: 'Search setlists',
-  emptySetlists: 'No setlists match “{{query}}”.',
+  // The library (ADR 0106): a song's actions, and the toasts that say what was done.
   library: {
+    home: 'Home',
     favourite: 'Add to favourites',
     unfavourite: 'Remove from favourites',
-    addToSetlist: 'Add to setlist',
-    newSetlist: 'New setlist',
-    setlistName: 'Setlist name',
+    moveTo: 'Move to…',
+    archive: 'Archive',
+    restore: 'Restore',
+    delete: 'Delete',
+    more: 'More',
+    moreOf: 'More for {{name}}',
+    undo: 'Undo',
+    moved: '“{{title}}” moved to {{place}}',
+    movedMany: 'Moved to {{place}}: {{count}}',
+    archived: '“{{title}}” archived',
+    archivedMany: 'Archived: {{count}}',
+    folderArchived: '“{{name}}” archived with its songs',
+    restored: '“{{title}}” is back in the library',
+    restoredMany: 'Back in the library: {{count}}',
+    favouritedOne: '“{{title}}” added to favourites',
+    unfavouritedOne: '“{{title}}” removed from favourites',
+    favourited: 'Added to favourites: {{count}}',
+    unfavourited: 'Removed from favourites: {{count}}',
+  },
+  // Move to… (Mindscape's DestinationSheet).
+  move: {
+    title: 'Move to',
+    choose: 'Choose where',
+    to: 'Move to {{place}}',
+    toCount: 'Move here: {{count}}',
+    newFolder: 'New folder',
+    here: 'They are here now',
+  },
+  // A folder of the library: the app's collections and the learner's own.
+  folder: {
+    list: 'Folders',
+    new: 'New folder',
+    edit: 'Edit folder',
+    name: 'Name',
+    baseName: 'New folder',
+    picture: 'Picture',
+    paint: 'Colour',
+    pictures: {
+      music: 'Note',
+      piano: 'Piano',
+      mic: 'Microphone',
+      guitar: 'Guitar',
+      headphones: 'Headphones',
+      drum: 'Drum',
+      church: 'Church',
+      book: 'Book',
+      heart: 'Heart',
+      star: 'Star',
+      sun: 'Sun',
+      leaf: 'Leaf',
+    },
+    paints: {
+      sand: 'Sand',
+      sky: 'Sky',
+      grass: 'Grass',
+      yellow: 'Yellow',
+      lilac: 'Lilac',
+    },
+    create: 'Create folder',
+    save: 'Save',
     songCount_one: '{{count}} song',
     songCount_other: '{{count}} songs',
-    // Why New setlist and Duplicate are greyed: the library holds as many as it keeps.
-    full: 'There is no room for another setlist: delete one first.',
-    copyName: '{{name}} (copy)',
-  },
-  // A setlist's page: its songs in the learner's order.
-  setlist: {
-    more: 'More',
-    rename: 'Rename',
-    duplicate: 'Duplicate',
-    delete: 'Delete',
-    addSongs: 'Add songs',
-    search: 'Search this setlist',
-    move: 'Move {{title}}',
-    remove: 'Remove {{title}} from the setlist',
-    empty: {
-      title: 'No songs here yet',
-      description: 'Add songs, then drag them into the order you play them in.',
-    },
-    emptyQuery: 'No songs here match “{{query}}”.',
+    empty: 'Empty',
+    more: 'More for {{name}}',
+    newSong: 'New song here',
+    archive: 'Archive folder',
+    delete: 'Delete folder',
+    emptyTitle: 'This folder is empty',
+    emptyDescription: 'Make a song here, or move songs in.',
+    moveIn: 'Move songs here',
     deleting: {
       title: 'Delete “{{name}}”?',
-      says: 'It can’t be undone. Its songs stay in Songs.',
+      builtIn: 'It goes to the archive with the app’s songs in it: {{count}}.',
+      own: 'The folder is deleted for good.',
+      ownSongs: 'Your own songs in it are deleted for good, with their takes: {{count}}.',
+      appSongs: 'The app’s songs in it go to the archive: {{count}}.',
       confirm: 'Delete',
       cancel: 'Keep it',
     },
-    // A drag as a screen reader hears it.
-    drag: {
-      // What a song's handle is, said after its name (dnd-kit's roledescription).
-      role: 'sortable',
-      instructions:
-        'To move a song, press Space or Enter on its handle, move it with the up and down arrows, then press Space or Enter to put it down, or Escape to put it back.',
-      picked: 'Picked up {{title}}.',
-      over: '{{title}} is at place {{place}} of {{count}}.',
-      dropped: '{{title}} put down at place {{place}} of {{count}}.',
-      cancelled: '{{title}} put back.',
+  },
+  // Select (Mindscape's): rows chosen for one action.
+  select: {
+    start: 'Select',
+    done: 'Done',
+    all: 'Select all',
+    none: 'Deselect all',
+    count: 'Selected: {{count}}',
+    toggle: 'Select {{name}}',
+    actions: 'For what is selected',
+    favourite: 'Favourite',
+    unfavourite: 'Unfavourite',
+    move: 'Move',
+    archive: 'Archive',
+    delete: 'Delete',
+  },
+  // Delete, asked first: the learner's own songs, and what Select chose.
+  deleting: {
+    one: 'Delete “{{title}}”?',
+    many: 'Delete what is selected? {{count}}',
+    songs: 'Your songs go for good, with their takes: {{count}}.',
+    folders: 'Folders: {{count}}. Your own songs in them go for good; the app’s go to the archive.',
+    confirm: 'Delete',
+    cancel: 'Keep them',
+  },
+  // A row moved by its handle, as a screen reader hears it.
+  drag: {
+    // What a handle is, said after its name (dnd-kit's roledescription).
+    role: 'sortable',
+    move: 'Move {{name}}',
+    instructions:
+      'To move a row, press Space or Enter on its handle, move it with the arrows, then press Space or Enter to put it down, or Escape to put it back.',
+    picked: 'Picked up {{name}}.',
+    over: '{{name}} is at place {{place}} of {{count}}.',
+    dropped: '{{name}} put down at place {{place}} of {{count}}.',
+    cancelled: '{{name}} put back.',
+  },
+  // Home with nothing in it: every song and folder archived.
+  homeEmpty: {
+    title: 'Your library is empty',
+    description: 'Make a song, or restore what you archived.',
+  },
+  // The archive (ADR 0106, Mindscape's): what was archived, to restore.
+  archive: {
+    title: 'Archive',
+    openCount: 'Archive: {{count}}',
+    restoreAll: 'Restore all',
+    restoredAll: 'Everything is back in the library',
+    restoreNamed: 'Restore {{name}}',
+    empty: {
+      title: 'Nothing archived',
+      description: 'Songs and folders you archive wait here, to be restored whenever you like.',
     },
   },
-  yours: 'Your songs',
-  // Your songs' shelf before there are any.
-  mineEmpty: {
-    title: 'No songs of your own yet',
-    description: 'Write one by its chords, or record it at the keys.',
-  },
+  new: 'New',
   newSong: 'New song',
   making: {
     title: 'New song',

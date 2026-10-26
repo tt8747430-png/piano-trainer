@@ -1,3 +1,4 @@
+import { arrangeLibrary, libraryCatalog, type LibraryState } from '@/entities/library'
 import { repertoire, shelfOf, type PiecesState } from '@/entities/piece'
 import { sectionIndex } from '@/pages/piece'
 
@@ -21,7 +22,12 @@ export function sectionIn(
     piece !== undefined && shelfOf(piece.kind) === shelf && sectionIndex(piece, section) !== null
   )
 }
+/** Whether a folder's page is there (ADR 0106): a folder the library holds, not archived. */
+export function folderIn(pieces: PiecesState, library: LibraryState, id: string): boolean {
+  const { folders } = arrangeLibrary(library, libraryCatalog({ ownSongs: pieces.songs }))
+  return folders.some((folder) => folder.id === id)
+}
 export { PiecePage, SectionPage } from '@/pages/piece'
-export { SetlistPage } from '@/pages/setlist'
+export { ArchivePage } from '@/pages/song-archive'
 export { SharedSongPage } from '@/pages/shared-song'
-export { SongsPage } from '@/pages/songs'
+export { FolderPage, SongsPage } from '@/pages/songs'

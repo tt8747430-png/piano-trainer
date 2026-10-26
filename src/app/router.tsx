@@ -15,7 +15,7 @@ import {
   selectOwnPattern,
   type PatternsStore,
 } from '@/entities/pattern'
-import { selectSetlist, type LibraryStore } from '@/entities/library'
+import type { LibraryStore } from '@/entities/library'
 import type { PiecesStore } from '@/entities/piece'
 import type { TakesStore } from '@/entities/take'
 import type { ViewsStore } from '@/entities/views'
@@ -65,7 +65,7 @@ import {
 import { LEARN_KEPT, learnSearch, readLearnSearch } from './routes/learn-search'
 import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/practice-search'
 import { searchSearch } from './routes/search-search'
-import { setlistSearch, songsSearch, validateSharedSongSearch } from './routes/songs-search'
+import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
 import { CHORD_FINDER_KEPT, chordFinderSearch, readChordFinderSearch } from './routes/tool-search'
 import { ShellLayout } from './ShellLayout'
@@ -104,7 +104,7 @@ function notFoundIn(way: NotFoundWay) {
  * What every route is handed: the screens' remembered views (ADR 0022), the learner's patterns, which
  * say whether a pattern's page is there (ADR 0026), the learner's pieces, which say whether a piece,
  * its page or its editor is (ADR 0027), their takes, which say whether a take's page is (ADR 0034),
- * and their library, which says whether a setlist's page is (ADR 0103).
+ * and their library, which says whether a folder's page is (ADR 0106).
  */
 export interface RouterContext {
   readonly views: ViewsStore
@@ -168,16 +168,25 @@ const pieceRoute = createRoute({
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
-// A setlist of the learner's library (ADR 0103): its songs in their order.
-const setlistRoute = createRoute({
+// A folder of the library (ADR 0106): its songs, under the filters Home has; not found where the
+// library has no such folder, or it is archived.
+const folderRoute = createRoute({
   getParentRoute: () => shellRoute,
-  path: '/songs/setlists/$setlistId',
+  path: '/songs/folders/$folderId',
   notFoundComponent: notFoundIn('songs'),
-  ...setlistSearch,
-  beforeLoad: ({ params, context }) => {
-    if (!selectSetlist(params.setlistId)(context.library.getState())) throw notFound()
+  ...songsSearch,
+  beforeLoad: async ({ params, context }) => {
+    const { folderIn } = await songsScreens()
+    const { pieces, library } = context
+    if (!folderIn(pieces.getState(), library.getState(), params.folderId)) throw notFound()
   },
-  component: lazyRouteComponent(songsScreens, 'SetlistPage'),
+  component: lazyRouteComponent(songsScreens, 'FolderPage'),
+})
+// The library's archive (ADR 0106): what the learner archived, to restore.
+const archiveRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/archive',
+  component: lazyRouteComponent(songsScreens, 'ArchivePage'),
 })
 // A section of a song, learned step by step (ADR 0100); a study's is on its shelf, below.
 const sectionRoute = createRoute({
@@ -484,7 +493,8 @@ const routeTree = rootRoute.addChildren([
     songsRoute,
     sharedSongRoute,
     pieceRoute,
-    setlistRoute,
+    folderRoute,
+    archiveRoute,
     sectionRoute,
     courseRoute,
     chordsRoute,

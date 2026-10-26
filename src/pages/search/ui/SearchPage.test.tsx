@@ -24,6 +24,8 @@ describe('Search', () => {
     expect(headings()).toEqual([
       'Practice',
       'Songs',
+      // The collections, folders of the library from the start (ADR 0106).
+      'Folders',
       'Lessons',
       'Courses',
       'Chords',
@@ -151,20 +153,48 @@ describe('Search', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/search'))
   })
 
-  it('finds a setlist of the learner’s by its name, its songs counted, opening its page (ADR 0103)', async () => {
+  it('finds a folder of the library by its name, its songs counted, opening its page (ADR 0106)', async () => {
     const storage = createMemoryStorage()
     storage.setItem(
       LIBRARY_STORAGE_KEY,
       JSON.stringify({
-        state: { setlists: [{ id: 'set-1', name: 'Sunday service', pieces: ['bz5', 'silent'] }] },
+        state: {
+          folders: [
+            {
+              id: 'folder-1',
+              name: 'Sunday service',
+              picture: 'church',
+              paint: 'grass',
+              songs: ['bz5', 'silent'],
+            },
+          ],
+        },
         version: LIBRARY_VERSION,
       }),
     )
     await renderApp('/search?q=sunday', { storage })
-    const setlists = await screen.findByRole('region', { name: 'Setlists' })
-    const row = within(setlists).getByRole('link', { name: /Sunday service/ })
-    expect(row).toHaveAttribute('href', '/songs/setlists/set-1')
+    const folders = await screen.findByRole('region', { name: 'Folders' })
+    const row = within(folders).getByRole('link', { name: /Sunday service/ })
+    expect(row).toHaveAttribute('href', '/songs/folders/folder-1')
     expect(row).toHaveTextContent('2 songs')
+  })
+
+  it('says a song the learner archived is archived, its row still opening its page', async () => {
+    const storage = createMemoryStorage()
+    storage.setItem(
+      LIBRARY_STORAGE_KEY,
+      JSON.stringify({
+        state: {
+          archive: [{ kind: 'song', id: 'bz5', from: { folder: 'bozhe-spasibo', index: 4 } }],
+        },
+        version: LIBRARY_VERSION,
+      }),
+    )
+    await renderApp('/search?q=still my soul', { storage })
+    const songs = await screen.findByRole('region', { name: 'Songs' })
+    const row = within(songs).getByRole('link', { name: /Still, my soul/ })
+    expect(row).toHaveAttribute('href', '/songs/bz5')
+    expect(row).toHaveTextContent('Archived')
   })
 
   it('reads in Russian, with nothing left in English', async () => {

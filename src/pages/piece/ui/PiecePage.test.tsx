@@ -5,7 +5,13 @@ import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { readSongLink } from '@/features/share-song'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
-import { LIBRARY_STORAGE_KEY, LIBRARY_VERSION, MOST_SETLISTS } from '@/entities/library'
+import {
+  arrangeLibrary,
+  LIBRARY_STORAGE_KEY,
+  LIBRARY_VERSION,
+  libraryCatalog,
+  placeIn,
+} from '@/entities/library'
 import { COLLECTIONS, pieceById, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import { createMemoryStorage } from '@/shared/lib'
@@ -201,7 +207,7 @@ describe('Piece', () => {
     ).toHaveAttribute('href', '/play/ex3')
   })
 
-  it('checks the song’s chords from More, after Add to setlist', async () => {
+  it('checks the song’s chords from More, after its place in the library', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs/bz5')
     await openMore(user)
@@ -210,7 +216,7 @@ describe('Piece', () => {
       within(more)
         .getAllByRole('button')
         .map((action) => action.textContent),
-    ).toEqual(['Add to setlist', 'Check these chords'])
+    ).toEqual(['Move to…', 'Archive', 'Check these chords'])
     await user.click(within(more).getByRole('button', { name: 'Check these chords' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/check'))
     expect(router.state.location.search).toEqual({ of: 'piece:bz5' })
@@ -330,7 +336,7 @@ describe('Piece: the learner’s own music', () => {
       within(more)
         .getAllByRole('button')
         .map((action) => action.textContent),
-    ).toEqual(['Add to setlist', 'Share', 'Delete'])
+    ).toEqual(['Move to…', 'Archive', 'Share', 'Delete'])
   })
 
   it('has nothing to learn in a song of no chord symbol: no learning card, its sections say so', async () => {
@@ -380,7 +386,7 @@ describe('Piece: the learner’s own music', () => {
 
   it('names a version by the learner’s own title in Songs, Search and on its page; Reset brings back the catalog’s (ADR 0094)', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/songs?collection=hymns', {
+    const { router } = await renderApp('/songs/folders/hymns', {
       storage: saved({ versions: { amazing: { ...MUSIC, title: 'My grace' } } }),
     })
     expect(await screen.findByRole('link', { name: /My grace/ })).toHaveAttribute(
@@ -452,21 +458,15 @@ describe('Piece: the learner’s own music', () => {
   })
 })
 
-describe('Piece: the learner’s library (ADR 0103)', () => {
+describe('Piece: the learner’s library (ADR 0106)', () => {
   /** A device whose library holds `state`. */
   const kept = (state: object) => {
     const storage = createMemoryStorage()
     storage.setItem(LIBRARY_STORAGE_KEY, JSON.stringify({ state, version: LIBRARY_VERSION }))
     return storage
   }
-  const SUNDAY = { id: 'set-1', name: 'Sunday', pieces: ['silent'] }
-
-  /** Opens More's Add to setlist, and its sheet. */
-  async function addToSetlist(user: ReturnType<typeof userEvent.setup>) {
-    await openMore(user)
-    await user.click(await screen.findByRole('button', { name: 'Add to setlist' }))
-    return screen.findByRole('dialog', { name: 'Add to setlist' })
-  }
+  const placeOf = (state: Parameters<typeof arrangeLibrary>[0], id: string) =>
+    placeIn(arrangeLibrary(state, libraryCatalog({ ownSongs: [] })), id)
 
   it('keeps a song among the favourites from the ♡ in its bar, pressed while it is one', async () => {
     const user = userEvent.setup()
@@ -482,75 +482,52 @@ describe('Piece: the learner’s library (ADR 0103)', () => {
     expect(libraryStore.getState().favourites).toEqual([])
   })
 
-  it('adds a song to a setlist from More: Favourites first, then each setlist, each a check', async () => {
-    const user = userEvent.setup()
-    const { libraryStore } = await renderApp('/songs/bz5', {
-      storage: kept({ favourites: ['silent'], setlists: [SUNDAY], nextSetlist: 2 }),
-    })
-    const sheet = await addToSetlist(user)
-    const checks = within(sheet).getAllByRole('checkbox')
-    expect(checks.map((check) => check.textContent?.trim())).toEqual([
-      'Favourites 1 song',
-      'Sunday 1 song',
-    ])
-    expect(checks.every((check) => check.getAttribute('aria-checked') === 'false')).toBe(true)
-    await user.click(within(sheet).getByRole('checkbox', { name: /^Sunday/ }))
-    expect(libraryStore.getState().setlists[0]?.pieces).toEqual(['silent', 'bz5'])
-    expect(within(sheet).getByRole('checkbox', { name: /^Sunday/ })).toBeChecked()
-    expect(within(sheet).getByRole('checkbox', { name: /^Sunday/ })).toHaveTextContent('2 songs')
-    await user.click(within(sheet).getByRole('checkbox', { name: /^Favourites/ }))
-    expect(libraryStore.getState().favourites).toEqual(['bz5', 'silent'])
-    // A tap again takes it out.
-    await user.click(within(sheet).getByRole('checkbox', { name: /^Sunday/ }))
-    expect(libraryStore.getState().setlists[0]?.pieces).toEqual(['silent'])
-  })
-
-  it('makes a new setlist named in place, the song put in it; Escape leaves the name alone', async () => {
+  it('moves the song to another folder from More, saying so with Undo', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs/bz5')
-    const sheet = await addToSetlist(user)
-    await user.click(within(sheet).getByRole('button', { name: 'New setlist' }))
-    await user.type(within(sheet).getByRole('textbox', { name: 'Setlist name' }), 'Nope')
-    await user.keyboard('{Escape}')
-    // The field closed, the sheet still open.
-    expect(screen.getByRole('dialog', { name: 'Add to setlist' })).toBeInTheDocument()
-    expect(within(sheet).getByRole('button', { name: 'New setlist' })).toHaveFocus()
-    await user.click(within(sheet).getByRole('button', { name: 'New setlist' }))
-    await user.type(within(sheet).getByRole('textbox', { name: 'Setlist name' }), ' Easter {Enter}')
-    expect(libraryStore.getState().setlists).toEqual([
-      { id: 'set-1', name: 'Easter', pieces: ['bz5'] },
-    ])
-    expect(within(sheet).getByRole('checkbox', { name: /^Easter/ })).toBeChecked()
-    expect(within(sheet).getByRole('button', { name: 'New setlist' })).toHaveFocus()
+    await openMore(user)
+    await user.click(await screen.findByRole('button', { name: 'Move to…' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Move to' })
+    // Where it stands now is no place to move it to.
+    expect(within(sheet).getByRole('button', { name: '«Боже, спасибо»' })).toBeDisabled()
+    await user.click(within(sheet).getByRole('button', { name: 'Hymns' }))
+    await user.click(within(sheet).getByRole('button', { name: 'Move to Hymns' }))
+    expect(placeOf(libraryStore.getState(), 'bz5')).toMatchObject({ folder: 'hymns' })
+    await user.click(await screen.findByRole('button', { name: 'Undo' }))
+    expect(placeOf(libraryStore.getState(), 'bz5')).toEqual({ folder: 'bozhe-spasibo', index: 4 })
   })
 
-  it('greys New setlist once the library holds as many as it keeps, saying why', async () => {
+  it('archives the song from More, and restores it from there while it is archived', async () => {
     const user = userEvent.setup()
-    const setlists = Array.from({ length: MOST_SETLISTS }, (_, i) => ({
-      id: `set-${i + 1}`,
-      name: `List ${i + 1}`,
-      pieces: [],
-    }))
-    await renderApp('/songs/bz5', { storage: kept({ setlists }) })
-    const sheet = await addToSetlist(user)
-    const make = within(sheet).getByRole('button', { name: 'New setlist' })
-    expect(make).toBeDisabled()
-    expect(make).toHaveAccessibleDescription(
-      'There is no room for another setlist: delete one first.',
-    )
+    const { libraryStore } = await renderApp('/songs/bz5')
+    await openMore(user)
+    await user.click(await screen.findByRole('button', { name: 'Archive' }))
+    expect(placeOf(libraryStore.getState(), 'bz5')).toBe('archived')
+    expect(await screen.findByText('“Still, my soul, be still” archived')).toBeInTheDocument()
+    // An archived song still opens; More offers Restore in place of Move to… and Archive.
+    await openMore(user)
+    const more = await screen.findByRole('dialog', { name: 'More' })
+    expect(within(more).queryByRole('button', { name: 'Move to…' })).toBeNull()
+    await user.click(within(more).getByRole('button', { name: 'Restore' }))
+    expect(placeOf(libraryStore.getState(), 'bz5')).toMatchObject({ folder: 'bozhe-spasibo' })
+  })
+
+  it('offers a study no place in the library: no ♡, no Move to… or Archive', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/accompaniment/studies/ex3')
+    await openMore(user)
+    const more = await screen.findByRole('dialog', { name: 'More' })
+    expect(within(more).queryByRole('button', { name: 'Archive' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Add to favourites' })).toBeNull()
   })
 
   it('reads in Russian', async () => {
     const user = userEvent.setup()
-    await renderApp('/songs/bz5', {
-      locale: 'ru',
-      storage: kept({ setlists: [SUNDAY], nextSetlist: 2 }),
-    })
-    expect(await screen.findByRole('button', { name: 'Добавить в избранное' })).toBeInTheDocument()
+    await renderApp('/songs/bz5', { locale: 'ru', storage: kept({ favourites: ['bz5'] }) })
+    expect(await screen.findByRole('button', { name: 'Убрать из избранного' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Ещё' }))
-    await user.click(await screen.findByRole('button', { name: 'Добавить в сет-лист' }))
-    const sheet = await screen.findByRole('dialog', { name: 'Добавить в сет-лист' })
-    expect(within(sheet).getByRole('checkbox', { name: /^Sunday/ })).toHaveTextContent('1 песня')
+    await user.click(await screen.findByRole('button', { name: 'Переместить…' }))
+    expect(await screen.findByRole('dialog', { name: 'Переместить' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
   })
 })

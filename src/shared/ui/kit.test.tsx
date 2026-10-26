@@ -46,13 +46,6 @@ describe('ScreenHeader', () => {
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
   })
 
-  it('puts what its page gives in the title’s place, the page still named by the title', () => {
-    render(<ScreenHeader title="Sunday" heading={<button type="button">Sunday</button>} />)
-    const title = screen.getByRole('heading', { level: 1, name: 'Sunday' })
-    expect(title).toContainElement(screen.getByRole('button', { name: 'Sunday' }))
-    expect(document.title).toMatch(/^Sunday · /)
-  })
-
   it('holds a subject’s tabs in the bar, under the title', () => {
     render(<ScreenHeader title="Chords" tabs={<nav aria-label="Chords" />} />)
     const bar = screen.getByRole('banner')
@@ -695,9 +688,9 @@ describe('RowButton', () => {
 
   it('greys a row that cannot act, saying why', () => {
     render(
-      <RowButton title="New setlist" onClick={() => {}} disabled reason="No room: delete one." />,
+      <RowButton title="New folder" onClick={() => {}} disabled reason="No room: delete one." />,
     )
-    const row = screen.getByRole('button', { name: 'New setlist' })
+    const row = screen.getByRole('button', { name: 'New folder' })
     expect(row).toBeDisabled()
     expect(row).toHaveAccessibleDescription('No room: delete one.')
     expect(row).toHaveAttribute('title', 'No room: delete one.')

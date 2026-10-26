@@ -12,7 +12,7 @@ import {
   type Piece,
 } from '@/entities/piece'
 import { selectScoreView, useSettings } from '@/entities/settings'
-import { useAddToSetlist, useFavouriteAction } from '@/features/manage-library'
+import { useFavouriteAction, useSongActions } from '@/features/manage-library'
 import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { beatGroupInBar, writtenBarAt } from '@/features/practice'
 import { ShareSaid, useShareSong } from '@/features/share-song'
@@ -62,14 +62,15 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const [showingInfo, setShowingInfo] = useState(false)
   const shared = useShareSong()
   const sharing = isOwnSongId(piece.id) && !isDegreePiece(piece)
-  // Its place in the learner's library (ADR 0103), first in More.
+  // Its place in the learner's library (ADR 0106), first in More; a study is in none.
   const favourite = useFavouriteAction(piece.id)
-  const setlist = useAddToSetlist(piece.id)
+  const library = useSongActions(piece)
+  const inLibrary = piece.kind !== 'study'
   const askView = useSettings((state) => selectScoreView(state).askOnOpen)
   return (
     // Its chords drawn in the inversions chosen for them in this piece (ADR 0101).
     <PieceInversions pieceId={piece.id}>
-      <MoreActions value={[favourite, setlist.action]}>
+      <MoreActions value={inLibrary ? [favourite, ...library.actions] : []}>
         <PlayerLayout
           title={title}
           onClose={close}
@@ -123,7 +124,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
           open={showingInfo}
           onOpenChange={setShowingInfo}
         />
-        {setlist.sheet}
+        {inLibrary ? library.sheet : null}
       </MoreActions>
     </PieceInversions>
   )

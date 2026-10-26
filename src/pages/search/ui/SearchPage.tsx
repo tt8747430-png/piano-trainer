@@ -78,9 +78,14 @@ function ResultGroup({ group }: { group: IndexGroup }) {
       }
     >
       {shown.map(({ id, title, detail, target }) =>
-        // A song's row is the one Songs shows it in: its number, key, level and learned badge.
+        // A song's row is the one Songs shows it in: its number, key, level and learned badge;
+        // archived, it says so (ADR 0106).
         target.opens === 'piece' ? (
-          <EntryRow key={id} entry={target.entry} />
+          <EntryRow
+            key={id}
+            entry={target.entry}
+            status={target.archived ? t('archived') : undefined}
+          />
         ) : (
           <li key={id}>
             <IndexRow title={title} detail={detail} target={target} />

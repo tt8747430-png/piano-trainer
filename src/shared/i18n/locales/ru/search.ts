@@ -4,10 +4,11 @@ export const search: LocaleResources['search'] = {
   title: 'Поиск',
   none: 'Ничего не найдено.',
   showAll: 'Показать все: {{count}}',
+  archived: 'В архиве',
   kinds: {
     pages: 'Практика',
     songs: 'Песни',
-    setlists: 'Сет-листы',
+    folders: 'Папки',
     lessons: 'Уроки',
     courses: 'Курсы',
     chords: 'Аккорды',

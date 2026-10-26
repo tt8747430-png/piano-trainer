@@ -1,9 +1,9 @@
 import { EXERCISES, type ExerciseId } from '@/entities/exercise'
 import { COURSES } from '@/entities/course'
 import { LESSONS, lessonPlace } from '@/entities/lesson'
-import type { SetlistId } from '@/entities/library'
+import type { FolderId } from '@/entities/library'
 import type { BookPattern, PatternRef } from '@/entities/pattern'
-import { entryTitles, type Entry } from '@/entities/piece'
+import { entryTitles, type Entry, type PieceId } from '@/entities/piece'
 import {
   LIBRARY_BY_STYLE,
   libraryLine,
@@ -38,7 +38,7 @@ import { typedSearch } from '@/widgets/progression-explorer'
 export const INDEX_KINDS = [
   'pages',
   'songs',
-  'setlists',
+  'folders',
   'lessons',
   'courses',
   'chords',
@@ -53,8 +53,9 @@ type IndexKind = (typeof INDEX_KINDS)[number]
 /** What an entry opens, by what it names; Search's row makes it a link. */
 export type IndexTarget =
   | { readonly opens: 'page'; readonly page: PracticePageId }
-  | { readonly opens: 'piece'; readonly entry: Entry }
-  | { readonly opens: 'setlist'; readonly setlist: SetlistId }
+  /** A song, and whether the learner archived it: its row says so (ADR 0106). */
+  | { readonly opens: 'piece'; readonly entry: Entry; readonly archived: boolean }
+  | { readonly opens: 'folder'; readonly folder: FolderId }
   | { readonly opens: 'lesson'; readonly lesson: string }
   | { readonly opens: 'course'; readonly course: string }
   | { readonly opens: 'course-lesson'; readonly course: string; readonly lesson: string }
@@ -92,7 +93,7 @@ export interface IndexNames {
   readonly scale: (kind: ScaleKind) => string
   readonly trainer: (trainer: TrainerId) => { readonly title: string; readonly about: string }
   readonly key: (key: Key) => string
-  /** How many songs a setlist holds: "3 songs". */
+  /** How many songs a folder holds: "Songs: 3". */
   readonly songCount: (count: number) => string
 }
 
@@ -102,12 +103,14 @@ export interface IndexSources {
   readonly names: IndexNames
   /** Every song, study and listing, as the learner has it, and their own songs. */
   readonly pieces: readonly Entry[]
-  /** The learner's setlists (ADR 0103), each with how many of its songs they have. */
-  readonly setlists: readonly {
-    readonly id: SetlistId
+  /** The library's folders (ADR 0106), each with how many songs it holds. */
+  readonly folders: readonly {
+    readonly id: FolderId
     readonly name: string
     readonly count: number
   }[]
+  /** The songs the learner archived. */
+  readonly archived: ReadonlySet<PieceId>
   /** Every pattern of the book, the learner's own too. */
   readonly patterns: readonly BookPattern[]
 }
@@ -129,7 +132,8 @@ export function indexEntries({
   locale,
   names,
   pieces,
-  setlists,
+  folders,
+  archived,
   patterns,
 }: IndexSources): IndexEntry[] {
   return [
@@ -152,16 +156,16 @@ export function indexEntries({
         title: primary,
         ...(secondary ? { detail: secondary } : {}),
         words: [entry.title, entry.titleEn ?? '', entry.titleRu ?? ''],
-        target: { opens: 'piece', entry },
+        target: { opens: 'piece', entry, archived: archived.has(entry.id) },
       }
     }),
-    ...setlists.map((setlist): IndexEntry => ({
-      id: `setlists:${setlist.id}`,
-      kind: 'setlists',
-      title: setlist.name,
-      detail: names.songCount(setlist.count),
+    ...folders.map((folder): IndexEntry => ({
+      id: `folders:${folder.id}`,
+      kind: 'folders',
+      title: folder.name,
+      detail: names.songCount(folder.count),
       words: [],
-      target: { opens: 'setlist', setlist: setlist.id },
+      target: { opens: 'folder', folder: folder.id },
     })),
     ...LESSONS.map((lesson): IndexEntry => {
       const place = lessonPlace(lesson.id)
