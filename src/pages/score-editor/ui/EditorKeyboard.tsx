@@ -2,25 +2,35 @@ import { ChevronDown, ChevronUp } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
-import { notesAt, notesOf, type EditorState } from '@/features/score-editor'
+import { keysRange } from '@/features/practice'
+import { notesAt, type EditorState } from '@/features/score-editor'
 import { selectKeyboard, useSettings } from '@/entities/settings'
 import { LiveKeyboard, useFoldKeys } from '@/features/live-keyboard'
-import { keyboardRange, midi, type KeyRange, type Midi } from '@/shared/lib/music'
+import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
 import { RailButton, RailGroup } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-
-/** The keys a hand writes in: the treble's from C4, the left hand's from C3, grown to its notes. */
-const TREBLE = { from: midi(60), to: midi(83) }
-const BASS = { from: midi(36), to: midi(59) }
 
 /** The keys of the notes at the caret. */
 const caretKeys = ({ draft, caret, layer }: EditorState): Midi[] =>
   layer === 'chords' ? [] : notesAt(draft, layer, caret).map((n) => n.midi)
 
-/** The stretch the layer's notes cover. */
-function layerSpan({ draft, layer }: EditorState): KeyRange {
-  const keys = layer === 'chords' ? [] : notesOf(draft, layer).map((n) => n.midi)
-  return keyboardRange(keys, layer === 'lh' ? BASS : TREBLE)
+/**
+ * The keys both hands play at the caret, as the Player's keys mark the beat it is on: what they
+ * narrow to hold (the widest kept), so they are as wide in both modes (ADR 0110).
+ */
+const handsHere = ({ draft, caret }: EditorState): Midi[] =>
+  (['rh', 'lh'] as const).flatMap((hand) => notesAt(draft, hand, caret).map((n) => n.midi))
+
+/**
+ * The keys the score's notes need, as the Player shows its keys (ADR 0110): the same keys as wide in
+ * both modes, so the keys, the transport and the sheet stand still as Practise · Edit switches.
+ */
+function scoreSpan({ draft }: EditorState): KeyRange {
+  return keysRange(
+    [...draft.staves.flatMap((staff) => staff.notes), ...draft.hands.rh, ...draft.hands.lh].map(
+      (n) => n.midi,
+    ),
+  )
 }
 
 /**
@@ -35,7 +45,9 @@ export function EditorKeyboard() {
   const { t } = useTranslation('common')
   const { actions, takes } = useScoreEditorContext()
   const here = useEditorState(useShallow(caretKeys))
-  const range = useEditorState(useShallow(layerSpan))
+  const range = useEditorState(useShallow(scoreSpan))
+  const hands = useEditorState(useShallow(handsHere))
+  const inView = useMemo(() => rangeOf([...here, ...hands]), [here, hands])
   const selected = useMemo(() => new Set(here), [here])
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const { folded, fold } = useFoldKeys()
@@ -44,6 +56,10 @@ export function EditorKeyboard() {
     <div data-area="keys" className="vt-keys min-w-0 shrink-0">
       <LiveKeyboard
         range={range}
+        // The caret's keys in sight with both hands' there, narrowing to hold them as the Player's
+        // keys narrow to hold its chords, so the keys stand as long in both modes (ADR 0110).
+        inView={inView}
+        fitInView
         selected={selected}
         onKeyPress={actions.play}
         spacePedal={takes.stage === 'idle'}

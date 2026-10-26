@@ -1,6 +1,7 @@
 import { X } from 'lucide-react'
 import type { ComponentProps, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/shared/lib'
 import { Button } from './primitives/button'
 import {
   Drawer,
@@ -22,20 +23,28 @@ export function Sheet(props: ComponentProps<typeof Drawer>) {
 /**
  * The sheet's panel: its title beside its Close, a body that scrolls with room round it, and an
  * optional footer parted from it by a hairline, clear of the home indicator. On a phone on its side
- * it takes nearly the whole height, or its body would be a sliver.
+ * it takes nearly the whole height, or its body would be a sliver; `full`, it takes it at every size
+ * (a preview opened full screen) and its body's room passes to what it holds.
  */
 export function SheetContent({
   title,
   children,
   footer,
+  full = false,
 }: {
   title: string
   children: ReactNode
   footer?: ReactNode
+  full?: boolean
 }) {
   const { t } = useTranslation('common')
   return (
-    <DrawerContent className="mx-auto w-full max-w-2xl rounded-t-4xl bg-card text-base landscape-phone:max-h-[calc(100dvh-1rem)]">
+    <DrawerContent
+      className={cn(
+        'mx-auto w-full max-w-2xl rounded-t-4xl bg-card text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
+        full && 'h-[calc(100dvh-1rem)] max-h-[calc(100dvh-1rem)] max-w-5xl',
+      )}
+    >
       <DrawerHeader className="flex-row items-center justify-between gap-3 px-5 pt-1 pb-4 text-left landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-left">
         <DrawerTitle className="min-w-0 font-display text-2xl font-semibold">{title}</DrawerTitle>
         <DrawerClose render={<Button variant="ghost" size="icon" aria-label={t('close')} />}>

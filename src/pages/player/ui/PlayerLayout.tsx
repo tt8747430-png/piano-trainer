@@ -128,17 +128,14 @@ export function PlayerLayout({
       {/* Close, then Practise · Edit, as the editor's bar has them (ADR 0090, 0094), level with the
           bar's first row of buttons where they wrap. Closer on a phone held upright, as the
           editor's bar is there, so the bar keeps one row from 320px. */}
-      <PlayerArea area="lead" className="flex items-center gap-2 self-start max-sm:gap-1">
+      <PlayerArea area="lead">
         <PlayerClose onClose={onClose} />
         {modes}
       </PlayerArea>
       {/* Where the bar is too narrow for them all (a larger text size), its buttons wrap rather
           than cover Close. The loop is the transport's (ADR 0099), the View the tools row's (ADR
           0102). */}
-      <PlayerArea
-        area="actions"
-        className="flex flex-wrap items-center justify-end gap-2 self-start max-sm:gap-1"
-      >
+      <PlayerArea area="actions">
         <MidiButton />
         {setup}
         <PlayerMore

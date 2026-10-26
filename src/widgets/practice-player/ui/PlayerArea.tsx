@@ -14,7 +14,18 @@ const ASIDE = {
 } as const
 
 /**
- * One part of the Player's screen, placed by its name. The transport's (`dock`) fades out of sight
+ * The bar's two groups, the same in the Player and the score editor (ADR 0110): level with the bar's
+ * first row of buttons where they wrap; closer on a phone held upright, so the bar keeps one row from
+ * 320px. Where the bar is too narrow for them all (a larger text size), the end group's buttons wrap
+ * rather than cover Close.
+ */
+const BAR_GROUP: Partial<Record<PlayerAreaName, string>> = {
+  lead: 'flex items-center gap-2 self-start max-sm:gap-1',
+  actions: 'flex flex-wrap items-center justify-end gap-2 self-start max-sm:gap-1',
+}
+
+/**
+ * One part of the Player's screen, and the score editor's (ADR 0110), placed by its name. The transport's (`dock`) fades out of sight
  * and reach while the screen hides it, and the bar's and the tools row's while they step aside (ADR
  * 0102), their room kept so nothing moves.
  */
@@ -35,7 +46,7 @@ export function PlayerArea({
       data-area={area}
       data-hidden={hidden || undefined}
       inert={hidden}
-      className={cn('min-w-0', part === null ? null : ASIDE[part], className)}
+      className={cn('min-w-0', BAR_GROUP[area], part === null ? null : ASIDE[part], className)}
     >
       {children}
     </div>

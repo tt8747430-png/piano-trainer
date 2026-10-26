@@ -1,21 +1,17 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { FloatingBar, FloatingBarButton, FloatingBarPlay } from '@/shared/ui'
-import { speedTempo, TempoButton } from '@/widgets/practice-player'
+import { DOCK_BUTTON, speedTempo, TempoButton, Transport } from '@/widgets/practice-player'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { RecordButton } from './RecordButton'
+import { RecordingSettings } from './RecordingSettings'
 import { TakesButton } from './TakesButton'
 
-/** A step button's size: a little smaller under 360px, where the width is short. */
-const STEP = 'narrow-phone:size-11'
-
 /**
- * The editor's transport, the Player's (`PlayerDock`, ADR 0061) in shape and place: one pill floating
- * over the sheet's foot, the tempo then ‹ Play ›, so the two screens are worked the same way, and
- * Record after them, as Dorico's transport has it (ADR 0094), which records (ADR 0096), and the takes
- * beside it once the song has any. Play plays from the caret's bar at the tempo's speed (the
- * learner's, never the song's tempo); ‹ › move the caret. What changes the music is the edit row's
- * and the palette's. While a take records, its strip stands here.
+ * The editor's transport (ADR 0110), the Player's pill (`Transport`) in shape, size and place: the
+ * tempo then ‹ Play ›, then the editor's own three where the Player's loop, Sound and hands stand:
+ * Record, as Dorico's transport has it (ADR 0094, 0096), the takes (greyed, saying why, until the
+ * song has one), and the recording settings (the metronome and Play melody under a take). Play plays
+ * from the caret's bar at the tempo's speed (the learner's, never the song's tempo); ‹ › move the
+ * caret. While a take records, its strip stands here.
  */
 export function EditorDock() {
   const { t } = useTranslation('editor')
@@ -23,36 +19,32 @@ export function EditorDock() {
   const ownTempo = useEditorState((state) => state.draft.tempo)
   const dispatch = actions.dispatch
   return (
-    <FloatingBar label={t('dock')} className="gap-1 narrow-phone:gap-0.5">
-      <TempoButton
-        tempo={speedTempo(ownTempo, view.speed)}
-        ownTempo={ownTempo}
-        // The editor's dock lies along the foot at every size: its pop-up opens over it.
-        side="top"
-        onTempo={(tempo) => view.setSpeed(tempo / ownTempo)}
-      />
-      <FloatingBarButton
-        label={t('back')}
-        className={STEP}
-        onClick={() => dispatch({ type: 'move', by: 'step', direction: -1 })}
-      >
-        <ChevronLeft aria-hidden />
-      </FloatingBarButton>
-      <FloatingBarPlay
-        label={t('play')}
-        playing={meta.playing}
-        disabled={takes.stage !== 'idle'}
-        onClick={actions.togglePlay}
-      />
-      <FloatingBarButton
-        label={t('on')}
-        className={STEP}
-        onClick={() => dispatch({ type: 'move', by: 'step', direction: 1 })}
-      >
-        <ChevronRight aria-hidden />
-      </FloatingBarButton>
-      <RecordButton className={STEP} />
-      <TakesButton className={STEP} />
-    </FloatingBar>
+    <Transport
+      label={t('dock')}
+      tempo={
+        <TempoButton
+          tempo={speedTempo(ownTempo, view.speed)}
+          ownTempo={ownTempo}
+          // Along the sheet's foot at every size: its pop-up opens over it.
+          side="top"
+          onTempo={(tempo) => view.setSpeed(tempo / ownTempo)}
+        />
+      }
+      playing={meta.playing}
+      play={{ label: t('play') }}
+      back={{ label: t('back') }}
+      next={{ label: t('on') }}
+      disabled={takes.stage !== 'idle'}
+      onPlay={actions.togglePlay}
+      onBack={() => dispatch({ type: 'move', by: 'step', direction: -1 })}
+      onNext={() => dispatch({ type: 'move', by: 'step', direction: 1 })}
+      end={
+        <>
+          <RecordButton className={DOCK_BUTTON} />
+          <TakesButton className={DOCK_BUTTON} />
+          <RecordingSettings className={DOCK_BUTTON} />
+        </>
+      }
+    />
   )
 }
