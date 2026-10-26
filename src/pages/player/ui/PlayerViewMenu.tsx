@@ -40,6 +40,7 @@ export function PlayerViewMenu({
   needs,
   staves,
   piano,
+  openAtStart,
 }: {
   /** The view shown: the one saved, or the one it falls back to where the music cannot show it. */
   shown: MusicView
@@ -47,6 +48,8 @@ export function PlayerViewMenu({
   needs: ViewNeeds
   staves: readonly { readonly name?: StaffName; readonly clef: Clef }[]
   piano: boolean
+  /** Open as the screen opens: a piece's, asked each time. */
+  openAtStart: boolean
 }) {
   const { t } = useTranslation('player')
   const settings = useSettingsStoreApi()
@@ -63,6 +66,7 @@ export function PlayerViewMenu({
         </PlayerTool>
       }
       from="tools"
+      defaultOpen={openAtStart}
     >
       <MenuSection title={t('views.label')} info={<ViewsAbout />}>
         <ViewTiles

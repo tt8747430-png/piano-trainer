@@ -58,6 +58,7 @@ export function PlayerLayout({
   info,
   share,
   status,
+  openView = false,
 }: {
   /**
    * Whether the sheet writes the piano's staves: not for a song that hides them, a lead sheet (ADR
@@ -83,6 +84,8 @@ export function PlayerLayout({
   share?: MenuAction | undefined
   /** What the screen says beside Wait mode's line: what an own song's Share said. */
   status?: ReactNode
+  /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0102). */
+  openView?: boolean
 }) {
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
@@ -140,7 +143,13 @@ export function PlayerLayout({
       </PlayerArea>
       <PlayerArea area="tools">
         <PlayerTools>
-          <PlayerViewMenu shown={shown} needs={needs} staves={viewed} piano={piano} />
+          <PlayerViewMenu
+            shown={shown}
+            needs={needs}
+            staves={viewed}
+            piano={piano}
+            openAtStart={openView}
+          />
         </PlayerTools>
       </PlayerArea>
       {dock === 'top' ? keys : null}

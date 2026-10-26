@@ -88,6 +88,30 @@ describe('the tools row (ADR 0102)', () => {
   })
 })
 
+describe('Ask each time a song opens (ADR 0102)', () => {
+  it('opens a song’s Player with its View open, once asked to, and a walk’s as it was', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const first = await renderApp('/play/silent', { storage })
+    const menu = await openView(user, 'Sheet music')
+    await user.click(within(menu).getByRole('switch', { name: 'Ask each time a song opens' }))
+    expect(first.settingsStore.getState().scoreView.askOnOpen).toBe(true)
+    first.unmount()
+    const song = await renderApp('/play/bz5', { storage })
+    expect(await screen.findByRole('dialog', { name: 'View' })).toBeInTheDocument()
+    song.unmount()
+    await renderApp('/play/walk', { storage })
+    await screen.findByRole('button', { name: 'View: Sheet music' })
+    expect(screen.queryByRole('dialog', { name: 'View' })).not.toBeInTheDocument()
+  })
+
+  it('opens a song’s Player with its View closed, as it is by default', async () => {
+    await renderApp('/play/bz5')
+    await screen.findByRole('button', { name: 'View: Sheet music' })
+    expect(screen.queryByRole('dialog', { name: 'View' })).not.toBeInTheDocument()
+  })
+})
+
 describe('the View, by view (ADR 0102)', () => {
   it('names each view in a line beside Show the music as, over the tiles and Ask each time', async () => {
     const user = userEvent.setup()
