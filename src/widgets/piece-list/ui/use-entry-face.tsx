@@ -19,13 +19,15 @@ const KIND_TILE: Readonly<Record<Entry['kind'], { icon: LucideIcon; paint: Paint
   study: { icon: GraduationCap, paint: 'grass' },
 }
 
-/** What a song's row shows, wherever it is listed: a `RowFace`'s, and its kind's tile. */
+/** What a song's row shows, wherever it is listed: its `RowFace`'s, and its kind's tile. */
 export interface EntryFace {
-  readonly title: string
-  readonly detail: string | undefined
-  readonly trailing: ReactNode
-  readonly children: ReactNode
-  /** Its kind's tile: its icon, and the paint its number in a sequence wears. */
+  readonly face: {
+    readonly title: string
+    readonly detail: string | undefined
+    readonly trailing: ReactNode
+    readonly children: ReactNode
+  }
+  /** Its kind's tile: its icon, and the paint its number in a book wears. */
   readonly kind: { readonly icon: LucideIcon; readonly paint: Paint }
 }
 
@@ -45,36 +47,38 @@ export function useEntryFace(entry: Entry): EntryFace {
   // Said, as the chords' line is not (ADR 0103).
   const count = pieceChords(entry, Number.POSITIVE_INFINITY).length
   return {
-    title: primary,
-    detail:
-      entry.kind === 'listing'
-        ? t('songs:noChart')
-        : [secondary, count > 0 ? t('songs:chordCount', { count }) : undefined]
-            .filter((part) => part !== undefined)
-            .join(' · ') || undefined,
-    trailing:
-      entry.kind === 'listing' ? null : (
-        <>
-          <span className="sr-only">{t('music:key.label')}</span>{' '}
-          <span className="shrink-0 font-display font-semibold tabular-nums">
-            {printedSymbol(keySymbol(pieceKey(entry)))}
+    face: {
+      title: primary,
+      detail:
+        entry.kind === 'listing'
+          ? t('songs:noChart')
+          : [secondary, count > 0 ? t('songs:chordCount', { count }) : undefined]
+              .filter((part) => part !== undefined)
+              .join(' · ') || undefined,
+      trailing:
+        entry.kind === 'listing' ? null : (
+          <>
+            <span className="sr-only">{t('music:key.label')}</span>{' '}
+            <span className="shrink-0 font-display font-semibold tabular-nums">
+              {printedSymbol(keySymbol(pieceKey(entry)))}
+            </span>
+            {stage ? <StageMark stage={stage} /> : null}
+            {learned ? <LearnedBadge label={t('common:learned.done')} /> : null}
+          </>
+        ),
+      children:
+        chords.length > 0 ? (
+          // A screen reader passes them by: the row names the song, its page lists its chords, and
+          // a symbol read aloud (`C♯m`) says little.
+          <span
+            data-slot="row-chords"
+            aria-hidden
+            className="block truncate font-display text-sm font-medium text-muted-foreground"
+          >
+            {chords.map(printedSymbol).join(CHORD_SPACE)}
           </span>
-          {stage ? <StageMark stage={stage} /> : null}
-          {learned ? <LearnedBadge label={t('common:learned.done')} /> : null}
-        </>
-      ),
-    children:
-      chords.length > 0 ? (
-        // A screen reader passes them by: the row names the song, its page lists its chords, and
-        // a symbol read aloud (`C♯m`) says little.
-        <span
-          data-slot="row-chords"
-          aria-hidden
-          className="block truncate font-display text-sm font-medium text-muted-foreground"
-        >
-          {chords.map(printedSymbol).join(CHORD_SPACE)}
-        </span>
-      ) : null,
+        ) : null,
+    },
     kind: KIND_TILE[entry.kind],
   }
 }

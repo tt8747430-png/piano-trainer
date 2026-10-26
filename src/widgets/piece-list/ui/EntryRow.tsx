@@ -8,7 +8,7 @@ import { useEntryFace } from './use-entry-face'
  * wear the same one.
  */
 export function EntryRow({ entry, tile = true }: { entry: Entry; tile?: boolean }) {
-  const { kind, ...face } = useEntryFace(entry)
+  const { face, kind } = useEntryFace(entry)
   const number = entry.source?.number
   return (
     <li>

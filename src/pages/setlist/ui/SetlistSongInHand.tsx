@@ -11,7 +11,7 @@ import { SONG_BODY, SONG_CARD, SONG_CONTROL } from './song-row-class'
  * A picture of the row, which a screen reader hears of from the drag's announcements.
  */
 export function SetlistSongInHand({ piece }: { piece: Piece }) {
-  const { kind: _kind, ...face } = useEntryFace(piece)
+  const { face } = useEntryFace(piece)
   return (
     <div aria-hidden className={cn(SONG_CARD, 'cursor-grabbing elevation-3 hover:bg-card')}>
       <span className={SONG_CONTROL}>

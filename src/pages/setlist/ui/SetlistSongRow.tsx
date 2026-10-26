@@ -16,7 +16,7 @@ import { SONG_BODY, SONG_CARD, SONG_CONTROL } from './song-row-class'
  */
 export function SetlistSongRow({ piece, onRemove }: { piece: Piece; onRemove: () => void }) {
   const { t } = useTranslation('songs')
-  const { kind: _kind, ...face } = useEntryFace(piece)
+  const { face } = useEntryFace(piece)
   const {
     attributes,
     listeners,

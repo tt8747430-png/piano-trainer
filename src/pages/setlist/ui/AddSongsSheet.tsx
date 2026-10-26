@@ -11,7 +11,7 @@ import { useEntryFace } from '@/widgets/piece-list'
 /** A song to add: a check, on while it is in the setlist. */
 function SongCheck({ piece, setlist }: { piece: Piece; setlist: Setlist }) {
   const store = useLibraryStoreApi()
-  const { title, detail } = useEntryFace(piece)
+  const { title, detail } = useEntryFace(piece).face
   return (
     <li>
       <RowCheck
