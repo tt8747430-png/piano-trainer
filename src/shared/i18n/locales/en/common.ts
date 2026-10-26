@@ -180,8 +180,9 @@ export const common = {
   recorderSettings: {
     click: 'Metronome',
     clickInfo: 'The beat goes on after the count-in',
-    tune: 'Tune',
-    tuneInfo: 'The song’s staves over the piano play under the take, where it has any',
+    tune: 'Play melody',
+    tuneInfo:
+      'The song’s melody, its staves over the piano, plays under your take while you record. Shown where the song has one.',
   },
   // The MIDI keyboard's settings, in Settings under its connection.
   midiSettings: {

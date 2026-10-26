@@ -82,6 +82,8 @@ export const player: LocaleResources['player'] = {
   ownFigureOf: '{{hand}}: как в фактуре',
   changed: { lh: 'Левая рука изменена', rh: 'Правая рука изменена', both: 'Обе руки изменены' },
   playing: 'Как звучит',
+  tuneInfo:
+    '«Играть мелодию»: {{staff}}, верхний нотоносец песни над фортепиано, звучит вместе с вашими руками.',
   allPatterns: 'Все фактуры',
   ownPattern: 'Своя фактура',
   ownPatternDetail: 'Левая и правая рука на ваш выбор',
@@ -103,7 +105,7 @@ export const player: LocaleResources['player'] = {
   recordingOnlyIn: 'Запись звучит только в своей тональности — {{key}}.',
   /** Why a pattern or figure, or a view of the music (ADR 0102), is closed to the music. */
   needs: {
-    tune: 'Нужна мелодия',
+    tune: 'Нужен нотоносец мелодии',
     key: 'Нужна тональность',
     simpleTime: 'Нужен простой размер',
     words: 'Нужен текст',
@@ -140,7 +142,7 @@ export const player: LocaleResources['player'] = {
   toggles: {
     namedNotes: 'Названия нот',
     positions: 'Положения аккордов',
-    tune: 'Мелодия',
+    tune: 'Играть мелодию',
     swing: 'Свинг',
     recording: 'Запись',
   },

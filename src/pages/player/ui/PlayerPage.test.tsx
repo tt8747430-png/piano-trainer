@@ -3,7 +3,14 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
-import { pieceById, PIECES, PIECES_STORAGE_KEY, PIECES_VERSION, stavesOf } from '@/entities/piece'
+import {
+  isLeadSheet,
+  pieceById,
+  PIECES,
+  PIECES_STORAGE_KEY,
+  PIECES_VERSION,
+  stavesOf,
+} from '@/entities/piece'
 import { setPracticeToggle, setScoreView } from '@/features/set-preference'
 import { createMemoryStorage, LANDSCAPE_PHONE } from '@/shared/lib'
 import { midi, parseNoteName, pitchClassOf } from '@/shared/lib/music'
@@ -407,21 +414,23 @@ describe('Player', () => {
     expect(router.state.location.search).toMatchObject({ key: 'A', swing: true })
   })
 
-  it('shows Tune in the Setup only for a piece with a tune', async () => {
+  it('shows Play melody in the Setup only for a piece with a tune', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
     await screen.findByRole('dialog', { name: 'Setup' })
-    expect(screen.queryByRole('button', { name: 'Tune' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Play melody' })).not.toBeInTheDocument()
   })
 
-  it('shows Tune in the Setup of a piece with a tune', async () => {
-    const withTune = PIECES.find((piece) => stavesOf(piece).length > 0)
+  it('shows Play melody in the Setup of a piece with a tune, its ⓘ naming the staff (ADR 0110)', async () => {
+    const withTune = PIECES.find((piece) => stavesOf(piece).length > 0 && !isLeadSheet(piece))
     if (!withTune) throw new Error('no piece has a tune')
     const user = userEvent.setup()
     await renderApp(`/play/${withTune.id}`)
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    expect(await screen.findByRole('button', { name: 'Tune' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'Play melody' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'About How it plays' }))
+    expect(await screen.findByText(/^Play melody: .+, the song’s top staff/)).toBeInTheDocument()
   })
 
   it('puts the fingers under the keys with Finger numbers', async () => {

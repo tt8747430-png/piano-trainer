@@ -143,7 +143,7 @@ describe('PlayerSetup', () => {
 
   it('saves the Tune toggle in settings, pressed while it is on', async () => {
     const { user, settingsStore } = await renderSetup({ tune: true })
-    const tune = screen.getByRole('button', { name: 'Tune' })
+    const tune = screen.getByRole('button', { name: 'Play melody' })
     expect(tune).toHaveAttribute('aria-pressed', 'false')
     await user.click(tune)
     expect(settingsStore.getState().practice.tune).toBe(true)

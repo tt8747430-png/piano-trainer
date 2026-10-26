@@ -87,7 +87,7 @@ describe('Settings', () => {
     const { settingsStore } = await renderApp('/settings')
     const recording = await screen.findByRole('region', { name: 'Recording' })
     await user.click(within(recording).getByRole('switch', { name: 'Metronome' }))
-    await user.click(within(recording).getByRole('switch', { name: 'Tune' }))
+    await user.click(within(recording).getByRole('switch', { name: 'Play melody' }))
     expect(settingsStore.getState().recorder).toEqual({ click: false, tune: true })
     await user.click(within(recording).getByRole('button', { name: 'About Metronome' }))
     expect(await screen.findByRole('dialog', { name: 'Metronome' })).toHaveTextContent(

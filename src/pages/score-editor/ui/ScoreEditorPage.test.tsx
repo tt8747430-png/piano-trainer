@@ -1458,7 +1458,7 @@ describe('the score editor', () => {
     )
     await renderApp('/play/my-1', { storage })
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    expect(await screen.findByRole('button', { name: 'Tune' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'Play melody' })).toBeInTheDocument()
   })
 
   it('closes to the song’s page', async () => {
@@ -1814,7 +1814,7 @@ describe('the score editor’s takes', () => {
     expect(settingsStore.getState().recorder.click).toBe(false)
     // The rest of the count-in still counts; nothing clicks after it.
     expect(audio.played.at(-1)?.sounds.map((sound) => sound.at)).toEqual([BEAT, 2 * BEAT, 3 * BEAT])
-    await user.click(within(settings).getByRole('switch', { name: 'Tune' }))
+    await user.click(within(settings).getByRole('switch', { name: 'Play melody' }))
     expect(settingsStore.getState().recorder.tune).toBe(true)
     // The tune comes in under the take from its downbeat.
     expect(audio.played.at(-1)?.at).toBeCloseTo(DOWNBEAT)
@@ -1826,7 +1826,7 @@ describe('the score editor’s takes', () => {
     await startTake(user, keyboard)
     const settings = await recordingSettings(user)
     expect(within(settings).getByRole('switch', { name: 'Metronome' })).toBeInTheDocument()
-    expect(within(settings).queryByRole('switch', { name: 'Tune' })).not.toBeInTheDocument()
+    expect(within(settings).queryByRole('switch', { name: 'Play melody' })).not.toBeInTheDocument()
   })
 
   it('keeps nothing from a take stopped in its count-in, and says when nothing was played', async () => {

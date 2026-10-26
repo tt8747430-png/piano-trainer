@@ -5,8 +5,8 @@ import { setPracticeToggle } from '@/features/set-preference'
 import { ToggleTile } from '@/shared/ui'
 
 /**
- * The Tune toggle (ADR 0097): a piece's tune, its top single staff, heard along with the hands; saved
- * for every piece with one.
+ * Play melody (ADR 0097, named so by ADR 0110): a piece's tune, its top single staff, heard along with
+ * the hands; saved for every piece with one. Its page's ⓘ names the staff.
  */
 export function TuneToggle() {
   const { t } = useTranslation('player')
