@@ -28,7 +28,6 @@ export {
 export {
   isOwnPatternId,
   isPatternRef,
-  nameFrom,
   OWN_NAME_MAX,
   ownName,
   ownPatternId,

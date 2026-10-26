@@ -1,7 +1,8 @@
 import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { nameFrom, usePatternBook } from '@/entities/pattern'
+import { OWN_NAME_MAX, usePatternBook } from '@/entities/pattern'
 import { localText, useLocale } from '@/shared/i18n'
+import { nameFrom } from '@/shared/lib'
 import { PatternEditor } from './PatternEditor'
 
 /** What a new pattern starts as with nothing to start from: whole notes, a chord over its root. */
@@ -16,8 +17,10 @@ export function NewPatternPage() {
   const source = from ? book.get(from) : undefined
   const start = source
     ? {
-        name: nameFrom(localText(source.name, locale), (name) =>
-          t('patterns.editor.mine', { name }),
+        name: nameFrom(
+          localText(source.name, locale),
+          (name) => t('patterns.editor.mine', { name }),
+          OWN_NAME_MAX,
         ),
         rh: source.rh,
         lh: source.lh,
