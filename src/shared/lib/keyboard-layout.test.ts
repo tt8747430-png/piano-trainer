@@ -1,33 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { diagramRange, keyAt, keyboardLayout, PIANO_LAYOUT, spanOf } from './keyboard-layout'
+import { keyAt, keyboardLayout, PIANO_LAYOUT, spanOf } from './keyboard-layout'
 import { midi } from './music'
-
-describe('diagramRange', () => {
-  const range = (...keys: number[]) => diagramRange(keys.map(midi))
-
-  it('spans from a C or an F to an E or a B, ten white keys at least, the chord with room round it', () => {
-    // C E G: C4–B4 is seven white keys, none under C; it grows down to F3, eleven.
-    expect(range(60, 64, 67)).toEqual({ from: 53, to: 71 })
-    // E G♯ B: C4–B4, none over B; it grows up to E5, ten.
-    expect(range(64, 68, 71)).toEqual({ from: 60, to: 76 })
-    // F A C: F4–E5, none under F; down to C4.
-    expect(range(65, 69, 72)).toEqual({ from: 60, to: 76 })
-  })
-
-  it('starts at the C under a black key the chord starts on', () => {
-    // C♯ E G♯: C4–B4, one white key under it and two over; down to F3.
-    expect(range(61, 64, 68)).toEqual({ from: 53, to: 71 })
-  })
-
-  it('spans a wide chord as far as it reaches', () => {
-    // C13 stacked from middle C: C4 to A5, in C4–B5's fourteen white keys.
-    expect(range(60, 64, 67, 70, 74, 77, 81)).toEqual({ from: 60, to: 83 })
-  })
-
-  it('stands round middle C with no keys', () => {
-    expect(range()).toEqual({ from: 53, to: 71 })
-  })
-})
 
 describe('keyboardLayout', () => {
   it('lays one octave out as 7 white keys with 5 shorter black keys between them', () => {

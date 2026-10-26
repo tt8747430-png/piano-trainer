@@ -33,8 +33,6 @@ export const player: LocaleResources['player'] = {
     },
   },
   tools: 'Инструменты',
-  noChords: 'В этих нотах нет аккордовых символов.',
-  toSheet: 'Показать ноты',
   nextChord: 'Дальше: {{symbol}}',
   line: { one: 'Такт {{n}}', many: 'Такты {{first}}–{{last}}' },
   key: 'Тональность',

@@ -1,55 +1,41 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import type { DiagramsMode } from '@/entities/settings'
+import { usePieceInversions } from '@/features/choose-diagram-inversion'
 import {
-  beatCells,
+  chordSummary,
   diagramChord,
   loopTicks,
-  writtenBarOf,
   type BarRange,
   type CellBar,
   type DiagramChord,
   type PlayedBeat,
 } from '@/features/practice'
-import { cn, LANDSCAPE_PHONE, useMediaQuery } from '@/shared/lib'
+import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { printedSymbol, type Tick } from '@/shared/lib/music'
 import { SheetTitle } from '@/shared/ui'
 import { ChordDiagram } from '@/widgets/chord-diagrams'
 import { chordsFrom } from '../model/chords-from'
-import { comingLine, lyricLines, type Span } from '../model/lyric-lines'
+import { lyricLines, type Span } from '../model/lyric-lines'
+import { sungPlace } from '../model/sung-place'
 import { BeatStrip } from './BeatStrip'
+import { SummaryGrid } from './SummaryGrid'
 import { SungLines } from './SungLines'
 
-/** From a tablet's width, the two chords after the next too. */
-const WIDE = '(min-width: 40rem)'
-
-/** How each place of the row draws its chord: the one sounding, the next, the two after it. */
-const PLACES = {
-  now: {
-    box: 'basis-1/2 max-w-md landscape-phone:max-w-56',
-    symbol: 'text-4xl landscape-phone:text-2xl',
-  },
-  next: {
-    box: 'basis-1/3 max-w-xs landscape-phone:max-w-36',
-    symbol: 'text-2xl text-muted-foreground landscape-phone:text-xl',
-  },
-  later: { box: 'basis-1/6 max-w-48 opacity-70', symbol: 'text-xl text-muted-foreground' },
-} as const
-
 /**
- * A chord of the row: its keys over its symbol, a button opening its sheet. One to come (`muted`)
- * is greyed, and named for a screen reader as the next; the one sounding by its keys' notes. In a
- * room too short for them as drawn, its keys shrink to it, its symbol kept whole.
+ * A chord of the pair, the one sounding or the next, each up to half the room and 28rem at most: its
+ * keys over its symbol, a button opening its sheet. The next (`muted`) is greyed and its symbol
+ * muted, named for a screen reader as the next; the one sounding by its keys' notes, its symbol in
+ * ink. In a room too short for them as drawn, its keys shrink to it, its symbol kept whole.
  */
 function Diagram({
   chord,
-  place,
   muted,
   label,
   onOpen,
 }: {
   chord: DiagramChord
-  place: keyof typeof PLACES
   muted: boolean
   /** What its symbol says: the symbol, or that it comes next. */
   label: string
@@ -61,15 +47,15 @@ function Diagram({
       type="button"
       aria-label={muted ? t('nextChord', { symbol: printedSymbol(chord.symbol) }) : undefined}
       onClick={onOpen}
-      className={cn(
-        'flex max-h-full min-w-0 shrink flex-col items-center gap-2 rounded-xl p-1.5 transition-colors duration-200 ease-out hover:bg-muted',
-        PLACES[place].box,
-      )}
+      className="flex max-h-full max-w-md min-w-0 shrink basis-1/2 flex-col items-center gap-2 rounded-xl p-1.5 transition-colors duration-200 ease-out hover:bg-muted landscape-phone:max-w-56"
     >
       <ChordDiagram chord={chord} muted={muted} className="min-h-0" />
       <span
         aria-hidden
-        className={cn('shrink-0 font-display leading-none font-semibold', PLACES[place].symbol)}
+        className={cn(
+          'shrink-0 font-display text-3xl leading-none font-semibold landscape-phone:text-2xl',
+          muted ? 'text-muted-foreground' : 'text-foreground',
+        )}
       >
         {label}
       </span>
@@ -78,14 +64,14 @@ function Diagram({
 }
 
 /**
- * Diagrams (ADR 0099, Chordify's): the chord sounding as a large keyboard diagram over its symbol, the
- * next beside it greyed (from a tablet's width the two after it too, smaller and greyer); where no
- * chord sounds yet (a pickup, a bar of none) the next alone, greyed, saying it is next. Under them the
- * beat strip; under it, with the View's Lyrics on, the line being sung and the next as the bars are
- * played, a repeat's or the loop's first again (`SungLines`, `comingLine`);
- * on a phone on its side, the title, the strip and the words beside the chords. All of it stands in
- * the room above the transport, in the middle of it, the chords shrinking where it is short
- * (`diagrams-view`). A diagram opens its chord's sheet (`onChord`); a beat tapped takes the cursor
+ * Diagrams (ADR 0099, 0101, Chordify's), every chord on the same keys, each in the inversion its
+ * piece chose. Animated, the chord sounding and the next beside it, the same size, the next greyed;
+ * where no chord sounds yet (a pickup, a bar of none) the next alone, saying it is next. Under them
+ * the beat strip, and under it, with the View's Lyrics on, the line sung (`SungLines`). On a phone on
+ * its side, the title, the strip and the words beside the chords. All of it stands in the room above
+ * the transport, in the middle of it, the chords shrinking where it is short (`diagrams-view`). In
+ * its summary mode, the strip and the words over the song's chords at once (`SummaryGrid`), the one
+ * sounding marked. A diagram opens its chord's sheet (`onChord`); a beat tapped takes the cursor
  * there (`onGo`).
  */
 export function ChordDiagrams({
@@ -93,9 +79,10 @@ export function ChordDiagrams({
   performance,
   bars,
   beat,
-  played,
+  span,
   loop,
   words,
+  mode,
   onGo,
   onChord,
 }: {
@@ -104,34 +91,55 @@ export function ChordDiagrams({
   /** Every bar as played, in beats. */
   bars: readonly CellBar[]
   beat: PlayedBeat
-  /** The beat sounding, as played. */
-  played: Span
+  /** The beat sounding, as played and as its bar is written. */
+  span: { readonly played: Span; readonly written: Span }
   loop: BarRange | null
   /** The View's Lyrics: the line sung under the strip. */
   words: boolean
+  /** The View's mode for Diagrams (ADR 0102's `scoreView.diagrams`). */
+  mode: DiagramsMode
   onGo: (at: Tick) => void
   onChord: (chord: number) => void
 }) {
   const { t } = useTranslation('player')
-  // On a phone on its side the room is short: the chord sounding and the next alone.
-  const tablet = useMediaQuery(WIDE)
-  const onSide = useMediaQuery(LANDSCAPE_PHONE)
-  const wide = tablet && !onSide
+  const chosen = usePieceInversions()?.chosen
   const { now, next } = chordsFrom(
     performance,
-    played,
+    span.played,
     loop ? loopTicks(performance, loop) : null,
-    wide ? 3 : 1,
   )
   const lines = useMemo(() => lyricLines(performance), [performance])
-  const written = useMemo(() => beatCells(performance), [performance])
-  const bar = writtenBarOf(performance, beat.bar)
-  const at = lines.findIndex((line) => line.bars.includes(bar))
-  const line = lines[at]
-  const chord = (index: number | undefined) =>
-    index === undefined ? null : diagramChord(performance, index)
-  const first = chord(now ?? undefined)
-  const [after, ...later] = next.map(chord)
+  const summary = useMemo(() => chordSummary(performance, chosen), [performance, chosen])
+  const place = words
+    ? sungPlace(performance, lines, { bar: beat.bar, played: span.played }, loop)
+    : null
+  const chord = (index: number | null) =>
+    index === null ? null : diagramChord(performance, index, chosen)
+  const strip = (
+    <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} />
+  )
+  const sung = place ? <SungLines place={place} written={span.written} /> : null
+  if (mode === 'summary') {
+    return (
+      <section
+        aria-label={t('views.diagrams')}
+        className="flex h-full flex-col gap-4 overflow-y-auto overscroll-contain pb-(--float-room) *:shrink-0"
+      >
+        <SheetTitle title={title} place="lines" />
+        <div className="sticky top-0 z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0">
+          {strip}
+        </div>
+        {sung}
+        <SummaryGrid
+          chords={summary}
+          sounding={now === null ? null : (performance.chords[now]?.symbol ?? null)}
+          onChord={onChord}
+        />
+      </section>
+    )
+  }
+  const first = chord(now)
+  const after = chord(next)
   return (
     <section
       aria-label={t('views.diagrams')}
@@ -148,7 +156,6 @@ export function ChordDiagrams({
           <>
             <Diagram
               chord={first}
-              place="now"
               muted={false}
               label={printedSymbol(first.symbol)}
               onOpen={() => onChord(first.chord)}
@@ -156,32 +163,16 @@ export function ChordDiagrams({
             {after ? (
               <Diagram
                 chord={after}
-                place="next"
                 muted
                 label={printedSymbol(after.symbol)}
                 onOpen={() => onChord(after.chord)}
               />
             ) : null}
-            {later.flatMap((each) =>
-              each ? (
-                <Diagram
-                  key={each.chord}
-                  chord={each}
-                  place="later"
-                  muted
-                  label={printedSymbol(each.symbol)}
-                  onOpen={() => onChord(each.chord)}
-                />
-              ) : (
-                []
-              ),
-            )}
           </>
         ) : after ? (
           // No chord yet: the next alone, greyed, saying so.
           <Diagram
             chord={after}
-            place="now"
             muted
             label={t('nextChord', { symbol: printedSymbol(after.symbol) })}
             onOpen={() => onChord(after.chord)}
@@ -189,16 +180,9 @@ export function ChordDiagrams({
         ) : null}
       </div>
       <div data-area="strip" className="-mx-gutter landscape-phone:mx-0">
-        <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} />
+        {strip}
       </div>
-      {words ? (
-        <SungLines
-          sung={line?.sung ? line : undefined}
-          coming={comingLine(performance, lines, beat.bar, loop)}
-          bars={written}
-          at={{ written: bar, beat: beat.beat }}
-        />
-      ) : null}
+      {sung}
     </section>
   )
 }

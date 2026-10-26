@@ -3,6 +3,7 @@ import { Play } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { entryTitles, useRepertoire, type Piece } from '@/entities/piece'
 import { selectLessons, useProgress } from '@/entities/progress'
+import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { loopParam } from '@/features/practice'
 import { useLocale } from '@/shared/i18n'
 import { OPEN_PLAINLY } from '@/shared/lib'
@@ -89,5 +90,10 @@ export function SectionPage() {
       </NotFound>
     )
   }
-  return <SectionView key={`${piece.id} ${index}`} piece={piece} section={index} />
+  return (
+    // Its chords drawn in the inversions chosen for them in this piece (ADR 0101).
+    <PieceInversions pieceId={piece.id}>
+      <SectionView key={`${piece.id} ${index}`} piece={piece} section={index} />
+    </PieceInversions>
+  )
 }

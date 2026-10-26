@@ -1,13 +1,12 @@
 import { useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import type { MusicView } from '@/entities/settings'
+import type { DiagramsMode, MusicView } from '@/entities/settings'
+import { usePieceInversions } from '@/features/choose-diagram-inversion'
 import {
   beatGroupFrom,
   diagramChord,
   playedBeatCells,
   useBeat,
   type BarRange,
-  type DiagramChord,
   type Practice,
 } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
@@ -17,14 +16,14 @@ import { beatSpan } from '../model/beat-span'
 import { ChordDiagrams } from './ChordDiagrams'
 import { ChordsOverLyrics } from './ChordsOverLyrics'
 import { GridView } from './GridView'
-import { NoChords } from './NoChords'
 
 /**
- * The Player's music as one of its chord views (ADR 0099): Chords over lyrics, Diagrams or the Grid,
- * each following the cursor a beat at a time (`useBeat`: Listen's clock while it plays, else the beat
- * the cursor stands on) and taking it to the beat tapped, the beat group there or the next
- * (`jumpToBeatGroup`, which sounds it while nothing plays). A chord tapped opens its sheet. Music of
- * no chord symbol says so, with the way to its sheet music (`onSheet`).
+ * The Player's music as one of its chord views (ADR 0099), shown only for music with chord symbols
+ * (ADR 0102): Chords over lyrics, Diagrams (in its mode, ADR 0101) or the Grid, each following the
+ * cursor a beat at a time (`useBeat`: Listen's clock while it plays, else the beat the cursor stands
+ * on) and taking it to the beat tapped, the beat group there or the next (`jumpToBeatGroup`, which
+ * sounds it while nothing plays). A chord tapped opens its sheet, drawn in the inversion its piece
+ * chose.
  */
 export function ChordView({
   view,
@@ -34,7 +33,7 @@ export function ChordView({
   practice,
   loop,
   words,
-  onSheet,
+  mode,
 }: {
   view: Exclude<MusicView, 'sheet'>
   title: string
@@ -45,24 +44,21 @@ export function ChordView({
   loop: BarRange | null
   /** The View's Lyrics: the Diagrams view's line sung. */
   words: boolean
-  onSheet: () => void
+  /** How Diagrams shows the chords: the one sounding and the next, or the song's all at once. */
+  mode: DiagramsMode
 }) {
-  const { t } = useTranslation('player')
   const beat = useBeat(performance, practice)
   const bars = useMemo(() => playedBeatCells(performance), [performance])
-  // The chord last opened stays in its sheet as the sheet closes.
-  const [shown, setShown] = useState<{ chord: DiagramChord; open: boolean } | null>(null)
-  if (performance.chords.length === 0)
-    return <NoChords title={title} label={t(`views.${view}`)} onSheet={onSheet} />
+  const chosen = usePieceInversions()?.chosen
+  // The chord last opened stays in its sheet as the sheet closes, drawn as its piece draws it now.
+  const [shown, setShown] = useState<{ chord: number; open: boolean } | null>(null)
+  const opened = shown ? diagramChord(performance, shown.chord, chosen) : null
   const span = beatSpan(performance, bars, beat)
   const go = (at: Tick) => {
     const group = beatGroupFrom(performance, at)
     if (group !== null) practice.jumpToBeatGroup(group)
   }
-  const open = (index: number) => {
-    const chord = diagramChord(performance, index)
-    if (chord) setShown({ chord, open: true })
-  }
+  const open = (chord: number) => setShown({ chord, open: true })
   return (
     <>
       {view === 'grid' ? (
@@ -92,16 +88,17 @@ export function ChordView({
           performance={performance}
           bars={bars}
           beat={beat}
-          played={span.played}
+          span={span}
           loop={loop}
           words={words}
+          mode={mode}
           onGo={go}
           onChord={open}
         />
       )}
-      {shown ? (
+      {shown && opened ? (
         <ChordSheet
-          chord={shown.chord}
+          chord={opened}
           open={shown.open}
           onOpenChange={(open) => setShown({ ...shown, open })}
         />

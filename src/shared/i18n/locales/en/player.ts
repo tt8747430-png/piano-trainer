@@ -44,9 +44,6 @@ export const player = {
   },
   // The row of tools under the Player's bar (ADR 0102), as a screen reader names it.
   tools: 'Tools',
-  /** Music of no chord symbol in a view of its chords (ADR 0094, 0099), and the way to its sheet. */
-  noChords: 'This music has no chord symbols.',
-  toSheet: 'Show the sheet music',
   /** The Diagrams view's chord to come, where none sounds yet: a pickup, a bar of no chord. */
   nextChord: 'Next: {{symbol}}',
   /** A line of Chords over lyrics, by its bars: a tap takes the Player there. */

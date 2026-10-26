@@ -1,5 +1,9 @@
 import { RouterProvider } from '@tanstack/react-router'
 import { type LibraryStore, LibraryStoreProvider } from '@/entities/library'
+import {
+  type DiagramInversionsStore,
+  DiagramInversionsStoreProvider,
+} from '@/entities/diagram-inversion'
 import { type PatternsStore, PatternsStoreProvider } from '@/entities/pattern'
 import { type PiecesStore, PiecesStoreProvider } from '@/entities/piece'
 import { type ProgressStore, ProgressStoreProvider } from '@/entities/progress'
@@ -22,6 +26,7 @@ export function App({
   piecesStore,
   takesStore,
   libraryStore,
+  diagramInversionsStore,
   services,
   router,
 }: {
@@ -31,6 +36,7 @@ export function App({
   piecesStore: PiecesStore
   takesStore: TakesStore
   libraryStore: LibraryStore
+  diagramInversionsStore: DiagramInversionsStore
   services: Services
   router: AppRouter
 }) {
@@ -41,18 +47,20 @@ export function App({
           <PiecesStoreProvider store={piecesStore}>
             <TakesStoreProvider store={takesStore}>
               <LibraryStoreProvider store={libraryStore}>
-                <ServicesProvider services={services}>
-                  <LocaleSync />
-                  <AudioUnlock />
-                  <MidiReconnect />
-                  <MidiSync />
-                  <TitlesSync />
-                  <ThemeProvider>
-                    <ShortcutsProvider>
-                      <RouterProvider router={router} />
-                    </ShortcutsProvider>
-                  </ThemeProvider>
-                </ServicesProvider>
+                <DiagramInversionsStoreProvider store={diagramInversionsStore}>
+                  <ServicesProvider services={services}>
+                    <LocaleSync />
+                    <AudioUnlock />
+                    <MidiReconnect />
+                    <MidiSync />
+                    <TitlesSync />
+                    <ThemeProvider>
+                      <ShortcutsProvider>
+                        <RouterProvider router={router} />
+                      </ShortcutsProvider>
+                    </ThemeProvider>
+                  </ServicesProvider>
+                </DiagramInversionsStoreProvider>
               </LibraryStoreProvider>
             </TakesStoreProvider>
           </PiecesStoreProvider>

@@ -4,9 +4,12 @@ import { cn, useElementSize } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
 import { CellChords } from '@/widgets/chord-chart'
+import { stripNames } from '../model/strip-names'
 
 /** Where the beat sounding stands along the strip: a third of the way in. */
 const STANDS = 1 / 3
+/** A quarter rest in the music font: where the music turns to no chord. */
+const REST = '\u{1D13D}'
 
 /** Each bar's first beat, counted along the strip from 0. */
 function firstBeats(bars: readonly CellBar[]): number[] {
@@ -20,12 +23,13 @@ function firstBeats(bars: readonly CellBar[]): number[] {
 }
 
 /**
- * The beat strip (ADR 0099, Chordify's): every beat of the music as played in one row, the repeats
- * taken, a barline before each bar, a chord named in the beat it starts in, the beat sounding filled
- * with the ink, the loop's beats on its band. It slides as the music goes, the beat sounding a third
- * of the way in (at once under reduced motion); a beat tapped takes the cursor there (`onBeat`, the
- * tick it is played at). It is a picture of where the music is, hidden from a screen reader, its
- * beats out of the tab order: the transport and the other views' bars are the way through.
+ * The beat strip (ADR 0099, 0101, Chordify's): every beat of the music as played in one row, the
+ * repeats taken, a barline before each bar, a chord named only in the beat where it changes and a
+ * rest where the music turns to none (`stripNames`), the beat sounding filled with the ink, the
+ * loop's beats on its band. It slides as the music goes, the beat sounding a third of the way in (at
+ * once under reduced motion); a beat tapped takes the cursor there (`onBeat`, the tick it is played
+ * at). It is a picture of where the music is, hidden from a screen reader, its beats out of the tab
+ * order: the transport and the other views' bars are the way through.
  */
 export function BeatStrip({
   performance,
@@ -47,6 +51,7 @@ export function BeatStrip({
   const row = useRef<HTMLDivElement>(null)
   const { width } = useElementSize(frame)
   const firsts = useMemo(() => firstBeats(bars), [bars])
+  const names = useMemo(() => stripNames(performance, bars), [performance, bars])
   const sounding = (firsts[beat.bar] ?? 0) + beat.beat
   // The strip moved under its frame, the beat sounding a third of the way in: measured, so it holds
   // at the reader's text size.
@@ -77,8 +82,9 @@ export function BeatStrip({
               key={played}
               className="flex border-y border-l-2 border-y-border border-l-foreground bg-card last:border-r-2 last:border-r-foreground"
             >
-              {cells.map(({ from, chords }, at) => {
+              {cells.map(({ from }, at) => {
                 const cell = (firsts[index] ?? 0) + at
+                const named = names[index]?.[at]
                 return (
                   <button
                     key={at}
@@ -97,9 +103,13 @@ export function BeatStrip({
                           : undefined,
                     )}
                   >
-                    <CellChords
-                      symbols={chords.flatMap((chord) => performance.chords[chord]?.symbol ?? [])}
-                    />
+                    {named?.rest ? (
+                      <span data-rest="" className="font-music text-3xl leading-none">
+                        {REST}
+                      </span>
+                    ) : (
+                      <CellChords symbols={named?.symbols ?? []} />
+                    )}
                   </button>
                 )
               })}

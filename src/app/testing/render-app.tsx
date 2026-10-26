@@ -1,6 +1,7 @@
 import { createMemoryHistory } from '@tanstack/react-router'
 import { render } from '@testing-library/react'
 import { createLibraryStore } from '@/entities/library'
+import { createDiagramInversionsStore } from '@/entities/diagram-inversion'
 import { createPatternsStore } from '@/entities/pattern'
 import { createPiecesStore } from '@/entities/piece'
 import { createProgressStore } from '@/entities/progress'
@@ -42,6 +43,7 @@ export async function renderApp(
   const takesStore = createTakesStore(saving)
   const viewsStore = createViewsStore(saving)
   const libraryStore = createLibraryStore(saving)
+  const diagramInversionsStore = createDiagramInversionsStore(saving)
   const router = heardUntil(testOver, () =>
     createAppRouter({
       history: createMemoryHistory({ initialEntries: [path] }),
@@ -64,6 +66,7 @@ export async function renderApp(
       piecesStore={piecesStore}
       takesStore={takesStore}
       libraryStore={libraryStore}
+      diagramInversionsStore={diagramInversionsStore}
       services={{ audio, midi: webMidi ? midi : null }}
       router={router}
     />,
@@ -78,6 +81,7 @@ export async function renderApp(
     takesStore,
     viewsStore,
     libraryStore,
+    diagramInversionsStore,
     audio,
     midi,
   }

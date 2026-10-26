@@ -213,6 +213,22 @@ describe('Segmented', () => {
     await user.click(screen.getByRole('radio', { name: '1st' }))
     expect(onChange).toHaveBeenCalledWith(1)
   })
+
+  it('greys a segment that cannot be chosen, saying why in its tooltip and to a screen reader', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    const options = [
+      { value: 0, label: 'Root' },
+      { value: 1, label: '1st', reason: 'Its keys run past B4' },
+    ]
+    render(<Segmented label="Inversion" value={0} options={options} onChange={onChange} />)
+    const greyed = screen.getByRole('radio', { name: '1st' })
+    expect(greyed).toHaveAttribute('data-disabled')
+    expect(greyed).toHaveAttribute('title', 'Its keys run past B4')
+    expect(greyed).toHaveAccessibleDescription('Its keys run past B4')
+    await user.click(greyed)
+    expect(onChange).not.toHaveBeenCalled()
+  })
 })
 
 describe('NamedSegmented', () => {
@@ -242,6 +258,24 @@ describe('InversionChoice', () => {
     expect(onChange).toHaveBeenCalledWith(2)
     rerender(<InversionChoice notes={7} value={0} onChange={onChange} />)
     expect(within(group).getAllByRole('radio')).toHaveLength(4)
+  })
+
+  it('greys each inversion that cannot be chosen with its reason, and may choose none', () => {
+    render(
+      <InversionChoice
+        notes={3}
+        value={null}
+        greyed={(inversion) => (inversion === 2 ? 'Its keys run past B4' : undefined)}
+        onChange={vi.fn()}
+      />,
+    )
+    const radios = screen.getAllByRole('radio')
+    expect(radios.map((radio) => radio.getAttribute('title'))).toEqual([
+      null,
+      null,
+      'Its keys run past B4',
+    ])
+    expect(radios.every((radio) => radio.getAttribute('aria-checked') === 'false')).toBe(true)
   })
 })
 

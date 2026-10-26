@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { PieceId } from '@/entities/piece'
 import { selectLessons, useProgress, useProgressStoreApi } from '@/entities/progress'
+import { usePieceInversions } from '@/features/choose-diagram-inversion'
 import { diagramChord } from '@/features/practice'
 import { recordChord } from '@/features/record-lesson'
 import type { Performance } from '@/shared/lib/arrangement'
@@ -13,8 +14,9 @@ import type { ChordLesson } from '../model/section-lessons'
 
 /**
  * A section's chords to learn (spec §3.2): "Learn C♯m⁷" for each, its tile in the section's paint
- * with the piano, a check on it once done. A row opens the chord's sheet, voiced as it first sounds
- * in the section, where its keys held together (on a MIDI keyboard or the sheet's own) learn it.
+ * with the piano, a check on it once done. A row opens the chord's sheet, drawn in the inversion
+ * chosen for it in the piece (ADR 0101), where its keys held together (on a MIDI keyboard or the
+ * sheet's own) learn it.
  */
 export function ChordLessons({
   pieceId,
@@ -33,7 +35,8 @@ export function ChordLessons({
   const done = useProgress(selectLessons)
   // The chord last opened stays in its sheet as the sheet closes.
   const [shown, setShown] = useState<{ lesson: ChordLesson; open: boolean } | null>(null)
-  const chord = shown ? diagramChord(performance, shown.lesson.chord) : null
+  const chosen = usePieceInversions()?.chosen
+  const chord = shown ? diagramChord(performance, shown.lesson.chord, chosen) : null
   if (chords.length === 0) return null
   return (
     <>

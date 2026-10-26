@@ -10,6 +10,7 @@ import {
 } from '@/shared/lib/music'
 import { isAudible, type Audible } from '@/shared/lib/schedule'
 import type { KeyMark } from '@/shared/ui'
+import type { DiagramChord } from './chord-diagram'
 
 /**
  * The Player's keyboard: the beat group's notes in the hands asked for (the ones heard, or in Wait
@@ -41,6 +42,22 @@ export function practiceMarks(
     })
   }
   return marks
+}
+
+/**
+ * The Player's keyboard in a chord view while Listen plays (ADR 0101): the chord sounding as its
+ * diagram draws it, each key named as the chord spells it; the bass it rings, which the chord has
+ * not, the left hand's, the rest the right's.
+ */
+export function diagramMarks(chord: DiagramChord): Map<Midi, KeyMark> {
+  return new Map(
+    chord.keys.flatMap((key, i) => {
+      const spelled = chord.notes[i]
+      if (!spelled) return []
+      const mark: KeyMark = { tone: key === chord.ring ? 'lh' : 'rh', label: noteName(spelled) }
+      return [[key, mark] as const]
+    }),
+  )
 }
 
 /** Two octaves around middle C: the least the Player shows. */

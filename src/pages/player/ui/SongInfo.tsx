@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Credits, entryTitles, PieceFactCards, type Piece } from '@/entities/piece'
+import { usePieceInversions } from '@/features/choose-diagram-inversion'
 import { chordSummary } from '@/features/practice'
 import { useLocale } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
@@ -26,7 +27,8 @@ export function SongInfo({
 }) {
   const { t } = useTranslation(['player', 'music'])
   const locale = useLocale()
-  const chords = useMemo(() => chordSummary(performance), [performance])
+  const chosen = usePieceInversions()?.chosen
+  const chords = useMemo(() => chordSummary(performance, chosen), [performance, chosen])
   const { secondary } = entryTitles(piece, locale)
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
