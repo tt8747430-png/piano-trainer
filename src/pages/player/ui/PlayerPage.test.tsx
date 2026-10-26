@@ -143,8 +143,11 @@ describe('Player', () => {
     expect((await screen.findAllByText('1', { selector: 'span' })).length).toBeGreaterThan(0)
     expect(document.querySelector('[data-slot="sheet-page"]')).toBeInTheDocument()
     await user.click(screen.getByRole('radio', { name: 'Grid' }))
-    expect(screen.queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
-    expect(screen.getByRole('region', { name: 'Grid' })).toBeInTheDocument()
+    // The music's area, under the menu's own part for the Grid (ADR 0108).
+    const music = document.querySelector<HTMLElement>('[data-area="sheet"]')
+    if (!music) throw new Error('the music’s area')
+    expect(within(music).queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
+    expect(within(music).getByRole('region', { name: 'Grid' })).toBeInTheDocument()
     await user.click(screen.getByRole('switch', { name: 'Keys' }))
     expect(settingsStore.getState().scoreView).toMatchObject({ music: 'grid', keys: false })
   })

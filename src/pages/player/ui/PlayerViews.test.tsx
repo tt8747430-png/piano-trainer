@@ -337,15 +337,28 @@ describe('Chords over lyrics (ADR 0099)', () => {
     ).toEqual(['Em', 'G/B', 'C', 'D/F♯'])
   })
 
-  it('opens a chip’s chord in its sheet, which plays it', async () => {
+  it('takes the cursor to a chip’s chord, sounding it, and opens no sheet (ADR 0108)', async () => {
     const user = userEvent.setup()
     const { audio } = await inView('lyrics', '/play/silent')
-    await user.click(within(line('Bars 5–8').shown).getByRole('button', { name: 'G7' }))
-    const sheet = await screen.findByRole('dialog', { name: 'G7 chord' })
-    expect(within(sheet).getByRole('img', { name: /^G7: / })).toBeInTheDocument()
     const played = audio.played.length
-    await user.click(within(sheet).getByRole('button', { name: 'Play' }))
-    expect(audio.played).toHaveLength(played + 1)
+    await user.click(within(line('Bars 5–8').shown).getByRole('button', { name: 'G7' }))
+    expect(line('Bars 5–8').button).toHaveAttribute('aria-current', 'step')
+    expect(within(line('Bars 5–8').shown).getByRole('button', { name: 'G7' })).toHaveAttribute(
+      'data-sounding',
+    )
+    expect(audio.played.length).toBeGreaterThan(played)
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('takes the cursor to a pinned diagram’s chord where it next sounds (ADR 0108)', async () => {
+    const user = userEvent.setup()
+    await inView('lyrics', '/play/silent')
+    const strip = document.querySelector('[data-slot="beat-strip"]')?.parentElement
+    const pinned = within(strip as HTMLElement).getByRole('list', { name: 'Chords' })
+    await user.click(within(pinned).getByRole('button', { name: /^G7: / }))
+    expect(line('Bars 5–8').button).toHaveAttribute('aria-current', 'step')
+    expect(within(pinned).getByRole('button', { name: /^G7: / })).toHaveAttribute('aria-current')
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
   it('follows Listen on its beat strip, and goes to a beat tapped there', async () => {
@@ -423,9 +436,11 @@ describe('Diagrams (ADR 0099)', () => {
     expect(sungLine(view)).toBeNull()
     // The chord sounding is named by its notes as they fold, G3 C4 E4; the next, greyed, as the next.
     expect(within(view).getByRole('button', { name: 'C: G C E' })).toBeInTheDocument()
-    // A diagram opens its chord's sheet.
+    // A diagram takes the cursor to its chord (ADR 0108): the next sounds now, opening no sheet.
     await user.click(within(view).getByRole('button', { name: 'Next: G7' }))
-    expect(await screen.findByRole('dialog', { name: 'G7 chord' })).toBeInTheDocument()
+    expect(within(view).getByRole('button', { name: /^G7: / })).toBeInTheDocument()
+    expect(stripNamed()[Number(stripBeat())]).toBe('G7')
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
   it.each([
@@ -525,11 +540,16 @@ describe('Diagrams (ADR 0099)', () => {
     const user = userEvent.setup()
     const { router, diagramInversionsStore } = await inView('diagrams', '/play/bz5')
     const view = screen.getByRole('region', { name: 'Diagrams' })
-    await user.click(within(view).getByRole('button', { name: 'G: G B D' }))
+    // Its sheet from Song information's chords: a diagram of the view is the music's to go to.
+    await user.click(screen.getByRole('button', { name: 'More' }))
+    await user.click(await screen.findByRole('button', { name: 'Song information' }))
+    const info = await screen.findByRole('dialog', { name: 'Song information' })
+    await user.click(within(info).getByRole('button', { name: 'G: G B D' }))
     const sheet = await screen.findByRole('dialog', { name: 'G chord' })
     await user.click(within(sheet).getByRole('radio', { name: '1st' }))
     expect(diagramInversionsStore.getState().pieces).toEqual({ bz5: { G: 1 } })
     expect(within(sheet).getByRole('img', { name: 'G: B D G' })).toBeInTheDocument()
+    await user.keyboard('{Escape}')
     await user.keyboard('{Escape}')
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
     expect(within(view).getByRole('button', { name: 'G: B D G' })).toBeInTheDocument()

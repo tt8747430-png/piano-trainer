@@ -34,6 +34,7 @@ import {
   isKeyDock,
   isKeyLength,
   isDiagramsMode,
+  isTextSize,
   isKeySize,
   isMusicView,
   isNamedKeys,
@@ -60,7 +61,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 11
+export const SETTINGS_VERSION = 12
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -206,12 +207,12 @@ function chordFinderSettings(value: unknown): ChordFinderSettings {
 const isSheetView = isOneOf(SHEET_VIEWS)
 
 /**
- * The Player's view: the music's view and Diagrams' mode, each switch and the layout as saved where
- * still valid, the staves hidden each once.
+ * The Player's view: the music's view, Diagrams' mode and Chords over lyrics' text size, each switch
+ * and the layout as saved where still valid, the staves hidden each once.
  */
 function scoreViewSettings(value: unknown): ScoreViewSettings {
   const saved = savedObject<ScoreViewSettings>(value)
-  const switched = (key: 'askOnOpen' | 'chordNames' | 'lyrics' | 'keys') =>
+  const switched = (key: 'askOnOpen' | 'chordNames' | 'lyrics' | 'pinned' | 'keys') =>
     typeof saved[key] === 'boolean' ? saved[key] : DEFAULT_SCORE_VIEW[key]
   const hidden: unknown = saved.hidden
   return {
@@ -221,6 +222,8 @@ function scoreViewSettings(value: unknown): ScoreViewSettings {
     askOnOpen: switched('askOnOpen'),
     chordNames: switched('chordNames'),
     lyrics: switched('lyrics'),
+    pinned: switched('pinned'),
+    textSize: isTextSize(saved.textSize) ? saved.textSize : DEFAULT_SCORE_VIEW.textSize,
     keys: switched('keys'),
     hidden: Array.isArray(hidden) ? [...new Set(hidden.filter(isStaffId))] : [],
   }

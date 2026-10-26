@@ -3,7 +3,18 @@ import type { CSSProperties } from 'react'
 import { useBarName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { BAR, barWords } from '../model/bar-look'
+import type { BarWords, BeatWords } from '../model/bar-words'
 import { BarCells } from './BarCells'
+
+/** No words under a bar. */
+const NO_WORDS: BarWords = []
+
+/** A verse's words as said: a word's syllables joined, words parted by a space. */
+const said = (verse: readonly BeatWords[]): string =>
+  verse
+    .map(({ text }) => text)
+    .join(' ')
+    .replaceAll('- ', '')
 
 /**
  * What a tap on a chart's bar does: plays it, a toggle pressed while it sounds (a song's chart); or
@@ -24,7 +35,7 @@ const beatTapped = (target: EventTarget): number => {
  * or short length; a bar of no chord its number alone (ADR 0094). `marked` while it plays: the bar
  * sounding, with a square to stop it, or the bar the Player is in, a pointer's target only, as the
  * sheet's bars are (the arrows move the cursor), its beat sounding filled (`sounding`). The loop's
- * bars (`looped`) lie on its band.
+ * bars (`looped`) lie on its band. Its words under its cells (`words`, ADR 0108).
  */
 export function BarButton({
   tap,
@@ -32,6 +43,7 @@ export function BarButton({
   symbols,
   cells,
   notes,
+  words = NO_WORDS,
   marked,
   sounding,
   looped,
@@ -46,6 +58,8 @@ export function BarButton({
   cells: readonly (readonly string[])[]
   /** Method labels and a short bar's length, under the chords. */
   notes: readonly string[]
+  /** Its words, verse by verse, under the beats they are sung on. */
+  words?: BarWords
   marked: boolean
   /** The beat sounding, filled: the Player's, in the bar it is in. */
   sounding: number | null
@@ -59,8 +73,9 @@ export function BarButton({
   return (
     <button
       type="button"
-      // Named by all it prints, as it prints it: its number, its chords, and the notes under them.
-      aria-label={barName(number, barWords(symbols, notes))}
+      // Named by all it prints, as it prints it: its number, its chords, its words (verse 1) and the
+      // notes under them.
+      aria-label={barName(number, barWords(symbols, [said(words[0] ?? []), ...notes]))}
       {...(tap === 'play'
         ? { 'aria-pressed': marked }
         : { 'aria-current': marked ? ('step' as const) : undefined, tabIndex: -1 })}
@@ -75,6 +90,7 @@ export function BarButton({
         number={number}
         cells={cells}
         notes={notes}
+        words={words}
         sounding={sounding}
         playing={playing}
         looped={looped}

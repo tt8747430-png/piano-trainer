@@ -1,4 +1,5 @@
 import { beatCells, type CellBar } from '@/features/practice'
+import type { BarWords, BeatWords } from '@/widgets/chord-chart'
 import type { Performance, PerformanceNote } from '@/shared/lib/arrangement'
 import { beatsToTicks, type Syllable, type Tick } from '@/shared/lib/music'
 
@@ -206,9 +207,9 @@ export function lyricLines(performance: Performance): LyricLine[] {
  * all: a line of neither words nor chords (an own song's bars of no chord symbol and nothing sung)
  * shows nothing, so it is left out, and its section's name heads its first line shown (`starts`).
  */
-export function shownLines(
-  lines: readonly LyricLine[],
-): { readonly line: LyricLine; readonly index: number; readonly starts: boolean }[] {
+export function shownLines<Line extends LyricLine>(
+  lines: readonly Line[],
+): { readonly line: Line; readonly index: number; readonly starts: boolean }[] {
   const shown = lines.flatMap((line, index) =>
     line.sung || line.segments.some(({ chord }) => chord !== null) ? [{ line, index }] : [],
   )
@@ -231,17 +232,57 @@ export function lineWords(line: LyricLine, verse = 0): string {
 
 /**
  * Where the chord sounding in a beat is shown (as written, its first pass): its line and segment,
- * the later where two sound in it; none where no chord does (a bar of none).
+ * the later where two sound in it; none where no chord does (a bar of none). A line shown once for
+ * the copies written after it (ADR 0108) marks theirs too, each `copies` on from its own start.
  */
 export function soundingChip(
-  lines: readonly LyricLine[],
+  lines: readonly (LyricLine & { readonly copies?: readonly Tick[] })[],
   beat: Span,
 ): { readonly line: number; readonly segment: number } | null {
   let found: { line: number; segment: number } | null = null
-  lines.forEach(({ segments }, line) =>
+  lines.forEach(({ segments, copies = [0] }, line) =>
     segments.forEach(({ chord, from, to }, segment) => {
-      if (chord !== null && from < beat.to && to > beat.from) found = { line, segment }
+      const sounds = copies.some((by) => from + by < beat.to && to + by > beat.from)
+      if (chord !== null && sounds) found = { line, segment }
     }),
   )
   return found
+}
+
+/**
+ * The Grid's words (ADR 0108): each bar's, as written (its first pass), verse by verse, each verse
+ * the words sung in each beat, a word the next beat goes on with hyphened. Only the bars with words;
+ * none for music of none.
+ */
+export function gridWords(performance: Performance): ReadonlyMap<number, BarWords> {
+  const sung = sungNotes(performance)
+  const verses = Math.max(0, ...sung.map((note) => note.lyrics?.length ?? 0))
+  const words = new Map<number, BarWords>()
+  if (verses === 0) return words
+  for (const bar of beatCells(performance)) {
+    const start = performance.bars[bar.played]?.startTick ?? 0
+    const end = start + (bar.cells.at(-1)?.to ?? 0)
+    // Each verse's syllables by beat, in time.
+    const beats = Array.from({ length: verses }, () => new Map<number, Syllable[]>())
+    for (const note of sung) {
+      if (note.startTick < start || note.startTick >= end) continue
+      const beat = Math.max(
+        0,
+        bar.cells.findLastIndex(({ from }) => from <= note.startTick - start),
+      )
+      note.lyrics?.forEach((syllable, verse) => {
+        if (!syllable) return
+        const sungThere = beats[verse]?.get(beat) ?? []
+        beats[verse]?.set(beat, [...sungThere, syllable])
+      })
+    }
+    const shown = beats.map((byBeat) =>
+      [...byBeat].map(([beat, syllables]): BeatWords => {
+        const { text, goesOn } = wordsOf(syllables)
+        return { beat, text: goesOn ? `${text}-` : text }
+      }),
+    )
+    if (shown.some((verse) => verse.length > 0)) words.set(bar.written, shown)
+  }
+  return words
 }

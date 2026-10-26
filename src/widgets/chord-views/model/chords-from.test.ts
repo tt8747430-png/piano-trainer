@@ -3,7 +3,7 @@ import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { chordsFrom } from './chords-from'
+import { chordNear, chordsFrom, pairSlide } from './chords-from'
 
 /** A song of 4/4 bars in C, played as the Player plays it, the repeats taken. */
 function song(...lines: string[]): Performance {
@@ -74,5 +74,36 @@ describe('chordsFrom', () => {
   it('has none, and none next, in music of no chord', () => {
     const none = song('_ _')
     expect(chordsFrom(none, beat(0, 0), null)).toEqual({ now: null, next: null })
+  })
+})
+
+describe('pairSlide', () => {
+  const four = song('C G Am F')
+  const pair = { now: 0, next: 1 }
+
+  it('holds the pair still until the half beat before the change, then slides it there', () => {
+    expect(pairSlide(four, pair, null, 0)).toBe(0)
+    expect(pairSlide(four, pair, null, 84)).toBe(0)
+    expect(pairSlide(four, pair, null, 90)).toBe(0.5)
+    expect(pairSlide(four, pair, null, 96)).toBe(1)
+  })
+
+  it('slides to a loop’s start as the loop goes round, and not at all with no next', () => {
+    const loop = { from: 0, to: 192 }
+    expect(pairSlide(four, { now: 1, next: 0 }, loop, 186)).toBe(0.5)
+    expect(pairSlide(four, { now: 1, next: null }, null, 186)).toBe(0)
+    expect(pairSlide(four, { now: null, next: 1 }, null, 90)).toBe(0)
+  })
+})
+
+describe('chordNear', () => {
+  const twice = song('C G C Am')
+
+  it('finds a chord where it next starts from a tick, else where it first does', () => {
+    const at = (symbol: string, tick: number) => twice.chords[chordNear(twice, symbol, tick) ?? -1]
+    expect(at('C', 0)?.startTick).toBe(0)
+    expect(at('C', 10)?.startTick).toBe(192)
+    expect(at('C', 200)?.startTick).toBe(0)
+    expect(chordNear(twice, 'D', 0)).toBeNull()
   })
 })

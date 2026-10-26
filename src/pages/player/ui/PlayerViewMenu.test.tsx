@@ -263,21 +263,80 @@ describe('the View, by view (ADR 0102)', () => {
     await user.click(within(menu).getByRole('radio', { name: 'Ноты' }))
     const layout = within(menu).getByRole('radiogroup', { name: 'Расположение' })
     expect(segmentsOf(layout)).toEqual(['Страницы', 'Прокрутка вниз', 'Прокрутка вбок'])
-    await user.click(
-      within(menu).getByRole('button', { name: 'Подробнее: Как показывать музыку' }),
-    )
+    await user.click(within(menu).getByRole('button', { name: 'Подробнее: Как показывать музыку' }))
     await screen.findByRole('dialog', { name: 'Как показывать музыку' })
     expect(untranslated(document.body)).toEqual([])
   })
 
-  it('gives Chords over lyrics and the Grid no section of their own', async () => {
+  it('heads Chords over lyrics’ own with its name: its diagrams pinned and its text size (ADR 0108)', async () => {
     const user = userEvent.setup()
-    await renderApp('/play/silent')
-    const menu = await openView(user, 'Sheet music')
-    for (const view of ['Chords over lyrics', 'Grid']) {
-      await user.click(within(menu).getByRole('radio', { name: view }))
-      expect(groupsOf(menu)).toEqual(['Show the music as', 'Every view'])
-      switchesAre(menu, 'Ask each time a song opens', 'Keys')
+    const { settingsStore } = await savedAs('lyrics', '/play/silent')
+    const menu = await openView(user, 'Chords over lyrics')
+    expect(groupsOf(menu)).toEqual(['Show the music as', 'Chords over lyrics', 'Every view'])
+    const lyrics = within(menu).getByRole('region', { name: 'Chords over lyrics' })
+    switchesAre(lyrics, 'Diagrams pinned')
+    await user.click(within(lyrics).getByRole('switch', { name: 'Diagrams pinned' }))
+    expect(settingsStore.getState().scoreView.pinned).toBe(false)
+    const size = within(lyrics).getByRole('group', { name: 'Text size' })
+    expect(size).toHaveTextContent('100%')
+    const larger = within(size).getByRole('button', { name: 'Larger text' })
+    for (const step of [115, 130, 150]) {
+      await user.click(larger)
+      expect(settingsStore.getState().scoreView.textSize).toBe(step)
+      expect(size).toHaveTextContent(`${step}%`)
     }
+    expect(larger).toBeDisabled()
+    const smaller = within(size).getByRole('button', { name: 'Smaller text' })
+    for (let i = 0; i < 5; i++) await user.click(smaller)
+    expect(settingsStore.getState().scoreView.textSize).toBe(80)
+    expect(smaller).toBeDisabled()
+    // The song's words take it, its chords with them.
+    expect(document.querySelector('[data-line="0"]')?.parentElement).toHaveStyle({
+      fontSize: '80%',
+    })
+  })
+
+  it('heads the Grid’s own with its name: its Lyrics, the words under its beats (ADR 0108)', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await savedAs('grid', '/play/silent')
+    const menu = await openView(user, 'Grid')
+    expect(groupsOf(menu)).toEqual(['Show the music as', 'Grid', 'Every view'])
+    const grid = within(menu).getByRole('region', { name: 'Grid' })
+    switchesAre(grid, 'Lyrics')
+    expect(within(musicArea()).getByRole('button', { name: /^Bar 1: C · Silent$/ })).toBeVisible()
+    await user.click(within(grid).getByRole('switch', { name: 'Lyrics' }))
+    expect(settingsStore.getState().scoreView.lyrics).toBe(false)
+    expect(within(musicArea()).getByRole('button', { name: 'Bar 1: C' })).toBeInTheDocument()
+  })
+
+  it('greys the Lyrics of a song of no words, saying why in its ⓘ (ADR 0108)', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await savedAs('grid', '/play/bz5')
+    const menu = await openView(user, 'Grid')
+    const lyrics = within(menu).getByRole('switch', { name: 'Lyrics' })
+    expect(lyrics).toHaveAttribute('aria-disabled', 'true')
+    await user.click(within(menu).getByRole('button', { name: 'About Lyrics' }))
+    expect(await screen.findByRole('dialog', { name: 'Lyrics' })).toHaveTextContent(
+      'The music has no words',
+    )
+    await user.keyboard('{Escape}')
+    await user.click(within(menu).getByRole('radio', { name: 'Diagrams' }))
+    expect(settingsStore.getState().scoreView.music).toBe('diagrams')
+    expect(within(menu).getByRole('switch', { name: 'Lyrics' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
+  })
+
+  it('reads Chords over lyrics’ and the Grid’s own in Russian', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await savedAs('lyrics', '/play/silent', { locale: 'ru' })
+    await user.click(screen.getByRole('button', { name: 'Вид: Аккорды над текстом' }))
+    const menu = await screen.findByRole('dialog', { name: 'Вид' })
+    expect(within(menu).getByRole('group', { name: 'Размер текста' })).toBeInTheDocument()
+    expect(untranslated(document.body)).toEqual([])
+    act(() => setScoreView(settingsStore, { music: 'grid' }))
+    expect(within(menu).getByRole('switch', { name: 'Текст' })).toBeInTheDocument()
+    expect(untranslated(document.body)).toEqual([])
   })
 })
