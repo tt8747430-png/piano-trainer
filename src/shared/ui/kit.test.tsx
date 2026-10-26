@@ -20,6 +20,7 @@ import { PlayLabel } from './PlayLabel'
 import { RatingMark } from './RatingMark'
 import { RoundButton } from './RoundButton'
 import { RoundLink } from './RoundLink'
+import { RowButton } from './RowButton'
 import { RowGroup } from './RowGroup'
 import { RowLink } from './RowLink'
 import { ScreenBarProvider } from './ScreenBarProvider'
@@ -628,6 +629,26 @@ describe('RowLink', () => {
     expect(
       within(link).getByText('Hymn').compareDocumentPosition(within(link).getByText('G G7 C D')),
     ).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+  })
+
+  it('wears a chevron, the disclosure of the page it leads to', () => {
+    render(<RowLink title="Chords" render={<a href="/practice/chords" />} />)
+    expect(
+      screen.getByRole('link', { name: 'Chords' }).querySelector('[data-slot="row-chevron"]'),
+    ).toBeInTheDocument()
+  })
+})
+
+describe('RowButton', () => {
+  it('opens in place as a button, a row’s tile and title with no chevron', async () => {
+    const onClick = vi.fn()
+    render(<RowButton title="Learn C♯m" icon={Settings} paint="sky" onClick={onClick} />)
+    const row = screen.getByRole('button', { name: 'Learn C♯m' })
+    expect(row).toHaveAttribute('type', 'button')
+    expect(row.querySelector('[data-slot="row-tile"]')).toHaveClass('bg-paint-sky')
+    expect(row.querySelector('[data-slot="row-chevron"]')).not.toBeInTheDocument()
+    await userEvent.setup().click(row)
+    expect(onClick).toHaveBeenCalledOnce()
   })
 })
 

@@ -664,7 +664,8 @@ and how an interval is heard). A pop-up button stays for long lists and beside o
   of one line, what it carries at its end (a key, a level's mark, the learned badge) and a chevron (the disclosure
   indicator). A titled group of them is a grid of row cards, each its own card and each card the link: its hover
   fills the whole card (sand) and moves the chevron 2px, never a box inside the card. A list of one kind (the Patterns
-  page) goes without tiles: every row would wear the same one.
+  page) goes without tiles: every row would wear the same one. A row that opens a sheet over its page (a section's
+  chords, each opening its chord's sheet) is the same row without the chevron: a button, not a link.
 - **Sheet** (card paper, 20px top, swipe handle, its Literata title at the left with a Close at the right, a scrolling
   body with 20px insets, an optional footer over a hairline): Setup, New song, the takes, Song information, a chord's.
 - **Note** (a lesson's callout, a note the learner reads): sand, 14px corners, 16px inset, body text.

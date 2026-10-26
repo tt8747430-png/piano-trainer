@@ -33,13 +33,14 @@ A container wires data to presentational children. One job each.
   its row), `InfoTip` (a control's explanation: an ⓘ beside its name opening a popover, §10), `ToggleTile` in a `ToggleGrid` (on or off as an icon over its name), `ToolButton` (a palette's tool: an
   icon or glyph, named in a tooltip), `LearnedBadge`, `TypedField`
   (music typed by name, in the book serif) and `NameField` (a name the learner gives, in the controls' face), `PlayToggle` (a chord or note pressed while it sounds) and `ChordButton` over it, `PlayLabel`,
-  `ToneChip`, `Fact`, `RowLink` and `RowGroup` (a row that leads to a page: a titled grid of row cards), `PAGE_TILES`, `SearchField` (a screen's search box), `PAINT`
+  `ToneChip`, `Fact`, `RowLink` and `RowGroup` (a row that leads to a page: a titled grid of row cards), `RowButton` (a row
+  that opens a sheet over its page: `RowLink`'s face, `RowFace`, without the chevron), `PAGE_TILES`, `SearchField` (a screen's search box), `PAINT`
   (the chrome's paints for a tile), `Sheet` / `SheetTrigger` / `SheetContent` (with its own Close for a screen reader), `RatingMark`,
   `LevelMark`, `LazyScoreView`, `NotFound` (a page that is not there, or no longer: its one line and the way on). A choice a component would make by a boolean prop is a component of its own (an
   explicit variant) or its children: a Setup sheet composes its first page, `ChordRow` its parts.
 - **Every page earns its place.** A screen does its job in place, or is a link the learner chose knowing where it goes:
   no middle man, no redirect the learner did not choose, no "coming soon". A row that leads to a page is a `RowLink`,
-  with its chevron.
+  with its chevron; a row that opens a sheet or a dialog over its page is a `RowButton`, with none.
 - **A thing's page and a tool's are two pages** (ADR 0044). An explorer's URL names the thing it shows; a tool's holds
   what the learner gave it. A tool is never a tab of a thing: tabs are the views of one thing. An explorer ends with
   its ways into the Player, then a Tools group whose rows open each tool on what the page shows. A new page of
