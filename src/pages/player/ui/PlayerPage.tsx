@@ -82,12 +82,8 @@ function PiecePlayer({ piece }: { piece: Piece }) {
           // A piece written in degrees has the piano's staves alone.
           staves={isDegreePiece(piece) ? undefined : piece.staves}
           recorded={piece.recording !== undefined}
-          modes={
-            // A piece written in degrees has no score to edit.
-            isDegreePiece(piece) ? null : (
-              <ModeSwitch pieceId={piece.id} mode="practise" bar={bar + 1} />
-            )
-          }
+          // Every piece is edited: one written in degrees as its chart in its key (ADR 0110).
+          modes={<ModeSwitch pieceId={piece.id} mode="practise" bar={bar + 1} />}
           setup={
             <PieceSetup
               piece={piece}

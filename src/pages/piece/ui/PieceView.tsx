@@ -109,13 +109,12 @@ export function PieceView({ piece }: { piece: Piece }) {
         crowded
         actions={
           <>
-            {isDegreePiece(piece) ? null : (
-              <RoundLink
-                label={t('edit')}
-                icon={PencilLine}
-                render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
-              />
-            )}
+            {/* Every piece is edited: one written in degrees as its chart in its key (ADR 0110). */}
+            <RoundLink
+              label={t('edit')}
+              icon={PencilLine}
+              render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
+            />
             {own ? null : <LearnedButton step={step} round />}
             {inLibrary ? <FavouriteButton piece={piece.id} /> : null}
             <div ref={more} className="contents">

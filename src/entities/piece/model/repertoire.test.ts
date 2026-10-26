@@ -93,10 +93,16 @@ describe('repertoire', () => {
     expect(pieces.entry('bz4')?.kind).toBe('song')
   })
 
-  it('leaves a song written in degrees and an unknown id as they are', () => {
-    const pieces = repertoire({ versions: { romashki: VERSION, gone: VERSION }, songs: [] })
-    expect(pieces.piece('romashki')).toBe(pieceById('romashki'))
+  it('plays a version of a song written in degrees as a chart, and leaves an unknown id out', () => {
+    const music = { ...VERSION }
+    const pieces = repertoire({ versions: { romashki: music, gone: music }, songs: [] })
+    expect(pieces.piece('romashki')).toMatchObject({ id: 'romashki', sections: music.sections })
+    expect(pieces.original('romashki')).toBe(pieceById('romashki'))
     expect(pieces.piece('gone')).toBeUndefined()
+  })
+
+  it('leaves a song written in degrees as it is while the learner has no version', () => {
+    expect(repertoire({ versions: {}, songs: [] }).piece('romashki')).toBe(pieceById('romashki'))
   })
 
   it('gives the learner’s own songs, in the order made', () => {

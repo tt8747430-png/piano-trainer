@@ -1649,9 +1649,12 @@ describe('the score editor', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1/)
   })
 
-  it('shows not found for a song written in degrees', async () => {
+  it('opens a song written in degrees as its chart in its key, its edits a version (ADR 0110)', async () => {
     await renderApp('/edit/romashki')
-    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Daisy fields' }),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Page not found' })).not.toBeInTheDocument()
   })
 })
 

@@ -42,11 +42,11 @@ describe('the learner’s pieces', () => {
     songs: [{ ...music, id: 'my-1', title: 'Morning' }] as const,
   }
 
-  it('find a version of a song, study or listing, never of one written in degrees or an unknown id', () => {
+  it('find a version of a song, study or listing, one written in degrees too, never of an unknown id', () => {
     expect(selectVersion(state, 'bz1')).toBe(music)
     expect(selectHasVersion(state, 'bz4')).toBe(true)
     expect(selectHasVersion(state, 'bz5')).toBe(false)
-    expect(selectHasVersion(state, 'romashki')).toBe(false)
+    expect(selectHasVersion(state, 'romashki')).toBe(true)
     expect(selectHasVersion(state, 'gone')).toBe(false)
     expect(selectHasVersion(state, 'constructor')).toBe(false)
   })
