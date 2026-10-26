@@ -137,6 +137,7 @@ export { chordsHolding, HOLDING_GROUPS, type HoldingChord, type HoldingGroup } f
 export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } from './passing-chords'
 export { voiceLead, type RowPosition } from './voice-lead'
 export { handPosition, type FromTone, type HandPosition } from './hand-position'
+export { isSimpleChord, simplifyChord } from './simple-chord'
 export {
   hasMinorThird,
   numeralChord,
