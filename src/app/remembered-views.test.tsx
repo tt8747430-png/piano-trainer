@@ -30,6 +30,48 @@ describe('Remembered views', () => {
     )
   })
 
+  it('brings a piece back transposed and simplified, for it alone, however it is opened (ADR 0104)', async () => {
+    const user = userEvent.setup()
+    const storage = createMemoryStorage()
+    const first = await renderApp('/play/lightly-row', { storage })
+    await user.click(await screen.findByRole('button', { name: /^Transpose/ }))
+    await user.click(await screen.findByRole('button', { name: 'Down a semitone' }))
+    await user.keyboard('{Escape}')
+    await user.click(screen.getByRole('button', { name: 'Simplify' }))
+    await waitFor(() =>
+      expect(first.viewsStore.getState().views['/play/lightly-row']).toEqual({
+        key: 'B',
+        simple: true,
+      }),
+    )
+    first.unmount()
+    // Opened plainly, from its page: as it was left.
+    const plain = await renderApp('/songs/lightly-row', { storage })
+    await user.click(await screen.findByRole('link', { name: 'Practise' }))
+    await waitFor(() =>
+      expect(plain.router.state.location.search).toEqual({ key: 'B', simple: true }),
+    )
+    expect(await screen.findByRole('button', { name: 'Simplify' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    plain.unmount()
+    // Opened by a link that names its bars: those, transposed and simplified as kept.
+    const looped = await renderApp('/play/lightly-row?loop=2-3', { storage })
+    await waitFor(() =>
+      expect(looped.router.state.location.search).toEqual({
+        loop: '2-3',
+        key: 'B',
+        simple: true,
+      }),
+    )
+    looped.unmount()
+    // Another piece plays as written.
+    const other = await renderApp('/play/bz5?loop=1-1', { storage })
+    await screen.findByRole('button', { name: 'Simplify' })
+    expect(other.router.state.location.search).toEqual({ loop: '1-1' })
+  })
+
   it('remembers a screen’s own params as its route reads them, and no screen not found', async () => {
     const storage = createMemoryStorage()
     const { viewsStore } = await renderApp('/play/bz5?key=A&junk=x', { storage })

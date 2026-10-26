@@ -26,7 +26,9 @@ import { usePlayer } from '../model/use-player'
 import { MoreActions } from './more-actions'
 import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
+import { SimplifyTool } from './SimplifyTool'
 import { SongInfo } from './SongInfo'
+import { TransposeTool } from './TransposeTool'
 
 function PiecePlayer({ piece }: { piece: Piece }) {
   const { t } = useTranslation(['player', 'piece'])
@@ -34,11 +36,8 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
   const close = useClose(piece)
   const setSearch = useViewChange<PlayerSearch>()
-  const { choice, performance, player, fit, headings, changeSetup } = usePlayer(
-    piece,
-    search,
-    setSearch,
-  )
+  const { choice, performance, player, fit, headings, simplifies, changeSetup, simplify } =
+    usePlayer(piece, search, setSearch)
   const title = entryTitles(piece, locale).primary
   // The bar as written the cursor is in, and the cursor taken to one (ADR 0090).
   const bar = writtenBarAt(performance, player.practice.state.beatGroup)
@@ -90,9 +89,21 @@ function PiecePlayer({ piece }: { piece: Piece }) {
             choice={choice}
             fit={fit}
             swing={isCompound(piece.meter) ? null : search.swing}
+            simple={choice.simple && simplifies}
             onChange={changeSetup}
             onSwing={player.setSwing}
           />
+        }
+        // Chordify's toolbar after the View (ADR 0104): the key the piece is played in, and Simplify.
+        tools={
+          <>
+            <TransposeTool
+              piece={piece}
+              tonic={choice.tonic}
+              onChange={(key) => changeSetup({ key })}
+            />
+            <SimplifyTool on={choice.simple} simplifies={simplifies} onChange={simplify} />
+          </>
         }
         info={{
           key: 'info',

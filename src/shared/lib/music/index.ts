@@ -70,6 +70,7 @@ export {
   transposedKey,
   transposeNote,
   transposition,
+  TRANSPOSITION_RANGE,
   writtenKey,
   isWrittenKey,
   writtenKeyAccidentals,

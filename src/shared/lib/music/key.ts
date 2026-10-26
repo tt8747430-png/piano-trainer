@@ -82,13 +82,16 @@ export const transposedKey = (key: Key, semitones: number): Key =>
         minor: key.minor,
       }
 
+/** How far a transposition moves the music, in semitones: the short way, a tritone up at most. */
+export const TRANSPOSITION_RANGE = { min: -5, max: 6 } as const
+
 /**
  * How far the music moves from one tonic to another, the short way its written notes move: −5 to
- * +6 semitones.
+ * +6 semitones (`TRANSPOSITION_RANGE`).
  */
 export function transposition(from: SpelledNote, to: SpelledNote): number {
   const up = pitchClass(pitchClassOf(to) - pitchClassOf(from))
-  return up > 6 ? up - 12 : up
+  return up > TRANSPOSITION_RANGE.max ? up - 12 : up
 }
 
 /**

@@ -3,8 +3,7 @@ import { choosableChordSize, isLeadSheet, isOwnKey, pieceKey, type Piece } from 
 import type { PracticeChoice } from '@/features/practice'
 import type { PatternFit } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
-import { noteParam, writtenKeyAccidentals } from '@/shared/lib/music'
-import { ChordSizeField, Labelled, NoteChoice } from '@/shared/ui'
+import { ChordSizeField, Labelled } from '@/shared/ui'
 import {
   TuneToggle,
   PatternCard,
@@ -15,14 +14,16 @@ import {
 import { PlayingSection } from '@/widgets/practice-player'
 
 /**
- * A piece's Setup: its key, the pattern and figures, its chord size, tune and recording where it
- * has them, and how it plays; at its foot the way into the score editor, whose Close comes back here.
+ * A piece's Setup: the pattern and figures, its chord size, tune and recording where it has them,
+ * and how it plays. Its key is the tools row's Transpose (ADR 0104); its chord size, a song's
+ * written in degrees, greyed while Simplify plays every chord as its triad, its ⓘ saying so.
  */
 export function PieceSetup({
   piece,
   choice,
   fit,
   swing,
+  simple,
   onChange,
   onSwing,
 }: {
@@ -32,28 +33,26 @@ export function PieceSetup({
   fit: PatternFit
   /** Null where the meter cannot swing. */
   swing: boolean | null
+  /** Whether Simplify plays the piece's chords as triads. */
+  simple: boolean
   onChange: (change: SetupChange) => void
   onSwing: (on: boolean) => void
 }) {
   const { t } = useTranslation(['player', 'music'])
   const keyName = useKeyName()
-  const own = pieceKey(piece)
   const chordSize = choosableChordSize(piece)
   // The recording plays in its own key alone: elsewhere its tile is closed, and says why.
-  const ownKey = piece.recording && !isOwnKey(piece, choice.tonic) ? keyName(own) : null
+  const ownKey = piece.recording && !isOwnKey(piece, choice.tonic) ? keyName(pieceKey(piece)) : null
   return (
     <PlayerSetup figures={choice} fit={fit} onFigures={onChange}>
-      <NoteChoice
-        label={t('key')}
-        value={noteParam(choice.tonic)}
-        accidentals={(letter) => writtenKeyAccidentals(letter, own.minor)}
-        name={(tonic) => keyName({ tonic, minor: own.minor })}
-        onChange={(key) => onChange({ key })}
-      />
       {chordSize ? (
-        <Labelled label={t('music:chordSize.label')}>
+        <Labelled
+          label={t('music:chordSize.label')}
+          info={simple ? t('simplify.chordSize') : undefined}
+        >
           <ChordSizeField
             value={choice.chordSize ?? chordSize}
+            disabled={simple}
             onChange={(next) => onChange({ chordSize: next })}
           />
         </Labelled>
