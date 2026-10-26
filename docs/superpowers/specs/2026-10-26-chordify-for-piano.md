@@ -2,7 +2,7 @@
 
 Date: 2026-10-26 · Decisions: [ADR 0101](../../adr/0101-chord-diagrams-on-one-keyboard.md),
 [ADR 0102](../../adr/0102-the-players-tools-row-and-its-view.md),
-[ADR 0103](../../adr/0103-the-learners-library.md) (later rounds add theirs) · Follows:
+[ADR 0106](../../adr/0106-one-library-of-songs.md) (later rounds add theirs) · Follows:
 [chord views and song lessons](2026-10-25-chord-views-and-song-lessons.md) (ADR 0099, 0100).
 
 The owner: every Chordify feature but the guitar's (capo, tuning, the tuner, the instrument choice, left-handed),
@@ -278,25 +278,74 @@ The Player has a metronome and a count-in already: the Setup's practice toggles,
 2. **Tempo:** the learner's speed from 50% to 200% of the song's, in 5% steps, where the tempo popover offers
    speeds. `TEMPO_RANGE` follows.
 
-## 6. Round 5 — The learner's library
+## 6. Round 5 — One library of songs, Mindscape's (ADR 0106)
 
-1. **`pt-library`:** favourites, ordered, and setlists, each with an id, a name and its pieces in order. It joins
-   the backup.
-2. **Favourites:**
-   - a ♡ in the song's page bar and "Add to favourites" in the Player's More;
-   - shown as the first setlist, "Favourites", which cannot be renamed or deleted.
-3. **Setlists:**
-   - a page each (`/songs/setlists/$setlistId`): its songs in order, reordered by drag (memory-palaces'
-     `useSortableList`, `moveBlock` and `order.ts` engine over dnd-kit);
-   - renamed in place (its `EditableTitle`'s behaviour), duplicated, deleted (asked first), and added to by
-     search;
-   - Play: the first song, then each song's end offers the next. It opens by itself unless played again.
-   - "Add to setlist", from the Player's More and the song's page More: a sheet of the setlists with "New setlist".
-4. **Songs** opens on the learner's library:
-   - Favourites, the setlists and Recently played (from what is practised now);
-   - "Songs I can play": tick the chords you know, and the songs that use only those are listed.
+The round's first build (ADR 0103: Favourites and Setlists as tabs of Songs, a setlist's page) was not one library.
+The owner: the songs one library, the built-in songs already in a folder each, folders of the learner's own, "a real
+song library like in memory palaces", and what the learner removes restored from Settings.
 
-   A song's row says how many chords it has.
+**From Mindscape** (`memory-palaces`): `pages/deck-library` (Home and a folder's page, `FolderRow`, `FolderSheet`,
+`LibrarySpeedDial`, `LibrarySelectView`, `LibraryDialogs`, `LibraryEmpty`, its `use-library*` hooks),
+`widgets/deck-tree` (`DestinationSheet`, `select-rows`, `LibrarySelectList`, `FilteredNotice`, `row-style`),
+`entities/folder`, `shared/lib/library-arrangement.ts`, `shared/ui/SwipeRow.tsx` with `shared/config/swipe.ts` and
+its helpers, `pages/archived-decks`, and its ADR 0003, the archive is a place.
+
+1. **Songs is the library.** Its Home holds the folders, then the songs that stand at Home.
+   - **The built-in collections are folders from the start:** Learning songs, Боже, спасибо, Called to Play, Called
+     to Play 2, Hymns and Горшков, in catalog order, each with its own picture and colour, its songs in catalog
+     order.
+   - **The learner's own songs** stand at Home, or in the folder they were made in.
+   - **A folder's row:** its tile (its picture on its colour), its name, its songs counted.
+   - **A folder's page** (`/songs/folders/$folderId`): Back, its name, More (Edit folder, Archive folder, and Delete
+     folder for the learner's own), its songs.
+   - **New, floating** (a speed dial): New song, made where the learner is (at Home or in the folder open), and New
+     folder, at Home.
+2. **A folder's look.** New folder and Edit folder are one sheet: its name (a new one's suggested, "New folder",
+   "New folder 2"), its picture (a choice of music pictures) and its colour (the theme's paints). A built-in folder
+   can be renamed and restyled too; its name is said in either language until the learner renames it.
+3. **A song's actions:** on its row's More (⋯) at every size, and by a swipe on a touch screen (Mindscape's
+   `SwipeRow`: to the right Favourite; to the left Move and Archive):
+   - **Favourite**, the ♡; the song page's bar and the Player's More keep theirs;
+   - **Move to…** (`DestinationSheet`): Home, each folder on its tile, and New folder (made, and the song moved into
+     it);
+   - **Archive**, with Undo in a toast;
+   - **Delete**, the learner's own song only, asked first: for good, its takes with it.
+
+   The song page's More and the Player's More offer Move to… and Archive too (and an own song's Delete, as now).
+4. **A folder's actions:** Edit, Archive (with its songs; Undo) and, for the learner's own folder, Delete, asked
+   first. A deleted folder never takes a song with it: its songs stand where it stood, at Home or in the archive.
+5. **Select** (the bar's Select, or a long press on a row): a check on each row (and on each folder at Home), Select
+   all, and a bar at the foot: Favourite · Move · Archive, and Delete where every song chosen is the learner's own.
+   In the Manual order each row has a handle that moves it (folders among folders, songs among songs; by drag or by
+   the keyboard, a screen reader told where it went).
+6. **Sort:** Manual (the order the learner drags), Name, Recently played (as Learn's songs played last; a song
+   never played after them in its order). It is the library's own and kept.
+7. **The search and filters** (Stage, With chords, Chords I know, and Favourites):
+   - **At Home** they look through the whole library: the songs that match, under their folders' names.
+   - **In a folder** they narrow its songs.
+   - **While they hide songs**, `FilteredNotice` says how many and clears them.
+8. **The archive is a place** (Mindscape's ADR 0003):
+   - **Archiving** takes a song, or a folder with its songs, out of the library into the archive.
+   - **Restore** puts a song back where it stood if that place is still in the library, else at Home, last; a
+     folder back at Home, last, with its songs. The toast's Undo puts either back exactly where it was.
+   - **Its page** (`/songs/archive`) is reached from Settings › Library (its count) and, while it holds anything,
+     from the last row of Songs' Home. Newest first; each row's Restore; Restore all; Delete, asked first, for the
+     learner's own song and folder.
+9. **Saved:** `pt-library` v2 (ADR 0038: no migration) holds only what the learner changed:
+   - the folders in Home's order (a built-in one by its collection's id, the learner's `folder-<n>`), each with its
+     look, the name the learner gave it, and its songs in order;
+   - the songs at Home, in order;
+   - the favourites;
+   - the archive, newest first;
+   - the sort.
+
+   **Read, never written:** a built-in folder the store does not hold (a collection added later) stands after the
+   others. A built-in song the store places nowhere stands last in its collection's folder, and is archived with it
+   while that folder is. An own song placed nowhere, or a song whose folder is gone, stands at Home.
+10. **Removed, with no legacy:** Songs' tabs (All, Favourites, Setlists, the collections), the setlists (their page,
+    the Add to setlist sheet, Search's setlists) and ADR 0103, superseded. Chords I know, the ♡, the chord count on
+    a row and the sortable engine stay.
+11. **Later:** a folder played song after song (Chordify's setlist play: the song's end offers the next).
 
 ## 7. Round 6 — Share, print, MIDI, song information, sections
 

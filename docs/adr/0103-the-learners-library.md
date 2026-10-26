@@ -1,7 +1,8 @@
 # ADR 0103 — The learner's library on Songs: Favourites, setlists, Chords I know
 
-- **Status:** accepted · **Date:** 2026-10-26 · **Amends:** ADR 0099 (the Player's More), ADR 0100 (the song's
-  page's bar) · **Spec:** [Chordify for piano](../superpowers/specs/2026-10-26-chordify-for-piano.md) §6
+- **Status:** superseded by [ADR 0106](0106-one-library-of-songs.md) · **Date:** 2026-10-26 · **Amends:** ADR 0099
+  (the Player's More), ADR 0100 (the song's page's bar) · **Spec:**
+  [Chordify for piano](../superpowers/specs/2026-10-26-chordify-for-piano.md) §6
 
 ## Context
 
