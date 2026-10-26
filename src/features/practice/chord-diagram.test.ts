@@ -76,6 +76,8 @@ describe('a chord’s diagram, as it folds', () => {
     const ninth = diagramChord(played('C9'), 0)
     expect(ninth?.keys).toEqual([55, 58, 60, 62, 64])
     expect(ninth?.ring).toBeNull()
+    // F9 would fold from its root F3: its root goes up to F4, over G3 A3 C4 E♭4.
+    expect(diagramChord(played('F9'), 0)?.keys).toEqual([55, 57, 60, 63, 65])
   })
 })
 

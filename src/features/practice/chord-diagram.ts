@@ -109,8 +109,8 @@ function overBass(tones: readonly PitchClass[], bass: PitchClass): Omit<Placed, 
 
 /**
  * Where a chord's notes stand on the diagram's keys: each folded into F3–E4, as Chordify draws
- * them. A slash chord stands over its bass, and a chord of five notes or more (ADR 0035) folds with
- * its root wherever it falls; neither is turned. A chord of three or four notes is drawn in the
+ * them. A slash chord stands over its bass, and a chord of five notes or more (ADR 0035) folds the
+ * same way, its root not lowest; neither is turned. A chord of three or four notes is drawn in the
  * inversion chosen, where it fits.
  */
 function placed(performed: PerformedChord, chosen: Inversion | undefined): Placed {
@@ -123,7 +123,15 @@ function placed(performed: PerformedChord, chosen: Inversion | undefined): Place
     }
   }
   const keys = lowestFirst(tones.map(foldedKey))
-  if (notes >= TWO_HANDS_FROM) return { keys, ring: null, inversions: { kind: 'large', notes } }
+  if (notes >= TWO_HANDS_FROM) {
+    // Its root is no bass here (ADR 0035's is the left hand's): folded lowest, it goes an octave
+    // up, which the keys always hold, a root folding lowest being one of F3 to B3.
+    const [root] = tones
+    const [lowest, ...rest] = keys
+    const up = root !== undefined && lowest !== undefined && lowest === foldedKey(root)
+    const drawn = up ? [...rest, midi(lowest + 12)] : keys
+    return { keys: drawn, ring: null, inversions: { kind: 'large', notes } }
+  }
   const turned = inversionsOf(tones)
   const fitting = turned.filter((each) => fits(each.keys)).map(({ inversion }) => inversion)
   // The fold is the inversion of its lowest note, close over it.
