@@ -1,12 +1,4 @@
-import {
-  chordSymbol,
-  midi,
-  parseNoteName,
-  PIANO,
-  readChordSymbol,
-  type Midi,
-  type SpelledNote,
-} from '@/shared/lib/music'
+import { midi, parseNoteName, PIANO, type Midi, type SpelledNote } from '@/shared/lib/music'
 
 /** `raw` when the guard accepts it, else the fallback: the one rule for a search param. */
 export const valueOr = <T>(is: (value: unknown) => value is T, raw: unknown, fallback: T): T =>
@@ -43,23 +35,3 @@ export function readKeyList(raw: unknown): Midi[] {
 /** Keys as a URL holds them, `60-64-67`: each once, lowest first. */
 export const keyListParam = (keys: readonly Midi[]): string =>
   [...new Set(keys)].sort((a, b) => a - b).join('-')
-
-/** The most chords a URL's list holds: more than any song list uses. */
-const MOST_CHORDS = 100
-
-/**
- * Chord symbols from the URL (`C.G.Bb.F#m7b5`): each that reads, without its bass (`C/E` is C), once,
- * as `chordSymbol` writes it, a hundred at most; none from anything else.
- */
-export function readChordList(raw: unknown): string[] {
-  const written = typeof raw === 'string' ? raw.split('.') : []
-  const symbols = written.flatMap((word) => {
-    const chord = word === '' ? null : readChordSymbol(word)
-    return chord ? [chordSymbol({ root: chord.root, quality: chord.quality })] : []
-  })
-  return [...new Set(symbols)].slice(0, MOST_CHORDS)
-}
-
-/** Chord symbols as a URL holds them: in ASCII (`Bb`, `m7b5`), in one order, `.` between. */
-export const chordListParam = (symbols: readonly string[]): string =>
-  [...new Set(symbols.map((symbol) => symbol.replaceAll('♭', 'b')))].sort().join('.')

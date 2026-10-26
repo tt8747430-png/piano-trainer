@@ -1,6 +1,6 @@
-import { screen, within } from '@testing-library/react'
+import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
@@ -9,6 +9,7 @@ import { createFakeAudio } from '@/shared/api/audio'
 import { createFakeMidi } from '@/shared/api/midi'
 import type { Performance } from '@/shared/lib/arrangement'
 import { ServicesProvider } from '@/shared/lib/services'
+import { stubMatchMedia } from '@/shared/test/match-media'
 import { ChordView } from './ChordView'
 
 /** C, C, G and Am, a bar each of 4/4, as the Player plays them. */
@@ -37,7 +38,7 @@ function renderSummary(bar: number) {
     clock: null,
     jumpToBeatGroup: vi.fn(),
   }
-  return renderWithSettings(
+  const rendered = renderWithSettings(
     <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
       <ChordView
         view="diagrams"
@@ -48,9 +49,12 @@ function renderSummary(bar: number) {
         practice={practice}
         loop={null}
         words={false}
+        pinned={false}
+        textSize={100}
       />
     </ServicesProvider>,
   )
+  return { ...rendered, practice }
 }
 
 /** The summary's cards, by their chord's symbol, the one sounding marked `*`. */
@@ -75,10 +79,256 @@ describe('Diagrams, its summary (ADR 0101)', () => {
     expect(cards()).toEqual(['C', 'G*', 'Am'])
   })
 
-  it('opens a card’s chord in its sheet', async () => {
+  it('takes the cursor to a card’s chord, opening no sheet (ADR 0108)', async () => {
     const user = userEvent.setup()
-    renderSummary(0)
+    const { practice } = renderSummary(0)
     await user.click(screen.getByRole('button', { name: /^Am: / }))
-    expect(await screen.findByRole('dialog', { name: 'Am chord' })).toBeInTheDocument()
+    expect(practice.jumpToBeatGroup).toHaveBeenCalledWith(barGroup(3))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+})
+
+/**
+ * Diagrams' pair, the cursor at a bar's first beat, under reduced motion so it settles at once.
+ * jsdom lays nothing out: each diagram is 300px wide.
+ */
+function renderPair(bar: number) {
+  vi.stubGlobal('matchMedia', (media: string) => ({
+    matches: media.includes('prefers-reduced-motion'),
+    media,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    addListener: () => {},
+    removeListener: () => {},
+    onchange: null,
+    dispatchEvent: () => false,
+  }))
+  vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue(
+    DOMRect.fromRect({ width: 300, height: 300 }),
+  )
+  const practice = {
+    state: { ...initialPractice(performance, 'listen', 'both'), beatGroup: barGroup(bar) },
+    clock: null,
+    jumpToBeatGroup: vi.fn(),
+  }
+  const { container, unmount } = renderWithSettings(
+    <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
+      <ChordView
+        view="diagrams"
+        mode="animated"
+        title="Morning"
+        performance={performance}
+        headings={[]}
+        practice={practice}
+        loop={null}
+        words={false}
+        pinned={false}
+        textSize={100}
+      />
+    </ServicesProvider>,
+  )
+  const pair = container.querySelector<HTMLElement>('[data-area="chords"]')!
+  /** The diagram of the chord sounding. */
+  const sounding = () => pair.querySelector<HTMLElement>('[data-diagram]:not([inert])')!
+  return { practice, pair, sounding, unmount }
+}
+
+const finger = { pointerId: 1, pointerType: 'touch', isPrimary: true }
+
+/**
+ * A finger down on a diagram, along by `by` px, slowly (a tenth of a second a step: no flick) or
+ * as quick as a flick, then up unless it stays.
+ */
+function swipe(on: HTMLElement, by: number, { lift = true, ms = 100 } = {}) {
+  vi.useFakeTimers({ toFake: ['Date'] })
+  onTestFinished(() => void vi.useRealTimers())
+  const step = () => vi.setSystemTime(Date.now() + ms)
+  fireEvent.pointerDown(on, { ...finger, buttons: 1, clientX: 400, clientY: 100 })
+  step()
+  fireEvent.pointerMove(on, { ...finger, buttons: 1, clientX: 400 + by / 2, clientY: 100 })
+  step()
+  fireEvent.pointerMove(on, { ...finger, buttons: 1, clientX: 400 + by, clientY: 100 })
+  step()
+  if (lift) fireEvent.pointerUp(on, { ...finger, buttons: 0, clientX: 400 + by, clientY: 100 })
+}
+
+describe('Diagrams, its pair swiped (ADR 0108)', () => {
+  it('follows the finger, the next drawn in as it goes', () => {
+    const { pair, sounding } = renderPair(0)
+    swipe(sounding(), -150, { lift: false })
+    // 150px less the 3px a touch moves before it is a drag, of a 300px diagram.
+    expect(Number(pair.style.getPropertyValue('--swipe'))).toBeCloseTo(0.49)
+  })
+
+  it('goes on to the next chord swiped left, back to the one before swiped right', () => {
+    // C held over two bars, then G: on is G.
+    const on = renderPair(0)
+    swipe(on.sounding(), -150)
+    expect(on.practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(2))
+    on.unmount()
+    // From Am, back is G.
+    const back = renderPair(3)
+    swipe(back.sounding(), 150)
+    expect(back.practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(2))
+  })
+
+  it('springs back short of a third of a diagram, the tap at its end no tap', () => {
+    const { practice, pair, sounding } = renderPair(0)
+    swipe(sounding(), -60)
+    fireEvent.click(sounding())
+    expect(practice.jumpToBeatGroup).not.toHaveBeenCalled()
+    expect(pair.style.getPropertyValue('--swipe')).toBe('0')
+  })
+
+  it('goes on with a flick, however short', () => {
+    const { practice, sounding } = renderPair(0)
+    swipe(sounding(), -40, { ms: 10 })
+    expect(practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(2))
+  })
+
+  it('springs back at the song’s ends', () => {
+    const { practice, sounding } = renderPair(0)
+    swipe(sounding(), 200)
+    expect(practice.jumpToBeatGroup).not.toHaveBeenCalled()
+  })
+
+  it('goes one chord on with a trackpad’s sideways scroll, the page kept still', () => {
+    const { practice, pair } = renderPair(0)
+    expect(fireEvent.wheel(pair, { deltaX: 150, deltaY: 0 })).toBe(false)
+    fireEvent.wheel(pair, { deltaX: 150, deltaY: 0 })
+    expect(practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(2))
+  })
+
+  it('leaves up and down to the page', () => {
+    const { practice, pair } = renderPair(0)
+    expect(pair).toHaveClass('touch-pan-y')
+    expect(fireEvent.wheel(pair, { deltaX: 0, deltaY: 150 })).toBe(true)
+    expect(practice.jumpToBeatGroup).not.toHaveBeenCalled()
+  })
+})
+
+/** A sung line of C and G, then the same two bars twice with no words, then F. */
+const sung: ChartPiece = {
+  ...piece,
+  sections: [{ kind: 'verse', lines: ['C G', 'C G', 'C G', 'F'] }],
+  staves: [{ notes: 'E4/4 | D4/4 | r/4 | r/4 | r/4 | r/4 | r/4' }],
+  lyrics: ['Good day'],
+}
+const sungPerformance = arrangePiece(sung, ownChoice(sung), BUILT_IN_PATTERNS, { unfold: true })
+
+/** Chords over lyrics or the Grid of the sung song, the cursor at a bar's first beat. */
+function renderView(
+  view: 'lyrics' | 'grid',
+  {
+    bar = 0,
+    pinned = true,
+    textSize = 100,
+    words = true,
+  }: { bar?: number; pinned?: boolean; textSize?: 80 | 100 | 130; words?: boolean } = {},
+) {
+  const group = sungPerformance.beatGroups.findIndex(
+    (each) => each.bar === bar && each.tick === bar * 96,
+  )
+  const practice = {
+    state: { ...initialPractice(sungPerformance, 'listen', 'both'), beatGroup: group },
+    clock: null,
+    jumpToBeatGroup: vi.fn(),
+  }
+  return renderWithSettings(
+    <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
+      <ChordView
+        view={view}
+        mode="animated"
+        title="Morning"
+        performance={sungPerformance}
+        headings={[]}
+        practice={practice}
+        loop={null}
+        words={words}
+        pinned={pinned}
+        textSize={textSize}
+      />
+    </ServicesProvider>,
+  )
+}
+
+describe('Chords over lyrics (ADR 0108)', () => {
+  it('pins the song’s chord diagrams under the strip, the one sounding marked', () => {
+    renderView('lyrics', { bar: 1 })
+    const strip = document.querySelector('[data-slot="beat-strip"]')?.parentElement
+    const pinned = within(strip as HTMLElement).getByRole('list', { name: 'Chords' })
+    const marked = within(pinned)
+      .getAllByRole('button')
+      .map((card) => `${card.textContent}${card.getAttribute('aria-current') ? '*' : ''}`)
+    expect(marked).toEqual(['C', 'G*', 'F'])
+  })
+
+  it('shows no diagrams with the switch off', () => {
+    renderView('lyrics', { pinned: false })
+    expect(screen.queryByRole('list', { name: 'Chords' })).not.toBeInTheDocument()
+  })
+
+  it('sizes the words and their chords together by the text size', () => {
+    renderView('lyrics', { textSize: 130 })
+    const song = document.querySelector('[data-line="0"]')?.parentElement
+    expect(song).toHaveStyle({ fontSize: '130%' })
+  })
+
+  it('shows a line of chords alone played again straight after itself once, ×2', () => {
+    renderView('lyrics')
+    const lines = [...document.querySelectorAll('[data-line]')]
+    expect(lines).toHaveLength(3)
+    expect(lines[1]).toHaveTextContent(/^CG×2/)
+    expect(within(lines[1] as HTMLElement).getByText('Played 2 times')).toBeInTheDocument()
+    expect(lines[2]).not.toHaveTextContent('×')
+  })
+
+  it('marks the line playing in either copy of a line shown once', () => {
+    renderView('lyrics', { bar: 4 })
+    expect(document.querySelector('[data-line="1"] button[aria-current]')).toBeInTheDocument()
+    expect(document.querySelector('[data-line="1"] [data-sounding]')).toHaveTextContent('C')
+  })
+
+  it('shows a chord’s diagram as a pointer rests on it, where the device hovers', async () => {
+    stubMatchMedia({ dark: true })
+    const user = userEvent.setup()
+    renderView('lyrics', { pinned: false })
+    const [chip] = within(document.querySelector('[data-line="0"]') as HTMLElement).getAllByRole(
+      'button',
+      { name: 'C' },
+    )
+    await user.hover(chip as HTMLElement)
+    await waitFor(() =>
+      expect(
+        within(document.querySelector('[data-slot="tooltip-content"]') as HTMLElement).getByRole(
+          'img',
+        ),
+      ).toHaveAccessibleName(/^C: /),
+    )
+  })
+
+  it('shows no diagram on a pointer resting where the device does not hover', async () => {
+    const user = userEvent.setup()
+    renderView('lyrics', { pinned: false })
+    const [chip] = within(document.querySelector('[data-line="0"]') as HTMLElement).getAllByRole(
+      'button',
+      { name: 'C' },
+    )
+    await user.hover(chip as HTMLElement)
+    expect(document.querySelector('[data-slot="tooltip-content"]')).toBeNull()
+  })
+})
+
+describe('the Grid’s words (ADR 0108)', () => {
+  it('writes the words under the beats they are sung on with the View’s Lyrics', () => {
+    renderView('grid')
+    expect(screen.getByRole('button', { name: 'Bar 1: C · Good' })).toBeInTheDocument()
+    expect(document.querySelectorAll('[data-verse]')).toHaveLength(2)
+  })
+
+  it('writes none with the Lyrics off', () => {
+    renderView('grid', { words: false })
+    expect(screen.getByRole('button', { name: 'Bar 1: C' })).toBeInTheDocument()
+    expect(document.querySelector('[data-verse]')).toBeNull()
   })
 })

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { choiceGroups, listKey, type Choices, type OptionValue } from './option'
 import { OptionItems } from './OptionItems'
 import { DropdownTrigger } from './DropdownTrigger'
@@ -12,6 +13,8 @@ export function Dropdown<V extends OptionValue>({
   value,
   onChange,
   bare = false,
+  face,
+  align,
   className,
   ...choices
 }: {
@@ -20,6 +23,10 @@ export function Dropdown<V extends OptionValue>({
   onChange: (value: V) => void
   /** Under a name already printed: the button shows its value alone. */
   bare?: boolean
+  /** How the button shows the value where it is not its label: shorter, beside a picture. */
+  face?: (value: V) => ReactNode
+  /** Where the list opens from the button's edge, in place of over the button. */
+  align?: 'start' | 'end'
   className?: string
 } & Choices<V>) {
   const groups = choiceGroups(choices)
@@ -34,8 +41,13 @@ export function Dropdown<V extends OptionValue>({
         if (next !== null && next !== value) onChange(next)
       }}
     >
-      <DropdownTrigger label={label} bare={bare} className={className} />
-      <SelectContent key={listKey(groups)}>
+      <DropdownTrigger label={label} bare={bare} className={className}>
+        {face}
+      </DropdownTrigger>
+      <SelectContent
+        key={listKey(groups)}
+        {...(align ? { align, alignItemWithTrigger: false } : {})}
+      >
         <OptionItems groups={groups} />
       </SelectContent>
     </Select>

@@ -8,6 +8,18 @@ import { menuOf, swipeOf, type RowAction } from '../model/row-actions'
 import { ROW_BODY, ROW_CARD } from './row-class'
 import { RowMore } from './RowMore'
 
+/** A favourite's small filled ♡, at its row's end, read and chosen alike. */
+export function FavouriteMark() {
+  const { t } = useTranslation('songs')
+  return (
+    <Heart
+      role="img"
+      aria-label={t('favourites')}
+      className="size-4 shrink-0 fill-current text-muted-foreground"
+    />
+  )
+}
+
 /** A song's swipe (ADR 0106): to the right Favourite; to the left Move, then Archive at the edge. */
 const LEADING = ['favourite']
 const TRAILING = ['move', 'archive']
@@ -35,18 +47,16 @@ export function SongRow({
   const press = useLongPress({ onLongPress: onSelect })
   return (
     <li>
-      <SwipeRow leading={swipeOf(actions, LEADING)} trailing={swipeOf(actions, TRAILING)}>
-        <div className={cn(ROW_CARD, 'hover:bg-muted')}>
+      <SwipeRow
+        leading={swipeOf(actions, LEADING)}
+        trailing={swipeOf(actions, TRAILING)}
+        className="h-full"
+      >
+        <div className={cn(ROW_CARD, 'has-[>a:hover]:bg-muted')}>
           <PieceLink entry={entry} className={ROW_BODY} {...press}>
             <RowFace {...face} />
           </PieceLink>
-          {favourite ? (
-            <Heart
-              role="img"
-              aria-label={t('favourites')}
-              className="size-4 shrink-0 fill-current text-muted-foreground"
-            />
-          ) : null}
+          {favourite ? <FavouriteMark /> : null}
           <RowMore label={t('library.moreOf', { name: face.title })} actions={menuOf(actions)} />
         </div>
       </SwipeRow>

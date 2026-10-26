@@ -21,6 +21,7 @@ import {
   setSort,
   useLibraryActs,
   type FolderSheetTarget,
+  type Moving,
 } from '@/features/manage-library'
 import { useLocale } from '@/shared/i18n'
 import { libraryView } from './library-view'
@@ -33,7 +34,7 @@ export const songKey = (id: PieceId): Chosen => `song:${id}`
 
 /** What the page has open over it, one at a time (CODE_STYLE §3: one union, never a flag each). */
 export type Pending =
-  | { readonly kind: 'move'; readonly songs: readonly PieceId[]; readonly what: string }
+  | { readonly kind: 'move'; readonly moving: Moving; readonly what: string }
   | { readonly kind: 'folder'; readonly target: FolderSheetTarget }
   | { readonly kind: 'delete-folder'; readonly folder: ShelvedFolder }
   | { readonly kind: 'delete-songs'; readonly songs: readonly PieceId[] }
@@ -77,7 +78,7 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
 
   // Every row on screen, in order: what Select all chooses.
   const rows: Chosen[] = [
-    ...view.folders.map((each) => folderKey(each.id)),
+    ...view.folders.map((each) => folderKey(each.folder.id)),
     ...view.groups.flatMap((group) => group.entries.map((entry) => songKey(entry.id))),
   ]
   const chosenSongs = [...chosen].flatMap((key) =>
@@ -108,6 +109,8 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
     /** Whether a drag may move the rows: only in the order the learner drags, with nothing hidden. */
     sortable: sort === 'manual' && !view.filtering,
     orderFolders: (order: FolderId[]) => orderFolders(store, catalog(), order),
+    /** Opens Move to… for a song or a folder, named under the sheet's title. */
+    moveOne: (moving: Moving, what: string) => setPending({ kind: 'move', moving, what }),
     orderSongs: (order: PieceId[]) => orderSongs(store, catalog(), folder?.id ?? null, order),
     select: {
       on: selecting,
@@ -140,8 +143,8 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
       move: () =>
         setPending({
           kind: 'move',
-          songs: chosenSongs,
-          what: t('select.count', { count: chosenSongs.length }),
+          moving: { songs: chosenSongs, folders: chosenFolders.map((each) => each.id) },
+          what: t('select.count', { count: chosen.size }),
         }),
       archive: () => {
         acts.archive(chosenSongs)
@@ -152,8 +155,15 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
       deletable: chosen.size > 0 && chosenSongs.every(isOwnSongId),
       delete: () => setPending({ kind: 'delete-chosen' }),
     },
-    /** Leaves a folder's page for Home: it was deleted or archived. */
-    leave: () => void navigate({ to: '/songs', replace: true }),
+    /** Leaves a folder's page for the place it stands in: it was deleted or archived. */
+    leave: () =>
+      void (folder?.parent
+        ? navigate({
+            to: '/songs/folders/$folderId',
+            params: { folderId: folder.parent },
+            replace: true,
+          })
+        : navigate({ to: '/songs', replace: true })),
   }
 }
 

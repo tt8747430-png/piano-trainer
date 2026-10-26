@@ -24,7 +24,7 @@ export function songActions(entry: Entry, page: LibraryPage, t: TFunction<'songs
       label: t('library.moveTo'),
       icon: FolderInput,
       paint: 'sky',
-      onSelect: () => page.open({ kind: 'move', songs: [entry.id], what: page.titleOf(entry.id) }),
+      onSelect: () => page.moveOne({ songs: [entry.id], folders: [] }, page.titleOf(entry.id)),
     },
     {
       key: 'archive',
@@ -48,9 +48,13 @@ export function songActions(entry: Entry, page: LibraryPage, t: TFunction<'songs
   ]
 }
 
-/** A folder's actions (ADR 0106): Edit, Archive (with its songs), and Delete, asked first. */
+/**
+ * A folder's actions (ADR 0106): Edit, Move to… (with all it holds), Archive (with all it holds), and
+ * Delete, asked first.
+ */
 export function folderActions(
   folder: ShelvedFolder,
+  name: string,
   page: LibraryPage,
   t: TFunction<'songs'>,
 ): RowAction[] {
@@ -61,6 +65,13 @@ export function folderActions(
       icon: PencilLine,
       paint: 'grass',
       onSelect: () => page.open({ kind: 'folder', target: { kind: 'edit', folder } }),
+    },
+    {
+      key: 'move',
+      label: t('library.moveTo'),
+      icon: FolderInput,
+      paint: 'sky',
+      onSelect: () => page.moveOne({ songs: [], folders: [folder.id] }, name),
     },
     {
       key: 'archive',

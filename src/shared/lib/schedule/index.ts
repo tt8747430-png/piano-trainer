@@ -40,7 +40,13 @@ export { runSounds, scaleRun } from './run'
 export { noteLine, twoHands, type NoteLineMeter } from './note-line'
 export { voicingKeys, voicingsMusic, type VoicedKey, type WrittenVoicing } from './voicings'
 export { keysSoundingAt, keysStruckAt, keyWindows, type KeyWindow } from './sounding'
-export { recordingPlay, type Recording, type RecordingPlay } from './recording'
+export {
+  recordingPlay,
+  STANDARD_TUNING,
+  tuningOf,
+  type Recording,
+  type RecordingPlay,
+} from './recording'
 export { recorderClicks, type ClickPlan } from './recorder-clicks'
 export { performanceMidi, type PartNames, type PerformanceMidiOptions } from './performance-midi'
 export type { GridBar } from './grid'

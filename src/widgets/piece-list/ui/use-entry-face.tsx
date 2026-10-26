@@ -24,6 +24,7 @@ export interface EntryFace {
   readonly face: {
     readonly title: string
     readonly detail: string | undefined
+    readonly count: string | undefined
     readonly trailing: ReactNode
     readonly children: ReactNode
   }
@@ -49,12 +50,8 @@ export function useEntryFace(entry: Entry): EntryFace {
   return {
     face: {
       title: primary,
-      detail:
-        entry.kind === 'listing'
-          ? t('songs:noChart')
-          : [secondary, count > 0 ? t('songs:chordCount', { count }) : undefined]
-              .filter((part) => part !== undefined)
-              .join(' · ') || undefined,
+      detail: entry.kind === 'listing' ? t('songs:noChart') : secondary,
+      count: entry.kind !== 'listing' && count > 0 ? t('songs:chordCount', { count }) : undefined,
       trailing:
         entry.kind === 'listing' ? null : (
           <>

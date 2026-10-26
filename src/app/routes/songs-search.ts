@@ -1,23 +1,26 @@
 import { isStage } from '@/entities/step'
 import type { SongsFilter } from '@/pages/songs'
-import { chordListParam, readChordList, readText } from '@/shared/lib'
+import { readText } from '@/shared/lib'
+import { keyParam, parseKey } from '@/shared/lib/music'
 import { routeSearch, type Raw } from './read-search'
 
 // The library's filters, at Home and in a folder alike (ADR 0106): in the URL, never remembered.
 export const SONGS_DEFAULTS: SongsFilter = {
   q: '',
-  withChords: false,
   stage: 'any',
-  known: '',
+  key: '',
   favourites: false,
+}
+/** A key as a song is written in, spelled as written (a song in G♭ is not one in F♯); none if none reads. */
+function readSongKey(raw: unknown): SongsFilter['key'] {
+  const key = typeof raw === 'string' ? parseKey(raw) : null
+  return key ? keyParam(key) : ''
 }
 function readSongsSearch(raw: Raw): SongsFilter {
   return {
     q: readText(raw.q, SONGS_DEFAULTS.q),
-    withChords: raw.withChords === true,
     stage: isStage(raw.stage) ? raw.stage : SONGS_DEFAULTS.stage,
-    // The chords known, as the URL writes them: each that reads, once, in one order (ADR 0103).
-    known: chordListParam(readChordList(raw.known)),
+    key: readSongKey(raw.key),
     favourites: raw.favourites === true,
   }
 }

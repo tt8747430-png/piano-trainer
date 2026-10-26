@@ -3,31 +3,16 @@ export const piece = {
   // A chord chart's section says its bars.
   barOne: 'bar {{n}}',
   barsFromTo: 'bars {{first}}–{{last}}',
-  // The song's page, Learn the song (ADR 0100): where to go next and the song's lessons done, its
-  // sections each with its lessons, and the whole song to play along with. What names the piece is
-  // a song's or a study's, by its kind: Russian names it.
+  // The song's page, Learn the song (ADR 0100): its sections each with its lessons done. What names
+  // the piece is a song's or a study's, by its kind: Russian names it.
   learnSong: {
     progress: '{{done}} of {{total}}',
     progressSaid: 'Lessons done: {{done}} of {{total}}',
-    start: {
-      song: 'Learn it step by step: start with the {{section}}.',
-      study: 'Learn it step by step: start with the {{section}}.',
-    },
-    next: 'Next: the {{section}}.',
-    done: {
-      song: 'Every section learned. Play it through.',
-      study: 'Every section learned. Play it through.',
-    },
     sections: 'Sections',
     lessons_one: '{{count}} lesson',
     lessons_other: '{{count}} lessons',
     lessonsDone: '{{lessons}} · {{done}} done',
     noLessons: 'No chords to learn',
-    playAlong: 'Play along',
-    playAlongDetail: {
-      song: 'The whole song in the Player',
-      study: 'The whole study in the Player',
-    },
   },
   // A section's page: its chords in order, its changes, its pattern; each lesson looped in the Player.
   learnSection: {
@@ -84,6 +69,7 @@ export const piece = {
   // An own song sent on as a link: its chart, staves and written hands inside it.
   share: 'Share',
   shareCopied: 'Link copied. Anyone who opens it can add the song to their own.',
+  shareLinked: 'Link copied. Anyone who opens it sees the chords as you play them.',
   shareFailed: 'The link could not be made here.',
   shareTooLong: 'This song is too long to fit in a link.',
   deleting: {
@@ -93,6 +79,8 @@ export const piece = {
     cancel: 'Keep it',
   },
   scaleOf: 'Scale: {{scale}}',
+  // What is said of a song or study, behind its ⓘ.
+  about: { song: 'About the song', study: 'About the study' },
   meter: 'Time signature',
   credit: {
     authors: 'Authors',

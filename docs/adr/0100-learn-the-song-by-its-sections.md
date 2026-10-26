@@ -1,6 +1,7 @@
 # ADR 0100 — A song is learned by its sections: its chords, its changes, its sequences, its pattern
 
-- **Status:** accepted · **Date:** 2026-10-25 · **Amends:** ADR 0098 (the song's page) · **Spec:**
+- **Status:** accepted · **Date:** 2026-10-25 · **Amends:** ADR 0098 (the song's page) · **Amended by:** ADR 0106
+  (the learning card goes) · **Spec:**
   [chord views and song lessons](../superpowers/specs/2026-10-25-chord-views-and-song-lessons.md)
 
 ## Context
@@ -16,6 +17,16 @@ a whole piece's Learned mark.
 - **The song's page is "Learn the song".** Under its bar: a card with where to go next and the song's lesson
   progress, its key, time and tempo as fact cards, its chords as diagrams (each opening its sheet), its sections as
   rows (a tile in the section's paint, its lessons done of all), and Play along; its note last.
+
+  **Amended** (2026-10-26, ADR 0106's second round): the owner did not want the card on top, and found the page
+  too much at once ("all of the chords when it has no sections… the play song is at the bottom, and this scale…
+  also at the bottom, and also I don't like the descriptions"). The page is now, top to bottom: its bar and byline;
+  **Practise**, first and largest (the Player as it was left; the floating Practise and Play along go); its key,
+  time and tempo; the way to its key's scale under them, its note behind an ⓘ (no paragraph on the page); its
+  chords as diagrams, once; its sections, only where it has more than one (a song of one section shows none of the
+  section machinery: its lessons are its section page's). `LearnCard`, `nextStep`, `songProgress` and `PlayAlong`
+  go. A section's page keeps its chords open and folds its Changes and Pattern until asked for; one change alone
+  is not listed apart from its sequence.
 - **A section's page** (`…/$pieceId/sections/$section`) teaches it in order: each chord (learned by playing it in
   its sheet, on a MIDI keyboard or the sheet's keys), each change between two chords (the Player looping the bars it
   is in), each chord sequence in time (the Player looping it), and each pattern it is played with (the Player

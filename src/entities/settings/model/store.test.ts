@@ -13,6 +13,7 @@ import {
   DEFAULT_TRAINER,
   DEFAULT_FLOATING,
   defaultKeyboard,
+  TEXT_SIZES,
 } from './types'
 
 /** Puts settings in storage as an earlier session would have saved them. */
@@ -134,6 +135,8 @@ describe('createSettingsStore', () => {
         askOnOpen: true,
         chordNames: false,
         lyrics: false,
+        pinned: false,
+        textSize: 130,
         hidden: ['treble', 'staff0'],
         keys: false,
       },
@@ -178,6 +181,8 @@ describe('createSettingsStore', () => {
       askOnOpen: false,
       chordNames: false,
       lyrics: true,
+      pinned: true,
+      textSize: 100,
       hidden: ['bass', 'staff1'],
       keys: true,
     })
@@ -207,9 +212,19 @@ describe('createSettingsStore', () => {
     expect(restored({ scoreView: { diagrams: 'summary' } }).scoreView.diagrams).toBe('summary')
   })
 
-  it('starts afresh over a save of the version before, which had no volumes (ADR 0105)', () => {
-    expect(SETTINGS_VERSION).toBe(11)
-    expect(restored({ theme: 'dark', sound: { rh: 20 } }, 10)).toEqual(
+  it('pins Chords over lyrics’ diagrams at its words’ own size, a size saved one of its steps (ADR 0108)', () => {
+    expect(DEFAULT_SCORE_VIEW).toMatchObject({ pinned: true, textSize: 100 })
+    expect(TEXT_SIZES).toContain(100)
+    for (const textSize of TEXT_SIZES)
+      expect(restored({ scoreView: { textSize } }).scoreView.textSize).toBe(textSize)
+    for (const textSize of [99, '115', 0, null])
+      expect(restored({ scoreView: { textSize } }).scoreView.textSize).toBe(100)
+    expect(restored({ scoreView: { pinned: 'no' } }).scoreView.pinned).toBe(true)
+  })
+
+  it('starts afresh over a save of the version before, which had no text size (ADR 0108)', () => {
+    expect(SETTINGS_VERSION).toBe(12)
+    expect(restored({ theme: 'dark', scoreView: { textSize: 130 } }, 11)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

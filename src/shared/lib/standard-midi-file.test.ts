@@ -148,4 +148,10 @@ describe('midiFileName', () => {
     expect(midiFileName('Ромашковые поля')).toBe('Ромашковые поля.mid')
     expect(midiFileName('A/B: "live"?')).toBe('A-B- -live--.mid')
   })
+
+  it('carries the tempo the music is written at, where it is given', () => {
+    expect(midiFileName('Still, my soul, be still', 72)).toBe(
+      'Still, my soul, be still (72 BPM).mid',
+    )
+  })
 })

@@ -3,7 +3,7 @@ import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { chordsFrom } from './chords-from'
+import { chordBefore, chordNear, chordsFrom, pairSlide } from './chords-from'
 
 /** A song of 4/4 bars in C, played as the Player plays it, the repeats taken. */
 function song(...lines: string[]): Performance {
@@ -74,5 +74,72 @@ describe('chordsFrom', () => {
   it('has none, and none next, in music of no chord', () => {
     const none = song('_ _')
     expect(chordsFrom(none, beat(0, 0), null)).toEqual({ now: null, next: null })
+  })
+})
+
+describe('pairSlide', () => {
+  const four = song('C G Am F')
+  const pair = { now: 0, next: 1 }
+
+  it('holds the pair still until the half beat before the change, then slides it there', () => {
+    expect(pairSlide(four, pair, null, 0)).toBe(0)
+    expect(pairSlide(four, pair, null, 84)).toBe(0)
+    expect(pairSlide(four, pair, null, 90)).toBe(0.5)
+    expect(pairSlide(four, pair, null, 96)).toBe(1)
+  })
+
+  it('slides to a loop’s start as the loop goes round, and not at all with no next', () => {
+    const loop = { from: 0, to: 192 }
+    expect(pairSlide(four, { now: 1, next: 0 }, loop, 186)).toBe(0.5)
+    expect(pairSlide(four, { now: 1, next: null }, null, 186)).toBe(0)
+    expect(pairSlide(four, { now: null, next: 1 }, null, 90)).toBe(0)
+  })
+})
+
+describe('chordNear', () => {
+  const twice = song('C G C Am')
+
+  it('finds a chord where it next starts from a tick, else where it first does', () => {
+    const at = (symbol: string, tick: number) => twice.chords[chordNear(twice, symbol, tick) ?? -1]
+    expect(at('C', 0)?.startTick).toBe(0)
+    expect(at('C', 10)?.startTick).toBe(192)
+    expect(at('C', 200)?.startTick).toBe(0)
+    expect(chordNear(twice, 'D', 0)).toBeNull()
+  })
+})
+
+describe('chordBefore', () => {
+  const four = song('C G Am F')
+  /** The chord a swipe back from a beat goes to; none at the start. */
+  const before = (
+    performance: Performance,
+    at: ReturnType<typeof beat>,
+    loop: { from: number; to: number } | null = null,
+  ) => {
+    const found = chordBefore(performance, at, chordsFrom(performance, at, loop).now, loop)
+    return found === null ? null : (performance.chords[found] ?? null)
+  }
+
+  it('is the chord before the one sounding, in played order: where a swipe back goes', () => {
+    expect(before(four, beat(2, 1))?.symbol).toBe('G')
+    expect(before(four, beat(0, 2))).toBeNull()
+  })
+
+  it('is the change before: a chord held is gone back over to where it started', () => {
+    const held = song('C C G Am')
+    expect(before(held, beat(3, 0))?.symbol).toBe('G')
+    expect(before(held, beat(2, 0))).toMatchObject({ symbol: 'C', startTick: 0 })
+    expect(before(held, beat(1, 3))).toBeNull()
+  })
+
+  it('is the chord before a bar of no chord', () => {
+    const empty = song('C _ G')
+    expect(before(empty, beat(1, 0))?.symbol).toBe('C')
+  })
+
+  it('stays in a loop', () => {
+    const loop = { from: 192, to: 384 }
+    expect(before(four, beat(2, 0), loop)).toBeNull()
+    expect(before(four, beat(3, 0), loop)?.symbol).toBe('Am')
   })
 })

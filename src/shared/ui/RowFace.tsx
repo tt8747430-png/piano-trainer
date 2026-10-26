@@ -13,6 +13,11 @@ export type RowTile =
 export type RowFaceProps = {
   title: string
   detail?: string | undefined
+  /**
+   * What the detail line counts (a song's chords): kept whole at its end, a long detail cut short on
+   * one line before it, so the count never stands alone on a line of its own.
+   */
+  count?: string | undefined
   /** What it carries at its end: a level, a mark. */
   trailing?: ReactNode
   /** What it shows under its title and detail. */
@@ -28,6 +33,7 @@ export type RowFaceProps = {
 export function RowFace({
   title,
   detail,
+  count,
   icon: Icon,
   numeral,
   paint,
@@ -46,7 +52,20 @@ export function RowFace({
       ) : null}
       <span className="min-w-0 flex-1">
         <span className="line-clamp-2 text-lg leading-snug font-semibold text-pretty">{title}</span>
-        {detail ? (
+        {count ? (
+          <>
+            {' '}
+            <span className="flex min-w-0 text-sm text-muted-foreground">
+              {detail ? (
+                <>
+                  <span className="truncate">{detail}</span>
+                  <span className="shrink-0 whitespace-pre">{' · '}</span>
+                </>
+              ) : null}
+              <span className="shrink-0">{count}</span>
+            </span>
+          </>
+        ) : detail ? (
           <>
             {' '}
             <span className="line-clamp-2 text-sm text-pretty text-muted-foreground">{detail}</span>

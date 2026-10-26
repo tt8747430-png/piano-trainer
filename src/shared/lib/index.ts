@@ -69,16 +69,7 @@ export {
   type MidiTrack,
   type TimedMidiEvent,
 } from './standard-midi-file'
-export {
-  chordListParam,
-  keyListParam,
-  readChordList,
-  readKeyList,
-  readNote,
-  readText,
-  valueOr,
-  wholeIn,
-} from './search-params'
+export { keyListParam, readKeyList, readNote, readText, valueOr, wholeIn } from './search-params'
 export { createStoreContext } from './store-context'
 export {
   moveTypingOctave,
@@ -93,6 +84,7 @@ export { READ_DISTANCE, useHiddenWhileReading } from './use-hidden-while-reading
 export { useShownOnScrollUp } from './use-shown-on-scroll-up'
 export { LANDSCAPE_PHONE, useMediaQuery } from './use-media-query'
 export { useWakeLock } from './use-wake-lock'
+export { startKeyboardViewport } from './keyboard-viewport'
 export { useElementSize } from './use-element-size'
 export { fitZoom, useFitZoom } from './use-fit-zoom'
 export { toggled } from './toggled'

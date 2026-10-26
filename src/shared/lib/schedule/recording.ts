@@ -9,7 +9,19 @@ export interface Recording {
   readonly start: number
   /** Its steady tempo in beats per minute, counted as the piece's chart counts them. */
   readonly tempo: number
+  /**
+   * The A above middle C it is tuned to, in hertz, where that is not the standard pitch (measured
+   * from the file): an instrument tuned to it plays along in tune (ADR 0107).
+   */
+  readonly tuning?: number
 }
+
+/** The standard pitch: the A above middle C at 440 Hz. */
+export const STANDARD_TUNING = 440
+
+/** The A a piece's music is tuned to: its recording's, else the standard pitch. */
+export const tuningOf = (recording: Recording | undefined): number =>
+  recording?.tuning ?? STANDARD_TUNING
 
 /** Where in a recording one pass plays from, when on the audio clock, how fast, and until when. */
 export interface RecordingPlay {

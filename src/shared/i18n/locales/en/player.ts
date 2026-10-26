@@ -1,10 +1,25 @@
 export const player = {
   setup: 'Setup',
-  // The bar's More (ADR 0099): a piece's information as a sheet, the music as a MIDI file; an own
-  // song's Share is the song page's.
+  // The bar's More (ADR 0099, 0107): a piece's information and its sections as sheets, Share as the
+  // song page's, Print, the music as a MIDI file (with a recording, at a fixed tempo or time aligned
+  // to it).
   more: 'More',
   info: { song: 'Song information', study: 'Study information' },
+  // Song information's tuning (ADR 0107): the A its recording is tuned to, said where it is not 440.
+  tuning: {
+    label: 'Tuning',
+    value: 'A {{hz}} Hz',
+    about:
+      'The recording is tuned to A {{hz}} Hz, not the standard 440 Hz. Tune an instrument to it to play along in tune.',
+  },
+  sections: {
+    title: 'Sections',
+    one: { song: 'This song has one section.', study: 'This study has one section.' },
+  },
+  print: 'Print',
   exportMidi: 'Export to MIDI',
+  exportMidiFixed: 'Export to MIDI, fixed tempo',
+  exportMidiAligned: 'Export to MIDI, time aligned',
   /** A piece's score in its two modes, the Player and the score editor (ADR 0090). */
   mode: { label: 'Practise or edit', practise: 'Practise', edit: 'Edit' },
   // How the score is shown (ADR 0064), from the bar: remembered for every piece.
@@ -34,6 +49,14 @@ export const player = {
     // What the View holds for every view of the music, after the view shown's own.
     every: 'Every view',
     // Diagrams' own (ADR 0102, Chordify's "Diagram view mode").
+    // Chords over lyrics' own (ADR 0108, Chordify's view settings).
+    pinned: {
+      label: 'Diagrams pinned',
+      about: 'The song’s chords as diagrams in a row under the beats, the one sounding marked',
+    },
+    textSize: { label: 'Text size', smaller: 'Smaller text', larger: 'Larger text' },
+    // Why the words' switch is greyed (ADR 0108).
+    noWords: 'The music has no words',
     mode: {
       label: 'Mode',
       animated: 'Animated',
@@ -65,7 +88,14 @@ export const player = {
   /** The Diagrams view's chord to come, where none sounds yet: a pickup, a bar of no chord. */
   nextChord: 'Next: {{symbol}}',
   /** A line of Chords over lyrics, by its bars: a tap takes the Player there. */
-  line: { one: 'Bar {{n}}', many: 'Bars {{first}}–{{last}}' },
+  line: {
+    one: 'Bar {{n}}',
+    many: 'Bars {{first}}–{{last}}',
+    // A line of chords alone played again straight after itself, shown once (ADR 0108).
+    times: '×{{n}}',
+    played_one: 'Played {{count}} time',
+    played_other: 'Played {{count}} times',
+  },
   key: 'Key',
   root: 'Root',
   walk: { title: 'Walk the chords in {{scale}}' },

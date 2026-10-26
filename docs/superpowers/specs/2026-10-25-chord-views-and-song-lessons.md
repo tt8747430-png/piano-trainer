@@ -205,7 +205,8 @@ The song's page (`PieceView`, a song's or a study's) becomes the way into learni
 2. **The learning card**: a line saying where to go next, and the song's lesson progress as a bar with "k of n"
    (`learnSong.progress`): none done, "Learn it step by step: start with the Intro." (its first section's name); some
    done, "Next: the Chorus." (the first section with a lesson not done); all done, "Every section learned. Play it
-   through." The line is a link to that section's page (or the Player, all done).
+   through." The line is a link to that section's page (or the Player, all done). *Removed* (ADR 0100 amended,
+   2026-10-26): the owner wanted no card on top; the sections' rows say what is done.
 3. **Facts as cards**: Key, Time, Tempo, each a card with its icon over its name and value (`FactCard` in
    `shared/ui`, three across at every width, Chordify's Capo · Tuning · BPM); its second title and who wrote it under
    them as now (`PieceCredits`).

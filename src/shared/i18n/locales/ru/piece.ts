@@ -7,15 +7,6 @@ export const piece: LocaleResources['piece'] = {
   learnSong: {
     progress: '{{done}} из {{total}}',
     progressSaid: 'Пройдено уроков: {{done}} из {{total}}',
-    start: {
-      song: 'Учите песню по шагам: начните с раздела «{{section}}».',
-      study: 'Учите этюд по шагам: начните с раздела «{{section}}».',
-    },
-    next: 'Дальше: раздел «{{section}}».',
-    done: {
-      song: 'Все разделы пройдены. Сыграйте песню целиком.',
-      study: 'Все разделы пройдены. Сыграйте этюд целиком.',
-    },
     sections: 'Разделы',
     lessons_one: '{{count}} урок',
     lessons_few: '{{count}} урока',
@@ -23,8 +14,6 @@ export const piece: LocaleResources['piece'] = {
     lessons_other: '{{count}} урока',
     lessonsDone: '{{lessons}} · пройдено: {{done}}',
     noLessons: 'Нет аккордов для разучивания',
-    playAlong: 'Играть вместе',
-    playAlongDetail: { song: 'Вся песня в плеере', study: 'Весь этюд в плеере' },
   },
   learnSection: {
     title: 'Учим раздел «{{section}}»',
@@ -77,6 +66,7 @@ export const piece: LocaleResources['piece'] = {
   },
   share: 'Поделиться',
   shareCopied: 'Ссылка скопирована. Открыв её, любой сможет добавить песню к своим.',
+  shareLinked: 'Ссылка скопирована. Открыв её, любой увидит аккорды так, как играете вы.',
   shareFailed: 'Здесь ссылку сделать не удалось.',
   shareTooLong: 'Песня слишком длинная, чтобы поместиться в ссылку.',
   delete: 'Удалить',
@@ -86,6 +76,7 @@ export const piece: LocaleResources['piece'] = {
     confirm: 'Удалить навсегда',
     cancel: 'Оставить',
   },
+  about: { song: 'О песне', study: 'Об этюде' },
   scaleOf: 'Гамма: {{scale}}',
   meter: 'Размер',
   credit: {

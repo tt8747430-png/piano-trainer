@@ -82,7 +82,7 @@ export function PlayerViewMenu({
           className="border-b-0"
         />
       </MenuSection>
-      <ViewSection view={shown} staves={staves} piano={piano} />
+      <ViewSection view={shown} staves={staves} piano={piano} words={needs.lyrics !== 'words'} />
       <MenuSection
         title={t('views.every')}
         className="[&>[data-slot=switch-row]:last-child]:border-b-0"

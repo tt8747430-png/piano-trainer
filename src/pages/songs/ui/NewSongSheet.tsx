@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { libraryCatalog, useLibraryStoreApi, type FolderId } from '@/entities/library'
 import { songTitle, TITLE_MAX, usePiecesStoreApi } from '@/entities/piece'
 import { makeSong, type ScoreSetup } from '@/features/edit-piece'
-import { moveSongs } from '@/features/manage-library'
+import { moveTo } from '@/features/manage-library'
 import { C_MAJOR, keyFromParam, keyParam, METERS, type Meter } from '@/shared/lib/music'
 import { KeyChoice, NameField, Segmented, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -41,7 +41,12 @@ export function NewSongSheet({
     const id = makeSong(store, { title, key: keyFromParam(key), meter, setup })
     if (!id) return
     if (folder)
-      moveSongs(library, libraryCatalog({ ownSongs: store.getState().songs }), [id], folder)
+      moveTo(
+        library,
+        libraryCatalog({ ownSongs: store.getState().songs }),
+        { songs: [id], folders: [] },
+        folder,
+      )
     void navigate({ to: '/edit/$pieceId', params: { pieceId: id }, search: { record } })
   }
   const untitled = songTitle(title) === null
