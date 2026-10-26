@@ -2,7 +2,8 @@
 
 - **Status:** accepted · **Date:** 2026-10-26 · **Amends:** ADR 0099 (the View's tiles and parts), ADR 0094 and
   0085 (the Player's bar: its View leaves it), ADR 0064 (the layout's names) · **Spec:**
-  [Chordify for piano](../superpowers/specs/2026-10-26-chordify-for-piano.md) §3
+  [Chordify for piano](../superpowers/specs/2026-10-26-chordify-for-piano.md) §3 · **Amended by:** ADR 0104
+  (Transpose and Simplify after the View)
 
 ## Context
 
