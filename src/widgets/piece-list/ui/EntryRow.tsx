@@ -21,9 +21,9 @@ const KIND_TILE: Readonly<Record<Entry['kind'], { icon: LucideIcon; paint: Paint
 /**
  * A piece or listing in a list, linking to its page on its shelf: its number in its book on its tile
  * (else its kind's icon; no `tile` where every row of its list would wear the same one), its title
- * over its second one (a listing: "no chart yet") and its first chords (Chordify's song cards),
- * then its key (named for a screen reader, as `PieceFacts` names it), its stage's mark and, once
- * learned, the learned badge.
+ * over its second one and how many chords it has (a listing: "no chart yet") and its first chords
+ * (Chordify's song cards), then its key (named for a screen reader, as `PieceFacts` names it), its
+ * stage's mark and, once learned, the learned badge.
  */
 export function EntryRow({ entry, tile = true }: { entry: Entry; tile?: boolean }) {
   const { t } = useTranslation(['songs', 'common', 'music'])
@@ -35,11 +35,19 @@ export function EntryRow({ entry, tile = true }: { entry: Entry; tile?: boolean 
   const kind = KIND_TILE[entry.kind]
   const number = entry.source?.number
   const chords = pieceChords(entry)
+  // How many it has, each once over any bass (ADR 0103): said, as the chords' line is not.
+  const count = pieceChords(entry, Number.POSITIVE_INFINITY).length
+  const detail =
+    entry.kind === 'listing'
+      ? t('songs:noChart')
+      : [secondary, count > 0 ? t('songs:chordCount', { count }) : undefined]
+          .filter((part) => part !== undefined)
+          .join(' · ') || undefined
   return (
     <li>
       <RowLink
         title={primary}
-        detail={entry.kind === 'listing' ? t('songs:noChart') : secondary}
+        detail={detail}
         {...(!tile ? {} : number === undefined ? kind : { numeral: number, paint: kind.paint })}
         trailing={
           entry.kind === 'listing' ? null : (

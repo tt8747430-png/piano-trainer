@@ -79,6 +79,22 @@ describe('Songs', () => {
     expect(listing?.querySelector('[data-slot="row-chords"]')).toBeNull()
   })
 
+  it('says how many chords a song has in its row’s detail, each once over any bass (ADR 0103)', async () => {
+    await renderApp('/songs')
+    const song = await screen.findByRole('link', { name: /Still, my soul, be still/ })
+    // G C Em G/B C/E Dsus4 D/F♯ Am D7 D: G/B is G, D/F♯ is D.
+    expect(within(song).getByText('Мир, душа, храни · 7 chords')).toBeVisible()
+    expect(song).toHaveAccessibleName(/7 chords/)
+    // A listing has no chart to count.
+    const listing = screen.getAllByRole('link', { name: /No chart yet/ })[0]
+    expect(listing).not.toHaveAccessibleName(/chord/)
+    cleanup()
+    await renderApp('/songs', { locale: 'ru' })
+    expect(
+      await screen.findByRole('link', { name: /Мир, душа, храни.*7 аккордов/ }),
+    ).toBeInTheDocument()
+  })
+
   it('prints a row’s chords and its key as the Player prints chord symbols, with ♯ and ♭', async () => {
     await renderApp('/songs')
     const song = await screen.findByRole('link', { name: /You waited for the morning light/ })
