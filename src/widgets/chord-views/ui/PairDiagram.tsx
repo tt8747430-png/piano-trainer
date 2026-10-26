@@ -57,7 +57,7 @@ export function PairDiagram({
           ...(coming || gone ? { opacity: SHOWN[coming ? 'coming' : 'gone'] } : {}),
         } as CSSProperties
       }
-      className="col-start-1 row-start-1 flex max-h-full min-h-0 min-w-0 translate-x-[calc((var(--slot)-var(--slide,0)-var(--swipe,0))*100%)] flex-col items-center gap-2 self-end rounded-xl p-1.5 transition-[translate,background-color] duration-300 ease-out group-data-moving/pair:transition-[background-color] group-data-swiping/pair:transition-[background-color] group-data-settling/pair:transition-[translate,background-color]! hover:bg-muted motion-reduce:transition-none landscape-phone:self-center"
+      className="col-start-1 row-start-1 flex max-h-full min-h-0 min-w-0 translate-x-[calc((var(--slot)-var(--slide,0)-var(--swipe,0))*100%)] flex-col items-center gap-2 self-end rounded-xl p-1.5 transition-[translate,background-color] duration-300 ease-out group-data-moving/pair:transition-[background-color] group-data-swiping/pair:transition-[background-color] group-data-settling/pair:transition-[translate,background-color]! hover:bg-muted group-data-swiping/pair:bg-transparent! motion-reduce:transition-none landscape-phone:self-center"
     >
       <ChordDiagram chord={chord} muted={muted} className="min-h-0" />
       <span

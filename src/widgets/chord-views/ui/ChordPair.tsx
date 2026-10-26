@@ -85,7 +85,7 @@ export function ChordPair({
       data-moving={moving ? '' : undefined}
       onPointerDownCapture={onPointerDownCapture}
       onClickCapture={onClickCapture}
-      className="group/pair -mx-gutter grid w-[calc(100%+2*var(--gutter))] max-w-[calc(56rem+2*var(--gutter))] touch-pan-y grid-cols-2 justify-self-center overflow-hidden overscroll-x-none px-gutter select-none [mask-image:linear-gradient(to_right,transparent,#000_var(--gutter),#000_calc(100%-var(--gutter)),transparent)] landscape-phone:mx-0 landscape-phone:w-full landscape-phone:max-w-[28rem] landscape-phone:px-0 landscape-phone:mask-none"
+      className="group/pair -mx-gutter grid w-[calc(100%+2*var(--gutter))] max-w-[calc(56rem+2*var(--gutter))] touch-pan-y grid-cols-2 justify-self-center overflow-hidden overscroll-x-none px-gutter select-none [mask-image:linear-gradient(to_right,transparent,#000_var(--gutter),#000_calc(100%-var(--gutter)),transparent)] landscape-phone:mx-0 landscape-phone:w-full landscape-phone:max-w-[28rem] landscape-phone:px-0 landscape-phone:mask-none landscape-phone:data-swiping:[mask-image:linear-gradient(to_right,transparent,#000_1.5rem,#000_calc(100%-1.5rem),transparent)]"
     >
       {back && !shown.has(back.chord) ? (
         <PairDiagram
