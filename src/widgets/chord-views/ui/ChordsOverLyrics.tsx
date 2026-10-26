@@ -95,8 +95,9 @@ export function ChordsOverLyrics({
         <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} />
       </div>
       {/* The chords and the song in one column, in the middle of a wide screen as the Grid's chart
-          is, at a reading width; the strip above runs across the view. */}
-      <div className="mx-auto flex w-full max-w-prose flex-col gap-4">
+          is, at a reading width; the strip above runs across the view. The width is in rem: a width
+          in the font's own `ch` had Chrome restyle the whole screen at every beat played. */}
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
         <ChordSummary chords={summary} />
         <div className="flex flex-col gap-3">
           {lines.map((line, index) => {
