@@ -140,7 +140,11 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
 - **Two faces:** Onest for reading and every control (buttons, pop-up buttons, segments, the nav); Literata
   (`font-display`, variable in weight and optical size) for titles (every `h1`–`h3`, at 600 from the base layer) and
   chord symbols. Both faces are variable, so a `font-display` element that is not a heading sets its weight
-  (`font-semibold`); never a serif on a control. Faux bold is off.
+  (`font-semibold`); never a serif on a control. Faux bold is off. Neither face has ♭ ♮ ♯: both take them from Text
+  Accidentals (`src/styles/fonts/`, written by `scripts/text-accidentals.py`), Noto Music's signs set for text.
+- **A chord symbol on screen is printed** (`printedSymbol`, `printedChord` for a chord): `C♯m7`, `B♭`, in its text,
+  its title and its screen reader's name alike, at the place it is shown (the kit's `ChordButton` and `ChordHeading`
+  print what they are given). What is stored, typed, parsed, put in a URL or compared keeps its ASCII (`C#m7`).
 - **Values worked out at runtime** (a key's place, the keys' width and length) go in `style`; every fixed value is a
   token, a utility or a named constant.
 - **Scales on Tailwind's own names,** so `cn()` already knows them: radii `rounded-xs` 6 · `sm` 9 · `md` 10 · `lg` 11

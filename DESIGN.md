@@ -66,57 +66,57 @@ colors:
   sky-night-ink: '#C2DBF1'
 typography:
   chord-display:
-    fontFamily: 'Literata Variable, Noto Music, Georgia, serif'
+    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
     fontSize: '72px'
     fontWeight: 600
     lineHeight: 1
   display:
-    fontFamily: 'Literata Variable, Noto Music, Georgia, serif'
+    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
     fontSize: '44px'
     fontWeight: 600
     lineHeight: 1.1
   large-title:
-    fontFamily: 'Literata Variable, Noto Music, Georgia, serif'
+    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
     fontSize: '34px'
     fontWeight: 600
     lineHeight: 1.15
   title-1:
-    fontFamily: 'Literata Variable, Noto Music, Georgia, serif'
+    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
     fontSize: '28px'
     fontWeight: 600
     lineHeight: 1.2
   title-2:
-    fontFamily: 'Literata Variable, Noto Music, Georgia, serif'
+    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
     fontSize: '22px'
     fontWeight: 600
     lineHeight: 1.3
   title-3:
-    fontFamily: 'Literata Variable, Noto Music, Georgia, serif'
+    fontFamily: 'Literata Variable, Text Accidentals, Noto Music, Georgia, serif'
     fontSize: '20px'
     fontWeight: 600
     lineHeight: 1.25
   headline:
-    fontFamily: 'Onest Variable, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
     fontSize: '17px'
     fontWeight: 600
     lineHeight: 1.375
   control:
-    fontFamily: 'Onest Variable, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
     fontSize: '16px'
     fontWeight: 600
     lineHeight: 1.5
   body:
-    fontFamily: 'Onest Variable, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
     fontSize: '16px'
     fontWeight: 400
     lineHeight: 1.5
   label:
-    fontFamily: 'Onest Variable, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
     fontSize: '14px'
     fontWeight: 500
     lineHeight: 1.43
   key-label:
-    fontFamily: 'Onest Variable, Noto Music, system-ui, sans-serif'
+    fontFamily: 'Onest Variable, Text Accidentals, Noto Music, system-ui, sans-serif'
     fontSize: '14px'
     fontWeight: 700
     lineHeight: 1.43
@@ -425,9 +425,14 @@ resting mark's wash to 55% of its paint (night 62%). Every calm value ships with
 
 ## Typography
 
-**Display Font:** Literata Variable (weight and optical-size axes, Latin and Cyrillic), self-hosted, with Noto Music
-and Georgia behind it; its Greek and Vietnamese subsets stay out of the PWA precache.
-**Body Font:** Onest Variable, self-hosted (with Noto Music's music subset behind it for 𝄪 and 𝄫, then system-ui).
+**Display Font:** Literata Variable (weight and optical-size axes, Latin and Cyrillic), self-hosted, with Text
+Accidentals, Noto Music and Georgia behind it; its Greek and Vietnamese subsets stay out of the PWA precache.
+**Body Font:** Onest Variable, self-hosted (with Text Accidentals and Noto Music's music subset behind it, then
+system-ui).
+**Text Accidentals:** neither face has ♭ ♮ ♯ 𝄪 𝄫, and Noto Music draws them for a staff (a sharp low, small and light
+beside a letter), so both faces take them from Noto Music's signs set for text: raised to stand by the capitals, a
+little larger, their thin stems thickened to weigh as the semibold letters (`scripts/text-accidentals.py`). Every
+chord symbol is printed with them (`C♯m7`, `B♭`, `printedSymbol`), at every size it is set in either face.
 
 **Character:** a sans and a serif made to work together, as a system face and its book face are. Literata sets what
 names a screen or a chord, at weight 600, and its optical size fits its drawing to each size; Onest carries everything
