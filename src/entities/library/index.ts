@@ -1,5 +1,4 @@
 export {
-  isSetlistId,
   MOST_PIECES,
   MOST_SETLISTS,
   SETLIST_NAME_MAX,
