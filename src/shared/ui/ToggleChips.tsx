@@ -1,23 +1,27 @@
+import { cn } from '@/shared/lib'
 import { optionName, type Option, type OptionValue } from './option'
 import { Toggle } from './primitives/toggle'
 
 /**
  * Several on-or-offs of a few, every one in sight: a row of chips that wraps, each pressed while it
- * is chosen. A group named by its label; the chosen come back in the options' order.
+ * is chosen. A group named by its label; the chosen come back in the options' order. `className`
+ * sets the chips' face where it is not the controls' (chord symbols, in the book serif).
  */
 export function ToggleChips<V extends OptionValue>({
   label,
   value,
   options,
   onChange,
+  className,
 }: {
   label: string
   value: readonly V[]
   options: readonly Option<V>[]
   onChange: (value: V[]) => void
+  className?: string
 }) {
   return (
-    <div role="group" aria-label={label} className="flex flex-wrap gap-2">
+    <div role="group" aria-label={label} className={cn('flex flex-wrap gap-2', className)}>
       {options.map((option) => (
         <Toggle
           key={String(option.value)}

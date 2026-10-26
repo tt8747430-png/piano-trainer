@@ -2,6 +2,8 @@ import { act, cleanup, fireEvent, screen, waitFor, within } from '@testing-libra
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { untranslated } from '@/app/testing/untranslated'
+import { LIBRARY_STORAGE_KEY, LIBRARY_VERSION } from '@/entities/library'
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { markLearned } from '@/features/mark-learned/mark-learned'
 import { createMemoryStorage } from '@/shared/lib'
@@ -277,5 +279,129 @@ describe('Songs: your own', () => {
       'aria-selected',
       'true',
     )
+  })
+})
+
+describe('Songs: the learner’s library (ADR 0103)', () => {
+  /** A device whose library holds `state`. */
+  const kept = (state: object) => {
+    const storage = createMemoryStorage()
+    storage.setItem(LIBRARY_STORAGE_KEY, JSON.stringify({ state, version: LIBRARY_VERSION }))
+    return storage
+  }
+  const SUNDAY = { id: 'set-1', name: 'Sunday', pieces: ['silent', 'bz5', 'gone'] }
+
+  it('has Favourites and Setlists after All', async () => {
+    await renderApp('/songs')
+    const tabs = await screen.findByRole('tablist', { name: 'Collection' })
+    expect(
+      within(tabs)
+        .getAllByRole('tab')
+        .slice(0, 4)
+        .map((tab) => tab.textContent),
+    ).toEqual(['All', 'Favourites', 'Setlists', 'Songs to learn'])
+  })
+
+  it('shows the favourites on their tab, the newest first, the search and filters keeping to them', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/songs?collection=favourites', {
+      storage: kept({ favourites: ['silent', 'my-9', 'bz5'] }),
+    })
+    const silent = await screen.findByRole('link', { name: /Silent Night/ })
+    const bz5 = screen.getByRole('link', { name: /Still, my soul, be still/ })
+    expect(silent.compareDocumentPosition(bz5)).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+    // No collection's song stands among them.
+    expect(screen.queryByRole('link', { name: /Hot Cross Buns/ })).not.toBeInTheDocument()
+    await user.type(screen.getByRole('searchbox', { name: 'Search songs' }), 'душа')
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ q: 'душа' }))
+    expect(screen.queryByRole('link', { name: /Silent Night/ })).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Still, my soul, be still/ })).toBeInTheDocument()
+  })
+
+  it('says how to fill the favourites before there are any', async () => {
+    await renderApp('/songs?collection=favourites')
+    expect(await screen.findByText('No favourites yet')).toBeInTheDocument()
+    expect(screen.getByText('Tap ♡ on a song’s page to keep it here.')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Clear filters' })).not.toBeInTheDocument()
+  })
+
+  it('lists the setlists, each its name, its songs counted and its first titles, opening its page', async () => {
+    await renderApp('/songs?collection=setlists', { storage: kept({ setlists: [SUNDAY] }) })
+    const sunday = await screen.findByRole('link', { name: /^Sunday/ })
+    expect(sunday).toHaveAttribute('href', '/songs/setlists/set-1')
+    expect(sunday).toHaveTextContent('2 songs')
+    expect(sunday).toHaveTextContent('Silent Night · Still, my soul, be still')
+    // A setlist is no song: the songs' filters are not offered over it.
+    expect(screen.getByRole('searchbox', { name: 'Search setlists' })).toBeInTheDocument()
+    expect(screen.queryByRole('combobox', { name: /^Level/ })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'With chords' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /^Chords I know/ })).not.toBeInTheDocument()
+  })
+
+  it('finds a setlist by its name or a song in it, and says when none matches', async () => {
+    await renderApp('/songs?collection=setlists&q=silent', {
+      storage: kept({ setlists: [SUNDAY, { id: 'set-2', name: 'Easter', pieces: [] }] }),
+    })
+    expect(await screen.findByRole('link', { name: /^Sunday/ })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /^Easter/ })).not.toBeInTheDocument()
+    cleanup()
+    await renderApp('/songs?collection=setlists&q=zzzz', { storage: kept({ setlists: [SUNDAY] }) })
+    expect(await screen.findByText('No setlists match “zzzz”.')).toBeInTheDocument()
+  })
+
+  it('makes a new setlist named in place, and opens it', async () => {
+    const user = userEvent.setup()
+    const { router, libraryStore } = await renderApp('/songs?collection=setlists')
+    expect(await screen.findByText('No setlists yet')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'New setlist' }))
+    await user.type(screen.getByRole('textbox', { name: 'Setlist name' }), 'Sunday{Enter}')
+    await waitFor(() => expect(router.state.location.pathname).toBe('/songs/setlists/set-1'))
+    expect(libraryStore.getState().setlists).toEqual([{ id: 'set-1', name: 'Sunday', pieces: [] }])
+  })
+
+  it('keeps only the songs that use the chords ticked in Chords I know, kept in the URL', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/songs')
+    await user.click(await screen.findByRole('button', { name: 'Chords I know' }))
+    const chords = await screen.findByRole('group', { name: 'Chords I know' })
+    // The chords the songs use, the most used first.
+    expect(
+      within(chords)
+        .getAllByRole('button')
+        .slice(0, 3)
+        .map((chip) => chip.textContent),
+    ).toEqual(['C', 'G', 'F'])
+    await user.click(within(chords).getByRole('button', { name: 'C' }))
+    await user.click(within(chords).getByRole('button', { name: 'G' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ known: 'C.G' }))
+    expect(screen.getByRole('button', { name: 'Chords I know: 2' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Hot Cross Buns/ })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /London Bridge/ })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /Still, my soul, be still/ })).not.toBeInTheDocument()
+    // Clear lets every song back.
+    await user.click(screen.getByRole('button', { name: 'Clear' }))
+    await waitFor(() => expect(router.state.location.search).not.toHaveProperty('known'))
+    expect(screen.getByRole('link', { name: /London Bridge/ })).toBeInTheDocument()
+  })
+
+  it('says when no song uses only the chords known', async () => {
+    await renderApp('/songs?collection=hymns&known=C')
+    expect(
+      await screen.findByText('No songs here use only the chords you know.'),
+    ).toBeInTheDocument()
+  })
+
+  it('reads in Russian', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs?collection=setlists', {
+      locale: 'ru',
+      storage: kept({ setlists: [SUNDAY] }),
+    })
+    expect(await screen.findByRole('link', { name: /^Sunday/ })).toHaveTextContent('2 песни')
+    expect(untranslated(document.body)).toEqual([])
+    await user.click(screen.getByRole('tab', { name: 'Все' }))
+    await user.click(await screen.findByRole('button', { name: 'Знакомые аккорды' }))
+    await screen.findByRole('group', { name: 'Знакомые аккорды' })
+    expect(untranslated(document.body)).toEqual([])
   })
 })
