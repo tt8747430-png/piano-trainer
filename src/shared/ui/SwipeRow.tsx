@@ -5,14 +5,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import {
-  animate,
-  motion,
-  type MotionValue,
-  useMotionValue,
-  useReducedMotion,
-  useTransform,
-} from 'motion/react'
+import { animate, motion, type MotionValue, useMotionValue, useTransform } from 'motion/react'
 import { useDrag } from '@use-gesture/react'
 import type { LucideIcon } from 'lucide-react'
 import {
@@ -24,6 +17,7 @@ import {
   resolveSwipeRelease,
   type SwipeGeometry,
   useGestureHold,
+  useMediaQuery,
 } from '@/shared/lib'
 import { PAINT, type Paint } from './paint'
 
@@ -63,7 +57,8 @@ export function SwipeRow({
   trailing?: readonly SwipeAction[]
   className?: string
 }) {
-  const reduce = useReducedMotion()
+  // Read per row, as the app's other motion is (`useSortableList`): the OS's setting as it is now.
+  const reduce = useMediaQuery('(prefers-reduced-motion: reduce)')
   const x = useMotionValue(0)
   const [open, setOpen] = useState<Side | null>(null)
   const [armed, setArmed] = useState<Side | null>(null)
