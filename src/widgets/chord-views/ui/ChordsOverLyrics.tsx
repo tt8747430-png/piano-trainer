@@ -120,7 +120,7 @@ export function ChordsOverLyrics({
       >
         <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} />
         {pinned ? (
-          <div className="mx-auto mt-2 w-full max-w-2xl px-gutter landscape-phone:px-0">
+          <div className="mx-auto mt-1 w-full max-w-2xl px-gutter landscape-phone:px-0">
             <ChordSummary chords={summary} sounding={sounding} />
           </div>
         ) : null}

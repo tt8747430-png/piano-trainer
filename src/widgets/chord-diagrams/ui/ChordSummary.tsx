@@ -10,8 +10,9 @@ import { ChordSheet } from './ChordSheet'
  * A piece's chord summary (ADR 0099, 0101): its chords in the order they first sound
  * (`chordSummary`), each its keys over its symbol as the sheet prints it (`C♯m7`), a button opening
  * its sheet; one row, scrolling sideways where it is wider than its room. Nothing for music of no
- * chord symbol. Following the music (`sounding`, Chords over lyrics' pinned row, ADR 0108), the
- * chord sounding is outlined in ink and kept in sight, the others' symbols muted.
+ * chord symbol. Following the music (`sounding`, Chords over lyrics' pinned row, ADR 0108), it is
+ * drawn smaller, to stay pinned in little room, and the chord sounding is outlined in ink and kept
+ * in sight, the others' symbols muted.
  */
 export function ChordSummary({
   chords,
@@ -58,16 +59,21 @@ export function ChordSummary({
                 aria-current={now ? 'true' : undefined}
                 onClick={() => setShown({ symbol: each.symbol, open: true })}
                 className={cn(
-                  'flex flex-col items-center gap-1.5 rounded-xl border border-transparent p-2 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
+                  'flex flex-col items-center rounded-xl border border-transparent transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
+                  follows ? 'gap-0.5 px-1.5 py-1' : 'gap-1.5 p-2',
                   now && 'border-foreground',
                 )}
               >
                 {/* Every chord on the same keys, the same size. */}
-                <ChordDiagram chord={each} className="h-10 w-auto" />
+                <ChordDiagram
+                  chord={each}
+                  className={follows ? 'h-8 w-auto landscape-phone:h-6' : 'h-10 w-auto'}
+                />
                 <span
                   aria-hidden
                   className={cn(
-                    'font-display text-lg leading-tight font-semibold',
+                    'font-display leading-tight font-semibold',
+                    follows ? 'text-base landscape-phone:text-sm' : 'text-lg',
                     follows && !now && 'text-muted-foreground',
                   )}
                 >

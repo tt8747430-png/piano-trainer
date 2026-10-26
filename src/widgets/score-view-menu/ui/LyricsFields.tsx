@@ -9,7 +9,8 @@ import { Button } from '@/shared/ui/primitives/button'
 
 /**
  * The text size, a step smaller or larger by − and + (ADR 0108, Chordify's font size): its name, then
- * − the size + at the row's end, each step one of `TEXT_SIZES`, greyed at either end.
+ * − the size + at the row's end (under its name where the row has no room), each step one of
+ * `TEXT_SIZES`, greyed at either end.
  */
 function TextSizeRow() {
   const { t } = useTranslation('player')
@@ -26,7 +27,7 @@ function TextSizeRow() {
     <div
       role="group"
       aria-labelledby={id}
-      className="flex min-h-14 items-center justify-between gap-4 py-2 text-lg"
+      className="flex min-h-14 flex-wrap items-center justify-between gap-x-3 gap-y-2 py-2 text-lg"
     >
       <span
         aria-hidden
@@ -34,10 +35,10 @@ function TextSizeRow() {
       >
         Aa
       </span>
-      <span id={id} className="min-w-0 flex-1">
+      <span id={id} className="flex-1 whitespace-nowrap">
         {t('views.textSize.label')}
       </span>
-      <span className="flex shrink-0 items-center gap-1">
+      <span className="ms-auto flex shrink-0 items-center gap-1">
         <Button
           variant="outline"
           size="icon"
