@@ -224,7 +224,9 @@ const SONG_COLLECTION_IDS = [
   'hymns',
   'gorshkov',
 ] as const satisfies readonly CollectionId[]
-export const isSongCollectionId = isOneOf<CollectionId>(SONG_COLLECTION_IDS)
+/** A collection Songs lists: each is a folder of the library from the start (ADR 0106). */
+export type SongCollectionId = (typeof SONG_COLLECTION_IDS)[number]
+export const isSongCollectionId = isOneOf<SongCollectionId>(SONG_COLLECTION_IDS)
 export interface Collection {
   readonly id: CollectionId
   readonly name: LocalText
