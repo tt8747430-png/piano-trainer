@@ -29,7 +29,7 @@ export function LibraryFilters({
   const { t } = useTranslation('songs')
   const set = useViewChange<SongsFilter>()
   return (
-    <div className="flex flex-col gap-3 lg:max-w-3xl">
+    <div className="flex flex-col gap-3">
       <div className="flex items-center gap-2">
         <div className="min-w-0 flex-1">
           <SearchField

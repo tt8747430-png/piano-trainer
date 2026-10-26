@@ -18,7 +18,7 @@ export function LibraryBrowse({ page, onClear }: { page: LibraryPage; onClear: (
       <FilteredNotice shown={view.shown} hidden={view.hidden} onClear={onClear} />
       {view.folders.length > 0 ? (
         <section aria-label={t('folder.list')}>
-          <ul className="grid-cards gap-2">
+          <ul className="grid-cards auto-rows-fr gap-2">
             {view.folders.map(({ folder, ...holds }) => (
               <FolderRow
                 key={folder.id}
@@ -44,7 +44,7 @@ export function LibraryBrowse({ page, onClear }: { page: LibraryPage; onClear: (
                 {group.heading}
               </h2>
             ) : null}
-            <ul className="grid-cards gap-2">
+            <ul className="grid-cards auto-rows-fr gap-2">
               {group.entries.map((entry) => (
                 <SongRow
                   key={entry.id}

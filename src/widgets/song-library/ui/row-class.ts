@@ -1,7 +1,10 @@
 // A row of the library (ADR 0106), as the list draws it, as Select draws it and as the hand holds it
 // (Mindscape's `row-style`: the drag's overlay is the row it came from, never a row of another size).
 
-/** The row's card: its hover fills it whole, under a mouse. */
+/**
+ * The row's card. Under a mouse its fill follows its link alone (`has-[>a:hover]`), so More, beside
+ * the link, shows its own hover and reads as a button of its own.
+ */
 export const ROW_CARD =
   'card flex h-full min-w-0 items-center gap-1 pr-1 transition-colors duration-200 ease-out'
 

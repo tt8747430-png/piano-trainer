@@ -47,8 +47,12 @@ export function SongRow({
   const press = useLongPress({ onLongPress: onSelect })
   return (
     <li>
-      <SwipeRow leading={swipeOf(actions, LEADING)} trailing={swipeOf(actions, TRAILING)}>
-        <div className={cn(ROW_CARD, 'hover:bg-muted')}>
+      <SwipeRow
+        leading={swipeOf(actions, LEADING)}
+        trailing={swipeOf(actions, TRAILING)}
+        className="h-full"
+      >
+        <div className={cn(ROW_CARD, 'has-[>a:hover]:bg-muted')}>
           <PieceLink entry={entry} className={ROW_BODY} {...press}>
             <RowFace {...face} />
           </PieceLink>

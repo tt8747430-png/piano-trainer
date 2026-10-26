@@ -34,9 +34,13 @@ export function FolderRow({
   const nameOf = useFolderName()
   const press = useLongPress({ onLongPress: onSelect })
   return (
-    <li>
-      <SwipeRow leading={swipeOf(actions, LEADING)} trailing={swipeOf(actions, TRAILING)}>
-        <div className={cn(ROW_CARD, 'hover:bg-muted')}>
+    <li className="min-w-0">
+      <SwipeRow
+        leading={swipeOf(actions, LEADING)}
+        trailing={swipeOf(actions, TRAILING)}
+        className="h-full"
+      >
+        <div className={cn(ROW_CARD, 'has-[>a:hover]:bg-muted')}>
           <Link
             to="/songs/folders/$folderId"
             params={{ folderId: folder.id }}
