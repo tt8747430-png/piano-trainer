@@ -37,7 +37,7 @@ const NO_STAVES: readonly { readonly name?: StaffName }[] = []
 
 /**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar, one row from a
- * 360px phone up (Close, Practise · Edit, then MIDI, Setup and More, ADR 0099); the tools row under
+ * 320px phone up (Close, Practise · Edit, then MIDI, Setup and More, ADR 0099); the tools row under
  * it (ADR 0102: the View, named by the view shown); the music under its title (ADR 0094) as the View
  * shows it (ADR 0099: the sheet music, Chords over lyrics, Diagrams or the Grid), Wait mode's line,
  * the transport floating under it (the tempo, ‹ ▶ ›, the loop and the hands) and the keys at the
@@ -121,12 +121,12 @@ export function PlayerLayout({
     <PlayerScreen keys={dock} aside={shown === 'diagrams' && practice.state.playing}>
       {/* Close, then Practise · Edit, as the editor's bar has them (ADR 0090, 0094), level with the
           bar's first row of buttons where they wrap. Closer on a phone held upright, as the
-          editor's bar is there, so the bar keeps one row from 360px. */}
+          editor's bar is there, so the bar keeps one row from 320px. */}
       <PlayerArea area="lead" className="flex items-center gap-2 self-start max-sm:gap-1">
         <PlayerClose onClose={onClose} />
         {modes}
       </PlayerArea>
-      {/* Where the bar is too narrow for them all (a phone under 360px), its buttons wrap rather
+      {/* Where the bar is too narrow for them all (a larger text size), its buttons wrap rather
           than cover Close. The loop is the transport's (ADR 0099), the View the tools row's (ADR
           0102). */}
       <PlayerArea

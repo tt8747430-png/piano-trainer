@@ -2,6 +2,7 @@ import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { untranslated } from '@/app/testing/untranslated'
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import type { MusicView } from '@/entities/settings'
 import { setScoreView } from '@/features/set-preference'
@@ -243,6 +244,30 @@ describe('the View, by view (ADR 0102)', () => {
     }
     expect(within(menu).getByRole('radio', { name: 'Sheet music' })).toBeChecked()
     expect(settingsStore.getState().scoreView.music).toBe('grid')
+  })
+
+  it('reads in Russian, its tools row, each view’s part and what each greyed view needs', async () => {
+    const user = userEvent.setup()
+    await savedAs('lyrics', '/play/bz5', { locale: 'ru' })
+    await user.click(screen.getByRole('button', { name: 'Вид: Схемы аккордов' }))
+    const menu = await screen.findByRole('dialog', { name: 'Вид' })
+    expect(within(menu).getByRole('radio', { name: 'Аккорды над текстом' })).toHaveAttribute(
+      'title',
+      'Нужен текст',
+    )
+    expect(untranslated(document.body)).toEqual([])
+    await user.click(within(menu).getByRole('button', { name: 'Подробнее: Режим' }))
+    await screen.findByRole('dialog', { name: 'Режим' })
+    expect(untranslated(document.body)).toEqual([])
+    await user.keyboard('{Escape}')
+    await user.click(within(menu).getByRole('radio', { name: 'Ноты' }))
+    const layout = within(menu).getByRole('radiogroup', { name: 'Расположение' })
+    expect(segmentsOf(layout)).toEqual(['Страницы', 'Прокрутка вниз', 'Прокрутка вбок'])
+    await user.click(
+      within(menu).getByRole('button', { name: 'Подробнее: Как показывать музыку' }),
+    )
+    await screen.findByRole('dialog', { name: 'Как показывать музыку' })
+    expect(untranslated(document.body)).toEqual([])
   })
 
   it('gives Chords over lyrics and the Grid no section of their own', async () => {
