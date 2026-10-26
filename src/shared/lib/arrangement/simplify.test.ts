@@ -40,8 +40,32 @@ describe('simplifyChart', () => {
     )
     expect(symbols(simplifyChart(written))).toEqual([
       ['Em G', 'C'],
-      ['', 'D D'],
+      ['', 'D'],
     ])
+  })
+
+  it('holds a chord on where the next in its bar simplifies to it, as a lead sheet writes it once', () => {
+    const written = chart(
+      lines([
+        bar(chord('C', 1), chord('C/E', 1), chord('Dsus4', 1), chord('D/F#', 1)),
+        bar(chord('D7', 4)),
+      ]),
+    )
+    const [bars] = simplifyChart(written).sections.flatMap((section) => section.lines)
+    expect(bars?.map((each) => each.chords.map((c) => [chordSymbol(c), c.beats]))).toEqual([
+      [
+        ['C', 2],
+        ['D', 2],
+      ],
+      [['D', 4]],
+    ])
+  })
+
+  it('keeps a chord written twice as it is written, and two played by different methods', () => {
+    const twice = chart(lines([bar(chord('G', 2), chord('G', 2))]))
+    expect(simplifyChart(twice)).toEqual(twice)
+    const methods = chart(lines([bar(chord('A7', 2, 't1'), chord('A', 2))]))
+    expect(symbols(simplifyChart(methods))).toEqual([['A A']])
   })
 
   it('keeps every chord’s length and method, each bar’s hands and barlines, each section’s key and meter', () => {
