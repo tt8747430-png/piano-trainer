@@ -7,6 +7,7 @@ import { topStaff } from './rows'
 import type { TakePart } from './take-edits'
 import type { Line } from './lines'
 import type { MarkChoice } from './marks'
+import type { TransposeApplies } from './settings'
 import type { ChosenValue, Dots } from './values'
 
 /** What undo and redo bring back. */
@@ -177,6 +178,12 @@ export type EditorAction =
       readonly key?: Key
       readonly tempo?: number
       readonly meter?: Meter
+    }
+  /** The music moved by semitones, the key and the chord symbols with it as asked (ADR 0110). */
+  | {
+      readonly type: 'transpose'
+      readonly semitones: number
+      readonly applies: TransposeApplies
     }
   /** The title printed at the sheet's head, given anew (ADR 0094): an empty one changes nothing. */
   | { readonly type: 'title'; readonly title: string }

@@ -35,7 +35,7 @@ import {
 import { setMeter, setSectionMeter } from './meters'
 import { joinSection, setSectionKey, setSectionKind } from './sections'
 import { addStaff, removeStaff, renameStaff, setStaffClef } from './staves'
-import { setKey, setTempo } from './settings'
+import { setKey, setTempo, transpose } from './settings'
 import { nextMode, type EditorAction, type EditorState } from './state'
 import { writeTake } from './take-edits'
 import { barAt, barsOf, keyAt } from './timeline'
@@ -326,6 +326,8 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       if (action.meter) next = setMeter(next, action.meter)
       return commit(state, next)
     }
+    case 'transpose':
+      return commit(state, transpose(draft, action.semitones, action.applies))
     case 'title': {
       const title = songTitle(action.title)
       return title === null || title === draft.title ? state : commit(state, { ...draft, title })

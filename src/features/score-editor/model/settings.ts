@@ -1,7 +1,15 @@
 import { keyText, PIECE_TEMPO, type KeyText } from '@/entities/piece'
 import { transposeChord, transposeNotes } from '@/shared/lib/arrangement'
-import { midi, parseKey, PIANO, transposeNote, writtenKey, type Key } from '@/shared/lib/music'
-import { withEveryStaff, type Draft, type DraftNote } from './draft'
+import {
+  midi,
+  parseKey,
+  PIANO,
+  transposedKey,
+  transposeNote,
+  writtenKey,
+  type Key,
+} from '@/shared/lib/music'
+import { withEveryStaff, type Draft, type DraftNote, type DraftSection } from './draft'
 
 /** Notes moved to a new tonic, each kept on the piano by octaves. */
 function moved(notes: readonly DraftNote[], from: Key, to: Key): DraftNote[] {
@@ -48,6 +56,48 @@ export function setKey(draft: Draft, key: Key): Draft {
     },
     (notes) => moved(notes, from, key),
   )
+}
+
+/** What Transpose moves besides the notes (ADR 0110): the key signature, and the chord symbols. */
+export interface TransposeApplies {
+  readonly key: boolean
+  readonly chords: boolean
+}
+
+/** Each section's key and chords taken from `from`, its bars as `to` has them otherwise. */
+const keepingFrom = (
+  to: readonly DraftSection[],
+  from: readonly DraftSection[],
+  applies: TransposeApplies,
+): DraftSection[] =>
+  to.map((section, s) => {
+    const was = from[s]
+    if (!was) return section
+    return {
+      heading: applies.key ? section.heading : was.heading,
+      lines: applies.chords
+        ? section.lines
+        : section.lines.map((line, l) =>
+            line.map((bar, b) => ({ ...bar, chords: was.lines[l]?.[b]?.chords ?? bar.chords })),
+          ),
+    }
+  })
+
+/**
+ * The music moved by semitones (ADR 0110, the transpose sheets of notation apps), the short way its
+ * notes move (−5 to +6), to the key spelled by its simplest signature (`transposedKey`, ADR 0104):
+ * the notes always; the key signature, a section's own key too, with `key`; the chord symbols with
+ * `chords`. A key kept, the notes are spelled as in the key they moved to, accidentals printed.
+ */
+export function transpose(draft: Draft, semitones: number, applies: TransposeApplies): Draft {
+  if (semitones === 0) return draft
+  const moved = setKey(draft, transposedKey(draft.key, semitones))
+  if (applies.key && applies.chords) return moved
+  return {
+    ...moved,
+    key: applies.key ? moved.key : draft.key,
+    sections: keepingFrom(moved.sections, draft.sections, applies),
+  }
 }
 
 /** The tempo, kept within the tempos a piece is written at. */
