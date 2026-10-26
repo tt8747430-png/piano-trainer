@@ -178,9 +178,16 @@ export const music = {
   // The sheet music: the Player's staff.
   sheet: {
     label: 'Sheet music',
-    // How a score is laid out (ADR 0064), the same words in the Player and the editor.
-    // As notation apps name their views: one line across, lines down the screen, A4 pages.
-    layout: { label: 'Layout', horizontal: 'Panorama', scroll: 'Scroll', pages: 'Pages' },
+    // How a score is laid out (ADR 0064, 0102), the same words in the Player and the editor: A4
+    // pages, lines down the screen, one line across; each named by how it reads, never as a view.
+    layout: {
+      label: 'Layout',
+      pages: 'Pages',
+      scroll: 'Scroll down',
+      horizontal: 'Scroll across',
+      about:
+        'On A4 pages as printed; in lines one under the other, scrolled down; or in one line, scrolled across',
+    },
     // A staff's own options, inline on its card (ADR 0058).
     fingers: 'Fingers',
     noteNames: 'Note names',

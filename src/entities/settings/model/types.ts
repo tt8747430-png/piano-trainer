@@ -160,14 +160,25 @@ export const MUSIC_VIEWS = ['sheet', 'lyrics', 'diagrams', 'grid'] as const
 export type MusicView = (typeof MUSIC_VIEWS)[number]
 
 /**
+ * The Diagrams view's modes (ADR 0102, Chordify's "Diagram view mode"): the chord sounding beside
+ * the next, moving with the music; or the song's chords all at once, the one sounding marked.
+ */
+export const DIAGRAMS_MODES = ['animated', 'summary'] as const
+export type DiagramsMode = (typeof DIAGRAMS_MODES)[number]
+
+/**
  * How the Player and the score editor show a score (ADR 0064, Soundslice's view settings): laid out
  * as one line across, lines down the screen or A4 pages; the Player's view of it (ADR 0099: the
- * editor always shows the score); the chord names; the words under the staff they are written on
- * (ADR 0093); the staves hidden, each by its place (ADR 0097); and the keys, or the score alone.
+ * editor always shows the score), Diagrams' mode, and whether a song opens asking for it (ADR 0102);
+ * the chord names; the words under the staff they are written on (ADR 0093); the staves hidden, each
+ * by its place (ADR 0097); and the keys, or the score alone.
  */
 export interface ScoreViewSettings {
   readonly layout: SheetView
   readonly music: MusicView
+  readonly diagrams: DiagramsMode
+  /** A piece's Player opens with its View menu open (Chordify's "Show this when opening a song"). */
+  readonly askOnOpen: boolean
   readonly chordNames: boolean
   /** The verses under the staff they are written on, where the song has words. */
   readonly lyrics: boolean
@@ -179,11 +190,14 @@ export interface ScoreViewSettings {
 
 /**
  * Down the screen, a line at a time, as a phone held upright reads best (one line across shows a bar
- * or two there); every staff, the chord names, the words.
+ * or two there); Diagrams moving with the music; a song opening in the view last chosen; every
+ * staff, the chord names, the words.
  */
 export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   layout: 'scroll',
   music: 'sheet',
+  diagrams: 'animated',
+  askOnOpen: false,
   chordNames: true,
   lyrics: true,
   hidden: [],
@@ -276,6 +290,7 @@ export const isOctaveShift = isOneOf(OCTAVE_SHIFTS)
 export const isTouch = isOneOf(TOUCHES)
 export const isPedalWay = isOneOf(PEDAL_WAYS)
 export const isMusicView = isOneOf(MUSIC_VIEWS)
+export const isDiagramsMode = isOneOf(DIAGRAMS_MODES)
 
 /** The first of the browser's preferred languages the app speaks decides; English otherwise. */
 export function detectLocale(languages: readonly string[] | undefined): Locale {

@@ -45,38 +45,27 @@ function keysDown(audio: { played: readonly { at: number }[]; setNow: (now: numb
 }
 
 describe('the View’s views of the music (ADR 0099)', () => {
-  it('chooses a view from its tiles, saved for every piece, the rest of the menu what the view has', async () => {
+  it('chooses a view from its tiles, saved for every piece', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
-    await user.click(await screen.findByRole('button', { name: 'View' }))
+    await user.click(await screen.findByRole('button', { name: 'View: Sheet music' }))
     const menu = await screen.findByRole('dialog', { name: 'View' })
     await user.click(within(menu).getByRole('radio', { name: 'Diagrams' }))
     expect(settingsStore.getState().scoreView.music).toBe('diagrams')
-    expect(screen.getByRole('region', { name: 'Diagrams' })).toBeInTheDocument()
-    expect(screen.queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
     expect(within(menu).getByRole('radio', { name: 'Diagrams' })).toHaveAttribute(
       'aria-checked',
       'true',
     )
-    /** The menu's switches are these, in order. */
-    const switchesAre = (...names: string[]) => {
-      const switches = within(menu).getAllByRole('switch')
-      expect(switches).toHaveLength(names.length)
-      names.forEach((name, i) => expect(switches[i]).toHaveAccessibleName(name))
-    }
-    // The line sung is Diagrams', so its Lyrics stays; the layout and the staves are the sheet's.
-    expect(within(menu).queryByRole('region', { name: 'Layout' })).not.toBeInTheDocument()
-    expect(within(menu).queryByRole('region', { name: 'Staves' })).not.toBeInTheDocument()
-    switchesAre('Lyrics', 'Keys')
+    // The music, under the menu's own part for the view (ADR 0102).
+    const music = document.querySelector<HTMLElement>('[data-area="sheet"]')
+    if (!music) throw new Error('the music’s area')
+    expect(within(music).getByRole('region', { name: 'Diagrams' })).toBeInTheDocument()
+    expect(within(music).queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
     await user.click(within(menu).getByRole('radio', { name: 'Chords over lyrics' }))
-    expect(screen.getByRole('region', { name: 'Chords over lyrics' })).toBeInTheDocument()
-    switchesAre('Keys')
-    await user.click(within(menu).getByRole('radio', { name: 'Grid' }))
-    switchesAre('Keys')
+    expect(within(music).getByRole('region', { name: 'Chords over lyrics' })).toBeInTheDocument()
     await user.click(within(menu).getByRole('radio', { name: 'Sheet music' }))
     expect(settingsStore.getState().scoreView.music).toBe('sheet')
-    expect(await screen.findByRole('region', { name: 'Sheet music' })).toBeInTheDocument()
-    expect(within(menu).getByRole('region', { name: 'Layout' })).toBeInTheDocument()
+    expect(await within(music).findByRole('region', { name: 'Sheet music' })).toBeInTheDocument()
   })
 
   it('opens every piece in the view last chosen', async () => {
@@ -85,27 +74,6 @@ describe('the View’s views of the music (ADR 0099)', () => {
     first.unmount()
     await renderApp('/play/silent', { storage })
     expect(await screen.findByRole('region', { name: 'Grid' })).toBeInTheDocument()
-  })
-
-  it('says music of no chord symbol has none, with the way to its sheet music', async () => {
-    const user = userEvent.setup()
-    const storage = withSong({
-      sections: [{ kind: 'verse', lines: ['_ _'] }],
-      hands: { rh: 'B4/4 | D5/4', lh: 'r/4 | r/4' },
-    })
-    const { settingsStore } = await inView('lyrics', '/play/my-1', { storage })
-    for (const [music, name] of [
-      ['lyrics', 'Chords over lyrics'],
-      ['diagrams', 'Diagrams'],
-      ['grid', 'Grid'],
-    ] as const) {
-      act(() => setScoreView(settingsStore, { music }))
-      const view = screen.getByRole('region', { name })
-      expect(within(view).getByText('This music has no chord symbols.')).toBeInTheDocument()
-    }
-    await user.click(screen.getByRole('button', { name: 'Show the sheet music' }))
-    expect(settingsStore.getState().scoreView.music).toBe('sheet')
-    expect(await screen.findByRole('region', { name: 'Sheet music' })).toBeInTheDocument()
   })
 
   it('reads in Russian', async () => {
@@ -300,6 +268,9 @@ describe('Chords over lyrics (ADR 0099)', () => {
         rh: 'B4/4 | B4/4 | A4/4 | G4/4 | E4/4 | D4/4',
         lh: 'r/4 | r/4 | r/4 | r/4 | r/4 | r/4',
       },
+      // Words in the chorus alone: music of none shows Diagrams (ADR 0102).
+      staves: [{ notes: 'r/4 | r/4 | r/4 | r/4 | E4/4 | D4/4' }],
+      lyrics: ['Sing on'],
     })
     await inView('lyrics', '/play/my-1', { storage })
     expect(screen.queryByRole('button', { name: 'Bars 1–2' })).not.toBeInTheDocument()
@@ -313,13 +284,18 @@ describe('Chords over lyrics (ADR 0099)', () => {
   })
 
   it('shows a line of no words as its chords, one chip a change', async () => {
-    await inView('lyrics', '/play/bz5')
-    const first = line('Bars 1–4')
+    const storage = withSong({
+      sections: [{ kind: 'verse', lines: ['G C', 'Em G/B C D/F#'] }],
+      staves: [{ notes: 'B4/4 | C5/4 | r/4 | r/4 | r/4 | r/4' }],
+      lyrics: ['Good day'],
+    })
+    await inView('lyrics', '/play/my-1', { storage })
+    const unsung = line('Bars 3–6')
     expect(
-      within(first.shown)
+      within(unsung.shown)
         .getAllByRole('button')
         .flatMap((each) => each.textContent || []),
-    ).toEqual(['G', 'C', 'Em', 'G/B', 'C', 'C/E', 'Dsus4', 'D/F♯'])
+    ).toEqual(['Em', 'G/B', 'C', 'D/F♯'])
   })
 
   it('opens a chip’s chord in its sheet, which plays it', async () => {
@@ -335,17 +311,17 @@ describe('Chords over lyrics (ADR 0099)', () => {
 
   it('follows Listen on its beat strip, and goes to a beat tapped there', async () => {
     const user = userEvent.setup()
-    const { audio } = await inView('lyrics', '/play/bz5')
+    const { audio } = await inView('lyrics', '/play/silent')
     expect(stripBeat()).toBe('0')
-    const sixth = document.querySelector('[data-slot="beat-strip"] [data-cell="5"]')
-    if (!sixth) throw new Error('a sixth beat')
-    await user.click(sixth)
-    expect(stripBeat()).toBe('5')
+    const fifth = document.querySelector('[data-slot="beat-strip"] [data-cell="4"]')
+    if (!fifth) throw new Error('a fifth beat')
+    await user.click(fifth)
+    expect(stripBeat()).toBe('4')
     await user.click(screen.getByRole('button', { name: 'Play' }))
     const start = audio.played.at(-1)?.at ?? 0
-    // From bar 2's second beat, two beats on at 72 BPM.
-    act(() => audio.setNow(start + (2 * 60) / 72 + 0.1))
-    await waitFor(() => expect(stripBeat()).toBe('7'))
+    // From bar 2's second beat of 3/4, two beats on at 84 BPM.
+    act(() => audio.setNow(start + (2 * 60) / 84 + 0.1))
+    await waitFor(() => expect(stripBeat()).toBe('6'))
     await user.click(screen.getByRole('button', { name: 'Stop' }))
   })
 

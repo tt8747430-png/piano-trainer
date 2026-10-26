@@ -1558,18 +1558,26 @@ describe('the score editor', () => {
     ])
   })
 
-  it('shows the score through the Player’s View, one menu, but what only practice has (ADR 0090, 0094)', async () => {
+  it('shows the score through the Player’s View, one menu, but what only practice has (ADR 0090, 0094, 0102)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', {
       storage: withSong({ staves: [{ name: 'Voice', notes: EMPTY_TUNE }] }),
     })
     await user.click(await screen.findByRole('button', { name: 'View' }))
     const view = await screen.findByRole('dialog', { name: 'View' })
+    // The score alone: no tiles of the Player's views, no view's heading, no Every view.
+    expect(within(view).queryByRole('radiogroup', { name: 'Show the music as' })).toBeNull()
+    expect(within(view).queryAllByRole('region')).toEqual([])
     expect(
       within(view)
-        .getAllByRole('region')
-        .map((section) => section.getAttribute('aria-label')),
-    ).toEqual(['Layout', 'Staves', 'Show'])
+        .getAllByRole('radio')
+        .map((layout) => layout.textContent),
+    ).toEqual(['Pages', 'Scroll down', 'Scroll across'])
+    expect(
+      within(view)
+        .getAllByRole('group')
+        .map((group) => group.getAttribute('aria-label')),
+    ).toEqual(['Staves', 'Show'])
     // Nothing in it twice: the palette folds by its own handle, and stands at the sheet's right.
     // What the sheet prints, the fingers too: the fingering field types them there (ADR 0096).
     const switches = within(view).getAllByRole('switch')

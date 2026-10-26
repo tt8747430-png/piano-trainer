@@ -11,6 +11,7 @@ import {
   useRepertoire,
   type Piece,
 } from '@/entities/piece'
+import { selectScoreView, useSettings } from '@/entities/settings'
 import { useAddToSetlist, useFavouriteAction } from '@/features/manage-library'
 import { beatGroupInBar, writtenBarAt } from '@/features/practice'
 import { ShareSaid, useShareSong } from '@/features/share-song'
@@ -63,6 +64,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   // Its place in the learner's library (ADR 0103), first in More.
   const favourite = useFavouriteAction(piece.id)
   const setlist = useAddToSetlist(piece.id)
+  const askView = useSettings((state) => selectScoreView(state).askOnOpen)
   return (
     <MoreActions value={[favourite, setlist.action]}>
       <PlayerLayout
@@ -109,6 +111,8 @@ function PiecePlayer({ piece }: { piece: Piece }) {
             : undefined
         }
         status={sharing ? <ShareSaid said={shared.said} /> : null}
+        // Chordify's "Show this when opening a song" (ADR 0102): the View, to choose how it shows.
+        openView={askView}
       />
       <SongInfo
         piece={piece}
