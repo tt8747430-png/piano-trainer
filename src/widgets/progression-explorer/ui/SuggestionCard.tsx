@@ -1,12 +1,13 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ChordRow, RowStaff, RowPlay } from '@/features/play-example'
-import { chordSymbol, type Chord, type PassingChords } from '@/shared/lib/music'
+import { printedChord, type Chord, type PassingChords } from '@/shared/lib/music'
 import type { ShownKeys } from '@/shared/ui'
 
 /**
  * One way from a chord to another: its name, the row From → … → To voiced smoothly (each chord
- * playing as the row voices it), in the key or chromatic, why it works, and Play, which plays the row.
+ * playing as the row voices it), in the key or chromatic, why it works (its chords printed as the
+ * sheets print them), and Play, which plays the row.
  */
 export function SuggestionCard({
   way,
@@ -38,9 +39,9 @@ export function SuggestionCard({
         <RowStaff />
         <p className="text-muted-foreground">
           {t(`passingChords.kind.${way.kind}.why`, {
-            chord: first ? chordSymbol(first) : '',
-            next: second ? chordSymbol(second) : '',
-            to: chordSymbol(to),
+            chord: first ? printedChord(first) : '',
+            next: second ? printedChord(second) : '',
+            to: printedChord(to),
           })}
         </p>
         <RowPlay variant="soft" />

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { chordsMusic, TappableStaff } from '@/features/play-example'
-import { parseChordSymbol, type SpelledNote } from '@/shared/lib/music'
+import { parseChordSymbol, printedSymbol, type SpelledNote } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
@@ -15,7 +15,8 @@ const STAFF_TEMPO = 120
 
 /**
  * A row of chords a lesson names, each written as the lesson writes it (C2 and Cadd9 are one chord
- * to the kernel): a short row on the grand staff, each chord a bar whose band names it and plays it
+ * to the kernel) and printed as the sheets print it (`F♯°7`): a short row on the grand staff, each
+ * chord a bar whose band names it and plays it
  * on the keys, with the staff's own options beside it (the chords' names, the notes'); a long one (a
  * grid of all twelve roots) as buttons, a tap playing one and a second stopping it.
  */
@@ -96,7 +97,7 @@ export function ChordExamples({
               playback.toggle(place, () => chordSounds(example.keys, { arpeggio: false }))
             }}
           >
-            <span className="font-display text-xl font-semibold">{symbol}</span>
+            <span className="font-display text-xl font-semibold">{printedSymbol(symbol)}</span>
           </PlayToggle>
         )
       })}

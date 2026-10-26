@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import {
   alteredSymbol,
   noteName,
+  printedSymbol,
   voicingKind,
   writtenSymbol,
   type FoundChord,
@@ -33,7 +34,8 @@ interface Telling {
  * What a found chord is, in words (ADR 0054): its kind where the table names it; its inversion (or,
  * where the name leaves its bass out and the bass is no inversion, the note in the bass); each tone
  * left out; how the keys lay it out (close, open, drop 2 or 3, a shell, 4ths, So What); and an altered
- * dominant's chart name. The same function until the language changes.
+ * dominant's chart name, printed as the sheets print a chord. The same function until the language
+ * changes.
  */
 export function useChordAbout(): (found: FoundChord, telling: Telling) => string[] {
   const { t } = useTranslation(['music', 'practice'])
@@ -58,7 +60,7 @@ export function useChordAbout(): (found: FoundChord, telling: Telling) => string
         ...(inversion ? [inversion] : []),
         ...found.leftOut.map((tone) => t(`practice:chordFinder.${LEFT_OUT_WORDS[tone]}`)),
         ...(voicing ? [t(`practice:chordFinder.voicing.${voicing}`)] : []),
-        ...(altered ? [t('practice:chordFinder.altered', { symbol: altered })] : []),
+        ...(altered ? [t('practice:chordFinder.altered', { symbol: printedSymbol(altered) })] : []),
       ]
     },
     [t],

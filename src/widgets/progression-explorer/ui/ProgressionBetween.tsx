@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { useFold } from '@/features/fold-section'
 import {
   chordInKey,
-  chordSymbol,
   PASSING_CATEGORIES,
   passingChords,
+  printedChord,
   type Chord,
   type Key,
   type PassingChords,
@@ -63,7 +63,7 @@ export function ProgressionBetween({
             value={chosen}
             options={changes.map((place) => ({
               value: place,
-              label: `${chordSymbol(chords[place] ?? from)} → ${chordSymbol(chords[place + 1] ?? to)}`,
+              label: `${printedChord(chords[place] ?? from)} → ${printedChord(chords[place + 1] ?? to)}`,
             }))}
             onChange={(between) => onChange({ between })}
           />

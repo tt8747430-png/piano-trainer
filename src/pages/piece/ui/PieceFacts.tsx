@@ -3,7 +3,7 @@ import { pieceStage } from '@/entities/course'
 import { StageMark } from '@/entities/step'
 import { entryTitles, pieceKey, selectHasVersion, usePieces, type Entry } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
-import { keySymbol } from '@/shared/lib/music'
+import { keySymbol, printedSymbol } from '@/shared/lib/music'
 
 /**
  * A listing's facts under its bar (`PieceHeader`), in one quiet line that reads and is not pressed:
@@ -22,11 +22,12 @@ export function PieceFacts({ entry }: { entry: Entry }) {
       <dl className="flex flex-wrap items-center gap-x-2 gap-y-1">
         <dt className="sr-only">{t('music:key.label')}</dt>
         <dd className="font-display font-semibold text-foreground tabular-nums">
-          {keySymbol(pieceKey(entry))}
+          {printedSymbol(keySymbol(pieceKey(entry)))}
         </dd>
         <dd aria-hidden>·</dd>
         <dt className="sr-only">{t('meter')}</dt>
-        {/* The key names a chord, in the serif; the meter and tempo are numbers, read alike. */}
+        {/* The key names a chord, in the serif as the sheets print one; the meter and tempo are
+            numbers, read alike. */}
         <dd className="font-medium text-foreground tabular-nums">{entry.meter}</dd>
         {entry.kind === 'listing' ? null : (
           <>

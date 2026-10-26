@@ -3,13 +3,16 @@ import { useTranslation } from 'react-i18next'
 import { isExerciseId, exerciseOf, type ExerciseChoice, type Exercise } from '@/entities/exercise'
 import { localText, useKeyName, useLocale, useScaleName } from '@/shared/i18n'
 import { useGoBack, useViewChange } from '@/shared/lib'
-import { chordSymbol } from '@/shared/lib/music'
+import { printedChord } from '@/shared/lib/music'
 import type { ExerciseSearch } from '../model/exercise-search'
 import { useExercisePlayer } from '../model/use-exercise-player'
 import { ExerciseSetup } from './ExerciseSetup'
 import { PlayerLayout } from './PlayerLayout'
 
-/** What an exercise is played on, as its title says it: its scale, its chord or its key. */
+/**
+ * What an exercise is played on, as its title says it: its scale, its chord (printed as the sheets
+ * print it) or its key.
+ */
 function useExerciseOf(exercise: Exercise, choice: ExerciseChoice): string {
   const scaleName = useScaleName()
   const keyName = useKeyName()
@@ -17,7 +20,7 @@ function useExerciseOf(exercise: Exercise, choice: ExerciseChoice): string {
     case 'scale':
       return scaleName(choice.root, choice.kind)
     case 'chord':
-      return chordSymbol({ root: choice.root, quality: choice.quality })
+      return printedChord({ root: choice.root, quality: choice.quality })
     case 'key':
       return keyName({ tonic: choice.root, minor: choice.tonality === 'minor' })
   }

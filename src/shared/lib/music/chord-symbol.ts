@@ -1,6 +1,7 @@
 import {
   CHORD_QUALITIES,
   chordBass,
+  chordSymbol,
   qualitySpellings,
   type Chord,
   type ChordQuality,
@@ -28,6 +29,9 @@ const normalise = (suffix: string): string =>
  */
 export const printedSymbol = (symbol: string): string =>
   symbol.replaceAll('#', '♯').replace(/(?<=[A-G])b|b(?=\d)/g, '♭')
+
+/** A chord's symbol as it is printed (`printedSymbol` of `chordSymbol`): `C♯m7`, `D/F♯`. */
+export const printedChord = (chord: Chord): string => printedSymbol(chordSymbol(chord))
 
 const QUALITY_BY_SUFFIX = new Map<string, ChordQuality>(
   CHORD_QUALITIES.flatMap((quality) =>

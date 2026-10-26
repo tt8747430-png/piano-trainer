@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { OPEN_PLAINLY, qualityParams } from '@/shared/lib'
-import { keyParam, note, noteParam } from '@/shared/lib/music'
+import { keyParam, note, noteParam, printedSymbol } from '@/shared/lib/music'
 import { PAGE_TILES, RowLink } from '@/shared/ui'
 import { PageRow } from '@/widgets/practice-pages'
 import type { IndexTarget } from '../model/index-entries'
@@ -54,8 +54,11 @@ export function IndexRow({
       )
     case 'chord':
       return (
+        // Its symbol (the title a chord typed has, the line a quality's has) printed as the sheets
+        // print it; a quality's name holds no sign. What Search matches keeps its ASCII.
         <RowLink
-          {...row}
+          title={printedSymbol(title)}
+          detail={detail === undefined ? undefined : printedSymbol(detail)}
           {...PAGE_TILES.chords}
           render={
             <Link
@@ -121,6 +124,7 @@ export function IndexRow({
       return (
         <RowLink
           {...row}
+          title={printedSymbol(title)}
           {...PAGE_TILES.progressions}
           render={<Link to="/practice/progressions" search={{ key: target.key, p: target.p }} />}
         />

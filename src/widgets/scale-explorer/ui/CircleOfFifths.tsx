@@ -9,6 +9,7 @@ import {
   keyScale,
   keySymbol,
   noteParam,
+  printedSymbol,
   sameKey,
   type CircleRing,
   type Key,
@@ -96,9 +97,11 @@ export function CircleOfFifths({ current }: { current: Key }) {
                     chord ? 'text-foreground' : 'text-muted-foreground',
                   )}
                 >
-                  {/* One of the key's chords is written as the key spells it: G♭ in D♭ major, though the place is F♯'s, and B° in C, though the place is B minor's. */}
+                  {/* One of the key's chords is written as the key spells it: G♭ in D♭ major, though
+                      the place is F♯'s, and B° in C, though the place is B minor's. Each name,
+                      a chord's or a key's, is printed as the sheets print a chord. */}
                   <span className="text-sm font-semibold">
-                    {chord ? chord.symbol : keySymbol(key)}
+                    {printedSymbol(chord ? chord.symbol : keySymbol(key))}
                   </span>
                   <span className="text-xs tabular-nums">
                     {chord?.numeral ?? signatureCount(key)}

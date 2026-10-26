@@ -65,10 +65,31 @@ describe('Practice → Progressions', () => {
     await rowIs(['Dm7ii7', 'G7V7', 'C6I6'])
   })
 
-  it('opens on a line whose chords a URL escapes', async () => {
+  it('opens on a line whose chords a URL escapes, each printed as the sheets print it', async () => {
     await renderApp(`/practice/progressions?p=${encodeURIComponent('I6/9-V7#9-III+')}`)
     await screen.findAllByRole('group', { name: 'Chords' })
-    await rowIs(['C6/9I6/9', 'G7#9V7#9', 'E+III+'])
+    await rowIs(['C6/9I6/9', 'G7♯9V7♯9', 'E+III+'])
+    expect(within(rowStaff()).getByRole('button', { name: 'Play bar 2, G7♯9' })).toBeInTheDocument()
+  })
+
+  it('prints the row’s chords, the passing chords and the walks through the keys with ♯ and ♭', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/progressions?key=E')
+    await screen.findAllByRole('group', { name: 'Chords' })
+    await rowIs(['EI', 'BV', 'C♯mvi', 'AIV'])
+    const between = screen.getByRole('region', { name: 'Between two chords' })
+    expect(
+      within(between).getByRole('combobox', { name: 'From chord to chord' }),
+    ).toHaveTextContent('E → B')
+    // The dominant of B, F♯7, leads into it.
+    expect(within(between).getByRole('article', { name: 'Secondary dominant' })).toHaveTextContent(
+      'F♯7 is the V7 of B',
+    )
+    await user.click(within(between).getByRole('combobox', { name: 'From chord to chord' }))
+    expect(await screen.findByRole('option', { name: 'B → C♯m' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /^Down by whole tones/ })).toHaveTextContent(
+      /E B C♯m A · D A Bm G …/,
+    )
   })
 
   it('reads an applied chord, the ii–V of another chord of the key, typed and in the URL', async () => {

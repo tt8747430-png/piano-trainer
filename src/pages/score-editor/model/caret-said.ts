@@ -9,7 +9,7 @@ import {
   type EditMode,
   type EditorState,
 } from '@/features/score-editor'
-import { chordSymbol, TICKS_PER_BEAT, writtenName, type Tick } from '@/shared/lib/music'
+import { printedChord, TICKS_PER_BEAT, writtenName, type Tick } from '@/shared/lib/music'
 import type { Duration } from '@/shared/lib/notation'
 
 interface Place {
@@ -63,7 +63,8 @@ function placeSaid(
   const at = { bar: index + 1, beat: beatOf(caret - start) }
   if (layer === 'chords') {
     const chord = chordAt(draft, caret)
-    return chord ? { kind: 'at', ...at, what: chordSymbol(chord) } : { kind: 'noChord', ...at }
+    // The chord as the sheet prints it over the bar (`C♯m7`).
+    return chord ? { kind: 'at', ...at, what: printedChord(chord) } : { kind: 'noChord', ...at }
   }
   // One note of a chord chosen alone: that note (ADR 0088).
   const all = notesAt(draft, layer, caret)

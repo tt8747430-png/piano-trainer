@@ -14,7 +14,7 @@ import { addSong } from '@/features/edit-piece'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
 import { readSongLink } from '@/features/share-song'
-import { keySymbol } from '@/shared/lib/music'
+import { keySymbol, printedSymbol } from '@/shared/lib/music'
 import { BackButton, ButtonLink, Fab, FloatingActions, NO_KEYS, ScreenHeader } from '@/shared/ui'
 import { ChordChart, useChartPlayback } from '@/widgets/chord-chart'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
@@ -45,7 +45,7 @@ function SharedChart({ song }: { song: SharedSong }) {
     <>
       <p className="-mt-3 text-lg text-muted-foreground">
         {t('shared.facts', {
-          key: keySymbol(pieceKey(piece)),
+          key: printedSymbol(keySymbol(pieceKey(piece))),
           meter: piece.meter,
           bpm: t('music:bpm', { tempo: piece.tempo }),
         })}

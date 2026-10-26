@@ -1,6 +1,6 @@
 import { Piano } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { noteName, type FoundChord, type Midi } from '@/shared/lib/music'
+import { noteName, printedSymbol, type FoundChord, type Midi } from '@/shared/lib/music'
 import { cn } from '@/shared/lib'
 import { ChordHeading } from '@/shared/ui'
 import { Toggle } from '@/shared/ui/primitives/toggle'
@@ -30,7 +30,8 @@ function SourceLine({ source, children }: { source: ChordSource; children?: stri
 /**
  * What the keys make (ADR 0054), as large as the page allows: the chord's symbol in the reading chosen,
  * what it is and leaves out, and every other reading to choose from (its notes by degree are on the
- * keys); else the note, the interval (a 5th as its power chord), or no chord.
+ * keys); else the note, the interval (a 5th as its power chord), or no chord. A name is printed as the
+ * sheets print a chord (`C♯m7`, `F♯`).
  */
 export function ChordName({
   finding,
@@ -73,7 +74,7 @@ export function ChordName({
     case 'note':
       return (
         <div className="flex flex-col items-center gap-1">
-          <h2 className="text-7xl">{noteName(finding.note)}</h2>
+          <h2 className="text-7xl">{printedSymbol(noteName(finding.note))}</h2>
           <SourceLine source={source}>{t('practice:chordFinder.note')}</SourceLine>
         </div>
       )
@@ -81,7 +82,9 @@ export function ChordName({
       return (
         <div className="flex flex-col items-center gap-1">
           <h2 className={finding.power ? 'text-7xl' : 'text-5xl'}>
-            {finding.power ?? t(`music:interval.${finding.interval}.name`)}
+            {finding.power
+              ? printedSymbol(finding.power)
+              : t(`music:interval.${finding.interval}.name`)}
           </h2>
           <SourceLine source={source}>
             {finding.power
@@ -152,11 +155,11 @@ function Found({
               <li key={label}>
                 <Toggle
                   pressed={label === chordLabel(shown, slash)}
-                  aria-label={t('chordFinder.reading', { symbol: label })}
+                  aria-label={t('chordFinder.reading', { symbol: printedSymbol(label) })}
                   onPressedChange={() => onReading(at)}
                   className="min-w-14 font-display text-lg font-semibold"
                 >
-                  {label}
+                  {printedSymbol(label)}
                 </Toggle>
               </li>
             ))}

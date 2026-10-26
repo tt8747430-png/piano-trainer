@@ -2,7 +2,7 @@ import { useRef, type MouseEvent, type PointerEvent, type Ref, type RefObject } 
 import { useTranslation } from 'react-i18next'
 import { staffLayer, type Layer } from '@/features/score-editor'
 import { useBarName } from '@/shared/i18n'
-import { chordSymbol, keySignature, type Midi, type Tick } from '@/shared/lib/music'
+import { keySignature, printedChord, type Midi, type Tick } from '@/shared/lib/music'
 import { staffClefAt, type TimedMusic } from '@/shared/lib/notation'
 import {
   MARK,
@@ -343,7 +343,8 @@ export function LineOverlay({
       {layout.measures.map((measure, index) => {
         const placed = line.bars[index]
         const chosenBy = placed ? choice(placed.start, { x: measure.x, y: -row }) : {}
-        const chords = (placed?.bar.chords ?? []).map((chord) => chordSymbol(chord.chord))
+        // Named by its chords as the labels' row prints them (`C♯m7`).
+        const chords = (placed?.bar.chords ?? []).map((chord) => printedChord(chord.chord))
         return (
           <button
             key={index}

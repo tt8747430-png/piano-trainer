@@ -33,7 +33,8 @@ describe('ChordChart', () => {
   it('counts each bar in its beats, each chord in the beat it starts in (ADR 0099)', () => {
     render(<ChordChart performance={performance} headings={[]} onBar={() => {}} playing={null} />)
     expect(beatsOf(screen.getByRole('button', { name: 'Bar 1: G' }))).toEqual(['1G', '', '', ''])
-    expect(beatsOf(screen.getByRole('button', { name: 'Bar 4: C C/E Dsus4 D/F#' }))).toEqual([
+    // Named by its chords as it prints them.
+    expect(beatsOf(screen.getByRole('button', { name: 'Bar 4: C C/E Dsus4 D/F♯' }))).toEqual([
       '4C',
       'C/E',
       'Dsus4',

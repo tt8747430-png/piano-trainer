@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
 import { PinnedKeyboard, useFoldKeys } from '@/features/live-keyboard'
 import { partsParams, useViewChange } from '@/shared/lib'
-import { keySymbol, noteParam } from '@/shared/lib/music'
+import { keySymbol, noteParam, printedSymbol } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import {
@@ -54,7 +54,8 @@ function FinderSettings({
   const { t } = useTranslation('practice')
   return (
     <Sheet>
-      {/* The key it spells in, in sight on the button that opens its settings. */}
+      {/* The key it spells in, in sight on the button that opens its settings, printed as a chord
+          is. */}
       <SheetTrigger
         render={
           <Button
@@ -67,7 +68,7 @@ function FinderSettings({
       >
         <SlidersHorizontal aria-hidden />
         <span aria-hidden className="font-display font-semibold">
-          {keySymbol(finder.musicKey)}
+          {printedSymbol(keySymbol(finder.musicKey))}
         </span>
       </SheetTrigger>
       <SheetContent title={t('chordFinder.settings')}>

@@ -203,8 +203,33 @@ describe('LessonView’s worksheet', () => {
   it('plays a grid of one chord on all twelve roots', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson(WORKSHEET)
-    await user.click(screen.getByRole('button', { name: 'G#m' }))
+    await user.click(screen.getByRole('button', { name: 'G♯m' }))
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([68, 71, 75])
+  })
+
+  it('prints its chords and voicings as the sheets print them, ♯ and ♭ as signs', async () => {
+    await renderLesson({
+      ...WORKSHEET,
+      sections: [
+        {
+          heading: { en: 'Sharps and flats', ru: 'Диезы и бемоли' },
+          blocks: [
+            { kind: 'chords', symbols: ['F', 'F#°7', 'G'] },
+            {
+              kind: 'voicings',
+              voicings: [{ symbol: 'G7#9', caption: 'V7#9', hands: 'F3 B3 | E♭4 A#4' }],
+            },
+          ],
+        },
+      ],
+    })
+    const passing = await screen.findByRole(
+      'button',
+      { name: 'Play bar 2, F♯°7' },
+      { timeout: 5000 },
+    )
+    expect(passing).toHaveTextContent(/^F♯°7$/)
+    expect(screen.getByRole('button', { name: /^G7♯9/ })).toHaveTextContent('V7♯9')
   })
 
   it('plays voicings exactly as written, each alone and the whole row', async () => {

@@ -29,6 +29,12 @@ describe('caretSaid', () => {
     expect(at(192, 'staff0')).toEqual({ kind: 'end' })
   })
 
+  it('says a chord as the sheet prints it, ♯ and ♭ as signs', () => {
+    const sharp = readDraft({ ...music, sections: [{ kind: 'verse', lines: ['F#m Bb7'] }] })
+    expect(caretSaid({ draft: sharp, caret: 0, layer: 'chords' })).toMatchObject({ what: 'F♯m' })
+    expect(caretSaid({ draft: sharp, caret: 96, layer: 'chords' })).toMatchObject({ what: 'B♭7' })
+  })
+
   it('says a bar of no chord has none in the chord row (ADR 0094)', () => {
     const empty = readDraft({ ...music, sections: [{ kind: 'verse', lines: ['D _'] }] })
     expect(caretSaid({ draft: empty, caret: 96, layer: 'chords' })).toEqual({

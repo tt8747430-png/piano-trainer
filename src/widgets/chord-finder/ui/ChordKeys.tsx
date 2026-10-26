@@ -2,12 +2,20 @@ import { Link } from '@tanstack/react-router'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
-import { keyScale, keysHolding, noteParam, numeralText, type FoundChord } from '@/shared/lib/music'
+import {
+  keyScale,
+  keysHolding,
+  noteParam,
+  numeralText,
+  printedSymbol,
+  type FoundChord,
+} from '@/shared/lib/music'
 import { PAGE_TILES, RowLink } from '@/shared/ui'
 
 /**
  * The keys that hold the chord found, as piano.org's key finder lists them: each key with the chord's
- * numeral there, opening the key's view of Scales; nothing for a chord the table does not name.
+ * numeral there (printed as the chord's symbol is), opening the key's view of Scales; nothing for a
+ * chord the table does not name.
  */
 export function ChordKeys({ found }: { found: FoundChord }) {
   const { t } = useTranslation('practice')
@@ -29,7 +37,7 @@ export function ChordKeys({ found }: { found: FoundChord }) {
               {...PAGE_TILES.key}
               trailing={
                 <span className="shrink-0 font-display text-xl font-semibold">
-                  {numeralText(numeral)}
+                  {printedSymbol(numeralText(numeral))}
                 </span>
               }
               render={

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { signatureOption, type ChoiceQuestion, type Question } from '@/features/trainer'
 import { useKeyName, useScaleName } from '@/shared/i18n'
-import { noteName, parseKey, writtenName } from '@/shared/lib/music'
+import { noteName, parseKey, printedSymbol, writtenName } from '@/shared/lib/music'
 import { INVERSION_NAMES } from '@/shared/ui'
 
 /** A key signature's count as the options write it (`3♯`, `2♭`, `0`), read back. */
@@ -10,7 +10,10 @@ const COUNT = /^(\d)(♯|♭)$/
 /** A progression's numerals as a line to read: `I–V–vi–IV`. */
 const progressionLine = (line: string) => line.split(' ').join('–')
 
-/** A round's words: what it asks, how each option reads, and what its answer is called. */
+/**
+ * A round's words: what it asks, how each option reads, and what its answer is called; a chord's
+ * symbol printed as the sheets print it (`C♯m7`), its option's value kept as it is compared.
+ */
 export function useRoundWords() {
   const { t } = useTranslation(['quiz', 'music'])
   const scaleName = useScaleName()
@@ -29,9 +32,9 @@ export function useRoundWords() {
     switch (question.mode) {
       case 'build-chord':
         return question.inversion === null
-          ? t('quiz:prompt.buildChord', { symbol: question.symbol })
+          ? t('quiz:prompt.buildChord', { symbol: printedSymbol(question.symbol) })
           : t('quiz:prompt.buildChordIn', {
-              symbol: question.symbol,
+              symbol: printedSymbol(question.symbol),
               position: t(`music:inversionName.${INVERSION_NAMES[question.inversion] ?? 'root'}`),
             })
       case 'name-chord':
@@ -79,6 +82,7 @@ export function useRoundWords() {
           return { value, label: key ? keyName(key) : signatureCount(value) }
         })
       case 'name-chord':
+        return question.options.map((value) => ({ value, label: printedSymbol(value) }))
       case 'chord-role':
         return question.options.map((value) => ({ value, label: value }))
       case 'name-progression':
@@ -86,12 +90,12 @@ export function useRoundWords() {
     }
   }
 
-  /** What the round's answer is called: `Cm7 · Minor 7th`, `Perfect fifth`, `E4`. */
+  /** What the round's answer is called: `C♯m7 · Minor 7th`, `Perfect fifth`, `E4`. */
   const answer = (question: Question): string => {
     switch (question.mode) {
       case 'build-chord':
       case 'name-chord':
-        return `${question.symbol} · ${t(`music:quality.${question.quality}`)}`
+        return `${printedSymbol(question.symbol)} · ${t(`music:quality.${question.quality}`)}`
       case 'build-scale':
       case 'name-scale':
         return scaleName(question.root, question.kind)
