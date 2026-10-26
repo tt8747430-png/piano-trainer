@@ -11,7 +11,8 @@ import { Button } from '@/shared/ui/primitives/button'
  * is greyed, is its tooltip and a screen reader's description (ADR 0096), else its label is. A greyed
  * tool keeps the pointer, so its tooltip still says why. An equal share of the row on a phone held
  * upright, as wide as its words from a tablet's width; open or pressed (a switch, `aria-pressed`), it
- * wears the muted fill a pressed button does.
+ * wears the muted fill a pressed button does. On a phone held upright its padding and gaps are
+ * narrower, so a name cut short keeps what letters it can.
  */
 export function PlayerTool({
   icon: Icon,
@@ -41,7 +42,7 @@ export function PlayerTool({
       aria-label={label}
       title={tip ?? label}
       className={cn(
-        'h-11 min-w-0 flex-1 basis-0 gap-1.5 rounded-xl px-3 aria-pressed:bg-muted sm:flex-none sm:basis-auto landscape-phone:h-10',
+        'h-11 min-w-0 flex-1 basis-0 gap-1.5 rounded-xl px-3 aria-pressed:bg-muted max-sm:gap-1 max-sm:px-2 narrow-phone:px-1.5 sm:flex-none sm:basis-auto landscape-phone:h-10',
         tip && 'disabled:pointer-events-auto disabled:hover:bg-transparent',
         className,
       )}
