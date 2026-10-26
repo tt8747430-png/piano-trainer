@@ -14,8 +14,6 @@ export const piece: LocaleResources['piece'] = {
     lessons_other: '{{count}} урока',
     lessonsDone: '{{lessons}} · пройдено: {{done}}',
     noLessons: 'Нет аккордов для разучивания',
-    playAlong: 'Играть вместе',
-    playAlongDetail: { song: 'Вся песня в плеере', study: 'Весь этюд в плеере' },
   },
   learnSection: {
     title: 'Учим раздел «{{section}}»',
@@ -77,6 +75,7 @@ export const piece: LocaleResources['piece'] = {
     confirm: 'Удалить навсегда',
     cancel: 'Оставить',
   },
+  about: { song: 'О песне', study: 'Об этюде' },
   scaleOf: 'Гамма: {{scale}}',
   meter: 'Размер',
   credit: {

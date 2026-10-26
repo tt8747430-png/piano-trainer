@@ -18,30 +18,26 @@ import { LearnedButton } from '@/features/mark-learned'
 import { ShareSaid, useShareSong } from '@/features/share-song'
 import { OPEN_PLAINLY } from '@/shared/lib'
 import { useLocale } from '@/shared/i18n'
-import { ActionMenu, FabLink, FloatingActions, RoundLink } from '@/shared/ui'
+import { ActionMenu, ButtonLink, RoundLink } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { sectionPaint } from '../model/section-paint'
 import { useSongLessons } from '../model/use-song-lessons'
 import { PieceAbout } from './PieceAbout'
 import { PieceByline } from './PieceByline'
 import { PieceChords } from './PieceChords'
 import { OwnMusicAsk } from './OwnMusicAsk'
 import { PieceHeader } from './PieceHeader'
-import { PlayAlong } from './PlayAlong'
-import { SectionLessonGroups } from './SectionLessonGroups'
 import { SectionRows } from './SectionRows'
 
 /**
- * A piece with a chart, in one column: Learn the song (ADR 0100). Its bar (Back, the title, then
- * Edit the score, Learned, its ♡ (ADR 0103) and More: Move to… and Archive (Restore while it is
- * archived; a study is in no library, ADR 0106), Check these chords, and for
- * the learner's own music Share and its way back, asked first); under the title its byline (what else it is called, Your version, its
- * stage, who wrote it); its key, time and
- * tempo as cards; its chords as diagrams, each opening its sheet, and its sections, each a row to its
- * page of lessons (a song of one section has that section's lessons here, its chords to learn among
- * them); Play along, the whole song; then its note and the way to its key's scale. Its chart is the
- * Player's: the page shows no keys but a chord's sheet's. Practise floats in the thumb's reach,
- * opening the Player as it was left.
+ * A piece with a chart, in one calm column: Learn the song (ADR 0100, amended). Its bar (Back, the
+ * title, then Edit the score, Learned, its ♡ (ADR 0103) and More: Move to… and Archive (Restore
+ * while it is archived; a study is in no library, ADR 0106), Check these chords, and for the
+ * learner's own music Share and its way back, asked first); under the title its byline (what else it
+ * is called, Your version, its stage, who wrote it); then, first and largest, Practise, the Player as
+ * it was left; its key, time and tempo as cards, the way to its key's scale under them and what is
+ * said of it behind an ⓘ; its chords as diagrams, once, each opening its sheet; and, where it has
+ * more than one, its sections, each a row to its page of lessons. Its chart is the Player's: the page
+ * shows no keys but a chord's sheet's.
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
@@ -50,7 +46,6 @@ export function PieceView({ piece }: { piece: Piece }) {
   const hasVersion = usePieces((state) => selectHasVersion(state, piece.id))
   const title = entryTitles(piece, locale).primary
   const { performance, headings, sections } = useSongLessons(piece)
-  const [only] = sections.length === 1 ? sections : []
   const shared = useShareSong()
   const [asking, setAsking] = useState(false)
   // More, which takes the focus back from a dialog it opened: the action chosen is folded away.
@@ -139,34 +134,26 @@ export function PieceView({ piece }: { piece: Piece }) {
       />
       <PieceByline piece={piece} />
       <ShareSaid said={shared.said} />
+      {/* The one thing to do first: play it (ADR 0100, amended), the Player as it was left. */}
+      <ButtonLink
+        size="lg"
+        className="h-14 w-full rounded-2xl text-lg sm:w-auto sm:self-start sm:px-8"
+        render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />}
+      >
+        <Play data-icon="inline-start" aria-hidden className="fill-current" />
+        {t('practise')}
+      </ButtonLink>
       <PieceFactCards piece={piece} />
-      {/* A song of one section has its lessons here, its chords among them to learn. */}
-      {only ? (
-        <SectionLessonGroups
-          piece={piece}
-          performance={performance}
-          lessons={only}
-          paint={sectionPaint(headings[0] ?? '')}
-        />
-      ) : (
-        <>
-          <PieceChords performance={performance} />
-          <SectionRows piece={piece} headings={headings} sections={sections} />
-        </>
-      )}
-      <PlayAlong piece={piece} />
       <PieceAbout entry={piece} />
+      <PieceChords performance={performance} />
+      {/* A song of one section has no section machinery: its chords above are all it needs. */}
+      {sections.length > 1 ? (
+        <SectionRows piece={piece} headings={headings} sections={sections} />
+      ) : null}
       {ownMusic ? (
         <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} returnTo={more} />
       ) : null}
       {inLibrary ? library.sheet : null}
-      <FloatingActions>
-        <FabLink
-          label={t('practise')}
-          icon={Play}
-          render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />}
-        />
-      </FloatingActions>
     </div>
   )
 }

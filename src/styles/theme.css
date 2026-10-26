@@ -287,6 +287,11 @@
   html:has([data-slot='app-nav']) {
     scroll-padding-bottom: calc(var(--nav-bar) + var(--docked, 0px) + var(--floating-foot));
   }
+  /* While the phone's keyboard is up, a field focused scrolls clear of it instead (what floats at
+     the foot has stepped aside): the room it covers, `keyboard-viewport`'s `--kb-inset`. */
+  html[data-keyboard] {
+    scroll-padding-bottom: calc(var(--kb-inset) + --spacing(6));
+  }
   /* Keys docked at the foot leave the top to the screen's bar alone. */
   html:has([data-slot='docked']) {
     scroll-padding-top: calc(--spacing(20) + max(--spacing(4), env(safe-area-inset-top)));
@@ -420,6 +425,18 @@
 /* The same with a floor: a sheet's footer keeps its inset where there is no home indicator. */
 @utility pb-safe-4 {
   padding-bottom: max(--spacing(4), env(safe-area-inset-bottom));
+}
+/* While the phone's keyboard is up (`keyboard-viewport`'s `data-keyboard`), what floats at the
+   screen's foot steps aside rather than ride on the keyboard: the floating actions, the toasts, and
+   the phone's tab bar (Mindscape's, its ADR 0002). */
+:root[data-keyboard] [data-slot='floating-host'],
+:root[data-keyboard] [data-slot='toast-viewport'] {
+  display: none;
+}
+@media (orientation: portrait) and (max-width: 63.99rem) {
+  :root[data-keyboard] [data-slot='app-nav'] {
+    display: none;
+  }
 }
 /* A sheet over the phone's keyboard stands on it: Base UI's VirtualKeyboardProvider measures the room
    the keyboard covers (`--drawer-keyboard-inset`, Mindscape's sheets), and its footer gives back the

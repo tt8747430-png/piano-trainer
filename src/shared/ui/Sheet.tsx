@@ -60,7 +60,9 @@ export function SheetContent({
     <DrawerContent
       className={cn(
         'mx-auto w-full max-w-2xl rounded-t-4xl bg-card pb-sheet-keyboard text-base landscape-phone:max-h-[calc(100dvh-1rem)]',
-        tall && 'h-[calc(100dvh-6rem)] landscape-phone:h-[calc(100dvh-1rem)]',
+        // The room anchored while no keyboard is up: the phone's keyboard never squeezes it.
+        tall &&
+          'h-[calc(var(--app-height,100dvh)-6rem)] landscape-phone:h-[calc(var(--app-height,100dvh)-1rem)]',
       )}
     >
       <DrawerHeader className="flex-row items-start justify-between gap-3 px-5 pt-1 pb-4 text-left landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-left">

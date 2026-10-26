@@ -14,11 +14,6 @@ export const piece = {
     lessons_other: '{{count}} lessons',
     lessonsDone: '{{lessons}} · {{done}} done',
     noLessons: 'No chords to learn',
-    playAlong: 'Play along',
-    playAlongDetail: {
-      song: 'The whole song in the Player',
-      study: 'The whole study in the Player',
-    },
   },
   // A section's page: its chords in order, its changes, its pattern; each lesson looped in the Player.
   learnSection: {
@@ -84,6 +79,8 @@ export const piece = {
     cancel: 'Keep it',
   },
   scaleOf: 'Scale: {{scale}}',
+  // What is said of a song or study, behind its ⓘ.
+  about: { song: 'About the song', study: 'About the study' },
   meter: 'Time signature',
   credit: {
     authors: 'Authors',

@@ -3,13 +3,24 @@ import { useFolderName } from '@/entities/library'
 import type { Entry, PieceId } from '@/entities/piece'
 import { useEntryFace } from '@/widgets/piece-list'
 import { RowFace } from '@/shared/ui'
-import { FolderFace, RowInHand, SelectRow, SortableRows } from '@/widgets/song-library'
+import {
+  FavouriteMark,
+  FolderFace,
+  RowInHand,
+  SelectRow,
+  SortableRows,
+} from '@/widgets/song-library'
 import { folderKey, songKey, type LibraryPage } from '../model/use-library-page'
 
-/** A song's face in Select, as its row shows it. */
-function SongFace({ entry }: { entry: Entry }) {
+/** A song's face in Select, as its row shows it, its ♡ where it is a favourite. */
+function SongFace({ entry, favourite }: { entry: Entry; favourite: boolean }) {
   const { face } = useEntryFace(entry)
-  return <RowFace {...face} />
+  return (
+    <>
+      <RowFace {...face} />
+      {favourite ? <FavouriteMark /> : null}
+    </>
+  )
 }
 
 /**
@@ -83,7 +94,7 @@ export function LibrarySelect({ page }: { page: LibraryPage }) {
                     onToggle={() => select.toggle(songKey(id))}
                     sortable={sortable}
                   >
-                    <SongFace entry={entry} />
+                    <SongFace entry={entry} favourite={page.favourites.includes(entry.id)} />
                   </SelectRow>
                 ) : null
               }}
@@ -91,7 +102,7 @@ export function LibrarySelect({ page }: { page: LibraryPage }) {
                 const entry = entries.get(id)
                 return entry ? (
                   <RowInHand checked={select.chosen.has(songKey(id))}>
-                    <SongFace entry={entry} />
+                    <SongFace entry={entry} favourite={page.favourites.includes(entry.id)} />
                   </RowInHand>
                 ) : null
               }}

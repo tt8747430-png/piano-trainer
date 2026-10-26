@@ -186,7 +186,8 @@ describe('Songs: the library’s Home and its folders (ADR 0106)', () => {
     // Each chord once over any bass: its G/B is G.
     expect(within(song).getByText('G C Em Dsus4')).toBeVisible()
     expect(song).not.toHaveAccessibleName(/Dsus4/)
-    expect(within(song).getByText('Мир, душа, храни · 7 chords')).toBeVisible()
+    expect(within(song).getByText('Мир, душа, храни')).toBeVisible()
+    expect(within(song).getByText('7 chords')).toBeVisible()
     const listing = screen.getAllByRole('link', { name: /No chart yet/ })[0]
     expect(listing?.querySelector('[data-slot="row-chords"]')).toBeNull()
     expect(listing).not.toHaveAccessibleName(/chord/)
@@ -677,7 +678,7 @@ describe('Songs: your own', () => {
 })
 
 describe('Songs: the archive’s way in (ADR 0106)', () => {
-  it('stands Archive in the bar at Home and in a folder, counting what it holds', async () => {
+  it('stands Archive in Home’s bar, counting what it holds', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs', {
       storage: saved({
@@ -687,12 +688,13 @@ describe('Songs: the archive’s way in (ADR 0106)', () => {
     const archive = await screen.findByRole('link', { name: 'Archive: 1' })
     expect(archive).toHaveAttribute('title', 'Archive: 1')
     expect(document.querySelector('[data-slot="archive-count"]')).toHaveTextContent('1')
+    expect(archive).toHaveAttribute('href', '/songs/archive')
+    // A folder's bar stays short: Back, its name, Select and its More.
     await user.click(screen.getByRole('link', { name: /^Hymns/ }))
-    expect(await screen.findByRole('link', { name: 'Archive: 1' })).toHaveAttribute(
-      'href',
-      '/songs/archive',
-    )
-    await user.click(screen.getByRole('link', { name: 'Archive: 1' }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Hymns' })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Archive: 1' })).toBeNull()
+    await user.click(screen.getByRole('link', { name: 'Back to Songs' }))
+    await user.click(await screen.findByRole('link', { name: 'Archive: 1' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/archive'))
   })
 

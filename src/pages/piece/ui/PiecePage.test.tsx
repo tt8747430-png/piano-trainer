@@ -139,42 +139,18 @@ describe('Piece', () => {
     ])
   })
 
-  it('plays it along, the whole song, from a row at its foot', async () => {
-    await renderApp('/songs/bz5')
-    expect(
-      await screen.findByRole('link', { name: 'Play along The whole song in the Player' }),
-    ).toHaveAttribute('href', '/play/bz5')
-  })
-
-  it('shows a study of one section its lessons in place, on its shelf (ADR 0100)', async () => {
+  it('shows a study of one section no section machinery: its chords once, as diagrams (ADR 0100)', async () => {
     await renderApp('/practice/accompaniment/studies/ex3')
-    // Its lessons in place: no page that repeats them.
     await screen.findByRole('heading', { level: 1 })
     expect(screen.queryByRole('region', { name: 'Sections' })).not.toBeInTheDocument()
-    // Its chords are the section's to learn, in place of the summary.
+    expect(screen.queryByRole('heading', { name: 'Changes' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /^Learn / })).not.toBeInTheDocument()
     expect(
       within(screen.getByRole('region', { name: 'Chords' }))
         .getAllByRole('button')
-        .map((row) => row.textContent),
-    ).toEqual(['Learn C', 'Learn Dm', 'Learn G', 'Learn F'])
-    expect(screen.getByRole('heading', { level: 2, name: 'Changes' })).toBeInTheDocument()
-    const inTime = screen.getByRole('region', { name: 'Play the chords in time' })
-    expect(
-      within(inTime)
-        .getAllByRole('link')
-        .map((row) => [row.textContent, row.getAttribute('href')]),
-    ).toEqual([
-      ['1st sequence C · Dm · G · C', '/play/ex3?loop=1-4'],
-      ['2nd sequence F · C · G · C', '/play/ex3?loop=5-8'],
-    ])
-    expect(screen.getByRole('link', { name: '1 · Bass + chords On C · Bar 1' })).toHaveAttribute(
-      'href',
-      '/play/ex3?loop=1-1',
-    )
-    // A study is called a study, never a song.
-    expect(
-      screen.getByRole('link', { name: 'Play along The whole study in the Player' }),
-    ).toHaveAttribute('href', '/play/ex3')
+        .map((chord) => chord.textContent),
+    ).toEqual(['C', 'Dm', 'G', 'F'])
+    expect(screen.getByRole('link', { name: 'Practise' })).toHaveAttribute('href', '/play/ex3')
   })
 
   it('checks the song’s chords from More, after its place in the library', async () => {
@@ -192,10 +168,13 @@ describe('Piece', () => {
     expect(router.state.location.search).toEqual({ of: 'piece:bz5' })
   })
 
-  it('floats Practise, its main action, and keeps Edit, Learned, its ♡ and More in its bar', async () => {
+  it('puts Practise first, under its byline, and keeps Edit, Learned, its ♡ and More in its bar', async () => {
     await renderApp('/songs/bz5')
     const practise = await screen.findByRole('link', { name: 'Practise' })
-    expect(practise.closest('[data-slot="floating-actions"]')).not.toBeNull()
+    expect(practise).toHaveAttribute('href', '/play/bz5')
+    // Before its facts and its chords: the first thing on the page to do.
+    const facts = screen.getByText('Key').closest('dl') as HTMLElement
+    expect(practise.compareDocumentPosition(facts) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     const bar = screen.getByRole('heading', { level: 1 }).closest('header') as HTMLElement
     for (const name of ['Edit the score', 'Learned', 'Add to favourites', 'More'])
       expect(
@@ -231,13 +210,9 @@ describe('Piece', () => {
     expect(untranslated(document.body)).toEqual([])
   })
 
-  it('reads a study’s lessons in Russian, calling it a study', async () => {
+  it('reads a study’s page in Russian', async () => {
     await renderApp('/practice/accompaniment/studies/ex3', { locale: 'ru' })
-    expect(await screen.findByRole('heading', { level: 2, name: 'Переходы' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '1-й оборот C · Dm · G · C' })).toBeInTheDocument()
-    expect(
-      screen.getByRole('link', { name: 'Играть вместе Весь этюд в плеере' }),
-    ).toBeInTheDocument()
+    expect(await screen.findByRole('region', { name: 'Аккорды' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
   })
 

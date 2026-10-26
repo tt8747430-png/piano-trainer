@@ -47,6 +47,12 @@ describe('the #standalone-boot script in index.html', () => {
     field.remove()
   })
 
+  it('keeps the keyboard over the page, in a tab and installed alike (Mindscape’s ADR 0002)', () => {
+    // Under resizes-content the layout would shrink with the keyboard and the app lift with it.
+    expect(viewport).toContain('interactive-widget=resizes-visual')
+    expect(runBoot('standalone')).toContain('interactive-widget=resizes-visual')
+  })
+
   it('leaves a browser tab zoomable', () => {
     expect(runBoot('browser')).toBe(viewport)
   })

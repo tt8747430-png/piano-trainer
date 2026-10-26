@@ -19,7 +19,7 @@ import { ArchiveButton } from './ArchiveButton'
 /**
  * The library's bar (Mindscape's): its title says where the learner is, Songs at Home, the folder's
  * name in one, with Back, which goes up a level, to the folder it stands in or Home, named so; then
- * Select and the archive's button, and a folder's More (Edit folder, New song here, Move to…, Archive
+ * Select, and at Home the archive's button, in a folder its More (Edit folder, New song here, Move to…, Archive
  * folder, Delete folder). While Select is on, the count chosen is its title, with Select all and
  * Done.
  */
@@ -70,7 +70,6 @@ export function LibraryHeader({
           />
         ) : undefined
       }
-      crowded={folder !== null}
       actions={
         <>
           <RoundButton
@@ -78,7 +77,7 @@ export function LibraryHeader({
             icon={ListChecks}
             onClick={() => page.select.start()}
           />
-          <ArchiveButton />
+          {folder ? null : <ArchiveButton />}
           {folder ? (
             <ActionMenu
               label={t('folder.more', { name })}
