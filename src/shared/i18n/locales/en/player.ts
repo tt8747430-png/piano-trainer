@@ -44,6 +44,24 @@ export const player = {
   },
   // The row of tools under the Player's bar (ADR 0102), as a screen reader names it.
   tools: 'Tools',
+  // The tools row's Transpose (ADR 0104): the key the music is in, moved a semitone at a time.
+  transpose: {
+    name: 'Transpose',
+    title: 'Transpose',
+    of: 'Transpose: {{key}}',
+    moved: 'Transpose: {{key}}, {{by}}',
+    down: 'Down a semitone',
+    up: 'Up a semitone',
+    own: { song: 'The song’s key', study: 'The study’s key' },
+    reset: 'Reset',
+  },
+  // The tools row's Simplify (ADR 0104, Chordify's): every chord its plain triad.
+  simplify: {
+    label: 'Simplify',
+    about: 'Every chord as its plain major or minor triad',
+    none: 'No chord to simplify',
+    chordSize: 'Simplify plays every chord as its triad.',
+  },
   /** The Diagrams view's chord to come, where none sounds yet: a pickup, a bar of no chord. */
   nextChord: 'Next: {{symbol}}',
   /** A line of Chords over lyrics, by its bars: a tap takes the Player there. */

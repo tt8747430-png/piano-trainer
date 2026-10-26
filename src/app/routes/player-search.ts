@@ -53,20 +53,23 @@ const isPlayerPattern = (value: unknown): value is PatternChoice =>
   value === 'chart' || isPatternRef(value)
 const isMode = isOneOf(PRACTICE_MODES)
 
-// A piece: key, tempo, pattern and chord size default to the piece's own, so their absence is the default.
-export const PLAYER_DEFAULTS: PlayerSearch = {
+/** How the Player goes, whatever it plays: its defaults. */
+const PRACTICE_DEFAULTS: PracticeView = {
   mode: 'listen',
   speedTraining: false,
   hands: 'both',
   swing: false,
 }
+// A piece: key, tempo, pattern and chord size default to the piece's own, so their absence is the
+// default; its chords as written, not simplified (ADR 0104).
+export const PLAYER_DEFAULTS: PlayerSearch = { ...PRACTICE_DEFAULTS, simple: false }
 /** The Player's own params: how it goes, whatever it plays. */
 function practiceView(raw: Raw): PracticeView {
   return {
-    mode: valueOr(isMode, raw.mode, PLAYER_DEFAULTS.mode),
+    mode: valueOr(isMode, raw.mode, PRACTICE_DEFAULTS.mode),
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, undefined),
     speedTraining: raw.speedTraining === true,
-    hands: valueOr(isHands, raw.hands, PLAYER_DEFAULTS.hands),
+    hands: valueOr(isHands, raw.hands, PRACTICE_DEFAULTS.hands),
     swing: raw.swing === true,
     loop: isLoopParam(raw.loop) ? raw.loop : undefined,
   }
@@ -95,6 +98,7 @@ export function readPlayerSearch(raw: Raw): PlayerSearch {
     key: key ? noteParam(key) : undefined,
     ...figures(raw),
     chordSize: chordSize(raw),
+    simple: raw.simple === true,
     bar: bar(raw),
   }
 }
@@ -113,10 +117,11 @@ const PLAYING = [
   'swing',
   'speedTraining',
 ] as const
-/** A piece's kept params (ADR 0022): its key and chord size too. */
+/** A piece's kept params (ADR 0022): its key, chord size and Simplify too (ADR 0104). */
 export const PLAYER_KEPT: readonly (keyof PlayerSearch & string)[] = [
   'key',
   'chordSize',
+  'simple',
   ...PLAYING,
 ]
 
@@ -124,7 +129,7 @@ export const PLAYER_KEPT: readonly (keyof PlayerSearch & string)[] = [
 export const WALK_DEFAULTS: WalkSearch = {
   root: noteParam(note('C')),
   kind: 'major',
-  ...PLAYER_DEFAULTS,
+  ...PRACTICE_DEFAULTS,
 }
 export function readWalkSearch(raw: Raw): WalkSearch {
   const kind = valueOr(isScaleKind, raw.kind, WALK_DEFAULTS.kind)
@@ -146,7 +151,7 @@ export const CHROMATIC_DEFAULTS: ChromaticSearch = {
   chords: chordsParam(CHROMATIC.chords),
   root: noteParam(note('C')),
   direction: CHROMATIC.direction,
-  ...PLAYER_DEFAULTS,
+  ...PRACTICE_DEFAULTS,
 }
 const isDirection = isOneOf(CHROMATIC_DIRECTIONS)
 export function readChromaticSearch(raw: Raw): ChromaticSearch {
@@ -165,7 +170,7 @@ export const CHROMATIC_KEPT: readonly (keyof ChromaticSearch & string)[] = ['dir
 
 // A progression: its numerals and key, then the Player's own params; an unread line is its own.
 const PROGRESSION_PLAYER_DEFAULTS: ProgressionSearch = {
-  ...PLAYER_DEFAULTS,
+  ...PRACTICE_DEFAULTS,
   p: PROGRESSION.numerals,
   key: C_MAJOR_PARAM,
 }
@@ -193,9 +198,9 @@ export const PROGRESSION_KEPT: readonly (keyof ProgressionSearch & string)[] = P
 // An exercise: the Player's own params, its swing absent for the exercise's own, then its choices,
 // each absent for the exercise's own (the page reads them against the exercise).
 const EXERCISE_DEFAULTS: ExerciseSearch = {
-  mode: PLAYER_DEFAULTS.mode,
+  mode: PRACTICE_DEFAULTS.mode,
   speedTraining: false,
-  hands: PLAYER_DEFAULTS.hands,
+  hands: PRACTICE_DEFAULTS.hands,
 }
 const when = <T>(guard: (value: unknown) => value is T, raw: unknown): T | undefined =>
   guard(raw) ? raw : undefined
