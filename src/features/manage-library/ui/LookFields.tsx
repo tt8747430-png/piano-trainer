@@ -39,7 +39,8 @@ export function LookFields({
           aria-label={t('folder.picture')}
           value={look.picture}
           onValueChange={(picture: FolderPicture) => onChange({ ...look, picture })}
-          className="flex flex-wrap gap-2"
+          // Six to a row where they fit, two even rows, never one left over.
+          className="flex max-w-82 flex-wrap gap-2"
         >
           {FOLDER_PICTURES.map((picture) => {
             const Icon = FOLDER_PICTURE_ICONS[picture]
