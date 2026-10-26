@@ -1,6 +1,8 @@
 import { Outlet, useRouterState } from '@tanstack/react-router'
+import { useLayoutEffect } from 'react'
 import { ReloadOnRestore } from '@/features/backup-data'
 import { ShortcutsHelp } from '@/features/shortcuts-help'
+import { startKeyboardViewport } from '@/shared/lib'
 import { StorageFullNotice } from './storage-full/StorageFullNotice'
 import { UpdatePrompt } from './update-prompt/UpdatePrompt'
 
@@ -9,6 +11,8 @@ export function RootLayout() {
   const fullScreen = useRouterState({
     select: (state) => state.matches.some((match) => match.staticData.fullScreen === true),
   })
+  // The phone's keyboard, measured once for the whole app: what floats at the foot steps aside.
+  useLayoutEffect(() => startKeyboardViewport(), [])
   return (
     <ShortcutsHelp>
       <Outlet />

@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { arrangeLibrary, savedLayout, type LibraryCatalog } from './arrangement'
+import {
+  arrangeLibrary,
+  archivedSongs,
+  placeIn,
+  savedLayout,
+  type LibraryCatalog,
+} from './arrangement'
 import { INITIAL_LIBRARY, type LibraryState } from './store'
 
 const CATALOG: LibraryCatalog = {
@@ -12,7 +18,7 @@ const CATALOG: LibraryCatalog = {
 }
 
 const library = (state: Partial<LibraryState>) => ({ ...INITIAL_LIBRARY, ...state })
-const MINE = { id: 'folder-1', name: 'Mine', picture: 'star', paint: 'sky' } as const
+const MINE = { id: 'folder-1', parent: null, name: 'Mine', picture: 'star', paint: 'sky' } as const
 
 describe('arrangeLibrary', () => {
   it('stands each collection as a folder of its songs, in catalog order, and the own songs at Home', () => {
@@ -20,13 +26,21 @@ describe('arrangeLibrary', () => {
     expect(layout.folders).toEqual([
       {
         id: 'learning-songs',
+        parent: null,
         picture: 'music',
         paint: 'yellow',
         builtIn: true,
         songs: ['a1', 'a2', 'a3'],
       },
-      { id: 'hymns', picture: 'church', paint: 'grass', builtIn: true, songs: ['h1', 'h2'] },
-      { id: 'gorshkov', picture: 'mic', paint: 'sand', builtIn: true, songs: ['g1'] },
+      {
+        id: 'hymns',
+        parent: null,
+        picture: 'church',
+        paint: 'grass',
+        builtIn: true,
+        songs: ['h1', 'h2'],
+      },
+      { id: 'gorshkov', parent: null, picture: 'mic', paint: 'sand', builtIn: true, songs: ['g1'] },
     ])
     expect(layout.home).toEqual(['my-1', 'my-2'])
     expect(layout.archive).toEqual([])
@@ -37,7 +51,7 @@ describe('arrangeLibrary', () => {
       library({
         folders: [
           { ...MINE, songs: [] },
-          { id: 'hymns', picture: 'star', paint: 'sky', songs: ['h2', 'h1'] },
+          { id: 'hymns', parent: null, picture: 'star', paint: 'sky', songs: ['h2', 'h1'] },
         ],
       }),
       CATALOG,
@@ -54,12 +68,15 @@ describe('arrangeLibrary', () => {
   it('stands a built-in song it places nowhere last in its collection’s folder, archived with it', () => {
     const layout = arrangeLibrary(
       library({
-        folders: [{ id: 'learning-songs', picture: 'music', paint: 'yellow', songs: ['a3'] }],
+        folders: [
+          { id: 'learning-songs', parent: null, picture: 'music', paint: 'yellow', songs: ['a3'] },
+        ],
         home: ['a1'],
         archive: [
           {
             kind: 'folder',
-            folder: { id: 'hymns', picture: 'church', paint: 'grass', songs: [] },
+            folder: { id: 'hymns', parent: null, picture: 'church', paint: 'grass', songs: [] },
+            subfolders: [],
             index: 1,
           },
         ],
@@ -76,11 +93,13 @@ describe('arrangeLibrary', () => {
         kind: 'folder',
         folder: {
           id: 'hymns',
+          parent: null,
           picture: 'church',
           paint: 'grass',
           builtIn: true,
           songs: ['h1', 'h2'],
         },
+        subfolders: [],
         index: 1,
       },
     ])
@@ -122,10 +141,115 @@ describe('arrangeLibrary', () => {
     expect(saved.home).toEqual(['my-2', 'my-1'])
     expect(saved.folders[0]).toEqual({
       id: 'learning-songs',
+      parent: null,
       picture: 'music',
       paint: 'yellow',
       songs: ['a1', 'a2', 'a3'],
     })
     expect(arrangeLibrary(library(saved), CATALOG)).toEqual(layout)
+  })
+
+  it('keeps folders in folders, and stands at Home one whose folder is gone, archived or a loop', () => {
+    const layout = arrangeLibrary(
+      library({
+        folders: [
+          { ...MINE, songs: [] },
+          { id: 'hymns', parent: 'folder-1', picture: 'church', paint: 'grass', songs: [] },
+          {
+            id: 'folder-2',
+            parent: 'folder-9',
+            name: 'Lost',
+            picture: 'star',
+            paint: 'sky',
+            songs: [],
+          },
+          {
+            id: 'folder-3',
+            parent: 'folder-4',
+            name: 'Loop',
+            picture: 'star',
+            paint: 'sky',
+            songs: [],
+          },
+          {
+            id: 'folder-4',
+            parent: 'folder-3',
+            name: 'Pool',
+            picture: 'star',
+            paint: 'sky',
+            songs: [],
+          },
+          {
+            id: 'folder-5',
+            parent: 'gorshkov',
+            name: 'Under',
+            picture: 'star',
+            paint: 'sky',
+            songs: [],
+          },
+        ],
+        archive: [
+          {
+            kind: 'folder',
+            folder: { id: 'gorshkov', parent: null, picture: 'mic', paint: 'sand', songs: [] },
+            subfolders: [],
+            index: 0,
+          },
+        ],
+      }),
+      CATALOG,
+    )
+    expect(layout.folders.map((folder) => [folder.id, folder.parent])).toEqual([
+      ['folder-1', null],
+      ['hymns', 'folder-1'],
+      ['folder-2', null],
+      ['folder-3', null],
+      ['folder-4', null],
+      ['folder-5', null],
+      ['learning-songs', null],
+    ])
+  })
+
+  it('keeps an archived folder’s subfolders under it, their songs out of the library', () => {
+    const layout = arrangeLibrary(
+      library({
+        archive: [
+          {
+            kind: 'folder',
+            folder: { ...MINE, parent: 'hymns', songs: ['my-1'] },
+            subfolders: [
+              {
+                id: 'folder-2',
+                parent: 'folder-1',
+                name: 'In',
+                picture: 'star',
+                paint: 'sky',
+                songs: ['my-2'],
+              },
+              {
+                id: 'folder-3',
+                parent: 'folder-9',
+                name: 'Lost',
+                picture: 'star',
+                paint: 'sky',
+                songs: [],
+              },
+            ],
+            index: 0,
+          },
+        ],
+      }),
+      CATALOG,
+    )
+    expect(layout.home).toEqual([])
+    const [entry] = layout.archive
+    if (entry?.kind !== 'folder') throw new Error('a folder archived')
+    expect(entry.folder.parent).toBe('hymns')
+    expect(entry.subfolders.map((folder) => [folder.id, folder.parent, folder.songs])).toEqual([
+      ['folder-2', 'folder-1', ['my-2']],
+      ['folder-3', 'folder-1', []],
+    ])
+    expect(placeIn(layout, 'my-2')).toBe('archived')
+    expect(archivedSongs(entry)).toEqual(['my-1', 'my-2'])
   })
 })

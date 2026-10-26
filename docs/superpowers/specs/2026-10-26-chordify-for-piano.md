@@ -328,7 +328,8 @@ can be archived, and deleting a folder deletes its songs, though the app's conte
 7. **Sort:** Manual (the order the learner drags), Name, Recently played (as Learn's songs played last; a song never
    played after them in its order): a pop-up beside the filters that shows the sort chosen, the library's own and
    kept.
-8. **The search and filters** (Level, With chords, Favourites, Chords I know), in the URL:
+8. **The search and filters** (Level, With chords, Favourites, Chords I know, in the URL; the second round
+   replaced them, item 15):
    - **At Home** they look through the whole library: the songs that match, under their folders' names (Home's
      last), and the folders whose names match the search.
    - **In a folder** they narrow its songs.
@@ -357,6 +358,27 @@ can be archived, and deleting a folder deletes its songs, though the app's conte
     (their page, the Add to setlist sheet, Search's setlists, now its folders), `EditableTitle`, and ADR 0103,
     superseded. Chords I know, the ♡, the chord count on a row and the sortable engine stay.
 13. **Later:** a folder played song after song (Chordify's setlist play: the song's end offers the next).
+
+**Second round** (the owner's phone screenshots and words; ADR 0106's second round, ADR 0100 amended):
+
+14. **Folders nest, to any depth** (Mindscape's `deck-tree`): a folder's page lists its folders, then its songs;
+    Back goes up a level; a folder moves into another (never into itself or under itself); archive, delete and
+    restore follow the subtree; a folder's row counts its folders and songs and names its first three songs.
+    `pt-library` v3.
+15. **The header:** one search box with the sort joined to its end (Manual · Name · Recent · Key), the Filter button
+    beside it with its count, its sheet of Key (each key with its count), Level and Favourites, Clear filters and
+    Show N; the filters on as chips under the search. With chords and Chords I know go. A folder's bar is Back, its
+    name, Select and More; the Archive button is Home's.
+16. **Move to… moves at a tap:** what moves whole under the title, Home on its own tile, the folders as they nest,
+    Here marked, no confirm button.
+17. **Nothing moves or clips:** Select's check takes the More's place; a song's second title is cut before its
+    chord count; a sheet's body keeps its rows' height.
+18. **Toasts:** one at a time; Undo closes its toast; gone after five seconds.
+19. **The phone's keyboard:** every sheet stands on it without lifting the app (Base UI's
+    `VirtualKeyboardProvider`, fields starting empty); `keyboard-viewport` hides what floats at the foot while typing.
+20. **The song's page** (ADR 0100 amended): no learning card; Practise first; its facts and key's scale; its note
+    behind an ⓘ; its chords once; its sections only where it has more than one. A section's changes and pattern
+    start folded.
 
 ## 7. Round 6 — Share, print, MIDI, song information, sections
 

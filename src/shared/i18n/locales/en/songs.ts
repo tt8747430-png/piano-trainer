@@ -1,17 +1,21 @@
 export const songs = {
   title: 'Songs',
   search: 'Search songs',
+  // The search box's hint: short, for a phone's width beside the sort.
+  searchHint: 'Search',
   noChart: 'No chart yet',
   empty: 'No songs match.',
   // Nothing to list for a search: it names what was searched.
   emptyQuery: 'No songs match “{{query}}”.',
-  withChords: 'With chords',
   // A song's stage, as its course places it (ADR 0005).
   stage: 'Level',
   anyStage: 'Any',
   emptyStage: 'No songs here at the “{{stage}}” level.',
   emptyQueryStage: 'No songs match “{{query}}” at the “{{stage}}” level.',
   emptyFavourites: 'No favourites here yet.',
+  emptyKey: 'No songs here in {{key}}.',
+  emptyFilters: 'No songs here match these filters.',
+  emptyQueryFilters: 'No songs match “{{query}}” with these filters.',
   clearFilters: 'Clear filters',
   // What the filters hide (Mindscape's FilteredNotice).
   filtered: 'Shown: {{shown}} of {{total}}',
@@ -19,14 +23,24 @@ export const songs = {
   // beginner).
   chordCount_one: '{{count}} chord',
   chordCount_other: '{{count}} chords',
-  // Chords I know (ADR 0103): the chords ticked, and only the songs that use no other stay.
-  known: {
-    label: 'Chords I know',
-    count: 'Chords I know: {{count}}',
-    info: 'Tick the chords you can play: only the songs that use no other chord stay.',
-    clear: 'Clear',
+  // The Filter button and its sheet (ADR 0106): Key, Level and Favourites, each folding.
+  filters: {
+    title: 'Filters',
+    on: 'Filters: {{count}} on',
+    key: 'Key',
+    anyKey: 'Any key',
+    // A key chosen, with how many songs here are in it.
+    keyCount: '{{key}} · {{count}}',
+    onlyFavourites: 'Only favourites',
+    show_one: 'Show {{count}} song',
+    show_other: 'Show {{count}} songs',
+    showNone: 'No songs to show',
+    // What is on, as a removable chip under the search.
+    chips: 'Filters on',
+    chipKey: 'Key: {{key}}',
+    chipStage: 'Level: {{stage}}',
+    remove: 'Remove {{name}}',
   },
-  emptyKnown: 'No songs here use only the chords you know.',
   favourites: 'Favourites',
   // The library's sort, kept (ADR 0106).
   sort: {
@@ -34,6 +48,14 @@ export const songs = {
     manual: 'Manual',
     name: 'Name',
     recent: 'Recently played',
+    key: 'Key',
+    // As the sort's button by the search shows it: a word or two.
+    short: {
+      manual: 'Manual',
+      name: 'Name',
+      recent: 'Recent',
+      key: 'Key',
+    },
   },
   // The library (ADR 0106): a song's actions, and the toasts that say what was done.
   library: {
@@ -62,11 +84,13 @@ export const songs = {
   // Move to… (Mindscape's DestinationSheet).
   move: {
     title: 'Move to',
-    choose: 'Choose where',
-    to: 'Move to {{place}}',
     toCount: 'Move here: {{count}}',
     newFolder: 'New folder',
-    here: 'They are here now',
+    // The place what moves stands in now.
+    here: 'Here',
+    intoItself: 'A folder cannot go into itself or a folder in it',
+    expand: 'Show the folders in {{name}}',
+    collapse: 'Hide the folders in {{name}}',
   },
   // A folder of the library: the app's collections and the learner's own.
   folder: {
@@ -102,13 +126,17 @@ export const songs = {
     save: 'Save',
     songCount_one: '{{count}} song',
     songCount_other: '{{count}} songs',
+    folderCount_one: '{{count}} folder',
+    folderCount_other: '{{count}} folders',
+    // Back up a level, to the folder this one stands in, or Home.
+    up: 'Back to {{name}}',
     empty: 'Empty',
     more: 'More for {{name}}',
     newSong: 'New song here',
     archive: 'Archive folder',
     delete: 'Delete folder',
     emptyTitle: 'This folder is empty',
-    emptyDescription: 'Make a song here, or move songs in.',
+    emptyDescription: 'Make a song or a folder here, or move songs in.',
     moveIn: 'Move songs here',
     deleting: {
       title: 'Delete “{{name}}”?',

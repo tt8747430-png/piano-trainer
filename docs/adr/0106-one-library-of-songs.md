@@ -1,7 +1,8 @@
 # ADR 0106 — One library of songs: folders, the learner's and the app's, and an archive
 
-- **Status:** accepted · **Date:** 2026-10-26 · **Supersedes:** ADR 0103 · **Amends:** ADR 0099 (the Player's
-  More), ADR 0100 (the song's page's bar) · **Spec:**
+- **Status:** accepted · **Date:** 2026-10-26 (second round the same day, below) · **Supersedes:** ADR 0103 ·
+  **Amends:** ADR 0099 (the Player's More), ADR 0100 (the song's page's bar; in the second round, the page) ·
+  **Spec:**
   [Chordify for piano](../superpowers/specs/2026-10-26-chordify-for-piano.md) §6
 
 ## Context
@@ -107,18 +108,84 @@ Mindscape, Apple Files, Notes and Music, Google Drive, forScore and MuseScore (t
 - a folder left and opened again keeps its scroll (the router's own restoration);
 - a swipe and a long press are shortcuts to what the row's More holds.
 
-Not taken: a sort for each folder (Files), nested folders, a 30-day expiry (the app's songs never vanish), tags.
+Not taken: a sort for each folder (Files), a 30-day expiry (the app's songs never vanish), tags. (Nested folders,
+first left out, came in the second round.)
+
+### Second round: nesting, one search with its filters, Move at a tap, the phone's keyboard
+
+The owner, from their phone: the Move sheet clipped the song's name, asked twice (a disabled "Choose where"), only
+greyed the folder it stood in and painted Home as Called to Play; With chords and Chords I know were not wanted, a
+Key filter was; the header should be one search with its sort, a filter button and chips (their examples); the
+folder's bar was four round buttons over a huge title; rows jumped as Select started; a song's detail wrapped with
+"· 16 chords" alone; toasts stayed or stacked; sheets with a field lifted the whole app over the keyboard; folders
+should nest, as Mindscape's decks do.
+
+- **Folders nest, to any depth** (Mindscape's `deck-tree`): a folder says the one it stands in (`parent`, Home
+  `null`); the folders of one place stand in the order the store lists them. `entities/library`'s `tree.ts` holds the
+  rules: `childFolders`, `subtreeIds`, `folderPath`, `canMoveFolder` (never into itself or a folder under it),
+  `withoutDescendants` (a folder chosen under another moves with it), `reachableFolders` (a folder whose place is
+  gone, archived or a loop stands at Home, read, never written).
+  - **A folder's page:** its folders first, then its songs; Back goes up a level, named for where ("Back to Hymns").
+    Its bar is Back, its name, Select and More (Edit folder, New song here, Move to…, Archive folder, Delete
+    folder); the Archive button stands in Home's bar alone.
+  - **A folder's row** counts its folders and songs ("1 folder · 4 songs", "Empty") and names its first three songs
+    under them (Files' and Music's), hidden from a screen reader.
+  - **New**, at Home and in a folder alike, is a dial of New song and New folder, each made where the learner is.
+  - **Archive, delete and restore follow the subtree**: archiving a folder takes every folder under it into its one
+    archive entry (`subfolders`); Restore puts it back in the folder it stood in while that is in the library, else at
+    Home, last; the toast's Undo exactly where it stood. Deleting a folder deletes every folder under it, each by
+    the first round's rule (the learner's go for good, a built-in one to the archive whole, at Home on its Restore).
+- **Move to… moves at a tap** (Mindscape's `DestinationTree`): what moves on its own line under the title, whole
+  (its body's rows keep their height, which had squeezed it); Home on a tile of its own (the muted neutral, no
+  folder's paint), then the folders as they nest, a folder holding folders opening and closing by the toggle at its
+  row's end; the place everything stands in marked **Here** (a check and the word); a folder moving greyed, saying
+  why. A folder is moved as a song is, from its More, its swipe and Select (`moveTo` over songs and folders, its Undo
+  `undoMove`).
+- **The search and filters** (the owner's examples):
+  - one search box, the **sort** joined to its end as a compact pop-up of a word or two (Manual · Name · Recent ·
+    **Key**, the last new: by key, majors from C up, then minors, then by title);
+  - beside it the **Filter** button, its count on it while filters are on, opening a sheet (a popover by it on a
+    laptop) of folding groups: **Key** (each key the songs here are written in, as the app names keys, with how
+    many), **Level**, **Favourites** (a switch); Clear filters and "Show N songs" at its foot, each change taken at
+    once;
+  - each filter on as a chip under the search ("Key: G major ×"), in a row that scrolls sideways;
+  - **With chords and Chords I know go**, with `known`, `withChords`, `KnownChordsFilter`, `known-chords.ts`,
+    `readChordList` and `chordListParam`;
+  - filters that keep nothing say which, by the one filter's own words or "these filters".
+  - At Home or in a folder they look through all the place holds, its folders' folders too, the songs found under
+    their folders' paths from it ("Hymns › Advent").
+- **Rows:** in Select the check stands where the row's More stood, fading in, so no tile or title moves (iOS
+  Files'); a song's second title is cut on one line before its chord count (`RowFace`'s `count`), never leaving the
+  count alone on a line.
+- **Toasts:** one at a time, a new one taking the place of the one before (its Undo would act on what has since
+  changed); its Undo closes it; it goes after five seconds, its Undo with it.
+- **The phone's keyboard** (Mindscape's ADR 0002, its `keyboard-viewport` and its sheets): every sheet (the kit's
+  `Sheet`) is wrapped in Base UI's `VirtualKeyboardProvider`, which focuses its fields without scrolling the page and
+  stands the sheet on the keyboard (`--drawer-keyboard-inset`, `pb-sheet-keyboard`); a field starts empty with what
+  it would answer as its placeholder (a selection in a sheet is what iOS reveals by lifting the whole app); the
+  viewport stays `interactive-widget=resizes-visual`, installed too. `shared/lib/keyboard-viewport.ts`, started once
+  by `RootLayout`, publishes `--app-height`, `--kb-inset` and `data-keyboard`: while typing, the tab bar, the
+  floating actions and the toasts step aside, and a page's field scrolls clear of the keyboard. Mindscape's
+  `useKeyboardReveal` and `useVirtualKeyboard` are not taken: its own rule is that one surface owns a reveal, and in
+  a sheet that is Base UI's, while the app's pages scroll the document, which the browser reveals itself. The score
+  editor's fields float on its sheet, not in a `Sheet`: they are untouched.
+- **Chose, from the libraries studied:** a folder's first songs on its row, the folders before the songs on a
+  folder's page, Here in Move to, the filters as chips. Not taken: Recently played at Home's top (Learn already
+  shows the songs played last; the sort offers Recent), a shelf of keys.
+
 
 ## Consequences
 
-- **`pt-library` is version 2** with no migration (ADR 0038): `folders` (each its id, look, name and songs),
-  `home`, `favourites`, `archive` (each entry a song with where it stood, or a folder with its index), `sort` and
-  `nextFolder`. A version 1 save (setlists) reads as the initial state. It stays in the backup.
+- **`pt-library` is version 3** with no migration (ADR 0038): `folders` (each its id, `parent`, look, name and
+  songs), `home`, `favourites`, `archive` (each entry a song with where it stood, or a folder with its `subfolders`
+  and its place among the folders it stood with), `sort` (`manual`, `name`, `recent`, `key`) and `nextFolder`. A
+  save of another version reads as the initial state. It stays in the backup.
 - **`entities/library`:** the types (`FolderId`, `FolderLook`, `SongPlace`, `ArchiveEntry`), the store and its
   sanitiser (each folder and song once, the caps: 40 characters a name, 100 folders, 500 songs a list), the
   arrangement (`arrangeLibrary` over `libraryCatalog`, `placeIn`, `savedLayout`), `useLibraryLayout`, and its own
   UI: `FolderTile`, `useFolderName`, the pictures.
-- **`features/manage-library`:** one pure command each over one snapshot (`editLibrary`): `moveSongs` and `undoMove`,
+- **`features/manage-library`:** one pure command each over one snapshot (`editLibrary`): `moveTo` (songs and
+  folders) and `undoMove`,
   `archiveSongs` and `restoreSongs`, `archiveFolder` and `restoreFolder`, `restoreAll`, `makeFolder`, `editFolder`,
   `deleteFolder` and `deleteOwnSongs` (through `features/edit-piece`'s `deleteSong`, with the takes),
   `orderFolders` and `orderSongs`, `setSort`, `toggleFavourite` and `setFavourites`; and the UI they share:

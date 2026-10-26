@@ -1,64 +1,70 @@
-import { Check, FolderPlus, House } from 'lucide-react'
+import { Check, ChevronDown, FolderPlus, House } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  childFolders,
   FolderTile,
   placeIn,
+  subtreeIds,
   useFolderName,
   useLibraryLayout,
   type FolderId,
+  type LibraryLayout,
+  type ShelvedFolder,
 } from '@/entities/library'
-import type { PieceId } from '@/entities/piece'
 import { cn } from '@/shared/lib'
-import { PAINT, Sheet, SheetContent } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { Sheet, SheetContent } from '@/shared/ui'
+import type { Moving } from '../move-to'
 import { FolderSheet } from './FolderSheet'
 import { useLibraryActs } from './use-library-acts'
 
-/** A place a song can go: a folder, or Home. */
+/** A place things can go: a folder, or Home. */
 type Place = FolderId | null
 
 const ROW =
-  'flex min-h-14 w-full items-center gap-3 rounded-2xl px-2 py-1.5 text-left text-lg font-semibold transition-colors duration-200 ease-out hover:bg-muted disabled:opacity-50 disabled:hover:bg-transparent aria-pressed:bg-muted focus-visible:-outline-offset-3'
+  'flex min-h-14 min-w-0 flex-1 items-center gap-3 rounded-2xl px-2 py-1.5 text-left text-lg leading-snug font-semibold transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3'
 
 /**
- * Move to… (Mindscape's `DestinationSheet`): Home, then every folder on its tile in Home's order,
- * the one the songs all stand in greyed; one chosen, its button says where they go. New folder at
- * its foot makes a folder and moves them into it. Each move says so in a toast, with Undo.
+ * Move to… (Mindscape's `DestinationSheet` and `DestinationTree`): what moves on its own line under
+ * the title, whole; Home on its own tile, then every folder on its tile as the library nests them, a
+ * folder with folders in it opening to them. A tap on a place moves there at once and closes, the
+ * toast saying where with Undo. The place everything stands in now is marked Here; a folder that
+ * moves cannot go into itself or a folder under it, greyed with why. New folder at its foot makes
+ * one at Home and moves them into it.
  */
 export function MoveSheet({
-  songs,
+  moving,
   what,
   onOpenChange,
 }: {
-  /** The songs to move; none while the sheet is shut. */
-  songs: readonly PieceId[] | null
-  /** What moves, under the sheet's title: a song's title, or how many. */
+  /** What moves; none while the sheet is shut. */
+  moving: Moving | null
+  /** What moves, under the sheet's title: a song's or folder's name, or how many. */
   what: string
   onOpenChange: (open: boolean) => void
 }) {
-  const [making, setMaking] = useState<readonly PieceId[] | null>(null)
+  const [making, setMaking] = useState<Moving | null>(null)
   const acts = useLibraryActs()
   return (
     <>
-      <Sheet open={songs !== null} onOpenChange={onOpenChange}>
-        {songs ? (
+      <Sheet open={moving !== null} onOpenChange={onOpenChange}>
+        {moving ? (
           <MovePicker
-            songs={songs}
+            moving={moving}
             what={what}
             onPick={(to) => {
               onOpenChange(false)
-              acts.move(songs, to)
+              acts.move(moving, to)
             }}
             onNewFolder={() => {
               onOpenChange(false)
-              setMaking(songs)
+              setMaking(moving)
             }}
           />
         ) : null}
       </Sheet>
       <FolderSheet
-        target={making ? { kind: 'new' } : null}
+        target={making ? { kind: 'new', parent: null } : null}
         onOpenChange={(open) => {
           if (!open) setMaking(null)
         }}
@@ -70,13 +76,26 @@ export function MoveSheet({
   )
 }
 
+/** Where everything moved stands now, if it all stands in one place: none to move it to. */
+function hereOf(layout: LibraryLayout, { songs, folders }: Moving): Place | undefined {
+  const places = new Set<Place | undefined>([
+    ...songs.map((id) => {
+      const place = placeIn(layout, id)
+      return place && place !== 'archived' ? place.folder : undefined
+    }),
+    ...folders.map((id) => layout.folders.find((folder) => folder.id === id)?.parent),
+  ])
+  const [here] = places
+  return places.size === 1 ? here : undefined
+}
+
 function MovePicker({
-  songs,
+  moving,
   what,
   onPick,
   onNewFolder,
 }: {
-  songs: readonly PieceId[]
+  moving: Moving
   what: string
   onPick: (to: Place) => void
   onNewFolder: () => void
@@ -84,83 +103,147 @@ function MovePicker({
   const { t } = useTranslation('songs')
   const layout = useLibraryLayout()
   const nameOf = useFolderName()
-  const [picked, setPicked] = useState<Place | undefined>(undefined)
-  // Where every song moved stands now, if they all stand in one place: no place to move them to.
-  const standing = new Set(
-    songs.map((id) => {
-      const place = placeIn(layout, id)
-      return place && place !== 'archived' ? place.folder : undefined
-    }),
-  )
-  const [here] = standing.size === 1 ? standing : [undefined]
-  const places: { place: Place; name: string; tile: ReactNode }[] = [
-    {
-      place: null,
-      name: t('library.home'),
-      tile: (
-        <span
-          aria-hidden
-          className={cn(
-            'grid size-12 shrink-0 place-items-center rounded-2xl [&_svg]:size-5',
-            PAINT.sky.fill,
-            PAINT.sky.ink,
-          )}
-        >
-          <House />
-        </span>
-      ),
-    },
-    ...layout.folders.map((folder) => ({
-      place: folder.id,
-      name: nameOf(folder),
-      tile: <FolderTile look={folder} />,
-    })),
-  ]
-  const chosen = places.find((each) => each.place === picked)
+  const here = hereOf(layout, moving)
+  // No folder goes into itself or a folder under it.
+  const barred = new Set(moving.folders.flatMap((id) => subtreeIds(layout.folders, id)))
+  // Every folder that holds folders starts open, as Mindscape's tree does.
+  const [shut, setShut] = useState<ReadonlySet<FolderId>>(new Set())
+  const toggle = (id: FolderId) =>
+    setShut((was) => {
+      const next = new Set(was)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+
+  const folderRows = (parent: Place, depth: number): ReactNode[] =>
+    childFolders(layout.folders, parent).map((folder) => {
+      const inside = barred.has(folder.id) ? [] : childFolders(layout.folders, folder.id)
+      const open = !shut.has(folder.id)
+      return (
+        <li key={folder.id}>
+          <PlaceRow
+            depth={depth}
+            tile={<FolderTile look={folder} />}
+            name={nameOf(folder)}
+            here={here === folder.id}
+            barred={barred.has(folder.id) ? t('move.intoItself') : null}
+            onPick={() => onPick(folder.id)}
+            toggle={
+              inside.length > 0 ? { open, onToggle: () => toggle(folder.id), folder } : undefined
+            }
+          />
+          {inside.length > 0 && open ? <ul>{folderRows(folder.id, depth + 1)}</ul> : null}
+        </li>
+      )
+    })
+
   return (
-    <SheetContent
-      title={t('move.title')}
-      footer={
-        <Button
-          size="lg"
-          className="w-full"
-          disabled={chosen === undefined}
-          onClick={() => chosen && onPick(chosen.place)}
-        >
-          {chosen ? t('move.to', { place: chosen.name }) : t('move.choose')}
-        </Button>
-      }
-    >
-      <p className="truncate pb-2 text-muted-foreground">{what}</p>
-      <ul className="flex flex-col gap-1">
-        {places.map(({ place, name, tile }) => (
-          <li key={place ?? 'home'}>
-            <button
-              type="button"
-              aria-pressed={picked === place}
-              disabled={place === here}
-              title={place === here ? t('move.here') : undefined}
-              onClick={() => setPicked(place)}
-              className={ROW}
-            >
-              {tile}
-              <span className="min-w-0 flex-1 truncate">{name}</span>
-              {picked === place ? <Check aria-hidden className="size-5 shrink-0" /> : null}
-            </button>
-          </li>
-        ))}
+    <SheetContent title={t('move.title')} description={what}>
+      <ul className="flex flex-col">
         <li>
-          <button type="button" onClick={onNewFolder} className={cn(ROW, 'text-link')}>
-            <span
-              aria-hidden
-              className="grid size-12 shrink-0 place-items-center rounded-2xl bg-muted [&_svg]:size-5"
-            >
-              <FolderPlus />
-            </span>
-            <span className="min-w-0 flex-1 truncate">{t('move.newFolder')}</span>
-          </button>
+          <PlaceRow
+            depth={0}
+            tile={
+              <span
+                aria-hidden
+                className="grid size-12 shrink-0 place-items-center rounded-2xl bg-muted text-foreground [&_svg]:size-5"
+              >
+                <House />
+              </span>
+            }
+            name={t('library.home')}
+            here={here === null}
+            barred={null}
+            onPick={() => onPick(null)}
+          />
+        </li>
+        {folderRows(null, 0)}
+        <li>
+          <div className="flex items-center">
+            <button type="button" onClick={onNewFolder} className={cn(ROW, 'text-link')}>
+              <span
+                aria-hidden
+                className="grid size-12 shrink-0 place-items-center rounded-2xl border border-dashed border-border [&_svg]:size-5"
+              >
+                <FolderPlus />
+              </span>
+              <span className="min-w-0 flex-1 break-words">{t('move.newFolder')}</span>
+            </button>
+          </div>
         </li>
       </ul>
     </SheetContent>
+  )
+}
+
+/**
+ * One place in Move to…: its tile and name, Here where everything stands now, and at its end the
+ * toggle that opens a folder to the folders in it; a tap on the place moves there.
+ */
+function PlaceRow({
+  depth,
+  tile,
+  name,
+  here,
+  barred,
+  onPick,
+  toggle,
+}: {
+  depth: number
+  tile: ReactNode
+  name: string
+  here: boolean
+  /** Why it cannot be chosen: a folder moving into itself. */
+  barred: string | null
+  onPick: () => void
+  toggle?: { open: boolean; onToggle: () => void; folder: ShelvedFolder }
+}) {
+  const { t } = useTranslation('songs')
+  const nameOf = useFolderName()
+  return (
+    // Each level stands in by a step, no further than four: a phone keeps room for the name.
+    <div className="flex items-center" style={{ paddingLeft: `${Math.min(depth, 4) * 1.25}rem` }}>
+      <button
+        type="button"
+        // Here is no move, and a folder into itself none: both stay in sight, neither acts.
+        aria-disabled={here || barred !== null || undefined}
+        title={barred ?? undefined}
+        onClick={here || barred ? undefined : onPick}
+        className={cn(
+          ROW,
+          here && 'cursor-default hover:bg-transparent',
+          barred && 'cursor-not-allowed opacity-50 hover:bg-transparent',
+        )}
+      >
+        {tile}
+        <span className="min-w-0 flex-1 break-words">{name}</span>{' '}
+        {here ? (
+          <span className="flex shrink-0 items-center gap-1 text-base font-medium text-muted-foreground">
+            <Check aria-hidden className="size-4" />
+            {t('move.here')}
+          </span>
+        ) : null}
+      </button>
+      {toggle ? (
+        <button
+          type="button"
+          aria-expanded={toggle.open}
+          aria-label={t(toggle.open ? 'move.collapse' : 'move.expand', {
+            name: nameOf(toggle.folder),
+          })}
+          onClick={toggle.onToggle}
+          className="grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground [&_svg]:size-5"
+        >
+          <ChevronDown
+            aria-hidden
+            className={cn(
+              'transition-transform duration-200 ease-out',
+              !toggle.open && '-rotate-90',
+            )}
+          />
+        </button>
+      ) : null}
+    </div>
   )
 }

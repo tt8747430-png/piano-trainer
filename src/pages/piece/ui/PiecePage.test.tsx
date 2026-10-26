@@ -114,17 +114,11 @@ describe('Piece', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/bz5/sections/2'))
   })
 
-  it('says where to start learning it, and how much of it is done (ADR 0100)', async () => {
-    await renderApp('/songs/bz5')
-    expect(
-      await screen.findByRole('link', { name: 'Learn it step by step: start with the Verse.' }),
-    ).toHaveAttribute('href', '/songs/bz5/sections/1')
-    expect(screen.getByText('Lessons done: 0 of 31')).toBeInTheDocument()
-  })
-
-  it('goes on to the first section with a lesson not done, a lesson two share counted once', async () => {
+  it('shows no learning card over its facts: each section says its lessons done (ADR 0100, amended)', async () => {
     const { progressStore } = await renderApp('/songs/bz5')
     await screen.findByRole('heading', { level: 1 })
+    expect(screen.queryByRole('link', { name: /^Learn it step by step/ })).not.toBeInTheDocument()
+    expect(screen.queryByText(/^Lessons done/)).not.toBeInTheDocument()
     // The verse played through, every chord of it learned: the chorus and the ending play some.
     const verse = sectionLessons(bz5Played(), 'bz5', 0)
     if (!verse) throw new Error('bz5 has a verse')
@@ -133,11 +127,6 @@ describe('Piece', () => {
         lessons: Object.fromEntries(lessonKeys(verse).map((key) => [key, DAY])),
       }),
     )
-    expect(screen.getByRole('link', { name: 'Next: the Chorus.' })).toHaveAttribute(
-      'href',
-      '/songs/bz5/sections/2',
-    )
-    expect(screen.getByText('Lessons done: 15 of 31')).toBeInTheDocument()
     const sections = screen.getByRole('region', { name: 'Sections' })
     expect(
       within(sections)
@@ -150,61 +139,18 @@ describe('Piece', () => {
     ])
   })
 
-  it('says to play it through once every lesson is done, opening the whole song', async () => {
-    const { progressStore } = await renderApp('/songs/bz5')
-    await screen.findByRole('heading', { level: 1 })
-    const keys = [0, 1, 2].flatMap((section) => {
-      const lessons = sectionLessons(bz5Played(), 'bz5', section)
-      return lessons ? lessonKeys(lessons) : []
-    })
-    act(() =>
-      progressStore.setState({ lessons: Object.fromEntries(keys.map((key) => [key, DAY])) }),
-    )
-    expect(
-      screen.getByRole('link', { name: 'Every section learned. Play it through.' }),
-    ).toHaveAttribute('href', '/play/bz5')
-    expect(screen.getByText('Lessons done: 31 of 31')).toBeInTheDocument()
-  })
-
-  it('plays it along, the whole song, from a row at its foot', async () => {
-    await renderApp('/songs/bz5')
-    expect(
-      await screen.findByRole('link', { name: 'Play along The whole song in the Player' }),
-    ).toHaveAttribute('href', '/play/bz5')
-  })
-
-  it('shows a study of one section its lessons in place, on its shelf (ADR 0100)', async () => {
+  it('shows a study of one section no section machinery: its chords once, as diagrams (ADR 0100)', async () => {
     await renderApp('/practice/accompaniment/studies/ex3')
-    // Where to start, its lessons under the card: the card leads to no page that repeats them.
-    expect(
-      await screen.findByText('Learn it step by step: start with the Practice.'),
-    ).not.toHaveAttribute('href')
-    expect(screen.queryByRole('link', { name: /start with the Practice/ })).not.toBeInTheDocument()
+    await screen.findByRole('heading', { level: 1 })
     expect(screen.queryByRole('region', { name: 'Sections' })).not.toBeInTheDocument()
-    // Its chords are the section's to learn, in place of the summary.
+    expect(screen.queryByRole('heading', { name: 'Changes' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /^Learn / })).not.toBeInTheDocument()
     expect(
       within(screen.getByRole('region', { name: 'Chords' }))
         .getAllByRole('button')
-        .map((row) => row.textContent),
-    ).toEqual(['Learn C', 'Learn Dm', 'Learn G', 'Learn F'])
-    expect(screen.getByRole('heading', { level: 2, name: 'Changes' })).toBeInTheDocument()
-    const inTime = screen.getByRole('region', { name: 'Play the chords in time' })
-    expect(
-      within(inTime)
-        .getAllByRole('link')
-        .map((row) => [row.textContent, row.getAttribute('href')]),
-    ).toEqual([
-      ['1st sequence C · Dm · G · C', '/play/ex3?loop=1-4'],
-      ['2nd sequence F · C · G · C', '/play/ex3?loop=5-8'],
-    ])
-    expect(screen.getByRole('link', { name: '1 · Bass + chords On C · Bar 1' })).toHaveAttribute(
-      'href',
-      '/play/ex3?loop=1-1',
-    )
-    // A study is called a study, never a song.
-    expect(
-      screen.getByRole('link', { name: 'Play along The whole study in the Player' }),
-    ).toHaveAttribute('href', '/play/ex3')
+        .map((chord) => chord.textContent),
+    ).toEqual(['C', 'Dm', 'G', 'F'])
+    expect(screen.getByRole('link', { name: 'Practise' })).toHaveAttribute('href', '/play/ex3')
   })
 
   it('checks the song’s chords from More, after its place in the library', async () => {
@@ -237,10 +183,13 @@ describe('Piece', () => {
     expect(`${link.pathname}${link.search}`).toBe('/play/bz5?key=A&simple=true')
   })
 
-  it('floats Practise, its main action, and keeps Edit, Learned, its ♡ and More in its bar', async () => {
+  it('puts Practise first, under its byline, and keeps Edit, Learned, its ♡ and More in its bar', async () => {
     await renderApp('/songs/bz5')
     const practise = await screen.findByRole('link', { name: 'Practise' })
-    expect(practise.closest('[data-slot="floating-actions"]')).not.toBeNull()
+    expect(practise).toHaveAttribute('href', '/play/bz5')
+    // Before its facts and its chords: the first thing on the page to do.
+    const facts = screen.getByText('Key').closest('dl') as HTMLElement
+    expect(practise.compareDocumentPosition(facts) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     const bar = screen.getByRole('heading', { level: 1 }).closest('header') as HTMLElement
     for (const name of ['Edit the score', 'Learned', 'Add to favourites', 'More'])
       expect(
@@ -273,22 +222,12 @@ describe('Piece', () => {
     expect(within(sections).getAllByRole('link')[0]).toHaveTextContent(
       'Куплет 15 уроков · пройдено: 0',
     )
-    expect(
-      screen.getByRole('link', { name: 'Учите песню по шагам: начните с раздела «Куплет».' }),
-    ).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
   })
 
-  it('reads a study’s lessons in Russian, calling it a study', async () => {
+  it('reads a study’s page in Russian', async () => {
     await renderApp('/practice/accompaniment/studies/ex3', { locale: 'ru' })
-    expect(await screen.findByRole('heading', { level: 2, name: 'Переходы' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '1-й оборот C · Dm · G · C' })).toBeInTheDocument()
-    expect(
-      screen.getByText('Учите этюд по шагам: начните с раздела «Практика».'),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('link', { name: 'Играть вместе Весь этюд в плеере' }),
-    ).toBeInTheDocument()
+    expect(await screen.findByRole('region', { name: 'Аккорды' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
   })
 
@@ -354,7 +293,7 @@ describe('Piece: the learner’s own music', () => {
     ).toEqual(['Move to…', 'Archive', 'Share', 'Delete'])
   })
 
-  it('has nothing to learn in a song of no chord symbol: no learning card, its sections say so', async () => {
+  it('has nothing to learn in a song of no chord symbol: its sections say so', async () => {
     const song = {
       ...MUSIC,
       id: 'my-1',
@@ -372,8 +311,6 @@ describe('Piece: the learner’s own music', () => {
         .getAllByRole('link')
         .map((row) => row.textContent),
     ).toEqual(['Verse No chords to learn', 'Chorus No chords to learn'])
-    expect(screen.queryByText(/^Lessons done/)).not.toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: /^Learn it step by step/ })).not.toBeInTheDocument()
   })
 
   it('edits a song in the score editor', async () => {
@@ -503,10 +440,12 @@ describe('Piece: the learner’s library (ADR 0106)', () => {
     await openMore(user)
     await user.click(await screen.findByRole('button', { name: 'Move to…' }))
     const sheet = await screen.findByRole('dialog', { name: 'Move to' })
-    // Where it stands now is no place to move it to.
-    expect(within(sheet).getByRole('button', { name: '«Боже, спасибо»' })).toBeDisabled()
+    // Where it stands now is marked Here, no place to move it to; a tap elsewhere moves at once.
+    expect(within(sheet).getByRole('button', { name: '«Боже, спасибо» Here' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
     await user.click(within(sheet).getByRole('button', { name: 'Hymns' }))
-    await user.click(within(sheet).getByRole('button', { name: 'Move to Hymns' }))
     expect(placeOf(libraryStore.getState(), 'bz5')).toMatchObject({ folder: 'hymns' })
     await user.click(await screen.findByRole('button', { name: 'Undo' }))
     expect(placeOf(libraryStore.getState(), 'bz5')).toEqual({ folder: 'bozhe-spasibo', index: 4 })

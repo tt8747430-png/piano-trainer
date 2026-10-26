@@ -50,7 +50,7 @@ export function useSongActions(entry: Entry): {
     actions,
     sheet: (
       <MoveSheet
-        songs={moving ? [entry.id] : null}
+        moving={moving ? { songs: [entry.id], folders: [] } : null}
         what={entryTitles(entry, locale).primary}
         onOpenChange={setMoving}
       />

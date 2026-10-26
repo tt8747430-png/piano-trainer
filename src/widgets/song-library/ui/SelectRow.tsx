@@ -6,13 +6,16 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { ROW_BODY, ROW_CARD, ROW_CONTROL } from './row-class'
 
-/** The check a chosen row wears, umber while chosen (the neutral chosen), a ring while not. */
+/**
+ * The check a chosen row wears, umber while chosen (the neutral chosen), a ring while not. It comes
+ * in where the row's More stood, fading, so nothing on the row moves as Select starts.
+ */
 export function SelectCheck({ checked }: { checked: boolean }) {
   return (
     <span
       aria-hidden
       className={cn(
-        'grid size-7 shrink-0 place-items-center rounded-full border transition-colors duration-200 ease-out',
+        'grid size-7 shrink-0 place-items-center rounded-full border transition-colors duration-200 ease-out motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-90 motion-safe:duration-200',
         checked ? 'border-transparent bg-selected text-selected-foreground' : 'border-input',
       )}
     >
@@ -23,7 +26,8 @@ export function SelectCheck({ checked }: { checked: boolean }) {
 
 /**
  * A row while Select is on (Mindscape's `SelectRow`): a tap chooses it or lets it go, its check at
- * its start; in the Manual order, its handle at its end moves it by a finger, a mouse or the keyboard
+ * its end in the place its More stood, so its tile and title stay where they were (iOS Files'); in
+ * the Manual order, its handle beside the check moves it by a finger, a mouse or the keyboard
  * (`sortable`). In the hand, its place is an empty slot, where it would land.
  */
 export function SelectRow({
@@ -62,17 +66,10 @@ export function SelectRow({
       className="data-dragging:*:border-dashed data-dragging:*:bg-muted data-dragging:*:*:invisible"
     >
       <div className={cn(ROW_CARD, 'hover:bg-muted', checked && 'ring-2 ring-selected ring-inset')}>
-        <button
-          type="button"
-          role="checkbox"
-          aria-checked={checked}
-          aria-label={t('select.toggle', { name })}
-          onClick={onToggle}
-          className={ROW_BODY}
-        >
-          <SelectCheck checked={checked} />
+        {/* The row's face chooses it too, as the check does: one stop for a keyboard, the check's. */}
+        <div aria-hidden onClick={onToggle} className={cn(ROW_BODY, 'cursor-pointer')}>
           {children}
-        </button>
+        </div>
         {sortable ? (
           <button
             ref={setActivatorNodeRef}
@@ -86,6 +83,16 @@ export function SelectRow({
             <GripVertical aria-hidden />
           </button>
         ) : null}
+        <button
+          type="button"
+          role="checkbox"
+          aria-checked={checked}
+          aria-label={t('select.toggle', { name })}
+          onClick={onToggle}
+          className={ROW_CONTROL}
+        >
+          <SelectCheck checked={checked} />
+        </button>
       </div>
     </li>
   )
@@ -102,12 +109,12 @@ export function RowInHand({ checked, children }: { checked: boolean; children: R
         checked && 'ring-2 ring-selected ring-inset',
       )}
     >
-      <div className={ROW_BODY}>
-        <SelectCheck checked={checked} />
-        {children}
-      </div>
+      <div className={ROW_BODY}>{children}</div>
       <span className={ROW_CONTROL}>
         <GripVertical />
+      </span>
+      <span className={ROW_CONTROL}>
+        <SelectCheck checked={checked} />
       </span>
     </div>
   )

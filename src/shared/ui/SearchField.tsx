@@ -1,5 +1,5 @@
 import { Search, X } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShortcuts } from '@/shared/lib/shortcuts'
 import {
@@ -10,7 +10,8 @@ import {
 } from './primitives/input-group'
 
 /**
- * A screen's search box, with a clear button while it holds text; `/` puts the cursor in it (a
+ * A screen's search box, with a clear button while it holds text and, joined to its end, what sorts
+ * what it finds (`end`); `/` puts the cursor in it (a
  * sheet's box, of no `screen`, leaves `/` to the screen's own). It holds what is typed itself: the URL it writes to catches up later, in a transition, and a box
  * that showed the URL would drop a key typed meanwhile and move the caret to the end. A value the
  * URL gets from elsewhere (Back, Show all) is shown.
@@ -20,6 +21,8 @@ export function SearchField({
   onChange,
   label,
   screen,
+  hint,
+  end,
   autoFocus = false,
 }: {
   value: string
@@ -28,6 +31,10 @@ export function SearchField({
   label: string
   /** The screen it is on, which the shortcuts' sheet lists its key under; none in a sheet. */
   screen?: string | undefined
+  /** A shorter placeholder where the box is narrow (the label stays its name): "Search". */
+  hint?: string
+  /** What is joined to its end, after the clear button: the sort of what it searches. */
+  end?: ReactNode
   /** The cursor starts in it, on a screen that is for searching. */
   autoFocus?: boolean
 }) {
@@ -61,11 +68,11 @@ export function SearchField({
         ref={input}
         type="search"
         aria-label={label}
-        placeholder={label}
+        placeholder={hint ?? label}
         autoFocus={autoFocus}
         value={text}
         onChange={(event) => type(event.target.value)}
-        className="text-base [&::-webkit-search-cancel-button]:appearance-none"
+        className="min-w-0 text-base text-ellipsis [&::-webkit-search-cancel-button]:appearance-none"
       />
       {text ? (
         <InputGroupAddon align="inline-end">
@@ -80,6 +87,14 @@ export function SearchField({
           >
             <X aria-hidden />
           </InputGroupButton>
+        </InputGroupAddon>
+      ) : null}
+      {end ? (
+        <InputGroupAddon
+          align="inline-end"
+          className="h-full self-stretch py-0 pr-0 has-[>button]:mr-0"
+        >
+          {end}
         </InputGroupAddon>
       ) : null}
     </InputGroup>

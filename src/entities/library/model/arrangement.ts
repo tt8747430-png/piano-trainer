@@ -7,6 +7,7 @@ import {
   type SavedFolder,
   type SongPlace,
 } from './types'
+import { reachableFolders } from './tree'
 
 /** What the library is read over: the collections' songs in catalog order, and the learner's own songs. */
 export interface LibraryCatalog {
@@ -28,9 +29,17 @@ type Shelving = ShelvedFolder & { songs: PieceId[] }
 
 export type ShelvedEntry =
   | { readonly kind: 'song'; readonly id: PieceId; readonly from: SongPlace }
-  | { readonly kind: 'folder'; readonly folder: ShelvedFolder; readonly index: number }
+  | {
+      readonly kind: 'folder'
+      readonly folder: ShelvedFolder
+      readonly subfolders: readonly ShelvedFolder[]
+      readonly index: number
+    }
 
-/** The whole library as it stands: its folders in Home's order, Home's songs, the archive newest first. */
+/**
+ * The whole library as it stands: its folders, each in the folder it stands in (those of one place
+ * in their order), Home's songs, the archive newest first.
+ */
 export interface LibraryLayout {
   readonly folders: readonly ShelvedFolder[]
   readonly home: readonly PieceId[]
@@ -38,9 +47,10 @@ export interface LibraryLayout {
 }
 
 /**
- * The library read over the catalog (ADR 0106, Mindscape's `library-arrangement`, one level of
+ * The library read over the catalog (ADR 0106, Mindscape's `library-arrangement`, folders in
  * folders), writing nothing: what the store holds stands where it put it, each song once and only
- * one the repertoire has; a built-in folder it does not hold stands after the others; a built-in
+ * one the repertoire has; a folder whose folder is gone, or archived, or whose links loop stands at
+ * Home (`reachableFolders`), as does a built-in folder it does not hold, after the others; a built-in
  * song it places nowhere stands last in its collection's folder, in the archive with it while that
  * folder is; an own song it places nowhere stands at Home.
  */
@@ -63,20 +73,28 @@ export function arrangeLibrary(
     songs: take(folder.songs),
   })
 
-  const folders = state.folders.map(shelve)
+  const folders = reachableFolders(state.folders.map(shelve))
   const home = take(state.home)
   const archived: Shelving[] = []
   const archive = state.archive.flatMap((entry): ShelvedEntry[] => {
     if (entry.kind === 'song') return take([entry.id]).length > 0 ? [entry] : []
     const folder = shelve(entry.folder)
-    archived.push(folder)
-    return [{ ...entry, folder }]
+    // Under the folder archived, each folder stands where it stood; one whose place is lost, in it.
+    const subfolders = reachableFolders([
+      { ...folder, parent: null },
+      ...entry.subfolders.map(shelve),
+    ])
+      .slice(1)
+      .map((each) => (each.parent === null ? { ...each, parent: folder.id } : each))
+    archived.push(folder, ...subfolders)
+    return [{ ...entry, folder, subfolders }]
   })
   const held = new Set([...folders, ...archived].map((folder) => folder.id))
   for (const collection of catalog.collections)
     if (!held.has(collection.id))
       folders.push({
         id: collection.id,
+        parent: null,
         ...COLLECTION_LOOKS[collection.id],
         builtIn: true,
         songs: [],
@@ -104,7 +122,13 @@ export function savedLayout(
     folders: layout.folders.map(savedFolder),
     home: layout.home,
     archive: layout.archive.map((entry): ArchiveEntry =>
-      entry.kind === 'song' ? entry : { ...entry, folder: savedFolder(entry.folder) },
+      entry.kind === 'song'
+        ? entry
+        : {
+            ...entry,
+            folder: savedFolder(entry.folder),
+            subfolders: entry.subfolders.map(savedFolder),
+          },
     ),
   }
 }
@@ -118,7 +142,12 @@ export function placeIn(layout: LibraryLayout, id: PieceId): SongPlace | 'archiv
     if (index >= 0) return { folder: folder.id, index }
   }
   const archived = layout.archive.some((entry) =>
-    entry.kind === 'song' ? entry.id === id : entry.folder.songs.includes(id),
+    entry.kind === 'song' ? entry.id === id : archivedSongs(entry).includes(id),
   )
   return archived ? 'archived' : null
 }
+
+/** Every song an archived folder holds, in it and in the folders under it. */
+export const archivedSongs = (
+  entry: Pick<Extract<ShelvedEntry, { kind: 'folder' }>, 'folder' | 'subfolders'>,
+): PieceId[] => [entry.folder, ...entry.subfolders].flatMap((folder) => folder.songs)

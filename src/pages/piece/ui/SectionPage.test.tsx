@@ -9,6 +9,14 @@ import { midi } from '@/shared/lib/music'
 
 const DAY = '2026-10-25T10:00:00.000Z'
 
+/** Opens a section's folded groups (ADR 0100, amended): its changes and its pattern. */
+async function unfold() {
+  await screen.findByRole('heading', { level: 1 })
+  for (const name of [/^Changes$/, /^Pattern/, /^Переходы$/, /^Фактур/])
+    for (const fold of screen.queryAllByRole('button', { name, expanded: false }))
+      act(() => fold.click())
+}
+
 /** A group of lesson rows by its heading: each row's words and where it leads. */
 const rowsOf = (group: string) =>
   within(screen.getByRole('region', { name: group }))
@@ -38,8 +46,22 @@ function savedSong(song: object) {
 }
 
 describe('a section’s page (ADR 0100)', () => {
+  it('starts with its chords open, its changes and its pattern folded until asked for', async () => {
+    await renderApp('/songs/bz5/sections/2')
+    expect(await screen.findByRole('button', { name: 'Changes' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    )
+    expect(screen.queryByRole('link', { name: /^1st sequence/ })).toBeNull()
+    expect(screen.getByRole('button', { name: /^Pattern/ })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    )
+  })
+
   it('teaches the chorus: its card, its sequences, its changes one at a time, its pattern', async () => {
     await renderApp('/songs/bz5/sections/2')
+    await unfold()
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Learn the Chorus' }),
     ).toBeInTheDocument()
@@ -83,6 +105,7 @@ describe('a section’s page (ADR 0100)', () => {
 
   it('says how many times a section of one run goes round, and loops one round', async () => {
     await renderApp('/songs/bz5/sections/1')
+    await unfold()
     // The run as it goes round, its C held back to (as its whole-section row has it): not the
     // chords it has, each once.
     const [card] = await screen.findAllByText('G · C · Em · G/B · C · C/E · Dsus4 · D/F♯', {
@@ -101,6 +124,7 @@ describe('a section’s page (ADR 0100)', () => {
   it('checks a lesson once a pass over its bars is done, and opens the Player looping it', async () => {
     const user = userEvent.setup()
     const { progressStore, router } = await renderApp('/songs/bz5/sections/2')
+    await unfold()
     const first = await screen.findByRole('link', { name: /^1st sequence/ })
     expect(tileIcon(first)).toBe('lucide-list-music')
     act(() => progressStore.setState({ lessons: { 'bz5:bars:9-12': DAY } }))
@@ -115,6 +139,7 @@ describe('a section’s page (ADR 0100)', () => {
   it('learns a chord played in its sheet, on a MIDI keyboard, and checks it', async () => {
     const user = userEvent.setup()
     const { midi: keyboard, progressStore } = await renderApp('/songs/bz5/sections/2')
+    await unfold()
     const row = await screen.findByRole('button', { name: 'Learn Em' })
     expect(tileIcon(row)).toBe('lucide-piano')
     // It opens its sheet in place: no chevron, which says a row leads to a page.
@@ -150,6 +175,7 @@ describe('a section’s page (ADR 0100)', () => {
   it('prints its chords with ♯ and ♭, keeping a chord learned under its symbol as written', async () => {
     const user = userEvent.setup()
     const { midi: keyboard, progressStore } = await renderApp('/songs/bz2/sections/1')
+    await unfold()
     const [card] = await screen.findAllByText('C♯m · F♯m · F♯m/D♯ · G♯ · C♯m', { exact: false })
     expect(card).toHaveTextContent('2 × C♯m · F♯m · F♯m/D♯ · G♯ · C♯m')
     expect(rowsOf('One change at a time')[0]).toEqual([
@@ -170,6 +196,7 @@ describe('a section’s page (ADR 0100)', () => {
   it('goes back to the song’s page, opened directly', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs/bz5/sections/3')
+    await unfold()
     await user.click(await screen.findByRole('button', { name: 'Back' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/bz5'))
   })
@@ -186,12 +213,14 @@ describe('a section’s page (ADR 0100)', () => {
     '/songs/bz4/sections/1',
   ])('is not found at %s', async (path) => {
     await renderApp(path)
+    await unfold()
     expect(await screen.findByText('Page not found')).toBeInTheDocument()
   })
 
   it('teaches a study’s section on its shelf, back to the study', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/accompaniment/studies/ex3/sections/1')
+    await unfold()
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Learn the Practice' }),
     ).toBeInTheDocument()
@@ -215,6 +244,7 @@ describe('a section’s page (ADR 0100)', () => {
       ],
     })
     await renderApp('/songs/my-1/sections/1', { storage })
+    await unfold()
     expect(await screen.findByRole('link', { name: 'Practise' })).toHaveAttribute(
       'href',
       '/play/my-1?loop=1-5',
@@ -233,6 +263,7 @@ describe('a section’s page (ADR 0100)', () => {
       hands: { rh: 'B4/4 | D5/4', lh: 'r/4 | r/4' },
     })
     await renderApp('/songs/my-1/sections/1', { storage })
+    await unfold()
     expect(await screen.findByText('No chord symbols')).toBeInTheDocument()
     expect(screen.queryByText(/^Lessons done/)).not.toBeInTheDocument()
     expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument()
@@ -240,6 +271,7 @@ describe('a section’s page (ADR 0100)', () => {
 
   it('reads in Russian', async () => {
     await renderApp('/songs/bz5/sections/2', { locale: 'ru' })
+    await unfold()
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Учим раздел «Припев»' }),
     ).toBeInTheDocument()

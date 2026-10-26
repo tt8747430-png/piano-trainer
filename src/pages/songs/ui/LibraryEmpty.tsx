@@ -8,13 +8,16 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from '@/shared/ui/primitives/empty'
+import { keyFromParam } from '@/shared/lib/music'
+import { useKeyName } from '@/shared/i18n'
+import { filtersOn } from '../model/library-view'
 import type { SongsFilter } from '../model/songs-filter'
 import type { LibraryPage } from '../model/use-library-page'
 
 /**
  * A place of the library with nothing to list (Mindscape's `LibraryEmpty`): an empty folder offers
  * New song and Move songs here; an empty Home, New song; filters that keep nothing say what found
- * nothing, and Clear filters.
+ * nothing (the search, the one filter on by its own words, or these filters), and Clear filters.
  */
 export function LibraryEmpty({
   page,
@@ -29,20 +32,26 @@ export function LibraryEmpty({
 }) {
   const { t } = useTranslation('songs')
   const { t: common } = useTranslation('common')
+  const keyName = useKeyName()
   if (page.view.filtering) {
     const searched = filter.q.trim()
-    const stage = filter.stage === 'any' ? null : common(`stage.${filter.stage}`)
+    const on = filtersOn(filter)
+    // What found nothing, said as plainly as it was asked: the one filter by its own words.
     const said = searched
-      ? stage
-        ? t('emptyQueryStage', { query: searched, stage })
-        : t('emptyQuery', { query: searched })
-      : stage
-        ? t('emptyStage', { stage })
-        : filter.known
-          ? t('emptyKnown')
-          : filter.favourites
-            ? t('emptyFavourites')
-            : t('empty')
+      ? on === 0
+        ? t('emptyQuery', { query: searched })
+        : on === 1 && filter.stage !== 'any'
+          ? t('emptyQueryStage', { query: searched, stage: common(`stage.${filter.stage}`) })
+          : t('emptyQueryFilters', { query: searched })
+      : on > 1
+        ? t('emptyFilters')
+        : filter.stage !== 'any'
+          ? t('emptyStage', { stage: common(`stage.${filter.stage}`) })
+          : filter.key !== ''
+            ? t('emptyKey', { key: keyName(keyFromParam(filter.key)) })
+            : filter.favourites
+              ? t('emptyFavourites')
+              : t('empty')
     return (
       <Empty>
         <EmptyHeader>

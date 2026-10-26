@@ -1,5 +1,5 @@
 import { AudioWaveform, ListMusic, MoveRight } from 'lucide-react'
-import { useId } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePatternName } from '@/entities/pattern'
 import type { Piece } from '@/entities/piece'
@@ -7,16 +7,16 @@ import type { BarRange } from '@/features/practice'
 import { useLocale } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
 import { printedSymbol } from '@/shared/lib/music'
-import { RowGroup, type Paint } from '@/shared/ui'
+import { FoldSection, RowGroup, type Fold, type Paint } from '@/shared/ui'
 import type { SectionLessons } from '../model/section-lessons'
 import { ChordLessons } from './ChordLessons'
 import { LessonRow } from './LessonRow'
 
 /**
  * A section's lessons as its page teaches them (spec §3.2), in the section's paint: its chords, each
- * learned in its sheet; its changes (each chord sequence in time, then one change at a time) and the
- * pattern its chords are played by, each a row into the Player looping it. A song of one section
- * shows them on its own page.
+ * learned in its sheet; then, folded until asked for (ADR 0100, amended), its changes (each chord
+ * sequence in time, then one change at a time where there is more than one) and the pattern its
+ * chords are played by, each a row into the Player looping it.
  */
 export function SectionLessonGroups({
   piece,
@@ -33,7 +33,10 @@ export function SectionLessonGroups({
   const { t } = useTranslation('piece')
   const locale = useLocale()
   const patternName = usePatternName()
-  const changesId = useId()
+  const changesFold = useClosedFold()
+  const patternFold = useClosedFold()
+  // One change alone is the sequence itself: its own row adds nothing.
+  const oneAtATime = changes.length > 1 ? changes : []
   // English names a sequence by its ordinal: 1st, 2nd, 3rd, 4th.
   const ordinal = new Intl.PluralRules(locale, { type: 'ordinal' })
   const sequenceName = (n: number) => t(`learnSection.sequence.${ordinal.select(n)}`, { n })
@@ -44,11 +47,8 @@ export function SectionLessonGroups({
   return (
     <>
       <ChordLessons pieceId={piece.id} performance={performance} chords={chords} paint={paint} />
-      {sequences.length + changes.length > 0 ? (
-        <section aria-labelledby={changesId} className="flex flex-col gap-4">
-          <h2 id={changesId} className="text-2xl">
-            {t('learnSection.changes')}
-          </h2>
+      {sequences.length + oneAtATime.length > 0 ? (
+        <FoldSection title={t('learnSection.changes')} fold={changesFold}>
           {sequences.length > 0 ? (
             <RowGroup title={t('learnSection.inTime')} level={3}>
               {sequences.map((sequence, i) => (
@@ -66,9 +66,9 @@ export function SectionLessonGroups({
               ))}
             </RowGroup>
           ) : null}
-          {changes.length > 0 ? (
+          {oneAtATime.length > 0 ? (
             <RowGroup title={t('learnSection.oneChange')} level={3}>
-              {changes.map((change) => (
+              {oneAtATime.map((change) => (
                 <LessonRow
                   key={`${change.from} ${change.to}`}
                   pieceId={piece.id}
@@ -84,27 +84,38 @@ export function SectionLessonGroups({
               ))}
             </RowGroup>
           ) : null}
-        </section>
+        </FoldSection>
       ) : null}
       {patterns.length > 0 ? (
-        <RowGroup title={t('learnSection.pattern', { count: patterns.length })}>
-          {/* A pattern is named by what it is; where it is looped, by its chord and bar. */}
-          {patterns.map((pattern) => (
-            <LessonRow
-              key={pattern.pattern}
-              pieceId={piece.id}
-              lesson={pattern}
-              title={patternName(pattern.pattern) ?? t('learnSection.pattern', { count: 1 })}
-              detail={t('learnSection.patternAt', {
-                chord: printedSymbol(pattern.symbol),
-                bars: barsName(pattern.bars),
-              })}
-              icon={AudioWaveform}
-              paint={paint}
-            />
-          ))}
-        </RowGroup>
+        <FoldSection
+          title={t('learnSection.pattern', { count: patterns.length })}
+          fold={patternFold}
+        >
+          <ul className="grid-cards gap-2 *:card">
+            {/* A pattern is named by what it is; where it is looped, by its chord and bar. */}
+            {patterns.map((pattern) => (
+              <LessonRow
+                key={pattern.pattern}
+                pieceId={piece.id}
+                lesson={pattern}
+                title={patternName(pattern.pattern) ?? t('learnSection.pattern', { count: 1 })}
+                detail={t('learnSection.patternAt', {
+                  chord: printedSymbol(pattern.symbol),
+                  bars: barsName(pattern.bars),
+                })}
+                icon={AudioWaveform}
+                paint={paint}
+              />
+            ))}
+          </ul>
+        </FoldSection>
       ) : null}
     </>
   )
+}
+
+/** A group of lessons that starts folded: the section's chords come first, the rest on asking. */
+function useClosedFold(): Fold {
+  const [open, setOpen] = useState(false)
+  return { open, toggle: () => setOpen((was) => !was) }
 }

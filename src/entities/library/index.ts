@@ -25,6 +25,7 @@ export {
 } from './model/store'
 export {
   arrangeLibrary,
+  archivedSongs,
   placeIn,
   savedLayout,
   type LibraryCatalog,
@@ -33,6 +34,14 @@ export {
   type ShelvedFolder,
 } from './model/arrangement'
 export { libraryCatalog } from './model/catalog'
+export {
+  canMoveFolder,
+  childFolders,
+  folderPath,
+  subtreeIds,
+  withoutDescendants,
+  type TreeFolder,
+} from './model/tree'
 export { LibraryStoreProvider, useLibrary, useLibraryStoreApi } from './model/context'
 export { selectFavourites, selectIsFavourite, selectSort } from './model/selectors'
 export { useLibraryLayout } from './model/use-library-layout'

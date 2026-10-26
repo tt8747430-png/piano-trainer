@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useFolderName, useLibraryLayout } from '@/entities/library'
+import { archivedSongs, useFolderName, useLibraryLayout } from '@/entities/library'
 import { PATTERN_IDS, usePatternBook } from '@/entities/pattern'
 import { COLLECTIONS, useRepertoire } from '@/entities/piece'
 import { useKeyName, useLocale } from '@/shared/i18n'
@@ -56,7 +56,7 @@ export function useIndex(names: IndexNames): IndexEntry[] {
         })),
         archived: new Set(
           library.archive.flatMap((entry) =>
-            entry.kind === 'song' ? [entry.id] : entry.folder.songs,
+            entry.kind === 'song' ? [entry.id] : archivedSongs(entry),
           ),
         ),
         patterns: [...book.own, ...PATTERN_IDS.map((id) => book.require(id))],
