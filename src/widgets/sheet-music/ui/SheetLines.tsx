@@ -3,15 +3,8 @@ import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Midi, Tick } from '@/shared/lib/music'
-import {
-  LANDSCAPE_PHONE,
-  PAGE,
-  paginate,
-  PRINT_SCALE,
-  useElementSize,
-  useMediaQuery,
-} from '@/shared/lib'
-import { PageCanvas, SheetPage, SheetTitle } from '@/shared/ui'
+import { LANDSCAPE_PHONE, PAGE, PRINT_SCALE, useElementSize, useMediaQuery } from '@/shared/lib'
+import { PageCanvas, SheetTitle } from '@/shared/ui'
 import {
   lineLead,
   measureWidths,
@@ -23,10 +16,8 @@ import { labelRow, ScoreView, scoreHeight, type Picked } from '@/shared/ui/score
 import { FINGERS, systemFit } from '../model/fit-scale'
 import { scoreLines, type ScoreLine } from '../model/score-lines'
 import { SheetOverlay } from './SheetOverlay'
+import { LINE_GAP, SheetPages } from './SheetPages'
 
-const LINE_GAP = 16
-/** The title's room over the first page's first line, at print size. */
-const TITLE_ROOM = 44
 /** A line's engraving on a screen this wide is at its own size; narrower, smaller, down to the least. */
 const FULL_WIDTH = 760
 const LEAST_SCALE = 0.62
@@ -193,37 +184,16 @@ export function SheetLines({
       </section>
     )
 
-  // A line's height as engraved: its staves and the verses under its tune (ADR 0093).
-  const dealt = paginate(
-    lines,
-    (each) => labels + scoreHeight(each.score, staves) * scale + LINE_GAP,
-    PAGE.height - 2 * margin - TITLE_ROOM,
-  )
   return (
     <PageCanvas column={PAGE.width}>
       <section aria-label={t('sheet.label')} className="flex flex-col items-center gap-8 p-6">
-        {dealt.map((page, number) => (
-          <SheetPage
-            key={number}
-            number={number + 1}
-            // Every page but the last filled to its height (ADR 0087).
-            filled={number < dealt.length - 1}
-            gap={LINE_GAP}
-            // The title stays with the line under it as the page is spread.
-            blocks={page.map((each, at) => ({
-              key: String(each.first),
-              content:
-                number === 0 && at === 0 ? (
-                  <div className="flex flex-col" style={{ gap: LINE_GAP }}>
-                    <SheetTitle title={title} place="page" />
-                    {line(each)}
-                  </div>
-                ) : (
-                  line(each)
-                ),
-            }))}
-          />
-        ))}
+        <SheetPages
+          lines={lines}
+          // A line's height as engraved: its staves and the verses under its tune (ADR 0093).
+          height={(each) => labels + scoreHeight(each.score, staves) * scale}
+          title={title}
+          line={line}
+        />
       </section>
     </PageCanvas>
   )
