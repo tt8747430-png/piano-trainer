@@ -15,6 +15,7 @@ import {
   selectOwnPattern,
   type PatternsStore,
 } from '@/entities/pattern'
+import type { LibraryStore } from '@/entities/library'
 import type { PiecesStore } from '@/entities/piece'
 import type { TakesStore } from '@/entities/take'
 import type { ViewsStore } from '@/entities/views'
@@ -102,13 +103,15 @@ function notFoundIn(way: NotFoundWay) {
 /**
  * What every route is handed: the screens' remembered views (ADR 0022), the learner's patterns, which
  * say whether a pattern's page is there (ADR 0026), the learner's pieces, which say whether a piece,
- * its page or its editor is (ADR 0027), and their takes, which say whether a take's page is (ADR 0034).
+ * its page or its editor is (ADR 0027), their takes, which say whether a take's page is (ADR 0034),
+ * and their library, which says whether a setlist's page is (ADR 0103).
  */
 export interface RouterContext {
   readonly views: ViewsStore
   readonly patterns: PatternsStore
   readonly pieces: PiecesStore
   readonly takes: TakesStore
+  readonly library: LibraryStore
 }
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
@@ -512,11 +515,12 @@ export function createAppRouter({
   patterns,
   pieces,
   takes,
+  library,
 }: RouterContext & { history?: RouterHistory }) {
   const router = createRouter({
     routeTree,
     history,
-    context: { views, patterns, pieces, takes },
+    context: { views, patterns, pieces, takes, library },
     defaultPreload: 'intent',
     defaultErrorComponent: RouteError,
     defaultPendingComponent: RoutePending,

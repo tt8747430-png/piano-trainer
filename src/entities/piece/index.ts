@@ -53,7 +53,7 @@ export {
   type SharedSong,
 } from './model/store'
 export { PiecesStoreProvider, usePieces, usePiecesStoreApi } from './model/context'
-export { repertoire } from './model/repertoire'
+export { repertoire, type Repertoire } from './model/repertoire'
 export { useRepertoire } from './model/use-repertoire'
 export { writeBar } from './model/write-chart'
 export { writeHand } from './model/write-hands'

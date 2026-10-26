@@ -140,6 +140,7 @@ describe('backup', () => {
       'pt-patterns',
       'pt-takes',
       'pt-views',
+      'pt-library',
     ])
   })
 })
