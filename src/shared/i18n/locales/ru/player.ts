@@ -123,6 +123,7 @@ export const player: LocaleResources['player'] = {
     playback: 'Скорость воспроизведения',
     playAlong: 'Слушать и играть вместе',
     speed: 'Скорость {{percent}}',
+    speedLabel: 'Скорость',
     own: 'Исходный темп',
     waitShort: 'Ждать',
     speedTraining: 'Разгон темпа',

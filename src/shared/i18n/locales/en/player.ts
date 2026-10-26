@@ -145,6 +145,8 @@ export const player = {
     playback: 'Playback speed',
     playAlong: 'Listen and play along',
     speed: '{{percent}} speed',
+    // The popover's slider: a share of the piece's tempo, 50% to 200% in 5% steps (ADR 0105).
+    speedLabel: 'Speed',
     own: 'Original tempo',
     waitShort: 'Wait',
     speedTraining: 'Speed training',
