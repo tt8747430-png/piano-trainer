@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef } from 'react'
-import { selectPractice, useSettings } from '@/entities/settings'
+import { selectPractice, selectSound, useSettings } from '@/entities/settings'
 import {
   loopParam,
   playerRange,
@@ -8,13 +8,14 @@ import {
   readLoop,
   usePractice,
   type BarRange,
+  type Mix,
   type Practice,
   type PracticeMode,
 } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
-import { audibleHands, type Hands, type Recording } from '@/shared/lib/schedule'
+import { audibleHands, volumeGain, type Hands, type Recording } from '@/shared/lib/schedule'
 import { useWakeLock } from '@/shared/lib'
 import type { KeyMark } from '@/shared/ui'
 import { reachLoop, type LoopReach } from './loop-reach'
@@ -79,6 +80,17 @@ export function usePracticePlayer(
   // The screen stays on while this screen is open: a phone on the stand does not lock mid-song.
   useWakeLock()
   const toggles = useSettings(selectPractice)
+  const sound = useSettings(selectSound)
+  const mix = useMemo<Mix>(
+    () => ({
+      rh: volumeGain(sound.rh),
+      lh: volumeGain(sound.lh),
+      staff: volumeGain(sound.staves),
+      recording: volumeGain(sound.recording),
+      click: volumeGain(sound.click),
+    }),
+    [sound],
+  )
   const tempo = view.tempo ?? ownTempo
   const loop = useMemo(
     () => readLoop(view.loop, performance.bars.length),
@@ -95,6 +107,7 @@ export function usePracticePlayer(
     metronome: toggles.metronome,
     countIn: toggles.countIn,
     recording,
+    mix,
   })
   const { state, press } = practice
   const waiting = state.mode === 'wait'

@@ -2,12 +2,13 @@ import {
   useCallback,
   useEffect,
   useEffectEvent,
+  useLayoutEffect,
   useMemo,
   useReducer,
   useRef,
   useState,
 } from 'react'
-import { PLAY_DELAY } from '@/shared/api/audio'
+import { PLAY_DELAY, type SoundGain } from '@/shared/api/audio'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Midi, Tick } from '@/shared/lib/music'
 import {
@@ -19,6 +20,7 @@ import {
 } from '@/shared/lib/schedule'
 import { useServices } from '@/shared/lib/services'
 import { loopBeatGroups, loopTicks, type BarRange, type BeatGroupRange } from './loop'
+import { heardIn, mixGain, type Mix } from './mix'
 import {
   accompanyingHands,
   initialPractice,
@@ -45,6 +47,8 @@ export interface PracticeSetup {
   readonly countIn: boolean
   /** The piece's recording, played along in Listen; null plays none. */
   readonly recording: Recording | null
+  /** How loud each part plays (ADR 0105): the hands, the staves, the recording and the click. */
+  readonly mix: Mix
 }
 
 export interface Practice {
@@ -57,6 +61,11 @@ export interface Practice {
    * in Wait mode the playhead stands at the notes awaited.
    */
   readonly clock: (() => Tick | null) | null
+  /**
+   * While Listen counts in, the beats of its bar left, the one sounding among them (4 3 2 1): what
+   * the screen shows large (ADR 0105); null otherwise.
+   */
+  readonly counting: number | null
   /** Plays, or in Wait mode starts waiting; after Finished, again from the start. */
   play(): void
   stop(): void
@@ -100,6 +109,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     initialPractice(performance, setup.mode, setup.hands, loop),
   )
   const [passTempo, setPassTempo] = useState<number | null>(null)
+  const [counting, setCounting] = useState<number | null>(null)
   // Bumped when the learner moves while Listen plays: the pass starts again from there.
   const [passRequest, setPassRequest] = useState(0)
 
@@ -113,7 +123,19 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     dispatch({ type: 'configure', performance, mode: setup.mode, hands: setup.hands, loop })
   }
 
-  const { tempo, ownTempo, speedTraining, swing, metronome, countIn, recording } = setup
+  const { tempo, ownTempo, speedTraining, swing, metronome, countIn, mix } = setup
+  // How loud each part plays, read as each sound comes to sound (ADR 0105): a change is heard from
+  // then on, and starts nothing again. Only a part turned right down, or up from nothing, does: it
+  // is then left out of the music, or brought into it, from the beat group playing.
+  const mixed = useRef(mix)
+  useLayoutEffect(() => {
+    mixed.current = mix
+  })
+  const gain = useCallback<SoundGain>((sound) => mixGain(() => mixed.current)(sound), [])
+  const heard = heardIn(audibleHands(state.hands), mix)
+  const { rh, lh, staff } = heard
+  const clicks = mix.click > 0
+  const recording = mix.recording > 0 ? setup.recording : null
   const up = speedTraining ? speedUp(tempo, ownTempo) : undefined
   const upStep = up?.step
   const upUntil = up?.until
@@ -148,7 +170,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
       state.performance,
       {
         tempo: carried ?? tempo,
-        hands: audibleHands(state.hands),
+        hands: { rh, lh, staff },
         range: passage,
         fromTick: from.tick ?? passage.from,
         speedUp:
@@ -157,6 +179,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
             : { step: upStep, until: upUntil },
         countIn: first && from.countIn,
         metronome,
+        clicks,
         swing,
       },
       {
@@ -165,27 +188,33 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
           run.current = { tempo, sounding }
           setPassTempo(sounding)
         },
+        count: setCounting,
       },
-      recording,
+      { recording, mix: () => mixed.current },
     )
     transport.current = started
-    // A stopped transport's last pass is no longer sounding: the next says its own tempo.
+    // A stopped transport's last pass is no longer sounding: the next says its own tempo, and counts
+    // nothing in.
     return () => {
       started.stop()
       if (transport.current === started) transport.current = null
       setPassTempo(null)
+      setCounting(null)
     }
   }, [
     audio,
     listening,
     state.performance,
-    state.hands,
+    rh,
+    lh,
+    staff,
     passage,
     tempo,
     upStep,
     upUntil,
     swing,
     metronome,
+    clicks,
     recording,
     passRequest,
   ])
@@ -200,8 +229,8 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   /** Sounds the other hands of this beat group; returns how long until the app moves on. */
   const accompany = useEffectEvent((): number => {
     const at = due.current ?? audio.now() + PLAY_DELAY
-    const hands = accompanyingHands(state.hands)
-    audio.play(beatGroupSounds(state.performance, state.beatGroup, { tempo, hands }), at)
+    const hands = heardIn(accompanyingHands(state.hands), mixed.current)
+    audio.play(beatGroupSounds(state.performance, state.beatGroup, { tempo, hands }), at, gain)
     if (answered) {
       due.current = null
       return CORRECT_PAUSE_MS
@@ -242,8 +271,12 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     dispatch(event)
     if (moved === state) return
     if (!state.playing) {
-      const hands = audibleHands(moved.hands)
-      audio.play(beatGroupSounds(moved.performance, moved.beatGroup, { tempo, hands }))
+      const hands = heardIn(audibleHands(moved.hands), mix)
+      audio.play(
+        beatGroupSounds(moved.performance, moved.beatGroup, { tempo, hands }),
+        undefined,
+        gain,
+      )
     } else if (state.mode === 'listen') setPassRequest((request) => request + 1)
   }
   const actions = {
@@ -268,6 +301,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     state,
     passTempo: listening ? passTempo : null,
     clock: listening ? clock : null,
+    counting: listening ? counting : null,
     ...actions,
   }
 }
