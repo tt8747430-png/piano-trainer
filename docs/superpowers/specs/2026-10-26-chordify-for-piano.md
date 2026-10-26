@@ -201,7 +201,8 @@ chordify.net itself answers 403 to every tool here (a bot check), so nothing was
 
 ## 3. Round 2 — The View by view, and the Player's tools row (ADR 0102)
 
-1. **The tools row.** Under the Player's bar, one row at every size, as Chordify's toolbar:
+1. **The tools row.** Under the Player's bar, one row at every size, as Chordify's toolbar; on a phone on its side,
+   where height is short, in the bar's own row:
    - **The View, named by the view shown** with a chevron ("Diagrams ▾"), opens the View menu. Round 3 adds
      Transpose and Simplify after it.
    - **How it looks:** quiet text buttons, each its icon, its name and, where it has one, its value. They are

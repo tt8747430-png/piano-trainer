@@ -18,7 +18,7 @@ Chordify does it differently in two ways:
 
 ## Decision
 
-- **A tools row under the Player's bar, at every size.** It holds the View, named by the view shown ("Diagrams ▾"),
+- **A tools row under the Player's bar, at every size** (on a phone on its side, where height is short, in the bar's own row). It holds the View, named by the view shown ("Diagrams ▾"),
   and from Round 3 Transpose and Simplify. The eye leaves the Player's bar; the editor keeps it, as it shows the
   score alone.
 - **The View menu by view.**
