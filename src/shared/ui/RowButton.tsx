@@ -1,19 +1,46 @@
+import { useId, type Ref } from 'react'
 import { cn } from '@/shared/lib'
 import { RowFace, type RowFaceProps } from './RowFace'
 import { rowClass } from './row-class'
 
 /**
- * A list row that opens something in place, over its page (a chord's sheet): a `RowLink`'s face
- * without its chevron, which says a row leads to a page; a button, not a link.
+ * A list row that acts in place, over its page (a chord's sheet, a new setlist named where it
+ * stands): a `RowLink`'s face without its chevron, which says a row leads to a page; a button, not a
+ * link. Greyed (`disabled`), it says why (`reason`): the browser's tooltip, and to a screen reader.
  */
-export function RowButton({ onClick, ...face }: RowFaceProps & { onClick: () => void }) {
+export function RowButton({
+  onClick,
+  disabled = false,
+  reason,
+  ref,
+  ...face
+}: RowFaceProps & {
+  onClick: () => void
+  disabled?: boolean
+  reason?: string | undefined
+  ref?: Ref<HTMLButtonElement>
+}) {
+  const id = useId()
+  const why = disabled ? reason : undefined
   return (
     <button
+      ref={ref}
       type="button"
       onClick={onClick}
-      className={cn(rowClass(face.paint !== undefined), 'w-full text-left')}
+      disabled={disabled}
+      title={why}
+      aria-describedby={why ? id : undefined}
+      className={cn(
+        rowClass(face.paint !== undefined),
+        'w-full text-left disabled:opacity-50 disabled:hover:bg-transparent',
+      )}
     >
       <RowFace {...face} />
+      {why ? (
+        <span id={id} hidden>
+          {why}
+        </span>
+      ) : null}
     </button>
   )
 }
