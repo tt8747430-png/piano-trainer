@@ -16,6 +16,9 @@ configure({ asyncUtilTimeout: 5_000 })
 const scrollWindow = vi.fn()
 const scrollElement = vi.fn()
 const scrollIntoView = vi.fn()
+const setPointerCapture = vi.fn()
+const releasePointerCapture = vi.fn()
+const hasPointerCapture = vi.fn()
 
 /**
  * The browser's stand-ins round every test with a DOM. The setup calls it for each file: with
@@ -38,6 +41,10 @@ export function setUpDom() {
     // scroll one into view: one asked to stays where it is.
     Element.prototype.scrollTo = scrollElement.mockReset()
     Element.prototype.scrollIntoView = scrollIntoView.mockReset()
+    // jsdom has no pointer capture, which a drag takes as the finger goes down (a swipe's, a grip's).
+    Element.prototype.setPointerCapture = setPointerCapture.mockReset()
+    Element.prototype.releasePointerCapture = releasePointerCapture.mockReset()
+    Element.prototype.hasPointerCapture = hasPointerCapture.mockReset().mockReturnValue(false)
   })
 
   // `globals: false` means Testing Library cannot register its own cleanup.

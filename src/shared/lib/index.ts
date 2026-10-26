@@ -124,3 +124,17 @@ export {
   type CanvasView,
   type Size,
 } from './pan-zoom'
+export {
+  armedSide,
+  clampSwipeOffset,
+  dragFrame,
+  resolveSwipeRelease,
+  wasCanceled,
+  type DragFrame,
+  type SwipeGeometry,
+  type SwipeRelease,
+} from './gestures'
+export { useGestureHold, type GestureHold, type ReleaseReason } from './gesture-hold'
+export { impact } from './haptics'
+export { useLongPress, type LongPressHandlers } from './use-long-press'
+export { nextName } from './next-name'

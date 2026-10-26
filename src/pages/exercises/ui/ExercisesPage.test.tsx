@@ -8,7 +8,9 @@ describe('Practice → Exercises', () => {
     await renderApp('/practice/exercises')
     expect(await screen.findByRole('heading', { level: 1, name: 'Exercises' })).toBeInTheDocument()
     expect(
-      screen.getAllByRole('region').map((region) => region.getAttribute('aria-labelledby')),
+      within(screen.getByRole('main'))
+        .getAllByRole('region')
+        .map((region) => region.getAttribute('aria-labelledby')),
     ).toHaveLength(3)
     expect(
       screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),

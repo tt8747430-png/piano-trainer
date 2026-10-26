@@ -1,6 +1,6 @@
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, onTestFinished, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import {
   isDegreePiece,
@@ -272,14 +272,6 @@ describe('the score editor', () => {
       }),
     )
     await user.keyboard('{ArrowLeft}')
-    // jsdom has no pointer capture: the grip asks for it as a drag starts.
-    Object.defineProperty(Element.prototype, 'setPointerCapture', {
-      value: vi.fn(),
-      configurable: true,
-    })
-    onTestFinished(() => {
-      Reflect.deleteProperty(Element.prototype, 'setPointerCapture')
-    })
     const grip = document.querySelector('[data-slot="note-grip"]')
     if (!grip) throw new Error('the note at the caret is a grip')
     fireEvent.pointerDown(grip, { clientY: 100, pointerId: 1 })
@@ -1970,7 +1962,7 @@ describe('the score editor’s takes', () => {
 
   it('records at once when the song was made to record, a MIDI keyboard connected', async () => {
     const user = userEvent.setup()
-    const { router, midi: keyboard } = await renderApp('/songs')
+    const { router, midi: keyboard } = await renderApp('/songs/folders/hymns')
     connect(keyboard)
     await user.click(await screen.findByRole('button', { name: 'New song' }))
     await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Evening')
@@ -1983,7 +1975,7 @@ describe('the score editor’s takes', () => {
 
   it('opens Record’s popover when the song was made to record with no MIDI keyboard', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/songs')
+    const { router } = await renderApp('/songs/folders/hymns')
     await user.click(await screen.findByRole('button', { name: 'New song' }))
     await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Evening')
     await user.click(screen.getByRole('button', { name: 'Record' }))

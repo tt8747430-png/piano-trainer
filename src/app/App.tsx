@@ -11,6 +11,7 @@ import { type SettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { type TakesStore, TakesStoreProvider } from '@/entities/take'
 import { type Services, ServicesProvider } from '@/shared/lib/services'
 import { ShortcutsProvider } from '@/shared/lib/shortcuts'
+import { Toaster } from '@/shared/ui'
 import { AudioUnlock } from './providers/AudioUnlock'
 import { LocaleSync } from './providers/LocaleSync'
 import { MidiReconnect } from './providers/MidiReconnect'
@@ -57,6 +58,7 @@ export function App({
                     <ThemeProvider>
                       <ShortcutsProvider>
                         <RouterProvider router={router} />
+                        <Toaster />
                       </ShortcutsProvider>
                     </ThemeProvider>
                   </ServicesProvider>
