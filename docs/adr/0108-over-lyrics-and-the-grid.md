@@ -54,6 +54,29 @@ chord line played several times once with "x3". Its Grid has a Lyrics button tha
     until it moves. The pair is clipped to two diagrams' room.
   - Taken to a beat or a chord while nothing plays, the strip and the pair slide there in 300ms.
   - Under reduced motion all of it stands still at each beat.
+- **Diagrams: the pair is swiped, the strip scrubbed** (the owner: "the diagram moves to next, not just tapping";
+  "the chord strip … should be swipable, but not the whole page"). Only the two move: both are `touch-pan-y`, so a
+  page's gesture up and down still works and one sideways never moves the page, swipes back through the history
+  or pulls it aside; a sideways wheel on them is the view's (its default prevented), an upright one the page's. No
+  scroll bars. Built on `@use-gesture/react` and `motion`, as the kit's `SwipeRow` is, over pure, tested models.
+  - **The pair** follows a finger, a mouse or a trackpad one to one (`pairSwipe`), a rubber band (iOS's, 0.55) past
+    a whole diagram and towards an end with no chord; the chord before is drawn in from the left as it goes right.
+    Let go past a third of a diagram, or with a flick (0.35px a millisecond, the way the drag went, after 8px), it
+    springs on and the cursor goes to the next chord (to the left) or to the first chord of the change before
+    (`chordBefore`, inside a loop's bars); a flick turned back, or towards an end, springs back (`pairRelease`). A
+    trackpad's swipe goes one chord a gesture, the rest of its scroll going nowhere. Once the music stands on the
+    chord swiped to, the pair settles into its slots as a step does (300ms). ← → still step the Player.
+  - **The strip** moves under the hand and, let go, glides on with the flick's speed, slowing as a scroll view does
+    (an exponential decay, its time constant 325ms, `glide`); it settles on the beat whose middle is nearest its
+    mark, a third of the way in, where the glide would come to rest (`stripRelease`, `beatAtMark`), never past its
+    first or last beat, and the cursor goes there. Past its ends it gives like a rubber band (`stripDrawn`). While
+    Listen plays a drag takes the strip from the clock; let go, the music goes on from the beat chosen, the strip
+    held on it until the clock stands there. A tap still goes to the beat tapped; a click at a drag's end is none.
+  - **Never fighting the clock.** Both are drawn as the clock's place plus an offset that eases to nothing: the
+    pair's `--slide` (the clock's) and `--swipe` (the hand's) add up; the strip's base is the clock's place (or the
+    beat sounding) and a tap's 300ms slide, a glide and a drag are its offset (`useStripMotion`). Every frame is
+    written straight to the element, with no render.
+  - Under reduced motion nothing glides or springs: let go, it snaps.
 - **A chord tapped goes there, in every chord view.** A diagram of the pair, a card of Diagrams' summary, a pinned
   diagram, a chip over the words and a beat of the strip take the Player's cursor to that chord, sounding it while
   nothing plays, as the Grid's beats do. A pair's diagram goes to its chord; a card or a pinned diagram goes to
@@ -84,7 +107,9 @@ chord line played several times once with "x3". Its Grid has a Lyrics button tha
   `soundingChip` marks a folded line's copies; `ChordsOverLyrics`, `LyricRow` and `ChordChip` take the text size,
   the pinned row and the hover diagram; `GridView` its words; `BeatStrip` takes the clock
   (`model/strip-place.ts`, `model/use-every-frame.ts`); `ChordDiagrams` slides its pair (`pairSlide`,
-  `chordNear`); `ChordView` opens no sheet.
+  `chordNear`); `ChordView` opens no sheet. The swipes: `model/swipe.ts` (`rubberBand`, `pairSwipe`,
+  `pairRelease`), `strip-place.ts`'s `glide`, `stripEnds`, `stripDrawn`, `beatAtMark` and `stripRelease`,
+  `chordBefore`; `usePairMotion` and `useStripMotion`; the pair is `ChordPair` over `PairDiagram`.
 - **`widgets/chord-chart`:** `ChordChart` and `BarButton` take `words` (`BarWords`, `BeatWords`); `gridColumns`
   and `gridRows` replace `rowsOf`; `chartBar` says `short`, and its `signature` only where the meter changes;
   `CellChords` takes its `span`.

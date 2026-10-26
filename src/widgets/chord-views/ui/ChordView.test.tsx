@@ -1,6 +1,6 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
@@ -85,6 +85,125 @@ describe('Diagrams, its summary (ADR 0101)', () => {
     await user.click(screen.getByRole('button', { name: /^Am: / }))
     expect(practice.jumpToBeatGroup).toHaveBeenCalledWith(barGroup(3))
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+})
+
+/**
+ * Diagrams' pair, the cursor at a bar's first beat, under reduced motion so it settles at once.
+ * jsdom lays nothing out: each diagram is 300px wide.
+ */
+function renderPair(bar: number) {
+  vi.stubGlobal('matchMedia', (media: string) => ({
+    matches: media.includes('prefers-reduced-motion'),
+    media,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    addListener: () => {},
+    removeListener: () => {},
+    onchange: null,
+    dispatchEvent: () => false,
+  }))
+  vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue(
+    DOMRect.fromRect({ width: 300, height: 300 }),
+  )
+  const practice = {
+    state: { ...initialPractice(performance, 'listen', 'both'), beatGroup: barGroup(bar) },
+    clock: null,
+    jumpToBeatGroup: vi.fn(),
+  }
+  const { container, unmount } = renderWithSettings(
+    <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
+      <ChordView
+        view="diagrams"
+        mode="animated"
+        title="Morning"
+        performance={performance}
+        headings={[]}
+        practice={practice}
+        loop={null}
+        words={false}
+        pinned={false}
+        textSize={100}
+      />
+    </ServicesProvider>,
+  )
+  const pair = container.querySelector<HTMLElement>('[data-area="chords"]')!
+  /** The diagram of the chord sounding. */
+  const sounding = () => pair.querySelector<HTMLElement>('[data-diagram]:not([inert])')!
+  return { practice, pair, sounding, unmount }
+}
+
+const finger = { pointerId: 1, pointerType: 'touch', isPrimary: true }
+
+/**
+ * A finger down on a diagram, along by `by` px, slowly (a tenth of a second a step: no flick) or
+ * as quick as a flick, then up unless it stays.
+ */
+function swipe(on: HTMLElement, by: number, { lift = true, ms = 100 } = {}) {
+  vi.useFakeTimers({ toFake: ['Date'] })
+  onTestFinished(() => void vi.useRealTimers())
+  const step = () => vi.setSystemTime(Date.now() + ms)
+  fireEvent.pointerDown(on, { ...finger, buttons: 1, clientX: 400, clientY: 100 })
+  step()
+  fireEvent.pointerMove(on, { ...finger, buttons: 1, clientX: 400 + by / 2, clientY: 100 })
+  step()
+  fireEvent.pointerMove(on, { ...finger, buttons: 1, clientX: 400 + by, clientY: 100 })
+  step()
+  if (lift) fireEvent.pointerUp(on, { ...finger, buttons: 0, clientX: 400 + by, clientY: 100 })
+}
+
+describe('Diagrams, its pair swiped (ADR 0108)', () => {
+  it('follows the finger, the next drawn in as it goes', () => {
+    const { pair, sounding } = renderPair(0)
+    swipe(sounding(), -150, { lift: false })
+    // 150px less the 3px a touch moves before it is a drag, of a 300px diagram.
+    expect(Number(pair.style.getPropertyValue('--swipe'))).toBeCloseTo(0.49)
+  })
+
+  it('goes on to the next chord swiped left, back to the one before swiped right', () => {
+    // C held over two bars, then G: on is G.
+    const on = renderPair(0)
+    swipe(on.sounding(), -150)
+    expect(on.practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(2))
+    on.unmount()
+    // From Am, back is G.
+    const back = renderPair(3)
+    swipe(back.sounding(), 150)
+    expect(back.practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(2))
+  })
+
+  it('springs back short of a third of a diagram, the tap at its end no tap', () => {
+    const { practice, pair, sounding } = renderPair(0)
+    swipe(sounding(), -60)
+    fireEvent.click(sounding())
+    expect(practice.jumpToBeatGroup).not.toHaveBeenCalled()
+    expect(pair.style.getPropertyValue('--swipe')).toBe('0')
+  })
+
+  it('goes on with a flick, however short', () => {
+    const { practice, sounding } = renderPair(0)
+    swipe(sounding(), -40, { ms: 10 })
+    expect(practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(2))
+  })
+
+  it('springs back at the song’s ends', () => {
+    const { practice, sounding } = renderPair(0)
+    swipe(sounding(), 200)
+    expect(practice.jumpToBeatGroup).not.toHaveBeenCalled()
+  })
+
+  it('goes one chord on with a trackpad’s sideways scroll, the page kept still', () => {
+    const { practice, pair } = renderPair(0)
+    expect(fireEvent.wheel(pair, { deltaX: 150, deltaY: 0 })).toBe(false)
+    fireEvent.wheel(pair, { deltaX: 150, deltaY: 0 })
+    expect(practice.jumpToBeatGroup).toHaveBeenCalledExactlyOnceWith(barGroup(2))
+  })
+
+  it('leaves up and down to the page', () => {
+    const { practice, pair } = renderPair(0)
+    expect(pair).toHaveClass('touch-pan-y')
+    expect(fireEvent.wheel(pair, { deltaX: 0, deltaY: 150 })).toBe(true)
+    expect(practice.jumpToBeatGroup).not.toHaveBeenCalled()
   })
 })
 
