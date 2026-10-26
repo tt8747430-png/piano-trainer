@@ -1,4 +1,8 @@
 import { RouterProvider } from '@tanstack/react-router'
+import {
+  type DiagramInversionsStore,
+  DiagramInversionsStoreProvider,
+} from '@/entities/diagram-inversion'
 import { type PatternsStore, PatternsStoreProvider } from '@/entities/pattern'
 import { type PiecesStore, PiecesStoreProvider } from '@/entities/piece'
 import { type ProgressStore, ProgressStoreProvider } from '@/entities/progress'
@@ -20,6 +24,7 @@ export function App({
   patternsStore,
   piecesStore,
   takesStore,
+  diagramInversionsStore,
   services,
   router,
 }: {
@@ -28,6 +33,7 @@ export function App({
   patternsStore: PatternsStore
   piecesStore: PiecesStore
   takesStore: TakesStore
+  diagramInversionsStore: DiagramInversionsStore
   services: Services
   router: AppRouter
 }) {
@@ -37,18 +43,20 @@ export function App({
         <PatternsStoreProvider store={patternsStore}>
           <PiecesStoreProvider store={piecesStore}>
             <TakesStoreProvider store={takesStore}>
-              <ServicesProvider services={services}>
-                <LocaleSync />
-                <AudioUnlock />
-                <MidiReconnect />
-                <MidiSync />
-                <TitlesSync />
-                <ThemeProvider>
-                  <ShortcutsProvider>
-                    <RouterProvider router={router} />
-                  </ShortcutsProvider>
-                </ThemeProvider>
-              </ServicesProvider>
+              <DiagramInversionsStoreProvider store={diagramInversionsStore}>
+                <ServicesProvider services={services}>
+                  <LocaleSync />
+                  <AudioUnlock />
+                  <MidiReconnect />
+                  <MidiSync />
+                  <TitlesSync />
+                  <ThemeProvider>
+                    <ShortcutsProvider>
+                      <RouterProvider router={router} />
+                    </ShortcutsProvider>
+                  </ThemeProvider>
+                </ServicesProvider>
+              </DiagramInversionsStoreProvider>
             </TakesStoreProvider>
           </PiecesStoreProvider>
         </PatternsStoreProvider>

@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { createDiagramInversionsStore } from '@/entities/diagram-inversion'
 import { createPatternsStore } from '@/entities/pattern'
 import { createPiecesStore } from '@/entities/piece'
 import { createProgressStore } from '@/entities/progress'
@@ -29,6 +30,7 @@ createRoot(rootElement).render(
       patternsStore={patternsStore}
       piecesStore={piecesStore}
       takesStore={takesStore}
+      diagramInversionsStore={createDiagramInversionsStore()}
       services={createServices()}
       router={createAppRouter({
         views: createViewsStore(),
