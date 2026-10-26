@@ -7,8 +7,8 @@ import { ChordDiagram } from '@/widgets/chord-diagrams'
 /**
  * The Diagrams view's summary (ADR 0101, Chordify's): the song's chords at once as cards in the
  * order they first sound, two a row on a phone held upright, three from a tablet's width, four on a
- * laptop; the card of the chord sounding outlined in ink, its symbol in ink, the others' muted. A
- * card opens its chord's sheet (`onChord`).
+ * laptop and on a phone on its side, whose room is short; the card of the chord sounding outlined in
+ * ink, its symbol in ink, the others' muted. A card opens its chord's sheet (`onChord`).
  */
 export function SummaryGrid({
   chords,
@@ -24,7 +24,7 @@ export function SummaryGrid({
   return (
     <ul
       aria-label={t('chordSummary')}
-      className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"
+      className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 landscape-phone:grid-cols-4"
     >
       {chords.map((chord) => {
         const now = chord.symbol === sounding

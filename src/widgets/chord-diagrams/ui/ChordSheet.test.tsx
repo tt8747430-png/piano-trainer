@@ -150,6 +150,24 @@ describe('ChordSheet, its inversion (ADR 0101)', () => {
     }
   })
 
+  it('greys the choice of a chord of five notes or more, which is not inverted', async () => {
+    const ninth: DiagramChord = {
+      chord: 2,
+      symbol: 'C9',
+      keys: [55, 58, 60, 62, 64].map(midi),
+      ring: null,
+      notes: [note('G'), note('B', -1), note('C'), note('D'), note('E')],
+      pitchClasses: [0, 4, 7, 10, 2].map(pitchClass),
+      inversions: { kind: 'large', notes: 5 },
+    }
+    const { sheet } = await openSheet({ chord: ninth }, { piece: true })
+    const choice = within(sheet).getByRole('radiogroup', { name: 'Inversion' })
+    const radios = within(choice).getAllByRole('radio')
+    expect(radios).toHaveLength(4)
+    for (const radio of radios)
+      expect(radio).toHaveAttribute('title', 'A chord of five notes or more is not inverted')
+  })
+
   it('has no inversion to choose where the music is no piece: a walk, a progression', async () => {
     const { sheet } = await openSheet()
     expect(within(sheet).queryByRole('radiogroup', { name: 'Inversion' })).not.toBeInTheDocument()

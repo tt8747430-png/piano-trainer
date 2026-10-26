@@ -104,7 +104,7 @@ export function BeatStrip({
                     )}
                   >
                     {named?.rest ? (
-                      <span data-rest="" className="font-music text-2xl leading-none">
+                      <span data-rest="" className="font-music text-3xl leading-none">
                         {REST}
                       </span>
                     ) : (
