@@ -7,6 +7,7 @@ export const search: LocaleResources['search'] = {
   kinds: {
     pages: 'Практика',
     songs: 'Песни',
+    setlists: 'Сет-листы',
     lessons: 'Уроки',
     courses: 'Курсы',
     chords: 'Аккорды',

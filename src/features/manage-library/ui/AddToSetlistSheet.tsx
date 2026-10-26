@@ -1,4 +1,4 @@
-import { Heart, ListOrdered } from 'lucide-react'
+import { Heart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   piecesIn,
@@ -8,7 +8,7 @@ import {
   useLibraryStoreApi,
 } from '@/entities/library'
 import { useRepertoire, type PieceId } from '@/entities/piece'
-import { RowCheck, Sheet, SheetContent } from '@/shared/ui'
+import { PAGE_TILES, RowCheck, Sheet, SheetContent } from '@/shared/ui'
 import { addToSetlist } from '../add-to-setlist'
 import { removeFromSetlist } from '../remove-from-setlist'
 import { toggleFavourite } from '../toggle-favourite'
@@ -54,8 +54,7 @@ export function AddToSetlistSheet({
               <RowCheck
                 title={setlist.name}
                 detail={count(setlist.pieces)}
-                icon={ListOrdered}
-                paint="yellow"
+                {...PAGE_TILES.setlist}
                 checked={setlist.pieces.includes(piece)}
                 onCheckedChange={(on) =>
                   (on ? addToSetlist : removeFromSetlist)(store, setlist.id, piece)
