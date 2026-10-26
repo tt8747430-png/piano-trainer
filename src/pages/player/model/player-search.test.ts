@@ -1,10 +1,10 @@
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
 import { LEFT_FIGURE_IDS, LEFT_FIGURES, RIGHT_FIGURE_IDS, RIGHT_FIGURES } from '@/entities/pattern'
-import { hasChartPlan, PIECES, pieceById, stavesOf } from '@/entities/piece'
+import { hasChartPlan, PIECES, pieceById, stavesOf, type Piece } from '@/entities/piece'
 import { splitsTheBeat } from '@/shared/lib/arrangement'
 import { ownChoice } from '@/features/practice'
-import { isCompound, note, noteParam } from '@/shared/lib/music'
+import { isCompound, note, noteParam, type SpelledNote } from '@/shared/lib/music'
 import { resolveChoice, searchPatch } from './player-search'
 
 function piece(id: string) {
@@ -35,6 +35,23 @@ describe('resolveChoice', () => {
     expect(
       resolveChoice(bz5, { key: noteParam(note('A', 1)) }, false, BUILT_IN_PATTERNS).tonic,
     ).toEqual(note('B', -1))
+  })
+
+  it('spells the key it moves to by its simplest signature, its own as it is written (ADR 0104)', () => {
+    const tonic = (piece: Piece, key: SpelledNote) =>
+      resolveChoice(piece, { key: noteParam(key) }, false, BUILT_IN_PATTERNS).tonic
+    // C♯ major writes seven sharps, D♭ five flats.
+    expect(tonic(bz5, note('C', 1))).toEqual(note('D', -1))
+    expect(tonic(bz5, note('G', -1))).toEqual(note('F', 1))
+    const inGFlat: Piece = { ...bz5, key: 'Gb' }
+    expect(tonic(inGFlat, note('F', 1))).toEqual(note('G', -1))
+    // D minor down a semitone: C♯ minor, never D♭ minor.
+    expect(tonic(twofive, note('D', -1))).toEqual(note('C', 1))
+  })
+
+  it('simplifies the chords where the URL says so', () => {
+    expect(resolveChoice(bz5, { simple: true }, false, BUILT_IN_PATTERNS).simple).toBe(true)
+    expect(resolveChoice(bz5, {}, false, BUILT_IN_PATTERNS).simple).toBe(false)
   })
 
   it('plays the piece’s own pattern when the chart names no methods', () => {

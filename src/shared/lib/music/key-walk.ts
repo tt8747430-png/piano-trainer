@@ -1,6 +1,4 @@
-import { tonicSpelling, type Key } from './key'
-import { pitchClassOf } from './note'
-import { pitchClass } from './pitch'
+import { transposedKey, type Key } from './key'
 
 /** The ways a progression walks through the keys, each ending back home. */
 export const KEY_WALKS = [
@@ -42,11 +40,6 @@ const STEPS: Readonly<
  */
 export function walkKeys(key: Key, walk: KeyWalk): Key[] {
   const { by, keys, back = false } = STEPS[walk]
-  const from = pitchClassOf(key.tonic)
-  const there = Array.from({ length: keys + 1 }, (_, i) =>
-    i % keys === 0
-      ? key
-      : { tonic: tonicSpelling(pitchClass(from + by * i), key.minor), minor: key.minor },
-  )
+  const there = Array.from({ length: keys + 1 }, (_, i) => transposedKey(key, by * i))
   return back ? [...there, ...there.slice(0, keys).reverse()] : there
 }

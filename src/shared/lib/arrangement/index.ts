@@ -1,5 +1,6 @@
 export { arrange, transposeChord, transposeNotes, type ArrangeOptions } from './arrange'
 export { parseFigure, playsKeyTriads, splitsTheBeat } from './figure'
+export { isSimpleChart, simplifyChart } from './simplify'
 export {
   type BeatGroup,
   type Chart,

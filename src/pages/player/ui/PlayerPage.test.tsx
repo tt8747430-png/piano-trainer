@@ -399,25 +399,19 @@ describe('Player', () => {
     expect(loop).toHaveAttribute('aria-pressed', 'false')
   })
 
-  it('changes the key and swing in the Setup sheet', async () => {
+  it('changes swing in the Setup sheet, the key kept as the tools row moved it', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/play/bz5')
+    const { router } = await renderApp('/play/bz5?key=A')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    await user.click(
-      within(await screen.findByRole('group', { name: 'Key' })).getByRole('radio', { name: 'A' }),
-    )
-    expect(router.state.location.search).toMatchObject({ key: 'A' })
-    await user.click(screen.getByRole('button', { name: 'Swing' }))
+    await user.click(await screen.findByRole('button', { name: 'Swing' }))
     expect(router.state.location.search).toMatchObject({ key: 'A', swing: true })
   })
 
-  it('shows all twelve keys in the Setup, the piece’s chosen, and Tune only for a piece with a tune', async () => {
+  it('shows Tune in the Setup only for a piece with a tune', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5')
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    const key = await screen.findByRole('group', { name: 'Key' })
-    expect(within(key).getByRole('radio', { name: 'G' })).toBeChecked()
-    expect(within(key).getByText('G major')).toBeInTheDocument()
+    await screen.findByRole('dialog', { name: 'Setup' })
     expect(screen.queryByRole('button', { name: 'Tune' })).not.toBeInTheDocument()
   })
 

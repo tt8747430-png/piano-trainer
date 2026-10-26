@@ -2,7 +2,7 @@ import { BUILT_IN_PATTERNS, followsInversion } from '@/entities/pattern'
 import { describe, expect, it } from 'vitest'
 import { hasChartPlan, PIECES, pieceById, pieceFit, pieceKey } from '@/entities/piece'
 import { note } from '@/shared/lib/music'
-import { arrangePiece, defaultPattern, ownChoice } from './arrange-piece'
+import { arrangePiece, defaultPattern, ownChoice, simplifies } from './arrange-piece'
 
 const piece = (id: string) => {
   const found = pieceById(id)
@@ -36,6 +36,7 @@ describe('ownChoice', () => {
       nearest: true,
       chordSize: null,
       tune: false,
+      simple: false,
     })
   })
 })
@@ -125,6 +126,68 @@ describe('arrangePiece', () => {
       )
     expect(symbols('triads')[0]).toBe('Dm')
     expect(symbols('ninths')[0]).toBe('Dm9')
+  })
+})
+
+describe('Simplify (ADR 0104)', () => {
+  const symbols = (played: ReturnType<typeof arrangePiece>) => [
+    ...new Set(played.chords.map((c) => c.symbol)),
+  ]
+
+  it('plays every chord of a piece as its plain triad, in the key chosen', () => {
+    // As written: G C Em G/B C/E Dsus4 D/F♯ D Am D7.
+    expect(
+      symbols(arrangePiece(bz5, { ...ownChoice(bz5), simple: true }, BUILT_IN_PATTERNS)),
+    ).toEqual(['G', 'C', 'Em', 'D', 'Am'])
+    const inA = { ...ownChoice(bz5), tonic: note('A'), simple: true }
+    expect(symbols(arrangePiece(bz5, inA, BUILT_IN_PATTERNS))).toEqual(['A', 'D', 'F#m', 'E', 'Bm'])
+  })
+
+  it('plays what a chord’s plain triad sounds: no 7th, no bass of its own', () => {
+    if (!('sections' in bz5)) throw new Error('bz5 is a chart')
+    const { staves: _staves, hands: _hands, ...rest } = bz5
+    const song = {
+      ...rest,
+      pattern: 'block' as const,
+      sections: [{ kind: 'verse' as const, lines: ['Cmaj7 G7/B'] }],
+    }
+    /** Each chord's pitch classes, and its lowest key's. */
+    const sounds = (simple: boolean) => {
+      const played = arrangePiece(song, { ...ownChoice(song), simple }, BUILT_IN_PATTERNS)
+      return played.chords.map((_, index) => {
+        const keys = played.notes.filter((n) => n.chord === index).map((n) => n.midi)
+        return { tones: new Set(keys.map((key) => key % 12)), bass: Math.min(...keys) % 12 }
+      })
+    }
+    // As written: Cmaj7's B, and G7/B's F over its B.
+    expect(sounds(false)).toEqual([
+      { tones: new Set([0, 4, 7, 11]), bass: 0 },
+      { tones: new Set([7, 11, 2, 5]), bass: 11 },
+    ])
+    expect(sounds(true)).toEqual([
+      { tones: new Set([0, 4, 7]), bass: 0 },
+      { tones: new Set([7, 11, 2]), bass: 7 },
+    ])
+  })
+
+  it('changes a piece only where it has a chord that is not a plain triad, at the chord size chosen', () => {
+    expect(simplifies(bz5, null)).toBe(true)
+    if (!('sections' in bz5)) throw new Error('bz5 is a chart')
+    const { staves: _staves, hands: _hands, ...rest } = bz5
+    const slash = { ...rest, sections: [{ kind: 'verse' as const, lines: ['G _ Em C/E'] }] }
+    expect(simplifies(slash, null)).toBe(true)
+    const triads = { ...rest, sections: [{ kind: 'verse' as const, lines: ['G _ Em C D'] }] }
+    expect(simplifies(triads, null)).toBe(false)
+    // A song written in degrees, at the size chosen: its sus4 chords are fixed (`V:=sus4`).
+    expect(simplifies(piece('romashki'), 'triads')).toBe(true)
+  })
+
+  it('plays a song written in degrees as triads, whatever its chord size', () => {
+    const twofive = piece('romashki')
+    const choice = { ...ownChoice(twofive), chordSize: 'ninths' as const, simple: true }
+    const played = arrangePiece(twofive, choice, BUILT_IN_PATTERNS)
+    expect(played.chords.every((c) => c.quality === 'maj' || c.quality === 'min')).toBe(true)
+    expect(played.chords[0]?.symbol).toBe('Dm')
   })
 })
 
