@@ -1,5 +1,5 @@
-import { cn, diagramRange, keyboardLayout } from '@/shared/lib'
-import type { Midi } from '@/shared/lib/music'
+import { cn, keyboardLayout } from '@/shared/lib'
+import type { KeyRange, Midi } from '@/shared/lib/music'
 import { KEY_LENGTH } from './piano-keyboard/PianoKeyboard'
 
 /** A white key's width in the drawing's units; the rest follows from it. */
@@ -10,10 +10,10 @@ const ROUND = { white: 1.5, black: 1 } as const
 /** A dot's radius, and how far its middle stands above its key's foot. */
 const DOT = { white: 3, black: 2.2 } as const
 const LIFT = { white: 6.5, black: 4 } as const
-/** The bass's ring: its line, drawn inside the dot's edge. */
+/** A ring's line, drawn inside the dot's edge. */
 const RING = 1.2
 
-/** What a key held wears: a dot, or the bass's ring. */
+/** What a key held wears: a dot, or a ring (a bass the chord has not). */
 type Mark = 'dot' | 'ring'
 
 /** A key placed in the drawing's units. */
@@ -61,35 +61,36 @@ function DiagramKey({ placed, mark }: { placed: PlacedKey; mark: Mark | null }) 
 }
 
 /**
- * A chord drawn as a keyboard (ADR 0099), a picture beside its symbol: the keys round it as the
- * app's keys look, from the C or F at or below its lowest key to the E or B at or above its highest
- * (ten white keys at least), each key held marked by a dot near its foot, dark on a white key and
- * light on a black one; the lowest a ring where the bass is asked for. `muted` greys it whole (the
- * next chord). It takes its container's width, its keys a piano's proportion, and is named for a
- * screen reader by `label`: its chord and its notes.
+ * A chord drawn as a keyboard (ADR 0099, 0101), a picture beside its symbol: the keys its caller
+ * gives (every chord diagram's F3 to B4) as the app's keys look, each key held marked by a dot near
+ * its foot, dark on a white key and light on a black one; the key `ring` names wears a ring instead
+ * (a bass the chord has not). `muted` greys it whole (the next chord). It takes its container's
+ * width, its keys a piano's proportion, and is named for a screen reader by `label`: its chord and
+ * its notes.
  */
 export function KeyDiagram({
   keys,
+  range,
   label,
-  bass = false,
+  ring,
   muted = false,
   className,
 }: {
   /** The keys held. */
   keys: readonly Midi[]
-  /** Its chord as printed and its notes: "C♯m7: E G# B". */
+  /** The keys drawn. */
+  range: KeyRange
+  /** Its chord as printed and its notes: "C♯m7: G# B C# E". */
   label: string
-  /** The lowest key held is the chord's bass: a ring rather than a dot. */
-  bass?: boolean
+  /** The key held drawn as a ring rather than a dot. */
+  ring?: Midi | undefined
   muted?: boolean
   className?: string
 }) {
-  const { keys: laid, whites } = keyboardLayout(diagramRange(keys))
+  const { keys: laid, whites } = keyboardLayout(range)
   const width = whites * WHITE
   const held = new Set(keys)
-  const lowest = Math.min(...keys)
-  const markOf = (key: Midi): Mark | null =>
-    !held.has(key) ? null : bass && key === lowest ? 'ring' : 'dot'
+  const markOf = (key: Midi): Mark | null => (!held.has(key) ? null : key === ring ? 'ring' : 'dot')
   // The white keys first, so the black keys stand over them.
   const placed = [...laid]
     .sort((a, b) => Number(a.black) - Number(b.black))

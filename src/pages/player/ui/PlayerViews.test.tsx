@@ -406,8 +406,8 @@ describe('Diagrams (ADR 0099)', () => {
     expect(within(view).getByText('All is calm, all is bright')).toBeInTheDocument()
     act(() => setScoreView(settingsStore, { lyrics: false }))
     expect(within(view).queryByText('Silent night, holy night,')).not.toBeInTheDocument()
-    // The chord sounding is named by its notes; the next, greyed, as the next.
-    expect(within(view).getByRole('button', { name: 'C: C E G' })).toBeInTheDocument()
+    // The chord sounding is named by its notes as they fold, G3 C4 E4; the next, greyed, as the next.
+    expect(within(view).getByRole('button', { name: 'C: G C E' })).toBeInTheDocument()
     // A diagram opens its chord's sheet.
     await user.click(within(view).getByRole('button', { name: 'Next: G7' }))
     expect(await screen.findByRole('dialog', { name: 'G7 chord' })).toBeInTheDocument()

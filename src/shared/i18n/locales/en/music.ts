@@ -232,10 +232,18 @@ export const music = {
   chordDiagram: '{{symbol}}: {{notes}}',
   chordSummary: 'Chords',
   // A chord's sheet: its diagram large, and Play; where it is learned, played on the keys under it.
+  // A piece's chord is drawn in the inversion chosen there (ADR 0101), or says why it has none.
   chordSheet: {
     title: '{{symbol}} chord',
     learn: 'Play it on the keys',
     learned: 'That’s it.',
+    inversionInfo:
+      'Every diagram of this chord in this song is drawn in the inversion chosen. What plays stays as it is.',
+    offKeys: 'Doesn’t fit the keys shown',
+    drawnOneWay: {
+      slash: 'Its bass is in its name: the note after the slash',
+      large: 'A chord of five notes or more is not inverted',
+    },
   },
   // An interval's card: how far it is, the chords it is heard in, and the ways it is played.
   intervalCard: {
