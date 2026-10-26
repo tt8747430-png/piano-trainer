@@ -87,7 +87,7 @@ export const player: LocaleResources['player'] = {
   },
   ownKeyOnly: 'Только в тональности {{key}}',
   recordingOnlyIn: 'Запись звучит только в своей тональности — {{key}}.',
-  /** Why a pattern or figure is closed to the music. */
+  /** Why a pattern or figure, or a view of the music (ADR 0102), is closed to the music. */
   needs: {
     tune: 'Нужна мелодия',
     key: 'Нужна тональность',

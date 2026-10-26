@@ -53,7 +53,8 @@ export function PlayerViewMenu({
 }) {
   const { t } = useTranslation('player')
   const settings = useSettingsStoreApi()
-  const scoreView = useSettings(selectScoreView)
+  const askOnOpen = useSettings((state) => selectScoreView(state).askOnOpen)
+  const keys = useSettings((state) => selectScoreView(state).keys)
   const name = t(`views.${shown}`)
   return (
     <ScoreViewMenu
@@ -76,8 +77,8 @@ export function PlayerViewMenu({
         />
         <SwitchRow
           label={t('views.ask')}
-          checked={scoreView.askOnOpen}
-          onCheckedChange={(askOnOpen) => setScoreView(settings, { askOnOpen })}
+          checked={askOnOpen}
+          onCheckedChange={(ask) => setScoreView(settings, { askOnOpen: ask })}
           className="border-b-0"
         />
       </MenuSection>
@@ -86,7 +87,7 @@ export function PlayerViewMenu({
         title={t('views.every')}
         className="[&>[data-slot=switch-row]:last-child]:border-b-0"
       >
-        <KeysSwitch shown={scoreView.keys} onShow={(keys) => setScoreView(settings, { keys })} />
+        <KeysSwitch shown={keys} onShow={(on) => setScoreView(settings, { keys: on })} />
       </MenuSection>
     </ScoreViewMenu>
   )

@@ -29,6 +29,7 @@ export function ScoreViewMenu({
 }: {
   /** What opens it: the Player's tools row's View, the editor's eye. */
   trigger: ReactElement
+  /** Where it opens from: the Player's tools row, or the editor's bar. */
   from: keyof typeof PLACES
   /** Open as the screen opens: a piece's Player, asked each time (ADR 0102). */
   defaultOpen?: boolean
