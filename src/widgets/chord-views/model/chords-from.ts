@@ -47,6 +47,36 @@ export function chordsFrom(performance: Performance, beat: Span, loop: Span | nu
   return { now, next: null }
 }
 
+/**
+ * The change before the chord sounding in a beat, in played order (ADR 0108): where a swipe back on
+ * the Diagrams view's pair goes, the first chord of the run of one symbol before the one sounding's
+ * (a chord held over several bars is gone back over whole). In a bar of no chord, the last chord
+ * before it. Inside a loop, none before its start. None before the first chord.
+ */
+export function chordBefore(
+  performance: Performance,
+  beat: Span,
+  now: number | null,
+  loop: Span | null,
+): number | null {
+  const { chords } = performance
+  /** The first of the run of one symbol a chord is in. */
+  const runStart = (index: number) => {
+    const symbol = chords[index]?.symbol
+    let start = index
+    while (start > 0 && chords[start - 1]?.symbol === symbol) start -= 1
+    return start
+  }
+  let before: number
+  if (now === null) before = chords.findLastIndex((chord) => chord.startTick < beat.from)
+  else before = runStart(now) - 1
+  if (before < 0) return null
+  // Its run's first chord in the loop: one started before the loop is gone back to where it starts.
+  let start = runStart(before)
+  while (loop && start <= before && (chords[start]?.startTick ?? 0) < loop.from) start += 1
+  return start > before ? null : start
+}
+
 /** How long before a change the Diagrams view's pair slides to it: half a beat. */
 const SLIDING = TICKS_PER_BEAT / 2
 
