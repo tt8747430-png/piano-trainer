@@ -30,7 +30,11 @@ export const TITLE_SIZES = ['large', 'small'] as const
 /** How large a screen's title is: large, or small, leaving the page more of the screen. */
 export type TitleSize = (typeof TITLE_SIZES)[number]
 
-/** The Player's saved switches: the Setup's (`PLAYING_TOGGLES`), the View menu's chord positions, finger numbers and named notes, a piece's tune and recording. */
+/**
+ * The Player's saved switches: the View menu's chord positions, finger numbers and named notes, a
+ * piece's tune and recording (the Setup's), and the count-in and the click (`metronome`, the
+ * transport's Sound's, ADR 0105).
+ */
 export const PRACTICE_TOGGLES = [
   'fingerNumbers',
   'namedNotes',
@@ -42,12 +46,6 @@ export const PRACTICE_TOGGLES = [
 ] as const
 export type PracticeToggle = (typeof PRACTICE_TOGGLES)[number]
 export type PracticeToggles = Readonly<Record<PracticeToggle, boolean>>
-/**
- * The Setup's saved switches: how any piece plays (the tune and the recording are a piece's own: its
- * setup shows them). What the sheet shows (chord positions, finger numbers, named notes) is the View
- * menu's alone (ADR 0064, 0085).
- */
-export const PLAYING_TOGGLES = ['metronome', 'countIn'] as const satisfies readonly PracticeToggle[]
 
 /**
  * The parts the Player's Sound turns up or down (ADR 0105, Chordify's "your perfect mix"): each hand,

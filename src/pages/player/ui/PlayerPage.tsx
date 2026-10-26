@@ -81,6 +81,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
           piano={!isLeadSheet(piece)}
           // A piece written in degrees has the piano's staves alone.
           staves={isDegreePiece(piece) ? undefined : piece.staves}
+          recorded={piece.recording !== undefined}
           modes={
             // A piece written in degrees has no score to edit.
             isDegreePiece(piece) ? null : (

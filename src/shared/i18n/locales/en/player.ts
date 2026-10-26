@@ -129,12 +129,26 @@ export const player = {
     lines: 'Bass lines',
     styles: 'Styles',
   },
+  /** The transport's Sound (ADR 0105): the count-in, the click, and each part's volume. */
+  sound: {
+    title: 'Sound',
+    countIn: 'Count in',
+    countInInfo: 'A bar of clicks before the music starts, its beats counted down on the screen.',
+    click: 'Click',
+    clickInfo: 'A click on every beat while the music plays.',
+    volume: 'Volume',
+    volumeInfo:
+      'How loud each part plays. Only the chords turns the recording right down and both hands up, so you hear the chords alone.',
+    staves: 'Staves',
+    recording: 'Recording',
+    onlyChords: 'Only the chords',
+  },
+  /** The count-in's beat as a screen reader hears it, its number large on the screen. */
+  counting: 'Count-in: {{count}}',
   toggles: {
     namedNotes: 'Note names',
     positions: 'Chord positions',
     tune: 'Tune',
-    metronome: 'Metronome',
-    countIn: 'Count-in',
     swing: 'Swing',
     recording: 'Recording',
   },

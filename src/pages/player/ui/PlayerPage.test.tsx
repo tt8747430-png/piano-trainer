@@ -149,13 +149,21 @@ describe('Player', () => {
     expect(settingsStore.getState().scoreView).toMatchObject({ music: 'grid', keys: false })
   })
 
-  it('holds the tempo, ‹, Play, ›, the loop and the hands in one toolbar named Playback (ADR 0099)', async () => {
+  it('holds the tempo, ‹, Play, ›, the loop, the Sound and the hands in one toolbar named Playback (ADR 0099, 0105)', async () => {
     await renderApp('/play/romashki')
     const dock = await screen.findByRole('toolbar', { name: 'Playback' })
     const names = within(dock)
       .getAllByRole('button')
       .map((button) => button.getAttribute('aria-label'))
-    expect(names).toEqual(['Tempo: 100%', 'Back', 'Play', 'Next', 'Loop', 'Hands: Both hands'])
+    expect(names).toEqual([
+      'Tempo: 100%',
+      'Back',
+      'Play',
+      'Next',
+      'Loop',
+      'Sound',
+      'Hands: Both hands',
+    ])
     expect(within(dock).getByRole('button', { name: 'Play' })).toHaveAttribute(
       'title',
       'Play (Space)',
@@ -170,6 +178,43 @@ describe('Player', () => {
     act(() => settingsStore.setState((state) => ({ keyboard: { ...state.keyboard, dock: 'top' } })))
     const top = screen.getByRole('group', { name: 'Keyboard' })
     expect(dock.compareDocumentPosition(top) & Node.DOCUMENT_POSITION_PRECEDING).toBeTruthy()
+  })
+
+  it('offers the recording’s volume in the Sound, and Only the chords plays the chords alone (ADR 0105)', async () => {
+    const user = userEvent.setup()
+    const { audio, settingsStore } = await renderApp('/play/romashki')
+    await user.click(await screen.findByRole('button', { name: 'Sound' }))
+    const sound = await screen.findByRole('dialog', { name: 'Sound' })
+    const labels = [...sound.querySelectorAll('[data-slot="slider-label"]')].map(
+      (label) => label.textContent,
+    )
+    expect(labels).toEqual(['Right hand', 'Left hand', 'Recording', 'Click'])
+    await user.click(within(sound).getByRole('button', { name: 'Only the chords' }))
+    expect(settingsStore.getState().sound).toMatchObject({ recording: 0, rh: 100, lh: 100 })
+    await user.keyboard('{Escape}')
+    await user.click(screen.getByRole('button', { name: 'Play' }))
+    expect(audio.recordings).toEqual([])
+    expect(audio.played.length).toBeGreaterThan(0)
+  })
+
+  it('counts its bar in large over the music, a beat at a time, then plays (ADR 0105)', async () => {
+    const user = userEvent.setup()
+    const { audio, settingsStore } = await renderApp('/play/bz5')
+    act(() => setPracticeToggle(settingsStore, 'countIn', true))
+    await user.click(await screen.findByRole('button', { name: 'Play' }))
+    // Each click of the bar counted in sounds an accented first, the rest plain.
+    const clicks = (audio.played[0]?.sounds ?? []).filter((sound) => sound.kind === 'click')
+    expect(clicks.length).toBeGreaterThan(1)
+    expect(clicks[0]).toMatchObject({ accent: true })
+    expect(clicks[1]).toMatchObject({ accent: false })
+    act(() => audio.setNow(0.15))
+    expect((await screen.findByRole('status')).textContent).toMatch(/^Count-in: 4/)
+    // A beat at bz5's 72.
+    const beat = 60 / 72
+    act(() => audio.setNow(0.15 + beat))
+    await waitFor(() => expect(screen.getByRole('status').textContent).toMatch(/^Count-in: 3/))
+    act(() => audio.setNow(0.15 + 8 * beat))
+    await waitFor(() => expect(screen.queryByText(/^Count-in/)).not.toBeInTheDocument())
   })
 
   it('plays «Ромашковые поля»’s recording along in Listen, from bar 1, slowed to the chart’s tempo', async () => {
@@ -512,8 +557,13 @@ describe('Player', () => {
     await user.click(screen.getByRole('button', { name: 'Setup' }))
     const setup = await screen.findByRole('dialog', { name: 'Setup' })
     expect(within(setup).queryByRole('button', { name: 'Chord positions' })).not.toBeInTheDocument()
+    // The count-in and the click are the transport's Sound's alone (ADR 0105).
     const playing = within(setup).getByRole('region', { name: 'How it plays' })
-    expect(within(playing).getByRole('button', { name: 'Metronome' })).toBeInTheDocument()
+    expect(
+      within(playing)
+        .getAllByRole('button')
+        .map((tile) => tile.getAttribute('aria-label') ?? tile.textContent),
+    ).not.toEqual(expect.arrayContaining([expect.stringMatching(/Metronome|Count/)]))
   })
 })
 
