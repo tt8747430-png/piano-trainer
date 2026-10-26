@@ -1,7 +1,6 @@
-import { note } from '@/shared/lib/music'
+import { C_MAJOR, note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const C_MINOR = { tonic: note('C'), minor: true }
 
 /** Called to Play, level 2, lesson 8, «Соединение аккордов»: I, IV and V joined by their nearest notes, from three positions. */

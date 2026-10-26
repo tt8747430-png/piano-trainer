@@ -34,18 +34,10 @@
 [data-slot='score'][data-muted='bass'] g.staff[data-staff='bass'] {
   color: var(--muted-foreground);
 }
-/* A hand's bar the pattern plays (ADR 0083): its notes shown in soft ink, not written, never marked
-   chosen. Its lines and barlines keep their own colour. */
-[data-slot='score'] g.staff.pattern,
-[data-slot='score'] g.staff.pattern g.note-chosen {
-  color: color-mix(in oklab, var(--muted-foreground) 70%, var(--background));
-}
-/* The line's clef, key and time at the head of such a bar stay in ink. */
-[data-slot='score'] g.staff.pattern :is(g.clef, g.keySig, g.meterSig) {
-  color: var(--foreground);
-}
-/* The notes chosen in the score editor: the focus colour, as a notation app marks a selection. */
-[data-slot='score'] g.note-chosen {
+/* What is chosen, in the editor and the Player (ADR 0096): drawn in the selection colour, as a
+   notation app draws a selection: a note (its head, accidental, stem and flag), a chord whole with
+   its dots, one key's dot, a rest, the ledger lines out to a head chosen. */
+[data-slot='score'] .note-chosen {
   color: var(--ring);
 }
 /* A named head (Named notes): a black note's in ink, its letter in the page's colour; an open one's
@@ -68,7 +60,28 @@
 [data-slot='score'] g.note-name.open text {
   fill: currentColor;
 }
+/* A staff's name at a line's head takes the ink (Verovio sets no fill on its text); the editor's
+   placeholder for a staff with no name of its own, printed in italics, is soft (ADR 0097). */
+[data-slot='score'] g.label text {
+  fill: currentColor;
+}
+[data-slot='score'] g.label tspan[font-style='italic'] {
+  fill: var(--muted-foreground);
+}
 /* Chord symbols and words in the app's faces. */
 [data-slot='score'] :is(g.harm, g.dir, g.tempo) text {
   font-family: var(--font-display);
+}
+/* The words under the tune (ADR 0093) stay in the face Verovio spaces them by (Times): in the app's
+   wider serif, neighbours a word apart touch on a panorama's natural spacing. Verovio sets no fill on
+   their text either, so a verse takes the ink (dark mode is light), and stays in it under a chosen
+   note, as a notation app marks the note alone; soft with the staff of the hand not heard. */
+[data-slot='score'] g.verse text {
+  fill: currentColor;
+}
+[data-slot='score'] g.note-chosen g.verse {
+  color: var(--foreground);
+}
+[data-slot='score'][data-muted='treble'] g.staff[data-staff='treble'] g.note-chosen g.verse {
+  color: var(--muted-foreground);
 }

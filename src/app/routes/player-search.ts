@@ -84,6 +84,10 @@ function figures(raw: Raw): Pick<SetupParams, 'pattern' | 'rh' | 'lh' | 'inversi
 const chordSize = (raw: Raw) => (isChordSize(raw.chordSize) ? raw.chordSize : undefined)
 const walk = (raw: Raw) => (isKeyWalk(raw.walk) ? raw.walk : undefined)
 
+/** A bar as printed, from 1: where the Player and the score editor open from the other (ADR 0090). */
+const BAR_MAX = 9999
+const bar = (raw: Raw): number | undefined => wholeIn(raw.bar, 1, BAR_MAX, undefined)
+
 export function readPlayerSearch(raw: Raw): PlayerSearch {
   const key = readNote(raw.key)
   return {
@@ -91,6 +95,7 @@ export function readPlayerSearch(raw: Raw): PlayerSearch {
     key: key ? noteParam(key) : undefined,
     ...figures(raw),
     chordSize: chordSize(raw),
+    bar: bar(raw),
   }
 }
 export const playerSearch = routeSearch(readPlayerSearch, PLAYER_DEFAULTS)
@@ -223,7 +228,12 @@ export const EXERCISE_KEPT: readonly (keyof ExerciseSearch & string)[] = [
   'speedTraining',
 ]
 
-// The score editor: whether its takes are open (its layout is a setting, `editorLayout`).
-export const EDIT_DEFAULTS: EditSearch = { record: false }
-const readEditSearch = (raw: Raw): EditSearch => ({ record: raw.record === true })
+// The score editor: whether its takes' sheet is open, whether Record is pressed as it opens, and the
+// bar its caret opens on (its layout is a setting).
+export const EDIT_DEFAULTS: EditSearch = { takes: false, record: false }
+const readEditSearch = (raw: Raw): EditSearch => ({
+  takes: raw.takes === true,
+  record: raw.record === true,
+  bar: bar(raw),
+})
 export const editSearch = routeSearch(readEditSearch, EDIT_DEFAULTS)

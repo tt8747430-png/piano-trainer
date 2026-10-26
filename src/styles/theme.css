@@ -4,6 +4,16 @@
 @custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 500px) and (max-width: 1023px));
 /* The narrowest phones held upright (under 360px): a bar of round buttons gives up what it can spare. */
 @custom-variant narrow-phone (@media (max-width: 359.98px));
+/* A wash under the pointer only where a mouse or a trackpad hovers, at every size: a phone keeps a
+   tapped element hovered, and some say they hover, so a tap would leave its wash behind (the
+   printed title's, a palette key's). */
+@custom-variant hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
 /* Keys docked at the foot of a screen wide for its height (a phone on its side, a laptop): the
    screen's floating actions stand at its side, over the keys, not over the little height left. */
 @custom-variant aside {
@@ -57,10 +67,10 @@
 
   --color-hand-rh: var(--hand-rh);
   --color-hand-lh: var(--hand-lh);
-  --color-hand-melody: var(--hand-melody);
+  --color-hand-staff: var(--hand-staff);
   --color-hand-rh-wash: var(--hand-rh-wash);
   --color-hand-lh-wash: var(--hand-lh-wash);
-  --color-hand-melody-wash: var(--hand-melody-wash);
+  --color-hand-staff-wash: var(--hand-staff-wash);
 
   --color-key-white: var(--key-white);
   --color-key-black: var(--key-black);
@@ -83,13 +93,14 @@
   --color-key-focus: var(--key-focus);
   --color-key-focus-halo: var(--key-focus-halo);
 
-  --font-sans: 'Onest Variable', 'Noto Music', system-ui, sans-serif;
+  /* Neither face has ♭ ♮ ♯: both take them from Text Accidentals, set for text (fonts/), not a staff. */
+  --font-sans: 'Onest Variable', 'Text Accidentals', 'Noto Music', system-ui, sans-serif;
   /*
    * The book's typeset titles: Literata, a book serif drawn for screens, variable in weight and
    * optical size (the browser fits its design to each size), Latin and Cyrillic alike. Titles and
    * chord symbols only; every control reads in Onest.
    */
-  --font-display: 'Literata Variable', 'Noto Music', Georgia, serif;
+  --font-display: 'Literata Variable', 'Text Accidentals', 'Noto Music', Georgia, serif;
   /* A music sign that stands alone (the rail's pedal mark): set by the music font's own metrics. */
   --font-music: 'Noto Music', serif;
 
@@ -654,6 +665,11 @@
       'sheet sheet'
       'status status';
   }
+  /* On a phone held upright the bar's buttons take its row, Close kept whole at its start (ADR 0085);
+     the title is printed on the sheet (ADR 0094). */
+  @variant max-sm {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
   @variant landscape-phone {
     grid-template-columns: minmax(0, 1fr) auto auto;
     grid-template-rows: auto minmax(0, 1fr) auto;
@@ -677,7 +693,7 @@
   }
 }
 
-/* The score editor's screen (pages/score-editor; spec §6, ADR 0065, 0079): its parts placed by
+/* The score editor's screen (pages/score-editor; spec §6, ADR 0079, 0089): its parts placed by
    `data-area`, one screen that never scrolls as a whole, the sheet its one scroller. The keys at the
    foot, or under the bar where the keyboard settings dock them at the top (`data-keys='top'`). What
    floats (`float`: the caret's moves, the folded keys' and palette's buttons, the palette) lies over
@@ -707,6 +723,68 @@
   &[data-keys='top'] {
     grid-template-rows: auto auto minmax(0, 1fr);
     grid-template-areas: 'bar' 'keys' 'sheet';
+  }
+}
+
+/* The Player's Diagrams view (widgets/chord-views, ADR 0099): its parts placed by `data-area` in the
+   room above the transport floating over its foot (the view's padding is `--float-room`), never under
+   it. Down the screen the title at the head, then the chords, the beat strip and the words sung, in
+   the middle of the room under the title (the rows either side share what is left); on a phone on
+   its side, where the bar and the keys leave a short room, the chords down its whole height, and
+   beside them the title, the strip and the words, in the middle of it. A short room keeps the line
+   sung and leaves out the next before the chords give anything up; then the chords take what the
+   rest leaves them, never more than they are drawn at: their diagrams shrink to it (`max-h-full`). */
+@utility diagrams-view {
+  container-type: size;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) minmax(5rem, auto) auto auto minmax(0, 1fr);
+  grid-template-areas: 'title' '.' 'chords' 'strip' 'words' '.';
+  & > [data-area='title'] {
+    grid-area: title;
+    margin-bottom: --spacing(2);
+  }
+  & > [data-area='chords'] {
+    grid-area: chords;
+    min-height: 0;
+  }
+  & > [data-area='strip'] {
+    grid-area: strip;
+    margin-top: --spacing(4);
+  }
+  & > [data-area='words'] {
+    grid-area: words;
+    margin-top: --spacing(4);
+  }
+  /* Too short a room for both lines and the chords as drawn (a 667px-tall phone, any phone on its
+     side): the line the music is in alone, the next only where it is the one line shown. */
+  @container (height < 19rem) {
+    & > [data-area='words'] > [data-slot='coming-line']:not(:first-child) {
+      display: none;
+    }
+  }
+  @variant landscape-phone {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto auto auto minmax(0, 1fr);
+    grid-template-areas: 'chords .' 'chords title' 'chords strip' 'chords words' 'chords .';
+    column-gap: --spacing(4);
+    /* One line of the title beside the chords, cut short where it is longer: with the strip and
+       the line sung, it fits the room a 375px-tall phone on its side leaves. */
+    & > [data-area='title'] {
+      margin-bottom: 0;
+      & > h1 {
+        overflow: hidden;
+        line-height: 1.1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+    & > [data-area='strip'] {
+      margin-top: --spacing(0.5);
+    }
+    & > [data-area='words'] {
+      margin-top: --spacing(1);
+    }
   }
 }
 

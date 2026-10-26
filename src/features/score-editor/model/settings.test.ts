@@ -1,72 +1,45 @@
 import { describe, expect, it } from 'vitest'
 import { note } from '@/shared/lib/music'
-import { draftOf, form, shape } from '../testing/test-draft'
-import { metersFor, setKey, setMeter, setTempo } from './settings'
+import { draftOf, form, shape, staffNotes } from '../testing/test-draft'
+import { setKey, setTempo } from './settings'
 
 describe('the song’s settings', () => {
   const draft = draftOf({
     key: 'C',
     sections: [{ kind: 'verse', lines: ['C G7/B'] }],
-    melody: 'E4/4 | D4/4',
-    hands: { lh: 'C3/4 | -' },
+    staves: [{ notes: 'E4/4 | D4/4' }],
+    hands: { lh: 'C3/4 | r/4' },
   })
 
   it('moves the music to a new tonic by the interval between them, letters kept', () => {
     const moved = setKey(draft, { tonic: note('E', -1), minor: false })
     expect(moved.key).toEqual({ tonic: note('E', -1), minor: false })
     expect(form(moved)).toEqual([[['E♭@0', 'B♭7/D@0']]])
-    expect(shape(moved.melody)).toEqual(['G4@0/96', 'F4@96/96'])
+    expect(shape(staffNotes(moved))).toEqual(['G4@0/96', 'F4@96/96'])
     expect(shape(moved.hands.lh)).toEqual(['E♭3@0/96'])
+  })
+
+  it('moves a section’s own key with the music (ADR 0089)', () => {
+    const changing = draftOf({
+      key: 'C',
+      sections: [
+        { kind: 'verse', lines: ['C'] },
+        { kind: 'chorus', key: 'Eb', lines: ['Eb'] },
+      ],
+    })
+    const moved = setKey(changing, { tonic: note('D'), minor: false })
+    expect(moved.sections.map((section) => section.heading.key)).toEqual([undefined, 'F'])
   })
 
   it('changes only the key for the other mode of the same tonic', () => {
     const minor = setKey(draft, { tonic: note('C'), minor: true })
     expect(minor.key.minor).toBe(true)
-    expect(minor.melody).toEqual(draft.melody)
+    expect(staffNotes(minor)).toEqual(staffNotes(draft))
     expect(form(minor)).toEqual(form(draft))
   })
 
   it('sets the tempo within 40 to 160', () => {
     expect(setTempo(draft, 200).tempo).toBe(160)
     expect(setTempo(draft, 72).tempo).toBe(72)
-  })
-
-  it('offers the meters of the same kind: a quarter keeps its length in 2/4, 3/4 and 4/4', () => {
-    expect(metersFor('4/4')).toEqual(['2/4', '3/4', '4/4'])
-    expect(metersFor('6/8')).toEqual(['6/8', '12/8'])
-  })
-
-  it('makes each full bar the new meter’s, its notes and chords past the new end taken', () => {
-    const three = setMeter(draft, '3/4')
-    expect(three.meter).toBe('3/4')
-    expect(three.sections[0]?.lines[0]?.map((bar) => bar.ticks)).toEqual([72, 72])
-    expect(shape(three.melody)).toEqual(['E4@0/72', 'D4@72/72'])
-    expect(form(three)).toEqual([[['C@0', 'G7/B@0']]])
-  })
-
-  it('lengthens each full bar to a longer meter, its last chord held on', () => {
-    const two = setMeter(setMeter(draft, '2/4'), '4/4')
-    expect(two.sections[0]?.lines[0]?.map((bar) => bar.ticks)).toEqual([96, 96])
-    expect(shape(two.melody)).toEqual(['E4@0/48', 'D4@96/48'])
-  })
-
-  it('keeps a pickup one, cut from its start, so the beats leading into the downbeat stay', () => {
-    const pickup = draftOf({
-      sections: [{ kind: 'verse', lines: ['G@3 C'] }],
-      melody: 'C4/1 D4/1 E4/1 | F4/4',
-    })
-    const two = setMeter(pickup, '2/4')
-    expect(two.sections[0]?.lines[0]?.[0]?.ticks).toBe(24)
-    expect(shape(two.melody)[0]).toBe('E4@0/24')
-    const three = setMeter(pickup, '3/4')
-    expect(three.sections[0]?.lines[0]?.[0]?.ticks).toBe(48)
-    expect(shape(three.melody).slice(0, 2)).toEqual(['D4@0/24', 'E4@24/24'])
-  })
-
-  it('keeps a pickup bar shorter than the meter’s as it is, and changes nothing across kinds', () => {
-    const pickup = draftOf({ sections: [{ kind: 'verse', lines: ['G@1 C'] }] })
-    const before = pickup.sections[0]?.lines[0]?.[0]?.ticks
-    expect(setMeter(pickup, '3/4').sections[0]?.lines[0]?.[0]?.ticks).toBe(before)
-    expect(setMeter(draft, '6/8')).toBe(draft)
   })
 })

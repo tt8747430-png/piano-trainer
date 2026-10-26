@@ -1,30 +1,40 @@
-import { useRef, type MouseEvent, type PointerEvent } from 'react'
+import { useRef, type MouseEvent, type PointerEvent, type Ref, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isHandLayer, type Layer } from '@/features/score-editor'
-import { chordSymbol, type Midi, type Tick } from '@/shared/lib/music'
+import { staffLayer, type Layer } from '@/features/score-editor'
+import { useBarName } from '@/shared/i18n'
+import { keySignature, printedChord, type Midi, type Tick } from '@/shared/lib/music'
 import { staffClefAt, type TimedMusic } from '@/shared/lib/notation'
 import {
   MARK,
   pickAt,
+  Playhead,
+  rowChords,
   ScoreMark,
-  StaffNames,
+  spaceOf,
   useSheetChoice,
   xAtTick,
-  type Head,
   type ScoreLayout,
   type SheetPoint,
 } from '@/shared/ui/score'
-import { LAYER_OF_STAFF, layerAt, staffOfLayer, type SheetLineBars } from '../model/line-music'
-import { chordRow, chosenBox } from '../model/chosen-box'
+import { layerAt, layerOfNote, staffOfLayer, type SheetLineBars } from '../model/line-music'
+import { chordRow, chosenBand } from '../model/chosen-band'
+import {
+  chordFieldBox,
+  chordRowTick,
+  fingeringFieldBox,
+  lyricAt,
+  lyricsFieldBox,
+  type FieldBox,
+  type SheetField,
+} from '../model/field-place'
 import { nearestPlace, roomAt } from '../model/nearest'
 import { noteAtStaffY, stepsDragged } from '../model/staff-pitch'
+import type { EditPrinted } from '../model/printed'
 import { EditorCaret } from './EditorCaret'
 import { LineLabels } from './LineLabels'
+import { PrintedSigns } from './PrintedSigns'
+import { StaffNames } from './StaffNames'
 
-/** How far a bar's Pattern stands in from where its notes begin. */
-const PATTERN_INSET = 6
-/** How far a bar's Pattern stands over its staff's top line. */
-const PATTERN_RISE = 4
 /** How far round the caret's onset a press takes hold of its notes to drag them. */
 const GRIP = { before: 14, after: 22, over: 16 } as const
 /**
@@ -37,10 +47,13 @@ function zoomOf(element: HTMLElement, box: DOMRect): number {
 }
 
 /**
- * Over a line's staff: its labels (with Pattern where a hand is not written, in that hand's layer),
- * the bars chosen, the caret, and each bar as a button that puts the caret where it is clicked; a
- * double click there writes the note on the line or space clicked (ADR 0064). The notes at the caret
- * are a grip: dragged up or down, they move by notes of the key.
+ * Over a line's staff: its labels, the bars chosen, the caret, the playhead while Play plays here (ADR
+ * 0096), and each bar as a button that puts the caret where it is clicked; a double click there
+ * writes the note on the line or space clicked (ADR 0064). The notes at the caret are a grip: dragged up or down, they move by notes of the key. The
+ * tempo mark, a section's name (ADR 0095), each clef, key and time signature and the staves' names are
+ * buttons too, each opening what changes it there (`edit`, ADR 0094). A tap on the chord row opens the
+ * chord-symbol field at the beat or the symbol tapped, one on a syllable the Lyrics field there
+ * (`onField`); the field open on this line has its place drawn (`fieldAnchor`, ADR 0096).
  */
 export function LineOverlay({
   layout,
@@ -48,7 +61,9 @@ export function LineOverlay({
   line,
   layer,
   caret,
-  chordNote,
+  chordNote = null,
+  playhead,
+  scroller,
   selection,
   onPlace,
   onReach,
@@ -58,14 +73,26 @@ export function LineOverlay({
   chordNames,
   row,
   labels,
-  onSignature,
+  headings,
+  edit,
   onWrite,
   onDrag,
+  field = null,
+  fieldAnchor,
+  onField,
 }: {
+  /** The field open at the caret on this line, its place drawn for it to stand at (ADR 0096). */
+  field?: SheetField | null | undefined
+  /** The element marking the open field's place, as it comes and goes. */
+  fieldAnchor?: Ref<HTMLDivElement> | undefined
+  /** A tap on what a field types where it is printed: its tick on the piece, and its row. */
+  onField?: ((field: SheetField, tick: Tick, layer: Layer) => void) | undefined
   /** The labels' row over the staff, in CSS px. */
   row: number
   /** The labels' size. */
   labels: number
+  /** Each section's name, by section: printed at its first bar (ADR 0095). */
+  headings: readonly string[]
   /** A note written where a staff was double-clicked: its tick, row and key. */
   onWrite?: ((tick: Tick, layer: Layer, key: Midi) => void) | undefined
   /** The notes at the caret dragged by steps of the key, the first step of a drag not `joins`. */
@@ -76,8 +103,12 @@ export function LineOverlay({
   layer: Layer
   /** From the line's start, when the caret is on this line. */
   caret: Tick | null
-  /** One note of the chord at the caret chosen alone (ADR 0088). */
-  chordNote: Midi | null
+  /** One note of the chord at the caret chosen alone (ADR 0088): the fingering field stands over it. */
+  chordNote?: Midi | null
+  /** Where Play is, on the piece's ticks, while it plays on this line (ADR 0096). */
+  playhead: { readonly tick: Tick; readonly clock: () => Tick | null } | null
+  /** The line's own sideways scroller (a line across), which keeps the playhead in sight. */
+  scroller?: RefObject<HTMLElement | null> | undefined
   /** The notes chosen, from the piece's start: their span. */
   selection: { readonly from: Tick; readonly to: Tick } | null
   /** A click on the sheet: the caret to a note (one of a chord's, `key`) or an empty place, Shift extending. */
@@ -91,42 +122,36 @@ export function LineOverlay({
   /** Where a click lands in a layer, on a note or a bar's start, never an empty step (ADR 0082). */
   tapsOf: (layer: Layer) => readonly Tick[]
   chordNames: boolean
-  onSignature: () => void
+  /** What edits a thing printed, opened from its button (ADR 0094). */
+  edit: EditPrinted
 }) {
   const { t } = useTranslation('editor')
-  const hand = isHandLayer(layer) ? layer : null
-  const [first] = layout.measures
-  const staff = hand ? layout.staves[hand === 'lh' ? 'bass' : 'treble'] : undefined
-  // The notes chosen on this line, hugged by the one selection's box on the staff of the row they
-  // are chosen in (the chord row, choosing chords), ADR 0088.
-  const chosen = chosenBox(layout, line.start, selection, {
+  const barName = useBarName()
+  // The chord symbols printed over the line, where a tap on one opens its field (ADR 0096).
+  const printed = chordNames ? rowChords(layout, music.chords, labels) : []
+  // The caret's staff: its notes a grip; the open field's place at the caret, over the chord row at
+  // its beat, under its note in a verse, over its note (or the chord's one note chosen) for fingers.
+  const caretStaff = staffOfLayer(layout.staves, layer)
+  const placeOf = (open: SheetField, at: Tick): FieldBox | null => {
+    if (open.kind === 'chord')
+      return layer === 'chords' && chordNames ? chordFieldBox(layout, printed, at, row) : null
+    if (!caretStaff) return null
+    return open.kind === 'lyrics'
+      ? lyricsFieldBox(layout, caretStaff.staff, at, open.verse)
+      : fingeringFieldBox(layout, caretStaff.staff, at, chordNote ?? undefined)
+  }
+  const fieldBox = field && caret !== null ? placeOf(field, caret) : null
+  // The notes chosen on this line as the one selection's band over the staff of the row they are
+  // chosen in (the chord row, choosing chords), ADR 0096: the notes themselves coloured.
+  const chosen = chosenBand(layout, line.start, selection, {
     row,
     staff: staffOfLayer(layout.staves, layer),
   })
-  // In a hand's layer, the bars it leaves to the pattern.
-  const patterned =
-    hand && staff ? layout.measures.map((_, index) => !line.bars[index]?.bar[hand]) : []
-  // Whether a note written in the caret's row starts at the caret: the pattern's, shown soft in a
-  // bar the hand leaves to it, are not written (ADR 0083).
-  const caretBar =
-    caret === null
-      ? -1
-      : line.bars.findIndex(
-          ({ start, bar }) => caret >= start - line.start && caret < start - line.start + bar.ticks,
-        )
+  // Whether a note written in the caret's row starts at the caret: its notes are a grip.
   const caretOnNote =
     caret !== null &&
     layer !== 'chords' &&
-    !patterned[caretBar] &&
-    music.notes.some((n) => n.hand === layer && n.startTick === caret)
-  // Whether anything starts at the caret in its row: else it marks an empty place, as a line.
-  const caretEmpty =
-    caret === null ||
-    (layer === 'chords'
-      ? !line.bars.some(({ start, bar }) =>
-          bar.chords.some((chord) => start - line.start + chord.at === caret),
-        )
-      : !caretOnNote)
+    music.notes.some((n) => layerOfNote(n) === layer && n.startTick === caret)
   /** A point on a bar's button in the line's layout px: a page canvas's zoom taken out. */
   const pointOf = (event: MouseEvent<HTMLButtonElement>, index: number): SheetPoint => {
     const measure = layout.measures[index]
@@ -147,22 +172,15 @@ export function LineOverlay({
     const tick = nearestPlace(places, x, (at) => xAtTick(layout, at - line.start))
     return { target, tick: tick ?? placed.start, y }
   }
-  // A head is chosen where its hand writes it: the pattern's, drawn soft, are empty staff (ADR 0083).
-  const written = (head: Head) => {
-    const own = LAYER_OF_STAFF[head.staff]
-    if (!isHandLayer(own)) return true
-    const index = layout.measures.findIndex(
-      (m) => head.tick >= m.startTick && head.tick < m.startTick + m.ticks,
-    )
-    return line.bars[index]?.bar[own] ?? true
-  }
   /**
    * What a click (or a held finger) at a point of bar `index` chooses (ADR 0088), as the Player's
    * does: the head under it (one note of a chord), the chord whose stem or column it is on, or the
-   * empty place it is in (a rest, the room after the last note, a bar the pattern plays, as a line);
-   * on empty staff between notes, nothing, what is chosen let go. A chord in the chord row.
+   * empty place it is in (a rest, the room after the last note, as a line); on empty staff between
+   * notes, nothing, what is chosen let go. A chord in the chord row, where a tap opens the
+   * chord-symbol field at the symbol printed there or the beat it is nearest; a tap on a syllable
+   * printed opens the Lyrics field there (ADR 0096).
    */
-  const chooseAt = (index: number, point: SheetPoint | null, extend: boolean) => {
+  const chooseAt = (index: number, point: SheetPoint | null, extend: boolean, held: boolean) => {
     const placed = line.bars[index]
     const measure = layout.measures[index]
     if (!placed || !measure) return
@@ -170,44 +188,54 @@ export function LineOverlay({
       onPlace(placed.start, layer, extend)
       return
     }
+    // A tap on a syllable printed: the Lyrics field there, on its verse.
+    const sung = onField && !extend && !held ? lyricAt(layout, point) : null
+    if (sung && onField) {
+      onField({ kind: 'lyrics', verse: sung.verse }, line.start + sung.tick, staffLayer(sung.staff))
+      return
+    }
     const target = layerAt(point.y, layout, chordNames)
     const end = placed.start + placed.bar.ticks
     const inBar = (tick: Tick) => tick >= placed.start && tick < end
     const xOf = (at: Tick) => xAtTick(layout, at - line.start)
+    if (target === 'chords' && onField && !extend && !held) {
+      const places = placesOf('chords')
+        .filter(inBar)
+        .map((tick) => tick - line.start)
+      const tick = chordRowTick(printed, places, point.x, (at) => xAtTick(layout, at))
+      onField({ kind: 'chord' }, tick === undefined ? placed.start : line.start + tick, 'chords')
+      return
+    }
     if (target === 'chords') {
       const tick = nearestPlace(tapsOf('chords').filter(inBar), point.x, xOf)
       onPlace(tick ?? placed.start, 'chords', extend)
       return
     }
-    const picked = pickAt(layout, point.x, point.y, written)
+    const picked = pickAt(layout, point.x, point.y)
     if (picked) {
       const key = picked.index === undefined ? undefined : picked.midi
-      onPlace(line.start + picked.tick, LAYER_OF_STAFF[picked.staff], extend, key)
+      onPlace(line.start + picked.tick, staffLayer(picked.staff), extend, key)
       return
     }
-    const hand = isHandLayer(target) ? target : null
-    const leftToPattern = hand !== null && !placed.bar[hand]
-    const notes = music.notes.filter((n) => n.hand === target)
+    const notes = music.notes.filter((n) => layerOfNote(n) === target)
     const places = tapsOf(target)
       .filter(inBar)
-      .map((tick) => ({
-        tick,
-        empty: leftToPattern || !notes.some((n) => n.startTick === tick - line.start),
-      }))
+      .map((tick) => ({ tick, empty: !notes.some((n) => n.startTick === tick - line.start) }))
     const room = roomAt(places, point.x, xOf, {
       start: measure.x,
       end: measure.x + measure.width,
-      lead: MARK.lead,
+      lead: MARK.lead * spaceOf(layout),
     })
     if (room !== undefined) onPlace(room, target, extend)
     else if (!extend) onDeselect()
   }
   const choice = useSheetChoice({
-    at: (start, point, extend) =>
+    at: (start, point, extend, held) =>
       chooseAt(
         line.bars.findIndex((placed) => placed.start === start),
         point,
         extend,
+        held,
       ),
     reach: onReach,
   })
@@ -217,11 +245,11 @@ export function LineOverlay({
     const lines = staffOfLayer(layout.staves, point.target)
     if (!lines) return
     const clef = staffClefAt(music, index, lines.staff)
-    const { midi } = noteAtStaffY(clef, point.y, lines, music.key)
+    // The bar's own key, where its section changes key (ADR 0089): its signature's sharps and flats.
+    const { midi } = noteAtStaffY(clef, point.y, lines, music.bars[index]?.key ?? music.key)
     onWrite(point.tick, point.target, midi)
   }
   // The caret's notes as a grip: a drag up or down moves them a step of the key at a time.
-  const caretStaff = staffOfLayer(layout.staves, layer)
   const drag = useRef<{ y: number; applied: number } | null>(null)
   const grip = {
     onPointerDown: (event: PointerEvent<HTMLDivElement>) => {
@@ -247,83 +275,48 @@ export function LineOverlay({
   return (
     <>
       {chosen ? (
-        // The bars chosen as the one selection's box on this line (ADR 0082), inset from the
-        // barlines so the next line's or section's bars stay clear of it.
-        <ScoreMark slot="bars-chosen" kind="range" box={chosen} />
+        // The notes chosen as the one selection's band on this line (ADR 0096).
+        <ScoreMark slot="notes-chosen" kind="band" box={chosen} />
       ) : null}
       {/* The caret first, so the labels and the notes stand over it; none while notes are chosen,
           the range their mark (ADR 0088). */}
       {caret === null || selection ? null : (
-        <EditorCaret
-          layout={layout}
-          layer={layer}
-          tick={caret}
-          chordNote={chordNote}
-          chords={chordRow(row)}
-          empty={caretEmpty}
-        />
+        <EditorCaret layout={layout} layer={layer} tick={caret} chords={chordRow(layout, row)} />
       )}
+      {playhead ? (
+        // On the line's own ticks, from its start.
+        <Playhead
+          layout={layout}
+          tick={playhead.tick - line.start}
+          clock={() => {
+            const at = playhead.clock()
+            return at === null ? null : at - line.start
+          }}
+          scroller={scroller}
+        />
+      ) : null}
       <LineLabels
         layout={layout}
         music={music}
-        firstBar={(line.bars[0]?.index ?? 0) + 1}
+        labels={line.labels}
+        headings={headings}
         chordNames={chordNames}
         row={row}
         size={labels}
+        edit={edit}
       />
-      {staff
-        ? patterned.map((left, index) => {
-            const measure = layout.measures[index]
-            // A bar the hand leaves to the pattern says so over its staff, whose notes, the
-            // pattern's, are drawn soft (ADR 0083).
-            return left && measure ? (
-              <span
-                key={`pattern-${index}`}
-                aria-hidden
-                className="pointer-events-none absolute z-10 text-xs leading-none text-muted-foreground italic"
-                style={{
-                  left: Math.max(measure.notes, measure.x) + PATTERN_INSET,
-                  top: staff.top - PATTERN_RISE,
-                  transform: 'translateY(-100%)',
-                }}
-              >
-                {t('sheet.pattern')}
-              </span>
-            ) : null
-          })
-        : null}
-      <StaffNames layout={layout} />
-      {first && first.notes > first.x ? (
-        // The clef, key and time signature at the line's head: a click opens what changes them.
-        <button
-          type="button"
-          tabIndex={-1}
-          aria-label={t('sheet.signature')}
-          title={t('sheet.signature')}
-          onClick={onSignature}
-          className="absolute bottom-0 z-30 cursor-pointer rounded-lg outline-none transition-colors duration-200 ease-out hover:bg-foreground/5"
-          style={{ left: first.x, width: first.notes - first.x, top: 0 }}
+      {fieldBox ? (
+        // Where the open field stands (ADR 0096): its page's popover is anchored to it.
+        <div
+          ref={fieldAnchor}
+          aria-hidden
+          data-slot="field-anchor"
+          className="pointer-events-none absolute"
+          style={fieldBox}
         />
       ) : null}
-      {layout.measures.map((measure, index) => {
-        const placed = line.bars[index]
-        const chosenBy = placed ? choice(placed.start, { x: measure.x, y: -row }) : {}
-        const chords = (placed?.bar.chords ?? []).map((chord) => chordSymbol(chord.chord))
-        return (
-          <button
-            key={index}
-            type="button"
-            tabIndex={-1}
-            aria-label={t('sheet.bar', { n: (placed?.index ?? 0) + 1, chords: chords.join(' ') })}
-            onDoubleClick={write(index)}
-            {...chosenBy}
-            // A pointer's target only (the arrows move the caret): no focus ring and no hover wash
-            // round the bar, which a touch screen leaves standing over empty staff (ADR 0082).
-            className="absolute bottom-0 z-20 cursor-text outline-none"
-            style={{ left: measure.x, width: measure.width, top: -row }}
-          />
-        )
-      })}
+      {/* The caret's notes' grip, under what is printed before them (a time signature, a clef):
+          a tap on a sign opens it, however close the notes stand on a page zoomed out. */}
       {caret !== null && caretStaff && onDrag && caretOnNote ? (
         <div
           aria-hidden
@@ -340,6 +333,33 @@ export function LineOverlay({
           {...grip}
         />
       ) : null}
+      <PrintedSigns
+        layout={layout}
+        bars={line.bars.map((placed) => placed.index)}
+        keyless={keySignature(music.bars[0]?.key ?? music.key) === 0}
+        edit={edit}
+      />
+      <StaffNames layout={layout} edit={edit} />
+      {layout.measures.map((measure, index) => {
+        const placed = line.bars[index]
+        const chosenBy = placed ? choice(placed.start, { x: measure.x, y: -row }) : {}
+        // Named by its chords as the labels' row prints them (`C♯m7`).
+        const chords = (placed?.bar.chords ?? []).map((chord) => printedChord(chord.chord))
+        return (
+          <button
+            key={index}
+            type="button"
+            tabIndex={-1}
+            aria-label={barName((placed?.index ?? 0) + 1, chords.join(' '))}
+            onDoubleClick={write(index)}
+            {...chosenBy}
+            // A pointer's target only (the arrows move the caret): no focus ring and no hover wash
+            // round the bar, which a touch screen leaves standing over empty staff (ADR 0082).
+            className="absolute bottom-0 z-20 cursor-text outline-none"
+            style={{ left: measure.x, width: measure.width, top: -row }}
+          />
+        )
+      })}
     </>
   )
 }

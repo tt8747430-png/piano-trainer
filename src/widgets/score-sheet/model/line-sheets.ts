@@ -1,14 +1,7 @@
 import type { Draft } from '@/features/score-editor'
 import type { TimeSignature } from '@/shared/lib/music'
 import { notate, type NextLine, type Score, type TimedMusic } from '@/shared/lib/notation'
-import {
-  lineMusic,
-  linesOf,
-  oneLine,
-  timeBeforeLine,
-  type PlayedHands,
-  type SheetLineBars,
-} from './line-music'
+import { lineMusic, linesOf, oneLine, timeBeforeLine, type SheetLineBars } from './line-music'
 
 /** A line as the sheet shows it: its bars, its music and that music engraved, the time before it. */
 export interface LineSheet {
@@ -52,20 +45,16 @@ export type LineCut =
 
 /**
  * The draft's lines as the sheet shows them (each chart line cut to fit its room; or all its bars
- * as one line), with what the pattern plays where a hand leaves a bar to it (`played`, ADR 0083); a
- * line that did not change always the same object (so its row is not drawn again) and the same music
- * always the same score (never engraved again).
+ * as one line), with or without their words (`lyrics`); a line that did not change always the same
+ * object (so its row is not drawn again) and the same music always the same score (never engraved
+ * again).
  */
-export function createLineSheets(): (
-  draft: Draft,
-  cut?: LineCut,
-  played?: PlayedHands,
-) => LineSheet[] {
+export function createLineSheets(): (draft: Draft, cut?: LineCut, lyrics?: boolean) => LineSheet[] {
   const scores = lastUsed<Score>()
   const sheets = lastUsed<LineSheet>()
-  return (draft, cut, played) => {
+  return (draft, cut, lyrics = true) => {
     const written = (cut?.across ? oneLine(draft) : linesOf(draft, cut)).map((line) => {
-      const music = lineMusic(draft, line, played)
+      const music = lineMusic(draft, line, lyrics)
       const text = JSON.stringify(music)
       return { line, music, text, score: scores(text, () => notate(untimed(music))) }
     })

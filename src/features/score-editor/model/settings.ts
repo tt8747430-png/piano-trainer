@@ -1,18 +1,7 @@
-import { keyText, PIECE_TEMPO } from '@/entities/piece'
+import { keyText, PIECE_TEMPO, type KeyText } from '@/entities/piece'
 import { transposeChord, transposeNotes } from '@/shared/lib/arrangement'
-import {
-  beatsPerBar,
-  isCompound,
-  METERS,
-  midi,
-  PIANO,
-  TICKS_PER_BEAT,
-  type Key,
-  type Meter,
-} from '@/shared/lib/music'
-import { setBarTicks } from './bars'
-import { barsOf } from './timeline'
-import type { Draft, DraftNote } from './draft'
+import { midi, parseKey, PIANO, transposeNote, writtenKey, type Key } from '@/shared/lib/music'
+import { withEveryStaff, type Draft, type DraftNote } from './draft'
 
 /** Notes moved to a new tonic, each kept on the piano by octaves. */
 function moved(notes: readonly DraftNote[], from: Key, to: Key): DraftNote[] {
@@ -29,60 +18,40 @@ function moved(notes: readonly DraftNote[], from: Key, to: Key): DraftNote[] {
 export function setKey(draft: Draft, key: Key): Draft {
   const from = draft.key
   if (keyText(from) === keyText(key)) return draft
-  return {
-    ...draft,
-    key,
-    sections: draft.sections.map((section) => ({
-      ...section,
-      lines: section.lines.map((line) =>
-        line.map((bar) => ({
-          ...bar,
-          chords: bar.chords.map((placed) => ({
-            ...placed,
-            chord: transposeChord(placed.chord, from.tonic, key.tonic),
-          })),
-        })),
-      ),
-    })),
-    melody: moved(draft.melody, from, key),
-    voices: draft.voices.map((voice) => moved(voice, from, key)),
-    hands: { rh: moved(draft.hands.rh, from, key), lh: moved(draft.hands.lh, from, key) },
+  // A section's own key moves with its music (ADR 0089).
+  const sectionKey = (written: KeyText): KeyText => {
+    const own = parseKey(written)
+    return own
+      ? keyText(writtenKey({ ...own, tonic: transposeNote(own.tonic, from.tonic, key.tonic) }))
+      : written
   }
+  return withEveryStaff(
+    {
+      ...draft,
+      key,
+      sections: draft.sections.map((section) => ({
+        ...section,
+        heading:
+          section.heading.key === undefined
+            ? section.heading
+            : { ...section.heading, key: sectionKey(section.heading.key) },
+        lines: section.lines.map((line) =>
+          line.map((bar) => ({
+            ...bar,
+            chords: bar.chords.map((placed) => ({
+              ...placed,
+              chord: transposeChord(placed.chord, from.tonic, key.tonic),
+            })),
+          })),
+        ),
+      })),
+    },
+    (notes) => moved(notes, from, key),
+  )
 }
 
 /** The tempo, kept within the tempos a piece is written at. */
 export function setTempo(draft: Draft, tempo: number): Draft {
   const kept = Math.min(PIECE_TEMPO.max, Math.max(PIECE_TEMPO.min, Math.round(tempo)))
   return kept === draft.tempo ? draft : { ...draft, tempo: kept }
-}
-
-/**
- * The meters a piece may change to: those of its own kind, where a written value keeps its length (a
- * quarter in 2/4, 3/4 and 4/4; an eighth in 6/8 and 12/8). Across kinds every note would be another.
- */
-export const metersFor = (meter: Meter): Meter[] =>
-  METERS.filter((each) => isCompound(each) === isCompound(meter))
-
-/** A bar's length in a meter: its beats in ticks. */
-const fullBar = (meter: Meter) => beatsPerBar(meter) * TICKS_PER_BEAT
-
-/**
- * The music in another meter of its kind: each full bar made the new meter's (shorter, its notes and
- * chords past the new end taken; longer, its last chord held on), a shorter bar kept as it is unless it
- * outruns the new bar. A pickup stays one: a beat short of the new bar at most, cut from its start.
- */
-export function setMeter(draft: Draft, meter: Meter): Draft {
-  if (meter === draft.meter || !metersFor(draft.meter).includes(meter)) return draft
-  const from = fullBar(draft.meter)
-  const to = fullBar(meter)
-  // From the last bar back, so each bar's start is still where it was when it is resized.
-  const resized = barsOf(draft).reduceRight((music, { bar }, index) => {
-    if (index === 0 && bar.ticks < from) {
-      const pickup = Math.min(bar.ticks, to - TICKS_PER_BEAT)
-      return setBarTicks(music, 0, pickup)
-    }
-    const ticks = bar.ticks === from || bar.ticks > to ? to : bar.ticks
-    return setBarTicks(music, index, ticks)
-  }, draft)
-  return { ...resized, meter }
 }

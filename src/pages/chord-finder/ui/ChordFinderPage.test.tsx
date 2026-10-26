@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { createMemoryStorage } from '@/shared/lib'
-import { midi } from '@/shared/lib/music'
+import { keyParam, midi, note } from '@/shared/lib/music'
 
 const keyboard = () => screen.getByRole('group', { name: 'Keyboard' })
 const key = (name: string) => within(keyboard()).getByRole('button', { name })
@@ -258,6 +258,29 @@ describe('Practice → Chord finder', () => {
     }
     await waitFor(() => expect(playedNames()).toEqual(['C', 'F']))
     expect(name()).toHaveTextContent(/^F$/)
+  })
+
+  it('prints the chord, its readings, the staff’s names and the key with ♯ and ♭, as the sheets print them', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/chord-finder?keys=61-64-68-71&key=C%23m')
+    expect(await screen.findByRole('heading', { level: 2, name: 'C♯m7' })).toBeInTheDocument()
+    await waitFor(() =>
+      expect(
+        within(screen.getByRole('region', { name: 'On the staff' })).getByRole('listitem'),
+      ).toHaveTextContent(/^C♯m7/),
+    )
+    expect(screen.getByRole('button', { name: 'Chord finder settings' })).toHaveTextContent('C♯m')
+    await user.click(screen.getByRole('button', { name: 'Read as E6/C♯' }))
+    expect(screen.getByRole('heading', { level: 2, name: 'E6/C♯' })).toBeInTheDocument()
+    // What the URL holds keeps its ASCII.
+    expect(router.state.location.search).toMatchObject({ keys: '61-64-68-71', key: 'C#m' })
+    const key = keyParam({ tonic: note('C', 1), minor: true })
+    const tap = (keys: string) =>
+      act(() => router.navigate({ to: '/practice/chord-finder', search: { keys, key } }))
+    await tap('54-61')
+    expect(await screen.findByRole('heading', { level: 2, name: 'F♯5' })).toBeInTheDocument()
+    await tap('54')
+    expect(await screen.findByRole('heading', { level: 2, name: 'F♯' })).toBeInTheDocument()
   })
 
   it('names a 5th as its power chord', async () => {

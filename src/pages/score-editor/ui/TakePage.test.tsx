@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
-import { PIECES_STORAGE_KEY } from '@/entities/piece'
+import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { TAKES_STORAGE_KEY } from '@/entities/take'
 import { createMemoryStorage } from '@/shared/lib'
 
@@ -40,7 +40,7 @@ function withTake(take: object = TAKE) {
   const storage = createMemoryStorage()
   storage.setItem(
     PIECES_STORAGE_KEY,
-    JSON.stringify({ state: { songs: [SONG], nextSong: 2 }, version: 1 }),
+    JSON.stringify({ state: { songs: [SONG], nextSong: 2 }, version: PIECES_VERSION }),
   )
   storage.setItem(
     TAKES_STORAGE_KEY,
@@ -139,13 +139,13 @@ describe('A take’s page', () => {
     const asking = await screen.findByRole('alertdialog', { name: 'Delete this take?' })
     await user.click(within(asking).getByRole('button', { name: 'Delete' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
-    expect(router.state.location.search).toEqual({ record: true })
+    expect(router.state.location.search).toEqual({ takes: true })
     expect(takesStore.getState().takes).toEqual([])
   })
 
   it('opens from its row in the takes', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/edit/my-1?record=true', { storage: withTake() })
+    const { router } = await renderApp('/edit/my-1?takes=true', { storage: withTake() })
     const sheet = await screen.findByRole('dialog', { name: 'Takes' })
     await user.click(within(sheet).getByRole('link', { name: 'First go' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1/takes/take-1'))

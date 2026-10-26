@@ -6,16 +6,23 @@ import { barAt, barsOf, totalTicks } from './timeline'
 
 const sortedUnique = (ticks: readonly Tick[]) => [...new Set(ticks)].sort((a, b) => a - b)
 
-/** Where the caret stands in the chords: every beat of every bar, and every chord's start. */
+/**
+ * Where the caret stands in the chords: every beat of a bar, and every chord's start; a bar of no
+ * chord's start alone, where its chord goes (ADR 0094).
+ */
 function chordPlaces(draft: Draft): Tick[] {
   return sortedUnique(
-    barsOf(draft).flatMap(({ start, bar }) => [
-      ...Array.from(
-        { length: Math.ceil(bar.ticks / TICKS_PER_BEAT) },
-        (_, k) => start + k * TICKS_PER_BEAT,
-      ),
-      ...bar.chords.map((chord) => start + chord.at),
-    ]),
+    barsOf(draft).flatMap(({ start, bar }) =>
+      bar.chords.length === 0
+        ? [start]
+        : [
+            ...Array.from(
+              { length: Math.ceil(bar.ticks / TICKS_PER_BEAT) },
+              (_, k) => start + k * TICKS_PER_BEAT,
+            ),
+            ...bar.chords.map((chord) => start + chord.at),
+          ],
+    ),
   )
 }
 
@@ -47,14 +54,14 @@ function notePlaces(draft: Draft, layer: NoteLayer, step: Tick): Tick[] {
   ]).filter((tick) => tick <= totalTicks(draft))
 }
 
-/** Every place the caret may stand in a layer, the value's step apart in the melody or a hand. */
+/** Every place the caret may stand in a layer, the value's step apart on a single staff or a hand. */
 export const caretPlaces = (draft: Draft, layer: Layer, step: Tick): Tick[] =>
   layer === 'chords' ? chordPlaces(draft) : notePlaces(draft, layer, step)
 
 /**
  * Where a click on the sheet lands in a layer (ADR 0082): on a note's start (a chord's in the chords),
  * or on the room after a bar's last note where it ends before the barline (a rest's start too); in a
- * bar whose row writes nothing (one the pattern plays), on its start. Never on an empty step between.
+ * bar whose row writes nothing, on its start. Never on an empty step between.
  */
 export function tapPlaces(draft: Draft, layer: Layer): Tick[] {
   const notes = layer === 'chords' ? [] : notesOf(draft, layer)
@@ -78,8 +85,8 @@ export function tapPlaces(draft: Draft, layer: Layer): Tick[] {
 
 /**
  * What stands at a place in a layer, as a span of time (ADR 0088): the notes starting there, to the
- * longest's end; a chord, to the next chord or beat; an empty place (a rest, a bar the pattern plays,
- * the room after the last note), to the next note or the barline.
+ * longest's end; a chord, to the next chord or beat; an empty place (a rest, the room after the last
+ * note), to the next note or the barline.
  */
 export function itemAt(draft: Draft, layer: Layer, tick: Tick): TickSpan {
   const bar = barAt(draft, tick)
@@ -87,10 +94,13 @@ export function itemAt(draft: Draft, layer: Layer, tick: Tick): TickSpan {
   if (tick >= totalTicks(draft)) return { from: tick, to: tick }
   if (layer === 'chords') {
     const at = tick - bar.start
-    const next = bar.bar.chords.some((each) => each.at === at)
+    // On a chord, to the next chord of its bar (its place in the bar, put on the timeline); on an
+    // empty beat, to the next place the caret stands on.
+    const onChord = bar.bar.chords.some((each) => each.at === at)
+    const next = onChord
       ? bar.bar.chords.find((each) => each.at > at)?.at
       : chordPlaces(draft).find((place) => place > tick)
-    const to = next === undefined ? end : next < tick ? bar.start + next : next
+    const to = next === undefined ? end : onChord ? bar.start + next : next
     return { from: tick, to: Math.min(to, end) }
   }
   const notes = notesOf(draft, layer)

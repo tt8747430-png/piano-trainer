@@ -174,10 +174,10 @@
   /* The Player's hands; never in the explorers. */
   --hand-rh: var(--p-brick);
   --hand-lh: var(--p-lilac);
-  --hand-melody: var(--p-grass);
+  --hand-staff: var(--p-grass);
   --hand-rh-wash: color-mix(in oklab, var(--p-brick) var(--mark-wash), var(--key-white));
   --hand-lh-wash: color-mix(in oklab, var(--p-lilac) var(--mark-wash), var(--key-white));
-  --hand-melody-wash: color-mix(in oklab, var(--p-grass) var(--mark-wash), var(--key-white));
+  --hand-staff-wash: color-mix(in oklab, var(--p-grass) var(--mark-wash), var(--key-white));
 
   /*
    * The keys: paper keys parted by a soft line, a warm black, hung from a light wooden rail. By

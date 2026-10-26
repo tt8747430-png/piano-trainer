@@ -4,17 +4,18 @@ export const settings: LocaleResources['settings'] = {
   title: 'Настройки',
   language: { label: 'Язык', en: 'English', ru: 'Русский' },
   theme: { label: 'Тема', system: 'Как в системе', light: 'Светлая', dark: 'Тёмная' },
-  layout: {
-    label: 'Вид',
+  appearance: {
+    label: 'Внешний вид',
     titles: { label: 'Заголовки страниц', large: 'Крупные', small: 'Мелкие' },
   },
   keyboard: 'Клавиатура',
   midi: 'MIDI-клавиатура',
+  recording: 'Запись',
   floating: {
-    label: 'Плавающие кнопки',
-    place: 'Где они стоят',
+    place: 'Плавающие кнопки',
+    placeInfo: 'Где у нижнего края экрана стоят кнопки, плавающие над ним',
     places: { left: 'Слева', center: 'Посередине', right: 'Справа' },
-    labels: 'Подписывать их',
+    labels: 'Подписывать плавающие кнопки',
     labelsNote: 'Иначе у каждой только значок; название видно при наведении',
   },
   progress: {

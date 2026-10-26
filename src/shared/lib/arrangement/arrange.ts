@@ -1,7 +1,5 @@
 import {
   barMarksOf,
-  DEFAULT_INSTRUMENT,
-  type Instrument,
   clefsInForce,
   HOME_CLEF,
   withoutBarMarks,
@@ -24,6 +22,7 @@ import {
   type Hand,
   type Inversion,
   type Key,
+  type Meter,
   type Midi,
   type SpelledNote,
   type Tick,
@@ -46,15 +45,15 @@ import type {
   Figure,
   FigureEvent,
   HandNote,
-  Melody,
-  MelodyFigure,
-  MelodyNote,
-  MelodyPattern,
+  TuneFigure,
+  TunePattern,
   Pattern,
   Performance,
   PerformanceBar,
   PerformanceNote,
   PerformedChord,
+  StaffMusic,
+  StaffNote,
   WrittenHands,
 } from './types'
 
@@ -71,14 +70,18 @@ export interface ArrangeOptions {
   readonly rh?: Figure
   /** Replaces every pattern's left hand. */
   readonly lh?: EventFigure
-  /** The tune, in the chart's key. */
-  readonly melody?: Melody
-  /** The more voices sung with the tune (ADR 0066), in the chart's key. */
-  readonly voices?: readonly Melody[]
-  /** What the tune and each more voice are played on (ADR 0070): a tune on another instrument than the voice is sung too. */
-  readonly instruments?: readonly Instrument[]
-  /** Also play the tune an octave up (hand 'melody'). */
-  readonly doubleMelody?: boolean
+  /**
+   * The single staves over the grand staff, top down, in the chart's key (ADR 0097): each staff's
+   * notes carried as written, heard as the piano's are. The top one is the tune a pattern's right
+   * hand may play.
+   */
+  readonly staves?: readonly StaffMusic[]
+  /**
+   * Whether the tune, the top staff, is heard (the Player's play-along): left out, its notes are
+   * written and silent. Where the right hand plays the tune it is not heard twice. The other staves
+   * are always heard.
+   */
+  readonly hearTune?: boolean
   /**
    * The right hand's chord in this inversion every time; with `nearest`, the first only, each after
    * it nearest the last. Left out, each chord voice-led from the last, the first near middle C.
@@ -98,7 +101,7 @@ const VELOCITY = {
   accent: 0.17,
   tune: 0.19,
   harmony: 0.11,
-  doubled: 0.15,
+  staff: 0.17,
 } as const
 
 /** A chart chord on the timeline, with the bar it sits in. */
@@ -189,8 +192,9 @@ function layOut(chart: Chart, unfold = false): Layout {
   const hands: (WrittenHands | undefined)[] = []
   const lineEnds = new Set<number>()
   const written = chart.sections.flatMap((section) => section.lines.flat())
-  // A pickup is the end of a bar: its chords sit where they fall in the meter's bar.
-  const pickup = beatsToTicks(beatsBefore(written, 0, chart.meter))
+  // A pickup is the end of a bar: its chords sit where they fall in its meter's bar, the first
+  // section's (ADR 0095).
+  const pickup = beatsToTicks(beatsBefore(written, 0, chart.sections[0]?.meter ?? chart.meter))
   let tick = 0
   // Where the order goes back, each hand's clef as it stands at the bar gone back to.
   const clefs = clefsInForce(written)
@@ -215,13 +219,17 @@ function layOut(chart: Chart, unfold = false): Layout {
       tick += durationTicks
       return chords.length - 1
     })
+    // Its chords fill it end to end; a bar of no chord lasts its beats all the same (ADR 0094).
+    tick = barStart + beatsToTicks(bar.beats)
     hands.push(bar.hands)
+    const meter = chart.sections[sectionIndex]?.meter
     bars.push({
       startTick: barStart,
       beats: bar.beats,
       section: sectionIndex,
       line: lineIndex,
       chords: chordIndexes,
+      ...(meter ? { meter } : {}),
       ...barMarksOf(bar),
       ...(jumped && index > 0
         ? { clefs: clefs[played.written] ?? HOME_CLEF }
@@ -244,6 +252,18 @@ function sounding(starts: readonly Tick[], tick: Tick): number {
     else high = middle - 1
   }
   return low
+}
+
+/**
+ * The chord sounding at `tick`, whose time holds it: its index among the chords placed in order; none
+ * in a bar of no chord (ADR 0094), where the chord before has ended.
+ */
+function chordAt(chords: readonly PlacedChord[], starts: readonly Tick[], tick: Tick) {
+  const index = sounding(starts, tick)
+  const placed = chords[index]
+  return placed && placed.startTick <= tick && tick < placed.startTick + placed.durationTicks
+    ? index
+    : undefined
 }
 
 /**
@@ -283,26 +303,26 @@ const VOICED_TOKENS = new Set(['chord', 'upper-voices', 'voice'])
 const playsVoiced = (figure: EventFigure): boolean =>
   figure.events.some((event) => event.tones.some((tone) => VOICED_TOKENS.has(tone.token.kind)))
 
-const isMelodyPattern = (pattern: Pattern): pattern is MelodyPattern => pattern.rh.kind === 'melody'
+const isTunePattern = (pattern: Pattern): pattern is TunePattern => pattern.rh.kind === 'tune'
 
 function patternFor(
   method: string | undefined,
   section: number,
   options: ArrangeOptions,
-  hasMelody: boolean,
+  hasTune: boolean,
 ) {
   const planned = method === undefined ? undefined : options.methods?.get(method)
   const pattern = planned ?? options.sections?.[section] ?? options.pattern
-  return isMelodyPattern(pattern) && !hasMelody ? pattern.withoutMelody : pattern
+  return isTunePattern(pattern) && !hasTune ? pattern.withoutTune : pattern
 }
 
 /** A right hand that plays the tune plays its fallback when there is no tune. */
-const playable = (figure: Figure, hasMelody: boolean): Figure =>
-  figure.kind === 'melody' && !hasMelody ? figure.withoutMelody : figure
+const playable = (figure: Figure, hasTune: boolean): Figure =>
+  figure.kind === 'tune' && !hasTune ? figure.withoutTune : figure
 
 /** What the right hand plays in a bar: `ends` plays the tune in a line's first and last bars only. */
 const inBar = (figure: Figure, atLineEnd: boolean): Figure =>
-  figure.kind === 'melody' && figure.use === 'ends' && !atLineEnd ? figure.between : figure
+  figure.kind === 'tune' && figure.use === 'ends' && !atLineEnd ? figure.between : figure
 
 /** Where a stretch of a chord sits in pattern time and on the timeline. */
 interface Window {
@@ -319,6 +339,11 @@ interface BarMeter {
   readonly beats: number
   readonly compound: boolean
 }
+
+const barMeterOf = (meter: Meter): BarMeter => ({
+  beats: beatsPerBar(meter),
+  compound: isCompound(meter),
+})
 
 /**
  * The events a figure plays in a meter: in compound time its 6/8 form in a two-beat bar, else its
@@ -375,18 +400,18 @@ function playFigure(
   })
 }
 
-/** The tune's notes that start in [start, end), from a melody in time order. */
-function tuneBetween(melody: readonly MelodyNote[], start: Tick, end: Tick): MelodyNote[] {
+/** The tune's notes that start in [start, end), from a tune in time order. */
+function tuneBetween(tune: readonly StaffNote[], start: Tick, end: Tick): StaffNote[] {
   let low = 0
-  let high = melody.length
+  let high = tune.length
   while (low < high) {
     const middle = Math.floor((low + high) / 2)
-    if ((melody[middle]?.startTick ?? end) < start) low = middle + 1
+    if ((tune[middle]?.startTick ?? end) < start) low = middle + 1
     else high = middle
   }
-  const found: MelodyNote[] = []
-  for (let i = low; i < melody.length; i++) {
-    const n = melody[i]
+  const found: StaffNote[] = []
+  for (let i = low; i < tune.length; i++) {
+    const n = tune[i]
     if (!n || n.startTick >= end) break
     found.push(n)
   }
@@ -404,26 +429,28 @@ function harmonyUnder(tune: Midi, context: ChordContext): Midi[] {
     .map(midi)
 }
 
+/** The tune in the right hand, over a window of its chord: doubled as written, or harmonised under. */
 function playTune(
-  figure: MelodyFigure,
-  melody: readonly MelodyNote[],
+  figure: TuneFigure,
+  tune: readonly StaffNote[],
   context: ChordContext,
   window: Window,
 ): PerformanceNote[] {
   const end = window.at + window.to - window.from
-  return tuneBetween(melody, window.at, end).flatMap((n) => {
+  return tuneBetween(tune, window.at, end).flatMap((n) => {
     const at = { startTick: n.startTick, durationTicks: n.durationTicks, chord: window.chord }
-    const tune: PerformanceNote = {
+    const played: PerformanceNote = {
       midi: n.midi,
       spelled: n.spelled,
       hand: 'rh',
       velocity: VELOCITY.tune,
       ...at,
       ...(n.marks ? { marks: n.marks } : {}),
+      ...(n.lyrics ? { lyrics: n.lyrics } : {}),
     }
-    if (figure.use !== 'harmony' || n.durationTicks < TICKS_PER_BEAT) return [tune]
+    if (figure.use !== 'harmony' || n.durationTicks < TICKS_PER_BEAT) return [played]
     return [
-      tune,
+      played,
       ...spellInChord(context, harmonyUnder(n.midi, context)).map(
         ({ midi: key, spelled }): PerformanceNote => ({
           midi: key,
@@ -439,16 +466,19 @@ function playTune(
 
 const HANDS: readonly Hand[] = ['rh', 'lh']
 
-/** A hand's written notes on the timeline, in the chosen key, each under the chord sounding at its onset. */
 /** A written note moved past either end of the piano, an octave back onto it. */
 const onThePiano = (key: Midi): Midi =>
   key < PIANO.from ? midi(key + 12) : key > PIANO.to ? midi(key - 12) : key
 
+/**
+ * A hand's written notes on the timeline, in the chosen key, each under the chord sounding at its
+ * onset (`chordOf`): none in a bar of no chord.
+ */
 function playWritten(
   written: readonly HandNote[],
   hand: Hand,
   barStart: Tick,
-  chordStarts: readonly Tick[],
+  chordOf: (tick: Tick) => number | undefined,
   from: SpelledNote,
   to: SpelledNote,
 ): PerformanceNote[] {
@@ -461,16 +491,18 @@ function playWritten(
           grace: transposeNotes(grace, from, to).map((g) => ({ ...g, midi: onThePiano(g.midi) })),
         }
       : n.marks
+    const chord = chordOf(startTick)
     return {
       ...(marks ? { marks } : {}),
       midi: onThePiano(n.midi),
       spelled: n.spelled,
       hand,
       ...(n.finger === undefined ? {} : { finger: n.finger }),
+      ...(n.lyrics ? { lyrics: n.lyrics } : {}),
       startTick,
       durationTicks: n.durationTicks,
       velocity: hand === 'lh' ? VELOCITY.left : VELOCITY.right,
-      chord: sounding(chordStarts, startTick),
+      ...(chord === undefined ? {} : { chord }),
     }
   })
 }
@@ -537,17 +569,18 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       : null,
   )
   const layout = layOut(chart, options.unfold)
-  // A tune is written on the written bars: where the repeats are played, it goes round with them.
-  const played = (notes: Melody): MelodyNote[] =>
-    options.unfold ? unrolled(notes, chart, layout.bars) : [...notes]
-  const melody = options.melody?.length
-    ? played(transposeNotes(options.melody, chart.key.tonic, options.tonic)).sort(
-        (a, b) => a.startTick - b.startTick,
-      )
-    : null
-  const barBeats = beatsPerBar(chart.meter)
-  const meterTicks = barBeats * TICKS_PER_BEAT
-  const barMeter: BarMeter = { beats: barBeats, compound: isCompound(chart.meter) }
+  // A staff is written on the written bars: where the repeats are played, it goes round with them.
+  // Each in the chosen key, its notes in time order.
+  const staves = (options.staves ?? []).map(({ notes }) => {
+    const moved = transposeNotes(notes, chart.key.tonic, options.tonic)
+    return (options.unfold ? unrolled(moved, chart, layout.bars) : moved).sort(
+      (a, b) => a.startTick - b.startTick,
+    )
+  })
+  // The tune a pattern's right hand may play: the top staff's (ADR 0097).
+  const tune = staves[0]?.length ? staves[0] : null
+  // How each section's bars play a figure: in its own meter, else the chart's (ADR 0095).
+  const barMeters = chart.sections.map((section) => barMeterOf(section.meter ?? chart.meter))
   const chords: PerformedChord[] = []
   const notes: PerformanceNote[] = []
   // The left hand's notes its figure plays, kept under the right hand once both are placed.
@@ -559,7 +592,13 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     const { bass, root } = transposeChord(chord, chart.key.tonic, options.tonic)
     return pitchClassOf(bass ?? root)
   })
-  const nextBasses = basses.map((_, index) => basses[index + 1])
+  // The next chord's, where it follows straight on: a bar of no chord between leaves none to lead to.
+  const nextBasses = basses.map((_, index) => {
+    const [here, next] = [layout.chords[index], layout.chords[index + 1]]
+    return here && next?.startTick === here.startTick + here.durationTicks
+      ? basses[index + 1]
+      : undefined
+  })
 
   layout.chords.forEach((placed, index) => {
     const chord = transposeChord(placed.chord, chart.key.tonic, options.tonic)
@@ -573,19 +612,14 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     )
     previous = context.voiced
     const { method } = placed.chord
-    const pattern: EventPattern | MelodyPattern = patternFor(
-      method,
-      section,
-      options,
-      melody !== null,
-    )
+    const pattern: EventPattern | TunePattern = patternFor(method, section, options, tune !== null)
     const rh = inBar(
-      playable(options.rh ?? pattern.rh, melody !== null),
+      playable(options.rh ?? pattern.rh, tune !== null),
       layout.lineEnds.has(placed.bar),
     )
     const lh = options.lh ?? pattern.lh
     const written = layout.hands[placed.bar]
-    playsTune.push(rh.kind === 'melody' && !written?.rh)
+    playsTune.push(rh.kind === 'tune' && !written?.rh)
     chords.push({
       ...chord,
       symbol: chordSymbol(chord),
@@ -594,13 +628,16 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       durationTicks: placed.durationTicks,
       bar: placed.bar,
       ...(method ? { method } : {}),
-      pattern: pattern.id,
+      // A bar that writes both hands plays its notes, and no pattern.
+      ...(written?.rh && written.lh ? {} : { pattern: pattern.id }),
       ...(rh.kind === 'events' && !written?.rh && playsVoiced(rh) ? { hand: context.voiced } : {}),
     })
 
-    // A chord plays its pattern in windows of one meter bar. A chord shorter than two beats, or in a
-    // pickup, picks the pattern up where it sits in the bar; every other window starts at the
-    // pattern's beginning.
+    // A chord plays its pattern in windows of one bar of its section's meter. A chord shorter than
+    // two beats, or in a pickup, picks the pattern up where it sits in the bar; every other window
+    // starts at the pattern's beginning.
+    const barMeter = barMeters[section] ?? barMeterOf(chart.meter)
+    const meterTicks = barMeter.beats * TICKS_PER_BEAT
     const end = placed.startTick + placed.durationTicks
     const picksUp = placed.chord.beats < 2 || (placed.bar === 0 && layout.pickup > 0)
     let at = placed.startTick
@@ -614,7 +651,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
       // A hand written in this bar plays its written notes instead (after the chords).
       if (!written?.rh) {
         if (rh.kind === 'events') notes.push(...playFigure(rh, stretch, 'rh', window, barMeter))
-        else if (melody) notes.push(...playTune(rh, melody, stretch, window))
+        else if (tune) notes.push(...playTune(rh, tune, stretch, window))
       }
       if (!written?.lh) {
         const left = playFigure(lh, stretch, 'lh', window, barMeter)
@@ -626,32 +663,36 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
   })
 
   const chordStarts = layout.chords.map((placed) => placed.startTick)
+  const chordOf = (tick: Tick) => chordAt(layout.chords, chordStarts, tick)
   layout.hands.forEach((written, bar) => {
     const barStart = layout.bars[bar]?.startTick ?? 0
     for (const hand of HANDS) {
       const played = written?.[hand]
       if (played)
-        notes.push(
-          ...playWritten(played, hand, barStart, chordStarts, chart.key.tonic, options.tonic),
-        )
+        notes.push(...playWritten(played, hand, barStart, chordOf, chart.key.tonic, options.tonic))
     }
   })
-  if (options.doubleMelody && melody) {
-    for (const n of melody) {
-      const chord = sounding(chordStarts, n.startTick)
-      if (playsTune[chord]) continue
+  staves.forEach((written, staff) => {
+    for (const n of written) {
+      const chord = chordOf(n.startTick)
+      // The tune heard where it is played along, and not again where a chord's pattern plays it in
+      // the right hand (a bar of no chord has none).
+      const silent = staff === 0 && (!options.hearTune || (chord !== undefined && playsTune[chord]))
       notes.push({
-        midi: midi(n.midi + 12),
+        midi: onThePiano(n.midi),
         spelled: n.spelled,
-        hand: 'melody',
+        hand: 'staff',
+        staff,
+        ...(silent ? { silent } : {}),
         startTick: n.startTick,
         durationTicks: n.durationTicks,
-        velocity: VELOCITY.doubled,
-        chord,
+        velocity: VELOCITY.staff,
+        ...(chord === undefined ? {} : { chord }),
         ...(n.marks ? { marks: n.marks } : {}),
+        ...(n.lyrics ? { lyrics: n.lyrics } : {}),
       })
     }
-  }
+  })
 
   keepUnder(notes, leftFigure)
   notes.sort((a, b) => a.startTick - b.startTick || a.midi - b.midi)
@@ -662,25 +703,25 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     if (members) members.push(i)
     else onsets.set(n.startTick, [i])
   })
-  const beatGroups = [...onsets].map(([tick, members]): BeatGroup => ({
-    tick,
-    bar: sounding(barStarts, tick),
-    chord: sounding(chordStarts, tick),
-    notes: members,
-  }))
+  const beatGroups = [...onsets].map(([tick, members]): BeatGroup => {
+    const chord = chordOf(tick)
+    return {
+      tick,
+      bar: sounding(barStarts, tick),
+      ...(chord === undefined ? {} : { chord }),
+      notes: members,
+    }
+  })
 
-  const voicesPlayed = (options.voices ?? []).map((voice) =>
-    played(transposeNotes(voice, chart.key.tonic, options.tonic)),
-  )
-  // The tempo and the pedal as every part marks them, whichever the learner hears (ADR 0068).
-  const timing = [...(melody ?? []), ...voicesPlayed.flat(), ...notes].flatMap(
-    ({ startTick, marks }) =>
-      marks?.expression !== undefined || marks?.pedal !== undefined ? [{ startTick, marks }] : [],
+  // The tempo and the pedal as every staff marks them, whichever the learner hears (ADR 0068).
+  const timing = notes.flatMap(({ startTick, marks }) =>
+    marks?.expression !== undefined || marks?.pedal !== undefined ? [{ startTick, marks }] : [],
   )
   return {
     key,
     meter: chart.meter,
     totalTicks: layout.totalTicks,
+    ...(staves.length > 0 ? { staves: (options.staves ?? []).map(({ clef }) => ({ clef })) } : {}),
     ...(timing.length > 0 ? { timing } : {}),
     bars: layout.bars.map((bar, index) => {
       const own = sectionKeys[bar.section]
@@ -690,11 +731,5 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     chords,
     notes,
     beatGroups,
-    ...(options.voices?.length || options.instruments?.some((one) => one !== DEFAULT_INSTRUMENT)
-      ? {
-          sung: [melody ?? [], ...voicesPlayed],
-          ...(options.instruments?.length ? { instruments: options.instruments } : {}),
-        }
-      : {}),
   }
 }

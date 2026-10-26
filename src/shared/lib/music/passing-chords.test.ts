@@ -1,13 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { chordSymbol, type Chord } from './chord'
 import { parseChordSymbol } from './chord-symbol'
-import type { Key } from './key'
+import { C_MAJOR, type Key } from './key'
 import { note } from './note'
 import { chordInKey, passingChords } from './passing-chords'
 
 const C = parseChordSymbol('C')
 const E_FLAT = parseChordSymbol('Eb')
-const C_MAJOR = { tonic: note('C'), minor: false }
 const rows = (from: Chord, to: Chord, key: Key = C_MAJOR) =>
   passingChords(from, to, key).map((each) => [each.kind, each.chords.map(chordSymbol).join(' ')])
 

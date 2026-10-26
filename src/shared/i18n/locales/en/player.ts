@@ -1,21 +1,33 @@
 export const player = {
   setup: 'Setup',
-  /** The Setup's way into the score editor, for the piece played. */
-  editScore: 'Edit the score',
+  // The bar's More (ADR 0099): a piece's information as a sheet, the music as a MIDI file; an own
+  // song's Share is the song page's.
+  more: 'More',
+  info: { song: 'Song information', study: 'Study information' },
+  exportMidi: 'Export to MIDI',
+  /** A piece's score in its two modes, the Player and the score editor (ADR 0090). */
+  mode: { label: 'Practise or edit', practise: 'Practise', edit: 'Edit' },
   // How the score is shown (ADR 0064), from the bar: remembered for every piece.
+  // The View's switches only practice has (ADR 0094); the rest of the View is music's.
   view: {
-    open: 'View',
-    staves: 'Staves',
-    melody: 'Melody staff',
-    melodyDetail: 'Its own staff over the piano, while the melody plays',
-    rh: 'Right hand',
-    lh: 'Left hand',
-    show: 'Show',
-    notation: 'Sheet music',
-    chordNames: 'Chord names',
     positionsDetail: 'Beside each chord’s name, the position the right hand plays it in',
-    keys: 'Keys',
   },
+  // The Player's views of the music (ADR 0099), the View's tiles; each names its own part of the
+  // screen.
+  views: {
+    label: 'Show the music as',
+    sheet: 'Sheet music',
+    lyrics: 'Chords over lyrics',
+    diagrams: 'Diagrams',
+    grid: 'Grid',
+  },
+  /** Music of no chord symbol in a view of its chords (ADR 0094, 0099), and the way to its sheet. */
+  noChords: 'This music has no chord symbols.',
+  toSheet: 'Show the sheet music',
+  /** The Diagrams view's chord to come, where none sounds yet: a pickup, a bar of no chord. */
+  nextChord: 'Next: {{symbol}}',
+  /** A line of Chords over lyrics, by its bars: a tap takes the Player there. */
+  line: { one: 'Bar {{n}}', many: 'Bars {{first}}–{{last}}' },
   key: 'Key',
   root: 'Root',
   walk: { title: 'Walk the chords in {{scale}}' },
@@ -38,7 +50,6 @@ export const player = {
   direction: 'Direction',
   directions: { up: 'Up', down: 'Down', both: 'Up and down' },
   tempo: 'Tempo',
-  bpm: '{{tempo}} BPM',
   hands: 'Hands',
   handsOf: 'Hands: {{hands}}',
   pattern: 'Pattern',
@@ -72,14 +83,16 @@ export const player = {
     'major-thirds': 'Up by major thirds',
   },
   ownKeyOnly: 'Only in {{key}}',
+  /** Why the recording's tile is closed, beside How it plays' heading. */
+  recordingOnlyIn: 'The recording plays only in {{key}}, its own key.',
   /** Why a pattern or figure is closed to the music. */
-  needs: { melody: 'Needs a melody', key: 'Needs a key', simpleTime: 'Needs simple time' },
+  needs: { tune: 'Needs a tune', key: 'Needs a key', simpleTime: 'Needs simple time' },
   /** The right hand's figures in the Setup, by what they do. */
   rhGroup: {
     chords: 'Chords',
     broken: 'Broken chords',
     moving: 'Moving voices',
-    melody: 'With the tune',
+    tune: 'With the tune',
     styles: 'Styles',
   },
   /** The left hand's figures in the Setup, by what they do. */
@@ -91,10 +104,9 @@ export const player = {
     styles: 'Styles',
   },
   toggles: {
-    fingerNumbers: 'Finger numbers',
     namedNotes: 'Note names',
     positions: 'Chord positions',
-    melody: 'Melody',
+    tune: 'Tune',
     metronome: 'Metronome',
     countIn: 'Count-in',
     swing: 'Swing',
@@ -104,6 +116,7 @@ export const player = {
     of: 'Tempo: {{value}}',
     ownPace: 'Waits for your notes',
     wait: 'Wait mode',
+    playback: 'Playback speed',
     playAlong: 'Listen and play along',
     speed: '{{percent}} speed',
     own: 'Original tempo',
@@ -137,7 +150,6 @@ export const player = {
   playThese: 'Play {{notes}}',
   right: 'Correct',
   notThat: 'Not {{note}}',
-  finished: 'Finished',
   finishedClean: 'Finished without a slip',
   finishedSlips: 'Finished · slips: {{count}}',
   loopBar: 'Loop bar {{first}}',

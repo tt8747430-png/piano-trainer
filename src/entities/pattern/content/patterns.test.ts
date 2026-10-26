@@ -62,23 +62,23 @@ describe('the pattern catalog', () => {
     }
   })
 
-  it('falls back to r4 where a melody is needed and missing', () => {
-    const tuneless = { methodCodes: true, melody: false, key: true, simpleTime: true }
+  it('falls back to r4 where a tune is needed and missing', () => {
+    const tuneless = { methodCodes: true, tune: false, key: true, simpleTime: true }
     expect(
       PATTERN_IDS.filter((id) => patternNeed(BUILT_IN_PATTERNS.require(id), tuneless)),
     ).toEqual(['r5', 'r6', 'r7'])
     for (const id of ['r5', 'r6', 'r7'] as const) {
       const { pattern } = BUILT_IN_PATTERNS.require(id)
-      expect('withoutMelody' in pattern && pattern.withoutMelody).toEqual(
+      expect('withoutTune' in pattern && pattern.withoutTune).toEqual(
         BUILT_IN_PATTERNS.require('r4').pattern,
       )
     }
     for (const id of ['mel', 'melE', 'melH'] as const) {
       const { figure } = RIGHT_FIGURES[id]
-      expect(figure.kind === 'melody' && figure.withoutMelody).toBe(RIGHT_FIGURES.r4.figure)
+      expect(figure.kind === 'tune' && figure.withoutTune).toBe(RIGHT_FIGURES.r4.figure)
     }
     const ends = RIGHT_FIGURES.melE.figure
-    expect(ends.kind === 'melody' && ends.use === 'ends' && ends.between).toBe(
+    expect(ends.kind === 'tune' && ends.use === 'ends' && ends.between).toBe(
       RIGHT_FIGURES.r4b.figure,
     )
   })

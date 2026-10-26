@@ -7,12 +7,21 @@ import {
   type Barline,
   type Jump,
   type Meter,
+  type NoteLyrics,
   type NoteMarks,
   type Ornament,
   type TimeSignature,
   tempoNote,
 } from '@/shared/lib/music'
-import { clefIn, type Measure, type Score, type ScoreEvent, type StaffId } from './types'
+import {
+  clefIn,
+  isSingleStaff,
+  type Measure,
+  type Score,
+  type ScoreEvent,
+  type SingleStaff,
+  type StaffId,
+} from './types'
 import { barStartOf, beamPlan } from './beams'
 import { ticksOf } from './values'
 
@@ -33,7 +42,21 @@ export interface MeiOptions {
    * printed after this line's last barline, a courtesy signature as LilyPond and MuseScore print one.
    */
   readonly next?: NextLine | undefined
+  /** The staves' names, printed at the line's head (a score's first line, ADR 0094). */
+  readonly labels?: StaffLabels | undefined
 }
+
+/**
+ * A staff's name as printed at a line's head (ADR 0094, 0097): the learner's, or a placeholder (the
+ * editor's, for a staff with none, so it has a name to click) printed soft, in italics.
+ */
+export interface PrintedName {
+  readonly text: string
+  readonly placeholder?: boolean
+}
+
+/** The names a score's staves are printed with: each single staff's, and the piano's over its two. */
+export type StaffLabels = Readonly<Partial<Record<SingleStaff | 'piano', PrintedName>>>
 
 /** What a line starts in, as the line before it ends with a courtesy signature where it changes. */
 export type NextLine = Pick<Measure, 'key' | 'time' | 'clefs'>
@@ -43,20 +66,29 @@ export type NextLine = Pick<Measure, 'key' | 'time' | 'clefs'>
  * two braced; each measure's voices as layers, eighths and shorter beamed by the beat, triplets in
  * tuplets, ties across barlines; its key, time and clef changes, barlines, repeats and endings, the
  * signs and jumps, the tempo; each note's marks: articulations, ornaments, arpeggios, grace notes,
- * slurs, dynamics, hairpins, octave lines, the pedal, expressions and fingers. Every measure is named
+ * slurs, dynamics, hairpins, octave lines, the pedal, expressions and fingers; the tune's syllables as
+ * verses under their notes (ADR 0093); the staves' names where asked (ADR 0094). Every measure is named
  * `m-<index>`, every chord `c-<staff>-<tick>`, note `n-<staff>-<tick>-<i>` and rest
  * `r-<staff>-<tick>`, so the drawing is read back by them: where each bar and onset stands, a bar
  * tapped, the notes chosen or playing.
  */
 export function scoreToMei(score: Score, options: MeiOptions = {}): string {
-  const { title = '', timeBefore } = options
+  const { title = '', timeBefore, labels = {} } = options
   const staves = (options.staves ?? score.staves).filter((staff) => score.staves.includes(staff))
   const number = (staff: StaffId) => staves.indexOf(staff) + 1
-  const piano: readonly StaffId[] = staves.filter((staff) => staff === 'treble' || staff === 'bass')
-  const sung = staves.filter((staff) => !piano.includes(staff))
+  const piano: readonly StaffId[] = staves.filter((staff) => !isSingleStaff(staff))
+  const single = staves.filter(isSingleStaff)
   const first = score.measures[0]
-  const staffDef = (staff: StaffId) =>
-    `<staffDef n="${number(staff)}" lines="5" ${clefAttrs(clefIn(first ?? {}, staff))}/>`
+  // A single staff's own name; the piano's over its brace, or on its one staff drawn.
+  const nameOf = (staff: StaffId) =>
+    isSingleStaff(staff) ? labels[staff] : piano.length === 1 ? labels.piano : undefined
+  const staffDef = (staff: StaffId) => {
+    const attrs = `n="${number(staff)}" lines="5" ${clefAttrs(clefIn(first ?? {}, staff))}`
+    const name = nameOf(staff)
+    return name === undefined
+      ? `<staffDef ${attrs}/>`
+      : `<staffDef ${attrs}>${label(name)}</staffDef>`
+  }
   const time = first?.time ?? null
   const continues =
     timeBefore !== undefined &&
@@ -65,9 +97,11 @@ export function scoreToMei(score: Score, options: MeiOptions = {}): string {
     timeBefore.unit === time.unit
   const scoreDef = `<scoreDef ${meterAttrs(time, score.meter)}${continues ? ' meter.visible="false"' : ''} key.sig="${keySig(
     keySignature(first?.key ?? score.key),
-  )}"><staffGrp>${sung.map(staffDef).join('')}${
+  )}"><staffGrp>${single.map(staffDef).join('')}${
     piano.length > 1
-      ? `<staffGrp symbol="brace" bar.thru="true">${piano.map(staffDef).join('')}</staffGrp>`
+      ? `<staffGrp symbol="brace" bar.thru="true">${
+          labels.piano === undefined ? '' : label(labels.piano)
+        }${piano.map(staffDef).join('')}</staffGrp>`
       : piano.length > 0
         ? piano.map(staffDef).join('')
         : ''
@@ -128,6 +162,10 @@ const JUMP_TEXT: Readonly<Record<Jump, string>> = {
 
 const escape = (text: string) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+
+/** A staff's name as Verovio prints it at the line's head, smaller than its words; a placeholder in italics. */
+const label = ({ text, placeholder }: PrintedName) =>
+  `<label><rend fontsize="small"${placeholder ? ' fontstyle="italic"' : ''}>${escape(text)}</rend></label>`
 
 const keySig = (fifths: number) =>
   fifths === 0 ? '0' : `${Math.abs(fifths)}${fifths > 0 ? 's' : 'f'}`
@@ -190,6 +228,8 @@ interface Open {
 class Writer {
   private readonly tied = new Map<string, Set<number>>()
   private readonly open = new Map<StaffId, Open>()
+  /** By verse, whether its last syllable's word goes on: the next is its middle or end. */
+  private readonly words = new Map<number, boolean>()
 
   constructor(
     private readonly score: Score,
@@ -215,14 +255,12 @@ class Writer {
         before && clefIn(before, staff) !== clefIn(measure, staff)
           ? `<clef ${clefAttrs(clefIn(measure, staff), '')}/>`
           : ''
-      const layers = measure.staves[staff].map((voice, v) => {
+      const layers = (measure.staves[staff] ?? []).map((voice, v) => {
         const stem = voice.stem === 'auto' ? '' : ` stem.dir="${voice.stem}"`
         const events = this.layer(voice.events, measure, staff, `${staff} ${v}`, stem, controls)
         return `<layer n="${v + 1}">${v === 0 ? clef : ''}${events}</layer>`
       })
-      // A staff the pattern plays here is typed so (a class on its drawing): drawn in soft ink.
-      const played = measure.pattern?.includes(staff) ? ' type="pattern"' : ''
-      return `<staff n="${this.number(staff)}"${played}>${layers.join('') || '<layer n="1"/>'}</staff>`
+      return `<staff n="${this.number(staff)}">${layers.join('') || '<layer n="1"/>'}</staff>`
     })
     const top = this.number(this.staves[0] ?? 'treble')
     const unitTicks = ticksOf(
@@ -319,6 +357,8 @@ class Writer {
     const single = event.notes.length === 1
     const id = single ? `n-${staff}-${event.tick}-0` : `c-${staff}-${event.tick}`
     const below = staff === 'bass'
+    const verses = event.lyrics ? this.verses(event.lyrics, `${staff}-${event.tick}`) : ''
+    const inside = artics + verses
     const notes = event.notes.map((written, i) => {
       const ends = tied.delete(written.midi)
       if (written.tie) tied.add(written.midi)
@@ -340,7 +380,7 @@ class Writer {
         single ? `${dur}${stem}${tremolo(marks?.ornament)}` : '',
         tie ? `tie="${tie}"` : '',
       ].filter(Boolean)
-      return `<note ${attrs.join(' ')}${single && artics ? `>${artics}</note>` : '/>'}`
+      return `<note ${attrs.join(' ')}${single && inside ? `>${inside}</note>` : '/>'}`
     })
     this.marks(marks, id, staff, controls)
     const graces = (marks?.grace ?? [])
@@ -356,8 +396,28 @@ class Writer {
       graces +
       (single
         ? (notes[0] ?? '')
-        : `<chord xml:id="${id}" ${dur}${stem}${tremolo(marks?.ornament)}>${notes.join('')}${artics}</chord>`)
+        : `<chord xml:id="${id}" ${dur}${stem}${tremolo(marks?.ornament)}>${notes.join('')}${inside}</chord>`)
     )
+  }
+
+  /**
+   * A note's syllables as verses (MEI 5): each named by its note's staff and tick and its verse
+   * (`v-<staff>-<tick>-<verse>`, where a sheet finds it printed, ADR 0096), with its place in its word
+   * (`wordpos`: its start, middle or end, none for a whole word) and what joins it to the next note
+   * (`con`: a dash to its word's next syllable, an underscore while it is held).
+   */
+  private verses(lyrics: NoteLyrics, at: string): string {
+    return lyrics
+      .map((syllable, verse) => {
+        if (!syllable) return ''
+        const open = this.words.get(verse) ?? false
+        this.words.set(verse, syllable.hyphen)
+        const wordpos = open ? (syllable.hyphen ? 'm' : 't') : syllable.hyphen ? 'i' : null
+        const con = syllable.hyphen ? 'd' : syllable.held > 0 ? 'u' : null
+        const attrs = [wordpos ? ` wordpos="${wordpos}"` : '', con ? ` con="${con}"` : ''].join('')
+        return `<verse xml:id="v-${at}-${verse}" n="${verse + 1}"><syl${attrs}>${escape(syllable.text)}</syl></verse>`
+      })
+      .join('')
   }
 
   /** A note's or chord's marks as MEI's control events, the spans among them closed where they end. */

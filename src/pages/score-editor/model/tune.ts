@@ -2,13 +2,18 @@ import { barsOf, type Draft } from '@/features/score-editor'
 import { schedule, type NoteSound } from '@/shared/lib/schedule'
 import { arrangeDraft } from './arrange-draft'
 
-/** The tune alone: no hand's notes. */
-const TUNE_ONLY = { rh: false, lh: false, melody: true } as const
+/** The single staves alone: no hand's notes. */
+const STAVES_ONLY = { rh: false, lh: false, staff: true } as const
+
+/** Whether the song has a tune to play under a take: a note on one of its single staves (ADR 0097). */
+export const hasTune = (draft: Pick<Draft, 'staves'>): boolean =>
+  draft.staves.some(({ notes }) => notes.length > 0)
 
 /**
  * The song's tune from its bar `from` (an index) at its tempo, its first note at 0 s: what plays
  * under a take from its downbeat (spec 2026-10-09 §4.2), so an accompaniment is recorded against
- * the song it accompanies; in strict time, its tempo marks left to the Player.
+ * the song it accompanies: its single staves over the piano (ADR 0097); in strict time, its tempo
+ * marks left to the Player.
  */
 export function tuneOf(draft: Draft, from: number): NoteSound[] {
   const fromTick = barsOf(draft)[from]?.start ?? 0
@@ -19,7 +24,7 @@ export function tuneOf(draft: Draft, from: number): NoteSound[] {
     { ...performance, timing },
     {
       tempo: draft.tempo,
-      hands: TUNE_ONLY,
+      hands: STAVES_ONLY,
       fromTick,
     },
   )

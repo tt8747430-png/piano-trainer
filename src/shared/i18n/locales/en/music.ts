@@ -2,7 +2,17 @@
 export const music = {
   // The major triad's label where a chord's suffix names it: its own suffix is empty.
   major: 'M',
+  // A tempo as every screen says it: a song's facts, the Player's and the editor's tempo, a take's.
+  bpm: '{{tempo}} BPM',
+  // An inversion as a chooser's short option, and said in full where it stands as a name: a quiz's
+  // prompt, a found chord's words.
   inversion: { label: 'Inversion', root: 'Root', first: '1st', second: '2nd', third: '3rd' },
+  inversionName: {
+    root: 'Root position',
+    first: '1st inversion',
+    second: '2nd inversion',
+    third: '3rd inversion',
+  },
   // Where a row's hand stands: the first chord's inversion, then each nearest the last or all in it.
   position: {
     from: {
@@ -15,8 +25,8 @@ export const music = {
     },
     first: 'First chord',
     nearest: 'Nearest',
-    nearestOn: 'Each next chord moves the least it can',
-    nearestOff: 'Every chord in the first one’s position',
+    nearestInfo:
+      'On, each next chord moves the least it can; off, every chord stays in the first one’s position.',
   },
   // How big a chord is: its stack of notes, triads to 13ths.
   chordSize: {
@@ -171,18 +181,20 @@ export const music = {
     // How a score is laid out (ADR 0064), the same words in the Player and the editor.
     // As notation apps name their views: one line across, lines down the screen, A4 pages.
     layout: { label: 'Layout', horizontal: 'Panorama', scroll: 'Scroll', pages: 'Pages' },
-    // Each sung staff's name, over its start where voices are sung together (ADR 0066).
-    staff: { melody: 'Melody', voice2: 'Voice 2', voice3: 'Voice 3', voice4: 'Voice 4' },
     // A staff's own options, inline on its card (ADR 0058).
     fingers: 'Fingers',
     noteNames: 'Note names',
-    chordNames: 'Chord names',
+    chordNames: 'Chord symbols',
     loading: 'Loading the music',
     error: 'The music can’t be shown.',
     bar: 'Bar {{n}}',
     barChords: 'Bar {{n}}: {{chords}}',
     loopStart: 'Loop start',
     loopEnd: 'Loop end',
+    // The piano's name at a score's first line's head (ADR 0094), as a printed score names it; a
+    // single staff's is its own (ADR 0097), else, in the editor and the View, its place's.
+    staves: { piano: 'Piano' },
+    staff: 'Staff {{n}}',
     // Pages floating on a canvas (ADR 0075): dragged to move, pinched or Ctrl-wheeled to zoom.
     canvas: {
       label: 'Pages: drag to move, pinch or Ctrl and scroll to zoom',
@@ -191,6 +203,18 @@ export const music = {
       fit: 'Fit the page to the width',
       zoom: '{{percent}} %',
     },
+  },
+  // The View (ADR 0094): how a score is shown, one menu in the Player and the editor; its staves
+  // named as a score names them (Upper staff, Lower staff), never a hand.
+  view: {
+    label: 'View',
+    staves: 'Staves',
+    upper: 'Upper staff',
+    lower: 'Lower staff',
+    show: 'Show',
+    lyrics: 'Lyrics',
+    fingers: 'Finger numbers',
+    keys: 'Keys',
   },
   // A list of patterns, Accompaniment's and the Setup's: the learner's shelves round the groups.
   patternShelf: { favourites: 'Favourites', own: 'Your patterns', hidden: 'Hidden' },
@@ -203,6 +227,16 @@ export const music = {
   playBarChord: 'Play bar {{n}}, {{symbol}}',
   // A row of chords that play, named for a screen reader.
   rowChords: 'Chords',
+  // A chord drawn as keys (ADR 0099), named for a screen reader by its notes; a piece's chords as
+  // diagrams, in the order they first sound.
+  chordDiagram: '{{symbol}}: {{notes}}',
+  chordSummary: 'Chords',
+  // A chord's sheet: its diagram large, and Play; where it is learned, played on the keys under it.
+  chordSheet: {
+    title: '{{symbol}} chord',
+    learn: 'Play it on the keys',
+    learned: 'That’s it.',
+  },
   // An interval's card: how far it is, the chords it is heard in, and the ways it is played.
   intervalCard: {
     semitones: 'Semitones: {{n}}',
@@ -213,36 +247,5 @@ export const music = {
     up: 'Up',
     down: 'Down',
     together: 'Together',
-  },
-  // What a sung part is played on, and the families they are found under (ADR 0070).
-  instrument: {
-    voice: 'Voice',
-    violin: 'Violin',
-    cello: 'Cello',
-    flute: 'Flute',
-    oboe: 'Oboe',
-    clarinet: 'Clarinet',
-    trumpet: 'Trumpet',
-    horn: 'Horn',
-    guitar: 'Guitar',
-  },
-  // As a score names a part at its staff.
-  instrumentShort: {
-    voice: 'V.',
-    violin: 'Vln.',
-    cello: 'Vc.',
-    flute: 'Fl.',
-    oboe: 'Ob.',
-    clarinet: 'Cl.',
-    trumpet: 'Tpt.',
-    horn: 'Hn.',
-    guitar: 'Gtr.',
-  },
-  instrumentFamily: {
-    voices: 'Voices',
-    strings: 'Strings',
-    woodwind: 'Woodwind',
-    brass: 'Brass',
-    plucked: 'Plucked',
   },
 } as const

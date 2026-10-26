@@ -37,7 +37,8 @@ export function FoldGroup({
           aria-expanded={open}
           aria-controls={listId}
           onClick={onToggle}
-          className="flex w-full items-baseline justify-between gap-3 rounded-lg text-left"
+          // Its reach is 44px tall, grown over the room round the heading, which stays put.
+          className="-my-2 flex min-h-11 w-full items-baseline justify-between gap-3 rounded-lg py-2 text-left"
         >
           <span className="flex items-center gap-2">
             <ChevronDown

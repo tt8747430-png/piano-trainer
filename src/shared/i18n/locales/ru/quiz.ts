@@ -2,9 +2,9 @@ import type { LocaleResources } from '../../types'
 
 export const quiz: LocaleResources['quiz'] = {
   trainers: {
-    'build-chord': 'Построить аккорд',
-    'name-chord': 'Назвать аккорд',
-    'build-scale': 'Построить гамму',
+    'build-chord': 'Построение аккорда',
+    'name-chord': 'Определение аккорда',
+    'build-scale': 'Построение гаммы',
     gaps: 'Мои пробелы',
     'intervals-by-ear': 'Интервалы на слух',
     'chords-by-ear': 'Аккорды на слух',
@@ -13,7 +13,7 @@ export const quiz: LocaleResources['quiz'] = {
     'reading-notes': 'Чтение нот',
     'key-signatures': 'Ключевые знаки',
     'key-degrees': 'Ступени тональности',
-    'chord-role': 'Роль аккорда',
+    'chord-role': 'Роли аккордов',
   },
   about: {
     'build-chord': 'Сыграйте названный аккорд на клавишах',
@@ -44,12 +44,6 @@ export const quiz: LocaleResources['quiz'] = {
     keyDegrees: 'Сыграйте ступени: {{key}}',
     chordRole: '{{key}}: какой это аккорд?',
     nameProgression: '{{key}}: что это за последовательность?',
-  },
-  position: {
-    root: 'основной вид',
-    first: '1-е обращение',
-    second: '2-е обращение',
-    third: '3-е обращение',
   },
   signature: { none: 'Нет', sharps: '{{count}} ♯', flats: '{{count}} ♭' },
   degrees: 'Ступени',

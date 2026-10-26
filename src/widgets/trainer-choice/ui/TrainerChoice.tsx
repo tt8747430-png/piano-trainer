@@ -3,6 +3,7 @@ import {
   CUSTOM_CHOICES,
   CUSTOM_OWN,
   listParam,
+  NOTE_RANGE,
   orOwn,
   readList,
   TYPE_ADDED,
@@ -16,6 +17,7 @@ import {
   midiOf,
   note,
   PIANO,
+  type Midi,
   SCALE_FAMILIES,
   scaleKindsIn,
 } from '@/shared/lib/music'
@@ -43,6 +45,10 @@ const WHITE_KEYS = Array.from({ length: 9 }, (_, octave) => ({
     key: midiOf(note(letter), octave),
   })).filter(({ key }) => key >= PIANO.from && key <= PIANO.to),
 })).filter((group) => group.keys.length > 0)
+
+/** A white key as its choice reads (`C4`): the range's own ends, shown while the URL names none. */
+const whiteKeyText = (key: Midi): string =>
+  WHITE_KEYS.flatMap((group) => group.keys).find((white) => white.key === key)?.text ?? ''
 
 /**
  * Custom's fields for a trainer: the lists it asks from (each checks several and never empties; a
@@ -182,7 +188,7 @@ export function TrainerChoice({
               <Dropdown
                 key={end}
                 label={t(`quiz:choice.${end}`)}
-                value={view[end] ?? (end === 'from' ? 'C4' : 'C5')}
+                value={view[end] ?? whiteKeyText(NOTE_RANGE[end])}
                 groups={WHITE_KEYS.map(({ octave, keys }) => ({
                   label: String(octave),
                   options: keys.map(({ text }) => ({ value: text, label: text })),

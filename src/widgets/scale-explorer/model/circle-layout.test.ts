@@ -23,7 +23,7 @@ describe('wedgePath', () => {
 describe('signatureCount', () => {
   it('writes a signature as its count of sharps or flats, and nothing for none', () => {
     expect(signatureCount({ tonic: note('E', -1), minor: false })).toBe('3♭')
-    expect(signatureCount({ tonic: note('A'), minor: false })).toBe('3#')
+    expect(signatureCount({ tonic: note('A'), minor: false })).toBe('3♯')
     expect(signatureCount({ tonic: note('A'), minor: true })).toBe('')
   })
 })

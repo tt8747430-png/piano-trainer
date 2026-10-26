@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { chordSymbol } from '@/shared/lib/music'
 import { testProgression, testSong } from '../testing/test-pieces'
-import { chartOf, hasChartPlan, melodyOf, patternsOfPiece, pieceFit } from './chart'
+import { chartOf, hasChartPlan, patternsOfPiece, pieceFit, sectionCount, stavesOf } from './chart'
+import { lyricsStaff } from './types'
 
 const firstSymbol = (...args: Parameters<typeof chartOf>) => {
   const chord = chartOf(...args).sections[0]?.lines[0]?.[0]?.chords[0]
@@ -27,11 +28,69 @@ describe('chartOf', () => {
   })
 })
 
-describe('melodyOf', () => {
-  it('reads a song’s tune; a progression has none', () => {
-    expect(melodyOf(testSong(['C'], { melody: 'C4/4' }))).toHaveLength(1)
-    expect(melodyOf(testSong(['C']))).toBeUndefined()
-    expect(melodyOf(testProgression('I:maj:4'))).toBeUndefined()
+describe('sectionCount', () => {
+  it('counts a chart’s sections, a progression of one line as one', () => {
+    const verse = { kind: 'verse', lines: ['C G'] } as const
+    expect(sectionCount(testSong(['C'], { sections: [verse, verse, verse] }))).toBe(3)
+    expect(sectionCount(testProgression('ii:min:4 V:dom:4'))).toBe(1)
+    expect(sectionCount(testProgression([verse, verse]))).toBe(2)
+  })
+})
+
+describe('stavesOf (ADR 0097)', () => {
+  it('reads a song’s single staves top down, each with its clef; a progression has none', () => {
+    const song = testSong(['C'], {
+      staves: [{ notes: 'C5/4' }, { name: 'Cello', clef: 'bass', notes: 'C3/2 G2/2' }],
+    })
+    expect(stavesOf(song).map(({ clef, notes }) => [clef, notes.map((n) => n.midi)])).toEqual([
+      ['treble', [72]],
+      ['bass', [48, 43]],
+    ])
+    expect(stavesOf(testSong(['C']))).toEqual([])
+    expect(stavesOf(testProgression('I:maj:4'))).toEqual([])
+  })
+})
+
+describe('the staff a piece’s lyrics are on (ADR 0093, 0097)', () => {
+  const hands = { rh: 'C4/2 D4/2 | E4/4' }
+  /** What the upper staff's notes sing, in order. */
+  const upper = (piece: Parameters<typeof chartOf>[0]) =>
+    chartOf(piece)
+      .sections.flatMap((section) => section.lines.flat())
+      .flatMap((bar) => bar.hands?.rh ?? [])
+      .flatMap((n) => n.lyrics?.[0]?.text ?? [])
+  /** What each single staff's notes sing, in order. */
+  const sung = (piece: Parameters<typeof chartOf>[0]) =>
+    stavesOf(piece).map(({ notes }) => notes.flatMap((n) => n.lyrics?.[0]?.text ?? []))
+  const STAVES = [{ notes: 'G4/4 | A4/4' }, { notes: 'E4/4 | F4/4' }]
+
+  it('is the top single staff’s where the piece has one, else the upper staff’s', () => {
+    const tuned = testSong(['C G'], { staves: STAVES, hands, lyrics: ['one two'] })
+    expect(lyricsStaff(tuned)).toBe(0)
+    expect(sung(tuned)).toEqual([['one', 'two'], []])
+    expect(upper(tuned)).toEqual([])
+    const untuned = testSong(['C G'], { hands, lyrics: ['one two three'] })
+    expect(lyricsStaff(untuned)).toBe('rh')
+    expect(upper(untuned)).toEqual(['one', 'two', 'three'])
+  })
+
+  it('is the staff lyricsOn names: another single staff, or the upper one', () => {
+    const second = testSong(['C G'], { staves: STAVES, hands, lyrics: ['one two'], lyricsOn: 1 })
+    expect(sung(second)).toEqual([[], ['one', 'two']])
+    const kept = testSong(['C G'], {
+      staves: STAVES,
+      hands,
+      lyrics: ['one two three'],
+      lyricsOn: 'rh',
+    })
+    expect(lyricsStaff(kept)).toBe('rh')
+    expect(sung(kept)).toEqual([[], []])
+    expect(upper(kept)).toEqual(['one', 'two', 'three'])
+  })
+
+  it('is the content’s mistake on a staff the piece has not', () => {
+    const lost = testSong(['C'], { staves: [{ notes: 'C5/4' }], lyrics: ['one'], lyricsOn: 2 })
+    expect(() => stavesOf(lost)).toThrow(/staff 3/)
   })
 })
 
@@ -57,16 +116,16 @@ describe('hasChartPlan', () => {
 
 describe('pieceFit', () => {
   it('gives a pattern the piece’s methods, tune, key and meter', () => {
-    expect(pieceFit(testSong(['C:t1 F'], { melody: 'C4/4' }))).toEqual({
+    expect(pieceFit(testSong(['C:t1 F'], { staves: [{ notes: 'C4/4' }] }))).toEqual({
       methodCodes: true,
       chart: ['t1', 'r4'],
-      melody: true,
+      tune: true,
       key: true,
       simpleTime: true,
     })
     expect(pieceFit(testSong(['C'], { meter: '6/8' }))).toMatchObject({
       methodCodes: false,
-      melody: false,
+      tune: false,
       simpleTime: false,
     })
   })

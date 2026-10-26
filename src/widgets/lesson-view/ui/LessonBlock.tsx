@@ -15,15 +15,13 @@ import {
   VoicingsExample,
 } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
-import { keyParam, note, noteParam, numeralsParam } from '@/shared/lib/music'
+import { C_MAJOR, keyParam, noteParam, numeralsParam } from '@/shared/lib/music'
 import { isProgressionRow } from '../model/chord-example'
 import { gridSymbols } from '../model/chord-grid'
 import { ChordExamples } from './ChordExamples'
 import { LessonLinkRow } from './LessonLinkRow'
 import { PatternExample } from './PatternExample'
 import { ButtonLink, type ShownKeys } from '@/shared/ui'
-
-const C_MAJOR = { tonic: note('C'), minor: false }
 
 /** One link on its card, as a lesson's rows are. */
 function LinkCard({ title, target }: { title: string; target: LessonLink }) {

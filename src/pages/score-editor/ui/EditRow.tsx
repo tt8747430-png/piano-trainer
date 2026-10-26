@@ -1,0 +1,138 @@
+import { ClipboardPaste, Copy, Delete, Redo2, Scissors, Undo2 } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useShallow } from 'zustand/react/shallow'
+import { copyTarget, whyNoPaste, type ClipEdit } from '@/features/score-editor'
+import { cn } from '@/shared/lib'
+import { Button } from '@/shared/ui/primitives/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
+import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+
+/**
+ * One of the row's commands: its icon, named for a screen reader and in a tooltip, which adds `hint`,
+ * what the command will act on. `blocked`, it does nothing and is greyed, its tooltip saying why.
+ */
+function EditButton({
+  label,
+  hint,
+  blocked,
+  disabled = false,
+  onClick,
+  children,
+}: {
+  label: string
+  hint?: string
+  blocked?: string
+  disabled?: boolean
+  onClick: () => void
+  children: ReactNode
+}) {
+  const said = blocked ?? hint
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={label}
+            aria-disabled={blocked ? true : undefined}
+            disabled={disabled}
+            onClick={blocked ? undefined : onClick}
+            className="size-11 shrink-0 rounded-xl aria-disabled:opacity-50 [&_svg:not([class*=size-])]:size-5"
+          />
+        }
+      >
+        {children}
+      </TooltipTrigger>
+      <TooltipContent>{said ? `${label} · ${said}` : label}</TooltipContent>
+    </Tooltip>
+  )
+}
+
+/** What Copy and Cut would take, in a line for their tooltips (ADR 0092). */
+function useCopySaid(): string {
+  const { t } = useTranslation('editor')
+  const target = useEditorState(useShallow(copyTarget))
+  if (!target) return t('clip.nothing')
+  if (target.kind === 'notes')
+    return target.count === 1 ? t('clip.note') : t('clip.notes', { n: target.count })
+  return target.from === target.to
+    ? t('clip.bar', { n: target.from })
+    : t('clip.bars', { from: target.from, to: target.to })
+}
+
+/** What Paste holds, in a line; or, greyed, why it cannot paste here. */
+function usePasteSaid(): { readonly hint?: string; readonly blocked?: string } {
+  const { t } = useTranslation('editor')
+  const why = useEditorState(whyNoPaste)
+  const holds = useEditorState((state) =>
+    state.clip?.kind === 'bars' ? state.clip.bars.length : (state.clip?.notes.length ?? 0),
+  )
+  const kind = useEditorState((state) => state.clip?.kind)
+  if (why) return { blocked: t(`clip.${why}`) }
+  return { hint: t(kind === 'bars' ? 'clip.holdsBars' : 'clip.holdsNotes', { n: holds }) }
+}
+
+/**
+ * The edit row (spec 2026-10-23, Flat's second toolbar): what is done to what is chosen, never a mark
+ * put on it: Delete (the notes or chord chosen, else the ones before the caret, as Backspace), Undo
+ * and Redo, Copy, Cut and Paste of what is chosen (the bars in the chord row, the notes on a staff;
+ * Paste greyed with its reason where the clip cannot go, ADR 0092). The staff written is chosen on
+ * the sheet, a bar added by writing past the last or from the palette's Bar (ADR 0094). In the bar's
+ * row where it has room, wrapped under it on a phone; scrolling sideways where even a phone's row is
+ * too narrow. While a take records, it waits for Stop.
+ */
+export function EditRow({ className }: { className?: string }) {
+  const { t } = useTranslation('editor')
+  const { actions, takes } = useScoreEditorContext()
+  const dispatch = actions.dispatch
+  const chords = useEditorState((state) => state.layer === 'chords')
+  const canUndo = useEditorState((state) => state.past.length > 0)
+  const canRedo = useEditorState((state) => state.future.length > 0)
+  const copySaid = useCopySaid()
+  const paste = usePasteSaid()
+  const recording = takes.stage !== 'idle'
+  const clip = (edit: ClipEdit) => () => dispatch({ type: 'clip', edit })
+  return (
+    <div
+      role="toolbar"
+      aria-label={t('editRow')}
+      className={cn(
+        'flex min-w-0 items-center gap-0.5 overflow-x-auto [scrollbar-width:none]',
+        className,
+      )}
+    >
+      <EditButton
+        label={t(chords ? 'chord.delete' : 'deleteNotes')}
+        disabled={recording}
+        onClick={() => dispatch({ type: 'delete', back: true })}
+      >
+        <Delete aria-hidden />
+      </EditButton>
+      <EditButton
+        label={t('undo')}
+        disabled={!canUndo || recording}
+        onClick={() => dispatch({ type: 'undo' })}
+      >
+        <Undo2 aria-hidden />
+      </EditButton>
+      <EditButton
+        label={t('redo')}
+        disabled={!canRedo || recording}
+        onClick={() => dispatch({ type: 'redo' })}
+      >
+        <Redo2 aria-hidden />
+      </EditButton>
+      <EditButton label={t('copy')} hint={copySaid} disabled={recording} onClick={clip('copy')}>
+        <Copy aria-hidden />
+      </EditButton>
+      <EditButton label={t('cut')} hint={copySaid} disabled={recording} onClick={clip('cut')}>
+        <Scissors aria-hidden />
+      </EditButton>
+      <EditButton label={t('paste')} {...paste} disabled={recording} onClick={clip('paste')}>
+        <ClipboardPaste aria-hidden />
+      </EditButton>
+    </div>
+  )
+}

@@ -4,7 +4,6 @@ export const songs = {
   collection: 'Collection',
   all: 'All',
   noChart: 'No chart yet',
-  learned: 'Learned',
   empty: 'No songs match.',
   // Nothing to list for a search: it names what was searched.
   emptyQuery: 'No songs match “{{query}}”.',
@@ -29,41 +28,29 @@ export const songs = {
     make: 'Make',
     makeAndRecord: 'Record',
   },
-  // What a new song's score holds, its own sheet (ADR 0072).
+  // The staves a new song's score starts with, its own sheet (ADR 0072, 0097).
   setup: {
     title: 'Score',
     customize: 'Customize',
     done: 'Done',
-    templates: 'Start from',
-    template: {
-      chordsAndPiano: 'Chords and piano',
-      leadSheet: 'Melody and chords',
-      pianoAndMelody: 'Piano with melody',
+    staves: 'Staves',
+    choice: {
       piano: 'Piano',
+      staffAndPiano: 'A staff and piano',
+      staff: 'A staff',
     },
-    templateDetail: {
-      chordsAndPiano: 'Chord names over the piano',
-      leadSheet: 'A lead sheet: the tune with chord names, no piano staves',
-      pianoAndMelody: 'The tune on its own staff over the piano, with chord names',
-      piano: 'The piano alone',
+    choiceDetail: {
+      piano: 'The piano’s two staves',
+      staffAndPiano: 'A staff over the piano, for a voice or another part',
+      staff: 'A lead sheet: one staff with chord symbols, the piano out of sight',
     },
-    rows: 'Rows',
-    chordNames: 'Chord names',
-    melody: 'Melody',
-    melodyDetail: 'A staff for the tune',
-    piano: 'Piano',
-    pianoDetail: 'Both hands, played by the pattern from the chord names unless you write them out',
-    pianoKept: 'Add the melody or a part to leave the piano out',
-    parts: 'More parts',
-    part: 'Part {{n}}',
-    addPart: 'Add a part',
-    removePart: 'Remove {{part}}',
+    more: 'Add more staves, name them and take them away on the score.',
   },
   // A song someone shared as a link.
   shared: {
     title: 'A shared song',
     reading: 'Reading the song…',
-    facts: '{{key}} · {{meter}} · {{tempo}} BPM',
+    facts: '{{key}} · {{meter}} · {{bpm}}',
     add: 'Add to Your songs',
     says: 'Add it to Your songs to practise it.',
     none: 'This link holds no song: it may be cut short.',

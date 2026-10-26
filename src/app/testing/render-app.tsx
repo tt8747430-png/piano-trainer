@@ -10,6 +10,7 @@ import type { Locale } from '@/shared/i18n'
 import { createFakeAudio } from '@/shared/api/audio'
 import { createFakeMidi } from '@/shared/api/midi'
 import { createMemoryStorage } from '@/shared/lib'
+import { heardUntil, untilTestEnds } from '@/shared/test/listeners'
 import { loadScoreView } from '@/shared/ui'
 import { App } from '../App'
 import { createAppRouter } from '../router'
@@ -20,6 +21,8 @@ import { createAppRouter } from '../router'
  * browser without it.
  * Every screen's code is loaded first, and the score's engraver, so a test waits on the app and
  * never on the runner importing a lazy chunk.
+ * What the app hears on the window and the document (its stores another tab's saves, its router the
+ * page's scroll) it stops hearing once the test is over, so nothing there holds it after.
  */
 export async function renderApp(
   path: string,
@@ -29,19 +32,23 @@ export async function renderApp(
     webMidi = true,
   }: { locale?: Locale; storage?: Storage; webMidi?: boolean } = {},
 ) {
-  const settingsStore = createSettingsStore({ storage, languages: [locale], finePointer: false })
-  const progressStore = createProgressStore({ storage })
-  const patternsStore = createPatternsStore({ storage })
-  const piecesStore = createPiecesStore({ storage })
-  const takesStore = createTakesStore({ storage })
-  const viewsStore = createViewsStore({ storage })
-  const router = createAppRouter({
-    history: createMemoryHistory({ initialEntries: [path] }),
-    views: viewsStore,
-    patterns: patternsStore,
-    pieces: piecesStore,
-    takes: takesStore,
-  })
+  const testOver = untilTestEnds()
+  const saving = { storage, signal: testOver }
+  const settingsStore = createSettingsStore({ ...saving, languages: [locale], finePointer: false })
+  const progressStore = createProgressStore(saving)
+  const patternsStore = createPatternsStore(saving)
+  const piecesStore = createPiecesStore(saving)
+  const takesStore = createTakesStore(saving)
+  const viewsStore = createViewsStore(saving)
+  const router = heardUntil(testOver, () =>
+    createAppRouter({
+      history: createMemoryHistory({ initialEntries: [path] }),
+      views: viewsStore,
+      patterns: patternsStore,
+      pieces: piecesStore,
+      takes: takesStore,
+    }),
+  )
   await Promise.all(Object.values(router.routesById).map((route) => router.loadRouteChunk(route)))
   await loadScoreView()
   const audio = createFakeAudio()

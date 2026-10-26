@@ -3,13 +3,14 @@ import type { ReactNode } from 'react'
 import { Toggle } from './primitives/toggle'
 
 /**
- * On or off as a tile: its picture (an icon, or a glyph such as the keys' rail wears) over its name,
- * and a line under it where it has one (why it is closed, what it does). Off, it is drawn in soft
- * ink; on, it wears the paint of what is on, its ink on it.
+ * On or off as a tile: its picture (an icon, or a glyph such as the keys' rail wears) over its name.
+ * `tip`, what it does or why it is closed, is its tooltip and a screen reader's description, never
+ * a line on it (ADR 0096): a closed tile keeps the pointer, so its tooltip still says why. Off, it is
+ * drawn in soft ink; on, it wears the paint of what is on, its ink on it.
  */
 export function ToggleTile({
   label,
-  detail,
+  tip,
   pressed,
   disabled = false,
   onPressedChange,
@@ -17,7 +18,7 @@ export function ToggleTile({
   glyph,
 }: {
   label: string
-  detail?: string | undefined
+  tip?: string | undefined
   pressed: boolean
   disabled?: boolean
   onPressedChange: (on: boolean) => void
@@ -25,10 +26,11 @@ export function ToggleTile({
   return (
     <Toggle
       size="tile"
+      title={tip}
       pressed={pressed}
       disabled={disabled}
       onPressedChange={onPressedChange}
-      className="aria-pressed:border-transparent aria-pressed:bg-paint-grass aria-pressed:text-on-paint-grass"
+      className="disabled:pointer-events-auto disabled:hover:bg-card aria-pressed:border-transparent aria-pressed:bg-paint-grass aria-pressed:text-on-paint-grass"
     >
       {Icon ? (
         <Icon aria-hidden className="size-6" />
@@ -38,12 +40,6 @@ export function ToggleTile({
         </span>
       )}
       <span className="text-center">{label}</span>
-      {detail ? (
-        <>
-          {' '}
-          <span className="text-center text-xs">{detail}</span>
-        </>
-      ) : null}
     </Toggle>
   )
 }

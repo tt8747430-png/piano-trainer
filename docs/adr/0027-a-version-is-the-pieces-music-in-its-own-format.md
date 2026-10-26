@@ -3,7 +3,8 @@
 - **Status:** accepted · **Date:** 2026-10-01 · **Amends:** ADR 0013's consequence that "the editor edits a Score and
   adds `perform(score)`" · **Builds on:** ADR 0002 (content as code), ADR 0023 (an inversion and a walk of keys play any
   chart), ADR 0026 (the learner's own beside the built-in, looked up in one place) · **Spec:**
-  `2026-10-01-score-editor-design.md`
+  `2026-10-01-score-editor-design.md`, removed once built (`git log --diff-filter=D -- docs/superpowers` finds it) ·
+  **Amended by** ADR 0091: a version writes every bar of both hands
 
 ## Context
 

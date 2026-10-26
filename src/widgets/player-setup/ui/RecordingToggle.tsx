@@ -6,7 +6,8 @@ import { ToggleTile } from '@/shared/ui'
 
 /**
  * The recording toggle: a piece's recording played along in Listen, saved for every piece with one.
- * In another key it is off and closed, and says in which key it plays (`ownKey`, null in it).
+ * In another key it is off and closed, its tooltip saying in which key it plays (`ownKey`, null in
+ * it); the Setup's How it plays says so too, beside its heading.
  */
 export function RecordingToggle({ ownKey }: { ownKey: string | null }) {
   const { t } = useTranslation('player')
@@ -15,7 +16,7 @@ export function RecordingToggle({ ownKey }: { ownKey: string | null }) {
   return (
     <ToggleTile
       label={t('toggles.recording')}
-      detail={ownKey ? t('ownKeyOnly', { key: ownKey }) : undefined}
+      tip={ownKey ? t('ownKeyOnly', { key: ownKey }) : undefined}
       icon={MicVocal}
       pressed={recording && ownKey === null}
       disabled={ownKey !== null}

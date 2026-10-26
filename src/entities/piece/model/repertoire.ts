@@ -27,11 +27,12 @@ function sameTimeline(original: ChartPiece, version: ChartPiece): boolean {
 }
 
 /**
- * A catalog song, study or listing played in the learner's music: its titles, credits, source and note
- * kept; a listing becomes a song; a recording kept only on the original's timeline.
+ * A catalog song, study or listing played in the learner's music: its titles (or the learner's own,
+ * ADR 0094), credits, source and note kept; a listing becomes a song; a recording kept only on the
+ * original's timeline.
  */
 export function versionOf(original: ChartPiece | Listing, music: PieceMusic): ChartPiece {
-  if (original.kind === 'listing') return { ...original, ...music, kind: 'song' }
+  if (original.kind === 'listing') return withMusic({ ...original, ...music, kind: 'song' }, music)
   const { recording, ...piece } = withMusic(original, music)
   return recording && sameTimeline(original, { ...piece, recording })
     ? { ...piece, recording }

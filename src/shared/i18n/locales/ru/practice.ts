@@ -88,7 +88,6 @@ export const practice: LocaleResources['practice'] = {
       'short-short-short-long': '3 короткие, длинная',
     },
     tempo: 'Темп',
-    bpm: '{{tempo}} уд/мин',
     playUpDown: 'Вверх и вниз',
     facts: { formula: 'Формула', gaps: 'Строение', relative: 'Параллельная', modeOf: 'Лад от' },
     chordsIn: 'Аккорды гаммы',
@@ -201,7 +200,6 @@ export const practice: LocaleResources['practice'] = {
     remember: 'Запоминать',
     rememberDetail: 'Последние {{count}}',
     slash: 'Над басом',
-    inversion: { first: 'Первое обращение', second: 'Второе обращение', third: 'Третье обращение' },
     bass: 'В басу {{note}}',
     voicing: {
       quartal: 'Кварты',

@@ -10,6 +10,8 @@ export interface SavingOptions {
   readonly storage?: Storage
   /** Where another tab's saves are announced: the window. */
   readonly otherTabs?: EventTarget
+  /** Stops the store following another tab's saves once it aborts: a test's store, at its end. */
+  readonly signal?: AbortSignal
 }
 
 /** What `migrate` hands `merge` for a save of another version: nothing of it is read. */
@@ -46,7 +48,7 @@ function savesIn(storage: Storage): PersistStorage<unknown> {
  * field added later reads as its default. A save of another version is not read, and the store starts
  * from `initial`: a shape that changes is a new version. What is saved is the state, or what `write`
  * makes of it (a compact form); `read` reads that back. The store follows another tab's saves of its
- * version (`followOtherTabs`), so one tab never writes over another's.
+ * version (`followOtherTabs`), so one tab never writes over another's, until `signal` aborts.
  */
 export function createSavedStore<State>(
   {
@@ -62,7 +64,7 @@ export function createSavedStore<State>(
     read: (saved: unknown, current: State) => State
     write?: (state: State) => unknown
   },
-  { storage = safeLocalStorage(), otherTabs = window }: SavingOptions = {},
+  { storage = safeLocalStorage(), otherTabs = window, signal }: SavingOptions = {},
 ): StoreApi<State> {
   const store = createStore<State>()(
     persist<State, [], [], unknown>(() => initial, {
@@ -74,6 +76,6 @@ export function createSavedStore<State>(
       merge: (saved, current) => (saved === DISCARDED ? current : read(saved, current)),
     }),
   )
-  followOtherTabs(store.persist, { key, version }, otherTabs)
+  followOtherTabs(store.persist, { key, version }, otherTabs, signal)
   return store
 }

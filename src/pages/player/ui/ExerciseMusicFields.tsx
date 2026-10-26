@@ -10,6 +10,7 @@ import {
   noteFromParam,
   noteName,
   noteParam,
+  printedSymbol,
   qualitySuffix,
   SCALE_FAMILIES,
   scaleKindsIn,
@@ -41,7 +42,6 @@ export function ExerciseMusicFields({
       <NoteChoice
         label={fields.root === 'key' ? t('player:key') : t('player:root')}
         value={noteParam(choice.root)}
-
         onChange={(root) => onChange({ root: noteFromParam(root) })}
       />
       {fields.kind || fields.quality || fields.start ? (
@@ -67,7 +67,7 @@ export function ExerciseMusicFields({
                 label: t(`music:family.${family}`),
                 options: qualities.map((quality) => ({
                   value: quality,
-                  label: qualitySuffix(quality) || t('music:major'),
+                  label: printedSymbol(qualitySuffix(quality)) || t('music:major'),
                   title: t(`music:quality.${quality}`),
                   detail: t(`music:quality.${quality}`),
                 })),

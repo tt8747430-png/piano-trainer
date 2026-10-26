@@ -1,17 +1,20 @@
 import type { StaffId } from '@/shared/lib/notation'
 import type { Tick } from '@/shared/lib/music'
-import type { ScoreLayout } from '../layout'
+import type { Extent, ScoreLayout } from '../layout'
 import { headsOf } from './svg-heads'
-
-/** The numbers in a `translate(x, y)` or a path's `M x y L x y`. */
-const numbers = (text: string | null) => (text?.match(/-?\d+(?:\.\d+)?/g) ?? []).map(Number)
+import { numbers } from './svg-glyphs'
+import { labelsOf } from './svg-labels'
+import { signsOf } from './svg-signs'
+import { syllablesOf } from './svg-syllables'
 
 /**
  * Where everything stands on a line Verovio engraved (ADR 0078), in CSS px, read from the SVG's own
  * coordinates, not the page's layout, so it reads the same anywhere (a test's DOM too): each measure
  * (`m-<index>`, its first staff's lines), each staff drawn (`staves`, top down) from its lines in the
  * first measure, each onset from its notes' and rests' heads (`n-`, `r-` and the hidden `h-<staff>-<tick>`),
- * and each head's box with its chord's column (`headsOf`, ADR 0088).
+ * each head's box with its chord's column (`headsOf`, ADR 0088), each clef, key and time signature
+ * printed (`signsOf`, ADR 0094), the staves' names at a first line's head (`labelsOf`) and each
+ * syllable printed under its note (`syllablesOf`, ADR 0096).
  */
 export function layoutOf(
   svg: SVGSVGElement,
@@ -68,21 +71,27 @@ export function layoutOf(
   })
 
   const placed: Partial<Record<StaffId, { top: number; bottom: number }>> = {}
+  const boxes: { top: number; bottom: number }[] = []
   staffGroups(svg.querySelector('#m-0')).forEach((group, index) => {
     const staff = staves[index]
     if (!staff) return
     const lines = linesOf(group)
-    placed[staff] = { top: y(lines.top), bottom: y(lines.bottom) }
+    const box = { top: y(lines.top), bottom: y(lines.bottom) }
+    placed[staff] = box
+    boxes.push(box)
   })
-  const boxes = Object.values(placed)
   const firstLines = linesOf(staffGroups(svg.querySelector('#m-0'))[0])
   const space = (firstLines.bottom - firstLines.top) / 4 || 180
-  const { heads, columns, rests } = headsOf(svg, space, (box) => ({
+  const inPx = (box: Extent): Extent => ({
     left: x(box.left),
     right: x(box.right),
     top: y(box.top),
     bottom: y(box.bottom),
-  }))
+  })
+  const { heads, columns, rests } = headsOf(svg, space, inPx)
+  const signs = signsOf(svg, space, inPx, staves, (index) => laid[index]?.notes ?? Infinity)
+  const labels = labelsOf(svg, inPx, placed)
+  const syllables = syllablesOf(svg, inPx)
   return {
     width,
     height,
@@ -94,5 +103,8 @@ export function layoutOf(
     heads,
     columns,
     rests,
+    signs,
+    labels,
+    syllables,
   }
 }

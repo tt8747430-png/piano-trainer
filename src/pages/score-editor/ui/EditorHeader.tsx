@@ -1,84 +1,48 @@
-import { Redo2, Undo2, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
-import { RoundButton, usePageHeading } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import { useFoldKeys } from '@/features/live-keyboard'
+import { barAt } from '@/features/score-editor'
+import { RoundButton } from '@/shared/ui'
+import { ModeSwitch } from '@/widgets/mode-switch'
+import { ScoreViewMenu } from '@/widgets/score-view-menu'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { EditorViewMenu } from './EditorViewMenu'
-import { PieceSettings } from './PieceSettings'
-import { RecorderSheet } from './RecorderSheet'
+import { useStaffHeads } from '../model/use-staff-heads'
+import { EditRow } from './EditRow'
 
 /**
- * The editor's bar, one row at every size, as the Player's is: Close; the title (on a phone only
- * what the caret is on, `status`, or Your version); Undo and Redo, plain, as a notation app's edit
- * commands; then the screen's round buttons in the Player's order and look (ADR 0085): Record, which
- * opens the takes; the eye (`EditorViewMenu`), how the work is shown; the MIDI keyboard, where the
- * Player has it (hidden without Web MIDI); and the sliders (`PieceSettings`), the song as a whole
- * (ADR 0080), the two menus named on a wide screen. Play, ‹ › and + ride in the dock over the
- * sheet's foot, where the Player's transport is (`EditorDock`).
+ * The editor's bar, one at every size (ADR 0094): Close; Practise · Edit (ADR 0090), the Player at
+ * the caret's bar; the edit row (`EditRow`: Delete, Undo, Redo, Copy, Cut, Paste); then the screen's
+ * own round buttons in the Player's order and look: the eye (`ScoreViewMenu`, the Player's View, its
+ * Keys the keys' fold), how the work is shown, and the MIDI keyboard (hidden without Web MIDI). No
+ * Song sheet: the song is edited where it is printed and in the palette. On a phone the edit row
+ * wraps under the rest. The sheet prints the title, the page's heading (`TitleField`), and shows the
+ * caret: here a live line says where the caret is, a screen reader's alone (`status`). Play, ‹ › and
+ * Record ride in the dock over the sheet's foot, where the Player's transport is (`EditorDock`).
  */
 export function EditorHeader({ status }: { status?: ReactNode }) {
   const { t } = useTranslation(['editor', 'common'])
   const { actions, meta, takes } = useScoreEditorContext()
-  const heading = usePageHeading<HTMLHeadingElement>(meta.title)
-  const canUndo = useEditorState((state) => state.past.length > 0)
-  const canRedo = useEditorState((state) => state.future.length > 0)
+  const bar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
+  const keys = useFoldKeys()
+  const staves = useStaffHeads()
+  const piano = useEditorState((state) => !state.draft.leadSheet)
   const recording = takes.stage !== 'idle'
   return (
-    <div className="flex flex-wrap items-center gap-x-1 gap-y-1 sm:flex-nowrap sm:gap-x-2">
+    <div className="flex flex-wrap items-center gap-1 sm:flex-nowrap sm:gap-2">
+      {status}
       <RoundButton label={t('common:close')} icon={X} onClick={actions.close} />
-      {/* The title over what the caret is on; on a phone, where the buttons fill the first row, both
-          share a row of their own under them, the title first. */}
-      <div className="flex min-w-0 flex-col pl-1 max-sm:order-last max-sm:basis-full max-sm:flex-row max-sm:items-baseline max-sm:gap-2 max-sm:px-2 sm:flex-1">
-        <h1
-          {...heading}
-          className="truncate text-lg leading-tight outline-none max-sm:max-w-[45%] max-sm:shrink-0 max-sm:text-base"
-        >
-          {meta.title}
-        </h1>
-        <div className="flex min-w-0 items-baseline gap-2">
-          {meta.hasVersion ? (
-            <span className="shrink-0 text-sm font-medium text-muted-foreground">
-              {t('editor:yourVersion')}
-            </span>
-          ) : null}
-          {status}
-        </div>
-      </div>
-      <div
-        role="toolbar"
-        aria-label={t('editor:dock')}
-        className="ms-auto flex items-center gap-0.5 sm:gap-1"
-      >
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label={t('editor:undo')}
-          title={t('editor:undo')}
-          disabled={!canUndo || recording}
-          className="rounded-full"
-          onClick={() => actions.dispatch({ type: 'undo' })}
-        >
-          <Undo2 aria-hidden />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label={t('editor:redo')}
-          title={t('editor:redo')}
-          disabled={!canRedo || recording}
-          className="rounded-full"
-          onClick={() => actions.dispatch({ type: 'redo' })}
-        >
-          <Redo2 aria-hidden />
-        </Button>
-      </div>
-      <div className="flex items-center gap-0.5 sm:gap-1">
-        <RecorderSheet />
-        <EditorViewMenu />
+      <ModeSwitch pieceId={meta.id} mode="edit" bar={bar} disabled={recording} />
+      <EditRow className="max-sm:order-last max-sm:basis-full max-sm:justify-between" />
+      <div className="ms-auto flex items-center gap-1">
+        <ScoreViewMenu
+          keys={{ shown: !keys.folded, show: (on) => keys.fold(!on) }}
+          staves={staves}
+          piano={piano}
+          disabled={recording}
+        />
         <MidiButton />
-        <PieceSettings />
       </div>
     </div>
   )

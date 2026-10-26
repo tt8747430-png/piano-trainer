@@ -14,9 +14,9 @@ const PLAN: RecorderPlan = {
   meter: '4/4',
   from: 0,
   tempo: 120,
-  click: true,
   room: 100,
   tune: [],
+  along: { click: true, tune: false },
 }
 
 function setUp(plan: RecorderPlan = PLAN) {
@@ -25,7 +25,7 @@ function setUp(plan: RecorderPlan = PLAN) {
   const progress: RecorderProgress[] = []
   const ended: (Played | null)[] = []
   audio.setNow(1)
-  const stop = startRecorder(audio, keyboard, plan, {
+  const session = startRecorder(audio, keyboard, plan, {
     progress: (each) => progress.push(each),
     ended: (played) => ended.push(played),
   })
@@ -34,7 +34,7 @@ function setUp(plan: RecorderPlan = PLAN) {
     audio.setNow(at)
     vi.advanceTimersByTime(25)
   }
-  return { audio, keyboard, progress, ended, stop, reach }
+  return { audio, keyboard, progress, ended, stop: session.stop, along: session.along, reach }
 }
 
 beforeEach(() => vi.useFakeTimers())
@@ -105,7 +105,7 @@ describe('startRecorder', () => {
     const ended: (Played | null)[] = []
     audio.setNow(1)
     keyboard.pedal(true)
-    const stop = startRecorder(audio, keyboard, PLAN, {
+    const { stop } = startRecorder(audio, keyboard, PLAN, {
       progress: () => {},
       ended: (played) => ended.push(played),
     })
@@ -118,10 +118,60 @@ describe('startRecorder', () => {
 
   it('plays the song’s tune under the take from its downbeat, and stops it at Stop', () => {
     const tune = [{ kind: 'note', midi: midi(72), at: 0, duration: 0.5, velocity: 0.2 }] as const
-    const { audio, stop } = setUp({ ...PLAN, tune })
+    const { audio, stop } = setUp({ ...PLAN, tune, along: { click: true, tune: true } })
     // Just after now (1 s), the count-in's 2 s, then the downbeat.
     expect(audio.played.at(-1)).toEqual({ sounds: tune, at: 3.1 })
     stop()
+    expect(audio.stops).toBe(2)
+  })
+
+  it('plays no tune under the take while it is off', () => {
+    const tune = [{ kind: 'note', midi: midi(72), at: 0, duration: 0.5, velocity: 0.2 }] as const
+    const { audio } = setUp({ ...PLAN, tune })
+    expect(audio.played).toHaveLength(1)
+  })
+
+  it('turns the click after the count-in off and on again while it records, the count-in kept', () => {
+    const { audio, along } = setUp()
+    // In the count-in (its beats 1.1, 1.6, 2.1 and 2.6 s): the rest of it, and no click after it.
+    audio.setNow(1.5)
+    along({ click: false, tune: false })
+    expect(audio.stops).toBe(2)
+    expect(audio.played.at(-1)?.at).toBeCloseTo(1.1)
+    expect(audio.played.at(-1)?.sounds.map((click) => click.at)).toEqual([0.5, 1, 1.5])
+    // Recording, the click comes back from the next beat on.
+    audio.setNow(3.3)
+    along({ click: true, tune: false })
+    expect(audio.stops).toBe(3)
+    expect(
+      audio.played
+        .at(-1)
+        ?.sounds.slice(0, 3)
+        .map((click) => click.at),
+    ).toEqual([2.5, 3, 3.5])
+  })
+
+  it('brings the tune in under the take from where it is, and changes nothing asked for twice', () => {
+    const tune = [
+      { kind: 'note', midi: midi(72), at: 0, duration: 0.5, velocity: 0.2 },
+      { kind: 'note', midi: midi(74), at: 1, duration: 0.5, velocity: 0.2 },
+    ] as const
+    const { audio, along } = setUp({ ...PLAN, tune })
+    audio.setNow(3.3)
+    along({ click: true, tune: true })
+    expect(audio.played.at(-1)).toEqual({ sounds: [tune[1]], at: 3.1 })
+    const plays = audio.played.length
+    along({ click: true, tune: true })
+    expect(audio.played).toHaveLength(plays)
+  })
+
+  it('changes nothing once it has stopped', () => {
+    const { audio, stop, along } = setUp()
+    audio.setNow(2)
+    stop()
+    const plays = audio.played.length
+    along({ click: false, tune: true })
+    expect(audio.played).toHaveLength(plays)
     expect(audio.stops).toBe(2)
   })
 

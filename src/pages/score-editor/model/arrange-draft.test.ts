@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { barsOf, readDraft } from '@/features/score-editor'
-import { arrangeDraft, playedHands, playedInBar } from './arrange-draft'
+import { readDraft } from '@/features/score-editor'
+import { arrangeDraft } from './arrange-draft'
 
 const draft = readDraft({
   key: 'C',
@@ -8,36 +8,20 @@ const draft = readDraft({
   tempo: 90,
   pattern: 'block',
   sections: [{ kind: 'verse', lines: ['C G'] }],
-  melody: 'E4/4 | D4/4',
-  hands: { lh: '- | G2/4' },
+  staves: [{ notes: 'E4/4 | D4/4' }],
+  hands: { rh: 'r/4 | r/4', lh: 'r/4 | G2/4' },
 })
 
 describe('arrangeDraft', () => {
-  it('plays the draft as written: the pattern, the written hand, and the melody heard', () => {
+  it('plays the draft as written: the hands’ notes alone, and its single staff heard (ADR 0097)', () => {
     const performance = arrangeDraft(draft)
-    expect(performance.notes.filter((n) => n.hand === 'melody').map((n) => n.startTick)).toEqual([
-      0, 96,
+    const staff = performance.notes.filter((n) => n.hand === 'staff')
+    expect(staff.map((n) => [n.startTick, n.silent])).toEqual([
+      [0, undefined],
+      [96, undefined],
     ])
-    const [, second] = barsOf(draft)
-    if (!second) throw new Error('a second bar')
-    expect(playedInBar(performance, 'lh', second).map((n) => [n.midi, n.startTick])).toEqual([
-      [43, 96],
-    ])
-  })
-
-  it('gives what the pattern plays in a bar a hand leaves to it', () => {
-    const [first] = barsOf(draft)
-    if (!first) throw new Error('a first bar')
-    const left = playedInBar(arrangeDraft(draft), 'lh', first)
-    expect(left.length).toBeGreaterThan(0)
-    expect(left.every((n) => n.startTick >= 0 && n.startTick < 96)).toBe(true)
-  })
-
-  it('gives each hand’s notes as played, the pattern’s with the written, for the sheet to show', () => {
-    const hands = playedHands(arrangeDraft(draft))
-    expect(hands.lh.some((n) => n.startTick < 96)).toBe(true)
-    expect(hands.lh.filter((n) => n.startTick >= 96).map((n) => n.midi)).toEqual([43])
-    expect(hands.rh.length).toBeGreaterThan(0)
-    expect(hands.rh.every((n) => n.finger === undefined && n.marks === undefined)).toBe(true)
+    expect(
+      performance.notes.filter((n) => n.hand !== 'staff').map((n) => [n.hand, n.midi, n.startTick]),
+    ).toEqual([['lh', 43, 96]])
   })
 })

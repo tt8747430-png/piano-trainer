@@ -2,7 +2,7 @@ import type { LucideIcon } from 'lucide-react'
 import type { ComponentProps } from 'react'
 import { Button } from './primitives/button'
 
-/** A 44px round icon button, named by its label. A round link is `RoundLink`. */
+/** A 44px round icon button, named by its label, which it says when pointed at. A round link is `RoundLink`. */
 export function RoundButton({
   label,
   icon: Icon,
@@ -12,7 +12,7 @@ export function RoundButton({
   'children' | 'render' | 'nativeButton'
 >) {
   return (
-    <Button variant="surface" size="icon" aria-label={label} {...props}>
+    <Button variant="surface" size="icon" aria-label={label} title={label} {...props}>
       <Icon aria-hidden />
     </Button>
   )

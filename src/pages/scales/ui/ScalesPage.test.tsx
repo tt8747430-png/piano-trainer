@@ -153,7 +153,7 @@ describe('Practice → Scales and keys', () => {
   it('plays a chord of the list from its degree’s key', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/practice/scales?root=A&show=chords&chords=4')
-    await user.click(await screen.findByRole('button', { name: /^C#m7/ }))
+    await user.click(await screen.findByRole('button', { name: /^C♯m7/ }))
     expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([73, 76, 80, 83])
   })
 
@@ -168,6 +168,14 @@ describe('Practice → Scales and keys', () => {
     }
     expect(screen.getByRole('button', { name: /^Em/ })).toHaveAttribute('data-holds')
     expect(screen.getByRole('button', { name: /^Dm/ })).not.toHaveAttribute('data-holds')
+  })
+
+  it('prints the chords, and those that hold a note, as the sheets print them', async () => {
+    await renderApp('/practice/scales?root=A&show=chords&keysPlay=notes')
+    const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
+    expect(screen.getByRole('button', { name: /^G♯°/ })).toBeInTheDocument()
+    fireEvent.pointerDown(within(keyboard).getByRole('button', { name: 'E5' }), { pointerId: 1 })
+    expect(screen.getByText('E is in A, C♯m, and E')).toBeInTheDocument()
   })
 
   it('in Notes, hears a MIDI key too, and says when no chord holds a note', async () => {
@@ -285,7 +293,7 @@ describe('Practice → Scales and keys', () => {
     const sizes = await screen.findByRole('radiogroup', { name: 'Chord size' })
     await user.click(within(sizes).getByRole('radio', { name: '13ths' }))
     expect(router.state.location.search).toMatchObject({ chords: 7 })
-    expect(screen.getByRole('button', { name: /^FMaj13#11/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /^FMaj13♯11/ })).toBeInTheDocument()
   })
 
   it('shows the chords in an inversion over their bass, each numeral figured', async () => {
@@ -374,6 +382,8 @@ describe('Practice → Scales and keys, Key view', () => {
     // Its vii° stands on B minor's place, written as the chord it is.
     expect(within(circle).getByRole('link', { name: 'B minor' })).toHaveTextContent('B°vii°')
     expect(within(circle).getByRole('link', { name: 'E♭ major' })).toHaveTextContent('3♭')
+    // A key the circle names is printed as a chord is, over its signature's count and sign.
+    expect(within(circle).getByRole('link', { name: 'F# minor' })).toHaveTextContent('F♯m3♯')
   })
 
   it('names a minor scale’s key and marks the notes its signature writes', async () => {
@@ -413,6 +423,18 @@ describe('Practice → Scales and keys, Key view', () => {
     expect(screen.getByRole('link', { name: 'F Dorian' }).getAttribute('href')).toMatch(
       /^\/practice\/scales\?/,
     )
+  })
+
+  it('opens a mode of the key in place, on its run, keeping the other choices', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/scales?root=Eb&show=key&hands=lh')
+    await screen.findByRole('heading', { level: 2, name: 'E♭ major' })
+    const entries = router.history.length
+    await user.click(screen.getByRole('link', { name: 'F Dorian' }))
+    // A mode has no Key view: its page opens on its run, the hands chosen kept, the entry replaced.
+    expect(router.state.location.search).toEqual({ root: 'F', kind: 'dorian', hands: 'lh' })
+    expect(await screen.findByRole('heading', { level: 2, name: 'F Dorian' })).toBeInTheDocument()
+    expect(router.history.length).toBe(entries)
   })
 
   it('goes to a minor key as its natural minor, and keeps the minor it was on', async () => {
@@ -467,6 +489,15 @@ describe('Practice → Scales and keys, Key view', () => {
     ).toBeInTheDocument()
     await user.click(within(harmonise).getByRole('radio', { name: 'D' }))
     await waitFor(() => expect(router.state.location.search).toMatchObject({ melody: 'D' }))
+  })
+
+  it('prints the chords that harmonise a note as the sheets print them', async () => {
+    await renderApp('/practice/scales?root=E&show=key')
+    const harmonise = await screen.findByRole('region', { name: 'Harmonise a melody note' })
+    // G♯, E major's 3rd: C♯m holds it as its 5th.
+    expect(
+      within(harmonise).getByRole('button', { name: 'C♯mas 5 · in the key' }),
+    ).toBeInTheDocument()
   })
 
   it('says so when no chord of the key holds the note, and offers the borrowed chords', async () => {

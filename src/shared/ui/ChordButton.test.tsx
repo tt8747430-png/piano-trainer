@@ -18,4 +18,9 @@ describe('ChordButton', () => {
     expect(button).toHaveAttribute('aria-pressed', 'true')
     expect(button).toHaveAttribute('data-holds')
   })
+
+  it('prints its symbol as the sheets print it, ♯ and ♭ as signs', () => {
+    render(<ChordButton symbol="F#m7b5" numeral="viiø7" playing={false} onClick={() => {}} />)
+    expect(screen.getByRole('button', { name: /^F♯m7♭5/ })).toBeInTheDocument()
+  })
 })

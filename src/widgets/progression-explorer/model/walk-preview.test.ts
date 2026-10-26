@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { note, parseNumerals } from '@/shared/lib/music'
+import { C_MAJOR, parseNumerals } from '@/shared/lib/music'
 import { walkPreview } from './walk-preview'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const TWO_FIVE_ONE = parseNumerals('ii V I') ?? []
 
 describe('walkPreview', () => {
@@ -18,6 +17,12 @@ describe('walkPreview', () => {
     )
     expect(walkPreview(TWO_FIVE_ONE, C_MAJOR, 'semitones-up', 'triads')).toBe(
       'Dm G C · E♭m A♭ D♭ …',
+    )
+  })
+
+  it('prints each chord as the sheets print it, a sharp as its sign', () => {
+    expect(walkPreview(TWO_FIVE_ONE, C_MAJOR, 'semitones-down', 'triads')).toBe(
+      'Dm G C · C♯m F♯ B …',
     )
   })
 })

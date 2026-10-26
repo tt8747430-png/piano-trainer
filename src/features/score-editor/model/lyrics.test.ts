@@ -1,0 +1,134 @@
+import { describe, expect, it } from 'vitest'
+import { gatherLyrics, isDegreePiece, musicOf, PIECES, writeLyrics } from '@/entities/piece'
+import { draftOf } from '../testing/test-draft'
+import { lyricsLayer, readDraft, tuneNotes, writeDraft } from './draft'
+import {
+  setSyllable,
+  singsHere,
+  sungAt,
+  sungFrom,
+  sungNear,
+  syllableAt,
+  verseCount,
+} from './lyrics'
+
+/** A tune of four quarters in bar 1, bar 2 silent; the piano written and silent. */
+const sungMusic = {
+  key: 'C' as const,
+  sections: [{ kind: 'verse' as const, lines: ['C G'] }],
+  staves: [{ notes: 'C4/1 D4/1 E4/1 F4/1 | r/4' }],
+  hands: { rh: 'r/4 | r/4', lh: 'r/4 | r/4' },
+}
+const sung = draftOf({ ...sungMusic, lyrics: ['Si-_ lent night,'] })
+const verses = (draft: typeof sung) => gatherLyrics(tuneNotes(draft)).map(writeLyrics)
+
+describe('the words in the editor (ADR 0093)', () => {
+  it('go under the staff they are written on: the top single staff’s, else the upper staff (ADR 0097)', () => {
+    expect(lyricsLayer(sung)).toBe('staff0')
+    expect(singsHere(sung, 'staff0')).toBe(true)
+    expect(singsHere(sung, 'rh')).toBe(false)
+    const piano = draftOf({ hands: { rh: 'G4+B4/2 D5/2 | r/4', lh: 'r/4 | r/4' } })
+    expect(lyricsLayer(piano)).toBe('rh')
+    expect(singsHere(piano, 'rh')).toBe(true)
+    expect(singsHere(piano, 'lh')).toBe(false)
+    // On the second staff where they are written there; never on a hand hidden.
+    const second = draftOf({
+      ...sungMusic,
+      staves: [...sungMusic.staves, { notes: 'G3/2 G3/2 | r/4' }],
+      lyrics: ['one two'],
+      lyricsOn: 1,
+    })
+    expect(lyricsLayer(second)).toBe('staff1')
+    expect(singsHere(second, 'staff1')).toBe(true)
+    expect(singsHere(second, 'staff0')).toBe(false)
+    expect(singsHere({ ...piano, leadSheet: true }, 'rh')).toBe(false)
+  })
+
+  it('go under the staff they are written on: the upper staff though the score has a single staff', () => {
+    const upper = draftOf({
+      key: 'C',
+      sections: [{ kind: 'verse', lines: ['C G'] }],
+      staves: [{ notes: 'C4/1 D4/1 E4/1 F4/1 | r/4' }],
+      hands: { rh: 'E5/2 G5/2 | r/4', lh: 'r/4 | r/4' },
+      lyrics: ['one two'],
+      lyricsOn: 'rh',
+    })
+    expect(lyricsLayer(upper)).toBe('rh')
+    expect(singsHere(upper, 'rh')).toBe(true)
+    expect(singsHere(upper, 'staff0')).toBe(false)
+    expect(verses(upper)).toEqual(['one two'])
+    expect(writeDraft(upper)).toMatchObject({ lyrics: ['one two'], lyricsOn: 'rh' })
+  })
+
+  it('find where the Lyrics field opens: the tune’s note at a tick, else the next, else the last before (ADR 0096)', () => {
+    expect(sungFrom(sung, 24)).toBe(24)
+    // From bar 2's rest, with no note after it: the last before.
+    expect(sungFrom(sung, 96)).toBe(72)
+    const late = draftOf({ ...sungMusic, staves: [{ notes: 'r/4 | C4/4' }] })
+    expect(sungFrom(late, 0)).toBe(96)
+    expect(sungFrom(draftOf({ ...sungMusic, staves: [{ notes: 'r/4 | r/4' }] }), 0)).toBeNull()
+  })
+
+  it('count the verses, find the note singing at a tick and the tune’s notes on either side', () => {
+    expect(verseCount(sung)).toBe(1)
+    expect(verseCount(draftOf())).toBe(0)
+    expect(sungAt(sung, 24)?.midi).toBe(62)
+    expect(sungAt(sung, 96)).toBeNull()
+    expect(sungNear(sung, 24, 1)).toBe(48)
+    expect(sungNear(sung, 24, -1)).toBe(0)
+    expect(sungNear(sung, 72, 1)).toBeNull()
+    expect(sungNear(sung, 0, -1)).toBeNull()
+  })
+
+  it('show each note’s syllable as the field writes it: its dash and the notes it is held over', () => {
+    expect([0, 24, 48, 72].map((tick) => syllableAt(sung, tick, 0))).toEqual([
+      'Si-_',
+      '',
+      'lent',
+      'night,',
+    ])
+    expect(syllableAt(sung, 0, 1)).toBe('')
+  })
+
+  it('set a syllable on the note at the caret, a melisma silencing the notes it is held over', () => {
+    const changed = setSyllable(sung, 24, 0, 'lent')
+    expect(verses(changed)).toEqual(['Si- lent lent night,'])
+    const held = setSyllable(sung, 0, 0, 'Si__')
+    expect(verses(held)).toEqual(['Si__ night,'])
+    expect(verses(setSyllable(held, 24, 0, 'x'))).toEqual(['Si x ~ night,'])
+    // The last word taken off: the verse ends where its words do.
+    expect(verses(setSyllable(sung, 72, 0, ''))).toEqual(['Si-_ lent'])
+    expect(verses(setSyllable(sung, 72, 0, '~'))).toEqual(['Si-_ lent'])
+    expect(setSyllable(sung, 96, 0, 'x')).toBe(sung)
+  })
+
+  it('start a verse where none was, written with the music', () => {
+    const second = setSyllable(sung, 48, 1, 'Nacht')
+    expect(verseCount(second)).toBe(2)
+    expect(writeDraft(second).lyrics).toEqual(['Si-_ lent night,', '~ ~ Nacht'])
+    // Taken back, the verse goes.
+    expect(writeDraft(setSyllable(second, 48, 1, '')).lyrics).toEqual(['Si-_ lent night,'])
+  })
+
+  it('save a verse begun on a long tune as its words alone, no empty place for every note after', () => {
+    const silent = PIECES.find((piece) => piece.id === 'silent')
+    if (!silent || isDegreePiece(silent)) throw new Error('the catalog has no Silent Night')
+    const draft = readDraft(musicOf(silent))
+    const [first, second] = tuneNotes(draft)
+    if (!first || !second) throw new Error('Silent Night has no tune')
+    const holy = setSyllable(
+      setSyllable(draft, first.startTick, 1, 'Ho-'),
+      second.startTick,
+      1,
+      'ly',
+    )
+    expect(writeDraft(holy).lyrics?.[1]).toBe('Ho- ly')
+  })
+
+  it('sing a chord of the upper staff on one note where the piano is the tune', () => {
+    const piano = draftOf({ hands: { rh: 'G4+B4/2 D5/2 | r/4', lh: 'r/4 | r/4' } })
+    const worded = setSyllable(setSyllable(piano, 0, 0, 'A-'), 48, 0, 'men')
+    expect(writeDraft(worded).lyrics).toEqual(['A- men'])
+    expect(worded.hands.rh.filter((n) => n.lyrics).map((n) => n.midi)).toEqual([71, 74])
+  })
+})

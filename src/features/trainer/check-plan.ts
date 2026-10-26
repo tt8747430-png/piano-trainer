@@ -33,9 +33,10 @@ function untilKnown(
 }
 
 /**
- * A Check's questions (spec §4.6): a piece's own chords as written, in turn, six questions or one each; a step's
- * chord family or scale until each is Known, which marks the step learned (ADR 0006). A piece is looked up in
- * `pieceOf`: the repertoire's, so a learner's version and own song are checked as they play.
+ * A Check's questions (spec §4.6): a piece's own chords as written, in turn, six questions or one each
+ * (none for a piece of no chord symbol, ADR 0094); a step's chord family or scale until each is Known,
+ * which marks the step learned (ADR 0006). A piece is looked up in `pieceOf`: the repertoire's, so a
+ * learner's version and own song are checked as they play.
  */
 export function checkPlan(
   of: StepId,
@@ -50,6 +51,7 @@ export function checkPlan(
     if (!piece) return null
     const skills = skillsOfPiece(piece)
     const chords = chordsOfPiece(piece).map((chord) => ({ ...chord, inversion: null }))
+    if (chords.length === 0) return null
     const length = Math.max(PIECE_CHECK, chords.length)
     return {
       of,

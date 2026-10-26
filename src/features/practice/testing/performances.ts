@@ -1,5 +1,5 @@
 import { arrange, parseFigure, type Chart, type Performance } from '@/shared/lib/arrangement'
-import { note, parseChordSymbol } from '@/shared/lib/music'
+import { midi, note, parseChordSymbol } from '@/shared/lib/music'
 
 /** Chords on every beat in the right hand, the root in octaves at each chord in the left. */
 const BEATS = {
@@ -40,6 +40,22 @@ export const ONE_BAR: Performance = arrange(chart(['C', 'G']), { tonic: note('C'
 export const TWO_BARS: Performance = arrange(chart(['C'], ['G']), {
   tonic: note('C'),
   pattern: BEATS,
+})
+
+/** The two bars under a single staff of a whole note a bar, E5 then D5, heard (ADR 0097). */
+export const TWO_BARS_UNDER_A_STAFF: Performance = arrange(chart(['C'], ['G']), {
+  tonic: note('C'),
+  pattern: BEATS,
+  staves: [
+    {
+      clef: 'treble',
+      notes: [
+        { midi: midi(76), spelled: note('E'), startTick: 0, durationTicks: 96 },
+        { midi: midi(74), spelled: note('D'), startTick: 96, durationTicks: 96 },
+      ],
+    },
+  ],
+  hearTune: true,
 })
 
 /** The same two bars in halves: four beat groups, two to a bar, at 0, 48, 96, 144. */

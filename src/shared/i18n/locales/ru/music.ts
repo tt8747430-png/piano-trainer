@@ -2,12 +2,19 @@ import type { LocaleResources } from '../../types'
 
 export const music: LocaleResources['music'] = {
   major: 'M',
+  bpm: '{{tempo}} уд/мин',
   inversion: {
     label: 'Обращение',
     root: 'Основной',
     first: '1-е',
     second: '2-е',
     third: '3-е',
+  },
+  inversionName: {
+    root: 'Основной вид',
+    first: '1-е обращение',
+    second: '2-е обращение',
+    third: '3-е обращение',
   },
   // Where a row's hand stands: the first chord's inversion, then each nearest the last or all in it.
   position: {
@@ -21,8 +28,8 @@ export const music: LocaleResources['music'] = {
     },
     first: 'Первый аккорд',
     nearest: 'Плавно',
-    nearestOn: 'Каждый следующий аккорд сдвигается как можно меньше',
-    nearestOff: 'Все аккорды в положении первого',
+    nearestInfo:
+      'Включено — каждый следующий аккорд сдвигается как можно меньше; выключено — все аккорды остаются в положении первого.',
   },
   // How big a chord is: its stack of notes, triads to 13ths.
   chordSize: {
@@ -159,16 +166,17 @@ export const music: LocaleResources['music'] = {
   sheet: {
     label: 'Ноты',
     layout: { label: 'Вид нот', horizontal: 'Панорама', scroll: 'Прокрутка', pages: 'Страницы' },
-    staff: { melody: 'Мелодия', voice2: 'Голос 2', voice3: 'Голос 3', voice4: 'Голос 4' },
     fingers: 'Аппликатура',
     noteNames: 'Названия нот',
-    chordNames: 'Названия аккордов',
+    chordNames: 'Аккордовые символы',
     loading: 'Загрузка нот',
     error: 'Ноты не удаётся показать.',
     bar: 'Такт {{n}}',
     barChords: 'Такт {{n}}: {{chords}}',
     loopStart: 'Начало повтора',
     loopEnd: 'Конец повтора',
+    staves: { piano: 'Фортепиано' },
+    staff: 'Нотоносец {{n}}',
     canvas: {
       label: 'Страницы: перетащите, чтобы сдвинуть; сведите пальцы или Ctrl с колёсиком — масштаб',
       zoomIn: 'Крупнее',
@@ -177,6 +185,16 @@ export const music: LocaleResources['music'] = {
       zoom: '{{percent}} %',
     },
   },
+  view: {
+    label: 'Вид',
+    staves: 'Нотоносцы',
+    upper: 'Верхний нотоносец',
+    lower: 'Нижний нотоносец',
+    show: 'Показывать',
+    lyrics: 'Текст',
+    fingers: 'Аппликатура',
+    keys: 'Клавиши',
+  },
   patternShelf: { favourites: 'Избранное', own: 'Ваши фактуры', hidden: 'Скрытые' },
   patternPart: { styles: 'Стили', yours: 'Свои' },
   play: 'Сыграть',
@@ -184,6 +202,13 @@ export const music: LocaleResources['music'] = {
   playBar: 'Сыграть такт {{n}}',
   playBarChord: 'Сыграть такт {{n}}, {{symbol}}',
   rowChords: 'Аккорды',
+  chordDiagram: '{{symbol}}: {{notes}}',
+  chordSummary: 'Аккорды',
+  chordSheet: {
+    title: 'Аккорд {{symbol}}',
+    learn: 'Сыграйте его на клавишах',
+    learned: 'Именно так.',
+  },
   intervalCard: {
     semitones: 'Полутонов: {{n}}',
     semitone: 'Величина: полутон',
@@ -195,34 +220,5 @@ export const music: LocaleResources['music'] = {
     up: 'Вверх',
     down: 'Вниз',
     together: 'Вместе',
-  },
-  instrument: {
-    voice: 'Голос',
-    violin: 'Скрипка',
-    cello: 'Виолончель',
-    flute: 'Флейта',
-    oboe: 'Гобой',
-    clarinet: 'Кларнет',
-    trumpet: 'Труба',
-    horn: 'Валторна',
-    guitar: 'Гитара',
-  },
-  instrumentShort: {
-    voice: 'Гол.',
-    violin: 'Скр.',
-    cello: 'Влч.',
-    flute: 'Фл.',
-    oboe: 'Гоб.',
-    clarinet: 'Кл.',
-    trumpet: 'Тр.',
-    horn: 'Влт.',
-    guitar: 'Гит.',
-  },
-  instrumentFamily: {
-    voices: 'Голоса',
-    strings: 'Струнные',
-    woodwind: 'Деревянные духовые',
-    brass: 'Медные духовые',
-    plucked: 'Щипковые',
   },
 }

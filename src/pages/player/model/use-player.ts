@@ -1,9 +1,10 @@
 import { usePatternBook } from '@/entities/pattern'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useEffectEvent, useMemo } from 'react'
 import { isLeadSheet, isOwnKey, pieceFit, usePieceHeadings, type Piece } from '@/entities/piece'
 import { useProgressStoreApi } from '@/entities/progress'
 import { selectPractice, useSettings } from '@/entities/settings'
 import { arrangePiece, type PracticeChoice } from '@/features/practice'
+import { recordPass } from '@/features/record-lesson'
 import { recordPractised } from '@/features/record-practised'
 import type { SetupChange } from '@/widgets/player-setup'
 import { usePracticePlayer } from '@/widgets/practice-player'
@@ -16,16 +17,15 @@ export function usePlayer(
   search: PlayerSearch,
   setSearch: (patch: Partial<PlayerSearch>) => void,
 ): WalkingPlayerOf<PracticeChoice, SetupChange> {
-  const { melody: heard, recording: withRecording } = useSettings(selectPractice)
+  const { tune: heard, recording: withRecording } = useSettings(selectPractice)
   // A lead sheet's tune is always heard: it is what its sheet shows (ADR 0083).
-  const melody = heard || isLeadSheet(piece)
+  const tune = heard || isLeadSheet(piece)
   const progress = useProgressStoreApi()
   const book = usePatternBook()
   const { key, pattern, rh, lh, inversion, nearest, chordSize } = search
   const choice = useMemo(
-    () =>
-      resolveChoice(piece, { key, pattern, rh, lh, inversion, nearest, chordSize }, melody, book),
-    [piece, key, pattern, rh, lh, inversion, nearest, chordSize, melody, book],
+    () => resolveChoice(piece, { key, pattern, rh, lh, inversion, nearest, chordSize }, tune, book),
+    [piece, key, pattern, rh, lh, inversion, nearest, chordSize, tune, book],
   )
   // The Player plays the repeats taken, the bars unrolled as they are played.
   const performance = useMemo(
@@ -38,6 +38,16 @@ export function usePlayer(
   const recording =
     piece.recording && withRecording && isOwnKey(piece, choice.tonic) ? piece.recording : null
   const player = usePracticePlayer(performance, search, setSearch, piece.tempo, recording)
+  // A pass played through in Wait mode is a lesson done: its loop's bars, or the whole piece's
+  // (ADR 0100). Read as it is counted, never a reason to record again.
+  const { passes } = player.practice.state
+  const recordFinished = useEffectEvent(() => {
+    const whole = { first: 0, last: performance.bars.length - 1 }
+    recordPass(progress, piece.id, player.loop ?? whole, new Date())
+  })
+  useEffect(() => {
+    if (passes > 0) recordFinished()
+  }, [passes])
   // Read once a piece: the Player renders each beat, and a fit reads the piece's chart.
   const fit = useMemo(() => pieceFit(piece), [piece])
   return {

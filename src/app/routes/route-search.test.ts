@@ -1,9 +1,7 @@
 // @vitest-environment jsdom
-import { createMemoryHistory } from '@tanstack/react-router'
 import { describe, expect, it } from 'vitest'
-import { testContext } from '@/app/testing/test-context'
+import { testRouter } from '@/app/testing/test-context'
 import { keyParam, note } from '@/shared/lib/music'
-import { createAppRouter } from '../router'
 import {
   CHORDS_DEFAULTS,
   INTERVALS_DEFAULTS,
@@ -16,10 +14,7 @@ import { SONGS_DEFAULTS } from './songs-search'
 
 /** What a route reads from a URL, however it was typed, kept or edited. */
 async function searchAt(url: string) {
-  const router = createAppRouter({
-    history: createMemoryHistory({ initialEntries: [url] }),
-    ...testContext(),
-  })
+  const router = testRouter(url)
   await router.load()
   return router.state.matches.at(-1)?.search
 }
@@ -46,9 +41,19 @@ describe('search params', () => {
     expect(await searchAt('/practice/chord-finder?keys=x-500&key=H')).toEqual(CHORD_FINDER_DEFAULTS)
   })
 
-  it('open the score editor’s takes only when the URL says so', async () => {
-    expect(await searchAt('/edit/bz5?record=true')).toEqual({ record: true })
-    expect(await searchAt('/edit/bz5?record=yes')).toEqual({ record: false })
+  it('open the score editor’s takes, or press its Record as it opens, only when the URL says so', async () => {
+    expect(await searchAt('/edit/bz5?takes=true')).toEqual({ takes: true, record: false })
+    expect(await searchAt('/edit/bz5?record=true')).toEqual({ takes: false, record: true })
+    expect(await searchAt('/edit/bz5?takes=yes&record=1')).toEqual(EDIT_DEFAULTS)
+  })
+
+  it('carry the bar between the Player and the score editor, a bar as printed (ADR 0090)', async () => {
+    expect(await searchAt('/edit/bz5?bar=4')).toEqual({ ...EDIT_DEFAULTS, bar: 4 })
+    expect(await searchAt('/play/bz5?bar=3')).toEqual({ ...PLAYER_DEFAULTS, bar: 3 })
+    for (const bar of ['0', '-2', '2.5', 'x']) {
+      expect(await searchAt(`/edit/bz5?bar=${bar}`)).toEqual(EDIT_DEFAULTS)
+      expect(await searchAt(`/play/bz5?bar=${bar}`)).toEqual(PLAYER_DEFAULTS)
+    }
   })
 
   it('keep what is valid', async () => {
@@ -286,10 +291,7 @@ describe('search params', () => {
 
   it('leave out of the URL only the line its key opens on', async () => {
     const F_SHARP_MINOR = keyParam({ tonic: note('F', 1), minor: true })
-    const router = createAppRouter({
-      history: createMemoryHistory({ initialEntries: ['/practice/progressions'] }),
-      ...testContext(),
-    })
+    const router = testRouter('/practice/progressions')
     await router.load()
     await router.navigate({
       to: '/practice/progressions',

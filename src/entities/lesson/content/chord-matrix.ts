@@ -1,7 +1,5 @@
-import { note } from '@/shared/lib/music'
+import { C_MAJOR } from '@/shared/lib/music'
 import type { Lesson } from '../model/types'
-
-const C_MAJOR = { tonic: note('C'), minor: false }
 
 const SECONDARY_DOMINANTS = 'I V/ii ii V/iii iii V/IV IV V/V V V/vi vi V I'
 
@@ -33,7 +31,7 @@ const chordMatrix: Lesson = {
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'A secondary dominant', ru: 'Вторичная доминанта' },
+          lead: { en: 'A secondary dominant', ru: 'Побочная доминанта' },
           text: {
             en: 'is a dominant 7th that leads to a chord other than I. It stands a 5th above that chord: E7 leads to Am, A7 to Dm. Every chord but B° has one.',
             ru: '— доминантсептаккорд, который ведёт не к I, а к другому аккорду. Он стоит на квинту выше него: E7 ведёт к Am, A7 к Dm. Такая доминанта есть у каждого аккорда, кроме B°.',
@@ -49,7 +47,7 @@ const chordMatrix: Lesson = {
           kind: 'text',
           text: {
             en: 'A secondary dominant makes the ear expect its chord. Here E goes to Am, as expected. D promises G, then moves to F instead.',
-            ru: 'После вторичной доминанты слух ждёт её аккорд. Здесь E приходит в Am, как и ожидалось. D обещает G, но уходит в F.',
+            ru: 'После побочной доминанты слух ждёт её аккорд. Здесь E приходит в Am, как и ожидалось. D обещает G, но уходит в F.',
           },
         },
         { kind: 'progression', numerals: 'I V/vi vi IV V I vi V/V IV I', key: C_MAJOR },
@@ -62,7 +60,7 @@ const chordMatrix: Lesson = {
           kind: 'text',
           text: {
             en: 'A secondary dominant can bring its own ii first: a minor 7th, or half-diminished when its target is minor.',
-            ru: 'Перед вторичной доминантой может стоять свой ii. Это малый септаккорд, а если она ведёт к минорному аккорду, полууменьшённый.',
+            ru: 'Перед побочной доминантой может стоять свой ii. Это малый септаккорд, а если она ведёт к минорному аккорду, полууменьшённый.',
           },
         },
         {
@@ -120,7 +118,7 @@ const chordMatrix: Lesson = {
             },
             {
               en: 'Follow each secondary dominant with its chord.',
-              ru: 'После каждой вторичной доминанты ставьте её аккорд.',
+              ru: 'После каждой побочной доминанты ставьте её аккорд.',
             },
             {
               en: 'Use mostly the family. Borrow from minor once or twice.',
@@ -153,7 +151,7 @@ const chordMatrix: Lesson = {
           kind: 'link',
           title: {
             en: 'Practise secondary dominants in the Player',
-            ru: 'Вторичные доминанты в плеере',
+            ru: 'Побочные доминанты в плеере',
           },
           target: {
             opens: 'player',

@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
+import { cn } from '@/shared/lib'
 import { NO_BAR_SIZE, useScreenBar } from './screen-bar'
 import { usePageHeading } from './use-page-heading'
 
@@ -14,12 +15,18 @@ export function ScreenHeader({
   title,
   back,
   actions,
+  crowded = false,
   tabs,
 }: {
   /** The screen's name: its large title and the page's. */
   title: string
   back?: ReactNode
   actions?: ReactNode
+  /**
+   * Three or more actions: on a phone they leave the title no room beside them, so it takes a row
+   * of its own under Back and them, two lines at most (as the Player's and the editor's bars do).
+   */
+  crowded?: boolean
   /** The page's views (`NavTabs`): the bar's second row, back with the title on the way up. */
   tabs?: ReactNode
 }) {
@@ -59,12 +66,16 @@ export function ScreenHeader({
       className="sticky top-0 z-30 -mx-gutter -mt-safe bg-background px-gutter pt-safe print:static print:mx-0 print:translate-y-0 print:px-0 duration-200 ease-out motion-safe:transition-transform data-hidden:-translate-y-full"
     >
       {/* The title takes the line beside the actions, wrapping between its words; only where its
-          longest word (Последовательности) does not fit beside them do the actions go under it. */}
+          longest word (Последовательности) does not fit beside them do the actions go under it.
+          Crowded, on a phone, the title takes the row under them instead. */}
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 pt-2 pb-4 landscape-phone:pb-2">
         {back ? <div className="print:hidden">{back}</div> : null}
         <h1
           {...heading}
-          className="min-w-longest-word flex-[1_1_0%] outline-none text-3xl text-balance wrap-break-word sm:text-4xl lg:text-5xl landscape-phone:text-2xl"
+          className={cn(
+            'min-w-longest-word flex-[1_1_0%] outline-none text-3xl text-balance wrap-break-word sm:text-4xl lg:text-5xl landscape-phone:text-2xl',
+            crowded && 'max-sm:order-last max-sm:line-clamp-2 max-sm:basis-full max-sm:text-start',
+          )}
         >
           {title}
         </h1>

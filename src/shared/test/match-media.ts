@@ -7,7 +7,8 @@ import { vi } from 'vitest'
 export function stubMatchMedia({ dark }: { dark: boolean }) {
   const state = { dark }
   const listeners = new Set<() => void>()
-  const matchMedia = vi.fn((media: string) => ({
+  // A plain function, not a mock: a worker keeps every mock made in it, and this is made per test.
+  const matchMedia = (media: string) => ({
     media,
     get matches() {
       return state.dark
@@ -18,7 +19,7 @@ export function stubMatchMedia({ dark }: { dark: boolean }) {
     addListener: (listener: () => void) => void listeners.add(listener),
     removeListener: (listener: () => void) => void listeners.delete(listener),
     dispatchEvent: () => false,
-  }))
+  })
   vi.stubGlobal('matchMedia', matchMedia)
   return {
     setDark(next: boolean) {

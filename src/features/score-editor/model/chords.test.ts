@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { chordSymbol, note, parseChordSymbol } from '@/shared/lib/music'
 import { draftOf, form } from '../testing/test-draft'
-import { deleteChord, keyChords, setChord } from './chords'
+import { chordSuggestions, deleteChord, keyChords, setChord } from './chords'
 
 describe('setChord', () => {
   it('replaces the chord starting there', () => {
@@ -12,6 +12,12 @@ describe('setChord', () => {
     expect(form(setChord(draftOf(), 0, 48, parseChordSymbol('D7')))).toEqual([
       [['G@0 D7@48', 'C@0']],
     ])
+  })
+
+  it('sets a chord into a bar of no chord at its start, where a bar’s chords begin (ADR 0094)', () => {
+    const empty = draftOf({ sections: [{ kind: 'verse', lines: ['G _'] }] })
+    expect(form(setChord(empty, 1, 0, parseChordSymbol('Em')))).toEqual([[['G@0', 'Em@0']]])
+    expect(form(setChord(empty, 1, 48, parseChordSymbol('Em')))).toEqual([[['G@0', 'Em@0']]])
   })
 
   it('keeps a chord’s method code, and gives a new one its bar’s', () => {
@@ -34,14 +40,20 @@ describe('deleteChord', () => {
     expect(form(deleteChord(split, 0, 0))).toEqual([[['D@0 Em@48', 'C@0']]])
   })
 
-  it('keeps a bar’s only chord', () => {
+  it('takes a bar’s only chord, leaving a bar of no chord (ADR 0094)', () => {
+    expect(form(deleteChord(draftOf(), 1, 0))).toEqual([[['G@0', '']]])
+  })
+
+  it('changes nothing where no chord starts', () => {
     const draft = draftOf()
-    expect(deleteChord(draft, 1, 0)).toBe(draft)
+    expect(deleteChord(draft, 1, 24)).toBe(draft)
+    const empty = draftOf({ sections: [{ kind: 'verse', lines: ['G _'] }] })
+    expect(deleteChord(empty, 1, 0)).toBe(empty)
   })
 })
 
 describe('keyChords', () => {
-  it('gives a key’s seven triads and its V7', () => {
+  it('gives a key’s triads I to vii, then its sevenths (a minor key’s V7 from its harmonic minor)', () => {
     expect(keyChords({ tonic: note('G'), minor: false }).map(chordSymbol)).toEqual([
       'G',
       'Am',
@@ -50,7 +62,13 @@ describe('keyChords', () => {
       'D',
       'Em',
       'F#°',
+      'GMaj7',
+      'Am7',
+      'Bm7',
+      'CMaj7',
       'D7',
+      'Em7',
+      'F#m7♭5',
     ])
     expect(keyChords({ tonic: note('A'), minor: true }).map(chordSymbol)).toEqual([
       'Am',
@@ -60,7 +78,43 @@ describe('keyChords', () => {
       'Em',
       'F',
       'G',
+      'Am7',
+      'Bm7♭5',
+      'CMaj7',
+      'Dm7',
       'E7',
+      'FMaj7',
+      'G7',
     ])
+  })
+})
+
+describe('chordSuggestions', () => {
+  const song = draftOf({
+    sections: [
+      { kind: 'verse', lines: ['G Bb7 C'] },
+      { kind: 'chorus', key: 'D', lines: ['D Bb7'] },
+    ],
+  })
+  const symbols = (...args: Parameters<typeof chordSuggestions>) =>
+    chordSuggestions(...args).map(chordSymbol)
+
+  it('offers the key’s chords, then the song’s own it lacks, each once', () => {
+    expect(symbols(song, 0, '')).toEqual([
+      ...['G', 'Am', 'Bm', 'C', 'D', 'Em', 'F#°'],
+      ...['GMaj7', 'Am7', 'Bm7', 'CMaj7', 'D7', 'Em7', 'F#m7♭5'],
+      'B♭7',
+    ])
+  })
+
+  it('takes the key at the place: a section’s own key there (ADR 0089)', () => {
+    expect(symbols(song, 288, '').slice(0, 7)).toEqual(['D', 'Em', 'F#m', 'G', 'A', 'Bm', 'C#°'])
+  })
+
+  it('keeps those starting as typed, in any case and with ♯ or #', () => {
+    expect(symbols(song, 0, 'b')).toEqual(['Bm', 'Bm7', 'B♭7'])
+    expect(symbols(song, 0, 'bB')).toEqual(['B♭7'])
+    expect(symbols(song, 0, ' f♯m')).toEqual(['F#m7♭5'])
+    expect(symbols(song, 0, 'Cmaj9')).toEqual([])
   })
 })

@@ -1,7 +1,8 @@
-import type { PatternId } from '@/entities/pattern'
-import type { SectionKind } from '@/entities/piece'
+import { keyText, type SectionKind } from '@/entities/piece'
+import type { Key } from '@/shared/lib/music'
 import type { Draft, DraftSection } from './draft'
 import { slotsOf, withSlots, type Heading } from './structure'
+import { sectionKey } from './timeline'
 
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
@@ -13,7 +14,13 @@ const sameHeading = (a: Heading, b: Heading): boolean =>
   a.detail?.en === b.detail?.en &&
   a.detail?.ru === b.detail?.ru &&
   a.key === b.key &&
-  a.pattern === b.pattern
+  a.meter === b.meter
+
+/** What a section's heading keeps through a new name or a split: its key and its meter. */
+const keptOf = ({ key, meter }: Heading): Pick<Heading, 'key' | 'meter'> => ({
+  ...(key === undefined ? {} : { key }),
+  ...(meter === undefined ? {} : { meter }),
+})
 
 /**
  * A new section's heading as its kind and place name it: a verse the number after the verses before
@@ -85,12 +92,10 @@ export function setSectionKind(draft: Draft, index: number, kind: SectionKind): 
   const section = draft.sections[index]
   if (!section) return draft
   const others = draft.sections.filter((other) => other !== section)
-  // Named afresh, it keeps what it plays: its key and its own pattern.
-  const { key, pattern } = section.heading
+  // Named afresh, it keeps its key and its meter.
   const heading: Heading = {
     ...named(kind, draft.sections.slice(0, index), others),
-    ...(key === undefined ? {} : { key }),
-    ...(pattern === undefined ? {} : { pattern }),
+    ...keptOf(section.heading),
   }
   if (sameHeading(heading, section.heading)) return draft
   const renamed: Draft = {
@@ -100,26 +105,45 @@ export function setSectionKind(draft: Draft, index: number, kind: SectionKind): 
   return withVerse(withoutVerse(renamed, index, section.heading), index, heading)
 }
 
-/** Section `index` playing a pattern of its own (ADR 0065), or the piece's again (`null`). */
-export function setSectionPattern(draft: Draft, index: number, pattern: PatternId | null): Draft {
-  const section = draft.sections[index]
-  if (!section || (section.heading.pattern ?? null) === pattern) return draft
-  const { pattern: _was, ...rest } = section.heading
-  const heading: Heading = pattern === null ? rest : { ...rest, pattern }
-  return {
-    ...draft,
-    sections: draft.sections.map((other) => (other === section ? { ...other, heading } : other)),
-  }
+/**
+ * A key change at section `index` (ADR 0089), as Flat changes key from a bar: that section and those
+ * after it in the same key, up to the next change of key, written in `key`; a section in the song's
+ * key writes none. The notes stay as they are, spelling and all: only their signature changes, and
+ * a note written or stepped there after is spelled in the new key (`keyAt`).
+ */
+export function setSectionKey(draft: Draft, index: number, key: Key): Draft {
+  if (!draft.sections[index]) return draft
+  const was = keyText(sectionKey(draft, index))
+  const now = keyText(key)
+  if (was === now) return draft
+  const home = keyText(draft.key)
+  let running = true
+  const sections = draft.sections.map((section, i) => {
+    if (i < index || !running) return section
+    if (keyText(sectionKey(draft, i)) !== was) {
+      running = false
+      return section
+    }
+    const { key: _was, ...rest } = section.heading
+    return { ...section, heading: now === home ? rest : { ...rest, key: now } }
+  })
+  return { ...draft, sections }
 }
 
-/** A new section from bar `index`, of the kind it was in, named next; a bar starting one changes nothing. */
+/**
+ * A new section from bar `index`, of the kind it was in, named next, in the key and the meter it was
+ * in (a change of key or time goes on past it); a bar starting one changes nothing.
+ */
 export function newSection(draft: Draft, index: number): Draft {
   const slots = slotsOf(draft)
   const slot = slots[index]
   if (!slot || slot.newSection) return draft
   const containing = slots.slice(0, index).filter((other) => other.newSection).length - 1
-  const kind = draft.sections[containing]?.heading.kind ?? 'verse'
-  const heading = named(kind, draft.sections.slice(0, containing + 1), draft.sections)
+  const was = draft.sections[containing]?.heading ?? { kind: 'verse' }
+  const heading: Heading = {
+    ...named(was.kind, draft.sections.slice(0, containing + 1), draft.sections),
+    ...keptOf(was),
+  }
   const split = withSlots(
     draft,
     slots.map((other, i) =>

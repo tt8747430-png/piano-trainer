@@ -295,7 +295,7 @@ const jazzVoicings: Lesson = {
       ],
     },
     {
-      heading: { en: 'Where slash chords resolve', ru: 'Куда разрешаются слэш-аккорды' },
+      heading: { en: 'Where slash chords resolve', ru: 'Куда разрешаются аккорды через дробь' },
       blocks: [
         {
           kind: 'text',
@@ -319,7 +319,7 @@ const jazzVoicings: Lesson = {
           kind: 'text',
           text: {
             en: 'Play each pair: the slash chord, then where it lands.',
-            ru: 'Сыграйте каждую пару: слэш-аккорд, затем аккорд разрешения.',
+            ru: 'Сыграйте каждую пару: аккорд через дробь, затем аккорд разрешения.',
           },
         },
       ],

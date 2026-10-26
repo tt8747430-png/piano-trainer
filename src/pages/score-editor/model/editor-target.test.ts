@@ -32,8 +32,10 @@ describe('editorTarget', () => {
       id: 'amazing',
       entry: amazing,
     })
-    expect(target?.music).toEqual(musicOf(amazing))
-    expect(target?.kind === 'version' && target.original).toEqual(musicOf(amazing))
+    // The original as the editor writes it: every bar written out (ADR 0091).
+    const original = writeDraft(readDraft(musicOf(amazing)))
+    expect(target?.music).toEqual(original)
+    expect(target?.kind === 'version' && target.original).toEqual(original)
   })
 
   it.each(
@@ -50,12 +52,12 @@ describe('editorTarget', () => {
     expect(target?.music).toEqual(version)
   })
 
-  it('starts a listing’s chart in its key and meter, which is its original', () => {
+  it('starts a listing’s chart in its key and meter, its bars of no chord, which is its original', () => {
     const target = editorTarget(NONE, 'bz4')
     expect(target?.music).toMatchObject({
       key: 'Cm',
       meter: '3/4',
-      sections: [{ kind: 'verse', lines: ['Cm Cm Cm Cm'] }],
+      sections: [{ kind: 'verse', lines: ['_ _ _ _'] }],
     })
     expect(target?.kind === 'version' && target.original).toEqual(target?.music)
   })

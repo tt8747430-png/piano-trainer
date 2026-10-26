@@ -32,6 +32,14 @@ describe('patternSample', () => {
     expect(sample.music.notes.every((n) => n.startTick < end)).toBe(true)
   })
 
+  it('writes the pattern’s two hands alone, on the grand staff: the piece’s own staff is its page’s', () => {
+    const sample = patternSample(BUILT_IN_PATTERNS.require('r5'), BUILT_IN_PATTERNS)
+    expect(sample.music.notes.every((n) => n.hand !== 'staff')).toBe(true)
+    expect(sample.music.staves).toBeUndefined()
+    const keys = new Set(sample.music.notes.map((n) => n.midi))
+    expect(sample.shown.keys.every((key) => keys.has(key))).toBe(true)
+  })
+
   it('plays the learner’s own pattern as written', () => {
     const book = patternBook([{ id: 'my-1', name: 'Sunday', rh: 'b1', lh: 'r' }])
     const sample = patternSample(book.require('my-1'), book)

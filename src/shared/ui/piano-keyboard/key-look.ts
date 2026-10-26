@@ -13,7 +13,7 @@ import {
 } from '@/shared/lib/music'
 
 /** A chord tone's role, a hand in the Player, or a scale's note: its tonic or another (roles stay on chord tones). */
-export type KeyTone = ChordRole | 'rh' | 'lh' | 'melody' | 'tonic' | 'scale'
+export type KeyTone = ChordRole | 'rh' | 'lh' | 'staff' | 'tonic' | 'scale'
 export interface KeyMark {
   readonly tone: KeyTone
   readonly label?: string

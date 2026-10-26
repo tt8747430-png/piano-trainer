@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { chordsHolding, midi, note, noteName } from '@/shared/lib/music'
+import { C_MAJOR, chordsHolding, midi, note, noteName } from '@/shared/lib/music'
 import { underMelody } from './holding-keys'
-
-const C_MAJOR = { tonic: note('C'), minor: false }
 
 describe('underMelody', () => {
   it('voices a chord close under the melody, the melody on top by its degree: C under E is G C E', () => {

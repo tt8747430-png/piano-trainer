@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { chordShown, useShownKeys } from '@/features/play-example'
 import { isOneOf } from '@/shared/lib'
-import { qualitySpellings, TENSION_CHORDS, writtenSymbol } from '@/shared/lib/music'
+import { printedSymbol, qualitySpellings, TENSION_CHORDS, writtenSymbol } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
 import { ChordHeading, FabPill, FloatingActions, PlayFab, usePlayKey } from '@/shared/ui'
@@ -38,7 +38,8 @@ export function ChordExplorer({
   const [shown, show] = useShownKeys(at, chordShown([...placed.lh, ...placed.rh]))
   const symbol = writtenSymbol(built)
   const { quality } = built
-  // The other ways its symbol is written: the table's, where the table has the chord.
+  // The other ways its symbol is written: the table's, where the table has the chord, each printed
+  // as the sheets print a chord.
   const others = quality ? qualitySpellings(quality).slice(1) : []
   // A choice sounds by itself: it has no button, so no Stop, and it cuts off what played.
   const change = (next: Partial<ChordView>) => {
@@ -65,7 +66,9 @@ export function ChordExplorer({
             <p className="flex flex-wrap items-baseline gap-x-4">
               <span className="text-muted-foreground">{t('practice:chords.written')}</span>
               <span className="font-display text-xl font-semibold">
-                {others.map((suffix) => writtenSymbol({ root: built.root, suffix })).join(' · ')}
+                {others
+                  .map((suffix) => printedSymbol(writtenSymbol({ root: built.root, suffix })))
+                  .join(' · ')}
               </span>
             </p>
           ) : null}

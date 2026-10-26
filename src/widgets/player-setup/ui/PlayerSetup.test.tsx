@@ -9,12 +9,12 @@ import {
   type AccompanimentChoice,
   type PatternFit,
 } from '@/entities/pattern'
-import { MelodyToggle } from './MelodyToggle'
+import { TuneToggle } from './TuneToggle'
 import { PatternCard } from './PatternCard'
 import { PlayerSetup } from './PlayerSetup'
 
 /** A song in 4/4 with no tune and no methods of its own. */
-const SONG: PatternFit = { methodCodes: false, melody: false, key: true, simpleTime: true }
+const SONG: PatternFit = { methodCodes: false, tune: false, key: true, simpleTime: true }
 
 async function renderSetup(
   fit: Partial<PatternFit> = {},
@@ -30,7 +30,7 @@ async function renderSetup(
     >
       <p>The music’s own choices</p>
       <PatternCard />
-      <MelodyToggle />
+      <TuneToggle />
     </PlayerSetup>,
   )
   await user.click(screen.getByRole('button', { name: 'Setup' }))
@@ -95,24 +95,28 @@ describe('PlayerSetup', () => {
     expect(onFigures).toHaveBeenCalledWith({ nearest: false })
   })
 
-  it('fades the position From the chart only where no pattern the chart plays follows it', async () => {
+  it('fades the position From the chart only where no pattern the chart plays follows it, saying why beside it', async () => {
     const fromChart = { pattern: 'chart' } as const
-    const { unmount } = await renderSetup({ methodCodes: true, chart: ['flow'] }, fromChart)
-    expect(screen.getByText('This pattern plays its own shapes.')).toBeInTheDocument()
+    const { user, unmount } = await renderSetup({ methodCodes: true, chart: ['flow'] }, fromChart)
+    expect(screen.getByRole('switch', { name: 'Nearest' })).toHaveAttribute('aria-disabled', 'true')
+    await user.click(screen.getByRole('button', { name: 'About First chord' }))
+    expect(await screen.findByRole('dialog', { name: 'First chord' })).toHaveTextContent(
+      'This pattern plays its own shapes.',
+    )
     unmount()
     await renderSetup({ methodCodes: true, chart: ['flow', 'block'] }, fromChart)
-    expect(screen.queryByText('This pattern plays its own shapes.')).toBeNull()
+    expect(screen.queryByRole('button', { name: 'About First chord' })).toBeNull()
   })
 
   it('turns Nearest back on, the URL’s own', async () => {
     const { user, onFigures } = await renderSetup({}, { inversion: 2, nearest: false })
     expect(screen.getByRole('radio', { name: '2nd' })).toBeChecked()
-    expect(screen.getByText('Every chord in the first one’s position')).toBeInTheDocument()
+    expect(screen.getByRole('switch', { name: 'Nearest' })).not.toBeChecked()
     await user.click(screen.getByRole('switch', { name: /Nearest/ }))
     expect(onFigures).toHaveBeenCalledWith({ nearest: undefined })
   })
 
-  it('chooses a pattern from its group, keeping melody patterns from music without a tune', async () => {
+  it('chooses a pattern from its group, keeping tune patterns from music without a tune', async () => {
     const { user, onFigures } = await renderSetup()
     await user.click(screen.getByRole('button', { name: /^Pattern/ }))
     expect(
@@ -137,13 +141,13 @@ describe('PlayerSetup', () => {
     expect(onFigures).toHaveBeenCalledWith({ rh: undefined })
   })
 
-  it('saves the melody toggle in settings, pressed while it is on', async () => {
-    const { user, settingsStore } = await renderSetup({ melody: true })
-    const melody = screen.getByRole('button', { name: 'Melody' })
-    expect(melody).toHaveAttribute('aria-pressed', 'false')
-    await user.click(melody)
-    expect(settingsStore.getState().practice.melody).toBe(true)
-    expect(melody).toHaveAttribute('aria-pressed', 'true')
+  it('saves the Tune toggle in settings, pressed while it is on', async () => {
+    const { user, settingsStore } = await renderSetup({ tune: true })
+    const tune = screen.getByRole('button', { name: 'Tune' })
+    expect(tune).toHaveAttribute('aria-pressed', 'false')
+    await user.click(tune)
+    expect(settingsStore.getState().practice.tune).toBe(true)
+    expect(tune).toHaveAttribute('aria-pressed', 'true')
   })
 
   it('closes what plays the key’s triads to music without a key', async () => {

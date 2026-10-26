@@ -36,7 +36,9 @@ export const common: LocaleResources['common'] = {
   },
   update: { available: 'Готова новая версия', update: 'Обновить', later: 'Позже' },
   close: 'Закрыть',
+  notice: { close: 'Закрыть уведомление' },
   clearSearch: 'Очистить поиск',
+  infoTip: 'Подробнее: {{name}}',
   loading: 'Загрузка',
   stage: {
     beginner: 'Начальный',
@@ -116,7 +118,7 @@ export const common: LocaleResources['common'] = {
     folded: 'Прятать клавиши страницы',
     foldedNote: 'Они сворачиваются в кнопку «Клавиши», которая их вернёт',
     foldedLandscape: 'Прятать их на телефоне боком',
-    foldedLandscapeNote: 'В уроках, разделах практики и песнях; плеер и редактор оставляют свои',
+    foldedLandscapeNote: 'В уроках, разделах практики, песнях и редакторе; плеер оставляет свои',
     swipe: {
       label: 'Проведение по клавишам',
       detail: 'Прокручивает клавиатуру или играет каждую клавишу (глиссандо)',
@@ -162,6 +164,12 @@ export const common: LocaleResources['common'] = {
     noDevice: 'MIDI-клавиатура не найдена.',
     denied: 'Доступ к MIDI запрещён.',
     unsupported: 'Этот браузер не может подключить MIDI-клавиатуру.',
+  },
+  recorderSettings: {
+    click: 'Метроном',
+    clickInfo: 'Доли звучат и после отсчёта',
+    tune: 'Мелодия',
+    tuneInfo: 'Под дубль звучат нотоносцы песни над фортепиано, если они есть',
   },
   midiSettings: {
     device: {

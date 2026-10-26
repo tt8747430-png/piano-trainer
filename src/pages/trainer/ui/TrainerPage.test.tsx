@@ -24,7 +24,7 @@ describe('A trainer', () => {
   it('opens at its first level, ten rounds, asking the first round', async () => {
     await renderApp('/practice/quiz/build-chord')
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Build chord' }),
+      await screen.findByRole('heading', { level: 1, name: 'Chord building' }),
     ).toBeInTheDocument()
     expect(screen.getByRole('combobox', { name: /^Level/ })).toHaveTextContent(
       'The main chords of C',
@@ -187,6 +187,12 @@ describe('A trainer', () => {
     expect(router.state.location.search).toMatchObject({ altered: true })
   })
 
+  it('shows Reading notes’ Custom range at middle C’s octave, as the run asks it', async () => {
+    await renderApp('/practice/quiz/reading-notes?level=custom')
+    expect(await screen.findByRole('combobox', { name: /^From/ })).toHaveTextContent('C4')
+    expect(screen.getByRole('combobox', { name: /^To/ })).toHaveTextContent('C5')
+  })
+
   it('opens a level its trainer does not have at the first, and keeps it out of the URL', async () => {
     const { router, viewsStore } = await renderApp('/practice/quiz/reading-notes?level=everything')
     expect(await screen.findByRole('combobox', { name: /^Level/ })).toHaveTextContent(
@@ -198,7 +204,7 @@ describe('A trainer', () => {
 
   it('writes its first level as no level, and Custom only for a trainer that has it', async () => {
     const first = await renderApp('/practice/quiz/build-chord?level=c-main')
-    await screen.findByRole('heading', { level: 1, name: 'Build chord' })
+    await screen.findByRole('heading', { level: 1, name: 'Chord building' })
     expect(first.router.state.location.search).toEqual({})
     first.unmount()
     const gaps = await renderApp('/practice/quiz/gaps?level=custom&rounds=20')

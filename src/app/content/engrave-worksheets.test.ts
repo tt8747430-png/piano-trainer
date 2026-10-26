@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest'
-import { note, placeScale, scaleKey } from '@/shared/lib/music'
+import { C_MAJOR, placeScale, scaleKey } from '@/shared/lib/music'
 import { notate, ticksOf, type Score } from '@/shared/lib/notation'
 import { noteLine, scaleRun, voicingsMusic } from '@/shared/lib/schedule'
 import { drawScore } from '@/shared/ui/score/verovio/draw'
@@ -9,8 +9,6 @@ import { LESSONS } from '@/entities/lesson'
 
 /** Every lesson a learner reads: the journeys', then each course's own. */
 const WORKSHEETS = [...LESSONS, ...COURSES.flatMap((course) => course.lessons)]
-
-const C_MAJOR = { tonic: note('C'), minor: false }
 
 /** A score engraved by Verovio on the staves asked, its measures all drawn. */
 async function expectEngraved(score: Score, staves: Score['staves'], what: string) {

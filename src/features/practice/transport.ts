@@ -1,11 +1,13 @@
 import { PLAY_DELAY, type AudioOutput } from '@/shared/api/audio'
 import type { Performance } from '@/shared/lib/arrangement'
+import type { Tick } from '@/shared/lib/music'
 import {
   advanceLoop,
   beatGroupAt,
   recordingPlay,
   startLoop,
   tempoAt,
+  tickAt,
   type LoopOptions,
   type Pass,
   type Recording,
@@ -14,10 +16,20 @@ import {
 /** How often the transport looks at the audio clock. */
 const FOLLOW_INTERVAL_MS = 25
 
+/** Listen's transport as it runs. */
+export interface Transport {
+  stop(): void
+  /**
+   * The tick its music sounds at `time` on the audio clock, between the beat groups: what the
+   * playhead follows (ADR 0096). Null before the music starts.
+   */
+  tickAt(time: number): Tick | null
+}
+
 /**
  * Listen's transport: plays the loop's passes on the audio clock, and the piece's recording with
  * every pass when it plays one, and reports each beat group as it sounds and each pass's tempo as it
- * starts. Returns the function that stops it.
+ * starts.
  */
 export function startTransport(
   audio: AudioOutput,
@@ -25,7 +37,7 @@ export function startTransport(
   options: LoopOptions,
   on: { readonly reach: (beatGroup: number) => void; readonly tempo: (tempo: number) => void },
   recording: Recording | null,
-): () => void {
+): Transport {
   const play = (pass: Pass) => {
     audio.play(pass.sounds, pass.start)
     if (recording) audio.playRecording(recording.src, recordingPlay(recording, pass))
@@ -53,8 +65,11 @@ export function startTransport(
   }
   const timer = setInterval(follow, FOLLOW_INTERVAL_MS)
 
-  return () => {
-    clearInterval(timer)
-    audio.stop()
+  return {
+    stop() {
+      clearInterval(timer)
+      audio.stop()
+    },
+    tickAt: (time) => tickAt(loop, time),
   }
 }

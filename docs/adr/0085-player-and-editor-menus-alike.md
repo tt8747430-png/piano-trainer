@@ -5,8 +5,8 @@
 
 ## Context
 
-An audit of both screens at a phone's and a laptop's sizes
-([2026-10-player-editor-ui-audit](../research/2026-10-player-editor-ui-audit.md)) found the two bars drawn and
+An audit of both screens at a phone's and a laptop's sizes (its notes removed once acted on;
+`git log --diff-filter=D -- docs/research` finds them) found the two bars drawn and
 named differently, the View menus ordered and headed differently, the MIDI keyboard in the Player's bar but in the
 editor's Song sheet (where, on Safari, without Web MIDI, it left a heading over nothing), Chord positions among the
 Setup's sounds though it only labels the sheet, three different things called "Melody", and the Player's upright

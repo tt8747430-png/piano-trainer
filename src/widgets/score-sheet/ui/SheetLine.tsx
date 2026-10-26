@@ -1,17 +1,36 @@
-import { memo, useEffect, useRef } from 'react'
-import type { Layer } from '@/features/score-editor'
+import { memo, useEffect, useEffectEvent, useRef, type Ref } from 'react'
+import { layerStaff, type Layer } from '@/features/score-editor'
 import type { Midi, Tick } from '@/shared/lib/music'
+import type { StaffId, StaffLabels } from '@/shared/lib/notation'
 import { cn, useElementSize } from '@/shared/lib'
 import { LazyScoreView, useCanvasReveal } from '@/shared/ui'
-import { staffOfHand } from '../model/line-music'
 import type { LineSheet } from '../model/line-sheets'
-import { labelRow, labelScale } from '../model/label-row'
+import { labelRow, labelScale, type ScoreLayout } from '@/shared/ui/score'
+import type { SheetField } from '../model/field-place'
+import type { EditPrinted } from '../model/printed'
 import { LineOverlay } from './LineOverlay'
 
 /** Whether an element's top is on the screen. */
 function topInSight(element: Element): boolean {
   const { top } = element.getBoundingClientRect()
   return top >= 0 && top < window.innerHeight
+}
+
+/** Tells each engraving's height at the line's own size, as it is drawn (`scale` the size drawn at). */
+function EngravedHeight({
+  layout,
+  scale,
+  onHeight,
+}: {
+  layout: ScoreLayout
+  scale: number
+  onHeight: (height: number) => void
+}) {
+  const tell = useEffectEvent((engraving: ScoreLayout) => {
+    if (engraving.height > 0 && scale > 0) onHeight(engraving.height / scale)
+  })
+  useEffect(() => tell(layout), [layout])
+  return null
 }
 
 /**
@@ -23,6 +42,7 @@ export const SheetLine = memo(function SheetLine({
   sheet,
   layer,
   caret,
+  playhead,
   chordNote,
   selection,
   onPlace,
@@ -31,13 +51,32 @@ export const SheetLine = memo(function SheetLine({
   placesOf,
   tapsOf,
   chordNames,
-  onSignature,
+  fingers,
+  headings,
+  edit,
+  labels,
+  staves,
   scale = 1,
   print = false,
   justify = true,
   onWrite,
   onDrag,
+  field = null,
+  fieldAnchor,
+  onField,
+  onEngraved,
 }: {
+  /**
+   * Its height as engraved at its own size, told as it is drawn: a line across, the whole piece's,
+   * reaches as far over and under its staves as any of its notes, which a sheet fits.
+   */
+  onEngraved?: ((height: number) => void) | undefined
+  /** The field open at the caret, where this line holds it (ADR 0096). */
+  field?: SheetField | null
+  /** The element marking the open field's place. */
+  fieldAnchor?: Ref<HTMLDivElement> | undefined
+  /** A tap on what a field types where it is printed (ADR 0096). */
+  onField?: ((field: SheetField, tick: Tick, layer: Layer) => void) | undefined
   onWrite?: ((tick: Tick, layer: Layer, key: Midi) => void) | undefined
   onDrag?: ((steps: number, joins: boolean) => void) | undefined
   /** The engraving's size: smaller on a phone, as it prints on a page. */
@@ -50,6 +89,8 @@ export const SheetLine = memo(function SheetLine({
   layer: Layer
   /** From the line's start, when the caret is on this line. */
   caret: Tick | null
+  /** Where Play is, on the piece's ticks, while it plays on this line (ADR 0096). */
+  playhead: { readonly tick: Tick; readonly clock: () => Tick | null } | null
   /** One note of the chord at the caret chosen alone (ADR 0088). */
   chordNote: Midi | null
   /** The notes chosen: their span on the piece. */
@@ -61,7 +102,16 @@ export const SheetLine = memo(function SheetLine({
   /** Where a click lands in a layer: on a note or a bar's start, never an empty step (ADR 0082). */
   tapsOf: (layer: Layer) => readonly Tick[]
   chordNames: boolean
-  onSignature: () => void
+  /** The fingers written on the notes, printed: the fingering field types them there (ADR 0096). */
+  fingers: boolean
+  /** Each section's name, by section: printed at its first bar (ADR 0095). */
+  headings: readonly string[]
+  /** What edits a thing printed (ADR 0094). */
+  edit: EditPrinted
+  /** The staves' names, printed at the line's head: the piece's first line (ADR 0094). */
+  labels?: StaffLabels | undefined
+  /** The staves drawn, of those the line writes: one of the piano's the View hides left out. */
+  staves: readonly StaffId[]
 }) {
   const ref = useRef<HTMLDivElement>(null)
   // A line of a few bars runs the sheet's width, as a printed page's does.
@@ -71,7 +121,7 @@ export const SheetLine = memo(function SheetLine({
   const row = labelRow(chordNames, scale, print)
   // The notes chosen, marked as a notation app marks them: those chosen on this line in the caret's
   // row, else the ones at the caret (one of a chord's, chosen alone).
-  const staff = layer === 'chords' ? null : staffOfHand(layer, sheet.music.melodyStaff ?? false)
+  const staff = layer === 'chords' ? null : layerStaff(layer)
   const selected =
     staff === null
       ? undefined
@@ -85,7 +135,7 @@ export const SheetLine = memo(function SheetLine({
           ? undefined
           : { staff, from: caret, to: caret + 1, midi: chordNote ?? undefined }
   // The caret's line comes into view when the caret moves onto it; the sheet opens where it is
-  // while the line is already in sight, its section's heading over it kept in view.
+  // while the line is already in sight.
   const held = useRef<boolean | null>(null)
   // On a page canvas, the canvas moves to it (ADR 0075); elsewhere the sheet scrolls.
   const reveal = useCanvasReveal()
@@ -111,33 +161,47 @@ export const SheetLine = memo(function SheetLine({
     >
       <LazyScoreView
         scale={scale}
+        fingers={fingers}
         score={sheet.score}
         timeBefore={sheet.timeBefore}
         next={sheet.next}
+        labels={labels}
+        staves={staves}
         selected={selected}
         fill={justify && width > 0 ? width : undefined}
       >
         {(layout) => (
-          <LineOverlay
-            layout={layout}
-            music={sheet.music}
-            line={sheet.line}
-            layer={layer}
-            caret={caret}
-            chordNote={chordNote}
-            tapsOf={tapsOf}
-            selection={selection}
-            onPlace={onPlace}
-            onReach={onReach}
-            onDeselect={onDeselect}
-            placesOf={placesOf}
-            chordNames={chordNames}
-            row={row}
-            labels={labelScale(scale, print)}
-            onSignature={onSignature}
-            onWrite={onWrite}
-            onDrag={onDrag}
-          />
+          <>
+            {onEngraved ? (
+              <EngravedHeight layout={layout} scale={scale} onHeight={onEngraved} />
+            ) : null}
+            <LineOverlay
+              layout={layout}
+              music={sheet.music}
+              line={sheet.line}
+              layer={layer}
+              caret={caret}
+              chordNote={chordNote}
+              playhead={playhead}
+              scroller={justify ? undefined : ref}
+              tapsOf={tapsOf}
+              selection={selection}
+              onPlace={onPlace}
+              onReach={onReach}
+              onDeselect={onDeselect}
+              placesOf={placesOf}
+              chordNames={chordNames}
+              row={row}
+              labels={labelScale(scale, print)}
+              headings={headings}
+              edit={edit}
+              onWrite={onWrite}
+              onDrag={onDrag}
+              field={field}
+              fieldAnchor={fieldAnchor}
+              onField={onField}
+            />
+          </>
         )}
       </LazyScoreView>
     </div>

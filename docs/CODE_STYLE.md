@@ -30,16 +30,17 @@ A container wires data to presentational children. One job each.
   made), `NoteChoice` (a note as written: its letter, then ♮ # ♭) and `KeyChoice` (a key as written: its tonic so,
   then Major · Minor, only the keys a signature writes), `Labelled` (a choice under its name:
   one field of a page's `grid-fields`), `NavTabs` with `NavTab` (one thing's views as tabs that are router links; the page says which is shown, never the router's active match), `InversionChoice` (each inversion drawn by `InversionGlyph`), `ChordSizeField`, `SwitchRow` (on or off in
-  its row), `ToggleTile` in a `ToggleGrid` (on or off as an icon over its name), `ToolButton` (a palette's tool: an
+  its row), `InfoTip` (a control's explanation: an ⓘ beside its name opening a popover, §10), `ToggleTile` in a `ToggleGrid` (on or off as an icon over its name), `ToolButton` (a palette's tool: an
   icon or glyph, named in a tooltip), `LearnedBadge`, `TypedField`
   (music typed by name, in the book serif) and `NameField` (a name the learner gives, in the controls' face), `PlayToggle` (a chord or note pressed while it sounds) and `ChordButton` over it, `PlayLabel`,
-  `ToneChip`, `Fact`, `RowLink` and `RowGroup` (a row that leads to a page: a titled grid of row cards), `PAGE_TILES`, `SearchField` (a screen's search box), `PAINT`
+  `ToneChip`, `Fact`, `RowLink` and `RowGroup` (a row that leads to a page: a titled grid of row cards), `RowButton` (a row
+  that opens a sheet over its page: `RowLink`'s face, `RowFace`, without the chevron), `PAGE_TILES`, `SearchField` (a screen's search box), `PAINT`
   (the chrome's paints for a tile), `Sheet` / `SheetTrigger` / `SheetContent` (with its own Close for a screen reader), `RatingMark`,
   `LevelMark`, `LazyScoreView`, `NotFound` (a page that is not there, or no longer: its one line and the way on). A choice a component would make by a boolean prop is a component of its own (an
   explicit variant) or its children: a Setup sheet composes its first page, `ChordRow` its parts.
 - **Every page earns its place.** A screen does its job in place, or is a link the learner chose knowing where it goes:
   no middle man, no redirect the learner did not choose, no "coming soon". A row that leads to a page is a `RowLink`,
-  with its chevron.
+  with its chevron; a row that opens a sheet or a dialog over its page is a `RowButton`, with none.
 - **A thing's page and a tool's are two pages** (ADR 0044). An explorer's URL names the thing it shows; a tool's holds
   what the learner gave it. A tool is never a tab of a thing: tabs are the views of one thing. An explorer ends with
   its ways into the Player, then a Tools group whose rows open each tool on what the page shows. A new page of
@@ -66,15 +67,15 @@ A container wires data to presentational children. One job each.
   (key size, note names, chord names, typing; and how a swipe plays, the rail's `GlissandoToggle`), saved for every
   keyboard and set from the rail or Settings (`KeyboardSettingsFields`, one component in both places); a screen never
   passes them itself, and the keyboard keeps its own proportion on every screen (no screen sizes it). The
-  explorers, a lesson and a Piece's chart pass `spotlight`: the keys the app puts down are the ones struck last (an
-  arpeggio's key alone, a chord's together), every mark kept; the Player and the quiz do not, and every key sounding
-  is down there. A screen may make a key play more than itself (`keyPlays`: in the Scales explorer's Chords view a
+  explorers, a lesson and a shared song's chart pass `spotlight`: the keys the app puts down are the ones struck last
+  (an arpeggio's key alone, a chord's together), every mark kept; the Player and the quiz do not, and every key
+  sounding is down there. A screen may make a key play more than itself (`keyPlays`: in the Scales explorer's Chords view a
   degree's key plays its chord), and every key it plays is down while the hand holds it.
   `PianoKeyboard` itself requires an `onKeyPress`, so no key is a dead end. Anything that plays sound on a screen shows
   it on that screen's keyboard (pin it when the page scrolls away from it).
-- **Every button that plays turns into Stop while its sound plays** (`usePlayback`, §8); in a grid of items (a Piece's
-  bars, a scale's chords) the item is a toggle instead, `aria-pressed` while it plays. A sound a screen makes by itself
-  (a choice sounding, a quiz's question) has no button and no Stop.
+- **Every button that plays turns into Stop while its sound plays** (`usePlayback`, §8); in a grid of items (a shared
+  song's bars, a scale's chords) the item is a toggle instead, `aria-pressed` while it plays. A sound a screen makes by
+  itself (a choice sounding, a quiz's question) has no button and no Stop.
 - A widget whose view a route's URL holds owns that view's type in its `model/` (`ChordView`, `ScaleView`,
   `SetupParams`); its place's validator in `app/routes` imports it with `import type`.
 
@@ -128,7 +129,7 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
   `prefers-contrast: more` layer: a new role gets all three where it is a line or a secondary ink.
 - **Chord-tone colours are role tokens** (`--role-root` … `--role-13th`, each with its `-wash`). A coloured key always
   also shows its degree or finger label, so colour is never the only cue. **Palette law:** role colours only on chord
-  tones (keys, a chord's tone chips); hand colours (`--hand-rh`, `--hand-lh`, `--hand-melody`, each with its `-wash`)
+  tones (keys, a chord's tone chips); hand colours (`--hand-rh`, `--hand-lh`, `--hand-staff`, each with its `-wash`)
   only in the Player; `--attention` only for a gap or "to check" (the dot, never the text beside it); the chrome's
   paints (`--paint-*`, each paint's wash, with `--on-paint-*` its deep shade for the icon on it) name places and kinds
   of step, never a chord tone. The keys have their own
@@ -139,7 +140,11 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
 - **Two faces:** Onest for reading and every control (buttons, pop-up buttons, segments, the nav); Literata
   (`font-display`, variable in weight and optical size) for titles (every `h1`–`h3`, at 600 from the base layer) and
   chord symbols. Both faces are variable, so a `font-display` element that is not a heading sets its weight
-  (`font-semibold`); never a serif on a control. Faux bold is off.
+  (`font-semibold`); never a serif on a control. Faux bold is off. Neither face has ♭ ♮ ♯: both take them from Text
+  Accidentals (`src/styles/fonts/`, written by `scripts/text-accidentals.py`), Noto Music's signs set for text.
+- **A chord symbol on screen is printed** (`printedSymbol`, `printedChord` for a chord): `C♯m7`, `B♭`, in its text,
+  its title and its screen reader's name alike, at the place it is shown (the kit's `ChordButton` and `ChordHeading`
+  print what they are given). What is stored, typed, parsed, put in a URL or compared keeps its ASCII (`C#m7`).
 - **Values worked out at runtime** (a key's place, the keys' width and length) go in `style`; every fixed value is a
   token, a utility or a named constant.
 - **Scales on Tailwind's own names,** so `cn()` already knows them: radii `rounded-xs` 6 · `sm` 9 · `md` 10 · `lg` 11
@@ -148,9 +153,16 @@ Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary
   · `4xl` 34 · `5xl` 44 (headline, title 3, title 2, title 1, large title, display), Tailwind's `7xl` 72 for the
   chord display; `ease-out` is the one
   curve. Numerals that change in place are `tabular-nums`.
-- Interactive elements: hover, `focus-visible`, `disabled`, and a transition. Icon-only controls get an
+- Interactive elements: hover, `focus-visible`, `disabled`, and a transition. Hover is a mouse's or a
+  trackpad's (`theme.css` makes `hover:` `(hover: hover) and (pointer: fine)`): a tap on a phone that says it
+  hovers leaves no wash behind (an edit mark's on the sheet). Icon-only controls get an
   `aria-label`, and their icons are 20px. Minimum target 44px (`min-h-11`, `size-11`); every size of `Button`,
   `Toggle`, `Input`, `InputGroup`, `Switch` and `Slider` already meets it, so the CLI's smaller sizes are removed.
+- **A control has the same name and does the same thing at every size; a size changes only where it stands and
+  how big it is** (ADR 0094, Flat's phone has the laptop's tools in the same places). A bar's or a dock's button
+  is its icon at every size, named by its `aria-label` and its tooltip (`title`): no name shown on a laptop
+  alone (`max-lg:sr-only`), no icon hidden on a phone alone, no option offered at one size only. Where a row
+  does not fit, it wraps or its controls shrink to the 44px target, never lose a word or a control.
 - **A link is a link.** Base UI's `Button` always sets `role="button"`, so a link that looks like a button is the
   kit's `ButtonLink` (or `RoundLink`) rendering the router's `Link`, never `<Button render={<Link />}>`. A control
   that acts (plays, closes, confirms) stays a `Button`.
@@ -302,6 +314,10 @@ box)` gives an element its box, and `stubScrolling({ clientWidth, scrollWidth })
 - **No sentence that repeats what a label, icon or layout already says. No how-to paragraphs.** Empty states and
   errors get one short line. The one exception is **lessons** (`entities/lesson`, Learn): a lesson teaches music, in
   prose with examples that play, and never explains a button.
+- **An explanation is an ⓘ** (ADR 0096): what a control does, where its name does not say, is the `InfoTip` beside
+  its name (`info` on `SwitchRow`, `SettingField`, `Labelled`, `MenuSection`, a palette's section), never a line
+  under it; a term's meaning (dolce: sweetly) and why a tool is greyed are its tooltip. A list of things to choose
+  still says what each is in its row (a pattern's idea, a song's credit).
 - Every interface string goes through i18next, in **both** `en` and `ru`
   (`src/shared/i18n/locales/{en,ru}/<namespace>.ts`; Russian is typed against English). A namespace is a place's:
   `learn` holds Learn's and a lesson's, `practice` Practice's pages', and a word two places share is `music`'s

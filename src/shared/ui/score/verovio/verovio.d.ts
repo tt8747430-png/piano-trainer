@@ -6,6 +6,8 @@ declare module 'verovio/wasm' {
 
 declare module 'verovio/esm' {
   export class VerovioToolkit {
+    /** Every toolkit made and not destroyed, which Verovio keeps for the page's life. */
+    static readonly instances: readonly VerovioToolkit[]
     constructor(module: unknown)
     setOptions(options: Record<string, unknown>): void
     loadData(data: string): boolean

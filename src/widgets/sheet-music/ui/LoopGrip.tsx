@@ -8,7 +8,10 @@ const STEPS: Readonly<Record<string, number>> = {
   ArrowUp: 1,
 }
 
-/** One end of the loop: a slider over the bars, dragged or moved by the arrow keys between `min` and `max`. */
+/**
+ * One end of the loop: a slider over the bars of its line, dragged or moved by the arrow keys
+ * between `min` and `max`, saying them as the piece numbers them (from `firstBar`, the line's first).
+ */
 export function LoopGrip({
   label,
   x,
@@ -19,10 +22,13 @@ export function LoopGrip({
   max,
   measures,
   onMove,
+  firstBar = 0,
 }: {
+  /** The piece's bar the line's first measure is. */
+  firstBar?: number
   label: string
   x: number
-  /** The loop's box, which the grip runs down the edge of. */
+  /** The loop's band, which the grip runs down the edge of. */
   top: number
   height: number
   bar: number
@@ -41,10 +47,10 @@ export function LoopGrip({
       role="slider"
       tabIndex={0}
       aria-label={label}
-      aria-valuemin={min + 1}
-      aria-valuemax={max + 1}
-      aria-valuenow={bar + 1}
-      aria-valuetext={t('sheet.bar', { n: bar + 1 })}
+      aria-valuemin={firstBar + min + 1}
+      aria-valuemax={firstBar + max + 1}
+      aria-valuenow={firstBar + bar + 1}
+      aria-valuetext={t('sheet.bar', { n: firstBar + bar + 1 })}
       onKeyDown={(event) => {
         const step = STEPS[event.key]
         const to =
@@ -73,7 +79,7 @@ export function LoopGrip({
       className="group absolute z-30 flex w-11 -translate-x-1/2 cursor-ew-resize touch-none justify-center rounded-md"
       style={{ left: x, top, height }}
     >
-      {/* In the selection's ring colour, down its box's edge (ADR 0082). */}
+      {/* In the selection colour, down its band’s edge (ADR 0096). */}
       <span
         aria-hidden
         className="h-full w-1 rounded-full bg-ring transition-transform duration-200 ease-out group-hover:scale-x-150"

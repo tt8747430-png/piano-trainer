@@ -78,7 +78,7 @@ describe('Practice → Chords', () => {
     ).toEqual(['♭5', '♭9', '#9', '#11', '♭13'])
     await user.click(within(alterations).getByRole('button', { name: '#11' }))
     expect(router.state.location.search).toMatchObject({ size: 9, alter: 's11' })
-    expect(await screen.findByRole('heading', { level: 2, name: 'C9#11' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { level: 2, name: 'C9♯11' })).toBeInTheDocument()
     expect(within(alterations).getByRole('button', { name: '#11' })).toHaveAttribute(
       'aria-pressed',
       'true',
@@ -271,6 +271,16 @@ describe('Practice → Chords', () => {
     await renderApp('/practice/chords?triad=min&size=7')
     const written = await screen.findByText('Also written')
     expect(written.parentElement).toHaveTextContent(/^Also writtenC−7 · Cmin7$/)
+  })
+
+  it('prints the chord and its other spellings as the sheets print them, ♯ and ♭ as signs', async () => {
+    const { router } = await renderApp('/practice/chords?root=F%23&triad=dim&size=7')
+    expect(await screen.findByRole('heading', { level: 2, name: 'F♯m7♭5' })).toBeInTheDocument()
+    expect(screen.getByText('Also written').parentElement).toHaveTextContent(
+      /^Also writtenF♯ø · F♯ø7 · F♯m7\(−5\) · F♯m7−5$/,
+    )
+    // The URL keeps its ASCII.
+    expect(router.state.location.search).toMatchObject({ root: 'F#' })
   })
 
   it('sets a long symbol a size down, so it stays on a phone’s line', async () => {

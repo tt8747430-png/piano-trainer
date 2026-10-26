@@ -33,9 +33,7 @@ const DEFAULTS = {
   keyboard: defaultKeyboard(false),
   recorder: DEFAULT_RECORDER,
   sidebar: DEFAULT_SIDEBAR,
-  paletteSide: 'right',
-  editorLayout: 'scroll',
-  paletteFolded: false,
+  paletteFolded: {},
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
   scoreView: DEFAULT_SCORE_VIEW,
@@ -50,7 +48,7 @@ describe('createSettingsStore', () => {
       fingerNumbers: false,
       namedNotes: false,
       positions: false,
-      melody: false,
+      tune: false,
       metronome: false,
       countIn: false,
       recording: true,
@@ -86,7 +84,7 @@ describe('createSettingsStore', () => {
         fingerNumbers: true,
         namedNotes: true,
         positions: true,
-        melody: false,
+        tune: false,
         metronome: true,
         countIn: false,
         recording: false,
@@ -108,9 +106,7 @@ describe('createSettingsStore', () => {
       },
       recorder: { click: false, tune: true },
       sidebar: 'collapsed',
-      paletteSide: 'right',
-      editorLayout: 'scroll',
-      paletteFolded: false,
+      paletteFolded: { beside: true, foot: false },
       midi: {
         device: 'Piano',
         sound: true,
@@ -130,10 +126,10 @@ describe('createSettingsStore', () => {
       },
       scoreView: {
         layout: 'scroll',
-        notation: true,
+        music: 'grid',
         chordNames: false,
-        melodyStaff: false,
-        hidden: ['treble'],
+        lyrics: false,
+        hidden: ['treble', 'staff0'],
         keys: false,
       },
       foldedSections: ['chords.tensions'],
@@ -158,22 +154,22 @@ describe('createSettingsStore', () => {
     expect(kept.at(-1)).toEqual([69])
   })
 
-  it('keeps the Player’s view where still valid, each staff hidden once', () => {
+  it('keeps the Player’s view where still valid, each staff hidden once (ADR 0097)', () => {
     expect(
       restored({
         scoreView: {
           layout: 'pages',
-          notation: 'no',
+          music: 'chart',
           chordNames: false,
-          hidden: ['bass', 'x', 'bass'],
+          hidden: ['bass', 'x', 'bass', 'staff1', 'staff-1', 'melody'],
         },
       }).scoreView,
     ).toEqual({
       layout: 'pages',
-      notation: true,
+      music: 'sheet',
       chordNames: false,
-      melodyStaff: true,
-      hidden: ['bass'],
+      lyrics: true,
+      hidden: ['bass', 'staff1'],
       keys: true,
     })
     expect(restored({ scoreView: { layout: 'paper' } }).scoreView).toEqual(DEFAULT_SCORE_VIEW)
@@ -181,23 +177,31 @@ describe('createSettingsStore', () => {
 
   it('opens a sidebar saved as anything but open or collapsed', () => {
     expect(restored({ sidebar: 'wide' }).sidebar).toBe('open')
-    expect(restored({ paletteSide: 'top' }).paletteSide).toBe('right')
-    expect(restored({ paletteSide: 'left' }).paletteSide).toBe('left')
-    expect(restored({ editorLayout: 'paper' }).editorLayout).toBe('scroll')
-    expect(restored({ editorLayout: 'pages' }).editorLayout).toBe('pages')
-    expect(restored({ paletteFolded: 'yes' }).paletteFolded).toBe(false)
-    expect(restored({ paletteFolded: true }).paletteFolded).toBe(true)
+    expect(restored({ paletteFolded: true }).paletteFolded).toEqual({})
+    expect(restored({ paletteFolded: { beside: 'yes', foot: false } }).paletteFolded).toEqual({
+      foot: false,
+    })
   })
 
   it('turns a click that is not a boolean on, its default', () => {
     expect(restored({ recorder: { click: 'no' } }).recorder).toEqual(DEFAULT_RECORDER)
   })
 
-  it('starts afresh over a save of the version before, which had no fold for a phone on its side', () => {
-    expect(SETTINGS_VERSION).toBe(3)
-    expect(restored({ theme: 'dark', keyboard: { folded: true } }, 2)).toEqual(
+  it('opens the Player in the sheet music, its view saved as any of the four (ADR 0099)', () => {
+    expect(DEFAULT_SCORE_VIEW.music).toBe('sheet')
+    for (const music of ['sheet', 'lyrics', 'diagrams', 'grid'])
+      expect(restored({ scoreView: { music } }).scoreView.music).toBe(music)
+  })
+
+  it('starts afresh over a save of the version before, whose View had a Sheet music switch (ADR 0099)', () => {
+    expect(SETTINGS_VERSION).toBe(9)
+    expect(restored({ theme: 'dark', scoreView: { notation: false } }, 8)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
+  })
+
+  it('keeps no side for the palette: beside the sheet it stands at its right (ADR 0094)', () => {
+    expect(restored({ paletteSide: 'left' })).not.toHaveProperty('paletteSide')
   })
 
   it('plays from the computer keyboard by default only where the pointer is fine', () => {

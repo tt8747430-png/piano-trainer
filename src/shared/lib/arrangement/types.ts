@@ -1,13 +1,14 @@
 import type {
   BarMarks,
   Chord,
+  Clef,
   Finger,
   Hand,
   HandClefs,
-  Instrument,
   Key,
   Meter,
   Midi,
+  NoteLyrics,
   NoteMarks,
   SpelledNote,
   Tick,
@@ -28,6 +29,8 @@ export interface HandNote {
   readonly durationTicks: Tick
   readonly finger?: Finger
   readonly marks?: NoteMarks
+  /** What it sings, by verse, where the right hand is the tune (ADR 0093). */
+  readonly lyrics?: NoteLyrics
 }
 /** A bar's hands written note by note: a hand here (even with no notes) is played as written, not by the pattern. */
 export interface WrittenHands {
@@ -36,6 +39,7 @@ export interface WrittenHands {
 }
 /** A bar of a chart: its chords, its beats, its written hands and its barlines (a repeat, an ending). */
 export interface ChartBar extends BarMarks {
+  /** End to end from its start, lasting its beats; none in a bar of no chord symbol (ADR 0094). */
   readonly chords: readonly ChartChord[]
   readonly beats: number
   readonly hands?: WrittenHands
@@ -46,6 +50,8 @@ export interface ChartSection {
   readonly lines: readonly (readonly ChartBar[])[]
   /** The key its bars are written in, where that is not the chart's (a key change). */
   readonly key?: Key
+  /** The meter its bars are counted in, where that is not the chart's (a change of time, ADR 0095). */
+  readonly meter?: Meter
 }
 export interface Chart {
   readonly key: Key
@@ -53,16 +59,26 @@ export interface Chart {
   readonly sections: readonly ChartSection[]
 }
 
-export interface MelodyNote {
+/** A note of a single staff over the piano's grand staff (ADR 0097). */
+export interface StaffNote {
   readonly midi: Midi
-  /** As the melody writes it: C♯5 is C♯, never D♭. */
+  /** As the staff writes it: C♯5 is C♯, never D♭. */
   readonly spelled: SpelledNote
   readonly startTick: Tick
   readonly durationTicks: Tick
   /** What its text marks on it (ADR 0063). */
   readonly marks?: NoteMarks
+  /** What it sings, by verse (ADR 0093). */
+  readonly lyrics?: NoteLyrics
 }
-export type Melody = readonly MelodyNote[]
+/**
+ * A single staff over the piano's grand staff (ADR 0097): its clef and its notes, one line in the
+ * chart's key, each note after the one before.
+ */
+export interface StaffMusic {
+  readonly clef: Clef
+  readonly notes: readonly StaffNote[]
+}
 
 /** One token of the figure notation (`C`, `T1`, `v3`, `s7`…): which notes of the chord being played it stands for. */
 export type FigureToken =
@@ -115,36 +131,37 @@ export interface EventFigure {
 }
 /**
  * A right hand that plays the tune: doubled, only at a line's ends, or harmonised under long notes.
- * `withoutMelody` plays when this figure is chosen on its own for a piece with no melody.
+ * `withoutTune` plays when this figure is chosen on its own for a piece with no tune.
  */
-export type MelodyFigure =
+export type TuneFigure =
   | {
-      readonly kind: 'melody'
+      readonly kind: 'tune'
       readonly use: 'double' | 'harmony'
-      readonly withoutMelody: EventFigure
+      readonly withoutTune: EventFigure
     }
   | {
-      readonly kind: 'melody'
+      readonly kind: 'tune'
       readonly use: 'ends'
       readonly between: EventFigure
-      readonly withoutMelody: EventFigure
+      readonly withoutTune: EventFigure
     }
-export type Figure = EventFigure | MelodyFigure
+export type Figure = EventFigure | TuneFigure
 export interface EventPattern {
   readonly id: string
   readonly rh: EventFigure
   readonly lh: EventFigure
 }
-/** A pattern whose right hand plays the tune; on a piece with no melody `withoutMelody` plays instead, both hands. */
-export interface MelodyPattern {
+/** A pattern whose right hand plays the tune; on a piece with no tune `withoutTune` plays instead, both hands. */
+export interface TunePattern {
   readonly id: string
-  readonly rh: MelodyFigure
+  readonly rh: TuneFigure
   readonly lh: EventFigure
-  readonly withoutMelody: EventPattern
+  readonly withoutTune: EventPattern
 }
-export type Pattern = EventPattern | MelodyPattern
+export type Pattern = EventPattern | TunePattern
 
-export type NoteHand = Hand | 'melody'
+/** Who plays a note: a hand of the piano, or a single staff over it (ADR 0097). */
+export type NoteHand = Hand | 'staff'
 export interface PerformedChord extends Chord {
   readonly symbol: string
   readonly tones: readonly Tone[]
@@ -152,8 +169,8 @@ export interface PerformedChord extends Chord {
   readonly durationTicks: Tick
   readonly bar: number
   readonly method?: string
-  /** The id of the pattern that played it. */
-  readonly pattern: string
+  /** The id of the pattern that played it; none where its bar writes both hands note by note. */
+  readonly pattern?: string
   /** The right hand's chord as voiced, where its figure plays the voiced chord (not a tune, nor its own shapes). */
   readonly hand?: readonly Midi[]
 }
@@ -170,6 +187,8 @@ export interface PerformanceBar extends BarMarks {
   readonly chords: readonly number[]
   /** The key it is played in, where that is not the Performance's (a key change). */
   readonly key?: Key
+  /** The meter it is counted in, where that is not the Performance's (a change of time, ADR 0095). */
+  readonly meter?: Meter
   /** The clef a hand's staff changes to at this bar. */
   readonly clefs?: HandClefs
 }
@@ -178,41 +197,45 @@ export interface PerformanceNote {
   /** As it is written: a chord tone as its chord spells it, another note as its token or the key does. */
   readonly spelled: SpelledNote
   readonly hand: NoteHand
+  /** A single staff's note (ADR 0097): its staff's place, top down from 0. */
+  readonly staff?: number
+  /**
+   * Written and not heard (ADR 0097): the tune's where it is not played along, or where the right
+   * hand plays it already.
+   */
+  readonly silent?: true
   readonly finger?: Finger
   readonly startTick: Tick
   readonly durationTicks: Tick
   readonly velocity: number
-  /** Index into Performance.chords: the chord this note was played for. */
-  readonly chord: number
+  /** Index into Performance.chords: the chord this note was played for; none in a bar of no chord. */
+  readonly chord?: number
   /** What a written note's text marks on it (ADR 0063). */
   readonly marks?: NoteMarks
+  /** What it sings, by verse (ADR 0093). */
+  readonly lyrics?: NoteLyrics
 }
 /** Notes sharing an onset: what Step mode walks through. `notes` index into Performance.notes. */
 export interface BeatGroup {
   readonly tick: Tick
   readonly bar: number
-  readonly chord: number
+  /** The chord sounding then; none in a bar of no chord (ADR 0094). */
+  readonly chord?: number
   readonly notes: readonly number[]
 }
 export interface Performance {
   readonly key: Key
   readonly meter: Meter
   readonly totalTicks: Tick
+  /** Its single staves over the grand staff, top down (ADR 0097): each one's clef. */
+  readonly staves?: readonly { readonly clef: Clef }[]
   readonly bars: readonly PerformanceBar[]
   readonly chords: readonly PerformedChord[]
   readonly notes: readonly PerformanceNote[]
   readonly beatGroups: readonly BeatGroup[]
   /**
-   * Where a piece has more voices (ADR 0066), every voice sung, in the key played: the tune first, then
-   * the more voices. Heard and shown, never the learner's to play, so apart from `notes` and the beat
-   * groups.
-   */
-  readonly sung?: readonly Melody[]
-  /**
    * Every part's tempo and pedal marks (ADR 0068), whether the learner hears that part or not: the
    * time and the pedal the whole piece keeps.
    */
   readonly timing?: readonly { readonly startTick: Tick; readonly marks: NoteMarks }[]
-  /** What each of `sung` is played on (ADR 0070), the voice where it names none. */
-  readonly instruments?: readonly Instrument[]
 }

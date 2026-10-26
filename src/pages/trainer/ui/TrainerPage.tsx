@@ -4,6 +4,7 @@ import { MidiButton } from '@/features/connect-midi'
 import { CUSTOM, isTrainerId, ROUNDS, type TrainerId, type TrainerView } from '@/features/trainer'
 import { useGoBack, useViewChange } from '@/shared/lib'
 import { BackButton, ButtonLink, Dropdown, NamedSegmented, ScreenHeader } from '@/shared/ui'
+import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { TrainerChoice } from '@/widgets/trainer-choice'
 import { useTrainerScreen } from '../model/use-trainer-screen'
 import { TrainerRecordLine } from './TrainerRecordLine'
@@ -72,15 +73,20 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
           onDone={close}
         />
       ) : (
-        <div className="flex flex-col items-start gap-3">
-          <p className="text-lg">{t('gaps.none')}</p>
-          <ButtonLink
-            variant="soft"
-            render={<Link to="/practice/quiz/$trainerId" params={{ trainerId: 'build-chord' }} />}
-          >
-            {t('gaps.toBuildChord')}
-          </ButtonLink>
-        </div>
+        // Nothing to ask yet: said as every empty screen says it, with a way to a trainer.
+        <Empty>
+          <EmptyHeader>
+            <EmptyTitle>{t('gaps.none')}</EmptyTitle>
+          </EmptyHeader>
+          <EmptyContent>
+            <ButtonLink
+              variant="soft"
+              render={<Link to="/practice/quiz/$trainerId" params={{ trainerId: 'build-chord' }} />}
+            >
+              {t('gaps.toBuildChord')}
+            </ButtonLink>
+          </EmptyContent>
+        </Empty>
       )}
     </div>
   )

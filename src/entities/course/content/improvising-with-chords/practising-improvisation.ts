@@ -1,7 +1,6 @@
-import { note } from '@/shared/lib/music'
+import { C_MAJOR, note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const LOOP = 'I vi IV V'
 
 /** Improvising with Chords, lesson 4: a melody made up over I–vi–IV–V. */

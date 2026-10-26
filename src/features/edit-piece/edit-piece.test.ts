@@ -3,16 +3,7 @@ import { createPiecesStore, readMusic, type PieceMusic } from '@/entities/piece'
 import { createTakesStore, type Take } from '@/entities/take'
 import { createMemoryStorage } from '@/shared/lib'
 import { note } from '@/shared/lib/music'
-import {
-  chartStart,
-  deleteSong,
-  makeSong,
-  renameSong,
-  resetVersion,
-  saveMusic,
-  SCORE_TEMPLATES,
-  templateOf,
-} from './index'
+import { chartStart, deleteSong, makeSong, resetVersion, saveMusic, SCORE_SETUPS } from './index'
 
 const fresh = () =>
   createPiecesStore({ storage: createMemoryStorage(), otherTabs: new EventTarget() })
@@ -56,47 +47,51 @@ describe('saveMusic', () => {
     saveMusic(store, { kind: 'song', id }, CHANGED)
     expect(store.getState().songs).toEqual([{ id, title: 'Morning', ...CHANGED }])
   })
+
+  it('saves the title with the music, an own song’s and a version’s alike (ADR 0094)', () => {
+    const store = fresh()
+    const id = makeSong(store, {
+      title: 'Morning',
+      key: { tonic: note('G'), minor: false },
+      meter: '3/4',
+    })
+    if (!id) throw new Error('made')
+    saveMusic(store, { kind: 'song', id }, { ...CHANGED, title: 'Evening' })
+    expect(store.getState().songs).toEqual([{ id, ...CHANGED, title: 'Evening' }])
+    // A version whose title alone changed is a version; Reset takes it away with the music.
+    const target = { kind: 'version', id: 'amazing', original: ORIGINAL } as const
+    saveMusic(store, target, { ...ORIGINAL, title: 'Grace' })
+    expect(store.getState().versions).toEqual({ amazing: { ...ORIGINAL, title: 'Grace' } })
+    resetVersion(store, 'amazing')
+    expect(store.getState().versions).toEqual({})
+  })
 })
 
 describe('the learner’s songs', () => {
-  it('names the template a setup is, and none once it has more parts', () => {
-    expect(templateOf(SCORE_TEMPLATES.leadSheet)).toBe('leadSheet')
-    expect(templateOf({ chordNames: false, melody: false, piano: true, parts: [] })).toBe('piano')
-    expect(templateOf({ chordNames: true, melody: true, piano: true, parts: [] })).toBe(
-      'pianoAndMelody',
-    )
-    expect(templateOf({ ...SCORE_TEMPLATES.piano, parts: ['flute'] })).toBeUndefined()
-  })
-
-  it('starts a lead sheet: the tune’s staff and the chord names, the piano hidden (ADR 0083)', () => {
+  it('starts a score of the piano, a staff over the piano, or a staff alone: a lead sheet (ADR 0083, 0097)', () => {
     const key = { tonic: note('C'), minor: false }
-    expect(chartStart(key, '4/4', SCORE_TEMPLATES.leadSheet)).toMatchObject({
-      melody: expect.any(String),
-      hidden: ['piano'],
+    expect(SCORE_SETUPS).toEqual(['piano', 'staffAndPiano', 'staff'])
+    expect(chartStart(key, '4/4')).not.toHaveProperty('staves')
+    expect(chartStart(key, '4/4', 'staffAndPiano')).toMatchObject({ staves: [{ notes: 'r/4' }] })
+    expect(chartStart(key, '4/4', 'staffAndPiano')).not.toHaveProperty('leadSheet')
+    expect(chartStart(key, '4/4', 'staff')).toMatchObject({
+      staves: [{ notes: 'r/4' }],
+      leadSheet: true,
     })
-    // Never every staff: with no tune nor part, the piano stays.
-    expect(
-      chartStart(key, '4/4', { chordNames: true, melody: false, piano: false, parts: [] }),
-    ).not.toHaveProperty('hidden')
   })
 
   it('makes a song’s score as its setup says, every staff there and readable though empty', () => {
     const store = fresh()
     const key = { tonic: note('C'), minor: false }
-    const setup = { chordNames: false, melody: true, piano: true, parts: ['cello'] } as const
-    const id = makeSong(store, { title: 'Hymn', key, meter: '6/8', setup })
+    const id = makeSong(store, { title: 'Hymn', key, meter: '6/8', setup: 'staffAndPiano' })
     const song = store.getState().songs.find((each) => each.id === id)
-    expect(song).toMatchObject({
-      melody: expect.any(String),
-      voices: [expect.any(String)],
-      instruments: ['voice', 'cello'],
-      hidden: ['chords'],
-    })
+    expect(song?.staves).toHaveLength(1)
+    expect(song).not.toHaveProperty('leadSheet')
     expect(() => readMusic(song!)).not.toThrow()
-    expect(readMusic(song!).melody).toEqual([])
+    expect(readMusic(song!).staves).toEqual([{ clef: 'treble', notes: [] }])
   })
 
-  it('makes a song of four bars of its key’s tonic chord, under the next number', () => {
+  it('makes a song of four bars of no chord, as a notation app’s new score, under the next number (ADR 0094)', () => {
     const store = fresh()
     const minor = { tonic: note('E', -1), minor: true }
     expect(makeSong(store, { title: '  Evening  ', key: minor, meter: '6/8' })).toBe('my-1')
@@ -109,11 +104,22 @@ describe('the learner’s songs', () => {
           meter: '6/8',
           tempo: 90,
           pattern: 'r1',
-          sections: [{ kind: 'verse', lines: ['E♭m E♭m E♭m E♭m'] }],
+          sections: [{ kind: 'verse', lines: ['_ _ _ _'] }],
         },
       ],
       nextSong: 2,
     })
+  })
+
+  it('starts a song empty: both hands written silent, so the editor opens on empty bars (ADR 0091)', () => {
+    const key = { tonic: note('C'), minor: false }
+    const silent = 'r/4 | r/4 | r/4 | r/4'
+    expect(chartStart(key, '4/4')).toMatchObject({ hands: { rh: silent, lh: silent } })
+    // In any meter, each bar's rest the bar's length, as an empty single staff is written.
+    const waltz = chartStart(key, '3/4', 'staffAndPiano')
+    expect(waltz.hands?.rh).toBe(Array(4).fill(waltz.staves?.[0]?.notes).join(' | '))
+    const { chart } = readMusic(waltz)
+    expect(chart.sections[0]?.lines[0]?.every((bar) => bar.hands?.rh?.length === 0)).toBe(true)
   })
 
   it('makes nothing without a title', () => {
@@ -124,15 +130,11 @@ describe('the learner’s songs', () => {
     expect(store.getState().songs).toEqual([])
   })
 
-  it('renames a song, and deletes it without giving its number again', () => {
+  it('deletes a song without giving its number again', () => {
     const store = fresh()
     const key = { tonic: note('C'), minor: false }
     const first = makeSong(store, { title: 'One', key, meter: '4/4' })
     if (!first) throw new Error('made')
-    renameSong(store, first, ' Two ')
-    expect(store.getState().songs[0]?.title).toBe('Two')
-    renameSong(store, first, '')
-    expect(store.getState().songs[0]?.title).toBe('Two')
     deleteSong(store, freshTakes(), first)
     expect(store.getState().songs).toEqual([])
     expect(makeSong(store, { title: 'Three', key, meter: '4/4' })).toBe('my-2')

@@ -70,7 +70,7 @@ spelling, and the gaps it finds come from what the learner answered, not from a 
   in the key chosen; and the keys that hold it),
   the score editor (the learner's version of any song or study, or the chart of a
   listing, and songs of their own: a click on the sheet chooses where the keys write (the chord row, the treble
-  staff's melody or right hand, the bass staff), chords typed, tapped or played under a Chord names toggle, the melody
+  staff (the right hand), the bass staff, or a single staff over them, as many as the song has, each named), chords typed, tapped or played under a Chord names toggle, each staff's notes
   and any bar of either hand written note by note from the keys, the computer keyboard or MIDI, the clef and
   signatures opening the song's key, tempo and time signature (changed within its kind), the notes at the caret
   marked, undo and redo, every change saved, played in the Player in any

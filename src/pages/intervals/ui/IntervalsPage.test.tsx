@@ -8,9 +8,9 @@ const timed = (sounds: readonly Sound[] = []) =>
   sounds.flatMap((sound) => (sound.kind === 'note' ? [[sound.midi, sound.at]] : []))
 
 describe('Practice → Intervals', () => {
-  it('writes a card for every interval, within the octave and, opened, past it', async () => {
+  it('writes a card for every interval, within the octave and past it, each group folding as the learner leaves it', async () => {
     const user = userEvent.setup()
-    await renderApp('/practice/intervals')
+    const { settingsStore } = await renderApp('/practice/intervals')
     const simple = await screen.findByRole('region', { name: 'Within the octave' })
     expect(
       within(simple)
@@ -37,11 +37,16 @@ describe('Practice → Intervals', () => {
     expect(third).toHaveTextContent('Imperfect consonance')
     expect(screen.getByRole('article', { name: 'Tritone' })).toHaveTextContent('A4 · d5')
     const compound = screen.getByRole('region', { name: 'Past the octave' })
-    expect(within(compound).queryByRole('article')).not.toBeInTheDocument()
-    await user.click(within(compound).getByRole('button', { name: 'Past the octave' }))
     expect(within(compound).getByRole('article', { name: 'Augmented ninth' })).toHaveTextContent(
       'In chords: #9',
     )
+    // Folded, as the other explorers' sections: saved in the settings, for every visit.
+    await user.click(within(compound).getByRole('button', { name: 'Past the octave' }))
+    expect(within(compound).getByRole('button', { name: 'Past the octave' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    )
+    expect(settingsStore.getState().foldedSections).toContain('intervals.compound')
   })
 
   it('says each size in tones as it is said: a semitone, one tone, tones', async () => {

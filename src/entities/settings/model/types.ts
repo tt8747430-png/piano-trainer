@@ -30,12 +30,12 @@ export const TITLE_SIZES = ['large', 'small'] as const
 /** How large a screen's title is: large, or small, leaving the page more of the screen. */
 export type TitleSize = (typeof TITLE_SIZES)[number]
 
-/** The Player's saved switches: the Setup's (`PLAYING_TOGGLES`), the View menu's chord positions, finger numbers and named notes, a piece's melody and recording. */
+/** The Player's saved switches: the Setup's (`PLAYING_TOGGLES`), the View menu's chord positions, finger numbers and named notes, a piece's tune and recording. */
 export const PRACTICE_TOGGLES = [
   'fingerNumbers',
   'namedNotes',
   'positions',
-  'melody',
+  'tune',
   'metronome',
   'countIn',
   'recording',
@@ -43,7 +43,7 @@ export const PRACTICE_TOGGLES = [
 export type PracticeToggle = (typeof PRACTICE_TOGGLES)[number]
 export type PracticeToggles = Readonly<Record<PracticeToggle, boolean>>
 /**
- * The Setup's saved switches: how any piece plays (the melody and the recording are a piece's own: its
+ * The Setup's saved switches: how any piece plays (the tune and the recording are a piece's own: its
  * setup shows them). What the sheet shows (chord positions, finger numbers, named notes) is the View
  * menu's alone (ADR 0064, 0085).
  */
@@ -93,9 +93,17 @@ export interface KeyboardSettings {
   readonly railControls: readonly RailControl[]
 }
 
-/** The side of the sheet the score editor's palette stands on, where it stands beside it (ADR 0071). */
-export const PALETTE_SIDES = ['right', 'left'] as const
-export type PaletteSide = (typeof PALETTE_SIDES)[number]
+/**
+ * Where the score editor's palette stands: beside the sheet (a laptop, a phone on its side), at its
+ * right (ADR 0094), or at its foot.
+ */
+export const PALETTE_PLACES = ['beside', 'foot'] as const
+export type PalettePlace = (typeof PALETTE_PLACES)[number]
+/**
+ * Whether the palette is folded, as the learner last left it in each place; a place never chosen
+ * takes its default (ADR 0089): open beside the sheet, where it covers no music, folded at the foot.
+ */
+export type PaletteFolds = Readonly<Partial<Record<PalettePlace, boolean>>>
 
 const SIDEBARS = ['open', 'collapsed'] as const
 /** A laptop's sidebar: its places named, or their icons alone. */
@@ -145,15 +153,25 @@ export const REMEMBERED_CHORDS = 24
 export const CHORD_KEYS_MAX = 10
 
 /**
- * How the Player shows a score (ADR 0064, Soundslice's view settings): laid out as one line across,
- * lines down the screen or A4 pages; the score itself, or only the keys; the chord names; the tune on
- * its own staff; the staves hidden; and the keys, or the score alone.
+ * The Player's four views of the music (ADR 0099, Chordify's): the sheet music; the chords as chips
+ * over the words; the chord sounding as a diagram beside the next; the chart in beat cells.
+ */
+export const MUSIC_VIEWS = ['sheet', 'lyrics', 'diagrams', 'grid'] as const
+export type MusicView = (typeof MUSIC_VIEWS)[number]
+
+/**
+ * How the Player and the score editor show a score (ADR 0064, Soundslice's view settings): laid out
+ * as one line across, lines down the screen or A4 pages; the Player's view of it (ADR 0099: the
+ * editor always shows the score); the chord names; the words under the staff they are written on
+ * (ADR 0093); the staves hidden, each by its place (ADR 0097); and the keys, or the score alone.
  */
 export interface ScoreViewSettings {
   readonly layout: SheetView
-  readonly notation: boolean
+  readonly music: MusicView
   readonly chordNames: boolean
-  readonly melodyStaff: boolean
+  /** The verses under the staff they are written on, where the song has words. */
+  readonly lyrics: boolean
+  /** The staves out of sight: a single staff by its place, the piano's upper or lower staff. */
   readonly hidden: readonly StaffId[]
   /** The keys under the score: off, the score has the screen. */
   readonly keys: boolean
@@ -161,13 +179,13 @@ export interface ScoreViewSettings {
 
 /**
  * Down the screen, a line at a time, as a phone held upright reads best (one line across shows a bar
- * or two there); every staff, the chord names, the tune on its staff.
+ * or two there); every staff, the chord names, the words.
  */
 export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   layout: 'scroll',
-  notation: true,
+  music: 'sheet',
   chordNames: true,
-  melodyStaff: true,
+  lyrics: true,
   hidden: [],
   keys: true,
 }
@@ -182,12 +200,8 @@ export interface SettingsState {
   keyboard: KeyboardSettings
   recorder: RecorderSettings
   sidebar: Sidebar
-  /** The side the score editor's palette stands on beside the sheet. */
-  paletteSide: PaletteSide
-  /** How the score editor lays its score out, on every song (ADR 0064). */
-  editorLayout: SheetView
-  /** Whether the score editor's palette is folded into its button. */
-  paletteFolded: boolean
+  /** Whether the score editor's palette is folded to its quick row and categories, by where it stands. */
+  paletteFolded: PaletteFolds
   midi: MidiSettings
   chordFinder: ChordFinderSettings
   scoreView: ScoreViewSettings
@@ -199,7 +213,7 @@ export const DEFAULT_PRACTICE: PracticeToggles = {
   fingerNumbers: false,
   namedNotes: false,
   positions: false,
-  melody: false,
+  tune: false,
   metronome: false,
   countIn: false,
   recording: true,
@@ -226,8 +240,6 @@ export const DEFAULT_MIDI: MidiSettings = {
 export { DEVICE_NAME_MAX } from '@/shared/api/midi'
 
 export const DEFAULT_SIDEBAR: Sidebar = 'open'
-export const DEFAULT_PALETTE_SIDE: PaletteSide = 'right'
-export const DEFAULT_EDITOR_LAYOUT: SheetView = 'scroll'
 
 /** The staff writes only the chord down now; the keys it is in are shown. */
 export const DEFAULT_CHORD_FINDER: ChordFinderSettings = {
@@ -260,10 +272,10 @@ export const isKeyDock = isOneOf(KEY_DOCKS)
 export const isKeyLength = isOneOf(KEY_LENGTHS)
 export const isNamedKeys = isOneOf(NAMED_KEYS)
 export const isSidebar = isOneOf(SIDEBARS)
-export const isPaletteSide = isOneOf(PALETTE_SIDES)
 export const isOctaveShift = isOneOf(OCTAVE_SHIFTS)
 export const isTouch = isOneOf(TOUCHES)
 export const isPedalWay = isOneOf(PEDAL_WAYS)
+export const isMusicView = isOneOf(MUSIC_VIEWS)
 
 /** The first of the browser's preferred languages the app speaks decides; English otherwise. */
 export function detectLocale(languages: readonly string[] | undefined): Locale {

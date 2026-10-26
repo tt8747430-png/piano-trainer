@@ -15,7 +15,7 @@ export const PROGRESSION = {
   tempo: 80,
   pattern: 'block',
   chordSize: 'triads',
-  fit: { methodCodes: false, melody: false, key: true, simpleTime: true },
+  fit: { methodCodes: false, tune: false, key: true, simpleTime: true },
 } as const satisfies {
   readonly numerals: string
   readonly minorNumerals: string

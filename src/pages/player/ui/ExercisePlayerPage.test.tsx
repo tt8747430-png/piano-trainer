@@ -15,6 +15,11 @@ describe('An exercise in the Player', () => {
     expect(await screen.findByRole('heading', { name: 'Arpeggio: Em7' })).toBeInTheDocument()
   })
 
+  it('titles an arpeggio by its chord as the sheets print it', async () => {
+    await renderApp('/play/exercise/arpeggio?root=C%23&quality=m7')
+    expect(await screen.findByRole('heading', { name: 'Arpeggio: C♯m7' })).toBeInTheDocument()
+  })
+
   it('plays and stops', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp('/play/exercise/hanon')

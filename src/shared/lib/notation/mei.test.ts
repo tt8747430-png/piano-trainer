@@ -128,21 +128,47 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(bass).not.toContain('symbol="brace"')
   })
 
+  it('names the staves drawn at the first line’s head: each single staff’s, the piano’s over its brace (ADR 0094, 0097)', () => {
+    const score = notate(
+      music(
+        [
+          c(0),
+          { ...n(76, note('E'), 'staff', 0, 24), staff: 0 },
+          { ...n(43, note('G'), 'staff', 0, 24), staff: 1 },
+          n(48, note('C'), 'lh', 0, 24),
+        ],
+        { chords: [], staves: [{ clef: 'treble' }, { clef: 'bass' }] },
+      ),
+    )
+    const labels = {
+      staff0: { text: 'Voice' },
+      staff1: { text: 'Staff 2', placeholder: true },
+      piano: { text: 'Piano' },
+    } as const
+    const named = scoreToMei(score, { labels })
+    expect(named).toMatch(
+      /<staffDef n="1"[^>]*clef\.shape="G"[^>]*>\s*<label><rend fontsize="small">Voice<\/rend><\/label>\s*<\/staffDef>/,
+    )
+    // A placeholder for a staff with no name of its own, in italics; the staff's clef its own.
+    expect(named).toMatch(
+      /<staffDef n="2"[^>]*clef\.shape="F"[^>]*>\s*<label><rend fontsize="small" fontstyle="italic">Staff 2<\/rend><\/label>/,
+    )
+    expect(named).toMatch(
+      /<staffGrp symbol="brace" bar\.thru="true">\s*<label><rend fontsize="small">Piano<\/rend><\/label>\s*<staffDef n="3"/,
+    )
+    // A staff not drawn has no name; the piano's one staff drawn takes the piano's.
+    const bass = scoreToMei(score, { labels, staves: ['bass'] })
+    expect(bass).not.toContain('Voice')
+    expect(bass).toMatch(/<staffDef n="1"[^>]*>\s*<label><rend fontsize="small">Piano</)
+    expect(scoreToMei(score)).not.toContain('<label')
+    expect(scoreToMei(score, { labels: { piano: { text: 'A & B' } } })).toContain('A &amp; B')
+  })
+
   it('writes a blank staff’s rests as hidden ones, each named by its staff and tick', () => {
     const tune = scoreToMei(
       notate(music([c(0)], { chords: [], bars: [{ startTick: 0, beats: 4, blank: ['bass'] }] })),
     )
     expect(tune).toMatch(/<rest xml:id="h-bass-0" dur="1" type="hidden"\/>/)
-  })
-
-  it('types a staff the pattern plays in a bar, so it is drawn in soft ink (ADR 0083)', () => {
-    const played = scoreToMei(
-      notate(
-        music([c(0)], { chords: [], bars: [{ startTick: 0, beats: 4, pattern: ['treble'] }] }),
-      ),
-    )
-    expect(played).toMatch(/<staff n="1" type="pattern">/)
-    expect(played).toMatch(/<staff n="2">/)
   })
 
   it('beams eighths by the meter, as LilyPond: four to the half bar in 4/4 (ADR 0084)', () => {
@@ -206,5 +232,67 @@ describe('scoreToMei, a note’s marks and the options', () => {
       expect(written).not.toContain('m-next')
       expect(written).not.toContain('<pb/>')
     })
+  })
+})
+
+describe('the words (ADR 0093)', () => {
+  const sung = (text: string, hyphen = false, held = 0) => ({ text, hyphen, held })
+  const verses = (lyrics: (ReturnType<typeof sung> | null)[][]) =>
+    scoreToMei(
+      notate(
+        music(
+          lyrics.map((each, i) => ({
+            ...n(72, note('C'), 'staff', i * 24, 24),
+            staff: 0,
+            lyrics: each,
+          })),
+          { staves: [{ clef: 'treble' }] },
+        ),
+      ),
+    )
+
+  it('writes each syllable as a verse of its note, named by its staff, tick and verse, its place in the word and what joins it on', () => {
+    const mei = verses([
+      [sung('A', true)],
+      [sung('ma', true)],
+      [sung('zing')],
+      [sung('grace', false, 1)],
+    ])
+    expect(mei).toContain(
+      '<verse xml:id="v-staff0-0-0" n="1"><syl wordpos="i" con="d">A</syl></verse>',
+    )
+    expect(mei).toContain(
+      '<verse xml:id="v-staff0-24-0" n="1"><syl wordpos="m" con="d">ma</syl></verse>',
+    )
+    expect(mei).toContain('<verse xml:id="v-staff0-48-0" n="1"><syl wordpos="t">zing</syl></verse>')
+    expect(mei).toContain('<verse xml:id="v-staff0-72-0" n="1"><syl con="u">grace</syl></verse>')
+    expect(mei).toMatch(/<note xml:id="n-staff0-0-0"[^>]*>\s*<verse xml:id="v-staff0-0-0" n="1">/)
+  })
+
+  it('numbers the verses, skipping one that sings nothing on the note, and escapes the text', () => {
+    const mei = verses([
+      [sung('one'), sung('<eins>')],
+      [null, sung('zwei')],
+    ])
+    expect(mei).toContain(
+      '<verse xml:id="v-staff0-0-0" n="1"><syl>one</syl></verse><verse xml:id="v-staff0-0-1" n="2"><syl>&lt;eins&gt;</syl></verse>',
+    )
+    expect(mei).toContain(
+      '<note xml:id="n-staff0-24-0" pname="c" oct="5" dur="4"><verse xml:id="v-staff0-24-1" n="2"><syl>zwei</syl></verse></note>',
+    )
+  })
+
+  it('writes a chord’s syllables inside the chord', () => {
+    const mei = scoreToMei(
+      notate(
+        music([
+          { ...n(72, note('C'), 'rh', 0, 96), lyrics: [sung('one')] },
+          n(76, note('E'), 'rh', 0, 96),
+        ]),
+      ),
+    )
+    expect(mei).toMatch(
+      /<chord xml:id="c-treble-0"[^>]*>(<note [^>]*\/>){2}<verse xml:id="v-treble-0-0" n="1"><syl>one<\/syl><\/verse><\/chord>/,
+    )
   })
 })

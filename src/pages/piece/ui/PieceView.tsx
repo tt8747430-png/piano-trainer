@@ -1,88 +1,106 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import {
-  Ellipsis,
-  PencilLine,
-  Play,
-  Printer,
-  RotateCcw,
-  Share2,
-  Target,
-  Trash2,
-} from 'lucide-react'
-import { useMemo, useRef, useState } from 'react'
+import { Ellipsis, PencilLine, Play, RotateCcw, Share2, Target, Trash2 } from 'lucide-react'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { pieceStepId } from '@/entities/step'
 import {
   entryTitles,
   isDegreePiece,
   isOwnSongId,
   musicOf,
+  PieceFactCards,
   selectHasVersion,
-  usePieceHeadings,
   usePieces,
   type Piece,
 } from '@/entities/piece'
-import { PinnedKeyboard } from '@/features/live-keyboard'
 import { LearnedButton } from '@/features/mark-learned'
-import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
 import { ShareSaid, useShareSong } from '@/features/share-song'
-import { loopParam } from '@/features/practice'
 import { OPEN_PLAINLY } from '@/shared/lib'
-import { audibleHands, barSounds } from '@/shared/lib/schedule'
-import { usePlayback } from '@/shared/lib/services'
 import { useLocale } from '@/shared/i18n'
-import { ActionMenu, ButtonLink, FabLink, FloatingActions, NO_KEYS, RoundLink } from '@/shared/ui'
+import { ActionMenu, FabLink, FloatingActions, RoundLink } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { ChordChart } from '@/widgets/chord-chart'
-import { PieceChords } from '@/widgets/piece-chords'
-import { PieceAbout, PieceCredits } from './PieceAbout'
-import { PieceFacts } from './PieceFacts'
-import { PieceForm } from './PieceForm'
+import { sectionPaint } from '../model/section-paint'
+import { useSongLessons } from '../model/use-song-lessons'
+import { LearnCard } from './LearnCard'
+import { PieceAbout } from './PieceAbout'
+import { PieceByline } from './PieceByline'
+import { PieceChords } from './PieceChords'
 import { OwnMusicAsk } from './OwnMusicAsk'
 import { PieceHeader } from './PieceHeader'
+import { PlayAlong } from './PlayAlong'
+import { SectionLessonGroups } from './SectionLessonGroups'
+import { SectionRows } from './SectionRows'
 
 /**
- * A piece with a chart, in one column, as a songbook's page reads: its bar (Back, the title, then Edit
- * the score, Learned and More: Check these chords, Print, and for the learner's own music Share and its
- * way back, asked first); its facts (key, time, tempo) and who wrote it; its form, the sections in
- * order, each a link to its place; the chords it plays and its chart by section, each section to
- * practise on its own, every chord and bar to tap and hear on its keys, docked as the keyboard settings
- * say; then its note and the way to its key's scale. Practise, what the page is for, floats in the
- * thumb's reach.
+ * A piece with a chart, in one column: Learn the song (ADR 0100). Its bar (Back, the title, then
+ * Edit the score, Learned and More: Check these chords, and for the learner's own music Share and
+ * its way back, asked first); under the title its byline (what else it is called, Your version, its
+ * stage, who wrote it); the learning card, where to go next and its lessons done; its key, time and
+ * tempo as cards; its chords as diagrams, each opening its sheet, and its sections, each a row to its
+ * page of lessons (a song of one section has that section's lessons here, its chords to learn among
+ * them); Play along, the whole song; then its note and the way to its key's scale. Its chart is the
+ * Player's: the page shows no keys but a chord's sheet's. Practise floats in the thumb's reach,
+ * opening the Player as it was left.
  */
 export function PieceView({ piece }: { piece: Piece }) {
   const { t } = useTranslation('piece')
   const locale = useLocale()
-  const playback = usePlayback<number>()
   const own = isOwnSongId(piece.id) ? piece.id : null
   const hasVersion = usePieces((state) => selectHasVersion(state, piece.id))
   const title = entryTitles(piece, locale).primary
-  const performance = useMemo(
-    () => arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS),
-    [piece],
-  )
-  const headings = usePieceHeadings(piece)
+  const { performance, headings, sections } = useSongLessons(piece)
+  const [only] = sections.length === 1 ? sections : []
   const shared = useShareSong()
   const [asking, setAsking] = useState(false)
   // More, which takes the focus back from a dialog it opened: the action chosen is folded away.
   const more = useRef<HTMLDivElement>(null)
   const step = pieceStepId(piece.id)
   const navigate = useNavigate()
-  const toggleBar = (bar: number) =>
-    playback.toggle(bar, () =>
-      barSounds(performance, bar, { tempo: piece.tempo, hands: audibleHands('both') }),
-    )
   const ownMusic = own
     ? ({ kind: 'song', id: own, title } as const)
     : hasVersion
       ? ({ kind: 'version', id: piece.id, title } as const)
       : null
+  const actions = [
+    // A piece of no chord symbol has none to check (ADR 0094).
+    ...(performance.chords.length > 0
+      ? [
+          {
+            key: 'check',
+            label: t('checkChords'),
+            icon: Target,
+            onSelect: () => void navigate({ to: '/check', search: { of: step } }),
+          },
+        ]
+      : []),
+    ...(own && !isDegreePiece(piece)
+      ? [
+          {
+            key: 'share',
+            label: t('share'),
+            icon: Share2,
+            onSelect: () => shared.share({ title, music: musicOf(piece) }),
+          },
+        ]
+      : []),
+    ...(ownMusic
+      ? [
+          {
+            key: 'back',
+            label: t(ownMusic.kind === 'song' ? 'delete' : 'reset'),
+            icon: ownMusic.kind === 'song' ? Trash2 : RotateCcw,
+            destructive: true,
+            onSelect: () => setAsking(true),
+          },
+        ]
+      : []),
+  ]
 
   return (
     <div className="flex flex-col gap-6 pb-4">
       <PieceHeader
         entry={piece}
+        crowded
         actions={
           <>
             {isDegreePiece(piece) ? null : (
@@ -93,96 +111,48 @@ export function PieceView({ piece }: { piece: Piece }) {
               />
             )}
             {own ? null : <LearnedButton step={step} round />}
-            <div ref={more} className="contents">
-              <ActionMenu
-                label={t('more')}
-                align="end"
-                trigger={<Ellipsis aria-hidden />}
-                render={
-                  <Button
-                    variant="surface"
-                    size="icon"
-                    className="rounded-full"
-                    aria-label={t('more')}
-                    title={t('more')}
-                  />
-                }
-                actions={[
-                  {
-                    key: 'check',
-                    label: t('checkChords'),
-                    icon: Target,
-                    onSelect: () => void navigate({ to: '/check', search: { of: step } }),
-                  },
-                  // An installed app has no browser menu to print from.
-                  {
-                    key: 'print',
-                    label: t('print'),
-                    icon: Printer,
-                    onSelect: () => window.print(),
-                  },
-                  ...(own && !isDegreePiece(piece)
-                    ? [
-                        {
-                          key: 'share',
-                          label: t('share'),
-                          icon: Share2,
-                          onSelect: () => shared.share({ title, music: musicOf(piece) }),
-                        },
-                      ]
-                    : []),
-                  ...(ownMusic
-                    ? [
-                        {
-                          key: 'back',
-                          label: t(ownMusic.kind === 'song' ? 'delete' : 'reset'),
-                          icon: ownMusic.kind === 'song' ? Trash2 : RotateCcw,
-                          destructive: true,
-                          onSelect: () => setAsking(true),
-                        },
-                      ]
-                    : []),
-                ]}
-              />
-            </div>
+            {/* More holds nothing for a catalog song of no chord symbol: then it is not there. */}
+            {actions.length > 0 ? (
+              <div ref={more} className="contents">
+                <ActionMenu
+                  label={t('more')}
+                  align="end"
+                  trigger={<Ellipsis aria-hidden />}
+                  render={
+                    <Button
+                      variant="surface"
+                      size="icon"
+                      className="rounded-full"
+                      aria-label={t('more')}
+                      title={t('more')}
+                    />
+                  }
+                  actions={actions}
+                />
+              </div>
+            ) : null}
           </>
         }
       />
-      <PieceFacts entry={piece} />
-      <PieceCredits entry={piece} />
+      <PieceByline piece={piece} />
       <ShareSaid said={shared.said} />
-      <PinnedKeyboard shown={NO_KEYS} range={playerRange(performance)} className="print:hidden" />
-      <PieceForm performance={performance} headings={headings} />
-      <div className="print:hidden">
-        <PieceChords performance={performance} />
-      </div>
-      <section className="flex flex-col gap-3">
-        <h2 className="text-2xl">{t('chart')}</h2>
-        <ChordChart
+      <LearnCard piece={piece} headings={headings} sections={sections} />
+      <PieceFactCards piece={piece} />
+      {/* A song of one section has its lessons here, its chords among them to learn. */}
+      {only ? (
+        <SectionLessonGroups
+          piece={piece}
           performance={performance}
-          headings={headings}
-          onBar={toggleBar}
-          playing={playback.playing}
-          sectionAction={(bars, section) => (
-            <ButtonLink
-              variant="outline"
-              className="h-9 rounded-full px-3 text-sm print:hidden"
-              aria-label={t('practiseSectionOf', { section: headings[section] ?? '' })}
-              render={
-                <Link
-                  to="/play/$pieceId"
-                  params={{ pieceId: piece.id }}
-                  search={{ loop: loopParam(bars) }}
-                  state={OPEN_PLAINLY}
-                />
-              }
-            >
-              <Play data-icon="inline-start" aria-hidden />
-              {t('practiseSection')}
-            </ButtonLink>
-          )}
+          lessons={only}
+          paint={sectionPaint(headings[0] ?? '')}
         />
-      </section>
+      ) : (
+        <>
+          <PieceChords performance={performance} />
+          <SectionRows piece={piece} headings={headings} sections={sections} />
+        </>
+      )}
+      <PlayAlong piece={piece} />
       <PieceAbout entry={piece} />
       {ownMusic ? (
         <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} returnTo={more} />

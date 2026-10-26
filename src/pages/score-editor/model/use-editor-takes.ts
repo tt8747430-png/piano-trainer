@@ -1,7 +1,7 @@
 import { useSearch } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useEffect, useEffectEvent, useState } from 'react'
 import { isOwnSongId, selectOwnSong, usePiecesStoreApi, type PieceId } from '@/entities/piece'
-import { useSettingsStoreApi } from '@/entities/settings'
+import { selectRecorder, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import {
   midiFile,
   quantise,
@@ -14,6 +14,7 @@ import {
 import { deleteTake, saveTake } from '@/features/manage-takes'
 import {
   useRecorder,
+  type Along,
   type RecorderProgressSource,
   type RecorderStage,
 } from '@/features/record-take'
@@ -30,7 +31,7 @@ import { TICKS_PER_BEAT, type Midi } from '@/shared/lib/music'
 import type { Duration } from '@/shared/lib/notation'
 import type { GridBar } from '@/shared/lib/schedule'
 import type { EditSearch } from './edit-search'
-import { tuneOf } from './tune'
+import { hasTune, tuneOf } from './tune'
 
 /** How a take is written into the score: where, split at which key, and snapped to which value. */
 export interface WriteChoice {
@@ -58,13 +59,20 @@ export interface EditorTakes {
   readonly progress: RecorderProgressSource
   /** The bar the take records from, from 1: the caret's when Record was pressed. */
   readonly fromBar: number
-  /** Whether the takes' sheet is open: the URL's `record`. */
+  /** Whether the takes' sheet is open: the URL's `takes`. */
   readonly open: boolean
   /** The sheet's page: the one it shows, kept as it closes. */
   readonly page: TakesPage
   /** Opens the sheet on a page, or closes it (null). */
   readonly show: (page: TakesPage | null) => void
-  /** Records a take from the caret's bar, to the song's tempo and meter. */
+  /** Whether Record was pressed as the editor opened (New song's Record): the URL's `record`. */
+  readonly asked: boolean
+  /** Forgets that Record was asked for, once it is pressed: the URL says nothing of it any more. */
+  readonly answered: () => void
+  /**
+   * Records a take from the caret's bar, to the song's tempo and meter, the click and the tune under
+   * it as Settings › Recording says (and as the recording strip's settings change it while it records).
+   */
   readonly record: () => void
   readonly stop: () => void
   readonly write: (take: Take, choice: WriteChoice) => void
@@ -72,27 +80,32 @@ export interface EditorTakes {
   readonly remove: (id: TakeId) => void
 }
 
-/** The draft's bars on the meter's grid, as the click follows them. */
+/** The draft's bars on the meter's grid, each in its section's (ADR 0095), as the click follows them. */
 const gridBars = (draft: Draft): GridBar[] =>
-  barsOf(draft).map(({ start, bar }) => ({ startTick: start, beats: bar.ticks / TICKS_PER_BEAT }))
+  barsOf(draft).map(({ start, bar, section }) => {
+    const meter = draft.sections[section]?.heading.meter
+    return { startTick: start, beats: bar.ticks / TICKS_PER_BEAT, ...(meter ? { meter } : {}) }
+  })
 
 /**
- * The score editor's takes (ADR 0028): the recorder over the caret's bar, each take kept as it ends
- * and the sheet opened on it while the screen is there; a take written into the score, downloaded or
- * deleted. Whether the sheet is open is the URL's (New song's Record arrives with it open).
+ * The score editor's takes (ADR 0028, 0096): the recorder over the caret's bar, each take kept as it
+ * ends and the takes' sheet opened on it while the screen is there; a take written into the score,
+ * downloaded or deleted. Whether the sheet is open is the URL's, and so is Record pressed as the
+ * editor opens (New song's Record). The click and the tune under a take follow the saved settings
+ * while it records.
  */
 export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: string): EditorTakes {
   const takes = useTakesStoreApi()
   const pieces = usePiecesStoreApi()
   const settings = useSettingsStoreApi()
-  const { record: open } = useSearch({ from: '/full-screen/edit/$pieceId' })
+  const { takes: open, record: asked } = useSearch({ from: '/full-screen/edit/$pieceId' })
   const changeView = useViewChange<EditSearch>()
   const [shown, setShown] = useState<TakesPage>(TAKES_PAGE)
   const [fromBar, setFromBar] = useState(1)
 
   const show = (page: TakesPage | null) => {
     if (page) setShown(page)
-    if (open !== (page !== null)) changeView({ record: page !== null })
+    if (open !== (page !== null)) changeView({ takes: page !== null })
   }
 
   const recorder = useRecorder((played, plan, ending) => {
@@ -113,10 +126,14 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
     if (ending === 'stopped') show({ kind: 'takes', nothingPlayed })
   })
 
+  // The metronome or the tune turned on or off while a take records sound so from the next beat.
+  const along = useSettings(selectRecorder)
+  const follow = useEffectEvent((next: Along) => recorder.along(next))
+  useEffect(() => follow(along), [along])
+
   const record = () => {
     const { draft, caret } = store.getState()
     const from = barAt(draft, caret).index
-    const { click, tune } = settings.getState().recorder
     show(null)
     setFromBar(from + 1)
     recorder.start({
@@ -124,9 +141,10 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
       meter: draft.meter,
       from,
       tempo: draft.tempo,
-      click,
       room: selectRoomLeft(takes.getState()),
-      tune: tune && draft.melody.length > 0 ? tuneOf(draft, from) : [],
+      // The song's tune whether it plays or not: it may be turned on while the take records.
+      tune: hasTune(draft) ? tuneOf(draft, from) : [],
+      along: settings.getState().recorder,
     })
   }
 
@@ -143,6 +161,8 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
     open,
     page: shown,
     show,
+    asked,
+    answered: () => changeView({ record: false }),
     record,
     stop: recorder.stop,
     write,

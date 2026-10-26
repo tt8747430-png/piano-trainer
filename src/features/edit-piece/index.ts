@@ -1,15 +1,4 @@
 export { deleteSong } from './delete-song'
-export {
-  addSong,
-  chartStart,
-  makeSong,
-  MOST_PARTS,
-  SCORE_TEMPLATES,
-  TEMPLATES,
-  templateOf,
-  type ScoreSetup,
-  type ScoreTemplate,
-} from './make-song'
-export { renameSong } from './rename-song'
+export { addSong, chartStart, makeSong, SCORE_SETUPS, type ScoreSetup } from './make-song'
 export { resetVersion } from './reset-version'
 export { saveMusic, type MusicTarget } from './save-music'

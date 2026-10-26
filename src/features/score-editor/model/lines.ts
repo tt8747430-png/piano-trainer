@@ -2,21 +2,16 @@ import type { NoteMarks, Tick } from '@/shared/lib/music'
 import type { Draft, DraftNote, NoteLayer } from './draft'
 import { selectionSpan } from './caret-moves'
 import { notesOf, withNotes } from './notes'
-import type { EditorState } from './state'
+import type { EditorState, TickSpan } from './state'
 import { barAt } from './timeline'
 
 /**
- * The lines Insert draws over notes, as a notation app's Lines palette does: a slur, a crescendo or
- * diminuendo hairpin, an octave line up or down (ADR 0080).
+ * The lines the palette draws over notes (Slurs & lines, Dynamics & hairpins, ADR 0089), as a
+ * notation app's Lines palette does: a slur, a crescendo or diminuendo hairpin, an octave line up or
+ * down.
  */
 export const LINES = ['slur', 'cresc', 'dim', '8va', '8vb'] as const
 export type Line = (typeof LINES)[number]
-
-/** Ticks from `from` up to, not including, `to`. */
-export interface Span {
-  readonly from: Tick
-  readonly to: Tick
-}
 
 type Writable = { -readonly [K in keyof NoteMarks]: NoteMarks[K] }
 
@@ -24,7 +19,7 @@ type Writable = { -readonly [K in keyof NoteMarks]: NoteMarks[K] }
  * Where a line goes: over the notes chosen, from the first's start to the last's end; else from the
  * caret to the end of its bar, as a notation app draws a line from one note selected to the bar's end.
  */
-export function lineSpan(state: EditorState): Span {
+export function lineSpan(state: EditorState): TickSpan {
   if (state.selection) return selectionSpan(state.selection)
   const bar = barAt(state.draft, state.caret)
   return { from: state.caret, to: bar.start + bar.bar.ticks }
@@ -34,7 +29,7 @@ export function lineSpan(state: EditorState): Span {
  * The onsets a line runs between: the span's first and last; a span of one onset reaching the next
  * note after it, since a line joins two notes. Null where the span starts no note.
  */
-function reach(notes: readonly DraftNote[], { from, to }: Span) {
+function reach(notes: readonly DraftNote[], { from, to }: TickSpan) {
   const onsets = notes.map((n) => n.startTick).filter((at) => at >= from && at < to)
   if (onsets.length === 0) return null
   const first = Math.min(...onsets)
@@ -95,7 +90,7 @@ function lineMarks(
  * last, an octave line over every note between; drawn there already, taken away. A line drawn over
  * a line of its kind replaces what lay inside it.
  */
-export function lineOver(draft: Draft, layer: NoteLayer, span: Span, line: Line): Draft {
+export function lineOver(draft: Draft, layer: NoteLayer, span: TickSpan, line: Line): Draft {
   const notes = notesOf(draft, layer)
   const ends = reach(notes, span)
   if (!ends) return draft
@@ -118,7 +113,7 @@ export function lineOver(draft: Draft, layer: NoteLayer, span: Span, line: Line)
 }
 
 /**
- * Whether a line is drawn where Insert would draw it now; null where it has no notes to go over
+ * Whether a line is drawn where its key would draw it now; null where it has no notes to go over
  * (the chord row, or no note from the caret on in its bar).
  */
 export function lineDrawn(state: EditorState, line: Line): boolean | null {

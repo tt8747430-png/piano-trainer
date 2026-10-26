@@ -1,7 +1,5 @@
-import { note } from '@/shared/lib/music'
+import { C_MAJOR, note } from '@/shared/lib/music'
 import type { Lesson } from '@/entities/lesson'
-
-const C_MAJOR = { tonic: note('C'), minor: false }
 
 /** Mastering Chords, lesson 3: a major chord's three positions, and the nearest one. */
 const majorInversions: Lesson = {

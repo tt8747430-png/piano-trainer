@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import type { PerformanceNote } from '@/shared/lib/arrangement'
-import { midi, note, type NoteMarks } from '@/shared/lib/music'
-import { loudness, markedSounds, rollOffsets } from './marks'
+import { C_MAJOR, midi, note, type NoteMarks } from '@/shared/lib/music'
+import { loudness, markedSounds, rollOffsets, stressOf } from './marks'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const played = (m: number, startTick: number, marks?: NoteMarks): PerformanceNote => ({
   midi: midi(m),
   spelled: note('C'),
@@ -17,6 +16,16 @@ const played = (m: number, startTick: number, marks?: NoteMarks): PerformanceNot
 const sound = { kind: 'note' as const, midi: midi(72), at: 1, duration: 0.5, velocity: 0.1 }
 /** At 60 bpm a 32nd lasts an eighth of a second. */
 const at60 = { key: C_MAJOR, thirtySecond: 0.125, full: 0.5 }
+
+describe('stressOf', () => {
+  it('strikes a note harder for an accent or a marcato, harder still for both', () => {
+    expect(stressOf(undefined)).toBe(1)
+    expect(stressOf({ articulations: ['staccato'] })).toBe(1)
+    expect(stressOf({ articulations: ['accent'] })).toBe(1.3)
+    expect(stressOf({ articulations: ['marcato'] })).toBe(1.4)
+    expect(stressOf({ articulations: ['accent', 'marcato'] })).toBeCloseTo(1.82)
+  })
+})
 
 describe('markedSounds', () => {
   it('sounds a note as it was without marks', () => {

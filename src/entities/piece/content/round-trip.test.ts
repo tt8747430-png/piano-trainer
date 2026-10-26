@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { parseChart } from '../model/parse-chart'
-import { parseMelody } from '../model/parse-melody'
+import { parseStaff } from '../model/parse-staff'
 import { musicOf, withMusic } from '../model/music'
 import { writeBar } from '../model/write-chart'
-import { writeMelody } from '../model/write-melody'
+import { writeStaff } from '../model/write-staff'
 import { PIECES } from './index'
 import { isDegreePiece, type ChartPiece } from '../model/types'
 
@@ -21,7 +21,7 @@ describe('every chart piece, written back', () => {
         tick += Math.round(bar.beats * 12)
         return { startTick, ticks: Math.round(bar.beats * 12) }
       })
-      const melody = parseMelody(piece)
+      const staves = (piece.staves ?? []).map((_, place) => parseStaff(piece, place))
       const rewritten = withMusic(piece, {
         ...musicOf(piece),
         sections: piece.sections.map((section, s) => ({
@@ -30,10 +30,19 @@ describe('every chart piece, written back', () => {
             line.map((written) => writeBar(written, chart.meter)).join(' '),
           ),
         })),
-        ...(melody ? { melody: writeMelody(melody, placed) } : {}),
+        ...(piece.staves
+          ? {
+              staves: piece.staves.map((staff, place) => ({
+                ...staff,
+                notes: writeStaff(staves[place] ?? [], placed),
+              })),
+            }
+          : {}),
       })
       expect(parseChart(rewritten)).toEqual(chart)
-      expect(parseMelody(rewritten)).toEqual(melody)
+      expect((rewritten.staves ?? []).map((_, place) => parseStaff(rewritten, place))).toEqual(
+        staves,
+      )
     },
   )
 })

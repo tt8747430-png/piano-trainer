@@ -1,12 +1,17 @@
 import { clefsInForce, HOME_CLEF, type Clef, type Hand } from '@/shared/lib/music'
-import type { Draft } from './draft'
+import { staffPlace } from '@/shared/lib/notation'
+import { isHandLayer, type Draft, type NoteLayer } from './draft'
 import { withBar } from './notes'
 import { barsOf } from './timeline'
 
-/** The clef a hand's staff is in at bar `index`. */
-export function clefAt(draft: Draft, index: number, hand: Hand): Clef {
+/**
+ * The clef a staff is in at bar `index`: a hand's as its bars change it (ADR 0069), a single
+ * staff's its own, the whole staff's (ADR 0097).
+ */
+export function clefAt(draft: Draft, index: number, layer: NoteLayer): Clef {
+  if (!isHandLayer(layer)) return draft.staves[staffPlace(layer)]?.clef ?? 'treble'
   const bars = barsOf(draft).map(({ bar }) => bar)
-  return (clefsInForce(bars)[index] ?? HOME_CLEF)[hand]
+  return (clefsInForce(bars)[index] ?? HOME_CLEF)[layer]
 }
 
 /**

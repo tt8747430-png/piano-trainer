@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useBarName } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
+import { printedSymbol } from '@/shared/lib/music'
 import { usePositionName } from '@/shared/ui'
 import { pickAt, useSheetChoice, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { chordPositions } from '../model/chord-positions'
@@ -35,7 +36,7 @@ export function BarTargets({
   onPick: (picked: Picked) => void
   onChoose: (bar: number, extend: boolean) => void
 }) {
-  const { t } = useTranslation('music')
+  const barName = useBarName()
   const positionName = usePositionName()
   const choice = useSheetChoice({
     at: (bar, point, extend) => {
@@ -59,14 +60,17 @@ export function BarTargets({
     return layout.measures.map((_, index) => {
       const bar = firstBar + index
       const chords = (performance.bars[bar]?.chords ?? []).flatMap((index) => {
-        const symbol = performance.chords[index]?.symbol
-        if (!symbol) return []
+        const written = performance.chords[index]?.symbol
+        if (!written) return []
+        // Named as its label over the staff prints it (`C♯m7`).
+        const symbol = printedSymbol(written)
         const position = placed[index]
         return position ? `${symbol} ${positionName(position)}` : symbol
       })
-      return t('sheet.barChords', { n: bar + 1, chords: chords.join(' ') })
+      // A bar of no chord is named by its number alone (ADR 0094).
+      return barName(bar + 1, chords.join(' '))
     })
-  }, [layout, performance, positions, positionName, t, firstBar])
+  }, [layout, performance, positions, positionName, barName, firstBar])
   return layout.measures.map((measure, index) => {
     const bar = firstBar + index
     return (
@@ -78,8 +82,8 @@ export function BarTargets({
         aria-current={bar === current ? 'step' : undefined}
         {...choice(bar, { x: measure.x, y: 0 })}
         // A pointer's target only, as the editor's (the arrows move the cursor): no focus ring and no
-        // hover wash round the bar, which would stand over empty staff (ADR 0082, 0088); the cursor and
-        // the loop are the selection's marks.
+        // hover wash round the bar, which would stand over empty staff (ADR 0082, 0088); the playhead
+        // and the loop are the sheet's marks (ADR 0096).
         className="absolute inset-y-0 z-20 cursor-pointer outline-none"
         style={{ left: measure.x, width: measure.width }}
       />

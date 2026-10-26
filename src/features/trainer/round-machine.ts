@@ -27,7 +27,7 @@ export interface ChordQuestion {
 }
 
 /**
- * One round of a trainer. Build chord, Build scale, Reading notes and The degrees of a key are
+ * One round of a trainer. Chord building, Scale building, Note reading and Key degrees are
  * answered on the keys; the rest by choosing one of their `options`.
  */
 export type Question =

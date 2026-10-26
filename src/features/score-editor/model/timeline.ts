@@ -1,4 +1,4 @@
-import type { Chord, Tick } from '@/shared/lib/music'
+import { parseKey, type Chord, type Key, type Meter, type Tick } from '@/shared/lib/music'
 import type { Draft, DraftBar } from './draft'
 
 /** A bar where it is: its index in the piece, its section and line, and its first tick. */
@@ -42,6 +42,24 @@ export function barAt(draft: Draft, tick: Tick): PlacedBar {
   return found
 }
 
+/**
+ * The chord sounding at a tick: its bar's last starting at or before it; none in a bar of no chord
+ * (ADR 0094).
+ */
+export function chordAt(draft: Draft, tick: Tick): Chord | undefined {
+  const { start, bar } = barAt(draft, tick)
+  return bar.chords.findLast((placed) => placed.at <= tick - start)?.chord
+}
+
+/**
+ * The chord written at a tick: the one starting there; none on a beat a chord sounds through, where
+ * a chord typed starts a new one (ADR 0096).
+ */
+export function chordWrittenAt(draft: Draft, tick: Tick): Chord | undefined {
+  const { start, bar } = barAt(draft, tick)
+  return bar.chords.find((placed) => placed.at === tick - start)?.chord
+}
+
 /** Each chord of a bar with its length: until the next chord or the barline. */
 export function chordsAt(
   bar: DraftBar,
@@ -51,3 +69,21 @@ export function chordsAt(
     ticks: (bar.chords[i + 1]?.at ?? bar.ticks) - chord.at,
   }))
 }
+
+/** The key a section is written in: its own (a key change, ADR 0089), else the song's. */
+export function sectionKey(draft: Draft, section: number): Key {
+  const written = draft.sections[section]?.heading.key
+  return (written === undefined ? null : parseKey(written)) ?? draft.key
+}
+
+/** The key at a tick: its section's. */
+export const keyAt = (draft: Draft, tick: Tick): Key =>
+  sectionKey(draft, barAt(draft, tick).section)
+
+/** The meter a section's bars are counted in: its own (a change of time, ADR 0095), else the song's. */
+export const sectionMeter = (draft: Draft, section: number): Meter =>
+  draft.sections[section]?.heading.meter ?? draft.meter
+
+/** The meter at a tick: its section's. */
+export const meterAt = (draft: Draft, tick: Tick): Meter =>
+  sectionMeter(draft, barAt(draft, tick).section)

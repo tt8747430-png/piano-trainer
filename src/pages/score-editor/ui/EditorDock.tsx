@@ -1,26 +1,39 @@
-import { ChevronLeft, ChevronRight, Delete } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { FloatingBar, FloatingBarButton, FloatingBarPlay } from '@/shared/ui'
+import { speedTempo, TempoButton } from '@/widgets/practice-player'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { AddMenu } from './AddMenu'
+import { RecordButton } from './RecordButton'
+import { TakesButton } from './TakesButton'
+
+/** A step button's size: a little smaller under 360px, where the width is short. */
+const STEP = 'narrow-phone:size-11'
 
 /**
  * The editor's transport, the Player's (`PlayerDock`, ADR 0061) in shape and place: one pill floating
- * over the sheet's foot, ‹ Play › in its middle, so the two screens are worked the same way. Around
- * them what the editor does without pause, as a touch notation app keeps them (Dorico for iPad's
- * Advance caret and Delete left): + to insert at the caret on the left, Delete as Backspace (the notes
- * or the chord before the caret) on the right. Play plays from the caret's bar.
+ * over the sheet's foot, the tempo then ‹ Play ›, so the two screens are worked the same way, and
+ * Record after them, as Dorico's transport has it (ADR 0094), which records (ADR 0096), and the takes
+ * beside it once the song has any. Play plays from the caret's bar at the tempo's speed (the
+ * learner's, never the song's tempo); ‹ › move the caret. What changes the music is the edit row's
+ * and the palette's. While a take records, its strip stands here.
  */
 export function EditorDock() {
   const { t } = useTranslation('editor')
-  const { actions, meta, takes } = useScoreEditorContext()
-  const chords = useEditorState((state) => state.layer === 'chords')
+  const { actions, meta, takes, view } = useScoreEditorContext()
+  const ownTempo = useEditorState((state) => state.draft.tempo)
   const dispatch = actions.dispatch
   return (
-    <FloatingBar label={t('caret.moves')} className="gap-1">
-      <AddMenu />
+    <FloatingBar label={t('dock')} className="gap-1 narrow-phone:gap-0.5">
+      <TempoButton
+        tempo={speedTempo(ownTempo, view.speed)}
+        ownTempo={ownTempo}
+        // The editor's dock lies along the foot at every size: its pop-up opens over it.
+        side="top"
+        onTempo={(tempo) => view.setSpeed(tempo / ownTempo)}
+      />
       <FloatingBarButton
         label={t('back')}
+        className={STEP}
         onClick={() => dispatch({ type: 'move', by: 'step', direction: -1 })}
       >
         <ChevronLeft aria-hidden />
@@ -33,16 +46,13 @@ export function EditorDock() {
       />
       <FloatingBarButton
         label={t('on')}
+        className={STEP}
         onClick={() => dispatch({ type: 'move', by: 'step', direction: 1 })}
       >
         <ChevronRight aria-hidden />
       </FloatingBarButton>
-      <FloatingBarButton
-        label={t(chords ? 'chord.delete' : 'deleteNotes')}
-        onClick={() => dispatch({ type: 'delete', back: true })}
-      >
-        <Delete aria-hidden />
-      </FloatingBarButton>
+      <RecordButton className={STEP} />
+      <TakesButton className={STEP} />
     </FloatingBar>
   )
 }

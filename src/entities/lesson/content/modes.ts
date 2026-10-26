@@ -89,7 +89,7 @@ const modes: Lesson = {
           kind: 'text',
           text: {
             en: 'Locrian lowers both the 2nd and the 5th. Its tonic chord is diminished, so it rarely feels like home.',
-            ru: 'Локрийский лад понижает и вторую, и пятую ступени. Его тоника — уменьшённое трезвучие, поэтому устойчивости в нём мало.',
+            ru: 'Локрийский лад понижает и вторую, и пятую ступени. Его тонический аккорд — уменьшённое трезвучие, поэтому устойчивости в нём мало.',
           },
         },
         { kind: 'scale', root: note('B'), scale: 'locrian' },

@@ -3,9 +3,9 @@ import { cn } from '@/shared/lib'
 import { MARK_CLASS, type MarkBox, type MarkKind } from './selection'
 
 /**
- * A mark of the one selection behind the notes (ADR 0082), the editor's and the Player's in every
- * layout. It moves by `left`, never a transform: a transform would make the pages round it one
- * picture, which Safari scales blurry when they are zoomed.
+ * A mark of the one selection behind the notes (ADR 0096), the editor's and the Player's in every
+ * layout: a range's band, or the caret's line. It moves by `left`, never a transform: a transform
+ * would make the pages round it one picture, which Safari scales blurry when they are zoomed.
  */
 export function ScoreMark({
   kind,

@@ -1,106 +1,252 @@
 import { ArrowDown, ArrowLeftRight, ArrowUp } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { NOTE_VALUES, takesDot } from '@/features/score-editor'
-import { isCompound } from '@/shared/lib/music'
-import { ToolKey } from '@/shared/ui'
+import { useShallow } from 'zustand/react/shallow'
+import {
+  carriesAccidental,
+  chosenNotes,
+  EDIT_MODES,
+  NOTE_VALUES,
+  shownValue,
+  takesDot,
+  type EditMode,
+} from '@/features/score-editor'
+import { isCompound, type Accidental } from '@/shared/lib/music'
+import { Segmented, ToolKey } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { useNotesChosen } from '../model/use-notes-chosen'
 import { VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
+import { GlyphGrid } from './palette-keys'
+import { usePaletteReason } from './palette-reason'
 
 /** A key drawn as notation: a glyph of the music font, at a note value's size. */
 const GLYPH = 'font-sans text-3xl leading-none'
 /** A quarter rest, as the staff draws it. */
 const REST = '𝄽'
 
-/** The values whole to 32nd, the one chosen on. */
-function ValueKeys() {
-  const { t } = useTranslation('editor')
-  const { actions } = useScoreEditorContext()
-  const value = useEditorState((state) => state.value.value)
-  return NOTE_VALUES.map((option) => (
-    <ToolKey
-      key={option}
-      label={t(`values.${VALUE_WORDS[option]}`)}
-      pressed={value === option}
-      onClick={() => actions.dispatch({ type: 'value', value: option })}
-    >
-      <span aria-hidden className={GLYPH}>
-        {VALUE_GLYPHS[option]}
-      </span>
-    </ToolKey>
-  ))
-}
+/** What the palette shows as chosen: the chosen note's value, else the next note's. */
+const useShown = () => useEditorState(useShallow(shownValue))
 
-/** Dotted, Double dotted and Triplet (out of reach where the meter takes none), a Rest, and Chord. */
-function RhythmKeys() {
+/**
+ * The palette's quick row (spec 2026-10-23), always in sight: the values whole to 32nd and Dotted.
+ * With a note chosen it is made that value; else the next note is written so. The chosen note's own
+ * value stands pressed.
+ */
+export function QuickValues() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
-  const dispatch = actions.dispatch
-  const value = useEditorState((state) => state.value)
-  const chord = useEditorState((state) => state.chord)
-  const dottable = useEditorState((state) => takesDot(state.value.value, state.draft.meter))
-  const doubleDottable = useEditorState((state) =>
-    takesDot(state.value.value, state.draft.meter, 2),
+  const shown = useShown()
+  const dottable = useEditorState((state) =>
+    takesDot((shownValue(state) ?? state.value).value, state.draft.meter),
   )
-  const compound = useEditorState((state) => isCompound(state.draft.meter))
   return (
-    <>
+    <div role="group" aria-label={t('values.label')} className="grid grid-cols-7 gap-1">
+      {NOTE_VALUES.map((option) => (
+        <ToolKey
+          key={option}
+          label={t(`values.${VALUE_WORDS[option]}`)}
+          pressed={shown?.value === option}
+          className="h-11"
+          onClick={() => actions.dispatch({ type: 'value', value: option })}
+        >
+          <span aria-hidden className={GLYPH}>
+            {VALUE_GLYPHS[option]}
+          </span>
+        </ToolKey>
+      ))}
       <ToolKey
         label={t('dot')}
-        pressed={value.dots === 1}
+        reason={t('reason.noDot')}
+        pressed={shown?.dots === 1}
         disabled={!dottable}
-        onClick={() => dispatch({ type: 'dot' })}
+        className="h-11"
+        onClick={() => actions.dispatch({ type: 'dot' })}
       >
         <span aria-hidden className={GLYPH}>
           {VALUE_GLYPHS[4]}.
         </span>
       </ToolKey>
+    </div>
+  )
+}
+
+/** A natural, drawn as the staff draws it. */
+function Natural() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-6" fill="currentColor">
+      <rect x="8" y="2" width="1.5" height="15" />
+      <rect x="14.5" y="7" width="1.5" height="15" />
+      <path d="M8 9.5 16 7.5v2.6L8 12.1zM8 15.5l8-2v2.6l-8 2z" />
+    </svg>
+  )
+}
+
+/** The accidentals' keys, ♯ ♭ ♮, in the palette's order. */
+const ACCIDENTAL_KEYS = [1, -1, 0] as const satisfies readonly Accidental[]
+
+/**
+ * The accidentals, Flat's (ADR 0091): each a toggle on the notes chosen, pressed while every one
+ * carries its sign, a tap writing the sign or taking it off (the note back as the key spells it);
+ * greyed with no note chosen.
+ */
+function AccidentalKeys() {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const chosen = useNotesChosen()
+  const carried = useEditorState(
+    useShallow((state) => {
+      const notes = chosenNotes(state)
+      return ACCIDENTAL_KEYS.map((accidental) => carriesAccidental(notes, accidental))
+    }),
+  )
+  const keys = {
+    1: { label: t('accidentals.sharp'), picture: <Sharp /> },
+    [-1]: { label: t('accidentals.flat'), picture: <Flat /> },
+    0: { label: t('accidentals.natural'), picture: <Natural /> },
+  } as const
+  return ACCIDENTAL_KEYS.map((accidental, i) => {
+    const { label, picture } = keys[accidental]
+    return (
       <ToolKey
-        label={t('doubleDot')}
-        pressed={value.dots === 2}
-        disabled={!doubleDottable}
-        onClick={() => dispatch({ type: 'dot', dots: 2 })}
+        key={label}
+        label={label}
+        reason={t('reason.chooseNote')}
+        pressed={carried[i] ?? false}
+        disabled={!chosen}
+        onClick={() => actions.dispatch({ type: 'accidental', accidental })}
       >
-        <span aria-hidden className={GLYPH}>
-          {VALUE_GLYPHS[4]}..
-        </span>
+        <span aria-hidden>{picture}</span>
       </ToolKey>
-      <ToolKey
-        label={t('triplet')}
-        pressed={value.triplet}
-        disabled={compound}
-        onClick={() => dispatch({ type: 'triplet' })}
-      >
-        <span aria-hidden className="font-display text-xl font-semibold italic">
-          3
-        </span>
-      </ToolKey>
-      <ToolKey label={t('rest')} onClick={() => dispatch({ type: 'rest' })}>
-        <span aria-hidden className={GLYPH}>
-          {REST}
-        </span>
-      </ToolKey>
-      <ToolKey label={t('marks.tie')} onClick={() => dispatch({ type: 'tie' })}>
-        <svg
-          aria-hidden
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          className="size-6"
+    )
+  })
+}
+
+/** A notehead, as the mode pictures draw it. */
+const Head = ({ cx, cy, soft = false }: { cx: number; cy: number; soft?: boolean }) => (
+  <ellipse
+    cx={cx}
+    cy={cy}
+    rx="4"
+    ry="2.8"
+    opacity={soft ? 0.45 : 1}
+    transform={`rotate(-20 ${cx} ${cy})`}
+  />
+)
+
+/**
+ * A mode's picture (ADR 0092): Replace, the caret before a note it writes over; Insert, a note with
+ * the arrow the later notes move by; Chord, noteheads stacked on one stem.
+ */
+function ModeIcon({ mode }: { mode: EditMode }) {
+  if (mode === 'chord') return <StackedNotes />
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="currentColor">
+      {mode === 'replace' ? (
+        <>
+          <rect x="4" y="3" width="1.6" height="18" rx="0.8" />
+          <Head cx={14} cy={15} />
+          <rect x="17.4" y="3" width="1.4" height="12" />
+        </>
+      ) : (
+        <>
+          <Head cx={7} cy={15} />
+          <rect x="10.4" y="3" width="1.4" height="12" />
+          <path
+            d="M14 15h6m-2.5-2.5L20 15l-2.5 2.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </>
+      )}
+    </svg>
+  )
+}
+
+/**
+ * The editing modes (ADR 0092, Flat's Melody · Insert · Chord): one always chosen; what a key played
+ * does in each is the ⓘ beside the section's name (ADR 0096); I cycles them.
+ */
+function ModeChoice() {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const mode = useEditorState((state) => state.mode)
+  return (
+    <Segmented
+      label={t('mode.label')}
+      value={mode}
+      options={EDIT_MODES.map((each) => ({
+        value: each,
+        label: t(`mode.${each}`),
+        icon: <ModeIcon mode={each} />,
+      }))}
+      onChange={(next) => actions.dispatch({ type: 'mode', mode: next })}
+    />
+  )
+}
+
+/**
+ * The Notes section, under the quick row's values: the editing modes, then Double dotted and
+ * Triplet (out of reach where the meter takes none), Rest and Tie, then the accidentals.
+ */
+export function NoteKeys() {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const dispatch = actions.dispatch
+  const shown = useShown()
+  const doubleDottable = useEditorState((state) =>
+    takesDot((shownValue(state) ?? state.value).value, state.draft.meter, 2),
+  )
+  const compound = useEditorState((state) => isCompound(state.draft.meter))
+  return (
+    <>
+      <ModeChoice />
+      <GlyphGrid>
+        <ToolKey
+          label={t('doubleDot')}
+          reason={t('reason.noDot')}
+          pressed={shown?.dots === 2}
+          disabled={!doubleDottable}
+          onClick={() => dispatch({ type: 'dot', dots: 2 })}
         >
-          <circle cx="5" cy="9" r="2" fill="currentColor" />
-          <circle cx="19" cy="9" r="2" fill="currentColor" />
-          <path d="M5 13 C9 18 15 18 19 13" />
-        </svg>
-      </ToolKey>
-      <ToolKey
-        label={t('chordMode')}
-        pressed={chord}
-        onClick={() => dispatch({ type: 'chordMode' })}
-      >
-        <StackedNotes />
-      </ToolKey>
+          <span aria-hidden className={GLYPH}>
+            {VALUE_GLYPHS[4]}..
+          </span>
+        </ToolKey>
+        <ToolKey
+          label={t('triplet')}
+          reason={t('reason.compound')}
+          pressed={shown?.triplet === true}
+          disabled={compound}
+          onClick={() => dispatch({ type: 'triplet' })}
+        >
+          <span aria-hidden className="font-display text-xl font-semibold italic">
+            3
+          </span>
+        </ToolKey>
+        <ToolKey label={t('rest')} onClick={() => dispatch({ type: 'rest' })}>
+          <span aria-hidden className={GLYPH}>
+            {REST}
+          </span>
+        </ToolKey>
+        <ToolKey label={t('marks.tie')} onClick={() => dispatch({ type: 'tie' })}>
+          <svg
+            aria-hidden
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            className="size-6"
+          >
+            <circle cx="5" cy="9" r="2" fill="currentColor" />
+            <circle cx="19" cy="9" r="2" fill="currentColor" />
+            <path d="M5 13 C9 18 15 18 19 13" />
+          </svg>
+        </ToolKey>
+        <AccidentalKeys />
+      </GlyphGrid>
     </>
   )
 }
@@ -186,24 +332,29 @@ export function PitchKeys() {
   const { actions } = useScoreEditorContext()
   const shift = (semitones: number) => actions.dispatch({ type: 'shift', semitones })
   const step = (steps: number) => actions.dispatch({ type: 'step', steps })
+  const off = !useNotesChosen()
+  const reason = usePaletteReason()
   const pairs = [
-    { by: 'half', up: t('up'), down: t('down'), move: shift, size: 1 },
+    // In the keys' order: ↑ ↓ a step in the key, with Shift a semitone, with Cmd an octave.
     { by: 'step', up: t('stepUp'), down: t('stepDown'), move: step, size: 1 },
+    { by: 'half', up: t('up'), down: t('down'), move: shift, size: 1 },
     { by: 'octave', up: t('octaveUp'), down: t('octaveDown'), move: shift, size: 12 },
   ] as const
   return (
-    <>
+    <GlyphGrid>
       {pairs.flatMap(({ by, up, down, move, size }) => [
-        <ToolKey key={up} label={up} onClick={() => move(size)}>
+        <ToolKey key={up} label={up} reason={reason} disabled={off} onClick={() => move(size)}>
           <Move up by={by} />
         </ToolKey>,
-        <ToolKey key={down} label={down} onClick={() => move(-size)}>
+        <ToolKey key={down} label={down} reason={reason} disabled={off} onClick={() => move(-size)}>
           <Move up={false} by={by} />
         </ToolKey>,
       ])}
       <ToolKey
         label={t('respell')}
+        reason={reason}
         span="wide"
+        disabled={off}
         onClick={() => actions.dispatch({ type: 'respell' })}
       >
         <span aria-hidden className="flex items-center gap-1">
@@ -212,26 +363,6 @@ export function PitchKeys() {
           <Flat />
         </span>
       </ToolKey>
-    </>
-  )
-}
-
-/**
- * The Notes keypad, six keys a row: the values whole to 32nd; the dots, Triplet, Rest, Tie and Chord.
- * The caret's moves and Delete stand apart from the palette, in the dock (`EditorDock`), a note's pitch under Pitch.
- */
-export function NoteKeys() {
-  const { t } = useTranslation('editor')
-  return (
-    <>
-      <div
-        role="group"
-        aria-label={t('values.label')}
-        className="col-span-full grid grid-cols-6 gap-1.5"
-      >
-        <ValueKeys />
-      </div>
-      <RhythmKeys />
-    </>
+    </GlyphGrid>
   )
 }

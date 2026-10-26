@@ -10,6 +10,7 @@ import { createPatternsStore, PatternsStoreProvider } from '@/entities/pattern'
 import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import type { Locale } from '@/shared/i18n'
 import { createMemoryStorage } from '@/shared/lib'
+import { untilTestEnds } from '@/shared/test/listeners'
 
 /**
  * `ui` as the one route of a memory router, under fresh in-memory settings and patterns stores, so
@@ -17,7 +18,12 @@ import { createMemoryStorage } from '@/shared/lib'
  */
 export async function renderRouted(ui: ReactElement, { locale = 'en' }: { locale?: Locale } = {}) {
   const storage = createMemoryStorage()
-  const settingsStore = createSettingsStore({ storage, languages: [locale], finePointer: false })
+  const settingsStore = createSettingsStore({
+    storage,
+    signal: untilTestEnds(),
+    languages: [locale],
+    finePointer: false,
+  })
   const patternsStore = createPatternsStore({ storage, otherTabs: new EventTarget() })
   const router = createRouter({
     routeTree: createRootRoute({ component: () => ui }),

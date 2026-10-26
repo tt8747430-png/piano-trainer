@@ -9,13 +9,15 @@ export interface NoteColumn {
   readonly width: number
 }
 
-/** Room a column takes past the first or last onset, and the least it is wide. */
+/** Room a column takes past the first or last onset. */
 const EDGE = 20
-const LEAST = 24
+/** The least a column is wide: a finger (44px, CODE_STYLE §5), centred on its note. */
+const LEAST = 44
 
 /**
  * Each onset's column across the staff, split half-way between its neighbours, so every note has a
- * place to tap that touches the next one's.
+ * place to tap that touches the next one's; a column narrower than a finger is grown to one, so two
+ * notes close together (a card's two half notes) each still take a tap.
  */
 export function noteColumns(
   onsets: readonly { readonly tick: Tick; readonly x: number }[],

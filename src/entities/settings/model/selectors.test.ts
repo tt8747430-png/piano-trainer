@@ -9,6 +9,7 @@ import {
   selectTrainer,
   selectFloating,
   selectSectionFolded,
+  selectPaletteFolded,
 } from './selectors'
 import {
   DEFAULT_CHORD_FINDER,
@@ -34,9 +35,7 @@ describe('settings selectors', () => {
       recorder: DEFAULT_RECORDER,
       foldedSections: ['chords.tensions'],
       sidebar: 'collapsed',
-      paletteSide: 'right',
-      editorLayout: 'scroll',
-      paletteFolded: false,
+      paletteFolded: {},
       midi: DEFAULT_MIDI,
       chordFinder: DEFAULT_CHORD_FINDER,
       scoreView: DEFAULT_SCORE_VIEW,
@@ -49,6 +48,15 @@ describe('settings selectors', () => {
     expect(selectSidebar(state)).toBe('collapsed')
     expect(selectMidi(state)).toBe(DEFAULT_MIDI)
     expect(selectChordFinder(state)).toBe(DEFAULT_CHORD_FINDER)
+  })
+
+  it('folds the palette at the foot and opens it beside the sheet, until the learner chooses', () => {
+    const unset = { paletteFolded: {} } as unknown as SettingsState
+    expect(selectPaletteFolded('foot')(unset)).toBe(true)
+    expect(selectPaletteFolded('beside')(unset)).toBe(false)
+    const chosen = { paletteFolded: { beside: true, foot: false } } as unknown as SettingsState
+    expect(selectPaletteFolded('foot')(chosen)).toBe(false)
+    expect(selectPaletteFolded('beside')(chosen)).toBe(true)
   })
 
   it('says whether a section is folded away', () => {

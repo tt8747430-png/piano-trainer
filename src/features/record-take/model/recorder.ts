@@ -8,14 +8,35 @@ import { isKept, takeOf, type Heard } from './take-of'
 const FOLLOW_INTERVAL_MS = 25
 
 /**
- * What a take is recorded to: the piece's bars and the one it starts at, the meter, tempo and click,
- * the notes the takes have room for, and what plays under it.
+ * What sounds with a take besides its count-in (ADR 0028, 0096): the click after the count-in, and
+ * the song's tune under it; either may be turned on or off while the take records.
  */
-export interface RecorderPlan extends Omit<ClickPlan, 'longest'> {
-  readonly room: number
-  /** What plays under the take from its downbeat (seconds from it): the song's tune, or nothing. */
-  readonly tune: readonly NoteSound[]
+export interface Along {
+  readonly click: boolean
+  readonly tune: boolean
 }
+
+/**
+ * What a take is recorded to: the piece's bars and the one it starts at, the meter and tempo, the
+ * notes the takes have room for, the song's tune, and what sounds along with it as it starts.
+ */
+export interface RecorderPlan extends Omit<ClickPlan, 'longest' | 'click'> {
+  readonly room: number
+  /** The song's tune from the take's downbeat (seconds from it); empty where it has none. */
+  readonly tune: readonly NoteSound[]
+  readonly along: Along
+}
+
+/** A take recording: Stop, and what sounds along with it changed from now on. */
+export interface RecorderSession {
+  /** Stops the take: kept from its downbeat, or nothing where it stopped in its count-in. */
+  readonly stop: () => void
+  /** The click and the tune on or off from the next beat on; the count-in always counts. */
+  readonly along: (along: Along) => void
+}
+
+/** A sound this close after the moment asked for still sounds. */
+const EARLY = 1e-6
 
 /** Where a take is: in its count-in (the beat, from 1), or recording (the bar from its first, from 0, and whole seconds). */
 export type RecorderProgress =
@@ -40,17 +61,20 @@ function sameProgress(a: RecorderProgress | null, b: RecorderProgress): boolean 
 /**
  * Records a take (ADR 0028): the count-in and the click on the audio clock from just after now, the
  * tune under it from its downbeat, and every key and pedal on the MIDI keyboard, each placed where it
- * was heard. It stops itself at the longest take or when the takes have no more room. Returns the
- * function that stops it.
+ * was heard. The click and the tune can be turned on or off while it records (ADR 0096). It stops
+ * itself at the longest take or when the takes have no more room. Returns the session: its Stop, and
+ * what sounds along with it.
  */
 export function startRecorder(
   audio: AudioOutput,
   midi: MidiPort,
   plan: RecorderPlan,
   on: RecorderEvents,
-): () => void {
+): RecorderSession {
   const longest = LONGEST_TAKE_MS / 1000
-  const clicks = recorderClicks({ ...plan, longest })
+  // Every click, the count-in's and the metronome's after it, kept or left out as `along` says.
+  const clicks = recorderClicks({ ...plan, click: true, longest })
+  let along = plan.along
   // What sounds stops first: nothing plays under a take.
   audio.stop()
   const start = audio.now() + PLAY_DELAY
@@ -58,8 +82,17 @@ export function startRecorder(
   const timing = { downbeat, tempo: plan.tempo, barLines: clicks.barStarts }
   const beat = 60 / plan.tempo
   const heardNow = () => audio.audioTimeAt(performance.now())
-  audio.play(clicks.sounds, start)
-  if (plan.tune.length > 0) audio.play(plan.tune, downbeat)
+  /** Plays what sounds along with the take from `from` on the audio clock on. */
+  const accompany = (from: number) => {
+    const counted = clicks.sounds.filter(
+      (click) =>
+        start + click.at >= from - EARLY && (along.click || click.at < clicks.downbeat - EARLY),
+    )
+    if (counted.length > 0) audio.play(counted, start)
+    const tune = along.tune ? plan.tune.filter((note) => downbeat + note.at >= from - EARLY) : []
+    if (tune.length > 0) audio.play(tune, downbeat)
+  }
+  accompany(start)
 
   const heard: Heard[] = []
   let struck = 0
@@ -115,5 +148,14 @@ export function startRecorder(
   }
   const timer = setInterval(follow, FOLLOW_INTERVAL_MS)
 
-  return stop
+  return {
+    stop,
+    along: (next) => {
+      if (stopped || (next.click === along.click && next.tune === along.tune)) return
+      along = next
+      // What was asked to sound is let go, and sounds again as now asked from just after now.
+      audio.stop()
+      accompany(audio.now() + PLAY_DELAY)
+    },
+  }
 }

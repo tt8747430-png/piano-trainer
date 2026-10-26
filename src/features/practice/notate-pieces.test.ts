@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest'
 import { PATTERN_IDS, BUILT_IN_PATTERNS } from '@/entities/pattern'
-import { melodyOf, PIECES } from '@/entities/piece'
+import { PIECES } from '@/entities/piece'
 import { arrange, type Chart } from '@/shared/lib/arrangement'
 import {
   beatsPerBar,
@@ -10,16 +10,19 @@ import {
   parseChordSymbol,
   type Meter,
 } from '@/shared/lib/music'
-import { notate, scoreToMei, STAVES, ticksOf, type Score } from '@/shared/lib/notation'
+import { notate, scoreToMei, ticksOf, type Score } from '@/shared/lib/notation'
 import { drawScore } from '@/shared/ui/score/verovio/draw'
 import { arrangePiece, ownChoice } from './arrange-piece'
 import { arrangeChromatic } from './chromatic'
 import { CHROMATIC } from './chromatic-choice'
 
-/** Every voice of every measure fills its bar, its events end to end; one or two voices a staff. */
+/**
+ * Every voice of every measure fills its bar, its events end to end; one or two voices a staff, each
+ * single staff's too (ADR 0097).
+ */
 function expectWritten(score: Score) {
   for (const measure of score.measures) {
-    for (const voices of [measure.staves.treble, measure.staves.bass]) {
+    for (const voices of score.staves.map((staff) => measure.staves[staff] ?? [])) {
       expect(voices.length).toBeGreaterThanOrEqual(1)
       expect(voices.length).toBeLessThanOrEqual(2)
       for (const voice of voices) {
@@ -73,13 +76,9 @@ describe('notation of the content', () => {
   })
 
   it.each(PIECES.map((piece) => [piece.id, piece] as const))(
-    'writes %s as it plays',
+    'writes %s as it plays, its single staves over the piano',
     (_id, piece) => {
       expectWritten(notate(arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS)))
-      if (melodyOf(piece))
-        expectWritten(
-          notate(arrangePiece(piece, { ...ownChoice(piece), melody: true }, BUILT_IN_PATTERNS)),
-        )
     },
   )
 
@@ -102,7 +101,7 @@ describe('notation of the content', () => {
 /** How many of a score's notes carry a finger. */
 const fingersOf = (score: Score) =>
   score.measures
-    .flatMap((measure) => STAVES.flatMap((staff) => measure.staves[staff]))
+    .flatMap((measure) => score.staves.flatMap((staff) => measure.staves[staff] ?? []))
     .flatMap((voice) => voice.events)
     .flatMap((event) => (event.kind === 'notes' ? event.notes : []))
     .filter((written) => written.finger !== undefined).length

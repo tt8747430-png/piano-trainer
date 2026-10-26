@@ -51,14 +51,18 @@ export default definePiece({
 | `tempo`                    | Beats per minute, 40–160 (a compound meter's beat is the dotted quarter)              |
 | `pattern`                  | The accompaniment the Player starts with (a pattern id, below)                        |
 | `note`                     | Optional `LocalText`, by the [copy rule](#text)                                       |
-| `sections`, `melody`       | Songs and studies: the [chart](#the-chart) and an optional [melody](#the-melody)      |
+| `sections`, `staves`       | Songs and studies: the [chart](#the-chart) and any [single staves](#single-staves)    |
 | `hands`                    | Songs and studies: optional bars of either hand [written out](#written-hands)         |
 | `progression`, `chordSize` | A song written in degrees: see [Written in degrees](#written-in-degrees)              |
 
 A chart that names method codes, or a section with a `pattern` of its own, starts the Player on its own plan:
 each coded chord plays its method's pattern, every other chord its section's `pattern`, else the piece's. A
-section's `pattern` (`{ kind: 'chorus', pattern: 'M3', lines: […] }`) is a built-in pattern id, as the piece's is
-(ADR 0065).
+section's `pattern` (`{ kind: 'chorus', pattern: 'M3', lines: […] }`) is a built-in pattern id, as the piece's is.
+It is content for the Player of a piece no one has edited: the editor opens every bar written and saves no section
+pattern (ADR 0091).
+
+A learner's version of a piece may give it a `title` of its own, typed where the editor prints it (ADR 0094): it
+shows in every language in place of `title`, `titleEn` and `titleRu`, until Reset brings back the piece's.
 
 ## Add a listing, a collection
 
@@ -75,17 +79,21 @@ is a double barline, `|.` the final one, and `[1` or `[2` before a bar puts it i
 The jumps (ADR 0068): `Segno` or `Coda` before a bar puts its sign there; `Fine`, `ToCoda` and a jump `DC`, `DC.Fine`,
 `DC.Coda`, `DS`, `DS.Fine` or `DS.Coda` after a bar: `'Segno G C ToCoda D DS.Coda Coda D7 G |.'`.
 
-`sections` is a list of `{ kind, n?, label?, last?, detail?, key?, pattern?, lines }`:
+`sections` is a list of `{ kind, n?, label?, last?, detail?, key?, meter?, pattern?, lines }`:
 
 - `kind`: `'intro' | 'verse' | 'chorus' | 'ending' | 'practice' | 'hymn' | 'part'`. The interface writes the heading.
 - `n` numbers a verse; `label` names a part (`'A'`); `last` marks a last chorus or last ending; `detail` is a
-  `LocalText` for anything else (`{ en: 'in 2/4', ru: 'на 2/4' }`, `{ en: 'and ending', ru: 'и окончание' }`).
+  `LocalText` for anything else (`{ en: 'and ending', ru: 'и окончание' }`).
 - `key` is a key change: the key the section is written in where it is not the piece's (`'Db'`), its signature
   printed where it starts; a learner's other key moves it with the piece's (ADR 0060).
-- `pattern` is the accompaniment the section's chords play where it is not the piece's (ADR 0065).
+- `meter` is a change of time (ADR 0095): the meter the section's bars are counted in where it is not the
+  piece's (`'2/4'`), of the piece's kind (`2/4`, `3/4` and `4/4` count quarters, `6/8` and `12/8` dotted
+  quarters), its time signature printed where it starts. Its bars are written whole in it (`Dm-Edim Gm`, not
+  `Dm@1-Edim@1 Gm@2`), and the Player counts, clicks and plays them so.
+- `pattern` is the accompaniment the section's chords play where it is not the piece's; the editor never writes one (ADR 0091).
 - `lines`: each line is bars separated by spaces.
 
-A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:method]`:
+A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:method]`, or `_` for none:
 
 | Written                    | Means                                                                                            |
 | -------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -96,10 +104,15 @@ A **bar** is one or more chords joined by `-`, each written `symbol[@beats][:met
 | `Fm@1`                     | A first bar shorter than the meter is a pickup: the end of a bar, played, counted and written so |
 | `C:t1 F`, `C-G:1`          | A method code; a chord without one takes its bar's first code                                    |
 | `D/F#`                     | A slash chord; a bass that is a chord tone is spelled as that tone (`D#/G` → `D#/F𝄪`)            |
+| `C _ G`, `_@2`             | No chord at all (ADR 0094): nothing printed over the bar, nothing a pattern plays there          |
 
-Beats per bar by meter: `2/4` 2, `3/4` 3, `4/4` 4, `6/8` 2, `12/8` 4. Beats must fall on whole ticks (24 per beat:
-`.5`, `.25`, `.125` a 32nd, `1.5`, not `.3`); a third of a beat is written as a fraction, `1:3` (a triplet 8th), `2:3`,
-`1:6` (a triplet 16th) (ADR 0060).
+`_` stands alone in its bar, its `@beats` given as a chord's where it is not the meter's length. A bar of no chord
+sounds only what a hand writes in it ([Written hands](#written-hands)). A learner's new song starts as four such
+bars, as a notation app's new score, and a bar the editor adds has no chord either.
+
+Beats per bar by meter, the section's own or the piece's: `2/4` 2, `3/4` 3, `4/4` 4, `6/8` 2, `12/8` 4. Beats must
+fall on whole ticks (24 per beat: `.5`, `.25`, `.125` a 32nd, `1.5`, not `.3`); a third of a beat is written as a
+fraction, `1:3` (a triplet 8th), `2:3`, `1:6` (a triplet 16th) (ADR 0060).
 
 **Chord symbols** are read in every spelling `qualitySpellings` lists (`src/shared/lib/music/chord.ts`): `m`, `7`,
 `Maj7`/`maj7`/`M7`/`Δ`, `m7♭5`/`m7b5`/`ø`, `°`/`dim`, `°7`/`dim7`, `sus`/`sus4`, `sus2`, `6`, `m6`, `6/9`,
@@ -120,27 +133,42 @@ and level 2's `Октавы`, `Октавы (гамма)` and `Chords` are `oct`
 chords holds for them: such a song's `pattern` is that way. What the codes cannot say (`3↑`, an octave higher;
 `x 1`; `(melody)`) goes in the piece's `note`.
 
-## The melody
+## Single staves
 
-`melody: 'E4/1 D4/.5 r/1 | C#5/1.5'`: a note name with its octave (C4 is middle C), a slash, then beats; `r` is a
-rest; `|` may mark bars and is ignored. It is written in the piece's key and is no longer than the chart. A melody
-lets the tune be doubled and makes the patterns that play it (r5–r7) available. Its notes keep the spelling they are
-written with (`C#5` is C♯, never D♭): the sheet music prints them so, moved into another key by interval.
+`staves: [{ notes: 'E4/1 D4/.5 r/1 | C#5/1.5' }]`: the staves over the piano's grand staff, top down (ADR 0097), each
+a line of notes: a note name with its octave (C4 is middle C), a slash, then beats; `r` is a rest; `|` may mark bars
+and is ignored. A staff is written in the piece's key and is no longer than the chart; its notes keep the spelling
+they are written with (`C#5` is C♯, never D♭): the sheet music prints them so, moved into another key by interval. A
+staff may have a `name`, printed at its first line's head (a `LocalText`; the learner's are their own text), and a
+`clef`, `'bass'` (it is in the treble unless it says so). The top staff is the tune: the Player's Setup plays it along,
+and the patterns that play the tune (r5–r7) play it. A built-in piece has one staff, with no name.
+
+### Lyrics
+
+`lyrics: ['Si-_ lent night, ho-_ ly night, …']`: the words, a verse a string (ADR 0093). A verse is syllables
+parted by spaces, each under the next note in order of the staff it is written on: the top single staff's notes
+where the piece has one, else the right hand's onsets, a chord of them one note. A rest takes none. `-` ends a syllable its word carries on (a
+hyphen is printed to the next: `A- ma- zing`); `_` holds the syllable over the next note (a melisma, one `_` a note:
+`Si-_ lent` sings "Si" on two notes); `~` leaves a note's place empty. Punctuation stays with its syllable. A verse is
+no longer than its staff's notes; a shorter one leaves the last notes without words. The sheet prints every verse
+under that staff, and the View menu's Lyrics switch hides them.
+
+The lyrics belong to the staff they are written on: `lyricsOn` names it, a single staff by its place (`1`, the
+second) or `'rh'`, the upper staff of a piece with single staves (a learner's song whose words were written there
+before a staff was added over the piano), sung on the right hand's onsets as above. The top single staff's is the
+default and is not written.
 
 ## Written hands
 
-`voices`: up to three more voices sung with the tune, each a string written as `melody` is, each on a staff of
-its own under the tune's (ADR 0066). `instruments` names what the tune and each voice are played on, in that order: `voice`, `violin`, `cello`,
-`flute`, `oboe`, `clarinet`, `trumpet`, `horn` or `guitar` (ADR 0070).
-
-`hands: { rh?, lh? }`: any bar of either hand written note by note, played in place of the pattern's hand there
-(the learner's versions are written so too, ADR 0027). Each hand is its bars separated by `|`, one entry for every bar
-of the chart in order:
+`hands: { rh?, lh? }`: any bar of either hand written note by note, played in place of the pattern's hand there.
+A learner's version or own song writes every bar of both hands (ADR 0027, 0091): the editor opens a piece with its
+pattern's bars written out as the Player plays them, and saves it so. Each hand is its bars separated by `|`, one
+entry for every bar of the chart in order:
 
 | Written                  | Means                                                                                                                                                     |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-`                      | The pattern plays this hand in this bar                                                                                                                   |
-| `C4/1 E4/1 G4/2`         | Notes one after another, each a pitch and its beats, as the melody writes them                                                                            |
+| `-`                      | The pattern plays this hand in this bar (built-in content only: a version writes every bar, ADR 0091)                                                     |
+| `C4/1 E4/1 G4/2`         | Notes one after another, each a pitch and its beats, as a single staff writes them                                                                        |
 | `C4+E4+G4/2`             | Notes struck together                                                                                                                                     |
 | `E4^3`                   | A finger (1–5), as the figure notation writes it                                                                                                          |
 | `r/1`                    | A rest; a bar of rests is written silence, not the pattern                                                                                                |
@@ -158,7 +186,7 @@ and `)` ends one; `8va` writes the notes an octave lower than they sound, `8vb` 
 `f` `ff`; a hairpin `cresc` or `dim` starts, `/hairpin` ends; an expression `dolce` `cantabile` `espress` `legato`
 `leggiero` `rit` `rall` `accel` `atempo` (ADR 0068); the pedal `ped` down, `pedch` changed, `pedup` up;
 `gr:D5+E5` grace notes struck just before. A pitch is
-always the one heard. A melody's notes take the same marks (`E4/1[stacc,p]`), a rest none.
+always the one heard. A single staff's notes take the same marks (`E4/1[stacc,p]`), a rest none.
 
 **Clef changes** (ADR 0069): `clef:treble` or `clef:bass` first in a hand's bar changes its staff from that bar on,
 before its notes or before `-`: `lh: '- | clef:treble C4/2 E4/2 | clef:bass G2/1'`.
@@ -263,8 +291,8 @@ could not see: where the chords came from, a quirk of the printed score, what th
 - **A pattern:** its id in `PATTERN_IDS`, then `{ group, name, idea, description?, rh, lh }` naming two figures.
   `idea` is one line in both languages, what it sounds like and what each hand does: the picker's line under its
   name. `description` is the source's fuller explanation, shown on the pattern's page. A right hand that plays the
-  tune makes it a melody pattern, which falls back to r4 on a piece with no melody. The learner's own patterns are
-  saved state, not content (ADR 0026).
+  tune makes it a tune pattern, which falls back to r4 on a piece with no single staff. The learner's own patterns
+  are saved state, not content (ADR 0026).
 - **A method code:** its code in `METHOD_CODES`, then `{ pattern, label }`.
 
 ### The figure notation
@@ -352,7 +380,7 @@ Player, `root?`, `quality?`) or `player` (a progression in the Player, ready to 
 
 A pattern plays over the piece its source teaches it on: the five ways over `ex3`, a right-hand technique over its
 lesson's study, Боброва's seven over `otche`, a rhythm style over a study's plain chords. A pattern that plays the tune (`r5`,
-`r6`, `r7`) needs a piece with a melody, in a block or a `piece` link. Its name and description come from the pattern; the lesson says why it is
+`r6`, `r7`) needs a piece with a single staff, in a block or a `piece` link. Its name and description come from the pattern; the lesson says why it is
 there. Numerals are read as the Progressions page reads them, a minor key from natural minor: a degree, then what a
 chord symbol writes after its root (`V7`, `I6`, `Vsus4`, `ii9`, `iiø7`), lower case for a chord with a minor 3rd
 (ADR 0032).
@@ -378,12 +406,13 @@ entry's alone: `tsc` holds every id a table names.
 ## What the tests check
 
 - **Catalog** (`src/entities/piece/content/catalog.test.ts`): the counts; every piece parses at every chord size it
-  allows; every piece arranges in all 12 keys with its own accompaniment and each of the 48 patterns, its melody
-  doubled, with every note on the piano (21–108) and inside the piece, every root spelled with at most one
-  accidental, and no silent bar; melodies fit their charts; tempos 40–160; credit names; every `LocalText` in both
-  languages.
+  allows; every piece arranges in all 12 keys with its own accompaniment and each of the 48 patterns, its tune
+  heard, with every note on the piano (21–108) and inside the piece, every root spelled with at most one
+  accidental, and no silent bar; every single staff fits its chart; every verse fits its staff; tempos 40–160;
+  credit names; every `LocalText` in both languages.
 - **Notation** (`src/features/practice/notate-pieces.test.ts`): every piece is written as sheet music and engraved in
-  its own key and pattern (its tune doubled too), and every pattern in 4/4, 3/4 and 12/8, each voice filling its bar.
+  its own key and pattern, its single staves over the piano, and every pattern in 4/4, 3/4 and 12/8, each voice
+  filling its bar.
 - **Curriculum** (`src/entities/course/content/courses.test.ts`): every lesson in one course, every step names a piece
   that exists, every piece once, no listing, every chord family and scale kind, every stage with courses in order.
 - **Patterns** (`src/entities/pattern/content/patterns.test.ts`): counts, ids, fallbacks, both languages.

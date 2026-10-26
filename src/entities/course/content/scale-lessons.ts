@@ -11,6 +11,7 @@ import {
   parseNumerals,
   pitchClassOf,
   placeScale,
+  printedSymbol,
   relativeKey,
   runFingering,
   signatureNotes,
@@ -180,8 +181,8 @@ const downLine = (notes: readonly { note: SpelledNote; midi: Midi }[]): string =
     .map((placed) => token(placed.midi, placed.note))
     .join(' ')
 
-/** A chord symbol as prose writes it: F♯m, not F#m. */
-const shown = (symbol: string | undefined): string => (symbol ?? '').replace(/#/g, '♯')
+/** A chord symbol as prose writes it, as the sheet prints it: F♯m, not F#m. */
+const shown = (symbol: string | undefined): string => printedSymbol(symbol ?? '')
 
 /** An arpeggio up two octaves and back in 8ths, the last note a half: two bars of 4/4. */
 function arpeggioLine(notes: readonly { note: SpelledNote; midi: Midi }[]): string {

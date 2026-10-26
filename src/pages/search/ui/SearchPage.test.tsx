@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -64,7 +64,17 @@ describe('Search', () => {
     expect(hrefOf('Progressions', /^Let It Be/)).toBe('/practice/progressions?p=I-V-vi-IV-I-V-IV-I')
     expect(hrefOf('Patterns', /^1 · Bass \+ chords/)).toBe('/practice/accompaniment/patterns/M1')
     expect(hrefOf('Exercises', /^Hanon No\. 1/)).toBe('/play/exercise/hanon')
-    expect(hrefOf('Quiz', /^Build chord/)).toBe('/practice/quiz/build-chord')
+    expect(hrefOf('Quiz', /^Chord building/)).toBe('/practice/quiz/build-chord')
+  })
+
+  it('opens a trainer and an exercise as they were left, like their own pages’ rows', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/quiz/reading-notes?level=treble')
+    await screen.findByRole('heading', { level: 1, name: 'Note reading' })
+    await act(() => router.navigate({ to: '/search', search: { q: 'note reading' } }))
+    await user.click(await screen.findByRole('link', { name: /^Note reading/ }))
+    expect(router.state.location.pathname).toBe('/practice/quiz/reading-notes')
+    expect(router.state.location.search).toEqual({ level: 'treble' })
   })
 
   it('finds what is typed, by kind, and keeps it in the URL', async () => {
@@ -76,14 +86,27 @@ describe('Search', () => {
     expect(hrefOf('Scales', /^Dorian/)).toBe('/practice/scales?kind=dorian')
   })
 
-  it('reads a chord symbol typed as the chord, and leads with it', async () => {
+  it('reads a chord symbol typed as the chord, and leads with it, printed as the sheets print it', async () => {
     await renderApp('/search?q=F%23m7b5')
     const chords = await screen.findByRole('region', { name: 'Chords' })
     const [first] = within(chords).getAllByRole('link')
-    expect(first).toHaveTextContent('F#m7♭5')
+    expect(first).toHaveTextContent('F♯m7♭5')
     expect(first).toHaveTextContent('Half-diminished 7th')
     expect(first?.getAttribute('href')).toMatch(/^\/practice\/chords\?root=F%23&/)
     expect(headings()[0]).toBe('Chords')
+  })
+
+  it('finds a chord by its symbol typed in ASCII, and prints the one found', async () => {
+    await renderApp('/search?q=C7%239')
+    const chords = await screen.findByRole('region', { name: 'Chords' })
+    expect(within(chords).getByRole('link', { name: /^7th sharp 9 C7♯9/ })).toBeInTheDocument()
+  })
+
+  it('prints a line of chords typed as the sheets print it', async () => {
+    await renderApp('/search?q=C%23m+F%23m+B7+E')
+    const progressions = await screen.findByRole('region', { name: 'Progressions' })
+    const [first] = within(progressions).getAllByRole('link')
+    expect(first).toHaveTextContent('C♯m F♯m B7 E')
   })
 
   it('reads a line of chords typed as a song’s, and leads with it on Progressions', async () => {

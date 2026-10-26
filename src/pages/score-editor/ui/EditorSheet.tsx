@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react'
+import { selectScoreView, useSettings } from '@/entities/settings'
 import {
   barAt,
   notesAt,
@@ -9,40 +10,59 @@ import {
 } from '@/features/score-editor'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { usePlay } from '@/shared/lib/services'
-import { ScoreSheet } from '@/widgets/score-sheet'
-import { arrangeDraft, playedHands } from '../model/arrange-draft'
+import { ScoreSheet, type EditPrinted, type SheetField } from '@/widgets/score-sheet'
+import type { TitlePlace } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { SectionHeading } from './SectionHeading'
+import { useHeardPlayhead } from '../model/use-heard-playhead'
+import { PrintedEdit } from './PrintedEdit'
+import { TitleField } from './TitleField'
+
+/** The title printed where the sheet prints it, edited there (ADR 0094). */
+const titleAt = (place: TitlePlace) => <TitleField place={place} />
+/**
+ * The tempo mark, a section's name, a key or time signature, a clef, a staff's name: each opening
+ * its popover or menu where it is printed.
+ */
+const editPrinted: EditPrinted = (printed, trigger) => (
+  <PrintedEdit printed={printed} trigger={trigger} />
+)
 
 /** How a note moved on its staff is heard: short and soft, as a notation app sounds it. */
 const HEARD = { duration: 0.35, velocity: 0.15 } as const
 
 /**
- * The sheet the editor writes on: the caret where the next note or chord goes; a double click on a
- * staff writes the note there, and a note dragged up or down moves by the key's notes, heard as it goes.
+ * The sheet the editor writes on, as the View shows the score (ADR 0094, 0097: its staves, its
+ * chord symbols): the caret where the next note or chord goes; a double click on a staff writes the note
+ * there, and a note dragged up or down moves by the key's notes, heard as it goes. While Play plays,
+ * the playhead follows the music apart from the caret (ADR 0096). A tap on what a field types where
+ * it is printed (the chord row) opens the field there, at the place the sheet draws for it
+ * (`onAnchor`).
  */
-export function EditorSheet({ room }: { room?: number | undefined }) {
+export function EditorSheet({
+  room,
+  onAnchor,
+  covered,
+}: {
+  /** What floats over the pages' right edge and foot (the palette beside them, the dock). */
+  covered?: { readonly right?: number; readonly bottom?: number } | undefined
+  room?: number | undefined
+  /** The place of the field open at the caret, on its line, as it comes and goes (ADR 0096). */
+  onAnchor: (anchor: HTMLDivElement | null) => void
+}) {
   const {
     store,
+    heard,
     actions: { dispatch },
     view,
-    meta,
   } = useScoreEditorContext()
+  const playhead = useHeardPlayhead(heard)
   const draft = useEditorState((state) => state.draft)
+  const hidden = useSettings((state) => selectScoreView(state).hidden)
   const caret = useEditorState((state) => state.caret)
   const layer = useEditorState((state) => state.layer)
   const selection = useEditorState((state) => state.selection)
   const chordNote = useEditorState((state) => state.chordNote)
   const chosen = useMemo(() => (selection ? selectionSpan(selection) : null), [selection])
-  // What the hands play, the pattern's notes with the written, arranged once a change (ADR 0083).
-  const played = useMemo(() => {
-    try {
-      return playedHands(arrangeDraft(draft))
-    } catch {
-      // A draft the Player cannot arrange yet shows its written notes alone.
-      return undefined
-    }
-  }, [draft])
   const onPlace = useCallback(
     (tick: Tick, to: Layer, extend: boolean, key?: Midi) =>
       dispatch(
@@ -66,8 +86,14 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
     [dispatch, store],
   )
   const onDeselect = useCallback(() => dispatch({ type: 'deselect' }), [dispatch])
-  const { openSettings: open } = view
-  const openSettings = useCallback(() => open(true), [open])
+  const { openField } = view
+  const onField = useCallback(
+    (field: SheetField, tick: Tick, to: Layer) => {
+      dispatch({ type: 'place', tick, layer: to })
+      openField(field)
+    },
+    [dispatch, openField],
+  )
   // Read when a bar is clicked, so a line's row does not change with every note written elsewhere.
   const placesOf = useCallback((to: Layer) => placesIn(store.getState(), to), [store])
   const tapsOf = useCallback((to: Layer) => tapsIn(store.getState(), to), [store])
@@ -98,8 +124,8 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
   return (
     <ScoreSheet
       draft={draft}
-      played={played}
       caret={caret}
+      playhead={playhead}
       chordNote={chordNote}
       layer={layer}
       selection={chosen}
@@ -108,14 +134,20 @@ export function EditorSheet({ room }: { room?: number | undefined }) {
       onDeselect={onDeselect}
       placesOf={placesOf}
       tapsOf={tapsOf}
-      heading={(section) => <SectionHeading section={section} />}
       chordNames={view.chordNames}
-      onSignature={openSettings}
+      fingers={view.fingers}
+      lyrics={view.lyrics}
+      edit={editPrinted}
+      hidden={hidden}
       view={view.layout}
-      title={meta.title}
+      title={titleAt}
       room={room}
+      covered={covered}
       onWrite={onWrite}
       onDrag={onDrag}
+      field={view.field}
+      fieldAnchor={onAnchor}
+      onField={onField}
     />
   )
 }

@@ -1,7 +1,6 @@
-import { note } from '@/shared/lib/music'
+import { C_MAJOR } from '@/shared/lib/music'
 import type { Lesson } from '../model/types'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const TWELVE_BARS = 'I7 I7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7'
 
 const syncopationAndSwing: Lesson = {
@@ -47,11 +46,11 @@ const syncopationAndSwing: Lesson = {
       ],
     },
     {
-      heading: { en: 'The anticipation', ru: 'Антиципация' },
+      heading: { en: 'The anticipation', ru: 'Предъём' },
       blocks: [
         {
           kind: 'text',
-          lead: { en: 'An anticipation', ru: 'Антиципация' },
+          lead: { en: 'An anticipation', ru: 'Предъём' },
           text: {
             en: 'plays the next bar’s note an eighth early and ties it over the barline. Here F arrives on the “and” after 4.',
             ru: '— это звук следующего такта, взятый на восьмую раньше и залигованный через тактовую черту. Здесь фа приходит на «и» после «четыре».',
@@ -138,7 +137,7 @@ const syncopationAndSwing: Lesson = {
           kind: 'question',
           ask: {
             en: 'Play the note the anticipation brought in early.',
-            ru: 'Сыграйте звук, который антиципация взяла раньше.',
+            ru: 'Сыграйте звук, который предъём взял раньше времени.',
           },
           answer: { notes: ['F'] },
         },

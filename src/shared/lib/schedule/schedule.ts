@@ -1,12 +1,5 @@
 import type { NoteHand, Performance, PerformanceNote } from '@/shared/lib/arrangement'
-import {
-  DEFAULT_INSTRUMENT,
-  isCompound,
-  TICKS_PER_BEAT,
-  type Instrument,
-  type Midi,
-  type Tick,
-} from '@/shared/lib/music'
+import { isCompound, TICKS_PER_BEAT, type Midi, type Tick } from '@/shared/lib/music'
 import {
   barClicks,
   barGrid,
@@ -26,11 +19,11 @@ export const HANDS = ['both', 'rh', 'lh'] as const
 export type Hands = (typeof HANDS)[number]
 export type Audible = Readonly<Record<NoteHand, boolean>>
 
-/** The one table of which hands each choice plays; the doubled tune always sounds. */
+/** The one table of which hands each choice plays; the staves over the piano always sound (ADR 0097). */
 const AUDIBLE: Readonly<Record<Hands, Audible>> = {
-  both: { rh: true, lh: true, melody: true },
-  rh: { rh: true, lh: false, melody: true },
-  lh: { rh: false, lh: true, melody: true },
+  both: { rh: true, lh: true, staff: true },
+  rh: { rh: true, lh: false, staff: true },
+  lh: { rh: false, lh: true, staff: true },
 }
 
 export const audibleHands = (hands: Hands): Audible => AUDIBLE[hands]
@@ -45,8 +38,6 @@ export interface NoteSound {
   readonly at: number
   readonly duration: number
   readonly velocity: number
-  /** A sung part's instrument (ADR 0066, 0070), not the piano. */
-  readonly timbre?: Instrument
 }
 export interface ClickSound {
   readonly kind: 'click'
@@ -72,6 +63,8 @@ interface ScheduleOptions {
 /** When each beat group sounds, so the Player can follow the music. */
 export interface Cue {
   readonly beatGroup: number
+  /** The beat group's tick, where the playhead stands as it sounds. */
+  readonly tick: Tick
   readonly at: number
 }
 
@@ -91,14 +84,14 @@ export interface Scheduled {
 const SHORTEST_NOTE = 0.15
 /** …nor than this when one beat group is sounded on its own. */
 const SHORTEST_ALONE = 0.35
-/** How loud a more voice sings: under the hands, as a voice behind the piano. */
-const SUNG_VELOCITY = 0.09
 /** Notes in a pass release a little early, so repeated notes are heard as two. */
 const LEGATO = 0.95
 /** A joined note (under a slur, or legato) holds to the next, overlapping it as a pianist's fingers do. */
 const JOINED = 1.03
 
-const isAudible = (n: PerformanceNote, hands: Audible) => hands[n.hand]
+/** Whether a note sounds: its hand's or its staff's heard, and not written silent (ADR 0097). */
+export const isAudible = (n: PerformanceNote, hands: Audible): boolean =>
+  hands[n.hand] && n.silent !== true
 
 /**
  * Where a tick sounds swung, on its bar's beats: a pickup's beats are the full bar's it ends, and a
@@ -129,7 +122,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   const tempo = checkedTempo(options.tempo)
   // Swung where asked, then held back or pressed on where the notes mark the tempo (ADR 0068).
   const swung = placement(performance, options.swing)
-  const marked = performance.timing ?? [...performance.notes, ...(performance.sung ?? []).flat()]
+  const marked = performance.timing ?? performance.notes
   const warp = tempoWarp(marked)
   const place = (tick: Tick) => warp(swung(tick))
   const pedal = pedalHeld(marked)
@@ -170,24 +163,6 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
     return markedSounds(sound, marks, { key: keyAt(performance, n.startTick), thirtySecond, full })
   })
 
-  // The more voices: heard whatever hands the learner chose, as the doubled tune is.
-  const sung: Sound[] = (performance.sung ?? []).flatMap((voice, part) =>
-    voice.flatMap((n): Sound[] => {
-      if (!inPass(n.startTick)) return []
-      const end = Math.min(n.startTick + n.durationTicks, toTick)
-      return [
-        {
-          kind: 'note',
-          midi: n.midi,
-          at: at(n.startTick),
-          duration: Math.max(SHORTEST_NOTE, (at(end) - at(n.startTick)) * LEGATO),
-          velocity: SUNG_VELOCITY,
-          timbre: performance.instruments?.[part] ?? DEFAULT_INSTRUMENT,
-        },
-      ]
-    }),
-  )
-
   const metronome: Sound[] = options.metronome
     ? performance.bars.flatMap((_, index) =>
         barClicks(performance, index).flatMap(({ tick, accent }): Sound[] =>
@@ -197,11 +172,11 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
     : []
 
   const cues = performance.beatGroups.flatMap((group, beatGroup) =>
-    inPass(group.tick) ? [{ beatGroup, at: at(group.tick) }] : [],
+    inPass(group.tick) ? [{ beatGroup, tick: group.tick, at: at(group.tick) }] : [],
   )
 
   return {
-    sounds: [...countIn, ...played, ...sung, ...metronome].sort((a, b) => a.at - b.at),
+    sounds: [...countIn, ...played, ...metronome].sort((a, b) => a.at - b.at),
     cues,
     end: at(toTick),
     fromTick,

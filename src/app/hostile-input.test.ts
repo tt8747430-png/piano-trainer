@@ -53,7 +53,7 @@ const NOTES = [
   'G4/0',
   'A4/-1',
 ]
-const melodyJunk = () =>
+const staffJunk = () =>
   Array.from(
     { length: 1 + Math.floor(rand() * 12) },
     () => NOTES[Math.floor(rand() * NOTES.length)],
@@ -96,7 +96,14 @@ describe('hostile input', () => {
         tempo: 40 + Math.floor(rand() * 140),
         pattern: rand() < 0.95 ? pick(['r1', 'r4', 'r2']) : junk(3),
         sections: [{ kind: 'verse', n: 1, lines: [chartJunk(), chartJunk()] }],
-        melody: rand() < 0.5 ? melodyJunk() : undefined,
+        staves:
+          rand() < 0.5
+            ? Array.from({ length: 1 + Math.floor(rand() * 3) }, () => ({
+                ...(rand() < 0.5 ? { name: junk(12) } : {}),
+                ...(rand() < 0.3 ? { clef: pick(['bass', 'treble', 'alto']) } : {}),
+                notes: staffJunk(),
+              }))
+            : undefined,
         hands: rand() < 0.3 ? [{ bar: 1, rh: junk(15), lh: junk(15) }] : undefined,
       }
       let song

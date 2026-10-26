@@ -1,4 +1,4 @@
-export { chordLabelSizes } from './chord-label'
+export { chordLabels, chordLabelWidth, type ChordLabel } from './chord-label'
 export { cn } from './cn'
 export {
   partsFromParams,
@@ -32,7 +32,9 @@ export {
 export { OCTAVE_SHIFTS, PEDAL_WAYS, type OctaveShift, type PedalWay } from './midi-choices'
 export {
   BLACK_HEIGHT,
+  diagramRange,
   keyAt,
+  keyboardLayout,
   PIANO_LAYOUT,
   spanOf,
   type KeyGeometry,
@@ -58,6 +60,16 @@ export {
 export { isRecord, savedObject } from './saved'
 export { createSavedStore, type SavingOptions } from './saved-store'
 export { downloadFile } from './download-file'
+export {
+  MIDI_DIVISION,
+  midiFileName,
+  noteEvents,
+  standardMidiFile,
+  type MidiEvent,
+  type MidiNote,
+  type MidiTrack,
+  type TimedMidiEvent,
+} from './standard-midi-file'
 export { keyListParam, readKeyList, readNote, readText, valueOr, wholeIn } from './search-params'
 export { createStoreContext } from './store-context'
 export {

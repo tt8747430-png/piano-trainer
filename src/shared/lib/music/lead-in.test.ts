@@ -1,12 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { chordSymbol } from './chord'
-import type { Key } from './key'
+import { C_MAJOR, type Key } from './key'
 import { LEAD_INS, withLeadIns, type LeadIn } from './lead-in'
 import { note } from './note'
 import { numeralChord, numeralText, parseNumerals } from './numerals'
 import type { ChordSize } from './scale-chord'
 
-const C_MAJOR: Key = { tonic: note('C'), minor: false }
 const C_MINOR: Key = { tonic: note('C'), minor: true }
 
 const led = (line: string, lead: LeadIn, key: Key = C_MAJOR): string =>

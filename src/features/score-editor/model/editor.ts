@@ -1,52 +1,91 @@
+import { songTitle } from '@/entities/piece'
 import { markBars } from './bar-marks'
 import { setClef } from './clefs'
-import { hiddenWithout, keepsAStaff, rowShown, staffLeftFor, withAStaff } from './rows'
+import { shownRows, staffLeftFor } from './rows'
 import { setBarTicks } from './bars'
+import { chosenNotes, chosenSpan, fingerPlace, shownValue, takenAway } from './chosen'
 import { moveCaret, placeCaret, placed, selectionSpan, stepOf } from './caret-moves'
-import { chordNoteStep, steppedKey } from './chord-note'
+import { clipEdited } from './clip-edits'
+import { singleStaff, staffPlace, ticksOf } from '@/shared/lib/notation'
+import { chordNoteStep } from './chord-note'
 import { deleteChord } from './chords'
-import { DEFAULT_INSTRUMENT, midi, PIANO, type Midi } from '@/shared/lib/music'
-import { EXTRA_VOICES } from '@/shared/lib/notation'
-import { isHandLayer, isVoiceLayer, voiceIndex } from './draft'
-import { barsEdited, chordSet, selectedBars } from './form-edits'
+import { midi, PIANO, type Midi } from '@/shared/lib/music'
+import { isHandLayer, type Draft, type Layer } from './draft'
+import { barsEdited, chordSet, chosenBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
 import { lineOver, lineSpan } from './lines'
+import { setSyllable, singsHere } from './lyrics'
 import { markNotes } from './marks'
 import {
-  backToPattern,
-  deleteBack,
+  backFrom,
   deleteNotes,
+  makeRoom,
+  notesAt,
   respellNotes,
-  setFinger,
+  setDuration,
+  setFingers,
   shiftNotes,
   stepNotes,
+  steppedKey,
   tieNotes,
-  writeOut,
+  toggleAccidental,
   writeRest,
-  type Where,
 } from './notes'
-import { joinSection, setSectionKind, setSectionPattern } from './sections'
-import { setKey, setMeter, setTempo } from './settings'
-import type { EditorAction, EditorState } from './state'
+import { setMeter, setSectionMeter } from './meters'
+import { joinSection, setSectionKey, setSectionKind } from './sections'
+import { addStaff, removeStaff, renameStaff, setStaffClef } from './staves'
+import { setKey, setTempo } from './settings'
+import { nextMode, type EditorAction, type EditorState } from './state'
 import { writeTake } from './take-edits'
-import { barAt } from './timeline'
-import { toggledDot, toggledTriplet, withValue } from './values'
+import { barAt, barsOf, keyAt } from './timeline'
+import { toggledDot, toggledTriplet, withValue, type ChosenValue } from './values'
 
 /**
- * What an edit of notes takes (ADR 0088): the notes chosen, from the first's start to the last's end;
- * else the chord's one note chosen; else the notes at the caret.
+ * Where the caret goes once the single staff at `place` is taken away (ADR 0097): from it, to the
+ * staff that was under it (the piano's upper staff under the last), else the one over it; from a
+ * staff under it, up with that staff; elsewhere, where it was.
  */
-function chosenSpan(state: EditorState): Where {
-  if (state.selection) return selectionSpan(state.selection)
-  if (state.chordNote !== null) return { at: state.caret, key: state.chordNote }
-  return state.caret
+function rowAfterRemoving(next: Draft, layer: Layer, place: number): Layer {
+  if (layer === 'chords' || isHandLayer(layer)) return layer
+  const at = staffPlace(layer)
+  if (at > place) return singleStaff(at - 1)
+  if (at < place) return layer
+  const staves = shownRows(next).filter((row) => row !== 'chords')
+  return staves[place] ?? staves.at(-1) ?? staffLeftFor(next)
 }
 
 /** The chord's one note chosen, moved by `move` (null where it went past the piano's ends). */
 function movedNote(state: EditorState, move: (key: Midi) => Midi | null): Partial<EditorState> {
   if (state.chordNote === null) return {}
   return { chordNote: move(state.chordNote) }
+}
+
+/**
+ * A value chosen in the palette (spec 2026-10-23): the notes chosen made that long, else the next
+ * note's; either way the value the next note is written as.
+ */
+function valueChosen(state: EditorState, value: ChosenValue): EditorState {
+  if (state.layer === 'chords' || chosenNotes(state).length === 0)
+    return { ...state, value, struck: null }
+  const ticks = ticksOf(value, state.draft.meter)
+  return commit(state, setDuration(state.draft, state.layer, chosenSpan(state), ticks), {
+    value,
+    struck: null,
+    selection: state.selection,
+  })
+}
+
+/** The chord's one note chosen, where a sign moved it: the note of its letter at the caret in `next`. */
+function accidentalMoved(state: EditorState, next: Draft): Partial<EditorState> {
+  if (state.chordNote === null || state.layer === 'chords') return {}
+  const chosen = notesAt(state.draft, state.layer, state.caret).find(
+    (n) => n.midi === state.chordNote,
+  )
+  const moved =
+    chosen &&
+    notesAt(next, state.layer, state.caret).find((n) => n.spelled.letter === chosen.spelled.letter)
+  return moved ? { chordNote: moved.midi } : {}
 }
 
 /** The editor's state after an action (spec §6). */
@@ -63,17 +102,21 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         struck: null,
       }
     case 'value':
-      return { ...state, value: withValue(state.value, action.value, draft.meter), struck: null }
+      return valueChosen(
+        state,
+        withValue(shownValue(state) ?? state.value, action.value, draft.meter),
+      )
     case 'dot':
     case 'triplet': {
+      const shown = shownValue(state) ?? state.value
       const value =
         action.type === 'dot'
-          ? toggledDot(state.value, draft.meter, action.dots)
-          : toggledTriplet(state.value, draft.meter)
-      return value === state.value ? state : { ...state, value }
+          ? toggledDot(shown, draft.meter, action.dots)
+          : toggledTriplet(shown, draft.meter)
+      return value === shown ? state : valueChosen(state, value)
     }
-    case 'chordMode':
-      return { ...state, chord: !state.chord, struck: null }
+    case 'mode':
+      return { ...state, mode: action.mode ?? nextMode(state.mode), struck: null }
     case 'move':
       return moveCaret(state, action.by, action.direction, action.extend ?? false)
     case 'place':
@@ -88,7 +131,19 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       return keyPlayed(state, action.key, action.time)
     case 'rest': {
       if (layer === 'chords') return state
-      const result = writeRest(draft, layer, caret, stepOf(state))
+      // The notes chosen made rests, still chosen.
+      if (state.selection) {
+        const span = selectionSpan(state.selection)
+        return commit(state, deleteNotes(draft, layer, span), {
+          caret: span.from,
+          selection: state.selection,
+          struck: null,
+        })
+      }
+      // In Insert mode a rest, like a note, is written in room made for it, the later notes pushed
+      // right (ADR 0092); with none to push, as Replace writes it, stopping at the song's end.
+      const room = state.mode === 'insert' ? makeRoom(draft, layer, caret, stepOf(state)) : draft
+      const result = writeRest(room, layer, caret, stepOf(state))
       return commit(state, result.draft, { caret: result.end, struck: null })
     }
     case 'delete': {
@@ -97,19 +152,20 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         // that note alone (ADR 0088).
         const span = chosenSpan(state)
         if (typeof span !== 'number' && 'from' in span)
-          return commit(state, deleteNotes(draft, layer, span), {
+          return commit(state, takenAway(state, layer, span), {
             caret: span.from,
             selection: null,
             struck: null,
           })
+        // The chord stays, so there is no gap to close.
         if (typeof span !== 'number')
           return commit(state, deleteNotes(draft, layer, span), {
             chordNote: null,
             struck: null,
           })
-        if (!action.back) return commit(state, deleteNotes(draft, layer, caret), { struck: null })
-        const taken = deleteBack(draft, layer, caret)
-        return commit(state, taken.draft, { caret: taken.caret, struck: null })
+        const at = action.back ? backFrom(draft, layer, caret) : caret
+        if (at === null) return { ...state, struck: null }
+        return commit(state, takenAway(state, layer, at), { caret: at, struck: null })
       }
       if (state.selection) return barsEdited(state, 'delete')
       const bar = barAt(draft, caret)
@@ -131,74 +187,44 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
             {
               struck: null,
               selection: state.selection,
-              ...movedNote(state, (key) => steppedKey(draft.key, key, action.steps)),
+              ...movedNote(state, (key) =>
+                steppedKey(keyAt(draft, state.caret), key, action.steps),
+              ),
             },
             action.joins ?? false,
           )
-    case 'melodyStaff': {
-      if (action.on === draft.melodyStaff) return state
-      if (action.on) return commit(state, { ...draft, melodyStaff: true }, { layer: 'melody' })
-      // Removed, it is no longer hidden: added again, it is in sight. A lead sheet's tune taken
-      // away brings the piano back, so a staff is in sight (ADR 0083).
-      const without = {
-        ...draft,
-        melodyStaff: false,
-        melody: [],
-        hidden: draft.hidden.filter((row) => row !== 'melody'),
-      }
-      const next = { ...without, hidden: withAStaff(without) }
+    case 'addStaff': {
+      const next = addStaff(draft, action.place)
+      // The caret on the staff added, where it was in time.
+      const added = singleStaff(Math.max(0, Math.min(action.place, draft.staves.length)))
       return commit(state, next, {
-        layer: layer === 'melody' ? staffLeftFor(next) : layer,
+        layer: added,
+        caret: placed(next, added, caret),
+        selection: null,
+        chordNote: null,
         struck: null,
       })
     }
-    case 'hide': {
-      if (draft.hidden.includes(action.row) === action.hidden) return state
-      const hidden = action.hidden
-        ? [...draft.hidden, action.row]
-        : draft.hidden.filter((row) => row !== action.row)
-      // Never every staff out of sight (ADR 0083).
-      if (!keepsAStaff(draft, hidden)) return state
-      const next = { ...draft, hidden }
-      // The caret leaves a row put out of sight (a hand's, with the piano) for the top staff's.
-      const leaves = !rowShown(next, isHandLayer(layer) ? 'piano' : layer)
+    case 'removeStaff': {
+      const next = removeStaff(draft, action.place)
+      if (next === draft) return state
+      return commit(state, next, {
+        layer: rowAfterRemoving(next, layer, action.place),
+        selection: null,
+        chordNote: null,
+        struck: null,
+      })
+    }
+    case 'renameStaff':
+      return commit(state, renameStaff(draft, action.place, action.name))
+    case 'piano': {
+      // Never every staff out of sight: a lead sheet keeps its single staves (ADR 0083).
+      if (draft.leadSheet === action.hidden || (action.hidden && draft.staves.length === 0))
+        return state
+      const next = { ...draft, leadSheet: action.hidden }
+      // The caret leaves a hand put out of sight for the top staff's.
+      const leaves = action.hidden && isHandLayer(layer)
       return commit(state, next, leaves ? { layer: staffLeftFor(next), struck: null } : {})
-    }
-    case 'instrument': {
-      if (action.part > draft.voices.length) return state
-      const instruments = draft.voices.map((_, i) => draft.instruments[i + 1] ?? DEFAULT_INSTRUMENT)
-      const all = [draft.instruments[0] ?? DEFAULT_INSTRUMENT, ...instruments]
-      all[action.part] = action.instrument
-      return commit(state, { ...draft, instruments: all })
-    }
-    case 'voiceStaff': {
-      const index = voiceIndex(action.voice)
-      if (action.on) {
-        // The next voice's staff, under the last one added: a voice never stands over an empty gap.
-        const next = draft.voices.length
-        if (next >= EXTRA_VOICES.length) return state
-        const voice = EXTRA_VOICES[next] ?? action.voice
-        const instruments = [
-          ...draft.instruments.slice(0, next + 1),
-          action.instrument ?? DEFAULT_INSTRUMENT,
-        ]
-        return commit(
-          state,
-          { ...draft, voices: [...draft.voices, []], instruments },
-          { layer: voice },
-        )
-      }
-      if (index >= draft.voices.length) return state
-      const voices = draft.voices.filter((_, i) => i !== index)
-      const instruments = draft.instruments.filter((_, i) => i !== index + 1)
-      const stays = !isVoiceLayer(layer) || voiceIndex(layer) < voices.length
-      const without = { ...draft, voices, instruments, hidden: hiddenWithout(draft.hidden, index) }
-      const next = { ...without, hidden: withAStaff(without) }
-      return commit(
-        state,
-        next,
-        stays ? { struck: null } : { layer: staffLeftFor(next), struck: null },
-      )
     }
     case 'shift':
       return layer === 'chords'
@@ -211,6 +237,15 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
               return moved < PIANO.from || moved > PIANO.to ? key : midi(moved)
             }),
           })
+    case 'accidental': {
+      if (layer === 'chords') return state
+      const next = toggleAccidental(draft, layer, chosenSpan(state), action.accidental)
+      return commit(state, next, {
+        struck: null,
+        selection: state.selection,
+        ...accidentalMoved(state, next),
+      })
+    }
     case 'respell':
       return layer === 'chords'
         ? state
@@ -218,9 +253,11 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
             struck: null,
             selection: state.selection,
           })
-    case 'finger':
+    case 'fingers':
       return isHandLayer(layer)
-        ? commit(state, setFinger(draft, layer, caret, action.midi, action.finger))
+        ? commit(state, setFingers(draft, layer, fingerPlace(state), action.fingers), {
+            struck: null,
+          })
         : state
     case 'mark': {
       if (layer === 'chords') return state
@@ -239,44 +276,59 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       return layer === 'chords'
         ? state
         : commit(state, tieNotes(draft, layer, caret), { struck: null })
+    // The words go under the staff they are written on alone (ADR 0093, 0097).
+    case 'syllable':
+      return singsHere(draft, layer)
+        ? commit(state, setSyllable(draft, caret, action.verse, action.text), { struck: null })
+        : state
     case 'chord':
-      return chordSet(state, action.chord, action.advance)
-    case 'writeOut':
-      return isHandLayer(layer)
-        ? commit(state, writeOut(draft, layer, barAt(draft, caret).index, action.played))
-        : state
-    case 'backToPattern':
-      return isHandLayer(layer)
-        ? commit(state, backToPattern(draft, layer, barAt(draft, caret).index))
-        : state
+      return chordSet(state, action.chord)
     case 'take':
       return commit(state, writeTake(draft, barAt(draft, caret).start, action.parts), {
         struck: null,
       })
     case 'bars':
       return barsEdited(state, action.edit)
-    case 'barMarks': {
-      const range = state.selection
-        ? selectedBars(draft, state.selection)
-        : { from: barAt(draft, caret).index, to: barAt(draft, caret).index }
-      return commit(state, markBars(draft, range, action.choice))
-    }
+    case 'clip':
+      return clipEdited(state, action.edit)
+    case 'barMarks':
+      return commit(state, markBars(draft, chosenBars(state), action.choice))
     case 'clef':
-      return commit(state, setClef(draft, barAt(draft, caret).index, action.hand, action.clef))
-    case 'barLength':
-      return commit(state, setBarTicks(draft, barAt(draft, caret).index, action.ticks))
+      return commit(
+        state,
+        isHandLayer(action.staff)
+          ? setClef(draft, action.bar, action.staff, action.clef)
+          : setStaffClef(draft, staffPlace(action.staff), action.clef),
+      )
+    // Each bar chosen, else the caret's.
+    case 'barLength': {
+      const { from, to } = chosenBars(state)
+      let next = draft
+      for (let index = from; index <= to; index++) next = setBarTicks(next, index, action.ticks)
+      return commit(state, next)
+    }
     case 'sectionKind':
       return commit(state, setSectionKind(draft, action.section, action.kind))
     case 'joinSection':
       return commit(state, joinSection(draft, action.section))
-    case 'sectionPattern':
-      return commit(state, setSectionPattern(draft, action.section, action.pattern))
+    case 'sectionKey': {
+      const section = barsOf(draft)[action.bar]?.section ?? 0
+      return commit(state, setSectionKey(draft, section, action.key))
+    }
+    case 'sectionMeter': {
+      const section = barsOf(draft)[action.bar]?.section ?? 0
+      return commit(state, setSectionMeter(draft, section, action.meter))
+    }
     case 'settings': {
       let next = draft
       if (action.key) next = setKey(next, action.key)
       if (action.tempo !== undefined) next = setTempo(next, action.tempo)
       if (action.meter) next = setMeter(next, action.meter)
       return commit(state, next)
+    }
+    case 'title': {
+      const title = songTitle(action.title)
+      return title === null || title === draft.title ? state : commit(state, { ...draft, title })
     }
     case 'undo':
     case 'redo':

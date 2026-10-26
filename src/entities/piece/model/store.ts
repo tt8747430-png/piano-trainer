@@ -1,16 +1,8 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isPatternId } from '@/entities/pattern'
 import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
-import {
-  DEFAULT_INSTRUMENT,
-  isInstrument,
-  isMeter,
-  isWrittenKey,
-  parseKey,
-  type Tick,
-} from '@/shared/lib/music'
-import type { Melody } from '@/shared/lib/arrangement'
-import { barTicksOf } from './chart'
+import { CLEFS, isMeter, isWrittenKey, parseKey, type Tick } from '@/shared/lib/music'
+import { barTicksOf, chartOf, stavesOf } from './chart'
 import { ContentError } from './content-error'
 import { musicOf, type PieceMusic } from './music'
 import {
@@ -21,21 +13,20 @@ import {
   type OwnSong,
   type OwnSongId,
 } from './own'
-import { parseMelody } from './parse-melody'
 import {
-  HIDDEN_ROWS,
-  showsAStaff,
   SECTION_KINDS,
+  staffName,
   type ChartPiece,
   type Hands,
-  type HiddenRow,
   type KeyText,
+  type LyricsStaff,
   type PieceId,
+  type PieceStaff,
   type Section,
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-export const PIECES_VERSION = 1
+export const PIECES_VERSION = 7
 
 /** The learner's pieces (spec 2026-10-01-score-editor §4). */
 export interface PiecesState {
@@ -65,17 +56,22 @@ const isKeyText = (value: unknown): value is KeyText => {
   return key !== null && isWrittenKey(key)
 }
 const isSectionKind = isOneOf(SECTION_KINDS)
+const isClef = isOneOf(CLEFS)
 const isText = (value: unknown): value is string => typeof value === 'string'
+/** A staff the lyrics are on, of `staves` single staves: one of them by its place, or the upper staff. */
+const isLyricsStaff = (value: unknown, staves: number): value is LyricsStaff =>
+  value === 'rh' ||
+  (typeof value === 'number' && Number.isInteger(value) && value >= 0 && value < staves)
 const isTempo = (value: unknown): value is number =>
   typeof value === 'number' &&
   Number.isInteger(value) &&
   value >= PIECE_TEMPO.min &&
   value <= PIECE_TEMPO.max
 
-/** A saved section whose fields read; its chart is read with the piece's. */
+/** A saved section whose fields read; its chart is read with the piece's, in its own meter. */
 function sectionOf(saved: unknown): Section | null {
   if (!isRecord(saved)) return null
-  const { kind, n, label, last, detail, key, pattern, lines } = saved
+  const { kind, n, label, last, detail, key, meter, pattern, lines } = saved
   if (!isSectionKind(kind) || !Array.isArray(lines) || !lines.every(isText)) return null
   const number = typeof n === 'number' && Number.isInteger(n) && n > 0 ? n : undefined
   const en = isRecord(detail) ? detail.en : undefined
@@ -87,8 +83,30 @@ function sectionOf(saved: unknown): Section | null {
     ...(last === true ? { last } : {}),
     ...(isText(en) && isText(ru) ? { detail: { en, ru } } : {}),
     ...(isKeyText(key) ? { key } : {}),
+    ...(isMeter(meter) ? { meter } : {}),
     ...(isPatternId(pattern) ? { pattern } : {}),
     lines,
+  }
+}
+
+/**
+ * A saved single staff whose fields read (ADR 0097): its notes, its clef, its name as typed (as the
+ * editor keeps one: trimmed, at most its letters) or in both languages.
+ */
+function staffOf(saved: unknown): PieceStaff | null {
+  if (!isRecord(saved) || !isText(saved.notes)) return null
+  const { name, clef } = saved
+  const typed = isText(name) ? staffName(name) : undefined
+  const en = isRecord(name) ? name.en : undefined
+  const ru = isRecord(name) ? name.ru : undefined
+  return {
+    ...(typed !== undefined
+      ? { name: typed }
+      : isText(en) && isText(ru)
+        ? { name: { en, ru } }
+        : {}),
+    ...(isClef(clef) && clef !== 'treble' ? { clef } : {}),
+    notes: saved.notes,
   }
 }
 
@@ -101,58 +119,37 @@ function savedHands(saved: unknown): Hands | undefined {
   return hands.rh === undefined && hands.lh === undefined ? undefined : hands
 }
 
-/** The most voices sung besides the tune, each on its own staff (ADR 0066). */
-const MOST_VOICES = 3
-
-/**
- * The saved more voices that read and fit the chart, the first three at most, each with its place
- * among those saved (its instrument's is one more).
- */
-function savedVoices(
-  piece: ChartPiece,
-  saved: unknown,
-  fits: (tune: Melody | undefined) => boolean,
-): { readonly voice: string; readonly index: number }[] {
-  if (!Array.isArray(saved)) return []
-  return saved
-    .flatMap((voice, index) => (isText(voice) ? [{ voice, index }] : []))
-    .filter(({ voice }) => {
-      try {
-        return fits(parseMelody({ ...piece, melody: voice }))
-      } catch (error) {
-        if (error instanceof ContentError) return false
-        throw error
-      }
-    })
-    .slice(0, MOST_VOICES)
-}
-
-/**
- * The rows a save hides, those it names once each (ADR 0072); the piano only while another staff is
- * in sight, so a score never hides every staff (ADR 0083).
- */
-function savedHidden(
-  saved: unknown,
-  staves: { readonly melody: boolean; readonly voices: number },
-): { hidden?: HiddenRow[] } {
-  if (!Array.isArray(saved)) return {}
-  const named = HIDDEN_ROWS.filter((row) => saved.includes(row))
-  const rows = showsAStaff(named, staves) ? named : named.filter((row) => row !== 'piano')
-  return rows.length > 0 ? { hidden: rows } : {}
-}
-
 /** The ticks a piece's chart lasts. */
 const chartTicks = (piece: ChartPiece): Tick =>
   barTicksOf(piece).reduce((sum, ticks) => sum + ticks, 0)
 
-/** Saved music that reads as a piece's: its fields, its chart, melody and hands; null otherwise. */
+/** Whether a piece's words read on the staff they are on (ADR 0093): a verse longer than its tune does not. */
+function singsLyrics(piece: ChartPiece): boolean {
+  try {
+    stavesOf(piece)
+    chartOf(piece)
+    return true
+  } catch (error) {
+    if (error instanceof ContentError) return false
+    throw error
+  }
+}
+
+/**
+ * Saved music that reads as a piece's: its fields, its chart, single staves and hands; null
+ * otherwise. Its words are kept where they read on the staff they are on (ADR 0093), its own title
+ * where it is one (ADR 0094), a lead sheet only where it has a single staff: a score never hides
+ * every staff (ADR 0083, 0097).
+ */
 function musicOfSaved(saved: unknown): PieceMusic | null {
   if (!isRecord(saved)) return null
-  const { key, meter, tempo, pattern, sections, melody, voices, instruments, hidden, hands } = saved
+  const { key, meter, tempo, pattern, sections, staves, leadSheet, hands, lyrics, lyricsOn } = saved
   if (!isKeyText(key) || !isMeter(meter) || !isTempo(tempo) || !isPatternId(pattern)) return null
   if (!Array.isArray(sections) || sections.length === 0) return null
   const read = sections.map(sectionOf)
   if (!read.every((section) => section !== null)) return null
+  const single = staves === undefined ? [] : Array.isArray(staves) ? staves.map(staffOf) : [null]
+  if (!single.every((staff) => staff !== null)) return null
   const written = savedHands(hands)
   const piece: ChartPiece = {
     id: 'saved',
@@ -163,27 +160,21 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     tempo,
     pattern,
     sections: read,
-    ...(isText(melody) ? { melody } : {}),
+    ...(single.length > 0 ? { staves: single } : {}),
+    ...(single.length > 0 && leadSheet === true ? { leadSheet } : {}),
     ...(written ? { hands: written } : {}),
+    ...(isLyricsStaff(lyricsOn, single.length) ? { lyricsOn } : {}),
   }
   try {
-    const fits = (tune: Melody | undefined) =>
-      Math.max(0, ...(tune ?? []).map((n) => n.startTick + n.durationTicks)) <= chartTicks(piece)
-    if (!fits(parseMelody(piece))) return null
-    const sung = savedVoices(piece, voices, fits)
-    // The tune's and each kept voice's instrument, kept where every one of them names one.
-    // A part saved without one is sung.
-    const played = Array.isArray(instruments)
-      ? [instruments[0], ...sung.map(({ index }) => instruments[index + 1])].map(
-          (instrument: unknown) => instrument ?? DEFAULT_INSTRUMENT,
-        )
-      : []
-    return musicOf({
-      ...piece,
-      ...(sung.length > 0 ? { voices: sung.map(({ voice }) => voice) } : {}),
-      ...(played.length > 0 && played.every(isInstrument) ? { instruments: played } : {}),
-      ...savedHidden(hidden, { melody: piece.melody !== undefined, voices: sung.length }),
-    })
+    const ends = stavesOf(piece).flatMap(({ notes }) =>
+      notes.map((n) => n.startTick + n.durationTicks),
+    )
+    const fits = Math.max(0, ...ends) <= chartTicks(piece)
+    if (!fits) return null
+    const verses = Array.isArray(lyrics) && lyrics.every(isText) ? lyrics : undefined
+    const sung = verses && singsLyrics({ ...piece, lyrics: verses }) ? { lyrics: verses } : {}
+    const named = isText(saved.title) ? songTitle(saved.title) : null
+    return { ...(named === null ? {} : { title: named }), ...musicOf({ ...piece, ...sung }) }
   } catch (error) {
     if (error instanceof ContentError) return null
     throw error
@@ -200,8 +191,10 @@ export interface SharedSong {
 export function readSharedSong(saved: unknown): SharedSong | null {
   if (!isRecord(saved) || !isText(saved.title)) return null
   const title = songTitle(saved.title)
-  const music = musicOfSaved(saved)
-  return title && music ? { title, music } : null
+  const read = musicOfSaved(saved)
+  if (!title || !read) return null
+  const { title: _title, ...music } = read
+  return { title, music }
 }
 
 function songOf(saved: unknown): OwnSong | null {

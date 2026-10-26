@@ -51,10 +51,15 @@ export function verovioOptions({
 
 let toolkit: Promise<VerovioToolkit> | undefined
 
-/** The one toolkit, loaded the first time a score is engraved. */
+/**
+ * The one toolkit, loaded the first time a score is engraved. Verovio keeps every toolkit it makes,
+ * each with its own WebAssembly memory (`VerovioToolkit.instances`, as it allows only one): this
+ * module loaded afresh, as a test file's fresh modules load it, takes the one there.
+ */
 export function loadToolkit(): Promise<VerovioToolkit> {
   toolkit ??= Promise.all([import('verovio/wasm'), import('verovio/esm')]).then(
-    async ([wasm, esm]) => new esm.VerovioToolkit(await wasm.default()),
+    async ([wasm, { VerovioToolkit }]) =>
+      VerovioToolkit.instances[0] ?? new VerovioToolkit(await wasm.default()),
   )
   return toolkit
 }

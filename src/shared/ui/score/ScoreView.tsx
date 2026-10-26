@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Midi, Tick, TimeSignature } from '@/shared/lib/music'
-import type { NextLine, Score, StaffId } from '@/shared/lib/notation'
+import type { NextLine, Score, StaffId, StaffLabels } from '@/shared/lib/notation'
 import { drawnStaves } from './drawn-staves'
 import type { ScoreLayout } from './layout'
-import { staffHeight } from './size'
+import { scoreHeight } from './size'
 import { StaffPlace } from './StaffPlace'
 import { drawScore } from './verovio/draw'
+import { chosenParts } from './verovio/svg-chosen'
 import './score.css'
 
 type Engraving =
@@ -16,8 +17,8 @@ type Engraving =
 
 /**
  * A score engraved by Verovio (ADR 0078) on one line of its staves (spec §2.5; the grand staff, the
- * tune's over it), or on some or one of them. What lies over it (labels, a cursor, the loop) is its children, given the engraving's
- * layout. The staff of `muted` is soft ink.
+ * tune's over it), or on some or one of them. What lies over it (labels, the playhead, the loop) is
+ * its children, given the engraving's layout. The staff of `muted` is soft ink.
  */
 export function ScoreView({
   score,
@@ -29,6 +30,7 @@ export function ScoreView({
   staves,
   timeBefore,
   next,
+  labels,
   selected,
   fill,
   children,
@@ -50,12 +52,14 @@ export function ScoreView({
    * barline, as a courtesy (a justified line's).
    */
   next?: NextLine | undefined
+  /** The staves' names, printed at the line's head: a score's first line (ADR 0094). */
+  labels?: StaffLabels | undefined
   /** The sheet's width in CSS pixels: the line is spread to it, and drawn smaller where wider. */
   fill?: number | undefined
   /**
    * The notes chosen, those starting in [from, to) on a staff (on every staff without one), one key
-   * alone where `midi` says, marked in the focus colour as a notation app marks a selection (ADR 0082,
-   * 0088).
+   * alone where `midi` says, drawn in the selection colour as a notation app draws a selection (ADR
+   * 0096): their heads, stems, flags, accidentals, dots and ledger lines, and the rests chosen.
    */
   selected?:
     | {
@@ -77,6 +81,8 @@ export function ScoreView({
   const nextKey = next
     ? JSON.stringify({ key: next.key, time: next.time, clefs: next.clefs } satisfies NextLine)
     : ''
+  // As one string, so a new object of the same names engraves nothing again.
+  const labelsKey = labels ? JSON.stringify(labels) : ''
   const drawn = drawnStaves(score, staff, staves)
   // As one string, so a new list of the same staves engraves nothing again.
   const shownKey = drawn.join(' ')
@@ -99,6 +105,7 @@ export function ScoreView({
             ? undefined
             : { count: beforeCount, unit: beforeUnit },
         next: nextKey ? (JSON.parse(nextKey) as NextLine) : undefined,
+        labels: labelsKey ? (JSON.parse(labelsKey) as StaffLabels) : undefined,
         fill,
       },
       stopped.signal,
@@ -110,7 +117,7 @@ export function ScoreView({
         if (!stopped.signal.aborted) setEngraving({ status: 'error' })
       })
     return () => stopped.abort()
-  }, [score, scale, fingers, names, shownKey, beforeCount, beforeUnit, nextKey, fill])
+  }, [score, scale, fingers, names, shownKey, beforeCount, beforeUnit, nextKey, labelsKey, fill])
 
   // The chosen notes are marked on the engraving as it is, so moving the caret engraves nothing again.
   const selectedStaff = selected?.staff
@@ -127,7 +134,7 @@ export function ScoreView({
     )
       return
     // One key of a chord: its heads' ids, as the layout read them with their keys.
-    const ids =
+    const keys =
       selectedKey === undefined
         ? null
         : new Set(
@@ -135,15 +142,15 @@ export function ScoreView({
               .filter((head) => head.midi === selectedKey)
               .map((head) => head.id),
           )
-    // Notes are named `n-<staff>-<tick>-<i>` (ADR 0078).
-    const marked = [
-      ...element.querySelectorAll<SVGElement>(
-        `g.note[id^="n-${selectedStaff === undefined ? '' : `${selectedStaff}-`}"]`,
-      ),
-    ].filter((each) => {
-      const tick = Number(each.id.split('-')[2])
-      return tick >= selectedFrom && tick < selectedTo && (!ids || ids.has(each.id))
-    })
+    const marked = chosenParts(
+      element,
+      {
+        staves: selectedStaff === undefined ? undefined : [selectedStaff],
+        from: selectedFrom,
+        to: selectedTo,
+      },
+      keys,
+    )
     for (const each of marked) each.classList.add('note-chosen')
     return () => {
       for (const each of marked) each.classList.remove('note-chosen')
@@ -153,7 +160,7 @@ export function ScoreView({
   const size =
     engraving.status === 'ready'
       ? { width: engraving.layout.width, height: engraving.layout.height }
-      : { height: staffHeight(undefined, drawn.length) * scale, width: fill }
+      : { height: scoreHeight(score, drawn) * scale, width: fill }
   return (
     // Its layers are its own: what lies over the engraving stays under what the page pins.
     <div className="relative isolate" style={size}>
@@ -167,11 +174,7 @@ export function ScoreView({
       {engraving.status === 'loading' ? (
         // Its lines, faint, until the first engraving is in: the music on its way, not a gap.
         <div className="absolute inset-x-0 top-0">
-          <StaffPlace
-            height={staffHeight(undefined, drawn.length)}
-            scale={scale}
-            count={drawn.length}
-          />
+          <StaffPlace height={scoreHeight(score, drawn)} scale={scale} count={drawn.length} />
           <p className="sr-only">{t('sheet.loading')}</p>
         </div>
       ) : null}

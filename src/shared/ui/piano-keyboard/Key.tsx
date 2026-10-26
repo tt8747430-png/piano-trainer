@@ -22,7 +22,7 @@ const REST: Readonly<Record<KeyFill, string>> = {
   '13th': cn(ROLE_WASH['13th'], LABEL_INK),
   rh: cn('bg-hand-rh-wash', LABEL_INK),
   lh: cn('bg-hand-lh-wash', LABEL_INK),
-  melody: cn('bg-hand-melody-wash', LABEL_INK),
+  staff: cn('bg-hand-staff-wash', LABEL_INK),
   tonic: 'bg-key-tonic text-on-key-tonic',
   scale: 'bg-key-scale text-on-key-scale',
 }
@@ -41,7 +41,7 @@ const DOWN: Readonly<Record<KeyFill, string>> = {
   '13th': cn(ROLE_BG['13th'], LABEL_INK),
   rh: cn('bg-hand-rh', LABEL_INK),
   lh: cn('bg-hand-lh', LABEL_INK),
-  melody: cn('bg-hand-melody', LABEL_INK),
+  staff: cn('bg-hand-staff', LABEL_INK),
   tonic: 'bg-key-tonic-down text-on-key-tonic',
   scale: 'bg-key-scale-down text-on-key-scale',
 }

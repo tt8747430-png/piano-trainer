@@ -5,7 +5,7 @@ import { isOneOf } from '@/shared/lib'
 import {
   parseKey,
   type ChordSize,
-  type Instrument,
+  type Clef,
   type Key,
   type Letter,
   type Meter,
@@ -46,10 +46,15 @@ export interface Section {
   readonly label?: string
   /** A last chorus or a last ending. */
   readonly last?: boolean
-  /** Anything else the heading says: 'in 2/4', 'and ending'. */
+  /** Anything else the heading says: 'and ending'. */
   readonly detail?: LocalText
   /** The key its bars are written in, where that is not the piece's: a key change. */
   readonly key?: KeyText
+  /**
+   * The meter its bars are counted in, where that is not the piece's: a change of time (ADR 0095),
+   * of the piece's kind (a quarter's beat, or a dotted quarter's).
+   */
+  readonly meter?: Meter
   /** The accompaniment its chords play, where it is not the piece's (a chord's method code still wins). */
   readonly pattern?: PatternId
   /** A chart's bars separated by spaces, or a sectioned progression's chords; see docs/CONTENT.md. */
@@ -92,56 +97,75 @@ interface PieceCommon extends EntryCommon {
   readonly recording?: Recording
 }
 
-/** A hand's bars written note by note, `|` between them, `-` for a bar the pattern plays: see docs/CONTENT.md. */
+/** A hand's bars written note by note, `|` between them, `-` for a bar left to the pattern: see docs/CONTENT.md. */
 export interface Hands {
   readonly rh?: string
   readonly lh?: string
 }
 
+/** A staff's printed name (ADR 0097): content's in both languages, a learner's as typed. */
+export type StaffName = LocalText | string
+
+/** The longest name a staff takes. */
+export const STAFF_NAME_MAX = 40
+
+/** A staff's name as the score keeps it (ADR 0097): trimmed, 40 characters at most; none where none is left. */
+export function staffName(text: string): string | undefined {
+  const name = text.trim().slice(0, STAFF_NAME_MAX).trim()
+  return name === '' ? undefined : name
+}
+
+/** A single staff over the piano's grand staff, as content writes it (ADR 0097). */
+export interface PieceStaff {
+  /** Its name, printed at the first line's head; none prints none. */
+  readonly name?: StaffName
+  /** Its clef: the treble unless it says the bass. */
+  readonly clef?: Clef
+  /** Its notes, one line: a note's name and octave, then beats (`E4/1 D4/.5 r/1`). */
+  readonly notes: string
+}
+
 export interface ChartPiece extends PieceCommon {
   readonly kind: 'song' | 'study'
   readonly sections: readonly Section[]
-  /** Note, octave and beats: `E4/1 D4/.5 r/1`. */
-  readonly melody?: string
-  /** More voices sung with the tune, each written as the tune is, each on a staff of its own (ADR 0066). */
-  readonly voices?: readonly string[]
+  /** Its single staves over the piano's grand staff, top down (ADR 0097): the tune first. */
+  readonly staves?: readonly PieceStaff[]
   /**
-   * What each sung part is played on, the tune's first, then each more voice's (ADR 0070): `voice`
-   * where none is given.
+   * A lead sheet (ADR 0083, 0094): the piano's grand staff hidden, its music kept and played, the
+   * single staves and the chord symbols in sight. Only a piece with a single staff is one.
    */
-  readonly instruments?: readonly Instrument[]
-  /** The rows the score leaves out of sight, their music kept (ADR 0072): hidden, not removed. */
-  readonly hidden?: readonly HiddenRow[]
+  readonly leadSheet?: boolean
   /** Bars of either hand written note by note, played in place of the pattern's hand there. */
   readonly hands?: Hands
+  /**
+   * Its words, a verse a string (ADR 0093): syllables parted by spaces, aligned to the notes of the
+   * staff they are on in order, `-` ending a syllable its word carries on, `_` holding one over the
+   * next note, `~` an empty place: see docs/CONTENT.md.
+   */
+  readonly lyrics?: readonly string[]
+  /**
+   * The staff its lyrics are written on (`lyricsStaff`): the top single staff's where it has one,
+   * else the upper staff; written only where it is another.
+   */
+  readonly lyricsOn?: LyricsStaff
 }
 
 /**
- * The rows a score may hide: the chord names, the tune's staff, each more voice's (ADR 0072), and the
- * piano's grand staff, which leaves a lead sheet (ADR 0083).
+ * A staff lyrics are written on (ADR 0093, 0097): a single staff by its place (0 the top), or the
+ * piano's upper staff (the right hand's).
  */
-export const HIDDEN_ROWS = ['chords', 'melody', 'voice2', 'voice3', 'voice4', 'piano'] as const
-export type HiddenRow = (typeof HIDDEN_ROWS)[number]
-export const isHiddenRow = isOneOf(HIDDEN_ROWS)
+export type LyricsStaff = number | 'rh'
 
-/** The more voices' rows, the second voice's first. */
-const VOICE_ROWS = ['voice2', 'voice3', 'voice4'] as const satisfies readonly HiddenRow[]
+/** Where a score's lyrics go where nothing says: on its top single staff, else the upper staff. */
+export const defaultLyricsStaff = (score: { readonly staves?: readonly unknown[] }): LyricsStaff =>
+  score.staves?.length ? 0 : 'rh'
 
 /**
- * Whether a score with `hidden` out of sight still shows a staff (ADR 0083): the piano's, the tune's
- * where it has one, or a more voice's it has. A score never hides every staff.
+ * The staff a piece's lyrics are on (ADR 0093, 0097): the one `lyricsOn` names, else the top single
+ * staff, else the upper staff.
  */
-export function showsAStaff(
-  hidden: readonly HiddenRow[],
-  staves: { readonly melody: boolean; readonly voices: number },
-): boolean {
-  const shown = (row: HiddenRow) => !hidden.includes(row)
-  return (
-    shown('piano') ||
-    (staves.melody && shown('melody')) ||
-    VOICE_ROWS.slice(0, staves.voices).some(shown)
-  )
-}
+export const lyricsStaff = (piece: Pick<ChartPiece, 'staves' | 'lyricsOn'>): LyricsStaff =>
+  piece.lyricsOn ?? defaultLyricsStaff(piece)
 
 /**
  * A song written in degrees, as its course teaches it: read in any key, its chords growing with the
@@ -163,11 +187,11 @@ export type Piece = ChartPiece | DegreePiece
 export const isDegreePiece = (piece: Entry): piece is DegreePiece => 'progression' in piece
 
 /**
- * Whether a piece is a lead sheet: it hides the piano's staves, its tune and chord names shown (ADR
- * 0083). The Player writes its tune's staff alone, the tune heard.
+ * Whether a piece is a lead sheet: it hides the piano's staves, its single staves and chord names
+ * shown (ADR 0083, 0097). The Player writes its single staves alone, the tune heard.
  */
 export const isLeadSheet = (piece: Piece): boolean =>
-  !isDegreePiece(piece) && piece.hidden?.includes('piano') === true
+  !isDegreePiece(piece) && piece.leadSheet === true && (piece.staves?.length ?? 0) > 0
 
 /** A songbook entry with no chart yet: shown in Songs, never opened in the Player. */
 export interface Listing extends EntryCommon {

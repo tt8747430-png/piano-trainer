@@ -9,10 +9,9 @@ import {
   chartOf,
   hasChartPlan,
   isDegreePiece,
-  melodyOf,
   patternsOfPiece,
   pieceKey,
-  voicesOf,
+  stavesOf,
   type Piece,
 } from '@/entities/piece'
 import { arrange, type ArrangeOptions, type Performance } from '@/shared/lib/arrangement'
@@ -22,7 +21,7 @@ import type { PracticeChoice } from './choice'
 export const defaultPattern = (piece: Piece): PatternChoice =>
   hasChartPlan(piece) ? 'chart' : piece.pattern
 
-/** The piece as written: its key, its default pattern and chord size, no figures swapped, no doubled melody. */
+/** The piece as written: its key, its default pattern and chord size, no figures swapped, its tune unheard. */
 export const ownChoice = (piece: Piece): PracticeChoice => ({
   tonic: pieceKey(piece).tonic,
   pattern: defaultPattern(piece),
@@ -31,11 +30,11 @@ export const ownChoice = (piece: Piece): PracticeChoice => ({
   inversion: null,
   nearest: true,
   chordSize: null,
-  melody: false,
+  tune: false,
 })
 
 /**
- * A piece as the Player plays it: the learner's key, pattern, hands' figures, chord size and melody;
+ * A piece as the Player plays it: the learner's key, pattern, hands' figures, chord size and tune;
  * its bars as written, or in the order they are played (`unfold`: the repeats taken, the Player's).
  */
 export function arrangePiece(
@@ -52,8 +51,7 @@ export function arrangePiece(
 
 /** The learner's choices as `arrange` takes them. */
 function arrangeOptions(piece: Piece, choice: PracticeChoice, book: PatternBook): ArrangeOptions {
-  const melody = melodyOf(piece)
-  const voices = voicesOf(piece)
+  const staves = stavesOf(piece)
   const fromChart = choice.pattern === 'chart'
   return {
     tonic: choice.tonic,
@@ -79,10 +77,6 @@ function arrangeOptions(piece: Piece, choice: PracticeChoice, book: PatternBook)
               ),
         }
       : {}),
-    ...(melody ? { melody, doubleMelody: choice.melody } : {}),
-    ...(voices.length > 0 ? { voices } : {}),
-    ...('instruments' in piece && piece.instruments?.length
-      ? { instruments: piece.instruments }
-      : {}),
+    ...(staves.length > 0 ? { staves, hearTune: choice.tune } : {}),
   }
 }

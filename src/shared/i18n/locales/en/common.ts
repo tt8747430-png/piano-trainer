@@ -35,8 +35,12 @@ export const common = {
     settings: 'Settings',
   },
   close: 'Close',
+  // A notice's Close, named apart from the screen's own Close.
+  notice: { close: 'Close the notice' },
   // A search box's button that empties it.
   clearSearch: 'Clear search',
+  // The ⓘ beside a control's name, opening its explanation (ADR 0096).
+  infoTip: 'About {{name}}',
   loading: 'Loading',
   // The four levels, a journey's and a course's (ADR 0053).
   stage: {
@@ -121,7 +125,7 @@ export const common = {
     folded: 'Hide a page’s keys',
     foldedNote: 'They fold into a Keys button that brings them back',
     foldedLandscape: 'Hide them on a phone on its side',
-    foldedLandscapeNote: 'Lessons, explorers and songs; the Player and the editor keep theirs',
+    foldedLandscapeNote: 'Lessons, explorers, songs and the editor; the Player keeps its own',
     swipe: {
       label: 'A swipe on the keys',
       detail: 'Scrolls the keyboard, or plays each key it crosses (glissando)',
@@ -169,6 +173,13 @@ export const common = {
     noDevice: 'No MIDI keyboard found.',
     denied: 'MIDI access was blocked.',
     unsupported: 'This browser can’t connect a MIDI keyboard.',
+  },
+  // How a take is recorded (ADR 0028): in Settings › Recording and the recording strip's settings.
+  recorderSettings: {
+    click: 'Metronome',
+    clickInfo: 'The beat goes on after the count-in',
+    tune: 'Tune',
+    tuneInfo: 'The song’s staves over the piano play under the take, where it has any',
   },
   // The MIDI keyboard's settings, in Settings under its connection.
   midiSettings: {

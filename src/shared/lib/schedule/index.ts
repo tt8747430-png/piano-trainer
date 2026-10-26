@@ -3,12 +3,15 @@ export {
   beatGroupAt,
   startLoop,
   tempoAt,
+  tickAt,
   type LoopOptions,
   type Pass,
   type SpeedUp,
 } from './loop'
+export { passTickAt } from './playhead'
 export {
   audibleHands,
+  isAudible,
   beatGroupSounds,
   HANDS,
   schedule,
@@ -18,6 +21,7 @@ export {
   type ClickSound,
   type Hands,
   type NoteSound,
+  type Scheduled,
   type Sound,
 } from './schedule'
 export {
@@ -37,6 +41,7 @@ export { voicingKeys, voicingsMusic, type VoicedKey, type WrittenVoicing } from 
 export { keysSoundingAt, keysStruckAt, keyWindows, type KeyWindow } from './sounding'
 export { recordingPlay, type Recording, type RecordingPlay } from './recording'
 export { recorderClicks, type ClickPlan } from './recorder-clicks'
+export { performanceMidi, type PartNames, type PerformanceMidiOptions } from './performance-midi'
 export type { GridBar } from './grid'
 export {
   gainVelocity,

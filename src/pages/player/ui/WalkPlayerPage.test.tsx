@@ -1,7 +1,8 @@
-import { screen, within } from '@testing-library/react'
+import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { setScoreView } from '@/features/set-preference'
 
 describe('Walk the chords in the Player', () => {
   it('walks a scale’s chords as sheet music, titled by its scale', async () => {
@@ -11,6 +12,24 @@ describe('Walk the chords in the Player', () => {
     ).toBeInTheDocument()
     expect(await screen.findByRole('button', { name: 'Bar 1: Dm' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Bar 8: Dm' })).toBeInTheDocument()
+  })
+
+  it('shows its chords in the views of them, its one section named nowhere (ADR 0099)', async () => {
+    const { settingsStore } = await renderApp('/play/walk?root=D&kind=dorian')
+    const title = { level: 1, name: 'Walk the chords in D Dorian' }
+    await screen.findByRole('heading', title)
+    act(() => setScoreView(settingsStore, { music: 'grid' }))
+    expect(screen.queryByRole('region', { name: 'Sheet music' })).not.toBeInTheDocument()
+    const grid = screen.getByRole('region', { name: 'Grid' })
+    expect(within(grid).getByRole('heading', title)).toBeInTheDocument()
+    expect(within(grid).queryByRole('heading', { level: 2 })).not.toBeInTheDocument()
+    expect(within(grid).getByRole('button', { name: 'Bar 1: Dm' })).toHaveAttribute(
+      'aria-current',
+      'step',
+    )
+    act(() => setScoreView(settingsStore, { music: 'diagrams' }))
+    const diagrams = screen.getByRole('region', { name: 'Diagrams' })
+    expect(within(diagrams).getAllByRole('img')[0]).toHaveAccessibleName(/^Dm: /)
   })
 
   it('plays and stops', async () => {

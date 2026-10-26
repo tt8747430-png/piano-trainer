@@ -1,4 +1,5 @@
 import { keySignature } from '@/shared/lib/music'
+import type { StaffLabels } from './mei'
 import type { Score } from './types'
 
 /**
@@ -26,13 +27,19 @@ const PER_KEY_ACCIDENTAL = 14
 /**
  * Each measure's width at `scale`: its columns of notes, or its chord names where they are shown
  * (`chordNames`) and take more (the names keep their own size, so they take more of a smaller
- * staff's units).
+ * staff's units); the first with the staves' names printed before it at the score's head (`labels`,
+ * ADR 0094), so the first line holds as much less.
  */
-export function measureWidths(score: Score, scale = 1, chordNames = true): number[] {
-  return score.measures.map((measure) => {
+export function measureWidths(
+  score: Score,
+  scale = 1,
+  chordNames = true,
+  labels: StaffLabels = {},
+): number[] {
+  return score.measures.map((measure, index) => {
     const columns = new Map<number, boolean>()
     for (const staff of score.staves) {
-      for (const voice of measure.staves[staff]) {
+      for (const voice of measure.staves[staff] ?? []) {
         for (const event of voice.events) {
           if (event.kind === 'rest' && event.hidden) continue
           const accidental =
@@ -51,10 +58,31 @@ export function measureWidths(score: Score, scale = 1, chordNames = true): numbe
           (sum, chord) => sum + chord.symbol.length * CHORD_CHAR + CHORD_GAP,
           0,
         ) * CHORD_SLACK
-    return Math.max(LEAST_MEASURE, notes, names / scale)
+    return Math.max(LEAST_MEASURE, notes, names / scale) + (index === 0 ? labelLead(labels) : 0)
   })
 }
 
 /** What a line's clef and key signature take before its first measure's notes, in the engraving's units. */
 export const lineLead = (score: Pick<Score, 'key'>): number =>
   LINE_LEAD + Math.abs(keySignature(score.key)) * PER_KEY_ACCIDENTAL
+
+/**
+ * A staff name's character as Verovio prints it (small), and the room after a name before its staff:
+ * the piano's takes its brace's too.
+ */
+const LABEL_CHAR = 10.5
+const LABEL_GAP = { single: 10, piano: 22 } as const
+
+/**
+ * What the staves' names take before a line's clef (ADR 0094), in the engraving's units: the longest
+ * name's, as Verovio indents a score's first line to print them.
+ */
+export const labelLead = (labels: StaffLabels): number =>
+  Math.max(
+    0,
+    ...Object.entries(labels).map(([staff, name]) =>
+      name === undefined
+        ? 0
+        : name.text.length * LABEL_CHAR + LABEL_GAP[staff === 'piano' ? 'piano' : 'single'],
+    ),
+  )

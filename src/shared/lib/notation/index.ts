@@ -1,22 +1,24 @@
-export { notate, staffClefAt } from './notate'
+export { notate, staffClefAt, staffOf } from './notate'
 export {
   clefIn,
   clefOf,
-  EXTRA_VOICES,
+  isSingleStaff,
+  isStaffId,
   PIANO_STAVES,
-  STAVES,
+  singleStaff,
+  staffPlace,
   type Duration,
-  type ExtraVoice,
   type Measure,
+  type PianoStaff,
   type Score,
   type ScoreEvent,
   type ScoreVoice,
+  type SingleStaff,
   type StaffId,
   type TimedMusic,
   type TimedNote,
   type WrittenNote,
-  type StaffInstruments,
 } from './types'
 export { ticksOf, valuesOf } from './values'
-export { lineLead, measureWidths } from './measure-widths'
-export { scoreToMei, type NextLine } from './mei'
+export { labelLead, lineLead, measureWidths } from './measure-widths'
+export { scoreToMei, type NextLine, type PrintedName, type StaffLabels } from './mei'

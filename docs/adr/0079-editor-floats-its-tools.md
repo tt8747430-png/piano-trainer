@@ -1,6 +1,6 @@
 # ADR 0079 — The score editor floats its tools over the sheet
 
-- **Status:** accepted · **Date:** 2026-10-22 · **Amends:** ADR 0065 (the palette's place and size)
+- **Status:** accepted · **Date:** 2026-10-22 · **Amends:** ADR 0065 (the palette's place and size; removed by ADR 0091)
 
 ## Context
 

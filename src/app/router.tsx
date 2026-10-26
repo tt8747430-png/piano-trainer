@@ -165,6 +165,18 @@ const pieceRoute = createRoute({
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
+// A section of a song, learned step by step (ADR 0100); a study's is on its shelf, below.
+const sectionRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/$pieceId/sections/$section',
+  notFoundComponent: notFoundIn('songs'),
+  beforeLoad: async ({ params, context }) => {
+    const { sectionIn } = await songsScreens()
+    const { pieceId, section } = params
+    if (!sectionIn(context.pieces.getState(), pieceId, section, 'songs')) throw notFound()
+  },
+  component: lazyRouteComponent(songsScreens, 'SectionPage'),
+})
 
 // Practice (ADR 0044): its list, then its training, Exercises and Quiz with its trainers.
 const practiceRoute = createRoute({
@@ -217,6 +229,17 @@ const studyRoute = createRoute({
     if (entryIn(context.pieces.getState(), params.pieceId)?.kind !== 'study') throw notFound()
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
+})
+const studySectionRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/accompaniment/studies/$pieceId/sections/$section',
+  notFoundComponent: notFoundIn('accompaniment'),
+  beforeLoad: async ({ params, context }) => {
+    const { sectionIn } = await songsScreens()
+    const { pieceId, section } = params
+    if (!sectionIn(context.pieces.getState(), pieceId, section, 'practice')) throw notFound()
+  },
+  component: lazyRouteComponent(songsScreens, 'SectionPage'),
 })
 // Practice's explorers: each page shows a thing on the keys.
 const chordsRoute = createRoute({
@@ -447,6 +470,7 @@ const routeTree = rootRoute.addChildren([
     songsRoute,
     sharedSongRoute,
     pieceRoute,
+    sectionRoute,
     courseRoute,
     chordsRoute,
     scalesRoute,
@@ -464,6 +488,7 @@ const routeTree = rootRoute.addChildren([
     chordFinderRoute,
     trainerRoute,
     studyRoute,
+    studySectionRoute,
     takeRoute,
   ]),
   fullScreenRoute.addChildren([

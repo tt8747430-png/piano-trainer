@@ -2,12 +2,12 @@ import { createMemoryHistory } from '@tanstack/react-router'
 import { act, cleanup, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { COLLECTIONS, PIECES_STORAGE_KEY } from '@/entities/piece'
+import { COLLECTIONS, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from '@/entities/settings'
 import { createMemoryStorage, safeLocalStorage } from '@/shared/lib'
 import { stubServiceWorker } from '@/shared/test/pwa-register'
-import { testContext } from '@/app/testing/test-context'
-import { createAppRouter } from './router'
+import { testContext, testRouter } from '@/app/testing/test-context'
+import { heardUntil, untilTestEnds } from '@/shared/test/listeners'
 import { renderApp } from './testing/render-app'
 
 // The storage is chosen once a page, and a file before this one in its worker may have chosen it:
@@ -37,13 +37,15 @@ const ROUTES = [
   ['/practice/accompaniment?show=seven-types', '/practice/accompaniment'],
   ['/practice/accompaniment/patterns/M1', '/practice/accompaniment/patterns/$patternRef'],
   ['/practice/accompaniment/studies/ex3', '/practice/accompaniment/studies/$pieceId'],
+  ['/songs/bz5/sections/2', '/songs/$pieceId/sections/$section'],
+  [
+    '/practice/accompaniment/studies/ex3/sections/1',
+    '/practice/accompaniment/studies/$pieceId/sections/$section',
+  ],
 ] as const
 
 async function open(path: string) {
-  const router = createAppRouter({
-    history: createMemoryHistory({ initialEntries: [path] }),
-    ...testContext(),
-  })
+  const router = testRouter(path)
   await router.load()
   return router
 }
@@ -108,7 +110,9 @@ describe('routes', () => {
     // module shows screens nothing has loaded yet.
     vi.resetModules()
     const fresh = await import('./router')
-    const router = fresh.createAppRouter({ history: createMemoryHistory(), ...testContext() })
+    const router = heardUntil(untilTestEnds(), () =>
+      fresh.createAppRouter({ history: createMemoryHistory(), ...testContext() }),
+    )
     for (const [path, route] of Object.entries(router.routesByPath)) {
       expect(route.options.component, path).toHaveProperty('preload', expect.any(Function))
     }
@@ -215,10 +219,16 @@ describe('the app shell', () => {
       '/practice/accompaniment',
     ],
     ['/practice/accompaniment/studies/nothing', 'Go to Accompaniment', '/practice/accompaniment'],
+    ['/songs/bz5/sections/9', 'Go to Songs', '/songs'],
+    [
+      '/practice/accompaniment/studies/ex3/sections/9',
+      'Go to Accompaniment',
+      '/practice/accompaniment',
+    ],
     ['/play/exercise/nothing', 'Go to Exercises', '/practice/exercises'],
     ['/play/walk?kind=blues', 'Go to Scales and keys', '/practice/scales'],
     ['/check?of=nothing', 'Go to Learn', '/'],
-    ['/edit/bz1/takes/nothing', 'Go to the takes', '/edit/bz1?record=true'],
+    ['/edit/bz1/takes/nothing', 'Go to the takes', '/edit/bz1?takes=true'],
     ['/edit/nothing/takes/nothing', 'Go to Songs', '/songs'],
   ])('shows not found at %s with the way back to its place', async (path, way, href) => {
     await renderApp(path)
@@ -389,7 +399,7 @@ describe('shelves', () => {
 describe('the learner’s pieces', () => {
   const saved = (state: object) => {
     const storage = createMemoryStorage()
-    storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: 1 }))
+    storage.setItem(PIECES_STORAGE_KEY, JSON.stringify({ state, version: PIECES_VERSION }))
     return storage
   }
   const SONG = {

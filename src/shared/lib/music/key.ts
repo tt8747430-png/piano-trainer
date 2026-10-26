@@ -20,6 +20,8 @@ export interface Key {
   readonly minor: boolean
 }
 
+/** C major: the key a tool, a progression or an example opens in until another is chosen. */
+export const C_MAJOR: Key = { tonic: note('C'), minor: false }
 /** 'G', 'G#m', 'Ebm', 'B♭': a note name, then `m` for minor. */
 export function parseKey(text: string): Key | null {
   const minor = text.endsWith('m')

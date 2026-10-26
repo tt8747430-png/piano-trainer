@@ -1,6 +1,6 @@
 export type { FigureChange, SetupChange, SetupParams } from './model/setup-params'
 export { KeyWalkField } from './ui/KeyWalkField'
-export { MelodyToggle } from './ui/MelodyToggle'
+export { TuneToggle } from './ui/TuneToggle'
 export { PatternCard } from './ui/PatternCard'
 export { PlayerSetup } from './ui/PlayerSetup'
 export { RecordingToggle } from './ui/RecordingToggle'

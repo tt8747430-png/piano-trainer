@@ -78,8 +78,8 @@ const eventFiguresOf = (figure: Figure): readonly EventFigure[] =>
   figure.kind === 'events'
     ? [figure]
     : figure.use === 'ends'
-      ? [figure.between, figure.withoutMelody]
-      : [figure.withoutMelody]
+      ? [figure.between, figure.withoutTune]
+      : [figure.withoutTune]
 
 /** Every set of events a figure can play: its own and every variant. */
 const eventSets = (figure: Figure): (readonly FigureEvent[])[] =>

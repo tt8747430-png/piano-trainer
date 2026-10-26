@@ -9,10 +9,10 @@ const saved = (key: string | null, newValue: string | null) =>
   new StorageEvent('storage', { key, newValue })
 const at = (version: number) => JSON.stringify({ state: {}, version })
 
-function follow() {
+function follow(signal?: AbortSignal) {
   const tabs = new EventTarget()
   const rehydrate = vi.fn()
-  followOtherTabs({ rehydrate }, SAVE, tabs)
+  followOtherTabs({ rehydrate }, SAVE, tabs, signal)
   return { tabs, rehydrate }
 }
 
@@ -36,5 +36,14 @@ describe('followOtherTabs', () => {
     tabs.dispatchEvent(saved(null, null))
     tabs.dispatchEvent(saved('pt-progress', '{oops'))
     expect(rehydrate).not.toHaveBeenCalled()
+  })
+
+  it('stops hearing the tabs once its signal aborts', () => {
+    const following = new AbortController()
+    const { tabs, rehydrate } = follow(following.signal)
+    tabs.dispatchEvent(saved('pt-progress', at(2)))
+    following.abort()
+    tabs.dispatchEvent(saved('pt-progress', at(2)))
+    expect(rehydrate).toHaveBeenCalledOnce()
   })
 })

@@ -3,70 +3,105 @@ import { useTranslation } from 'react-i18next'
 import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { useElementSize, type SheetView } from '@/shared/lib'
+import type { Tick } from '@/shared/lib/music'
 import { notate, type StaffId } from '@/shared/lib/notation'
-import { ScoreView, staffHeight, type Picked, type ScoreLayout } from '@/shared/ui/score'
-import { fitScale, widestBar } from '../model/fit-scale'
+import { SheetTitle } from '@/shared/ui'
+import {
+  labelRow,
+  ScoreView,
+  scoreHeight,
+  useStaffLabels,
+  type Picked,
+  type ScoreLayout,
+} from '@/shared/ui/score'
+import { engravedHeight, FINGERS, fitScale, widestBar } from '../model/fit-scale'
 import { groupOfTick } from '../model/group-of-tick'
 import { keepsLoop } from '../model/keeps-loop'
 import { playedMusic } from '../model/played-music'
 import { SheetLines } from './SheetLines'
 import { SheetOverlay } from './SheetOverlay'
 
-/** How the sheet shows its score (ADR 0064): its layout, its chord names, the tune's staff, the staves hidden. */
+/**
+ * How the sheet shows its score (ADR 0064): its layout, its chord names, the words under the staff
+ * that sings them (ADR 0093), the staves hidden (ADR 0097).
+ */
 export interface SheetViewChoice {
   readonly layout: SheetView
   readonly chordNames: boolean
-  readonly melodyStaff: boolean
+  readonly lyrics: boolean
   readonly hidden: readonly StaffId[]
 }
 
-/** As the Player always was: one line across, every staff, the chord names. */
+/** As the Player always was: one line across, every staff, the chord names, the words. */
 const ACROSS: SheetViewChoice = {
   layout: 'horizontal',
   chordNames: true,
-  melodyStaff: false,
+  lyrics: true,
   hidden: [],
 }
 
-/** The room fingers take under and over the staff (the labels' row is the section's padding). */
-const FINGERS = 36
-/** A bar measured this much wider or narrower than before engraves the staff again; less does not. */
-const BAR_CHANGE = 0.1
+/** No single staff named. */
+const NO_NAMES: readonly (string | undefined)[] = []
 
 /**
- * Tells the widest bar, at scale 1, of each engraving as it is drawn: the next is scaled by it. Read
- * as a new engraving comes, at the scale it was drawn at; the one before stays up while the next is
- * drawn, under the new scale.
+ * A bar measured this much wider or narrower than before engraves the staff again; less does not.
+ * The engraving's height is its own at any size, so the least change of it counts.
  */
-function BarWidth({
+const CHANGE = { bar: 0.1, height: 0.02 } as const
+
+/** The music's own measures once engraved, at scale 1: its widest bar and its height as read. */
+interface Engraved {
+  readonly bar?: number | undefined
+  readonly height?: number | undefined
+}
+
+/** A measure kept where the new one is within `change` of it: the staff is not engraved again. */
+const steady = (was: number | undefined, next: number | undefined, change: number) =>
+  next === undefined || (was !== undefined && Math.abs(next - was) <= was * change) ? was : next
+
+/**
+ * Tells the music's own measures (`Engraved`) of each engraving as it is drawn: the next is scaled by
+ * them. Read as a new engraving comes, at the scale it was drawn at; the one before stays up while
+ * the next is drawn, under the new scale.
+ */
+function EngravedSize({
   layout,
   scale,
-  onBar,
+  staves,
+  read,
+  onEngraved,
 }: {
   layout: ScoreLayout
   scale: number
-  onBar: (bar: number) => void
+  staves: readonly StaffId[]
+  read: readonly StaffId[]
+  onEngraved: (engraved: Engraved) => void
 }) {
-  const tell = useEffectEvent((engraved: ScoreLayout) => {
-    const bar = widestBar(engraved, scale)
-    if (bar !== undefined) onBar(bar)
-  })
+  const tell = useEffectEvent((engraving: ScoreLayout) =>
+    onEngraved({
+      bar: widestBar(engraving, scale),
+      height: engravedHeight(engraving, staves, read, scale),
+    }),
+  )
   useEffect(() => tell(layout), [layout])
   return null
 }
 
 /**
- * A Performance as sheet music (spec §2.6): chord symbols over numbered bars, the cursor on the beat
- * group now, the loop, bars to jump to; the tune on its own staff where the view asks, the staves it
- * hides left out. Laid out across (the default), on one scrolling line that takes the height it is
- * given and engraves the staff to fill it (`fitScale`) while two of its bars still show, so music read
- * from a stand is as large as the screen allows; or in the chart's lines, down the screen or on A4
- * pages (`SheetLines`).
+ * A Performance as sheet music (spec §2.6): its title at its head, the page's heading (ADR 0094);
+ * chord symbols over numbered bars, the playhead at the beat group now (moving with the music while
+ * Listen plays, ADR 0096), the loop, bars to jump to; its single staves over the piano, each named by
+ * its own name (ADR 0097), the piano's left out of a lead sheet, the staves the view hides left out.
+ * Laid out across (the default), on one scrolling line under the title
+ * that takes the height left and engraves the staff to fill it (`fitScale`) while two of its bars
+ * still show, so music read from a stand is as large as the screen allows; or in the chart's lines,
+ * down the screen or on A4 pages (`SheetLines`).
  */
 export function SheetMusic({
   performance,
   headings,
   current,
+  clock,
   loop,
   playing = false,
   fingers,
@@ -77,17 +112,25 @@ export function SheetMusic({
   onLoopChange,
   view = ACROSS,
   title,
+  piano = true,
+  staffNames = NO_NAMES,
 }: {
   view?: SheetViewChoice
-  /** The piece's title, at the head of the first page. */
-  title?: string
+  /** The piece's title, printed at the sheet's head in every layout: the page's heading (ADR 0094). */
+  title: string
+  /** Whether the piano's staves are written: not on a lead sheet (ADR 0083). */
+  piano?: boolean
+  /** Each single staff's name by its place, as printed at the first line's head (ADR 0097). */
+  staffNames?: readonly (string | undefined)[]
   performance: Performance
   /** Each section's name, by section: shown at its first bar. */
   headings: readonly string[]
-  /** The beat group the cursor is on. */
+  /** The beat group the cursor is on: where the playhead stands. */
   current: number
+  /** Where Listen's music is while it plays, read every frame: the playhead moves with it. */
+  clock?: (() => Tick | null) | null | undefined
   loop: BarRange | null
-  /** Whether the music plays (or waits on the keys): the cursor is marked in a loop then. */
+  /** Whether the music plays (or waits on the keys): the playhead is shown in a loop then. */
   playing?: boolean
   fingers: boolean
   /** Each notehead carries its note's name. */
@@ -101,9 +144,10 @@ export function SheetMusic({
   onLoopChange: (loop: BarRange | null) => void
 }) {
   const { t } = useTranslation('music')
-  // The tune's own staff only where the tune is heard (the Melody switch).
-  const ownStaff = view.melodyStaff && performance.notes.some((n) => n.hand === 'melody')
-  const written = useMemo(() => notate(playedMusic(performance, ownStaff)), [performance, ownStaff])
+  const written = useMemo(
+    () => notate(playedMusic(performance, { lyrics: view.lyrics, piano })),
+    [performance, view.lyrics, piano],
+  )
   // The tempo marks said in the labels' row by their bar's number, not engraved in a row of their own
   // over the staff (ADR 0074).
   const { score, tempos } = useMemo(
@@ -115,21 +159,36 @@ export function SheetMusic({
   )
   const kept = score.staves.filter((staff) => !view.hidden.includes(staff))
   const staves = kept.length > 0 ? kept : score.staves
-  const scroller = useRef<HTMLElement>(null)
-  const { width, height } = useElementSize(scroller)
-  const room = { width, height: height - (fingers ? FINGERS : 0) }
-  // The music's own widest bar, once engraved: a line of plain bars grows where a busy one cannot.
-  const [bar, setBar] = useState<number>()
-  const onBar = useMemo(
-    () => (next: number) =>
-      setBar((kept) =>
-        kept !== undefined && Math.abs(next - kept) <= kept * BAR_CHANGE ? kept : next,
-      ),
+  // The staves' names at the first line's head (ADR 0094, 0097).
+  const labels = useStaffLabels(
+    staves,
+    staffNames.map((text) => (text === undefined ? undefined : { text })),
+  )
+  const scroller = useRef<HTMLDivElement>(null)
+  // The room under the title, the labels' row's and the engraving's to fill.
+  const room = useElementSize(scroller)
+  // The music's own measures, once engraved: a line of plain bars grows where a busy one cannot, and
+  // a line whose notes go far over or under its staves (anywhere in the piece) is drawn smaller, so
+  // its whole system is in the room, never under the keys (a phone on its side).
+  const [own, setOwn] = useState<Engraved>({})
+  const onEngraved = useMemo(
+    () => (next: Engraved) =>
+      setOwn((was) => {
+        const bar = steady(was.bar, next.bar, CHANGE.bar)
+        const height = steady(was.height, next.height, CHANGE.height)
+        return bar === was.bar && height === was.height ? was : { bar, height }
+      }),
     [],
   )
-  // A muted staff may leave the height: its hand is not read.
-  const read = staves.filter((staff) => staff !== muted).length || 1
-  const scale = fitScale(room, staffHeight(undefined, read), bar)
+  // A muted staff may leave the height: its hand is not read. The verses under the tune stay in it.
+  const read = staves.filter((staff) => staff !== muted)
+  const reading = read.length > 0 ? read : staves
+  // Before it is engraved, its staves' least room and the fingers'.
+  const natural = own.height ?? scoreHeight(score, reading) + (fingers ? FINGERS : 0)
+  // The labels' row over the staff, as the editor's lines draw it: as tall as what it holds (the
+  // chord symbols' or the bars'), smaller with a staff drawn smaller.
+  const rowAt = (size: number) => labelRow(view.chordNames, size)
+  const scale = fitScale(room, natural, own.bar, rowAt)
   // Bars chosen as the editor chooses notes (ADR 0082, 0088), the loop: from the bar held or the
   // loop's start (else the cursor's bar) to the one reached, exactly.
   const anchor = useRef<number | null>(null)
@@ -153,7 +212,8 @@ export function SheetMusic({
     setPicked({ picked: next, group: at })
   }
   const here = picked?.group === current ? picked.picked : null
-  // The notes chosen, in the selection's colour: the loop's, else the one clicked, else the cursor's.
+  // What is chosen, in the selection's colour (ADR 0096): the loop's notes, else the one clicked; the
+  // notes the playhead is at are not chosen.
   const selected = useMemo(() => {
     const first = loop ? performance.bars[loop.first] : undefined
     if (loop && first)
@@ -161,25 +221,28 @@ export function SheetMusic({
         from: first.startTick,
         to: performance.bars[loop.last + 1]?.startTick ?? performance.totalTicks,
       }
-    if (here) return { staff: here.staff, from: here.tick, to: here.tick + 1, midi: here.midi }
-    return group ? { from: group.tick, to: group.tick + 1 } : undefined
-  }, [loop, performance, group, here])
-  // While the loop stands chosen and nothing moves, its box is the mark, the cursor none (ADR 0088).
-  // Playing, or stepped on since, the cursor is where the music is.
+    return here
+      ? { staff: here.staff, from: here.tick, to: here.tick + 1, midi: here.midi }
+      : undefined
+  }, [loop, performance, here])
+  // While the loop stands chosen and nothing moves, the loop is the mark, the playhead out of sight
+  // (ADR 0088). Playing, or stepped on since, the playhead is where the music is.
   const loopKey = loop ? `${loop.first}-${loop.last}` : ''
   const [resting, setResting] = useState({ loop: loopKey, at: current })
   if (resting.loop !== loopKey) setResting({ loop: loopKey, at: current })
-  const cursorShown = !loop || playing || current !== resting.at
+  const playheadShown = !loop || playing || current !== resting.at
   if (view.layout !== 'horizontal')
     return (
       <SheetLines
         score={score}
         performance={performance}
         staves={staves}
+        staffNames={labels}
         pages={view.layout === 'pages'}
         title={title}
         headings={headings}
         current={current}
+        clock={clock}
         loop={loop}
         fingers={fingers}
         names={names}
@@ -192,48 +255,60 @@ export function SheetMusic({
         onLoopChange={onLoopChange}
         onChoose={onChoose}
         selected={selected}
-        cursorShown={cursorShown}
-        picked={here}
+        playheadShown={playheadShown}
       />
     )
   return (
-    <section
-      ref={scroller}
-      aria-label={t('sheet.label')}
-      className="relative -mx-gutter h-full overflow-x-auto overscroll-x-contain px-gutter pt-11 scrollbar-none landscape-phone:mx-0 landscape-phone:px-0"
-    >
-      <ScoreView
-        score={score}
-        scale={scale}
-        fingers={fingers}
-        names={names}
-        muted={muted}
-        staves={staves}
-        selected={selected}
+    // The title at the line's head (ADR 0094), the line scrolling sideways under it in the height left.
+    <section aria-label={t('sheet.label')} className="flex h-full flex-col">
+      <SheetTitle title={title} place="across" />
+      <div
+        ref={scroller}
+        className="relative -mx-gutter min-h-0 flex-1 overflow-x-auto overscroll-x-contain px-gutter scrollbar-none landscape-phone:mx-0 landscape-phone:px-0"
       >
-        {(layout) => (
-          <>
-            <BarWidth layout={layout} scale={scale} onBar={onBar} />
-            <SheetOverlay
-              layout={layout}
-              scroller={scroller}
-              performance={performance}
-              headings={headings}
-              positions={positions}
-              chordNames={view.chordNames}
-              tempos={tempos}
-              current={current}
-              loop={loop}
-              cursorShown={cursorShown}
-              picked={here}
-              onJump={onJump}
-              onPick={onPick}
-              onLoopChange={onLoopChange}
-              onChoose={onChoose}
-            />
-          </>
-        )}
-      </ScoreView>
+        <div className="w-max" style={{ paddingTop: rowAt(scale) }}>
+          <ScoreView
+            score={score}
+            scale={scale}
+            fingers={fingers}
+            names={names}
+            muted={muted}
+            staves={staves}
+            labels={labels}
+            selected={selected}
+          >
+            {(layout) => (
+              <>
+                <EngravedSize
+                  layout={layout}
+                  scale={scale}
+                  staves={staves}
+                  read={reading}
+                  onEngraved={onEngraved}
+                />
+                <SheetOverlay
+                  layout={layout}
+                  labelSize={scale}
+                  scroller={scroller}
+                  performance={performance}
+                  headings={headings}
+                  positions={positions}
+                  chordNames={view.chordNames}
+                  tempos={tempos}
+                  current={current}
+                  clock={clock}
+                  loop={loop}
+                  playheadShown={playheadShown}
+                  onJump={onJump}
+                  onPick={onPick}
+                  onLoopChange={onLoopChange}
+                  onChoose={onChoose}
+                />
+              </>
+            )}
+          </ScoreView>
+        </div>
+      </div>
     </section>
   )
 }

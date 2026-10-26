@@ -33,3 +33,16 @@ false`) and the caret leaves a hand for the top staff (`staffLeftFor`, `topStaff
 
 A lead sheet reads as one in both screens. A hand's staff is never blank where the pattern plays. Writing out a bar
 replaces the soft notes with the written ones.
+
+**Later (2026-10-23, ADR 0091):** the pattern's notes drawn soft, and `StaffList`'s parts, are gone: every bar of
+the editor's score is written, so a hand's staff holds its own notes everywhere; the lead sheet and the piano's eye
+stay.
+
+**Later (2026-10-24, ADR 0094):** a lead sheet is one boolean, `leadSheet`, read only where the piece has a tune, so
+a score never hides every staff without `HIDDEN_ROWS` or `showsAStaff`. The chord names are the View's; New song's
+templates are Piano (the default), Melody and chords, and Piano with melody.
+
+**Later (2026-10-25, ADR 0097):** a lead sheet's single staves are staves like any other, as many as the learner
+adds. The piano is hidden from its name's menu (Hide the piano, while a single staff is in sight) and shown again from
+a single staff's (Show the piano); the last staff in sight is never removed or hidden. New song's choices are Piano
+(the default), A staff and piano, and A staff.

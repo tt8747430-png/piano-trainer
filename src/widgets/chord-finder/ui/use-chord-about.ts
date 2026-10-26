@@ -3,12 +3,14 @@ import { useTranslation } from 'react-i18next'
 import {
   alteredSymbol,
   noteName,
+  printedSymbol,
   voicingKind,
   writtenSymbol,
   type FoundChord,
   type LeftOut,
   type Midi,
 } from '@/shared/lib/music'
+import { INVERSION_NAMES } from '@/shared/ui'
 
 /** Each tone a hand leaves out, as the locales' `finder` key it. */
 const LEFT_OUT_WORDS = {
@@ -17,9 +19,6 @@ const LEFT_OUT_WORDS = {
   '9th': 'no9th',
   '11th': 'no11th',
 } as const satisfies Readonly<Record<LeftOut, string>>
-
-/** An inversion's word, by which tone of the chord is lowest (1 its 3rd, up to its 7th). */
-const INVERSION_WORDS = { 1: 'first', 2: 'second', 3: 'third' } as const
 
 /** How a reading is written (ADR 0054): over its bass (`C/E`), or by its root alone (`C`). */
 export const chordLabel = (found: FoundChord, slash: boolean): string =>
@@ -35,20 +34,22 @@ interface Telling {
  * What a found chord is, in words (ADR 0054): its kind where the table names it; its inversion (or,
  * where the name leaves its bass out and the bass is no inversion, the note in the bass); each tone
  * left out; how the keys lay it out (close, open, drop 2 or 3, a shell, 4ths, So What); and an altered
- * dominant's chart name. The same function until the language changes.
+ * dominant's chart name, printed as the sheets print a chord. The same function until the language
+ * changes.
  */
 export function useChordAbout(): (found: FoundChord, telling: Telling) => string[] {
   const { t } = useTranslation(['music', 'practice'])
   return useCallback(
     (found, { keys, slash }) => {
+      // Its inversion's name where a tone of the chord is lowest (1 its 3rd, up to its 7th), never root.
       const word =
-        found.inversion === 1 || found.inversion === 2 || found.inversion === 3
-          ? INVERSION_WORDS[found.inversion]
+        found.inversion !== undefined && found.inversion >= 1
+          ? INVERSION_NAMES[found.inversion]
           : undefined
       const inversion = !found.bass
         ? null
         : word
-          ? t(`practice:chordFinder.inversion.${word}`)
+          ? t(`music:inversionName.${word}`)
           : slash
             ? null
             : t('practice:chordFinder.bass', { note: noteName(found.bass) })
@@ -59,7 +60,7 @@ export function useChordAbout(): (found: FoundChord, telling: Telling) => string
         ...(inversion ? [inversion] : []),
         ...found.leftOut.map((tone) => t(`practice:chordFinder.${LEFT_OUT_WORDS[tone]}`)),
         ...(voicing ? [t(`practice:chordFinder.voicing.${voicing}`)] : []),
-        ...(altered ? [t('practice:chordFinder.altered', { symbol: altered })] : []),
+        ...(altered ? [t('practice:chordFinder.altered', { symbol: printedSymbol(altered) })] : []),
       ]
     },
     [t],

@@ -17,7 +17,7 @@ const SONG: SharedSong = {
     tempo: 84,
     pattern: 'r1',
     sections: [{ kind: 'verse', n: 1, lines: ['G C G D'] }],
-    melody: 'G4/3 | B4/3 | D5/3 | D5/3',
+    staves: [{ name: 'Voice', notes: 'G4/3 | B4/3 | D5/3 | D5/3' }],
   },
 }
 
@@ -62,7 +62,7 @@ describe('a song’s link', () => {
     const lines = Array.from({ length: 4000 }, (_, i) => (i % 2 ? 'G C G D' : 'Em C D G'))
     const long: SharedSong = {
       ...SONG,
-      music: { ...SONG.music, sections: [{ kind: 'verse', n: 1, lines }], melody: undefined },
+      music: { ...SONG.music, sections: [{ kind: 'verse', n: 1, lines }], staves: undefined },
     }
     const back = await readSongLink(await linkOf(long))
     expect(back?.music.sections[0]?.lines).toHaveLength(4000)

@@ -1,7 +1,6 @@
-import type { Key, Midi } from '@/shared/lib/music'
 import { placed } from './caret-moves'
 import type { Layer } from './draft'
-import { keyStep, notesAt } from './notes'
+import { notesAt } from './notes'
 import { shownRows } from './rows'
 import type { EditorState } from './state'
 
@@ -9,13 +8,6 @@ import type { EditorState } from './state'
 export function staffNear(layer: Layer, direction: -1 | 1, rows: readonly Layer[]): Layer {
   const at = rows.indexOf(layer)
   return rows[Math.max(0, Math.min(rows.length - 1, at + direction))] ?? layer
-}
-
-/** A key moved `steps` notes of the key up or down, as a note dragged on its staff. */
-export function steppedKey(key: Key, from: Midi, steps: number): Midi {
-  let moved = from
-  for (let i = 0; i < Math.abs(steps); i++) moved = keyStep(key, moved, steps > 0 ? 1 : -1)
-  return moved
 }
 
 /**

@@ -36,8 +36,8 @@ export type EditorTarget =
   | {
       readonly kind: 'song'
       readonly id: OwnSongId
-      readonly title: string
-      readonly music: PieceMusic
+      /** Its music under its title: the learner's, saved with it (ADR 0094). */
+      readonly music: PieceMusic & { readonly title: string }
     }
 
 /** The editor's target for an id, or none: a progression, or nothing there, is not edited. */
@@ -45,8 +45,8 @@ export function editorTarget(state: PiecesState, id: string): EditorTarget | und
   if (isOwnSongId(id)) {
     const song = selectOwnSong(state, id)
     if (!song) return undefined
-    const { id: _id, title, ...music } = song
-    return { kind: 'song', id, title, music }
+    const { id: _id, ...music } = song
+    return { kind: 'song', id, music }
   }
   const entry = versionableEntry(id)
   if (!entry) return undefined
@@ -62,7 +62,7 @@ export function savedMusic(state: PiecesState, target: EditorTarget): PieceMusic
   if (target.kind === 'version') return selectVersion(state, target.id) ?? target.original
   const song = selectOwnSong(state, target.id)
   if (!song) return undefined
-  const { id: _id, title: _title, ...music } = song
+  const { id: _id, ...music } = song
   return music
 }
 

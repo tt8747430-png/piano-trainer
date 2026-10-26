@@ -11,6 +11,10 @@ export default definePiece({
   tempo: 108,
   pattern: 'block',
   sections: [{ kind: 'verse', lines: ['C C G7 C', 'C C G7 C'] }],
-  melody:
-    'G4/1.5 A4/.5 G4/1 F4/1 | E4/1 F4/1 G4/2 | D4/1 E4/1 F4/2 | E4/1 F4/1 G4/2 | G4/1.5 A4/.5 G4/1 F4/1 | E4/1 F4/1 G4/2 | D4/2 G4/2 | E4/1 C4/3',
+  staves: [
+    {
+      notes:
+        'G4/1.5 A4/.5 G4/1 F4/1 | E4/1 F4/1 G4/2 | D4/1 E4/1 F4/2 | E4/1 F4/1 G4/2 | G4/1.5 A4/.5 G4/1 F4/1 | E4/1 F4/1 G4/2 | D4/2 G4/2 | E4/1 C4/3',
+    },
+  ],
 })

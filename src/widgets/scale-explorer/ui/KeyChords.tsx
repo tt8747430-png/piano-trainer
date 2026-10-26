@@ -1,12 +1,18 @@
 import { useTranslation } from 'react-i18next'
 import { ScaleChordGrid } from '@/features/play-example'
 import { useLocale } from '@/shared/i18n'
-import type { Midi, PlacedScaleChord, ScaleKind, SpelledNote } from '@/shared/lib/music'
+import {
+  printedSymbol,
+  type Midi,
+  type PlacedScaleChord,
+  type ScaleKind,
+  type SpelledNote,
+} from '@/shared/lib/music'
 import { heardName } from '../model/scale-keys'
 
 /**
  * The key's chords: a tap plays one from its degree's key, pressed while it sounds. Listening for a
- * note (Keys play Notes), the chords that hold it are ringed and named.
+ * note (Keys play Notes), the chords that hold it are ringed and named, as the sheets print them.
  */
 export function KeyChords({
   chords,
@@ -34,7 +40,7 @@ export function KeyChords({
         : t('scales.holds', {
             note: heardName(note, root, kind),
             chords: new Intl.ListFormat(locale, { type: 'conjunction' }).format(
-              holding.map((placed) => placed.symbol),
+              holding.map((placed) => printedSymbol(placed.symbol)),
             ),
           })
   return (

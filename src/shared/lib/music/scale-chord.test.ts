@@ -7,6 +7,7 @@ import {
   borrowedChords,
   CHORD_NOTES,
   CHORD_SIZES,
+  ROMAN_NUMERALS,
   romanFigure,
   scaleChordAt,
   scaleChordHolds,
@@ -24,6 +25,12 @@ const symbols = (
   scaleChords(root, kind, notes)
     .map((chord) => writtenSymbol(chord))
     .join(' ')
+
+describe('ROMAN_NUMERALS', () => {
+  it('names the seven degrees I to VII, upper case, in order', () => {
+    expect(ROMAN_NUMERALS).toEqual(['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'])
+  })
+})
 
 describe('scaleChords', () => {
   it.each([

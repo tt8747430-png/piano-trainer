@@ -1,5 +1,5 @@
 import type { Midi, Tick } from '@/shared/lib/music'
-import type { StaffId, StaffInstruments } from '@/shared/lib/notation'
+import type { SingleStaff, StaffId } from '@/shared/lib/notation'
 
 /** Where an engraving's staves, bars and onsets stand, in CSS px from its top left. */
 export interface ScoreLayout {
@@ -19,8 +19,6 @@ export interface ScoreLayout {
   }[]
   /** Each staff drawn: its top and bottom lines. */
   readonly staves: Partial<Record<StaffId, { readonly top: number; readonly bottom: number }>>
-  /** What each sung staff is played on, where one is chosen (ADR 0070): its name over it. */
-  readonly staffInstruments?: StaffInstruments
   /** Each written onset left to right: its tick and its first notehead's or rest's x. */
   readonly onsets: readonly { readonly tick: Tick; readonly x: number }[]
   /** Each notehead drawn, with its accidental and dots (ADR 0088): what a selection hugs. */
@@ -29,6 +27,12 @@ export interface ScoreLayout {
   readonly columns?: readonly Column[]
   /** Each rest drawn: notes chosen over it hug it too. */
   readonly rests?: readonly Rest[]
+  /** Each clef, key and time signature printed, at a staff's head or where it changes (ADR 0094). */
+  readonly signs?: readonly Sign[]
+  /** The staves' names printed at a score's first line's head (ADR 0094). */
+  readonly labels?: readonly StaffLabel[]
+  /** Each syllable printed under its note (ADR 0093): where a tap types it (ADR 0096). */
+  readonly syllables?: readonly Lyric[]
 }
 
 /** A box on the engraving, in its px: its left, right, top and foot. */
@@ -61,6 +65,36 @@ export interface Column extends Extent {
   readonly tick: Tick
 }
 
+/** What a sign printed on a staff is. */
+export type SignKind = 'clef' | 'key' | 'time'
+
+/**
+ * A clef, key or time signature printed on a staff (ADR 0094): at a line's head, or at the start of the
+ * measure it changes in; its box round its glyphs. A courtesy sign at a line's end, the next line's,
+ * is not one.
+ */
+export interface Sign extends Extent {
+  readonly kind: SignKind
+  readonly staff: StaffId
+  /** The line's measure it stands in, from 0. */
+  readonly measure: number
+}
+
+/** A syllable printed under its note in a verse (ADR 0093): the note's staff and tick, its verse from 0, its box. */
+export interface Lyric extends Extent {
+  readonly staff: StaffId
+  readonly tick: Tick
+  readonly verse: number
+}
+
+/**
+ * A staff's name printed at a score's first line's head (ADR 0094): a single staff's beside it (ADR
+ * 0097), the piano's beside its two (or the one drawn); its box.
+ */
+export interface StaffLabel extends Extent {
+  readonly staves: SingleStaff | 'piano'
+}
+
 /**
  * The x of a tick among a bar's points in tick order (its onsets, then its end): a point's own, or in
  * proportion between the two around it; past the last, the last's.
@@ -90,4 +124,22 @@ export function xAtTick(layout: Pick<ScoreLayout, 'measures' | 'onsets'>, tick: 
     ? []
     : [{ tick: measure.startTick, x: measure.notes }]
   return xAmong([...opening, ...onsets, { tick: end, x: measure.x + measure.width }], tick)
+}
+
+/**
+ * The left edge of what is drawn at a tick (ADR 0096): its heads with their accidentals and its
+ * rests, on `staves` (every staff without); where nothing is drawn there, the tick's own x. What a
+ * playhead and a caret stand just before.
+ */
+export function leftAt(
+  layout: Pick<ScoreLayout, 'measures' | 'onsets' | 'heads' | 'rests'>,
+  tick: Tick,
+  staves?: readonly StaffId[],
+): number {
+  const here = (drawn: { readonly staff: StaffId; readonly tick: Tick }) =>
+    drawn.tick === tick && (!staves || staves.includes(drawn.staff))
+  const edges = [...(layout.heads ?? []), ...(layout.rests ?? [])]
+    .filter(here)
+    .map((drawn) => drawn.left)
+  return edges.length > 0 ? Math.min(...edges) : xAtTick(layout, tick)
 }

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import {
+  pieceKey,
   usePieceHeadings,
   usePiecesStoreApi,
   type ChartPiece,
@@ -13,11 +14,9 @@ import { addSong } from '@/features/edit-piece'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
 import { readSongLink } from '@/features/share-song'
-import { audibleHands, barSounds } from '@/shared/lib/schedule'
-import { usePlayback } from '@/shared/lib/services'
-import { BackButton, ButtonLink, FloatingActions, NO_KEYS, ScreenHeader } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
-import { ChordChart } from '@/widgets/chord-chart'
+import { keySymbol, printedSymbol } from '@/shared/lib/music'
+import { BackButton, ButtonLink, Fab, FloatingActions, NO_KEYS, ScreenHeader } from '@/shared/ui'
+import { ChordChart, useChartPlayback } from '@/widgets/chord-chart'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 
 type Reading =
@@ -26,11 +25,12 @@ type Reading =
   | { readonly kind: 'song'; readonly song: SharedSong }
 
 /**
- * A shared song's chart as every chart reads: its bars under their sections' headings, each to tap
- * and hear on the keys, so the learner hears the song before adding it.
+ * A shared song as every song reads: its key, meter and tempo in a line, then its chart, its bars
+ * under their sections' headings, each to tap and hear on the keys, so the learner hears the song
+ * before adding it.
  */
 function SharedChart({ song }: { song: SharedSong }) {
-  const playback = usePlayback<number>()
+  const { t } = useTranslation(['songs', 'music'])
   const piece = useMemo<ChartPiece>(
     () => ({ id: 'shared', kind: 'song', title: song.title, ...song.music }),
     [song],
@@ -40,18 +40,23 @@ function SharedChart({ song }: { song: SharedSong }) {
     [piece],
   )
   const headings = usePieceHeadings(piece)
+  const { playing, toggleBar } = useChartPlayback(performance, piece.tempo)
   return (
     <>
+      <p className="-mt-3 text-lg text-muted-foreground">
+        {t('shared.facts', {
+          key: printedSymbol(keySymbol(pieceKey(piece))),
+          meter: piece.meter,
+          bpm: t('music:bpm', { tempo: piece.tempo }),
+        })}
+      </p>
+      <p>{t('shared.says')}</p>
       <PinnedKeyboard shown={NO_KEYS} range={playerRange(performance)} />
       <ChordChart
         performance={performance}
         headings={headings}
-        playing={playback.playing}
-        onBar={(bar) =>
-          playback.toggle(bar, () =>
-            barSounds(performance, bar, { tempo: piece.tempo, hands: audibleHands('both') }),
-          )
-        }
+        playing={playing}
+        onBar={toggleBar}
       />
     </>
   )
@@ -107,26 +112,16 @@ export function SharedSongPage() {
         </Empty>
       ) : (
         <>
-          <p className="-mt-3 text-lg text-muted-foreground">
-            {t('shared.facts', {
-              key: reading.song.music.key,
-              meter: reading.song.music.meter,
-              tempo: reading.song.music.tempo,
-            })}
-          </p>
-          <p>{t('shared.says')}</p>
           <SharedChart song={reading.song} />
           <FloatingActions>
             {/* The page's one action, named in words: a lone + would not say what it adds to. */}
-            <Button
-              size="lg"
+            <Fab
+              label={t('shared.add')}
+              icon={Plus}
+              extended
               disabled={adding}
               onClick={() => add(reading.song)}
-              className="h-14 rounded-full px-5 shadow-lg shadow-foreground/15"
-            >
-              <Plus data-icon="inline-start" aria-hidden />
-              {t('shared.add')}
-            </Button>
+            />
           </FloatingActions>
         </>
       )}

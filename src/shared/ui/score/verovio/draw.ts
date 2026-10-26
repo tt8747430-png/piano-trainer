@@ -1,5 +1,11 @@
 import type { Midi, TimeSignature } from '@/shared/lib/music'
-import { scoreToMei, type NextLine, type Score, type StaffId } from '@/shared/lib/notation'
+import {
+  scoreToMei,
+  type NextLine,
+  type Score,
+  type StaffId,
+  type StaffLabels,
+} from '@/shared/lib/notation'
 import type { ScoreLayout } from '../layout'
 import { engrave } from './engine'
 import { layoutOf } from './svg-layout'
@@ -16,7 +22,13 @@ export interface DrawOptions {
   readonly next?: NextLine | undefined
   /** The width the line is justified to, in CSS px; it is drawn smaller where its music is wider. */
   readonly fill?: number | undefined
+  /** The staves' names, printed at the line's head (ADR 0094). */
+  readonly labels?: StaffLabels | undefined
 }
+
+/** How much smaller a line still broken in two is drawn again, and how many times it is drawn at most. */
+const SHRINK = 0.97
+const SHRINK_TRIES = 5
 
 /** The names a note's head may carry: its letter and its sign. */
 const SIGN = { [-2]: '𝄫', [-1]: '♭', 0: '', 1: '♯', 2: '𝄪' } as const
@@ -39,11 +51,13 @@ export async function drawScore(
       fingers: options.fingers,
       timeBefore: options.timeBefore,
       next,
+      labels: options.labels,
     })
   // The courtesy signature follows a line broken where it is written: a line left at its own width has no break.
   const justified = meiOf(options.next)
   const natural = options.next ? meiOf(undefined) : justified
-  const drawn = async (scale: number, width = options.fill) => {
+  // Its width said every time: `undefined` is the music's own width, never the line's.
+  const drawn = async (scale: number, width: number | undefined) => {
     const mei = width === undefined ? natural : justified
     const [svg = ''] = await engrave(mei, { width, scale })
     const sheet = host.ownerDocument.createElement('div')
@@ -57,13 +71,22 @@ export async function drawScore(
     const last = layout.measures.at(-1)
     return last ? last.x + last.width : 0
   }
-  let page = await drawn(options.scale)
   const { fill } = options
-  if (fill !== undefined && (page.systems > 1 || endOf(page.layout) > fill + 1)) {
-    // Wider than the line: drawn once at its own width, then again as much smaller as it is wider.
+  let page = await drawn(options.scale, fill)
+  const fits = ({ systems, layout }: typeof page, width: number) =>
+    systems === 1 && endOf(layout) <= width + 1
+  if (fill !== undefined && !fits(page, fill)) {
+    // Wider than the line: drawn once at its own width, then again as much smaller as it is wider,
+    // and smaller again while Verovio still breaks it, its justified line needing a little more
+    // room than its own width.
     const own =
       page.systems > 1 ? endOf((await drawn(options.scale, undefined)).layout) : endOf(page.layout)
-    page = await drawn((options.scale * fill) / own)
+    let scale = (options.scale * fill) / own
+    page = await drawn(scale, fill)
+    for (let tries = 1; tries < SHRINK_TRIES && !fits(page, fill); tries++) {
+      scale *= SHRINK
+      page = await drawn(scale, fill)
+    }
   }
   if (signal.aborted) return null
   const { sheet, element, layout } = page
@@ -75,8 +98,7 @@ export async function drawScore(
       .forEach((group, index) => group.setAttribute('data-staff', options.staves[index] ?? ''))
   if (options.names) nameHeads(element, score)
   host.replaceChildren(...sheet.childNodes)
-  const keyed = withKeys(layout, score)
-  return score.staffInstruments ? { ...keyed, staffInstruments: score.staffInstruments } : keyed
+  return withKeys(layout, score)
 }
 
 /**
@@ -87,7 +109,7 @@ export function withKeys(layout: ScoreLayout, score: Score): ScoreLayout {
   const keys = new Map<string, Midi[]>()
   for (const measure of score.measures)
     for (const staff of score.staves)
-      for (const voice of measure.staves[staff])
+      for (const voice of measure.staves[staff] ?? [])
         for (const event of voice.events)
           if (event.kind === 'notes')
             event.notes.forEach((written, i) => {
@@ -122,7 +144,7 @@ function nameHeads(svg: SVGSVGElement, score: Score) {
   const names = new Map<string, string>()
   for (const measure of score.measures)
     for (const staff of score.staves)
-      for (const voice of measure.staves[staff])
+      for (const voice of measure.staves[staff] ?? [])
         for (const event of voice.events)
           if (event.kind === 'notes')
             event.notes.forEach((written, i) =>

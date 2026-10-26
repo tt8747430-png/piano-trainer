@@ -1,18 +1,66 @@
 export const piece = {
-  // The chords a piece plays, each once, to tap; then its chart, bar by bar.
-  chords: 'Chords',
   checkChords: 'Check these chords',
-  chart: 'Chart',
+  // A chord chart's section says its bars.
   barOne: 'bar {{n}}',
   barsFromTo: 'bars {{first}}–{{last}}',
-  practiseSection: 'Practise',
-  practiseSectionOf: 'Practise {{section}}',
-  form: 'Form',
-  formBars_one: '{{count}} bar',
-  formBars_other: '{{count}} bars',
+  // The song's page, Learn the song (ADR 0100): where to go next and the song's lessons done, its
+  // sections each with its lessons, and the whole song to play along with. What names the piece is
+  // a song's or a study's, by its kind: Russian names it.
+  learnSong: {
+    progress: '{{done}} of {{total}}',
+    progressSaid: 'Lessons done: {{done}} of {{total}}',
+    start: {
+      song: 'Learn it step by step: start with the {{section}}.',
+      study: 'Learn it step by step: start with the {{section}}.',
+    },
+    next: 'Next: the {{section}}.',
+    done: {
+      song: 'Every section learned. Play it through.',
+      study: 'Every section learned. Play it through.',
+    },
+    sections: 'Sections',
+    lessons_one: '{{count}} lesson',
+    lessons_other: '{{count}} lessons',
+    lessonsDone: '{{lessons}} · {{done}} done',
+    noLessons: 'No chords to learn',
+    playAlong: 'Play along',
+    playAlongDetail: {
+      song: 'The whole song in the Player',
+      study: 'The whole study in the Player',
+    },
+  },
+  // A section's page: its chords in order, its changes, its pattern; each lesson looped in the Player.
+  learnSection: {
+    title: 'Learn the {{section}}',
+    rounds: '{{n}} ×',
+    noChords: 'No chord symbols',
+    chords: 'Chords',
+    learnChord: 'Learn {{chord}}',
+    changes: 'Changes',
+    inTime: 'Play the chords in time',
+    // A chord sequence by its place in the section, by the ordinal's plural form (Russian says
+    // «оборот»: its «последовательность» is a Progression).
+    sequence: {
+      zero: '{{n}}th sequence',
+      one: '{{n}}st sequence',
+      two: '{{n}}nd sequence',
+      few: '{{n}}rd sequence',
+      many: '{{n}}th sequence',
+      other: '{{n}}th sequence',
+    },
+    wholeSection: 'The whole section',
+    oneChange: 'One change at a time',
+    change: 'From {{from}} to {{to}}',
+    bar: 'Bar {{n}}',
+    bars: 'Bars {{first}}–{{last}}',
+    // Each pattern the section is played with, by its name; where it is looped, on its chord.
+    pattern_one: 'Pattern',
+    pattern_other: 'Patterns',
+    patternAt: 'On {{chord}} · {{bars}}',
+    done: 'Done',
+  },
   tempo: 'Tempo',
-  bpm: '{{tempo}} BPM',
-  print: 'Print the chart',
+  time: 'Time',
   progression: 'Progression',
   more: 'More',
   practise: 'Practise',
@@ -28,12 +76,12 @@ export const piece = {
   reset: 'Reset to the original',
   resetting: {
     title: 'Reset {{title}}?',
-    says: 'Your chords, melody and written-out hands are removed, and it goes back to the book’s version.',
+    says: 'Your chords, staves and written-out hands are removed, and it goes back to the book’s version.',
     confirm: 'Reset',
     cancel: 'Keep mine',
   },
   delete: 'Delete',
-  // An own song sent on as a link: its chart, tune and written hands inside it.
+  // An own song sent on as a link: its chart, staves and written hands inside it.
   share: 'Share',
   shareCopied: 'Link copied. Anyone who opens it can add the song to their own.',
   shareFailed: 'The link could not be made here.',
@@ -45,7 +93,6 @@ export const piece = {
     cancel: 'Keep it',
   },
   scaleOf: 'Scale: {{scale}}',
-  key: 'Key',
   meter: 'Time signature',
   credit: {
     authors: 'Authors',

@@ -1,7 +1,5 @@
 import {
   clefsInForce,
-  INSTRUMENT_OF,
-  type Instrument,
   HOME_CLEF,
   type Clef,
   type Hand,
@@ -12,6 +10,7 @@ import {
   timeSignature,
   writtenOctave,
   writtenShift,
+  type NoteLyrics,
   type NoteMarks,
   type Key,
   type Meter,
@@ -20,18 +19,18 @@ import {
 import { printedAccidentals } from './accidentals'
 import { spellSpan, voiceGrid, type Span, type VoiceGrid } from './rhythm'
 import type {
-  StaffInstruments,
   Measure,
   NotesEvent,
   RestEvent,
   Score,
   ScoreVoice,
   StaffId,
+  StaffVoices,
   TimedMusic,
   TimedNote,
   WrittenNote,
 } from './types'
-import { clefOf, PIANO_STAVES, STAVES } from './types'
+import { clefOf, isSingleStaff, PIANO_STAVES, singleStaff, staffPlace } from './types'
 import { separateVoices, type BarChord, type BarNote, type VoiceChords } from './voices'
 
 /**
@@ -54,8 +53,9 @@ interface DraftVoice {
   readonly stem: ScoreVoice['stem']
 }
 
-const staffOf = ({ hand, voice }: TimedNote, melodyStaff: boolean): StaffId =>
-  voice ?? (hand === 'lh' ? 'bass' : hand === 'melody' && melodyStaff ? 'melody' : 'treble')
+/** The staff a note is written on: its single staff (ADR 0097), the right hand's treble, the left's bass. */
+export const staffOf = ({ hand, staff }: Pick<TimedNote, 'hand' | 'staff'>): StaffId =>
+  hand === 'staff' ? singleStaff(staff ?? 0) : hand === 'lh' ? 'bass' : 'treble'
 
 /** A note held into the next bar, by its staff and key. */
 const heldKey = (staff: StaffId, key: number) => `${staff} ${key}`
@@ -63,14 +63,15 @@ const heldKey = (staff: StaffId, key: number) => `${staff} ${key}`
 /**
  * The notes sounding in a bar, cut at its lines, as each staff's chords (spec §2.4 steps 1–2). A note
  * from the bar before goes on from it only where that bar's writing tied it on (`tiedOn`); one written
- * cut short there starts afresh, its accidental printed.
+ * cut short there starts afresh, its accidental printed. The words go under one staff alone (`sung`,
+ * ADR 0093): a note's syllables elsewhere are not written.
  */
 function barChords(
   notes: readonly TimedNote[],
   bar: Bar,
   tiedOn: ReadonlySet<string>,
-  melodyStaff: boolean,
-): Record<StaffId, BarChord[]> {
+  sung: StaffId,
+): ReadonlyMap<StaffId, BarChord[]> {
   const end = bar.start + bar.ticks
   const groups = new Map<string, { staff: StaffId; chord: BarChord }>()
   for (const n of notes) {
@@ -78,7 +79,8 @@ function barChords(
     if (n.startTick >= end || noteEnd <= bar.start) continue
     const start = Math.max(n.startTick, bar.start) - bar.start
     const stop = Math.min(noteEnd, end) - bar.start
-    const tiedFrom = n.startTick < bar.start && tiedOn.has(heldKey(staffOf(n, melodyStaff), n.midi))
+    const staff = staffOf(n)
+    const tiedFrom = n.startTick < bar.start && tiedOn.has(heldKey(staff, n.midi))
     const written: BarNote = {
       midi: n.midi,
       spelled: n.spelled,
@@ -86,14 +88,12 @@ function barChords(
       tiedTo: noteEnd > end,
       ...(n.finger ? { finger: n.finger } : {}),
       ...(n.marks ? { marks: n.marks } : {}),
+      ...(n.lyrics && staff === sung ? { lyrics: n.lyrics } : {}),
     }
-    const id = `${n.voice ?? n.hand} ${start} ${stop}`
+    const id = `${staff} ${start} ${stop}`
     const group = groups.get(id)
     if (!group) {
-      groups.set(id, {
-        staff: staffOf(n, melodyStaff),
-        chord: { hand: n.hand, start, end: stop, notes: [written] },
-      })
+      groups.set(id, { staff, chord: { start, end: stop, notes: [written] } })
     } else if (!group.chord.notes.some((other) => other.midi === n.midi)) {
       group.chord = {
         ...group.chord,
@@ -101,11 +101,9 @@ function barChords(
       }
     }
   }
-  const staves = Object.fromEntries(STAVES.map((id) => [id, [] as BarChord[]])) as Record<
-    StaffId,
-    BarChord[]
-  >
-  for (const { staff, chord } of groups.values()) staves[staff].push(chord)
+  const staves = new Map<StaffId, BarChord[]>()
+  for (const { staff, chord } of groups.values())
+    staves.set(staff, [...(staves.get(staff) ?? []), chord])
   return staves
 }
 
@@ -141,6 +139,14 @@ function pieceMarks(notes: readonly BarNote[], first: boolean, last: boolean): N
   return Object.keys(marks).length > 0 ? marks : null
 }
 
+/**
+ * What a written piece sings: its chord's one note's syllables, on the piece that starts the notes,
+ * in a staff's first voice alone (a second voice under the tune sings nothing, so no syllable prints
+ * twice).
+ */
+const pieceLyrics = (notes: readonly BarNote[], first: boolean): NoteLyrics | null =>
+  (first ? notes.find((n) => n.lyrics && !n.tiedFrom)?.lyrics : undefined) ?? null
+
 /** A voice's chords as values end to end: gaps as rests, a chord as tied pieces (spec §2.4 steps 4–5). */
 function writeVoice(voice: VoiceChords, bar: Bar, second: boolean): DraftVoice {
   const grid = voiceGrid(voice.chords, bar.meter)
@@ -155,11 +161,13 @@ function writeVoice(voice: VoiceChords, bar: Bar, second: boolean): DraftVoice {
     pieces.forEach((piece, i) => {
       const last = i === pieces.length - 1
       const marks = pieceMarks(chord.notes, i === 0, last)
+      const lyrics = second ? null : pieceLyrics(chord.notes, i === 0)
       events.push({
         kind: 'notes',
         tick: bar.start + piece.tick,
         duration: piece.duration,
         ...(marks ? { marks } : {}),
+        ...(lyrics ? { lyrics } : {}),
         notes: chord.notes.map((n) => ({
           midi: n.midi,
           spelled: n.spelled,
@@ -242,10 +250,10 @@ const blankStaff = (bar: Bar): ScoreVoice[] => [
 ]
 
 /** The notes a bar's last chords tie into the next bar, by staff and key. */
-function tiedOut(staves: Record<StaffId, ScoreVoice[]>): Set<string> {
+function tiedOut(staves: StaffVoices, written: readonly StaffId[]): Set<string> {
   const held = new Set<string>()
-  for (const id of STAVES) {
-    for (const voice of staves[id]) {
+  for (const id of written) {
+    for (const voice of staves[id] ?? []) {
       const last = voice.events.at(-1)
       if (last?.kind !== 'notes') continue
       for (const written of last.notes) if (written.tie) held.add(heldKey(id, written.midi))
@@ -255,49 +263,56 @@ function tiedOut(staves: Record<StaffId, ScoreVoice[]>): Set<string> {
 }
 
 /**
- * Timed notes as a written score: bars, a grand staff (and the tune's own staff over it where the
- * music asks), voices, values, ties and accidentals (spec §2.4). A pickup is written under the
- * meter's signature, a short first bar.
+ * The clefs a measure's staves are in, where not `clefOf`'s: each single staff's own (ADR 0097), the
+ * right hand's on the treble and the left's on the bass as their bars change them (ADR 0069).
  */
-/** The hands' clefs on their staves, the right's on the treble and the left's on the bass, where not their own. */
 function staffClefs(
   clefs: Readonly<Record<Hand, Clef>>,
-  instruments: StaffInstruments = {},
+  single: readonly { readonly clef: Clef }[],
 ): Pick<Measure, 'clefs'> {
   const changed: Partial<Record<StaffId, Clef>> = {}
-  // A sung staff in its instrument's clef (ADR 0070).
-  for (const [staff, instrument] of Object.entries(instruments) as [StaffId, Instrument][])
-    if (INSTRUMENT_OF[instrument].clef !== clefOf(staff))
-      changed[staff] = INSTRUMENT_OF[instrument].clef
+  single.forEach(({ clef }, place) => {
+    const staff = singleStaff(place)
+    if (clef !== clefOf(staff)) changed[staff] = clef
+  })
   if (clefs.rh !== clefOf('treble')) changed.treble = clefs.rh
   if (clefs.lh !== clefOf('bass')) changed.bass = clefs.lh
   return Object.keys(changed).length > 0 ? { clefs: changed } : {}
 }
 
 /**
- * The clef a staff is in at bar `index` of timed music: a hand's as its bars change it, a sung part's
- * its instrument's, else its own.
+ * The clef a staff is in at bar `index` of timed music: a single staff's own, a hand's as its bars
+ * change it.
  */
 export function staffClefAt(music: TimedMusic, index: number, staff: StaffId): Clef {
-  const hand = staff === 'treble' ? 'rh' : staff === 'bass' ? 'lh' : null
-  const instrument = music.staffInstruments?.[staff]
-  if (instrument) return INSTRUMENT_OF[instrument].clef
-  return (hand && clefsInForce(music.bars)[index]?.[hand]) || clefOf(staff)
+  if (isSingleStaff(staff)) return music.staves?.[staffPlace(staff)]?.clef ?? clefOf(staff)
+  const hand = staff === 'treble' ? 'rh' : 'lh'
+  return clefsInForce(music.bars)[index]?.[hand] ?? clefOf(staff)
 }
 
+/**
+ * Timed notes as a written score: bars, its single staves over the grand staff (ADR 0097; no piano
+ * on a lead sheet, ADR 0083), voices, values, ties and accidentals (spec §2.4). A pickup is written
+ * under the meter's signature, a short first bar.
+ */
 export function notate(music: TimedMusic): Score {
-  const melodyStaff = music.melodyStaff ?? false
-  const voices = music.voiceStaves ?? []
-  const written: readonly StaffId[] = STAVES.filter(
-    (id) =>
-      (id === 'melody' && melodyStaff) ||
-      voices.some((voice) => voice === id) ||
-      (music.piano !== false && PIANO_STAVES.some((piano) => piano === id)),
-  )
+  const single = music.staves ?? []
+  const written: readonly StaffId[] = [
+    ...single.map((_, place) => singleStaff(place)),
+    ...(music.piano === false ? [] : PIANO_STAVES),
+  ]
+  // The words go under the staff whose notes sing them: the top one where two do (a single staff
+  // over the piano's upper one, a pattern playing the tune), ADR 0093.
+  const sung: StaffId =
+    written.find((staff) =>
+      music.notes.some((n) => n.lyrics !== undefined && staffOf(n) === staff),
+    ) ?? 'treble'
   let tiedOn = new Set<string>()
   const clefs = clefsInForce(music.bars)
   const measures = music.bars.map((placed, index): Measure => {
-    const before = beatsBefore(music.bars, index, music.meter)
+    // Counted in its own meter where it has one (ADR 0095).
+    const meter = placed.meter ?? music.meter
+    const before = music.continued ? 0 : beatsBefore(music.bars, index, music.meter)
     const pickup = before > 0
     const from = beatsToTicks(before)
     const ticks = beatsToTicks(placed.beats)
@@ -305,30 +320,30 @@ export function notate(music: TimedMusic): Score {
       start: placed.startTick - from,
       ticks: from + ticks,
       from,
-      meter: music.meter,
+      meter,
       key: placed.key ?? music.key,
     }
-    const chords = barChords(music.notes, bar, tiedOn, melodyStaff)
-    const staff = (id: StaffId) =>
+    const chords = barChords(music.notes, bar, tiedOn, sung)
+    const staff = (id: StaffId): ScoreVoice[] =>
       !written.includes(id)
         ? []
         : placed.blank?.includes(id)
           ? blankStaff(bar)
-          : writeStaff(chords[id], bar)
-    const staves = Object.fromEntries(STAVES.map((id) => [id, staff(id)])) as Record<
-      StaffId,
-      ScoreVoice[]
-    >
-    tiedOn = tiedOut(staves)
+          : writeStaff(chords.get(id) ?? [], bar)
+    const staves: StaffVoices = {
+      ...Object.fromEntries(written.map((id) => [id, staff(id)])),
+      treble: staff('treble'),
+      bass: staff('bass'),
+    }
+    tiedOn = tiedOut(staves, written)
     return {
       startTick: placed.startTick,
       ticks,
-      time: timeSignature(pickup ? beatsPerBar(music.meter) : placed.beats, music.meter),
+      time: timeSignature(pickup ? beatsPerBar(meter) : placed.beats, meter),
       ...(placed.key ? { key: placed.key } : {}),
       ...(placed.tempo ? { tempo: placed.tempo } : {}),
-      ...(placed.pattern?.length ? { pattern: placed.pattern } : {}),
       ...barMarksOf(placed),
-      ...staffClefs(clefs[index] ?? HOME_CLEF, music.staffInstruments),
+      ...staffClefs(clefs[index] ?? HOME_CLEF, single),
       staves,
       chords: music.chords
         .filter(
@@ -343,6 +358,5 @@ export function notate(music: TimedMusic): Score {
     meter: music.meter,
     staves: written,
     measures,
-    ...(music.staffInstruments ? { staffInstruments: music.staffInstruments } : {}),
   }
 }

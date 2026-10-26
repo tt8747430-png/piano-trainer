@@ -10,18 +10,29 @@ export {
   type Piece,
   type PieceId,
   type Section,
+  type KeyText,
   type SectionKind,
 } from './model/types'
 export {
-  HIDDEN_ROWS,
-  isHiddenRow,
+  defaultLyricsStaff,
   isLeadSheet,
-  showsAStaff,
+  lyricsStaff,
   SONG_SECTION_KINDS,
-  type HiddenRow,
+  STAFF_NAME_MAX,
+  staffName,
+  type LyricsStaff,
+  type PieceStaff,
+  type StaffName,
 } from './model/types'
 
-export { chartOf, hasChartPlan, melodyOf, patternsOfPiece, pieceFit, voicesOf } from './model/chart'
+export {
+  chartOf,
+  hasChartPlan,
+  patternsOfPiece,
+  pieceFit,
+  sectionCount,
+  stavesOf,
+} from './model/chart'
 export { keyText, musicOf, readMusic, sameMusic, type PieceMusic } from './model/music'
 export { HAND_IDS, type HandId } from './model/parse-hands'
 export {
@@ -46,9 +57,11 @@ export { repertoire } from './model/repertoire'
 export { useRepertoire } from './model/use-repertoire'
 export { writeBar } from './model/write-chart'
 export { writeHand } from './model/write-hands'
-export { emptyLine, writeMelody } from './model/write-melody'
+export { writeStaff } from './model/write-staff'
+export { gatherLyrics, readLyrics, singingNotes, writeLyrics, type Verse } from './model/lyrics'
 export { fourToALine, wholeBar } from './model/chart-layout'
 export { chordsOfPiece, skillsOfPiece } from './model/skills'
+export { pieceChords } from './model/piece-chords'
 export {
   choosableChordSize,
   entriesInKey,
@@ -64,7 +77,9 @@ export {
 export { shelfOf } from './model/shelf'
 export { entryTitles } from './model/titles'
 export { Credits } from './ui/Credits'
+export { PieceFactCards } from './ui/PieceFactCards'
 export { PieceLink } from './ui/PieceLink'
 export { SourceLine } from './ui/SourceLine'
 export { usePieceHeadings, useSectionHeading } from './ui/use-section-heading'
+export { useStaffNames, useStaffTitle } from './ui/use-staff-names'
 export { COLLECTIONS, METHOD_BOOK_PIECES, PIECES, SONG_COLLECTIONS } from './content'

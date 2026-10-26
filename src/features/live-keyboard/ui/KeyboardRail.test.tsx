@@ -122,6 +122,12 @@ describe('the keyboard’s rail', () => {
     expect(chord()).toBe('Chord played: Em7/D')
   })
 
+  it('prints the chord held as the sheets print it, ♯ and ♭ as signs', () => {
+    const { midiKeyboard } = setUp()
+    act(() => [61, 64, 68].forEach((key) => midiKeyboard.press(midi(key))))
+    expect(chord()).toBe('Chord played: C♯m')
+  })
+
   it('names the keys held on a MIDI keyboard', () => {
     const { midiKeyboard } = setUp()
     act(() => [62, 65, 69].forEach((key) => midiKeyboard.press(midi(key))))

@@ -2,7 +2,7 @@ import { nameChords, readChordSymbol, type Chord, type Midi } from '@/shared/lib
 import { stepOf } from './caret-moves'
 import { setChord } from './chords'
 import { commit } from './history'
-import { addToChord, writeNotes } from './notes'
+import { addToChord, insertNotes, writeNotes } from './notes'
 import type { EditorState, Struck } from './state'
 import { barAt } from './timeline'
 
@@ -20,7 +20,8 @@ function chordOfKeys(keys: readonly Midi[]): Chord | undefined {
 
 /**
  * A key played: written at the caret as a note (or joining the notes struck with it, or those at the
- * caret in Chord mode), or, in the chords, named with the keys struck with it as the chord there.
+ * caret in Chord mode; in Insert mode pushing the staff's later notes right, ADR 0092), or, in the
+ * chords, named with the keys struck with it as the chord there.
  */
 export function keyPlayed(state: EditorState, key: Midi, time: number): EditorState {
   const { draft, layer, caret, struck } = state
@@ -50,7 +51,7 @@ export function keyPlayed(state: EditorState, key: Midi, time: number): EditorSt
     )
   }
   const ticks = stepOf(state)
-  if (state.chord) {
+  if (state.mode === 'chord') {
     return commit(state, addToChord(draft, layer, caret, key, ticks), { struck: null })
   }
   if (joining) {
@@ -61,7 +62,8 @@ export function keyPlayed(state: EditorState, key: Midi, time: number): EditorSt
       true,
     )
   }
-  const result = writeNotes(draft, layer, caret, [key], ticks)
+  const write = state.mode === 'insert' ? insertNotes : writeNotes
+  const result = write(draft, layer, caret, [key], ticks)
   return commit(state, result.draft, {
     caret: result.end,
     struck: { at: caret, time, keys: [key], layer, written: true },

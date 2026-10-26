@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { note } from '@/shared/lib/music'
+import { C_MAJOR, note } from '@/shared/lib/music'
 import { noteLine, twoHands, type NoteLineMeter } from './note-line'
 
-const C_MAJOR = { tonic: note('C'), minor: false }
 const timed = (text: string, meter: NoteLineMeter = '4/4') =>
   noteLine(text, { hand: 'rh', meter, key: C_MAJOR }).notes.map((n) => [
     n.midi,

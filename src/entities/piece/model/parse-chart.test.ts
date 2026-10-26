@@ -38,6 +38,40 @@ describe('parseChart', () => {
     expect(() => parseChart(testSong([], { sections: wrong }))).toThrow(ContentError)
   })
 
+  it('reads a section in a meter of its own, its bars counted in it (ADR 0095)', () => {
+    const sections = [
+      { kind: 'verse' as const, lines: ['C G-C'] },
+      { kind: 'chorus' as const, meter: '3/4' as const, lines: ['F G-C Am@1'] },
+      { kind: 'ending' as const, meter: '4/4' as const, lines: ['C'] },
+    ]
+    const chart = parseChart(testSong([], { sections }))
+    // A section in the piece's own meter carries none, as a section in its key carries no key.
+    expect(chart.sections.map((section) => section.meter)).toEqual([undefined, '3/4', undefined])
+    const beats = (section: number) =>
+      chart.sections[section]?.lines
+        .flat()
+        .map((bar) => [bar.beats, ...bar.chords.map((chord) => chord.beats)])
+    expect(beats(0)).toEqual([
+      [4, 4],
+      [4, 2, 2],
+    ])
+    expect(beats(1)).toEqual([
+      [3, 3],
+      [3, 1.5, 1.5],
+      [1, 1],
+    ])
+  })
+
+  it('refuses a section’s meter of another kind, whose beat is another note', () => {
+    const sections = [
+      { kind: 'verse' as const, lines: ['C'] },
+      { kind: 'chorus' as const, meter: '6/8' as const, lines: ['F'] },
+    ]
+    expect(() => parseChart(testSong([], { sections }))).toThrow(
+      /section 2: "6\/8" is a meter of another kind than the piece’s "4\/4"/,
+    )
+  })
+
   it('reads the barlines between bars: repeats, endings, a double and the final barline', () => {
     const [line = []] =
       parseChart(testSong(['|: C [1 F :| [2 G || Am |.'])).sections[0]?.lines ?? []
@@ -88,6 +122,23 @@ describe('parseChart', () => {
     expect(chart.sections[0]?.lines[0]?.[0]?.beats).toBe(4)
     const compound = parseChart(testSong(['C-Dm-Em-F-G-Am C'], { meter: '6/8' }))
     expect(compound.sections[0]?.lines[0]?.[0]?.beats).toBe(2)
+  })
+
+  it('reads `_` as a bar of no chord, the meter’s length or its own given beats (ADR 0094)', () => {
+    expect(read(['C _ G'])).toEqual([['C 4'], [], ['G 4']])
+    const beats = (line: string, meter: '4/4' | '3/4' = '4/4') =>
+      parseChart(testSong([line], { meter })).sections[0]?.lines[0]?.map((bar) => bar.beats)
+    expect(beats('_ _@2 _@1.5')).toEqual([4, 2, 1.5])
+    expect(beats('_', '3/4')).toEqual([3])
+    expect(errorOf(['C _-G']).message).toMatch(/no chord, written alone/)
+    expect(errorOf(['_:t1']).message).toMatch(/no chord, written alone/)
+    expect(errorOf(['_@20']).message).toContain('"20"')
+  })
+
+  it('writes a bar of no chord back as `_`, its beats where they are not the meter’s', () => {
+    const text = '|: _ :| _@2 Segno _@1.5 |.'
+    const [line = []] = parseChart(testSong([text])).sections[0]?.lines ?? []
+    expect(line.map((bar) => writeBar(bar, '4/4')).join(' ')).toBe(text)
   })
 
   it('reads given beats', () => {

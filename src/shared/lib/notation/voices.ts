@@ -1,4 +1,4 @@
-import type { Finger, Hand, Midi, NoteMarks, SpelledNote, Tick } from '@/shared/lib/music'
+import type { Finger, Midi, NoteLyrics, NoteMarks, SpelledNote, Tick } from '@/shared/lib/music'
 import type { Stem } from './types'
 
 /** A note of a chord in one bar: whether it goes on from the bar before, or into the next. */
@@ -7,13 +7,14 @@ export interface BarNote {
   readonly spelled: SpelledNote
   readonly finger?: Finger
   readonly marks?: NoteMarks
+  /** What it sings, by verse: a tune's note on the staff the words go under. */
+  readonly lyrics?: NoteLyrics
   readonly tiedFrom: boolean
   readonly tiedTo: boolean
 }
 
-/** One hand's notes sounding together in a bar, from `start` to `end` (ticks from the bar's start). */
+/** A staff's notes sounding together in a bar, from `start` to `end` (ticks from the bar's start). */
 export interface BarChord {
-  readonly hand: Hand | 'melody'
   readonly start: Tick
   readonly end: Tick
   readonly notes: readonly BarNote[]
@@ -65,26 +66,13 @@ function place(voice: BarChord[], chord: BarChord) {
 }
 
 /**
- * A staff's chords in a bar as one or two voices (spec §2.4 step 3): the tune, when there is one,
- * is voice 1 over the right hand; otherwise each chord goes in the first voice free at its onset, or
- * a second, the higher voice first. With two, the higher has its stems up.
+ * A staff's chords in a bar as one or two voices (spec §2.4 step 3): each chord goes in the first
+ * voice free at its onset, or a second, the higher voice first. With two, the higher has its stems up.
  */
 export function separateVoices(chords: readonly BarChord[]): VoiceChords[] {
-  const ordered = [...chords].sort(
-    (a, b) =>
-      a.start - b.start ||
-      Number(b.hand === 'melody') - Number(a.hand === 'melody') ||
-      top(b) - top(a),
-  )
-  const withTune = ordered.some((chord) => chord.hand === 'melody')
-  const tune: BarChord[] = []
-  const accompaniment: BarChord[] = []
-  const voices: BarChord[][] = withTune ? [tune, accompaniment] : []
+  const ordered = [...chords].sort((a, b) => a.start - b.start || top(b) - top(a))
+  const voices: BarChord[][] = []
   for (const chord of ordered) {
-    if (withTune) {
-      place(chord.hand === 'melody' ? tune : accompaniment, chord)
-      continue
-    }
     const free = voices.find((voice) => endOf(voice) <= chord.start)
     if (free) free.push(chord)
     else if (voices.length < MAX_VOICES) voices.push([chord])
@@ -97,8 +85,7 @@ export function separateVoices(chords: readonly BarChord[]): VoiceChords[] {
   const [first, second] = voices.filter((voice) => voice.length > 0)
   if (!first) return []
   if (!second) return [{ chords: first, stem: 'auto' }]
-  const [one, two] =
-    withTune || meanPitch(first) >= meanPitch(second) ? [first, second] : [second, first]
+  const [one, two] = meanPitch(first) >= meanPitch(second) ? [first, second] : [second, first]
   const oneUp = meanPitch(one) >= meanPitch(two)
   return [
     { chords: one, stem: oneUp ? 'up' : 'down' },

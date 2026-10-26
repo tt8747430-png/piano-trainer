@@ -27,6 +27,13 @@ describe('TempoButton', () => {
     expect(screen.getByRole('button', { name: 'Tempo: 75%' })).toBeInTheDocument()
   })
 
+  it('wears its gauge beside the value at every size, the pill sized to fit (ADR 0094)', () => {
+    renderTempo()
+    const gauge = screen.getByRole('button', { name: 'Tempo: 100%' }).querySelector('svg')
+    expect(gauge).not.toBeNull()
+    expect(gauge?.getAttribute('class')).not.toMatch(/:hidden/)
+  })
+
   it('chooses Wait mode or a speed', async () => {
     const user = userEvent.setup()
     const { onWait, onTempo } = renderTempo()
@@ -40,6 +47,20 @@ describe('TempoButton', () => {
     await user.click(screen.getByRole('button', { name: 'Tempo: 100%' }))
     await user.click(await screen.findByRole('option', { name: '50% speed' }))
     expect(onTempo).toHaveBeenLastCalledWith(36)
+  })
+
+  it('only sets how fast the music plays back where it has no Wait mode or speed training (the editor’s)', async () => {
+    const user = userEvent.setup()
+    const onTempo = vi.fn()
+    renderWithSettings(<TempoButton tempo={45} ownTempo={90} onTempo={onTempo} />)
+    await user.click(screen.getByRole('button', { name: 'Tempo: 50%' }))
+    expect(
+      await screen.findByRole('option', { name: '50% speed', selected: true }),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('option', { name: 'Wait mode' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('switch', { name: /Speed training/ })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('option', { name: 'Original tempo' }))
+    expect(onTempo).toHaveBeenLastCalledWith(90)
   })
 
   it('scrolls within the screen’s height where the screen is short (a phone on its side)', async () => {

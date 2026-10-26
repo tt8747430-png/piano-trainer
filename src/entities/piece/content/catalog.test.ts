@@ -22,10 +22,10 @@ import {
   hasChartPlan,
   isDegreePiece,
   isPiece,
-  melodyOf,
   pieceById,
   pieceFit,
   pieceKey,
+  stavesOf,
   type Piece,
   isSongCollectionId,
   SONG_COLLECTIONS,
@@ -141,7 +141,7 @@ describe('the catalog', () => {
       const chordSizes =
         isDegreePiece(piece) && piece.chordSize.choosable ? CHORD_SIZES : [undefined]
       for (const chordSize of chordSizes) expect(() => chartOf(piece, chordSize)).not.toThrow()
-      expect(() => melodyOf(piece)).not.toThrow()
+      expect(() => stavesOf(piece)).not.toThrow()
     },
   )
 
@@ -149,7 +149,7 @@ describe('the catalog', () => {
     'arranges %s in all 12 keys with every accompaniment',
     (_id, piece) => {
       const chart = chartOf(piece)
-      const melody = melodyOf(piece)
+      const staves = stavesOf(piece)
       const { minor } = pieceKey(piece)
       const problems: string[] = []
       for (let pc = 0; pc < 12; pc++) {
@@ -159,8 +159,8 @@ describe('the catalog', () => {
             tonic,
             pattern,
             methods,
-            melody,
-            doubleMelody: true,
+            staves,
+            hearTune: true,
           })
           problems.push(
             ...problemsIn(performance).map(
@@ -173,18 +173,18 @@ describe('the catalog', () => {
     },
   )
 
-  it('fits every melody inside its chart', () => {
+  it('fits every single staff inside its chart', () => {
     for (const piece of PIECES) {
-      const melody = melodyOf(piece)
-      if (!melody) continue
-      const last = melody.at(-1)
       const chart = arrange(chartOf(piece), {
         tonic: pieceKey(piece).tonic,
         pattern: BUILT_IN_PATTERNS.require('block').pattern,
       })
-      expect((last?.startTick ?? 0) + (last?.durationTicks ?? 0), piece.id).toBeLessThanOrEqual(
-        chart.totalTicks,
-      )
+      for (const { notes } of stavesOf(piece)) {
+        const last = notes.at(-1)
+        expect((last?.startTick ?? 0) + (last?.durationTicks ?? 0), piece.id).toBeLessThanOrEqual(
+          chart.totalTicks,
+        )
+      }
     }
   })
 

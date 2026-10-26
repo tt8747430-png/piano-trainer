@@ -12,8 +12,11 @@ import type { SetupChange, SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
 import { ownLeftOut } from './own-left-out'
 
-/** The Player's URL: how it goes, and the piece's own choices (spec §2.10). */
-export type PlayerSearch = PracticeView & SetupParams
+/**
+ * The Player's URL: how it goes, and the piece's own choices (spec §2.10); and the bar as printed its
+ * cursor opens on, the editor's caret's where Practise came from it (ADR 0090).
+ */
+export type PlayerSearch = PracticeView & SetupParams & { readonly bar?: number }
 
 /**
  * The Player's URL read against its piece: what the URL leaves out is the piece's own, and so is a
@@ -23,7 +26,7 @@ export type PlayerSearch = PracticeView & SetupParams
 export function resolveChoice(
   piece: Piece,
   search: SetupParams,
-  melody: boolean,
+  tune: boolean,
   book: PatternBook,
 ): PracticeChoice {
   const own = ownChoice(piece)
@@ -37,7 +40,7 @@ export function resolveChoice(
     inversion: search.inversion ?? null,
     nearest: search.nearest !== false,
     chordSize: choosableChordSize(piece) === null ? null : (search.chordSize ?? null),
-    melody,
+    tune,
   }
 }
 

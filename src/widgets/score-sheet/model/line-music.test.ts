@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { readDraft } from '@/features/score-editor'
 import { midi, note } from '@/shared/lib/music'
-import { layerAt, linesOf, lineMusic, timeBeforeLine } from './line-music'
+import { staffOf } from '@/shared/lib/notation'
+import { layerAt, linesOf, lineMusic, oneLine, timeBeforeLine } from './line-music'
 
 const draft = readDraft({
   key: 'G',
@@ -12,8 +13,8 @@ const draft = readDraft({
     { kind: 'verse', lines: ['G@1', 'C-D G'] },
     { kind: 'chorus', lines: ['Em@2'] },
   ],
-  melody: 'D4/1 | G4/2 A4/1 B4/3 | C5/2',
-  hands: { lh: '- | C3/4 | - | -', rh: '- | - | - | G3/2' },
+  staves: [{ notes: 'D4/1 | G4/2 A4/1 B4/3 | C5/2' }],
+  hands: { lh: 'r/1 | C3/4 | r/4 | r/4', rh: 'r/1 | r/4 | r/4 | G3/2' },
 })
 
 describe('the sheet’s lines', () => {
@@ -24,6 +25,21 @@ describe('the sheet’s lines', () => {
       [0, 0, [0]],
       [0, 1, [1, 2]],
       [1, 0, [3]],
+    ])
+  })
+
+  it('say what each bar’s label prints: a line’s first number, a section’s name, the tempo (ADR 0095)', () => {
+    expect(linesOf(draft).map((line) => line.labels)).toEqual([
+      [{ number: 1, section: 0, tempo: 90 }],
+      [{ number: 2 }, {}],
+      [{ number: 4, section: 1 }],
+    ])
+    // All of it as one line, across: each section named where it starts.
+    expect(oneLine(draft)[0]?.labels).toEqual([
+      { number: 1, section: 0, tempo: 90 },
+      {},
+      {},
+      { section: 1 },
     ])
   })
 
@@ -64,11 +80,11 @@ describe('the sheet’s lines', () => {
     ])
   })
 
-  it('write a line from its own start: the melody on its staff, the written hands, and the chord symbols', () => {
+  it('write a line from its own start: each single staff’s notes, the written hands, and the chord symbols', () => {
     const [, second] = linesOf(draft)
     if (!second) throw new Error('a second line')
     const music = lineMusic(draft, second)
-    expect(music.melodyStaff).toBe(true)
+    expect(music.staves).toEqual([{ clef: 'treble' }])
     expect(music.bars).toEqual([
       { startTick: 0, beats: 4, blank: ['treble'] },
       { startTick: 96, beats: 4, blank: ['treble', 'bass'] },
@@ -78,12 +94,12 @@ describe('the sheet’s lines', () => {
       { startTick: 48, symbol: 'D' },
       { startTick: 96, symbol: 'G' },
     ])
-    expect(music.notes.map((n) => [n.hand, n.midi, n.startTick, n.durationTicks])).toEqual([
-      ['melody', 67, 0, 48],
-      ['melody', 69, 48, 24],
-      ['melody', 71, 72, 72],
-      ['melody', 72, 144, 48],
-      ['lh', 48, 0, 96],
+    expect(music.notes.map((n) => [staffOf(n), n.midi, n.startTick, n.durationTicks])).toEqual([
+      ['staff0', 67, 0, 48],
+      ['staff0', 69, 48, 24],
+      ['staff0', 71, 72, 72],
+      ['staff0', 72, 144, 48],
+      ['bass', 48, 0, 96],
     ])
   })
 
@@ -91,51 +107,19 @@ describe('the sheet’s lines', () => {
     const [, , third] = linesOf(draft)
     if (!third) throw new Error('a third line')
     const music = lineMusic(draft, third)
-    expect(music.bars).toEqual([{ startTick: 0, beats: 2, blank: ['melody', 'bass'] }])
+    expect(music.bars).toEqual([{ startTick: 0, beats: 2, blank: ['staff0', 'bass'] }])
     expect(music.notes.map((n) => [n.hand, n.midi, n.startTick, n.durationTicks])).toEqual([
       ['rh', 55, 0, 48],
     ])
   })
 
-  it('write what the pattern plays in a bar a hand leaves to it, its staff marked so (ADR 0083)', () => {
-    const [, second] = linesOf(draft)
-    if (!second) throw new Error('a second line')
-    const at = (key: number, startTick: number, durationTicks: number) => ({
-      midi: midi(key),
-      spelled: note('C'),
-      startTick,
-      durationTicks,
-    })
-    const played = {
-      // The last held past its bar's end: cut at the barline.
-      rh: [at(64, 24, 96), at(67, 120, 200)],
-      // Bar 2's left hand is written: the pattern's there is not shown.
-      lh: [at(36, 24, 96), at(43, 120, 96)],
-    }
-    const music = lineMusic(draft, second, played)
-    expect(music.bars).toEqual([
-      { startTick: 0, beats: 4, pattern: ['treble'] },
-      { startTick: 96, beats: 4, pattern: ['treble', 'bass'] },
-    ])
-    expect(
-      music.notes
-        .filter((n) => n.hand !== 'melody')
-        .map((n) => [n.hand, n.midi, n.startTick, n.durationTicks]),
-    ).toEqual([
-      ['rh', 64, 0, 96],
-      ['rh', 67, 96, 96],
-      ['lh', 48, 0, 96],
-      ['lh', 43, 96, 96],
-    ])
-  })
-
   it('write no piano on a lead sheet: the tune’s staff alone (ADR 0083)', () => {
-    const lead = { ...draft, hidden: ['piano' as const] }
+    const lead = { ...draft, leadSheet: true }
     const [, second] = linesOf(lead)
     if (!second) throw new Error('a second line')
-    const music = lineMusic(lead, second, { rh: [], lh: [] })
+    const music = lineMusic(lead, second)
     expect(music.piano).toBe(false)
-    expect(music.notes.every((n) => n.hand === 'melody')).toBe(true)
+    expect(music.notes.every((n) => staffOf(n) === 'staff0')).toBe(true)
     expect(music.bars).toEqual([
       { startTick: 0, beats: 4 },
       { startTick: 96, beats: 4 },
@@ -168,12 +152,32 @@ describe('the sheet’s lines', () => {
     expect(timeBeforeLine(draft, second)).toEqual({ count: 4, unit: 4 })
     expect(timeBeforeLine(draft, third)).toEqual({ count: 4, unit: 4 })
   })
+
+  it('write a section’s own meter on its bars, its time printed where it starts (ADR 0095)', () => {
+    const changing = readDraft({
+      key: 'C',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [
+        { kind: 'verse', meter: '3/4', lines: ['C@1', 'G'] },
+        { kind: 'chorus', lines: ['F'] },
+      ],
+    })
+    const [pickup, verse, chorus] = linesOf(changing)
+    if (!pickup || !verse || !chorus) throw new Error('three lines')
+    expect(lineMusic(changing, verse).bars[0]).toMatchObject({ beats: 3, meter: '3/4' })
+    expect(lineMusic(changing, chorus).bars[0]?.meter).toBeUndefined()
+    // The verse's pickup is short of its own 3/4, and its bars are 3/4's.
+    expect(timeBeforeLine(changing, verse)).toEqual({ count: 3, unit: 4 })
+    expect(timeBeforeLine(changing, chorus)).toEqual({ count: 3, unit: 4 })
+  })
 })
 
 describe('layerAt', () => {
   const layout = {
     staves: {
-      melody: { top: 40, bottom: 80 },
+      staff0: { top: 40, bottom: 80 },
       treble: { top: 130, bottom: 170 },
       bass: { top: 220, bottom: 260 },
     },
@@ -182,12 +186,44 @@ describe('layerAt', () => {
   it('writes the staff nearest a point, the chord row over the staves', () => {
     expect([-5, 60, 110, 150, 200, 300].map((y) => layerAt(y, layout, true))).toEqual([
       'chords',
-      'melody',
+      'staff0',
       'rh',
       'rh',
       'lh',
       'lh',
     ])
-    expect(layerAt(-5, layout, false)).toBe('melody')
+    expect(layerAt(-5, layout, false)).toBe('staff0')
+  })
+})
+
+describe('the words on a line (ADR 0093)', () => {
+  const worded = readDraft({
+    key: 'C',
+    meter: '4/4',
+    tempo: 90,
+    pattern: 'r1',
+    sections: [{ kind: 'verse', lines: ['C G'] }],
+    staves: [{ notes: 'C4/2 D4/2 | E4/4' }],
+    lyrics: ['one two three'],
+  })
+  const sung = (music: ReturnType<typeof lineMusic>) =>
+    music.notes.flatMap((n) => (n.lyrics ? [n.lyrics[0]?.text] : []))
+
+  it('carries each note’s syllables, left out where the View hides the words', () => {
+    const [line] = linesOf(worded)
+    if (!line) throw new Error('a line')
+    expect(sung(lineMusic(worded, line))).toEqual(['one', 'two', 'three'])
+    expect(sung(lineMusic(worded, line, false))).toEqual([])
+  })
+
+  it('carries the syllables of the staff the lyrics are on alone: the upper staff’s under a tune', () => {
+    // The same syllables on both staves: the upper staff's sing, the tune's are not its lyrics.
+    const tune = worded.staves[0]?.notes ?? []
+    const rh = tune.map((n) => ({ ...n, midi: midi(n.midi + 12) }))
+    const upper = { ...worded, lyricsOn: 'rh' as const, hands: { ...worded.hands, rh } }
+    const [line] = linesOf(upper)
+    if (!line) throw new Error('a line')
+    const music = lineMusic(upper, line)
+    expect(music.notes.filter((n) => n.lyrics).map((n) => n.hand)).toEqual(['rh', 'rh', 'rh'])
   })
 })

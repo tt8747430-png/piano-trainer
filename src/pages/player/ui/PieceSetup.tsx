@@ -4,18 +4,18 @@ import type { PracticeChoice } from '@/features/practice'
 import type { PatternFit } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
 import { noteParam, writtenKeyAccidentals } from '@/shared/lib/music'
-import { ChordSizeField, Labelled, NoteChoice, MenuSection, ToggleGrid } from '@/shared/ui'
+import { ChordSizeField, Labelled, NoteChoice } from '@/shared/ui'
 import {
-  MelodyToggle,
+  TuneToggle,
   PatternCard,
   PlayerSetup,
   RecordingToggle,
   type SetupChange,
 } from '@/widgets/player-setup'
-import { PlayingToggles } from '@/widgets/practice-player'
+import { PlayingSection } from '@/widgets/practice-player'
 
 /**
- * A piece's Setup: its key, the pattern and figures, its chord size, melody and recording where it
+ * A piece's Setup: its key, the pattern and figures, its chord size, tune and recording where it
  * has them, and how it plays; at its foot the way into the score editor, whose Close comes back here.
  */
 export function PieceSetup({
@@ -39,13 +39,14 @@ export function PieceSetup({
   const keyName = useKeyName()
   const own = pieceKey(piece)
   const chordSize = choosableChordSize(piece)
+  // The recording plays in its own key alone: elsewhere its tile is closed, and says why.
+  const ownKey = piece.recording && !isOwnKey(piece, choice.tonic) ? keyName(own) : null
   return (
     <PlayerSetup figures={choice} fit={fit} onFigures={onChange}>
       <NoteChoice
         label={t('key')}
         value={noteParam(choice.tonic)}
         accidentals={(letter) => writtenKeyAccidentals(letter, own.minor)}
-
         name={(tonic) => keyName({ tonic, minor: own.minor })}
         onChange={(key) => onChange({ key })}
       />
@@ -58,16 +59,15 @@ export function PieceSetup({
         </Labelled>
       ) : null}
       <PatternCard />
-      <MenuSection title={t('playing')}>
-        <ToggleGrid label={t('playing')}>
-          <PlayingToggles swing={swing} onSwing={onSwing} />
-          {/* A lead sheet's tune is always heard (ADR 0083). */}
-          {fit.melody && !isLeadSheet(piece) ? <MelodyToggle /> : null}
-          {piece.recording ? (
-            <RecordingToggle ownKey={isOwnKey(piece, choice.tonic) ? null : keyName(own)} />
-          ) : null}
-        </ToggleGrid>
-      </MenuSection>
+      <PlayingSection
+        swing={swing}
+        onSwing={onSwing}
+        info={ownKey ? t('recordingOnlyIn', { key: ownKey }) : undefined}
+      >
+        {/* A lead sheet's tune is always heard (ADR 0083). */}
+        {fit.tune && !isLeadSheet(piece) ? <TuneToggle /> : null}
+        {piece.recording ? <RecordingToggle ownKey={ownKey} /> : null}
+      </PlayingSection>
     </PlayerSetup>
   )
 }

@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { draftOf, form, lengths, shape } from '../testing/test-draft'
+import { draftOf, form, lengths, shape, staffNotes } from '../testing/test-draft'
 import {
   barLengths,
   copyBars,
   deleteBars,
   insertBar,
+  insertBarBefore,
   joinLine,
   newLine,
   pasteBars,
@@ -14,20 +15,20 @@ import { deleteChord } from './chords'
 
 const sung = draftOf({
   sections: [{ kind: 'verse', lines: ['G C', 'D G'] }],
-  melody: 'B4/4 | C5/2 E5/2 | D5/6 | B4/2',
-  hands: { lh: '- | C3/4 | D3/4 | -' },
+  staves: [{ notes: 'B4/4 | C5/2 E5/2 | D5/6 | B4/2' }],
+  hands: { lh: 'r/4 | C3/4 | D3/4 | r/4' },
 })
 
 describe('insertBar', () => {
-  it('adds a bar after, with the chord before it again, and moves the notes after it on', () => {
+  it('adds a bar of no chord after, as notation software does, and moves the notes after it on', () => {
     const inserted = insertBar(sung, 0)
     expect(form(inserted)).toEqual([
       [
-        ['G@0', 'G@0', 'C@0'],
+        ['G@0', '', 'C@0'],
         ['D@0', 'G@0'],
       ],
     ])
-    expect(shape(inserted.melody)).toEqual([
+    expect(shape(staffNotes(inserted))).toEqual([
       'B4@0/96',
       'C5@192/48',
       'E5@240/48',
@@ -38,7 +39,34 @@ describe('insertBar', () => {
   })
 
   it('cuts a note held across where the bar goes in', () => {
-    expect(shape(insertBar(sung, 2).melody)).toContain('D5@192/96')
+    expect(shape(staffNotes(insertBar(sung, 2)))).toContain('D5@192/96')
+  })
+
+  it('adds a bar after a bar of no chord too', () => {
+    const empty = draftOf({ sections: [{ kind: 'verse', lines: ['_'] }] })
+    expect(form(insertBar(empty, 0))).toEqual([[['', '']]])
+  })
+})
+
+describe('insertBarBefore', () => {
+  it('adds a bar of no chord before, starting its line, the notes moved on', () => {
+    const inserted = insertBarBefore(sung, 2)
+    expect(form(inserted)).toEqual([
+      [
+        ['G@0', 'C@0'],
+        ['', 'D@0', 'G@0'],
+      ],
+    ])
+    expect(shape(inserted.hands.lh)).toEqual(['C3@96/96', 'D3@288/96'])
+  })
+
+  it('adds a bar before the first', () => {
+    expect(form(insertBarBefore(sung, 0))).toEqual([
+      [
+        ['', 'G@0', 'C@0'],
+        ['D@0', 'G@0'],
+      ],
+    ])
   })
 })
 
@@ -46,7 +74,7 @@ describe('deleteBars', () => {
   it('takes bars with their notes, cutting a note held into them, and moves the rest back', () => {
     const deleted = deleteBars(sung, { from: 3, to: 3 })
     expect(form(deleted)).toEqual([[['G@0', 'C@0'], ['D@0']]])
-    expect(shape(deleted.melody)).toEqual(['B4@0/96', 'C5@96/48', 'E5@144/48', 'D5@192/96'])
+    expect(shape(staffNotes(deleted))).toEqual(['B4@0/96', 'C5@96/48', 'E5@144/48', 'D5@192/96'])
   })
 
   it('takes a line or a section left empty', () => {
@@ -68,6 +96,7 @@ describe('deleteBars', () => {
 describe('copy and paste', () => {
   it('pastes bars with their notes after a bar', () => {
     const clip = copyBars(sung, { from: 1, to: 2 })
+    expect(clip.kind).toBe('bars')
     const pasted = pasteBars(sung, 3, clip)
     expect(form(pasted)).toEqual([
       [
@@ -75,7 +104,7 @@ describe('copy and paste', () => {
         ['D@0', 'G@0', 'C@0', 'D@0'],
       ],
     ])
-    expect(shape(pasted.melody).slice(-3)).toEqual(['C5@384/48', 'E5@432/48', 'D5@480/96'])
+    expect(shape(staffNotes(pasted)).slice(-3)).toEqual(['C5@384/48', 'E5@432/48', 'D5@480/96'])
     expect(shape(pasted.hands.lh)).toEqual(['C3@96/96', 'D3@192/96', 'C3@384/96', 'D3@480/96'])
   })
 })
@@ -84,14 +113,26 @@ describe('setBarTicks, a pickup', () => {
   it('shortens and lengthens a pickup at its start, its chords kept from its end', () => {
     const pickup = draftOf({
       sections: [{ kind: 'verse', lines: ['G@2-D@1 C'] }],
-      melody: 'C4/1 D4/1 E4/1 | F4/4',
+      staves: [{ notes: 'C4/1 D4/1 E4/1 | F4/4' }],
     })
     const short = setBarTicks(pickup, 0, 24)
     expect(form(short)).toEqual([[['D@0', 'C@0']]])
-    expect(shape(short.melody)[0]).toBe('E4@0/24')
+    expect(shape(staffNotes(short))[0]).toBe('E4@0/24')
     const long = setBarTicks(short, 0, 48)
     expect(form(long)).toEqual([[['D@0', 'C@0']]])
     expect(lengths(long)).toEqual([48, 96])
+  })
+
+  it('reads a first bar against its section’s own meter: a whole bar of it is none (ADR 0095)', () => {
+    const waltz = draftOf({
+      sections: [{ kind: 'verse', meter: '3/4', lines: ['G C'] }],
+      staves: [{ notes: 'C4/1 D4/1 E4/1 | F4/3' }],
+    })
+    // A whole 3/4 bar made shorter is cut at its end, as any bar is: its first beats stay.
+    expect(shape(staffNotes(setBarTicks(waltz, 0, 48))).slice(0, 2)).toEqual([
+      'C4@0/24',
+      'D4@24/24',
+    ])
   })
 })
 
@@ -123,19 +164,22 @@ describe('pasted bars', () => {
 describe('setBarTicks', () => {
   it('shortens a bar, taking its chords and notes past the new end, and moves the rest back', () => {
     const shorter = setBarTicks(
-      draftOf({ sections: [{ kind: 'verse', lines: ['G-D C'] }], melody: 'B4/1 A4/3 | G4/4' }),
+      draftOf({
+        sections: [{ kind: 'verse', lines: ['G-D C'] }],
+        staves: [{ notes: 'B4/1 A4/3 | G4/4' }],
+      }),
       0,
       24,
     )
     expect(form(shorter)).toEqual([[['G@0', 'C@0']]])
-    expect(shape(shorter.melody)).toEqual(['B4@0/24', 'G4@24/96'])
+    expect(shape(staffNotes(shorter))).toEqual(['B4@0/24', 'G4@24/96'])
     expect(lengths(shorter)).toEqual([24, 96])
   })
 
   it('lengthens a bar, moving the notes after it on', () => {
-    const longer = setBarTicks(draftOf({ melody: 'B4/4 | G4/4' }), 0, 144)
+    const longer = setBarTicks(draftOf({ staves: [{ notes: 'B4/4 | G4/4' }] }), 0, 144)
     expect(lengths(longer)).toEqual([144, 96])
-    expect(shape(longer.melody)).toEqual(['B4@0/96', 'G4@144/96'])
+    expect(shape(staffNotes(longer))).toEqual(['B4@0/96', 'G4@144/96'])
   })
 
   it('offers lengths from an eighth to the meter’s bar', () => {

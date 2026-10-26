@@ -59,6 +59,7 @@ export {
   type ReferenceInterval,
 } from './interval-facts'
 export {
+  C_MAJOR,
   keyFromParam,
   keySymbol,
   keyParam,
@@ -74,6 +75,7 @@ export {
   type KeyParam,
 } from './key'
 export { CHORD_ROLES, type ChordRole, type Tone } from './tone'
+export { type NoteLyrics, type Syllable } from './lyrics'
 export {
   CHORD_FAMILIES,
   CHORD_QUALITIES,
@@ -124,6 +126,7 @@ export {
   readChordLine,
   readChordSymbol,
   type ChordLine,
+  printedChord,
   printedSymbol,
 } from './chord-symbol'
 export { nameChords, type FoundChord, type LeftOut } from './chord-finder'
@@ -195,6 +198,7 @@ export {
 export {
   CHORD_NOTES,
   CHORD_SIZES,
+  ROMAN_NUMERALS,
   SIZE_NOTES,
   STACK_SIZES,
   sizeOfNotes,
@@ -258,13 +262,3 @@ export {
   type Jump,
 } from './bar-marks'
 export { CLEFS, clefsInForce, HOME_CLEF, type Clef, type HandClefs } from './clef'
-export {
-  DEFAULT_INSTRUMENT,
-  INSTRUMENT_FAMILIES,
-  INSTRUMENT_OF,
-  INSTRUMENTS,
-  instrumentsIn,
-  isInstrument,
-  type Instrument,
-  type InstrumentFamily,
-} from './instrument'

@@ -6,10 +6,13 @@ import { keyParam, note, noteName, noteParam, writtenKeyAccidentals } from '@/sh
 import { ButtonLink } from './ButtonLink'
 import { ChordSizeField } from './ChordSizeField'
 import { Dropdown } from './Dropdown'
+import { FactCard } from './FactCard'
 import { InversionChoice } from './InversionChoice'
 import { RankMark } from './RankMark'
 import { NamedSegmented } from './NamedSegmented'
 import { KeyChoice } from './KeyChoice'
+import { Labelled } from './Labelled'
+import { MenuSection } from './MenuSection'
 import { NoteChoice } from './NoteChoice'
 import { optionName } from './option'
 import { Pinned } from './Pinned'
@@ -17,13 +20,16 @@ import { PlayLabel } from './PlayLabel'
 import { RatingMark } from './RatingMark'
 import { RoundButton } from './RoundButton'
 import { RoundLink } from './RoundLink'
+import { RowButton } from './RowButton'
 import { RowGroup } from './RowGroup'
 import { RowLink } from './RowLink'
 import { ScreenBarProvider } from './ScreenBarProvider'
 import { ScreenHeader } from './ScreenHeader'
 import { Segmented } from './Segmented'
+import { SettingField } from './SettingField'
 import { SwitchRow } from './SwitchRow'
 import { ToggleChips } from './ToggleChips'
+import { ToggleTile } from './ToggleTile'
 import { TypedField } from './TypedField'
 
 const MODES = [
@@ -43,6 +49,31 @@ describe('ScreenHeader', () => {
     render(<ScreenHeader title="Chords" tabs={<nav aria-label="Chords" />} />)
     const bar = screen.getByRole('banner')
     expect(within(bar).getByRole('navigation', { name: 'Chords' })).toBeInTheDocument()
+  })
+
+  it('keeps the title beside one or two actions, and under three or more on a phone, two lines at most', () => {
+    const { rerender } = render(
+      <ScreenHeader
+        title="Wonderful Grace of Jesus"
+        actions={<button type="button">Edit</button>}
+      />,
+    )
+    const title = screen.getByRole('heading', { level: 1 })
+    expect(title).not.toHaveClass('max-sm:basis-full')
+    rerender(
+      <ScreenHeader
+        title="Wonderful Grace of Jesus"
+        crowded
+        actions={
+          <>
+            <button type="button">Edit</button>
+            <button type="button">Learned</button>
+            <button type="button">More</button>
+          </>
+        }
+      />,
+    )
+    expect(title).toHaveClass('max-sm:order-last', 'max-sm:basis-full', 'max-sm:line-clamp-2')
   })
   const scrollTo = (y: number) => {
     vi.spyOn(window, 'scrollY', 'get').mockReturnValue(y)
@@ -113,9 +144,11 @@ describe('PlayLabel', () => {
 })
 
 describe('RoundButton', () => {
-  it('is named by its label, not its icon', () => {
+  it('is named by its label, not its icon, and says it when pointed at, as a round link does', () => {
     render(<RoundButton label="Settings" icon={Settings} />)
-    expect(screen.getByRole('button', { name: 'Settings' })).toHaveClass('rounded-full')
+    const button = screen.getByRole('button', { name: 'Settings' })
+    expect(button).toHaveClass('rounded-full')
+    expect(button).toHaveAttribute('title', 'Settings')
   })
 })
 
@@ -243,23 +276,134 @@ describe('TypedField', () => {
 })
 
 describe('SwitchRow', () => {
-  it('is a switch named by its label, its note under the label', async () => {
+  it('is a switch named by its label alone, turned by a tap anywhere on its row', async () => {
+    const user = userEvent.setup()
+    const onCheckedChange = vi.fn()
+    render(<SwitchRow label="Metronome" checked={false} onCheckedChange={onCheckedChange} />)
+    expect(screen.getByRole('switch', { name: 'Metronome' })).toBeInTheDocument()
+    await user.click(screen.getByText('Metronome'))
+    expect(onCheckedChange).toHaveBeenCalledWith(true, expect.anything())
+  })
+
+  it('says what it does in a popover beside its name, never in a line under it', async () => {
     const user = userEvent.setup()
     const onCheckedChange = vi.fn()
     render(
       <SwitchRow
-        label="Recording"
-        detail="Only in G major"
+        label="Metronome"
+        info="The beat goes on after the count-in"
         checked={false}
-        disabled
         onCheckedChange={onCheckedChange}
       />,
     )
-    const toggle = screen.getByRole('switch', { name: /^Recording/ })
-    expect(screen.getByText('Only in G major')).toBeInTheDocument()
+    expect(screen.getByRole('switch', { name: 'Metronome' })).toBeInTheDocument()
+    expect(screen.queryByText('The beat goes on after the count-in')).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'About Metronome' }))
+    expect(await screen.findByRole('dialog', { name: 'Metronome' })).toHaveTextContent(
+      'The beat goes on after the count-in',
+    )
+    // The ⓘ opens the explanation and turns nothing.
+    expect(onCheckedChange).not.toHaveBeenCalled()
+  })
+
+  it('turns nothing while disabled', async () => {
+    const user = userEvent.setup()
+    const onCheckedChange = vi.fn()
+    render(
+      <SwitchRow label="Recording" checked={false} disabled onCheckedChange={onCheckedChange} />,
+    )
+    const toggle = screen.getByRole('switch', { name: 'Recording' })
     expect(toggle).toHaveAttribute('aria-disabled', 'true')
     await user.click(toggle)
+    await user.click(screen.getByText('Recording'))
     expect(onCheckedChange).not.toHaveBeenCalled()
+  })
+})
+
+describe('a choice’s explanation', () => {
+  const TOUCH = 'How hard a key must be struck to sound loud'
+  const touch = (
+    <Segmented
+      label="Touch"
+      value="normal"
+      options={[
+        { value: 'light', label: 'Light' },
+        { value: 'normal', label: 'Normal' },
+      ]}
+      onChange={() => {}}
+    />
+  )
+
+  it.each([
+    [
+      'a setting',
+      <SettingField key="setting" label="Touch" info={TOUCH}>
+        {touch}
+      </SettingField>,
+    ],
+    [
+      'a labelled field',
+      <Labelled key="labelled" label="Touch" info={TOUCH}>
+        {touch}
+      </Labelled>,
+    ],
+    [
+      'a menu’s group',
+      <MenuSection key="menu" title="Touch" info={TOUCH}>
+        {touch}
+      </MenuSection>,
+    ],
+  ])('is a popover beside %s’s name, never a line under it', async (_, field) => {
+    const user = userEvent.setup()
+    render(field)
+    expect(screen.getByText('Touch')).toBeInTheDocument()
+    expect(screen.getByRole('radiogroup', { name: 'Touch' })).toBeInTheDocument()
+    expect(screen.queryByText(TOUCH)).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'About Touch' }))
+    expect(await screen.findByRole('dialog', { name: 'Touch' })).toHaveTextContent(TOUCH)
+  })
+
+  it('is left out where a choice has none', () => {
+    render(
+      <SettingField label="Touch">
+        <span>Light</span>
+      </SettingField>,
+    )
+    expect(screen.queryByRole('button', { name: /^About/ })).toBeNull()
+  })
+})
+
+describe('ToggleTile', () => {
+  it('says what it does in its tooltip, never in a line on it', () => {
+    render(
+      <ToggleTile
+        label="Glissando"
+        tip="A swipe plays the keys"
+        icon={Settings}
+        pressed={false}
+        onPressedChange={() => {}}
+      />,
+    )
+    const tile = screen.getByRole('button', { name: 'Glissando' })
+    expect(tile).toHaveAccessibleDescription('A swipe plays the keys')
+    expect(tile).toHaveAttribute('title', 'A swipe plays the keys')
+    expect(tile).not.toHaveTextContent('A swipe plays the keys')
+  })
+
+  it('closed, still says why when pointed at', () => {
+    render(
+      <ToggleTile
+        label="Recording"
+        tip="Only in D minor"
+        icon={Settings}
+        pressed={false}
+        disabled
+        onPressedChange={() => {}}
+      />,
+    )
+    const tile = screen.getByRole('button', { name: 'Recording' })
+    expect(tile).toBeDisabled()
+    expect(tile).toHaveAccessibleDescription('Only in D minor')
   })
 })
 
@@ -474,6 +618,38 @@ describe('RowLink', () => {
     expect(link).toHaveAttribute('href', '/practice/chords')
     expect(link.querySelector('[data-slot="row-tile"]')).toHaveClass('bg-paint-sand')
   })
+
+  it('shows what it holds under its title and detail', () => {
+    render(
+      <RowLink title="Amazing Grace" detail="Hymn" render={<a href="/songs/amazing" />}>
+        <span>G G7 C D</span>
+      </RowLink>,
+    )
+    const link = screen.getByRole('link', { name: 'Amazing Grace Hymn G G7 C D' })
+    expect(
+      within(link).getByText('Hymn').compareDocumentPosition(within(link).getByText('G G7 C D')),
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+  })
+
+  it('wears a chevron, the disclosure of the page it leads to', () => {
+    render(<RowLink title="Chords" render={<a href="/practice/chords" />} />)
+    expect(
+      screen.getByRole('link', { name: 'Chords' }).querySelector('[data-slot="row-chevron"]'),
+    ).toBeInTheDocument()
+  })
+})
+
+describe('RowButton', () => {
+  it('opens in place as a button, a row’s tile and title with no chevron', async () => {
+    const onClick = vi.fn()
+    render(<RowButton title="Learn C♯m" icon={Settings} paint="sky" onClick={onClick} />)
+    const row = screen.getByRole('button', { name: 'Learn C♯m' })
+    expect(row).toHaveAttribute('type', 'button')
+    expect(row.querySelector('[data-slot="row-tile"]')).toHaveClass('bg-paint-sky')
+    expect(row.querySelector('[data-slot="row-chevron"]')).not.toBeInTheDocument()
+    await userEvent.setup().click(row)
+    expect(onClick).toHaveBeenCalledOnce()
+  })
 })
 
 describe('RowGroup', () => {
@@ -486,6 +662,31 @@ describe('RowGroup', () => {
     expect(screen.getByRole('region', { name: 'References' })).toContainElement(
       screen.getByText('Chords'),
     )
+  })
+
+  it('heads itself a level down inside a section of its page', () => {
+    render(
+      <RowGroup title="One change at a time" level={3}>
+        <li>From C to G</li>
+      </RowGroup>,
+    )
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'One change at a time' }),
+    ).toBeInTheDocument()
+  })
+})
+
+describe('FactCard', () => {
+  it('names its fact under its icon, in a list of facts', () => {
+    render(
+      <dl>
+        <FactCard icon={Settings} name="Tempo">
+          72 BPM
+        </FactCard>
+      </dl>,
+    )
+    expect(screen.getByRole('term')).toHaveTextContent('Tempo')
+    expect(screen.getByRole('definition')).toHaveTextContent('72 BPM')
   })
 })
 
