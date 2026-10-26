@@ -9,6 +9,8 @@ export {
   DEFAULT_SCORE_VIEW,
   DIAGRAMS_MODES,
   MUSIC_VIEWS,
+  TEXT_SIZES,
+  type TextSize,
   type DiagramsMode,
   type MusicView,
   type ScoreViewSettings,

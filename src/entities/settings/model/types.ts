@@ -174,6 +174,13 @@ export const DIAGRAMS_MODES = ['animated', 'summary'] as const
 export type DiagramsMode = (typeof DIAGRAMS_MODES)[number]
 
 /**
+ * Chords over lyrics' text sizes (ADR 0108, Chordify's font size): its words and chords as a percent
+ * of their own size, smallest first, a step at a time by its − and +.
+ */
+export const TEXT_SIZES = [80, 90, 100, 115, 130, 150] as const
+export type TextSize = (typeof TEXT_SIZES)[number]
+
+/**
  * How the Player and the score editor show a score (ADR 0064, Soundslice's view settings): laid out
  * as one line across, lines down the screen or A4 pages; the Player's view of it (ADR 0099: the
  * editor always shows the score), Diagrams' mode, and whether a song opens asking for it (ADR 0102);
@@ -189,6 +196,10 @@ export interface ScoreViewSettings {
   readonly chordNames: boolean
   /** The verses under the staff they are written on, where the song has words. */
   readonly lyrics: boolean
+  /** Chords over lyrics' chord diagrams pinned under its strip (ADR 0108). */
+  readonly pinned: boolean
+  /** Chords over lyrics' words and chords, as a percent of their own size (ADR 0108). */
+  readonly textSize: TextSize
   /** The staves out of sight: a single staff by its place, the piano's upper or lower staff. */
   readonly hidden: readonly StaffId[]
   /** The keys under the score: off, the score has the screen. */
@@ -207,6 +218,8 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   askOnOpen: false,
   chordNames: true,
   lyrics: true,
+  pinned: true,
+  textSize: 100,
   hidden: [],
   keys: true,
 }
@@ -308,6 +321,7 @@ export const isTouch = isOneOf(TOUCHES)
 export const isPedalWay = isOneOf(PEDAL_WAYS)
 export const isMusicView = isOneOf(MUSIC_VIEWS)
 export const isDiagramsMode = isOneOf(DIAGRAMS_MODES)
+export const isTextSize = isOneOf(TEXT_SIZES)
 
 /** The first of the browser's preferred languages the app speaks decides; English otherwise. */
 export function detectLocale(languages: readonly string[] | undefined): Locale {
