@@ -1,6 +1,6 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { Info, Share2 } from 'lucide-react'
-import { useEffect, useEffectEvent, useState } from 'react'
+import { Info, ListTree, Share2 } from 'lucide-react'
+import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   entryTitles,
@@ -15,18 +15,20 @@ import { selectScoreView, useSettings } from '@/entities/settings'
 import { useFavouriteAction, useSongActions } from '@/features/manage-library'
 import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { beatGroupInBar, writtenBarAt } from '@/features/practice'
-import { ShareSaid, useShareSong } from '@/features/share-song'
+import { ShareSaid, useShareSong, type SongToShare } from '@/features/share-song'
 import { useLocale } from '@/shared/i18n'
 import { useViewChange } from '@/shared/lib'
-import { isCompound } from '@/shared/lib/music'
-import { ButtonLink, NotFound } from '@/shared/ui'
+import { isCompound, noteParam } from '@/shared/lib/music'
+import { ButtonLink, NotFound, type MenuAction } from '@/shared/ui'
 import { ModeSwitch } from '@/widgets/mode-switch'
 import { useClose } from '../model/use-close'
 import type { PlayerSearch } from '../model/player-search'
+import { sectionAt, sectionStarts } from '../model/section-starts'
 import { usePlayer } from '../model/use-player'
 import { MoreActions } from './more-actions'
 import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
+import { SectionsSheet } from './SectionsSheet'
 import { SimplifyTool } from './SimplifyTool'
 import { SongInfo } from './SongInfo'
 import { TransposeTool } from './TransposeTool'
@@ -56,11 +58,52 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   useEffect(() => {
     if (search.bar !== undefined) openAt(search.bar)
   }, [search.bar])
-  // More's own (ADR 0099): the piece's information as a sheet, and an own song's Share, as its page
-  // shares it, saying so where the status line is.
-  const [showingInfo, setShowingInfo] = useState(false)
+  // More's own (ADR 0099, 0107): the piece's information and its sections as sheets, and Share, as
+  // its page shares it, saying so where the status line is.
+  const [showing, setShowing] = useState<'info' | 'sections' | null>(null)
+  const sheetOf = (sheet: 'info' | 'sections') => ({
+    open: showing === sheet,
+    onOpenChange: (open: boolean) => setShowing(open ? sheet : null),
+  })
+  const starts = useMemo(() => sectionStarts(performance), [performance])
   const shared = useShareSong()
-  const sharing = isOwnSongId(piece.id) && !isDegreePiece(piece)
+  // An own song carries its music, one of the app's is a link to itself as it is played.
+  const sharing: SongToShare | null = !isOwnSongId(piece.id)
+    ? {
+        kind: 'piece',
+        id: piece.id,
+        title,
+        played: { key: noteParam(choice.tonic), simple: choice.simple && simplifies },
+      }
+    : isDegreePiece(piece)
+      ? null
+      : { kind: 'own', song: { title, music: musicOf(piece) } }
+  const more: MenuAction[] = [
+    {
+      key: 'info',
+      label: t(`player:info.${piece.kind}`),
+      icon: Info,
+      onSelect: () => setShowing('info'),
+    },
+    {
+      key: 'sections',
+      label: t('player:sections.title'),
+      icon: ListTree,
+      onSelect: () => setShowing('sections'),
+      disabled: starts.length < 2,
+      reason: t(`player:sections.one.${piece.kind}`),
+    },
+    ...(sharing
+      ? [
+          {
+            key: 'share',
+            label: t('piece:share'),
+            icon: Share2,
+            onSelect: () => shared.share(sharing),
+          },
+        ]
+      : []),
+  ]
   // Its place in the learner's library (ADR 0106), first in More; a study is in none.
   const favourite = useFavouriteAction(piece.id)
   const library = useSongActions(piece)
@@ -81,7 +124,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
           piano={!isLeadSheet(piece)}
           // A piece written in degrees has the piano's staves alone.
           staves={isDegreePiece(piece) ? undefined : piece.staves}
-          recorded={piece.recording !== undefined}
+          recording={piece.recording}
           modes={
             // A piece written in degrees has no score to edit.
             isDegreePiece(piece) ? null : (
@@ -110,31 +153,18 @@ function PiecePlayer({ piece }: { piece: Piece }) {
               <SimplifyTool on={choice.simple} simplifies={simplifies} onChange={simplify} />
             </>
           }
-          info={{
-            key: 'info',
-            label: t(`player:info.${piece.kind}`),
-            icon: Info,
-            onSelect: () => setShowingInfo(true),
-          }}
-          share={
-            sharing
-              ? {
-                  key: 'share',
-                  label: t('piece:share'),
-                  icon: Share2,
-                  onSelect: () => shared.share({ title, music: musicOf(piece) }),
-                }
-              : undefined
-          }
-          status={sharing ? <ShareSaid said={shared.said} /> : null}
+          more={more}
+          status={<ShareSaid said={shared.said} />}
           // Chordify's "Show this when opening a song" (ADR 0102): the View, to choose how it shows.
           openView={askView}
         />
-        <SongInfo
-          piece={piece}
-          performance={performance}
-          open={showingInfo}
-          onOpenChange={setShowingInfo}
+        <SongInfo piece={piece} performance={performance} {...sheetOf('info')} />
+        <SectionsSheet
+          starts={starts}
+          headings={headings}
+          current={sectionAt(performance, player.practice.state.beatGroup)}
+          onGo={goToBar}
+          {...sheetOf('sections')}
         />
         {inLibrary ? library.sheet : null}
       </MoreActions>

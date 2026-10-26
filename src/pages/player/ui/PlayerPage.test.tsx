@@ -208,11 +208,12 @@ describe('Player', () => {
     expect(clicks[0]).toMatchObject({ accent: true })
     expect(clicks[1]).toMatchObject({ accent: false })
     act(() => audio.setNow(0.15))
-    expect((await screen.findByRole('status')).textContent).toMatch(/^Count-in: 4/)
+    // The count-in's own status, beside the one Share speaks in.
+    expect(await screen.findByText(/^Count-in: 4/)).toBeInTheDocument()
     // A beat at bz5's 72.
     const beat = 60 / 72
     act(() => audio.setNow(0.15 + beat))
-    await waitFor(() => expect(screen.getByRole('status').textContent).toMatch(/^Count-in: 3/))
+    expect(await screen.findByText(/^Count-in: 3/)).toBeInTheDocument()
     act(() => audio.setNow(0.15 + 8 * beat))
     await waitFor(() => expect(screen.queryByText(/^Count-in/)).not.toBeInTheDocument())
   })

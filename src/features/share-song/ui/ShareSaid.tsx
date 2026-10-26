@@ -1,9 +1,14 @@
 import { useTranslation } from 'react-i18next'
 import type { ShareSaid as Said } from '../model/use-share-song'
 
-const WORDS = { copied: 'shareCopied', failed: 'shareFailed', tooLong: 'shareTooLong' } as const
+const WORDS = {
+  copied: 'shareCopied',
+  linked: 'shareLinked',
+  failed: 'shareFailed',
+  tooLong: 'shareTooLong',
+} as const
 
-/** What sharing said (copied, failed, too long), in a quiet line that a screen reader hears. */
+/** What sharing said (copied, linked, failed, too long), in a quiet line that a screen reader hears. */
 export function ShareSaid({ said }: { said: Said }) {
   const { t } = useTranslation('piece')
   return (
