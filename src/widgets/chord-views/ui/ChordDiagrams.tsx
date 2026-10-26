@@ -58,7 +58,8 @@ function Diagram({
       aria-hidden={coming || undefined}
       inert={coming}
       onClick={onGo}
-      style={{ '--slot': slot } as CSSProperties}
+      // The one coming shows as it slides in: at rest it is out of sight, even in the gutters' fade.
+      style={{ '--slot': slot, ...(coming ? { opacity: 'var(--slide, 0)' } : {}) } as CSSProperties}
       className="col-start-1 row-start-1 flex max-h-full min-h-0 min-w-0 translate-x-[calc((var(--slot)-var(--slide,0))*100%)] flex-col items-center gap-2 self-end rounded-xl p-1.5 transition-[translate,background-color] duration-300 ease-out group-data-moving/pair:transition-[background-color] hover:bg-muted motion-reduce:transition-none landscape-phone:self-center"
     >
       <ChordDiagram chord={chord} muted={muted} className="min-h-0" />
@@ -194,11 +195,13 @@ export function ChordDiagrams({
       <div data-area="title">
         <SheetTitle title={title} place="lines" />
       </div>
+      {/* Two diagrams' room, clipped there: one past it is out of sight. On a phone held upright it
+          runs into the gutters, fading there, so a diagram sliding past is never cut hard. */}
       <div
         ref={pair}
         data-area="chords"
         data-moving={moving ? '' : undefined}
-        className="group/pair grid grid-cols-[repeat(2,minmax(0,28rem))] justify-center overflow-hidden landscape-phone:grid-cols-[repeat(2,minmax(0,14rem))]"
+        className="group/pair -mx-gutter grid w-[calc(100%+2*var(--gutter))] max-w-[calc(56rem+2*var(--gutter))] grid-cols-2 justify-self-center overflow-hidden px-gutter [mask-image:linear-gradient(to_right,transparent,#000_var(--gutter),#000_calc(100%-var(--gutter)),transparent)] landscape-phone:mx-0 landscape-phone:w-full landscape-phone:max-w-[28rem] landscape-phone:px-0 landscape-phone:mask-none"
       >
         {first ? (
           <>

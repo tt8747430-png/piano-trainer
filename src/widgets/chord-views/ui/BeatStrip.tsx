@@ -68,7 +68,8 @@ export function BeatStrip({
   useLayoutEffect(() => {
     const cells = [...(row.current?.querySelectorAll<HTMLElement>('[data-cell]') ?? [])]
     places.current = {
-      lefts: cells.map((cell) => cell.offsetLeft + (cell.parentElement?.offsetLeft ?? 0)),
+      // The row is each beat's offset parent.
+      lefts: cells.map((cell) => cell.offsetLeft),
       widths: cells.map((cell) => cell.offsetWidth),
     }
   }, [bars, width])
