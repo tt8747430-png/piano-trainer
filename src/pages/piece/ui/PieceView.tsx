@@ -13,6 +13,7 @@ import {
   usePieces,
   type Piece,
 } from '@/entities/piece'
+import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { LearnedButton } from '@/features/mark-learned'
 import { ShareSaid, useShareSong } from '@/features/share-song'
 import { OPEN_PLAINLY } from '@/shared/lib'
@@ -97,73 +98,78 @@ export function PieceView({ piece }: { piece: Piece }) {
   ]
 
   return (
-    <div className="flex flex-col gap-6 pb-4">
-      <PieceHeader
-        entry={piece}
-        crowded
-        actions={
-          <>
-            {isDegreePiece(piece) ? null : (
-              <RoundLink
-                label={t('edit')}
-                icon={PencilLine}
-                render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
-              />
-            )}
-            {own ? null : <LearnedButton step={step} round />}
-            {/* More holds nothing for a catalog song of no chord symbol: then it is not there. */}
-            {actions.length > 0 ? (
-              <div ref={more} className="contents">
-                <ActionMenu
-                  label={t('more')}
-                  align="end"
-                  trigger={<Ellipsis aria-hidden />}
-                  render={
-                    <Button
-                      variant="surface"
-                      size="icon"
-                      className="rounded-full"
-                      aria-label={t('more')}
-                      title={t('more')}
-                    />
-                  }
-                  actions={actions}
+    // Its chords drawn in the inversions chosen for them in this piece (ADR 0101).
+    <PieceInversions pieceId={piece.id}>
+      <div className="flex flex-col gap-6 pb-4">
+        <PieceHeader
+          entry={piece}
+          crowded
+          actions={
+            <>
+              {isDegreePiece(piece) ? null : (
+                <RoundLink
+                  label={t('edit')}
+                  icon={PencilLine}
+                  render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
                 />
-              </div>
-            ) : null}
+              )}
+              {own ? null : <LearnedButton step={step} round />}
+              {/* More holds nothing for a catalog song of no chord symbol: then it is not there. */}
+              {actions.length > 0 ? (
+                <div ref={more} className="contents">
+                  <ActionMenu
+                    label={t('more')}
+                    align="end"
+                    trigger={<Ellipsis aria-hidden />}
+                    render={
+                      <Button
+                        variant="surface"
+                        size="icon"
+                        className="rounded-full"
+                        aria-label={t('more')}
+                        title={t('more')}
+                      />
+                    }
+                    actions={actions}
+                  />
+                </div>
+              ) : null}
+            </>
+          }
+        />
+        <PieceByline piece={piece} />
+        <ShareSaid said={shared.said} />
+        <LearnCard piece={piece} headings={headings} sections={sections} />
+        <PieceFactCards piece={piece} />
+        {/* A song of one section has its lessons here, its chords among them to learn. */}
+        {only ? (
+          <SectionLessonGroups
+            piece={piece}
+            performance={performance}
+            lessons={only}
+            paint={sectionPaint(headings[0] ?? '')}
+          />
+        ) : (
+          <>
+            <PieceChords performance={performance} />
+            <SectionRows piece={piece} headings={headings} sections={sections} />
           </>
-        }
-      />
-      <PieceByline piece={piece} />
-      <ShareSaid said={shared.said} />
-      <LearnCard piece={piece} headings={headings} sections={sections} />
-      <PieceFactCards piece={piece} />
-      {/* A song of one section has its lessons here, its chords among them to learn. */}
-      {only ? (
-        <SectionLessonGroups
-          piece={piece}
-          performance={performance}
-          lessons={only}
-          paint={sectionPaint(headings[0] ?? '')}
-        />
-      ) : (
-        <>
-          <PieceChords performance={performance} />
-          <SectionRows piece={piece} headings={headings} sections={sections} />
-        </>
-      )}
-      <PlayAlong piece={piece} />
-      <PieceAbout entry={piece} />
-      {ownMusic ? (
-        <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} returnTo={more} />
-      ) : null}
-      <FloatingActions>
-        <FabLink
-          label={t('practise')}
-          icon={Play}
-          render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />}
-        />
-      </FloatingActions>
-    </div>
+        )}
+        <PlayAlong piece={piece} />
+        <PieceAbout entry={piece} />
+        {ownMusic ? (
+          <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} returnTo={more} />
+        ) : null}
+        <FloatingActions>
+          <FabLink
+            label={t('practise')}
+            icon={Play}
+            render={
+              <Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />
+            }
+          />
+        </FloatingActions>
+      </div>
+    </PieceInversions>
   )
 }

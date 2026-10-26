@@ -11,6 +11,7 @@ import {
   useRepertoire,
   type Piece,
 } from '@/entities/piece'
+import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { beatGroupInBar, writtenBarAt } from '@/features/practice'
 import { ShareSaid, useShareSong } from '@/features/share-song'
 import { useLocale } from '@/shared/i18n'
@@ -59,7 +60,8 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const shared = useShareSong()
   const sharing = isOwnSongId(piece.id) && !isDegreePiece(piece)
   return (
-    <>
+    // Its chords drawn in the inversions chosen for them in this piece (ADR 0101).
+    <PieceInversions pieceId={piece.id}>
       <PlayerLayout
         title={title}
         onClose={close}
@@ -111,7 +113,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
         open={showingInfo}
         onOpenChange={setShowingInfo}
       />
-    </>
+    </PieceInversions>
   )
 }
 

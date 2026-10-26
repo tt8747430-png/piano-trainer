@@ -3,6 +3,7 @@ import { Play } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { entryTitles, useRepertoire, type Piece } from '@/entities/piece'
 import { selectLessons, useProgress } from '@/entities/progress'
+import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { loopParam } from '@/features/practice'
 import { useLocale } from '@/shared/i18n'
 import { OPEN_PLAINLY } from '@/shared/lib'
@@ -40,38 +41,41 @@ function SectionView({ piece, section }: { piece: Piece; section: number }) {
   const heading = headings[section] ?? ''
   const paint = sectionPaint(heading)
   return (
-    <div className="flex flex-col gap-8 pb-4">
-      <ScreenHeader
-        title={t('learnSection.title', { section: heading })}
-        back={<SectionBack piece={piece} />}
-        actions={
-          <RoundLink
-            label={t('practise')}
-            icon={Play}
-            render={
-              <Link
-                to="/play/$pieceId"
-                params={{ pieceId: piece.id }}
-                search={{ loop: loopParam(lessons.bars) }}
-                state={OPEN_PLAINLY}
-              />
-            }
-          />
-        }
-      />
-      <SectionCard
-        title={entryTitles(piece, locale).primary}
-        lessons={lessons}
-        paint={paint}
-        progress={progressOf(lessonKeys(lessons), done)}
-      />
-      <SectionLessonGroups
-        piece={piece}
-        performance={performance}
-        lessons={lessons}
-        paint={paint}
-      />
-    </div>
+    // Its chords drawn in the inversions chosen for them in this piece (ADR 0101).
+    <PieceInversions pieceId={piece.id}>
+      <div className="flex flex-col gap-8 pb-4">
+        <ScreenHeader
+          title={t('learnSection.title', { section: heading })}
+          back={<SectionBack piece={piece} />}
+          actions={
+            <RoundLink
+              label={t('practise')}
+              icon={Play}
+              render={
+                <Link
+                  to="/play/$pieceId"
+                  params={{ pieceId: piece.id }}
+                  search={{ loop: loopParam(lessons.bars) }}
+                  state={OPEN_PLAINLY}
+                />
+              }
+            />
+          }
+        />
+        <SectionCard
+          title={entryTitles(piece, locale).primary}
+          lessons={lessons}
+          paint={paint}
+          progress={progressOf(lessonKeys(lessons), done)}
+        />
+        <SectionLessonGroups
+          piece={piece}
+          performance={performance}
+          lessons={lessons}
+          paint={paint}
+        />
+      </div>
+    </PieceInversions>
   )
 }
 
