@@ -382,8 +382,8 @@ describe('Practice → Scales and keys, Key view', () => {
     // Its vii° stands on B minor's place, written as the chord it is.
     expect(within(circle).getByRole('link', { name: 'B minor' })).toHaveTextContent('B°vii°')
     expect(within(circle).getByRole('link', { name: 'E♭ major' })).toHaveTextContent('3♭')
-    // A key the circle names is printed as a chord is, over its signature's count.
-    expect(within(circle).getByRole('link', { name: 'F# minor' })).toHaveTextContent(/^F♯m3/)
+    // A key the circle names is printed as a chord is, over its signature's count and sign.
+    expect(within(circle).getByRole('link', { name: 'F# minor' })).toHaveTextContent('F♯m3♯')
   })
 
   it('names a minor scale’s key and marks the notes its signature writes', async () => {
