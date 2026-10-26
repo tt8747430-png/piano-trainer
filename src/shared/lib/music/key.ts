@@ -47,6 +47,24 @@ const LETTER_FIFTHS: Readonly<Record<Letter, number>> = {
 export const keySignature = (key: Key): number =>
   LETTER_FIFTHS[key.tonic.letter] + 7 * key.tonic.accidental - (key.minor ? 3 : 0)
 
+/**
+ * The key a signature of `count` sharps (> 0) or flats (< 0) writes, major or minor (ADR 0110: the
+ * palette's key signatures, each a tile): 3 is A major or F♯ minor.
+ */
+export function signatureKey(count: number, minor: boolean): Key {
+  const fifths = count + (minor ? 3 : 0)
+  for (const accidental of [0, 1, -1] as const) {
+    const letter = (Object.keys(LETTER_FIFTHS) as Letter[]).find(
+      (each) => LETTER_FIFTHS[each] + 7 * accidental === fifths,
+    )
+    if (letter) return { tonic: note(letter, accidental), minor }
+  }
+  throw new RangeError(`No key signature writes ${count}`)
+}
+
+/** Every key signature, from seven flats to seven sharps (ADR 0110). */
+export const SIGNATURE_COUNTS: readonly number[] = Array.from({ length: 15 }, (_, i) => i - 7)
+
 export const keyPrefersSharps = (key: Key): boolean => keySignature(key) > 0
 
 /** The most sharps or flats a key signature writes: C♯ major's seven, C♭ major's. */

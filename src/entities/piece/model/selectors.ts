@@ -2,6 +2,7 @@ import { pitchClassOf, type ChordSize, type Key, type SpelledNote } from '@/shar
 import type { PatternId } from '@/entities/pattern'
 import { COLLECTIONS, PIECES } from '../content'
 import { patternsOfPiece } from './chart'
+import { asChartPiece } from './degree-chart'
 import type { PieceMusic } from './music'
 import type { OwnSong } from './own'
 import type { PiecesState } from './store'
@@ -27,10 +28,13 @@ export function pieceById(id: string): Piece | undefined {
   return entry && isPiece(entry) ? entry : undefined
 }
 
-/** The catalog entry a learner may have a version of: a song, study or listing written as a chart (never one written in degrees). */
+/**
+ * The catalog entry a learner may have a version of: every song, study and listing, a song written in
+ * degrees as its chart in its key (ADR 0110).
+ */
 export function versionableEntry(id: string): ChartPiece | Listing | undefined {
   const entry = entryById(id)
-  return entry && !isDegreePiece(entry) ? entry : undefined
+  return entry && isDegreePiece(entry) ? asChartPiece(entry) : entry
 }
 
 /** The learner's version's music of a catalog song, study or listing, where there is one. */

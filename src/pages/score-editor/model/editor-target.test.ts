@@ -5,7 +5,6 @@ import {
   PIECES,
   pieceById,
   sameMusic,
-  type ChartPiece,
   type PiecesState,
 } from '@/entities/piece'
 import { readDraft, writeDraft } from '@/features/score-editor'
@@ -38,12 +37,25 @@ describe('editorTarget', () => {
     expect(target?.kind === 'version' && target.original).toEqual(original)
   })
 
-  it.each(
-    PIECES.filter((piece): piece is ChartPiece => !isDegreePiece(piece)).map((piece) => [piece.id]),
-  )('knows %s written back unchanged as its original, however the book writes it', (id) => {
-    const target = editorTarget(NONE, id)
-    if (target?.kind !== 'version') throw new Error(`${id} has a version to edit`)
-    expect(sameMusic(writeDraft(readDraft(target.music)), target.original)).toBe(true)
+  it.each(PIECES.map((piece) => [piece.id]))(
+    'opens %s, and knows it written back unchanged as its original, however the book writes it',
+    (id) => {
+      const target = editorTarget(NONE, id)
+      if (target?.kind !== 'version') throw new Error(`${id} has a version to edit`)
+      expect(sameMusic(writeDraft(readDraft(target.music)), target.original)).toBe(true)
+    },
+  )
+
+  it('opens a song written in degrees as its chart in its key, its chords as the Player plays them', () => {
+    const target = editorTarget(NONE, 'romashki')
+    if (target?.kind !== 'version') throw new Error('romashki has a version to edit')
+    expect(target.music).toMatchObject({ key: 'Dm', meter: '4/4' })
+    expect(target.music.sections.map((section) => section.kind)).toEqual([
+      'verse',
+      'chorus',
+      'chorus',
+    ])
+    expect(target.music.sections[0]?.lines[0]).toMatch(/^Dm7 /)
   })
 
   it('edits the learner’s version where there is one', () => {
@@ -62,12 +74,11 @@ describe('editorTarget', () => {
     expect(target?.kind === 'version' && target.original).toEqual(target?.music)
   })
 
-  it('edits an own song, and nothing for a progression or what is not there', () => {
+  it('edits an own song, and nothing for what is not there', () => {
     expect(editorTarget({ ...NONE, songs: [SONG] }, 'my-1')).toMatchObject({
       kind: 'song',
       id: 'my-1',
     })
-    expect(editorTarget(NONE, 'romashki')).toBeUndefined()
     expect(editorTarget(NONE, 'my-1')).toBeUndefined()
     expect(editorTarget(NONE, 'nothing')).toBeUndefined()
   })

@@ -63,9 +63,12 @@ export function diagramMarks(chord: DiagramChord): Map<Midi, KeyMark> {
 /** Two octaves around middle C: the least the Player shows. */
 const AT_LEAST: KeyRange = { from: midi(48), to: midi(71) }
 
+/**
+ * The keys a score's notes need, from a C to a B, two octaves round middle C at least: the Player's,
+ * and the score editor's, so its keys are as wide and as long in both modes (ADR 0110).
+ */
+export const keysRange = (keys: readonly Midi[]): KeyRange => keyboardRange(keys, AT_LEAST)
+
 /** Every note of the piece on the keyboard, from a C to a B. */
 export const playerRange = (performance: Performance): KeyRange =>
-  keyboardRange(
-    performance.notes.map((n) => n.midi),
-    AT_LEAST,
-  )
+  keysRange(performance.notes.map((n) => n.midi))

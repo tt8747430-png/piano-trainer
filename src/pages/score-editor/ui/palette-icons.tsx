@@ -29,7 +29,7 @@ const STAFF = (
   <path d="M2 6 H22 M2 9 H22 M2 12 H22 M2 15 H22 M2 18 H22" strokeWidth="0.9" opacity="0.45" />
 )
 
-const G_CLEF =
+export const G_CLEF =
   'M376 415l25 -145c3 -18 3 -18 29 -18c147 0 241 -113 241 -241c0 -113 -67 -198 -168 -238c-14 -6 -15 -5 -13 -17c11 -62 29 -157 29 -214c0 -170 -130 -200 -197 -200c-151 0 -190 98 -190 163c0 62 40 115 107 115c61 0 96 -47 96 -102c0 -58 -36 -85 -67 -94c-23 -7 -32 -10 -32 -17c0 -13 26 -29 80 -29c59 0 159 18 159 166c0 47 -15 134 -27 201c-2 12 -4 11 -15 9c-20 -4 -46 -6 -69 -6c-245 0 -364 165 -364 339c0 202 153 345 297 464c12 10 11 12 9 24c-7 41 -14 106 -14 164c0 104 24 229 98 311c20 22 51 48 65 48c11 0 37 -28 52 -50c41 -60 65 -146 65 -233c0 -153 -82 -280 -190 -381c-6 -6 -8 -7 -6 -19zM470 943c-61 0 -133 -96 -133 -252c0 -32 2 -66 6 -92c2 -13 6 -14 13 -8c79 69 174 159 174 270c0 55 -27 82 -60 82zM361 262l-21 128c-2 11 -4 12 -14 4c-47 -38 -93 -75 -153 -142c-83 -94 -93 -173 -93 -232c0 -139 113 -236 288 -236c20 0 40 2 56 5c15 3 16 3 14 14l-50 298c-2 11 -4 12 -20 8c-61 -17 -100 -60 -100 -117c0 -46 30 -89 72 -107c7 -3 15 -6 15 -13c0 -6 -4 -11 -12 -11c-7 0 -19 3 -27 6c-68 23 -115 87 -115 177c0 85 57 164 145 194c18 6 18 5 15 24zM430 103l49 -285c2 -12 4 -12 16 -6c56 28 94 79 94 142c0 88 -67 156 -148 163c-12 1 -13 -2 -11 -14z'
 /** The glyph's height in its units (1000 to an em), from its top at 1098 down to −658. */
 const G_CLEF_TOP = 1098
@@ -316,58 +316,6 @@ export function CodaSign() {
       <path d="M12 2 V22 M3 12 H21" strokeWidth="1.5" />
     </Icon>
   )
-}
-
-/** How each barline key draws its mark, on a staff. */
-const BARLINE_ICONS = {
-  repeatStart: (
-    <Icon>
-      {STAFF}
-      <path d="M5.5 6 V18" strokeWidth="3" strokeLinecap="butt" />
-      <path d="M10 6 V18" strokeWidth="1.5" />
-      <circle cx="14" cy="10.5" r="1.3" fill="currentColor" stroke="none" />
-      <circle cx="14" cy="13.5" r="1.3" fill="currentColor" stroke="none" />
-    </Icon>
-  ),
-  repeatEnd: CATEGORY_ICONS.repeats,
-  ending1: (
-    <Icon>
-      {STAFF}
-      <path d="M4 18 V3 H20" strokeWidth="1.5" />
-      <Word text="1." y={11} size={8} />
-    </Icon>
-  ),
-  ending2: (
-    <Icon>
-      {STAFF}
-      <path d="M4 18 V3 H20" strokeWidth="1.5" />
-      <Word text="2." y={11} size={8} />
-    </Icon>
-  ),
-  double: (
-    <Icon>
-      {STAFF}
-      <path d="M13 6 V18 M17 6 V18" strokeWidth="1.5" />
-    </Icon>
-  ),
-  final: (
-    <Icon>
-      {STAFF}
-      <path d="M12.5 6 V18" strokeWidth="1.5" />
-      <path d="M17.5 6 V18" strokeWidth="3.5" strokeLinecap="butt" />
-    </Icon>
-  ),
-  plain: (
-    <Icon>
-      {STAFF}
-      <path d="M15 6 V18" strokeWidth="1.5" />
-    </Icon>
-  ),
-} as const
-
-/** A barline key's picture. */
-export function BarlineIcon({ choice }: { choice: keyof typeof BARLINE_ICONS }) {
-  return BARLINE_ICONS[choice]
 }
 
 /** A slur or an octave line's picture: a slur's arc, a hairpin, 8va over its dashed line. */

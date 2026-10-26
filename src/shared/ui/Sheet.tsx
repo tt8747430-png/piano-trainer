@@ -39,19 +39,23 @@ export function Sheet({
  * wrapping), a body that scrolls with room round it, and an optional footer parted from it by a
  * hairline, clear of the home indicator. What the body holds keeps its height, scrolling rather than
  * squeezed. Over the phone's keyboard the panel stands on it. On a phone on its side it takes nearly
- * the whole height, or its body would be a sliver.
+ * the whole height, or its body would be a sliver; `full`, it takes it at every size (a preview
+ * opened full screen) and its body's room passes to what it holds.
  */
 export function SheetContent({
   title,
   description,
   children,
   footer,
+  full = false,
   tall = false,
 }: {
   title: string
   description?: string
   children: ReactNode
   footer?: ReactNode
+  /** The whole screen's height at every size: a preview opened full screen (ADR 0110). */
+  full?: boolean
   /** As tall as a sheet stands, whatever it holds: a sheet that is a screen (the library's filters). */
   tall?: boolean
 }) {
@@ -63,6 +67,8 @@ export function SheetContent({
         // The room anchored while no keyboard is up: the phone's keyboard never squeezes it.
         tall &&
           'h-[calc(var(--app-height,100dvh)-6rem)] landscape-phone:h-[calc(var(--app-height,100dvh)-1rem)]',
+        full &&
+          'h-[calc(var(--app-height,100dvh)-1rem)] max-h-[calc(var(--app-height,100dvh)-1rem)] max-w-5xl',
       )}
     >
       <DrawerHeader className="flex-row items-start justify-between gap-3 px-5 pt-1 pb-4 text-left landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-left">

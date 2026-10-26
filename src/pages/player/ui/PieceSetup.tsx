@@ -1,5 +1,14 @@
 import { useTranslation } from 'react-i18next'
-import { choosableChordSize, isLeadSheet, isOwnKey, pieceKey, type Piece } from '@/entities/piece'
+import {
+  choosableChordSize,
+  isDegreePiece,
+  isLeadSheet,
+  isOwnKey,
+  pieceKey,
+  useStaffNames,
+  useStaffTitle,
+  type Piece,
+} from '@/entities/piece'
 import type { PracticeChoice } from '@/features/practice'
 import type { PatternFit } from '@/entities/pattern'
 import { useKeyName } from '@/shared/i18n'
@@ -14,8 +23,8 @@ import {
 import { PlayingSection } from '@/widgets/practice-player'
 
 /**
- * A piece's Setup: the pattern and figures, its chord size, tune and recording where it has them,
- * and how it plays. Its key is the tools row's Transpose (ADR 0104); its chord size, a song's
+ * A piece's Setup: the pattern and figures, its chord size, Play melody (its tune, ADR 0110) and
+ * recording where it has them, and how it plays, the ⓘ beside it naming the staff Play melody plays. Its key is the tools row's Transpose (ADR 0104); its chord size, a song's
  * written in degrees, greyed while Simplify plays every chord as its triad, its ⓘ saying so.
  */
 export function PieceSetup({
@@ -43,6 +52,15 @@ export function PieceSetup({
   const chordSize = choosableChordSize(piece)
   // The recording plays in its own key alone: elsewhere its tile is closed, and says why.
   const ownKey = piece.recording && !isOwnKey(piece, choice.tonic) ? keyName(pieceKey(piece)) : null
+  // Play melody, the top single staff heard along (ADR 0097), its staff named in the section's ⓘ
+  // (ADR 0110). A lead sheet's tune is always heard (ADR 0083).
+  const tune = fit.tune && !isLeadSheet(piece)
+  const [topName] = useStaffNames(isDegreePiece(piece) ? undefined : piece.staves)
+  const staffTitle = useStaffTitle()
+  const said = [
+    ...(tune ? [t('tuneInfo', { staff: staffTitle(topName, 0) })] : []),
+    ...(ownKey ? [t('recordingOnlyIn', { key: ownKey })] : []),
+  ]
   return (
     <PlayerSetup figures={choice} fit={fit} onFigures={onChange}>
       {chordSize ? (
@@ -61,10 +79,17 @@ export function PieceSetup({
       <PlayingSection
         swing={swing}
         onSwing={onSwing}
-        info={ownKey ? t('recordingOnlyIn', { key: ownKey }) : undefined}
+        info={
+          said.length > 0 ? (
+            <div className="flex flex-col gap-2">
+              {said.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+            </div>
+          ) : undefined
+        }
       >
-        {/* A lead sheet's tune is always heard (ADR 0083). */}
-        {fit.tune && !isLeadSheet(piece) ? <TuneToggle /> : null}
+        {tune ? <TuneToggle /> : null}
         {piece.recording ? <RecordingToggle ownKey={ownKey} /> : null}
       </PlayingSection>
     </PlayerSetup>

@@ -110,6 +110,81 @@ export function CaptionKey({
   )
 }
 
+/**
+ * Signs as tiles (ADR 0110, forScore's palette): clefs, key and time signatures, barlines, as many to
+ * a row as fit, three on the narrowest phone.
+ */
+export function SignGrid({ label, children }: { label?: string; children: ReactNode }) {
+  return (
+    <div
+      role={label ? 'group' : undefined}
+      aria-label={label}
+      className="grid grid-cols-[repeat(auto-fill,minmax(4.75rem,1fr))] gap-1.5"
+    >
+      {children}
+    </div>
+  )
+}
+
+/**
+ * A sign's tile (ADR 0110, forScore's palette): the sign drawn on a short staff (`children`), its name
+ * under it, and what it holds in small type (`detail`: a key's relative minor, a time's beats); pressed
+ * where it is so already; greyed, its tooltip says why (`reason`, ADR 0096).
+ */
+export function SignTile({
+  label,
+  name = label,
+  detail,
+  reason,
+  pressed,
+  disabled = false,
+  onClick,
+  children,
+}: {
+  /** Its name for a screen reader and its tooltip. */
+  label: string
+  /** What it prints under the sign, where that is not its label: a time's beats alone. */
+  name?: string | null
+  detail?: string
+  reason?: string | undefined
+  pressed?: boolean
+  disabled?: boolean
+  onClick: () => void
+  children: ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={disabled && reason ? `${label}\n${reason}` : detail ? `${label} · ${detail}` : label}
+      aria-pressed={pressed}
+      disabled={disabled}
+      onClick={onClick}
+      className="group flex min-h-24 min-w-0 flex-col items-center justify-start gap-0.5 rounded-xl border border-border bg-card px-1 pt-1.5 pb-1.5 text-card-foreground transition-colors hover:bg-chosen aria-pressed:border-selected aria-pressed:bg-selected aria-pressed:text-selected-foreground disabled:opacity-35 disabled:hover:bg-card"
+    >
+      <span aria-hidden className="flex h-11 w-full shrink-0 justify-center">
+        {children}
+      </span>
+      {name === null ? null : (
+        <span
+          aria-hidden
+          className="w-full text-center text-sm leading-tight text-balance break-words"
+        >
+          {name}
+        </span>
+      )}
+      {detail ? (
+        <span
+          aria-hidden
+          className="w-full text-center text-xs leading-tight text-muted-foreground tabular-nums group-aria-pressed:text-selected-foreground/80"
+        >
+          {detail}
+        </span>
+      ) : null}
+    </button>
+  )
+}
+
 /** Terms as a score prints them (dolce, rit., D.C. al Fine), as many to a row as fit. */
 export function TermGrid({ label, children }: { label?: string; children: ReactNode }) {
   return (

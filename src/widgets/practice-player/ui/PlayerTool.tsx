@@ -7,7 +7,8 @@ import { Button } from '@/shared/ui/primitives/button'
  * A tool of the Player's tools row (ADR 0102, 0104): a quiet text button, its icon in soft ink, then
  * its name, then what it is set to (`value`: Transpose's key), whole, and what follows (`children`:
  * the View's chevron, turning while its menu is open). On a phone held upright a tool with a value
- * shows that alone after its icon, its name left to its label, so no name is cut short there.
+ * shows that alone after its icon, its name left to its label, so no name is cut short there; a
+ * `brief` one, on a phone on its side too.
  * Named for a screen reader by `label`, which holds the name it prints; `tip`, what it does or why it
  * is greyed, is its tooltip and a screen reader's description (ADR 0096), else its label is. A greyed
  * tool keeps the pointer, so its tooltip still says why. As wide as its words, growing into the
@@ -21,6 +22,7 @@ export function PlayerTool({
   name,
   value,
   tip,
+  brief = false,
   className,
   children,
   ...props
@@ -32,6 +34,11 @@ export function PlayerTool({
   /** What it is set to, after its name and never cut short. */
   value?: ReactNode
   tip?: string | undefined
+  /**
+   * Its name left to its label on a phone, upright or on its side, its icon (and value) alone there:
+   * a tool sharing the row with the edit row's icons (the editor's View and Transpose, ADR 0110).
+   */
+  brief?: boolean
   children?: ReactNode
 } & Omit<
   ComponentProps<typeof Button>,
@@ -50,7 +57,15 @@ export function PlayerTool({
       {...props}
     >
       <Icon aria-hidden className="text-muted-foreground" />
-      <span className={cn('min-w-0 truncate', value !== undefined && 'max-sm:hidden')}>{name}</span>
+      <span
+        className={cn(
+          'min-w-0 truncate',
+          value !== undefined && 'max-sm:hidden',
+          brief && 'max-sm:hidden landscape-phone:hidden',
+        )}
+      >
+        {name}
+      </span>
       {value === undefined ? null : <span className="shrink-0">{value}</span>}
       {children}
     </Button>

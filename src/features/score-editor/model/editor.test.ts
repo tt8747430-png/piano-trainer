@@ -861,6 +861,18 @@ describe('the editor', () => {
     expect(state.draft).toMatchObject({ tempo: 120 })
   })
 
+  it('transposes the music, Undo taking it back (ADR 0110)', () => {
+    const start = initialEditor(draftOf())
+    const moved = run(start, {
+      type: 'transpose',
+      semitones: 2,
+      applies: { key: true, chords: true },
+    })
+    expect(moved.draft.key).toEqual({ tonic: note('A'), minor: false })
+    expect(form(moved.draft)).toEqual([[['A@0', 'D@0']]])
+    expect(run(moved, { type: 'undo' }).draft).toEqual(start.draft)
+  })
+
   it('gives the song a title of the learner’s own, saved with its music, an empty one changing nothing (ADR 0094)', () => {
     const named = run(initialEditor(draftOf()), { type: 'title', title: '  Evening  ' })
     expect(named.draft.title).toBe('Evening')

@@ -130,6 +130,9 @@ export const player = {
   ownFigureOf: '{{hand}}: back to the pattern’s own',
   changed: { lh: 'Left hand changed', rh: 'Right hand changed', both: 'Both hands changed' },
   playing: 'How it plays',
+  /** The Play melody tile, in How it plays' ⓘ (ADR 0110): the staff it plays, named. */
+  tuneInfo:
+    'Play melody: {{staff}}, the song’s top staff over the piano, plays along with your hands.',
   /** The picker's way to the Patterns page, where they are explained, starred, hidden and made. */
   allPatterns: 'All patterns',
   ownPattern: 'Make your own pattern',
@@ -155,7 +158,7 @@ export const player = {
   recordingOnlyIn: 'The recording plays only in {{key}}, its own key.',
   /** Why a pattern or figure, or a view of the music (ADR 0102), is closed to the music. */
   needs: {
-    tune: 'Needs a tune',
+    tune: 'Needs a melody staff',
     key: 'Needs a key',
     simpleTime: 'Needs simple time',
     words: 'Needs words',
@@ -166,7 +169,7 @@ export const player = {
     chords: 'Chords',
     broken: 'Broken chords',
     moving: 'Moving voices',
-    tune: 'With the tune',
+    tune: 'With the melody',
     styles: 'Styles',
   },
   /** The left hand's figures in the Setup, by what they do. */
@@ -196,7 +199,7 @@ export const player = {
   toggles: {
     namedNotes: 'Note names',
     positions: 'Chord positions',
-    tune: 'Tune',
+    tune: 'Play melody',
     swing: 'Swing',
     recording: 'Recording',
   },

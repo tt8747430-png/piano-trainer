@@ -13,6 +13,7 @@ import {
   useHiddenWhileReading,
   useMediaQuery,
 } from '@/shared/lib'
+import { PlayerArea, SCORE_SCREEN } from '@/widgets/practice-player'
 import { ScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
 import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
@@ -20,7 +21,8 @@ import { usePaletteBeside } from '../model/use-palette-beside'
 import { useScoreEditor } from '../model/use-score-editor'
 import { CaretLine } from './CaretLine'
 import { EditorDock } from './EditorDock'
-import { EditorHeader } from './EditorHeader'
+import { EditorActions, EditorLead } from './EditorHeader'
+import { EditorToolsRow } from './EditorToolsRow'
 import { EditorKeyboard } from './EditorKeyboard'
 import { EditorSheet } from './EditorSheet'
 import { EditorTools } from './EditorTools'
@@ -86,13 +88,20 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
   )
   return (
     <ScoreEditorContext value={editor}>
-      <div
-        data-keys={dock}
-        className="editor-screen min-h-0 flex-1 gap-2 py-2 landscape-phone:gap-1.5 landscape-phone:py-1"
-      >
-        <div data-area="bar">
-          <EditorHeader status={idle ? <CaretLine /> : undefined} />
-        </div>
+      {/* The Player's frame (ADR 0110): its bar's two groups, its tools row, the sheet, the transport
+          and the keys in the Player's places, so nothing moves as Practise · Edit switches. */}
+      <div data-keys={dock} className={SCORE_SCREEN}>
+        <PlayerArea area="lead">
+          <EditorLead />
+        </PlayerArea>
+        <PlayerArea area="actions">
+          <EditorActions />
+        </PlayerArea>
+        <PlayerArea area="tools">
+          <EditorToolsRow />
+        </PlayerArea>
+        {/* Where the caret is, a screen reader's alone, in the Player's status line's place. */}
+        <PlayerArea area="status">{idle ? <CaretLine /> : null}</PlayerArea>
         {editor.view.layout === 'pages' ? (
           // Pages on their canvas (ADR 0075): it moves and zooms them itself, the area never scrolls.
           <div
@@ -142,7 +151,10 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
             // the card's was.
             <div
               ref={side}
-              className="pointer-events-auto absolute top-0 right-0 flex max-h-full w-84 flex-col landscape-phone:w-80 xl:w-96"
+              // Its foot clear of the transport, which stands centred on the sheet's foot as the
+              // Player's does (ADR 0110).
+              style={{ maxHeight: `calc(100% - ${below + GAP}px)` }}
+              className="pointer-events-auto absolute top-0 right-0 flex w-84 flex-col landscape-phone:w-80 xl:w-96"
             >
               {tools}
             </div>
@@ -151,20 +163,18 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
             ref={foot}
             data-hidden={footShown ? undefined : true}
             inert={!footShown}
-            className={cn(
-              'absolute inset-x-0 bottom-0 flex max-h-full flex-col items-center gap-2 px-1 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none',
-              // The dock centred in the room the palette beside the sheet leaves, never under it.
-              beside && 'pr-84 landscape-phone:pr-80 xl:pr-96',
-            )}
+            // The transport at the sheet's foot where the Player's stands, the palette at the foot
+            // over it (ADR 0110).
+            className="absolute inset-x-0 bottom-0 flex max-h-full flex-col items-center gap-2 px-1 pb-2 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:pb-1"
           >
-            <div className="pointer-events-auto shrink-0">
-              {idle ? <EditorDock /> : <RecordingStrip />}
-            </div>
             {beside ? null : (
               <div className="pointer-events-auto flex min-h-0 w-full max-w-xl flex-col">
                 {tools}
               </div>
             )}
+            <div className="pointer-events-auto shrink-0">
+              {idle ? <EditorDock /> : <RecordingStrip />}
+            </div>
           </div>
         </div>
         <EditorKeyboard />

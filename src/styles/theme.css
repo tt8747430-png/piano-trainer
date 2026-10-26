@@ -652,7 +652,8 @@
   bottom: max(--spacing(4), env(safe-area-inset-bottom));
 }
 
-/* The Player's screen (widgets/practice-player; spec §2.8, ADR 0061): its parts placed by `data-area`.
+/* The Player's screen, and the score editor's (widgets/practice-player; spec §2.8, ADR 0061, 0110):
+   its parts placed by `data-area`.
    At every size a column: the bar (its lead and actions in columns of their own, so neither squeezes
    the other), the tools row under it (ADR 0102), the sheet taking what is left, Wait mode's line and
    the keys at the foot, the transport floating over the sheet's foot. On a phone on its side the
@@ -689,6 +690,15 @@
   }
   & > [data-area='status'] {
     grid-area: status;
+  }
+  /* The score editor's (ADR 0110): what floats over its sheet (the palette, the transport, the notice)
+     lies over the sheet's area, above it, and only its own controls take a touch. */
+  & > [data-area='float'] {
+    grid-area: sheet;
+    position: relative;
+    z-index: 30;
+    min-height: 0;
+    pointer-events: none;
   }
   /* The transport floats over the sheet's foot (ADR 0061, 0081), taking no room of its own. */
   & > [data-area='dock'] {
@@ -735,39 +745,6 @@
         'keys keys keys keys'
         'sheet sheet sheet sheet';
     }
-  }
-}
-
-/* The score editor's screen (pages/score-editor; spec §6, ADR 0079, 0089): its parts placed by
-   `data-area`, one screen that never scrolls as a whole, the sheet its one scroller. The keys at the
-   foot, or under the bar where the keyboard settings dock them at the top (`data-keys='top'`). What
-   floats (`float`: the caret's moves, the folded keys' and palette's buttons, the palette) lies over
-   the sheet's area, above it, and only its own controls take a touch. */
-@utility editor-screen {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  grid-template-areas: 'bar' 'sheet' 'keys';
-  & > [data-area='bar'] {
-    grid-area: bar;
-    min-width: 0;
-  }
-  & > [data-area='sheet'] {
-    grid-area: sheet;
-  }
-  & > [data-area='keys'] {
-    grid-area: keys;
-  }
-  & > [data-area='float'] {
-    grid-area: sheet;
-    position: relative;
-    z-index: 30;
-    min-height: 0;
-    pointer-events: none;
-  }
-  &[data-keys='top'] {
-    grid-template-rows: auto auto minmax(0, 1fr);
-    grid-template-areas: 'bar' 'keys' 'sheet';
   }
 }
 

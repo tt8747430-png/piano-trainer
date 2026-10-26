@@ -1,5 +1,6 @@
 export { midi, PITCH_CLASSES, pitchClass, type Midi, type PitchClass } from './pitch'
 export {
+  beatGrouping,
   beatsPerBar,
   beatsBefore,
   beatsToTicks,
@@ -64,6 +65,8 @@ export {
   keySymbol,
   keyParam,
   keySignature,
+  signatureKey,
+  SIGNATURE_COUNTS,
   parseKey,
   signatureNotes,
   tonicSpelling,

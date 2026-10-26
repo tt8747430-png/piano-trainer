@@ -10,6 +10,7 @@ import {
   TICKS_PER_BEAT,
   timeSignature,
   timeSignatureText,
+  beatGrouping,
 } from './time'
 
 describe('time', () => {
@@ -64,5 +65,15 @@ describe('tempoNote', () => {
     expect(tempoNote('4/4')).toBe('\u{1D15F}')
     expect(tempoNote('6/8')).toBe('\u{1D15F}\u{1D16D}')
     expect(tempoNote('12/8')).toBe('\u{1D15F}\u{1D16D}')
+  })
+})
+
+describe('beatGrouping (ADR 0110)', () => {
+  it('groups a bar’s eighths by its beats: two to a quarter, three to a dotted quarter', () => {
+    expect(beatGrouping('2/4')).toEqual([2, 2])
+    expect(beatGrouping('3/4')).toEqual([2, 2, 2])
+    expect(beatGrouping('4/4')).toEqual([2, 2, 2, 2])
+    expect(beatGrouping('6/8')).toEqual([3, 3])
+    expect(beatGrouping('12/8')).toEqual([3, 3, 3, 3])
   })
 })

@@ -126,7 +126,8 @@ export function ScoreSheet({
   /** The notes at the caret dragged on their staff by steps of the key. */
   onDrag?: (steps: number, joins: boolean) => void
   draft: Draft
-  caret: Tick
+  /** Where the next note goes; none on a sheet only shown (the editor's Transpose preview, ADR 0110). */
+  caret: Tick | null
   /**
    * Where Play is while it plays, on the piece's ticks: the playhead stands there and follows the
    * clock, the sheet following it, the caret and what is chosen left where they are (ADR 0096).
@@ -246,7 +247,7 @@ export function ScoreSheet({
     () => sheetsOf(draft, across ? { across: true } : { room: roomAcross, widths }, lyrics),
     [sheetsOf, draft, across, roomAcross, widths, lyrics],
   )
-  const caretBar = barAt(draft, caret).index
+  const caretBar = caret === null ? null : barAt(draft, caret).index
   const playBar = playhead ? barAt(draft, playhead.tick).index : null
 
   const line = (
@@ -255,7 +256,7 @@ export function ScoreSheet({
     print = false,
     onEngraved?: (height: number) => void,
   ) => {
-    const holdsCaret = sheet.line.bars.some((placed) => placed.index === caretBar)
+    const holdsCaret = caret !== null && sheet.line.bars.some((placed) => placed.index === caretBar)
     return (
       <SheetLine
         key={`${sheet.line.section} ${sheet.line.line} ${sheet.line.start}`}

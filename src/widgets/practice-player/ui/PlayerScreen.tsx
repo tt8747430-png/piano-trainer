@@ -4,6 +4,14 @@ import { useHiddenWhileReading } from '@/shared/lib'
 import { ChromeShownContext } from '../model/chrome-shown'
 import { dockTap } from '../model/tap-on-screen'
 
+/**
+ * The score's screen, the Player's and the score editor's one frame (ADR 0110): the `player-screen`
+ * grid with the same gaps and padding, so the bar, the tools row, the sheet, the transport and the
+ * keys stand in the same places in both modes.
+ */
+export const SCORE_SCREEN =
+  'player-screen min-h-0 flex-1 gap-3 py-2 max-sm:gap-x-2 landscape-phone:gap-2 landscape-phone:py-0 landscape-phone:data-[keys=top]:pb-2'
+
 /** Whether an event happened on the music (`data-area="sheet"`). */
 const onSheet = (event: SyntheticEvent) =>
   event.target instanceof Element && event.target.closest('[data-area="sheet"]') !== null
@@ -47,7 +55,7 @@ export function PlayerScreen({
     // a phone held upright the bar's two groups closer, so a phone from 320px has its buttons in a row.
     <div
       data-keys={keys}
-      className="player-screen min-h-0 flex-1 gap-3 py-2 max-sm:gap-x-2 landscape-phone:gap-2 landscape-phone:py-0 landscape-phone:data-[keys=top]:pb-2"
+      className={SCORE_SCREEN}
       onPointerDown={onMusic(reading.onPointerDown)}
       onPointerMove={onMusic(reading.onPointerMove)}
       onTouchStart={onMusic(reading.onTouchStart)}
