@@ -19,9 +19,10 @@ const MODE_ICONS = {
 
 /**
  * Diagrams' own part of the View (ADR 0102, Chordify's "Diagram view mode"): its mode first,
- * Animated or Summary, what each does the ⓘ beside its name; then the words sung under its strip.
+ * Animated or Summary, what each does the ⓘ beside its name; then the words sung under its strip,
+ * greyed where the music has none (`noWords`, why).
  */
-export function DiagramsFields() {
+export function DiagramsFields({ noWords }: { noWords?: string }) {
   const { t } = useTranslation('player')
   const store = useSettingsStoreApi()
   const mode = useSettings((state) => selectScoreView(state).diagrams)
@@ -43,7 +44,7 @@ export function DiagramsFields() {
         />
       </Labelled>
       <div className="flex flex-col [&>[data-slot=switch-row]]:border-b-0">
-        <ViewSwitch part="lyrics" />
+        <ViewSwitch part="lyrics" reason={noWords} />
       </div>
     </>
   )

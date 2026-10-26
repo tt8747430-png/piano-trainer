@@ -1,16 +1,23 @@
 import { useTranslation } from 'react-i18next'
+import type { DiagramChord } from '@/features/practice'
 import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
-import type { LyricLine, SungWords } from '../model/lyric-lines'
+import { printedSymbol } from '@/shared/lib/music'
+import { ChordDiagram } from '@/widgets/chord-diagrams'
+import type { SungWords } from '../model/lyric-lines'
+import type { ShownLine } from '../model/repeated-lines'
 import { ChordChip } from './ChordChip'
 
 /** A place where a verse sings nothing: a no-break space, so the verses under it stay level. */
 const EMPTY_PLACE = String.fromCharCode(0xa0)
 
-/** A verse's words in a segment: a word the next segment carries on drawn on by a hyphen. */
+/**
+ * A verse's words in a segment: a word the next segment carries on drawn on by a hyphen. Wider than
+ * the line's room (a large text size on a narrow phone), they wrap in it: never cut.
+ */
 function Words({ words }: { words: SungWords | undefined }) {
   return (
-    <span className="flex whitespace-pre">
+    <span className="flex whitespace-pre-wrap">
       <span>{words?.text || EMPTY_PLACE}</span>
       {words?.goesOn ? (
         <span aria-hidden className="grow px-0.5 text-center">
@@ -28,7 +35,9 @@ function Words({ words }: { words: SungWords | undefined }) {
  * up to the next, verse 1 and each verse more under it, muted; a line of no words its chords alone.
  * The line playing reads in ink, bold; the others are muted. A chip opens its chord's sheet; the
  * line anywhere else takes the cursor to its first beat (a pointer's way only: the transport is the
- * keys'). On the loop's band where the loop holds it.
+ * keys'). On the loop's band where the loop holds it. Every length is in `em`, so the line takes its
+ * view's text size (ADR 0108), and its segments wrap whole. A line of chords alone played again
+ * straight after itself is shown once, `×N` at its end (`times`).
  */
 export function LyricRow({
   line,
@@ -37,10 +46,11 @@ export function LyricRow({
   playing,
   sounding,
   looped,
+  diagramOf,
   onGo,
   onChord,
 }: {
-  line: LyricLine
+  line: ShownLine
   /** Its place among the lines, which the view finds it by. */
   index: number
   performance: Performance
@@ -48,6 +58,8 @@ export function LyricRow({
   /** Its segment whose chord sounds. */
   sounding: number | null
   looped: boolean
+  /** A chord's diagram as its piece draws it: what a pointer resting on its chip shows. */
+  diagramOf: (chord: number) => DiagramChord | null
   onGo: () => void
   onChord: (chord: number) => void
 }) {
@@ -63,6 +75,17 @@ export function LyricRow({
       <ChordChip
         symbol={performance.chords[chord]?.symbol ?? ''}
         sounding={segment === sounding}
+        diagram={() => {
+          const drawn = diagramOf(chord)
+          return drawn ? (
+            <>
+              <ChordDiagram chord={drawn} className="h-14 w-auto" />
+              <span aria-hidden className="font-display text-base leading-tight font-semibold">
+                {printedSymbol(drawn.symbol)}
+              </span>
+            </>
+          ) : null
+        }}
         onOpen={() => onChord(chord)}
       />
     )
@@ -91,13 +114,15 @@ export function LyricRow({
       <div
         className={cn(
           'pointer-events-none relative flex flex-wrap',
-          line.sung ? 'items-end gap-y-2' : 'gap-x-3 gap-y-3 py-1',
+          line.sung ? 'items-end gap-y-[0.5em]' : 'items-center gap-x-[0.75em] gap-y-[0.75em] py-1',
         )}
       >
         {line.segments.map(({ chord, verses: sung }, segment) =>
           line.sung ? (
-            <span key={segment} className="flex flex-col">
-              <span className="flex h-9 items-end pr-2 pb-1.5">{chip(chord, segment)}</span>
+            <span key={segment} className="flex max-w-full min-w-0 flex-col">
+              <span className="flex h-[2.25em] items-end pr-[0.5em] pb-[0.375em]">
+                {chip(chord, segment)}
+              </span>
               {verses.map((verse) => (
                 <span key={verse} className={cn(verse > 0 && 'font-normal text-muted-foreground')}>
                   <Words words={sung[verse]} />
@@ -108,6 +133,12 @@ export function LyricRow({
             <span key={segment}>{chip(chord, segment)}</span>
           ),
         )}
+        {line.times > 1 ? (
+          <span className="text-[0.875em] font-semibold text-muted-foreground tabular-nums">
+            <span aria-hidden>{t('line.times', { n: line.times })}</span>
+            <span className="sr-only">{t('line.played', { count: line.times })}</span>
+          </span>
+        ) : null}
       </div>
     </div>
   )

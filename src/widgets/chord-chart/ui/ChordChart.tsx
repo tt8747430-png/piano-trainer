@@ -13,6 +13,7 @@ import {
   sectionAnchor,
   sectionBars,
 } from '../model/chart-sections'
+import type { BarWords } from '../model/bar-words'
 import { useRowRoom } from '../model/use-row-room'
 import { BarButton, type BarTap } from './BarButton'
 
@@ -20,6 +21,8 @@ import { BarButton, type BarTap } from './BarButton'
 const BEAT_MOST = 4
 /** No bar in the loop. */
 const NO_BARS: ReadonlySet<number> = new Set()
+/** No words under the bars. */
+const NO_WORDS: ReadonlyMap<number, BarWords> = new Map()
 
 /**
  * A Chart's bars as written, in beats (ADR 0099, Chordify's grid), by section, line by line, each
@@ -28,7 +31,8 @@ const NO_BARS: ReadonlySet<number> = new Set()
  * more rows, every beat as wide as every other so bars line up down the chart. The bar playing is
  * marked: on a song's chart a tap plays a bar, pressed while it sounds; on the Player's (`tap="go"`,
  * ADR 0098) a tap goes to the beat tapped (`onBar`, the bar and the tick of that beat, its first
- * time), the bar the Player is in current and its beat sounding filled.
+ * time), the bar the Player is in current and its beat sounding filled. With `words`, each bar's
+ * words under its beats (ADR 0108).
  */
 export function ChordChart({
   performance,
@@ -37,6 +41,7 @@ export function ChordChart({
   playing,
   beat = null,
   looped = NO_BARS,
+  words = NO_WORDS,
   onBar,
   className,
 }: {
@@ -50,6 +55,8 @@ export function ChordChart({
   beat?: number | null
   /** The bars as written the loop goes round. */
   looped?: ReadonlySet<number>
+  /** Each bar's words as written, verse by verse, by its number from 0: the Grid's Lyrics. */
+  words?: ReadonlyMap<number, BarWords>
   /** A bar tapped, as written, and the tick its beat tapped is first played at. */
   onBar: (bar: number, at: Tick) => void
   /** Where it stands in its page. */
@@ -143,6 +150,7 @@ export function ChordChart({
                   symbols={symbols}
                   cells={cells}
                   notes={notes}
+                  words={words.get(written)}
                   marked={playing === written}
                   sounding={playing === written ? beat : null}
                   looped={looped.has(written)}

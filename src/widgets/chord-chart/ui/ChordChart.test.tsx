@@ -127,4 +127,39 @@ describe('ChordChart', () => {
       ['Bar 3: G', '3G'],
     ])
   })
+
+  it('writes the words under the beats they are sung on, verse by verse (ADR 0108)', () => {
+    const words = new Map([
+      [
+        0,
+        [
+          [
+            { beat: 0, text: 'Si-' },
+            { beat: 1, text: 'lent' },
+            { beat: 3, text: 'night' },
+          ],
+          [{ beat: 2, text: 'Ho-' }],
+        ],
+      ],
+    ])
+    render(
+      <ChordChart
+        performance={performance}
+        headings={[]}
+        onBar={() => {}}
+        playing={null}
+        words={words}
+      />,
+    )
+    // Said with the bar, a word's syllables joined.
+    const bar = screen.getByRole('button', { name: 'Bar 1: G · Silent night' })
+    const verses = [...bar.querySelectorAll('[data-verse]')]
+    expect(verses.map((verse) => verse.textContent)).toEqual(['Si-lentnight', 'Ho-'])
+    // Each from its beat to the next word's, or the bar's end.
+    const placed = [...(verses[0]?.children ?? [])].map(
+      (word) => (word as HTMLElement).style.gridColumn,
+    )
+    expect(placed).toEqual(['1 / 2', '2 / 4', '4 / -1'])
+    expect(screen.getByRole('button', { name: /^Bar 2:/ }).querySelector('[data-verse]')).toBeNull()
+  })
 })

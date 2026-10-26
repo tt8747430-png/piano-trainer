@@ -191,6 +191,8 @@ export function PlayerLayout({
             loop={player.loop}
             words={scoreView.lyrics}
             mode={scoreView.diagrams}
+            pinned={scoreView.pinned}
+            textSize={scoreView.textSize}
           />
         )}
       </PlayerArea>

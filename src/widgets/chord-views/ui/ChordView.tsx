@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import type { DiagramsMode, MusicView } from '@/entities/settings'
+import type { DiagramsMode, MusicView, TextSize } from '@/entities/settings'
 import { usePieceInversions } from '@/features/choose-diagram-inversion'
 import {
   beatGroupFrom,
@@ -34,6 +34,8 @@ export function ChordView({
   loop,
   words,
   mode,
+  pinned,
+  textSize,
 }: {
   view: Exclude<MusicView, 'sheet'>
   title: string
@@ -42,10 +44,14 @@ export function ChordView({
   headings: readonly string[]
   practice: Pick<Practice, 'state' | 'clock' | 'jumpToBeatGroup'>
   loop: BarRange | null
-  /** The View's Lyrics: the Diagrams view's line sung. */
+  /** The View's Lyrics: the Diagrams view's line sung, the Grid's words under its beats. */
   words: boolean
   /** How Diagrams shows the chords: the one sounding and the next, or the song's all at once. */
   mode: DiagramsMode
+  /** Chords over lyrics' chord diagrams pinned under its strip (ADR 0108). */
+  pinned: boolean
+  /** Chords over lyrics' words and chords, as a percent of their own size. */
+  textSize: TextSize
 }) {
   const beat = useBeat(performance, practice)
   const bars = useMemo(() => playedBeatCells(performance), [performance])
@@ -68,6 +74,7 @@ export function ChordView({
           headings={headings}
           beat={beat}
           loop={loop}
+          words={words}
           onBeat={go}
         />
       ) : view === 'lyrics' ? (
@@ -79,6 +86,8 @@ export function ChordView({
           beat={beat}
           written={span.written}
           loop={loop}
+          pinned={pinned}
+          textSize={textSize}
           onGo={go}
           onChord={open}
         />

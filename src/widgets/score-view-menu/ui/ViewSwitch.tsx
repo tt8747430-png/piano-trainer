@@ -11,8 +11,16 @@ import { setPracticeToggle, setScoreView } from '@/features/set-preference'
 import { SwitchRow } from '@/shared/ui'
 import type { SheetPart } from '../model/score-parts'
 
+/**
+ * A switch's own props: why it is greyed, where the music has nothing for it to show (ADR 0108),
+ * which its ⓘ says.
+ */
+interface SwitchProps {
+  readonly reason?: string
+}
+
 /** The chord symbols over the staff, as a lead sheet prints them. */
-function ChordNamesSwitch() {
+function ChordNamesSwitch({ reason }: SwitchProps) {
   const { t } = useTranslation('music')
   const store = useSettingsStoreApi()
   const on = useSettings((state) => selectScoreView(state).chordNames)
@@ -20,6 +28,8 @@ function ChordNamesSwitch() {
     <SwitchRow
       icon={<span className="font-display text-base font-semibold">C⁷</span>}
       label={t('sheet.chordNames')}
+      info={reason}
+      disabled={reason !== undefined}
       checked={on}
       onCheckedChange={(chordNames) => setScoreView(store, { chordNames })}
     />
@@ -27,7 +37,7 @@ function ChordNamesSwitch() {
 }
 
 /** The position the right hand plays each chord in, beside its symbol: practice's alone. */
-function PositionsSwitch() {
+function PositionsSwitch({ reason }: SwitchProps) {
   const { t } = useTranslation('player')
   const store = useSettingsStoreApi()
   const on = useSettings((state) => selectPractice(state).positions)
@@ -35,15 +45,19 @@ function PositionsSwitch() {
     <SwitchRow
       icon={<Layers />}
       label={t('toggles.positions')}
-      info={t('view.positionsDetail')}
+      info={reason ?? t('view.positionsDetail')}
+      disabled={reason !== undefined}
       checked={on}
       onCheckedChange={(positions) => setPracticeToggle(store, 'positions', positions)}
     />
   )
 }
 
-/** The words under the staff they are written on (ADR 0093), or under Diagrams' strip. */
-function LyricsSwitch() {
+/**
+ * The words under the staff they are written on (ADR 0093), under Diagrams' strip, or under the
+ * Grid's beats (ADR 0108).
+ */
+function LyricsSwitch({ reason }: SwitchProps) {
   const { t } = useTranslation('music')
   const store = useSettingsStoreApi()
   const on = useSettings((state) => selectScoreView(state).lyrics)
@@ -51,6 +65,8 @@ function LyricsSwitch() {
     <SwitchRow
       icon={<WholeWord />}
       label={t('view.lyrics')}
+      info={reason}
+      disabled={reason !== undefined}
       checked={on}
       onCheckedChange={(lyrics) => setScoreView(store, { lyrics })}
     />
@@ -58,7 +74,7 @@ function LyricsSwitch() {
 }
 
 /** The fingers written over the notes (ADR 0096). */
-function FingersSwitch() {
+function FingersSwitch({ reason }: SwitchProps) {
   const { t } = useTranslation('music')
   const store = useSettingsStoreApi()
   const on = useSettings((state) => selectPractice(state).fingerNumbers)
@@ -66,6 +82,8 @@ function FingersSwitch() {
     <SwitchRow
       icon={<Hash />}
       label={t('view.fingers')}
+      info={reason}
+      disabled={reason !== undefined}
       checked={on}
       onCheckedChange={(fingers) => setPracticeToggle(store, 'fingerNumbers', fingers)}
     />
@@ -73,7 +91,7 @@ function FingersSwitch() {
 }
 
 /** Each note's name in its head: practice's alone. */
-function NoteNamesSwitch() {
+function NoteNamesSwitch({ reason }: SwitchProps) {
   const { t } = useTranslation('player')
   const store = useSettingsStoreApi()
   const on = useSettings((state) => selectPractice(state).namedNotes)
@@ -81,13 +99,15 @@ function NoteNamesSwitch() {
     <SwitchRow
       icon={<Type />}
       label={t('toggles.namedNotes')}
+      info={reason}
+      disabled={reason !== undefined}
       checked={on}
       onCheckedChange={(named) => setPracticeToggle(store, 'namedNotes', named)}
     />
   )
 }
 
-const SWITCHES: Readonly<Record<SheetPart, ComponentType>> = {
+const SWITCHES: Readonly<Record<SheetPart, ComponentType<SwitchProps>>> = {
   chordNames: ChordNamesSwitch,
   positions: PositionsSwitch,
   lyrics: LyricsSwitch,
@@ -97,9 +117,10 @@ const SWITCHES: Readonly<Record<SheetPart, ComponentType>> = {
 
 /**
  * What the music shows, turned on or off in the View (ADR 0094, 0102): one of the sheet music's
- * parts, each saved for every piece; Diagrams shows the words too.
+ * parts, each saved for every piece; Diagrams and the Grid show the words too. Greyed where the
+ * music has nothing for it to show, the `reason` its ⓘ (ADR 0108).
  */
-export function ViewSwitch({ part }: { part: SheetPart }) {
+export function ViewSwitch({ part, reason }: { part: SheetPart; reason?: string }) {
   const Switch = SWITCHES[part]
-  return <Switch />
+  return <Switch reason={reason} />
 }

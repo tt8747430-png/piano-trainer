@@ -34,6 +34,14 @@ export const player = {
     // What the View holds for every view of the music, after the view shown's own.
     every: 'Every view',
     // Diagrams' own (ADR 0102, Chordify's "Diagram view mode").
+    // Chords over lyrics' own (ADR 0108, Chordify's view settings).
+    pinned: {
+      label: 'Diagrams pinned',
+      about: 'The song’s chords as diagrams in a row under the beats, the one sounding marked',
+    },
+    textSize: { label: 'Text size', smaller: 'Smaller text', larger: 'Larger text' },
+    // Why the words' switch is greyed (ADR 0108).
+    noWords: 'The music has no words',
     mode: {
       label: 'Mode',
       animated: 'Animated',
@@ -65,7 +73,14 @@ export const player = {
   /** The Diagrams view's chord to come, where none sounds yet: a pickup, a bar of no chord. */
   nextChord: 'Next: {{symbol}}',
   /** A line of Chords over lyrics, by its bars: a tap takes the Player there. */
-  line: { one: 'Bar {{n}}', many: 'Bars {{first}}–{{last}}' },
+  line: {
+    one: 'Bar {{n}}',
+    many: 'Bars {{first}}–{{last}}',
+    // A line of chords alone played again straight after itself, shown once (ADR 0108).
+    times: '×{{n}}',
+    played_one: 'Played {{count}} time',
+    played_other: 'Played {{count}} times',
+  },
   key: 'Key',
   root: 'Root',
   walk: { title: 'Walk the chords in {{scale}}' },
