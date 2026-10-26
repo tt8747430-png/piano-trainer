@@ -15,6 +15,7 @@ import {
 } from '../model/chart-sections'
 import { useRowRoom } from '../model/use-row-room'
 import { BarButton, type BarTap } from './BarButton'
+import { PrintedBar } from './PrintedBar'
 
 /** The widest a beat is drawn, in rem: a 4-beat bar reads at a glance on a laptop, not across it. */
 const BEAT_MOST = 4
@@ -28,7 +29,8 @@ const NO_BARS: ReadonlySet<number> = new Set()
  * more rows, every beat as wide as every other so bars line up down the chart. The bar playing is
  * marked: on a song's chart a tap plays a bar, pressed while it sounds; on the Player's (`tap="go"`,
  * ADR 0098) a tap goes to the beat tapped (`onBar`, the bar and the tick of that beat, its first
- * time), the bar the Player is in current and its beat sounding filled.
+ * time), the bar the Player is in current and its beat sounding filled; printed (`tap="print"`,
+ * ADR 0107), its bars to read alone.
  */
 export function ChordChart({
   performance,
@@ -38,26 +40,35 @@ export function ChordChart({
   beat = null,
   looped = NO_BARS,
   onBar,
+  rowBeats,
   className,
 }: {
   performance: Performance
   /** Each section's name, by section; none for music of one section, named nowhere. */
   headings: readonly string[]
-  tap?: BarTap
   /** The bar playing, as written: the one sounding, or the one the Player is in. */
   playing: number | null
   /** The beat sounding in the bar playing: the Player's, filled. */
   beat?: number | null
   /** The bars as written the loop goes round. */
   looped?: ReadonlySet<number>
-  /** A bar tapped, as written, and the tick its beat tapped is first played at. */
-  onBar: (bar: number, at: Tick) => void
+  /** How many beats a row holds before a line wraps: the screen's room by default. */
+  rowBeats?: number
   /** Where it stands in its page. */
   className?: string
-}) {
+} & (
+  | {
+      tap?: BarTap
+      /** A bar tapped, as written, and the tick its beat tapped is first played at. */
+      onBar: (bar: number, at: Tick) => void
+    }
+  // As it prints (ADR 0107): its bars to read, none to tap.
+  | { tap: 'print'; onBar?: undefined }
+)) {
   const { t } = useTranslation('piece')
   const locale = useLocale()
-  const room = useRowRoom()
+  const screenRoom = useRowRoom()
+  const room = rowBeats ?? screenRoom
   // Read once a performance: the Player's chart renders again as each beat plays.
   const sections = useMemo(() => {
     const cells = new Map(beatCells(performance).map((bar) => [bar.written, bar]))
@@ -135,21 +146,32 @@ export function ChordChart({
                 width: `${(beats(row) / widest) * 100}%`,
               }}
             >
-              {row.map(({ written, symbols, notes, cells, starts }) => (
-                <BarButton
-                  key={written}
-                  tap={tap}
-                  number={written + 1}
-                  symbols={symbols}
-                  cells={cells}
-                  notes={notes}
-                  marked={playing === written}
-                  sounding={playing === written ? beat : null}
-                  looped={looped.has(written)}
-                  onTap={(tapped) => onBar(written, starts[tapped] ?? starts[0] ?? 0)}
-                  style={{ gridColumn: `span ${cells.length}` }}
-                />
-              ))}
+              {row.map(({ written, symbols, notes, cells, starts }) =>
+                tap === 'print' ? (
+                  <PrintedBar
+                    key={written}
+                    number={written + 1}
+                    symbols={symbols}
+                    cells={cells}
+                    notes={notes}
+                    style={{ gridColumn: `span ${cells.length}` }}
+                  />
+                ) : (
+                  <BarButton
+                    key={written}
+                    tap={tap}
+                    number={written + 1}
+                    symbols={symbols}
+                    cells={cells}
+                    notes={notes}
+                    marked={playing === written}
+                    sounding={playing === written ? beat : null}
+                    looped={looped.has(written)}
+                    onTap={(tapped) => onBar?.(written, starts[tapped] ?? starts[0] ?? 0)}
+                    style={{ gridColumn: `span ${cells.length}` }}
+                  />
+                ),
+              )}
             </div>
           ))}
         </section>

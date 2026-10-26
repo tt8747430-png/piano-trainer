@@ -49,7 +49,12 @@ export function ActionMenu({
       <PopoverTrigger ref={ref} render={render}>
         {trigger}
       </PopoverTrigger>
-      <PopoverContent aria-label={label} align={align} className="w-72 gap-1 p-2">
+      {/* As tall as the room it has, scrolling past it: a phone on its side holds few rows. */}
+      <PopoverContent
+        aria-label={label}
+        align={align}
+        className="max-h-(--available-height) w-72 gap-1 overflow-y-auto overscroll-contain p-2"
+      >
         {actions.map((action) => {
           const why = action.disabled ? action.reason : undefined
           const whyId = `${id}-${action.key}-why`

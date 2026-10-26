@@ -174,5 +174,9 @@ export function noteEvents(notes: readonly MidiNote[], channel: number): TimedMi
 /** What a file system refuses in a name. */
 const UNSAFE = /[/\\:*?"<>|]/g
 
-/** A MIDI file's name: its title, with nothing a file system refuses, as `.mid`. */
-export const midiFileName = (title: string): string => `${title.replace(UNSAFE, '-')}.mid`
+/**
+ * A MIDI file's name: its title, with nothing a file system refuses, then the tempo its music is
+ * written at where one is given (`Daisy fields (73 BPM)`, Chordify's), as `.mid`.
+ */
+export const midiFileName = (title: string, bpm?: number): string =>
+  `${title.replace(UNSAFE, '-')}${bpm === undefined ? '' : ` (${bpm} BPM)`}.mid`
