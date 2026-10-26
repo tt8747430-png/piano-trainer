@@ -1,25 +1,21 @@
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Span } from './lyric-lines'
 
-/** The chord sounding in a beat and the changes after it, indexes into the performance's chords. */
+/** The chord sounding in a beat and the change after it, indexes into the performance's chords. */
 export interface ChordsFrom {
   /** None in a bar of no chord, or before the first. */
   readonly now: number | null
-  readonly next: readonly number[]
+  /** None past the music's last chord. */
+  readonly next: number | null
 }
 
 /**
- * What the Diagrams view shows (ADR 0099): the chord sounding in a beat (as played; the later where
- * two start in it), and the `count` chords after it in played order, each a change (a chord held
- * again is no next chord). Where a loop goes round, after its last chord comes the one sounding as
- * it starts; with none, the music ends.
+ * What the Diagrams view shows (ADR 0099, 0101): the chord sounding in a beat (as played; the later
+ * where two start in it), and the next chord in played order, a change (a chord held again is no
+ * next chord). Where a loop goes round, after its last chord comes the one sounding as it starts;
+ * with none, the music ends.
  */
-export function chordsFrom(
-  performance: Performance,
-  beat: Span,
-  loop: Span | null,
-  count: number,
-): ChordsFrom {
+export function chordsFrom(performance: Performance, beat: Span, loop: Span | null): ChordsFrom {
   const { chords } = performance
   /** The last chord sounding in a span; -1 for none. */
   const soundingIn = (span: Span) =>
@@ -41,14 +37,11 @@ export function chordsFrom(
   const now = found < 0 ? null : found
   const coming = chords.findIndex((chord) => chord.startTick >= beat.to)
   let at = now !== null ? after(now) : inLoop(coming) ? coming : round
-  let last = now === null ? null : (chords[now]?.symbol ?? null)
-  const next: number[] = []
-  // A loop of one chord held goes round for ever: each chord is looked at twice at most.
-  for (let steps = 0; at >= 0 && next.length < count && steps < 2 * chords.length; steps++) {
-    const symbol = chords[at]?.symbol ?? null
-    if (symbol !== last) next.push(at)
-    last = symbol
+  const held = now === null ? null : (chords[now]?.symbol ?? null)
+  // A loop of one chord held goes round for ever: each chord is looked at once at most.
+  for (let steps = 0; at >= 0 && steps < chords.length; steps++) {
+    if (chords[at]?.symbol !== held) return { now, next: at }
     at = after(at)
   }
-  return { now, next }
+  return { now, next: null }
 }

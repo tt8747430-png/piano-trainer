@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { usePieceInversions } from '@/features/choose-diagram-inversion'
 import {
   chordSummary,
   writtenBarOf,
@@ -57,7 +58,8 @@ export function ChordsOverLyrics({
     () => lines.map((line) => line.sung || line.segments.some(({ chord }) => chord !== null)),
     [lines],
   )
-  const summary = useMemo(() => chordSummary(performance), [performance])
+  const chosen = usePieceInversions()?.chosen
+  const summary = useMemo(() => chordSummary(performance, chosen), [performance, chosen])
   const bar = writtenBarOf(performance, beat.bar)
   const playing = lines.findIndex((line) => line.bars.includes(bar))
   const chip = soundingChip(lines, written)

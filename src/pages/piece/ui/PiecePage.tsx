@@ -1,6 +1,7 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useRepertoire } from '@/entities/piece'
+import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { ButtonLink, NotFound } from '@/shared/ui'
 import { ListingView } from './ListingView'
 import { PieceView } from './PieceView'
@@ -22,6 +23,9 @@ export function PiecePage() {
   return entry.kind === 'listing' ? (
     <ListingView listing={entry} />
   ) : (
-    <PieceView key={entry.id} piece={entry} />
+    // Its chords drawn in the inversions chosen for them in this piece (ADR 0101).
+    <PieceInversions pieceId={entry.id}>
+      <PieceView key={entry.id} piece={entry} />
+    </PieceInversions>
   )
 }

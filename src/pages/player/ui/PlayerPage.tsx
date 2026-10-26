@@ -13,6 +13,7 @@ import {
 } from '@/entities/piece'
 import { selectScoreView, useSettings } from '@/entities/settings'
 import { useAddToSetlist, useFavouriteAction } from '@/features/manage-library'
+import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { beatGroupInBar, writtenBarAt } from '@/features/practice'
 import { ShareSaid, useShareSong } from '@/features/share-song'
 import { useLocale } from '@/shared/i18n'
@@ -65,74 +66,77 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const setlist = useAddToSetlist(piece.id)
   const askView = useSettings((state) => selectScoreView(state).askOnOpen)
   return (
-    <MoreActions value={[favourite, setlist.action]}>
-      <PlayerLayout
-        title={title}
-        onClose={close}
-        view={search}
-        player={player}
-        performance={performance}
-        headings={headings}
-        // A song that hides its piano is a lead sheet (ADR 0083).
-        piano={!isLeadSheet(piece)}
-        // A piece written in degrees has the piano's staves alone.
-        staves={isDegreePiece(piece) ? undefined : piece.staves}
-        modes={
-          // A piece written in degrees has no score to edit.
-          isDegreePiece(piece) ? null : (
-            <ModeSwitch pieceId={piece.id} mode="practise" bar={bar + 1} />
-          )
-        }
-        setup={
-          <PieceSetup
-            piece={piece}
-            choice={choice}
-            fit={fit}
-            swing={isCompound(piece.meter) ? null : search.swing}
-            simple={choice.simple && simplifies}
-            onChange={changeSetup}
-            onSwing={player.setSwing}
-          />
-        }
-        // Chordify's toolbar after the View (ADR 0104): the key the piece is played in, and Simplify.
-        tools={
-          <>
-            <TransposeTool
+    // Its chords drawn in the inversions chosen for them in this piece (ADR 0101).
+    <PieceInversions pieceId={piece.id}>
+      <MoreActions value={[favourite, setlist.action]}>
+        <PlayerLayout
+          title={title}
+          onClose={close}
+          view={search}
+          player={player}
+          performance={performance}
+          headings={headings}
+          // A song that hides its piano is a lead sheet (ADR 0083).
+          piano={!isLeadSheet(piece)}
+          // A piece written in degrees has the piano's staves alone.
+          staves={isDegreePiece(piece) ? undefined : piece.staves}
+          modes={
+            // A piece written in degrees has no score to edit.
+            isDegreePiece(piece) ? null : (
+              <ModeSwitch pieceId={piece.id} mode="practise" bar={bar + 1} />
+            )
+          }
+          setup={
+            <PieceSetup
               piece={piece}
-              tonic={choice.tonic}
-              onChange={(key) => changeSetup({ key })}
+              choice={choice}
+              fit={fit}
+              swing={isCompound(piece.meter) ? null : search.swing}
+              simple={choice.simple && simplifies}
+              onChange={changeSetup}
+              onSwing={player.setSwing}
             />
-            <SimplifyTool on={choice.simple} simplifies={simplifies} onChange={simplify} />
-          </>
-        }
-        info={{
-          key: 'info',
-          label: t(`player:info.${piece.kind}`),
-          icon: Info,
-          onSelect: () => setShowingInfo(true),
-        }}
-        share={
-          sharing
-            ? {
-                key: 'share',
-                label: t('piece:share'),
-                icon: Share2,
-                onSelect: () => shared.share({ title, music: musicOf(piece) }),
-              }
-            : undefined
-        }
-        status={sharing ? <ShareSaid said={shared.said} /> : null}
-        // Chordify's "Show this when opening a song" (ADR 0102): the View, to choose how it shows.
-        openView={askView}
-      />
-      <SongInfo
-        piece={piece}
-        performance={performance}
-        open={showingInfo}
-        onOpenChange={setShowingInfo}
-      />
-      {setlist.sheet}
-    </MoreActions>
+          }
+          // Chordify's toolbar after the View (ADR 0104): the key the piece is played in, and Simplify.
+          tools={
+            <>
+              <TransposeTool
+                piece={piece}
+                tonic={choice.tonic}
+                onChange={(key) => changeSetup({ key })}
+              />
+              <SimplifyTool on={choice.simple} simplifies={simplifies} onChange={simplify} />
+            </>
+          }
+          info={{
+            key: 'info',
+            label: t(`player:info.${piece.kind}`),
+            icon: Info,
+            onSelect: () => setShowingInfo(true),
+          }}
+          share={
+            sharing
+              ? {
+                  key: 'share',
+                  label: t('piece:share'),
+                  icon: Share2,
+                  onSelect: () => shared.share({ title, music: musicOf(piece) }),
+                }
+              : undefined
+          }
+          status={sharing ? <ShareSaid said={shared.said} /> : null}
+          // Chordify's "Show this when opening a song" (ADR 0102): the View, to choose how it shows.
+          openView={askView}
+        />
+        <SongInfo
+          piece={piece}
+          performance={performance}
+          open={showingInfo}
+          onOpenChange={setShowingInfo}
+        />
+        {setlist.sheet}
+      </MoreActions>
+    </PieceInversions>
   )
 }
 

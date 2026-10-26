@@ -765,9 +765,10 @@
     margin-top: --spacing(4);
   }
   /* Too short a room for both lines and the chords as drawn (a 667px-tall phone, any phone on its
-     side): the line the music is in alone, the next only where it is the one line shown. */
+     side): the line being sung alone; between lines, the next alone, the wait's dash left out. */
   @container (height < 19rem) {
-    & > [data-area='words'] > [data-slot='coming-line']:not(:first-child) {
+    & > [data-area='words'] > [data-slot='sung-line'] ~ [data-slot='coming-line'],
+    & > [data-area='words'] > [data-slot='wait'] {
       display: none;
     }
   }

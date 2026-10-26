@@ -141,6 +141,7 @@ describe('backup', () => {
       'pt-takes',
       'pt-views',
       'pt-library',
+      'pt-diagram-inversions',
     ])
   })
 })

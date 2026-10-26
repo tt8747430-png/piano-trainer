@@ -22,7 +22,10 @@ two more from a tablet's width. They showed a voicing the learner had not chosen
 - **Chordify's place by default.** A chord's tones are folded into F3–E4.
   - A slash chord's bass that is one of its tones is the lowest.
   - A bass that is not one of its tones is its key in that octave, a ring, under the chord close above it.
-  - A chord of five notes or more is folded the same way.
+  - Where a slash chord over its bass would run past B4 (C/E over E4 reaches C5; F♯m/D♯ over D♯4, C♯5), its notes
+    fold as any chord's and its bass is a ring where it falls, so it is still told from the chord alone.
+  - A chord of five notes or more is folded the same way, its root not lowest: where it would fold lowest (F9
+    from F3), it stands an octave up.
 - **An inversion per chord, the learner's.** A chord of three or four notes can be drawn in each of its inversions
   that fit the keys, chosen on its sheet.
   - The choice is kept for that chord in that song (`pt-diagram-inversions`), and every diagram of it shows it.

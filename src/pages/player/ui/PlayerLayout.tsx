@@ -1,14 +1,8 @@
 import { useMemo, type ReactNode } from 'react'
 import { useStaffNames, type StaffName } from '@/entities/piece'
-import {
-  selectKeyboard,
-  selectScoreView,
-  useSettings,
-  useSettingsStoreApi,
-} from '@/entities/settings'
+import { selectKeyboard, selectScoreView, useSettings } from '@/entities/settings'
 import { MidiButton } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
-import { setScoreView } from '@/features/set-preference'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
@@ -27,6 +21,7 @@ import {
   type PracticeView,
 } from '@/widgets/practice-player'
 import { SheetMusic } from '@/widgets/sheet-music'
+import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerMore } from './PlayerMore'
 import { PlayerViewMenu } from './PlayerViewMenu'
 
@@ -93,7 +88,6 @@ export function PlayerLayout({
 }) {
   const { practice } = player
   const dock = useSettings((state) => selectKeyboard(state).dock)
-  const settings = useSettingsStoreApi()
   const scoreView = useSettings(selectScoreView)
   const names = useStaffNames(staves)
   // The score's single staves as the View switches them: each its clef as the music reads it.
@@ -105,14 +99,16 @@ export function PlayerLayout({
   const needs = useMemo(() => viewNeeds(performance), [performance])
   const shown = shownView(scoreView.music, needs)
   usePlayerShortcuts(player, view, onClose)
+  // A chord view's keys in Listen: the chord sounding as its diagram draws it (ADR 0101).
+  const chordKeys = useChordKeys(performance, practice.state, shown !== 'sheet')
   const keys = !scoreView.keys ? null : (
     <PlayerArea area="keys">
       <LiveKeyboard
         range={player.range}
-        inView={player.inView}
+        inView={chordKeys ? chordKeys.inView : player.inView}
         // Wait mode's chord across both hands is all in sight, the keys narrowing to hold it.
         fitInView
-        marks={player.marks}
+        marks={chordKeys?.marks ?? player.marks}
         wrong={player.wrong}
         onKeyPress={player.tapKey}
         // Space is Play here: the pedal is the rail's, or a MIDI keyboard's.
@@ -188,7 +184,7 @@ export function PlayerLayout({
             practice={practice}
             loop={player.loop}
             words={scoreView.lyrics}
-            onSheet={() => setScoreView(settings, { music: 'sheet' })}
+            mode={scoreView.diagrams}
           />
         )}
       </PlayerArea>

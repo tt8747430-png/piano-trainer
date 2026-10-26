@@ -14,6 +14,8 @@ export interface Option<V extends OptionValue> {
   readonly detail?: string
   /** How a pop-up's button writes it among the others chosen, where its label is long (`m2`). */
   readonly short?: string
+  /** Why it cannot be chosen, where it cannot: a segment greyed, saying so in its tooltip. */
+  readonly reason?: string | undefined
 }
 
 /**

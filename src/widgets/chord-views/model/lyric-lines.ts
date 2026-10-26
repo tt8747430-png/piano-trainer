@@ -1,4 +1,4 @@
-import { beatCells, writtenBarOf, type BarRange, type CellBar } from '@/features/practice'
+import { beatCells, type CellBar } from '@/features/practice'
 import type { Performance, PerformanceNote } from '@/shared/lib/arrangement'
 import { beatsToTicks, type Syllable, type Tick } from '@/shared/lib/music'
 
@@ -31,12 +31,21 @@ export interface LyricSegment extends Span {
   readonly verses: readonly SungWords[]
 }
 
+/** A word of a line as sung: its syllables joined, from the tick its first is sung at. */
+export interface SungWord {
+  /** A word the next line goes on with ends in a hyphen. */
+  readonly text: string
+  readonly at: Tick
+}
+
 /** A line of the chart as Chords over lyrics shows it. */
 export interface LyricLine extends Span {
   readonly section: number
   /** Its bars as written. */
   readonly bars: readonly number[]
   readonly segments: readonly LyricSegment[]
+  /** Each verse's words in time, verse 1 first: what the Diagrams view lights as they are sung. */
+  readonly words: readonly (readonly SungWord[])[]
   /** A verse sings in it: else it is its chords alone, a chip for each. */
   readonly sung: boolean
 }
@@ -77,6 +86,25 @@ function wordsOf(syllables: readonly Syllable[]): SungWords {
   return { text, goesOn: syllables.at(-1)?.hyphen ?? false }
 }
 
+/** A syllable sung, at its note's tick. */
+interface TimedSyllable {
+  readonly syllable: Syllable
+  readonly at: Tick
+}
+
+/** A verse's syllables in a line as its words in time: each from its first syllable's tick. */
+function timedWords(syllables: readonly TimedSyllable[]): SungWord[] {
+  const words: { text: string; at: Tick }[] = []
+  syllables.forEach(({ syllable, at }, i) => {
+    const word = words.at(-1)
+    if (word && syllables[i - 1]?.syllable.hyphen) word.text += syllable.text
+    else words.push({ text: syllable.text, at })
+  })
+  const last = words.at(-1)
+  if (last && syllables.at(-1)?.syllable.hyphen) last.text += '-'
+  return words
+}
+
 /** A line's bars, in time, their chords run together where one is held over a bar line. */
 function lineOf(
   performance: Performance,
@@ -87,6 +115,8 @@ function lineOf(
   const segments: Building[] = []
   const open = (chord: number | null, span: Span) =>
     segments.push({ chord, ...span, sung: Array.from({ length: verses }, () => []) })
+  // Each verse's syllables in the line, in time.
+  const timed: TimedSyllable[][] = Array.from({ length: verses }, () => [])
   // The chord last shown, while it is held on: a bar of no chord lets it go.
   let held: string | null = null
   const starts = bars.map((each) => performance.bars[each.played]?.startTick ?? 0)
@@ -110,7 +140,9 @@ function lineOf(
       if (segments.length === 0) open(null, { from: start, to: start })
       const segment = segments.at(-1)
       note.lyrics?.forEach((syllable, verse) => {
-        if (syllable) segment?.sung[verse]?.push(syllable)
+        if (!syllable) return
+        segment?.sung[verse]?.push(syllable)
+        timed[verse]?.push({ syllable, at: note.startTick })
       })
     }
     while (next < chords.length) showChord(chords[next++])
@@ -144,6 +176,7 @@ function lineOf(
     from,
     to: (starts.at(-1) ?? from) + (lastBar ? beatsToTicks(lastBar.beats) : 0),
     segments: shown,
+    words: timed.map(timedWords),
     sung: shown.some(({ verses: words }) => words.some(({ text }) => text !== '')),
   }
 }
@@ -177,51 +210,6 @@ export function lineWords(line: LyricLine, verse = 0): string {
     })
     .join('')
     .trim()
-}
-
-/**
- * The next line sung after a bar played (the Diagrams view's line to come), in the order the Player
- * plays the bars: a repeat's lines again, and where the loop goes round, the line it goes round to.
- * A line starts again where the bars played jump or move on to another line. None past the last.
- */
-export function comingLine(
-  performance: Performance,
-  lines: readonly LyricLine[],
-  played: number,
-  loop: BarRange | null,
-): LyricLine | undefined {
-  const lineOf = new Map<number, LyricLine>()
-  for (const line of lines) for (const bar of line.bars) lineOf.set(bar, line)
-  const after = (bar: number) => (loop && bar === loop.last ? loop.first : bar + 1)
-  const count = performance.bars.length
-  let before = writtenBarOf(performance, played)
-  // Each bar looked at once: a loop that sings nothing goes round no more.
-  for (let bar = after(played), steps = 0; bar < count && steps < count; steps++) {
-    const written = writtenBarOf(performance, bar)
-    const line = lineOf.get(written)
-    if (line?.sung && (line !== lineOf.get(before) || written !== before + 1)) return line
-    before = written
-    bar = after(bar)
-  }
-  return undefined
-}
-
-/**
- * How far through its line a beat is (the Diagrams view's bar under the line sung): its beats counted
- * to the end of this one, out of the line's; 0 for a beat outside it. `bars` are the bars as written,
- * in beats (`beatCells`).
- */
-export function lineProgress(
-  line: LyricLine,
-  bars: readonly CellBar[],
-  at: { readonly written: number; readonly beat: number },
-): number {
-  const beats = (written: number) => bars.find((bar) => bar.written === written)?.cells.length ?? 0
-  const place = line.bars.indexOf(at.written)
-  if (place < 0) return 0
-  const all = line.bars.reduce((sum, written) => sum + beats(written), 0)
-  const before = line.bars.slice(0, place).reduce((sum, written) => sum + beats(written), 0)
-  return all === 0 ? 0 : Math.min(1, (before + at.beat + 1) / all)
 }
 
 /**

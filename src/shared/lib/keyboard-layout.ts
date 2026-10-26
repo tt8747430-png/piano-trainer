@@ -1,12 +1,4 @@
-import {
-  isBlackKey,
-  midi,
-  MIDDLE_C,
-  PIANO,
-  pitchClass,
-  type KeyRange,
-  type Midi,
-} from '@/shared/lib/music'
+import { isBlackKey, midi, PIANO, type KeyRange, type Midi } from '@/shared/lib/music'
 
 /** A black key sits over the gap between two white keys, 62% as wide… */
 const BLACK_WIDTH = 0.62
@@ -54,46 +46,6 @@ export function keyboardLayout(range: KeyRange): { keys: KeyGeometry[]; whites: 
     }
   }
   return { keys, whites: whiteKeys.length }
-}
-
-/** A chord's diagram shows at least this many white keys: a little over an octave. */
-const DIAGRAM_WHITES = 10
-/** Where a group of black keys starts (C, F) and ends (E, B): a diagram's two ends. */
-const GROUP_START = new Set([0, 5])
-const GROUP_END = new Set([4, 11])
-
-const whitesIn = (from: number, to: number) => {
-  let whites = 0
-  for (let key = from; key <= to; key++) if (!isBlackKey(midi(key))) whites++
-  return whites
-}
-const startBelow = (key: number) => {
-  let start = key
-  while (!GROUP_START.has(pitchClass(start))) start--
-  return start
-}
-const endAbove = (key: number) => {
-  let end = key
-  while (!GROUP_END.has(pitchClass(end))) end++
-  return end
-}
-
-/**
- * The keys a chord's diagram spans (ADR 0099): from the C or F at or below its lowest key to the E
- * or B at or above its highest, whole groups of black keys, grown a group at a time on the side with
- * less room until it shows ten white keys, so the chord sits with room round it. No keys: round
- * middle C.
- */
-export function diagramRange(keys: readonly Midi[]): KeyRange {
-  const lowest = keys.length > 0 ? Math.min(...keys) : MIDDLE_C
-  const highest = keys.length > 0 ? Math.max(...keys) : MIDDLE_C
-  let from = startBelow(lowest)
-  let to = endAbove(highest)
-  while (whitesIn(from, to) < DIAGRAM_WHITES) {
-    if (whitesIn(from, lowest - 1) < whitesIn(highest + 1, to)) from = startBelow(from - 1)
-    else to = endAbove(to + 1)
-  }
-  return { from: midi(from), to: midi(to) }
 }
 
 /** Where a stretch of keys sits on a laid-out keyboard. */

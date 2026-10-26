@@ -9,7 +9,13 @@ export { PRACTICE_MODES, type PracticeMode } from './practice-mode'
 export { usePractice, type Practice } from './use-practice'
 export { isLoopParam, loopParam, loopTicks, readLoop, type BarRange, type LoopParam } from './loop'
 export { beatGroupInBar, firstPlayedBar, writtenBarAt, writtenBarOf } from './written-bar'
-export { chordSummary, diagramChord, type DiagramChord } from './chord-diagram'
+export {
+  chordSummary,
+  DIAGRAM_KEYS,
+  diagramChord,
+  type DiagramChord,
+  type DiagramInversions,
+} from './chord-diagram'
 export {
   beatAt,
   beatCells,
@@ -23,7 +29,7 @@ export { useBeat } from './use-beat'
 
 export { arrangePiece, ownChoice, simplifies } from './arrange-piece'
 export type { PracticeChoice } from './choice'
-export { playerRange, practiceMarks } from './marks'
+export { diagramMarks, playerRange, practiceMarks } from './marks'
 export { spellPitchClass } from './note-names'
 export { arrangeWalk, WALK, type WalkChoice } from './walk'
 export { arrangeChromatic } from './chromatic'

@@ -1,9 +1,8 @@
 import { Check } from 'lucide-react'
 import { useEffect, useEffectEvent, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { DiagramChord } from '@/features/practice'
+import { DIAGRAM_KEYS, type DiagramChord } from '@/features/practice'
 import { LiveKeyboard } from '@/features/live-keyboard'
-import { diagramRange } from '@/shared/lib'
 import { holdsChord } from '../model/holds-chord'
 import { useHandKeys } from '../model/use-hand-keys'
 
@@ -15,8 +14,9 @@ export interface ChordLearn {
 
 /**
  * A chord learned by playing it (ADR 0100): a line asking for it over the keys to play it on, the
- * diagram's keys. Its keys held together, on a MIDI keyboard or these keys with several fingers,
- * learn it, once; the line then says so, as it does from the start once the chord is learned.
+ * diagram's own, F3 to B4 (ADR 0101). Its keys held together, on a MIDI keyboard or these keys with
+ * several fingers, learn it, once; the line then says so, as it does from the start once the chord
+ * is learned.
  */
 export function ChordLearning({ chord, learned, onLearned }: { chord: DiagramChord } & ChordLearn) {
   const { t } = useTranslation('music')
@@ -39,7 +39,7 @@ export function ChordLearning({ chord, learned, onLearned }: { chord: DiagramCho
       </p>
       {/* The keys keep a finger's drag: the sheet does not swipe away under them. */}
       <div data-base-ui-swipe-ignore="" className="w-full">
-        <LiveKeyboard range={diagramRange(chord.keys)} />
+        <LiveKeyboard range={DIAGRAM_KEYS} />
       </div>
     </>
   )

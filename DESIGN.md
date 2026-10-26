@@ -882,8 +882,9 @@ one keeps its music in the room above the transport.
   page's colour; the loop's cells on a 15% deep-sky band.
 - **The beat strip:** every cell as played in one row, square cells 56px on a phone (64px from 640px, 40px on a phone
   on its side), sliding in 200ms (at once under reduced motion) so the beat sounding stands a third of the way in,
-  never a scroll bar; a cell tapped takes the cursor there. A picture of where the music is, hidden from a screen
-  reader.
+  never a scroll bar; a cell tapped takes the cursor there. A chord is named only in the beat where it changes, so a
+  chord held over bars is named once; where the music turns to no chord its first beat holds a quarter rest (Noto
+  Music 28px). A picture of where the music is, hidden from a screen reader.
 - **Chords over lyrics:** the title, then the strip across the view, held at its top on the page's paper, then one
   column in the middle at most 42rem wide: the chord summary, then the song by section, each under its name in spaced
   capitals (Literata 600 14px, 0.3em apart, soft ink), each line its chords as **chips** over its words, verse 1 first
@@ -891,31 +892,39 @@ one keeps its music in the room above the transport.
   wash with 10px corners, filled with ink while it sounds, its target reaching past it to a finger's size; a line of
   no words is its chips in a row. The line playing is ink and semibold, the others soft ink; it is kept in the top
   third of the room between the strip and the transport as the music reaches it.
-- **Diagrams:** the title, then the chord sounding as a large diagram over its symbol (Literata 600 36px), the next
-  beside it greyed (24px, soft ink), and from 640px the two after it, smaller and greyer; the strip across the view
-  under them; then, with the View's Lyrics on, the line sung (18px, 20px from 640px, semibold) over a 4px ink bar
-  filling as it goes, and the next line in soft ink. Where no chord sounds yet the next stands alone, greyed, "Next:
-  C". All of it stands in the middle of the room above the transport (`diagrams-view`): a short room keeps the line
-  sung and leaves out the next, then the diagrams shrink to what is left. On a phone on its side the chords take the
-  left half, its whole height, and the title (one line), the strip and the line sung stand beside them.
+- **Diagrams** (ADR 0101, Chordify's): the title, then the chord sounding and the next side by side, the same size,
+  each up to half the room and 28rem at most, never a third: each its diagram over its symbol (Literata 600 28px, 22px
+  on a phone on its side), the sounding one's in ink, the next's diagram greyed and its symbol soft ink. The strip
+  across the view under them; then, with the View's Lyrics on, the line sung centred (18px, 20px from 640px,
+  semibold), each word in ink once the music reaches it and soft ink before, and the next line in soft ink under it.
+  Between lines that sing a dash stands in the line's place, 64px by 4px on the sand track, its 10px ink dot running
+  along it to the next line's first word, the way behind it in ink. Where no chord sounds yet the next stands alone,
+  greyed, "Next: C". All of it stands in the middle of the room above the transport (`diagrams-view`): a short room
+  keeps the line sung and leaves out the next (between lines, the next alone, no dash), then the diagrams shrink to
+  what is left. On a phone on its side the chords take the left half, its whole height, and the title (one line), the
+  strip and the line sung stand beside them.
+- **Diagrams' summary:** the title, the strip held at the view's top on the page's paper, the words as above, then
+  the song's chords as cards (the card surface, 12px inside) in the order they first sound, two a row on a phone held
+  upright, three from 640px, four from 1024px and on a phone on its side: each its diagram over its symbol (Literata
+  600 22px) in soft ink; the chord sounding's card outlined in ink, its symbol in ink. A card opens the chord's sheet.
 - **Grid:** the chart in beats under the title: each section's name (Literata 600 20px) with its bars in soft ink,
   each line a card-paper row of bars, every beat as wide so bars line up down it, a row wrapping where the screen
   holds no more; cells 48px tall (56px from 640px, 44px on a phone on its side), a bar's number small in its first
   cell's corner, each bar a button.
-- **No chord symbols:** a chord view of music with none says so in one soft line under the title, with Show the
-  sheet music (soft) under it; the view chosen stays saved.
-- **The chord diagram** (`KeyDiagram`): a chord drawn as the app's keys, white keys key paper parted by the key bed and
-  black keys a warm black, from the C or F at or below its lowest key to the E or B at or above its highest, ten white
-  keys at least; each key held a dot near its foot, ink on a white key and white on a black one, and the bass the
-  right hand leaves to the left a ring. It takes its container's width at a key's proportion; one to come is greyed
-  whole (40%). It names its chord and notes for a screen reader.
+- **The chord diagram** (`KeyDiagram`, ADR 0101): a chord drawn as the app's keys, white keys key paper parted by the
+  key bed and black keys a warm black, always F3 to B4, eleven white keys, so a song's chords stand in one place and
+  move by a key or two; each key held a dot near its foot, ink on a white key and white on a black one, and a slash
+  chord's bass a ring where the chord has it not (or where it cannot stand lowest). It takes its container's width at
+  a key's proportion; one to come is greyed whole (40%). It names its chord and notes for a screen reader.
 - **The chord summary:** the chords in the order they first sound, each once: its diagram 40px tall (a wide chord
   wider) over its symbol (Literata 600 18px), a button with 12px corners filling sand on hover; one row, scrolling
   sideways and fading at an edge with more beyond it.
 - **A chord's sheet** (from a chip, a diagram, the summary): "C♯m7 chord" as its title, the diagram as wide as the
-  sheet allows (at most 28rem), and at its foot Close (soft) and Play (honey, Stop while it sounds) side by side. On a
-  section's page it asks "Play it on the keys" (Onest 600 18px) over the keys round the chord, and once they are held
-  together says "That's it." beside a grass check.
+  sheet allows (at most 28rem); a piece's chord its Inversion under it as the kit's inversion segments (Root · 1st ·
+  2nd · 3rd, each its stack of heads), with an ⓘ, an inversion that does not fit the keys greyed (50%) and saying so
+  in its tooltip, a slash chord's or a chord of five notes or more all greyed, none chosen; at its foot Close (soft)
+  and Play (honey, Stop while it sounds) side by side. On a section's page it asks "Play it on the keys" (Onest 600
+  18px) over the diagram's keys, F3 to B4, and once they are held together says "That's it." beside a grass check.
 
 ### A piece's page: Learn the song
 

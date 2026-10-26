@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
-import { arrangePiece, beatCells, ownChoice, playedBeatCells } from '@/features/practice'
+import { arrangePiece, ownChoice, playedBeatCells } from '@/features/practice'
 import { beatSpan, loopedBars } from './beat-span'
-import { lineProgress, lyricLines } from './lyric-lines'
 
 /** C F repeated, then G Am in 4/4, then a bar of 2/4: played C F C F G Am Dm. */
 const piece: ChartPiece = {
@@ -39,23 +38,5 @@ describe('loopedBars', () => {
     expect([...loopedBars(performance, { first: 3, last: 4 })]).toEqual([1, 2])
     expect([...loopedBars(performance, { first: 0, last: 3 })]).toEqual([0, 1])
     expect([...loopedBars(performance, null)]).toEqual([])
-  })
-})
-
-describe('lineProgress', () => {
-  const [, second] = lyricLines(performance)
-  const written = beatCells(performance)
-
-  it('is how far through its line a beat is, its beats counted to the beat’s end', () => {
-    if (!second) throw new Error('two lines')
-    // G Am Dm: ten beats.
-    expect(lineProgress(second, written, { written: 2, beat: 0 })).toBe(0.1)
-    expect(lineProgress(second, written, { written: 3, beat: 1 })).toBe(0.6)
-    expect(lineProgress(second, written, { written: 4, beat: 1 })).toBe(1)
-  })
-
-  it('is none outside the line', () => {
-    if (!second) throw new Error('two lines')
-    expect(lineProgress(second, written, { written: 0, beat: 0 })).toBe(0)
   })
 })
