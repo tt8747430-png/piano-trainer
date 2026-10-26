@@ -16,7 +16,7 @@ import { printedSymbol, type Tick } from '@/shared/lib/music'
 import { SheetTitle } from '@/shared/ui'
 import { ChordDiagram } from '@/widgets/chord-diagrams'
 import { chordsFrom } from '../model/chords-from'
-import { lyricLines, type Span } from '../model/lyric-lines'
+import { comingLine, lyricLines, type Span } from '../model/lyric-lines'
 import { BeatStrip } from './BeatStrip'
 import { SungLines } from './SungLines'
 
@@ -81,7 +81,8 @@ function Diagram({
  * Diagrams (ADR 0099, Chordify's): the chord sounding as a large keyboard diagram over its symbol, the
  * next beside it greyed (from a tablet's width the two after it too, smaller and greyer); where no
  * chord sounds yet (a pickup, a bar of none) the next alone, greyed, saying it is next. Under them the
- * beat strip; under it, with the View's Lyrics on, the line being sung and the next (`SungLines`);
+ * beat strip; under it, with the View's Lyrics on, the line being sung and the next as the bars are
+ * played, a repeat's or the loop's first again (`SungLines`, `comingLine`);
  * on a phone on its side, the title, the strip and the words beside the chords. All of it stands in
  * the room above the transport, in the middle of it, the chords shrinking where it is short
  * (`diagrams-view`). A diagram opens its chord's sheet (`onChord`); a beat tapped takes the cursor
@@ -193,7 +194,7 @@ export function ChordDiagrams({
       {words ? (
         <SungLines
           sung={line?.sung ? line : undefined}
-          coming={lines.slice(at + 1).find((each) => each.sung)}
+          coming={comingLine(performance, lines, beat.bar, loop)}
           bars={written}
           at={{ written: bar, beat: beat.beat }}
         />

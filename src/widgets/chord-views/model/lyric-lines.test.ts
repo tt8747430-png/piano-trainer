@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
-import { arrangePiece, ownChoice } from '@/features/practice'
+import { arrangePiece, ownChoice, type BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { lineWords, lyricLines, soundingChip, type LyricLine } from './lyric-lines'
+import { comingLine, lineWords, lyricLines, soundingChip, type LyricLine } from './lyric-lines'
 
 /** A song of 4/4 bars in C, its sections' lines, a staff over the piano, and its verses. */
 function song(
@@ -140,6 +140,42 @@ describe('lineWords', () => {
     expect(lineWords(line)).toBe('Holy night')
     expect(lineWords(line, 1)).toBe('Calm and')
     expect(lineWords(line, 2)).toBe('')
+  })
+})
+
+describe('comingLine', () => {
+  // Bars of a word each: line 1 "One two", line 2 "three four", line 3 "five six".
+  const words = {
+    notes: 'E4/4 | F4/4 | G4/4 | A4/4 | B4/4 | C5/4',
+    lyrics: ['One two three four five six'],
+  }
+  const coming = (performance: Performance, played: number, loop: BarRange | null = null) => {
+    const line = comingLine(performance, lyricLines(performance), played, loop)
+    return line ? lineWords(line) : null
+  }
+
+  it('is the next line sung as the bars are played, a repeat’s first line again', () => {
+    // Played One two | One two | three four | five six.
+    const repeated = song([['|: C F :|', 'G Am', 'Dm E']], words)
+    expect(coming(repeated, 1)).toBe('One two')
+    expect(coming(repeated, 3)).toBe('three four')
+    expect(coming(repeated, 4)).toBe('five six')
+  })
+
+  it('goes round to the loop’s first line where the loop goes round', () => {
+    const plain = song([['C F', 'G Am', 'Dm E']], words)
+    expect(coming(plain, 3)).toBe('five six')
+    expect(coming(plain, 3, { first: 2, last: 3 })).toBe('three four')
+    expect(coming(plain, 1, { first: 0, last: 1 })).toBe('One two')
+  })
+
+  it('passes over a line of no words, and is none after the last line sung', () => {
+    const between = song([['C F', 'G Am', 'Dm E']], {
+      notes: 'E4/4 | F4/4 | r/4 | r/4 | B4/4 | C5/4',
+      lyrics: ['One two five six'],
+    })
+    expect(coming(between, 0)).toBe('five six')
+    expect(coming(between, 4)).toBeNull()
   })
 })
 

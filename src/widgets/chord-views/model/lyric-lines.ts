@@ -1,4 +1,4 @@
-import { beatCells, type CellBar } from '@/features/practice'
+import { beatCells, writtenBarOf, type BarRange, type CellBar } from '@/features/practice'
 import type { Performance, PerformanceNote } from '@/shared/lib/arrangement'
 import { beatsToTicks, type Syllable, type Tick } from '@/shared/lib/music'
 
@@ -177,6 +177,33 @@ export function lineWords(line: LyricLine, verse = 0): string {
     })
     .join('')
     .trim()
+}
+
+/**
+ * The next line sung after a bar played (the Diagrams view's line to come), in the order the Player
+ * plays the bars: a repeat's lines again, and where the loop goes round, the line it goes round to.
+ * A line starts again where the bars played jump or move on to another line. None past the last.
+ */
+export function comingLine(
+  performance: Performance,
+  lines: readonly LyricLine[],
+  played: number,
+  loop: BarRange | null,
+): LyricLine | undefined {
+  const lineOf = new Map<number, LyricLine>()
+  for (const line of lines) for (const bar of line.bars) lineOf.set(bar, line)
+  const after = (bar: number) => (loop && bar === loop.last ? loop.first : bar + 1)
+  const count = performance.bars.length
+  let before = writtenBarOf(performance, played)
+  // Each bar looked at once: a loop that sings nothing goes round no more.
+  for (let bar = after(played), steps = 0; bar < count && steps < count; steps++) {
+    const written = writtenBarOf(performance, bar)
+    const line = lineOf.get(written)
+    if (line?.sung && (line !== lineOf.get(before) || written !== before + 1)) return line
+    before = written
+    bar = after(bar)
+  }
+  return undefined
 }
 
 /**
