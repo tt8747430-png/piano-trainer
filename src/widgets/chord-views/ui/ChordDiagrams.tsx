@@ -37,8 +37,9 @@ const PLACES = {
 } as const
 
 /**
- * A chord of the row: its keys over its symbol, a button opening its sheet. In a room too short for
- * them as drawn, its keys shrink to it, its symbol kept whole.
+ * A chord of the row: its keys over its symbol, a button opening its sheet. One to come (`muted`)
+ * is greyed, and named for a screen reader as the next; the one sounding by its keys' notes. In a
+ * room too short for them as drawn, its keys shrink to it, its symbol kept whole.
  */
 function Diagram({
   chord,
@@ -54,9 +55,11 @@ function Diagram({
   label: string
   onOpen: () => void
 }) {
+  const { t } = useTranslation('player')
   return (
     <button
       type="button"
+      aria-label={muted ? t('nextChord', { symbol: printedSymbol(chord.symbol) }) : undefined}
       onClick={onOpen}
       className={cn(
         'flex max-h-full min-w-0 shrink flex-col items-center gap-2 rounded-xl p-1.5 transition-colors duration-200 ease-out hover:bg-muted',
