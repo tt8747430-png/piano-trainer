@@ -1,7 +1,7 @@
 import { useMemo, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { PlayHandle } from '@/shared/api/audio'
-import type { Tick } from '@/shared/lib/music'
+import { printedSymbol, type Tick } from '@/shared/lib/music'
 import type { Score, StaffId, TimedMusic } from '@/shared/lib/notation'
 import { runSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
@@ -10,6 +10,12 @@ import { LazyScoreView, type ShownKeys } from '@/shared/ui'
 import { notesShown } from '../model/notes-example'
 import { namesAt, noteColumns, passage, staffAt } from '../model/staff-taps'
 import { useStaffPlayhead } from '../model/use-staff-playhead'
+
+/** The chord a bar starts with, printed as the sheets print it (`C♯m7`); none for a bar of no chord. */
+function barSymbol(music: TimedMusic, start: Tick): string | undefined {
+  const symbol = music.chords.find((chord) => chord.startTick === start)?.symbol
+  return symbol === undefined ? undefined : printedSymbol(symbol)
+}
 
 /** How far a note's column reaches past the staff's lines, for notes on ledger lines. */
 const REACH = 16
@@ -55,7 +61,10 @@ export function TappableStaff({
   tempo: number
   /** The whole music played from its first tick at `tempo` by a Play beside it: its notes marked as they sound. */
   follow?: PlayHandle | null
-  /** A word after each bar's chord on its band, by its place: the chord's numeral in its key. */
+  /**
+   * A word after each bar's chord on its band, by its place: the chord's numeral in its key, printed
+   * as its symbol is.
+   */
   captions?: readonly (string | undefined)[] | undefined
   /** What the keys show for a bar tapped, by its place, where not its notes by name: a chord's degrees. */
   barShown?: ((bar: number) => ShownKeys | undefined) | undefined
@@ -71,9 +80,7 @@ export function TappableStaff({
       music.bars.map((bar, i) => ({
         from: bar.startTick,
         to: music.bars[i + 1]?.startTick ?? Number.POSITIVE_INFINITY,
-        symbol: symbols
-          ? music.chords.find((chord) => chord.startTick === bar.startTick)?.symbol
-          : undefined,
+        symbol: symbols ? barSymbol(music, bar.startTick) : undefined,
       })),
     [music, symbols],
   )
@@ -146,6 +153,7 @@ export function TappableStaff({
                   const bar = bars[i]
                   if (!bar) return null
                   const id = `bar:${i}`
+                  const caption = captions?.[i]
                   return (
                     <button
                       key={id}
@@ -171,9 +179,9 @@ export function TappableStaff({
                       }}
                     >
                       {bar.symbol ?? firstBar + i}
-                      {bar.symbol && captions?.[i] ? (
+                      {bar.symbol && caption ? (
                         <span className="ml-1 font-sans text-xs font-medium text-muted-foreground">
-                          {captions[i]}
+                          {printedSymbol(caption)}
                         </span>
                       ) : null}
                     </button>

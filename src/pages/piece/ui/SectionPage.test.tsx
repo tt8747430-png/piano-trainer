@@ -117,6 +117,13 @@ describe('a section’s page (ADR 0100)', () => {
     const { midi: keyboard, progressStore } = await renderApp('/songs/bz5/sections/2')
     const row = await screen.findByRole('button', { name: 'Learn Em' })
     expect(tileIcon(row)).toBe('lucide-piano')
+    // It opens its sheet in place: no chevron, which says a row leads to a page.
+    expect(row.querySelector('[data-slot="row-chevron"]')).not.toBeInTheDocument()
+    expect(
+      screen
+        .getAllByRole('link', { name: /^1st sequence/ })[0]
+        ?.querySelector('[data-slot="row-chevron"]'),
+    ).toBeInTheDocument()
     await user.click(row)
     const sheet = await screen.findByRole('dialog', { name: 'Em chord' })
     expect(within(sheet).getByText('Play it on the keys')).toBeInTheDocument()

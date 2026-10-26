@@ -34,9 +34,12 @@ export function wedgePath(place: number, ring: CircleRing): string {
   return `M ${at(outer, from)} A ${outer} ${outer} 0 0 1 ${at(outer, to)} L ${at(inner, to)} A ${inner} ${inner} 0 0 0 ${at(inner, from)} Z`
 }
 
-/** A key's signature as the circle writes it: its count of sharps or flats ("3♭"), nothing for none. */
+/**
+ * A key's signature as the circle writes it: its count of sharps or flats with the sign, as the
+ * chords beside it print theirs ("3♯", "3♭"), nothing for none.
+ */
 export function signatureCount(key: Key): string {
   const count = keySignature(key)
   if (count === 0) return ''
-  return count > 0 ? `${count}#` : `${-count}♭`
+  return count > 0 ? `${count}♯` : `${-count}♭`
 }

@@ -7,7 +7,7 @@ import { diagramChord } from '@/features/practice'
 import { recordChord } from '@/features/record-lesson'
 import type { Performance } from '@/shared/lib/arrangement'
 import { printedSymbol } from '@/shared/lib/music'
-import { RowGroup, RowLink, type Paint } from '@/shared/ui'
+import { RowButton, RowGroup, type Paint } from '@/shared/ui'
 import { ChordSheet } from '@/widgets/chord-diagrams'
 import type { ChordLesson } from '../model/section-lessons'
 
@@ -42,7 +42,8 @@ export function ChordLessons({
           const learned = done[lesson.key] !== undefined
           return (
             <li key={lesson.key}>
-              <RowLink
+              {/* It opens a sheet over the page, not another page: a button with no chevron. */}
+              <RowButton
                 title={t('learnSection.learnChord', { chord: printedSymbol(lesson.symbol) })}
                 icon={learned ? Check : Piano}
                 paint={paint}
@@ -50,14 +51,7 @@ export function ChordLessons({
                 trailing={
                   learned ? <span className="sr-only">{t('learnSection.done')}</span> : undefined
                 }
-                // It opens a sheet over the page, not another page: the row is a button.
-                render={
-                  <button
-                    type="button"
-                    className="w-full text-left"
-                    onClick={() => setShown({ lesson, open: true })}
-                  />
-                }
+                onClick={() => setShown({ lesson, open: true })}
               />
             </li>
           )

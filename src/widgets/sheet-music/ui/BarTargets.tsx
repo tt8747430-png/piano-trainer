@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useBarName } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
+import { printedSymbol } from '@/shared/lib/music'
 import { usePositionName } from '@/shared/ui'
 import { pickAt, useSheetChoice, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { chordPositions } from '../model/chord-positions'
@@ -59,8 +60,10 @@ export function BarTargets({
     return layout.measures.map((_, index) => {
       const bar = firstBar + index
       const chords = (performance.bars[bar]?.chords ?? []).flatMap((index) => {
-        const symbol = performance.chords[index]?.symbol
-        if (!symbol) return []
+        const written = performance.chords[index]?.symbol
+        if (!written) return []
+        // Named as its label over the staff prints it (`C♯m7`).
+        const symbol = printedSymbol(written)
         const position = placed[index]
         return position ? `${symbol} ${positionName(position)}` : symbol
       })

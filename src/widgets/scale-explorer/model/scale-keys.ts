@@ -2,6 +2,7 @@ import {
   noteName,
   pitchClass,
   pitchClassOf,
+  printedSymbol,
   scaleChordHolds,
   scaleKey,
   spellInKey,
@@ -13,12 +14,19 @@ import {
 } from '@/shared/lib/music'
 import type { KeyMark } from '@/shared/ui'
 
-/** Chords view: each degree's key with its numeral over its chord (The Ultimate Piano's Diatonic). */
+/**
+ * Chords view: each degree's key with its numeral over its chord (The Ultimate Piano's Diatonic), the
+ * chord printed as the sheets print it (`vi` over `F♯m`).
+ */
 export function chordMarks(chords: readonly PlacedScaleChord[]): Map<Midi, KeyMark> {
   return new Map(
     chords.map((placed, i) => [
       placed.key,
-      { tone: i === 0 ? 'tonic' : 'scale', label: placed.symbol, caption: placed.numeral },
+      {
+        tone: i === 0 ? 'tonic' : 'scale',
+        label: printedSymbol(placed.symbol),
+        caption: placed.numeral,
+      },
     ]),
   )
 }

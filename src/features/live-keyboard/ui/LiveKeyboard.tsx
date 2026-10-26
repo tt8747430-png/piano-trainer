@@ -2,7 +2,7 @@ import { Fragment, useMemo, type ComponentProps, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings } from '@/entities/settings'
 import { MidiSoundToggle, useHeldKeys } from '@/features/connect-midi'
-import { nameChords, rangeOf, type Midi } from '@/shared/lib/music'
+import { nameChords, printedSymbol, rangeOf, type Midi } from '@/shared/lib/music'
 import type { RailControl } from '@/shared/lib'
 import { useLiveVoice, useSoundingKeys } from '@/shared/lib/services'
 import { useShortcuts } from '@/shared/lib/shortcuts'
@@ -107,9 +107,13 @@ export function LiveKeyboard({
         : new Set([...sounding, ...live, ...held, ...[...typed.held].flatMap(plays)]),
     [sounding, live, held, typed.held, plays],
   )
-  // What a hand plays: the live voice's keys and a MIDI keyboard's, held or on under the pedal.
+  // What a hand plays: the live voice's keys and a MIDI keyboard's, held or on under the pedal,
+  // named as the sheets print a chord (`C♯m`).
   const chord = useMemo(
-    () => (namesChords && chordNames ? (nameChords([...live, ...held])[0]?.symbol ?? '') : null),
+    () =>
+      namesChords && chordNames
+        ? printedSymbol(nameChords([...live, ...held])[0]?.symbol ?? '')
+        : null,
     [namesChords, chordNames, live, held],
   )
   // The rail holds the controls the learner keeps on it, how the keys look apart from how they play.

@@ -12,6 +12,13 @@ describe('chordMarks', () => {
     expect(marks.get(midi(62))).toEqual({ tone: 'scale', label: 'Dm', caption: 'ii' })
     expect(marks.size).toBe(7)
   })
+
+  it('prints each chord as the sheets print it, ♯ as its sign', () => {
+    const marks = [...chordMarks(placeScaleChords(note('A'), 'major', 3, 0)).values()]
+    expect(marks.map((mark) => mark.label)).toEqual(['A', 'Bm', 'C♯m', 'D', 'E', 'F♯m', 'G♯°'])
+    const thirteenths = [...chordMarks(placeScaleChords(C, 'major', 7, 0)).values()]
+    expect(thirteenths[3]).toMatchObject({ label: 'FMaj13♯11', caption: 'IV' })
+  })
 })
 
 describe('chordKeyPlays', () => {

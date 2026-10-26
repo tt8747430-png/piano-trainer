@@ -1,9 +1,11 @@
 import { cn } from '@/shared/lib'
+import { printedSymbol } from '@/shared/lib/music'
 import { PlayToggle } from './PlayToggle'
 
 /**
- * A chord to tap in a grid of chords: its symbol over its numeral and a detail where it has them, pressed while it
- * sounds (a square: tap again to stop), ringed when it holds the note heard.
+ * A chord to tap in a grid of chords: its symbol over its numeral (a chord symbol with a degree for a
+ * root), both as the sheets print them (`C♯m7`, `V7♯9`), and a detail where it has them, pressed
+ * while it sounds (a square: tap again to stop), ringed when it holds the note heard.
  */
 export function ChordButton({
   symbol,
@@ -35,9 +37,11 @@ export function ChordButton({
           symbol.length > 7 ? 'text-base' : symbol.length > 5 ? 'text-lg' : 'text-xl',
         )}
       >
-        {symbol}
+        {printedSymbol(symbol)}
       </span>
-      {numeral ? <span className="text-sm text-muted-foreground">{numeral}</span> : null}
+      {numeral ? (
+        <span className="text-sm text-muted-foreground">{printedSymbol(numeral)}</span>
+      ) : null}
       {detail ? (
         <span data-detail="" className="text-xs text-muted-foreground">
           {detail}

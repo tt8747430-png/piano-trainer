@@ -109,6 +109,33 @@ describe('TrainerBoard', () => {
     expect(screen.getByText('Not quite: it’s C/E · Major triad, with E lowest')).toBeInTheDocument()
   })
 
+  it('prints the chord it asks for and names with ♯ and ♭, as the sheets print them', async () => {
+    const user = userEvent.setup()
+    renderBoard({
+      kind: 'skills',
+      chords: 'build-chord',
+      skills: ['chord:min'],
+      roots: [pitchClass(1)],
+    })
+    expect(screen.getByRole('heading', { name: 'Build C♯m' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'C4' }))
+    await user.click(screen.getByRole('button', { name: 'Check' }))
+    expect(screen.getByText('Not quite: it’s C♯m · Minor triad')).toBeInTheDocument()
+  })
+
+  it('prints a chord to name among its answers as the sheets print it', async () => {
+    const user = userEvent.setup()
+    renderBoard({
+      kind: 'skills',
+      chords: 'name-chord',
+      skills: ['chord:min'],
+      roots: [pitchClass(1)],
+    })
+    const answers = screen.getByRole('group', { name: 'Answers' })
+    await user.click(within(answers).getByRole('button', { name: 'C♯m' }))
+    expect(screen.getByText('Correct')).toBeInTheDocument()
+  })
+
   it('asks to name a chord from four answers', async () => {
     const user = userEvent.setup()
     renderBoard(skills('chord:d7', 'name-chord'))

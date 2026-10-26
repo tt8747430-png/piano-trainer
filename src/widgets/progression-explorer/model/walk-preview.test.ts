@@ -19,4 +19,10 @@ describe('walkPreview', () => {
       'Dm G C · E♭m A♭ D♭ …',
     )
   })
+
+  it('prints each chord as the sheets print it, a sharp as its sign', () => {
+    expect(walkPreview(TWO_FIVE_ONE, C_MAJOR, 'semitones-down', 'triads')).toBe(
+      'Dm G C · C♯m F♯ B …',
+    )
+  })
 })

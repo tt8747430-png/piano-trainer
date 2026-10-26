@@ -5,13 +5,21 @@ import { renderApp } from '@/app/testing/render-app'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 
 describe('The chromatic walk in the Player', () => {
+  it('titles a walk by its chords as the sheets print them', async () => {
+    await renderApp('/play/chromatic?chords=min.m7&root=F%23')
+    expect(
+      await screen.findByRole('heading', { name: 'Chromatic walk: F♯m · F♯m7' }),
+    ).toBeInTheDocument()
+  })
+
   it('walks the chosen chords root by root as sheet music, titled by them', async () => {
     await renderApp('/play/chromatic?chords=m9.maj9&root=G')
     expect(
       await screen.findByRole('heading', { name: 'Chromatic walk: Gm9 · GMaj9' }),
     ).toBeInTheDocument()
     expect(await screen.findByRole('button', { name: 'Bar 1: Gm9' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Bar 3: G#m9' })).toBeInTheDocument()
+    // Each bar named by its chord as the sheet prints it.
+    expect(screen.getByRole('button', { name: 'Bar 3: G♯m9' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Bar 4: A♭Maj9' })).toBeInTheDocument()
   })
 
@@ -47,6 +55,14 @@ describe('The chromatic walk in the Player', () => {
       'aria-selected',
       'true',
     )
+  })
+
+  it('names each chord type in the Setup sheet by its suffix as the sheets print it', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/chromatic?chords=m9&root=G')
+    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    await user.click(await screen.findByRole('combobox', { name: 'Chord types' }))
+    expect(await screen.findByRole('option', { name: '7♯9 · 7th sharp 9' })).toBeInTheDocument()
   })
 
   it('changes the direction and the root in the Setup sheet', async () => {

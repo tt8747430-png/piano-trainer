@@ -10,6 +10,7 @@ import {
   noteFromParam,
   noteName,
   noteParam,
+  printedSymbol,
   qualitySuffix,
   SCALE_FAMILIES,
   scaleKindsIn,
@@ -66,7 +67,7 @@ export function ExerciseMusicFields({
                 label: t(`music:family.${family}`),
                 options: qualities.map((quality) => ({
                   value: quality,
-                  label: qualitySuffix(quality) || t('music:major'),
+                  label: printedSymbol(qualitySuffix(quality)) || t('music:major'),
                   title: t(`music:quality.${quality}`),
                   detail: t(`music:quality.${quality}`),
                 })),

@@ -4,6 +4,7 @@ import {
   ChordSymbolError,
   chordsOfLine,
   parseChordSymbol,
+  printedChord,
   printedSymbol,
   readChordLine,
   readChordSymbol,
@@ -146,5 +147,17 @@ describe('printedSymbol', () => {
     expect(printedSymbol('Bsus4')).toBe('Bsus4')
     expect(printedSymbol('Bdim7')).toBe('Bdim7')
     expect(printedSymbol('Cadd9')).toBe('Cadd9')
+  })
+
+  it('prints a symbol once printed as it is', () => {
+    expect(printedSymbol('C♯m7♭5')).toBe('C♯m7♭5')
+  })
+})
+
+describe('printedChord', () => {
+  it('prints a chord as its symbol is printed, over its bass', () => {
+    expect(printedChord({ root: note('C', 1), quality: 'm7' })).toBe('C♯m7')
+    expect(printedChord({ root: note('B', -1), quality: 's9' })).toBe('B♭7♯9')
+    expect(printedChord({ root: note('D'), quality: 'maj', bass: note('F', 1) })).toBe('D/F♯')
   })
 })

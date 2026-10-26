@@ -52,4 +52,13 @@ describe('the theme', () => {
     for (const rule of hovered)
       expect(rule.within).toContain('@media (hover: hover) and (pointer: fine)')
   })
+
+  it('sets ♭ ♮ ♯ in both faces as text sets them, before the music font draws them for a staff', async () => {
+    const css = await compiled(['font-sans', 'font-display'])
+    expect(css).toContain(`'Onest Variable', 'Text Accidentals', 'Noto Music'`)
+    expect(css).toContain(`'Literata Variable', 'Text Accidentals', 'Noto Music'`)
+    const face = readFileSync('src/styles/fonts/text-accidentals.css', 'utf8')
+    expect(face).toContain(`font-family: 'Text Accidentals'`)
+    expect(face).toMatch(/unicode-range: U\+266D-266F, U\+1D12A-1D12B;/)
+  })
 })

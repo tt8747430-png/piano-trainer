@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import {
   noteName,
   pitchClass,
+  printedSymbol,
   spellInKey,
   type Key,
   type Midi,
@@ -19,7 +20,10 @@ import { chordLabel, useChordAbout } from './use-chord-about'
 /** Four beats a bar, never printed: each chord is a whole note on its own. */
 const NO_TIME: TimeSignature = { count: 4, unit: 4 }
 
-/** A chord played in words: its symbol over its bar, a line under it, and all of it for a screen reader. */
+/**
+ * A chord played in words: its symbol over its bar, printed as the sheets print it (`C♯m7`), a line
+ * under it, and all of it for a screen reader.
+ */
 interface Said {
   readonly symbol: string
   readonly detail: string
@@ -111,17 +115,21 @@ export function ChordTrail({
             const best = readingAt(finding.readings, newest ? chosenAt : 0)
             // Under its bar, what the chord is; how the keys lay it out is the name's to say.
             const detail = about(best, { slash }).join(' · ')
-            const symbol = chordLabel(best, slash)
+            const symbol = printedSymbol(chordLabel(best, slash))
             return { symbol, detail, heard: `${symbol} ${detail}`.trim() }
           }
           case 'interval':
             return {
-              symbol: finding.power ?? t(`music:interval.${finding.interval}.short`),
+              symbol: finding.power
+                ? printedSymbol(finding.power)
+                : t(`music:interval.${finding.interval}.short`),
               detail: '',
               heard: t(`music:interval.${finding.interval}.name`),
             }
-          case 'note':
-            return { symbol: noteName(finding.note), detail: '', heard: noteName(finding.note) }
+          case 'note': {
+            const symbol = printedSymbol(noteName(finding.note))
+            return { symbol, detail: '', heard: symbol }
+          }
           default:
             return {
               symbol: '',

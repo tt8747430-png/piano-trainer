@@ -1,85 +1,35 @@
 import { useRender } from '@base-ui/react/use-render'
-import { ChevronRight, type LucideIcon } from 'lucide-react'
-import type { ReactNode } from 'react'
-import { cn } from '@/shared/lib'
-import { PAINT, type Paint } from './paint'
-
-/** A row's tile on its paint's wash: an icon, or the row's number where the rows are a sequence; or none. */
-type RowTile =
-  | { icon: LucideIcon; numeral?: undefined; paint: Paint }
-  | { icon?: undefined; numeral: number; paint: Paint }
-  | { icon?: undefined; numeral?: undefined; paint?: undefined }
+import { ChevronRight } from 'lucide-react'
+import { RowFace, type RowFaceProps } from './RowFace'
+import { rowClass } from './row-class'
 
 /**
- * A list row that leads to a page: a tile in its paint with an icon, or its number in a sequence (a
- * list of one kind goes without, every row's tile alike), a title of up to two lines, an optional
- * detail of up to two, what it holds under them (a song's chords), what it carries at its end (a
- * level, a mark) and a chevron (Apple's disclosure indicator). `render` is the link (a router
- * `Link`).
+ * A list row that leads to a page: its face (`RowFace`: a tile, a title of up to two lines, a detail,
+ * what it holds and carries) and a chevron (Apple's disclosure indicator) that says it goes there.
+ * `render` is the link (a router `Link`). A row that opens a sheet over its page is a `RowButton`.
  */
 export function RowLink({
-  title,
-  detail,
-  icon: Icon,
-  numeral,
-  paint,
-  trailing,
   render,
-  children,
-}: {
-  title: string
-  detail?: string | undefined
-  trailing?: ReactNode
+  ...face
+}: RowFaceProps & {
   render: useRender.RenderProp
-  /** What it shows under its title and detail. */
-  children?: ReactNode
-} & RowTile) {
+}) {
   return useRender({
     defaultTagName: 'a',
     render,
     props: {
-      className: cn(
-        // The whole card is the link: its hover fills the card to its line, never a box inside it,
-        // and beside a taller card in its row it stays centred in its own.
-        'group/row flex h-full min-h-16 min-w-0 items-center gap-3 rounded-3xl py-2 pr-3 transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
-        // A row without a tile keeps its text off the card's edge.
-        paint ? 'pl-2' : 'pl-4',
-      ),
+      className: rowClass(face.paint !== undefined),
       children: (
-        <>
-          {paint ? (
-            <span
-              data-slot="row-tile"
+        <RowFace
+          {...face}
+          end={
+            <ChevronRight
+              data-slot="row-chevron"
               aria-hidden
-              className={cn(
-                'grid size-12 shrink-0 place-items-center rounded-2xl font-display text-xl font-semibold tabular-nums',
-                PAINT[paint].fill,
-                PAINT[paint].ink,
-              )}
-            >
-              {Icon ? <Icon className="size-5" /> : numeral}
-            </span>
-          ) : null}
-          <span className="min-w-0 flex-1">
-            <span className="line-clamp-2 text-lg leading-snug font-semibold text-pretty">
-              {title}
-            </span>
-            {detail ? (
-              <>
-                {' '}
-                <span className="line-clamp-2 text-sm text-pretty text-muted-foreground">
-                  {detail}
-                </span>
-              </>
-            ) : null}
-            {children ? <> {children}</> : null}
-          </span>
-          {trailing ? <> {trailing}</> : null}
-          <ChevronRight
-            aria-hidden
-            className="size-5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out group-hover/row:translate-x-0.5 group-hover/row:text-foreground"
-          />
-        </>
+              className="size-5 shrink-0 text-muted-foreground transition-transform duration-200 ease-out group-hover/row:translate-x-0.5 group-hover/row:text-foreground"
+            />
+          }
+        />
       ),
     },
   })

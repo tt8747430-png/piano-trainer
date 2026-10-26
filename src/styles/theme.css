@@ -93,13 +93,14 @@
   --color-key-focus: var(--key-focus);
   --color-key-focus-halo: var(--key-focus-halo);
 
-  --font-sans: 'Onest Variable', 'Noto Music', system-ui, sans-serif;
+  /* Neither face has ♭ ♮ ♯: both take them from Text Accidentals, set for text (fonts/), not a staff. */
+  --font-sans: 'Onest Variable', 'Text Accidentals', 'Noto Music', system-ui, sans-serif;
   /*
    * The book's typeset titles: Literata, a book serif drawn for screens, variable in weight and
    * optical size (the browser fits its design to each size), Latin and Cyrillic alike. Titles and
    * chord symbols only; every control reads in Onest.
    */
-  --font-display: 'Literata Variable', 'Noto Music', Georgia, serif;
+  --font-display: 'Literata Variable', 'Text Accidentals', 'Noto Music', Georgia, serif;
   /* A music sign that stands alone (the rail's pedal mark): set by the music font's own metrics. */
   --font-music: 'Noto Music', serif;
 

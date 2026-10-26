@@ -1,13 +1,16 @@
 import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useViewChange, useGoBack } from '@/shared/lib'
-import { chordSymbol, pitchClassOf, qualityRootSpelling } from '@/shared/lib/music'
+import { pitchClassOf, printedChord, qualityRootSpelling } from '@/shared/lib/music'
 import type { ChromaticSearch } from '../model/chromatic-search'
 import { useChromaticPlayer } from '../model/use-chromatic-player'
 import { ChromaticSetup } from './ChromaticSetup'
 import { PlayerLayout } from './PlayerLayout'
 
-/** The chromatic walk in the Player: the chosen chord qualities root by root, a semitone at a time, with a song's patterns. */
+/**
+ * The chromatic walk in the Player: the chosen chord qualities root by root, a semitone at a time,
+ * with a song's patterns; titled by its chords on its root, printed as the sheets print them.
+ */
 export function ChromaticPlayerPage() {
   const { t } = useTranslation('player')
   const search = useSearch({ from: '/full-screen/play/chromatic' })
@@ -16,7 +19,7 @@ export function ChromaticPlayerPage() {
   const { choice, performance, player, changeSetup } = useChromaticPlayer(search, setSearch)
   const from = pitchClassOf(choice.root)
   const chords = choice.chords
-    .map((quality) => chordSymbol({ root: qualityRootSpelling(from, quality), quality }))
+    .map((quality) => printedChord({ root: qualityRootSpelling(from, quality), quality }))
     .join(' · ')
   return (
     <PlayerLayout

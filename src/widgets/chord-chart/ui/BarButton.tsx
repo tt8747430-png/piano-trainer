@@ -2,6 +2,7 @@ import { Square } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import { useBarName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
+import { printedSymbol } from '@/shared/lib/music'
 import { CellChords } from './CellChords'
 
 /**
@@ -58,10 +59,10 @@ export function BarButton({
   return (
     <button
       type="button"
-      // Named by all it prints: its number, its chords, and the notes under them.
+      // Named by all it prints, as it prints it: its number, its chords, and the notes under them.
       aria-label={barName(
         number,
-        [symbols.join(' '), ...notes].filter((said) => said !== '').join(' · '),
+        [symbols.map(printedSymbol).join(' '), ...notes].filter((said) => said !== '').join(' · '),
       )}
       {...(tap === 'play'
         ? { 'aria-pressed': marked }

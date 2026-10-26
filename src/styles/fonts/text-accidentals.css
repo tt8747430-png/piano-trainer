@@ -1,0 +1,14 @@
+/*
+ * ♭ ♮ ♯ 𝄪 𝄫 as text sets them: neither face has them, and Noto Music draws them for a staff, a sharp
+ * low and small beside a letter. These are its signs scaled and raised by the capitals
+ * (`scripts/text-accidentals.py` writes the font), which both faces take before Noto Music (theme.css),
+ * so a chord symbol printed with them (`C♯m7`, `B♭`) reads alike in a title, a row or a key's label.
+ */
+@font-face {
+  font-family: 'Text Accidentals';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('./text-accidentals.woff2') format('woff2');
+  unicode-range: U+266D-266F, U+1D12A-1D12B;
+}
