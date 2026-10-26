@@ -162,10 +162,25 @@ describe('Piece', () => {
       within(more)
         .getAllByRole('button')
         .map((action) => action.textContent),
-    ).toEqual(['Move to…', 'Archive', 'Check these chords'])
+    ).toEqual(['Move to…', 'Archive', 'Check these chords', 'Share'])
     await user.click(within(more).getByRole('button', { name: 'Check these chords' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/check'))
     expect(router.state.location.search).toEqual({ of: 'piece:bz5' })
+  })
+
+  it('shares a song of the app as a link to it in the Player, in the key and as simplified as last played (ADR 0107)', async () => {
+    const user = userEvent.setup()
+    const { viewsStore } = await renderApp('/songs/bz5')
+    act(() => viewsStore.setState({ views: { '/play/bz5': { key: 'A', simple: true } } }))
+    await openMore(user)
+    await user.click(await screen.findByRole('button', { name: 'Share' }))
+    await waitFor(() =>
+      expect(screen.getByRole('status', { name: '' })).toHaveTextContent(
+        'Link copied. Anyone who opens it sees the chords as you play them.',
+      ),
+    )
+    const link = new URL(await navigator.clipboard.readText())
+    expect(`${link.pathname}${link.search}`).toBe('/play/bz5?key=A&simple=true')
   })
 
   it('puts Practise first, under its byline, and keeps Edit, Learned, its ♡ and More in its bar', async () => {

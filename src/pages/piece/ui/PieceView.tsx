@@ -1,4 +1,4 @@
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate, useRouter } from '@tanstack/react-router'
 import { Ellipsis, PencilLine, Play, RotateCcw, Share2, Target, Trash2 } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,6 +13,7 @@ import {
   usePieces,
   type Piece,
 } from '@/entities/piece'
+import { selectView } from '@/entities/views'
 import { FavouriteButton, useSongActions } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
 import { ShareSaid, useShareSong } from '@/features/share-song'
@@ -20,6 +21,7 @@ import { OPEN_PLAINLY } from '@/shared/lib'
 import { useLocale } from '@/shared/i18n'
 import { ActionMenu, ButtonLink, RoundLink } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { playedAs } from '../model/played-as'
 import { useSongLessons } from '../model/use-song-lessons'
 import { PieceAbout } from './PieceAbout'
 import { PieceByline } from './PieceByline'
@@ -31,8 +33,8 @@ import { SectionRows } from './SectionRows'
 /**
  * A piece with a chart, in one calm column: Learn the song (ADR 0100, amended). Its bar (Back, the
  * title, then Edit the score, Learned, its ♡ (ADR 0103) and More: Move to… and Archive (Restore
- * while it is archived; a study is in no library, ADR 0106), Check these chords, and for the
- * learner's own music Share and its way back, asked first); under the title its byline (what else it
+ * while it is archived; a study is in no library, ADR 0106), Check these chords, Share (ADR 0107),
+ * and for the learner's own music its way back, asked first); under the title its byline (what else it
  * is called, Your version, its stage, who wrote it); then, first and largest, Practise, the Player as
  * it was left; its key, time and tempo as cards, the way to its key's scale under them and what is
  * said of it behind an ⓘ; its chords as diagrams, once, each opening its sheet; and, where it has
@@ -52,6 +54,7 @@ export function PieceView({ piece }: { piece: Piece }) {
   const more = useRef<HTMLDivElement>(null)
   const step = pieceStepId(piece.id)
   const navigate = useNavigate()
+  const router = useRouter()
   // A song's place in the library (ADR 0106); a study, on Practice, is in none.
   const library = useSongActions(piece)
   const inLibrary = piece.kind !== 'study'
@@ -73,16 +76,30 @@ export function PieceView({ piece }: { piece: Piece }) {
           },
         ]
       : []),
-    ...(own && !isDegreePiece(piece)
-      ? [
+    // An own song carries its music; one of the app's is a link to itself, as last played (ADR 0107).
+    ...(own && isDegreePiece(piece)
+      ? []
+      : [
           {
             key: 'share',
             label: t('share'),
             icon: Share2,
-            onSelect: () => shared.share({ title, music: musicOf(piece) }),
+            onSelect: () =>
+              shared.share(
+                own && !isDegreePiece(piece)
+                  ? { kind: 'own', song: { title, music: musicOf(piece) } }
+                  : {
+                      kind: 'piece',
+                      id: piece.id,
+                      title,
+                      played: playedAs(
+                        piece,
+                        selectView(router.options.context.views.getState(), `/play/${piece.id}`),
+                      ),
+                    },
+              ),
           },
-        ]
-      : []),
+        ]),
     ...(ownMusic
       ? [
           {

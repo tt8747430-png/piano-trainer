@@ -44,6 +44,11 @@ export interface PerformanceMidiOptions {
   readonly title: string
   /** The parts' tracks' names. */
   readonly names: PartNames
+  /**
+   * Seconds of silence before bar 1, at the first tempo: where a recording's bar 1 begins, so the
+   * file lies under it time aligned (ADR 0107). None by default: bar 1 starts the file.
+   */
+  readonly lead?: number
 }
 
 /** A part of the score as a track: its name, its channel, its notes (by index), the pedal's or not. */
@@ -119,23 +124,30 @@ export function performanceMidi(
   const tempo = checkedTempo(options.tempo)
   // A compound meter's beat, its click, is a dotted quarter.
   const click = isCompound(performance.meter) ? 1.5 : 1
-  const fileTick = (tick: Tick) => Math.round((tick * MIDI_DIVISION * click) / TICKS_PER_BEAT)
-  const end = fileTick(performance.totalTicks)
   // The tempo and the pedal as every part marks them, whichever the learner hears (ADR 0068).
   const marked = performance.timing ?? performance.notes
+  const steps = tempoSteps(marked)
+  // The silence before bar 1, in the file's ticks at the music's first tempo.
+  const first = tempo * (steps[0]?.factor ?? 1) * click
+  const lead = Math.round(((options.lead ?? 0) * first * MIDI_DIVISION) / 60)
+  const fileTick = (tick: Tick) =>
+    lead + Math.round((tick * MIDI_DIVISION * click) / TICKS_PER_BEAT)
+  // What holds from bar 1 holds from the file's start, through the lead.
+  const markTick = (tick: Tick) => (tick === 0 ? 0 : fileTick(tick))
+  const end = fileTick(performance.totalTicks)
 
   const signatures: TimedMidiEvent[] = []
   for (const bar of performance.bars) {
     const { count, unit } = writtenTime(bar.beats, bar.meter ?? performance.meter)
     const last = signatures.at(-1)
     if (last?.kind === 'time' && last.count === count && last.unit === unit) continue
-    signatures.push({ tick: fileTick(bar.startTick), kind: 'time', count, unit, click })
+    signatures.push({ tick: markTick(bar.startTick), kind: 'time', count, unit, click })
   }
   const music: TimedMidiEvent[] = [
     { tick: 0, kind: 'name', text: options.title },
     ...signatures,
-    ...tempoSteps(marked).map((step): TimedMidiEvent => ({
-      tick: fileTick(step.tick),
+    ...steps.map((step): TimedMidiEvent => ({
+      tick: markTick(step.tick),
       kind: 'tempo',
       quarters: tempo * step.factor * click,
     })),

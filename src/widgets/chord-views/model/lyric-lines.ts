@@ -201,6 +201,23 @@ export function lyricLines(performance: Performance): LyricLine[] {
   return lines.map((bars) => lineOf(performance, bars, sung, verses))
 }
 
+/**
+ * The lines Chords over lyrics shows, on the screen and in print, each with its place among them
+ * all: a line of neither words nor chords (an own song's bars of no chord symbol and nothing sung)
+ * shows nothing, so it is left out, and its section's name heads its first line shown (`starts`).
+ */
+export function shownLines(
+  lines: readonly LyricLine[],
+): { readonly line: LyricLine; readonly index: number; readonly starts: boolean }[] {
+  const shown = lines.flatMap((line, index) =>
+    line.sung || line.segments.some(({ chord }) => chord !== null) ? [{ line, index }] : [],
+  )
+  return shown.map((each, at) => ({
+    ...each,
+    starts: shown[at - 1]?.line.section !== each.line.section,
+  }))
+}
+
 /** A line's words in a verse (verse 1 by default), as one line of text: the Diagrams view's. */
 export function lineWords(line: LyricLine, verse = 0): string {
   return line.segments

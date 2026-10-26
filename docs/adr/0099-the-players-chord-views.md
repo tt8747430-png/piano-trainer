@@ -4,7 +4,7 @@
   chart), ADR 0094 and 0085 (the Player's bar and transport: the loop moves to the transport) · **Spec:** [chord
   views and song lessons](../superpowers/specs/2026-10-25-chord-views-and-song-lessons.md) · **Amended by:** ADR
   0101 (diagrams on one keyboard, an inversion per chord), ADR 0102 (the tools row; the View by view), ADR 0104
-  (Transpose and Simplify)
+  (Transpose and Simplify), ADR 0107 (More's Share, Print, Sections, MIDI time aligned, the tuning)
 
 ## Context
 

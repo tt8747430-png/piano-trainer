@@ -15,7 +15,7 @@ import { SheetTitle } from '@/shared/ui'
 import { ChordSummary } from '@/widgets/chord-diagrams'
 import { loopedBars } from '../model/beat-span'
 import { footRoom, inSight, lineScroll } from '../model/in-sight'
-import { lyricLines, soundingChip, type Span } from '../model/lyric-lines'
+import { lyricLines, shownLines, soundingChip, type Span } from '../model/lyric-lines'
 import { BeatStrip } from './BeatStrip'
 import { LyricRow } from './LyricRow'
 
@@ -52,12 +52,7 @@ export function ChordsOverLyrics({
 }) {
   const { t } = useTranslation('player')
   const lines = useMemo(() => lyricLines(performance), [performance])
-  // A line of neither words nor chords (an own song's bars of no chord symbol and nothing sung)
-  // shows nothing, so it is left out, and a section's name heads its first line that shows.
-  const shown = useMemo(
-    () => lines.map((line) => line.sung || line.segments.some(({ chord }) => chord !== null)),
-    [lines],
-  )
+  const shown = useMemo(() => shownLines(lines), [lines])
   const chosen = usePieceInversions()?.chosen
   const summary = useMemo(() => chordSummary(performance, chosen), [performance, chosen])
   const bar = writtenBarOf(performance, beat.bar)
@@ -108,11 +103,8 @@ export function ChordsOverLyrics({
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
         <ChordSummary chords={summary} />
         <div className="flex flex-col gap-3">
-          {lines.map((line, index) => {
-            if (!shown[index]) return null
+          {shown.map(({ line, index, starts }) => {
             const heading = headings[line.section]
-            const before = lines.findLast((_, at) => at < index && shown[at])
-            const starts = before?.section !== line.section
             return (
               <Fragment key={index}>
                 {starts && heading ? (

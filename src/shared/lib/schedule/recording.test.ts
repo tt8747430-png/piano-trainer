@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Pass } from './loop'
-import { recordingPlay, type Recording } from './recording'
+import { recordingPlay, tuningOf, type Recording } from './recording'
 
 const VOCAL: Recording = { src: 'vocal.m4a', start: 2.74, tempo: 72 }
 const pass = (extra: Partial<Pass>): Pass => ({
@@ -41,5 +41,13 @@ describe('recordingPlay', () => {
     const play = recordingPlay({ ...VOCAL, start: 1 }, pass({ musicStart: 10 / 3 }))
     expect(play.at).toBeCloseTo(100 + 10 / 3 - 1)
     expect(play.offset).toBe(0)
+  })
+})
+
+describe('tuningOf', () => {
+  it('reads A at 440 Hz, unless a recording is tuned away from it', () => {
+    expect(tuningOf(undefined)).toBe(440)
+    expect(tuningOf(VOCAL)).toBe(440)
+    expect(tuningOf({ ...VOCAL, tuning: 443 })).toBe(443)
   })
 })

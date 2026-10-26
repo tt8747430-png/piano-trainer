@@ -854,6 +854,36 @@
   margin: 16mm;
 }
 
+/* A score's A4 pages print as drawn, their margins their own (ADR 0075, 0107). */
+@page score {
+  size: A4;
+  margin: 0;
+}
+
+/* The Player's print (ADR 0107): while its render stands, it alone is printed, the app left out; a
+   score's pages one to a sheet of paper, as wide and tall as it, with no shadow. */
+@media print {
+  body:has(> [data-slot='song-print']) > :not([data-slot='song-print']) {
+    display: none !important;
+  }
+  /* On white paper, where the browser prints backgrounds. */
+  html:has(> body > [data-slot='song-print']),
+  body:has(> [data-slot='song-print']) {
+    background: none;
+  }
+  [data-slot='printed-score'] {
+    page: score;
+  }
+  [data-slot='printed-score'] [data-slot='sheet-page'] {
+    width: 210mm !important;
+    height: 297mm;
+    min-height: 0 !important;
+    overflow: hidden;
+    box-shadow: none;
+    break-after: page;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

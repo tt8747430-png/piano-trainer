@@ -69,6 +69,7 @@ export const piece = {
   // An own song sent on as a link: its chart, staves and written hands inside it.
   share: 'Share',
   shareCopied: 'Link copied. Anyone who opens it can add the song to their own.',
+  shareLinked: 'Link copied. Anyone who opens it sees the chords as you play them.',
   shareFailed: 'The link could not be made here.',
   shareTooLong: 'This song is too long to fit in a link.',
   deleting: {
