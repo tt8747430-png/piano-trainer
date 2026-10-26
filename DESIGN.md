@@ -487,7 +487,8 @@ the View's Keys takes it away.
 
 - **The bar,** one at every size and one row from 320px (ADR 0094, 0099, 0102): ✕ and Practise · Edit at its start;
   MIDI, ⚙ (Setup) and More (…) at its end, each its icon named in a tooltip, 4px apart on a phone held upright. More
-  holds a piece's Add to favourites and Add to setlist (ADR 0103), its Song information (a sheet: its chords as
+  holds a song's Add to favourites, Move to… and Archive (ADR 0106; Restore while archived; a study none of them),
+  its Song information (a sheet: its chords as
   diagrams, then its key as played, time and tempo as the song page's cards, its second title and who wrote it),
   Export to MIDI and an own song's Share. The title is printed on the sheet.
 - **The tools row** (ADR 0102, Chordify's toolbar), under the bar at every size, over a hairline: quiet text buttons
@@ -522,17 +523,41 @@ nothing on the screen marks it beyond the tile.
 
 How each screen uses its width:
 
-- **Songs:** the collections as tabs (All, then the learner's library, Favourites and Setlists (ADR 0103), then Your
-  songs once there are any, then the books); the search, then Stage (a pop-up of only the stages its shelves hold,
-  absent where none does), With chords (a labelled toggle) and Chords I know (a button counting the chords ticked,
-  its popover their chips in Literata, the most used first), under the search on a phone and beside it from 640px;
-  and the songs as row cards in a grid, each saying how many chords it has. The Setlists tab has the search alone
-  over its setlists' row cards (a name over its songs counted and its first titles), then New setlist, a row named
-  where it stands.
-- **A setlist** (ADR 0103): its bar (Back, its name renamed where it is printed, Add songs and More), the search, and
-  its songs in one column, `max-w-3xl` from 1024px: each a card of its handle (a grip), the song's row face and its
-  Remove (✕); in the hand, the card lifted by a shade over a dashed slot where it lands. Add songs and Add to setlist
-  are sheets of check rows (a ring, an umber check while in).
+- **Songs, the library** (ADR 0106, Mindscape's): its bar says where the learner is (Songs at Home, a folder's name
+  with Back in one), then Select (a round icon), the **Archive** button (a round icon, a small ink count on its corner
+  while the archive holds anything) and, in a folder, More. Under it the search, then the sort (a pop-up showing the
+  sort chosen: Manual · Name · Recently played), Level, With chords and Favourites (labelled toggles) and Chords I
+  know, under the search on a phone and beside it from 640px, wrapping whole. Then the rows as cards in a grid (one
+  column on a phone, as many of 18rem as fit): at Home the **folders**, each its tile (a picture of music on its paint,
+  48px, the 2xl radius), its name (Onest 600 18px) over its songs counted and a chevron, then Home's songs; in a
+  folder, its songs. A song's card is its row face (title, second title and chords counted, its first chords in
+  Literata, key, stage, learned) with its **More** (⋯, a ghost 44px icon) at its end. A swipe slides the card over its
+  tray: to the right Favourite on sand, to the left Move on sky and Archive on lilac (a folder: Edit on grass;
+  Archive), each a 44px round button on its paint; past them the edge action arms, growing a step with a knock, and
+  fires on release. While the filters look through the library, the songs found stand under their folders' names
+  (Literata 600 22px), and a muted line over them says "Shown: 12 of 92" with Clear filters (a link). New floats: a
+  speed dial (+) of New folder and New song at Home, New song (the extended honey button) in a folder.
+- **Select:** the bar's title becomes the count ("Selected: 2"), with Select all (ghost) and Done (soft). Each card
+  wears a check at its start (a ring, umber while chosen, the card ringed in umber) and, in the Manual sort with
+  nothing hidden, a grip at its end; in the hand the card lifts a shade over a dashed slot. Its bar floats where the
+  screen's actions float: one raised pill of icon-over-word buttons, Favourite · Move · Archive, and Delete in the
+  warning colour where everything chosen can be deleted; a slot that cannot act is greyed, never taken away.
+- **Move to…** (a sheet): what moves under its title in soft ink, then Home (a house on sky) and each folder on its
+  tile, 56px rows, the one chosen tinted with a check, the place they stand greyed; New folder (a muted tile, link
+  ink) at its foot; the footer's honey button says where ("Move to Hymns"), "Choose where" until one is chosen.
+- **The folder sheet:** its name (the suggested one as its placeholder), then Picture, twelve 48px tiles drawn on the
+  paint chosen, and Colour, the five paints as round swatches; the chosen one ringed in ink. Create folder or Save in
+  its footer.
+- **A toast** says each move, archive and favourite: a card (the 3xl radius, the highest shade) centred over the
+  screen's foot clear of the tab bar, the docked keys and the floating actions, at most 26rem wide, its line (Onest
+  500 16px), then Undo (a ghost button in link ink, 600) and its ✕; gone in five seconds.
+- **Empty:** an empty folder says so and offers New song and Move songs here (a sheet of every other song under its
+  place's name, each a check row); an empty Home offers New song; a search that finds nothing names it, with Clear
+  filters.
+- **The archive** (`/songs/archive`): Back, the title, Restore all (soft, its icon) in the bar; then its rows as cards,
+  newest first: a folder's tile, name and songs counted, or a song's row face (a link: an archived song still opens),
+  each with Restore (soft) and, for the learner's own, More with Delete; empty, an archive icon over "Nothing
+  archived" and its line.
 - **Piece** (ADR 0100, Learn the song): one column at every width: its bar (Edit, Learned, ♡, More), the learning
   card, its facts as three cards, its chords as diagrams, its sections as rows, Play along and its note; Practise
   floats. Only a chord's sheet sounds and shows keys there. A section's page is the same column.
@@ -929,7 +954,8 @@ one keeps its music in the room above the transport.
 ### A piece's page: Learn the song
 
 A song's or a study's page (ADR 0100), one column under its screen bar (Back, the title, then Edit, Learned, its ♡
-(ADR 0103: pressed while a favourite, a sand fill and a filled heart) and More: Add to setlist, Check these chords,
+(ADR 0103: pressed while a favourite, a sand fill and a filled heart) and More: Move to… and Archive (ADR 0106;
+Restore while archived; a study has neither, nor the ♡), Check these chords,
 an own song's Share, Reset to the original or Delete, asked first): its second title, stage and
 who wrote it; the **learning card**; Key · Time · Tempo as **fact cards**; **Chords** (Literata 600 24px) over the
 chord summary; **Sections** over its sections as rows in one card, each a row link in its section's paint with a note,

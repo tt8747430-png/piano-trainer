@@ -36,6 +36,7 @@ export const common: LocaleResources['common'] = {
   },
   update: { available: 'Готова новая версия', update: 'Обновить', later: 'Позже' },
   close: 'Закрыть',
+  notifications: 'Уведомления',
   notice: { close: 'Закрыть уведомление' },
   clearSearch: 'Очистить поиск',
   infoTip: 'Подробнее: {{name}}',

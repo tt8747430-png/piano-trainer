@@ -1,149 +1,291 @@
 import { describe, expect, it } from 'vitest'
-import { createLibraryStore, MOST_PIECES, MOST_SETLISTS } from '@/entities/library'
+import {
+  arrangeLibrary,
+  createLibraryStore,
+  type LibraryCatalog,
+  type LibraryStore,
+} from '@/entities/library'
+import { createPiecesStore } from '@/entities/piece'
+import { createTakesStore } from '@/entities/take'
+import { makeSong } from '@/features/edit-piece'
+import { saveTake } from '@/features/manage-takes'
 import { createMemoryStorage } from '@/shared/lib'
-import { addToSetlist } from './add-to-setlist'
-import { createSetlist } from './create-setlist'
-import { deleteSetlist } from './delete-setlist'
-import { duplicateSetlist } from './duplicate-setlist'
-import { moveInSetlist } from './move-in-setlist'
-import { removeFromSetlist } from './remove-from-setlist'
-import { renameSetlist } from './rename-setlist'
-import { toggleFavourite } from './toggle-favourite'
+import { C_MAJOR } from '@/shared/lib/music'
+import {
+  archiveFolder,
+  archiveSongs,
+  deleteFolder,
+  deleteOwnSongs,
+  editFolder,
+  makeFolder,
+  moveSongs,
+  orderFolders,
+  orderSongs,
+  restoreAll,
+  restoreFolder,
+  restoreSongs,
+  setFavourites,
+  setSort,
+  toggleFavourite,
+  undoMove,
+} from './index'
 
-const store = () =>
-  createLibraryStore({ storage: createMemoryStorage(), otherTabs: new EventTarget() })
-const copy = (name: string) => `${name} (copy)`
-
-/** A library with one setlist of these songs, and that setlist's id. */
-function withSetlist(pieces: readonly string[]) {
-  const library = store()
-  const id = createSetlist(library, 'Sunday')
-  if (!id) throw new Error('made')
-  for (const piece of pieces) addToSetlist(library, id, piece)
-  return { library, id }
+const saving = () => ({ storage: createMemoryStorage(), otherTabs: new EventTarget() })
+const CATALOG: LibraryCatalog = {
+  collections: [
+    { id: 'learning-songs', songs: ['a1', 'a2', 'a3'] },
+    { id: 'hymns', songs: ['h1', 'h2'] },
+  ],
+  ownSongs: ['my-1', 'my-2'],
 }
-const songsOf = (library: ReturnType<typeof store>, id: string) =>
-  library.getState().setlists.find((setlist) => setlist.id === id)?.pieces
+const LOOK = { picture: 'star', paint: 'sky' } as const
 
-describe('toggleFavourite', () => {
-  it('keeps a song among the favourites, the newest first, and lets it go', () => {
-    const library = store()
-    toggleFavourite(library, 'bz5')
-    toggleFavourite(library, 'silent')
-    expect(library.getState().favourites).toEqual(['silent', 'bz5'])
-    toggleFavourite(library, 'bz5')
-    expect(library.getState().favourites).toEqual(['silent'])
-  })
+const fresh = () => createLibraryStore(saving())
+const layout = (store: LibraryStore, catalog = CATALOG) => arrangeLibrary(store.getState(), catalog)
+/** Each folder by its id with its songs, and Home's: the library at a glance. */
+const shelves = (store: LibraryStore, catalog = CATALOG): Record<string, readonly string[]> => {
+  const { folders, home } = layout(store, catalog)
+  return { ...Object.fromEntries(folders.map((folder) => [folder.id, folder.songs])), home }
+}
+const archived = (store: LibraryStore, catalog = CATALOG) =>
+  layout(store, catalog).archive.map((entry) =>
+    entry.kind === 'song' ? entry.id : `${entry.folder.id}[${entry.folder.songs.join(' ')}]`,
+  )
 
-  it('lets the oldest go past the most it keeps', () => {
-    const library = store()
-    const many = Array.from({ length: MOST_PIECES }, (_, i) => `piece-${i}`)
-    library.setState({ favourites: many })
-    toggleFavourite(library, 'bz5')
-    expect(library.getState().favourites).toHaveLength(MOST_PIECES)
-    expect(library.getState().favourites[0]).toBe('bz5')
-    expect(library.getState().favourites).not.toContain(`piece-${MOST_PIECES - 1}`)
+describe('favourites', () => {
+  it('toggles a song, the newest first, and sets several at once', () => {
+    const store = fresh()
+    toggleFavourite(store, 'a1')
+    toggleFavourite(store, 'h1')
+    expect(store.getState().favourites).toEqual(['h1', 'a1'])
+    toggleFavourite(store, 'a1')
+    expect(store.getState().favourites).toEqual(['h1'])
+    setFavourites(store, ['a2', 'h1'], true)
+    expect(store.getState().favourites).toEqual(['a2', 'h1'])
+    setFavourites(store, ['a2', 'h1'], false)
+    expect(store.getState().favourites).toEqual([])
   })
 })
 
-describe('createSetlist', () => {
-  it('makes an empty setlist under the next number, its name trimmed, and hands back its id', () => {
-    const library = store()
-    expect(createSetlist(library, '  Sunday ')).toBe('set-1')
-    expect(createSetlist(library, 'Practice')).toBe('set-2')
-    expect(library.getState()).toMatchObject({
-      setlists: [
-        { id: 'set-1', name: 'Sunday', pieces: [] },
-        { id: 'set-2', name: 'Practice', pieces: [] },
-      ],
-      nextSetlist: 3,
+describe('moveSongs', () => {
+  it('moves songs to the end of a folder or of Home, and its Undo puts each back where it stood', () => {
+    const store = fresh()
+    const moved = moveSongs(store, CATALOG, ['a2', 'my-1', 'h2'], 'hymns')
+    expect(shelves(store)).toEqual({
+      'learning-songs': ['a1', 'a3'],
+      hymns: ['h1', 'h2', 'a2', 'my-1'],
+      home: ['my-2'],
+    })
+    undoMove(store, CATALOG, moved)
+    expect(shelves(store)).toEqual({
+      'learning-songs': ['a1', 'a2', 'a3'],
+      hymns: ['h1', 'h2'],
+      home: ['my-1', 'my-2'],
     })
   })
 
-  it('makes none without a name, or once the library holds as many as it keeps', () => {
-    const library = store()
-    expect(createSetlist(library, '   ')).toBeNull()
-    expect(library.getState().setlists).toEqual([])
-    for (let i = 0; i < MOST_SETLISTS; i++) createSetlist(library, `List ${i}`)
-    expect(createSetlist(library, 'One more')).toBeNull()
-    expect(library.getState().setlists).toHaveLength(MOST_SETLISTS)
-  })
-})
-
-describe('renameSetlist', () => {
-  it('names a setlist anew, trimmed; an empty name changes nothing', () => {
-    const { library, id } = withSetlist([])
-    renameSetlist(library, id, '  Easter ')
-    expect(library.getState().setlists[0]?.name).toBe('Easter')
-    renameSetlist(library, id, '  ')
-    expect(library.getState().setlists[0]?.name).toBe('Easter')
-  })
-})
-
-describe('duplicateSetlist', () => {
-  it('copies a setlist after it, its songs in order, named as a copy within 40 characters', () => {
-    const { library, id } = withSetlist(['bz5', 'silent'])
-    createSetlist(library, 'Practice')
-    expect(duplicateSetlist(library, id, copy)).toBe('set-3')
-    expect(library.getState().setlists.map(({ id, name }) => [id, name])).toEqual([
-      ['set-1', 'Sunday'],
-      ['set-3', 'Sunday (copy)'],
-      ['set-2', 'Practice'],
+  it('moves to Home, and says nothing of a song already where it goes', () => {
+    const store = fresh()
+    expect(moveSongs(store, CATALOG, ['a3', 'my-2'], null)).toEqual([
+      { id: 'a3', from: { folder: 'learning-songs', index: 2 } },
     ])
-    expect(songsOf(library, 'set-3')).toEqual(['bz5', 'silent'])
-    renameSetlist(library, id, 'A setlist with a name of forty letters')
-    const longer = duplicateSetlist(library, id, copy)
-    expect(longer && library.getState().setlists[1]?.name).toBe(
-      'A setlist with a name of forty… (copy)',
+    expect(shelves(store).home).toEqual(['my-1', 'my-2', 'a3'])
+  })
+})
+
+describe('the order', () => {
+  it('writes the order dropped over the folders and over a list’s songs, those hidden keeping theirs', () => {
+    const store = fresh()
+    orderFolders(store, CATALOG, ['hymns', 'learning-songs'])
+    orderSongs(store, CATALOG, 'learning-songs', ['a3', 'a1'])
+    orderSongs(store, CATALOG, null, ['my-2', 'my-1'])
+    expect(shelves(store)).toEqual({
+      hymns: ['h1', 'h2'],
+      'learning-songs': ['a3', 'a2', 'a1'],
+      home: ['my-2', 'my-1'],
+    })
+    expect(layout(store).folders.map((folder) => folder.id)).toEqual(['hymns', 'learning-songs'])
+  })
+
+  it('keeps the sort chosen', () => {
+    const store = fresh()
+    setSort(store, 'recent')
+    expect(store.getState().sort).toBe('recent')
+  })
+})
+
+describe('the archive', () => {
+  it('archives songs, the newest first, and restores each where it stood', () => {
+    const store = fresh()
+    expect(archiveSongs(store, CATALOG, ['a2', 'nope'])).toEqual(['a2'])
+    archiveSongs(store, CATALOG, ['my-1'])
+    expect(archived(store)).toEqual(['my-1', 'a2'])
+    expect(shelves(store)).toMatchObject({ 'learning-songs': ['a1', 'a3'], home: ['my-2'] })
+    restoreSongs(store, CATALOG, ['a2', 'my-1'])
+    expect(archived(store)).toEqual([])
+    expect(shelves(store)).toMatchObject({
+      'learning-songs': ['a1', 'a2', 'a3'],
+      home: ['my-1', 'my-2'],
+    })
+  })
+
+  it('restores a song whose folder is gone at Home, last', () => {
+    const store = fresh()
+    archiveSongs(store, CATALOG, ['h1'])
+    archiveFolder(store, CATALOG, 'hymns')
+    restoreSongs(store, CATALOG, ['h1'])
+    expect(shelves(store).home).toEqual(['my-1', 'my-2', 'h1'])
+    expect(archived(store)).toEqual(['hymns[h2]'])
+  })
+
+  it('archives a folder with its songs; Restore brings it back at Home, last, Undo where it stood', () => {
+    const store = fresh()
+    archiveFolder(store, CATALOG, 'learning-songs')
+    expect(archived(store)).toEqual(['learning-songs[a1 a2 a3]'])
+    expect(layout(store).folders.map((folder) => folder.id)).toEqual(['hymns'])
+    restoreFolder(store, CATALOG, 'learning-songs')
+    expect(layout(store).folders.map((folder) => folder.id)).toEqual(['hymns', 'learning-songs'])
+    expect(shelves(store)['learning-songs']).toEqual(['a1', 'a2', 'a3'])
+    archiveFolder(store, CATALOG, 'hymns')
+    restoreFolder(store, CATALOG, 'hymns', true)
+    expect(layout(store).folders.map((folder) => folder.id)).toEqual(['hymns', 'learning-songs'])
+  })
+
+  it('restores everything: the folders at Home, then each song where it stood', () => {
+    const store = fresh()
+    archiveSongs(store, CATALOG, ['a1'])
+    archiveFolder(store, CATALOG, 'learning-songs')
+    archiveSongs(store, CATALOG, ['my-2'])
+    restoreAll(store, CATALOG)
+    expect(archived(store)).toEqual([])
+    expect(shelves(store)).toEqual({
+      hymns: ['h1', 'h2'],
+      'learning-songs': ['a1', 'a2', 'a3'],
+      home: ['my-1', 'my-2'],
+    })
+  })
+})
+
+describe('folders', () => {
+  it('makes an own folder at Home, last, with the songs moved in, its id never given twice', () => {
+    const store = fresh()
+    expect(makeFolder(store, CATALOG, { name: '  Sunday ', ...LOOK }, ['a1', 'my-2'])).toBe(
+      'folder-1',
     )
+    expect(makeFolder(store, CATALOG, { name: '   ', ...LOOK })).toBeNull()
+    expect(layout(store).folders.at(-1)).toEqual({
+      id: 'folder-1',
+      name: 'Sunday',
+      ...LOOK,
+      builtIn: false,
+      songs: ['a1', 'my-2'],
+    })
+    expect(shelves(store)).toMatchObject({ 'learning-songs': ['a2', 'a3'], home: ['my-1'] })
+    expect(store.getState().nextFolder).toBe(2)
   })
 
-  it('copies nothing that is not there, or once the library is full', () => {
-    const { library, id } = withSetlist([])
-    expect(duplicateSetlist(library, 'set-9', copy)).toBeNull()
-    for (let i = 1; i < MOST_SETLISTS; i++) createSetlist(library, `List ${i}`)
-    expect(duplicateSetlist(library, id, copy)).toBeNull()
-  })
-})
-
-describe('deleteSetlist', () => {
-  it('takes a setlist away, and never gives its number again', () => {
-    const { library, id } = withSetlist(['bz5'])
-    deleteSetlist(library, id)
-    expect(library.getState().setlists).toEqual([])
-    expect(createSetlist(library, 'Again')).toBe('set-2')
-  })
-})
-
-describe('addToSetlist and removeFromSetlist', () => {
-  it('adds a song at the end, once, and takes it out', () => {
-    const { library, id } = withSetlist(['bz5', 'silent', 'bz5'])
-    expect(songsOf(library, id)).toEqual(['bz5', 'silent'])
-    removeFromSetlist(library, id, 'bz5')
-    expect(songsOf(library, id)).toEqual(['silent'])
-  })
-
-  it('adds nothing past the most a list keeps, nor to a setlist not there', () => {
-    const { library, id } = withSetlist([])
-    const many = Array.from({ length: MOST_PIECES }, (_, i) => `piece-${i}`)
-    library.setState({ setlists: [{ id, name: 'Full', pieces: many }] })
-    addToSetlist(library, id, 'bz5')
-    expect(songsOf(library, id)).toHaveLength(MOST_PIECES)
-    addToSetlist(library, 'set-9', 'bz5')
-    expect(library.getState().setlists).toHaveLength(1)
+  it('edits a folder’s name and look; a built-in one given no name says its collection’s again', () => {
+    const store = fresh()
+    editFolder(store, CATALOG, 'hymns', { name: 'Sunday', picture: 'sun', paint: 'lilac' })
+    expect(layout(store).folders[1]).toMatchObject({
+      name: 'Sunday',
+      picture: 'sun',
+      paint: 'lilac',
+    })
+    editFolder(store, CATALOG, 'hymns', { name: undefined, picture: 'sun', paint: 'lilac' })
+    expect(layout(store).folders[1]?.name).toBeUndefined()
+    const own = makeFolder(store, CATALOG, { name: 'Mine', ...LOOK }) ?? 'folder-0'
+    editFolder(store, CATALOG, own, { name: ' ', picture: 'heart', paint: 'sand' })
+    expect(layout(store).folders.at(-1)).toMatchObject({ name: 'Mine', picture: 'heart' })
   })
 })
 
-describe('moveInSetlist', () => {
-  it('puts the songs in the order they were dropped in', () => {
-    const { library, id } = withSetlist(['a', 'b', 'c'])
-    moveInSetlist(library, id, ['c', 'a', 'b'])
-    expect(songsOf(library, id)).toEqual(['c', 'a', 'b'])
+describe('deleting', () => {
+  const stores = () => {
+    const pieces = createPiecesStore(saving())
+    const takes = createTakesStore(saving())
+    const library = fresh()
+    const song = (title: string) =>
+      makeSong(pieces, { title, key: C_MAJOR, meter: '4/4' }) ?? 'my-0'
+    return { library, pieces, takes, song }
+  }
+  const catalogOf = (pieces: ReturnType<typeof stores>['pieces']): LibraryCatalog => ({
+    ...CATALOG,
+    ownSongs: pieces.getState().songs.map((song) => song.id),
   })
 
-  it('keeps a song a search hid, or one the repertoire no longer has, in its place', () => {
-    const { library, id } = withSetlist(['a', 'gone', 'b', 'c'])
-    moveInSetlist(library, id, ['c', 'a', 'b'])
-    expect(songsOf(library, id)).toEqual(['c', 'gone', 'a', 'b'])
+  it('deletes an own folder: its own songs for good with their takes, the app’s each to the archive', () => {
+    const { library, pieces, takes, song } = stores()
+    const [mine, kept] = [song('Mine'), song('Kept')]
+    saveTake(takes, {
+      pieceId: mine,
+      made: 0,
+      tempo: 90,
+      meter: '4/4',
+      fromBar: 1,
+      notes: [],
+      pedals: [],
+      length: 0,
+      bars: [0],
+    })
+    const catalog = catalogOf(pieces)
+    toggleFavourite(library, mine)
+    const folder = makeFolder(library, catalog, { name: 'Sunday', ...LOOK }, ['h2', mine, 'a1'])
+    deleteFolder({ library, pieces, takes }, catalog, folder ?? 'folder-0')
+    expect(pieces.getState().songs.map((each) => each.id)).toEqual([kept])
+    expect(takes.getState().takes).toEqual([])
+    expect(library.getState().favourites).toEqual([])
+    const after = catalogOf(pieces)
+    expect(layout(library, after).folders.map((each) => each.id)).toEqual([
+      'learning-songs',
+      'hymns',
+    ])
+    expect(archived(library, after)).toEqual(['h2', 'a1'])
+    expect(shelves(library, after).home).toEqual([kept])
+    // Restored, each goes to its collection's folder, last.
+    restoreSongs(library, after, ['h2', 'a1'])
+    expect(shelves(library, after)).toEqual({
+      'learning-songs': ['a2', 'a3', 'a1'],
+      hymns: ['h1', 'h2'],
+      home: [kept],
+    })
+  })
+
+  it('deletes a built-in folder to the archive whole with the app’s songs, and restores it whole', () => {
+    const { library, pieces, takes, song } = stores()
+    const mine = song('Mine')
+    const catalog = catalogOf(pieces)
+    moveSongs(library, catalog, [mine], 'hymns')
+    deleteFolder({ library, pieces, takes }, catalog, 'hymns')
+    expect(pieces.getState().songs).toEqual([])
+    const after = catalogOf(pieces)
+    expect(archived(library, after)).toEqual(['hymns[h1 h2]'])
+    restoreFolder(library, after, 'hymns')
+    expect(shelves(library, after)).toEqual({
+      'learning-songs': ['a1', 'a2', 'a3'],
+      hymns: ['h1', 'h2'],
+      home: [],
+    })
+  })
+
+  it('deletes an own folder from the archive, its app’s songs staying there', () => {
+    const { library, pieces, takes } = stores()
+    const folder = makeFolder(library, CATALOG, { name: 'Sunday', ...LOOK }, ['h1']) ?? 'folder-0'
+    archiveSongs(library, CATALOG, ['a2'])
+    archiveFolder(library, CATALOG, folder)
+    deleteFolder({ library, pieces, takes }, CATALOG, folder)
+    expect(archived(library)).toEqual(['h1', 'a2'])
+  })
+
+  it('deletes the learner’s own songs for good, never the app’s', () => {
+    const { library, pieces, takes, song } = stores()
+    const [one, two] = [song('One'), song('Two')]
+    const catalog = catalogOf(pieces)
+    archiveSongs(library, catalog, [two])
+    deleteOwnSongs({ library, pieces, takes }, catalog, [one, two, 'a1'])
+    expect(pieces.getState().songs).toEqual([])
+    const after = catalogOf(pieces)
+    expect(archived(library, after)).toEqual([])
+    expect(shelves(library, after)['learning-songs']).toEqual(['a1', 'a2', 'a3'])
   })
 })

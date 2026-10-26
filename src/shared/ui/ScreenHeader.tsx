@@ -13,7 +13,6 @@ import { usePageHeading } from './use-page-heading'
  */
 export function ScreenHeader({
   title,
-  heading,
   back,
   actions,
   crowded = false,
@@ -21,8 +20,6 @@ export function ScreenHeader({
 }: {
   /** The screen's name: its large title and the page's. */
   title: string
-  /** What the page puts in the title's place: a name renamed where it is (`EditableTitle`). */
-  heading?: ReactNode
   back?: ReactNode
   actions?: ReactNode
   /**
@@ -80,7 +77,7 @@ export function ScreenHeader({
             crowded && 'max-sm:order-last max-sm:line-clamp-2 max-sm:basis-full max-sm:text-start',
           )}
         >
-          {heading ?? title}
+          {title}
         </h1>
         {actions ? (
           <div className="ms-auto flex shrink-0 items-center gap-2 print:hidden">{actions}</div>

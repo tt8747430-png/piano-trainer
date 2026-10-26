@@ -29,15 +29,17 @@ const names: IndexNames = {
 }
 const pieces = COLLECTIONS.flatMap((collection) => collection.entries)
 const patterns = PATTERN_IDS.map((id) => BUILT_IN_PATTERNS.require(id))
-const setlists = [
-  { id: 'set-1', name: 'Sunday service', count: 3 },
-  { id: 'set-2', name: 'Warm-up', count: 0 },
+const folders = [
+  { id: 'folder-1', name: 'Sunday service', count: 3 },
+  { id: 'hymns', name: 'Hymns', count: 0 },
 ] as const
+const archived = new Set([pieces[1]!.id])
 const sources = (locale: IndexSources['locale'] = 'en'): IndexSources => ({
   locale,
   names,
   pieces,
-  setlists,
+  folders,
+  archived,
   patterns,
 })
 const all = indexEntries(sources())
@@ -53,7 +55,7 @@ describe('indexEntries', () => {
   it('holds every named thing once: no registry is listed twice or left out', () => {
     expect(ofKind('pages')).toHaveLength(PRACTICE_PAGE_IDS.length)
     expect(ofKind('songs')).toHaveLength(pieces.length)
-    expect(ofKind('setlists')).toHaveLength(setlists.length)
+    expect(ofKind('folders')).toHaveLength(folders.length)
     expect(ofKind('lessons')).toHaveLength(LESSONS.length)
     expect(ofKind('courses')).toHaveLength(
       COURSES.length + COURSES.reduce((sum, course) => sum + course.lessons.length, 0),
@@ -141,19 +143,20 @@ describe('indexEntries', () => {
     })
   })
 
-  it('names a setlist of the learner’s by its name, its songs counted, and opens its page (ADR 0103)', () => {
+  it('names a folder of the library by its name, its songs counted, and opens its page (ADR 0106)', () => {
     expect(titled('Sunday service')).toMatchObject({
-      kind: 'setlists',
+      kind: 'folders',
       detail: '3 songs',
-      target: { opens: 'setlist', setlist: 'set-1' },
+      target: { opens: 'folder', folder: 'folder-1' },
     })
   })
 
-  it('lists a song by its title, its page’s entry kept for its row', () => {
-    const [first] = pieces
-    const song = ofKind('songs').find((entry) => entry.id === `songs:${first!.id}`)
-    expect(song?.target).toEqual({ opens: 'piece', entry: first })
-    expect([song?.title, ...(song?.words ?? [])]).toContain(first!.title)
+  it('lists a song by its title, its page’s entry kept for its row, saying whether it is archived', () => {
+    const [first, second] = pieces
+    const song = (id: string) => ofKind('songs').find((entry) => entry.id === `songs:${id}`)
+    expect(song(first!.id)?.target).toEqual({ opens: 'piece', entry: first, archived: false })
+    expect(song(second!.id)?.target).toMatchObject({ archived: true })
+    expect([song(first!.id)?.title, ...(song(first!.id)?.words ?? [])]).toContain(first!.title)
   })
 })
 

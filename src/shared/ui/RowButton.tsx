@@ -4,8 +4,8 @@ import { RowFace, type RowFaceProps } from './RowFace'
 import { rowClass } from './row-class'
 
 /**
- * A list row that acts in place, over its page (a chord's sheet, a new setlist named where it
- * stands): a `RowLink`'s face without its chevron, which says a row leads to a page; a button, not a
+ * A list row that acts in place, over its page (a chord's sheet, a lesson played in the Player):
+ * a `RowLink`'s face without its chevron, which says a row leads to a page; a button, not a
  * link. Greyed (`disabled`), it says why (`reason`): the browser's tooltip, and to a screen reader.
  */
 export function RowButton({

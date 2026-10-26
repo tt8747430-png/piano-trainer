@@ -4,6 +4,7 @@ export {
   isSongCollectionId,
   pieceKey,
   type CollectionId,
+  type SongCollectionId,
   type ChartPiece,
   type Entry,
   type Listing,

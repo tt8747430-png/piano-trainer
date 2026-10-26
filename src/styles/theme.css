@@ -521,6 +521,12 @@
     --spacing(--value(integer)) + var(--nav-bar) + var(--docked, 0px) + var(--floating-foot)
   );
 }
+/* What stands over all that stands at the screen's foot (a toast): `bottom-foot-3`. */
+@utility bottom-foot-* {
+  bottom: calc(
+    --spacing(--value(integer)) + var(--nav-bar) + var(--docked, 0px) + var(--floating-foot)
+  );
+}
 /* The keys and the button they fold into share one name, so folding morphs one into the other
    (`morph`); the page under them changes at once. The two are never stretched into each other's
    shape: each keeps its own size in a frame that grows or shrinks from the corner they share (the

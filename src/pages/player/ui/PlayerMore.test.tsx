@@ -87,13 +87,10 @@ describe('the Player’s More (ADR 0099)', () => {
     [
       'a song',
       '/play/bz5',
-      ['Add to favourites', 'Add to setlist', 'Song information', 'Export to MIDI'],
+      ['Add to favourites', 'Move to…', 'Archive', 'Song information', 'Export to MIDI'],
     ],
-    [
-      'a study',
-      '/play/ex3',
-      ['Add to favourites', 'Add to setlist', 'Study information', 'Export to MIDI'],
-    ],
+    // A study is in no library (ADR 0106).
+    ['a study', '/play/ex3', ['Study information', 'Export to MIDI']],
     ['a walk', '/play/walk?root=D&kind=dorian', ['Export to MIDI']],
     ['a progression', '/play/progression?p=ii-V-I&key=Bb', ['Export to MIDI']],
     ['a chromatic walk', '/play/chromatic?chords=m9&root=G', ['Export to MIDI']],
@@ -109,7 +106,8 @@ describe('the Player’s More (ADR 0099)', () => {
     await renderApp('/play/my-1', { storage: withSong() })
     expect(await moreActions(user)).toEqual([
       'Add to favourites',
-      'Add to setlist',
+      'Move to…',
+      'Archive',
       'Song information',
       'Export to MIDI',
       'Share',
@@ -132,7 +130,7 @@ describe('the Player’s More (ADR 0099)', () => {
     })
   })
 
-  it('keeps a piece among the favourites, and adds it to a setlist, from More (ADR 0103)', async () => {
+  it('keeps a piece among the favourites, moves it into a new folder and archives it, from More (ADR 0106)', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/play/bz5')
     await chooseMore(user, 'Add to favourites')
@@ -140,16 +138,24 @@ describe('the Player’s More (ADR 0099)', () => {
     // Named by what it does now.
     await chooseMore(user, 'Remove from favourites')
     expect(libraryStore.getState().favourites).toEqual([])
-    await chooseMore(user, 'Add to setlist')
-    const sheet = await screen.findByRole('dialog', { name: 'Add to setlist' })
-    await user.click(within(sheet).getByRole('button', { name: 'New setlist' }))
-    await user.type(within(sheet).getByRole('textbox', { name: 'Setlist name' }), 'Sunday{Enter}')
-    expect(libraryStore.getState().setlists).toEqual([
-      { id: 'set-1', name: 'Sunday', pieces: ['bz5'] },
+    await chooseMore(user, 'Move to…')
+    const sheet = await screen.findByRole('dialog', { name: 'Move to' })
+    await user.click(within(sheet).getByRole('button', { name: 'New folder' }))
+    const making = await screen.findByRole('dialog', { name: 'New folder' })
+    await user.type(within(making).getByRole('textbox', { name: 'Name' }), 'Sunday')
+    await user.click(within(making).getByRole('button', { name: 'Create folder' }))
+    await waitFor(() =>
+      expect(
+        libraryStore.getState().folders.find((folder) => folder.id === 'folder-1'),
+      ).toMatchObject({ name: 'Sunday', songs: ['bz5'] }),
+    )
+    expect(
+      await screen.findByText('“Still, my soul, be still” moved to Sunday'),
+    ).toBeInTheDocument()
+    await chooseMore(user, 'Archive')
+    expect(libraryStore.getState().archive).toEqual([
+      { kind: 'song', id: 'bz5', from: { folder: 'folder-1', index: 0 } },
     ])
-    await user.keyboard('{Escape}')
-    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
-    expect(screen.getByRole('button', { name: 'More' })).toHaveFocus()
   })
 
   it('shows a song’s information: its chords, its key, time and tempo, its second title and who wrote it', async () => {

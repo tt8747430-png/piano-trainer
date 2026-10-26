@@ -70,6 +70,23 @@ describe('backup', () => {
     })
   })
 
+  it('holds the library at version 2 (ADR 0106): its folders, Home, archive and sort', () => {
+    const library = {
+      state: {
+        folders: [],
+        home: ['my-1'],
+        favourites: [],
+        archive: [],
+        sort: 'name',
+        nextFolder: 1,
+      },
+      version: 2,
+    }
+    const storage = saved()
+    storage.setItem('pt-library', JSON.stringify(library))
+    expect(readBackup(writeBackup(storage, NOW))?.saves['pt-library']).toEqual(library)
+  })
+
   it('puts a backup in place of what is there, a store without a save starting afresh', () => {
     const backup = readBackup(writeBackup(saved(), NOW))
     if (!backup) throw new Error('no backup')

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { piecesIn, selectSetlists, useLibrary } from '@/entities/library'
+import { useFolderName, useLibraryLayout } from '@/entities/library'
 import { PATTERN_IDS, usePatternBook } from '@/entities/pattern'
 import { COLLECTIONS, useRepertoire } from '@/entities/piece'
 import { useKeyName, useLocale } from '@/shared/i18n'
@@ -22,21 +22,22 @@ export function useIndexNames(): IndexNames {
         about: t(`quiz:about.${trainer}`),
       }),
       key,
-      songCount: (count) => t('songs:library.songCount', { count }),
+      songCount: (count) => t('songs:folder.songCount', { count }),
     }),
     [t, page, key],
   )
 }
 
 /**
- * The index as this learner has it: every song in their version and their own, their setlists,
- * every pattern of their book, in their language.
+ * The index as this learner has it: every song in their version and their own (those archived said
+ * so), the library's folders, every pattern of their book, in their language.
  */
 export function useIndex(names: IndexNames): IndexEntry[] {
   const locale = useLocale()
   const repertoire = useRepertoire()
   const book = usePatternBook()
-  const setlists = useLibrary(selectSetlists)
+  const library = useLibraryLayout()
+  const folderName = useFolderName()
   return useMemo(
     () =>
       indexEntries({
@@ -48,13 +49,18 @@ export function useIndex(names: IndexNames): IndexEntry[] {
             collection.entries.map((entry) => repertoire.entry(entry.id) ?? entry),
           ),
         ],
-        setlists: setlists.map((setlist) => ({
-          id: setlist.id,
-          name: setlist.name,
-          count: piecesIn(setlist.pieces, repertoire).length,
+        folders: library.folders.map((folder) => ({
+          id: folder.id,
+          name: folderName(folder),
+          count: folder.songs.length,
         })),
+        archived: new Set(
+          library.archive.flatMap((entry) =>
+            entry.kind === 'song' ? [entry.id] : entry.folder.songs,
+          ),
+        ),
         patterns: [...book.own, ...PATTERN_IDS.map((id) => book.require(id))],
       }),
-    [locale, names, repertoire, setlists, book],
+    [locale, names, repertoire, library, folderName, book],
   )
 }

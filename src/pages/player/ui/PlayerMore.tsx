@@ -9,7 +9,7 @@ import { MoreActions } from './more-actions'
 
 /**
  * The bar's More (ADR 0099), after the Setup, in the song page's More's look: a piece's place in the
- * library (`MoreActions`, ADR 0103: Add to favourites, Add to setlist), its Song information
+ * library (`MoreActions`, ADR 0106: Add to favourites, Move to…, Archive), its Song information
  * (`info`), Export to MIDI (the music as the Player plays it now, at the tempo chosen, saved under its
  * title, each part's track named as the screen names it) and an own song's Share (`share`). A walk, a
  * progression, a chromatic walk or an exercise has Export to MIDI alone.

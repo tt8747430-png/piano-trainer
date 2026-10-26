@@ -4,7 +4,7 @@ import { RowFace, type RowFaceProps } from './RowFace'
 import { rowClass } from './row-class'
 
 /**
- * A list row that is on or off (a song in a setlist, Chordify's Save to setlists): a `RowLink`'s face,
+ * A list row that is on or off (a song ticked to move into a folder, Apple Music's Add Music): a `RowLink`'s face,
  * and at its end, in its `trailing` place, a check, umber while on (the neutral chosen), a ring
  * while off; a tap turns it.
  */

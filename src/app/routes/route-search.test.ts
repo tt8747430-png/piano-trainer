@@ -110,15 +110,14 @@ describe('search params', () => {
       chordSize: 'ninths',
       simple: true,
     })
-    expect(await searchAt('/songs?q=душа&collection=hymns&withChords=true&stage=advanced')).toEqual(
-      {
-        q: 'душа',
-        collection: 'hymns',
-        withChords: true,
-        stage: 'advanced',
-        known: '',
-      },
-    )
+    expect(await searchAt('/songs?q=душа&withChords=true&stage=advanced&favourites=true')).toEqual({
+      q: 'душа',
+      withChords: true,
+      stage: 'advanced',
+      known: '',
+      favourites: true,
+    })
+    expect(await searchAt('/songs/folders/hymns?q=душа')).toEqual({ ...SONGS_DEFAULTS, q: 'душа' })
     expect(await searchAt('/practice/scales?root=Eb&kind=harmonic&chords=4')).toMatchObject({
       root: 'Eb',
       kind: 'harmonic',
@@ -128,10 +127,10 @@ describe('search params', () => {
   })
 
   it('read the chords known each once, in ASCII and one order, a bass and a stray word left out (ADR 0103)', async () => {
-    expect(
-      await searchAt(`/songs?collection=favourites&known=${encodeURIComponent('G.B♭.H.C/E.G/B')}`),
-    ).toEqual({ ...SONGS_DEFAULTS, collection: 'favourites', known: 'Bb.C.G' })
-    expect(await searchAt('/songs?collection=setlists')).toMatchObject({ collection: 'setlists' })
+    expect(await searchAt(`/songs?known=${encodeURIComponent('G.B♭.H.C/E.G/B')}`)).toEqual({
+      ...SONGS_DEFAULTS,
+      known: 'Bb.C.G',
+    })
   })
 
   it('drop a Reading notes range end that is off the piano or no MIDI key', async () => {
@@ -168,8 +167,9 @@ describe('search params', () => {
     expect(
       await searchAt('/practice/scales?kind=ionian&tempo=10&chords=9&step=chords:tri'),
     ).toEqual(SCALES_DEFAULTS)
-    expect(await searchAt('/songs?collection=psalms')).toEqual(SONGS_DEFAULTS)
-    expect(await searchAt('/songs?collection=studies')).toEqual(SONGS_DEFAULTS)
+    expect(await searchAt('/songs?favourites=yes&stage=expert&withChords=1')).toEqual(
+      SONGS_DEFAULTS,
+    )
   })
 
   it('ignore an old link’s fingers: the playing hand’s stand under the keys', async () => {

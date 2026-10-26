@@ -93,12 +93,12 @@ export function IndexRow({
           }
         />
       )
-    case 'setlist':
+    case 'folder':
       return (
         <RowLink
           {...row}
-          {...PAGE_TILES.setlist}
-          render={<Link to="/songs/setlists/$setlistId" params={{ setlistId: target.setlist }} />}
+          {...PAGE_TILES.folder}
+          render={<Link to="/songs/folders/$folderId" params={{ folderId: target.folder }} />}
         />
       )
     case 'pattern':

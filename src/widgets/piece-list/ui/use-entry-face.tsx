@@ -32,7 +32,7 @@ export interface EntryFace {
 }
 
 /**
- * A piece's or listing's row's face, wherever it is listed (Songs, a setlist): its title over its
+ * A piece's or listing's row's face, wherever it is listed (the library, Search, the archive): its title over its
  * second one and how many chords it has, each once over any bass (a listing: "no chart yet"), its
  * first chords (Chordify's song cards), then its key (named for a screen reader, as `PieceFacts`
  * names it), its stage's mark and, once learned, the learned badge.

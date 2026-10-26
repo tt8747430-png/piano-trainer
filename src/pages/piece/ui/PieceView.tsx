@@ -13,7 +13,7 @@ import {
   usePieces,
   type Piece,
 } from '@/entities/piece'
-import { FavouriteButton, useAddToSetlist } from '@/features/manage-library'
+import { FavouriteButton, useSongActions } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
 import { ShareSaid, useShareSong } from '@/features/share-song'
 import { OPEN_PLAINLY } from '@/shared/lib'
@@ -34,7 +34,8 @@ import { SectionRows } from './SectionRows'
 
 /**
  * A piece with a chart, in one column: Learn the song (ADR 0100). Its bar (Back, the title, then
- * Edit the score, Learned, its ♡ (ADR 0103) and More: Add to setlist, Check these chords, and for
+ * Edit the score, Learned, its ♡ (ADR 0103) and More: Move to… and Archive (Restore while it is
+ * archived; a study is in no library, ADR 0106), Check these chords, and for
  * the learner's own music Share and its way back, asked first); under the title its byline (what else it is called, Your version, its
  * stage, who wrote it); the learning card, where to go next and its lessons done; its key, time and
  * tempo as cards; its chords as diagrams, each opening its sheet, and its sections, each a row to its
@@ -57,14 +58,16 @@ export function PieceView({ piece }: { piece: Piece }) {
   const more = useRef<HTMLDivElement>(null)
   const step = pieceStepId(piece.id)
   const navigate = useNavigate()
-  const setlist = useAddToSetlist(piece.id)
+  // A song's place in the library (ADR 0106); a study, on Practice, is in none.
+  const library = useSongActions(piece)
+  const inLibrary = piece.kind !== 'study'
   const ownMusic = own
     ? ({ kind: 'song', id: own, title } as const)
     : hasVersion
       ? ({ kind: 'version', id: piece.id, title } as const)
       : null
   const actions = [
-    setlist.action,
+    ...(inLibrary ? library.actions : []),
     // A piece of no chord symbol has none to check (ADR 0094).
     ...(performance.chords.length > 0
       ? [
@@ -114,7 +117,7 @@ export function PieceView({ piece }: { piece: Piece }) {
               />
             )}
             {own ? null : <LearnedButton step={step} round />}
-            <FavouriteButton piece={piece.id} />
+            {inLibrary ? <FavouriteButton piece={piece.id} /> : null}
             <div ref={more} className="contents">
               <ActionMenu
                 label={t('more')}
@@ -158,7 +161,7 @@ export function PieceView({ piece }: { piece: Piece }) {
       {ownMusic ? (
         <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} returnTo={more} />
       ) : null}
-      {setlist.sheet}
+      {inLibrary ? library.sheet : null}
       <FloatingActions>
         <FabLink
           label={t('practise')}
