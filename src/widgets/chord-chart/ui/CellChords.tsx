@@ -12,13 +12,18 @@ const MOST = 1.25
 /**
  * The chords starting in a beat cell (ADR 0099), in the display face as the sheet prints them
  * (`C♯m7`): as large as the cell holds them, a size down where it is narrow, never under `LEAST`;
- * the later of two a size down again. Sized by the cell, the container (`@container`) round it.
+ * the later of two a size down again. Sized by the cell, the container (`@container`) round it,
+ * and the empty beats after it it may run on into (`span`, the beats it has, its own one of them;
+ * ADR 0108), so a chord held for a bar is drawn as large as its bar allows, as its neighbours are.
  */
 export function CellChords({
   symbols,
+  span = 1,
   className,
 }: {
   symbols: readonly string[]
+  /** The beats it has room in: its own and the empty ones after it. */
+  span?: number
   className?: string
 }) {
   if (symbols.length === 0) return null
@@ -36,7 +41,7 @@ export function CellChords({
         className,
       )}
       style={{
-        fontSize: `clamp(${LEAST}rem, calc((100cqi - ${INSET}rem) / ${width.toFixed(3)}), ${MOST}rem)`,
+        fontSize: `clamp(${LEAST}rem, calc((${span} * 100cqi - ${INSET}rem) / ${width.toFixed(3)}), ${MOST}rem)`,
       }}
     >
       {printed.map((symbol, i) => (

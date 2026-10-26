@@ -1,22 +1,53 @@
 import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart } from '@/shared/lib/arrangement'
 import { note, parseChordSymbol } from '@/shared/lib/music'
-import { chartBar, chartSections, rowsOf, sectionBars } from './chart-sections'
+import { chartBar, chartSections, gridColumns, gridRows, sectionBars } from './chart-sections'
 
-describe('rowsOf', () => {
-  it('wraps a line’s bars into rows of as many whole bars as the room’s beats hold', () => {
-    expect(rowsOf([4, 4, 4, 4], 8)).toEqual([
-      [0, 1],
-      [2, 3],
-    ])
-    expect(rowsOf([3, 3, 3], 8)).toEqual([[0, 1], [2]])
-    expect(rowsOf([4, 4, 4, 4], 16)).toEqual([[0, 1, 2, 3]])
-    expect(rowsOf([2, 4, 4], 8)).toEqual([[0, 1], [2]])
+describe('gridColumns', () => {
+  const bars = (...slots: number[]) => slots.map((slot) => ({ cells: slot, slot }))
+
+  it('holds as many whole bars of the commonest length as the room does', () => {
+    expect(gridColumns(bars(4, 4, 4, 4), 8)).toBe(8)
+    expect(gridColumns(bars(3, 3, 3), 8)).toBe(6)
+    expect(gridColumns(bars(2, 2, 3, 2), 8)).toBe(8)
+    expect(gridColumns(bars(4, 4), 32)).toBe(32)
   })
 
-  it('gives a bar wider than the room a row of its own, and a line of none no row', () => {
-    expect(rowsOf([12, 4], 8)).toEqual([[0], [1]])
-    expect(rowsOf([], 8)).toEqual([])
+  it('takes a bar longer than the room whole', () => {
+    expect(gridColumns(bars(12, 4), 8)).toBe(12)
+    expect(gridColumns([], 8)).toBe(1)
+  })
+})
+
+describe('gridRows', () => {
+  it('lays bars on rows of whole places, a pickup at the end of a whole bar’s', () => {
+    const pickup = { cells: 1, slot: 4 }
+    const bar = { cells: 4, slot: 4 }
+    expect(gridRows([pickup, bar, bar, bar, bar], 8)).toEqual([
+      [
+        { index: 0, column: 0, lead: 3 },
+        { index: 1, column: 4, lead: 0 },
+      ],
+      [
+        { index: 2, column: 0, lead: 0 },
+        { index: 3, column: 4, lead: 0 },
+      ],
+      [{ index: 4, column: 0, lead: 0 }],
+    ])
+  })
+
+  it('moves a bar that does not fit to the next row, and takes one longer than a row alone', () => {
+    const three = { cells: 3, slot: 3 }
+    const four = { cells: 4, slot: 4 }
+    expect(gridRows([four, three, four], 8).map((row) => row.map(({ index }) => index))).toEqual([
+      [0, 1],
+      [2],
+    ])
+    expect(gridRows([{ cells: 12, slot: 12 }, four], 8)).toEqual([
+      [{ index: 0, column: 0, lead: 0 }],
+      [{ index: 1, column: 0, lead: 0 }],
+    ])
+    expect(gridRows([], 8)).toEqual([])
   })
 })
 
@@ -60,7 +91,12 @@ describe('chartSections', () => {
     // Played C F C F G.
     expect(played.bars).toHaveLength(5)
     expect(chartSections(played)).toEqual([[[0, 1], [2]]])
-    expect(chartBar(played, 2)).toEqual({ symbols: ['G'], methods: [], signature: null })
+    expect(chartBar(played, 2)).toEqual({
+      symbols: ['G'],
+      methods: [],
+      signature: null,
+      short: false,
+    })
   })
 })
 
@@ -73,7 +109,7 @@ describe('sectionBars', () => {
 })
 
 describe('chartBar', () => {
-  it('gives a bar its chords’ symbols, the methods they name, and a short bar’s signature', () => {
+  it('gives a bar its chords’ symbols, the methods they name, and whether it is short', () => {
     const chart: Chart = {
       key: { tonic: note('C'), minor: false },
       meter: '4/4',
@@ -95,11 +131,17 @@ describe('chartBar', () => {
       ],
     }
     const performance = arrange(chart, { tonic: note('C'), pattern: BLOCK })
-    expect(chartBar(performance, 0)).toEqual({ symbols: ['G7'], methods: [], signature: '1/4' })
+    expect(chartBar(performance, 0)).toEqual({
+      symbols: ['G7'],
+      methods: [],
+      signature: null,
+      short: true,
+    })
     expect(chartBar(performance, 1)).toEqual({
       symbols: ['C', 'F'],
       methods: ['t1'],
       signature: null,
+      short: false,
     })
     expect(chartBar(performance, 2)).toBeNull()
   })

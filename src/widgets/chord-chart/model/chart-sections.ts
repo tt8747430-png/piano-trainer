@@ -23,12 +23,14 @@ export function chartSections(performance: Performance): number[][][] {
 
 /**
  * What a bar's button shows: its chords' symbols, the methods they name, and its time signature where
- * it is short of its meter's bar (a pickup's) or its meter changes there (ADR 0095).
+ * its meter changes there (ADR 0095); whether it is short of its meter's bar (a pickup), which the
+ * Grid shows by its beats alone (ADR 0108).
  */
 interface ChartBar {
   readonly symbols: readonly string[]
   readonly methods: readonly MethodCode[]
   readonly signature: string | null
+  readonly short: boolean
 }
 
 /** A bar as written as it is played the first time; none past the last. */
@@ -50,7 +52,8 @@ export function chartBar(performance: Performance, written: number): ChartBar | 
   return {
     symbols: chords.map((chord) => chord.symbol),
     methods: [...new Set(chords.flatMap((chord) => chord.method ?? []))].filter(isMethodCode),
-    signature: full && !changes ? null : timeSignatureText(timeSignature(bar.beats, meter)),
+    signature: changes ? timeSignatureText(timeSignature(beatsPerBar(meter), meter)) : null,
+    short: !full,
   }
 }
 
@@ -66,22 +69,50 @@ export function sectionBars(lines: readonly (readonly number[])[]): SectionBars 
   return all.length === 0 ? null : { first: Math.min(...all), last: Math.max(...all) }
 }
 
+/** A bar of the Grid: the beats it lasts, and the beats its place takes (a pickup's, a whole bar's). */
+export interface GridBar {
+  readonly cells: number
+  /** At least `cells`: a pickup takes a whole bar's place, standing at its end. */
+  readonly slot: number
+}
+
+/** A bar placed on the Grid's row: which, the column its place starts in, and the beats left blank before it. */
+export interface PlacedBar {
+  readonly index: number
+  readonly column: number
+  readonly lead: number
+}
+
 /**
- * A line's bars, by their beats, in rows of as many whole bars as `room` beats hold (ADR 0099: two
- * 4-beat bars on a phone held upright): indexes into the line, a bar never split, one at least.
+ * How many beat columns every row of the Grid has (ADR 0108): as many whole bars of the music's
+ * commonest length as `room` beats hold (two 4-beat bars on a phone held upright, two of 3/4 in six),
+ * one at least, and never fewer than its longest bar's place.
  */
-export function rowsOf(beats: readonly number[], room: number): number[][] {
-  const rows: number[][] = []
-  let used = Infinity
-  beats.forEach((bar, index) => {
-    const row = rows.at(-1)
-    if (row && used + bar <= room) {
-      row.push(index)
-      used += bar
-    } else {
-      rows.push([index])
-      used = bar
+export function gridColumns(bars: readonly GridBar[], room: number): number {
+  if (bars.length === 0) return 1
+  const counts = new Map<number, number>()
+  for (const { slot } of bars) counts.set(slot, (counts.get(slot) ?? 0) + 1)
+  const [common = 1] = [...counts].sort((a, b) => b[1] - a[1] || b[0] - a[0])[0] ?? []
+  const fits = common * Math.max(1, Math.floor(room / common))
+  return Math.max(fits, ...bars.map(({ slot }) => slot))
+}
+
+/**
+ * A section's bars laid on the Grid's rows of `columns` beats (ADR 0108, a lead sheet's): one after
+ * another as they are written, a row holding as many whole places as fit, a bar never split; a
+ * pickup at the end of its place, the beats before it blank, so the bars after it fall on the
+ * beats of every row.
+ */
+export function gridRows(bars: readonly GridBar[], columns: number): PlacedBar[][] {
+  const rows: PlacedBar[][] = []
+  let used = columns
+  bars.forEach(({ cells, slot }, index) => {
+    if (used + slot > columns || rows.length === 0) {
+      rows.push([])
+      used = 0
     }
+    rows.at(-1)?.push({ index, column: used, lead: slot - cells })
+    used += slot
   })
   return rows
 }

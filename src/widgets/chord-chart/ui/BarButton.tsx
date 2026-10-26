@@ -23,6 +23,12 @@ const said = (verse: readonly BeatWords[]): string =>
     .join(' ')
     .replaceAll('- ', '')
 
+/** The beats a cell's chords have room in: their own and the empty ones after it in its bar. */
+function roomAfter(cells: readonly (readonly string[])[], beat: number): number {
+  const next = cells.findIndex((chords, at) => at > beat && chords.length > 0)
+  return (next < 0 ? cells.length : next) - beat
+}
+
 /** The beat of a bar a tap landed on: its cell's, else its first (a key pressed on the bar). */
 const beatTapped = (target: EventTarget): number => {
   const cell = target instanceof Element ? target.closest('[data-beat]') : null
@@ -112,7 +118,7 @@ export function BarButton({
               {number}
             </span>
           ) : null}
-          <CellChords symbols={chords} className="relative z-10" />
+          <CellChords symbols={chords} span={roomAfter(cells, beat)} className="relative z-10" />
         </span>
       ))}
       {words.map((verse, index) =>

@@ -162,4 +162,23 @@ describe('ChordChart', () => {
     expect(placed).toEqual(['1 / 2', '2 / 4', '4 / -1'])
     expect(screen.getByRole('button', { name: /^Bar 2:/ }).querySelector('[data-verse]')).toBeNull()
   })
+
+  it('lays every row on the same beats, a pickup at the end of a whole bar’s place (ADR 0108)', () => {
+    const otche = piece('otche')
+    const hymn = arrangePiece(otche, ownChoice(otche), BUILT_IN_PATTERNS)
+    render(<ChordChart performance={hymn} headings={[]} onBar={() => {}} playing={null} />)
+    const pickup = screen.getByRole('button', { name: /^Bar 1:/ })
+    const row = pickup.parentElement as HTMLElement
+    // Two 4/4 bars a row on a phone: the pickup's beat after three blank ones, then bar 2.
+    expect(row.style.gridTemplateColumns).toBe('repeat(8, minmax(0, 1fr))')
+    expect((row.querySelector('[data-blank]') as HTMLElement).style.gridColumn).toBe('1 / span 3')
+    expect(pickup.style.gridColumn).toBe('4 / span 1')
+    expect(screen.getByRole('button', { name: /^Bar 2:/ }).style.gridColumn).toBe('5 / span 4')
+    // Its length is its beats: no signature under it.
+    expect(pickup).not.toHaveTextContent('1/4')
+    // Bars 3 and 4 share the next row.
+    const third = screen.getByRole('button', { name: /^Bar 3:/ })
+    expect(third.parentElement).toBe(screen.getByRole('button', { name: /^Bar 4:/ }).parentElement)
+    expect(third.style.gridColumn).toBe('1 / span 4')
+  })
 })
