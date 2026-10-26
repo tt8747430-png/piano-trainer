@@ -6,6 +6,7 @@ import {
   selectPractice,
   selectRecorder,
   selectSidebar,
+  selectSound,
   selectTrainer,
   selectFloating,
   selectSectionFolded,
@@ -17,18 +18,20 @@ import {
   DEFAULT_MIDI,
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
+  DEFAULT_SOUND,
   DEFAULT_TRAINER,
   defaultKeyboard,
   type SettingsState,
 } from './types'
 
 describe('settings selectors', () => {
-  it('return the practice toggles, the trainer, keyboard, recorder and MIDI settings and the sidebar as saved', () => {
+  it('return the practice toggles, the volumes, the trainer, keyboard, recorder and MIDI settings and the sidebar as saved', () => {
     const state: SettingsState = {
       theme: 'system',
       titles: 'small',
       locale: 'en',
       practice: DEFAULT_PRACTICE,
+      sound: DEFAULT_SOUND,
       trainer: DEFAULT_TRAINER,
       floating: { place: 'right', labels: true },
       keyboard: defaultKeyboard(false),
@@ -41,6 +44,7 @@ describe('settings selectors', () => {
       scoreView: DEFAULT_SCORE_VIEW,
     }
     expect(selectPractice(state)).toBe(DEFAULT_PRACTICE)
+    expect(selectSound(state)).toBe(DEFAULT_SOUND)
     expect(selectTrainer(state)).toBe(DEFAULT_TRAINER)
     expect(selectFloating(state)).toEqual({ place: 'right', labels: true })
     expect(selectKeyboard(state)).toBe(state.keyboard)

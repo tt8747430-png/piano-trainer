@@ -47,6 +47,15 @@ describe('search params', () => {
     expect(await searchAt('/edit/bz5?takes=yes&record=1')).toEqual(EDIT_DEFAULTS)
   })
 
+  it('simplify a piece’s chords only where the URL says so, and nothing a walk plays (ADR 0104)', async () => {
+    expect(PLAYER_DEFAULTS).toMatchObject({ simple: false })
+    expect(await searchAt('/play/bz5?simple=true')).toEqual({ ...PLAYER_DEFAULTS, simple: true })
+    for (const stale of ['yes', '1', 'false'])
+      expect(await searchAt(`/play/bz5?simple=${stale}`)).toEqual(PLAYER_DEFAULTS)
+    expect(WALK_DEFAULTS).not.toHaveProperty('simple')
+    expect(CHROMATIC_DEFAULTS).not.toHaveProperty('simple')
+  })
+
   it('carry the bar between the Player and the score editor, a bar as printed (ADR 0090)', async () => {
     expect(await searchAt('/edit/bz5?bar=4')).toEqual({ ...EDIT_DEFAULTS, bar: 4 })
     expect(await searchAt('/play/bz5?bar=3')).toEqual({ ...PLAYER_DEFAULTS, bar: 3 })
@@ -85,7 +94,7 @@ describe('search params', () => {
     })
     expect(
       await searchAt(
-        '/play/bz5?key=A&tempo=96&hands=lh&mode=wait&speedTraining=true&swing=true&loop=2-3&pattern=chart&rh=t1&lh=o&chordSize=ninths',
+        '/play/bz5?key=A&tempo=96&hands=lh&mode=wait&speedTraining=true&swing=true&loop=2-3&pattern=chart&rh=t1&lh=o&chordSize=ninths&simple=true',
       ),
     ).toEqual({
       key: 'A',
@@ -99,6 +108,7 @@ describe('search params', () => {
       rh: 't1',
       lh: 'o',
       chordSize: 'ninths',
+      simple: true,
     })
     expect(await searchAt('/songs?q=душа&withChords=true&stage=advanced&favourites=true')).toEqual({
       q: 'душа',

@@ -9,7 +9,9 @@ import {
   parseKey,
   signatureNotes,
   tonicSpelling,
+  transposedKey,
   transposeNote,
+  transposition,
   writtenKey,
   writtenKeyAccidentals,
   type Key,
@@ -120,6 +122,52 @@ describe('transposeNote', () => {
         expect(transposeNote(root, note('G'), note('G'))).toEqual(root)
       }
     }
+  })
+})
+
+describe('transposedKey', () => {
+  it.each([
+    ['C', -1, 'B'],
+    ['C', 1, 'D♭'],
+    ['F', 1, 'F#'],
+    ['G', -1, 'F#'],
+    ['Dm', 1, 'E♭m'],
+    ['Am', -1, 'G#m'],
+    ['Dm', -4, 'B♭m'],
+    ['Em', -3, 'C#m'],
+  ])('moves %s by %i semitones to %s, the key its simplest signature writes', (from, by, to) => {
+    expect(keySymbol(transposedKey(key(from), by))).toBe(to)
+  })
+
+  it('keeps the key as written where it does not move, or moves a whole octave', () => {
+    expect(transposedKey(key('Gb'), 0)).toEqual(key('Gb'))
+    expect(transposedKey(key('C#'), 12)).toEqual(key('C#'))
+    expect(transposedKey(key('D#m'), -12)).toEqual(key('D#m'))
+  })
+
+  it('lands every key in one of six sharps or flats at most', () => {
+    for (const from of ['C', 'C#', 'Gb', 'Am', 'D#m', 'Abm']) {
+      for (let by = -11; by <= 11; by++) {
+        if (by === 0) continue
+        expect(Math.abs(keySignature(transposedKey(key(from), by))), `${from} ${by}`).toBeLessThan(
+          7,
+        )
+      }
+    }
+  })
+})
+
+describe('transposition', () => {
+  it.each([
+    ['C', 'B', -1],
+    ['C', 'D', 2],
+    ['C', 'F#', 6],
+    ['C', 'Gb', 6],
+    ['C', 'G', -5],
+    ['D', 'A', -5],
+    ['Gb', 'F#', 0],
+  ])('moves the music from %s to %s by %i semitones, the short way', (from, to, semitones) => {
+    expect(transposition(key(from).tonic, key(to).tonic)).toBe(semitones)
   })
 })
 

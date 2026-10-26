@@ -7,6 +7,7 @@ import type { Performance } from '@/shared/lib/arrangement'
 import type { MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
+  CountInBeat,
   HandsButton,
   LoopButton,
   PlayerArea,
@@ -14,6 +15,7 @@ import {
   PlayerClose,
   PlayerDock,
   PlayerTools,
+  SoundButton,
   TempoButton,
   usePlayerShortcuts,
   WaitLine,
@@ -33,9 +35,11 @@ const NO_STAVES: readonly { readonly name?: StaffName }[] = []
 /**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar, one row from a
  * 320px phone up (Close, Practise · Edit, then MIDI, Setup and More, ADR 0099); the tools row under
- * it (ADR 0102: the View, named by the view shown); the music under its title (ADR 0094) as the View
+ * it (ADR 0102: the View, named by the view shown, then the music's own tools, a piece's Transpose
+ * and Simplify, ADR 0104); the music under its title (ADR 0094) as the View
  * shows it (ADR 0099: the sheet music, Chords over lyrics, Diagrams or the Grid), Wait mode's line,
- * the transport floating under it (the tempo, ‹ ▶ ›, the loop and the hands) and the keys at the
+ * the transport floating under it (the tempo, ‹ ▶ ›, the loop, the Sound and the hands), the
+ * count-in's beat large over it all while Listen counts in (ADR 0105), and the keys at the
  * foot, or under the tools row where the keyboard settings dock them at the top; the computer's keys
  * drive it (`usePlayerShortcuts`).
  */
@@ -47,9 +51,11 @@ export function PlayerLayout({
   performance,
   headings = NO_HEADINGS,
   setup,
+  tools,
   modes,
   piano = true,
   staves = NO_STAVES,
+  recorded = false,
   info,
   share,
   status,
@@ -62,6 +68,8 @@ export function PlayerLayout({
   piano?: boolean
   /** The piece's single staves, top down, each printed and switched in the View by its name (ADR 0097). */
   staves?: readonly { readonly name?: StaffName }[]
+  /** The piece has a recording: the Sound offers its volume (ADR 0105). */
+  recorded?: boolean
   title: string
   onClose: () => void
   view: PracticeView
@@ -71,6 +79,8 @@ export function PlayerLayout({
   headings?: readonly string[]
   /** The Setup: its button, in the toolbar, and the sheet it opens. */
   setup: ReactNode
+  /** The tools row's after the View: a piece's Transpose and Simplify (ADR 0104); none for a walk. */
+  tools?: ReactNode
   /** Practise · Edit (ADR 0090), after Close: a piece's own, none for a walk. */
   modes?: ReactNode
   /** A piece's Song information (ADR 0099): More's first action, before Export to MIDI. */
@@ -147,6 +157,7 @@ export function PlayerLayout({
             piano={piano}
             openAtStart={openView}
           />
+          {tools}
         </PlayerTools>
       </PlayerArea>
       {dock === 'top' ? keys : null}
@@ -193,7 +204,7 @@ export function PlayerLayout({
         {status}
       </PlayerArea>
       {/* On a phone held upright the transport may stand into the gutters: it floats over the
-          sheet, and its six controls (the tempo's value the longest) need the screen's width. */}
+          sheet, and its seven controls (the tempo's value the longest) need the screen's width. */}
       <PlayerArea
         area="dock"
         className="flex justify-center max-sm:-mx-gutter landscape-phone:items-center"
@@ -213,10 +224,12 @@ export function PlayerLayout({
             />
           }
           loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
+          sound={<SoundButton staves={viewed.length > 0} recording={recorded} />}
           hands={<HandsButton hands={view.hands} onChange={player.setHands} />}
         />
       </PlayerArea>
       {dock === 'top' ? null : keys}
+      <CountInBeat count={practice.counting} />
     </PlayerScreen>
   )
 }

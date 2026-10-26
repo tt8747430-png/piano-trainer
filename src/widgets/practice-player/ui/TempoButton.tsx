@@ -3,23 +3,28 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { PracticeMode } from '@/features/practice'
 import { formatPercent, useLocale } from '@/shared/i18n'
-import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import { Listbox, SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useDockSide } from '../model/dock-side'
-import { percentOf, SPEEDS, speedTempo } from '../model/speeds'
+import { percentOf, SPEED_RANGE, SPEEDS, speedStep, speedTempo } from '../model/speeds'
+
+/** A speed as a screen reader says it: its percent, as the language writes one. */
+const PERCENT = { style: 'unit', unit: 'percent' } as const
 
 /**
  * The transport's round look: a pill along the bar, a little smaller under 360px and on a phone on
  * its side, so the transport fits with the gauge beside the value at every size (ADR 0094).
  */
-const TRIGGER = 'h-12 rounded-full px-3 narrow-phone:h-11 narrow-phone:px-2 landscape-phone:h-10'
+const TRIGGER =
+  'h-12 rounded-full px-3 small-phone:h-11 small-phone:px-2 narrow-phone:gap-1 narrow-phone:px-1 landscape-phone:h-10'
 
 /**
- * The tempo button and its popover (spec §2.7): Wait mode, or a speed of the piece's tempo, or any
- * tempo; speed training below the piece's tempo. The button says the pass's tempo while it plays.
+ * The tempo button and its popover (spec §2.7): Wait mode, or a speed of the piece's tempo, its
+ * presets or any 5% step from 50% to 200% on the slider (ADR 0105, Chordify's), which says the beats
+ * a minute it plays at; speed training below the piece's tempo. The button says the pass's tempo
+ * while it plays.
  * Without `onWait` and `onSpeedTraining` it only sets how fast the music plays back: the score
  * editor's, which checks what was written at the learner's speed (ADR 0089).
  */
@@ -120,17 +125,21 @@ export function TempoButton({
           ]}
         />
         <Slider
-          min={TEMPO_RANGE.min}
-          max={TEMPO_RANGE.max}
-          step={1}
-          value={tempo}
-          onValueChange={onTempo}
+          min={SPEED_RANGE.min}
+          max={SPEED_RANGE.max}
+          step={SPEED_RANGE.step}
+          value={speedStep(tempo, ownTempo)}
+          onValueChange={(percent) => onTempo(speedTempo(ownTempo, percent / 100))}
+          format={PERCENT}
+          locale={locale}
           // Room under the track for the thumb's 44px reach, which the popover's edge would cut.
           className="flex flex-col gap-3 pb-2.5"
         >
-          <div className="flex justify-between">
-            <SliderLabel>{t('tempo')}</SliderLabel>
-            <span className="font-semibold tabular-nums">{t('music:bpm', { tempo })}</span>
+          <div className="flex justify-between gap-3">
+            <SliderLabel>{t('pace.speedLabel')}</SliderLabel>
+            <span className="font-semibold tabular-nums">
+              {`${formatPercent(locale, percentOf(tempo, ownTempo))} · ${t('music:bpm', { tempo })}`}
+            </span>
           </div>
         </Slider>
         {onSpeedTraining && mode === 'listen' && tempo < ownTempo ? (

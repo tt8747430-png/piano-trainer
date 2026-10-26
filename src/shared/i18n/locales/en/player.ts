@@ -44,6 +44,24 @@ export const player = {
   },
   // The row of tools under the Player's bar (ADR 0102), as a screen reader names it.
   tools: 'Tools',
+  // The tools row's Transpose (ADR 0104): the key the music is in, moved a semitone at a time.
+  transpose: {
+    name: 'Transpose',
+    title: 'Transpose',
+    of: 'Transpose: {{key}}',
+    moved: 'Transpose: {{key}}, {{by}}',
+    down: 'Down a semitone',
+    up: 'Up a semitone',
+    own: { song: 'The song’s key', study: 'The study’s key' },
+    reset: 'Reset',
+  },
+  // The tools row's Simplify (ADR 0104, Chordify's): every chord its plain triad.
+  simplify: {
+    label: 'Simplify',
+    about: 'Every chord as its plain major or minor triad',
+    none: 'No chord to simplify',
+    chordSize: 'Simplify plays every chord as its triad.',
+  },
   /** The Diagrams view's chord to come, where none sounds yet: a pickup, a bar of no chord. */
   nextChord: 'Next: {{symbol}}',
   /** A line of Chords over lyrics, by its bars: a tap takes the Player there. */
@@ -129,12 +147,26 @@ export const player = {
     lines: 'Bass lines',
     styles: 'Styles',
   },
+  /** The transport's Sound (ADR 0105): the count-in, the click, and each part's volume. */
+  sound: {
+    title: 'Sound',
+    countIn: 'Count in',
+    countInInfo: 'A bar of clicks before the music starts, its beats counted down on the screen.',
+    click: 'Click',
+    clickInfo: 'A click on every beat while the music plays.',
+    volume: 'Volume',
+    volumeInfo:
+      'How loud each part plays. Only the chords turns the recording right down and both hands up, so you hear the chords alone.',
+    staves: 'Staves',
+    recording: 'Recording',
+    onlyChords: 'Only the chords',
+  },
+  /** The count-in's beat as a screen reader hears it, its number large on the screen. */
+  counting: 'Count-in: {{count}}',
   toggles: {
     namedNotes: 'Note names',
     positions: 'Chord positions',
     tune: 'Tune',
-    metronome: 'Metronome',
-    countIn: 'Count-in',
     swing: 'Swing',
     recording: 'Recording',
   },
@@ -145,6 +177,8 @@ export const player = {
     playback: 'Playback speed',
     playAlong: 'Listen and play along',
     speed: '{{percent}} speed',
+    // The popover's slider: a share of the piece's tempo, 50% to 200% in 5% steps (ADR 0105).
+    speedLabel: 'Speed',
     own: 'Original tempo',
     waitShort: 'Wait',
     speedTraining: 'Speed training',

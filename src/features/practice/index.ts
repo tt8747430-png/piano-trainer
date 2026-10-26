@@ -7,6 +7,7 @@ export {
 } from './practice-machine'
 export { PRACTICE_MODES, type PracticeMode } from './practice-mode'
 export { usePractice, type Practice } from './use-practice'
+export { FULL_MIX, type Mix } from './mix'
 export { isLoopParam, loopParam, loopTicks, readLoop, type BarRange, type LoopParam } from './loop'
 export { beatGroupInBar, firstPlayedBar, writtenBarAt, writtenBarOf } from './written-bar'
 export {
@@ -27,7 +28,7 @@ export {
 } from './beats'
 export { useBeat } from './use-beat'
 
-export { arrangePiece, ownChoice } from './arrange-piece'
+export { arrangePiece, ownChoice, simplifies } from './arrange-piece'
 export type { PracticeChoice } from './choice'
 export { diagramMarks, playerRange, practiceMarks } from './marks'
 export { spellPitchClass } from './note-names'

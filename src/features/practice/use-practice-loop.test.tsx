@@ -6,6 +6,7 @@ import { createFakeMidi } from '@/shared/api/midi'
 import { arrange, parseFigure, type Chart, type Performance } from '@/shared/lib/arrangement'
 import { note, parseChordSymbol } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
+import { FULL_MIX } from './mix'
 import { usePractice, type PracticeSetup } from './use-practice'
 
 const bar = (symbol: string) => ({ chords: [{ ...parseChordSymbol(symbol), beats: 4 }], beats: 4 })
@@ -36,6 +37,7 @@ const SETUP: PracticeSetup = {
   metronome: false,
   countIn: false,
   recording: null,
+  mix: FULL_MIX,
 }
 
 let audio: FakeAudio

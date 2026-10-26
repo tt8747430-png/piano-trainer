@@ -9,6 +9,7 @@ import type {
   PalettePlace,
   SettingsState,
   Sidebar,
+  SoundSettings,
   Theme,
   TitleSize,
   FloatingSettings,
@@ -19,6 +20,7 @@ export const selectTheme = (state: SettingsState): Theme => state.theme
 export const selectTitles = (state: SettingsState): TitleSize => state.titles
 export const selectLocale = (state: SettingsState): Locale => state.locale
 export const selectPractice = (state: SettingsState): PracticeToggles => state.practice
+export const selectSound = (state: SettingsState): SoundSettings => state.sound
 export const selectTrainer = (state: SettingsState): TrainerSettings => state.trainer
 export const selectFloating = (state: SettingsState): FloatingSettings => state.floating
 export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.keyboard

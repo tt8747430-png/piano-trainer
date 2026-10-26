@@ -28,8 +28,11 @@ const AUDIBLE: Readonly<Record<Hands, Audible>> = {
 
 export const audibleHands = (hands: Hands): Audible => AUDIBLE[hands]
 
-/** The tempos a learner can choose, in beats per minute: 50% of the slowest piece (56) is 28. */
-export const TEMPO_RANGE = { min: 20, max: 160 } as const
+/**
+ * The tempos a learner can choose, in beats per minute: half the slowest a piece is written at (40)
+ * to twice the fastest (160), the learner's speed running from 50% to 200% of a piece's (ADR 0105).
+ */
+export const TEMPO_RANGE = { min: 20, max: 320 } as const
 
 export interface NoteSound {
   readonly kind: 'note'
@@ -38,6 +41,11 @@ export interface NoteSound {
   readonly at: number
   readonly duration: number
   readonly velocity: number
+  /**
+   * The part of a piece's music it is, its hand or a staff over the piano, which the Player's mix
+   * turns up or down (ADR 0105); none for a sound of no piece's (a chord tapped, a run).
+   */
+  readonly part?: NoteHand
 }
 export interface ClickSound {
   readonly kind: 'click'
@@ -54,8 +62,15 @@ interface ScheduleOptions {
   readonly fromTick?: Tick
   /** Where it ends: the piece's end by default. A note sounding past it is cut there. */
   readonly toTick?: Tick
+  /** A bar counted in before the music, a click on each of its beats. */
   readonly countIn?: boolean
+  /** A click on every beat of the music. */
   readonly metronome?: boolean
+  /**
+   * Whether the count-in and the metronome sound their clicks, true unless said: with the click
+   * turned right down (ADR 0105) a count-in still counts its bar, unheard.
+   */
+  readonly clicks?: boolean
   /** Off-beat 8ths late, long-short; a compound meter never swings. */
   readonly swing?: boolean
 }
@@ -78,6 +93,8 @@ export interface Scheduled {
   readonly toTick: Tick
   /** When `fromTick` sounds, after the pass's start: after its count-in. */
   readonly musicStart: number
+  /** When each beat of its count-in sounds, after the pass's start, clicked or not; none without one. */
+  readonly counts: readonly number[]
 }
 
 /** A note never sounds shorter than this in a pass… */
@@ -129,11 +146,10 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   const counted = options.countIn ? countInBeats(performance, fromTick) : []
   const musicStart = secondsFor(place(fromTick) - place(counted[0]?.tick ?? fromTick), tempo)
   const at = (tick: Tick) => musicStart + secondsFor(place(tick) - place(fromTick), tempo)
-  const countIn: Sound[] = counted.map(({ tick, accent }) => ({
-    kind: 'click',
-    at: at(tick),
-    accent,
-  }))
+  const clicked = options.clicks !== false
+  const countIn: Sound[] = clicked
+    ? counted.map(({ tick, accent }) => ({ kind: 'click', at: at(tick), accent }))
+    : []
   const inPass = (tick: Tick) => tick >= fromTick && tick < toTick
 
   // A note still held where the pass starts sounds from there, for what is left of it.
@@ -157,19 +173,21 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
       at: at(start) + (rolls[i] ?? 0),
       duration: Math.max(SHORTEST_NOTE, full * (joined.has(i) ? JOINED : LEGATO)),
       velocity: n.velocity * (levels[i] ?? 1),
+      part: n.hand,
     }
     // A note held over from before the pass sounds plainly: its marks were where it began.
     const marks = n.startTick >= fromTick ? n.marks : undefined
     return markedSounds(sound, marks, { key: keyAt(performance, n.startTick), thirtySecond, full })
   })
 
-  const metronome: Sound[] = options.metronome
-    ? performance.bars.flatMap((_, index) =>
-        barClicks(performance, index).flatMap(({ tick, accent }): Sound[] =>
-          inPass(tick) ? [{ kind: 'click', at: at(tick), accent }] : [],
-        ),
-      )
-    : []
+  const metronome: Sound[] =
+    options.metronome && clicked
+      ? performance.bars.flatMap((_, index) =>
+          barClicks(performance, index).flatMap(({ tick, accent }): Sound[] =>
+            inPass(tick) ? [{ kind: 'click', at: at(tick), accent }] : [],
+          ),
+        )
+      : []
 
   const cues = performance.beatGroups.flatMap((group, beatGroup) =>
     inPass(group.tick) ? [{ beatGroup, tick: group.tick, at: at(group.tick) }] : [],
@@ -182,6 +200,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
     fromTick,
     toTick,
     musicStart,
+    counts: counted.map(({ tick }) => at(tick)),
   }
 }
 
@@ -204,6 +223,7 @@ export function beatGroupSounds(
         at: 0,
         duration: Math.max(SHORTEST_ALONE, secondsFor(n.durationTicks, tempo)),
         velocity: n.velocity,
+        part: n.hand,
       },
     ]
   })

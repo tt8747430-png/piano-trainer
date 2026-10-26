@@ -3,7 +3,8 @@
 - **Status:** accepted · **Date:** 2026-10-25 · **Amends:** ADR 0064 (the View), ADR 0098 (the Player's chord
   chart), ADR 0094 and 0085 (the Player's bar and transport: the loop moves to the transport) · **Spec:** [chord
   views and song lessons](../superpowers/specs/2026-10-25-chord-views-and-song-lessons.md) · **Amended by:** ADR
-  0101 (diagrams on one keyboard, an inversion per chord), ADR 0102 (the tools row; the View by view)
+  0101 (diagrams on one keyboard, an inversion per chord), ADR 0102 (the tools row; the View by view), ADR 0104
+  (Transpose and Simplify)
 
 ## Context
 

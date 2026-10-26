@@ -10,6 +10,7 @@ const pass = (extra: Partial<Pass>): Pass => ({
   fromTick: 0,
   toTick: 1728,
   musicStart: 0,
+  counts: [],
   start: 100,
   tempo: 72,
   ...extra,

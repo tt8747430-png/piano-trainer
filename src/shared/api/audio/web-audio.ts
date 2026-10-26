@@ -23,8 +23,14 @@ interface Voice {
   readonly output: GainNode
 }
 
-/** Builds a sound's voice; `ended` runs when it is over. */
-type Render<S> = (context: AudioContext, sound: S, at: number, ended: () => void) => Voice
+/** Builds a sound's voice at `gain` of its loudness (ADR 0105); `ended` runs when it is over. */
+type Render<S> = (
+  context: AudioContext,
+  sound: S,
+  at: number,
+  gain: number,
+  ended: () => void,
+) => Voice
 
 /** The piano's partials at `frequency` into `filter`, from `at`: each oscillator with its level. */
 function partials(context: AudioContext, frequency: number, filter: AudioNode, at: number) {
@@ -40,7 +46,7 @@ function partials(context: AudioContext, frequency: number, filter: AudioNode, a
   })
 }
 
-const playNote: Render<NoteSound> = (context, note, at, ended) => {
+const playNote: Render<NoteSound> = (context, note, at, gain, ended) => {
   const frequency = frequencyOf(note.midi)
   const release = at + note.duration + 0.2
   const filter = context.createBiquadFilter()
@@ -48,7 +54,7 @@ const playNote: Render<NoteSound> = (context, note, at, ended) => {
   filter.frequency.setValueAtTime(Math.min(7000, frequency * 9), at)
   filter.frequency.exponentialRampToValueAtTime(Math.max(300, frequency * 2), release)
   const envelope = context.createGain()
-  const peak = Math.max(SILENT, note.velocity)
+  const peak = Math.max(SILENT, note.velocity * gain)
   envelope.gain.setValueAtTime(SILENT, at)
   envelope.gain.exponentialRampToValueAtTime(peak, at + 0.008)
   envelope.gain.exponentialRampToValueAtTime(peak * 0.4, at + Math.min(0.35, note.duration * 0.5))
@@ -91,18 +97,24 @@ function damped(context: AudioContext, { sources, output }: Voice) {
   for (const source of sources) source.stop(at + 0.25)
 }
 
-const playClick: Render<ClickSound> = (context, click, at, ended) => {
+/** A click's loudness: the bar's first beat's higher and louder. */
+const CLICK_PEAK = { accent: 0.22, beat: 0.13 } as const
+
+const playClick: Render<ClickSound> = (context, click, at, gain, ended) => {
   const oscillator = context.createOscillator()
-  const gain = context.createGain()
+  const envelope = context.createGain()
   oscillator.frequency.value = click.accent ? 1600 : 1100
-  gain.gain.setValueAtTime(SILENT, at)
-  gain.gain.exponentialRampToValueAtTime(click.accent ? 0.22 : 0.13, at + 0.002)
-  gain.gain.exponentialRampToValueAtTime(SILENT, at + 0.05)
-  oscillator.connect(gain).connect(context.destination)
+  envelope.gain.setValueAtTime(SILENT, at)
+  envelope.gain.exponentialRampToValueAtTime(
+    Math.max(SILENT, (click.accent ? CLICK_PEAK.accent : CLICK_PEAK.beat) * gain),
+    at + 0.002,
+  )
+  envelope.gain.exponentialRampToValueAtTime(SILENT, at + 0.05)
+  oscillator.connect(envelope).connect(context.destination)
   oscillator.start(at)
   oscillator.stop(at + 0.06)
   oscillator.onended = ended
-  return { sources: [oscillator], output: gain }
+  return { sources: [oscillator], output: envelope }
 }
 
 const browserContext = (): AudioContext | null =>
@@ -169,18 +181,20 @@ export function createWebAudioOutput({
     return context
   }
 
-  const render = (sound: Sound, at: number) => {
-    // A note goes to the keyboard's speaker where one is chosen.
+  const render = (sound: Sound, at: number, gain: number) => {
+    // A sound turned right down is not played at all.
+    if (gain <= 0) return
+    // A note goes to the keyboard's speaker where one is chosen, struck as hard as its gain leaves it.
     if (sound.kind === 'note' && piano) {
-      piano.render(sound, at)
+      piano.render({ ...sound, velocity: sound.velocity * gain }, at)
       return
     }
     if (!context) return
     const ended = () => voices.delete(voice)
     const voice =
       sound.kind === 'note'
-        ? playNote(context, sound, at, ended)
-        : playClick(context, sound, at, ended)
+        ? playNote(context, sound, at, gain, ended)
+        : playClick(context, sound, at, gain, ended)
     voices.add(voice)
   }
 
@@ -230,7 +244,7 @@ export function createWebAudioOutput({
       // With no gesture behind it (a sound as a screen opens), resuming could only fail.
       if (audio && heldBack(audio) && activated()) await audio.resume()
     },
-    play(sounds, at) {
+    play(sounds, at, gain) {
       const audio = openContext()
       if (!audio) return NOTHING_PLAYED
       if (heldBack(audio)) {
@@ -240,7 +254,7 @@ export function createWebAudioOutput({
         void audio.resume()
       }
       const start = at ?? audio.currentTime + PLAY_DELAY
-      lookahead.add(sounds, start)
+      lookahead.add(sounds, start, gain)
       return keys.add(sounds, start)
     },
     stop() {
@@ -273,7 +287,7 @@ export function createWebAudioOutput({
         : null
     },
     loadRecording: (src) => recordings.load(src),
-    playRecording: (src, play) => recordings.play(src, play),
+    playRecording: (src, play, volume) => recordings.play(src, play, volume),
     now,
     // What is heard now, moved by how long before or after now the page's moment was.
     audioTimeAt: (pageTime) => {

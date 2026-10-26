@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { gainVelocity, TOUCHES, touchVelocity, velocityGain } from './velocity'
+import { gainVelocity, TOUCHES, touchVelocity, velocityGain, volumeGain } from './velocity'
 
 describe('velocityGain', () => {
   it('sounds the hardest strike loudest, and softer as the square of the velocity', () => {
@@ -33,5 +33,17 @@ describe('gainVelocity', () => {
 
   it('reads a gain over the loudest as the hardest strike', () => {
     expect(gainVelocity(1)).toBe(127)
+  })
+})
+
+describe('volumeGain', () => {
+  it('plays a part at its own loudness at 100% and not at all at 0%', () => {
+    expect(volumeGain(100)).toBe(1)
+    expect(volumeGain(0)).toBe(0)
+  })
+
+  it('turns a part down as the ear hears it, the slider’s middle a quarter of the loudness', () => {
+    expect(volumeGain(50)).toBe(0.25)
+    expect(volumeGain(10)).toBeCloseTo(0.01)
   })
 })

@@ -22,6 +22,7 @@ import {
   hasChartPlan,
   isDegreePiece,
   isPiece,
+  PIECE_TEMPO,
   pieceById,
   pieceFit,
   pieceKey,
@@ -190,9 +191,15 @@ describe('the catalog', () => {
 
   it('sets a playable tempo', () => {
     for (const piece of PIECES) {
-      expect(piece.tempo, piece.id).toBeGreaterThanOrEqual(40)
-      expect(piece.tempo, piece.id).toBeLessThanOrEqual(160)
+      expect(piece.tempo, piece.id).toBeGreaterThanOrEqual(PIECE_TEMPO.min)
+      expect(piece.tempo, piece.id).toBeLessThanOrEqual(PIECE_TEMPO.max)
     }
+  })
+
+  it('plays any piece from half its tempo to twice it, the learner’s speeds (ADR 0105)', () => {
+    expect(PIECE_TEMPO).toEqual({ min: 40, max: 160 })
+    expect(TEMPO_RANGE.min).toBeLessThanOrEqual(PIECE_TEMPO.min / 2)
+    expect(TEMPO_RANGE.max).toBeGreaterThanOrEqual(PIECE_TEMPO.max * 2)
   })
 
   it('keeps credit names as printed, with the role apart', () => {
