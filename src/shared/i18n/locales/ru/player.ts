@@ -15,9 +15,24 @@ export const player: LocaleResources['player'] = {
     lyrics: 'Аккорды над текстом',
     diagrams: 'Схемы аккордов',
     grid: 'Сетка',
+    about: {
+      sheet: 'партитура, как в печати',
+      lyrics: 'аккорды каждой строки над её словами',
+      diagrams: 'звучащий аккорд на клавишах, рядом следующий',
+      grid: 'аккорды каждого такта по долям',
+    },
+    shown: 'Вид: {{view}}',
+    ask: 'Спрашивать при каждом открытии песни',
+    every: 'Во всех видах',
+    mode: {
+      label: 'Режим',
+      animated: 'Анимация',
+      summary: 'Сводка',
+      about:
+        'Анимация: звучащий аккорд и следующий, по ходу музыки. Сводка: все аккорды песни сразу, звучащий отмечен.',
+    },
   },
-  noChords: 'В этих нотах нет аккордовых символов.',
-  toSheet: 'Показать ноты',
+  tools: 'Инструменты',
   nextChord: 'Дальше: {{symbol}}',
   line: { one: 'Такт {{n}}', many: 'Такты {{first}}–{{last}}' },
   key: 'Тональность',
@@ -70,8 +85,14 @@ export const player: LocaleResources['player'] = {
   },
   ownKeyOnly: 'Только в тональности {{key}}',
   recordingOnlyIn: 'Запись звучит только в своей тональности — {{key}}.',
-  /** Why a pattern or figure is closed to the music. */
-  needs: { tune: 'Нужна мелодия', key: 'Нужна тональность', simpleTime: 'Нужен простой размер' },
+  /** Why a pattern or figure, or a view of the music (ADR 0102), is closed to the music. */
+  needs: {
+    tune: 'Нужна мелодия',
+    key: 'Нужна тональность',
+    simpleTime: 'Нужен простой размер',
+    words: 'Нужен текст',
+    chords: 'Нужны аккордовые символы',
+  },
   rhGroup: {
     chords: 'Аккорды',
     broken: 'Ломаные аккорды',

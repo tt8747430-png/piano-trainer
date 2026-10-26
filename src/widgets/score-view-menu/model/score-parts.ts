@@ -1,6 +1,17 @@
 /**
- * What of the score the View offers (ADR 0099): the sheet music's every part; the Player's other
- * views of the music have fewer.
+ * What the sheet music shows besides its staves, each a switch in the View, in the order offered
+ * (ADR 0102): the chord symbols, the chord positions beside them, the words, the fingers and the
+ * notes' names. The Player's sheet music has every one.
  */
-export const SCORE_PARTS = ['layout', 'staves', 'chordNames', 'lyrics', 'fingers'] as const
-export type ScorePart = (typeof SCORE_PARTS)[number]
+export const SHEET_PARTS = ['chordNames', 'positions', 'lyrics', 'fingers', 'noteNames'] as const
+export type SheetPart = (typeof SHEET_PARTS)[number]
+
+/**
+ * What a score prints, the editor's View's alone: the chord positions and the notes' names are what
+ * only practice shows (ADR 0094).
+ */
+export const PRINTED_PARTS = [
+  'chordNames',
+  'lyrics',
+  'fingers',
+] as const satisfies readonly SheetPart[]

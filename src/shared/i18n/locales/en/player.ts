@@ -20,10 +20,30 @@ export const player = {
     lyrics: 'Chords over lyrics',
     diagrams: 'Diagrams',
     grid: 'Grid',
+    // Each view in a line, the ⓘ beside Show the music as (ADR 0102).
+    about: {
+      sheet: 'the score, as printed',
+      lyrics: 'each line’s chords over its words',
+      diagrams: 'the chord sounding on the keys, the next beside it',
+      grid: 'every bar’s chords, beat by beat',
+    },
+    // The tools row's View, named by the view shown (ADR 0102).
+    shown: 'View: {{view}}',
+    // Chordify's "Show this when opening a song": a song's Player opens with the View open.
+    ask: 'Ask each time a song opens',
+    // What the View holds for every view of the music, after the view shown's own.
+    every: 'Every view',
+    // Diagrams' own (ADR 0102, Chordify's "Diagram view mode").
+    mode: {
+      label: 'Mode',
+      animated: 'Animated',
+      summary: 'Summary',
+      about:
+        'Animated: the chord sounding and the next, moving with the music. Summary: the song’s chords all at once, the one sounding marked.',
+    },
   },
-  /** Music of no chord symbol in a view of its chords (ADR 0094, 0099), and the way to its sheet. */
-  noChords: 'This music has no chord symbols.',
-  toSheet: 'Show the sheet music',
+  // The row of tools under the Player's bar (ADR 0102), as a screen reader names it.
+  tools: 'Tools',
   /** The Diagrams view's chord to come, where none sounds yet: a pickup, a bar of no chord. */
   nextChord: 'Next: {{symbol}}',
   /** A line of Chords over lyrics, by its bars: a tap takes the Player there. */
@@ -85,8 +105,14 @@ export const player = {
   ownKeyOnly: 'Only in {{key}}',
   /** Why the recording's tile is closed, beside How it plays' heading. */
   recordingOnlyIn: 'The recording plays only in {{key}}, its own key.',
-  /** Why a pattern or figure is closed to the music. */
-  needs: { tune: 'Needs a tune', key: 'Needs a key', simpleTime: 'Needs simple time' },
+  /** Why a pattern or figure, or a view of the music (ADR 0102), is closed to the music. */
+  needs: {
+    tune: 'Needs a tune',
+    key: 'Needs a key',
+    simpleTime: 'Needs simple time',
+    words: 'Needs words',
+    chords: 'Needs chord symbols',
+  },
   /** The right hand's figures in the Setup, by what they do. */
   rhGroup: {
     chords: 'Chords',

@@ -479,17 +479,24 @@ name in Literata, the four places and Settings at its foot, or collapsed to 72px
 at least 18rem as fit. The Player, the score editor and the Check are full screen with no navigation: the viewport's
 height and width, scrolling inside when their content is taller.
 
-**The Player** (Flowkey's shape) is its bar, the music in the view chosen (the sheet or a chord view, below), Wait
-mode's line and the keys, placed by the
-`player-screen` grid, the transport floating over the sheet's foot (ADR 0061, 0081, 0085). The keyboard is as tall
-as its keys' proportion makes it (below), at the foot or under the bar as the keyboard settings dock it; the View's
-Keys takes it away.
+**The Player** (Flowkey's shape) is its bar, the tools row under it, the music in the view chosen (the sheet or a
+chord view, below), Wait mode's line and the keys, placed by the
+`player-screen` grid, the transport floating over the sheet's foot (ADR 0061, 0081, 0085, 0102). The keyboard is as
+tall as its keys' proportion makes it (below), at the foot or under the tools row as the keyboard settings dock it;
+the View's Keys takes it away.
 
-- **The bar,** one at every size and one row from 360px (ADR 0094, 0099): ✕ and Practise · Edit at its start; the
-  View (an eye), MIDI, ⚙ (Setup) and More (…) at its end, each its icon named in a tooltip, 4px apart on a phone held
-  upright, wrapping only under 360px. More holds a piece's Song information (a sheet: its chords as diagrams, then
-  its key as played, time and tempo as the song page's cards, its second title and who wrote it), Export to MIDI and
-  an own song's Share. The title is printed on the sheet.
+- **The bar,** one at every size and one row from 320px (ADR 0094, 0099, 0102): ✕ and Practise · Edit at its start;
+  MIDI, ⚙ (Setup) and More (…) at its end, each its icon named in a tooltip, 4px apart on a phone held upright. More
+  holds a piece's Song information (a sheet: its chords as diagrams, then its key as played, time and tempo as the
+  song page's cards, its second title and who wrote it), Export to MIDI and an own song's Share. The title is printed
+  on the sheet.
+- **The tools row** (ADR 0102, Chordify's toolbar), under the bar at every size, over a hairline: quiet text buttons
+  (no fill or line at rest, sand on hover and while open), each its 16px icon in soft ink, then its name in ink (Onest
+  600 16px), cut short where the row has no room, 44px tall (40px on a phone on its side). The View comes first,
+  named by the view shown with a chevron that turns while its menu is open ("Diagrams ⌄"); the tools after it share
+  the row equally on a phone held upright and stand packed at its start from 640px. While Diagrams plays, the bar and
+  the tools row fade up out of sight and reach, their room kept; a tap on the free room brings them back with the
+  transport, the next sends all of them aside, and the music stopping brings them back.
 - **The transport** (`PlayerDock`): one pill floating along the sheet's foot at every size, a phone on its side too:
   the tempo, ‹ ▶ › (Play in honey), the loop (pressed: a muted fill; R) and the hands. Its controls are 48px from
   640px, the 44px target side by side on a phone held upright, and 40px under 360px and on a phone on its side
@@ -507,7 +514,7 @@ pattern's line then reads "Left hand changed", "Right hand changed" or "Both han
 idea, so a changed pattern never passes for the pattern itself), the inversion as five drawn segments (Nearest, then Root to 3rd as
 stacks of noteheads), the chord size as segments, and how it plays as a grid of toggle tiles (Chord positions,
 Metronome, Count-in, Swing, and a piece's Tune and Recording). What the sheet shows (finger numbers, named notes,
-chord names, the staves, the layout) is the View menu's alone, behind its eye beside the Setup's sliders.
+chord names, the staves, the layout) is the View menu's alone, behind the tools row's View.
 
 A piece with a recording has a **Recording** toggle tile in its Setup, on by default; in another key it is
 disabled with "Only in D minor" (the key as `keyOf` writes it) under its name. The recording plays in Listen only;
@@ -546,10 +553,11 @@ across it; a line wraps to rows of two 4-beat bars on a phone held upright, four
 eight on a laptop. The same rule spreads a score's lines,
 in the Player and the editor: each line is justified to its bars' share of the longest line's width. On a short
 sheet (a phone on its side) both screens draw a line smaller, down to 0.4 of its size, so a whole system is in sight
-over the keys (Panorama's one line as engraved, its notes far over or under its staves anywhere in the piece, its
+over the keys (Scroll across's one line as engraved, its notes far over or under its staves anywhere in the piece, its
 labels' row smaller with it); Pages open with a page's width fitted beside what floats over its right edge (the
 editor's palette) and no larger than shows a whole line, the caret's or the playhead's line kept in sight. The
-layouts are named alike wherever they are chosen: Panorama · Scroll · Pages (Панорама · Прокрутка · Страницы).
+layouts are named alike wherever they are chosen, by how each reads, never as a view: Pages · Scroll down · Scroll
+across (Страницы · Прокрутка вниз · Прокрутка вбок).
 
 ## Elevation & Depth
 
@@ -804,10 +812,10 @@ key's notes, relative and modes, the chords it borrows, and under them the songs
 
 ### The sheet (the Player and the editor)
 
-The score engraved by Verovio in a worker (ADR 0078), laid out as the View says: Panorama, one line across as large
-as its height allows with two bars at least in sight; Scroll, the chart's lines down the screen, each justified to
-its width; Pages, A4 pages at their print size on a canvas that pans and zooms (ADR 0075, 0087). The title is
-printed at its head, the staves' names at its first line's head (ADR 0094).
+The score engraved by Verovio in a worker (ADR 0078), laid out as the View says: Pages, A4 pages at their print size
+on a canvas that pans and zooms (ADR 0075, 0087); Scroll down, the chart's lines down the screen, each justified to
+its width; Scroll across, one line across as large as its height allows with two bars at least in sight. The title
+is printed at its head, the staves' names at its first line's head (ADR 0094).
 
 - **Ink:** notes, rests, clefs, beams and ties in ink; the staff's lines and barlines in the control line
   (`--input`); the staff of the hand not heard or practised in soft ink (hands: right → the bass staff soft). Dark
@@ -834,7 +842,7 @@ printed at its head, the staves' names at its first line's head (ADR 0094).
 - **Named notes** (the Named notes toggle): each head drawn round with its note's name in it as spelled, as
   notation programs' note-name heads: a filled note's in ink with the letter in the page's colour, a half or whole
   note's open with the letter in ink. The Player's sheet only.
-- **Sizes:** Panorama fills its height, 0.4 to 1.6 of full size; Scroll's lines are as large as the width allows,
+- **Sizes:** Scroll across fills its height, 0.4 to 1.6 of full size; Scroll down's lines are as large as the width allows,
   smaller on a phone on its side so a whole system is in sight; Pages print at 0.6, the canvas zooming them.
 - **Loading** keeps the staff's space, its lines faint; if it cannot be engraved, one line says the music can't be
   shown, and the keys, Play and Wait mode still work.
@@ -848,9 +856,15 @@ printed at its head, the staves' names at its first line's head (ADR 0094).
 ### The chord views (the Player)
 
 The Player shows a piece as **Sheet music** (above), **Chords over lyrics**, **Diagrams** or **Grid** (ADR 0099),
-chosen at the top of its View as four tiles two by two: each a picture of its view drawn in its own style over its
-name (Onest 500 14px), on card paper in the control line, the one shown pressed (sand, an ink line, ink text). The
-rest of the View is what that view has. Each view is one scroller under the bar with the title printed at its head as
+chosen at the top of its View (ADR 0102), under Show the music as and its ⓘ naming each in a line, as four tiles two
+by two: each a picture of its view drawn in its own style over its name (Onest 500 14px), on card paper in the
+control line, the one shown pressed (sand, an ink line, ink text); one the music cannot show greyed to 40%, what it
+needs its tooltip (words, chord symbols), and a saved view it cannot show falling back (Chords over lyrics to
+Diagrams, Diagrams or the Grid to the sheet music). Then Ask each time a song opens, a switch; the view shown's own
+part under its name (the sheet music's Layout, staves and switches; Diagrams' Mode, Animated · Summary, and Lyrics),
+then Every view (the Keys), each group under its heading over a hairline; a field's name in soft ink (Onest 14px),
+its ⓘ beside it. The editor's View is the sheet music's part and its Keys alone. On a phone the menu is as wide as
+the tools row; from 640px it is 26rem. Each view is one scroller under the bar with the title printed at its head as
 the sheet prints it; every chord symbol in them is printed as the sheet prints it (`C♯m7`, `printedSymbol`), and every
 one keeps its music in the room above the transport.
 
@@ -889,8 +903,6 @@ one keeps its music in the room above the transport.
   each line a card-paper row of bars, every beat as wide so bars line up down it, a row wrapping where the screen
   holds no more; cells 48px tall (56px from 640px, 44px on a phone on its side), a bar's number small in its first
   cell's corner, each bar a button.
-- **No chord symbols:** a chord view of music with none says so in one soft line under the title, with Show the
-  sheet music (soft) under it; the view chosen stays saved.
 - **The chord diagram** (`KeyDiagram`, ADR 0101): a chord drawn as the app's keys, white keys key paper parted by the
   key bed and black keys a warm black, always F3 to B4, eleven white keys, so a song's chords stand in one place and
   move by a key or two; each key held a dot near its foot, ink on a white key and white on a black one, and a slash

@@ -616,18 +616,18 @@
 }
 
 /* The Player's screen (widgets/practice-player; spec §2.8, ADR 0061): its parts placed by `data-area`.
-   Upright and from a laptop's width, a column: the toolbar (its title and actions in columns of their
-   own, so neither squeezes the other), the sheet taking what is left, Wait mode's line, the transport
-   floating in the thumb's reach and the keys at the foot. On a phone on its side the transport stands
-   upright at the right edge, beside the toolbar and the sheet, and Wait mode's line joins the
-   toolbar's row, so the sheet keeps the height those rows would take. Where the keyboard settings dock the keys at the top (`data-keys='top'`), they sit under
-   the toolbar instead. */
+   At every size a column: the bar (its lead and actions in columns of their own, so neither squeezes
+   the other), the tools row under it (ADR 0102), the sheet taking what is left, Wait mode's line and
+   the keys at the foot, the transport floating over the sheet's foot. On a phone on its side Wait
+   mode's line joins the bar's row, so the sheet keeps the height that row would take. Where the
+   keyboard settings dock the keys at the top (`data-keys='top'`), they sit under the tools row. */
 @utility player-screen {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
   grid-template-areas:
     'lead actions'
+    'tools tools'
     'sheet sheet'
     'status status'
     'keys keys';
@@ -639,6 +639,9 @@
   }
   & > [data-area='actions'] {
     grid-area: actions;
+  }
+  & > [data-area='tools'] {
+    grid-area: tools;
   }
   & > [data-area='keys'] {
     grid-area: keys;
@@ -658,9 +661,10 @@
     margin-bottom: 0.5rem;
   }
   &[data-keys='top'] {
-    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
     grid-template-areas:
       'lead actions'
+      'tools tools'
       'keys keys'
       'sheet sheet'
       'status status';
@@ -672,9 +676,10 @@
   }
   @variant landscape-phone {
     grid-template-columns: minmax(0, 1fr) auto auto;
-    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
     grid-template-areas:
       'lead status actions'
+      'tools tools tools'
       'sheet sheet sheet'
       'keys keys keys';
     /* Along the sheet's foot, as upright and as the editor's dock (ADR 0081): the sheet between the
@@ -684,9 +689,10 @@
       margin-bottom: 0.25rem;
     }
     &[data-keys='top'] {
-      grid-template-rows: auto auto minmax(0, 1fr);
+      grid-template-rows: auto auto auto minmax(0, 1fr);
       grid-template-areas:
         'lead status actions'
+        'tools tools tools'
         'keys keys keys'
         'sheet sheet sheet';
     }

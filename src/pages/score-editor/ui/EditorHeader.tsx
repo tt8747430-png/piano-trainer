@@ -1,4 +1,4 @@
-import { X } from 'lucide-react'
+import { Eye, X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
@@ -6,7 +6,12 @@ import { useFoldKeys } from '@/features/live-keyboard'
 import { barAt } from '@/features/score-editor'
 import { RoundButton } from '@/shared/ui'
 import { ModeSwitch } from '@/widgets/mode-switch'
-import { ScoreViewMenu } from '@/widgets/score-view-menu'
+import {
+  KeysSwitch,
+  PRINTED_PARTS,
+  ScoreViewMenu,
+  SheetViewFields,
+} from '@/widgets/score-view-menu'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useStaffHeads } from '../model/use-staff-heads'
 import { EditRow } from './EditRow'
@@ -14,15 +19,16 @@ import { EditRow } from './EditRow'
 /**
  * The editor's bar, one at every size (ADR 0094): Close; Practise · Edit (ADR 0090), the Player at
  * the caret's bar; the edit row (`EditRow`: Delete, Undo, Redo, Copy, Cut, Paste); then the screen's
- * own round buttons in the Player's order and look: the eye (`ScoreViewMenu`, the Player's View, its
- * Keys the keys' fold), how the work is shown, and the MIDI keyboard (hidden without Web MIDI). No
+ * own round buttons in the Player's look: the eye (`ScoreViewMenu`, the Player's View with the sheet
+ * music's part alone, its Keys the keys' fold, ADR 0102), how the work is shown, and the MIDI keyboard
+ * (hidden without Web MIDI). No
  * Song sheet: the song is edited where it is printed and in the palette. On a phone the edit row
  * wraps under the rest. The sheet prints the title, the page's heading (`TitleField`), and shows the
  * caret: here a live line says where the caret is, a screen reader's alone (`status`). Play, ‹ › and
  * Record ride in the dock over the sheet's foot, where the Player's transport is (`EditorDock`).
  */
 export function EditorHeader({ status }: { status?: ReactNode }) {
-  const { t } = useTranslation(['editor', 'common'])
+  const { t } = useTranslation(['editor', 'common', 'music'])
   const { actions, meta, takes } = useScoreEditorContext()
   const bar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
   const keys = useFoldKeys()
@@ -36,12 +42,16 @@ export function EditorHeader({ status }: { status?: ReactNode }) {
       <ModeSwitch pieceId={meta.id} mode="edit" bar={bar} disabled={recording} />
       <EditRow className="max-sm:order-last max-sm:basis-full max-sm:justify-between" />
       <div className="ms-auto flex items-center gap-1">
+        {/* The eye, the score being all it shows (ADR 0102): the sheet music's part of the View,
+            then the keys. */}
         <ScoreViewMenu
-          keys={{ shown: !keys.folded, show: (on) => keys.fold(!on) }}
-          staves={staves}
-          piano={piano}
-          disabled={recording}
-        />
+          trigger={<RoundButton label={t('music:view.label')} icon={Eye} disabled={recording} />}
+          from="bar"
+        >
+          <SheetViewFields staves={staves} piano={piano} parts={PRINTED_PARTS}>
+            <KeysSwitch shown={!keys.folded} onShow={(on) => keys.fold(!on)} />
+          </SheetViewFields>
+        </ScoreViewMenu>
         <MidiButton />
       </div>
     </div>

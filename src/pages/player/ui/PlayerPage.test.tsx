@@ -39,8 +39,9 @@ describe('Player', () => {
     async (_size, query) => {
       sizedAs(query)
       await renderApp('/play/bz5')
-      await screen.findByRole('button', { name: 'View' })
-      // Close, then Practise · Edit, as the editor's bar has them; the title is on the sheet.
+      await screen.findByRole('button', { name: 'Setup' })
+      // Close, then Practise · Edit, as the editor's bar has them; the title is on the sheet. The
+      // View is the tools row's, under the bar (ADR 0102).
       const controls = [
         ...document.querySelectorAll(
           ':is([data-area="lead"], [data-area="actions"]) :is(button, a)',
@@ -49,7 +50,6 @@ describe('Player', () => {
       expect(controls.map((control) => control.getAttribute('aria-label'))).toEqual([
         'Close',
         'Edit',
-        'View',
         'MIDI keyboard',
         'Setup',
         'More',
@@ -137,7 +137,7 @@ describe('Player', () => {
   it('shows the score as its View menu says, remembered for every piece', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/romashki')
-    await user.click(await screen.findByRole('button', { name: 'View' }))
+    await user.click(await screen.findByRole('button', { name: 'View: Sheet music' }))
     await user.click(await screen.findByRole('radio', { name: 'Pages' }))
     expect(settingsStore.getState().scoreView.layout).toBe('pages')
     expect((await screen.findAllByText('1', { selector: 'span' })).length).toBeGreaterThan(0)
@@ -400,7 +400,7 @@ describe('Player', () => {
     const { settingsStore } = await renderApp('/play/bz5')
     await waitFor(() => expect(document.querySelector('[data-slot="score"] svg')).not.toBeNull())
     expect(namedHeads()).toBe(0)
-    await user.click(await screen.findByRole('button', { name: 'View' }))
+    await user.click(await screen.findByRole('button', { name: 'View: Sheet music' }))
     await user.click(await screen.findByRole('switch', { name: 'Note names' }))
     expect(settingsStore.getState().practice.namedNotes).toBe(true)
     await waitFor(() => expect(namedHeads()).toBeGreaterThan(0))
@@ -468,10 +468,10 @@ describe('Player', () => {
   it('keeps what the sheet shows in the View, the editor’s with what only practice has, and how it plays in the Setup', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
-    await user.click(await screen.findByRole('button', { name: 'View' }))
+    await user.click(await screen.findByRole('button', { name: 'View: Sheet music' }))
     const view = await screen.findByRole('dialog', { name: 'View' })
-    // The Player's views first (ADR 0099), then the editor's View, one menu (ADR 0094): the layout,
-    // the staves, what is shown, then the Player's own.
+    // The Player's views first (ADR 0099), then the sheet music's own, the editor's View with what
+    // only practice shows among it (ADR 0094, 0102), then what every view has.
     const views = within(view).getByRole('radiogroup', { name: 'Show the music as' })
     expect(
       within(views)
@@ -483,23 +483,18 @@ describe('Player', () => {
       ['Diagrams', 'false'],
       ['Grid', 'false'],
     ])
-    expect(
-      within(view)
-        .getAllByRole('region')
-        .map((section) => section.getAttribute('aria-label')),
-    ).toEqual(['Layout', 'Staves', 'Show'])
-    const switches = within(view).getAllByRole('switch')
-    expect(switches).toHaveLength(9)
+    const sheet = within(view).getByRole('region', { name: 'Sheet music' })
+    const switches = within(sheet).getAllByRole('switch')
+    expect(switches).toHaveLength(8)
     // Each single staff by its name, its place's where it has none (ADR 0097), then the piano's.
     ;[
       'Staff 1',
       'Upper staff',
       'Lower staff',
       'Chord symbols',
+      /^Chord positions/,
       'Lyrics',
       'Finger numbers',
-      'Keys',
-      /^Chord positions/,
       'Note names',
     ].forEach((name, i) => expect(switches[i]).toHaveAccessibleName(name))
     await user.click(within(view).getByRole('switch', { name: 'Upper staff' }))
@@ -529,7 +524,7 @@ describe('the words under the tune (ADR 0093)', () => {
     act(() => setPracticeToggle(settingsStore, 'tune', true))
     await waitFor(() => expect(document.querySelectorAll('.syl').length).toBeGreaterThan(0))
     expect(document.querySelector('.syl')?.textContent?.trim()).toBe('Si')
-    await user.click(await screen.findByRole('button', { name: 'View' }))
+    await user.click(await screen.findByRole('button', { name: 'View: Sheet music' }))
     const view = await screen.findByRole('dialog', { name: 'View' })
     const lyrics = within(view).getByRole('switch', { name: 'Lyrics' })
     expect(lyrics).toBeChecked()

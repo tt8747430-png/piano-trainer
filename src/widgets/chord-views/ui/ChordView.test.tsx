@@ -48,7 +48,6 @@ function renderSummary(bar: number) {
         practice={practice}
         loop={null}
         words={false}
-        onSheet={vi.fn()}
       />
     </ServicesProvider>,
   )

@@ -127,6 +127,8 @@ describe('createSettingsStore', () => {
       scoreView: {
         layout: 'scroll',
         music: 'grid',
+        diagrams: 'summary',
+        askOnOpen: true,
         chordNames: false,
         lyrics: false,
         hidden: ['treble', 'staff0'],
@@ -160,6 +162,8 @@ describe('createSettingsStore', () => {
         scoreView: {
           layout: 'pages',
           music: 'chart',
+          diagrams: 'carousel',
+          askOnOpen: 'yes',
           chordNames: false,
           hidden: ['bass', 'x', 'bass', 'staff1', 'staff-1', 'melody'],
         },
@@ -167,6 +171,8 @@ describe('createSettingsStore', () => {
     ).toEqual({
       layout: 'pages',
       music: 'sheet',
+      diagrams: 'animated',
+      askOnOpen: false,
       chordNames: false,
       lyrics: true,
       hidden: ['bass', 'staff1'],
@@ -193,9 +199,14 @@ describe('createSettingsStore', () => {
       expect(restored({ scoreView: { music } }).scoreView.music).toBe(music)
   })
 
-  it('starts afresh over a save of the version before, whose View had a Sheet music switch (ADR 0099)', () => {
-    expect(SETTINGS_VERSION).toBe(9)
-    expect(restored({ theme: 'dark', scoreView: { notation: false } }, 8)).toEqual(
+  it('opens Diagrams animated, and a song in the view saved, asking nothing (ADR 0102)', () => {
+    expect(DEFAULT_SCORE_VIEW).toMatchObject({ diagrams: 'animated', askOnOpen: false })
+    expect(restored({ scoreView: { diagrams: 'summary' } }).scoreView.diagrams).toBe('summary')
+  })
+
+  it('starts afresh over a save of the version before, whose View had no Diagrams’ mode (ADR 0102)', () => {
+    expect(SETTINGS_VERSION).toBe(10)
+    expect(restored({ theme: 'dark', scoreView: { music: 'diagrams' } }, 9)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import type { DiagramsMode } from '@/entities/settings'
 import { usePieceInversions } from '@/features/choose-diagram-inversion'
 import {
   chordSummary,
@@ -16,7 +17,6 @@ import { printedSymbol, type Tick } from '@/shared/lib/music'
 import { SheetTitle } from '@/shared/ui'
 import { ChordDiagram } from '@/widgets/chord-diagrams'
 import { chordsFrom } from '../model/chords-from'
-import type { DiagramsMode } from '../model/diagrams-mode'
 import { lyricLines, type Span } from '../model/lyric-lines'
 import { sungPlace } from '../model/sung-place'
 import { BeatStrip } from './BeatStrip'
@@ -82,7 +82,7 @@ export function ChordDiagrams({
   span,
   loop,
   words,
-  mode = 'animated',
+  mode,
   onGo,
   onChord,
 }: {
@@ -96,7 +96,8 @@ export function ChordDiagrams({
   loop: BarRange | null
   /** The View's Lyrics: the line sung under the strip. */
   words: boolean
-  mode?: DiagramsMode
+  /** The View's mode for Diagrams (ADR 0102's `scoreView.diagrams`). */
+  mode: DiagramsMode
   onGo: (at: Tick) => void
   onChord: (chord: number) => void
 }) {

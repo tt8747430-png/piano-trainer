@@ -11,6 +11,7 @@ import {
   useRepertoire,
   type Piece,
 } from '@/entities/piece'
+import { selectScoreView, useSettings } from '@/entities/settings'
 import { PieceInversions } from '@/features/choose-diagram-inversion'
 import { beatGroupInBar, writtenBarAt } from '@/features/practice'
 import { ShareSaid, useShareSong } from '@/features/share-song'
@@ -59,6 +60,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const [showingInfo, setShowingInfo] = useState(false)
   const shared = useShareSong()
   const sharing = isOwnSongId(piece.id) && !isDegreePiece(piece)
+  const askView = useSettings((state) => selectScoreView(state).askOnOpen)
   return (
     // Its chords drawn in the inversions chosen for them in this piece (ADR 0101).
     <PieceInversions pieceId={piece.id}>
@@ -106,6 +108,8 @@ function PiecePlayer({ piece }: { piece: Piece }) {
             : undefined
         }
         status={sharing ? <ShareSaid said={shared.said} /> : null}
+        // Chordify's "Show this when opening a song" (ADR 0102): the View, to choose how it shows.
+        openView={askView}
       />
       <SongInfo
         piece={piece}
