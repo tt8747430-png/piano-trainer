@@ -450,10 +450,12 @@ describe('Piece: the learner’s library (ADR 0106)', () => {
     await openMore(user)
     await user.click(await screen.findByRole('button', { name: 'Move to…' }))
     const sheet = await screen.findByRole('dialog', { name: 'Move to' })
-    // Where it stands now is no place to move it to.
-    expect(within(sheet).getByRole('button', { name: '«Боже, спасибо»' })).toBeDisabled()
+    // Where it stands now is marked Here, no place to move it to; a tap elsewhere moves at once.
+    expect(within(sheet).getByRole('button', { name: '«Боже, спасибо» Here' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
     await user.click(within(sheet).getByRole('button', { name: 'Hymns' }))
-    await user.click(within(sheet).getByRole('button', { name: 'Move to Hymns' }))
     expect(placeOf(libraryStore.getState(), 'bz5')).toMatchObject({ folder: 'hymns' })
     await user.click(await screen.findByRole('button', { name: 'Undo' }))
     expect(placeOf(libraryStore.getState(), 'bz5')).toEqual({ folder: 'bozhe-spasibo', index: 4 })

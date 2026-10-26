@@ -12,7 +12,7 @@ import { useLocale } from '@/shared/i18n'
 import { say } from '@/shared/ui'
 import { archiveFolder, restoreFolder } from '../archive-folder'
 import { archiveSongs, restoreSongs } from '../archive-songs'
-import { moveSongs, undoMove } from '../move-songs'
+import { moveTo, undoMove, type Moving } from '../move-to'
 import { setFavourites } from '../toggle-favourite'
 
 /**
@@ -32,23 +32,30 @@ export function useLibraryActs() {
     const entry = repertoire.entry(id)
     return entry ? entryTitles(entry, locale).primary : id
   }
-  /** Where a song goes, named: a folder by its name (one made a moment ago too), or Home. */
-  const placeName = (to: FolderId | null) => {
+  /** A folder by its name as it stands now (one made a moment ago too), wherever it is. */
+  const folderNameOf = (id: FolderId) => {
     const { folders } = arrangeLibrary(store.getState(), catalog())
-    const folder = to === null ? undefined : folders.find((each) => each.id === to)
-    return folder ? folderName(folder) : t('library.home')
+    const folder = folders.find((each) => each.id === id)
+    return folder ? folderName(folder) : ''
   }
+  /** Where something goes, named: a folder by its name, or Home. */
+  const placeName = (to: FolderId | null) => (to === null ? t('library.home') : folderNameOf(to))
   return {
-    move: (ids: readonly PieceId[], to: FolderId | null) => {
-      const moved = moveSongs(store, catalog(), ids, to)
-      if (moved.length === 0) return
+    /** Songs and folders moved into a folder or Home, said by name where one moved, with Undo. */
+    move: (what: Moving, to: FolderId | null) => {
+      const moves = moveTo(store, catalog(), what, to)
+      const count = moves.songs.length + moves.folders.length
+      if (count === 0) return
       const place = placeName(to)
-      const [only] = moved
+      const [song] = moves.songs
+      const [folder] = moves.folders
+      const named =
+        count > 1 ? null : song ? titleOf(song.id) : folder ? folderNameOf(folder.id) : null
       say(
-        moved.length === 1 && only
-          ? t('library.moved', { title: titleOf(only.id), place })
-          : t('library.movedMany', { count: moved.length, place }),
-        undo(() => undoMove(store, catalog(), moved)),
+        named
+          ? t('library.moved', { title: named, place })
+          : t('library.movedMany', { count, place }),
+        undo(() => undoMove(store, catalog(), moves)),
       )
     },
     archive: (ids: readonly PieceId[]) => {

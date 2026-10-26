@@ -7,11 +7,12 @@ import {
   useFolderName,
   useLibraryLayout,
   useLibraryStoreApi,
+  type FolderId,
   type FolderLook,
   type OwnFolderId,
   type ShelvedFolder,
 } from '@/entities/library'
-import { useRepertoire, type PieceId } from '@/entities/piece'
+import { useRepertoire } from '@/entities/piece'
 import { nextName } from '@/shared/lib'
 import { NameField, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -19,16 +20,16 @@ import { editFolder } from '../edit-folder'
 import { makeFolder } from '../make-folder'
 import { LookFields } from './LookFields'
 
-/** What the folder sheet is open on: a new folder (holding these songs), or a folder to edit. */
+/** What the folder sheet is open on: a new folder (in a folder, or at Home), or a folder to edit. */
 export type FolderSheetTarget =
-  | { readonly kind: 'new'; readonly songs?: readonly PieceId[] }
+  | { readonly kind: 'new'; readonly parent: FolderId | null }
   | { readonly kind: 'edit'; readonly folder: ShelvedFolder }
 
 /**
  * New folder and Edit folder, one sheet (Mindscape's `FolderSheet`): its name (a new one's
- * suggested, "New folder", "New folder 2"), its picture and its paint. A new folder is made at Home,
- * last, holding the songs it was made for (`onMade` hears its id); a built-in folder whose name is
- * left as its collection's keeps saying it in either language.
+ * suggested, "New folder", "New folder 2"; an edited one's its own, kept where nothing is typed), its
+ * picture and its paint. A new folder is made where the learner is, last there (`onMade` hears its
+ * id); a built-in folder whose name is left as its collection's keeps saying it in either language.
  */
 export function FolderSheet({
   target,
@@ -68,12 +69,16 @@ function FolderForm({
   const layout = useLibraryLayout()
   const nameOf = useFolderName()
   const editing = target.kind === 'edit' ? target.folder : null
-  const shown = editing ? nameOf(editing) : ''
-  const suggested = nextName(
-    t('folder.baseName'),
-    layout.folders.map((folder) => nameOf(folder)),
-  )
-  const [name, setName] = useState(shown)
+  // The field starts empty, what it would answer its placeholder (Mindscape's `PromptSheet`): text
+  // put in a field has to be selected to be replaced, and a selection in a sheet is what iOS reveals
+  // by lifting the whole app over the keyboard.
+  const suggestion = editing
+    ? nameOf(editing)
+    : nextName(
+        t('folder.baseName'),
+        layout.folders.map((folder) => nameOf(folder)),
+      )
+  const [name, setName] = useState('')
   const [look, setLook] = useState<FolderLook>(
     editing
       ? { picture: editing.picture, paint: editing.paint }
@@ -82,33 +87,24 @@ function FolderForm({
           paint: FOLDER_PAINTS[layout.folders.length % FOLDER_PAINTS.length] ?? 'sand',
         },
   )
-  // A new folder takes its suggested name where none is typed; an edited one needs one of its own.
-  const answer = name.trim() || (editing ? '' : suggested)
+  const typed = name.trim()
   const submit = (event?: FormEvent) => {
     event?.preventDefault()
-    if (!answer) return
     const catalog = libraryCatalog(repertoire)
     if (!editing) {
-      onDone(
-        makeFolder(
-          store,
-          catalog,
-          { name: answer, ...look },
-          target.kind === 'new' ? target.songs : [],
-        ),
-      )
+      const parent = target.kind === 'new' ? target.parent : null
+      onDone(makeFolder(store, catalog, { name: typed || suggestion, ...look }, { parent }))
       return
     }
-    // A built-in folder's name left as its collection's stays its collection's, in either language.
-    const keepsItsOwn = editing.builtIn && !editing.name && answer === shown
-    editFolder(store, catalog, editing.id, { name: keepsItsOwn ? undefined : answer, ...look })
+    // Nothing typed keeps its name: a built-in folder's stays its collection's, in either language.
+    editFolder(store, catalog, editing.id, { name: typed || editing.name, ...look })
     onDone(null)
   }
   return (
     <SheetContent
       title={t(editing ? 'folder.edit' : 'folder.new')}
       footer={
-        <Button size="lg" className="w-full" disabled={!answer} onClick={() => submit()}>
+        <Button size="lg" className="w-full" onClick={() => submit()}>
           {t(editing ? 'folder.save' : 'folder.create')}
         </Button>
       }
@@ -117,7 +113,8 @@ function FolderForm({
         <NameField
           label={t('folder.name')}
           value={name}
-          placeholder={editing ? undefined : suggested}
+          placeholder={suggestion}
+          enterKeyHint="done"
           maxLength={FOLDER_NAME_MAX}
           onChange={(event) => setName(event.target.value)}
         />

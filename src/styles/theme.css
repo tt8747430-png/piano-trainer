@@ -421,6 +421,18 @@
 @utility pb-safe-4 {
   padding-bottom: max(--spacing(4), env(safe-area-inset-bottom));
 }
+/* A sheet over the phone's keyboard stands on it: Base UI's VirtualKeyboardProvider measures the room
+   the keyboard covers (`--drawer-keyboard-inset`, Mindscape's sheets), and its footer gives back the
+   home indicator's inset the keyboard covers too. */
+@utility pb-sheet-keyboard {
+  padding-bottom: var(--drawer-keyboard-inset, 0px);
+}
+@utility pb-sheet-foot {
+  padding-bottom: max(
+    --spacing(4),
+    calc(env(safe-area-inset-bottom) - var(--drawer-keyboard-inset, 0px))
+  );
+}
 @utility pb-safe-2 {
   padding-bottom: max(--spacing(2), env(safe-area-inset-bottom));
 }

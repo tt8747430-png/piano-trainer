@@ -110,11 +110,10 @@ describe('search params', () => {
       chordSize: 'ninths',
       simple: true,
     })
-    expect(await searchAt('/songs?q=душа&withChords=true&stage=advanced&favourites=true')).toEqual({
+    expect(await searchAt('/songs?q=душа&key=Em&stage=advanced&favourites=true')).toEqual({
       q: 'душа',
-      withChords: true,
       stage: 'advanced',
-      known: '',
+      key: 'Em',
       favourites: true,
     })
     expect(await searchAt('/songs/folders/hymns?q=душа')).toEqual({ ...SONGS_DEFAULTS, q: 'душа' })
@@ -126,11 +125,12 @@ describe('search params', () => {
     expect(await searchAt('/check?of=scale:blues')).toEqual({ of: 'scale:blues' })
   })
 
-  it('read the chords known each once, in ASCII and one order, a bass and a stray word left out (ADR 0103)', async () => {
-    expect(await searchAt(`/songs?known=${encodeURIComponent('G.B♭.H.C/E.G/B')}`)).toEqual({
+  it('read a song key as written, sharps and flats in the URL’s spelling (ADR 0106)', async () => {
+    expect(await searchAt(`/songs?key=${encodeURIComponent('F♯m')}`)).toEqual({
       ...SONGS_DEFAULTS,
-      known: 'Bb.C.G',
+      key: 'F#m',
     })
+    expect(await searchAt('/songs?key=Gb')).toEqual({ ...SONGS_DEFAULTS, key: 'Gb' })
   })
 
   it('drop a Reading notes range end that is off the piano or no MIDI key', async () => {
@@ -167,9 +167,7 @@ describe('search params', () => {
     expect(
       await searchAt('/practice/scales?kind=ionian&tempo=10&chords=9&step=chords:tri'),
     ).toEqual(SCALES_DEFAULTS)
-    expect(await searchAt('/songs?favourites=yes&stage=expert&withChords=1')).toEqual(
-      SONGS_DEFAULTS,
-    )
+    expect(await searchAt('/songs?favourites=yes&stage=expert&key=H')).toEqual(SONGS_DEFAULTS)
   })
 
   it('ignore an old link’s fingers: the playing hand’s stand under the keys', async () => {

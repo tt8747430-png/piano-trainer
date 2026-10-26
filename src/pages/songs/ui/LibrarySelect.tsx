@@ -21,13 +21,13 @@ export function LibrarySelect({ page }: { page: LibraryPage }) {
   const { t } = useTranslation('songs')
   const nameOf = useFolderName()
   const { view, select, sortable } = page
-  const folders = new Map(view.folders.map((folder) => [folder.id, folder]))
+  const folders = new Map(view.folders.map((each) => [each.folder.id, each]))
   const entries = new Map(
     view.groups.flatMap((group) => group.entries.map((entry) => [entry.id, entry] as const)),
   )
   const folderName = (id: string) => {
-    const folder = folders.get(id as never)
-    return folder ? nameOf(folder) : ''
+    const each = folders.get(id as never)
+    return each ? nameOf(each.folder) : ''
   }
   const songName = (id: PieceId) => page.titleOf(id)
   return (
@@ -35,12 +35,12 @@ export function LibrarySelect({ page }: { page: LibraryPage }) {
       {view.folders.length > 0 ? (
         <SortableRows
           label={t('folder.list')}
-          ids={view.folders.map((folder) => folder.id)}
+          ids={view.folders.map((each) => each.folder.id)}
           nameOf={folderName}
           onMove={page.orderFolders}
           row={(id) => {
-            const folder = folders.get(id)
-            return folder ? (
+            const each = folders.get(id)
+            return each ? (
               <SelectRow
                 key={id}
                 id={id}
@@ -49,15 +49,15 @@ export function LibrarySelect({ page }: { page: LibraryPage }) {
                 onToggle={() => select.toggle(folderKey(id))}
                 sortable={sortable}
               >
-                <FolderFace folder={folder} />
+                <FolderFace folder={each.folder} holds={each} />
               </SelectRow>
             ) : null
           }}
           inHand={(id) => {
-            const folder = folders.get(id)
-            return folder ? (
+            const each = folders.get(id)
+            return each ? (
               <RowInHand checked={select.chosen.has(folderKey(id))}>
-                <FolderFace folder={folder} />
+                <FolderFace folder={each.folder} holds={each} />
               </RowInHand>
             ) : null
           }}

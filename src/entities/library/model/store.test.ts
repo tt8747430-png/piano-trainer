@@ -12,6 +12,7 @@ const restored = (state: unknown, version = LIBRARY_VERSION) => {
 
 const SUNDAY = {
   id: 'folder-1',
+  parent: null,
   name: 'Sunday',
   picture: 'church',
   paint: 'grass',
@@ -19,27 +20,47 @@ const SUNDAY = {
 } as const
 
 describe('createLibraryStore', () => {
-  it('starts holding nothing the learner changed, saved as pt-library version 2', () => {
+  it('starts holding nothing the learner changed, saved as pt-library version 3', () => {
     const storage = createMemoryStorage()
     const store = createLibraryStore({ storage, otherTabs: new EventTarget() })
     expect(store.getState()).toEqual(INITIAL_LIBRARY)
     store.setState({ favourites: ['bz5'] })
     expect(JSON.parse(storage.getItem('pt-library') ?? 'null')).toEqual({
       state: { ...INITIAL_LIBRARY, favourites: ['bz5'] },
-      version: 2,
+      version: 3,
     })
   })
 
   it('restores what was saved', () => {
     const saved = {
-      folders: [SUNDAY, { id: 'hymns', picture: 'star', paint: 'sky', songs: ['h1'] }],
+      folders: [
+        SUNDAY,
+        { id: 'hymns', parent: 'folder-1', picture: 'star', paint: 'sky', songs: ['h1'] },
+      ],
       home: ['my-1'],
       favourites: ['silent'],
       archive: [
         { kind: 'song', id: 'my-2', from: { folder: 'folder-1', index: 1 } },
         {
           kind: 'folder',
-          folder: { id: 'gorshkov', name: 'Mine', picture: 'mic', paint: 'sand', songs: [] },
+          folder: {
+            id: 'gorshkov',
+            parent: 'hymns',
+            name: 'Mine',
+            picture: 'mic',
+            paint: 'sand',
+            songs: [],
+          },
+          subfolders: [
+            {
+              id: 'folder-3',
+              parent: 'gorshkov',
+              name: 'Inner',
+              picture: 'star',
+              paint: 'sky',
+              songs: ['my-4'],
+            },
+          ],
           index: 2,
         },
       ],
@@ -49,9 +70,25 @@ describe('createLibraryStore', () => {
     expect(restored(saved)).toEqual(saved)
   })
 
-  it('reads a save of version 1 (the setlists) as the initial state', () => {
+  it('reads a save of another version (one level of folders) as the initial state', () => {
     const setlists = [{ id: 'set-1', name: 'Sunday', pieces: ['bz5'] }]
     expect(restored({ favourites: ['bz5'], setlists, nextSetlist: 2 }, 1)).toEqual(INITIAL_LIBRARY)
+    expect(restored({ folders: [SUNDAY], favourites: ['bz5'] }, 2)).toEqual(INITIAL_LIBRARY)
+  })
+
+  it('stands at Home a folder whose place does not read or is itself', () => {
+    const state = restored({
+      folders: [
+        { ...SUNDAY, parent: 7 },
+        { id: 'folder-2', name: 'Self', parent: 'folder-2', songs: [] },
+        { id: 'hymns', parent: 'folder-1', songs: [] },
+      ],
+    })
+    expect(state.folders.map((folder) => [folder.id, folder.parent])).toEqual([
+      ['folder-1', null],
+      ['folder-2', null],
+      ['hymns', 'folder-1'],
+    ])
   })
 
   it('keeps each song once across the folders, Home and the archive', () => {
@@ -83,7 +120,7 @@ describe('createLibraryStore', () => {
     })
     expect(state.folders).toEqual([
       { ...SUNDAY, picture: 'music', paint: 'sand' },
-      { id: 'hymns', picture: 'church', paint: 'grass', songs: ['h2'] },
+      { id: 'hymns', parent: null, picture: 'church', paint: 'grass', songs: ['h2'] },
     ])
     expect(state.archive).toEqual([])
   })
@@ -114,7 +151,7 @@ describe('createLibraryStore', () => {
     const store = createLibraryStore({ storage, otherTabs })
     storage.setItem(
       LIBRARY_STORAGE_KEY,
-      JSON.stringify({ state: { ...INITIAL_LIBRARY, favourites: ['silent'] }, version: 2 }),
+      JSON.stringify({ state: { ...INITIAL_LIBRARY, favourites: ['silent'] }, version: 3 }),
     )
     otherTabs.dispatchEvent(
       new StorageEvent('storage', {

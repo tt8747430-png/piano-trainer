@@ -49,7 +49,7 @@ export function MoveInSheet({
             className="w-full"
             disabled={ticked.size === 0}
             onClick={() => {
-              acts.move([...ticked], folder.id)
+              acts.move({ songs: [...ticked], folders: [] }, folder.id)
               setTicked(new Set())
               onOpenChange(false)
             }}

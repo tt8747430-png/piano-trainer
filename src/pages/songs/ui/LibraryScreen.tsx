@@ -48,7 +48,7 @@ export function LibraryScreen({
       {page.select.on ? (
         <SelectionBar page={page} />
       ) : (
-        <NewActions page={page} inFolder={folder !== null} />
+        <NewActions page={page} folder={folder?.id ?? null} />
       )}
       <LibraryDialogs page={page} folder={folder} />
     </div>

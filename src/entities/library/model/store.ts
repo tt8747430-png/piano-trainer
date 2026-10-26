@@ -21,14 +21,14 @@ import {
 } from './types'
 
 export const LIBRARY_STORAGE_KEY = 'pt-library'
-export const LIBRARY_VERSION = 2
+export const LIBRARY_VERSION = 3
 
 /**
  * The learner's library (ADR 0106), only what they changed: read over the catalog
  * (`arrangeLibrary`), what it does not hold stands where the catalog puts it.
  */
 export interface LibraryState {
-  /** The folders in the library, in Home's order, each with its songs in order. */
+  /** The folders in the library, each saying the folder it stands in, those of one place in order. */
   readonly folders: readonly SavedFolder[]
   /** The songs at Home, after the folders, in order. */
   readonly home: readonly PieceId[]
@@ -78,15 +78,20 @@ const songsOf = (saved: unknown, taken: Set<PieceId>): PieceId[] =>
     .filter((id): id is PieceId => isPieceIdText(id) && !taken.has(id) && Boolean(taken.add(id)))
     .slice(0, MOST_PIECES)
 
-/** A saved folder that reads: its id, its look (its default where it does not read), its name, its songs. */
+/**
+ * A saved folder that reads: its id, the folder it stands in (Home where none reads, or it names
+ * itself), its look (its default where it does not read), its name, its songs.
+ */
 function folderOf(saved: unknown, taken: Set<PieceId>): SavedFolder | null {
   if (!isRecord(saved) || !isFolderId(saved.id)) return null
+  const parent = isFolderId(saved.parent) && saved.parent !== saved.id ? saved.parent : null
   const look = isSongCollectionId(saved.id) ? COLLECTION_LOOKS[saved.id] : OWN_LOOK
   const name = typeof saved.name === 'string' ? folderName(saved.name) : null
   // An own folder needs its name; a built-in one without one says its collection's.
   if (!name && isOwnFolderId(saved.id)) return null
   return {
     id: saved.id,
+    parent,
     ...(name ? { name } : {}),
     picture: isPicture(saved.picture) ? saved.picture : look.picture,
     paint: isPaint(saved.paint) ? saved.paint : look.paint,
@@ -107,7 +112,7 @@ function sanitize(persisted: unknown): LibraryState {
   const saved = savedObject<LibraryState>(persisted)
   const songs = new Set<PieceId>()
   const folderIds = new Set<FolderId>()
-  // Each folder once, in the library or in the archive, as many as the library keeps.
+  // Each folder once, in the library or in the archive (under another archived), as many as are kept.
   const once = (folder: SavedFolder | null): folder is SavedFolder =>
     folder !== null && !folderIds.has(folder.id) && folderIds.size < MOST_FOLDERS
       ? Boolean(folderIds.add(folder.id))
@@ -124,7 +129,11 @@ function sanitize(persisted: unknown): LibraryState {
         return id ? [{ kind: 'song', id, from: placeOf(value.from) }] : []
       }
       const folder = value.kind === 'folder' ? folderOf(value.folder, songs) : null
-      return once(folder) ? [{ kind: 'folder', folder, index: indexOf(value.index) }] : []
+      if (!once(folder)) return []
+      const subfolders = (Array.isArray(value.subfolders) ? value.subfolders : [])
+        .map((each) => folderOf(each, songs))
+        .filter(once)
+      return [{ kind: 'folder', folder, subfolders, index: indexOf(value.index) }]
     },
   )
   // Past every own folder read: none is given again.

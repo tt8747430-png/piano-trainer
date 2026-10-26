@@ -40,13 +40,20 @@ export function ArchivedRow({
   const nameOf = useFolderName()
   const locale = useLocale()
   const song = entry.kind === 'song' ? repertoire.entry(entry.id) : undefined
-  const name = entry.kind === 'folder' ? nameOf(entry.folder) : (song ? entryTitles(song, locale).primary : '')
+  const name =
+    entry.kind === 'folder' ? nameOf(entry.folder) : song ? entryTitles(song, locale).primary : ''
   if (entry.kind === 'song' && !song) return null
   return (
     <li className="card flex min-w-0 items-center gap-1 pr-2">
       {entry.kind === 'folder' ? (
         <div className="flex min-h-16 min-w-0 flex-1 items-center gap-3 py-2 pl-2">
-          <FolderFace folder={entry.folder} />
+          <FolderFace
+            folder={entry.folder}
+            holds={{
+              folders: entry.subfolders.filter((each) => each.parent === entry.folder.id).length,
+              songs: entry.folder.songs.length,
+            }}
+          />
         </div>
       ) : song ? (
         <SongFace entry={song} />

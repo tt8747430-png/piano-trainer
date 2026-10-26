@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
   arrangeLibrary,
+  childFolders,
   createLibraryStore,
+  type FolderId,
   type LibraryCatalog,
   type LibraryStore,
 } from '@/entities/library'
@@ -18,7 +20,7 @@ import {
   deleteOwnSongs,
   editFolder,
   makeFolder,
-  moveSongs,
+  moveTo,
   orderFolders,
   orderSongs,
   restoreAll,
@@ -49,8 +51,22 @@ const shelves = (store: LibraryStore, catalog = CATALOG): Record<string, readonl
 }
 const archived = (store: LibraryStore, catalog = CATALOG) =>
   layout(store, catalog).archive.map((entry) =>
-    entry.kind === 'song' ? entry.id : `${entry.folder.id}[${entry.folder.songs.join(' ')}]`,
+    entry.kind === 'song'
+      ? entry.id
+      : [entry.folder, ...entry.subfolders]
+          .map((folder) => `${folder.id}[${folder.songs.join(' ')}]`)
+          .join(' > '),
   )
+/** Each folder by its id, where it stands, from Home down in each place's order: the tree at a glance. */
+const tree = (store: LibraryStore, catalog = CATALOG) => {
+  const { folders } = layout(store, catalog)
+  const walk = (parent: FolderId | null): string[] =>
+    childFolders(folders, parent).flatMap((folder) => [
+      `${parent ?? 'home'}/${folder.id}`,
+      ...walk(folder.id),
+    ])
+  return walk(null)
+}
 
 describe('favourites', () => {
   it('toggles a song, the newest first, and sets several at once', () => {
@@ -70,7 +86,7 @@ describe('favourites', () => {
 describe('moveSongs', () => {
   it('moves songs to the end of a folder or of Home, and its Undo puts each back where it stood', () => {
     const store = fresh()
-    const moved = moveSongs(store, CATALOG, ['a2', 'my-1', 'h2'], 'hymns')
+    const moved = moveTo(store, CATALOG, { songs: ['a2', 'my-1', 'h2'], folders: [] }, 'hymns')
     expect(shelves(store)).toEqual({
       'learning-songs': ['a1', 'a3'],
       hymns: ['h1', 'h2', 'a2', 'my-1'],
@@ -86,9 +102,10 @@ describe('moveSongs', () => {
 
   it('moves to Home, and says nothing of a song already where it goes', () => {
     const store = fresh()
-    expect(moveSongs(store, CATALOG, ['a3', 'my-2'], null)).toEqual([
-      { id: 'a3', from: { folder: 'learning-songs', index: 2 } },
-    ])
+    expect(moveTo(store, CATALOG, { songs: ['a3', 'my-2'], folders: [] }, null)).toEqual({
+      songs: [{ id: 'a3', from: { folder: 'learning-songs', index: 2 } }],
+      folders: [],
+    })
     expect(shelves(store).home).toEqual(['my-1', 'my-2', 'a3'])
   })
 })
@@ -169,12 +186,13 @@ describe('the archive', () => {
 describe('folders', () => {
   it('makes an own folder at Home, last, with the songs moved in, its id never given twice', () => {
     const store = fresh()
-    expect(makeFolder(store, CATALOG, { name: '  Sunday ', ...LOOK }, ['a1', 'my-2'])).toBe(
-      'folder-1',
-    )
+    expect(
+      makeFolder(store, CATALOG, { name: '  Sunday ', ...LOOK }, { songs: ['a1', 'my-2'] }),
+    ).toBe('folder-1')
     expect(makeFolder(store, CATALOG, { name: '   ', ...LOOK })).toBeNull()
     expect(layout(store).folders.at(-1)).toEqual({
       id: 'folder-1',
+      parent: null,
       name: 'Sunday',
       ...LOOK,
       builtIn: false,
@@ -230,7 +248,14 @@ describe('deleting', () => {
     })
     const catalog = catalogOf(pieces)
     toggleFavourite(library, mine)
-    const folder = makeFolder(library, catalog, { name: 'Sunday', ...LOOK }, ['h2', mine, 'a1'])
+    const folder = makeFolder(
+      library,
+      catalog,
+      { name: 'Sunday', ...LOOK },
+      {
+        songs: ['h2', mine, 'a1'],
+      },
+    )
     deleteFolder({ library, pieces, takes }, catalog, folder ?? 'folder-0')
     expect(pieces.getState().songs.map((each) => each.id)).toEqual([kept])
     expect(takes.getState().takes).toEqual([])
@@ -255,7 +280,7 @@ describe('deleting', () => {
     const { library, pieces, takes, song } = stores()
     const mine = song('Mine')
     const catalog = catalogOf(pieces)
-    moveSongs(library, catalog, [mine], 'hymns')
+    moveTo(library, catalog, { songs: [mine], folders: [] }, 'hymns')
     deleteFolder({ library, pieces, takes }, catalog, 'hymns')
     expect(pieces.getState().songs).toEqual([])
     const after = catalogOf(pieces)
@@ -270,7 +295,8 @@ describe('deleting', () => {
 
   it('deletes an own folder from the archive, its app’s songs staying there', () => {
     const { library, pieces, takes } = stores()
-    const folder = makeFolder(library, CATALOG, { name: 'Sunday', ...LOOK }, ['h1']) ?? 'folder-0'
+    const folder =
+      makeFolder(library, CATALOG, { name: 'Sunday', ...LOOK }, { songs: ['h1'] }) ?? 'folder-0'
     archiveSongs(library, CATALOG, ['a2'])
     archiveFolder(library, CATALOG, folder)
     deleteFolder({ library, pieces, takes }, CATALOG, folder)
@@ -287,5 +313,99 @@ describe('deleting', () => {
     const after = catalogOf(pieces)
     expect(archived(library, after)).toEqual([])
     expect(shelves(library, after)['learning-songs']).toEqual(['a1', 'a2', 'a3'])
+  })
+})
+
+describe('folders in folders', () => {
+  /** Sunday, at Home, holds Advent, which holds Hymns (moved in), and Advent holds a2. */
+  const nested = () => {
+    const store = fresh()
+    const sunday = makeFolder(store, CATALOG, { name: 'Sunday', ...LOOK }) ?? 'folder-0'
+    const advent =
+      makeFolder(store, CATALOG, { name: 'Advent', ...LOOK }, { parent: sunday, songs: ['a2'] }) ??
+      'folder-0'
+    moveTo(store, CATALOG, { songs: [], folders: ['hymns'] }, advent)
+    return { store, sunday, advent }
+  }
+
+  it('makes a folder in a folder, and moves a folder into another, its songs with it', () => {
+    const { store } = nested()
+    expect(tree(store)).toEqual([
+      'home/learning-songs',
+      'home/folder-1',
+      'folder-1/folder-2',
+      'folder-2/hymns',
+    ])
+    expect(shelves(store)).toMatchObject({ 'folder-2': ['a2'], hymns: ['h1', 'h2'] })
+  })
+
+  it('moves no folder into itself or a folder under it, and its Undo puts each back', () => {
+    const { store, sunday, advent } = nested()
+    expect(moveTo(store, CATALOG, { songs: [], folders: [sunday] }, advent).folders).toEqual([])
+    const moves = moveTo(store, CATALOG, { songs: ['a1'], folders: [advent, 'hymns'] }, null)
+    // Hymns moves with Advent, under it.
+    expect(moves.folders).toEqual([{ id: advent, parent: sunday, index: 0 }])
+    expect(tree(store)).toEqual([
+      'home/learning-songs',
+      'home/folder-1',
+      'home/folder-2',
+      'folder-2/hymns',
+    ])
+    undoMove(store, CATALOG, moves)
+    expect(tree(store)).toEqual([
+      'home/learning-songs',
+      'home/folder-1',
+      'folder-1/folder-2',
+      'folder-2/hymns',
+    ])
+    expect(shelves(store)['learning-songs']).toEqual(['a1', 'a3'])
+  })
+
+  it('archives a folder with every folder under it, and restores it in its folder, Undo exactly', () => {
+    const { store, sunday, advent } = nested()
+    archiveFolder(store, CATALOG, advent)
+    expect(archived(store)).toEqual(['folder-2[a2] > hymns[h1 h2]'])
+    expect(tree(store)).toEqual(['home/learning-songs', 'home/folder-1'])
+    restoreFolder(store, CATALOG, advent)
+    expect(tree(store)).toEqual([
+      'home/learning-songs',
+      'home/folder-1',
+      'folder-1/folder-2',
+      'folder-2/hymns',
+    ])
+    // Its folder archived after it: Restore brings it to Home.
+    archiveFolder(store, CATALOG, advent)
+    archiveFolder(store, CATALOG, sunday)
+    restoreFolder(store, CATALOG, advent)
+    expect(tree(store)).toEqual(['home/learning-songs', 'home/folder-2', 'folder-2/hymns'])
+    // A song archived with it comes out of it alone.
+    archiveFolder(store, CATALOG, advent)
+    restoreSongs(store, CATALOG, ['h1'])
+    expect(shelves(store).home).toEqual(['my-1', 'my-2', 'h1'])
+  })
+
+  it('orders the folders of one place, the others keeping theirs', () => {
+    const { store, sunday } = nested()
+    const third = makeFolder(store, CATALOG, { name: 'Third', ...LOOK }, { parent: sunday })
+    orderFolders(store, CATALOG, [third ?? 'folder-0', 'folder-2'])
+    expect(tree(store)).toEqual([
+      'home/learning-songs',
+      'home/folder-1',
+      'folder-1/folder-3',
+      'folder-1/folder-2',
+      'folder-2/hymns',
+    ])
+  })
+
+  it('deletes a folder with every folder under it, each by its rule', () => {
+    const { store, sunday } = nested()
+    const pieces = createPiecesStore(saving())
+    const takes = createTakesStore(saving())
+    deleteFolder({ library: store, pieces, takes }, CATALOG, sunday)
+    expect(tree(store)).toEqual(['home/learning-songs'])
+    // Advent's app song to the archive on its own, Hymns whole.
+    expect(archived(store)).toEqual(['a2', 'hymns[h1 h2]'])
+    restoreFolder(store, CATALOG, 'hymns')
+    expect(tree(store)).toEqual(['home/learning-songs', 'home/hymns'])
   })
 })

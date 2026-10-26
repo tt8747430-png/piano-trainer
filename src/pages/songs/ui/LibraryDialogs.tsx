@@ -23,7 +23,7 @@ export function LibraryDialogs({
   return (
     <>
       <MoveSheet
-        songs={pending?.kind === 'move' ? pending.songs : null}
+        moving={pending?.kind === 'move' ? pending.moving : null}
         what={pending?.kind === 'move' ? pending.what : ''}
         onOpenChange={(open) => {
           if (open) return

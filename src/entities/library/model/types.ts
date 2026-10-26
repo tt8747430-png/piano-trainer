@@ -40,9 +40,14 @@ export interface FolderLook {
   readonly paint: FolderPaint
 }
 
-/** A folder as saved: its look, the name the learner gave it (none: a collection's own), its songs in order. */
+/**
+ * A folder as saved: the folder it stands in (`null`: Home; ADR 0106's folders nest, to any depth),
+ * its look, the name the learner gave it (none: a collection's own), its songs in order. Folders in
+ * one place stand in the order the store lists them.
+ */
 export interface SavedFolder extends FolderLook {
   readonly id: FolderId
+  readonly parent: FolderId | null
   readonly name?: string
   readonly songs: readonly PieceId[]
 }
@@ -53,13 +58,22 @@ export interface SongPlace {
   readonly index: number
 }
 
-/** What the archive holds (ADR 0106, Mindscape's ADR 0003): a song, or a folder with its songs. */
+/**
+ * What the archive holds (ADR 0106, Mindscape's ADR 0003): a song, or a folder with its songs and
+ * every folder under it (`subfolders`, each saying the one it stands in); the folder's `parent` and
+ * `index` say where it stood among the folders there.
+ */
 export type ArchiveEntry =
   | { readonly kind: 'song'; readonly id: PieceId; readonly from: SongPlace }
-  | { readonly kind: 'folder'; readonly folder: SavedFolder; readonly index: number }
+  | {
+      readonly kind: 'folder'
+      readonly folder: SavedFolder
+      readonly subfolders: readonly SavedFolder[]
+      readonly index: number
+    }
 
-/** How the library's songs are listed: as the learner dragged them, by name, or played last first. */
-export const LIBRARY_SORTS = ['manual', 'name', 'recent'] as const
+/** How the library's songs are listed: as the learner dragged them, by name, played last first, or by key. */
+export const LIBRARY_SORTS = ['manual', 'name', 'recent', 'key'] as const
 export type LibrarySort = (typeof LIBRARY_SORTS)[number]
 
 /** The longest name a folder takes. */
