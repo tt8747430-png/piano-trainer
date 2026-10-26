@@ -8,12 +8,11 @@ import { stepIdOf, type StepId } from '@/entities/step'
 import { useFold } from '@/features/fold-section'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn, IN_PLACE } from '@/shared/lib'
-import { FoldBody } from '@/shared/ui'
+import { FoldBody, ProgressBar } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
 import { journeyProgress } from '../model/progress'
 import { centreOf, columnOf } from '../model/zigzag'
 import { JourneyNode } from './JourneyNode'
-import { LearnedBar } from './LearnedMeter'
 
 /** The dashed path from one node down to the next, across the map's three columns. */
 function Path({ from, to }: { from: 0 | 1 | 2; to: 0 | 1 | 2 }) {
@@ -78,7 +77,7 @@ function JourneyTabs({ shown }: { shown: Journey }) {
                     {t('journey.steps', { learned: progress.done, total: progress.total })}
                   </span>
                 </span>
-                <LearnedBar progress={progress} />
+                <ProgressBar done={progress.done} total={progress.total} />
               </Link>
             </li>
           )
