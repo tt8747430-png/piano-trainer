@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { entryTitles } from './titles'
+import { entryTitles, entryWords } from './titles'
 
 const bz5 = { title: 'Мир, душа, храни', titleEn: 'Still, my soul, be still' }
 const silent = { title: 'Silent Night', titleRu: 'Тихая ночь' }
@@ -31,5 +31,24 @@ describe('entryTitles', () => {
     const study = { kind: 'study' as const, title: 'Урок 3: C – Dm', titleEn: 'Lesson 3: C – Dm' }
     expect(entryTitles(study, 'en')).toEqual({ primary: 'Lesson 3: C – Dm' })
     expect(entryTitles(study, 'ru')).toEqual({ primary: 'Урок 3: C – Dm' })
+  })
+})
+
+describe('entryWords', () => {
+  it('finds an entry by every title and every name credited', () => {
+    const credited = {
+      ...bz5,
+      id: 'bz5',
+      kind: 'listing',
+      key: 'G',
+      meter: '4/4',
+      credits: [{ role: 'music', names: 'Keith Getty' }, { role: 'unknown' }],
+    } as const
+    expect(entryWords(credited)).toEqual([
+      'Мир, душа, храни',
+      'Still, my soul, be still',
+      '',
+      'Keith Getty',
+    ])
   })
 })

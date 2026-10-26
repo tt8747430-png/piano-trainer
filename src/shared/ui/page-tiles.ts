@@ -9,6 +9,7 @@ import {
   Layers,
   ListChecks,
   ListMusic,
+  ListOrdered,
   ScanSearch,
   Ruler,
   type LucideIcon,
@@ -39,4 +40,6 @@ export const PAGE_TILES = {
   chordFinder: { icon: ScanSearch, paint: 'sky' },
   exercises: { icon: Dumbbell, paint: 'sand' },
   quiz: { icon: ListChecks, paint: 'lilac' },
+  // A setlist of the learner's library (ADR 0103): songs, in their order.
+  setlist: { icon: ListOrdered, paint: 'yellow' },
 } as const satisfies Readonly<Record<string, Tile>>

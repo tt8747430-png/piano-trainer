@@ -1,7 +1,16 @@
 import { describe, expect, it } from 'vitest'
 import { isOneOf } from './is-one-of'
 import { midi, note } from './music'
-import { keyListParam, readKeyList, readNote, readText, valueOr, wholeIn } from './search-params'
+import {
+  chordListParam,
+  keyListParam,
+  readChordList,
+  readKeyList,
+  readNote,
+  readText,
+  valueOr,
+  wholeIn,
+} from './search-params'
 
 const isMode = isOneOf(['listen', 'step', 'wait'] as const)
 
@@ -62,5 +71,33 @@ describe('readKeyList', () => {
   it('writes them back the same way', () => {
     expect(keyListParam([midi(67), midi(60), midi(64)])).toBe('60-64-67')
     expect(keyListParam([])).toBe('')
+  })
+})
+
+describe('readChordList', () => {
+  it('reads chord symbols as they are written, each once, a bass left out', () => {
+    expect(readChordList('C.G.Bb.F#m7b5.Am7.C/E.G')).toEqual(['C', 'G', 'B♭', 'F#m7♭5', 'Am7'])
+  })
+
+  it('reads none from anything else, and leaves out what is not a chord', () => {
+    expect(readChordList(undefined)).toEqual([])
+    expect(readChordList(7)).toEqual([])
+    expect(readChordList('C.H.zz..G')).toEqual(['C', 'G'])
+  })
+
+  it('reads at most a hundred', () => {
+    const roots = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C#', 'Eb', 'F#', 'Ab', 'Bb']
+    const kinds = ['', 'm', '7', 'm7', 'Maj7', 'sus4', 'sus2', '6', 'm6', '9', 'dim']
+    const many = roots.flatMap((root) => kinds.map((kind) => root + kind))
+    expect(many).toHaveLength(132)
+    expect(readChordList(many.join('.'))).toHaveLength(100)
+  })
+})
+
+describe('chordListParam', () => {
+  it('writes chords as a URL holds them, in ASCII and in one order, and reads back', () => {
+    const param = chordListParam(['G', 'B♭', 'F#m7♭5', 'C'])
+    expect(param).toBe('Bb.C.F#m7b5.G')
+    expect(readChordList(param)).toEqual(['B♭', 'C', 'F#m7♭5', 'G'])
   })
 })

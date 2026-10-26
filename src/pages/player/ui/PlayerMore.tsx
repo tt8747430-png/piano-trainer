@@ -1,15 +1,18 @@
 import { Ellipsis, FileMusic } from 'lucide-react'
+import { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffTitle } from '@/entities/piece'
 import { ActionMenu, type MenuAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { exportMidi, type PlayedMusic } from '../model/export-midi'
+import { MoreActions } from './more-actions'
 
 /**
- * The bar's More (ADR 0099), after the Setup, in the song page's More's look: a piece's Song
- * information (`info`), Export to MIDI (the music as the Player plays it now, at the tempo chosen,
- * saved under its title, each part's track named as the screen names it) and an own song's Share
- * (`share`). A walk, a progression, a chromatic walk or an exercise has Export to MIDI alone.
+ * The bar's More (ADR 0099), after the Setup, in the song page's More's look: a piece's place in the
+ * library (`MoreActions`, ADR 0103: Add to favourites, Add to setlist), its Song information
+ * (`info`), Export to MIDI (the music as the Player plays it now, at the tempo chosen, saved under its
+ * title, each part's track named as the screen names it) and an own song's Share (`share`). A walk, a
+ * progression, a chromatic walk or an exercise has Export to MIDI alone.
  */
 export function PlayerMore({
   music,
@@ -24,6 +27,7 @@ export function PlayerMore({
   share?: MenuAction | undefined
 }) {
   const { t } = useTranslation(['player', 'common'])
+  const library = use(MoreActions)
   const staffTitle = useStaffTitle()
   const names = {
     staff: (place: number) => staffTitle(staves[place], place),
@@ -31,6 +35,7 @@ export function PlayerMore({
     lh: t('common:hands.lh'),
   }
   const actions: readonly MenuAction[] = [
+    ...library,
     ...(info ? [info] : []),
     {
       key: 'midi',

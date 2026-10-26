@@ -1,6 +1,7 @@
 import { EXERCISES, type ExerciseId } from '@/entities/exercise'
 import { COURSES } from '@/entities/course'
 import { LESSONS, lessonPlace } from '@/entities/lesson'
+import type { SetlistId } from '@/entities/library'
 import type { BookPattern, PatternRef } from '@/entities/pattern'
 import { entryTitles, type Entry } from '@/entities/piece'
 import {
@@ -37,6 +38,7 @@ import { typedSearch } from '@/widgets/progression-explorer'
 export const INDEX_KINDS = [
   'pages',
   'songs',
+  'setlists',
   'lessons',
   'courses',
   'chords',
@@ -52,6 +54,7 @@ type IndexKind = (typeof INDEX_KINDS)[number]
 export type IndexTarget =
   | { readonly opens: 'page'; readonly page: PracticePageId }
   | { readonly opens: 'piece'; readonly entry: Entry }
+  | { readonly opens: 'setlist'; readonly setlist: SetlistId }
   | { readonly opens: 'lesson'; readonly lesson: string }
   | { readonly opens: 'course'; readonly course: string }
   | { readonly opens: 'course-lesson'; readonly course: string; readonly lesson: string }
@@ -89,6 +92,8 @@ export interface IndexNames {
   readonly scale: (kind: ScaleKind) => string
   readonly trainer: (trainer: TrainerId) => { readonly title: string; readonly about: string }
   readonly key: (key: Key) => string
+  /** How many songs a setlist holds: "3 songs". */
+  readonly songCount: (count: number) => string
 }
 
 /** What the index is projected from, besides the content every learner has. */
@@ -97,6 +102,12 @@ export interface IndexSources {
   readonly names: IndexNames
   /** Every song, study and listing, as the learner has it, and their own songs. */
   readonly pieces: readonly Entry[]
+  /** The learner's setlists (ADR 0103), each with how many of its songs they have. */
+  readonly setlists: readonly {
+    readonly id: SetlistId
+    readonly name: string
+    readonly count: number
+  }[]
   /** Every pattern of the book, the learner's own too. */
   readonly patterns: readonly BookPattern[]
 }
@@ -114,7 +125,13 @@ const named = (text: LocalText, locale: Locale) => ({
  * The index: every named thing the app has, each once (ADR 0044). A projection of the registries the
  * pages themselves read, so a thing added to one is found here with no second list to keep.
  */
-export function indexEntries({ locale, names, pieces, patterns }: IndexSources): IndexEntry[] {
+export function indexEntries({
+  locale,
+  names,
+  pieces,
+  setlists,
+  patterns,
+}: IndexSources): IndexEntry[] {
   return [
     ...PRACTICE_PAGE_IDS.map((page): IndexEntry => {
       const { title, about } = names.page(page)
@@ -138,6 +155,14 @@ export function indexEntries({ locale, names, pieces, patterns }: IndexSources):
         target: { opens: 'piece', entry },
       }
     }),
+    ...setlists.map((setlist): IndexEntry => ({
+      id: `setlists:${setlist.id}`,
+      kind: 'setlists',
+      title: setlist.name,
+      detail: names.songCount(setlist.count),
+      words: [],
+      target: { opens: 'setlist', setlist: setlist.id },
+    })),
     ...LESSONS.map((lesson): IndexEntry => {
       const place = lessonPlace(lesson.id)
       return {

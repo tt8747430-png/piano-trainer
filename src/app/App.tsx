@@ -1,4 +1,5 @@
 import { RouterProvider } from '@tanstack/react-router'
+import { type LibraryStore, LibraryStoreProvider } from '@/entities/library'
 import { type PatternsStore, PatternsStoreProvider } from '@/entities/pattern'
 import { type PiecesStore, PiecesStoreProvider } from '@/entities/piece'
 import { type ProgressStore, ProgressStoreProvider } from '@/entities/progress'
@@ -20,6 +21,7 @@ export function App({
   patternsStore,
   piecesStore,
   takesStore,
+  libraryStore,
   services,
   router,
 }: {
@@ -28,6 +30,7 @@ export function App({
   patternsStore: PatternsStore
   piecesStore: PiecesStore
   takesStore: TakesStore
+  libraryStore: LibraryStore
   services: Services
   router: AppRouter
 }) {
@@ -37,18 +40,20 @@ export function App({
         <PatternsStoreProvider store={patternsStore}>
           <PiecesStoreProvider store={piecesStore}>
             <TakesStoreProvider store={takesStore}>
-              <ServicesProvider services={services}>
-                <LocaleSync />
-                <AudioUnlock />
-                <MidiReconnect />
-                <MidiSync />
-                <TitlesSync />
-                <ThemeProvider>
-                  <ShortcutsProvider>
-                    <RouterProvider router={router} />
-                  </ShortcutsProvider>
-                </ThemeProvider>
-              </ServicesProvider>
+              <LibraryStoreProvider store={libraryStore}>
+                <ServicesProvider services={services}>
+                  <LocaleSync />
+                  <AudioUnlock />
+                  <MidiReconnect />
+                  <MidiSync />
+                  <TitlesSync />
+                  <ThemeProvider>
+                    <ShortcutsProvider>
+                      <RouterProvider router={router} />
+                    </ShortcutsProvider>
+                  </ThemeProvider>
+                </ServicesProvider>
+              </LibraryStoreProvider>
             </TakesStoreProvider>
           </PiecesStoreProvider>
         </PatternsStoreProvider>

@@ -106,6 +106,7 @@ describe('search params', () => {
         collection: 'hymns',
         withChords: true,
         stage: 'advanced',
+        known: '',
       },
     )
     expect(await searchAt('/practice/scales?root=Eb&kind=harmonic&chords=4')).toMatchObject({
@@ -114,6 +115,13 @@ describe('search params', () => {
       chords: 4,
     })
     expect(await searchAt('/check?of=scale:blues')).toEqual({ of: 'scale:blues' })
+  })
+
+  it('read the chords known each once, in ASCII and one order, a bass and a stray word left out (ADR 0103)', async () => {
+    expect(
+      await searchAt(`/songs?collection=favourites&known=${encodeURIComponent('G.B♭.H.C/E.G/B')}`),
+    ).toEqual({ ...SONGS_DEFAULTS, collection: 'favourites', known: 'Bb.C.G' })
+    expect(await searchAt('/songs?collection=setlists')).toMatchObject({ collection: 'setlists' })
   })
 
   it('drop a Reading notes range end that is off the piano or no MIDI key', async () => {

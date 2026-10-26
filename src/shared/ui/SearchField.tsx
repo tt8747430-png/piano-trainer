@@ -10,8 +10,8 @@ import {
 } from './primitives/input-group'
 
 /**
- * A screen's search box, with a clear button while it holds text; `/` puts the cursor in it.
- * It holds what is typed itself: the URL it writes to catches up later, in a transition, and a box
+ * A screen's search box, with a clear button while it holds text; `/` puts the cursor in it (a
+ * sheet's box, of no `screen`, leaves `/` to the screen's own). It holds what is typed itself: the URL it writes to catches up later, in a transition, and a box
  * that showed the URL would drop a key typed meanwhile and move the caret to the end. A value the
  * URL gets from elsewhere (Back, Show all) is shown.
  */
@@ -26,8 +26,8 @@ export function SearchField({
   onChange: (value: string) => void
   /** What it searches, its name and its placeholder: "Search songs". */
   label: string
-  /** The screen it is on, which the shortcuts' sheet lists its key under. */
-  screen: string
+  /** The screen it is on, which the shortcuts' sheet lists its key under; none in a sheet. */
+  screen?: string | undefined
   /** The cursor starts in it, on a screen that is for searching. */
   autoFocus?: boolean
 }) {
@@ -49,7 +49,9 @@ export function SearchField({
     setText(next)
     onChange(next)
   }
-  useShortcuts(screen, [{ label, combo: { key: '/' }, run: () => input.current?.focus() }])
+  useShortcuts(screen ?? '', [{ label, combo: { key: '/' }, run: () => input.current?.focus() }], {
+    enabled: screen !== undefined,
+  })
   return (
     <InputGroup className="h-12 rounded-2xl bg-card">
       <InputGroupAddon>

@@ -2,6 +2,8 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { LIBRARY_STORAGE_KEY, LIBRARY_VERSION } from '@/entities/library'
+import { createMemoryStorage } from '@/shared/lib'
 import { untranslated } from '@/app/testing/untranslated'
 
 const headings = () =>
@@ -147,6 +149,22 @@ describe('Search', () => {
     await screen.findByRole('heading', { level: 1, name: 'Songs' })
     await user.keyboard('{Control>}k{/Control}')
     await waitFor(() => expect(router.state.location.pathname).toBe('/search'))
+  })
+
+  it('finds a setlist of the learner’s by its name, its songs counted, opening its page (ADR 0103)', async () => {
+    const storage = createMemoryStorage()
+    storage.setItem(
+      LIBRARY_STORAGE_KEY,
+      JSON.stringify({
+        state: { setlists: [{ id: 'set-1', name: 'Sunday service', pieces: ['bz5', 'silent'] }] },
+        version: LIBRARY_VERSION,
+      }),
+    )
+    await renderApp('/search?q=sunday', { storage })
+    const setlists = await screen.findByRole('region', { name: 'Setlists' })
+    const row = within(setlists).getByRole('link', { name: /Sunday service/ })
+    expect(row).toHaveAttribute('href', '/songs/setlists/set-1')
+    expect(row).toHaveTextContent('2 songs')
   })
 
   it('reads in Russian, with nothing left in English', async () => {

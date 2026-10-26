@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { piecesIn, selectSetlists, useLibrary } from '@/entities/library'
 import { PATTERN_IDS, usePatternBook } from '@/entities/pattern'
 import { COLLECTIONS, useRepertoire } from '@/entities/piece'
 import { useKeyName, useLocale } from '@/shared/i18n'
@@ -8,7 +9,7 @@ import { indexEntries, type IndexEntry, type IndexNames } from './index-entries'
 
 /** The names the interface gives what content does not name itself, in the learner's language. */
 export function useIndexNames(): IndexNames {
-  const { t } = useTranslation(['music', 'quiz'])
+  const { t } = useTranslation(['music', 'quiz', 'songs'])
   const page = usePageWords()
   const key = useKeyName()
   return useMemo(
@@ -21,19 +22,21 @@ export function useIndexNames(): IndexNames {
         about: t(`quiz:about.${trainer}`),
       }),
       key,
+      songCount: (count) => t('songs:library.songCount', { count }),
     }),
     [t, page, key],
   )
 }
 
 /**
- * The index as this learner has it: every song in their version and their own, every pattern of
- * their book, in their language.
+ * The index as this learner has it: every song in their version and their own, their setlists,
+ * every pattern of their book, in their language.
  */
 export function useIndex(names: IndexNames): IndexEntry[] {
   const locale = useLocale()
   const repertoire = useRepertoire()
   const book = usePatternBook()
+  const setlists = useLibrary(selectSetlists)
   return useMemo(
     () =>
       indexEntries({
@@ -45,8 +48,13 @@ export function useIndex(names: IndexNames): IndexEntry[] {
             collection.entries.map((entry) => repertoire.entry(entry.id) ?? entry),
           ),
         ],
+        setlists: setlists.map((setlist) => ({
+          id: setlist.id,
+          name: setlist.name,
+          count: piecesIn(setlist.pieces, repertoire).length,
+        })),
         patterns: [...book.own, ...PATTERN_IDS.map((id) => book.require(id))],
       }),
-    [locale, names, repertoire, book],
+    [locale, names, repertoire, setlists, book],
   )
 }

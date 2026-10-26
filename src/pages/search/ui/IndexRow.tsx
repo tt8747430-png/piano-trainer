@@ -93,6 +93,14 @@ export function IndexRow({
           }
         />
       )
+    case 'setlist':
+      return (
+        <RowLink
+          {...row}
+          {...PAGE_TILES.setlist}
+          render={<Link to="/songs/setlists/$setlistId" params={{ setlistId: target.setlist }} />}
+        />
+      )
     case 'pattern':
       return (
         <RowLink

@@ -1,7 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { cn } from '@/shared/lib'
-import { PAINT, type Paint } from './paint'
+import type { Paint } from './paint'
+import { TileMark } from './TileMark'
 
 /** A row's tile on its paint's wash: an icon, or the row's number where the rows are a sequence; or none. */
 export type RowTile =
@@ -38,17 +38,11 @@ export function RowFace({
   return (
     <>
       {paint ? (
-        <span
-          data-slot="row-tile"
-          aria-hidden
-          className={cn(
-            'grid size-12 shrink-0 place-items-center rounded-2xl font-display text-xl font-semibold tabular-nums',
-            PAINT[paint].fill,
-            PAINT[paint].ink,
-          )}
-        >
-          {Icon ? <Icon className="size-5" /> : numeral}
-        </span>
+        Icon ? (
+          <TileMark icon={Icon} paint={paint} />
+        ) : numeral === undefined ? null : (
+          <TileMark numeral={numeral} paint={paint} />
+        )
       ) : null}
       <span className="min-w-0 flex-1">
         <span className="line-clamp-2 text-lg leading-snug font-semibold text-pretty">{title}</span>

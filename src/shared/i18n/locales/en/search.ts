@@ -6,6 +6,7 @@ export const search = {
   kinds: {
     pages: 'Practice',
     songs: 'Songs',
+    setlists: 'Setlists',
     lessons: 'Lessons',
     courses: 'Courses',
     chords: 'Chords',

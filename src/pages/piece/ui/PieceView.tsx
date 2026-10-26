@@ -13,6 +13,7 @@ import {
   usePieces,
   type Piece,
 } from '@/entities/piece'
+import { FavouriteButton, useAddToSetlist } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
 import { ShareSaid, useShareSong } from '@/features/share-song'
 import { OPEN_PLAINLY } from '@/shared/lib'
@@ -33,8 +34,8 @@ import { SectionRows } from './SectionRows'
 
 /**
  * A piece with a chart, in one column: Learn the song (ADR 0100). Its bar (Back, the title, then
- * Edit the score, Learned and More: Check these chords, and for the learner's own music Share and
- * its way back, asked first); under the title its byline (what else it is called, Your version, its
+ * Edit the score, Learned, its ♡ (ADR 0103) and More: Add to setlist, Check these chords, and for
+ * the learner's own music Share and its way back, asked first); under the title its byline (what else it is called, Your version, its
  * stage, who wrote it); the learning card, where to go next and its lessons done; its key, time and
  * tempo as cards; its chords as diagrams, each opening its sheet, and its sections, each a row to its
  * page of lessons (a song of one section has that section's lessons here, its chords to learn among
@@ -56,12 +57,14 @@ export function PieceView({ piece }: { piece: Piece }) {
   const more = useRef<HTMLDivElement>(null)
   const step = pieceStepId(piece.id)
   const navigate = useNavigate()
+  const setlist = useAddToSetlist(piece.id)
   const ownMusic = own
     ? ({ kind: 'song', id: own, title } as const)
     : hasVersion
       ? ({ kind: 'version', id: piece.id, title } as const)
       : null
   const actions = [
+    setlist.action,
     // A piece of no chord symbol has none to check (ADR 0094).
     ...(performance.chords.length > 0
       ? [
@@ -111,26 +114,24 @@ export function PieceView({ piece }: { piece: Piece }) {
               />
             )}
             {own ? null : <LearnedButton step={step} round />}
-            {/* More holds nothing for a catalog song of no chord symbol: then it is not there. */}
-            {actions.length > 0 ? (
-              <div ref={more} className="contents">
-                <ActionMenu
-                  label={t('more')}
-                  align="end"
-                  trigger={<Ellipsis aria-hidden />}
-                  render={
-                    <Button
-                      variant="surface"
-                      size="icon"
-                      className="rounded-full"
-                      aria-label={t('more')}
-                      title={t('more')}
-                    />
-                  }
-                  actions={actions}
-                />
-              </div>
-            ) : null}
+            <FavouriteButton piece={piece.id} />
+            <div ref={more} className="contents">
+              <ActionMenu
+                label={t('more')}
+                align="end"
+                trigger={<Ellipsis aria-hidden />}
+                render={
+                  <Button
+                    variant="surface"
+                    size="icon"
+                    className="rounded-full"
+                    aria-label={t('more')}
+                    title={t('more')}
+                  />
+                }
+                actions={actions}
+              />
+            </div>
           </>
         }
       />
@@ -157,6 +158,7 @@ export function PieceView({ piece }: { piece: Piece }) {
       {ownMusic ? (
         <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} returnTo={more} />
       ) : null}
+      {setlist.sheet}
       <FloatingActions>
         <FabLink
           label={t('practise')}

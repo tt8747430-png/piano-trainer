@@ -13,6 +13,7 @@ import { usePageHeading } from './use-page-heading'
  */
 export function ScreenHeader({
   title,
+  heading,
   back,
   actions,
   crowded = false,
@@ -20,6 +21,8 @@ export function ScreenHeader({
 }: {
   /** The screen's name: its large title and the page's. */
   title: string
+  /** What the page puts in the title's place: a name renamed where it is (`EditableTitle`). */
+  heading?: ReactNode
   back?: ReactNode
   actions?: ReactNode
   /**
@@ -32,7 +35,7 @@ export function ScreenHeader({
 }) {
   const { shown, report, hold } = useScreenBar()
   const bar = useRef<HTMLElement>(null)
-  const heading = usePageHeading<HTMLHeadingElement>(title)
+  const pageHeading = usePageHeading<HTMLHeadingElement>(title)
   useEffect(() => {
     const element = bar.current
     if (!element) return
@@ -56,10 +59,10 @@ export function ScreenHeader({
       data-slot="screen-bar"
       data-hidden={shown ? undefined : ''}
       // A control focused holds the bar; the heading, focused as the screen opens, does not.
-      onFocus={(event) => hold(event.target !== heading.ref.current)}
+      onFocus={(event) => hold(event.target !== pageHeading.ref.current)}
       onBlur={(event) =>
         hold(
-          event.relatedTarget !== heading.ref.current &&
+          event.relatedTarget !== pageHeading.ref.current &&
             event.currentTarget.contains(event.relatedTarget),
         )
       }
@@ -71,13 +74,13 @@ export function ScreenHeader({
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 pt-2 pb-4 landscape-phone:pb-2">
         {back ? <div className="print:hidden">{back}</div> : null}
         <h1
-          {...heading}
+          {...pageHeading}
           className={cn(
             'min-w-longest-word flex-[1_1_0%] outline-none text-3xl text-balance wrap-break-word sm:text-4xl lg:text-5xl landscape-phone:text-2xl',
             crowded && 'max-sm:order-last max-sm:line-clamp-2 max-sm:basis-full max-sm:text-start',
           )}
         >
-          {title}
+          {heading ?? title}
         </h1>
         {actions ? (
           <div className="ms-auto flex shrink-0 items-center gap-2 print:hidden">{actions}</div>

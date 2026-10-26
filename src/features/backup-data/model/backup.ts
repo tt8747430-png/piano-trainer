@@ -1,3 +1,4 @@
+import { LIBRARY_STORAGE_KEY, LIBRARY_VERSION } from '@/entities/library'
 import { PATTERNS_STORAGE_KEY, PATTERNS_VERSION } from '@/entities/pattern'
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { PROGRESS_STORAGE_KEY, PROGRESS_VERSION } from '@/entities/progress'
@@ -14,6 +15,7 @@ const STORES = {
   [PATTERNS_STORAGE_KEY]: PATTERNS_VERSION,
   [TAKES_STORAGE_KEY]: TAKES_VERSION,
   [VIEWS_STORAGE_KEY]: VIEWS_VERSION,
+  [LIBRARY_STORAGE_KEY]: LIBRARY_VERSION,
 } as const
 export const SAVE_KEYS = Object.keys(STORES) as (keyof typeof STORES)[]
 

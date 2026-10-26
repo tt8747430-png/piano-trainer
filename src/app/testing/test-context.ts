@@ -1,4 +1,5 @@
 import { createMemoryHistory } from '@tanstack/react-router'
+import { createLibraryStore } from '@/entities/library'
 import { createPatternsStore } from '@/entities/pattern'
 import { createPiecesStore } from '@/entities/piece'
 import { createTakesStore } from '@/entities/take'
@@ -15,6 +16,7 @@ export function testContext(): RouterContext {
     patterns: createPatternsStore(saving),
     pieces: createPiecesStore(saving),
     takes: createTakesStore(saving),
+    library: createLibraryStore(saving),
   }
 }
 

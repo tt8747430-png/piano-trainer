@@ -22,5 +22,6 @@ export function sectionIn(
   )
 }
 export { PiecePage, SectionPage } from '@/pages/piece'
+export { SetlistPage } from '@/pages/setlist'
 export { SharedSongPage } from '@/pages/shared-song'
 export { SongsPage } from '@/pages/songs'

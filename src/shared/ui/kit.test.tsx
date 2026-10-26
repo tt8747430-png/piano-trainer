@@ -21,6 +21,7 @@ import { RatingMark } from './RatingMark'
 import { RoundButton } from './RoundButton'
 import { RoundLink } from './RoundLink'
 import { RowButton } from './RowButton'
+import { RowCheck } from './RowCheck'
 import { RowGroup } from './RowGroup'
 import { RowLink } from './RowLink'
 import { ScreenBarProvider } from './ScreenBarProvider'
@@ -43,6 +44,13 @@ describe('ScreenHeader', () => {
     render(<ScreenHeader title="Learn" actions={<button type="button">Settings</button>} />)
     expect(screen.getByRole('heading', { level: 1, name: 'Learn' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
+  })
+
+  it('puts what its page gives in the title’s place, the page still named by the title', () => {
+    render(<ScreenHeader title="Sunday" heading={<button type="button">Sunday</button>} />)
+    const title = screen.getByRole('heading', { level: 1, name: 'Sunday' })
+    expect(title).toContainElement(screen.getByRole('button', { name: 'Sunday' }))
+    expect(document.title).toMatch(/^Sunday · /)
   })
 
   it('holds a subject’s tabs in the bar, under the title', () => {
@@ -649,6 +657,36 @@ describe('RowButton', () => {
     expect(row.querySelector('[data-slot="row-chevron"]')).not.toBeInTheDocument()
     await userEvent.setup().click(row)
     expect(onClick).toHaveBeenCalledOnce()
+  })
+
+  it('greys a row that cannot act, saying why', () => {
+    render(
+      <RowButton title="New setlist" onClick={() => {}} disabled reason="No room: delete one." />,
+    )
+    const row = screen.getByRole('button', { name: 'New setlist' })
+    expect(row).toBeDisabled()
+    expect(row).toHaveAccessibleDescription('No room: delete one.')
+    expect(row).toHaveAttribute('title', 'No room: delete one.')
+  })
+})
+
+describe('RowCheck', () => {
+  it('is on or off, a tap turning it', async () => {
+    const onCheckedChange = vi.fn()
+    const { rerender } = render(
+      <RowCheck
+        title="Sunday"
+        detail="3 songs"
+        checked={false}
+        onCheckedChange={onCheckedChange}
+      />,
+    )
+    const row = screen.getByRole('checkbox', { name: 'Sunday 3 songs' })
+    expect(row).not.toBeChecked()
+    await userEvent.setup().click(row)
+    expect(onCheckedChange).toHaveBeenCalledWith(true)
+    rerender(<RowCheck title="Sunday" detail="3 songs" checked onCheckedChange={onCheckedChange} />)
+    expect(row).toBeChecked()
   })
 })
 

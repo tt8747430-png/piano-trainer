@@ -70,7 +70,16 @@ export {
   type MidiTrack,
   type TimedMidiEvent,
 } from './standard-midi-file'
-export { keyListParam, readKeyList, readNote, readText, valueOr, wholeIn } from './search-params'
+export {
+  chordListParam,
+  keyListParam,
+  readChordList,
+  readKeyList,
+  readNote,
+  readText,
+  valueOr,
+  wholeIn,
+} from './search-params'
 export { createStoreContext } from './store-context'
 export {
   moveTypingOctave,
@@ -91,6 +100,9 @@ export { toggled } from './toggled'
 export { useScrollMotion } from './use-scroll-motion'
 export { SHORTEST_PRESS_MS, usePresses } from './use-presses'
 export { useViewChange } from './use-view-change'
+export { mergeVisibleOrder } from './order'
+export { nameFrom } from './name-from'
+export { useSortableList, type SortableList } from './use-sortable-list'
 export { morph } from './morph'
 export { longestLine } from './longest-line'
 export { breakLine } from './line-breaks'

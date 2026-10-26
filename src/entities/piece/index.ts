@@ -53,7 +53,7 @@ export {
   type SharedSong,
 } from './model/store'
 export { PiecesStoreProvider, usePieces, usePiecesStoreApi } from './model/context'
-export { repertoire } from './model/repertoire'
+export { repertoire, type Repertoire } from './model/repertoire'
 export { useRepertoire } from './model/use-repertoire'
 export { writeBar } from './model/write-chart'
 export { writeHand } from './model/write-hands'
@@ -75,7 +75,7 @@ export {
   versionableEntry,
 } from './model/selectors'
 export { shelfOf } from './model/shelf'
-export { entryTitles } from './model/titles'
+export { entryTitles, entryWords } from './model/titles'
 export { Credits } from './ui/Credits'
 export { PieceFactCards } from './ui/PieceFactCards'
 export { PieceLink } from './ui/PieceLink'

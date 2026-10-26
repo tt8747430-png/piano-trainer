@@ -25,13 +25,19 @@ const names: IndexNames = {
   scale: (kind) => `scale ${kind}`,
   trainer: (trainer) => ({ title: `trainer ${trainer}`, about: `asks ${trainer}` }),
   key: (key) => `key ${keySymbol(key)}`,
+  songCount: (count) => `${count} songs`,
 }
 const pieces = COLLECTIONS.flatMap((collection) => collection.entries)
 const patterns = PATTERN_IDS.map((id) => BUILT_IN_PATTERNS.require(id))
+const setlists = [
+  { id: 'set-1', name: 'Sunday service', count: 3 },
+  { id: 'set-2', name: 'Warm-up', count: 0 },
+] as const
 const sources = (locale: IndexSources['locale'] = 'en'): IndexSources => ({
   locale,
   names,
   pieces,
+  setlists,
   patterns,
 })
 const all = indexEntries(sources())
@@ -47,6 +53,7 @@ describe('indexEntries', () => {
   it('holds every named thing once: no registry is listed twice or left out', () => {
     expect(ofKind('pages')).toHaveLength(PRACTICE_PAGE_IDS.length)
     expect(ofKind('songs')).toHaveLength(pieces.length)
+    expect(ofKind('setlists')).toHaveLength(setlists.length)
     expect(ofKind('lessons')).toHaveLength(LESSONS.length)
     expect(ofKind('courses')).toHaveLength(
       COURSES.length + COURSES.reduce((sum, course) => sum + course.lessons.length, 0),
@@ -131,6 +138,14 @@ describe('indexEntries', () => {
       kind: 'quiz',
       detail: 'asks gaps',
       target: { opens: 'trainer', trainer: 'gaps' },
+    })
+  })
+
+  it('names a setlist of the learner’s by its name, its songs counted, and opens its page (ADR 0103)', () => {
+    expect(titled('Sunday service')).toMatchObject({
+      kind: 'setlists',
+      detail: '3 songs',
+      target: { opens: 'setlist', setlist: 'set-1' },
     })
   })
 

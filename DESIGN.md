@@ -487,9 +487,9 @@ the View's Keys takes it away.
 
 - **The bar,** one at every size and one row from 320px (ADR 0094, 0099, 0102): ✕ and Practise · Edit at its start;
   MIDI, ⚙ (Setup) and More (…) at its end, each its icon named in a tooltip, 4px apart on a phone held upright. More
-  holds a piece's Song information (a sheet: its chords as diagrams, then its key as played, time and tempo as the
-  song page's cards, its second title and who wrote it), Export to MIDI and an own song's Share. The title is printed
-  on the sheet.
+  holds a piece's Add to favourites and Add to setlist (ADR 0103), its Song information (a sheet: its chords as
+  diagrams, then its key as played, time and tempo as the song page's cards, its second title and who wrote it),
+  Export to MIDI and an own song's Share. The title is printed on the sheet.
 - **The tools row** (ADR 0102, Chordify's toolbar), under the bar at every size, over a hairline: quiet text buttons
   (no fill or line at rest, sand on hover and while open), each its 16px icon in soft ink, then its name in ink (Onest
   600 16px), cut short where the row has no room, 44px tall (40px on a phone on its side). The View comes first,
@@ -522,10 +522,18 @@ nothing on the screen marks it beyond the tile.
 
 How each screen uses its width:
 
-- **Songs:** the collections as tabs (All, Your songs once there are any, then the books); the search, then Stage (a
-  pop-up of only the stages its shelves hold, absent where none does) and With chords (a labelled toggle), under the
-  search on a phone and beside it from 640px; and the songs as row cards in a grid.
-- **Piece** (ADR 0100, Learn the song): one column at every width: its bar (Edit, Learned, More), the learning
+- **Songs:** the collections as tabs (All, then the learner's library, Favourites and Setlists (ADR 0103), then Your
+  songs once there are any, then the books); the search, then Stage (a pop-up of only the stages its shelves hold,
+  absent where none does), With chords (a labelled toggle) and Chords I know (a button counting the chords ticked,
+  its popover their chips in Literata, the most used first), under the search on a phone and beside it from 640px;
+  and the songs as row cards in a grid, each saying how many chords it has. The Setlists tab has the search alone
+  over its setlists' row cards (a name over its songs counted and its first titles), then New setlist, a row named
+  where it stands.
+- **A setlist** (ADR 0103): its bar (Back, its name renamed where it is printed, Add songs and More), the search, and
+  its songs in one column, `max-w-3xl` from 1024px: each a card of its handle (a grip), the song's row face and its
+  Remove (✕); in the hand, the card lifted by a shade over a dashed slot where it lands. Add songs and Add to setlist
+  are sheets of check rows (a ring, an umber check while in).
+- **Piece** (ADR 0100, Learn the song): one column at every width: its bar (Edit, Learned, ♡, More), the learning
   card, its facts as three cards, its chords as diagrams, its sections as rows, Play along and its note; Practise
   floats. Only a chord's sheet sounds and shows keys there. A section's page is the same column.
 - **Learn:** the journeys as tabs over the shown journey's chapters, each folding under its heading, its lessons a
@@ -911,8 +919,9 @@ one keeps its music in the room above the transport.
 
 ### A piece's page: Learn the song
 
-A song's or a study's page (ADR 0100), one column under its screen bar (Back, the title, then Edit, Learned and More:
-Check these chords, an own song's Share, Reset to the original or Delete, asked first): its second title, stage and
+A song's or a study's page (ADR 0100), one column under its screen bar (Back, the title, then Edit, Learned, its ♡
+(ADR 0103: pressed while a favourite, a sand fill and a filled heart) and More: Add to setlist, Check these chords,
+an own song's Share, Reset to the original or Delete, asked first): its second title, stage and
 who wrote it; the **learning card**; Key · Time · Tempo as **fact cards**; **Chords** (Literata 600 24px) over the
 chord summary; **Sections** over its sections as rows in one card, each a row link in its section's paint with a note,
 its name and "15 lessons · 3 done", to its page; **Play along** (a row in its own card, in the song's yellow or the

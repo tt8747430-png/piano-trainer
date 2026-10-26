@@ -29,7 +29,7 @@ export const settings = {
   },
   backup: {
     label: 'Backup',
-    says: 'Your songs, takes, patterns, progress and settings live on this device only. Save them as a file to keep them safe or to move them to another device.',
+    says: 'Your songs, setlists, takes, patterns, progress and settings live on this device only. Save them as a file to keep them safe or to move them to another device.',
     save: 'Save a backup',
     restore: 'Restore from a file',
     notBackup: 'This file is not a Piano Trainer backup.',

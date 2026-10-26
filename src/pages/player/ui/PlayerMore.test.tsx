@@ -84,8 +84,16 @@ function firstTempo(bytes: Uint8Array): number {
 
 describe('the Player’s More (ADR 0099)', () => {
   it.each([
-    ['a song', '/play/bz5', ['Song information', 'Export to MIDI']],
-    ['a study', '/play/ex3', ['Study information', 'Export to MIDI']],
+    [
+      'a song',
+      '/play/bz5',
+      ['Add to favourites', 'Add to setlist', 'Song information', 'Export to MIDI'],
+    ],
+    [
+      'a study',
+      '/play/ex3',
+      ['Add to favourites', 'Add to setlist', 'Study information', 'Export to MIDI'],
+    ],
     ['a walk', '/play/walk?root=D&kind=dorian', ['Export to MIDI']],
     ['a progression', '/play/progression?p=ii-V-I&key=Bb', ['Export to MIDI']],
     ['a chromatic walk', '/play/chromatic?chords=m9&root=G', ['Export to MIDI']],
@@ -99,7 +107,13 @@ describe('the Player’s More (ADR 0099)', () => {
   it('shares an own song alone, saying the link is copied where there is no share sheet', async () => {
     const user = userEvent.setup()
     await renderApp('/play/my-1', { storage: withSong() })
-    expect(await moreActions(user)).toEqual(['Song information', 'Export to MIDI', 'Share'])
+    expect(await moreActions(user)).toEqual([
+      'Add to favourites',
+      'Add to setlist',
+      'Song information',
+      'Export to MIDI',
+      'Share',
+    ])
     await user.click(screen.getByRole('button', { name: 'Share' }))
     await waitFor(() =>
       expect(screen.getByText(/^Link copied\./)).toHaveAttribute('role', 'status'),
@@ -116,6 +130,26 @@ describe('the Player’s More (ADR 0099)', () => {
         sections: MORNING.sections,
       },
     })
+  })
+
+  it('keeps a piece among the favourites, and adds it to a setlist, from More (ADR 0103)', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/play/bz5')
+    await chooseMore(user, 'Add to favourites')
+    expect(libraryStore.getState().favourites).toEqual(['bz5'])
+    // Named by what it does now.
+    await chooseMore(user, 'Remove from favourites')
+    expect(libraryStore.getState().favourites).toEqual([])
+    await chooseMore(user, 'Add to setlist')
+    const sheet = await screen.findByRole('dialog', { name: 'Add to setlist' })
+    await user.click(within(sheet).getByRole('button', { name: 'New setlist' }))
+    await user.type(within(sheet).getByRole('textbox', { name: 'Setlist name' }), 'Sunday{Enter}')
+    expect(libraryStore.getState().setlists).toEqual([
+      { id: 'set-1', name: 'Sunday', pieces: ['bz5'] },
+    ])
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+    expect(screen.getByRole('button', { name: 'More' })).toHaveFocus()
   })
 
   it('shows a song’s information: its chords, its key, time and tempo, its second title and who wrote it', async () => {
