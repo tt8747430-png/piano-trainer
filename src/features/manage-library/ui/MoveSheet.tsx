@@ -1,4 +1,4 @@
-import { Check, ChevronRight, FolderPlus, House } from 'lucide-react'
+import { Check, ChevronDown, FolderPlus, House } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -161,7 +161,6 @@ function MovePicker({
         {folderRows(null, 0)}
         <li>
           <div className="flex items-center">
-            <span aria-hidden className="size-11 shrink-0" />
             <button type="button" onClick={onNewFolder} className={cn(ROW, 'text-link')}>
               <span
                 aria-hidden
@@ -179,8 +178,8 @@ function MovePicker({
 }
 
 /**
- * One place in Move to…: the toggle that opens a folder to the folders in it (or its room), its
- * tile and name, Here where everything stands now; a tap moves there.
+ * One place in Move to…: its tile and name, Here where everything stands now, and at its end the
+ * toggle that opens a folder to the folders in it; a tap on the place moves there.
  */
 function PlaceRow({
   depth,
@@ -205,24 +204,6 @@ function PlaceRow({
   return (
     // Each level stands in by a step, no further than four: a phone keeps room for the name.
     <div className="flex items-center" style={{ paddingLeft: `${Math.min(depth, 4) * 1.25}rem` }}>
-      {toggle ? (
-        <button
-          type="button"
-          aria-expanded={toggle.open}
-          aria-label={t(toggle.open ? 'move.collapse' : 'move.expand', {
-            name: nameOf(toggle.folder),
-          })}
-          onClick={toggle.onToggle}
-          className="grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground [&_svg]:size-5"
-        >
-          <ChevronRight
-            aria-hidden
-            className={cn('transition-transform duration-200 ease-out', toggle.open && 'rotate-90')}
-          />
-        </button>
-      ) : (
-        <span aria-hidden className="size-11 shrink-0" />
-      )}
       <button
         type="button"
         // Here is no move, and a folder into itself none: both stay in sight, neither acts.
@@ -244,6 +225,25 @@ function PlaceRow({
           </span>
         ) : null}
       </button>
+      {toggle ? (
+        <button
+          type="button"
+          aria-expanded={toggle.open}
+          aria-label={t(toggle.open ? 'move.collapse' : 'move.expand', {
+            name: nameOf(toggle.folder),
+          })}
+          onClick={toggle.onToggle}
+          className="grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors duration-200 ease-out hover:bg-muted hover:text-foreground [&_svg]:size-5"
+        >
+          <ChevronDown
+            aria-hidden
+            className={cn(
+              'transition-transform duration-200 ease-out',
+              !toggle.open && '-rotate-90',
+            )}
+          />
+        </button>
+      ) : null}
     </div>
   )
 }
