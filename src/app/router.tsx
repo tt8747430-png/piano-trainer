@@ -15,7 +15,7 @@ import {
   selectOwnPattern,
   type PatternsStore,
 } from '@/entities/pattern'
-import type { LibraryStore } from '@/entities/library'
+import { selectSetlist, type LibraryStore } from '@/entities/library'
 import type { PiecesStore } from '@/entities/piece'
 import type { TakesStore } from '@/entities/take'
 import type { ViewsStore } from '@/entities/views'
@@ -65,7 +65,7 @@ import {
 import { LEARN_KEPT, learnSearch, readLearnSearch } from './routes/learn-search'
 import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/practice-search'
 import { searchSearch } from './routes/search-search'
-import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
+import { setlistSearch, songsSearch, validateSharedSongSearch } from './routes/songs-search'
 import { remembered, restoreView } from './routes/remember'
 import { CHORD_FINDER_KEPT, chordFinderSearch, readChordFinderSearch } from './routes/tool-search'
 import { ShellLayout } from './ShellLayout'
@@ -167,6 +167,17 @@ const pieceRoute = createRoute({
     if (!entry || shelfOf(entry.kind) !== 'songs') throw notFound()
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
+})
+// A setlist of the learner's library (ADR 0103): its songs in their order.
+const setlistRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/setlists/$setlistId',
+  notFoundComponent: notFoundIn('songs'),
+  ...setlistSearch,
+  beforeLoad: ({ params, context }) => {
+    if (!selectSetlist(params.setlistId)(context.library.getState())) throw notFound()
+  },
+  component: lazyRouteComponent(songsScreens, 'SetlistPage'),
 })
 // A section of a song, learned step by step (ADR 0100); a study's is on its shelf, below.
 const sectionRoute = createRoute({
@@ -473,6 +484,7 @@ const routeTree = rootRoute.addChildren([
     songsRoute,
     sharedSongRoute,
     pieceRoute,
+    setlistRoute,
     sectionRoute,
     courseRoute,
     chordsRoute,

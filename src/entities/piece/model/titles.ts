@@ -27,3 +27,14 @@ export function entryTitles(
     ? { primary: translated }
     : { primary: translated, secondary: entry.title }
 }
+
+/**
+ * What a search finds an entry by: every title it has, and the names its credits print ("getty"
+ * finds Still, my soul, be still).
+ */
+export const entryWords = (entry: Entry): string[] => [
+  entry.title,
+  entry.titleEn ?? '',
+  entry.titleRu ?? '',
+  ...(entry.credits ?? []).flatMap((credit) => (credit.role === 'unknown' ? [] : [credit.names])),
+]

@@ -70,7 +70,16 @@ export {
   type MidiTrack,
   type TimedMidiEvent,
 } from './standard-midi-file'
-export { keyListParam, readKeyList, readNote, readText, valueOr, wholeIn } from './search-params'
+export {
+  chordListParam,
+  keyListParam,
+  readChordList,
+  readKeyList,
+  readNote,
+  readText,
+  valueOr,
+  wholeIn,
+} from './search-params'
 export { createStoreContext } from './store-context'
 export {
   moveTypingOctave,

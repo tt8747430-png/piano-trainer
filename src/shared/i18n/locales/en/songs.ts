@@ -74,6 +74,8 @@ export const songs = {
     },
     // A drag as a screen reader hears it.
     drag: {
+      // What a song's handle is, said after its name (dnd-kit's roledescription).
+      role: 'sortable',
       instructions:
         'To move a song, press Space or Enter on its handle, move it with the up and down arrows, then press Space or Enter to put it down, or Escape to put it back.',
       picked: 'Picked up {{title}}.',
