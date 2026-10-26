@@ -54,12 +54,6 @@ function drawnKeys(performed: PerformedChord): { keys: Midi[]; bass: boolean } {
   return { keys: [midi(lowest - under), ...hand], bass: true }
 }
 
-/** The keys a performed chord is drawn with (`drawnKeys`); none for a chord the music has not. */
-export function diagramKeys(performance: Performance, chord: number): Midi[] {
-  const performed = performance.chords[chord]
-  return performed ? drawnKeys(performed).keys : []
-}
-
 /** A key's note as the chord spells it: one of its tones or its bass, else as the key spells it. */
 const spelledIn = (performed: PerformedChord, key: Midi, musicKey: Key): SpelledNote =>
   performed.tones.find((tone) => tone.pitchClass === pitchClass(key))?.note ??

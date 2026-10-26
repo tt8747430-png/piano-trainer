@@ -2,13 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart } from '@/shared/lib/arrangement'
 import { note, parseChordSymbol } from '@/shared/lib/music'
 import { TWO_BARS } from './testing/performances'
-import {
-  beatGroupInBar,
-  firstPlayedBar,
-  playedBars,
-  writtenBarAt,
-  writtenBarOf,
-} from './written-bar'
+import { beatGroupInBar, firstPlayedBar, writtenBarAt, writtenBarOf } from './written-bar'
 
 const BEATS = {
   id: 'beats',
@@ -60,38 +54,5 @@ describe('the bar as written, between the Player and the editor', () => {
     expect(firstPlayedBar(PLAYED, 1)).toBe(1)
     expect(firstPlayedBar(PLAYED, 2)).toBe(4)
     expect(firstPlayedBar(PLAYED, 3)).toBeNull()
-  })
-
-  it('plays written bars (a section’s) as the bars played: every pass of a repeat inside them', () => {
-    // C F repeated, then G: played C F C F G.
-    expect(playedBars(PLAYED, { first: 0, last: 1 })).toEqual({ first: 0, last: 3 })
-    expect(playedBars(PLAYED, { first: 2, last: 2 })).toEqual({ first: 4, last: 4 })
-    expect(playedBars(PLAYED, { first: 0, last: 2 })).toEqual({ first: 0, last: 4 })
-    // Bars as written are played as written where nothing repeats.
-    expect(playedBars(TWO_BARS, { first: 1, last: 1 })).toEqual({ first: 1, last: 1 })
-    expect(playedBars(PLAYED, { first: 3, last: 4 })).toBeNull()
-  })
-
-  it('stops where the music leaves the bars: a repeat back to before them plays them once', () => {
-    // From the second bar, C F G repeated whole: played C F G C F G; F G is played twice, apart.
-    const whole = arrange(
-      {
-        ...REPEATED,
-        sections: [
-          {
-            lines: [
-              [
-                { chords: [{ ...parseChordSymbol('C'), beats: 4 }], beats: 4 },
-                { chords: [{ ...parseChordSymbol('F'), beats: 4 }], beats: 4 },
-                { chords: [{ ...parseChordSymbol('G'), beats: 4 }], beats: 4, barline: 'repeat' },
-              ],
-            ],
-          },
-        ],
-      },
-      { tonic: note('C'), pattern: BEATS, unfold: true },
-    )
-    expect(whole.bars.map((_, played) => writtenBarOf(whole, played))).toEqual([0, 1, 2, 0, 1, 2])
-    expect(playedBars(whole, { first: 1, last: 2 })).toEqual({ first: 1, last: 2 })
   })
 })

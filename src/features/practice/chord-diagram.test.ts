@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { arrange, parseFigure, type Chart, type EventPattern } from '@/shared/lib/arrangement'
+import {
+  arrange,
+  parseFigure,
+  type Chart,
+  type EventPattern,
+  type Performance,
+} from '@/shared/lib/arrangement'
 import { note, noteName, parseChordSymbol } from '@/shared/lib/music'
-import { chordSummary, diagramChord, diagramKeys } from './chord-diagram'
+import { chordSummary, diagramChord } from './chord-diagram'
 import { ONE_BAR } from './testing/performances'
 
 /** Each chord voiced on every beat in the right hand. */
@@ -35,29 +41,32 @@ const chart = (...symbols: string[]): Chart => ({
 const played = (pattern: EventPattern, ...symbols: string[]) =>
   arrange(chart(...symbols), { tonic: note('C'), pattern })
 
-describe('diagramKeys', () => {
+describe('a chord’s diagram’s keys', () => {
+  const keysOf = (performance: Performance, chord: number) =>
+    diagramChord(performance, chord)?.keys ?? []
+
   it('shows a chord as the right hand plays it', () => {
     // G after C, led to the nearest keys: B3 D4 G4.
-    expect(diagramKeys(ONE_BAR, 1)).toEqual([59, 62, 67])
+    expect(keysOf(ONE_BAR, 1)).toEqual([59, 62, 67])
     // A 7th chord's root is the bass's: C♯m7 in the right hand is B3 E4 G♯4, its root C♯3 under them.
-    expect(diagramKeys(played(VOICED, 'C#m7'), 0)).toEqual([49, 59, 64, 68])
+    expect(keysOf(played(VOICED, 'C#m7'), 0)).toEqual([49, 59, 64, 68])
   })
 
   it('draws a slash chord’s bass under the hand where the hand leaves it out', () => {
     // C E G in the hand, its bass B♭3 under them.
-    expect(diagramKeys(played(VOICED, 'C/Bb'), 0)).toEqual([58, 60, 64, 67])
+    expect(keysOf(played(VOICED, 'C/Bb'), 0)).toEqual([58, 60, 64, 67])
     // E is the hand's own: nothing drawn under it.
-    expect(diagramKeys(played(VOICED, 'C/E'), 0)).toEqual([60, 64, 67])
+    expect(keysOf(played(VOICED, 'C/E'), 0)).toEqual([60, 64, 67])
   })
 
   it('shows a chord the right hand voices none of close from its root, from middle C up', () => {
     const arpeggio = played(ARPEGGIO, 'G', 'C#m7')
-    expect(diagramKeys(arpeggio, 0)).toEqual([67, 71, 74])
-    expect(diagramKeys(arpeggio, 1)).toEqual([61, 64, 68, 71])
+    expect(keysOf(arpeggio, 0)).toEqual([67, 71, 74])
+    expect(keysOf(arpeggio, 1)).toEqual([61, 64, 68, 71])
   })
 
-  it('shows no keys for a chord the music has not', () => {
-    expect(diagramKeys(ONE_BAR, 2)).toEqual([])
+  it('has no diagram for a chord the music has not', () => {
+    expect(diagramChord(ONE_BAR, 2)).toBeNull()
   })
 })
 
