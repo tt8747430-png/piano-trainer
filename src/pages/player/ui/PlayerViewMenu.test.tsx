@@ -88,6 +88,49 @@ describe('the tools row (ADR 0102)', () => {
   })
 })
 
+describe('while Diagrams plays (ADR 0102)', () => {
+  /** The bar's two groups and the tools row. */
+  const bar = () =>
+    ['lead', 'actions', 'tools'].map((area) => {
+      const found = document.querySelector(`[data-area="${area}"]`)
+      if (!found) throw new Error(area)
+      return found
+    })
+
+  it('steps the bar and the tools row aside, back at a tap on the free room or once it stops', async () => {
+    const user = userEvent.setup()
+    await savedAs('diagrams', '/play/bz5')
+    const transport = screen.getByRole('toolbar', { name: 'Playback' })
+    const dock = transport.closest('[data-area="dock"]')
+    await user.click(within(transport).getByRole('button', { name: 'Play' }))
+    for (const area of bar()) {
+      expect(area).toHaveAttribute('data-hidden')
+      expect(area).toHaveAttribute('inert')
+    }
+    expect(dock).not.toHaveAttribute('data-hidden')
+    // A tap on the free room brings them back, and the next sends them aside with the transport.
+    const title = screen.getByRole('heading', { level: 1 })
+    await user.click(title)
+    for (const area of bar()) expect(area).not.toHaveAttribute('data-hidden')
+    await user.click(title)
+    for (const area of bar()) expect(area).toHaveAttribute('data-hidden')
+    expect(dock).toHaveAttribute('data-hidden')
+    // Stopped (Space, the transport aside too), everything is back.
+    await user.keyboard(' ')
+    for (const area of bar()) expect(area).not.toHaveAttribute('data-hidden')
+    expect(dock).not.toHaveAttribute('data-hidden')
+  })
+
+  it('keeps the bar in sight while another view plays', async () => {
+    const user = userEvent.setup()
+    await savedAs('grid', '/play/bz5')
+    await user.click(screen.getByRole('button', { name: 'Play' }))
+    expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
+    for (const area of bar()) expect(area).not.toHaveAttribute('data-hidden')
+    await user.click(screen.getByRole('button', { name: 'Stop' }))
+  })
+})
+
 describe('Ask each time a song opens (ADR 0102)', () => {
   it('opens a song’s Player with its View open, once asked to, and a walk’s as it was', async () => {
     const user = userEvent.setup()

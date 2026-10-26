@@ -117,7 +117,8 @@ export function PlayerLayout({
     </PlayerArea>
   )
   return (
-    <PlayerScreen keys={dock}>
+    // While Diagrams plays, the bar and the tools row step aside (ADR 0102).
+    <PlayerScreen keys={dock} aside={shown === 'diagrams' && practice.state.playing}>
       {/* Close, then Practise · Edit, as the editor's bar has them (ADR 0090, 0094), level with the
           bar's first row of buttons where they wrap. Closer on a phone held upright, as the
           editor's bar is there, so the bar keeps one row from 360px. */}
