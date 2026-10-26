@@ -4,8 +4,9 @@ import { pieceById } from '@/entities/piece'
 import { noteName, pitchClass } from '@/shared/lib/music'
 import { audibleHands } from '@/shared/lib/schedule'
 import { arrangePiece, ownChoice } from './arrange-piece'
+import { diagramChord } from './chord-diagram'
 import { TWO_BARS_UNDER_A_STAFF } from './testing/performances'
-import { playerRange, practiceMarks } from './marks'
+import { diagramMarks, playerRange, practiceMarks } from './marks'
 
 const bz5 = pieceById('bz5')
 if (!bz5) throw new Error('bz5')
@@ -80,6 +81,36 @@ describe('practiceMarks', () => {
       received: [pitchClass(first.midi)],
     })
     expect(marks.get(first.midi)?.label).toBe('✓')
+  })
+})
+
+describe('diagramMarks', () => {
+  /** bz5's chord of this symbol as its diagram draws it. */
+  const drawn = (symbol: string) => {
+    const chord = diagramChord(
+      performance,
+      performance.chords.findIndex((each) => each.symbol === symbol),
+    )
+    if (!chord) throw new Error(`bz5 has ${symbol}`)
+    return chord
+  }
+
+  it('marks a chord’s keys as its diagram draws them, each named as the chord spells it', () => {
+    // G/B: B3 D4 G4, its bass one of its tones.
+    expect([...diagramMarks(drawn('G/B'))]).toEqual([
+      [59, { tone: 'rh', label: 'B' }],
+      [62, { tone: 'rh', label: 'D' }],
+      [67, { tone: 'rh', label: 'G' }],
+    ])
+  })
+
+  it('marks the bass it rings as the left hand’s', () => {
+    // C/E folds G3 C4 E4, its bass E4 ringed.
+    expect([...diagramMarks(drawn('C/E'))]).toEqual([
+      [55, { tone: 'rh', label: 'G' }],
+      [60, { tone: 'rh', label: 'C' }],
+      [64, { tone: 'lh', label: 'E' }],
+    ])
   })
 })
 

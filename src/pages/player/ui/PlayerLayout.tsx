@@ -28,6 +28,7 @@ import {
 } from '@/widgets/practice-player'
 import { SCORE_PARTS, ScoreViewMenu, type ScorePart } from '@/widgets/score-view-menu'
 import { SheetMusic } from '@/widgets/sheet-music'
+import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerMore } from './PlayerMore'
 import { PracticeSwitches } from './PracticeSwitches'
 
@@ -107,14 +108,16 @@ export function PlayerLayout({
     name: staves[place]?.name,
   }))
   usePlayerShortcuts(player, view, onClose)
+  // A chord view's keys in Listen: the chord sounding as its diagram draws it (ADR 0101).
+  const chordKeys = useChordKeys(performance, practice.state, scoreView.music !== 'sheet')
   const keys = !scoreView.keys ? null : (
     <PlayerArea area="keys">
       <LiveKeyboard
         range={player.range}
-        inView={player.inView}
+        inView={chordKeys ? chordKeys.inView : player.inView}
         // Wait mode's chord across both hands is all in sight, the keys narrowing to hold it.
         fitInView
-        marks={player.marks}
+        marks={chordKeys?.marks ?? player.marks}
         wrong={player.wrong}
         onKeyPress={player.tapKey}
         // Space is Play here: the pedal is the rail's, or a MIDI keyboard's.
