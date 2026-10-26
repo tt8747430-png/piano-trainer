@@ -21,7 +21,7 @@ export {
 } from './beats'
 export { useBeat } from './use-beat'
 
-export { arrangePiece, ownChoice } from './arrange-piece'
+export { arrangePiece, ownChoice, simplifies } from './arrange-piece'
 export type { PracticeChoice } from './choice'
 export { playerRange, practiceMarks } from './marks'
 export { spellPitchClass } from './note-names'
