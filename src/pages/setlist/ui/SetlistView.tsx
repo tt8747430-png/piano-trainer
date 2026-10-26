@@ -43,7 +43,6 @@ export function SetlistView({ setlist }: { setlist: Setlist }) {
   const [deleting, setDeleting] = useState(false)
   // More, which takes the focus back from the dialog it opened: the action chosen is folded away.
   const more = useRef<HTMLDivElement>(null)
-  const places = new Map(setlistActs.pieces.map((piece, i) => [piece.id, i + 1]))
   const searched = search.q.trim()
   return (
     <div className="flex flex-col gap-6 pb-4">
@@ -136,7 +135,6 @@ export function SetlistView({ setlist }: { setlist: Setlist }) {
           {setlistActs.shown.length > 0 ? (
             <SetlistSongs
               pieces={setlistActs.shown}
-              places={places}
               onMove={setlistActs.move}
               onRemove={setlistActs.remove}
             />

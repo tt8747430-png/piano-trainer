@@ -49,11 +49,12 @@ export function KnownChordsFilter({
       <PopoverContent
         aria-label={t('known.label')}
         align="start"
-        className="w-[min(28rem,calc(100vw-2rem))] gap-3 p-3"
+        className="max-h-(--available-height) w-[min(28rem,calc(100vw-2rem))] gap-3 p-3"
       >
         <MenuSection title={t('known.label')} info={t('known.info')}>
-          {/* Room round the chips inside the scroller, so a chip's focus ring is not cut. */}
-          <div className="-m-1 max-h-[min(50dvh,20rem)] overflow-y-auto p-1">
+          {/* The chips scroll in the room the screen leaves under the heading and Clear, with
+              room round them inside the scroller, so a chip's focus ring is not cut. */}
+          <div className="-m-1 max-h-[min(24rem,calc(var(--available-height)-7.5rem))] overflow-y-auto overscroll-contain p-1">
             <ToggleChips
               label={t('known.label')}
               value={known}

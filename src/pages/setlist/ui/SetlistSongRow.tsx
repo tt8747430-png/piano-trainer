@@ -10,21 +10,13 @@ import { SONG_BODY, SONG_CARD, SONG_CONTROL } from './song-row-class'
 
 /**
  * A setlist's song as a row (ADR 0103): its handle, which a finger, a mouse or the keyboard moves it
- * by along the list; the song, numbered by its place in the setlist in its kind's paint, a link to
- * its page; and Remove, which takes it out of the setlist. In the hand, its place is an empty slot,
+ * by along the list; the song, its row's face as Songs shows it (one kind: no tile), a link to its
+ * page; and Remove, which takes it out of the setlist. In the hand, its place is an empty slot,
  * where it would land.
  */
-export function SetlistSongRow({
-  piece,
-  place,
-  onRemove,
-}: {
-  piece: Piece
-  place: number
-  onRemove: () => void
-}) {
+export function SetlistSongRow({ piece, onRemove }: { piece: Piece; onRemove: () => void }) {
   const { t } = useTranslation('songs')
-  const { kind, ...face } = useEntryFace(piece)
+  const { kind: _kind, ...face } = useEntryFace(piece)
   const {
     attributes,
     listeners,
@@ -58,7 +50,7 @@ export function SetlistSongRow({
         <GripVertical aria-hidden />
       </button>
       <PieceLink entry={piece} className={cn(SONG_BODY, 'focus-visible:-outline-offset-3')}>
-        <RowFace {...face} numeral={place} paint={kind.paint} />
+        <RowFace {...face} />
       </PieceLink>
       <button
         type="button"

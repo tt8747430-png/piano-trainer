@@ -15,17 +15,14 @@ const MODIFIERS = [restrictToVerticalAxis]
  * A setlist's songs (those its search keeps), each a row moved by its handle (Mindscape's engine,
  * `useSortableList`): dragged by a finger or a mouse, or picked up by Space or Enter and moved by the
  * arrows, along the list alone, the order dropped written over the whole setlist (`onMove`); a
- * screen reader hears where it is, by the song's title and its place. Each numbered by its place in
- * the whole setlist (`places`).
+ * screen reader hears where it is, by the song's title and its place.
  */
 export function SetlistSongs({
   pieces,
-  places,
   onMove,
   onRemove,
 }: {
   pieces: readonly Piece[]
-  places: ReadonlyMap<PieceId, number>
   onMove: (order: PieceId[]) => void
   onRemove: (piece: PieceId) => void
 }) {
@@ -66,18 +63,13 @@ export function SetlistSongs({
           {list.items.map((id) => {
             const piece = byId.get(id)
             return piece ? (
-              <SetlistSongRow
-                key={id}
-                piece={piece}
-                place={places.get(id) ?? 0}
-                onRemove={() => onRemove(id)}
-              />
+              <SetlistSongRow key={id} piece={piece} onRemove={() => onRemove(id)} />
             ) : null
           })}
         </ul>
       </SortableContext>
       <DragOverlay {...list.overlay}>
-        {inHand ? <SetlistSongInHand piece={inHand} place={places.get(inHand.id) ?? 0} /> : null}
+        {inHand ? <SetlistSongInHand piece={inHand} /> : null}
       </DragOverlay>
     </DndContext>
   )

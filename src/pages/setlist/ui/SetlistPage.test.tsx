@@ -36,8 +36,10 @@ describe('A setlist (ADR 0103)', () => {
     await renderApp('/songs/setlists/set-1', { storage: kept([SUNDAY]) })
     expect(await screen.findByRole('heading', { level: 1, name: 'Sunday' })).toBeInTheDocument()
     expect(songs()).toEqual(['/songs/silent', '/songs/bz5', '/songs/amazing'])
-    // Each numbered by its place, as a sequence's rows are.
-    expect(screen.getByRole('link', { name: /Silent Night/ })).toHaveTextContent(/^1/)
+    // Each as Songs shows it: its chords counted, its key.
+    expect(screen.getByRole('link', { name: /Silent Night/ })).toHaveAccessibleName(
+      /3 chords.*Key C/,
+    )
   })
 
   it('is not found where the library has no such setlist', async () => {
