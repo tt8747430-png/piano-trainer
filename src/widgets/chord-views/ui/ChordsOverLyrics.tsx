@@ -51,6 +51,12 @@ export function ChordsOverLyrics({
 }) {
   const { t } = useTranslation('player')
   const lines = useMemo(() => lyricLines(performance), [performance])
+  // A line of neither words nor chords (an own song's bars of no chord symbol and nothing sung)
+  // shows nothing, so it is left out, and a section's name heads its first line that shows.
+  const shown = useMemo(
+    () => lines.map((line) => line.sung || line.segments.some(({ chord }) => chord !== null)),
+    [lines],
+  )
   const summary = useMemo(() => chordSummary(performance), [performance])
   const bar = writtenBarOf(performance, beat.bar)
   const playing = lines.findIndex((line) => line.bars.includes(bar))
@@ -101,8 +107,10 @@ export function ChordsOverLyrics({
         <ChordSummary chords={summary} />
         <div className="flex flex-col gap-3">
           {lines.map((line, index) => {
+            if (!shown[index]) return null
             const heading = headings[line.section]
-            const starts = index === 0 || lines[index - 1]?.section !== line.section
+            const before = lines.findLast((_, at) => at < index && shown[at])
+            const starts = before?.section !== line.section
             return (
               <Fragment key={index}>
                 {starts && heading ? (

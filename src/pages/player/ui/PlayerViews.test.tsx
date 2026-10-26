@@ -290,6 +290,28 @@ describe('Chords over lyrics (ADR 0099)', () => {
     expect(shown).toHaveTextContent(/Good morn.*Hello.*ing.*now/)
   })
 
+  it('leaves out a line of neither words nor chords, its section named over its next line', async () => {
+    const storage = withSong({
+      sections: [
+        { kind: 'verse', lines: ['_ _', 'G D'] },
+        { kind: 'chorus', lines: ['C G'] },
+      ],
+      hands: {
+        rh: 'B4/4 | B4/4 | A4/4 | G4/4 | E4/4 | D4/4',
+        lh: 'r/4 | r/4 | r/4 | r/4 | r/4 | r/4',
+      },
+    })
+    await inView('lyrics', '/play/my-1', { storage })
+    expect(screen.queryByRole('button', { name: 'Bars 1–2' })).not.toBeInTheDocument()
+    expect(line('Bars 3–4').shown).toBeInTheDocument()
+    const view = screen.getByRole('region', { name: 'Chords over lyrics' })
+    expect(
+      within(view)
+        .getAllByRole('heading', { level: 2 })
+        .map((heading) => heading.textContent),
+    ).toEqual(['Verse', 'Chorus'])
+  })
+
   it('shows a line of no words as its chords, one chip a change', async () => {
     await inView('lyrics', '/play/bz5')
     const first = line('Bars 1–4')
