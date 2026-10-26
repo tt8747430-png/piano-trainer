@@ -4,7 +4,20 @@ export const player: LocaleResources['player'] = {
   setup: 'Параметры',
   more: 'Ещё',
   info: { song: 'О песне', study: 'Об этюде' },
+  tuning: {
+    label: 'Строй',
+    value: 'Ля {{hz}} Гц',
+    about:
+      'Запись настроена на ля {{hz}} Гц, а не на стандартные 440 Гц. Настройте инструмент так же, чтобы играть с ней в лад.',
+  },
+  sections: {
+    title: 'Разделы',
+    one: { song: 'В этой песне один раздел.', study: 'В этом этюде один раздел.' },
+  },
+  print: 'Печать',
   exportMidi: 'Экспорт в MIDI',
+  exportMidiFixed: 'Экспорт в MIDI, ровный темп',
+  exportMidiAligned: 'Экспорт в MIDI, по записи',
   mode: { label: 'Играть или править', practise: 'Играть', edit: 'Править' },
   view: {
     positionsDetail: 'Рядом с названием аккорда — в каком обращении его берёт правая рука',

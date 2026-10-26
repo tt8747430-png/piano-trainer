@@ -1,6 +1,6 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
@@ -36,9 +36,15 @@ type User = ReturnType<typeof userEvent.setup>
 async function moreActions(user: User) {
   await user.click(await screen.findByRole('button', { name: 'More' }))
   const menu = await screen.findByRole('dialog', { name: 'More' })
+  // Each by its name, the reason a greyed one gives left out.
   return within(menu)
     .getAllByRole('button')
-    .map((action) => action.textContent)
+    .map((action) =>
+      [...action.childNodes]
+        .filter((part) => !(part instanceof HTMLElement && part.hidden))
+        .map((part) => part.textContent)
+        .join(''),
+    )
 }
 
 /** Opens More and chooses one of its actions. */
@@ -82,26 +88,90 @@ function firstTempo(bytes: Uint8Array): number {
   return Math.round(60_000_000 / ((a << 16) | (b << 8) | c))
 }
 
+/**
+ * Where a MIDI file's first note is struck, in its ticks: the first Note On of its first part's
+ * track, counted from its start.
+ */
+function firstNoteOn(bytes: Uint8Array): number {
+  const tracks: Uint8Array[] = []
+  for (let at = 14; at < bytes.length;) {
+    const length = new DataView(bytes.buffer, bytes.byteOffset + at + 4, 4).getUint32(0)
+    tracks.push(bytes.slice(at + 8, at + 8 + length))
+    at += 8 + length
+  }
+  let first = Infinity
+  for (const track of tracks.slice(1)) {
+    let i = 0
+    let tick = 0
+    const varLength = () => {
+      let value = 0
+      for (;;) {
+        const next = track[i++] ?? 0
+        value = (value << 7) | (next & 0x7f)
+        if (next < 0x80) return value
+      }
+    }
+    while (i < track.length) {
+      tick += varLength()
+      const status = track[i++] ?? 0
+      if (status === 0xff) {
+        i += 1
+        const length = varLength()
+        i += length
+      } else {
+        if (status >> 4 === 0x9 && (track[i + 1] ?? 0) > 0) first = Math.min(first, tick)
+        i += 2
+      }
+    }
+  }
+  return first
+}
+
 describe('the Player’s More (ADR 0099)', () => {
   it.each([
     [
       'a song',
       '/play/bz5',
-      ['Add to favourites', 'Move to…', 'Archive', 'Song information', 'Export to MIDI'],
+      [
+        'Add to favourites',
+        'Move to…',
+        'Archive',
+        'Song information',
+        'Sections',
+        'Share',
+        'Print',
+        'Export to MIDI',
+      ],
+    ],
+    // With a recording, its MIDI fixed tempo or time aligned to the recording (ADR 0107).
+    [
+      'a song with a recording',
+      '/play/romashki',
+      [
+        'Add to favourites',
+        'Move to…',
+        'Archive',
+        'Song information',
+        'Sections',
+        'Share',
+        'Print',
+        'Export to MIDI, fixed tempo',
+        'Export to MIDI, time aligned',
+      ],
     ],
     // A study is in no library (ADR 0106).
-    ['a study', '/play/ex3', ['Study information', 'Export to MIDI']],
-    ['a walk', '/play/walk?root=D&kind=dorian', ['Export to MIDI']],
-    ['a progression', '/play/progression?p=ii-V-I&key=Bb', ['Export to MIDI']],
-    ['a chromatic walk', '/play/chromatic?chords=m9&root=G', ['Export to MIDI']],
-    ['an exercise', '/play/exercise/hanon', ['Export to MIDI']],
+    ['a study', '/play/ex3', ['Study information', 'Sections', 'Share', 'Print', 'Export to MIDI']],
+    ['a walk', '/play/walk?root=D&kind=dorian', ['Print', 'Export to MIDI']],
+    ['a progression', '/play/progression?p=ii-V-I&key=Bb', ['Print', 'Export to MIDI']],
+    ['a chromatic walk', '/play/chromatic?chords=m9&root=G', ['Print', 'Export to MIDI']],
+    ['an exercise', '/play/exercise/hanon', ['Print', 'Export to MIDI']],
   ])('lists what %s has', async (_music, path, actions) => {
     const user = userEvent.setup()
     await renderApp(path)
     expect(await moreActions(user)).toEqual(actions)
   })
 
-  it('shares an own song alone, saying the link is copied where there is no share sheet', async () => {
+  it('shares an own song with its music, saying the link is copied where there is no share sheet', async () => {
     const user = userEvent.setup()
     await renderApp('/play/my-1', { storage: withSong() })
     expect(await moreActions(user)).toEqual([
@@ -109,12 +179,17 @@ describe('the Player’s More (ADR 0099)', () => {
       'Move to…',
       'Archive',
       'Song information',
-      'Export to MIDI',
+      'Sections',
       'Share',
+      'Print',
+      'Export to MIDI',
     ])
     await user.click(screen.getByRole('button', { name: 'Share' }))
     await waitFor(() =>
-      expect(screen.getByText(/^Link copied\./)).toHaveAttribute('role', 'status'),
+      expect(screen.getByText(/^Link copied\. Anyone who opens it can add/)).toHaveAttribute(
+        'role',
+        'status',
+      ),
     )
     const link = new URL(await navigator.clipboard.readText())
     expect(link.pathname).toBe('/songs/shared')
@@ -128,6 +203,38 @@ describe('the Player’s More (ADR 0099)', () => {
         sections: MORNING.sections,
       },
     })
+  })
+
+  it('shares a song of the app as a link to itself, in the key it is played and as simplified', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/bz5?key=A&simple=true')
+    await chooseMore(user, 'Share')
+    await waitFor(() =>
+      expect(screen.getByText(/^Link copied\. Anyone who opens it/)).toHaveAttribute(
+        'role',
+        'status',
+      ),
+    )
+    const link = new URL(await navigator.clipboard.readText())
+    expect(link.origin).toBe(window.location.origin)
+    expect(link.pathname).toBe('/play/bz5')
+    expect(Object.fromEntries(link.searchParams)).toEqual({ key: 'A', simple: 'true' })
+  })
+
+  it('hands the link to the device’s share sheet where it has one', async () => {
+    const user = userEvent.setup()
+    const share = vi.fn(() => Promise.resolve())
+    Object.defineProperty(navigator, 'share', { value: share, configurable: true })
+    onTestFinished(() => void Reflect.deleteProperty(navigator, 'share'))
+    await renderApp('/play/bz5')
+    await chooseMore(user, 'Share')
+    await waitFor(() => expect(share).toHaveBeenCalledTimes(1))
+    expect(share).toHaveBeenCalledWith({
+      title: 'Still, my soul, be still',
+      url: `${window.location.origin}/play/bz5?key=G&simple=false`,
+    })
+    // The share sheet says what it did: the screen says nothing.
+    expect(screen.queryByText(/^Link copied/)).not.toBeInTheDocument()
   })
 
   it('keeps a piece among the favourites, moves it into a new folder and archives it, from More (ADR 0106)', async () => {
@@ -173,7 +280,10 @@ describe('the Player’s More (ADR 0099)', () => {
       ['Key', 'G'],
       ['Time', '4/4'],
       ['Tempo', '72 BPM'],
+      ['Tuning', 'A 440 Hz'],
     ])
+    // At the standard pitch, nothing more is said of it.
+    expect(within(sheet).queryByRole('button', { name: 'About Tuning' })).not.toBeInTheDocument()
     expect(within(sheet).getByText('Мир, душа, храни')).toBeInTheDocument()
     expect(
       within(sheet).getByText('Keith Getty, Kristyn Getty, Stuart Townend'),
@@ -234,17 +344,18 @@ describe('the Player’s More (ADR 0099)', () => {
       ['Key', 'C'],
       ['Time', '4/4'],
       ['Tempo', '76 BPM'],
+      ['Tuning', 'A 440 Hz'],
     ])
     // A study's title is translated whole: no printed one stands under it.
     expect(within(sheet).queryByText(/^Урок 3/)).not.toBeInTheDocument()
   })
 
-  it('exports the music as it plays to a MIDI file named for it, at the tempo chosen', async () => {
+  it('exports the music as it plays to a MIDI file named for it and its tempo, the tempo chosen', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5?tempo=36')
     const saved = catchDownloads()
     await chooseMore(user, 'Export to MIDI')
-    expect(saved.names).toEqual(['Still, my soul, be still.mid'])
+    expect(saved.names).toEqual(['Still, my soul, be still (36 BPM).mid'])
     const [file] = saved.files
     if (!file) throw new Error('a file is saved')
     expect(file.type).toBe('audio/midi')
@@ -253,12 +364,33 @@ describe('the Player’s More (ADR 0099)', () => {
     expect(firstTempo(bytes)).toBe(36)
   })
 
+  it('exports a song with a recording at the tempo chosen, or time aligned to the recording', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/romashki?tempo=60')
+    const saved = catchDownloads()
+    await chooseMore(user, 'Export to MIDI, fixed tempo')
+    await chooseMore(user, 'Export to MIDI, time aligned')
+    // Time aligned: at the recording's tempo, its notes from where its bar 1 is, 3.26 s in.
+    expect(saved.names).toEqual(['Daisy fields (60 BPM).mid', 'Daisy fields (73 BPM).mid'])
+    const [fixed, aligned] = await Promise.all(
+      saved.files.map(async (file) => new Uint8Array(await file.arrayBuffer())),
+    )
+    if (!fixed || !aligned) throw new Error('two files are saved')
+    expect(firstTempo(fixed)).toBe(60)
+    expect(firstTempo(aligned)).toBe(73)
+    expect(firstNoteOn(fixed)).toBe(0)
+    // 3.26 s at 73 a minute, in 480 ticks a quarter.
+    expect(firstNoteOn(aligned)).toBe(Math.round((3.26 * 73 * 480) / 60))
+  })
+
   it('exports a walk under its title, at the tempo it plays', async () => {
     const user = userEvent.setup()
     await renderApp('/play/walk?root=D&kind=dorian')
     const saved = catchDownloads()
     await chooseMore(user, 'Export to MIDI')
-    expect(saved.names).toEqual(['Walk the chords in D Dorian.mid'])
+    expect(saved.names).toEqual([
+      expect.stringMatching(/^Walk the chords in D Dorian \(\d+ BPM\)\.mid$/),
+    ])
     const [file] = saved.files
     if (!file) throw new Error('a file is saved')
     expect(String.fromCharCode(...new Uint8Array(await file.arrayBuffer()).slice(0, 4))).toBe(

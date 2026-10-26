@@ -1,9 +1,10 @@
-import { useMemo, type ReactNode } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { useStaffNames, type StaffName } from '@/entities/piece'
 import { selectKeyboard, selectScoreView, useSettings } from '@/entities/settings'
 import { MidiButton } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import type { Performance } from '@/shared/lib/arrangement'
+import type { Recording } from '@/shared/lib/schedule'
 import type { MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
@@ -23,6 +24,7 @@ import {
   type PracticeView,
 } from '@/widgets/practice-player'
 import { SheetMusic } from '@/widgets/sheet-music'
+import { SongPrint } from '@/widgets/song-print'
 import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerMore } from './PlayerMore'
 import { PlayerViewMenu } from './PlayerViewMenu'
@@ -41,7 +43,8 @@ const NO_STAVES: readonly { readonly name?: StaffName }[] = []
  * the transport floating under it (the tempo, ‹ ▶ ›, the loop, the Sound and the hands), the
  * count-in's beat large over it all while Listen counts in (ADR 0105), and the keys at the
  * foot, or under the tools row where the keyboard settings dock them at the top; the computer's keys
- * drive it (`usePlayerShortcuts`).
+ * drive it (`usePlayerShortcuts`). More's Print puts the music as the View shows it in print
+ * (`SongPrint`, ADR 0107).
  */
 export function PlayerLayout({
   title,
@@ -55,9 +58,8 @@ export function PlayerLayout({
   modes,
   piano = true,
   staves = NO_STAVES,
-  recorded = false,
-  info,
-  share,
+  recording,
+  more,
   status,
   openView = false,
 }: {
@@ -68,8 +70,11 @@ export function PlayerLayout({
   piano?: boolean
   /** The piece's single staves, top down, each printed and switched in the View by its name (ADR 0097). */
   staves?: readonly { readonly name?: StaffName }[]
-  /** The piece has a recording: the Sound offers its volume (ADR 0105). */
-  recorded?: boolean
+  /**
+   * The piece's recording: the Sound offers its volume (ADR 0105), More its MIDI time aligned to it
+   * (ADR 0107).
+   */
+  recording?: Recording | undefined
   title: string
   onClose: () => void
   view: PracticeView
@@ -83,11 +88,9 @@ export function PlayerLayout({
   tools?: ReactNode
   /** Practise · Edit (ADR 0090), after Close: a piece's own, none for a walk. */
   modes?: ReactNode
-  /** A piece's Song information (ADR 0099): More's first action, before Export to MIDI. */
-  info?: MenuAction | undefined
-  /** An own song's Share (ADR 0099): More's last action. */
-  share?: MenuAction | undefined
-  /** What the screen says beside Wait mode's line: what an own song's Share said. */
+  /** The music's own in More, before Print: a piece's Song information, Sections and Share (ADR 0107). */
+  more?: readonly MenuAction[] | undefined
+  /** What the screen says beside Wait mode's line: what a piece's Share said. */
   status?: ReactNode
   /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0102). */
   openView?: boolean
@@ -105,6 +108,8 @@ export function PlayerLayout({
   const needs = useMemo(() => viewNeeds(performance), [performance])
   const shown = shownView(scoreView.music, needs)
   usePlayerShortcuts(player, view, onClose)
+  // More's Print (ADR 0107): the music printed as the View shows it, while its render stands.
+  const [printing, setPrinting] = useState(false)
   // A chord view's keys in Listen: the chord sounding as its diagram draws it (ADR 0101).
   const chordKeys = useChordKeys(performance, practice.state, shown !== 'sheet')
   const keys = !scoreView.keys ? null : (
@@ -143,9 +148,10 @@ export function PlayerLayout({
         {setup}
         <PlayerMore
           music={{ performance, title, tempo: player.tempo }}
+          recording={recording}
           staves={names}
-          info={info}
-          share={share}
+          actions={more}
+          onPrint={() => setPrinting(true)}
         />
       </PlayerArea>
       <PlayerArea area="tools">
@@ -226,12 +232,29 @@ export function PlayerLayout({
             />
           }
           loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
-          sound={<SoundButton staves={viewed.length > 0} recording={recorded} />}
+          sound={<SoundButton staves={viewed.length > 0} recording={recording !== undefined} />}
           hands={<HandsButton hands={view.hands} onChange={player.setHands} />}
         />
       </PlayerArea>
       {dock === 'top' ? null : keys}
       <CountInBeat count={practice.counting} />
+      {printing ? (
+        <SongPrint
+          view={shown}
+          title={title}
+          performance={performance}
+          headings={headings}
+          sheet={{
+            view: scoreView,
+            piano,
+            staffNames: names,
+            fingers: player.fingers,
+            names: player.names,
+            positions: player.positions,
+          }}
+          onDone={() => setPrinting(false)}
+        />
+      ) : null}
     </PlayerScreen>
   )
 }

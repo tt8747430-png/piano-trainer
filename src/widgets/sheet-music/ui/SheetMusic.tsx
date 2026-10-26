@@ -4,22 +4,15 @@ import type { BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { useElementSize, type SheetView } from '@/shared/lib'
 import type { Tick } from '@/shared/lib/music'
-import { notate, type StaffId } from '@/shared/lib/notation'
+import type { StaffId } from '@/shared/lib/notation'
 import { SheetTitle } from '@/shared/ui'
-import {
-  labelRow,
-  ScoreView,
-  scoreHeight,
-  useStaffLabels,
-  type Picked,
-  type ScoreLayout,
-} from '@/shared/ui/score'
+import { labelRow, ScoreView, scoreHeight, type Picked, type ScoreLayout } from '@/shared/ui/score'
 import { engravedHeight, FINGERS, fitScale, widestBar } from '../model/fit-scale'
 import { groupOfTick } from '../model/group-of-tick'
 import { keepsLoop } from '../model/keeps-loop'
-import { playedMusic } from '../model/played-music'
 import { SheetLines } from './SheetLines'
 import { SheetOverlay } from './SheetOverlay'
+import { useSheetScore } from './use-sheet-score'
 
 /**
  * How the sheet shows its score (ADR 0064): its layout, its chord names, the words under the staff
@@ -144,25 +137,10 @@ export function SheetMusic({
   onLoopChange: (loop: BarRange | null) => void
 }) {
   const { t } = useTranslation('music')
-  const written = useMemo(
-    () => notate(playedMusic(performance, { lyrics: view.lyrics, piano })),
-    [performance, view.lyrics, piano],
-  )
-  // The tempo marks said in the labels' row by their bar's number, not engraved in a row of their own
-  // over the staff (ADR 0074).
-  const { score, tempos } = useMemo(
-    () => ({
-      score: { ...written, measures: written.measures.map(({ tempo: _, ...measure }) => measure) },
-      tempos: written.measures.map((measure) => measure.tempo),
-    }),
-    [written],
-  )
-  const kept = score.staves.filter((staff) => !view.hidden.includes(staff))
-  const staves = kept.length > 0 ? kept : score.staves
-  // The staves' names at the first line's head (ADR 0094, 0097).
-  const labels = useStaffLabels(
-    staves,
-    staffNames.map((text) => (text === undefined ? undefined : { text })),
+  const { score, tempos, staves, labels } = useSheetScore(
+    performance,
+    { lyrics: view.lyrics, piano, hidden: view.hidden },
+    staffNames,
   )
   const scroller = useRef<HTMLDivElement>(null)
   // The room under the title, the labels' row's and the engraving's to fill.

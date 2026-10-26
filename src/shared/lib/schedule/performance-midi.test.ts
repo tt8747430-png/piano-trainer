@@ -315,4 +315,32 @@ describe('performanceMidi', () => {
       },
     ])
   })
+
+  it('starts the music where the recording’s bar 1 is, time aligned to it, every part with it', () => {
+    // Two seconds at 90 a minute: three quarters, 1,440 of the file's ticks.
+    const lead = 1440
+    const aligned = readMidi(
+      performanceMidi(PICKUP_AND_THREE, { tempo: 90, title: 'Ромашки', names: NAMES, lead: 2 }),
+    )
+    const [music = [], , right = []] = aligned.tracks
+    // What sounds before bar 1 is counted from the file's start: its tempo and first signature.
+    expect(signaturesOf(music)).toEqual([
+      [0, 1, 4, 24],
+      [24 * 20 + lead, 4, 4, 24],
+      [216 * 20 + lead, 3, 4, 24],
+    ])
+    expect(temposOf(music)[0]).toEqual([0, 666_667])
+    expect(temposOf(music).at(-1)).toEqual([288 * 20 + lead, 666_667])
+    expect(notesOf(right)).toEqual(
+      expected(PICKUP_AND_THREE, (n) => n.hand === 'rh').map((n) => ({
+        channel: 0,
+        ...n,
+        on: n.on + lead,
+        off: n.off + lead,
+      })),
+    )
+    expect(controlsOf(right)[0]).toEqual([24 * 20 + lead, 0, 64, 127])
+    for (const track of aligned.tracks)
+      expect(track.at(-1)).toEqual({ tick: 360 * 20 + lead, meta: 0x2f, data: [] })
+  })
 })

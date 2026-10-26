@@ -1,10 +1,25 @@
 export const player = {
   setup: 'Setup',
-  // The bar's More (ADR 0099): a piece's information as a sheet, the music as a MIDI file; an own
-  // song's Share is the song page's.
+  // The bar's More (ADR 0099, 0107): a piece's information and its sections as sheets, Share as the
+  // song page's, Print, the music as a MIDI file (with a recording, at a fixed tempo or time aligned
+  // to it).
   more: 'More',
   info: { song: 'Song information', study: 'Study information' },
+  // Song information's tuning (ADR 0107): the A its recording is tuned to, said where it is not 440.
+  tuning: {
+    label: 'Tuning',
+    value: 'A {{hz}} Hz',
+    about:
+      'The recording is tuned to A {{hz}} Hz, not the standard 440 Hz. Tune an instrument to it to play along in tune.',
+  },
+  sections: {
+    title: 'Sections',
+    one: { song: 'This song has one section.', study: 'This study has one section.' },
+  },
+  print: 'Print',
   exportMidi: 'Export to MIDI',
+  exportMidiFixed: 'Export to MIDI, fixed tempo',
+  exportMidiAligned: 'Export to MIDI, time aligned',
   /** A piece's score in its two modes, the Player and the score editor (ADR 0090). */
   mode: { label: 'Practise or edit', practise: 'Practise', edit: 'Edit' },
   // How the score is shown (ADR 0064), from the bar: remembered for every piece.

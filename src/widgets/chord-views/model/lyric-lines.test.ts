@@ -3,7 +3,14 @@ import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { gridWords, lineWords, lyricLines, soundingChip, type LyricLine } from './lyric-lines'
+import {
+  gridWords,
+  lineWords,
+  lyricLines,
+  shownLines,
+  soundingChip,
+  type LyricLine,
+} from './lyric-lines'
 
 /** A song of 4/4 bars in C, its sections' lines, a staff over the piano, and its verses. */
 function song(
@@ -125,6 +132,19 @@ describe('lyricLines', () => {
     expect(lines.map(({ bars, from }) => ({ bars, from }))).toEqual([
       { bars: [0, 1], from: 0 },
       { bars: [2], from: 384 },
+    ])
+  })
+})
+
+describe('shownLines', () => {
+  it('leaves out a line of neither words nor chords, a section starting at its first line shown', () => {
+    // A verse whose first line is bars of no chord and nothing sung, then a chorus.
+    const performance = song([['_ _', 'C G'], ['F']])
+    expect(
+      shownLines(lyricLines(performance)).map(({ index, starts }) => ({ index, starts })),
+    ).toEqual([
+      { index: 1, starts: true },
+      { index: 2, starts: true },
     ])
   })
 })

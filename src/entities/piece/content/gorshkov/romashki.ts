@@ -15,7 +15,8 @@ export default definePiece({
   // Bar 1 at 3.26 s, heard by the owner; the voice's first note (2.73 s) is a pickup. Sung at 73, not
   // the chart's 72: its choruses are 16 beats apart in 13.17 s, and a 73 grid from bar 1 meets its
   // landmarks within 50 ms (bar 5's C at 16.45 s, the choruses on bars 11 and 15 at 36.11 and 49.25 s,
-  // the last note on bar 18 at 59.19 s), where 72 falls 0.73 s behind by the end.
+  // the last note on bar 18 at 59.19 s), where 72 falls 0.73 s behind by the end. Tuned to the
+  // standard A 440 Hz: its spectrum's peaks lie 0.3 cents off the equal-tempered grid (440.1 Hz).
   recording: { src: vocal, start: 3.26, tempo: 73 },
   progression: [
     {

@@ -17,6 +17,7 @@ import {
 } from '../model/chart-sections'
 import { useRowRoom } from '../model/use-row-room'
 import { BarButton, type BarTap } from './BarButton'
+import { PrintedBar } from './PrintedBar'
 
 /** The widest a beat is drawn, in rem: a 4-beat bar reads at a glance on a laptop, not across it. */
 const BEAT_MOST = 4
@@ -53,6 +54,7 @@ function Blank({ from, beats, closes = false }: { from: number; beats: number; c
  * tap goes to the beat tapped (`onBar`, the bar and the tick of that beat, its first time), the bar
  * the Player is in current and its beat sounding filled. With `words`, each bar's words under its
  * beats (ADR 0108). A meter that changes is named under its bar; a pickup's length is its beats.
+ * Printed (`tap="print"`, ADR 0107), its bars to read alone.
  */
 export function ChordChart({
   performance,
@@ -63,12 +65,12 @@ export function ChordChart({
   looped = NO_BARS,
   words = NO_WORDS,
   onBar,
+  rowBeats,
   className,
 }: {
   performance: Performance
   /** Each section's name, by section; none for music of one section, named nowhere. */
   headings: readonly string[]
-  tap?: BarTap
   /** The bar playing, as written: the one sounding, or the one the Player is in. */
   playing: number | null
   /** The beat sounding in the bar playing: the Player's, filled. */
@@ -77,14 +79,23 @@ export function ChordChart({
   looped?: ReadonlySet<number>
   /** Each bar's words as written, verse by verse, by its number from 0: the Grid's Lyrics. */
   words?: ReadonlyMap<number, BarWords>
-  /** A bar tapped, as written, and the tick its beat tapped is first played at. */
-  onBar: (bar: number, at: Tick) => void
+  /** How many beats a row holds: the screen's room by default. */
+  rowBeats?: number
   /** Where it stands in its page. */
   className?: string
-}) {
+} & (
+  | {
+      tap?: BarTap
+      /** A bar tapped, as written, and the tick its beat tapped is first played at. */
+      onBar: (bar: number, at: Tick) => void
+    }
+  // As it prints (ADR 0107): its bars to read, none to tap.
+  | { tap: 'print'; onBar?: undefined }
+)) {
   const { t } = useTranslation('piece')
   const locale = useLocale()
-  const room = useRowRoom()
+  const screenRoom = useRowRoom()
+  const room = rowBeats ?? screenRoom
   // Read once a performance: the Player's chart renders again as each beat plays.
   const sections = useMemo(() => {
     const counted = beatCells(performance)
@@ -175,22 +186,34 @@ export function ChordChart({
                   const bar = shown[at]
                   if (!bar) return []
                   const { written, symbols, notes, cells, starts } = bar
+                  const place = { gridColumn: `${column + lead + 1} / span ${cells.length}` }
                   return [
                     lead > 0 ? <Blank key={`lead-${written}`} from={column} beats={lead} /> : null,
-                    <BarButton
-                      key={written}
-                      tap={tap}
-                      number={written + 1}
-                      symbols={symbols}
-                      cells={cells}
-                      notes={notes}
-                      words={words.get(written)}
-                      marked={playing === written}
-                      sounding={playing === written ? beat : null}
-                      looped={looped.has(written)}
-                      onTap={(tapped) => onBar(written, starts[tapped] ?? starts[0] ?? 0)}
-                      style={{ gridColumn: `${column + lead + 1} / span ${cells.length}` }}
-                    />,
+                    tap === 'print' ? (
+                      <PrintedBar
+                        key={written}
+                        number={written + 1}
+                        symbols={symbols}
+                        cells={cells}
+                        notes={notes}
+                        style={place}
+                      />
+                    ) : (
+                      <BarButton
+                        key={written}
+                        tap={tap}
+                        number={written + 1}
+                        symbols={symbols}
+                        cells={cells}
+                        notes={notes}
+                        words={words.get(written)}
+                        marked={playing === written}
+                        sounding={playing === written ? beat : null}
+                        looped={looped.has(written)}
+                        onTap={(tapped) => onBar?.(written, starts[tapped] ?? starts[0] ?? 0)}
+                        style={place}
+                      />
+                    ),
                   ]
                 })}
                 {end < columns ? <Blank from={end} beats={columns - end} closes /> : null}
