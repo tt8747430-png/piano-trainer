@@ -42,13 +42,13 @@ Non-trivial feature → `superpowers:brainstorming` first; specs in `docs/superp
   break**: the files you touched and their importers (`npm run test:related -- <changed source files>`, or
   `npm run test:changed` for everything uncommitted). The full `npm run test` takes minutes: run it once before a
   push that touches shared code (`shared/lib`, an entity's model, `app/`, the test setup or config), never after
-  each edit; CI runs it on every push anyway. After touching startup, routing, the PWA or config, also
-  `npm run build`.
+  each edit: CI runs only by hand, so these local checks are the gate. After touching startup, routing, the PWA or
+  config, also `npm run build`.
 
 ## Commands
 
-Node 24 (`.nvmrc`, `nvm use`). CI (`.github/workflows/ci.yml`) runs `typecheck`, `lint`, `test:cov` and `build`
-on every push and PR; Vercel previews each PR and deploys `main`.
+Node 24 (`.nvmrc`, `nvm use`). CI (`.github/workflows/ci.yml`: `typecheck`, `lint`, `test:cov`, `build`) runs only
+when started by hand; every check runs locally before a push. Vercel previews each PR and deploys `main`.
 `dev` · `build` · `preview` · `typecheck` · `lint` (includes the layer rules) · `test` (everything) /
 `test:unit` (the node half, about two minutes) / `test:related -- <files>` (the tests that import them) /
 `test:changed` (the tests uncommitted changes reach) / `test:watch` / `test:cov` (90% lines on `src/shared/lib/**`

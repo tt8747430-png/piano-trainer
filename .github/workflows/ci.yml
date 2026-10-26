@@ -1,18 +1,17 @@
-# Every push, to any branch, and every pull request: typecheck, lint (including the layer rules),
-# tests with the coverage gate, and a production build. Nothing merges red.
+# Run by hand only (Actions › CI › Run workflow): the owner checks locally before each push, as
+# CLAUDE.md says (typecheck, lint, the tests a change reaches, the whole suite before a push that
+# touches shared code, the build after startup, routing, the PWA or config). Here: typecheck, lint
+# (including the layer rules), tests with the coverage gate, and a production build.
 name: CI
 
 on:
-  push:
-    branches: ['**']
-  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   check:
