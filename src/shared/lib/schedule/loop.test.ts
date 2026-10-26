@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { arrange, parseFigure, type Chart } from '@/shared/lib/arrangement'
 import { note, parseChordSymbol } from '@/shared/lib/music'
-import { advanceLoop, beatGroupAt, startLoop, tempoAt } from './loop'
+import { advanceLoop, beatGroupAt, countAt, startLoop, tempoAt } from './loop'
 import { audibleHands } from './schedule'
 
 /** One bar of C, a chord on each beat: four beat groups, four seconds at 60 bpm. */
@@ -44,6 +44,30 @@ describe('beatGroupAt', () => {
     expect(beatGroupAt(loop, 14)).toBe(0)
     expect(beatGroupAt(loop, 15.5)).toBe(1)
     expect(beatGroupAt(loop, 17.99)).toBe(3)
+  })
+})
+
+describe('countAt', () => {
+  const loop = startLoop(ONE_BAR, { ...OPTIONS, countIn: true }, 10)
+
+  it('counts the count-in’s bar down as it sounds: its beats left, the one sounding among them', () => {
+    expect(countAt(loop, 10)).toBe(4)
+    expect(countAt(loop, 10.99)).toBe(4)
+    expect(countAt(loop, 11)).toBe(3)
+    expect(countAt(loop, 12.5)).toBe(2)
+    expect(countAt(loop, 13.99)).toBe(1)
+  })
+
+  it('counts nothing before it, once the music starts, or in a pass without one', () => {
+    expect(countAt(loop, 9.9)).toBeNull()
+    expect(countAt(loop, 14)).toBeNull()
+    expect(countAt(startLoop(ONE_BAR, OPTIONS, 10), 10)).toBeNull()
+  })
+
+  it('counts its bar in unheard where the clicks are silent (ADR 0105)', () => {
+    const silent = startLoop(ONE_BAR, { ...OPTIONS, countIn: true, clicks: false }, 10)
+    expect(silent.passes[0]?.sounds.some((sound) => sound.kind === 'click')).toBe(false)
+    expect(countAt(silent, 11)).toBe(3)
   })
 })
 

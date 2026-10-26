@@ -1,6 +1,7 @@
 export {
   advanceLoop,
   beatGroupAt,
+  countAt,
   startLoop,
   tempoAt,
   tickAt,

@@ -252,6 +252,52 @@ describe('schedule', () => {
     expect(musicStart).toBe(3.5)
   })
 
+  it('says when each beat of its count-in sounds: a bar before the music, counted down', () => {
+    const counted = schedule(perform('C', 'F'), { tempo: 120, hands: ALL, countIn: true })
+    expect(counted.counts).toEqual([0, 0.5, 1, 1.5])
+    expect(counted.musicStart).toBe(2)
+    const from = schedule(perform('C', 'F'), {
+      tempo: 60,
+      hands: ALL,
+      fromTick: 48,
+      countIn: true,
+    })
+    expect(from.counts).toEqual([0, 1, 2, 3])
+    expect(schedule(perform('C'), { tempo: 60, hands: ALL }).counts).toEqual([])
+  })
+
+  it('counts its bar in unheard and clicks nothing where the click is silent (ADR 0105)', () => {
+    const silent = schedule(perform('C'), {
+      tempo: 60,
+      hands: ALL,
+      countIn: true,
+      metronome: true,
+      clicks: false,
+    })
+    expect(clicks(silent.sounds)).toEqual([])
+    expect(silent.counts).toEqual([0, 1, 2, 3])
+    expect(notes(silent.sounds).every((sound) => sound.at === 4)).toBe(true)
+  })
+
+  it('names each note’s part, its hand or a staff over the piano, for the mix (ADR 0105)', () => {
+    const parts = (sounds: readonly Sound[]) =>
+      notes(sounds).map((sound) => `${sound.midi}:${sound.part ?? '-'}`)
+    expect(parts(schedule(perform('C'), { tempo: 60, hands: ALL }).sounds)).toEqual([
+      '36:lh',
+      '60:rh',
+      '64:rh',
+      '67:rh',
+      '72:staff',
+    ])
+    expect(parts(beatGroupSounds(perform('C'), 0, { tempo: 60, hands: ALL }))).toEqual([
+      '36:lh',
+      '60:rh',
+      '64:rh',
+      '67:rh',
+      '72:staff',
+    ])
+  })
+
   it('clicks every beat with the metronome, accenting each bar’s first', () => {
     const whole = schedule(perform('C'), { tempo: 60, hands: ALL, metronome: true })
     expect(clicks(whole.sounds)).toEqual([
