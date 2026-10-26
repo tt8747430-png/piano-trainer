@@ -1,7 +1,8 @@
 # Chordify for piano: its diagrams, its toolbar, its sound, a learner's library
 
 Date: 2026-10-26 · Decisions: [ADR 0101](../../adr/0101-chord-diagrams-on-one-keyboard.md),
-[ADR 0102](../../adr/0102-the-players-tools-row-and-its-view.md) (later rounds add theirs) · Follows:
+[ADR 0102](../../adr/0102-the-players-tools-row-and-its-view.md),
+[ADR 0103](../../adr/0103-the-learners-library.md) (later rounds add theirs) · Follows:
 [chord views and song lessons](2026-10-25-chord-views-and-song-lessons.md) (ADR 0099, 0100).
 
 The owner: every Chordify feature but the guitar's (capo, tuning, the tuner, the instrument choice, left-handed),
