@@ -21,6 +21,7 @@ import { RatingMark } from './RatingMark'
 import { RoundButton } from './RoundButton'
 import { RoundLink } from './RoundLink'
 import { RowButton } from './RowButton'
+import { RowCheck } from './RowCheck'
 import { RowGroup } from './RowGroup'
 import { RowLink } from './RowLink'
 import { ScreenBarProvider } from './ScreenBarProvider'
@@ -666,6 +667,26 @@ describe('RowButton', () => {
     expect(row).toBeDisabled()
     expect(row).toHaveAccessibleDescription('No room: delete one.')
     expect(row).toHaveAttribute('title', 'No room: delete one.')
+  })
+})
+
+describe('RowCheck', () => {
+  it('is on or off, a tap turning it', async () => {
+    const onCheckedChange = vi.fn()
+    const { rerender } = render(
+      <RowCheck
+        title="Sunday"
+        detail="3 songs"
+        checked={false}
+        onCheckedChange={onCheckedChange}
+      />,
+    )
+    const row = screen.getByRole('checkbox', { name: 'Sunday 3 songs' })
+    expect(row).not.toBeChecked()
+    await userEvent.setup().click(row)
+    expect(onCheckedChange).toHaveBeenCalledWith(true)
+    rerender(<RowCheck title="Sunday" detail="3 songs" checked onCheckedChange={onCheckedChange} />)
+    expect(row).toBeChecked()
   })
 })
 

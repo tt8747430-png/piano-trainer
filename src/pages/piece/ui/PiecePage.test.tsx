@@ -5,6 +5,7 @@ import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { readSongLink } from '@/features/share-song'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
+import { LIBRARY_STORAGE_KEY, LIBRARY_VERSION, MOST_SETLISTS } from '@/entities/library'
 import { COLLECTIONS, pieceById, PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import { createMemoryStorage } from '@/shared/lib'
@@ -200,7 +201,7 @@ describe('Piece', () => {
     ).toHaveAttribute('href', '/play/ex3')
   })
 
-  it('checks the song’s chords from More, its one action there', async () => {
+  it('checks the song’s chords from More, after Add to setlist', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs/bz5')
     await openMore(user)
@@ -209,18 +210,18 @@ describe('Piece', () => {
       within(more)
         .getAllByRole('button')
         .map((action) => action.textContent),
-    ).toEqual(['Check these chords'])
+    ).toEqual(['Add to setlist', 'Check these chords'])
     await user.click(within(more).getByRole('button', { name: 'Check these chords' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/check'))
     expect(router.state.location.search).toEqual({ of: 'piece:bz5' })
   })
 
-  it('floats Practise, its main action, and keeps Edit, Learned and More in its bar', async () => {
+  it('floats Practise, its main action, and keeps Edit, Learned, its ♡ and More in its bar', async () => {
     await renderApp('/songs/bz5')
     const practise = await screen.findByRole('link', { name: 'Practise' })
     expect(practise.closest('[data-slot="floating-actions"]')).not.toBeNull()
     const bar = screen.getByRole('heading', { level: 1 }).closest('header') as HTMLElement
-    for (const name of ['Edit the score', 'Learned', 'More'])
+    for (const name of ['Edit the score', 'Learned', 'Add to favourites', 'More'])
       expect(
         within(bar).getByRole(name === 'Edit the score' ? 'link' : 'button', { name }),
       ).toBeInTheDocument()
@@ -329,7 +330,7 @@ describe('Piece: the learner’s own music', () => {
       within(more)
         .getAllByRole('button')
         .map((action) => action.textContent),
-    ).toEqual(['Share', 'Delete'])
+    ).toEqual(['Add to setlist', 'Share', 'Delete'])
   })
 
   it('has nothing to learn in a song of no chord symbol: no learning card, its sections say so', async () => {
@@ -448,5 +449,108 @@ describe('Piece: the learner’s own music', () => {
       'href',
       '/edit/bz4',
     )
+  })
+})
+
+describe('Piece: the learner’s library (ADR 0103)', () => {
+  /** A device whose library holds `state`. */
+  const kept = (state: object) => {
+    const storage = createMemoryStorage()
+    storage.setItem(LIBRARY_STORAGE_KEY, JSON.stringify({ state, version: LIBRARY_VERSION }))
+    return storage
+  }
+  const SUNDAY = { id: 'set-1', name: 'Sunday', pieces: ['silent'] }
+
+  /** Opens More's Add to setlist, and its sheet. */
+  async function addToSetlist(user: ReturnType<typeof userEvent.setup>) {
+    await openMore(user)
+    await user.click(await screen.findByRole('button', { name: 'Add to setlist' }))
+    return screen.findByRole('dialog', { name: 'Add to setlist' })
+  }
+
+  it('keeps a song among the favourites from the ♡ in its bar, pressed while it is one', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs/bz5')
+    const heart = await screen.findByRole('button', { name: 'Add to favourites' })
+    expect(heart).toHaveAttribute('aria-pressed', 'false')
+    await user.click(heart)
+    expect(libraryStore.getState().favourites).toEqual(['bz5'])
+    // Named by what a tap does now.
+    expect(heart).toHaveAccessibleName('Remove from favourites')
+    expect(heart).toHaveAttribute('aria-pressed', 'true')
+    await user.click(heart)
+    expect(libraryStore.getState().favourites).toEqual([])
+  })
+
+  it('adds a song to a setlist from More: Favourites first, then each setlist, each a check', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs/bz5', {
+      storage: kept({ favourites: ['silent'], setlists: [SUNDAY], nextSetlist: 2 }),
+    })
+    const sheet = await addToSetlist(user)
+    const checks = within(sheet).getAllByRole('checkbox')
+    expect(checks.map((check) => check.textContent?.trim())).toEqual([
+      'Favourites 1 song',
+      'Sunday 1 song',
+    ])
+    expect(checks.every((check) => check.getAttribute('aria-checked') === 'false')).toBe(true)
+    await user.click(within(sheet).getByRole('checkbox', { name: /^Sunday/ }))
+    expect(libraryStore.getState().setlists[0]?.pieces).toEqual(['silent', 'bz5'])
+    expect(within(sheet).getByRole('checkbox', { name: /^Sunday/ })).toBeChecked()
+    expect(within(sheet).getByRole('checkbox', { name: /^Sunday/ })).toHaveTextContent('2 songs')
+    await user.click(within(sheet).getByRole('checkbox', { name: /^Favourites/ }))
+    expect(libraryStore.getState().favourites).toEqual(['bz5', 'silent'])
+    // A tap again takes it out.
+    await user.click(within(sheet).getByRole('checkbox', { name: /^Sunday/ }))
+    expect(libraryStore.getState().setlists[0]?.pieces).toEqual(['silent'])
+  })
+
+  it('makes a new setlist named in place, the song put in it; Escape leaves the name alone', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs/bz5')
+    const sheet = await addToSetlist(user)
+    await user.click(within(sheet).getByRole('button', { name: 'New setlist' }))
+    await user.type(within(sheet).getByRole('textbox', { name: 'Setlist name' }), 'Nope')
+    await user.keyboard('{Escape}')
+    // The field closed, the sheet still open.
+    expect(screen.getByRole('dialog', { name: 'Add to setlist' })).toBeInTheDocument()
+    expect(within(sheet).getByRole('button', { name: 'New setlist' })).toHaveFocus()
+    await user.click(within(sheet).getByRole('button', { name: 'New setlist' }))
+    await user.type(within(sheet).getByRole('textbox', { name: 'Setlist name' }), ' Easter {Enter}')
+    expect(libraryStore.getState().setlists).toEqual([
+      { id: 'set-1', name: 'Easter', pieces: ['bz5'] },
+    ])
+    expect(within(sheet).getByRole('checkbox', { name: /^Easter/ })).toBeChecked()
+    expect(within(sheet).getByRole('button', { name: 'New setlist' })).toHaveFocus()
+  })
+
+  it('greys New setlist once the library holds as many as it keeps, saying why', async () => {
+    const user = userEvent.setup()
+    const setlists = Array.from({ length: MOST_SETLISTS }, (_, i) => ({
+      id: `set-${i + 1}`,
+      name: `List ${i + 1}`,
+      pieces: [],
+    }))
+    await renderApp('/songs/bz5', { storage: kept({ setlists }) })
+    const sheet = await addToSetlist(user)
+    const make = within(sheet).getByRole('button', { name: 'New setlist' })
+    expect(make).toBeDisabled()
+    expect(make).toHaveAccessibleDescription(
+      'There is no room for another setlist: delete one first.',
+    )
+  })
+
+  it('reads in Russian', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs/bz5', {
+      locale: 'ru',
+      storage: kept({ setlists: [SUNDAY], nextSetlist: 2 }),
+    })
+    expect(await screen.findByRole('button', { name: 'Добавить в избранное' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Ещё' }))
+    await user.click(await screen.findByRole('button', { name: 'Добавить в сет-лист' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Добавить в сет-лист' })
+    expect(within(sheet).getByRole('checkbox', { name: /^Sunday/ })).toHaveTextContent('1 песня')
+    expect(untranslated(document.body)).toEqual([])
   })
 })

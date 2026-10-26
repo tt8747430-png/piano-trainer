@@ -11,6 +11,7 @@ import {
   useRepertoire,
   type Piece,
 } from '@/entities/piece'
+import { useAddToSetlist, useFavouriteAction } from '@/features/manage-library'
 import { beatGroupInBar, writtenBarAt } from '@/features/practice'
 import { ShareSaid, useShareSong } from '@/features/share-song'
 import { useLocale } from '@/shared/i18n'
@@ -21,6 +22,7 @@ import { ModeSwitch } from '@/widgets/mode-switch'
 import { useClose } from '../model/use-close'
 import type { PlayerSearch } from '../model/player-search'
 import { usePlayer } from '../model/use-player'
+import { MoreActions } from './more-actions'
 import { PieceSetup } from './PieceSetup'
 import { PlayerLayout } from './PlayerLayout'
 import { SongInfo } from './SongInfo'
@@ -58,8 +60,11 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const [showingInfo, setShowingInfo] = useState(false)
   const shared = useShareSong()
   const sharing = isOwnSongId(piece.id) && !isDegreePiece(piece)
+  // Its place in the learner's library (ADR 0103), first in More.
+  const favourite = useFavouriteAction(piece.id)
+  const setlist = useAddToSetlist(piece.id)
   return (
-    <>
+    <MoreActions value={[favourite, setlist.action]}>
       <PlayerLayout
         title={title}
         onClose={close}
@@ -111,7 +116,8 @@ function PiecePlayer({ piece }: { piece: Piece }) {
         open={showingInfo}
         onOpenChange={setShowingInfo}
       />
-    </>
+      {setlist.sheet}
+    </MoreActions>
   )
 }
 

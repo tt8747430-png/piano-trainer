@@ -14,6 +14,74 @@ export const songs = {
   emptyStage: 'No songs here at the “{{stage}}” level.',
   emptyQueryStage: 'No songs match “{{query}}” at the “{{stage}}” level.',
   clearFilters: 'Clear filters',
+  // A song's row counts its chords, each once over any bass (Chordify's 7 Tips: three to five for a
+  // beginner).
+  chordCount_one: '{{count}} chord',
+  chordCount_other: '{{count}} chords',
+  // Chords I know (ADR 0103): the chords ticked, and only the songs that use no other stay.
+  known: {
+    label: 'Chords I know',
+    count: 'Chords I know: {{count}}',
+    info: 'Tick the chords you can play: only the songs that use no other chord stay.',
+    clear: 'Clear',
+  },
+  emptyKnown: 'No songs here use only the chords you know.',
+  // The learner's library (ADR 0103): their favourites and their setlists, Songs' tabs after All.
+  favourites: 'Favourites',
+  setlists: 'Setlists',
+  favouritesEmpty: {
+    title: 'No favourites yet',
+    description: 'Tap ♡ on a song’s page to keep it here.',
+  },
+  setlistsEmpty: {
+    title: 'No setlists yet',
+    description: 'Gather songs to play in your own order: for a service, a lesson or an evening.',
+  },
+  searchSetlists: 'Search setlists',
+  emptySetlists: 'No setlists match “{{query}}”.',
+  library: {
+    favourite: 'Add to favourites',
+    unfavourite: 'Remove from favourites',
+    addToSetlist: 'Add to setlist',
+    newSetlist: 'New setlist',
+    setlistName: 'Setlist name',
+    songCount_one: '{{count}} song',
+    songCount_other: '{{count}} songs',
+    // Why New setlist and Duplicate are greyed: the library holds as many as it keeps.
+    full: 'There is no room for another setlist: delete one first.',
+    copyName: '{{name}} (copy)',
+  },
+  // A setlist's page: its songs in the learner's order.
+  setlist: {
+    more: 'More',
+    rename: 'Rename',
+    duplicate: 'Duplicate',
+    delete: 'Delete',
+    addSongs: 'Add songs',
+    search: 'Search this setlist',
+    move: 'Move {{title}}',
+    remove: 'Remove {{title}} from the setlist',
+    empty: {
+      title: 'No songs here yet',
+      description: 'Add songs, then drag them into the order you play them in.',
+    },
+    emptyQuery: 'No songs here match “{{query}}”.',
+    deleting: {
+      title: 'Delete “{{name}}”?',
+      says: 'It can’t be undone. Its songs stay in Songs.',
+      confirm: 'Delete',
+      cancel: 'Keep it',
+    },
+    // A drag as a screen reader hears it.
+    drag: {
+      instructions:
+        'To move a song, press Space or Enter on its handle, move it with the up and down arrows, then press Space or Enter to put it down, or Escape to put it back.',
+      picked: 'Picked up {{title}}.',
+      over: '{{title}} is at place {{place}} of {{count}}.',
+      dropped: '{{title}} put down at place {{place}} of {{count}}.',
+      cancelled: '{{title}} put back.',
+    },
+  },
   yours: 'Your songs',
   // Your songs' shelf before there are any.
   mineEmpty: {
