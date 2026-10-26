@@ -17,7 +17,8 @@ const PERCENT = { style: 'unit', unit: 'percent' } as const
  * The transport's round look: a pill along the bar, a little smaller under 360px and on a phone on
  * its side, so the transport fits with the gauge beside the value at every size (ADR 0094).
  */
-const TRIGGER = 'h-12 rounded-full px-3 narrow-phone:h-11 narrow-phone:px-2 landscape-phone:h-10'
+const TRIGGER =
+  'h-12 rounded-full px-3 small-phone:h-11 small-phone:px-2 narrow-phone:gap-1 narrow-phone:px-1 landscape-phone:h-10'
 
 /**
  * The tempo button and its popover (spec §2.7): Wait mode, or a speed of the piece's tempo, its

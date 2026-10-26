@@ -118,11 +118,14 @@ export function FloatingBarPlay({
   title,
   playing,
   disabled = false,
+  className,
   onClick,
 }: {
   label: string
   title?: string
   playing: boolean
+  /** Its size where a screen needs it smaller: the transport's 48px under 360px. */
+  className?: string
   /** Waiting on something else first (the editor's Play while a take records). */
   disabled?: boolean
   onClick: () => void
@@ -138,7 +141,7 @@ export function FloatingBarPlay({
       aria-pressed={playing}
       disabled={disabled}
       onClick={onClick}
-      className={BAR_PLAY}
+      className={cn(BAR_PLAY, className)}
     >
       <Icon aria-hidden />
     </Button>

@@ -2,6 +2,8 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 /* A phone on its side on the music stand: short and wide (the Player's two-column layout). */
 @custom-variant landscape-phone (@media (orientation: landscape) and (max-height: 500px) and (max-width: 1023px));
+/* A phone held upright narrower than 390px: the transport's seven controls a size down. */
+@custom-variant small-phone (@media (max-width: 389.98px));
 /* The narrowest phones held upright (under 360px): a bar of round buttons gives up what it can spare. */
 @custom-variant narrow-phone (@media (max-width: 359.98px));
 /* A wash under the pointer only where a mouse or a trackpad hovers, at every size: a phone keeps a

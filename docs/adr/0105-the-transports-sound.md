@@ -50,7 +50,8 @@ steps.
   beats sound (`counts`), and `countAt` counts them down; `clicks: false` counts a bar in unheard; `volumeGain`.
 - **`shared/api/audio`:** `play` takes a `SoundGain`, `playRecording` a volume.
 - **`features/practice`:** `Mix`, `mixGain`, `heardIn`; `usePractice` takes the mix and says `counting`.
-- **`widgets/practice-player`:** `SoundButton`, `CountInBeat`; the transport has seven controls, which fit from
-  320px at 40px each.
+- **`widgets/practice-player`:** `SoundButton`, `CountInBeat`; the transport has seven controls. Under 390px
+  they are 40px and ‹ › 32px; under 360px ‹ › are 28px, Play 48px and the tempo's padding narrower, so the seven
+  fit from 320px (`DOCK_BUTTON`, `DOCK_STEP`, the `small-phone` variant).
 
 The score editor's transport and its recorder's click (ADR 0028, 0096) keep their own switches.
