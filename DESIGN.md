@@ -515,10 +515,18 @@ nothing on the screen marks it beyond the tile.
 
 How each screen uses its width:
 
-- **Songs:** the collections as tabs (All, Your songs once there are any, then the books); the search, then Stage (a
-  pop-up of only the stages its shelves hold, absent where none does) and With chords (a labelled toggle), under the
-  search on a phone and beside it from 640px; and the songs as row cards in a grid.
-- **Piece** (ADR 0100, Learn the song): one column at every width: its bar (Edit, Learned, More), the learning
+- **Songs:** the collections as tabs (All, then the learner's library, Favourites and Setlists (ADR 0103), then Your
+  songs once there are any, then the books); the search, then Stage (a pop-up of only the stages its shelves hold,
+  absent where none does), With chords (a labelled toggle) and Chords I know (a button counting the chords ticked,
+  its popover their chips in Literata, the most used first), under the search on a phone and beside it from 640px;
+  and the songs as row cards in a grid, each saying how many chords it has. The Setlists tab has the search alone
+  over its setlists' row cards (a name over its songs counted and its first titles), then New setlist, a row named
+  where it stands.
+- **A setlist** (ADR 0103): its bar (Back, its name renamed where it is printed, Add songs and More), the search, and
+  its songs in one column, `max-w-3xl` from 1024px: each a card of its handle (a grip), the song's row face and its
+  Remove (✕); in the hand, the card lifted by a shade over a dashed slot where it lands. Add songs and Add to setlist
+  are sheets of check rows (a ring, an umber check while in).
+- **Piece** (ADR 0100, Learn the song): one column at every width: its bar (Edit, Learned, ♡, More), the learning
   card, its facts as three cards, its chords as diagrams, its sections as rows, Play along and its note; Practise
   floats. Only a chord's sheet sounds and shows keys there. A section's page is the same column.
 - **Learn:** the journeys as tabs over the shown journey's chapters, each folding under its heading, its lessons a
@@ -897,8 +905,9 @@ one keeps its music in the room above the transport.
 
 ### A piece's page: Learn the song
 
-A song's or a study's page (ADR 0100), one column under its screen bar (Back, the title, then Edit, Learned and More:
-Check these chords, an own song's Share, Reset to the original or Delete, asked first): its second title, stage and
+A song's or a study's page (ADR 0100), one column under its screen bar (Back, the title, then Edit, Learned, its ♡
+(ADR 0103: pressed while a favourite, a sand fill and a filled heart) and More: Add to setlist, Check these chords,
+an own song's Share, Reset to the original or Delete, asked first): its second title, stage and
 who wrote it; the **learning card**; Key · Time · Tempo as **fact cards**; **Chords** (Literata 600 24px) over the
 chord summary; **Sections** over its sections as rows in one card, each a row link in its section's paint with a note,
 its name and "15 lessons · 3 done", to its page; **Play along** (a row in its own card, in the song's yellow or the
