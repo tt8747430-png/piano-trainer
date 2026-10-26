@@ -13,8 +13,9 @@ const LINE =
 
 /**
  * Learn the song's card (spec §3.1): where to go next, a link there (a section's page; the Player
- * once every lesson is done), and the song's lessons done of all. None for a song with nothing to
- * learn: it has no chord symbols.
+ * once every lesson is done), and the song's lessons done of all. A song of one section has its
+ * lessons on its own page, under the card: the card says where to start and leads nowhere else. None
+ * for a song with nothing to learn: it has no chord symbols.
  */
 export function LearnCard({
   piece,
@@ -29,6 +30,11 @@ export function LearnCard({
   const lessons = useProgress(selectLessons)
   const step = nextStep(sections, lessons)
   if (!step) return null
+  // Where to go: the first section with a lesson, or the next one not done.
+  const said = ({ kind, section }: { kind: 'start' | 'next'; section: number }) =>
+    kind === 'start'
+      ? t(`learnSong.start.${piece.kind}`, { section: headings[section] ?? '' })
+      : t('learnSong.next', { section: headings[section] ?? '' })
   const arrow = (
     <ArrowRight
       aria-hidden
@@ -43,11 +49,11 @@ export function LearnCard({
           {t(`learnSong.done.${piece.kind}`)}
           {arrow}
         </Link>
+      ) : sections.length === 1 ? (
+        <p className="text-lg font-semibold text-pretty">{said(step)}</p>
       ) : (
         <SectionLink piece={piece} section={step.section} className={LINE}>
-          {step.kind === 'start'
-            ? t(`learnSong.start.${piece.kind}`, { section: headings[step.section] ?? '' })
-            : t('learnSong.next', { section: headings[step.section] ?? '' })}
+          {said(step)}
           {arrow}
         </SectionLink>
       )}

@@ -168,9 +168,11 @@ describe('Piece', () => {
 
   it('shows a study of one section its lessons in place, on its shelf (ADR 0100)', async () => {
     await renderApp('/practice/accompaniment/studies/ex3')
+    // Where to start, its lessons under the card: the card leads to no page that repeats them.
     expect(
-      await screen.findByRole('link', { name: 'Learn it step by step: start with the Practice.' }),
-    ).toHaveAttribute('href', '/practice/accompaniment/studies/ex3/sections/1')
+      await screen.findByText('Learn it step by step: start with the Practice.'),
+    ).not.toHaveAttribute('href')
+    expect(screen.queryByRole('link', { name: /start with the Practice/ })).not.toBeInTheDocument()
     expect(screen.queryByRole('region', { name: 'Sections' })).not.toBeInTheDocument()
     // Its chords are the section's to learn, in place of the summary.
     expect(
@@ -260,7 +262,7 @@ describe('Piece', () => {
     expect(await screen.findByRole('heading', { level: 2, name: 'Переходы' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '1-й оборот C · Dm · G · C' })).toBeInTheDocument()
     expect(
-      screen.getByRole('link', { name: 'Учите этюд по шагам: начните с раздела «Практика».' }),
+      screen.getByText('Учите этюд по шагам: начните с раздела «Практика».'),
     ).toBeInTheDocument()
     expect(
       screen.getByRole('link', { name: 'Играть вместе Весь этюд в плеере' }),
