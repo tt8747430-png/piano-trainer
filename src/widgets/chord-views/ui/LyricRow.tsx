@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import type { DiagramChord } from '@/features/practice'
 import { cn } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
-import { printedSymbol } from '@/shared/lib/music'
+import { printedSymbol, type Tick } from '@/shared/lib/music'
 import { ChordDiagram } from '@/widgets/chord-diagrams'
 import type { SungWords } from '../model/lyric-lines'
 import type { ShownLine } from '../model/repeated-lines'
@@ -48,7 +48,6 @@ export function LyricRow({
   looped,
   diagramOf,
   onGo,
-  onChord,
 }: {
   line: ShownLine
   /** Its place among the lines, which the view finds it by. */
@@ -60,8 +59,8 @@ export function LyricRow({
   looped: boolean
   /** A chord's diagram as its piece draws it: what a pointer resting on its chip shows. */
   diagramOf: (chord: number) => DiagramChord | null
-  onGo: () => void
-  onChord: (chord: number) => void
+  /** A tap on it: the tick it takes the cursor to, its first beat's or a chip's chord's. */
+  onGo: (at: Tick) => void
 }) {
   const { t } = useTranslation('player')
   const first = line.bars[0] ?? 0
@@ -86,7 +85,7 @@ export function LyricRow({
             </>
           ) : null
         }}
-        onOpen={() => onChord(chord)}
+        onGo={() => onGo(performance.chords[chord]?.startTick ?? line.from)}
       />
     )
   return (
@@ -108,7 +107,7 @@ export function LyricRow({
             : t('line.many', { first: first + 1, last: last + 1 })
         }
         aria-current={playing ? 'step' : undefined}
-        onClick={onGo}
+        onClick={() => onGo(line.from)}
         className="absolute inset-0 cursor-pointer rounded-lg"
       />
       <div

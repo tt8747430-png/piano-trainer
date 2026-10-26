@@ -38,7 +38,7 @@ function renderSummary(bar: number) {
     clock: null,
     jumpToBeatGroup: vi.fn(),
   }
-  return renderWithSettings(
+  const rendered = renderWithSettings(
     <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
       <ChordView
         view="diagrams"
@@ -54,6 +54,7 @@ function renderSummary(bar: number) {
       />
     </ServicesProvider>,
   )
+  return { ...rendered, practice }
 }
 
 /** The summary's cards, by their chord's symbol, the one sounding marked `*`. */
@@ -78,11 +79,12 @@ describe('Diagrams, its summary (ADR 0101)', () => {
     expect(cards()).toEqual(['C', 'G*', 'Am'])
   })
 
-  it('opens a card’s chord in its sheet', async () => {
+  it('takes the cursor to a card’s chord, opening no sheet (ADR 0108)', async () => {
     const user = userEvent.setup()
-    renderSummary(0)
+    const { practice } = renderSummary(0)
     await user.click(screen.getByRole('button', { name: /^Am: / }))
-    expect(await screen.findByRole('dialog', { name: 'Am chord' })).toBeInTheDocument()
+    expect(practice.jumpToBeatGroup).toHaveBeenCalledWith(barGroup(3))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 })
 

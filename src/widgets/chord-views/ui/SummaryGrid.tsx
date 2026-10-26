@@ -8,7 +8,8 @@ import { ChordDiagram } from '@/widgets/chord-diagrams'
  * The Diagrams view's summary (ADR 0101, Chordify's): the song's chords at once as cards in the
  * order they first sound, two a row on a phone held upright, three from a tablet's width, four on a
  * laptop and on a phone on its side, whose room is short; the card of the chord sounding outlined in
- * ink, its symbol in ink, the others' muted. A card opens its chord's sheet (`onChord`).
+ * ink, its symbol in ink, the others' muted. A card tapped takes the cursor to its chord (`onChord`, by its symbol,
+ * ADR 0108).
  */
 export function SummaryGrid({
   chords,
@@ -18,7 +19,7 @@ export function SummaryGrid({
   chords: readonly DiagramChord[]
   /** The symbol of the chord sounding; none in a bar of no chord. */
   sounding: string | null
-  onChord: (chord: number) => void
+  onChord: (symbol: string) => void
 }) {
   const { t } = useTranslation('music')
   return (
@@ -33,7 +34,7 @@ export function SummaryGrid({
             <button
               type="button"
               aria-current={now ? 'true' : undefined}
-              onClick={() => onChord(chord.chord)}
+              onClick={() => onChord(chord.symbol)}
               className={cn(
                 'card flex w-full flex-col items-center gap-2 p-3 transition-colors duration-200 ease-out hover:bg-muted',
                 now && 'border-foreground',

@@ -12,15 +12,19 @@ import { ChordSheet } from './ChordSheet'
  * its sheet; one row, scrolling sideways where it is wider than its room. Nothing for music of no
  * chord symbol. Following the music (`sounding`, Chords over lyrics' pinned row, ADR 0108), it is
  * drawn smaller, to stay pinned in little room, and the chord sounding is outlined in ink and kept
- * in sight, the others' symbols muted.
+ * in sight, the others' symbols muted, and a chord tapped is the music's to go to (`onChord`, ADR
+ * 0108) where its sheet would open.
  */
 export function ChordSummary({
   chords,
   sounding,
+  onChord,
 }: {
   chords: readonly DiagramChord[]
   /** The symbol of the chord sounding, where the row follows the music; none in a bar of none. */
   sounding?: string | null
+  /** A chord tapped, by its symbol, where the row follows the music: in place of its sheet. */
+  onChord?: (symbol: string) => void
 }) {
   const { t } = useTranslation('music')
   // The chord last opened stays in its sheet as the sheet closes; drawn as its piece draws it now.
@@ -57,7 +61,9 @@ export function ChordSummary({
               <button
                 type="button"
                 aria-current={now ? 'true' : undefined}
-                onClick={() => setShown({ symbol: each.symbol, open: true })}
+                onClick={() =>
+                  onChord ? onChord(each.symbol) : setShown({ symbol: each.symbol, open: true })
+                }
                 className={cn(
                   'flex flex-col items-center rounded-xl border border-transparent transition-colors duration-200 ease-out hover:bg-muted focus-visible:-outline-offset-3',
                   follows ? 'gap-0.5 px-1.5 py-1' : 'gap-1.5 p-2',

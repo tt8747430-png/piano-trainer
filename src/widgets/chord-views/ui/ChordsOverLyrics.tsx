@@ -30,8 +30,8 @@ import { LyricRow } from './LyricRow'
  * (`LyricRow`), at the text size chosen (`textSize`), a line of chords alone played again straight
  * after itself once with ×N (`foldRepeats`). The line playing is kept in sight, in the top third of
  * the room between the strip and the transport (`lineScroll`); the chip of the chord sounding is
- * filled. A chip, or a diagram, opens the chord's sheet (`onChord`); a line or a beat tapped takes the
- * cursor there (`onGo`, the tick it is first played at).
+ * filled. A chip, a line or a beat tapped takes the cursor there (`onGo`, the tick it is first
+ * played at), a pinned diagram to its chord (`onSymbol`, ADR 0108): the line scrolls to it.
  */
 export function ChordsOverLyrics({
   title,
@@ -43,8 +43,9 @@ export function ChordsOverLyrics({
   loop,
   pinned,
   textSize,
+  clock,
   onGo,
-  onChord,
+  onSymbol,
 }: {
   title: string
   performance: Performance
@@ -59,8 +60,11 @@ export function ChordsOverLyrics({
   pinned: boolean
   /** The words and their chords, as a percent of their own size. */
   textSize: TextSize
+  /** Listen's clock while it plays: the strip's. */
+  clock: (() => Tick | null) | null
   onGo: (at: Tick) => void
-  onChord: (chord: number) => void
+  /** A pinned diagram tapped, by its symbol: the cursor taken to it. */
+  onSymbol: (symbol: string) => void
 }) {
   const { t } = useTranslation('player')
   const lines = useMemo(() => foldRepeats(performance, lyricLines(performance)), [performance])
@@ -118,10 +122,17 @@ export function ChordsOverLyrics({
         ref={strip}
         className="sticky top-0 z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0"
       >
-        <BeatStrip performance={performance} bars={bars} beat={beat} loop={loop} onBeat={onGo} />
+        <BeatStrip
+          performance={performance}
+          bars={bars}
+          beat={beat}
+          loop={loop}
+          clock={clock}
+          onBeat={onGo}
+        />
         {pinned ? (
           <div className="mx-auto mt-1 w-full max-w-2xl px-gutter landscape-phone:px-0">
-            <ChordSummary chords={summary} sounding={sounding} />
+            <ChordSummary chords={summary} sounding={sounding} onChord={onSymbol} />
           </div>
         ) : null}
       </div>
@@ -153,8 +164,7 @@ export function ChordsOverLyrics({
                 sounding={chip?.line === index ? chip.segment : null}
                 looped={line.bars.some((each) => looped.has(each))}
                 diagramOf={diagramOf}
-                onGo={() => onGo(line.from)}
-                onChord={onChord}
+                onGo={onGo}
               />
             </Fragment>
           )
