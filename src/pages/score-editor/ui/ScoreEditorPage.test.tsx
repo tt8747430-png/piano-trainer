@@ -1964,6 +1964,7 @@ describe('the score editor’s takes', () => {
     const user = userEvent.setup()
     const { router, midi: keyboard } = await renderApp('/songs/folders/hymns')
     connect(keyboard)
+    await user.click(await screen.findByRole('button', { name: 'New' }))
     await user.click(await screen.findByRole('button', { name: 'New song' }))
     await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Evening')
     await user.click(screen.getByRole('button', { name: 'Record' }))
@@ -1976,6 +1977,7 @@ describe('the score editor’s takes', () => {
   it('opens Record’s popover when the song was made to record with no MIDI keyboard', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs/folders/hymns')
+    await user.click(await screen.findByRole('button', { name: 'New' }))
     await user.click(await screen.findByRole('button', { name: 'New song' }))
     await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Evening')
     await user.click(screen.getByRole('button', { name: 'Record' }))
