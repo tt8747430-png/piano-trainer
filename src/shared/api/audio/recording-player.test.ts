@@ -9,6 +9,7 @@ function fakeMedia(refuse = false) {
     muted: false,
     paused: true,
     seeking: false,
+    volume: 1,
     seeks: [] as number[],
     plays: 0,
     pauses: 0,
@@ -43,6 +44,7 @@ function slowMedia(cost: number, now: () => number) {
     muted: false,
     paused: true,
     seeking: false,
+    volume: 1,
     get currentTime() {
       return media.paused
         ? position
@@ -78,6 +80,7 @@ function loadingMedia() {
     muted: false,
     paused: true,
     seeking: false,
+    volume: 1,
     plays: 0,
     play() {
       media.plays++
@@ -243,6 +246,23 @@ describe('createRecordingPlayer', () => {
     recordings.prime()
     await vi.advanceTimersByTimeAsync(0)
     expect(media.plays).toBe(1)
+  })
+
+  it('plays as loud as its volume says, from its start and as it changes (ADR 0105)', async () => {
+    const recordings = player()
+    let level = 0.25
+    recordings.play('vocal.m4a', { at: 0, offset: 0, rate: 1, until: 30 }, () => level)
+    await vi.advanceTimersByTimeAsync(20)
+    expect(media.volume).toBe(0.25)
+    level = 0.64
+    clock = 0.5
+    await vi.advanceTimersByTimeAsync(20)
+    expect(media.volume).toBe(0.64)
+    // A play that says no volume plays at full.
+    recordings.play('vocal.m4a', { at: 1, offset: 1, rate: 1, until: 30 })
+    clock = 1
+    await vi.advanceTimersByTimeAsync(20)
+    expect(media.volume).toBe(1)
   })
 
   it('stays silent when the browser refuses to play', async () => {
