@@ -6,6 +6,7 @@ import { selectLessons, useProgress, useProgressStoreApi } from '@/entities/prog
 import { diagramChord } from '@/features/practice'
 import { recordChord } from '@/features/record-lesson'
 import type { Performance } from '@/shared/lib/arrangement'
+import { printedSymbol } from '@/shared/lib/music'
 import { RowGroup, RowLink, type Paint } from '@/shared/ui'
 import { ChordSheet } from '@/widgets/chord-diagrams'
 import type { ChordLesson } from '../model/section-lessons'
@@ -42,7 +43,7 @@ export function ChordLessons({
           return (
             <li key={lesson.key}>
               <RowLink
-                title={t('learnSection.learnChord', { chord: lesson.symbol })}
+                title={t('learnSection.learnChord', { chord: printedSymbol(lesson.symbol) })}
                 icon={learned ? Check : Piano}
                 paint={paint}
                 // The check says it to the eye alone.

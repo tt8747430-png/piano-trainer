@@ -208,6 +208,43 @@ describe('playedBeatCells', () => {
     // The second pass's chords are its own.
     expect(cells[2]?.cells[0]?.chords).toEqual([3])
   })
+
+  it('counts a pickup played again on its bar’s beats, as its first pass and the cursor do', () => {
+    // A pickup of a beat and a half, G then D on its last beat, repeated with the bars after it.
+    const repeated = played(
+      '4/4',
+      [
+        [
+          [
+            { ...bar(1.5, ['G', 0.5], ['D', 1]), repeatStart: true },
+            bar(4, ['C', 4]),
+            { ...bar(2.5, ['F', 2.5]), barline: 'repeat' },
+          ],
+        ],
+      ],
+      true,
+    )
+    const pickups = playedBeatCells(repeated).filter(({ written }) => written === 0)
+    const named = pickups.map(({ cells }) =>
+      cells.map(({ from, chords }) => [
+        from,
+        ...chords.map((chord) => repeated.chords[chord]?.symbol),
+      ]),
+    )
+    expect(named).toEqual([
+      [
+        [0, 'G'],
+        [12, 'D'],
+      ],
+      [
+        [0, 'G'],
+        [12, 'D'],
+      ],
+    ])
+    // The cursor on D the second time stands in the cell the strip names it in.
+    const second = repeated.bars[3]
+    expect(second && beatAt(repeated, second.startTick + 12).beat).toBe(1)
+  })
 })
 
 describe('beatGroupFrom', () => {

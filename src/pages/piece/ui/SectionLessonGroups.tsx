@@ -6,6 +6,7 @@ import type { Piece } from '@/entities/piece'
 import type { BarRange } from '@/features/practice'
 import { useLocale } from '@/shared/i18n'
 import type { Performance } from '@/shared/lib/arrangement'
+import { printedSymbol } from '@/shared/lib/music'
 import { RowGroup, type Paint } from '@/shared/ui'
 import type { SectionLessons } from '../model/section-lessons'
 import { ChordLessons } from './ChordLessons'
@@ -58,7 +59,7 @@ export function SectionLessonGroups({
                   title={
                     sequences.length > 1 ? sequenceName(i + 1) : t('learnSection.wholeSection')
                   }
-                  detail={sequence.symbols.join(' · ')}
+                  detail={sequence.symbols.map(printedSymbol).join(' · ')}
                   icon={ListMusic}
                   paint={paint}
                 />
@@ -72,7 +73,10 @@ export function SectionLessonGroups({
                   key={`${change.from} ${change.to}`}
                   pieceId={piece.id}
                   lesson={change}
-                  title={t('learnSection.change', { from: change.from, to: change.to })}
+                  title={t('learnSection.change', {
+                    from: printedSymbol(change.from),
+                    to: printedSymbol(change.to),
+                  })}
                   detail={barsName(change.bars)}
                   icon={MoveRight}
                   paint={paint}
@@ -92,7 +96,7 @@ export function SectionLessonGroups({
               lesson={pattern}
               title={patternName(pattern.pattern) ?? t('learnSection.pattern', { count: 1 })}
               detail={t('learnSection.patternAt', {
-                chord: pattern.symbol,
+                chord: printedSymbol(pattern.symbol),
                 bars: barsName(pattern.bars),
               })}
               icon={AudioWaveform}

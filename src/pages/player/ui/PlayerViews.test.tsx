@@ -384,8 +384,10 @@ describe('Diagrams (ADR 0099)', () => {
     expect(within(view).getByText('All is calm, all is bright')).toBeInTheDocument()
     act(() => setScoreView(settingsStore, { lyrics: false }))
     expect(within(view).queryByText('Silent night, holy night,')).not.toBeInTheDocument()
+    // The chord sounding is named by its notes; the next, greyed, as the next.
+    expect(within(view).getByRole('button', { name: 'C: C E G' })).toBeInTheDocument()
     // A diagram opens its chord's sheet.
-    await user.click(within(view).getByRole('button', { name: /^G7: / }))
+    await user.click(within(view).getByRole('button', { name: 'Next: G7' }))
     expect(await screen.findByRole('dialog', { name: 'G7 chord' })).toBeInTheDocument()
   })
 
@@ -397,6 +399,7 @@ describe('Diagrams (ADR 0099)', () => {
     await inView('diagrams', '/play/my-1', { storage })
     const view = screen.getByRole('region', { name: 'Diagrams' })
     expect(within(view).getByText('Next: G')).toBeInTheDocument()
+    expect(within(view).getByRole('button', { name: 'Next: G' })).toBeInTheDocument()
     const [only, ...more] = within(view).getAllByRole('img')
     expect(only).toHaveAttribute('data-muted')
     expect(more).toEqual([])

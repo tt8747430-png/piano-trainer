@@ -51,7 +51,10 @@ function beatSpans(performance: Performance, played: number): { from: Tick; to: 
   return spans
 }
 
-/** A bar played in beats, with its own chords; none past the last. */
+/**
+ * A bar played in beats, with its own chords; none past the last. Every pass counts its beats as its
+ * first does, as the cursor's beat is counted (`beatAt`): a pickup played again is still its bar's end.
+ */
 function cellBar(performance: Performance, played: number): CellBar | null {
   const bar = performance.bars[played]
   if (!bar) return null
@@ -59,12 +62,13 @@ function cellBar(performance: Performance, played: number): CellBar | null {
     const start = (performance.chords[chord]?.startTick ?? -1) - bar.startTick
     return start >= from && start < to
   }
-  const cells = beatSpans(performance, played).map(({ from, to }) => ({
+  const written = writtenBarOf(performance, played)
+  const first = firstPlayedBar(performance, written) ?? played
+  const cells = beatSpans(performance, first).map(({ from, to }) => ({
     from,
     to,
     chords: bar.chords.filter((chord) => startsIn(chord, from, to)),
   }))
-  const written = writtenBarOf(performance, played)
   return { written, played, section: bar.section, line: bar.line, cells }
 }
 

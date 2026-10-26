@@ -7,9 +7,15 @@ export const piece: LocaleResources['piece'] = {
   learnSong: {
     progress: '{{done}} из {{total}}',
     progressSaid: 'Пройдено уроков: {{done}} из {{total}}',
-    start: 'Учите песню по шагам: начните с раздела «{{section}}».',
+    start: {
+      song: 'Учите песню по шагам: начните с раздела «{{section}}».',
+      study: 'Учите этюд по шагам: начните с раздела «{{section}}».',
+    },
     next: 'Дальше: раздел «{{section}}».',
-    done: 'Все разделы пройдены. Сыграйте песню целиком.',
+    done: {
+      song: 'Все разделы пройдены. Сыграйте песню целиком.',
+      study: 'Все разделы пройдены. Сыграйте этюд целиком.',
+    },
     sections: 'Разделы',
     lessons_one: '{{count}} урок',
     lessons_few: '{{count}} урока',
@@ -18,7 +24,7 @@ export const piece: LocaleResources['piece'] = {
     lessonsDone: '{{lessons}} · пройдено: {{done}}',
     noLessons: 'Нет аккордов для разучивания',
     playAlong: 'Играть вместе',
-    playAlongDetail: 'Вся песня в плеере',
+    playAlongDetail: { song: 'Вся песня в плеере', study: 'Весь этюд в плеере' },
   },
   learnSection: {
     title: 'Учим раздел «{{section}}»',

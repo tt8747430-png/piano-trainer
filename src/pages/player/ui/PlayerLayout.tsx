@@ -154,7 +154,8 @@ export function PlayerLayout({
         <MidiButton />
         {setup}
         <PlayerMore
-          music={{ performance, title, tempo: player.tempo, staves: names }}
+          music={{ performance, title, tempo: player.tempo }}
+          staves={names}
           info={info}
           share={share}
         />

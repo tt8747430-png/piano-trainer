@@ -54,7 +54,7 @@ describe('Piece', () => {
       within(chords)
         .getAllByRole('button')
         .map((chord) => chord.textContent),
-    ).toEqual(['G', 'C', 'Em', 'G/B', 'C/E', 'Dsus4', 'D/F#', 'Am', 'D7', 'D'])
+    ).toEqual(['G', 'C', 'Em', 'G/B', 'C/E', 'Dsus4', 'D/F♯', 'Am', 'D7', 'D'])
     await user.click(within(chords).getAllByRole('button')[2] as HTMLElement)
     const sheet = await screen.findByRole('dialog', { name: 'Em chord' })
     expect(within(sheet).queryByText('Play it on the keys')).not.toBeInTheDocument()
@@ -73,6 +73,20 @@ describe('Piece', () => {
       ['Tempo', '72 BPM'],
     ])
     expect(screen.getByText('Мир, душа, храни')).toBeInTheDocument()
+  })
+
+  it('prints its key and its chords as the Player prints chord symbols, with ♯ and ♭', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs/bz2')
+    const facts = (await screen.findByText('Tempo')).closest('dl') as HTMLElement
+    expect(within(facts).getByText('Key').nextElementSibling).toHaveTextContent('C♯m')
+    const chords = screen.getByRole('region', { name: 'Chords' })
+    const [first] = within(chords).getAllByRole('button')
+    expect(first).toHaveTextContent('C♯m')
+    // Its keys are named by the symbol as printed, then the notes they mark.
+    expect(within(first as HTMLElement).getByRole('img')).toHaveAccessibleName(/^C♯m: /)
+    await user.click(first as HTMLElement)
+    expect(await screen.findByRole('dialog', { name: 'C♯m chord' })).toBeInTheDocument()
   })
 
   it('lists its sections, each a row to its page of lessons in its paint (ADR 0100)', async () => {
@@ -178,6 +192,10 @@ describe('Piece', () => {
       'href',
       '/play/ex3?loop=1-1',
     )
+    // A study is called a study, never a song.
+    expect(
+      screen.getByRole('link', { name: 'Play along The whole study in the Player' }),
+    ).toHaveAttribute('href', '/play/ex3')
   })
 
   it('checks the song’s chords from More, its one action there', async () => {
@@ -237,10 +255,16 @@ describe('Piece', () => {
     expect(untranslated(document.body)).toEqual([])
   })
 
-  it('reads a study’s lessons in Russian', async () => {
+  it('reads a study’s lessons in Russian, calling it a study', async () => {
     await renderApp('/practice/accompaniment/studies/ex3', { locale: 'ru' })
     expect(await screen.findByRole('heading', { level: 2, name: 'Переходы' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '1-й оборот C · Dm · G · C' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: 'Учите этюд по шагам: начните с раздела «Практика».' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: 'Играть вместе Весь этюд в плеере' }),
+    ).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
   })
 

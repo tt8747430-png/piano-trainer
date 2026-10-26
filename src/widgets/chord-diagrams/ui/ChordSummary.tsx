@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { DiagramChord } from '@/features/practice'
+import { printedSymbol } from '@/shared/lib/music'
 import { ChordDiagram } from './ChordDiagram'
 import { ChordSheet } from './ChordSheet'
 
 /**
  * A piece's chord summary (ADR 0099): its chords in the order they first sound (`chordSummary`), each
- * its keys over its symbol, a button opening its sheet; one row, scrolling sideways where it is
+ * its keys over its symbol as the sheet prints it (`C♯m7`), a button opening its sheet; one row, scrolling sideways where it is
  * wider than its room. Nothing for music of no chord symbol.
  */
 export function ChordSummary({ chords }: { chords: readonly DiagramChord[] }) {
@@ -30,7 +31,7 @@ export function ChordSummary({ chords }: { chords: readonly DiagramChord[] }) {
               {/* One height for all: every chord's keys the same size, a wide chord wider. */}
               <ChordDiagram chord={chord} className="h-10 w-auto" />
               <span aria-hidden className="font-display text-lg leading-tight font-semibold">
-                {chord.symbol}
+                {printedSymbol(chord.symbol)}
               </span>
             </button>
           </li>

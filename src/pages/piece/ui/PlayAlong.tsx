@@ -18,7 +18,7 @@ export function PlayAlong({ piece }: { piece: Pick<Piece, 'id' | 'kind'> }) {
       <li>
         <RowLink
           title={t('learnSong.playAlong')}
-          detail={t('learnSong.playAlongDetail')}
+          detail={t(`learnSong.playAlongDetail.${piece.kind}`)}
           icon={Play}
           paint={PAINT[piece.kind]}
           render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} />}

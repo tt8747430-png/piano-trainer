@@ -29,7 +29,7 @@ async function openSheet(props: Partial<ComponentProps<typeof ChordSheet>> = {})
       <ChordSheet open onOpenChange={onOpenChange} chord={C_SHARP_M7} {...props} />
     </ServicesProvider>,
   )
-  const sheet = await screen.findByRole('dialog', { name: 'C#m7 chord' })
+  const sheet = await screen.findByRole('dialog', { name: 'C♯m7 chord' })
   return { sheet, audio, keyboard, onOpenChange }
 }
 
@@ -40,9 +40,9 @@ const hold = (keyboard: ReturnType<typeof createFakeMidi>, ...keys: number[]) =>
   })
 
 describe('ChordSheet', () => {
-  it('shows the chord as its keys, named by its notes', async () => {
+  it('shows the chord as its keys, named by its symbol as printed and its notes', async () => {
     const { sheet } = await openSheet()
-    expect(within(sheet).getByRole('img', { name: 'C#m7: C# B E G#' })).toBeInTheDocument()
+    expect(within(sheet).getByRole('img', { name: 'C♯m7: C# B E G#' })).toBeInTheDocument()
   })
 
   it('plays the chord’s keys together, Play turning into Stop while they sound', async () => {

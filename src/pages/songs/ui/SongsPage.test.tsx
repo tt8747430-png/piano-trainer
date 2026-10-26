@@ -79,6 +79,13 @@ describe('Songs', () => {
     expect(listing?.querySelector('[data-slot="row-chords"]')).toBeNull()
   })
 
+  it('prints a row’s chords and its key as the Player prints chord symbols, with ♯ and ♭', async () => {
+    await renderApp('/songs')
+    const song = await screen.findByRole('link', { name: /You waited for the morning light/ })
+    expect(within(song).getByText('C♯m F♯m G♯ C♯')).toBeVisible()
+    expect(song).toHaveAccessibleName(/Key C♯m/)
+  })
+
   it('lists songs only: no study or progression', async () => {
     await renderApp('/songs')
     expect(await screen.findByRole('heading', { level: 2, name: 'Hymns' })).toBeInTheDocument()

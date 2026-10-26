@@ -213,6 +213,28 @@ components:
     backgroundColor: '{colors.paper-card}'
     rounded: '{rounded.card}'
     padding: '20px'
+  fact-card:
+    backgroundColor: '{colors.paper-card}'
+    textColor: '{colors.ink}'
+    typography: '{typography.label}'
+    rounded: '{rounded.card}'
+    padding: '12px 8px'
+  beat-cell:
+    backgroundColor: '{colors.paper-card}'
+    textColor: '{colors.ink}'
+    size: '56px'
+  beat-cell-sounding:
+    backgroundColor: '{colors.ink}'
+    textColor: '{colors.paper}'
+    size: '56px'
+  chord-chip:
+    backgroundColor: '{colors.sand-sunken}'
+    textColor: '{colors.ink}'
+    rounded: '{rounded.md}'
+  chord-chip-sounding:
+    backgroundColor: '{colors.ink}'
+    textColor: '{colors.paper}'
+    rounded: '{rounded.md}'
   step-tile:
     backgroundColor: '{colors.wash-sand}'
     textColor: '{colors.sand-deep}'
@@ -345,7 +367,8 @@ Seven paints at one lightness (`paint-brick`, `paint-yellow`, `paint-grass`, `pa
 - **On keys, as the Player's hands:** right brick, left lilac, tune grass; the Player only.
 - **On the chrome, as the book's paints:** sand, yellow, grass, sky and lilac name places and kinds of step, always as
   their wash with their deep shade on it for the icon (the on-colour): the step tiles (chords sand, scale sky, study
-  grass, song yellow, progression lilac) and a course's tile. By
+  grass, song yellow, progression lilac), a course's tile and a song's sections by their kind (an intro, outro or
+  ending sand, a verse sky, a chorus grass, a bridge lilac, the rest yellow; its lessons wear it too). By
   night each wash is a dusk tint (`dusk-sand`, `dusk-yellow`, `dusk-grass`, `dusk-sky`, `dusk-lilac`) under its light
   shade (`sand-light`, `yellow-light`, `grass-light`, `sky-light`, `lilac-light`). Brick and teal are never on the
   chrome.
@@ -451,7 +474,8 @@ name in Literata, the four places and Settings at its foot, or collapsed to 72px
 at least 18rem as fit. The Player, the score editor and the Check are full screen with no navigation: the viewport's
 height and width, scrolling inside when their content is taller.
 
-**The Player** (Flowkey's shape) is its bar, the sheet, Wait mode's line and the keys, placed by the
+**The Player** (Flowkey's shape) is its bar, the music in the view chosen (the sheet or a chord view, below), Wait
+mode's line and the keys, placed by the
 `player-screen` grid, the transport floating over the sheet's foot (ADR 0061, 0081, 0085). The keyboard is as tall
 as its keys' proportion makes it (below), at the foot or under the bar as the keyboard settings dock it; the View's
 Keys takes it away.
@@ -462,10 +486,11 @@ Keys takes it away.
   its key as played, time and tempo as the song page's cards, its second title and who wrote it), Export to MIDI and
   an own song's Share. The title is printed on the sheet.
 - **The transport** (`PlayerDock`): one pill floating along the sheet's foot at every size, a phone on its side too:
-  the tempo, ‹ ▶ › (Play in honey), the loop (pressed: a muted fill; R) and the hands. On a phone held upright its
-  controls are the 44px target, side by side, and it may stand into the gutters, so the six fit from 360px in
-  either language. It steps aside while the music is read and comes back at a tap on a note; a tap on the screen's
-  free room shows or hides it.
+  the tempo, ‹ ▶ › (Play in honey), the loop (pressed: a muted fill; R) and the hands. Its controls are 48px from
+  640px, the 44px target side by side on a phone held upright, and 40px under 360px and on a phone on its side
+  (`DOCK_BUTTON`); it may stand into the gutters, so the six fit from 320px in either language. Every view keeps
+  its music in the room above it (`--float-room`). It steps aside while the music is read and comes back at a tap
+  on a note; a tap on the screen's free room shows or hides it.
 - **A phone on its side** (a landscape screen under 500px tall): Wait mode's line stands in the bar's row, between
   its two groups; the sheet takes the height between the bar and the keys.
 
@@ -488,8 +513,9 @@ How each screen uses its width:
 - **Songs:** the collections as tabs (All, Your songs once there are any, then the books); the search, then Stage (a
   pop-up of only the stages its shelves hold, absent where none does) and With chords (a labelled toggle), under the
   search on a phone and beside it from 640px; and the songs as row cards in a grid.
-- **Piece** (ADR 0098): one column: its bar (Edit, Learned, More), its facts and credits, its form as chips, its
-  note; Practise floats. It plays nothing and shows no keys: its chords are the Player's chart.
+- **Piece** (ADR 0100, Learn the song): one column at every width: its bar (Edit, Learned, More), the learning
+  card, its facts as three cards, its chords as diagrams, its sections as rows, Play along and its note; Practise
+  floats. Only a chord's sheet sounds and shows keys there. A section's page is the same column.
 - **Learn:** the journeys as tabs over the shown journey's chapters, each folding under its heading, its lessons a
   zigzag of nodes; or the courses, shelf by shelf, as compact cards (icon tile, name, facts as pictures); Continue
   floats. A lesson's bar floats too: sections ‹ n/m ›, the lessons either side at its ends, its tools.
@@ -505,12 +531,14 @@ How each screen uses its width:
 - **Settings:** two equal columns from 1024px.
 - **Intervals:** the interval cards as many across as fit.
 
-Stacks use gap: 24px between a screen's parts, 32px between sections, 16–20px inside a group. The explorers, a lesson
-and a Piece's chart pin their keyboard to the top while the page scrolls.
+Stacks use gap: 24px between a screen's parts, 32px between sections, 16–20px inside a group. The explorers, a
+lesson and a shared song's chart pin their keyboard to the top while the page scrolls.
 
-**The Equal Columns Rule.** A chart's lines are grids of equal columns, each line as wide as its bars' share of the
-longest line, so bars line up down the chart; a bar is parted by a 1px control line and each line closes with one. A
-bar is at most 14rem wide, so a line of two reads at a glance on a laptop. The same rule spreads a score's lines,
+**The Equal Columns Rule.** A chart's lines are grids of equal beats (the Grid, ADR 0099), each row as wide as its
+beats' share of the longest row, so bars line up down the chart; a bar is parted by a 2px ink barline and each row
+closes with one, its beats by a hairline. A beat is at most 4rem wide, so a bar reads at a glance on a laptop, not
+across it; a line wraps to rows of two 4-beat bars on a phone held upright, four on a tablet or a phone on its side and
+eight on a laptop. The same rule spreads a score's lines,
 in the Player and the editor: each line is justified to its bars' share of the longest line's width. On a short
 sheet (a phone on its side) both screens draw a line smaller, down to 0.4 of its size, so a whole system is in sight
 over the keys (Panorama's one line as engraved, its notes far over or under its staves anywhere in the piece, its
@@ -616,6 +644,12 @@ and how an interval is heard). A pop-up button stays for long lists and beside o
 
 - **Card** (card paper, 14px, the 1px soft line): grouped rows, the practice card, a settings group (its title on a
   sand band over a 1px line).
+- **Fact card** (`FactCard`, ADR 0100; the same card, 12px by 8px inset, its text centred): a 20px icon in soft ink
+  over its name (14px, soft ink) over its value (18px, semibold, tabular), a key in Literata as a chord is. A
+  piece's Key · Time · Tempo stand three across at every width, Chordify's Capo · Tuning · BPM.
+- **Learning card** (ADR 0100; the card, 20px inset): where to go next as one deep-sky link in Onest 600 18px with
+  an arrow that moves 2px on hover, over the lessons done: a 6px grass bar on a sand track and "3 of 8" at its end
+  in soft ink (said "Lessons done: 3 of 8").
 - **Continue** (ADR 0057, 0058): one honey button floating over Learn, 56px and round: its step's icon (read or
   play) alone, named by its tooltip; with names asked, a pill with Continue over the step's title in Literata.
 - **Floating buttons** (ADR 0058) stand where Settings says: down the left or right edge in a column, or in a row
@@ -632,7 +666,7 @@ and how an interval is heard). A pop-up button stays for long lists and beside o
   fills the whole card (sand) and moves the chevron 2px, never a box inside the card. A list of one kind (the Patterns
   page) goes without tiles: every row would wear the same one.
 - **Sheet** (card paper, 20px top, swipe handle, its Literata title at the left with a Close at the right, a scrolling
-  body with 20px insets, an optional footer over a hairline): Setup, New song, the takes.
+  body with 20px insets, an optional footer over a hairline): Setup, New song, the takes, Song information, a chord's.
 - **Note** (a lesson's callout, a note the learner reads): sand, 14px corners, 16px inset, body text.
 - **Interval card** (card paper, 14px, the 1px soft line, 16px inset): the interval's name (Literata 600 20px) with
   its short name at the right in soft ink, its size, consonance and (past the octave) the degree a chord writes, a
@@ -805,6 +839,74 @@ printed at its head, the staves' names at its first line's head (ADR 0094).
   every accidental on its note; an interval card writes its two notes on the treble staff alone (`staff`), 130 units
   tall: room above for a 13th over B4 with its sharp, below for two ledger lines.
 
+### The chord views (the Player)
+
+The Player shows a piece as **Sheet music** (above), **Chords over lyrics**, **Diagrams** or **Grid** (ADR 0099),
+chosen at the top of its View as four tiles two by two: each a picture of its view drawn in its own style over its
+name (Onest 500 14px), on card paper in the control line, the one shown pressed (sand, an ink line, ink text). The
+rest of the View is what that view has. Each view is one scroller under the bar with the title printed at its head as
+the sheet prints it; every chord symbol in them is printed as the sheet prints it (`C♯m7`, `printedSymbol`), and every
+one keeps its music in the room above the transport.
+
+- **Beat cells:** a bar counted in its meter's beats, each a cell on card paper, a hairline between a bar's cells and
+  a 2px ink barline before each bar; a chord named in the cell it starts in (Literata 600, as large as the cell holds
+  it, 12 to 20px, a second chord in the same beat a size down); the beat sounding filled with ink, its name in the
+  page's colour; the loop's cells on a 15% deep-sky band.
+- **The beat strip:** every cell as played in one row, square cells 56px on a phone (64px from 640px, 40px on a phone
+  on its side), sliding in 200ms (at once under reduced motion) so the beat sounding stands a third of the way in,
+  never a scroll bar; a cell tapped takes the cursor there. A picture of where the music is, hidden from a screen
+  reader.
+- **Chords over lyrics:** the title, then the strip across the view, held at its top on the page's paper, then one
+  column in the middle at most 42rem wide: the chord summary, then the song by section, each under its name in spaced
+  capitals (Literata 600 14px, 0.3em apart, soft ink), each line its chords as **chips** over its words, verse 1 first
+  and each verse more under it in soft ink. A chip is its symbol in Literata 600 (16px, 18px from 640px) on a sand
+  wash with 10px corners, filled with ink while it sounds, its target reaching past it to a finger's size; a line of
+  no words is its chips in a row. The line playing is ink and semibold, the others soft ink; it is kept in the top
+  third of the room between the strip and the transport as the music reaches it.
+- **Diagrams:** the title, then the chord sounding as a large diagram over its symbol (Literata 600 36px), the next
+  beside it greyed (24px, soft ink), and from 640px the two after it, smaller and greyer; the strip across the view
+  under them; then, with the View's Lyrics on, the line sung (18px, 20px from 640px, semibold) over a 4px ink bar
+  filling as it goes, and the next line in soft ink. Where no chord sounds yet the next stands alone, greyed, "Next:
+  C". All of it stands in the middle of the room above the transport (`diagrams-view`): a short room keeps the line
+  sung and leaves out the next, then the diagrams shrink to what is left. On a phone on its side the chords take the
+  left half, its whole height, and the title (one line), the strip and the line sung stand beside them.
+- **Grid:** the chart in beats under the title: each section's name (Literata 600 20px) with its bars in soft ink,
+  each line a card-paper row of bars, every beat as wide so bars line up down it, a row wrapping where the screen
+  holds no more; cells 48px tall (56px from 640px, 44px on a phone on its side), a bar's number small in its first
+  cell's corner, each bar a button.
+- **No chord symbols:** a chord view of music with none says so in one soft line under the title, with Show the
+  sheet music (soft) under it; the view chosen stays saved.
+- **The chord diagram** (`KeyDiagram`): a chord drawn as the app's keys, white keys key paper parted by the key bed and
+  black keys a warm black, from the C or F at or below its lowest key to the E or B at or above its highest, ten white
+  keys at least; each key held a dot near its foot, ink on a white key and white on a black one, and the bass the
+  right hand leaves to the left a ring. It takes its container's width at a key's proportion; one to come is greyed
+  whole (40%). It names its chord and notes for a screen reader.
+- **The chord summary:** the chords in the order they first sound, each once: its diagram 40px tall (a wide chord
+  wider) over its symbol (Literata 600 18px), a button with 12px corners filling sand on hover; one row, scrolling
+  sideways and fading at an edge with more beyond it.
+- **A chord's sheet** (from a chip, a diagram, the summary): "C♯m7 chord" as its title, the diagram as wide as the
+  sheet allows (at most 28rem), and at its foot Close (soft) and Play (honey, Stop while it sounds) side by side. On a
+  section's page it asks "Play it on the keys" (Onest 600 18px) over the keys round the chord, and once they are held
+  together says "That's it." beside a grass check.
+
+### A piece's page: Learn the song
+
+A song's or a study's page (ADR 0100), one column under its screen bar (Back, the title, then Edit, Learned and More:
+Check these chords, an own song's Share, Reset to the original or Delete, asked first): its second title, stage and
+who wrote it; the **learning card**; Key · Time · Tempo as **fact cards**; **Chords** (Literata 600 24px) over the
+chord summary; **Sections** over its sections as rows in one card, each a row link in its section's paint with a note,
+its name and "15 lessons · 3 done", to its page; **Play along** (a row in its own card, in the song's yellow or the
+study's grass, "The whole song in the Player"); its note and its key's scale. Practise floats. A piece of one section
+has that section's lessons in place of the chords and the rows. A listing's one action is Write the chart (the honey
+pill).
+
+**A section's page** ("Learn the Chorus", Practise in its bar looping the section): its card, a 56px tile in the
+section's paint beside the piece's title (soft ink), the section's chords in Literata 600 24px, `3 ×` before a run
+played round, and its lessons done; then its lessons as titled groups of row cards, each tile in the section's paint,
+a check in place of its icon once done: **Chords** ("Learn C♯m", each opening its sheet to learn it), then rows into
+the Player looping their bars: **Changes** (Play the chords in time, a row for each chord sequence; One change at a
+time, "From C♯m to E" over its bars) and the **Pattern** (its name, on its chord and bars).
+
 ### The score editor
 
 The page where a learner writes their version of a piece or a song of their own (ADR 0027), one screen that never
@@ -856,10 +958,6 @@ keys, with the dock and the palette floating over the sheet.
 - **New song** (Songs' floating +) is a sheet: the Title field, the key choice, the five meters as segments, the
   staves its score starts with (the piano, a staff over it, or a staff alone, its own sheet), and at its foot Make in
   honey with Record (soft, a microphone) beside it, which opens the editor with Record pressed.
-- **A piece's page** (ADR 0098): its bar (Back, the title, Edit, Learned, More: Check these chords, an own song's
-  Share, Reset to the original or Delete, asked first), its facts and who wrote it, its form (each section a chip
-  opening the Player looping it) and its note; Practise floats. A listing's one action is Write the chart (the honey
-  pill).
 
 ### Free play
 

@@ -128,7 +128,7 @@ describe('the Player’s More (ADR 0099)', () => {
       within(chords)
         .getAllByRole('button')
         .map((chord) => chord.textContent),
-    ).toEqual(['G', 'C', 'Em', 'G/B', 'C/E', 'Dsus4', 'D/F#', 'Am', 'D7', 'D'])
+    ).toEqual(['G', 'C', 'Em', 'G/B', 'C/E', 'Dsus4', 'D/F♯', 'Am', 'D7', 'D'])
     expect(factsIn(sheet)).toEqual([
       ['Key', 'G'],
       ['Time', '4/4'],
@@ -173,6 +173,18 @@ describe('the Player’s More (ADR 0099)', () => {
     expect(factsIn(sheet)[0]).toEqual(['Key', 'A'])
   })
 
+  it('prints the key and the chords as the views print chord symbols, with ♯ and ♭', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/bz5?key=F%23')
+    await chooseMore(user, 'Song information')
+    const sheet = await screen.findByRole('dialog', { name: 'Song information' })
+    const chords = within(within(sheet).getByRole('list', { name: 'Chords' })).getAllByRole(
+      'button',
+    )
+    expect(chords.map((chord) => chord.textContent).slice(0, 3)).toEqual(['F♯', 'B', 'D♯m'])
+    expect(factsIn(sheet)[0]).toEqual(['Key', 'F♯'])
+  })
+
   it('names a study’s information as a study’s, with no second title of its own', async () => {
     const user = userEvent.setup()
     await renderApp('/play/ex3')
@@ -212,6 +224,20 @@ describe('the Player’s More (ADR 0099)', () => {
     expect(String.fromCharCode(...new Uint8Array(await file.arrayBuffer()).slice(0, 4))).toBe(
       'MThd',
     )
+  })
+
+  it('names the file’s tracks as the screen names the parts, in the learner’s language', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/silent', { locale: 'ru' })
+    const saved = catchDownloads()
+    await user.click(await screen.findByRole('button', { name: 'Ещё' }))
+    await user.click(await screen.findByRole('button', { name: 'Экспорт в MIDI' }))
+    const [file] = saved.files
+    if (!file) throw new Error('a file is saved')
+    const text = new TextDecoder().decode(await file.arrayBuffer())
+    // Silent Night's staff of no name of its own, by its place; then the hands.
+    for (const name of ['Нотоносец 1', 'Правая рука', 'Левая рука']) expect(text).toContain(name)
+    expect(text).not.toContain('Right hand')
   })
 
   it('reads in Russian, its menu and the song’s information', async () => {

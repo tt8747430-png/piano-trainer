@@ -1,6 +1,7 @@
 import { Music } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
+import { printedSymbol } from '@/shared/lib/music'
 import { PAINT, type Paint } from '@/shared/ui'
 import type { SectionLessons } from '../model/section-lessons'
 import type { LessonProgress } from '../model/song-progress'
@@ -47,7 +48,7 @@ export function SectionCard({
                 {t('learnSection.rounds', { n: rounds })}{' '}
               </span>
             ) : null}
-            {shown.join(' · ')}
+            {shown.map(printedSymbol).join(' · ')}
           </p>
         ) : (
           <p className="text-lg text-muted-foreground">{t('learnSection.noChords')}</p>

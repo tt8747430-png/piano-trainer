@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { DiagramChord } from '@/features/practice'
+import { printedSymbol } from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlayback } from '@/shared/lib/services'
 import { PlayLabel, Sheet, SheetContent } from '@/shared/ui'
@@ -30,7 +31,7 @@ export function ChordSheet({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
-        title={t('music:chordSheet.title', { symbol: chord.symbol })}
+        title={t('music:chordSheet.title', { symbol: printedSymbol(chord.symbol) })}
         footer={
           <div className="flex gap-3">
             <Button size="lg" variant="soft" className="flex-1" onClick={() => onOpenChange(false)}>

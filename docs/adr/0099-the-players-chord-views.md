@@ -29,7 +29,8 @@ menu with Song information and Export to MIDI. The Player had the sheet music or
   do not keep one row on a 375px phone, and the bar is the same at every size; Chordify's transport carries its
   loop beside the tempo, so the loop moves from the bar into the floating transport: the tempo, ‹ ▶ ›, the loop and
   the hands. Its key (R), tooltip and pressed look stay. On a phone held upright the transport's controls are the
-  44px target, side by side, and it may stand into the gutters, so the six fit from 360px.
+  44px target, side by side, and it may stand into the gutters, so the six fit from 360px; under 360px they are
+  40px, as on a phone on its side, so they fit from 320px.
 - **Not Chordify's:** no view picker on opening, no instrument but the piano, no capo or tuning, no Transpose or
   Simplify items (the Setup's key transposes), no volume.
 
