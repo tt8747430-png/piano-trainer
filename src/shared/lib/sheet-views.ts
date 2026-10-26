@@ -1,8 +1,9 @@
 /**
- * How a score is laid out (ADR 0064), in the order it is offered: one line across, a panorama; lines
- * down the screen; or A4 pages as it will print. The editor's and the Player's view, held in their URLs.
+ * How a score is laid out (ADR 0064, 0102), in the order it is offered: A4 pages as it will print;
+ * lines one under the other, scrolled down; or one line, scrolled across. The sheet music's layout in
+ * the Player's View and the editor's, saved for every piece.
  */
-export const SHEET_VIEWS = ['horizontal', 'scroll', 'pages'] as const
+export const SHEET_VIEWS = ['pages', 'scroll', 'horizontal'] as const
 export type SheetView = (typeof SHEET_VIEWS)[number]
 
 /** An A4 page in CSS pixels at 96 dpi, and its margin (15 mm). */

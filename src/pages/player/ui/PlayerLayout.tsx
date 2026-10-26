@@ -1,18 +1,17 @@
-import type { ReactNode } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import { useStaffNames, type StaffName } from '@/entities/piece'
 import {
   selectKeyboard,
   selectScoreView,
   useSettings,
   useSettingsStoreApi,
-  type MusicView,
 } from '@/entities/settings'
 import { MidiButton } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import { setScoreView } from '@/features/set-preference'
 import type { Performance } from '@/shared/lib/arrangement'
 import type { MenuAction } from '@/shared/ui'
-import { ChordView, ViewTiles } from '@/widgets/chord-views'
+import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
   HandsButton,
   LoopButton,
@@ -20,16 +19,16 @@ import {
   PlayerScreen,
   PlayerClose,
   PlayerDock,
+  PlayerTools,
   TempoButton,
   usePlayerShortcuts,
   WaitLine,
   type PracticePlayer,
   type PracticeView,
 } from '@/widgets/practice-player'
-import { SCORE_PARTS, ScoreViewMenu, type ScorePart } from '@/widgets/score-view-menu'
 import { SheetMusic } from '@/widgets/sheet-music'
 import { PlayerMore } from './PlayerMore'
-import { PracticeSwitches } from './PracticeSwitches'
+import { PlayerViewMenu } from './PlayerViewMenu'
 
 /** A walk or a progression: one section, named nowhere. */
 const NO_HEADINGS: readonly string[] = []
@@ -37,24 +36,13 @@ const NO_HEADINGS: readonly string[] = []
 const NO_STAVES: readonly { readonly name?: StaffName }[] = []
 
 /**
- * What of the score each view of the music offers in the View (ADR 0099): the sheet music its every
- * part; Diagrams the words it shows under its strip; Chords over lyrics and the Grid none, the chords
- * and the words being the view.
- */
-const VIEW_PARTS: Readonly<Record<MusicView, readonly ScorePart[]>> = {
-  sheet: SCORE_PARTS,
-  lyrics: [],
-  diagrams: ['lyrics'],
-  grid: [],
-}
-
-/**
- * The Player's screen over any Performance (Flowkey's shape, ADR 0061): the toolbar, one row from a
- * 360px phone up (Close, Practise · Edit, then the View, MIDI, Setup and More, ADR 0099), the music
- * under its title (ADR 0094) as the View shows it (ADR 0099: the sheet music, Chords over lyrics,
- * Diagrams or the Grid), Wait mode's line, the transport floating under it (the tempo, ‹ ▶ ›, the loop
- * and the hands) and the keys at the foot, or under the toolbar where the keyboard settings dock them
- * at the top; the computer's keys drive it (`usePlayerShortcuts`).
+ * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar, one row from a
+ * 360px phone up (Close, Practise · Edit, then MIDI, Setup and More, ADR 0099); the tools row under
+ * it (ADR 0102: the View, named by the view shown); the music under its title (ADR 0094) as the View
+ * shows it (ADR 0099: the sheet music, Chords over lyrics, Diagrams or the Grid), Wait mode's line,
+ * the transport floating under it (the tempo, ‹ ▶ ›, the loop and the hands) and the keys at the
+ * foot, or under the tools row where the keyboard settings dock them at the top; the computer's keys
+ * drive it (`usePlayerShortcuts`).
  */
 export function PlayerLayout({
   title,
@@ -106,6 +94,9 @@ export function PlayerLayout({
     clef,
     name: staves[place]?.name,
   }))
+  // The view saved, where the music can show it, else the one it falls back to (ADR 0102).
+  const needs = useMemo(() => viewNeeds(performance), [performance])
+  const shown = shownView(scoreView.music, needs)
   usePlayerShortcuts(player, view, onClose)
   const keys = !scoreView.keys ? null : (
     <PlayerArea area="keys">
@@ -132,25 +123,12 @@ export function PlayerLayout({
         {modes}
       </PlayerArea>
       {/* Where the bar is too narrow for them all (a phone under 360px), its buttons wrap rather
-          than cover Close. The loop is the transport's (ADR 0099). */}
+          than cover Close. The loop is the transport's (ADR 0099), the View the tools row's (ADR
+          0102). */}
       <PlayerArea
         area="actions"
         className="flex flex-wrap items-center justify-end gap-2 self-start max-sm:gap-1"
       >
-        <ScoreViewMenu
-          keys={{ shown: scoreView.keys, show: (on) => setScoreView(settings, { keys: on }) }}
-          staves={viewed}
-          piano={piano}
-          views={
-            <ViewTiles
-              value={scoreView.music}
-              onChange={(music) => setScoreView(settings, { music })}
-            />
-          }
-          parts={VIEW_PARTS[scoreView.music]}
-        >
-          {scoreView.music === 'sheet' ? <PracticeSwitches /> : null}
-        </ScoreViewMenu>
         <MidiButton />
         {setup}
         <PlayerMore
@@ -160,9 +138,14 @@ export function PlayerLayout({
           share={share}
         />
       </PlayerArea>
+      <PlayerArea area="tools">
+        <PlayerTools>
+          <PlayerViewMenu shown={shown} needs={needs} staves={viewed} piano={piano} />
+        </PlayerTools>
+      </PlayerArea>
       {dock === 'top' ? keys : null}
       <PlayerArea area="sheet">
-        {scoreView.music === 'sheet' ? (
+        {shown === 'sheet' ? (
           <SheetMusic
             view={scoreView}
             piano={piano}
@@ -183,7 +166,7 @@ export function PlayerLayout({
           />
         ) : (
           <ChordView
-            view={scoreView.music}
+            view={shown}
             title={title}
             performance={performance}
             headings={headings}
