@@ -128,7 +128,8 @@ export function TransposeSheet({
         ) : (
           <div className="flex flex-col gap-4 pt-1">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-              <span className="text-sm font-semibold text-muted-foreground">
+              {/* Under 360px on a line of its own, so the key stays beside the semitones. */}
+              <span className="text-sm font-semibold text-muted-foreground narrow-phone:basis-full">
                 {t('transpose.semitones')}
               </span>
               <div className="flex items-center gap-1">
