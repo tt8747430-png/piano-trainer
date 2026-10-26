@@ -1,7 +1,8 @@
-# ADR 0108 — Chords over lyrics' pinned diagrams, text size, hover and ×N; the Grid's words
+# ADR 0108 — The chord views made even, still and tappable: Over lyrics, the Grid, Diagrams
 
-- **Status:** accepted · **Date:** 2026-10-26 · **Amends:** ADR 0099 (Chords over lyrics, the Grid), ADR 0102
-  (the View by view: Chords over lyrics and the Grid gain their own sections) · **Spec:**
+- **Status:** accepted · **Date:** 2026-10-26 · **Amends:** ADR 0099 (Chords over lyrics, the Grid, a chord
+  tapped), ADR 0101 (the Diagrams view's pair and strip), ADR 0102 (the View by view: Chords over lyrics and the
+  Grid gain their own sections) · **Spec:**
   [Chordify for piano](../superpowers/specs/2026-10-26-chordify-for-piano.md) §1.3, §8
 
 ## Context
@@ -10,6 +11,12 @@ Chords over lyrics showed the song's chord summary once at the top of its column
 first lines; its words had one size; a line of chords repeated stood once for each time it was written, and once
 for a repeat however many times it was played. The Grid had no words. Neither view had a section of its own in the
 View.
+
+The owner's phone showed two more faults. In Diagrams the view scrolled sideways under its strip: a scroll bar
+ran under it, the first diagram was cut at the left edge and the strip's last chord at the right; the pair and the
+strip jumped from beat to beat. In the Grid a hymn's one-beat pickup stood as a narrow cell glued to the next bar
+with "1/4" under it, its first rows ended early at different places, and the right edges were ragged: rows followed
+the chart's written lines, each as long as its bars.
 
 Chordify's Over lyrics pins the song's chord diagrams in a row under its strip, resizes its text ("Adjust view
 settings": the font size, − and +), shows a chord's diagram when a computer's pointer rests on it, and writes a
@@ -37,6 +44,35 @@ chord line played several times once with "x3". Its Grid has a Lyrics button tha
   its cell to the next sung beat's, wrapping there; a bar's name says its words (verse 1).
 - **Greyed with its reason.** Where the music has no words, the Grid's and Diagrams' Lyrics switch is greyed, its
   ⓘ saying "The music has no words".
+- **Diagrams: the view stands still, the strips move.**
+  - Nothing in the Diagrams view scrolls; in Summary only the cards scroll down. The strip and the pair run into
+    the screen's gutters on a phone held upright and fade there, so nothing is cut hard at an edge.
+  - While Listen plays, the beat strip follows its clock frame by frame (`stripShift`, `beatThrough`): the beat
+    sounding's middle a third of the way in as it starts, sliding on to the next beat's place as it ends.
+  - The pair holds still until half a beat before the change, then slides, eased, with the clock (`pairSlide`):
+    the next into the place of the one sounding, the chord after it in from the right, out of reach and unseen
+    until it moves. The pair is clipped to two diagrams' room.
+  - Taken to a beat or a chord while nothing plays, the strip and the pair slide there in 300ms.
+  - Under reduced motion all of it stands still at each beat.
+- **A chord tapped goes there, in every chord view.** A diagram of the pair, a card of Diagrams' summary, a pinned
+  diagram, a chip over the words and a beat of the strip take the Player's cursor to that chord, sounding it while
+  nothing plays, as the Grid's beats do. A pair's diagram goes to its chord; a card or a pinned diagram goes to
+  where its chord next starts from the beat sounding, else where it first does (`chordNear`). The view slides or
+  scrolls to it. No chord view opens a chord's sheet: that is the song page's and Song information's summary, and
+  a laptop shows a chip's diagram on hover.
+- **No tap trapped.** A chip's reach past its face stops within the room between lines, so it never takes a tap
+  meant for the line over or under it; the diagram coming in is inert.
+- **The Grid, even and calm** (a lead sheet's):
+  - Every row has the same beats (`gridColumns`: as many whole bars of the music's commonest length as the screen
+    holds, two 4/4 bars or two 3/4 bars on a phone held upright), every beat as wide, so beats and barlines line
+    up down the chart.
+  - A section's bars run on from row to row as written, a bar never split (`gridRows`); each section starts a row.
+    The chart's written lines no longer break rows.
+  - A pickup takes a whole bar's place, standing at its end, the beats before it blank; the beats after a
+    section's last bar are blank, its closing barline before them. A short bar elsewhere takes its own beats.
+  - A short bar's length is shown by its beats alone: no "1/4" under it. A bar where the meter changes still names
+    the new meter under it.
+  - A chord is drawn as large as its room: its beat and the empty beats after it in its bar.
 - **`pt-settings` v12** holds `scoreView.pinned` and `scoreView.textSize`; a save of another version starts afresh
   (ADR 0038).
 
@@ -46,8 +82,13 @@ chord line played several times once with "x3". Its Grid has a Lyrics button tha
   version 12.
 - **`widgets/chord-views`:** `foldRepeats` and `ShownLine` (`model/repeated-lines.ts`), `gridWords`;
   `soundingChip` marks a folded line's copies; `ChordsOverLyrics`, `LyricRow` and `ChordChip` take the text size,
-  the pinned row and the hover diagram; `GridView` its words.
-- **`widgets/chord-chart`:** `ChordChart` and `BarButton` take `words` (`BarWords`, `BeatWords`).
-- **`widgets/chord-diagrams`:** `ChordSummary` follows the music with `sounding`, drawn smaller.
+  the pinned row and the hover diagram; `GridView` its words; `BeatStrip` takes the clock
+  (`model/strip-place.ts`, `model/use-every-frame.ts`); `ChordDiagrams` slides its pair (`pairSlide`,
+  `chordNear`); `ChordView` opens no sheet.
+- **`widgets/chord-chart`:** `ChordChart` and `BarButton` take `words` (`BarWords`, `BeatWords`); `gridColumns`
+  and `gridRows` replace `rowsOf`; `chartBar` says `short`, and its `signature` only where the meter changes;
+  `CellChords` takes its `span`.
+- **`widgets/chord-diagrams`:** `ChordSummary` follows the music with `sounding`, drawn smaller, and a tap on it
+  goes to the chord (`onChord`) where its sheet would open.
 - **`widgets/score-view-menu`:** `LyricsFields`, `GridFields`; `ViewSwitch` greyed with a `reason`; `ViewSection`
   takes whether the music has words.
