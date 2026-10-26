@@ -837,6 +837,11 @@
   body:has(> [data-slot='song-print']) > :not([data-slot='song-print']) {
     display: none !important;
   }
+  /* On white paper, where the browser prints backgrounds. */
+  html:has(> body > [data-slot='song-print']),
+  body:has(> [data-slot='song-print']) {
+    background: none;
+  }
   [data-slot='printed-score'] {
     page: score;
   }

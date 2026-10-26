@@ -67,7 +67,7 @@ export function SongPrint({
     if (view !== 'sheet') ready()
   }, [view, ready])
   return createPortal(
-    <div data-slot="song-print" className="hidden bg-background text-foreground print:block">
+    <div data-slot="song-print" className="hidden text-foreground print:block">
       {view === 'sheet' ? (
         <PrintedScore
           performance={performance}

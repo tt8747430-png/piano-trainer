@@ -73,7 +73,7 @@ export function PrintedScore({
     [lines, onReady],
   )
   return (
-    <div data-slot="printed-score" className="flex flex-col items-center">
+    <div data-slot="printed-score" className="flex flex-col">
       <SheetPages
         lines={lines}
         height={(each) => row + scoreHeight(each.score, staves) * PRINT_SCALE}
