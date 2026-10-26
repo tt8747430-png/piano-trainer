@@ -49,6 +49,7 @@ export {
   TOUCHES,
   touchVelocity,
   velocityGain,
+  volumeGain,
   type Touch,
 } from './velocity'
 export {

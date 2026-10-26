@@ -49,6 +49,15 @@ export type PracticeToggles = Readonly<Record<PracticeToggle, boolean>>
  */
 export const PLAYING_TOGGLES = ['metronome', 'countIn'] as const satisfies readonly PracticeToggle[]
 
+/**
+ * The parts the Player's Sound turns up or down (ADR 0105, Chordify's "your perfect mix"): each hand,
+ * the staves over the piano, a piece's recording, and the click (the count-in's and the metronome's).
+ */
+export const SOUND_PARTS = ['rh', 'lh', 'staves', 'recording', 'click'] as const
+export type SoundPart = (typeof SOUND_PARTS)[number]
+/** How loud each part sounds, in whole percent: 100 its own loudness, 0 not played at all. */
+export type SoundSettings = Readonly<Record<SoundPart, number>>
+
 /** How every trainer goes, whatever it asks. */
 export interface TrainerSettings {
   /** A right answer moves on to the next round by itself. */
@@ -209,6 +218,7 @@ export interface SettingsState {
   titles: TitleSize
   locale: Locale
   practice: PracticeToggles
+  sound: SoundSettings
   trainer: TrainerSettings
   floating: FloatingSettings
   keyboard: KeyboardSettings
@@ -231,6 +241,15 @@ export const DEFAULT_PRACTICE: PracticeToggles = {
   metronome: false,
   countIn: false,
   recording: true,
+}
+
+/** Every part as loud as it is. */
+export const DEFAULT_SOUND: SoundSettings = {
+  rh: 100,
+  lh: 100,
+  staves: 100,
+  recording: 100,
+  click: 100,
 }
 
 export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }

@@ -19,6 +19,7 @@ import {
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
+  DEFAULT_SOUND,
   DEFAULT_TRAINER,
   DEFAULT_FLOATING,
   DEVICE_NAME_MAX,
@@ -26,6 +27,7 @@ import {
   SECTION_ID_MAX,
   PRACTICE_TOGGLES,
   REMEMBERED_CHORDS,
+  SOUND_PARTS,
   defaultKeyboard,
   detectLocale,
   isFloatingPlace,
@@ -51,13 +53,14 @@ import {
   type RecorderSettings,
   type ScoreViewSettings,
   type SettingsState,
+  type SoundSettings,
   type FloatingSettings,
   type TrainerSettings,
 } from './types'
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 10
+export const SETTINGS_VERSION = 11
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -78,6 +81,7 @@ export function createSettingsStore({
         titles: 'large',
         locale: detectLocale(languages),
         practice: DEFAULT_PRACTICE,
+        sound: DEFAULT_SOUND,
         trainer: DEFAULT_TRAINER,
         floating: DEFAULT_FLOATING,
         keyboard: defaultKeyboard(finePointer),
@@ -104,6 +108,21 @@ function practiceToggles(value: unknown): PracticeToggles {
       return [toggle, typeof kept === 'boolean' ? kept : DEFAULT_PRACTICE[toggle]]
     }),
   ) as Record<keyof PracticeToggles, boolean>
+}
+
+/** A volume as saved: a whole percent from 0 to 100. */
+const isVolume = (value: unknown): value is number =>
+  Number.isInteger(value) && (value as number) >= 0 && (value as number) <= 100
+
+/** Each part's volume as saved where it is one, at full otherwise. */
+function soundSettings(value: unknown): SoundSettings {
+  const saved = savedObject<SoundSettings>(value)
+  return Object.fromEntries(
+    SOUND_PARTS.map((part) => {
+      const kept: unknown = saved[part]
+      return [part, isVolume(kept) ? kept : DEFAULT_SOUND[part]]
+    }),
+  ) as Record<keyof SoundSettings, number>
 }
 
 /** Where the floating actions stand and whether they say their names, each as saved where valid. */
@@ -247,6 +266,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     titles: isTitleSize(saved.titles) ? saved.titles : current.titles,
     locale: isLocale(saved.locale) ? saved.locale : current.locale,
     practice: practiceToggles(saved.practice),
+    sound: soundSettings(saved.sound),
     trainer: trainerSettings(saved.trainer),
     floating: floatingSettings(saved.floating),
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),

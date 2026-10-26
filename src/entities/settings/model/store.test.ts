@@ -9,6 +9,7 @@ import {
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
+  DEFAULT_SOUND,
   DEFAULT_TRAINER,
   DEFAULT_FLOATING,
   defaultKeyboard,
@@ -28,6 +29,7 @@ const restored = (state: unknown, version = SETTINGS_VERSION) => {
 const DEFAULTS = {
   titles: 'large',
   practice: DEFAULT_PRACTICE,
+  sound: DEFAULT_SOUND,
   trainer: DEFAULT_TRAINER,
   floating: DEFAULT_FLOATING,
   keyboard: defaultKeyboard(false),
@@ -89,6 +91,7 @@ describe('createSettingsStore', () => {
         countIn: false,
         recording: false,
       },
+      sound: { rh: 100, lh: 35, staves: 0, recording: 60, click: 5 },
       trainer: { autoNext: true },
       floating: { place: 'right', labels: true },
       keyboard: {
@@ -204,11 +207,25 @@ describe('createSettingsStore', () => {
     expect(restored({ scoreView: { diagrams: 'summary' } }).scoreView.diagrams).toBe('summary')
   })
 
-  it('starts afresh over a save of the version before, whose View had no Diagrams’ mode (ADR 0102)', () => {
-    expect(SETTINGS_VERSION).toBe(10)
-    expect(restored({ theme: 'dark', scoreView: { music: 'diagrams' } }, 9)).toEqual(
+  it('starts afresh over a save of the version before, which had no volumes (ADR 0105)', () => {
+    expect(SETTINGS_VERSION).toBe(11)
+    expect(restored({ theme: 'dark', sound: { rh: 20 } }, 10)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
+  })
+
+  it('plays every part at full volume until the learner turns one down (ADR 0105)', () => {
+    expect(DEFAULT_SOUND).toEqual({ rh: 100, lh: 100, staves: 100, recording: 100, click: 100 })
+  })
+
+  it('keeps each volume saved as a whole percent from 0 to 100, at full otherwise', () => {
+    expect(
+      restored({
+        sound: { rh: 0, lh: 100, staves: 101, recording: -5, click: 52.5, extra: 3 },
+      }).sound,
+    ).toEqual({ rh: 0, lh: 100, staves: 100, recording: 100, click: 100 })
+    expect(restored({ sound: { rh: '40', lh: null } }).sound).toEqual(DEFAULT_SOUND)
+    expect(restored({ sound: 'loud' }).sound).toEqual(DEFAULT_SOUND)
   })
 
   it('keeps no side for the palette: beside the sheet it stands at its right (ADR 0094)', () => {
