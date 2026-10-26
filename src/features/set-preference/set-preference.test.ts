@@ -8,6 +8,7 @@ import {
   setAutoNext,
   setFloating,
   setChordFinder,
+  onlyTheChords,
   setKeyboard,
   setLocale,
   setPracticeToggle,
@@ -17,6 +18,7 @@ import {
   setSectionFolded,
   setPaletteFolded,
   setSidebar,
+  setSound,
   setTheme,
 } from './index'
 
@@ -81,6 +83,20 @@ describe('set-preference', () => {
     })
     setPracticeToggle(store, 'metronome', false)
     expect(store.getState().practice.metronome).toBe(false)
+  })
+
+  it('setSound turns one part up or down and saves it, the others kept (ADR 0105)', () => {
+    const { storage, store } = setUp()
+    setSound(store, { lh: 40 })
+    setSound(store, { click: 0 })
+    expect(saved(storage).sound).toEqual({ rh: 100, lh: 40, staves: 100, recording: 100, click: 0 })
+  })
+
+  it('onlyTheChords silences the recording and turns both hands full up, as Chordify’s tip says', () => {
+    const { storage, store } = setUp()
+    setSound(store, { rh: 20, lh: 0, staves: 70, click: 30 })
+    onlyTheChords(store)
+    expect(saved(storage).sound).toEqual({ rh: 100, lh: 100, staves: 70, recording: 0, click: 30 })
   })
 
   it('setRecorderClick saves whether the click goes on while a take records', () => {

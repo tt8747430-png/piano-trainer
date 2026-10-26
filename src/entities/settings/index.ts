@@ -1,5 +1,4 @@
 export {
-  PLAYING_TOGGLES,
   FOLDED_MAX,
   REMEMBERED_CHORDS,
   THEMES,
@@ -19,6 +18,9 @@ export {
   type MidiSettings,
   type PracticeToggle,
   type PalettePlace,
+  SOUND_PARTS,
+  type SoundPart,
+  type SoundSettings,
   type Sidebar,
   type Theme,
   type TitleSize,
@@ -42,6 +44,7 @@ export {
   selectSectionFolded,
   selectPaletteFolded,
   selectSidebar,
+  selectSound,
   selectTheme,
   selectTitles,
   selectTrainer,

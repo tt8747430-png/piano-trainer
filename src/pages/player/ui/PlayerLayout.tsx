@@ -7,6 +7,7 @@ import type { Performance } from '@/shared/lib/arrangement'
 import type { MenuAction } from '@/shared/ui'
 import { ChordView, shownView, viewNeeds } from '@/widgets/chord-views'
 import {
+  CountInBeat,
   HandsButton,
   LoopButton,
   PlayerArea,
@@ -14,6 +15,7 @@ import {
   PlayerClose,
   PlayerDock,
   PlayerTools,
+  SoundButton,
   TempoButton,
   usePlayerShortcuts,
   WaitLine,
@@ -36,7 +38,8 @@ const NO_STAVES: readonly { readonly name?: StaffName }[] = []
  * it (ADR 0102: the View, named by the view shown, then the music's own tools, a piece's Transpose
  * and Simplify, ADR 0104); the music under its title (ADR 0094) as the View
  * shows it (ADR 0099: the sheet music, Chords over lyrics, Diagrams or the Grid), Wait mode's line,
- * the transport floating under it (the tempo, ‹ ▶ ›, the loop and the hands) and the keys at the
+ * the transport floating under it (the tempo, ‹ ▶ ›, the loop, the Sound and the hands), the
+ * count-in's beat large over it all while Listen counts in (ADR 0105), and the keys at the
  * foot, or under the tools row where the keyboard settings dock them at the top; the computer's keys
  * drive it (`usePlayerShortcuts`).
  */
@@ -52,6 +55,7 @@ export function PlayerLayout({
   modes,
   piano = true,
   staves = NO_STAVES,
+  recorded = false,
   info,
   share,
   status,
@@ -64,6 +68,8 @@ export function PlayerLayout({
   piano?: boolean
   /** The piece's single staves, top down, each printed and switched in the View by its name (ADR 0097). */
   staves?: readonly { readonly name?: StaffName }[]
+  /** The piece has a recording: the Sound offers its volume (ADR 0105). */
+  recorded?: boolean
   title: string
   onClose: () => void
   view: PracticeView
@@ -198,7 +204,7 @@ export function PlayerLayout({
         {status}
       </PlayerArea>
       {/* On a phone held upright the transport may stand into the gutters: it floats over the
-          sheet, and its six controls (the tempo's value the longest) need the screen's width. */}
+          sheet, and its seven controls (the tempo's value the longest) need the screen's width. */}
       <PlayerArea
         area="dock"
         className="flex justify-center max-sm:-mx-gutter landscape-phone:items-center"
@@ -218,10 +224,12 @@ export function PlayerLayout({
             />
           }
           loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
+          sound={<SoundButton staves={viewed.length > 0} recording={recorded} />}
           hands={<HandsButton hands={view.hands} onChange={player.setHands} />}
         />
       </PlayerArea>
       {dock === 'top' ? null : keys}
+      <CountInBeat count={practice.counting} />
     </PlayerScreen>
   )
 }

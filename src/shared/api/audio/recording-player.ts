@@ -5,6 +5,8 @@ export interface Media {
   currentTime: number
   playbackRate: number
   muted: boolean
+  /** How loud it plays, 0 to 1. */
+  volume: number
   readonly paused: boolean
   readonly seeking: boolean
   play(): Promise<void>
@@ -14,8 +16,8 @@ export interface Media {
 interface RecordingPlayer {
   /** Makes the recording's element, so a play can start it at once. */
   load(src: string): void
-  /** Queues a play; it starts when the clock reaches its `at`. */
-  play(src: string, play: RecordingPlay): void
+  /** Queues a play; it starts when the clock reaches its `at`, as loud as `volume` says as it plays. */
+  play(src: string, play: RecordingPlay, volume?: () => number): void
   /**
    * Inside a gesture: plays each loaded recording not yet primed muted and pauses it, so it may play
    * later without one. A play that starts meanwhile keeps the element going.
@@ -37,13 +39,18 @@ const SETTLE = 0.3
 
 interface Queued extends RecordingPlay {
   readonly src: string
+  readonly volume: (() => number) | undefined
 }
+
+/** A play's volume now, as an element takes one: 0 to 1, at full where it says none. */
+const volumeOf = (play: Queued): number => Math.min(1, Math.max(0, play.volume?.() ?? 1))
 
 /**
  * Recordings kept on the clock: each queued play starts as the clock reaches it (sought to its
  * offset, at its rate), is sought back whenever it drifts, is started again when something pauses it
  * (an interruption, a prime that finished late), and is paused at its end unless another play follows,
- * which only seeks it. A seek aims as far ahead as the element stands still after one.
+ * which only seeks it. A seek aims as far ahead as the element stands still after one. It plays as
+ * loud as its play's volume says, looked at with the clock (ADR 0105).
  */
 export function createRecordingPlayer({
   now,
@@ -97,11 +104,14 @@ export function createRecordingPlayer({
       if (current && current.src !== next.src) element(current.src).pause()
       const media = element(next.src)
       media.playbackRate = next.rate
+      media.volume = volumeOf(next)
       seek(media, next, time)
       start(media)
       current = next
     } else if (current) {
       const media = element(current.src)
+      const volume = volumeOf(current)
+      if (media.volume !== volume) media.volume = volume
       if (time >= current.until) {
         media.pause()
         current = null
@@ -126,9 +136,9 @@ export function createRecordingPlayer({
 
   return {
     load: (src) => void element(src),
-    play(src, play) {
+    play(src, play, volume) {
       element(src)
-      queue = [...queue, { ...play, src }].sort((a, b) => a.at - b.at)
+      queue = [...queue, { ...play, src, volume }].sort((a, b) => a.at - b.at)
       timer ??= setInterval(tick, TICK_MS)
     },
     prime() {

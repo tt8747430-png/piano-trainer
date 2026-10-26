@@ -20,6 +20,8 @@ export interface LoopOptions {
   readonly speedUp?: SpeedUp | undefined
   readonly countIn?: boolean
   readonly metronome?: boolean
+  /** Whether the count-in and the metronome click: a count-in still counts without (ADR 0105). */
+  readonly clicks?: boolean
   readonly swing?: boolean
 }
 
@@ -65,6 +67,7 @@ function passAt(
       toTick: options.range.to,
       countIn: first && options.countIn === true,
       metronome: options.metronome === true,
+      clicks: options.clicks !== false,
       swing: options.swing === true,
     }),
     start,
@@ -116,6 +119,19 @@ export function beatGroupAt(loop: Loop, time: number): number | null {
 /** The tempo of the pass sounding at `time`, or null before any has started. */
 export function tempoAt(loop: Loop, time: number): number | null {
   return loop.passes.findLast((pass) => pass.start <= time)?.tempo ?? null
+}
+
+/**
+ * Where a count-in is at `time` on the clock: the beats of its bar left, the one sounding among them,
+ * so its bar is counted down (4 3 2 1); null outside one.
+ */
+export function countAt(loop: Loop, time: number): number | null {
+  for (const pass of loop.passes) {
+    if (time >= pass.start + pass.musicStart) continue
+    const sounding = pass.counts.findLastIndex((at) => pass.start + at <= time)
+    if (sounding >= 0) return pass.counts.length - sounding
+  }
+  return null
 }
 
 /**

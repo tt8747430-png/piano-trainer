@@ -1,7 +1,13 @@
 import type { RecordingPlay, Sound } from '@/shared/lib/schedule'
 import { createLiveVoice } from './live-voice'
 import { createSoundingKeys } from './sounding'
-import { PLAY_DELAY, type AudioOutput, type LiveEvent, type NoteOutput } from './types'
+import {
+  PLAY_DELAY,
+  type AudioOutput,
+  type LiveEvent,
+  type NoteOutput,
+  type SoundGain,
+} from './types'
 
 /**
  * An AudioOutput for tests: records what it is asked, and keeps a clock the test moves. The keys
@@ -10,14 +16,23 @@ import { PLAY_DELAY, type AudioOutput, type LiveEvent, type NoteOutput } from '.
  */
 export interface FakeAudio extends AudioOutput {
   readonly unlocks: number
-  readonly played: readonly { readonly sounds: readonly Sound[]; readonly at: number }[]
+  /** Each play: its sounds, when, and how loud each, where it was told (ADR 0105). */
+  readonly played: readonly {
+    readonly sounds: readonly Sound[]
+    readonly at: number
+    readonly gain?: SoundGain
+  }[]
   readonly stops: number
   /** What the hands did to the live voice, in order. */
   readonly voice: readonly LiveEvent[]
   /** The keyboard's speaker the notes are sent to; null: the browser. */
   readonly notesOut: NoteOutput | null
   readonly loadedRecordings: readonly string[]
-  readonly recordings: readonly { readonly src: string; readonly play: RecordingPlay }[]
+  readonly recordings: readonly {
+    readonly src: string
+    readonly play: RecordingPlay
+    readonly volume?: () => number
+  }[]
   setNow(seconds: number): void
 }
 
@@ -25,9 +40,9 @@ export function createFakeAudio(): FakeAudio {
   let clock = 0
   let unlocks = 0
   let stops = 0
-  const played: { sounds: readonly Sound[]; at: number }[] = []
+  const played: { sounds: readonly Sound[]; at: number; gain?: SoundGain }[] = []
   const loadedRecordings: string[] = []
-  const recordings: { src: string; play: RecordingPlay }[] = []
+  const recordings: { src: string; play: RecordingPlay; volume?: () => number }[] = []
   const voice: LiveEvent[] = []
   let notesOut: NoteOutput | null = null
   const keys = createSoundingKeys({ now: () => clock })
@@ -36,9 +51,9 @@ export function createFakeAudio(): FakeAudio {
     async unlock() {
       unlocks++
     },
-    play(sounds, at) {
+    play(sounds, at, gain) {
       const start = at ?? clock + PLAY_DELAY
-      played.push({ sounds, at: start })
+      played.push(gain ? { sounds, at: start, gain } : { sounds, at: start })
       return keys.add(sounds, start)
     },
     stop() {
@@ -64,8 +79,8 @@ export function createFakeAudio(): FakeAudio {
     loadRecording(src) {
       loadedRecordings.push(src)
     },
-    playRecording(src, play) {
-      recordings.push({ src, play })
+    playRecording(src, play, volume) {
+      recordings.push(volume ? { src, play, volume } : { src, play })
     },
     now: () => clock,
     audioTimeAt: (pageTime) => clock + (pageTime - performance.now()) / 1000,

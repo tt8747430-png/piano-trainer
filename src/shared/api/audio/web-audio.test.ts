@@ -11,16 +11,25 @@ class FakeContext {
   state: AudioContextState = 'suspended'
   readonly destination = {}
   readonly oscillators: { type: string; frequency: number; start: number; stop: number }[] = []
-  readonly gains: { disconnected: boolean; targets: { value: number; at: number }[] }[] = []
+  readonly gains: {
+    disconnected: boolean
+    targets: { value: number; at: number }[]
+    ramps: { value: number; at: number }[]
+  }[] = []
   resume = vi.fn(async () => {
     this.state = 'running'
   })
 
-  private param(targets: { value: number; at: number }[] = []) {
+  private param(
+    targets: { value: number; at: number }[] = [],
+    ramps: { value: number; at: number }[] = [],
+  ) {
     return {
       value: 0,
       setValueAtTime: vi.fn(),
-      exponentialRampToValueAtTime: vi.fn(),
+      exponentialRampToValueAtTime: vi.fn(
+        (value: number, at: number) => void ramps.push({ value, at }),
+      ),
       linearRampToValueAtTime: vi.fn(),
       cancelScheduledValues: vi.fn(),
       setTargetAtTime: vi.fn((value: number, at: number) => void targets.push({ value, at })),
@@ -37,9 +46,13 @@ class FakeContext {
   }
 
   createGain() {
-    const record = { disconnected: false, targets: [] as { value: number; at: number }[] }
+    const record = {
+      disconnected: false,
+      targets: [] as { value: number; at: number }[],
+      ramps: [] as { value: number; at: number }[],
+    }
     this.gains.push(record)
-    const gain = this.param(record.targets)
+    const gain = this.param(record.targets, record.ramps)
     const node = this.node({ gain })
     node.disconnect = vi.fn(() => {
       record.disconnected = true
@@ -146,6 +159,32 @@ describe('createWebAudioOutput', () => {
     expect(context.oscillators).toHaveLength(1)
   })
 
+  it('plays a note and a click as loud as their gain says as each comes to sound (ADR 0105)', () => {
+    vi.useFakeTimers()
+    const { context, audio } = setUp()
+    let level = 1
+    const later: Sound = { ...A4, at: 1 }
+    audio.play([A4, CLICK, later], 0, () => level)
+    // What sounds at once is rendered at its gain, in time: the click's peak its own, the note's its
+    // velocity.
+    const peaks = () => context.gains.flatMap((gain) => gain.ramps.slice(0, 1).map((r) => r.value))
+    expect(peaks()).toEqual([0.22, 0.2])
+    // Turned down before the next note is rendered: it sounds at the new gain.
+    level = 0.5
+    context.currentTime = 0.8
+    vi.advanceTimersByTime(25)
+    expect(peaks()).toEqual([0.22, 0.2, 0.1])
+    audio.stop()
+    vi.useRealTimers()
+  })
+
+  it('plays no sound its gain silences', () => {
+    const { context, audio } = setUp()
+    const play = audio.play([A4, CLICK], 0, (sound) => (sound.kind === 'click' ? 0 : 1))
+    expect(context.oscillators).toHaveLength(3)
+    expect(audio.isPlaying(play)).toBe(true)
+  })
+
   it('starts shortly after now when no time is given', () => {
     const { context, audio } = setUp()
     context.currentTime = 2
@@ -248,6 +287,15 @@ describe('through the piano', () => {
     expect(context.oscillators).toHaveLength(1)
   })
 
+  it('sends a note to the piano at the velocity its gain leaves it (ADR 0105)', () => {
+    const { audio } = setUp()
+    const { output, sent } = pianoSpeaker()
+    audio.notesTo(output)
+    audio.play([A4], 0, () => 0.25)
+    // A quarter of 0.2 is struck at half the velocity: 52 of 104.
+    expect(sent).toEqual(['on 69 52'])
+  })
+
   it('sounds the notes in the browser again once the piano is let go', () => {
     const { context, audio } = setUp()
     const { output, sent } = pianoSpeaker()
@@ -317,6 +365,7 @@ describe('a recording', () => {
       muted: false,
       paused: true,
       seeking: false,
+      volume: 1,
       play: vi.fn(async () => {
         media.paused = false
       }),
@@ -337,6 +386,33 @@ describe('a recording', () => {
     await vi.advanceTimersByTimeAsync(20)
     expect(media.play).toHaveBeenCalledOnce()
     expect(media.currentTime).toBeCloseTo(3.26)
+    vi.useRealTimers()
+  })
+
+  it('plays a recording as loud as its volume says (ADR 0105)', async () => {
+    vi.useFakeTimers()
+    const context = new FakeContext()
+    const media = {
+      currentTime: 0,
+      playbackRate: 1,
+      muted: false,
+      paused: true,
+      seeking: false,
+      volume: 1,
+      play: vi.fn(async () => {
+        media.paused = false
+      }),
+      pause: vi.fn(),
+    }
+    const audio = createWebAudioOutput({
+      createContext: () => context as unknown as AudioContext,
+      frame: () => undefined,
+      createMedia: () => media,
+    })
+    audio.play([A4], 0)
+    audio.playRecording('vocal.m4a', { at: 0, offset: 3.26, rate: 1, until: 60 }, () => 0.36)
+    await vi.advanceTimersByTimeAsync(20)
+    expect(media.volume).toBe(0.36)
     vi.useRealTimers()
   })
 })

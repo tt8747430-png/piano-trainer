@@ -1,6 +1,7 @@
 export {
   advanceLoop,
   beatGroupAt,
+  countAt,
   startLoop,
   tempoAt,
   tickAt,
@@ -49,6 +50,7 @@ export {
   TOUCHES,
   touchVelocity,
   velocityGain,
+  volumeGain,
   type Touch,
 } from './velocity'
 export {

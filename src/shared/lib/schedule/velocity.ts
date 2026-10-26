@@ -24,3 +24,10 @@ export const touchVelocity = (velocity: number, touch: Touch): number =>
 
 /** The velocity a note's gain was struck at: `velocityGain` turned round. */
 export const gainVelocity = (gain: number): number => velocityIn(127 * Math.sqrt(gain / LOUDEST))
+
+/**
+ * How loud a part sounds at a volume (ADR 0105), 0 to 100 percent: a gain from 0 to its own
+ * loudness, as the square of the volume, so the slider turns it down evenly to the ear (half way
+ * down, about a quarter as loud).
+ */
+export const volumeGain = (percent: number): number => (percent / 100) ** 2

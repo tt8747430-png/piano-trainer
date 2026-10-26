@@ -7,6 +7,7 @@ import { createFakeMidi, type FakeMidi } from '@/shared/api/midi'
 import { midi, note, parseChordSymbol } from '@/shared/lib/music'
 import type { NoteSound, Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from '@/shared/lib/services'
+import { FULL_MIX } from './mix'
 import { ONE_BAR, TWO_BARS } from './testing/performances'
 import { usePractice, type PracticeSetup } from './use-practice'
 
@@ -21,6 +22,7 @@ const LISTEN: PracticeSetup = {
   metronome: false,
   countIn: false,
   recording: null,
+  mix: FULL_MIX,
 }
 
 let audio: FakeAudio
@@ -48,6 +50,10 @@ const wait = (ms: number) => act(() => vi.advanceTimersByTime(ms))
 const notesOf = (sounds: readonly Sound[]) =>
   sounds.filter((sound): sound is NoteSound => sound.kind === 'note')
 const keysOf = (sounds: readonly Sound[]) => notesOf(sounds).map((sound) => sound.midi)
+/** The parts a play's notes are of, each once. */
+const partsOf = (sounds: readonly Sound[] = []) =>
+  [...new Set(notesOf(sounds).map((sound) => sound.part))].sort()
+const VOCAL = { src: 'vocal.m4a', start: 2, tempo: 60 }
 
 beforeEach(() => {
   vi.useFakeTimers()
@@ -165,6 +171,139 @@ describe('usePractice: Listen', () => {
     act(() => result.current.next())
     expect(result.current.state.beatGroup).toBe(1)
     expect(keysOf(audio.played[0]?.sounds ?? [])).toEqual([60, 64, 67])
+  })
+})
+
+describe('usePractice: the count-in', () => {
+  it('counts its bar down as it sounds, for the screen to show, then none once the music plays', () => {
+    const { result } = renderPractice(ONE_BAR, { countIn: true })
+    expect(result.current.counting).toBeNull()
+    act(() => result.current.play())
+    const counted: (number | null)[] = []
+    for (const now of [0.1, 1.1, 2.1, 3.1, 4.1]) {
+      clockTo(now)
+      counted.push(result.current.counting)
+    }
+    expect(counted).toEqual([4, 3, 2, 1, null])
+  })
+
+  it('counts nothing once stopped, nor without a count-in', () => {
+    const counted = renderPractice(ONE_BAR, { countIn: true })
+    act(() => counted.result.current.play())
+    clockTo(0.1)
+    act(() => counted.result.current.stop())
+    expect(counted.result.current.counting).toBeNull()
+    counted.unmount()
+    const plain = renderPractice(ONE_BAR)
+    act(() => plain.result.current.play())
+    clockTo(0.1)
+    expect(plain.result.current.counting).toBeNull()
+  })
+
+  it('counts its bar in unheard with the click turned right down (ADR 0105)', () => {
+    const { result } = renderPractice(ONE_BAR, {
+      countIn: true,
+      metronome: true,
+      mix: { ...FULL_MIX, click: 0 },
+    })
+    act(() => result.current.play())
+    expect(audio.played[0]?.sounds.some((sound) => sound.kind === 'click')).toBe(false)
+    clockTo(1.1)
+    expect(result.current.counting).toBe(3)
+  })
+})
+
+describe('usePractice: the mix (ADR 0105)', () => {
+  it('plays each part as loud as the mix says, a change heard without starting again', () => {
+    const { result, rerender } = renderPractice(ONE_BAR, { mix: { ...FULL_MIX, rh: 0.25 } })
+    act(() => result.current.play())
+    const pass = audio.played[0]
+    const rh = notesOf(pass?.sounds ?? []).find((sound) => sound.part === 'rh')
+    expect(rh && pass?.gain?.(rh)).toBe(0.25)
+    rerender({ performance: ONE_BAR, setup: { ...LISTEN, mix: { ...FULL_MIX, rh: 0.64 } } })
+    expect(audio.played).toHaveLength(1)
+    expect(audio.stops).toBe(0)
+    expect(rh && pass?.gain?.(rh)).toBe(0.64)
+  })
+
+  it('plays no part turned right down, and brings one turned up again in from where it plays', () => {
+    const { result, rerender } = renderPractice(ONE_BAR, { mix: { ...FULL_MIX, lh: 0 } })
+    act(() => result.current.play())
+    expect(partsOf(audio.played[0]?.sounds)).toEqual(['rh'])
+    clockTo(0.1 + 2)
+    rerender({ performance: ONE_BAR, setup: { ...LISTEN, mix: { ...FULL_MIX, lh: 0.5 } } })
+    expect(audio.played).toHaveLength(2)
+    expect(partsOf(audio.played[1]?.sounds)).toEqual(['lh', 'rh'])
+  })
+
+  it('clicks as loud as the click’s volume, and not at all turned right down', () => {
+    const clicked = renderPractice(ONE_BAR, { metronome: true, mix: { ...FULL_MIX, click: 0.36 } })
+    act(() => clicked.result.current.play())
+    const click = audio.played[0]?.sounds.find((sound) => sound.kind === 'click')
+    expect(click && audio.played[0]?.gain?.(click)).toBe(0.36)
+    clicked.unmount()
+    audio = createFakeAudio()
+    const silent = renderPractice(ONE_BAR, { metronome: true, mix: { ...FULL_MIX, click: 0 } })
+    act(() => silent.result.current.play())
+    expect(audio.played[0]?.sounds.some((sound) => sound.kind === 'click')).toBe(false)
+  })
+
+  it('plays the recording at its volume, and none turned right down', () => {
+    const heard = renderPractice(ONE_BAR, {
+      recording: VOCAL,
+      mix: { ...FULL_MIX, recording: 0.49 },
+    })
+    act(() => heard.result.current.play())
+    expect(audio.recordings[0]?.volume?.()).toBe(0.49)
+    heard.unmount()
+    audio = createFakeAudio()
+    const silent = renderPractice(ONE_BAR, { recording: VOCAL, mix: { ...FULL_MIX, recording: 0 } })
+    act(() => silent.result.current.play())
+    expect(audio.recordings).toEqual([])
+  })
+
+  it('sounds a beat group moved to as loud as the mix says', () => {
+    const { result } = renderPractice(ONE_BAR, { mix: { ...FULL_MIX, lh: 0.16 } })
+    // Beat 3: the right hand's G and the left hand's octave.
+    act(() => result.current.jumpToBeatGroup(2))
+    const moved = audio.played[0]
+    const lh = notesOf(moved?.sounds ?? []).find((sound) => sound.part === 'lh')
+    expect(partsOf(moved?.sounds)).toEqual(['lh', 'rh'])
+    expect(lh && moved?.gain?.(lh)).toBe(0.16)
+  })
+
+  it('accompanies Wait mode as loud as the mix says', () => {
+    const { result } = renderPractice(ONE_BAR, {
+      mode: 'wait',
+      hands: 'rh',
+      mix: { ...FULL_MIX, lh: 0.16 },
+    })
+    act(() => result.current.play())
+    act(() => {
+      keyboard.press(midi(60))
+      keyboard.press(midi(64))
+      keyboard.press(midi(67))
+    })
+    const accompanied = audio.played[0]
+    const lh = notesOf(accompanied?.sounds ?? []).find((sound) => sound.part === 'lh')
+    expect(partsOf(accompanied?.sounds)).toEqual(['lh'])
+    expect(lh && accompanied?.gain?.(lh)).toBe(0.16)
+  })
+
+  it('leaves a hand turned right down out of Wait mode’s accompaniment', () => {
+    const { result } = renderPractice(ONE_BAR, {
+      mode: 'wait',
+      hands: 'rh',
+      mix: { ...FULL_MIX, lh: 0 },
+    })
+    act(() => result.current.play())
+    act(() => {
+      keyboard.press(midi(60))
+      keyboard.press(midi(64))
+      keyboard.press(midi(67))
+    })
+    expect(result.current.state.outcome).toBe('correct')
+    expect(audio.played.flatMap((play) => keysOf(play.sounds))).toEqual([])
   })
 })
 

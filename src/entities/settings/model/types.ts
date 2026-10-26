@@ -30,7 +30,11 @@ export const TITLE_SIZES = ['large', 'small'] as const
 /** How large a screen's title is: large, or small, leaving the page more of the screen. */
 export type TitleSize = (typeof TITLE_SIZES)[number]
 
-/** The Player's saved switches: the Setup's (`PLAYING_TOGGLES`), the View menu's chord positions, finger numbers and named notes, a piece's tune and recording. */
+/**
+ * The Player's saved switches: the View menu's chord positions, finger numbers and named notes, a
+ * piece's tune and recording (the Setup's), and the count-in and the click (`metronome`, the
+ * transport's Sound's, ADR 0105).
+ */
 export const PRACTICE_TOGGLES = [
   'fingerNumbers',
   'namedNotes',
@@ -42,12 +46,15 @@ export const PRACTICE_TOGGLES = [
 ] as const
 export type PracticeToggle = (typeof PRACTICE_TOGGLES)[number]
 export type PracticeToggles = Readonly<Record<PracticeToggle, boolean>>
+
 /**
- * The Setup's saved switches: how any piece plays (the tune and the recording are a piece's own: its
- * setup shows them). What the sheet shows (chord positions, finger numbers, named notes) is the View
- * menu's alone (ADR 0064, 0085).
+ * The parts the Player's Sound turns up or down (ADR 0105, Chordify's "your perfect mix"): each hand,
+ * the staves over the piano, a piece's recording, and the click (the count-in's and the metronome's).
  */
-export const PLAYING_TOGGLES = ['metronome', 'countIn'] as const satisfies readonly PracticeToggle[]
+export const SOUND_PARTS = ['rh', 'lh', 'staves', 'recording', 'click'] as const
+export type SoundPart = (typeof SOUND_PARTS)[number]
+/** How loud each part sounds, in whole percent: 100 its own loudness, 0 not played at all. */
+export type SoundSettings = Readonly<Record<SoundPart, number>>
 
 /** How every trainer goes, whatever it asks. */
 export interface TrainerSettings {
@@ -209,6 +216,7 @@ export interface SettingsState {
   titles: TitleSize
   locale: Locale
   practice: PracticeToggles
+  sound: SoundSettings
   trainer: TrainerSettings
   floating: FloatingSettings
   keyboard: KeyboardSettings
@@ -231,6 +239,15 @@ export const DEFAULT_PRACTICE: PracticeToggles = {
   metronome: false,
   countIn: false,
   recording: true,
+}
+
+/** Every part as loud as it is. */
+export const DEFAULT_SOUND: SoundSettings = {
+  rh: 100,
+  lh: 100,
+  staves: 100,
+  recording: 100,
+  click: 100,
 }
 
 export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }

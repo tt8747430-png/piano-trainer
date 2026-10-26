@@ -7,6 +7,12 @@ export type LiveEvent =
   | { readonly kind: 'release'; readonly midi: Midi }
   | { readonly kind: 'pedal'; readonly pedal: PedalKind; readonly down: boolean }
 
+/**
+ * How loud a sound plays, asked as it is about to sound (ADR 0105): a share of its own loudness (a
+ * note's velocity, a click's), 0 leaving it out.
+ */
+export type SoundGain = (sound: Sound) => number
+
 /** One call to `play()`: the port says whether it still sounds (`isPlaying`). */
 export interface PlayHandle {
   /** When it starts on the audio clock: its sounds' `at` counts from here. */
@@ -30,8 +36,12 @@ export interface AudioOutput {
    * and primes each loaded recording once. Does nothing once audio runs and every recording is primed.
    */
   unlock(): Promise<void>
-  /** Plays sounds whose `at` counts from `at` on the audio clock (by default just after now); returns their play. */
-  play(sounds: readonly Sound[], at?: number): PlayHandle
+  /**
+   * Plays sounds whose `at` counts from `at` on the audio clock (by default just after now); returns
+   * their play. Each sounds as loud as `gain` says as it comes to sound, so a change is heard from
+   * the next sound on; at full where none is given.
+   */
+  play(sounds: readonly Sound[], at?: number, gain?: SoundGain): PlayHandle
   /**
    * Silences what sounds, recordings too, and drops what is queued: every play stops playing. The
    * live voice is a hand's: a key it holds ends when it is let go.
@@ -57,8 +67,11 @@ export interface AudioOutput {
   notesTo(output: NoteOutput | null): void
   /** Readies a recording (fetched whole) so a Play can start it at once. */
   loadRecording(src: string): void
-  /** Plays a recording from `play.offset` at `play.rate`, from `play.at` on the audio clock until `play.until`. */
-  playRecording(src: string, play: RecordingPlay): void
+  /**
+   * Plays a recording from `play.offset` at `play.rate`, from `play.at` on the audio clock until
+   * `play.until`, as loud as `volume` says as it plays (0 to 1; at full where none is given).
+   */
+  playRecording(src: string, play: RecordingPlay, volume?: () => number): void
   /** The audio clock in seconds; 0 before there is any. */
   now(): number
   /**
