@@ -12,7 +12,7 @@ import {
   type RootAccidental,
   type SpelledNote,
 } from './note'
-import type { PitchClass } from './pitch'
+import { pitchClass, type PitchClass } from './pitch'
 
 /** A tonic, major or minor. */
 export interface Key {
@@ -68,6 +68,28 @@ export const writtenKey = (key: Key): Key =>
 /** The tonic a key on this pitch class is named from: minor keys lean sharp (G♯ minor, D♭ major). */
 export const tonicSpelling = (pc: PitchClass, minor: boolean): SpelledNote =>
   rootSpelling(pc, minor)
+
+/**
+ * The key so many semitones from this one, a minor key staying minor, its tonic spelled by the key's
+ * one rule (`tonicSpelling`), so its signature is the simplest of its pitch's: B, not C♭; where two
+ * write six, F♯ major and E♭ minor. The key itself, as written, where it does not move.
+ */
+export const transposedKey = (key: Key, semitones: number): Key =>
+  pitchClass(semitones) === 0
+    ? key
+    : {
+        tonic: tonicSpelling(pitchClass(pitchClassOf(key.tonic) + semitones), key.minor),
+        minor: key.minor,
+      }
+
+/**
+ * How far the music moves from one tonic to another, the short way its written notes move: −5 to
+ * +6 semitones.
+ */
+export function transposition(from: SpelledNote, to: SpelledNote): number {
+  const up = pitchClass(pitchClassOf(to) - pitchClassOf(from))
+  return up > 6 ? up - 12 : up
+}
 
 /**
  * Moves a note from one tonic to another by the interval between them, so its letter moves with the

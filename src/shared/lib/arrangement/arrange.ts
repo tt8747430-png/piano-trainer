@@ -18,6 +18,7 @@ import {
   spellChord,
   TICKS_PER_BEAT,
   transposeNote,
+  transposition,
   type Chord,
   type Hand,
   type Inversion,
@@ -286,8 +287,7 @@ export function transposeNotes<N extends { readonly midi: Midi; readonly spelled
   from: SpelledNote,
   to: SpelledNote,
 ): N[] {
-  const up = pitchClass(pitchClassOf(to) - pitchClassOf(from))
-  const semitones = up > 6 ? up - 12 : up
+  const semitones = transposition(from, to)
   return notes.map((n) => ({
     ...n,
     midi: midi(n.midi + semitones),
