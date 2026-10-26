@@ -15,7 +15,8 @@ import { KnownChordsFilter } from './KnownChordsFilter'
 /**
  * The library's search and filters (ADR 0106): the search its own row on a phone, then the sort
  * (Manual · Name · Recently played, kept in the library), Level (only the levels the songs here
- * hold), With chords, Favourites and Chords I know, each whole, wrapping where they do not fit. The
+ * hold), With chords, Favourites and Chords I know, each whole: on a phone one row under the
+ * search that scrolls sideways, from a tablet beside it, wrapping where they do not fit. The
  * filters are the URL's; the sort is the library's.
  */
 export function LibraryFilters({
@@ -46,46 +47,48 @@ export function LibraryFilters({
           screen={screen}
         />
       </div>
-      <Dropdown<LibrarySort>
-        label={t('sort.label')}
-        value={page.sort}
-        onChange={page.setSort}
-        options={LIBRARY_SORTS.map((value) => ({ value, label: t(`sort.${value}`) }))}
-        className="flex-auto sm:flex-none"
-      />
-      {stages.length > 0 ? (
-        <Dropdown
-          label={t('stage')}
-          value={filter.stage}
-          onChange={(stage) => set({ stage })}
-          options={[
-            { value: 'any', label: t('anyStage') },
-            ...stages.map((stage) => ({ value: stage, label: common(`stage.${stage}`) })),
-          ]}
-          className="flex-auto sm:flex-none"
+      <div className="flex min-w-0 items-center gap-2 max-sm:-mx-gutter max-sm:basis-full max-sm:overflow-x-auto max-sm:px-gutter max-sm:[scrollbar-width:none] max-sm:*:shrink-0 sm:contents">
+        <Dropdown<LibrarySort>
+          label={t('sort.label')}
+          value={page.sort}
+          onChange={page.setSort}
+          options={LIBRARY_SORTS.map((value) => ({ value, label: t(`sort.${value}`) }))}
+          className="sm:flex-none"
         />
-      ) : null}
-      <Toggle
-        pressed={filter.withChords}
-        onPressedChange={(withChords) => set({ withChords })}
-        className="flex-auto sm:flex-none"
-      >
-        <ListMusic aria-hidden />
-        {t('withChords')}
-      </Toggle>
-      <Toggle
-        pressed={filter.favourites}
-        onPressedChange={(favourites) => set({ favourites })}
-        className="flex-auto sm:flex-none"
-      >
-        <Heart aria-hidden />
-        {t('favourites')}
-      </Toggle>
-      <KnownChordsFilter
-        choices={choices}
-        known={known}
-        onChange={(chords) => set({ known: chordListParam(chords) })}
-      />
+        {stages.length > 0 ? (
+          <Dropdown
+            label={t('stage')}
+            value={filter.stage}
+            onChange={(stage) => set({ stage })}
+            options={[
+              { value: 'any', label: t('anyStage') },
+              ...stages.map((stage) => ({ value: stage, label: common(`stage.${stage}`) })),
+            ]}
+            className="sm:flex-none"
+          />
+        ) : null}
+        <Toggle
+          pressed={filter.withChords}
+          onPressedChange={(withChords) => set({ withChords })}
+          className="sm:flex-none"
+        >
+          <ListMusic aria-hidden />
+          {t('withChords')}
+        </Toggle>
+        <Toggle
+          pressed={filter.favourites}
+          onPressedChange={(favourites) => set({ favourites })}
+          className="sm:flex-none"
+        >
+          <Heart aria-hidden />
+          {t('favourites')}
+        </Toggle>
+        <KnownChordsFilter
+          choices={choices}
+          known={known}
+          onChange={(chords) => set({ known: chordListParam(chords) })}
+        />
+      </div>
     </div>
   )
 }

@@ -31,7 +31,7 @@ export function KnownChordsFilter({
             variant="outline"
             aria-label={count > 0 ? t('known.count', { count }) : t('known.label')}
             data-chosen={count > 0 ? '' : undefined}
-            className="flex-auto data-chosen:border-foreground data-chosen:bg-muted sm:flex-none"
+            className="data-chosen:border-foreground data-chosen:bg-muted sm:flex-none"
           />
         }
       >
