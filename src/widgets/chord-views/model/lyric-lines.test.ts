@@ -3,7 +3,7 @@ import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
-import { lineWords, lyricLines, soundingChip, type LyricLine } from './lyric-lines'
+import { gridWords, lineWords, lyricLines, soundingChip, type LyricLine } from './lyric-lines'
 
 /** A song of 4/4 bars in C, its sections' lines, a staff over the piano, and its verses. */
 function song(
@@ -180,5 +180,51 @@ describe('soundingChip', () => {
   it('is none in a bar of no chord', () => {
     const empty = song([['C _']])
     expect(soundingChip(lyricLines(empty), { from: 96, to: 120 })).toBeNull()
+  })
+})
+
+describe('gridWords', () => {
+  it('puts each verse’s words under the beat they are sung on, a word going on hyphened', () => {
+    const performance = song([['C G']], {
+      notes: 'E4/1 F4/1 G4/2 | A4/0.5 B4/0.5 C5/1 r/2',
+      lyrics: ['Si- lent night, ho- ly one'],
+    })
+    const words = gridWords(performance)
+    expect(words.get(0)).toEqual([
+      [
+        { beat: 0, text: 'Si-' },
+        { beat: 1, text: 'lent' },
+        { beat: 2, text: 'night,' },
+      ],
+    ])
+    expect(words.get(1)).toEqual([
+      [
+        { beat: 0, text: 'holy' },
+        { beat: 1, text: 'one' },
+      ],
+    ])
+  })
+
+  it('stacks every verse, a verse sung nowhere in a bar empty there', () => {
+    const performance = song([['C G']], {
+      notes: 'E4/2 F4/2 | G4/4',
+      lyrics: ['Now the day', 'And the'],
+    })
+    const words = gridWords(performance)
+    expect(words.get(0)).toEqual([
+      [
+        { beat: 0, text: 'Now' },
+        { beat: 2, text: 'the' },
+      ],
+      [
+        { beat: 0, text: 'And' },
+        { beat: 2, text: 'the' },
+      ],
+    ])
+    expect(words.get(1)).toEqual([[{ beat: 0, text: 'day' }], []])
+  })
+
+  it('is empty for music of no words', () => {
+    expect(gridWords(song([['C G']])).size).toBe(0)
   })
 })
