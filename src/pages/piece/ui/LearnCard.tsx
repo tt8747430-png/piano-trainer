@@ -40,12 +40,14 @@ export function LearnCard({
       {step.kind === 'done' ? (
         // The whole song, played the learner's way.
         <Link to="/play/$pieceId" params={{ pieceId: piece.id }} className={LINE}>
-          {t('learnSong.done')}
+          {t(`learnSong.done.${piece.kind}`)}
           {arrow}
         </Link>
       ) : (
         <SectionLink piece={piece} section={step.section} className={LINE}>
-          {t(`learnSong.${step.kind}`, { section: headings[step.section] ?? '' })}
+          {step.kind === 'start'
+            ? t(`learnSong.start.${piece.kind}`, { section: headings[step.section] ?? '' })
+            : t('learnSong.next', { section: headings[step.section] ?? '' })}
           {arrow}
         </SectionLink>
       )}

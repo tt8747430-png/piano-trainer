@@ -192,6 +192,10 @@ describe('Piece', () => {
       'href',
       '/play/ex3?loop=1-1',
     )
+    // A study is called a study, never a song.
+    expect(
+      screen.getByRole('link', { name: 'Play along The whole study in the Player' }),
+    ).toHaveAttribute('href', '/play/ex3')
   })
 
   it('checks the song’s chords from More, its one action there', async () => {
@@ -251,10 +255,16 @@ describe('Piece', () => {
     expect(untranslated(document.body)).toEqual([])
   })
 
-  it('reads a study’s lessons in Russian', async () => {
+  it('reads a study’s lessons in Russian, calling it a study', async () => {
     await renderApp('/practice/accompaniment/studies/ex3', { locale: 'ru' })
     expect(await screen.findByRole('heading', { level: 2, name: 'Переходы' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '1-й оборот C · Dm · G · C' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: 'Учите этюд по шагам: начните с раздела «Практика».' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: 'Играть вместе Весь этюд в плеере' }),
+    ).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
   })
 
