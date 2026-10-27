@@ -32,7 +32,7 @@ export function PieceProgressions({ piece }: { piece: Piece }) {
                 p: libraryParam(progression, key.minor),
                 ...(progression.size ? { size: progression.size } : {}),
               }}
-              className="inline-flex h-9 items-center gap-1.5 rounded-full border border-input bg-muted px-3.5 text-sm font-semibold whitespace-nowrap transition-colors duration-200 ease-out hover:bg-accent"
+              className="inline-flex h-9 items-center gap-1.5 rounded-full border border-border px-3.5 text-sm font-medium whitespace-nowrap transition-colors duration-200 ease-out hover:bg-muted"
             >
               {localText(progression.name, locale)}
               <span className="font-display font-medium text-muted-foreground">
