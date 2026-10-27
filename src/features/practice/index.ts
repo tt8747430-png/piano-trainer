@@ -11,6 +11,7 @@ export { FULL_MIX, type Mix } from './mix'
 export { isLoopParam, loopParam, loopTicks, readLoop, type BarRange, type LoopParam } from './loop'
 export { beatGroupInBar, firstPlayedBar, writtenBarAt, writtenBarOf } from './written-bar'
 export {
+  chordDiagram,
   chordSummary,
   DIAGRAM_KEYS,
   diagramChord,
