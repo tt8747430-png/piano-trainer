@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { lineDrawn, type Line } from '@/features/score-editor'
-import { ToolKey } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { GlyphGrid } from './palette-keys'
+import { GlyphGrid, PaletteKey } from './palette-keys'
 import { LineIcon } from './palette-icons'
 import { usePaletteReason } from './palette-reason'
 
@@ -16,7 +15,7 @@ function LineKey({ line }: { line: Line }) {
   const { actions } = useScoreEditorContext()
   const drawn = useEditorState((state) => lineDrawn(state, line))
   return (
-    <ToolKey
+    <PaletteKey
       label={t(`lines.${line}`)}
       reason={usePaletteReason()}
       pressed={drawn === true}
@@ -26,7 +25,7 @@ function LineKey({ line }: { line: Line }) {
       <span aria-hidden className="size-7">
         <LineIcon line={line} />
       </span>
-    </ToolKey>
+    </PaletteKey>
   )
 }
 

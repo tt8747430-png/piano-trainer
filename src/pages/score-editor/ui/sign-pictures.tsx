@@ -125,10 +125,13 @@ export function KeyPicture({ signatureOf }: { signatureOf: Key }) {
   )
 }
 
-/** A time signature, its count over its unit across the staff (ADR 0110). */
-export function TimePicture({ meter }: { meter: Meter }) {
+/** Common time's C, as the music font prints it. */
+export const COMMON_TIME = '\u{1D134}'
+
+/** A time signature, its count over its unit across the staff, or 4/4 as C (ADR 0110, 0114). */
+export function TimePicture({ meter, common = false }: { meter: Meter; common?: boolean }) {
   const [count, unit] = meter.split('/')
-  const digits = {
+  const figure = {
     textAnchor: 'middle',
     dominantBaseline: 'central',
     fontSize: 15,
@@ -138,13 +141,55 @@ export function TimePicture({ meter }: { meter: Meter }) {
   } as const
   return (
     <Staff>
-      <text x={WIDTH / 2} y={TOP + SPACE} {...digits}>
-        {count}
-      </text>
-      <text x={WIDTH / 2} y={TOP + 3 * SPACE} {...digits}>
-        {unit}
-      </text>
+      {common ? (
+        <text
+          x={WIDTH / 2}
+          y={TOP + 2 * SPACE}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontSize={26}
+          stroke="none"
+          className="font-music"
+        >
+          {COMMON_TIME}
+        </text>
+      ) : (
+        <>
+          <text x={WIDTH / 2} y={TOP + SPACE} {...figure}>
+            {count}
+          </text>
+          <text x={WIDTH / 2} y={TOP + 3 * SPACE} {...figure}>
+            {unit}
+          </text>
+        </>
+      )}
     </Staff>
+  )
+}
+
+/** A time signature as a key's face: its figures one over the other, or 4/4 as C (ADR 0114). */
+export function TimeFigures({
+  meter,
+  common = false,
+}: {
+  meter: Meter | { readonly count: number; readonly unit: number }
+  common?: boolean
+}) {
+  if (common)
+    return (
+      <span aria-hidden className="font-music text-3xl leading-none">
+        {COMMON_TIME}
+      </span>
+    )
+  const [count, unit] = typeof meter === 'string' ? meter.split('/') : [meter.count, meter.unit]
+  return (
+    <span
+      aria-hidden
+      className="flex flex-col items-center font-serif text-base leading-[0.85] font-bold"
+    >
+      <span>{count}</span>
+      <span>{unit}</span>
+    </span>
   )
 }
 

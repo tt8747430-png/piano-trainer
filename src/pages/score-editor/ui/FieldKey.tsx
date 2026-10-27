@@ -8,11 +8,14 @@ import { useFieldReason } from '../model/use-field-reason'
 import { FieldIcon } from './palette-icons'
 import { CaptionKey } from './palette-keys'
 
-type Kind = SheetField['kind']
+/**
+ * The fields the palette opens (ADR 0114): the words and the fingers. The chord symbols' field is
+ * opened by a tap on the chord row or Cmd or Ctrl with K, so it has no key.
+ */
+type Kind = Exclude<SheetField['kind'], 'chord'>
 
 /** Each field's key: its name and its picture. */
 const KEYS = {
-  chord: { label: 'chord.symbol', picture: <FieldIcon field="chord" /> },
   lyrics: { label: 'lyrics.label', picture: <WholeWord /> },
   fingering: { label: 'fingering', picture: <FieldIcon field="fingering" /> },
 } as const satisfies Readonly<Record<Kind, { label: string; picture: ReactNode }>>

@@ -1,12 +1,17 @@
-import type { ReactNode } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 import { InfoTip, ToolKey } from '@/shared/ui'
 import type { PaletteCategory } from '../model/palette-categories'
+import { PaletteGroupName, useKeyTip, usePaletteForm } from './palette-form'
+
+/** A key of the folded palette's row: a 44px picture (40px on a phone on its side), snapping in. */
+const ROW_KEY = 'h-11 min-w-11 shrink-0 snap-start px-1.5 landscape-phone:h-10'
 
 /**
- * One category's tools in the opened palette, under its name: a titled section the category bar
- * scrolls to; `info`, what its tools do or why they are greyed where they are (no note chosen, not a
- * hand's staff), is the ⓘ beside its name, never a line in it (ADR 0096).
+ * A category's tools under its name, as the palette lays them out (ADR 0114). Opened, a titled
+ * section the category bar scrolls to; `info`, what its tools do or why they are greyed where they
+ * are, is the ⓘ beside its name, never a line in it (ADR 0096). In the folded row, a group of keys
+ * parted from the one before by a hairline, named for a screen reader and in each key's tooltip.
  */
 export function PaletteSection({
   category,
@@ -19,6 +24,18 @@ export function PaletteSection({
   info?: ReactNode
   children: ReactNode
 }) {
+  const form = usePaletteForm()
+  if (form === 'row')
+    return (
+      <div
+        role="group"
+        aria-label={title}
+        data-category={category}
+        className="flex shrink-0 items-center gap-1 border-l border-hairline pl-2 first:border-l-0 first:pl-0"
+      >
+        <PaletteGroupName value={title}>{children}</PaletteGroupName>
+      </div>
+    )
   return (
     <section
       aria-label={title}
@@ -34,8 +51,9 @@ export function PaletteSection({
   )
 }
 
-/** A group's name inside a section (Pedal, Lyrics), with what it is for where it says more. */
+/** A group's name inside a section (Pedal, Lyrics), with what it is for where it says more; none in the row. */
 export function GroupName({ name, info }: { name: string; info?: ReactNode }) {
+  if (usePaletteForm() === 'row') return null
   return (
     <div className="flex min-h-5 items-center gap-1.5 pt-1">
       <h4 className="text-sm text-muted-foreground">{name}</h4>
@@ -44,32 +62,112 @@ export function GroupName({ name, info }: { name: string; info?: ReactNode }) {
   )
 }
 
-/** A group of picture keys, six to a row: the values, the marks, the dynamics. */
-export function GlyphGrid({ label, children }: { label?: string; children: ReactNode }) {
-  return (
-    <div role={label ? 'group' : undefined} aria-label={label} className="grid grid-cols-6 gap-1.5">
-      {children}
-    </div>
-  )
+/** What a section says over its keys (whose staff, from which bar); none in the row, whose keys say it. */
+export function SectionLine({ children }: { children: ReactNode }) {
+  if (usePaletteForm() === 'row') return null
+  return <p className="text-sm text-muted-foreground">{children}</p>
 }
 
-/** A group of keys that name what they do under their picture, as many to a row as fit. */
-export function CaptionGrid({ label, children }: { label?: string; children: ReactNode }) {
+/** A grid of keys in a section; in the row, the keys in line. */
+function KeyGrid({
+  label,
+  className,
+  children,
+}: {
+  label?: string | undefined
+  className: string
+  children: ReactNode
+}) {
+  const row = usePaletteForm() === 'row'
   return (
     <div
       role={label ? 'group' : undefined}
       aria-label={label}
-      className="grid grid-cols-[repeat(auto-fill,minmax(5rem,1fr))] gap-1.5"
+      className={row ? 'contents' : className}
     >
       {children}
     </div>
   )
 }
 
+/** A group of picture keys, six to a row: the values, the marks, the dynamics. */
+export function GlyphGrid({ label, children }: { label?: string; children: ReactNode }) {
+  return (
+    <KeyGrid label={label} className="grid grid-cols-6 gap-1.5">
+      {children}
+    </KeyGrid>
+  )
+}
+
+/** A group of keys that name what they do under their picture, as many to a row as fit. */
+export function CaptionGrid({ label, children }: { label?: string; children: ReactNode }) {
+  return (
+    <KeyGrid label={label} className="grid grid-cols-[repeat(auto-fill,minmax(5rem,1fr))] gap-1.5">
+      {children}
+    </KeyGrid>
+  )
+}
+
 /**
- * A key that says what it does: its picture over its name (a standard musical term), the name
- * wrapping inside its box, never cut; pressed where it is so already; greyed, its tooltip says why
- * (`reason`, ADR 0096).
+ * Signs as tiles (ADR 0110, 0114): clefs, key signatures, barlines, as many to a row as fit, three on
+ * the narrowest phone; `narrow` for the key signatures, seven to a row where there is room.
+ */
+export function SignGrid({
+  label,
+  narrow = false,
+  children,
+}: {
+  label?: string
+  narrow?: boolean
+  children: ReactNode
+}) {
+  return (
+    <KeyGrid
+      label={label}
+      className={cn(
+        'grid gap-1.5',
+        narrow
+          ? 'grid-cols-[repeat(auto-fill,minmax(3.5rem,1fr))]'
+          : 'grid-cols-[repeat(auto-fill,minmax(4.75rem,1fr))]',
+      )}
+    >
+      {children}
+    </KeyGrid>
+  )
+}
+
+/** Terms as a score prints them (dolce, rit., D.C. al Fine), as many to a row as fit. */
+export function TermGrid({ label, children }: { label?: string; children: ReactNode }) {
+  return (
+    <KeyGrid
+      label={label}
+      className="grid grid-cols-[repeat(auto-fill,minmax(4.5rem,1fr))] gap-1.5"
+    >
+      {children}
+    </KeyGrid>
+  )
+}
+
+/**
+ * A palette's key (`ToolKey`), as the palette lays it out: in a section's grid as its grid sizes it;
+ * in the row a 44px picture, its group's name in its tooltip (ADR 0114).
+ */
+export function PaletteKey({ label, className, ...props }: ComponentProps<typeof ToolKey>) {
+  const row = usePaletteForm() === 'row'
+  return (
+    <ToolKey
+      label={label}
+      tip={useKeyTip(label)}
+      className={cn(className, row && ROW_KEY)}
+      {...props}
+    />
+  )
+}
+
+/**
+ * A key that says what it does: in a section, its picture over its name (a standard musical term),
+ * the name wrapping inside its box, never cut; in the row, its picture alone, named in its tooltip.
+ * Pressed where it is so already; greyed, its tooltip says why (`reason`, ADR 0096).
  */
 export function CaptionKey({
   label,
@@ -87,6 +185,22 @@ export function CaptionKey({
   onClick: () => void
   children: ReactNode
 }) {
+  const row = usePaletteForm() === 'row'
+  if (row)
+    return (
+      <PaletteKey
+        label={label}
+        reason={reason}
+        pressed={pressed}
+        disabled={disabled}
+        onClick={onClick}
+        className="[&_svg]:size-6"
+      >
+        <span aria-hidden className="grid place-items-center">
+          {children}
+        </span>
+      </PaletteKey>
+    )
   return (
     <button
       type="button"
@@ -95,7 +209,7 @@ export function CaptionKey({
       aria-pressed={pressed}
       disabled={disabled}
       onClick={onClick}
-      className="flex min-h-16 min-w-0 flex-col items-center justify-start gap-1 rounded-xl border border-border bg-card px-1 pt-2 pb-1.5 text-card-foreground transition-colors hover:bg-chosen aria-pressed:border-selected aria-pressed:bg-selected aria-pressed:text-selected-foreground disabled:opacity-35 disabled:hover:bg-card"
+      className={cn(KEY_FACE, 'min-h-16 justify-start gap-1 px-1 pt-2 pb-1.5')}
     >
       <span aria-hidden className="grid min-h-7 w-full shrink-0 place-items-center [&_svg]:size-7">
         {children}
@@ -110,91 +224,66 @@ export function CaptionKey({
   )
 }
 
-/**
- * Signs as tiles (ADR 0110, forScore's palette): clefs, key and time signatures, barlines, as many to
- * a row as fit, three on the narrowest phone.
- */
-export function SignGrid({ label, children }: { label?: string; children: ReactNode }) {
-  return (
-    <div
-      role={label ? 'group' : undefined}
-      aria-label={label}
-      className="grid grid-cols-[repeat(auto-fill,minmax(4.75rem,1fr))] gap-1.5"
-    >
-      {children}
-    </div>
-  )
-}
+/** A tile's face: a card that gives a little as it is pressed, filled while it is so (ADR 0114). */
+const KEY_FACE =
+  'flex min-w-0 flex-col items-center rounded-xl border border-border bg-card text-card-foreground transition-[background-color,border-color,color,scale] duration-80 ease-out hover:bg-chosen active:scale-95 aria-pressed:border-selected aria-pressed:bg-selected aria-pressed:text-selected-foreground disabled:opacity-35 disabled:hover:bg-card motion-reduce:transition-none motion-reduce:active:scale-100'
 
 /**
- * A sign's tile (ADR 0110, forScore's palette): the sign drawn on a short staff (`children`), its name
- * under it, and what it holds in small type (`detail`: a key's relative minor, a time's beats); pressed
- * where it is so already; greyed, its tooltip says why (`reason`, ADR 0096).
+ * A sign's tile (ADR 0110, 0114, forScore's palette): the sign drawn on a short staff (`children`),
+ * its name under it in small type, the same tile for a clef, a key and a barline; what it is besides
+ * its name (`detail`: a key's relative minor) said in its tooltip and to a screen reader. Pressed where
+ * it is so already; greyed, its tooltip says why (`reason`, ADR 0096). In the row, the sign alone.
  */
 export function SignTile({
   label,
   name = label,
-  detail,
   reason,
   pressed,
   disabled = false,
-  onClick,
   children,
+  ...props
 }: {
   /** Its name for a screen reader and its tooltip. */
   label: string
-  /** What it prints under the sign, where that is not its label: a time's beats alone. */
-  name?: string | null
-  detail?: string
+  /** What it prints under the sign, where that is not its label: a key's two names, short. */
+  name?: string
   reason?: string | undefined
   pressed?: boolean
   disabled?: boolean
-  onClick: () => void
   children: ReactNode
-}) {
+} & Omit<
+  ComponentProps<'button'>,
+  'aria-label' | 'aria-pressed' | 'title' | 'disabled' | 'children'
+>) {
+  const row = usePaletteForm() === 'row'
+  const tip = useKeyTip(label)
   return (
     <button
       type="button"
       aria-label={label}
-      title={disabled && reason ? `${label}\n${reason}` : detail ? `${label} · ${detail}` : label}
+      title={disabled && reason ? `${tip}\n${reason}` : tip}
       aria-pressed={pressed}
       disabled={disabled}
-      onClick={onClick}
-      className="group flex min-h-24 min-w-0 flex-col items-center justify-start gap-0.5 rounded-xl border border-border bg-card px-1 pt-1.5 pb-1.5 text-card-foreground transition-colors hover:bg-chosen aria-pressed:border-selected aria-pressed:bg-selected aria-pressed:text-selected-foreground disabled:opacity-35 disabled:hover:bg-card"
+      {...props}
+      className={cn(
+        KEY_FACE,
+        row
+          ? 'h-11 w-16 shrink-0 snap-start justify-center p-1 landscape-phone:h-10'
+          : 'min-h-18 justify-start gap-0.5 px-1 pt-1.5 pb-1.5',
+      )}
     >
-      <span aria-hidden className="flex h-11 w-full shrink-0 justify-center">
+      <span aria-hidden className={cn('flex w-full shrink-0 justify-center', row ? 'h-8' : 'h-10')}>
         {children}
       </span>
-      {name === null ? null : (
+      {row ? null : (
         <span
           aria-hidden
-          className="w-full text-center text-sm leading-tight text-balance break-words"
+          className="w-full text-center text-xs leading-tight text-balance break-words"
         >
           {name}
         </span>
       )}
-      {detail ? (
-        <span
-          aria-hidden
-          className="w-full text-center text-xs leading-tight text-muted-foreground tabular-nums group-aria-pressed:text-selected-foreground/80"
-        >
-          {detail}
-        </span>
-      ) : null}
     </button>
-  )
-}
-
-/** Terms as a score prints them (dolce, rit., D.C. al Fine), as many to a row as fit. */
-export function TermGrid({ label, children }: { label?: string; children: ReactNode }) {
-  return (
-    <div
-      role={label ? 'group' : undefined}
-      aria-label={label}
-      className="grid grid-cols-[repeat(auto-fill,minmax(4.5rem,1fr))] gap-1.5"
-    >
-      {children}
-    </div>
   )
 }
 
@@ -217,17 +306,18 @@ export function TermKey({
   disabled?: boolean
   onClick: () => void
 }) {
+  const row = usePaletteForm() === 'row'
   return (
-    <ToolKey
+    <PaletteKey
       label={label}
       description={meaning}
       reason={reason}
       disabled={disabled}
       onClick={onClick}
-      className="whitespace-normal"
+      className={row ? 'w-auto px-2.5 whitespace-nowrap' : 'whitespace-normal'}
     >
       <Printed text={term} />
-    </ToolKey>
+    </PaletteKey>
   )
 }
 

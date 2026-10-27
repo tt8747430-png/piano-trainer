@@ -30,6 +30,7 @@ export const editor: LocaleResources['editor'] = {
   },
   palette: {
     label: 'Инструменты',
+    row: 'Все инструменты',
     open: 'Показать все инструменты',
     close: 'Показать меньше инструментов',
     categories: 'Виды инструментов',
@@ -118,6 +119,26 @@ export const editor: LocaleResources['editor'] = {
   signature: {
     fromSection: 'С раздела «{{section}}» (такт {{bar}})',
     song: 'Вся песня',
+    none: 'Без ключевых знаков',
+    sharps: 'Диезы',
+    flats: 'Бемоли',
+    change: '{{sign}}: {{now}}',
+  },
+  time: {
+    current: 'Размер',
+    beat: 'Доли',
+    beatType: 'Длительность доли',
+    beatTypeInfo:
+      'Песня считается в одних долях: четвертями в 2/4, 3/4 и 4/4, восьмыми в 6/8 и 12/8. Другие изменили бы длительность каждой ноты.',
+    pickup: 'Затакт',
+    pickupInfo: 'Длина первого такта, если песня начинается с затакта. «Нет» — целый такт.',
+    none: 'Нет',
+    common: 'Частые размеры',
+    otherKind: 'Считается другими долями: длительность каждой ноты изменилась бы.',
+    commonTime: 'Писать как C',
+    commonTimeInfo: 'Размер 4/4 пишется знаком C везде, где песня в 4/4.',
+    cancel: 'Отмена',
+    apply: 'Применить',
   },
   lines: {
     slur: 'Лига',
@@ -128,7 +149,6 @@ export const editor: LocaleResources['editor'] = {
   },
   expressions: 'Ремарки',
   pedal: 'Педаль',
-  chordsAndLyrics: 'Аккордовые символы и текст',
   lyrics: {
     label: 'Текст',
     field: 'Слог',
@@ -259,7 +279,7 @@ export const editor: LocaleResources['editor'] = {
     joinLine: 'Соединить строки',
     newSection: 'Новый раздел',
     length: 'Длина такта',
-    lengthInfo: 'Затакт или такт длиннее или короче размера.',
+    lengthInfo: 'Такт длиннее или короче размера. Затакт задаётся в размере.',
     lengthOf: 'Длина такта {{time}}',
   },
   section: {
