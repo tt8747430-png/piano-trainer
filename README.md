@@ -1,7 +1,7 @@
 # Piano Trainer
 
-Learn to play songs at the piano: a path from easy to hard, the chords and scales each song needs, and a practice
-player that plays along, steps through, or waits for you. Installable, works offline, in English and Russian.
+Learn to play songs at the piano: lessons and courses, the chords and scales each song needs, and a player that plays
+along, loops, or waits for your keys. Installable, works offline, in English and Russian.
 
 ## Run it
 
@@ -14,13 +14,14 @@ npm run test                       # all tests
 npm run build && npm run preview   # the production build, with the service worker
 ```
 
-## Work on it
+CI (`.github/workflows/ci.yml`) runs only when started by hand; the local checks in [CLAUDE.md](CLAUDE.md) are the
+gate. Vercel previews each pull request and deploys `main` (`vercel.ts`).
 
-- How code is organised and written: [CLAUDE.md](CLAUDE.md), [docs/CODE_STYLE.md](docs/CODE_STYLE.md).
+## Docs
+
+- What it is and for whom: [PRODUCT.md](PRODUCT.md). Its look: [DESIGN.md](DESIGN.md).
+- How the code is organised and the rules for changing it: [CLAUDE.md](CLAUDE.md), then
+  [docs/CODE_STYLE.md](docs/CODE_STYLE.md).
+- Adding a song, pattern, lesson or course: [docs/CONTENT.md](docs/CONTENT.md).
 - The words we use: [docs/UBIQUITOUS_LANGUAGE.md](docs/UBIQUITOUS_LANGUAGE.md).
-- Decisions and why: [docs/adr](docs/adr); the visual world in [ADR 0007](docs/adr/0007-visual-world-from-reference-apps.md).
-- Every push and pull request runs typecheck, lint, tests with coverage and the build
-  (`.github/workflows/ci.yml`). Vercel builds a preview of each pull request and deploys `main` to production
-  (`vercel.ts`).
-
-- How to add a song, a progression, a pattern or a path step: [docs/CONTENT.md](docs/CONTENT.md).
+- Decisions and why: [docs/adr](docs/adr).

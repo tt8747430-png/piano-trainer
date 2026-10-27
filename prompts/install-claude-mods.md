@@ -21,23 +21,23 @@ After my yes, do not ask me questions. Make sensible choices and list them for m
 
 ## The mods
 
-| # | Mod | Source | Install as |
-| --- | --- | --- | --- |
-| 1 | savvy-flow | marketplace `johnnyvizz/claude-kit` | `savvy-flow@claude-kit` |
-| 2 | savvy-progress | same marketplace | `savvy-progress@claude-kit` |
-| 3 | filetree | marketplace `data-goblin/claude-code-filetree` | `filetree@claude-code-filetree` |
-| 4 | cache-tax | marketplace `karanb192/claude-code-mods` | `cache-tax@claude-code-mods` |
-| 5 | reflect-mod | marketplace `bayramannakov/claude-reflect` | `reflect-mod@claude-reflect-marketplace` |
-| 6 | catch-me-up | marketplace `oliverow/catch-me-up` | `catch-me-up@catch-me-up` |
-| 7 | replay-theater | clone of `anthropics/claude-code-playground` | `replay-theater@claude-code-playground-mods` |
-| 8 | blast-radius | same clone | `blast-radius@claude-code-playground-mods` |
-| 9 | next-steps | clone of `hamzafer/claude-code-mods` | from the local marketplace |
-| 10 | visible-compact | clone of `nvsravank/visible-compact` | from the local marketplace |
-| 11 | cc-plugin-you-should-know | built in | `claude plugin enable cc-plugin-you-should-know@builtin` |
-| 12 | terminal-browser | installer script, then an optional plugin | see below |
-| 13 | compact-bar | you build it | see below |
-| 14 | prompt-upgrade | you build it | see below |
-| 15 | clean-view | you build it | see below |
+| #   | Mod                       | Source                                         | Install as                                               |
+| --- | ------------------------- | ---------------------------------------------- | -------------------------------------------------------- |
+| 1   | savvy-flow                | marketplace `johnnyvizz/claude-kit`            | `savvy-flow@claude-kit`                                  |
+| 2   | savvy-progress            | same marketplace                               | `savvy-progress@claude-kit`                              |
+| 3   | filetree                  | marketplace `data-goblin/claude-code-filetree` | `filetree@claude-code-filetree`                          |
+| 4   | cache-tax                 | marketplace `karanb192/claude-code-mods`       | `cache-tax@claude-code-mods`                             |
+| 5   | reflect-mod               | marketplace `bayramannakov/claude-reflect`     | `reflect-mod@claude-reflect-marketplace`                 |
+| 6   | catch-me-up               | marketplace `oliverow/catch-me-up`             | `catch-me-up@catch-me-up`                                |
+| 7   | replay-theater            | clone of `anthropics/claude-code-playground`   | `replay-theater@claude-code-playground-mods`             |
+| 8   | blast-radius              | same clone                                     | `blast-radius@claude-code-playground-mods`               |
+| 9   | next-steps                | clone of `hamzafer/claude-code-mods`           | from the local marketplace                               |
+| 10  | visible-compact           | clone of `nvsravank/visible-compact`           | from the local marketplace                               |
+| 11  | cc-plugin-you-should-know | built in                                       | `claude plugin enable cc-plugin-you-should-know@builtin` |
+| 12  | terminal-browser          | installer script, then an optional plugin      | see below                                                |
+| 13  | compact-bar               | you build it                                   | see below                                                |
+| 14  | prompt-upgrade            | you build it                                   | see below                                                |
+| 15  | clean-view                | you build it                                   | see below                                                |
 
 What the table can't say:
 
@@ -172,13 +172,13 @@ Build my landing page · 1m 12s                     [ ● Clean View: ON ]
 
 The header changes with the state of the job:
 
-| State | Header shows |
-|---|---|
-| Working | Job name · time running |
+| State     | Header shows                                                                                                            |
+| --------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Working   | Job name · time running                                                                                                 |
 | Needs you | Highlighted **Needs you** badge and the reason, e.g. "Claude needs your OK to continue". The current step's ▶ becomes ‖ |
-| Stuck | ⚠ Stuck: the reason, in one plain sentence |
-| Stopped | ■ Stopped · job name · you pressed Esc |
-| Done | ✓ All done · job name · took 2m 14s. After 5 seconds it shrinks to one line |
+| Stuck     | ⚠ Stuck: the reason, in one plain sentence                                                                              |
+| Stopped   | ■ Stopped · job name · you pressed Esc                                                                                  |
+| Done      | ✓ All done · job name · took 2m 14s. After 5 seconds it shrinks to one line                                             |
 
 #### How the checklist works
 
