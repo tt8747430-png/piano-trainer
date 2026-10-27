@@ -53,6 +53,11 @@ describe('scoreToMei', () => {
     expect(mei).toMatch(/meter\.count="4" meter\.unit="4"/)
   })
 
+  it('starts the line on a system of its own, the encoded break Verovio lays it out by (ADR 0114)', () => {
+    expect(mei).toMatch(/<section><sb\/><measure xml:id="m-0"/)
+    expect(mei.match(/<sb\/>/g)).toHaveLength(1)
+  })
+
   it('braces the grand staff, its treble and bass clefs', () => {
     expect(mei).toMatch(/<staffGrp symbol="brace" bar\.thru="true">/)
     expect(mei).toMatch(/<staffDef n="1"[^>]*clef\.shape="G" clef\.line="2"/)

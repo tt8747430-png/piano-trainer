@@ -131,7 +131,9 @@ export function scoreToMei(score: Score, options: MeiOptions = {}): string {
     `<meiHead><fileDesc><titleStmt><title>${escape(title)}</title></titleStmt><pubStmt/></fileDesc></meiHead>`,
     '<music><body><mdiv><score>',
     scoreDef,
-    `<section>${body.join('')}</section>`,
+    // The line is a system of its own (ADR 0114): Verovio lays out a justified line by its encoded
+    // breaks, and warns of none where it has none.
+    `<section><sb/>${body.join('')}</section>`,
     '</score></mdiv></body></music></mei>',
   ].join('\n')
 }
