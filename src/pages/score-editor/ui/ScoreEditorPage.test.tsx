@@ -1054,7 +1054,7 @@ describe('the score editor', () => {
     expect(await screen.findByRole('dialog', { name: 'Record' })).toBeInTheDocument()
   })
 
-  it('transposes the song from its tools row’s Transpose, the key and chords as asked, Undo taking it back (ADR 0110)', async () => {
+  it('transposes the song from the Player’s one Transpose, the key and chords as asked, Undo taking it back (ADR 0110, 0115)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'Transpose: G major' }))
@@ -1063,8 +1063,10 @@ describe('the score editor', () => {
     expect(within(sheet).getByRole('button', { name: 'Transpose' })).toBeDisabled()
     await user.click(within(sheet).getByRole('button', { name: 'Up a semitone' }))
     await user.click(within(sheet).getByRole('button', { name: 'Up a semitone' }))
-    expect(within(sheet).getByRole('status', { name: 'Semitones' })).toHaveTextContent('+2')
-    expect(within(sheet).getByText('Lands in A / F♯m')).toBeInTheDocument()
+    // The Player's one control (ADR 0115): the key it lands in, how far, Reset.
+    expect(sheet).toHaveTextContent('A major')
+    expect(sheet).toHaveTextContent('+2 semitones')
+    expect(within(sheet).getByRole('button', { name: 'Reset' })).toBeEnabled()
     expect(within(sheet).getByRole('switch', { name: 'Apply to key' })).toBeChecked()
     expect(within(sheet).getByRole('switch', { name: 'Apply to chords' })).toBeChecked()
     expect(within(sheet).getByRole('region', { name: 'Preview' })).toBeInTheDocument()

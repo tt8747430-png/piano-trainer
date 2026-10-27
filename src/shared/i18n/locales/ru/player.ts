@@ -60,6 +60,10 @@ export const player: LocaleResources['player'] = {
     down: 'На полутон ниже',
     up: 'На полутон выше',
     own: { song: 'Тональность песни', study: 'Тональность этюда' },
+    semitones_one: '{{by}} полутон',
+    semitones_few: '{{by}} полутона',
+    semitones_many: '{{by}} полутонов',
+    semitones_other: '{{by}} полутона',
     reset: 'Сбросить',
   },
   simplify: {

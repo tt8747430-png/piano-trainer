@@ -76,6 +76,9 @@ export const player = {
     down: 'Down a semitone',
     up: 'Up a semitone',
     own: { song: 'The song’s key', study: 'The study’s key' },
+    // How far the music moves, signed: «+2 semitones».
+    semitones_one: '{{by}} semitone',
+    semitones_other: '{{by}} semitones',
     reset: 'Reset',
   },
   // The tools row's Simplify (ADR 0104, Chordify's): every chord its plain triad.

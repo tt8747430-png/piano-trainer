@@ -1,9 +1,6 @@
-import { ArrowUpDown, ChevronDown, Eye } from 'lucide-react'
-import { useState } from 'react'
+import { ChevronDown, Eye } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useFoldKeys } from '@/features/live-keyboard'
-import { keySymbol, printedSymbol } from '@/shared/lib/music'
-import { useKeyName } from '@/shared/i18n'
 import { PlayerTool, PlayerTools } from '@/widgets/practice-player'
 import {
   KeysSwitch,
@@ -14,7 +11,7 @@ import {
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useStaffHeads } from '../model/use-staff-heads'
 import { EditCommands } from './EditCommands'
-import { TransposeSheet } from './TransposeSheet'
+import { EditorTranspose } from './EditorTranspose'
 
 /**
  * The View, the tools row's first as the Player's is (ADR 0102, 0110): named Sheet music, the score
@@ -48,28 +45,6 @@ function EditorView({ disabled }: { disabled: boolean }) {
         <KeysSwitch shown={!keys.folded} onShow={(on) => keys.fold(!on)} />
       </SheetViewFields>
     </ScoreViewMenu>
-  )
-}
-
-/** Transpose, after the View as the Player's is (ADR 0104, 0110): the song's key, its sheet. */
-function EditorTranspose({ disabled }: { disabled: boolean }) {
-  const { t } = useTranslation('editor')
-  const keyName = useKeyName()
-  const key = useEditorState((state) => state.draft.key)
-  const [open, setOpen] = useState(false)
-  return (
-    <>
-      <PlayerTool
-        icon={ArrowUpDown}
-        label={t('transpose.of', { key: keyName(key) })}
-        name={t('transpose.name')}
-        value={<span className="font-display">{printedSymbol(keySymbol(key))}</span>}
-        brief
-        disabled={disabled}
-        onClick={() => setOpen(true)}
-      />
-      <TransposeSheet open={open} onOpenChange={setOpen} />
-    </>
   )
 }
 
