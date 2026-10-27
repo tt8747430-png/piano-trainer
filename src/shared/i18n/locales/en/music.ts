@@ -23,10 +23,13 @@ export const music = {
       '11th': 'From the 11th',
       '13th': 'From the 13th',
     },
-    first: 'First chord',
-    nearest: 'Nearest',
+    // The position a row's chords start in, and whether they move smoothly from it (ADR 0115).
+    first: 'Starting position',
+    startAbout:
+      'Which note of the first chord your hand plays lowest. Here is C major in each position:',
+    nearest: 'Move smoothly',
     nearestInfo:
-      'On, each next chord moves the least it can; off, every chord stays in the first one’s position.',
+      'On, each chord after the first takes the position nearest the one before, so your hand moves the least. Off, every chord keeps the starting position.',
   },
   // How big a chord is: its stack of notes, triads to 13ths.
   chordSize: {

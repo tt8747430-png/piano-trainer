@@ -10,7 +10,12 @@ import { ServicesProvider } from '@/shared/lib/services'
 import type { PracticeView } from './practice-view'
 import { usePracticePlayer } from './use-practice-player'
 
-const VIEW: PracticeView = { mode: 'listen', speedTraining: false, hands: 'both', swing: false }
+const VIEW: PracticeView = {
+  mode: 'listen',
+  speedTraining: false,
+  hands: 'both',
+  swing: 'straight',
+}
 
 function renderPlayer(view: Partial<PracticeView> = {}) {
   const setView = vi.fn()

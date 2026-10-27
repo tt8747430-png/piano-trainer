@@ -9,6 +9,8 @@ interface SheetChoice {
   readonly key: string
   readonly label: string
   readonly note?: string | undefined
+  /** What it plays, drawn at the row's end: a hand's part's bar. */
+  readonly picture?: ReactNode
   readonly selected: boolean
   readonly disabled?: boolean
   onChoose(): void
@@ -63,15 +65,18 @@ export function ListPage({
             ...(choice.disabled ? { disabled: true } : {}),
             onChoose: choice.onChoose,
             content: (
-              <span className="min-w-0 flex-1">
-                <span className="block font-semibold">{choice.label}</span>
-                {choice.note ? (
-                  <>
-                    {' '}
-                    <span className="block text-sm text-muted-foreground">{choice.note}</span>
-                  </>
-                ) : null}
-              </span>
+              <>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-semibold">{choice.label}</span>
+                  {choice.note ? (
+                    <>
+                      {' '}
+                      <span className="block text-sm text-muted-foreground">{choice.note}</span>
+                    </>
+                  ) : null}
+                </span>
+                {choice.picture}
+              </>
             ),
           })),
         }))}

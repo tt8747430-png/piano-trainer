@@ -2,6 +2,7 @@ import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
 import { passTickAt } from './playhead'
 import { schedule, type Audible, type Scheduled } from './schedule'
+import type { SwingFeel } from './swing'
 
 /** Speed training: each pass `step` BPM faster, up to `until`. */
 export interface SpeedUp {
@@ -22,7 +23,7 @@ export interface LoopOptions {
   readonly metronome?: boolean
   /** Whether the count-in and the metronome click: a count-in still counts without (ADR 0105). */
   readonly clicks?: boolean
-  readonly swing?: boolean
+  readonly swing?: SwingFeel
 }
 
 /** One pass queued on the audio clock: its sounds, cues and end count from `start`, at its tempo. */
@@ -68,7 +69,7 @@ function passAt(
       countIn: first && options.countIn === true,
       metronome: options.metronome === true,
       clicks: options.clicks !== false,
-      swing: options.swing === true,
+      swing: options.swing ?? 'straight',
     }),
     start,
     tempo,

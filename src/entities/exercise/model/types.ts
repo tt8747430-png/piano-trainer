@@ -1,6 +1,7 @@
 import type { Stage } from '@/entities/step'
 import type { LocalText } from '@/shared/i18n'
 import type { Inversion, ScaleKind } from '@/shared/lib/music'
+import type { SwingFeel } from '@/shared/lib/schedule'
 import type { ExerciseChoice, FigureId, Octaves } from './choice'
 
 /** The exercise groups, in the catalog's order: a scale's and a chord's open from their pages, the rest from Exercises. */
@@ -61,5 +62,6 @@ export interface Exercise {
   readonly fields: ExerciseFields
   readonly own: Partial<ExerciseChoice>
   readonly tempo: number
-  readonly swing: boolean
+  /** How much its 8ths swing as it opens (ADR 0115). */
+  readonly swing: SwingFeel
 }

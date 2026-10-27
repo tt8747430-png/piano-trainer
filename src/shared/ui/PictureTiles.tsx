@@ -11,6 +11,13 @@ export interface PictureTile<V extends string> {
   readonly reason?: string | undefined
 }
 
+/** A row's tiles: four in a row where a phone is not narrow, two by two where it is. */
+const COLUMNS = {
+  2: 'grid-cols-2',
+  3: 'grid-cols-3',
+  4: 'grid-cols-4 narrow-phone:grid-cols-2',
+} as const
+
 /**
  * One choice of a few, each a tile of its picture over its name (ADR 0099, 0115): the View's views
  * and its layouts. A radio group named by its label; the arrows move to a choice and choose it. The
@@ -27,7 +34,7 @@ export function PictureTiles<V extends string>({
   label: string
   value: V
   tiles: readonly PictureTile<V>[]
-  columns: 2 | 3
+  columns: 2 | 3 | 4
   onChange: (value: V) => void
 }) {
   return (
@@ -38,7 +45,7 @@ export function PictureTiles<V extends string>({
         const tile = tiles.find((each) => each.value === next)
         if (tile && tile.value !== value) onChange(tile.value)
       }}
-      className={cn('grid gap-2', columns === 2 ? 'grid-cols-2' : 'grid-cols-3')}
+      className={cn('grid gap-2', COLUMNS[columns])}
     >
       {tiles.map((tile) => (
         <Radio.Root

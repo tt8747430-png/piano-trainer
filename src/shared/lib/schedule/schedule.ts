@@ -11,7 +11,7 @@ import {
 import { joinedNotes } from './legato'
 import { loudness, markedSounds, rollOffsets } from './marks'
 import { pedalHeld } from './pedal-marks'
-import { swingTick } from './swing'
+import { isSwung, swingTick, type SwingFeel } from './swing'
 import { tempoWarp } from './tempo-marks'
 
 /** Which hands the learner hears: both, or one of them. */
@@ -78,8 +78,8 @@ interface ScheduleOptions {
    * turned right down (ADR 0105) a count-in still counts its bar, unheard.
    */
   readonly clicks?: boolean
-  /** Off-beat 8ths late, long-short; a compound meter never swings. */
-  readonly swing?: boolean
+  /** How much the off-beat 8ths come late, long-short (ADR 0115); a compound meter never swings. */
+  readonly swing?: SwingFeel
 }
 
 /** When each beat group sounds, so the Player can follow the music. */
@@ -121,19 +121,19 @@ export const isAudible = (n: PerformanceNote, hands: Audible): boolean =>
  * Where a tick sounds swung, on its bar's beats: a pickup's beats are the full bar's it ends, and a
  * short bar's start from its own first beat (`barGrid`), so every beat after either stays a beat.
  */
-function swungOnGrid(music: BarsInMeter, tick: Tick): number {
+function swungOnGrid(music: BarsInMeter, tick: Tick, feel: SwingFeel): number {
   const index = Math.max(
     0,
     music.bars.findLastIndex((bar) => bar.startTick <= tick),
   )
   const origin = barGrid(music, index).start
-  return origin + swingTick(tick - origin)
+  return origin + swingTick(tick - origin, feel)
 }
 
-/** Where a tick sounds, in ticks: swung on its bar's beats when asked, straight in a compound meter. */
-const placement = (performance: Performance, swing: boolean | undefined) =>
-  swing && !isCompound(performance.meter)
-    ? (tick: Tick) => swungOnGrid(performance, tick)
+/** Where a tick sounds, in ticks: swung on its bar's beats as asked, straight in a compound meter. */
+const placement = (performance: Performance, swing: SwingFeel | undefined) =>
+  swing && isSwung(swing) && !isCompound(performance.meter)
+    ? (tick: Tick) => swungOnGrid(performance, tick, swing)
     : (tick: Tick) => tick
 
 /** The key a tick is played in: its bar's, else the piece's. */
@@ -243,7 +243,7 @@ export function beatGroupSounds(
 export function untilNextBeatGroup(
   performance: Performance,
   beatGroup: number,
-  options: { readonly tempo: number; readonly swing?: boolean },
+  options: { readonly tempo: number; readonly swing?: SwingFeel },
 ): number {
   const place = placement(performance, options.swing)
   const tick = performance.beatGroups[beatGroup]?.tick ?? 0

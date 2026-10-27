@@ -17,7 +17,7 @@ const LISTEN: PracticeSetup = {
   tempo: 60,
   ownTempo: 60,
   speedTraining: false,
-  swing: false,
+  swing: 'straight',
   loop: null,
   metronome: false,
   countIn: false,
@@ -393,7 +393,7 @@ describe('usePractice: Wait mode', () => {
         },
       },
     )
-    const { result } = renderPractice(eighths, { mode: 'wait', hands: 'lh', swing: true })
+    const { result } = renderPractice(eighths, { mode: 'wait', hands: 'lh', swing: 'medium' })
     act(() => result.current.play())
     act(() => keyboard.press(midi(48)))
     wait(150)

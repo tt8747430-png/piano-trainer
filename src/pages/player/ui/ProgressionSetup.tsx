@@ -6,6 +6,7 @@ import { ChordSizeField, Labelled, KeyChoice } from '@/shared/ui'
 import { PatternCard, KeyWalkField, PlayerSetup } from '@/widgets/player-setup'
 import { PlayingSection } from '@/widgets/practice-player'
 import type { ProgressionChange } from '../model/progression-search'
+import type { SwingFeel } from '@/shared/lib/schedule'
 
 /** A progression's Setup: its key and a walk through the keys, the pattern and figures, its chord size, and how it plays. */
 export function ProgressionSetup({
@@ -18,9 +19,9 @@ export function ProgressionSetup({
   choice: ProgressionChoice
   /** What the progression, as it is played, has for its patterns. */
   fit: PatternFit
-  swing: boolean
+  swing: SwingFeel
   onChange: (change: ProgressionChange) => void
-  onSwing: (on: boolean) => void
+  onSwing: (feel: SwingFeel) => void
 }) {
   const { t } = useTranslation(['player', 'music'])
   return (

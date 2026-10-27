@@ -9,6 +9,7 @@ import {
   type NoteSound,
   type Sound,
 } from './schedule'
+import type { SwingFeel } from './swing'
 
 const oneChordBar = (symbol: string) => ({
   chords: [{ ...parseChordSymbol(symbol), beats: 4 }],
@@ -421,7 +422,7 @@ describe('untilNextBeatGroup', () => {
         lh: { kind: 'events', events: parseFigure('0/16 L1') },
       },
     })
-    const due = (swing: boolean) => {
+    const due = (swing: SwingFeel) => {
       const times = [0]
       for (let group = 0; group < 3; group += 1) {
         const wait = untilNextBeatGroup(eighths, group, { tempo: 60, swing })
@@ -429,8 +430,9 @@ describe('untilNextBeatGroup', () => {
       }
       return times
     }
-    expect(due(false)).toEqual([0, 0.5, 1, 1.5])
-    expect(due(true)).toEqual([0, 0.6667, 1, 1.6667])
+    expect(due('straight')).toEqual([0, 0.5, 1, 1.5])
+    expect(due('medium')).toEqual([0, 0.6667, 1, 1.6667])
+    expect(due('hard')).toEqual([0, 0.75, 1, 1.75])
   })
 })
 
@@ -474,15 +476,16 @@ describe('schedule: a passage and swing', () => {
         lh: { kind: 'events', events: parseFigure('0/16 L1') },
       },
     })
-    const rh = (swing: boolean) => [
+    const rh = (swing: SwingFeel) => [
       ...new Set(
         notes(schedule(eighths, { tempo: 60, hands: audibleHands('rh'), swing }).sounds).map(
           (s) => s.at,
         ),
       ),
     ]
-    expect(rh(false)).toEqual([0, 0.5, 1, 1.5])
-    expect(rh(true).map((at) => Number(at.toFixed(4)))).toEqual([0, 0.6667, 1, 1.6667])
+    expect(rh('straight')).toEqual([0, 0.5, 1, 1.5])
+    expect(rh('light').map((at) => Number(at.toFixed(4)))).toEqual([0, 0.6, 1, 1.6])
+    expect(rh('medium').map((at) => Number(at.toFixed(4)))).toEqual([0, 0.6667, 1, 1.6667])
   })
 
   it('swings on the bar’s beats after a pickup, not on beats counted from the pickup', () => {
@@ -509,7 +512,7 @@ describe('schedule: a passage and swing', () => {
     const rh = [
       ...new Set(
         notes(
-          schedule(afterPickup, { tempo: 60, hands: audibleHands('rh'), swing: true }).sounds,
+          schedule(afterPickup, { tempo: 60, hands: audibleHands('rh'), swing: 'medium' }).sounds,
         ).map((s) => Number(s.at.toFixed(4))),
       ),
     ]
@@ -519,7 +522,7 @@ describe('schedule: a passage and swing', () => {
 
   it('never swings a compound meter', () => {
     const inEighths = arrange({ ...chart('C'), meter: '6/8' }, { tonic: note('C'), pattern: BEATS })
-    expect(schedule(inEighths, { tempo: 60, hands: ALL, swing: true })).toEqual(
+    expect(schedule(inEighths, { tempo: 60, hands: ALL, swing: 'hard' })).toEqual(
       schedule(inEighths, { tempo: 60, hands: ALL }),
     )
   })
