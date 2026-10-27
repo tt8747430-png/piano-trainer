@@ -23,10 +23,13 @@ import { useMetronome } from '../model/use-metronome'
 import { BeatSquares } from './BeatSquares'
 import { TempoSteps } from './TempoSteps'
 
+/** The two pop-up buttons, round as the steps; on the narrowest phones a size down, so their words fit. */
+const POP_UP = 'rounded-full narrow-phone:gap-1 narrow-phone:px-2.5 narrow-phone:text-sm'
+
 /** A pop-up button's face here: its picture, then the value. */
 const face = (Icon: LucideIcon, value: string) => (
-  <span className="flex items-center justify-center gap-2">
-    <Icon aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+  <span className="flex items-center justify-center gap-2 narrow-phone:gap-1.5">
+    <Icon aria-hidden className="size-5 shrink-0 text-muted-foreground narrow-phone:size-4" />
     <span className="truncate">{value}</span>
   </span>
 )
@@ -72,7 +75,7 @@ export function MetronomePage() {
     },
   ])
   return (
-    <div className="flex min-h-full flex-col">
+    <div className="flex min-h-screen-free flex-col">
       <ScreenHeader
         title={name}
         back={<BackButton fallback={{ to: '/practice' }} />}
@@ -82,8 +85,8 @@ export function MetronomePage() {
           </InfoTip>
         }
       />
-      <div className="mx-auto grid w-full max-w-md flex-1 content-center justify-items-center gap-8 pb-8 landscape-phone:max-w-3xl landscape-phone:grid-cols-2 landscape-phone:gap-x-10 landscape-phone:gap-y-5">
-        <div className="flex w-full flex-col items-center gap-5 landscape-phone:gap-4">
+      <div className="mx-auto grid w-full max-w-md flex-1 content-center items-center justify-items-center gap-8 pb-4 narrow-phone:gap-5 sm:max-w-lg sm:gap-10 landscape-phone:max-w-3xl landscape-phone:grid-cols-2 landscape-phone:gap-x-10 landscape-phone:gap-y-5">
+        <div className="flex w-full flex-col items-center gap-5 narrow-phone:gap-4 landscape-phone:gap-4">
           <TempoSteps bpm={metronome.bpm} onStep={metronome.nudge} />
           <div className="flex w-full items-center gap-3">
             <Slider
@@ -100,7 +103,7 @@ export function MetronomePage() {
               {t('practice:metronome.tap')}
             </Button>
           </div>
-          <div className="grid w-full grid-cols-2 gap-3">
+          <div className="grid w-full grid-cols-2 gap-3 narrow-phone:gap-2">
             <Dropdown<MetronomeSound>
               label={t('practice:metronome.sound')}
               value={metronome.sound}
@@ -111,7 +114,7 @@ export function MetronomePage() {
               }))}
               bare
               face={(sound) => face(Volume2, t(`practice:metronome.sounds.${sound}`))}
-              className="rounded-full"
+              className={POP_UP}
             />
             <Dropdown<MetronomeMeter>
               label={t('practice:metronome.meter')}
@@ -120,21 +123,21 @@ export function MetronomePage() {
               options={METRONOME_METERS.map((meter) => ({ value: meter, label: meter }))}
               bare
               face={(meter) => face(MetronomeIcon, meter)}
-              className="rounded-full"
+              className={POP_UP}
             />
           </div>
         </div>
-        <div className="flex w-full flex-col items-center gap-8 landscape-phone:gap-6">
+        <div className="flex w-full flex-col items-center gap-8 narrow-phone:gap-5 landscape-phone:gap-6">
           <Button
             aria-label={toggleName}
             title={toggleName}
             onClick={metronome.toggle}
-            className="size-24 rounded-full landscape-phone:size-20 [&_svg]:size-10"
+            className="size-24 rounded-full narrow-phone:size-20 sm:size-28 landscape-phone:size-20"
           >
             {metronome.playing ? (
-              <Square aria-hidden className="fill-current" />
+              <Square aria-hidden className="size-9 fill-current" />
             ) : (
-              <Play aria-hidden className="translate-x-0.5 fill-current" />
+              <Play aria-hidden className="size-10 translate-x-0.5 fill-current" />
             )}
           </Button>
           <BeatSquares beats={beatsOf(metronome.meter)} sounding={metronome.beat} />
