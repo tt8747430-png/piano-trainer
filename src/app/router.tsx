@@ -303,6 +303,13 @@ const chordFinderRoute = createRoute({
   component: lazyRouteComponent(toolScreens, 'ChordFinderPage'),
 })
 
+// The Metronome (ADR 0113): a steady beat at any tempo, its choices saved in pt-settings.
+const metronomeRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/metronome',
+  component: lazyRouteComponent(toolScreens, 'MetronomePage'),
+})
+
 // Accompaniment: the patterns and their pieces, a page for each source (ADR 0033). A pattern is
 // explained, starred, hidden on its own page; the learner's own are made and edited (ADR 0026).
 const accompanimentRoute = createRoute({
@@ -511,6 +518,7 @@ const routeTree = rootRoute.addChildren([
     quizRoute,
     exercisesRoute,
     chordFinderRoute,
+    metronomeRoute,
     trainerRoute,
     studyRoute,
     studySectionRoute,

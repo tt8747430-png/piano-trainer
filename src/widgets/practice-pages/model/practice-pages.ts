@@ -3,7 +3,7 @@ import { PAGE_TILES, type Tile } from '@/shared/ui'
 /**
  * Practice's pages (ADR 0044), each where it is and the tile it wears: the things a page shows on the
  * keys, each holding the tools that work on it (ADR 0052); the Chord finder, any chord played named
- * (ADR 0054); and the training.
+ * (ADR 0054); and the training, the Metronome with it (ADR 0113).
  */
 export const PRACTICE_PAGES = {
   chords: { to: '/practice/chords', tile: PAGE_TILES.chords },
@@ -14,6 +14,7 @@ export const PRACTICE_PAGES = {
   chordFinder: { to: '/practice/chord-finder', tile: PAGE_TILES.chordFinder },
   exercises: { to: '/practice/exercises', tile: PAGE_TILES.exercises },
   quiz: { to: '/practice/quiz', tile: PAGE_TILES.quiz },
+  metronome: { to: '/practice/metronome', tile: PAGE_TILES.metronome },
 } as const satisfies Readonly<Record<string, { to: string; tile: Tile }>>
 export type PracticePageId = keyof typeof PRACTICE_PAGES
 
@@ -29,7 +30,7 @@ export const THINGS = [
 /** The groups listed under a heading, in order: the tool at the keys, then the training. */
 export const PRACTICE_GROUPS = [
   { id: 'atTheKeys', pages: ['chordFinder'] },
-  { id: 'training', pages: ['exercises', 'quiz'] },
+  { id: 'training', pages: ['exercises', 'quiz', 'metronome'] },
 ] as const satisfies readonly { id: string; pages: readonly PracticePageId[] }[]
 
 /** Every page of Practice, in the order it lists them. */

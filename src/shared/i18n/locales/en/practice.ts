@@ -10,6 +10,7 @@ export const practice = {
     progressions: 'Progressions',
     accompaniment: 'Accompaniment',
     chordFinder: 'Chord finder',
+    metronome: 'Metronome',
     exercises: 'Exercises',
     quiz: 'Quiz',
   },
@@ -20,6 +21,7 @@ export const practice = {
     intervals: 'Every interval, heard and shown on the keys',
     progressions: 'Pick a known one or type your own, in any key',
     chordFinder: 'Play a chord to see its name and how it is written',
+    metronome: 'Clicks, beeps or a drum beat, at any tempo',
   },
   // Words the explorers share.
   root: 'Root',
@@ -340,5 +342,22 @@ export const practice = {
     },
     // The count after a colon reads right for any number, in both languages.
     gaps: 'To check: {{count}}',
+  },
+  // The Metronome (ADR 0113): its tempo, sound, time signature and beats.
+  metronome: {
+    info: 'Set the tempo with − and +, the slider, or Tap tempo: tap it in time and the Metronome takes the tempo of your last taps. The first beat of each bar is accented. Space starts and stops it; ↑ and ↓ change the tempo by 1, with Shift by 10.',
+    bpm: 'BPM',
+    slider: 'Tempo',
+    tempo: 'Tempo: {{bpm}} BPM',
+    slower: 'Slower by {{step}}',
+    faster: 'Faster by {{step}}',
+    tap: 'Tap tempo',
+    sound: 'Sound',
+    sounds: { click: 'Clicks', beep: 'Beeps', drum: 'Drum beat' },
+    meter: 'Time signature',
+    beats: 'Beats',
+    beat: 'Beat {{beat}}',
+    start: 'Start',
+    stop: 'Stop',
   },
 } as const

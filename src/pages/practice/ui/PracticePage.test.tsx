@@ -35,12 +35,13 @@ describe('Practice', () => {
     ])
   })
 
-  it('lists Exercises and Quiz under Training, each saying its groups', async () => {
+  it('lists Exercises, Quiz and the Metronome under Training, each saying its groups or its line', async () => {
     await renderApp('/practice')
     const training = await screen.findByRole('region', { name: 'Training' })
     expect(rowsOf(training)).toEqual([
       ['Exercises Finger technique · Barry Harris · Piano With Jonny', '/practice/exercises'],
       ['Quiz Chords · Scales and keys · By ear · Reading', '/practice/quiz'],
+      ['Metronome Clicks, beeps or a drum beat, at any tempo', '/practice/metronome'],
     ])
   })
 
