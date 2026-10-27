@@ -192,8 +192,8 @@ describe('scoreToMei, a note’s marks and the options', () => {
   })
 
   it('prints 4/4 as common time where the music asks, and any other meter by its figures (ADR 0114)', () => {
-    const common = notate(music([c(0)], { chords: [], commonTime: true }))
-    expect(common.commonTime).toBe(true)
+    const common = notate(music([c(0)], { chords: [], timeSymbol: true }))
+    expect(common.timeSymbol).toBe(true)
     expect(scoreToMei(common)).toMatch(
       /<scoreDef meter\.count="4" meter\.unit="4" meter\.sym="common"/,
     )
@@ -202,7 +202,7 @@ describe('scoreToMei, a note’s marks and the options', () => {
       music([c(0)], {
         chords: [],
         meter: '3/4',
-        commonTime: true,
+        timeSymbol: true,
         bars: [{ startTick: 0, beats: 3 }],
       }),
     )
@@ -211,7 +211,7 @@ describe('scoreToMei, a note’s marks and the options', () => {
     const changed = notate(
       music([c(0)], {
         chords: [],
-        commonTime: true,
+        timeSymbol: true,
         bars: [
           { startTick: 0, beats: 3, meter: '3/4' },
           { startTick: 72, beats: 4 },
@@ -221,6 +221,22 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(scoreToMei(changed)).toMatch(
       /<scoreDef meter\.count="4" meter\.unit="4" meter\.sym="common"\/>/,
     )
+  })
+
+  it('prints 2/2 as cut time where the music asks, else as its figures (ADR 0114)', () => {
+    const cut = (timeSymbol: boolean) =>
+      scoreToMei(
+        notate(
+          music([c(0)], {
+            chords: [],
+            meter: '2/2',
+            ...(timeSymbol ? { timeSymbol: true as const } : {}),
+          }),
+        ),
+      )
+    expect(cut(true)).toMatch(/<scoreDef meter\.count="2" meter\.unit="2" meter\.sym="cut"/)
+    expect(cut(false)).toMatch(/<scoreDef meter\.count="2" meter\.unit="2"/)
+    expect(cut(false)).not.toContain('meter.sym')
   })
 
   it('hides the time on a line that goes on in it, and shows it where it changes', () => {

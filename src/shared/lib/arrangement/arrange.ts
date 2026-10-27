@@ -5,10 +5,12 @@ import {
   withoutBarMarks,
   beatsBefore,
   playOrder,
+  barTicks,
   beatsPerBar,
   beatsToTicks,
   chordBass,
   chordSymbol,
+  groupTicks,
   isCompound,
   midi,
   PIANO,
@@ -334,16 +336,35 @@ interface Window {
   readonly chord: number
 }
 
-/** How a bar's meter plays a figure: its beats, and whether each divides in three (6/8, 12/8). */
+/**
+ * How a bar's meter plays a figure: its beats, whether each divides in three (6/8, 12/8), and the
+ * groups its bar falls in (ADR 0114: 5/4's 3+2, 6/4's 3+3, in ticks), a figure played once in each.
+ */
 interface BarMeter {
   readonly beats: number
   readonly compound: boolean
+  readonly groups: readonly Tick[]
 }
 
-const barMeterOf = (meter: Meter): BarMeter => ({
-  beats: beatsPerBar(meter),
-  compound: isCompound(meter),
-})
+const barMeterOf = (meter: Meter): BarMeter => {
+  const groups = groupTicks(meter)
+  return {
+    beats: beatsPerBar(meter),
+    compound: isCompound(meter),
+    // A bar of beats a figure counts in quarters is one group: a figure is a bar of 2, 3 or 4 beats.
+    groups: groups.length > 1 && !isCompound(meter) ? groups : [barTicks(meter)],
+  }
+}
+
+/** The group a tick from the bar's start falls in: where it starts, and how long it is. */
+function groupAt(groups: readonly Tick[], tick: Tick): { start: Tick; length: Tick } {
+  let start = 0
+  for (const length of groups) {
+    if (tick < start + length) return { start, length }
+    start += length
+  }
+  return { start, length: groups.at(-1) ?? TICKS_PER_BEAT }
+}
 
 /**
  * The events a figure plays in a meter: in compound time its 6/8 form in a two-beat bar, else its
@@ -642,19 +663,25 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     const picksUp = placed.chord.beats < 2 || (placed.bar === 0 && layout.pickup > 0)
     let at = placed.startTick
     while (at < end) {
-      const from = at === placed.startTick && picksUp ? placed.offsetInBar % meterTicks : 0
-      const length = Math.min(meterTicks - from, end - at)
+      // In a bar of groups (5/4's 3+2), each group plays the figure as a bar of its own beats.
+      const inBar = (placed.offsetInBar + at - placed.startTick) % meterTicks
+      const group = barMeter.groups.length > 1 ? groupAt(barMeter.groups, inBar) : null
+      const span = group ? group.length : meterTicks
+      const into = group ? inBar - group.start : placed.offsetInBar % meterTicks
+      const from = at === placed.startTick && picksUp ? into : 0
+      const length = Math.min(span - (group ? into : from), end - at)
+      const played: BarMeter = group ? { ...barMeter, beats: span / TICKS_PER_BEAT } : barMeter
       const window: Window = { from, to: from + length, at, chord: index }
       // The last stretch of a chord leads to the next chord's bass; the others back to its own.
       const ahead = at + length >= end ? nextBasses[index] : undefined
       const stretch = ahead === undefined ? context : { ...context, nextBass: ahead }
       // A hand written in this bar plays its written notes instead (after the chords).
       if (!written?.rh) {
-        if (rh.kind === 'events') notes.push(...playFigure(rh, stretch, 'rh', window, barMeter))
+        if (rh.kind === 'events') notes.push(...playFigure(rh, stretch, 'rh', window, played))
         else if (tune) notes.push(...playTune(rh, tune, stretch, window))
       }
       if (!written?.lh) {
-        const left = playFigure(lh, stretch, 'lh', window, barMeter)
+        const left = playFigure(lh, stretch, 'lh', window, played)
         for (const n of left) leftFigure.add(n)
         notes.push(...left)
       }
@@ -720,7 +747,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
   return {
     key,
     meter: chart.meter,
-    ...(chart.commonTime ? { commonTime: true } : {}),
+    ...(chart.timeSymbol ? { timeSymbol: true } : {}),
     totalTicks: layout.totalTicks,
     ...(staves.length > 0 ? { staves: (options.staves ?? []).map(({ clef }) => ({ clef })) } : {}),
     ...(timing.length > 0 ? { timing } : {}),

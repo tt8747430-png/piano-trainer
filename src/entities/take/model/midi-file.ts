@@ -5,7 +5,13 @@ import {
   standardMidiFile,
   type TimedMidiEvent,
 } from '@/shared/lib'
-import { beatsPerBar, isCompound, timeSignature } from '@/shared/lib/music'
+import {
+  beatsPerBar,
+  isCompound,
+  meterBeats,
+  TICKS_PER_BEAT,
+  timeSignature,
+} from '@/shared/lib/music'
 import type { PedalKind } from '@/shared/lib/schedule'
 import type { Take } from './types'
 
@@ -47,7 +53,8 @@ export function midiFile(take: Take): Uint8Array<ArrayBuffer> {
     tick,
     kind: 'time',
     ...timeSignature(beats, take.meter),
-    click,
+    // Clicked on the meter's counted beat (ADR 0114): a half in 2/2.
+    click: ((meterBeats(take.meter)[0] ?? TICKS_PER_BEAT) / TICKS_PER_BEAT) * click,
   })
   const signatures: TimedMidiEvent[] = []
   let beatsNow = beatsPerBar(take.meter)

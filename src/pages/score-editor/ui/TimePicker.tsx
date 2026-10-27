@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { barLengths, barsOf, metersFor, sectionMeter } from '@/features/score-editor'
+import { barLengths, barsOf, sameKind, sectionMeter } from '@/features/score-editor'
 import {
   beatsPerBar,
   METERS,
@@ -51,14 +51,14 @@ export function TimePicker({ bar, onDone }: { bar?: number | undefined; onDone: 
   const kind = useEditorState((state) => state.draft.meter)
   const was = {
     meter: useEditorState((state) => sectionMeter(state.draft, section)),
-    commonTime: useEditorState((state) => state.draft.commonTime ?? false),
+    timeSymbol: useEditorState((state) => state.draft.timeSymbol ?? false),
     pickup: useEditorState((state) => barsOf(state.draft)[0]?.bar.ticks ?? 0),
   }
   const [meter, setMeter] = useState(was.meter)
-  const [commonTime, setCommonTime] = useState(was.commonTime)
+  const [timeSymbol, setCommonTime] = useState(was.timeSymbol)
   const [pickup, setPickup] = useState<Tick>(Math.min(was.pickup, fullBar(was.meter)))
   const { count, unit } = figuresOf(meter)
-  const allowed = metersFor(kind)
+  const allowed = METERS.filter((each) => sameKind(each, kind))
 
   // A meter chosen keeps the pickup where the new bar holds it; else the first bar is whole.
   const choose = (next: Meter) => {
@@ -88,7 +88,7 @@ export function TimePicker({ bar, onDone }: { bar?: number | undefined; onDone: 
   }))
   const changed =
     meter !== was.meter ||
-    (meter === '4/4' && commonTime !== was.commonTime) ||
+    (meter === '4/4' && timeSymbol !== was.timeSymbol) ||
     (song && pickup !== Math.min(was.pickup, fullBar(was.meter)))
   const apply = () => {
     actions.dispatch({
@@ -96,7 +96,7 @@ export function TimePicker({ bar, onDone }: { bar?: number | undefined; onDone: 
       bar: from,
       time: {
         meter,
-        ...(meter === '4/4' ? { commonTime } : {}),
+        ...(meter === '4/4' ? { timeSymbol } : {}),
         ...(song ? { pickup } : {}),
       },
     })
@@ -163,15 +163,15 @@ export function TimePicker({ bar, onDone }: { bar?: number | undefined; onDone: 
             onClick={() => choose(each)}
             className="h-12"
           >
-            <TimeFigures meter={each} common={each === '4/4' && commonTime} />
+            <TimeFigures meter={each} common={each === '4/4' && timeSymbol} />
           </ToolKey>
         ))}
       </div>
       {meter === '4/4' ? (
         <SwitchRow
-          label={t('time.commonTime')}
-          info={t('time.commonTimeInfo')}
-          checked={commonTime}
+          label={t('time.timeSymbol')}
+          info={t('time.timeSymbolInfo')}
+          checked={timeSymbol}
           onCheckedChange={setCommonTime}
           className="min-h-12 border-b-0 py-0 text-base"
         />

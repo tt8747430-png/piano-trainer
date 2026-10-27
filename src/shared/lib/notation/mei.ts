@@ -2,6 +2,8 @@ import {
   EXPRESSION_TEXT,
   isCompound,
   keySignature,
+  meterOf,
+  meterSymbol,
   type Accidental,
   type Articulation,
   type Barline,
@@ -174,12 +176,16 @@ const keySig = (fifths: number) =>
 const clefAttrs = (clef: string, prefix = 'clef.') =>
   clef === 'bass' ? `${prefix}shape="F" ${prefix}line="4"` : `${prefix}shape="G" ${prefix}line="2"`
 
-/** A time signature's attributes: its figures, 4/4 as common time's C where the score asks (ADR 0114). */
-const meterAttrs = (time: TimeSignature | null, score: Pick<Score, 'meter' | 'commonTime'>) => {
+/**
+ * A time signature's attributes: its figures, 4/4 as common time's C and 2/2 as cut time's ¢ where
+ * the score asks (ADR 0114).
+ */
+const meterAttrs = (time: TimeSignature | null, score: Pick<Score, 'meter' | 'timeSymbol'>) => {
   const [count = '', unit = ''] = score.meter.split('/')
   const figures = { count: String(time?.count ?? count), unit: String(time?.unit ?? unit) }
-  const common = score.commonTime && figures.count === '4' && figures.unit === '4'
-  return `meter.count="${figures.count}" meter.unit="${figures.unit}"${common ? ' meter.sym="common"' : ''}`
+  const meter = meterOf(Number(figures.count), Number(figures.unit))
+  const symbol = score.timeSymbol && meter ? meterSymbol(meter) : null
+  return `meter.count="${figures.count}" meter.unit="${figures.unit}"${symbol ? ` meter.sym="${symbol}"` : ''}`
 }
 
 /** A scoreDef's attributes for a measure whose time or key is not the one before's: none where both go on. */

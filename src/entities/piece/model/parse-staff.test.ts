@@ -26,7 +26,7 @@ describe('parseStaff', () => {
     expect(parseStaff(testSong(['C']), 0)).toEqual([])
   })
 
-  it.each(['X4/1', 'E4', 'E4/0', 'E4/0.3', 'E/1', 'E4/17', 'E4/1e8', 'C9/1', 'B#8/1', 'Ab0/1'])(
+  it.each(['X4/1', 'E4', 'E4/0', 'E4/0.3', 'E/1', 'E4/25', 'E4/1e8', 'C9/1', 'B#8/1', 'Ab0/1'])(
     'names the staff and the note it cannot read: %j',
     (token) => {
       let caught: unknown

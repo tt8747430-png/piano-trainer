@@ -1,5 +1,8 @@
 import {
+  groupTicks,
   isCompound,
+  meterBeats,
+  meterOf,
   TICKS_PER_BEAT,
   type Meter,
   type Tick,
@@ -17,14 +20,30 @@ export interface BeamPlan {
 }
 
 /**
- * How far a beam of eighths may run, in ticks (LilyPond's `default-time-signature-settings`): the
- * half bar in 4/4, the whole bar in 3/4, else the beat (a dotted quarter in 6/8 and 12/8).
+ * The groups a beam of eighths may run over, in ticks from the bar's first beat, in turn (LilyPond's
+ * `default-time-signature-settings` and `beatStructure`, ADR 0084, 0114): the half bar in 4/4, the
+ * whole bar in 3/4, a half in x/2, 5/4's 3+2 and 6/4's 3+3 quarters, 7/8's 2+2+3 eighths, a dotted
+ * quarter in 6/8, 9/8 and 12/8, else the beat.
  */
-function eighthsGroup(time: TimeSignature, meter: Meter): Tick {
-  if (isCompound(meter) || time.unit !== 4) return TICKS_PER_BEAT
-  if (time.count === 4) return 2 * TICKS_PER_BEAT
-  if (time.count === 3) return 3 * TICKS_PER_BEAT
-  return TICKS_PER_BEAT
+function eighthsGroups(time: TimeSignature, meter: Meter): Tick[] {
+  const own = meterOf(time.count, time.unit)
+  if (!own || isCompound(meter) !== isCompound(own)) return [TICKS_PER_BEAT]
+  if (time.unit === 4 && time.count === 4) return [2 * TICKS_PER_BEAT]
+  if (time.unit === 4 && time.count === 3) return [3 * TICKS_PER_BEAT]
+  if (time.unit === 4 && time.count <= 2) return [TICKS_PER_BEAT]
+  return time.unit === 4 ? groupTicks(own) : meterBeats(own)
+}
+
+/** Which group a tick from the bar's first beat falls in: the groups in turn, the last repeated. */
+function groupAt(groups: readonly Tick[], tick: Tick): number {
+  let start = 0
+  let at = 0
+  for (;;) {
+    const length = groups[Math.min(at, groups.length - 1)] ?? TICKS_PER_BEAT
+    if (tick < start + length) return at
+    start += length
+    at += 1
+  }
 }
 
 /** Consecutive indices whose `key` agrees, as runs. */
@@ -47,7 +66,7 @@ function runsBy(indices: readonly number[], key: (index: number) => number): num
 
 /**
  * A voice's beams and tuplets in a bar, as LilyPond's auto-beaming writes them (ADR 0084): eighths
- * beamed over the meter's group (`eighthsGroup`), a beam with anything shorter cut at each beat; a
+ * beamed over the meter's groups (`eighthsGroups`), a beam with anything shorter cut at each beat; a
  * rest or a longer note ends a beam; each beat of triplets one tuplet, its eighths beamed. `barStart`
  * is where the bar's first beat falls (before a pickup's music).
  */
@@ -74,11 +93,11 @@ export function beamPlan(
     ),
   )
 
-  const group = eighthsGroup(time, meter)
+  const groups = eighthsGroups(time, meter)
   const plain = indices.filter(
     (index) => beamable(events[index]) && !events[index]?.duration.triplet,
   )
-  const beams = runsBy(plain, (index) => Math.floor(at(index) / group)).flatMap((run) =>
+  const beams = runsBy(plain, (index) => groupAt(groups, Math.max(0, at(index)))).flatMap((run) =>
     run.some((index) => (events[index]?.duration.value ?? 0) > 8) ? runsBy(run, beatOf) : [run],
   )
   const order = (a: readonly number[], b: readonly number[]) => (a[0] ?? 0) - (b[0] ?? 0)

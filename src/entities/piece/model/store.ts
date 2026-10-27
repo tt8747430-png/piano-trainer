@@ -26,7 +26,7 @@ import {
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-export const PIECES_VERSION = 7
+export const PIECES_VERSION = 8
 
 /** The learner's pieces (spec 2026-10-01-score-editor §4). */
 export interface PiecesState {
@@ -157,7 +157,7 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     title: 'saved',
     key,
     meter,
-    ...(saved.commonTime === true ? { commonTime: true } : {}),
+    ...(saved.timeSymbol === true ? { timeSymbol: true } : {}),
     tempo,
     pattern,
     sections: read,

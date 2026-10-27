@@ -92,7 +92,7 @@ interface EntryCommon {
 
 interface PieceCommon extends EntryCommon {
   /** 4/4 printed as common time, C, wherever it is printed (ADR 0114). */
-  readonly commonTime?: true
+  readonly timeSymbol?: true
   readonly tempo: number
   readonly pattern: PatternId
   /** A performance of the piece that plays along in Listen: in its own key and form. */

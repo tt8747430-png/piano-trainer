@@ -49,7 +49,7 @@ every line drawn.
    first bar's lengths an eighth apart. For 4/4, **Show as C**. Nothing changes until **Apply**, one step Undo
    takes back (`time` action, `setTime`, `setPickup`); **Cancel** closes it. From a section on, or the whole
    song's at its head, said over it.
-6. **Common time** is the song's (`commonTime: true` on the piece, its music, the chart, the Performance, the
+6. **Common time** is the song's (`timeSymbol: true` on the piece, its music, the chart, the Performance, the
    draft and the Score; MEI `meter.sym="common"` on every 4/4 printed). `pt-pieces` reads the field as one added
    later (ADR 0038). **Cut time is left out:** ¢ is 2/2, a meter the model has not.
 7. **The key signature picker** (`KeyPicker`): Major · Minor, then No key signature (C major / A minor) as a tile
@@ -64,7 +64,7 @@ every line drawn.
 
 ## Consequences
 
-- **`shared/lib/notation`, `arrangement`, `entities/piece`, `widgets/score-sheet`:** `commonTime`; the line's
+- **`shared/lib/notation`, `arrangement`, `entities/piece`, `widgets/score-sheet`:** `timeSymbol`; the line's
   `<sb/>`.
 - **`features/score-editor`:** the `time` action (`TimeChoice`, `setTime`, `setPickup`) replaces `sectionMeter`
   and the settings action's meter.

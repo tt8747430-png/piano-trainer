@@ -107,7 +107,7 @@ describe('a written hand', () => {
     ['C4/1@5', 'starts past its bar'],
     ['C4/1@0', 'cannot read "C4/1@0"'],
     ['C9/1', 'cannot read "C9/1"'],
-    ['C4/17', 'cannot read "C4/17"'],
+    ['C4/25', 'cannot read "C4/25"'],
     ['C4/1e8', 'cannot read "C4/1e8"'],
   ])('names the bar of a token it cannot read: %j', (token, problem) => {
     const error = errorOf(['G C'], { lh: `- | ${token}` })

@@ -240,7 +240,7 @@ export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): Tim
   return {
     key: draft.key,
     meter: draft.meter,
-    ...(draft.commonTime ? { commonTime: true } : {}),
+    ...(draft.timeSymbol ? { timeSymbol: true } : {}),
     bars,
     notes,
     chords,

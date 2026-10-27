@@ -219,7 +219,7 @@ export function TimeSignatureKeys() {
   const { t } = useTranslation('editor')
   const { section, said } = useSignatureFrom(undefined)
   const meter = useEditorState((state) => sectionMeter(state.draft, section))
-  const common = useEditorState((state) => meter === '4/4' && state.draft.commonTime === true)
+  const common = useEditorState((state) => meter === '4/4' && state.draft.timeSymbol === true)
   const title = t('palette.category.time')
   return (
     <>

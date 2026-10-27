@@ -57,7 +57,7 @@ export interface Chart {
   readonly key: Key
   readonly meter: Meter
   /** 4/4 printed as common time, C (ADR 0114). */
-  readonly commonTime?: true
+  readonly timeSymbol?: true
   readonly sections: readonly ChartSection[]
 }
 
@@ -229,7 +229,7 @@ export interface Performance {
   readonly key: Key
   readonly meter: Meter
   /** 4/4 printed as common time, C (ADR 0114). */
-  readonly commonTime?: true
+  readonly timeSymbol?: true
   readonly totalTicks: Tick
   /** Its single staves over the grand staff, top down (ADR 0097): each one's clef. */
   readonly staves?: readonly { readonly clef: Clef }[]

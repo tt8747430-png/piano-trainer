@@ -167,7 +167,7 @@ const isPickup = (draft: Draft, index: number, ticks: Tick): boolean =>
  * and the notes in them taken, the chord sounding where it now starts kept; longer, room before it,
  * its first chord held back to the start. Its chords keep their places from its end.
  */
-function setPickupTicks(draft: Draft, ticks: Tick): Draft {
+export function setPickupTicks(draft: Draft, ticks: Tick): Draft {
   const placed = barsOf(draft)[0]
   if (!placed) return draft
   const shift = ticks - placed.bar.ticks

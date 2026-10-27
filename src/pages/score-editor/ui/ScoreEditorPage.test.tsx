@@ -713,7 +713,7 @@ describe('the score editor', () => {
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({
         meter: '4/4',
-        commonTime: true,
+        timeSymbol: true,
         sections: [{ lines: ['G@1 G G G'] }],
       }),
     )
