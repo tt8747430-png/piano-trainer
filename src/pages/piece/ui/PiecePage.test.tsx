@@ -103,7 +103,7 @@ describe('Piece', () => {
     const rows = within(sections).getAllByRole('link')
     expect(rows.map((row) => [row.textContent, row.getAttribute('href')])).toEqual([
       ['Verse 15 lessons · 0 done', '/songs/bz5/sections/1'],
-      ['Chorus 20 lessons · 0 done', '/songs/bz5/sections/2'],
+      ['Chorus 21 lessons · 0 done', '/songs/bz5/sections/2'],
       ['Ending 2 lessons · 0 done', '/songs/bz5/sections/3'],
     ])
     const paints = rows.map(
@@ -134,7 +134,7 @@ describe('Piece', () => {
         .map((row) => row.textContent),
     ).toEqual([
       'Verse 15 lessons · 15 done',
-      'Chorus 20 lessons · 5 done',
+      'Chorus 21 lessons · 5 done',
       'Ending 2 lessons · 1 done',
     ])
   })
