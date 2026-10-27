@@ -1,6 +1,7 @@
 import { chartOf, type Piece } from '@/entities/piece'
 import type { ChartBar } from '@/shared/lib/arrangement'
 import {
+  chordSymbol,
   findNumerals,
   numeralReadings,
   parseNumerals,
@@ -31,11 +32,14 @@ export interface SongPlace {
   readonly played: Bars
   /** The key it is heard in: the song's, or its section's. */
   readonly key: Key
+  /** Its chords' symbols as written, a chord held over several once: `G C G`. */
+  readonly chords: readonly string[]
 }
 
 /** A stretch of a song's chords in one key, with no bar of no chord in it: where a progression runs. */
 interface Stretch {
   readonly key: Key
+  readonly chords: readonly Chord[]
   /** Each chord's written bar. */
   readonly bars: readonly number[]
   readonly readings: readonly (readonly Numeral[])[]
@@ -61,6 +65,7 @@ function readPiece(piece: Piece): Read {
     if (open && open.chords.length > 0)
       stretches.push({
         key: open.key,
+        chords: open.chords,
         bars: open.bars,
         readings: numeralReadings(open.chords, open.key),
       })
@@ -108,8 +113,14 @@ function playedBars(order: readonly number[], bars: Bars): Bars {
 /** A place in a stretch, as the chords' indexes there, with its bars and the key it is in. */
 interface Found extends SongPlace {
   readonly stretch: number
-  readonly chords: Bars
+  readonly span: Bars
 }
+
+/** Chords' symbols as written, a chord held over several once. */
+const heldOnce = (chords: readonly Chord[]): string[] =>
+  chords.map(chordSymbol).filter((symbol, i, all) => i === 0 || symbol !== all[i - 1])
+
+const placeOf = ({ bars, played, key, chords }: Found): SongPlace => ({ bars, played, key, chords })
 
 function found(piece: Piece, numerals: readonly Numeral[], minor: boolean): Found[] {
   const { stretches, order } = readPiece(piece)
@@ -120,10 +131,11 @@ function found(piece: Piece, numerals: readonly Numeral[], minor: boolean): Foun
           const bars = { first: stretch.bars[span.first] ?? 0, last: stretch.bars[span.last] ?? 0 }
           return {
             stretch: at,
-            chords: span,
+            span,
             bars,
             played: playedBars(order, bars),
             key: stretch.key,
+            chords: heldOnce(stretch.chords.slice(span.first, span.last + 1)),
           }
         }),
   )
@@ -137,8 +149,7 @@ export const progressionPlaces = (
   piece: Piece,
   numerals: readonly Numeral[],
   minor: boolean,
-): SongPlace[] =>
-  found(piece, numerals, minor).map(({ bars, played, key }) => ({ bars, played, key }))
+): SongPlace[] => found(piece, numerals, minor).map(placeOf)
 
 /** A song a progression is heard in, and where. */
 export interface SongWith {
@@ -176,9 +187,9 @@ const LINES = PROGRESSION_LIBRARY.map((progression) => ({
 
 const inside = (inner: Found, outer: Found): boolean =>
   inner.stretch === outer.stretch &&
-  outer.chords.first <= inner.chords.first &&
-  inner.chords.last <= outer.chords.last &&
-  outer.chords.last - outer.chords.first > inner.chords.last - inner.chords.first
+  outer.span.first <= inner.span.first &&
+  inner.span.last <= outer.span.last &&
+  outer.span.last - outer.span.first > inner.span.last - inner.span.first
 
 /**
  * The library's progressions a song uses, in the order it first uses them: each where it is heard
@@ -200,12 +211,12 @@ export function progressionsOf(piece: Piece): UsedProgression[] {
     .sort(
       (a, b) =>
         a.first.stretch - b.first.stretch ||
-        a.first.chords.first - b.first.chords.first ||
-        a.first.chords.last - b.first.chords.last,
+        a.first.span.first - b.first.span.first ||
+        a.first.span.last - b.first.span.last,
     )
     .map(({ progression, key, places }) => ({
       progression,
       key,
-      places: places.map(({ bars, played, key: placeKey }) => ({ bars, played, key: placeKey })),
+      places: places.map(placeOf),
     }))
 }

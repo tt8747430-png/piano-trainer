@@ -22,6 +22,15 @@ describe('progressionPlaces', () => {
     expect(places(piece('amazing'), 'I IV I')).toEqual(['1-4 G', '9-12 G'])
   })
 
+  it('gives the chords each place is heard on, as written, a chord held once', () => {
+    const chords = progressionPlaces(piece('amazing'), numerals('I IV I'), false).map((place) =>
+      place.chords.join(' '),
+    )
+    expect(chords).toEqual(['G G7 C G', 'G G7 C G'])
+    const [held] = progressionPlaces(testSong(['C C F C']), numerals('I IV I'), false)
+    expect(held?.chords).toEqual(['C', 'F', 'C'])
+  })
+
   it('looks only in the key’s mode the line is written for', () => {
     expect(places(piece('amazing'), 'i iv i', true)).toEqual([])
     const minor = testSong(['Am Dm Am E'], { key: 'Am' })
