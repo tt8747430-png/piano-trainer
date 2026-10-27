@@ -152,7 +152,8 @@ describe('Playhead (ADR 0096)', () => {
         around={(sheet) => <RevealContext value={reveal}>{sheet}</RevealContext>}
       />,
     )
-    await vi.waitFor(() => expect(reveal).toHaveBeenCalled())
+    // The second sheet engraves in the worker: under the whole suite that can take past a second.
+    await vi.waitFor(() => expect(reveal).toHaveBeenCalled(), { timeout: 5000 })
     expect(reveal.mock.calls[0]?.[0]).toHaveAttribute('data-slot', 'sheet-line')
   })
 
