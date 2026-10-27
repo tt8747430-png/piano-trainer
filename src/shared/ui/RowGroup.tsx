@@ -9,12 +9,15 @@ import { FoldSection, type Fold } from './FoldSection'
 export function RowGroup({
   title,
   fold,
+  info,
   level = 2,
   children,
   footer,
 }: {
   title: string
   fold?: Fold | undefined
+  /** What the group is for, opened from the ⓘ beside its name. */
+  info?: ReactNode
   level?: 2 | 3
   children: ReactNode
   /** What follows the rows, under the group's name still (Search's Show all). */
@@ -24,6 +27,7 @@ export function RowGroup({
     <FoldSection
       title={title}
       fold={fold}
+      info={info}
       level={level}
       headingClassName={level === 2 ? 'text-2xl' : 'text-xl'}
     >

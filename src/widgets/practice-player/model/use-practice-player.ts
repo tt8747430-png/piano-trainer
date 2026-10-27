@@ -1,5 +1,11 @@
 import { useCallback, useMemo, useRef } from 'react'
-import { selectPractice, selectSound, useSettings } from '@/entities/settings'
+import {
+  selectPractice,
+  selectScoreView,
+  selectSound,
+  useSettings,
+  useSettingsStoreApi,
+} from '@/entities/settings'
 import {
   loopParam,
   playerRange,
@@ -12,6 +18,7 @@ import {
   type Practice,
   type PracticeMode,
 } from '@/features/practice'
+import { setPracticeToggle, setScoreView } from '@/features/set-preference'
 import type { Performance } from '@/shared/lib/arrangement'
 import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
@@ -49,6 +56,14 @@ export interface PracticePlayer {
   readonly names: boolean
   /** Each chord symbol says how the right hand plays it. */
   readonly positions: boolean
+  /** The click while the music plays: this visit's (ADR 0111), else the learner's saved one. */
+  readonly click: boolean
+  /** The keys out: this visit's (ADR 0111), else the View's saved ones. */
+  readonly keys: boolean
+  /** The click on or off: this visit's where it has its own, else the saved one. */
+  setClick(on: boolean): void
+  /** The keys out or put away: this visit's where it has its own, else the View's. */
+  setKeys(on: boolean): void
   setMode(mode: PracticeMode): void
   /** Listen at a tempo: the mode and the tempo in one change of the URL. */
   listenAt(tempo: number): void
@@ -79,7 +94,10 @@ export function usePracticePlayer(
 ): PracticePlayer {
   // The screen stays on while this screen is open: a phone on the stand does not lock mid-song.
   useWakeLock()
+  const settings = useSettingsStoreApi()
   const toggles = useSettings(selectPractice)
+  const savedKeys = useSettings((state) => selectScoreView(state).keys)
+  const click = view.click ?? toggles.metronome
   const sound = useSettings(selectSound)
   const mix = useMemo<Mix>(
     () => ({
@@ -104,7 +122,7 @@ export function usePracticePlayer(
     speedTraining: view.speedTraining,
     swing: view.swing,
     loop,
-    metronome: toggles.metronome,
+    metronome: click,
     countIn: toggles.countIn,
     recording,
     mix,
@@ -157,6 +175,14 @@ export function usePracticePlayer(
     fingers: toggles.fingerNumbers,
     names: toggles.namedNotes,
     positions: toggles.positions,
+    click,
+    keys: view.keys ?? savedKeys,
+    setClick: (on) =>
+      view.click === undefined
+        ? setPracticeToggle(settings, 'metronome', on)
+        : setView({ click: on }),
+    setKeys: (on) =>
+      view.keys === undefined ? setScoreView(settings, { keys: on }) : setView({ keys: on }),
     setMode: (mode) => setView({ mode }),
     listenAt: (next) => setView({ mode: 'listen', tempo: next === ownTempo ? undefined : next }),
     setSpeedTraining: (on) => setView({ speedTraining: on }),

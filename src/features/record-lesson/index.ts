@@ -1,1 +1,1 @@
-export { recordChord, recordPass } from './record-lesson'
+export { recordHold, recordPass } from './record-lesson'

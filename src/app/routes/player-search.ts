@@ -72,6 +72,8 @@ function practiceView(raw: Raw): PracticeView {
     hands: valueOr(isHands, raw.hands, PRACTICE_DEFAULTS.hands),
     swing: raw.swing === true,
     loop: isLoopParam(raw.loop) ? raw.loop : undefined,
+    click: typeof raw.click === 'boolean' ? raw.click : undefined,
+    keys: typeof raw.keys === 'boolean' ? raw.keys : undefined,
   }
 }
 /** The pattern and the hands' figures a Setup chooses, whatever the Player plays. */

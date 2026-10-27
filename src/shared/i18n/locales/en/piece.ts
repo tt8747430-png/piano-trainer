@@ -19,29 +19,27 @@ export const piece = {
     title: 'Learn the {{section}}',
     rounds: '{{n}} ×',
     noChords: 'No chord symbols',
+    // Each group of lessons named by what it does, a word or two; how it does it behind its ⓘ
+    // (ADR 0111).
     chords: 'Chords',
+    chordsInfo_one: 'Hold each chord on the keys to learn it.',
+    chordsInfo_other:
+      'Hold each chord on the keys {{count}} times to learn it, letting go of every key between.',
     learnChord: 'Learn {{chord}}',
-    changes: 'Changes',
-    inTime: 'Play the chords in time',
-    // A chord sequence by its place in the section, by the ordinal's plural form (Russian says
-    // «оборот»: its «последовательность» is a Progression).
-    sequence: {
-      zero: '{{n}}th sequence',
-      one: '{{n}}st sequence',
-      two: '{{n}}nd sequence',
-      few: '{{n}}rd sequence',
-      many: '{{n}}th sequence',
-      other: '{{n}}th sequence',
-    },
-    wholeSection: 'The whole section',
+    held: '{{held}} of {{needed}}',
+    inTime: 'In time',
+    inTimeInfo:
+      'The Player loops the chords at the song’s tempo with the click on. Play along in Wait mode to tick them off.',
     oneChange: 'One change at a time',
-    change: 'From {{from}} to {{to}}',
-    bar: 'Bar {{n}}',
-    bars: 'Bars {{first}}–{{last}}',
-    // Each pattern the section is played with, by its name; where it is looped, on its chord.
+    oneChangeInfo:
+      'The Player waits on each of the two chords until you play it, at your own pace.',
+    change: '{{from}} → {{to}}',
+    // Each pattern the section is played with, by its name, on the chord it is looped on.
     pattern_one: 'Pattern',
     pattern_other: 'Patterns',
-    patternAt: 'On {{chord}} · {{bars}}',
+    patternInfo:
+      'The Player loops a bar of the pattern on one chord, its notes lit on the keys as they sound.',
+    patternOn: 'On {{chord}}',
     done: 'Done',
   },
   tempo: 'Tempo',

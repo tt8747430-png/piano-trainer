@@ -1,13 +1,15 @@
 import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { setSound } from '@/features/set-preference'
 import { SoundButton } from './SoundButton'
 
 async function openSound(props: Partial<Parameters<typeof SoundButton>[0]> = {}) {
   const user = userEvent.setup()
-  const view = renderWithSettings(<SoundButton staves={false} recording={false} {...props} />)
+  const view = renderWithSettings(
+    <SoundButton staves={false} recording={false} click={false} onClick={vi.fn()} {...props} />,
+  )
   await user.click(screen.getByRole('button', { name: 'Sound' }))
   const popover = await screen.findByRole('dialog', { name: 'Sound' })
   return { ...view, user, popover }
@@ -24,15 +26,17 @@ const volume = (popover: HTMLElement, name: string) =>
     ?.querySelector('input[type="range"]')
 
 describe('SoundButton (ADR 0105)', () => {
-  it('turns the count-in and the click on and off: the saved toggles', async () => {
-    const { user, popover, settingsStore } = await openSound()
+  it('turns the count-in on and off, the saved toggle, and the click as the Player says', async () => {
+    const onClick = vi.fn()
+    const { user, popover, settingsStore } = await openSound({ click: true, onClick })
     const switches = within(popover).getAllByRole('switch')
-    expect(switches.map((each) => each.getAttribute('aria-checked'))).toEqual(['false', 'false'])
+    expect(switches.map((each) => each.getAttribute('aria-checked'))).toEqual(['false', 'true'])
     expect(switches[0]).toHaveAccessibleName('Count in')
     expect(switches[1]).toHaveAccessibleName('Click')
     await user.click(switches[0] as HTMLElement)
     await user.click(switches[1] as HTMLElement)
-    expect(settingsStore.getState().practice).toMatchObject({ countIn: true, metronome: true })
+    expect(settingsStore.getState().practice).toMatchObject({ countIn: true, metronome: false })
+    expect(onClick).toHaveBeenCalledWith(false)
   })
 
   it('has a volume for each hand and the click, and the staves and the recording where there are any', async () => {

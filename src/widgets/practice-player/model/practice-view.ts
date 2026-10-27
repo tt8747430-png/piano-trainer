@@ -9,4 +9,14 @@ export interface PracticeView {
   readonly hands: Hands
   readonly swing: boolean
   readonly loop?: LoopParam
+  /**
+   * The click for this visit, over the learner's saved one, which it leaves as it is: a song's
+   * change in time opens with it on (ADR 0111). Never remembered.
+   */
+  readonly click?: boolean
+  /**
+   * The keys for this visit, over the View's: a pattern lesson opens them, each note lit as it
+   * sounds whatever the view (ADR 0111). Never remembered.
+   */
+  readonly keys?: boolean
 }

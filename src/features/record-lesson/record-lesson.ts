@@ -3,6 +3,7 @@ import {
   barsLessonKey,
   chordLessonKey,
   selectLessonDone,
+  withHold,
   withLesson,
   type LessonKey,
   type ProgressStore,
@@ -20,7 +21,10 @@ export function recordPass(store: ProgressStore, pieceId: PieceId, bars: BarRang
   recordLesson(store, barsLessonKey(pieceId, bars), now)
 }
 
-/** Records a chord of a piece played in its sheet on a section's page (ADR 0100). */
-export function recordChord(store: ProgressStore, pieceId: PieceId, symbol: string, now: Date) {
-  recordLesson(store, chordLessonKey(pieceId, symbol), now)
+/**
+ * Records a chord of a piece held in its sheet on a section's page, let go since it was last held:
+ * its third hold learns it (ADR 0111).
+ */
+export function recordHold(store: ProgressStore, pieceId: PieceId, symbol: string, now: Date) {
+  store.setState((state) => withHold(state, chordLessonKey(pieceId, symbol), now.toISOString()))
 }

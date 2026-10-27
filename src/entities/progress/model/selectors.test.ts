@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   byLastOpened,
   selectAnswers,
+  selectHolds,
   selectIsLearned,
   selectLearned,
   selectPractised,
@@ -19,7 +20,8 @@ const state: ProgressState = {
   answers: { 'chord:m7': [{ correct: true, at: '2026-09-24T10:00:00.000Z' }] },
   trainers: { 'name-chord:3': { runs: 2, last: 80, best: 90, bestStreak: 6 } },
   days: [],
-  lessons: {},
+  lessons: { 'bz5:chord:C': '2026-09-24T10:00:00.000Z' },
+  holds: { 'bz5:chord:G': 2 },
 }
 
 describe('progress selectors', () => {
@@ -60,5 +62,13 @@ describe('byLastOpened', () => {
     }
     expect(byLastOpened(practised)).toEqual(['ode', 'silent', 'bz5', 'hgta'])
     expect(byLastOpened({})).toEqual([])
+  })
+})
+
+describe('selectHolds', () => {
+  it('counts a chord’s holds: three once learned, none before the first', () => {
+    expect(selectHolds('bz5:chord:G')(state)).toBe(2)
+    expect(selectHolds('bz5:chord:C')(state)).toBe(3)
+    expect(selectHolds('bz5:chord:F')(state)).toBe(0)
   })
 })

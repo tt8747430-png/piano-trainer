@@ -5,7 +5,13 @@ import type { PieceId } from '@/entities/piece'
  * in its sheet, or a pass finished in Wait mode over bars as played, numbered from 1 as the Player's
  * loop prints them. A section's lessons are worked out from the music; only these keys are kept.
  */
-export type LessonKey = `${PieceId}:chord:${string}` | `${PieceId}:bars:${number}-${number}`
+export type LessonKey = ChordLessonKey | `${PieceId}:bars:${number}-${number}`
+
+/** A chord of a piece, learned by holding it in its sheet (ADR 0111). */
+export type ChordLessonKey = `${PieceId}:chord:${string}`
+
+/** How many times a chord is held, let go between, to learn it (ADR 0111, Chordify's three). */
+export const CHORD_HOLDS = 3
 
 /** Bars as played, counted from 0: a loop's, or a section's. */
 interface PlayedBars {
@@ -14,7 +20,7 @@ interface PlayedBars {
 }
 
 /** A chord of a piece, learned by playing it in its sheet. */
-export const chordLessonKey = (pieceId: PieceId, symbol: string): LessonKey =>
+export const chordLessonKey = (pieceId: PieceId, symbol: string): ChordLessonKey =>
   `${pieceId}:chord:${symbol}`
 
 /**
@@ -36,6 +42,10 @@ export function isLessonKey(key: string): key is LessonKey {
   return first === undefined || Number(first) <= Number(last)
 }
 
+/** Whether a lesson key is a chord's: the one kind of lesson its holds count towards. */
+export const isChordLessonKey = (key: string): key is ChordLessonKey =>
+  isLessonKey(key) && key.includes(':chord:')
+
 /** How many lessons done are kept: the latest, more than every song in the books has. */
 export const LESSONS_KEPT = 2000
 
@@ -49,4 +59,12 @@ export function keptLessons(lessons: Lessons): Lessons {
     .toSorted(([, a], [, b]) => Date.parse(b) - Date.parse(a))
     .slice(0, LESSONS_KEPT)
   return Object.fromEntries(latest)
+}
+
+type Holds = Readonly<Partial<Record<ChordLessonKey, number>>>
+
+/** The chords' holds as they are kept: the latest LESSONS_KEPT counted, by when each was last held. */
+export function keptHolds(holds: Holds): Holds {
+  const entries = Object.entries(holds)
+  return entries.length <= LESSONS_KEPT ? holds : Object.fromEntries(entries.slice(-LESSONS_KEPT))
 }

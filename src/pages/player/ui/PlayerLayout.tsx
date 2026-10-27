@@ -110,9 +110,14 @@ export function PlayerLayout({
   usePlayerShortcuts(player, view, onClose)
   // More's Print (ADR 0107): the music printed as the View shows it, while its render stands.
   const [printing, setPrinting] = useState(false)
-  // A chord view's keys in Listen: the chord sounding as its diagram draws it (ADR 0101).
-  const chordKeys = useChordKeys(performance, practice.state, shown !== 'sheet')
-  const keys = !scoreView.keys ? null : (
+  // A chord view's keys in Listen: the chord sounding as its diagram draws it (ADR 0101); a pattern
+  // lesson's, each note as it sounds, whatever the view (ADR 0111).
+  const chordKeys = useChordKeys(
+    performance,
+    practice.state,
+    shown !== 'sheet' && view.keys !== true,
+  )
+  const keys = !player.keys ? null : (
     <PlayerArea area="keys">
       <LiveKeyboard
         range={player.range}
@@ -159,6 +164,8 @@ export function PlayerLayout({
             staves={viewed}
             piano={piano}
             openAtStart={openView}
+            keys={player.keys}
+            onKeys={player.setKeys}
           />
           {tools}
         </PlayerTools>
@@ -229,7 +236,14 @@ export function PlayerLayout({
             />
           }
           loop={<LoopButton looped={player.loop !== null} onToggle={player.toggleLoop} />}
-          sound={<SoundButton staves={viewed.length > 0} recording={recording !== undefined} />}
+          sound={
+            <SoundButton
+              staves={viewed.length > 0}
+              recording={recording !== undefined}
+              click={player.click}
+              onClick={player.setClick}
+            />
+          }
           hands={<HandsButton hands={view.hands} onChange={player.setHands} />}
         />
       </PlayerArea>

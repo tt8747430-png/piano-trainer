@@ -205,6 +205,21 @@ describe('sectionLessons', () => {
     ])
   })
 
+  it('loops a pattern on one chord: the section’s first alone in a bar, else any chord alone', () => {
+    const lessons = sectionLessons(arranged(chart(section('C-G F:t1 G:t1 C'))), 'my-1', 0)
+    expect(
+      lessons?.patterns.map((pattern) => [pattern.pattern, pattern.symbol, pattern.key]),
+    ).toEqual([
+      ['block', 'C', 'my-1:bars:4-4'],
+      ['beats', 'F', 'my-1:bars:2-2'],
+    ])
+    // No bar of one chord: its first bar, as it plays there.
+    const shared = sectionLessons(arranged(chart(section('C-G F-C'))), 'my-1', 0)
+    expect(shared?.patterns.map((pattern) => [pattern.symbol, pattern.key])).toEqual([
+      ['C', 'my-1:bars:1-1'],
+    ])
+  })
+
   it('has no pattern lesson for a section written out note by note', () => {
     const written = { hands: { rh: [], lh: [] } }
     const performance = arranged(chart({ lines: [[bar('C', written), bar('G', written)]] }))

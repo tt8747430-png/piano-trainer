@@ -33,7 +33,12 @@ const SWITCH_ROW = 'min-h-11 border-b-0 py-0 text-base'
 export function SoundButton({
   staves,
   recording,
+  click,
+  onClick,
 }: {
+  /** The click while the music plays: the Player's, this visit's where a lesson set it (ADR 0111). */
+  click: boolean
+  onClick: (on: boolean) => void
   /** The music has staves over the piano: their volume is offered. */
   staves: boolean
   /** The piece has a recording: its volume, and Only the chords, are offered. */
@@ -43,7 +48,7 @@ export function SoundButton({
   const locale = useLocale()
   const side = useDockSide()
   const settings = useSettingsStoreApi()
-  const { countIn, metronome } = useSettings(selectPractice)
+  const { countIn } = useSettings(selectPractice)
   const sound = useSettings(selectSound)
   const parts: readonly { part: SoundPart; label: string }[] = [
     { part: 'rh', label: t('common:hands.rh') },
@@ -84,8 +89,8 @@ export function SoundButton({
           <SwitchRow
             label={t('player:sound.click')}
             info={t('player:sound.clickInfo')}
-            checked={metronome}
-            onCheckedChange={(on) => setPracticeToggle(settings, 'metronome', on)}
+            checked={click}
+            onCheckedChange={(on) => onClick(on)}
             className={SWITCH_ROW}
           />
         </div>

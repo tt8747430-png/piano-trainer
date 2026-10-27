@@ -1,6 +1,6 @@
 import type { PieceId } from '@/entities/piece'
 import type { SkillId } from '@/shared/lib/music'
-import type { LessonKey } from './lessons'
+import { CHORD_HOLDS, type ChordLessonKey, type LessonKey } from './lessons'
 import { NO_ANSWERS } from './mastery'
 import type { Answer, ProgressState, RunKey, TrainerRecord } from './types'
 import type { StepId } from '@/entities/step'
@@ -46,3 +46,9 @@ export const selectLessonDone =
 export function lessonsDone(lessons: ProgressState['lessons'], keys: readonly LessonKey[]): number {
   return new Set(keys.filter((key) => lessons[key] !== undefined)).size
 }
+
+/** How many times a chord lesson's chord was held (ADR 0111): CHORD_HOLDS once it is learned. */
+export const selectHolds =
+  (key: ChordLessonKey) =>
+  (state: ProgressState): number =>
+    state.lessons[key] !== undefined ? CHORD_HOLDS : (state.holds[key] ?? 0)

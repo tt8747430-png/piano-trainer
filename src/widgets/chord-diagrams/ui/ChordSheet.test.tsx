@@ -11,7 +11,7 @@ import { PieceInversions } from '@/features/choose-diagram-inversion'
 import type { DiagramChord } from '@/features/practice'
 import { createFakeAudio } from '@/shared/api/audio'
 import { createFakeMidi } from '@/shared/api/midi'
-import { createMemoryStorage } from '@/shared/lib'
+import { createMemoryStorage, SHORTEST_PRESS_MS } from '@/shared/lib'
 import { midi, note, pitchClass, printedSymbol } from '@/shared/lib/music'
 import { ServicesProvider } from '@/shared/lib/services'
 import { ChordSheet } from './ChordSheet'
@@ -104,7 +104,7 @@ describe('ChordSheet', () => {
   it('has no keys to learn it on where it is not learned', async () => {
     const { sheet } = await openSheet()
     expect(within(sheet).queryByRole('group', { name: 'Keyboard' })).not.toBeInTheDocument()
-    expect(within(sheet).queryByText('Play it on the keys')).not.toBeInTheDocument()
+    expect(within(sheet).queryByText('Hold it on the keys')).not.toBeInTheDocument()
   })
 })
 
@@ -174,25 +174,57 @@ describe('ChordSheet, its inversion (ADR 0101)', () => {
   })
 })
 
+/** Keys let go on the MIDI keyboard, once each press has been down its shortest. */
+async function letGo(keyboard: ReturnType<typeof createFakeMidi>, ...keys: number[]) {
+  await act(() => new Promise((done) => setTimeout(done, SHORTEST_PRESS_MS + 10)))
+  act(() => {
+    for (const key of keys) keyboard.release(midi(key))
+  })
+}
+
+/** A chord's learning, held `held` times so far of three (ADR 0111). */
+const learning = (held: number, onHeld = vi.fn()) => ({ learn: { held, needed: 3, onHeld } })
+
 describe('ChordSheet, learning the chord', () => {
-  it('learns it once its keys are held together on a MIDI keyboard, in any octave, once', async () => {
-    const onLearned = vi.fn()
-    const { sheet, keyboard } = await openSheet({ learn: { learned: false, onLearned } })
-    expect(within(sheet).getByText('Play it on the keys')).toBeInTheDocument()
+  it('counts a hold once its keys are held together on a MIDI keyboard, in any octave', async () => {
+    const onHeld = vi.fn()
+    const { sheet, keyboard, audio } = await openSheet(learning(0, onHeld))
+    expect(within(sheet).getByText('Hold it on the keys')).toBeInTheDocument()
+    expect(within(sheet).getByText('0 of 3')).toBeInTheDocument()
     // E3 G♯3 B2: its notes in other octaves, in another order; not yet the chord, its root missing.
     hold(keyboard, 52, 56, 47)
-    expect(onLearned).not.toHaveBeenCalled()
+    expect(onHeld).not.toHaveBeenCalled()
     hold(keyboard, 61)
-    expect(onLearned).toHaveBeenCalledTimes(1)
-    expect(within(sheet).getByText('That’s it.')).toBeInTheDocument()
-    // Another octave of it is still the chord: learned once.
+    expect(onHeld).toHaveBeenCalledTimes(1)
+    // Each hold heard: a click, the first beat's.
+    expect(audio.played.at(-1)?.sounds).toEqual([{ kind: 'click', at: 0, accent: true }])
+    // Held longer, or another octave of it added, it is the same hold.
     hold(keyboard, 73)
-    expect(onLearned).toHaveBeenCalledTimes(1)
+    expect(onHeld).toHaveBeenCalledTimes(1)
   })
 
-  it('learns it on its own keys, the diagram’s, held with several fingers', async () => {
-    const onLearned = vi.fn()
-    const { sheet } = await openSheet({ learn: { learned: false, onLearned } })
+  it('counts the next hold only once every key is let go and the chord played again', async () => {
+    const onHeld = vi.fn()
+    const { keyboard } = await openSheet(learning(1, onHeld))
+    hold(keyboard, 56, 59, 61, 64)
+    expect(onHeld).toHaveBeenCalledTimes(1)
+    // A finger lifted and put back is the same hold.
+    await letGo(keyboard, 64)
+    hold(keyboard, 64)
+    expect(onHeld).toHaveBeenCalledTimes(1)
+    await letGo(keyboard, 56, 59, 61, 64)
+    hold(keyboard, 56, 59, 61, 64)
+    expect(onHeld).toHaveBeenCalledTimes(2)
+  })
+
+  it('shows the holds counted', async () => {
+    const { sheet } = await openSheet(learning(2))
+    expect(within(sheet).getByText('2 of 3')).toBeInTheDocument()
+  })
+
+  it('counts a hold on its own keys, the diagram’s, held with several fingers', async () => {
+    const onHeld = vi.fn()
+    const { sheet } = await openSheet(learning(0, onHeld))
     const keys = within(sheet).getByRole('group', { name: 'Keyboard' })
     for (const [pointerId, name] of [
       [1, 'G sharp 3'],
@@ -204,22 +236,23 @@ describe('ChordSheet, learning the chord', () => {
         pointerId,
         pointerType: 'touch',
       })
-    expect(onLearned).toHaveBeenCalledTimes(1)
+    expect(onHeld).toHaveBeenCalledTimes(1)
   })
 
   it('waits while a key the chord has not is held with its keys', async () => {
-    const onLearned = vi.fn()
-    const { sheet, keyboard } = await openSheet({ learn: { learned: false, onLearned } })
+    const onHeld = vi.fn()
+    const { sheet, keyboard } = await openSheet(learning(0, onHeld))
     hold(keyboard, 62, 56, 59, 61, 64)
-    expect(onLearned).not.toHaveBeenCalled()
-    expect(within(sheet).getByText('Play it on the keys')).toBeInTheDocument()
+    expect(onHeld).not.toHaveBeenCalled()
+    expect(within(sheet).getByText('0 of 3')).toBeInTheDocument()
   })
 
-  it('says it is learned from the start once it is, learning it no more', async () => {
-    const onLearned = vi.fn()
-    const { sheet, keyboard } = await openSheet({ learn: { learned: true, onLearned } })
-    expect(within(sheet).getByText('That’s it.')).toBeInTheDocument()
+  it('says it is learned once held three times, counting no more', async () => {
+    const onHeld = vi.fn()
+    const { sheet, keyboard } = await openSheet(learning(3, onHeld))
+    expect(within(sheet).getByText('Learned')).toBeInTheDocument()
+    expect(within(sheet).getByText('3 of 3')).toBeInTheDocument()
     hold(keyboard, 56, 59, 61, 64)
-    expect(onLearned).not.toHaveBeenCalled()
+    expect(onHeld).not.toHaveBeenCalled()
   })
 })

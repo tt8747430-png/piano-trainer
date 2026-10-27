@@ -1,7 +1,12 @@
 import type { PieceId } from '@/entities/piece'
-import { barsLessonKey, chordLessonKey, type LessonKey } from '@/entities/progress'
+import {
+  barsLessonKey,
+  chordLessonKey,
+  type ChordLessonKey,
+  type LessonKey,
+} from '@/entities/progress'
 import type { BarRange } from '@/features/practice'
-import type { Performance } from '@/shared/lib/arrangement'
+import type { PerformedChord, Performance } from '@/shared/lib/arrangement'
 
 // A section learned step by step (ADR 0100, spec §3.2): each chord, each chord sequence in time,
 // each change between two chords, each pattern it is played with. All of it is read from the
@@ -19,7 +24,7 @@ export interface ChordLesson {
   readonly symbol: string
   /** Where it first sounds in the section: its index among the performance's chords, as voiced there. */
   readonly chord: number
-  readonly key: LessonKey
+  readonly key: ChordLessonKey
 }
 /** A chord sequence played in time: its chords as they come, the same chord held over a barline once. */
 export interface SequenceLesson extends Looped {
@@ -32,7 +37,7 @@ export interface ChangeLesson extends Looped {
   readonly from: string
   readonly to: string
 }
-/** A pattern the section's chords are played by, looped in the first bar it plays: on its chord there. */
+/** A pattern the section's chords are played by, looped in a bar of it on one chord (ADR 0111). */
 export interface PatternLesson extends Looped {
   readonly kind: 'pattern'
   readonly pattern: string
@@ -191,23 +196,37 @@ function changesOf(pieceId: PieceId, run: readonly RunChord[]): ChangeLesson[] {
   })
 }
 
-/** Each pattern the section's chords are played by, at the first chord it plays: in that chord's bar. */
+/**
+ * Each pattern the section's chords are played by, looped in a bar on one chord (ADR 0111): the
+ * first bar it plays the section's first chord alone in, else the first it plays any chord alone in,
+ * else the first bar it plays.
+ */
 function patternsOf(performance: Performance, pieceId: PieceId, bars: BarRange): PatternLesson[] {
-  const patterns = new Map<string, PatternLesson>()
-  for (const chord of performance.chords) {
-    const { pattern, bar } = chord
-    if (bar < bars.first || bar > bars.last || pattern === undefined || patterns.has(pattern))
-      continue
-    const looped = { first: bar, last: bar }
-    patterns.set(pattern, {
-      kind: 'pattern',
-      pattern,
-      symbol: chord.symbol,
-      bars: looped,
-      key: barsLessonKey(pieceId, looped),
-    })
+  const within = performance.chords.filter(({ bar }) => bar >= bars.first && bar <= bars.last)
+  const opening = within[0]?.symbol
+  const alone = (bar: number) => performance.bars[bar]?.chords.length === 1
+  const played = new Map<string, PerformedChord[]>()
+  for (const chord of within) {
+    if (chord.pattern === undefined) continue
+    played.set(chord.pattern, [...(played.get(chord.pattern) ?? []), chord])
   }
-  return [...patterns.values()]
+  return [...played].flatMap(([pattern, chords]) => {
+    const chord =
+      chords.find((each) => each.symbol === opening && alone(each.bar)) ??
+      chords.find((each) => alone(each.bar)) ??
+      chords[0]
+    if (!chord) return []
+    const looped = { first: chord.bar, last: chord.bar }
+    return [
+      {
+        kind: 'pattern',
+        pattern,
+        symbol: chord.symbol,
+        bars: looped,
+        key: barsLessonKey(pieceId, looped),
+      },
+    ]
+  })
 }
 
 /** The section's chords in the order they first sound, each once, where it first sounds. */

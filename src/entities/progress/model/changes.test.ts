@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { qualitiesIn, type SkillId } from '@/shared/lib/music'
-import { withAnswer, withLearned, withRun } from './changes'
+import { withAnswer, withHold, withLearned, withRun } from './changes'
+import { CHORD_HOLDS } from './lessons'
 import { EMPTY_PROGRESS, type ProgressState } from './types'
 
 const MONDAY = '2026-09-21T10:00:00.000Z'
@@ -81,5 +82,24 @@ describe('withRun', () => {
       'build-chord:1': { runs: 1, last: 100, best: 100, bestStreak: 10 },
       'build-chord:2': { runs: 1, last: 50, best: 50, bestStreak: 2 },
     })
+  })
+})
+
+describe('withHold', () => {
+  it('counts a chord’s holds, and learns it on the third, its count gone', () => {
+    const once = withHold(EMPTY_PROGRESS, 'bz5:chord:G', MONDAY)
+    expect(once.holds).toEqual({ 'bz5:chord:G': 1 })
+    expect(once.lessons).toEqual({})
+    const twice = withHold(once, 'bz5:chord:G', MONDAY)
+    expect(twice.holds).toEqual({ 'bz5:chord:G': 2 })
+    const learned = withHold(twice, 'bz5:chord:G', FRIDAY)
+    expect(CHORD_HOLDS).toBe(3)
+    expect(learned.holds).toEqual({})
+    expect(learned.lessons).toEqual({ 'bz5:chord:G': FRIDAY })
+  })
+
+  it('changes nothing for a chord learned already', () => {
+    const learned = { ...EMPTY_PROGRESS, lessons: { 'bz5:chord:G': MONDAY } }
+    expect(withHold(learned, 'bz5:chord:G', FRIDAY)).toBe(learned)
   })
 })
