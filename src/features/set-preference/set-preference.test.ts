@@ -11,6 +11,7 @@ import {
   onlyTheChords,
   setKeyboard,
   setLocale,
+  setMetronome,
   setPracticeToggle,
   setMidi,
   setRecorderClick,
@@ -90,6 +91,15 @@ describe('set-preference', () => {
     setSound(store, { lh: 40 })
     setSound(store, { click: 0 })
     expect(saved(storage).sound).toEqual({ rh: 100, lh: 40, staves: 100, recording: 100, click: 0 })
+  })
+
+  it('setMetronome saves its tempo, meter or sound, a tempo held to its range (ADR 0113)', () => {
+    const { storage, store } = setUp()
+    setMetronome(store, { meter: '3/4' })
+    setMetronome(store, { bpm: 500 })
+    expect(saved(storage).metronome).toEqual({ bpm: 300, meter: '3/4', sound: 'click' })
+    setMetronome(store, { bpm: 12, sound: 'drum' })
+    expect(saved(storage).metronome).toEqual({ bpm: 30, meter: '3/4', sound: 'drum' })
   })
 
   it('onlyTheChords silences the recording and turns both hands full up, as Chordify’s tip says', () => {

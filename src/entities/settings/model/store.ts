@@ -11,9 +11,11 @@ import {
   type SavingOptions,
 } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
+import { BPM_RANGE } from '@/shared/lib/schedule'
 import {
   CHORD_KEYS_MAX,
   DEFAULT_CHORD_FINDER,
+  DEFAULT_METRONOME,
   DEFAULT_MIDI,
   DEFAULT_SCORE_VIEW,
   DEFAULT_PRACTICE,
@@ -36,6 +38,8 @@ import {
   isDiagramsMode,
   isTextSize,
   isKeySize,
+  isMetronomeMeter,
+  isMetronomeSound,
   isMusicView,
   isNamedKeys,
   isOctaveShift,
@@ -48,6 +52,7 @@ import {
   isTouch,
   type ChordFinderSettings,
   type KeyboardSettings,
+  type MetronomeSettings,
   type MidiSettings,
   type PaletteFolds,
   type PracticeToggles,
@@ -61,7 +66,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 12
+export const SETTINGS_VERSION = 13
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -92,6 +97,7 @@ export function createSettingsStore({
         midi: DEFAULT_MIDI,
         chordFinder: DEFAULT_CHORD_FINDER,
         scoreView: DEFAULT_SCORE_VIEW,
+        metronome: DEFAULT_METRONOME,
         foldedSections: [],
       },
       read: sanitize,
@@ -229,6 +235,22 @@ function scoreViewSettings(value: unknown): ScoreViewSettings {
   }
 }
 
+/** A tempo the Metronome keeps: whole beats a minute within its range. */
+const isBpm = (value: unknown): value is number =>
+  Number.isInteger(value) &&
+  (value as number) >= BPM_RANGE.min &&
+  (value as number) <= BPM_RANGE.max
+
+/** The Metronome's tempo, meter and sound, each as saved where still valid (ADR 0113). */
+function metronomeSettings(value: unknown): MetronomeSettings {
+  const saved = savedObject<MetronomeSettings>(value)
+  return {
+    bpm: isBpm(saved.bpm) ? saved.bpm : DEFAULT_METRONOME.bpm,
+    meter: isMetronomeMeter(saved.meter) ? saved.meter : DEFAULT_METRONOME.meter,
+    sound: isMetronomeSound(saved.sound) ? saved.sound : DEFAULT_METRONOME.sound,
+  }
+}
+
 /** The sections folded: each an id a section could have, once; the newest kept. */
 function foldedSections(value: unknown): string[] {
   if (!Array.isArray(value)) return []
@@ -279,6 +301,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     midi: midiSettings(saved.midi),
     chordFinder: chordFinderSettings(saved.chordFinder),
     scoreView: scoreViewSettings(saved.scoreView),
+    metronome: metronomeSettings(saved.metronome),
     foldedSections: foldedSections(saved.foldedSections),
   }
 }

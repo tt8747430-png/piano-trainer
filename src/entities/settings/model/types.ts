@@ -21,7 +21,14 @@ import {
 } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
-import { TOUCHES, type Touch } from '@/shared/lib/schedule'
+import {
+  METRONOME_METERS,
+  METRONOME_SOUNDS,
+  TOUCHES,
+  type MetronomeMeter,
+  type MetronomeSound,
+  type Touch,
+} from '@/shared/lib/schedule'
 
 export const THEMES = ['system', 'light', 'dark'] as const
 export type Theme = (typeof THEMES)[number]
@@ -224,6 +231,17 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   keys: true,
 }
 
+/** The Metronome as the learner left it (ADR 0113): its tempo, meter and sound. */
+export interface MetronomeSettings {
+  /** Beats a minute, whole, within `BPM_RANGE`. */
+  readonly bpm: number
+  readonly meter: MetronomeMeter
+  readonly sound: MetronomeSound
+}
+
+/** 120 a minute in 4/4, a click on each beat. */
+export const DEFAULT_METRONOME: MetronomeSettings = { bpm: 120, meter: '4/4', sound: 'click' }
+
 export interface SettingsState {
   theme: Theme
   titles: TitleSize
@@ -240,6 +258,7 @@ export interface SettingsState {
   midi: MidiSettings
   chordFinder: ChordFinderSettings
   scoreView: ScoreViewSettings
+  metronome: MetronomeSettings
   /** The sections folded away, by their ids (`chords.tensions`): the same on every visit. */
   foldedSections: readonly string[]
 }
@@ -322,6 +341,8 @@ export const isPedalWay = isOneOf(PEDAL_WAYS)
 export const isMusicView = isOneOf(MUSIC_VIEWS)
 export const isDiagramsMode = isOneOf(DIAGRAMS_MODES)
 export const isTextSize = isOneOf(TEXT_SIZES)
+export const isMetronomeMeter = isOneOf(METRONOME_METERS)
+export const isMetronomeSound = isOneOf(METRONOME_SOUNDS)
 
 /** The first of the browser's preferred languages the app speaks decides; English otherwise. */
 export function detectLocale(languages: readonly string[] | undefined): Locale {
