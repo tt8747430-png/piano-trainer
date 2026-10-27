@@ -17,6 +17,7 @@ import {
   untilNextBeatGroup,
   type Hands,
   type Recording,
+  type SwingFeel,
 } from '@/shared/lib/schedule'
 import { useServices } from '@/shared/lib/services'
 import { loopBeatGroups, loopTicks, type BarRange, type BeatGroupRange } from './loop'
@@ -40,7 +41,7 @@ export interface PracticeSetup {
   /** The piece's own: speed training climbs to it. */
   readonly ownTempo: number
   readonly speedTraining: boolean
-  readonly swing: boolean
+  readonly swing: SwingFeel
   /** The bars looped; null plays the whole piece. */
   readonly loop: BarRange | null
   readonly metronome: boolean

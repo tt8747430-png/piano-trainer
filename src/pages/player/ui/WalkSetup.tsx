@@ -5,6 +5,7 @@ import { ChordSizeField, Labelled, NoteChoice } from '@/shared/ui'
 import { PatternCard, PlayerSetup } from '@/widgets/player-setup'
 import { PlayingSection } from '@/widgets/practice-player'
 import type { WalkChange } from '../model/walk-search'
+import type { SwingFeel } from '@/shared/lib/schedule'
 
 /** The walk's Setup: its root, the pattern and figures, its chord size, and how it plays. */
 export function WalkSetup({
@@ -14,9 +15,9 @@ export function WalkSetup({
   onSwing,
 }: {
   choice: WalkChoice
-  swing: boolean
+  swing: SwingFeel
   onChange: (change: WalkChange) => void
-  onSwing: (on: boolean) => void
+  onSwing: (feel: SwingFeel) => void
 }) {
   const { t } = useTranslation(['player', 'music'])
   return (

@@ -3,7 +3,7 @@
  * lines one under the other, scrolled down; or one line, scrolled across. The sheet music's layout in
  * the Player's View and the editor's, saved for every piece.
  */
-export const SHEET_VIEWS = ['pages', 'scroll', 'horizontal'] as const
+export const SHEET_VIEWS = ['page', 'vertical', 'panorama'] as const
 export type SheetView = (typeof SHEET_VIEWS)[number]
 
 /** An A4 page in CSS pixels at 96 dpi, and its margin (15 mm). */

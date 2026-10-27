@@ -22,7 +22,13 @@ import { setPracticeToggle, setScoreView } from '@/features/set-preference'
 import type { Performance } from '@/shared/lib/arrangement'
 import { rangeOf, type KeyRange, type Midi } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
-import { audibleHands, volumeGain, type Hands, type Recording } from '@/shared/lib/schedule'
+import {
+  audibleHands,
+  volumeGain,
+  type Hands,
+  type Recording,
+  type SwingFeel,
+} from '@/shared/lib/schedule'
 import { useWakeLock } from '@/shared/lib'
 import type { KeyMark } from '@/shared/ui'
 import { reachLoop, type LoopReach } from './loop-reach'
@@ -69,7 +75,7 @@ export interface PracticePlayer {
   listenAt(tempo: number): void
   setSpeedTraining(on: boolean): void
   setHands(hands: Hands): void
-  setSwing(on: boolean): void
+  setSwing(feel: SwingFeel): void
   /** Loops the bar the cursor is in, or removes the loop. */
   toggleLoop(): void
   /** The loop chosen, or let go of. */
@@ -187,7 +193,7 @@ export function usePracticePlayer(
     listenAt: (next) => setView({ mode: 'listen', tempo: next === ownTempo ? undefined : next }),
     setSpeedTraining: (on) => setView({ speedTraining: on }),
     setHands: (next) => setView({ hands: next }),
-    setSwing: (on) => setView({ swing: on }),
+    setSwing: (feel) => setView({ swing: feel }),
     toggleLoop: () => setView({ loop: loop ? undefined : loopParam({ first: bar, last: bar }) }),
     setLoop: (next) => setView({ loop: next ? loopParam(next) : undefined }),
     reachLoop: (by, direction) => {

@@ -16,6 +16,7 @@ import {
   PlayerClose,
   PlayerDock,
   PlayerTools,
+  ScoreBar,
   SoundButton,
   TempoButton,
   usePlayerShortcuts,
@@ -35,10 +36,10 @@ const NO_HEADINGS: readonly string[] = []
 const NO_STAVES: readonly { readonly name?: StaffName }[] = []
 
 /**
- * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar, one row from a
- * 320px phone up (Close, Practise · Edit, then MIDI, Setup and More, ADR 0099); the tools row under
- * it (ADR 0102: the View, named by the view shown, then the music's own tools, a piece's Transpose
- * and Simplify, ADR 0104); the music under its title (ADR 0094) as the View
+ * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar (`ScoreBar`, ADR
+ * 0115: Close, Practise · Edit, then MIDI, Setup and More, ADR 0099; its tools, ADR 0102: the View,
+ * named by the view shown, then the music's own tools, a piece's Transpose and Simplify, ADR 0104);
+ * the music under its title (ADR 0094) as the View
  * shows it (ADR 0099: the sheet music, Chords over lyrics, Diagrams or the Grid), Wait mode's line,
  * the transport floating under it (the tempo, ‹ ▶ ›, the loop, the Sound and the hands), the
  * count-in's beat large over it all while Listen counts in (ADR 0105), and the keys at the
@@ -135,41 +136,44 @@ export function PlayerLayout({
   return (
     // While Diagrams plays, the bar and the tools row step aside (ADR 0102).
     <PlayerScreen keys={dock} aside={shown === 'diagrams' && practice.state.playing}>
-      {/* Close, then Practise · Edit, as the editor's bar has them (ADR 0090, 0094), level with the
-          bar's first row of buttons where they wrap. Closer on a phone held upright, as the
-          editor's bar is there, so the bar keeps one row from 320px. */}
-      <PlayerArea area="lead">
-        <PlayerClose onClose={onClose} />
-        {modes}
-      </PlayerArea>
-      {/* Where the bar is too narrow for them all (a larger text size), its buttons wrap rather
-          than cover Close. The loop is the transport's (ADR 0099), the View the tools row's (ADR
-          0102). */}
-      <PlayerArea area="actions">
-        <MidiButton />
-        {setup}
-        <PlayerMore
-          music={{ performance, title, tempo: player.tempo }}
-          recording={recording}
-          staves={names}
-          actions={more}
-          onPrint={() => setPrinting(true)}
-        />
-      </PlayerArea>
-      <PlayerArea area="tools">
-        <PlayerTools>
-          <PlayerViewMenu
-            shown={shown}
-            needs={needs}
-            staves={viewed}
-            piano={piano}
-            openAtStart={openView}
-            keys={player.keys}
-            onKeys={player.setKeys}
-          />
-          {tools}
-        </PlayerTools>
-      </PlayerArea>
+      {/* The score's bar, the editor's in shape (ADR 0090, 0110, 0115): Close, then Practise · Edit;
+          MIDI, Setup and More; the View and the music's tools. The loop is the transport's (ADR
+          0099). */}
+      <ScoreBar
+        lead={
+          <>
+            <PlayerClose onClose={onClose} />
+            {modes}
+          </>
+        }
+        actions={
+          <>
+            <MidiButton variant="tool" />
+            {setup}
+            <PlayerMore
+              music={{ performance, title, tempo: player.tempo }}
+              recording={recording}
+              staves={names}
+              actions={more}
+              onPrint={() => setPrinting(true)}
+            />
+          </>
+        }
+        tools={
+          <PlayerTools>
+            <PlayerViewMenu
+              shown={shown}
+              needs={needs}
+              staves={viewed}
+              piano={piano}
+              openAtStart={openView}
+              keys={player.keys}
+              onKeys={player.setKeys}
+            />
+            {tools}
+          </PlayerTools>
+        }
+      />
       {dock === 'top' ? keys : null}
       <PlayerArea area="sheet">
         {shown === 'sheet' ? (

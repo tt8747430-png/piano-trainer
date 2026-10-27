@@ -32,7 +32,7 @@ import type {
 import type { EditSearch } from '@/pages/score-editor'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
 import { isInversion, keyParam, note, noteParam } from '@/shared/lib/music'
-import { TEMPO_RANGE } from '@/shared/lib/schedule'
+import { SWING_FEELS, TEMPO_RANGE, type SwingFeel } from '@/shared/lib/schedule'
 import type { SetupParams } from '@/widgets/player-setup'
 import type { PracticeView } from '@/widgets/practice-player'
 import {
@@ -52,13 +52,14 @@ import {
 const isPlayerPattern = (value: unknown): value is PatternChoice =>
   value === 'chart' || isPatternRef(value)
 const isMode = isOneOf(PRACTICE_MODES)
+const isSwingFeel: (value: unknown) => value is SwingFeel = isOneOf(SWING_FEELS)
 
 /** How the Player goes, whatever it plays: its defaults. */
 const PRACTICE_DEFAULTS: PracticeView = {
   mode: 'listen',
   speedTraining: false,
   hands: 'both',
-  swing: false,
+  swing: 'straight',
 }
 // A piece: key, tempo, pattern and chord size default to the piece's own, so their absence is the
 // default; its chords as written, not simplified (ADR 0104).
@@ -70,7 +71,7 @@ function practiceView(raw: Raw): PracticeView {
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, undefined),
     speedTraining: raw.speedTraining === true,
     hands: valueOr(isHands, raw.hands, PRACTICE_DEFAULTS.hands),
-    swing: raw.swing === true,
+    swing: valueOr(isSwingFeel, raw.swing, PRACTICE_DEFAULTS.swing),
     loop: isLoopParam(raw.loop) ? raw.loop : undefined,
     click: typeof raw.click === 'boolean' ? raw.click : undefined,
     keys: typeof raw.keys === 'boolean' ? raw.keys : undefined,
@@ -211,7 +212,7 @@ export function readExerciseSearch(raw: Raw): ExerciseSearch {
   const { swing: _swing, ...view } = practiceView(raw)
   return {
     ...view,
-    swing: typeof raw.swing === 'boolean' ? raw.swing : undefined,
+    swing: when(isSwingFeel, raw.swing),
     root: root ? noteParam(root) : undefined,
     kind: when(isScaleKind, raw.kind),
     octaves: when(isOctaves, raw.octaves),

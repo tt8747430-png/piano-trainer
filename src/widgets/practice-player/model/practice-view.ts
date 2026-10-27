@@ -1,5 +1,5 @@
 import type { LoopParam, PracticeMode } from '@/features/practice'
-import type { Hands } from '@/shared/lib/schedule'
+import type { Hands, SwingFeel } from '@/shared/lib/schedule'
 
 /** How the Player goes, as its URL holds it (spec §2.10): an absent tempo is the piece's own. */
 export interface PracticeView {
@@ -7,7 +7,8 @@ export interface PracticeView {
   readonly tempo?: number
   readonly speedTraining: boolean
   readonly hands: Hands
-  readonly swing: boolean
+  /** How much its 8ths swing (ADR 0115). */
+  readonly swing: SwingFeel
   readonly loop?: LoopParam
   /**
    * The click for this visit, over the learner's saved one, which it leaves as it is: a song's

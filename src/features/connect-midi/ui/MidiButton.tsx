@@ -13,9 +13,10 @@ import { MidiControl } from './MidiControl'
 
 /**
  * The Player's MIDI button: a dot shows the status and the name says it (when pointed at too, as
- * every round button does); the popover connects. Hidden without Web MIDI.
+ * every round button does); the popover connects. Hidden without Web MIDI. In the score's bar it
+ * is a toolbar's button (`variant="tool"`, ADR 0115), elsewhere a round one.
  */
-export function MidiButton() {
+export function MidiButton({ variant = 'surface' }: { variant?: 'surface' | 'tool' }) {
   const { t } = useTranslation('common')
   const { connection } = useMidiConnection()
   if (connection.kind === 'unsupported') return null
@@ -26,7 +27,7 @@ export function MidiButton() {
       <PopoverTrigger
         render={
           <Button
-            variant="surface"
+            variant={variant}
             size="icon"
             aria-label={label}
             title={label}

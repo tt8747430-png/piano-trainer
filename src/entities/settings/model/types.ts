@@ -38,18 +38,15 @@ export const TITLE_SIZES = ['large', 'small'] as const
 export type TitleSize = (typeof TITLE_SIZES)[number]
 
 /**
- * The Player's saved switches: the View menu's chord positions, finger numbers and named notes, a
- * piece's tune and recording (the Setup's), and the count-in and the click (`metronome`, the
- * transport's Sound's, ADR 0105).
+ * The Player's saved switches: the View menu's chord positions, finger numbers and named notes, and
+ * the count-in and the click (`metronome`, the transport's Sound's, ADR 0105).
  */
 export const PRACTICE_TOGGLES = [
   'fingerNumbers',
   'namedNotes',
   'positions',
-  'tune',
   'metronome',
   'countIn',
-  'recording',
 ] as const
 export type PracticeToggle = (typeof PRACTICE_TOGGLES)[number]
 export type PracticeToggles = Readonly<Record<PracticeToggle, boolean>>
@@ -219,7 +216,7 @@ export interface ScoreViewSettings {
  * staff, the chord names, the words.
  */
 export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
-  layout: 'scroll',
+  layout: 'vertical',
   music: 'sheet',
   diagrams: 'animated',
   askOnOpen: false,
@@ -258,6 +255,8 @@ export interface SettingsState {
   midi: MidiSettings
   chordFinder: ChordFinderSettings
   scoreView: ScoreViewSettings
+  /** What plays a song's melody along (ADR 0115). */
+  melody: MelodySource
   metronome: MetronomeSettings
   /** The sections folded away, by their ids (`chords.tensions`): the same on every visit. */
   foldedSections: readonly string[]
@@ -267,11 +266,19 @@ export const DEFAULT_PRACTICE: PracticeToggles = {
   fingerNumbers: false,
   namedNotes: false,
   positions: false,
-  tune: false,
   metronome: false,
   countIn: false,
-  recording: true,
 }
+
+/**
+ * What plays a song's melody along with the hands (ADR 0115), the Setup's Melody, saved for every
+ * song: none, the song's top single staff, or its recording.
+ */
+export const MELODY_SOURCES = ['none', 'staff', 'recording'] as const
+export type MelodySource = (typeof MELODY_SOURCES)[number]
+
+/** A song's recording where it has one: what it was heard with before the choice was one. */
+export const DEFAULT_MELODY: MelodySource = 'recording'
 
 /** Every part as loud as it is. */
 export const DEFAULT_SOUND: SoundSettings = {

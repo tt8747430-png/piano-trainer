@@ -32,7 +32,7 @@ const SETUP: PracticeSetup = {
   tempo: 60,
   ownTempo: 60,
   speedTraining: false,
-  swing: false,
+  swing: 'straight',
   loop: { first: 0, last: 0 },
   metronome: false,
   countIn: false,

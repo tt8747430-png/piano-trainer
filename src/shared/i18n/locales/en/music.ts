@@ -23,10 +23,13 @@ export const music = {
       '11th': 'From the 11th',
       '13th': 'From the 13th',
     },
-    first: 'First chord',
-    nearest: 'Nearest',
+    // The position a row's chords start in, and whether they move smoothly from it (ADR 0115).
+    first: 'Starting position',
+    startAbout:
+      'Which note of the first chord your hand plays lowest. Here is C major in each position:',
+    nearest: 'Move smoothly',
     nearestInfo:
-      'On, each next chord moves the least it can; off, every chord stays in the first one’s position.',
+      'On, each chord after the first takes the position nearest the one before, so your hand moves the least. Off, every chord keeps the starting position.',
   },
   // How big a chord is: its stack of notes, triads to 13ths.
   chordSize: {
@@ -178,15 +181,15 @@ export const music = {
   // The sheet music: the Player's staff.
   sheet: {
     label: 'Sheet music',
-    // How a score is laid out (ADR 0064, 0102), the same words in the Player and the editor: A4
-    // pages, lines down the screen, one line across; each named by how it reads, never as a view.
+    // How a score is laid out (ADR 0064, 0102, 0115), the same words in the Player and the editor,
+    // Dorico's and Sibelius's: A4 pages, lines down the screen, one line across.
     layout: {
       label: 'Layout',
-      pages: 'Pages',
-      scroll: 'Scroll down',
-      horizontal: 'Scroll across',
+      page: 'Page view',
+      vertical: 'Vertical scroll',
+      panorama: 'Panorama',
       about:
-        'On A4 pages as printed; in lines one under the other, scrolled down; or in one line, scrolled across',
+        'Page view: on A4 pages, as it prints. Vertical scroll: line under line, scrolled down. Panorama: the whole song in one line, scrolled across.',
     },
     // A staff's own options, inline on its card (ADR 0058).
     fingers: 'Fingers',
@@ -219,9 +222,23 @@ export const music = {
     upper: 'Upper staff',
     lower: 'Lower staff',
     show: 'Show',
-    lyrics: 'Lyrics',
-    fingers: 'Finger numbers',
     keys: 'Keys',
+    // What the sheet music shows, each a chip (ADR 0115), what each shows the ⓘ beside Show.
+    parts: {
+      chordNames: 'Chord symbols',
+      positions: 'Chord positions',
+      lyrics: 'Lyrics',
+      fingers: 'Finger numbers',
+      noteNames: 'Note names',
+    },
+    partsAbout: {
+      chordNames: 'each chord’s name over the staff, as a lead sheet prints it',
+      positions: 'beside each chord’s name, the position the right hand plays it in',
+      lyrics: 'the words under the notes they are sung on',
+      fingers: 'the fingers written over the notes',
+      noteNames: 'each note’s letter in its head',
+    },
+    lastStaff: 'The last staff in sight stays',
   },
   // A list of patterns, Accompaniment's and the Setup's: the learner's shelves round the groups.
   patternShelf: { favourites: 'Favourites', own: 'Your patterns', hidden: 'Hidden' },

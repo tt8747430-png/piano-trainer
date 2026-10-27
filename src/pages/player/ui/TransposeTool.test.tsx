@@ -123,7 +123,7 @@ describe('Transpose (ADR 0104)', () => {
     expect(tool).toHaveTextContent('ТональностьEm')
     await user.click(tool)
     const popover = (await screen.findAllByRole('dialog', { name: 'Транспонировать' }))[0]
-    expect(popover).toHaveTextContent('+2')
+    expect(popover).toHaveTextContent('+2 полутона')
     expect(untranslated(document.body)).toEqual([])
   })
 })

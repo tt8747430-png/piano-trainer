@@ -41,11 +41,18 @@ const DEFAULTS = {
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
   scoreView: DEFAULT_SCORE_VIEW,
+  melody: 'recording',
   metronome: DEFAULT_METRONOME,
   foldedSections: [],
 }
 
 describe('createSettingsStore', () => {
+  it('keeps the Melody saved where it is a source, the recording otherwise (ADR 0115)', () => {
+    expect(restored({ melody: 'staff' }).melody).toBe('staff')
+    expect(restored({ melody: 'tune' }).melody).toBe('recording')
+    expect(restored({}).practice).not.toHaveProperty('tune')
+  })
+
   it('starts on the system theme, the browser language, no toggles and no auto-next', () => {
     const store = createSettingsStore({ storage: createMemoryStorage(), languages: ['ru-RU'] })
     expect(store.getState()).toEqual({ theme: 'system', locale: 'ru', ...DEFAULTS })
@@ -53,10 +60,8 @@ describe('createSettingsStore', () => {
       fingerNumbers: false,
       namedNotes: false,
       positions: false,
-      tune: false,
       metronome: false,
       countIn: false,
-      recording: true,
     })
     expect(DEFAULT_TRAINER).toEqual({ autoNext: false })
     expect(DEFAULT_RECORDER).toEqual({ click: true, tune: false })
@@ -89,11 +94,10 @@ describe('createSettingsStore', () => {
         fingerNumbers: true,
         namedNotes: true,
         positions: true,
-        tune: false,
         metronome: true,
         countIn: false,
-        recording: false,
       },
+      melody: 'none',
       sound: { rh: 100, lh: 35, staves: 0, recording: 60, click: 5 },
       trainer: { autoNext: true },
       floating: { place: 'right', labels: true },
@@ -131,7 +135,7 @@ describe('createSettingsStore', () => {
         ],
       },
       scoreView: {
-        layout: 'scroll',
+        layout: 'vertical',
         music: 'grid',
         diagrams: 'summary',
         askOnOpen: true,
@@ -169,7 +173,7 @@ describe('createSettingsStore', () => {
     expect(
       restored({
         scoreView: {
-          layout: 'pages',
+          layout: 'page',
           music: 'chart',
           diagrams: 'carousel',
           askOnOpen: 'yes',
@@ -178,7 +182,7 @@ describe('createSettingsStore', () => {
         },
       }).scoreView,
     ).toEqual({
-      layout: 'pages',
+      layout: 'page',
       music: 'sheet',
       diagrams: 'animated',
       askOnOpen: false,
@@ -225,9 +229,9 @@ describe('createSettingsStore', () => {
     expect(restored({ scoreView: { pinned: 'no' } }).scoreView.pinned).toBe(true)
   })
 
-  it('starts afresh over a save of the version before, which had no Metronome (ADR 0113)', () => {
-    expect(SETTINGS_VERSION).toBe(13)
-    expect(restored({ theme: 'dark', scoreView: { textSize: 130 } }, 12)).toEqual(
+  it('starts afresh over a save of the version before, which had a tune and a recording switch (ADR 0115)', () => {
+    expect(SETTINGS_VERSION).toBe(15)
+    expect(restored({ theme: 'dark', practice: { tune: true } }, 14)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

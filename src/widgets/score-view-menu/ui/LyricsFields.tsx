@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { selectScoreView, TEXT_SIZES, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setScoreView } from '@/features/set-preference'
 import { formatPercent, useLocale } from '@/shared/i18n'
-import { SwitchRow } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { PartChip, PartChips } from './PartChip'
 
 /**
  * The text size, a step smaller or larger by − and + (ADR 0108, Chordify's font size): its name, then
@@ -69,21 +69,23 @@ function TextSizeRow() {
 
 /**
  * Chords over lyrics' own part of the View (ADR 0108, Chordify's view settings): the song's chord
- * diagrams pinned under its strip, then its text size.
+ * diagrams pinned under its strip, a chip as the View's other parts are (ADR 0115), then its text
+ * size.
  */
 export function LyricsFields() {
-  const { t } = useTranslation('player')
+  const { t } = useTranslation(['player', 'music'])
   const store = useSettingsStoreApi()
   const pinned = useSettings((state) => selectScoreView(state).pinned)
   return (
-    <div className="flex flex-col">
-      <SwitchRow
-        icon={<Pin />}
-        label={t('views.pinned.label')}
-        info={t('views.pinned.about')}
-        checked={pinned}
-        onCheckedChange={(on) => setScoreView(store, { pinned: on })}
-      />
+    <div className="flex flex-col gap-2">
+      <PartChips label={t('music:view.show')} info={t('views.pinned.about')}>
+        <PartChip
+          icon={<Pin />}
+          label={t('views.pinned.label')}
+          pressed={pinned}
+          onPressedChange={(on) => setScoreView(store, { pinned: on })}
+        />
+      </PartChips>
       <TextSizeRow />
     </div>
   )

@@ -2,7 +2,7 @@ import { Redo2, Undo2, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
 import { barAt } from '@/features/score-editor'
-import { RoundButton } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
 import { ModeSwitch } from '@/widgets/mode-switch'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
@@ -16,7 +16,15 @@ export function EditorLead() {
   const bar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
   return (
     <>
-      <RoundButton label={t('close')} icon={X} onClick={actions.close} />
+      <Button
+        variant="tool"
+        size="icon"
+        aria-label={t('close')}
+        title={t('close')}
+        onClick={actions.close}
+      >
+        <X aria-hidden />
+      </Button>
       <ModeSwitch pieceId={meta.id} mode="edit" bar={bar} disabled={takes.stage !== 'idle'} />
     </>
   )
@@ -35,19 +43,27 @@ export function EditorActions() {
   const recording = takes.stage !== 'idle'
   return (
     <>
-      <MidiButton />
-      <RoundButton
-        label={t('undo')}
-        icon={Undo2}
+      <MidiButton variant="tool" />
+      <Button
+        variant="tool"
+        size="icon"
+        aria-label={t('undo')}
+        title={t('undo')}
         disabled={!canUndo || recording}
         onClick={() => actions.dispatch({ type: 'undo' })}
-      />
-      <RoundButton
-        label={t('redo')}
-        icon={Redo2}
+      >
+        <Undo2 aria-hidden />
+      </Button>
+      <Button
+        variant="tool"
+        size="icon"
+        aria-label={t('redo')}
+        title={t('redo')}
         disabled={!canRedo || recording}
         onClick={() => actions.dispatch({ type: 'redo' })}
-      />
+      >
+        <Redo2 aria-hidden />
+      </Button>
     </>
   )
 }

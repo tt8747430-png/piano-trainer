@@ -2,6 +2,7 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { SETTINGS_VERSION } from '@/entities/settings'
 import type { ClickSound } from '@/shared/lib/schedule'
 import { createMemoryStorage } from '@/shared/lib'
 
@@ -136,7 +137,7 @@ describe('Practice → Metronome', () => {
     storage.setItem(
       'pt-settings',
       JSON.stringify({
-        version: 13,
+        version: SETTINGS_VERSION,
         state: { metronome: { bpm: 66, meter: '6/8', sound: 'beep' } },
       }),
     )

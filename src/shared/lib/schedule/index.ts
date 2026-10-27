@@ -83,3 +83,4 @@ export {
   type MetronomeSound,
   type MetronomeTime,
 } from './metronome'
+export { isSwung, SWING_FEELS, SWING_SHARE, type SwingFeel } from './swing'

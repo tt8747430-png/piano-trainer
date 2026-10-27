@@ -22,6 +22,9 @@ const buttonVariants = cva(
         surface:
           'rounded-full border-input bg-card text-foreground hover:bg-muted aria-expanded:bg-muted',
         link: 'text-base font-semibold text-link underline-offset-4 hover:underline',
+        // A toolbar's button, the score's bar's every one (ADR 0115): no frame of its own on the
+        // bar's band, the muted fill while it is hovered, open or pressed.
+        tool: 'rounded-xl text-foreground hover:bg-muted aria-expanded:bg-muted aria-pressed:bg-muted',
       },
       // Every size is at least a 44px touch target (spec §8), so the CLI's smaller sizes are gone.
       size: {
