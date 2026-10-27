@@ -241,6 +241,7 @@ export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): Tim
     key: draft.key,
     meter: draft.meter,
     ...(draft.timeSymbol ? { timeSymbol: true } : {}),
+    ...(draft.tempoUnit ? { tempoUnit: draft.tempoUnit } : {}),
     bars,
     notes,
     chords,

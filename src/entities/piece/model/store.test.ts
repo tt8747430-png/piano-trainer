@@ -54,6 +54,18 @@ describe('createPiecesStore', () => {
     ).not.toHaveProperty('timeSymbol')
   })
 
+  it('keeps a tempo mark’s own unit, its tempo a whole tick’s part of a beat (ADR 0114)', () => {
+    const eighths = { ...MUSIC, tempo: 46.5, tempoUnit: '8' }
+    expect(restored({ versions: { bz1: eighths } }).versions.bz1).toMatchObject({
+      tempo: 46.5,
+      tempoUnit: '8',
+    })
+    expect(
+      restored({ versions: { bz1: { ...MUSIC, tempoUnit: '32' } } }).versions.bz1,
+    ).not.toHaveProperty('tempoUnit')
+    expect(restored({ versions: { bz1: { ...MUSIC, tempo: 46.51 } } }).versions).toEqual({})
+  })
+
   it('keeps a section’s own key, and drops one no signature writes', () => {
     const changing = {
       ...MUSIC,

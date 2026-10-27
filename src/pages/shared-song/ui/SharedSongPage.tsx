@@ -6,6 +6,7 @@ import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import {
   pieceKey,
   usePieceHeadings,
+  useTempoText,
   usePiecesStoreApi,
   type ChartPiece,
   type SharedSong,
@@ -40,6 +41,7 @@ function SharedChart({ song }: { song: SharedSong }) {
     [piece],
   )
   const headings = usePieceHeadings(piece)
+  const tempo = useTempoText(piece)
   const { playing, toggleBar } = useChartPlayback(performance, piece.tempo)
   return (
     <>
@@ -47,7 +49,7 @@ function SharedChart({ song }: { song: SharedSong }) {
         {t('shared.facts', {
           key: printedSymbol(keySymbol(pieceKey(piece))),
           meter: piece.meter,
-          bpm: t('music:bpm', { tempo: piece.tempo }),
+          bpm: tempo,
         })}
       </p>
       <p>{t('shared.says')}</p>

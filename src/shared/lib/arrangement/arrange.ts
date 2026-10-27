@@ -748,6 +748,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     key,
     meter: chart.meter,
     ...(chart.timeSymbol ? { timeSymbol: true } : {}),
+    ...(chart.tempoUnit ? { tempoUnit: chart.tempoUnit } : {}),
     totalTicks: layout.totalTicks,
     ...(staves.length > 0 ? { staves: (options.staves ?? []).map(({ clef }) => ({ clef })) } : {}),
     ...(timing.length > 0 ? { timing } : {}),

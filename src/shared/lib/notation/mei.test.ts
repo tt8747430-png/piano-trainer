@@ -223,6 +223,15 @@ describe('scoreToMei, a note’s marks and the options', () => {
     )
   })
 
+  it('marks the tempo in its own unit where it has one, else the meter’s beat (ADR 0114)', () => {
+    const eighths = scoreToMei(notate(music([c(0)], { tempoUnit: '8' })))
+    expect(eighths).toMatch(/<tempo [^>]*mm="168" mm\.unit="8" place="above">\u{1D160} = 168</u)
+    const dotted = scoreToMei(notate(music([c(0)], { tempoUnit: '4.' })))
+    expect(dotted).toMatch(/mm="56" mm\.unit="4" mm\.dots="1"/)
+    const halves = scoreToMei(notate(music([c(0)], { meter: '2/2', tempoUnit: '2' })))
+    expect(halves).toMatch(/mm="42" mm\.unit="2"/)
+  })
+
   it('prints 2/2 as cut time where the music asks, else as its figures (ADR 0114)', () => {
     const cut = (timeSymbol: boolean) =>
       scoreToMei(

@@ -9,6 +9,7 @@ import {
   type Key,
   type Letter,
   type Meter,
+  type TempoUnit,
 } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
 
@@ -91,8 +92,10 @@ interface EntryCommon {
 }
 
 interface PieceCommon extends EntryCommon {
-  /** 4/4 printed as common time, C, wherever it is printed (ADR 0114). */
+  /** 4/4 printed as common time's C, 2/2 as cut time's ¢ (ADR 0114). */
   readonly timeSymbol?: true
+  /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
+  readonly tempoUnit?: TempoUnit
   readonly tempo: number
   readonly pattern: PatternId
   /** A performance of the piece that plays along in Listen: in its own key and form. */

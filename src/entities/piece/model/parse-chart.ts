@@ -218,6 +218,7 @@ export function parseChart(piece: ChartPiece): Chart {
     key: pieceKey(piece),
     meter: piece.meter,
     ...(piece.timeSymbol ? { timeSymbol: true } : {}),
+    ...(piece.tempoUnit ? { tempoUnit: piece.tempoUnit } : {}),
     sections: sections.map((section) => ({
       ...(section.key ? { key: section.key } : {}),
       ...(section.meter ? { meter: section.meter } : {}),

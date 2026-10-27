@@ -1,5 +1,6 @@
 import {
   barTicks,
+  beatUnit,
   eighthTicks,
   isCompound,
   TICKS_PER_BEAT,
@@ -39,8 +40,8 @@ const kindFactor = (from: Meter, to: Meter): number =>
 
 /**
  * The music with every tick scaled by `factor` (a quarter of 24 ticks in 4/4 is 16 in 6/8), its
- * tempo with them, so each note keeps its length and its speed: null where a tick falls between the
- * new ones (a triplet's eighth in compound time).
+ * tempo with them, so each note keeps its length and its speed, and its tempo mark as printed: null
+ * where a tick falls between the new ones (a triplet's eighth in compound time).
  */
 function rescaled(draft: Draft, factor: number): Draft | null {
   if (factor === 1) return draft
@@ -58,8 +59,10 @@ function rescaled(draft: Draft, factor: number): Draft | null {
     }))
   const next: Draft = {
     ...draft,
-    // A beat of the new kind lasts 1/factor of the old one: as many of them a minute, times factor.
-    tempo: Math.max(1, Math.round(draft.tempo * factor)),
+    // A beat of the new kind lasts 1/factor of the old one: as many of them a minute, times factor;
+    // the mark as it was, in the note it counted (a quarter's ♩ = 120 in 4/4 is ♩ = 120 in 6/8).
+    tempo: draft.tempo * factor,
+    tempoUnit: draft.tempoUnit ?? beatUnit(draft.meter),
     sections: draft.sections.map((section) => ({
       ...section,
       lines: section.lines.map((line) =>

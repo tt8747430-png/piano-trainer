@@ -1,6 +1,5 @@
 import {
   EXPRESSION_TEXT,
-  isCompound,
   keySignature,
   meterOf,
   meterSymbol,
@@ -12,7 +11,9 @@ import {
   type NoteMarks,
   type Ornament,
   type TimeSignature,
-  tempoNote,
+  beatUnit,
+  tempoMark,
+  unitNote,
 } from '@/shared/lib/music'
 import {
   clefIn,
@@ -285,9 +286,13 @@ class Writer {
           `<harm staff="${top}" tstamp="${at(chord.tick)}">${escape(chord.symbol)}</harm>`,
         )
     if (measure.tempo !== undefined) {
-      const dots = isCompound(this.score.meter) ? ' mm.dots="1"' : ''
+      // The mark in its own unit (ADR 0114): ♪ = 180, a tempo of 90 in 4/4.
+      const unit = this.score.tempoUnit ?? beatUnit(this.score.meter)
+      const mark = tempoMark(measure.tempo, unit, this.score.meter)
+      const dots = unit.endsWith('.') ? ' mm.dots="1"' : ''
+      const value = unit.replace('.', '')
       controls.push(
-        `<tempo staff="${top}" tstamp="1" mm="${measure.tempo}" mm.unit="4"${dots} place="above">${tempoNote(this.score.meter)} = ${measure.tempo}</tempo>`,
+        `<tempo staff="${top}" tstamp="1" mm="${mark}" mm.unit="${value}"${dots} place="above">${unitNote(unit)} = ${mark}</tempo>`,
       )
     }
     if (measure.segno) controls.push(`<dir staff="${top}" tstamp="1" place="above">𝄋</dir>`)

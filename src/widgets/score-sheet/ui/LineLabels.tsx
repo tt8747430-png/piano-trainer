@@ -69,6 +69,7 @@ export function LineLabels({
       headings={headings}
       chords={chordNames ? music.chords : []}
       meter={music.meter}
+      tempoUnit={music.tempoUnit}
       row={row}
       size={size}
       printed={printed}

@@ -183,12 +183,64 @@ export function beatsBefore(
     : 0
 }
 
+/** The notes a tempo mark may count (ADR 0114): a value, a dot after it where dotted. */
+export const TEMPO_UNITS = ['2', '2.', '4', '4.', '8', '8.', '16'] as const
+export type TempoUnit = (typeof TEMPO_UNITS)[number]
+export const isTempoUnit = (value: unknown): value is TempoUnit =>
+  TEMPO_UNITS.some((unit) => unit === value)
+
 /**
- * The note a song's ticks count in beats (`TICKS_PER_BEAT`), a tempo's where its mark says no other:
- * a quarter in simple time, a dotted quarter in compound (LilyPond's `\tempo 4. = 58`).
+ * The beat a song's ticks count (`TICKS_PER_BEAT`), its tempo's: a quarter in simple time, a dotted
+ * quarter in compound (LilyPond's `\tempo 4. = 58`). A tempo mark counts it unless it says another.
  */
-export const tempoNote = (meter: Meter): string =>
-  isCompound(meter) ? '\u{1D15F}\u{1D16D}' : '\u{1D15F}'
+export const beatUnit = (meter: Meter): TempoUnit => (isCompound(meter) ? '4.' : '4')
+
+/**
+ * The notes a tempo mark is offered in, the meter's beat first (ADR 0114, as notation apps offer
+ * them): a half, a dotted half and a quarter in x/2; a quarter, a dotted quarter, an eighth, a
+ * dotted eighth and a sixteenth in x/4 and in x/8 of simple time; in compound, the dotted quarter
+ * first, then the eighth, the quarter, the dotted eighth and the dotted half.
+ */
+export function tempoUnitsFor(meter: Meter): TempoUnit[] {
+  if (isCompound(meter)) return ['4.', '8', '4', '8.', '2.']
+  if (meterParts(meter).unit === 2) return ['2', '2.', '4']
+  if (meterParts(meter).unit === 8) return ['8', '8.', '4', '4.', '16']
+  return ['4', '4.', '8', '8.', '16']
+}
+
+/** A tempo unit's length in a meter's ticks: a quarter 24 in simple time, 16 in compound. */
+export function unitTicks(unit: TempoUnit, meter: Meter): Tick {
+  const value = Number.parseInt(unit, 10)
+  const plain = (eighthTicks(meter) * 8) / value
+  return unit.endsWith('.') ? (plain * 3) / 2 : plain
+}
+
+/**
+ * A tempo's mark in a unit: how many of it a minute, to the nearest whole, of a tempo in the song's
+ * beats (`tempo`, beats a minute); 120 in 4/4 is ♪ = 240, ♩. = 80.
+ */
+export const tempoMark = (tempo: number, unit: TempoUnit, meter: Meter): number =>
+  Math.round((tempo * TICKS_PER_BEAT) / unitTicks(unit, meter))
+
+/** A tempo in the song's beats a minute of a mark in a unit: ♪ = 93 in 4/4 is 46.5. */
+export const tempoOfMark = (mark: number, unit: TempoUnit, meter: Meter): number =>
+  (mark * unitTicks(unit, meter)) / TICKS_PER_BEAT
+
+/** A tempo unit as music text: 𝅗𝅥, ♩, ♪ or 𝅘𝅥𝅯 (SMuFL's text notes), a dot after it where dotted. */
+export function unitNote(unit: TempoUnit): string {
+  const note =
+    { '2': '\u{1D15E}', '4': '\u{1D15F}', '8': '\u{1D160}', '16': '\u{1D161}' }[
+      unit.replace('.', '') as '2' | '4' | '8' | '16'
+    ] ?? '\u{1D15F}'
+  return unit.endsWith('.') ? `${note}\u{1D16D}` : note
+}
+
+/**
+ * The note a tempo mark prints (LilyPond's `\tempo 4. = 58`): its own unit where it has one, else the
+ * song's beat, a quarter in simple time and a dotted quarter in compound.
+ */
+export const tempoNote = (meter: Meter, unit?: TempoUnit): string =>
+  unitNote(unit ?? beatUnit(meter))
 
 export interface TimeSignature {
   readonly count: number

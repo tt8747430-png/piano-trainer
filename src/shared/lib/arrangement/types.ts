@@ -13,6 +13,7 @@ import type {
   SpelledNote,
   Tick,
   Tone,
+  TempoUnit,
 } from '@/shared/lib/music'
 
 /** A chart as the engine reads it: chords by section, line and bar, in the key it is written in. */
@@ -56,8 +57,10 @@ export interface ChartSection {
 export interface Chart {
   readonly key: Key
   readonly meter: Meter
-  /** 4/4 printed as common time, C (ADR 0114). */
+  /** 4/4 printed as common time's C, 2/2 as cut time's ¢ (ADR 0114). */
   readonly timeSymbol?: true
+  /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
+  readonly tempoUnit?: TempoUnit
   readonly sections: readonly ChartSection[]
 }
 
@@ -228,8 +231,10 @@ export interface BeatGroup {
 export interface Performance {
   readonly key: Key
   readonly meter: Meter
-  /** 4/4 printed as common time, C (ADR 0114). */
+  /** 4/4 printed as common time's C, 2/2 as cut time's ¢ (ADR 0114). */
   readonly timeSymbol?: true
+  /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
+  readonly tempoUnit?: TempoUnit
   readonly totalTicks: Tick
   /** Its single staves over the grand staff, top down (ADR 0097): each one's clef. */
   readonly staves?: readonly { readonly clef: Clef }[]

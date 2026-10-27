@@ -6,6 +6,14 @@ import {
   beatsPerBar,
   beatStarts,
   beatsToTicks,
+  beatUnit,
+  isTempoUnit,
+  TEMPO_UNITS,
+  tempoMark,
+  tempoOfMark,
+  tempoUnitsFor,
+  unitNote,
+  unitTicks,
   COMMON_METERS,
   isCompound,
   isMeter,
@@ -136,6 +144,42 @@ describe('tempoNote', () => {
     expect(tempoNote('2/2')).toBe('\u{1D15F}')
     expect(tempoNote('6/8')).toBe('\u{1D15F}\u{1D16D}')
     expect(tempoNote('12/8')).toBe('\u{1D15F}\u{1D16D}')
+  })
+})
+
+describe('a tempo mark’s unit (ADR 0114)', () => {
+  it('offers the meter’s beat first', () => {
+    expect(tempoUnitsFor('4/4')).toEqual(['4', '4.', '8', '8.', '16'])
+    expect(tempoUnitsFor('2/2')).toEqual(['2', '2.', '4'])
+    expect(tempoUnitsFor('6/8')[0]).toBe('4.')
+    expect(beatUnit('3/4')).toBe('4')
+    expect(beatUnit('12/8')).toBe('4.')
+    expect(TEMPO_UNITS.every(isTempoUnit)).toBe(true)
+    expect(isTempoUnit('32')).toBe(false)
+  })
+
+  it('measures a unit in the meter’s ticks', () => {
+    expect(['2', '4', '4.', '8', '8.', '16'].map((u) => unitTicks(u as '4', '4/4'))).toEqual([
+      48, 24, 36, 12, 18, 6,
+    ])
+    expect(unitTicks('4.', '6/8')).toBe(24)
+    expect(unitTicks('8', '6/8')).toBe(8)
+  })
+
+  it('marks a tempo in any unit, and reads a mark back as the song’s beats a minute', () => {
+    expect(tempoMark(120, '8', '4/4')).toBe(240)
+    expect(tempoMark(120, '4.', '4/4')).toBe(80)
+    expect(tempoMark(120, '2', '2/2')).toBe(60)
+    expect(tempoMark(60, '8', '6/8')).toBe(180)
+    expect(tempoOfMark(93, '8', '4/4')).toBe(46.5)
+    expect(tempoOfMark(60, '2', '2/2')).toBe(120)
+    expect(tempoMark(tempoOfMark(93, '8', '4/4'), '8', '4/4')).toBe(93)
+  })
+
+  it('prints a unit as its note, dotted where it is', () => {
+    expect(unitNote('2')).toBe('\u{1D15E}')
+    expect(unitNote('8.')).toBe('\u{1D160}\u{1D16D}')
+    expect(tempoNote('2/2', '2')).toBe('\u{1D15E}')
   })
 })
 

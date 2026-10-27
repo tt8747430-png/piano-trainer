@@ -65,6 +65,7 @@ export const SheetLabels = memo(function SheetLabels({
       headings={headings}
       chords={chords}
       meter={performance.meter}
+      tempoUnit={performance.tempoUnit}
       row={labelRow(chordNames, size)}
       size={labelScale(size)}
     />

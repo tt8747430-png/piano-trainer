@@ -51,7 +51,9 @@ describe('the song’s meter', () => {
     // A bar of 3/4 (72 ticks) is 48 in 3/8's ticks, then cut to 3/8's 24, as a shorter meter cuts.
     expect(eighths.sections[0]?.lines[0]?.map((bar) => bar.ticks)).toEqual([24, 24])
     expect(shape(staffNotes(eighths))).toEqual(['E4@0/24', 'D4@24/24'])
-    expect(eighths.tempo).toBe(Math.round(waltz.tempo * (2 / 3)))
+    expect(eighths.tempo).toBe(waltz.tempo * (2 / 3))
+    // Its mark as printed: the quarter it counted, ♩ = 90 still.
+    expect(eighths.tempoUnit).toBe('4')
     // And back: the bar 3/4's again, the notes as long as they were.
     const back = setMeter(setMeter(draft, '12/8'), '4/4')
     expect(shape(staffNotes(back))).toEqual(shape(staffNotes(draft)))
