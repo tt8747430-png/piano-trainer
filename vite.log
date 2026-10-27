@@ -1,6 +1,0 @@
-
-  VITE v8.3.4  ready in 382 ms
-
-  ➜  Local:   http://localhost:5210/
-  ➜  Network: use --host to expose
-1:25:14 AM [vite] (client) hmr update /src/styles/index.css, /src/shared/ui/score/ScoreView.tsx
