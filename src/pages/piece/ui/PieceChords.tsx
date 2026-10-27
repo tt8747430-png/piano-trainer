@@ -1,4 +1,4 @@
-import { useId, useMemo } from 'react'
+import { useId, useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePieceInversions } from '@/features/choose-diagram-inversion'
 import { chordSummary } from '@/features/practice'
@@ -8,9 +8,16 @@ import { ChordSummary } from '@/widgets/chord-diagrams'
 /**
  * The song's chords (spec §3.1): its chord summary under its heading, each chord's keys in the
  * inversion chosen for it (ADR 0101) opening its sheet, where it is seen and heard (learned on a
- * section's page). None for music of no chord symbol.
+ * section's page), and what is said of them under it (`children`: the progressions they make, ADR
+ * 0112). None for music of no chord symbol.
  */
-export function PieceChords({ performance }: { performance: Performance }) {
+export function PieceChords({
+  performance,
+  children,
+}: {
+  performance: Performance
+  children?: ReactNode
+}) {
   const { t } = useTranslation('music')
   const id = useId()
   const chosen = usePieceInversions()?.chosen
@@ -22,6 +29,7 @@ export function PieceChords({ performance }: { performance: Performance }) {
         {t('chordSummary')}
       </h2>
       <ChordSummary chords={chords} />
+      {children}
     </section>
   )
 }

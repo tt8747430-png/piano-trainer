@@ -46,6 +46,8 @@ export const piece: LocaleResources['piece'] = {
   tempo: 'Темп',
   time: 'Размер',
   progression: 'Последовательность',
+  // Последовательности из библиотеки, которые использует песня, под её аккордами (ADR 0112).
+  progressions: 'Последовательности',
   more: 'Ещё',
   practise: 'Играть',
   edit: 'Редактировать ноты',

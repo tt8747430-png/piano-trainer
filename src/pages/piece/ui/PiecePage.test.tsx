@@ -67,6 +67,27 @@ describe('Piece', () => {
     expect(within(sheet).queryByText('Play it on the keys')).not.toBeInTheDocument()
   })
 
+  it('names the progressions it uses under its chords, each opening Progressions in its key', async () => {
+    await renderApp('/songs/amazing')
+    const chords = await screen.findByRole('region', { name: 'Chords' })
+    const used = within(chords).getByRole('list', { name: 'Progressions' })
+    const links = within(used).getAllByRole('link')
+    expect(links.map((link) => link.textContent)).toEqual([
+      'Gospel hymnI–IV–I–V',
+      'Authentic cadenceI–V–I',
+      'Plagal cadenceI–IV–I',
+    ])
+    const href = new URL(links[0]?.getAttribute('href') ?? '', 'http://x')
+    expect(href.pathname).toBe('/practice/progressions')
+    expect(Object.fromEntries(href.searchParams)).toEqual({ key: 'G', p: 'I-IV-I-V' })
+  })
+
+  it('names no progression where it uses none', async () => {
+    await renderApp('/songs/aura-lee')
+    await screen.findByRole('region', { name: 'Chords' })
+    expect(screen.queryByRole('list', { name: 'Progressions' })).not.toBeInTheDocument()
+  })
+
   it('puts its key, time and tempo on three cards, its second title under them (ADR 0100)', async () => {
     await renderApp('/songs/bz5')
     const facts = (await screen.findByText('Tempo')).closest('dl') as HTMLElement
