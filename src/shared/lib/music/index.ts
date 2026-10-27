@@ -233,6 +233,7 @@ export {
 } from './circle'
 export { keysHolding, type KeyHolding } from './keys-holding'
 export { keysOfChords, readInKey, type ChordReading, type KeyReading } from './key-of-chords'
+export { findNumerals, numeralReadings, standsFor, type FoundSpan } from './numeral-find'
 export { KEY_WALKS, walkKeys, type KeyWalk } from './key-walk'
 export { LEAD_INS, withLeadIns, type LeadIn } from './lead-in'
 export {
