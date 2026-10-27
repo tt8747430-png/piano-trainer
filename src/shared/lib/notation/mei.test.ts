@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { midi, note, type SpelledNote } from '@/shared/lib/music'
+import { midi, note, type Clef, type SpelledNote } from '@/shared/lib/music'
 import { scoreToMei } from './mei'
 import { notate } from './notate'
 import type { TimedMusic, TimedNote } from './types'
@@ -221,6 +221,29 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(scoreToMei(changed)).toMatch(
       /<scoreDef meter\.count="4" meter\.unit="4" meter\.sym="common"\/>/,
     )
+  })
+
+  it('writes every clef by its sign, line and octave, its notes as they sound (ADR 0114)', () => {
+    const inClef = (clef: Clef) =>
+      scoreToMei(
+        notate(
+          music([{ ...n(60, note('C'), 'staff', 0, 24), staff: 0 }], {
+            chords: [],
+            staves: [{ clef }],
+          }),
+        ),
+      )
+    expect(inClef('alto')).toMatch(/<staffDef n="1"[^>]*clef\.shape="C" clef\.line="3"/)
+    expect(inClef('tenor')).toMatch(/clef\.shape="C" clef\.line="4"/)
+    expect(inClef('subbass')).toMatch(/clef\.shape="F" clef\.line="5"/)
+    const low = inClef('treble-8vb')
+    expect(low).toMatch(/clef\.shape="G" clef\.line="2" clef\.dis="8" clef\.dis\.place="below"/)
+    // Its pitch as it sounds: Verovio draws a treble 8vb's middle C an octave up, where C5 stands.
+    expect(low).toMatch(/<note xml:id="n-staff0-0-0" pname="c" oct="4"/)
+    const high = inClef('bass-15ma')
+    expect(high).toMatch(/clef\.dis="15" clef\.dis\.place="above"/)
+    expect(high).toMatch(/<note xml:id="n-staff0-0-0" pname="c" oct="4"/)
+    expect(inClef('alto')).toMatch(/<note xml:id="n-staff0-0-0" pname="c" oct="4"/)
   })
 
   it('marks the tempo in its own unit where it has one, else the meter’s beat (ADR 0114)', () => {

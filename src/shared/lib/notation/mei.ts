@@ -6,12 +6,14 @@ import {
   type Accidental,
   type Articulation,
   type Barline,
+  type Clef,
   type Jump,
   type NoteLyrics,
   type NoteMarks,
   type Ornament,
   type TimeSignature,
   beatUnit,
+  CLEF_FORMS,
   tempoMark,
   unitNote,
 } from '@/shared/lib/music'
@@ -174,8 +176,15 @@ const label = ({ text, placeholder }: PrintedName) =>
 const keySig = (fifths: number) =>
   fifths === 0 ? '0' : `${Math.abs(fifths)}${fifths > 0 ? 's' : 'f'}`
 
-const clefAttrs = (clef: string, prefix = 'clef.') =>
-  clef === 'bass' ? `${prefix}shape="F" ${prefix}line="4"` : `${prefix}shape="G" ${prefix}line="2"`
+/** A clef's attributes (ADR 0114): its sign and line, and an octave clef's 8 or 15 above or below. */
+function clefAttrs(clef: Clef, prefix = 'clef.'): string {
+  const { shape, line, octaves } = CLEF_FORMS[clef]
+  const dis =
+    octaves === 0
+      ? ''
+      : ` ${prefix}dis="${Math.abs(octaves) === 2 ? 15 : 8}" ${prefix}dis.place="${octaves > 0 ? 'above' : 'below'}"`
+  return `${prefix}shape="${shape}" ${prefix}line="${line}"${dis}`
+}
 
 /**
  * A time signature's attributes: its figures, 4/4 as common time's C and 2/2 as cut time's ¢ where

@@ -16,6 +16,16 @@ describe('noteAtStaffY', () => {
       spelled: note('B', -1),
     })
   })
+
+  it('reads every clef’s lines, an octave clef’s an octave from where it is written (ADR 0114)', () => {
+    const C_MAJOR = { tonic: note('C'), minor: false }
+    // The alto's middle line is middle C; the tenor's fourth.
+    expect(noteAtStaffY('alto', 60, lines, C_MAJOR)).toMatchObject({ midi: 60 })
+    expect(noteAtStaffY('tenor', 50, lines, C_MAJOR)).toMatchObject({ midi: 60 })
+    // A treble 8vb's top line sounds F4, a bass 8va's A4.
+    expect(noteAtStaffY('treble-8vb', 40, lines, C_MAJOR)).toMatchObject({ midi: 65 })
+    expect(noteAtStaffY('bass-8va', 40, lines, C_MAJOR)).toMatchObject({ midi: 69 })
+  })
 })
 
 describe('stepsDragged', () => {

@@ -143,7 +143,7 @@ describe('createPiecesStore', () => {
       staves: [
         { name: 'Voice', notes: 'B4/4' },
         { name: { en: 'Cello', ru: 'Виолончель' }, clef: 'bass', notes: 'B2/4' },
-        { name: '   ', clef: 'alto', notes: 'r/4' },
+        { name: '   ', clef: 'viola', notes: 'r/4' },
         { name: `  ${'Flute'.repeat(10)}  `, notes: 'r/4' },
       ],
     }

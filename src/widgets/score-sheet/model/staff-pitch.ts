@@ -4,18 +4,17 @@ import {
   midiOf,
   note,
   spellScale,
+  topLineStep,
   type Clef,
   type Key,
   type Midi,
   type SpelledNote,
 } from '@/shared/lib/music'
 
-/** Each clef's top line, in steps from C0 (an octave is seven): F5 on the treble, A3 on the bass. */
-const TOP_LINE = { treble: 5 * 7 + 3, bass: 3 * 7 + 5 } as const
-
 /**
  * The note on a staff's line or space nearest a point `y`, given where the staff's lines are drawn,
- * as the key writes it (its signature's sharps and flats): where a tap on the staff puts a note.
+ * as the key writes it (its signature's sharps and flats) and as it sounds in the clef (an octave
+ * clef's an octave from where it is written, ADR 0114): where a tap on the staff puts a note.
  */
 export function noteAtStaffY(
   clef: Clef,
@@ -24,7 +23,7 @@ export function noteAtStaffY(
   key: Key,
 ): { readonly midi: Midi; readonly spelled: SpelledNote } {
   const step = (lines.bottom - lines.top) / 8
-  const index = TOP_LINE[clef] - Math.round((y - lines.top) / step)
+  const index = topLineStep(clef) - Math.round((y - lines.top) / step)
   const letter = LETTERS[((index % 7) + 7) % 7] ?? 'C'
   const accidental =
     spellScale(key.tonic, keyScale(key)).find((tone) => tone.note.letter === letter)?.note

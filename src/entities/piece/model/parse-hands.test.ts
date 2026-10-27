@@ -45,7 +45,20 @@ describe('a written hand', () => {
         bars.map((bar) => bar.clefs?.lh),
       ),
     ).toBe('clef:treble C4/1 E4/1 G4/2 | r/4 | clef:bass r/4')
-    expect(errorOf(['C'], { rh: 'clef:alto C4/4' }).message).toMatch(/no clef "alto"/)
+    expect(errorOf(['C'], { rh: 'clef:viola C4/4' }).message).toMatch(/no clef "viola"/)
+  })
+
+  it('reads and writes back every clef a staff may take (ADR 0114)', () => {
+    const hands = { rh: 'clef:alto C4/4 | clef:treble-8vb C4/4 | clef:bass-15ma C4/4' }
+    const bars = barsOf(['C G F'], hands)
+    expect(bars.map((bar) => bar.clefs?.rh)).toEqual(['alto', 'treble-8vb', 'bass-15ma'])
+    expect(
+      writeHand(
+        bars.map((bar) => bar.hands?.rh ?? []),
+        bars.map(() => 96),
+        bars.map((bar) => bar.clefs?.rh),
+      ),
+    ).toBe(hands.rh)
   })
 
   it('reads notes struck together, each with its finger', () => {
