@@ -451,4 +451,54 @@ describe('Practice → Progressions', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/play/progression'))
     expect(router.state.location.search).toMatchObject({ inversion: 0, nearest: true })
   })
+
+  it('draws its chords as the Player’s diagrams, each once, each opening its sheet', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/progressions?key=G&p=I-IV-I-V')
+    const summary = await screen.findByRole('list', { name: 'Chords' })
+    const chords = within(summary).getAllByRole('button')
+    expect(chords.map((chord) => chord.textContent)).toEqual(['G', 'C', 'D'])
+    expect(within(summary).getByRole('img', { name: 'G: G B D' })).toBeInTheDocument()
+    await user.click(chords[1] ?? document.body)
+    expect(await screen.findByRole('dialog', { name: 'C chord' })).toBeInTheDocument()
+  })
+
+  /** The songs a progression is heard in, every one of them shown. */
+  const everySong = async () => {
+    const songs = await screen.findByRole('region', { name: 'Songs with this progression' })
+    const all = within(songs).queryByRole('button', { name: /^Show all/ })
+    if (all) await userEvent.setup().click(all)
+    return songs
+  }
+
+  it('lists the songs it is heard in, each opening the Player looping its bars', async () => {
+    await renderApp('/practice/progressions?key=G&p=I-IV-I')
+    const amazing = within(await everySong()).getByRole('link', { name: /Amazing Grace/ })
+    expect(amazing).toHaveTextContent('bars 1–4')
+    expect(amazing).toHaveTextContent('G G7 C G')
+    const href = new URL(amazing.getAttribute('href') ?? '', 'http://x')
+    expect(href.pathname).toBe('/play/amazing')
+    expect(Object.fromEntries(href.searchParams)).toEqual({ bar: '1', loop: '1-4' })
+  })
+
+  it('finds the songs in their own keys, whatever key it is shown in', async () => {
+    await renderApp('/practice/progressions?key=Eb&p=I-IV-I')
+    const songs = await everySong()
+    expect(within(songs).getByRole('link', { name: /Amazing Grace/ })).toBeInTheDocument()
+  })
+
+  it('shows a few songs, and every one when asked', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/progressions?key=C&p=I-V-I')
+    const songs = await screen.findByRole('region', { name: 'Songs with this progression' })
+    const few = within(songs).getAllByRole('link').length
+    await user.click(within(songs).getByRole('button', { name: /^Show all \d+ songs$/ }))
+    expect(within(songs).getAllByRole('link').length).toBeGreaterThan(few)
+  })
+
+  it('says when no song uses it yet', async () => {
+    await renderApp('/practice/progressions?key=C&p=ii7-bII7-IMaj7')
+    const songs = await screen.findByRole('region', { name: 'Songs with this progression' })
+    expect(within(songs).getByText('No song uses it yet')).toBeInTheDocument()
+  })
 })
