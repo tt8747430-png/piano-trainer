@@ -52,7 +52,7 @@ import {
 import { barsOf, chordsAt, sectionMeter, startsIn, type PlacedBar } from './timeline'
 
 /**
- * What the editor writes (spec §6.1, ADR 0091, 0097): the chord symbols, a single staff by its place,
+ * What the editor writes (ADR 0114, 0097): the chord symbols, a single staff by its place,
  * or one of the piano's two staves (a hand's).
  */
 export type Layer = 'chords' | SingleStaff | HandId
@@ -69,7 +69,7 @@ export interface DraftNote {
   readonly durationTicks: Tick
   readonly finger?: Finger
   readonly marks?: NoteMarks
-  /** What it sings, by verse (ADR 0093): a note of the staff the words are on, a chord's one note on the upper staff. */
+  /** What it sings, by verse (ADR 0097): a note of the staff the words are on, a chord's one note on the upper staff. */
   readonly lyrics?: NoteLyrics
 }
 
@@ -80,16 +80,16 @@ export interface DraftChord {
   readonly method?: string
 }
 
-/** A bar as the editor holds it: its length, its chords and its barlines; every bar is written (ADR 0091). */
+/** A bar as the editor holds it: its length, its chords and its barlines; every bar is written (ADR 0114). */
 export interface DraftBar extends BarMarks {
   readonly ticks: Tick
-  /** In order, the first at 0; none in a bar of no chord (ADR 0094). */
+  /** In order, the first at 0; none in a bar of no chord (ADR 0114). */
   readonly chords: readonly DraftChord[]
-  /** The clef a hand's staff changes to here (ADR 0069). */
+  /** The clef a hand's staff changes to here (ADR 0097). */
   readonly clefs?: HandClefs
 }
 
-/** A section's heading as the editor holds it: the song's form, with no pattern of its own (ADR 0091). */
+/** A section's heading as the editor holds it: the song's form, with no pattern of its own (ADR 0114). */
 export type DraftHeading = Omit<Section, 'lines' | 'pattern'>
 
 export interface DraftSection {
@@ -108,7 +108,7 @@ export interface DraftStaff {
 
 /** A piece's music as the editor holds it: bars of chords, and notes on the timeline. */
 export interface Draft {
-  /** The learner's own title (ADR 0094): an own song's, or a version's in place of the catalog's. */
+  /** The learner's own title (ADR 0114): an own song's, or a version's in place of the catalog's. */
   readonly title?: string
   readonly key: Key
   readonly meter: Meter
@@ -117,18 +117,18 @@ export interface Draft {
   /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
   readonly tempoUnit?: TempoUnit
   readonly tempo: number
-  /** The piece's pattern, kept for the Player's Setup; the editor's bars are all written (ADR 0091). */
+  /** The piece's pattern, kept for the Player's Setup; the editor's bars are all written (ADR 0114). */
   readonly pattern: PatternId
   readonly sections: readonly DraftSection[]
   /**
-   * The single staves over the grand staff, top down (ADR 0097): each kept though empty (ADR 0072),
+   * The single staves over the grand staff, top down (ADR 0097): each kept though empty (ADR 0114),
    * as many as the learner adds.
    */
   readonly staves: readonly DraftStaff[]
-  /** A lead sheet: the piano's staves out of sight, their music kept (ADR 0072, 0083). */
+  /** A lead sheet: the piano's staves out of sight, their music kept (ADR 0114). */
   readonly leadSheet: boolean
   /**
-   * The staff the lyrics are written on (ADR 0093, 0097): a single staff by its place, or the
+   * The staff the lyrics are written on (ADR 0097): a single staff by its place, or the
    * piano's upper staff.
    */
   readonly lyricsOn: LyricsStaff
@@ -157,7 +157,7 @@ const inOrder = (notes: DraftNote[]): DraftNote[] =>
   notes.sort((a, b) => a.startTick - b.startTick || a.midi - b.midi)
 
 /**
- * Music as the editor holds it, every bar written (ADR 0091): it reads as the Player reads it, or
+ * Music as the editor holds it, every bar written (ADR 0114): it reads as the Player reads it, or
  * throws where it does not. A bar the music leaves a hand to the pattern is written out with what
  * the Player plays there (the pattern's notes with their fingers, each cut at the bar's end), so what
  * is heard is what is written.
@@ -258,7 +258,7 @@ export const lyricsLayer = (draft: Pick<Draft, 'lyricsOn'>): NoteLayer =>
   draft.lyricsOn === 'rh' ? 'rh' : singleStaff(draft.lyricsOn)
 
 /**
- * The notes the lyrics go under (ADR 0093, 0097): the single staff's they are on, or the right
+ * The notes the lyrics go under (ADR 0097): the single staff's they are on, or the right
  * hand's where they are on the upper staff, a chord of them one note.
  */
 export const tuneNotes = (draft: Draft): DraftNote[] =>
@@ -266,14 +266,14 @@ export const tuneNotes = (draft: Draft): DraftNote[] =>
     ? singingNotes(draft.hands.rh)
     : [...(draft.staves[draft.lyricsOn]?.notes ?? [])]
 
-/** The draft as the content writes music: every bar of both hands written (ADR 0091), its words as verses. */
+/** The draft as the content writes music: every bar of both hands written (ADR 0114), its words as verses. */
 export function writeDraft(draft: Draft): PieceMusic {
   const placed = barsOf(draft)
   const timeline = placed.map(({ start, bar }) => ({ startTick: start, ticks: bar.ticks }))
   const ticks = placed.map(({ bar }) => bar.ticks)
   const clefs = (hand: Hand) => placed.map(({ bar }) => bar.clefs?.[hand])
   const lyrics = gatherLyrics(tuneNotes(draft)).map(writeLyrics)
-  // A staff the score has is written though empty, as a rest, so it stays (ADR 0072).
+  // A staff the score has is written though empty, as a rest, so it stays (ADR 0114).
   const staves = draft.staves.map(({ name, clef, notes }) => ({
     ...(name === undefined ? {} : { name }),
     ...(clef === 'treble' ? {} : { clef }),
@@ -287,7 +287,7 @@ export function writeDraft(draft: Draft): PieceMusic {
     ...(draft.tempoUnit ? { tempoUnit: draft.tempoUnit } : {}),
     tempo: draft.tempo,
     pattern: draft.pattern,
-    // Each bar in its section's meter (ADR 0095).
+    // Each bar in its section's meter (ADR 0097).
     sections: draft.sections.map((section, s) => ({
       ...section.heading,
       lines: section.lines.map((line) =>

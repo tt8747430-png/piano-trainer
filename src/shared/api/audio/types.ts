@@ -48,7 +48,7 @@ export interface AudioOutput {
    */
   stop(): void
   /**
-   * The live voice (spec 2026-10-09 §2.1): a key struck at `velocity` (1–127) sounds until it is let
+   * The live voice: a key struck at `velocity` (1–127) sounds until it is let
    * go, or on under the pedals; struck again, it stops first.
    */
   press(key: Midi, velocity: number): void
@@ -61,7 +61,7 @@ export interface AudioOutput {
   /** The pedals now: the same object until one changes. */
   pedals(): Readonly<Record<PedalKind, boolean>>
   /**
-   * The scheduled notes sound on `output` instead of the browser (spec 2026-10-09 §3.3): the click
+   * The scheduled notes sound on `output` instead of the browser: the click
    * and a recording stay in the browser, and so does the live voice; null: the browser again.
    */
   notesTo(output: NoteOutput | null): void

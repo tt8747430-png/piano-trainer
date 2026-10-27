@@ -32,7 +32,7 @@ function simplifiedBar(chords: readonly ChartChord[]): ChartChord[] {
 }
 
 /**
- * A chart as Simplify plays it (ADR 0104): every chord its plain triad on its root (`simplifyChord`),
+ * A chart as Simplify plays it (ADR 0105): every chord its plain triad on its root (`simplifyChord`),
  * a bar's chord held on where the next simplifies to it; a bar of no chord, and every bar's written
  * hands and barlines, as they are.
  */

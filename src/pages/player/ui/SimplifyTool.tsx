@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PlayerTool } from '@/widgets/practice-player'
 
 /**
- * The tools row's Simplify (ADR 0104, Chordify's): a switch, pressed while every chord is played and
+ * The tools row's Simplify (ADR 0105, Chordify's): a switch, pressed while every chord is played and
  * shown as its plain triad; its tooltip says so. Greyed, saying why, where no chord of the music would
  * change.
  */

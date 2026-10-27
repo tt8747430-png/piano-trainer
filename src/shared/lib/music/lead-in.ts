@@ -2,7 +2,7 @@ import type { Key } from './key'
 import { pitchClassOf } from './note'
 import { hasMinorThird, numeralChord, numeralText, type Numeral } from './numerals'
 
-/** The ways a progression leads into each of its chords (ADR 0041): by the chord's own V, or its ii–V. */
+/** The ways a progression leads into each of its chords (ADR 0112): by the chord's own V, or its ii–V. */
 export const LEAD_INS = ['v', 'ii-v'] as const
 export type LeadIn = (typeof LEAD_INS)[number]
 

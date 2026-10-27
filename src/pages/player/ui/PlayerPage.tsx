@@ -42,14 +42,14 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const { choice, performance, player, fit, headings, simplifies, changeSetup, simplify } =
     usePlayer(piece, search, setSearch)
   const title = entryTitles(piece, locale).primary
-  // The bar as written the cursor is in, and the cursor taken to one (ADR 0090).
+  // The bar as written the cursor is in, and the cursor taken to one (ADR 0115).
   const bar = writtenBarAt(performance, player.practice.state.beatGroup)
   const { jumpToBeatGroup } = player.practice
   const goToBar = (written: number) => {
     const group = beatGroupInBar(performance, written)
     if (group !== null) jumpToBeatGroup(group)
   }
-  // Opened at a bar (Practise from the editor's caret, ADR 0090): the cursor goes there, once, and
+  // Opened at a bar (Practise from the editor's caret, ADR 0115): the cursor goes there, once, and
   // the URL forgets it, so the view remembered never holds it.
   const openAt = useEffectEvent((at: number) => {
     goToBar(at - 1)
@@ -58,7 +58,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   useEffect(() => {
     if (search.bar !== undefined) openAt(search.bar)
   }, [search.bar])
-  // More's own (ADR 0099, 0107): the piece's information and its sections as sheets, and Share, as
+  // More's own (ADR 0108, 0107): the piece's information and its sections as sheets, and Share, as
   // its page shares it, saying so where the status line is.
   const [showing, setShowing] = useState<'info' | 'sections' | null>(null)
   const sheetOf = (sheet: 'info' | 'sections') => ({
@@ -110,7 +110,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   const inLibrary = piece.kind !== 'study'
   const askView = useSettings((state) => selectScoreView(state).askOnOpen)
   return (
-    // Its chords drawn in the inversions chosen for them in this piece (ADR 0101).
+    // Its chords drawn in the inversions chosen for them in this piece (ADR 0108).
     <PieceInversions pieceId={piece.id}>
       <MoreActions value={inLibrary ? [favourite, ...library.actions] : []}>
         <PlayerLayout
@@ -120,12 +120,12 @@ function PiecePlayer({ piece }: { piece: Piece }) {
           player={player}
           performance={performance}
           headings={headings}
-          // A song that hides its piano is a lead sheet (ADR 0083).
+          // A song that hides its piano is a lead sheet (ADR 0114).
           piano={!isLeadSheet(piece)}
           // A piece written in degrees has the piano's staves alone.
           staves={isDegreePiece(piece) ? undefined : piece.staves}
           recording={piece.recording}
-          // Every piece is edited: one written in degrees as its chart in its key (ADR 0110).
+          // Every piece is edited: one written in degrees as its chart in its key (ADR 0115).
           modes={<ModeSwitch pieceId={piece.id} mode="practise" bar={bar + 1} />}
           setup={
             <PieceSetup
@@ -138,7 +138,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
               onSwing={player.setSwing}
             />
           }
-          // Chordify's toolbar after the View (ADR 0104): the key the piece is played in, and Simplify.
+          // Chordify's toolbar after the View (ADR 0105): the key the piece is played in, and Simplify.
           tools={
             <>
               <TransposeTool
@@ -151,7 +151,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
           }
           more={more}
           status={<ShareSaid said={shared.said} />}
-          // Chordify's "Show this when opening a song" (ADR 0102): the View, to choose how it shows.
+          // Chordify's "Show this when opening a song" (ADR 0108): the View, to choose how it shows.
           openView={askView}
         />
         <SongInfo piece={piece} performance={performance} {...sheetOf('info')} />

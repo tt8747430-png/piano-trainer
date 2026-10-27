@@ -18,8 +18,8 @@ import {
 } from './types'
 
 /**
- * A song's or study's music as the content writes it: what a learner's version holds (ADR 0027),
- * under the learner's own title where they gave one (ADR 0094).
+ * A song's or study's music as the content writes it: what a learner's version holds (ADR 0097),
+ * under the learner's own title where they gave one (ADR 0114).
  */
 export type PieceMusic = Pick<
   ChartPiece,
@@ -42,8 +42,8 @@ export type PieceMusic = Pick<
 
 /**
  * A piece's music, without what it leaves out: its single staves where it has any, a lead sheet only
- * with one (ADR 0083, 0097), its lyrics' staff only where they are and it is not the top single
- * staff (ADR 0093).
+ * with one (ADR 0114, 0097), its lyrics' staff only where they are and it is not the top single
+ * staff (ADR 0097).
  */
 export function musicOf(piece: ChartPiece): PieceMusic {
   const staves = piece.staves?.length ? { staves: piece.staves } : {}
@@ -67,7 +67,7 @@ export function musicOf(piece: ChartPiece): PieceMusic {
 
 /**
  * Music read as the engine reads a piece: its chart (with the written hands) and its single staves,
- * its words on the notes of the staff they are on (ADR 0093, 0097); a mistake throws a ContentError.
+ * its words on the notes of the staff they are on (ADR 0097); a mistake throws a ContentError.
  */
 export function readMusic(music: PieceMusic): { chart: Chart; staves: StaffMusic[] } {
   const piece: ChartPiece = { id: 'music', kind: 'song', title: '', ...music }
@@ -75,7 +75,7 @@ export function readMusic(music: PieceMusic): { chart: Chart; staves: StaffMusic
 }
 
 /**
- * An entry under the learner's own title (ADR 0094), the same in every language: the printed title's
+ * An entry under the learner's own title (ADR 0114), the same in every language: the printed title's
  * translations go with it.
  */
 function retitled(entry: ChartPiece, title: string | undefined): ChartPiece {

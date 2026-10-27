@@ -23,8 +23,8 @@ const FULL_WIDTH = 760
 const LEAST_SCALE = 0.62
 
 /**
- * The score in the chart's lines (ADR 0064): down the screen, or dealt onto A4 pages as it will print,
- * its title at the head of the first line (ADR 0094), each chart line cut by width where it is wider
+ * The score in the chart's lines (ADR 0096): down the screen, or dealt onto A4 pages as it will print,
+ * its title at the head of the first line (ADR 0114), each chart line cut by width where it is wider
  * than the screen holds. Each line is justified to the width and carries its labels, the loop's part
  * and its bars to jump to; the playhead stands on the line playing, which comes into sight as it
  * starts (ADR 0096). On a phone on its side, a line down the screen is drawn small enough that its
@@ -57,7 +57,7 @@ export function SheetLines({
   score: Score
   performance: Performance
   staves: readonly StaffId[]
-  /** The staves' names, printed at the first line's head (ADR 0094). */
+  /** The staves' names, printed at the first line's head (ADR 0114). */
   staffNames: StaffLabels
   /** On A4 pages; else lines down the screen. */
   pages: boolean
@@ -79,7 +79,7 @@ export function SheetLines({
   onPick: (picked: Picked) => void
   onLoopChange: (loop: BarRange) => void
   onChoose: (bar: number, extend: boolean) => void
-  /** The notes chosen: the loop's, else the one clicked, one head of a chord alone (ADR 0088, 0096). */
+  /** The notes chosen: the loop's, else the one clicked, one head of a chord alone (ADR 0096). */
   selected:
     | {
         readonly staff?: StaffId
@@ -99,7 +99,7 @@ export function SheetLines({
   const labels = labelRow(chordNames)
   // Down the screen as large as the width allows; on a phone on its side, a whole system, its
   // fingers and the verses under its tune in the sheet's height. Pages as they print, on a canvas
-  // that zooms them to the screen (ADR 0075).
+  // that zooms them to the screen (ADR 0096).
   const across = Math.min(1, Math.max(LEAST_SCALE, width / FULL_WIDTH))
   const scale = pages
     ? PRINT_SCALE
@@ -113,7 +113,7 @@ export function SheetLines({
       : across
   const margin = pages ? PAGE.margin : 0
   const inner = pages ? PAGE.width - 2 * margin : width
-  // Each chart line cut by width to the room a line has, less its clef and key (ADR 0074).
+  // Each chart line cut by width to the room a line has, less its clef and key (ADR 0087).
   const widths = useMemo(
     () => measureWidths(score, scale, chordNames, staffNames),
     [score, scale, chordNames, staffNames],
@@ -189,7 +189,7 @@ export function SheetLines({
       <section aria-label={t('sheet.label')} className="flex flex-col items-center gap-8 p-6">
         <SheetPages
           lines={lines}
-          // A line's height as engraved: its staves and the verses under its tune (ADR 0093).
+          // A line's height as engraved: its staves and the verses under its tune (ADR 0097).
           height={(each) => labels + scoreHeight(each.score, staves) * scale}
           title={title}
           line={line}

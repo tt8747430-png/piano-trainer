@@ -1,6 +1,6 @@
 import type { KeyParam } from '@/shared/lib/music'
 
-/** What the Chord finder shows, as its URL holds it (ADR 0054). */
+/** What the Chord finder shows, as its URL holds it (ADR 0052). */
 export interface ChordFinderView {
   /** The keys tapped, written `60-64-67`, lowest first: a chord to send as a link. */
   readonly keys: string

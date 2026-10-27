@@ -36,7 +36,7 @@ export interface PracticeState {
   readonly slips: Readonly<Partial<Record<number, number>>>
   /**
    * Wait mode: the passes played to their end while it played, a loop's every lap: what a piece's
-   * Player records as a lesson done (ADR 0100).
+   * Player records as a lesson done (ADR 0111).
    */
   readonly passes: number
   /**

@@ -26,12 +26,12 @@ const buttonVariants = cva(
         // bar's band, the muted fill while it is hovered, open or pressed.
         tool: 'rounded-xl text-foreground hover:bg-muted aria-expanded:bg-muted aria-pressed:bg-muted',
       },
-      // Every size is at least a 44px touch target (spec §8), so the CLI's smaller sizes are gone.
+      // Every size is at least a 44px touch target, so the CLI's smaller sizes are gone.
       size: {
         default:
           'h-11 gap-2 px-4 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3',
         lg: 'h-12 gap-2 px-5 text-base has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4',
-        // Icons in icon-only buttons are 20px (spec §2.3); text buttons keep 16px beside the label.
+        // Icons in icon-only buttons are 20px; text buttons keep 16px beside the label.
         icon: "size-11 [&_svg:not([class*='size-'])]:size-5",
         'icon-lg': "size-12 [&_svg:not([class*='size-'])]:size-5",
         pill: 'h-14 gap-2 px-6 text-lg has-data-[icon=inline-end]:pr-5 has-data-[icon=inline-start]:pl-5',

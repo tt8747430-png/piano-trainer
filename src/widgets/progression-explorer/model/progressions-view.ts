@@ -37,7 +37,7 @@ export interface ProgressionsView {
   readonly inKey?: boolean
 }
 
-/** The chords a view plays: its numerals, each led into by its V or ii–V where the view says (ADR 0041). */
+/** The chords a view plays: its numerals, each led into by its V or ii–V where the view says (ADR 0112). */
 export function playedNumerals(view: ProgressionsView): Numeral[] {
   const numerals = parseNumerals(view.p) ?? []
   return view.lead ? withLeadIns(numerals, view.lead, keyFromParam(view.key)) : numerals
@@ -50,7 +50,7 @@ export const viewProgression = (view: ProgressionsView): LibraryProgression | un
 /**
  * A view changed. A key turned minor or major shows the library's progression in that mode's line,
  * where it has one (the jazz cadence's ii°–V–i, and back), at the chord size shown; any other line
- * stays as it is written (ADR 0041).
+ * stays as it is written (ADR 0112).
  */
 export function changedView(
   view: ProgressionsView,

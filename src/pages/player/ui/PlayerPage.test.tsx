@@ -42,13 +42,13 @@ describe('Player', () => {
     ['a phone on its side', LANDSCAPE_PHONE],
     ['a laptop', '(min-width: 64rem)'],
   ])(
-    'keeps one bar on %s: each control its icon, named by its label and title (ADR 0094)',
+    'keeps one bar on %s: each control its icon, named by its label and title (ADR 0114)',
     async (_size, query) => {
       sizedAs(query)
       await renderApp('/play/bz5')
       await screen.findByRole('button', { name: 'Setup' })
       // Close, then Practise · Edit, as the editor's bar has them; the title is on the sheet. The
-      // View is the tools row's, under the bar (ADR 0102).
+      // View is the tools row's, under the bar (ADR 0108).
       const controls = [
         ...document.querySelectorAll(
           ':is([data-area="lead"], [data-area="actions"]) :is(button, a)',
@@ -94,7 +94,7 @@ describe('Player', () => {
     expect(await screen.findByRole('link', { name: 'Go to Songs' })).toBeInTheDocument()
   })
 
-  it('shows a song that hides its piano as a lead sheet: the tune’s staff alone (ADR 0083)', async () => {
+  it('shows a song that hides its piano as a lead sheet: the tune’s staff alone (ADR 0114)', async () => {
     const storage = createMemoryStorage()
     const song = {
       id: 'my-1',
@@ -120,7 +120,7 @@ describe('Player', () => {
     expect(new Set(staves())).toEqual(new Set(['staff0']))
   })
 
-  it('plays a song of bars of no chord: its written notes, each bar named by its number (ADR 0094)', async () => {
+  it('plays a song of bars of no chord: its written notes, each bar named by its number (ADR 0114)', async () => {
     const storage = createMemoryStorage()
     const song = {
       id: 'my-1',
@@ -159,7 +159,7 @@ describe('Player', () => {
     expect(settingsStore.getState().scoreView).toMatchObject({ music: 'grid', keys: false })
   })
 
-  it('holds the tempo, ‹, Play, ›, the loop, the Sound and the hands in one toolbar named Playback (ADR 0099, 0105)', async () => {
+  it('holds the tempo, ‹, Play, ›, the loop, the Sound and the hands in one toolbar named Playback (ADR 0108, 0105)', async () => {
     await renderApp('/play/romashki')
     const dock = await screen.findByRole('toolbar', { name: 'Playback' })
     const names = within(dock)
@@ -281,7 +281,7 @@ describe('Player', () => {
 
   it('opens a song with its title, tempo, hands and sheet music, and records it as practised', async () => {
     const { progressStore } = await renderApp('/play/bz5')
-    // The title printed at the sheet's head, the bar holding Close and the screen's buttons (ADR 0094).
+    // The title printed at the sheet's head, the bar holding Close and the screen's buttons (ADR 0114).
     const sheet = await screen.findByRole('region', { name: 'Sheet music' })
     expect(
       within(sheet).getByRole('heading', { level: 1, name: 'Still, my soul, be still' }),
@@ -500,7 +500,7 @@ describe('Player', () => {
     expect(dock).not.toHaveAttribute('data-hidden')
   })
 
-  it('turns to Edit at its cursor’s bar from the Practise · Edit switch, after Close (ADR 0090)', async () => {
+  it('turns to Edit at its cursor’s bar from the Practise · Edit switch, after Close (ADR 0115)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5?bar=3')
     const modes = await screen.findByRole('navigation', { name: 'Practise or edit' })
@@ -527,8 +527,8 @@ describe('Player', () => {
     const { settingsStore } = await renderApp('/play/silent')
     await user.click(await screen.findByRole('button', { name: 'View: Sheet music' }))
     const view = await screen.findByRole('dialog', { name: 'View' })
-    // The Player's views first (ADR 0099), then the sheet music's own, the editor's View with what
-    // only practice shows among it (ADR 0094, 0102), then what every view has.
+    // The Player's views first (ADR 0108), then the sheet music's own, the editor's View with what
+    // only practice shows among it (ADR 0114, 0108), then what every view has.
     const views = within(view).getByRole('radiogroup', { name: 'Show the music as' })
     expect(
       within(views)
@@ -580,7 +580,7 @@ describe('Player', () => {
   })
 })
 
-describe('the words under the tune (ADR 0093)', () => {
+describe('the words under the tune (ADR 0097)', () => {
   it('prints the verse under the tune while it plays, and hides it from the View', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
@@ -597,7 +597,7 @@ describe('the words under the tune (ADR 0093)', () => {
   })
 })
 
-describe('a pass played in Wait mode, a lesson done (ADR 0100)', () => {
+describe('a pass played in Wait mode, a lesson done (ADR 0111)', () => {
   // Both hands written: C4 over C3, then D4 over G2, a beat group a bar.
   const SONG = {
     id: 'my-1',

@@ -28,7 +28,7 @@ describe('the sheet’s lines', () => {
     ])
   })
 
-  it('say what each bar’s label prints: a line’s first number, a section’s name, the tempo (ADR 0095)', () => {
+  it('say what each bar’s label prints: a line’s first number, a section’s name, the tempo (ADR 0097)', () => {
     expect(linesOf(draft).map((line) => line.labels)).toEqual([
       [{ number: 1, section: 0, tempo: 90 }],
       [{ number: 2 }, {}],
@@ -113,7 +113,7 @@ describe('the sheet’s lines', () => {
     ])
   })
 
-  it('write no piano on a lead sheet: the tune’s staff alone (ADR 0083)', () => {
+  it('write no piano on a lead sheet: the tune’s staff alone (ADR 0114)', () => {
     const lead = { ...draft, leadSheet: true }
     const [, second] = linesOf(lead)
     if (!second) throw new Error('a second line')
@@ -160,7 +160,7 @@ describe('the sheet’s lines', () => {
     expect(timeBeforeLine(draft, third)).toEqual({ count: 4, unit: 4 })
   })
 
-  it('write a section’s own meter on its bars, its time printed where it starts (ADR 0095)', () => {
+  it('write a section’s own meter on its bars, its time printed where it starts (ADR 0097)', () => {
     const changing = readDraft({
       key: 'C',
       meter: '4/4',
@@ -203,7 +203,7 @@ describe('layerAt', () => {
   })
 })
 
-describe('the words on a line (ADR 0093)', () => {
+describe('the words on a line (ADR 0097)', () => {
   const worded = readDraft({
     key: 'C',
     meter: '4/4',

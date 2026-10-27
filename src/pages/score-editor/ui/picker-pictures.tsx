@@ -117,7 +117,7 @@ function CClef({ x, line }: { x: number; line: number }) {
 }
 
 /**
- * A clef drawn on a short staff (ADR 0110, 0114): its sign on its line, an octave clef's 8 or 15 over
+ * A clef drawn on a short staff (ADR 0115, 0114): its sign on its line, an octave clef's 8 or 15 over
  * or under it, small, as notation apps print it.
  */
 export function ClefSign({ clef }: { clef: Clef }) {

@@ -65,7 +65,7 @@ describe('SheetMusic', () => {
   })
 
   it.each(['panorama', 'vertical', 'page'] as const)(
-    'prints the title at the sheet’s head as the page’s heading, %s (ADR 0094)',
+    'prints the title at the sheet’s head as the page’s heading, %s (ADR 0114)',
     async (layout) => {
       renderSheet({
         shown: { layout, chordNames: true, lyrics: true, hidden: [] },
@@ -80,7 +80,7 @@ describe('SheetMusic', () => {
   )
 
   it.each(['panorama', 'vertical', 'page'] as const)(
-    'names the piano’s staves at the first line’s head, %s (ADR 0094)',
+    'names the piano’s staves at the first line’s head, %s (ADR 0114)',
     async (layout) => {
       renderSheet({
         shown: { layout, chordNames: true, lyrics: true, hidden: [] },
@@ -124,7 +124,7 @@ describe('SheetMusic', () => {
     expect(screen.getByRole('button', { name: 'Bar 2: G' })).toHaveAttribute('aria-current', 'step')
   })
 
-  it('jumps to a bar’s first beat group from the keyboard, and nowhere at a tap on empty staff (ADR 0088)', async () => {
+  it('jumps to a bar’s first beat group from the keyboard, and nowhere at a tap on empty staff (ADR 0096)', async () => {
     const user = userEvent.setup()
     const { onJump, onLoopChange } = renderSheet({ loop: { first: 0, last: 1 } })
     const second = await screen.findByRole('button', { name: 'Bar 2: G' })
@@ -260,7 +260,7 @@ describe('SheetMusic', () => {
     },
   )
 
-  it('keeps the playhead out of sight while the loop stands chosen and nothing moves, then where it is stepped to (ADR 0088)', async () => {
+  it('keeps the playhead out of sight while the loop stands chosen and nothing moves, then where it is stepped to (ADR 0096)', async () => {
     const sheet = (current: number) => (
       <SheetMusic
         title="Morning"

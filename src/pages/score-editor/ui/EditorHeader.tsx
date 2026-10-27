@@ -7,7 +7,7 @@ import { ModeSwitch } from '@/widgets/mode-switch'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /**
- * The editor's bar's lead, as the Player's (ADR 0090, 0110): Close, then Practise · Edit, the Player
+ * The editor's bar's lead, as the Player's (ADR 0115): Close, then Practise · Edit, the Player
  * at the caret's bar, in the same place in both modes.
  */
 export function EditorLead() {
@@ -31,7 +31,7 @@ export function EditorLead() {
 }
 
 /**
- * The editor's bar's end, in the slots the Player's MIDI · Setup · More stand in (ADR 0110): the MIDI
+ * The editor's bar's end, in the slots the Player's MIDI · Setup · More stand in (ADR 0115): the MIDI
  * keyboard (hidden without Web MIDI, as the Player's), then Undo and Redo, the edits made most often,
  * where Setup and More are. While a take records they wait for Stop.
  */

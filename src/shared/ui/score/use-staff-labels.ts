@@ -12,7 +12,7 @@ import {
 const NO_NAMES: readonly (PrintedName | undefined)[] = []
 
 /**
- * The names a score's staves are printed with at its first line's head (ADR 0094, 0097): each single
+ * The names a score's staves are printed with at its first line's head (ADR 0114, 0097): each single
  * staff drawn by its own name (`names`, by place: the learner's, or the editor's placeholder), none
  * where it has none; the piano's in the learner's language where one of its two is drawn. The same
  * object while the names are, so a line is not engraved again for each render.

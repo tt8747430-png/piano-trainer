@@ -7,7 +7,7 @@ import {
 import type { Performance } from '@/shared/lib/arrangement'
 import { noteName, pitchClass, type PitchClass } from '@/shared/lib/music'
 
-/** What Wait mode's line says (spec §2.7). */
+/** What Wait mode's line says. */
 export type WaitFeedback =
   | { readonly kind: 'play'; readonly notes: readonly string[] }
   | { readonly kind: 'right' }
@@ -48,7 +48,7 @@ export function waitFeedback(performance: Performance, state: PracticeState): Wa
 }
 
 /**
- * A pass's slips in a line (spec 2026-10-11): how many, and where most fell: the bar with the most,
+ * A pass's slips in a line: how many, and where most fell: the bar with the most,
  * with the neighbour beside it that had more of the rest, so a hard passage is looped whole.
  */
 export function passReport(slips: PracticeState['slips']): {

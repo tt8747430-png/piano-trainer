@@ -37,10 +37,10 @@ const NO_STAVES: readonly { readonly name?: StaffName }[] = []
 
 /**
  * The Player's screen over any Performance (Flowkey's shape, ADR 0061): its bar (`ScoreBar`, ADR
- * 0115: Close, Practise · Edit, then MIDI, Setup and More, ADR 0099; its tools, ADR 0102: the View,
- * named by the view shown, then the music's own tools, a piece's Transpose and Simplify, ADR 0104);
- * the music under its title (ADR 0094) as the View
- * shows it (ADR 0099: the sheet music, Chords over lyrics, Diagrams or the Grid), Wait mode's line,
+ * 0115: Close, Practise · Edit, then MIDI, Setup and More, ADR 0108; its tools, ADR 0108: the View,
+ * named by the view shown, then the music's own tools, a piece's Transpose and Simplify, ADR 0105);
+ * the music under its title (ADR 0114) as the View
+ * shows it (ADR 0108: the sheet music, Chords over lyrics, Diagrams or the Grid), Wait mode's line,
  * the transport floating under it (the tempo, ‹ ▶ ›, the loop, the Sound and the hands), the
  * count-in's beat large over it all while Listen counts in (ADR 0105), and the keys at the
  * foot, or under the tools row where the keyboard settings dock them at the top; the computer's keys
@@ -66,7 +66,7 @@ export function PlayerLayout({
 }: {
   /**
    * Whether the sheet writes the piano's staves: not for a song that hides them, a lead sheet (ADR
-   * 0083). The keys and what plays are the same.
+   * 0114). The keys and what plays are the same.
    */
   piano?: boolean
   /** The piece's single staves, top down, each printed and switched in the View by its name (ADR 0097). */
@@ -85,15 +85,15 @@ export function PlayerLayout({
   headings?: readonly string[]
   /** The Setup: its button, in the toolbar, and the sheet it opens. */
   setup: ReactNode
-  /** The tools row's after the View: a piece's Transpose and Simplify (ADR 0104); none for a walk. */
+  /** The tools row's after the View: a piece's Transpose and Simplify (ADR 0105); none for a walk. */
   tools?: ReactNode
-  /** Practise · Edit (ADR 0090), after Close: a piece's own, none for a walk. */
+  /** Practise · Edit (ADR 0115), after Close: a piece's own, none for a walk. */
   modes?: ReactNode
   /** The music's own in More, before Print: a piece's Song information, Sections and Share (ADR 0107). */
   more?: readonly MenuAction[] | undefined
   /** What the screen says beside Wait mode's line: what a piece's Share said. */
   status?: ReactNode
-  /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0102). */
+  /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0108). */
   openView?: boolean
 }) {
   const { practice } = player
@@ -105,13 +105,13 @@ export function PlayerLayout({
     clef,
     name: staves[place]?.name,
   }))
-  // The view saved, where the music can show it, else the one it falls back to (ADR 0102).
+  // The view saved, where the music can show it, else the one it falls back to (ADR 0108).
   const needs = useMemo(() => viewNeeds(performance), [performance])
   const shown = shownView(scoreView.music, needs)
   usePlayerShortcuts(player, view, onClose)
   // More's Print (ADR 0107): the music printed as the View shows it, while its render stands.
   const [printing, setPrinting] = useState(false)
-  // A chord view's keys in Listen: the chord sounding as its diagram draws it (ADR 0101); a pattern
+  // A chord view's keys in Listen: the chord sounding as its diagram draws it (ADR 0108); a pattern
   // lesson's, each note as it sounds, whatever the view (ADR 0111).
   const chordKeys = useChordKeys(
     performance,
@@ -134,11 +134,11 @@ export function PlayerLayout({
     </PlayerArea>
   )
   return (
-    // While Diagrams plays, the bar and the tools row step aside (ADR 0102).
+    // While Diagrams plays, the bar and the tools row step aside (ADR 0108).
     <PlayerScreen keys={dock} aside={shown === 'diagrams' && practice.state.playing}>
-      {/* The score's bar, the editor's in shape (ADR 0090, 0110, 0115): Close, then Practise · Edit;
+      {/* The score's bar, the editor's in shape (ADR 0115): Close, then Practise · Edit;
           MIDI, Setup and More; the View and the music's tools. The loop is the transport's (ADR
-          0099). */}
+          0108). */}
       <ScoreBar
         lead={
           <>

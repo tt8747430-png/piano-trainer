@@ -12,7 +12,7 @@ import {
 import { notesOf, startNear, withNotes } from './notes'
 
 /**
- * Whether the Lyrics tool works where the caret writes (ADR 0093, 0097): on the staff the words are
+ * Whether the Lyrics tool works where the caret writes (ADR 0097): on the staff the words are
  * on, a single staff the score has, or the upper staff in sight.
  */
 export const singsHere = (draft: Draft, layer: Layer): boolean =>
@@ -87,7 +87,7 @@ function singing(n: DraftNote, lyrics: NoteLyrics | undefined): DraftNote {
 
 /**
  * The draft with `text` sung on the tune's note at `tick` in `verse`, as the Lyrics field writes it
- * (ADR 0093, Flat's): a syllable, `-` where its word goes on, `_` holding it over the next notes,
+ * (ADR 0097, Flat's): a syllable, `-` where its word goes on, `_` holding it over the next notes,
  * which then sing nothing there; `~` or nothing leaves the note silent in that verse. A tick with
  * no note of the tune changes nothing.
  */

@@ -32,7 +32,7 @@ const tune = draftOf({
 })
 
 describe('the caret in a voice', () => {
-  it('moves note to note, never inside one, where it would mark empty staff (ADR 0088)', () => {
+  it('moves note to note, never inside one, where it would mark empty staff (ADR 0096)', () => {
     expect(nextCaret(tune, 'staff0', 0, 24, 1)).toBe(36)
     expect(nextCaret(tune, 'staff0', 36, 48, 1)).toBe(48)
     expect(nextCaret(tune, 'staff0', 48, 24, 1)).toBe(96)
@@ -90,7 +90,7 @@ describe('the caret in the chords', () => {
     expect(caretPlaces(halves, 'chords', 24)).toEqual([0, 24, 36, 48, 72])
   })
 
-  it('stands at a bar of no chord’s start alone, where its chord would go (ADR 0094)', () => {
+  it('stands at a bar of no chord’s start alone, where its chord would go (ADR 0114)', () => {
     const empty = draftOf({ sections: [{ kind: 'verse', lines: ['G _ D'] }] })
     expect(caretPlaces(empty, 'chords', 24)).toEqual([0, 24, 48, 72, 96, 192, 216, 240, 264])
     expect(snapToChord(empty, 150)).toBe(96)

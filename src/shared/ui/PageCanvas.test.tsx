@@ -62,7 +62,7 @@ describe('PageCanvas', () => {
     vi.useRealTimers()
   })
 
-  it('never puts its zoom’s buttons under a tap: the tap reaches what it was on (ADR 0110)', () => {
+  it('never puts its zoom’s buttons under a tap: the tap reaches what it was on (ADR 0115)', () => {
     const onClick = vi.fn()
     const region = canvas(onClick)
     const controls = () => region.querySelector('[data-slot="canvas-controls"]')

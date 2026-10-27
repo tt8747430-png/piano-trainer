@@ -2,7 +2,7 @@ import { REMEMBERED_CHORDS } from '@/entities/settings'
 import type { Midi } from '@/shared/lib/music'
 import { namesChord } from './finding'
 
-/** The chords played, oldest first, and the keys down now (ADR 0054). */
+/** The chords played, oldest first, and the keys down now (ADR 0052). */
 export interface ChordLog {
   readonly chords: readonly (readonly Midi[])[]
   /** The keys down when the log last heard. */

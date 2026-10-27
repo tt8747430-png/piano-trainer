@@ -67,7 +67,7 @@ export interface GraceNote {
   readonly spelled: SpelledNote
 }
 
-/** What is written on a note besides its pitch and time (ADR 0063); its pitch is the one it sounds. */
+/** What is written on a note besides its pitch and time (ADR 0097); its pitch is the one it sounds. */
 export interface NoteMarks {
   readonly articulations?: readonly Articulation[]
   readonly ornament?: Ornament

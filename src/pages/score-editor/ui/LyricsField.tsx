@@ -39,7 +39,7 @@ function VerseStep({
 }
 
 /**
- * The words under the tune, typed one syllable at a time under the note they are sung on (ADR 0093,
+ * The words under the tune, typed one syllable at a time under the note they are sung on (ADR 0097,
  * 0096, Flat's Lyrics): the field stands on the caret's note's syllable in its verse, on the staff the
  * words are on, and writes what it holds there as it moves on or is left. Space, → or Enter go to the
  * tune's next note, ← back; `-` or `_` typed save with the mark and go on; ↓ the next verse (a new

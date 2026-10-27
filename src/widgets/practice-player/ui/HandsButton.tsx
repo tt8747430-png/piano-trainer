@@ -12,7 +12,7 @@ import { HandsIcon } from './HandsIcon'
 /** The popover's order: one hand, the other, both. */
 const CHOICES: readonly Hands[] = ['rh', 'lh', 'both']
 
-/** The hands button and its popover: right, left or both (spec §2.8). */
+/** The hands button and its popover: right, left or both. */
 export function HandsButton({
   hands,
   onChange,

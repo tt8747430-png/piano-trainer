@@ -9,7 +9,7 @@ import { useSheetLayerName } from '../model/use-layer-name'
 const REACH = 6
 
 /**
- * A button over each staff's name printed at the first line's head (ADR 0094, 0097): each single
+ * A button over each staff's name printed at the first line's head (ADR 0114, 0097): each single
  * staff's (its own name, or the editor's placeholder for a staff with none) and the piano's, each
  * opening what edits that staff (`edit`), as tall as the staves it names.
  */

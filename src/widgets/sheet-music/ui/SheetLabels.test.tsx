@@ -25,7 +25,7 @@ const labelsOf = (container: HTMLElement) =>
   [...container.querySelectorAll('[data-slot="bar-label"]')].map((label) => label.textContent)
 
 describe('SheetLabels', () => {
-  it('prints a section’s name at its first bar beside the line’s number, a tempo after them (ADR 0095)', () => {
+  it('prints a section’s name at its first bar beside the line’s number, a tempo after them (ADR 0097)', () => {
     const { container } = render(
       <SheetLabels
         layout={layout}

@@ -11,7 +11,7 @@ import { usePracticePlayer } from '@/widgets/practice-player'
 import { resolveChoice, searchPatch, type PlayerSearch } from './player-search'
 import type { WalkingPlayerOf } from './player-of'
 
-/** A piece's Player: a walking Player's, and its tools row's Simplify (ADR 0104). */
+/** A piece's Player: a walking Player's, and its tools row's Simplify (ADR 0105). */
 export interface PiecePlayerOf extends WalkingPlayerOf<PracticeChoice, SetupChange> {
   /** Whether Simplify changes the piece as chosen: where it would not, it is greyed. */
   readonly simplifies: boolean
@@ -19,7 +19,7 @@ export interface PiecePlayerOf extends WalkingPlayerOf<PracticeChoice, SetupChan
   simplify(on: boolean): void
 }
 
-/** The piece as the Player plays it (spec §2.1): its URL's choices arranged, practised from the widget's hook. */
+/** The piece as the Player plays it: its URL's choices arranged, practised from the widget's hook. */
 export function usePlayer(
   piece: Piece,
   search: PlayerSearch,
@@ -28,7 +28,7 @@ export function usePlayer(
   const saved = useSettings(selectMelody)
   // Read once a piece: the Player renders each beat, and a fit reads the piece's chart.
   const fit = useMemo(() => pieceFit(piece), [piece])
-  // What the piece has to play its melody with (ADR 0115): a lead sheet's is always heard (ADR 0083).
+  // What the piece has to play its melody with (ADR 0115): a lead sheet's is always heard (ADR 0114).
   const has = (inOwnKey: boolean) => ({
     staff: fit.tune,
     recording: piece.recording !== undefined,
@@ -62,7 +62,7 @@ export function usePlayer(
   const recording = melody.recording ? (piece.recording ?? null) : null
   const player = usePracticePlayer(performance, search, setSearch, piece.tempo, recording)
   // A pass played through in Wait mode is a lesson done: its loop's bars, or the whole piece's
-  // (ADR 0100). Read as it is counted, never a reason to record again.
+  // (ADR 0111). Read as it is counted, never a reason to record again.
   const { passes } = player.practice.state
   const recordFinished = useEffectEvent(() => {
     const whole = { first: 0, last: performance.bars.length - 1 }

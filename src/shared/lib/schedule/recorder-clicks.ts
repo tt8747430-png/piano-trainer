@@ -25,10 +25,10 @@ interface RecorderClicks {
 }
 
 /**
- * A take's clicks (spec 2026-10-05 §2): the Player's count-in before the take's first bar (a pickup
+ * A take's clicks: the Player's count-in before the take's first bar (a pickup
  * comes in on its beat), then, with the click on, a click on each beat of the piece's bars from there
  * (each bar's first accented), and past the piece's end of bars of the meter its last bar is in (ADR
- * 0095), until the take's longest.
+ * 0097), until the take's longest.
  */
 export function recorderClicks({
   bars,

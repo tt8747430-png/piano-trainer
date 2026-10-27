@@ -20,7 +20,7 @@ const LEFT_OUT_WORDS = {
   '11th': 'no11th',
 } as const satisfies Readonly<Record<LeftOut, string>>
 
-/** How a reading is written (ADR 0054): over its bass (`C/E`), or by its root alone (`C`). */
+/** How a reading is written (ADR 0052): over its bass (`C/E`), or by its root alone (`C`). */
 export const chordLabel = (found: FoundChord, slash: boolean): string =>
   slash ? found.symbol : writtenSymbol(found.chord)
 
@@ -31,7 +31,7 @@ interface Telling {
 }
 
 /**
- * What a found chord is, in words (ADR 0054): its kind where the table names it; its inversion (or,
+ * What a found chord is, in words (ADR 0052): its kind where the table names it; its inversion (or,
  * where the name leaves its bass out and the bass is no inversion, the note in the bass); each tone
  * left out; how the keys lay it out (close, open, drop 2 or 3, a shell, 4ths, So What); and an altered
  * dominant's chart name, printed as the sheets print a chord. The same function until the language

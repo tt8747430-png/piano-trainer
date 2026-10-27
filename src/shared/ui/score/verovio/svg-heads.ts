@@ -26,7 +26,7 @@ function stemBox(group: Element | null): Extent | null {
 }
 
 /**
- * Each notehead of a line Verovio engraved (ADR 0088), with its accidental and its dots, and each
+ * Each notehead of a line Verovio engraved (ADR 0096), with its accidental and its dots, and each
  * chord's column with its stem, in the line's px (`at` turns Verovio's units into them): read from
  * the glyphs' places and their boxes in the font, so it reads the same anywhere, a test's DOM too.
  */

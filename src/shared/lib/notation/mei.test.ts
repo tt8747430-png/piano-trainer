@@ -133,7 +133,7 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(bass).not.toContain('symbol="brace"')
   })
 
-  it('names the staves drawn at the first line’s head: each single staff’s, the piano’s over its brace (ADR 0094, 0097)', () => {
+  it('names the staves drawn at the first line’s head: each single staff’s, the piano’s over its brace (ADR 0114, 0097)', () => {
     const score = notate(
       music(
         [
@@ -176,7 +176,7 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(tune).toMatch(/<rest xml:id="h-bass-0" dur="1" type="hidden"\/>/)
   })
 
-  it('beams eighths by the meter, as LilyPond: four to the half bar in 4/4 (ADR 0084)', () => {
+  it('beams eighths by the meter, as LilyPond: four to the half bar in 4/4 (ADR 0087)', () => {
     const eighths = [0, 12, 24, 36].map((tick) => c(tick))
     const written = scoreToMei(plain(eighths.map((e) => ({ ...e, durationTicks: 12 }))))
     expect(written.match(/<beam>/g)).toHaveLength(1)
@@ -320,7 +320,7 @@ describe('scoreToMei, a note’s marks and the options', () => {
   })
 })
 
-describe('the words (ADR 0093)', () => {
+describe('the words (ADR 0097)', () => {
   const sung = (text: string, hyphen = false, held = 0) => ({ text, hyphen, held })
   const verses = (lyrics: (ReturnType<typeof sung> | null)[][]) =>
     scoreToMei(

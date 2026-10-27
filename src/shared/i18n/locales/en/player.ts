@@ -1,6 +1,6 @@
 export const player = {
   setup: 'Setup',
-  // The bar's More (ADR 0099, 0107): a piece's information and its sections as sheets, Share as the
+  // The bar's More (ADR 0108, 0107): a piece's information and its sections as sheets, Share as the
   // song page's, Print, the music as a MIDI file (with a recording, at a fixed tempo or time aligned
   // to it).
   more: 'More',
@@ -20,9 +20,9 @@ export const player = {
   exportMidi: 'Export to MIDI',
   exportMidiFixed: 'Export to MIDI, fixed tempo',
   exportMidiAligned: 'Export to MIDI, time aligned',
-  /** A piece's score in its two modes, the Player and the score editor (ADR 0090). */
+  /** A piece's score in its two modes, the Player and the score editor (ADR 0115). */
   mode: { label: 'Practise or edit', practise: 'Practise', edit: 'Edit' },
-  // The Player's views of the music (ADR 0099), the View's tiles; each names its own part of the
+  // The Player's views of the music (ADR 0108), the View's tiles; each names its own part of the
   // screen.
   views: {
     label: 'Show the music as',
@@ -30,20 +30,20 @@ export const player = {
     lyrics: 'Chords over lyrics',
     diagrams: 'Diagrams',
     grid: 'Grid',
-    // Each view in a line, the ⓘ beside Show the music as (ADR 0102).
+    // Each view in a line, the ⓘ beside Show the music as (ADR 0108).
     about: {
       sheet: 'the score, as printed',
       lyrics: 'each line’s chords over its words',
       diagrams: 'the chord sounding on the keys, the next beside it',
       grid: 'every bar’s chords, beat by beat',
     },
-    // The tools row's View, named by the view shown (ADR 0102).
+    // The tools row's View, named by the view shown (ADR 0108).
     shown: 'View: {{view}}',
     // Chordify's "Show this when opening a song": a song's Player opens with the View open.
     ask: 'Ask each time a song opens',
     // What the View holds for every view of the music, after the view shown's own.
     every: 'Every view',
-    // Diagrams' own (ADR 0102, Chordify's "Diagram view mode").
+    // Diagrams' own (ADR 0108, Chordify's "Diagram view mode").
     // Chords over lyrics' own (ADR 0108, Chordify's view settings).
     pinned: {
       label: 'Diagrams pinned',
@@ -60,9 +60,9 @@ export const player = {
         'Animated: the chord sounding and the next, moving with the music. Summary: the song’s chords all at once, the one sounding marked.',
     },
   },
-  // The row of tools under the Player's bar (ADR 0102), as a screen reader names it.
+  // The row of tools under the Player's bar (ADR 0108), as a screen reader names it.
   tools: 'Tools',
-  // The tools row's Transpose (ADR 0104): the key the music is in, moved a semitone at a time.
+  // The tools row's Transpose (ADR 0105): the key the music is in, moved a semitone at a time.
   transpose: {
     name: 'Transpose',
     title: 'Transpose',
@@ -76,7 +76,7 @@ export const player = {
     semitones_other: '{{by}} semitones',
     reset: 'Reset',
   },
-  // The tools row's Simplify (ADR 0104, Chordify's): every chord its plain triad.
+  // The tools row's Simplify (ADR 0105, Chordify's): every chord its plain triad.
   simplify: {
     label: 'Simplify',
     about: 'Every chord as its plain major or minor triad',
@@ -173,7 +173,7 @@ export const player = {
   },
   /** Why the recording's tile is closed, beside How it plays' heading. */
   recordingOnlyIn: 'The recording plays only in {{key}}, its own key.',
-  /** Why a pattern or figure, or a view of the music (ADR 0102), is closed to the music. */
+  /** Why a pattern or figure, or a view of the music (ADR 0108), is closed to the music. */
   needs: {
     tune: 'Needs a melody staff',
     key: 'Needs a key',

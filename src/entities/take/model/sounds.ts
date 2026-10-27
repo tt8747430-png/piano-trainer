@@ -62,7 +62,7 @@ const struckSoft = (note: TakeNote, pedals: readonly PedalPress[]): boolean =>
   pedals.some((press) => press.pedal === 'soft' && press.down <= note.at && note.at < press.up)
 
 /**
- * A take heard as played (spec 2026-10-09 §3.4, §3.5): each key from its onset, as loud as the Touch
+ * A take heard as played: each key from its onset, as loud as the Touch
  * hears how it was struck (two thirds under the soft pedal), sounding while held, or on to the
  * sustain's up where it was down as the key was let go, or to the sostenuto's that caught it, and
  * never past the same key struck again. Seconds from the take's first downbeat.

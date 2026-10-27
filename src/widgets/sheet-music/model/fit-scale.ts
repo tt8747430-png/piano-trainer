@@ -4,7 +4,7 @@ import type { ScoreLayout } from '@/shared/ui/score'
 /** The room fingers take under and over the staff, in CSS px. */
 export const FINGERS = 36
 /**
- * How far the Player's staff may shrink and grow to fit its room (spec §2.8): on a phone on its side
+ * How far the Player's staff may shrink and grow to fit its room: on a phone on its side
  * its whole system stays in sight over the keys, small.
  */
 export const SHEET_SCALE = { min: 0.4, max: 1.6 } as const

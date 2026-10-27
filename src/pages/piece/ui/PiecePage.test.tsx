@@ -41,7 +41,7 @@ describe('Piece', () => {
     expect(screen.getByText('«Боже, спасибо» · No. 5 · p. 16')).toBeInTheDocument()
   })
 
-  it('says what the song is, and plays nothing: no chart or keys (ADR 0098)', async () => {
+  it('says what the song is, and plays nothing: no chart or keys (ADR 0108)', async () => {
     const { audio } = await renderApp('/songs/bz5')
     await screen.findByRole('heading', { level: 1, name: 'Still, my soul, be still' })
     expect(screen.getByText('72 BPM')).toBeInTheDocument()
@@ -88,7 +88,7 @@ describe('Piece', () => {
     expect(screen.queryByRole('list', { name: 'Progressions' })).not.toBeInTheDocument()
   })
 
-  it('puts its key, time and tempo on three cards, its second title under them (ADR 0100)', async () => {
+  it('puts its key, time and tempo on three cards, its second title under them (ADR 0111)', async () => {
     await renderApp('/songs/bz5')
     const facts = (await screen.findByText('Tempo')).closest('dl') as HTMLElement
     expect(
@@ -117,7 +117,7 @@ describe('Piece', () => {
     expect(await screen.findByRole('dialog', { name: 'C♯m chord' })).toBeInTheDocument()
   })
 
-  it('lists its sections, each a row to its page of lessons in its paint (ADR 0100)', async () => {
+  it('lists its sections, each a row to its page of lessons in its paint (ADR 0111)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs/bz5')
     const sections = await screen.findByRole('region', { name: 'Sections' })
@@ -135,7 +135,7 @@ describe('Piece', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/bz5/sections/2'))
   })
 
-  it('shows no learning card over its facts: each section says its lessons done (ADR 0100, amended)', async () => {
+  it('shows no learning card over its facts: each section says its lessons done (ADR 0111, amended)', async () => {
     const { progressStore } = await renderApp('/songs/bz5')
     await screen.findByRole('heading', { level: 1 })
     expect(screen.queryByRole('link', { name: /^Learn it step by step/ })).not.toBeInTheDocument()
@@ -160,7 +160,7 @@ describe('Piece', () => {
     ])
   })
 
-  it('shows a study of one section no section machinery: its chords once, as diagrams (ADR 0100)', async () => {
+  it('shows a study of one section no section machinery: its chords once, as diagrams (ADR 0111)', async () => {
     await renderApp('/practice/accompaniment/studies/ex3')
     await screen.findByRole('heading', { level: 1 })
     expect(screen.queryByRole('region', { name: 'Sections' })).not.toBeInTheDocument()
@@ -294,7 +294,7 @@ describe('Piece: the learner’s own music', () => {
     return storage
   }
 
-  it('offers no Check for a new song of no chord symbol, only its own ways (ADR 0094)', async () => {
+  it('offers no Check for a new song of no chord symbol, only its own ways (ADR 0114)', async () => {
     const user = userEvent.setup()
     const silent = { rh: 'r/3 | r/3 | r/3 | r/3', lh: 'r/3 | r/3 | r/3 | r/3' }
     const song = {
@@ -357,7 +357,7 @@ describe('Piece: the learner’s own music', () => {
     expect(screen.queryByText('Your version')).toBeNull()
   })
 
-  it('names a version by the learner’s own title in Songs, Search and on its page; Reset brings back the catalog’s (ADR 0094)', async () => {
+  it('names a version by the learner’s own title in Songs, Search and on its page; Reset brings back the catalog’s (ADR 0114)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs/folders/hymns', {
       storage: saved({ versions: { amazing: { ...MUSIC, title: 'My grace' } } }),

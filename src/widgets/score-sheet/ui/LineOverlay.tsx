@@ -38,7 +38,7 @@ import { StaffNames } from './StaffNames'
 /** How far round the caret's onset a press takes hold of its notes to drag them. */
 const GRIP = { before: 14, after: 22, over: 16 } as const
 /**
- * How much larger the sheet is drawn than laid out: a page canvas's zoom (ADR 0075), 1 elsewhere. A
+ * How much larger the sheet is drawn than laid out: a page canvas's zoom (ADR 0096), 1 elsewhere. A
  * point's place on the screen, divided by it, is its place on the line's layout.
  */
 function zoomOf(element: HTMLElement, box: DOMRect): number {
@@ -49,9 +49,9 @@ function zoomOf(element: HTMLElement, box: DOMRect): number {
 /**
  * Over a line's staff: its labels, the bars chosen, the caret, the playhead while Play plays here (ADR
  * 0096), and each bar as a button that puts the caret where it is clicked; a double click there
- * writes the note on the line or space clicked (ADR 0064). The notes at the caret are a grip: dragged up or down, they move by notes of the key. The
- * tempo mark, a section's name (ADR 0095), each clef, key and time signature and the staves' names are
- * buttons too, each opening what changes it there (`edit`, ADR 0094). A tap on the chord row opens the
+ * writes the note on the line or space clicked (ADR 0096). The notes at the caret are a grip: dragged up or down, they move by notes of the key. The
+ * tempo mark, a section's name (ADR 0097), each clef, key and time signature and the staves' names are
+ * buttons too, each opening what changes it there (`edit`, ADR 0114). A tap on the chord row opens the
  * chord-symbol field at the beat or the symbol tapped, one on a syllable the Lyrics field there
  * (`onField`); the field open on this line has its place drawn (`fieldAnchor`, ADR 0096).
  */
@@ -91,7 +91,7 @@ export function LineOverlay({
   row: number
   /** The labels' size. */
   labels: number
-  /** Each section's name, by section: printed at its first bar (ADR 0095). */
+  /** Each section's name, by section: printed at its first bar (ADR 0097). */
   headings: readonly string[]
   /** A note written where a staff was double-clicked: its tick, row and key. */
   onWrite?: ((tick: Tick, layer: Layer, key: Midi) => void) | undefined
@@ -103,7 +103,7 @@ export function LineOverlay({
   layer: Layer
   /** From the line's start, when the caret is on this line. */
   caret: Tick | null
-  /** One note of the chord at the caret chosen alone (ADR 0088): the fingering field stands over it. */
+  /** One note of the chord at the caret chosen alone (ADR 0096): the fingering field stands over it. */
   chordNote?: Midi | null
   /** Where Play is, on the piece's ticks, while it plays on this line (ADR 0096). */
   playhead: { readonly tick: Tick; readonly clock: () => Tick | null } | null
@@ -115,14 +115,14 @@ export function LineOverlay({
   onPlace: (tick: Tick, layer: Layer, extend: boolean, key?: Midi) => void
   /** A held finger dragged onto the bar starting at `tick`: what is chosen reaches it. */
   onReach: (tick: Tick) => void
-  /** A click on empty staff: what is chosen let go (ADR 0088). */
+  /** A click on empty staff: what is chosen let go (ADR 0096). */
   onDeselect: () => void
   /** Where a note may be written in a layer: a double click writes at the nearest. */
   placesOf: (layer: Layer) => readonly Tick[]
-  /** Where a click lands in a layer, on a note or a bar's start, never an empty step (ADR 0082). */
+  /** Where a click lands in a layer, on a note or a bar's start, never an empty step (ADR 0096). */
   tapsOf: (layer: Layer) => readonly Tick[]
   chordNames: boolean
-  /** What edits a thing printed, opened from its button (ADR 0094). */
+  /** What edits a thing printed, opened from its button (ADR 0114). */
   edit: EditPrinted
 }) {
   const { t } = useTranslation('editor')
@@ -173,7 +173,7 @@ export function LineOverlay({
     return { target, tick: tick ?? placed.start, y }
   }
   /**
-   * What a click (or a held finger) at a point of bar `index` chooses (ADR 0088), as the Player's
+   * What a click (or a held finger) at a point of bar `index` chooses (ADR 0096), as the Player's
    * does: the head under it (one note of a chord), the chord whose stem or column it is on, or the
    * empty place it is in (a rest, the room after the last note, as a line); on empty staff between
    * notes, nothing, what is chosen let go. A chord in the chord row, where a tap opens the
@@ -245,7 +245,7 @@ export function LineOverlay({
     const lines = staffOfLayer(layout.staves, point.target)
     if (!lines) return
     const clef = staffClefAt(music, index, lines.staff)
-    // The bar's own key, where its section changes key (ADR 0089): its signature's sharps and flats.
+    // The bar's own key, where its section changes key (ADR 0114): its signature's sharps and flats.
     const { midi } = noteAtStaffY(clef, point.y, lines, music.bars[index]?.key ?? music.key)
     onWrite(point.tick, point.target, midi)
   }
@@ -279,7 +279,7 @@ export function LineOverlay({
         <ScoreMark slot="notes-chosen" kind="band" box={chosen} />
       ) : null}
       {/* The caret first, so the labels and the notes stand over it; none while notes are chosen,
-          the range their mark (ADR 0088). */}
+          the range their mark (ADR 0096). */}
       {caret === null || selection ? null : (
         <EditorCaret layout={layout} layer={layer} tick={caret} chords={chordRow(layout, row)} />
       )}
@@ -354,7 +354,7 @@ export function LineOverlay({
             onDoubleClick={write(index)}
             {...chosenBy}
             // A pointer's target only (the arrows move the caret): no focus ring and no hover wash
-            // round the bar, which a touch screen leaves standing over empty staff (ADR 0082).
+            // round the bar, which a touch screen leaves standing over empty staff (ADR 0096).
             className="absolute bottom-0 z-20 cursor-text outline-none"
             style={{ left: measure.x, width: measure.width, top: -row }}
           />

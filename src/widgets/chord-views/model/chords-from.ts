@@ -11,7 +11,7 @@ export interface ChordsFrom {
 }
 
 /**
- * What the Diagrams view shows (ADR 0099, 0101): the chord sounding in a beat (as played; the later
+ * What the Diagrams view shows (ADR 0108): the chord sounding in a beat (as played; the later
  * where two start in it), and the next chord in played order, a change (a chord held again is no
  * next chord). Where a loop goes round, after its last chord comes the one sounding as it starts;
  * with none, the music ends.

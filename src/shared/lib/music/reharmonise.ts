@@ -6,7 +6,7 @@ import { plainRoot, type SpelledNote } from './note'
 import { tonesInKey } from './scale'
 import { availableTensions } from './tensions'
 
-/** The owner's table's groups (roadmap §10.3), with the triads a hymn's melody note takes first. */
+/** The owner's table's groups, with the triads a hymn's melody note takes first. */
 export const HOLDING_GROUPS = ['triads', 'major', 'minor', 'dominant'] as const
 export type HoldingGroup = (typeof HOLDING_GROUPS)[number]
 

@@ -27,10 +27,10 @@ type CaretPlace =
       readonly value: Duration | null
     })
   | (Place & { readonly kind: 'at' | 'held' | 'rest'; readonly what: string })
-  /** The chord row of a bar of no chord (ADR 0094). */
+  /** The chord row of a bar of no chord (ADR 0114). */
   | (Place & { readonly kind: 'noChord' })
 
-/** What the caret line says: the place, and the editing mode where it is not Replace (ADR 0092). */
+/** What the caret line says: the place, and the editing mode where it is not Replace (ADR 0114). */
 type CaretSaid = CaretPlace & { readonly mode?: Exclude<EditMode, 'replace'> }
 
 /** A beat counted from 1, a part of one as a decimal: 1, 2.5. */
@@ -66,7 +66,7 @@ function placeSaid(
     // The chord as the sheet prints it over the bar (`C♯m7`).
     return chord ? { kind: 'at', ...at, what: printedChord(chord) } : { kind: 'noChord', ...at }
   }
-  // One note of a chord chosen alone: that note (ADR 0088).
+  // One note of a chord chosen alone: that note (ADR 0096).
   const all = notesAt(draft, layer, caret)
   const one = all.filter((n) => n.midi === chordNote)
   const notes = one.length > 0 ? one : all

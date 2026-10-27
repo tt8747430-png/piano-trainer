@@ -6,7 +6,7 @@ import { signTargets, type EditPrinted, type Printed } from '../model/printed'
 import { useSheetLayerName } from '../model/use-layer-name'
 
 /**
- * A button over each clef, key and time signature printed on a line (ADR 0094), as Flat's: a tap on
+ * A button over each clef, key and time signature printed on a line (ADR 0114), as Flat's: a tap on
  * one opens what changes it there (`edit`); a key printing no sharps or flats has its place after
  * the line's clefs. A pointer's target, as a bar's: the keyboard has the palette's Clef, Key
  * signature and Time signature.

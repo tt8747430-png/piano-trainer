@@ -10,7 +10,7 @@ export interface MelodyHas {
   readonly recording: boolean
   /** Whether it is played in its own key: its recording plays in no other. */
   readonly inOwnKey: boolean
-  /** Its staves alone in sight: the melody is what its sheet shows, always heard (ADR 0083). */
+  /** Its staves alone in sight: the melody is what its sheet shows, always heard (ADR 0114). */
   readonly leadSheet: boolean
 }
 

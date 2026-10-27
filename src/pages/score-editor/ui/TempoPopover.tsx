@@ -92,7 +92,7 @@ function TempoRuler({
 }
 
 /**
- * The tempo mark's picker (ADR 0094, 0114, after notation apps' tempo dials): the mark large in an
+ * The tempo mark's picker (ADR 0114, after notation apps' tempo dials): the mark large in an
  * accent circle, its tempo word under it; held and swiped up or down (or dragged with the mouse, or
  * the wheel turned) it changes a beat a minute every few px, the screen filled with its ruler while it
  * moves; with the focus a spin button, ↑ ↓ a beat a minute, Page Up and Page Down ten, Home and End its
@@ -246,7 +246,7 @@ function TempoPicker({ onDone }: { onDone: () => void }) {
 }
 
 /**
- * The tempo mark's picker where the mark is printed (ADR 0094, 0114): the song's own tempo and the
+ * The tempo mark's picker where the mark is printed (ADR 0114): the song's own tempo and the
  * note it counts, saved with its music; how to slide it behind the ⓘ by its title.
  */
 export function TempoPopover({ trigger }: { trigger: ReactElement }) {

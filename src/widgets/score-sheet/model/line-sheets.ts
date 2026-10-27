@@ -15,7 +15,7 @@ export interface LineSheet {
 
 /**
  * The music as it is engraved on the sheet: its tempo marks left out, as the line's labels write
- * them in the row over the staff (ADR 0074), so a tempo takes no row of its own over the system.
+ * them in the row over the staff (ADR 0087), so a tempo takes no row of its own over the system.
  */
 export const untimed = (music: TimedMusic): TimedMusic => ({
   ...music,

@@ -14,7 +14,7 @@ const PLACES = {
 } as const
 
 /**
- * How the music is shown (ADR 0064, 0094, 0102, Soundslice's view settings and Chordify's): one
+ * How the music is shown (ADR 0096, 0114, 0108, Soundslice's view settings and Chordify's): one
  * menu, the Player's and the score editor's, remembered for every piece and opened by each screen's
  * own `trigger`, the Player's tools row's View or the editor's eye. Its parts are the screen's: the
  * Player's views as tiles, the view shown's own (`ViewSection`) and what every view has, each group
@@ -31,7 +31,7 @@ export function ScoreViewMenu({
   trigger: ReactElement
   /** Where it opens from: the Player's tools row, or the editor's bar. */
   from: keyof typeof PLACES
-  /** Open as the screen opens: a piece's Player, asked each time (ADR 0102). */
+  /** Open as the screen opens: a piece's Player, asked each time (ADR 0108). */
   defaultOpen?: boolean
   children: ReactNode
 }) {

@@ -60,7 +60,7 @@ export const LIBRARY_BY_STYLE: readonly {
   progressions: PROGRESSION_LIBRARY.filter((each) => each.style === style),
 }))
 
-/** A key's common progressions (roadmap §3.8), the ones a scale's page offers, each in the key's mode. */
+/** A key's common progressions, the ones a scale's page offers, each in the key's mode. */
 export const COMMON_PROGRESSIONS: readonly LibraryProgression[] = (
   ['complete-cadence', 'doo-wop', 'jazz-cadence', 'axis'] as const
 ).map(listed)

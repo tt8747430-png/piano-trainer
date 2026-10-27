@@ -66,7 +66,7 @@ function place(voice: BarChord[], chord: BarChord) {
 }
 
 /**
- * A staff's chords in a bar as one or two voices (spec §2.4 step 3): each chord goes in the first
+ * A staff's chords in a bar as one or two voices: each chord goes in the first
  * voice free at its onset, or a second, the higher voice first. With two, the higher has its stems up.
  */
 export function separateVoices(chords: readonly BarChord[]): VoiceChords[] {

@@ -26,7 +26,7 @@ function SectionBack({ piece }: { piece: Pick<Piece, 'id' | 'kind'> }) {
 }
 
 /**
- * A section's page (ADR 0100, spec §3.2): "Learn the Verse", its card (the song, the section's chords,
+ * A section's page (ADR 0111): "Learn the Verse", its card (the song, the section's chords,
  * its lessons done), then its lessons in order, each looping its bars in the Player; Practise in the
  * bar loops the whole section.
  */
@@ -91,7 +91,7 @@ export function SectionPage() {
     )
   }
   return (
-    // Its chords drawn in the inversions chosen for them in this piece (ADR 0101).
+    // Its chords drawn in the inversions chosen for them in this piece (ADR 0108).
     <PieceInversions pieceId={piece.id}>
       <SectionView key={`${piece.id} ${index}`} piece={piece} section={index} />
     </PieceInversions>

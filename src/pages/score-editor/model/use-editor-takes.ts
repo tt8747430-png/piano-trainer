@@ -80,7 +80,7 @@ export interface EditorTakes {
   readonly remove: (id: TakeId) => void
 }
 
-/** The draft's bars on the meter's grid, each in its section's (ADR 0095), as the click follows them. */
+/** The draft's bars on the meter's grid, each in its section's (ADR 0097), as the click follows them. */
 const gridBars = (draft: Draft): GridBar[] =>
   barsOf(draft).map(({ start, bar, section }) => {
     const meter = draft.sections[section]?.heading.meter

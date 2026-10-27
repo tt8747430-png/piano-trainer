@@ -8,7 +8,7 @@ interface EntryTitles {
 }
 
 /**
- * A title in the learner's language over the printed one, where it has one (spec §8): English
+ * A title in the learner's language over the printed one, where it has one: English
  * shows a Russian song's English title, Russian a hymn's Russian; otherwise the printed title alone.
  * A study's title is a lesson's heading, its translation all of it: no printed one under it.
  */

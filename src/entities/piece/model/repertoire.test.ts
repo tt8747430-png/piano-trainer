@@ -49,7 +49,7 @@ describe('repertoire', () => {
     expect(pieces.original('bz1')).toBe(entryById('bz1'))
   })
 
-  it('names a version by the learner’s own title in every language, the catalog’s without one (ADR 0094)', () => {
+  it('names a version by the learner’s own title in every language, the catalog’s without one (ADR 0114)', () => {
     const pieces = repertoire({ versions: { bz1: { ...VERSION, title: 'Thanks' } }, songs: [] })
     const version = pieces.piece('bz1')
     if (!version) throw new Error('the version')

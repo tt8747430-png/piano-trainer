@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 
 /**
- * The beat shown (ADR 0113): a square for each beat of the bar, the first larger, the one sounding
+ * The beat shown (ADR 0052): a square for each beat of the bar, the first larger, the one sounding
  * filled in honey. The squares share the row's width, so six fit a 320px phone.
  */
 export function BeatSquares({ beats, sounding }: { beats: number; sounding: number | null }) {

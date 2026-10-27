@@ -125,7 +125,7 @@ export function performanceMidi(
   const tempo = checkedTempo(options.tempo)
   // A compound meter's beat, its click, is a dotted quarter.
   const click = isCompound(performance.meter) ? 1.5 : 1
-  // The tempo and the pedal as every part marks them, whichever the learner hears (ADR 0068).
+  // The tempo and the pedal as every part marks them, whichever the learner hears (ADR 0097).
   const marked = performance.timing ?? performance.notes
   const steps = tempoSteps(marked)
   // The silence before bar 1, in the file's ticks at the music's first tempo.

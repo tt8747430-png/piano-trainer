@@ -9,7 +9,7 @@ import { exportMidi, type PlayedMusic } from '../model/export-midi'
 import { MoreActions } from './more-actions'
 
 /**
- * The bar's More (ADR 0099), after the Setup, in the song page's More's look: a piece's place in the
+ * The bar's More (ADR 0108), after the Setup, in the song page's More's look: a piece's place in the
  * library (`MoreActions`, ADR 0106: Add to favourites, Move to…, Archive), the music's own
  * (`actions`: a piece's Song information, Sections and Share, ADR 0107), Print (the music as the
  * View shows it, ADR 0107) and Export to MIDI: the music as the Player plays it now, at the tempo

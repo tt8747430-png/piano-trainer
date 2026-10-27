@@ -17,7 +17,7 @@ import {
 } from '@/widgets/chord-finder'
 import type { ChordFinderView } from './chord-finder-view'
 
-/** The Chord finder's state (ADR 0054): the keys shown, where they come from, and what they make. */
+/** The Chord finder's state (ADR 0052): the keys shown, where they come from, and what they make. */
 interface ChordFinder {
   /** The keys the chord shown is made of, lowest first. */
   readonly keys: readonly Midi[]

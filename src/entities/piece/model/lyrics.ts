@@ -3,7 +3,7 @@ import type { NoteLyrics, Syllable } from '@/shared/lib/music'
 import { ContentError } from './content-error'
 import type { ChartPiece } from './types'
 
-/** A verse aligned to the tune's notes in order (ADR 0093): null under a note that sings nothing. */
+/** A verse aligned to the tune's notes in order (ADR 0097): null under a note that sings nothing. */
 export type Verse = readonly (Syllable | null)[]
 
 /** A syllable's text, then `-` where its word goes on, then one `_` for each note it is held over. */
@@ -105,7 +105,7 @@ const handTune = (chart: Chart): HandNote[][] =>
 export const tuneLength = (chart: Chart, staff: readonly StaffNote[] | undefined): number =>
   staff ? staff.length : handTune(chart).reduce((sum, bar) => sum + bar.length, 0)
 
-/** A single staff's notes with its verses on them, in order (ADR 0093, 0097). */
+/** A single staff's notes with its verses on them, in order (ADR 0097). */
 export const withStaffLyrics = (
   notes: readonly StaffNote[],
   verses: readonly Verse[],

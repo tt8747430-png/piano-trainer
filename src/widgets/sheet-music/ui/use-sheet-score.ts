@@ -6,9 +6,9 @@ import { playedMusic } from '../model/played-music'
 
 /**
  * A Performance written as the sheet shows it, on the screen and in print alike: its score with the
- * words unless the view hides them (ADR 0093) and the piano's staves but on a lead sheet (ADR 0083),
- * its tempo marks taken out to be said in the labels' row (ADR 0074), the staves the view keeps (never
- * none, ADR 0097) and their names as printed at the first line's head (ADR 0094).
+ * words unless the view hides them (ADR 0097) and the piano's staves but on a lead sheet (ADR 0114),
+ * its tempo marks taken out to be said in the labels' row (ADR 0087), the staves the view keeps (never
+ * none, ADR 0097) and their names as printed at the first line's head (ADR 0114).
  */
 export function useSheetScore(
   performance: Performance,

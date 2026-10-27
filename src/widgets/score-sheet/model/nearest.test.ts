@@ -7,7 +7,7 @@ describe('nearestPlace', () => {
   })
 })
 
-describe('roomAt (ADR 0088)', () => {
+describe('roomAt (ADR 0096)', () => {
   // Notes at 0 and 24, then the room after them from 48, in a bar to x 200; a tick 2 px each.
   const places = [
     { tick: 0, empty: false },

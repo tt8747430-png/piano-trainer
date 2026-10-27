@@ -5,8 +5,8 @@ import { ActionMenu } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 
 /**
- * A section's menu, opened from its name printed at its first bar (ADR 0095): name it as a song's
- * part (Intro to Ending), or join it to the section before. The song's form, nothing else (ADR 0091);
+ * A section's menu, opened from its name printed at its first bar (ADR 0097): name it as a song's
+ * part (Intro to Ending), or join it to the section before. The song's form, nothing else (ADR 0114);
  * the palette's Bar starts a new section.
  */
 export function SectionMenu({

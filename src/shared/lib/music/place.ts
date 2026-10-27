@@ -62,7 +62,7 @@ function inverted(tones: readonly Tone[], key: Midi, inversion: number): PlacedT
     .sort((a, b) => a.midi - b.midi)
 }
 
-/** From this many notes a chord takes two hands: one hand cannot hold its stack (ADR 0035). */
+/** From this many notes a chord takes two hands: one hand cannot hold its stack (ADR 0046). */
 export const TWO_HANDS_FROM = 5
 
 /** The most keys the right hand holds of a chord in two hands. */
@@ -72,7 +72,7 @@ const PERFECT_FIFTH = 7
 const FROM_SEVENTH = 3
 
 /**
- * A chord of five notes or more shared between the hands (ADR 0035): the left hand takes the root
+ * A chord of five notes or more shared between the hands (ADR 0046): the left hand takes the root
  * and, from six notes, the perfect 5th over it; where the right hand would still hold more than five
  * keys, the 7th too (its shell), then an altered 5th. The right hand takes the rest, every tone once.
  */
@@ -111,7 +111,7 @@ export const closeFrom = (tones: readonly Tone[], start: Tone, startKey: Midi): 
 
 /**
  * The inversions a built chord is shown in. Up to four notes: root position and one per tone after
- * the root. From five, in two hands (ADR 0035), its root stays in the bass: root position, the right
+ * the root. From five, in two hands (ADR 0046), its root stays in the bass: root position, the right
  * hand from its lowest tone (the 3rd), and the 3rd inversion where that hand has a 7th or 6th to
  * start from instead (3-5-7-9 and 7-9-3-5).
  */
@@ -147,7 +147,7 @@ function twoHands(tones: readonly Tone[], key: Midi, inversion: number): PlacedC
  * A chord's tones, from its root up, as the explorers place them. In one hand: the whole stack from
  * the root at or above middle C in an inversion (a chord spelled out, whatever its size). In both
  * hands: up to four notes, that hand over the root an octave below; from five notes, shared between
- * the hands as a pianist holds it (`sharedOut`, ADR 0035).
+ * the hands as a pianist holds it (`sharedOut`, ADR 0046).
  */
 export function placeChord(
   tones: readonly Tone[],

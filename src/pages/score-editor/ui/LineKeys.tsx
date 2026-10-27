@@ -6,7 +6,7 @@ import { LineIcon } from './palette-icons'
 import { usePaletteReason } from './palette-reason'
 
 /**
- * A line's key (ADR 0080): drawn in one go over the notes chosen, else from the note at the caret to
+ * A line's key (ADR 0114): drawn in one go over the notes chosen, else from the note at the caret to
  * its bar's end; pressed where it is drawn there already (tapped again, taken away); greyed where no
  * note starts.
  */

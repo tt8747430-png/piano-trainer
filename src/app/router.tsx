@@ -101,9 +101,9 @@ function notFoundIn(way: NotFoundWay) {
 }
 
 /**
- * What every route is handed: the screens' remembered views (ADR 0022), the learner's patterns, which
- * say whether a pattern's page is there (ADR 0026), the learner's pieces, which say whether a piece,
- * its page or its editor is (ADR 0027), their takes, which say whether a take's page is (ADR 0034),
+ * What every route is handed: the screens' remembered views (ADR 0038), the learner's patterns, which
+ * say whether a pattern's page is there (ADR 0047), the learner's pieces, which say whether a piece,
+ * its page or its editor is (ADR 0097), their takes, which say whether a take's page is (ADR 0034),
  * and their library, which says whether a folder's page is (ADR 0106).
  */
 export interface RouterContext {
@@ -138,13 +138,13 @@ const settingsRoute = createRoute({
   path: '/settings',
   component: lazyRouteComponent(settingsScreens, 'SettingsPage'),
 })
-// How to use (ADR 0113): a short guide, reached from Settings' Help.
+// How to use (ADR 0052): a short guide, reached from Settings' Help.
 const howToUseRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/how-to-use',
   component: lazyRouteComponent(settingsScreens, 'HowToUsePage'),
 })
-// Search: every named thing the app has, found by name (ADR 0044).
+// Search: every named thing the app has, found by name (ADR 0052).
 const searchRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/search',
@@ -194,7 +194,7 @@ const archiveRoute = createRoute({
   path: '/songs/archive',
   component: lazyRouteComponent(songsScreens, 'ArchivePage'),
 })
-// A section of a song, learned step by step (ADR 0100); a study's is on its shelf, below.
+// A section of a song, learned step by step (ADR 0111); a study's is on its shelf, below.
 const sectionRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/songs/$pieceId/sections/$section',
@@ -207,7 +207,7 @@ const sectionRoute = createRoute({
   component: lazyRouteComponent(songsScreens, 'SectionPage'),
 })
 
-// Practice (ADR 0044): its list, then its training, Exercises and Quiz with its trainers.
+// Practice (ADR 0052): its list, then its training, Exercises and Quiz with its trainers.
 const practiceRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice',
@@ -300,7 +300,7 @@ const progressionsRoute = createRoute({
   component: lazyRouteComponent(explorerScreens, 'ProgressionsPage'),
 })
 
-// The Chord finder (ADR 0054): a tool of its own, any chord played or tapped named, spelled and written.
+// The Chord finder (ADR 0052): a tool of its own, any chord played or tapped named, spelled and written.
 const chordFinderRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/chord-finder',
@@ -309,15 +309,15 @@ const chordFinderRoute = createRoute({
   component: lazyRouteComponent(toolScreens, 'ChordFinderPage'),
 })
 
-// The Metronome (ADR 0113): a steady beat at any tempo, its choices saved in pt-settings.
+// The Metronome (ADR 0052): a steady beat at any tempo, its choices saved in pt-settings.
 const metronomeRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/metronome',
   component: lazyRouteComponent(toolScreens, 'MetronomePage'),
 })
 
-// Accompaniment: the patterns and their pieces, a page for each source (ADR 0033). A pattern is
-// explained, starred, hidden on its own page; the learner's own are made and edited (ADR 0026).
+// Accompaniment: the patterns and their pieces, a page for each source (ADR 0047). A pattern is
+// explained, starred, hidden on its own page; the learner's own are made and edited (ADR 0047).
 const accompanimentRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/practice/accompaniment',
@@ -593,7 +593,7 @@ declare module '@tanstack/react-router' {
   interface StaticDataRouteOption {
     /** A screen on its own (the Player, the Check), which nothing else is laid over. */
     fullScreen?: true
-    /** A screen that comes back the learner's way (ADR 0022): its view saved in `pt-views`. */
+    /** A screen that comes back the learner's way (ADR 0038): its view saved in `pt-views`. */
     remembered?: true
   }
 }

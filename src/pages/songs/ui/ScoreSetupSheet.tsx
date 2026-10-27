@@ -5,7 +5,7 @@ import { InfoTip, Segmented, Sheet, SheetContent } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
- * The staves a new song's score starts with (ADR 0072, 0091, 0097), its own sheet over New song, as
+ * The staves a new song's score starts with (ADR 0114, 0097), its own sheet over New song, as
  * a notation app's new score asks: the piano, a staff over it, or a staff alone (a lead sheet). More
  * are added, named and taken away on the score. What each holds is the ⓘ beside the choice's name
  * (ADR 0096).

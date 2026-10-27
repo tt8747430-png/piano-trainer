@@ -34,7 +34,7 @@ export function addStaff(draft: Draft, place: number): Draft {
 
 /**
  * The single staff at `place` taken away with its notes (ADR 0097): never a lead sheet's last, the
- * only staff in sight (ADR 0083). The words go with the notes they are on, the top single staff
+ * only staff in sight (ADR 0114). The words go with the notes they are on, the top single staff
  * (else the upper staff) left to take them next; another staff's keep theirs.
  */
 export function removeStaff(draft: Draft, place: number): Draft {

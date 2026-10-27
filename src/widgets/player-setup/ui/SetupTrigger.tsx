@@ -5,7 +5,7 @@ import { Button } from '@/shared/ui/primitives/button'
 
 /**
  * The Setup's button in the Player's bar, a toolbar's (ADR 0115): its sliders at every size, named
- * by its tooltip and for a screen reader (ADR 0081, 0094).
+ * by its tooltip and for a screen reader (ADR 0115, 0114).
  */
 export function SetupTrigger() {
   const { t } = useTranslation('player')

@@ -12,7 +12,7 @@ import type {
 import { pitchText } from './music'
 import { readPitch } from './note-text'
 
-/** Each mark's word in a song's text (docs/CONTENT.md, ADR 0063). */
+/** Each mark's word in a song's text (docs/CONTENT.md, ADR 0097). */
 const ARTICULATION_WORDS: Readonly<Record<Articulation, string>> = {
   accent: 'acc',
   staccato: 'stacc',

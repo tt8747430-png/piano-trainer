@@ -25,7 +25,7 @@ export const stepOf = ({ value, draft }: EditorState): Tick => ticksOf(value, dr
 export const placesIn = (state: EditorState, layer: Layer): Tick[] =>
   caretPlaces(state.draft, layer, stepOf(state))
 
-/** Where a click on the sheet lands in a layer: a note, or a bar's start (ADR 0082). */
+/** Where a click on the sheet lands in a layer: a note, or a bar's start (ADR 0096). */
 export const tapsIn = (state: EditorState, layer: Layer): Tick[] => tapPlaces(state.draft, layer)
 
 /** The span the notes chosen take, from the earlier's start to the later's end. */
@@ -35,7 +35,7 @@ export const selectionSpan = ({ anchor, head }: Selection): TickSpan => ({
 })
 
 /**
- * The notes chosen once the caret goes to `next` in `layer` with Shift (ADR 0088), as a notation app
+ * The notes chosen once the caret goes to `next` in `layer` with Shift (ADR 0096), as a notation app
  * extends a range: from what the choice began on (the caret's note, chord or empty place) to what it
  * reaches, both inside.
  */
@@ -46,7 +46,7 @@ const extendedTo = (state: EditorState, next: Tick, layer: Layer): Selection => 
 
 /**
  * The caret put at a tick in a layer (a click on the sheet, else a move), Shift choosing notes; a key
- * names one note of the chord there, chosen alone (ADR 0088).
+ * names one note of the chord there, chosen alone (ADR 0096).
  */
 export function placeCaret(
   state: EditorState,
@@ -72,7 +72,7 @@ function placesOfBar(draft: Draft, layer: Layer, index: number): Tick[] {
 }
 
 /**
- * Where Shift with a bar's move takes what is chosen (ADR 0088): on to its bar's last note, else the
+ * Where Shift with a bar's move takes what is chosen (ADR 0096): on to its bar's last note, else the
  * next bar's; back to its bar's first, else the bar before's.
  */
 function barReach(state: EditorState, direction: -1 | 1): Tick {
@@ -105,7 +105,7 @@ function lineStart(bars: ReturnType<typeof barsOf>, caret: Tick, direction: -1 |
 
 /**
  * The caret moved a step, a bar, a line or to an end; with Shift, what is chosen reaches on by a
- * note, to a bar's end or start, or to an end of the piece (ADR 0088).
+ * note, to a bar's end or start, or to an end of the piece (ADR 0096).
  */
 export function moveCaret(
   state: EditorState,

@@ -59,7 +59,7 @@ export interface SongPlace {
 }
 
 /**
- * What the archive holds (ADR 0106, Mindscape's ADR 0003): a song, or a folder with its songs and
+ * What the archive holds (ADR 0106, Mindscape's ADR 0038): a song, or a folder with its songs and
  * every folder under it (`subfolders`, each saying the one it stands in); the folder's `parent` and
  * `index` say where it stood among the folders there.
  */

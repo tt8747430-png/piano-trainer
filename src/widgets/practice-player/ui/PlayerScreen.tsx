@@ -5,7 +5,7 @@ import { ChromeShownContext } from '../model/chrome-shown'
 import { dockTap } from '../model/tap-on-screen'
 
 /**
- * The score's screen, the Player's and the score editor's one frame (ADR 0110): the `player-screen`
+ * The score's screen, the Player's and the score editor's one frame (ADR 0115): the `player-screen`
  * grid with the same gaps and padding, so the bar, the tools row, the sheet, the transport and the
  * keys stand in the same places in both modes.
  */
@@ -17,11 +17,11 @@ const onSheet = (event: SyntheticEvent) =>
   event.target instanceof Element && event.target.closest('[data-area="sheet"]') !== null
 
 /**
- * The Player's screen: its areas (`PlayerArea`) placed by the `player-screen` utility (spec §2.8),
+ * The Player's screen: its areas (`PlayerArea`) placed by the `player-screen` utility,
  * the keys at the foot or under the tools row as the keyboard settings dock them. The floating
  * transport steps aside as the music is read (dragged, scrolled, pinched: `useHiddenWhileReading`);
  * a tap on the screen's free room shows or hides it, a tap on a note brings it back (`dockTap`).
- * While the bar and the tools row step aside (`aside`: Diagrams playing, ADR 0102, as Chordify's
+ * While the bar and the tools row step aside (`aside`: Diagrams playing, ADR 0108, as Chordify's
  * do), a tap on the free room brings them back with the transport, and the next sends all of them
  * aside; once it is over (the music stopped), they are all back.
  */

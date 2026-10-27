@@ -209,7 +209,7 @@ describe('the practice machine', () => {
       })
     })
 
-    it('counts a pass played to its end, and none stepped through while stopped (ADR 0100)', () => {
+    it('counts a pass played to its end, and none stepped through while stopped (ADR 0111)', () => {
       const played = playOn(waiting('rh'), 4)
       expect(played).toMatchObject({ outcome: 'finished', passes: 1 })
       expect(run(played, { type: 'play' }).passes).toBe(1)

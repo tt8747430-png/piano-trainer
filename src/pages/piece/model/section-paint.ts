@@ -2,7 +2,7 @@ import type { Paint } from '@/shared/ui'
 
 /**
  * The words a learner names a song's parts with, in either language, by the paint each part's tile
- * wears (spec §3.4): a word's start, so a verse's plural or a Russian case still reads.
+ * wears: a word's start, so a verse's plural or a Russian case still reads.
  */
 const PARTS: readonly (readonly [Paint, readonly string[]])[] = [
   ['sand', ['intro', 'outro', 'ending', 'coda', 'вступлени', 'окончани', 'концовк', 'кода']],
@@ -17,7 +17,7 @@ const WORDS = PARTS.map(
 )
 
 /**
- * A section's paint by its name (spec §3.4): an intro, outro or ending sand, a verse sky, a chorus or
+ * A section's paint by its name: an intro, outro or ending sand, a verse sky, a chorus or
  * refrain grass, a bridge lilac, anything else (an instrumental, an interlude, a hymn's part) yellow.
  * The part its name says first wins (`Verse 4 and ending` is a verse), so two sections of one kind
  * wear the same paint in either language.

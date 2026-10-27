@@ -28,7 +28,7 @@ const SONG = {
 }
 /** The song's tune's staff with nothing on it yet: a rest in each bar. */
 const EMPTY_TUNE = 'r/4 | r/4 | r/4 | r/4'
-/** Both hands written, silent: the song's bars are not the pattern's (ADR 0091). */
+/** Both hands written, silent: the song's bars are not the pattern's (ADR 0114). */
 const SILENT_HANDS = { rh: EMPTY_TUNE, lh: EMPTY_TUNE }
 const withSong = (music: object = {}) => {
   const storage = createMemoryStorage()
@@ -77,7 +77,7 @@ async function openCategory(user: ReturnType<typeof userEvent.setup>, category: 
   return screen.findByRole('region', { name: category })
 }
 
-/** The Notes section's editing modes (ADR 0092). */
+/** The Notes section's editing modes (ADR 0114). */
 const modesOf = (notes: HTMLElement) =>
   within(notes).getByRole('radiogroup', { name: 'Editing mode' })
 
@@ -134,7 +134,7 @@ describe('the score editor', () => {
     expect(within(palette).getByRole('group', { name: 'Note value' })).toBeInTheDocument()
   })
 
-  it('prints the title at the sheet’s head, a click turning it into a field in its place (ADR 0094)', async () => {
+  it('prints the title at the sheet’s head, a click turning it into a field in its place (ADR 0114)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     const sheet = await screen.findByRole('region', { name: 'Score' })
@@ -165,7 +165,7 @@ describe('the score editor', () => {
     )
   })
 
-  it('opens each staff’s menu from its name: a staff renamed, added and taken away, the piano hidden and shown (ADR 0094, 0097)', async () => {
+  it('opens each staff’s menu from its name: a staff renamed, added and taken away, the piano hidden and shown (ADR 0114, 0097)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', {
       storage: withSong({ staves: [{ notes: 'B4/4 | r/4 | r/4 | r/4' }], hands: SILENT_HANDS }),
@@ -210,7 +210,7 @@ describe('the score editor', () => {
     await waitFor(() => expect(staves()).toEqual([{ notes: 'r/4' }]))
   })
 
-  it('opens a new song on empty bars, nothing written in either staff, as a new score (ADR 0091)', async () => {
+  it('opens a new song on empty bars, nothing written in either staff, as a new score (ADR 0114)', async () => {
     const user = userEvent.setup()
     const made = chartStart({ tonic: note('G'), minor: false }, '4/4')
     await renderApp('/edit/my-1', { storage: withSong(made) })
@@ -278,7 +278,7 @@ describe('the score editor', () => {
     expect(await within(palette).findByRole('toolbar', { name: 'Every tool' })).toBeInTheDocument()
   })
 
-  it('opens on an empty tune’s staff the song was given, and keeps it (ADR 0072)', async () => {
+  it('opens on an empty tune’s staff the song was given, and keeps it (ADR 0114)', async () => {
     const user = userEvent.setup({ delay: 120 })
     const { piecesStore, settingsStore } = await renderApp('/edit/my-1', {
       storage: withSong({ staves: [{ notes: EMPTY_TUNE }] }),
@@ -389,7 +389,7 @@ describe('the score editor', () => {
     expect(await screen.findByRole('link', { name: 'Go to Songs' })).toBeInTheDocument()
   })
 
-  it('sets the tempo mark on its dial: stepped, typed, in another note, on ✓ (ADR 0094, 0114)', async () => {
+  it('sets the tempo mark on its dial: stepped, typed, in another note, on ✓ (ADR 0114)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(
@@ -431,7 +431,7 @@ describe('the score editor', () => {
     expect(await screen.findByRole('button', { name: 'Tempo: \u{1D160} = 82' })).toBeInTheDocument()
   })
 
-  it('changes the song’s key at its first key signature, a later section’s from its own (ADR 0094)', async () => {
+  it('changes the song’s key at its first key signature, a later section’s from its own (ADR 0114)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', {
       storage: withSong({
@@ -482,7 +482,7 @@ describe('the score editor', () => {
     )
   })
 
-  it('changes key from the caret’s section on in the palette, the song’s own in its first (ADR 0089)', async () => {
+  it('changes key from the caret’s section on in the palette, the song’s own in its first (ADR 0114)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await screen.findByRole('status')
@@ -517,7 +517,7 @@ describe('the score editor', () => {
     )
   })
 
-  it('changes time from the caret’s section on in the palette and where it is printed, the song’s in its first (ADR 0095)', async () => {
+  it('changes time from the caret’s section on in the palette and where it is printed, the song’s in its first (ADR 0097)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', {
       storage: withSong({
@@ -709,7 +709,7 @@ describe('the score editor', () => {
       return screen.findByRole('dialog', { name: 'Time signature' })
     }
     const picker = await openPicker()
-    // At the song's first bar, the whole song's (ADR 0095).
+    // At the song's first bar, the whole song's (ADR 0097).
     expect(within(picker).getByText('The whole song')).toBeInTheDocument()
     expect(within(picker).getByRole('spinbutton', { name: 'Beat type' })).toHaveAttribute(
       'aria-valuetext',
@@ -742,7 +742,7 @@ describe('the score editor', () => {
     )
   })
 
-  it('changes a staff’s clef from its bar on, from its clef printed there (ADR 0094)', async () => {
+  it('changes a staff’s clef from its bar on, from its clef printed there (ADR 0114)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', {
       storage: withSong({ hands: SILENT_HANDS }),
@@ -814,7 +814,7 @@ describe('the score editor', () => {
     ).toEqual(['Intro', 'Chorus', 'Bridge', 'Ending'])
   })
 
-  it('prints a section’s name in the labels’ row as the Player does, its menu opened there (ADR 0095)', async () => {
+  it('prints a section’s name in the labels’ row as the Player does, its menu opened there (ADR 0097)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', {
       storage: withSong({
@@ -926,7 +926,7 @@ describe('the score editor', () => {
     expect(screen.getByRole('textbox', { name: 'Chord symbol' })).toHaveFocus()
   })
 
-  it('types a chord into a bar of no chord, at its start, as a new song’s bars are (ADR 0094)', async () => {
+  it('types a chord into a bar of no chord, at its start, as a new song’s bars are (ADR 0114)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', {
       storage: withSong(chartStart({ tonic: note('G'), minor: false }, '4/4')),
@@ -1030,7 +1030,7 @@ describe('the score editor', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Bar 1, beat 4 · F4 half')
   })
 
-  it('cycles the editing modes with I, the caret line naming the mode; Insert pushes the later notes right (ADR 0092)', async () => {
+  it('cycles the editing modes with I, the caret line naming the mode; Insert pushes the later notes right (ADR 0114)', async () => {
     const user = userEvent.setup({ delay: 120 })
     const { piecesStore, settingsStore } = await renderApp('/edit/my-1', {
       storage: withSong({ staves: [{ notes: EMPTY_TUNE }] }),
@@ -1087,7 +1087,7 @@ describe('the score editor', () => {
     expect(screen.getByRole('button', { name: 'Hide the keys' })).toBeInTheDocument()
   })
 
-  it('offers no side for its palette beside the sheet, nor a switch for it, in the View (ADR 0094)', async () => {
+  it('offers no side for its palette beside the sheet, nor a switch for it, in the View (ADR 0114)', async () => {
     const user = userEvent.setup()
     sizedAs(LANDSCAPE_PHONE)
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
@@ -1109,7 +1109,7 @@ describe('the score editor', () => {
     ['a phone held upright', 'none'],
     ['a phone on its side', LANDSCAPE_PHONE],
   ])(
-    'keeps the Player’s bar and tools row on %s: the edits, the caret’s place for a screen reader alone, the title on the sheet (ADR 0094, 0110)',
+    'keeps the Player’s bar and tools row on %s: the edits, the caret’s place for a screen reader alone, the title on the sheet (ADR 0114, 0115)',
     async (_size, query) => {
       sizedAs(query)
       await renderApp('/edit/my-1', { storage: withSong() })
@@ -1143,7 +1143,7 @@ describe('the score editor', () => {
     ['a phone on its side', LANDSCAPE_PHONE],
     ['a laptop', '(min-width: 64rem)'],
   ])(
-    'shows each control of its bar and dock as its icon on %s, named by its label and a tooltip (ADR 0094, 0110)',
+    'shows each control of its bar and dock as its icon on %s, named by its label and a tooltip (ADR 0114, 0115)',
     async (_size, query) => {
       sizedAs(query)
       await renderApp('/edit/my-1', { storage: withSong() })
@@ -1175,7 +1175,7 @@ describe('the score editor', () => {
     },
   )
 
-  it('keeps the Player’s transport, its own three after ‹ Play ›: Record, as Dorico’s transport, the takes and the recording settings (ADR 0094, 0110)', async () => {
+  it('keeps the Player’s transport, its own three after ‹ Play ›: Record, as Dorico’s transport, the takes and the recording settings (ADR 0114, 0115)', async () => {
     const user = userEvent.setup()
     await renderApp('/edit/my-1', { storage: withSong() })
     // Named for what it does: Play, the caret moved a note back or on, and a take recorded.
@@ -1203,7 +1203,7 @@ describe('the score editor', () => {
     expect(await screen.findByRole('dialog', { name: 'Record' })).toBeInTheDocument()
   })
 
-  it('transposes the song from the Player’s one Transpose, the key and chords as asked, Undo taking it back (ADR 0110, 0115)', async () => {
+  it('transposes the song from the Player’s one Transpose, the key and chords as asked, Undo taking it back (ADR 0115)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'Transpose: G major' }))
@@ -1235,7 +1235,7 @@ describe('the score editor', () => {
     )
   })
 
-  it('transposes the notes alone, the chord symbols kept, without Apply to chords (ADR 0110)', async () => {
+  it('transposes the notes alone, the chord symbols kept, without Apply to chords (ADR 0115)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'Transpose: G major' }))
@@ -1279,13 +1279,13 @@ describe('the score editor', () => {
     // No Add bar in the row: the palette's Bar adds one after the caret's (or before).
     expect(within(row).queryByRole('button', { name: /bar/i })).not.toBeInTheDocument()
     await tapIn(user, 'Bar', 'Add bar after')
-    // A bar added has no chord, as a notation app adds one (ADR 0094).
+    // A bar added has no chord, as a notation app adds one (ADR 0114).
     expect(songOf(piecesStore.getState())).toMatchObject({
       sections: [{ lines: ['Em Em _ G G G'] }],
     })
   })
 
-  it('copies the notes chosen on a staff and pastes them at the caret, the bars’ clip staying the chord row’s (ADR 0092)', async () => {
+  it('copies the notes chosen on a staff and pastes them at the caret, the bars’ clip staying the chord row’s (ADR 0114)', async () => {
     const user = userEvent.setup({ delay: 120 })
     const { piecesStore, settingsStore } = await renderApp('/edit/my-1', {
       storage: withSong({ staves: [{ notes: 'B4/1 A4/1 G4/1 F#4/1' }] }),
@@ -1395,7 +1395,7 @@ describe('the score editor', () => {
     const notes = await openCategory(user, 'Notes')
     for (const name of ['Double dotted', 'Triplet', 'Rest', 'Tie', 'Sharp', 'Flat', 'Natural'])
       expect(within(notes).getByRole('button', { name })).toBeInTheDocument()
-    // The editing modes, Flat's, one always chosen (ADR 0092).
+    // The editing modes, Flat's, one always chosen (ADR 0114).
     const modes = within(modesOf(notes)).getAllByRole('radio')
     expect(modes).toHaveLength(3)
     ;['Replace', 'Insert', 'Chord'].forEach((name, i) =>
@@ -1425,7 +1425,7 @@ describe('the score editor', () => {
     expect(fingers).toHaveAccessibleDescription(
       'For the piano’s staves: tap a note on the upper or lower staff.',
     )
-    // A bar added has no chord, as a notation app adds one (ADR 0094).
+    // A bar added has no chord, as a notation app adds one (ADR 0114).
     const bar = await tapIn(user, 'Bar', 'Add bar after')
     expect(songOf(piecesStore.getState())).toMatchObject({ sections: [{ lines: ['G _ G G G'] }] })
     await user.click(within(bar).getByRole('button', { name: 'Add bar before' }))
@@ -1711,7 +1711,7 @@ describe('the score editor', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/my-1'))
   })
 
-  it('opens at the bar its URL names, and turns to Practise at its caret’s bar (ADR 0090)', async () => {
+  it('opens at the bar its URL names, and turns to Practise at its caret’s bar (ADR 0115)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/edit/my-1?bar=3', { storage: withSong() })
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Bar 3, beat 1/))
@@ -1742,7 +1742,7 @@ describe('the score editor', () => {
     expect(musicOf(original).sections[0]?.lines[0]).toBe('G G7 C G')
   })
 
-  it('gives a catalog song a title of the learner’s own from the sheet, saved as its version (ADR 0094)', async () => {
+  it('gives a catalog song a title of the learner’s own from the sheet, saved as its version (ADR 0114)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/amazing', { locale: 'ru' })
     const sheet = await screen.findByRole('region', { name: 'Ноты' })
@@ -1776,7 +1776,7 @@ describe('the score editor', () => {
     expect(piecesStore.getState().versions.bz4?.sections[0]?.lines[0]).toBe('Fm _ _ _')
   })
 
-  it('keeps the MIDI keyboard first of its bar’s end, where the Player’s is, then Undo and Redo where Setup and More are, and no Song sheet (ADR 0094, 0110)', async () => {
+  it('keeps the MIDI keyboard first of its bar’s end, where the Player’s is, then Undo and Redo where Setup and More are, and no Song sheet (ADR 0114, 0115)', async () => {
     await renderApp('/edit/my-1', { storage: withSong() })
     const midiButton = await screen.findByRole('button', { name: 'MIDI keyboard' })
     const end = midiButton.closest('[data-area="actions"]')
@@ -1785,7 +1785,7 @@ describe('the score editor', () => {
     expect(namesIn(lead as HTMLElement)).toEqual(['Close'])
   })
 
-  it('shows the score through the Player’s View, one menu, but what only practice has (ADR 0090, 0094, 0102)', async () => {
+  it('shows the score through the Player’s View, one menu, but what only practice has (ADR 0115, 0114, 0108)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', {
       storage: withSong({ staves: [{ name: 'Voice', notes: EMPTY_TUNE }] }),
@@ -1828,7 +1828,7 @@ describe('the score editor', () => {
     expect(settingsStore.getState()).not.toHaveProperty('editorLayout')
   })
 
-  it('shows the tune’s staff and the chord symbols as the View says, the caret kept in sight (ADR 0094)', async () => {
+  it('shows the tune’s staff and the chord symbols as the View says, the caret kept in sight (ADR 0114)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', {
       storage: withSong({ staves: [{ notes: 'B4/4 | D5/4 | G4/4 | G4/4' }] }),
@@ -1864,7 +1864,7 @@ describe('the score editor', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff · Bar 1/)
   })
 
-  it('draws one piano staff alone where the View hides the other, the caret kept on the one in sight (ADR 0094)', async () => {
+  it('draws one piano staff alone where the View hides the other, the caret kept on the one in sight (ADR 0114)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/edit/my-1', {
       storage: withSong({ hands: SILENT_HANDS }),
@@ -1885,7 +1885,7 @@ describe('the score editor', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1/)
   })
 
-  it('opens a song written in degrees as its chart in its key, its edits a version (ADR 0110)', async () => {
+  it('opens a song written in degrees as its chart in its key, its edits a version (ADR 0115)', async () => {
     await renderApp('/edit/romashki')
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Daisy fields' }),
@@ -2230,7 +2230,7 @@ describe('the score editor’s takes', () => {
   })
 })
 
-describe('the words under the tune (ADR 0093)', () => {
+describe('the words under the tune (ADR 0097)', () => {
   const sung = () =>
     withSong({
       staves: [{ notes: 'G4/4 | A4/4 | B4/4 | C5/4' }],

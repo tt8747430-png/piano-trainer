@@ -18,8 +18,7 @@ const said = (verse: readonly BeatWords[]): string =>
 
 /**
  * What a tap on a chart's bar does: plays it, a toggle pressed while it sounds (a song's chart); or
- * takes the Player there, to the beat tapped, its bar current while the cursor is in it (ADR 0098,
- * 0099).
+ * takes the Player there, to the beat tapped, its bar current while the cursor is in it (ADR 0108).
  */
 export type BarTap = 'play' | 'go'
 
@@ -30,9 +29,9 @@ const beatTapped = (target: EventTarget): number => {
 }
 
 /**
- * One bar of a chart's line in its beats (ADR 0099): a cell a beat, the chords starting in each, its
+ * One bar of a chart's line in its beats (ADR 0108): a cell a beat, the chords starting in each, its
  * number small in its first cell's corner, a barline before it, and under its cells its method labels
- * or short length; a bar of no chord its number alone (ADR 0094). `marked` while it plays: the bar
+ * or short length; a bar of no chord its number alone (ADR 0114). `marked` while it plays: the bar
  * sounding, with a square to stop it, or the bar the Player is in, a pointer's target only, as the
  * sheet's bars are (the arrows move the cursor), its beat sounding filled (`sounding`). The loop's
  * bars (`looped`) lie on its band. Its words under its cells (`words`, ADR 0108).

@@ -21,7 +21,7 @@ function lineOf(feedback: WaitFeedback, t: TFunction<'player'>): string {
 }
 
 /**
- * Wait mode's one line: what to play, a wrong key, Right, or Finished (spec §2.7). A pass finished
+ * Wait mode's one line: what to play, a wrong key, Right, or Finished. A pass finished
  * says how many slips it had, offers Again, and the loop of the bars that had the most.
  */
 export function WaitLine({

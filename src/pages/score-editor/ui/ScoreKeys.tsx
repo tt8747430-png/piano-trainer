@@ -34,7 +34,7 @@ import { SignPicker } from './SignPicker'
 import { TimePicker } from './TimePicker'
 
 /**
- * Clef in the palette (ADR 0069, 0097, 0114): the caret's staff from the first bar chosen (else the
+ * Clef in the palette (ADR 0097, 0114): the caret's staff from the first bar chosen (else the
  * caret's). Opened, its picker in its section under what it changes; in the folded row, the clef in
  * force drawn, opening the same picker over it; greyed, saying why, where the caret writes chords.
  */
@@ -136,7 +136,7 @@ export function TimeSignatureKeys() {
 }
 
 /**
- * Barlines & repeats: the barlines and endings as tiles (ADR 0110, forScore's), each drawn on its staff
+ * Barlines & repeats: the barlines and endings as tiles (ADR 0115, forScore's), each drawn on its staff
  * over its name, then the signs and jumps, on the bars chosen, else the caret's: a sign as printed
  * over its name; a jump's words alone, what they ask its tooltip (ADR 0096).
  */
@@ -202,7 +202,7 @@ const PEDAL_LABEL = {
 
 /**
  * Text & pedal: the expression words alone as printed, what each asks its tooltip (ADR 0096); the
- * pedal's marks; the Lyrics key, opening the words' field under the caret's note (ADR 0093, 0096),
+ * pedal's marks; the Lyrics key, opening the words' field under the caret's note (ADR 0097, 0096),
  * the one way in, with a pointer, to a song with no words printed yet to tap.
  */
 export function TextKeys() {

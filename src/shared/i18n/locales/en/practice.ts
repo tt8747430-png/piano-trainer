@@ -1,6 +1,6 @@
 export const practice = {
   title: 'Practice',
-  // Practice's groups of pages (ADR 0044). The things come first, under no heading.
+  // Practice's groups of pages (ADR 0052). The things come first, under no heading.
   groups: { atTheKeys: 'At the keys', training: 'Training' },
   // Its pages, each by its name: the things, the tools, the training.
   pages: {
@@ -132,7 +132,7 @@ export const practice = {
     throughKeys: 'Through the keys',
     choose: 'Progression',
     typed: 'Typed',
-    /** What leads into each chord of the progression (ADR 0041). */
+    /** What leads into each chord of the progression (ADR 0112). */
     lead: { label: 'Lead into each chord', none: 'No', v: 'By its V', 'ii-v': 'By its ii–V' },
     // The songs a progression is heard in, each opening the Player at its bars (ADR 0112).
     songs: {
@@ -193,7 +193,7 @@ export const practice = {
       cancel: 'Cancel',
     },
   },
-  // The Chord finder (ADR 0054): a chord played or tapped, named, spelled and written.
+  // The Chord finder (ADR 0052): a chord played or tapped, named, spelled and written.
   chordFinder: {
     promptTitle: 'Play a chord',
     prompt: 'On your MIDI keyboard, or tap its keys.',
@@ -332,7 +332,7 @@ export const practice = {
     },
   },
   exercises: {
-    // The Exercises page's groups (roadmap §10.5).
+    // The Exercises page's groups.
     groups: {
       technique: 'Finger technique',
       barryHarris: 'Barry Harris',
@@ -350,7 +350,7 @@ export const practice = {
     // The count after a colon reads right for any number, in both languages.
     gaps: 'To check: {{count}}',
   },
-  // The Metronome (ADR 0113): its tempo, sound, time signature and beats.
+  // The Metronome (ADR 0052): its tempo, sound, time signature and beats.
   metronome: {
     info: 'Set the tempo with − and +, the slider, or Tap tempo: tap it in time and the Metronome takes the tempo of your last taps. The first beat of each bar is accented. Space starts and stops it; ↑ and ↓ change the tempo by 1, with Shift by 10.',
     bpm: 'BPM',

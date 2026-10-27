@@ -12,7 +12,7 @@ import { barsOf, keyAt } from './timeline'
 
 /**
  * A chord set where it starts in a bar: the one there replaced (its method kept), or the bar split; in
- * a bar of no chord, at its start, where a bar's chords begin (ADR 0094).
+ * a bar of no chord, at its start, where a bar's chords begin (ADR 0114).
  */
 export const setChord = (draft: Draft, index: number, from: Tick, chord: Chord): Draft =>
   withBar(draft, index, (bar) => {
@@ -32,7 +32,7 @@ export const setChord = (draft: Draft, index: number, from: Tick, chord: Chord):
 
 /**
  * A chord taken from its bar: its beats go to the chord before it; a bar's first chord's to the one
- * after, which then starts the bar; a bar's only chord leaves a bar of no chord (ADR 0094).
+ * after, which then starts the bar; a bar's only chord leaves a bar of no chord (ADR 0114).
  */
 export function deleteChord(draft: Draft, index: number, at: Tick): Draft {
   let changed = false
@@ -65,7 +65,7 @@ const comparable = (symbol: string) =>
 
 /**
  * The chords the chord-symbol field offers at a place as one types (ADR 0096): the key's there (its
- * section's, ADR 0089), then the song's own it lacks, each once, those whose symbol starts as typed.
+ * section's, ADR 0114), then the song's own it lacks, each once, those whose symbol starts as typed.
  */
 export function chordSuggestions(draft: Draft, tick: Tick, typed: string): Chord[] {
   const song = barsOf(draft).flatMap(({ bar }) => bar.chords.map((placed) => placed.chord))

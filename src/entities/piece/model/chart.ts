@@ -10,7 +10,7 @@ import { isDegreePiece, lyricsStaff, type ChartPiece, type Piece } from './types
 
 /**
  * A piece's chart; one written in degrees at the chosen chord size when it lets the learner choose.
- * Lyrics on the upper staff (`lyricsStaff`) are sung on the right hand's notes (ADR 0093).
+ * Lyrics on the upper staff (`lyricsStaff`) are sung on the right hand's notes (ADR 0097).
  */
 export function chartOf(piece: Piece, chordSize?: ChordSize): Chart {
   if (isDegreePiece(piece)) {
@@ -24,7 +24,7 @@ export function chartOf(piece: Piece, chordSize?: ChordSize): Chart {
 
 /**
  * A piece's single staves over the piano, top down (ADR 0097): each its clef and its notes, the
- * staff its words are on singing them (ADR 0093). Words on a staff the piece has not are the
+ * staff its words are on singing them (ADR 0097). Words on a staff the piece has not are the
  * content's mistake: a ContentError names it.
  */
 export function stavesOf(piece: Piece): StaffMusic[] {

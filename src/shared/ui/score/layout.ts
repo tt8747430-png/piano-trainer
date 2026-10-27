@@ -21,17 +21,17 @@ export interface ScoreLayout {
   readonly staves: Partial<Record<StaffId, { readonly top: number; readonly bottom: number }>>
   /** Each written onset left to right: its tick and its first notehead's or rest's x. */
   readonly onsets: readonly { readonly tick: Tick; readonly x: number }[]
-  /** Each notehead drawn, with its accidental and dots (ADR 0088): what a selection hugs. */
+  /** Each notehead drawn, with its accidental and dots (ADR 0096): what a selection hugs. */
   readonly heads?: readonly Head[]
   /** Each chord's (or note's) column on its staff: its heads and its stem, what a click on it chooses whole. */
   readonly columns?: readonly Column[]
   /** Each rest drawn: notes chosen over it hug it too. */
   readonly rests?: readonly Rest[]
-  /** Each clef, key and time signature printed, at a staff's head or where it changes (ADR 0094). */
+  /** Each clef, key and time signature printed, at a staff's head or where it changes (ADR 0114). */
   readonly signs?: readonly Sign[]
-  /** The staves' names printed at a score's first line's head (ADR 0094). */
+  /** The staves' names printed at a score's first line's head (ADR 0114). */
   readonly labels?: readonly StaffLabel[]
-  /** Each syllable printed under its note (ADR 0093): where a tap types it (ADR 0096). */
+  /** Each syllable printed under its note (ADR 0097): where a tap types it (ADR 0096). */
   readonly syllables?: readonly Lyric[]
 }
 
@@ -43,7 +43,7 @@ export interface Extent {
   readonly bottom: number
 }
 
-/** A notehead drawn: its note's id (`n-<staff>-<tick>-<i>`, ADR 0078), its key where known, and its box. */
+/** A notehead drawn: its note's id (`n-<staff>-<tick>-<i>`, ADR 0087), its key where known, and its box. */
 export interface Head extends Extent {
   readonly id: string
   readonly staff: StaffId
@@ -69,7 +69,7 @@ export interface Column extends Extent {
 export type SignKind = 'clef' | 'key' | 'time'
 
 /**
- * A clef, key or time signature printed on a staff (ADR 0094): at a line's head, or at the start of the
+ * A clef, key or time signature printed on a staff (ADR 0114): at a line's head, or at the start of the
  * measure it changes in; its box round its glyphs. A courtesy sign at a line's end, the next line's,
  * is not one.
  */
@@ -80,7 +80,7 @@ export interface Sign extends Extent {
   readonly measure: number
 }
 
-/** A syllable printed under its note in a verse (ADR 0093): the note's staff and tick, its verse from 0, its box. */
+/** A syllable printed under its note in a verse (ADR 0097): the note's staff and tick, its verse from 0, its box. */
 export interface Lyric extends Extent {
   readonly staff: StaffId
   readonly tick: Tick
@@ -88,7 +88,7 @@ export interface Lyric extends Extent {
 }
 
 /**
- * A staff's name printed at a score's first line's head (ADR 0094): a single staff's beside it (ADR
+ * A staff's name printed at a score's first line's head (ADR 0114): a single staff's beside it (ADR
  * 0097), the piano's beside its two (or the one drawn); its box.
  */
 export interface StaffLabel extends Extent {

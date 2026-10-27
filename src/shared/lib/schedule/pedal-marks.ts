@@ -7,7 +7,7 @@ export interface PedalSpan {
 }
 
 /**
- * Where the sustain pedal its notes mark (ADR 0068) is down, in order: from a press to its release,
+ * Where the sustain pedal its notes mark (ADR 0097) is down, in order: from a press to its release,
  * a change ending one span and starting the next.
  */
 export function pedalSpans(

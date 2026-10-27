@@ -238,7 +238,7 @@ describe('the catalog', () => {
       ).toBeNull()
   })
 
-  it('keeps every recording small enough to be precached, so it plays offline (ADR 0016)', () => {
+  it('keeps every recording small enough to be precached, so it plays offline (ADR 0034)', () => {
     for (const piece of PIECES) {
       if (!piece.recording) continue
       const { size } = statSync(`.${piece.recording.src}`)

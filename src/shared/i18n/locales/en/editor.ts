@@ -4,11 +4,11 @@ export const editor = {
   redo: 'Redo',
   // A change the song's music cannot be written with: nothing saved over what was.
   unsaved: 'This change can’t be saved: the song stays as it was last saved.',
-  // The dock over the sheet's foot (ADR 0094): the tempo, ‹ Play ›, and Record.
+  // The dock over the sheet's foot (ADR 0114): the tempo, ‹ Play ›, and Record.
   dock: 'Play, move and record',
-  // The tools row (ADR 0110), the Player's in its place: the View, Transpose, then the edit row.
+  // The tools row (ADR 0115), the Player's in its place: the View, Transpose, then the edit row.
   tools: 'Editing tools',
-  // The editor's Transpose (ADR 0110): its sheet writes the song in another key.
+  // The editor's Transpose (ADR 0115): its sheet writes the song in another key.
   transpose: {
     key: 'Apply to key',
     keyInfo:
@@ -56,7 +56,7 @@ export const editor = {
     noDot: 'This value is too short to dot.',
     compound: 'A compound meter divides each beat in three already.',
     // Where the lyrics go (where they are, or will be in a song with none yet), said where the caret
-    // is on another staff (ADR 0093): a single staff by its name (ADR 0097), or the upper staff.
+    // is on another staff (ADR 0097): a single staff by its name (ADR 0097), or the upper staff.
     lyricsOn: {
       staff: 'Lyrics go on {{staff}}: tap a note there.',
       rh: 'Lyrics go on the upper staff: tap a note there.',
@@ -67,7 +67,7 @@ export const editor = {
   copy: 'Copy',
   cut: 'Cut',
   paste: 'Paste',
-  // What Copy and Cut take, and what Paste holds, or why it is greyed (ADR 0092).
+  // What Copy and Cut take, and what Paste holds, or why it is greyed (ADR 0114).
   clip: {
     bar: 'Bar {{n}}',
     bars: 'Bars {{from}}–{{to}}',
@@ -80,7 +80,7 @@ export const editor = {
     toStaff: 'The notes copied go on a staff',
     toChords: 'The bars copied go in the chord symbols',
   },
-  // The palette's Barlines & repeats (ADR 0068).
+  // The palette's Barlines & repeats (ADR 0097).
   barline: {
     repeatStart: 'Start repeat',
     repeatEnd: 'End repeat',
@@ -113,7 +113,7 @@ export const editor = {
     'ds-fine': 'From the sign to Fine',
     'ds-coda': 'From the sign, then to the coda',
   },
-  // The palette's Clef: the caret's staff changes clef from the bar chosen on (ADR 0069).
+  // The palette's Clef: the caret's staff changes clef from the bar chosen on (ADR 0097).
   clef: {
     from: '{{staff}}, from bar {{bar}} on',
     family: {
@@ -140,9 +140,9 @@ export const editor = {
     subbass: 'Sub-bass clef',
   },
   // The palette's Key and Time and their popovers: a section's key or meter, or the whole song's,
-  // changed there (ADR 0094, 0095).
+  // changed there (ADR 0114, 0097).
   signature: {
-    // A change of key or time from a section on, up to the next change (ADR 0089, 0095).
+    // A change of key or time from a section on, up to the next change (ADR 0114, 0097).
     fromSection: 'From {{section}} on (bar {{bar}})',
     song: 'The whole song',
     // The key signature picker's tiles (ADR 0114).
@@ -214,7 +214,7 @@ export const editor = {
   expressions: 'Expression text',
   pedal: 'Pedal',
   // Text & pedal's keys for what is typed where it prints (ADR 0096).
-  // The words under the tune (ADR 0093), one syllable at a time in the Lyrics field under its note.
+  // The words under the tune (ADR 0097), one syllable at a time in the Lyrics field under its note.
   lyrics: {
     label: 'Lyrics',
     field: 'Syllable',
@@ -235,7 +235,7 @@ export const editor = {
     'a-tempo': 'Back to the tempo',
   },
   accidentals: { sharp: 'Sharp', flat: 'Flat', natural: 'Natural' },
-  // Where the caret writes, named as a score names its staves (ADR 0091, 0097): the chord symbols'
+  // Where the caret writes, named as a score names its staves (ADR 0114, 0097): the chord symbols'
   // row, the piano's two staves (a single staff by its own name). Never a hand: the hands are the
   // Player's.
   layers: {
@@ -253,10 +253,10 @@ export const editor = {
     notes: 'Bar {{bar}}, beat {{beat}} · {{what}} {{value}}',
     held: 'Bar {{bar}}, beat {{beat}} · {{what}} held',
     rest: 'Bar {{bar}}, beat {{beat}} · rest',
-    // The chord row of a bar with no chord symbol (ADR 0094).
+    // The chord row of a bar with no chord symbol (ADR 0114).
     noChord: 'Bar {{bar}}, beat {{beat}} · no chord',
     end: 'End of the song',
-    // The editing mode, where it is not Replace (ADR 0092).
+    // The editing mode, where it is not Replace (ADR 0114).
     mode: '{{mode}} mode',
     values: {
       whole: 'whole',
@@ -281,7 +281,7 @@ export const editor = {
   },
   dot: 'Dotted',
   doubleDot: 'Double dotted',
-  // A note's marks (ADR 0063), each a key that puts it on the notes at the caret or takes it off.
+  // A note's marks (ADR 0097), each a key that puts it on the notes at the caret or takes it off.
   marks: {
     staccato: 'Staccato',
     staccatissimo: 'Staccatissimo',
@@ -317,7 +317,7 @@ export const editor = {
   },
   triplet: 'Triplet',
   rest: 'Rest',
-  // The editing modes (ADR 0092, Flat's Melody · Insert · Chord), one chosen in the Notes section,
+  // The editing modes (ADR 0114, Flat's Melody · Insert · Chord), one chosen in the Notes section,
   // the ⓘ beside its name saying what a key played does in each (ADR 0096).
   mode: {
     label: 'Editing mode',
@@ -365,7 +365,7 @@ export const editor = {
     kind: 'Section',
     join: 'Join with the section before',
   },
-  // The song as a whole (ADR 0094: edited where it is printed and in the palette): its title, its
+  // The song as a whole (ADR 0114: edited where it is printed and in the palette): its title, its
   // tempo with the tempo words, its time signature.
   song: {
     title: 'Title',
@@ -472,7 +472,7 @@ export const editor = {
     clip: 'Copy, cut, paste what is chosen',
   },
   roll: { label: 'Notes: {{notes}} · bars: {{bars}}', playFrom: 'Play from bar {{n}}' },
-  // What is printed on the score, edited where it is (ADR 0094): the title, a click turning it into a
+  // What is printed on the score, edited where it is (ADR 0114): the title, a click turning it into a
   // field in its place.
   printed: {
     rename: 'Change the title',

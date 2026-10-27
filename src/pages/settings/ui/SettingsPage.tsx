@@ -95,7 +95,7 @@ const PLACE_ICON = {
 /**
  * Settings, as an app's settings page reads (ADR 0096): Language, Theme, Appearance (the page titles,
  * the floating buttons), the Keyboard, the MIDI keyboard, Recording, Backup, Help (How to use, ADR
- * 0113) and Progress, each choice
+ * 0052) and Progress, each choice
  * one compact row (its name with its ⓘ, the control at its right or under it), two columns from a
  * laptop's width.
  */

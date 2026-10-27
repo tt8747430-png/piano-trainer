@@ -12,7 +12,7 @@ const bar = (...chords: ChartChord[]): ChartBar => ({
   chords,
   beats: chords.reduce((sum, each) => sum + each.beats, 0),
 })
-/** A bar of no chord symbol (ADR 0094). */
+/** A bar of no chord symbol (ADR 0114). */
 const NONE: ChartBar = { chords: [], beats: 4 }
 
 /** A chart in G major of these sections. */

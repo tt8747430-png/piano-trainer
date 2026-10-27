@@ -26,7 +26,7 @@ function statusLine(
   }
 }
 
-/** The keyboard's status in one line, and the one action it needs (spec §7). */
+/** The keyboard's status in one line, and the one action it needs. */
 export function MidiControl() {
   const { t } = useTranslation('common')
   const { connection, connect } = useMidiConnection()

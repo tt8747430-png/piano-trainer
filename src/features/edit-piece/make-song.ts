@@ -13,7 +13,7 @@ import {
 import { beatsPerBar, beatsToTicks, type Key, type Meter } from '@/shared/lib/music'
 
 /**
- * The staves a new song's score starts with (ADR 0083, 0094, 0097), as a notation app's new score
+ * The staves a new song's score starts with (ADR 0114, 0097), as a notation app's new score
  * asks: the piano's grand staff; a single staff over it; or a single staff alone, the piano out of
  * sight (a lead sheet). More are added, named and taken away on the score. Its chord symbols are
  * typed into it; shown or not, the View's.
@@ -31,9 +31,9 @@ interface SongDraft {
 
 /**
  * Where a new song starts: a verse of four empty bars at 90, as a notation app's new score (ADR
- * 0091, 0094): no chord symbol, both hands written silent, so the editor opens on empty bars rather
+ * 0114): no chord symbol, both hands written silent, so the editor opens on empty bars rather
  * than the pattern's notes; its staves as `setup` says, a single staff with nothing on it yet a rest
- * (ADR 0072, 0097), never every staff hidden: the piano hidden only under a single staff (ADR 0083).
+ * (ADR 0114, 0097), never every staff hidden: the piano hidden only under a single staff (ADR 0114).
  */
 export function chartStart(key: Key, meter: Meter, setup: ScoreSetup = 'piano'): PieceMusic {
   const beats = beatsPerBar(meter)

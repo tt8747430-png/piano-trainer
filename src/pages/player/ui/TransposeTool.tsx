@@ -11,7 +11,7 @@ import {
 import { TransposeTool as Transpose } from '@/widgets/transpose'
 
 /**
- * The Player's Transpose (ADR 0104, 0115): the one Transpose, moving the key it is played in at once,
+ * The Player's Transpose (ADR 0105, 0115): the one Transpose, moving the key it is played in at once,
  * a semitone at a time, kept in the URL as its tonic. Where the piece's recording falls silent in
  * another key, the ⓘ beside its heading says so.
  */

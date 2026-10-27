@@ -15,7 +15,7 @@ const HEIGHT = 40
 const GLYPH = SPACE / 250
 
 /**
- * A short staff a sign is drawn on (ADR 0110, forScore's palette): its five lines, in the soft ink
+ * A short staff a sign is drawn on (ADR 0115, forScore's palette): its five lines, in the soft ink
  * the palette's staves wear, and the sign over them in the ink of the tile.
  */
 function Staff({ children }: { children: ReactNode }) {
@@ -79,12 +79,12 @@ const SHARP_STEPS = [0, 3, -1, 2, 5, 1, 4] as const
 const FLAT_STEPS = [4, 1, 5, 2, 6, 3, 7] as const
 const stepY = (step: number) => TOP + (step * SPACE) / 2
 
-/** A clef drawn on its staff (ADR 0110, 0114): the picker's own picture. */
+/** A clef drawn on its staff (ADR 0115, 0114): the picker's own picture. */
 export function ClefPicture({ clef }: { clef: Clef }) {
   return <ClefSign clef={clef} />
 }
 
-/** A key's signature after a treble clef, as forScore draws its palette's keys (ADR 0110). */
+/** A key's signature after a treble clef, as forScore draws its palette's keys (ADR 0115). */
 export function KeyPicture({ signatureOf }: { signatureOf: Key }) {
   const count = keySignature(signatureOf)
   const steps = (count > 0 ? SHARP_STEPS : FLAT_STEPS).slice(0, Math.abs(count))
@@ -112,7 +112,7 @@ const TIME_SYMBOL: Readonly<Record<MeterSymbol, string>> = {
   cut: '\u{1D135}',
 }
 
-/** A time signature, its count over its unit across the staff, or 4/4 as C, 2/2 as ¢ (ADR 0110, 0114). */
+/** A time signature, its count over its unit across the staff, or 4/4 as C, 2/2 as ¢ (ADR 0115, 0114). */
 export function TimePicture({
   meter,
   symbol = null,
@@ -203,7 +203,7 @@ const ending = (n: string) => (
 
 const MID = WIDTH / 2
 
-/** Each barline and ending drawn on its staff (ADR 0110). */
+/** Each barline and ending drawn on its staff (ADR 0115). */
 const BARLINES = {
   plain: thin(MID),
   double: (
@@ -238,7 +238,7 @@ const BARLINES = {
 
 export type BarlinePictured = keyof typeof BARLINES
 
-/** A barline or an ending drawn on its staff (ADR 0110). */
+/** A barline or an ending drawn on its staff (ADR 0115). */
 export function BarlinePicture({ choice }: { choice: BarlinePictured }) {
   return <Staff>{BARLINES[choice]}</Staff>
 }

@@ -3,7 +3,7 @@ import type { Extent, Lyric } from '../layout'
 import { textBox } from './svg-glyphs'
 
 /**
- * Each syllable Verovio printed under its note (ADR 0093), in the line's px (`at` turns Verovio's
+ * Each syllable Verovio printed under its note (ADR 0097), in the line's px (`at` turns Verovio's
  * units into them): its note's staff and tick and its verse, as `scoreToMei` names it
  * (`v-<staff>-<tick>-<verse>`), and its text's box, as wide as its letters: where a tap on it opens
  * the Lyrics field there (ADR 0096).

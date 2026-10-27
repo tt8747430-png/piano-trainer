@@ -11,7 +11,7 @@ import { ChordLessons } from './ChordLessons'
 import { LessonRow } from './LessonRow'
 
 /**
- * A section's lessons as its page teaches them (ADR 0100, 0111), in the section's paint, each group
+ * A section's lessons as its page teaches them (ADR 0111), in the section's paint, each group
  * named by what it does in a word or two and how behind its ⓘ: its chords, each learned in its sheet
  * by holding it three times; then, folded until asked for, its chords in time (each sequence, the
  * Player in Listen with the click), one change at a time where there is more than one (Wait mode on
@@ -35,7 +35,7 @@ export function SectionLessonGroups({
   const inTimeFold = useClosedFold()
   const changesFold = useClosedFold()
   const patternFold = useClosedFold()
-  // One change alone is the sequence itself: its own row adds nothing (ADR 0100, amended).
+  // One change alone is the sequence itself: its own row adds nothing (ADR 0111, amended).
   const oneAtATime = changes.length > 1 ? changes : []
   return (
     <>

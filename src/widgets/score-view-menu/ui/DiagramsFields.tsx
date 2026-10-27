@@ -19,7 +19,7 @@ const MODE_ICONS = {
 } as const satisfies Record<DiagramsMode, unknown>
 
 /**
- * Diagrams' own part of the View (ADR 0102, Chordify's "Diagram view mode"): its mode first,
+ * Diagrams' own part of the View (ADR 0108, Chordify's "Diagram view mode"): its mode first,
  * Animated or Summary, what each does the ⓘ beside its name; then the words sung under its strip,
  * greyed where the music has none (`noWords`, why).
  */

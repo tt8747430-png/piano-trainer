@@ -22,7 +22,7 @@ export interface DrawOptions {
   readonly next?: NextLine | undefined
   /** The width the line is justified to, in CSS px; it is drawn smaller where its music is wider. */
   readonly fill?: number | undefined
-  /** The staves' names, printed at the line's head (ADR 0094). */
+  /** The staves' names, printed at the line's head (ADR 0114). */
   readonly labels?: StaffLabels | undefined
 }
 
@@ -34,7 +34,7 @@ const SHRINK_TRIES = 5
 const SIGN = { [-2]: '𝄫', [-1]: '♭', 0: '', 1: '♯', 2: '𝄪' } as const
 
 /**
- * A score engraved by Verovio (ADR 0078) into a sheet of its own, which `host` shows once it is
+ * A score engraved by Verovio (ADR 0087) into a sheet of its own, which `host` shows once it is
  * whole: one line of its staves, justified to `fill` (drawn again smaller where its music is wider,
  * never broken in two), each staff's group named by `data-staff`, each head named where asked. Its layout says
  * where everything stands. Stopped by `signal`, it leaves what was there and says null.
@@ -102,7 +102,7 @@ export async function drawScore(
 }
 
 /**
- * Each head with its note's key, from the score (ADR 0088): what a head clicked chooses. Two voices'
+ * Each head with its note's key, from the score (ADR 0096): what a head clicked chooses. Two voices'
  * chords at one tick share their ids; they come in the voices' order, as the engraving draws them.
  */
 export function withKeys(layout: ScoreLayout, score: Score): ScoreLayout {

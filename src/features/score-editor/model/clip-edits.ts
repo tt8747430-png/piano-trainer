@@ -31,7 +31,7 @@ function copied(state: EditorState, layer: NoteLayer): NotesClip | null {
   }
 }
 
-/** What Copy would take (ADR 0092): the bars chosen (as printed, from 1), the notes chosen, or nothing. */
+/** What Copy would take (ADR 0114): the bars chosen (as printed, from 1), the notes chosen, or nothing. */
 export function copyTarget(
   state: EditorState,
 ):
@@ -84,7 +84,7 @@ function barsClipped(state: EditorState, edit: ClipEdit): EditorState {
 }
 
 /**
- * Copy, Cut and Paste act on what is chosen (ADR 0092, as Flat's and Dorico's): in the chord row the
+ * Copy, Cut and Paste act on what is chosen (ADR 0114, as Flat's and Dorico's): in the chord row the
  * bars chosen; on a staff the notes chosen, the chord's one note, or the chord at the caret. Cut
  * leaves their time as a rest, in Insert mode closing the gap; Paste writes the clip's notes from the
  * caret on its staff (over what is there, in Insert mode pushing it right), the caret after them and

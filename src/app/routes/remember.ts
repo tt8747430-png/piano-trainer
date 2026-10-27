@@ -2,7 +2,7 @@ import { defaultStringifySearch, redirect } from '@tanstack/react-router'
 import { sameView, selectView, type RememberedView, type ViewsStore } from '@/entities/views'
 import type { Raw } from './read-search'
 
-// A screen comes back the learner's way (spec §6, ADR 0022). Opened plainly (`OPEN_PLAINLY`), its
+// A screen comes back the learner's way (ADR 0038). Opened plainly (`OPEN_PLAINLY`), its
 // last view; opened by a link that names what to show, that, with the screen's kept params the link
 // leaves out.
 

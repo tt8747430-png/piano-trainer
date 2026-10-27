@@ -108,7 +108,7 @@ describe('ChordSheet', () => {
   })
 })
 
-describe('ChordSheet, its inversion (ADR 0101)', () => {
+describe('ChordSheet, its inversion (ADR 0108)', () => {
   it('chooses the inversion a piece’s chord is drawn in, kept for that chord in that piece', async () => {
     const user = userEvent.setup()
     const { sheet, inversions } = await openSheet({}, { piece: true })

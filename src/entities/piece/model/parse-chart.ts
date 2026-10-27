@@ -33,7 +33,7 @@ export const JUMP_TOKENS: Readonly<Record<Jump, string>> = {
 
 /**
  * Marks written after a bar, its end: a repeat back, a double barline, the final one; a jump, Fine,
- * To Coda (ADR 0068).
+ * To Coda (ADR 0097).
  */
 const END_TOKENS: Readonly<Record<string, BarMarks>> = {
   ':|': { barline: 'repeat' },
@@ -55,7 +55,7 @@ const START_TOKENS: Readonly<Record<string, BarMarks>> = {
 /** The most bars of its meter one bar may last: a bar of chords with long `@beats`. */
 const BAR_LIMIT = 4
 
-/** A bar with no chord symbol (ADR 0094): nothing printed over it, nothing a pattern plays there. */
+/** A bar with no chord symbol (ADR 0114): nothing printed over it, nothing a pattern plays there. */
 export const NO_CHORD = '_'
 
 interface WrittenChord {
@@ -87,7 +87,7 @@ function readChord(text: string, fail: Fail): WrittenChord {
   }
 }
 
-/** `_`, a bar of no chord (ADR 0094): the meter's length or its own `@beats`, written alone. */
+/** `_`, a bar of no chord (ADR 0114): the meter's length or its own `@beats`, written alone. */
 function emptyBar(written: readonly WrittenChord[], meterBeats: number, fail: Fail): ChartBar {
   const [only] = written
   if (written.length > 1 || only?.method !== undefined)
@@ -146,7 +146,7 @@ function sectionKey(piece: ChartPiece, text: string, s: number): Key {
 }
 
 /**
- * The meter a section's bars are counted in (ADR 0095): its own, else the piece's. One of the other
+ * The meter a section's bars are counted in (ADR 0097): its own, else the piece's. One of the other
  * kind is the content's mistake: its beat would be another note, a dotted quarter for a quarter.
  */
 function sectionMeter(piece: ChartPiece, meter: Meter | undefined, s: number): Meter {
@@ -171,7 +171,7 @@ export function parseChart(piece: ChartPiece): Chart {
       throw new ContentError(piece.id, position, problem)
     }
   const places: HandBar[] = []
-  // Each section's bars counted in its own meter, else the piece's (ADR 0095).
+  // Each section's bars counted in its own meter, else the piece's (ADR 0097).
   const meters = piece.sections.map((section, s) => sectionMeter(piece, section.meter, s))
   const sections = piece.sections.map((section, s) => ({
     key: section.key === undefined ? null : sectionKey(piece, section.key, s),

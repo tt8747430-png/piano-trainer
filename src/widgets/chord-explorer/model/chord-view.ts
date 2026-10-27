@@ -16,7 +16,7 @@ import { type PartsParams, partsFromParams, partsParams } from '@/shared/lib'
 
 /**
  * What the Chords explorer shows: a chord built part by part on a root, in an inversion, in one hand
- * or two. From five notes a chord takes two hands whatever `hands` says (ADR 0035): `hands` stays the
+ * or two. From five notes a chord takes two hands whatever `hands` says (ADR 0046): `hands` stays the
  * learner's choice for the chords one hand holds.
  */
 export interface ChordView extends PartsParams {

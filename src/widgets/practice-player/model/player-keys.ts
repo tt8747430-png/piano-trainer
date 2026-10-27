@@ -1,6 +1,6 @@
 import type { Combo } from '@/shared/lib/shortcuts'
 
-/** The Player's keys (spec 2026-10-09 §3): bound by `usePlayerShortcuts`, named on its buttons. */
+/** The Player's keys: bound by `usePlayerShortcuts`, named on its buttons. */
 export const PLAYER_KEYS = {
   play: { key: ' ' },
   back: { key: 'ArrowLeft' },
@@ -9,7 +9,7 @@ export const PLAYER_KEYS = {
   slower: { key: 'ArrowDown' },
   loop: { code: 'KeyR' },
   start: { key: 'Home' },
-  /** The loop's far end a bar back or on, to the first or last bar (ADR 0088). */
+  /** The loop's far end a bar back or on, to the first or last bar (ADR 0096). */
   reachBack: { key: 'ArrowLeft', shift: true },
   reachNext: { key: 'ArrowRight', shift: true },
   reachStart: { key: 'Home', shift: true },

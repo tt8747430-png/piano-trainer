@@ -31,7 +31,7 @@ describe('recorderClicks', () => {
     expect(clicks.barStarts).toEqual([0, 2, 3, 5])
   })
 
-  it('clicks a bar in its own meter, and the bars past the end in the last one’s (ADR 0095)', () => {
+  it('clicks a bar in its own meter, and the bars past the end in the last one’s (ADR 0097)', () => {
     // At 60 a beat is a second: a bar of 4/4, then one of 3/4 where the last section changes time.
     const clicks = recorderClicks({
       bars: [

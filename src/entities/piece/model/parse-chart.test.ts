@@ -43,7 +43,7 @@ describe('parseChart', () => {
     expect(() => parseChart(testSong([], { sections: wrong }))).toThrow(ContentError)
   })
 
-  it('reads a section in a meter of its own, its bars counted in it (ADR 0095)', () => {
+  it('reads a section in a meter of its own, its bars counted in it (ADR 0097)', () => {
     const sections = [
       { kind: 'verse' as const, lines: ['C G-C'] },
       { kind: 'chorus' as const, meter: '3/4' as const, lines: ['F G-C Am@1'] },
@@ -129,7 +129,7 @@ describe('parseChart', () => {
     expect(compound.sections[0]?.lines[0]?.[0]?.beats).toBe(2)
   })
 
-  it('reads `_` as a bar of no chord, the meter’s length or its own given beats (ADR 0094)', () => {
+  it('reads `_` as a bar of no chord, the meter’s length or its own given beats (ADR 0114)', () => {
     expect(read(['C _ G'])).toEqual([['C 4'], [], ['G 4']])
     const beats = (line: string, meter: '4/4' | '3/4' = '4/4') =>
       parseChart(testSong([line], { meter })).sections[0]?.lines[0]?.map((bar) => bar.beats)

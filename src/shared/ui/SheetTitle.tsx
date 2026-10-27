@@ -14,7 +14,7 @@ const PLACES = {
 export type TitlePlace = keyof typeof PLACES
 
 /**
- * A score's title printed at the head of its sheet (ADR 0094), as a printed score has it: the page's
+ * A score's title printed at the head of its sheet (ADR 0114), as a printed score has it: the page's
  * h1, which names the page and takes the focus as the screen opens. Its text, or what the editor
  * puts in its place (`children`: the title as a button that turns into a field).
  */

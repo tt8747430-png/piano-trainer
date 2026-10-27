@@ -6,7 +6,7 @@ import { latestPieces, type ChosenInversions, type PieceInversions } from './cho
 export const DIAGRAM_INVERSIONS_STORAGE_KEY = 'pt-diagram-inversions'
 export const DIAGRAM_INVERSIONS_VERSION = 1
 
-/** The inversion the learner chose for each chord's diagram, piece by piece (ADR 0101). */
+/** The inversion the learner chose for each chord's diagram, piece by piece (ADR 0108). */
 export interface DiagramInversionsState {
   readonly pieces: PieceInversions
 }

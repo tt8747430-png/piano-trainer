@@ -30,7 +30,7 @@ describe('ChordChart', () => {
     expect(screen.getByRole('button', { name: /^Bar 1:/ })).toHaveAttribute('aria-pressed', 'false')
   })
 
-  it('counts each bar in its beats, each chord in the beat it starts in (ADR 0099)', () => {
+  it('counts each bar in its beats, each chord in the beat it starts in (ADR 0108)', () => {
     render(<ChordChart performance={performance} headings={[]} onBar={() => {}} playing={null} />)
     expect(beatsOf(screen.getByRole('button', { name: 'Bar 1: G' }))).toEqual(['1G', '', '', ''])
     // Named by its chords as it prints them.
@@ -106,7 +106,7 @@ describe('ChordChart', () => {
     ])
   })
 
-  it('shows a bar of no chord as an empty bar, named by its number (ADR 0094)', () => {
+  it('shows a bar of no chord as an empty bar, named by its number (ADR 0114)', () => {
     const song: Piece = {
       id: 'my-1',
       kind: 'song',

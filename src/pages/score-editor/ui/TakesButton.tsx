@@ -7,7 +7,7 @@ import { useScoreEditorContext } from '../model/editor-context'
 import { TAKES_PAGE } from '../model/use-editor-takes'
 
 /**
- * The song's takes, beside Record (ADR 0096, 0110): their sheet, the one way to them but a take just
+ * The song's takes, beside Record (ADR 0096, 0115): their sheet, the one way to them but a take just
  * kept, which opens it by itself. Named with how many there are; greyed until there is one, its
  * tooltip saying why, so the transport keeps its seven in their places.
  */

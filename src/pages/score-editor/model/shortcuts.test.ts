@@ -71,7 +71,7 @@ describe('shortcutOf', () => {
       type: 'shift',
       semitones: -12,
     })
-    // Alt keeps going through a chord's notes (ADR 0088).
+    // Alt keeps going through a chord's notes (ADR 0096).
     expect(shortcutOf(press('ArrowUp', 'ArrowUp', { altKey: true }), 'rh')).toEqual({
       type: 'chordNote',
       direction: 1,
@@ -128,7 +128,7 @@ describe('shortcutOf', () => {
     })
   })
 
-  it('extends what is chosen with Shift: a note, Alt a bar, Cmd or Home and End to an end (ADR 0088)', () => {
+  it('extends what is chosen with Shift: a note, Alt a bar, Cmd or Home and End to an end (ADR 0096)', () => {
     const shift = { shiftKey: true }
     expect(shortcutOf(press('ArrowLeft', 'ArrowLeft', shift), 'rh')).toEqual({
       type: 'move',
@@ -188,7 +188,7 @@ describe('shortcutOf', () => {
     expect(shortcutOf(press('KeyL', 'l'), 'staff0')).toBeNull()
   })
 
-  it('opens the fingering field with Shift and F, which typing leaves free (ADR 0036, 0096)', () => {
+  it('opens the fingering field with Shift and F, which typing leaves free (ADR 0062, 0096)', () => {
     for (const layer of ['rh', 'lh', 'staff0'] as const)
       expect(shortcutOf(press('KeyF', 'F', { shiftKey: true }), layer)).toEqual({
         type: 'field',
@@ -198,7 +198,7 @@ describe('shortcutOf', () => {
     expect(shortcutOf(press('KeyF', 'f', { metaKey: true, shiftKey: true }), 'rh')).toBeNull()
   })
 
-  it('cycles the editing modes with I, a letter typing leaves free, on a staff alone (ADR 0092)', () => {
+  it('cycles the editing modes with I, a letter typing leaves free, on a staff alone (ADR 0114)', () => {
     expect(shortcutOf(press('KeyI', 'i'), 'staff0')).toEqual({ type: 'mode' })
     expect(shortcutOf(press('KeyI', 'i'), 'lh')).toEqual({ type: 'mode' })
     expect(shortcutOf(press('KeyI', 'i'), 'chords')).toBeNull()

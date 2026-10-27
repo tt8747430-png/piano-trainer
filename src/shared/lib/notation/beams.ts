@@ -21,7 +21,7 @@ export interface BeamPlan {
 
 /**
  * The groups a beam of eighths may run over, in ticks from the bar's first beat, in turn (LilyPond's
- * `default-time-signature-settings` and `beatStructure`, ADR 0084, 0114): the half bar in 4/4, the
+ * `default-time-signature-settings` and `beatStructure`, ADR 0087, 0114): the half bar in 4/4, the
  * whole bar in 3/4, a half in x/2, 5/4's 3+2 and 6/4's 3+3 quarters, 7/8's 2+2+3 eighths, a dotted
  * quarter in 6/8, 9/8 and 12/8, else the beat.
  */
@@ -65,7 +65,7 @@ function runsBy(indices: readonly number[], key: (index: number) => number): num
 }
 
 /**
- * A voice's beams and tuplets in a bar, as LilyPond's auto-beaming writes them (ADR 0084): eighths
+ * A voice's beams and tuplets in a bar, as LilyPond's auto-beaming writes them (ADR 0087): eighths
  * beamed over the meter's groups (`eighthsGroups`), a beam with anything shorter cut at each beat; a
  * rest or a longer note ends a beam; each beat of triplets one tuplet, its eighths beamed. `barStart`
  * is where the bar's first beat falls (before a pickup's music).

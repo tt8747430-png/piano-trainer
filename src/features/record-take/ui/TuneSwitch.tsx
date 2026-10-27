@@ -4,7 +4,7 @@ import { setRecorderTune } from '@/features/set-preference'
 import { SwitchRow } from '@/shared/ui'
 
 /**
- * Whether a song's tune plays under a take (spec 2026-10-09 §4.2), saved for every take: one switch
+ * Whether a song's tune plays under a take, saved for every take: one switch
  * in Settings › Recording and in the recording strip's settings where the song has a tune.
  */
 export function TuneSwitch() {

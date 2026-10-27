@@ -95,7 +95,7 @@ If agents are running and the owner asks, say so; never guess their results. If 
   - **Worktrees:** symlink `node_modules`, never `npm install` there.
 - **Saved stores and their versions:** each entity's `model/store.ts`.
 - **Docs to update each round:**
-  - **ADRs:** a new ADR in `docs/adr/`, styled like the latest and added to its README's index, or amend the round's own. `DESIGN.md` where the look changed.
+  - **ADRs:** amend the area's ADR (`docs/adr/README.md`), styled like 0105: the decision as it stands now, one line in its History. A new ADR only for a new area, added to the README's index. `DESIGN.md` where the look changed.
   - **Glossary:** rows in `docs/UBIQUITOUS_LANGUAGE.md`.
   - **CLAUDE.md:** its rules and short map, kept current: rename what was renamed and drop what was deleted. It stays a map, never a list of components; detail goes in the ADR.
 - **Never:** a model ID in a commit; copying Chordify's code; retrying bot-check circumvention against chordify.net. The owner's saved Chordify page holds their account details, so never copy it into the repo.

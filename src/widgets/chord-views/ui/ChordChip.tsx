@@ -7,7 +7,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/
 const HOVERS = '(hover: hover) and (pointer: fine)'
 
 /**
- * A chord as a chip over the words (ADR 0099): its symbol in the display face as the sheet prints it
+ * A chord as a chip over the words (ADR 0108): its symbol in the display face as the sheet prints it
  * (`C♯m7`), at its line's text size (ADR 0108: every length in `em`), filled with the ink while it
  * sounds, a muted wash in its line's ink otherwise. A tap takes the cursor to it (`onGo`, ADR 0108);
  * its target reaches past the chip sideways to a finger's size, up and down no further than the

@@ -14,7 +14,7 @@ const SEGMENT =
   'relative inline-flex size-9 items-center justify-center rounded-lg border border-transparent text-muted-foreground transition-colors duration-200 ease-out select-none before:absolute before:-inset-1 before:content-[""] [&_svg]:size-5'
 
 /**
- * One mode, its icon at every size, its name its tooltip and a screen reader's (ADR 0094): the one
+ * One mode, its icon at every size, its name its tooltip and a screen reader's (ADR 0114): the one
  * shown a card on the track, the other a link to it.
  */
 function Segment({
@@ -57,7 +57,7 @@ function Segment({
 }
 
 /**
- * Practise · Edit (ADR 0090): a piece's score in its two modes, the Player and the score editor, as
+ * Practise · Edit (ADR 0115): a piece's score in its two modes, the Player and the score editor, as
  * one screen's (Flat's Composing and Read-only), first of the round buttons in both bars. The other
  * mode opens at `bar` (as printed, from 1: the Player's cursor's, the editor's caret's), in place of
  * this one in the history, so Close still goes back where the learner came from. Only for a piece

@@ -74,7 +74,7 @@ function pedalled(damper: Damper, pedal: PedalKind, down: boolean): Damped {
 }
 
 /**
- * The damper after `event` (spec 2026-10-09 §2.1, §3.4), and the keys whose dampers fell: they stop
+ * The damper after `event`, and the keys whose dampers fell: they stop
  * sounding now. A key let go stops unless the sustain is down or the sostenuto caught it; the
  * sustain's up stops every key no hand holds and the sostenuto did not catch; the sostenuto catches
  * the keys held as it goes down and lets them go as it comes up. The soft pedal stops nothing.

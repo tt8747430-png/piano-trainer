@@ -15,18 +15,18 @@ const PERCENT = { style: 'unit', unit: 'percent' } as const
 
 /**
  * The transport's round look: a pill along the bar, a little smaller under 360px and on a phone on
- * its side, so the transport fits with the gauge beside the value at every size (ADR 0094).
+ * its side, so the transport fits with the gauge beside the value at every size (ADR 0114).
  */
 const TRIGGER =
   'h-12 rounded-full px-3 small-phone:h-11 small-phone:px-2 narrow-phone:gap-1 narrow-phone:px-1 landscape-phone:h-10'
 
 /**
- * The tempo button and its popover (spec §2.7): Wait mode, or a speed of the piece's tempo, its
+ * The tempo button and its popover: Wait mode, or a speed of the piece's tempo, its
  * presets or any 5% step from 50% to 200% on the slider (ADR 0105, Chordify's), which says the beats
  * a minute it plays at; speed training below the piece's tempo. The button says the pass's tempo
  * while it plays.
  * Without `onWait` and `onSpeedTraining` it only sets how fast the music plays back: the score
- * editor's, which checks what was written at the learner's speed (ADR 0089).
+ * editor's, which checks what was written at the learner's speed (ADR 0114).
  */
 export function TempoButton({
   mode = 'listen',
@@ -76,7 +76,7 @@ export function TempoButton({
           />
         }
       >
-        {/* The gauge beside the value at every size (ADR 0094): the pill is sized to fit it. */}
+        {/* The gauge beside the value at every size (ADR 0114): the pill is sized to fit it. */}
         <Gauge data-icon="inline-start" />
         <span className="tabular-nums">{value}</span>
       </PopoverTrigger>

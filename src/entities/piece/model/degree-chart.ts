@@ -5,7 +5,7 @@ import type { ChartPiece, DegreePiece, Section } from './types'
 const charts = new WeakMap<DegreePiece, ChartPiece>()
 
 /**
- * A song written in degrees as a chart in its key (ADR 0110): its chords read at its own chord size,
+ * A song written in degrees as a chart in its key (ADR 0115): its chords read at its own chord size,
  * as the Player plays them, each bar written as a chart writes it, under its sections' headings (one
  * line of degrees a verse). What a learner's version of it starts from, so it is edited as any song.
  */

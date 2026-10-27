@@ -14,7 +14,7 @@ describe('Walk the chords in the Player', () => {
     expect(screen.getByRole('button', { name: 'Bar 8: Dm' })).toBeInTheDocument()
   })
 
-  it('shows its chords in the views of them, its one section named nowhere (ADR 0099)', async () => {
+  it('shows its chords in the views of them, its one section named nowhere (ADR 0108)', async () => {
     const { settingsStore } = await renderApp('/play/walk?root=D&kind=dorian')
     const title = { level: 1, name: 'Walk the chords in D Dorian' }
     await screen.findByRole('heading', title)

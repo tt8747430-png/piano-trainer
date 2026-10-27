@@ -102,7 +102,7 @@ function FinderSettings({
 }
 
 /**
- * The Chord finder (ADR 0054), a tool of its own: a chord played on a MIDI keyboard or tapped on the
+ * The Chord finder (ADR 0052), a tool of its own: a chord played on a MIDI keyboard or tapped on the
  * keys is named at once, as large as the page allows, in every reading it has, its keys marked by
  * degree, in the middle of one stage over the grand staff that writes it, spelled in the key chosen,
  * and where the chords are remembered those played before it; then the keys that hold it. What the learner turns off is

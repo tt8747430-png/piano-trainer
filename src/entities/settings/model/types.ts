@@ -67,7 +67,7 @@ export interface TrainerSettings {
 }
 
 /** How every lesson shows its examples. */
-/** Where a screen's floating actions stand along its foot (ADR 0058). */
+/** Where a screen's floating actions stand along its foot (ADR 0061). */
 export const FLOATING_PLACES = ['left', 'center', 'right'] as const
 export type FloatingPlace = (typeof FLOATING_PLACES)[number]
 export const isFloatingPlace = (value: unknown): value is FloatingPlace =>
@@ -106,13 +106,13 @@ export interface KeyboardSettings {
 
 /**
  * Where the score editor's palette stands: beside the sheet (a laptop, a phone on its side), at its
- * right (ADR 0094), or at its foot.
+ * right (ADR 0114), or at its foot.
  */
 export const PALETTE_PLACES = ['beside', 'foot'] as const
 export type PalettePlace = (typeof PALETTE_PLACES)[number]
 /**
  * Whether the palette is folded, as the learner last left it in each place; a place never chosen
- * takes its default (ADR 0089): open beside the sheet, where it covers no music, folded at the foot.
+ * takes its default (ADR 0114): open beside the sheet, where it covers no music, folded at the foot.
  */
 export type PaletteFolds = Readonly<Partial<Record<PalettePlace, boolean>>>
 
@@ -124,11 +124,11 @@ export type Sidebar = (typeof SIDEBARS)[number]
 export interface RecorderSettings {
   /** The click goes on after the count-in, while the take records. */
   readonly click: boolean
-  /** The song's tune plays under the take (spec 2026-10-09 §4.2). */
+  /** The song's tune plays under the take. */
   readonly tune: boolean
 }
 
-/** The MIDI keyboard's settings (spec 2026-10-09 §3.1). */
+/** The MIDI keyboard's settings. */
 export interface MidiSettings {
   /** The keyboard heard, by its name; null: any. */
   readonly device: string | null
@@ -142,7 +142,7 @@ export interface MidiSettings {
   readonly pedal: PedalWay
 }
 
-/** The Chord finder's own settings (ADR 0054), and the chords it remembers. */
+/** The Chord finder's own settings (ADR 0052), and the chords it remembers. */
 export interface ChordFinderSettings {
   /** The staff keeps the chords played in turn, and so does the device; else it writes only the chord down now. */
   readonly remember: boolean
@@ -164,14 +164,14 @@ export const REMEMBERED_CHORDS = 24
 export const CHORD_KEYS_MAX = 10
 
 /**
- * The Player's four views of the music (ADR 0099, Chordify's): the sheet music; the chords as chips
+ * The Player's four views of the music (ADR 0108, Chordify's): the sheet music; the chords as chips
  * over the words; the chord sounding as a diagram beside the next; the chart in beat cells.
  */
 export const MUSIC_VIEWS = ['sheet', 'lyrics', 'diagrams', 'grid'] as const
 export type MusicView = (typeof MUSIC_VIEWS)[number]
 
 /**
- * The Diagrams view's modes (ADR 0102, Chordify's "Diagram view mode"): the chord sounding beside
+ * The Diagrams view's modes (ADR 0108, Chordify's "Diagram view mode"): the chord sounding beside
  * the next, moving with the music; or the song's chords all at once, the one sounding marked.
  */
 export const DIAGRAMS_MODES = ['animated', 'summary'] as const
@@ -185,10 +185,10 @@ export const TEXT_SIZES = [80, 90, 100, 115, 130, 150] as const
 export type TextSize = (typeof TEXT_SIZES)[number]
 
 /**
- * How the Player and the score editor show a score (ADR 0064, Soundslice's view settings): laid out
- * as one line across, lines down the screen or A4 pages; the Player's view of it (ADR 0099: the
- * editor always shows the score), Diagrams' mode, and whether a song opens asking for it (ADR 0102);
- * the chord names; the words under the staff they are written on (ADR 0093); the staves hidden, each
+ * How the Player and the score editor show a score (ADR 0096, Soundslice's view settings): laid out
+ * as one line across, lines down the screen or A4 pages; the Player's view of it (ADR 0108: the
+ * editor always shows the score), Diagrams' mode, and whether a song opens asking for it (ADR 0108);
+ * the chord names; the words under the staff they are written on (ADR 0097); the staves hidden, each
  * by its place (ADR 0097); and the keys, or the score alone.
  */
 export interface ScoreViewSettings {
@@ -228,7 +228,7 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   keys: true,
 }
 
-/** The Metronome as the learner left it (ADR 0113): its tempo, meter and sound. */
+/** The Metronome as the learner left it (ADR 0052): its tempo, meter and sound. */
 export interface MetronomeSettings {
   /** Beats a minute, whole, within `BPM_RANGE`. */
   readonly bpm: number

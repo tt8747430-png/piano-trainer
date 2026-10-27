@@ -46,7 +46,7 @@ export const ownChoice = (piece: Piece): PracticeChoice => ({
 
 /**
  * A piece as the Player plays it: the learner's key, pattern, hands' figures, chord size and tune,
- * every chord its plain triad where Simplify is on (ADR 0104: a piece written in degrees then plays
+ * every chord its plain triad where Simplify is on (ADR 0105: a piece written in degrees then plays
  * triads whatever its chord size); its bars as written, or in the order they are played (`unfold`:
  * the repeats taken, the Player's).
  */
@@ -64,7 +64,7 @@ export function arrangePiece(
 }
 
 /**
- * Whether Simplify changes a piece (ADR 0104): a chord of its chart, at the chord size chosen (null
+ * Whether Simplify changes a piece (ADR 0105): a chord of its chart, at the chord size chosen (null
  * its own), that is not a plain triad on its root.
  */
 export const simplifies = (piece: Piece, chordSize: ChordSize | null): boolean =>

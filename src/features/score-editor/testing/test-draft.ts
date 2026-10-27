@@ -5,7 +5,7 @@ import { barsOf } from '../model/timeline'
 
 /**
  * A draft to edit in tests: G major in 4/4 unless the music says otherwise; both hands silent unless
- * the music writes them (a bar left to the pattern is written out, ADR 0091).
+ * the music writes them (a bar left to the pattern is written out, ADR 0114).
  */
 export function draftOf(music: Partial<PieceMusic> = {}): Draft {
   const draft = readDraft({

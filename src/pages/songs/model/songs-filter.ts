@@ -8,7 +8,7 @@ import type { KeyParam } from '@/shared/lib/music'
  */
 export interface SongsFilter {
   readonly q: string
-  /** Only the songs of one level, as their courses place them (ADR 0005); a song in no course has none. */
+  /** Only the songs of one level, as their courses place them (ADR 0053); a song in no course has none. */
   readonly stage: Stage | 'any'
   /** Only the songs written in one key, as the URL writes it (`G`, `Em`); none, every key. */
   readonly key: KeyParam | ''

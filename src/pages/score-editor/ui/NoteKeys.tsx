@@ -89,7 +89,7 @@ function Natural() {
 const ACCIDENTAL_KEYS = [1, -1, 0] as const satisfies readonly Accidental[]
 
 /**
- * The accidentals, Flat's (ADR 0091): each a toggle on the notes chosen, pressed while every one
+ * The accidentals, Flat's (ADR 0114): each a toggle on the notes chosen, pressed while every one
  * carries its sign, a tap writing the sign or taking it off (the note back as the key spells it);
  * greyed with no note chosen.
  */
@@ -138,7 +138,7 @@ const Head = ({ cx, cy, soft = false }: { cx: number; cy: number; soft?: boolean
 )
 
 /**
- * A mode's picture (ADR 0092): Replace, the caret before a note it writes over; Insert, a note with
+ * A mode's picture (ADR 0114): Replace, the caret before a note it writes over; Insert, a note with
  * the arrow the later notes move by; Chord, noteheads stacked on one stem.
  */
 function ModeIcon({ mode }: { mode: EditMode }) {
@@ -170,7 +170,7 @@ function ModeIcon({ mode }: { mode: EditMode }) {
 }
 
 /**
- * The editing modes (ADR 0092, Flat's Melody · Insert · Chord): one always chosen; what a key played
+ * The editing modes (ADR 0114, Flat's Melody · Insert · Chord): one always chosen; what a key played
  * does in each is the ⓘ beside the section's name (ADR 0096); I cycles them. In the folded row, three
  * picture keys, the mode chosen pressed (ADR 0114).
  */

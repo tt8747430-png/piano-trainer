@@ -1,13 +1,13 @@
 import type { ScoreViewSettings } from '@/entities/settings'
 import { layerStaff, shownRows, type Layer, type NoteLayer } from '@/features/score-editor'
 
-/** What the View says it shows (ADR 0094, 0097): the chord symbols, the staves hidden. */
+/** What the View says it shows (ADR 0114, 0097): the chord symbols, the staves hidden. */
 type Shown = Pick<ScoreViewSettings, 'chordNames' | 'hidden'>
 
 /**
- * The rows the caret writes in, top down, as the View shows the score (ADR 0094, 0097): the chord
+ * The rows the caret writes in, top down, as the View shows the score (ADR 0114, 0097): the chord
  * symbols where the View shows them, and each staff in sight. A View that would leave no staff in
- * sight leaves out none, as the sheets never hide every staff (ADR 0083).
+ * sight leaves out none, as the sheets never hide every staff (ADR 0114).
  */
 export function rowsInSight(
   draft: { readonly staves: readonly unknown[]; readonly leadSheet: boolean },

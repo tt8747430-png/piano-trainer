@@ -47,7 +47,7 @@ describe('versesOf', () => {
 })
 
 describe('staffHeight', () => {
-  it('is the staves’ room, and a verse’s more for each verse under them (ADR 0093)', () => {
+  it('is the staves’ room, and a verse’s more for each verse under them (ADR 0097)', () => {
     expect(staffHeight(undefined, 2)).toBe(STAFF_GAP + LAST_STAFF)
     expect(staffHeight(undefined, 2, 2)).toBe(STAFF_GAP + LAST_STAFF + 2 * VERSE)
     expect(staffHeight('treble', 2, 1)).toBe(LAST_STAFF + VERSE)

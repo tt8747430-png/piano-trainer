@@ -5,7 +5,7 @@ const LAPTOP = '(min-width: 64rem)'
 const TABLET = '(min-width: 40rem)'
 
 /**
- * How many beats a row of the grid holds before a line wraps (ADR 0099): two 4-beat bars on a phone
+ * How many beats a row of the grid holds before a line wraps (ADR 0108): two 4-beat bars on a phone
  * held upright, four on a tablet or a phone on its side, eight on a laptop.
  */
 export function useRowRoom(): number {

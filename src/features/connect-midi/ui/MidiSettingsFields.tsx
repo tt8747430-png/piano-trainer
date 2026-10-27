@@ -14,7 +14,7 @@ const shiftLabel = (shift: OctaveShift) =>
   shift > 0 ? `+${shift}` : shift < 0 ? `−${-shift}` : '0'
 
 /**
- * The MIDI keyboard's settings, as Settings lists them under its connection (spec 2026-10-09 §3.1),
+ * The MIDI keyboard's settings, as Settings lists them under its connection,
  * each one row whose ⓘ says what it does (ADR 0096): the keyboard heard (the ones connected now, and
  * the one chosen while it is away), whether the app sounds its keys or its own music through it, its
  * octave shift, its touch and its pedal's way round. Nothing where the browser cannot connect a

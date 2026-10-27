@@ -9,7 +9,7 @@ import {
   type PedalKind,
 } from '@/shared/lib/schedule'
 
-/** The keys a hand plays, sounding while held, under the pedals (spec 2026-10-09 §2.1). */
+/** The keys a hand plays, sounding while held, under the pedals. */
 interface LiveVoice {
   press(key: Midi, velocity: number): void
   release(key: Midi): void

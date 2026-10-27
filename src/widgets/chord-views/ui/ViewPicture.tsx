@@ -187,7 +187,7 @@ function Grid() {
 const PICTURES = { sheet: Sheet, lyrics: Lyrics, diagrams: Diagrams, grid: Grid } as const
 
 /**
- * A view of the music drawn in its own style (ADR 0099), the picture on its tile in the View: a few
+ * A view of the music drawn in its own style (ADR 0108), the picture on its tile in the View: a few
  * bars of staff; a chip over a line of words; a diagram beside a greyed one over a strip of beats; a
  * grid of cells, one filled. In the ink of the tile it is on.
  */

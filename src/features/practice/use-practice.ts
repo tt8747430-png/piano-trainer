@@ -84,7 +84,7 @@ const sameLoop = (a: BeatGroupRange | null, b: BeatGroupRange | null) =>
   a === b || (a !== null && b !== null && a.first === b.first && a.last === b.last)
 
 /**
- * Connects the practice machine to time, audio and MIDI (spec §2.7). The machine decides; this hook
+ * Connects the practice machine to time, audio and MIDI. The machine decides; this hook
  * plays what it decides, follows the audio clock in Listen, and moves Wait mode on.
  *
  * A new `performance` object is a new piece to practise; hand in the same object while the

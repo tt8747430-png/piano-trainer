@@ -41,7 +41,7 @@ export const PAGE_TILES = {
   chordFinder: { icon: ScanSearch, paint: 'sky' },
   exercises: { icon: Dumbbell, paint: 'sand' },
   quiz: { icon: ListChecks, paint: 'lilac' },
-  // The Metronome (ADR 0113): a steady beat to practise to.
+  // The Metronome (ADR 0052): a steady beat to practise to.
   metronome: { icon: Metronome, paint: 'grass' },
   // A folder of the library (ADR 0106): songs, in their order.
   folder: { icon: Folder, paint: 'yellow' },

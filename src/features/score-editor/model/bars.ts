@@ -49,8 +49,8 @@ function insertSlots(draft: Draft, after: number, bars: readonly DraftBar[]): Dr
 }
 
 /**
- * A new bar in a section, as notation software adds one: its meter's length (ADR 0095), no chord
- * (ADR 0094).
+ * A new bar in a section, as notation software adds one: its meter's length (ADR 0097), no chord
+ * (ADR 0114).
  */
 const newBar = (draft: Draft, section: number): DraftBar => ({
   ticks: beatsPerBar(sectionMeter(draft, section)) * TICKS_PER_BEAT,
@@ -155,7 +155,7 @@ export function barLengths(meter: Meter): Tick[] {
   return Array.from({ length: full / eighth }, (_, i) => (i + 1) * eighth)
 }
 
-/** A bar of the first section's meter, its own or the song's (ADR 0095): what a pickup is short of. */
+/** A bar of the first section's meter, its own or the song's (ADR 0097): what a pickup is short of. */
 const firstBar = (draft: Draft): Tick => beatsPerBar(sectionMeter(draft, 0)) * TICKS_PER_BEAT
 
 /** Whether bar `index` is a pickup: the first bar, shorter than its meter's. */

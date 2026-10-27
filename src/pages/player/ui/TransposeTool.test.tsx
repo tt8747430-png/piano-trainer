@@ -18,7 +18,7 @@ async function openTranspose(user: User) {
   return popover
 }
 
-describe('Transpose (ADR 0104)', () => {
+describe('Transpose (ADR 0105)', () => {
   it('stands after the View in the tools row, named by the key the music is in', async () => {
     await renderApp('/play/lightly-row')
     const tools = within(await toolsRow()).getAllByRole('button')

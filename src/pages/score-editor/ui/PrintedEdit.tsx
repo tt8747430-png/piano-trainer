@@ -8,8 +8,8 @@ import { TempoPopover } from './TempoPopover'
 import { TimePopover } from './TimePopover'
 
 /**
- * What a thing printed on the sheet opens where it is (ADR 0094), over its button there (`trigger`):
- * the tempo mark its tempo, a section's name its menu (ADR 0095), a key signature its key and a time
+ * What a thing printed on the sheet opens where it is (ADR 0114), over its button there (`trigger`):
+ * the tempo mark its tempo, a section's name its menu (ADR 0097), a key signature its key and a time
  * signature its meter, each from its section on, a clef its staff's clef, a staff's name its menu.
  */
 export function PrintedEdit({

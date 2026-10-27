@@ -25,7 +25,7 @@ async function holdAndLetGo(keyboard: FakeMidi, ...keys: number[]) {
   await act(() => new Promise((done) => setTimeout(done, 0)))
 }
 
-/** Opens a section's folded groups (ADR 0100 amended, 0111): in time, one change, the pattern. */
+/** Opens a section's folded groups (ADR 0111 amended, 0111): in time, one change, the pattern. */
 async function unfold() {
   await screen.findByRole('heading', { level: 1 })
   for (const name of [
@@ -68,7 +68,7 @@ function savedSong(song: object) {
   return storage
 }
 
-describe('a section’s page (ADR 0100)', () => {
+describe('a section’s page (ADR 0111)', () => {
   it('starts with its chords open, the rest folded, each group with its ⓘ', async () => {
     const user = userEvent.setup()
     await renderApp('/songs/bz5/sections/2')
@@ -283,7 +283,7 @@ describe('a section’s page (ADR 0100)', () => {
     )
   })
 
-  it('loops a section with its repeats as the Player plays it, every pass (ADR 0067)', async () => {
+  it('loops a section with its repeats as the Player plays it, every pass (ADR 0097)', async () => {
     // The verse's first two bars repeated, then the chorus: played Em D Em D C, then G D.
     const storage = savedSong({
       pattern: 'r2',

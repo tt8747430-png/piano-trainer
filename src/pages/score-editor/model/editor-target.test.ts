@@ -31,7 +31,7 @@ describe('editorTarget', () => {
       id: 'amazing',
       entry: amazing,
     })
-    // The original as the editor writes it: every bar written out (ADR 0091).
+    // The original as the editor writes it: every bar written out (ADR 0114).
     const original = writeDraft(readDraft(musicOf(amazing)))
     expect(target?.music).toEqual(original)
     expect(target?.kind === 'version' && target.original).toEqual(original)

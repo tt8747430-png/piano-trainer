@@ -16,7 +16,7 @@ type Engraving =
   | { readonly status: 'error' }
 
 /**
- * A score engraved by Verovio (ADR 0078) on one line of its staves (spec §2.5; the grand staff, the
+ * A score engraved by Verovio (ADR 0087) on one line of its staves (the grand staff, the
  * tune's over it), or on some or one of them. What lies over it (labels, the playhead, the loop) is
  * its children, given the engraving's layout. The staff of `muted` is soft ink.
  */
@@ -52,7 +52,7 @@ export function ScoreView({
    * barline, as a courtesy (a justified line's).
    */
   next?: NextLine | undefined
-  /** The staves' names, printed at the line's head: a score's first line (ADR 0094). */
+  /** The staves' names, printed at the line's head: a score's first line (ADR 0114). */
   labels?: StaffLabels | undefined
   /** The sheet's width in CSS pixels: the line is spread to it, and drawn smaller where wider. */
   fill?: number | undefined

@@ -4,7 +4,7 @@ import { cn } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
- * A tool of the Player's tools row (ADR 0102, 0104): a toolbar's text button (ADR 0115), its icon, then
+ * A tool of the Player's tools row (ADR 0108, 0105): a toolbar's text button (ADR 0115), its icon, then
  * its name, then what it is set to (`value`: Transpose's key), whole, and what follows (`children`:
  * the View's chevron, turning while its menu is open). On a phone held upright a tool with a value
  * shows that alone after its icon, its name left to its label, so no name is cut short there; a
@@ -36,7 +36,7 @@ export function PlayerTool({
   tip?: string | undefined
   /**
    * Its name left to its label on a phone, upright or on its side, its icon (and value) alone there:
-   * a tool sharing the row with the edit row's icons (the editor's View and Transpose, ADR 0110).
+   * a tool sharing the row with the edit row's icons (the editor's View and Transpose, ADR 0115).
    */
   brief?: boolean
   children?: ReactNode

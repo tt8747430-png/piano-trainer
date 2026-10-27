@@ -11,7 +11,7 @@ import type {
 import type { Draft, DraftNote, NoteLayer } from './draft'
 import { isAt, notesOf, withNotes, type Where } from './notes'
 
-/** A mark the palette puts on notes (ADR 0063). */
+/** A mark the palette puts on notes (ADR 0097). */
 export type MarkChoice =
   | { readonly kind: 'articulation'; readonly articulation: Articulation }
   | { readonly kind: 'ornament'; readonly ornament: Ornament }

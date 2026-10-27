@@ -36,7 +36,7 @@ describe('time', () => {
     expect(beatsBefore([{ beats: 3 }], 0, '3/4')).toBe(0)
   })
 
-  it('reads a first bar against its own meter where it has one (ADR 0095)', () => {
+  it('reads a first bar against its own meter where it has one (ADR 0097)', () => {
     expect(beatsBefore([{ beats: 3, meter: '3/4' }], 0, '4/4')).toBe(0)
     expect(beatsBefore([{ beats: 2, meter: '3/4' }], 0, '4/4')).toBe(1)
   })
@@ -183,7 +183,7 @@ describe('a tempo mark’s unit (ADR 0114)', () => {
   })
 })
 
-describe('beatGrouping (ADR 0110, 0114)', () => {
+describe('beatGrouping (ADR 0115, 0114)', () => {
   it('groups a bar’s eighths by its counted beats', () => {
     expect(beatGrouping('2/4')).toEqual([2, 2])
     expect(beatGrouping('3/4')).toEqual([2, 2, 2])

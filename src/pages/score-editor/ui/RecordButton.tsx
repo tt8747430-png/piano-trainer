@@ -12,7 +12,7 @@ import { useScoreEditorContext } from '../model/editor-context'
 const DOT = 'fill-current text-destructive'
 
 /**
- * Record, the transport's last (ADR 0094, 0096, Dorico's): with a MIDI keyboard connected and room
+ * Record, the transport's last (ADR 0114, 0096, Dorico's): with a MIDI keyboard connected and room
  * in the takes, a tap counts in and records at once, no sheet first; else its popover says what it
  * needs: a MIDI keyboard, with the way to connect one (and Record there once one is), or room in
  * the takes. New song's Record arrives with it pressed (`asked`).

@@ -13,7 +13,7 @@ import { keyScale, spellScale, tonesInKey } from './scale'
 import { scaleChordAt } from './scale-chord'
 
 /**
- * The categories of passing chords, in the order they are shown: The Ultimate Piano's (roadmap §10.2),
+ * The categories of passing chords, in the order they are shown: The Ultimate Piano's,
  * its Diatonic the chords of the key itself.
  */
 export const PASSING_CATEGORIES = [

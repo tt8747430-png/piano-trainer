@@ -33,9 +33,9 @@ function untilKnown(
 }
 
 /**
- * A Check's questions (spec §4.6): a piece's own chords as written, in turn, six questions or one each
- * (none for a piece of no chord symbol, ADR 0094); a step's chord family or scale until each is Known,
- * which marks the step learned (ADR 0006). A piece is looked up in `pieceOf`: the repertoire's, so a
+ * A Check's questions: a piece's own chords as written, in turn, six questions or one each
+ * (none for a piece of no chord symbol, ADR 0114); a step's chord family or scale until each is Known,
+ * which marks the step learned (ADR 0025). A piece is looked up in `pieceOf`: the repertoire's, so a
  * learner's version and own song are checked as they play.
  */
 export function checkPlan(

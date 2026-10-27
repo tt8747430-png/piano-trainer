@@ -44,7 +44,7 @@ export function barAt(draft: Draft, tick: Tick): PlacedBar {
 
 /**
  * The chord sounding at a tick: its bar's last starting at or before it; none in a bar of no chord
- * (ADR 0094).
+ * (ADR 0114).
  */
 export function chordAt(draft: Draft, tick: Tick): Chord | undefined {
   const { start, bar } = barAt(draft, tick)
@@ -70,7 +70,7 @@ export function chordsAt(
   }))
 }
 
-/** The key a section is written in: its own (a key change, ADR 0089), else the song's. */
+/** The key a section is written in: its own (a key change, ADR 0114), else the song's. */
 export function sectionKey(draft: Draft, section: number): Key {
   const written = draft.sections[section]?.heading.key
   return (written === undefined ? null : parseKey(written)) ?? draft.key
@@ -80,7 +80,7 @@ export function sectionKey(draft: Draft, section: number): Key {
 export const keyAt = (draft: Draft, tick: Tick): Key =>
   sectionKey(draft, barAt(draft, tick).section)
 
-/** The meter a section's bars are counted in: its own (a change of time, ADR 0095), else the song's. */
+/** The meter a section's bars are counted in: its own (a change of time, ADR 0097), else the song's. */
 export const sectionMeter = (draft: Draft, section: number): Meter =>
   draft.sections[section]?.heading.meter ?? draft.meter
 

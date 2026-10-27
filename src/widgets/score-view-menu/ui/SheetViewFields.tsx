@@ -31,7 +31,7 @@ function PartsAbout({ parts }: { parts: readonly SheetPart[] }) {
 }
 
 /**
- * The sheet music's own part of the View (ADR 0064, 0097, 0102, 0115): its layout first, three
+ * The sheet music's own part of the View (ADR 0096, 0097, 0108, 0115): its layout first, three
  * tiles with their miniatures; its staves as chips, each by its name (a single staff's own, else its
  * place's, then the piano's upper and lower), the last in sight kept; then what it shows as chips
  * (`parts`: the Player's every one, the editor's what a score prints), and after them a screen's own
@@ -45,7 +45,7 @@ export function SheetViewFields({
 }: {
   /** The score's single staves, top down: each its own chip. */
   staves: readonly { readonly name?: StaffName; readonly clef: Clef }[]
-  /** Whether the score writes the piano's staves: a lead sheet does not (ADR 0083). */
+  /** Whether the score writes the piano's staves: a lead sheet does not (ADR 0114). */
   piano: boolean
   parts?: readonly SheetPart[]
   children?: ReactNode

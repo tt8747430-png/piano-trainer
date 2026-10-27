@@ -65,7 +65,7 @@ describe('checkPlan', () => {
     expect(checkPlan('course:rhythm-basics/note-values')).toBeNull()
   })
 
-  it('has none for a piece of no chord symbol: nothing to check (ADR 0094)', () => {
+  it('has none for a piece of no chord symbol: nothing to check (ADR 0114)', () => {
     const bz5 = pieceById('bz5')
     if (!bz5 || isDegreePiece(bz5)) throw new Error('bz5')
     const silent = { ...bz5, sections: [{ kind: 'verse' as const, lines: ['_ _'] }] }

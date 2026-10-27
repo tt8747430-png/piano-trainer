@@ -2,7 +2,7 @@ import { createContext, use } from 'react'
 import type { ChosenInversions } from '@/entities/diagram-inversion'
 import type { Inversion } from '@/shared/lib/music'
 
-/** A piece's chosen inversions as its diagrams read them, and the way to choose one (ADR 0101). */
+/** A piece's chosen inversions as its diagrams read them, and the way to choose one (ADR 0108). */
 export interface PieceInversionChoice {
   /** The inversion chosen for each chord, by its symbol as played. */
   readonly chosen: ChosenInversions

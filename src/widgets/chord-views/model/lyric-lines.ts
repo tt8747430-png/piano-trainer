@@ -3,7 +3,7 @@ import type { BarWords, BeatWords } from '@/widgets/chord-chart'
 import type { Performance, PerformanceNote } from '@/shared/lib/arrangement'
 import { beatsToTicks, type Syllable, type Tick } from '@/shared/lib/music'
 
-// Chords over lyrics (ADR 0099), as ChordPro's renderers lay a song out: each line of the chart a
+// Chords over lyrics (ADR 0108), as ChordPro's renderers lay a song out: each line of the chart a
 // row of segments, a segment a chord over the words sung up to the next, so no two chords ever
 // overlap. Every tick here is a bar's first pass: each bar is written once, as the chart writes it.
 
@@ -58,7 +58,7 @@ const staffRank = (note: PerformanceNote): number =>
 /**
  * The notes the words are sung on, one an onset, in time: those of the staff they are written under,
  * the top one where two carry them (a tune the right hand doubles), as the sheet prints them (ADR
- * 0093).
+ * 0097).
  */
 function sungNotes(performance: Performance): PerformanceNote[] {
   const singing = performance.notes.filter((note) => note.lyrics)
@@ -183,7 +183,7 @@ function lineOf(
 }
 
 /**
- * The chart's lines as Chords over lyrics shows them (ADR 0099): each a row of segments, a chord
+ * The chart's lines as Chords over lyrics shows them (ADR 0108): each a row of segments, a chord
  * over the words sung from where it starts up to the next chord, verse by verse; a chord held over
  * bar lines once. Words are the verses on the notes of the staff they are written under; a line with
  * none is its chords alone. Each bar once, as it is first played.

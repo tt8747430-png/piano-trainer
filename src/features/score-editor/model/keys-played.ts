@@ -20,7 +20,7 @@ function chordOfKeys(keys: readonly Midi[]): Chord | undefined {
 
 /**
  * A key played: written at the caret as a note (or joining the notes struck with it, or those at the
- * caret in Chord mode; in Insert mode pushing the staff's later notes right, ADR 0092), or, in the
+ * caret in Chord mode; in Insert mode pushing the staff's later notes right, ADR 0114), or, in the
  * chords, named with the keys struck with it as the chord there.
  */
 export function keyPlayed(state: EditorState, key: Midi, time: number): EditorState {

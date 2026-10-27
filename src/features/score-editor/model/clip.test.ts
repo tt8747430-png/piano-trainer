@@ -4,7 +4,7 @@ import { draftOf, oneStaff, shape, staffNotes } from '../testing/test-draft'
 import { clipFits, copyNotes, pasteNotes, type NotesClip } from './clip'
 import { musicToSave } from './draft'
 
-describe('the notes clipboard (ADR 0092)', () => {
+describe('the notes clipboard (ADR 0114)', () => {
   it('copies the notes starting in a span, timed from its start, with its length', () => {
     const sung = draftOf({ staves: [{ notes: 'B4/1 C5/1 D5/2 | E5/4' }] })
     const clip = copyNotes(sung, 'staff0', { from: 24, to: 96 })

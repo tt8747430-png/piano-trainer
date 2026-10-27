@@ -62,7 +62,7 @@ function movedNote(state: EditorState, move: (key: Midi) => Midi | null): Partia
 }
 
 /**
- * A value chosen in the palette (spec 2026-10-23): the notes chosen made that long, else the next
+ * A value chosen in the palette: the notes chosen made that long, else the next
  * note's; either way the value the next note is written as.
  */
 function valueChosen(state: EditorState, value: ChosenValue): EditorState {
@@ -88,7 +88,7 @@ function accidentalMoved(state: EditorState, next: Draft): Partial<EditorState> 
   return moved ? { chordNote: moved.midi } : {}
 }
 
-/** The editor's state after an action (spec §6). */
+/** The editor's state after an action. */
 export function reduce(state: EditorState, action: EditorAction): EditorState {
   const { draft, layer, caret } = state
   switch (action.type) {
@@ -141,7 +141,7 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         })
       }
       // In Insert mode a rest, like a note, is written in room made for it, the later notes pushed
-      // right (ADR 0092); with none to push, as Replace writes it, stopping at the song's end.
+      // right (ADR 0114); with none to push, as Replace writes it, stopping at the song's end.
       const room = state.mode === 'insert' ? makeRoom(draft, layer, caret, stepOf(state)) : draft
       const result = writeRest(room, layer, caret, stepOf(state))
       return commit(state, result.draft, { caret: result.end, struck: null })
@@ -149,7 +149,7 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
     case 'delete': {
       if (layer !== 'chords') {
         // The notes chosen in this row taken, the caret at their start; a chord's one note chosen,
-        // that note alone (ADR 0088).
+        // that note alone (ADR 0096).
         const span = chosenSpan(state)
         if (typeof span !== 'number' && 'from' in span)
           return commit(state, takenAway(state, layer, span), {
@@ -218,7 +218,7 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
     case 'renameStaff':
       return commit(state, renameStaff(draft, action.place, action.name))
     case 'piano': {
-      // Never every staff out of sight: a lead sheet keeps its single staves (ADR 0083).
+      // Never every staff out of sight: a lead sheet keeps its single staves (ADR 0114).
       if (draft.leadSheet === action.hidden || (action.hidden && draft.staves.length === 0))
         return state
       const next = { ...draft, leadSheet: action.hidden }
@@ -276,7 +276,7 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       return layer === 'chords'
         ? state
         : commit(state, tieNotes(draft, layer, caret), { struck: null })
-    // The words go under the staff they are written on alone (ADR 0093, 0097).
+    // The words go under the staff they are written on alone (ADR 0097).
     case 'syllable':
       return singsHere(draft, layer)
         ? commit(state, setSyllable(draft, caret, action.verse, action.text), { struck: null })

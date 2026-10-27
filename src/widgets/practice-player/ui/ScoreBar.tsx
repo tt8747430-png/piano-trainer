@@ -12,7 +12,7 @@ const GROUP = 'flex min-w-0 items-center gap-1 sm:gap-2'
  * and on a phone on its side (the `score-bar` utility). One band of the card's paper with one
  * hairline under the whole, every button a toolbar's (`variant="tool"`), so the two modes' bars are
  * the same height and switching moves nothing. While the music is read in Diagrams it steps aside
- * whole (ADR 0102), its room kept.
+ * whole (ADR 0108), its room kept.
  */
 export function ScoreBar({
   lead,

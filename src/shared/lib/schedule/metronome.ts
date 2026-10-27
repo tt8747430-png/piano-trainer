@@ -1,6 +1,6 @@
 import type { ClickSound, ClickVoice } from './schedule'
 
-/** The Metronome's meters (ADR 0113, 0114): a beat of 6/8 is an eighth, each counted; of 2/2 a half. */
+/** The Metronome's meters (ADR 0052, 0114): a beat of 6/8 is an eighth, each counted; of 2/2 a half. */
 export const METRONOME_METERS = ['4/4', '3/4', '2/4', '2/2', '6/8', '1/4'] as const
 export type MetronomeMeter = (typeof METRONOME_METERS)[number]
 

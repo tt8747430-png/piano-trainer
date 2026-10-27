@@ -26,7 +26,7 @@ const HEIGHT_CHANGE = 0.02
 /** The title's room over the first page's first line, for dealing lines onto pages. */
 const TITLE_ROOM = 52
 /**
- * The staff's size down the screen (ADR 0074), as LilyPond sets a staff size per paper: full from a
+ * The staff's size down the screen (ADR 0087), as LilyPond sets a staff size per paper: full from a
  * sheet this wide, smaller on a phone, so a line holds more than a bar, never under `least`.
  */
 const SCROLL_SCALE = { full: 600, least: 0.72 } as const
@@ -43,7 +43,7 @@ const itemKey = (item: PageItem) =>
     : `${item.sheet.line.section} ${item.sheet.line.line} ${item.sheet.line.start}`
 
 /**
- * Each section's name in the learner's language, by section: printed at its first bar (ADR 0095).
+ * Each section's name in the learner's language, by section: printed at its first bar (ADR 0097).
  * The same array while the names are, so a line's row is not drawn again for every edit.
  */
 function useHeadings(draft: Draft): readonly string[] {
@@ -71,10 +71,10 @@ function blocksOf(page: readonly PageItem[]): PageItem[][] {
 }
 
 /**
- * The editor's sheet (spec §6.1, ADR 0064), as `view` lays it out: its title at its head (ADR 0094);
+ * The editor's sheet (ADR 0096), as `view` lays it out: its title at its head (ADR 0114);
  * the piece down the screen, each chart line a system of its staves; the same on A4 pages as it will
  * print, its title on the first; or all of it as one line across. Over each line its labels' row, as
- * the Player's: its first bar's number, a section's name at its first bar (ADR 0095), the tempo and
+ * the Player's: its first bar's number, a section's name at its first bar (ADR 0097), the tempo and
  * the chord symbols; the caret on its layer's staff; while Play plays, the playhead apart from it
  * (ADR 0096). A line is drawn again only when what it shows changes.
  */
@@ -126,17 +126,17 @@ export function ScoreSheet({
   /** The notes at the caret dragged on their staff by steps of the key. */
   onDrag?: (steps: number, joins: boolean) => void
   draft: Draft
-  /** Where the next note goes; none on a sheet only shown (the editor's Transpose preview, ADR 0110). */
+  /** Where the next note goes; none on a sheet only shown (the editor's Transpose preview, ADR 0115). */
   caret: Tick | null
   /**
    * Where Play is while it plays, on the piece's ticks: the playhead stands there and follows the
    * clock, the sheet following it, the caret and what is chosen left where they are (ADR 0096).
    */
   playhead?: { readonly tick: Tick; readonly clock: () => Tick | null } | null
-  /** One note of the chord at the caret chosen alone (ADR 0088). */
+  /** One note of the chord at the caret chosen alone (ADR 0096). */
   chordNote?: Midi | null
   layer: Layer
-  /** The notes chosen: their span on the piece (ADR 0088). */
+  /** The notes chosen: their span on the piece (ADR 0096). */
   selection: { readonly from: Tick; readonly to: Tick } | null
   onPlace: (tick: Tick, layer: Layer, extend: boolean, key?: Midi) => void
   /** A held finger dragged onto the bar starting at a tick: what is chosen reaches it. */
@@ -145,27 +145,27 @@ export function ScoreSheet({
   onDeselect: () => void
   /** Where the caret may stand in a layer, asked when a bar is clicked. */
   placesOf: (layer: Layer) => readonly Tick[]
-  /** Where a click lands in a layer: on a note or a bar's start, never an empty step (ADR 0082). */
+  /** Where a click lands in a layer: on a note or a bar's start, never an empty step (ADR 0096). */
   tapsOf: (layer: Layer) => readonly Tick[]
   /** Chord names over the staff, written in their row; without them a click there writes the staff under it. */
   chordNames: boolean
-  /** The words under the tune, where the song has them (ADR 0093). */
+  /** The words under the tune, where the song has them (ADR 0097). */
   lyrics?: boolean
   /** The fingers written on the notes, printed (the View's Finger numbers): typed there (ADR 0096). */
   fingers?: boolean
   /**
-   * What edits a thing printed, opened from its button where it is printed (ADR 0094): the tempo
-   * mark, a section's name (ADR 0095), a clef, a key or time signature, a staff's name.
+   * What edits a thing printed, opened from its button where it is printed (ADR 0114): the tempo
+   * mark, a section's name (ADR 0097), a clef, a key or time signature, a staff's name.
    */
   edit: EditPrinted
   /**
-   * The staves the View hides (ADR 0094): one of the piano's alone is left out of the drawing, its
+   * The staves the View hides (ADR 0114): one of the piano's alone is left out of the drawing, its
    * notes kept; never every staff.
    */
   hidden?: readonly StaffId[]
   view?: SheetView
   /**
-   * The piece's title as the page prints it, its heading (ADR 0094), where it is printed: at the head
+   * The piece's title as the page prints it, its heading (ADR 0114), where it is printed: at the head
    * of the first page, of the lines down the screen, or of the line across.
    */
   title: (place: TitlePlace) => ReactNode
@@ -175,14 +175,14 @@ export function ScoreSheet({
   const across = view === 'panorama'
   const box = useRef<HTMLElement>(null)
   const { width } = useElementSize(box)
-  // Pages as they print, on a canvas that zooms them to the screen (ADR 0075): laid out alike on any.
+  // Pages as they print, on a canvas that zooms them to the screen (ADR 0096): laid out alike on any.
   const pages = view === 'page'
   // The piece's music whole, for each bar's width: lines are cut by width, as an engraver cuts them.
   const whole = useMemo(() => {
     const [all] = oneLine(draft)
     return all ? notate(untimed(lineMusic(draft, all, lyrics))) : undefined
   }, [draft, lyrics])
-  // The staves a line draws: the score's, less those the View hides (ADR 0094, 0097), never every
+  // The staves a line draws: the score's, less those the View hides (ADR 0114, 0097), never every
   // one; the verses under the staff that sings them.
   const written = whole?.staves.join(' ') ?? ''
   const hiddenKey = hidden.join(' ')
@@ -193,7 +193,7 @@ export function ScoreSheet({
   }, [written, hiddenKey])
   const staves = drawn.length > 0 ? drawn.length : 2
   const verses = whole ? versesOf(whole, drawn) : 0
-  // The staves' names at the first line's head (ADR 0094, 0097): each single staff's own, else its
+  // The staves' names at the first line's head (ADR 0114, 0097): each single staff's own, else its
   // place's printed soft, so a staff with no name has one to click (as Flat prints "Title").
   const own = useStaffNames(draft.staves)
   const title = useStaffTitle()
@@ -294,7 +294,7 @@ export function ScoreSheet({
 
   if (pages) {
     const scale = PRINT_SCALE
-    // A line's height as engraved: its staves and the verses under its tune (ADR 0093).
+    // A line's height as engraved: its staves and the verses under its tune (ADR 0097).
     const lineHeight = (sheet: LineSheet) =>
       labelRow(chordNames, scale, true) + (scoreHeight(sheet.score, drawn) + LINE_GAP) * scale
     const items: PageItem[] = [

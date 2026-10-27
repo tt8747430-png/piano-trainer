@@ -21,7 +21,7 @@ Then append the common part below unchanged. Launch with `isolation: "worktree"`
   - `CLAUDE.md`, whose rules bind you;
   - `docs/CODE_STYLE.md`, `DESIGN.md` and `docs/UBIQUITOUS_LANGUAGE.md`;
   - the round's spec in `.scratch/<feature>/spec.md`, if it has one;
-  - the ADRs your brief names.
+  - the ADR of each area your round changes (`docs/adr/README.md` lists them) and any other your brief names.
 - Chordify research notes are in `/tmp/claude-0/-home-user-piano-trainer/05b98fad-a70e-53a3-9b61-b349107350d2/scratchpad/chordify/research.md`. Read them for behaviour only: never copy Chordify's code or wording. chordify.net blocks automated access, so do not try to reach it.
 
 ## The owner's standing rules
@@ -42,7 +42,7 @@ Then append the common part below unchanged. Launch with `isolation: "worktree"`
 - Never `git checkout`, `restore`, `stash` or `reset` what you did not create. Do not push.
 - Commit each task as soon as it is finished: one proper commit per task, its message saying what changed and why. You need not run tests before each commit; `npm run typecheck && npm run lint` is enough there. When the round is finished, run only the tests your changes reach (`npm run test:changed`, or `npm run test:related -- <changed source files>`) and fix what fails. Never run the full `npm run test`: it runs once, on the merged branch, at the merge. Run `npm run build` only if you touched startup, routing, the PWA or config.
 - Before you report, merge `claude/keen-gates-q9bnit` again if it moved, and resolve any conflicts.
-- Write the ADR your brief names, in the style of `docs/adr/0105-*.md`, and add the glossary rows. Do not edit `CLAUDE.md`; it is updated at the merge.
+- Amend the ADR of the area you changed, in the style of `docs/adr/0105-*.md`: its decision as it stands now, and one line in its History. Write a new ADR only for a new area, and add it to `docs/adr/README.md`. Add the glossary rows. Do not edit `CLAUDE.md`; it is updated at the merge.
 - Put every string in English and Russian.
 - Screenshots:
   - Run a dev server with `npx vite --port <your port> --strictPort` in the background.

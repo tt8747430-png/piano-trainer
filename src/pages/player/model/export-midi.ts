@@ -2,7 +2,7 @@ import { downloadFile, midiFileName } from '@/shared/lib'
 import type { Performance } from '@/shared/lib/arrangement'
 import { performanceMidi, type PartNames } from '@/shared/lib/schedule'
 
-/** The music as the Player plays it now, as its More exports it (ADR 0099). */
+/** The music as the Player plays it now, as its More exports it (ADR 0108). */
 export interface PlayedMusic {
   readonly performance: Performance
   /** The Player's title: the file's name, and its first track's. */

@@ -57,7 +57,7 @@ function barText(notes: readonly HandNote[], barTicks: Tick): string {
 
 /**
  * A hand as the piece writes it, bar by bar, every bar written (a bar with no notes a rest, ADR
- * 0091), each bar that changes its staff's clef starting `clef:` (ADR 0069).
+ * 0114), each bar that changes its staff's clef starting `clef:` (ADR 0097).
  */
 export function writeHand(
   bars: readonly (readonly HandNote[])[],

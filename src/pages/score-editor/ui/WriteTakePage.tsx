@@ -43,7 +43,7 @@ const PIANO_INTO = ['both', 'rh', 'lh'] as const
 const EIGHTH = gridKey({ value: 8, dots: 0, triplet: false })
 
 /**
- * A take's page of the sheet (spec 2026-10-05 §4): where it goes (the piano's staves, or a single
+ * A take's page of the sheet: where it goes (the piano's staves, or a single
  * staff by its name, ADR 0097), the key the hands split at, the shortest note it is snapped to (a
  * value of the meter it was played in), and Write from the caret's bar, which names it.
  */

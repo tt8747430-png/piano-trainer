@@ -4,7 +4,7 @@ import { beatAt, type PlayedBeat } from './beats'
 import type { Practice } from './use-practice'
 
 /**
- * The beat sounding now (ADR 0099), in the bar played. While Listen plays, where its clock is, looked
+ * The beat sounding now (ADR 0108), in the bar played. While Listen plays, where its clock is, looked
  * at every frame and new only as a beat begins, a few times a second at most; before its first
  * sounds, and otherwise, the beat of the beat group the cursor stands on (Wait mode's awaited, where
  * Play starts).

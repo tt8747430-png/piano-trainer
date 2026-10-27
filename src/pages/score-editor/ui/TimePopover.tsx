@@ -5,7 +5,7 @@ import { SignPicker } from './SignPicker'
 import { TimePicker } from './TimePicker'
 
 /**
- * A time signature's picker (ADR 0094, 0095, 0114), opened where it is printed: its meter from its
+ * A time signature's picker (ADR 0114, 0097), opened where it is printed: its meter from its
  * section on, or the whole song's (with its pickup) at its head, said under its title.
  */
 export function TimePopover({ bar, trigger }: { bar: number; trigger: ReactElement }) {

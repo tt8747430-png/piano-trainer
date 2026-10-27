@@ -11,7 +11,7 @@ const family = (shape: ClefShape): Clef[] =>
   CLEFS.filter((clef) => CLEF_FORMS[clef].shape === shape)
 
 /**
- * The clef picker (ADR 0069, 0097, 0114, after notation apps' clef sheets): one bordered grid, the G
+ * The clef picker (ADR 0097, 0114, after notation apps' clef sheets): one bordered grid, the G
  * clefs (treble, an octave or two up or down), the C clefs (soprano to baritone) and the F clefs (bass,
  * up or down, on the third line and the fifth), each drawn on a short staff, named in its tooltip and
  * to a screen reader, the one the staff is in tinted. A tap writes it: one of the piano's staves from

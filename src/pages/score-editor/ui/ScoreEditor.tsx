@@ -35,15 +35,15 @@ import { UnsavedNotice } from './UnsavedNotice'
 const GAP = 8
 
 /**
- * The score editor (spec §6, ADR 0064, 0089, 0091), laid out as a notation app, one screen that never
+ * The score editor (ADR 0096, 0114), laid out as a notation app, one screen that never
  * scrolls as a whole: the bar, saying where the caret is; the sheet, its one scroller; the keys at
  * the foot or under the bar. Over the sheet floats what works on it, above everything and never
- * moving it (ADR 0079): the dock (`EditorDock`), the Player's transport in shape and place, and the
+ * moving it (ADR 0115): the dock (`EditorDock`), the Player's transport in shape and place, and the
  * palette, a card that hugs its keys, at the foot on a phone held upright and a tablet, beside the
- * sheet at its right on a laptop and a phone on its side (ADR 0094); folded, its row of tabs alone,
+ * sheet at its right on a laptop and a phone on its side (ADR 0114); folded, its row of tabs alone,
  * where the card was.
  * Floating, they take no room of the sheet's: it only has room to scroll its last line above the
- * dock (ADR 0081). What floats at the foot steps aside while the music is read (dragged,
+ * dock (ADR 0115). What floats at the foot steps aside while the music is read (dragged,
  * scrolled, pinched) and comes back at a tap on the sheet. While a take records, its strip stands
  * where the dock was.
  */
@@ -55,7 +55,7 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
   const idle = editor.takes.stage === 'idle'
   const dock = useSettings((state) => selectKeyboard(state).dock)
   const settings = useSettingsStoreApi()
-  // Open by default beside the sheet, where it covers no music; folded at the foot (ADR 0089).
+  // Open by default beside the sheet, where it covers no music; folded at the foot (ADR 0114).
   const place = beside ? 'beside' : 'foot'
   const palette = !useSettings(selectPaletteFolded(place))
   const setPalette = (open: boolean) => setPaletteFolded(settings, place, !open)
@@ -67,7 +67,7 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
   const { height: below } = useElementSize(foot)
   const { width: besideWidth } = useElementSize(side)
   // The sheet never leaves the caret under what floats at its foot: as the palette opens (the foot
-  // grows), the caret's staff scrolls into the room above it (spec 2026-10-23).
+  // grows), the caret's staff scrolls into the room above it.
   useEffect(() => {
     const box = sheet.current
     const caret = box?.querySelector('[data-slot="caret"]')
@@ -88,14 +88,14 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
   )
   return (
     <ScoreEditorContext value={editor}>
-      {/* The Player's frame (ADR 0110): its bar's two groups, its tools row, the sheet, the transport
+      {/* The Player's frame (ADR 0115): its bar's two groups, its tools row, the sheet, the transport
           and the keys in the Player's places, so nothing moves as Practise · Edit switches. */}
       <div data-keys={dock} className={SCORE_SCREEN}>
         <ScoreBar lead={<EditorLead />} actions={<EditorActions />} tools={<EditorToolsRow />} />
         {/* Where the caret is, a screen reader's alone, in the Player's status line's place. */}
         <PlayerArea area="status">{idle ? <CaretLine /> : null}</PlayerArea>
         {editor.view.layout === 'page' ? (
-          // Pages on their canvas (ADR 0075): it moves and zooms them itself, the area never scrolls.
+          // Pages on their canvas (ADR 0096): it moves and zooms them itself, the area never scrolls.
           <div
             ref={sheet}
             data-area="sheet"
@@ -139,12 +139,12 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
             </div>
           </div>
           {beside ? (
-            // Beside the sheet, over its right edge (ADR 0094): folded, its row of tabs stays where
+            // Beside the sheet, over its right edge (ADR 0114): folded, its row of tabs stays where
             // the card's was.
             <div
               ref={side}
               // Its foot clear of the transport, which stands centred on the sheet's foot as the
-              // Player's does (ADR 0110).
+              // Player's does (ADR 0115).
               style={{ maxHeight: `calc(100% - ${below + GAP}px)` }}
               className="pointer-events-auto absolute top-0 right-0 flex w-84 flex-col landscape-phone:w-80 xl:w-96"
             >
@@ -156,7 +156,7 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
             data-hidden={footShown ? undefined : true}
             inert={!footShown}
             // The transport at the sheet's foot where the Player's stands, the palette at the foot
-            // over it (ADR 0110).
+            // over it (ADR 0115).
             className="absolute inset-x-0 bottom-0 flex max-h-full flex-col items-center gap-2 px-1 pb-2 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:pb-1"
           >
             {beside ? null : (

@@ -21,7 +21,7 @@ const keyOf = (entry: ShelvedEntry) =>
   entry.kind === 'song' ? `song:${entry.id}` : `folder:${entry.folder.id}`
 
 /**
- * The archive (ADR 0106, Mindscape's `ArchivedDecksPage` and its ADR 0003, the archive is a place):
+ * The archive (ADR 0106, Mindscape's `ArchivedDecksPage` and its ADR 0038, the archive is a place):
  * Back and Restore all in its bar; what was archived, the newest first, folders with their songs
  * counted and songs, each with Restore, and its More with Delete, asked first, for the learner's own
  * song or folder; empty, it says what it is for.

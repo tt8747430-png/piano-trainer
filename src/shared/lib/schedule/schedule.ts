@@ -48,7 +48,7 @@ export interface NoteSound {
   readonly part?: NoteHand
 }
 /**
- * A beat's sound, synthesised (ADR 0113): the Player's click, or the Metronome's beep and drums.
+ * A beat's sound, synthesised (ADR 0052): the Player's click, or the Metronome's beep and drums.
  */
 export type ClickVoice = 'click' | 'beep' | 'kick' | 'snare' | 'hat'
 
@@ -144,7 +144,7 @@ const keyAt = (performance: Performance, tick: Tick) =>
 export function schedule(performance: Performance, options: ScheduleOptions): Scheduled {
   const { hands, fromTick = 0, toTick = performance.totalTicks } = options
   const tempo = checkedTempo(options.tempo)
-  // Swung where asked, then held back or pressed on where the notes mark the tempo (ADR 0068).
+  // Swung where asked, then held back or pressed on where the notes mark the tempo (ADR 0097).
   const swung = placement(performance, options.swing)
   const marked = performance.timing ?? performance.notes
   const warp = tempoWarp(marked)
@@ -162,7 +162,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   // A note still held where the pass starts sounds from there, for what is left of it.
   const heard = (n: PerformanceNote) =>
     inPass(n.startTick) || (n.startTick < fromTick && n.startTick + n.durationTicks > fromTick)
-  // The notes' marks (ADR 0063): their dynamics, rolls, lengths, grace notes and ornaments.
+  // The notes' marks (ADR 0097): their dynamics, rolls, lengths, grace notes and ornaments.
   const levels = loudness(performance.notes)
   const rolls = rollOffsets(performance.notes)
   const thirtySecond = secondsFor(TICKS_PER_BEAT / 8, tempo)

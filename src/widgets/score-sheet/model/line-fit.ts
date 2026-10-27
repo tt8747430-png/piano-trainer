@@ -10,7 +10,7 @@ const LEAST_FIT = 0.4
 
 /**
  * The size a line is drawn at so a whole system is in sight in the sheet's height (a phone on its
- * side): its labels' row (a section's name in it, ADR 0095), a tempo mark, its staves and the verses
+ * side): its labels' row (a section's name in it, ADR 0097), a tempo mark, its staves and the verses
  * under the tune, or the line as engraved where it is known (`natural`: a line across, whose notes
  * anywhere in the piece reach over or under its staves); at most its own size, never under
  * `LEAST_FIT`.
@@ -26,7 +26,7 @@ export function lineFit({
   staves: number
   /** Whether the line has its chord row over it. */
   chordNames?: boolean
-  /** The verses of words under the staff that sings them (ADR 0093). */
+  /** The verses of words under the staff that sings them (ADR 0097). */
   verses?: number
   /** The line's height as engraved, at its own size, where it is known. */
   natural?: number | undefined

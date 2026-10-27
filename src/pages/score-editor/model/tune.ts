@@ -11,7 +11,7 @@ export const hasTune = (draft: Pick<Draft, 'staves'>): boolean =>
 
 /**
  * The song's tune from its bar `from` (an index) at its tempo, its first note at 0 s: what plays
- * under a take from its downbeat (spec 2026-10-09 §4.2), so an accompaniment is recorded against
+ * under a take from its downbeat, so an accompaniment is recorded against
  * the song it accompanies: its single staves over the piano (ADR 0097); in strict time, its tempo
  * marks left to the Player.
  */

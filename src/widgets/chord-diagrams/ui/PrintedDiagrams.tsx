@@ -6,7 +6,7 @@ import { ChordDiagram } from './ChordDiagram'
 /**
  * A piece's chords as diagrams on a page of their own, the last of its print (ADR 0107, Chordify's):
  * under their heading, each its keys over its symbol as the sheet prints it, in the order they first
- * sound and in the inversion its piece chose (ADR 0101), four a row. Nothing for music of no chord
+ * sound and in the inversion its piece chose (ADR 0108), four a row. Nothing for music of no chord
  * symbol.
  */
 export function PrintedDiagrams({ chords }: { chords: readonly DiagramChord[] }) {

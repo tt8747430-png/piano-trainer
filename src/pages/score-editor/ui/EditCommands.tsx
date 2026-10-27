@@ -49,7 +49,7 @@ function EditButton({
   )
 }
 
-/** What Copy and Cut would take, in a line for their tooltips (ADR 0092). */
+/** What Copy and Cut would take, in a line for their tooltips (ADR 0114). */
 function useCopySaid(): string {
   const { t } = useTranslation('editor')
   const target = useEditorState(useShallow(copyTarget))
@@ -74,11 +74,11 @@ function usePasteSaid(): { readonly hint?: string; readonly blocked?: string } {
 }
 
 /**
- * The edit row's commands (spec 2026-10-23, Flat's second toolbar), in the tools row after Transpose
- * (ADR 0110): what is done to what is chosen, never a mark put on it: Delete (the notes or chord
+ * The edit row's commands (Flat's second toolbar), in the tools row after Transpose
+ * (ADR 0115): what is done to what is chosen, never a mark put on it: Delete (the notes or chord
  * chosen, else the ones before the caret, as Backspace), Copy, Cut and Paste of what is chosen (the
  * bars in the chord row, the notes on a staff; Paste greyed with its reason where the clip cannot go,
- * ADR 0092). Undo and Redo are the bar's. While a take records, they wait for Stop.
+ * ADR 0114). Undo and Redo are the bar's. While a take records, they wait for Stop.
  */
 export function EditCommands() {
   const { t } = useTranslation('editor')

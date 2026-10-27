@@ -11,7 +11,7 @@ function middleOf(boxes: readonly ({ top: number; bottom: number } | undefined)[
 }
 
 /**
- * The staves' names Verovio printed at a first line's head (ADR 0094), in the line's px (`at` turns
+ * The staves' names Verovio printed at a first line's head (ADR 0114), in the line's px (`at` turns
  * Verovio's units into them): each name's box, its text right-aligned before its staves and as wide
  * as its letters, and which staves it names, a single staff (ADR 0097) or the piano's, by the staves
  * it stands nearest beside (Verovio keeps no id on a name).

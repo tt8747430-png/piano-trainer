@@ -26,7 +26,7 @@ export interface LessonTrack {
 }
 
 /**
- * A lesson, a journey's or a course's (ADR 0053, 0058), in one column in the middle of the screen:
+ * A lesson, a journey's or a course's (ADR 0053, 0061), in one column in the middle of the screen:
  * its title with Learned in its bar, where it is (`place`), the lesson under its
  * floating bar of sections, and at its end the lesson before and the way on, which learns it.
  */

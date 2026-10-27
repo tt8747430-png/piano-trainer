@@ -37,7 +37,7 @@ describe('resolveChoice', () => {
     ).toEqual(note('B', -1))
   })
 
-  it('spells the key it moves to by its simplest signature, its own as it is written (ADR 0104)', () => {
+  it('spells the key it moves to by its simplest signature, its own as it is written (ADR 0105)', () => {
     const tonic = (piece: Piece, key: SpelledNote) =>
       resolveChoice(piece, { key: noteParam(key) }, false, BUILT_IN_PATTERNS).tonic
     // C♯ major writes seven sharps, D♭ five flats.

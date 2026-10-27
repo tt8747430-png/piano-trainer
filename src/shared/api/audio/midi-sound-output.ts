@@ -19,7 +19,7 @@ const OFF_AHEAD_MS = 100
 const OFF_EVERY_MS = 25
 
 /**
- * Notes through the piano (spec 2026-10-09 §3.3): each note's on sent at once, timed on the page's
+ * Notes through the piano: each note's on sent at once, timed on the page's
  * clock (`pageTimeOf` a moment of the audio clock), at the velocity its gain was struck at; its off
  * held until shortly before it is due. A key has one voice on a keyboard, so a note struck again
  * before the last one on its key ends ends that one just before it, and the last one's off goes:

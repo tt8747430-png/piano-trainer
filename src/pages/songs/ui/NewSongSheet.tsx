@@ -85,7 +85,7 @@ export function NewSongSheet({
               onChange={setMeter}
             />
           </div>
-          {/* What the score holds: its own sheet, so New song stays short (ADR 0072). */}
+          {/* What the score holds: its own sheet, so New song stays short (ADR 0114). */}
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 flex-col">
               <span className="text-sm text-muted-foreground">{t('setup.title')}</span>

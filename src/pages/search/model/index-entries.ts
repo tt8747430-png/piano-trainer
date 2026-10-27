@@ -125,7 +125,7 @@ const named = (text: LocalText, locale: Locale) => ({
 })
 
 /**
- * The index: every named thing the app has, each once (ADR 0044). A projection of the registries the
+ * The index: every named thing the app has, each once (ADR 0052). A projection of the registries the
  * pages themselves read, so a thing added to one is found here with no second list to keep.
  */
 export function indexEntries({

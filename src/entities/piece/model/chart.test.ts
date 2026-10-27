@@ -51,7 +51,7 @@ describe('stavesOf (ADR 0097)', () => {
   })
 })
 
-describe('the staff a piece’s lyrics are on (ADR 0093, 0097)', () => {
+describe('the staff a piece’s lyrics are on (ADR 0097)', () => {
   const hands = { rh: 'C4/2 D4/2 | E4/4' }
   /** What the upper staff's notes sing, in order. */
   const upper = (piece: Parameters<typeof chartOf>[0]) =>

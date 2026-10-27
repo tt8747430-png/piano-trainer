@@ -12,7 +12,7 @@ export const takeBarCount = (take: Pick<Take, 'bars'>): number => Math.max(1, ta
 export const takeBarStart = (take: Pick<Take, 'bars'>, bar: number): number => take.bars[bar] ?? 0
 
 /**
- * The take cut to its bars `first`…`last` (from 0) in place (spec 2026-10-09 §4.3): notes and presses
+ * The take cut to its bars `first`…`last` (from 0) in place: notes and presses
  * before the first dropped, the rest moved back by the bars cut, a note or press held past the last
  * bar's end cut there (a pedal held over the first bar's start held from it), the length whole bars,
  * so the take stays on the click's beats; it starts that much later in the piece.

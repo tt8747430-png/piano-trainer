@@ -7,7 +7,7 @@ import type { TimedMusic } from '@/shared/lib/notation'
 import { audibleHands, isAudible, schedule, type Sound } from '@/shared/lib/schedule'
 import { unmarked, type ShownKeys } from '@/shared/ui'
 
-/** The piece a pattern that plays the tune is heard over: its lesson's (ADR 0021). */
+/** The piece a pattern that plays the tune is heard over: its lesson's (ADR 0053). */
 const TUNE_PIECE = 'otche'
 /** A bar of C heard at a steady walk. */
 const SAMPLE_TEMPO = 80

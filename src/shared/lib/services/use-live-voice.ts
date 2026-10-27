@@ -12,7 +12,7 @@ interface HandVoice {
 }
 
 /**
- * The live voice for one hand's keys (spec 2026-10-09 §2.2). Each press strikes what it plays, and
+ * The live voice for one hand's keys. Each press strikes what it plays, and
  * its key's letting go releases exactly that, though the screen's chords changed meanwhile: one
  * release for each key struck, so the live voice, which counts what holds each key, lets go of a key
  * two presses hold (two fingers, two chords sharing a note) with the last of them. Everything still

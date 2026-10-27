@@ -27,7 +27,7 @@ interface Place {
   readonly key?: Combo
 }
 
-/** The three places (ADR 0049), each opened as it was left. The bar is monochrome: the screens above it carry the colour. */
+/** The three places (ADR 0053), each opened as it was left. The bar is monochrome: the screens above it carry the colour. */
 const PLACES: readonly Place[] = [
   {
     to: '/',

@@ -52,7 +52,7 @@ export interface Section {
   /** The key its bars are written in, where that is not the piece's: a key change. */
   readonly key?: KeyText
   /**
-   * The meter its bars are counted in, where that is not the piece's: a change of time (ADR 0095),
+   * The meter its bars are counted in, where that is not the piece's: a change of time (ADR 0097),
    * of the piece's kind (a quarter's beat, or a dotted quarter's).
    */
   readonly meter?: Meter
@@ -136,14 +136,14 @@ export interface ChartPiece extends PieceCommon {
   /** Its single staves over the piano's grand staff, top down (ADR 0097): the tune first. */
   readonly staves?: readonly PieceStaff[]
   /**
-   * A lead sheet (ADR 0083, 0094): the piano's grand staff hidden, its music kept and played, the
+   * A lead sheet (ADR 0114): the piano's grand staff hidden, its music kept and played, the
    * single staves and the chord symbols in sight. Only a piece with a single staff is one.
    */
   readonly leadSheet?: boolean
   /** Bars of either hand written note by note, played in place of the pattern's hand there. */
   readonly hands?: Hands
   /**
-   * Its words, a verse a string (ADR 0093): syllables parted by spaces, aligned to the notes of the
+   * Its words, a verse a string (ADR 0097): syllables parted by spaces, aligned to the notes of the
    * staff they are on in order, `-` ending a syllable its word carries on, `_` holding one over the
    * next note, `~` an empty place: see docs/CONTENT.md.
    */
@@ -156,7 +156,7 @@ export interface ChartPiece extends PieceCommon {
 }
 
 /**
- * A staff lyrics are written on (ADR 0093, 0097): a single staff by its place (0 the top), or the
+ * A staff lyrics are written on (ADR 0097): a single staff by its place (0 the top), or the
  * piano's upper staff (the right hand's).
  */
 export type LyricsStaff = number | 'rh'
@@ -166,7 +166,7 @@ export const defaultLyricsStaff = (score: { readonly staves?: readonly unknown[]
   score.staves?.length ? 0 : 'rh'
 
 /**
- * The staff a piece's lyrics are on (ADR 0093, 0097): the one `lyricsOn` names, else the top single
+ * The staff a piece's lyrics are on (ADR 0097): the one `lyricsOn` names, else the top single
  * staff, else the upper staff.
  */
 export const lyricsStaff = (piece: Pick<ChartPiece, 'staves' | 'lyricsOn'>): LyricsStaff =>
@@ -193,7 +193,7 @@ export const isDegreePiece = (piece: Entry): piece is DegreePiece => 'progressio
 
 /**
  * Whether a piece is a lead sheet: it hides the piano's staves, its single staves and chord names
- * shown (ADR 0083, 0097). The Player writes its single staves alone, the tune heard.
+ * shown (ADR 0114, 0097). The Player writes its single staves alone, the tune heard.
  */
 export const isLeadSheet = (piece: Piece): boolean =>
   !isDegreePiece(piece) && piece.leadSheet === true && (piece.staves?.length ?? 0) > 0

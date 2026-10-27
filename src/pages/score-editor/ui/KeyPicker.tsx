@@ -14,7 +14,7 @@ const SHARPS = [1, 2, 3, 4, 5, 6, 7] as const
 const FLATS = [-1, -2, -3, -4, -5, -6, -7] as const
 
 /**
- * The key signature picker (ADR 0089, 0094, 0114, after notation apps' key sheets): one bordered grid
+ * The key signature picker (ADR 0114, after notation apps' key sheets): one bordered grid
  * of one to seven sharps over one to seven flats, each cell the signs alone, named by its major and
  * relative minor in its tooltip and to a screen reader, the one in force tinted; Switch to natural
  * under it (no key signature, C major or A minor). A cell keeps the key's mode, so Major · Minor over

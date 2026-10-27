@@ -15,7 +15,7 @@ import {
 import { toneMark, type KeyMark } from '@/shared/ui'
 
 /**
- * What the keys make (ADR 0054): nothing yet, one note, two notes as an interval (a 5th also as its
+ * What the keys make (ADR 0052): nothing yet, one note, two notes as an interval (a 5th also as its
  * power chord), a chord by every name it reads as, best first, or no chord.
  */
 export type Finding =

@@ -185,7 +185,7 @@ describe('createWebAudioOutput', () => {
     expect(context.oscillators).toHaveLength(1)
   })
 
-  it('plays the Metronome’s beep as one tone, the bar’s first higher (ADR 0113)', () => {
+  it('plays the Metronome’s beep as one tone, the bar’s first higher (ADR 0052)', () => {
     const { context, audio } = setUp()
     audio.play(
       [

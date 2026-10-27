@@ -9,7 +9,7 @@ import {
 } from '@/shared/lib/music'
 import type { ChordItem } from '../draw'
 
-// The chords ladder (The Ultimate Piano's, roadmap §10.6): sixteen levels from C's three main chords
+// The chords ladder (The Ultimate Piano's): sixteen levels from C's three main chords
 // to diminished and augmented on every root.
 
 const C = note('C')

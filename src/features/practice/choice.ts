@@ -8,6 +8,6 @@ export interface PracticeChoice extends AccompanimentChoice {
   readonly chordSize: ChordSize | null
   /** The Tune switch: the tune, the top single staff, heard along with the hands (ADR 0097). */
   readonly tune: boolean
-  /** Simplify (ADR 0104): every chord played and shown as its plain triad on its root. */
+  /** Simplify (ADR 0105): every chord played and shown as its plain triad on its root. */
   readonly simple: boolean
 }

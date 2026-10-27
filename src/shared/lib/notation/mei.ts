@@ -46,12 +46,12 @@ export interface MeiOptions {
    * printed after this line's last barline, a courtesy signature as LilyPond and MuseScore print one.
    */
   readonly next?: NextLine | undefined
-  /** The staves' names, printed at the line's head (a score's first line, ADR 0094). */
+  /** The staves' names, printed at the line's head (a score's first line, ADR 0114). */
   readonly labels?: StaffLabels | undefined
 }
 
 /**
- * A staff's name as printed at a line's head (ADR 0094, 0097): the learner's, or a placeholder (the
+ * A staff's name as printed at a line's head (ADR 0114, 0097): the learner's, or a placeholder (the
  * editor's, for a staff with none, so it has a name to click) printed soft, in italics.
  */
 export interface PrintedName {
@@ -66,12 +66,12 @@ export type StaffLabels = Readonly<Partial<Record<SingleStaff | 'piano', Printed
 export type NextLine = Pick<Measure, 'key' | 'time' | 'clefs'>
 
 /**
- * A Score as MEI 5 (ADR 0078), the encoding Verovio engraves: one staff per staff drawn, the piano's
+ * A Score as MEI 5 (ADR 0087), the encoding Verovio engraves: one staff per staff drawn, the piano's
  * two braced; each measure's voices as layers, eighths and shorter beamed by the beat, triplets in
  * tuplets, ties across barlines; its key, time and clef changes, barlines, repeats and endings, the
  * signs and jumps, the tempo; each note's marks: articulations, ornaments, arpeggios, grace notes,
  * slurs, dynamics, hairpins, octave lines, the pedal, expressions and fingers; the tune's syllables as
- * verses under their notes (ADR 0093); the staves' names where asked (ADR 0094). Every measure is named
+ * verses under their notes (ADR 0097); the staves' names where asked (ADR 0114). Every measure is named
  * `m-<index>`, every chord `c-<staff>-<tick>`, note `n-<staff>-<tick>-<i>` and rest
  * `r-<staff>-<tick>`, so the drawing is read back by them: where each bar and onset stands, a bar
  * tapped, the notes chosen or playing.
@@ -323,7 +323,7 @@ class Writer {
     return `<measure ${attrs.join(' ')}>${staves.join('')}${controls.join('')}</measure>`
   }
 
-  /** A layer's events, beamed by the meter and each beat of triplets a tuplet (`beamPlan`, ADR 0084). */
+  /** A layer's events, beamed by the meter and each beat of triplets a tuplet (`beamPlan`, ADR 0087). */
   private layer(
     events: readonly ScoreEvent[],
     measure: Measure,

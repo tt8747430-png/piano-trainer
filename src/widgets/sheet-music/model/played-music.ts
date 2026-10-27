@@ -4,7 +4,7 @@ import type { TimedMusic } from '@/shared/lib/notation'
 /**
  * The music the Player's sheet writes: the performance itself, its single staves over the piano as
  * the song writes them, heard or not (ADR 0097); the piano's staves left out of a lead sheet (`piano`
- * off, ADR 0083); its words left out where the View hides them (`lyrics` off, ADR 0093).
+ * off, ADR 0114); its words left out where the View hides them (`lyrics` off, ADR 0097).
  */
 export function playedMusic(
   performance: Performance,

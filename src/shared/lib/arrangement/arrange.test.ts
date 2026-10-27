@@ -49,7 +49,7 @@ const BEATS = pattern('beats', '0/4 C,4/4 C,8/4 C,12/4 C', '0/16 L1+L8')
 
 /**
  * A bar written `C`, `F@2-G@2` or `C:t1`; chords without @beats share what is left equally. `_` is a
- * bar of no chord (ADR 0094).
+ * bar of no chord (ADR 0114).
  */
 function bar(text: string, barBeats: number): ChartBar {
   if (text === '_') return { chords: [], beats: barBeats }
@@ -195,7 +195,7 @@ describe('arrange', () => {
     expect(performance.totalTicks).toBe(288)
   })
 
-  it('lays a bar of no chord end to end with the others, the pattern playing nothing there (ADR 0094)', () => {
+  it('lays a bar of no chord end to end with the others, the pattern playing nothing there (ADR 0114)', () => {
     const performance = arrange(chart([['C', '_', 'G']]), { tonic: C, pattern: BEATS })
     expect(performance.bars.map((b) => [b.startTick, b.chords])).toEqual([
       [0, [0]],
@@ -237,7 +237,7 @@ describe('arrange', () => {
     expect(performance.totalTicks).toBe(72)
   })
 
-  it('plays a section in a meter of its own as its meter plays it: its 3/4 variant in three (ADR 0095)', () => {
+  it('plays a section in a meter of its own as its meter plays it: its 3/4 variant in three (ADR 0097)', () => {
     const waltz: EventPattern = {
       id: 'waltz',
       rh: figure('4/4 C,12/4 C', { inThree: parseFigure('4/4 C,8/4 C') }),
@@ -259,7 +259,7 @@ describe('arrange', () => {
     expect(performance.totalTicks).toBe(240)
   })
 
-  it('counts a first section in a meter of its own from its own whole bar, no pickup (ADR 0095)', () => {
+  it('counts a first section in a meter of its own from its own whole bar, no pickup (ADR 0097)', () => {
     const waltz = chart([['C', 'G']])
     const three: Chart = {
       ...waltz,
@@ -844,7 +844,7 @@ describe('arrange', () => {
     expect(notesOf(played, 'rh')[0]?.velocity).toBe(0.19)
   })
 
-  it('hears the tune in a bar of no chord, where no pattern plays it (ADR 0094)', () => {
+  it('hears the tune in a bar of no chord, where no pattern plays it (ADR 0114)', () => {
     const performance = arrange(chart([['C', '_']]), {
       tonic: C,
       pattern: BLOCK,
@@ -1073,7 +1073,7 @@ describe('a hand written into a bar', () => {
     ])
   })
 
-  it('names the pattern each chord is played by, none where its bar writes both hands (ADR 0100)', () => {
+  it('names the pattern each chord is played by, none where its bar writes both hands (ADR 0111)', () => {
     const written = arrange(twoBars({ rh: hand([72, 0, 96]), lh: hand([36, 0, 96]) }), {
       tonic: C,
       pattern: BEATS,
@@ -1107,7 +1107,7 @@ describe('a hand written into a bar', () => {
     expect(notesOf(performance, 'lh').map((n) => n.chord)).toEqual([0, 1])
   })
 
-  it('plays a bar of no chord’s written notes, for no chord, and groups them so (ADR 0094)', () => {
+  it('plays a bar of no chord’s written notes, for no chord, and groups them so (ADR 0114)', () => {
     const plain = chart([['C', '_']])
     const [first, second] = plain.sections[0]?.lines[0] ?? []
     if (!first || !second) throw new Error('two bars')

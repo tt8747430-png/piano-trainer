@@ -181,7 +181,7 @@ export const music = {
   // The sheet music: the Player's staff.
   sheet: {
     label: 'Sheet music',
-    // How a score is laid out (ADR 0064, 0102, 0115), the same words in the Player and the editor,
+    // How a score is laid out (ADR 0096, 0108, 0115), the same words in the Player and the editor,
     // Dorico's and Sibelius's: A4 pages, lines down the screen, one line across.
     layout: {
       label: 'Layout',
@@ -191,7 +191,7 @@ export const music = {
       about:
         'Page view: on A4 pages, as it prints. Vertical scroll: line under line, scrolled down. Panorama: the whole song in one line, scrolled across.',
     },
-    // A staff's own options, inline on its card (ADR 0058).
+    // A staff's own options, inline on its card (ADR 0061).
     fingers: 'Fingers',
     noteNames: 'Note names',
     chordNames: 'Chord symbols',
@@ -201,11 +201,11 @@ export const music = {
     barChords: 'Bar {{n}}: {{chords}}',
     loopStart: 'Loop start',
     loopEnd: 'Loop end',
-    // The piano's name at a score's first line's head (ADR 0094), as a printed score names it; a
+    // The piano's name at a score's first line's head (ADR 0114), as a printed score names it; a
     // single staff's is its own (ADR 0097), else, in the editor and the View, its place's.
     staves: { piano: 'Piano' },
     staff: 'Staff {{n}}',
-    // Pages floating on a canvas (ADR 0075): dragged to move, pinched or Ctrl-wheeled to zoom.
+    // Pages floating on a canvas (ADR 0096): dragged to move, pinched or Ctrl-wheeled to zoom.
     canvas: {
       label: 'Pages: drag to move, pinch or Ctrl and scroll to zoom',
       zoomIn: 'Zoom in',
@@ -214,7 +214,7 @@ export const music = {
       zoom: '{{percent}} %',
     },
   },
-  // The View (ADR 0094): how a score is shown, one menu in the Player and the editor; its staves
+  // The View (ADR 0114): how a score is shown, one menu in the Player and the editor; its staves
   // named as a score names them (Upper staff, Lower staff), never a hand.
   view: {
     label: 'View',
@@ -251,12 +251,12 @@ export const music = {
   playBarChord: 'Play bar {{n}}, {{symbol}}',
   // A row of chords that play, named for a screen reader.
   rowChords: 'Chords',
-  // A chord drawn as keys (ADR 0099), named for a screen reader by its notes; a piece's chords as
+  // A chord drawn as keys (ADR 0108), named for a screen reader by its notes; a piece's chords as
   // diagrams, in the order they first sound.
   chordDiagram: '{{symbol}}: {{notes}}',
   chordSummary: 'Chords',
   // A chord's sheet: its diagram large, and Play; where it is learned, played on the keys under it.
-  // A piece's chord is drawn in the inversion chosen there (ADR 0101), or says why it has none.
+  // A piece's chord is drawn in the inversion chosen there (ADR 0108), or says why it has none.
   chordSheet: {
     title: '{{symbol}} chord',
     learn: 'Hold it on the keys',

@@ -56,7 +56,7 @@ const sheet = (
 describe('ScoreSheet', () => {
   beforeAll(loadScoreView)
 
-  it('names each section in the labels’ row at its first bar, no heading over its lines (ADR 0095)', async () => {
+  it('names each section in the labels’ row at its first bar, no heading over its lines (ADR 0097)', async () => {
     const user = userEvent.setup()
     const edited = vi.fn()
     sheet('chords', vi.fn(), true, edited)
@@ -73,7 +73,7 @@ describe('ScoreSheet', () => {
   })
 
   it.each(['vertical', 'page', 'panorama'] as const)(
-    'prints the title it is given at the sheet’s head, %s (ADR 0094)',
+    'prints the title it is given at the sheet’s head, %s (ADR 0114)',
     async (view) => {
       render(
         <ScoreSheet
@@ -98,7 +98,7 @@ describe('ScoreSheet', () => {
     },
   )
 
-  it('names the staves at the first line’s head alone, a nameless one by its place, muted (ADR 0094, 0097)', async () => {
+  it('names the staves at the first line’s head alone, a nameless one by its place, muted (ADR 0114, 0097)', async () => {
     sheet('staff0')
     const names = (line: Element | undefined) =>
       [...(line?.querySelectorAll('[data-slot="score"] g.label') ?? [])]
@@ -153,7 +153,7 @@ describe('ScoreSheet', () => {
     ])
   })
 
-  it('puts a button over each staff’s name, opening what edits that staff (ADR 0094)', async () => {
+  it('puts a button over each staff’s name, opening what edits that staff (ADR 0114)', async () => {
     const user = userEvent.setup()
     const edited = vi.fn()
     sheet('staff0', vi.fn(), true, edited)
@@ -163,7 +163,7 @@ describe('ScoreSheet', () => {
     expect(edited).toHaveBeenLastCalledWith({ kind: 'staff', staves: 'piano' })
   })
 
-  it('draws one piano staff alone where the View hides the other (ADR 0094)', async () => {
+  it('draws one piano staff alone where the View hides the other (ADR 0114)', async () => {
     render(
       <ScoreSheet
         draft={draft}
@@ -360,15 +360,15 @@ describe('ScoreSheet', () => {
     sheet('rh', vi.fn(), false)
     await screen.findByRole('button', { name: 'Bar 1: G' })
     const rows = [...document.querySelectorAll<HTMLElement>('[data-slot="line-labels"]')]
-    // As the Player prints them (ADR 0095).
+    // As the Player prints them (ADR 0097).
     expect(rows.map((row) => row.textContent)).toEqual([
       '1 · Verse · \u{1D15F}= 90',
       '3',
       '4 · Chorus',
     ])
-    // The tempo in the row, not a row of its own over the staff (ADR 0074), a button there.
+    // The tempo in the row, not a row of its own over the staff (ADR 0087), a button there.
     expect(screen.getByRole('button', { name: 'Tempo: 90 BPM' })).toHaveTextContent('\u{1D15F}= 90')
-    // No chord names: the row holds a number alone, not the chords' room (ADR 0072).
+    // No chord names: the row holds a number alone, not the chords' room (ADR 0114).
     expect(rows.every((row) => row.style.height === '20px')).toBe(true)
   })
 
@@ -408,7 +408,7 @@ describe('ScoreSheet', () => {
       await waitFor(() =>
         expect(document.querySelector('g.note.note-chosen')?.id).toMatch(/^n-treble-/),
       )
-      // While notes are chosen the caret stands aside: the range is the mark (ADR 0088).
+      // While notes are chosen the caret stands aside: the range is the mark (ADR 0096).
       expect(document.querySelector('[data-slot="caret"]')).toBeNull()
     },
   )
@@ -424,7 +424,7 @@ describe('ScoreSheet', () => {
     expect(onPlace).toHaveBeenCalledWith(192, 'staff0', false)
   })
 
-  it('puts a button over the tempo mark and each clef, key and time signature, edited there (ADR 0094)', async () => {
+  it('puts a button over the tempo mark and each clef, key and time signature, edited there (ADR 0114)', async () => {
     const user = userEvent.setup()
     const edited = vi.fn()
     sheet('staff0', vi.fn(), true, edited)
@@ -475,7 +475,7 @@ describe('ScoreSheet', () => {
     }
   })
 
-  it('chooses nothing on empty staff beside a note, and a bar’s start where its row writes nothing (ADR 0088)', async () => {
+  it('chooses nothing on empty staff beside a note, and a bar’s start where its row writes nothing (ADR 0096)', async () => {
     const onPlace = vi.fn()
     const onDeselect = vi.fn()
     sheet('staff0', onPlace, false, vi.fn(), onDeselect)

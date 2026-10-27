@@ -28,7 +28,7 @@ function SourceLine({ source, children }: { source: ChordSource; children?: stri
 }
 
 /**
- * What the keys make (ADR 0054), as large as the page allows: the chord's symbol in the reading chosen,
+ * What the keys make (ADR 0052), as large as the page allows: the chord's symbol in the reading chosen,
  * what it is and leaves out, and every other reading to choose from (its notes by degree are on the
  * keys); else the note, the interval (a 5th as its power chord), or no chord. A name is printed as the
  * sheets print a chord (`C♯m7`, `F♯`).

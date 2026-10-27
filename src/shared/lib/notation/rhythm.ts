@@ -52,7 +52,7 @@ export function voiceGrid(spans: readonly Span[], meter: Meter): VoiceGrid {
 }
 
 /**
- * Whether a value may be written at a tick (spec §2.4 step 5). A beat or longer starts on a beat and
+ * Whether a value may be written at a tick. A beat or longer starts on a beat and
  * ends on one, or half-way through one in x/4; in a four-beat bar it crosses the middle only from the
  * bar's start. Shorter lies inside one beat, starting on a multiple of half its undotted length.
  */

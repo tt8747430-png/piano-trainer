@@ -8,7 +8,7 @@ import { chordPositions } from '../model/chord-positions'
 
 /**
  * Each bar as a button over the staff, as the editor's are, through the one selection's gestures
- * (ADR 0082, 0088): a click or tap on a head chooses that note (one of a chord's), on a stem or a
+ * (ADR 0096): a click or tap on a head chooses that note (one of a chord's), on a stem or a
  * chord's column the chord, and the cursor jumps there; on empty staff, nothing. Enter or Space goes
  * to the bar's first beat; Shift with a click, or a finger held and dragged, chooses bars (`onChoose`,
  * the piece's bar, extending what is chosen).
@@ -67,7 +67,7 @@ export function BarTargets({
         const position = placed[index]
         return position ? `${symbol} ${positionName(position)}` : symbol
       })
-      // A bar of no chord is named by its number alone (ADR 0094).
+      // A bar of no chord is named by its number alone (ADR 0114).
       return barName(bar + 1, chords.join(' '))
     })
   }, [layout, performance, positions, positionName, barName, firstBar])
@@ -82,7 +82,7 @@ export function BarTargets({
         aria-current={bar === current ? 'step' : undefined}
         {...choice(bar, { x: measure.x, y: 0 })}
         // A pointer's target only, as the editor's (the arrows move the cursor): no focus ring and no
-        // hover wash round the bar, which would stand over empty staff (ADR 0082, 0088); the playhead
+        // hover wash round the bar, which would stand over empty staff (ADR 0096); the playhead
         // and the loop are the sheet's marks (ADR 0096).
         className="absolute inset-y-0 z-20 cursor-pointer outline-none"
         style={{ left: measure.x, width: measure.width }}

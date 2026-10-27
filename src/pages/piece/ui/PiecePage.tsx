@@ -23,7 +23,7 @@ export function PiecePage() {
   return entry.kind === 'listing' ? (
     <ListingView listing={entry} />
   ) : (
-    // Its chords drawn in the inversions chosen for them in this piece (ADR 0101).
+    // Its chords drawn in the inversions chosen for them in this piece (ADR 0108).
     <PieceInversions pieceId={entry.id}>
       <PieceView key={entry.id} piece={entry} />
     </PieceInversions>

@@ -15,7 +15,7 @@ export function keyAccidentals(key: Key): ReadonlyMap<Letter, Accidental> {
 }
 
 /**
- * The accidental each note of a staff's bar prints, its notes in time order (spec §2.4 step 6): one
+ * The accidental each note of a staff's bar prints, its notes in time order: one
  * that differs from the signature or an earlier note of its letter and octave in the bar, a natural
  * as 0; none on a tied continuation, which changes nothing.
  */

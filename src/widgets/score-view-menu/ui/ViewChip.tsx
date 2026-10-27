@@ -40,7 +40,7 @@ function usePart(part: SheetPart): readonly [boolean, (on: boolean) => void] {
 }
 
 /**
- * What the music shows, turned on or off in the View (ADR 0094, 0102, 0115): one of the sheet
+ * What the music shows, turned on or off in the View (ADR 0114, 0108, 0115): one of the sheet
  * music's parts as a chip, saved for every piece; Diagrams and the Grid show the words too. Greyed
  * where the music has nothing for it to show, the `reason` its tooltip (ADR 0108).
  */

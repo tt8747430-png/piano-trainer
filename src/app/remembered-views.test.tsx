@@ -30,7 +30,7 @@ describe('Remembered views', () => {
     )
   })
 
-  it('brings a piece back transposed and simplified, for it alone, however it is opened (ADR 0104)', async () => {
+  it('brings a piece back transposed and simplified, for it alone, however it is opened (ADR 0105)', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
     const first = await renderApp('/play/lightly-row', { storage })

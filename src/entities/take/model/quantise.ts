@@ -18,7 +18,7 @@ const COMPOUND_GRIDS: Grids = [
 ]
 
 /**
- * The shortest notes a take in `meter` is snapped to (spec 2026-10-05 §4): the beat, an eighth, a
+ * The shortest notes a take in `meter` is snapped to: the beat, an eighth, a
  * sixteenth, and in x/4 an eighth triplet.
  */
 export const takeGrids = (meter: Meter): Grids =>
@@ -41,7 +41,7 @@ interface Strike {
 }
 
 /**
- * A take snapped to `grid`, a note value in the take's own meter (spec 2026-10-05 §4): each onset and
+ * A take snapped to `grid`, a note value in the take's own meter: each onset and
  * release to the nearest step at the take's tempo, a note a step long at least; a key cut where it
  * starts again, and two strikes of a key snapped to one step kept as the first.
  */

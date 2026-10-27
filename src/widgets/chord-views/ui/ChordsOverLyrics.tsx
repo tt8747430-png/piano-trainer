@@ -23,7 +23,7 @@ import { BeatStrip } from './BeatStrip'
 import { LyricRow } from './LyricRow'
 
 /**
- * Chords over lyrics (ADR 0099, 0108, Chordify's): under the title the beat strip across the view,
+ * Chords over lyrics (ADR 0108, Chordify's): under the title the beat strip across the view,
  * held at the top as the song scrolls under it with, where pinned (`pinned`), the song's chords as
  * diagrams in a row under it, the one sounding outlined; then in one column in its middle the song by
  * section, each under its name in spaced capitals, each line its chords as chips over its words

@@ -3,7 +3,7 @@
 Status: needs-triage
 Severity: P3
 Tier: 5
-Rule: ADR 0018 (a chord's notes in any octave)
+Rule: ADR 0053 (a chord's notes in any octave)
 Where: `src/entities/lesson/content/bass-and-chords.ts:96-101`
 
 ## What is wrong
@@ -16,6 +16,6 @@ Where: `src/entities/lesson/content/bass-and-chords.ts:96-101`
 
 ## The fix
 
-The owner's call: reword the ask to what is checked, or let a chord answer require its bass lowest (a change to ADR 0018's rule).
+The owner's call: reword the ask to what is checked, or let a chord answer require its bass lowest (a change to ADR 0053's rule).
 
 ## Comments

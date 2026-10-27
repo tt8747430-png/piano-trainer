@@ -3,7 +3,7 @@ export const piece = {
   // A chord chart's section says its bars.
   barOne: 'bar {{n}}',
   barsFromTo: 'bars {{first}}–{{last}}',
-  // The song's page, Learn the song (ADR 0100): its sections each with its lessons done. What names
+  // The song's page, Learn the song (ADR 0111): its sections each with its lessons done. What names
   // the piece is a song's or a study's, by its kind: Russian names it.
   learnSong: {
     progress: '{{done}} of {{total}}',

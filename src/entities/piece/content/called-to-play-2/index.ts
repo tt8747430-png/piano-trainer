@@ -27,7 +27,7 @@ import zemlya from './zemlya'
 
 /**
  * The songs of «Призван играть для Него», level 2, in the order its lessons teach on them: the
- * workbook’s plans, each chord a bar with the way it names (spec 2026-10-14).
+ * workbook’s plans, each chord a bar with the way it names.
  */
 const calledToPlayTwo: Collection = {
   id: 'called-to-play-2',

@@ -20,7 +20,7 @@ function rests(from: Tick, to: Tick, bars: readonly BarSpan[]): { at: Tick; tick
 /**
  * A single staff's notes as content writes them (ADR 0097): notes and the rests between them in time
  * order, `|` where a bar line falls between them; a staff with nothing written on it yet its first
- * bar's rest, so it is saved and read back as there (ADR 0072). A staff is one line: no note starts
+ * bar's rest, so it is saved and read back as there (ADR 0114). A staff is one line: no note starts
  * under another.
  */
 export function writeStaff(notes: readonly StaffNote[], bars: readonly BarSpan[]): string {

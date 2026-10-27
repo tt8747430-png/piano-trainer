@@ -6,7 +6,7 @@ import type { EditorState, TickSpan } from './state'
 import { barAt } from './timeline'
 
 /**
- * The lines the palette draws over notes (Slurs & lines, Dynamics & hairpins, ADR 0089), as a
+ * The lines the palette draws over notes (Slurs & lines, Dynamics & hairpins, ADR 0114), as a
  * notation app's Lines palette does: a slur, a crescendo or diminuendo hairpin, an octave line up or
  * down.
  */

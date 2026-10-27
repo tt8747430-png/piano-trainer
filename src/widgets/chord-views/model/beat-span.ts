@@ -12,7 +12,7 @@ import type { Span } from './lyric-lines'
 const NONE: ReadonlySet<number> = new Set()
 
 /**
- * The bars as written a loop goes round (its bars are the bars played, ADR 0090): where the views
+ * The bars as written a loop goes round (its bars are the bars played, ADR 0115): where the views
  * that write each bar once mark it, a repeat's bar once.
  */
 export function loopedBars(performance: Performance, loop: BarRange | null): ReadonlySet<number> {
@@ -24,7 +24,7 @@ export function loopedBars(performance: Performance, loop: BarRange | null): Rea
 }
 
 /**
- * The beat sounding as ticks (ADR 0099): where it is played, and where the chord views write it, its
+ * The beat sounding as ticks (ADR 0108): where it is played, and where the chord views write it, its
  * bar's first pass (a repeat's second time is written once). `played` is every bar as played, in
  * beats (`playedBeatCells`).
  */

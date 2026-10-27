@@ -32,7 +32,7 @@ describe('the Player’s Sections (ADR 0107)', () => {
     await waitFor(() =>
       expect(screen.queryByRole('dialog', { name: 'Sections' })).not.toBeInTheDocument(),
     )
-    // The cursor at the chorus's first bar: the editor opens there from it (ADR 0090).
+    // The cursor at the chorus's first bar: the editor opens there from it (ADR 0115).
     expect(screen.getByRole('link', { name: 'Edit' })).toHaveAttribute('href', '/edit/bz5?bar=9')
   })
 

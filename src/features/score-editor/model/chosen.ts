@@ -8,7 +8,7 @@ import type { EditorState, TickSpan } from './state'
 import { valueOf, type ChosenValue } from './values'
 
 /**
- * What an edit of notes takes (ADR 0088): the notes chosen, from the first's start to the last's end;
+ * What an edit of notes takes (ADR 0096): the notes chosen, from the first's start to the last's end;
  * else the chord's one note chosen; else the notes at the caret.
  */
 export function chosenSpan(state: EditorState): Where {
@@ -18,7 +18,7 @@ export function chosenSpan(state: EditorState): Where {
 }
 
 /**
- * The notes the palette acts on (spec 2026-10-23): those chosen, the chord's one note, or the notes at
+ * The notes the palette acts on: those chosen, the chord's one note, or the notes at
  * the caret; none where the caret is only an insertion point, or in the chord names' row.
  */
 export const chosenNotes = (state: EditorState): DraftNote[] =>
@@ -41,7 +41,7 @@ export const fingeredAt = (
   isHandLayer(state.layer) ? fingeredNotes(state.draft, state.layer, fingerPlace(state)) : []
 
 /**
- * What Delete or Cut takes away (ADR 0092): in Replace mode the notes at a tick or in a span, their
+ * What Delete or Cut takes away (ADR 0114): in Replace mode the notes at a tick or in a span, their
  * time left as a rest; in Insert mode what stands there (the notes, or the empty place), the later
  * notes pulled left to close the gap.
  */

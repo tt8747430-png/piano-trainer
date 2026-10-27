@@ -48,7 +48,7 @@ function useCloseTo(target: EditorTarget): () => void {
 }
 
 /**
- * The score editor's visit (spec §6): its store over the target's draft, saving each change; keys from
+ * The score editor's visit: its store over the target's draft, saving each change; keys from
  * the keyboard, the computer keyboard and MIDI written at the caret; the shortcuts; Play; and the
  * takes (ADR 0028): while one records, its keys write nothing and Space or Escape stops it.
  * Opened at `bar` (as printed), the caret starts there.
@@ -58,8 +58,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   useWakeLock()
   const pieces = usePiecesStoreApi()
   const locale = useLocale()
-  // How the score is shown is the View's, the Player's too (ADR 0090, 0094): its layout (the music
-  // stands still between Practise and Edit), its words (ADR 0093), staves, chord symbols and fingers.
+  // How the score is shown is the View's, the Player's too (ADR 0115, 0114): its layout (the music
+  // stands still between Practise and Edit), its words (ADR 0097), staves, chord symbols and fingers.
   const shown = useSettings(selectScoreView)
   const fingers = useSettings((state) => selectPractice(state).fingerNumbers)
   /** The music last saved here, or read: what the store holds unless another tab saved since. */
@@ -88,7 +88,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       }),
     [pieces, store, target, saved],
   )
-  // Opened at a bar (Edit from the Player's cursor, ADR 0090): the caret goes to its start, once,
+  // Opened at a bar (Edit from the Player's cursor, ADR 0115): the caret goes to its start, once,
   // and the URL forgets it.
   const setSearch = useViewChange<EditSearch>()
   const openAt = useEffectEvent((printed: number) => {
@@ -110,7 +110,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   )
   const { field, openField } = useOpenField(store, fieldsShown)
   const close = useCloseTo(target)
-  // The learner's own title, saved with the music (ADR 0094); else the catalog's, in their language.
+  // The learner's own title, saved with the music (ADR 0114); else the catalog's, in their language.
   const title =
     useStore(store, (state) => state.draft.title) ??
     (target.kind === 'song' ? target.music.title : entryTitles(target.entry, locale).primary)
@@ -183,7 +183,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     return () => window.removeEventListener('keydown', listener)
   }, [])
 
-  // The caret writes only in a row in sight (ADR 0094, 0097): a row the View hides (the chord
+  // The caret writes only in a row in sight (ADR 0114, 0097): a row the View hides (the chord
   // symbols, a staff) is stepped over the way the caret was going, else it stays; a row put out of
   // sight under it sends it to the staff under it. Now, and whenever a step, an Undo or a Redo would
   // bring it back there.
@@ -205,7 +205,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     heard,
     actions: { dispatch, play, togglePlay, close, dismissUnsaved: () => setUnsaved(false) },
     view: {
-      // The chord symbols shown or not are the View's (ADR 0094).
+      // The chord symbols shown or not are the View's (ADR 0114).
       chordNames: shown.chordNames,
       lyrics: shown.lyrics,
       fingers,

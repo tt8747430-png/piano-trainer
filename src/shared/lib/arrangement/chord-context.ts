@@ -211,7 +211,7 @@ function scaleStepAbove(steps: number, context: ChordContext): number {
   return (scale[((steps % 7) + 7) % 7] ?? 0) + 12 * Math.floor(steps / 7)
 }
 
-/** A figure token's keys against the chord being played, each spelled (spec §2.2). */
+/** A figure token's keys against the chord being played, each spelled. */
 export function tokenNotes(token: FigureToken, context: ChordContext): TokenNote[] {
   switch (token.kind) {
     case 'chord':

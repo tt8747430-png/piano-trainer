@@ -44,7 +44,7 @@ export function SheetOverlay({
   /** Where Listen's music is while it plays: the playhead moves with it (ADR 0096). */
   clock?: (() => Tick | null) | null | undefined
   loop: BarRange | null
-  /** Whether the playhead is in sight: not while the loop stands chosen and nothing moves (ADR 0088). */
+  /** Whether the playhead is in sight: not while the loop stands chosen and nothing moves (ADR 0096). */
   playheadShown?: boolean
   onJump: (beatGroup: number) => void
   /** A note or a chord clicked: the cursor goes to it. */

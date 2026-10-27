@@ -18,7 +18,7 @@ import {
   type SpelledNote,
 } from '@/shared/lib/music'
 
-// A chord as its diagram draws it (ADR 0101, Chordify's): on one keyboard, F3 to B4, its notes
+// A chord as its diagram draws it (ADR 0108, Chordify's): on one keyboard, F3 to B4, its notes
 // folded into the octave from F3 to E4, so a song's chords stand in one place and change by a key
 // or two; a chord of three or four notes in the inversion the learner chose for it in that song.
 
@@ -115,7 +115,7 @@ function overBass(tones: readonly PitchClass[], bass: PitchClass): Omit<Placed, 
 
 /**
  * Where a chord's notes stand on the diagram's keys: each folded into F3–E4, as Chordify draws
- * them. A slash chord stands over its bass, and a chord of five notes or more (ADR 0035) folds the
+ * them. A slash chord stands over its bass, and a chord of five notes or more (ADR 0046) folds the
  * same way, its root not lowest; neither is turned. A chord of three or four notes is drawn in the
  * inversion chosen, where it fits.
  */
@@ -130,7 +130,7 @@ function placed(performed: Drawn, chosen: Inversion | undefined): Placed {
   }
   const keys = lowestFirst(tones.map(foldedKey))
   if (notes >= TWO_HANDS_FROM) {
-    // Its root is no bass here (ADR 0035's is the left hand's): folded lowest, it goes an octave
+    // Its root is no bass here (ADR 0046's is the left hand's): folded lowest, it goes an octave
     // up, which the keys always hold, a root folding lowest being one of F3 to B3.
     const [root] = tones
     const [lowest, ...rest] = keys

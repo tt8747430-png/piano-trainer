@@ -4,9 +4,9 @@ import type { Score } from './types'
 
 /**
  * How much each measure's notes take across, packed as tight as they read, in the engraving's units
- * (ADR 0074): estimated from what it writes, before anything is engraved, so a sheet can break its
+ * (ADR 0087): estimated from what it writes, before anything is engraved, so a sheet can break its
  * lines by width as LilyPond and abcjs do rather than by a count of bars. Fitted to Verovio's natural
- * widths over the songs (ADR 0078): a measure's barline and margins take `MEASURE_BASE`, each column
+ * widths over the songs (ADR 0087): a measure's barline and margins take `MEASURE_BASE`, each column
  * of notes or rests about `PER_ONSET`, more with an accidental; a measure of many chord names, the
  * names side by side.
  */
@@ -28,7 +28,7 @@ const PER_KEY_ACCIDENTAL = 14
  * Each measure's width at `scale`: its columns of notes, or its chord names where they are shown
  * (`chordNames`) and take more (the names keep their own size, so they take more of a smaller
  * staff's units); the first with the staves' names printed before it at the score's head (`labels`,
- * ADR 0094), so the first line holds as much less.
+ * ADR 0114), so the first line holds as much less.
  */
 export function measureWidths(
   score: Score,
@@ -74,7 +74,7 @@ const LABEL_CHAR = 10.5
 const LABEL_GAP = { single: 10, piano: 22 } as const
 
 /**
- * What the staves' names take before a line's clef (ADR 0094), in the engraving's units: the longest
+ * What the staves' names take before a line's clef (ADR 0114), in the engraving's units: the longest
  * name's, as Verovio indents a score's first line to print them.
  */
 export const labelLead = (labels: StaffLabels): number =>

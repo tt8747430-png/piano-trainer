@@ -53,7 +53,7 @@ function PositionsAbout() {
 }
 
 /**
- * Where a row's hand stands (ADR 0039, 0115): the position its first chord starts in, each drawn as
+ * Where a row's hand stands (ADR 0047, 0115): the position its first chord starts in, each drawn as
  * its stack of `notes` notes, what a position is drawn on the keys in the ⓘ beside its name; and Move
  * smoothly: on, each chord after the first moves to the position nearest the one before; off, every
  * one stays in the first one's position. Where it is greyed, `info` says why beside its name (ADR

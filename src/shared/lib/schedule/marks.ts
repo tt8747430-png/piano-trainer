@@ -12,7 +12,7 @@ import {
 } from '@/shared/lib/music'
 import type { NoteSound } from './schedule'
 
-/** How loud each dynamic plays a hand, against its arranged loudness (spec 2026-10-20 §4). */
+/** How loud each dynamic plays a hand, against its arranged loudness. */
 const DYNAMIC_LEVEL: Readonly<Record<Dynamic, number>> = {
   pp: 0.5,
   p: 0.7,

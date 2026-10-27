@@ -22,7 +22,7 @@ export interface PairLanding {
 type Wheel = 'page' | 'following' | 'gone'
 
 /**
- * How the Diagrams view's pair moves (ADR 0101, 0108). Its diagrams stand in their slots, moved on by
+ * How the Diagrams view's pair moves (ADR 0108). Its diagrams stand in their slots, moved on by
  * two numbers in diagrams' widths: `--slide`, the clock's (`slide`, frame by frame while `moving`),
  * and `--swipe`, a finger's, added to it, so a swipe never fights the clock. A finger, a mouse or a
  * trackpad's sideways scroll draws the pair along one to one, a rubber band towards an end with no

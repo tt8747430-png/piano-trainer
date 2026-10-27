@@ -1,9 +1,9 @@
 import { PAGE_TILES, type Tile } from '@/shared/ui'
 
 /**
- * Practice's pages (ADR 0044), each where it is and the tile it wears: the things a page shows on the
+ * Practice's pages (ADR 0052), each where it is and the tile it wears: the things a page shows on the
  * keys, each holding the tools that work on it (ADR 0052); the Chord finder, any chord played named
- * (ADR 0054); and the training, the Metronome with it (ADR 0113).
+ * (ADR 0052); and the training, the Metronome with it (ADR 0052).
  */
 export const PRACTICE_PAGES = {
   chords: { to: '/practice/chords', tile: PAGE_TILES.chords },

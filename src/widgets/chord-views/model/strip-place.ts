@@ -34,7 +34,7 @@ export function beatThrough(
 }
 
 /**
- * How far the strip is moved under its frame (ADR 0101, 0108): the beat sounding's middle a third of
+ * How far the strip is moved under its frame (ADR 0108): the beat sounding's middle a third of
  * the way in as it starts, sliding on through it to the next beat's place as it ends. `lefts` and
  * `widths` are each beat's along the strip, as drawn; `room` the frame's width.
  */

@@ -9,7 +9,7 @@ import { chooseDiagramInversion } from '../model/choose-diagram-inversion'
 import { PieceInversionsContext, type PieceInversionChoice } from '../model/use-piece-inversions'
 
 /**
- * The piece whose chords the diagrams under it draw (ADR 0101): every diagram of a chord in it, on
+ * The piece whose chords the diagrams under it draw (ADR 0108): every diagram of a chord in it, on
  * any of its screens, in the inversion the learner chose for that chord in that piece.
  */
 export function PieceInversions({ pieceId, children }: { pieceId: PieceId; children: ReactNode }) {

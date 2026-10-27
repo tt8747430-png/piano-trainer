@@ -11,7 +11,7 @@ import { FactCard, InfoTip, MenuSection, Sheet, SheetContent } from '@/shared/ui
 import { ChordSummary } from '@/widgets/chord-diagrams'
 
 /**
- * A piece's Song information (ADR 0099, Chordify's), from the Player's More: its chords as the
+ * A piece's Song information (ADR 0108, Chordify's), from the Player's More: its chords as the
  * Player plays them now, each opening its sheet (none for music of no chord symbol); its key as
  * played, its time and tempo, the song page's cards, and its tuning (ADR 0107: the A its recording
  * is tuned to, A 440 Hz otherwise; an ⓘ says what it means where it is not 440); then its second

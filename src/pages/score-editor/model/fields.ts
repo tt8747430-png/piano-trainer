@@ -10,8 +10,8 @@ import type { SheetField } from '@/widgets/score-sheet'
 
 /**
  * Why a field cannot open where the caret is (ADR 0096), its palette key greyed, saying it: the View
- * hides what it writes, the words go on another staff (ADR 0093: a single staff, or the upper staff),
- * the staff has no note to sing, fingers go on the piano's staves (ADR 0091), on a note.
+ * hides what it writes, the words go on another staff (ADR 0097: a single staff, or the upper staff),
+ * the staff has no note to sing, fingers go on the piano's staves (ADR 0114), on a note.
  */
 export type FieldReason =
   | 'chordsHidden'
