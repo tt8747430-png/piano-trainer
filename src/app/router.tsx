@@ -138,6 +138,12 @@ const settingsRoute = createRoute({
   path: '/settings',
   component: lazyRouteComponent(settingsScreens, 'SettingsPage'),
 })
+// How to use (ADR 0113): a short guide, reached from Settings' Help.
+const howToUseRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/how-to-use',
+  component: lazyRouteComponent(settingsScreens, 'HowToUsePage'),
+})
 // Search: every named thing the app has, found by name (ADR 0044).
 const searchRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -496,6 +502,7 @@ const routeTree = rootRoute.addChildren([
   shellRoute.addChildren([
     learnRoute,
     settingsRoute,
+    howToUseRoute,
     searchRoute,
     songsRoute,
     sharedSongRoute,

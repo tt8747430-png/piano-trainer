@@ -57,6 +57,7 @@ describe('Settings', () => {
       'MIDI keyboard',
       'Recording',
       'Backup',
+      'Help',
       'Progress',
     ])
     // How the keys look, where a page's keys sit, how they play, and the bar over them.

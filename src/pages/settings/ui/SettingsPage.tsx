@@ -1,4 +1,5 @@
-import { ArrowDown, ArrowDownLeft, ArrowDownRight } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import { ArrowDown, ArrowDownLeft, ArrowDownRight, LifeBuoy } from 'lucide-react'
 import { useId, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
@@ -25,6 +26,7 @@ import { cn } from '@/shared/lib'
 import {
   BackButton,
   InfoTip,
+  RowLink,
   ScreenHeader,
   Segmented,
   SettingField,
@@ -92,7 +94,8 @@ const PLACE_ICON = {
 
 /**
  * Settings, as an app's settings page reads (ADR 0096): Language, Theme, Appearance (the page titles,
- * the floating buttons), the Keyboard, the MIDI keyboard, Recording, Backup and Progress, each choice
+ * the floating buttons), the Keyboard, the MIDI keyboard, Recording, Backup, Help (How to use, ADR
+ * 0113) and Progress, each choice
  * one compact row (its name with its ⓘ, the control at its right or under it), two columns from a
  * laptop's width.
  */
@@ -180,6 +183,17 @@ export function SettingsPage() {
         </Group>
         <Group title={t('backup.label')} info={t('backup.says')}>
           <BackupFields />
+        </Group>
+        <Group title={t('help.label')}>
+          <div className="-mx-3 -my-2">
+            <RowLink
+              title={t('help.howToUse')}
+              detail={t('help.howToUseLine')}
+              icon={LifeBuoy}
+              paint="sky"
+              render={<Link to="/settings/how-to-use" />}
+            />
+          </div>
         </Group>
         <Group title={t('progress.label')}>
           <AlertDialog open={confirming} onOpenChange={setConfirming}>
