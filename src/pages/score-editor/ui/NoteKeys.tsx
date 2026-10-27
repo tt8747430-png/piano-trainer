@@ -11,11 +11,12 @@ import {
   type EditMode,
 } from '@/features/score-editor'
 import { isCompound, type Accidental } from '@/shared/lib/music'
-import { Segmented, ToolKey } from '@/shared/ui'
+import { Segmented } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
 import { VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
-import { GlyphGrid } from './palette-keys'
+import { usePaletteForm } from './palette-form'
+import { GlyphGrid, PaletteKey } from './palette-keys'
 import { usePaletteReason } from './palette-reason'
 
 /** A key drawn as notation: a glyph of the music font, at a note value's size. */
@@ -27,21 +28,25 @@ const REST = '𝄽'
 const useShown = () => useEditorState(useShallow(shownValue))
 
 /**
- * The palette's quick row (spec 2026-10-23), always in sight: the values whole to 32nd and Dotted.
- * With a note chosen it is made that value; else the next note is written so. The chosen note's own
- * value stands pressed.
+ * The values whole to 32nd and Dotted, first of the Notes (ADR 0114): with a note chosen it is made
+ * that value; else the next note is written so. The chosen note's own value stands pressed.
  */
-export function QuickValues() {
+function ValueKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const shown = useShown()
   const dottable = useEditorState((state) =>
     takesDot((shownValue(state) ?? state.value).value, state.draft.meter),
   )
+  const row = usePaletteForm() === 'row'
   return (
-    <div role="group" aria-label={t('values.label')} className="grid grid-cols-7 gap-1">
+    <div
+      role="group"
+      aria-label={t('values.label')}
+      className={row ? 'contents' : 'grid grid-cols-7 gap-1'}
+    >
       {NOTE_VALUES.map((option) => (
-        <ToolKey
+        <PaletteKey
           key={option}
           label={t(`values.${VALUE_WORDS[option]}`)}
           pressed={shown?.value === option}
@@ -51,9 +56,9 @@ export function QuickValues() {
           <span aria-hidden className={GLYPH}>
             {VALUE_GLYPHS[option]}
           </span>
-        </ToolKey>
+        </PaletteKey>
       ))}
-      <ToolKey
+      <PaletteKey
         label={t('dot')}
         reason={t('reason.noDot')}
         pressed={shown?.dots === 1}
@@ -64,7 +69,7 @@ export function QuickValues() {
         <span aria-hidden className={GLYPH}>
           {VALUE_GLYPHS[4]}.
         </span>
-      </ToolKey>
+      </PaletteKey>
     </div>
   )
 }
@@ -106,7 +111,7 @@ function AccidentalKeys() {
   return ACCIDENTAL_KEYS.map((accidental, i) => {
     const { label, picture } = keys[accidental]
     return (
-      <ToolKey
+      <PaletteKey
         key={label}
         label={label}
         reason={t('reason.chooseNote')}
@@ -115,7 +120,7 @@ function AccidentalKeys() {
         onClick={() => actions.dispatch({ type: 'accidental', accidental })}
       >
         <span aria-hidden>{picture}</span>
-      </ToolKey>
+      </PaletteKey>
     )
   })
 }
@@ -166,12 +171,29 @@ function ModeIcon({ mode }: { mode: EditMode }) {
 
 /**
  * The editing modes (ADR 0092, Flat's Melody · Insert · Chord): one always chosen; what a key played
- * does in each is the ⓘ beside the section's name (ADR 0096); I cycles them.
+ * does in each is the ⓘ beside the section's name (ADR 0096); I cycles them. In the folded row, three
+ * picture keys, the mode chosen pressed (ADR 0114).
  */
 function ModeChoice() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const mode = useEditorState((state) => state.mode)
+  const choose = (next: EditMode) => actions.dispatch({ type: 'mode', mode: next })
+  if (usePaletteForm() === 'row')
+    return (
+      <div role="group" aria-label={t('mode.label')} className="contents">
+        {EDIT_MODES.map((each) => (
+          <PaletteKey
+            key={each}
+            label={t(`mode.${each}`)}
+            pressed={mode === each}
+            onClick={() => choose(each)}
+          >
+            <ModeIcon mode={each} />
+          </PaletteKey>
+        ))}
+      </div>
+    )
   return (
     <Segmented
       label={t('mode.label')}
@@ -181,14 +203,14 @@ function ModeChoice() {
         label: t(`mode.${each}`),
         icon: <ModeIcon mode={each} />,
       }))}
-      onChange={(next) => actions.dispatch({ type: 'mode', mode: next })}
+      onChange={choose}
     />
   )
 }
 
 /**
- * The Notes section, under the quick row's values: the editing modes, then Double dotted and
- * Triplet (out of reach where the meter takes none), Rest and Tie, then the accidentals.
+ * The Notes section: the values and Dotted, the editing modes, then Double dotted and Triplet (out
+ * of reach where the meter takes none), Rest and Tie, then the accidentals.
  */
 export function NoteKeys() {
   const { t } = useTranslation('editor')
@@ -201,9 +223,10 @@ export function NoteKeys() {
   const compound = useEditorState((state) => isCompound(state.draft.meter))
   return (
     <>
+      <ValueKeys />
       <ModeChoice />
       <GlyphGrid>
-        <ToolKey
+        <PaletteKey
           label={t('doubleDot')}
           reason={t('reason.noDot')}
           pressed={shown?.dots === 2}
@@ -213,8 +236,8 @@ export function NoteKeys() {
           <span aria-hidden className={GLYPH}>
             {VALUE_GLYPHS[4]}..
           </span>
-        </ToolKey>
-        <ToolKey
+        </PaletteKey>
+        <PaletteKey
           label={t('triplet')}
           reason={t('reason.compound')}
           pressed={shown?.triplet === true}
@@ -224,13 +247,13 @@ export function NoteKeys() {
           <span aria-hidden className="font-display text-xl font-semibold italic">
             3
           </span>
-        </ToolKey>
-        <ToolKey label={t('rest')} onClick={() => dispatch({ type: 'rest' })}>
+        </PaletteKey>
+        <PaletteKey label={t('rest')} onClick={() => dispatch({ type: 'rest' })}>
           <span aria-hidden className={GLYPH}>
             {REST}
           </span>
-        </ToolKey>
-        <ToolKey label={t('marks.tie')} onClick={() => dispatch({ type: 'tie' })}>
+        </PaletteKey>
+        <PaletteKey label={t('marks.tie')} onClick={() => dispatch({ type: 'tie' })}>
           <svg
             aria-hidden
             viewBox="0 0 24 24"
@@ -244,7 +267,7 @@ export function NoteKeys() {
             <circle cx="19" cy="9" r="2" fill="currentColor" />
             <path d="M5 13 C9 18 15 18 19 13" />
           </svg>
-        </ToolKey>
+        </PaletteKey>
         <AccidentalKeys />
       </GlyphGrid>
     </>
@@ -343,14 +366,20 @@ export function PitchKeys() {
   return (
     <GlyphGrid>
       {pairs.flatMap(({ by, up, down, move, size }) => [
-        <ToolKey key={up} label={up} reason={reason} disabled={off} onClick={() => move(size)}>
+        <PaletteKey key={up} label={up} reason={reason} disabled={off} onClick={() => move(size)}>
           <Move up by={by} />
-        </ToolKey>,
-        <ToolKey key={down} label={down} reason={reason} disabled={off} onClick={() => move(-size)}>
+        </PaletteKey>,
+        <PaletteKey
+          key={down}
+          label={down}
+          reason={reason}
+          disabled={off}
+          onClick={() => move(-size)}
+        >
           <Move up={false} by={by} />
-        </ToolKey>,
+        </PaletteKey>,
       ])}
-      <ToolKey
+      <PaletteKey
         label={t('respell')}
         reason={reason}
         span="wide"
@@ -362,7 +391,7 @@ export function PitchKeys() {
           <ArrowLeftRight className="size-5" strokeWidth={2.5} />
           <Flat />
         </span>
-      </ToolKey>
+      </PaletteKey>
     </GlyphGrid>
   )
 }

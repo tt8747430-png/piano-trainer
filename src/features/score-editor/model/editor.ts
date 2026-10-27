@@ -32,7 +32,7 @@ import {
   toggleAccidental,
   writeRest,
 } from './notes'
-import { setMeter, setSectionMeter } from './meters'
+import { setTime } from './meters'
 import { joinSection, setSectionKey, setSectionKind } from './sections'
 import { addStaff, removeStaff, renameStaff, setStaffClef } from './staves'
 import { setKey, setTempo, transpose } from './settings'
@@ -315,15 +315,14 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       const section = barsOf(draft)[action.bar]?.section ?? 0
       return commit(state, setSectionKey(draft, section, action.key))
     }
-    case 'sectionMeter': {
+    case 'time': {
       const section = barsOf(draft)[action.bar]?.section ?? 0
-      return commit(state, setSectionMeter(draft, section, action.meter))
+      return commit(state, setTime(draft, section, action.time))
     }
     case 'settings': {
       let next = draft
       if (action.key) next = setKey(next, action.key)
       if (action.tempo !== undefined) next = setTempo(next, action.tempo)
-      if (action.meter) next = setMeter(next, action.meter)
       return commit(state, next)
     }
     case 'transpose':

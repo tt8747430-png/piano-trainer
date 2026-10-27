@@ -111,6 +111,8 @@ export interface Draft {
   readonly title?: string
   readonly key: Key
   readonly meter: Meter
+  /** 4/4 printed as common time, C (ADR 0114). */
+  readonly commonTime?: true
   readonly tempo: number
   /** The piece's pattern, kept for the Player's Setup; the editor's bars are all written (ADR 0091). */
   readonly pattern: PatternId
@@ -209,6 +211,7 @@ export function readDraft(music: PieceMusic): Draft {
     ...(music.title === undefined ? {} : { title: music.title }),
     key,
     meter: music.meter,
+    ...(music.commonTime ? { commonTime: true } : {}),
     tempo: music.tempo,
     pattern: music.pattern,
     sections,
@@ -276,6 +279,7 @@ export function writeDraft(draft: Draft): PieceMusic {
     ...(draft.title === undefined ? {} : { title: draft.title }),
     key: keyText(draft.key),
     meter: draft.meter,
+    ...(draft.commonTime ? { commonTime: true } : {}),
     tempo: draft.tempo,
     pattern: draft.pattern,
     // Each bar in its section's meter (ADR 0095).

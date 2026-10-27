@@ -7,8 +7,8 @@ import type { BarMarkChoice } from '@/features/score-editor'
  * what is chosen: the notes' values and rhythm, their pitch, their marks and dynamics with the
  * hairpins, the slurs and octave lines; the bars chosen (added, removed, broken, their length, written
  * out), their clef, the song's key and time signature, barlines and repeats; text and the pedal. What
- * is typed where it prints (ADR 0096) is a key among its kin: the chord symbols and the lyrics in Text
- * & pedal, the fingering in Articulations.
+ * is typed where it prints (ADR 0096) and opened by no tap on the sheet is a key among its kin: the
+ * lyrics in Text & pedal, the fingering in Articulations (ADR 0114).
  */
 export const PALETTE_CATEGORIES = [
   'notes',
@@ -25,11 +25,8 @@ export const PALETTE_CATEGORIES = [
 ] as const
 export type PaletteCategory = (typeof PALETTE_CATEGORIES)[number]
 
-/**
- * What works in any row: what acts on bars, the chord names' too; Text & pedal, whose Chord symbol key
- * takes the caret to the chord row (ADR 0096).
- */
-const ANY_ROW: readonly PaletteCategory[] = ['bar', 'key', 'time', 'repeats', 'text']
+/** What works in any row: what acts on bars, the chord names' too. */
+const ANY_ROW: readonly PaletteCategory[] = ['bar', 'key', 'time', 'repeats']
 
 /**
  * Whether a category works where the caret writes: greyed elsewhere, never hidden. On a staff every

@@ -18,10 +18,11 @@ export const editor = {
     preview: 'Preview',
     apply: 'Transpose',
   },
-  // The one palette (spec 2026-10-23): a quick row of values, the categories as a bar of pictures,
-  // every category's section stacked above them when it is opened.
+  // The one palette (ADR 0114): folded, one row of every tool, scrolling sideways; opened, every
+  // category's section stacked over the bar of categories.
   palette: {
     label: 'Tools',
+    row: 'Every tool',
     open: 'Show every tool',
     close: 'Show fewer tools',
     categories: 'Kinds of tools',
@@ -124,6 +125,29 @@ export const editor = {
     // A change of key or time from a section on, up to the next change (ADR 0089, 0095).
     fromSection: 'From {{section}} on (bar {{bar}})',
     song: 'The whole song',
+    // The key signature picker's tiles (ADR 0114).
+    none: 'No key signature',
+    sharps: 'Sharps',
+    flats: 'Flats',
+    // A palette key that opens the picker, named by what is in force.
+    change: '{{sign}}: {{now}}',
+  },
+  // The time signature picker (ADR 0114): its wheels, the common meters, its pickup, Show as C.
+  time: {
+    current: 'Time',
+    beat: 'Beat',
+    beatType: 'Beat type',
+    beatTypeInfo:
+      'A song keeps the note its beats are counted in: quarters in 2/4, 3/4 and 4/4, eighths in 6/8 and 12/8. Another would change every note’s value.',
+    pickup: 'Pickup',
+    pickupInfo: 'How long the first bar is, where the song starts on an upbeat. None: a whole bar.',
+    none: 'None',
+    common: 'Common meters',
+    otherKind: 'Counted in another note: every note would change value.',
+    commonTime: 'Show as C',
+    commonTimeInfo: 'Prints 4/4 as common time, C, wherever the song is in 4/4.',
+    cancel: 'Cancel',
+    apply: 'Apply',
   },
   // The lines drawn over notes, each a key.
   lines: {
@@ -136,7 +160,6 @@ export const editor = {
   expressions: 'Expression text',
   pedal: 'Pedal',
   // Text & pedal's keys for what is typed where it prints (ADR 0096).
-  chordsAndLyrics: 'Chord symbols and lyrics',
   // The words under the tune (ADR 0093), one syllable at a time in the Lyrics field under its note.
   lyrics: {
     label: 'Lyrics',
@@ -280,7 +303,8 @@ export const editor = {
     joinLine: 'Join lines',
     newSection: 'New section',
     length: 'Bar length',
-    lengthInfo: 'A pickup, or a bar longer or shorter than the meter’s.',
+    lengthInfo:
+      'A bar longer or shorter than the meter’s. The first bar’s pickup is the time signature’s.',
     lengthOf: 'Bar length {{time}}',
   },
   section: {

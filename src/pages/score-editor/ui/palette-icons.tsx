@@ -206,14 +206,8 @@ export function CategoryIcon({ category }: { category: PaletteCategory }) {
   return CATEGORY_ICONS[category]
 }
 
-/** The pictures of the keys that open a field typed where it prints (ADR 0096), drawn as it prints. */
+/** The picture of the key that opens the fingering's field (ADR 0096), drawn as it prints. */
 const FIELD_ICONS = {
-  // A chord symbol.
-  chord: (
-    <Icon>
-      <Word text="C7" y={16} size={11} />
-    </Icon>
-  ),
   // A note with its finger's number over it.
   fingering: (
     <Icon>
@@ -231,7 +225,7 @@ const FIELD_ICONS = {
   ),
 } as const
 
-/** The picture of a field's key: a chord symbol's, a finger's. */
+/** The picture of a field's key: a finger's. */
 export function FieldIcon({ field }: { field: keyof typeof FIELD_ICONS }) {
   return FIELD_ICONS[field]
 }

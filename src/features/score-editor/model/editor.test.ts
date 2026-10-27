@@ -78,7 +78,7 @@ describe('the editor', () => {
       }),
     )
     // From the bar given, the chorus's first, wherever the caret is (a time signature on the sheet).
-    const chorus = run(twoParts, { type: 'sectionMeter', bar: 2, meter: '3/4' })
+    const chorus = run(twoParts, { type: 'time', bar: 2, time: { meter: '3/4' } })
     expect(chorus.draft.sections.map((section) => section.heading.meter)).toEqual([
       undefined,
       '3/4',

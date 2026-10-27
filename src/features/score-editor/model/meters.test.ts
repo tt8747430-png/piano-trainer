@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { draftOf, form, lengths, shape, staffNotes } from '../testing/test-draft'
-import { metersFor, setMeter, setSectionMeter } from './meters'
+import { metersFor, setMeter, setSectionMeter, setTime } from './meters'
 
 describe('the song’s meter', () => {
   const draft = draftOf({
@@ -112,5 +112,39 @@ describe('a change of time at a section (ADR 0095)', () => {
     expect(changed.meter).toBe('2/4')
     expect(meters(changed)).toEqual([undefined, '3/4', '4/4'])
     expect(lengths(changed)).toEqual([48, 48, 72, 96])
+  })
+})
+
+describe('setTime, the time signature’s picker applied (ADR 0114)', () => {
+  const song = draftOf({
+    sections: [
+      { kind: 'verse', lines: ['C G'] },
+      { kind: 'chorus', lines: ['F C'] },
+    ],
+    staves: [{ notes: 'C4/1 D4/1 E4/1 F4/1 | G4/4 | A4/4 | B4/4' }],
+  })
+
+  it('changes the whole song’s meter at its first section, its pickup and its C with it, in one go', () => {
+    const changed = setTime(song, 0, { meter: '4/4', commonTime: true, pickup: 24 })
+    expect(changed.commonTime).toBe(true)
+    expect(lengths(changed)).toEqual([24, 96, 96, 96])
+    const plain = setTime(changed, 0, { meter: '3/4', commonTime: false, pickup: 48 })
+    expect(plain).not.toHaveProperty('commonTime')
+    expect(plain.meter).toBe('3/4')
+    expect(lengths(plain)).toEqual([48, 72, 72, 72])
+  })
+
+  it('changes a later section’s meter from it on, no pickup there, the song’s C kept as it was', () => {
+    const common = setTime(song, 0, { meter: '4/4', commonTime: true })
+    const chorus = setTime(common, 1, { meter: '2/4' })
+    expect(chorus.meter).toBe('4/4')
+    expect(chorus.commonTime).toBe(true)
+    expect(chorus.sections[1]?.heading.meter).toBe('2/4')
+    expect(lengths(chorus)).toEqual([96, 96, 48, 48])
+  })
+
+  it('leaves what is as it is: the same meter writes no section a meter of its own', () => {
+    const chorus = setSectionMeter(song, 1, '2/4')
+    expect(setTime(chorus, 0, { meter: '4/4' })).toBe(chorus)
   })
 })

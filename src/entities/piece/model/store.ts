@@ -157,6 +157,7 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     title: 'saved',
     key,
     meter,
+    ...(saved.commonTime === true ? { commonTime: true } : {}),
     tempo,
     pattern,
     sections: read,

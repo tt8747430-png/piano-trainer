@@ -38,6 +38,22 @@ describe('createPiecesStore', () => {
     expect(restored(saved)).toEqual(saved)
   })
 
+  it('keeps 4/4 printed as common time, and reads anything else there as its figures (ADR 0114)', () => {
+    const common = {
+      ...MUSIC,
+      meter: '4/4',
+      sections: [{ kind: 'verse', lines: ['C'] }],
+      staves: [{ notes: 'C4/4' }],
+      hands: { lh: 'C3/4' },
+    }
+    expect(
+      restored({ versions: { bz1: { ...common, commonTime: true } } }).versions.bz1?.commonTime,
+    ).toBe(true)
+    expect(
+      restored({ versions: { bz1: { ...common, commonTime: 'yes' } } }).versions.bz1,
+    ).not.toHaveProperty('commonTime')
+  })
+
   it('keeps a section’s own key, and drops one no signature writes', () => {
     const changing = {
       ...MUSIC,

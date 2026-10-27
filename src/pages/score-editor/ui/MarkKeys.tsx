@@ -2,10 +2,9 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { chosenNotes, hasMark, type MarkChoice } from '@/features/score-editor'
 import { DYNAMICS } from '@/shared/lib/music'
-import { ToolKey } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
-import { GlyphGrid } from './palette-keys'
+import { GlyphGrid, PaletteKey } from './palette-keys'
 import { usePaletteReason } from './palette-reason'
 
 /** A glyph of the music font (Noto Music), at a key's size. */
@@ -63,7 +62,7 @@ function MarkKey({
 }) {
   const { actions } = useScoreEditorContext()
   return (
-    <ToolKey
+    <PaletteKey
       label={label}
       reason={usePaletteReason()}
       pressed={useMarkOn(mark)}
@@ -71,7 +70,7 @@ function MarkKey({
       onClick={() => actions.dispatch({ type: 'mark', mark })}
     >
       {children}
-    </ToolKey>
+    </PaletteKey>
   )
 }
 
