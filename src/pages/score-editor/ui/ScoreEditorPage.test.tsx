@@ -1634,7 +1634,7 @@ describe('the score editor', () => {
     expect(keys).not.toContain(midi(48))
   })
 
-  it('opens a song with a tune in the Player with Tune to turn on', async () => {
+  it('opens a song with a tune in the Player with its staff to choose as the Melody (ADR 0115)', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
     const song = { ...SONG, staves: [{ notes: 'B4/4 | D5/4 | G4/4 | G4/4' }] }
@@ -1644,7 +1644,7 @@ describe('the score editor', () => {
     )
     await renderApp('/play/my-1', { storage })
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    expect(await screen.findByRole('button', { name: 'Play melody' })).toBeInTheDocument()
+    expect(await screen.findByRole('radio', { name: 'Staff 1' })).toBeEnabled()
   })
 
   it('closes to the song’s page', async () => {
