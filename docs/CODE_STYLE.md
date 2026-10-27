@@ -1,349 +1,237 @@
 # Code Style
 
-How code is written in Piano Trainer. Builds on [CLAUDE.md](../CLAUDE.md); adapted from Mindscape's
-(memory-palaces) style guide, keeping only what applies here. Goal: small, single-responsibility, tested units.
+How code is written here. [CLAUDE.md](../CLAUDE.md) has the layers and the change rules; [DESIGN.md](../DESIGN.md)
+has the look; [UBIQUITOUS_LANGUAGE.md](UBIQUITOUS_LANGUAGE.md) has the names. Each rule below points at code that
+already follows it: match that shape. Why a rule exists is in the ADRs (`docs/adr/`, index in its README).
 
-## 1. Compose small components
+## 1. Components
 
-A container wires data to presentational children. One job each.
+| What                            | Where                                                  |
+| ------------------------------- | ------------------------------------------------------ |
+| App-wide, purely presentational | `shared/ui/` (the kit)                                 |
+| shadcn primitive                | `shared/ui/primitives/`, added with the shadcn CLI     |
+| Only an entity's own data shown | `entities/<x>/ui/` (a piece's credits, a step's title) |
+| Composite, tied to screens      | `widgets/<x>/ui/`                                      |
+| Screen root                     | `pages/<x>/ui/`                                        |
+| Part of one parent              | beside it, in the same `ui/` folder                    |
 
-| What                            | Where                                                            |
-| ------------------------------- | ---------------------------------------------------------------- |
-| App-wide, purely presentational | `shared/ui/`                                                     |
-| shadcn primitive                | `shared/ui/primitives/` (added with the shadcn CLI, not by hand) |
-| Only an entity's own data shown | `entities/<x>/ui/` (a piece's credits, a step's title)           |
-| Composite, tied to screens      | `widgets/<x>/ui/`                                                |
-| Screen root                     | `pages/<x>/ui/`                                                  |
-| Subpart of one parent           | beside it, in the same `ui/` folder                              |
-
-- About 200 lines per file. Past it, extract children, or move state into `model/`.
+- About 200 lines a file. Past that, extract children or move state into `model/`.
 - **One exported component per file, named for the file.** Private helpers may stay.
-- A page composes widgets and `shared/ui`, with little markup of its own.
-- Promote to `shared/ui` only what is app-wide and presentational. The kit: `PianoKeyboard` (the one keyboard) with
-  `RailButton` (a button in its rail, filling its `children` slot; a toggle with `aria-pressed`) and `ShownKeys` (what
-  a page's keyboard shows),
-  `Pinned`, `ScreenHeader`, `BackButton` (a screen's Back), `RoundButton` / `RoundLink`, `ButtonLink`, `Segmented`
-  (a radio group) and `NamedSegmented` (its name on screen, beside a control it could be mistaken for), `Listbox`
-  (one choice of a list: a Setup page's, the tempo and hands popovers), `Dropdown` (the pop-up button,
-  over shadcn's `select`) with `MultiDropdown` (in both, a list with other values is another list, mounted anew by
-  `listKey`: Base UI checks a list changed in place against the value it held before, and reports a choice nobody
-  made), `NoteChoice` (a note as written: its letter, then ♮ # ♭) and `KeyChoice` (a key as written: its tonic so,
-  then Major · Minor, only the keys a signature writes), `Labelled` (a choice under its name:
-  one field of a page's `grid-fields`), `NavTabs` with `NavTab` (one thing's views as tabs that are router links; the page says which is shown, never the router's active match), `InversionChoice` (each inversion drawn by `InversionGlyph`), `ChordSizeField`, `SwitchRow` (on or off in
-  its row), `InfoTip` (a control's explanation: an ⓘ beside its name opening a popover, §10), `ToggleTile` in a `ToggleGrid` (on or off as an icon over its name), `ToolButton` (a palette's tool: an
-  icon or glyph, named in a tooltip), `LearnedBadge`, `TypedField`
-  (music typed by name, in the book serif) and `NameField` (a name the learner gives, in the controls' face), `PlayToggle` (a chord or note pressed while it sounds) and `ChordButton` over it, `PlayLabel`,
-  `ToneChip`, `Fact`, `RowLink` and `RowGroup` (a row that leads to a page: a titled grid of row cards), `RowButton` (a row
-  that opens a sheet over its page: `RowLink`'s face, `RowFace`, without the chevron), `PAGE_TILES`, `SearchField` (a screen's search box), `PAINT`
-  (the chrome's paints for a tile), `Sheet` / `SheetTrigger` / `SheetContent` (with its own Close for a screen reader), `RatingMark`,
-  `LevelMark`, `LazyScoreView`, `NotFound` (a page that is not there, or no longer: its one line and the way on). A choice a component would make by a boolean prop is a component of its own (an
-  explicit variant) or its children: a Setup sheet composes its first page, `ChordRow` its parts.
-- **Every page earns its place.** A screen does its job in place, or is a link the learner chose knowing where it goes:
-  no middle man, no redirect the learner did not choose, no "coming soon". A row that leads to a page is a `RowLink`,
-  with its chevron; a row that opens a sheet or a dialog over its page is a `RowButton`, with none.
-- **A thing's page and a tool's are two pages** (ADR 0044). An explorer's URL names the thing it shows; a tool's holds
-  what the learner gave it. A tool is never a tab of a thing: tabs are the views of one thing. An explorer ends with
-  its ways into the Player, then a Tools group whose rows open each tool on what the page shows. A new page of
-  Practice is a row in `PRACTICE_PAGES`, in its group, with its tile in `PAGE_TILES`; Search finds it from there.
-- **Whatever has a name is found by Search.** The index is `indexEntries` (`pages/search`), one projection of the
-  registries; a new kind of named thing is a kind there, and its test holds the count to its registry.
-- **Choosing** (Apple's Human Interface Guidelines): five or fewer short nouns are a `Segmented`; more, or longer
-  names, a `Dropdown` (its label and value on the button, groups for a long list); on or off a `Switch` in its row;
-  settings changed less often a `Sheet`; a popover anchored to its button for a few quick choices whose effect shows
-  at once (the keyboard settings beside the keys, the Player's tempo and hands). Where a picture says it faster (ADR
-  0029): a note is a `NoteChoice` and a key a `KeyChoice` (the letter, then its accidental, as it is written), an
-  inversion its drawn stack, several on-or-offs
-  together on a sheet `ToggleTile`s, the sections of one screen tabs (`ui/primitives/tabs`). A `Dropdown` stays for
-  long lists and beside other controls in a row.
-- **A screen takes the width it is given.** No `max-w-*` on a screen; its side gutter is `px-gutter` (what bleeds to
-  the edges, `-mx-gutter`), a list is `grid-cards` (row cards, as many columns of 18rem as fit), chord buttons
-  `grid-chords`. Two fixed columns are for an explorer's choices beside what they show, never for two lists.
-- **One focus ring.** The base layer draws it (3px, 2px off the control): a component adds no `outline-none` and no
-  ring of its own. Inside a scroller or a clipped box that would cut it, `focus-visible:-outline-offset-3`.
-- **A screen shows a keyboard as `LiveKeyboard`** (`features/live-keyboard`): every key sounds when touched, typed or
-  clicked. A key goes down while the app sounds it or a hand holds it (a finger, a typed key, MIDI): a tap is a hand's
-  play (`useSoundKeys`), so its key is down while pressed, not while it rings, and for at least the shortest press
-  (`usePresses` in `shared/lib`, which every hand's keys go through). It follows the **keyboard settings**
-  (key size, note names, chord names, typing; and how a swipe plays, the rail's `GlissandoToggle`), saved for every
-  keyboard and set from the rail or Settings (`KeyboardSettingsFields`, one component in both places); a screen never
-  passes them itself, and the keyboard keeps its own proportion on every screen (no screen sizes it). The
-  explorers, a lesson and a shared song's chart pass `spotlight`: the keys the app puts down are the ones struck last
-  (an arpeggio's key alone, a chord's together), every mark kept; the Player and the quiz do not, and every key
-  sounding is down there. A screen may make a key play more than itself (`keyPlays`: in the Scales explorer's Chords view a
-  degree's key plays its chord), and every key it plays is down while the hand holds it.
-  `PianoKeyboard` itself requires an `onKeyPress`, so no key is a dead end. Anything that plays sound on a screen shows
-  it on that screen's keyboard (pin it when the page scrolls away from it).
-- **Every button that plays turns into Stop while its sound plays** (`usePlayback`, §8); in a grid of items (a shared
-  song's bars, a scale's chords) the item is a toggle instead, `aria-pressed` while it plays. A sound a screen makes by
-  itself (a choice sounding, a quiz's question) has no button and no Stop.
-- A widget whose view a route's URL holds owns that view's type in its `model/` (`ChordView`, `ScaleView`,
-  `SetupParams`); its place's validator in `app/routes` imports it with `import type`.
+- A page composes widgets and the kit, with little markup of its own.
+- **Every page earns its place.** No middle page, no redirect the learner did not choose, no "coming soon". A row
+  that leads to a page is a `RowLink` (chevron); a row that opens a sheet over its page is a `RowButton` (none).
+- **A thing's page and a tool's are two pages.** An explorer's URL names the thing it shows; a tool's URL holds what
+  the learner gave it. Tabs are views of one thing, never a tool. A new Practice page is a row in `PRACTICE_PAGES`
+  with its tile in `PAGE_TILES`.
+- **Whatever has a name is found by Search** (`indexEntries` in `pages/search`): a new kind of named thing is a kind
+  there, and its test holds the count to its registry.
+- **One implementation of a thing, used everywhere.** The Player and the editor share their header, transport, View,
+  Transpose and selection. Copy the nearest slice's shape before inventing one.
 
-## 2. Logic into hooks; components render
+## 2. Hooks, state and effects
 
-- Stateful or effectful logic (subscriptions, timers, audio, MIDI, DOM measurement) goes in a hook: reusable ones
-  in `shared/lib`, one-offs beside their component.
-- **Pure domain logic never lives in a component or a hook.** It goes in `shared/lib` or `entities/*/model`,
-  tested without React.
+- Stateful or effectful logic (subscriptions, timers, audio, MIDI, measuring) is a hook: shared ones in `shared/lib`,
+  one-offs beside their component.
+- **Pure domain logic never lives in a component or a hook.** It goes in `shared/lib` or `entities/*/model`, tested
+  without React.
+- **Where state lives:** what you look at is in the URL; what must be remembered is a saved store
+  (`createSavedStore`); a screen's last view is `pt-views`; everything else is component state.
+- **Derive during render.** `useEffect` only syncs with the outside world (DOM attributes, audio, MIDI,
+  `matchMedia`). A child never reports a derived value up through an effect.
 
-## 3. Complex state → a reducer or a machine
+## 3. Complex state
 
-- Several values changing together, or distinct phases → a pure reducer or discriminated-union machine outside the
+- Values that change together, or distinct phases, are a pure reducer or a discriminated-union machine outside the
   component, with its own tests (`features/practice/practice-machine.ts`, `features/trainer/round-machine.ts`). The
   component dispatches.
-- A page with many acts exposes **one** hook, `pages/<x>/model/use-<thing>.ts`. That hook is the test surface
-  (`renderHook`), not the page.
-- **A confirmation or multi-step flow is one union value, never a flag each**
-  (`stage: 'idle' | 'confirm' | 'working'`).
+- **A page with many acts exposes one hook,** `pages/<x>/model/use-<thing>.ts` (`use-player.ts`,
+  `use-library-page.ts`). It composes the stores and acts inside and is the page's test surface (`renderHook`).
+- **What is open over a page is one union value, never a flag each** (`use-library-page.ts`'s pending act, `use-editor-takes.ts`'s
+  sheet's page). Separate booleans make "a dialog over a sheet" reachable.
 - A lone toggle stays `useState`.
 
-## 4. Composition over configuration
+## 4. Composition and variants
 
-- No boolean-prop proliferation (`isPrimary`, `isCompact`): use variants or `children` slots.
-- **Variants are lookup maps of complete static class strings.** Never `` `bg-${x}` ``: Tailwind cannot see it.
-- Multi-part UI → compound components sharing context, not a wide list of props.
-- `children` over `renderX`; a render prop only when the parent injects per-item data.
+- No boolean-prop proliferation (`isPrimary`, `isCompact`). A choice a prop would make is its own component or its
+  `children`: a Setup sheet composes its first page, `ChordRow` its parts.
+- **Variants are lookup maps of complete class strings** (`primitives/button.tsx`, `role-classes.ts`). Never
+  `` `bg-${x}` ``: Tailwind cannot see it.
+- Multi-part UI is a compound component sharing context, not a wide prop list. `children` over `renderX`; a render
+  prop only when the parent injects per-item data.
 - **React 19:** `ref` is a normal prop (no `forwardRef`); `use(Context)`; `<Context value>` without `.Provider`.
+- A widget whose view a URL holds owns that view's type in its `model/` (`ChordView`, `ScaleView`); the route's
+  validator imports it with `import type`.
 
-## 5. Tailwind and tokens
+## 5. The kit, tokens and controls
 
-Tailwind v4 with two layers: primitives (`--p-*`) → semantic roles (`--primary`, `--card`, `--role-root`, …) in
-`src/styles/tokens.css`, exposed as utilities by `@theme inline` in `src/styles/theme.css`.
+**Add to `shared/ui`** only what is app-wide and presentational and has a second user. Read its barrel (`index.ts`)
+before writing a control: a segmented choice, a dropdown, a row, a sheet, a tooltip, a fold and a toast are there.
+shadcn primitives come from the CLI (`shadcn` skill), never by hand; the CLI's sizes under 44px are removed.
 
-- **Semantic utilities only** (`bg-card`, `text-muted-foreground`, `bg-role-3rd`): never a raw colour, never a
-  primitive, never `p-[13px]`. No role yet → add one to `tokens.css`, in both themes. DESIGN's card surface is the
-  `card` utility (`theme.css`: its corners, soft line and paper), on whatever element holds the card.
-- **Compose with `cn()`** (`shared/lib/cn.ts`, which re-exports shadcn's `cn` package; shadcn primitives import the
-  package directly). A custom theme name its default tables do not know (a new text size, radius or shadow) must be
-  registered with `createCn` from `cn/config`, with a test, or `cn()` drops classes.
-- **Stack with `flex`/`grid` and `gap-*`,** not `space-x-*`/`space-y-*`. Equal width and height → `size-*`.
-- **Dark mode is the token remap under `[data-theme='dark']`.** App code writes no `dark:` classes. `dark:` is bound
-  to `data-theme` only so shadcn primitives follow the app's setting rather than the OS.
-- **The world is a labelled picture book, printed quietly** (ADR 0010, ADR 0011): seven faded paints at one
-  lightness, each with a pale wash. What each colour does is a token: `--primary` (honey) the one action and the only
-  control filled with a colour, `--selected` (umber, neutral) the check on a chosen item, `--learned` learned, on and connected,
-  `--link` links and `--ring` focus, `--attention` a gap, `--destructive` a wrong key or a reset, `--border` the soft
-  1px line round a card, `--input` the 1px line round a control (3:1), `--hairline` a divider. A chosen segment is
-  `bg-card` with `border-input` on a `bg-muted` track; the nav's place is `bg-muted`. Every line is 1px
-  (`border`, `divide-y`); only focus rings and the keys' own rings are wider. `tokens.css` holds light, dark and a
-  `prefers-contrast: more` layer: a new role gets all three where it is a line or a secondary ink.
-- **Chord-tone colours are role tokens** (`--role-root` … `--role-13th`, each with its `-wash`). A coloured key always
-  also shows its degree or finger label, so colour is never the only cue. **Palette law:** role colours only on chord
-  tones (keys, a chord's tone chips); hand colours (`--hand-rh`, `--hand-lh`, `--hand-staff`, each with its `-wash`)
-  only in the Player; `--attention` only for a gap or "to check" (the dot, never the text beside it); the chrome's
-  paints (`--paint-*`, each paint's wash, with `--on-paint-*` its deep shade for the icon on it) name places and kinds
-  of step, never a chord tone. The keys have their own
-  roles: a mark is its wash while its key is quiet and its full colour while it sounds (`--key-scale` and
-  `--key-scale-down`, `--key-tonic` and `--key-tonic-down`, a role or hand and its `-wash`), a plain key sounding is
-  `--key-down`; the inks are `--on-key-*` and `--on-role`; their material is `--key-rail` (with `--on-key-rail`), `--key-bed`, `--key-shade`,
-  `--key-lip`, `--key-sheen` (the No Glow Rule's one exception, on keys only); a slider's thumb is `--thumb`.
-- **Two faces:** Onest for reading and every control (buttons, pop-up buttons, segments, the nav); Literata
-  (`font-display`, variable in weight and optical size) for titles (every `h1`–`h3`, at 600 from the base layer) and
-  chord symbols. Both faces are variable, so a `font-display` element that is not a heading sets its weight
-  (`font-semibold`); never a serif on a control. Faux bold is off. Neither face has ♭ ♮ ♯: both take them from Text
-  Accidentals (`src/styles/fonts/`, written by `scripts/text-accidentals.py`), Noto Music's signs set for text.
-- **A chord symbol on screen is printed** (`printedSymbol`, `printedChord` for a chord): `C♯m7`, `B♭`, in its text,
-  its title and its screen reader's name alike, at the place it is shown (the kit's `ChordButton` and `ChordHeading`
-  print what they are given). What is stored, typed, parsed, put in a URL or compared keeps its ASCII (`C#m7`).
-- **Values worked out at runtime** (a key's place, the keys' width and length) go in `style`; every fixed value is a
-  token, a utility or a named constant.
-- **Scales on Tailwind's own names,** so `cn()` already knows them: radii `rounded-xs` 6 · `sm` 9 · `md` 10 · `lg` 11
-  · `xl` 12 · `2xl` 12 · `3xl` 14 · `4xl` 20 (black keys, white keys, primitives, pop-up buttons, buttons, cards, sheets); type
-  one size per text style, in rem so it follows the reader's text size: `text-lg` 17 · `xl` 20 · `2xl` 22 · `3xl` 28
-  · `4xl` 34 · `5xl` 44 (headline, title 3, title 2, title 1, large title, display), Tailwind's `7xl` 72 for the
-  chord display; `ease-out` is the one
-  curve. Numerals that change in place are `tabular-nums`.
-- Interactive elements: hover, `focus-visible`, `disabled`, and a transition. Hover is a mouse's or a
-  trackpad's (`theme.css` makes `hover:` `(hover: hover) and (pointer: fine)`): a tap on a phone that says it
-  hovers leaves no wash behind (an edit mark's on the sheet). Icon-only controls get an
-  `aria-label`, and their icons are 20px. Minimum target 44px (`min-h-11`, `size-11`); every size of `Button`,
-  `Toggle`, `Input`, `InputGroup`, `Switch` and `Slider` already meets it, so the CLI's smaller sizes are removed.
-- **A control has the same name and does the same thing at every size; a size changes only where it stands and
-  how big it is** (ADR 0094, Flat's phone has the laptop's tools in the same places). A bar's or a dock's button
-  is its icon at every size, named by its `aria-label` and its tooltip (`title`): no name shown on a laptop
-  alone (`max-lg:sr-only`), no icon hidden on a phone alone, no option offered at one size only. Where a row
-  does not fit, it wraps or its controls shrink to the 44px target, never lose a word or a control.
-- **A link is a link.** Base UI's `Button` always sets `role="button"`, so a link that looks like a button is the
-  kit's `ButtonLink` (or `RoundLink`) rendering the router's `Link`, never `<Button render={<Link />}>`. A control
-  that acts (plays, closes, confirms) stays a `Button`.
-- **Compose the primitives as shadcn does:** a button inside a field is `InputGroup` + `InputGroupAddon`; a slider is
-  named by its `SliderLabel`; a sheet's switch is named by the `<label>` around it, with no second `aria-label`.
-- Clear the notch and the home indicator with `pt-safe` / `pb-safe` / `bottom-safe` (`theme.css`), not arbitrary
-  values. A row that scrolls sideways hides its bar with Tailwind's `scrollbar-none`. A phone on its side is the
-  `landscape-phone:` variant; the narrowest phones upright (under 360px) are `narrow-phone:`. A layout of named areas that changes by form factor is one `@utility` in `theme.css`
-  whose children take their place by `data-area` (the Player's `player-screen`), not a wall of arbitrary grid values.
-- Colours CSS cannot reach (the browser toolbar, the manifest) come from `THEME_COLORS` (`shared/config`), which a
-  test holds to `--background`: a repaint changes `tokens.css` and `THEME_COLORS` together.
-- Mobile-first: the base style is the phone; layer up with `sm:` and `lg:`.
-- Motion animates `transform` and `opacity` only, and must mean something. `prefers-reduced-motion` is honoured
-  globally in `theme.css`.
+**Choosing a control** (Apple's HIG): five or fewer short nouns are a `Segmented`; more, or longer, a `Dropdown`; on
+or off a `SwitchRow`; a note a `NoteChoice`, a key a `KeyChoice`, an inversion its drawn stack (`InversionChoice`);
+several on-or-offs on a sheet `ToggleTile`s; quick choices whose effect shows at once a popover by their button;
+settings changed less often a `Sheet`.
 
-## 6. TypeScript and imports
+**Tokens.** Tailwind v4 with two layers: primitives (`--p-*`) in `src/styles/tokens.css`, semantic roles over them,
+exposed as utilities by `@theme inline` in `src/styles/theme.css`.
 
-`import type` for type-only imports · no `any` (take `unknown` and narrow) · small domain types over bare numbers
-and strings (`PitchClass`, `Midi`, `StepId`) · another slice only through its `index.ts` · the `@/` alias, never
-`../../` across slices.
+- Semantic utilities only (`bg-card`, `text-muted-foreground`, `bg-role-3rd`): never a primitive, a hex value or
+  `p-[13px]`. A new role goes in `tokens.css` for light, dark and `prefers-contrast: more`.
+- Values worked out at runtime (a key's place) go in `style`; every fixed value is a token, a utility or a named
+  constant. A layout that changes by form factor is one `@utility` placing children by `data-area`
+  (`player-screen`, `score-bar`), not a wall of arbitrary grid values.
+- **Compose with `cn()`** (`shared/lib/cn.ts`). The scales use Tailwind's own names so `cn()` knows them; a new
+  custom name is registered with `createCn` from `cn/config`, with a test, or `cn()` drops classes.
+- `flex`/`grid` with `gap-*`, not `space-*`. Equal width and height is `size-*`.
+- **No `dark:` in app code.** Dark mode is the token remap under `[data-theme='dark']`; `dark:` is bound to that
+  attribute only so shadcn primitives follow the app's setting. Colours CSS cannot reach (the browser bar, the
+  manifest) come from `THEME_COLORS`, held by a test to `--background`.
 
-**Search params** are validated in `app/routes/<place>-search.ts`: an invalid value takes its default, silently (no
-clamping). Validators run as the app opens, so they import only what a URL is made of (`read-search.ts`, a feature's
-`*-choice.ts`), never a module that arranges or plays: the bundler moves whole modules into the first paint. Each
-validator writes every one of its params, an invalid optional one as `undefined`, because the router lays a route's
-search over the raw one and a param left out would let the stale value through. Defaults leave the URL
-(`stripSearchParams`), and a control's change replaces the history entry (`replace: true`).
+**Controls.**
 
-## 7. Performance
+- **44px targets** (`min-h-11`, `size-11`); every `Button` size already meets it. A control drawn smaller grows its
+  reach to 44px (`ModeSwitch`). Icon-only controls have an `aria-label` and a tooltip, and 20px icons (lucide).
+- **A control has the same name, icon and place at every size.** No label shown on a laptop alone, no option offered
+  at one size only. A row that does not fit wraps or shrinks to 44px; it never loses a control.
+- **One focus ring,** from the base layer (3px, 2px off). No `outline-none` and no ring of a component's own. Inside
+  a scroller or a clipped box, `focus-visible:-outline-offset-3`. Siblings gap by at least `gap-2`, or the ring
+  of one covers the next.
+- Every interactive element has hover, `focus-visible`, `disabled` and a transition. `hover:` fires only for a mouse
+  or a trackpad (`theme.css`), so a tap leaves no wash behind.
+- **A link is a link:** a button-looking link is `ButtonLink` or `RoundLink` over the router's `Link`, never
+  `<Button render={<Link />}>` (Base UI sets `role="button"`). A control that acts stays a `Button`.
+- **An explanation is an ⓘ.** What a control does, where its name does not say, is the `InfoTip` beside its name
+  (`info` on `SwitchRow`, `SettingField`, `Labelled`, `MenuSection`). Never a line of text under a control. A term's
+  meaning and why a control is greyed go in its tooltip.
+- Compose primitives as shadcn does: a button inside a field is `InputGroup` + `InputGroupAddon`; a slider is named by
+  its `SliderLabel`; a switch by the `<label>` round it.
+- **A chord symbol on screen is printed** (`printedSymbol`, `printedChord`: `C♯m7`, `B♭`), in text, titles and
+  accessible names alike. What is stored, typed, parsed, compared or put in a URL stays ASCII (`C#m7`).
+- **A screen's keys are `LiveKeyboard`** (`features/live-keyboard`): every key sounds when touched, typed or played
+  on MIDI, and follows the saved keyboard settings; a screen never sizes it. Anything that sounds on a screen shows on
+  its keys.
+- **A button that plays becomes Stop while its sound plays** (`usePlayback`). In a grid of items the item is a
+  toggle, `aria-pressed` while it sounds.
 
-- **Subscribe narrowly:** `useSettings(selectTheme)`, never the whole state. State a handler needs only when it runs
-  → `useSettingsStoreApi().getState()` at call time.
-- **Derive during render. `useEffect` only syncs with the outside world** (DOM attributes, audio, MIDI,
-  `matchMedia`).
+## 6. TypeScript, imports and URLs
+
+- `import type` for types · no `any` (take `unknown` and narrow) · small domain types over bare numbers and strings
+  (`PitchClass`, `Midi`, `Tick`, `StepId`) · another slice only through its `index.ts` · the `@/` alias across
+  slices.
+- **Search params** are validated in `app/routes/<place>-search.ts`. An invalid value takes its default, silently.
+  Each validator writes every param it owns (an invalid optional one as `undefined`), or a stale value leaks through.
+  Defaults leave the URL (`stripSearchParams`); a control's change replaces the history entry.
+- Validators run as the app opens, so they import only what a URL is made of (`read-search.ts`, a `*-choice.ts`),
+  never a module that arranges or plays.
+
+## 7. Performance and build
+
+- **Subscribe narrowly:** `useSettings(selectTheme)`, never the whole state. State a handler reads only when it runs
+  comes from `useSettingsStoreApi().getState()` at call time.
 - Never define a component inside a component. Hoist static JSX and lookup maps to module scope.
 - `memo` deliberately: a list row under a busy parent, with stable props.
-- Every route's screen is lazy (`lazyRouteComponent` over an `app/routes/*-screens.ts` module; each module is one
-  chunk of the screens that load together), so the first paint carries only the shell. The fallback screens (not
-  found, `RouteError`) stay eager: they must render even when a chunk fails to load.
 - A ternary, not `cond && <X />` (a `0` renders).
-- `startTransition` or `useDeferredValue` for expensive, non-urgent updates (search, filters).
+- `startTransition` / `useDeferredValue` for costly, non-urgent updates (search, filters).
+- **Every screen is lazy** (`lazyRouteComponent` over an `app/routes/*-screens.ts` module, one chunk per group that
+  loads together). Fallback screens (not found, `RouteError`) stay eager. The engraver loads only with a staff
+  (`LazyScoreView`); `shared/ui/score` is imported by that path, never through the kit's barrel.
+- Check a production build with `npm run build && npm run preview` after touching startup, routing, the PWA or config.
+  A `VITE_` variable is public. The Vercel config is `vercel.ts`, pinned by `vercel.test.ts`.
 
 ## 8. Music code
 
-- **Spelling comes from letter steps + semitones,** never from a table of sharp or flat names. That is what keeps
-  C♭, E♯, F𝄪 and 𝄫7 right. Name tables are for display only where no key exists.
-- **Transpose by interval, keeping letters:** `transposeNote(note, fromTonic, toTonic)` applies the interval from
-  the old tonic to the note to the new tonic, so D in G is E♭ in A♭. A root that would need a double accidental
-  takes its plain spelling; chord tones and slash basses are then spelled from the root. Never move by semitones and
-  then choose sharps or flats.
-- **The kernel is fenced:** `shared/lib/music` imports nothing outside itself, `shared/lib/arrangement` and
-  `shared/lib/notation` only music, and none of them imports a package (lint).
-- **Time is the kernel's:** `Tick`, `TICKS_PER_BEAT`, `Meter`, `beatsPerBar`, `isCompound` and `timeSignature` live
-  in `shared/lib/music/time.ts`; nothing re-exports them elsewhere.
-- **A Performance is what sounds, and what is written:** each note keeps its written onset and length and its
-  `spelled` note, decided where the chord is voiced; the tune keeps its written spelling. `notate(performance)` (`shared/lib/notation`) writes
-  it as a Score; the Score is never played, and cutting or quantising in `notate` changes only what is written.
-- **Sheet music is `ScoreView`** (`shared/ui/score`, imported by that path, never the kit's barrel, so only the
-  Player's chunk carries the engraver). It writes the Score as MEI (`scoreToMei`), has Verovio engrave it in a worker
-  (ADR 0078), reads the layout from the SVG (a measure's x and width, an onset's x, `xAtTick`) and hands it to its
-  children; every colour is `currentColor` for `score.css` to set from the tokens.
-  **Outside the Player a staff is `LazyScoreView`** (the kit): it loads `ScoreView` the first time a staff is on
-  screen (`loadScoreView`), keeping the staff's height meanwhile, so a Learn screen's chunk stays without the engraver;
-  `renderApp` loads it before a test renders.
-- **A run is `scaleRun`** (`shared/lib/schedule`): the notes from the Start on note up an octave and back in the
-  practice rhythm, fingered, in `scaleKey`'s key (a mode in its parent's), as timed music in ticks; `runSounds(run,
-tempo)` sounds it and `notate(run)` writes it.
-- **A scale's chords are stacks, not qualities:** `scaleChords(root, kind, notes)` stacks 3–7 notes in thirds from each
-  degree, named by one rule (`stackSuffix`, over the triad and 7th-chord tables in `chord-name.ts`), carrying the
-  table's `quality` only where the stack is one. A chart of a scale's chords (the walk) takes `scaleChordAt`'s
-  qualities: a 9th only where it is an available tension.
-- **A built chord is `buildChord(root, parts)`** over `ChordParts` (triad, size, 7th, added tone, alterations), fitted
-  by `fitParts` (and `withAlterations` for a choice of several), named by the table where it has the chord and else by
-  the same tables as the stacks. **Every chord's root is spelled by `chordRootSpelling(pc, intervals)`**: sharp on
-  C♯/G♯ under a minor 3rd or minor 9th, the one rule for the table, the builder and the quiz.
-- **Available tensions are `tensions.ts`'s** (`tensionTones`, `availableTensions`): the chord builder's tensions,
-  `scaleChordAt`'s 9ths and Reharmonise ask it; the builder's alterations are held to it by a test. Never write a
-  second table of what a chord takes.
-- **A numeral is a chord symbol with a degree for a root** (`numerals.ts`, ADR 0032): its quality is the table's, read
-  by the chord symbols' own suffix lookup (`readQualitySuffix`) and written one way (lower case for a chord with a
-  minor 3rd). Never a second table of what a numeral may write.
-- **A row of chords is voiced by `voiceLead`:** each chord over its root in the bass, the hand in the inversion
-  nearest the one before; a chord of five notes or more leaves its root to the bass, and the bass sits under the
-  hand. The Player's hands are the arrangement's, not this.
-- **A root worked out from an interval is spelled by letters, then named plainly** (`spellBelow` / `spellAbove`, then
-  `plainRoot`): the tritone substitution of B♭7 (E♭'s dominant) is written E7, never F♭7. Keys played are named by `nameChords`, over
-  the builder's chords and the tones a hand leaves out of them (`leftOut`), never by a second table.
-- **A line in one hand is written on one staff:** `LazyScoreView`'s `staff` draws only that staff of the grand staff
-  (an interval, a note to read); music for both hands keeps the grand staff.
-- **`arrangement` exports only `arrange`** (plus `parseFigure`, what a figure needs of its source, `playsKeyTriads` and
-  `splitsTheBeat`, `transposeChord` and `transposeNotes`, which the score editor moves a draft's key with, and the
-  types). A bar's written hands
-  (`ChartBar.hands`) play in place of the pattern's hand there (ADR 0027). Voice
-  leading, an inversion's voicing, the chord context and fingering are internal and tested through `arrange`.
-- Domain time is **ticks** (24 per beat, ADR 0060). Seconds are worked out only in `shared/lib/schedule` and the audio adapter:
-  Listen's transport reads the audio clock and hands it to the loop (`advanceLoop`, `beatGroupAt`); a take's click
-  is `recorderClicks`, on the Player's bar grid. A take is the one thing kept in time as played, milliseconds (ADR
-  0028): `takeSounds` hears it (its pedals, through the Touch) and `quantise` snaps it to ticks, both in
-  `entities/take`; a velocity's loudness is `velocityGain`, the live voice's and a take's alike.
-- Audio and MIDI are reached **only** through `useServices()` (ports in `shared/api`). No component or hook creates an
-  `AudioContext` or calls `requestMIDIAccess`. **Scheduled music goes through `play()`, a hand's keys through the live
-  voice** (ADR 0034): `usePlay` cuts off what sounds (a chord, a run, a bar) and returns the play's handle;
-  `useLiveVoice` sounds a hand's keys on top (a tap's key, a typed key, or the chord a key stands for) from its press
-  until its release, under the pedals (`usePedal`), and lets go of whatever it still holds as its screen goes; never a
-  hand's key through `play()`. What the music sounds, which keys were struck last, and the live voice's keys are the
-  port's to know (`useSoundingKeys()`, `useSoundingKeys('struck')`, `useSoundingKeys('live')`); the live voice's keys
-  show down but never lead the keyboard's view. The MIDI keyboard is set up once, by `MidiSync` (`configure`). The port also says whether a play still sounds
-  (`isPlaying(handle)`), so **a Play button is `usePlayback`**: component state over the port, `playing` (the id last
-  played, while it plays) and `toggle(id, sounds)`, with no tracker, no provider and no shared state; another button's
-  sound cuts it off and the port says so. A chord's keys sound with `chordSounds(keys, { arpeggio })`, a walk of
-  chords with `walkSounds`.
-- Randomness is injected (`random: () => number`), so every quiz test is deterministic.
-- **The explorers place tones with `placeChord(tones, { inversion, bothHands })` / `placeScale(root, kind, start)`**
-  (a scale's chords with `placeScaleChords`, a key's borrowed ones with `placeBorrowedChords`), and a stack of `notes`
-  notes has the inversions `lastInversion(notes)` gives: the validators, the segments and the keyboard all ask it.
-- **A chord of five notes or more takes two hands** (ADR 0035, `TWO_HANDS_FROM`): `placeChord` with `bothHands`
-  gives the left hand the root (and the perfect 5th from six notes) and holds the rest close in the right
-  (`closeFrom`); a built chord's inversions are `chordInversions(tones)` (from five notes root position, and 3 where
-  the right hand can start from its 7th), fitted by `fitChordInversion`. With one hand `placeChord` still spells the
-  whole stack, which is what a trainer or an example asks for. Never stack a big chord in one hand to be played.
-- Content is data validated by tests: a chart that does not parse, an unknown chord symbol, or a missing Russian
-  text fails CI.
+- **Spell from letter steps plus semitones,** never from a table of sharp or flat names. Name tables (`note.ts`) are
+  for a pitch with no letter context only.
+- **Transpose by interval, keeping letters** (`transposeNote`): D in G is E♭ in A♭. A root that would need a double
+  accidental takes its plain spelling; chord tones and slash basses are spelled from the root.
+- A root found from an interval is spelled by letters, then named plainly (`spellBelow` / `spellAbove`, `plainRoot`):
+  the tritone sub of B♭7 is E7, never F♭7.
+- **One table each:** chord names in `chord-name.ts` (stacks by `stackSuffix`, built chords by `buildChord`), a
+  chord's root spelling in `chordRootSpelling`, available tensions in `tensions.ts`, numerals' qualities through the
+  chord symbols' own suffix reading (`numerals.ts`), keys played named by `nameChords`. Never a second table.
+- **Placing tones:** `placeChord` / `placeScale` / `placeScaleChords`; a stack's inversions from `lastInversion`. A
+  chord of `TWO_HANDS_FROM` (5) notes or more takes two hands; never stack a big chord in one hand to be played. A row
+  of chords is voiced by `voiceLead`.
+- **Time is ticks** (`TICKS_PER_BEAT` = 24, `shared/lib/music/time.ts`). Seconds appear only in `shared/lib/schedule`
+  and the audio adapter. A take is the one thing kept in milliseconds, as played; `quantise` snaps it to ticks.
+- **A Performance is what sounds and what is written:** each note keeps its written onset, length and spelling.
+  `notate` writes it as a Score; a Score is never played.
+- **`arrangement` exports `arrange`** (and a few named helpers). Voice leading, fingering and inversions inside it are
+  tested through `arrange`.
+- **The kernel is fenced** (lint): `music` imports only itself; `arrangement` and `notation` only `music`; none
+  imports a package.
+- **Audio and MIDI only through `useServices()`.** No code creates an `AudioContext` or calls `requestMIDIAccess`.
+  Scheduled music goes through `play()` (`usePlay`); a hand's keys through the live voice (`useLiveVoice`), never
+  `play()`. What sounds is the port's to know (`useSoundingKeys`).
+- Randomness is injected (`random: () => number`), so trainers test deterministically.
+- Content is data held by tests: an unparsed chart, an unknown chord or a missing Russian text fails
+  ([CONTENT](CONTENT.md)).
 
 ## 9. Tests
 
-- **Test first** (`tdd` skill). A test names behaviour a learner or caller can observe ("saves a new language"),
-  not an implementation detail.
-- Components: Testing Library, by role and accessible name; `userEvent.setup()` for interaction. No snapshots.
-- Ports are replaced by **fakes** (`createMemoryStorage()`, `stubMatchMedia`, `stubServiceWorker`,
-  `createFakeAudio()`, `createFakeMidi()`), not by mocking modules. Verovio engraves for real in a test: it reads
-  no fonts or layout, and where there is no `Worker` it runs in the test's own thread (ADR 0078).
-- A component under the settings store: `renderWithSettings(ui, { locale, theme })`; whole-app behaviour:
-  `renderApp(path, { locale })`; both in `src/app/testing/`.
-- **A screen's test sits beside its page** (`pages/<x>/ui/<X>Page.test.tsx`) and runs the whole app through
-  `renderApp`, so routing, search params and stores are real. Test files are outside the layer rules.
-- jsdom lays nothing out: Base UI keeps a slider's thumb hidden until it measures the track (query it with
-  `{ hidden: true }`), and scrolling code checks `scrollWidth` before it scrolls, so it does nothing there. Where a
-  pointer's position or a scroll matters, `src/shared/test/layout.ts` lays out what the test needs: `stubBox(element,
-box)` gives an element its box, and `stubScrolling({ clientWidth, scrollWidth })` gives every element scroll metrics
-  and a `scrollTo` that moves and fires `scroll`, returning each position scrolled to.
-- Keys that sound: move the fake audio's clock (`act(() => audio.setNow(t))`) and read the key's `data-down`. A pointer
-  on the keys: `fireEvent.pointerDown` on a key and `pointerMove` on the keys' group, whose box `stubBox` gives. A key a
-  hand let go stays down for the shortest press: a test that reads it up again uses fake timers and moves them on by
-  `SHORTEST_PRESS_MS`.
-- `globals: false`: import `describe`, `it`, `expect` and `vi` from `vitest`.
+- **Test first** (`tdd` skill). A test names behaviour a learner or a caller sees ("saves a new language").
+- Tests sit beside their file. `*.test.ts` runs in node, `*.test.tsx` in jsdom; a `.ts` test that needs a DOM starts
+  with `// @vitest-environment jsdom`. Import `describe`, `it`, `expect`, `vi` from `vitest`.
+- **What to test:** pure logic in `shared/lib` and `entities/*/model` by unit tests (90% lines enforced there); a
+  page's hook by `renderHook`; a screen by its page's test running the whole app (`renderApp(path)`), so routing,
+  search params and stores are real. Components by role and accessible name with `userEvent.setup()`. No snapshots.
+- **Fakes, not module mocks:** `createMemoryStorage()`, `createFakeAudio()`, `createFakeMidi()`, `stubMatchMedia`,
+  `stubServiceWorker`. Helpers in `src/app/testing/` (`renderApp`, `renderRouted`, `renderWithSettings`,
+  `testRouter`).
+- **Leave nothing behind:** workers share modules and the document (`isolate: false`). Listeners a test adds stop
+  with it (`untilTestEnds()` in `src/shared/test/listeners.ts`).
+- **jsdom lays nothing out.** Where a box or a scroll matters, `stubBox` and `stubScrolling`
+  (`src/shared/test/layout.ts`). A Base UI slider's thumb stays hidden until measured: query it with
+  `{ hidden: true }`. Keys that sound: move the fake audio's clock (`audio.setNow(t)`) and read `data-down`; a key let
+  go stays down `SHORTEST_PRESS_MS`, so use fake timers. Verovio engraves for real in tests, on the test's thread.
+- A gesture, a layout or a keyboard behaviour jsdom cannot show is checked in a browser at the sizes in §11.
 
 ## 10. Copy and i18n
 
-- **No sentence that repeats what a label, icon or layout already says. No how-to paragraphs.** Empty states and
-  errors get one short line. The one exception is **lessons** (`entities/lesson`, Learn): a lesson teaches music, in
-  prose with examples that play, and never explains a button.
-- **An explanation is an ⓘ** (ADR 0096): what a control does, where its name does not say, is the `InfoTip` beside
-  its name (`info` on `SwitchRow`, `SettingField`, `Labelled`, `MenuSection`, a palette's section), never a line
-  under it; a term's meaning (dolce: sweetly) and why a tool is greyed are its tooltip. A list of things to choose
-  still says what each is in its row (a pattern's idea, a song's credit).
-- Every interface string goes through i18next, in **both** `en` and `ru`
-  (`src/shared/i18n/locales/{en,ru}/<namespace>.ts`; Russian is typed against English). A namespace is a place's:
-  `learn` holds Learn's and a lesson's, `practice` Practice's pages', and a word two places share is `music`'s
-  (Play, a row of chords, an interval's card). One string, one key: a page's title is `practice:pages.<page>`
-  wherever it is shown.
-- Content text a learner reads is `LocalText { en, ru }`, read through `localText(text, locale)`. Credits stay as
-  printed ([CONTENT](CONTENT.md)).
+- **No sentence that repeats what a label, icon or layout says. No how-to paragraphs.** Empty states and errors get
+  one short line. Lessons are the exception: they teach music in prose, never a button.
+- Real musical words: "crescendo", not "get louder". A name says what a control does.
+- Every UI string is in both `en` and `ru` (`src/shared/i18n/locales/{en,ru}/<namespace>.ts`; Russian is typed
+  against English, so a missing key fails `tsc`). A namespace is a place's (`learn`, `practice`, `search`); words
+  every screen shares are `music`'s. One string, one key.
+- Content text is `LocalText { en, ru }`, read through `localText`. Credits stay as printed.
 - Note and chord names are the same in both languages (B, not H).
-- **String keys are words,** never numbers (`inversion.first`, `levelName.beginner`): i18next's typed keys cannot
-  address `inversion.1`. A table beside the code maps a number to its key.
-- A count goes after a colon ("Chords to check: 2"): plural forms cannot be typed against English, and the colon
-  reads right for any number in both languages.
+- Keys are words, never numbers (`inversion.first`): typed keys cannot address `inversion.1`.
+- A count goes after a colon ("Chords to check: 2"): plurals cannot be typed against English.
 
-## 11. Build and deploy
+## 11. Layout and mobile
 
-- The Vercel config is `vercel.ts` (`@vercel/config`, a `config` export, which is what Vercel's build reads): the
-  SPA rewrite for every path but `/assets/`; `/assets/*` immutable; everything else (the app at any path, `sw.js`,
-  the manifest, the icons) revalidates. `vercel.test.ts` pins all of it. Read `vercel:knowledge-update` before
-  changing it.
-- **The service worker** registers once the page has loaded, looks for a new version whenever the app comes back to
-  the screen, and offers a waiting one in the shell only (never over the Player or the Check). The precache holds
-  only the fonts' subsets the app's text reaches, and no file over `PRECACHE_FILE_LIMIT` (a recording must fit).
-- Check a production build with `npm run build && npm run preview`: it catches lazy-chunk, asset and
-  service-worker problems `dev` hides.
-- A `VITE_` variable is public. Never put a secret in one.
-- **The installed app is an app:** `index.html`'s `#standalone-boot` locks zoom only when installed (a browser tab
-  keeps its zoom, for accessibility), and `theme.css`'s base layer keeps text unselectable and callout-free outside
-  fields, the page from overscrolling, and controls from waiting on a double tap. A new text field needs nothing:
-  `input`, `textarea` and `[contenteditable]` select again.
+- **Mobile first:** the base style is the phone; layer up with `sm:` and `lg:`. Custom variants in `theme.css`:
+  `landscape-phone:` (a phone on its side), `small-phone:` (under 390px), `narrow-phone:` (under 360px).
+- **Check four sizes:** 390×844 and 320×568 upright, 844×390 on its side, 1280×800 a laptop. Same features, words and
+  layout logic at each. Nothing clipped, overflowing or wrapping badly at 320px.
+- **A screen takes the width it is given.** No `max-w-*` on a screen. Its gutter is `px-gutter` (bleed with
+  `-mx-gutter`); lists are `grid-cards`, fields `grid-fields`, chord buttons `grid-chords`.
+- **Floating things float.** The transport, the palette, the floating actions and the zoom buttons take no layout
+  room and never push the page. The page gets scroll room under them (`pb-foot-*`, `--float-room`), not an empty
+  row. What floats over music steps aside while it is read (`useHiddenWhileReading`).
+- **Nothing traps a click.** A transparent or closed layer still takes presses: give it `pointer-events-none` or
+  `inert` whenever it is not on top. Test the tap after a popover closes.
+- **Nothing jumps.** Switching mode (Player and editor) or entering Select keeps icons in place and heights equal.
+- Safe areas through the named utilities (`pt-safe`, `pb-safe`, `px-gutter-safe`, `bottom-safe`), never arbitrary
+  values. `dvh`, never `vh`.
+- A sideways scroller clips both axes: keep room for focus rings inside it. Hide its bar with `scrollbar-none`.
+- **The phone's keyboard:** a sheet stands on it (`pb-sheet-keyboard`); the tab bar, toasts and floating actions
+  hide while it is up (`data-keyboard`). Focus a sheet's field through its `initialFocus`, never `autoFocus`.
+- **Keys:** a screen's shortcut is one `useShortcuts` call beside what it drives, never a `keydown` listener of its
+  own. A letter alone is the piano's (typing), so a shortcut takes a named key or a letter typing leaves free.
+- **The installed app is an app:** zoom is locked only when installed; text is unselectable outside fields; no
+  callout, no overscroll, no double-tap wait. A new text field needs nothing (`input`, `textarea` select again).
+
+## 12. Motion
+
+- Animate `transform` and `opacity` only, with the one curve, `ease-out` (`--ease-out`). Motion shows a change of
+  place or state, or it goes.
+- 150–300ms for feedback in the page; a sheet or the keys' fold travel further and take longer.
+- **Reduced motion:** `theme.css` cuts CSS animations and transitions to nothing. Script-driven motion asks too:
+  `useMediaQuery('(prefers-reduced-motion: reduce)')` or `motion`'s `useReducedMotion`; `morph` changes at once;
+  `useScrollMotion` scrolls instantly.
+- A view transition goes through `morph` (`shared/lib/morph.ts`), never `document.startViewTransition` directly.
+- Strips and diagrams move on their own; the page itself does not move. Finger-driven motion follows the finger and
+  can be reversed mid-gesture.
