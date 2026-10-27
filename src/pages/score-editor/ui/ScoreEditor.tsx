@@ -13,7 +13,7 @@ import {
   useHiddenWhileReading,
   useMediaQuery,
 } from '@/shared/lib'
-import { PlayerArea, SCORE_SCREEN } from '@/widgets/practice-player'
+import { PlayerArea, SCORE_SCREEN, ScoreBar } from '@/widgets/practice-player'
 import { ScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
 import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
@@ -91,15 +91,7 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
       {/* The Player's frame (ADR 0110): its bar's two groups, its tools row, the sheet, the transport
           and the keys in the Player's places, so nothing moves as Practise · Edit switches. */}
       <div data-keys={dock} className={SCORE_SCREEN}>
-        <PlayerArea area="lead">
-          <EditorLead />
-        </PlayerArea>
-        <PlayerArea area="actions">
-          <EditorActions />
-        </PlayerArea>
-        <PlayerArea area="tools">
-          <EditorToolsRow />
-        </PlayerArea>
+        <ScoreBar lead={<EditorLead />} actions={<EditorActions />} tools={<EditorToolsRow />} />
         {/* Where the caret is, a screen reader's alone, in the Player's status line's place. */}
         <PlayerArea area="status">{idle ? <CaretLine /> : null}</PlayerArea>
         {editor.view.layout === 'pages' ? (

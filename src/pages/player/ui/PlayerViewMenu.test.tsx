@@ -91,14 +91,15 @@ describe('the tools row (ADR 0102)', () => {
 
 describe('while Diagrams plays (ADR 0102)', () => {
   /** The bar's two groups and the tools row. */
-  const bar = () =>
-    ['lead', 'actions', 'tools'].map((area) => {
-      const found = document.querySelector(`[data-area="${area}"]`)
-      if (!found) throw new Error(area)
-      return found
-    })
+  // The score's bar, one surface holding its buttons and its tools (ADR 0115).
+  const bar = () => {
+    const found = document.querySelector('header[data-area="bar"]')
+    if (!found) throw new Error('bar')
+    expect(found.querySelector('[data-area="tools"]')).toBeInTheDocument()
+    return [found]
+  }
 
-  it('steps the bar and the tools row aside, back at a tap on the free room or once it stops', async () => {
+  it('steps the bar with its tools aside, back at a tap on the free room or once it stops', async () => {
     const user = userEvent.setup()
     await savedAs('diagrams', '/play/bz5')
     const transport = screen.getByRole('toolbar', { name: 'Playback' })

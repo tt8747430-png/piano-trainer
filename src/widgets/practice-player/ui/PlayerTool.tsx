@@ -4,7 +4,7 @@ import { cn } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
 
 /**
- * A tool of the Player's tools row (ADR 0102, 0104): a quiet text button, its icon in soft ink, then
+ * A tool of the Player's tools row (ADR 0102, 0104): a toolbar's text button (ADR 0115), its icon, then
  * its name, then what it is set to (`value`: Transpose's key), whole, and what follows (`children`:
  * the View's chevron, turning while its menu is open). On a phone held upright a tool with a value
  * shows that alone after its icon, its name left to its label, so no name is cut short there; a
@@ -46,17 +46,17 @@ export function PlayerTool({
 >) {
   return (
     <Button
-      variant="ghost"
+      variant="tool"
       aria-label={label}
       title={tip ?? label}
       className={cn(
-        'h-11 min-w-0 flex-auto gap-1.5 rounded-xl px-3 aria-pressed:bg-muted max-sm:gap-1 max-sm:px-2 max-sm:text-sm narrow-phone:px-1.5 sm:flex-none landscape-phone:h-10 landscape-phone:shrink',
+        'h-11 min-w-0 flex-auto gap-1.5 px-3 max-sm:gap-1 max-sm:px-2 max-sm:text-sm narrow-phone:px-1.5 sm:flex-none landscape-phone:h-10 landscape-phone:shrink',
         tip && 'disabled:pointer-events-auto disabled:hover:bg-transparent',
         className,
       )}
       {...props}
     >
-      <Icon aria-hidden className="text-muted-foreground" />
+      <Icon aria-hidden />
       <span
         className={cn(
           'min-w-0 truncate',
