@@ -112,6 +112,13 @@ describe('the draft', () => {
     ])
   })
 
+  it('reads and writes back 4/4 printed as common time (ADR 0114)', () => {
+    const common = readDraft({ ...WRITTEN, commonTime: true })
+    expect(common.commonTime).toBe(true)
+    expect(writeDraft(common).commonTime).toBe(true)
+    expect(writeDraft(readDraft(WRITTEN))).not.toHaveProperty('commonTime')
+  })
+
   it('carries no section’s own pattern: the song’s form alone (ADR 0091)', () => {
     const { hands: _hands, staves: _staves, ...plain } = WRITTEN
     const patterned: PieceMusic = {

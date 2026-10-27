@@ -191,6 +191,16 @@ function setPickupTicks(draft: Draft, ticks: Tick): Draft {
 }
 
 /**
+ * The first bar made a pickup `ticks` long, or a whole bar again at its meter's length (ADR 0114),
+ * always from its start, as the beats lead into the downbeat (`setPickupTicks`).
+ */
+export function setPickup(draft: Draft, ticks: Tick): Draft {
+  const placed = barsOf(draft)[0]
+  if (!placed || ticks <= 0 || ticks > firstBar(draft) || ticks === placed.bar.ticks) return draft
+  return setPickupTicks(draft, ticks)
+}
+
+/**
  * A bar made `ticks` long: shorter, its chords and notes past the new end taken; longer, its last chord
  * held on; the notes after it moved. A pickup changes at its start instead (`setPickupTicks`).
  */

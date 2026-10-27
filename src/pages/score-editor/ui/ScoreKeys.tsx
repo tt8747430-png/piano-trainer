@@ -1,21 +1,17 @@
 import { useTranslation } from 'react-i18next'
-import { useSectionHeading } from '@/entities/piece'
+import { useShallow } from 'zustand/react/shallow'
 import {
-  barsOf,
   BARLINE_CHOICES,
   chosenBars,
   clefAt,
   isHandLayer,
   JUMP_CHOICES,
-  metersFor,
   sectionKey,
   sectionMeter,
   type BarMarkChoice,
   type NoteLayer,
 } from '@/features/score-editor'
-import { useShallow } from 'zustand/react/shallow'
 import {
-  beatGrouping,
   CLEFS,
   EXPRESSION_TEXT,
   EXPRESSIONS,
@@ -23,37 +19,41 @@ import {
   noteName,
   printedSymbol,
   signatureKey,
-  SIGNATURE_COUNTS,
   writtenKey,
   type Key,
   type Pedal,
 } from '@/shared/lib/music'
+import { Segmented } from '@/shared/ui'
 import { useLayerName } from '@/widgets/score-sheet'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { isJumpWords, JUMP_SIGNS, JUMP_WORDS } from '../model/palette-categories'
-import { useFieldReason } from '../model/use-field-reason'
 import { useNotesChosen } from '../model/use-notes-chosen'
+import { useSignatureFrom } from '../model/use-signature-from'
 import { useStaffHeads } from '../model/use-staff-heads'
 import { FieldKey } from './FieldKey'
 import { CodaSign } from './palette-icons'
+import { usePaletteForm } from './palette-form'
 import {
   CaptionGrid,
   CaptionKey,
   GroupName,
   Printed,
+  SectionLine,
   SignGrid,
   SignTile,
   TermGrid,
   TermKey,
 } from './palette-keys'
-import { BarlinePicture, ClefPicture, KeyPicture, TimePicture } from './sign-pictures'
-import { Segmented } from '@/shared/ui'
 import { usePaletteReason } from './palette-reason'
+import { BarlinePicture, ClefPicture, KeyPicture, TimePicture } from './sign-pictures'
+import { SignPopover } from './SignPopover'
+import { TimePicker } from './TimePicker'
 
 /**
- * Clef (ADR 0069, 0097): a staff's clef, Treble or Bass, the one it is in pressed: one of the piano's
- * from a bar on, a single staff's whole. In the palette the caret's staff from the first bar chosen
- * (else the caret's); over a clef printed on the sheet (ADR 0094), its staff from its bar (`at`).
+ * The clef picker (ADR 0069, 0097, 0114): the clefs the notation writes, each drawn on its staff over
+ * its name, the one the staff is in pressed: one of the piano's from a bar on, a single staff's whole.
+ * In the palette the caret's staff from the first bar chosen (else the caret's); over a clef printed
+ * on the sheet (ADR 0094), its staff from its bar (`at`).
  */
 export function ClefKeys({ at }: { at?: { readonly staff: NoteLayer; readonly bar: number } }) {
   const { t } = useTranslation('editor')
@@ -68,13 +68,13 @@ export function ClefKeys({ at }: { at?: { readonly staff: NoteLayer; readonly ba
   return (
     <>
       {staff ? (
-        <p className="text-sm text-muted-foreground">
+        <SectionLine>
           {isHandLayer(staff)
             ? t('clef.from', { staff: layerName(staff), bar: bar + 1 })
             : layerName(staff)}
-        </p>
+        </SectionLine>
       ) : null}
-      <SignGrid>
+      <SignGrid label={t('palette.category.clef')}>
         {CLEFS.map((clef) => (
           <SignTile
             key={clef}
@@ -92,134 +92,149 @@ export function ClefKeys({ at }: { at?: { readonly staff: NoteLayer; readonly ba
   )
 }
 
-/**
- * Where a key or time signature changes from (ADR 0089, 0095), as Flat changes either from a bar: the
- * section of the bar given (its sign on the sheet), else of the first bar chosen (or the caret's), from
- * there on up to the next change; in the song's first section, the whole song. `said` names which,
- * over the choice.
- */
-function useSignatureFrom(bar: number | undefined) {
-  const { t } = useTranslation('editor')
-  const named = useSectionHeading()
-  const chosen = useEditorState((state) => chosenBars(state).from)
-  const from = bar ?? chosen
-  const section = useEditorState((state) => barsOf(state.draft)[from]?.section ?? 0)
-  const heading = useEditorState((state) => state.draft.sections[section]?.heading)
-  // The section's first bar, as printed.
-  const first = useEditorState(
-    (state) => (barsOf(state.draft).find((placed) => placed.section === section)?.index ?? 0) + 1,
-  )
-  const song = section === 0
-  const said = song
-    ? t('signature.song')
-    : t('signature.fromSection', {
-        section: heading ? named({ ...heading, lines: [] }) : '',
-        bar: first,
-      })
-  return { from, section, song, said }
+/** A key's names: its tonic printed, the major's alone and the minor's with its m (`E♭`, `Cm`). */
+function useKeyNames() {
+  const { t } = useTranslation('music')
+  const tonic = (key: Key) => printedSymbol(noteName(key.tonic))
+  return {
+    /** As a screen reader and a tooltip say it: `E♭ major`. */
+    full: (key: Key) => t(key.minor ? 'key.minor' : 'key.major', { tonic: tonic(key) }),
+    /** As a tile prints it: `E♭`, `Cm`. */
+    short: (key: Key) => `${tonic(key)}${key.minor ? 'm' : ''}`,
+  }
 }
 
-/** A key named as its signature writes it, its tonic printed (`E♭ major`). */
-function useSignatureName(): (key: Key) => string {
-  const { t } = useTranslation('music')
-  return (key) =>
-    t(key.minor ? 'key.minor' : 'key.major', { tonic: printedSymbol(noteName(key.tonic)) })
-}
-
-/**
- * Key signature (ADR 0089, 0094, 0110): its fifteen signatures as tiles, forScore's, each drawn after
- * a treble clef and named by its major key, its relative minor in small type; the one in force
- * pressed; over them Major · Minor, the same tonic's other mode, nothing moved. A tile chosen keeps the key's mode: a minor song goes to the signature's minor key. From a
- * bar's section on, up to the next change, as Flat changes key from a bar; in the song's first
- * section its own key, the music moved with it. In the palette the first bar chosen's (else the
- * caret's); over a key signature printed on the sheet, its bar (`bar`).
- */
-export function KeySignatureKeys({ bar }: { bar?: number }) {
-  const { t } = useTranslation('music')
-  const { actions } = useScoreEditorContext()
-  const { from, section, song, said } = useSignatureFrom(bar)
-  const named = useSignatureName()
-  // The song's own key at its head; a later section's from there on.
-  const key = useEditorState(
+/** The key in force where the picker changes it: the song's own at its head, a section's after. */
+const useKeyAt = (bar: number | undefined) => {
+  const { section, song } = useSignatureFrom(bar)
+  return useEditorState(
     useShallow((state) => (song ? state.draft.key : sectionKey(state.draft, section))),
   )
+}
+
+/** The signatures of one to seven sharps, and of one to seven flats. */
+const SHARPS = [1, 2, 3, 4, 5, 6, 7] as const
+const FLATS = [-1, -2, -3, -4, -5, -6, -7] as const
+
+/**
+ * The key signature picker (ADR 0089, 0094, 0114, after notation apps' sheets): Major · Minor, the
+ * same tonic's other mode, nothing moved; No key signature, C major or A minor, a tile of its own;
+ * then one to seven sharps over one to seven flats, each tile the signature drawn on a staff, named
+ * by its major and relative minor, the one in force pressed. A tile keeps the key's mode: a minor song
+ * goes to the signature's minor key. From a bar's section on, up to the next change, as Flat changes
+ * key from a bar; in the song's first section its own key, the music moved with it (`said` says
+ * which). In the palette the first bar chosen's (else the caret's); over a key signature printed on
+ * the sheet, its bar (`bar`). A tap changes it.
+ */
+export function KeyPicker({ bar }: { bar?: number | undefined }) {
+  const { t } = useTranslation(['editor', 'music'])
+  const { actions } = useScoreEditorContext()
+  const { from, song, said } = useSignatureFrom(bar)
+  const names = useKeyNames()
+  const key = useKeyAt(bar)
   const count = keySignature(key)
   const choose = (next: Key) =>
     actions.dispatch(
       song ? { type: 'settings', key: next } : { type: 'sectionKey', bar: from, key: next },
     )
+  const tile = (each: number) => {
+    const major = signatureKey(each, false)
+    const minor = signatureKey(each, true)
+    const label = `${names.full(major)}, ${names.full(minor)}`
+    return (
+      <SignTile
+        key={each}
+        label={each === 0 ? `${t('signature.none')}: ${label}` : label}
+        name={
+          each === 0
+            ? `${t('signature.none')} · ${names.short(major)} / ${names.short(minor)}`
+            : `${names.short(major)} / ${names.short(minor)}`
+        }
+        pressed={each === count}
+        onClick={() => (each === count ? undefined : choose(key.minor ? minor : major))}
+      >
+        <KeyPicture signatureOf={major} />
+      </SignTile>
+    )
+  }
   return (
     <>
       <h4 className="text-sm text-muted-foreground">{said}</h4>
       {/* Major or minor on the same tonic, nothing moved: C major to C minor. */}
       <Segmented
-        label={t('key.mode')}
+        label={t('music:key.mode')}
         value={key.minor ? 'minor' : 'major'}
         options={(['major', 'minor'] as const).map((mode) => ({
           value: mode,
-          label: t(`key.${mode}Mode`),
+          label: t(`music:key.${mode}Mode`),
         }))}
         onChange={(mode) => choose(writtenKey({ tonic: key.tonic, minor: mode === 'minor' }))}
       />
-      <SignGrid label={t('key.label')}>
-        {SIGNATURE_COUNTS.map((each) => {
-          const major = signatureKey(each, false)
-          const minor = signatureKey(each, true)
-          return (
-            <SignTile
-              key={each}
-              label={named(major)}
-              detail={named(minor)}
-              pressed={each === count}
-              onClick={() => (each === count ? undefined : choose(key.minor ? minor : major))}
-            >
-              <KeyPicture signatureOf={major} />
-            </SignTile>
-          )
-        })}
-      </SignGrid>
+      <div role="group" aria-label={t('music:key.label')} className="flex flex-col gap-2">
+        <div className="grid">{tile(0)}</div>
+        <GroupName name={t('signature.sharps')} />
+        <SignGrid label={t('signature.sharps')} narrow>
+          {SHARPS.map(tile)}
+        </SignGrid>
+        <GroupName name={t('signature.flats')} />
+        <SignGrid label={t('signature.flats')} narrow>
+          {FLATS.map(tile)}
+        </SignGrid>
+      </div>
     </>
   )
 }
 
 /**
- * Time signature (ADR 0094, 0095, 0110): the meters of the song's kind as tiles, forScore's, each
- * drawn on a staff over its eighths by beat in small type (3/4's 2, 2, 2), the one in force pressed, from a bar's section on up to the
- * next change, as Flat changes time from a measure; in the song's first section the whole song's, every
- * bar counted in it. In the palette the first bar chosen's (else the caret's); over a time signature
- * printed on the sheet, its bar (`bar`).
+ * Key signature in the palette (ADR 0114): opened, its picker in its section; in the folded row, the
+ * key in force drawn, opening the same picker over it.
  */
-export function TimeSignatureKeys({ bar }: { bar?: number }) {
+export function KeySignatureKeys() {
   const { t } = useTranslation('editor')
-  const { actions } = useScoreEditorContext()
-  const { from, section, song, said } = useSignatureFrom(bar)
-  const kind = useEditorState((state) => state.draft.meter)
+  const names = useKeyNames()
+  const key = useKeyAt(undefined)
+  const title = t('palette.category.key')
+  if (usePaletteForm() === 'sections') return <KeyPicker />
+  return (
+    <SignPopover
+      label={title}
+      wide
+      trigger={
+        <SignTile label={t('signature.change', { sign: title, now: names.full(key) })}>
+          <KeyPicture signatureOf={key} />
+        </SignTile>
+      }
+    >
+      <KeyPicker />
+    </SignPopover>
+  )
+}
+
+/**
+ * Time signature in the palette (ADR 0114): the meter in force drawn, from the first bar chosen's
+ * section (else the caret's), opening its picker over it, where the wheels slide and Apply changes it;
+ * opened, under what it changes.
+ */
+export function TimeSignatureKeys() {
+  const { t } = useTranslation('editor')
+  const { section, said } = useSignatureFrom(undefined)
   const meter = useEditorState((state) => sectionMeter(state.draft, section))
+  const common = useEditorState((state) => meter === '4/4' && state.draft.commonTime === true)
+  const title = t('palette.category.time')
   return (
     <>
-      <h4 className="text-sm text-muted-foreground">{said}</h4>
-      <SignGrid label={t('song.meter')}>
-        {metersFor(kind).map((each) => (
-          <SignTile
-            key={each}
-            label={each}
-            // The sign says its meter: under it, its eighths by beat, in small type.
-            name={null}
-            detail={beatGrouping(each).join(', ')}
-            pressed={each === meter}
-            onClick={() =>
-              each === meter
-                ? undefined
-                : actions.dispatch(
-                    song
-                      ? { type: 'settings', meter: each }
-                      : { type: 'sectionMeter', bar: from, meter: each },
-                  )
-            }
-          >
-            <TimePicture meter={each} />
-          </SignTile>
-        ))}
+      <SectionLine>{said}</SectionLine>
+      <SignGrid>
+        <SignPopover
+          label={title}
+          trigger={
+            <SignTile label={t('signature.change', { sign: title, now: meter })} name={meter}>
+              <TimePicture meter={meter} common={common} />
+            </SignTile>
+          }
+        >
+          {(close) => <TimePicker onDone={close} />}
+        </SignPopover>
       </SignGrid>
     </>
   )
@@ -266,7 +281,11 @@ export function RepeatKeys() {
         ))}
       </SignGrid>
       <GroupName name={t('jumps')} />
-      <div role="group" aria-label={t('jumps')} className="flex flex-col gap-1.5">
+      <div
+        role="group"
+        aria-label={t('jumps')}
+        className={usePaletteForm() === 'row' ? 'contents' : 'flex flex-col gap-1.5'}
+      >
         <CaptionGrid>{signs.map(key)}</CaptionGrid>
         <TermGrid>{words.map(key)}</TermGrid>
       </div>
@@ -288,7 +307,8 @@ const PEDAL_LABEL = {
 
 /**
  * Text & pedal: the expression words alone as printed, what each asks its tooltip (ADR 0096); the
- * pedal's marks.
+ * pedal's marks; the Lyrics key, opening the words' field under the caret's note (ADR 0093, 0096),
+ * the one way in, with a pointer, to a song with no words printed yet to tap.
  */
 export function TextKeys() {
   const { t } = useTranslation('editor')
@@ -326,29 +346,7 @@ export function TextKeys() {
           </CaptionKey>
         ))}
       </CaptionGrid>
-    </>
-  )
-}
-
-/**
- * The chord symbols and the words, typed where they print (ADR 0096): one key each, opening its field
- * at the caret (the chord symbol's over the staff at its beat, the Lyrics field under its note);
- * greyed where it cannot open, its tooltip and the ⓘ beside the group's name saying why.
- */
-export function ChordAndLyricsKeys() {
-  const { t } = useTranslation('editor')
-  const reasons = [useFieldReason('chord'), useFieldReason('lyrics')].filter(
-    (why) => why !== undefined,
-  )
-  const name = t('chordsAndLyrics')
-  return (
-    <>
-      <GroupName
-        name={name}
-        info={reasons.length > 0 ? reasons.map((why) => <p key={why}>{why}</p>) : undefined}
-      />
-      <CaptionGrid label={name}>
-        <FieldKey field="chord" />
+      <CaptionGrid>
         <FieldKey field="lyrics" />
       </CaptionGrid>
     </>

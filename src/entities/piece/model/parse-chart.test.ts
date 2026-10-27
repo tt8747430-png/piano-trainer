@@ -24,6 +24,11 @@ function errorOf(lines: readonly string[]): ContentError {
 }
 
 describe('parseChart', () => {
+  it('reads 4/4 printed as common time, and nothing where the piece does not ask (ADR 0114)', () => {
+    expect(parseChart({ ...testSong(['C']), commonTime: true }).commonTime).toBe(true)
+    expect(parseChart(testSong(['C']))).not.toHaveProperty('commonTime')
+  })
+
   it('reads a section written in a key of its own, and names a key it cannot read', () => {
     const sections = [
       { kind: 'verse' as const, lines: ['C'] },

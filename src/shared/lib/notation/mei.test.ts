@@ -53,6 +53,11 @@ describe('scoreToMei', () => {
     expect(mei).toMatch(/meter\.count="4" meter\.unit="4"/)
   })
 
+  it('starts the line on a system of its own, the encoded break Verovio lays it out by (ADR 0114)', () => {
+    expect(mei).toMatch(/<section><sb\/><measure xml:id="m-0"/)
+    expect(mei.match(/<sb\/>/g)).toHaveLength(1)
+  })
+
   it('braces the grand staff, its treble and bass clefs', () => {
     expect(mei).toMatch(/<staffGrp symbol="brace" bar\.thru="true">/)
     expect(mei).toMatch(/<staffDef n="1"[^>]*clef\.shape="G" clef\.line="2"/)
@@ -184,6 +189,38 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(
       written.match(/<tuplet num="3" numbase="2"><beam>(<note[^>]*\/>){3}<\/beam><\/tuplet>/g),
     ).toHaveLength(2)
+  })
+
+  it('prints 4/4 as common time where the music asks, and any other meter by its figures (ADR 0114)', () => {
+    const common = notate(music([c(0)], { chords: [], commonTime: true }))
+    expect(common.commonTime).toBe(true)
+    expect(scoreToMei(common)).toMatch(
+      /<scoreDef meter\.count="4" meter\.unit="4" meter\.sym="common"/,
+    )
+    expect(scoreToMei(plain([c(0)]))).not.toContain('meter.sym')
+    const waltz = notate(
+      music([c(0)], {
+        chords: [],
+        meter: '3/4',
+        commonTime: true,
+        bars: [{ startTick: 0, beats: 3 }],
+      }),
+    )
+    expect(scoreToMei(waltz)).not.toContain('meter.sym')
+    // A change back to 4/4 prints its C too.
+    const changed = notate(
+      music([c(0)], {
+        chords: [],
+        commonTime: true,
+        bars: [
+          { startTick: 0, beats: 3, meter: '3/4' },
+          { startTick: 72, beats: 4 },
+        ],
+      }),
+    )
+    expect(scoreToMei(changed)).toMatch(
+      /<scoreDef meter\.count="4" meter\.unit="4" meter\.sym="common"\/>/,
+    )
   })
 
   it('hides the time on a line that goes on in it, and shows it where it changes', () => {

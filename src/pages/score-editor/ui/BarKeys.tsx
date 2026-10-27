@@ -1,15 +1,10 @@
 import { useTranslation } from 'react-i18next'
 import { barAt, barLengths, meterAt } from '@/features/score-editor'
-import {
-  TICKS_PER_BEAT,
-  timeSignature,
-  timeSignatureText,
-  type TimeSignature,
-} from '@/shared/lib/music'
-import { ToolKey } from '@/shared/ui'
+import { TICKS_PER_BEAT, timeSignature, timeSignatureText } from '@/shared/lib/music'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { BarIcon, type BarKeyEdit } from './palette-icons'
-import { CaptionGrid, CaptionKey, GlyphGrid, GroupName } from './palette-keys'
+import { TimeFigures } from './sign-pictures'
+import { CaptionGrid, CaptionKey, GlyphGrid, GroupName, PaletteKey } from './palette-keys'
 
 /** What the Bar section does to the bars chosen, else the caret's, in order. */
 const BAR_KEYS: readonly BarKeyEdit[] = [
@@ -20,16 +15,6 @@ const BAR_KEYS: readonly BarKeyEdit[] = [
   'joinLine',
   'newSection',
 ]
-
-/** A time signature drawn as printed: its figures one over the other. */
-function Figures({ time }: { time: TimeSignature }) {
-  return (
-    <span className="flex flex-col items-center font-serif text-base leading-[0.85] font-bold">
-      <span>{time.count}</span>
-      <span>{time.unit}</span>
-    </span>
-  )
-}
 
 /**
  * Bar (spec 2026-10-23): what acts on the bars chosen, else the caret's: a bar added before or after,
@@ -60,14 +45,14 @@ export function BarKeys() {
         {barLengths(meter).map((ticks) => {
           const time = timeSignature(ticks / TICKS_PER_BEAT, meter)
           return (
-            <ToolKey
+            <PaletteKey
               key={ticks}
               label={t('bars.lengthOf', { time: timeSignatureText(time) })}
               pressed={ticks === barTicks}
               onClick={() => actions.dispatch({ type: 'barLength', ticks })}
             >
-              <Figures time={time} />
-            </ToolKey>
+              <TimeFigures meter={time} />
+            </PaletteKey>
           )
         })}
       </GlyphGrid>

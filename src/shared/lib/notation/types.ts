@@ -46,6 +46,8 @@ export interface TimedNote {
 export interface TimedMusic {
   readonly key: Key
   readonly meter: Meter
+  /** 4/4 printed as common time, C, wherever it is printed (ADR 0114). */
+  readonly commonTime?: true
   readonly bars: readonly (BarMarks & {
     /** The tempo marked over it, at the music's head: beats a minute. */
     readonly tempo?: number
@@ -177,6 +179,8 @@ export type StaffVoices = Readonly<Record<PianoStaff, readonly ScoreVoice[]>> &
 export interface Score {
   readonly key: Key
   readonly meter: Meter
+  /** 4/4 printed as common time, C (ADR 0114). */
+  readonly commonTime?: true
   /** The staves it writes, top down. */
   readonly staves: readonly StaffId[]
   readonly measures: readonly Measure[]

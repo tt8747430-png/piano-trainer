@@ -10,6 +10,7 @@ import {
   newLine,
   pasteBars,
   setBarTicks,
+  setPickup,
 } from './bars'
 import { deleteChord } from './chords'
 
@@ -133,6 +134,28 @@ describe('setBarTicks, a pickup', () => {
       'C4@0/24',
       'D4@24/24',
     ])
+  })
+})
+
+describe('setPickup (ADR 0114)', () => {
+  const song = draftOf({
+    sections: [{ kind: 'verse', lines: ['G C'] }],
+    staves: [{ notes: 'C4/1 D4/1 E4/1 F4/1 | G4/4' }],
+  })
+
+  it('makes a whole first bar a pickup from its start: its last beats lead into the downbeat', () => {
+    const pickup = setPickup(song, 24)
+    expect(lengths(pickup)).toEqual([24, 96])
+    expect(shape(staffNotes(pickup)).slice(0, 2)).toEqual(['F4@0/24', 'G4@24/96'])
+  })
+
+  it('makes a pickup a whole bar again, room before it, and leaves a bar of its length as it is', () => {
+    const whole = setPickup(setPickup(song, 24), 96)
+    expect(lengths(whole)).toEqual([96, 96])
+    expect(shape(staffNotes(whole))[0]).toBe('F4@72/24')
+    expect(setPickup(song, 96)).toBe(song)
+    expect(setPickup(song, 0)).toBe(song)
+    expect(setPickup(song, 120)).toBe(song)
   })
 })
 

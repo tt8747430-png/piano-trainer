@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { midi, note } from '@/shared/lib/music'
 import { notate, type TimedNote } from '@/shared/lib/notation'
 import { drawScore, type DrawOptions } from './draw'
@@ -49,5 +49,15 @@ describe('drawScore', () => {
       expect(systems, `${short} px short`).toBe(1)
       expect(layout.width).toBeLessThanOrEqual(fill + 1)
     }
+  }, 60_000)
+
+  it('lays out a justified line with no warning from Verovio, its break encoded (ADR 0114)', async () => {
+    const said: unknown[] = []
+    const heard = (...args: unknown[]) => void said.push(args.join(' '))
+    for (const method of ['log', 'warn', 'error', 'info'] as const)
+      vi.spyOn(console, method).mockImplementation(heard)
+    const natural = await draw(undefined)
+    await draw(natural.layout.width + 40)
+    expect(said.filter((line) => String(line).includes('Warning'))).toEqual([])
   }, 60_000)
 })
