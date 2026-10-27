@@ -88,13 +88,13 @@ export function MetronomePage() {
       <div className="mx-auto grid w-full max-w-md flex-1 content-center items-center justify-items-center gap-8 pb-4 narrow-phone:gap-5 sm:max-w-lg sm:gap-10 landscape-phone:max-w-3xl landscape-phone:grid-cols-2 landscape-phone:gap-x-10 landscape-phone:gap-y-5">
         <div className="flex w-full flex-col items-center gap-5 narrow-phone:gap-4 landscape-phone:gap-4">
           <TempoSteps bpm={metronome.bpm} onStep={metronome.nudge} />
-          <div className="flex w-full items-center gap-3">
+          <div className="flex w-full flex-wrap items-center justify-center gap-3">
             <Slider
               value={metronome.bpm}
               min={BPM_RANGE.min}
               max={BPM_RANGE.max}
               onValueChange={(bpm) => metronome.setBpm(bpm)}
-              className="flex-1"
+              className="min-w-24 flex-1"
             >
               <SliderLabel className="sr-only">{t('practice:metronome.slider')}</SliderLabel>
             </Slider>
