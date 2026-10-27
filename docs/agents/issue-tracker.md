@@ -1,21 +1,12 @@
 # Issue tracker: local Markdown
 
-Issues and specs for this repo live as Markdown files in `.scratch/`.
+Issues and specs live as Markdown in `.scratch/`, one directory per feature: `.scratch/<feature-slug>/`.
 
-## Conventions
+- The spec is `spec.md` in that directory.
+- Issues are one file each, `issues/<NN>-<slug>.md`, numbered from `01`.
+- Triage state is a `Status:` line near the top ([triage-labels](triage-labels.md)).
+- Comments go at the bottom under `## Comments`.
+- A finished feature's directory is removed; its decision, if any, lives on as an ADR in `docs/adr/`.
 
-- One feature per directory: `.scratch/<feature-slug>/`.
-- The spec is `.scratch/<feature-slug>/spec.md`. (Design specs from brainstorming live in
-  `docs/superpowers/specs/`; an implementation plan in `docs/superpowers/plans/` is removed once built.)
-- Implementation issues are one file per ticket, `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from
-  `01`; never one combined tickets file.
-- Triage state is a `Status:` line near the top of each issue (role strings in `triage-labels.md`).
-- Comments and history append at the bottom under a `## Comments` heading.
-
-## When a skill says "publish to the issue tracker"
-
-Create a file under `.scratch/<feature-slug>/`, creating the directory if needed.
-
-## When a skill says "fetch the relevant ticket"
-
-Read the file at the referenced path. The owner normally passes the path or the issue number.
+"Publish to the issue tracker" → create the file, and the directory if needed. "Fetch the ticket" → read the file
+at the path or number the owner gives.
