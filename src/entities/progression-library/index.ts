@@ -8,3 +8,12 @@ export {
   progressionById,
   progressionMode,
 } from './model/selectors'
+export {
+  progressionPlaces,
+  progressionsOf,
+  songsWith,
+  type Bars,
+  type SongPlace,
+  type SongWith,
+  type UsedProgression,
+} from './model/in-songs'
