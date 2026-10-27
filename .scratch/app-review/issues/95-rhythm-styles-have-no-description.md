@@ -3,7 +3,7 @@
 Status: needs-triage
 Severity: P2
 Tier: 5
-Rule: spec §4.2 (each style has a name and a description)
+Rule: ADR 0047 (each built-in pattern has its idea; its description is its page)
 Where: `src/entities/pattern/content/patterns.ts:285-328`, `model/types.ts:152`
 
 ## What is wrong
