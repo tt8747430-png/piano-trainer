@@ -1,6 +1,6 @@
 import type { BarMarkChoice } from './bar-marks'
 import type { SectionKind } from '@/entities/piece'
-import type { Chord, Clef, Finger, Key, Meter, Midi, Tick } from '@/shared/lib/music'
+import type { Chord, Clef, Finger, Key, Midi, Tick } from '@/shared/lib/music'
 import type { Clip } from './clip'
 import type { Draft, Layer, NoteLayer } from './draft'
 import { topStaff } from './rows'
@@ -9,6 +9,7 @@ import type { Line } from './lines'
 import type { MarkChoice } from './marks'
 import type { TransposeApplies } from './settings'
 import type { ChosenValue, Dots } from './values'
+import type { TimeChoice } from './meters'
 
 /** What undo and redo bring back. */
 export interface Snapshot {
@@ -169,15 +170,14 @@ export type EditorAction =
    */
   | { readonly type: 'sectionKey'; readonly bar: number; readonly key: Key }
   /**
-   * A change of time from a bar's section on (ADR 0095): the first bar chosen's, or a time
-   * signature's on the sheet.
+   * A time signature from a bar's section on (ADR 0095, 0114): the first bar chosen's, or a time
+   * signature's on the sheet; at the song's first section the whole song's, with its C and pickup.
    */
-  | { readonly type: 'sectionMeter'; readonly bar: number; readonly meter: Meter }
+  | { readonly type: 'time'; readonly bar: number; readonly time: TimeChoice }
   | {
       readonly type: 'settings'
       readonly key?: Key
       readonly tempo?: number
-      readonly meter?: Meter
     }
   /** The music moved by semitones, the key and the chord symbols with it as asked (ADR 0110). */
   | {

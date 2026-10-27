@@ -1,5 +1,12 @@
-import { beatsPerBar, isCompound, METERS, TICKS_PER_BEAT, type Meter } from '@/shared/lib/music'
-import { setBarTicks } from './bars'
+import {
+  beatsPerBar,
+  isCompound,
+  METERS,
+  TICKS_PER_BEAT,
+  type Meter,
+  type Tick,
+} from '@/shared/lib/music'
+import { setBarTicks, setPickup } from './bars'
 import type { Draft } from './draft'
 import { barsOf, sectionMeter } from './timeline'
 
@@ -73,4 +80,31 @@ export function setSectionMeter(draft: Draft, index: number, meter: Meter): Draf
     return meter
   })
   return inMeters(draft, meters)
+}
+
+/** A time signature as its picker applies it (ADR 0114). */
+export interface TimeChoice {
+  readonly meter: Meter
+  /** 4/4 printed as common time, C, the song's whole; left as it is where not said. */
+  readonly commonTime?: boolean
+  /** The first bar's length at the song's head: a pickup, or a whole bar's for none. */
+  readonly pickup?: Tick
+}
+
+/**
+ * A time signature applied at section `section` in one step (ADR 0114): its meter, the whole song's at
+ * its first section (`setMeter`), else from that section on (`setSectionMeter`), only where it
+ * changes; the song's C; and at its head, the pickup.
+ */
+export function setTime(draft: Draft, section: number, choice: TimeChoice): Draft {
+  let next = draft
+  if (choice.meter !== sectionMeter(draft, section))
+    next =
+      section === 0 ? setMeter(next, choice.meter) : setSectionMeter(next, section, choice.meter)
+  if (choice.commonTime !== undefined && choice.commonTime !== (next.commonTime ?? false)) {
+    const { commonTime: _was, ...rest } = next
+    next = choice.commonTime ? { ...rest, commonTime: true } : rest
+  }
+  if (section === 0 && choice.pickup !== undefined) next = setPickup(next, choice.pickup)
+  return next
 }
