@@ -28,7 +28,7 @@ When the owner points at a reference, study how that app actually behaves: its h
 These come straight from their feedback. Each has burned a round before.
 
 **No half measures**
-- No legacy code, backwards compatibility, workarounds, duplication or unfinished work. Saved user data need not survive; bump the store version (ADR 0038). Built-in content must keep working.
+- No legacy code, backwards compatibility, workarounds, duplication or unfinished work. Saved data need not survive a shape change (CLAUDE.md, Change rules).
 - If something is missing, implement it and extend the app rather than leaving it out. When you refuse or defer a part, say why and propose how to build it.
 - One implementation of a thing, used everywhere. The same control looks and behaves the same in the Player and the editor (Transpose, selection, header, transport, View).
 
@@ -66,13 +66,11 @@ These come straight from their feedback. Each has burned a round before.
    - **Screenshots:** copy the owner's screenshots into `scratchpad/<round>/owner/` with descriptive names, and describe each one in the brief, because agents can't see the chat.
    - **Mid-round feedback:** if the owner adds to a running agent's area, send it to that agent with SendMessage rather than starting another.
    - **Small fixes:** do them yourself; an agent needs the whole context re-explained.
-4. **Testing (the owner was explicit, and repeats it):**
-   - **Agents** run `typecheck`, `lint` and only the tests their changes reach (`npm run test:changed` / `test:related`). They never run the full suite. They run `build` only after touching startup, routing, the PWA or config.
-   - **You** merge every agent's branch into the session branch, then run the full `npm run test` and `npm run build` once on the merged result. Never run two suites at once. Check `ps` before starting one, and never `pkill` with a pattern that matches your own command.
-   - **CI** runs by hand only; the local checks are the gate.
+4. **Testing** follows CLAUDE.md's "Verify before claiming done" and "Parallel agents". The owner repeats it: agents never run the full suite; you run it once on the merged result. Beyond that:
+   - Never run two suites at once. Check `ps` before starting one, and never `pkill` with a pattern that matches your own command.
    - **Flaky tests:** a test that fails only under load and passes alone gets made robust (e.g. a longer wait on engraving), and you say so.
-5. **Commits:** one proper commit per finished task. The message says what changed and why and ends with the session's attribution lines. Never run `npm run format`; run prettier only on the files you touched, and never on CLAUDE.md.
-6. **Merge and push:** once the merged suite and the build are green, update CLAUDE.md and the docs (ADR per round, glossary rows, DESIGN.md), then run `git push -u origin <branch> && git push origin HEAD:main`. Remove finished worktrees and their branches.
+5. **Commits:** one proper commit per finished task. The message says what changed and why and ends with the session's attribution lines. Prettier never runs on CLAUDE.md.
+6. **Merge and push:** once the merged suite and the build are green, update the docs (see below), then run `git push -u origin <branch> && git push origin HEAD:main`. Remove finished worktrees and their branches.
 7. **Context:** keep it under about 300k tokens. Delegate file-heavy reading to agents and summarise.
 8. **Data and content:**
    - **Transcriptions:** a transcribed score must match the source note for note. Check it again before merging.
@@ -95,9 +93,9 @@ If agents are running and the owner asks, say so; never guess their results. If 
   - **Dev server:** `npx vite --port <port> --strictPort`, run in the background.
   - **Playwright:** `require('/opt/node-tools/node_modules/playwright-core')` with `chromium.launch({ executablePath: '/opt/pw-browsers/chromium' })`, deviceScaleFactor 2.
   - **Worktrees:** symlink `node_modules`, never `npm install` there.
-- **Saved stores and their versions:** see CLAUDE.md's entities section. A shape change bumps the version, with no migration.
+- **Saved stores and their versions:** each entity's `model/store.ts`.
 - **Docs to update each round:**
-  - **ADRs:** a new ADR in `docs/adr/`, styled like 0105, or amend the round's own.
+  - **ADRs:** a new ADR in `docs/adr/`, styled like the latest and added to its README's index, or amend the round's own. `DESIGN.md` where the look changed.
   - **Glossary:** rows in `docs/UBIQUITOUS_LANGUAGE.md`.
-  - **CLAUDE.md:** its architecture map, kept current: rename what was renamed and drop what was deleted.
-- **Never:** `git checkout`, `restore`, `stash` or `reset` the owner's work; a model ID in a commit; copying Chordify's code; retrying bot-check circumvention against chordify.net. The owner's saved Chordify page holds their account details, so never copy it into the repo.
+  - **CLAUDE.md:** its rules and short map, kept current: rename what was renamed and drop what was deleted. It stays a map, never a list of components; detail goes in the ADR.
+- **Never:** a model ID in a commit; copying Chordify's code; retrying bot-check circumvention against chordify.net. The owner's saved Chordify page holds their account details, so never copy it into the repo.
