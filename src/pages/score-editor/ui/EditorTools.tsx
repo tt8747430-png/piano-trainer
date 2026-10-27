@@ -495,7 +495,8 @@ export function EditorTools({
               className={barButton}
               onClick={() => fold(!folded)}
             >
-              {folded ? <ChevronUp aria-hidden /> : <ChevronDown aria-hidden />}
+              {/* Its arrow the way it opens: up at the foot, down beside the sheet. */}
+              {folded === side ? <ChevronDown aria-hidden /> : <ChevronUp aria-hidden />}
             </Button>
             <Button
               variant="ghost"
