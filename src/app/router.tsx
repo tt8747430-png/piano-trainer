@@ -138,6 +138,12 @@ const settingsRoute = createRoute({
   path: '/settings',
   component: lazyRouteComponent(settingsScreens, 'SettingsPage'),
 })
+// How to use (ADR 0113): a short guide, reached from Settings' Help.
+const howToUseRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/how-to-use',
+  component: lazyRouteComponent(settingsScreens, 'HowToUsePage'),
+})
 // Search: every named thing the app has, found by name (ADR 0044).
 const searchRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -301,6 +307,13 @@ const chordFinderRoute = createRoute({
   ...chordFinderSearch,
   ...remembered(readChordFinderSearch, CHORD_FINDER_KEPT),
   component: lazyRouteComponent(toolScreens, 'ChordFinderPage'),
+})
+
+// The Metronome (ADR 0113): a steady beat at any tempo, its choices saved in pt-settings.
+const metronomeRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/metronome',
+  component: lazyRouteComponent(toolScreens, 'MetronomePage'),
 })
 
 // Accompaniment: the patterns and their pieces, a page for each source (ADR 0033). A pattern is
@@ -489,6 +502,7 @@ const routeTree = rootRoute.addChildren([
   shellRoute.addChildren([
     learnRoute,
     settingsRoute,
+    howToUseRoute,
     searchRoute,
     songsRoute,
     sharedSongRoute,
@@ -511,6 +525,7 @@ const routeTree = rootRoute.addChildren([
     quizRoute,
     exercisesRoute,
     chordFinderRoute,
+    metronomeRoute,
     trainerRoute,
     studyRoute,
     studySectionRoute,

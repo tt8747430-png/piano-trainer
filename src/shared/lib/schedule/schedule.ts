@@ -47,10 +47,17 @@ export interface NoteSound {
    */
   readonly part?: NoteHand
 }
+/**
+ * A beat's sound, synthesised (ADR 0113): the Player's click, or the Metronome's beep and drums.
+ */
+export type ClickVoice = 'click' | 'beep' | 'kick' | 'snare' | 'hat'
+
 export interface ClickSound {
   readonly kind: 'click'
   readonly at: number
   readonly accent: boolean
+  /** What it sounds as: a click where none is named. */
+  readonly voice?: ClickVoice
 }
 export type Sound = NoteSound | ClickSound
 

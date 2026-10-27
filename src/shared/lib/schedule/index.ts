@@ -20,6 +20,7 @@ export {
   untilNextBeatGroup,
   type Audible,
   type ClickSound,
+  type ClickVoice,
   type Hands,
   type NoteSound,
   type Scheduled,
@@ -67,3 +68,18 @@ export {
   type DamperEvent,
   type PedalKind,
 } from './damper'
+export {
+  BPM_RANGE,
+  beatHeard,
+  beatsOf,
+  beatSounds,
+  clampBpm,
+  goOnFrom,
+  METRONOME_METERS,
+  METRONOME_SOUNDS,
+  plannedBeats,
+  type MetronomeBeat,
+  type MetronomeMeter,
+  type MetronomeSound,
+  type MetronomeTime,
+} from './metronome'

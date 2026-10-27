@@ -550,6 +550,22 @@
     --spacing(--value(integer)) + var(--nav-bar) + var(--docked, 0px) + var(--floating-foot)
   );
 }
+/* A screen that fills the room `AppShell`'s main leaves it, no more, so what it centres stands in the
+   middle of what is seen (the Metronome): the viewport less main's top and foot padding, as it pads
+   at each size (`pb-foot-6`, on a phone on its side `pb-foot-4`, on a laptop `pb-foot-12`). */
+@utility min-h-screen-free {
+  --foot-pad: --spacing(6);
+  min-height: calc(
+    100dvh - max(--spacing(4), env(safe-area-inset-top)) - var(--foot-pad) - var(--nav-bar) -
+      var(--docked, 0px) - var(--floating-foot)
+  );
+  @variant landscape-phone {
+    --foot-pad: --spacing(4);
+  }
+  @variant lg {
+    --foot-pad: --spacing(12);
+  }
+}
 /* What stands over all that stands at the screen's foot (a toast): `bottom-foot-3`. */
 @utility bottom-foot-* {
   bottom: calc(

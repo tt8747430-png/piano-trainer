@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   selectChordFinder,
   selectKeyboard,
+  selectMetronome,
   selectMidi,
   selectPractice,
   selectRecorder,
@@ -15,6 +16,7 @@ import {
 import {
   DEFAULT_CHORD_FINDER,
   DEFAULT_SCORE_VIEW,
+  DEFAULT_METRONOME,
   DEFAULT_MIDI,
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
@@ -42,9 +44,11 @@ describe('settings selectors', () => {
       midi: DEFAULT_MIDI,
       chordFinder: DEFAULT_CHORD_FINDER,
       scoreView: DEFAULT_SCORE_VIEW,
+      metronome: DEFAULT_METRONOME,
     }
     expect(selectPractice(state)).toBe(DEFAULT_PRACTICE)
     expect(selectSound(state)).toBe(DEFAULT_SOUND)
+    expect(selectMetronome(state)).toBe(DEFAULT_METRONOME)
     expect(selectTrainer(state)).toBe(DEFAULT_TRAINER)
     expect(selectFloating(state)).toEqual({ place: 'right', labels: true })
     expect(selectKeyboard(state)).toBe(state.keyboard)

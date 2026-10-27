@@ -5,6 +5,7 @@ import { createSettingsStore, SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from './s
 import {
   DEFAULT_CHORD_FINDER,
   DEFAULT_SCORE_VIEW,
+  DEFAULT_METRONOME,
   DEFAULT_MIDI,
   DEFAULT_PRACTICE,
   DEFAULT_RECORDER,
@@ -40,6 +41,7 @@ const DEFAULTS = {
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
   scoreView: DEFAULT_SCORE_VIEW,
+  metronome: DEFAULT_METRONOME,
   foldedSections: [],
 }
 
@@ -140,6 +142,7 @@ describe('createSettingsStore', () => {
         hidden: ['treble', 'staff0'],
         keys: false,
       },
+      metronome: { bpm: 72, meter: '6/8', sound: 'drum' },
       foldedSections: ['chords.tensions'],
     }
     expect(restored(saved)).toEqual(saved)
@@ -222,11 +225,26 @@ describe('createSettingsStore', () => {
     expect(restored({ scoreView: { pinned: 'no' } }).scoreView.pinned).toBe(true)
   })
 
-  it('starts afresh over a save of the version before, which had no text size (ADR 0108)', () => {
-    expect(SETTINGS_VERSION).toBe(12)
-    expect(restored({ theme: 'dark', scoreView: { textSize: 130 } }, 11)).toEqual(
+  it('starts afresh over a save of the version before, which had no Metronome (ADR 0113)', () => {
+    expect(SETTINGS_VERSION).toBe(13)
+    expect(restored({ theme: 'dark', scoreView: { textSize: 130 } }, 12)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
+  })
+
+  it('starts the Metronome at 120 in 4/4 with a click, each part saved kept where valid (ADR 0113)', () => {
+    expect(DEFAULT_METRONOME).toEqual({ bpm: 120, meter: '4/4', sound: 'click' })
+    expect(restored({ metronome: { bpm: 400, meter: '5/4', sound: 'beep' } }).metronome).toEqual({
+      bpm: 120,
+      meter: '4/4',
+      sound: 'beep',
+    })
+    expect(restored({ metronome: { bpm: 66.5, meter: '2/4', sound: 'bell' } }).metronome).toEqual({
+      bpm: 120,
+      meter: '2/4',
+      sound: 'click',
+    })
+    expect(restored({ metronome: 'fast' }).metronome).toEqual(DEFAULT_METRONOME)
   })
 
   it('plays every part at full volume until the learner turns one down (ADR 0105)', () => {

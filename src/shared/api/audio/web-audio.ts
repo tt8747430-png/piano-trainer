@@ -1,5 +1,5 @@
 import type { Midi } from '@/shared/lib/music'
-import type { ClickSound, NoteSound, Sound } from '@/shared/lib/schedule'
+import type { ClickSound, ClickVoice, NoteSound, Sound } from '@/shared/lib/schedule'
 import { createLiveVoice } from './live-voice'
 import { createLookahead } from './lookahead'
 import { createMidiSoundOutput, type MidiSoundOutput } from './midi-sound-output'
@@ -19,7 +19,7 @@ const frequencyOf = (key: Midi) => 440 * 2 ** ((key - 69) / 12)
 
 /** A sound's nodes: the oscillators that make it and the gain it leaves by. */
 interface Voice {
-  readonly sources: readonly OscillatorNode[]
+  readonly sources: readonly AudioScheduledSourceNode[]
   readonly output: GainNode
 }
 
@@ -100,21 +100,139 @@ function damped(context: AudioContext, { sources, output }: Voice) {
 /** A click's loudness: the bar's first beat's higher and louder. */
 const CLICK_PEAK = { accent: 0.22, beat: 0.13 } as const
 
-const playClick: Render<ClickSound> = (context, click, at, gain, ended) => {
+/** A short tone at `hz`: up in 2 ms, `peak` loud, gone by `length` seconds. */
+function tone(
+  context: AudioContext,
+  {
+    hz,
+    peak,
+    length,
+    type = 'sine',
+  }: { hz: number; peak: number; length: number; type?: OscillatorType },
+  at: number,
+  ended: () => void,
+): Voice {
   const oscillator = context.createOscillator()
   const envelope = context.createGain()
-  oscillator.frequency.value = click.accent ? 1600 : 1100
+  oscillator.type = type
+  oscillator.frequency.value = hz
   envelope.gain.setValueAtTime(SILENT, at)
-  envelope.gain.exponentialRampToValueAtTime(
-    Math.max(SILENT, (click.accent ? CLICK_PEAK.accent : CLICK_PEAK.beat) * gain),
-    at + 0.002,
-  )
-  envelope.gain.exponentialRampToValueAtTime(SILENT, at + 0.05)
+  envelope.gain.exponentialRampToValueAtTime(Math.max(SILENT, peak), at + 0.002)
+  envelope.gain.exponentialRampToValueAtTime(SILENT, at + length)
   oscillator.connect(envelope).connect(context.destination)
   oscillator.start(at)
-  oscillator.stop(at + 0.06)
+  oscillator.stop(at + length + 0.01)
   oscillator.onended = ended
   return { sources: [oscillator], output: envelope }
+}
+
+const playClick: Render<ClickSound> = (context, click, at, gain, ended) =>
+  tone(
+    context,
+    {
+      hz: click.accent ? 1600 : 1100,
+      peak: (click.accent ? CLICK_PEAK.accent : CLICK_PEAK.beat) * gain,
+      length: 0.05,
+    },
+    at,
+    ended,
+  )
+
+/** The Metronome's beep (ADR 0113): a round tone, the bar's first a fifth higher. */
+const playBeep: Render<ClickSound> = (context, beep, at, gain, ended) =>
+  tone(
+    context,
+    { hz: beep.accent ? 1320 : 880, peak: (beep.accent ? 0.3 : 0.2) * gain, length: 0.12 },
+    at,
+    ended,
+  )
+
+/** A second of white noise, made once for each context: the snare's and the hat's. */
+const noises = new WeakMap<AudioContext, AudioBuffer>()
+function noiseOf(context: AudioContext): AudioBuffer {
+  const made = noises.get(context)
+  if (made) return made
+  const buffer = context.createBuffer(1, context.sampleRate, context.sampleRate)
+  const samples = buffer.getChannelData(0)
+  for (let index = 0; index < samples.length; index++) samples[index] = Math.random() * 2 - 1
+  noises.set(context, buffer)
+  return buffer
+}
+
+/** Noise through a high-pass at `hz`, `peak` loud and gone by `length` seconds. */
+function noise(
+  context: AudioContext,
+  { hz, peak, length }: { hz: number; peak: number; length: number },
+  at: number,
+): Voice {
+  const source = context.createBufferSource()
+  source.buffer = noiseOf(context)
+  const filter = context.createBiquadFilter()
+  filter.type = 'highpass'
+  filter.frequency.value = hz
+  const envelope = context.createGain()
+  envelope.gain.setValueAtTime(SILENT, at)
+  envelope.gain.exponentialRampToValueAtTime(Math.max(SILENT, peak), at + 0.001)
+  envelope.gain.exponentialRampToValueAtTime(SILENT, at + length)
+  source.connect(filter).connect(envelope).connect(context.destination)
+  source.start(at)
+  source.stop(at + length + 0.01)
+  return { sources: [source], output: envelope }
+}
+
+/** The kick: a sine falling from 150 Hz to 45 Hz as it dies away. */
+const playKick: Render<ClickSound> = (context, kick, at, gain, ended) => {
+  const oscillator = context.createOscillator()
+  const envelope = context.createGain()
+  oscillator.frequency.setValueAtTime(150, at)
+  oscillator.frequency.exponentialRampToValueAtTime(45, at + 0.12)
+  envelope.gain.setValueAtTime(SILENT, at)
+  envelope.gain.exponentialRampToValueAtTime(
+    Math.max(SILENT, (kick.accent ? 0.9 : 0.7) * gain),
+    at + 0.004,
+  )
+  envelope.gain.exponentialRampToValueAtTime(SILENT, at + 0.3)
+  oscillator.connect(envelope).connect(context.destination)
+  oscillator.start(at)
+  oscillator.stop(at + 0.31)
+  oscillator.onended = ended
+  return { sources: [oscillator], output: envelope }
+}
+
+/** The snare: a burst of bright noise over a short low tone, its body. */
+const playSnare: Render<ClickSound> = (context, snare, at, gain, ended) => {
+  const peak = (snare.accent ? 0.45 : 0.35) * gain
+  const rattle = noise(context, { hz: 1500, peak, length: 0.16 }, at)
+  const body = tone(
+    context,
+    { hz: 190, peak: peak * 0.6, length: 0.08, type: 'triangle' },
+    at,
+    () => undefined,
+  )
+  const [source] = rattle.sources
+  if (source) source.onended = ended
+  return { sources: [...rattle.sources, ...body.sources], output: rattle.output }
+}
+
+/** The hat: a tick of the brightest noise. */
+const playHat: Render<ClickSound> = (context, hat, at, gain, ended) => {
+  const voice = noise(
+    context,
+    { hz: 7000, peak: (hat.accent ? 0.2 : 0.12) * gain, length: 0.045 },
+    at,
+  )
+  const [source] = voice.sources
+  if (source) source.onended = ended
+  return voice
+}
+
+/** How each beat's sound is made: synthesised, nothing fetched, so it plays offline. */
+const CLICK_VOICES: Readonly<Record<ClickVoice, Render<ClickSound>>> = {
+  click: playClick,
+  beep: playBeep,
+  kick: playKick,
+  snare: playSnare,
+  hat: playHat,
 }
 
 const browserContext = (): AudioContext | null =>
@@ -194,7 +312,7 @@ export function createWebAudioOutput({
     const voice =
       sound.kind === 'note'
         ? playNote(context, sound, at, gain, ended)
-        : playClick(context, sound, at, gain, ended)
+        : CLICK_VOICES[sound.voice ?? 'click'](context, sound, at, gain, ended)
     voices.add(voice)
   }
 

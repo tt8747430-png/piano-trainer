@@ -3,6 +3,7 @@ import type {
   ChordFinderSettings,
   ScoreViewSettings,
   KeyboardSettings,
+  MetronomeSettings,
   MidiSettings,
   PracticeToggles,
   RecorderSettings,
@@ -39,3 +40,4 @@ export const selectSectionFolded =
     state.foldedSections.includes(id)
 export const selectChordFinder = (state: SettingsState): ChordFinderSettings => state.chordFinder
 export const selectScoreView = (state: SettingsState): ScoreViewSettings => state.scoreView
+export const selectMetronome = (state: SettingsState): MetronomeSettings => state.metronome
