@@ -191,6 +191,38 @@ describe('scoreToMei, a note’s marks and the options', () => {
     ).toHaveLength(2)
   })
 
+  it('prints 4/4 as common time where the music asks, and any other meter by its figures (ADR 0114)', () => {
+    const common = notate(music([c(0)], { chords: [], commonTime: true }))
+    expect(common.commonTime).toBe(true)
+    expect(scoreToMei(common)).toMatch(
+      /<scoreDef meter\.count="4" meter\.unit="4" meter\.sym="common"/,
+    )
+    expect(scoreToMei(plain([c(0)]))).not.toContain('meter.sym')
+    const waltz = notate(
+      music([c(0)], {
+        chords: [],
+        meter: '3/4',
+        commonTime: true,
+        bars: [{ startTick: 0, beats: 3 }],
+      }),
+    )
+    expect(scoreToMei(waltz)).not.toContain('meter.sym')
+    // A change back to 4/4 prints its C too.
+    const changed = notate(
+      music([c(0)], {
+        chords: [],
+        commonTime: true,
+        bars: [
+          { startTick: 0, beats: 3, meter: '3/4' },
+          { startTick: 72, beats: 4 },
+        ],
+      }),
+    )
+    expect(scoreToMei(changed)).toMatch(
+      /<scoreDef meter\.count="4" meter\.unit="4" meter\.sym="common"\/>/,
+    )
+  })
+
   it('hides the time on a line that goes on in it, and shows it where it changes', () => {
     const score = plain([c(0)])
     expect(scoreToMei(score, { timeBefore: { count: 4, unit: 4 } })).toContain(

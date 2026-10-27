@@ -178,6 +178,12 @@ describe('arrange', () => {
     expect(inD.bars.map((b) => b.key && noteName(b.key.tonic))).toEqual([undefined, 'E♭'])
   })
 
+  it('carries 4/4 printed as common time to the score (ADR 0114)', () => {
+    const common = { ...chart([['C']]), commonTime: true } as const
+    expect(arrange(common, { tonic: C, pattern: BLOCK }).commonTime).toBe(true)
+    expect(arrange(chart([['C']]), { tonic: C, pattern: BLOCK })).not.toHaveProperty('commonTime')
+  })
+
   it('puts bars and chords end to end', () => {
     const performance = arrange(chart([['C', 'F@2-G@2', 'Am@2-G@1-F@1']]), {
       tonic: C,

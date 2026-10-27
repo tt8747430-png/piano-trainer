@@ -25,6 +25,7 @@ export type PieceMusic = Pick<
   ChartPiece,
   | 'key'
   | 'meter'
+  | 'commonTime'
   | 'tempo'
   | 'pattern'
   | 'sections'
@@ -50,6 +51,7 @@ export function musicOf(piece: ChartPiece): PieceMusic {
   return {
     key: piece.key,
     meter: piece.meter,
+    ...(piece.commonTime ? { commonTime: true } : {}),
     tempo: piece.tempo,
     pattern: piece.pattern,
     sections: piece.sections,
@@ -125,6 +127,7 @@ export const sameMusic = (a: PieceMusic, b: PieceMusic): boolean =>
   a.title === b.title &&
   a.key === b.key &&
   a.meter === b.meter &&
+  (a.commonTime ?? false) === (b.commonTime ?? false) &&
   a.tempo === b.tempo &&
   a.pattern === b.pattern &&
   (a.staves?.length ?? 0) === (b.staves?.length ?? 0) &&

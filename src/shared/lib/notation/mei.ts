@@ -6,7 +6,6 @@ import {
   type Articulation,
   type Barline,
   type Jump,
-  type Meter,
   type NoteLyrics,
   type NoteMarks,
   type Ornament,
@@ -95,7 +94,7 @@ export function scoreToMei(score: Score, options: MeiOptions = {}): string {
     time !== null &&
     timeBefore.count === time.count &&
     timeBefore.unit === time.unit
-  const scoreDef = `<scoreDef ${meterAttrs(time, score.meter)}${continues ? ' meter.visible="false"' : ''} key.sig="${keySig(
+  const scoreDef = `<scoreDef ${meterAttrs(time, score)}${continues ? ' meter.visible="false"' : ''} key.sig="${keySig(
     keySignature(first?.key ?? score.key),
   )}"><staffGrp>${single.map(staffDef).join('')}${
     piano.length > 1
@@ -175,16 +174,19 @@ const keySig = (fifths: number) =>
 const clefAttrs = (clef: string, prefix = 'clef.') =>
   clef === 'bass' ? `${prefix}shape="F" ${prefix}line="4"` : `${prefix}shape="G" ${prefix}line="2"`
 
-const meterAttrs = (time: TimeSignature | null, meter: Meter) => {
-  const [count, unit] = meter.split('/')
-  return `meter.count="${time?.count ?? count}" meter.unit="${time?.unit ?? unit}"`
+/** A time signature's attributes: its figures, 4/4 as common time's C where the score asks (ADR 0114). */
+const meterAttrs = (time: TimeSignature | null, score: Pick<Score, 'meter' | 'commonTime'>) => {
+  const [count = '', unit = ''] = score.meter.split('/')
+  const figures = { count: String(time?.count ?? count), unit: String(time?.unit ?? unit) }
+  const common = score.commonTime && figures.count === '4' && figures.unit === '4'
+  return `meter.count="${figures.count}" meter.unit="${figures.unit}"${common ? ' meter.sym="common"' : ''}`
 }
 
 /** A scoreDef's attributes for a measure whose time or key is not the one before's: none where both go on. */
 function changedAttrs(score: Score, measure: NextLine, before: NextLine): string {
   const time =
     before.time.count !== measure.time.count || before.time.unit !== measure.time.unit
-      ? ` ${meterAttrs(measure.time, score.meter)}`
+      ? ` ${meterAttrs(measure.time, score)}`
       : ''
   const keyOf = (m: NextLine) => keySignature(m.key ?? score.key)
   const key = keyOf(before) !== keyOf(measure) ? ` key.sig="${keySig(keyOf(measure))}"` : ''

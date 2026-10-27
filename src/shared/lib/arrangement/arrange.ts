@@ -720,6 +720,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
   return {
     key,
     meter: chart.meter,
+    ...(chart.commonTime ? { commonTime: true } : {}),
     totalTicks: layout.totalTicks,
     ...(staves.length > 0 ? { staves: (options.staves ?? []).map(({ clef }) => ({ clef })) } : {}),
     ...(timing.length > 0 ? { timing } : {}),
