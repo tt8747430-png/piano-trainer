@@ -79,6 +79,7 @@ export function PlayerSetup({
         ) : null}
         {page === 'rh' ? (
           <FigurePage
+            hand="rh"
             label={t('rh')}
             ids={RIGHT_FIGURE_IDS}
             sections={RIGHT_FIGURE_GROUPS.map((group) => ({
@@ -94,6 +95,7 @@ export function PlayerSetup({
         ) : null}
         {page === 'lh' ? (
           <FigurePage
+            hand="lh"
             label={t('lh')}
             ids={LEFT_FIGURE_IDS}
             sections={LEFT_FIGURE_GROUPS.map((group) => ({

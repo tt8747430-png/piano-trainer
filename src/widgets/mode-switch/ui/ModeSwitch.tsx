@@ -11,7 +11,7 @@ const ICONS: Readonly<Record<ScoreMode, LucideIcon>> = { practise: Music, edit: 
 
 // Drawn 36px on the 44px track; its reach grows to the track's edge (a 44px touch target, CODE_STYLE §5).
 const SEGMENT =
-  'relative inline-flex size-9 items-center justify-center rounded-full border border-transparent text-muted-foreground transition-colors duration-200 ease-out select-none before:absolute before:-inset-1 before:content-[""] [&_svg]:size-5'
+  'relative inline-flex size-9 items-center justify-center rounded-lg border border-transparent text-muted-foreground transition-colors duration-200 ease-out select-none before:absolute before:-inset-1 before:content-[""] [&_svg]:size-5'
 
 /**
  * One mode, its icon at every size, its name its tooltip and a screen reader's (ADR 0094): the one
@@ -81,7 +81,7 @@ export function ModeSwitch({
   return (
     <nav
       aria-label={t('mode.label')}
-      className="flex shrink-0 items-center gap-0.5 rounded-full bg-muted p-1"
+      className="flex shrink-0 items-center gap-0.5 rounded-xl bg-muted p-1"
     >
       <Segment
         mode="practise"

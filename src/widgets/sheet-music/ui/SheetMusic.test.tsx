@@ -51,7 +51,7 @@ describe('SheetMusic', () => {
     renderSheet({
       current: 5,
       shown: {
-        layout: 'scroll',
+        layout: 'vertical',
         chordNames: false,
         lyrics: true,
         hidden: ['bass'],
@@ -64,7 +64,7 @@ describe('SheetMusic', () => {
     expect(screen.queryByText('G', { selector: 'span' })).not.toBeInTheDocument()
   })
 
-  it.each(['horizontal', 'scroll', 'pages'] as const)(
+  it.each(['panorama', 'vertical', 'page'] as const)(
     'prints the title at the sheet’s head as the page’s heading, %s (ADR 0094)',
     async (layout) => {
       renderSheet({
@@ -79,7 +79,7 @@ describe('SheetMusic', () => {
     },
   )
 
-  it.each(['horizontal', 'scroll', 'pages'] as const)(
+  it.each(['panorama', 'vertical', 'page'] as const)(
     'names the piano’s staves at the first line’s head, %s (ADR 0094)',
     async (layout) => {
       renderSheet({
@@ -101,7 +101,7 @@ describe('SheetMusic', () => {
         .map((label) => label.textContent?.trim())
         .sort()
     const shown = (hidden: StaffId[]) =>
-      ({ layout: 'scroll', chordNames: true, lyrics: true, hidden }) as const
+      ({ layout: 'vertical', chordNames: true, lyrics: true, hidden }) as const
     const { unmount } = renderSheet({
       performance: TWO_BARS_UNDER_A_STAFF,
       staffNames: ['Voice'],
@@ -176,7 +176,7 @@ describe('SheetMusic', () => {
     renderSheet({
       performance: twoLines,
       loop: { first: 1, last: 2 },
-      shown: { layout: 'scroll', chordNames: true, lyrics: true, hidden: [] },
+      shown: { layout: 'vertical', chordNames: true, lyrics: true, hidden: [] },
     })
     const start = await screen.findByRole('slider', { name: 'Loop start' })
     expect(start).toHaveAttribute('aria-valuetext', 'Bar 2')
@@ -214,7 +214,7 @@ describe('SheetMusic', () => {
     }
   })
 
-  it.each(['horizontal', 'scroll', 'pages'] as const)(
+  it.each(['panorama', 'vertical', 'page'] as const)(
     'draws the playhead as one line over every staff, the notes at it not chosen, %s (ADR 0096)',
     async (layout) => {
       const shown = { layout, chordNames: true, lyrics: true }
@@ -235,7 +235,7 @@ describe('SheetMusic', () => {
     },
   )
 
-  it.each(['horizontal', 'scroll', 'pages'] as const)(
+  it.each(['panorama', 'vertical', 'page'] as const)(
     'draws the loop as one band over every staff, its notes coloured as the editor’s chosen, %s (ADR 0096)',
     async (layout) => {
       renderSheet({

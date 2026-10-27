@@ -22,11 +22,6 @@ export const player = {
   exportMidiAligned: 'Export to MIDI, time aligned',
   /** A piece's score in its two modes, the Player and the score editor (ADR 0090). */
   mode: { label: 'Practise or edit', practise: 'Practise', edit: 'Edit' },
-  // How the score is shown (ADR 0064), from the bar: remembered for every piece.
-  // The View's switches only practice has (ADR 0094); the rest of the View is music's.
-  view: {
-    positionsDetail: 'Beside each chord’s name, the position the right hand plays it in',
-  },
   // The Player's views of the music (ADR 0099), the View's tiles; each names its own part of the
   // screen.
   views: {
@@ -76,6 +71,9 @@ export const player = {
     down: 'Down a semitone',
     up: 'Up a semitone',
     own: { song: 'The song’s key', study: 'The study’s key' },
+    // How far the music moves, signed: «+2 semitones».
+    semitones_one: '{{by}} semitone',
+    semitones_other: '{{by}} semitones',
     reset: 'Reset',
   },
   // The tools row's Simplify (ADR 0104, Chordify's): every chord its plain triad.
@@ -121,6 +119,8 @@ export const player = {
   hands: 'Hands',
   handsOf: 'Hands: {{hands}}',
   pattern: 'Pattern',
+  // The Setup's section of what the hands play: the pattern and the position (ADR 0115).
+  accompaniment: 'Accompaniment',
   fromChart: 'From the chart',
   fromChartDescription: 'Each section and chord as the song marks it.',
   rh: 'Right hand',
@@ -129,10 +129,28 @@ export const player = {
   /** A changed hand's way back. */
   ownFigureOf: '{{hand}}: back to the pattern’s own',
   changed: { lh: 'Left hand changed', rh: 'Right hand changed', both: 'Both hands changed' },
+  // What a pattern is, and what choosing a hand's part does (ADR 0115).
+  patternAbout:
+    'A pattern is what your two hands play together, each its own part. Choose a hand to change its part alone: the music changes at once, and the pattern becomes your own mix. Back to the pattern brings its own parts back.',
+  yourMix: '{{pattern}}, your mix',
+  yourPart: 'Your choice',
+  backToPattern: 'Back to the pattern',
+  // What plays the song's tune along with your hands (ADR 0115).
+  melody: {
+    label: 'Melody',
+    about:
+      'What plays the song’s tune along with your two hands. {{staff}}: the song’s top staff, as written over the piano. Recording: the song as recorded, in its own key only. None: your hands alone. A right hand that plays the tune plays it whatever you choose here.',
+    none: 'None',
+    staff: 'Melody staff',
+    recording: 'Recording',
+    why: {
+      noStaff: 'This song has no staff over the piano',
+      noRecording: 'This song has no recording',
+      ownKey: 'The recording plays only in {{key}}, its own key',
+      leadSheet: 'A lead sheet always plays its melody',
+    },
+  },
   playing: 'How it plays',
-  /** The Play melody tile, in How it plays' ⓘ (ADR 0110): the staff it plays, named. */
-  tuneInfo:
-    'Play melody: {{staff}}, the song’s top staff over the piano, plays along with your hands.',
   /** The picker's way to the Patterns page, where they are explained, starred, hidden and made. */
   allPatterns: 'All patterns',
   ownPattern: 'Make your own pattern',
@@ -153,7 +171,6 @@ export const player = {
     'minor-thirds': 'Up by minor thirds',
     'major-thirds': 'Up by major thirds',
   },
-  ownKeyOnly: 'Only in {{key}}',
   /** Why the recording's tile is closed, beside How it plays' heading. */
   recordingOnlyIn: 'The recording plays only in {{key}}, its own key.',
   /** Why a pattern or figure, or a view of the music (ADR 0102), is closed to the music. */
@@ -196,12 +213,15 @@ export const player = {
   },
   /** The count-in's beat as a screen reader hears it, its number large on the screen. */
   counting: 'Count-in: {{count}}',
-  toggles: {
-    namedNotes: 'Note names',
-    positions: 'Chord positions',
-    tune: 'Play melody',
-    swing: 'Swing',
-    recording: 'Recording',
+  // How much the 8ths swing (ADR 0115): four feels, each drawn as its beat.
+  swing: {
+    label: 'Swing',
+    about:
+      'Swing plays each pair of 8th notes long-short instead of even, the beats where they were. Straight: even. Light: a little late, 3 to 2. Medium: as triplets, 2 to 1, as jazz and blues swing. Hard: a dotted 8th and a 16th, 3 to 1.',
+    straight: 'Straight',
+    light: 'Light',
+    medium: 'Medium',
+    hard: 'Hard',
   },
   pace: {
     of: 'Tempo: {{value}}',

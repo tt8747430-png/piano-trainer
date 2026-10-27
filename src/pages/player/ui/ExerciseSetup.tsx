@@ -6,6 +6,7 @@ import { PlayingSection } from '@/widgets/practice-player'
 import type { ExerciseChange } from '../model/exercise-search'
 import { ExerciseMusicFields } from './ExerciseMusicFields'
 import { ExerciseWayFields } from './ExerciseWayFields'
+import type { SwingFeel } from '@/shared/lib/schedule'
 
 /**
  * An exercise's Setup: its button, and the sheet of the choices its rule takes (each only where the
@@ -20,9 +21,9 @@ export function ExerciseSetup({
 }: {
   exercise: Exercise
   choice: ExerciseChoice
-  swing: boolean
+  swing: SwingFeel
   onChange: (change: ExerciseChange) => void
-  onSwing: (on: boolean) => void
+  onSwing: (feel: SwingFeel) => void
 }) {
   const { t } = useTranslation('player')
   return (

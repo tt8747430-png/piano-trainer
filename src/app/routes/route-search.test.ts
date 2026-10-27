@@ -94,7 +94,7 @@ describe('search params', () => {
     })
     expect(
       await searchAt(
-        '/play/bz5?key=A&tempo=96&hands=lh&mode=wait&speedTraining=true&swing=true&loop=2-3&pattern=chart&rh=t1&lh=o&chordSize=ninths&simple=true',
+        '/play/bz5?key=A&tempo=96&hands=lh&mode=wait&speedTraining=true&swing=light&loop=2-3&pattern=chart&rh=t1&lh=o&chordSize=ninths&simple=true',
       ),
     ).toEqual({
       key: 'A',
@@ -102,7 +102,7 @@ describe('search params', () => {
       hands: 'lh',
       mode: 'wait',
       speedTraining: true,
-      swing: true,
+      swing: 'light',
       loop: '2-3',
       pattern: 'chart',
       rh: 't1',

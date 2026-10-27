@@ -10,24 +10,13 @@ export const editor = {
   tools: 'Editing tools',
   // The editor's Transpose (ADR 0110): its sheet writes the song in another key.
   transpose: {
-    name: 'Transpose',
-    of: 'Transpose: {{key}}',
-    title: 'Transpose',
-    semitones: 'Semitones',
-    down: 'Down a semitone',
-    up: 'Up a semitone',
-    lands: 'Lands in {{key}}',
-    same: 'The song’s key',
     key: 'Apply to key',
     keyInfo:
       'The key signature moves with the music. Off, the notes still move and are written with accidentals in the key the song is in.',
     chords: 'Apply to chords',
     chordsInfo: 'The chord symbols move with the music. Off, they stay as they are written.',
     preview: 'Preview',
-    open: 'Open the preview',
-    whole: 'The whole song',
     apply: 'Transpose',
-    cancel: 'Cancel',
   },
   // The one palette (ADR 0114): folded, one row of every tool, scrolling sideways; opened, every
   // category's section stacked over the bar of categories.

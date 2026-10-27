@@ -5,6 +5,7 @@ import {
   type Exercise,
 } from '@/entities/exercise'
 import { noteParam, pitchClassOf } from '@/shared/lib/music'
+import type { SwingFeel } from '@/shared/lib/schedule'
 import type { PracticeView } from '@/widgets/practice-player'
 
 /**
@@ -12,7 +13,7 @@ import type { PracticeView } from '@/widgets/practice-player'
  * (the 2-5-1 scale is swung).
  */
 export type ExerciseSearch = Omit<PracticeView, 'swing'> & {
-  readonly swing?: boolean
+  readonly swing?: SwingFeel
 } & ExerciseParams
 
 /** What an exercise's Setup changes: any of its choices. */

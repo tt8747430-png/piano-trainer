@@ -13,7 +13,7 @@ import type { Clef } from '@/shared/lib/music'
 import { MenuSection, SwitchRow } from '@/shared/ui'
 import { ViewTiles, type ViewNeeds } from '@/widgets/chord-views'
 import { PlayerTool } from '@/widgets/practice-player'
-import { KeysSwitch, ScoreViewMenu, ViewSection } from '@/widgets/score-view-menu'
+import { KeysChip, ScoreViewMenu, ViewSection } from '@/widgets/score-view-menu'
 
 /** Each view of the music in a line, its name first: the ⓘ beside Show the music as. */
 function ViewsAbout() {
@@ -87,11 +87,10 @@ export function PlayerViewMenu({
         />
       </MenuSection>
       <ViewSection view={shown} staves={staves} piano={piano} words={needs.lyrics !== 'words'} />
-      <MenuSection
-        title={t('views.every')}
-        className="[&>[data-slot=switch-row]:last-child]:border-b-0"
-      >
-        <KeysSwitch shown={keys} onShow={onKeys} />
+      <MenuSection title={t('views.every')}>
+        <div className="flex flex-wrap gap-2">
+          <KeysChip shown={keys} onShow={onKeys} />
+        </div>
       </MenuSection>
     </ScoreViewMenu>
   )

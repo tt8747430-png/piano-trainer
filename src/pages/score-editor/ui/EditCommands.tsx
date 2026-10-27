@@ -32,13 +32,13 @@ function EditButton({
       <TooltipTrigger
         render={
           <Button
-            variant="ghost"
+            variant="tool"
             size="icon"
             aria-label={label}
             aria-disabled={blocked ? true : undefined}
             disabled={disabled}
             onClick={blocked ? undefined : onClick}
-            className="size-11 shrink-0 rounded-xl aria-disabled:opacity-50 narrow-phone:w-9 landscape-phone:size-10 [&_svg:not([class*=size-])]:size-5"
+            className="size-11 shrink-0 aria-disabled:opacity-50 narrow-phone:w-9 landscape-phone:size-10 [&_svg:not([class*=size-])]:size-5"
           />
         }
       >

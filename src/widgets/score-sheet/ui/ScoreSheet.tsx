@@ -95,7 +95,7 @@ export function ScoreSheet({
   fingers = false,
   edit,
   hidden = NO_STAVES,
-  view = 'scroll',
+  view = 'vertical',
   title: heading,
   room,
   covered,
@@ -172,11 +172,11 @@ export function ScoreSheet({
 }) {
   const { t } = useTranslation('editor')
   const [sheetsOf] = useState(createLineSheets)
-  const across = view === 'horizontal'
+  const across = view === 'panorama'
   const box = useRef<HTMLElement>(null)
   const { width } = useElementSize(box)
   // Pages as they print, on a canvas that zooms them to the screen (ADR 0075): laid out alike on any.
-  const pages = view === 'pages'
+  const pages = view === 'page'
   // The piece's music whole, for each bar's width: lines are cut by width, as an engraver cuts them.
   const whole = useMemo(() => {
     const [all] = oneLine(draft)

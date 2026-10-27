@@ -1,13 +1,14 @@
 import { useTranslation } from 'react-i18next'
 import { SHEET_VIEWS, type SheetView } from '@/shared/lib'
 import { Labelled } from './Labelled'
-import { Segmented } from './Segmented'
-import { SheetViewIcon } from './SheetViewIcon'
+import { LayoutPicture } from './LayoutPicture'
+import { PictureTiles } from './PictureTiles'
 
 /**
- * How a score is laid out (ADR 0064, 0102), one choice wherever it is made (the sheet music's part of
- * the Player's View and the editor's, first in both): on A4 pages, in lines down the screen, or in
- * one line across, each drawn, what each does the ⓘ beside its name.
+ * How a score is laid out (ADR 0064, 0102, 0115), one choice wherever it is made (the sheet music's
+ * part of the Player's View and the editor's, first in both): Page view, Vertical scroll or Panorama
+ * (Dorico's and Sibelius's names), each a tile with its miniature, what each does the ⓘ beside its
+ * name.
  */
 export function SheetLayoutField({
   value,
@@ -19,13 +20,14 @@ export function SheetLayoutField({
   const { t } = useTranslation('music')
   return (
     <Labelled label={t('sheet.layout.label')} info={t('sheet.layout.about')}>
-      <Segmented
+      <PictureTiles
         label={t('sheet.layout.label')}
         value={value}
-        options={SHEET_VIEWS.map((each) => ({
-          value: each,
-          label: t(`sheet.layout.${each}`),
-          icon: <SheetViewIcon view={each} />,
+        columns={3}
+        tiles={SHEET_VIEWS.map((layout) => ({
+          value: layout,
+          label: t(`sheet.layout.${layout}`),
+          picture: <LayoutPicture layout={layout} />,
         }))}
         onChange={onChange}
       />

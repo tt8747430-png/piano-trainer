@@ -11,6 +11,7 @@ import { MultiDropdown, NoteChoice, Segmented } from '@/shared/ui'
 import { PatternCard, PlayerSetup } from '@/widgets/player-setup'
 import { PlayingSection } from '@/widgets/practice-player'
 import type { ChromaticChange } from '../model/chromatic-search'
+import type { SwingFeel } from '@/shared/lib/schedule'
 
 /**
  * The chromatic walk's Setup: its chord qualities (each by its suffix, printed as the sheets print a
@@ -23,9 +24,9 @@ export function ChromaticSetup({
   onSwing,
 }: {
   choice: ChromaticChoice
-  swing: boolean
+  swing: SwingFeel
   onChange: (change: ChromaticChange) => void
-  onSwing: (on: boolean) => void
+  onSwing: (feel: SwingFeel) => void
 }) {
   const { t } = useTranslation(['player', 'music'])
   return (

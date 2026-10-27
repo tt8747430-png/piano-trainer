@@ -21,7 +21,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'scale', kind: SCALE_KINDS, octaves: OCTAVES, start: true, fingering: true },
     own: { kind: 'major', octaves: 2 },
     tempo: 80,
-    swing: false,
+    swing: 'straight',
   },
   {
     id: 'thirds',
@@ -35,7 +35,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'scale', kind: SCALE_KINDS, octaves: FEW_OCTAVES },
     own: { kind: 'major', octaves: 1 },
     tempo: 72,
-    swing: false,
+    swing: 'straight',
   },
   {
     id: 'sixths',
@@ -49,7 +49,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'scale', kind: SCALE_KINDS, octaves: FEW_OCTAVES },
     own: { kind: 'major', octaves: 1 },
     tempo: 66,
-    swing: false,
+    swing: 'straight',
   },
   {
     id: 'groups',
@@ -63,7 +63,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'scale', kind: SCALE_KINDS, octaves: FEW_OCTAVES, figure: ['1234', '1324'] },
     own: { kind: 'major', octaves: 1, figure: '1234' },
     tempo: 72,
-    swing: false,
+    swing: 'straight',
   },
   {
     id: 'contrary',
@@ -77,7 +77,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'scale', kind: SCALE_KINDS, octaves: FEW_OCTAVES },
     own: { kind: 'major', octaves: 1 },
     tempo: 72,
-    swing: false,
+    swing: 'straight',
   },
   {
     id: 'arpeggio',
@@ -91,7 +91,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'chord', quality: true, inversion: [0, 1, 2, 3], octaves: OCTAVES },
     own: { quality: 'maj', inversion: 0, octaves: 2 },
     tempo: 72,
-    swing: false,
+    swing: 'straight',
   },
   {
     id: 'inversions',
@@ -105,7 +105,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'chord', quality: true },
     own: { quality: 'maj' },
     tempo: 60,
-    swing: false,
+    swing: 'straight',
   },
   {
     id: 'sixth-diminished',
@@ -119,7 +119,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'key', tonality: true, octaves: FEW_OCTAVES },
     own: { tonality: 'major', octaves: 1 },
     tempo: 80,
-    swing: true,
+    swing: 'medium',
   },
   {
     id: 'sixth-diminished-chords',
@@ -133,7 +133,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'key', tonality: true, voicing: true },
     own: { tonality: 'major', voicing: 'close' },
     tempo: 66,
-    swing: false,
+    swing: 'straight',
   },
   {
     id: 'dominant-scale',
@@ -147,7 +147,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'key', from: true },
     own: { from: 'root' },
     tempo: 92,
-    swing: true,
+    swing: 'medium',
   },
   {
     id: 'from-third',
@@ -161,7 +161,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'key' },
     own: {},
     tempo: 84,
-    swing: true,
+    swing: 'medium',
   },
   {
     id: 'drop-two',
@@ -175,7 +175,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'key', inversion: [0, 1, 2, 3] },
     own: { inversion: 0 },
     tempo: 60,
-    swing: false,
+    swing: 'straight',
   },
   {
     id: 'two-five-one-scale',
@@ -189,7 +189,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'key' },
     own: {},
     tempo: 96,
-    swing: true,
+    swing: 'medium',
   },
   {
     id: 'inner-voice',
@@ -203,7 +203,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'key' },
     own: {},
     tempo: 66,
-    swing: false,
+    swing: 'straight',
   },
   {
     id: 'modes',
@@ -217,7 +217,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'key' },
     own: {},
     tempo: 80,
-    swing: false,
+    swing: 'straight',
   },
   {
     id: 'rapid-switch',
@@ -231,7 +231,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'key' },
     own: {},
     tempo: 84,
-    swing: false,
+    swing: 'straight',
   },
   {
     id: 'pattern-shifting',
@@ -245,7 +245,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'key', figure: ['1235', '1353', '3212'] },
     own: { figure: '1235' },
     tempo: 84,
-    swing: true,
+    swing: 'medium',
   },
   {
     id: 'five-finger',
@@ -259,7 +259,7 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'key', tonality: true },
     own: { tonality: 'major' },
     tempo: 80,
-    swing: false,
+    swing: 'straight',
   },
   {
     id: 'hanon',
@@ -273,6 +273,6 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'key' },
     own: {},
     tempo: 92,
-    swing: false,
+    swing: 'straight',
   },
 ]

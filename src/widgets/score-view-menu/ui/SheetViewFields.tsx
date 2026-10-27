@@ -5,42 +5,40 @@ import { selectScoreView, useSettings, useSettingsStoreApi } from '@/entities/se
 import { setScoreView, setStaffShown } from '@/features/set-preference'
 import type { Clef } from '@/shared/lib/music'
 import { singleStaff, type StaffId } from '@/shared/lib/notation'
-import { SheetLayoutField, SwitchRow } from '@/shared/ui'
+import { SheetLayoutField } from '@/shared/ui'
 import { SHEET_PARTS, type SheetPart } from '../model/score-parts'
-import { ViewSwitch } from './ViewSwitch'
+import { PartChip, PartChips } from './PartChip'
+import { ViewChip } from './ViewChip'
 
 /** Each clef as the music font draws it. */
 const CLEF_GLYPH: Readonly<Record<Clef, string>> = { treble: '\u{1D11E}', bass: '\u{1D122}' }
 
-/** A staff's clef, as the music font draws it, for its switch's picture. */
+/** A staff's clef, as the music font draws it, for its chip's picture. */
 function ClefGlyph({ clef }: { clef: Clef }) {
-  return <span className="font-music text-2xl leading-none">{CLEF_GLYPH[clef]}</span>
+  return <span className="font-music text-xl leading-none">{CLEF_GLYPH[clef]}</span>
 }
 
-/**
- * Switches under their name, one under the other, the last with no line under it: a group named for
- * a screen reader by the name it prints.
- */
-function SwitchGroup({ label, children }: { label: string; children: ReactNode }) {
+/** What each part shows, a line each, the ⓘ beside Show. */
+function PartsAbout({ parts }: { parts: readonly SheetPart[] }) {
+  const { t } = useTranslation('music')
   return (
-    <div
-      role="group"
-      aria-label={label}
-      className="flex flex-col [&>[data-slot=switch-row]:last-child]:border-b-0"
-    >
-      <span aria-hidden className="text-sm text-muted-foreground">
-        {label}
-      </span>
-      {children}
-    </div>
+    <ul className="flex flex-col gap-1.5">
+      {parts.map((part) => (
+        <li key={part}>
+          <span className="font-semibold">{t(`view.parts.${part}`)}</span>:{' '}
+          {t(`view.partsAbout.${part}`)}
+        </li>
+      ))}
+    </ul>
   )
 }
 
 /**
- * The sheet music's own part of the View (ADR 0064, 0097, 0102): its layout first; its staves, each
- * switched by its name (a single staff's own, else its place's, then the piano's upper and lower), the
- * last in sight kept; then what it shows (`parts`: the Player's every one, the editor's what a score
- * prints), and after them a screen's own (`children`: the editor's Keys).
+ * The sheet music's own part of the View (ADR 0064, 0097, 0102, 0115): its layout first, three
+ * tiles with their miniatures; its staves as chips, each by its name (a single staff's own, else its
+ * place's, then the piano's upper and lower), the last in sight kept; then what it shows as chips
+ * (`parts`: the Player's every one, the editor's what a score prints), and after them a screen's own
+ * (`children`: the editor's Keys).
  */
 export function SheetViewFields({
   staves,
@@ -48,7 +46,7 @@ export function SheetViewFields({
   parts = SHEET_PARTS,
   children,
 }: {
-  /** The score's single staves, top down: each its own switch. */
+  /** The score's single staves, top down: each its own chip. */
   staves: readonly { readonly name?: StaffName; readonly clef: Clef }[]
   /** Whether the score writes the piano's staves: a lead sheet does not (ADR 0083). */
   piano: boolean
@@ -61,7 +59,7 @@ export function SheetViewFields({
   const hidden = useSettings((state) => selectScoreView(state).hidden)
   const names = useStaffNames(staves)
   const title = useStaffTitle()
-  const switches: readonly { staff: StaffId; label: string; clef: Clef }[] = [
+  const chips: readonly { staff: StaffId; label: string; clef: Clef }[] = [
     ...staves.map(({ clef }, place) => ({
       staff: singleStaff(place),
       label: title(names[place], place),
@@ -76,31 +74,32 @@ export function SheetViewFields({
   ]
   const shown = (staff: StaffId) => !hidden.includes(staff)
   // The score is never left with no staff in sight.
-  const inSight = switches.filter(({ staff }) => shown(staff)).length
+  const inSight = chips.filter(({ staff }) => shown(staff)).length
+  const listed = SHEET_PARTS.filter((part) => parts.includes(part))
   return (
     <>
       <SheetLayoutField
         value={layout}
         onChange={(chosen) => setScoreView(store, { layout: chosen })}
       />
-      <SwitchGroup label={t('view.staves')}>
-        {switches.map(({ staff, label, clef }) => (
-          <SwitchRow
+      <PartChips label={t('view.staves')}>
+        {chips.map(({ staff, label, clef }) => (
+          <PartChip
             key={staff}
             icon={<ClefGlyph clef={clef} />}
             label={label}
-            checked={shown(staff)}
-            disabled={shown(staff) && inSight === 1}
-            onCheckedChange={(on) => setStaffShown(store, staff, on)}
+            pressed={shown(staff)}
+            reason={shown(staff) && inSight === 1 ? t('view.lastStaff') : undefined}
+            onPressedChange={(on) => setStaffShown(store, staff, on)}
           />
         ))}
-      </SwitchGroup>
-      <SwitchGroup label={t('view.show')}>
-        {SHEET_PARTS.filter((part) => parts.includes(part)).map((part) => (
-          <ViewSwitch key={part} part={part} />
+      </PartChips>
+      <PartChips label={t('view.show')} info={<PartsAbout parts={listed} />}>
+        {listed.map((part) => (
+          <ViewChip key={part} part={part} />
         ))}
         {children}
-      </SwitchGroup>
+      </PartChips>
     </>
   )
 }

@@ -77,10 +77,8 @@ describe('set-preference', () => {
       fingerNumbers: false,
       namedNotes: false,
       positions: false,
-      tune: false,
       metronome: true,
       countIn: false,
-      recording: true,
     })
     setPracticeToggle(store, 'metronome', false)
     expect(store.getState().practice.metronome).toBe(false)

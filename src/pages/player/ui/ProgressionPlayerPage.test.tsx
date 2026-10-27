@@ -48,13 +48,13 @@ describe('A progression in the Player', () => {
     expect(first?.toSorted((a, b) => a - b)).toEqual([53, 57, 60, 62])
   })
 
-  it('keeps every chord in the first one’s inversion with Nearest off', async () => {
+  it('keeps every chord in the first one’s inversion with Move smoothly off', async () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp(
       '/play/progression?p=ii-V-I&key=C&chordSize=sevenths&hands=rh&inversion=1',
     )
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
-    await user.click(screen.getByRole('switch', { name: /Nearest/ }))
+    await user.click(screen.getByRole('switch', { name: /Move smoothly/ }))
     expect(router.state.location.search).toMatchObject({ inversion: 1, nearest: false })
     await user.keyboard('{Escape}')
     await user.click(await screen.findByRole('button', { name: 'Play' }))
@@ -76,8 +76,8 @@ describe('A progression in the Player', () => {
     await user.click(await screen.findByRole('button', { name: 'Setup' }))
     expect(screen.getByRole('radio', { name: '1st' })).toHaveAttribute('data-disabled')
     expect(screen.queryByText('This pattern plays its own shapes.')).toBeNull()
-    await user.click(screen.getByRole('button', { name: 'About First chord' }))
-    expect(await screen.findByRole('dialog', { name: 'First chord' })).toHaveTextContent(
+    await user.click(screen.getByRole('button', { name: 'About Starting position' }))
+    expect(await screen.findByRole('dialog', { name: 'Starting position' })).toHaveTextContent(
       'This pattern plays its own shapes.',
     )
   })

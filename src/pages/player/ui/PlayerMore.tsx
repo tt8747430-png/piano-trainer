@@ -71,12 +71,7 @@ export function PlayerMore({
       align="end"
       trigger={<Ellipsis aria-hidden />}
       render={
-        <Button
-          variant="surface"
-          size="icon"
-          aria-label={t('player:more')}
-          title={t('player:more')}
-        />
+        <Button variant="tool" size="icon" aria-label={t('player:more')} title={t('player:more')} />
       }
       actions={[
         ...library,

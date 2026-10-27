@@ -9,7 +9,8 @@ import {
   type AccompanimentChoice,
   type PatternFit,
 } from '@/entities/pattern'
-import { TuneToggle } from './TuneToggle'
+import { melodyOf } from '../model/melody'
+import { MelodyField } from './MelodyField'
 import { PatternCard } from './PatternCard'
 import { PlayerSetup } from './PlayerSetup'
 
@@ -30,7 +31,16 @@ async function renderSetup(
     >
       <p>The music’s own choices</p>
       <PatternCard />
-      <TuneToggle />
+      <MelodyField
+        melody={melodyOf('none', {
+          staff: fit.tune ?? false,
+          recording: false,
+          inOwnKey: true,
+          leadSheet: false,
+        })}
+        staff="Melody"
+        ownKey="C major"
+      />
     </PlayerSetup>,
   )
   await user.click(screen.getByRole('button', { name: 'Setup' }))
@@ -59,10 +69,10 @@ describe('PlayerSetup', () => {
     expect(screen.queryByRole('button', { name: /back to the pattern’s own/ })).toBeNull()
   })
 
-  it('shows a changed hand by its figure, with a way back to the pattern’s own beside it', async () => {
+  it('shows a changed hand by its figure, your choice, with a way back to the pattern’s own beside it', async () => {
     const { user, onFigures } = await renderSetup({}, { rh: 'b2' })
     expect(
-      screen.getByRole('button', { name: `Right hand: ${RIGHT_FIGURES.b2.name.en}` }),
+      screen.getByRole('button', { name: `Right hand: ${RIGHT_FIGURES.b2.name.en}, Your choice` }),
     ).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Right hand: back to the pattern’s own' }))
     expect(onFigures).toHaveBeenCalledWith({ rh: undefined })
@@ -71,11 +81,32 @@ describe('PlayerSetup', () => {
     ).toBeNull()
   })
 
-  it('says on the pattern which hand the learner changed, and nothing while neither is', async () => {
-    await renderSetup({}, { lh: 'o' })
-    expect(
-      screen.getByRole('button', { name: /^Pattern: Whole notes.*, left hand changed$/ }),
-    ).toBeInTheDocument()
+  it('says on the pattern which hand the learner changed, the pattern their mix, and goes back to it', async () => {
+    const { user, onFigures } = await renderSetup({}, { lh: 'o' })
+    const pattern = screen.getByRole('button', {
+      name: /^Pattern: Whole notes.*, left hand changed$/,
+    })
+    expect(pattern).toHaveTextContent('your mix')
+    await user.click(screen.getByRole('button', { name: 'Back to the pattern' }))
+    expect(onFigures).toHaveBeenCalledWith({ lh: undefined, rh: undefined })
+  })
+
+  it('says what a pattern is, and what choosing a hand does, beside its name', async () => {
+    const { user } = await renderSetup()
+    expect(screen.queryByRole('button', { name: 'Back to the pattern' })).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'About Pattern' }))
+    expect(await screen.findByRole('dialog', { name: 'Pattern' })).toHaveTextContent(
+      'the music changes at once, and the pattern becomes your own mix',
+    )
+  })
+
+  it('draws what each hand’s part plays, in its row and in its list', async () => {
+    const { user } = await renderSetup()
+    const right = screen.getByRole('button', { name: /^Right hand: / })
+    expect(right.querySelector('svg rect')).not.toBeNull()
+    await user.click(right)
+    for (const option of screen.getAllByRole('option').slice(1))
+      expect(option.querySelector('svg rect')).not.toBeNull()
   })
 
   it('says both hands are changed when both are', async () => {
@@ -85,34 +116,48 @@ describe('PlayerSetup', () => {
     ).toBeInTheDocument()
   })
 
-  it('starts the first chord in root position, each after it nearest, by default', async () => {
+  it('starts the first chord in root position, moving smoothly after it, by default', async () => {
     const { user, onFigures } = await renderSetup()
     expect(screen.getByRole('radio', { name: 'Root' })).toBeChecked()
-    expect(screen.getByRole('switch', { name: /Nearest/ })).toBeChecked()
+    expect(screen.getByRole('switch', { name: /Move smoothly/ })).toBeChecked()
     await user.click(screen.getByRole('radio', { name: '1st' }))
     expect(onFigures).toHaveBeenCalledWith({ inversion: 1 })
-    await user.click(screen.getByRole('switch', { name: /Nearest/ }))
+    await user.click(screen.getByRole('switch', { name: /Move smoothly/ }))
     expect(onFigures).toHaveBeenCalledWith({ nearest: false })
+  })
+
+  it('draws each starting position on the keys beside its name (ADR 0115)', async () => {
+    const { user } = await renderSetup()
+    await user.click(screen.getByRole('button', { name: 'About Starting position' }))
+    const about = await screen.findByRole('dialog', { name: 'Starting position' })
+    expect(about).toHaveTextContent('Which note of the first chord your hand plays lowest')
+    for (const name of ['Root position: C E G', '1st inversion: E G C', '2nd inversion: G C E'])
+      expect(screen.getByRole('img', { name })).toBeInTheDocument()
   })
 
   it('fades the position From the chart only where no pattern the chart plays follows it, saying why beside it', async () => {
     const fromChart = { pattern: 'chart' } as const
     const { user, unmount } = await renderSetup({ methodCodes: true, chart: ['flow'] }, fromChart)
-    expect(screen.getByRole('switch', { name: 'Nearest' })).toHaveAttribute('aria-disabled', 'true')
-    await user.click(screen.getByRole('button', { name: 'About First chord' }))
-    expect(await screen.findByRole('dialog', { name: 'First chord' })).toHaveTextContent(
+    expect(screen.getByRole('switch', { name: 'Move smoothly' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
+    await user.click(screen.getByRole('button', { name: 'About Starting position' }))
+    expect(await screen.findByRole('dialog', { name: 'Starting position' })).toHaveTextContent(
       'This pattern plays its own shapes.',
     )
     unmount()
     await renderSetup({ methodCodes: true, chart: ['flow', 'block'] }, fromChart)
-    expect(screen.queryByRole('button', { name: 'About First chord' })).toBeNull()
+    expect(screen.getByRole('switch', { name: 'Move smoothly' })).not.toHaveAttribute(
+      'aria-disabled',
+    )
   })
 
-  it('turns Nearest back on, the URL’s own', async () => {
+  it('turns Move smoothly back on, the URL’s own', async () => {
     const { user, onFigures } = await renderSetup({}, { inversion: 2, nearest: false })
     expect(screen.getByRole('radio', { name: '2nd' })).toBeChecked()
-    expect(screen.getByRole('switch', { name: 'Nearest' })).not.toBeChecked()
-    await user.click(screen.getByRole('switch', { name: /Nearest/ }))
+    expect(screen.getByRole('switch', { name: 'Move smoothly' })).not.toBeChecked()
+    await user.click(screen.getByRole('switch', { name: /Move smoothly/ }))
     expect(onFigures).toHaveBeenCalledWith({ nearest: undefined })
   })
 
@@ -141,13 +186,18 @@ describe('PlayerSetup', () => {
     expect(onFigures).toHaveBeenCalledWith({ rh: undefined })
   })
 
-  it('saves the Tune toggle in settings, pressed while it is on', async () => {
+  it('saves the Melody chosen in settings, the staff by its name, a source the song has not greyed', async () => {
     const { user, settingsStore } = await renderSetup({ tune: true })
-    const tune = screen.getByRole('button', { name: 'Play melody' })
-    expect(tune).toHaveAttribute('aria-pressed', 'false')
-    await user.click(tune)
-    expect(settingsStore.getState().practice.tune).toBe(true)
-    expect(tune).toHaveAttribute('aria-pressed', 'true')
+    const melody = screen.getByRole('radiogroup', { name: 'Melody' })
+    const staff = screen.getByRole('radio', { name: 'Melody' })
+    expect(screen.getByRole('radio', { name: 'None' })).toBeChecked()
+    expect(screen.getByRole('radio', { name: 'Recording' })).toHaveAttribute(
+      'title',
+      'This song has no recording',
+    )
+    await user.click(staff)
+    expect(settingsStore.getState().melody).toBe('staff')
+    expect(melody).toBeInTheDocument()
   })
 
   it('closes what plays the key’s triads to music without a key', async () => {

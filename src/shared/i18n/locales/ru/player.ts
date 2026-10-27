@@ -19,9 +19,6 @@ export const player: LocaleResources['player'] = {
   exportMidiFixed: 'Экспорт в MIDI, ровный темп',
   exportMidiAligned: 'Экспорт в MIDI, по записи',
   mode: { label: 'Играть или править', practise: 'Играть', edit: 'Править' },
-  view: {
-    positionsDetail: 'Рядом с названием аккорда — в каком обращении его берёт правая рука',
-  },
   views: {
     label: 'Как показывать музыку',
     sheet: 'Ноты',
@@ -60,6 +57,10 @@ export const player: LocaleResources['player'] = {
     down: 'На полутон ниже',
     up: 'На полутон выше',
     own: { song: 'Тональность песни', study: 'Тональность этюда' },
+    semitones_one: '{{by}} полутон',
+    semitones_few: '{{by}} полутона',
+    semitones_many: '{{by}} полутонов',
+    semitones_other: '{{by}} полутона',
     reset: 'Сбросить',
   },
   simplify: {
@@ -100,6 +101,7 @@ export const player: LocaleResources['player'] = {
   tempo: 'Темп',
   hands: 'Руки',
   handsOf: 'Руки: {{hands}}',
+  accompaniment: 'Аккомпанемент',
   pattern: 'Фактура',
   fromChart: 'Как в песне',
   fromChartDescription: 'Каждый раздел и аккорд так, как указано в песне.',
@@ -107,10 +109,27 @@ export const player: LocaleResources['player'] = {
   lh: 'Левая рука',
   ownFigure: 'Как в фактуре',
   ownFigureOf: '{{hand}}: как в фактуре',
+  patternAbout:
+    'Фактура — это то, что вместе играют две руки, у каждой своя партия. Выберите партию одной руки — меняется только она, музыка сразу звучит по-новому, а фактура становится вашим вариантом. «Вернуть фактуру» возвращает её собственные партии.',
+  yourMix: '{{pattern}}, ваш вариант',
+  yourPart: 'Ваш выбор',
+  backToPattern: 'Вернуть фактуру',
+  melody: {
+    label: 'Мелодия',
+    about:
+      'Что играет мелодию песни вместе с вашими руками. {{staff}}: верхний нотоносец песни, как он записан над фортепиано. Запись: песня, как она записана, только в своей тональности. Нет: только ваши руки. Если правая рука играет мелодию, она играет её при любом выборе.',
+    none: 'Нет',
+    staff: 'Нотоносец мелодии',
+    recording: 'Запись',
+    why: {
+      noStaff: 'У песни нет нотоносца над фортепиано',
+      noRecording: 'У песни нет записи',
+      ownKey: 'Запись звучит только в {{key}}, своей тональности',
+      leadSheet: 'Лид-шит всегда играет свою мелодию',
+    },
+  },
   changed: { lh: 'Левая рука изменена', rh: 'Правая рука изменена', both: 'Обе руки изменены' },
   playing: 'Как звучит',
-  tuneInfo:
-    '«Играть мелодию»: {{staff}}, верхний нотоносец песни над фортепиано, звучит вместе с вашими руками.',
   allPatterns: 'Все фактуры',
   ownPattern: 'Своя фактура',
   ownPatternDetail: 'Левая и правая рука на ваш выбор',
@@ -128,7 +147,6 @@ export const player: LocaleResources['player'] = {
     'minor-thirds': 'Вверх по малым терциям',
     'major-thirds': 'Вверх по большим терциям',
   },
-  ownKeyOnly: 'Только в тональности {{key}}',
   recordingOnlyIn: 'Запись звучит только в своей тональности — {{key}}.',
   /** Why a pattern or figure, or a view of the music (ADR 0102), is closed to the music. */
   needs: {
@@ -166,12 +184,14 @@ export const player: LocaleResources['player'] = {
     onlyChords: 'Только аккорды',
   },
   counting: 'Отсчёт: {{count}}',
-  toggles: {
-    namedNotes: 'Названия нот',
-    positions: 'Положения аккордов',
-    tune: 'Играть мелодию',
-    swing: 'Свинг',
-    recording: 'Запись',
+  swing: {
+    label: 'Свинг',
+    about:
+      'Свинг играет каждую пару восьмых длинно-коротко, а не ровно; доли остаются на месте. Ровно: восьмые одинаковые. Лёгкий: вторая чуть позже, 3 к 2. Средний: триолями, 2 к 1, как в джазе и блюзе. Сильный: восьмая с точкой и шестнадцатая, 3 к 1.',
+    straight: 'Ровно',
+    light: 'Лёгкий',
+    medium: 'Средний',
+    hard: 'Сильный',
   },
   pace: {
     of: 'Темп: {{value}}',

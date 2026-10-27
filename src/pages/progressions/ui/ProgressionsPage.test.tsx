@@ -435,7 +435,7 @@ describe('Practice → Progressions', () => {
       })
     }
     expect((await lowestHands())[0]).toBe(7) // G: C from its 5th
-    await user.click(screen.getByRole('switch', { name: /Nearest/ }))
+    await user.click(screen.getByRole('switch', { name: /Move smoothly/ }))
     expect(router.state.location.search).toMatchObject({ inversion: 2, nearest: false })
     expect(await lowestHands()).toEqual([7, 0, 2, 7]) // every chord from its 5th
   })
