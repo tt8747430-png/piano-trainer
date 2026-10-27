@@ -11,109 +11,77 @@ web
 - **First:** church accompanists, adults and teens, learning to accompany worship songs at the piano from chord
   charts: the «Боже, спасибо» songbook (Надежда Боброва), _Called to Play for Him_ (A. Savchenko) and hymns. The
   owner first, then others in the same church and school circle. Russian and English speakers.
-- **Also:** piano learners in general who want chords, scales and songs; the church songbooks are the first
-  content, not the limit.
+- **Also:** piano learners in general who want chords, scales and songs. The church songbooks are the first content,
+  not the limit.
 
 ## Product Purpose
 
-Piano Trainer teaches a learner to play songs at the piano. It gives an easy-to-hard path of studies, chord topics
-and songs, a practice player that plays along, steps through or waits for the learner's notes, and theory that finds
-the learner's gaps from quiz answers and routes practice to them. Success: a learner opens it, sees what to play
-next, and gets to the keyboard in one tap; nothing they had in the old app is lost.
+Piano Trainer teaches a learner to play songs at the piano. Success: a learner opens it, sees what to play next, and
+is at the keys in one tap.
 
 ## Positioning
 
-It is built around real songbooks and the accompaniment methods taught in them (Боброва's seven accompaniment types,
-the five ways of _Called to Play_'s lesson 3): a chart becomes a playable accompaniment in any key, with correct note
-spelling, and the gaps it finds come from what the learner answered, not from a generic curriculum.
+It is built around real songbooks and the accompaniment methods they teach (Боброва's accompaniment types, the ways of
+_Called to Play_): a chart becomes a playable accompaniment in any key, spelled correctly. The gaps it finds come from
+what the learner answered, not from a generic curriculum.
 
 ## Operating Context
 
-- **At the piano:** a phone propped on the music stand of an acoustic or digital piano, glanced at while both hands
-  play; or a tablet or laptop beside a MIDI keyboard, where Wait mode listens to the keys.
-- Practice is glance-and-play: the learner reads a bar, a chord or a key colour and looks back at the keys.
-- Offline is normal (a church hall, a practice room); the app installs as a PWA.
+- **At the piano:** a phone on the music stand, glanced at while both hands play; or a tablet or laptop beside a MIDI
+  keyboard, where Wait mode listens to the keys.
+- Glance and play: the learner reads a bar, a chord or a key colour, then looks back at the keys.
+- Offline is normal (a church hall, a practice room). The app installs as a PWA.
 
-## Capabilities and Constraints
+## Capabilities
 
-- Screens, in three places (Learn · Songs · Practice): Learn (its header's toggle between two things kept apart,
-  ADR 0053: the Lessons, four journeys from Foundations to Mastery laid out as the journey-app's, chapters of theory
-  lessons as zigzags of nodes; and the Courses, shelves as the courses-app's: beginner, intermediate, technique, chords
-  and improvising, and the method books (_Called to Play_, its level 2, Боброва, Gorshkov), each course its level,
-  weeks, its own lessons and its guided songs. Continue goes on in the track last learned on. Each lesson is a
-  worksheet: examples that play in place, questions answered on the keys, links into Practice, the Quiz
-  and the Player; Settings behind its gear on a phone, at the sidebar's foot on a laptop), Songs (the songs by collection, chosen from tabs, and the learner's own
-  songs, made from New song), a Piece (its facts, Practise, the chords it plays to tap and hear, its chart), the Player
-  (sheet music as it plays; Listen or Wait mode, a loop, speed training, swing; a piece, or a scale's chords walked
-  with a song's patterns; its Setup a key picker, the pattern with its two hands, drawn inversions and toggle tiles),
-  Practice (each page one thing with the tools that work on it. **Chords:** one page that makes any chord from its
-  root (letter and accidental), quality, size, 7th, suspension, added tones (several at once, a 7th chord the one its stack skipped) and alterations, each
-  in sight, on the keys and a staff, with a 7th chord's available tensions
-  (weak, strong, tensions, avoid) and its arpeggio and chromatic walk in the Player.
-  **Scales and keys:** thirteen scale kinds with the modes and both blues; its Scale view starts the run on any note,
-  fingered from the thumb or as the scale, on a staff, and opens the scale's exercises in the Player (over one to four
-  octaves, in 3rds, 6ths and groups, in contrary motion); its Chords view stacks the scale's chords to 13ths in any
-  inversion and walks them; its Key view (a major or minor scale) is the circle of fifths with the key's signature,
-  relative, modes, borrowed chords, songs, and a melody note harmonised by every chord that holds it. **Progressions:** one library by style, or a line typed in numerals or a
-  song's chords (read in the key they are in), in any key and chord size, played and opened in the Player in the key or
-  through the keys; Between, the passing chords from any chord of the row to the next. **Intervals:** every interval over a
-  root on a staff, heard up, down and together. **Accompaniment:** Patterns, each pattern's page explaining and
-  playing it, with favourites, hiding from the Player's list, and the learner's own made from any two figures; and
-  the Studies they are practised on. **Exercises:** the five-finger position and Hanon No. 1; Barry Harris's
-  6th-diminished scale and its chords, the dominant scale down, arpeggios from the 3rd and drop-2 7ths; Piano With
-  Jonny's 2-5-1 scale, inner voice, modes, rapid switch and pattern shifting. **Quiz:** every trainer, each a ladder
-  of levels or Custom, runs of rounds summed up and recorded per level: Build chord, Name chord, A chord's role, Build
-  scale, key signatures, a key's degrees, reading notes, and intervals, chords and scales by ear; My gaps, across
-  them, in its bar. **Chord finder:** any chord played on a MIDI keyboard or tapped
-  on the keys named at once, large, in every reading it has (an inversion over its bass, tones left out, a 5th as a
-  power chord), its notes by degree, read on once let go; the chords played written in turn on a grand staff, spelled
-  in the key chosen; and the keys that hold it),
-  the score editor (the learner's version of any song or study, or the chart of a
-  listing, and songs of their own: a click on the sheet chooses where the keys write (the chord row, the treble
-  staff (the right hand), the bass staff, or a single staff over them, as many as the song has, each named), chords typed, tapped or played under a Chord names toggle, each staff's notes
-  and any bar of either hand written note by note from the keys, the computer keyboard or MIDI, the clef and
-  signatures opening the song's key, tempo and time signature (changed within its kind), the notes at the caret
-  marked, undo and redo, every change saved, played in the Player in any
-  key; takes recorded on a MIDI keyboard to a click, the song's tune under them if asked, each with a page of its own:
-  named, drawn as a piano roll, played from any bar and kept to the bars chosen), Settings (with the MIDI keyboard's
-  own group: the keyboard heard, Sound the MIDI keyboard, Play through the piano, an octave shift, the Touch and a
-  reversed pedal). Every key a hand plays sounds while it is held, under a pedal: the MIDI keyboard's, the rail's
-  Pedal or Space. The keyboard's rail holds every keyboard setting in sight as a picture (a zoom, the note names,
-  typing, glissando, the pedal) beside its map. The computer's keys drive the app: Space, the arrows, R, Home and
-  Escape in the Player, Enter for a screen's one Play and a round's one action, numbers for a round's answers, Alt
-  and 1–3 for the three places, and `?` for the sheet that lists them. Full behaviour:
-  `docs/superpowers/specs/2026-09-24-piano-trainer-rewrite-design.md` and ADRs 0012–0036.
-- English and Russian, interface and content text alike. Note and chord names are international (B, `#`, `♭`).
-- Terminology: `docs/UBIQUITOUS_LANGUAGE.md` ("Song", "Study" or "Progression" in the interface, never "Piece").
-- No accounts, sync, backend or audio recording.
+Three places, **Learn · Songs · Practice**, plus Search and Settings.
+
+- **Learn:** the Lessons (journeys of chapters, from the first keys to mastery) and the Courses (shelves by level and
+  by method book, each with its own lessons and guided songs). A lesson is a worksheet: examples that play in place,
+  questions answered on the keys, links into Practice and the Player. Continue picks up where the learner left off.
+- **Songs:** one library of folders, favourites and an archive, with search, sort and filters. A song's page has its
+  key, chords as diagrams, the progressions it uses and its sections, each section with short lessons (its chords, in
+  time, one change at a time, the pattern). Songs can be shared as a link, printed and exported to MIDI.
+- **The Player:** the music as sheet music, chords over lyrics, animated chord diagrams or a grid. Listen or Wait
+  mode, a loop, tempo, transpose, simplify, the sound mix, and a Setup for the accompaniment pattern, its inversions,
+  swing and melody. It also plays a scale's chords walked through the keys, progressions and exercises.
+- **The score editor:** the Player's score in Edit mode. Any song can be edited, and the learner can write songs of
+  their own: notes, chords, lyrics, fingering, staves, key, time, clef and tempo, all edited where they print. Takes
+  are recorded from a MIDI keyboard to a click and kept bar by bar.
+- **Practice:** Chords (any chord from its parts, with its tensions), Scales and keys (runs with fingering, a
+  scale's chords, a key's page with the circle of fifths and harmonisation), Intervals, Progressions (a library by
+  style, or a line typed in numerals or chords, in any key, with passing chords and the songs that use it),
+  Accompaniment (the patterns and the studies they are practised on), the Chord finder (any chord played, named),
+  the Metronome, Exercises (five-finger position, Hanon, Barry Harris, Piano With Jonny) and Quiz (trainers with
+  levels; My gaps across them).
+- **Everywhere:** the keys a hand plays sound while held, under a pedal (the MIDI keyboard's, the rail's, or Space).
+  The computer keyboard drives the app; `?` lists its shortcuts.
+
+## Constraints
+
+- English and Russian, interface and content alike. Note and chord names are international (B, `#`, `♭`).
+- Words: [docs/UBIQUITOUS_LANGUAGE.md](docs/UBIQUITOUS_LANGUAGE.md) ("Song", "Study" or "Progression" in the
+  interface, never "Piece").
+- No accounts, sync or backend. Saved data stays on the device; Settings' Backup writes it to a file and reads it
+  back. Recording is MIDI, not audio.
 
 ## Brand Commitments
 
-The name is **Piano Trainer**. The legacy look (navy on slate, Bricolage Grotesque) is evidence of the subject, free
-to replace.
+The name is **Piano Trainer**. The world is a **labelled picture book**, printed quietly: paper, a soft line round
+every shape, faded paints at one lightness, colour filling one control per screen, titles and chords in a book serif
+(Literata) with Onest for reading and controls. No characters, animals or mascots. The keys follow The Ultimate
+Piano's learn view: a mark pale at rest, full colour when its key is played. Tokens and components:
+[DESIGN.md](DESIGN.md).
 
-**The world (owner-chosen, 2026-09-27, ADR 0010):** a **labelled picture book**, Richard Scarry's Busytown
-cross-sections: paper, a line round every shape, seven paints at one lightness and a small printed label on
-everything. Its colour, line and labelling only: no characters, animals or mascots. **Printed quietly (owner,
-2026-09-27, ADR 0011):** faded paints, a soft 1px line, colour filling one control per screen, a neutral "chosen",
-titles and chords typeset in a book serif (Literata) with Onest for reading and controls. The keys follow **The Ultimate Piano**'s learn view (owner-sent): a mark pale at rest, full colour when its
-key is played.
-
-**Reference guides (owner-sent, 2026-09-27), for colour and type:** Apple's Human Interface Guidelines on Color
-and Typography, and Material's colour system: one meaning per colour, colour on one control's background, a
-monochrome tab bar, light, dark and increased-contrast variants, few typefaces as a sans and serif pair, fixed text
-styles that follow the reader's text size, "on" colours for what sits on a fill.
-
-**Reference products (owner-pinned, 2026-09-25), for structure and craft:** **Clefs** (round icon buttons, the
-keyboard as the lower half of a practice screen), **Flowkey**'s player (the keyboard as the hero, one big round Play,
-tempo and hands in small popovers from the toolbar, chord symbols over numbered bars), a theory reference app
-(grouped reference cards with inline actions) and a chord trainer (bottom sheets of toggles with "Select common ·
-Clear all" and Apply). Their craft level is the bar; their sage palette and floating tab bar are no longer ours. Not
-taken from them: streaks as pressure, mascots, upsells, locked content, stock photos.
+**Reference products,** for structure and craft (the owner's list, kept in `.claude/skills/owner-way`): Flat and
+Dorico for the editor, Chordify for the Player's views and song lessons, Mindscape for the library, Clefs and
+Flowkey for the practice screen. Their craft level is the bar. Not taken from them: streaks as pressure, mascots,
+upsells, locked content, stock photos.
 
 ## Evidence on Hand
 
-- 42 pieces, 7 listings, 39 accompaniment patterns, the progression library and the path, as code under `src/entities/*/content/`.
+- The songbooks' songs and studies, listings, patterns, the progression library, lessons and courses, as code under
+  `src/entities/*/content/`.
 - No testimonials, users, metrics or screenshots of real use. Do not invent any.
 
 ## Product Principles
@@ -121,7 +89,7 @@ taken from them: streaks as pressure, mascots, upsells, locked content, stock ph
 1. **To the keys in one tap.** Every screen's one primary action leads to playing.
 2. **Readable at arm's length.** What matters while playing (the chord, the bar, the key colours) reads from the
    music stand.
-3. **Never explain the obvious.** No how-to paragraphs; labels, layout and the labelled keyboard do the teaching.
+3. **Calm screens.** Explanations sit behind an ⓘ, never in a paragraph under a control.
 4. **Nothing locked.** Levels suggest an order; the learner may open anything.
 5. **Evidence, not guesses.** Gaps come only from quiz answers.
 
@@ -129,4 +97,4 @@ taken from them: streaks as pressure, mascots, upsells, locked content, stock ph
 
 - Colour is never the only cue: every coloured key also carries its degree or finger label.
 - 44px minimum targets, visible focus, `prefers-reduced-motion` honoured, WCAG AA contrast in both themes.
-- Two scripts (Latin and Cyrillic) must read equally well; Russian strings run about 20–30% longer.
+- Latin and Cyrillic must read equally well; Russian strings run about 20–30% longer.
