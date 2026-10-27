@@ -1,12 +1,15 @@
 import type { ChosenInversions } from '@/entities/diagram-inversion'
 import type { Performance, PerformedChord } from '@/shared/lib/arrangement'
 import {
+  chordSymbol,
   isInversion,
   midi,
   pitchClass,
   pitchClassOf,
+  spellChord,
   spellInKey,
   TWO_HANDS_FROM,
+  type Chord,
   type Inversion,
   type Key,
   type KeyRange,
@@ -88,6 +91,9 @@ const inversionsOf = (tones: readonly PitchClass[]) =>
       : [],
   )
 
+/** What a diagram draws of a chord: its symbol, its tones as spelled and the bass it is over. */
+type Drawn = Pick<PerformedChord, 'symbol' | 'tones' | 'bass'>
+
 /** A chord's keys, the bass it rings and the inversions it can be drawn in. */
 interface Placed {
   readonly keys: Midi[]
@@ -113,7 +119,7 @@ function overBass(tones: readonly PitchClass[], bass: PitchClass): Omit<Placed, 
  * same way, its root not lowest; neither is turned. A chord of three or four notes is drawn in the
  * inversion chosen, where it fits.
  */
-function placed(performed: PerformedChord, chosen: Inversion | undefined): Placed {
+function placed(performed: Drawn, chosen: Inversion | undefined): Placed {
   const tones = performed.tones.map((tone) => tone.pitchClass)
   const notes = tones.length
   if (performed.bass) {
@@ -145,11 +151,32 @@ function placed(performed: PerformedChord, chosen: Inversion | undefined): Place
 }
 
 /** A key's note as the chord spells it: one of its tones or its bass, else as the key spells it. */
-const spelledIn = (performed: PerformedChord, key: Midi, musicKey: Key): SpelledNote =>
-  performed.tones.find((tone) => tone.pitchClass === pitchClass(key))?.note ??
-  (performed.bass && pitchClassOf(performed.bass) === pitchClass(key)
-    ? performed.bass
+const spelledIn = (drawn: Drawn, key: Midi, musicKey: Key): SpelledNote =>
+  drawn.tones.find((tone) => tone.pitchClass === pitchClass(key))?.note ??
+  (drawn.bass && pitchClassOf(drawn.bass) === pitchClass(key)
+    ? drawn.bass
     : spellInKey(pitchClass(key), musicKey))
+
+/** A chord's diagram, `chord` its index where it sounds, in the inversion chosen where one is. */
+function diagramOf(
+  drawn: Drawn,
+  chord: number,
+  musicKey: Key,
+  chosen: Inversion | undefined,
+): DiagramChord {
+  const { keys, ring, inversions } = placed(drawn, chosen)
+  const tones = drawn.tones.map((tone) => tone.pitchClass)
+  const bass = drawn.bass ? pitchClassOf(drawn.bass) : undefined
+  return {
+    chord,
+    symbol: drawn.symbol,
+    keys,
+    ring,
+    notes: keys.map((key) => spelledIn(drawn, key, musicKey)),
+    pitchClasses: bass === undefined || tones.includes(bass) ? tones : [...tones, bass],
+    inversions,
+  }
+}
 
 /**
  * A performed chord as its diagram shows it, in the inversion chosen for its symbol where it has
@@ -161,20 +188,24 @@ export function diagramChord(
   chosen: ChosenInversions = NONE_CHOSEN,
 ): DiagramChord | null {
   const performed = performance.chords[chord]
-  if (!performed) return null
-  const { keys, ring, inversions } = placed(performed, chosen[performed.symbol])
-  const tones = performed.tones.map((tone) => tone.pitchClass)
-  const bass = performed.bass ? pitchClassOf(performed.bass) : undefined
-  return {
-    chord,
-    symbol: performed.symbol,
-    keys,
-    ring,
-    notes: keys.map((key) => spelledIn(performed, key, performance.key)),
-    pitchClasses: bass === undefined || tones.includes(bass) ? tones : [...tones, bass],
-    inversions,
-  }
+  return performed ? diagramOf(performed, chord, performance.key, chosen[performed.symbol]) : null
 }
+
+/**
+ * A chord as the Player's diagram draws it where no music plays it (a progression's, ADR 0112): its
+ * tones as its symbol spells them, `chord` its place in its row.
+ */
+export const chordDiagram = (chord: Chord, musicKey: Key, at: number): DiagramChord =>
+  diagramOf(
+    {
+      symbol: chordSymbol(chord),
+      tones: spellChord(chord.root, chord.quality),
+      ...(chord.bass ? { bass: chord.bass } : {}),
+    },
+    at,
+    musicKey,
+    undefined,
+  )
 
 /**
  * The music's chords in the order they first sound, each symbol once, each in the inversion chosen

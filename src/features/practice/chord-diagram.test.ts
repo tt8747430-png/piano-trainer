@@ -6,8 +6,8 @@ import {
   type EventPattern,
   type Performance,
 } from '@/shared/lib/arrangement'
-import { note, noteName, parseChordSymbol } from '@/shared/lib/music'
-import { chordSummary, diagramChord } from './chord-diagram'
+import { C_MAJOR, note, noteName, parseChordSymbol } from '@/shared/lib/music'
+import { chordDiagram, chordSummary, diagramChord } from './chord-diagram'
 
 /** Each chord voiced on every beat in the right hand: the voicing a diagram no longer follows. */
 const VOICED: EventPattern = {
@@ -156,5 +156,15 @@ describe('chordSummary', () => {
 
   it('lists none for music of no chord symbol', () => {
     expect(chordSummary(played('_', '_'))).toEqual([])
+  })
+})
+
+describe('chordDiagram', () => {
+  it('draws a chord of no music as the Player draws it in a song', () => {
+    for (const symbol of ['C', 'C#m7', 'G#sus4', 'C/E', 'Bb/C', 'Cmaj9'])
+      expect(chordDiagram(parseChordSymbol(symbol), C_MAJOR, 2)).toEqual({
+        ...diagramChord(played(symbol), 0),
+        chord: 2,
+      })
   })
 })

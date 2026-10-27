@@ -134,6 +134,13 @@ export const practice = {
     typed: 'Typed',
     /** What leads into each chord of the progression (ADR 0041). */
     lead: { label: 'Lead into each chord', none: 'No', v: 'By its V', 'ii-v': 'By its ii–V' },
+    // The songs a progression is heard in, each opening the Player at its bars (ADR 0112).
+    songs: {
+      title: 'Songs with this progression',
+      none: 'No song uses it yet',
+      all_one: 'Show all {{count}} song',
+      all_other: 'Show all {{count}} songs',
+    },
     between: {
       title: 'Between two chords',
       about: 'Passing chords are extra chords that lead from one chord of the row into the next.',
