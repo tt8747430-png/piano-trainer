@@ -528,6 +528,16 @@ describe('Diagrams (ADR 0099)', () => {
     expect(markedKeys()).not.toEqual(['G3', 'C4', 'E4'])
   })
 
+  it('shows a pattern lesson’s keys, its notes as they sound, whatever the view (ADR 0111)', async () => {
+    const { settingsStore } = await inView('diagrams', '/play/bz5?loop=1-1&keys=true')
+    act(() => setScoreView(settingsStore, { keys: false }))
+    // The notes the pattern plays first, not G as its diagram draws it.
+    const notes = markedKeys()
+    expect(notes).not.toEqual(['G3', 'B3', 'D4'])
+    act(() => setScoreView(settingsStore, { music: 'sheet' }))
+    expect(markedKeys()).toEqual(notes)
+  })
+
   it('marks what Wait mode waits for on the keys of a chord view, as the sheet music does', async () => {
     const { settingsStore } = await inView('diagrams', '/play/bz5?mode=wait')
     const waited = markedKeys()

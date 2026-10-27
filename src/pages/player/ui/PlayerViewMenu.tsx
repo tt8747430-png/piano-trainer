@@ -41,7 +41,12 @@ export function PlayerViewMenu({
   staves,
   piano,
   openAtStart,
+  keys,
+  onKeys,
 }: {
+  /** The keys out: the View's, or this visit's where a lesson opened them (ADR 0111). */
+  keys: boolean
+  onKeys: (shown: boolean) => void
   /** The view shown: the one saved, or the one it falls back to where the music cannot show it. */
   shown: MusicView
   /** The views the music cannot show, with what each needs. */
@@ -54,7 +59,6 @@ export function PlayerViewMenu({
   const { t } = useTranslation('player')
   const settings = useSettingsStoreApi()
   const askOnOpen = useSettings((state) => selectScoreView(state).askOnOpen)
-  const keys = useSettings((state) => selectScoreView(state).keys)
   const name = t(`views.${shown}`)
   return (
     <ScoreViewMenu
@@ -87,7 +91,7 @@ export function PlayerViewMenu({
         title={t('views.every')}
         className="[&>[data-slot=switch-row]:last-child]:border-b-0"
       >
-        <KeysSwitch shown={keys} onShow={(on) => setScoreView(settings, { keys: on })} />
+        <KeysSwitch shown={keys} onShow={onKeys} />
       </MenuSection>
     </ScoreViewMenu>
   )

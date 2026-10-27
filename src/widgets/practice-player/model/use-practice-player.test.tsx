@@ -28,10 +28,36 @@ function renderPlayer(view: Partial<PracticeView> = {}) {
   const hook = renderHook(() => usePracticePlayer(TWO_BARS, { ...VIEW, ...view }, setView, 72), {
     wrapper,
   })
-  return { ...hook, setView, audio }
+  return { ...hook, setView, audio, settingsStore }
 }
 
 describe('usePracticePlayer', () => {
+  it('clicks as the learner saved it, or as the visit says, its switch changing that alone', () => {
+    const saved = renderPlayer()
+    expect(saved.result.current.click).toBe(false)
+    act(() => saved.result.current.setClick(true))
+    expect(saved.settingsStore.getState().practice.metronome).toBe(true)
+    expect(saved.setView).not.toHaveBeenCalled()
+    // A change in time opens with the click on for its visit (ADR 0111): the saved one untouched.
+    const visit = renderPlayer({ click: true })
+    expect(visit.result.current.click).toBe(true)
+    act(() => visit.result.current.setClick(false))
+    expect(visit.setView).toHaveBeenLastCalledWith({ click: false })
+    expect(visit.settingsStore.getState().practice.metronome).toBe(false)
+  })
+
+  it('shows the keys as the View saved them, or as the visit says', () => {
+    const saved = renderPlayer()
+    expect(saved.result.current.keys).toBe(true)
+    act(() => saved.result.current.setKeys(false))
+    expect(saved.settingsStore.getState().scoreView.keys).toBe(false)
+    expect(saved.setView).not.toHaveBeenCalled()
+    const visit = renderPlayer({ keys: true })
+    act(() => visit.result.current.setKeys(false))
+    expect(visit.setView).toHaveBeenLastCalledWith({ keys: false })
+    expect(visit.settingsStore.getState().scoreView.keys).toBe(true)
+  })
+
   it('writes the piece’s own tempo as absent', () => {
     const { result, setView } = renderPlayer()
     act(() => result.current.listenAt(72))

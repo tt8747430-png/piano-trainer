@@ -9,9 +9,13 @@ import type { Raw } from './read-search'
 /**
  * Kept params that belong to another: a link that names a pattern means the pattern's own hands and
  * inversion, never those kept from another pattern (a pattern's Practise would else play another).
+ * A song lesson that names the visit's click or keys opens the Player in Listen, which a URL leaves
+ * out as its default: never in a mode kept from the last time (ADR 0111).
  */
 const BOUND_TO: Readonly<Record<string, readonly string[]>> = {
   pattern: ['rh', 'lh', 'inversion', 'nearest'],
+  click: ['mode'],
+  keys: ['mode'],
 }
 
 /**
