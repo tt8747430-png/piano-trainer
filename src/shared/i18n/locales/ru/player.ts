@@ -19,9 +19,6 @@ export const player: LocaleResources['player'] = {
   exportMidiFixed: 'Экспорт в MIDI, ровный темп',
   exportMidiAligned: 'Экспорт в MIDI, по записи',
   mode: { label: 'Играть или править', practise: 'Играть', edit: 'Править' },
-  view: {
-    positionsDetail: 'Рядом с названием аккорда — в каком обращении его берёт правая рука',
-  },
   views: {
     label: 'Как показывать музыку',
     sheet: 'Ноты',
@@ -171,8 +168,6 @@ export const player: LocaleResources['player'] = {
   },
   counting: 'Отсчёт: {{count}}',
   toggles: {
-    namedNotes: 'Названия нот',
-    positions: 'Положения аккордов',
     tune: 'Играть мелодию',
     swing: 'Свинг',
     recording: 'Запись',

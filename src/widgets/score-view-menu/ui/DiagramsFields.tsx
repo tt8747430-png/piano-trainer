@@ -9,7 +9,8 @@ import {
 } from '@/entities/settings'
 import { setScoreView } from '@/features/set-preference'
 import { Labelled, Segmented } from '@/shared/ui'
-import { ViewSwitch } from './ViewSwitch'
+import { PartChips } from './PartChip'
+import { ViewChip } from './ViewChip'
 
 /** Each mode drawn: the chord sounding with the next behind it; the song's chords in a grid. */
 const MODE_ICONS = {
@@ -22,8 +23,8 @@ const MODE_ICONS = {
  * Animated or Summary, what each does the ⓘ beside its name; then the words sung under its strip,
  * greyed where the music has none (`noWords`, why).
  */
-export function DiagramsFields({ noWords }: { noWords?: string }) {
-  const { t } = useTranslation('player')
+export function DiagramsFields({ noWords }: { noWords?: string | undefined }) {
+  const { t } = useTranslation(['player', 'music'])
   const store = useSettingsStoreApi()
   const mode = useSettings((state) => selectScoreView(state).diagrams)
   return (
@@ -43,9 +44,9 @@ export function DiagramsFields({ noWords }: { noWords?: string }) {
           onChange={(diagrams) => setScoreView(store, { diagrams })}
         />
       </Labelled>
-      <div className="flex flex-col [&>[data-slot=switch-row]]:border-b-0">
-        <ViewSwitch part="lyrics" reason={noWords} />
-      </div>
+      <PartChips label={t('music:view.show')}>
+        <ViewChip part="lyrics" reason={noWords} />
+      </PartChips>
     </>
   )
 }

@@ -63,6 +63,17 @@ const segmentsOf = (choice: HTMLElement) =>
     .getAllByRole('radio')
     .map((segment) => segment.textContent)
 
+/** The chips in a part of the menu (ADR 0115) are these, in order. */
+function chipsAre(part: HTMLElement, ...names: string[]) {
+  const chips = within(part)
+    .getAllByRole('button')
+    .filter((button) => button.hasAttribute('aria-pressed'))
+  expect(chips.map((chip) => chip.lastElementChild?.textContent)).toEqual(names)
+}
+
+/** A chip of the menu, by its name. */
+const chip = (part: HTMLElement, name: string) => within(part).getByRole('button', { name })
+
 /** The switches in a part of the menu are these, in order. */
 function switchesAre(part: HTMLElement, ...names: (string | RegExp)[]) {
   const switches = within(part).getAllByRole('switch')
@@ -180,16 +191,30 @@ describe('the View, by view (ADR 0102)', () => {
     expect(groupsOf(menu)).toEqual(['Show the music as', 'Sheet music', 'Every view'])
     const sheet = within(menu).getByRole('region', { name: 'Sheet music' })
     const layout = within(sheet).getByRole('radiogroup', { name: 'Layout' })
-    expect(segmentsOf(layout)).toEqual(['Pages', 'Scroll down', 'Scroll across'])
-    expect(within(layout).getByRole('radio', { name: 'Scroll down' })).toBeChecked()
-    await user.click(within(layout).getByRole('radio', { name: 'Scroll across' }))
-    expect(settingsStore.getState().scoreView.layout).toBe('horizontal')
+    expect(segmentsOf(layout)).toEqual(['Page view', 'Vertical scroll', 'Panorama'])
+    expect(within(layout).getByRole('radio', { name: 'Vertical scroll' })).toBeChecked()
+    await user.click(within(layout).getByRole('radio', { name: 'Panorama' }))
+    expect(settingsStore.getState().scoreView.layout).toBe('panorama')
     expect(within(sheet).getByRole('group', { name: 'Staves' })).toBeInTheDocument()
     expect(within(sheet).queryByRole('radiogroup', { name: 'Mode' })).not.toBeInTheDocument()
-    switchesAre(within(menu).getByRole('region', { name: 'Every view' }), 'Keys')
+    chipsAre(
+      within(sheet).getByRole('group', { name: 'Staves' }),
+      'Staff 1',
+      'Upper staff',
+      'Lower staff',
+    )
+    chipsAre(
+      within(sheet).getByRole('group', { name: 'Show' }),
+      'Chord symbols',
+      'Chord positions',
+      'Lyrics',
+      'Finger numbers',
+      'Note names',
+    )
+    chipsAre(within(menu).getByRole('region', { name: 'Every view' }), 'Keys')
     await user.click(within(sheet).getByRole('button', { name: 'About Layout' }))
     expect(await screen.findByRole('dialog', { name: 'Layout' })).toHaveTextContent(
-      'On A4 pages as printed; in lines one under the other, scrolled down; or in one line, scrolled across',
+      'Panorama: the whole song in one line, scrolled across.',
     )
   })
 
@@ -203,7 +228,7 @@ describe('the View, by view (ADR 0102)', () => {
     const mode = within(diagrams).getByRole('radiogroup', { name: 'Mode' })
     expect(segmentsOf(mode)).toEqual(['Animated', 'Summary'])
     expect(within(mode).getByRole('radio', { name: 'Animated' })).toBeChecked()
-    switchesAre(diagrams, 'Lyrics')
+    chipsAre(diagrams, 'Lyrics')
     expect(within(menu).queryByRole('radiogroup', { name: 'Layout' })).not.toBeInTheDocument()
     expect(within(menu).queryByRole('group', { name: 'Staves' })).not.toBeInTheDocument()
     await user.click(within(mode).getByRole('radio', { name: 'Summary' }))
@@ -263,7 +288,7 @@ describe('the View, by view (ADR 0102)', () => {
     await user.keyboard('{Escape}')
     await user.click(within(menu).getByRole('radio', { name: 'Ноты' }))
     const layout = within(menu).getByRole('radiogroup', { name: 'Расположение' })
-    expect(segmentsOf(layout)).toEqual(['Страницы', 'Прокрутка вниз', 'Прокрутка вбок'])
+    expect(segmentsOf(layout)).toEqual(['Страницы', 'Прокрутка вниз', 'Панорама'])
     await user.click(within(menu).getByRole('button', { name: 'Подробнее: Как показывать музыку' }))
     await screen.findByRole('dialog', { name: 'Как показывать музыку' })
     expect(untranslated(document.body)).toEqual([])
@@ -275,8 +300,8 @@ describe('the View, by view (ADR 0102)', () => {
     const menu = await openView(user, 'Chords over lyrics')
     expect(groupsOf(menu)).toEqual(['Show the music as', 'Chords over lyrics', 'Every view'])
     const lyrics = within(menu).getByRole('region', { name: 'Chords over lyrics' })
-    switchesAre(lyrics, 'Diagrams pinned')
-    await user.click(within(lyrics).getByRole('switch', { name: 'Diagrams pinned' }))
+    chipsAre(lyrics, 'Diagrams pinned')
+    await user.click(chip(lyrics, 'Diagrams pinned'))
     expect(settingsStore.getState().scoreView.pinned).toBe(false)
     const size = within(lyrics).getByRole('group', { name: 'Text size' })
     expect(size).toHaveTextContent('100%')
@@ -303,30 +328,23 @@ describe('the View, by view (ADR 0102)', () => {
     const menu = await openView(user, 'Grid')
     expect(groupsOf(menu)).toEqual(['Show the music as', 'Grid', 'Every view'])
     const grid = within(menu).getByRole('region', { name: 'Grid' })
-    switchesAre(grid, 'Lyrics')
+    chipsAre(grid, 'Lyrics')
     expect(within(musicArea()).getByRole('button', { name: /^Bar 1: C · Silent$/ })).toBeVisible()
-    await user.click(within(grid).getByRole('switch', { name: 'Lyrics' }))
+    await user.click(chip(grid, 'Lyrics'))
     expect(settingsStore.getState().scoreView.lyrics).toBe(false)
     expect(within(musicArea()).getByRole('button', { name: 'Bar 1: C' })).toBeInTheDocument()
   })
 
-  it('greys the Lyrics of a song of no words, saying why in its ⓘ (ADR 0108)', async () => {
+  it('greys the Lyrics of a song of no words, saying why in its tooltip (ADR 0108, 0115)', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await savedAs('grid', '/play/bz5')
     const menu = await openView(user, 'Grid')
-    const lyrics = within(menu).getByRole('switch', { name: 'Lyrics' })
-    expect(lyrics).toHaveAttribute('aria-disabled', 'true')
-    await user.click(within(menu).getByRole('button', { name: 'About Lyrics' }))
-    expect(await screen.findByRole('dialog', { name: 'Lyrics' })).toHaveTextContent(
-      'The music has no words',
-    )
-    await user.keyboard('{Escape}')
+    const lyrics = chip(menu, 'Lyrics')
+    expect(lyrics).toBeDisabled()
+    expect(lyrics).toHaveAttribute('title', 'The music has no words')
     await user.click(within(menu).getByRole('radio', { name: 'Diagrams' }))
     expect(settingsStore.getState().scoreView.music).toBe('diagrams')
-    expect(within(menu).getByRole('switch', { name: 'Lyrics' })).toHaveAttribute(
-      'aria-disabled',
-      'true',
-    )
+    expect(chip(menu, 'Lyrics')).toBeDisabled()
   })
 
   it('reads Chords over lyrics’ and the Grid’s own in Russian', async () => {
@@ -337,7 +355,7 @@ describe('the View, by view (ADR 0102)', () => {
     expect(within(menu).getByRole('group', { name: 'Размер текста' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
     act(() => setScoreView(settingsStore, { music: 'grid' }))
-    expect(within(menu).getByRole('switch', { name: 'Текст' })).toBeInTheDocument()
+    expect(chip(menu, 'Текст')).toHaveAttribute('aria-pressed')
     expect(untranslated(document.body)).toEqual([])
   })
 })

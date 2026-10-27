@@ -22,11 +22,6 @@ export const player = {
   exportMidiAligned: 'Export to MIDI, time aligned',
   /** A piece's score in its two modes, the Player and the score editor (ADR 0090). */
   mode: { label: 'Practise or edit', practise: 'Practise', edit: 'Edit' },
-  // How the score is shown (ADR 0064), from the bar: remembered for every piece.
-  // The View's switches only practice has (ADR 0094); the rest of the View is music's.
-  view: {
-    positionsDetail: 'Beside each chord’s name, the position the right hand plays it in',
-  },
   // The Player's views of the music (ADR 0099), the View's tiles; each names its own part of the
   // screen.
   views: {
@@ -200,8 +195,6 @@ export const player = {
   /** The count-in's beat as a screen reader hears it, its number large on the screen. */
   counting: 'Count-in: {{count}}',
   toggles: {
-    namedNotes: 'Note names',
-    positions: 'Chord positions',
     tune: 'Play melody',
     swing: 'Swing',
     recording: 'Recording',

@@ -336,7 +336,11 @@ describe('the score editor', () => {
     expect(settingsStore.getState().keyboard.folded).toBe(true)
     expect(screen.queryByRole('button', { name: 'Hide the keys' })).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'View' }))
-    await user.click(await screen.findByRole('switch', { name: 'Keys' }))
+    await user.click(
+      within(await screen.findByRole('dialog', { name: 'View' })).getByRole('button', {
+        name: 'Keys',
+      }),
+    )
     expect(settingsStore.getState().keyboard.folded).toBe(false)
     expect(screen.getByRole('button', { name: 'Hide the keys' })).toBeInTheDocument()
   })
@@ -936,7 +940,11 @@ describe('the score editor', () => {
     sizedAs(LANDSCAPE_PHONE)
     const { settingsStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await user.click(await screen.findByRole('button', { name: 'View' }))
-    await user.click(await screen.findByRole('switch', { name: 'Keys' }))
+    await user.click(
+      within(await screen.findByRole('dialog', { name: 'View' })).getByRole('button', {
+        name: 'Keys',
+      }),
+    )
     expect(settingsStore.getState().keyboard.foldedLandscape).toBe(false)
     expect(settingsStore.getState().keyboard.folded).toBe(false)
     expect(screen.getByRole('button', { name: 'Hide the keys' })).toBeInTheDocument()
@@ -950,8 +958,12 @@ describe('the score editor', () => {
     const view = await screen.findByRole('dialog', { name: 'View' })
     expect(within(view).queryByRole('radio', { name: 'Left' })).not.toBeInTheDocument()
     expect(within(view).queryByRole('switch', { name: 'Every tool' })).not.toBeInTheDocument()
-    // The piano's two staves, then what is shown: no switch of the palette's.
-    expect(within(view).getAllByRole('switch')).toHaveLength(6)
+    // The piano's two staves, then what is shown: no chip of the palette's.
+    expect(
+      within(view)
+        .getAllByRole('button')
+        .filter((button) => button.hasAttribute('aria-pressed')),
+    ).toHaveLength(6)
     // Beside the sheet it stands at its right: no side is kept for it.
     expect(settingsStore.getState()).not.toHaveProperty('paletteSide')
   })
@@ -1494,7 +1506,7 @@ describe('the score editor', () => {
     expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
   })
 
-  it.each(['scroll', 'pages', 'horizontal'] as const)(
+  it.each(['vertical', 'page', 'panorama'] as const)(
     'draws the playhead as Play plays, moving with the music, the caret left where it was, %s (ADR 0096)',
     async (layout) => {
       const user = userEvent.setup()
@@ -1650,7 +1662,7 @@ describe('the score editor', () => {
       within(view)
         .getAllByRole('radio')
         .map((layout) => layout.textContent),
-    ).toEqual(['Pages', 'Scroll down', 'Scroll across'])
+    ).toEqual(['Page view', 'Vertical scroll', 'Panorama'])
     expect(
       within(view)
         .getAllByRole('group')
@@ -1658,10 +1670,11 @@ describe('the score editor', () => {
     ).toEqual(['Staves', 'Show'])
     // Nothing in it twice: the palette folds by its own handle, and stands at the sheet's right.
     // What the sheet prints, the fingers too: the fingering field types them there (ADR 0096).
-    const switches = within(view).getAllByRole('switch')
-    expect(switches).toHaveLength(7)
-    // A switch for each staff by its name (ADR 0097), then the piano's.
-    ;[
+    // A chip for each staff by its name (ADR 0097, 0115), then the piano's, then what it prints.
+    const chips = within(view)
+      .getAllByRole('button')
+      .filter((button) => button.hasAttribute('aria-pressed'))
+    expect(chips.map((chip) => chip.lastElementChild?.textContent)).toEqual([
       'Voice',
       'Upper staff',
       'Lower staff',
@@ -1669,12 +1682,12 @@ describe('the score editor', () => {
       'Lyrics',
       'Finger numbers',
       'Keys',
-    ].forEach((name, i) => expect(switches[i]).toHaveAccessibleName(name))
-    await user.click(within(view).getByRole('switch', { name: 'Finger numbers' }))
+    ])
+    await user.click(within(view).getByRole('button', { name: 'Finger numbers' }))
     expect(settingsStore.getState().practice.fingerNumbers).toBe(true)
     expect(within(view).queryByRole('radiogroup', { name: /beside/ })).not.toBeInTheDocument()
-    await user.click(within(view).getByRole('radio', { name: 'Pages' }))
-    expect(settingsStore.getState().scoreView.layout).toBe('pages')
+    await user.click(within(view).getByRole('radio', { name: 'Page view' }))
+    expect(settingsStore.getState().scoreView.layout).toBe('page')
     expect(settingsStore.getState()).not.toHaveProperty('editorLayout')
   })
 
@@ -1700,12 +1713,12 @@ describe('the score editor', () => {
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Staff 1 · Bar 1/))
     await user.click(screen.getByRole('button', { name: 'View' }))
     const view = await screen.findByRole('dialog', { name: 'View' })
-    await user.click(within(view).getByRole('switch', { name: 'Staff 1' }))
+    await user.click(within(view).getByRole('button', { name: 'Staff 1' }))
     expect(settingsStore.getState().scoreView.hidden).toEqual(['staff0'])
     await waitFor(() => expect(staves()).toEqual(new Set(['treble', 'bass'])))
     // The caret leaves the staff out of sight for the one under it; its notes are kept.
     expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff · Bar 1/)
-    await user.click(within(view).getByRole('switch', { name: 'Chord symbols' }))
+    await user.click(within(view).getByRole('button', { name: 'Chord symbols' }))
     expect(settingsStore.getState().scoreView.chordNames).toBe(false)
     await waitFor(() => expect(chordNames()).not.toContain(true))
     await user.keyboard('{Escape}')
@@ -1729,7 +1742,7 @@ describe('the score editor', () => {
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Upper staff/))
     await user.click(screen.getByRole('button', { name: 'View' }))
     const view = await screen.findByRole('dialog', { name: 'View' })
-    await user.click(within(view).getByRole('switch', { name: 'Upper staff' }))
+    await user.click(within(view).getByRole('button', { name: 'Upper staff' }))
     expect(settingsStore.getState().scoreView.hidden).toEqual(['treble'])
     await waitFor(() => expect(staves()).toEqual(new Set(['bass'])))
     expect(screen.getByRole('status')).toHaveTextContent(/^Lower staff · Bar 1/)

@@ -36,7 +36,7 @@ function PreviewLine({ draft }: { draft: Draft }) {
         lyrics={shown.lyrics}
         hidden={shown.hidden}
         edit={shownAsPrinted}
-        view="horizontal"
+        view="panorama"
         room={PREVIEW_ROOM}
         title={NO_TITLE}
       />

@@ -27,7 +27,7 @@ export interface SheetViewChoice {
 
 /** As the Player always was: one line across, every staff, the chord names, the words. */
 const ACROSS: SheetViewChoice = {
-  layout: 'horizontal',
+  layout: 'panorama',
   chordNames: true,
   lyrics: true,
   hidden: [],
@@ -209,14 +209,14 @@ export function SheetMusic({
   const [resting, setResting] = useState({ loop: loopKey, at: current })
   if (resting.loop !== loopKey) setResting({ loop: loopKey, at: current })
   const playheadShown = !loop || playing || current !== resting.at
-  if (view.layout !== 'horizontal')
+  if (view.layout !== 'panorama')
     return (
       <SheetLines
         score={score}
         performance={performance}
         staves={staves}
         staffNames={labels}
-        pages={view.layout === 'pages'}
+        pages={view.layout === 'page'}
         title={title}
         headings={headings}
         current={current}

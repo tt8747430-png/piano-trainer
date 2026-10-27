@@ -131,7 +131,7 @@ describe('createSettingsStore', () => {
         ],
       },
       scoreView: {
-        layout: 'scroll',
+        layout: 'vertical',
         music: 'grid',
         diagrams: 'summary',
         askOnOpen: true,
@@ -169,7 +169,7 @@ describe('createSettingsStore', () => {
     expect(
       restored({
         scoreView: {
-          layout: 'pages',
+          layout: 'page',
           music: 'chart',
           diagrams: 'carousel',
           askOnOpen: 'yes',
@@ -178,7 +178,7 @@ describe('createSettingsStore', () => {
         },
       }).scoreView,
     ).toEqual({
-      layout: 'pages',
+      layout: 'page',
       music: 'sheet',
       diagrams: 'animated',
       askOnOpen: false,
@@ -225,9 +225,9 @@ describe('createSettingsStore', () => {
     expect(restored({ scoreView: { pinned: 'no' } }).scoreView.pinned).toBe(true)
   })
 
-  it('starts afresh over a save of the version before, which had no Metronome (ADR 0113)', () => {
-    expect(SETTINGS_VERSION).toBe(13)
-    expect(restored({ theme: 'dark', scoreView: { textSize: 130 } }, 12)).toEqual(
+  it('starts afresh over a save of the version before, whose layouts had other names (ADR 0115)', () => {
+    expect(SETTINGS_VERSION).toBe(14)
+    expect(restored({ theme: 'dark', scoreView: { layout: 'horizontal' } }, 13)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

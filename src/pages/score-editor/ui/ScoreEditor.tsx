@@ -94,7 +94,7 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
         <ScoreBar lead={<EditorLead />} actions={<EditorActions />} tools={<EditorToolsRow />} />
         {/* Where the caret is, a screen reader's alone, in the Player's status line's place. */}
         <PlayerArea area="status">{idle ? <CaretLine /> : null}</PlayerArea>
-        {editor.view.layout === 'pages' ? (
+        {editor.view.layout === 'page' ? (
           // Pages on their canvas (ADR 0075): it moves and zooms them itself, the area never scrolls.
           <div
             ref={sheet}

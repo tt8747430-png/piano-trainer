@@ -72,7 +72,7 @@ describe('ScoreSheet', () => {
     expect(edited).toHaveBeenLastCalledWith({ kind: 'section', section: 0 })
   })
 
-  it.each(['scroll', 'pages', 'horizontal'] as const)(
+  it.each(['vertical', 'page', 'panorama'] as const)(
     'prints the title it is given at the sheet’s head, %s (ADR 0094)',
     async (view) => {
       render(
@@ -268,7 +268,7 @@ describe('ScoreSheet', () => {
     expect(onField).toHaveBeenCalledTimes(1)
   })
 
-  it.each(['scroll', 'pages', 'horizontal'] as const)(
+  it.each(['vertical', 'page', 'panorama'] as const)(
     'puts the open field’s place over the chord row at the caret’s beat, on its line, %s (ADR 0096)',
     async (view) => {
       const anchors: (HTMLElement | null)[] = []
@@ -299,7 +299,7 @@ describe('ScoreSheet', () => {
       // Bar 3's third beat, on the verse's second line down the screen and on a page; across, the one line.
       const lines = [...document.querySelectorAll('[data-slot="sheet-line"]')]
       expect(anchor?.closest('[data-slot="sheet-line"]')).toBe(
-        view === 'horizontal' ? lines[0] : lines[1],
+        view === 'panorama' ? lines[0] : lines[1],
       )
       expect(anchor).toHaveAttribute('data-slot', 'field-anchor')
       expect(anchor?.style.top).toMatch(/^-\d/)
@@ -373,9 +373,9 @@ describe('ScoreSheet', () => {
   })
 
   it.each([
-    ['scroll', 2],
-    ['pages', 2],
-    ['horizontal', 1],
+    ['vertical', 2],
+    ['page', 2],
+    ['panorama', 1],
   ] as const)(
     'draws the notes chosen as one band on each line they are on, coloured, no caret with them, %s (ADR 0096)',
     async (view, lines) => {
@@ -574,7 +574,7 @@ describe('ScoreSheet', () => {
     expect(scrolled).toHaveBeenCalledWith({ block: 'nearest' })
   })
 
-  it.each(['scroll', 'pages', 'horizontal'] as const)(
+  it.each(['vertical', 'page', 'panorama'] as const)(
     'draws the playhead on the line Play is on, over its staves, apart from the caret, %s (ADR 0096)',
     async (view) => {
       const props = {
@@ -603,7 +603,7 @@ describe('ScoreSheet', () => {
       const lines = [...document.querySelectorAll('[data-slot="sheet-line"]')]
       // Bar 3 opens the verse's second line down the screen and on a page; across, the one line.
       expect(playhead?.closest('[data-slot="sheet-line"]')).toBe(
-        view === 'horizontal' ? lines[0] : lines[1],
+        view === 'panorama' ? lines[0] : lines[1],
       )
       // The caret stays at bar 1, the playhead apart from it.
       expect(lines[0]?.querySelector('[data-slot="caret"]')).not.toBeNull()

@@ -219,7 +219,7 @@ export interface ScoreViewSettings {
  * staff, the chord names, the words.
  */
 export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
-  layout: 'scroll',
+  layout: 'vertical',
   music: 'sheet',
   diagrams: 'animated',
   askOnOpen: false,
