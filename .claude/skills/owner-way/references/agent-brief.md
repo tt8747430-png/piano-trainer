@@ -20,7 +20,7 @@ Then append the common part below unchanged. Launch with `isolation: "worktree"`
 - Read these first:
   - `CLAUDE.md`, whose rules bind you;
   - `docs/CODE_STYLE.md`, `DESIGN.md` and `docs/UBIQUITOUS_LANGUAGE.md`;
-  - the spec `docs/superpowers/specs/2026-10-26-chordify-for-piano.md` §1 (what Chordify does) and your round's section;
+  - the round's spec in `.scratch/<feature>/spec.md`, if it has one;
   - the ADRs your brief names.
 - Chordify research notes are in `/tmp/claude-0/-home-user-piano-trainer/05b98fad-a70e-53a3-9b61-b349107350d2/scratchpad/chordify/research.md`. Read them for behaviour only: never copy Chordify's code or wording. chordify.net blocks automated access, so do not try to reach it.
 
