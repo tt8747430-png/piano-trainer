@@ -76,8 +76,9 @@ function TempoRuler({
       {TEMPO_WORDS.filter(([, bpm]) => bpm >= low && bpm <= high).map(([word, bpm]) => (
         <span
           key={word}
-          className="absolute left-6 -translate-y-1/2 text-sm font-bold tracking-wider uppercase opacity-60"
-          style={{ top: at(bpm) }}
+          className="absolute left-6 -translate-y-1/2 text-sm font-bold tracking-wider uppercase transition-opacity duration-150 motion-reduce:transition-none"
+          // A word by the mark's number fades, so the number stands alone.
+          style={{ top: at(bpm), opacity: Math.abs(mark - bpm) * PX_PER_BEAT < 48 ? 0.15 : 0.6 }}
         >
           {name(word)}
         </span>

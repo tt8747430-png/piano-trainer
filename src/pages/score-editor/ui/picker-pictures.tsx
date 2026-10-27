@@ -97,22 +97,22 @@ function FClef({ x, line }: { x: number; line: number }) {
   )
 }
 
-/** The C clef, drawn: a thick and a thin bar four spaces tall, two bows meeting at its line. */
+/**
+ * The C clef, the music font's: its glyph an em tall, four spaces, its middle on the line given (its
+ * baseline two spaces under it).
+ */
 function CClef({ x, line }: { x: number; line: number }) {
-  const c = lineY(line)
-  const half = 2 * SPACE
-  const left = x - 7
-  const bow = (way: 1 | -1) =>
-    `M${left + 5.4} ${c - way * 0.4} C${left + 8} ${c - way * 0.4} ${left + 9.5} ${c - way * 2.6} ${left + 10} ${c - way * 4.8} C${left + 10.6} ${c - way * 7.6} ${left + 12.4} ${c - way * 10.6} ${left + 14.6} ${c - way * 10.2}`
   return (
-    <g>
-      <rect x={left} y={c - half} width="2.8" height={2 * half} stroke="none" />
-      <rect x={left + 4} y={c - half} width="0.9" height={2 * half} stroke="none" />
-      <path d={bow(1)} fill="none" strokeWidth="1.6" strokeLinecap="round" />
-      <path d={bow(-1)} fill="none" strokeWidth="1.6" strokeLinecap="round" />
-      <circle cx={left + 13.2} cy={c - 9.4} r="1.9" stroke="none" />
-      <circle cx={left + 13.2} cy={c + 9.4} r="1.9" stroke="none" />
-    </g>
+    <text
+      x={x}
+      y={lineY(line) + 2 * SPACE}
+      textAnchor="middle"
+      fontSize={4 * SPACE}
+      stroke="none"
+      className="font-music"
+    >
+      {'\u{1D121}'}
+    </text>
   )
 }
 

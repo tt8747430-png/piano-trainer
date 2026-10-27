@@ -78,7 +78,7 @@ function TimeColumn({
         {name}
         {info ? <InfoTip name={name}>{info}</InfoTip> : null}
       </span>
-      <div className="relative w-24 py-11" style={{ height: 4 * SPACE + 88 }}>
+      <div className="relative w-20 py-11 min-[380px]:w-24" style={{ height: 4 * SPACE + 88 }}>
         <div aria-hidden className="absolute inset-x-0 top-11" style={{ height: 4 * SPACE }}>
           {[0, 1, 2, 3, 4].map((line) => (
             <span
@@ -96,7 +96,7 @@ function TimeColumn({
 
 /** The wheels' face in the picker: its figures large in the serif, the value on a soft round band. */
 const FIGURE_WHEEL =
-  'w-20 [&_[data-value]]:text-5xl [&_[data-value]]:font-extrabold [&_[data-slot=wheel-band]]:inset-x-2 [&_[data-slot=wheel-band]]:rounded-full [&_[data-slot=wheel-band]]:border-0 [&_[data-slot=wheel-band]]:bg-foreground/7'
+  'w-16 min-[380px]:w-20 [&_[data-value]]:text-5xl [&_[data-value]]:font-extrabold [&_[data-slot=wheel-band]]:inset-x-2 [&_[data-slot=wheel-band]]:rounded-full [&_[data-slot=wheel-band]]:border-0 [&_[data-slot=wheel-band]]:bg-foreground/7'
 
 /**
  * The time signature's picker (ADR 0114, after notation apps' wheels): Current and Pickup side by side,
@@ -183,13 +183,13 @@ export function TimePicker({ bar, onDone }: { bar?: number | undefined; onDone: 
 
   return (
     <div className="flex flex-col gap-4" onKeyDown={onKeyDown}>
-      <div className="flex items-start justify-center gap-3 min-[380px]:gap-5">
+      <div className="flex items-start justify-center gap-2 min-[380px]:gap-5">
         {/* Beat and Beat type, named once at the left, level with the figures they name. */}
         <div className="flex flex-col items-end pt-8 text-sm text-muted-foreground">
           <span aria-hidden className="flex items-center" style={{ height: 44 + FIGURE }}>
             <span className="mt-11">{t('time.beat')}</span>
           </span>
-          <span className="flex items-center gap-1" style={{ height: FIGURE }}>
+          <span className="flex items-center gap-1 whitespace-nowrap" style={{ height: FIGURE }}>
             <span aria-hidden>{t('time.beatType')}</span>
             <InfoTip name={t('time.beatType')}>{t('time.beatTypeInfo')}</InfoTip>
           </span>

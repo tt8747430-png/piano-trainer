@@ -98,12 +98,7 @@ export function SignPicker({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger render={trigger} />
-      <SheetContent title={title} {...(description ? { description } : {})}>
-        {info ? (
-          <div className="-mt-3 mb-1 flex items-center gap-1 text-sm text-muted-foreground">
-            <InfoTip name={title}>{info}</InfoTip>
-          </div>
-        ) : null}
+      <SheetContent title={title} {...(description ? { description } : {})} info={info}>
         <div className="flex flex-col gap-4">{body}</div>
       </SheetContent>
     </Sheet>
