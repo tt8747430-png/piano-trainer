@@ -80,7 +80,7 @@ const shifted = (notes: readonly DraftNote[], from: Tick, by: Tick): DraftNote[]
   notes.map((n) => (n.startTick >= from ? { ...n, startTick: n.startTick + by } : n))
 
 /**
- * Insert mode's room (ADR 0092, Flat's): the notes of a layer from `at` on pushed `ticks` to the
+ * Insert mode's room (ADR 0114, Flat's): the notes of a layer from `at` on pushed `ticks` to the
  * right, bars added at the end of the song first to hold what is pushed past it, so nothing is
  * lost. A note sounding into `at` from before stays.
  */
@@ -92,7 +92,7 @@ export function makeRoom(draft: Draft, layer: NoteLayer, at: Tick, ticks: Tick):
 }
 
 /**
- * Insert mode's Delete (ADR 0092): the notes starting in `span` taken and the later notes pulled
+ * Insert mode's Delete (ADR 0114): the notes starting in `span` taken and the later notes pulled
  * left by its length, closing the gap as Flat's does. On a single staff a note held into the gap (a
  * tie over the barline) is cut there, so the notes pulled left never sound under it.
  */
@@ -101,7 +101,7 @@ export function closeGap(draft: Draft, layer: NoteLayer, { from, to }: TickSpan)
   return withNotes(draft, layer, shifted(clearUnder(draft, layer, from, to), to, from - to))
 }
 
-/** A key as the draft writes it at a tick: spelled in the key there (a section's own, ADR 0089). */
+/** A key as the draft writes it at a tick: spelled in the key there (a section's own, ADR 0114). */
 export const spelledIn = (draft: Draft, key: Midi, at: Tick) => ({
   midi: key,
   spelled: spellInKey(pitchClass(key), keyAt(draft, at)),
@@ -162,7 +162,7 @@ export function writeNotes(
   return { draft: withNotes(grown, layer, [...clearUnder(grown, layer, at, end), ...written]), end }
 }
 
-/** Insert mode's writing (ADR 0092): keys written at `at` in the room made for them. */
+/** Insert mode's writing (ADR 0114): keys written at `at` in the room made for them. */
 export const insertNotes = (
   draft: Draft,
   layer: NoteLayer,
@@ -213,7 +213,7 @@ export function addToChord(
 
 /**
  * What an edit takes: the notes at a tick (the caret's), one note of the chord there (its key, chosen
- * alone, ADR 0088), or those starting in a span (the notes chosen).
+ * alone, ADR 0096), or those starting in a span (the notes chosen).
  */
 export type Where = Tick | TickSpan | { readonly at: Tick; readonly key: Midi }
 
@@ -228,7 +228,7 @@ export const isAt = (where: Where) => (n: DraftNote) =>
 /**
  * Notes kept where some of a chord's were taken: what a note taken sang goes to its chord's highest
  * note left, where none of them sings, so the chord still sings it (a chord is one note of the tune,
- * ADR 0093).
+ * ADR 0097).
  */
 function stillSinging(kept: readonly DraftNote[], taken: readonly DraftNote[]): DraftNote[] {
   let notes = [...kept]
@@ -280,7 +280,7 @@ function changeAt(
 
 /**
  * The notes `where` takes made `ticks` long, as the palette's value tapped with notes chosen makes
- * them (spec 2026-10-23): each onset's notes together (a chord's one note chosen takes its chord, a
+ * them: each onset's notes together (a chord's one note chosen takes its chord, a
  * chord's notes being one length), the first onsets first. Shorter, the time they leave is a rest;
  * longer, the notes starting under them are taken, as writing a note there takes them; a note stops
  * at the piece's end.
@@ -322,7 +322,7 @@ const letterInKey = (letter: Letter, key: Key): SpelledNote =>
   note(letter)
 
 /**
- * Flat's accidentals (ADR 0091): the notes `where` takes written on their letter with the sign, ♯
+ * Flat's accidentals (ADR 0114): the notes `where` takes written on their letter with the sign, ♯
  * (1), ♭ (−1) or ♮ (0), their key following; where every one carries it already, the sign comes off
  * and each letter is spelled as its key spells it, the note back at the key's pitch. Nothing moves
  * past the piano's ends.
@@ -375,7 +375,7 @@ export function steppedKey(key: Key, from: Midi, steps: number): Midi {
 
 /**
  * The notes `where` takes moved `steps` notes of the key up or down, as a note dragged on the staff
- * moves (ADR 0064); nothing moves past the piano's ends.
+ * moves (ADR 0096); nothing moves past the piano's ends.
  */
 export const stepNotes = (draft: Draft, layer: NoteLayer, where: Where, steps: number): Draft =>
   changeAt(draft, layer, where, (n) => {

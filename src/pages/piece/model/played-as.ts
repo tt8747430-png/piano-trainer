@@ -5,7 +5,7 @@ import { noteParam } from '@/shared/lib/music'
 
 /**
  * How a piece is played, as its page shares it (ADR 0107): the key and Simplify its Player last kept
- * (ADR 0022, 0104), else its own key, as written.
+ * (ADR 0038, 0105), else its own key, as written.
  */
 export function playedAs(
   piece: Piece,

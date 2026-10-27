@@ -3,7 +3,7 @@ import { chordInversions, noteName, placeChord, type Tone } from '@/shared/lib/m
 import { Segmented } from '@/shared/ui'
 
 /**
- * Where the right hand of a chord of five notes or more starts, its root left to the bass (ADR 0035):
+ * Where the right hand of a chord of five notes or more starts, its root left to the bass (ADR 0046):
  * each start named as the keys name it, its degree and its note (`3 E`, `♭7 B♭`).
  */
 export function RightHandFrom({

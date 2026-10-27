@@ -20,7 +20,7 @@ export const BARLINE_CHOICES = [
   'final',
   'plain',
 ] as const
-/** The signs and jumps beside them (ADR 0068). */
+/** The signs and jumps beside them (ADR 0097). */
 export const JUMP_CHOICES = ['segno', 'coda', 'toCoda', 'fine', ...JUMPS] as const
 export const BAR_MARK_CHOICES = [...BARLINE_CHOICES, ...JUMP_CHOICES] as const
 export type BarMarkChoice = (typeof BAR_MARK_CHOICES)[number]

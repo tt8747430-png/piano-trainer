@@ -50,7 +50,7 @@ describe('writeNotes on a single staff', () => {
     expect(shape(staffNotes(written.draft))).toEqual(['G4@72/48'])
   })
 
-  it('adds a bar for a note past the end: the meter’s length, no chord (ADR 0094)', () => {
+  it('adds a bar for a note past the end: the meter’s length, no chord (ADR 0114)', () => {
     const draft = oneStaff()
     const written = writeNotes(draft, 'staff0', totalTicks(draft), keys(67), 24)
     expect(totalTicks(written.draft)).toBe(288)
@@ -79,7 +79,7 @@ describe('writeNotes in a hand', () => {
     expect(shape(chord.draft.hands.lh)).toEqual(['G2@0/96', 'B3@24/24', 'D4@24/24'])
   })
 
-  it('holds a note into the next bar, every bar being written (ADR 0091)', () => {
+  it('holds a note into the next bar, every bar being written (ADR 0114)', () => {
     const written = writeNotes(draftOf(), 'rh', 48, keys(67), 96)
     expect(shape(written.draft.hands.rh)).toEqual(['G4@48/96'])
     expect(written.end).toBe(144)
@@ -169,7 +169,7 @@ describe('rests', () => {
   })
 })
 
-describe('closeGap (Insert mode’s Delete, ADR 0092)', () => {
+describe('closeGap (Insert mode’s Delete, ADR 0114)', () => {
   it('pulls the later notes left by the gap', () => {
     const draft = draftOf({ staves: [{ notes: 'B4/1 A4/1 G4/1 F#4/1' }] })
     expect(shape(staffNotes(closeGap(draft, 'staff0', { from: 24, to: 48 })))).toEqual([

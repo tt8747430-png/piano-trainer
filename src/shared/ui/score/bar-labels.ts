@@ -5,7 +5,7 @@ export interface LabelledBar {
 }
 
 /**
- * What the labels' row prints at a bar's start (ADR 0087, 0095), in this order: a line's first bar
+ * What the labels' row prints at a bar's start (ADR 0087, 0097), in this order: a line's first bar
  * its number, as a printed system numbers its start; a section's first bar the section's name, as a
  * score prints a rehearsal mark; a bar a tempo is marked over, its tempo.
  */

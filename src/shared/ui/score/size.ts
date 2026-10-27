@@ -1,7 +1,7 @@
 import type { Score, StaffId } from '@/shared/lib/notation'
 
 /**
- * A staff's room as Verovio engraves it at scale 1 (a staff space 10, ADR 0078), its least: ledger
+ * A staff's room as Verovio engraves it at scale 1 (a staff space 10, ADR 0087), its least: ledger
  * lines far over or under take more. Its top line stands `TOP_LINE` down, each staff `STAFF_GAP`
  * under the one over it, and the last takes `LAST_STAFF` from its own top to the engraving's foot.
  */
@@ -9,7 +9,7 @@ export const TOP_LINE = 30
 export const STAFF_GAP = 101
 export const LAST_STAFF = 101
 /**
- * A verse of the words under the staff they are written on (ADR 0093): Verovio's lyric size, 4.5
+ * A verse of the words under the staff they are written on (ADR 0097): Verovio's lyric size, 4.5
  * half-spaces. Each verse pushes the staff under it (or the engraving's foot) down by as much, less
  * what the gap already held: the first verse under a lone staff, or the first two under a single
  * staff over the grand staff, mostly fit the room there already, so a system of them is estimated a

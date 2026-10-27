@@ -138,7 +138,7 @@ const playClick: Render<ClickSound> = (context, click, at, gain, ended) =>
     ended,
   )
 
-/** The Metronome's beep (ADR 0113): a round tone, the bar's first a fifth higher. */
+/** The Metronome's beep (ADR 0052): a round tone, the bar's first a fifth higher. */
 const playBeep: Render<ClickSound> = (context, beep, at, gain, ended) =>
   tone(
     context,
@@ -250,7 +250,7 @@ const heldBack = (context: AudioContext) =>
 /**
  * A recording's element, playing the whole file from memory. Streamed, an element asks for byte
  * ranges, and the service worker's precache answers with the whole file: the element could not seek,
- * so each seek landed back at 0 s and was made again and again (ADR 0016). Until the file is in, the
+ * so each seek landed back at 0 s and was made again and again (ADR 0034). Until the file is in, the
  * element has no source: a play waits for it.
  */
 export function wholeFileMedia(src: string): HTMLAudioElement {

@@ -22,7 +22,7 @@ const sungMusic = {
 const sung = draftOf({ ...sungMusic, lyrics: ['Si-_ lent night,'] })
 const verses = (draft: typeof sung) => gatherLyrics(tuneNotes(draft)).map(writeLyrics)
 
-describe('the words in the editor (ADR 0093)', () => {
+describe('the words in the editor (ADR 0097)', () => {
   it('go under the staff they are written on: the top single staff’s, else the upper staff (ADR 0097)', () => {
     expect(lyricsLayer(sung)).toBe('staff0')
     expect(singsHere(sung, 'staff0')).toBe(true)

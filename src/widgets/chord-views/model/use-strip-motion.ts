@@ -32,7 +32,7 @@ interface Waiting {
 }
 
 /**
- * Where the beat strip stands and how it moves (ADR 0101, 0108). It is drawn at a base, the beat
+ * Where the beat strip stands and how it moves (ADR 0108). It is drawn at a base, the beat
  * sounding at the mark (Listen's clock's place frame by frame while it plays), plus an offset that
  * eases to nothing, so a move never fights the clock: a beat tapped or stepped to slides there in
  * 300ms, a flick glides on, slowing. A finger, a mouse or a trackpad's sideways scroll drags it, one

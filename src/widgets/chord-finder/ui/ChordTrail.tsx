@@ -78,7 +78,7 @@ function EmptyStaff({ label }: { label: string }) {
 }
 
 /**
- * The chords played (ADR 0054), oldest first, each a whole note in a bar of its own on a grand staff,
+ * The chords played (ADR 0052), oldest first, each a whole note in a bar of its own on a grand staff,
  * spelled in the key chosen and named over its bar, the newest last; for a screen reader, the names
  * in order, as wide as its bars. Where the chords are not remembered, it writes the one chord down
  * now; before a chord is played, an empty grand staff.

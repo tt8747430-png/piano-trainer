@@ -5,7 +5,7 @@ import type { Performance } from '@/shared/lib/arrangement'
 export type ViewNeed = 'words' | 'chords'
 
 /**
- * The Player's views the music cannot show, each with what it needs (ADR 0102); a view left out can
+ * The Player's views the music cannot show, each with what it needs (ADR 0108); a view left out can
  * show it. The sheet music shows any.
  */
 export type ViewNeeds = Readonly<Partial<Record<MusicView, ViewNeed>>>
@@ -18,7 +18,7 @@ const FALLS_BACK: Readonly<Record<Exclude<MusicView, 'sheet'>, MusicView>> = {
 }
 
 /**
- * What the music lacks for each of the Player's views (ADR 0102): the three chord views need its
+ * What the music lacks for each of the Player's views (ADR 0108): the three chord views need its
  * chord symbols, and Chords over lyrics its words too, sung on some note.
  */
 export function viewNeeds(performance: Performance): ViewNeeds {

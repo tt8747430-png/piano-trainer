@@ -8,7 +8,7 @@ import { ScoreEditor } from './ScoreEditor'
 
 function Editing({ id }: { id: string }) {
   const { t } = useTranslation('common')
-  // The bar the caret opens on, as printed: the Player's cursor's, where Edit came from it (ADR 0090).
+  // The bar the caret opens on, as printed: the Player's cursor's, where Edit came from it (ADR 0115).
   const { bar } = useSearch({ from: '/full-screen/edit/$pieceId' })
   // The visit opens on what the store holds now; the editor saves into it from there.
   const pieces = usePiecesStoreApi()

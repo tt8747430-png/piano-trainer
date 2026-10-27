@@ -6,7 +6,7 @@ import { PLAYER_KEYS } from '../model/player-keys'
 
 /**
  * Close, the score bar's first (ADR 0115), saying its key (Escape); the title is printed on the
- * sheet (ADR 0094).
+ * sheet (ADR 0114).
  */
 export function PlayerClose({ onClose }: { onClose: () => void }) {
   const { t } = useTranslation('common')

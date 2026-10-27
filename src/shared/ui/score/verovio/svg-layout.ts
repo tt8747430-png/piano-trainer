@@ -8,12 +8,12 @@ import { signsOf } from './svg-signs'
 import { syllablesOf } from './svg-syllables'
 
 /**
- * Where everything stands on a line Verovio engraved (ADR 0078), in CSS px, read from the SVG's own
+ * Where everything stands on a line Verovio engraved (ADR 0087), in CSS px, read from the SVG's own
  * coordinates, not the page's layout, so it reads the same anywhere (a test's DOM too): each measure
  * (`m-<index>`, its first staff's lines), each staff drawn (`staves`, top down) from its lines in the
  * first measure, each onset from its notes' and rests' heads (`n-`, `r-` and the hidden `h-<staff>-<tick>`),
- * each head's box with its chord's column (`headsOf`, ADR 0088), each clef, key and time signature
- * printed (`signsOf`, ADR 0094), the staves' names at a first line's head (`labelsOf`) and each
+ * each head's box with its chord's column (`headsOf`, ADR 0096), each clef, key and time signature
+ * printed (`signsOf`, ADR 0114), the staves' names at a first line's head (`labelsOf`) and each
  * syllable printed under its note (`syllablesOf`, ADR 0096).
  */
 export function layoutOf(

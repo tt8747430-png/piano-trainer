@@ -1,7 +1,7 @@
 import type { Hand } from './fingering'
 
 /**
- * The clefs a staff is written in (ADR 0069, 0114): the treble and the bass, each also an octave or
+ * The clefs a staff is written in (ADR 0097, 0114): the treble and the bass, each also an octave or
  * two above or below (8va, 8vb, 15ma, 15mb); the C clefs on each line, soprano to baritone; and the F
  * clef on the third line and the fifth, as notation apps offer them.
  */

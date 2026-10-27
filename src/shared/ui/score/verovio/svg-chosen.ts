@@ -1,7 +1,7 @@
 import type { Chosen } from '../selection'
 import { glyphBox, numbers } from './svg-glyphs'
 
-/** What an engraved note or rest is on, from its id: `n-<staff>-<tick>-<i>`, `r-<staff>-<tick>` (ADR 0078). */
+/** What an engraved note or rest is on, from its id: `n-<staff>-<tick>-<i>`, `r-<staff>-<tick>` (ADR 0087). */
 const placeOf = (element: Element) => {
   const [, staff = '', tick = ''] = element.id.split('-')
   return { staff, tick: Number(tick) }

@@ -211,7 +211,7 @@ describe('the written keys', () => {
   })
 })
 
-describe('signatureKey (ADR 0110)', () => {
+describe('signatureKey (ADR 0115)', () => {
   it('names the key each signature writes, major or minor', () => {
     expect(signatureKey(0, false)).toEqual({ tonic: note('C'), minor: false })
     expect(signatureKey(0, true)).toEqual({ tonic: note('A'), minor: true })

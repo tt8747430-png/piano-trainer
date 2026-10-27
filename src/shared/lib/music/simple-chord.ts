@@ -2,7 +2,7 @@ import type { Chord } from './chord'
 import { hasMinorThird } from './numerals'
 
 /**
- * A chord as Simplify plays it (Chordify's, ADR 0104): its plain triad on its root, minor where it
+ * A chord as Simplify plays it (Chordify's, ADR 0105): its plain triad on its root, minor where it
  * has a minor 3rd (a diminished chord too), major otherwise (augmented, suspended); a slash chord's
  * bass and every added note dropped.
  */

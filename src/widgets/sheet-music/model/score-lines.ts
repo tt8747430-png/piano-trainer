@@ -18,7 +18,7 @@ export interface ScoreLine {
  * A score cut into the chart's lines (each section's, as it is written), each its own score of the
  * measures it holds: what the Player lays out down the screen or on pages. A chart line wider than
  * `fit.room` is cut into as few lines as hold it, as even as they come by its measures' `widths`
- * (ADR 0074).
+ * (ADR 0087).
  */
 export function scoreLines(
   score: Score,

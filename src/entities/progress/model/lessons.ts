@@ -1,7 +1,7 @@
 import type { PieceId } from '@/entities/piece'
 
 /**
- * A song's lesson as the progress keeps it (ADR 0100), by what was done: a chord of a piece played
+ * A song's lesson as the progress keeps it (ADR 0111), by what was done: a chord of a piece played
  * in its sheet, or a pass finished in Wait mode over bars as played, numbered from 1 as the Player's
  * loop prints them. A section's lessons are worked out from the music; only these keys are kept.
  */

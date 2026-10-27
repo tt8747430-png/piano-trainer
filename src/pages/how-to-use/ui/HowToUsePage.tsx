@@ -4,7 +4,7 @@ import { GUIDE } from '../model/guide'
 import { GuideSection } from './GuideSection'
 
 /**
- * How to use (ADR 0113), reached from Settings' Help: a short guide in plain steps, a part for each
+ * How to use (ADR 0052), reached from Settings' Help: a short guide in plain steps, a part for each
  * thing a learner does (songs, the Player, lessons, the editor, MIDI, the Metronome), each folding,
  * two columns from a laptop's width as Settings has.
  */

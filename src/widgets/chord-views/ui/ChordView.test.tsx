@@ -66,7 +66,7 @@ const cards = () =>
         `${card.getAttribute('aria-label') ?? card.textContent}${card.getAttribute('aria-current') ? '*' : ''}`,
     )
 
-describe('Diagrams, its summary (ADR 0101)', () => {
+describe('Diagrams, its summary (ADR 0108)', () => {
   it('shows the strip, then the song’s chords at once as cards, the one sounding marked', () => {
     renderSummary(0)
     const view = screen.getByRole('region', { name: 'Diagrams' })

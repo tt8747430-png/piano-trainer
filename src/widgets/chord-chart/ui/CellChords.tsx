@@ -10,7 +10,7 @@ const LEAST = 0.75
 const MOST = 1.25
 
 /**
- * The chords starting in a beat cell (ADR 0099), in the display face as the sheet prints them
+ * The chords starting in a beat cell (ADR 0108), in the display face as the sheet prints them
  * (`C♯m7`): as large as the cell holds them, a size down where it is narrow, never under `LEAST`;
  * the later of two a size down again. Sized by the cell, the container (`@container`) round it,
  * and the empty beats after it it may run on into (`span`, the beats it has, its own one of them;

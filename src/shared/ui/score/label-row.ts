@@ -10,7 +10,7 @@ export const LABEL_INSET_PX = 4
 const LEAST_LABELS = 0.7
 
 /**
- * A page's labels, as it prints (ADR 0075): chord symbols 2.6 staff spaces tall, as LilyPond's and
+ * A page's labels, as it prints (ADR 0096): chord symbols 2.6 staff spaces tall, as LilyPond's and
  * Sibelius's are, of the 18 px they are at full size (1.8 spaces of 10 px) on a staff at `PRINT_SCALE`.
  */
 const PRINT_LABELS = (2.6 * 10 * PRINT_SCALE) / 18
@@ -24,7 +24,7 @@ export const labelScale = (scale: number, print = false) =>
 
 /**
  * The row over a line's staff, in CSS px: the chord symbols' where they are shown, else only its
- * bars' labels' (ADR 0072: a hidden row takes no room), at the line's size.
+ * bars' labels' (ADR 0114: a hidden row takes no room), at the line's size.
  */
 export const labelRow = (chordNames: boolean, scale = 1, print = false) =>
   Math.round((chordNames ? CHORD_ROW : NUMBER_ROW) * labelScale(scale, print))

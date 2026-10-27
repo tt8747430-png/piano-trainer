@@ -154,7 +154,7 @@ describe('the one selection’s marks (ADR 0096)', () => {
   })
 })
 
-describe('what a click chooses (ADR 0088)', () => {
+describe('what a click chooses (ADR 0096)', () => {
   it('chooses the head under it, one note of a chord', () => {
     expect(pickAt(laid, 76, 65)).toEqual({ staff: 'treble', tick: 0, index: 1, midi: 64 })
     expect(pickAt(laid, 76, 73)).toEqual({ staff: 'treble', tick: 0, index: 0, midi: 60 })

@@ -4,7 +4,7 @@ import { PageRow, PRACTICE_GROUPS, THINGS } from '@/widgets/practice-pages'
 import { GapsBadge, useGapsCount } from '@/widgets/trainer-list'
 
 /**
- * Practice (ADR 0044): the things, under no heading, each a page that shows one on the keys; then
+ * Practice (ADR 0052): the things, under no heading, each a page that shows one on the keys; then
  * the Chord finder at the keys; then the training.
  */
 export function PracticePage() {

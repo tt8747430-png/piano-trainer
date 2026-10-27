@@ -196,7 +196,7 @@ function layOut(chart: Chart, unfold = false): Layout {
   const lineEnds = new Set<number>()
   const written = chart.sections.flatMap((section) => section.lines.flat())
   // A pickup is the end of a bar: its chords sit where they fall in its meter's bar, the first
-  // section's (ADR 0095).
+  // section's (ADR 0097).
   const pickup = beatsToTicks(beatsBefore(written, 0, chart.sections[0]?.meter ?? chart.meter))
   let tick = 0
   // Where the order goes back, each hand's clef as it stands at the bar gone back to.
@@ -222,7 +222,7 @@ function layOut(chart: Chart, unfold = false): Layout {
       tick += durationTicks
       return chords.length - 1
     })
-    // Its chords fill it end to end; a bar of no chord lasts its beats all the same (ADR 0094).
+    // Its chords fill it end to end; a bar of no chord lasts its beats all the same (ADR 0114).
     tick = barStart + beatsToTicks(bar.beats)
     hands.push(bar.hands)
     const meter = chart.sections[sectionIndex]?.meter
@@ -259,7 +259,7 @@ function sounding(starts: readonly Tick[], tick: Tick): number {
 
 /**
  * The chord sounding at `tick`, whose time holds it: its index among the chords placed in order; none
- * in a bar of no chord (ADR 0094), where the chord before has ended.
+ * in a bar of no chord (ADR 0114), where the chord before has ended.
  */
 function chordAt(chords: readonly PlacedChord[], starts: readonly Tick[], tick: Tick) {
   const index = sounding(starts, tick)
@@ -600,7 +600,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
   })
   // The tune a pattern's right hand may play: the top staff's (ADR 0097).
   const tune = staves[0]?.length ? staves[0] : null
-  // How each section's bars play a figure: in its own meter, else the chart's (ADR 0095).
+  // How each section's bars play a figure: in its own meter, else the chart's (ADR 0097).
   const barMeters = chart.sections.map((section) => barMeterOf(section.meter ?? chart.meter))
   const chords: PerformedChord[] = []
   const notes: PerformanceNote[] = []
@@ -740,7 +740,7 @@ export function arrange(chart: Chart, options: ArrangeOptions): Performance {
     }
   })
 
-  // The tempo and the pedal as every staff marks them, whichever the learner hears (ADR 0068).
+  // The tempo and the pedal as every staff marks them, whichever the learner hears (ADR 0097).
   const timing = notes.flatMap(({ startTick, marks }) =>
     marks?.expression !== undefined || marks?.pedal !== undefined ? [{ startTick, marks }] : [],
   )

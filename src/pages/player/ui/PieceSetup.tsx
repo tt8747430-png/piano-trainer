@@ -28,7 +28,7 @@ import { PlayingSection } from '@/widgets/practice-player'
  * A piece's Setup: its chord size (a song's written in degrees, greyed while Simplify plays every
  * chord as its triad, its ⓘ saying so), the pattern and its two hands, the right hand's first chord,
  * and how it plays: Swing and the Melody, the song's top staff by its name or its recording (ADR
- * 0115). Its key is the tools row's Transpose (ADR 0104).
+ * 0115). Its key is the tools row's Transpose (ADR 0105).
  */
 export function PieceSetup({
   piece,

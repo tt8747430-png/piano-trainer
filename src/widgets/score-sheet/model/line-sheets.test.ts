@@ -56,7 +56,7 @@ describe('the sheet’s lines as written', () => {
     expect(chorus?.next).toBeUndefined()
   })
 
-  it('prints a change of time where a section starts in its own meter, and at the line before (ADR 0095)', () => {
+  it('prints a change of time where a section starts in its own meter, and at the line before (ADR 0097)', () => {
     const sheetsOf = createLineSheets()
     const [verse, chorus] = sheetsOf(
       readDraft({

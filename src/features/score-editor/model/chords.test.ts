@@ -14,7 +14,7 @@ describe('setChord', () => {
     ])
   })
 
-  it('sets a chord into a bar of no chord at its start, where a bar’s chords begin (ADR 0094)', () => {
+  it('sets a chord into a bar of no chord at its start, where a bar’s chords begin (ADR 0114)', () => {
     const empty = draftOf({ sections: [{ kind: 'verse', lines: ['G _'] }] })
     expect(form(setChord(empty, 1, 0, parseChordSymbol('Em')))).toEqual([[['G@0', 'Em@0']]])
     expect(form(setChord(empty, 1, 48, parseChordSymbol('Em')))).toEqual([[['G@0', 'Em@0']]])
@@ -40,7 +40,7 @@ describe('deleteChord', () => {
     expect(form(deleteChord(split, 0, 0))).toEqual([[['D@0 Em@48', 'C@0']]])
   })
 
-  it('takes a bar’s only chord, leaving a bar of no chord (ADR 0094)', () => {
+  it('takes a bar’s only chord, leaving a bar of no chord (ADR 0114)', () => {
     expect(form(deleteChord(draftOf(), 1, 0))).toEqual([[['G@0', '']]])
   })
 
@@ -107,7 +107,7 @@ describe('chordSuggestions', () => {
     ])
   })
 
-  it('takes the key at the place: a section’s own key there (ADR 0089)', () => {
+  it('takes the key at the place: a section’s own key there (ADR 0114)', () => {
     expect(symbols(song, 288, '').slice(0, 7)).toEqual(['D', 'Em', 'F#m', 'G', 'A', 'Bm', 'C#°'])
   })
 

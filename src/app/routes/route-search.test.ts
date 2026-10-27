@@ -47,7 +47,7 @@ describe('search params', () => {
     expect(await searchAt('/edit/bz5?takes=yes&record=1')).toEqual(EDIT_DEFAULTS)
   })
 
-  it('simplify a piece’s chords only where the URL says so, and nothing a walk plays (ADR 0104)', async () => {
+  it('simplify a piece’s chords only where the URL says so, and nothing a walk plays (ADR 0105)', async () => {
     expect(PLAYER_DEFAULTS).toMatchObject({ simple: false })
     expect(await searchAt('/play/bz5?simple=true')).toEqual({ ...PLAYER_DEFAULTS, simple: true })
     for (const stale of ['yes', '1', 'false'])
@@ -56,7 +56,7 @@ describe('search params', () => {
     expect(CHROMATIC_DEFAULTS).not.toHaveProperty('simple')
   })
 
-  it('carry the bar between the Player and the score editor, a bar as printed (ADR 0090)', async () => {
+  it('carry the bar between the Player and the score editor, a bar as printed (ADR 0115)', async () => {
     expect(await searchAt('/edit/bz5?bar=4')).toEqual({ ...EDIT_DEFAULTS, bar: 4 })
     expect(await searchAt('/play/bz5?bar=3')).toEqual({ ...PLAYER_DEFAULTS, bar: 3 })
     for (const bar of ['0', '-2', '2.5', 'x']) {
@@ -81,7 +81,7 @@ describe('search params', () => {
       hands: 'both',
       step: 'chords:sev',
     })
-    // From five notes a chord is in root position or has its right hand from the 7th (ADR 0035).
+    // From five notes a chord is in root position or has its right hand from the 7th (ADR 0046).
     expect(await searchAt('/practice/chords?size=9&inversion=3')).toMatchObject({ inversion: 3 })
     expect(await searchAt('/practice/chords?size=9&inversion=2')).toMatchObject({ inversion: 0 })
     expect(await searchAt('/practice/chords?size=13&alter=b9s11')).toMatchObject({

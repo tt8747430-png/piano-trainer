@@ -9,13 +9,13 @@ import { usePaletteBeside } from '../model/use-palette-beside'
 /** The title: at the line's head across, else centred, its field as wide as the sheet. */
 const PLACED = { across: '', centred: 'text-center' } as const
 /**
- * The room the palette leaves beside the sheet, which it covers at its right (ADR 0094): the title
+ * The room the palette leaves beside the sheet, which it covers at its right (ADR 0114): the title
  * keeps to it, as the dock does; a page's title is the page's.
  */
 const BESIDE = 'pr-84 landscape-phone:pr-80 xl:pr-96'
 
 /**
- * The title printed at the sheet's head (ADR 0094), edited where it is, as Flat's: a click turns it
+ * The title printed at the sheet's head (ADR 0114), edited where it is, as Flat's: a click turns it
  * into a field in its place, the title chosen; Enter or leaving the field saves what it holds with the
  * music (an own song's title, or a version's in place of the catalog's), Escape keeps the title it
  * had, and an empty field changes nothing. Nothing is printed under it the learner did not write: a
@@ -56,7 +56,7 @@ export function TitleField({ place }: { place: TitlePlace }) {
         {editing ? (
           // In place, at the title's size, as wide as what it holds (a copy of it, unseen, sizes
           // the cell the field fills): no box round it, its line under it, so a phone's handles
-          // stay on the text and nothing under the title is covered (ADR 0110).
+          // stay on the text and nothing under the title is covered (ADR 0115).
           <span className="inline-grid max-w-full align-top">
             <span aria-hidden className="invisible col-start-1 row-start-1 px-1 whitespace-pre">
               {typed === '' ? ' ' : typed}

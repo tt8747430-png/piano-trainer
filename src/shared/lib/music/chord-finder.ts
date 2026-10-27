@@ -57,7 +57,7 @@ const looselySuspended = (parts: ChordParts): boolean =>
   parts.triad === 'sus2' || (parts.triad === 'sus4' && parts.seventh !== 'minor')
 
 /**
- * The tones of a chord a hand may leave out (spec 2026-10-05 §5): its perfect 5th, from a 7th chord
+ * The tones of a chord a hand may leave out: its perfect 5th, from a 7th chord
  * up and from a 6/9; its natural 9th and 11th under its highest number (a 13th's, an 11th's 9th); and
  * the major 3rd of a plain 7th chord, where the 5th is played. Never the root, the 7th, the
  * highest number or an alteration: they are what the name says. A 6th or an added tone keeps its 5th,

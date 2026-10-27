@@ -19,7 +19,7 @@ const COLUMNS = {
 } as const
 
 /**
- * One choice of a few, each a tile of its picture over its name (ADR 0099, 0115): the View's views
+ * One choice of a few, each a tile of its picture over its name (ADR 0108, 0115): the View's views
  * and its layouts. A radio group named by its label; the arrows move to a choice and choose it. The
  * one chosen is outlined on the muted fill; one that cannot be chosen is greyed, its reason its
  * tooltip. `columns`, how many stand in a row.

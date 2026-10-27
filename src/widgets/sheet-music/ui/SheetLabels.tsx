@@ -5,10 +5,10 @@ import { barLabels, LabelRow, labelRow, labelScale, type ScoreLayout } from '@/s
 import { chordPositions } from '../model/chord-positions'
 
 /**
- * Over the staff, the labels' row the editor's sheet prints too (ADR 0087, 0095): the line's first
+ * Over the staff, the labels' row the editor's sheet prints too (ADR 0087, 0097): the line's first
  * bar's number, as LilyPond and a printed system number a line's start (each bar is still a button to
  * tap, which says its number to a screen reader), a section's name at its first bar and a tempo mark
- * where it changes; each chord symbol at its onset (spec §2.6), with Chord positions how the right
+ * where it changes; each chord symbol at its onset, with Chord positions how the right
  * hand plays it.
  */
 export const SheetLabels = memo(function SheetLabels({

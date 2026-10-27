@@ -3,7 +3,7 @@ import type { PieceId } from '@/entities/piece'
 import type { Inversion } from '@/shared/lib/music'
 
 /**
- * Draws a chord of a piece in an inversion wherever the piece shows its diagram (ADR 0101); the
+ * Draws a chord of a piece in an inversion wherever the piece shows its diagram (ADR 0108); the
  * inversion its notes fold into (`folded`) forgets the choice, so nothing is kept for the default.
  */
 export function chooseDiagramInversion(

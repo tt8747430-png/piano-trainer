@@ -35,7 +35,7 @@ describe('caretSaid', () => {
     expect(caretSaid({ draft: sharp, caret: 96, layer: 'chords' })).toMatchObject({ what: 'B♭7' })
   })
 
-  it('says a bar of no chord has none in the chord row (ADR 0094)', () => {
+  it('says a bar of no chord has none in the chord row (ADR 0114)', () => {
     const empty = readDraft({ ...music, sections: [{ kind: 'verse', lines: ['D _'] }] })
     expect(caretSaid({ draft: empty, caret: 96, layer: 'chords' })).toEqual({
       kind: 'noChord',
@@ -57,7 +57,7 @@ describe('caretSaid', () => {
     expect(at(120, 'staff0')).toEqual({ kind: 'held', bar: 2, beat: '2', what: 'A4' })
   })
 
-  it('names the mode where it is not Replace, on a staff alone (ADR 0092)', () => {
+  it('names the mode where it is not Replace, on a staff alone (ADR 0114)', () => {
     expect(caretSaid({ draft, caret: 36, layer: 'staff0', mode: 'insert' })).toEqual({
       kind: 'rest',
       bar: 1,
@@ -77,7 +77,7 @@ describe('caretSaid', () => {
     )
   })
 
-  it('names one note of a chord chosen alone (ADR 0088)', () => {
+  it('names one note of a chord chosen alone (ADR 0096)', () => {
     const chord = readDraft({ ...music, hands: { ...music.hands, rh: 'D4+F#4+A4/4 | r/4' } })
     expect(caretSaid({ draft: chord, caret: 0, layer: 'rh', chordNote: midi(66) })).toMatchObject({
       kind: 'notes',

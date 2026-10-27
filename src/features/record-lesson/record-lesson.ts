@@ -16,7 +16,7 @@ function recordLesson(store: ProgressStore, key: LessonKey, now: Date): void {
   store.setState((state) => withLesson(state, key, now.toISOString()))
 }
 
-/** Records a pass finished in Wait mode over bars as played: a loop's, or the whole piece's (ADR 0100). */
+/** Records a pass finished in Wait mode over bars as played: a loop's, or the whole piece's (ADR 0111). */
 export function recordPass(store: ProgressStore, pieceId: PieceId, bars: BarRange, now: Date) {
   recordLesson(store, barsLessonKey(pieceId, bars), now)
 }

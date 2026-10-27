@@ -42,7 +42,7 @@ export interface Metronome extends MetronomeSettings {
 }
 
 /**
- * The Metronome (ADR 0113): its tempo, meter and sound as saved, and its beats played on the audio
+ * The Metronome (ADR 0052): its tempo, meter and sound as saved, and its beats played on the audio
  * clock. The beats are queued ahead of the clock, each at its time; a timer only tops the queue up.
  * A change while it plays goes on from the beat heard, at once. The screen stays on while it plays.
  */

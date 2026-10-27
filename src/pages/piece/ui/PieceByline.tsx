@@ -12,7 +12,7 @@ import {
 import { useLocale } from '@/shared/i18n'
 
 /**
- * Under a song's title, as a byline (ADR 0100): what else it is called and Your version where the
+ * Under a song's title, as a byline (ADR 0111): what else it is called and Your version where the
  * learner has one, then who wrote it and where it is in its book; its stage's mark ends the first
  * line, or begins its book's line where nothing comes before.
  */

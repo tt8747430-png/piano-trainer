@@ -19,7 +19,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { wholeTake, type KeptBars } from '../model/kept-bars'
 
 /**
- * Keep bars (spec 2026-10-09 §4.3): the first and last bar to keep, numbered as the piece numbers
+ * Keep bars: the first and last bar to keep, numbered as the piece numbers
  * them, and Keep, which asks first: the other bars are deleted for good. Keep waits for a choice
  * that cuts something. A section that folds, as the learner left it.
  */

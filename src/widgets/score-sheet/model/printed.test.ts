@@ -29,7 +29,7 @@ const layout: ScoreLayout = {
   ],
 }
 
-describe('signTargets (ADR 0094)', () => {
+describe('signTargets (ADR 0114)', () => {
   it('names each sign by what it changes and the piece’s bar it stands at, a single staff’s clef too (ADR 0097)', () => {
     const targets = signTargets(layout, [8, 9])
     expect(targets.map((target) => target.printed)).toEqual([

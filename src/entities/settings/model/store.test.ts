@@ -208,13 +208,13 @@ describe('createSettingsStore', () => {
     expect(restored({ recorder: { click: 'no' } }).recorder).toEqual(DEFAULT_RECORDER)
   })
 
-  it('opens the Player in the sheet music, its view saved as any of the four (ADR 0099)', () => {
+  it('opens the Player in the sheet music, its view saved as any of the four (ADR 0108)', () => {
     expect(DEFAULT_SCORE_VIEW.music).toBe('sheet')
     for (const music of ['sheet', 'lyrics', 'diagrams', 'grid'])
       expect(restored({ scoreView: { music } }).scoreView.music).toBe(music)
   })
 
-  it('opens Diagrams animated, and a song in the view saved, asking nothing (ADR 0102)', () => {
+  it('opens Diagrams animated, and a song in the view saved, asking nothing (ADR 0108)', () => {
     expect(DEFAULT_SCORE_VIEW).toMatchObject({ diagrams: 'animated', askOnOpen: false })
     expect(restored({ scoreView: { diagrams: 'summary' } }).scoreView.diagrams).toBe('summary')
   })
@@ -236,7 +236,7 @@ describe('createSettingsStore', () => {
     )
   })
 
-  it('starts the Metronome at 120 in 4/4 with a click, each part saved kept where valid (ADR 0113)', () => {
+  it('starts the Metronome at 120 in 4/4 with a click, each part saved kept where valid (ADR 0052)', () => {
     expect(DEFAULT_METRONOME).toEqual({ bpm: 120, meter: '4/4', sound: 'click' })
     expect(restored({ metronome: { bpm: 400, meter: '5/4', sound: 'beep' } }).metronome).toEqual({
       bpm: 120,
@@ -265,7 +265,7 @@ describe('createSettingsStore', () => {
     expect(restored({ sound: 'loud' }).sound).toEqual(DEFAULT_SOUND)
   })
 
-  it('keeps no side for the palette: beside the sheet it stands at its right (ADR 0094)', () => {
+  it('keeps no side for the palette: beside the sheet it stands at its right (ADR 0114)', () => {
     expect(restored({ paletteSide: 'left' })).not.toHaveProperty('paletteSide')
   })
 

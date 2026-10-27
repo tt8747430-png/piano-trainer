@@ -17,14 +17,14 @@ const BAR_KEYS: readonly BarKeyEdit[] = [
 ]
 
 /**
- * Bar (spec 2026-10-23): what acts on the bars chosen, else the caret's: a bar added before or after,
+ * Bar: what acts on the bars chosen, else the caret's: a bar added before or after,
  * the bars deleted, a line or a section begun there or the lines joined; their length (a pickup, or a
  * bar of another length, as the ⓘ beside its name says), each saying what it does.
  */
 export function BarKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
-  // The caret's section's meter, its own or the song's (ADR 0095).
+  // The caret's section's meter, its own or the song's (ADR 0097).
   const meter = useEditorState((state) => meterAt(state.draft, state.caret))
   const barTicks = useEditorState((state) => barAt(state.draft, state.caret).bar.ticks)
   return (

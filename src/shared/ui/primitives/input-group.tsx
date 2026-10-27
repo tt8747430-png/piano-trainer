@@ -63,7 +63,7 @@ function InputGroupAddon({
 
 const inputGroupButtonVariants = cva('flex items-center gap-2 text-sm shadow-none', {
   variants: {
-    // Every size is at least a 44px touch target (spec §8), as the Button's are.
+    // Every size is at least a 44px touch target, as the Button's are.
     size: {
       default: 'h-11 gap-1.5 px-3',
       icon: "size-11 p-0 has-[>svg]:p-0 [&_svg:not([class*='size-'])]:size-5",

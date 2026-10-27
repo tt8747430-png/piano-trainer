@@ -4,7 +4,7 @@ import { barsOf, chosenBars } from '@/features/score-editor'
 import { useEditorState } from './editor-context'
 
 /**
- * Where a key or time signature changes from (ADR 0089, 0095), as Flat changes either from a bar: the
+ * Where a key or time signature changes from (ADR 0114, 0097), as Flat changes either from a bar: the
  * section of the bar given (its sign on the sheet), else of the first bar chosen (or the caret's), from
  * there on up to the next change; in the song's first section, the whole song. `said` names which,
  * over the choice.

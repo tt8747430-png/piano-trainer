@@ -30,7 +30,7 @@ const labelsOf = (container: HTMLElement) => [
 ]
 
 describe('LabelRow', () => {
-  it('prints a bar’s number, its section’s name and its tempo in that order at its start (ADR 0095)', () => {
+  it('prints a bar’s number, its section’s name and its tempo in that order at its start (ADR 0097)', () => {
     const { container } = render(
       <LabelRow
         layout={layout}

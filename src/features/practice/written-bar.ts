@@ -1,7 +1,7 @@
 import type { Performance } from '@/shared/lib/arrangement'
 
 // The bar as written (the chart's, counted from 0), as the Player, the editor and the chord views
-// share it (ADR 0090, 0099): the Player plays the repeats taken, so a bar it plays may be one
+// share it (ADR 0115, 0108): the Player plays the repeats taken, so a bar it plays may be one
 // written earlier, and its loop and numbers are the bars played.
 
 /** The written bar a bar played is: its own index, unless the repeats are played (`unfold`). */

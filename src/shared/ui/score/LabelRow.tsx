@@ -59,7 +59,7 @@ function partsOf(
 }
 
 /**
- * The labels' row over a line's staff, the Player's and the editor's alike (ADR 0087, 0095): at a
+ * The labels' row over a line's staff, the Player's and the editor's alike (ADR 0087, 0097): at a
  * bar's start what its label says (`BarLabel`: the line's first bar's number, a section's name at its
  * first bar, a tempo where it is marked, `·` between), running on to the next bar's label or the
  * line's end and cut short there; at each chord's onset its symbol, smaller where many share a bar.

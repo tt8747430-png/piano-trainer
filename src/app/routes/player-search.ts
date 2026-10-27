@@ -62,7 +62,7 @@ const PRACTICE_DEFAULTS: PracticeView = {
   swing: 'straight',
 }
 // A piece: key, tempo, pattern and chord size default to the piece's own, so their absence is the
-// default; its chords as written, not simplified (ADR 0104).
+// default; its chords as written, not simplified (ADR 0105).
 export const PLAYER_DEFAULTS: PlayerSearch = { ...PRACTICE_DEFAULTS, simple: false }
 /** The Player's own params: how it goes, whatever it plays. */
 function practiceView(raw: Raw): PracticeView {
@@ -90,7 +90,7 @@ function figures(raw: Raw): Pick<SetupParams, 'pattern' | 'rh' | 'lh' | 'inversi
 const chordSize = (raw: Raw) => (isChordSize(raw.chordSize) ? raw.chordSize : undefined)
 const walk = (raw: Raw) => (isKeyWalk(raw.walk) ? raw.walk : undefined)
 
-/** A bar as printed, from 1: where the Player and the score editor open from the other (ADR 0090). */
+/** A bar as printed, from 1: where the Player and the score editor open from the other (ADR 0115). */
 const BAR_MAX = 9999
 const bar = (raw: Raw): number | undefined => wholeIn(raw.bar, 1, BAR_MAX, undefined)
 
@@ -120,7 +120,7 @@ const PLAYING = [
   'swing',
   'speedTraining',
 ] as const
-/** A piece's kept params (ADR 0022): its key, chord size and Simplify too (ADR 0104). */
+/** A piece's kept params (ADR 0038): its key, chord size and Simplify too (ADR 0105). */
 export const PLAYER_KEPT: readonly (keyof PlayerSearch & string)[] = [
   'key',
   'chordSize',

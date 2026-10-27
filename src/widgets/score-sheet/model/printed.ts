@@ -3,8 +3,8 @@ import type { StaffId } from '@/shared/lib/notation'
 import type { Extent, ScoreLayout, Sign, StaffLabel } from '@/shared/ui/score'
 
 /**
- * What is printed on the sheet and edited where it is (ADR 0094), as Flat's and Dorico's: the tempo
- * mark; a section's name at its first bar (ADR 0095); a key or time signature, from the piece's bar it
+ * What is printed on the sheet and edited where it is (ADR 0114), as Flat's and Dorico's: the tempo
+ * mark; a section's name at its first bar (ADR 0097); a key or time signature, from the piece's bar it
  * stands at; a staff's clef there; a staff's name at the first line's head, a single staff's or the
  * piano's (ADR 0097).
  */
@@ -69,7 +69,7 @@ function withKeyPlaces(layout: ScoreLayout, keyless: boolean): readonly Sign[] {
 }
 
 /**
- * The targets over a line's clefs, key and time signatures (ADR 0094), `bars` the piece's bar of each
+ * The targets over a line's clefs, key and time signatures (ADR 0114), `bars` the piece's bar of each
  * of its measures: each sign's box grown to meet its neighbours on its staff halfway, from the line's
  * start to short of its measure's first note, and over its staff's lines at least; a key printing
  * no sharps or flats (`keyless`) its place after the head's clefs; a single staff's clef too, which

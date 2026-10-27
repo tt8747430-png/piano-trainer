@@ -10,7 +10,7 @@ import {
 } from '@/shared/lib/music'
 import type { ReadNote } from '../draw'
 
-// The notes ladder (roadmap §10.6): fifteen levels from three anchors to every key. A note at or above
+// The notes ladder: fifteen levels from three anchors to every key. A note at or above
 // middle C is read on the treble staff, one below it on the bass, unless the level says otherwise.
 
 const read = (text: string, clef?: ReadNote['clef']): ReadNote => {

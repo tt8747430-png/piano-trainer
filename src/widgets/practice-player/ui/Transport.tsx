@@ -4,7 +4,7 @@ import { FloatingBar, FloatingBarButton, FloatingBarPlay } from '@/shared/ui'
 import { DOCK_STEP } from './dock-sizes'
 
 /**
- * The transport's pill (ADR 0061, 0099, 0105, 0110), the Player's and the score editor's one shape:
+ * The transport's pill (ADR 0061, 0108, 0105, 0115), the Player's and the score editor's one shape:
  * the tempo, ‹, Play or Stop (honey), ›, then three controls of the screen's own (`end`: the Player's
  * loop, Sound and hands; the editor's Record, takes and recording settings), each a transport
  * button's size (`DOCK_BUTTON`). The same seven in the same sizes in both modes of one score, so

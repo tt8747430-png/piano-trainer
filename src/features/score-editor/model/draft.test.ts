@@ -49,7 +49,7 @@ const WRITTEN: PieceMusic = {
 }
 
 describe('the draft', () => {
-  it('writes a section’s bars in its own meter, whole bars without their beats (ADR 0095)', () => {
+  it('writes a section’s bars in its own meter, whole bars without their beats (ADR 0097)', () => {
     const music: PieceMusic = {
       key: 'C',
       meter: '4/4',
@@ -76,7 +76,7 @@ describe('the draft', () => {
     },
   )
 
-  it('writes out the bars the pattern played as the Player plays them, each note inside its bar (ADR 0091)', () => {
+  it('writes out the bars the pattern played as the Player plays them, each note inside its bar (ADR 0114)', () => {
     const draft = readDraft(WRITTEN)
     const piece: ChartPiece = { id: 'written', kind: 'song', title: '', ...WRITTEN }
     const { notes } = arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS)
@@ -150,7 +150,7 @@ describe('the draft', () => {
     expect(writeDraft(cut)).toMatchObject({ meter: '2/2', timeSymbol: true })
   })
 
-  it('carries no section’s own pattern: the song’s form alone (ADR 0091)', () => {
+  it('carries no section’s own pattern: the song’s form alone (ADR 0114)', () => {
     const { hands: _hands, staves: _staves, ...plain } = WRITTEN
     const patterned: PieceMusic = {
       ...plain,
@@ -202,7 +202,7 @@ describe('the draft', () => {
     expect(shape(staffNotes(draft, 1))).toEqual(['G2@24/96', 'C3@120/96'])
     expect(staffNotes(draft, 2)).toEqual([])
     expect(draft.leadSheet).toBe(true)
-    // An empty staff is written as a rest, so it stays (ADR 0072).
+    // An empty staff is written as a rest, so it stays (ADR 0114).
     const [voice, cello] = music.staves ?? []
     expect(writeDraft(draft).staves).toEqual([voice, cello, { notes: 'r/1' }])
   })
@@ -241,7 +241,7 @@ describe('the draft', () => {
     expect(barAt(draft, totalTicks(draft)).index).toBe(3)
   })
 
-  it('finds the chord sounding at a tick in its bar; none in a bar of no chord (ADR 0094)', () => {
+  it('finds the chord sounding at a tick in its bar; none in a bar of no chord (ADR 0114)', () => {
     const draft = readDraft({ ...WRITTEN, sections: [{ kind: 'verse', lines: ['G@1 C-D _ Em'] }] })
     const at = (tick: number) => {
       const chord = chordAt(draft, tick)

@@ -45,7 +45,7 @@ function PreviewLine({ draft }: { draft: Draft }) {
 }
 
 /**
- * The editor's Transpose (ADR 0110, 0115): the Player's one Transpose, its trigger the key the song is
+ * The editor's Transpose (ADR 0115): the Player's one Transpose, its trigger the key the song is
  * written in and its control the same − the key it lands in +, how far, and Reset; under it what
  * writing needs: Apply to key and Apply to chords, each its ⓘ, the first line moved as a preview, and
  * Transpose, which writes the song so in one edit Undo takes back. Opened afresh each time, from the

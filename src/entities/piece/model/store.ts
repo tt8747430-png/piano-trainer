@@ -36,7 +36,7 @@ import {
 export const PIECES_STORAGE_KEY = 'pt-pieces'
 export const PIECES_VERSION = 8
 
-/** The learner's pieces (spec 2026-10-01-score-editor §4). */
+/** The learner's pieces. */
 export interface PiecesState {
   /** The learner's version of a catalog song, study or listing, by its id. */
   readonly versions: Readonly<Record<PieceId, PieceMusic>>
@@ -132,7 +132,7 @@ function savedHands(saved: unknown): Hands | undefined {
 const chartTicks = (piece: ChartPiece): Tick =>
   barTicksOf(piece).reduce((sum, ticks) => sum + ticks, 0)
 
-/** Whether a piece's words read on the staff they are on (ADR 0093): a verse longer than its tune does not. */
+/** Whether a piece's words read on the staff they are on (ADR 0097): a verse longer than its tune does not. */
 function singsLyrics(piece: ChartPiece): boolean {
   try {
     stavesOf(piece)
@@ -146,9 +146,9 @@ function singsLyrics(piece: ChartPiece): boolean {
 
 /**
  * Saved music that reads as a piece's: its fields, its chart, single staves and hands; null
- * otherwise. Its words are kept where they read on the staff they are on (ADR 0093), its own title
- * where it is one (ADR 0094), a lead sheet only where it has a single staff: a score never hides
- * every staff (ADR 0083, 0097).
+ * otherwise. Its words are kept where they read on the staff they are on (ADR 0097), its own title
+ * where it is one (ADR 0114), a lead sheet only where it has a single staff: a score never hides
+ * every staff (ADR 0114, 0097).
  */
 function musicOfSaved(saved: unknown): PieceMusic | null {
   if (!isRecord(saved)) return null

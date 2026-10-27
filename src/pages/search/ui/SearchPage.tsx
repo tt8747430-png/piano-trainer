@@ -12,7 +12,7 @@ import { useIndex, useIndexNames } from '../model/use-index'
 import { IndexRow } from './IndexRow'
 
 /**
- * Search (ADR 0044): one field over every named thing the app has, by kind, each a row to its page.
+ * Search (ADR 0052): one field over every named thing the app has, by kind, each a row to its page.
  * With nothing typed it is the whole index; a chord symbol typed is read as the chord, a line of
  * chords as a song's to transpose. Each kind shows its nearest rows first, the rest on Show all.
  */

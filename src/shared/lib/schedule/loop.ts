@@ -32,7 +32,7 @@ export interface Pass extends Scheduled {
   readonly tempo: number
 }
 
-/** Listen's loop (spec §2.7): passes of the passage, each queued as the last one nears its end. */
+/** Listen's loop: passes of the passage, each queued as the last one nears its end. */
 interface Loop {
   readonly performance: Performance
   readonly options: LoopOptions

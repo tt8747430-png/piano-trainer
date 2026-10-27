@@ -81,7 +81,7 @@ export const SheetLine = memo(function SheetLine({
   onDrag?: ((steps: number, joins: boolean) => void) | undefined
   /** The engraving's size: smaller on a phone, as it prints on a page. */
   scale?: number
-  /** On a page, its labels as they print (ADR 0075). */
+  /** On a page, its labels as they print (ADR 0096). */
   print?: boolean
   /** Spread to the sheet's width, as a printed system is; a panorama's one line is left natural. */
   justify?: boolean
@@ -91,7 +91,7 @@ export const SheetLine = memo(function SheetLine({
   caret: Tick | null
   /** Where Play is, on the piece's ticks, while it plays on this line (ADR 0096). */
   playhead: { readonly tick: Tick; readonly clock: () => Tick | null } | null
-  /** One note of the chord at the caret chosen alone (ADR 0088). */
+  /** One note of the chord at the caret chosen alone (ADR 0096). */
   chordNote: Midi | null
   /** The notes chosen: their span on the piece. */
   selection: { readonly from: Tick; readonly to: Tick } | null
@@ -99,16 +99,16 @@ export const SheetLine = memo(function SheetLine({
   onReach: (tick: Tick) => void
   onDeselect: () => void
   placesOf: (layer: Layer) => readonly Tick[]
-  /** Where a click lands in a layer: on a note or a bar's start, never an empty step (ADR 0082). */
+  /** Where a click lands in a layer: on a note or a bar's start, never an empty step (ADR 0096). */
   tapsOf: (layer: Layer) => readonly Tick[]
   chordNames: boolean
   /** The fingers written on the notes, printed: the fingering field types them there (ADR 0096). */
   fingers: boolean
-  /** Each section's name, by section: printed at its first bar (ADR 0095). */
+  /** Each section's name, by section: printed at its first bar (ADR 0097). */
   headings: readonly string[]
-  /** What edits a thing printed (ADR 0094). */
+  /** What edits a thing printed (ADR 0114). */
   edit: EditPrinted
-  /** The staves' names, printed at the line's head: the piece's first line (ADR 0094). */
+  /** The staves' names, printed at the line's head: the piece's first line (ADR 0114). */
   labels?: StaffLabels | undefined
   /** The staves drawn, of those the line writes: one of the piano's the View hides left out. */
   staves: readonly StaffId[]
@@ -137,7 +137,7 @@ export const SheetLine = memo(function SheetLine({
   // The caret's line comes into view when the caret moves onto it; the sheet opens where it is
   // while the line is already in sight.
   const held = useRef<boolean | null>(null)
-  // On a page canvas, the canvas moves to it (ADR 0075); elsewhere the sheet scrolls.
+  // On a page canvas, the canvas moves to it (ADR 0096); elsewhere the sheet scrolls.
   const reveal = useCanvasReveal()
   useEffect(() => {
     const line = ref.current

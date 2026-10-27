@@ -1,5 +1,5 @@
 /**
- * How a score is laid out (ADR 0064, 0102), in the order it is offered: A4 pages as it will print;
+ * How a score is laid out (ADR 0096, 0108), in the order it is offered: A4 pages as it will print;
  * lines one under the other, scrolled down; or one line, scrolled across. The sheet music's layout in
  * the Player's View and the editor's, saved for every piece.
  */
@@ -10,7 +10,7 @@ export type SheetView = (typeof SHEET_VIEWS)[number]
 export const PAGE = { width: 794, height: 1123, margin: 57 } as const
 
 /**
- * The engraving's size on a page, as it prints (ADR 0075): a staff a 33rd of the page's width (24 px
+ * The engraving's size on a page, as it prints (ADR 0096): a staff a 33rd of the page's width (24 px
  * of 794), as the hymnals in `piano-data/scores` print theirs (18 pt of 612). The page canvas zooms
  * it to the screen, so a page is never laid out again for a narrow one.
  */

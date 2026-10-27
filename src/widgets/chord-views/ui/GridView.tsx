@@ -11,7 +11,7 @@ import { inSight } from '../model/in-sight'
 import { gridWords } from '../model/lyric-lines'
 
 /**
- * The Grid (ADR 0098, 0099): the music's chord chart in beats under its title, its sections headed,
+ * The Grid (ADR 0108): the music's chord chart in beats under its title, its sections headed,
  * the beat sounding filled, the loop's bars on its band; a beat tapped takes the cursor there. Its
  * own scroller, with room to scroll its last line clear of the transport floating over its foot. The
  * bar the cursor is in is kept in sight as the music moves on, as the sheet keeps the line playing;

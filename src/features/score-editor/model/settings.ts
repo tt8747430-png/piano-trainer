@@ -30,7 +30,7 @@ function moved(notes: readonly DraftNote[], from: Key, to: Key): DraftNote[] {
 export function setKey(draft: Draft, key: Key): Draft {
   const from = draft.key
   if (keyText(from) === keyText(key)) return draft
-  // A section's own key moves with its music (ADR 0089).
+  // A section's own key moves with its music (ADR 0114).
   const sectionKey = (written: KeyText): KeyText => {
     const own = parseKey(written)
     return own
@@ -62,7 +62,7 @@ export function setKey(draft: Draft, key: Key): Draft {
   )
 }
 
-/** What Transpose moves besides the notes (ADR 0110): the key signature, and the chord symbols. */
+/** What Transpose moves besides the notes (ADR 0115): the key signature, and the chord symbols. */
 export interface TransposeApplies {
   readonly key: boolean
   readonly chords: boolean
@@ -88,8 +88,8 @@ const keepingFrom = (
   })
 
 /**
- * The music moved by semitones (ADR 0110, the transpose sheets of notation apps), the short way its
- * notes move (−5 to +6), to the key spelled by its simplest signature (`transposedKey`, ADR 0104):
+ * The music moved by semitones (ADR 0115, the transpose sheets of notation apps), the short way its
+ * notes move (−5 to +6), to the key spelled by its simplest signature (`transposedKey`, ADR 0105):
  * the notes always; the key signature, a section's own key too, with `key`; the chord symbols with
  * `chords`. A key kept, the notes are spelled as in the key they moved to, accidentals printed.
  */

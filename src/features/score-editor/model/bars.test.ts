@@ -124,7 +124,7 @@ describe('setBarTicks, a pickup', () => {
     expect(lengths(long)).toEqual([48, 96])
   })
 
-  it('reads a first bar against its section’s own meter: a whole bar of it is none (ADR 0095)', () => {
+  it('reads a first bar against its section’s own meter: a whole bar of it is none (ADR 0097)', () => {
     const waltz = draftOf({
       sections: [{ kind: 'verse', meter: '3/4', lines: ['G C'] }],
       staves: [{ notes: 'C4/1 D4/1 E4/1 | F4/3' }],

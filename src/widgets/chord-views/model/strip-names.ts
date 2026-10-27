@@ -11,7 +11,7 @@ const NOTHING: StripName = { symbols: [], rest: false }
 const REST: StripName = { symbols: [], rest: true }
 
 /**
- * Each beat of the strip as it names its chords (ADR 0101, Chordify's), bar by bar as played: a
+ * Each beat of the strip as it names its chords (ADR 0108, Chordify's), bar by bar as played: a
  * chord only in the beat where it changes from the chord sounding before it, so one held over bars,
  * or played again bar after bar, is named once; where the music turns to no chord (a bar of none,
  * or music that starts with none), a rest in that bar's first beat. `bars` are every bar as played,

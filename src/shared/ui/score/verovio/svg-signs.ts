@@ -10,7 +10,7 @@ const KINDS: readonly (readonly [SignKind, string])[] = [
 ]
 
 /**
- * Each clef, key and time signature of a line Verovio engraved (ADR 0094), in the line's px (`at`
+ * Each clef, key and time signature of a line Verovio engraved (ADR 0114), in the line's px (`at`
  * turns Verovio's units into them), top staff first and each staff's left to right: the staff
  * whose group holds it (a clef changed inside a measure stands in its layer), the measure (`m-<i>`)
  * and the box round its glyphs. A sign past its measure's first note is a courtesy for the next

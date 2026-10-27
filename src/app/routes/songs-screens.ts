@@ -8,7 +8,7 @@ export { shelfOf } from '@/entities/piece'
 export const entryIn = (state: PiecesState, id: string) => repertoire(state).entry(id)
 
 /**
- * Whether a section's page is there (ADR 0100): the piece's, on its shelf (`songs` or a study's
+ * Whether a section's page is there (ADR 0111): the piece's, on its shelf (`songs` or a study's
  * `practice`), and a section it has, counted from 1.
  */
 export function sectionIn(

@@ -30,7 +30,7 @@ export function pieceById(id: string): Piece | undefined {
 
 /**
  * The catalog entry a learner may have a version of: every song, study and listing, a song written in
- * degrees as its chart in its key (ADR 0110).
+ * degrees as its chart in its key (ADR 0115).
  */
 export function versionableEntry(id: string): ChartPiece | Listing | undefined {
   const entry = entryById(id)

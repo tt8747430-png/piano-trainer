@@ -19,7 +19,7 @@ export function PieceCredits({ entry }: { entry: Entry }) {
 
 /**
  * Under a song's facts, in one quiet line: the way to its key's scale, and what is said about it
- * behind an ⓘ (ADR 0100, amended: no paragraph of description on the page).
+ * behind an ⓘ (ADR 0111, amended: no paragraph of description on the page).
  */
 export function PieceAbout({ entry }: { entry: Entry }) {
   const { t } = useTranslation('piece')

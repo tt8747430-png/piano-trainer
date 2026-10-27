@@ -90,7 +90,7 @@ describe('sections', () => {
     expect(headings(joinSection(form, 1)).map((heading) => heading.label)).toEqual(['A', 'B', 'A'])
   })
 
-  describe('a key change at a section (ADR 0089)', () => {
+  describe('a key change at a section (ADR 0114)', () => {
     const song = draftOf({
       sections: [
         { kind: 'verse', n: 1, lines: ['G C'] },
@@ -132,7 +132,7 @@ describe('sections', () => {
     })
   })
 
-  describe('a change of time at a section (ADR 0095)', () => {
+  describe('a change of time at a section (ADR 0097)', () => {
     const song = draftOf({
       sections: [
         { kind: 'verse', n: 1, lines: ['G C'] },

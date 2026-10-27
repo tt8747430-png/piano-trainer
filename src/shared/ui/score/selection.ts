@@ -10,7 +10,7 @@ import { leftAt, xAtTick, type Extent, type Head, type ScoreLayout } from './lay
  */
 export const MARK = { reach: 0.5, pad: 0.3, lead: 0.5, inset: 0.4 } as const
 
-/** How far round a head a click still lands on it, in staff spaces (ADR 0088). */
+/** How far round a head a click still lands on it, in staff spaces (ADR 0096). */
 export const GRAB = 0.35
 
 /**
@@ -62,7 +62,7 @@ const over = ({ top, bottom }: Span, space: number) => ({
   height: bottom - top + 2 * MARK.reach * space,
 })
 
-/** What a mark is over (ADR 0088): the notes starting in [from, to) on these staves (every staff without), one key alone where `midi` says. */
+/** What a mark is over (ADR 0096): the notes starting in [from, to) on these staves (every staff without), one key alone where `midi` says. */
 export interface Chosen {
   readonly staves?: readonly StaffId[] | undefined
   readonly from: Tick
@@ -179,7 +179,7 @@ export function caretLine(
   return { left: leftAt(layout, tick, staves) - MARK.lead * space, ...over(span, space) }
 }
 
-/** What a point on the engraving lands on (ADR 0088): one head (`index`, `midi`), or a chord's column whole. */
+/** What a point on the engraving lands on (ADR 0096): one head (`index`, `midi`), or a chord's column whole. */
 export interface Picked {
   readonly staff: StaffId
   readonly tick: Tick
@@ -195,7 +195,7 @@ const centre = (box: Extent, x: number, y: number) =>
   Math.hypot((box.left + box.right) / 2 - x, (box.top + box.bottom) / 2 - y)
 
 /**
- * What a click at (x, y) on the engraving chooses (ADR 0088), the editor's and the Player's alike:
+ * What a click at (x, y) on the engraving chooses (ADR 0096), the editor's and the Player's alike:
  * the head under it (the nearest, where a chord's heads touch); else the chord whose column (its
  * heads and stem) it is on; else nothing: empty staff is never chosen.
  */

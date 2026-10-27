@@ -73,7 +73,7 @@ const MOVES: Readonly<Partial<Record<string, (key: Midi) => Midi>>> = {
 }
 
 /**
- * The one keyboard (spec §8): the whole piano hung from its rail, scrolling sideways, its `range`
+ * The one keyboard: the whole piano hung from its rail, scrolling sideways, its `range`
  * filling the width at Fit. A group named "Keyboard" whose keys are buttons named by note, one of
  * them in the tab order; the arrow keys walk the rest. A key plays the instant it is touched and the
  * keys hold still under a finger (Glissando plays each key a finger slides onto); the keyboard
@@ -104,7 +104,7 @@ export function PianoKeyboard({
   /**
    * Fit narrows its keys until the widest span `inView` has asked for fits the width (the Player's:
    * Wait mode's chord across both hands). It narrows only as a wider span is asked, never back, so
-   * the keys hold still (ADR 0059).
+   * the keys hold still (ADR 0062).
    */
   fitInView?: boolean
   keySize?: KeySize

@@ -65,7 +65,7 @@ describe('a line engraved by Verovio, read back', () => {
   }, 20_000)
 })
 
-describe('each notehead read back (ADR 0088)', () => {
+describe('each notehead read back (ADR 0096)', () => {
   const chordScore = notate({
     key: { tonic: note('C'), minor: false },
     meter: '4/4',
@@ -143,7 +143,7 @@ describe('each notehead read back (ADR 0088)', () => {
   }, 20_000)
 })
 
-describe('a line with words (ADR 0093)', () => {
+describe('a line with words (ADR 0097)', () => {
   const sung = (text: string) => ({ text, hyphen: false, held: 0 })
   const worded = notate({
     key: { tonic: note('C'), minor: false },
@@ -235,7 +235,7 @@ describe('a line with words (ADR 0093)', () => {
   }, 20_000)
 })
 
-describe('the staves’ names at a first line’s head (ADR 0094, 0097)', () => {
+describe('the staves’ names at a first line’s head (ADR 0114, 0097)', () => {
   const tuned = notate({
     key: { tonic: note('C'), minor: false },
     meter: '4/4',
@@ -292,7 +292,7 @@ describe('the staves’ names at a first line’s head (ADR 0094, 0097)', () => 
   }, 20_000)
 })
 
-describe('the signs printed on a line (ADR 0094)', () => {
+describe('the signs printed on a line (ADR 0114)', () => {
   const signed = notate({
     key: { tonic: note('D'), minor: false },
     meter: '4/4',

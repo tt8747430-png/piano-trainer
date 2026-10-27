@@ -204,7 +204,7 @@ describe('PianoKeyboard', () => {
     const { rerender } = renderKeyboard({ inView: asked, fitInView: true })
     const keys = screen.getByRole('group', { name: 'Keyboard' })
     expect(keys.style.height).toContain('100cqw / 19')
-    // A narrower span asked next leaves the keys as they are: they hold still (ADR 0059).
+    // A narrower span asked next leaves the keys as they are: they hold still (ADR 0062).
     rerender(
       <PianoKeyboard
         range={ONE_OCTAVE}

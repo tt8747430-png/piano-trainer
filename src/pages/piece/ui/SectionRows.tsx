@@ -10,7 +10,7 @@ import { progressOf } from '../model/song-progress'
 import { SectionLink } from './SectionLink'
 
 /**
- * A song's sections in order, in one card (spec §3.1): each a row to its page, its tile in its paint
+ * A song's sections in order, in one card: each a row to its page, its tile in its paint
  * with a note, its name, and its lessons done of all.
  */
 export function SectionRows({

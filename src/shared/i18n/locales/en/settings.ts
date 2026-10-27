@@ -11,7 +11,7 @@ export const settings = {
   midi: 'MIDI keyboard',
   // How a take is recorded in the score editor (ADR 0028), as its recording strip's settings say too.
   recording: 'Recording',
-  // A screen's floating actions (ADR 0058): where they stand, and whether they say their names.
+  // A screen's floating actions (ADR 0061): where they stand, and whether they say their names.
   floating: {
     place: 'Floating buttons',
     placeInfo: 'Where the buttons that float over a screen stand along its foot',
@@ -45,7 +45,7 @@ export const settings = {
     cancel: 'Keep what is here',
     confirm: 'Restore',
   },
-  // Help (ADR 0113): How to use, a short guide in plain steps, each part folding.
+  // Help (ADR 0052): How to use, a short guide in plain steps, each part folding.
   help: {
     label: 'Help',
     howToUse: 'How to use',

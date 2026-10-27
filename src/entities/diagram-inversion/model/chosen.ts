@@ -2,7 +2,7 @@ import type { PieceId } from '@/entities/piece'
 import type { Inversion } from '@/shared/lib/music'
 
 /**
- * The inversion chosen for each chord of a piece, by its symbol as played (ADR 0101): what its
+ * The inversion chosen for each chord of a piece, by its symbol as played (ADR 0108): what its
  * diagrams draw it in, wherever the piece shows them. The chord chosen last at the end.
  */
 export type ChosenInversions = Readonly<Record<string, Inversion>>

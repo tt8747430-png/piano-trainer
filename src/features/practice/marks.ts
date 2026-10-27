@@ -45,7 +45,7 @@ export function practiceMarks(
 }
 
 /**
- * The Player's keyboard in a chord view while Listen plays (ADR 0101): the chord sounding as its
+ * The Player's keyboard in a chord view while Listen plays (ADR 0108): the chord sounding as its
  * diagram draws it, each key named as the chord spells it; the bass it rings, which the chord has
  * not, the left hand's, the rest the right's.
  */
@@ -65,7 +65,7 @@ const AT_LEAST: KeyRange = { from: midi(48), to: midi(71) }
 
 /**
  * The keys a score's notes need, from a C to a B, two octaves round middle C at least: the Player's,
- * and the score editor's, so its keys are as wide and as long in both modes (ADR 0110).
+ * and the score editor's, so its keys are as wide and as long in both modes (ADR 0115).
  */
 export const keysRange = (keys: readonly Midi[]): KeyRange => keyboardRange(keys, AT_LEAST)
 

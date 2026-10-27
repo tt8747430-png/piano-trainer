@@ -9,7 +9,7 @@ export const RevealContext = createContext<((revealed: Revealed) => void) | null
 
 /**
  * What brings an element of the canvas into sight (the caret's line, the line playing), or a box on
- * the screen, inside a `PageCanvas` (ADR 0075); null outside one, where the element scrolls into view
+ * the screen, inside a `PageCanvas` (ADR 0096); null outside one, where the element scrolls into view
  * as a page's does.
  */
 export const useCanvasReveal = () => useContext(RevealContext)

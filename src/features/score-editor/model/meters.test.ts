@@ -92,7 +92,7 @@ describe('the song’s meter', () => {
     expect(setMeter(pickup, '3/4').sections[0]?.lines[0]?.[0]?.ticks).toBe(before)
   })
 
-  it('counts the whole song in the new meter, a section’s own given up (ADR 0095)', () => {
+  it('counts the whole song in the new meter, a section’s own given up (ADR 0097)', () => {
     const changing = draftOf({
       sections: [
         { kind: 'verse', lines: ['G C'] },
@@ -110,7 +110,7 @@ describe('the song’s meter', () => {
   })
 })
 
-describe('a change of time at a section (ADR 0095)', () => {
+describe('a change of time at a section (ADR 0097)', () => {
   const song = draftOf({
     sections: [
       { kind: 'verse', n: 1, lines: ['G C'] },

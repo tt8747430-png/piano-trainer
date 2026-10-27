@@ -9,7 +9,7 @@ const ASIDE =
   'transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none'
 
 /**
- * One part of the Player's screen under its bar (`ScoreBar`), and the score editor's (ADR 0110),
+ * One part of the Player's screen under its bar (`ScoreBar`), and the score editor's (ADR 0115),
  * placed by its name. The transport's (`dock`) fades out of sight and reach while the screen hides
  * it, its room kept so nothing moves.
  */

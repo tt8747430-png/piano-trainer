@@ -1,7 +1,7 @@
 import type { ChordQuality, ReferenceInterval, ScaleKind } from '@/shared/lib/music'
 import type { IntervalWay } from '@/shared/lib/schedule'
 
-// The ear trainers' ladders (The Ultimate Piano's ear training, roadmap §10.6).
+// The ear trainers' ladders (The Ultimate Piano's ear training).
 
 const STEPS: readonly ReferenceInterval[] = ['m2', 'M2', 'm3', 'M3']
 const FOURTHS: readonly ReferenceInterval[] = [...STEPS, 'P4', 'P5']

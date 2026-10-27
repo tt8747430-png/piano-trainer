@@ -38,7 +38,7 @@ const gridBars = () =>
     .getAllByRole('button', { name: /^Bar / })
     .map((bar) => bar.getAttribute('aria-label'))
 
-describe('Simplify (ADR 0104)', () => {
+describe('Simplify (ADR 0105)', () => {
   it('plays and shows every chord as its plain triad while pressed, and as written again', async () => {
     const user = userEvent.setup()
     const { router, settingsStore } = await renderApp('/play/my-1', {

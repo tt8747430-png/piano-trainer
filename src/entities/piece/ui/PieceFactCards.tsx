@@ -8,8 +8,8 @@ import { pieceKey, type Piece } from '../model/types'
 import { useTempoText } from './use-tempo-text'
 
 /**
- * A piece's facts as cards, three across (ADR 0100), on its song's page and in the Player's Song
- * information (ADR 0099): its key, time and tempo. The key is the one it is played in, where the
+ * A piece's facts as cards, three across (ADR 0111), on its song's page and in the Player's Song
+ * information (ADR 0108): its key, time and tempo. The key is the one it is played in, where the
  * Player's Setup has moved it (`played`), else its own. A fact more after them (`children`: Song
  * information's tuning, ADR 0107) makes four, two by two on a phone held upright.
  */

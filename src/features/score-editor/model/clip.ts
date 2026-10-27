@@ -23,7 +23,7 @@ export interface BarsClip {
   readonly hands: Readonly<Record<HandId, readonly DraftNote[]>>
 }
 
-/** Notes copied from one staff (ADR 0092), timed from the start of the span they were chosen in, and its length. */
+/** Notes copied from one staff (ADR 0114), timed from the start of the span they were chosen in, and its length. */
 export interface NotesClip {
   readonly kind: 'notes'
   readonly layer: NoteLayer
@@ -58,7 +58,7 @@ function fitTo({ notes, ticks }: NotesClip, layer: NoteLayer): DraftNote[] {
 }
 
 /**
- * Copied notes written from `at` on a staff (ADR 0092), spelled in the key there: over what is in
+ * Copied notes written from `at` on a staff (ADR 0114), spelled in the key there: over what is in
  * their time, or, in Insert mode, in room made for them, the later notes pushed right; bars added at
  * the end of the song for what runs past it. Where the notes end, the caret goes next.
  */

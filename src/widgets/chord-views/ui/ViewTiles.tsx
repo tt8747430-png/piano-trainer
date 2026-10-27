@@ -5,9 +5,9 @@ import type { ViewNeeds } from '../model/view-needs'
 import { ViewPicture } from './ViewPicture'
 
 /**
- * The Player's views of the music as tiles (ADR 0099), the top of its View: each a picture of the
+ * The Player's views of the music as tiles (ADR 0108), the top of its View: each a picture of the
  * view drawn in its own style over its name, two by two, the one shown chosen, as the layouts' tiles
- * are (ADR 0115). A view the music cannot show is greyed, what it needs its tooltip (ADR 0102:
+ * are (ADR 0115). A view the music cannot show is greyed, what it needs its tooltip (ADR 0108:
  * words, chord symbols).
  */
 export function ViewTiles({

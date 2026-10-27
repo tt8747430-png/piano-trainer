@@ -9,7 +9,7 @@ import { SheetField } from './SheetField'
  * The chord-symbol field (ADR 0096, Flat's): the chord written at the caret's beat, typed over the
  * chord row where it is printed. What is typed is written as the field goes on or is left
  * (`readChordSymbol`): Enter or → a beat on, ← a beat back, Escape out; a symbol that cannot be read
- * is marked and written nowhere; emptied, the chord there comes off (a bar may hold none, ADR 0094).
+ * is marked and written nowhere; emptied, the chord there comes off (a bar may hold none, ADR 0114).
  * Under it, the chords to tap, those starting as typed: the key's, I to vii, triads then sevenths,
  * then the song's own; a tap writes one and goes on.
  */

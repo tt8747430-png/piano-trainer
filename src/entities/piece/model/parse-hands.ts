@@ -34,7 +34,7 @@ const TOKEN = /^([^/@[\]]+)\/([^/@[\]]+)(?:@([^[\]]+))?(?:\[([^\]]*)\])?$/
 
 type Fail = (problem: string) => never
 
-/** A clef change written first in a hand's bar: `clef:bass C4/4 …`, or `clef:treble -` (ADR 0069). */
+/** A clef change written first in a hand's bar: `clef:bass C4/4 …`, or `clef:treble -` (ADR 0097). */
 export const CLEF_TOKEN = 'clef:'
 
 /** A bar's entry as its clef change and the rest: the clef's name (null where none), its notes or `-`. */

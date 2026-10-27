@@ -5,7 +5,7 @@ import { beatsPerBar, beatsToTicks, timeSignature, timeSignatureText } from '@/s
 
 /**
  * The performance's bars as written (their indexes, counted from 0) by section, then line by line as
- * the chart writes them: each once, where the Player plays the repeats (ADR 0067, 0098).
+ * the chart writes them: each once, where the Player plays the repeats (ADR 0097, 0108).
  */
 export function chartSections(performance: Performance): number[][][] {
   const sections: number[][][] = []
@@ -23,7 +23,7 @@ export function chartSections(performance: Performance): number[][][] {
 
 /**
  * What a bar's button shows: its chords' symbols, the methods they name, and its time signature where
- * its meter changes there (ADR 0095); whether it is short of its meter's bar (a pickup), which the
+ * its meter changes there (ADR 0097); whether it is short of its meter's bar (a pickup), which the
  * Grid shows by its beats alone (ADR 0108).
  */
 interface ChartBar {

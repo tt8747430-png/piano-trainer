@@ -9,7 +9,7 @@ import type { KeyMark } from '@/shared/ui'
 const NO_MARKS: ReadonlyMap<Midi, KeyMark> = new Map()
 
 /**
- * The keys at the foot of a chord view while Listen plays (ADR 0101): the chord sounding as its
+ * The keys at the foot of a chord view while Listen plays (ADR 0108): the chord sounding as its
  * diagram draws it, in the inversion its piece chose, those keys kept in sight; none marked in a bar
  * of no chord, the tune heard and not marked. None in Wait mode, which marks what it waits for, nor
  * over the sheet music (`chordView` false), which marks the notes heard: the Player's own marks.

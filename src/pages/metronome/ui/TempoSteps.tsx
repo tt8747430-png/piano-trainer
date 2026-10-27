@@ -10,7 +10,7 @@ const STEP =
 
 /**
  * The tempo, large in the middle, with −10 and −1 before it and +1 and +10 after it as round buttons
- * (ADR 0113). The number keeps its width as it changes, so the buttons never move.
+ * (ADR 0052). The number keeps its width as it changes, so the buttons never move.
  */
 export function TempoSteps({ bpm, onStep }: { bpm: number; onStep: (step: number) => void }) {
   const { t } = useTranslation('practice')

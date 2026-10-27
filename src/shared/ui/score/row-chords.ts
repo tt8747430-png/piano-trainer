@@ -21,7 +21,7 @@ export interface PrintedChord extends RowChord {
 
 /**
  * The chord symbols the labels' row prints over a line at its labels' size (`size`, 1 at full size;
- * ADR 0072): those in its bars, each at its chord's onset as a lead sheet writes it (♯ ♭), drawn
+ * ADR 0114): those in its bars, each at its chord's onset as a lead sheet writes it (♯ ♭), drawn
  * smaller or moved on where it would run into the next (`chordLabels`), with the width it and what
  * follows it take. Where the row prints them, and where the editor's chord-symbol field stands on one
  * (ADR 0096).

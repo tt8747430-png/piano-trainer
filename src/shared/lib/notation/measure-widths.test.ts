@@ -76,7 +76,7 @@ describe('lineLead', () => {
   })
 })
 
-describe('labelLead (ADR 0094)', () => {
+describe('labelLead (ADR 0114)', () => {
   it('gives the first line the room its staves’ names take, the longest, as Verovio indents it', () => {
     expect(labelLead({})).toBe(0)
     // Verovio's indents at scale 1: Piano 73, Melody 75, Фортепиано 122 px.

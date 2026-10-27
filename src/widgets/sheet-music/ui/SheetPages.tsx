@@ -9,7 +9,7 @@ export const LINE_GAP = 16
 const TITLE_ROOM = 44
 
 /**
- * A score's lines dealt onto A4 pages as they print (ADR 0075), the screen's and the print's alike:
+ * A score's lines dealt onto A4 pages as they print (ADR 0096), the screen's and the print's alike:
  * a line starts a new page where it does not fit on the one begun, the title over the first line and
  * kept with it as the page is spread, every page but the last filled to its height (ADR 0087).
  */

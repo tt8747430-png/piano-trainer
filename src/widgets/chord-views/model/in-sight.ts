@@ -17,7 +17,7 @@ const THIRD = 1 / 3
 const KEPT_AT = 1 / 4
 
 /**
- * How far Chords over lyrics scrolls to keep the line playing in sight (ADR 0099): none where it
+ * How far Chords over lyrics scrolls to keep the line playing in sight (ADR 0108): none where it
  * stands in the top third of the room under the strip held at the top and over the transport,
  * wholly in it; else by as much as brings its top a quarter of the way down that room, or higher
  * where its foot would reach under the transport, its top never under the strip. `top` is the line's

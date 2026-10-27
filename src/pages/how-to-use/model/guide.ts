@@ -33,7 +33,7 @@ export interface GuideStep {
 }
 
 /**
- * How to use (ADR 0113): its parts in the order a learner meets them, each a few plain steps, every
+ * How to use (ADR 0052): its parts in the order a learner meets them, each a few plain steps, every
  * step beside the icon its control wears in the app, its words under `settings:howToUse.<part>`.
  */
 export const GUIDE = [

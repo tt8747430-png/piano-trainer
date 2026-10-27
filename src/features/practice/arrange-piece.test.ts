@@ -129,7 +129,7 @@ describe('arrangePiece', () => {
   })
 })
 
-describe('Simplify (ADR 0104)', () => {
+describe('Simplify (ADR 0105)', () => {
   const symbols = (played: ReturnType<typeof arrangePiece>) => [
     ...new Set(played.chords.map((c) => c.symbol)),
   ]
@@ -191,7 +191,7 @@ describe('Simplify (ADR 0104)', () => {
   })
 })
 
-describe('the words a piece sings (ADR 0093)', () => {
+describe('the words a piece sings (ADR 0097)', () => {
   const silent = piece('silent')
   const sungBy = (
     notes: readonly { readonly lyrics?: readonly unknown[]; readonly hand: string }[],

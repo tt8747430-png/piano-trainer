@@ -80,14 +80,14 @@ export interface PracticePlayer {
   toggleLoop(): void
   /** The loop chosen, or let go of. */
   setLoop(loop: BarRange | null): void
-  /** The loop's far end moved by Shift with an arrow, Home or End (ADR 0088). */
+  /** The loop's far end moved by Shift with an arrow, Home or End (ADR 0096). */
   reachLoop(by: LoopReach, direction: -1 | 1): void
   /** A key tapped on the screen: an answer in Wait mode. The keyboard sounds every tap itself. */
   tapKey(key: Midi): void
 }
 
 /**
- * The Player's one hook over any Performance (spec §2.7): the URL's view and the saved switches in,
+ * The Player's one hook over any Performance: the URL's view and the saved switches in,
  * everything the screen shows out. A page turns its source (a piece, an exercise) into the Performance;
  * a piece's recording plays along in Listen.
  */

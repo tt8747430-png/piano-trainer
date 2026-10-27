@@ -106,7 +106,7 @@ export function setSectionKind(draft: Draft, index: number, kind: SectionKind): 
 }
 
 /**
- * A key change at section `index` (ADR 0089), as Flat changes key from a bar: that section and those
+ * A key change at section `index` (ADR 0114), as Flat changes key from a bar: that section and those
  * after it in the same key, up to the next change of key, written in `key`; a section in the song's
  * key writes none. The notes stay as they are, spelling and all: only their signature changes, and
  * a note written or stepped there after is spelled in the new key (`keyAt`).

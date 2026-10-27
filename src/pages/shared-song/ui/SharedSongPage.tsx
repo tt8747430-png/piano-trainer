@@ -65,7 +65,7 @@ function SharedChart({ song }: { song: SharedSong }) {
 }
 
 /**
- * A song someone shared (spec 2026-10-11-share-a-song): read from its link, shown as its chart, and
+ * A song someone shared: read from its link, shown as its chart, and
  * played on its keys, and made one of the learner's own songs only when they say so (Add floats).
  */
 export function SharedSongPage() {

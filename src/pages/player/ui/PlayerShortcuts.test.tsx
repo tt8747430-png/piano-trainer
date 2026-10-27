@@ -50,7 +50,7 @@ describe('the Player’s shortcuts', () => {
     expect(router.state.location.search).not.toHaveProperty('loop')
   })
 
-  it('moves the loop’s far end with Shift and the arrows, Home and End, and lets it go on Escape (ADR 0088)', async () => {
+  it('moves the loop’s far end with Shift and the arrows, Home and End, and lets it go on Escape (ADR 0096)', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/bz5')
     await screen.findByRole('button', { name: 'Play' })

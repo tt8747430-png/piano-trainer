@@ -1,5 +1,5 @@
 /**
- * A chart line's bars cut into lines of the sheet (ADR 0074), as an engraver breaks a system: as few
+ * A chart line's bars cut into lines of the sheet (ADR 0087), as an engraver breaks a system: as few
  * lines as hold them in `room`, then as even as they come by width, so a line is never a full one
  * over a stub (abcjs's `wrap`, LilyPond's optimal breaker). Where widths tie, the earlier line takes
  * more. A bar wider than the room stands alone; the room unknown, they all stand on one line.

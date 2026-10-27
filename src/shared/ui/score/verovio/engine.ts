@@ -29,7 +29,7 @@ export function warmEngraver(): void {
 }
 
 /**
- * A score's MEI engraved by Verovio (ADR 0078): in a Web Worker, so a long score never holds the page
+ * A score's MEI engraved by Verovio (ADR 0087): in a Web Worker, so a long score never holds the page
  * back. Its pages' SVG, a line's one page.
  */
 export function engrave(mei: string, options: EngraveOptions): Promise<string[]> {

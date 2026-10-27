@@ -7,7 +7,7 @@ import { useEditorState } from '../model/editor-context'
 import { hasTune } from '../model/tune'
 
 /**
- * How a take sounds (ADR 0096, 0110): the metronome after the count-in and Play melody under it where
+ * How a take sounds (ADR 0096, 0115): the metronome after the count-in and Play melody under it where
  * the song has a melody staff, Settings › Recording's own switches, in a popover from the transport's
  * last control, and from the recording strip's while a take records (changed as it records).
  */

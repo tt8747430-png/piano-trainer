@@ -7,7 +7,7 @@ import type { Step } from '../model/types'
 type LinkedStep = Exclude<Step, { readonly kind: 'piece' }>
 
 /**
- * A step's way to where it is done: a lesson's page (a journey's or a course's), or a chord or scale step's explorer (spec §4.1)
+ * A step's way to where it is done: a lesson's page (a journey's or a course's), or a chord or scale step's explorer
  * with the step panel open. A piece's way is its caller's: its page on its shelf, or the Player.
  */
 export function StepLink({

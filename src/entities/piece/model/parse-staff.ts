@@ -9,7 +9,7 @@ import type { ChartPiece } from './types'
 /**
  * A single staff's notes (ADR 0097), the one at `place` top down: `E4/1 D4/.5[stacc] r/1 | C#5/1.5`,
  * note and octave on the piano (or `r` for a rest), a slash, then beats, and a note's marks in
- * brackets as a hand's (ADR 0063); `|` may mark bars and is ignored. None for a staff it has not.
+ * brackets as a hand's (ADR 0097); `|` may mark bars and is ignored. None for a staff it has not.
  */
 export function parseStaff(piece: ChartPiece, place: number): StaffNote[] {
   const text = piece.staves?.[place]?.notes

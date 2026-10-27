@@ -43,7 +43,7 @@ export interface SheetLineBars {
   readonly bars: readonly PlacedBar[]
   /** Where it starts on the piece's timeline. */
   readonly start: number
-  /** Each bar's label (ADR 0095): the line's first number, a section's name, the tempo. */
+  /** Each bar's label (ADR 0097): the line's first number, a section's name, the tempo. */
   readonly labels: readonly BarLabel[]
 }
 
@@ -63,7 +63,7 @@ function labelled(draft: Draft, lines: readonly UnlabelledLine[]): SheetLineBars
 
 /**
  * The chart's lines, each section's as written; a line wider than `room` (a narrow screen's) cut
- * into as few lines as hold it, as even as they come by the bars' `widths` (ADR 0074).
+ * into as few lines as hold it, as even as they come by the bars' `widths` (ADR 0087).
  */
 export function linesOf(
   draft: Draft,
@@ -173,9 +173,9 @@ export function staffOfLayer(
 
 /**
  * A line as the sheet writes it, from its own start: each single staff's notes on it (ADR 0097), the
- * right hand on the treble staff, the left hand on the bass (every bar written, ADR 0091); the chord
+ * right hand on the treble staff, the left hand on the bass (every bar written, ADR 0114); the chord
  * symbols; the lyrics under the staff they are on unless the View hides them (`lyrics` off, ADR
- * 0093). A staff with nothing in a bar is left blank there, a row hidden is not written at all: no
+ * 0097). A staff with nothing in a bar is left blank there, a row hidden is not written at all: no
  * piano on a lead sheet.
  */
 export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): TimedMusic {
@@ -204,7 +204,7 @@ export function lineMusic(draft: Draft, line: SheetLineBars, lyrics = true): Tim
   const bars = line.bars.map(({ start, bar, section }, index) => {
     const startTick = start - from
     // A section's own key and meter: its signature and its time printed where it starts (a key
-    // change, a change of time, ADR 0095).
+    // change, a change of time, ADR 0097).
     const { key: written, meter } = draft.sections[section]?.heading ?? {}
     const key = written === undefined ? null : parseKey(written)
     const holds = (staff: StaffId) =>

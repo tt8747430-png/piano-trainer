@@ -123,7 +123,7 @@ describe('notate', () => {
     ])
   })
 
-  it('writes no chord symbol over a bar of no chord (ADR 0094)', () => {
+  it('writes no chord symbol over a bar of no chord (ADR 0114)', () => {
     const score = notate(
       music([n(60, note('C'), 'rh', 0, 96), n(62, note('D'), 'rh', 96, 96)], {
         bars: [
@@ -246,7 +246,7 @@ describe('notate', () => {
       slurStart: true as const,
       slurEnd: true as const,
     }
-    // A note from beat 2 to beat 4 is written as two tied quarters (spec §2.4).
+    // A note from beat 2 to beat 4 is written as two tied quarters.
     const score = notate(music([n(72, note('C'), 'rh', beat, 2 * beat, { marks })]))
     const events = score.measures[0]?.staves.treble[0]?.events.filter((e) => e.kind === 'notes')
     expect(events?.map((event) => event.kind === 'notes' && event.marks)).toEqual([
@@ -310,7 +310,7 @@ describe('notate', () => {
     ])
   })
 
-  it('writes a bar in its own meter whole, a pickup only where it is short of that meter (ADR 0095)', () => {
+  it('writes a bar in its own meter whole, a pickup only where it is short of that meter (ADR 0097)', () => {
     const score = notate(
       music([n(60, note('C'), 'rh', 0, 72)], {
         bars: [
@@ -408,7 +408,7 @@ describe('notate with a blank staff', () => {
   })
 })
 
-describe('notate a lead sheet (ADR 0083)', () => {
+describe('notate a lead sheet (ADR 0114)', () => {
   it('writes no piano where the music leaves it out: its single staves alone', () => {
     const notes = [n(72, note('C'), 'staff', 0, 96, { staff: 0 }), n(60, note('C'), 'rh', 0, 96)]
     const lead = notate(music(notes, { staves: [{ clef: 'treble' }], piano: false }))
@@ -417,7 +417,7 @@ describe('notate a lead sheet (ADR 0083)', () => {
   })
 })
 
-describe('notate the words (ADR 0093)', () => {
+describe('notate the words (ADR 0097)', () => {
   const sung = (text: string, hyphen = false, held = 0) => ({ text, hyphen, held })
   /** Each voice's written notes' syllables in order, rests left out. */
   const verses = (score: ReturnType<typeof notate>, staff: StaffId) =>

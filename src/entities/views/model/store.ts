@@ -11,7 +11,7 @@ export interface ViewsState {
 
 export type ViewsStore = StoreApi<ViewsState>
 
-/** The screens' last views, saved under `pt-views` (ADR 0022). */
+/** The screens' last views, saved under `pt-views` (ADR 0038). */
 export const createViewsStore = (saving: SavingOptions = {}): ViewsStore =>
   createSavedStore(
     { key: VIEWS_STORAGE_KEY, version: VIEWS_VERSION, initial: { views: {} }, read: sanitize },

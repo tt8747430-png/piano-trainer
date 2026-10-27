@@ -1,0 +1,46 @@
+# ADR 0025 — Training: gaps from quiz answers only, trainers on one round machine, exercises as rules
+
+- **Status:** accepted · **Date:** 2026-09-24 · consolidated 2026-10-27
+
+## Context
+
+The owner wants the app to find and fill gaps in a learner's theory without lesson text, trainers in The Ultimate
+Piano's shape (a ladder of levels, fixed rounds so runs compare, a summary), and every exercise group of the sources
+(scales in 3rds, Hanon, Barry Harris's lines, Piano With Jonny's) in any key, in the Player with its sheet music and
+Wait mode.
+
+## Decision
+
+- **A Skill is one chord quality or one scale kind**, rated from its Evidence, the last five quiz answers: Known is at
+  least four of five right including the latest; Gap is tried but not Known; Unknown is never tried. A Known skill
+  whose latest answer is 14 days old is Due, and stays Known. Only quiz answers are evidence: a wrong note in the
+  Player is as likely rhythm or hand position as theory, exercises record none, and a round's keyboard names no chord
+  (ADR 0062).
+- **Where gaps are found and filled:** a song's Check these chords (its own chords in turn, six questions or one
+  each); a journey chapter's Check, which marks its step learned once its family is Known, asking each skill as often
+  as it still needs; and My gaps in Quiz's bar (the gaps, then the due, then the unknowns of pieces opened).
+- **One round machine** (`features/trainer`): a round is answered by keys chosen and checked, by keys pressed and
+  judged at once, or by a choice. What a run asks is one value (`Asks`), drawn never the same twice running. A run
+  counts its rounds (10, 20 or until stopped), times each answer, keeps the streak and sums up. The Check, a lesson's
+  question and every trainer share one board.
+- **What a trainer asks is view state** (its level, rounds and Custom choices in the URL, remembered per trainer);
+  **what a learner did is saved state**: each run adds to its trainer level's record in `pt-progress`.
+- **An exercise is a rule that writes a Performance** (`shared/lib/exercise`, a fenced kernel): one generator per
+  rule over a small choice, laid out by `exercisePerformance` in 4/4 bars, four a line, a chord a passage for the
+  symbols and Wait mode. Fingering is written where the method fingers it, and only there. The catalogue is content
+  (`entities/exercise`: group, stage, name, what it trains, the fields its rule takes, its own choice, tempo and
+  swing). One route plays them, `/play/exercise/$exerciseId`, its URL's choices read against the exercise.
+- **One home each:** the Quiz page holds every trainer by group; the Exercises page holds the drills of no other
+  page (a scale's exercises open from Scales, a chord's arpeggio from Chords); a drill another Player already plays is
+  not repeated.
+
+## Consequences
+
+A new trainer is a ladder, an entry in `trainers.ts` and its words; a new exercise a generator, a catalogue row and
+a case in `arrangeExercise`, whose test writes every exercise in every root on the piano's keys.
+
+## History
+
+- 0006 — Theory gaps come from quiz answers only (2026-09-24; Due added 2026-10-11).
+- 0024 — An exercise is a rule that writes a Performance (2026-10-01).
+- 0025 — A trainer is a round machine with a ladder (2026-10-01).

@@ -9,7 +9,7 @@ import { EditCommands } from './EditCommands'
 import { EditorTranspose } from './EditorTranspose'
 
 /**
- * The View, the tools row's first as the Player's is (ADR 0102, 0110): named Sheet music, the score
+ * The View, the tools row's first as the Player's is (ADR 0108, 0115): named Sheet music, the score
  * being all the editor shows, its icon alone on a phone held upright, where the edit row's commands
  * share the row; its menu the sheet music's part of the View, then the keys' fold.
  */
@@ -44,7 +44,7 @@ function EditorView({ disabled }: { disabled: boolean }) {
 }
 
 /**
- * The editor's tools row (ADR 0110), the Player's in its place and height, so the sheet stands still
+ * The editor's tools row (ADR 0115), the Player's in its place and height, so the sheet stands still
  * as Practise · Edit switches: the View, Transpose, then the edit row's commands (Delete, Copy, Cut,
  * Paste). While a take records, it waits for Stop.
  */

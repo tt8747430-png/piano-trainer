@@ -25,7 +25,7 @@ describe('createViewsStore', () => {
     })
   })
 
-  it('forgets what was saved before Practice’s pages moved (ADR 0044): a version-1 save', () => {
+  it('forgets what was saved before Practice’s pages moved (ADR 0052): a version-1 save', () => {
     const storage = createMemoryStorage()
     writeSaved(storage, { views: { '/practice/chords/find': { keys: '60-64-67' } } }, 1)
     expect(createViewsStore({ storage }).getState()).toEqual({ views: {} })

@@ -11,11 +11,11 @@ import { useStaffHeads } from '../model/use-staff-heads'
 import { StaffNameField } from './StaffNameField'
 
 /**
- * A staff's menu, opened from its name at the first line's head (ADR 0094, 0097, Flat's instruments):
+ * A staff's menu, opened from its name at the first line's head (ADR 0114, 0097, Flat's instruments):
  * a single staff's Rename (its name typed where it is printed), Add a staff over or under it (single
  * staves stand over the piano), Show the piano where the score hides it, and Remove (its notes go
  * with it; Undo brings them back); the piano's Add a staff over the piano and Hide the piano (a lead
- * sheet, its music kept and played, ADR 0083). The last staff in sight is never removed or hidden.
+ * sheet, its music kept and played, ADR 0114). The last staff in sight is never removed or hidden.
  */
 export function StaffMenu({
   staves,

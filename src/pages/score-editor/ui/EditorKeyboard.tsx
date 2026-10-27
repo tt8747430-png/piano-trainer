@@ -16,13 +16,13 @@ const caretKeys = ({ draft, caret, layer }: EditorState): Midi[] =>
 
 /**
  * The keys both hands play at the caret, as the Player's keys mark the beat it is on: what they
- * narrow to hold (the widest kept), so they are as wide in both modes (ADR 0110).
+ * narrow to hold (the widest kept), so they are as wide in both modes (ADR 0115).
  */
 const handsHere = ({ draft, caret }: EditorState): Midi[] =>
   (['rh', 'lh'] as const).flatMap((hand) => notesAt(draft, hand, caret).map((n) => n.midi))
 
 /**
- * The keys the score's notes need, as the Player shows its keys (ADR 0110): the same keys as wide in
+ * The keys the score's notes need, as the Player shows its keys (ADR 0115): the same keys as wide in
  * both modes, so the keys, the transport and the sheet stand still as Practise · Edit switches.
  */
 function scoreSpan({ draft }: EditorState): KeyRange {
@@ -38,7 +38,7 @@ function scoreSpan({ draft }: EditorState): KeyRange {
  * records, Space stops it rather than holding the pedal. Docked where the keyboard settings dock
  * every screen's keys, under the palette at the foot or under the bar at the top; folded from its
  * rail, it leaves its room to the sheet and comes back from the palette's row of tabs or the View
- * menu, staying folded until unfolded (ADR 0055). On a phone on its
+ * menu, staying folded until unfolded (ADR 0062). On a phone on its
  * side, too short for the keys and a grand staff, it opens folded, its fold kept apart there (ADR 0062).
  */
 export function EditorKeyboard() {
@@ -57,7 +57,7 @@ export function EditorKeyboard() {
       <LiveKeyboard
         range={range}
         // The caret's keys in sight with both hands' there, narrowing to hold them as the Player's
-        // keys narrow to hold its chords, so the keys stand as long in both modes (ADR 0110).
+        // keys narrow to hold its chords, so the keys stand as long in both modes (ADR 0115).
         inView={inView}
         fitInView
         selected={selected}

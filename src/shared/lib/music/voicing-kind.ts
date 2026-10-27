@@ -3,7 +3,7 @@ import { noteName } from './note'
 import { pitchClass, type Midi } from './pitch'
 
 /**
- * How a chord's keys are laid out, as jazz pianists name it (ADR 0054): close within an octave, open
+ * How a chord's keys are laid out, as jazz pianists name it (ADR 0052): close within an octave, open
  * past it, drop 2 and drop 3 (a close voicing's second or third voice from the top an octave down),
  * a shell (root, 3rd and 7th alone), a stack of 4ths, or the So What voicing (three 4ths, a 3rd on top).
  */

@@ -15,7 +15,7 @@ const view = (shown: { chordNames?: boolean; hidden?: StaffId[] } = {}) => ({
   ...shown,
 })
 
-describe('the rows the caret writes in, as the View shows the score (ADR 0094, 0097)', () => {
+describe('the rows the caret writes in, as the View shows the score (ADR 0114, 0097)', () => {
   it('holds every staff in sight and the chord symbols the View shows', () => {
     expect(rowsInSight(score(1), view())).toEqual(['chords', 'staff0', 'rh', 'lh'])
     expect(rowsInSight(score(2), view())).toEqual(['chords', 'staff0', 'staff1', 'rh', 'lh'])
@@ -41,7 +41,7 @@ describe('the rows the caret writes in, as the View shows the score (ADR 0094, 0
     ])
   })
 
-  it('never leaves every staff out of sight, as the Player’s sheet never does (ADR 0083)', () => {
+  it('never leaves every staff out of sight, as the Player’s sheet never does (ADR 0114)', () => {
     expect(rowsInSight(score(0), view({ hidden: ['treble', 'bass'] }))).toEqual([
       'chords',
       'rh',

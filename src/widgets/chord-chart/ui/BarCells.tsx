@@ -12,7 +12,7 @@ function roomAfter(cells: readonly (readonly string[])[], beat: number): number 
 }
 
 /**
- * What a bar of a chart's line holds (ADR 0099), on the screen and in print: a cell a beat, the
+ * What a bar of a chart's line holds (ADR 0108), on the screen and in print: a cell a beat, the
  * chords starting in each, its number small in its first cell's corner, and under its cells its method
  * labels or a changed meter. The beat sounding is filled (`sounding`); the bar sounding (`playing`)
  * and the loop's (`looped`) wear their washes; else a pointer over the bar washes it. Under its cells

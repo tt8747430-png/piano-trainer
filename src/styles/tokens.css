@@ -1,7 +1,7 @@
 /*
  * Two layers (docs/CODE_STYLE.md §5): primitives (--p-*) hold raw values; semantic roles name what a
  * colour is for. Components use roles through Tailwind utilities, never primitives. The world
- * (DESIGN.md, ADR 0010, ADR 0011) is a labelled picture book printed quietly: warm paper, a soft line
+ * (DESIGN.md, ADR 0011) is a labelled picture book printed quietly: warm paper, a soft line
  * round every card and control, and seven paints faded to one even lightness, so any two sit
  * together; each has a pale wash (a key at rest, a place's tint) and a deep shade (its text and
  * icons). Colour fills one control per screen, the action; what is chosen is neutral.
@@ -148,7 +148,7 @@
     0 10px 20px -6px color-mix(in oklab, var(--shade) var(--shade-far), transparent),
     0 22px 40px -12px color-mix(in oklab, var(--shade) var(--shade-far), transparent);
 
-  /* Chord-tone roles (spec §8): only on chord tones — keys, the legend, a chord chip. */
+  /* Chord-tone roles: only on chord tones — keys, the legend, a chord chip. */
   --role-root: var(--p-brick);
   --role-3rd: var(--p-sky);
   --role-5th: var(--p-grass);

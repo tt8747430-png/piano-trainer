@@ -5,9 +5,9 @@ import type { Layer } from './draft'
 type Rows = { readonly staves: readonly unknown[]; readonly leadSheet: boolean }
 
 /**
- * The rows the score holds and the caret writes, top down (ADR 0091, 0094, 0097): the chord
+ * The rows the score holds and the caret writes, top down (ADR 0114, 0097): the chord
  * symbols, each single staff by its place, the right hand's and the left's unless the piano is
- * hidden (a lead sheet, ADR 0083). Which of them a reader sees is the View's.
+ * hidden (a lead sheet, ADR 0114). Which of them a reader sees is the View's.
  */
 export function shownRows(draft: Rows): Layer[] {
   return [

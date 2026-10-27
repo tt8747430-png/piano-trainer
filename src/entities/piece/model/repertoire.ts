@@ -6,7 +6,7 @@ import { withMusic, type PieceMusic } from './music'
 import { isOwnSongId, type OwnSong } from './own'
 import type { PiecesState } from './store'
 
-/** The pieces a learner can play: the catalog's in their versions, and their own songs (spec §2). */
+/** The pieces a learner can play: the catalog's in their versions, and their own songs. */
 export interface Repertoire {
   /** A catalog entry in the learner's version, or an own song. */
   entry(id: string): Entry | undefined
@@ -28,7 +28,7 @@ function sameTimeline(original: ChartPiece, version: ChartPiece): boolean {
 
 /**
  * A catalog song, study or listing played in the learner's music: its titles (or the learner's own,
- * ADR 0094), credits, source and note kept; a listing becomes a song; a recording kept only on the
+ * ADR 0114), credits, source and note kept; a listing becomes a song; a recording kept only on the
  * original's timeline.
  */
 export function versionOf(original: ChartPiece | Listing, music: PieceMusic): ChartPiece {

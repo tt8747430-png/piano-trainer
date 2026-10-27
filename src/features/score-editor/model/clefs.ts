@@ -5,7 +5,7 @@ import { withBar } from './notes'
 import { barsOf } from './timeline'
 
 /**
- * The clef a staff is in at bar `index`: a hand's as its bars change it (ADR 0069), a single
+ * The clef a staff is in at bar `index`: a hand's as its bars change it (ADR 0097), a single
  * staff's its own, the whole staff's (ADR 0097).
  */
 export function clefAt(draft: Draft, index: number, layer: NoteLayer): Clef {
@@ -15,7 +15,7 @@ export function clefAt(draft: Draft, index: number, layer: NoteLayer): Clef {
 }
 
 /**
- * A hand's staff changed to `clef` from bar `index` on (ADR 0069): a change written there, or taken
+ * A hand's staff changed to `clef` from bar `index` on (ADR 0097): a change written there, or taken
  * away where the staff is in that clef already from the bars before.
  */
 export function setClef(draft: Draft, index: number, hand: Hand, clef: Clef): Draft {

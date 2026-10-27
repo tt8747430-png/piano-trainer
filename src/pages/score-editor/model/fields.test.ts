@@ -34,7 +34,7 @@ describe('the fields over the sheet (ADR 0096)', () => {
   it('opens the Lyrics field on the staff the words go on, where the View shows them and the staff has a note', () => {
     expect(fieldClosedBy('lyrics', caretOn('staff0'), shown)).toBeNull()
     expect(fieldClosedBy('lyrics', caretOn('lh'), shown)).toBe('lyricsOn.staff')
-    // On the upper staff where they are written there (ADR 0093).
+    // On the upper staff where they are written there (ADR 0097).
     const upper = {
       hands: { rh: 'G4/4 | r/4', lh: 'r/4 | r/4' },
       lyrics: ['one'],

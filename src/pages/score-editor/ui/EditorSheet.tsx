@@ -17,7 +17,7 @@ import { useHeardPlayhead } from '../model/use-heard-playhead'
 import { PrintedEdit } from './PrintedEdit'
 import { TitleField } from './TitleField'
 
-/** The title printed where the sheet prints it, edited there (ADR 0094). */
+/** The title printed where the sheet prints it, edited there (ADR 0114). */
 const titleAt = (place: TitlePlace) => <TitleField place={place} />
 /**
  * The tempo mark, a section's name, a key or time signature, a clef, a staff's name: each opening
@@ -31,7 +31,7 @@ const editPrinted: EditPrinted = (printed, trigger) => (
 const HEARD = { duration: 0.35, velocity: 0.15 } as const
 
 /**
- * The sheet the editor writes on, as the View shows the score (ADR 0094, 0097: its staves, its
+ * The sheet the editor writes on, as the View shows the score (ADR 0114, 0097: its staves, its
  * chord symbols): the caret where the next note or chord goes; a double click on a staff writes the note
  * there, and a note dragged up or down moves by the key's notes, heard as it goes. While Play plays,
  * the playhead follows the music apart from the caret (ADR 0096). A tap on what a field types where

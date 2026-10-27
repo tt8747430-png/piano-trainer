@@ -29,7 +29,7 @@ describe('playedMusic', () => {
     expect(music.notes.filter((n) => n.hand === 'staff').map((n) => n.midi)).toEqual([72])
   })
 
-  it('writes a lead sheet’s staves alone, the piano left out (ADR 0083)', () => {
+  it('writes a lead sheet’s staves alone, the piano left out (ADR 0114)', () => {
     const performance = arrange(CHART, {
       tonic: C_MAJOR.tonic,
       pattern: BLOCK,
@@ -39,7 +39,7 @@ describe('playedMusic', () => {
     expect(notate(playedMusic(performance, { piano: false })).staves).toEqual(['staff0'])
   })
 
-  it('leaves the words out where the View hides them (ADR 0093)', () => {
+  it('leaves the words out where the View hides them (ADR 0097)', () => {
     const sung = { text: 'one', hyphen: false, held: 0 }
     const performance = arrange(CHART, {
       tonic: C_MAJOR.tonic,

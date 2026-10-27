@@ -19,7 +19,7 @@ export function nearestPlace(
 }
 
 /**
- * The empty place a click at `x` on a bar lands on (ADR 0088): a rest, the room after its last note;
+ * The empty place a click at `x` on a bar lands on (ADR 0096): a rest, the room after its last note;
  * each stretching from just before its own x (the bar's `start`,
  * the first) to the next place's (a note's, whose head is chosen by itself) or the bar's `end`. None
  * between two notes.

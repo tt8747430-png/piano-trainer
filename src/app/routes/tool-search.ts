@@ -3,7 +3,7 @@ import { keyListParam, readKeyList } from '@/shared/lib'
 import { keyParam } from '@/shared/lib/music'
 import { C_MAJOR_PARAM, readKey, routeSearch, type Raw } from './read-search'
 
-// The Chord finder (ADR 0054): the keys tapped, a chord to send as a link, and the key it is spelled in.
+// The Chord finder (ADR 0052): the keys tapped, a chord to send as a link, and the key it is spelled in.
 export const CHORD_FINDER_DEFAULTS: ChordFinderView = { keys: '', key: C_MAJOR_PARAM }
 export function readChordFinderSearch(raw: Raw): ChordFinderView {
   const key = readKey(raw.key)

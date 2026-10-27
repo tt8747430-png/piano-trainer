@@ -59,7 +59,7 @@ function CourseAction({ course }: { course: Course }) {
 }
 
 /**
- * A course's page (ADR 0053, 0058): one card, its icon on its level's paint beside what it teaches
+ * A course's page (ADR 0053, 0061): one card, its icon on its level's paint beside what it teaches
  * and its facts in words, and along its foot how much is learned and its one way in; then its
  * lessons numbered as taught, the next ringed, and its guided songs.
  */

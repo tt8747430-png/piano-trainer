@@ -49,7 +49,7 @@ const stepFactor = (changes: readonly TempoChange[], step: number): number =>
   factorAt(changes, step * STEP + STEP / 2)
 
 /**
- * Where a tick falls once the tempo its notes mark (ADR 0068) is followed, in ticks at the written
+ * Where a tick falls once the tempo its notes mark (ADR 0097) is followed, in ticks at the written
  * tempo: rit. and rall. slow to three quarters of it over two beats, accel. presses on to five
  * quarters, each held until a tempo brings the written tempo back. Without such a mark, each tick
  * is where it was.

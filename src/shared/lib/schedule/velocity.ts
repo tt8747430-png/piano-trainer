@@ -1,7 +1,7 @@
 /** A tap's and a typed key's velocity: today's loudness. */
 export const HAND_VELOCITY = 100
 
-/** How the app hears a MIDI keyboard's velocities (spec 2026-10-09 §3.5). */
+/** How the app hears a MIDI keyboard's velocities. */
 export const TOUCHES = ['light', 'normal', 'heavy'] as const
 export type Touch = (typeof TOUCHES)[number]
 

@@ -13,7 +13,7 @@ import { isLeftFigureId, isPatternId, isRightFigureId, type PatternId } from './
 export const PATTERNS_STORAGE_KEY = 'pt-patterns'
 export const PATTERNS_VERSION = 1
 
-/** The learner's way with patterns (spec 2026-10-01-patterns §3). */
+/** The learner's way with patterns. */
 export interface PatternsState {
   /** In the order starred. */
   readonly favourites: readonly PatternRef[]

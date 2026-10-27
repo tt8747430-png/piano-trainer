@@ -12,7 +12,7 @@ import { useStripMotion } from '../model/use-strip-motion'
 const REST = '\u{1D13D}'
 
 /**
- * The beat strip (ADR 0099, 0101, 0108, Chordify's): every beat of the music as played in one row,
+ * The beat strip (ADR 0108, Chordify's): every beat of the music as played in one row,
  * the repeats taken, a barline before each bar, a chord named only in the beat where it changes and a
  * rest where the music turns to none (`stripNames`), the beat sounding filled with the ink, the
  * loop's beats on its band. While Listen plays it slides with its clock frame by frame

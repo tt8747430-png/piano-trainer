@@ -1,5 +1,5 @@
 /**
- * The tempo words a tempo mark is named by (ADR 0094, 0114), slowest first, each from its beats a
+ * The tempo words a tempo mark is named by (ADR 0114), slowest first, each from its beats a
  * minute as a metronome marks them: the word under the picker's number, and on its ruler.
  */
 export const TEMPO_WORDS = [

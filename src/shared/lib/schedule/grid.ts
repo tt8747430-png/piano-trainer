@@ -11,7 +11,7 @@ import {
 export interface GridBar {
   readonly startTick: Tick
   readonly beats: number
-  /** The meter it is counted in, where that is not the piece's (a change of time, ADR 0095). */
+  /** The meter it is counted in, where that is not the piece's (a change of time, ADR 0097). */
   readonly meter?: Meter | undefined
 }
 

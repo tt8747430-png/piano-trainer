@@ -45,7 +45,7 @@ function chordBeatsText(ticks: Tick): string {
 /**
  * A bar's chords as the chart writes them: joined by `-`, without beats where they share the meter's
  * bar equally, else each with its own; a method code once when every chord shares it. A bar of no
- * chord is `_`, with its beats where it is not the meter's length (ADR 0094).
+ * chord is `_`, with its beats where it is not the meter's length (ADR 0114).
  */
 function chordsText(bar: ChartBar, meter: Meter): string {
   const full = beatsToTicks(bar.beats) === beatsToTicks(beatsPerBar(meter))

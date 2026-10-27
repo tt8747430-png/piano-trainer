@@ -246,7 +246,7 @@ const isBpm = (value: unknown): value is number =>
   (value as number) >= BPM_RANGE.min &&
   (value as number) <= BPM_RANGE.max
 
-/** The Metronome's tempo, meter and sound, each as saved where still valid (ADR 0113). */
+/** The Metronome's tempo, meter and sound, each as saved where still valid (ADR 0052). */
 function metronomeSettings(value: unknown): MetronomeSettings {
   const saved = savedObject<MetronomeSettings>(value)
   return {

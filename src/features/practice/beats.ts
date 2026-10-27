@@ -2,7 +2,7 @@ import type { Performance } from '@/shared/lib/arrangement'
 import { beatsBefore, beatsToTicks, TICKS_PER_BEAT, type Tick } from '@/shared/lib/music'
 import { firstPlayedBar, writtenBarOf } from './written-bar'
 
-// The chord views count a bar in beats (ADR 0099): quarters in x/4, dotted quarters in 6/8 and 12/8
+// The chord views count a bar in beats (ADR 0108): quarters in x/4, dotted quarters in 6/8 and 12/8
 // (`beatsPerBar`), a bar's chords named in the beat each starts in.
 
 /** One beat of a bar: where it starts and ends from its bar's start, and the chords starting in it. */
@@ -83,14 +83,14 @@ export function beatCells(performance: Performance): CellBar[] {
     })
 }
 
-/** Every bar as played, the repeats taken (the beat strip's, ADR 0099), in beats. */
+/** Every bar as played, the repeats taken (the beat strip's, ADR 0108), in beats. */
 export function playedBeatCells(performance: Performance): CellBar[] {
   return performance.bars.flatMap((_, played) => cellBar(performance, played) ?? [])
 }
 
 /**
  * The beat group at a tick, else the first after it: where a beat tapped takes the cursor (ADR
- * 0099). Past the last, the last; none in music of no notes.
+ * 0108). Past the last, the last; none in music of no notes.
  */
 export function beatGroupFrom(performance: Performance, tick: Tick): number | null {
   const { beatGroups } = performance

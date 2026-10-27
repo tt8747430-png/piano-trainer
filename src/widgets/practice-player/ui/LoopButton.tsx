@@ -7,7 +7,7 @@ import { PLAYER_KEYS } from '../model/player-keys'
 import { DOCK_BUTTON } from './dock-sizes'
 
 /**
- * The transport's loop (ADR 0099, beside the tempo's controls as Chordify's transport carries it):
+ * The transport's loop (ADR 0108, beside the tempo's controls as Chordify's transport carries it):
  * loops the bar the cursor is in, or removes the loop, as R does; pressed, in neutrals, while a loop
  * is set.
  */

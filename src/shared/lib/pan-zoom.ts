@@ -1,5 +1,5 @@
 /**
- * Where a canvas's content stands on the screen (ADR 0075): moved by `x` and `y` (CSS px, its top
+ * Where a canvas's content stands on the screen (ADR 0096): moved by `x` and `y` (CSS px, its top
  * left corner's place in the viewport) and drawn at `zoom`, as a notation app's page view floats its
  * pages on a canvas that pans and zooms.
  */

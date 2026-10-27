@@ -97,7 +97,7 @@ If agents are running and the owner asks, say so; never guess their results. If 
   - **Worktrees:** symlink `node_modules`, never `npm install` there.
 - **Saved stores and their versions:** see CLAUDE.md's entities section. A shape change bumps the version, with no migration.
 - **Docs to update each round:**
-  - **ADRs:** a new ADR in `docs/adr/`, styled like 0105, or amend the round's own.
+  - **ADRs:** amend the area's ADR (`docs/adr/README.md`), styled like 0105: the decision as it stands now, one line in its History. A new ADR only for a new area.
   - **Glossary:** rows in `docs/UBIQUITOUS_LANGUAGE.md`.
   - **CLAUDE.md:** its architecture map, kept current: rename what was renamed and drop what was deleted.
 - **Never:** `git checkout`, `restore`, `stash` or `reset` the owner's work; a model ID in a commit; copying Chordify's code; retrying bot-check circumvention against chordify.net. The owner's saved Chordify page holds their account details, so never copy it into the repo.

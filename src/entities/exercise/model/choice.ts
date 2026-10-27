@@ -15,7 +15,7 @@ import type { ChordToneFrom } from '@/shared/lib/exercise'
 export const OCTAVES = [1, 2, 3, 4] as const
 export type Octaves = (typeof OCTAVES)[number]
 
-/** The arpeggio types (roadmap §10.4): minor, major and neutral by feel. */
+/** The arpeggio types: minor, major and neutral by feel. */
 export const ARPEGGIO_QUALITIES = [
   'maj',
   'min',

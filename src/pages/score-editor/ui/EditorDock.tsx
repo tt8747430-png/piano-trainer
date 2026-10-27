@@ -6,9 +6,9 @@ import { RecordingSettings } from './RecordingSettings'
 import { TakesButton } from './TakesButton'
 
 /**
- * The editor's transport (ADR 0110), the Player's pill (`Transport`) in shape, size and place: the
+ * The editor's transport (ADR 0115), the Player's pill (`Transport`) in shape, size and place: the
  * tempo then ‹ Play ›, then the editor's own three where the Player's loop, Sound and hands stand:
- * Record, as Dorico's transport has it (ADR 0094, 0096), the takes (greyed, saying why, until the
+ * Record, as Dorico's transport has it (ADR 0114, 0096), the takes (greyed, saying why, until the
  * song has one), and the recording settings (the metronome and Play melody under a take). Play plays
  * from the caret's bar at the tempo's speed (the learner's, never the song's tempo); ‹ › move the
  * caret. While a take records, its strip stands here.

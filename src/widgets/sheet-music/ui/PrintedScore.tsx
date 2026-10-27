@@ -19,7 +19,7 @@ function Engraved({ first, onEngraved }: { first: number; onEngraved: (first: nu
 }
 
 /**
- * The sheet music as it prints (ADR 0107): the pages the Pages layout shows (ADR 0075, 0087), at their
+ * The sheet music as it prints (ADR 0107): the pages the Pages layout shows (ADR 0096, 0087), at their
  * print size, as the View shows the score (its staves, chord symbols and words), each line with its
  * labels' row and nothing a screen adds (the playhead, the loop, bars to tap). Says when every line
  * is engraved (`onReady`), so the browser prints it whole.

@@ -44,7 +44,7 @@ export interface ProgressState {
   readonly trainers: Readonly<Partial<Record<RunKey, TrainerRecord>>>
   /** The days on the learner's calendar they practised (`2026-10-11`), oldest first, the latest DAYS_KEPT. */
   readonly days: readonly string[]
-  /** When each song lesson was first done (ADR 0100), the latest LESSONS_KEPT. */
+  /** When each song lesson was first done (ADR 0111), the latest LESSONS_KEPT. */
   readonly lessons: Readonly<Partial<Record<LessonKey, string>>>
   /**
    * How many times each chord lesson's chord was held so far (ADR 0111), 1 or 2: on its third hold

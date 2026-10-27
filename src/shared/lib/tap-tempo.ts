@@ -5,7 +5,7 @@ const TAPS_KEPT = 5
 const TAP_PAUSE = 2000
 
 /**
- * Tap tempo (ADR 0113): a tap at `time` (milliseconds) after the taps before it. The tempo is the
+ * Tap tempo (ADR 0052): a tap at `time` (milliseconds) after the taps before it. The tempo is the
  * average gap between the last few taps, in beats a minute; a tap after a pause starts again, and
  * one tap alone reads none.
  */

@@ -40,7 +40,7 @@ describe('the editor', () => {
     expect(shape(staffNotes(run(written, { type: 'step', steps: -1 }).draft))).toEqual(['F#4@0/24'])
   })
 
-  it('changes key from the caret’s section on, its notes written and stepped in that key (ADR 0089)', () => {
+  it('changes key from the caret’s section on, its notes written and stepped in that key (ADR 0114)', () => {
     const twoParts = initialEditor(
       draftOf({
         sections: [
@@ -67,7 +67,7 @@ describe('the editor', () => {
     expect(run(chorus, { type: 'undo' }).draft.sections[1]?.heading.key).toBeUndefined()
   })
 
-  it('changes time from a bar’s section on, a bar added there counted in it (ADR 0095)', () => {
+  it('changes time from a bar’s section on, a bar added there counted in it (ADR 0097)', () => {
     const twoParts = initialEditor(
       draftOf({
         sections: [
@@ -227,7 +227,7 @@ describe('the editor', () => {
     expect(state.caret).toBe(0)
   })
 
-  it('cycles the modes round, Replace, Insert, Chord, as I does (ADR 0092)', () => {
+  it('cycles the modes round, Replace, Insert, Chord, as I does (ADR 0114)', () => {
     const once = run(start(), { type: 'mode' })
     expect(once.mode).toBe('insert')
     expect(run(once, { type: 'mode' }).mode).toBe('chord')
@@ -453,7 +453,7 @@ describe('the editor', () => {
     expect(run(typed, { type: 'move', by: 'step', direction: 1 }).caret).toBe(72)
   })
 
-  it('takes a bar’s only chord with Delete, the bar left to type a chord into (ADR 0094)', () => {
+  it('takes a bar’s only chord with Delete, the bar left to type a chord into (ADR 0114)', () => {
     const am = parseChordSymbol('Am')
     const onLast = run(initialEditor(draftOf()), { type: 'place', tick: 96, layer: 'chords' })
     const deleted = run(onLast, { type: 'delete' })
@@ -475,7 +475,7 @@ describe('the editor', () => {
     expect(run(state, { type: 'undo' }).draft).toEqual(oneStaff())
   })
 
-  it('hides the piano for a lead sheet, the caret leaving a hand for the tune, and shows it again (ADR 0083)', () => {
+  it('hides the piano for a lead sheet, the caret leaving a hand for the tune, and shows it again (ADR 0114)', () => {
     const sung = initialEditor(
       draftOf({ staves: [{ notes: 'B4/1 | D5/1' }], hands: { lh: 'G2/4 | r/4' } }),
     )
@@ -496,7 +496,7 @@ describe('the editor', () => {
     expect(run(lead, { type: 'removeStaff', place: 0 })).toBe(lead)
   })
 
-  it('keeps the lyrics on the upper staff as a staff is added: saved with the music (ADR 0093, 0097)', () => {
+  it('keeps the lyrics on the upper staff as a staff is added: saved with the music (ADR 0097)', () => {
     const piano = initialEditor(
       draftOf({ hands: { rh: 'G4+B4/2 D5/2 | r/4', lh: 'r/4 | r/4' }, lyrics: ['A- men'] }),
     )
@@ -612,7 +612,7 @@ describe('the editor', () => {
     ).toBeNull()
   })
 
-  it('chooses one note of a chord, and edits it alone (ADR 0088)', () => {
+  it('chooses one note of a chord, and edits it alone (ADR 0096)', () => {
     const chord = run(initialEditor(draftOf({ hands: { rh: 'C4+E4+G4/4 | r/4' } })), {
       type: 'layer',
       layer: 'rh',
@@ -667,7 +667,7 @@ describe('the editor', () => {
     expect(cut.clip?.kind === 'bars' && cut.clip.bars).toHaveLength(2)
   })
 
-  it('copies the notes chosen on a staff and pastes them from the caret over what is there, bars added to hold them (ADR 0092)', () => {
+  it('copies the notes chosen on a staff and pastes them from the caret over what is there, bars added to hold them (ADR 0114)', () => {
     const four = run(start(), key(60, 0), key(62, 500), key(64, 1000), key(65, 1500))
     const chosen = run(
       four,
@@ -861,7 +861,7 @@ describe('the editor', () => {
     expect(state.draft).toMatchObject({ tempo: 120 })
   })
 
-  it('transposes the music, Undo taking it back (ADR 0110)', () => {
+  it('transposes the music, Undo taking it back (ADR 0115)', () => {
     const start = initialEditor(draftOf())
     const moved = run(start, {
       type: 'transpose',
@@ -873,7 +873,7 @@ describe('the editor', () => {
     expect(run(moved, { type: 'undo' }).draft).toEqual(start.draft)
   })
 
-  it('gives the song a title of the learner’s own, saved with its music, an empty one changing nothing (ADR 0094)', () => {
+  it('gives the song a title of the learner’s own, saved with its music, an empty one changing nothing (ADR 0114)', () => {
     const named = run(initialEditor(draftOf()), { type: 'title', title: '  Evening  ' })
     expect(named.draft.title).toBe('Evening')
     const saved = musicToSave(named.draft)
@@ -979,7 +979,7 @@ describe('the palette on what is chosen', () => {
       { type: 'move', by: 'bar', direction: 1, extend: true },
     )
     expect(lengths(run(both, { type: 'barLength', ticks: 48 }).draft)).toEqual([48, 48])
-    // From the bar given, wherever the caret is (a clef on the sheet, ADR 0094).
+    // From the bar given, wherever the caret is (a clef on the sheet, ADR 0114).
     const clef = run(initialEditor(draftOf()), { type: 'clef', staff: 'rh', clef: 'bass', bar: 1 })
     expect(clef.draft.sections[0]?.lines[0]?.[1]?.clefs).toEqual({ rh: 'bass' })
     // A single staff's clef is its whole staff's (ADR 0097).
@@ -1045,7 +1045,7 @@ describe('createEditorStore', () => {
   })
 })
 
-describe('the words (ADR 0093)', () => {
+describe('the words (ADR 0097)', () => {
   const sung = () =>
     initialEditor(
       draftOf({

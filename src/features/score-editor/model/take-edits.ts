@@ -5,7 +5,7 @@ import { notesOf, oneLine, reaching, spelledIn, withNotes } from './notes'
 import type { TickSpan } from './state'
 import { barAt } from './timeline'
 
-/** Where a take is written (spec 2026-10-05 §4): both hands, split at a key, or one staff. */
+/** Where a take is written: both hands, split at a key, or one staff. */
 export type TakeInto = 'both' | NoteLayer
 
 /** A take's notes for one layer, in ticks from the take's first downbeat. */
@@ -51,7 +51,7 @@ function writePart(draft: Draft, { layer, notes }: TakePart, span: TickSpan): Dr
 }
 
 /**
- * A take written into the draft from the bar starting at `from` (spec 2026-10-05 §4): over whole bars
+ * A take written into the draft from the bar starting at `from`: over whole bars
  * to the bar it ends in, bars added past the piece's end; in each part's layer the notes starting
  * there are replaced. The draft as it was for a take with no notes.
  */

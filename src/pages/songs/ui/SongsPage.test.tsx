@@ -601,7 +601,7 @@ describe('Songs: your own', () => {
     })
   })
 
-  it('makes a lead sheet: a staff alone, the piano hidden (ADR 0083, 0097)', async () => {
+  it('makes a lead sheet: a staff alone, the piano hidden (ADR 0114, 0097)', async () => {
     const user = userEvent.setup()
     const { piecesStore, router } = await renderApp('/songs/folders/hymns')
     await user.click(await screen.findByRole('button', { name: 'New' }))

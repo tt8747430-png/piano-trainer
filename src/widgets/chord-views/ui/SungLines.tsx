@@ -3,7 +3,7 @@ import { lineWords, type Span } from '../model/lyric-lines'
 import type { SungPlace } from '../model/sung-place'
 
 /**
- * The wait for the next line sung, in a line's place (ADR 0101, Chordify's): a dash whose dot runs
+ * The wait for the next line sung, in a line's place (ADR 0108, Chordify's): a dash whose dot runs
  * along it to the next line's first word, the way behind it in ink.
  */
 function Wait({ progress }: { progress: number }) {
@@ -26,7 +26,7 @@ function Wait({ progress }: { progress: number }) {
 }
 
 /**
- * The words under the Diagrams view's strip (ADR 0099, 0101, Chordify's karaoke): the line being
+ * The words under the Diagrams view's strip (ADR 0108, Chordify's karaoke): the line being
  * sung in the body face, bold, each word in ink once the music reaches it (its first syllable's
  * beat, as written) and muted before; between lines that sing, the wait in its place; the next line
  * sung muted under either. A room too short for both shows the first alone (`diagrams-view`); on a

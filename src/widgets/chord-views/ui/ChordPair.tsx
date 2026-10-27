@@ -9,7 +9,7 @@ import { usePairMotion } from '../model/use-pair-motion'
 import { PairDiagram } from './PairDiagram'
 
 /**
- * The Diagrams view's pair (ADR 0101, 0108): the chord sounding and the next beside it, the same
+ * The Diagrams view's pair (ADR 0108): the chord sounding and the next beside it, the same
  * size, the next greyed; where no chord sounds yet (a pickup, a bar of none) the next alone, saying
  * it is next. As a change comes the pair slides with Listen's clock frame by frame (`pairSlide`), the
  * next into the place of the one sounding, the one after it in from the right; taken to a chord it

@@ -6,7 +6,7 @@ import { patternNeed } from '../model/fit'
 import { METHOD_CODES, type PatternId } from '../model/types'
 import { METHODS } from './methods'
 
-// Called to Play's level 2 plays level 1's methods in 6/8 and 12/8 (spec 2026-10-14): each figure
+// Called to Play's level 2 plays level 1's methods in 6/8 and 12/8: each figure
 // below is the book's, a dotted-quarter beat 24 ticks, an 8th 8, a 16th 4.
 
 const NAMES = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B']

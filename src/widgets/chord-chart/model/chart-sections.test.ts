@@ -72,7 +72,7 @@ describe('chartSections', () => {
     expect(chartSections(performance)).toEqual([[[0, 1], [2]], [[3, 4, 5]]])
   })
 
-  it('keeps each bar as written once, where the Player plays the repeats (ADR 0067, 0098)', () => {
+  it('keeps each bar as written once, where the Player plays the repeats (ADR 0097, 0108)', () => {
     const repeated: Chart = {
       ...CHART,
       sections: [
@@ -146,7 +146,7 @@ describe('chartBar', () => {
     expect(chartBar(performance, 2)).toBeNull()
   })
 
-  it('gives a section’s first bar in a meter of its own its signature, and the bar back in the piece’s (ADR 0095)', () => {
+  it('gives a section’s first bar in a meter of its own its signature, and the bar back in the piece’s (ADR 0097)', () => {
     const changing: Chart = {
       ...CHART,
       sections: [

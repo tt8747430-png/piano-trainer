@@ -48,7 +48,7 @@ export const keySignature = (key: Key): number =>
   LETTER_FIFTHS[key.tonic.letter] + 7 * key.tonic.accidental - (key.minor ? 3 : 0)
 
 /**
- * The key a signature of `count` sharps (> 0) or flats (< 0) writes, major or minor (ADR 0110: the
+ * The key a signature of `count` sharps (> 0) or flats (< 0) writes, major or minor (ADR 0115: the
  * palette's key signatures, each a tile): 3 is A major or F♯ minor.
  */
 export function signatureKey(count: number, minor: boolean): Key {
@@ -62,7 +62,7 @@ export function signatureKey(count: number, minor: boolean): Key {
   throw new RangeError(`No key signature writes ${count}`)
 }
 
-/** Every key signature, from seven flats to seven sharps (ADR 0110). */
+/** Every key signature, from seven flats to seven sharps (ADR 0115). */
 export const SIGNATURE_COUNTS: readonly number[] = Array.from({ length: 15 }, (_, i) => i - 7)
 
 export const keyPrefersSharps = (key: Key): boolean => keySignature(key) > 0

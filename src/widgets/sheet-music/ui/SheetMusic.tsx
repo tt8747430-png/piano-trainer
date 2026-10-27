@@ -15,8 +15,8 @@ import { SheetOverlay } from './SheetOverlay'
 import { useSheetScore } from './use-sheet-score'
 
 /**
- * How the sheet shows its score (ADR 0064): its layout, its chord names, the words under the staff
- * that sings them (ADR 0093), the staves hidden (ADR 0097).
+ * How the sheet shows its score (ADR 0096): its layout, its chord names, the words under the staff
+ * that sings them (ADR 0097), the staves hidden (ADR 0097).
  */
 export interface SheetViewChoice {
   readonly layout: SheetView
@@ -81,7 +81,7 @@ function EngravedSize({
 }
 
 /**
- * A Performance as sheet music (spec §2.6): its title at its head, the page's heading (ADR 0094);
+ * A Performance as sheet music: its title at its head, the page's heading (ADR 0114);
  * chord symbols over numbered bars, the playhead at the beat group now (moving with the music while
  * Listen plays, ADR 0096), the loop, bars to jump to; its single staves over the piano, each named by
  * its own name (ADR 0097), the piano's left out of a lead sheet, the staves the view hides left out.
@@ -109,9 +109,9 @@ export function SheetMusic({
   staffNames = NO_NAMES,
 }: {
   view?: SheetViewChoice
-  /** The piece's title, printed at the sheet's head in every layout: the page's heading (ADR 0094). */
+  /** The piece's title, printed at the sheet's head in every layout: the page's heading (ADR 0114). */
   title: string
-  /** Whether the piano's staves are written: not on a lead sheet (ADR 0083). */
+  /** Whether the piano's staves are written: not on a lead sheet (ADR 0114). */
   piano?: boolean
   /** Each single staff's name by its place, as printed at the first line's head (ADR 0097). */
   staffNames?: readonly (string | undefined)[]
@@ -167,7 +167,7 @@ export function SheetMusic({
   // chord symbols' or the bars'), smaller with a staff drawn smaller.
   const rowAt = (size: number) => labelRow(view.chordNames, size)
   const scale = fitScale(room, natural, own.bar, rowAt)
-  // Bars chosen as the editor chooses notes (ADR 0082, 0088), the loop: from the bar held or the
+  // Bars chosen as the editor chooses notes (ADR 0096), the loop: from the bar held or the
   // loop's start (else the cursor's bar) to the one reached, exactly.
   const anchor = useRef<number | null>(null)
   const group = performance.beatGroups[current]
@@ -176,7 +176,7 @@ export function SheetMusic({
     const from = extend ? (anchor.current ?? loop?.first ?? group?.bar ?? at) : at
     onLoopChange({ first: Math.min(from, at), last: Math.max(from, at) })
   }
-  // A note or a chord clicked, as the editor's click (ADR 0088): the cursor goes to its beat group and
+  // A note or a chord clicked, as the editor's click (ADR 0096): the cursor goes to its beat group and
   // it alone is marked until the cursor moves; the loop stays for a note inside it (`keepsLoop`).
   const [picked, setPicked] = useState<{ readonly picked: Picked; readonly group: number } | null>(
     null,
@@ -204,7 +204,7 @@ export function SheetMusic({
       : undefined
   }, [loop, performance, here])
   // While the loop stands chosen and nothing moves, the loop is the mark, the playhead out of sight
-  // (ADR 0088). Playing, or stepped on since, the playhead is where the music is.
+  // (ADR 0096). Playing, or stepped on since, the playhead is where the music is.
   const loopKey = loop ? `${loop.first}-${loop.last}` : ''
   const [resting, setResting] = useState({ loop: loopKey, at: current })
   if (resting.loop !== loopKey) setResting({ loop: loopKey, at: current })
@@ -237,7 +237,7 @@ export function SheetMusic({
       />
     )
   return (
-    // The title at the line's head (ADR 0094), the line scrolling sideways under it in the height left.
+    // The title at the line's head (ADR 0114), the line scrolling sideways under it in the height left.
     <section aria-label={t('sheet.label')} className="flex h-full flex-col">
       <SheetTitle title={title} place="across" />
       <div

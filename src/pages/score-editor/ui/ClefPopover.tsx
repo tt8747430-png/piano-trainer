@@ -6,7 +6,7 @@ import { ClefPicker } from './ClefPicker'
 import { SignPicker } from './SignPicker'
 
 /**
- * A clef's picker (ADR 0094, 0114), opened where it is printed: that staff's clef from its bar on, a
+ * A clef's picker (ADR 0114), opened where it is printed: that staff's clef from its bar on, a
  * single staff's whole (ADR 0097), said under its title.
  */
 export function ClefPopover({

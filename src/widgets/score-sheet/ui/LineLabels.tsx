@@ -9,11 +9,11 @@ const PART =
   'relative z-30 cursor-pointer rounded-md transition-colors duration-200 ease-out hover:bg-foreground/5 hover:text-foreground focus-visible:-outline-offset-3'
 
 /**
- * Over a line's staff, the labels' row the Player prints too (ADR 0087, 0095): the number of its
+ * Over a line's staff, the labels' row the Player prints too (ADR 0087, 0097): the number of its
  * first bar at its head, a section's name at its first bar, the tempo at the piece's head, and with
  * chord names each chord symbol at its onset; the row as tall as what it holds (`row`), drawn at the
  * line's size. A section's name is a button opening its menu, and the tempo mark one opening what
- * sets the tempo (`edit`, ADR 0094).
+ * sets the tempo (`edit`, ADR 0114).
  */
 export function LineLabels({
   layout,

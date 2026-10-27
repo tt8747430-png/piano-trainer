@@ -5,7 +5,7 @@ import { touchVelocity } from '@/shared/lib/schedule'
 import { useServices } from '@/shared/lib/services'
 
 /**
- * The MIDI keyboard as the settings say (spec 2026-10-09 §3.2): the port hears the keyboard chosen,
+ * The MIDI keyboard as the settings say: the port hears the keyboard chosen,
  * shifted, its pedals read the right way round, so every reader of the port hears the same keys.
  * Its pedals are the live voice's pedals, always; its keys sound through the live voice, as loud as
  * the Touch hears them, only with Sound the MIDI keyboard on: what it sounded is let go as the switch

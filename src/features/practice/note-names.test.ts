@@ -16,7 +16,7 @@ describe('spellPitchClass', () => {
     expect(spellPitchClass(performance, g, pitchClass(1))).toBe('C#')
   })
 
-  it('names it from the key in a bar of no chord (ADR 0094)', () => {
+  it('names it from the key in a bar of no chord (ADR 0114)', () => {
     expect(spellPitchClass(performance, undefined, pitchClass(6))).toBe('F#')
   })
 })

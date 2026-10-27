@@ -21,7 +21,7 @@ export interface BookPattern {
   readonly pattern: Pattern
 }
 
-/** The built-in patterns and the learner's own, looked up by ref (ADR 0026). */
+/** The built-in patterns and the learner's own, looked up by ref (ADR 0047). */
 export interface PatternBook {
   /** The pattern a ref names; undefined where the book holds none (an own pattern since deleted). */
   get(ref: PatternRef): BookPattern | undefined

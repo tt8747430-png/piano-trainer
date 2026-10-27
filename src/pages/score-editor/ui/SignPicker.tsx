@@ -51,7 +51,7 @@ function PickerHead({
 }
 
 /**
- * What a sign opens, the score editor's pickers' one frame (ADR 0094, 0114, after notation apps'
+ * What a sign opens, the score editor's pickers' one frame (ADR 0114, after notation apps'
  * sheets): on a laptop a popover by what was tapped (its button on the sheet, or its key in the
  * palette, the trigger), elsewhere a sheet from the foot of the screen, each titled by what it changes
  * with its Close, and what it changes from under the title (`description`). Its picker is given

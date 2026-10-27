@@ -19,7 +19,7 @@ describe('the song’s settings', () => {
     expect(shape(moved.hands.lh)).toEqual(['E♭3@0/96'])
   })
 
-  it('moves a section’s own key with the music (ADR 0089)', () => {
+  it('moves a section’s own key with the music (ADR 0114)', () => {
     const changing = draftOf({
       key: 'C',
       sections: [
@@ -54,7 +54,7 @@ describe('the song’s settings', () => {
   })
 })
 
-describe('transpose (ADR 0110)', () => {
+describe('transpose (ADR 0115)', () => {
   const draft = draftOf({
     key: 'C',
     sections: [{ kind: 'verse', lines: ['C G7/B'] }],

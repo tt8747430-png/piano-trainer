@@ -2,7 +2,7 @@ import type { PatternId } from '@/entities/pattern'
 import type { LocalText } from '@/shared/i18n'
 import type { ChordSize } from '@/shared/lib/music'
 
-/** The styles the Progressions library groups its progressions by (roadmap §10.1). */
+/** The styles the Progressions library groups its progressions by. */
 export const PROGRESSION_STYLES = [
   'pop',
   'rock',
@@ -16,7 +16,7 @@ export const PROGRESSION_STYLES = [
 export type ProgressionStyle = (typeof PROGRESSION_STYLES)[number]
 
 /**
- * A progression's lines of numerals as `parseNumerals` reads them, one for each mode it has (ADR 0041):
+ * A progression's lines of numerals as `parseNumerals` reads them, one for each mode it has (ADR 0112):
  * a major key's (`I V vi IV`), a minor key's counted from natural minor (`i VI III VII`), or both.
  */
 export type ModeLines =

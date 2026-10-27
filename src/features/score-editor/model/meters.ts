@@ -89,7 +89,7 @@ const pickupIn = (ticks: Tick, to: Tick, meter: Meter): Tick => {
 }
 
 /**
- * The music with each section counted in its meter of `meters` (ADR 0095), the song's the first
+ * The music with each section counted in its meter of `meters` (ADR 0097), the song's the first
  * section's: in a section whose bar's length changes, each full bar is made the new meter's (shorter,
  * its notes and chords past the new end taken; longer, its last chord held on), a shorter bar kept
  * as it is unless it outruns the new bar. A pickup stays one, cut from its start. A section says its
@@ -126,7 +126,7 @@ const wholeBars = (draft: Draft): Tick[] =>
   draft.sections.map((_, section) => barTicks(sectionMeter(draft, section)))
 
 /**
- * The whole song in another meter (ADR 0095, 0114): every section counted in it, none in its own.
+ * The whole song in another meter (ADR 0097, 0114): every section counted in it, none in its own.
  * In a meter of the other kind every tick is written anew so each note keeps its length (and the
  * tempo its speed); where a note falls between the new ticks nothing changes (`meterBar`).
  */
@@ -145,7 +145,7 @@ export function setMeter(draft: Draft, meter: Meter): Draft {
 }
 
 /**
- * A change of time at section `index` (ADR 0095), as Flat changes time from a measure "until the next
+ * A change of time at section `index` (ADR 0097), as Flat changes time from a measure "until the next
  * time signature": that section and those after it in the same meter, up to the next change, counted
  * in `meter`, of the song's kind; a section in the song's meter writes none. At the first section, it
  * is the song's meter, the sections past the change keeping theirs.

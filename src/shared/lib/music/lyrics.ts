@@ -1,5 +1,5 @@
 /**
- * A syllable sung on a note of the tune (ADR 0093), as a verse writes it under the note: Flat's and
+ * A syllable sung on a note of the tune (ADR 0097), as a verse writes it under the note: Flat's and
  * LilyPond's marks, a hyphen to the next syllable of its word, an extender line while it is held.
  */
 export interface Syllable {

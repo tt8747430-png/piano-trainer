@@ -85,7 +85,7 @@ describe('routes', () => {
     '/practice/quiz/nothing',
     '/practice/progressions/flow',
     '/practice/tensions',
-    // Where a page was before ADR 0044, and a tool's page before ADR 0052: no redirect, the address
+    // Where a page or a tool's page was before ADR 0052: no redirect, the address
     // is not there.
     '/practice/free-play',
     '/practice/passing-chords',

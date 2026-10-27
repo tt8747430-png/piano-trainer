@@ -39,7 +39,7 @@ function tallestLine(pages: HTMLElement | null): number | undefined {
 }
 
 /**
- * Pages floating on a canvas (ADR 0075), as a notation app's page view: drawn at their print size,
+ * Pages floating on a canvas (ADR 0096), as a notation app's page view: drawn at their print size,
  * moved by a drag (a click or a double click on them still reaches them), zoomed by a pinch, by Ctrl
  * or ⌘ with the wheel, or by its buttons; opened with a page's width fitted to the screen, in the room
  * what floats over its right edge leaves (`covered`: the editor's palette beside the pages), and no
@@ -47,7 +47,7 @@ function tallestLine(pages: HTMLElement | null): number | undefined {
  * sight (the caret's line, the playhead's) comes clear of what floats over it, and stays in sight as
  * the pages are fitted again. A grip (`data-grip`: a note's, the loop's) drags itself, not the canvas.
  * The zoom's buttons come into sight as the pages are moved or zoomed, never at a tap (which would
- * leave them under the next tap, ADR 0110), and fade once the pages are left alone, or at a tap on
+ * leave them under the next tap, ADR 0115), and fade once the pages are left alone, or at a tap on
  * them.
  */
 export function PageCanvas({
@@ -57,7 +57,7 @@ export function PageCanvas({
 }: {
   column: number
   /**
-   * What floats over the canvas without moving with it (ADR 0081): over its right edge (the editor's
+   * What floats over the canvas without moving with it (ADR 0115): over its right edge (the editor's
    * palette beside the pages) and its foot (the dock), in CSS px.
    */
   covered?: { readonly right?: number; readonly bottom?: number } | undefined
@@ -195,7 +195,7 @@ export function PageCanvas({
     // whatever it lands on, so every touch would be a grip's.
     const target = event.target as Element
     // A tap shows nothing: the zoom's buttons appearing under a finger would take the next tap
-    // meant for the music or a popover's way out (ADR 0110). They come as the pages move.
+    // meant for the music or a popover's way out (ADR 0115). They come as the pages move.
     if (target.closest('[data-slot="canvas-controls"]')) return
     if (event.button !== 0 || target.closest('[data-grip]')) return
     pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY })

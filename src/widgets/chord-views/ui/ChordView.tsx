@@ -16,8 +16,8 @@ import { ChordsOverLyrics } from './ChordsOverLyrics'
 import { GridView } from './GridView'
 
 /**
- * The Player's music as one of its chord views (ADR 0099), shown only for music with chord symbols
- * (ADR 0102): Chords over lyrics, Diagrams (in its mode, ADR 0101) or the Grid, each following the
+ * The Player's music as one of its chord views (ADR 0108), shown only for music with chord symbols
+ * (ADR 0108): Chords over lyrics, Diagrams (in its mode, ADR 0108) or the Grid, each following the
  * cursor a beat at a time (`useBeat`: Listen's clock while it plays, else the beat the cursor stands
  * on) and taking it to the beat tapped, the beat group there or the next (`jumpToBeatGroup`, which
  * sounds it while nothing plays). A chord tapped anywhere, a chip, a diagram, a card, a beat, takes

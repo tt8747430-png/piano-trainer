@@ -5,7 +5,7 @@ import { Labelled, MenuSection, PictureTiles } from '@/shared/ui'
 import { SwingPicture } from './SwingPicture'
 
 /**
- * How the Player plays, the Setup's last section (ADR 0085, 0115): Swing, how late the second of each
+ * How the Player plays, the Setup's last section (ADR 0115): Swing, how late the second of each
  * pair of 8ths comes, one of four tiles each drawing its beat (null where the meter cannot swing),
  * what it does its ⓘ; then the music's own (`children`: a piece's Melody). Nothing where it has
  * neither. The count-in and the click are the transport's Sound's (ADR 0105), what the sheet shows

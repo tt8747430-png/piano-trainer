@@ -56,7 +56,7 @@ describe('chordsHolding', () => {
   })
 })
 
-/** The owner's table (roadmap §10.3): each melody note's major, minor and dominant roots, as it wrote them. */
+/** The owner's table: each melody note's major, minor and dominant roots, as it wrote them. */
 const TABLE: readonly (readonly [string, string, string, string])[] = [
   ['G', 'E♭ A♭ F D♭ B♭', 'E A F D B♭', 'E♭ A F# F E D♭ B B♭'],
   ['A♭', 'E A G♭ D B', 'F B♭ G♭ E♭ B', 'E B♭ G G♭ F D C B'],

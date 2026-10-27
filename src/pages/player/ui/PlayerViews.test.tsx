@@ -83,7 +83,7 @@ function keysDown(audio: { played: readonly { at: number }[]; setNow: (now: numb
     .map((key) => key.getAttribute('aria-label') ?? '')
 }
 
-describe('the View’s views of the music (ADR 0099)', () => {
+describe('the View’s views of the music (ADR 0108)', () => {
   it('chooses a view from its tiles, saved for every piece', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
@@ -95,7 +95,7 @@ describe('the View’s views of the music (ADR 0099)', () => {
       'aria-checked',
       'true',
     )
-    // The music, under the menu's own part for the view (ADR 0102).
+    // The music, under the menu's own part for the view (ADR 0108).
     const music = document.querySelector<HTMLElement>('[data-area="sheet"]')
     if (!music) throw new Error('the music’s area')
     expect(within(music).getByRole('region', { name: 'Diagrams' })).toBeInTheDocument()
@@ -128,7 +128,7 @@ describe('the View’s views of the music (ADR 0099)', () => {
   })
 })
 
-describe('the Grid (ADR 0098, 0099)', () => {
+describe('the Grid (ADR 0108)', () => {
   it('shows the chart in beats where the sheet music was, by section, under its title', async () => {
     await inView('grid', '/play/bz5')
     const grid = screen.getByRole('region', { name: 'Grid' })
@@ -182,7 +182,7 @@ describe('the Grid (ADR 0098, 0099)', () => {
     expect(down.every((name) => /^[GBD]\d$/.test(name))).toBe(true)
   })
 
-  it('shows a bar of no chord as an empty bar named by its number, which a tap goes to (ADR 0094)', async () => {
+  it('shows a bar of no chord as an empty bar named by its number, which a tap goes to (ADR 0114)', async () => {
     const user = userEvent.setup()
     const storage = withSong({
       sections: [{ kind: 'verse', lines: ['G _ D _'] }],
@@ -238,7 +238,7 @@ describe('the Grid (ADR 0098, 0099)', () => {
   })
 })
 
-describe('Chords over lyrics (ADR 0099)', () => {
+describe('Chords over lyrics (ADR 0108)', () => {
   /** A line of the words by the bars it holds: its button, and what it shows. */
   const line = (name: string) => {
     const button = screen.getByRole('button', { name })
@@ -307,7 +307,7 @@ describe('Chords over lyrics (ADR 0099)', () => {
         rh: 'B4/4 | B4/4 | A4/4 | G4/4 | E4/4 | D4/4',
         lh: 'r/4 | r/4 | r/4 | r/4 | r/4 | r/4',
       },
-      // Words in the chorus alone: music of none shows Diagrams (ADR 0102).
+      // Words in the chorus alone: music of none shows Diagrams (ADR 0108).
       staves: [{ notes: 'r/4 | r/4 | r/4 | r/4 | E4/4 | D4/4' }],
       lyrics: ['Sing on'],
     })
@@ -393,7 +393,7 @@ describe('Chords over lyrics (ADR 0099)', () => {
   })
 })
 
-describe('Diagrams (ADR 0099)', () => {
+describe('Diagrams (ADR 0108)', () => {
   it('follows the chord sounding as Listen plays', async () => {
     const user = userEvent.setup()
     const { audio } = await inView('diagrams', '/play/bz5')
@@ -446,7 +446,7 @@ describe('Diagrams (ADR 0099)', () => {
   it.each([
     ['a tablet', '(min-width: 40rem)'],
     ['a laptop', '(min-width: 64rem)'],
-  ])('shows the chord sounding and the next alone on %s (ADR 0101)', async (_size, query) => {
+  ])('shows the chord sounding and the next alone on %s (ADR 0108)', async (_size, query) => {
     sizedAs(query)
     await inView('diagrams', '/play/bz5')
     const view = screen.getByRole('region', { name: 'Diagrams' })
@@ -457,7 +457,7 @@ describe('Diagrams (ADR 0099)', () => {
     ).toEqual(['G: G B D', 'C: G C E'])
   })
 
-  it('names a chord on the strip once over the bars that go on with it (ADR 0101)', async () => {
+  it('names a chord on the strip once over the bars that go on with it (ADR 0108)', async () => {
     await inView('diagrams', '/play/silent')
     // Bars of 3/4: C C C C, then G7 G7 C C.
     expect(stripNamed().slice(0, 24)).toEqual([
@@ -466,7 +466,7 @@ describe('Diagrams (ADR 0099)', () => {
     ])
   })
 
-  it('rests on the strip where the music turns to no chord (ADR 0101)', async () => {
+  it('rests on the strip where the music turns to no chord (ADR 0108)', async () => {
     const storage = withSong({
       sections: [{ kind: 'verse', lines: ['G _ G'] }],
       hands: { rh: 'B4/4 | D5/4 | A4/4', lh: 'r/4 | r/4 | r/4' },
@@ -479,7 +479,7 @@ describe('Diagrams (ADR 0099)', () => {
     ])
   })
 
-  it('lights the words of the line sung as the music reaches them (ADR 0101)', async () => {
+  it('lights the words of the line sung as the music reaches them (ADR 0108)', async () => {
     const user = userEvent.setup()
     await inView('diagrams', '/play/silent')
     const view = screen.getByRole('region', { name: 'Diagrams' })
@@ -495,7 +495,7 @@ describe('Diagrams (ADR 0099)', () => {
     expect(comingLine(view)).toHaveTextContent('All is calm, all is bright')
   })
 
-  it('waits between lines that sing with a dash, the next line under it (ADR 0101)', async () => {
+  it('waits between lines that sing with a dash, the next line under it (ADR 0108)', async () => {
     const user = userEvent.setup()
     const storage = withSong({
       sections: [{ kind: 'verse', lines: ['G D', 'C G', 'D G'] }],
@@ -512,7 +512,7 @@ describe('Diagrams (ADR 0099)', () => {
     expect(comingLine(view)).toHaveTextContent('good night')
   })
 
-  it('marks the chord sounding on the keys as its diagram draws it in Listen (ADR 0101)', async () => {
+  it('marks the chord sounding on the keys as its diagram draws it in Listen (ADR 0108)', async () => {
     const user = userEvent.setup()
     const { audio, settingsStore } = await inView('diagrams', '/play/bz5')
     // G, folded: G3 B3 D4.
@@ -546,7 +546,7 @@ describe('Diagrams (ADR 0099)', () => {
     expect(markedKeys()).toEqual(waited)
   })
 
-  it('draws a chord in the inversion chosen on its sheet, on every screen of the song (ADR 0101)', async () => {
+  it('draws a chord in the inversion chosen on its sheet, on every screen of the song (ADR 0108)', async () => {
     const user = userEvent.setup()
     const { router, diagramInversionsStore } = await inView('diagrams', '/play/bz5')
     const view = screen.getByRole('region', { name: 'Diagrams' })
@@ -582,7 +582,7 @@ describe('Diagrams (ADR 0099)', () => {
     expect(more).toEqual([])
   })
 
-  it('shows the song’s chords at once in its summary, as the View’s Mode says (ADR 0101, 0102)', async () => {
+  it('shows the song’s chords at once in its summary, as the View’s Mode says (ADR 0108)', async () => {
     const user = userEvent.setup()
     await inView('diagrams', '/play/silent')
     await user.click(await screen.findByRole('button', { name: 'View: Diagrams' }))

@@ -8,7 +8,7 @@ export interface PageBlock {
 }
 
 /**
- * An A4 page of a score as it prints (ADR 0075), its number at its foot. A page that is not the last
+ * An A4 page of a score as it prints (ADR 0096), its number at its foot. A page that is not the last
  * is filled to its height (ADR 0087), as LilyPond's and MuseScore's are: the gaps between its blocks
  * grow alike until its last system meets the bottom margin, each by `PAGE_STRETCH` at most; the last
  * page is left ragged.

@@ -43,7 +43,7 @@ function useReason(category: PaletteCategory): string | undefined {
 /** The categories whose tools say more than their names: the editing modes. */
 const EXPLAINED: readonly PaletteCategory[] = ['notes']
 
-/** What a key played does in each editing mode (ADR 0092), where their names alone do not say. */
+/** What a key played does in each editing mode (ADR 0114), where their names alone do not say. */
 function About() {
   const { t } = useTranslation('editor')
   return (
@@ -249,7 +249,7 @@ function ToolRow({ row }: { row: RefObject<HTMLDivElement | null> }) {
 }
 
 /**
- * The bar of categories over the opened palette's sections (ADR 0089, 0114), a picture each, scrolling
+ * The bar of categories over the opened palette's sections (ADR 0114), a picture each, scrolling
  * sideways where the screen is narrow: the category in sight marked, the mark sliding to the one
  * tapped or scrolled to.
  */
@@ -377,9 +377,9 @@ function Sections({
 }
 
 /**
- * The editor's one palette (spec 2026-10-23, after Flat; ADR 0114): every tool, each acting on what is
+ * The editor's one palette (after Flat; ADR 0114): every tool, each acting on what is
  * chosen (a note, a chord, a range or bars), else setting what the next note will be. A card floating
- * over the sheet (ADR 0079, 0081), at the foot (`side` off) or beside it (`side`). Folded, one row of
+ * over the sheet (ADR 0115), at the foot (`side` off) or beside it (`side`). Folded, one row of
  * every tool, scrolling sideways; opened (`folded` off), every category's section stacked and
  * scrolling over the bar of categories, a category tapped scrolling smoothly to its own, the bar's
  * mark following the sections as they scroll. The palette's fold and a Keys toggle stand at the row's

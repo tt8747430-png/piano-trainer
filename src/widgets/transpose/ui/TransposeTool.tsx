@@ -14,7 +14,7 @@ const signed = (semitones: number): string =>
   `${semitones > 0 ? '+' : semitones < 0 ? '−' : ''}${Math.abs(semitones)}`
 
 /**
- * Transpose (ADR 0104, 0110, 0115), one tool in the Player and the score editor: in the tools row
+ * Transpose (ADR 0105, 0115), one tool in the Player and the score editor: in the tools row
  * after the View, its arrows and the key the music is in (`current`, as printed: `B♭m`), in the
  * accent once moved (`moved`). Its popover holds the one control both modes share: − the key it
  * lands in + (`landing`, `by` semitones from where it started, `−5` to `+6`, the short way), how far

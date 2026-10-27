@@ -24,7 +24,7 @@ const SHADE: Readonly<Record<Shade, string>> = {
 }
 
 /**
- * A take drawn as a piano roll (spec 2026-10-09 §4.3): each key's note a bar on its lane from its
+ * A take drawn as a piano roll: each key's note a bar on its lane from its
  * onset for as long as it sounds, shaded by how hard it was struck; the pedals a lane each under the
  * keys; its bars and beats as lines. Each bar is a button that plays from it, numbered as the piece
  * numbers it; the bars Keep bars would cut are dimmed. It scrolls sideways.

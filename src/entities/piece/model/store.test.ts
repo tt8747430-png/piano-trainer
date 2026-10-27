@@ -80,7 +80,7 @@ describe('createPiecesStore', () => {
     expect(sections?.map((section) => section.key)).toEqual([undefined, 'Db', undefined])
   })
 
-  it('keeps a section’s own meter, and drops music whose section is counted in another kind (ADR 0095)', () => {
+  it('keeps a section’s own meter, and drops music whose section is counted in another kind (ADR 0097)', () => {
     const changing = {
       ...MUSIC,
       sections: [
@@ -129,7 +129,7 @@ describe('createPiecesStore', () => {
     expect(Object.keys(restored({ versions }).versions)).toEqual(['bz1'])
   })
 
-  it('reads a save of its own version alone: one with voices or instruments is another shape (ADR 0091)', () => {
+  it('reads a save of its own version alone: one with voices or instruments is another shape (ADR 0114)', () => {
     const sung = { ...MUSIC, voices: ['D4/4'], instruments: ['flute', 'cello'] }
     const kept = restored({ versions: { bz1: sung } }).versions.bz1
     expect(kept).toBeDefined()
@@ -156,7 +156,7 @@ describe('createPiecesStore', () => {
     ])
   })
 
-  it('keeps a lead sheet only where the score has a single staff (ADR 0083, 0094, 0097)', () => {
+  it('keeps a lead sheet only where the score has a single staff (ADR 0114, 0097)', () => {
     const read = (music: object) => restored({ versions: { bz1: music } }).versions.bz1
     // A lead sheet: the single staves and the chord symbols, the piano out of sight.
     expect(read({ ...MUSIC, leadSheet: true })).toEqual({ ...MUSIC, leadSheet: true })
@@ -167,7 +167,7 @@ describe('createPiecesStore', () => {
     expect(read({ ...MUSIC, leadSheet: 'yes' })).toEqual(MUSIC)
   })
 
-  it('keeps the words that read on the staff they are on, and drops a verse longer than it (ADR 0093)', () => {
+  it('keeps the words that read on the staff they are on, and drops a verse longer than it (ADR 0097)', () => {
     const staves = [{ notes: 'B4/2 A4/2' }]
     const sung = { ...MUSIC, staves, lyrics: ['one two', 'eins'] }
     expect(restored({ versions: { bz1: sung } }).versions.bz1?.lyrics).toEqual(['one two', 'eins'])
@@ -194,7 +194,7 @@ describe('createPiecesStore', () => {
     })
   })
 
-  it('keeps lyrics on the upper staff of a piece with a single staff, read on its notes (ADR 0093)', () => {
+  it('keeps lyrics on the upper staff of a piece with a single staff, read on its notes (ADR 0097)', () => {
     const hands = { rh: 'B4/2 A4/2 | - | - | -', lh: 'B2/4 | - | - | -' }
     const upper = { ...MUSIC, hands, lyrics: ['one two'], lyricsOn: 'rh' }
     expect(restored({ versions: { bz1: upper } }).versions.bz1).toEqual(upper)
@@ -209,7 +209,7 @@ describe('createPiecesStore', () => {
     })
   })
 
-  it('keeps a version’s own title of 1 to 80 characters, trimmed, and drops another (ADR 0094)', () => {
+  it('keeps a version’s own title of 1 to 80 characters, trimmed, and drops another (ADR 0114)', () => {
     const versions = {
       bz1: { ...MUSIC, title: '  Thanks  ' },
       bz2: { ...MUSIC, title: '   ' },

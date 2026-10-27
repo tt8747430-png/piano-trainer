@@ -16,7 +16,7 @@ describe('staffNear', () => {
   })
 })
 
-describe('Alt ↑ ↓ through a chord (ADR 0088)', () => {
+describe('Alt ↑ ↓ through a chord (ADR 0096)', () => {
   const chord = run(
     initialEditor(draftOf({ hands: { rh: 'C4+E4+G4/4 | r/4', lh: 'C3/4 | r/4' } })),
     {

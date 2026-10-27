@@ -45,7 +45,7 @@ export function useEntryFace(entry: Entry): EntryFace {
   const learned = useProgress(selectIsLearned(pieceStepId(entry.id)))
   const stage = pieceStage(entry.id)
   const chords = pieceChords(entry)
-  // Said, as the chords' line is not (ADR 0103).
+  // Said, as the chords' line is not (ADR 0106).
   const count = pieceChords(entry, Number.POSITIVE_INFINITY).length
   return {
     face: {

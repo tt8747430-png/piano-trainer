@@ -2,7 +2,7 @@ import type { DiagramChord } from '@/features/practice'
 import { pitchClass, type Midi } from '@/shared/lib/music'
 
 /**
- * Whether keys held together are the chord (ADR 0100): every note its diagram marks, its bass among
+ * Whether keys held together are the chord (ADR 0111): every note its diagram marks, its bass among
  * them, in any octave or inversion, and no note the chord has not.
  */
 export function holdsChord(

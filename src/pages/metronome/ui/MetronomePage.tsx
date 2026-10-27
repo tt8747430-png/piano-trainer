@@ -35,7 +35,7 @@ const face = (Icon: LucideIcon, value: string) => (
 )
 
 /**
- * The Metronome (ADR 0113), a page of Practice: the tempo large between its steps, the slider and
+ * The Metronome (ADR 0052), a page of Practice: the tempo large between its steps, the slider and
  * Tap tempo under it; the sound and the time signature side by side; one round Play in the middle;
  * the beat shown as a row of squares. Space starts and stops it, ↑ ↓ change the tempo by 1, with
  * Shift by 10. What it does is its bar's ⓘ.

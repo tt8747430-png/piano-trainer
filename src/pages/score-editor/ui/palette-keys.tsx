@@ -109,7 +109,7 @@ export function CaptionGrid({ label, children }: { label?: string; children: Rea
 }
 
 /**
- * Signs as tiles (ADR 0110, 0114): clefs, key signatures, barlines, as many to a row as fit, three on
+ * Signs as tiles (ADR 0115, 0114): clefs, key signatures, barlines, as many to a row as fit, three on
  * the narrowest phone; `narrow` for the key signatures, seven to a row where there is room.
  */
 export function SignGrid({
@@ -229,7 +229,7 @@ const KEY_FACE =
   'flex min-w-0 flex-col items-center rounded-xl border border-border bg-card text-card-foreground transition-[background-color,border-color,color,scale] duration-80 ease-out hover:bg-chosen active:scale-95 aria-pressed:border-selected aria-pressed:bg-selected aria-pressed:text-selected-foreground disabled:opacity-35 disabled:hover:bg-card motion-reduce:transition-none motion-reduce:active:scale-100'
 
 /**
- * A sign's tile (ADR 0110, 0114, forScore's palette): the sign drawn on a short staff (`children`),
+ * A sign's tile (ADR 0115, 0114, forScore's palette): the sign drawn on a short staff (`children`),
  * its name under it in small type, the same tile for a clef, a key and a barline; what it is besides
  * its name (`detail`: a key's relative minor) said in its tooltip and to a screen reader. Pressed where
  * it is so already; greyed, its tooltip says why (`reason`, ADR 0096). In the row, the sign alone.

@@ -61,7 +61,7 @@ function DiagramKey({ placed, mark }: { placed: PlacedKey; mark: Mark | null }) 
 }
 
 /**
- * A chord drawn as a keyboard (ADR 0099, 0101), a picture beside its symbol: the keys its caller
+ * A chord drawn as a keyboard (ADR 0108), a picture beside its symbol: the keys its caller
  * gives (every chord diagram's F3 to B4) as the app's keys look, each key held marked by a dot near
  * its foot, dark on a white key and light on a black one; the key `ring` names wears a ring instead
  * (a bass the chord has not). `muted` greys it whole (the next chord). It takes its container's

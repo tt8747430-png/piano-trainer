@@ -54,7 +54,7 @@ import {
   type Raw,
 } from './read-search'
 
-// Practice's explorers (ADR 0044), each a page that shows a thing on the keys: a chord, a scale and its
+// Practice's explorers (ADR 0052), each a page that shows a thing on the keys: a chord, a scale and its
 // key, the intervals over a root, a progression.
 
 // Chords

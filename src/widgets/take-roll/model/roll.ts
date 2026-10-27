@@ -19,7 +19,7 @@ interface RollPress {
   readonly up: number
 }
 
-/** A take laid out as a piano roll (spec 2026-10-09 §4.3), in milliseconds from its downbeat. */
+/** A take laid out as a piano roll, in milliseconds from its downbeat. */
 interface Roll {
   /** The lanes, highest key first: the take's keys, a key spare above and below (C4–C5 for none). */
   readonly lanes: readonly Midi[]

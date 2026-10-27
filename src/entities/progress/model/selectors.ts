@@ -36,7 +36,7 @@ export function byLastOpened(practised: ProgressState['practised']): PieceId[] {
     .map(({ id }) => id)
 }
 
-/** Whether a song lesson is done (ADR 0100). */
+/** Whether a song lesson is done (ADR 0111). */
 export const selectLessonDone =
   (key: LessonKey) =>
   (state: ProgressState): boolean =>

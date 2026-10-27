@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { reachLoop } from './loop-reach'
 
-describe('reachLoop (ADR 0088)', () => {
+describe('reachLoop (ADR 0096)', () => {
   it('begins at the cursor’s bar and takes the next with Shift →, the one before with Shift ←', () => {
     expect(reachLoop(null, null, 3, 'bar', 1, 8)).toEqual({
       loop: { first: 3, last: 4 },

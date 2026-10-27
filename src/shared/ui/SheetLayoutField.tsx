@@ -5,7 +5,7 @@ import { LayoutPicture } from './LayoutPicture'
 import { PictureTiles } from './PictureTiles'
 
 /**
- * How a score is laid out (ADR 0064, 0102, 0115), one choice wherever it is made (the sheet music's
+ * How a score is laid out (ADR 0096, 0108, 0115), one choice wherever it is made (the sheet music's
  * part of the Player's View and the editor's, first in both): Page view, Vertical scroll or Panorama
  * (Dorico's and Sibelius's names), each a tile with its miniature, what each does the ⓘ beside its
  * name.

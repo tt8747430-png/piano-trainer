@@ -9,7 +9,7 @@ import { holdsChord } from '../model/holds-chord'
 import { useHandKeys } from '../model/use-hand-keys'
 
 /**
- * Where a chord's sheet learns it (ADR 0100, 0111): how many times it was held so far, how many
+ * Where a chord's sheet learns it (ADR 0111): how many times it was held so far, how many
  * learn it, and what a hold counted does.
  */
 export interface ChordLearn {
@@ -26,7 +26,7 @@ const HELD_SOUND = [{ kind: 'click', at: 0, accent: true }] as const
 /**
  * A chord learned by holding it `needed` times (ADR 0111, Chordify's three): a line asking for it,
  * its ⓘ saying how, over the holds counted (a dot each, filled as it is counted, and "1 of 3"), then
- * the keys to play it on, the diagram's own, F3 to B4 (ADR 0101). Its keys held together, on a MIDI
+ * the keys to play it on, the diagram's own, F3 to B4 (ADR 0108). Its keys held together, on a MIDI
  * keyboard or these keys with several fingers, count a hold, heard and seen; the next counts once
  * every key is let go and the chord held again, never by holding it longer.
  */

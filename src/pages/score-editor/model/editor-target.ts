@@ -18,7 +18,7 @@ import { readDraft, writeDraft } from '@/features/score-editor'
 /** Music as the editor writes it: the book's own spelling of beats and bars put as the writer puts it. */
 const asWritten = (music: PieceMusic): PieceMusic => writeDraft(readDraft(music))
 
-/** What the editor writes: a catalog song's, study's or listing's version, or an own song (spec §2). */
+/** What the editor writes: a catalog song's, study's or listing's version, or an own song. */
 export type EditorTarget =
   | {
       readonly kind: 'version'
@@ -36,7 +36,7 @@ export type EditorTarget =
   | {
       readonly kind: 'song'
       readonly id: OwnSongId
-      /** Its music under its title: the learner's, saved with it (ADR 0094). */
+      /** Its music under its title: the learner's, saved with it (ADR 0114). */
       readonly music: PieceMusic & { readonly title: string }
     }
 

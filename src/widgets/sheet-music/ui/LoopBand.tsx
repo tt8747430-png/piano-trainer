@@ -6,7 +6,7 @@ import { LoopGrip } from './LoopGrip'
 /**
  * The loop, the Player's bars chosen (ADR 0096): one light band of the selection colour over every
  * staff in sight for its bars, its notes coloured as the editor's chosen notes are, and a grip at
- * each end on its barline (spec §2.6), clear of an accidental after the first.
+ * each end on its barline, clear of an accidental after the first.
  */
 export function LoopBand({
   layout,

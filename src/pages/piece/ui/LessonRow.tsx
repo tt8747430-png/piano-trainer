@@ -20,7 +20,7 @@ const OPENS = {
 } as const
 
 /**
- * A lesson the Player loops, as a row (ADR 0100): its tile in its section's paint, a check on it once
+ * A lesson the Player loops, as a row (ADR 0111): its tile in its section's paint, a check on it once
  * done; it opens the Player looping its bars as its kind says (`OPENS`).
  */
 export function LessonRow({

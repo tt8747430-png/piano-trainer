@@ -5,7 +5,7 @@ import type { Exercise } from '../model/types'
 const FEW_OCTAVES = [1, 2] as const
 
 /**
- * Practice's exercises, by group in the page's order (roadmap §10.5, spec §3): each written for the
+ * Practice's exercises, by group in the page's order: each written for the
  * app from its method's idea; Hanon's No. 1 is public domain.
  */
 export const EXERCISES: readonly Exercise[] = [

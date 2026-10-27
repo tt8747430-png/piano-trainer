@@ -4,7 +4,7 @@ import type { NoteMarks, Tick } from '@/shared/lib/music'
 /**
  * The notes played joined, each held to the next (by index into `notes`): those under a slur, from
  * the note it starts on to the one it ends on, and those from a legato mark on until leggiero, each in
- * its own hand, as a player phrases them (ADR 0068).
+ * its own hand, as a player phrases them (ADR 0097).
  */
 export function joinedNotes(
   notes: readonly {

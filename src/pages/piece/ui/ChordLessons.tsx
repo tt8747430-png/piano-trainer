@@ -13,7 +13,7 @@ import { ChordSheet } from '@/widgets/chord-diagrams'
 import type { ChordLesson } from '../model/section-lessons'
 
 /**
- * A chord to learn as a row (ADR 0100, 0111): "Learn C♯m⁷", its tile in the section's paint with
+ * A chord to learn as a row (ADR 0111): "Learn C♯m⁷", its tile in the section's paint with
  * the piano, a check on it once learned; its holds so far, "1 of 3", at its end until then.
  */
 function ChordLessonRow({
@@ -52,8 +52,8 @@ function ChordLessonRow({
 }
 
 /**
- * A section's chords to learn (ADR 0100, 0111), each a row opening the chord's sheet, drawn in the
- * inversion chosen for it in the piece (ADR 0101), where its keys held together (on a MIDI keyboard
+ * A section's chords to learn (ADR 0111), each a row opening the chord's sheet, drawn in the
+ * inversion chosen for it in the piece (ADR 0108), where its keys held together (on a MIDI keyboard
  * or the sheet's own) three times, let go between, learn it.
  */
 export function ChordLessons({

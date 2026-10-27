@@ -48,7 +48,7 @@ describe('saveMusic', () => {
     expect(store.getState().songs).toEqual([{ id, title: 'Morning', ...CHANGED }])
   })
 
-  it('saves the title with the music, an own song’s and a version’s alike (ADR 0094)', () => {
+  it('saves the title with the music, an own song’s and a version’s alike (ADR 0114)', () => {
     const store = fresh()
     const id = makeSong(store, {
       title: 'Morning',
@@ -68,7 +68,7 @@ describe('saveMusic', () => {
 })
 
 describe('the learner’s songs', () => {
-  it('starts a score of the piano, a staff over the piano, or a staff alone: a lead sheet (ADR 0083, 0097)', () => {
+  it('starts a score of the piano, a staff over the piano, or a staff alone: a lead sheet (ADR 0114, 0097)', () => {
     const key = { tonic: note('C'), minor: false }
     expect(SCORE_SETUPS).toEqual(['piano', 'staffAndPiano', 'staff'])
     expect(chartStart(key, '4/4')).not.toHaveProperty('staves')
@@ -91,7 +91,7 @@ describe('the learner’s songs', () => {
     expect(readMusic(song!).staves).toEqual([{ clef: 'treble', notes: [] }])
   })
 
-  it('makes a song of four bars of no chord, as a notation app’s new score, under the next number (ADR 0094)', () => {
+  it('makes a song of four bars of no chord, as a notation app’s new score, under the next number (ADR 0114)', () => {
     const store = fresh()
     const minor = { tonic: note('E', -1), minor: true }
     expect(makeSong(store, { title: '  Evening  ', key: minor, meter: '6/8' })).toBe('my-1')
@@ -111,7 +111,7 @@ describe('the learner’s songs', () => {
     })
   })
 
-  it('starts a song empty: both hands written silent, so the editor opens on empty bars (ADR 0091)', () => {
+  it('starts a song empty: both hands written silent, so the editor opens on empty bars (ADR 0114)', () => {
     const key = { tonic: note('C'), minor: false }
     const silent = 'r/4 | r/4 | r/4 | r/4'
     expect(chartStart(key, '4/4')).toMatchObject({ hands: { rh: silent, lh: silent } })

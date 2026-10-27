@@ -30,7 +30,7 @@ export interface HandNote {
   readonly durationTicks: Tick
   readonly finger?: Finger
   readonly marks?: NoteMarks
-  /** What it sings, by verse, where the right hand is the tune (ADR 0093). */
+  /** What it sings, by verse, where the right hand is the tune (ADR 0097). */
   readonly lyrics?: NoteLyrics
 }
 /** A bar's hands written note by note: a hand here (even with no notes) is played as written, not by the pattern. */
@@ -40,18 +40,18 @@ export interface WrittenHands {
 }
 /** A bar of a chart: its chords, its beats, its written hands and its barlines (a repeat, an ending). */
 export interface ChartBar extends BarMarks {
-  /** End to end from its start, lasting its beats; none in a bar of no chord symbol (ADR 0094). */
+  /** End to end from its start, lasting its beats; none in a bar of no chord symbol (ADR 0114). */
   readonly chords: readonly ChartChord[]
   readonly beats: number
   readonly hands?: WrittenHands
-  /** The clef a hand's staff changes to at this bar (ADR 0069). */
+  /** The clef a hand's staff changes to at this bar (ADR 0097). */
   readonly clefs?: HandClefs
 }
 export interface ChartSection {
   readonly lines: readonly (readonly ChartBar[])[]
   /** The key its bars are written in, where that is not the chart's (a key change). */
   readonly key?: Key
-  /** The meter its bars are counted in, where that is not the chart's (a change of time, ADR 0095). */
+  /** The meter its bars are counted in, where that is not the chart's (a change of time, ADR 0097). */
   readonly meter?: Meter
 }
 export interface Chart {
@@ -71,9 +71,9 @@ export interface StaffNote {
   readonly spelled: SpelledNote
   readonly startTick: Tick
   readonly durationTicks: Tick
-  /** What its text marks on it (ADR 0063). */
+  /** What its text marks on it (ADR 0097). */
   readonly marks?: NoteMarks
-  /** What it sings, by verse (ADR 0093). */
+  /** What it sings, by verse (ADR 0097). */
   readonly lyrics?: NoteLyrics
 }
 /**
@@ -192,7 +192,7 @@ export interface PerformanceBar extends BarMarks {
   readonly chords: readonly number[]
   /** The key it is played in, where that is not the Performance's (a key change). */
   readonly key?: Key
-  /** The meter it is counted in, where that is not the Performance's (a change of time, ADR 0095). */
+  /** The meter it is counted in, where that is not the Performance's (a change of time, ADR 0097). */
   readonly meter?: Meter
   /** The clef a hand's staff changes to at this bar. */
   readonly clefs?: HandClefs
@@ -215,16 +215,16 @@ export interface PerformanceNote {
   readonly velocity: number
   /** Index into Performance.chords: the chord this note was played for; none in a bar of no chord. */
   readonly chord?: number
-  /** What a written note's text marks on it (ADR 0063). */
+  /** What a written note's text marks on it (ADR 0097). */
   readonly marks?: NoteMarks
-  /** What it sings, by verse (ADR 0093). */
+  /** What it sings, by verse (ADR 0097). */
   readonly lyrics?: NoteLyrics
 }
 /** Notes sharing an onset: what Step mode walks through. `notes` index into Performance.notes. */
 export interface BeatGroup {
   readonly tick: Tick
   readonly bar: number
-  /** The chord sounding then; none in a bar of no chord (ADR 0094). */
+  /** The chord sounding then; none in a bar of no chord (ADR 0114). */
   readonly chord?: number
   readonly notes: readonly number[]
 }
@@ -243,7 +243,7 @@ export interface Performance {
   readonly notes: readonly PerformanceNote[]
   readonly beatGroups: readonly BeatGroup[]
   /**
-   * Every part's tempo and pedal marks (ADR 0068), whether the learner hears that part or not: the
+   * Every part's tempo and pedal marks (ADR 0097), whether the learner hears that part or not: the
    * time and the pedal the whole piece keeps.
    */
   readonly timing?: readonly { readonly startTick: Tick; readonly marks: NoteMarks }[]

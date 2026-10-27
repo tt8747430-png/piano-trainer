@@ -8,7 +8,7 @@ import type { LessonProgress } from '../model/song-progress'
 import { LessonsMeter } from './LessonsMeter'
 
 /**
- * A section's card (spec §3.2): its tile in its paint beside the song's title, the section's chords
+ * A section's card: its tile in its paint beside the song's title, the section's chords
  * (where it is one run played round, `3 ×` before the run as it goes; else its chords in the order
  * they first sound), and its lessons done.
  */

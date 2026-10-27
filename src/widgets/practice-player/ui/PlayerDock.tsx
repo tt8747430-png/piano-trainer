@@ -6,10 +6,10 @@ import { PLAYER_KEYS } from '../model/player-keys'
 import { Transport } from './Transport'
 
 /**
- * The Player's transport (ADR 0061, 0099, 0105): the tempo, ‹, Play or Stop (honey), ›, the loop, the
- * Sound and the hands in the pill the score editor's shares (`Transport`, ADR 0110), floating along
+ * The Player's transport (ADR 0061, 0108, 0105): the tempo, ‹, Play or Stop (honey), ›, the loop, the
+ * Sound and the hands in the pill the score editor's shares (`Transport`, ADR 0115), floating along
  * the sheet's foot at every size, a phone on its side too, where the sheet is too short for it
- * upright (ADR 0081, 0085).
+ * upright (ADR 0115).
  */
 export function PlayerDock({
   practice,

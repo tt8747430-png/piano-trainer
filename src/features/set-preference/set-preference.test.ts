@@ -91,7 +91,7 @@ describe('set-preference', () => {
     expect(saved(storage).sound).toEqual({ rh: 100, lh: 40, staves: 100, recording: 100, click: 0 })
   })
 
-  it('setMetronome saves its tempo, meter or sound, a tempo held to its range (ADR 0113)', () => {
+  it('setMetronome saves its tempo, meter or sound, a tempo held to its range (ADR 0052)', () => {
     const { storage, store } = setUp()
     setMetronome(store, { meter: '3/4' })
     setMetronome(store, { bpm: 500 })

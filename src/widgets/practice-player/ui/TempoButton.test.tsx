@@ -27,7 +27,7 @@ describe('TempoButton', () => {
     expect(screen.getByRole('button', { name: 'Tempo: 75%' })).toBeInTheDocument()
   })
 
-  it('wears its gauge beside the value at every size, the pill sized to fit (ADR 0094)', () => {
+  it('wears its gauge beside the value at every size, the pill sized to fit (ADR 0114)', () => {
     renderTempo()
     const gauge = screen.getByRole('button', { name: 'Tempo: 100%' }).querySelector('svg')
     expect(gauge).not.toBeNull()

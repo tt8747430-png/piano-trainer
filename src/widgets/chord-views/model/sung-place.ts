@@ -2,7 +2,7 @@ import { firstPlayedBar, loopTicks, writtenBarOf, type BarRange } from '@/featur
 import type { Performance } from '@/shared/lib/arrangement'
 import type { LyricLine, Span } from './lyric-lines'
 
-/** Where the words are as the bars are played: the Diagrams view's words (ADR 0101). */
+/** Where the words are as the bars are played: the Diagrams view's words (ADR 0108). */
 export type SungPlace =
   /** In a line that sings: it, and the next line sung. */
   | { readonly kind: 'line'; readonly line: LyricLine; readonly coming: LyricLine | undefined }

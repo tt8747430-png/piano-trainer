@@ -22,8 +22,8 @@ const entry = <const Id extends string>(
 const note = (en: string, ru: string): LocalText => ({ en, ru })
 
 /**
- * The Ultimate Piano's progressions by style (roadmap §10.1) with the app's own practice
- * progressions among them, one entry for each idea (ADR 0041): its line in a major key, in a minor
+ * The Ultimate Piano's progressions by style with the app's own practice
+ * progressions among them, one entry for each idea (ADR 0112): its line in a major key, in a minor
  * key, or both. A pop loop's minor line is the same loop heard from its relative minor; a cadence's
  * is its minor-key version, the dominant major. No line is another as a loop, in the same key or the
  * relative one: not from another chord, nor with a chord held. The blues write their 7ths (a blues I is

@@ -58,7 +58,7 @@ export function SheetContent({
   info?: ReactNode
   children: ReactNode
   footer?: ReactNode
-  /** The whole screen's height at every size: a preview opened full screen (ADR 0110). */
+  /** The whole screen's height at every size: a preview opened full screen (ADR 0115). */
   full?: boolean
   /** As tall as a sheet stands, whatever it holds: a sheet that is a screen (the library's filters). */
   tall?: boolean

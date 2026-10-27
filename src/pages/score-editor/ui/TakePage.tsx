@@ -28,7 +28,7 @@ import { KeepBars } from './KeepBars'
 import { TakeNameField } from './TakeNameField'
 
 /**
- * A take on its own page (spec 2026-10-09 §4.3, ADR 0061): its song, its length and tempo, its name, the take
+ * A take on its own page (ADR 0061): its song, its length and tempo, its name, the take
  * drawn as a piano roll that plays from a bar tapped, and Keep bars; Play floats, Download and Delete
  * in the dial beside it; the keys go down on the keyboard as it plays.
  */

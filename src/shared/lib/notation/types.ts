@@ -39,7 +39,7 @@ export interface TimedNote {
   readonly durationTicks: Tick
   readonly finger?: Finger
   readonly marks?: NoteMarks
-  /** What it sings, by verse (ADR 0093): written under the staff whose notes sing it. */
+  /** What it sings, by verse (ADR 0097): written under the staff whose notes sing it. */
   readonly lyrics?: NoteLyrics
 }
 
@@ -60,16 +60,16 @@ export interface TimedMusic {
     readonly blank?: readonly StaffId[]
     /** The key it is written in, where that is not the music's (a key change). */
     readonly key?: Key
-    /** The meter it is counted in, where that is not the music's (a change of time, ADR 0095). */
+    /** The meter it is counted in, where that is not the music's (a change of time, ADR 0097). */
     readonly meter?: Meter
-    /** The clef a hand's staff changes to at this bar (ADR 0069). */
+    /** The clef a hand's staff changes to at this bar (ADR 0097). */
     readonly clefs?: HandClefs
   })[]
   readonly notes: readonly TimedNote[]
   readonly chords: readonly { readonly startTick: Tick; readonly symbol: string }[]
   /** The single staves over the grand staff, top down (ADR 0097): each one's clef. None by default. */
   readonly staves?: readonly { readonly clef: Clef }[]
-  /** Whether the piano's grand staff is written: not on a lead sheet (ADR 0083). Written by default. */
+  /** Whether the piano's grand staff is written: not on a lead sheet (ADR 0114). Written by default. */
   readonly piano?: boolean
   /**
    * Music going on from bars before it, a later line of a piece written alone (the editor's): its
@@ -96,12 +96,12 @@ export interface NotesEvent {
   readonly duration: Duration
   readonly notes: readonly WrittenNote[]
   /**
-   * Its notes' marks (ADR 0063): those of the notes it starts, a slur's end where its notes end, and an
+   * Its notes' marks (ADR 0097): those of the notes it starts, a slur's end where its notes end, and an
    * octave line on every piece under it.
    */
   readonly marks?: NoteMarks
   /**
-   * The syllables sung on it, by verse (ADR 0093): the tune's, on the piece that starts its notes, a
+   * The syllables sung on it, by verse (ADR 0097): the tune's, on the piece that starts its notes, a
    * chord's one note singing for the chord; none on a tied continuation.
    */
   readonly lyrics?: NoteLyrics
@@ -146,7 +146,7 @@ export const isStaffId = (value: unknown): value is StaffId =>
  * every other a treble (a single staff written in the bass clef says so in its measures' `clefs`).
  */
 export const clefOf = (staff: StaffId): Clef => (staff === 'bass' ? 'bass' : 'treble')
-/** The clef a staff is in at a measure: its own (a single staff's, ADR 0097), or a hand's changed clef (ADR 0069). */
+/** The clef a staff is in at a measure: its own (a single staff's, ADR 0097), or a hand's changed clef (ADR 0097). */
 export const clefIn = (measure: Pick<Measure, 'clefs'>, staff: StaffId): Clef =>
   measure.clefs?.[staff] ?? clefOf(staff)
 

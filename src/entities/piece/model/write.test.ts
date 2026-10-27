@@ -111,7 +111,7 @@ describe('writeStaff', () => {
     expect(writeStaff([staffNote(61, 48, 96)], bars4)).toBe('r/2 C#4/4')
   })
 
-  it('writes a staff with nothing on it as its first bar’s rest, so it stays (ADR 0072)', () => {
+  it('writes a staff with nothing on it as its first bar’s rest, so it stays (ADR 0114)', () => {
     expect(writeStaff([], bars4)).toBe('r/4')
     expect(staffOf(['C'], writeStaff([], bars4))).toEqual([])
   })
@@ -202,17 +202,17 @@ describe('the music of a piece', () => {
     expect(sameMusic(music, { ...music, sections: [{ lines: ['C G'], kind: 'verse' }] })).toBe(true)
     expect(sameMusic(music, { ...music, tempo: 80 })).toBe(false)
     expect(sameMusic(music, { ...music, hands: { lh: '- | r/4' } })).toBe(false)
-    // A version's own title is its music's (ADR 0094).
+    // A version's own title is its music's (ADR 0114).
     expect(sameMusic(music, { ...music, title: 'Mine' })).toBe(false)
     expect(sameMusic(music, { ...music, leadSheet: true })).toBe(false)
-    // A section counted in a meter of its own (ADR 0095).
+    // A section counted in a meter of its own (ADR 0097).
     const changed = {
       ...music,
       sections: [{ kind: 'verse' as const, meter: '3/4' as const, lines: ['C G'] }],
     }
     expect(sameMusic(music, changed)).toBe(false)
     expect(musicOf({ ...song, leadSheet: true })).toEqual({ ...music, leadSheet: true })
-    // The lyrics' staff, written where it is not the top single staff (ADR 0093, 0097).
+    // The lyrics' staff, written where it is not the top single staff (ADR 0097).
     const upper = { ...song, lyrics: ['one'], lyricsOn: 'rh' as const }
     expect(musicOf(upper)).toEqual({ ...music, lyrics: ['one'], lyricsOn: 'rh' })
     expect(musicOf({ ...upper, lyricsOn: 0 })).toEqual({ ...music, lyrics: ['one'] })

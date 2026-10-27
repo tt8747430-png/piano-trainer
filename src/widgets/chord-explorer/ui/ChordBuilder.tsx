@@ -49,7 +49,7 @@ const SIZE_NAMES = {
  * offered only what fits the fields before it: its root (letter and accidental), a row of its own; its
  * quality (major, minor, augmented, diminished), its size, its suspension (a major chord's); then its 7th, the tones it adds and its alterations as
  * chips, each only where the chord takes one; then how it is held: its inversion, and one hand or two.
- * A chord of five notes or more takes two hands (ADR 0035): in the inversion's place, where its right
+ * A chord of five notes or more takes two hands (ADR 0046): in the inversion's place, where its right
  * hand starts, when it has more than one start.
  */
 export function ChordBuilder({

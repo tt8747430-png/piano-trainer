@@ -25,7 +25,7 @@ function Words({ words }: { words: SungWords | undefined }) {
 }
 
 /**
- * A line of Chords over lyrics laid out (ADR 0099), on the screen and in print alike: its segments,
+ * A line of Chords over lyrics laid out (ADR 0108), on the screen and in print alike: its segments,
  * each its chord (`chord`, drawn by its screen: a chip, a printed symbol) over the words sung up to
  * the next, verse 1 and each verse more under it, muted; a line of no words its chords alone, then
  * what ends it (`end`: the screen's ×N, ADR 0108). Every length is in `em`, so it takes its view's

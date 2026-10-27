@@ -3,7 +3,7 @@ import { isDue, ratingOf, type ProgressState } from '@/entities/progress'
 import { SKILLS, type SkillId } from '@/shared/lib/music'
 
 /**
- * My gaps (spec §4.6 ③): gap skills first, then Known skills due for a review (`isDue`), then unknown
+ * My gaps: gap skills first, then Known skills due for a review (`isDue`), then unknown
  * skills of pieces the learner has opened.
  */
 export function myGaps(

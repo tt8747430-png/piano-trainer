@@ -8,7 +8,7 @@ const sortedUnique = (ticks: readonly Tick[]) => [...new Set(ticks)].sort((a, b)
 
 /**
  * Where the caret stands in the chords: every beat of a bar, and every chord's start; a bar of no
- * chord's start alone, where its chord goes (ADR 0094).
+ * chord's start alone, where its chord goes (ADR 0114).
  */
 function chordPlaces(draft: Draft): Tick[] {
   return sortedUnique(
@@ -34,7 +34,7 @@ export function snapToChord(draft: Draft, tick: Tick): Tick {
 
 /**
  * Where the caret may stand in a layer of notes: their starts and ends, barlines, the ends, and steps
- * of the value where nothing sounds (ADR 0088): never inside a note, where it would mark empty staff.
+ * of the value where nothing sounds (ADR 0096): never inside a note, where it would mark empty staff.
  */
 function notePlaces(draft: Draft, layer: NoteLayer, step: Tick): Tick[] {
   const notes = notesOf(draft, layer)
@@ -59,7 +59,7 @@ export const caretPlaces = (draft: Draft, layer: Layer, step: Tick): Tick[] =>
   layer === 'chords' ? chordPlaces(draft) : notePlaces(draft, layer, step)
 
 /**
- * Where a click on the sheet lands in a layer (ADR 0082): on a note's start (a chord's in the chords),
+ * Where a click on the sheet lands in a layer (ADR 0096): on a note's start (a chord's in the chords),
  * or on the room after a bar's last note where it ends before the barline (a rest's start too); in a
  * bar whose row writes nothing, on its start. Never on an empty step between.
  */
@@ -84,7 +84,7 @@ export function tapPlaces(draft: Draft, layer: Layer): Tick[] {
 }
 
 /**
- * What stands at a place in a layer, as a span of time (ADR 0088): the notes starting there, to the
+ * What stands at a place in a layer, as a span of time (ADR 0096): the notes starting there, to the
  * longest's end; a chord, to the next chord or beat; an empty place (a rest, the room after the last
  * note), to the next note or the barline.
  */

@@ -3,7 +3,7 @@ import { useServices } from '@/shared/lib/services'
 import { inPopUp, takesKey } from '@/shared/lib/shortcuts'
 
 /**
- * Space holds the sustain while it is held (spec 2026-10-09 §2.3), where Space has no other job: not
+ * Space holds the sustain while it is held, where Space has no other job: not
  * in a field or on a focused control, with no modifier. Its auto-repeat scrolls nothing; letting go,
  * the window losing the focus, the hook switched off or the screen gone lift the pedal it put down.
  */

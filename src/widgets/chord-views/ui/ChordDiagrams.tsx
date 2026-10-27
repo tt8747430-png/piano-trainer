@@ -22,7 +22,7 @@ import { SummaryGrid } from './SummaryGrid'
 import { SungLines } from './SungLines'
 
 /**
- * Diagrams (ADR 0099, 0101, 0108, Chordify's), every chord on the same keys, each in the inversion
+ * Diagrams (ADR 0108, Chordify's), every chord on the same keys, each in the inversion
  * its piece chose. Animated, the pair (`ChordPair`): the chord sounding and the next beside it,
  * sliding with Listen's clock and swiped to the next chord or the one before, the page itself still.
  * Under them the beat strip, dragged to scrub, and under it, with the View's Lyrics on, the line sung
@@ -57,7 +57,7 @@ export function ChordDiagrams({
   clock: (() => Tick | null) | null
   /** The View's Lyrics: the line sung under the strip. */
   words: boolean
-  /** The View's mode for Diagrams (ADR 0102's `scoreView.diagrams`). */
+  /** The View's mode for Diagrams (ADR 0108's `scoreView.diagrams`). */
   mode: DiagramsMode
   onGo: (at: Tick) => void
   /** A chord tapped by its symbol: the cursor taken to it. */

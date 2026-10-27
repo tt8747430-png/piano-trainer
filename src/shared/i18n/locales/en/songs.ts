@@ -7,7 +7,7 @@ export const songs = {
   empty: 'No songs match.',
   // Nothing to list for a search: it names what was searched.
   emptyQuery: 'No songs match “{{query}}”.',
-  // A song's stage, as its course places it (ADR 0005).
+  // A song's stage, as its course places it (ADR 0053).
   stage: 'Level',
   anyStage: 'Any',
   emptyStage: 'No songs here at the “{{stage}}” level.',
@@ -210,7 +210,7 @@ export const songs = {
     make: 'Make',
     makeAndRecord: 'Record',
   },
-  // The staves a new song's score starts with, its own sheet (ADR 0072, 0097).
+  // The staves a new song's score starts with, its own sheet (ADR 0114, 0097).
   setup: {
     title: 'Score',
     customize: 'Customize',

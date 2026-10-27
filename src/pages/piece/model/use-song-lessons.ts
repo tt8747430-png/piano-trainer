@@ -5,7 +5,7 @@ import { arrangePiece, ownChoice } from '@/features/practice'
 import { sectionLessons } from './section-lessons'
 
 /**
- * A song's sections and their lessons (ADR 0100), read from the piece as the Player plays it, its
+ * A song's sections and their lessons (ADR 0111), read from the piece as the Player plays it, its
  * repeats taken, so each lesson's bars are the bars the Player loops; with each section's heading.
  */
 export function useSongLessons(piece: Piece) {

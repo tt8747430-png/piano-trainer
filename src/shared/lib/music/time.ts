@@ -158,7 +158,7 @@ export function beatStarts(meter: Meter): { readonly tick: Tick; readonly accent
 }
 
 /**
- * How a bar's eighths fall into its counted beats (ADR 0110, 0114, as notation apps print it under
+ * How a bar's eighths fall into its counted beats (ADR 0115, 0114, as notation apps print it under
  * a time signature): two to a quarter's beat, three to a dotted quarter's, four to a half's; 7/8 is
  * 2, 2, 3.
  */
@@ -166,7 +166,7 @@ export const beatGrouping = (meter: Meter): number[] =>
   meterBeats(meter).map((ticks) => ticks / eighthTicks(meter))
 
 /**
- * A pickup: a first bar shorter than its meter's (its own, ADR 0095, else `meter`), which is the end
+ * A pickup: a first bar shorter than its meter's (its own, ADR 0097, else `meter`), which is the end
  * of a bar (its first note an upbeat). The beats of the meter's bar it leaves out before it; none for
  * any other bar.
  */

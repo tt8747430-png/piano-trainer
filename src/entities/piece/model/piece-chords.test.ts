@@ -29,7 +29,7 @@ describe('pieceChords', () => {
     ])
   })
 
-  it('lists none for a song of no chord symbol (ADR 0094) or a listing', () => {
+  it('lists none for a song of no chord symbol (ADR 0114) or a listing', () => {
     expect(pieceChords(testSong(['_ _']))).toEqual([])
     expect(pieceChords(testSong(['C _ G7']))).toEqual(['C', 'G7'])
     expect(

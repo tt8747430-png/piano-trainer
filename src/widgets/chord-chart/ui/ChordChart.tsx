@@ -42,7 +42,7 @@ function Blank({ from, beats, closes = false }: { from: number; beats: number; c
 }
 
 /**
- * A Chart's bars as written, in beats (ADR 0099, 0108, Chordify's grid, a lead sheet's), by section,
+ * A Chart's bars as written, in beats (ADR 0108, Chordify's grid, a lead sheet's), by section,
  * each section under a heading that says its bars (a walk's one section has none): a bar a group of
  * beat cells, a chord named in the beat it starts in. Every row is as wide as every other, with as
  * many beats (`gridColumns`: whole bars of the music's commonest length, as many as the screen
@@ -50,7 +50,7 @@ function Blank({ from, beats, closes = false }: { from: number; beats: number; c
  * from row to row as written, a bar never split (`gridRows`), a section starting a row of its own. A
  * pickup stands at the end of a whole bar's place, the beats before it blank, so the bars after it
  * fall in step; the beats after a section's last bar are blank too. The bar playing is marked: on a
- * song's chart a tap plays a bar, pressed while it sounds; on the Player's (`tap="go"`, ADR 0098) a
+ * song's chart a tap plays a bar, pressed while it sounds; on the Player's (`tap="go"`, ADR 0108) a
  * tap goes to the beat tapped (`onBar`, the bar and the tick of that beat, its first time), the bar
  * the Player is in current and its beat sounding filled. With `words`, each bar's words under its
  * beats (ADR 0108). A meter that changes is named under its bar; a pickup's length is its beats.

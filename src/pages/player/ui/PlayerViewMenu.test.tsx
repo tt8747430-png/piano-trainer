@@ -81,7 +81,7 @@ function switchesAre(part: HTMLElement, ...names: (string | RegExp)[]) {
   names.forEach((name, i) => expect(switches[i]).toHaveAccessibleName(name))
 }
 
-describe('the tools row (ADR 0102)', () => {
+describe('the tools row (ADR 0108)', () => {
   it('stands under the bar and names the view shown, opening the View from there', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/play/silent')
@@ -100,7 +100,7 @@ describe('the tools row (ADR 0102)', () => {
   })
 })
 
-describe('while Diagrams plays (ADR 0102)', () => {
+describe('while Diagrams plays (ADR 0108)', () => {
   /** The bar's two groups and the tools row. */
   // The score's bar, one surface holding its buttons and its tools (ADR 0115).
   const bar = () => {
@@ -144,7 +144,7 @@ describe('while Diagrams plays (ADR 0102)', () => {
   })
 })
 
-describe('Ask each time a song opens (ADR 0102)', () => {
+describe('Ask each time a song opens (ADR 0108)', () => {
   it('opens a song’s Player with its View open, once asked to, and a walk’s as it was', async () => {
     const user = userEvent.setup()
     const storage = createMemoryStorage()
@@ -168,7 +168,7 @@ describe('Ask each time a song opens (ADR 0102)', () => {
   })
 })
 
-describe('the View, by view (ADR 0102)', () => {
+describe('the View, by view (ADR 0108)', () => {
   it('names each view in a line beside Show the music as, over the tiles and Ask each time', async () => {
     const user = userEvent.setup()
     await renderApp('/play/silent')

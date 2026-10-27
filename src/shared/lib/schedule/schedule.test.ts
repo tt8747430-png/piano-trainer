@@ -314,7 +314,7 @@ describe('schedule', () => {
     ])
   })
 
-  it('clicks and counts in a section in a meter of its own by its own beats (ADR 0095)', () => {
+  it('clicks and counts in a section in a meter of its own by its own beats (ADR 0097)', () => {
     const changing: Chart = {
       ...chart('C'),
       sections: [

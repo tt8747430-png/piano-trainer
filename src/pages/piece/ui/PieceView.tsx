@@ -32,8 +32,8 @@ import { PieceProgressions } from './PieceProgressions'
 import { SectionRows } from './SectionRows'
 
 /**
- * A piece with a chart, in one calm column: Learn the song (ADR 0100, amended). Its bar (Back, the
- * title, then Edit the score, Learned, its ♡ (ADR 0103) and More: Move to… and Archive (Restore
+ * A piece with a chart, in one calm column: Learn the song (ADR 0111, amended). Its bar (Back, the
+ * title, then Edit the score, Learned, its ♡ (ADR 0106) and More: Move to… and Archive (Restore
  * while it is archived; a study is in no library, ADR 0106), Check these chords, Share (ADR 0107),
  * and for the learner's own music its way back, asked first); under the title its byline (what else it
  * is called, Your version, its stage, who wrote it); then, first and largest, Practise, the Player as
@@ -66,7 +66,7 @@ export function PieceView({ piece }: { piece: Piece }) {
       : null
   const actions = [
     ...(inLibrary ? library.actions : []),
-    // A piece of no chord symbol has none to check (ADR 0094).
+    // A piece of no chord symbol has none to check (ADR 0114).
     ...(performance.chords.length > 0
       ? [
           {
@@ -121,7 +121,7 @@ export function PieceView({ piece }: { piece: Piece }) {
         crowded
         actions={
           <>
-            {/* Every piece is edited: one written in degrees as its chart in its key (ADR 0110). */}
+            {/* Every piece is edited: one written in degrees as its chart in its key (ADR 0115). */}
             <RoundLink
               label={t('edit')}
               icon={PencilLine}
@@ -151,7 +151,7 @@ export function PieceView({ piece }: { piece: Piece }) {
       />
       <PieceByline piece={piece} />
       <ShareSaid said={shared.said} />
-      {/* The one thing to do first: play it (ADR 0100, amended), the Player as it was left. */}
+      {/* The one thing to do first: play it (ADR 0111, amended), the Player as it was left. */}
       <ButtonLink
         size="lg"
         className="h-14 w-full rounded-2xl text-lg sm:w-auto sm:self-start sm:px-8"

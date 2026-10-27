@@ -44,7 +44,7 @@ const TabLink = createLink(TabAnchor)
 export const NavTab: LinkComponent<typeof TabAnchor> = (props) => <TabLink {...props} />
 
 /**
- * One thing's views as a strip of tabs that are links (ADR 0044): the tabs primitive's look, a
+ * One thing's views as a strip of tabs that are links (ADR 0052): the tabs primitive's look, a
  * navigation's meaning (the view shown is `aria-current`), each tab with its own URL.
  */
 export function NavTabs({ label, children }: { label: string; children: ReactNode }) {

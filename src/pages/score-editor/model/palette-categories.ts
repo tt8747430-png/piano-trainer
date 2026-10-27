@@ -3,7 +3,7 @@ import { isOneOf } from '@/shared/lib'
 import type { BarMarkChoice } from '@/features/score-editor'
 
 /**
- * The palette's categories (spec 2026-10-23), one palette for every tool as Flat's is, each acting on
+ * The palette's categories, one palette for every tool as Flat's is, each acting on
  * what is chosen: the notes' values and rhythm, their pitch, their marks and dynamics with the
  * hairpins, the slurs and octave lines; the bars chosen (added, removed, broken, their length, written
  * out), their clef, the song's key and time signature, barlines and repeats; text and the pedal. What

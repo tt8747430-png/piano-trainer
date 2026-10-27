@@ -27,7 +27,7 @@ import {
 import { exercisePerformance, type Harmony, type LineNote } from './performance'
 import { BAR, HALF } from './time'
 
-// Piano With Jonny's five major-scale exercises: the scale as music uses it (roadmap §9.4).
+// Piano With Jonny's five major-scale exercises: the scale as music uses it.
 
 const MAJOR = 'major'
 const tonicAt = (root: SpelledNote, octave: number): Midi =>

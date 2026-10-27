@@ -8,7 +8,7 @@ import {
 import type { BarRange } from '@/features/practice'
 import type { PerformedChord, Performance } from '@/shared/lib/arrangement'
 
-// A section learned step by step (ADR 0100, spec §3.2): each chord, each chord sequence in time,
+// A section learned step by step (ADR 0111): each chord, each chord sequence in time,
 // each change between two chords, each pattern it is played with. All of it is read from the
 // piece as the Player plays it, its repeats taken, so a lesson's bars are the bars the Player loops.
 
@@ -244,7 +244,7 @@ function chordsOf(performance: Performance, pieceId: PieceId, bars: BarRange): C
 }
 
 /**
- * A section's lessons (spec §3.2), from the piece as the Player plays it (its repeats taken) and the
+ * A section's lessons, from the piece as the Player plays it (its repeats taken) and the
  * section's index: none for a section the piece has not.
  */
 export function sectionLessons(
