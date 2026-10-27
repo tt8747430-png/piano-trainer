@@ -22,7 +22,9 @@ import {
 import { ProgressionBetween } from './ProgressionBetween'
 import { ProgressionChoice } from './ProgressionChoice'
 import { ProgressionField } from './ProgressionField'
+import { ProgressionDiagrams } from './ProgressionDiagrams'
 import { ProgressionPractice } from './ProgressionPractice'
+import { ProgressionSongs } from './ProgressionSongs'
 
 /**
  * A progression in any key, read top to bottom (ADR 0052): the keys, its row of chords that play with
@@ -48,16 +50,18 @@ export function ProgressionExplorer({
   const played = playedNumerals(view)
   const named = viewProgression(view)
   const change = (next: Partial<ProgressionsView>) => onChange(changedView(view, next))
+  const row = progressionRow(played, key, view.size)
   return (
     <div className="flex flex-col gap-6">
       <PinnedKeyboard shown={shown} />
       <ChordRow
-        chords={progressionRow(played, key, view.size)}
+        chords={row}
         position={{ inversion: view.inversion, nearest: view.nearest }}
         onShow={setShown}
       >
         <RowStaff />
         <RowPlay variant="default" />
+        <ProgressionDiagrams chords={row.map(({ chord }) => chord)} musicKey={key} />
         {named?.note ? (
           <p className="max-w-prose text-muted-foreground">{localText(named.note, locale)}</p>
         ) : null}
@@ -98,6 +102,7 @@ export function ProgressionExplorer({
         <PositionField notes={view.size === 'triads' ? 3 : 4} position={view} onChange={change} />
       </div>
       <ProgressionPractice musicKey={key} inPlayer={playerSearch(view)} />
+      <ProgressionSongs line={view.p} minor={key.minor} />
       <ProgressionBetween
         chords={played.map((numeral) => numeralChord(numeral, key, view.size))}
         musicKey={key}

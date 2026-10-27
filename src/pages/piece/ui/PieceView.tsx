@@ -28,6 +28,7 @@ import { PieceByline } from './PieceByline'
 import { PieceChords } from './PieceChords'
 import { OwnMusicAsk } from './OwnMusicAsk'
 import { PieceHeader } from './PieceHeader'
+import { PieceProgressions } from './PieceProgressions'
 import { SectionRows } from './SectionRows'
 
 /**
@@ -161,7 +162,9 @@ export function PieceView({ piece }: { piece: Piece }) {
       </ButtonLink>
       <PieceFactCards piece={piece} />
       <PieceAbout entry={piece} />
-      <PieceChords performance={performance} />
+      <PieceChords performance={performance}>
+        <PieceProgressions piece={piece} />
+      </PieceChords>
       {/* A song of one section has no section machinery: its chords above are all it needs. */}
       {sections.length > 1 ? (
         <SectionRows piece={piece} headings={headings} sections={sections} />

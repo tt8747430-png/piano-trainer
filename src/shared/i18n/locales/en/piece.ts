@@ -47,6 +47,8 @@ export const piece = {
   tempo: 'Tempo',
   time: 'Time',
   progression: 'Progression',
+  // The library's progressions a song uses, under its chords (ADR 0112).
+  progressions: 'Progressions',
   more: 'More',
   practise: 'Practise',
   edit: 'Edit the score',
