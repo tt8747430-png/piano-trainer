@@ -16,10 +16,12 @@ const SPAN = {
  * tooltip under a pointer; with `pressed` a toggle, filled while on; disabled, greyed. What a term
  * on its face means (`description`: dolce, sweetly) is its tooltip and a screen reader's description,
  * never a line on it; greyed, it says why (`reason`) in the browser's own tooltip, the pointer kept
- * on it so it can, and to a screen reader (ADR 0096).
+ * on it so it can, and to a screen reader (ADR 0096). Pressed, it gives a little under the finger
+ * (ADR 0114).
  */
 export function ToolKey({
   label,
+  tip = label,
   description,
   reason,
   pressed,
@@ -30,6 +32,8 @@ export function ToolKey({
   ...props
 }: {
   label: string
+  /** Its tooltip, where it says more than its name: the group it is in (the palette's row). */
+  tip?: string
   /** What the key's face means, where it prints a term. */
   description?: string | undefined
   /** Why it is greyed, said while it is. */
@@ -57,7 +61,7 @@ export function ToolKey({
             title={why}
             disabled={disabled}
             className={cn(
-              'h-12 min-w-0 rounded-xl landscape-phone:h-10 px-1 text-2xl leading-none font-normal hover:bg-chosen aria-pressed:border-selected aria-pressed:bg-selected aria-pressed:text-selected-foreground disabled:opacity-35 [&_svg:not([class*=size-])]:size-5',
+              'h-12 min-w-0 rounded-xl landscape-phone:h-10 px-1 text-2xl leading-none font-normal duration-80 ease-out hover:bg-chosen active:scale-95 motion-reduce:active:scale-100 aria-pressed:border-selected aria-pressed:bg-selected aria-pressed:text-selected-foreground disabled:opacity-35 [&_svg:not([class*=size-])]:size-5',
               why && 'disabled:pointer-events-auto disabled:hover:bg-card',
               SPAN[span],
               className,
@@ -78,7 +82,7 @@ export function ToolKey({
           </span>
         ) : null}
       </TooltipTrigger>
-      <TooltipContent>{description ?? label}</TooltipContent>
+      <TooltipContent>{description ?? tip}</TooltipContent>
     </Tooltip>
   )
 }
