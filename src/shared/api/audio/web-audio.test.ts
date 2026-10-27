@@ -8,6 +8,8 @@ import { createWebAudioOutput, wholeFileMedia } from './web-audio'
 class FakeContext {
   currentTime = 0
   outputLatency = 0
+  sampleRate = 8
+  readonly noises: { start: number; stop: number }[] = []
   state: AudioContextState = 'suspended'
   readonly destination = {}
   readonly oscillators: { type: string; frequency: number; start: number; stop: number }[] = []
@@ -64,6 +66,26 @@ class FakeContext {
     return this.node({ type: 'lowpass', frequency: this.param() })
   }
 
+  createBuffer(_channels: number, length: number) {
+    const samples = new Float32Array(length)
+    return { getChannelData: () => samples }
+  }
+
+  createBufferSource() {
+    const record = { start: -1, stop: -1 }
+    this.noises.push(record)
+    return this.node({
+      buffer: null as unknown,
+      start: (at: number) => {
+        record.start = at
+      },
+      stop: (at: number) => {
+        record.stop = at
+      },
+      onended: null as (() => void) | null,
+    })
+  }
+
   createOscillator() {
     const record = { type: 'sine', frequency: 0, start: -1, stop: -1 }
     this.oscillators.push(record)
@@ -78,6 +100,10 @@ class FakeContext {
         set value(hz: number) {
           record.frequency = hz
         },
+        setValueAtTime: (hz: number) => {
+          record.frequency = hz
+        },
+        exponentialRampToValueAtTime: vi.fn(),
       },
       start: (at: number) => {
         record.start = at
@@ -157,6 +183,33 @@ describe('createWebAudioOutput', () => {
     const { context, audio } = setUp()
     audio.play([CLICK], 0)
     expect(context.oscillators).toHaveLength(1)
+  })
+
+  it('plays the Metronome’s beep as one tone, the bar’s first higher (ADR 0113)', () => {
+    const { context, audio } = setUp()
+    audio.play(
+      [
+        { ...CLICK, voice: 'beep' },
+        { kind: 'click', at: 0.2, accent: false, voice: 'beep' },
+      ],
+      0,
+    )
+    expect(context.oscillators.map((oscillator) => oscillator.frequency)).toEqual([1320, 880])
+  })
+
+  it('plays a drum beat synthesised: the kick a tone, the snare noise over a tone, the hat noise', () => {
+    const { context, audio } = setUp()
+    audio.play(
+      [
+        { kind: 'click', at: 0, accent: true, voice: 'kick' },
+        { kind: 'click', at: 0, accent: false, voice: 'snare' },
+        { kind: 'click', at: 0, accent: false, voice: 'hat' },
+      ],
+      0,
+    )
+    expect(context.oscillators).toHaveLength(2)
+    expect(context.noises).toHaveLength(2)
+    for (const noise of context.noises) expect(noise.start).toBe(0)
   })
 
   it('plays a note and a click as loud as their gain says as each comes to sound (ADR 0105)', () => {
