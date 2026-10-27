@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { createProgressStore } from '@/entities/progress'
 import { loopParam } from '@/features/practice'
 import { createMemoryStorage } from '@/shared/lib'
-import { recordChord, recordPass } from './index'
+import { recordHold, recordPass } from './index'
 
 const MONDAY = new Date('2026-10-19T10:00:00.000Z')
 const FRIDAY = new Date('2026-10-23T10:00:00.000Z')
@@ -29,13 +29,17 @@ describe('recordPass', () => {
   })
 })
 
-describe('recordChord', () => {
-  it('saves a chord of a piece played in its sheet, once', () => {
+describe('recordHold', () => {
+  it('counts each hold of a chord in its sheet, learning it on the third', () => {
     const store = createProgressStore({ storage: createMemoryStorage() })
-    recordChord(store, 'bz5', 'D/F♯', MONDAY)
+    recordHold(store, 'bz5', 'D/F♯', MONDAY)
+    recordHold(store, 'bz5', 'D/F♯', MONDAY)
+    expect(store.getState().holds).toEqual({ 'bz5:chord:D/F♯': 2 })
+    expect(store.getState().lessons).toEqual({})
+    recordHold(store, 'bz5', 'D/F♯', FRIDAY)
+    expect(store.getState().lessons).toEqual({ 'bz5:chord:D/F♯': FRIDAY.toISOString() })
     const saved = store.getState()
-    recordChord(store, 'bz5', 'D/F♯', FRIDAY)
+    recordHold(store, 'bz5', 'D/F♯', FRIDAY)
     expect(store.getState()).toBe(saved)
-    expect(saved.lessons).toEqual({ 'bz5:chord:D/F♯': MONDAY.toISOString() })
   })
 })

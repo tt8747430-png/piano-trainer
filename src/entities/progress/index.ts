@@ -8,12 +8,14 @@ export {
   type TrainerRecord,
 } from './model/types'
 export { isDue, knownCount, ratingOf, stillToKnow } from './model/mastery'
-export { withAnswer, withLearned, withLesson, withRun } from './model/changes'
+export { withAnswer, withHold, withLearned, withLesson, withRun } from './model/changes'
 export {
   barsLessonKey,
+  CHORD_HOLDS,
   chordLessonKey,
   isLessonKey,
   LESSONS_KEPT,
+  type ChordLessonKey,
   type LessonKey,
 } from './model/lessons'
 export { dateOfDay, lastWeek, localDay, streak, withDay } from './model/days'
@@ -29,6 +31,7 @@ export {
   selectAllAnswers,
   selectAnswers,
   selectDays,
+  selectHolds,
   selectIsLearned,
   selectLearned,
   selectLessonDone,

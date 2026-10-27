@@ -37,6 +37,7 @@ describe('createProgressStore', () => {
       trainers: { 'build-chord:1': { runs: 3, last: 70, best: 90, bestStreak: 8 } },
       days: ['2026-10-10', '2026-10-11'],
       lessons: { 'bz5:chord:C': DAY, 'bz5:bars:9-18': DAY },
+      holds: { 'bz5:chord:G': 2 },
     }
     writeSaved(storage, saved)
     expect(createProgressStore({ storage }).getState()).toEqual(saved)
@@ -74,6 +75,14 @@ describe('createProgressStore', () => {
         'bz5:loop:1-2': DAY,
         'bz5:chord:G': 'today',
       },
+      holds: {
+        'bz5:chord:Am': 1,
+        'bz5:chord:F': 3,
+        'bz5:chord:E': 0,
+        'bz5:chord:D/F♯': 2,
+        'bz5:bars:1-2': 1,
+        'bz5:chord:B': 1.5,
+      },
       extra: true,
     })
     expect(createProgressStore({ storage }).getState()).toEqual({
@@ -86,6 +95,8 @@ describe('createProgressStore', () => {
       trainers: { 'name-chord:3': { runs: 2, last: 80, best: 80, bestStreak: 5 } },
       days: ['2026-10-09', '2026-10-11'],
       lessons: { 'bz5:chord:D/F♯': DAY, 'bz5:bars:9-18': DAY },
+      // A chord's holds short of three, never one already learned.
+      holds: { 'bz5:chord:Am': 1 },
     })
   })
 
@@ -109,9 +120,10 @@ describe('createProgressStore', () => {
     const state = createProgressStore({ storage }).getState()
     expect(state.days).toEqual([])
     expect(state.lessons).toEqual({})
+    expect(state.holds).toEqual({})
   })
 
-  it.each([1, 3])('does not read a version-%i save', (version) => {
+  it.each([2, 4])('does not read a version-%i save', (version) => {
     const storage = createMemoryStorage()
     writeSaved(storage, { learned: { 'piece:bz5': DAY } }, version)
     expect(createProgressStore({ storage }).getState()).toEqual(EMPTY_PROGRESS)

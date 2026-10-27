@@ -1,4 +1,4 @@
-import { keptLessons, type LessonKey } from './lessons'
+import { CHORD_HOLDS, keptHolds, keptLessons, type ChordLessonKey, type LessonKey } from './lessons'
 import { latestEvidence, stepCompletedBy } from './mastery'
 import { selectAnswers, selectIsLearned } from './selectors'
 import type { ProgressState, QuizAnswer, RunKey, RunResult } from './types'
@@ -45,3 +45,16 @@ export const withLesson = (state: ProgressState, key: LessonKey, at: string): Pr
   state.lessons[key] !== undefined
     ? state
     : { ...state, lessons: keptLessons({ ...state.lessons, [key]: at }) }
+
+/**
+ * The progress after a chord lesson's chord was held on `at` (ADR 0111): one hold more, the chord
+ * learned on its CHORD_HOLDS-th, its count then dropped. A chord learned already changes nothing.
+ */
+export function withHold(state: ProgressState, key: ChordLessonKey, at: string): ProgressState {
+  if (state.lessons[key] !== undefined) return state
+  const { [key]: before = 0, ...others } = state.holds
+  const held = before + 1
+  return held >= CHORD_HOLDS
+    ? { ...withLesson(state, key, at), holds: others }
+    : { ...state, holds: keptHolds({ ...others, [key]: held }) }
+}

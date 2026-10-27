@@ -242,8 +242,13 @@ export const music = {
   // A piece's chord is drawn in the inversion chosen there (ADR 0101), or says why it has none.
   chordSheet: {
     title: '{{symbol}} chord',
-    learn: 'Play it on the keys',
-    learned: 'That’s it.',
+    learn: 'Hold it on the keys',
+    // A chord lesson is learned by holding the chord this many times (ADR 0111).
+    learnInfo_one: 'Hold the chord once to learn it.',
+    learnInfo_other:
+      'Hold the chord {{count}} times to learn it, letting go of every key between. Holding it longer counts once.',
+    held: '{{held}} of {{needed}}',
+    learned: 'Learned',
     inversionInfo:
       'Every diagram of this chord in this music is drawn in the inversion chosen. What plays stays as it is.',
     offKeys: 'Doesn’t fit the keys shown',

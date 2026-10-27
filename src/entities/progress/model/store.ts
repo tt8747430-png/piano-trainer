@@ -3,7 +3,15 @@ import { isStepId, type StepId } from '@/entities/step'
 import { isSkillId, type SkillId } from '@/shared/lib/music'
 import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
 import { keptDays } from './days'
-import { isLessonKey, keptLessons, type LessonKey } from './lessons'
+import {
+  CHORD_HOLDS,
+  isChordLessonKey,
+  isLessonKey,
+  keptHolds,
+  keptLessons,
+  type ChordLessonKey,
+  type LessonKey,
+} from './lessons'
 import { latestEvidence } from './mastery'
 import {
   EMPTY_PROGRESS,
@@ -14,7 +22,7 @@ import {
 } from './types'
 
 export const PROGRESS_STORAGE_KEY = 'pt-progress'
-export const PROGRESS_VERSION = 2
+export const PROGRESS_VERSION = 3
 
 export type ProgressStore = StoreApi<ProgressState>
 
@@ -81,12 +89,21 @@ function trainerRecord(value: unknown): TrainerRecord | undefined {
  * Stored JSON is untrusted: keep what is still valid, drop the rest, never throw. */
 function sanitize(persisted: unknown): ProgressState {
   const saved = savedObject<ProgressState>(persisted)
+  const lessons = keptLessons(kept<LessonKey, string>(saved.lessons, isLessonKey, dateOrNothing))
   return {
     learned: kept<StepId, string>(saved.learned, isStepId, dateOrNothing),
     practised: kept(saved.practised, isPieceKey, dateOrNothing),
     answers: kept<SkillId, readonly Answer[]>(saved.answers, isSkillId, evidenceOrNothing),
     trainers: kept(saved.trainers, isRunKey, trainerRecord),
     days: Array.isArray(saved.days) ? keptDays(saved.days) : [],
-    lessons: keptLessons(kept<LessonKey, string>(saved.lessons, isLessonKey, dateOrNothing)),
+    lessons,
+    // A chord held short of learning it: never one its lessons have learned.
+    holds: keptHolds(
+      kept(
+        saved.holds,
+        (key): key is ChordLessonKey => isChordLessonKey(key) && lessons[key] === undefined,
+        (value) => (isCount(value) && value > 0 && value < CHORD_HOLDS ? value : undefined),
+      ),
+    ),
   }
 }
