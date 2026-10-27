@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { note } from '@/shared/lib/music'
 import { draftOf, form, shape, staffNotes } from '../testing/test-draft'
-import { setKey, setTempo, transpose } from './settings'
+import { setKey, setTempo, setTempoMark, transpose } from './settings'
 
 describe('the song’s settings', () => {
   const draft = draftOf({
@@ -41,6 +41,16 @@ describe('the song’s settings', () => {
   it('sets the tempo within 40 to 160', () => {
     expect(setTempo(draft, 200).tempo).toBe(160)
     expect(setTempo(draft, 72).tempo).toBe(72)
+  })
+
+  it('sets the tempo mark in any note, its tempo the song’s beats a minute (ADR 0114)', () => {
+    const eighths = setTempoMark(draft, 93, '8')
+    expect(eighths).toMatchObject({ tempo: 46.5, tempoUnit: '8' })
+    const quarters = setTempoMark(eighths, 100, '4')
+    expect(quarters.tempo).toBe(100)
+    expect(quarters).not.toHaveProperty('tempoUnit')
+    expect(setTempoMark(draft, 400, '8').tempo).toBe(160)
+    expect(setTempoMark(quarters, 100, '4')).toBe(quarters)
   })
 })
 

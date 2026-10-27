@@ -1,13 +1,17 @@
 import { keyText, PIECE_TEMPO, type KeyText } from '@/entities/piece'
 import { transposeChord, transposeNotes } from '@/shared/lib/arrangement'
 import {
+  beatUnit,
   midi,
   parseKey,
+  tempoOfMark,
+  TICKS_PER_BEAT,
   PIANO,
   transposedKey,
   transposeNote,
   writtenKey,
   type Key,
+  type TempoUnit,
 } from '@/shared/lib/music'
 import { withEveryStaff, type Draft, type DraftNote, type DraftSection } from './draft'
 
@@ -104,4 +108,18 @@ export function transpose(draft: Draft, semitones: number, applies: TransposeApp
 export function setTempo(draft: Draft, tempo: number): Draft {
   const kept = Math.min(PIECE_TEMPO.max, Math.max(PIECE_TEMPO.min, Math.round(tempo)))
   return kept === draft.tempo ? draft : { ...draft, tempo: kept }
+}
+
+/**
+ * The tempo mark as its picker sets it (ADR 0114): `mark` of `unit` a minute (♪ = 180), its tempo the
+ * song's beats a minute of it to a tick's part, kept within the tempos a piece is written at; the
+ * unit said only where it is not the meter's beat.
+ */
+export function setTempoMark(draft: Draft, mark: number, unit: TempoUnit): Draft {
+  const beats = Math.round(tempoOfMark(mark, unit, draft.meter) * TICKS_PER_BEAT) / TICKS_PER_BEAT
+  const tempo = Math.min(PIECE_TEMPO.max, Math.max(PIECE_TEMPO.min, beats))
+  const { tempoUnit: _was, ...rest } = draft
+  const next: Draft =
+    unit === beatUnit(draft.meter) ? { ...rest, tempo } : { ...rest, tempo, tempoUnit: unit }
+  return next.tempo === draft.tempo && next.tempoUnit === draft.tempoUnit ? draft : next
 }

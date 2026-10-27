@@ -35,7 +35,7 @@ import {
 import { setTime } from './meters'
 import { joinSection, setSectionKey, setSectionKind } from './sections'
 import { addStaff, removeStaff, renameStaff, setStaffClef } from './staves'
-import { setKey, setTempo, transpose } from './settings'
+import { setKey, setTempo, setTempoMark, transpose } from './settings'
 import { nextMode, type EditorAction, type EditorState } from './state'
 import { writeTake } from './take-edits'
 import { barAt, barsOf, keyAt } from './timeline'
@@ -325,6 +325,8 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
       if (action.tempo !== undefined) next = setTempo(next, action.tempo)
       return commit(state, next)
     }
+    case 'tempo':
+      return commit(state, setTempoMark(draft, action.mark, action.unit))
     case 'transpose':
       return commit(state, transpose(draft, action.semitones, action.applies))
     case 'title': {

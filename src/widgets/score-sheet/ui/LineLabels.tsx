@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { beatUnit, tempoMark, unitNote } from '@/shared/lib/music'
 import type { TimedMusic } from '@/shared/lib/notation'
 import { LabelRow, type BarLabel, type PrintLabel, type ScoreLayout } from '@/shared/ui/score'
 import type { EditPrinted } from '../model/printed'
@@ -47,7 +48,14 @@ export function LineLabels({
           {content}
         </button>,
       )
-    const name = t('editor:printed.tempoMark', { bpm: t('music:bpm', { tempo: part.tempo }) })
+    // The mark as printed, in its own note where it has one (ADR 0114): `♪ = 180`.
+    const unit = music.tempoUnit ?? beatUnit(music.meter)
+    const mark = tempoMark(part.tempo, unit, music.meter)
+    const said =
+      unit === beatUnit(music.meter)
+        ? t('music:bpm', { tempo: mark })
+        : `${unitNote(unit)} = ${mark}`
+    const name = t('editor:printed.tempoMark', { bpm: said })
     return edit(
       { kind: 'tempo' },
       <button

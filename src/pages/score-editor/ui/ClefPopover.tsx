@@ -1,13 +1,13 @@
 import type { ReactElement } from 'react'
-import { useTranslation } from 'react-i18next'
 import { staffLayer } from '@/features/score-editor'
 import type { StaffId } from '@/shared/lib/notation'
-import { ClefKeys } from './ScoreKeys'
-import { SignPopover } from './SignPopover'
+import { useClefAt, useClefSaid } from '../model/use-clef-at'
+import { ClefPicker } from './ClefPicker'
+import { SignPicker } from './SignPicker'
 
 /**
- * A clef's popover (ADR 0094), opened where it is printed: the palette's Clef, that staff's clef from
- * its bar on, a single staff's whole (ADR 0097).
+ * A clef's picker (ADR 0094, 0114), opened where it is printed: that staff's clef from its bar on, a
+ * single staff's whole (ADR 0097), said under its title.
  */
 export function ClefPopover({
   bar,
@@ -18,10 +18,11 @@ export function ClefPopover({
   staff: StaffId
   trigger: ReactElement
 }) {
-  const { t } = useTranslation('editor')
+  const at = useClefAt({ staff: staffLayer(staff), bar })
+  const { title, said } = useClefSaid(at)
   return (
-    <SignPopover label={t('palette.category.clef')} trigger={trigger}>
-      <ClefKeys at={{ staff: staffLayer(staff), bar }} />
-    </SignPopover>
+    <SignPicker title={title} description={said} wide trigger={trigger}>
+      {at.staff ? <ClefPicker staff={at.staff} bar={bar} current={at.current} /> : null}
+    </SignPicker>
   )
 }
