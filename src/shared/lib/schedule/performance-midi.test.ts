@@ -267,6 +267,27 @@ describe('performanceMidi', () => {
     expect(new Set(notesOf(right).map((n) => n.on))).toEqual(new Set([0, 720]))
   })
 
+  it('writes 2/2 clicked by the half, and 7/8 by its first two eighths (ADR 0114)', () => {
+    const inMeter = (meter: '2/2' | '7/8', beats: number) =>
+      signaturesOf(
+        readMidi(
+          performanceMidi(
+            arrange(
+              {
+                key: { tonic: note('C'), minor: false },
+                meter,
+                sections: [{ lines: [[bar(beats, ['C', beats])]] }],
+              },
+              { tonic: note('C'), pattern: BEATS },
+            ),
+            { tempo: 60, title: meter, names: NAMES },
+          ),
+        ).tracks[0] ?? [],
+      )
+    expect(inMeter('2/2', 4)).toEqual([[0, 2, 2, 48]])
+    expect(inMeter('7/8', 3.5)).toEqual([[0, 7, 8, 24]])
+  })
+
   it('names each part as the screen names it, in the learner’s language', () => {
     const names = readMidi(
       performanceMidi(PICKUP_AND_THREE, {

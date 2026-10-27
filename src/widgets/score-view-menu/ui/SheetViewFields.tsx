@@ -3,19 +3,16 @@ import { useTranslation } from 'react-i18next'
 import { useStaffNames, useStaffTitle, type StaffName } from '@/entities/piece'
 import { selectScoreView, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setScoreView, setStaffShown } from '@/features/set-preference'
-import type { Clef } from '@/shared/lib/music'
+import { clefGlyph, type Clef } from '@/shared/lib/music'
 import { singleStaff, type StaffId } from '@/shared/lib/notation'
 import { SheetLayoutField } from '@/shared/ui'
 import { SHEET_PARTS, type SheetPart } from '../model/score-parts'
 import { PartChip, PartChips } from './PartChip'
 import { ViewChip } from './ViewChip'
 
-/** Each clef as the music font draws it. */
-const CLEF_GLYPH: Readonly<Record<Clef, string>> = { treble: '\u{1D11E}', bass: '\u{1D122}' }
-
 /** A staff's clef, as the music font draws it, for its chip's picture. */
 function ClefGlyph({ clef }: { clef: Clef }) {
-  return <span className="font-music text-xl leading-none">{CLEF_GLYPH[clef]}</span>
+  return <span className="font-music text-xl leading-none">{clefGlyph(clef)}</span>
 }
 
 /** What each part shows, a line each, the ⓘ beside Show. */

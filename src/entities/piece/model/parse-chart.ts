@@ -217,7 +217,8 @@ export function parseChart(piece: ChartPiece): Chart {
   return {
     key: pieceKey(piece),
     meter: piece.meter,
-    ...(piece.commonTime ? { commonTime: true } : {}),
+    ...(piece.timeSymbol ? { timeSymbol: true } : {}),
+    ...(piece.tempoUnit ? { tempoUnit: piece.tempoUnit } : {}),
     sections: sections.map((section) => ({
       ...(section.key ? { key: section.key } : {}),
       ...(section.meter ? { meter: section.meter } : {}),

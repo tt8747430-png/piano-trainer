@@ -1,7 +1,7 @@
 import type { ClickSound, ClickVoice } from './schedule'
 
-/** The Metronome's meters (ADR 0113): a beat of 6/8 is an eighth, each counted. */
-export const METRONOME_METERS = ['4/4', '3/4', '2/4', '6/8', '1/4'] as const
+/** The Metronome's meters (ADR 0113, 0114): a beat of 6/8 is an eighth, each counted; of 2/2 a half. */
+export const METRONOME_METERS = ['4/4', '3/4', '2/4', '2/2', '6/8', '1/4'] as const
 export type MetronomeMeter = (typeof METRONOME_METERS)[number]
 
 /** What the Metronome sounds on each beat: a click, a beep or a drum beat. */
@@ -19,6 +19,7 @@ const BEATS: Readonly<Record<MetronomeMeter, number>> = {
   '4/4': 4,
   '3/4': 3,
   '2/4': 2,
+  '2/2': 2,
   '6/8': 6,
   '1/4': 1,
 }
@@ -34,6 +35,7 @@ const DRUMS: Readonly<Record<MetronomeMeter, readonly ('kick' | 'snare' | null)[
   '4/4': ['kick', 'snare', 'kick', 'snare'],
   '3/4': ['kick', 'snare', 'snare'],
   '2/4': ['kick', 'snare'],
+  '2/2': ['kick', 'snare'],
   '6/8': ['kick', null, null, 'snare', null, null],
   '1/4': ['kick'],
 }

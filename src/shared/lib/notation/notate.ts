@@ -356,7 +356,8 @@ export function notate(music: TimedMusic): Score {
   return {
     key: music.key,
     meter: music.meter,
-    ...(music.commonTime ? { commonTime: true } : {}),
+    ...(music.timeSymbol ? { timeSymbol: true } : {}),
+    ...(music.tempoUnit ? { tempoUnit: music.tempoUnit } : {}),
     staves: written,
     measures,
   }

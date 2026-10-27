@@ -97,4 +97,56 @@ describe('beamPlan', () => {
     const events = voice('4. 8 4 4', '4/4')
     expect(beamPlan(events, '4/4', time(4, 4), 0).beams).toEqual([])
   })
+  describe('the meters of ADR 0114, as LilyPond’s beat structure', () => {
+    it('beams 2/2 eighths by the half', () => {
+      const events = voice('8 8 8 8 8 8 8 8', '2/2')
+      expect(beamPlan(events, '2/2', time(2, 2), 0).beams).toEqual([
+        [0, 1, 2, 3],
+        [4, 5, 6, 7],
+      ])
+    })
+
+    it('beams 3/2 eighths by the half', () => {
+      const events = voice('8 8 8 8 8 8 8 8 8 8 8 8', '3/2')
+      expect(beamPlan(events, '3/2', time(3, 2), 0).beams).toEqual([
+        [0, 1, 2, 3],
+        [4, 5, 6, 7],
+        [8, 9, 10, 11],
+      ])
+    })
+
+    it('beams 5/4 eighths 3+2', () => {
+      const events = voice('8 8 8 8 8 8 8 8 8 8', '5/4')
+      expect(beamPlan(events, '5/4', time(5, 4), 0).beams).toEqual([
+        [0, 1, 2, 3, 4, 5],
+        [6, 7, 8, 9],
+      ])
+    })
+
+    it('beams 6/4 eighths 3+3', () => {
+      const events = voice('8 8 8 8 8 8 8 8 8 8 8 8', '6/4')
+      expect(beamPlan(events, '6/4', time(6, 4), 0).beams).toEqual([
+        [0, 1, 2, 3, 4, 5],
+        [6, 7, 8, 9, 10, 11],
+      ])
+    })
+
+    it('beams 7/8 eighths 2+2+3', () => {
+      const events = voice('8 8 8 8 8 8 8', '7/8')
+      expect(beamPlan(events, '7/8', time(7, 8), 0).beams).toEqual([
+        [0, 1],
+        [2, 3],
+        [4, 5, 6],
+      ])
+    })
+
+    it('beams 9/8 eighths by the dotted quarter', () => {
+      const events = voice('8 8 8 8 8 8 8 8 8', '9/8')
+      expect(beamPlan(events, '9/8', time(9, 8), 0).beams).toEqual([
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+      ])
+    })
+  })
 })

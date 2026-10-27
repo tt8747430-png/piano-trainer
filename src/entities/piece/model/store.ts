@@ -1,7 +1,15 @@
 import type { StoreApi } from 'zustand/vanilla'
 import { isPatternId } from '@/entities/pattern'
 import { createSavedStore, isOneOf, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
-import { CLEFS, isMeter, isWrittenKey, parseKey, type Tick } from '@/shared/lib/music'
+import {
+  CLEFS,
+  isMeter,
+  isTempoUnit,
+  isWrittenKey,
+  parseKey,
+  TICKS_PER_BEAT,
+  type Tick,
+} from '@/shared/lib/music'
 import { barTicksOf, chartOf, stavesOf } from './chart'
 import { ContentError } from './content-error'
 import { musicOf, type PieceMusic } from './music'
@@ -26,7 +34,7 @@ import {
 } from './types'
 
 export const PIECES_STORAGE_KEY = 'pt-pieces'
-export const PIECES_VERSION = 7
+export const PIECES_VERSION = 8
 
 /** The learner's pieces (spec 2026-10-01-score-editor §4). */
 export interface PiecesState {
@@ -62,9 +70,10 @@ const isText = (value: unknown): value is string => typeof value === 'string'
 const isLyricsStaff = (value: unknown, staves: number): value is LyricsStaff =>
   value === 'rh' ||
   (typeof value === 'number' && Number.isInteger(value) && value >= 0 && value < staves)
+/** A tempo in the song's beats a minute: a mark in another unit's may be a part of one, a whole tick's. */
 const isTempo = (value: unknown): value is number =>
   typeof value === 'number' &&
-  Number.isInteger(value) &&
+  Math.abs(value * TICKS_PER_BEAT - Math.round(value * TICKS_PER_BEAT)) < 1e-6 &&
   value >= PIECE_TEMPO.min &&
   value <= PIECE_TEMPO.max
 
@@ -157,7 +166,8 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     title: 'saved',
     key,
     meter,
-    ...(saved.commonTime === true ? { commonTime: true } : {}),
+    ...(saved.timeSymbol === true ? { timeSymbol: true } : {}),
+    ...(isTempoUnit(saved.tempoUnit) ? { tempoUnit: saved.tempoUnit } : {}),
     tempo,
     pattern,
     sections: read,

@@ -25,8 +25,8 @@ function errorOf(lines: readonly string[]): ContentError {
 
 describe('parseChart', () => {
   it('reads 4/4 printed as common time, and nothing where the piece does not ask (ADR 0114)', () => {
-    expect(parseChart({ ...testSong(['C']), commonTime: true }).commonTime).toBe(true)
-    expect(parseChart(testSong(['C']))).not.toHaveProperty('commonTime')
+    expect(parseChart({ ...testSong(['C']), timeSymbol: true }).timeSymbol).toBe(true)
+    expect(parseChart(testSong(['C']))).not.toHaveProperty('timeSymbol')
   })
 
   it('reads a section written in a key of its own, and names a key it cannot read', () => {
@@ -137,7 +137,7 @@ describe('parseChart', () => {
     expect(beats('_', '3/4')).toEqual([3])
     expect(errorOf(['C _-G']).message).toMatch(/no chord, written alone/)
     expect(errorOf(['_:t1']).message).toMatch(/no chord, written alone/)
-    expect(errorOf(['_@20']).message).toContain('"20"')
+    expect(errorOf(['_@30']).message).toContain('"30"')
   })
 
   it('writes a bar of no chord back as `_`, its beats where they are not the meter’s', () => {
@@ -216,7 +216,7 @@ describe('parseChart', () => {
     ['C@x', '"x"'],
     ['C@0.3', '"0.3"'],
     ['C@1e8', '"1e8"'],
-    ['C@17', '"17"'],
+    ['C@25', '"25"'],
     ['C@12-G@8', 'longer than four bars'],
     ['C@4-G', 'leave no beats'],
     ['C-D-E-F-G', '5 chords'],

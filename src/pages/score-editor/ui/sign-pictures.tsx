@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 import type { BarMarkChoice } from '@/features/score-editor'
-import { keySignature, type Clef, type Key, type Meter } from '@/shared/lib/music'
+import { keySignature, type Clef, type Key, type Meter, type MeterSymbol } from '@/shared/lib/music'
 import { G_CLEF } from './palette-icons'
+import { ClefSign } from './picker-pictures'
 
 /** A staff space in the picture's units: its five lines from y 8 to 32. */
 const SPACE = 6
@@ -47,24 +48,6 @@ function TrebleClef({ x }: { x: number }) {
   )
 }
 
-/** The bass clef, drawn: its curl from the F line (the second from the top), its two dots round it. */
-function BassClef({ x }: { x: number }) {
-  const f = TOP + SPACE
-  return (
-    <g transform={`translate(${x - 7} ${f})`}>
-      <circle cx="2.2" cy="0.4" r="2.2" stroke="none" />
-      <path
-        d="M0.4 0.4 C0.4 -4.6 4 -6.4 7.2 -6.2 C11.4 -6 13.4 -2.8 13.2 1.6 C12.8 9.4 6.4 15 -0.6 18.2"
-        fill="none"
-        strokeWidth="1.9"
-        strokeLinecap="round"
-      />
-      <circle cx="16.4" cy="-2.6" r="1.25" stroke="none" />
-      <circle cx="16.4" cy="3.2" r="1.25" stroke="none" />
-    </g>
-  )
-}
-
 /** A sharp centred on a line or space, three spaces tall. */
 function Sharp({ x, y }: { x: number; y: number }) {
   return (
@@ -96,11 +79,9 @@ const SHARP_STEPS = [0, 3, -1, 2, 5, 1, 4] as const
 const FLAT_STEPS = [4, 1, 5, 2, 6, 3, 7] as const
 const stepY = (step: number) => TOP + (step * SPACE) / 2
 
-/** A clef drawn on its staff (ADR 0110). */
+/** A clef drawn on its staff (ADR 0110, 0114): the picker's own picture. */
 export function ClefPicture({ clef }: { clef: Clef }) {
-  return (
-    <Staff>{clef === 'bass' ? <BassClef x={WIDTH / 2} /> : <TrebleClef x={WIDTH / 2} />}</Staff>
-  )
+  return <ClefSign clef={clef} />
 }
 
 /** A key's signature after a treble clef, as forScore draws its palette's keys (ADR 0110). */
@@ -125,11 +106,20 @@ export function KeyPicture({ signatureOf }: { signatureOf: Key }) {
   )
 }
 
-/** Common time's C, as the music font prints it. */
-export const COMMON_TIME = '\u{1D134}'
+/** Common time's C and cut time's ¢, as the music font prints them. */
+const TIME_SYMBOL: Readonly<Record<MeterSymbol, string>> = {
+  common: '\u{1D134}',
+  cut: '\u{1D135}',
+}
 
-/** A time signature, its count over its unit across the staff, or 4/4 as C (ADR 0110, 0114). */
-export function TimePicture({ meter, common = false }: { meter: Meter; common?: boolean }) {
+/** A time signature, its count over its unit across the staff, or 4/4 as C, 2/2 as ¢ (ADR 0110, 0114). */
+export function TimePicture({
+  meter,
+  symbol = null,
+}: {
+  meter: Meter
+  symbol?: MeterSymbol | null
+}) {
   const [count, unit] = meter.split('/')
   const figure = {
     textAnchor: 'middle',
@@ -141,7 +131,7 @@ export function TimePicture({ meter, common = false }: { meter: Meter; common?: 
   } as const
   return (
     <Staff>
-      {common ? (
+      {symbol ? (
         <text
           x={WIDTH / 2}
           y={TOP + 2 * SPACE}
@@ -151,7 +141,7 @@ export function TimePicture({ meter, common = false }: { meter: Meter; common?: 
           stroke="none"
           className="font-music"
         >
-          {COMMON_TIME}
+          {TIME_SYMBOL[symbol]}
         </text>
       ) : (
         <>
@@ -167,28 +157,19 @@ export function TimePicture({ meter, common = false }: { meter: Meter; common?: 
   )
 }
 
-/** A time signature as a key's face: its figures one over the other, or 4/4 as C (ADR 0114). */
+/** A time signature as a key's face: its figures one over the other (ADR 0114). */
 export function TimeFigures({
   meter,
-  common = false,
 }: {
-  meter: Meter | { readonly count: number; readonly unit: number }
-  common?: boolean
+  meter: { readonly count: number; readonly unit: number }
 }) {
-  if (common)
-    return (
-      <span aria-hidden className="font-music text-3xl leading-none">
-        {COMMON_TIME}
-      </span>
-    )
-  const [count, unit] = typeof meter === 'string' ? meter.split('/') : [meter.count, meter.unit]
   return (
     <span
       aria-hidden
       className="flex flex-col items-center font-serif text-base leading-[0.85] font-bold"
     >
-      <span>{count}</span>
-      <span>{unit}</span>
+      <span>{meter.count}</span>
+      <span>{meter.unit}</span>
     </span>
   )
 }

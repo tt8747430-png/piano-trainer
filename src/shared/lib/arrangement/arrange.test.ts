@@ -179,9 +179,9 @@ describe('arrange', () => {
   })
 
   it('carries 4/4 printed as common time to the score (ADR 0114)', () => {
-    const common = { ...chart([['C']]), commonTime: true } as const
-    expect(arrange(common, { tonic: C, pattern: BLOCK }).commonTime).toBe(true)
-    expect(arrange(chart([['C']]), { tonic: C, pattern: BLOCK })).not.toHaveProperty('commonTime')
+    const common = { ...chart([['C']]), timeSymbol: true } as const
+    expect(arrange(common, { tonic: C, pattern: BLOCK }).timeSymbol).toBe(true)
+    expect(arrange(chart([['C']]), { tonic: C, pattern: BLOCK })).not.toHaveProperty('timeSymbol')
   })
 
   it('puts bars and chords end to end', () => {
@@ -313,6 +313,45 @@ describe('arrange', () => {
       onsets(arrange(chart([['Am']], { meter }), { tonic: C, pattern: steps }), 'rh')
     expect(inMeter('6/8')).toEqual([0, 16])
     expect(inMeter('12/8')).toEqual([0, 24, 48, 72])
+  })
+
+  describe('the meters of ADR 0114', () => {
+    it('plays a figure in 2/2 as in 4/4: a bar of four quarters', () => {
+      const performance = arrange(chart([['C', 'G']], { meter: '2/2' }), {
+        tonic: C,
+        pattern: BEATS,
+      })
+      expect(onsets(performance, 'rh')).toEqual([0, 24, 48, 72, 96, 120, 144, 168])
+      expect(performance.bars.map((b) => b.beats)).toEqual([4, 4])
+      expect(performance.meter).toBe('2/2')
+    })
+
+    it('plays a figure once in each group of 5/4: three beats, then two', () => {
+      const performance = arrange(chart([['C']], { meter: '5/4' }), { tonic: C, pattern: BEATS })
+      expect(onsets(performance, 'rh')).toEqual([0, 24, 48, 72, 96])
+      expect(onsets(performance, 'lh')).toEqual([0, 72])
+      expect(performance.totalTicks).toBe(120)
+    })
+
+    it('plays the 3/4 variant in each three of 6/4', () => {
+      const waltz: EventPattern = {
+        id: 'waltz',
+        rh: figure('4/4 C,12/4 C', { inThree: parseFigure('4/4 C,8/4 C') }),
+        lh: figure('0/4 L1'),
+      }
+      const performance = arrange(chart([['C']], { meter: '6/4' }), { tonic: C, pattern: waltz })
+      expect(onsets(performance, 'rh')).toEqual([24, 48, 96, 120])
+      expect(onsets(performance, 'lh')).toEqual([0, 72])
+    })
+
+    it('plays a figure’s compound version in 9/8, clipped to its three beats', () => {
+      const performance = arrange(chart([['C']], { meter: '9/8' }), {
+        tonic: C,
+        pattern: pattern('beats', '0/4 C,4/4 C,8/4 C,12/4 C', '0/16 L1'),
+      })
+      expect(onsets(performance, 'rh')).toEqual([0, 24, 48])
+      expect(performance.totalTicks).toBe(72)
+    })
   })
 
   it('clips a figure to a two-beat meter', () => {

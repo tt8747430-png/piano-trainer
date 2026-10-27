@@ -1,7 +1,14 @@
 import { useTranslation } from 'react-i18next'
 import { pieceStage } from '@/entities/course'
 import { StageMark } from '@/entities/step'
-import { entryTitles, pieceKey, selectHasVersion, usePieces, type Entry } from '@/entities/piece'
+import {
+  entryTitles,
+  pieceKey,
+  selectHasVersion,
+  TempoText,
+  usePieces,
+  type Entry,
+} from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
 import { keySymbol, printedSymbol } from '@/shared/lib/music'
 
@@ -34,7 +41,7 @@ export function PieceFacts({ entry }: { entry: Entry }) {
             <dd aria-hidden>·</dd>
             <dt className="sr-only">{t('tempo')}</dt>
             <dd className="font-medium text-foreground tabular-nums">
-              {t('music:bpm', { tempo: entry.tempo })}
+              <TempoText piece={entry} />
             </dd>
           </>
         )}

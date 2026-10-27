@@ -13,6 +13,7 @@ import type {
   SpelledNote,
   Tick,
   TimeSignature,
+  TempoUnit,
 } from '@/shared/lib/music'
 
 /** A note value by its denominator: 1 a whole, 32 a 32nd. */
@@ -46,8 +47,10 @@ export interface TimedNote {
 export interface TimedMusic {
   readonly key: Key
   readonly meter: Meter
-  /** 4/4 printed as common time, C, wherever it is printed (ADR 0114). */
-  readonly commonTime?: true
+  /** 4/4 printed as common time's C, 2/2 as cut time's ¢ (ADR 0114). */
+  readonly timeSymbol?: true
+  /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
+  readonly tempoUnit?: TempoUnit
   readonly bars: readonly (BarMarks & {
     /** The tempo marked over it, at the music's head: beats a minute. */
     readonly tempo?: number
@@ -179,8 +182,10 @@ export type StaffVoices = Readonly<Record<PianoStaff, readonly ScoreVoice[]>> &
 export interface Score {
   readonly key: Key
   readonly meter: Meter
-  /** 4/4 printed as common time, C (ADR 0114). */
-  readonly commonTime?: true
+  /** 4/4 printed as common time's C, 2/2 as cut time's ¢ (ADR 0114). */
+  readonly timeSymbol?: true
+  /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
+  readonly tempoUnit?: TempoUnit
   /** The staves it writes, top down. */
   readonly staves: readonly StaffId[]
   readonly measures: readonly Measure[]

@@ -1,6 +1,6 @@
 import type { BarMarkChoice } from './bar-marks'
 import type { SectionKind } from '@/entities/piece'
-import type { Chord, Clef, Finger, Key, Midi, Tick } from '@/shared/lib/music'
+import type { Chord, Clef, Finger, Key, Midi, TempoUnit, Tick } from '@/shared/lib/music'
 import type { Clip } from './clip'
 import type { Draft, Layer, NoteLayer } from './draft'
 import { topStaff } from './rows'
@@ -179,6 +179,8 @@ export type EditorAction =
       readonly key?: Key
       readonly tempo?: number
     }
+  /** The tempo mark as its picker sets it: a number of a note a minute (ADR 0114). */
+  | { readonly type: 'tempo'; readonly mark: number; readonly unit: TempoUnit }
   /** The music moved by semitones, the key and the chord symbols with it as asked (ADR 0110). */
   | {
       readonly type: 'transpose'

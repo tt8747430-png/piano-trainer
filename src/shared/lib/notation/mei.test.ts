@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { midi, note, type SpelledNote } from '@/shared/lib/music'
+import { midi, note, type Clef, type SpelledNote } from '@/shared/lib/music'
 import { scoreToMei } from './mei'
 import { notate } from './notate'
 import type { TimedMusic, TimedNote } from './types'
@@ -192,8 +192,8 @@ describe('scoreToMei, a note’s marks and the options', () => {
   })
 
   it('prints 4/4 as common time where the music asks, and any other meter by its figures (ADR 0114)', () => {
-    const common = notate(music([c(0)], { chords: [], commonTime: true }))
-    expect(common.commonTime).toBe(true)
+    const common = notate(music([c(0)], { chords: [], timeSymbol: true }))
+    expect(common.timeSymbol).toBe(true)
     expect(scoreToMei(common)).toMatch(
       /<scoreDef meter\.count="4" meter\.unit="4" meter\.sym="common"/,
     )
@@ -202,7 +202,7 @@ describe('scoreToMei, a note’s marks and the options', () => {
       music([c(0)], {
         chords: [],
         meter: '3/4',
-        commonTime: true,
+        timeSymbol: true,
         bars: [{ startTick: 0, beats: 3 }],
       }),
     )
@@ -211,7 +211,7 @@ describe('scoreToMei, a note’s marks and the options', () => {
     const changed = notate(
       music([c(0)], {
         chords: [],
-        commonTime: true,
+        timeSymbol: true,
         bars: [
           { startTick: 0, beats: 3, meter: '3/4' },
           { startTick: 72, beats: 4 },
@@ -221,6 +221,54 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(scoreToMei(changed)).toMatch(
       /<scoreDef meter\.count="4" meter\.unit="4" meter\.sym="common"\/>/,
     )
+  })
+
+  it('writes every clef by its sign, line and octave, its notes as they sound (ADR 0114)', () => {
+    const inClef = (clef: Clef) =>
+      scoreToMei(
+        notate(
+          music([{ ...n(60, note('C'), 'staff', 0, 24), staff: 0 }], {
+            chords: [],
+            staves: [{ clef }],
+          }),
+        ),
+      )
+    expect(inClef('alto')).toMatch(/<staffDef n="1"[^>]*clef\.shape="C" clef\.line="3"/)
+    expect(inClef('tenor')).toMatch(/clef\.shape="C" clef\.line="4"/)
+    expect(inClef('subbass')).toMatch(/clef\.shape="F" clef\.line="5"/)
+    const low = inClef('treble-8vb')
+    expect(low).toMatch(/clef\.shape="G" clef\.line="2" clef\.dis="8" clef\.dis\.place="below"/)
+    // Its pitch as it sounds: Verovio draws a treble 8vb's middle C an octave up, where C5 stands.
+    expect(low).toMatch(/<note xml:id="n-staff0-0-0" pname="c" oct="4"/)
+    const high = inClef('bass-15ma')
+    expect(high).toMatch(/clef\.dis="15" clef\.dis\.place="above"/)
+    expect(high).toMatch(/<note xml:id="n-staff0-0-0" pname="c" oct="4"/)
+    expect(inClef('alto')).toMatch(/<note xml:id="n-staff0-0-0" pname="c" oct="4"/)
+  })
+
+  it('marks the tempo in its own unit where it has one, else the meter’s beat (ADR 0114)', () => {
+    const eighths = scoreToMei(notate(music([c(0)], { tempoUnit: '8' })))
+    expect(eighths).toMatch(/<tempo [^>]*mm="168" mm\.unit="8" place="above">\u{1D160} = 168</u)
+    const dotted = scoreToMei(notate(music([c(0)], { tempoUnit: '4.' })))
+    expect(dotted).toMatch(/mm="56" mm\.unit="4" mm\.dots="1"/)
+    const halves = scoreToMei(notate(music([c(0)], { meter: '2/2', tempoUnit: '2' })))
+    expect(halves).toMatch(/mm="42" mm\.unit="2"/)
+  })
+
+  it('prints 2/2 as cut time where the music asks, else as its figures (ADR 0114)', () => {
+    const cut = (timeSymbol: boolean) =>
+      scoreToMei(
+        notate(
+          music([c(0)], {
+            chords: [],
+            meter: '2/2',
+            ...(timeSymbol ? { timeSymbol: true as const } : {}),
+          }),
+        ),
+      )
+    expect(cut(true)).toMatch(/<scoreDef meter\.count="2" meter\.unit="2" meter\.sym="cut"/)
+    expect(cut(false)).toMatch(/<scoreDef meter\.count="2" meter\.unit="2"/)
+    expect(cut(false)).not.toContain('meter.sym')
   })
 
   it('hides the time on a line that goes on in it, and shows it where it changes', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { draftOf, form, lengths, shape, staffNotes } from '../testing/test-draft'
-import { metersFor, setMeter, setSectionMeter, setTime } from './meters'
+import { meterBar, sameKind, setMeter, setSectionMeter, setTime } from './meters'
 
 describe('the song’s meter', () => {
   const draft = draftOf({
@@ -10,9 +10,53 @@ describe('the song’s meter', () => {
     hands: { lh: 'C3/4 | r/4' },
   })
 
-  it('offers the meters of the same kind: a quarter keeps its length in 2/4, 3/4 and 4/4', () => {
-    expect(metersFor('4/4')).toEqual(['2/4', '3/4', '4/4'])
-    expect(metersFor('6/8')).toEqual(['6/8', '12/8'])
+  it('tells the meters counted alike: a quarter’s beat, or a dotted quarter’s (ADR 0114)', () => {
+    expect(
+      ['2/2', '3/4', '5/4', '7/8', '3/2'].every((meter) => sameKind(meter as '4/4', '4/4')),
+    ).toBe(true)
+    expect(['3/8', '6/8', '9/8', '12/8'].some((meter) => sameKind(meter as '4/4', '4/4'))).toBe(
+      false,
+    )
+  })
+
+  it('offers any meter at the song’s head, one counted in the other beat only where its notes fit it', () => {
+    expect(meterBar(draft, 0, '6/8')).toBeNull()
+    expect(meterBar(draft, 0, '5/4')).toBeNull()
+    const triplets = draftOf({
+      sections: [{ kind: 'verse', lines: ['C'] }],
+      staves: [{ notes: 'C4/1:3 D4/1:3 E4/1:3 F4/3' }],
+    })
+    expect(meterBar(triplets, 0, '6/8')).toBe('between')
+    const two = draftOf({
+      sections: [
+        { kind: 'verse', lines: ['C'] },
+        { kind: 'chorus', lines: ['G'] },
+      ],
+    })
+    expect(meterBar(two, 1, '6/8')).toBe('otherKind')
+    expect(meterBar(two, 1, '7/4')).toBeNull()
+  })
+
+  it('makes 2/2 of 4/4 as it is: four quarters a bar, every note where it was', () => {
+    const cut = setMeter(draft, '2/2')
+    expect(cut.meter).toBe('2/2')
+    expect(cut.sections[0]?.lines[0]?.map((bar) => bar.ticks)).toEqual([96, 96])
+    expect(shape(staffNotes(cut))).toEqual(shape(staffNotes(draft)))
+  })
+
+  it('counts the other beat with every note kept its length and the tempo its speed: 3/4 to 3/8', () => {
+    const waltz = setMeter(draft, '3/4')
+    const eighths = setMeter(waltz, '3/8')
+    expect(eighths.meter).toBe('3/8')
+    // A bar of 3/4 (72 ticks) is 48 in 3/8's ticks, then cut to 3/8's 24, as a shorter meter cuts.
+    expect(eighths.sections[0]?.lines[0]?.map((bar) => bar.ticks)).toEqual([24, 24])
+    expect(shape(staffNotes(eighths))).toEqual(['E4@0/24', 'D4@24/24'])
+    expect(eighths.tempo).toBe(waltz.tempo * (2 / 3))
+    // Its mark as printed: the quarter it counted, ♩ = 90 still.
+    expect(eighths.tempoUnit).toBe('4')
+    // And back: the bar 3/4's again, the notes as long as they were.
+    const back = setMeter(setMeter(draft, '12/8'), '4/4')
+    expect(shape(staffNotes(back))).toEqual(shape(staffNotes(draft)))
   })
 
   it('makes each full bar the new meter’s, its notes and chords past the new end taken', () => {
@@ -42,11 +86,10 @@ describe('the song’s meter', () => {
     expect(shape(staffNotes(three)).slice(0, 2)).toEqual(['D4@0/24', 'E4@24/24'])
   })
 
-  it('keeps a pickup bar shorter than the meter’s as it is, and changes nothing across kinds', () => {
+  it('keeps a pickup bar shorter than the meter’s as it is', () => {
     const pickup = draftOf({ sections: [{ kind: 'verse', lines: ['G@1 C'] }] })
     const before = pickup.sections[0]?.lines[0]?.[0]?.ticks
     expect(setMeter(pickup, '3/4').sections[0]?.lines[0]?.[0]?.ticks).toBe(before)
-    expect(setMeter(draft, '6/8')).toBe(draft)
   })
 
   it('counts the whole song in the new meter, a section’s own given up (ADR 0095)', () => {
@@ -125,20 +168,20 @@ describe('setTime, the time signature’s picker applied (ADR 0114)', () => {
   })
 
   it('changes the whole song’s meter at its first section, its pickup and its C with it, in one go', () => {
-    const changed = setTime(song, 0, { meter: '4/4', commonTime: true, pickup: 24 })
-    expect(changed.commonTime).toBe(true)
+    const changed = setTime(song, 0, { meter: '4/4', timeSymbol: true, pickup: 24 })
+    expect(changed.timeSymbol).toBe(true)
     expect(lengths(changed)).toEqual([24, 96, 96, 96])
-    const plain = setTime(changed, 0, { meter: '3/4', commonTime: false, pickup: 48 })
-    expect(plain).not.toHaveProperty('commonTime')
+    const plain = setTime(changed, 0, { meter: '3/4', timeSymbol: false, pickup: 48 })
+    expect(plain).not.toHaveProperty('timeSymbol')
     expect(plain.meter).toBe('3/4')
     expect(lengths(plain)).toEqual([48, 72, 72, 72])
   })
 
   it('changes a later section’s meter from it on, no pickup there, the song’s C kept as it was', () => {
-    const common = setTime(song, 0, { meter: '4/4', commonTime: true })
+    const common = setTime(song, 0, { meter: '4/4', timeSymbol: true })
     const chorus = setTime(common, 1, { meter: '2/4' })
     expect(chorus.meter).toBe('4/4')
-    expect(chorus.commonTime).toBe(true)
+    expect(chorus.timeSymbol).toBe(true)
     expect(chorus.sections[1]?.heading.meter).toBe('2/4')
     expect(lengths(chorus)).toEqual([96, 96, 48, 48])
   })

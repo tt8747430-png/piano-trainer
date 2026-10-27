@@ -1,17 +1,19 @@
 import type { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SignPopover } from './SignPopover'
+import { useSignatureFrom } from '../model/use-signature-from'
+import { SignPicker } from './SignPicker'
 import { TimePicker } from './TimePicker'
 
 /**
- * A time signature's popover (ADR 0094, 0095, 0114), opened where it is printed: the time signature
- * picker at its bar, the meter from its section on, or the whole song's (with its pickup) at its head.
+ * A time signature's picker (ADR 0094, 0095, 0114), opened where it is printed: its meter from its
+ * section on, or the whole song's (with its pickup) at its head, said under its title.
  */
 export function TimePopover({ bar, trigger }: { bar: number; trigger: ReactElement }) {
   const { t } = useTranslation('editor')
+  const { said } = useSignatureFrom(bar)
   return (
-    <SignPopover label={t('palette.category.time')} trigger={trigger}>
+    <SignPicker title={t('palette.category.time')} description={said} trigger={trigger}>
       {(close) => <TimePicker bar={bar} onDone={close} />}
-    </SignPopover>
+    </SignPicker>
   )
 }

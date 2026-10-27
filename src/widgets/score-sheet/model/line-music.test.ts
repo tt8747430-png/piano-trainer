@@ -148,8 +148,8 @@ describe('the sheet’s lines', () => {
   it('print 4/4 as common time where the song asks (ADR 0114)', () => {
     const [first] = linesOf(draft)
     if (!first) throw new Error('a line')
-    expect(lineMusic({ ...draft, commonTime: true }, first).commonTime).toBe(true)
-    expect(lineMusic(draft, first)).not.toHaveProperty('commonTime')
+    expect(lineMusic({ ...draft, timeSymbol: true }, first).timeSymbol).toBe(true)
+    expect(lineMusic(draft, first)).not.toHaveProperty('timeSymbol')
   })
 
   it('print the time signature again only where it changes', () => {

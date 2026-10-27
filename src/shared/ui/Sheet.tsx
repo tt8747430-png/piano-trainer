@@ -3,6 +3,7 @@ import { X } from 'lucide-react'
 import type { ComponentProps, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
+import { InfoTip } from './InfoTip'
 import { Button } from './primitives/button'
 import {
   Drawer,
@@ -45,6 +46,7 @@ export function Sheet({
 export function SheetContent({
   title,
   description,
+  info,
   children,
   footer,
   full = false,
@@ -52,6 +54,8 @@ export function SheetContent({
 }: {
   title: string
   description?: string
+  /** What the sheet's tools do, where their names alone do not say: an ⓘ after the title (ADR 0096). */
+  info?: ReactNode
   children: ReactNode
   footer?: ReactNode
   /** The whole screen's height at every size: a preview opened full screen (ADR 0110). */
@@ -73,9 +77,12 @@ export function SheetContent({
     >
       <DrawerHeader className="flex-row items-start justify-between gap-3 px-5 pt-1 pb-4 text-left landscape-phone:pb-1 group-data-[swipe-axis=y]/drawer-popup:text-left">
         <div className="flex min-w-0 flex-col gap-1 pt-1">
-          <DrawerTitle className="font-display text-2xl leading-tight font-semibold text-pretty break-words">
-            {title}
-          </DrawerTitle>
+          <div className="flex items-center gap-1.5">
+            <DrawerTitle className="font-display text-2xl leading-tight font-semibold text-pretty break-words">
+              {title}
+            </DrawerTitle>
+            {info ? <InfoTip name={title}>{info}</InfoTip> : null}
+          </div>
           {description ? (
             <DrawerDescription className="text-base leading-snug text-pretty break-words text-muted-foreground">
               {description}

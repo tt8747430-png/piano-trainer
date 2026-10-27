@@ -116,8 +116,28 @@ export const editor = {
   // The palette's Clef: the caret's staff changes clef from the bar chosen on (ADR 0069).
   clef: {
     from: '{{staff}}, from bar {{bar}} on',
+    family: {
+      G: 'G clefs',
+      C: 'C clefs',
+      F: 'F clefs',
+    },
     treble: 'Treble clef',
+    'treble-8va': 'Treble clef, an octave up (8va)',
+    'treble-8vb': 'Treble clef, an octave down (8vb)',
+    'treble-15ma': 'Treble clef, two octaves up (15ma)',
+    'treble-15mb': 'Treble clef, two octaves down (15mb)',
+    soprano: 'Soprano clef',
+    'mezzo-soprano': 'Mezzo-soprano clef',
+    alto: 'Alto clef',
+    tenor: 'Tenor clef',
+    baritone: 'Baritone clef (C)',
     bass: 'Bass clef',
+    'bass-8va': 'Bass clef, an octave up (8va)',
+    'bass-8vb': 'Bass clef, an octave down (8vb)',
+    'bass-15ma': 'Bass clef, two octaves up (15ma)',
+    'bass-15mb': 'Bass clef, two octaves down (15mb)',
+    'baritone-f': 'Baritone clef (F)',
+    subbass: 'Sub-bass clef',
   },
   // The palette's Key and Time and their popovers: a section's key or meter, or the whole song's,
   // changed there (ADR 0094, 0095).
@@ -131,23 +151,57 @@ export const editor = {
     flats: 'Flats',
     // A palette key that opens the picker, named by what is in force.
     change: '{{sign}}: {{now}}',
+    natural: 'Switch to natural',
+    wholeSong: 'Change the key for the whole song',
+    wholeSongInfo:
+      'On, the song’s own key changes, its music moved with it, as at its start. Off, the key changes from this section on, up to the next change.',
   },
-  // The time signature picker (ADR 0114): its wheels, the common meters, its pickup, Show as C.
+  // Every picker's Cancel and Apply (ADR 0114).
+  picker: {
+    cancel: 'Cancel',
+    apply: 'Apply',
+  },
+  // The tempo mark's picker (ADR 0114).
+  tempo: {
+    mark: 'Tempo',
+    markInfo:
+      'Hold the circle and swipe up or down, drag it with the mouse or turn the mouse wheel; with the keyboard, ↑ ↓ a beat a minute, Page Up and Page Down ten, or type the number.',
+    unit: 'The note the tempo counts',
+    units: {
+      '2': 'Half note',
+      '2.': 'Dotted half note',
+      '4': 'Quarter note',
+      '4.': 'Dotted quarter note',
+      '8': 'Eighth note',
+      '8.': 'Dotted eighth note',
+      '16': 'Sixteenth note',
+    },
+    value: '{{mark}} a minute, {{word}}',
+  },
+  // The time signature picker (ADR 0114): its wheels, its pickup, the C or ¢ for its figures.
   time: {
-    current: 'Time',
+    current: 'Current',
     beat: 'Beat',
     beatType: 'Beat type',
     beatTypeInfo:
-      'A song keeps the note its beats are counted in: quarters in 2/4, 3/4 and 4/4, eighths in 6/8 and 12/8. Another would change every note’s value.',
+      'The note each beat is counted in: a half, a quarter or an eighth. Changing it counts the bars anew; every note keeps its length. After the first section, a song counted in quarters cannot change to 3/8, 6/8, 9/8 or 12/8 (counted in dotted quarters), nor back: change it at the song’s start.',
     pickup: 'Pickup',
-    pickupInfo: 'How long the first bar is, where the song starts on an upbeat. None: a whole bar.',
-    none: 'None',
-    common: 'Common meters',
-    otherKind: 'Counted in another note: every note would change value.',
-    commonTime: 'Show as C',
-    commonTimeInfo: 'Prints 4/4 as common time, C, wherever the song is in 4/4.',
-    cancel: 'Cancel',
-    apply: 'Apply',
+    pickupInfo:
+      'How long the first bar is where the song starts on an upbeat: a number of a note, 1/8 an eighth. – is none: a whole bar.',
+    pickupBeats: 'Pickup: how many',
+    pickupBeatType: 'Pickup: of which note',
+    symbol: {
+      common: 'Use common time symbol',
+      cut: 'Use cut time symbol',
+    },
+    symbolInfo: {
+      common: 'Prints 4/4 as C, wherever the song is in 4/4.',
+      cut: 'Prints 2/2 as ¢, wherever the song is in 2/2.',
+    },
+    symbolName: {
+      common: 'Common time, C',
+      cut: 'Cut time, ¢',
+    },
   },
   // The lines drawn over notes, each a key.
   lines: {
@@ -319,6 +373,7 @@ export const editor = {
     tempoWords: 'Tempo words',
     tempos: {
       largo: 'Largo',
+      larghetto: 'Larghetto',
       adagio: 'Adagio',
       andante: 'Andante',
       moderato: 'Moderato',

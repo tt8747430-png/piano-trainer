@@ -1,6 +1,7 @@
 import type { Performance, PerformanceNote } from '@/shared/lib/arrangement'
 import {
   isCompound,
+  meterBeats,
   TICKS_PER_BEAT,
   timeSignature,
   type Meter,
@@ -138,10 +139,13 @@ export function performanceMidi(
 
   const signatures: TimedMidiEvent[] = []
   for (const bar of performance.bars) {
-    const { count, unit } = writtenTime(bar.beats, bar.meter ?? performance.meter)
+    const meter = bar.meter ?? performance.meter
+    const { count, unit } = writtenTime(bar.beats, meter)
     const last = signatures.at(-1)
     if (last?.kind === 'time' && last.count === count && last.unit === unit) continue
-    signatures.push({ tick: markTick(bar.startTick), kind: 'time', count, unit, click })
+    // Clicked on the meter's counted beat (ADR 0114): a half in 2/2, two eighths first in 7/8.
+    const beat = ((meterBeats(meter)[0] ?? TICKS_PER_BEAT) / TICKS_PER_BEAT) * click
+    signatures.push({ tick: markTick(bar.startTick), kind: 'time', count, unit, click: beat })
   }
   const music: TimedMidiEvent[] = [
     { tick: 0, kind: 'name', text: options.title },

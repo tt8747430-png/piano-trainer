@@ -35,6 +35,7 @@ import {
   type Finger,
   type Key,
   type Meter,
+  type TempoUnit,
   type Midi,
   type NoteLyrics,
   type NoteMarks,
@@ -111,8 +112,10 @@ export interface Draft {
   readonly title?: string
   readonly key: Key
   readonly meter: Meter
-  /** 4/4 printed as common time, C (ADR 0114). */
-  readonly commonTime?: true
+  /** 4/4 printed as common time's C, 2/2 as cut time's ¢ (ADR 0114). */
+  readonly timeSymbol?: true
+  /** The note its tempo mark counts, where not the meter's beat (ADR 0114): ♪ = 180. */
+  readonly tempoUnit?: TempoUnit
   readonly tempo: number
   /** The piece's pattern, kept for the Player's Setup; the editor's bars are all written (ADR 0091). */
   readonly pattern: PatternId
@@ -211,7 +214,8 @@ export function readDraft(music: PieceMusic): Draft {
     ...(music.title === undefined ? {} : { title: music.title }),
     key,
     meter: music.meter,
-    ...(music.commonTime ? { commonTime: true } : {}),
+    ...(music.timeSymbol ? { timeSymbol: true } : {}),
+    ...(music.tempoUnit ? { tempoUnit: music.tempoUnit } : {}),
     tempo: music.tempo,
     pattern: music.pattern,
     sections,
@@ -279,7 +283,8 @@ export function writeDraft(draft: Draft): PieceMusic {
     ...(draft.title === undefined ? {} : { title: draft.title }),
     key: keyText(draft.key),
     meter: draft.meter,
-    ...(draft.commonTime ? { commonTime: true } : {}),
+    ...(draft.timeSymbol ? { timeSymbol: true } : {}),
+    ...(draft.tempoUnit ? { tempoUnit: draft.tempoUnit } : {}),
     tempo: draft.tempo,
     pattern: draft.pattern,
     // Each bar in its section's meter (ADR 0095).

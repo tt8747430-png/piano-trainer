@@ -113,10 +113,41 @@ describe('the draft', () => {
   })
 
   it('reads and writes back 4/4 printed as common time (ADR 0114)', () => {
-    const common = readDraft({ ...WRITTEN, commonTime: true })
-    expect(common.commonTime).toBe(true)
-    expect(writeDraft(common).commonTime).toBe(true)
-    expect(writeDraft(readDraft(WRITTEN))).not.toHaveProperty('commonTime')
+    const common = readDraft({ ...WRITTEN, timeSymbol: true })
+    expect(common.timeSymbol).toBe(true)
+    expect(writeDraft(common).timeSymbol).toBe(true)
+    expect(writeDraft(readDraft(WRITTEN))).not.toHaveProperty('timeSymbol')
+  })
+
+  it.each([
+    ['2/2', 'G C', 'D4/2 E4/2 | F#4/4'],
+    ['3/2', 'G C', 'D4/2 E4/4 | F#4/6'],
+    ['5/4', 'G@3 D G', 'D4/3 | E4/5 | F#4/5'],
+    ['6/4', 'G C', 'D4/3 E4/3 | F#4/6'],
+    ['7/8', 'G C', 'D4/1 E4/1 F#4/1.5 | G4/3.5'],
+    ['9/8', 'G C', 'D4/1 E4/2 | F#4/3'],
+    ['3/8', 'G C', 'D4/1:3 E4/2:3 | F#4/1'],
+  ] as const)('reads and writes back a song in %s as it was (ADR 0114)', (meter, line, notes) => {
+    const music: PieceMusic = {
+      key: 'G',
+      meter,
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: [line] }],
+      staves: [{ notes }],
+      hands: { rh: notes.replace(/D4|E4|F#4|G4/g, 'B3'), lh: notes.replace(/D4|E4|F#4|G4/g, 'G2') },
+    }
+    const draft = readDraft(music)
+    const written = writeDraft(draft)
+    expect(chartAndStaves(written)).toEqual(chartAndStaves(music))
+    expect(readDraft(written)).toEqual(draft)
+    expect(musicToSave(draft)).toEqual(written)
+  })
+
+  it('reads and writes back 2/2 printed as cut time (ADR 0114)', () => {
+    const cut = readDraft({ ...WRITTEN, meter: '2/2', timeSymbol: true })
+    expect(cut.timeSymbol).toBe(true)
+    expect(writeDraft(cut)).toMatchObject({ meter: '2/2', timeSymbol: true })
   })
 
   it('carries no section’s own pattern: the song’s form alone (ADR 0091)', () => {
@@ -133,21 +164,21 @@ describe('the draft', () => {
   it('saves only music that reads back', () => {
     const draft = readDraft(WRITTEN)
     expect(musicToSave(draft)).toEqual(writeDraft(draft))
-    // A note of twenty beats, five bars tied, is longer than the music writes a note.
+    // A note of twenty-five beats, past six bars tied, is longer than the music writes a note.
     const five = readDraft({
       key: 'G',
       meter: '4/4',
       tempo: 90,
       pattern: 'r1',
-      sections: [{ kind: 'verse', lines: ['G G G G G'] }],
-      staves: [{ notes: 'D4/4 | D4/4 | D4/4 | D4/4 | D4/4' }],
+      sections: [{ kind: 'verse', lines: ['G G G G G G G'] }],
+      staves: [{ notes: 'D4/4 | D4/4 | D4/4 | D4/4 | D4/4 | D4/4 | D4/4' }],
     })
     const [first] = staffNotes(five)
     if (!first) throw new Error('a note')
     expect(musicToSave(five)).not.toBeNull()
     const long = {
       ...five,
-      staves: [{ clef: 'treble' as const, notes: [{ ...first, durationTicks: 20 * 24 }] }],
+      staves: [{ clef: 'treble' as const, notes: [{ ...first, durationTicks: 25 * 24 }] }],
     }
     expect(musicToSave(long)).toBeNull()
   })

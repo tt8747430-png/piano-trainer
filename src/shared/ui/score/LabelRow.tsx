@@ -1,5 +1,5 @@
 import { Fragment, type ReactNode } from 'react'
-import { tempoNote, type Meter } from '@/shared/lib/music'
+import { beatUnit, tempoMark, unitNote, type Meter, type TempoUnit } from '@/shared/lib/music'
 import type { BarLabel } from './bar-labels'
 import { LABEL_INSET_PX } from './label-row'
 import type { ScoreLayout } from './layout'
@@ -22,7 +22,17 @@ const plain: PrintLabel = (_part, content) => <span aria-hidden>{content}</span>
 /** What a bar's label says, in the order it is printed, each part as the sheet prints it. */
 function partsOf(
   label: BarLabel,
-  { headings, meter, print }: { headings: readonly string[]; meter: Meter; print: PrintLabel },
+  {
+    headings,
+    meter,
+    tempoUnit,
+    print,
+  }: {
+    headings: readonly string[]
+    meter: Meter
+    tempoUnit: TempoUnit | undefined
+    print: PrintLabel
+  },
 ): { readonly key: string; readonly node: ReactNode }[] {
   const { number, section, tempo } = label
   const name = section === undefined ? '' : (headings[section] ?? '')
@@ -39,7 +49,8 @@ function partsOf(
             node: print(
               { kind: 'tempo', tempo },
               <>
-                <span className="font-music">{tempoNote(meter)}</span>= {tempo}
+                <span className="font-music">{unitNote(tempoUnit ?? beatUnit(meter))}</span>={' '}
+                {tempoMark(tempo, tempoUnit ?? beatUnit(meter), meter)}
               </>,
             ),
           },
@@ -62,6 +73,7 @@ export function LabelRow({
   headings,
   chords,
   meter,
+  tempoUnit,
   row,
   size = 1,
   printed = plain,
@@ -75,6 +87,8 @@ export function LabelRow({
   chords: readonly RowChord[]
   /** The meter a tempo counts. */
   meter: Meter
+  /** The note the tempo mark counts, where not the meter's beat (ADR 0114). */
+  tempoUnit?: TempoUnit | undefined
   row: number
   size?: number
   printed?: PrintLabel
@@ -84,7 +98,7 @@ export function LabelRow({
   const shown = rowChords(layout, chords, size)
   const said = layout.measures.map((measure, index) => {
     const label = labels[index]
-    const parts = label ? partsOf(label, { headings, meter, print: printed }) : []
+    const parts = label ? partsOf(label, { headings, meter, tempoUnit, print: printed }) : []
     return { measure, parts }
   })
   return (

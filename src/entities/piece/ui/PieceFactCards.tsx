@@ -5,6 +5,7 @@ import { cn } from '@/shared/lib'
 import { keySymbol, printedSymbol, type Key } from '@/shared/lib/music'
 import { FactCard } from '@/shared/ui'
 import { pieceKey, type Piece } from '../model/types'
+import { useTempoText } from './use-tempo-text'
 
 /**
  * A piece's facts as cards, three across (ADR 0100), on its song's page and in the Player's Song
@@ -22,6 +23,7 @@ export function PieceFactCards({
   children?: ReactNode
 }) {
   const { t } = useTranslation(['piece', 'music'])
+  const tempo = useTempoText(piece)
   return (
     <dl className={cn('grid gap-2', children ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3')}>
       <FactCard icon={KeyRound} name={t('music:key.label')}>
@@ -33,7 +35,7 @@ export function PieceFactCards({
         {piece.meter}
       </FactCard>
       <FactCard icon={Metronome} name={t('tempo')}>
-        {t('music:bpm', { tempo: piece.tempo })}
+        {tempo}
       </FactCard>
       {children}
     </dl>

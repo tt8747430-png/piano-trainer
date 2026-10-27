@@ -14,10 +14,10 @@ const voices = (sounds: readonly { voice?: string; accent: boolean }[]) =>
   sounds.map(({ voice, accent }) => `${voice ?? 'click'}${accent ? '!' : ''}`)
 
 describe('the Metronome’s beats', () => {
-  it('counts each meter’s beats, a beat of 6/8 an eighth', () => {
-    expect(['4/4', '3/4', '2/4', '6/8', '1/4'].map((meter) => beatsOf(meter as never))).toEqual([
-      4, 3, 2, 6, 1,
-    ])
+  it('counts each meter’s beats, a beat of 6/8 an eighth, of 2/2 a half', () => {
+    expect(
+      ['4/4', '3/4', '2/4', '2/2', '6/8', '1/4'].map((meter) => beatsOf(meter as never)),
+    ).toEqual([4, 3, 2, 2, 6, 1])
   })
 
   it('keeps a tempo within its range, in whole beats a minute', () => {

@@ -47,11 +47,23 @@ describe('createPiecesStore', () => {
       hands: { lh: 'C3/4' },
     }
     expect(
-      restored({ versions: { bz1: { ...common, commonTime: true } } }).versions.bz1?.commonTime,
+      restored({ versions: { bz1: { ...common, timeSymbol: true } } }).versions.bz1?.timeSymbol,
     ).toBe(true)
     expect(
-      restored({ versions: { bz1: { ...common, commonTime: 'yes' } } }).versions.bz1,
-    ).not.toHaveProperty('commonTime')
+      restored({ versions: { bz1: { ...common, timeSymbol: 'yes' } } }).versions.bz1,
+    ).not.toHaveProperty('timeSymbol')
+  })
+
+  it('keeps a tempo mark’s own unit, its tempo a whole tick’s part of a beat (ADR 0114)', () => {
+    const eighths = { ...MUSIC, tempo: 46.5, tempoUnit: '8' }
+    expect(restored({ versions: { bz1: eighths } }).versions.bz1).toMatchObject({
+      tempo: 46.5,
+      tempoUnit: '8',
+    })
+    expect(
+      restored({ versions: { bz1: { ...MUSIC, tempoUnit: '32' } } }).versions.bz1,
+    ).not.toHaveProperty('tempoUnit')
+    expect(restored({ versions: { bz1: { ...MUSIC, tempo: 46.51 } } }).versions).toEqual({})
   })
 
   it('keeps a section’s own key, and drops one no signature writes', () => {
@@ -74,7 +86,7 @@ describe('createPiecesStore', () => {
       sections: [
         { kind: 'verse', lines: ['Bm'] },
         { kind: 'chorus', meter: '6/8', lines: ['G A'] },
-        { kind: 'ending', meter: '7/8', lines: ['Bm'] },
+        { kind: 'ending', meter: '13/8', lines: ['Bm'] },
       ],
       hands: { lh: 'B2/4 | - | - | -' },
     }
@@ -107,7 +119,7 @@ describe('createPiecesStore', () => {
       bz7: { ...MUSIC, staves: 'B4/4' },
       bz5: { ...MUSIC, hands: { rh: 'C4/4' } },
       bz6: { ...MUSIC, pattern: 'nope' },
-      bz8: { ...MUSIC, meter: '5/4' },
+      bz8: { ...MUSIC, meter: '5/16' },
       bz9: { ...MUSIC, tempo: 300 },
       bz10: { ...MUSIC, key: 'H' },
       bz11: { ...MUSIC, key: 'A#' },
@@ -131,7 +143,7 @@ describe('createPiecesStore', () => {
       staves: [
         { name: 'Voice', notes: 'B4/4' },
         { name: { en: 'Cello', ru: 'Виолончель' }, clef: 'bass', notes: 'B2/4' },
-        { name: '   ', clef: 'alto', notes: 'r/4' },
+        { name: '   ', clef: 'viola', notes: 'r/4' },
         { name: `  ${'Flute'.repeat(10)}  `, notes: 'r/4' },
       ],
     }

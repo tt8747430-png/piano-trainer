@@ -8,10 +8,10 @@ export function ticksIn(beats: number): Tick | null {
 }
 
 /**
- * The most beats a chord or a note lasts: four bars of 4/4, twice the longest the built-in pieces
- * write, so a song from a link can never ask for a bar of millions of beats.
+ * The most beats a chord or a note lasts: a bar of 12/2 (ADR 0114), six bars of 4/4, so a song from
+ * a link can never ask for a bar of millions of beats.
  */
-export const MAX_BEATS = 16
+export const MAX_BEATS = 24
 
 /** `2:3`: a fraction of beats, for what a decimal cannot write exactly (a triplet's third). */
 const FRACTION = /^(\d+):(\d+)$/

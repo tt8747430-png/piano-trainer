@@ -1,6 +1,6 @@
 # ADR 0095 — A section's name and meter printed at its first bar, edited there
 
-- **Status:** accepted · **Date:** 2026-10-24 · **Builds on:** ADR 0087 (a line's first bar numbered), ADR 0089 (a
+- **Status:** accepted, amended by ADR 0114 (every meter; the beat type across kinds) · **Date:** 2026-10-24 · **Builds on:** ADR 0087 (a line's first bar numbered), ADR 0089 (a
   key from a section on), ADR 0094 (edited where printed) · **Amends:** the editor's section headings (ADR 0065's
   successor, `SectionHeading`) · Research: Flat's [rehearsal marks](https://help.flat.io/en/music-notation-software/rehearsal/)
   and [time signature](https://help.flat.io/en/music-notation-software/timesig/) ("applies from that measure until the
@@ -31,3 +31,9 @@ written as short bars (`@beats`), with no time signature printed.
 and `shared/lib/notation` (a measure's meter), `features/practice` (the bar grid), `features/score-editor` (a
 `sectionMeter` action beside `sectionKey`), `widgets/score-sheet` and `widgets/sheet-music` (the section's name in the
 labels' row), `pages/score-editor` (`SectionHeading` becomes the printed name's menu; the Time popover).
+
+## Amended by ADR 0114
+
+A section's meter is any count of 1 to 12 over 2, 4 or 8 of the song's kind. The song's own meter, at its head,
+may change kind: the whole song is written anew so each note keeps its length. A section past the first still
+keeps the song's kind, since one song counts its ticks one way.

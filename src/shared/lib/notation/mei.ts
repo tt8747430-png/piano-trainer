@@ -1,16 +1,21 @@
 import {
   EXPRESSION_TEXT,
-  isCompound,
   keySignature,
+  meterOf,
+  meterSymbol,
   type Accidental,
   type Articulation,
   type Barline,
+  type Clef,
   type Jump,
   type NoteLyrics,
   type NoteMarks,
   type Ornament,
   type TimeSignature,
-  tempoNote,
+  beatUnit,
+  CLEF_FORMS,
+  tempoMark,
+  unitNote,
 } from '@/shared/lib/music'
 import {
   clefIn,
@@ -171,15 +176,26 @@ const label = ({ text, placeholder }: PrintedName) =>
 const keySig = (fifths: number) =>
   fifths === 0 ? '0' : `${Math.abs(fifths)}${fifths > 0 ? 's' : 'f'}`
 
-const clefAttrs = (clef: string, prefix = 'clef.') =>
-  clef === 'bass' ? `${prefix}shape="F" ${prefix}line="4"` : `${prefix}shape="G" ${prefix}line="2"`
+/** A clef's attributes (ADR 0114): its sign and line, and an octave clef's 8 or 15 above or below. */
+function clefAttrs(clef: Clef, prefix = 'clef.'): string {
+  const { shape, line, octaves } = CLEF_FORMS[clef]
+  const dis =
+    octaves === 0
+      ? ''
+      : ` ${prefix}dis="${Math.abs(octaves) === 2 ? 15 : 8}" ${prefix}dis.place="${octaves > 0 ? 'above' : 'below'}"`
+  return `${prefix}shape="${shape}" ${prefix}line="${line}"${dis}`
+}
 
-/** A time signature's attributes: its figures, 4/4 as common time's C where the score asks (ADR 0114). */
-const meterAttrs = (time: TimeSignature | null, score: Pick<Score, 'meter' | 'commonTime'>) => {
+/**
+ * A time signature's attributes: its figures, 4/4 as common time's C and 2/2 as cut time's ¢ where
+ * the score asks (ADR 0114).
+ */
+const meterAttrs = (time: TimeSignature | null, score: Pick<Score, 'meter' | 'timeSymbol'>) => {
   const [count = '', unit = ''] = score.meter.split('/')
   const figures = { count: String(time?.count ?? count), unit: String(time?.unit ?? unit) }
-  const common = score.commonTime && figures.count === '4' && figures.unit === '4'
-  return `meter.count="${figures.count}" meter.unit="${figures.unit}"${common ? ' meter.sym="common"' : ''}`
+  const meter = meterOf(Number(figures.count), Number(figures.unit))
+  const symbol = score.timeSymbol && meter ? meterSymbol(meter) : null
+  return `meter.count="${figures.count}" meter.unit="${figures.unit}"${symbol ? ` meter.sym="${symbol}"` : ''}`
 }
 
 /** A scoreDef's attributes for a measure whose time or key is not the one before's: none where both go on. */
@@ -279,9 +295,13 @@ class Writer {
           `<harm staff="${top}" tstamp="${at(chord.tick)}">${escape(chord.symbol)}</harm>`,
         )
     if (measure.tempo !== undefined) {
-      const dots = isCompound(this.score.meter) ? ' mm.dots="1"' : ''
+      // The mark in its own unit (ADR 0114): ♪ = 180, a tempo of 90 in 4/4.
+      const unit = this.score.tempoUnit ?? beatUnit(this.score.meter)
+      const mark = tempoMark(measure.tempo, unit, this.score.meter)
+      const dots = unit.endsWith('.') ? ' mm.dots="1"' : ''
+      const value = unit.replace('.', '')
       controls.push(
-        `<tempo staff="${top}" tstamp="1" mm="${measure.tempo}" mm.unit="4"${dots} place="above">${tempoNote(this.score.meter)} = ${measure.tempo}</tempo>`,
+        `<tempo staff="${top}" tstamp="1" mm="${mark}" mm.unit="${value}"${dots} place="above">${unitNote(unit)} = ${mark}</tempo>`,
       )
     }
     if (measure.segno) controls.push(`<dir staff="${top}" tstamp="1" place="above">𝄋</dir>`)

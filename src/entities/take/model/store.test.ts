@@ -136,7 +136,7 @@ describe('createTakesStore', () => {
       { ...SAVED_TAKE, id: 'take-3', pieceId: '' },
       { ...SAVED_TAKE, id: 'take-4', made: 'today' },
       { ...SAVED_TAKE, id: 'take-5', tempo: 300 },
-      { ...SAVED_TAKE, id: 'take-6', meter: '5/4' },
+      { ...SAVED_TAKE, id: 'take-6', meter: '5/16' },
       { ...SAVED_TAKE, id: 'take-7', length: -1 },
       { ...SAVED_TAKE, id: 'take-8', length: 11 * 60 * 1000 },
       { ...SAVED_TAKE, id: 'take-9', notes: 'none' },
