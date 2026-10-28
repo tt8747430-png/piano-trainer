@@ -10,7 +10,7 @@ const timed = (sounds: readonly Sound[] = []) =>
 
 /** A row by its interval's name. */
 const row = (name: string) =>
-  screen.getByRole('button', { name: (said) => said.includes(name) && !said.startsWith(name) })
+  screen.getByRole('button', { name: (said) => said.includes(name) && !said.startsWith('About') })
 
 describe('Practice → Intervals', () => {
   it('lists a row for every interval, the tritone as A4 and d5 apart, each group folding as the learner leaves it', async () => {
@@ -37,13 +37,11 @@ describe('Practice → Intervals', () => {
       'M7Major seventhSemitones: 11',
       'P8OctaveSemitones: 12',
     ])
-    expect(within(row('Minor third')).getByRole('img')).toHaveAccessibleName(
-      'Minor third on the keys',
-    )
+    expect(screen.getByRole('img', { name: 'Minor third on the keys' })).toBeInTheDocument()
     const compound = screen.getByRole('region', { name: 'Past the octave' })
-    expect(within(compound).getByRole('button', { name: /Augmented ninth/ })).toHaveTextContent(
-      'Semitones: 15',
-    )
+    expect(
+      within(compound).getByRole('button', { name: /^A9 ?Augmented ninth/ }),
+    ).toHaveTextContent('Semitones: 15')
     // Folded, as the other explorers' sections: saved in the settings, for every visit.
     await user.click(within(compound).getByRole('button', { name: 'Past the octave' }))
     expect(within(compound).getByRole('button', { name: 'Past the octave' })).toHaveAttribute(
@@ -82,6 +80,24 @@ describe('Practice → Intervals', () => {
     ])
   })
 
+  it('names the songs that open with an interval, rising and falling, behind its ⓘ', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderApp('/practice/intervals')
+    await user.click(await screen.findByRole('button', { name: 'About Major sixth' }))
+    const songs = await screen.findByRole('dialog', { name: 'Major sixth' })
+    expect(within(songs).getByRole('list', { name: 'Up' })).toHaveTextContent(
+      'My Bonnie Lies over the Ocean',
+    )
+    expect(within(songs).getByRole('list', { name: 'Down' })).toHaveTextContent(
+      'Nobody Knows the Trouble I’ve Seen',
+    )
+    // The ⓘ opens the songs and plays nothing.
+    expect(audio.played).toEqual([])
+    // Past the octave no song is known by its interval.
+    const compound = screen.getByRole('region', { name: 'Past the octave' })
+    expect(within(compound).queryByRole('button', { name: /^About/ })).toBeNull()
+  })
+
   it('chooses the root, kept in the URL', async () => {
     const user = userEvent.setup()
     const { router, audio } = await renderApp('/practice/intervals')
@@ -101,8 +117,14 @@ describe('Practice → Intervals', () => {
   it('speaks Russian', async () => {
     await renderApp('/practice/intervals', { locale: 'ru' })
     expect(await screen.findByRole('heading', { level: 1, name: 'Интервалы' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Малая терция/ })).toHaveTextContent('м3')
-    expect(screen.getByRole('button', { name: /Уменьшённая квинта/ })).toHaveTextContent('ум5')
+    expect(screen.getByRole('button', { name: /^м3 ?Малая терция/ })).toHaveTextContent('м3')
+    expect(screen.getByRole('button', { name: /^ум5 ?Уменьшённая квинта/ })).toHaveTextContent(
+      'ум5',
+    )
+    await userEvent.setup().click(screen.getByRole('button', { name: 'Подробнее: Большая секста' }))
+    expect(await screen.findByRole('list', { name: 'Вверх' })).toHaveTextContent(
+      'В лесу родилась ёлочка',
+    )
     expect(untranslated(document.body)).toEqual([])
   })
 })

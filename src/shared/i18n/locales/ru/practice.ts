@@ -136,6 +136,7 @@ export const practice: LocaleResources['practice'] = {
       d5: { name: 'Уменьшённая квинта', short: 'ум5' },
     },
     keys: '{{name}} на клавишах',
+    songs: 'Песни',
   },
   progressions: {
     field: 'Ступени или аккорды',

@@ -144,6 +144,8 @@ export const practice = {
       d5: { name: 'Diminished fifth', short: 'd5' },
     },
     keys: '{{name}} on the keys',
+    // The songs an interval opens, behind its row's ⓘ (the unison's one list).
+    songs: 'Songs',
   },
   progressions: {
     field: 'Numerals or chords',
