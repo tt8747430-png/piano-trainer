@@ -13,13 +13,15 @@ needs." Model: the owner's `memory-palaces` repo (Supabase + RxDB), whose code w
   the profile across devices.
 - **Sign-in:** email and password, Google; Apple shown as **Coming soon** (disabled) until a paid Apple developer
   account exists. Password reset by email.
+- **The built-in content is the admin's alone to edit.** Every learner makes their own songs, patterns and
+  progressions, and keeps each **private** or **publishes** it to the **Public library**, where everyone can find,
+  play and copy it. The other open questions follow best practice (below).
 
 ## Defaults until the owner says otherwise
 
 1. Content is authored in the app (inline editor) and lives in the database; the current files are imported once and
    then deleted; a nightly export keeps a readable copy in the repo.
 2. Editors: the owner alone (`admin`); an `editor` role (content, no accounts) is built in but given to no one.
-3. Learners' own songs stay private.
 4. Downloads: what the learner is working on downloads by itself (the current course, favourites, setlists, recent
    songs), with a switch to turn it off.
 5. Starter set, always in the app: the first course, ten songs, the theory pages.
@@ -75,11 +77,23 @@ then the branch and `main`.
   always works" (ADR).
 - An import script loads today's `entities/*/content` once, checked by the content tests; then the files go.
 
+### 4b. The Public library
+- A learner's own item (song, pattern, progression) is Private by default; **Publish** needs an account and puts a
+  snapshot in `public_items` (author's display name, kind, meta, body, `published_at`, `version`, counts); the author
+  updates it by publishing again, or **Unpublishes** it. The private copy stays the learner's to edit.
+- **Songs → Public library**: browse by kind, level and key, sorted by New or Most saved; search; open and play
+  offline once downloaded, as any content. **Save to my library** makes the learner's own copy, crediting the author
+  (`copied_from`); a save count, no likes or comments yet.
+- **Best practice for shared content**: a **Report** on every public item (reason, to the admin's Content queue);
+  the admin can hide or remove an item and block an account from publishing; publishing is rate-limited and an item's
+  size capped by the database; a one-line rights notice before the first publish (only what you wrote or may share);
+  an account's deletion removes its public items with it.
+
 ### 5. Admin
 - Role in `app_metadata.role` (`admin`, `editor`), set only by the service role; read from the JWT by RLS and Edge
   Functions; the app shows the Admin area only to it, in its own lazy chunk.
 - **Accounts** (email, joined, last active, groups, devices), **Groups**, **Feature switches** per group (every build
-  goes to everyone; a feature waits behind its switch), **Content** (drafts, published, audiences), **Activity log**.
+  goes to everyone; a feature waits behind its switch), **Content** (drafts, published, audiences), **Reports** (the Public library's, with Hide · Remove · Block), **Activity log**.
   All through Edge Functions that check the role; never a client query on `auth.users`.
 
 ### 6. Inline content editing
