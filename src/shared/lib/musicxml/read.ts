@@ -507,7 +507,14 @@ export function readMusicXml(source: string): ReadScore {
               break
             }
             if (read.grace) {
-              graces.set(voice, [...(graces.get(voice) ?? []), { midi, spelled: read.spelled }])
+              graces.set(voice, [
+                ...(graces.get(voice) ?? []),
+                {
+                  midi,
+                  spelled: read.spelled,
+                  ...(read.appoggiatura ? { appoggiatura: true as const } : {}),
+                },
+              ])
               break
             }
             const before = last.get(voice)
@@ -778,6 +785,8 @@ type NoteRead =
       voice: string
       chord: boolean
       grace: boolean
+      /** A grace note written unslashed. */
+      appoggiatura: boolean
       midi: number
       spelled: SpelledNote
       finger?: Finger
@@ -791,7 +800,8 @@ type NoteRead =
 /** Reads one `<note>`, its duration in ticks (unrounded) by `toTicks`. */
 function readNote(note: XmlElement, toTicks: (duration: number) => number): NoteRead {
   const chord = childOf(note, 'chord') !== undefined
-  const grace = childOf(note, 'grace') !== undefined
+  const graceElement = childOf(note, 'grace')
+  const grace = graceElement !== undefined
   const ticks = grace ? 0 : toTicks(numberAt(note, 'duration') ?? 0)
   const staff = numberAt(note, 'staff') ?? 1
   const voice = textAt(note, 'voice') ?? '1'
@@ -901,6 +911,7 @@ function readNote(note: XmlElement, toTicks: (duration: number) => number): Note
     voice,
     chord,
     grace,
+    appoggiatura: grace && graceElement.attrs.slash !== 'yes',
     midi,
     spelled: { letter: step as Letter, accidental },
     ...(finger ? { finger } : {}),

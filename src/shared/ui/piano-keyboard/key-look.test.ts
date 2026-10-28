@@ -9,6 +9,16 @@ const root = new Map<Midi, KeyMark>([[C4, { tone: 'root', label: '1' }]])
 const UNNAMED: KeyText = { namedKeys: 'none', markNotes: false }
 
 describe('keyLook', () => {
+  it('draws a voice’s ghost faint on a plain key, its letter still there', () => {
+    const left = new Map<Midi, KeyMark>([[C4, { tone: 'root', label: 'S', ghost: true }]])
+    expect(keyLook(C4, { marks: left }, UNNAMED)).toEqual({
+      fill: 'white',
+      down: false,
+      outlined: false,
+      label: { kind: 'mark', text: 'S', ghost: true },
+    })
+  })
+
   it('leaves a key with nothing on it white or black', () => {
     expect(keyLook(C4, {}, UNNAMED)).toEqual({
       fill: 'white',

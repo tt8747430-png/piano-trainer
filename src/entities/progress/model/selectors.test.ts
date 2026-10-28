@@ -22,6 +22,7 @@ const state: ProgressState = {
   days: [],
   lessons: { 'bz5:chord:C': '2026-09-24T10:00:00.000Z' },
   holds: { 'bz5:chord:G': 2 },
+  read: { 'lesson:triads': [0] },
 }
 
 describe('progress selectors', () => {

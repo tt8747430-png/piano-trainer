@@ -26,5 +26,19 @@ export const journeyProgress = (journey: Journey, learned: Learned): Progress =>
 export const courseProgress = (course: Course, learned: Learned): Progress =>
   progressOf(courseStepIds(course), learned)
 
+/**
+ * How much of a lesson is read, 0 to 1: its sections read of all it has; the whole of it once it is
+ * learned.
+ */
+export function lessonShare(
+  sections: number,
+  read: readonly number[] | undefined,
+  learned: boolean,
+): number {
+  if (learned) return 1
+  if (sections === 0) return 0
+  return (read ?? []).filter((section) => section < sections).length / sections
+}
+
 export const isComplete = (progress: Progress): boolean =>
   progress.total > 0 && progress.done === progress.total

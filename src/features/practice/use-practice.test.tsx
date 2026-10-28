@@ -23,6 +23,7 @@ const LISTEN: PracticeSetup = {
   loop: null,
   metronome: false,
   countIn: false,
+  rest: 0,
   recording: null,
   mix: FULL_MIX,
 }

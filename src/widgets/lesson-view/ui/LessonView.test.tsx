@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-router'
 import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { lessonById, type Lesson } from '@/entities/lesson'
 import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { createFakeAudio } from '@/shared/api/audio'
@@ -17,7 +17,7 @@ import { C_MAJOR, note } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from '@/shared/lib/services'
 import { FloatingHost } from '@/shared/ui'
-import { LessonView, type UpLink } from './LessonView'
+import { LessonView, type Onward, type UpLink } from './LessonView'
 
 /** What the lesson must show, else the test fails here rather than searching the whole page. */
 function found<T>(value: T | null | undefined, what: string): T {
@@ -32,6 +32,7 @@ function firstLesson(): Lesson {
 }
 
 const UP: UpLink = { link: <Link to="/" />, label: 'Back to the journey', title: 'Foundations' }
+const ONWARD: Onward = { link: <Link to="/" />, onGo: () => {} }
 
 /** A lesson as the one route of a memory router, so its links build their addresses. */
 async function renderLesson(lesson: Lesson = firstLesson()) {
@@ -42,7 +43,9 @@ async function renderLesson(lesson: Lesson = firstLesson()) {
     finePointer: false,
   })
   const router = createRouter({
-    routeTree: createRootRoute({ component: () => <LessonView lesson={lesson} up={UP} /> }),
+    routeTree: createRootRoute({
+      component: () => <LessonView lesson={lesson} up={UP} onward={ONWARD} />,
+    }),
     history: createMemoryHistory(),
   })
   render(
@@ -112,6 +115,46 @@ describe('LessonView', () => {
     )
   })
 
+  it('reads a page at a time on a phone: back, the pages’ dots, Next, and Done on the last', async () => {
+    // A phone held upright: the paged lesson's query matches.
+    vi.stubGlobal('matchMedia', (media: string) => ({
+      media,
+      matches: media.includes('max-width: 639.98px'),
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    }))
+    const user = userEvent.setup()
+    await renderLesson()
+    expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
+      'Reading chord symbols',
+    ])
+    const bar = screen.getByRole('toolbar', { name: 'Lesson' })
+    expect(within(bar).getByRole('button', { name: 'Previous section' })).toBeDisabled()
+    expect(
+      within(bar).getByRole('button', { name: 'In this lesson: section 1 of 10' }),
+    ).toBeVisible()
+    await user.click(within(bar).getByRole('link', { name: 'Next' }))
+    expect(
+      await screen.findByRole('heading', { level: 2, name: 'Numbers and 7ths' }),
+    ).toBeInTheDocument()
+    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(1)
+    expect(within(bar).getByRole('link', { name: 'Previous section' })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/#section-1$/),
+    )
+    // The last page goes on.
+    await user.click(within(bar).getByRole('button', { name: 'In this lesson: section 2 of 10' }))
+    const sheet = await screen.findByRole('dialog', { name: 'In this lesson' })
+    await user.click(within(sheet).getByRole('link', { name: 'Try it' }))
+    expect(await screen.findByRole('heading', { level: 2, name: 'Try it' })).toBeInTheDocument()
+    expect(within(bar).queryByRole('link', { name: 'Next' })).not.toBeInTheDocument()
+    expect(within(bar).getByRole('link', { name: 'Done' })).toHaveAttribute('href', '/')
+  })
+
   it('plays a chord example and marks its tones on the keys', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson()
@@ -121,6 +164,42 @@ describe('LessonView', () => {
     expect(cm).toHaveAttribute('aria-pressed', 'true')
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'D sharp 4' })).toHaveTextContent('♭3')
+  })
+
+  it('names four voices on the keys, the key a voice left faint as the row plays on', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderLesson({
+      ...firstLesson(),
+      sections: [
+        {
+          heading: { en: 'Four voices', ru: 'Четыре голоса' },
+          blocks: [
+            {
+              kind: 'voicings',
+              satb: true,
+              voicings: [
+                { symbol: 'C', caption: 'I', hands: 'C3 G3 | E4 C5' },
+                { symbol: 'G', caption: 'V', hands: 'G2 G3 | D4 B4' },
+              ],
+            },
+          ],
+        },
+      ],
+    })
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    const chords = screen.getByRole('list', { name: 'Chords' })
+    await user.click(found(within(chords).getAllByRole('button')[0], 'the first chord'))
+    expect(within(keyboard).getByRole('button', { name: 'C5' })).toHaveTextContent('S')
+    expect(within(keyboard).getByRole('button', { name: 'C3' })).toHaveTextContent('B')
+    await user.click(screen.getByRole('button', { name: 'Play' }))
+    // Into the second chord: its voices named, the keys they left faint.
+    act(() => audio.setNow((audio.played.at(-1)?.at ?? 0) + 1.5))
+    await waitFor(() =>
+      expect(within(keyboard).getByRole('button', { name: 'B4' })).toHaveTextContent('S'),
+    )
+    const left = within(keyboard).getByRole('button', { name: 'C5' })
+    expect(left).toHaveTextContent('S')
+    expect(left.querySelector('.opacity-40')).not.toBeNull()
   })
 
   it('stops an example on a second tap', async () => {
@@ -443,6 +522,118 @@ describe('LessonView’s accompaniment', () => {
     expect(tool).toMatch(/[?&]p=ii-V-I(&|$)/)
     expect(tool).toMatch(/[?&]key=C(&|$)/)
     expect(tool).toMatch(/[?&]size=sevenths(&|$)/)
+  })
+
+  it('names each chord of a progression by its function on a chip that plays it', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderLesson(ACCOMPANIMENT)
+    const chips = screen.getByRole('list', { name: 'Chords by function' })
+    expect(
+      within(chips)
+        .getAllByRole('button')
+        .map((chip) => chip.ariaLabel),
+    ).toEqual(['ii, Subdominant', 'V, Dominant', 'I, Tonic'])
+    expect(
+      within(chips)
+        .getAllByRole('button')
+        .map((chip) => chip.textContent),
+    ).toEqual(['iiS', 'VD', 'IT'])
+    await user.click(within(chips).getByRole('button', { name: 'V, Dominant' }))
+    // G7 alone, as the row voices it: its bass under the hand.
+    expect(new Set(notes(audio.played.at(-1)?.sounds ?? []).map((key) => key % 12))).toEqual(
+      new Set([7, 11, 2, 5]),
+    )
+    expect(within(chips).getByRole('button', { name: 'V, Dominant' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+  })
+
+  it('shows a progression’s root motion with its legend, played as a chain', async () => {
+    await renderLesson({
+      ...ACCOMPANIMENT,
+      sections: [
+        {
+          heading: { en: 'Roots', ru: 'Основные тоны' },
+          blocks: [
+            { kind: 'progression', numerals: 'I IV vii° iii', key: C_MAJOR, show: 'motion' },
+          ],
+        },
+      ],
+    })
+    const chips = screen.getByRole('list', { name: 'Chords by root motion' })
+    expect(
+      within(chips)
+        .getAllByRole('button')
+        .map((chip) => chip.textContent),
+    ).toEqual(['I\u00a0', 'IV↓5', 'vii°↓5', 'iii↓5'])
+    expect(screen.getByText('Down a 5th')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Play the chain' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Open in Progressions' }).getAttribute('href')).toMatch(
+      /[?&]harmony=motion(&|$)/,
+    )
+  })
+
+  it('redraws a variants block’s example, chips and caption in place', async () => {
+    const user = userEvent.setup()
+    await renderLesson({
+      ...ACCOMPANIMENT,
+      sections: [
+        {
+          heading: { en: 'Two ways to V', ru: 'Два пути к V' },
+          blocks: [
+            {
+              kind: 'variants',
+              variants: [
+                {
+                  label: { en: 'ii6', ru: 'ii6' },
+                  caption: { en: 'The plain subdominant', ru: 'Простая субдоминанта' },
+                  example: { kind: 'progression', numerals: 'I ii/3 V I', key: C_MAJOR },
+                },
+                {
+                  label: { en: '♭II6', ru: '♭II6' },
+                  caption: { en: 'The Neapolitan', ru: 'Неаполитанский' },
+                  text: { en: 'One note lower.', ru: 'На звук ниже.' },
+                  example: { kind: 'progression', numerals: 'I ♭II/3 V I', key: C_MAJOR },
+                },
+              ],
+            },
+          ],
+          takeaway: { en: 'Lower the 2nd and ii6 turns Neapolitan.', ru: 'Понизь II ступень.' },
+        },
+      ],
+    })
+    const chips = () => screen.getByRole('list', { name: 'Chords by function' })
+    expect(within(chips()).getAllByRole('button')[1]).toHaveAccessibleName('ii/3, Subdominant')
+    expect(screen.getByText('The plain subdominant')).toBeInTheDocument()
+    await user.click(screen.getByRole('radio', { name: '♭II6' }))
+    expect(within(chips()).getAllByRole('button')[1]).toHaveAccessibleName('♭II/3, Subdominant')
+    expect(screen.getByText('The Neapolitan')).toBeInTheDocument()
+    expect(screen.getByText('One note lower.')).toBeInTheDocument()
+    expect(screen.getByRole('complementary', { name: 'In short' })).toHaveTextContent(
+      'Lower the 2nd and ii6 turns Neapolitan.',
+    )
+  })
+
+  it('sets a rule apart on its card, its name over what it says', async () => {
+    await renderLesson({
+      ...ACCOMPANIMENT,
+      sections: [
+        {
+          heading: { en: 'Fifths', ru: 'Квинты' },
+          blocks: [
+            {
+              kind: 'note',
+              rule: { en: 'No parallel fifths', ru: 'Без параллельных квинт' },
+              text: { en: 'Two voices never move in fifths.', ru: 'Два голоса не идут квинтами.' },
+            },
+            { kind: 'progression', numerals: 'I V', key: C_MAJOR },
+          ],
+        },
+      ],
+    })
+    const rule = screen.getByText('No parallel fifths')
+    expect(rule.parentElement).toHaveTextContent('Two voices never move in fifths.')
   })
 
   it('links into the tools and the Player on what it names', async () => {

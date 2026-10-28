@@ -280,6 +280,8 @@ export const editor = {
     notes: 'Bar {{bar}}, beat {{beat}} · {{what}} {{value}}',
     held: 'Bar {{bar}}, beat {{beat}} · {{what}} held',
     rest: 'Bar {{bar}}, beat {{beat}} · rest',
+    // The grace notes chosen, edited in their notes' place (Flat's).
+    grace: 'Bar {{bar}}, beat {{beat}} · grace note {{what}}',
     // The chord row of a bar with no chord symbol (ADR 0114).
     noChord: 'Bar {{bar}}, beat {{beat}} · no chord',
     end: 'End of the song',
@@ -321,6 +323,7 @@ export const editor = {
   dot: 'Dotted',
   doubleDot: 'Double dotted',
   grace: 'Grace note',
+  acciaccatura: 'Acciaccatura',
   // A note's marks (ADR 0097), each a key that puts it on the notes at the caret or takes it off.
   marks: {
     staccato: 'Staccato',
@@ -525,11 +528,12 @@ export const editor = {
     group: 'Score editor',
     value: 'A note value, whole to 64th',
     dot: 'Dotted',
-    tuplet: 'Tuplet of 2 to 9',
+    tuplet: 'Tuplet of 2 to 8',
     annotation: 'Text over the note',
     numeral: 'Roman numeral of the chord',
     rest: 'A rest',
-    grace: 'A grace note',
+    grace: 'An appoggiatura (grace note)',
+    acciaccatura: 'An acciaccatura (grace note, slashed)',
     accidentals: 'Natural, sharp, flat',
     respell: 'Respell',
     tie: 'Tie',

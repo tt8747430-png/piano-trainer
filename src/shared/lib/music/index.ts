@@ -163,6 +163,17 @@ export { alteredSymbol, voicingKind, VOICING_KINDS, type VoicingKind } from './v
 export { chordsHolding, HOLDING_GROUPS, type HoldingChord, type HoldingGroup } from './reharmonise'
 export { chordInKey, PASSING_CATEGORIES, passingChords, type PassingChords } from './passing-chords'
 export { voiceLead, type RowPosition } from './voice-lead'
+export {
+  HARMONIC_FUNCTIONS,
+  harmonicFunction,
+  isStrongMove,
+  ROOT_STEPS,
+  rootMove,
+  rootMoveText,
+  type HarmonicFunction,
+  type RootMove,
+  type RootStep,
+} from './harmony'
 export { handPosition, type FromTone, type HandPosition } from './hand-position'
 export { isSimpleChord, simplifyChord } from './simple-chord'
 export {

@@ -38,6 +38,7 @@ describe('createProgressStore', () => {
       days: ['2026-10-10', '2026-10-11'],
       lessons: { 'bz5:chord:C': DAY, 'bz5:bars:9-18': DAY },
       holds: { 'bz5:chord:G': 2 },
+      read: { 'lesson:triads': [0, 2], 'course:called-to-play/five-ways': [1] },
     }
     writeSaved(storage, saved)
     expect(createProgressStore({ storage }).getState()).toEqual(saved)
@@ -83,6 +84,12 @@ describe('createProgressStore', () => {
         'bz5:bars:1-2': 1,
         'bz5:chord:B': 1.5,
       },
+      read: {
+        'lesson:triads': [2, 0, 2, -1, 'one'],
+        'course:x/y': [],
+        'piece:bz5': [0],
+        'lesson:': [0],
+      },
       extra: true,
     })
     expect(createProgressStore({ storage }).getState()).toEqual({
@@ -97,6 +104,8 @@ describe('createProgressStore', () => {
       lessons: { 'bz5:chord:D/F♯': DAY, 'bz5:bars:9-18': DAY },
       // A chord's holds short of three, never one already learned.
       holds: { 'bz5:chord:Am': 1 },
+      // A lesson's sections read, each once and in order; never a piece's.
+      read: { 'lesson:triads': [0, 2] },
     })
   })
 
@@ -123,7 +132,7 @@ describe('createProgressStore', () => {
     expect(state.holds).toEqual({})
   })
 
-  it.each([2, 4])('does not read a version-%i save', (version) => {
+  it.each([3, 5])('does not read a version-%i save', (version) => {
     const storage = createMemoryStorage()
     writeSaved(storage, { learned: { 'piece:bz5': DAY } }, version)
     expect(createProgressStore({ storage }).getState()).toEqual(EMPTY_PROGRESS)

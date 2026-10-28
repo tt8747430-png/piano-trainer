@@ -1,10 +1,12 @@
 import { Link, type LinkProps } from '@tanstack/react-router'
 import { ArrowRight, ChevronsLeft } from 'lucide-react'
-import type { ReactElement, ReactNode } from 'react'
+import { Fragment, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
 import type { StepId } from '@/entities/step'
+import { useProgressStoreApi } from '@/entities/progress'
 import { LearnedButton, useLearned } from '@/features/mark-learned'
+import { recordSectionRead } from '@/features/record-reading'
 import { localText, useLocale } from '@/shared/i18n'
 import { ButtonLink, ScreenHeader } from '@/shared/ui'
 import { LessonView, type UpLink } from '@/widgets/lesson-view'
@@ -28,7 +30,8 @@ export interface LessonTrack {
 /**
  * A lesson, a journey's or a course's (ADR 0053, 0061), in one column in the middle of the screen:
  * its title with Learned in its bar, where it is (`place`), the lesson under its
- * floating bar of sections, and at its end the lesson before and the way on, which learns it.
+ * floating bar of sections, and at its end the lesson before and the way on, which learns it (on a
+ * phone, read a page at a time, the bar's Done).
  */
 export function LessonLayout({
   lesson,
@@ -36,16 +39,21 @@ export function LessonLayout({
   place,
   back,
   track,
+  after = [],
 }: {
   lesson: Lesson
   step: StepId
   place: ReactNode
+  /** The lessons to read before it, each a link by its title. */
+  after?: readonly { readonly title: string; readonly link: LinkProps }[]
   /** The screen's Back (`BackButton`). */
   back: ReactNode
   track: LessonTrack
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
+  const { learn } = useLearned(step)
+  const progress = useProgressStoreApi()
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
       <ScreenHeader
@@ -55,9 +63,26 @@ export function LessonLayout({
       />
       <nav aria-label={t('placeLabel')} className="-mt-3 text-muted-foreground print:hidden">
         {place}
+        {after.length > 0 ? (
+          <span className="block">
+            {t('afterLinks')}{' '}
+            {after.map(({ title, link }, i) => (
+              <Fragment key={title}>
+                {i > 0 ? ', ' : null}
+                <PlaceLink {...link}>{title}</PlaceLink>
+              </Fragment>
+            ))}
+          </span>
+        ) : null}
       </nav>
-      <LessonView key={lesson.id} lesson={lesson} up={track.up} />
-      <LessonEnd step={step} track={track} />
+      <LessonView
+        key={lesson.id}
+        lesson={lesson}
+        up={track.up}
+        onward={{ link: track.next.link, onGo: learn }}
+        end={(paged) => <LessonEnd track={track} onGo={learn} paged={paged} />}
+        onRead={(section) => recordSectionRead(progress, step, section)}
+      />
     </div>
   )
 }
@@ -85,13 +110,24 @@ function EndLink({ way, onGo, primary }: { way: WayLink; onGo?: () => void; prim
   )
 }
 
-/** A lesson's end: the lesson before and the way on side by side; going on learns it. */
-function LessonEnd({ step, track }: { step: StepId; track: LessonTrack }) {
-  const { learn } = useLearned(step)
+/**
+ * A lesson's end: the lesson before and the way on side by side; going on learns it. Read a page at a
+ * time, the bar's Done is the way on: the end keeps the lesson before.
+ */
+function LessonEnd({
+  track,
+  onGo,
+  paged,
+}: {
+  track: LessonTrack
+  onGo: () => void
+  paged: boolean
+}) {
+  if (paged && !track.previous) return null
   return (
     <footer className="mt-8 grid gap-3 border-t border-border pt-6 print:hidden sm:grid-cols-2">
       {track.previous ? <EndLink way={track.previous} primary={false} /> : null}
-      <EndLink way={track.next} onGo={learn} primary />
+      {paged ? null : <EndLink way={track.next} onGo={onGo} primary />}
     </footer>
   )
 }

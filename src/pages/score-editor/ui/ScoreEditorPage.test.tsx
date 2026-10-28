@@ -1648,6 +1648,35 @@ describe('the score editor', () => {
     )
   })
 
+  it('puts a grace note before the note at the caret and edits its pitch as a note’s, Flat’s two kinds', async () => {
+    const user = userEvent.setup({ delay: 120 })
+    const { piecesStore, settingsStore } = await renderApp('/edit/my-1', {
+      storage: withSong({ staves: [{ notes: EMPTY_TUNE }] }),
+    })
+    act(() => setKeyboard(settingsStore, { typing: true }))
+    await user.keyboard('a')
+    await user.keyboard('{ArrowLeft}')
+    await tapIn(user, 'Pitch', 'Grace note')
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({ staves: [{ notes: 'C4/1[app:D4]' }] }),
+    )
+    // Chosen as it is put there: ↑ moves it, its note stays.
+    await user.keyboard('{ArrowUp}')
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({ staves: [{ notes: 'C4/1[app:E4]' }] }),
+    )
+    expect(screen.getByRole('status')).toHaveTextContent(/grace note E4/)
+    // The acciaccatura's key makes it slashed, its pitch kept; Escape goes back to its note.
+    await tapIn(user, 'Pitch', 'Acciaccatura')
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({ staves: [{ notes: 'C4/1[gr:E4]' }] }),
+    )
+    await user.keyboard('{Escape}{ArrowUp}')
+    await waitFor(() =>
+      expect(songOf(piecesStore.getState())).toMatchObject({ staves: [{ notes: 'D4/1[gr:E4]' }] }),
+    )
+  })
+
   it('shows the Text’s terms alone on their keys, each meaning its tooltip (ADR 0096)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', {

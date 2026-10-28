@@ -50,6 +50,7 @@ export {
   selectRecorder,
   selectSectionFolded,
   selectPaletteFolded,
+  selectPaletteSections,
   selectSidebar,
   selectSound,
   selectTheme,

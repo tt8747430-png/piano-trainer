@@ -5,6 +5,7 @@ const A_MINOR = { tonic: note('A'), minor: true }
 
 const commonProgressions: Lesson = {
   id: 'common-progressions',
+  after: ['chord-functions'],
   title: { en: 'Common progressions', ru: 'Распространённые последовательности' },
   summary: {
     en: 'Learn the few chord orders that most songs are built on, in major and in minor.',
@@ -70,6 +71,28 @@ const commonProgressions: Lesson = {
         },
         { kind: 'progression', numerals: 'ii V I', key: C_MAJOR, size: 'sevenths' },
       ],
+      takeaway: {
+        en: 'ii–V–I is the strongest way home: each root falls a 5th.',
+        ru: 'ii–V–I — самый сильный путь домой: каждый основной тон падает на квинту.',
+      },
+    },
+    {
+      heading: { en: 'Why roots matter', ru: 'Почему важны основные тоны' },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'Root motion', ru: 'Ход основных тонов' },
+          text: {
+            en: 'is how far each chord’s root moves to the next. A root falling a 5th pulls hardest. This chain falls by 5ths all the way home.',
+            ru: '— это расстояние, на которое основной тон аккорда переходит к следующему. Сильнее всего тянет ход на квинту вниз. Эта цепочка идёт квинтами вниз до самого дома.',
+          },
+        },
+        { kind: 'progression', numerals: 'I IV vii° iii vi ii V I', key: C_MAJOR, show: 'motion' },
+      ],
+      takeaway: {
+        en: 'Roots falling by 5ths are the engine of tonal harmony.',
+        ru: 'Ход основных тонов на квинту вниз — двигатель тональной гармонии.',
+      },
     },
     {
       heading: { en: 'In a minor key: i–iv–V–i', ru: 'В миноре: i–iv–V–i' },

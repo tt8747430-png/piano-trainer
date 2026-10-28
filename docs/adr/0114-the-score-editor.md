@@ -71,13 +71,17 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
     glyph on a sky wash (as the pickers' cells); greyed, faded, the tooltip saying why. A tooltip is the key's name
     then its shortcut in brackets, as Flat's (`TOOL_SHORTCUTS`).
   - Whether the panel is hidden and the sheet compact is kept by place (`paletteFolded`: `panel`, `sheet`); the panel
-    shown and the sheet compact until the learner chooses.
+    shown and the sheet compact until the learner chooses; the panel's open sections by name (`paletteSections`),
+    the Notes and Pitch until the learner opens or folds one.
 - **Flat's shortcuts** where the typing keys leave them free (`TOOL_SHORTCUTS`, one table for the keys, the tooltips
   and the `?` sheet): 1–6 the values, 8 a rest, 9 a grace note, 0 = − ♮ ♯ ♭, the full stop a dot, the comma a tie,
   Shift with 3 a triplet; a letter alone plays the piano, so Flat's J, S, T and P take Shift (Respell, a slur, a trill,
   the pedal); Shift with < > the hairpins, Cmd or Ctrl with Shift and 8 or 9 the octave lines; Cmd or Ctrl with Shift
   and Enter a bar after, with Backspace the bars deleted, with Enter a new line; [ ] the repeats.
-- **A grace note** (`grace`): an appoggiatura a step above in the key before each note chosen; again, it comes off.
+- **Grace notes**, Flat's two kinds: the appoggiatura (9, unslashed) and the acciaccatura (Shift with 9, slashed), a
+  step above in the key before each note chosen on any staff; the other kind's key switches it, its pitch kept; the
+  same key again takes it off. Put there, it is chosen (`grace`): ↑ ↓, Shift a semitone, the accidentals, Respell, a
+  key played, the drag and Delete edit it as a note; Escape or any other action goes back to its note.
 - **Sign pickers** (`SignPicker`): a sheet from the foot on a phone, a popover by the sign on a laptop, ✗ and ✓ at its
   foot (Escape and Enter), one Undo step.
   - **Time:** Current and Pickup, each drawn as it prints on faint staff lines, each figure a wheel. Within the

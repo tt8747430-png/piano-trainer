@@ -81,6 +81,25 @@ describe('A course', () => {
     expect(screen.getByText('Course complete')).toBeInTheDocument()
   })
 
+  it('rings a lesson as its sections are read, the one Continue leads to ringed in honey alone', async () => {
+    const { progressStore } = await renderApp('/courses/gorshkov')
+    await screen.findByRole('heading', { level: 1 })
+    const [first, , third] = gorshkov.lessons
+    const sections = third?.sections.length ?? 0
+    act(() =>
+      progressStore.setState({
+        read: {
+          [`course:gorshkov/${first?.id}`]: [0],
+          [`course:gorshkov/${third?.id}`]: [0],
+        },
+      }),
+    )
+    const rows = within(screen.getByRole('region', { name: 'Lessons' })).getAllByRole('link')
+    expect(rows[2]).toHaveAccessibleName(new RegExp(`, ${Math.round(100 / sections)}% read$`))
+    // The first is where Continue leads: its honey ring says so.
+    expect(rows[0]).toHaveAttribute('aria-current', 'step')
+  })
+
   it('goes back to the Courses when opened directly', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/courses/gorshkov')

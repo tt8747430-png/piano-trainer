@@ -51,6 +51,8 @@ export interface ProgressState {
    * it is done in `lessons` and leaves here. The latest LESSONS_KEPT, last held last.
    */
   readonly holds: Readonly<Partial<Record<ChordLessonKey, number>>>
+  /** The sections of each lesson read so far, by their place, in order: what fills its ring. */
+  readonly read: Readonly<Partial<Record<StepId, readonly number[]>>>
 }
 
 export const EMPTY_PROGRESS: ProgressState = {
@@ -61,4 +63,5 @@ export const EMPTY_PROGRESS: ProgressState = {
   days: [],
   lessons: {},
   holds: {},
+  read: {},
 }

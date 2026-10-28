@@ -12,6 +12,7 @@ export const selectTrainerRecords = (state: ProgressState) => state.trainers
 export const selectLessons = (state: ProgressState) => state.lessons
 
 export const selectAllAnswers = (state: ProgressState) => state.answers
+export const selectRead = (state: ProgressState) => state.read
 
 export const selectIsLearned =
   (id: StepId) =>

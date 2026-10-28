@@ -1,1 +1,1 @@
-export { LessonView, type UpLink } from './ui/LessonView'
+export { LessonView, type Onward, type UpLink } from './ui/LessonView'

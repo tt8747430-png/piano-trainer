@@ -141,3 +141,33 @@ describe('speed training', () => {
     expect(fourth.passes.at(-1)?.tempo).toBe(120)
   })
 })
+
+describe('a rest between passes', () => {
+  const rested = { ...OPTIONS, rest: 2 }
+
+  it('starts the first pass at once, then rests so many beats before each repeat, clicking them', () => {
+    const loop = startLoop(ONE_BAR, rested, 10)
+    expect(loop.passes[0]).toMatchObject({ start: 10, end: 4, musicStart: 0 })
+    const next = advanceLoop(loop, 13.6).passes.at(-1)
+    expect(next).toMatchObject({ start: 14, end: 6, musicStart: 2 })
+    const clicks = next?.sounds.filter((sound) => sound.kind === 'click').map((sound) => sound.at)
+    expect(clicks).toEqual([0, 1])
+    expect(next?.sounds.find((sound) => sound.kind === 'note')?.at).toBe(2)
+  })
+
+  it('counts the rest down as a count-in, and follows the music after it', () => {
+    const loop = advanceLoop(startLoop(ONE_BAR, rested, 10), 13.6)
+    expect(countAt(loop, 14.2)).toBe(2)
+    expect(countAt(loop, 15.2)).toBe(1)
+    expect(countAt(loop, 16.2)).toBeNull()
+    expect(beatGroupAt(loop, 15.5)).toBe(3)
+    expect(beatGroupAt(loop, 16.2)).toBe(0)
+  })
+
+  it('rests in silence where the clicks are silent', () => {
+    const loop = startLoop(ONE_BAR, { ...rested, clicks: false }, 10)
+    const next = advanceLoop(loop, 13.6).passes.at(-1)
+    expect(next?.sounds.some((sound) => sound.kind === 'click')).toBe(false)
+    expect(next?.musicStart).toBe(2)
+  })
+})

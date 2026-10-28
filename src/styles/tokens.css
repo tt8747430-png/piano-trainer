@@ -113,6 +113,16 @@
   --on-paint-grass: var(--p-grass-deep);
   --on-paint-sky: var(--p-sky-deep);
   --on-paint-lilac: var(--p-lilac-deep);
+  /*
+   * A paint at full strength, ink on it: a progression's chip while its chord sounds (DESIGN.md,
+   * Harmony), as a mark's key is while it sounds. The same by night.
+   */
+  --paint-full-sand: var(--p-sand);
+  --paint-full-yellow: var(--p-yellow);
+  --paint-full-grass: var(--p-grass);
+  --paint-full-sky: var(--p-sky);
+  --paint-full-lilac: var(--p-lilac);
+  --on-paint-full: var(--p-ink);
   /* Learned, known, on, connected: the book's grass. */
   --learned: var(--p-grass-deep);
   --learned-foreground: var(--p-white);

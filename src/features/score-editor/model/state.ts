@@ -63,11 +63,19 @@ export interface EditorState extends Snapshot {
   readonly selection: Selection | null
   /** One note of the chord at the caret chosen alone, by its key (ADR 0096): else the whole chord. */
   readonly chordNote: Midi | null
+  /**
+   * The grace notes before the notes chosen are what the pitch edits act on (Flat's): ↑ ↓, Shift a
+   * semitone, the accidentals, Respell, a key played, Delete. Any other action goes back to the notes.
+   */
+  readonly grace: boolean
   readonly struck: Struck | null
   readonly clip: Clip | null
   readonly past: readonly Snapshot[]
   readonly future: readonly Snapshot[]
 }
+
+/** Flat's two grace notes: the acciaccatura, slashed, and the appoggiatura. */
+export type GraceKind = 'acciaccatura' | 'appoggiatura'
 
 export type BarEdit = 'insert' | 'insertBefore' | 'delete' | 'newLine' | 'joinLine' | 'newSection'
 
@@ -134,8 +142,11 @@ export type EditorAction =
   | { readonly type: 'piano'; readonly hidden: boolean }
   | { readonly type: 'shift'; readonly semitones: number }
   | { readonly type: 'respell' }
-  /** A grace note before each note chosen, a step above in the key; taken off where they all have one. */
-  | { readonly type: 'grace' }
+  /**
+   * A grace note of a kind before each note chosen, a step above in the key, chosen to be edited; of
+   * the other kind, made this kind; of this kind on every note, taken off.
+   */
+  | { readonly type: 'grace'; readonly kind: GraceKind }
   /**
    * The notes chosen written on their letter ♯ (1), ♭ (−1) or ♮ (0); where every one carries the
    * sign already, taken off, each spelled as its key spells it (ADR 0114).
@@ -211,6 +222,7 @@ export const initialEditor = (draft: Draft): EditorState => ({
   mode: 'replace',
   selection: null,
   chordNote: null,
+  grace: false,
   struck: null,
   clip: null,
   past: [],

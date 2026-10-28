@@ -47,14 +47,21 @@ export const TOOL_SHORTCUTS = {
   thirtySecond: value(32, 6),
   sixtyFourth: value(64, 7),
   rest: { code: 'Digit8', cap: '8', does: { type: 'rest' } },
-  grace: { code: 'Digit9', cap: '9', does: { type: 'grace' } },
+  grace: { code: 'Digit9', cap: '9', does: { type: 'grace', kind: 'appoggiatura' } },
+  acciaccatura: {
+    code: 'Digit9',
+    cap: '9',
+    shift: true,
+    does: { type: 'grace', kind: 'acciaccatura' },
+  },
   natural: { code: 'Digit0', cap: '0', does: { type: 'accidental', accidental: 0 } },
   sharp: { code: 'Equal', cap: '=', does: { type: 'accidental', accidental: 1 } },
   flat: { code: 'Minus', cap: '−', does: { type: 'accidental', accidental: -1 } },
   respell: { code: 'KeyJ', cap: 'J', shift: true, does: { type: 'respell' } },
   dot: { code: 'Period', cap: '.', does: { type: 'dot' } },
   tie: { code: 'Comma', cap: ',', does: { type: 'tie' } },
-  // Flat's ⇧2–⇧9: a tuplet of two to nine on the value (ADR 0097).
+  // Flat's ⇧2–⇧8: a tuplet of two to eight on the value; ⇧9 is the acciaccatura's, so nine takes
+  // its key alone (ADR 0097).
   tuplet2: tuplet(2),
   tuplet3: tuplet(3),
   tuplet4: tuplet(4),
@@ -62,7 +69,6 @@ export const TOOL_SHORTCUTS = {
   tuplet6: tuplet(6),
   tuplet7: tuplet(7),
   tuplet8: tuplet(8),
-  tuplet9: tuplet(9),
   slur: { code: 'KeyS', cap: 'S', shift: true, does: { type: 'line', line: 'slur' } },
   cresc: { code: 'Comma', cap: '<', shift: true, does: { type: 'line', line: 'cresc' } },
   dim: { code: 'Period', cap: '>', shift: true, does: { type: 'line', line: 'dim' } },

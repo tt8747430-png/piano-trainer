@@ -110,8 +110,11 @@ export function EditorSheet({
       dispatch({ type: 'step', steps, joins })
       const state = store.getState()
       if (state.layer === 'chords') return
+      const here = notesAt(state.draft, state.layer, state.caret)
+      // The grace notes chosen are what the drag moves: theirs heard.
+      const moved = state.grace ? here.flatMap((n) => n.marks?.grace ?? []) : here
       play(
-        notesAt(state.draft, state.layer, state.caret).map((n) => ({
+        moved.map((n) => ({
           kind: 'note' as const,
           midi: n.midi,
           at: 0,

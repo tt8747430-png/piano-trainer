@@ -24,6 +24,7 @@ export const PALETTE_CATEGORIES = [
   'text',
 ] as const
 export type PaletteCategory = (typeof PALETTE_CATEGORIES)[number]
+export const isPaletteCategory = isOneOf(PALETTE_CATEGORIES)
 
 /** What works in any row: what acts on bars, the chord names' too. */
 const ANY_ROW: readonly PaletteCategory[] = ['bar', 'key', 'time', 'repeats']

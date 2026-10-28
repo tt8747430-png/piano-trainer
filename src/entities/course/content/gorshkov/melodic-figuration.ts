@@ -6,6 +6,7 @@ const G_MINOR = { tonic: note('G'), minor: true }
 /** Gorshkov's lesson 5, «Мелодическая фигурация»: a line of the accompaniment's own, on «Опять метель». */
 const melodicFiguration: Lesson = {
   id: 'melodic-figuration',
+  after: ['thinking-in-degrees', 'chord-pulse'],
   title: { en: 'Melodic figuration', ru: 'Мелодическая фигурация' },
   summary: {
     en: 'Weave a line into the accompaniment that moves through the chords and answers the melody.',

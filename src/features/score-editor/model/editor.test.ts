@@ -456,15 +456,73 @@ describe('the editor', () => {
     expect(staffNotes(run(back, { type: 'delete' }).draft)).toEqual([])
   })
 
-  it('puts a grace note before the notes at the caret, a step above in the key, and takes it off again (Flat’s)', () => {
+  it('puts a grace note before the notes at the caret, a step above in the key, Flat’s two kinds, and takes it off again', () => {
     const graces = (state: EditorState) =>
-      staffNotes(state.draft).map((n) => n.marks?.grace?.map((g) => g.midi))
+      staffNotes(state.draft).map((n) =>
+        n.marks?.grace?.map((g) => `${g.midi}${g.appoggiatura ? '' : '/'}`),
+      )
     const written = run(start(), key(60, 0), key(64, 500))
     const back = run(written, { type: 'place', tick: 0, layer: 'staff0' })
-    const graced = run(back, { type: 'grace' })
-    // C4's step above in C major is D4.
-    expect(graces(graced)).toEqual([[62], undefined])
-    expect(graces(run(graced, { type: 'grace' }))).toEqual([undefined, undefined])
+    // C4's step above in C major is D4: an appoggiatura, chosen to be edited.
+    const graced = run(back, { type: 'grace', kind: 'appoggiatura' })
+    expect(graces(graced)).toEqual([['62'], undefined])
+    expect(graced.grace).toBe(true)
+    // The other kind changes its kind, its pitch kept; the same kind again takes it off.
+    const slashed = run(graced, { type: 'grace', kind: 'acciaccatura' })
+    expect(graces(slashed)).toEqual([['62/'], undefined])
+    const off = run(slashed, { type: 'grace', kind: 'acciaccatura' })
+    expect(graces(off)).toEqual([undefined, undefined])
+    expect(off.grace).toBe(false)
+  })
+
+  it('edits a grace note chosen as any note: steps, semitones, accidentals, respelling, a key played, Delete', () => {
+    const grace = (state: EditorState) => {
+      const g = staffNotes(state.draft)[0]?.marks?.grace?.[0]
+      return g ? `${g.spelled.letter}${g.spelled.accidental}:${g.midi}` : null
+    }
+    const back = run(start(), key(60, 0), { type: 'place', tick: 0, layer: 'staff0' })
+    const chosen = run(back, { type: 'grace', kind: 'appoggiatura' })
+    expect(grace(chosen)).toBe('D0:62')
+    // Its note stays as it was while the grace note moves.
+    const stepped = run(chosen, { type: 'step', steps: 1 })
+    expect(grace(stepped)).toBe('E0:64')
+    expect(staffNotes(stepped.draft)[0]?.midi).toBe(60)
+    expect(grace(run(stepped, { type: 'shift', semitones: -1 }))).toBe('D1:63')
+    expect(grace(run(chosen, { type: 'accidental', accidental: 1 }))).toBe('D1:63')
+    expect(grace(run(chosen, { type: 'accidental', accidental: 1 }, { type: 'respell' }))).toBe(
+      'E-1:63',
+    )
+    expect(grace(run(chosen, key(67, 600)))).toBe('G0:67')
+    // A key played writes the grace note's pitch, never a note after it.
+    expect(staffNotes(run(chosen, key(67, 600)).draft)).toHaveLength(
+      staffNotes(chosen.draft).length,
+    )
+    const deleted = run(chosen, { type: 'delete' })
+    expect(grace(deleted)).toBeNull()
+    expect(staffNotes(deleted.draft)[0]?.midi).toBe(60)
+    expect(deleted.grace).toBe(false)
+    // Escape goes back to its note; a move of the caret too.
+    expect(run(chosen, { type: 'deselect' }).grace).toBe(false)
+    const note = run(chosen, { type: 'deselect' }, { type: 'step', steps: 1 })
+    expect(staffNotes(note.draft)[0]?.midi).toBe(62)
+    expect(run(chosen, { type: 'move', by: 'step', direction: 1, extend: false }).grace).toBe(false)
+  })
+
+  it('puts a grace note before a note on either of the piano’s staves', () => {
+    const piano = run(
+      initialEditor(draftOf({ hands: { rh: 'E4/4 | r/4', lh: 'C3/4 | r/4' } })),
+      { type: 'layer', layer: 'lh' },
+      { type: 'place', tick: 0, layer: 'lh' },
+      { type: 'grace', kind: 'acciaccatura' },
+    )
+    expect(piano.draft.hands.lh[0]?.marks?.grace?.map((g) => g.midi)).toEqual([50])
+    const upper = run(
+      piano,
+      { type: 'place', tick: 0, layer: 'rh' },
+      { type: 'grace', kind: 'appoggiatura' },
+    )
+    // E4's step above in the draft's G major is F♯4.
+    expect(upper.draft.hands.rh[0]?.marks?.grace?.map((g) => g.midi)).toEqual([66])
   })
 
   it('puts fingers on the notes at the caret bottom up, a chord’s one note alone, none taking them off (ADR 0096)', () => {

@@ -89,6 +89,12 @@ describe('readMarks', () => {
     })
   })
 
+  it('reads an appoggiatura’s grace notes, unslashed, and writes them back so', () => {
+    const marks = readMarks('app:D5')
+    expect(marks).toEqual({ grace: [{ midi: midi(74), spelled: note('D'), appoggiatura: true }] })
+    expect(marks && writeMarks(marks)).toBe('app:D5')
+  })
+
   it.each(['', 'nope', 'tr,mord', 'p,f', '8va,8vb', 'gr:', 'gr:Q5', 'acc,acc', 'cresc,dim'])(
     'reads %j as no marks: unknown, empty or one of a kind twice',
     (text) => {

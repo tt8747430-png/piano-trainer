@@ -3,6 +3,7 @@ import type { Lesson } from '../model/types'
 
 const reharmonisingAMelody: Lesson = {
   id: 'reharmonising-a-melody',
+  after: ['passing-chords'],
   title: { en: 'Reharmonising a melody note', ru: 'Новая гармония для ноты мелодии' },
   summary: {
     en: 'Find the chords that hold one melody note, from triads to 7th chords, and choose between them.',

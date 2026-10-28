@@ -21,7 +21,11 @@ describe('shortcutOf', () => {
     expect(shortcutOf(press('Digit7', '7'), 'lh')).toEqual({ type: 'value', value: 64 })
     expect(shortcutOf(press('Period', '.'), 'staff0')).toEqual({ type: 'dot' })
     expect(shortcutOf(press('Digit8', '8'), 'staff0')).toEqual({ type: 'rest' })
-    expect(shortcutOf(press('Digit9', '9'), 'rh')).toEqual({ type: 'grace' })
+    expect(shortcutOf(press('Digit9', '9'), 'rh')).toEqual({ type: 'grace', kind: 'appoggiatura' })
+    expect(shortcutOf(press('Digit9', '(', { shiftKey: true }), 'lh')).toEqual({
+      type: 'grace',
+      kind: 'acciaccatura',
+    })
     // Shift with a digit is a tuplet's, not a value's.
     expect(shortcutOf(press('Digit3', '#', { shiftKey: true }), 'rh')).toEqual({
       type: 'tuplet',
@@ -31,9 +35,9 @@ describe('shortcutOf', () => {
       type: 'tuplet',
       num: 5,
     })
-    expect(shortcutOf(press('Digit9', '(', { shiftKey: true }), 'rh')).toEqual({
+    expect(shortcutOf(press('Digit8', '*', { shiftKey: true }), 'rh')).toEqual({
       type: 'tuplet',
-      num: 9,
+      num: 8,
     })
     expect(shortcutOf(press('Digit1', '!', { shiftKey: true }), 'rh')).toBeNull()
   })

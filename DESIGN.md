@@ -256,6 +256,19 @@ shade for an icon on their wash. They mean one thing each, by where they appear:
   sections: intro and ending sand, verse sky, chorus grass, bridge lilac, the rest yellow. Brick and teal never
   appear on the chrome.
 
+### Harmony
+
+A progression's chips say what each chord does, in three of the chrome's paints, each its wash with its deep shade at
+rest and its full paint with ink on it while its chord sounds (`--paint-full-*`, `--on-paint-full`), as a mark's key
+does:
+
+- **Function:** tonic grass, subdominant sand, dominant lilac; the line under the numeral `T`, `S`, `D`.
+- **Root motion:** a 5th down lilac, a 3rd down sand, a 2nd up grass (the strong moves, as the theory book colours
+  them); the moves the other way (`↑5 ↑3 ↓2`) sand-neutral. A legend card names the four.
+
+A chip is a 56px tile in one even grid: one row, or two rows of half where one would crowd (more than six on a phone,
+more than eight wider). These paints mean a function or a move only on a progression's chips and their legend.
+
 ### The keys
 
 - White keys are card paper (softer by night, never glaring in a dim hall), black keys a warm black, parted by a 1px
@@ -266,6 +279,8 @@ shade for an icon on their wash. They mean one thing each, by where they appear:
 - **Down:** a plain key down turns sky. A quiz's chosen keys are honey, a wrong key crimson with ✕, a missing key a
   deep-sky ring inside its edge. A wrong key beats a lit one, a lit one a mark.
 - **Focus:** a two-tone ring, ink outside and white inside, so it shows on any key.
+- **Voices:** a four-voice chord's keys carry S A T B in their chord tone's colour; the key a voice left keeps its
+  letter at 40%, the key plain.
 
 ### Colour rules
 
@@ -434,6 +449,13 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
   staff (a muted card with a "?" while hidden, the same size, so nothing moves on Reveal), the keys, the answers, and
   one primary pill in one place from the round's start to its Next: Reveal on a card, Check on a build, Next greyed
   until answered. Clear and Show answer are link-ink words beside it.
+- **A lesson's cards:** a note on sand; a rule on a card (`card`), its name in Literata 600 over soft ink; a
+  section's takeaway on the lilac wash, "In short" in the deep shade over one Literata 600 sentence. Variants are
+  `ChoiceChips` (one of a few, wrapping, the chosen ink on sand in an ink line), or a segmented switch for two.
+- **A lesson on a phone** reads a page a section: the floating bar holds ‹, the pages' dots (the one read a 20px
+  capsule, the rest 8px dots in the line colour; tapping them opens the contents) and Next, honey, Done on the last.
+- **Progress ring** (`ProgressRing`): an arc in the stage paint's deep shade round a lesson's node or number, over a
+  hairline track, as its sections are read; none once learned or where Continue's honey ring stands.
 - **Popover:** 12px corners, the popover shade. An `InfoTip` is a 16px ⓘ in soft ink beside a name, opening a
   popover; no line of explanation stands under a control.
 - **Toast** (`say`): a card with the highest shade over the screen's foot, clear of all that floats there: its line,
