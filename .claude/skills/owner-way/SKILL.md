@@ -61,21 +61,28 @@ These come straight from their feedback. Each has burned a round before.
 
 1. **Before starting:** fetch and check that the branch is level with `main` (`claude/keen-gates-q9bnit` unless told otherwise).
 2. **Work in rounds, in a loop.** Keep going round after round without asking. Stop only for decisions that are genuinely the owner's, and put those as clear questions at the end of the report. When the owner says "continue", pick up exactly where the work stopped.
-3. **Parallel agents for big rounds.** Use worktree agents (`isolation: "worktree"`), each with a brief built from `references/agent-brief.md`.
-   - **Scope:** split by files so no two agents edit the same component. Keep a round small enough to finish in well under an hour; split it rather than letting it grow.
-   - **Screenshots:** copy the owner's screenshots into `scratchpad/<round>/owner/` with descriptive names, and describe each one in the brief, because agents can't see the chat.
-   - **Mid-round feedback:** if the owner adds to a running agent's area, send it to that agent with SendMessage rather than starting another.
-   - **Small fixes:** do them yourself; an agent needs the whole context re-explained.
+3. **Do the work yourself; agents are the exception.** The owner pays for every agent's context: each one starts from nothing, rereads CLAUDE.md, the docs and the code, and its report lands back in yours. Five agents cost about five sessions. The rule is the *maximum principle*: the best result for the least usage. So:
+   - **By default you work inline**, one task after another, in this session: read only what the task needs, edit, run the tests it reaches, commit. Most rounds, including feature rounds and bug hunts, are done this way.
+   - **Use an agent only when all of these hold:** the work is large (hours, not minutes), it splits into parts that touch different files, each part can be briefed in under a page without the chat's history, and running them in parallel saves the owner real time. Two or three agents at most; never more than the parts that are truly independent.
+   - **Cheap jobs get a cheap model:** reading saved pages, screenshots or docs to write notes, a mechanical edit with a complete spec, or a search goes to a smaller model (`model: "sonnet"`, or `"haiku"` for pure extraction), read-only, with no worktree. Judgment, design and multi-file code take the strongest model.
+   - **Never delegate** a lookup you can do in a few tool calls, a review you could do by reading the diff, or work whose brief would need the conversation's history.
+   - **Hand over files, not pastes:** a brief or a report that is long goes in a file; ask for short reports (what changed, the commits, what is left). Everything an agent prints stays in your context.
+   - **An agent's "done" is a claim, not evidence:** check its diff and its tests before you merge.
+   - When agents do run: split by files (`references/agent-brief.md`), copy the owner's screenshots to `scratchpad/<round>/owner/` with a written description, send mid-round feedback to the running agent with SendMessage, and resume a stopped agent rather than starting a new one.
 4. **Testing** follows CLAUDE.md's "Verify before claiming done" and "Parallel agents". The owner repeats it: agents never run the full suite; you run it once on the merged result. Beyond that:
    - Never run two suites at once. Check `ps` before starting one, and never `pkill` with a pattern that matches your own command.
    - **Flaky tests:** a test that fails only under load and passes alone gets made robust (e.g. a longer wait on engraving), and you say so.
 5. **Commits:** one proper commit per finished task. The message says what changed and why and ends with the session's attribution lines. Prettier never runs on CLAUDE.md.
 6. **Merge and push:** once the merged suite and the build are green, update the docs (see below), then run `git push -u origin <branch> && git push origin HEAD:main`. Remove finished worktrees and their branches.
-7. **Context:** keep it under about 300k tokens. Delegate file-heavy reading to agents and summarise.
+7. **Context:** keep it under about 300k tokens. Read the part of a file you need (offset and limit, grep), never whole long files; keep tool output short (filter test and build output to the summary lines). When reading a large batch of pages or images is unavoidable, one cheap read-only agent writes notes to a file.
 8. **Data and content:**
    - **Transcriptions:** a transcribed score must match the source note for note. Check it again before merging.
    - **Bobrova:** material from Bobrova's books is credited to Bobrova, as is everything marked "n.b.".
    - **Music theory:** check theory content in English and Russian, and rewrite AI-sounding text plainly.
+
+## How to work well (the best practices this skill adopts)
+
+`references/practices.md` holds the practices taken from superpowers (brainstorming, plans, TDD, debugging, verification, code review) and from impeccable (design), each in a line or two, with when to call which skill. Read it once a session, before the first task.
 
 ## Reporting
 
