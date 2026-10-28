@@ -28,7 +28,8 @@ export interface LessonTrack {
 /**
  * A lesson, a journey's or a course's (ADR 0053, 0061), in one column in the middle of the screen:
  * its title with Learned in its bar, where it is (`place`), the lesson under its
- * floating bar of sections, and at its end the lesson before and the way on, which learns it.
+ * floating bar of sections, and at its end the lesson before and the way on, which learns it (on a
+ * phone, read a page at a time, the bar's Done).
  */
 export function LessonLayout({
   lesson,
@@ -46,6 +47,7 @@ export function LessonLayout({
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
+  const { learn } = useLearned(step)
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
       <ScreenHeader
@@ -56,8 +58,13 @@ export function LessonLayout({
       <nav aria-label={t('placeLabel')} className="-mt-3 text-muted-foreground print:hidden">
         {place}
       </nav>
-      <LessonView key={lesson.id} lesson={lesson} up={track.up} />
-      <LessonEnd step={step} track={track} />
+      <LessonView
+        key={lesson.id}
+        lesson={lesson}
+        up={track.up}
+        onward={{ link: track.next.link, onGo: learn }}
+        end={(paged) => <LessonEnd track={track} onGo={learn} paged={paged} />}
+      />
     </div>
   )
 }
@@ -85,13 +92,24 @@ function EndLink({ way, onGo, primary }: { way: WayLink; onGo?: () => void; prim
   )
 }
 
-/** A lesson's end: the lesson before and the way on side by side; going on learns it. */
-function LessonEnd({ step, track }: { step: StepId; track: LessonTrack }) {
-  const { learn } = useLearned(step)
+/**
+ * A lesson's end: the lesson before and the way on side by side; going on learns it. Read a page at a
+ * time, the bar's Done is the way on: the end keeps the lesson before.
+ */
+function LessonEnd({
+  track,
+  onGo,
+  paged,
+}: {
+  track: LessonTrack
+  onGo: () => void
+  paged: boolean
+}) {
+  if (paged && !track.previous) return null
   return (
     <footer className="mt-8 grid gap-3 border-t border-border pt-6 print:hidden sm:grid-cols-2">
       {track.previous ? <EndLink way={track.previous} primary={false} /> : null}
-      <EndLink way={track.next} onGo={learn} primary />
+      {paged ? null : <EndLink way={track.next} onGo={onGo} primary />}
     </footer>
   )
 }

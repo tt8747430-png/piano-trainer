@@ -73,6 +73,8 @@ export const learn: LocaleResources['learn'] = {
   lessonBar: 'Урок',
   variants: 'Варианты',
   takeaway: 'Коротко',
+  nextPage: 'Дальше',
+  done: 'Готово',
   fingers: 'Аппликатура в гаммах',
   example: {
     over: 'На аккордах «{{piece}}»',

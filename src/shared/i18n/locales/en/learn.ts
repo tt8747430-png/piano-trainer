@@ -76,6 +76,9 @@ export const learn = {
   // A lesson's example in versions, the chips that choose one; a section's sentence at its end.
   variants: 'Versions',
   takeaway: 'In short',
+  // A lesson read a page at a time on a phone: on to its next page, and on past its last.
+  nextPage: 'Next',
+  done: 'Done',
   fingers: 'Fingers on the scales',
   // A lesson's example: the piece a pattern plays over, where it opens, and how to hear it.
   example: {

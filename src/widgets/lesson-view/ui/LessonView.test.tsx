@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-router'
 import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { lessonById, type Lesson } from '@/entities/lesson'
 import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { createFakeAudio } from '@/shared/api/audio'
@@ -17,7 +17,7 @@ import { C_MAJOR, note } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from '@/shared/lib/services'
 import { FloatingHost } from '@/shared/ui'
-import { LessonView, type UpLink } from './LessonView'
+import { LessonView, type Onward, type UpLink } from './LessonView'
 
 /** What the lesson must show, else the test fails here rather than searching the whole page. */
 function found<T>(value: T | null | undefined, what: string): T {
@@ -32,6 +32,7 @@ function firstLesson(): Lesson {
 }
 
 const UP: UpLink = { link: <Link to="/" />, label: 'Back to the journey', title: 'Foundations' }
+const ONWARD: Onward = { link: <Link to="/" />, onGo: () => {} }
 
 /** A lesson as the one route of a memory router, so its links build their addresses. */
 async function renderLesson(lesson: Lesson = firstLesson()) {
@@ -42,7 +43,9 @@ async function renderLesson(lesson: Lesson = firstLesson()) {
     finePointer: false,
   })
   const router = createRouter({
-    routeTree: createRootRoute({ component: () => <LessonView lesson={lesson} up={UP} /> }),
+    routeTree: createRootRoute({
+      component: () => <LessonView lesson={lesson} up={UP} onward={ONWARD} />,
+    }),
     history: createMemoryHistory(),
   })
   render(
@@ -110,6 +113,46 @@ describe('LessonView', () => {
       'href',
       expect.stringMatching(/#section-2$/),
     )
+  })
+
+  it('reads a page at a time on a phone: back, the pages’ dots, Next, and Done on the last', async () => {
+    // A phone held upright: the paged lesson's query matches.
+    vi.stubGlobal('matchMedia', (media: string) => ({
+      media,
+      matches: media.includes('max-width: 639.98px'),
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    }))
+    const user = userEvent.setup()
+    await renderLesson()
+    expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
+      'Reading chord symbols',
+    ])
+    const bar = screen.getByRole('toolbar', { name: 'Lesson' })
+    expect(within(bar).getByRole('button', { name: 'Previous section' })).toBeDisabled()
+    expect(
+      within(bar).getByRole('button', { name: 'In this lesson: section 1 of 10' }),
+    ).toBeVisible()
+    await user.click(within(bar).getByRole('link', { name: 'Next' }))
+    expect(
+      await screen.findByRole('heading', { level: 2, name: 'Numbers and 7ths' }),
+    ).toBeInTheDocument()
+    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(1)
+    expect(within(bar).getByRole('link', { name: 'Previous section' })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/#section-1$/),
+    )
+    // The last page goes on.
+    await user.click(within(bar).getByRole('button', { name: 'In this lesson: section 2 of 10' }))
+    const sheet = await screen.findByRole('dialog', { name: 'In this lesson' })
+    await user.click(within(sheet).getByRole('link', { name: 'Try it' }))
+    expect(await screen.findByRole('heading', { level: 2, name: 'Try it' })).toBeInTheDocument()
+    expect(within(bar).queryByRole('link', { name: 'Next' })).not.toBeInTheDocument()
+    expect(within(bar).getByRole('link', { name: 'Done' })).toHaveAttribute('href', '/')
   })
 
   it('plays a chord example and marks its tones on the keys', async () => {
