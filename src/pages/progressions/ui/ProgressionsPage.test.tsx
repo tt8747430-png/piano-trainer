@@ -1,8 +1,9 @@
 import { act, cleanup, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import type { Sound } from '@/shared/lib/schedule'
+import { loadScoreView } from '@/shared/ui'
 
 /** The row's own Play, floating at the screen's foot. */
 const playButton = () =>
@@ -34,6 +35,10 @@ const chips = (of: HTMLElement) =>
     .map((chip) => chip.textContent)
 const onsets = (sounds: readonly Sound[] = []) =>
   new Set(sounds.flatMap((sound) => (sound.kind === 'note' ? [sound.at] : []))).size
+
+// The first renderApp of a worker imports this page and the score's engraver; under a full suite's
+// load that alone took most of a test's 15 s, so it happens once here, with time of its own.
+beforeAll(() => Promise.all([loadScoreView(), import('@/pages/progressions')]), 30_000)
 
 describe('Practice → Progressions', () => {
   it('writes a progression’s chords in the key, each over its numeral', async () => {
