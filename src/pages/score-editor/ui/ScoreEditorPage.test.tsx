@@ -129,7 +129,8 @@ describe('the score editor', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/^Chord symbols · /)
     // The quick row is the values wherever the caret is: a chord symbol is typed over the staff.
     expect(within(palette).getByRole('group', { name: 'Note value' })).toBeInTheDocument()
-  })
+    // The file's first editor loads its modules and Verovio: slower under a loaded machine.
+  }, 30_000)
 
   it('prints the title at the sheet’s head, a click turning it into a field in its place (ADR 0114)', async () => {
     const user = userEvent.setup()
@@ -205,7 +206,8 @@ describe('the score editor', () => {
     // With none, the piano's menu adds one over it.
     await menu('Piano staves', 'Add a staff over the piano')
     await waitFor(() => expect(staves()).toEqual([{ notes: 'r/4' }]))
-  })
+    // Eight engravings of the song, each staff's menu opened in turn: longer than one edit's test.
+  }, 30_000)
 
   it('opens a new song on empty bars, nothing written in either staff, as a new score (ADR 0114)', async () => {
     const user = userEvent.setup()

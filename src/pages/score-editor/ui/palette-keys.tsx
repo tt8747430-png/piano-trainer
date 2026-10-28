@@ -134,7 +134,7 @@ export function KeyGrid({ label, children }: { label?: string | undefined; child
     )
   if (form === 'list')
     return (
-      <div {...group} className="grid grid-cols-2 gap-1.5">
+      <div {...group} className="grid grid-cols-1 gap-1.5 min-[360px]:grid-cols-2">
         {children}
       </div>
     )
@@ -152,10 +152,13 @@ function Face({ label, children }: { label: string; children: ReactNode }) {
   if (usePaletteForm() !== 'list') return children
   return (
     <>
-      <span aria-hidden className="grid size-8 shrink-0 place-items-center [&_svg]:size-6">
+      <span
+        aria-hidden
+        className="flex h-8 min-w-8 shrink-0 items-center justify-center [&_svg]:size-6"
+      >
         {children}
       </span>
-      <span aria-hidden className="min-w-0 flex-1 break-words">
+      <span aria-hidden className="min-w-0 flex-1 text-balance">
         {label}
       </span>
     </>
@@ -244,7 +247,7 @@ export function SignTile({
         {children}
       </span>
       {form === 'list' ? (
-        <span aria-hidden className="min-w-0 flex-1 break-words">
+        <span aria-hidden className="min-w-0 flex-1 text-balance">
           {name}
         </span>
       ) : null}
