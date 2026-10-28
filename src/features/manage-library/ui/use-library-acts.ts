@@ -125,9 +125,15 @@ export function useLibraryActs() {
         undo(() => setFavourites(store, [id], !on)),
       )
     },
+    /** Songs' ♡ set, counted, with Undo, which turns back only those it changed. */
     favourite: (ids: readonly PieceId[], on: boolean) => {
+      const was = store.getState().favourites
+      const changed = ids.filter((id) => was.includes(id) !== on)
       setFavourites(store, ids, on)
-      say(t(on ? 'library.favourited' : 'library.unfavourited', { count: ids.length }))
+      say(
+        t(on ? 'library.favourited' : 'library.unfavourited', { count: ids.length }),
+        undo(() => setFavourites(store, changed, !on)),
+      )
     },
   }
 }

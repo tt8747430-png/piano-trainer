@@ -496,6 +496,21 @@ describe('Songs: Select (ADR 0106)', () => {
     expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toEqual({ folder: null, index: 0 })
   })
 
+  it('favourites the songs chosen, its toast’s Undo taking back only what it changed', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs/folders/hymns', {
+      storage: saved({ library: { favourites: ['amazing'] } }),
+    })
+    await user.click(await screen.findByRole('button', { name: 'Select' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
+    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    await user.click(within(bar).getByRole('button', { name: 'Favourite' }))
+    expect(libraryStore.getState().favourites).toEqual(['silent', 'amazing'])
+    await user.click(await screen.findByRole('button', { name: 'Undo' }))
+    await waitFor(() => expect(libraryStore.getState().favourites).toEqual(['amazing']))
+  })
+
   it('chooses every row by Select all, and starts with a row chosen by a long press', async () => {
     const user = userEvent.setup()
     await renderApp('/songs/folders/hymns')
