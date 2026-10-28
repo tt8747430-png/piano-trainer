@@ -76,8 +76,8 @@ const understanding: Lesson = {
         {
           kind: 'text',
           text: {
-            en: 'When the root is a black key, the thumb takes the first white key. In A♭ major that is C, so the right hand plays 4-1-2-4: the A♭ takes the finger it takes an octave up. F♯ major has no white key: 1-2-3-1-2-3-5 from F♯.',
-            ru: 'Если тоника на чёрной клавише, большой палец берёт первую белую. В ля-бемоль мажоре это до, и правая рука играет 4-1-2-4: ля-бемоль берёт тот же палец, что и октавой выше. В фа-диез мажоре белых нет: 1-2-3-1-2-3-5 от фа-диеза.',
+            en: 'With a black root, the thumb takes the first white key: C in A♭ major, so the right hand plays 4-1-2-4. F♯ major has no white key: 1-2-3-1-2-3-5.',
+            ru: 'Если тоника на чёрной клавише, большой палец берёт первую белую: до в ля-бемоль мажоре, и правая рука играет 4-1-2-4. В фа-диез мажоре белых нет: 1-2-3-1-2-3-5.',
           },
         },
         { kind: 'chords', symbols: ['A♭'] },
