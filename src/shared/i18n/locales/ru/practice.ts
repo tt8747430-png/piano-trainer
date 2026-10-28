@@ -178,6 +178,7 @@ export const practice: LocaleResources['practice'] = {
       classical: 'Классика',
       soul: 'R&B и соул',
       gospel: 'Госпел',
+      modal: 'Модальные',
       theory: 'Теория',
     },
   },

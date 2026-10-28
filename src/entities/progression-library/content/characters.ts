@@ -114,4 +114,57 @@ export const CHARACTERS: Readonly<Record<ProgressionId, LocalText>> = {
     'A tour of the circle, then home through the borrowed',
     'По кругу, а домой через заимствованные',
   ),
+  picardy: line(
+    'Minor all the way, then a sudden bright ending',
+    'Весь путь в миноре и внезапно светлый конец',
+  ),
+  amen: line('A soft, bittersweet amen', 'Мягкое, горьковато-сладкое «аминь»'),
+  'phrygian-half': line(
+    'Old and grave, it stops on a question',
+    'Старинная и строгая, останавливается на вопросе',
+  ),
+  neapolitan: line('Dark and dramatic, a step off the path', 'Тёмная и драматичная, шаг в сторону'),
+  lament: line('Grieving, the bass sinking step by step', 'Скорбная, бас опускается шаг за шагом'),
+  'line-cliche': line('Brooding, one voice sliding down', 'Задумчивая, один голос сползает вниз'),
+  backdoor: line(
+    'Warm and sly, home by the side door',
+    'Тёплая и хитрая, домой через боковую дверь',
+  ),
+  coltrane: line(
+    'Dazzling, three keys in a few bars',
+    'Ослепительная, три тональности за несколько тактов',
+  ),
+  ragtime: line(
+    'Jaunty, each chord pulling to the next',
+    'Задорная, каждый аккорд тянет к следующему',
+  ),
+  'diminished-turnaround': line(
+    'Churchy and smooth, the bass climbing',
+    'Церковный и плавный, бас поднимается',
+  ),
+  'quick-change': line(
+    'Restless from the start, the classic blues',
+    'Беспокойный с первых тактов, классический блюз',
+  ),
+  'minor-blues': line('Dark and smoky, the blues in minor', 'Тёмный и дымный, блюз в миноре'),
+  'eight-bar': line(
+    'Short and plain, the old folk blues',
+    'Короткий и простой, старый народный блюз',
+  ),
+  'dorian-vamp': line(
+    'Cool and funky, minor with a lift',
+    'Прохладный и фанковый, минор с подъёмом',
+  ),
+  'mixolydian-vamp': line(
+    'Bright but earthy, a rock anthem’s swagger',
+    'Светлый, но приземлённый, размах рок-гимна',
+  ),
+  'lydian-vamp': line(
+    'Dreamy and floating, film-score wonder',
+    'Мечтательный и парящий, чудо из кино',
+  ),
+  'phrygian-vamp': line(
+    'Tense and Spanish, a semitone away',
+    'Напряжённый и испанский, на полутон в сторону',
+  ),
 }

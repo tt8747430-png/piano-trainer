@@ -348,3 +348,5 @@ export {
   parallelKey,
   type DegreeName,
 } from './key-relations'
+export { CHURCH_MODES, modeKey, readInMode, type ChurchMode } from './modal'
+export { nashvilleNumber } from './nashville'

@@ -184,6 +184,7 @@ export const practice = {
       classical: 'Classical',
       soul: 'R&B / Soul',
       gospel: 'Gospel',
+      modal: 'Modal',
       theory: 'Theory',
     },
   },

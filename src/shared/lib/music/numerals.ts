@@ -11,7 +11,8 @@ import { spellAbove } from './interval'
 import type { Key } from './key'
 import { letterIndex, pitchClassOf, plainRoot, type SpelledNote } from './note'
 import { pitchClass } from './pitch'
-import { keyScale, spellScale } from './scale'
+import type { ChurchMode } from './modal'
+import { keyScale, spellScale, type ScaleKind } from './scale'
 import {
   ROMAN_NUMERALS,
   scaleChordAt,
@@ -256,9 +257,14 @@ const leadingTone = (numeral: Numeral): boolean =>
  * on the leading tone, and its diminished vi from melodic minor, on the raised 6th), a flat in either from the major scale (A minor's ♭VI is F, not F♭: its own VI,
  * grown as the key's).
  */
-export function numeralChord(numeral: Numeral, key: Key, size: ChordSize): Chord {
+export function numeralChord(
+  numeral: Numeral,
+  key: Key,
+  size: ChordSize,
+  mode?: ChurchMode,
+): Chord {
   const { of, bass, ...own } = numeral
-  const chord = of ? ownChord(own, appliedKey(of, key), size) : ownChord(own, key, size)
+  const chord = of ? ownChord(own, appliedKey(of, key), size) : ownChord(own, key, size, mode)
   const tone = bass && spellChord(chord.root, chord.quality).find((each) => each.role === bass)
   return tone ? { ...chord, bass: tone.note } : chord
 }
@@ -284,17 +290,22 @@ function appliedKey(of: AppliedDegree, key: Key): Key {
   return { tonic, minor: of.minor }
 }
 
-/** A numeral's chord in the key it is written in. */
-function ownChord(numeral: Numeral, key: Key, size: ChordSize): Chord {
-  const kind = keyScale(key)
-  const scale = spellScale(key.tonic, kind)
+/**
+ * A numeral's chord in the key it is written in; in a church mode (`modeKey`'s key), its root read
+ * against the key and its own chord and growth the mode's (Mixolydian's I grows to a dominant 7th).
+ */
+function ownChord(numeral: Numeral, key: Key, size: ChordSize, mode?: ChurchMode): Chord {
+  const keyKind = keyScale(key)
+  const kind: ScaleKind = mode ?? keyKind
+  const written = spellScale(key.tonic, keyKind)
+  const scale = mode ? spellScale(key.tonic, mode) : written
   // A flat counts from the major scale in either mode, as pop writes a minor key's ♭III ♭VI ♭VII.
-  const from = key.minor && numeral.shift < 0 ? spellScale(key.tonic, 'major') : scale
+  const from = key.minor && numeral.shift < 0 ? spellScale(key.tonic, 'major') : written
   const tone = from[numeral.degree]
   if (!tone) throw new RangeError(`A scale has no degree ${numeral.degree}`)
   const { quality } = numeral
   // A minor key's diminished vii is on its leading tone, as harmonic minor has it (A minor's G♯°,
-  // F♯ minor's E♯°), and its vi° on its raised 6th (F♯°), spelled as the key spells it.
+  // F♯ minor's E♯°), and its vi° on its raised 6th (F♯°, Dorian's own), spelled as the key spells it.
   if (key.minor && leadingTone(numeral)) {
     const root = spellAbove(tone.note, { steps: 0, semitones: 1 })
     if (size === 'triads' || quality !== 'dim') return { root, quality }
