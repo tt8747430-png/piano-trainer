@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { chosenNotes, hasMark, type MarkChoice } from '@/features/score-editor'
-import { DYNAMICS } from '@/shared/lib/music'
+import { DYNAMICS, type Pedal } from '@/shared/lib/music'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
-import { GlyphGrid, PaletteKey } from './palette-keys'
+import type { Tool } from '../model/shortcuts'
+import { PaletteKey } from './palette-keys'
 import { usePaletteReason } from './palette-reason'
 
 /** A glyph of the music font (Noto Music), at a key's size. */
@@ -54,16 +55,19 @@ const useMarkOn = (mark: MarkChoice): boolean =>
 function MarkKey({
   mark,
   label,
+  tool,
   children,
 }: {
   mark: MarkChoice
   label: string
+  tool?: Tool
   children: ReactNode
 }) {
   const { actions } = useScoreEditorContext()
   return (
     <PaletteKey
       label={label}
+      tool={tool}
       reason={usePaletteReason()}
       pressed={useMarkOn(mark)}
       disabled={!useNotesChosen()}
@@ -74,11 +78,11 @@ function MarkKey({
   )
 }
 
-/** The Articulations tab: how a note is struck, then the ornaments that decorate it and a rolled chord. */
+/** The Articulations' marks (Flat's order): how a note is struck, and held under a fermata. */
 export function ArticulationKeys() {
   const { t } = useTranslation('editor')
   return (
-    <GlyphGrid>
+    <>
       <MarkKey
         mark={{ kind: 'articulation', articulation: 'staccato' }}
         label={t('marks.staccato')}
@@ -105,10 +109,40 @@ export function ArticulationKeys() {
           𝄐
         </span>
       </MarkKey>
-      <MarkKey mark={{ kind: 'ornament', ornament: 'trill' }} label={t('marks.trill')}>
+    </>
+  )
+}
+
+/** The Ornaments (Flat's): the trill, the tremolo, the rolled chord, the mordents and the turn. */
+export function OrnamentKeys() {
+  const { t } = useTranslation('editor')
+  return (
+    <>
+      <MarkKey mark={{ kind: 'ornament', ornament: 'trill' }} label={t('marks.trill')} tool="trill">
         <span aria-hidden className={PRINTED}>
           tr
         </span>
+      </MarkKey>
+      <MarkKey mark={{ kind: 'ornament', ornament: 'tremolo' }} label={t('marks.tremolo')}>
+        {/* Flat's: a note, strokes across its stem. */}
+        <Drawn>
+          <ellipse
+            cx="9"
+            cy="18.5"
+            rx="3.6"
+            ry="2.6"
+            transform="rotate(-20 9 18.5)"
+            fill="currentColor"
+            stroke="none"
+          />
+          <path d="M12.3 18V3" strokeWidth="1.5" />
+          <path d="M8 10 L16.5 7.5 M8 14 L16.5 11.5" strokeWidth="2.25" />
+        </Drawn>
+      </MarkKey>
+      <MarkKey mark={{ kind: 'arpeggio' }} label={t('marks.arpeggio')}>
+        <Drawn>
+          <path d="M12 2 C9 4 15 6 12 8 C9 10 15 12 12 14 C9 16 15 18 12 20 M9 19 L12 22 L15 19" />
+        </Drawn>
       </MarkKey>
       <MarkKey mark={{ kind: 'ornament', ornament: 'mordent' }} label={t('marks.mordent')}>
         <Drawn>
@@ -129,25 +163,42 @@ export function ArticulationKeys() {
           𝆗
         </span>
       </MarkKey>
-      <MarkKey mark={{ kind: 'ornament', ornament: 'tremolo' }} label={t('marks.tremolo')}>
-        <Drawn>
-          <path d="M5 9 L19 5 M5 14 L19 10 M5 19 L19 15" />
-        </Drawn>
-      </MarkKey>
-      <MarkKey mark={{ kind: 'arpeggio' }} label={t('marks.arpeggio')}>
-        <Drawn>
-          <path d="M12 2 C9 4 15 6 12 8 C9 10 15 12 12 14 C9 16 15 18 12 20 M9 19 L12 22 L15 19" />
-        </Drawn>
-      </MarkKey>
-    </GlyphGrid>
+    </>
   )
+}
+
+/** The pedal's marks, drawn as printed: pressed, changed, let up. */
+const PEDALS = [
+  { pedal: 'down', glyph: '𝆮', label: 'marks.pedalDown' },
+  { pedal: 'change', glyph: '𝆯𝆮', label: 'marks.pedalChange' },
+  { pedal: 'up', glyph: '𝆯', label: 'marks.pedalUp' },
+] as const satisfies readonly { pedal: Pedal; glyph: string; label: string }[]
+
+/**
+ * The pedal (Flat's, in Dynamics): pressed under the note chosen, let up under the last of a span
+ * chosen; changed; let up.
+ */
+export function PedalKeys() {
+  const { t } = useTranslation('editor')
+  return PEDALS.map(({ pedal, glyph, label }) => (
+    <MarkKey
+      key={pedal}
+      mark={{ kind: 'pedal', pedal }}
+      label={t(label)}
+      tool={pedal === 'down' ? 'pedal' : undefined}
+    >
+      <span aria-hidden className={MUSIC}>
+        {glyph}
+      </span>
+    </MarkKey>
+  ))
 }
 
 /** The Dynamics: pianissimo to fortissimo, each set from the note it stands under. */
 export function DynamicKeys() {
   const { t } = useTranslation('editor')
   return (
-    <GlyphGrid>
+    <>
       {DYNAMICS.map((dynamic) => (
         <MarkKey key={dynamic} mark={{ kind: 'dynamic', dynamic }} label={t(`marks.${dynamic}`)}>
           <span aria-hidden className="font-serif text-xl font-bold italic leading-none">
@@ -155,6 +206,6 @@ export function DynamicKeys() {
           </span>
         </MarkKey>
       ))}
-    </GlyphGrid>
+    </>
   )
 }

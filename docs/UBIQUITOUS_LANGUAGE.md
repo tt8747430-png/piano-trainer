@@ -369,7 +369,18 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Caret**: where the next note goes, a thin line on its staff. _Avoid:_ cursor.
 - **Selection**: the notes or bars chosen, coloured. _Avoid:_ highlight.
 - **Editing mode**: Replace · Insert · Chord. _Avoid:_ input mode.
-- **Palette**: the editor's tools by category, folded to one row or opened. _Avoid:_ toolbar.
+- **Palette** (UI Tools): the editor's tools by category in Flat's order, docked as a **panel** at the sheet's left
+  (from 48rem across) or a **sheet** at its foot (a phone held upright). _Avoid:_ floating card, folded row.
+- **Panel**: the palette docked at the sheet's left, its sections an accordion, hidden whole by its «. _Avoid:_
+  sidebar (the app's navigation).
+- **Note-entry toolbar** («Ввод нот»): the everyday tools in one row (♮ ♯ ♭, Respell, the values, dots, tie, triplet,
+  rest), over the sheet beside the panel and as the sheet's quick row. _Avoid:_ palette (it is the palette's part).
+- **Compact · Expanded**: the phone's sheet with its quick row and category tabs, or with every section. _Avoid:_
+  folded, opened.
+- **List mode**: the expanded sheet's keys each with its name. _Avoid:_ labels mode.
+- **Chord wizard** («Конструктор аккорда»): the chord symbol built from a root, a chord and a bass beside its field.
+  _Avoid:_ chord builder, chord dialog.
+- **Grace note** («Форшлаг»): a note struck just before its note, taking none of its time. _Avoid:_ ornament note.
 - **Sign picker** (`SignPicker`): the one frame of the **Time signature**, **Key signature** and **Clef** pickers
   and the tempo dial: a sheet on a phone, a popover on a laptop. _Avoid:_ dialog, modal.
 - **Sign tile**: a sign drawn on a staff with its name. _Avoid:_ icon.

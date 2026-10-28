@@ -325,9 +325,14 @@ every screen's title smaller (`data-titles='small'`).
 - **A page that shows a thing on the keys** reads top to bottom: the keys pinned (top or foot, as the keyboard
   settings say), what it is with its one honey Play, its choices as fields, then its titled sections. No page splits
   into two columns of unrelated things.
-- **Floating things float.** The transport, the floating buttons, the editor's palette and the zoom buttons take no
-  layout room; the page gets scroll room under them. Over music they step aside while it is read and come back at a
-  tap.
+- **Floating things float.** The transport, the floating buttons and the zoom buttons take no layout room; the page
+  gets scroll room under them. Over music they step aside while it is read and come back at a tap.
+- **The editor's palette docks, as Flat's.** From 48rem across a panel at the sheet's left (card paper, a hairline at
+  its right, reaching the screen's edge), its sections an accordion of 48px rows parted by hairlines, and over the
+  sheet the note-entry toolbar, its keys 40px glyphs in a sand pill. On a phone held upright a sheet at the foot,
+  card paper with 24px top corners and a soft upward shade, its grab handle 40×4, its category tabs glyphs in a sand
+  pill, the chosen on a card-paper thumb. Keys are square cells of a bordered table (a 12px outer radius, hairlines
+  between cells, 44px at the least); pressed, a sky glyph on a sky wash; greyed at 35%.
 - **Equal columns.** A chart's lines are grids of equal beats so bars line up down the page; a score's lines are
   justified to their share of the longest line. Layouts are named as notation apps name them: Page view, Vertical
   scroll, Panorama.

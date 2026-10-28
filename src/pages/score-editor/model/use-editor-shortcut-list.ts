@@ -1,18 +1,41 @@
 import { useTranslation } from 'react-i18next'
 import { modifierCaps, useShortcuts, useShortcutsPlatform } from '@/shared/lib/shortcuts'
+import { toolCaps, type Tool } from './shortcuts'
 
 /**
  * The score editor's keys, listed in the shortcuts' sheet: `shortcutOf` reads them, layer by layer,
- * so here they are only named, with the caps this keyboard prints.
+ * so here they are only named, with the caps this keyboard prints; the tools' from the table their
+ * tooltips print too (`TOOL_SHORTCUTS`).
  */
 export function useEditorShortcutList(): void {
   const { t } = useTranslation('editor')
-  const { mod, alt, shift } = modifierCaps(useShortcutsPlatform())
+  const caps = modifierCaps(useShortcutsPlatform())
+  const { mod, alt, shift } = caps
+  const keys = (...tools: Tool[]) =>
+    tools.flatMap((tool, i) => {
+      const each = toolCaps(tool, caps)
+      // The modifiers once, before the first: ⇧ < >.
+      return i === 0 ? each : each.slice(-1)
+    })
   useShortcuts(t('shortcuts.group'), [
     { label: t('shortcuts.value'), shown: ['1', '–', '6'] },
-    { label: t('shortcuts.dot'), shown: ['.'] },
-    { label: t('shortcuts.rest'), shown: ['0'] },
-    { label: t('shortcuts.mode'), shown: ['I'] },
+    { label: t('shortcuts.dot'), shown: keys('dot') },
+    { label: t('shortcuts.rest'), shown: keys('rest') },
+    { label: t('shortcuts.grace'), shown: keys('grace') },
+    { label: t('shortcuts.accidentals'), shown: keys('natural', 'sharp', 'flat') },
+    { label: t('shortcuts.respell'), shown: keys('respell') },
+    { label: t('shortcuts.tie'), shown: keys('tie') },
+    { label: t('shortcuts.triplet'), shown: keys('triplet') },
+    { label: t('shortcuts.mode'), shown: keys('mode') },
+    { label: t('shortcuts.slur'), shown: keys('slur') },
+    { label: t('shortcuts.hairpins'), shown: keys('cresc', 'dim') },
+    { label: t('shortcuts.octaveLines'), shown: keys('8va', '8vb') },
+    { label: t('shortcuts.trill'), shown: keys('trill') },
+    { label: t('shortcuts.pedal'), shown: keys('pedal') },
+    { label: t('shortcuts.barAfter'), shown: keys('barAfter') },
+    { label: t('shortcuts.barDelete'), shown: keys('barDelete') },
+    { label: t('shortcuts.newLine'), shown: keys('newLine') },
+    { label: t('shortcuts.repeats'), shown: keys('repeatStart', 'repeatEnd') },
     { label: t('shortcuts.step'), shown: ['←', '→'] },
     { label: t('shortcuts.bar'), shown: [alt, '←', '→'] },
     { label: t('shortcuts.line'), shown: ['Enter'] },
@@ -27,9 +50,9 @@ export function useEditorShortcutList(): void {
     { label: t('shortcuts.semitone'), shown: [shift, '↑', '↓'] },
     { label: t('shortcuts.octave'), shown: [mod, '↑', '↓'] },
     { label: t('shortcuts.delete'), shown: ['Backspace'] },
-    { label: t('shortcuts.chord'), shown: [mod, 'K'] },
-    { label: t('shortcuts.lyrics'), shown: [mod, 'L'] },
-    { label: t('shortcuts.fingering'), shown: [shift, 'F'] },
+    { label: t('shortcuts.chord'), shown: keys('chord') },
+    { label: t('shortcuts.lyrics'), shown: keys('lyrics') },
+    { label: t('shortcuts.fingering'), shown: keys('fingering') },
     { label: t('shortcuts.undo'), shown: [mod, 'Z'] },
     { label: t('shortcuts.redo'), shown: [shift, mod, 'Z'] },
     { label: t('shortcuts.clip'), shown: [mod, 'C', 'X', 'V'] },

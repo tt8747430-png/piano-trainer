@@ -118,7 +118,7 @@ describe('createSettingsStore', () => {
       },
       recorder: { click: false, tune: true },
       sidebar: 'collapsed',
-      paletteFolded: { beside: true, foot: false },
+      paletteFolded: { panel: true, sheet: false },
       midi: {
         input: false,
         device: 'Piano',
@@ -202,8 +202,8 @@ describe('createSettingsStore', () => {
   it('opens a sidebar saved as anything but open or collapsed', () => {
     expect(restored({ sidebar: 'wide' }).sidebar).toBe('open')
     expect(restored({ paletteFolded: true }).paletteFolded).toEqual({})
-    expect(restored({ paletteFolded: { beside: 'yes', foot: false } }).paletteFolded).toEqual({
-      foot: false,
+    expect(restored({ paletteFolded: { panel: 'yes', sheet: false } }).paletteFolded).toEqual({
+      sheet: false,
     })
   })
 
@@ -268,7 +268,7 @@ describe('createSettingsStore', () => {
     expect(restored({ sound: 'loud' }).sound).toEqual(DEFAULT_SOUND)
   })
 
-  it('keeps no side for the palette: beside the sheet it stands at its right (ADR 0114)', () => {
+  it('keeps no side for the palette: its panel stands at the sheet’s left (ADR 0114)', () => {
     expect(restored({ paletteSide: 'left' })).not.toHaveProperty('paletteSide')
   })
 

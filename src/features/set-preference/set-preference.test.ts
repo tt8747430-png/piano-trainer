@@ -50,10 +50,10 @@ describe('set-preference', () => {
 
   it('setPaletteFolded folds the editor’s palette where it stands, and saves it', () => {
     const { storage, store } = setUp()
-    setPaletteFolded(store, 'beside', true)
-    expect(store.getState().paletteFolded).toEqual({ beside: true })
-    setPaletteFolded(store, 'foot', false)
-    expect(saved(storage).paletteFolded).toEqual({ beside: true, foot: false })
+    setPaletteFolded(store, 'panel', true)
+    expect(store.getState().paletteFolded).toEqual({ panel: true })
+    setPaletteFolded(store, 'sheet', false)
+    expect(saved(storage).paletteFolded).toEqual({ panel: true, sheet: false })
   })
 
   it('setSidebar collapses the sidebar and saves it', () => {
