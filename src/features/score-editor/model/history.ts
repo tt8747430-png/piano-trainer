@@ -7,7 +7,12 @@ import type { EditorState, Snapshot } from './state'
 /** How many steps undo goes back. */
 const HISTORY = 200
 
-const snapshotOf = ({ draft, caret, layer }: Snapshot): Snapshot => ({ draft, caret, layer })
+const snapshotOf = ({ draft, caret, layer, grace }: Snapshot): Snapshot => ({
+  draft,
+  caret,
+  layer,
+  grace,
+})
 
 /**
  * A draft changed: the state before goes on the undo list (unless the change joins the last one), the
@@ -36,7 +41,10 @@ export function commit(
   }
 }
 
-/** The step before brought back (undo), or the one undone last (redo), with its caret and layer. */
+/**
+ * The step before brought back (undo), or the one undone last (redo), with its caret, layer and
+ * whether its grace notes were chosen.
+ */
 export function undone(state: EditorState, direction: 'undo' | 'redo'): EditorState {
   const from = direction === 'undo' ? state.past : state.future
   const back = from.at(direction === 'undo' ? -1 : 0)

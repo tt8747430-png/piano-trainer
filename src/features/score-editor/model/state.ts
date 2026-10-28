@@ -17,6 +17,12 @@ export interface Snapshot {
   readonly draft: Draft
   readonly caret: Tick
   readonly layer: Layer
+  /**
+   * The grace notes before the notes chosen are what the pitch edits act on (Flat's): ↑ ↓, Shift a
+   * semitone, the accidentals, Respell, a key played, Delete. Any other action goes back to the notes.
+   * Undo brings it back with the step, so a grace note's edit undone leaves the grace note chosen.
+   */
+  readonly grace: boolean
 }
 
 /** Ticks from `from` up to, not including, `to`: a note's (or chord's, or empty place's) time. */
@@ -63,11 +69,6 @@ export interface EditorState extends Snapshot {
   readonly selection: Selection | null
   /** One note of the chord at the caret chosen alone, by its key (ADR 0096): else the whole chord. */
   readonly chordNote: Midi | null
-  /**
-   * The grace notes before the notes chosen are what the pitch edits act on (Flat's): ↑ ↓, Shift a
-   * semitone, the accidentals, Respell, a key played, Delete. Any other action goes back to the notes.
-   */
-  readonly grace: boolean
   readonly struck: Struck | null
   readonly clip: Clip | null
   readonly past: readonly Snapshot[]
