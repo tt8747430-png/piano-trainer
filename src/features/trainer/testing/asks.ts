@@ -11,11 +11,11 @@ export const scripted =
     return value
   }
 
-/** Skills on any root, as My gaps, the Check and Custom ask them. */
+/** Skills on any root, as My gaps and the Check ask them. */
 export const skillAsks = (
   skills: SkillId[],
   extra: Partial<Omit<Extract<Asks, { kind: 'skills' }>, 'kind' | 'skills'>> = {},
-): Asks => ({ kind: 'skills', chords: 'build-chord', skills, ...extra })
+): Asks => ({ kind: 'skills', skills, ...extra })
 
 /** The skill a round answers on, if it rates one. */
 export const skillAsked = (question: Question): SkillId | undefined =>

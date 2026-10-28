@@ -22,7 +22,8 @@ export function AnsweredChoices({
 }: {
   choices: readonly { value: string; label: string }[]
   answer: string
-  chosen: string
+  /** The option chosen; none where the answer was shown unanswered (its time ran out). */
+  chosen: string | null
 }) {
   const { t } = useTranslation('quiz')
   const markOf = (value: string): Mark =>

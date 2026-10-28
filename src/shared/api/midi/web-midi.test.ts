@@ -4,6 +4,7 @@ import type { MidiStatus, NoteEvent, PedalEvent } from './types'
 import { createWebMidi, hasWebMidi } from './web-midi'
 
 class FakeInput {
+  manufacturer: string | null = null
   onmidimessage: ((event: { data: Uint8Array; timeStamp: number }) => void) | null = null
   state: 'connected' | 'disconnected' = 'connected'
   constructor(
@@ -18,6 +19,7 @@ class FakeInput {
 
 /** A keyboard's speaker: what it is sent, with when. */
 class FakeOutput {
+  manufacturer: string | null = null
   state: 'connected' | 'disconnected' = 'connected'
   readonly sent: { data: number[]; at: number | undefined }[] = []
   constructor(
@@ -58,6 +60,65 @@ const withAccess = (access: FakeAccess) =>
   createWebMidi(async () => access as unknown as MIDIAccess)
 
 describe('createWebMidi', () => {
+  it('lists each device once by its name, its maker, and whether it sends keys or has a speaker', async () => {
+    const piano = new FakeInput('a', 'Piano')
+    piano.manufacturer = 'Yamaha'
+    const pianoOut = new FakeOutput('b', 'Piano')
+    const synth = new FakeOutput('c', 'Synth')
+    const access = new FakeAccess(piano, pianoOut, synth)
+    const midi = withAccess(access)
+    expect(midi.devices()).toEqual([])
+    await midi.connect()
+    const devices = midi.devices()
+    expect(devices).toEqual([
+      { name: 'Piano', manufacturer: 'Yamaha', input: true, output: true },
+      { name: 'Synth', manufacturer: '', input: false, output: true },
+    ])
+    expect(midi.devices()).toBe(devices)
+    access.unplug(piano)
+    expect(midi.devices()).toEqual([
+      { name: 'Piano', manufacturer: '', input: false, output: true },
+      { name: 'Synth', manufacturer: '', input: false, output: true },
+    ])
+  })
+
+  it('logs what every keyboard sends, the ones not heard too, and clears its log', async () => {
+    const piano = new FakeInput('a', 'Piano')
+    const pads = new FakeInput('b', 'Pads')
+    const midi = withAccess(new FakeAccess(piano, pads))
+    await midi.connect()
+    midi.configure({ device: 'Piano', octaveShift: 0, reversedPedal: false })
+    const heard = vi.fn()
+    midi.onLog(heard)
+    piano.send([0x90, 60, 100], 5)
+    pads.send([0xf8], 6)
+    expect(midi.log()).toEqual([
+      { id: 1, device: 'Piano', data: [0x90, 60, 100], time: 5 },
+      { id: 2, device: 'Pads', data: [0xf8], time: 6 },
+    ])
+    expect(heard).toHaveBeenCalledTimes(2)
+    midi.clearLog()
+    expect(midi.log()).toEqual([])
+  })
+
+  it('stops listening when MIDI input is turned off, letting go of what was held', async () => {
+    const piano = new FakeInput('a', 'Piano')
+    const midi = withAccess(new FakeAccess(piano))
+    await midi.connect()
+    const notes: NoteEvent[] = []
+    midi.onNote((event) => notes.push(event))
+    piano.send([0x90, 60, 100], 1)
+    midi.disconnect()
+    expect(midi.current()).toEqual({ state: 'off' })
+    expect(notes.at(-1)).toMatchObject({ midi: 60, on: false })
+    piano.send([0x90, 62, 100], 2)
+    expect(notes).toHaveLength(2)
+    expect(midi.log()).toHaveLength(1)
+    expect(await midi.connect()).toEqual({ state: 'connected', devices: ['Piano'] })
+    piano.send([0x90, 62, 100], 3)
+    expect(notes).toHaveLength(3)
+  })
+
   it('connects to every keyboard plugged in', async () => {
     const midi = withAccess(new FakeAccess(new FakeInput('a', 'Piano'), new FakeInput('b', 'Pads')))
     expect(await midi.connect()).toEqual({ state: 'connected', devices: ['Piano', 'Pads'] })

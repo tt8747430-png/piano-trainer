@@ -13,7 +13,7 @@ describe('checkPlan', () => {
     expect(plan?.skills).toEqual(skillsOfPiece(bz5))
     expect(plan?.length).toBe(Math.max(6, chords.length))
     expect(plan?.marks).toBeNull()
-    expect(plan?.asks).toEqual({ kind: 'chords', mode: 'build-chord', chords, ordered: true })
+    expect(plan?.asks).toEqual({ kind: 'chords', drill: 'entry', chords, ordered: true })
   })
 
   it('asks every quality of a family in turn, as often as each still needs to be Known', () => {

@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { selectMidi, useSettings } from '@/entities/settings'
 import { Button } from '@/shared/ui/primitives/button'
 import { Spinner } from '@/shared/ui/primitives/spinner'
-import { isMidiConnected, useMidiConnection, type MidiConnection } from '../use-midi-connection'
+import { isMidiConnected, type MidiConnection } from '../use-midi-connection'
+import { useMidiInput } from '../use-midi-input'
 
 /** The connection in a line: the keyboard chosen by its name (connected, or not), else every one connected. */
 function statusLine(
@@ -23,13 +24,15 @@ function statusLine(
       return t('midi.denied')
     case 'no-device':
       return t('midi.noDevice')
+    case 'off':
+      return t('midi.off')
   }
 }
 
-/** The keyboard's status in one line, and the one action it needs. */
+/** The keyboard's status in one line, and the one action it needs: connecting turns MIDI input on. */
 export function MidiControl() {
   const { t } = useTranslation('common')
-  const { connection, connect } = useMidiConnection()
+  const { connection, turn } = useMidiInput()
   const device = useSettings((state) => selectMidi(state).device)
   const line = statusLine(connection, device, t)
   return (
@@ -40,7 +43,7 @@ export function MidiControl() {
       {connection.kind === 'unsupported' || isMidiConnected(connection) ? null : (
         <Button
           variant="soft"
-          onClick={connect}
+          onClick={() => turn(true)}
           disabled={connection.kind === 'connecting'}
           className="self-start"
         >

@@ -1,4 +1,4 @@
-import type { ChordQuality, ReferenceInterval, ScaleKind } from '@/shared/lib/music'
+import type { ReferenceInterval, ScaleKind } from '@/shared/lib/music'
 import type { IntervalWay } from '@/shared/lib/schedule'
 
 // The ear trainers' ladders (The Ultimate Piano's ear training).
@@ -42,37 +42,6 @@ export const INTERVAL_LEVEL: Readonly<
   down: { intervals: SIMPLE_INTERVALS, ways: ['down'] },
   together: { intervals: SIMPLE_INTERVALS, ways: ['together'] },
   compound: { intervals: COMPOUND_INTERVALS, ways: ['up', 'down', 'together'] },
-}
-
-/** The chords by ear: the four triads and the four 7ths. */
-export const EAR_QUALITIES: readonly ChordQuality[] = [
-  'maj',
-  'min',
-  'dim',
-  'aug',
-  'maj7',
-  'm7',
-  'd7',
-  'o7',
-]
-
-export const QUALITY_LEVELS = [
-  'major-minor',
-  'diminished-augmented',
-  'sevenths',
-  'all',
-  'arpeggio',
-] as const
-export type QualityLevel = (typeof QUALITY_LEVELS)[number]
-
-export const QUALITY_LEVEL: Readonly<
-  Record<QualityLevel, { readonly qualities: readonly ChordQuality[]; readonly arpeggio: boolean }>
-> = {
-  'major-minor': { qualities: ['maj', 'min'], arpeggio: false },
-  'diminished-augmented': { qualities: ['maj', 'min', 'dim', 'aug'], arpeggio: false },
-  sevenths: { qualities: ['maj7', 'm7', 'd7', 'o7'], arpeggio: false },
-  all: { qualities: EAR_QUALITIES, arpeggio: false },
-  arpeggio: { qualities: EAR_QUALITIES, arpeggio: true },
 }
 
 /** The scales by ear: major, natural and harmonic minor, and the modes. */

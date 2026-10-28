@@ -102,12 +102,12 @@ const buildMinorChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'Build chords in the Quiz', ru: 'Построение аккордов в тестах' },
-          target: { opens: 'quiz', trainer: 'build-chord' },
+          target: { opens: 'quiz', trainer: 'chords', drill: 'entry' },
         },
         {
           kind: 'link',
           title: { en: 'Major or minor by ear', ru: 'Мажор или минор на слух' },
-          target: { opens: 'quiz', trainer: 'chords-by-ear' },
+          target: { opens: 'quiz', trainer: 'chords', drill: 'ear' },
         },
       ],
     },

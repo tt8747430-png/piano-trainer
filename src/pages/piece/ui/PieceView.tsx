@@ -1,5 +1,15 @@
 import { Link, useNavigate, useRouter } from '@tanstack/react-router'
-import { Ellipsis, PencilLine, Play, RotateCcw, Share2, Target, Trash2 } from 'lucide-react'
+import {
+  Ellipsis,
+  FileCode,
+  FileMusic,
+  PencilLine,
+  Play,
+  RotateCcw,
+  Share2,
+  Target,
+  Trash2,
+} from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { pieceStepId } from '@/entities/step'
@@ -17,6 +27,7 @@ import { selectView } from '@/entities/views'
 import { FavouriteButton, useSongActions } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
 import { ShareSaid, useShareSong } from '@/features/share-song'
+import { useSongExport } from '@/features/song-files'
 import { OPEN_PLAINLY } from '@/shared/lib'
 import { useLocale } from '@/shared/i18n'
 import { ActionMenu, ButtonLink, RoundLink } from '@/shared/ui'
@@ -34,7 +45,8 @@ import { SectionRows } from './SectionRows'
 /**
  * A piece with a chart, in one calm column: Learn the song (ADR 0111, amended). Its bar (Back, the
  * title, then Edit the score, Learned, its ♡ (ADR 0106) and More: Move to… and Archive (Restore
- * while it is archived; a study is in no library, ADR 0106), Check these chords, Share (ADR 0107),
+ * while it is archived; a study is in no library, ADR 0106), Check these chords, Share, Export to
+ * MIDI and to MusicXML (ADR 0107),
  * and for the learner's own music its way back, asked first); under the title its byline (what else it
  * is called, Your version, its stage, who wrote it); then, first and largest, Practise, the Player as
  * it was left; its key, time and tempo as cards, the way to its key's scale under them and what is
@@ -43,7 +55,7 @@ import { SectionRows } from './SectionRows'
  * shows no keys but a chord's sheet's.
  */
 export function PieceView({ piece }: { piece: Piece }) {
-  const { t } = useTranslation('piece')
+  const { t } = useTranslation(['piece', 'player'])
   const locale = useLocale()
   const own = isOwnSongId(piece.id) ? piece.id : null
   const hasVersion = usePieces((state) => selectHasVersion(state, piece.id))
@@ -59,6 +71,7 @@ export function PieceView({ piece }: { piece: Piece }) {
   // A song's place in the library (ADR 0106); a study, on Practice, is in none.
   const library = useSongActions(piece)
   const inLibrary = piece.kind !== 'study'
+  const files = useSongExport(piece)
   const ownMusic = own
     ? ({ kind: 'song', id: own, title } as const)
     : hasVersion
@@ -101,6 +114,14 @@ export function PieceView({ piece }: { piece: Piece }) {
               ),
           },
         ]),
+    // Its files, as the Player's More exports them (ADR 0107).
+    { key: 'midi', label: t('player:exportMidi'), icon: FileMusic, onSelect: files.midi },
+    {
+      key: 'musicxml',
+      label: t('player:exportMusicXml'),
+      icon: FileCode,
+      onSelect: files.musicXml,
+    },
     ...(ownMusic
       ? [
           {

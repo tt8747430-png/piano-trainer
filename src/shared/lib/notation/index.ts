@@ -22,3 +22,4 @@ export {
 export { ticksOf, valuesOf } from './values'
 export { labelLead, lineLead, measureWidths } from './measure-widths'
 export { scoreToMei, type NextLine, type PrintedName, type StaffLabels } from './mei'
+export { barStartOf, beamPlan } from './beams'
