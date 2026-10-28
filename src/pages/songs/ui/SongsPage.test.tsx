@@ -344,6 +344,26 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     expect(piecesStore.getState().songs).toMatchObject([{ id: 'my-1', title: 'Tune' }])
   })
 
+  it('makes nothing of a file whose reading was closed before it was read', async () => {
+    const user = userEvent.setup()
+    const { piecesStore, router } = await renderApp('/songs')
+    await screen.findByRole('button', { name: 'New' })
+    const midi = standardMidiFile([
+      { events: noteEvents([{ key: 60, on: 0, off: 1920, velocity: 80 }], 0), end: 1920 },
+    ])
+    // A large file still being read.
+    let read: (bytes: ArrayBuffer) => void = () => undefined
+    const file = new File([midi], 'Tune.mid')
+    file.arrayBuffer = () => new Promise((done) => (read = done))
+    choose(file)
+    const sheet = await screen.findByRole('dialog', { name: 'Import' })
+    await user.click(within(sheet).getByRole('button', { name: 'Close' }))
+    await act(async () => read(await new Blob([midi]).arrayBuffer()))
+    await act(() => new Promise((done) => setTimeout(done, 50)))
+    expect(piecesStore.getState().songs).toEqual([])
+    expect(router.state.location.pathname).toBe('/songs')
+  })
+
   it('says what a file dropped on the library left out, then opens the song', async () => {
     const user = userEvent.setup()
     await renderApp('/songs')
