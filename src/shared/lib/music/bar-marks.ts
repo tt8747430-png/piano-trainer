@@ -108,7 +108,8 @@ export function playOrder(bars: readonly BarMarks[]): number[] {
   while (i < bars.length) {
     const bar = bars[i] ?? {}
     // Past a run of endings, the passage is done: the next repeat starts here.
-    if (bar.ending === undefined && bars[i - 1]?.ending !== undefined && !jumped) {
+    const came = order.at(-1)
+    if (bar.ending === undefined && came === i - 1 && bars[came]?.ending !== undefined && !jumped) {
       pass = 1
       start = i
     }
