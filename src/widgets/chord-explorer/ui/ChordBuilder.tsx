@@ -2,6 +2,8 @@ import { useTranslation } from 'react-i18next'
 import {
   addedOf,
   ALTERATION_SIGN,
+  BUILT_SIZES,
+  lastInversion,
   alterationsOf,
   chordInversions,
   SEVENTH_DEGREE,
@@ -26,8 +28,8 @@ import {
 import { isSuspended, takesTwoHands, type ChordView } from '../model/chord-view'
 import { RightHandFrom } from './RightHandFrom'
 
-/** A chord's quality: its 3rd and 5th. A suspension is a field of its own. */
-const QUALITIES = ['maj', 'min', 'aug', 'dim'] as const satisfies readonly Triad[]
+/** A chord's quality: its 3rd and 5th, or its 5th alone. A suspension is a field of its own. */
+const QUALITIES = ['maj', 'min', 'aug', 'dim', 'power'] as const satisfies readonly Triad[]
 /** The suspensions, each a major chord's 3rd taken by a 2nd or a 4th. */
 const SUSPENSIONS = ['sus2', 'sus4'] as const satisfies readonly Triad[]
 
@@ -103,10 +105,15 @@ export function ChordBuilder({
         <Segmented
           label={t('music:chordSize.label')}
           value={parts.size}
-          options={sizesOf(quality).map((size) => ({
+          options={BUILT_SIZES.map((size) => ({
             value: size,
             label: t(`practice:chords.builder.sizes.${SIZE_NAMES[size]}`),
             title: t(`practice:chords.builder.sizeNames.${SIZE_NAMES[size]}`),
+            reason: sizesOf(quality).includes(size)
+              ? undefined
+              : t(`practice:chords.builder.sizeNot.${quality === 'power' ? 'power' : 'stops'}`, {
+                  quality: t(`practice:chords.builder.triads.${quality}`).toLocaleLowerCase(),
+                }),
           }))}
           onChange={(size) => onChange({ size })}
         />
@@ -178,7 +185,12 @@ export function ChordBuilder({
       ) : (
         <Labelled label={t('music:inversion.label')}>
           <InversionChoice
-            notes={tones.length}
+            notes={Math.max(tones.length, 3)}
+            greyed={(inversion) =>
+              inversion > lastInversion(tones.length)
+                ? t('practice:chords.builder.powerInversion')
+                : undefined
+            }
             value={chord.inversion}
             onChange={(inversion) => onChange({ inversion })}
           />

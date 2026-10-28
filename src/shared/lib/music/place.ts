@@ -36,11 +36,15 @@ export const isInversion = (value: unknown): value is Inversion =>
 /** The explorers offer root position and at most the first three inversions. */
 const MOST_INVERSIONS = INVERSIONS.length - 1
 
+/** The fewest notes a chord is inverted from: a power chord's 5th under its root is a 4th, no chord. */
+const INVERTED_FROM = 3
+
 /**
  * The last inversion a chord of `notes` notes is shown in: one per tone after the root, at most
- * three (the 3rd, 5th or 7th in the bass).
+ * three (the 3rd, 5th or 7th in the bass); a power chord's none.
  */
-export const lastInversion = (notes: number): number => Math.min(notes - 1, MOST_INVERSIONS)
+export const lastInversion = (notes: number): number =>
+  notes < INVERTED_FROM ? 0 : Math.min(notes - 1, MOST_INVERSIONS)
 
 /** An inversion a chord of `notes` notes is shown in: the one asked, else its last. */
 export const fitInversion = (inversion: number, notes: number): number =>

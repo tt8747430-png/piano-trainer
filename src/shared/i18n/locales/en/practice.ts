@@ -50,7 +50,13 @@ export const practice = {
         aug: 'Augmented',
         sus2: 'Suspended 2nd',
         sus4: 'Suspended 4th',
+        power: 'Power (5)',
       },
+      sizeNot: {
+        stops: 'Chord dictionaries stop the {{quality}} chord before this size.',
+        power: 'A power chord has no 3rd, so nothing stacks on it.',
+      },
+      powerInversion: 'A power chord stays in root position: its 5th under the root is a 4th.',
       sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
       sizeNames: {
         triad: 'Triad',

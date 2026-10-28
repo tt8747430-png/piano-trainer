@@ -44,7 +44,14 @@ export const practice: LocaleResources['practice'] = {
         aug: 'Увеличенное',
         sus2: 'С задержанной секундой',
         sus4: 'С задержанной квартой',
+        power: 'Квинтовый (5)',
       },
+      sizeNot: {
+        stops: 'Аккорд «{{quality}}» в справочниках до этого размера не строят.',
+        power: 'В квинтовом аккорде нет терции, строить не на чем.',
+      },
+      powerInversion:
+        'Квинтовый аккорд берут только в основном виде: квинта под основным тоном даёт кварту.',
       // A stack named by its top interval, as a chord symbol writes it: a triad up to the 5th.
       sizes: { triad: '5', seventh: '7', ninth: '9', eleventh: '11', thirteenth: '13' },
       sizeNames: {
