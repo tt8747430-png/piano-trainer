@@ -237,6 +237,7 @@ export {
   type Fingering,
   type Hand,
 } from './fingering'
+export { blockFingering, handFingers, type ChordFingers } from './chord-fingering'
 export {
   CHORD_NOTES,
   CHORD_SIZES,

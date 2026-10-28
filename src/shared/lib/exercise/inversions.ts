@@ -1,12 +1,12 @@
 import type { Performance } from '@/shared/lib/arrangement'
 import {
+  handFingers,
   MIDDLE_C,
   midi,
   pitchClassOf,
   spellChord,
   tonicSpelling,
   type ChordQuality,
-  type Finger,
   type SpelledNote,
 } from '@/shared/lib/music'
 import type { LineNote } from './performance'
@@ -19,18 +19,12 @@ const HIGHEST = 84
 /** At most a 7th chord's four tones: a bigger chord climbs as its 7th chord. */
 const MOST_TONES = 4
 
-/** A triad's fingering by its inversion (root position, 1st, 2nd); a four-note chord's is one. */
-const TRIAD_FINGERS: readonly (readonly Finger[])[] = [
-  [1, 3, 5],
-  [1, 2, 5],
-  [1, 3, 5],
-]
-const FOUR_FINGERS: readonly Finger[] = [1, 2, 3, 5]
-
 /**
- * A chord climbing through its inversions in the right hand, close, a chord each half note: root
- * position, each inversion, root position an octave up, and back down; the left hand holds its root
- * under each. Written in its root's major or minor key, under its symbol.
+ * A chord climbing through its inversions in both hands, close, a chord each half note: root
+ * position, each inversion, root position an octave up, and back down; the left hand an octave under
+ * the right. Each hand fingers each chord as a block (`handFingers`: the right hand's 1-3-5, 1-2-5,
+ * 1-3-5 and the left's 5-3-1, 5-3-1, 5-2-1 for a triad). Written in its root's major or minor key,
+ * under its symbol.
  */
 export function inversionsExercise(choice: {
   readonly root: SpelledNote
@@ -49,30 +43,30 @@ export function inversionsExercise(choice: {
   ]
   const notes: LineNote[] = steps.flatMap((inversion, i) => {
     const startTick = i * HALF
-    const fingers = count === 3 ? (TRIAD_FINGERS[inversion % count] ?? FOUR_FINGERS) : FOUR_FINGERS
-    const right = Array.from({ length: count }, (_, k): LineNote => {
+    const keys = Array.from({ length: count }, (_, k) => {
       const at = inversion + k
       const tone = tones[at % count] ?? tones[0]
       if (!tone) throw new RangeError('A chord has at least its root')
-      const finger = fingers[k]
-      return {
-        midi: midi(rootKey + tone.semitones + 12 * Math.floor(at / count)),
-        spelled: tone.note,
-        hand: 'rh',
-        startTick,
-        durationTicks: HALF,
-        ...(finger === undefined ? {} : { finger }),
-      }
-    })
-    const bass: LineNote = {
-      midi: midi(rootKey - 12),
-      spelled: root,
-      hand: 'lh',
-      startTick,
-      durationTicks: HALF,
-      finger: 5,
+      return { tone, midi: midi(rootKey + tone.semitones + 12 * Math.floor(at / count)) }
+    }).sort((a, b) => a.midi - b.midi)
+    const hand = (side: 'rh' | 'lh', below: number): LineNote[] => {
+      const fingers = handFingers(
+        keys.map((key) => key.midi),
+        side,
+      )
+      return keys.map(({ tone, midi: key }, k) => {
+        const finger = fingers[k]
+        return {
+          midi: midi(key - below),
+          spelled: tone.note,
+          hand: side,
+          startTick,
+          durationTicks: HALF,
+          ...(finger === undefined ? {} : { finger }),
+        }
+      })
     }
-    return [bass, ...right]
+    return [...hand('lh', 12), ...hand('rh', 0)]
   })
   const minor = tones[1]?.degree === '♭3'
   return exercisePerformance({
