@@ -13,6 +13,9 @@ needs." Model: the owner's `memory-palaces` repo (Supabase + RxDB), whose code w
   the profile across devices.
 - **Sign-in:** email and password, Google; Apple shown as **Coming soon** (disabled) until a paid Apple developer
   account exists. Password reset by email.
+- **Later, from the owner:** Google's OAuth client ID and secret, for Supabase → Authentication → Providers → Google
+  (redirect URI `https://itmiutianxvtlwhdsalo.supabase.co/auth/v1/callback`). Until then the Google button is built
+  and tested against the fake gateway, and the provider stays off.
 - **The built-in content is the admin's alone to edit.** Every learner makes their own songs, patterns and
   progressions, and keeps each **private** or **publishes** it to the **Public library**, where everyone can find,
   play and copy it. The other open questions follow best practice (below).
