@@ -53,6 +53,11 @@ export interface ProgressState {
   readonly holds: Readonly<Partial<Record<ChordLessonKey, number>>>
   /** The sections of each lesson read so far, by their place, in order: what fills its ring. */
   readonly read: Readonly<Partial<Record<StepId, readonly number[]>>>
+  /**
+   * Each exercise's last tempo, beats a minute, by what it is kept under (`hanon:5`, `scale`): where
+   * it opens next time, so its tempo ladder goes on from the rung it reached.
+   */
+  readonly tempos: Readonly<Partial<Record<string, number>>>
 }
 
 export const EMPTY_PROGRESS: ProgressState = {
@@ -64,4 +69,5 @@ export const EMPTY_PROGRESS: ProgressState = {
   lessons: {},
   holds: {},
   read: {},
+  tempos: {},
 }

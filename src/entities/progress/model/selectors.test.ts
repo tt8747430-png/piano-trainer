@@ -6,6 +6,7 @@ import {
   selectIsLearned,
   selectLearned,
   selectPractised,
+  selectTempo,
   selectTrainerRecord,
 } from './selectors'
 import { EMPTY_PROGRESS, type ProgressState } from './types'
@@ -23,7 +24,15 @@ const state: ProgressState = {
   lessons: { 'bz5:chord:C': '2026-09-24T10:00:00.000Z' },
   holds: { 'bz5:chord:G': 2 },
   read: { 'lesson:triads': [0] },
+  tempos: { 'hanon:5': 84 },
 }
+
+describe('selectTempo', () => {
+  it('reads an exercise’s last tempo, none where none is kept', () => {
+    expect(selectTempo('hanon:5')(state)).toBe(84)
+    expect(selectTempo('scale')(state)).toBeUndefined()
+  })
+})
 
 describe('progress selectors', () => {
   it('return saved fields as they are', () => {

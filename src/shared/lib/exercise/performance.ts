@@ -12,6 +12,7 @@ import {
   type Hand,
   type Key,
   type Midi,
+  type NoteMarks,
   type SpelledNote,
   type Tick,
 } from '@/shared/lib/music'
@@ -25,6 +26,8 @@ export interface LineNote {
   readonly startTick: Tick
   readonly durationTicks: Tick
   readonly finger?: Finger
+  /** What is written on it: an articulation, a dynamic, a hairpin. */
+  readonly marks?: NoteMarks
 }
 
 /** The chord a passage of an exercise is over, from its first tick until the next chord or the end. */

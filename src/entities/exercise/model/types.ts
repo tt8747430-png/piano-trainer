@@ -15,6 +15,7 @@ export const EXERCISE_IDS = [
   'sixths',
   'groups',
   'contrary',
+  'scale-routine',
   'arpeggio',
   'inversions',
   'sixth-diminished',
@@ -49,6 +50,8 @@ export interface ExerciseFields {
   readonly voicing?: true
   readonly from?: true
   readonly tonality?: true
+  /** Which of Hanon's Nos. 1 to 20. */
+  readonly hanon?: true
   /** Each hand's start octave (a scale run). */
   readonly handOctaves?: true
 }

@@ -13,6 +13,7 @@ import {
   modes,
   rapidSwitch,
   scaleExercise,
+  scaleRoutine,
   sequenceExercise,
   sixthDiminishedChords,
   sixthDiminishedScale,
@@ -41,6 +42,8 @@ export function arrangeExercise(id: ExerciseId, choice: ExerciseChoice): Perform
       return sequenceExercise({ ...choice, figure: FIGURES[choice.figure] })
     case 'contrary':
       return contraryExercise(choice)
+    case 'scale-routine':
+      return scaleRoutine(choice)
     case 'arpeggio':
       return arpeggioExercise(choice)
     case 'inversions':
@@ -68,6 +71,6 @@ export function arrangeExercise(id: ExerciseId, choice: ExerciseChoice): Perform
     case 'five-finger':
       return fiveFinger({ root, minor })
     case 'hanon':
-      return hanon({ root })
+      return hanon({ root, number: choice.hanon })
   }
 }

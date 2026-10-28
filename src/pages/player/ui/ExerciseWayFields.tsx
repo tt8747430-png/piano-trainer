@@ -1,12 +1,20 @@
 import { useTranslation } from 'react-i18next'
-import { CHORD_TONES, VOICINGS, type ExerciseChoice, type Exercise } from '@/entities/exercise'
+import {
+  CHORD_TONES,
+  HANON_TRAINS,
+  VOICINGS,
+  type ExerciseChoice,
+  type Exercise,
+} from '@/entities/exercise'
+import { localText, useLocale } from '@/shared/i18n'
+import { HANON_NUMBERS } from '@/shared/lib/exercise'
 import { fingeringsOf, isInversion, spellChord } from '@/shared/lib/music'
-import { InversionChoice, NamedSegmented, Segmented } from '@/shared/ui'
+import { Dropdown, InversionChoice, NamedSegmented, Segmented } from '@/shared/ui'
 import type { ExerciseChange } from '../model/exercise-search'
 
 /**
- * How an exercise's line goes, where its rule takes it: the fingering, an inversion, octaves, a
- * sequence's figure, close or drop 2, the chord tone it starts on.
+ * How an exercise's line goes, where its rule takes it: Hanon's number (each with what it works), the
+ * fingering, an inversion, octaves, a sequence's figure, close or drop 2, the chord tone it starts on.
  */
 export function ExerciseWayFields({
   exercise: { fields },
@@ -18,9 +26,22 @@ export function ExerciseWayFields({
   onChange: (change: ExerciseChange) => void
 }) {
   const { t } = useTranslation('player')
+  const locale = useLocale()
   const fingerings = fingeringsOf(choice.kind, choice.start)
   return (
     <>
+      {fields.hanon ? (
+        <Dropdown
+          label={t('exercise.hanon.label')}
+          value={choice.hanon}
+          options={HANON_NUMBERS.map((number) => ({
+            value: number,
+            label: t('exercise.hanon.number', { number }),
+            detail: localText(HANON_TRAINS[number], locale),
+          }))}
+          onChange={(hanon) => onChange({ hanon })}
+        />
+      ) : null}
       {fields.fingering && fingerings.length > 1 ? (
         <Segmented
           label={t('exercise.fingering')}

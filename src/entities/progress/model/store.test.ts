@@ -132,6 +132,20 @@ describe('createProgressStore', () => {
     expect(state.holds).toEqual({})
   })
 
+  it('keeps each exercise’s last tempo, dropping one off the tempo range or under no exercise', () => {
+    const storage = createMemoryStorage()
+    writeSaved(storage, {
+      tempos: { 'hanon:5': 84, scale: 96, 'hanon:2': 900, 'Bad Key': 60, arpeggio: 'fast' },
+    })
+    expect(createProgressStore({ storage }).getState().tempos).toEqual({ 'hanon:5': 84, scale: 96 })
+  })
+
+  it('reads a save without tempos as none kept', () => {
+    const storage = createMemoryStorage()
+    writeSaved(storage, { learned: { 'piece:bz5': DAY } })
+    expect(createProgressStore({ storage }).getState().tempos).toEqual({})
+  })
+
   it.each([3, 5])('does not read a version-%i save', (version) => {
     const storage = createMemoryStorage()
     writeSaved(storage, { learned: { 'piece:bz5': DAY } }, version)

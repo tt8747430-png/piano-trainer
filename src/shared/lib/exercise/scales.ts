@@ -36,7 +36,7 @@ interface ScaleRun {
 }
 
 /** A scale's music: in its key, over its tonic chord. */
-function overTonic(run: ScaleRun, notes: readonly LineNote[]): Performance {
+export function overTonic(run: ScaleRun, notes: readonly LineNote[]): Performance {
   return exercisePerformance({
     key: scaleKey(run.root, run.kind),
     notes,
@@ -113,13 +113,19 @@ export function handOctaves(
  * fingered as the scale or from the thumb (a fingering the scale cannot take is its own), and coming
  * down as the scale comes down (melodic minor as natural minor).
  */
-export function scaleExercise(
-  run: StartedRun & {
-    readonly fingering: Fingering
-    /** The octave each hand starts in, where asked and its run fits on the keys; else its own. */
-    readonly startOctaves?: Partial<HandOctaves>
-  },
-): Performance {
+export function scaleExercise(run: FingeredRun): Performance {
+  return overTonic(run, inEighths(scaleRunHands(run)))
+}
+
+/** A run as a scale exercise takes it: from where, fingered how, each hand starting where. */
+export type FingeredRun = StartedRun & {
+  readonly fingering: Fingering
+  /** The octave each hand starts in, where asked and its run fits on the keys; else its own. */
+  readonly startOctaves?: Partial<HandOctaves>
+}
+
+/** Each hand's keys of a scale exercise's run, up and back, fingered (`scaleExercise`). */
+export function scaleRunHands(run: FingeredRun): Readonly<Record<Hand, readonly Played[]>> {
   const { root, kind, octaves, start } = run
   const count = spellScale(root, kind).length
   const way = fingeringsOf(kind, start).includes(run.fingering)
@@ -148,7 +154,7 @@ export function scaleExercise(
   }
   const down = kindComingDown(kind)
   const both = (hand: Hand) => [...handRun(kind, hand), ...handRun(down, hand).reverse().slice(1)]
-  return overTonic(run, inEighths({ rh: both('rh'), lh: both('lh') }))
+  return { rh: both('rh'), lh: both('lh') }
 }
 
 /**

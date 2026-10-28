@@ -235,7 +235,7 @@ Each colour is a semantic token with a light and a dark value, and a firmer valu
 | `selected`                        | umber → dusk muted       | the check on a chosen item; never an action                               |
 | `chosen`                          | card paper → dusk line   | the chosen segment on its muted track                                     |
 | `secondary`                       | sky mist → sky night     | the secondary button, a pressed grid item                                 |
-| `link`, `ring`                    | deep sky → light sky     | links, focus, what is chosen on the music                                 |
+| `link`, `ring`                    | deep sky → light sky     | links, focus, what is chosen on the music; a scale's crossing fingers     |
 | `learned`                         | grass deep → grass light | learned, known, on, connected                                             |
 | `attention`                       | ochre                    | a gap or "to check": a dot, never text                                    |
 | `destructive`                     | crimson                  | wrong and destructive                                                     |
@@ -438,7 +438,9 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 - **Interval row** (Intervals): the short name in soft ink, the name over its semitones, a small `KeyDiagram` at its
   end; two columns from 48rem. The row playing takes the selected wash.
 - **Hand drawing** (`HandDiagram`): a hand palm down in sand, each finger numbered in an ink dot, thumb 1 to little
-  finger 5, the right hand's thumb at the left; beside it the run's notes over that hand's fingers.
+  finger 5, the right hand's thumb at the left; beside it the run's notes over that hand's fingers, a crossing's
+  finger in sky and underlined (on the keys its circle filled in sky, on the staff its number in bold sky). Under a
+  scale's degrees or a key's notes, each degree's name in small soft ink.
 - **Sheet** (`Sheet`): card paper, 20px top corners, a grab handle, its Literata title with Close, a scrolling body,
   an optional footer over a hairline. It stands on the phone's keyboard. Never a sheet over a sheet: open a list as a
   page of the sheet.

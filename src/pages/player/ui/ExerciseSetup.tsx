@@ -7,11 +7,12 @@ import type { ExerciseChange } from '../model/exercise-search'
 import { ExerciseMusicFields } from './ExerciseMusicFields'
 import { ExerciseWayFields } from './ExerciseWayFields'
 import { ScalePracticeFields } from './ScalePracticeFields'
+import { TempoLadder } from './TempoLadder'
 import type { Hands, SwingFeel } from '@/shared/lib/schedule'
 
 /**
  * An exercise's Setup: its button, and the sheet of the choices its rule takes (each only where the
- * exercise has it), a scale run's practice (its hands, their octaves, tempo, metronome and the rest
+ * exercise has it), its tempo ladder, a scale run's practice (its hands, their octaves, tempo, metronome and the rest
  * between loops), then how the Player plays.
  */
 export function ExerciseSetup({
@@ -39,6 +40,7 @@ export function ExerciseSetup({
         <div className="flex flex-col gap-5">
           <ExerciseMusicFields exercise={exercise} choice={choice} onChange={onChange} />
           <ExerciseWayFields exercise={exercise} choice={choice} onChange={onChange} />
+          <TempoLadder player={player} />
           {exercise.fields.handOctaves ? (
             <ScalePracticeFields
               choice={choice}

@@ -2,6 +2,7 @@ import type { StoreApi } from 'zustand/vanilla'
 import { isStepId, type StepId } from '@/entities/step'
 import { isSkillId, type SkillId } from '@/shared/lib/music'
 import { createSavedStore, isRecord, savedObject, type SavingOptions } from '@/shared/lib'
+import { TEMPO_RANGE } from '@/shared/lib/schedule'
 import { keptDays } from './days'
 import {
   CHORD_HOLDS,
@@ -83,6 +84,12 @@ function evidenceOrNothing(value: unknown): readonly Answer[] | undefined {
 /** A trainer and its level, as a record is kept under: `name-chord:3`. */
 const isRunKey = (key: string): key is RunKey => /^[a-z][a-z0-9-]*:[a-z0-9-]+$/.test(key)
 
+/** What an exercise's tempo is kept under: its id, and a number where it has several (`hanon:5`). */
+const isTempoKey = (key: string): key is string => /^[a-z][a-z0-9-]*(:[0-9]+)?$/.test(key)
+
+const isTempo = (value: unknown): value is number =>
+  isCount(value) && value >= TEMPO_RANGE.min && value <= TEMPO_RANGE.max
+
 const isPercent = (value: unknown): value is number => isCount(value) && value <= 100
 
 /**
@@ -110,6 +117,7 @@ function sanitize(persisted: unknown): ProgressState {
     lessons,
     // A chord held short of learning it: never one its lessons have learned.
     read: kept<StepId, readonly number[]>(saved.read, isLessonStep, sectionsRead),
+    tempos: kept(saved.tempos, isTempoKey, (value) => (isTempo(value) ? value : undefined)),
     holds: keptHolds(
       kept(
         saved.holds,
