@@ -11,11 +11,12 @@ type Marked = readonly { readonly startTick: Tick; readonly marks?: NoteMarks }[
 
 /**
  * Where a note marks the tempo to move: a tempo mark sets it at once (a factor of the written tempo),
- * rit., rall. and accel. move it from there over two beats, a tempo brings back the last mark's.
+ * rit., rall., accel. and string. move it from there over two beats, riten. holds it back at once, a
+ * tempo brings back the last mark's.
  */
 interface TempoChange {
   readonly tick: Tick
-  readonly kind: 'mark' | 'move' | 'back'
+  readonly kind: 'mark' | 'move' | 'held' | 'back'
   readonly target: number
 }
 
@@ -29,8 +30,10 @@ function tempoChanges(notes: Marked, written: number | undefined): TempoChange[]
       const expression = n.marks?.expression
       if (expression === 'rit' || expression === 'rall')
         changes.push({ tick: n.startTick, kind: 'move', target: SLOWER })
-      else if (expression === 'accel')
+      else if (expression === 'accel' || expression === 'stringendo')
         changes.push({ tick: n.startTick, kind: 'move', target: FASTER })
+      else if (expression === 'riten')
+        changes.push({ tick: n.startTick, kind: 'held', target: SLOWER })
       else if (expression === 'a-tempo')
         changes.push({ tick: n.startTick, kind: 'back', target: 1 })
       return changes
@@ -51,6 +54,7 @@ function factorAt(changes: readonly TempoChange[], tick: Tick): number {
       base = change.target
       factor = base
     } else if (change.kind === 'back') factor = base
+    else if (change.kind === 'held') factor = base * change.target
     else {
       const along = Math.min(1, (tick - change.tick) / CHANGE_TICKS)
       factor = factor + (base * change.target - factor) * along

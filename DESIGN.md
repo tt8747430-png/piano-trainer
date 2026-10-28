@@ -434,9 +434,17 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 - **Fact card** (`FactCard`): an icon over a fact's name over its value; three across (Key · Time · Tempo).
 - **Library card** (Progressions): its numerals as the title, name · chord count in soft ink, its character in a
   line, chips of the numeral (small, soft) over the chord; a round paper Play at its top right. While it plays its
-  line turns honey and the sounding chip takes the selected wash; the card shown wears a darker line.
-- **Interval row** (Intervals): the short name in soft ink, the name over its semitones, a small `KeyDiagram` at its
-  end; two columns from 48rem. The row playing takes the selected wash.
+  line turns honey and the sounding chip takes the selected wash; the card shown wears a darker line. Written as
+  Nashville, the title and the chips' small line are numbers; as Chords, the chips are the chord alone.
+- **Interval row** (Intervals): the short name in soft ink, the name over its semitones, the songs' ⓘ, a small
+  `KeyDiagram` at its end; two columns from 48rem. The card is the button (stretched under the ⓘ); the row playing
+  takes the selected wash. The ⓘ lists Up and Down, each a semibold head over titles in soft ink.
+- **Metronome's tempo word**: the Italian word under BPM, small caps-tracked soft ink, its meaning and range in its ⓘ.
+- **Bar trainer** (Metronome): a switch row with its ⓘ, then Played · Muted as two round pop-up buttons (a speaker,
+  a crossed speaker) like Sound and Meter, greyed while off so nothing moves. In a muted bar the sounding square is
+  ringed in honey, not filled, under a "Muted" caption that keeps its place (transparent while heard).
+- **Scale degrees** (Key view): a plain table, a hairline between rows: the numeral in soft ink, the degree's name,
+  its note semibold, the triad as printed.
 - **Hand drawing** (`HandDiagram`): a hand palm down in sand, each finger numbered in an ink dot, thumb 1 to little
   finger 5, the right hand's thumb at the left; beside it the run's notes over that hand's fingers, or a chord's
   inversions a row each (its name in small type, each note over its finger), the one on the keys in strong ink.

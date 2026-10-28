@@ -10,7 +10,7 @@ import { CHARACTERS } from './characters'
 /** An entry as written, its character added from `CHARACTERS`. */
 type Written = ModeLines & Omit<ProgressionDetails, 'character'>
 
-type Extras = Pick<LibraryProgression, 'note' | 'pattern' | 'size'>
+type Extras = Pick<LibraryProgression, 'note' | 'pattern' | 'size' | 'mode'>
 
 /** A progression of the library: one idea, with its line in each mode it has. */
 const entry = <const Id extends string>(
@@ -107,6 +107,12 @@ const LIBRARY = [
       ),
     },
   ),
+  entry('pop', 'line-cliche', { minor: 'i iMaj7 i7 i6' }, 'Minor line cliché', 'Минорное клише', {
+    note: note(
+      'One minor chord held while a single voice falls a semitone at a time from its root: 8, 7, ♭7, 6.',
+      'Один минорный аккорд держится, а один голос спускается от основного тона по полутонам: 8, 7, ♭7, 6.',
+    ),
+  }),
   entry('rock', 'rock-shuffle', { major: 'I V IV' }, 'Rock shuffle', 'Рок-шаффл', {
     note: note(
       'Down from the dominant (V) through the subdominant (IV) to the tonic (I). This V–IV–I ending closes rock and gospel songs alike.',
@@ -212,6 +218,31 @@ const LIBRARY = [
       ),
     },
   ),
+  entry('jazz', 'backdoor', { major: 'iv7 ♭VII7 Imaj7' }, 'Backdoor ii–V', 'Ход «с чёрного хода»', {
+    note: note(
+      'A ii–V that comes home from a whole tone below: iv7 and ♭VII7 are borrowed from the parallel minor (Fm7 B♭7 to Cmaj7).',
+      'Связка ii–V, которая приходит домой с тона ниже: iv7 и ♭VII7 взяты из одноимённого минора (Fm7 B♭7 к Cmaj7).',
+    ),
+  }),
+  entry(
+    'jazz',
+    'coltrane',
+    { major: 'Imaj7 ♭III7 ♭VImaj7 VII7 IIImaj7 V7 Imaj7' },
+    'Coltrane changes',
+    'Гармония Колтрейна',
+    {
+      note: note(
+        'Three keys a major third apart (C, A♭, E), each reached by its own V7: the cycle of Giant Steps.',
+        'Три тональности на расстоянии большой терции (C, A♭, E), в каждую ведёт своя V7: цикл Giant Steps.',
+      ),
+    },
+  ),
+  entry('jazz', 'ragtime', { major: 'III7 VI7 II7 V7 I' }, 'Ragtime progression', 'Рэгтайм', {
+    note: note(
+      'Dominant 7ths round the circle of fifths, each the V of the next, until the last lands on I.',
+      'Доминантсептаккорды по квинтовому кругу, каждый служит V для следующего, пока последний не придёт к I.',
+    ),
+  }),
   entry(
     'blues',
     'blues-turnaround',
@@ -232,6 +263,39 @@ const LIBRARY = [
         'Самая распространённая форма блюза: двенадцать тактов на I7, IV7 и V7. Попробуйте сверху блюзовую гамму.',
       ),
     },
+  ),
+  entry(
+    'blues',
+    'quick-change',
+    { major: 'I7 IV7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7' },
+    '12-bar blues, quick change',
+    '12-тактовый блюз с быстрой сменой',
+    {
+      note: note(
+        'The 12-bar blues with the IV in bar 2: the change to IV comes quickly, then the form goes on as the slow change does.',
+        '12-тактовый блюз с IV во втором такте: смена на IV приходит быстро, дальше форма идёт как обычно.',
+      ),
+    },
+  ),
+  entry(
+    'blues',
+    'minor-blues',
+    { minor: 'i7 i7 i7 i7 iv7 iv7 i7 i7 VI7 V7 i7 V7' },
+    'Minor blues',
+    'Минорный блюз',
+    {
+      note: note(
+        'The 12-bar form in a minor key: i and iv minor 7ths, and ♭VI7 stepping down a semitone to V7 in bar 9.',
+        '12-тактовая форма в миноре: минорные септаккорды i и iv, а в девятом такте VI7 спускается на полутон к V7.',
+      ),
+    },
+  ),
+  entry(
+    'blues',
+    'eight-bar',
+    { major: 'I7 V7 IV7 IV7 I7 V7 I7 V7' },
+    '8-bar blues',
+    '8-тактовый блюз',
   ),
   entry(
     'classical',
@@ -298,6 +362,57 @@ const LIBRARY = [
       ),
     },
   ),
+  entry('classical', 'picardy', { minor: 'i iv V I' }, 'Picardy third', 'Пикардийская терция', {
+    note: note(
+      'A minor piece that ends on the major tonic chord: the third of the last chord is raised, an old way to close in light.',
+      'Минорная пьеса заканчивается мажорным тоническим аккордом: терция последнего аккорда повышена. Старинный способ закончить светло.',
+    ),
+  }),
+  entry(
+    'classical',
+    'amen',
+    { major: 'IV iv I' },
+    'Minor plagal cadence',
+    'Минорная плагальная каденция',
+    {
+      note: note(
+        'The plagal cadence with the subdominant turned minor on the way: iv is borrowed from the parallel minor, its 3rd stepping down to the tonic’s 5th.',
+        'Плагальная каденция, в которой субдоминанта по пути становится минорной: iv взята из одноимённого минора, её терция спускается к квинте тоники.',
+      ),
+    },
+  ),
+  entry(
+    'classical',
+    'phrygian-half',
+    { minor: 'iv/3 V' },
+    'Phrygian half cadence',
+    'Фригийская половинная каденция',
+    {
+      note: note(
+        'A minor key’s half cadence: iv in first inversion to V, the bass falling a semitone (F to E in A minor), as the Phrygian mode’s last step does.',
+        'Половинная каденция минора: iv в первом обращении к V, бас спускается на полутон (F к E в ля миноре), как последний шаг фригийского лада.',
+      ),
+    },
+  ),
+  entry(
+    'classical',
+    'neapolitan',
+    { minor: 'i ♭II/3 V i' },
+    'Neapolitan sixth',
+    'Неаполитанский секстаккорд',
+    {
+      note: note(
+        'The major chord on the lowered 2nd, in first inversion (B♭/D in A minor), leading to V. Its root falls a semitone to the dominant’s leading tone.',
+        'Мажорный аккорд на пониженной II ступени в первом обращении (B♭/D в ля миноре) ведёт к V. Его основной тон спускается на полутон к вводному тону доминанты.',
+      ),
+    },
+  ),
+  entry('classical', 'lament', { minor: 'i v/3 iv/3 V' }, 'Lament bass', 'Ламенто', {
+    note: note(
+      'The bass walks down from the tonic to the dominant by step (A G F E in A minor), the chords following it: the oldest sound of grief in music.',
+      'Бас идёт по ступеням вниз от тоники к доминанте (A G F E в ля миноре), аккорды следуют за ним: древнейший музыкальный образ скорби.',
+    ),
+  }),
   entry('soul', 'neo-soul', { major: 'vi V IV V', minor: 'i VII VI VII' }, 'Neo-soul', 'Нео-соул'),
   entry('gospel', 'gospel-standard', { major: 'I iii IV V' }, 'Gospel standard', 'Госпел-стандарт'),
   entry('gospel', 'gospel-hymn', { major: 'I IV I V' }, 'Gospel hymn', 'Госпел-гимн'),
@@ -328,6 +443,47 @@ const LIBRARY = [
       ),
     },
   ),
+  entry(
+    'gospel',
+    'diminished-turnaround',
+    { major: 'Imaj7 #i°7 ii7 V7' },
+    'Diminished turnaround',
+    'Оборот с уменьшённым',
+    {
+      note: note(
+        'A diminished 7th on the raised tonic walks the bass up a semitone into ii: C, C♯, D.',
+        'Уменьшённый септаккорд на повышенной тонике ведёт бас на полутон вверх к ii: C, C♯, D.',
+      ),
+    },
+  ),
+  entry('modal', 'dorian-vamp', { minor: 'i IV' }, 'Dorian vamp', 'Дорийский вамп', {
+    mode: 'dorian',
+    note: note(
+      'A minor chord and the major chord a 4th above it: the major IV holds the Dorian mode’s raised 6th (F♯ in A Dorian).',
+      'Минорный аккорд и мажорный аккорд квартой выше: мажорная IV содержит повышенную VI ступень дорийского лада (F♯ в ля дорийском).',
+    ),
+  }),
+  entry('modal', 'mixolydian-vamp', { major: 'I ♭VII' }, 'Mixolydian vamp', 'Миксолидийский вамп', {
+    mode: 'mixolydian',
+    note: note(
+      'A major chord and the major chord a whole tone below: ♭VII holds the Mixolydian mode’s lowered 7th (B♭ in C Mixolydian).',
+      'Мажорный аккорд и мажорный аккорд на тон ниже: ♭VII содержит пониженную VII ступень миксолидийского лада (B♭ в до миксолидийском).',
+    ),
+  }),
+  entry('modal', 'lydian-vamp', { major: 'I II' }, 'Lydian vamp', 'Лидийский вамп', {
+    mode: 'lydian',
+    note: note(
+      'A major chord and the major chord a whole tone above: II holds the Lydian mode’s raised 4th (F♯ in C Lydian).',
+      'Мажорный аккорд и мажорный аккорд на тон выше: II содержит повышенную IV ступень лидийского лада (F♯ в до лидийском).',
+    ),
+  }),
+  entry('modal', 'phrygian-vamp', { minor: 'i ♭II' }, 'Phrygian vamp', 'Фригийский вамп', {
+    mode: 'phrygian',
+    note: note(
+      'A minor chord and the major chord a semitone above it: ♭II holds the Phrygian mode’s lowered 2nd (B♭ in A Phrygian).',
+      'Минорный аккорд и мажорный аккорд на полутон выше: ♭II содержит пониженную II ступень фригийского лада (B♭ в ля фригийском).',
+    ),
+  }),
   entry(
     'theory',
     'key-chords',

@@ -195,6 +195,11 @@ const EXPRESSION_WORDS = new Map<string, Expression>([
   ['ritardando', 'rit'],
   ['rallentando', 'rall'],
   ['accelerando', 'accel'],
+  ['ritenuto', 'riten'],
+  ['stringendo', 'stringendo'],
+  ['sostenuto', 'sostenuto'],
+  ['mano destra', 'md'],
+  ['mano sinistra', 'ms'],
 ])
 
 /** A swing mark by the words it prints. */

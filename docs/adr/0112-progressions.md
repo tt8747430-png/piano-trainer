@@ -43,6 +43,22 @@ use one.
   read both as applied and as its own degree. A song's chord stands for a numeral where it holds every tone the
   numeral writes (a triad's 7th, 6th, 9th or sus added still stands for it; the bass is never asked). A place never
   runs over a bar of no chord or a key change, and only a key of the line's mode is searched.
+- **How it is read and played**, three switches as a progression player has them, each in the URL:
+  - **Mode** (`mode=`): the line read in a church mode on the key's tonic (`readInMode`): each plain degree becomes
+    the mode's own chord, written against the major key of the tonic for Lydian and Mixolydian, the minor for
+    Dorian, Phrygian and Locrian (I IV V in Dorian is i IV v; Mixolydian's VII is ♭VII); chromatic, applied and
+    written-out chords stay as written. A chord grows by the mode's scale (Mixolydian's I to a dominant 7th). A
+    mode chosen stands the key on its major or minor; the key turned to the other leaves the mode; the mode is
+    named under the line, and the typed line's major/minor hint says nothing while in one. The Player gets the
+    re-read numerals in the key (it grows them by the key, not the mode).
+  - **Written as** (`names=`): Numerals · Nashville · Chords, on the row's staff, its chips and every library card.
+    Nashville counts from the tonic's major scale in a minor key too (`1m ♭3 4m 5`), its figures raised.
+  - **Voicing** (`block=`): Voice-led (the position chosen, moving smoothly as set) or Block (every chord in root
+    position, the hand leaping); the position greyed while blocks; the Player opens as shown.
+- **The library's breadth** follows the common named progressions of the reference sites, checked as chords, with a
+  **Modal** style of vamps that open in their mode (`mode` on an entry; its lines still written against major or
+  minor). A rotation of a loop already there (vi–IV–I–V, the Aeolian shuttle, I–♭VII–IV beside I–♭VII–IV–I) stays
+  out, as the loop test holds.
 - **Both ways:** the page lists **Songs with this progression**, each at the bars it is first heard on, opening the
   Player there looped; a song's page names the library's progressions it uses as chips, each opening Progressions in
   the song's key, one heard only inside a longer one left out.
@@ -61,3 +77,5 @@ is saved: views remember numerals, and the Player's `bar` and `loop` open a piec
 - 0112 — A progression's songs, and a song's progressions (2026-10-27).
 - r13 — The library as cards that play in place, each with its character (2026-10-28).
 - r13 — Function and root-motion chips under the row (2026-10-28).
+- r14 — Modes, Numerals · Nashville · Chords, voice-led or block; 17 more named progressions and a Modal style
+  (2026-10-28), from Musicca's and piano.org's progression pages.

@@ -175,6 +175,9 @@ export const practice = {
       noSignature: 'No sharps or flats',
       notes: 'Notes',
       modes: 'Modes',
+      parallel: 'Parallel',
+      enharmonic: 'Also written',
+      neighbours: 'Beside it on the circle',
       borrowed: 'Borrowed chords',
       songs: 'Songs in this key',
       studies: 'Studies in this key',
@@ -197,6 +200,8 @@ export const practice = {
       d5: { name: 'Diminished fifth', short: 'd5' },
     },
     keys: '{{name}} on the keys',
+    // The songs an interval opens, behind its row's ⓘ (the unison's one list).
+    songs: 'Songs',
   },
   progressions: {
     field: 'Numerals or chords',
@@ -205,6 +210,25 @@ export const practice = {
     minorLine: 'These numerals are a minor key’s.',
     playIn: 'Play them in {{key}}',
     throughKeys: 'Through the keys',
+    // How the row is read and played (ADR 0112): its mode, how its chords are named, voice-led or blocks.
+    mode: {
+      label: 'Mode',
+      info: 'Read the numerals in a church mode on the key’s tonic: each degree becomes that mode’s own chord. I IV V in Dorian is i IV v, and Mixolydian’s VII is ♭VII. Major or minor reads them in the key itself.',
+    },
+    names: {
+      label: 'Written as',
+      numerals: 'Numerals',
+      nashville: 'Nashville',
+      chords: 'Chords',
+      info: 'Roman numerals, or Nashville numbers: each chord’s root counted from the tonic, a plain number for a major chord and m for a minor one (1 5 6m 4), a ♭ where the root lies below the major scale. Or the chords alone.',
+    },
+    voicing: {
+      label: 'Voicing',
+      led: 'Voice-led',
+      block: 'Block',
+      info: 'Voice-led, each chord moves to the position nearest the one before: the notes they share are held and the rest step. Block, every chord stands in root position and the hand leaps. Switch between them to hear the difference.',
+      blockReason: 'Block chords all stand in root position.',
+    },
     // The library as cards, a card a progression (ADR 0112).
     library: 'Library',
     chordCount_one: '{{count}} chord',
@@ -232,6 +256,7 @@ export const practice = {
       classical: 'Classical',
       soul: 'R&B / Soul',
       gospel: 'Gospel',
+      modal: 'Modal',
       theory: 'Theory',
     },
   },
@@ -446,5 +471,14 @@ export const practice = {
     beat: 'Beat {{beat}}',
     start: 'Start',
     stop: 'Stop',
+    // The bar trainer: bars played, then bars muted, to keep time with no click.
+    trainer: 'Bar trainer',
+    trainerInfo:
+      'The Metronome plays its bars, then goes silent for its muted bars while you keep the time, and comes back in on the beat. The beats still show while it is silent.',
+    played: 'Bars played',
+    mutedBars: 'Bars muted',
+    bars_one: '{{count}} bar',
+    bars_other: '{{count}} bars',
+    muted: 'Muted',
   },
 } as const

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import {
   chordSymbol,
   isStrongMove,
+  printedSymbol,
   rootMoveText,
   voiceLead,
   type Midi,
@@ -178,22 +179,23 @@ export function RowStaff() {
 /**
  * The row's chords as chips under its staff (DESIGN.md, Harmony): each numeral over what the chord
  * does in its key (`function`), or over how its root moved there (`motion`: a strong move in its
- * paint, one that steps back neutral). The chip sounding follows the row as it plays; a tap plays its
- * chord. Only a progression's row, its chords read in a key, has them.
+ * paint, one that steps back neutral); a row naming its chords alone, each chip its chord. The chip
+ * sounding follows the row as it plays; a tap plays its chord. Only a progression's row, its chords
+ * read in a key, has them.
  */
 export function RowChips({ show }: { show: 'function' | 'motion' }) {
   const { t } = useTranslation('music')
   const { chords, sounding, playChord } = useRow()
   const moves = useMemo(() => rowMoves(chords), [chords])
-  if (chords.some((chord) => chord.function === undefined || chord.caption === undefined))
-    return null
+  if (chords.some((chord) => chord.function === undefined)) return null
   return (
     <HarmonyChips
       label={t(show === 'function' ? 'harmony.chips' : 'harmony.moves')}
       count={chords.length}
     >
       {chords.map((chord, place) => {
-        const numeral = chord.caption ?? ''
+        // Named by its caption, or, where the row names its chords alone, by its symbol.
+        const numeral = chord.caption ?? printedSymbol(chord.symbol ?? chordSymbol(chord.chord))
         const said = chord.function ?? 'tonic'
         const move = moves[place] ?? null
         const strong = move !== null && isStrongMove(move)

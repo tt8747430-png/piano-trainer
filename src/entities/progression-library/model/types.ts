@@ -1,6 +1,6 @@
 import type { PatternId } from '@/entities/pattern'
 import type { LocalText } from '@/shared/i18n'
-import type { ChordSize } from '@/shared/lib/music'
+import type { ChordSize, ChurchMode } from '@/shared/lib/music'
 
 /** The styles the Progressions library groups its progressions by. */
 export const PROGRESSION_STYLES = [
@@ -11,6 +11,7 @@ export const PROGRESSION_STYLES = [
   'classical',
   'soul',
   'gospel',
+  'modal',
   'theory',
 ] as const
 export type ProgressionStyle = (typeof PROGRESSION_STYLES)[number]
@@ -42,4 +43,6 @@ export interface ProgressionDetails {
   readonly pattern?: PatternId
   /** The chord size it opens at, where triads would lose what it teaches. */
   readonly size?: ChordSize
+  /** The church mode it is heard in (a Dorian vamp), its lines written against its major or minor key. */
+  readonly mode?: ChurchMode
 }
