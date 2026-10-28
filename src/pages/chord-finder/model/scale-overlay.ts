@@ -4,6 +4,7 @@ import {
   PIANO,
   pitchClass,
   pitchClassOf,
+  printedSymbol,
   spellScale,
   type Key,
   type Midi,
@@ -24,7 +25,7 @@ export function scaleOverlay(key: Key): Map<Midi, KeyMark> {
     if (found)
       marks.set(midi(each), {
         tone: found.at === 0 ? 'tonic' : 'scale',
-        label: noteName(found.tone.note),
+        label: printedSymbol(noteName(found.tone.note)),
       })
   }
   return marks

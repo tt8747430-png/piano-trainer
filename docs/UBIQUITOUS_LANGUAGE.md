@@ -306,7 +306,8 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 
 - **Place**: one of the three: Learn · Songs · Practice. _Avoid:_ tab, section.
 - **Learn** («Обучение»): the Lessons and the Courses. _Avoid:_ Path.
-- **Practice** («Практика»): the things, At the keys, Training. _Avoid:_ Drill, Tools.
+- **Practice** («Практика»): its pages in three groups, Theory («Теория»), Playing («Игра») and Training
+  («Тренировка»). _Avoid:_ Drill, Tools, At the keys.
 - **Explorer**: a page that shows one thing on the keys: Chords, Scales and keys, Intervals, Progressions. _Avoid:_
   viewer, reference.
 - **Tool**: what works something out from what the learner gives, on the page of the thing it works on. _Avoid:_
@@ -314,6 +315,18 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Tabs** (a page's): the views of one thing. _Avoid:_ sub-pages.
 - **Scale view** / **Chords view** / **Key view**: Scales and keys' three tabs. _Avoid:_ mode.
 - **Keys play**: in Chords view, a key plays its chord or its note. _Avoid:_ tap mode.
+- **Strip** (`StepStrip`): one choice of many in a row that scrolls, with ‹ › to step along it (a root's 17
+  spellings, a chord's quality, a scale's kind). _Avoid:_ carousel, picker wheel.
+- **On the keys** («На клавишах»): what a scale run's keys carry, Notes · Left hand · Right hand. _Avoid:_ key mode.
+- **Fingering by hand** («Аппликатура по рукам»): each hand drawn with its fingers numbered, beside the run's notes
+  and that hand's fingers. _Avoid:_ fingering table.
+- **Character** (a progression's): how it sounds, in one line under its name. _Avoid:_ description, mood.
+- **Library card**: a progression of the library on Progressions: its numerals, name, chord count, character and
+  chips, with a Play that plays it in place. _Avoid:_ preset.
+- **Play what you choose** («Играть выбранное», `autoplay`): a chord or a scale chosen sounds at once. _Avoid:_
+  preview, audition.
+- **Scale on the keys** («Гамма на клавишах»): the Chord finder's key's scale painted on every octave. _Avoid:_
+  overlay, highlight.
 - **Library** (progressions): the one list of practised progressions, one entry an idea, a major and a minor line.
   _Avoid:_ presets, templates.
 - **Typed line**: Progressions' field of numerals or chords. _Avoid:_ key detector.

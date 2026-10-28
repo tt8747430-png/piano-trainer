@@ -22,6 +22,11 @@ use one.
     from the chords alone (`keysOfChords`); a chord out of the key is named, not refused (`V/iv`, `♭VII`); playing
     them in another key keeps their letters and basses;
   - **Between** (`?between=&inKey=`): the passing chords between two chords of its row.
+- **The library is a list of cards** under the key's strip and Major · Minor, style by style, as the reference app
+  lists its progressions: a card's title its numerals, then its name and chord count, how it sounds in one line
+  (`character`, both languages), and a chip a chord, the numeral over the chord in the key shown, so the key
+  re-spells every card. Its Play plays it in place, the sounding chip lit; a tap elsewhere on it shows it at the
+  top of the page, named over its character. No pop-up chooses a progression.
 - **A lead-in is a way to play any progression** (`lead`: `v` or `ii-v`): each chord after its own V or ii–V. The
   secondary dominants and the ii–V–I to every chord of a key are its lines, not the library's.
 - **A walk through the keys** is a chart transformation (`walk`): up or down by semitones or whole tones, or round the
@@ -49,3 +54,4 @@ is saved: views remember numerals, and the Player's `bar` and `loop` open a piec
 - 0041 — One idea in both modes; a lead-in is a way to play it (2026-10-13).
 - 0045 — Transpose reads a song's chords in their key (2026-10-14), now the page's typed line.
 - 0112 — A progression's songs, and a song's progressions (2026-10-27).
+- r13 — The library as cards that play in place, each with its character (2026-10-28).
