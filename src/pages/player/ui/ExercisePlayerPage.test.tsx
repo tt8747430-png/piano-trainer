@@ -63,6 +63,38 @@ describe('An exercise in the Player', () => {
     expect(screen.getByRole('radio', { name: 'From the thumb' })).toBeChecked()
   })
 
+  it('sets up a scale’s practice: hands, each hand’s start octave, tempo, metronome and a rest between loops', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/play/exercise/scale')
+    await user.click(await screen.findByRole('button', { name: 'Setup' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Setup' })
+    const right = within(sheet).getByRole('radiogroup', { name: 'Right hand starts on' })
+    expect(within(right).getByRole('radio', { name: 'C4' })).toBeChecked()
+    // Two octaves from C7 run past the top C: greyed, saying why.
+    const top = within(right).getByRole('radio', { name: 'C7' })
+    expect(top).toHaveAttribute('data-disabled')
+    expect(top).toHaveAccessibleDescription('Its run would go past the top of the keyboard')
+    await user.click(within(right).getByRole('radio', { name: 'C5' }))
+    expect(router.state.location.search).toMatchObject({ rhOctave: 5 })
+    const left = within(sheet).getByRole('radiogroup', { name: 'Left hand starts on' })
+    expect(within(left).getByRole('radio', { name: 'C2' })).toBeChecked()
+    await user.click(within(sheet).getByRole('radio', { name: 'Right' }))
+    expect(router.state.location.search).toMatchObject({ hands: 'rh' })
+    expect(
+      within(sheet).queryByRole('radiogroup', { name: 'Left hand starts on' }),
+    ).not.toBeInTheDocument()
+    const rest = within(sheet).getByRole('radiogroup', { name: 'Ticks between loops' })
+    await user.click(within(rest).getByRole('radio', { name: '2' }))
+    expect(router.state.location.search).toMatchObject({ rest: 2 })
+    await user.click(within(sheet).getByRole('switch', { name: /^Metronome/ }))
+    expect(within(sheet).getByRole('switch', { name: /^Metronome/ })).toBeChecked()
+    expect(within(sheet).getByRole('slider', { hidden: true })).toHaveAttribute(
+      'aria-valuenow',
+      '80',
+    )
+    expect(within(sheet).getByText('80 BPM')).toBeInTheDocument()
+  })
+
   it('swings an exercise that is its own swing, and leaves it out of the URL', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/play/exercise/two-five-one-scale')

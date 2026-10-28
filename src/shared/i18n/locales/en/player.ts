@@ -270,6 +270,22 @@ export const player = {
   loopBars: 'Loop bars {{first}}–{{last}}',
   again: 'Again',
   /** An exercise's Setup: the choices its rule takes. */
+  // A scale run's practice, as the reference app's Practice Scale sheet.
+  scalePractice: {
+    hands: 'Hands',
+    startsOn: { rh: 'Right hand starts on', lh: 'Left hand starts on' },
+    out: {
+      above: 'Its run would go past the top of the keyboard',
+      below: 'Its run would go below the bottom of the keyboard',
+    },
+    tempo: 'Tempo',
+    metronome: 'Metronome',
+    rest: {
+      label: 'Ticks between loops',
+      info: 'Beats of clicks before each repeat, to reset the hand before the scale comes round again',
+      none: 'None',
+    },
+  },
   exercise: {
     title: '{{name}}: {{of}}',
     scale: 'Scale',

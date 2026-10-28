@@ -65,6 +65,8 @@ const PRACTICE_DEFAULTS: PracticeView = {
 // default; its chords as written, not simplified (ADR 0105).
 export const PLAYER_DEFAULTS: PlayerSearch = { ...PRACTICE_DEFAULTS, simple: false }
 /** The Player's own params: how it goes, whatever it plays. */
+/** The most beats of rest a loop takes before each repeat. */
+const MOST_REST = 4
 function practiceView(raw: Raw): PracticeView {
   return {
     mode: valueOr(isMode, raw.mode, PRACTICE_DEFAULTS.mode),
@@ -75,6 +77,7 @@ function practiceView(raw: Raw): PracticeView {
     loop: isLoopParam(raw.loop) ? raw.loop : undefined,
     click: typeof raw.click === 'boolean' ? raw.click : undefined,
     keys: typeof raw.keys === 'boolean' ? raw.keys : undefined,
+    rest: wholeIn(raw.rest, 1, MOST_REST, undefined),
   }
 }
 /** The pattern and the hands' figures a Setup chooses, whatever the Player plays. */
@@ -224,6 +227,8 @@ export function readExerciseSearch(raw: Raw): ExerciseSearch {
     voicing: when(isVoicing, raw.voicing),
     from: when(isChordTone, raw.from),
     tonality: when(isTonality, raw.tonality),
+    rhOctave: wholeIn(raw.rhOctave, 1, 7, undefined),
+    lhOctave: wholeIn(raw.lhOctave, 1, 7, undefined),
   }
 }
 export const exerciseSearch = routeSearch(readExerciseSearch, EXERCISE_DEFAULTS)

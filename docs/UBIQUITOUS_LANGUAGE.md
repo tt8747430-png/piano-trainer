@@ -349,6 +349,10 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   chips, with a Play that plays it in place. _Avoid:_ preset.
 - **Play what you choose** («Играть выбранное», `autoplay`): a chord or a scale chosen sounds at once. _Avoid:_
   preview, audition.
+- **Ticks between loops** («Щелчки между повторами», `rest`): beats of clicks the Player waits before each repeat
+  of a loop. _Avoid:_ gap, pause, delay.
+- **Starts on** (a hand's, «начинает с»): the octave a hand's scale run starts in, C1 to C7. _Avoid:_ register,
+  position.
 - **Scale on the keys** («Гамма на клавишах»): the Chord finder's key's scale painted on every octave. _Avoid:_
   overlay, highlight.
 - **Library** (progressions): the one list of practised progressions, one entry an idea, a major and a minor line.
