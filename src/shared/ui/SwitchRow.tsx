@@ -8,7 +8,8 @@ import { Switch } from './primitives/switch'
  * On or off in its row of a list: its picture where it has one, the label, what it does in an
  * `InfoTip` after the label's last word where it says more than its name (ADR 0096, never a line
  * under it), and the switch, named by the label alone. A tap anywhere on the row turns it, but on
- * the ⓘ. Greyed (`disabled`), it says why under its label (`reason`).
+ * the ⓘ. Greyed (`disabled`), it says why in its tooltip and to a screen reader (`reason`), never
+ * in a line under it.
  */
 export function SwitchRow({
   icon,
@@ -27,7 +28,7 @@ export function SwitchRow({
   info?: ReactNode
   checked: boolean
   disabled?: boolean
-  /** Why it is greyed, shown under its label while it is (Needs MIDI input). */
+  /** Why it is greyed: its tooltip while it is, and its description (Needs MIDI input). */
   reason?: string | undefined
   onCheckedChange: (on: boolean) => void
   className?: string
@@ -41,6 +42,7 @@ export function SwitchRow({
   return (
     <div
       data-slot="switch-row"
+      title={why}
       className={cn(
         'relative isolate flex min-h-14 items-center justify-between gap-4 border-b border-border py-2 text-lg',
         className,
@@ -73,7 +75,7 @@ export function SwitchRow({
           ) : null}
         </span>
         {why ? (
-          <span id={whyId} className="block text-sm text-muted-foreground">
+          <span id={whyId} className="sr-only">
             {why}
           </span>
         ) : null}
