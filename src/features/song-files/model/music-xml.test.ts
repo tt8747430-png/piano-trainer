@@ -87,7 +87,7 @@ describe('a song’s MusicXML, exported then imported', () => {
       sections: [
         {
           kind: 'verse',
-          lines: ['|: C [1 F :| [2 G :| [3 A :|x4 [4 G', 'Page C % C F G %% F G Rest2 G G |.'],
+          lines: ['|: C [1 F :| [2 G :| [3 A :|x4 [4 G', 'Page C % C F G %% F G Rest2 _ _ C |.'],
         },
       ],
     }
@@ -95,6 +95,8 @@ describe('a song’s MusicXML, exported then imported', () => {
     expect(xml).toContain('<print new-page="yes"/>')
     expect(xml).toContain('<measure-repeat type="start">2</measure-repeat>')
     expect(xml).toContain('<multiple-rest>2</multiple-rest>')
+    // A bar of no chord (ADR 0114) says so: N.C., MusicXML's harmony of no kind.
+    expect(xml).toContain('<kind text="N.C.">none</kind>')
     const back = songOfMusicXml(xml, 'x.musicxml')
     expect(back.leftOut).toEqual({})
     expect(back.song.music).toEqual(written(marked))

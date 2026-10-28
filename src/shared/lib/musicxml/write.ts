@@ -32,7 +32,7 @@ import {
   type ScoreEvent,
   type StaffId,
 } from '@/shared/lib/notation'
-import { harmonyXml } from './harmony'
+import { harmonyXml, NO_CHORD_XML } from './harmony'
 import { tag, text } from './xml'
 
 /** What a score is written with besides its music. */
@@ -477,6 +477,11 @@ class PartWriter {
     }
     const out: string[] = []
     const harmonies = chords ? [...measure.chords] : []
+    // A bar of no chord after a bar of chords (ADR 0114) stops the chord sounding on: N.C.
+    const index = this.score.measures.indexOf(measure)
+    const before = this.score.measures[index - 1]
+    if (chords && measure.chords.length === 0 && before && before.chords.length > 0)
+      out.push(NO_CHORD_XML)
     const whole = events.length === 1 && events[0]?.kind === 'rest'
     events.forEach((event, index) => {
       const length = ticksOf(event.duration, this.score.meter)

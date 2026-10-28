@@ -266,6 +266,17 @@ const stepAndAlter = (prefix: 'root' | 'bass', note: SpelledNote) =>
  * quality, its suffix as the kind's text (what is printed), and its bass; `offset` in divisions from
  * where it stands in the measure's notes.
  */
+/**
+ * No chord from here on (N.C.), as MusicXML writes it: a harmony of the kind `none`, its root a
+ * placeholder the kind says not to read.
+ */
+export const NO_CHORD_XML = tag(
+  'harmony',
+  {},
+  tag('root', {}, text('root-step', 'C')),
+  tag('kind', { text: 'N.C.' }, 'none'),
+)
+
 export function harmonyXml(chord: Chord, offset = 0): string {
   const { kind, changes } = kindOf(chord.quality)
   return tag(

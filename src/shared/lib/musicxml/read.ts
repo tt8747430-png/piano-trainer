@@ -132,7 +132,8 @@ export interface ReadScore {
   readonly staves: readonly ReadStaff[]
   readonly bars: readonly ReadBar[]
   readonly notes: readonly ReadNote[]
-  readonly chords: readonly { readonly startTick: Tick; readonly chord: Chord }[]
+  /** Each chord symbol from where it stands; null where none sounds from there on (N.C.). */
+  readonly chords: readonly { readonly startTick: Tick; readonly chord: Chord | null }[]
   /** The app's own data, where the file is one the app wrote. */
   readonly appData?: string
   readonly leftOut: Readonly<Partial<Record<LeftOut, number>>>
@@ -318,7 +319,7 @@ export function readMusicXml(source: string): ReadScore {
   const parts: ReadPart[] = []
   const notes: Building[] = []
   const pending: Pending[] = []
-  const chords = new Map<Tick, Chord>()
+  const chords = new Map<Tick, Chord | null>()
   const bars: { -readonly [K in keyof ReadBar]?: ReadBar[K] }[] = []
   let key: Key | undefined
   let tempo: { tempo: number; unit?: TempoUnit } | undefined
@@ -472,6 +473,7 @@ export function readMusicXml(source: string): ReadScore {
             const chord = readHarmony(child)
             if (!chord) {
               if (textAt(child, 'kind') !== 'none') leave('chords')
+              else if (!chords.has(tick)) chords.set(tick, null)
             } else if (!chords.has(tick)) chords.set(tick, chord)
             break
           }
