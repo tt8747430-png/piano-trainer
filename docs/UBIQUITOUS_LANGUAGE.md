@@ -91,6 +91,19 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   chord size, shape.
 - **Drop 2**: a close four-note chord with its second voice from the top an octave lower. _Avoid:_ spread.
 - **Shell**: the left hand's root and 7th. _Avoid:_ rootless, skeleton.
+- **Rootless voicing** («Расположение без основного тона»): four notes, no root, in the left hand: **Type A** from
+  the 3rd on ii and I (3 5 7 9), **Type B** from the 7th (7 9 3 5), V the other way round. _Avoid:_ left-hand
+  voicing, shell.
+- **Locked hands** («Сцепленные руки»): block chords: a close four-note chord under each melody note, the left hand
+  doubling the melody an octave down. _Avoid:_ block chords (an accompaniment pattern's name).
+- **Slash chord** («Аккорд с указанным басом»): a chord over a bass, `C/E`: an inversion where the bass is a chord
+  tone, an added bass where it is not. _Avoid:_ over chord, polychord.
+- **Modulation** («Модуляция»): moving to a new key and staying, confirmed by its own cadence: by a **pivot chord**
+  («общий аккорд»), direct, or by step. A borrowed V without a cadence is only a visit. _Avoid:_ key change (as a
+  term), transposition.
+- **Cadence** («Каденция»): the two chords that end a phrase: **authentic** V–I, **perfect** (root position, the
+  tonic on top) or **imperfect**; **plagal** IV–I; **half** ending on V; **deceptive** V–vi; **Phrygian half**
+  iv6–V in minor. The **cadential 6/4** is I6/4 decorating V. _Avoid:_ ending, close (as terms).
 - **Inversion** («Обращение»): which chord tone is lowest: Root · 1st · 2nd · 3rd. A chord of five notes or more is
   not inverted; its **Right hand from** says where the hand above the bass starts. _Avoid:_ position.
 - **Figures**: an inversion's figured-bass mark after a numeral: ⁶, ⁶₄, ⁷, ⁶₅, ⁴₃, ⁴₂. _Avoid:_ inversion symbol.
@@ -262,6 +275,10 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Note names**: C · All · None. _Avoid:_ labels.
 - **Chord names**: the rail naming the chord a hand holds. _Avoid:_ chord detection.
 - **Typing keys**: the computer keyboard as a piano. _Avoid:_ hotkeys.
+- **Phone's keyboard** (`keyboard-viewport`): the on-screen keyboard a text field opens; it covers the screen's foot
+  (`--kb-inset`), never the piano. _Avoid:_ soft keyboard, virtual keyboard.
+- **Reveal** (`keyboard-reveal`): the page lifting a focused field, its label and its error clear of the phone's
+  keyboard. **Reserve**: the keyboard last measured, held as a field is focused, before the keyboard comes.
 - **Down** (a key): sounding now or held by a hand, for at least the **shortest press** (150ms). _Avoid:_ active,
   playing.
 - **Lit**: a key shown as an answer or a pattern's note, not sounding. _Avoid:_ down.
@@ -395,7 +412,9 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Chords**, **Intervals**, **Build scale**, **My gaps**: trainers. _Avoid:_ exercise.
 - **Setup** (a trainer's): the one template every trainer opens at: its drill, Options, Timing, how it works, Start.
   _Avoid:_ settings, config.
-- **Drill** («Режим»): the way Chords and Intervals ask the same things: **Cards** («Карточки»), **Quiz** («Тест»),
+- **Cadences** («Каденции»): the Quiz's trainer that asks a cadence in all four drills: heard after its key's tonic,
+  read on the grand staff, the chord that makes it played, or a card of its name or staff. A cadence rates no skill.
+- **Drill** («Режим»): the way Chords, Intervals and Cadences ask the same things: **Cards** («Карточки»), **Quiz** («Тест»),
   **Play** («Игра»), **By ear** («На слух»). Never an exercise. _Avoid:_ mode, game.
 - **Card** (a drill's): a chord or interval shown by one of its name, keys or staff (**Shown**), the rest
   **Revealed**; never right or wrong. _Avoid:_ flashcard (in the UI), flip.

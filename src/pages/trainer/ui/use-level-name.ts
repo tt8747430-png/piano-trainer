@@ -15,6 +15,7 @@ const isLevelOf = {
   degrees: isOneOf(LADDERS.degrees),
   roles: isOneOf(LADDERS.roles),
   progressions: isOneOf(LADDERS.progressions),
+  cadences: isOneOf(LADDERS.cadences),
 }
 
 /** Every ladder's levels by name: a ladder added without its names fails to compile. */
@@ -30,6 +31,7 @@ const NAMES: Readonly<Record<Ladder, (level: string, t: TFunction<'quiz'>) => st
   roles: (level, t) => (isLevelOf.roles(level) ? t(`levels.roles.${level}`) : null),
   progressions: (level, t) =>
     isLevelOf.progressions(level) ? t(`levels.progressions.${level}`) : null,
+  cadences: (level, t) => (isLevelOf.cadences(level) ? t(`levels.cadences.${level}`) : null),
 }
 
 /** A trainer's level as its name reads: its ladder's, or Custom. */

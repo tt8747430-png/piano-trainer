@@ -145,6 +145,8 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
   const onGrace = graceEdited(state, action)
   if (onGrace) return onGrace
   const next = reduced(state, action)
+  // Undo and redo bring back whether the grace notes were chosen with their step.
+  if (action.type === 'undo' || action.type === 'redo') return next
   const kept = ON_GRACE.has(action.type) || (action.type === 'place' && action.grace === true)
   return next.grace && !kept ? { ...next, grace: false } : next
 }

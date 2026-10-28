@@ -74,7 +74,7 @@ export const piece = {
   shareTooLong: 'This song is too long to fit in a link.',
   deleting: {
     title: 'Delete {{title}}?',
-    says: 'It is removed from Your songs, with its music and takes.',
+    says: 'It is deleted for good, with its music and takes.',
     confirm: 'Delete for good',
     cancel: 'Keep it',
   },

@@ -344,6 +344,26 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     expect(piecesStore.getState().songs).toMatchObject([{ id: 'my-1', title: 'Tune' }])
   })
 
+  it('makes nothing of a file whose reading was closed before it was read', async () => {
+    const user = userEvent.setup()
+    const { piecesStore, router } = await renderApp('/songs')
+    await screen.findByRole('button', { name: 'New' })
+    const midi = standardMidiFile([
+      { events: noteEvents([{ key: 60, on: 0, off: 1920, velocity: 80 }], 0), end: 1920 },
+    ])
+    // A large file still being read.
+    let read: (bytes: ArrayBuffer) => void = () => undefined
+    const file = new File([midi], 'Tune.mid')
+    file.arrayBuffer = () => new Promise((done) => (read = done))
+    choose(file)
+    const sheet = await screen.findByRole('dialog', { name: 'Import' })
+    await user.click(within(sheet).getByRole('button', { name: 'Close' }))
+    await act(async () => read(await new Blob([midi]).arrayBuffer()))
+    await act(() => new Promise((done) => setTimeout(done, 50)))
+    expect(piecesStore.getState().songs).toEqual([])
+    expect(router.state.location.pathname).toBe('/songs')
+  })
+
   it('says what a file dropped on the library left out, then opens the song', async () => {
     const user = userEvent.setup()
     await renderApp('/songs')
@@ -468,12 +488,67 @@ describe('Songs: Select (ADR 0106)', () => {
     await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
     expect(screen.getByRole('heading', { level: 1, name: 'Selected: 2' })).toBeInTheDocument()
     const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
-    // Delete is for the learner's own songs and folders: none of these.
-    expect(within(bar).queryByRole('button', { name: 'Delete' })).toBeNull()
+    // Delete is for the learner's own songs and folders: none of these, so it is greyed, kept in
+    // its slot so the bar's buttons never shift as rows are chosen.
+    expect(within(bar).getByRole('button', { name: 'Delete' })).toBeDisabled()
     await user.click(within(bar).getByRole('button', { name: 'Archive' }))
     expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived')
     expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
     expect(await screen.findByText('Archived: 2')).toBeInTheDocument()
+  })
+
+  it('archives folders and songs chosen together in one go, one Undo putting all of them back', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs', {
+      storage: saved({ pieces: { songs: [SONG], nextSong: 2 } }),
+    })
+    await user.click(await screen.findByRole('button', { name: 'Select' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Hymns' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Gorshkov’s songs' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Morning' }))
+    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    await user.click(within(bar).getByRole('button', { name: 'Archive' }))
+    expect(libraryStore.getState().archive).toHaveLength(3)
+    expect(await screen.findByText('Archived: 3')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    await waitFor(() => expect(libraryStore.getState().archive).toEqual([]))
+    const folders = await screen.findByRole('region', { name: 'Folders' })
+    expect(rowNames(folders).slice(4)).toEqual(['Hymns 5 songs', 'Gorshkov’s songs 4 songs'])
+    expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toEqual({ folder: null, index: 0 })
+  })
+
+  it('favourites the songs chosen, its toast’s Undo taking back only what it changed', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs/folders/hymns', {
+      storage: saved({ library: { favourites: ['amazing'] } }),
+    })
+    await user.click(await screen.findByRole('button', { name: 'Select' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
+    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    await user.click(within(bar).getByRole('button', { name: 'Favourite' }))
+    expect(libraryStore.getState().favourites).toEqual(['silent', 'amazing'])
+    await user.click(await screen.findByRole('button', { name: 'Undo' }))
+    await waitFor(() => expect(libraryStore.getState().favourites).toEqual(['amazing']))
+  })
+
+  it('acts only on the rows chosen that are in sight, a search hiding the rest', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs/folders/hymns')
+    await user.click(await screen.findByRole('button', { name: 'Select' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
+    fireEvent.change(screen.getByRole('searchbox', { name: 'Search songs' }), {
+      target: { value: 'Amazing' },
+    })
+    await waitFor(() =>
+      expect(screen.queryByRole('checkbox', { name: 'Select Silent Night' })).toBeNull(),
+    )
+    expect(screen.getByRole('heading', { level: 1, name: 'Selected: 1' })).toBeInTheDocument()
+    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    await user.click(within(bar).getByRole('button', { name: 'Archive' }))
+    expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
+    expect(placeOf(libraryStore.getState(), 'silent')).toMatchObject({ folder: 'hymns' })
   })
 
   it('chooses every row by Select all, and starts with a row chosen by a long press', async () => {

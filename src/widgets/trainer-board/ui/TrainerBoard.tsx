@@ -32,7 +32,11 @@ import { useRoundWords } from './use-round-words'
 /** Whether a round asked by ear, or a card, hides this side until it is answered or turned over. */
 function hides(question: Question, side: 'name' | 'keys' | 'staff'): boolean {
   if (isCard(question)) return question.show !== side
-  if (question.mode === 'name-chord' || question.mode === 'name-interval')
+  if (
+    question.mode === 'name-chord' ||
+    question.mode === 'name-interval' ||
+    question.mode === 'name-cadence'
+  )
     return question.heard && side !== 'name'
   return false
 }
@@ -75,9 +79,17 @@ export function TrainerBoard({
   })
   const choices = isChoice(question) ? words.options(question) : null
   const heard =
-    (question.mode === 'name-chord' || question.mode === 'name-interval') && question.heard
+    (question.mode === 'name-chord' ||
+      question.mode === 'name-interval' ||
+      question.mode === 'name-cadence') &&
+    question.heard
   // Play again: a round asked by sound; a chord or interval read or turned over, once answered.
-  const seenFirst = card || question.mode === 'name-chord' || question.mode === 'name-interval'
+  const seenFirst =
+    card ||
+    question.mode === 'name-chord' ||
+    question.mode === 'name-interval' ||
+    question.mode === 'name-cadence' ||
+    (question.mode === 'build-chord' && question.cadence !== undefined)
   const hears =
     heard ||
     (seenFirst && result !== null) ||
@@ -229,7 +241,14 @@ export function TrainerBoard({
             className="grid grid-cols-2 gap-3 lg:grid-cols-4"
           >
             {choices.map(({ value, label }) => (
-              <Button key={value} variant="outline" size="lg" onClick={() => trainer.choose(value)}>
+              <Button
+                key={value}
+                variant="outline"
+                size="lg"
+                // A long answer (Imperfect authentic) wraps rather than run past the button.
+                className="h-auto min-h-12 py-2 text-balance whitespace-normal"
+                onClick={() => trainer.choose(value)}
+              >
                 {label}
               </Button>
             ))}

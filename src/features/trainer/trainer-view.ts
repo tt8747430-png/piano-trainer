@@ -10,6 +10,7 @@ export const TRAINER_IDS = [
   'gaps',
   'scales-by-ear',
   'progressions-by-ear',
+  'cadences',
   'reading-notes',
   'key-signatures',
   'key-degrees',

@@ -1,5 +1,10 @@
 import { useTranslation } from 'react-i18next'
-import { signatureOption, type ChoiceQuestion, type Question } from '@/features/trainer'
+import {
+  cadenceNumerals,
+  signatureOption,
+  type ChoiceQuestion,
+  type Question,
+} from '@/features/trainer'
 import { useKeyName, useScaleName } from '@/shared/i18n'
 import { noteName, parseKey, printedSymbol, writtenName } from '@/shared/lib/music'
 import { INVERSION_NAMES } from '@/shared/ui'
@@ -31,6 +36,20 @@ export function useRoundWords() {
   const prompt = (question: Question): string => {
     switch (question.mode) {
       case 'build-chord':
+        if (question.cadence) {
+          const { cadence, key, at } = question.cadence
+          const words = {
+            cadence: t(`quiz:cadence.${cadence}`),
+            key: keyName(key),
+          }
+          const chord =
+            at === 0
+              ? t('quiz:prompt.playCadenceBefore', words)
+              : t('quiz:prompt.playCadenceLast', words)
+          return question.inversion === null
+            ? chord
+            : `${chord}, ${t(`music:inversionName.${INVERSION_NAMES[question.inversion] ?? 'root'}`).toLowerCase()}`
+        }
         return question.inversion === null
           ? t('quiz:prompt.buildChord', { symbol: printedSymbol(question.symbol) })
           : t('quiz:prompt.buildChordIn', {
@@ -68,6 +87,14 @@ export function useRoundWords() {
         return t('quiz:prompt.chordRole', { key: keyName(question.key) })
       case 'name-progression':
         return t('quiz:prompt.nameProgression', { key: keyName(question.key) })
+      case 'name-cadence':
+        return question.heard
+          ? t('quiz:prompt.hearCadence', { key: keyName(question.key) })
+          : t('quiz:prompt.nameCadence', { key: keyName(question.key) })
+      case 'cadence-card':
+        return question.show === 'name'
+          ? answer(question)
+          : t('quiz:prompt.nameCadence', { key: keyName(question.key) })
     }
   }
 
@@ -92,13 +119,21 @@ export function useRoundWords() {
         return question.options.map((value) => ({ value, label: value }))
       case 'name-progression':
         return question.options.map((value) => ({ value, label: progressionLine(value) }))
+      case 'name-cadence':
+        return question.options.map((value) => ({ value, label: t(`quiz:cadence.${value}`) }))
     }
   }
 
   /** What the round's answer is called: `C♯m7 · Minor 7th`, `Perfect fifth`, `E4`. */
   function answer(question: Question): string {
     switch (question.mode) {
+      case 'name-cadence':
+      case 'cadence-card':
+        return `${t(`quiz:cadence.${question.cadence}`)} · ${cadenceNumerals(question.voicing)} · ${keyName(question.key)}`
       case 'build-chord':
+        if (question.cadence)
+          return `${printedSymbol(question.symbol)} · ${cadenceNumerals(question.cadence.voicing)}`
+        return `${printedSymbol(question.symbol)} · ${t(`music:quality.${question.quality}`)}`
       case 'name-chord':
       case 'chord-card':
         return `${printedSymbol(question.symbol)} · ${t(`music:quality.${question.quality}`)}`

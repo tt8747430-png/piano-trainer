@@ -25,9 +25,12 @@ details.
     (right Favourite; left Move, then Archive), a long press starting Select;
   - a folder's row counts its folders and songs and names its first songs; its More edits, moves, archives or deletes
     it;
-  - **Select**: a check fading in where More stood so nothing moves, the count as the title, Select all, a bar of
-    Favourite · Move · Archive · Delete where everything chosen allows it; in the Manual sort a handle moves each row,
-    by finger, mouse or keyboard, a screen reader told where;
+  - **Select**: a check fading in where More stood so nothing moves, the count as the title, Select all (round, so
+    the bar keeps its one row at 320px), a bar of Favourite · Move · Archive · Delete, each in its slot, greyed where
+    what is chosen does not allow it (Delete: anything but the learner's own songs and folders); it counts and acts on
+    the rows chosen that are in sight, a search or filter hiding the rest; its Archive is one toast whose Undo puts
+    every song and folder back; in the Manual sort a handle moves each row, by finger, mouse or keyboard, a screen
+    reader told where;
   - **Move to…**: Home, then the folders as they nest, the place it stands in marked Here; a tap moves at once;
     New folder at its foot;
   - the song's page and the Player's More: the ♡, Move to…, Archive or Restore.
@@ -62,3 +65,4 @@ A study, practised on Practice, is in no library. A folder played song after son
 - 0106 — One library of songs (2026-10-26); its second round nested the folders, made one search with its filters,
   moved at a tap and stood sheets on the phone's keyboard (ADR 0061).
 - New's Import and a file dropped on the library (2026-10-28, ADR 0107).
+- Select acts on the rows in sight, its bar's slots stay put and its Archive has one Undo (2026-10-28).

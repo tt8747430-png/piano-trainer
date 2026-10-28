@@ -25,7 +25,7 @@ const SONG: SharedSong = {
 }
 
 describe('A shared song', () => {
-  it('shows the song its link holds, and adds it to Your songs only when asked', async () => {
+  it('shows the song its link holds, and adds it to the library only when asked', async () => {
     const user = userEvent.setup()
     const data = await linkOf(SONG)
     const { router, piecesStore } = await renderApp(`/songs/shared?song=${data}`)
@@ -33,7 +33,7 @@ describe('A shared song', () => {
     expect(screen.getByText('G · 3/4 · 84 BPM')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /^Bar 1: G$/ })).toBeInTheDocument()
     expect(piecesStore.getState().songs).toEqual([])
-    await user.click(screen.getByRole('button', { name: 'Add to Your songs' }))
+    await user.click(screen.getByRole('button', { name: 'Add to the library' }))
     expect(piecesStore.getState().songs.map((song) => song.title)).toEqual(['Morning'])
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/my-1'))
   })
@@ -47,7 +47,7 @@ describe('A shared song', () => {
   it('floats Add, and plays a tapped bar on its keys before it is added', async () => {
     const user = userEvent.setup()
     const { audio } = await renderApp(`/songs/shared?song=${await linkOf(SONG)}`)
-    const add = await screen.findByRole('button', { name: 'Add to Your songs' })
+    const add = await screen.findByRole('button', { name: 'Add to the library' })
     expect(add.closest('[data-slot="floating-actions"]')).not.toBeNull()
     expect(screen.getByRole('group', { name: 'Keyboard' })).toBeInTheDocument()
     const bar = screen.getByRole('button', { name: /^Bar 2: C$/ })
@@ -56,17 +56,17 @@ describe('A shared song', () => {
     expect(bar).toHaveAttribute('aria-pressed', 'true')
   })
 
-  it('says what the song is for, and names Add in words', async () => {
+  it('names Add in words, by the library it adds to, with no line repeating it', async () => {
     await renderApp(`/songs/shared?song=${await linkOf(SONG)}`)
-    expect(await screen.findByText('Add it to Your songs to practise it.')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Add to Your songs' })).toHaveTextContent(
-      'Add to Your songs',
+    expect(await screen.findByRole('button', { name: 'Add to the library' })).toHaveTextContent(
+      'Add to the library',
     )
+    expect(screen.queryByText(/Your songs/)).toBeNull()
   })
 
   it('adds the song once, however quickly Add is pressed again', async () => {
     const { router, piecesStore } = await renderApp(`/songs/shared?song=${await linkOf(SONG)}`)
-    const add = await screen.findByRole('button', { name: 'Add to Your songs' })
+    const add = await screen.findByRole('button', { name: 'Add to the library' })
     fireEvent.click(add)
     fireEvent.click(add)
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/my-1'))
@@ -83,7 +83,7 @@ describe('A shared song', () => {
 
   it('reads in Russian, with nothing left in English', async () => {
     await renderApp(`/songs/shared?song=${await linkOf(SONG)}`, { locale: 'ru' })
-    await screen.findByRole('button', { name: 'Добавить к вашим песням' })
+    await screen.findByRole('button', { name: 'Добавить в библиотеку' })
     expect(untranslated(document.body)).toEqual([])
   })
 })

@@ -18,6 +18,7 @@ import {
 } from '@/shared/lib/music'
 import { INTERVAL_WAYS, type IntervalWay } from '@/shared/lib/schedule'
 import type { Asks, ChordItem } from './draw'
+import { CADENCE_LEVEL, CADENCE_LEVELS, type CadenceLevel } from './ladders/cadences'
 import { CHORD_LEVELS, chordLevel, type ChordLevel } from './ladders/chords'
 import {
   EAR_SCALES,
@@ -46,9 +47,11 @@ import {
 import { NOTE_LEVELS, NOTE_RANGE, noteLevel, rangeNotes, type NoteLevel } from './ladders/notes'
 import { SCALE_LEVEL_KINDS, SCALE_LEVELS, type ScaleLevel } from './ladders/scales'
 import {
+  CARD_SIDES,
   CUSTOM,
   DRILLS,
   readList,
+  type CardSide,
   type Drill,
   type TrainerId,
   type TrainerView,
@@ -69,13 +72,15 @@ export type CustomField =
 
 /**
  * A trainer: its ladder, Custom's choices (none: no Custom), the drills it asks in (none: one way
- * only), and what a run at a level asks.
+ * only), what its cards can show, and what a run at a level asks.
  */
 export interface Trainer {
   readonly id: TrainerId
   readonly levels: readonly string[]
   readonly custom: readonly CustomField[]
   readonly drills: readonly Drill[]
+  /** What a card can show on its face, where it asks in cards: a cadence has no one set of keys. */
+  readonly sides: readonly CardSide[]
   asks(level: string, view: TrainerView, gaps: readonly SkillId[]): Asks
 }
 
@@ -162,12 +167,16 @@ function customNotes(view: TrainerView) {
   return notes.length > 0 ? notes : rangeNotes(NOTE_RANGE.from, NOTE_RANGE.to, false)
 }
 
+/** A cadence card shows its name or its staff: its two chords on one keyboard would read as one. */
+const CADENCE_SIDES = ['name', 'staff'] as const satisfies readonly CardSide[]
+
 const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
   chords: {
     id: 'chords',
     levels: CHORD_LEVELS,
     custom: ['chords', 'roots', 'inversions'],
     drills: DRILLS,
+    sides: CARD_SIDES,
     asks: (level, view) => {
       return {
         kind: 'chords',
@@ -183,6 +192,7 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     levels: INTERVAL_LEVELS,
     custom: ['intervals', 'roots', 'ways'],
     drills: DRILLS,
+    sides: CARD_SIDES,
     asks: (level, view) => {
       const drill = drillIn(DRILLS, view)
       const show = view.show ?? 'name'
@@ -203,6 +213,7 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     levels: SCALE_LEVELS,
     custom: ['scales'],
     drills: [],
+    sides: [],
     asks: (level, view) => ({
       kind: 'skills',
       skills: (level === CUSTOM
@@ -216,6 +227,7 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     levels: [],
     custom: [],
     drills: [],
+    sides: [],
     asks: (_level, _view, gaps) => ({
       kind: 'skills',
       skills: gaps,
@@ -227,6 +239,7 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     levels: SCALE_EAR_LEVELS,
     custom: ['kinds', 'descending'],
     drills: [],
+    sides: [],
     asks: (level, view) =>
       level === CUSTOM
         ? {
@@ -241,6 +254,7 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     levels: NOTE_LEVELS,
     custom: ['range', 'accidentals'],
     drills: [],
+    sides: [],
     asks: (level, view) => ({
       kind: 'notes',
       notes: level === CUSTOM ? customNotes(view) : noteLevel(level as NoteLevel),
@@ -251,6 +265,7 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     levels: SIGNATURE_LEVELS,
     custom: [],
     drills: [],
+    sides: [],
     asks: (level) => ({ kind: 'signatures', keys: SIGNATURE_LEVEL[level as SignatureLevel] }),
   },
   'key-degrees': {
@@ -258,6 +273,7 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     levels: DEGREE_LEVELS,
     custom: [],
     drills: [],
+    sides: [],
     asks: (level) => ({ kind: 'degrees', keys: DEGREE_LEVEL[level as DegreeLevel] }),
   },
   'chord-role': {
@@ -265,6 +281,7 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     levels: ROLE_LEVELS,
     custom: [],
     drills: [],
+    sides: [],
     asks: (level) => ({ kind: 'roles', ...ROLE_LEVEL[level as RoleLevel] }),
   },
   // A progression is no skill (UBIQUITOUS_LANGUAGE): its answers rate nothing.
@@ -273,9 +290,24 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     levels: PROGRESSION_LEVELS,
     custom: [],
     drills: [],
+    sides: [],
     asks: (level) => ({
       kind: 'progressions',
       ...PROGRESSION_LEVEL[level as ProgressionLevel],
+    }),
+  },
+  // A cadence is no skill either: two chords in a key, heard or read.
+  cadences: {
+    id: 'cadences',
+    levels: CADENCE_LEVELS,
+    custom: [],
+    drills: DRILLS,
+    sides: CADENCE_SIDES,
+    asks: (level, view) => ({
+      kind: 'cadences',
+      drill: drillIn(DRILLS, view),
+      ...CADENCE_LEVEL[level as CadenceLevel],
+      show: view.show === 'staff' ? 'staff' : 'name',
     }),
   },
 }
@@ -317,6 +349,7 @@ export const LADDERS = {
   degrees: DEGREE_LEVELS,
   roles: ROLE_LEVELS,
   progressions: PROGRESSION_LEVELS,
+  cadences: CADENCE_LEVELS,
 } as const
 type Ladder = keyof typeof LADDERS
 
@@ -331,6 +364,7 @@ const LADDER_OF: Readonly<Record<TrainerId, Ladder | null>> = {
   'key-degrees': 'degrees',
   'chord-role': 'roles',
   'progressions-by-ear': 'progressions',
+  cadences: 'cadences',
 }
 
 /** The ladder a trainer climbs; null for My gaps. */

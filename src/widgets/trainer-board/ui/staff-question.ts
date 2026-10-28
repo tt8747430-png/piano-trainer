@@ -11,6 +11,8 @@ export type StaffQuestion = Extract<
       | 'chord-card'
       | 'name-interval'
       | 'interval-card'
+      | 'name-cadence'
+      | 'cadence-card'
   }
 >
 
@@ -20,4 +22,6 @@ export const showsStaff = (question: Question): question is StaffQuestion =>
   question.mode === 'name-chord' ||
   question.mode === 'chord-card' ||
   question.mode === 'name-interval' ||
-  question.mode === 'interval-card'
+  question.mode === 'interval-card' ||
+  question.mode === 'name-cadence' ||
+  question.mode === 'cadence-card'

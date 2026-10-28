@@ -6,6 +6,7 @@ import {
   useLibraryStoreApi,
   type FolderId,
   type LibraryCatalog,
+  type ShelvedFolder,
 } from '@/entities/library'
 import { entryTitles, useRepertoire, type PieceId } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
@@ -69,6 +70,31 @@ export function useLibraryActs() {
         undo(() => restoreSongs(store, catalog(), archived)),
       )
     },
+    /**
+     * What Select chose, archived in one go (songs, and folders with all they hold): one toast, its
+     * Undo putting every one back exactly where it stood.
+     */
+    archiveChosen: (ids: readonly PieceId[], folders: readonly ShelvedFolder[]) => {
+      const archived = archiveSongs(store, catalog(), ids)
+      for (const folder of folders) archiveFolder(store, catalog(), folder.id)
+      const [song] = archived
+      const [first] = folders
+      const count = archived.length + folders.length
+      if (count === 0) return
+      say(
+        count > 1
+          ? t('library.archivedMany', { count })
+          : song
+            ? t('library.archived', { title: titleOf(song) })
+            : t('library.folderArchived', { name: first ? folderName(first) : '' }),
+        undo(() => {
+          // The last archived first, so each folder goes back to the place it was taken from.
+          for (const folder of folders.toReversed())
+            restoreFolder(store, catalog(), folder.id, true)
+          restoreSongs(store, catalog(), archived)
+        }),
+      )
+    },
     restore: (ids: readonly PieceId[]) => {
       restoreSongs(store, catalog(), ids)
       const [only] = ids
@@ -99,9 +125,15 @@ export function useLibraryActs() {
         undo(() => setFavourites(store, [id], !on)),
       )
     },
+    /** Songs' ♡ set, counted, with Undo, which turns back only those it changed. */
     favourite: (ids: readonly PieceId[], on: boolean) => {
+      const was = store.getState().favourites
+      const changed = ids.filter((id) => was.includes(id) !== on)
       setFavourites(store, ids, on)
-      say(t(on ? 'library.favourited' : 'library.unfavourited', { count: ids.length }))
+      say(
+        t(on ? 'library.favourited' : 'library.unfavourited', { count: ids.length }),
+        undo(() => setFavourites(store, changed, !on)),
+      )
     },
   }
 }

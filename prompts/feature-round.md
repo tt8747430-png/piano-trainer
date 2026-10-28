@@ -2,28 +2,27 @@
 
 ## Goal
 
-Turn the owner's feedback (text and screenshots) into finished, merged work that matches the reference apps they point at, in one round of parallel agents.
+Turn the owner's feedback (text and screenshots) into finished, merged work that matches the reference apps they point at, for the least usage that gets it right (the owner-way skill's maximum principle).
 
 ## Context
 
 - Load the `owner-way` skill and read `CLAUDE.md`.
 - Before touching an area, read its section in the skill's `references/feedback-log.md`, so you don't bring back something the owner already rejected.
-- **Screenshots:** copy them into the session's `scratchpad/<round>/owner/` with descriptive names (`1-example-time-signature-wheels.jpg`, `4-ours-editor-palette.jpg`). Agents can't see the chat, so each one needs a written description.
+- Read the skill's `references/practices.md` once: test first, root cause before a fix, evidence before claims, impeccable for UI.
+- **Screenshots:** look at each one yourself. Only if an agent will build from them, copy them to `scratchpad/<round>/owner/` with descriptive names and describe each in its brief.
 
 ## Task
 
 1. List every request in the feedback, the small ones too. Nothing the owner wrote may be dropped silently.
-2. Group the requests into agents by the files they touch, so no two agents edit the same component. Keep each agent's work well under an hour. Split a large area rather than let one agent run long.
-3. Write each agent's brief from `.claude/skills/owner-way/references/agent-brief.md`. Quote the owner's words, describe each screenshot, number the items to build, and name the ADR to write or amend.
-4. Launch the agents in one message, each with `isolation: "worktree"`, a one-line prompt pointing at its brief, and its own dev-server port.
-5. If the owner adds feedback while an agent runs, send it to that agent with SendMessage.
-6. As each agent reports, check its commits and look at its screenshots. Merge it into the session branch.
-7. Once all have merged, run the full test suite and the build once. Fix what fails.
-8. Update `CLAUDE.md` and the docs. Then push the branch and `main`, and remove the worktrees and their branches.
+2. Order them so each builds on the last, and do them **yourself, one after another**: read only the code each needs, test first, build, run the tests it reaches, commit.
+3. Use agents only where the owner-way skill allows: a large part that touches other files and can be briefed in under a page. Then two or three at most, each with a brief from `.claude/skills/owner-way/references/agent-brief.md` (the owner's words, the screenshots described, numbered items, the ADR), launched in one message with `isolation: "worktree"`, a cheap model for reading or mechanical work. Keep working on your own part while they run; send mid-round feedback to the running agent; check each one's diff and tests before merging it.
+4. Once everything is in, run the full test suite and the build once. Fix what fails at its cause.
+5. Update `CLAUDE.md` and the docs. Push the branch and `main`; remove any worktrees.
 
 ## Constraints
 
-- Agents test only what their changes reach. The full suite runs once, on the merged branch. Never run two suites at once.
+- The tests a change reaches after each task; the full suite once, on the finished branch. Never run two suites at once.
+- Read parts of files, not whole ones; filter long outputs to their summary lines.
 - No legacy code, workarounds or unfinished work. Implement what's missing.
 
 ## Done means

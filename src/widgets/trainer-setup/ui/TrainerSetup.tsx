@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { selectTrainer, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setAutoNext } from '@/features/set-preference'
 import {
-  CARD_SIDES,
   CUSTOM,
   CUSTOM_CHOICES,
   CUSTOM_OWN,
@@ -122,7 +121,7 @@ export function TrainerSetup({
     )
   const { id } = trainer
   const how =
-    id === 'chords' || id === 'intervals'
+    id === 'chords' || id === 'intervals' || id === 'cadences'
       ? t(`quiz:how.${id}.${drill ?? 'flashcards'}`)
       : t(`quiz:how.${id}`)
 
@@ -150,7 +149,10 @@ export function TrainerSetup({
             <Segmented
               label={t('quiz:show.label')}
               value={view.show ?? 'name'}
-              options={CARD_SIDES.map((side) => ({ value: side, label: t(`quiz:show.${side}`) }))}
+              options={trainer.sides.map((side) => ({
+                value: side,
+                label: t(`quiz:show.${side}`),
+              }))}
               onChange={(show) => onChange({ show: show === 'name' ? undefined : show })}
             />
           </SettingField>

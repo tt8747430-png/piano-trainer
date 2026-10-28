@@ -13,6 +13,7 @@ import {
 } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import type { IntervalWay } from '@/shared/lib/schedule'
+import type { Cadence, CadenceVoicing } from './ladders/cadences'
 import type { CardSide } from './trainer-view'
 
 /** A chord to build or name: its symbol (over its bass in an inversion) and its tones from the root. */
@@ -25,6 +26,18 @@ export interface ChordQuestion {
   readonly tones: readonly Tone[]
   /** The tone that must be lowest (its inversion), or null: any voicing will do. */
   readonly inversion: number | null
+}
+
+/** A cadence in a key, voiced: what a cadence round shows and sounds. */
+export interface CadenceQuestion {
+  readonly cadence: Cadence
+  readonly key: Key
+  readonly voicing: CadenceVoicing
+}
+
+/** A chord played for a cadence: which of the cadence's two chords it is. */
+export interface CadenceChord extends CadenceQuestion {
+  readonly at: 0 | 1
 }
 
 /** An interval up from a root: its keys and its notes as written. */
@@ -44,7 +57,11 @@ export interface IntervalQuestion {
  * degrees are answered on the keys; the rest by choosing one of their `options`.
  */
 export type Question =
-  | ({ readonly mode: 'build-chord' } & ChordQuestion)
+  | ({
+      readonly mode: 'build-chord'
+      /** The cadence it is played for: the prompt names the cadence, not the chord. */
+      readonly cadence?: CadenceChord
+    } & ChordQuestion)
   | ({
       readonly mode: 'name-chord'
       readonly options: readonly string[]
@@ -105,6 +122,13 @@ export type Question =
       readonly chordKeys: readonly (readonly Midi[])[]
       readonly options: readonly string[]
     }
+  /** A cadence named from its staff, or heard after its key's tonic. */
+  | ({
+      readonly mode: 'name-cadence'
+      readonly heard: boolean
+      readonly options: readonly Cadence[]
+    } & CadenceQuestion)
+  | ({ readonly mode: 'cadence-card'; readonly show: 'name' | 'staff' } & CadenceQuestion)
   | {
       readonly mode: 'chord-role'
       readonly key: Key
@@ -135,8 +159,10 @@ export const pressesKeys = (
 /** A flashcard: turned over, never right or wrong. */
 export const isCard = (
   question: Question,
-): question is Extract<Question, { mode: 'chord-card' | 'interval-card' }> =>
-  question.mode === 'chord-card' || question.mode === 'interval-card'
+): question is Extract<Question, { mode: 'chord-card' | 'interval-card' | 'cadence-card' }> =>
+  question.mode === 'chord-card' ||
+  question.mode === 'interval-card' ||
+  question.mode === 'cadence-card'
 
 export const isChoice = (question: Question): question is ChoiceQuestion => 'options' in question
 
@@ -155,6 +181,8 @@ export function choiceAnswer(question: ChoiceQuestion): string {
       return question.numeral
     case 'name-progression':
       return question.line
+    case 'name-cadence':
+      return question.cadence
   }
 }
 
