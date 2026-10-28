@@ -11,9 +11,11 @@ import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import {
   chordSymbol,
+  nashvilleNumber,
   numeralChord,
   numeralText,
   parseNumerals,
+  printedSymbol,
   voiceLead,
   writtenKey,
   type ChordSize,
@@ -22,6 +24,7 @@ import {
 import { walkSounds } from '@/shared/lib/schedule'
 import { usePlayback, usePlayhead } from '@/shared/lib/services'
 import { ChordText, FoldSection, PlayButton } from '@/shared/ui'
+import type { ProgressionNames } from '../model/progressions-view'
 
 type Playback = ReturnType<typeof usePlayback<string>>
 
@@ -29,9 +32,9 @@ type Playback = ReturnType<typeof usePlayback<string>>
 const CARD_TEMPO = 84
 const BEATS_A_CHORD = 2
 
-/** A card's chords in the key shown: each numeral over the chord it is there. */
+/** A card's chords in the key shown: each numeral (or Nashville number) over the chord it is there. */
 interface CardChord {
-  readonly numeral: string
+  readonly numeral: string | undefined
   readonly symbol: string
 }
 
@@ -49,16 +52,19 @@ const cardKey = (progression: LibraryProgression, key: Key): Key => {
  * card titled by its numerals, its name and chord count, how it sounds in a line, and a chip a chord
  * (the numeral over the chord in the key chosen), so the key and Major · Minor above re-spell every
  * card. Its Play plays it there and then, the sounding chord's chip lit; a tap anywhere else opens it
- * at the top of the page. The one shown is marked.
+ * at the top of the page. The one shown is marked. Its chords are named as the page's row names them:
+ * by numerals, Nashville numbers, or the chords alone.
  */
 export function ProgressionLibrary({
   musicKey,
   size,
+  names,
   shown,
   onChoose,
 }: {
   musicKey: Key
   size: ChordSize
+  names: ProgressionNames
   /** The library's progression the page shows, if it shows one. */
   shown: string | undefined
   onChoose: (progression: LibraryProgression) => void
@@ -82,6 +88,7 @@ export function ProgressionLibrary({
                   progression={progression}
                   musicKey={cardKey(progression, musicKey)}
                   size={progression.size ?? size}
+                  names={names}
                   shown={progression.id === shown}
                   playback={playback}
                   onChoose={() => onChoose(progression)}
@@ -99,6 +106,7 @@ function ProgressionCard({
   progression,
   musicKey,
   size,
+  names,
   shown,
   playback,
   onChoose,
@@ -106,6 +114,7 @@ function ProgressionCard({
   progression: LibraryProgression
   musicKey: Key
   size: ChordSize
+  names: ProgressionNames
   shown: boolean
   playback: Playback
   onChoose: () => void
@@ -120,10 +129,18 @@ function ProgressionCard({
     () => numerals.map((numeral) => numeralChord(numeral, musicKey, size)),
     [numerals, musicKey, size],
   )
-  const row: readonly CardChord[] = numerals.map((numeral, at) => ({
-    numeral: numeralText(numeral),
-    symbol: chords[at] ? chordSymbol(chords[at]) : '',
-  }))
+  const row: readonly CardChord[] = numerals.map((numeral, at) => {
+    const chord = chords[at]
+    return {
+      numeral:
+        names === 'numerals'
+          ? numeralText(numeral)
+          : names === 'nashville' && chord
+            ? nashvilleNumber(chord, musicKey)
+            : undefined,
+      symbol: chord ? chordSymbol(chord) : '',
+    }
+  })
   const onsets = useMemo(
     () => chords.map((_, at) => (at * BEATS_A_CHORD * 60) / CARD_TEMPO),
     [chords],
@@ -131,7 +148,7 @@ function ProgressionCard({
   const playing = playback.playing === progression.id
   const sounding = usePlayhead(playing ? playback.handle : null, onsets)
   const name = localText(progression.name, locale)
-  const line = row.map((chord) => chord.numeral).join(' – ')
+  const line = row.map((chord) => chord.numeral ?? printedSymbol(chord.symbol)).join(' – ')
   return (
     <article
       aria-label={name}
@@ -175,7 +192,9 @@ function ProgressionCard({
               sounding === at && 'bg-selected text-selected-foreground',
             )}
           >
-            <span className="text-xs text-muted-foreground">{chord.numeral}</span>
+            {chord.numeral === undefined ? null : (
+              <span className="text-xs text-muted-foreground">{chord.numeral}</span>
+            )}
             <ChordText symbol={chord.symbol} />
           </li>
         ))}

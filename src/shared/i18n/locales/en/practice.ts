@@ -157,6 +157,25 @@ export const practice = {
     minorLine: 'These numerals are a minor key’s.',
     playIn: 'Play them in {{key}}',
     throughKeys: 'Through the keys',
+    // How the row is read and played (ADR 0112): its mode, how its chords are named, voice-led or blocks.
+    mode: {
+      label: 'Mode',
+      info: 'Read the numerals in a church mode on the key’s tonic: each degree becomes that mode’s own chord. I IV V in Dorian is i IV v, and Mixolydian’s VII is ♭VII. Major or minor reads them in the key itself.',
+    },
+    names: {
+      label: 'Written as',
+      numerals: 'Numerals',
+      nashville: 'Nashville',
+      chords: 'Chords',
+      info: 'Roman numerals, or Nashville numbers: each chord’s root counted from the tonic, a plain number for a major chord and m for a minor one (1 5 6m 4), a ♭ where the root lies below the major scale. Or the chords alone.',
+    },
+    voicing: {
+      label: 'Voicing',
+      led: 'Voice-led',
+      block: 'Block',
+      info: 'Voice-led, each chord moves to the position nearest the one before: the notes they share are held and the rest step. Block, every chord stands in root position and the hand leaps. Switch between them to hear the difference.',
+      blockReason: 'Block chords all stand in root position.',
+    },
     // The library as cards, a card a progression (ADR 0112).
     library: 'Library',
     chordCount_one: '{{count}} chord',

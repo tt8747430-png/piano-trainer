@@ -14,6 +14,7 @@ import {
   buildChord,
   BUILT_SIZES,
   CHORD_NOTES,
+  CHURCH_MODES,
   chordInversions,
   type ChordFamily,
   type Fingering,
@@ -212,8 +213,12 @@ export function readProgressionsSearch(raw: Raw): ProgressionsView {
         : undefined,
     inKey: raw.inKey === true ? true : undefined,
     harmony: raw.harmony === 'motion' ? 'motion' : undefined,
+    mode: isChurchMode(raw.mode) ? raw.mode : undefined,
+    block: raw.block === true ? true : undefined,
+    names: raw.names === 'nashville' || raw.names === 'chords' ? raw.names : undefined,
   }
 }
+const isChurchMode = isOneOf(CHURCH_MODES)
 /** Progressions' line left out of the URL only where its key opens on it. */
 const stripOpeningLine: SearchMiddleware<ProgressionsView> = (context) => {
   const search = context.next(context.search)

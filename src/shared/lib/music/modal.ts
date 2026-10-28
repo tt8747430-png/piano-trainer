@@ -13,6 +13,9 @@ export type ChurchMode = (typeof CHURCH_MODES)[number]
 /** The modes with a minor 3rd over their tonic: read against the minor key on it. */
 const MINOR_MODES: ReadonlySet<ChurchMode> = new Set(['dorian', 'phrygian', 'locrian'])
 
+/** Whether a mode has a minor 3rd over its tonic (Dorian, Phrygian, Locrian). */
+export const isMinorMode = (mode: ChurchMode): boolean => MINOR_MODES.has(mode)
+
 /**
  * The key a mode on `tonic` is written against: the major key of the same tonic for a mode with a major
  * 3rd (Lydian, Mixolydian), the minor key for one with a minor 3rd. Its numerals are that key's, the
@@ -20,7 +23,7 @@ const MINOR_MODES: ReadonlySet<ChurchMode> = new Set(['dorian', 'phrygian', 'loc
  */
 export const modeKey = (tonic: SpelledNote, mode: ChurchMode): Key => ({
   tonic,
-  minor: MINOR_MODES.has(mode),
+  minor: isMinorMode(mode),
 })
 
 /**

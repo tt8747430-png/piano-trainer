@@ -1,11 +1,13 @@
 import {
   harmonicFunction,
+  nashvilleNumber,
   rootMove,
   numeralChord,
   parseChordSymbol,
   numeralText,
   type Chord,
   type ChordSize,
+  type ChurchMode,
   type HarmonicFunction,
   type Key,
   type Numeral,
@@ -28,17 +30,33 @@ export interface RowChord {
 export const symbolsRow = (symbols: readonly string[]): RowChord[] =>
   symbols.map((symbol) => ({ chord: parseChordSymbol(symbol), symbol }))
 
-/** A progression's chords in a key and size, each captioned by its numeral, with what it does there. */
+/** How a progression's row names its chords: numerals, Nashville numbers, or the chords alone. */
+export type RowNames = 'numerals' | 'nashville' | 'chords'
+
+/**
+ * A progression's chords in a key and size, grown as its church mode grows them where it has one, each
+ * captioned by its numeral (or its Nashville number, or nothing but its symbol), with what it does there.
+ */
 export const progressionRow = (
   numerals: readonly Numeral[],
   key: Key,
   size: ChordSize,
+  { mode, names = 'numerals' }: { mode?: ChurchMode | undefined; names?: RowNames } = {},
 ): RowChord[] =>
-  numerals.map((numeral) => ({
-    chord: numeralChord(numeral, key, size),
-    caption: numeralText(numeral),
-    function: harmonicFunction(numeral, key.minor),
-  }))
+  numerals.map((numeral) => {
+    const chord = numeralChord(numeral, key, size, mode)
+    const caption =
+      names === 'numerals'
+        ? numeralText(numeral)
+        : names === 'nashville'
+          ? nashvilleNumber(chord, key)
+          : undefined
+    return {
+      chord,
+      ...(caption === undefined ? {} : { caption }),
+      function: harmonicFunction(numeral, key.minor),
+    }
+  })
 
 /** How each chord's root moved from the one before it; none for the first, or where the letter stays. */
 export const rowMoves = (chords: readonly RowChord[]): (RootMove | null)[] =>

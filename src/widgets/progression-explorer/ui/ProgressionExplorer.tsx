@@ -18,6 +18,9 @@ import {
   numeralGrows,
   numeralsLine,
   parseNumerals,
+  printedSymbol,
+  chordSymbol,
+  type Numeral,
 } from '@/shared/lib/music'
 import {
   ChordSizeField,
@@ -33,7 +36,9 @@ import {
   chosenView,
   playedNumerals,
   playerSearch,
+  rowPosition,
   viewProgression,
+  type ProgressionNames,
   type ProgressionsView,
 } from '../model/progressions-view'
 import { ProgressionBetween } from './ProgressionBetween'
@@ -41,6 +46,7 @@ import { ProgressionField } from './ProgressionField'
 import { ProgressionDiagrams } from './ProgressionDiagrams'
 import { ProgressionLibrary } from './ProgressionLibrary'
 import { ProgressionPractice } from './ProgressionPractice'
+import { ProgressionReading } from './ProgressionReading'
 import { ProgressionSongs } from './ProgressionSongs'
 
 /**
@@ -59,7 +65,7 @@ export function ProgressionExplorer({
   const { t } = useTranslation(['music', 'practice'])
   const locale = useLocale()
   const [shown, setShown] = useShownKeys(
-    `${view.key} ${view.p} ${view.size} ${view.inversion} ${view.nearest} ${view.lead}`,
+    `${view.key} ${view.p} ${view.mode} ${view.size} ${view.inversion} ${view.nearest} ${view.block} ${view.lead}`,
     NO_KEYS,
   )
   const key = keyFromParam(view.key)
@@ -67,24 +73,21 @@ export function ProgressionExplorer({
   const played = playedNumerals(view)
   const named = viewProgression(view)
   const change = (next: Partial<ProgressionsView>) => onChange(changedView(view, next))
-  const row = progressionRow(played, key, view.size)
+  const names = view.names ?? 'numerals'
+  const row = progressionRow(played, key, view.size, { mode: view.mode, names })
   const behavior = useScrollMotion()
   return (
     <div className="flex flex-col gap-6">
       <PinnedKeyboard shown={shown} />
       <hgroup className="flex flex-col gap-1">
         <h2 className="text-3xl wrap-anywhere">
-          {named ? localText(named.name, locale) : numeralsLine(numerals)}
+          {named ? localText(named.name, locale) : rowLine(row, names, numerals)}
         </h2>
         {named ? (
           <p className="text-lg text-muted-foreground">{localText(named.character, locale)}</p>
         ) : null}
       </hgroup>
-      <ChordRow
-        chords={row}
-        position={{ inversion: view.inversion, nearest: view.nearest }}
-        onShow={setShown}
-      >
+      <ChordRow chords={row} position={rowPosition(view)} onShow={setShown}>
         <RowStaff />
         <div className="flex flex-col gap-3">
           <Segmented
@@ -132,11 +135,19 @@ export function ProgressionExplorer({
             onChange={(lead) => change({ lead: lead === 'none' ? undefined : lead })}
           />
         </Labelled>
-        <PositionField notes={view.size === 'triads' ? 3 : 4} position={view} onChange={change} />
+        <ProgressionReading view={view} onChange={change} />
+        <PositionField
+          notes={view.size === 'triads' ? 3 : 4}
+          position={view}
+          disabled={view.block === true}
+          {...(view.block ? { info: t('practice:progressions.voicing.blockReason') } : {})}
+          onChange={change}
+        />
       </div>
       <ProgressionLibrary
         musicKey={key}
         size={view.size}
+        names={names}
         shown={named?.id}
         onChoose={(progression) => {
           onChange(chosenView(view, progression))
@@ -155,4 +166,14 @@ export function ProgressionExplorer({
       />
     </div>
   )
+}
+
+/** A typed line's name over the row: its numerals, its Nashville numbers or its chords, as the row names them. */
+function rowLine(
+  row: ReturnType<typeof progressionRow>,
+  names: ProgressionNames,
+  numerals: readonly Numeral[],
+): string {
+  if (names === 'numerals') return numeralsLine(numerals)
+  return row.map(({ chord, caption }) => caption ?? printedSymbol(chordSymbol(chord))).join(' – ')
 }

@@ -161,3 +161,47 @@ describe('a lead-in', () => {
     expect(chosenView(shown, library('axis')).lead).toBe('v')
   })
 })
+
+describe('a progression in a mode', () => {
+  it('plays each plain degree as the mode’s own chord', () => {
+    const dorian = { ...view(minor('D'), 'I-IV-V', 'triads'), mode: 'dorian' as const }
+    expect(playedNumerals(dorian).map(numeralText)).toEqual(['i', 'IV', 'v'])
+  })
+
+  it('stands a mode chosen on the major or minor key of its tonic', () => {
+    expect(changedView(view(major('C'), 'I-IV-V', 'triads'), { mode: 'dorian' })).toMatchObject({
+      key: minor('C'),
+      mode: 'dorian',
+    })
+    expect(changedView(view(major('C'), 'I-IV-V', 'triads'), { mode: 'lydian' })).toMatchObject({
+      key: major('C'),
+      mode: 'lydian',
+    })
+  })
+
+  it('leaves the mode when the key turns to the other of major and minor', () => {
+    const dorian = { ...view(minor('D'), 'i-IV', 'triads'), mode: 'dorian' as const }
+    expect(changedView(dorian, { key: major('D') }).mode).toBeUndefined()
+    expect(changedView(dorian, { key: minor('E') }).mode).toBe('dorian')
+  })
+
+  it('opens a modal vamp in its mode, and any other progression in none', () => {
+    expect(chosenView(view(major('C'), 'I-V', 'triads'), library('dorian-vamp'))).toMatchObject({
+      key: minor('C'),
+      mode: 'dorian',
+    })
+    const dorian = { ...view(minor('D'), 'i-IV', 'triads'), mode: 'dorian' as const }
+    expect(chosenView(dorian, library('axis')).mode).toBeUndefined()
+  })
+})
+
+describe('block chords', () => {
+  it('plays every chord in root position, the hand leaping, in the Player too', () => {
+    const blocks = {
+      ...view(major('C'), 'I-V-vi-IV', 'triads'),
+      inversion: 1 as const,
+      block: true as const,
+    }
+    expect(playerSearch(blocks)).toMatchObject({ inversion: 0, nearest: false })
+  })
+})
