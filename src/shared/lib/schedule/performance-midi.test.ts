@@ -7,9 +7,11 @@ import {
   type Performance,
   type StaffNote,
 } from '@/shared/lib/arrangement'
-import { midi, note, parseChordSymbol, type NoteMarks } from '@/shared/lib/music'
+import { midi, note, parseChordSymbol, TICKS_PER_BEAT, type NoteMarks } from '@/shared/lib/music'
 import { performanceMidi, type PartNames } from './performance-midi'
 import { gainVelocity } from './velocity'
+
+const B = TICKS_PER_BEAT
 
 const BEATS: EventPattern = {
   id: 'beats',
@@ -57,11 +59,11 @@ const PICKUP_AND_THREE: Performance = arrange(
       {
         clef: 'treble',
         notes: [
-          tuneNote(67, 0, 24),
-          tuneNote(72, 24, 96, { pedal: 'down' }),
-          tuneNote(69, 120, 96, { pedal: 'change' }),
-          tuneNote(76, 216, 72, { pedal: 'up', expression: 'rit' }),
-          tuneNote(72, 288, 72, { expression: 'a-tempo' }),
+          tuneNote(67, 0, B),
+          tuneNote(72, B, 4 * B, { pedal: 'down' }),
+          tuneNote(69, 5 * B, 4 * B, { pedal: 'change' }),
+          tuneNote(76, 9 * B, 3 * B, { pedal: 'up', expression: 'rit' }),
+          tuneNote(72, 12 * B, 3 * B, { expression: 'a-tempo' }),
         ],
       },
     ],
@@ -172,14 +174,17 @@ function notesOf(track: readonly ReadEvent[]) {
   return notes.sort((a, b) => a.on - b.on || a.key - b.key)
 }
 
-/** A part's notes as the file should write them: 20 of its ticks a performance's (480 a quarter). */
+/** A performance's tick as the file's, 480 a quarter. */
+const inFile = (tick: number) => Math.round((tick * 480) / TICKS_PER_BEAT)
+
+/** A part's notes as the file should write them. */
 const expected = (performance: Performance, part: (n: Performance['notes'][number]) => boolean) =>
   performance.notes
     .filter(part)
     .map((n) => ({
       key: n.midi,
-      on: n.startTick * 20,
-      off: (n.startTick + n.durationTicks) * 20,
+      on: inFile(n.startTick),
+      off: inFile(n.startTick + n.durationTicks),
       velocity: gainVelocity(n.velocity),
     }))
     .sort((a, b) => a.on - b.on || a.key - b.key)
@@ -307,7 +312,7 @@ describe('performanceMidi', () => {
       const notes = TWO.notes.map((each, i) => (i === at && marks ? { ...each, marks } : each))
       const midiFile = performanceMidi({ ...TWO, notes }, { tempo: 90, title: '', names: NAMES })
       return notesOf(readMidi(midiFile).tracks[1] ?? []).find(
-        (each) => each.key === n.midi && each.on === n.startTick * 20,
+        (each) => each.key === n.midi && each.on === inFile(n.startTick),
       )?.velocity
     }
     const plain = gainVelocity(n.velocity)
@@ -326,12 +331,12 @@ describe('performanceMidi', () => {
     }
     const midiFile = performanceMidi(doubled, { tempo: 90, title: '', names: NAMES })
     const right = notesOf(readMidi(midiFile).tracks[1] ?? [])
-    expect(right.filter((each) => each.key === n.midi && each.on === n.startTick * 20)).toEqual([
+    expect(right.filter((each) => each.key === n.midi && each.on === inFile(n.startTick))).toEqual([
       {
         channel: 0,
         key: n.midi,
-        on: n.startTick * 20,
-        off: (n.startTick + n.durationTicks) * 20,
+        on: inFile(n.startTick),
+        off: inFile(n.startTick + n.durationTicks),
         velocity: gainVelocity(n.velocity),
       },
     ])

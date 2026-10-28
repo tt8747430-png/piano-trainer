@@ -1,10 +1,12 @@
 // @vitest-environment jsdom
 import { beforeAll, describe, expect, it } from 'vitest'
-import { midi, note, type SpelledNote } from '@/shared/lib/music'
+import { midi, note, type SpelledNote, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { notate, scoreToMei, type TimedNote } from '@/shared/lib/notation'
 import { chosenParts } from './svg-chosen'
 import { numbers } from './svg-glyphs'
 import { engraveMei } from './toolkit'
+
+const B = TICKS_PER_BEAT
 
 const n = (
   key: number,
@@ -23,16 +25,16 @@ const score = notate({
   meter: '4/4',
   bars: [
     { startTick: 0, beats: 4 },
-    { startTick: 96, beats: 4 },
+    { startTick: 4 * B, beats: 4 },
   ],
   notes: [
-    n(72, 'rh', 0, 36, note('C')),
-    n(76, 'rh', 0, 36, note('E')),
-    n(85, 'rh', 36, 12, note('C', 1)),
-    n(86, 'rh', 48, 6, note('D')),
-    n(57, 'lh', 0, 96, note('A')),
-    n(84, 'rh', 96, 48, note('C')),
-    n(40, 'lh', 96, 24, note('E')),
+    n(72, 'rh', 0, 1.5 * B, note('C')),
+    n(76, 'rh', 0, 1.5 * B, note('E')),
+    n(85, 'rh', 1.5 * B, 0.5 * B, note('C', 1)),
+    n(86, 'rh', 2 * B, 0.25 * B, note('D')),
+    n(57, 'lh', 0, 4 * B, note('A')),
+    n(84, 'rh', 4 * B, 2 * B, note('C')),
+    n(40, 'lh', 4 * B, B, note('E')),
   ],
   chords: [],
 })
@@ -58,9 +60,9 @@ const ledgers = (parts: readonly Element[]) =>
 
 describe('the parts of an engraving that draw what is chosen (ADR 0096)', () => {
   it('colours a note whole, its stem, flag and sharp inside it, and its ledger lines out to it', () => {
-    const parts = chosenParts(svg, { staves: ['treble'], from: 36, to: 37 }, null)
-    expect(ids(parts)).toEqual(['n-treble-36-0'])
-    const note = svg.querySelector('#n-treble-36-0')
+    const parts = chosenParts(svg, { staves: ['treble'], from: 1.5 * B, to: 1.5 * B + 1 }, null)
+    expect(ids(parts)).toEqual(['n-treble-7560-0'])
+    const note = svg.querySelector('#n-treble-7560-0')
     expect(note?.querySelector('g.stem g.flag')).not.toBeNull()
     expect(note?.querySelector('g.accid')).not.toBeNull()
     // C♯6: the A5 and C6 lines over the staff, not the D6's beside them.
@@ -86,16 +88,18 @@ describe('the parts of an engraving that draw what is chosen (ADR 0096)', () => 
   })
 
   it('colours the rests chosen, never with one key of a chord', () => {
-    expect(ids(chosenParts(svg, { staves: ['treble'], from: 54, to: 96 }, null))).toEqual([
-      'r-treble-54',
-      'r-treble-72',
+    expect(ids(chosenParts(svg, { staves: ['treble'], from: 2.25 * B, to: 4 * B }, null))).toEqual([
+      'r-treble-11340',
+      'r-treble-15120',
     ])
-    expect(ids(chosenParts(svg, { staves: ['treble'], from: 54, to: 96 }, new Set()))).toEqual([])
+    expect(
+      ids(chosenParts(svg, { staves: ['treble'], from: 2.25 * B, to: 4 * B }, new Set())),
+    ).toEqual([])
   })
 
   it('colours every staff’s notes where no staff is said, a ledger line under the bass too', () => {
-    const parts = chosenParts(svg, { from: 96, to: 97 }, null)
-    expect(ids(parts)).toEqual(['n-treble-96-0', 'n-bass-96-0'])
+    const parts = chosenParts(svg, { from: 4 * B, to: 4 * B + 1 }, null)
+    expect(ids(parts)).toEqual(['n-treble-20160-0', 'n-bass-20160-0'])
     // C6's two over the treble, E2's one under the bass.
     expect(ledgers(parts)).toHaveLength(3)
   })

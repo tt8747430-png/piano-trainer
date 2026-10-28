@@ -1,5 +1,6 @@
 import type { CaretMove, ChosenValue, EditorAction, Layer } from '@/features/score-editor'
 import type { KeyPress } from '@/shared/lib/shortcuts'
+import type { TupletCount } from '@/shared/lib/notation'
 import type { SheetField } from '@/widgets/score-sheet'
 
 /** A shortcut: an editor action, or a field opened to type in where it is printed (ADR 0096). */
@@ -17,6 +18,13 @@ interface ToolCombo {
 interface ToolShortcut extends ToolCombo {
   readonly does: Shortcut
 }
+
+const tuplet = (num: TupletCount): ToolShortcut => ({
+  code: `Digit${num}`,
+  cap: String(num),
+  shift: true,
+  does: { type: 'tuplet', num },
+})
 
 const value = (chosen: ChosenValue['value'], digit: number): ToolShortcut => ({
   code: `Digit${digit}`,
@@ -37,6 +45,7 @@ export const TOOL_SHORTCUTS = {
   eighth: value(8, 4),
   sixteenth: value(16, 5),
   thirtySecond: value(32, 6),
+  sixtyFourth: value(64, 7),
   rest: { code: 'Digit8', cap: '8', does: { type: 'rest' } },
   grace: { code: 'Digit9', cap: '9', does: { type: 'grace', kind: 'appoggiatura' } },
   acciaccatura: {
@@ -51,7 +60,15 @@ export const TOOL_SHORTCUTS = {
   respell: { code: 'KeyJ', cap: 'J', shift: true, does: { type: 'respell' } },
   dot: { code: 'Period', cap: '.', does: { type: 'dot' } },
   tie: { code: 'Comma', cap: ',', does: { type: 'tie' } },
-  triplet: { code: 'Digit3', cap: '3', shift: true, does: { type: 'triplet' } },
+  // Flat's ⇧2–⇧8: a tuplet of two to eight on the value; ⇧9 is the acciaccatura's, so nine takes
+  // its key alone (ADR 0097).
+  tuplet2: tuplet(2),
+  tuplet3: tuplet(3),
+  tuplet4: tuplet(4),
+  tuplet5: tuplet(5),
+  tuplet6: tuplet(6),
+  tuplet7: tuplet(7),
+  tuplet8: tuplet(8),
   slur: { code: 'KeyS', cap: 'S', shift: true, does: { type: 'line', line: 'slur' } },
   cresc: { code: 'Comma', cap: '<', shift: true, does: { type: 'line', line: 'cresc' } },
   dim: { code: 'Period', cap: '>', shift: true, does: { type: 'line', line: 'dim' } },
@@ -93,6 +110,9 @@ export const TOOL_SHORTCUTS = {
   chord: { code: 'KeyK', cap: 'K', mod: true, does: { type: 'field', field: 'chord' } },
   lyrics: { code: 'KeyL', cap: 'L', mod: true, does: { type: 'field', field: 'lyrics' } },
   fingering: { code: 'KeyF', cap: 'F', shift: true, does: { type: 'field', field: 'fingering' } },
+  // Flat's ⌘E an annotation, ⌘⇧K a Roman numeral (ADR 0097).
+  annotation: { code: 'KeyE', cap: 'E', mod: true, does: { type: 'field', field: 'text' } },
+  numeral: { code: 'KeyK', cap: 'K', shift: true, mod: true, does: { type: 'numeral' } },
 } as const satisfies Readonly<Record<string, ToolShortcut>>
 export type Tool = keyof typeof TOOL_SHORTCUTS
 /** Whether a name is a tool's with a shortcut: a line's, a mark's. */

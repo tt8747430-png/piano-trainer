@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { isLoopParam, loopBeatGroups, loopParam, loopTicks, readLoop } from './loop'
 import { TWO_BARS } from './testing/performances'
+
+const B = TICKS_PER_BEAT
 
 describe('the loop’s param', () => {
   it('writes bars as printed, and reads them back', () => {
@@ -21,6 +24,6 @@ describe('the loop’s param', () => {
 describe('a loop in a performance', () => {
   it('spans its bars’ beat groups and ticks', () => {
     expect(loopBeatGroups(TWO_BARS, { first: 1, last: 1 })).toEqual({ first: 4, last: 7 })
-    expect(loopTicks(TWO_BARS, { first: 1, last: 1 })).toEqual({ from: 96, to: 192 })
+    expect(loopTicks(TWO_BARS, { first: 1, last: 1 })).toEqual({ from: 4 * B, to: 8 * B })
   })
 })

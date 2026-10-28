@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { Pass } from './loop'
 import { recordingPlay, tuningOf, type Recording } from './recording'
+
+const B = TICKS_PER_BEAT
 
 const VOCAL: Recording = { src: 'vocal.m4a', start: 2.74, tempo: 72 }
 const pass = (extra: Partial<Pass>): Pass => ({
@@ -8,7 +11,7 @@ const pass = (extra: Partial<Pass>): Pass => ({
   cues: [],
   end: 60,
   fromTick: 0,
-  toTick: 1728,
+  toTick: 72 * B,
   musicStart: 0,
   counts: [],
   start: 100,
@@ -23,7 +26,7 @@ describe('recordingPlay', () => {
 
   it('plays from the pass’s first tick at the pass’s tempo', () => {
     // Four beats in at 72 is 3⅓ seconds into the recording; at 36 it plays at half speed.
-    const play = recordingPlay(VOCAL, pass({ fromTick: 96, tempo: 36, end: 80 }))
+    const play = recordingPlay(VOCAL, pass({ fromTick: 4 * B, tempo: 36, end: 80 }))
     expect(play.at).toBe(100)
     expect(play.offset).toBeCloseTo(2.74 + 10 / 3)
     expect(play.rate).toBe(0.5)

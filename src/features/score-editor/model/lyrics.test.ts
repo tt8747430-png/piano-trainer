@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { gatherLyrics, isDegreePiece, musicOf, PIECES, writeLyrics } from '@/entities/piece'
 import { draftOf } from '../testing/test-draft'
 import { lyricsLayer, readDraft, tuneNotes, writeDraft } from './draft'
@@ -11,6 +12,8 @@ import {
   syllableAt,
   verseCount,
 } from './lyrics'
+
+const B = TICKS_PER_BEAT
 
 /** A tune of four quarters in bar 1, bar 2 silent; the piano written and silent. */
 const sungMusic = {
@@ -61,27 +64,27 @@ describe('the words in the editor (ADR 0097)', () => {
   })
 
   it('find where the Lyrics field opens: the tune’s note at a tick, else the next, else the last before (ADR 0096)', () => {
-    expect(sungFrom(sung, 24)).toBe(24)
+    expect(sungFrom(sung, B)).toBe(B)
     // From bar 2's rest, with no note after it: the last before.
-    expect(sungFrom(sung, 96)).toBe(72)
+    expect(sungFrom(sung, 4 * B)).toBe(3 * B)
     const late = draftOf({ ...sungMusic, staves: [{ notes: 'r/4 | C4/4' }] })
-    expect(sungFrom(late, 0)).toBe(96)
+    expect(sungFrom(late, 0)).toBe(4 * B)
     expect(sungFrom(draftOf({ ...sungMusic, staves: [{ notes: 'r/4 | r/4' }] }), 0)).toBeNull()
   })
 
   it('count the verses, find the note singing at a tick and the tune’s notes on either side', () => {
     expect(verseCount(sung)).toBe(1)
     expect(verseCount(draftOf())).toBe(0)
-    expect(sungAt(sung, 24)?.midi).toBe(62)
-    expect(sungAt(sung, 96)).toBeNull()
-    expect(sungNear(sung, 24, 1)).toBe(48)
-    expect(sungNear(sung, 24, -1)).toBe(0)
-    expect(sungNear(sung, 72, 1)).toBeNull()
+    expect(sungAt(sung, B)?.midi).toBe(62)
+    expect(sungAt(sung, 4 * B)).toBeNull()
+    expect(sungNear(sung, B, 1)).toBe(2 * B)
+    expect(sungNear(sung, B, -1)).toBe(0)
+    expect(sungNear(sung, 3 * B, 1)).toBeNull()
     expect(sungNear(sung, 0, -1)).toBeNull()
   })
 
   it('show each note’s syllable as the field writes it: its dash and the notes it is held over', () => {
-    expect([0, 24, 48, 72].map((tick) => syllableAt(sung, tick, 0))).toEqual([
+    expect([0, B, 2 * B, 3 * B].map((tick) => syllableAt(sung, tick, 0))).toEqual([
       'Si-_',
       '',
       'lent',
@@ -91,23 +94,23 @@ describe('the words in the editor (ADR 0097)', () => {
   })
 
   it('set a syllable on the note at the caret, a melisma silencing the notes it is held over', () => {
-    const changed = setSyllable(sung, 24, 0, 'lent')
+    const changed = setSyllable(sung, B, 0, 'lent')
     expect(verses(changed)).toEqual(['Si- lent lent night,'])
     const held = setSyllable(sung, 0, 0, 'Si__')
     expect(verses(held)).toEqual(['Si__ night,'])
-    expect(verses(setSyllable(held, 24, 0, 'x'))).toEqual(['Si x ~ night,'])
+    expect(verses(setSyllable(held, B, 0, 'x'))).toEqual(['Si x ~ night,'])
     // The last word taken off: the verse ends where its words do.
-    expect(verses(setSyllable(sung, 72, 0, ''))).toEqual(['Si-_ lent'])
-    expect(verses(setSyllable(sung, 72, 0, '~'))).toEqual(['Si-_ lent'])
-    expect(setSyllable(sung, 96, 0, 'x')).toBe(sung)
+    expect(verses(setSyllable(sung, 3 * B, 0, ''))).toEqual(['Si-_ lent'])
+    expect(verses(setSyllable(sung, 3 * B, 0, '~'))).toEqual(['Si-_ lent'])
+    expect(setSyllable(sung, 4 * B, 0, 'x')).toBe(sung)
   })
 
   it('start a verse where none was, written with the music', () => {
-    const second = setSyllable(sung, 48, 1, 'Nacht')
+    const second = setSyllable(sung, 2 * B, 1, 'Nacht')
     expect(verseCount(second)).toBe(2)
     expect(writeDraft(second).lyrics).toEqual(['Si-_ lent night,', '~ ~ Nacht'])
     // Taken back, the verse goes.
-    expect(writeDraft(setSyllable(second, 48, 1, '')).lyrics).toEqual(['Si-_ lent night,'])
+    expect(writeDraft(setSyllable(second, 2 * B, 1, '')).lyrics).toEqual(['Si-_ lent night,'])
   })
 
   it('save a verse begun on a long tune as its words alone, no empty place for every note after', () => {
@@ -127,7 +130,7 @@ describe('the words in the editor (ADR 0097)', () => {
 
   it('sing a chord of the upper staff on one note where the piano is the tune', () => {
     const piano = draftOf({ hands: { rh: 'G4+B4/2 D5/2 | r/4', lh: 'r/4 | r/4' } })
-    const worded = setSyllable(setSyllable(piano, 0, 0, 'A-'), 48, 0, 'men')
+    const worded = setSyllable(setSyllable(piano, 0, 0, 'A-'), 2 * B, 0, 'men')
     expect(writeDraft(worded).lyrics).toEqual(['A- men'])
     expect(worded.hands.rh.filter((n) => n.lyrics).map((n) => n.midi)).toEqual([71, 74])
   })

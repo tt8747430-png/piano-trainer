@@ -8,6 +8,7 @@ import {
   EXPRESSIONS,
   DYNAMICS,
   isCompound,
+  MULTI_REST,
   meterOf,
   signatureKey,
   type Articulation,
@@ -17,6 +18,7 @@ import {
   type Dynamic,
   type Expression,
   type Finger,
+  TICKS_PER_BEAT,
   type GraceNote,
   type Jump,
   type Key,
@@ -25,6 +27,7 @@ import {
   type Midi,
   type NoteLyrics,
   type NoteMarks,
+  type OctaveLine,
   type Ornament,
   type SpelledNote,
   type Syllable,
@@ -56,13 +59,13 @@ export const LEFT_OUT = [
   'keys',
   /** A tempo after the first. */
   'tempos',
-  /** Dynamics we do not write (sfz, fp, ppp). */
+  /** Dynamics we do not write. */
   'dynamics',
   /** Words over the music that are no mark of ours. */
   'text',
   /** Chord symbols we cannot read. */
   'chords',
-  /** Endings past the second, or one ending for several times through. */
+  /** Endings past the fourth, or one ending for several times through. */
   'endings',
   /** Ornaments, articulations and technique we do not write. */
   'marks',
@@ -159,6 +162,9 @@ const ARTICULATIONS: Readonly<Record<string, Articulation>> = {
   accent: 'accent',
   tenuto: 'tenuto',
   'strong-accent': 'marcato',
+  'detached-legato': 'portato',
+  'breath-mark': 'breath',
+  caesura: 'caesura',
 }
 
 const ORNAMENTS: Readonly<Record<string, Ornament>> = {
@@ -166,8 +172,12 @@ const ORNAMENTS: Readonly<Record<string, Ornament>> = {
   'inverted-mordent': 'mordent',
   mordent: 'lower-mordent',
   turn: 'turn',
-  tremolo: 'tremolo',
+  'inverted-turn': 'inverted-turn',
 }
+
+/** A tremolo's strokes as MusicXML counts them, one to three (four read as three). */
+const tremoloOf = (strokes: number): Ornament =>
+  strokes <= 1 ? 'tremolo-1' : strokes === 2 ? 'tremolo-2' : 'tremolo-3'
 
 /** An expression's words as other apps write them. */
 const EXPRESSION_WORDS = new Map<string, Expression>([
@@ -265,8 +275,8 @@ interface Building {
 
 /**
  * Reads a MusicXML file's text (partwise or timewise): its title and makers, its first key, meter and
- * tempo, every part's staves, measures and notes, in ticks of the meter's kind (a quarter 24 in
- * simple time, 16 in compound, ADR 0097). Throws an XmlError for text that is no XML and a
+ * tempo, every part's staves, measures and notes, in ticks of the meter's kind (a quarter a beat in
+ * simple time, two thirds of one in compound, ADR 0097). Throws an XmlError for text that is no XML and a
  * NotAScoreError for XML that is no score.
  */
 export function readMusicXml(source: string): ReadScore {
@@ -290,7 +300,7 @@ export function readMusicXml(source: string): ReadScore {
   const firstMeter = firstTime && meterOfTime(firstTime)
   if (firstTime && !firstMeter) leave('meters')
   const meter: Meter = firstMeter ?? '4/4'
-  const quarter = isCompound(meter) ? 16 : 24
+  const quarter = isCompound(meter) ? (2 * TICKS_PER_BEAT) / 3 : TICKS_PER_BEAT
   const symbol = firstTime?.attrs.symbol
   const timeSymbol =
     (symbol === 'common' && meter === '4/4') || (symbol === 'cut' && meter === '2/2')
@@ -379,7 +389,7 @@ export function readMusicXml(source: string): ReadScore {
     staffOf(1)
     const divisions = { value: 1 }
     let transpose = 0
-    const octave = new Map<number, '8va' | '8vb'>()
+    const octave = new Map<number, OctaveLine>()
     const graces = new Map<string, GraceNote[]>()
     /** The words' verses by their numbers, in the order the part first sings them. */
     const verses = new Map<string, number>()
@@ -428,6 +438,14 @@ export function readMusicXml(source: string): ReadScore {
               const known = staves[staffOf(Number(details.attrs.number ?? 1))]
               if (known && details.attrs['print-object'] === 'no') known.hidden = true
             }
+            for (const style of childrenOf(child, 'measure-style')) {
+              const repeat = childOf(style, 'measure-repeat')
+              const length = Number(repeat && textOf(repeat))
+              if (repeat?.attrs.type === 'start' && (length === 1 || length === 2))
+                bar.barRepeat = length
+              const rests = numberAt(style, 'multiple-rest') ?? 0
+              if (rests >= MULTI_REST.from && rests <= MULTI_REST.to) bar.multiRest = rests
+            }
             const shift = childOf(child, 'transpose')
             if (shift)
               transpose =
@@ -443,6 +461,7 @@ export function readMusicXml(source: string): ReadScore {
           case 'print':
             if (child.attrs['new-system'] === 'yes' || child.attrs['new-page'] === 'yes')
               bar.lineStart = true
+            if (child.attrs['new-page'] === 'yes') bar.pageBreak = true
             break
           case 'barline':
             readBarline(child, bar, leave)
@@ -662,13 +681,17 @@ function readBarline(
   const style = textAt(barline, 'bar-style')
   const repeat = childOf(barline, 'repeat')?.attrs.direction
   if (repeat === 'forward') bar.repeatStart = true
-  if (repeat === 'backward') bar.barline = 'repeat'
-  else if (!left && (style === 'light-heavy' || style === 'heavy')) bar.barline ??= 'final'
+  if (repeat === 'backward') {
+    bar.barline = 'repeat'
+    const times = Number(childOf(barline, 'repeat')?.attrs.times)
+    if (times >= 3 && times <= 9) bar.times = times
+  } else if (!left && (style === 'light-heavy' || style === 'heavy')) bar.barline ??= 'final'
   else if (!left && style === 'light-light') bar.barline ??= 'double'
   const ending = childOf(barline, 'ending')
   if (ending && ending.attrs.type === 'start') {
     const number = (ending.attrs.number ?? '').trim()
-    if (number === '1' || number === '2') bar.ending = Number(number) as 1 | 2
+    if (number === '1' || number === '2' || number === '3' || number === '4')
+      bar.ending = Number(number) as 1 | 2 | 3 | 4
     else leave('endings')
   }
   if (childOf(barline, 'segno')) bar.segno = true
@@ -677,7 +700,7 @@ function readBarline(
 
 interface DirectionReader {
   readonly mark: (marks: NoteMarks) => void
-  readonly octave: (line: '8va' | '8vb' | undefined) => void
+  readonly octave: (line: OctaveLine | undefined) => void
   readonly bar: (marks: BarMarks) => void
   readonly rehearsal: (text: string) => void
   readonly tempo: (tempo: { tempo: number; unit?: TempoUnit }) => void
@@ -711,7 +734,8 @@ function readDirection(direction: XmlElement, read: DirectionReader) {
           const kind = child.attrs.type
           const size = Number(child.attrs.size ?? 8)
           if (kind === 'stop' || kind === 'continue') read.octave(undefined)
-          else if (size !== 8) read.leave('marks')
+          else if (size !== 8 && size !== 15) read.leave('marks')
+          else if (size === 15) read.octave(kind === 'down' ? '15ma' : '15mb')
           else read.octave(kind === 'down' ? '8va' : '8vb')
           break
         }
@@ -826,7 +850,7 @@ function readNote(note: XmlElement, toTicks: (duration: number) => number): Note
             const articulation = ARTICULATIONS[each.name]
             if (articulation)
               marks.articulations = [...new Set([...(marks.articulations ?? []), articulation])]
-            else if (each.name !== 'breath-mark') leftOut += 1
+            else leftOut += 1
           }
           break
         case 'fermata':
@@ -835,7 +859,10 @@ function readNote(note: XmlElement, toTicks: (duration: number) => number): Note
         case 'ornaments':
           for (const each of child.children) {
             if (typeof each === 'string' || each.name === 'accidental-mark') continue
-            const ornament = ORNAMENTS[each.name]
+            const ornament =
+              each.name === 'tremolo' && each.attrs.type !== 'start' && each.attrs.type !== 'stop'
+                ? tremoloOf(Number(textOf(each) || 3))
+                : ORNAMENTS[each.name]
             if (ornament && !marks.ornament) marks.ornament = ornament
             else if (each.name !== 'wavy-line') leftOut += 1
           }

@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { C_MAJOR, midi, note, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { exercisePerformance } from './performance'
 
+const B = TICKS_PER_BEAT
+
 const EIGHTH = TICKS_PER_BEAT / 2
 const at = (i: number, key: number, hand: 'rh' | 'lh' = 'rh') => ({
   midi: midi(key),
@@ -37,14 +39,14 @@ describe('exercisePerformance', () => {
       notes: Array.from({ length: 16 }, (_, i) => at(i, 60)),
       harmony: [
         { chord: { root: note('D'), quality: 'm7' }, startTick: 0 },
-        { chord: { root: note('G'), quality: 'd7' }, startTick: 96 },
+        { chord: { root: note('G'), quality: 'd7' }, startTick: 4 * B },
       ],
     })
     expect(
       performance.chords.map((chord) => [chord.symbol, chord.bar, chord.durationTicks]),
     ).toEqual([
-      ['Dm7', 0, 96],
-      ['G7', 1, 96],
+      ['Dm7', 0, 4 * B],
+      ['G7', 1, 4 * B],
     ])
     expect(performance.bars.map((bar) => bar.chords)).toEqual([[0], [1]])
     expect(performance.notes.map((n) => n.chord)).toEqual([

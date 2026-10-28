@@ -9,37 +9,52 @@ const STEP = TICKS_PER_BEAT / 8
 
 type Marked = readonly { readonly startTick: Tick; readonly marks?: NoteMarks }[]
 
-/** Where a note marks the tempo to move, and the factor of the written tempo it moves to. */
+/**
+ * Where a note marks the tempo to move: a tempo mark sets it at once (a factor of the written tempo),
+ * rit., rall. and accel. move it from there over two beats, a tempo brings back the last mark's.
+ */
 interface TempoChange {
   readonly tick: Tick
+  readonly kind: 'mark' | 'move' | 'back'
   readonly target: number
 }
 
-function tempoChanges(notes: Marked): TempoChange[] {
+function tempoChanges(notes: Marked, written: number | undefined): TempoChange[] {
   return notes
-    .flatMap((n) => {
+    .flatMap((n): TempoChange[] => {
+      const changes: TempoChange[] = []
+      const tempo = n.marks?.tempo
+      if (tempo !== undefined && written !== undefined && written > 0)
+        changes.push({ tick: n.startTick, kind: 'mark', target: tempo / written })
       const expression = n.marks?.expression
-      const target =
-        expression === 'rit' || expression === 'rall'
-          ? SLOWER
-          : expression === 'accel'
-            ? FASTER
-            : expression === 'a-tempo'
-              ? 1
-              : null
-      return target === null ? [] : [{ tick: n.startTick, target }]
+      if (expression === 'rit' || expression === 'rall')
+        changes.push({ tick: n.startTick, kind: 'move', target: SLOWER })
+      else if (expression === 'accel')
+        changes.push({ tick: n.startTick, kind: 'move', target: FASTER })
+      else if (expression === 'a-tempo')
+        changes.push({ tick: n.startTick, kind: 'back', target: 1 })
+      return changes
     })
     .sort((a, b) => a.tick - b.tick)
 }
 
-/** The tempo's factor at a tick: moving from the one before to each change's target over CHANGE_TICKS. */
+/**
+ * The tempo's factor at a tick: a mark's at once, a rit.'s or an accel.'s moving from the one before
+ * to its share of the last mark's over CHANGE_TICKS, a tempo the last mark's again.
+ */
 function factorAt(changes: readonly TempoChange[], tick: Tick): number {
+  let base = 1
   let factor = 1
   for (const change of changes) {
     if (change.tick > tick) break
-    const from = factor
-    const along = Math.min(1, (tick - change.tick) / CHANGE_TICKS)
-    factor = change.target === 1 ? 1 : from + (change.target - from) * along
+    if (change.kind === 'mark') {
+      base = change.target
+      factor = base
+    } else if (change.kind === 'back') factor = base
+    else {
+      const along = Math.min(1, (tick - change.tick) / CHANGE_TICKS)
+      factor = factor + (base * change.target - factor) * along
+    }
   }
   return factor
 }
@@ -50,12 +65,12 @@ const stepFactor = (changes: readonly TempoChange[], step: number): number =>
 
 /**
  * Where a tick falls once the tempo its notes mark (ADR 0097) is followed, in ticks at the written
- * tempo: rit. and rall. slow to three quarters of it over two beats, accel. presses on to five
- * quarters, each held until a tempo brings the written tempo back. Without such a mark, each tick
- * is where it was.
+ * tempo (`written`, beats a minute): a tempo mark changes it at once; rit. and rall. slow to three
+ * quarters of it over two beats, accel. presses on to five quarters, each held until a tempo brings
+ * the last mark's back. Without such a mark, each tick is where it was.
  */
-export function tempoWarp(notes: Marked): (tick: Tick) => number {
-  const changes = tempoChanges(notes)
+export function tempoWarp(notes: Marked, written?: number): (tick: Tick) => number {
+  const changes = tempoChanges(notes, written)
   if (changes.length === 0) return (tick) => tick
   const sums = [0]
   return (tick) => {
@@ -80,8 +95,8 @@ export interface TempoStep {
  * start, then one at each 32nd where it moves (over a rit.'s, a rall.'s or an accel.'s two beats)
  * or comes back (a tempo). The written tempo alone where nothing marks it.
  */
-export function tempoSteps(notes: Marked): TempoStep[] {
-  const changes = tempoChanges(notes)
+export function tempoSteps(notes: Marked, written?: number): TempoStep[] {
+  const changes = tempoChanges(notes, written)
   const last = changes.at(-1)
   if (!last) return [{ tick: 0, factor: 1 }]
   const steps: TempoStep[] = []

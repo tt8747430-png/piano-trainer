@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { midi, note, type Key } from '@/shared/lib/music'
+import { midi, note, type Key, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { trailMusic } from './trail-music'
+
+const B = TICKS_PER_BEAT
 
 const D_MAJOR: Key = { tonic: note('D'), minor: false }
 
@@ -20,7 +22,7 @@ describe('trailMusic', () => {
   it('leaves a staff with no key blank, and an empty trail one blank bar', () => {
     expect(trailMusic([[midi(60)], [midi(40)]], D_MAJOR, ['', '']).bars).toEqual([
       { startTick: 0, beats: 4, blank: ['bass'] },
-      { startTick: 96, beats: 4, blank: ['treble'] },
+      { startTick: 4 * B, beats: 4, blank: ['treble'] },
     ])
     expect(trailMusic([], D_MAJOR, []).bars).toEqual([
       { startTick: 0, beats: 4, blank: ['treble', 'bass'] },

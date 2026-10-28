@@ -1,6 +1,11 @@
 export { shownRows } from './model/rows'
 export { clefAt } from './model/clefs'
-export { BARLINE_CHOICES, JUMP_CHOICES, type BarMarkChoice } from './model/bar-marks'
+export {
+  BARLINE_CHOICES,
+  JUMP_CHOICES,
+  REPEAT_BAR_CHOICES,
+  type BarMarkChoice,
+} from './model/bar-marks'
 export { barLengths } from './model/bars'
 export { copyTarget, whyNoPaste } from './model/clip-edits'
 export { chordSuggestions } from './model/chords'
@@ -50,7 +55,7 @@ export {
   totalTicks,
   type PlacedBar,
 } from './model/timeline'
-export { NOTE_VALUES, takesDot, valueOf, type ChosenValue } from './model/values'
+export { NOTE_VALUES, takesDot, takesTuplet, valueOf, type ChosenValue } from './model/values'
 export { chosenNotes, fingeredAt, shownValue } from './model/chosen'
 export { hasMark, type MarkChoice } from './model/marks'
 export { singsHere, sungAt, sungFrom, sungNear, syllableAt, verseCount } from './model/lyrics'

@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { note } from '@/shared/lib/music'
+import { note, TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { ChartBar } from '@/shared/lib/arrangement'
 import { ContentError } from './content-error'
 import { parseChart } from './parse-chart'
 import { testSong } from '../testing/test-pieces'
 import type { Hands } from './types'
 import { writeHand } from './write-hands'
+
+const B = TICKS_PER_BEAT
 
 const barsOf = (lines: readonly string[], hands: Hands, meter: '4/4' | '3/4' = '4/4'): ChartBar[] =>
   parseChart(testSong(lines, { hands, meter })).sections.flatMap((section) => section.lines.flat())
@@ -25,9 +27,9 @@ describe('a written hand', () => {
     const [first, second] = barsOf(['C G'], { rh: '- | C4/1 E4/1 G4/2' })
     expect(first?.hands).toBeUndefined()
     expect(second?.hands?.rh).toEqual([
-      { midi: 60, spelled: note('C'), startTick: 0, durationTicks: 24 },
-      { midi: 64, spelled: note('E'), startTick: 24, durationTicks: 24 },
-      { midi: 67, spelled: note('G'), startTick: 48, durationTicks: 48 },
+      { midi: 60, spelled: note('C'), startTick: 0, durationTicks: B },
+      { midi: 64, spelled: note('E'), startTick: B, durationTicks: B },
+      { midi: 67, spelled: note('G'), startTick: 2 * B, durationTicks: 2 * B },
     ])
     expect(second?.hands?.lh).toBeUndefined()
   })
@@ -41,7 +43,7 @@ describe('a written hand', () => {
     expect(
       writeHand(
         bars.map((bar) => bar.hands?.lh ?? []),
-        bars.map(() => 96),
+        bars.map(() => 4 * B),
         bars.map((bar) => bar.clefs?.lh),
       ),
     ).toBe('clef:treble C4/1 E4/1 G4/2 | r/4 | clef:bass r/4')
@@ -55,7 +57,7 @@ describe('a written hand', () => {
     expect(
       writeHand(
         bars.map((bar) => bar.hands?.rh ?? []),
-        bars.map(() => 96),
+        bars.map(() => 4 * B),
         bars.map((bar) => bar.clefs?.rh),
       ),
     ).toBe(hands.rh)
@@ -64,21 +66,21 @@ describe('a written hand', () => {
   it('reads notes struck together, each with its finger', () => {
     const [bar] = barsOf(['C'], { rh: 'C4^1+E4^3+G4^5/4' })
     expect(bar?.hands?.rh?.map((n) => [n.midi, n.startTick, n.durationTicks, n.finger])).toEqual([
-      [60, 0, 96, 1],
-      [64, 0, 96, 3],
-      [67, 0, 96, 5],
+      [60, 0, 4 * B, 1],
+      [64, 0, 4 * B, 3],
+      [67, 0, 4 * B, 5],
     ])
   })
 
   it('places a token on a beat counted from 1, so a held note and the notes over it are both written', () => {
     const [bar] = barsOf(['C'], { lh: 'C3/4 E3+G3/1@2 E3+G3/1 r/.5 G3/.5@4.5' })
     expect(bar?.hands?.lh?.map((n) => [n.midi, n.startTick, n.durationTicks])).toEqual([
-      [48, 0, 96],
-      [52, 24, 24],
-      [55, 24, 24],
-      [52, 48, 24],
-      [55, 48, 24],
-      [55, 84, 12],
+      [48, 0, 4 * B],
+      [52, B, B],
+      [55, B, B],
+      [52, 2 * B, B],
+      [55, 2 * B, B],
+      [55, 3.5 * B, 0.5 * B],
     ])
   })
 
@@ -90,7 +92,7 @@ describe('a written hand', () => {
   it('holds a note across the barline into a bar the hand writes too', () => {
     const [first] = barsOf(['C G'], { lh: 'C3/6 | G3/2@3' })
     expect(first?.hands?.lh).toEqual([
-      { midi: 48, spelled: note('C'), startTick: 0, durationTicks: 144 },
+      { midi: 48, spelled: note('C'), startTick: 0, durationTicks: 6 * B },
     ])
   })
 
@@ -133,16 +135,16 @@ describe('a written hand', () => {
       rh: 'C4/1:3 D4/1:3 E4/1:3 C5/.125 B4/.125 A4/.125 G4/.125 F4/1:6 G4/5:6 C4/1.5',
     })
     expect(bar?.hands?.rh?.map((n) => [n.startTick, n.durationTicks])).toEqual([
-      [0, 8],
-      [8, 8],
-      [16, 8],
-      [24, 3],
-      [27, 3],
-      [30, 3],
-      [33, 3],
-      [36, 4],
-      [40, 20],
-      [60, 36],
+      [0, B / 3],
+      [B / 3, B / 3],
+      [(2 * B) / 3, B / 3],
+      [B, 0.125 * B],
+      [1.125 * B, 0.125 * B],
+      [1.25 * B, 0.125 * B],
+      [1.375 * B, 0.125 * B],
+      [1.5 * B, B / 6],
+      [(5 * B) / 3, (5 * B) / 6],
+      [2.5 * B, 1.5 * B],
     ])
   })
 

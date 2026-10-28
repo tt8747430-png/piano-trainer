@@ -10,10 +10,12 @@ import {
   type PieceMusic,
 } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
-import { chordSymbol, midi, note } from '@/shared/lib/music'
+import { chordSymbol, midi, note, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { musicToSave, readDraft, writeDraft, type Draft } from './draft'
 import { barAt, barsOf, chordAt, chordsAt, chordWrittenAt, totalTicks } from './timeline'
 import { shape, staffNotes } from '../testing/test-draft'
+
+const B = TICKS_PER_BEAT
 
 const CHART_PIECES = PIECES.filter((piece): piece is ChartPiece => !isDegreePiece(piece))
 
@@ -61,7 +63,7 @@ describe('the draft', () => {
       ],
     }
     const draft = readDraft(music)
-    expect(barsOf(draft).map(({ bar }) => bar.ticks)).toEqual([96, 96, 72, 72])
+    expect(barsOf(draft).map(({ bar }) => bar.ticks)).toEqual([4 * B, 4 * B, 3 * B, 3 * B])
     expect(writeDraft(draft).sections).toEqual(music.sections)
   })
 
@@ -81,7 +83,7 @@ describe('the draft', () => {
     const piece: ChartPiece = { id: 'written', kind: 'song', title: '', ...WRITTEN }
     const { notes } = arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS)
     // The last bar, both hands the pattern's: the pattern's notes with their fingers, cut at its end.
-    const [from, to] = [216, 312]
+    const [from, to] = [9 * B, 13 * B]
     const inLast = (hand: 'rh' | 'lh') =>
       notes
         .filter((n) => n.hand === hand && n.startTick >= from && n.startTick < to)
@@ -178,7 +180,7 @@ describe('the draft', () => {
     expect(musicToSave(five)).not.toBeNull()
     const long = {
       ...five,
-      staves: [{ clef: 'treble' as const, notes: [{ ...first, durationTicks: 25 * 24 }] }],
+      staves: [{ clef: 'treble' as const, notes: [{ ...first, durationTicks: 25 * B }] }],
     }
     expect(musicToSave(long)).toBeNull()
   })
@@ -199,7 +201,7 @@ describe('the draft', () => {
       [{ en: 'Cello', ru: 'Виолончель' }, 'bass'],
       [undefined, 'treble'],
     ])
-    expect(shape(staffNotes(draft, 1))).toEqual(['G2@24/96', 'C3@120/96'])
+    expect(shape(staffNotes(draft, 1))).toEqual(['G2@1/4', 'C3@5/4'])
     expect(staffNotes(draft, 2)).toEqual([])
     expect(draft.leadSheet).toBe(true)
     // An empty staff is written as a rest, so it stays (ADR 0114).
@@ -212,32 +214,32 @@ describe('the draft', () => {
     expect(draft.key).toEqual({ tonic: note('G'), minor: false })
     const [pickup, second] = barsOf(draft)
     expect(pickup).toMatchObject({ index: 0, section: 0, line: 0, start: 0 })
-    expect(pickup?.bar.ticks).toBe(24)
-    expect(second?.bar.chords.map((chord) => chord.at)).toEqual([0, 48])
+    expect(pickup?.bar.ticks).toBe(B)
+    expect(second?.bar.chords.map((chord) => chord.at)).toEqual([0, 2 * B])
     expect(staffNotes(draft)[1]).toEqual({
       midi: midi(67),
       spelled: note('G'),
-      startTick: 24,
-      durationTicks: 48,
+      startTick: B,
+      durationTicks: 2 * B,
     })
     // The left hand's bars 2 and 3, as written.
     expect(
       draft.hands.lh
-        .filter((n) => n.startTick >= 24 && n.startTick < 216)
+        .filter((n) => n.startTick >= B && n.startTick < 9 * B)
         .map((n) => [n.midi, n.startTick, n.durationTicks, n.finger]),
     ).toEqual([
-      [48, 24, 96, undefined],
-      [52, 48, 24, undefined],
-      [55, 48, 24, 2],
-      [43, 120, 96, undefined],
+      [48, B, 4 * B, undefined],
+      [52, 2 * B, B, undefined],
+      [55, 2 * B, B, 2],
+      [43, 5 * B, 4 * B, undefined],
     ])
   })
 
   it('finds the bar a tick is in, a barline in the later bar, the end in the last', () => {
     const draft = readDraft(WRITTEN)
-    expect(totalTicks(draft)).toBe(24 + 96 + 96 + 96)
-    expect(barAt(draft, 24).index).toBe(1)
-    expect(barAt(draft, 23).index).toBe(0)
+    expect(totalTicks(draft)).toBe(B + 4 * B + 4 * B + 4 * B)
+    expect(barAt(draft, B).index).toBe(1)
+    expect(barAt(draft, (23 * B) / 24).index).toBe(0)
     expect(barAt(draft, totalTicks(draft)).index).toBe(3)
   })
 
@@ -247,7 +249,7 @@ describe('the draft', () => {
       const chord = chordAt(draft, tick)
       return chord && chordSymbol(chord)
     }
-    expect([0, 24, 71, 72, 120, 216, 312].map(at)).toEqual([
+    expect([0, B, (71 * B) / 24, 3 * B, 5 * B, 9 * B, 13 * B].map(at)).toEqual([
       'G',
       'C',
       'C',
@@ -264,7 +266,7 @@ describe('the draft', () => {
       const chord = chordWrittenAt(draft, tick)
       return chord && chordSymbol(chord)
     }
-    expect([0, 24, 48, 72, 120, 216, 240].map(at)).toEqual([
+    expect([0, B, 2 * B, 3 * B, 5 * B, 9 * B, 10 * B].map(at)).toEqual([
       'G',
       'C',
       undefined,
@@ -279,9 +281,9 @@ describe('the draft', () => {
     const bar = barsOf(readDraft(WRITTEN))[3]?.bar
     if (!bar) throw new Error('a fourth bar')
     expect(chordsAt(bar).map(({ at, ticks, method }) => [at, ticks, method])).toEqual([
-      [0, 48, 't1'],
-      [48, 24, 't1'],
-      [72, 24, 't1'],
+      [0, 2 * B, 't1'],
+      [2 * B, B, 't1'],
+      [3 * B, B, 't1'],
     ])
   })
 })

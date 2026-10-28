@@ -7,6 +7,7 @@ import { useNotesChosen } from '../model/use-notes-chosen'
 import type { Tool } from '../model/shortcuts'
 import { PaletteKey } from './palette-keys'
 import { usePaletteReason } from './palette-reason'
+import { LineKeys } from './LineKeys'
 
 /** A glyph of the music font (Noto Music), at a key's size. */
 const MUSIC = 'font-music text-3xl leading-none'
@@ -101,6 +102,9 @@ export function ArticulationKeys() {
       <MarkKey mark={{ kind: 'articulation', articulation: 'tenuto' }} label={t('marks.tenuto')}>
         <OnHead mark="—" />
       </MarkKey>
+      <MarkKey mark={{ kind: 'articulation', articulation: 'portato' }} label={t('marks.portato')}>
+        <OnHead mark="•̲" />
+      </MarkKey>
       <MarkKey mark={{ kind: 'articulation', articulation: 'marcato' }} label={t('marks.marcato')}>
         <OnHead mark="^" />
       </MarkKey>
@@ -109,11 +113,24 @@ export function ArticulationKeys() {
           𝄐
         </span>
       </MarkKey>
+      <MarkKey mark={{ kind: 'articulation', articulation: 'breath' }} label={t('marks.breath')}>
+        <span aria-hidden className="font-serif text-3xl font-bold leading-none">
+          ’
+        </span>
+      </MarkKey>
+      <MarkKey mark={{ kind: 'articulation', articulation: 'caesura' }} label={t('marks.caesura')}>
+        <Drawn>
+          <path d="M7 19 L12 5 M12 19 L17 5" />
+        </Drawn>
+      </MarkKey>
     </>
   )
 }
 
-/** The Ornaments (Flat's): the trill, the tremolo, the rolled chord, the mordents and the turn. */
+/**
+ * The Ornaments (Flat's order): the trill, the tremolo of one to three strokes, the rolled chord,
+ * the glissando, the mordents, the turn and the inverted turn.
+ */
 export function OrnamentKeys() {
   const { t } = useTranslation('editor')
   return (
@@ -123,27 +140,36 @@ export function OrnamentKeys() {
           tr
         </span>
       </MarkKey>
-      <MarkKey mark={{ kind: 'ornament', ornament: 'tremolo' }} label={t('marks.tremolo')}>
-        {/* Flat's: a note, strokes across its stem. */}
-        <Drawn>
-          <ellipse
-            cx="9"
-            cy="18.5"
-            rx="3.6"
-            ry="2.6"
-            transform="rotate(-20 9 18.5)"
-            fill="currentColor"
-            stroke="none"
-          />
-          <path d="M12.3 18V3" strokeWidth="1.5" />
-          <path d="M8 10 L16.5 7.5 M8 14 L16.5 11.5" strokeWidth="2.25" />
-        </Drawn>
-      </MarkKey>
+      {([1, 2, 3] as const).map((strokes) => (
+        <MarkKey
+          key={strokes}
+          mark={{ kind: 'ornament', ornament: `tremolo-${strokes}` }}
+          label={t(`marks.tremolo${strokes}`)}
+        >
+          {/* Flat's: a note, its strokes across its stem. */}
+          <Drawn>
+            <ellipse
+              cx="9"
+              cy="18.5"
+              rx="3.6"
+              ry="2.6"
+              transform="rotate(-20 9 18.5)"
+              fill="currentColor"
+              stroke="none"
+            />
+            <path d="M12.3 18V3" strokeWidth="1.5" />
+            {Array.from({ length: strokes }, (_, i) => (
+              <path key={i} d={`M8 ${8 + i * 3.5} L16.5 ${5.5 + i * 3.5}`} strokeWidth="2" />
+            ))}
+          </Drawn>
+        </MarkKey>
+      ))}
       <MarkKey mark={{ kind: 'arpeggio' }} label={t('marks.arpeggio')}>
         <Drawn>
           <path d="M12 2 C9 4 15 6 12 8 C9 10 15 12 12 14 C9 16 15 18 12 20 M9 19 L12 22 L15 19" />
         </Drawn>
       </MarkKey>
+      <LineKeys lines={['gliss']} />
       <MarkKey mark={{ kind: 'ornament', ornament: 'mordent' }} label={t('marks.mordent')}>
         <Drawn>
           <path d={MORDENT} />
@@ -163,8 +189,39 @@ export function OrnamentKeys() {
           𝆗
         </span>
       </MarkKey>
+      <MarkKey
+        mark={{ kind: 'ornament', ornament: 'inverted-turn' }}
+        label={t('marks.invertedTurn')}
+      >
+        <span aria-hidden className={`${MUSIC} relative`}>
+          𝆗
+          <span className="absolute inset-y-1 left-1/2 w-px -translate-x-1/2 bg-current" />
+        </span>
+      </MarkKey>
     </>
   )
+}
+
+/** The swing marks, as printed: 8ths swung, 16ths swung, straight again. */
+const SWINGS = [
+  { swing: 'eighths', glyph: '𝅘𝅥𝅮𝅘𝅥𝅮', label: 'words.swingEighths' },
+  { swing: 'sixteenths', glyph: '𝅘𝅥𝅯𝅘𝅥𝅯', label: 'words.swingSixteenths' },
+  { swing: 'straight', glyph: '𝅘𝅥𝅮=𝅘𝅥𝅮', label: 'words.straight' },
+] as const
+
+/**
+ * Flat's swing marks (ADR 0097): the 8ths or the 16ths swung from the note chosen on, or straight
+ * again; each printed over the staff and played so.
+ */
+export function SwingKeys() {
+  const { t } = useTranslation('editor')
+  return SWINGS.map(({ swing, glyph, label }) => (
+    <MarkKey key={swing} mark={{ kind: 'swing', swing }} label={t(label)}>
+      <span aria-hidden className="font-music text-lg leading-none">
+        {glyph}
+      </span>
+    </MarkKey>
+  ))
 }
 
 /** The pedal's marks, drawn as printed: pressed, changed, let up. */
@@ -194,7 +251,10 @@ export function PedalKeys() {
   ))
 }
 
-/** The Dynamics: pianissimo to fortissimo, each set from the note it stands under. */
+/**
+ * The Dynamics, Flat's eighteen: ppp to fff, each set from the note it stands under, then the accents
+ * (sforzando, forte-piano …), each on its note alone (ADR 0097).
+ */
 export function DynamicKeys() {
   const { t } = useTranslation('editor')
   return (

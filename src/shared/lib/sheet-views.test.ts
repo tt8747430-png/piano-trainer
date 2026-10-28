@@ -9,6 +9,19 @@ describe('paginate', () => {
     ])
   })
 
+  it('starts a new page at a page break, though the item would fit (ADR 0097)', () => {
+    const items = [{ h: 20 }, { h: 20, breaks: true }, { h: 20 }]
+    expect(
+      paginate(
+        items,
+        (item) => item.h,
+        100,
+        undefined,
+        (item) => item.breaks === true,
+      ).map((page) => page.length),
+    ).toEqual([1, 2])
+  })
+
   it('gives an item taller than a page a page of its own', () => {
     expect(paginate([30, 150, 30], (h) => h, 100)).toEqual([[30], [150], [30]])
   })

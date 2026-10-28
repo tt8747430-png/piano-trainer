@@ -18,7 +18,7 @@ export function useEditorShortcutList(): void {
       return i === 0 ? each : each.slice(-1)
     })
   useShortcuts(t('shortcuts.group'), [
-    { label: t('shortcuts.value'), shown: ['1', '–', '6'] },
+    { label: t('shortcuts.value'), shown: ['1', '–', '7'] },
     { label: t('shortcuts.dot'), shown: keys('dot') },
     { label: t('shortcuts.rest'), shown: keys('rest') },
     { label: t('shortcuts.grace'), shown: keys('grace') },
@@ -26,7 +26,9 @@ export function useEditorShortcutList(): void {
     { label: t('shortcuts.accidentals'), shown: keys('natural', 'sharp', 'flat') },
     { label: t('shortcuts.respell'), shown: keys('respell') },
     { label: t('shortcuts.tie'), shown: keys('tie') },
-    { label: t('shortcuts.triplet'), shown: keys('triplet') },
+    { label: t('shortcuts.tuplet'), shown: [shift, '2', '–', '8'] },
+    { label: t('shortcuts.annotation'), shown: keys('annotation') },
+    { label: t('shortcuts.numeral'), shown: keys('numeral') },
     { label: t('shortcuts.mode'), shown: keys('mode') },
     { label: t('shortcuts.slur'), shown: keys('slur') },
     { label: t('shortcuts.hairpins'), shown: keys('cresc', 'dim') },

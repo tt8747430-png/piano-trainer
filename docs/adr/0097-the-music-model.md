@@ -19,8 +19,11 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
   song is `my-<n>`, never given twice. The repertoire is the catalog as the learner has it: the router, Songs, a
   piece's page and the Player read it; lessons and courses read the catalog they teach. A recording plays with a
   version only on the original's timeline.
-- **Time.** A beat is 24 ticks (a 32nd is 3, a triplet 8th 8). Nothing saved holds ticks: music is written in beats
-  (a fraction `1:3` where a decimal cannot say it), takes in milliseconds.
+- **Time.** A beat is 5040 ticks (2⁴·3²·5·7), so every value to the 64th and every tuplet of 2 to 9 is whole.
+  Nothing saved holds ticks: music is written in beats (a fraction `1:3` where four decimal places cannot say it),
+  takes in milliseconds. **Tuplets are not written as such**: notation finds them from the notes' timing (a window
+  of a quarter, a half, a beat, two or four beats split evenly into 3, 5, 6, 7 or 9 in simple time, 2, 4, 5, 7, 8 or 9
+  in compound) and brackets them; the editor's tuplet key only chooses that length.
 - **Meters.** A meter is a count of 1 to 12 over 2, 4 or 8. Its kind (a quarter, or a dotted quarter in x/8) is what
   the song's ticks count; its counted beats (2/2's two halves, 7/8's 2+2+3) are what the click and the count-in
   follow, and its groups what the click accents, the beams join and a pattern's figure fills. A section may have its
@@ -29,15 +32,27 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
   the tempo stays the song's beats a minute.
 - **A bar may have no chord symbol** (`_`, `_@2` where it is not the meter's length): nothing printed over it, nothing
   a pattern plays there.
-- **Marks belong to written notes** (`[acc,stacc]`): articulations, ornaments, octave lines, slurs, dynamics,
-  hairpins, grace notes, expressions and the pedal. A note's pitch stays the pitch it sounds (8va changes only where
-  it is written). The schedule hears the marks that change the sound: lengths, loudness, rolls, grace notes,
-  ornaments, `rit` and `accel` (`tempoWarp`), the pedal (`pedalHeld`), notes joined under a slur or legato. A tie is a
-  longer note, not a mark.
-- **Barlines, repeats, endings and jumps are bar marks** (`|: :| || |. [1 [2`, Segno, Coda, Fine, To Coda, D.C. and
-  D.S. with their al Fine and al Coda). They are engraved as written and played as taken (`playOrder`): back once
-  from a repeat's end, the 1st ending left out the second time, a jump taken once and played on without repeats. The
-  Player plays the piece unrolled; the editor, the song's page and the chart keep the bars as written.
+- **Marks belong to written notes** (`[acc,stacc]`): articulations (with portato, the breath mark and the
+  caesura), ornaments (with the inverted turn and a tremolo of one to three strokes), octave lines (8va, 8vb, 15ma,
+  15mb), the glissando, slurs, Flat's every dynamic (ppp to fff and its ten accents), hairpins, grace notes,
+  expressions, the pedal, a tempo change, a swing mark, a Roman numeral and free text. A note's pitch stays the pitch
+  it sounds (8va changes only where it is written). The schedule hears the marks that change the sound: lengths
+  (portato ¾, a caesura half, a breath a 16th off), loudness (each dynamic's level, and the accents struck at one
+  level and held at another), rolls, grace notes, ornaments and tremolos played out, a glissando over the white keys
+  between its notes, `rit` and `accel` and each tempo change (`tempoWarp`, and in the MIDI file's tempo map), a swing
+  mark's feel from its note on, the pedal (`pedalHeld`), notes joined under a slur or legato. A tie is a longer
+  note, not a mark. A Roman numeral is the numerals kernel's of the chord and key there, not typed; free text is
+  percent-encoded in the text (`txt:`). A two-note tremolo is not a mark: the model has no notes paired across a
+  beat.
+- **Barlines, repeats, endings and jumps are bar marks** (`|: :| :|x3 || |. [1 [2 [3 [4`, Segno, Coda, Fine, To
+  Coda, D.C. and D.S. with their al Fine and al Coda). They are engraved as written and played as taken
+  (`playOrder`): back from a repeat's end until played its times (twice, `:|xN`'s N, or as many as its endings),
+  each time through taking only its ending of that number, a jump taken once and played on without repeats, taking
+  each run of endings' last. The Player plays the piece unrolled; the editor, the song's page and the chart keep the
+  bars as written.
+- **Flat's Measure marks are bar marks too**: a page break (`Page`), a bar repeat of one bar or two (`%`, `%%`) and a
+  multi-bar rest (`Rest3`). A bar repeat's and a rest's notes are written out and played as written; only the
+  drawing changes (ADR 0087), and only while the bars still repeat or stay empty.
 - **A clef changes from a bar on**, in a hand's or a staff's text (`clef:alto`): treble and bass with their octave
   forms, the five C clefs and the F clef on the third or fifth line. A clef never changes mid-bar.
 - **A score is staves**: any number of single staves over or under the piano's grand staff, each named by the learner
@@ -62,3 +77,6 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
 - 0093 — Lyrics under the tune (2026-10-24).
 - 0095 — A section's meter (2026-10-24); every meter and the beat type by 0114 (2026-10-27).
 - 0097 — A score's staves are staves (2026-10-24).
+- 2026-10-28 — Flat's notation: 5040 ticks a beat, the 64th and tuplets of 2 to 9; portato, breath, caesura,
+  inverted turn, tremolos, 15ma/15mb, glissando, every dynamic, tempo changes, swing marks, Roman numerals and free
+  text; repeat ×N, endings to the 4th, page breaks, bar repeats and multi-bar rests.

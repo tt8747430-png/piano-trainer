@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { midi, note, type Clef, type SpelledNote } from '@/shared/lib/music'
+import { midi, note, type Clef, type SpelledNote, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { scoreToMei } from './mei'
 import { notate } from './notate'
 import type { TimedMusic, TimedNote } from './types'
+
+const B = TICKS_PER_BEAT
 
 const n = (
   key: number,
@@ -17,7 +19,7 @@ const music = (notes: TimedNote[], extra: Partial<TimedMusic> = {}): TimedMusic 
   meter: '4/4',
   bars: [
     { startTick: 0, beats: 4, tempo: 84 },
-    { startTick: 96, beats: 4, barline: 'final' },
+    { startTick: 4 * B, beats: 4, barline: 'final' },
   ],
   notes,
   chords: [{ startTick: 0, symbol: 'D♭' }],
@@ -25,7 +27,7 @@ const music = (notes: TimedNote[], extra: Partial<TimedMusic> = {}): TimedMusic 
 })
 
 const marked = (marks: TimedNote['marks'], finger?: TimedNote['finger']): TimedNote => ({
-  ...n(72, note('C'), 'rh', 0, 24),
+  ...n(72, note('C'), 'rh', 0, B),
   ...(marks ? { marks } : {}),
   ...(finger ? { finger } : {}),
 })
@@ -33,19 +35,57 @@ const marked = (marks: TimedNote['marks'], finger?: TimedNote['finger']): TimedN
 const mei = scoreToMei(
   notate(
     music([
-      n(61, note('D', -1), 'rh', 0, 24),
-      n(65, note('F'), 'rh', 0, 24),
-      n(68, note('A', -1), 'rh', 24, 12),
-      n(70, note('B', -1), 'rh', 36, 12),
+      n(61, note('D', -1), 'rh', 0, B),
+      n(65, note('F'), 'rh', 0, B),
+      n(68, note('A', -1), 'rh', B, 0.5 * B),
+      n(70, note('B', -1), 'rh', 1.5 * B, 0.5 * B),
       // Over the barline: written as two notes tied.
-      n(73, note('D', -1), 'rh', 48, 96),
-      n(37, note('D', -1), 'lh', 0, 192),
+      n(73, note('D', -1), 'rh', 2 * B, 4 * B),
+      n(37, note('D', -1), 'lh', 0, 8 * B),
     ]),
   ),
   { title: 'Wonderful Grace', chordSymbols: true },
 )
 
 describe('scoreToMei', () => {
+  describe('bar repeats and multi-bar rests (Flat’s)', () => {
+    const whole = (key: number, letter: Parameters<typeof note>[0], bar: number) =>
+      n(key, note(letter), 'rh', bar * 4 * B, 4 * B)
+    const bars = (marks: Partial<TimedMusic['bars'][number]>[]) =>
+      marks.map((mark, i) => ({ startTick: i * 4 * B, beats: 4, ...mark }))
+    const measures = (written: string) => written.match(/<measure [^>]*>.*?<\/measure>/g) ?? []
+
+    it('draws a bar repeat in its sign on every staff, a two-bar repeat’s over both its bars', () => {
+      const notes = [whole(60, 'C', 0), whole(60, 'C', 1), whole(60, 'C', 2), whole(60, 'C', 3)]
+      const one = measures(scoreToMei(notate(music(notes, { bars: bars([{}, { barRepeat: 1 }]) }))))
+      expect(one[1]).toMatch(
+        /<staff n="1"><layer n="1"><mRpt num.visible="false"\/><\/layer><\/staff>/,
+      )
+      expect(one[1]).toMatch(
+        /<staff n="2"><layer n="1"><mRpt num.visible="false"\/><\/layer><\/staff>/,
+      )
+      expect(one[1]).not.toContain('<note')
+      const two = measures(
+        scoreToMei(notate(music(notes, { bars: bars([{}, {}, { barRepeat: 2 }, {}]) }))),
+      )
+      expect(two.slice(2).every((m) => m.includes('<mRpt2/>') && !m.includes('<note'))).toBe(true)
+      // A pair broken by the line's end is drawn in its notes.
+      const cut = notate(music(notes, { bars: bars([{}, {}, { barRepeat: 2 }, {}]) }))
+      const head = measures(scoreToMei({ ...cut, measures: cut.measures.slice(0, 3) }))
+      expect(head[2]).toContain('<note')
+    })
+
+    it('draws a multi-bar rest as one measure counting its bars, named by its first, ending as its last', () => {
+      const notes = [whole(60, 'C', 0), whole(64, 'E', 4)]
+      const marks = bars([{}, { multiRest: 3 }, {}, { barline: 'double' }, {}])
+      const written = measures(scoreToMei(notate(music(notes, { bars: marks }))))
+      expect(written).toHaveLength(3)
+      expect(written[1]).toMatch(/^<measure xml:id="m-1" n="2" right="dbl">/)
+      expect(written[1]).toContain('<layer n="1"><multiRest num="3"/></layer>')
+      expect(written[2]).toMatch(/^<measure xml:id="m-4"/)
+    })
+  })
+
   it('writes an MEI document with the title, the key of five flats and 4/4', () => {
     expect(mei).toContain('<mei xmlns="http://www.music-encoding.org/ns/mei"')
     expect(mei).toContain('<title>Wonderful Grace</title>')
@@ -71,8 +111,8 @@ describe('scoreToMei', () => {
     expect(mei).toMatch(
       /<beam>\s*<note[^>]*pname="a"[^>]*dur="8"[^>]*\/>\s*<note[^>]*pname="b"[^>]*dur="8"/,
     )
-    expect(mei).toMatch(/<note xml:id="n-treble-48-0"[^>]*tie="i"/)
-    expect(mei).toMatch(/<note xml:id="n-treble-96-0"[^>]*tie="t"/)
+    expect(mei).toMatch(/<note xml:id="n-treble-10080-0"[^>]*tie="i"/)
+    expect(mei).toMatch(/<note xml:id="n-treble-20160-0"[^>]*tie="t"/)
   })
 
   it('numbers each measure by its index, and writes its chord symbol, tempo and final barline', () => {
@@ -94,13 +134,13 @@ describe('scoreToMei, a note’s marks and the options', () => {
     const written = scoreToMei(
       plain([
         c(0, { slurStart: true, dynamic: 'mf', pedal: 'down', expression: 'dolce' }),
-        c(24, { slurEnd: true, pedal: 'up' }),
+        c(B, { slurEnd: true, pedal: 'up' }),
       ]),
     )
-    expect(written).toContain('<slur staff="1" startid="#n-treble-0-0" endid="#n-treble-24-0"/>')
+    expect(written).toContain('<slur staff="1" startid="#n-treble-0-0" endid="#n-treble-5040-0"/>')
     expect(written).toMatch(/<dynam staff="1" startid="#n-treble-0-0"[^>]*>mf<\/dynam>/)
     expect(written).toContain('<pedal staff="1" startid="#n-treble-0-0" dir="down"/>')
-    expect(written).toContain('<pedal staff="1" startid="#n-treble-24-0" dir="up"/>')
+    expect(written).toContain('<pedal staff="1" startid="#n-treble-5040-0" dir="up"/>')
     expect(written).toMatch(/<rend fontstyle="italic">dolce<\/rend>/)
   })
 
@@ -108,33 +148,68 @@ describe('scoreToMei, a note’s marks and the options', () => {
     const written = scoreToMei(
       plain([
         c(0, { articulations: ['staccato'], hairpin: 'cresc', octave: '8va' }),
-        c(24, { octave: '8va' }),
-        c(48, { hairpin: 'end' }),
+        c(B, { octave: '8va' }),
+        c(2 * B, { hairpin: 'end' }),
       ]),
     )
     expect(written).toMatch(/<note xml:id="n-treble-0-0"[^>]*><artic artic="stacc"\/><\/note>/)
     expect(written).toContain(
-      '<hairpin staff="1" form="cres" startid="#n-treble-0-0" endid="#n-treble-48-0"/>',
+      '<hairpin staff="1" form="cres" startid="#n-treble-0-0" endid="#n-treble-10080-0"/>',
     )
     expect(written).toMatch(
-      /<octave staff="1" startid="#n-treble-0-0" endid="#n-treble-24-0" dis="8" dis.place="above"\/>/,
+      /<octave staff="1" startid="#n-treble-0-0" endid="#n-treble-5040-0" dis="8" dis.place="above"\/>/,
+    )
+  })
+
+  it('writes Flat’s other marks: 15ma, a glissando, portato, a breath, a caesura, an inverted turn, a tremolo’s strokes, an accent’s dynamic', () => {
+    const written = scoreToMei(
+      plain([
+        c(0, { octave: '15ma', glissando: true, articulations: ['portato', 'breath'] }),
+        c(B, { octave: '15ma', ornament: 'inverted-turn', dynamic: 'sfz' }),
+        c(2 * B, { ornament: 'tremolo-2', articulations: ['caesura'] }),
+      ]),
+    )
+    expect(written).toMatch(/dis="15" dis.place="above"/)
+    expect(written).toContain('<gliss staff="1" startid="#n-treble-0-0" endid="#n-treble-5040-0"/>')
+    expect(written).toContain('<artic artic="ten-stacc"/>')
+    expect(written).toContain('<breath staff="1" tstamp="2"/>')
+    expect(written).toContain('<caesura staff="1" tstamp="4"/>')
+    expect(written).toContain('<turn staff="1" startid="#n-treble-5040-0" form="lower"/>')
+    expect(written).toMatch(/<note xml:id="n-treble-10080-0"[^>]*stem\.mod="2slash"/)
+    expect(written).toMatch(/<dynam[^>]*>sfz<\/dynam>/)
+  })
+
+  it('writes a tempo mark mid-song, a swing mark, a Roman numeral under the staff and free text over it', () => {
+    const written = scoreToMei(
+      plain([
+        c(0, { numeral: 'V7/ii', text: 'con <brio>' }),
+        c(B, { tempo: 120, swing: 'eighths' }),
+      ]),
+    )
+    expect(written).toMatch(
+      /<tempo staff="1" startid="#n-treble-5040-0" mm="120" mm\.unit="4" place="above">\u{1D15F} = 120<\/tempo>/u,
+    )
+    expect(written).toContain('Swing \u{1D160}\u{1D160}')
+    expect(written).toContain('<harm staff="1" startid="#n-treble-0-0" place="below">V7/ii</harm>')
+    expect(written).toContain(
+      '<dir staff="1" startid="#n-treble-0-0" place="above">con &lt;brio&gt;</dir>',
     )
   })
 
   it('writes an acciaccatura slashed and an appoggiatura unslashed before their notes', () => {
     const grace = { midi: midi(62), spelled: note('D') }
     const written = scoreToMei(
-      plain([c(0, { grace: [grace] }), c(24, { grace: [{ ...grace, appoggiatura: true }] })]),
+      plain([c(0, { grace: [grace] }), c(B, { grace: [{ ...grace, appoggiatura: true }] })]),
     )
     // Each its own id, read back from the engraving as its note's grace note (ADR 0114).
     expect(written).toContain(
       '<note xml:id="g-treble-0-0" grace="unacc" dur="8" stem.mod="1slash" pname="d"',
     )
-    expect(written).toContain('<note xml:id="g-treble-24-0" grace="acc" dur="8" pname="d"')
+    expect(written).toContain(`<note xml:id="g-treble-${B}-0" grace="acc" dur="8" pname="d"`)
   })
 
   it('writes fingers only where asked, and only the staves asked for', () => {
-    const score = plain([c(0, undefined, 3), { ...n(48, note('C'), 'lh', 0, 24) }])
+    const score = plain([c(0, undefined, 3), { ...n(48, note('C'), 'lh', 0, B) }])
     expect(scoreToMei(score)).not.toContain('<fing')
     expect(scoreToMei(score, { fingers: true })).toContain(
       '<fing startid="#n-treble-0-0" place="above">3</fing>',
@@ -150,9 +225,9 @@ describe('scoreToMei, a note’s marks and the options', () => {
       music(
         [
           c(0),
-          { ...n(76, note('E'), 'staff', 0, 24), staff: 0 },
-          { ...n(43, note('G'), 'staff', 0, 24), staff: 1 },
-          n(48, note('C'), 'lh', 0, 24),
+          { ...n(76, note('E'), 'staff', 0, B), staff: 0 },
+          { ...n(43, note('G'), 'staff', 0, B), staff: 1 },
+          n(48, note('C'), 'lh', 0, B),
         ],
         { chords: [], staves: [{ clef: 'treble' }, { clef: 'bass' }] },
       ),
@@ -189,14 +264,17 @@ describe('scoreToMei, a note’s marks and the options', () => {
   })
 
   it('beams eighths by the meter, as LilyPond: four to the half bar in 4/4 (ADR 0087)', () => {
-    const eighths = [0, 12, 24, 36].map((tick) => c(tick))
-    const written = scoreToMei(plain(eighths.map((e) => ({ ...e, durationTicks: 12 }))))
+    const eighths = [0, 0.5 * B, B, 1.5 * B].map((tick) => c(tick))
+    const written = scoreToMei(plain(eighths.map((e) => ({ ...e, durationTicks: 0.5 * B }))))
     expect(written.match(/<beam>/g)).toHaveLength(1)
     expect(written).toMatch(/<beam>(<note[^>]*\/>){4}<\/beam>/)
   })
 
   it('writes each beat of triplets as its own tuplet, its eighths beamed', () => {
-    const triplets = [0, 8, 16, 24, 32, 40].map((tick) => ({ ...c(tick), durationTicks: 8 }))
+    const triplets = [0, B / 3, (2 * B) / 3, B, (4 * B) / 3, (5 * B) / 3].map((tick) => ({
+      ...c(tick),
+      durationTicks: B / 3,
+    }))
     const written = scoreToMei(plain(triplets))
     expect(
       written.match(/<tuplet num="3" numbase="2"><beam>(<note[^>]*\/>){3}<\/beam><\/tuplet>/g),
@@ -226,7 +304,7 @@ describe('scoreToMei, a note’s marks and the options', () => {
         timeSymbol: true,
         bars: [
           { startTick: 0, beats: 3, meter: '3/4' },
-          { startTick: 72, beats: 4 },
+          { startTick: 3 * B, beats: 4 },
         ],
       }),
     )
@@ -239,7 +317,7 @@ describe('scoreToMei, a note’s marks and the options', () => {
     const inClef = (clef: Clef) =>
       scoreToMei(
         notate(
-          music([{ ...n(60, note('C'), 'staff', 0, 24), staff: 0 }], {
+          music([{ ...n(60, note('C'), 'staff', 0, B), staff: 0 }], {
             chords: [],
             staves: [{ clef }],
           }),
@@ -339,7 +417,7 @@ describe('the words (ADR 0097)', () => {
       notate(
         music(
           lyrics.map((each, i) => ({
-            ...n(72, note('C'), 'staff', i * 24, 24),
+            ...n(72, note('C'), 'staff', i * B, B),
             staff: 0,
             lyrics: each,
           })),
@@ -359,10 +437,12 @@ describe('the words (ADR 0097)', () => {
       '<verse xml:id="v-staff0-0-0" n="1"><syl wordpos="i" con="d">A</syl></verse>',
     )
     expect(mei).toContain(
-      '<verse xml:id="v-staff0-24-0" n="1"><syl wordpos="m" con="d">ma</syl></verse>',
+      '<verse xml:id="v-staff0-5040-0" n="1"><syl wordpos="m" con="d">ma</syl></verse>',
     )
-    expect(mei).toContain('<verse xml:id="v-staff0-48-0" n="1"><syl wordpos="t">zing</syl></verse>')
-    expect(mei).toContain('<verse xml:id="v-staff0-72-0" n="1"><syl con="u">grace</syl></verse>')
+    expect(mei).toContain(
+      '<verse xml:id="v-staff0-10080-0" n="1"><syl wordpos="t">zing</syl></verse>',
+    )
+    expect(mei).toContain('<verse xml:id="v-staff0-15120-0" n="1"><syl con="u">grace</syl></verse>')
     expect(mei).toMatch(/<note xml:id="n-staff0-0-0"[^>]*>\s*<verse xml:id="v-staff0-0-0" n="1">/)
   })
 
@@ -375,7 +455,7 @@ describe('the words (ADR 0097)', () => {
       '<verse xml:id="v-staff0-0-0" n="1"><syl>one</syl></verse><verse xml:id="v-staff0-0-1" n="2"><syl>&lt;eins&gt;</syl></verse>',
     )
     expect(mei).toContain(
-      '<note xml:id="n-staff0-24-0" pname="c" oct="5" dur="4"><verse xml:id="v-staff0-24-1" n="2"><syl>zwei</syl></verse></note>',
+      '<note xml:id="n-staff0-5040-0" pname="c" oct="5" dur="4"><verse xml:id="v-staff0-5040-1" n="2"><syl>zwei</syl></verse></note>',
     )
   })
 
@@ -383,8 +463,8 @@ describe('the words (ADR 0097)', () => {
     const mei = scoreToMei(
       notate(
         music([
-          { ...n(72, note('C'), 'rh', 0, 96), lyrics: [sung('one')] },
-          n(76, note('E'), 'rh', 0, 96),
+          { ...n(72, note('C'), 'rh', 0, 4 * B), lyrics: [sung('one')] },
+          n(76, note('E'), 'rh', 0, 4 * B),
         ]),
       ),
     )

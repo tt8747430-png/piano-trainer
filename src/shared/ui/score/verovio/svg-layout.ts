@@ -56,16 +56,27 @@ export function layoutOf(
     onsets.set(tick, Math.min(onsets.get(tick) ?? Infinity, x(at)))
   }
 
+  // A measure drawn stands for itself and the bars after it not drawn: a multi-bar rest's (ADR 0087).
+  const drawnAt = measures.map((_, index) => svg.querySelector(`#m-${index}`))
+  const shareOf = (index: number) => {
+    let first = index
+    while (first > 0 && !drawnAt[first]) first -= 1
+    let count = 1
+    while (first + count < measures.length && !drawnAt[first + count]) count += 1
+    return { first, part: index - first, count }
+  }
   const laid = measures.map((measure, index) => {
-    const lines = linesOf(staffGroups(svg.querySelector(`#m-${index}`))[0])
-    const left = x(lines.from)
+    const { first, part, count } = shareOf(index)
+    const lines = linesOf(staffGroups(drawnAt[first] ?? null)[0])
+    const width = (x(lines.to) - x(lines.from)) / count
+    const left = x(lines.from) + part * width
     const end = measure.startTick + measure.ticks
     const own = [...onsets].filter(([tick]) => tick >= measure.startTick && tick < end)
     return {
       startTick: measure.startTick,
       ticks: measure.ticks,
       x: left,
-      width: x(lines.to) - left,
+      width,
       notes: own.length > 0 ? Math.min(...own.map(([, at]) => at)) : left,
     }
   })

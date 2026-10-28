@@ -2,12 +2,15 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import userEvent from '@testing-library/user-event'
 import { cloneElement } from 'react'
 import { beforeAll, describe, expect, it, vi } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { PieceMusic } from '@/entities/piece'
 import { createEditorStore, placesIn, readDraft, tapsIn, type Layer } from '@/features/score-editor'
 import { stubBox } from '@/shared/test/layout'
 import { loadScoreView } from '@/shared/ui'
 import type { EditPrinted, Printed } from '../model/printed'
 import { ScoreSheet } from './ScoreSheet'
+
+const B = TICKS_PER_BEAT
 
 const writtenMusic = {
   key: 'G',
@@ -39,7 +42,7 @@ const sheet = (
   render(
     <ScoreSheet
       draft={draft}
-      caret={96}
+      caret={4 * B}
       layer={layer}
       tapsOf={(to) => tapsIn(createEditorStore(draft, vi.fn()).getState(), to)}
       selection={null}
@@ -228,7 +231,7 @@ describe('ScoreSheet', () => {
     // whose treble top line (F5) Verovio draws 30px down.
     const chorus = await screen.findByRole('button', { name: 'Bar 2: E' })
     fireEvent.doubleClick(chorus, { clientY: 74, detail: 2 })
-    expect(onWrite).toHaveBeenCalledWith(96, 'rh', 78)
+    expect(onWrite).toHaveBeenCalledWith(4 * B, 'rh', 78)
     // The verse, in C: F♮.
     fireEvent.doubleClick(screen.getByRole('button', { name: 'Bar 1: C' }), {
       clientY: 74,
@@ -244,7 +247,7 @@ describe('ScoreSheet', () => {
     render(
       <ScoreSheet
         draft={draft}
-        caret={96}
+        caret={4 * B}
         layer="chords"
         tapsOf={(to) => tapsIn(createEditorStore(draft, vi.fn()).getState(), to)}
         selection={null}
@@ -260,11 +263,11 @@ describe('ScoreSheet', () => {
     )
     // jsdom lays nothing out: a click lands at the bar's top left, in the chord row at its first beat.
     await user.click(await screen.findByRole('button', { name: 'Bar 3: Em' }))
-    expect(onField).toHaveBeenLastCalledWith({ kind: 'chord' }, 192, 'chords')
+    expect(onField).toHaveBeenLastCalledWith({ kind: 'chord' }, 8 * B, 'chords')
     expect(onPlace).not.toHaveBeenCalled()
     await user.keyboard('{Shift>}')
     await user.click(screen.getByRole('button', { name: 'Bar 4: C' }))
-    expect(onPlace).toHaveBeenLastCalledWith(288, 'chords', true)
+    expect(onPlace).toHaveBeenLastCalledWith(12 * B, 'chords', true)
     expect(onField).toHaveBeenCalledTimes(1)
   })
 
@@ -275,7 +278,7 @@ describe('ScoreSheet', () => {
       render(
         <ScoreSheet
           draft={draft}
-          caret={240}
+          caret={10 * B}
           layer="chords"
           tapsOf={() => []}
           selection={null}
@@ -322,7 +325,7 @@ describe('ScoreSheet', () => {
     render(
       <ScoreSheet
         draft={sung}
-        caret={96}
+        caret={4 * B}
         layer="staff0"
         tapsOf={() => []}
         selection={null}
@@ -353,7 +356,7 @@ describe('ScoreSheet', () => {
       clientY: Number.parseFloat(place.style.top) + 4 - Number.parseFloat(bar.style.top),
       detail: 1,
     })
-    expect(onField).toHaveBeenLastCalledWith({ kind: 'lyrics', verse: 0 }, 96, 'staff0')
+    expect(onField).toHaveBeenLastCalledWith({ kind: 'lyrics', verse: 0 }, 4 * B, 'staff0')
   })
 
   it('numbers each line at its head, a section’s name and the tempo beside it, its row only as tall as what it holds', async () => {
@@ -385,7 +388,7 @@ describe('ScoreSheet', () => {
           caret={0}
           layer="rh"
           tapsOf={() => []}
-          selection={{ from: 0, to: 288 }}
+          selection={{ from: 0, to: 12 * B }}
           onPlace={vi.fn()}
           onReach={vi.fn()}
           onDeselect={vi.fn()}
@@ -421,7 +424,7 @@ describe('ScoreSheet', () => {
     const [bar] = await screen.findAllByRole('button', { name: /^Bar 3/ })
     if (!bar) throw new Error('no bar')
     await user.click(bar)
-    expect(onPlace).toHaveBeenCalledWith(192, 'staff0', false)
+    expect(onPlace).toHaveBeenCalledWith(8 * B, 'staff0', false)
   })
 
   it('puts a button over the tempo mark and each clef, key and time signature, edited there (ADR 0114)', async () => {
@@ -492,7 +495,7 @@ describe('ScoreSheet', () => {
     expect(onDeselect).toHaveBeenCalledTimes(1)
     // Anywhere in an empty bar: its start, as a line where the next note goes.
     await click(/^Bar 3/, 5)
-    expect(onPlace).toHaveBeenLastCalledWith(192, 'staff0', false)
+    expect(onPlace).toHaveBeenLastCalledWith(8 * B, 'staff0', false)
   })
 
   it('marks the caret as a line on its staff, on notes and in an empty bar, never a box (ADR 0096)', async () => {
@@ -567,10 +570,10 @@ describe('ScoreSheet', () => {
       edit: editing(vi.fn()),
       title: () => null,
     }
-    const { rerender } = render(<ScoreSheet {...props} caret={96} />)
+    const { rerender } = render(<ScoreSheet {...props} caret={4 * B} />)
     await screen.findByRole('button', { name: 'Bar 2: C D' })
     expect(scrolled).not.toHaveBeenCalled()
-    rerender(<ScoreSheet {...props} caret={288} />)
+    rerender(<ScoreSheet {...props} caret={12 * B} />)
     expect(scrolled).toHaveBeenCalledWith({ block: 'nearest' })
   })
 
@@ -593,7 +596,7 @@ describe('ScoreSheet', () => {
         view,
       }
       const { rerender } = render(
-        <ScoreSheet {...props} playhead={{ tick: 192, clock: () => null }} />,
+        <ScoreSheet {...props} playhead={{ tick: 8 * B, clock: () => null }} />,
       )
       await screen.findAllByRole('button', { name: /^Bar 3/ })
       await waitFor(() =>

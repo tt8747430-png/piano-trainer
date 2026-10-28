@@ -232,8 +232,21 @@ const BARLINES = {
       {thick(MID + 5)}
     </>
   ),
+  // Flat's Repeat ×N: the end repeat with its times over it.
+  repeatTimes: (
+    <>
+      {dots(MID - 4)}
+      {thin(MID + 0.5)}
+      {thick(MID + 5)}
+      <text x={MID + 9} y={TOP + 4} fontSize="9" fontWeight="700" stroke="none">
+        ×
+      </text>
+    </>
+  ),
   ending1: ending('1.'),
   ending2: ending('2.'),
+  ending3: ending('3.'),
+  ending4: ending('4.'),
 } as const satisfies Partial<Record<BarMarkChoice, ReactNode>>
 
 export type BarlinePictured = keyof typeof BARLINES

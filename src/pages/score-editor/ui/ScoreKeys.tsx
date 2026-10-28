@@ -189,6 +189,29 @@ export function RepeatKeys() {
  * (ADR 0096) — with a pointer the one way in to a song with no words or chords printed yet to tap —
  * then the expression words alone as printed, what each asks its tooltip.
  */
+/**
+ * The Roman numeral key (ADR 0097, Flat's ⌘⇧K): the numeral of the chord sounding at the notes
+ * chosen, in the key there (the numerals kernel's), under them; again, taken off.
+ */
+function NumeralKey() {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const chosen = useNotesChosen()
+  return (
+    <PaletteKey
+      label={t('words.numeral')}
+      tool="numeral"
+      reason={usePaletteReason()}
+      disabled={!chosen}
+      onClick={() => actions.dispatch({ type: 'numeral' })}
+    >
+      <span aria-hidden className="font-serif text-lg font-semibold leading-none">
+        IV<sup className="text-[0.6em]">6</sup>
+      </span>
+    </PaletteKey>
+  )
+}
+
 export function TextKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
@@ -199,6 +222,8 @@ export function TextKeys() {
       <KeyGrid>
         <FieldKey field="lyrics" />
         <FieldKey field="chord" />
+        <NumeralKey />
+        <FieldKey field="text" />
       </KeyGrid>
       <GroupName name={t('expressions')} />
       <KeyGrid label={t('expressions')}>

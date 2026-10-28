@@ -26,7 +26,21 @@ were the measure (line breaking, beams, courtesy signatures, page filling).
 - **Lines break by width** (`measureWidths`, `breakLine`): as few lines as hold the music, then as even as they come,
   every line justified. The Player and the editor both use it.
 - **Beams follow the meter as LilyPond's** (`beamPlan`): eighths over the half bar in 4/4, the whole bar in 3/4, by
-  the beat or the meter's groups otherwise; a beam with 16ths cut at each beat; each beat of triplets one tuplet.
+  the beat or the meter's groups otherwise; a beam with 16ths cut at each beat; each tuplet (`tupletAt`, its
+  bracket's start) beamed and bracketed alone with its count (`<tuplet num numbase>`).
+- **Values reach the 64th, tuplets 2 to 9** (`voiceGrid`): a bar's notes are spelled on the coarsest grid that holds
+  them, a tuplet where a quarter, half, beat or longer window splits evenly into its count (3:2, 5:4, 6:4, 7:4, 9:8 in
+  simple time; 2:3, 4:3, 5:3, 7:6, 8:6, 9:6 in compound, a duplet or quadruplet only where struck notes split a beat).
+- **Signs for notes** (`drawnAs`): a bar marked a bar repeat is drawn as `<mRpt/>` (`<mRpt2/>` over both bars of a
+  two-bar repeat, both on the line) while its notes are the bar's (or two bars') before, in its notes otherwise; a
+  multi-bar rest is one `<measure>` with `<multiRest num>` named by its first bar, its other bars not drawn, while
+  they stay empty and nothing is marked or changes between them. The layout shares the drawn measure's width among
+  the bars it stands for, so the playhead and the caret walk through them.
+- **Flat's marks as MEI**: 8va/8vb/15ma/15mb as `<octave dis>`, a glissando `<gliss>` to the next note, portato as
+  `ten-stacc`, a breath mark and a caesura after their note, the inverted turn `<turn form="lower">`, a tremolo's
+  strokes `stem.mod`, a tempo change `<tempo>` over its note, a swing mark and free text as `<dir>`, a Roman
+  numeral `<harm>` under the staff, a repeat played N times its `N×` over its end. A page break starts a new page in
+  the page view (`paginate`).
 - **Courtesy signatures**: a line is told what the next starts in (`NextLine`) and ends with the new key, time or
   clef, as LilyPond and MuseScore print them.
 - **The labels' row is ours** (`LabelRow`): HTML over each line in the app's faces, read by a screen reader: the
@@ -53,3 +67,5 @@ LilyPond's cautionary accidentals at a line's start are not written: each line i
 - 0084 — Beams by the meter; chord names print ♯ and ♭ (2026-10-23).
 - 0087 — Courtesy signatures, line-start bar numbers, pages filled (2026-10-23), from the research note comparing
   the engraving with LilyPond, deleted.
+- 2026-10-28 — The 64th, tuplets of 2 to 9 found from the timing, Flat's marks, bar repeats and multi-bar rests drawn
+  as their signs, page breaks.

@@ -1,4 +1,5 @@
 import { ArrowDown, ArrowLeftRight, ArrowUp } from 'lucide-react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import {
@@ -8,14 +9,17 @@ import {
   NOTE_VALUES,
   shownValue,
   takesDot,
+  takesTuplet,
+  type ChosenValue,
   type EditMode,
   type GraceKind,
 } from '@/features/score-editor'
 import { isCompound, type Accidental } from '@/shared/lib/music'
+import { TUPLET_COUNTS, tupletOf, type TupletCount } from '@/shared/lib/notation'
 import { Segmented } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
-import { VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
+import { TUPLET_WORDS, VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
 import type { Tool } from '../model/shortcuts'
 import { usePaletteDock, usePaletteForm } from './palette-form'
 import { KeyGrid, PaletteKey } from './palette-keys'
@@ -28,7 +32,11 @@ const GLYPH = 'font-sans text-3xl leading-none'
 const REST = '𝄽'
 
 /** What the palette shows as chosen: the chosen note's value, else the next note's. */
-const useShown = () => useEditorState(useShallow(shownValue))
+/** The value shown, kept while it reads the same: its tuplet is a fresh object each time it is read. */
+function useShown(): ChosenValue | null {
+  const key = useEditorState((state) => JSON.stringify(shownValue(state)))
+  return useMemo(() => JSON.parse(key) as ChosenValue | null, [key])
+}
 
 /** Each value's key, Flat's 1 to 7. */
 const VALUE_TOOLS: Readonly<Partial<Record<number, Tool>>> = {
@@ -38,10 +46,11 @@ const VALUE_TOOLS: Readonly<Partial<Record<number, Tool>>> = {
   8: 'eighth',
   16: 'sixteenth',
   32: 'thirtySecond',
+  64: 'sixtyFourth',
 }
 
 /**
- * The values whole to 32nd (ADR 0114): with a note chosen it is made that value; else the next note
+ * The values whole to 64th (ADR 0114): with a note chosen it is made that value; else the next note
  * is written so. The chosen note's own value stands pressed.
  */
 function ValueKeys() {
@@ -193,8 +202,8 @@ function ModeChoice() {
 
 /**
  * The everyday tools, Flat's quick toolbar in its order: the accidentals ♮ ♯ ♭ and Respell, the
- * values whole to 32nd, Dotted and Double dotted (out of reach where the meter takes none), Tie,
- * Triplet (out of reach in a compound meter) and Rest. The note-entry toolbar over the sheet on a
+ * values whole to 64th, Dotted and Double dotted (out of reach where the meter takes none), Tie,
+ * Tuplet (the meter's first: a triplet, a duplet in compound time) and Rest. The note-entry toolbar over the sheet on a
  * laptop, the sheet's quick row on a phone, and the Notes' keys there.
  */
 export function NoteBar() {
@@ -208,7 +217,6 @@ export function NoteBar() {
   const doubleDottable = useEditorState((state) =>
     takesDot((shownValue(state) ?? state.value).value, state.draft.meter, 2),
   )
-  const compound = useEditorState((state) => isCompound(state.draft.meter))
   const off = !useNotesChosen()
   return (
     <>
@@ -265,21 +273,7 @@ export function NoteBar() {
           <path d="M3 10 C8 16 16 16 21 10" />
         </svg>
       </PaletteKey>
-      <PaletteKey
-        label={t('triplet')}
-        tool="triplet"
-        reason={t('reason.compound')}
-        pressed={shown?.triplet === true}
-        disabled={compound}
-        onClick={() => dispatch({ type: 'triplet' })}
-      >
-        {/* Flat's: a tuplet's bracket round its 3. */}
-        <span aria-hidden className="flex items-start gap-0.5 font-display text-base leading-none">
-          <span className="mt-1 size-1.5 border-t-[1.5px] border-l-[1.5px] border-current" />
-          <span className="font-semibold italic">3</span>
-          <span className="mt-1 size-1.5 border-t-[1.5px] border-r-[1.5px] border-current" />
-        </span>
-      </PaletteKey>
+      <QuickTupletKey />
       <PaletteKey label={t('rest')} tool="rest" onClick={() => dispatch({ type: 'rest' })}>
         <span aria-hidden className={GLYPH}>
           {REST}
@@ -303,8 +297,61 @@ export function NoteKeys() {
           <NoteBar />
         </KeyGrid>
       ) : null}
+      <KeyGrid>
+        <TupletKeys quick={!sheet} />
+      </KeyGrid>
     </>
   )
+}
+
+/** A tuplet's bracket round its count, as Flat's key and a score draw it: ⌐3¬. */
+function TupletBracket({ num }: { num: TupletCount }) {
+  return (
+    <span aria-hidden className="flex items-start gap-0.5 font-display text-base leading-none">
+      <span className="mt-1 size-1.5 border-t-[1.5px] border-l-[1.5px] border-current" />
+      <span className="font-semibold italic">{num}</span>
+      <span className="mt-1 size-1.5 border-t-[1.5px] border-r-[1.5px] border-current" />
+    </span>
+  )
+}
+
+/** One tuplet's key: on the value chosen, the same again off; greyed where the meter or value takes none. */
+function TupletKey({ num }: { num: TupletCount }) {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const shown = useShown()
+  const meter = useEditorState((state) => state.draft.meter)
+  const value = useEditorState((state) => (shownValue(state) ?? state.value).value)
+  return (
+    <PaletteKey
+      label={t(`tuplets.${TUPLET_WORDS[num]}`)}
+      tool={num === 9 ? undefined : `tuplet${num}`}
+      reason={t(tupletOf(num, meter) ? 'reason.shortTuplet' : 'reason.plainTuplet')}
+      pressed={shown?.tuplet?.num === num}
+      disabled={!takesTuplet(value, num, meter)}
+      onClick={() => actions.dispatch({ type: 'tuplet', num })}
+    >
+      <TupletBracket num={num} />
+    </PaletteKey>
+  )
+}
+
+/** The quick toolbar's Tuplet, Flat's: the meter's first, a triplet, or a duplet in compound time. */
+function QuickTupletKey() {
+  const compound = useEditorState((state) => isCompound(state.draft.meter))
+  return <TupletKey num={compound ? 2 : 3} />
+}
+
+/**
+ * The tuplets two to nine (ADR 0097, Flat's ⇧2–⇧8, nine by its key alone), each on the value
+ * chosen: the chosen note's, else the next written; greyed where the meter writes such notes plainly (two or four to a simple
+ * beat, three or six to a compound one) or the value is too short for it.
+ */
+function TupletKeys({ quick }: { quick: boolean }) {
+  const compound = useEditorState((state) => isCompound(state.draft.meter))
+  // On the phone's sheet the everyday tools above hold the quick tuplet already.
+  const shown = quick ? TUPLET_COUNTS : TUPLET_COUNTS.filter((num) => num !== (compound ? 2 : 3))
+  return shown.map((num) => <TupletKey key={num} num={num} />)
 }
 
 /** Chord's picture: noteheads stacked on one stem, as the next notes stack onto the one at the caret. */
@@ -477,7 +524,7 @@ export function PitchKeys() {
         </PaletteKey>,
       ])}
       <GraceKeys />
-      <LineKeys lines={['8va', '8vb']} />
+      <LineKeys lines={['8va', '8vb', '15ma', '15mb']} />
     </KeyGrid>
   )
 }

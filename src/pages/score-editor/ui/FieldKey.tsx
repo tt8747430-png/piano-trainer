@@ -16,7 +16,11 @@ const KEYS = {
   lyrics: { label: 'lyrics.label', picture: <MicVocal />, tool: 'lyrics' },
   chord: { label: 'chord.symbol', picture: <FieldIcon field="chord" />, tool: 'chord' },
   fingering: { label: 'fingering', picture: <FieldIcon field="fingering" />, tool: 'fingering' },
-} as const satisfies Readonly<Record<Kind, { label: string; picture: ReactNode; tool: Tool }>>
+  text: { label: 'words.text', picture: <FieldIcon field="text" />, tool: 'annotation' },
+  tempo: { label: 'words.tempo', picture: <FieldIcon field="tempo" />, tool: undefined },
+} as const satisfies Readonly<
+  Record<Kind, { label: string; picture: ReactNode; tool: Tool | undefined }>
+>
 
 /**
  * The palette's one key for a field typed where it is printed (ADR 0096): it opens the field at the

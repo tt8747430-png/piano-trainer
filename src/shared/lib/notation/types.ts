@@ -16,15 +16,24 @@ import type {
   TempoUnit,
 } from '@/shared/lib/music'
 
-/** A note value by its denominator: 1 a whole, 32 a 32nd. */
-export type NoteValue = 1 | 2 | 4 | 8 | 16 | 32
+/** A note value by its denominator: 1 a whole, 64 a 64th. */
+export type NoteValue = 1 | 2 | 4 | 8 | 16 | 32 | 64
+
+/**
+ * A tuplet (ADR 0097): `num` notes written in the time of `numbase` of their value: a triplet 3:2,
+ * a quintuplet 5:4, a duplet in compound time 2:3.
+ */
+export interface Tuplet {
+  readonly num: number
+  readonly numbase: number
+}
 
 export interface Duration {
   readonly value: NoteValue
   /** One dot adds half the value, two add three quarters. */
   readonly dots: 0 | 1 | 2
-  /** Three in the time of two: only in a triplet beat. */
-  readonly triplet: boolean
+  /** The tuplet it is written in, its length its share of the notes it takes the time of. */
+  readonly tuplet?: Tuplet
 }
 
 /** A note on a timeline: what `notate` reads. A Performance's notes are these. */
@@ -90,7 +99,12 @@ export interface WrittenNote {
   readonly finger?: Finger
 }
 
-export interface NotesEvent {
+/** Where a tuplet's bracket starts: the events of one tuplet share it. */
+interface InTuplet {
+  readonly tupletAt?: Tick
+}
+
+export interface NotesEvent extends InTuplet {
   readonly kind: 'notes'
   readonly tick: Tick
   readonly duration: Duration
@@ -107,7 +121,7 @@ export interface NotesEvent {
   readonly lyrics?: NoteLyrics
 }
 
-export interface RestEvent {
+export interface RestEvent extends InTuplet {
   readonly kind: 'rest'
   readonly tick: Tick
   readonly duration: Duration
@@ -172,7 +186,15 @@ export interface Measure extends BarMarks {
   /** One or two voices on each of the score's staves; none on a piano's staff it does not write. */
   readonly staves: StaffVoices
   readonly chords: readonly ChordMark[]
+  /**
+   * How it is drawn where not as its notes (`drawnAs`, ADR 0087): in a bar repeat's sign, one bar's
+   * or a two-bar pair's, or in a multi-bar rest begun at it (`rest`) or before it (`restOn`).
+   */
+  readonly drawn?: DrawnAs
 }
+
+/** A measure drawn as a sign for its notes: a bar repeat's, or a multi-bar rest's. */
+export type DrawnAs = 'repeat' | 'repeat2' | 'rest' | 'restOn'
 
 /** Each staff's voices in a measure: the piano's two always there, a single staff's where it is written. */
 export type StaffVoices = Readonly<Record<PianoStaff, readonly ScoreVoice[]>> &

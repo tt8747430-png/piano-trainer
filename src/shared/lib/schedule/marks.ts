@@ -1,10 +1,12 @@
 import type { PerformanceNote } from '@/shared/lib/arrangement'
 import {
   keyScale,
+  isBlackKey,
   midi,
   pitchClass,
   pitchClassOf,
   spellScale,
+  tremoloStrokes,
   type Dynamic,
   type Key,
   type Midi,
@@ -12,14 +14,34 @@ import {
 } from '@/shared/lib/music'
 import type { NoteSound } from './schedule'
 
-/** How loud each dynamic plays a hand, against its arranged loudness. */
-const DYNAMIC_LEVEL: Readonly<Record<Dynamic, number>> = {
-  pp: 0.5,
-  p: 0.7,
-  mp: 0.85,
-  mf: 1,
-  f: 1.25,
-  ff: 1.5,
+/** How loud each level plays a hand, against its arranged loudness. */
+const LEVEL = { ppp: 0.4, pp: 0.5, p: 0.7, mp: 0.85, mf: 1, f: 1.25, ff: 1.5, fff: 1.75 } as const
+
+/**
+ * How each dynamic plays (ADR 0097): a level held from its note on; an accent striking its note
+ * alone harder than the level around it; or a note struck at one level and the next held at another.
+ */
+const DYNAMIC_PLAY: Readonly<
+  Record<Dynamic, { readonly level?: number; readonly stress?: number; readonly strike?: number }>
+> = {
+  ppp: { level: LEVEL.ppp },
+  pp: { level: LEVEL.pp },
+  p: { level: LEVEL.p },
+  mp: { level: LEVEL.mp },
+  mf: { level: LEVEL.mf },
+  f: { level: LEVEL.f },
+  ff: { level: LEVEL.ff },
+  fff: { level: LEVEL.fff },
+  sf: { stress: 1.5 },
+  sfz: { stress: 1.5 },
+  fz: { stress: 1.5 },
+  sffz: { stress: 1.8 },
+  rf: { stress: 1.35 },
+  rfz: { stress: 1.35 },
+  fp: { strike: LEVEL.f, level: LEVEL.p },
+  sfp: { strike: LEVEL.ff, level: LEVEL.p },
+  sfpp: { strike: LEVEL.ff, level: LEVEL.pp },
+  pf: { strike: LEVEL.p, level: LEVEL.f },
 }
 /** How much harder an accent and a marcato strike their note. */
 const ACCENT = 1.3
@@ -40,6 +62,8 @@ export interface MarkTiming {
   readonly thirtySecond: number
   /** The note's whole written length in seconds: a tenuto holds it all. */
   readonly full: number
+  /** The next note on its staff, where a glissando slides to. */
+  readonly glissTo?: Midi
 }
 
 /** The key's note next above or below a key, by step: an ornament's neighbour. */
@@ -67,7 +91,11 @@ export function markedSounds(
   if (has('staccato')) duration /= 2
   if (has('staccatissimo')) duration /= 4
   if (has('marcato')) duration *= 0.75
+  if (has('portato')) duration *= 0.75
   if (has('fermata')) duration *= 1.5
+  // A breath mark leaves a 16th's silence before the next note, a caesura half the note.
+  if (has('breath')) duration -= 2 * timing.thirtySecond
+  if (has('caesura')) duration /= 2
   const main: NoteSound = {
     ...sound,
     duration: Math.max(SHORTEST, duration),
@@ -80,7 +108,22 @@ export function markedSounds(
     at: Math.max(0, main.at - GRACE * (all.length - i)),
     duration: GRACE,
   }))
+  const glissTo = timing.glissTo
+  if (marks.glissando && glissTo !== undefined && glissTo !== main.midi)
+    return [...grace, ...glissando(main, glissTo, timing)]
   return [...grace, ...ornamented(main, marks.ornament, timing)]
+}
+
+/**
+ * A glissando: the white keys from the note towards the next, the next itself left to sound as its
+ * own note, spread evenly over the note's length.
+ */
+function glissando(main: NoteSound, to: Midi, { thirtySecond }: MarkTiming): NoteSound[] {
+  const step = to > main.midi ? 1 : -1
+  const keys: Midi[] = [main.midi]
+  for (let m = main.midi + step; m !== to; m += step) if (!isBlackKey(midi(m))) keys.push(midi(m))
+  const each = Math.max(Math.min(thirtySecond, 0.05), main.duration / keys.length)
+  return keys.map((m, i) => ({ ...main, midi: m, at: main.at + i * each, duration: each }))
 }
 
 /** A note played as its ornament: strokes of 32nds, the last holding what is left of it. */
@@ -90,28 +133,30 @@ function ornamented(
   { key, thirtySecond }: MarkTiming,
 ): NoteSound[] {
   if (!ornament) return [main]
-  const strokes = Math.max(1, Math.floor(main.duration / thirtySecond + 1e-9))
+  // A tremolo repeats its note in 8ths, 16ths or 32nds by its strokes; the rest stroke in 32nds.
+  const tremolo = tremoloStrokes(ornament)
+  const stroke = tremolo ? thirtySecond * 2 ** (3 - tremolo) : thirtySecond
+  const strokes = Math.max(1, Math.floor(main.duration / stroke + 1e-9))
   const above = neighbour(key, main.midi, 1)
   const below = neighbour(key, main.midi, -1)
   const keys: readonly Midi[] =
     ornament === 'trill'
       ? Array.from({ length: strokes }, (_, i) => (i % 2 === 0 ? main.midi : above))
-      : ornament === 'tremolo'
+      : tremolo
         ? Array.from({ length: strokes }, () => main.midi)
         : ornament === 'mordent'
           ? [main.midi, above, main.midi]
           : ornament === 'lower-mordent'
             ? [main.midi, below, main.midi]
-            : [above, main.midi, below, main.midi]
+            : ornament === 'inverted-turn'
+              ? [below, main.midi, above, main.midi]
+              : [above, main.midi, below, main.midi]
   const fits = keys.slice(0, strokes)
   return fits.map((m, i) => ({
     ...main,
     midi: m,
-    at: main.at + i * thirtySecond,
-    duration:
-      i === fits.length - 1
-        ? Math.max(thirtySecond, main.duration - i * thirtySecond)
-        : thirtySecond,
+    at: main.at + i * stroke,
+    duration: i === fits.length - 1 ? Math.max(stroke, main.duration - i * stroke) : stroke,
   }))
 }
 
@@ -139,16 +184,20 @@ export function loudness(notes: readonly PerformanceNote[]): number[] {
             ((ramp.to - ramp.from) * (n.startTick - ramp.start)) / (ramp.end - ramp.start)
         if (done) ramp = null
       }
-      if (marks?.dynamic) level = DYNAMIC_LEVEL[marks.dynamic]
+      const play = marks?.dynamic ? DYNAMIC_PLAY[marks.dynamic] : {}
+      const struck = play.strike ?? level * (play.stress ?? 1)
+      if (play.level !== undefined) level = play.level
       if (marks?.hairpin === 'cresc' || marks?.hairpin === 'dim') {
         const later = order.slice(k + 1).filter(({ n: next }) => next.startTick > n.startTick)
         const stop = later.find(({ n: next }) => next.marks?.dynamic || next.marks?.hairpin)
         const end = stop?.n.startTick ?? later.at(-1)?.n.startTick
         const dynamic = stop?.n.marks?.dynamic
-        const to = dynamic ? DYNAMIC_LEVEL[dynamic] : level * OPEN_HAIRPIN[marks.hairpin]
+        const to =
+          (dynamic && (DYNAMIC_PLAY[dynamic].strike ?? DYNAMIC_PLAY[dynamic].level)) ||
+          level * OPEN_HAIRPIN[marks.hairpin]
         ramp = end === undefined ? null : { from: level, to, start: n.startTick, end }
       }
-      levels[i] = level
+      levels[i] = play.level !== undefined && play.strike === undefined ? level : struck
     }
   }
   return levels
@@ -166,5 +215,22 @@ export function rollOffsets(notes: readonly PerformanceNote[]): number[] {
         other.midi < n.midi,
     )
     return +(below.length * ROLL_STEP).toFixed(3)
+  })
+}
+
+/**
+ * Where each note marked glissando slides to (ADR 0097): the note of its part's next onset nearest
+ * its pitch; none for another note, or one with no note after it.
+ */
+export function glissandoTargets(notes: readonly PerformanceNote[]): (Midi | undefined)[] {
+  return notes.map((n) => {
+    if (!n.marks?.glissando) return undefined
+    const later = notes.filter(
+      (other) => other.hand === n.hand && other.staff === n.staff && other.startTick > n.startTick,
+    )
+    const next = Math.min(...later.map((other) => other.startTick))
+    return later
+      .filter((other) => other.startTick === next)
+      .sort((a, b) => Math.abs(a.midi - n.midi) - Math.abs(b.midi - n.midi))[0]?.midi
   })
 }

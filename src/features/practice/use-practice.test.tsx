@@ -4,12 +4,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { arrange, parseFigure, type Performance } from '@/shared/lib/arrangement'
 import { createFakeAudio, type FakeAudio } from '@/shared/api/audio'
 import { createFakeMidi, type FakeMidi } from '@/shared/api/midi'
-import { midi, note, parseChordSymbol } from '@/shared/lib/music'
+import { midi, note, parseChordSymbol, TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { NoteSound, Sound } from '@/shared/lib/schedule'
 import { ServicesProvider } from '@/shared/lib/services'
 import { FULL_MIX } from './mix'
 import { ONE_BAR, TWO_BARS } from './testing/performances'
 import { usePractice, type PracticeSetup } from './use-practice'
+
+const B = TICKS_PER_BEAT
 
 const LISTEN: PracticeSetup = {
   mode: 'listen',
@@ -85,9 +87,9 @@ describe('usePractice: Listen', () => {
     expect(result.current.clock).toBeNull()
     act(() => result.current.play())
     clockTo(0.1 + 0.5)
-    expect(result.current.clock?.()).toBe(12)
+    expect(result.current.clock?.()).toBe(0.5 * B)
     act(() => audio.setNow(0.1 + 2.75))
-    expect(result.current.clock?.()).toBe(66)
+    expect(result.current.clock?.()).toBe(2.75 * B)
     act(() => result.current.stop())
     expect(result.current.clock).toBeNull()
   })
@@ -163,7 +165,7 @@ describe('usePractice: Listen', () => {
     rerender({ performance: ONE_BAR, setup: { ...LISTEN, tempo: 120 } })
     expect(audio.played).toHaveLength(2)
     expect(notesOf(audio.played[1]?.sounds ?? [])).toHaveLength(
-      ONE_BAR.notes.filter((n) => n.startTick >= 48).length,
+      ONE_BAR.notes.filter((n) => n.startTick >= 2 * B).length,
     )
   })
 
@@ -471,7 +473,7 @@ describe('usePractice: a loop and speed training', () => {
     const restarted = audio.played.at(-1)
     expect(restarted?.at).toBeCloseTo(5.3 + 0.1)
     expect(notesOf(restarted?.sounds ?? [])[0]?.at).toBe(0)
-    expect(ONE_BAR.beatGroups[beatGroup]?.tick).toBe(24)
+    expect(ONE_BAR.beatGroups[beatGroup]?.tick).toBe(B)
     clockTo(5.3 + 0.1 + 0.5)
     expect(result.current.passTempo).toBe(66)
   })

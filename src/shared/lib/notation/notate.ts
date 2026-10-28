@@ -1,3 +1,4 @@
+import { drawnAs } from './drawn'
 import {
   clefsInForce,
   HOME_CLEF,
@@ -107,11 +108,18 @@ function barChords(
   return staves
 }
 
+/** Where the tuplet a piece of a bar is written in starts, as its events say it: none outside one. */
+function inTuplet(grid: VoiceGrid, bar: Bar, tick: Tick): { tupletAt?: Tick } {
+  const tuplet = grid.tupletAt(tick)
+  return tuplet ? { tupletAt: bar.start + tuplet.start } : {}
+}
+
 function rests(span: Span, bar: Bar, grid: VoiceGrid, hidden: boolean): RestEvent[] {
   return spellSpan(span, { meter: bar.meter, barTicks: bar.ticks, grid }).map((piece) => ({
     kind: 'rest',
     tick: bar.start + piece.tick,
     duration: piece.duration,
+    ...inTuplet(grid, bar, piece.tick),
     hidden,
   }))
 }
@@ -149,7 +157,7 @@ const pieceLyrics = (notes: readonly BarNote[], first: boolean): NoteLyrics | nu
 
 /** A voice's chords as values end to end: gaps as rests, a chord as tied pieces. */
 function writeVoice(voice: VoiceChords, bar: Bar, second: boolean): DraftVoice {
-  const grid = voiceGrid(voice.chords, bar.meter)
+  const grid = voiceGrid(voice.chords, bar.meter, bar.ticks)
   const events: (DraftEvent | RestEvent)[] = []
   let at = bar.from
   for (const chord of voice.chords) {
@@ -166,6 +174,7 @@ function writeVoice(voice: VoiceChords, bar: Bar, second: boolean): DraftVoice {
         kind: 'notes',
         tick: bar.start + piece.tick,
         duration: piece.duration,
+        ...inTuplet(grid, bar, piece.tick),
         ...(marks ? { marks } : {}),
         ...(lyrics ? { lyrics } : {}),
         notes: chord.notes.map((n) => ({
@@ -231,7 +240,7 @@ function writeStaff(chords: readonly BarChord[], bar: Bar): ScoreVoice[] {
             events: rests(
               { start: bar.from, end: bar.ticks },
               bar,
-              voiceGrid([], bar.meter),
+              voiceGrid([], bar.meter, bar.ticks),
               false,
             ),
             stem: 'auto',
@@ -244,7 +253,12 @@ function writeStaff(chords: readonly BarChord[], bar: Bar): ScoreVoice[] {
 /** A staff with nothing to write: hidden rests that hold the bar's time. */
 const blankStaff = (bar: Bar): ScoreVoice[] => [
   {
-    events: rests({ start: bar.from, end: bar.ticks }, bar, voiceGrid([], bar.meter), true),
+    events: rests(
+      { start: bar.from, end: bar.ticks },
+      bar,
+      voiceGrid([], bar.meter, bar.ticks),
+      true,
+    ),
     stem: 'auto',
   },
 ]
@@ -359,6 +373,6 @@ export function notate(music: TimedMusic): Score {
     ...(music.timeSymbol ? { timeSymbol: true } : {}),
     ...(music.tempoUnit ? { tempoUnit: music.tempoUnit } : {}),
     staves: written,
-    measures,
+    measures: drawnAs(measures),
   }
 }

@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react'
 import { useLayoutEffect, useRef, type ComponentProps, type ReactNode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
-import { midi, note, type Tick } from '@/shared/lib/music'
+import { midi, note, type Tick, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { notate, type StaffId, type TimedNote } from '@/shared/lib/notation'
 import { stubBox, stubScrolling } from '@/shared/test/layout'
 import { RevealContext } from '../canvas-reveal'
@@ -9,6 +9,8 @@ import type { ScoreLayout } from './layout'
 import { Playhead } from './Playhead'
 import { playheadSpan, playheadX } from './playhead-place'
 import { ScoreView } from './ScoreView'
+
+const B = TICKS_PER_BEAT
 
 const n = (key: number, hand: TimedNote['hand'], startTick: number, durationTicks: number) => ({
   midi: midi(key),
@@ -24,16 +26,16 @@ const score = notate({
   meter: '4/4',
   bars: [
     { startTick: 0, beats: 4 },
-    { startTick: 96, beats: 4 },
+    { startTick: 4 * B, beats: 4 },
   ],
   notes: [
-    n(72, 'rh', 0, 24),
-    n(72, 'rh', 24, 24),
-    n(72, 'rh', 48, 24),
-    n(72, 'rh', 72, 24),
-    n(48, 'lh', 0, 96),
-    n(72, 'rh', 96, 96),
-    n(48, 'lh', 96, 96),
+    n(72, 'rh', 0, B),
+    n(72, 'rh', B, B),
+    n(72, 'rh', 2 * B, B),
+    n(72, 'rh', 3 * B, B),
+    n(48, 'lh', 0, 4 * B),
+    n(72, 'rh', 4 * B, 4 * B),
+    n(48, 'lh', 4 * B, 4 * B),
   ],
   chords: [],
 })
@@ -97,7 +99,7 @@ describe('Playhead (ADR 0096)', () => {
     // From the treble's top line past the bass's foot: both staves.
     expect(span.top).toBeLessThan(layout.staves.treble?.top ?? 0)
     expect(span.top + span.height).toBeGreaterThan(layout.staves.bass?.bottom ?? 0)
-    rerender(<Sheet props={{ tick: 96 }} />)
+    rerender(<Sheet props={{ tick: 4 * B }} />)
     expect(line.style.height).toBe(`${span.height}px`)
   })
 
@@ -108,35 +110,35 @@ describe('Playhead (ADR 0096)', () => {
   })
 
   it('stands just before the notes it is at, and slides there as it is moved', async () => {
-    const { line, layout, rerender } = await renderPlayhead({ tick: 24 })
-    const heads = (layout.heads ?? []).filter((head) => head.tick === 24)
-    expect(leftOf(line)).toBe(playheadX(layout, 24))
+    const { line, layout, rerender } = await renderPlayhead({ tick: B })
+    const heads = (layout.heads ?? []).filter((head) => head.tick === B)
+    expect(leftOf(line)).toBe(playheadX(layout, B))
     expect(leftOf(line)).toBeLessThan(Math.min(...heads.map((head) => head.left)))
     expect(line).toHaveClass('transition-[left]')
-    rerender(<Sheet props={{ tick: 48 }} />)
-    expect(leftOf(line)).toBe(playheadX(layout, 48))
+    rerender(<Sheet props={{ tick: 2 * B }} />)
+    expect(leftOf(line)).toBe(playheadX(layout, 2 * B))
   })
 
   it('moves with the music’s clock every frame between the onsets, by its left', async () => {
     const { line, layout, rerender } = await renderPlayhead({ tick: 0 })
-    let heard: Tick | null = 12
+    let heard: Tick | null = 0.5 * B
     vi.useFakeTimers()
     rerender(<Sheet props={{ tick: 0, clock: () => heard }} />)
     // Half way from the first quarter to the second, and with no sliding behind the music.
-    expect(leftOf(line)).toBe(playheadX(layout, 12))
+    expect(leftOf(line)).toBe(playheadX(layout, 0.5 * B))
     expect(line).not.toHaveClass('transition-[left]')
-    heard = 30
+    heard = 1.25 * B
     act(() => vi.advanceTimersToNextFrame())
-    expect(leftOf(line)).toBe(playheadX(layout, 30))
-    expect(leftOf(line)).toBeGreaterThan(playheadX(layout, 24))
+    expect(leftOf(line)).toBe(playheadX(layout, 1.25 * B))
+    expect(leftOf(line)).toBeGreaterThan(playheadX(layout, B))
     expect(line.style.transform).toBe('')
     // Past the line's end, it waits at its last barline; before its start, where it was.
-    heard = 500
+    heard = (125 * B) / 6
     act(() => vi.advanceTimersToNextFrame())
-    expect(leftOf(line)).toBe(playheadX(layout, 192))
-    heard = -10
+    expect(leftOf(line)).toBe(playheadX(layout, 8 * B))
+    heard = -(5 * B) / 12
     act(() => vi.advanceTimersToNextFrame())
-    expect(leftOf(line)).toBe(playheadX(layout, 192))
+    expect(leftOf(line)).toBe(playheadX(layout, 8 * B))
   })
 
   it('brings its line into sight as it comes onto it, on a page canvas by the canvas', async () => {
@@ -160,7 +162,7 @@ describe('Playhead (ADR 0096)', () => {
   it('keeps itself in the middle half of a line wider than its scroller', async () => {
     const { scrolls } = stubScrolling({ clientWidth: 100, scrollWidth: 2000 })
     const { rerender } = await renderPlayhead({ tick: 0 })
-    rerender(<Sheet props={{ tick: 96 }} />)
+    rerender(<Sheet props={{ tick: 4 * B }} />)
     expect(scrolls.at(-1)).toBeGreaterThan(0)
   })
 
@@ -183,17 +185,17 @@ describe('Playhead (ADR 0096)', () => {
     stubBox(shown, { left: 0, top: 0, width: 1000, height: 200 })
     stubBox(line, { left: 350, top: 20, width: 2, height: 100 })
     reveal.mockClear()
-    rerender(<Sheet props={{ tick: 24 }} around={onCanvas} />)
+    rerender(<Sheet props={{ tick: B }} around={onCanvas} />)
     expect(reveal).toHaveBeenCalledWith({ left: 250, right: 650, top: 20, bottom: 120 })
     // In the middle half, the canvas stays.
     stubBox(line, { left: 200, top: 20, width: 2, height: 100 })
     reveal.mockClear()
-    rerender(<Sheet props={{ tick: 48 }} around={onCanvas} />)
+    rerender(<Sheet props={{ tick: 2 * B }} around={onCanvas} />)
     expect(reveal).not.toHaveBeenCalled()
     // Its line's end in sight already (a page fitted to the screen): the canvas stays.
     stubBox(shown, { left: 0, top: 0, width: 390, height: 200 })
     stubBox(line, { left: 350, top: 20, width: 2, height: 100 })
-    rerender(<Sheet props={{ tick: 72 }} around={onCanvas} />)
+    rerender(<Sheet props={{ tick: 3 * B }} around={onCanvas} />)
     expect(reveal).not.toHaveBeenCalled()
   })
 

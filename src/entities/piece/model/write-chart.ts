@@ -11,8 +11,8 @@ import {
   type Tick,
 } from '@/shared/lib/music'
 
-/** The longest decimal written before a fraction is: a 32nd's `.125`. */
-const MOST_PLACES = 3
+/** The longest decimal written before a fraction is: a 64th's `.0625`. */
+const MOST_PLACES = 4
 
 /**
  * Ticks as beats the content reads back as them: the shortest decimal (`2`, `1.5`, `.5`, `.125`), or
@@ -69,12 +69,17 @@ function chordsText(bar: ChartBar, meter: Meter): string {
 export function writeBar(bar: ChartBar, meter: Meter): string {
   const chords = chordsText(bar, meter)
   return [
+    ...(bar.pageBreak ? ['Page'] : []),
     ...(bar.segno ? ['Segno'] : []),
     ...(bar.coda ? ['Coda'] : []),
     ...(bar.repeatStart ? ['|:'] : []),
+    ...(bar.barRepeat ? ['%'.repeat(bar.barRepeat)] : []),
+    ...(bar.multiRest ? [`Rest${bar.multiRest}`] : []),
     ...(bar.ending ? [`[${bar.ending}`] : []),
     chords,
-    ...(bar.barline ? [END_TOKEN[bar.barline]] : []),
+    ...(bar.barline
+      ? [`${END_TOKEN[bar.barline]}${bar.barline === 'repeat' && bar.times ? `x${bar.times}` : ''}`]
+      : []),
     ...(bar.fine ? ['Fine'] : []),
     ...(bar.toCoda ? ['ToCoda'] : []),
     ...(bar.jump ? [JUMP_TOKENS[bar.jump]] : []),

@@ -5,6 +5,7 @@ import {
   beatsToTicks,
   ChordSymbolError,
   isCompound,
+  MULTI_REST,
   parseChordSymbol,
   parseKey,
   TICKS_PER_BEAT,
@@ -43,13 +44,30 @@ const END_TOKENS: Readonly<Record<string, BarMarks>> = {
   Fine: { fine: true },
   ToCoda: { toCoda: true },
 }
+/** `:|x3`: a repeat's end played its times, Flat's repeat ×N (three to nine; twice is `:|`). */
+function repeatTimes(token: string): BarMarks | undefined {
+  const times = /^:\|x([3-9])$/.exec(token)?.[1]
+  return times ? { barline: 'repeat', times: Number(times) } : undefined
+}
+
 /** Marks written before a bar: a repeat starting at it, the ending it belongs to, the signs. */
 const START_TOKENS: Readonly<Record<string, BarMarks>> = {
   '|:': { repeatStart: true },
   '[1': { ending: 1 },
   '[2': { ending: 2 },
+  '[3': { ending: 3 },
+  '[4': { ending: 4 },
   Segno: { segno: true },
   Coda: { coda: true },
+  Page: { pageBreak: true },
+  '%': { barRepeat: 1 },
+  '%%': { barRepeat: 2 },
+}
+
+/** `Rest3`: a multi-bar rest drawn over this bar and the next two (two to ninety-nine bars). */
+function multiRest(token: string): BarMarks | undefined {
+  const count = Number(/^Rest(\d+)$/.exec(token)?.[1])
+  return count >= MULTI_REST.from && count <= MULTI_REST.to ? { multiRest: count } : undefined
 }
 
 /** The most bars of its meter one bar may last: a bar of chords with long `@beats`. */
@@ -183,7 +201,7 @@ export function parseChart(piece: ChartPiece): Chart {
       // Marks before a bar wait for it; a barline after one is its end.
       let before: BarMarks = {}
       for (const token of tokens) {
-        const end = END_TOKENS[token]
+        const end = END_TOKENS[token] ?? repeatTimes(token)
         if (end) {
           const last = bars.at(-1)
           if (!last || Object.keys(before).length > 0) fail(`a barline before any bar: "${token}"`)
@@ -192,7 +210,7 @@ export function parseChart(piece: ChartPiece): Chart {
           bars[bars.length - 1] = { ...last, ...end }
           continue
         }
-        const start = START_TOKENS[token]
+        const start = START_TOKENS[token] ?? multiRest(token)
         if (start) {
           if (Object.keys(start).some((mark) => mark in before))
             fail(`two of a kind before one bar: "${token}"`)

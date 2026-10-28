@@ -91,6 +91,33 @@ describe('parseChart', () => {
     expect(errorOf(['C || |.']).message).toMatch(/two of a kind/)
   })
 
+  it('reads and writes a repeat played its times and the 3rd and 4th endings (Flat’s)', () => {
+    const text = '|: C [1 F :| [2 G :| [3 A :|x4 [4 Bm |.'
+    const [line = []] = parseChart(testSong([text])).sections[0]?.lines ?? []
+    expect(line.map(({ ending, times }) => [ending, times])).toEqual([
+      [undefined, undefined],
+      [1, undefined],
+      [2, undefined],
+      [3, 4],
+      [4, undefined],
+    ])
+    expect(line.map((bar) => writeBar(bar, '4/4')).join(' ')).toBe(text)
+    expect(errorOf(['C :|x1']).message).toMatch(/unknown/)
+    const [paged = []] = parseChart(testSong(['C', 'Page G'])).sections[0]?.lines.slice(1) ?? []
+    expect(paged[0]?.pageBreak).toBe(true)
+    expect(writeBar(paged[0] ?? { chords: [], beats: 4 }, '4/4')).toBe('Page G')
+  })
+
+  it('reads and writes a bar repeat of one or two bars and a multi-bar rest (Flat’s)', () => {
+    const text = 'C % C F G %% F G Rest3 _ _ _'
+    const [line = []] = parseChart(testSong([text])).sections[0]?.lines ?? []
+    expect(line.map(({ barRepeat, multiRest }) => barRepeat ?? multiRest ?? 0)).toEqual([
+      0, 1, 0, 0, 2, 0, 3, 0, 0,
+    ])
+    expect(line.map((bar) => writeBar(bar, '4/4')).join(' ')).toBe(text)
+    expect(errorOf(['Rest1 _']).message).toMatch(/unknown/)
+  })
+
   it('writes a bar’s barlines back around it', () => {
     const [line = []] =
       parseChart(testSong(['|: C [1 F :| [2 G || Am |.'])).sections[0]?.lines ?? []
@@ -214,12 +241,12 @@ describe('parseChart', () => {
     ['C:zz', 'method code "zz"'],
     ['C@0', '"0"'],
     ['C@x', '"x"'],
-    ['C@0.3', '"0.3"'],
+    ['C@0.0001', '"0.0001"'],
     ['C@1e8', '"1e8"'],
     ['C@25', '"25"'],
     ['C@12-G@8', 'longer than four bars'],
     ['C@4-G', 'leave no beats'],
-    ['C-D-E-F-G', '5 chords'],
+    ['C-D-E-F-G-A-B-C-D-E-F', '11 chords'],
     ['  ', 'empty line'],
   ])('refuses %j', (line, problem) => {
     const error = errorOf([line])

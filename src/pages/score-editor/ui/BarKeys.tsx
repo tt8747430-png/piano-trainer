@@ -1,5 +1,11 @@
 import { useTranslation } from 'react-i18next'
-import { barAt, barLengths, meterAt } from '@/features/score-editor'
+import {
+  barAt,
+  barLengths,
+  meterAt,
+  REPEAT_BAR_CHOICES,
+  type BarMarkChoice,
+} from '@/features/score-editor'
 import { TICKS_PER_BEAT, timeSignature, timeSignatureText } from '@/shared/lib/music'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { BarIcon, type BarKeyEdit } from './palette-icons'
@@ -50,6 +56,25 @@ export function BarKeys() {
             </span>
           </PaletteKey>
         ))}
+        {/* Flat's page break: the line from the bar chosen starts a new page (ADR 0097). */}
+        <PaletteKey
+          label={t('barline.pageBreak')}
+          onClick={() => actions.dispatch({ type: 'barMarks', choice: 'pageBreak' })}
+        >
+          <svg
+            aria-hidden
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="size-6"
+          >
+            <path d="M6 3h8l4 4v14H6z M14 3v4h4" />
+            <path d="M15 11v4h-6 M11 13l-2 2 2 2" />
+          </svg>
+        </PaletteKey>
       </KeyGrid>
       <GroupName name={t('bars.length')} info={t('bars.lengthInfo')} />
       <KeyGrid label={t('bars.length')}>
@@ -67,6 +92,45 @@ export function BarKeys() {
           )
         })}
       </KeyGrid>
+      <GroupName name={t('bars.repeats')} info={t('bars.repeatsInfo')} />
+      <KeyGrid label={t('bars.repeats')}>
+        {REPEAT_BAR_CHOICES.map((choice) => (
+          <PaletteKey
+            key={choice}
+            label={t(`barline.${choice}`)}
+            onClick={() => actions.dispatch({ type: 'barMarks', choice })}
+          >
+            <RepeatBarSign choice={choice} />
+          </PaletteKey>
+        ))}
+      </KeyGrid>
     </>
+  )
+}
+
+/** The signs a score draws: a bar repeat's slash between dots (one, or two for two bars), a multi-bar rest's bar. */
+function RepeatBarSign({ choice }: { choice: BarMarkChoice }) {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" fill="currentColor" className="size-6">
+      {choice === 'multiRest' ? (
+        <>
+          <rect x="5" y="10.5" width="14" height="4" />
+          <rect x="4" y="7.5" width="1.5" height="10" />
+          <rect x="18.5" y="7.5" width="1.5" height="10" />
+        </>
+      ) : (
+        <>
+          <path
+            d={
+              choice === 'barRepeat1'
+                ? 'M6 18l10-12h2L8 18z'
+                : 'M3 18l10-12h2L5 18z M8 18l10-12h2L10 18z'
+            }
+          />
+          <circle cx={choice === 'barRepeat1' ? 7.5 : 5} cy="8" r="1.6" />
+          <circle cx={choice === 'barRepeat1' ? 16.5 : 19} cy="16" r="1.6" />
+        </>
+      )}
+    </svg>
   )
 }

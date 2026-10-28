@@ -13,11 +13,12 @@ const press = (code: string, key: string, mods: Partial<KeyPress> = {}): KeyPres
 })
 
 describe('shortcutOf', () => {
-  it('chooses a value by 1 to 6, a dot by the full stop, writes a rest by 8 and a grace note by 9, as Flat’s', () => {
+  it('chooses a value by 1 to 7, a dot by the full stop, writes a rest by 8 and a grace note by 9, as Flat’s', () => {
     expect(shortcutOf(press('Digit1', '1'), 'staff0')).toEqual({ type: 'value', value: 1 })
     expect(shortcutOf(press('Digit3', '3'), 'rh')).toEqual({ type: 'value', value: 4 })
     expect(shortcutOf(press('Digit5', '5'), 'lh')).toEqual({ type: 'value', value: 16 })
     expect(shortcutOf(press('Digit6', '6'), 'lh')).toEqual({ type: 'value', value: 32 })
+    expect(shortcutOf(press('Digit7', '7'), 'lh')).toEqual({ type: 'value', value: 64 })
     expect(shortcutOf(press('Period', '.'), 'staff0')).toEqual({ type: 'dot' })
     expect(shortcutOf(press('Digit8', '8'), 'staff0')).toEqual({ type: 'rest' })
     expect(shortcutOf(press('Digit9', '9'), 'rh')).toEqual({ type: 'grace', kind: 'appoggiatura' })
@@ -26,7 +27,18 @@ describe('shortcutOf', () => {
       kind: 'acciaccatura',
     })
     // Shift with a digit is a tuplet's, not a value's.
-    expect(shortcutOf(press('Digit3', '#', { shiftKey: true }), 'rh')).toEqual({ type: 'triplet' })
+    expect(shortcutOf(press('Digit3', '#', { shiftKey: true }), 'rh')).toEqual({
+      type: 'tuplet',
+      num: 3,
+    })
+    expect(shortcutOf(press('Digit5', '%', { shiftKey: true }), 'rh')).toEqual({
+      type: 'tuplet',
+      num: 5,
+    })
+    expect(shortcutOf(press('Digit8', '*', { shiftKey: true }), 'rh')).toEqual({
+      type: 'tuplet',
+      num: 8,
+    })
     expect(shortcutOf(press('Digit1', '!', { shiftKey: true }), 'rh')).toBeNull()
   })
 

@@ -7,11 +7,17 @@ import { barAt } from './timeline'
 
 /**
  * The lines the palette draws over notes (Slurs & lines, Dynamics & hairpins, ADR 0114), as a
- * notation app's Lines palette does: a slur, a crescendo or diminuendo hairpin, an octave line up or
- * down.
+ * notation app's Lines palette does: a slur, a crescendo or diminuendo hairpin, an octave line one
+ * or two octaves up or down, a glissando (ADR 0097).
  */
-export const LINES = ['slur', 'cresc', 'dim', '8va', '8vb'] as const
+export const LINES = ['slur', 'cresc', 'dim', '8va', '8vb', '15ma', '15mb', 'gliss'] as const
 export type Line = (typeof LINES)[number]
+
+/** The lines that set an octave on every note under them. */
+const OCTAVES = ['8va', '8vb', '15ma', '15mb'] as const
+type OctaveLineChoice = (typeof OCTAVES)[number]
+const isOctave = (line: Line): line is OctaveLineChoice =>
+  (OCTAVES as readonly string[]).includes(line)
 
 type Writable = { -readonly [K in keyof NoteMarks]: NoteMarks[K] }
 
@@ -51,6 +57,8 @@ function drawn(notes: readonly DraftNote[], first: Tick, last: Tick, line: Line)
         at(first).some((n) => n.marks?.hairpin === line) &&
         at(last).some((n) => n.marks?.hairpin !== undefined)
       )
+    case 'gliss':
+      return at(first).some((n) => n.marks?.glissando)
     default:
       return notes
         .filter((n) => n.startTick >= first && n.startTick <= last)
@@ -78,6 +86,10 @@ function lineMarks(
     if (!startsNext) delete next.hairpin
     if (on && place === 'first') next.hairpin = line
     if (on && place === 'last' && !startsNext) next.hairpin = 'end'
+  } else if (line === 'gliss') {
+    // A glissando starts at the first note and slides to the last; the last may start another.
+    if (place !== 'last') delete next.glissando
+    if (on && place === 'first') next.glissando = true
   } else {
     delete next.octave
     if (on) next.octave = line
@@ -104,7 +116,7 @@ export function lineOver(draft: Draft, layer: NoteLayer, span: TickSpan, line: L
       const place =
         n.startTick === first ? 'first' : n.startTick === last ? 'last' : ('inside' as const)
       // A line over one note alone (the last of the music): an octave line, or nothing to join.
-      if (first === last && line !== '8va' && line !== '8vb') return n
+      if (first === last && !isOctave(line)) return n
       const { marks: _old, ...note } = n
       const marks = lineMarks(n.marks, line, place, on)
       return marks ? { ...note, marks } : note
@@ -121,6 +133,6 @@ export function lineDrawn(state: EditorState, line: Line): boolean | null {
   const notes = notesOf(state.draft, state.layer)
   const ends = reach(notes, lineSpan(state))
   if (!ends) return null
-  if (ends.first === ends.last && line !== '8va' && line !== '8vb') return null
+  if (ends.first === ends.last && !isOctave(line)) return null
   return drawn(notes, ends.first, ends.last, line)
 }

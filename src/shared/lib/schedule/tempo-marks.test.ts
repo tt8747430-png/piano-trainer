@@ -23,6 +23,22 @@ describe('tempoWarp', () => {
     expect(warp(10 * beat) - warp(9 * beat)).toBeCloseTo(beat)
   })
 
+  it('changes the tempo at a tempo mark, from the written one, and comes back to it at a tempo after a rit.', () => {
+    const marked = [
+      { startTick: 0 },
+      { startTick: 4 * beat, marks: { tempo: 120 } },
+      { startTick: 8 * beat, marks: { expression: 'rit' as const } },
+      { startTick: 12 * beat, marks: { expression: 'a-tempo' as const } },
+    ]
+    const warp = tempoWarp(marked, 60)
+    expect(warp(4 * beat)).toBe(4 * beat)
+    // Twice the written tempo: a beat takes half as long.
+    expect(warp(6 * beat) - warp(4 * beat)).toBeCloseTo(beat)
+    // Back at a tempo: the mark's tempo, not the written one.
+    expect(warp(14 * beat) - warp(13 * beat)).toBeCloseTo(beat / 2)
+    expect(tempoWarp(marked)(6 * beat)).toBeGreaterThan(5 * beat)
+  })
+
   it('presses on from an accel., each beat shorter', () => {
     const warp = tempoWarp([at(0, 'accel')])
     expect(warp(6 * beat) - warp(4 * beat)).toBeCloseTo((2 * beat) / 1.25)
@@ -49,6 +65,14 @@ describe('tempoSteps', () => {
     expect(steps.slice(-2)).toEqual([
       { tick: 6 * beat, factor: 0.75 },
       { tick: 8 * beat, factor: 1 },
+    ])
+  })
+
+  it('steps to a tempo mark’s tempo at once, against the written tempo', () => {
+    const marked = [at(0), { startTick: 4 * beat, marks: { tempo: 120 } }]
+    expect(tempoSteps(marked, 60)).toEqual([
+      { tick: 0, factor: 1 },
+      { tick: 4 * beat, factor: 2 },
     ])
   })
 

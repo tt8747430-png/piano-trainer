@@ -6,15 +6,15 @@ import type { Take } from './types'
 type Grids = readonly [Duration, ...Duration[]]
 
 const SIMPLE_GRIDS: Grids = [
-  { value: 4, dots: 0, triplet: false },
-  { value: 8, dots: 0, triplet: false },
-  { value: 16, dots: 0, triplet: false },
-  { value: 8, dots: 0, triplet: true },
+  { value: 4, dots: 0 },
+  { value: 8, dots: 0 },
+  { value: 16, dots: 0 },
+  { value: 8, dots: 0, tuplet: { num: 3, numbase: 2 } },
 ]
 const COMPOUND_GRIDS: Grids = [
-  { value: 4, dots: 1, triplet: false },
-  { value: 8, dots: 0, triplet: false },
-  { value: 16, dots: 0, triplet: false },
+  { value: 4, dots: 1 },
+  { value: 8, dots: 0 },
+  { value: 16, dots: 0 },
 ]
 
 /**

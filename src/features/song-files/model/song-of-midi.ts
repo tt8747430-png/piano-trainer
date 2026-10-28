@@ -113,8 +113,8 @@ function gridError(take: Take, step: Tick): number {
 /** A take snapped to the finest grid it needs: a 16th, or an eighth triplet in x/4 where it fits better. */
 function snapped(take: Take): QuantisedNote[] {
   const grids = takeGrids(take.meter)
-  const sixteenth = grids.find((grid) => grid.value === 16 && !grid.triplet)
-  const triplet = grids.find((grid) => grid.triplet)
+  const sixteenth = grids.find((grid) => grid.value === 16 && !grid.tuplet)
+  const triplet = grids.find((grid) => grid.tuplet)
   if (!sixteenth) return []
   const plain = gridError(take, ticksOf(sixteenth, take.meter))
   const three = triplet ? gridError(take, ticksOf(triplet, take.meter)) : Infinity
@@ -279,7 +279,7 @@ function withPedals(
   beats: number,
   meter: Meter,
 ) {
-  const step = ticksOf({ value: 16, dots: 0, triplet: false }, meter)
+  const step = ticksOf({ value: 16, dots: 0 }, meter)
   const toTick = (fileTick: number) =>
     Math.round((((fileTick * msPerTick) / 60_000) * beats * TICKS_PER_BEAT) / step) * step
   const notes = [...hands.lh, ...hands.rh].sort((a, b) => a.startTick - b.startTick)

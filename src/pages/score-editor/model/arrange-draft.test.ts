@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { readDraft } from '@/features/score-editor'
 import { arrangeDraft } from './arrange-draft'
+
+const B = TICKS_PER_BEAT
 
 const draft = readDraft({
   key: 'C',
@@ -18,10 +21,10 @@ describe('arrangeDraft', () => {
     const staff = performance.notes.filter((n) => n.hand === 'staff')
     expect(staff.map((n) => [n.startTick, n.silent])).toEqual([
       [0, undefined],
-      [96, undefined],
+      [4 * B, undefined],
     ])
     expect(
       performance.notes.filter((n) => n.hand !== 'staff').map((n) => [n.hand, n.midi, n.startTick]),
-    ).toEqual([['lh', 43, 96]])
+    ).toEqual([['lh', 43, 4 * B]])
   })
 })

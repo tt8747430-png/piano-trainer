@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import type { Performance } from '@/shared/lib/arrangement'
-import { note, noteName } from '@/shared/lib/music'
+import { note, noteName, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { inversionsExercise } from './inversions'
+
+const B = TICKS_PER_BEAT
 
 const chordsOf = (performance: Performance, hand: 'rh' | 'lh') => {
   const starts = [...new Set(performance.notes.map((n) => n.startTick))].sort((a, b) => a - b)
@@ -24,7 +26,7 @@ describe('inversionsExercise', () => {
       [64, 67, 72],
       [60, 64, 67],
     ])
-    expect(exercise.notes[1]?.durationTicks).toBe(48)
+    expect(exercise.notes[1]?.durationTicks).toBe(2 * B)
   })
 
   it('fingers each inversion as it is taught, the root under it in the left hand', () => {

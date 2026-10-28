@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { parseKey, type Key } from '@/shared/lib/music'
+import { parseKey, TICKS_PER_BEAT, type Key } from '@/shared/lib/music'
 import { draftOf, form } from '../testing/test-draft'
 import { joinSection, newSection, setSectionKey, setSectionKind } from './sections'
 import { keyAt, meterAt } from './timeline'
+
+const B = TICKS_PER_BEAT
 
 const key = (text: string): Key => {
   const parsed = parseKey(text)
@@ -120,15 +122,15 @@ describe('sections', () => {
     it('is the key at a tick: a section’s own, else the song’s', () => {
       expect(keyAt(song, 0)).toEqual(key('G'))
       // Each bar a whole note: the bridge starts at its seventh bar.
-      expect(keyAt(song, 6 * 96)).toEqual(key('E'))
-      expect(keyAt(song, 8 * 96)).toEqual(key('G'))
+      expect(keyAt(song, 6 * 4 * B)).toEqual(key('E'))
+      expect(keyAt(song, 8 * 4 * B)).toEqual(key('G'))
     })
 
     it('stays in a section split by a new section: its second half keeps its key', () => {
       // The bridge, in E, split at its second bar.
       const split = newSection(song, 7)
       expect(keys(split)).toEqual([undefined, undefined, undefined, 'E', 'E', undefined])
-      expect(keyAt(split, 7 * 96)).toEqual(key('E'))
+      expect(keyAt(split, 7 * 4 * B)).toEqual(key('E'))
     })
   })
 
@@ -147,8 +149,8 @@ describe('sections', () => {
     it('is the meter at a tick: a section’s own, else the song’s', () => {
       expect(meterAt(song, 0)).toBe('4/4')
       // The bridge starts at its fifth bar, after four of 4/4.
-      expect(meterAt(song, 4 * 96)).toBe('3/4')
-      expect(meterAt(song, 4 * 96 + 2 * 72)).toBe('4/4')
+      expect(meterAt(song, 4 * 4 * B)).toBe('3/4')
+      expect(meterAt(song, 4 * 4 * B + 2 * 3 * B)).toBe('4/4')
     })
 
     it('stays in a section split by a new section, and in one named afresh', () => {

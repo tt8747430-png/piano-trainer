@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { lyricLines, soundingChip } from './lyric-lines'
 import { foldRepeats } from './repeated-lines'
+
+const B = TICKS_PER_BEAT
 
 /** A song of 4/4 bars in C, its sections' lines, a staff over the piano, and its verses. */
 function song(
@@ -54,7 +57,7 @@ describe('foldRepeats', () => {
       { chords: ['Am', 'F'], bars: [6, 7], times: 1 },
     ])
     const [first] = foldRepeats(performance, lyricLines(performance))
-    expect(first?.copies).toEqual([0, 192, 384])
+    expect(first?.copies).toEqual([0, 8 * B, 16 * B])
   })
 
   it('counts a repeat and a copy written after it together', () => {
@@ -80,7 +83,7 @@ describe('foldRepeats', () => {
   it('marks the chord sounding in any copy of a folded line', () => {
     const performance = song([['C G', 'C G']])
     const lines = foldRepeats(performance, lyricLines(performance))
-    expect(soundingChip(lines, { from: 0, to: 24 })).toEqual({ line: 0, segment: 0 })
-    expect(soundingChip(lines, { from: 288, to: 312 })).toEqual({ line: 0, segment: 1 })
+    expect(soundingChip(lines, { from: 0, to: B })).toEqual({ line: 0, segment: 0 })
+    expect(soundingChip(lines, { from: 12 * B, to: 13 * B })).toEqual({ line: 0, segment: 1 })
   })
 })

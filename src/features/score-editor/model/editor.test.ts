@@ -1,6 +1,13 @@
 import { musicToSave, readDraft } from './draft'
 import { describe, expect, it, vi } from 'vitest'
-import { chordSymbol, midi, note, parseChordSymbol, type Meter } from '@/shared/lib/music'
+import {
+  chordSymbol,
+  midi,
+  note,
+  parseChordSymbol,
+  type Meter,
+  TICKS_PER_BEAT,
+} from '@/shared/lib/music'
 import { ticksOf } from '@/shared/lib/notation'
 import { draftOf, form, lengths, oneStaff, shape, staffNotes } from '../testing/test-draft'
 import { copyTarget, whyNoPaste } from './clip-edits'
@@ -8,6 +15,8 @@ import { reduce } from './editor'
 import { shownValue } from './chosen'
 import { initialEditor, type EditorAction, type EditorState } from './state'
 import { createEditorStore } from './store'
+
+const B = TICKS_PER_BEAT
 
 const run = (state: EditorState, ...actions: EditorAction[]) => actions.reduce(reduce, state)
 const key = (n: number, time: number): EditorAction => ({ type: 'key', key: midi(n), time })
@@ -17,27 +26,27 @@ const start = (layer: EditorState['layer'] = 'staff0') =>
 describe('the editor', () => {
   it('deletes back from the end, a note at a time, as Backspace does', () => {
     const written = run(start('staff0'), key(60, 0), key(62, 500), key(64, 1000), key(65, 1500))
-    expect(written.caret).toBe(96)
+    expect(written.caret).toBe(4 * B)
     const once = run(written, { type: 'delete', back: true })
-    expect(shape(staffNotes(once.draft))).toEqual(['C4@0/24', 'D4@24/24', 'E4@48/24'])
-    expect(once.caret).toBe(72)
+    expect(shape(staffNotes(once.draft))).toEqual(['C4@0/1', 'D4@1/1', 'E4@2/1'])
+    expect(once.caret).toBe(3 * B)
     const twice = run(once, { type: 'delete', back: true })
-    expect(shape(staffNotes(twice.draft))).toEqual(['C4@0/24', 'D4@24/24'])
-    expect(twice.caret).toBe(48)
+    expect(shape(staffNotes(twice.draft))).toEqual(['C4@0/1', 'D4@1/1'])
+    expect(twice.caret).toBe(2 * B)
     // On a note, it takes that one and stays.
     const chosen = run(
       written,
-      { type: 'place', tick: 24, layer: 'staff0' },
+      { type: 'place', tick: B, layer: 'staff0' },
       { type: 'delete', back: true },
     )
-    expect(shape(staffNotes(chosen.draft))).toEqual(['C4@0/24', 'E4@48/24', 'F4@72/24'])
-    expect(chosen.caret).toBe(24)
+    expect(shape(staffNotes(chosen.draft))).toEqual(['C4@0/1', 'E4@2/1', 'F4@3/1'])
+    expect(chosen.caret).toBe(B)
   })
 
   it('moves the notes at the caret by notes of the key, as a note dragged on its staff', () => {
     const written = run(start('staff0'), key(67, 0), { type: 'move', by: 'end', direction: -1 })
-    expect(shape(staffNotes(run(written, { type: 'step', steps: 2 }).draft))).toEqual(['B4@0/24'])
-    expect(shape(staffNotes(run(written, { type: 'step', steps: -1 }).draft))).toEqual(['F#4@0/24'])
+    expect(shape(staffNotes(run(written, { type: 'step', steps: 2 }).draft))).toEqual(['B4@0/1'])
+    expect(shape(staffNotes(run(written, { type: 'step', steps: -1 }).draft))).toEqual(['F#4@0/1'])
   })
 
   it('changes key from the caret’s section on, its notes written and stepped in that key (ADR 0114)', () => {
@@ -55,14 +64,14 @@ describe('the editor', () => {
       twoParts,
       { type: 'layer', layer: 'staff0' },
       { type: 'sectionKey', bar: 2, key: { tonic: note('F'), minor: false } },
-      { type: 'place', tick: 192, layer: 'staff0' },
+      { type: 'place', tick: 8 * B, layer: 'staff0' },
     )
     expect(chorus.draft.sections.map((section) => section.heading.key)).toEqual([undefined, 'F'])
     // A B♭ in F, not the A♯ G major would write; a step up from A in F is B♭ too.
-    const written = run(chorus, key(70, 0), { type: 'place', tick: 192, layer: 'staff0' })
-    expect(shape(staffNotes(written.draft))).toEqual(['B♭4@192/24'])
-    const a = run(chorus, key(69, 0), { type: 'place', tick: 192, layer: 'staff0' })
-    expect(shape(staffNotes(run(a, { type: 'step', steps: 1 }).draft))).toEqual(['B♭4@192/24'])
+    const written = run(chorus, key(70, 0), { type: 'place', tick: 8 * B, layer: 'staff0' })
+    expect(shape(staffNotes(written.draft))).toEqual(['B♭4@8/1'])
+    const a = run(chorus, key(69, 0), { type: 'place', tick: 8 * B, layer: 'staff0' })
+    expect(shape(staffNotes(run(a, { type: 'step', steps: 1 }).draft))).toEqual(['B♭4@8/1'])
     // Undone, the chorus is in the song's key again.
     expect(run(chorus, { type: 'undo' }).draft.sections[1]?.heading.key).toBeUndefined()
   })
@@ -83,16 +92,16 @@ describe('the editor', () => {
       undefined,
       '3/4',
     ])
-    expect(lengths(chorus.draft)).toEqual([96, 96, 72, 72])
+    expect(lengths(chorus.draft)).toEqual([4, 4, 3, 3])
     // A bar added in the chorus is a bar of its 3/4; one in the verse, of the song's 4/4.
     const added = run(
       chorus,
-      { type: 'place', tick: 192, layer: 'chords' },
+      { type: 'place', tick: 8 * B, layer: 'chords' },
       { type: 'bars', edit: 'insert' },
       { type: 'place', tick: 0, layer: 'chords' },
       { type: 'bars', edit: 'insert' },
     )
-    expect(lengths(added.draft)).toEqual([96, 96, 96, 72, 72, 72])
+    expect(lengths(added.draft)).toEqual([4, 4, 4, 3, 3, 3])
     // Undone, the chorus is counted in the song's meter again.
     expect(run(chorus, { type: 'undo' }).draft).toEqual(twoParts.draft)
   })
@@ -113,7 +122,7 @@ describe('the editor', () => {
     const one = run(start(), key(67, 0), key(69, 500))
     const over = run(one, { type: 'addStaff', place: 0 })
     expect(over.draft.staves.map((staff) => staff.notes.length)).toEqual([0, 2])
-    expect(over).toMatchObject({ layer: 'staff0', caret: 48 })
+    expect(over).toMatchObject({ layer: 'staff0', caret: 2 * B })
     const under = run(one, { type: 'addStaff', place: 1 })
     expect(under.draft.staves.map((staff) => staff.notes.length)).toEqual([2, 0])
     expect(under.layer).toBe('staff1')
@@ -149,7 +158,7 @@ describe('the editor', () => {
       { type: 'value', value: 32 },
       key(69, 500),
     )
-    expect(shape(staffNotes(state.draft))).toEqual(['G4@0/84', 'A4@84/3'])
+    expect(shape(staffNotes(state.draft))).toEqual(['G4@0/3.5', 'A4@3.5/.125'])
   })
 
   it('marks the notes at the caret, or across the bars chosen, as one undo step', () => {
@@ -162,7 +171,7 @@ describe('the editor', () => {
     expect(staffNotes(marked.draft).map((n) => n.marks)).toEqual([{ dynamic: 'p' }, undefined])
     expect(run(marked, { type: 'undo' }).draft).toBe(written.draft)
     const tied = run(start(), key(67, 0), key(67, 500), { type: 'move', by: 'end', direction: -1 })
-    expect(shape(staffNotes(run(tied, { type: 'tie' }).draft))).toEqual(['G4@0/48'])
+    expect(shape(staffNotes(run(tied, { type: 'tie' }).draft))).toEqual(['G4@0/2'])
   })
 
   it('opens at the piece’s start on its top staff, the right hand with no tune, writing quarter notes', () => {
@@ -171,7 +180,7 @@ describe('the editor', () => {
     expect(state).toMatchObject({
       layer: 'rh',
       caret: 0,
-      value: { value: 4, dots: 0, triplet: false },
+      value: { value: 4, dots: 0 },
       mode: 'replace',
       past: [],
       future: [],
@@ -180,24 +189,24 @@ describe('the editor', () => {
 
   it('writes a played key at the caret and moves past it', () => {
     const state = run(start(), key(67, 0), key(69, 500))
-    expect(shape(staffNotes(state.draft))).toEqual(['G4@0/24', 'A4@24/24'])
-    expect(state.caret).toBe(48)
+    expect(shape(staffNotes(state.draft))).toEqual(['G4@0/1', 'A4@1/1'])
+    expect(state.caret).toBe(2 * B)
   })
 
   it('writes keys struck together as one entry, one undo step', () => {
     const state = run(start('rh'), key(60, 0), key(64, 30), key(67, 60))
-    expect(shape(state.draft.hands.rh)).toEqual(['C4@0/24', 'E4@0/24', 'G4@0/24'])
-    expect(state.caret).toBe(24)
+    expect(shape(state.draft.hands.rh)).toEqual(['C4@0/1', 'E4@0/1', 'G4@0/1'])
+    expect(state.caret).toBe(B)
     expect(run(state, { type: 'undo' }).draft.hands.rh).toEqual([])
   })
 
   it('writes a take from the caret’s bar as one undo step, and a take of nothing as none', () => {
-    const at = run(start('rh'), { type: 'place', tick: 120, layer: 'rh' })
+    const at = run(start('rh'), { type: 'place', tick: 5 * B, layer: 'rh' })
     const parts = [
-      { layer: 'rh' as const, notes: [{ midi: midi(67), startTick: 0, durationTicks: 24 }] },
+      { layer: 'rh' as const, notes: [{ midi: midi(67), startTick: 0, durationTicks: B }] },
     ]
     const state = run(at, { type: 'take', parts })
-    expect(shape(state.draft.hands.rh)).toEqual(['G4@96/24'])
+    expect(shape(state.draft.hands.rh)).toEqual(['G4@4/1'])
     expect(state.past).toHaveLength(at.past.length + 1)
     expect(run(state, { type: 'undo' }).draft).toBe(at.draft)
     const nothing = run(at, { type: 'take', parts: [{ layer: 'rh', notes: [] }] })
@@ -212,7 +221,7 @@ describe('the editor', () => {
       { type: 'move', by: 'step', direction: -1 },
       key(64, 30),
     )
-    expect(shape(state.draft.hands.rh)).toEqual(['E4@0/24'])
+    expect(shape(state.draft.hands.rh)).toEqual(['E4@0/1'])
   })
 
   it('keeps the caret in Chord mode, so each key joins the notes there', () => {
@@ -223,7 +232,7 @@ describe('the editor', () => {
       key(55, 900),
       key(64, 2000),
     )
-    expect(shape(state.draft.hands.lh)).toEqual(['C3@0/24', 'G3@0/24', 'E4@0/24'])
+    expect(shape(state.draft.hands.lh)).toEqual(['C3@0/1', 'G3@0/1', 'E4@0/1'])
     expect(state.caret).toBe(0)
   })
 
@@ -239,19 +248,19 @@ describe('the editor', () => {
     const four = run(start(), key(60, 0), key(62, 500), key(64, 1000), key(65, 1500))
     const inserted = run(
       four,
-      { type: 'place', tick: 24, layer: 'staff0' },
+      { type: 'place', tick: B, layer: 'staff0' },
       { type: 'mode', mode: 'insert' },
       key(67, 2000),
     )
     expect(shape(staffNotes(inserted.draft))).toEqual([
-      'C4@0/24',
-      'G4@24/24',
-      'D4@48/24',
-      'E4@72/24',
-      'F4@96/24',
+      'C4@0/1',
+      'G4@1/1',
+      'D4@2/1',
+      'E4@3/1',
+      'F4@4/1',
     ])
-    expect(inserted.caret).toBe(48)
-    expect(lengths(inserted.draft)).toEqual([96, 96])
+    expect(inserted.caret).toBe(2 * B)
+    expect(lengths(inserted.draft)).toEqual([4, 4])
     // Another staff's notes stay where they are.
     const both = run(
       run(start('rh'), key(72, 0)),
@@ -259,33 +268,33 @@ describe('the editor', () => {
       { type: 'mode', mode: 'insert' },
       key(48, 500),
     )
-    expect(shape(both.draft.hands.rh)).toEqual(['C5@0/24'])
+    expect(shape(both.draft.hands.rh)).toEqual(['C5@0/1'])
     // Pushed past the last bar, the notes get a bar of their own: nothing is lost.
     const full = run(start(), ...[60, 62, 64, 65, 67, 69, 71, 72].map((n, i) => key(n, i * 500)))
-    expect(full.caret).toBe(192)
+    expect(full.caret).toBe(8 * B)
     const grown = run(
       full,
       { type: 'place', tick: 0, layer: 'staff0' },
       { type: 'mode', mode: 'insert' },
       key(59, 5000),
     )
-    expect(lengths(grown.draft)).toEqual([96, 96, 96])
-    expect(shape(staffNotes(grown.draft)).at(-1)).toBe('C5@192/24')
+    expect(lengths(grown.draft)).toEqual([4, 4, 4])
+    expect(shape(staffNotes(grown.draft)).at(-1)).toBe('C5@8/1')
     expect(staffNotes(grown.draft)).toHaveLength(9)
     // Undone as one step, the bar added goes too.
-    expect(lengths(run(grown, { type: 'undo' }).draft)).toEqual([96, 96])
+    expect(lengths(run(grown, { type: 'undo' }).draft)).toEqual([4, 4])
   })
 
   it('in Insert mode a rest pushes the later notes right too', () => {
     const four = run(start(), key(60, 0), key(62, 500), key(64, 1000), key(65, 1500))
     const rested = run(
       four,
-      { type: 'place', tick: 24, layer: 'staff0' },
+      { type: 'place', tick: B, layer: 'staff0' },
       { type: 'mode', mode: 'insert' },
       { type: 'rest' },
     )
-    expect(shape(staffNotes(rested.draft))).toEqual(['C4@0/24', 'D4@48/24', 'E4@72/24', 'F4@96/24'])
-    expect(rested.caret).toBe(48)
+    expect(shape(staffNotes(rested.draft))).toEqual(['C4@0/1', 'D4@2/1', 'E4@3/1', 'F4@4/1'])
+    expect(rested.caret).toBe(2 * B)
     // At a barline inside a tied note, the rest cuts the tie there, as a note written there does.
     const tied = run(
       initialEditor(draftOf({ staves: [{ notes: 'r/3 C5/2 | D5/1 r/2' }] })),
@@ -293,37 +302,37 @@ describe('the editor', () => {
       { type: 'mode', mode: 'insert' },
       { type: 'rest' },
     )
-    expect(shape(staffNotes(tied.draft))).toEqual(['C5@72/24', 'D5@144/24'])
-    expect(tied.caret).toBe(120)
+    expect(shape(staffNotes(tied.draft))).toEqual(['C5@3/1', 'D5@6/1'])
+    expect(tied.caret).toBe(5 * B)
   })
 
   it('in Insert mode Delete closes the gap, pulling the later notes left; in Replace it leaves a rest', () => {
     const four = run(start(), key(60, 0), key(62, 500), key(64, 1000), key(65, 1500))
-    const atD = run(four, { type: 'place', tick: 24, layer: 'staff0' })
+    const atD = run(four, { type: 'place', tick: B, layer: 'staff0' })
     expect(shape(staffNotes(run(atD, { type: 'delete' }).draft))).toEqual([
-      'C4@0/24',
-      'E4@48/24',
-      'F4@72/24',
+      'C4@0/1',
+      'E4@2/1',
+      'F4@3/1',
     ])
     const insert = run(atD, { type: 'mode', mode: 'insert' })
     const pulled = run(insert, { type: 'delete' })
-    expect(shape(staffNotes(pulled.draft))).toEqual(['C4@0/24', 'E4@24/24', 'F4@48/24'])
-    expect(pulled.caret).toBe(24)
+    expect(shape(staffNotes(pulled.draft))).toEqual(['C4@0/1', 'E4@1/1', 'F4@2/1'])
+    expect(pulled.caret).toBe(B)
     // Backspace with nothing at the caret takes the note before and closes its gap.
     const back = run(
       insert,
-      { type: 'place', tick: 96, layer: 'staff0' },
+      { type: 'place', tick: 4 * B, layer: 'staff0' },
       { type: 'delete', back: true },
     )
-    expect(shape(staffNotes(back.draft))).toEqual(['C4@0/24', 'D4@24/24', 'E4@48/24'])
-    expect(back.caret).toBe(72)
+    expect(shape(staffNotes(back.draft))).toEqual(['C4@0/1', 'D4@1/1', 'E4@2/1'])
+    expect(back.caret).toBe(3 * B)
     // A range chosen closes as one gap.
     const range = run(
       insert,
       { type: 'move', by: 'step', direction: 1, extend: true },
       { type: 'delete' },
     )
-    expect(shape(staffNotes(range.draft))).toEqual(['C4@0/24', 'F4@24/24'])
+    expect(shape(staffNotes(range.draft))).toEqual(['C4@0/1', 'F4@1/1'])
     // One note of a chord taken leaves the chord, so no gap closes.
     const chord = run(start('rh'), key(60, 0), key(64, 30), key(67, 60), key(62, 500))
     const one = run(
@@ -332,21 +341,47 @@ describe('the editor', () => {
       { type: 'mode', mode: 'insert' },
       { type: 'delete' },
     )
-    expect(shape(one.draft.hands.rh)).toEqual(['C4@0/24', 'G4@0/24', 'D4@24/24'])
+    expect(shape(one.draft.hands.rh)).toEqual(['C4@0/1', 'G4@0/1', 'D4@1/1'])
   })
 
-  it('takes the value, dot and triplet for the next note', () => {
+  it('takes the value, dot and tuplet for the next note', () => {
     const state = run(start(), { type: 'value', value: 8 }, { type: 'dot' }, key(67, 0))
-    expect(shape(staffNotes(state.draft))).toEqual(['G4@0/18'])
-    const triplet = run(start(), { type: 'value', value: 8 }, { type: 'triplet' }, key(67, 0))
-    expect(shape(staffNotes(triplet.draft))).toEqual(['G4@0/8'])
+    expect(shape(staffNotes(state.draft))).toEqual(['G4@0/.75'])
+    const triplet = run(
+      start(),
+      { type: 'value', value: 8 },
+      { type: 'tuplet', num: 3 },
+      key(67, 0),
+    )
+    expect(shape(staffNotes(triplet.draft))).toEqual(['G4@0/1:3'])
+    const quintuplet = run(
+      start(),
+      { type: 'value', value: 16 },
+      { type: 'tuplet', num: 5 },
+      key(67, 0),
+    )
+    expect(shape(staffNotes(quintuplet.draft))).toEqual(['G4@0/.2'])
+    const septuplet = run(
+      start(),
+      { type: 'value', value: 16 },
+      { type: 'tuplet', num: 7 },
+      key(67, 0),
+    )
+    expect(shape(staffNotes(septuplet.draft))).toEqual(['G4@0/1:7'])
+  })
+
+  it('writes a 64th', () => {
+    const state = run(start(), { type: 'value', value: 64 }, key(67, 0))
+    expect(shape(staffNotes(state.draft))).toEqual(['G4@0/.0625'])
   })
 
   it('chooses only values the meter writes in whole ticks', () => {
     const choices: EditorAction[] = [
-      ...([1, 2, 4, 8, 16] as const).map((value): EditorAction => ({ type: 'value', value })),
+      ...([1, 2, 4, 8, 16, 64] as const).map((value): EditorAction => ({ type: 'value', value })),
       { type: 'dot' },
-      { type: 'triplet' },
+      { type: 'tuplet', num: 3 },
+      { type: 'tuplet', num: 5 },
+      { type: 'tuplet', num: 2 },
     ]
     for (const meter of ['4/4', '3/4', '6/8', '12/8'] satisfies Meter[]) {
       const opened = initialEditor(draftOf({ meter, sections: [{ kind: 'verse', lines: ['G'] }] }))
@@ -355,7 +390,7 @@ describe('the editor', () => {
           for (const third of choices) {
             const { value } = run(opened, first, second, third)
             expect(Number.isInteger(ticksOf(value, meter)), JSON.stringify(value)).toBe(true)
-            expect(value.dots === 1 && value.triplet).toBe(false)
+            expect(value.dots === 1 && value.tuplet !== undefined).toBe(false)
           }
         }
       }
@@ -364,49 +399,60 @@ describe('the editor', () => {
 
   it('takes a dot on a sixteenth in x/4, its 32nd whole ticks, and keeps one onto a sixteenth', () => {
     const sixteenth = run(start(), { type: 'value', value: 16 }, { type: 'dot' })
-    expect(sixteenth.value).toEqual({ value: 16, dots: 1, triplet: false })
-    expect(shape(staffNotes(run(sixteenth, key(67, 0)).draft))).toEqual(['G4@0/9'])
+    expect(sixteenth.value).toEqual({ value: 16, dots: 1 })
+    expect(shape(staffNotes(run(sixteenth, key(67, 0)).draft))).toEqual(['G4@0/.375'])
     const dotted = run(
       start(),
       { type: 'value', value: 8 },
       { type: 'dot' },
       { type: 'value', value: 16 },
     )
-    expect(dotted.value).toEqual({ value: 16, dots: 1, triplet: false })
+    expect(dotted.value).toEqual({ value: 16, dots: 1 })
     const compound = run(
       initialEditor(draftOf({ meter: '6/8', sections: [{ kind: 'verse', lines: ['G'] }] })),
       { type: 'value', value: 16 },
       { type: 'dot' },
     )
-    expect(compound.value).toEqual({ value: 16, dots: 1, triplet: false })
+    expect(compound.value).toEqual({ value: 16, dots: 1 })
   })
 
-  it('takes a dot or a triplet, never both', () => {
-    const dotted = run(start(), { type: 'value', value: 8 }, { type: 'triplet' }, { type: 'dot' })
-    expect(dotted.value).toEqual({ value: 8, dots: 1, triplet: false })
-    const triplet = run(start(), { type: 'value', value: 8 }, { type: 'dot' }, { type: 'triplet' })
-    expect(triplet.value).toEqual({ value: 8, dots: 0, triplet: true })
+  it('takes a dot or a tuplet, never both, and the same tuplet again off', () => {
+    const tuplet = { type: 'tuplet', num: 3 } as const
+    const dotted = run(start(), { type: 'value', value: 8 }, tuplet, { type: 'dot' })
+    expect(dotted.value).toEqual({ value: 8, dots: 1 })
+    const triplet = run(start(), { type: 'value', value: 8 }, { type: 'dot' }, tuplet)
+    expect(triplet.value).toEqual({ value: 8, dots: 0, tuplet: { num: 3, numbase: 2 } })
+    expect(run(triplet, tuplet).value).toEqual({ value: 8, dots: 0 })
+    expect(run(triplet, { type: 'tuplet', num: 5 }).value).toEqual({
+      value: 8,
+      dots: 0,
+      tuplet: { num: 5, numbase: 4 },
+    })
   })
 
-  it('leaves Triplet off in a compound meter', () => {
-    const state = run(
-      initialEditor(draftOf({ meter: '6/8', sections: [{ kind: 'verse', lines: ['G'] }] })),
-      {
-        type: 'triplet',
-      },
+  it('takes only the tuplets the meter writes: no triplet in compound time, no duplet in simple', () => {
+    const compound = initialEditor(
+      draftOf({ meter: '6/8', sections: [{ kind: 'verse', lines: ['G'] }] }),
     )
-    expect(state.value.triplet).toBe(false)
+    expect(run(compound, { type: 'tuplet', num: 3 }).value.tuplet).toBeUndefined()
+    expect(
+      run(compound, { type: 'value', value: 8 }, { type: 'tuplet', num: 2 }).value.tuplet,
+    ).toEqual({
+      num: 2,
+      numbase: 3,
+    })
+    expect(run(start(), { type: 'tuplet', num: 2 }).value.tuplet).toBeUndefined()
   })
 
   it('writes rests, deletes, moves and respells the notes at the caret', () => {
     const written = run(start(), key(61, 0), { type: 'rest' })
-    expect(shape(staffNotes(written.draft))).toEqual(['C#4@0/24'])
-    expect(written.caret).toBe(48)
+    expect(shape(staffNotes(written.draft))).toEqual(['C#4@0/1'])
+    expect(written.caret).toBe(2 * B)
     const back = run(written, { type: 'place', tick: 0, layer: 'staff0' })
     expect(shape(staffNotes(run(back, { type: 'shift', semitones: 12 }).draft))).toEqual([
-      'C#5@0/24',
+      'C#5@0/1',
     ])
-    expect(shape(staffNotes(run(back, { type: 'respell' }).draft))).toEqual(['D♭4@0/24'])
+    expect(shape(staffNotes(run(back, { type: 'respell' }).draft))).toEqual(['D♭4@0/1'])
     expect(staffNotes(run(back, { type: 'delete' }).draft)).toEqual([])
   })
 
@@ -535,22 +581,22 @@ describe('the editor', () => {
 
   it('sets a chord at the caret’s beat, the caret staying there, a step going on a beat', () => {
     const am = parseChordSymbol('Am')
-    const onThird = run(initialEditor(draftOf()), { type: 'place', tick: 48, layer: 'chords' })
+    const onThird = run(initialEditor(draftOf()), { type: 'place', tick: 2 * B, layer: 'chords' })
     const typed = run(onThird, { type: 'chord', chord: am })
-    expect(form(typed.draft)).toEqual([[['G@0 Am@48', 'C@0']]])
-    expect(typed.caret).toBe(48)
-    expect(run(typed, { type: 'move', by: 'step', direction: 1 }).caret).toBe(72)
+    expect(form(typed.draft)).toEqual([[['G@0 Am@2', 'C@0']]])
+    expect(typed.caret).toBe(2 * B)
+    expect(run(typed, { type: 'move', by: 'step', direction: 1 }).caret).toBe(3 * B)
   })
 
   it('takes a bar’s only chord with Delete, the bar left to type a chord into (ADR 0114)', () => {
     const am = parseChordSymbol('Am')
-    const onLast = run(initialEditor(draftOf()), { type: 'place', tick: 96, layer: 'chords' })
+    const onLast = run(initialEditor(draftOf()), { type: 'place', tick: 4 * B, layer: 'chords' })
     const deleted = run(onLast, { type: 'delete' })
     expect(form(deleted.draft)).toEqual([[['G@0', '']]])
-    expect(deleted.caret).toBe(96)
+    expect(deleted.caret).toBe(4 * B)
     // Its places in the chord row: its start alone, where the next chord goes.
     const moved = run(deleted, { type: 'move', by: 'step', direction: 1 })
-    expect(moved.caret).toBe(96)
+    expect(moved.caret).toBe(4 * B)
     const typed = run(moved, { type: 'chord', chord: am })
     expect(form(typed.draft)).toEqual([[['G@0', 'Am@0']]])
   })
@@ -613,9 +659,9 @@ describe('the editor', () => {
     const line = (state: EditorState, direction: -1 | 1) =>
       run(state, { type: 'move', by: 'line', direction, extend: false })
     const second = line(lines, 1)
-    expect(second.caret).toBe(192)
-    expect(line(second, 1).caret).toBe(288)
-    expect(line(line(second, 1), 1).caret).toBe(288)
+    expect(second.caret).toBe(8 * B)
+    expect(line(second, 1).caret).toBe(12 * B)
+    expect(line(line(second, 1), 1).caret).toBe(12 * B)
     const inside = run(lines, { type: 'move', by: 'bar', direction: 1, extend: false })
     expect(line(inside, -1).caret).toBe(0)
     expect(line(second, -1).caret).toBe(0)
@@ -637,21 +683,24 @@ describe('the editor', () => {
     const bar = { type: 'move', by: 'bar', direction: 1, extend: true } as const
     // To bar 1's end, then bar 2's: four notes, from the first's start to the fourth's end.
     const chosen = run(written, bar, bar)
-    expect(chosen.selection).toEqual({ anchor: { from: 0, to: 48 }, head: { from: 144, to: 192 } })
+    expect(chosen.selection).toEqual({
+      anchor: { from: 0, to: 2 * B },
+      head: { from: 6 * B, to: 8 * B },
+    })
     expect(tune(run(chosen, { type: 'shift', semitones: 1 }))).toEqual([
-      'C#4@0/48',
-      'D#4@48/48',
-      'F4@96/48',
-      'F#4@144/48',
-      'G4@192/48',
-      'A4@240/48',
+      'C#4@0/2',
+      'D#4@2/2',
+      'F4@4/2',
+      'F#4@6/2',
+      'G4@8/2',
+      'A4@10/2',
     ])
     // The notes stay chosen, so the next edit takes them too.
     expect(
       tune(run(chosen, { type: 'shift', semitones: 1 }, { type: 'respell' })).slice(0, 2),
-    ).toEqual(['D♭4@0/48', 'E♭4@48/48'])
+    ).toEqual(['D♭4@0/2', 'E♭4@2/2'])
     const deleted = run(chosen, { type: 'delete', back: true })
-    expect(tune(deleted)).toEqual(['G4@192/48', 'A4@240/48'])
+    expect(tune(deleted)).toEqual(['G4@8/2', 'A4@10/2'])
     expect(deleted.selection).toBeNull()
     expect(deleted.caret).toBe(0)
     // Escape lets them go, as a notation app's.
@@ -676,24 +725,24 @@ describe('the editor', () => {
     const move = (by: 'step' | 'bar' | 'end', direction: -1 | 1) =>
       ({ type: 'move', by, direction, extend: true }) as const
     // Shift and the right arrow from the first half note: it and the next, both whole.
-    expect(span(run(tune, move('step', 1)))).toEqual({ from: 0, to: 96 })
-    expect(span(run(tune, move('step', 1), move('step', 1)))).toEqual({ from: 0, to: 192 })
+    expect(span(run(tune, move('step', 1)))).toEqual({ from: 0, to: 4 * B })
+    expect(span(run(tune, move('step', 1), move('step', 1)))).toEqual({ from: 0, to: 8 * B })
     // And back again: the first alone.
-    expect(span(run(tune, move('step', 1), move('step', -1)))).toEqual({ from: 0, to: 48 })
+    expect(span(run(tune, move('step', 1), move('step', -1)))).toEqual({ from: 0, to: 2 * B })
     // Back from bar 2's note: the note before it too.
-    const atTwo = run(tune, { type: 'place', tick: 96, layer: 'staff0' })
-    expect(span(run(atTwo, move('step', -1)))).toEqual({ from: 48, to: 192 })
+    const atTwo = run(tune, { type: 'place', tick: 4 * B, layer: 'staff0' })
+    expect(span(run(atTwo, move('step', -1)))).toEqual({ from: 2 * B, to: 8 * B })
     // A bar on: to the bar's last note, then the next bar's; a bar back: to its first, then before.
-    expect(span(run(tune, move('bar', 1)))).toEqual({ from: 0, to: 96 })
-    expect(span(run(tune, move('bar', 1), move('bar', 1)))).toEqual({ from: 0, to: 192 })
-    expect(span(run(atTwo, move('bar', -1)))).toEqual({ from: 0, to: 192 })
+    expect(span(run(tune, move('bar', 1)))).toEqual({ from: 0, to: 4 * B })
+    expect(span(run(tune, move('bar', 1), move('bar', 1)))).toEqual({ from: 0, to: 8 * B })
+    expect(span(run(atTwo, move('bar', -1)))).toEqual({ from: 0, to: 8 * B })
     // To the ends: the last note, the first.
-    expect(span(run(atTwo, move('end', 1)))).toEqual({ from: 96, to: 288 })
-    expect(span(run(atTwo, move('end', -1)))).toEqual({ from: 0, to: 192 })
+    expect(span(run(atTwo, move('end', 1)))).toEqual({ from: 4 * B, to: 12 * B })
+    expect(span(run(atTwo, move('end', -1)))).toEqual({ from: 0, to: 8 * B })
     // A note clicked with Shift is the range's end: from the caret's note to it, no bar more.
-    expect(span(run(tune, { type: 'place', tick: 96, layer: 'staff0', extend: true }))).toEqual({
+    expect(span(run(tune, { type: 'place', tick: 4 * B, layer: 'staff0', extend: true }))).toEqual({
       from: 0,
-      to: 192,
+      to: 8 * B,
     })
     // A move without Shift lets the range go.
     expect(
@@ -710,14 +759,14 @@ describe('the editor', () => {
     // Its head clicked: E alone.
     const e = run(chord, { type: 'place', tick: 0, layer: 'rh', key: midi(64) })
     expect(e.chordNote).toBe(64)
-    expect(rh(run(e, { type: 'shift', semitones: 1 }))).toEqual(['C4@0/96', 'F4@0/96', 'G4@0/96'])
+    expect(rh(run(e, { type: 'shift', semitones: 1 }))).toEqual(['C4@0/4', 'F4@0/4', 'G4@0/4'])
     // It stays chosen as it moves, so the next move moves it on.
     expect(run(e, { type: 'shift', semitones: 1 }).chordNote).toBe(65)
-    expect(rh(run(e, { type: 'step', steps: 1 }))).toEqual(['C4@0/96', 'F#4@0/96', 'G4@0/96'])
+    expect(rh(run(e, { type: 'step', steps: 1 }))).toEqual(['C4@0/4', 'F#4@0/4', 'G4@0/4'])
     expect(run(e, { type: 'step', steps: 1 }).chordNote).toBe(66)
-    expect(rh(run(e, { type: 'respell' }))).toEqual(['C4@0/96', 'F♭4@0/96', 'G4@0/96'])
+    expect(rh(run(e, { type: 'respell' }))).toEqual(['C4@0/4', 'F♭4@0/4', 'G4@0/4'])
     const deleted = run(e, { type: 'delete' })
-    expect(rh(deleted)).toEqual(['C4@0/96', 'G4@0/96'])
+    expect(rh(deleted)).toEqual(['C4@0/4', 'G4@0/4'])
     expect(deleted.chordNote).toBeNull()
     const marked = run(e, {
       type: 'mark',
@@ -747,7 +796,10 @@ describe('the editor', () => {
       }),
       { type: 'move', by: 'bar', direction: 1, extend: true },
     )
-    expect(chosen.selection).toEqual({ anchor: { from: 0, to: 96 }, head: { from: 96, to: 192 } })
+    expect(chosen.selection).toEqual({
+      anchor: { from: 0, to: 4 * B },
+      head: { from: 4 * B, to: 8 * B },
+    })
     const pasted = run(chosen, { type: 'clip', edit: 'copy' }, { type: 'clip', edit: 'paste' })
     expect(form(pasted.draft)).toEqual([[['G@0', 'C@0', 'G@0', 'C@0', 'D@0']]])
     const cut = run(chosen, { type: 'clip', edit: 'cut' })
@@ -760,66 +812,66 @@ describe('the editor', () => {
     const four = run(start(), key(60, 0), key(62, 500), key(64, 1000), key(65, 1500))
     const chosen = run(
       four,
-      { type: 'place', tick: 24, layer: 'staff0' },
+      { type: 'place', tick: B, layer: 'staff0' },
       { type: 'move', by: 'step', direction: 1, extend: true },
       { type: 'clip', edit: 'copy' },
     )
     expect(chosen.clip).toEqual({
       kind: 'notes',
       layer: 'staff0',
-      ticks: 48,
-      notes: [
-        expect.objectContaining({ startTick: 0 }),
-        expect.objectContaining({ startTick: 24 }),
-      ],
+      ticks: 2 * B,
+      notes: [expect.objectContaining({ startTick: 0 }), expect.objectContaining({ startTick: B })],
     })
     // Copying changes nothing, and what was chosen stays chosen.
     expect(chosen.draft).toBe(four.draft)
     expect(chosen.selection).not.toBeNull()
     const pasted = run(
       chosen,
-      { type: 'place', tick: 72, layer: 'staff0' },
+      { type: 'place', tick: 3 * B, layer: 'staff0' },
       { type: 'clip', edit: 'paste' },
     )
     expect(shape(staffNotes(pasted.draft))).toEqual([
-      'C4@0/24',
-      'D4@24/24',
-      'E4@48/24',
-      'D4@72/24',
-      'E4@96/24',
+      'C4@0/1',
+      'D4@1/1',
+      'E4@2/1',
+      'D4@3/1',
+      'E4@4/1',
     ])
     // The caret after what was pasted, the pasted notes chosen.
-    expect(pasted.caret).toBe(120)
-    expect(pasted.selection).toEqual({ anchor: { from: 72, to: 120 }, head: { from: 72, to: 120 } })
+    expect(pasted.caret).toBe(5 * B)
+    expect(pasted.selection).toEqual({
+      anchor: { from: 3 * B, to: 5 * B },
+      head: { from: 3 * B, to: 5 * B },
+    })
     // Pasted at the song's end, the notes get the bars they need.
     const grown = run(
       chosen,
-      { type: 'place', tick: 168, layer: 'staff0' },
+      { type: 'place', tick: 7 * B, layer: 'staff0' },
       { type: 'clip', edit: 'paste' },
     )
-    expect(lengths(grown.draft)).toEqual([96, 96, 96])
-    expect(shape(staffNotes(grown.draft)).slice(-2)).toEqual(['D4@168/24', 'E4@192/24'])
+    expect(lengths(grown.draft)).toEqual([4, 4, 4])
+    expect(shape(staffNotes(grown.draft)).slice(-2)).toEqual(['D4@7/1', 'E4@8/1'])
     // Pasted into a hand, the notes go on that staff.
     const toHand = run(
       chosen,
       { type: 'place', tick: 0, layer: 'lh' },
       { type: 'clip', edit: 'paste' },
     )
-    expect(shape(toHand.draft.hands.lh)).toEqual(['D4@0/24', 'E4@24/24'])
+    expect(shape(toHand.draft.hands.lh)).toEqual(['D4@0/1', 'E4@1/1'])
     // In Insert mode the paste pushes the later notes right.
     const inserted = run(
       chosen,
-      { type: 'place', tick: 24, layer: 'staff0' },
+      { type: 'place', tick: B, layer: 'staff0' },
       { type: 'mode', mode: 'insert' },
       { type: 'clip', edit: 'paste' },
     )
     expect(shape(staffNotes(inserted.draft))).toEqual([
-      'C4@0/24',
-      'D4@24/24',
-      'E4@48/24',
-      'D4@72/24',
-      'E4@96/24',
-      'F4@120/24',
+      'C4@0/1',
+      'D4@1/1',
+      'E4@2/1',
+      'D4@3/1',
+      'E4@4/1',
+      'F4@5/1',
     ])
   })
 
@@ -830,16 +882,20 @@ describe('the editor', () => {
       { type: 'place', tick: 0, layer: 'rh' },
       { type: 'clip', edit: 'copy' },
     )
-    expect(whole.clip).toMatchObject({ kind: 'notes', layer: 'rh', ticks: 24 })
+    expect(whole.clip).toMatchObject({ kind: 'notes', layer: 'rh', ticks: B })
     expect(whole.clip?.kind === 'notes' && whole.clip.notes).toHaveLength(3)
     const one = run(
       chord,
       { type: 'place', tick: 0, layer: 'rh', key: midi(64) },
       { type: 'clip', edit: 'copy' },
     )
-    expect(one.clip?.kind === 'notes' && shape(one.clip.notes)).toEqual(['E4@0/24'])
+    expect(one.clip?.kind === 'notes' && shape(one.clip.notes)).toEqual(['E4@0/1'])
     // An empty place copies nothing: the clip stays as it was.
-    const empty = run(one, { type: 'place', tick: 48, layer: 'rh' }, { type: 'clip', edit: 'copy' })
+    const empty = run(
+      one,
+      { type: 'place', tick: 2 * B, layer: 'rh' },
+      { type: 'clip', edit: 'copy' },
+    )
     expect(empty.clip).toBe(one.clip)
   })
 
@@ -850,23 +906,23 @@ describe('the editor', () => {
       { type: 'place', tick: 0, layer: 'rh' },
     )
     const copied = run(voices, { type: 'clip', edit: 'copy' })
-    expect(copied.clip).toMatchObject({ kind: 'notes', ticks: 48 })
-    expect(copied.clip?.kind === 'notes' && shape(copied.clip.notes)).toEqual(['C5@0/48'])
+    expect(copied.clip).toMatchObject({ kind: 'notes', ticks: 2 * B })
+    expect(copied.clip?.kind === 'notes' && shape(copied.clip.notes)).toEqual(['C5@0/2'])
     expect(copyTarget(voices)).toEqual({ kind: 'notes', count: 1 })
     const cut = run(voices, { type: 'clip', edit: 'cut' })
-    expect(shape(cut.draft.hands.rh)).toEqual(['E4@24/72'])
+    expect(shape(cut.draft.hands.rh)).toEqual(['E4@1/3'])
     expect(cut.draft).toEqual(run(voices, { type: 'delete' }).draft)
   })
 
   it('cuts the notes chosen, leaving a rest in Replace mode and closing the gap in Insert mode', () => {
     const four = run(start(), key(60, 0), key(62, 500), key(64, 1000), key(65, 1500))
-    const atD = run(four, { type: 'place', tick: 24, layer: 'staff0' })
+    const atD = run(four, { type: 'place', tick: B, layer: 'staff0' })
     const cut = run(atD, { type: 'clip', edit: 'cut' })
-    expect(shape(staffNotes(cut.draft))).toEqual(['C4@0/24', 'E4@48/24', 'F4@72/24'])
-    expect(cut.clip?.kind === 'notes' && shape(cut.clip.notes)).toEqual(['D4@0/24'])
-    expect(cut.caret).toBe(24)
+    expect(shape(staffNotes(cut.draft))).toEqual(['C4@0/1', 'E4@2/1', 'F4@3/1'])
+    expect(cut.clip?.kind === 'notes' && shape(cut.clip.notes)).toEqual(['D4@0/1'])
+    expect(cut.caret).toBe(B)
     const pulled = run(atD, { type: 'mode', mode: 'insert' }, { type: 'clip', edit: 'cut' })
-    expect(shape(staffNotes(pulled.draft))).toEqual(['C4@0/24', 'E4@24/24', 'F4@48/24'])
+    expect(shape(staffNotes(pulled.draft))).toEqual(['C4@0/1', 'E4@1/1', 'F4@2/1'])
     expect(run(pulled, { type: 'undo' }).draft).toBe(atD.draft)
   })
 
@@ -905,7 +961,7 @@ describe('the editor', () => {
       ),
     ).toEqual({ kind: 'bars', from: 1, to: 2 })
     expect(copyTarget(four)).toBeNull()
-    expect(copyTarget(run(four, { type: 'place', tick: 24, layer: 'staff0' }))).toEqual({
+    expect(copyTarget(run(four, { type: 'place', tick: B, layer: 'staff0' }))).toEqual({
       kind: 'notes',
       count: 1,
     })
@@ -913,7 +969,7 @@ describe('the editor', () => {
       copyTarget(
         run(
           four,
-          { type: 'place', tick: 24, layer: 'staff0' },
+          { type: 'place', tick: B, layer: 'staff0' },
           { type: 'move', by: 'step', direction: 1, extend: true },
         ),
       ),
@@ -936,8 +992,8 @@ describe('the editor', () => {
   it('adds and deletes bars, changes a bar’s length and starts a line and a section', () => {
     const state = run(initialEditor(draftOf()), { type: 'bars', edit: 'insert' })
     expect(form(state.draft)).toEqual([[['G@0', '', 'C@0']]])
-    expect(state.caret).toBe(96)
-    expect(lengths(run(state, { type: 'barLength', ticks: 48 }).draft)).toEqual([96, 48, 96])
+    expect(state.caret).toBe(4 * B)
+    expect(lengths(run(state, { type: 'barLength', ticks: 2 * B }).draft)).toEqual([4, 2, 4])
     expect(form(run(state, { type: 'bars', edit: 'delete' }).draft)).toEqual([[['G@0', 'C@0']]])
     expect(form(run(state, { type: 'bars', edit: 'newLine' }).draft)).toEqual([
       [['G@0'], ['', 'C@0']],
@@ -980,8 +1036,8 @@ describe('the editor', () => {
   it('undoes and redoes the changes with the caret, and a new change drops the redo', () => {
     const written = run(start(), key(67, 0), key(69, 500))
     const undone = run(written, { type: 'undo' })
-    expect(shape(staffNotes(undone.draft))).toEqual(['G4@0/24'])
-    expect(undone.caret).toBe(24)
+    expect(shape(staffNotes(undone.draft))).toEqual(['G4@0/1'])
+    expect(undone.caret).toBe(B)
     expect(run(undone, { type: 'redo' }).draft).toBe(written.draft)
     expect(run(undone, key(71, 900)).future).toEqual([])
     expect(run(initialEditor(draftOf()), { type: 'undo' })).toEqual(initialEditor(draftOf()))
@@ -1000,50 +1056,50 @@ describe('the palette on what is chosen', () => {
     run(state, { type: 'layer', layer: 'staff0' }, { type: 'place', tick, layer: 'staff0' })
 
   it('makes the note chosen the value tapped, the next notes too, the caret staying', () => {
-    const state = run(at(tune(), 24), { type: 'value', value: 8 })
-    expect(shape(staffNotes(state.draft))).toEqual(['B4@0/24', 'A4@24/12', 'G4@48/24', 'F#4@72/24'])
-    expect(state.caret).toBe(24)
-    expect(state.value).toEqual({ value: 8, dots: 0, triplet: false })
-    expect(shownValue(state)).toEqual({ value: 8, dots: 0, triplet: false })
-    expect(staffNotes(run(state, { type: 'undo' }).draft)[1]?.durationTicks).toBe(24)
+    const state = run(at(tune(), B), { type: 'value', value: 8 })
+    expect(shape(staffNotes(state.draft))).toEqual(['B4@0/1', 'A4@1/.5', 'G4@2/1', 'F#4@3/1'])
+    expect(state.caret).toBe(B)
+    expect(state.value).toEqual({ value: 8, dots: 0 })
+    expect(shownValue(state)).toEqual({ value: 8, dots: 0 })
+    expect(staffNotes(run(state, { type: 'undo' }).draft)[1]?.durationTicks).toBe(B)
   })
 
-  it('dots the note chosen, and makes it a triplet’s', () => {
+  it('dots the note chosen, and makes it a tuplet’s', () => {
     const dotted = run(at(tune(), 0), { type: 'value', value: 8 }, { type: 'dot' })
-    expect(shape(staffNotes(dotted.draft)).slice(0, 2)).toEqual(['B4@0/18', 'A4@24/24'])
-    const triplet = run(at(tune(), 0), { type: 'value', value: 8 }, { type: 'triplet' })
-    expect(staffNotes(triplet.draft)[0]?.durationTicks).toBe(8)
+    expect(shape(staffNotes(dotted.draft)).slice(0, 2)).toEqual(['B4@0/.75', 'A4@1/1'])
+    const triplet = run(at(tune(), 0), { type: 'value', value: 8 }, { type: 'tuplet', num: 3 })
+    expect(staffNotes(triplet.draft)[0]?.durationTicks).toBe(B / 3)
   })
 
   it('changes every note of a range, keeping it chosen', () => {
     const chosen = run(at(tune(), 0), { type: 'move', by: 'step', direction: 1, extend: true })
     const state = run(chosen, { type: 'value', value: 8 })
-    expect(shape(staffNotes(state.draft))).toEqual(['B4@0/12', 'A4@24/12', 'G4@48/24', 'F#4@72/24'])
+    expect(shape(staffNotes(state.draft))).toEqual(['B4@0/.5', 'A4@1/.5', 'G4@2/1', 'F#4@3/1'])
     expect(state.selection).not.toBeNull()
   })
 
   it('shows the value chosen for the next note where no note is chosen', () => {
-    const end = at(tune(), 96)
+    const end = at(tune(), 4 * B)
     const state = run(end, { type: 'value', value: 2 })
     expect(state.draft).toBe(end.draft)
-    expect(shownValue(state)).toEqual({ value: 2, dots: 0, triplet: false })
-    expect(shownValue(at(tune(), 0))).toEqual({ value: 4, dots: 0, triplet: false })
+    expect(shownValue(state)).toEqual({ value: 2, dots: 0 })
+    expect(shownValue(at(tune(), 0))).toEqual({ value: 4, dots: 0 })
   })
 
   it('makes the notes of a range rests', () => {
     const chosen = run(at(tune(), 0), { type: 'move', by: 'step', direction: 1, extend: true })
     const state = run(chosen, { type: 'rest' })
-    expect(shape(staffNotes(state.draft))).toEqual(['G4@48/24', 'F#4@72/24'])
+    expect(shape(staffNotes(state.draft))).toEqual(['G4@2/1', 'F#4@3/1'])
     expect(state.caret).toBe(0)
   })
 
   it('writes the note chosen sharp, flat or natural, and the same sign again takes it off (Flat’s)', () => {
-    const natural = run(at(tune(), 72), { type: 'accidental', accidental: 0 })
-    expect(shape(staffNotes(natural.draft)).at(-1)).toBe('F4@72/24')
+    const natural = run(at(tune(), 3 * B), { type: 'accidental', accidental: 0 })
+    expect(shape(staffNotes(natural.draft)).at(-1)).toBe('F4@3/1')
     // ♮ again: back to the key's F♯.
     expect(
       shape(staffNotes(run(natural, { type: 'accidental', accidental: 0 }).draft)).at(-1),
-    ).toBe('F#4@72/24')
+    ).toBe('F#4@3/1')
     // The chord's one note chosen follows its sign on and off.
     const chord = run(
       initialEditor(draftOf({ hands: { rh: 'C4+E4/4 | r/4' } })),
@@ -1051,10 +1107,10 @@ describe('the palette on what is chosen', () => {
       { type: 'place', tick: 0, layer: 'rh', key: midi(64) },
     )
     const flat = run(chord, { type: 'accidental', accidental: -1 })
-    expect(shape(flat.draft.hands.rh)).toEqual(['C4@0/96', 'E♭4@0/96'])
+    expect(shape(flat.draft.hands.rh)).toEqual(['C4@0/4', 'E♭4@0/4'])
     expect(flat.chordNote).toBe(63)
     const back = run(flat, { type: 'accidental', accidental: -1 })
-    expect(shape(back.draft.hands.rh)).toEqual(['C4@0/96', 'E4@0/96'])
+    expect(shape(back.draft.hands.rh)).toEqual(['C4@0/4', 'E4@0/4'])
     expect(back.chordNote).toBe(64)
   })
 
@@ -1067,7 +1123,7 @@ describe('the palette on what is chosen', () => {
       { type: 'layer', layer: 'chords' },
       { type: 'move', by: 'bar', direction: 1, extend: true },
     )
-    expect(lengths(run(both, { type: 'barLength', ticks: 48 }).draft)).toEqual([48, 48])
+    expect(lengths(run(both, { type: 'barLength', ticks: 2 * B }).draft)).toEqual([2, 2])
     // From the bar given, wherever the caret is (a clef on the sheet, ADR 0114).
     const clef = run(initialEditor(draftOf()), { type: 'clef', staff: 'rh', clef: 'bass', bar: 1 })
     expect(clef.draft.sections[0]?.lines[0]?.[1]?.clefs).toEqual({ rh: 'bass' })
@@ -1098,11 +1154,11 @@ describe('createEditorStore', () => {
       { type: 'settings', tempo: 90, key: store.getState().draft.key },
       { type: 'layer', layer: 'rh' },
       // A beat no chord starts on.
-      { type: 'place', tick: 24, layer: 'chords' },
+      { type: 'place', tick: B, layer: 'chords' },
       { type: 'delete' },
       { type: 'place', tick: 0, layer: 'chords' },
       { type: 'bars', edit: 'newLine' },
-      { type: 'barLength', ticks: 96 },
+      { type: 'barLength', ticks: 4 * B },
       { type: 'chord', chord: parseChordSymbol('G') },
     ]
     for (const action of nothing) store.dispatch(action)
@@ -1117,17 +1173,17 @@ describe('createEditorStore', () => {
     })
     const rested = run(onEmpty, { type: 'rest' })
     expect(rested.draft).toBe(onEmpty.draft)
-    expect(rested.caret).toBe(24)
+    expect(rested.caret).toBe(B)
     const insert = run(
       onEmpty,
       { type: 'mode', mode: 'insert' },
-      { type: 'place', tick: 72, layer: 'staff0' },
+      { type: 'place', tick: 3 * B, layer: 'staff0' },
       { type: 'value', value: 2 },
     )
     // Nothing after the caret to push: the rest stops at the song's end, as Replace writes it.
     const pushed = run(insert, { type: 'rest' })
     expect(pushed.draft).toBe(onEmpty.draft)
-    expect(pushed.caret).toBe(96)
+    expect(pushed.caret).toBe(4 * B)
     const closed = run(insert, { type: 'delete' })
     expect(closed.draft).toBe(onEmpty.draft)
     expect(closed.past).toEqual([])
@@ -1185,7 +1241,7 @@ describe('the words (ADR 0097)', () => {
       { type: 'place', tick: 0, layer: 'rh', key: midi(67) },
       { type: 'delete' },
     )
-    expect(shape(top.draft.hands.rh).slice(0, 2)).toEqual(['C4@0/48', 'E4@0/48'])
+    expect(shape(top.draft.hands.rh).slice(0, 2)).toEqual(['C4@0/2', 'E4@0/2'])
     expect(verses(top)).toEqual(['Hal- le- lu'])
   })
 })

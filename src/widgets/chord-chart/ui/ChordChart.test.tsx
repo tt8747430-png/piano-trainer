@@ -2,6 +2,7 @@ import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { pieceById, type Piece } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
 import { TWO_BARS } from '@/features/practice/testing/performances'
@@ -61,9 +62,9 @@ describe('ChordChart', () => {
     if (!fourthBeat) throw new Error('a fourth beat')
     await user.click(fourthBeat)
     // Bar 3's fourth beat: two bars and three beats in.
-    expect(onBar).toHaveBeenLastCalledWith(2, 2 * 96 + 72)
+    expect(onBar).toHaveBeenLastCalledWith(2, 11 * TICKS_PER_BEAT)
     await user.click(third)
-    expect(onBar).toHaveBeenLastCalledWith(2, 2 * 96)
+    expect(onBar).toHaveBeenLastCalledWith(2, 8 * TICKS_PER_BEAT)
     rerender(<ChordChart {...props} playing={9} beat={1} />)
     const tenth = screen.getByRole('button', { name: /^Bar 10:/ })
     expect(tenth).toHaveAttribute('aria-current', 'step')

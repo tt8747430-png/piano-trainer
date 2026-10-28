@@ -9,6 +9,8 @@ import {
   parseChordSymbol,
   tempoMark,
   beatUnit,
+  SWING_TEXT,
+  TICKS_PER_BEAT,
   writtenOctave,
   type Clef,
   type Jump,
@@ -65,6 +67,7 @@ const TYPES: Readonly<Record<number, string>> = {
   8: 'eighth',
   16: '16th',
   32: '32nd',
+  64: '64th',
 }
 
 const ARTICULATIONS: Readonly<Partial<Record<string, string>>> = {
@@ -73,6 +76,9 @@ const ARTICULATIONS: Readonly<Partial<Record<string, string>>> = {
   accent: 'accent',
   tenuto: 'tenuto',
   marcato: 'strong-accent',
+  portato: 'detached-legato',
+  breath: 'breath-mark',
+  caesura: 'caesura',
 }
 
 const ORNAMENTS: Readonly<Record<string, string>> = {
@@ -80,7 +86,10 @@ const ORNAMENTS: Readonly<Record<string, string>> = {
   mordent: '<inverted-mordent/>',
   'lower-mordent': '<mordent/>',
   turn: '<turn/>',
-  tremolo: '<tremolo type="single">3</tremolo>',
+  'inverted-turn': '<inverted-turn/>',
+  'tremolo-1': '<tremolo type="single">1</tremolo>',
+  'tremolo-2': '<tremolo type="single">2</tremolo>',
+  'tremolo-3': '<tremolo type="single">3</tremolo>',
 }
 
 /** Each jump as printed, and how a player's sound takes it. */
@@ -211,7 +220,10 @@ const escapeText = (value: string) =>
 interface Open {
   slur: boolean
   hairpin: boolean
-  octave: boolean
+  /** The octave line running: its size, 8 or 15. */
+  octave: false | 8 | 15
+  /** A glissando started on the note before. */
+  gliss?: boolean
 }
 
 /** One part's measures, what runs across their barlines (ties, slurs, lines, held words) held between them. */
@@ -234,7 +246,7 @@ class PartWriter {
     private readonly top: boolean,
     private readonly options: MusicXmlOptions,
   ) {
-    this.divisions = ticksOf({ value: 4, dots: 0, triplet: false }, score.meter)
+    this.divisions = ticksOf({ value: 4, dots: 0 }, score.meter)
   }
 
   write(): string {
@@ -252,7 +264,7 @@ class PartWriter {
   }
 
   private unitTicks(time: TimeSignature) {
-    return ticksOf({ value: time.unit, dots: 0, triplet: false }, this.score.meter)
+    return ticksOf({ value: time.unit, dots: 0 }, this.score.meter)
   }
 
   private staffNumber(staff: StaffId) {
@@ -260,9 +272,10 @@ class PartWriter {
   }
 
   private measure(measure: Measure, index: number, number: number): string {
-    const before = this.score.measures[index - 1]
     const out: string[] = []
-    if (this.options.lineStarts?.includes(index) && index > 0)
+    // A page break starts a page, its line with it (Flat's).
+    if (measure.pageBreak && index > 0) out.push(tag('print', { 'new-page': 'yes' }))
+    else if (this.options.lineStarts?.includes(index) && index > 0)
       out.push(tag('print', { 'new-system': 'yes' }))
     const ending = this.score.measures[index - 1]?.ending
     const left = [
@@ -273,7 +286,7 @@ class PartWriter {
       measure.repeatStart ? tag('repeat', { direction: 'forward' }) : '',
     ].join('')
     if (left) out.push(tag('barline', { location: 'left' }, left))
-    out.push(this.attributes(measure, before))
+    out.push(this.attributes(measure, index))
     if (this.top) out.push(...this.headDirections(measure, index))
     const staves = this.part.staves
     const voices = staves.flatMap((staff, s) =>
@@ -304,13 +317,33 @@ class PartWriter {
             type: measure.barline === 'repeat' ? 'stop' : 'discontinue',
           })
         : '',
-      measure.barline === 'repeat' ? tag('repeat', { direction: 'backward' }) : '',
+      measure.barline === 'repeat'
+        ? tag('repeat', { direction: 'backward', times: measure.times })
+        : '',
     ].join('')
     if (right) out.push(tag('barline', { location: 'right' }, right))
     return tag('measure', { number, ...(number === 0 ? { implicit: 'yes' } : {}) }, ...out)
   }
 
-  private attributes(measure: Measure, before: Measure | undefined): string {
+  /**
+   * A bar repeat's style from its first bar to the first after it, MusicXML's measure-repeat (the
+   * bars it repeats); a multi-bar rest's count at its first bar.
+   */
+  private measureStyle(measure: Measure, index: number): string {
+    const measures = this.score.measures
+    const repeatOf = (at: number) => measures[at]?.barRepeat
+    const ended = [1, 2].some((length) => repeatOf(index - length) === length)
+    const styles = [
+      ended && !measure.barRepeat ? tag('measure-repeat', { type: 'stop' }) : '',
+      measure.barRepeat ? tag('measure-repeat', { type: 'start' }, String(measure.barRepeat)) : '',
+      measure.multiRest ? text('multiple-rest', measure.multiRest) : '',
+    ].filter(Boolean)
+    return styles.length > 0 ? tag('measure-style', {}, ...styles) : ''
+  }
+
+  private attributes(measure: Measure, index: number): string {
+    const before = this.score.measures[index - 1]
+    const style = this.measureStyle(measure, index)
     const keyOf = (m: Measure) => m.key ?? this.score.key
     const key = keyOf(measure)
     const keyXml =
@@ -347,7 +380,7 @@ class PartWriter {
             .map((_, s) => tag('staff-details', { number: s + 1, 'print-object': 'no' }))
             .join('')
         : ''
-    if (!keyXml && !timeXml && !clefs && before) return ''
+    if (!keyXml && !timeXml && !clefs && !style && before) return ''
     return tag(
       'attributes',
       {},
@@ -357,6 +390,7 @@ class PartWriter {
       !before && this.part.staves.length > 1 ? text('staves', this.part.staves.length) : '',
       clefs,
       hidden,
+      style,
     )
   }
 
@@ -368,7 +402,7 @@ class PartWriter {
     if (measure.tempo !== undefined) {
       const unit = this.score.tempoUnit ?? beatUnit(this.score.meter)
       const mark = tempoMark(measure.tempo, unit, this.score.meter)
-      const quarters = (measure.tempo * 24) / this.divisions
+      const quarters = (measure.tempo * TICKS_PER_BEAT) / this.divisions
       out.push(
         direction(
           'above',
@@ -404,7 +438,11 @@ class PartWriter {
       const number = this.staffNumber(staff)
       if (open.octave)
         out.push(
-          direction(undefined, tag('octave-shift', { type: 'stop', size: 8 }), staffXml(number)),
+          direction(
+            undefined,
+            tag('octave-shift', { type: 'stop', size: open.octave === 15 ? 15 : 8 }),
+            staffXml(number),
+          ),
         )
       if (open.hairpin)
         out.push(direction(undefined, tag('wedge', { type: 'stop' }), staffXml(number)))
@@ -467,8 +505,14 @@ class PartWriter {
     this.tied.set(key, tied)
     const type = TYPES[event.duration.value] ?? 'quarter'
     const dots = '<dot/>'.repeat(event.duration.dots)
-    const modification = event.duration.triplet
-      ? tag('time-modification', {}, text('actual-notes', 3), text('normal-notes', 2))
+    const tupletIn = event.duration.tuplet
+    const modification = tupletIn
+      ? tag(
+          'time-modification',
+          {},
+          text('actual-notes', tupletIn.num),
+          text('normal-notes', tupletIn.numbase),
+        )
       : ''
     if (event.kind === 'rest') {
       tied.clear()
@@ -519,6 +563,7 @@ class PartWriter {
         written.tie ? tag('tied', { type: 'start' }) : '',
         first ? this.slurs(marks, staff, number) : '',
         first && tuplet ? tag('tuplet', { type: tuplet, bracket: 'yes' }) : '',
+        first ? this.glissando(marks, staff, number) : '',
         first && marks?.ornament ? tag('ornaments', {}, ORNAMENTS[marks.ornament] ?? '') : '',
         written.finger === undefined ? '' : tag('technical', {}, text('fingering', written.finger)),
         first ? articulationsXml(marks) : '',
@@ -558,22 +603,28 @@ class PartWriter {
     this.open.set(staff, open)
     const out: string[] = []
     const below = 'below'
-    if (open.octave && marks?.octave === undefined) {
+    const size = marks?.octave?.startsWith('15') ? 15 : 8
+    if (open.octave && (marks?.octave === undefined || size !== open.octave)) {
       out.push(
-        direction(undefined, tag('octave-shift', { type: 'stop', size: 8 }), staffXml(number)),
+        direction(
+          undefined,
+          tag('octave-shift', { type: 'stop', size: open.octave }),
+          staffXml(number),
+        ),
       )
       open.octave = false
     }
     if (marks?.octave && !open.octave) {
-      // 8va writes the notes an octave below where they sound: MusicXML's shift down.
+      // 8va writes the notes an octave below where they sound: MusicXML's shift down; 15ma two.
+      const up = marks.octave === '8va' || marks.octave === '15ma'
       out.push(
         direction(
-          marks.octave === '8va' ? 'above' : 'below',
-          tag('octave-shift', { type: marks.octave === '8va' ? 'down' : 'up', size: 8 }),
+          up ? 'above' : 'below',
+          tag('octave-shift', { type: up ? 'down' : 'up', size }),
           staffXml(number),
         ),
       )
-      open.octave = true
+      open.octave = size
     }
     if (!marks) return out
     if (marks.dynamic)
@@ -590,6 +641,27 @@ class PartWriter {
         )
       open.hairpin = marks.hairpin !== 'end'
     }
+    // A tempo mark mid-song (ADR 0097): its unit and beats, and the tempo a player takes.
+    if (marks.tempo !== undefined) {
+      const unit = this.score.tempoUnit ?? beatUnit(this.score.meter)
+      const mark = tempoMark(marks.tempo, unit, this.score.meter)
+      out.push(
+        direction(
+          'above',
+          tag('metronome', {}, beatUnitXml(unit), text('per-minute', mark)),
+          staffXml(number),
+          tag('sound', { tempo: round((marks.tempo * TICKS_PER_BEAT) / this.divisions) }),
+        ),
+      )
+    }
+    if (marks.swing)
+      out.push(
+        direction('above', tag('words', {}, escapeText(SWING_TEXT[marks.swing])), staffXml(number)),
+      )
+    if (marks.text)
+      out.push(direction('above', tag('words', {}, escapeText(marks.text)), staffXml(number)))
+    if (marks.numeral)
+      out.push(direction('below', tag('words', {}, escapeText(marks.numeral)), staffXml(number)))
     if (marks.expression)
       out.push(
         direction(
@@ -610,6 +682,19 @@ class PartWriter {
         ),
       )
     return out
+  }
+
+  /** A glissando's start on its note, its stop on the staff's next (ADR 0097). */
+  private glissando(marks: NoteMarks | undefined, staff: StaffId, number: number | undefined) {
+    const open = this.open.get(staff)
+    if (!open) return ''
+    const n = number ?? 1
+    const stop = open.gliss ? tag('glissando', { type: 'stop', number: n }) : ''
+    open.gliss = marks?.glissando === true
+    const start = open.gliss
+      ? tag('glissando', { type: 'start', number: n, 'line-type': 'wavy' })
+      : ''
+    return stop + start
   }
 
   private slurs(marks: NoteMarks | undefined, staff: StaffId, number: number | undefined): string {

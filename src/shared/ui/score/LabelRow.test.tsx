@@ -1,7 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import type { ScoreLayout } from './layout'
 import { LabelRow } from './LabelRow'
+
+const B = TICKS_PER_BEAT
 
 /** Three narrow bars of 4/4, 60px each. */
 const layout: ScoreLayout = {
@@ -12,8 +15,8 @@ const layout: ScoreLayout = {
   staves: { treble: { top: 40, bottom: 80 }, bass: { top: 130, bottom: 170 } },
   measures: [
     { startTick: 0, ticks: 96, x: 0, width: 60, notes: 30 },
-    { startTick: 96, ticks: 96, x: 60, width: 60, notes: 70 },
-    { startTick: 192, ticks: 96, x: 120, width: 60, notes: 130 },
+    { startTick: 4 * B, ticks: 96, x: 60, width: 60, notes: 70 },
+    { startTick: 8 * B, ticks: 96, x: 120, width: 60, notes: 130 },
   ],
   onsets: [
     { tick: 0, x: 30 },
@@ -73,7 +76,7 @@ describe('LabelRow', () => {
         headings={[]}
         chords={[
           { startTick: 0, symbol: 'F#m/Bb' },
-          { startTick: 96, symbol: 'C', detail: 'root position' },
+          { startTick: 4 * B, symbol: 'C', detail: 'root position' },
         ]}
         meter="4/4"
         row={44}
@@ -89,7 +92,7 @@ describe('LabelRow', () => {
         layout={layout}
         labels={[{ number: 1, tempo: 58 }, {}, {}]}
         headings={[]}
-        chords={[{ startTick: 288, symbol: 'G' }]}
+        chords={[{ startTick: 12 * B, symbol: 'G' }]}
         meter="6/8"
         row={44}
       />,

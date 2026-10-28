@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
 import { arrangePiece, ownChoice, type BarRange } from '@/features/practice'
 import type { Performance } from '@/shared/lib/arrangement'
 import { lineWords, lyricLines } from './lyric-lines'
 import { sungPlace } from './sung-place'
+
+const B = TICKS_PER_BEAT
 
 /** A song of 4/4 bars in C, one line of the chart to a string, its words on a staff over the piano. */
 function song(lines: readonly string[], { notes, lyrics }: { notes: string; lyrics: string[] }) {
@@ -32,7 +35,7 @@ const WORDS = {
 /** A 4/4 bar's beat, as played, in its ticks. */
 const beat = (bar: number, beat = 0) => ({
   bar,
-  played: { from: bar * 96 + beat * 24, to: bar * 96 + (beat + 1) * 24 },
+  played: { from: bar * 4 * B + beat * B, to: bar * 4 * B + (beat + 1) * B },
 })
 
 /** Where the words are, by what they say: the line sung or the wait's progress, and the next line. */

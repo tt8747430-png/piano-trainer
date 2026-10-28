@@ -27,14 +27,16 @@ export const PAGE_STRETCH = 60
 
 /**
  * Items of known height dealt onto pages of `room`, in order: an item starts a new page where it does
- * not fit on the one begun; one taller than a page has a page of its own. A heading never ends a page:
- * it goes over with the item after it.
+ * not fit on the one begun, or where it breaks the page before it (a page break, ADR 0097); one
+ * taller than a page has a page of its own. A heading never ends a page: it goes over with the item
+ * after it.
  */
 export function paginate<T>(
   items: readonly T[],
   heightOf: (item: T) => number,
   room: number,
   keepsWithNext: (item: T) => boolean = () => false,
+  breaksBefore: (item: T) => boolean = () => false,
 ): T[][] {
   const pages: T[][] = []
   let page: T[] = []
@@ -42,7 +44,7 @@ export function paginate<T>(
   items.forEach((item, index) => {
     const next = items[index + 1]
     const height = heightOf(item) + (keepsWithNext(item) && next !== undefined ? heightOf(next) : 0)
-    if (page.length > 0 && used + height > room) {
+    if (page.length > 0 && (used + height > room || breaksBefore(item))) {
       pages.push(page)
       page = []
       used = 0

@@ -31,25 +31,31 @@ export function meterBar(
 ): 'otherKind' | 'between' | null {
   if (sameKind(meter, draft.meter)) return null
   if (section > 0) return 'otherKind'
-  return rescaled(draft, kindFactor(draft.meter, meter)) ? null : 'between'
+  return rescaled(draft, meter) ? null : 'between'
 }
 
 /** How a tick of one kind's is written in the other's, a note keeping its length: 2/3 into compound. */
 const kindFactor = (from: Meter, to: Meter): number =>
   sameKind(from, to) ? 1 : isCompound(to) ? 2 / 3 : 3 / 2
 
+/** The finest value a meter writes without a tuplet: a 64th, a 16th of its beat or a 24th of a dotted one. */
+const sixtyFourth = (meter: Meter): Tick => TICKS_PER_BEAT / (isCompound(meter) ? 24 : 16)
+
 /**
- * The music with every tick scaled by `factor` (a quarter of 24 ticks in 4/4 is 16 in 6/8), its
- * tempo with them, so each note keeps its length and its speed, and its tempo mark as printed: null
- * where a tick falls between the new ones (a triplet's eighth in compound time).
+ * The music with every tick scaled to `meter`'s kind (a quarter, a beat in 4/4, is two thirds of
+ * one in 6/8), its tempo with them, so each note keeps its length and its speed, and its tempo mark
+ * as printed: null where a tick falls between the new meter's 64ths (a triplet's eighth in
+ * compound time).
  */
-function rescaled(draft: Draft, factor: number): Draft | null {
+function rescaled(draft: Draft, meter: Meter): Draft | null {
+  const factor = kindFactor(draft.meter, meter)
   if (factor === 1) return draft
+  const grid = sixtyFourth(meter)
   let whole = true
   const scale = (tick: Tick): Tick => {
-    const scaled = tick * factor
-    if (Math.abs(scaled - Math.round(scaled)) > 1e-9) whole = false
-    return Math.round(scaled)
+    const scaled = Math.round(tick * factor)
+    if (scaled % grid !== 0) whole = false
+    return scaled
   }
   const notes = (each: readonly DraftNote[]) =>
     each.map((n) => ({
@@ -134,13 +140,12 @@ export function setMeter(draft: Draft, meter: Meter): Draft {
   const was = wholeBars(draft)
   const meters = draft.sections.map(() => meter)
   if (meters.every((each, section) => each === sectionMeter(draft, section))) return draft
-  const factor = kindFactor(draft.meter, meter)
-  const scaled = rescaled(draft, factor)
+  const scaled = rescaled(draft, meter)
   if (!scaled) return draft
   return inMeters(
     scaled,
     meters,
-    was.map((ticks) => Math.round(ticks * factor)),
+    was.map((ticks) => Math.round(ticks * kindFactor(draft.meter, meter))),
   )
 }
 

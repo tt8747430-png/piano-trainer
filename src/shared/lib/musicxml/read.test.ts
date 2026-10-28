@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { note, parseChordSymbol } from '@/shared/lib/music'
+import { note, parseChordSymbol, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { NotAScoreError, readMusicXml } from './read'
 import { XmlError } from './xml'
+
+const B = TICKS_PER_BEAT
 
 const pitch = (step: string, octave: number, alter = 0) =>
   `<pitch><step>${step}</step>${alter ? `<alter>${alter}</alter>` : ''}<octave>${octave}</octave></pitch>`
@@ -86,9 +88,9 @@ describe('readMusicXml', () => {
       ],
     })
     expect(score.bars.map(({ startTick, ticks }) => [startTick, ticks])).toEqual([
-      [0, 96],
-      [96, 96],
-      [192, 96],
+      [0, 4 * B],
+      [4 * B, 4 * B],
+      [8 * B, 4 * B],
     ])
     expect(score.bars[1]).toMatchObject({ repeatStart: true, ending: 1, barline: 'repeat' })
     expect(score.bars[2]).toMatchObject({
@@ -100,7 +102,7 @@ describe('readMusicXml', () => {
     })
     expect(score.chords).toEqual([
       { startTick: 0, chord: parseChordSymbol('F') },
-      { startTick: 72, chord: parseChordSymbol('C7') },
+      { startTick: 3 * B, chord: parseChordSymbol('C7') },
     ])
   })
 
@@ -110,31 +112,31 @@ describe('readMusicXml', () => {
       notes.filter((n) => n.startTick === tick && n.staff === staff)
     expect(at(0).map((n) => n.midi)).toEqual([65, 69])
     expect(at(0)[0]).toMatchObject({
-      durationTicks: 48,
+      durationTicks: 2 * B,
       finger: 1,
       marks: { dynamic: 'p', slurStart: true },
       lyrics: [{ text: 'Hal', hyphen: true, held: 0 }],
     })
     // A chord's note takes its first note's marks.
     expect(at(0)[1]?.marks).toEqual({ dynamic: 'p', slurStart: true })
-    expect(at(48)[0]).toMatchObject({ durationTicks: 8, lyrics: [{ text: 'lo', held: 2 }] })
-    expect(at(64)[0]).toMatchObject({ midi: 70, marks: { slurEnd: true } })
+    expect(at(2 * B)[0]).toMatchObject({ durationTicks: B / 3, lyrics: [{ text: 'lo', held: 2 }] })
+    expect(at((8 * B) / 3)[0]).toMatchObject({ midi: 70, marks: { slurEnd: true } })
     // Tied across the barline: one note.
-    expect(at(72)[0]).toMatchObject({
+    expect(at(3 * B)[0]).toMatchObject({
       midi: 72,
-      durationTicks: 48,
-      marks: { articulations: ['staccato'] },
+      durationTicks: 2 * B,
+      marks: { articulations: ['staccato', 'portato'] },
     })
-    expect(at(120)[0]?.marks?.grace).toEqual([{ midi: 76, spelled: note('E') }])
+    expect(at(5 * B)[0]?.marks?.grace).toEqual([{ midi: 76, spelled: note('E') }])
     expect(at(0, 1)[0]).toMatchObject({ midi: 41, marks: { pedal: 'down' } })
     // Written an octave under where it sounds: the pitch read is the one heard.
-    expect(at(192)[0]).toMatchObject({ midi: 86, marks: { octave: '8va' } })
-    expect(at(192, 1)[0]).toMatchObject({ midi: 66, spelled: note('F', 1) })
+    expect(at(8 * B)[0]).toMatchObject({ midi: 86, marks: { octave: '8va' } })
+    expect(at(8 * B, 1)[0]).toMatchObject({ midi: 66, spelled: note('F', 1) })
   })
 
   it('counts what it leaves out', () => {
-    // The quintuplet's notes, the sfz, Allegro, the detached legato.
-    expect(readMusicXml(PIANO).leftOut).toEqual({ rhythms: 5, dynamics: 1, text: 1, marks: 1 })
+    // Allegro alone: the quintuplet, the sfz and the detached legato are read (ADR 0097).
+    expect(readMusicXml(PIANO).leftOut).toEqual({ text: 1 })
   })
 
   it('refuses what is no score', () => {
@@ -150,6 +152,6 @@ describe('readMusicXml', () => {
     const score = readMusicXml(timewise)
     expect(score.meter).toBe('3/4')
     expect(score.parts).toEqual([{ name: 'Flute', staves: [0] }])
-    expect(score.notes).toMatchObject([{ midi: 69, startTick: 0, durationTicks: 72 }])
+    expect(score.notes).toMatchObject([{ midi: 69, startTick: 0, durationTicks: 3 * B }])
   })
 })

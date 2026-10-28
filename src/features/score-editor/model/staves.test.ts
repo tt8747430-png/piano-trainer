@@ -16,8 +16,8 @@ describe('addStaff (ADR 0097)', () => {
     const over = addStaff(draft, 0)
     expect(over.staves.map((staff) => [staff.name, staff.clef, shape(staff.notes)])).toEqual([
       [undefined, 'treble', []],
-      ['Voice', 'treble', ['D5@0/96', 'B4@96/96']],
-      [undefined, 'bass', ['G3@0/96', 'D3@96/96']],
+      ['Voice', 'treble', ['D5@0/4', 'B4@4/4']],
+      [undefined, 'bass', ['G3@0/4', 'D3@4/4']],
     ])
     // Over the piano: under the last single staff.
     expect(addStaff(draft, 2).staves.map((staff) => staff.notes.length)).toEqual([2, 2, 0])

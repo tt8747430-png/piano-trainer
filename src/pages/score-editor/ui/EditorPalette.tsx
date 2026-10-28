@@ -35,7 +35,7 @@ import { setPaletteSections } from '@/features/set-preference'
 import { BarKeys } from './BarKeys'
 import { FieldKey } from './FieldKey'
 import { LineKeys } from './LineKeys'
-import { ArticulationKeys, DynamicKeys, OrnamentKeys, PedalKeys } from './MarkKeys'
+import { SwingKeys, ArticulationKeys, DynamicKeys, OrnamentKeys, PedalKeys } from './MarkKeys'
 import { NoteBar, NoteKeys, PitchKeys } from './NoteKeys'
 import {
   PaletteDockContext,
@@ -146,6 +146,12 @@ function Tools() {
       </Section>
       <Section category="bar">
         <BarKeys />
+        {/* Flat's Measure: a tempo mark at the note, and swing from it (ADR 0097). */}
+        <GroupName name={t('words.tempoGroup')} />
+        <KeyGrid label={t('words.tempoGroup')}>
+          <FieldKey field="tempo" />
+          <SwingKeys />
+        </KeyGrid>
       </Section>
       <Section category="clef">
         <ClefKeys />

@@ -214,6 +214,29 @@ const FIELD_ICONS = {
       />
     </Icon>
   ),
+  // Flat's annotation: words in italics over a line of text.
+  text: (
+    <Icon>
+      <Word text="Aa" y={13} size={11} italic />
+      <path d="M4 19 H20" strokeWidth="1.5" />
+    </Icon>
+  ),
+  // Flat's tempo key: a quarter note = its beats.
+  tempo: (
+    <Icon>
+      <ellipse
+        cx="6"
+        cy="17"
+        rx="3"
+        ry="2.2"
+        transform="rotate(-20 6 17)"
+        fill="currentColor"
+        stroke="none"
+      />
+      <path d="M8.7 16.2 V5" strokeWidth="1.4" />
+      <path d="M12 10.5 H20 M12 14 H20" strokeWidth="1.4" />
+    </Icon>
+  ),
 } as const
 
 /** The picture of a field's key: a chord symbol's, a finger's. */
@@ -349,6 +372,26 @@ const LINE_ICONS = {
     <Icon>
       <path d="M4 7 H18 V3" strokeDasharray="2 2" />
       <Word text="8vb" y={18} size={9} italic />
+    </Icon>
+  ),
+  '15ma': (
+    <Icon>
+      <Word text="15ma" y={12} size={8} italic />
+      <path d="M4 17 H18 V21" strokeDasharray="2 2" />
+    </Icon>
+  ),
+  '15mb': (
+    <Icon>
+      <path d="M4 7 H18 V3" strokeDasharray="2 2" />
+      <Word text="15mb" y={18} size={8} italic />
+    </Icon>
+  ),
+  // A glissando: a wavy line rising from one notehead to another.
+  gliss: (
+    <Icon>
+      <ellipse cx="4.5" cy="18" rx="2.2" ry="1.6" fill="currentColor" stroke="none" />
+      <ellipse cx="19.5" cy="6" rx="2.2" ry="1.6" fill="currentColor" stroke="none" />
+      <path d="M6.5 16 q1.5 -3 3 -1.5 t3 -1.5 t3 -1.5 t2 -2.5" />
     </Icon>
   ),
 } as const

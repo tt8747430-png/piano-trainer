@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { readDraft } from '@/features/score-editor'
-import { midi, note } from '@/shared/lib/music'
+import { midi, note, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { staffOf } from '@/shared/lib/notation'
 import { layerAt, linesOf, lineMusic, oneLine, timeBeforeLine } from './line-music'
+
+const B = TICKS_PER_BEAT
 
 const draft = readDraft({
   key: 'G',
@@ -59,24 +61,24 @@ describe('the sheet’s lines', () => {
       ])
     expect(parts(3)).toEqual([
       [0, [0, 1], 0],
-      [0, [2, 3], 192],
-      [1, [4, 5, 6], 384],
+      [0, [2, 3], 8 * B],
+      [1, [4, 5, 6], 16 * B],
     ])
     expect(parts(2)).toEqual([
       [0, [0, 1], 0],
-      [0, [2, 3], 192],
-      [1, [4, 5], 384],
-      [1, [6], 576],
+      [0, [2, 3], 8 * B],
+      [1, [4, 5], 16 * B],
+      [1, [6], 24 * B],
     ])
     expect(parts(4)).toEqual([
       [0, [0, 1, 2, 3], 0],
-      [1, [4, 5, 6], 384],
+      [1, [4, 5, 6], 16 * B],
     ])
     // A dense first bar stands alone, the light ones after it share a line.
     expect(parts(3, [250, 60, 60, 60, 100, 100, 100])).toEqual([
       [0, [0], 0],
-      [0, [1, 2, 3], 96],
-      [1, [4, 5, 6], 384],
+      [0, [1, 2, 3], 4 * B],
+      [1, [4, 5, 6], 16 * B],
     ])
   })
 
@@ -87,19 +89,19 @@ describe('the sheet’s lines', () => {
     expect(music.staves).toEqual([{ clef: 'treble' }])
     expect(music.bars).toEqual([
       { startTick: 0, beats: 4, blank: ['treble'] },
-      { startTick: 96, beats: 4, blank: ['treble', 'bass'] },
+      { startTick: 4 * B, beats: 4, blank: ['treble', 'bass'] },
     ])
     expect(music.chords).toEqual([
       { startTick: 0, symbol: 'C' },
-      { startTick: 48, symbol: 'D' },
-      { startTick: 96, symbol: 'G' },
+      { startTick: 2 * B, symbol: 'D' },
+      { startTick: 4 * B, symbol: 'G' },
     ])
     expect(music.notes.map((n) => [staffOf(n), n.midi, n.startTick, n.durationTicks])).toEqual([
-      ['staff0', 67, 0, 48],
-      ['staff0', 69, 48, 24],
-      ['staff0', 71, 72, 72],
-      ['staff0', 72, 144, 48],
-      ['bass', 48, 0, 96],
+      ['staff0', 67, 0, 2 * B],
+      ['staff0', 69, 2 * B, B],
+      ['staff0', 71, 3 * B, 3 * B],
+      ['staff0', 72, 6 * B, 2 * B],
+      ['bass', 48, 0, 4 * B],
     ])
   })
 
@@ -109,7 +111,7 @@ describe('the sheet’s lines', () => {
     const music = lineMusic(draft, third)
     expect(music.bars).toEqual([{ startTick: 0, beats: 2, blank: ['staff0', 'bass'] }])
     expect(music.notes.map((n) => [n.hand, n.midi, n.startTick, n.durationTicks])).toEqual([
-      ['rh', 55, 0, 48],
+      ['rh', 55, 0, 2 * B],
     ])
   })
 
@@ -122,7 +124,7 @@ describe('the sheet’s lines', () => {
     expect(music.notes.every((n) => staffOf(n) === 'staff0')).toBe(true)
     expect(music.bars).toEqual([
       { startTick: 0, beats: 4 },
-      { startTick: 96, beats: 4 },
+      { startTick: 4 * B, beats: 4 },
     ])
   })
 

@@ -27,7 +27,10 @@ import {
   TICKS_PER_BEAT,
   timeSignature,
   timeSignatureText,
+  type Meter,
 } from './time'
+
+const B = TICKS_PER_BEAT
 
 describe('time', () => {
   it('reads a first bar shorter than the meter as a pickup: the end of a bar', () => {
@@ -42,11 +45,15 @@ describe('time', () => {
   })
 
   it('counts beats in whole ticks', () => {
-    expect([1, 0.5, 1 / 3, 2.25, 0.125].map(beatsToTicks)).toEqual([24, 12, 8, 54, 3])
+    expect([1, 0.5, 1 / 3, 2.25, 0.125, 0.0625].map(beatsToTicks)).toEqual([
+      5040, 2520, 1680, 11340, 630, 315,
+    ])
   })
 
-  it('counts twenty-four ticks a beat', () => {
-    expect(TICKS_PER_BEAT).toBe(24)
+  it('counts 5040 ticks a beat: every value to the 64th and every tuplet of two to nine whole', () => {
+    expect(TICKS_PER_BEAT).toBe(5040)
+    for (const parts of [2, 3, 4, 5, 6, 7, 8, 9, 16, 48])
+      expect(Number.isInteger(TICKS_PER_BEAT / parts)).toBe(true)
   })
 })
 
@@ -78,18 +85,19 @@ describe('meters (ADR 0114)', () => {
         beatsPerBar(m as never),
       ),
     ).toEqual([4, 6, 2, 5, 6, 1, 2, 3, 4, 3.5])
-    expect(barTicks('2/2')).toBe(96)
-    expect(barTicks('5/8')).toBe(60)
+    expect(barTicks('2/2')).toBe(4 * B)
+    expect(barTicks('5/8')).toBe(2.5 * B)
   })
 
   it('counts a bar’s beats: halves in x/2, quarters in x/4, dotted quarters in 6/8, eighths in twos and threes', () => {
-    expect(meterBeats('2/2')).toEqual([48, 48])
-    expect(meterBeats('3/2')).toEqual([48, 48, 48])
-    expect(meterBeats('5/4')).toEqual([24, 24, 24, 24, 24])
-    expect(meterBeats('6/8')).toEqual([24, 24])
-    expect(meterBeats('3/8')).toEqual([24])
-    expect(meterBeats('7/8')).toEqual([24, 24, 36])
-    expect(meterBeats('5/8')).toEqual([36, 24])
+    const beats = (meter: Meter) => meterBeats(meter).map((ticks) => ticks / B)
+    expect(beats('2/2')).toEqual([2, 2])
+    expect(beats('3/2')).toEqual([2, 2, 2])
+    expect(beats('5/4')).toEqual([1, 1, 1, 1, 1])
+    expect(beats('6/8')).toEqual([1, 1])
+    expect(beats('3/8')).toEqual([1])
+    expect(beats('7/8')).toEqual([1, 1, 1.5])
+    expect(beats('5/8')).toEqual([1.5, 1])
   })
 
   it('groups five and more beats: 5/4 as 3+2, 6/4 as 3+3, 7/4 as 4+3', () => {
@@ -103,14 +111,14 @@ describe('meters (ADR 0114)', () => {
   it('accents a bar’s first beat and each group’s', () => {
     expect(beatStarts('5/4')).toEqual([
       { tick: 0, accent: true },
-      { tick: 24, accent: false },
-      { tick: 48, accent: false },
-      { tick: 72, accent: true },
-      { tick: 96, accent: false },
+      { tick: B, accent: false },
+      { tick: 2 * B, accent: false },
+      { tick: 3 * B, accent: true },
+      { tick: 4 * B, accent: false },
     ])
     expect(beatStarts('2/2')).toEqual([
       { tick: 0, accent: true },
-      { tick: 48, accent: false },
+      { tick: 2 * B, accent: false },
     ])
   })
 
@@ -159,11 +167,11 @@ describe('a tempo mark’s unit (ADR 0114)', () => {
   })
 
   it('measures a unit in the meter’s ticks', () => {
-    expect(['2', '4', '4.', '8', '8.', '16'].map((u) => unitTicks(u as '4', '4/4'))).toEqual([
-      48, 24, 36, 12, 18, 6,
-    ])
-    expect(unitTicks('4.', '6/8')).toBe(24)
-    expect(unitTicks('8', '6/8')).toBe(8)
+    expect(['2', '4', '4.', '8', '8.', '16'].map((u) => unitTicks(u as '4', '4/4'))).toEqual(
+      [2, 1, 1.5, 0.5, 0.75, 0.25].map((beats) => beats * B),
+    )
+    expect(unitTicks('4.', '6/8')).toBe(B)
+    expect(unitTicks('8', '6/8')).toBe(B / 3)
   })
 
   it('marks a tempo in any unit, and reads a mark back as the song’s beats a minute', () => {

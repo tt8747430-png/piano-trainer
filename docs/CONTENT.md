@@ -88,12 +88,18 @@ A **bar** is chords joined by `-`, each `symbol[@beats][:method]`, or `_` for no
 | `C _ G`, `_@2`             | No chord: nothing printed over the bar, no pattern there, only what a hand writes |
 
 A bar's beats are the meter's: a quarter each in simple time (2/2 has four), a dotted quarter in compound time (6/8
-has two, 12/8 four). Beats fall on whole ticks (24 a beat: `.5`, `.25`, `.125`, not `.3`); thirds are fractions,
-`1:3` a triplet 8th, `2:3`, `1:6` a triplet 16th.
+has two, 12/8 four). Beats fall on whole ticks (5040 a beat, so every value to the 64th, `.0625`, and every
+tuplet of two to nine notes is whole); what a decimal of four places cannot write is a fraction: `1:3` a triplet
+8th, `2:3`, `1:6` a triplet 16th, `1:7` a septuplet 16th (a quintuplet 16th is `.2`). Tuplets are not written
+as such: notes of a tuplet's length are engraved in its bracket.
 
-**Barlines** between bars: `|:` starts a repeat, `:|` ends one, `||` a double barline, `|.` the final one, `[1` or
-`[2` before a bar puts it in that ending: `'|: G C [1 D :| [2 D7 G |.'`. **Jumps:** `Segno` or `Coda` before a bar;
-`Fine`, `ToCoda`, `DC`, `DC.Fine`, `DC.Coda`, `DS`, `DS.Fine` or `DS.Coda` after one.
+**Barlines** between bars: `|:` starts a repeat, `:|` ends one (`:|x3` to `:|x9` plays it that many times), `||` a
+double barline, `|.` the final one, `[1` to `[4` before a bar puts it in that ending:
+`'|: G C [1 D :| [2 D7 G |.'`. **Jumps:** `Segno` or `Coda` before a bar; `Fine`, `ToCoda`, `DC`, `DC.Fine`,
+`DC.Coda`, `DS`, `DS.Fine` or `DS.Coda` after one. **Before a bar:** `Page` starts a new page (and line) there; `%`
+marks a bar repeating the bar before, `%%` it and the next repeating the two before (the notes are still written,
+and the sign is drawn while they match); `Rest3` draws that bar and the next two as one multi-bar rest while they
+stay empty (2 to 99 bars).
 
 **Chord symbols** are read in every spelling `qualitySpellings` lists (`src/shared/lib/music/chord.ts`): `m`, `7`,
 `Maj7`/`M7`/`Δ`, `m7b5`/`ø`, `dim`/`°`, `dim7`/`°7`, `sus4`, `sus2`, `6`, `m6`, `6/9`, `add9`/`2`, `9`, `13`, `7b9`,
@@ -142,7 +148,7 @@ both hands; built-in content may leave bars to the pattern.
 | `E4^3`                   | A finger, 1–5                                                           |
 | `r/1`                    | A rest; a bar of rests is written silence, not the pattern              |
 | `C3/4 E3+G3/1@2 E3+G3/1` | `@beat` starts a token on a beat counted from 1 (`@2.5` the "and" of 2) |
-| `F4/1:3 D4/1:3 E4/1:3`   | A triplet; `C4/.125` a 32nd                                             |
+| `F4/1:3 D4/1:3 E4/1:3`   | A triplet; `C4/.2` a quintuplet 16th; `C4/.0625` a 64th                 |
 | `C4+E4/1[acc,stacc]`     | Marks after a token, on each of its notes                               |
 | `clef:bass G2/1`         | First in a bar, changes the staff's clef from that bar on               |
 
@@ -150,10 +156,16 @@ In the piece's key, accidentals as printed (`E5` in a D♭ section is E natural)
 piano. A note may run past its bar only into a bar where the same hand is written: it is tied across.
 
 **Marks**, joined by commas in brackets: articulations `stacc` `staccatiss` `acc` `ten` `marc` `ferm`; one ornament
-`tr` `mord` `lmord` `turn` `trem`; `arp` rolls the chord; `(` and `)` start and end a slur; `8va` writes the notes an
-octave lower than they sound, `8vb` higher; dynamics `pp` `p` `mp` `mf` `f` `ff`; a hairpin `cresc` or `dim`,
+`tr` `mord` `lmord` `turn` `iturn` (inverted), `trem1` `trem2` `trem3` (a tremolo's strokes); `port` (portato),
+`breath` and `caes` (a breath mark or a caesura after the note); `arp` rolls the chord; `(` and `)` start and end a
+slur; `8va` writes the notes an octave lower than they sound, `8vb` higher, `15ma` and `15mb` two octaves; `gliss`
+slides to the next note; dynamics `ppp` to `fff` and the accents `sf` `sfz` `sffz` `fz` `rf` `rfz` `fp` `sfp`
+`sfpp` `pf` (struck on their note alone, or struck at one level and held at another); a hairpin `cresc` or `dim`,
 `/hairpin` to end it; expressions `dolce` `cantabile` `espress` `legato` `leggiero` `rit` `rall` `accel` `atempo`;
-the pedal `ped`, `pedch`, `pedup`; `gr:D5+E5` grace notes. A pitch is always the one heard. A rest takes no marks.
+the pedal `ped`, `pedch`, `pedup`; `gr:D5+E5` grace notes (`app:D5` an appoggiatura's); `tempo:120` a tempo
+change from the note on (20 to 400 beats a minute, played and exported); `swing8`, `swing16` or `straight` a swing
+mark; `rn:V7/ii` a Roman numeral under the note; `txt:` free text above it, percent-encoded (`txt:a%20tempo`). A
+pitch is always the one heard. A rest takes no marks.
 
 ## A recording
 

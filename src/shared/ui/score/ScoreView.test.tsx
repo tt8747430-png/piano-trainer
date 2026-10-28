@@ -1,18 +1,20 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { midi, note } from '@/shared/lib/music'
+import { midi, note, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import * as engine from './verovio/engine'
 import { ScoreView } from './ScoreView'
+
+const B = TICKS_PER_BEAT
 
 const score = notate({
   key: { tonic: note('C'), minor: false },
   meter: '3/4',
   bars: [
     { startTick: 0, beats: 3 },
-    { startTick: 36, beats: 3 },
+    { startTick: 1.5 * B, beats: 3 },
   ],
-  notes: [{ midi: midi(60), spelled: note('C'), hand: 'rh', startTick: 0, durationTicks: 72 }],
+  notes: [{ midi: midi(60), spelled: note('C'), hand: 'rh', startTick: 0, durationTicks: 3 * B }],
   chords: [{ startTick: 0, symbol: 'C' }],
 })
 
@@ -38,7 +40,7 @@ describe('ScoreView', () => {
           spelled: note('C'),
           hand: 'rh',
           startTick: 0,
-          durationTicks: 96,
+          durationTicks: 4 * B,
           marks: { grace: [{ midi: midi(74), spelled: note('D') }] },
         },
       ],

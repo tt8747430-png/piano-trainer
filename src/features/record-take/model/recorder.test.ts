@@ -2,14 +2,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { Played } from '@/entities/take'
 import { createFakeAudio } from '@/shared/api/audio'
 import { createFakeMidi } from '@/shared/api/midi'
-import { midi } from '@/shared/lib/music'
+import { midi, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { startRecorder, type RecorderPlan, type RecorderProgress } from './recorder'
+
+const B = TICKS_PER_BEAT
 
 /** 4/4 at 120: a beat is half a second, the count-in two seconds. */
 const PLAN: RecorderPlan = {
   bars: [
     { startTick: 0, beats: 4 },
-    { startTick: 96, beats: 4 },
+    { startTick: 4 * B, beats: 4 },
   ],
   meter: '4/4',
   from: 0,
