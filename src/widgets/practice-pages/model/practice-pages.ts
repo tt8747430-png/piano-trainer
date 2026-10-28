@@ -18,23 +18,18 @@ export const PRACTICE_PAGES = {
 } as const satisfies Readonly<Record<string, { to: string; tile: Tile }>>
 export type PracticePageId = keyof typeof PRACTICE_PAGES
 
-/** The pages a thing is shown on, listed first and under no heading: a thing carries its own name. */
-export const THINGS = [
-  'chords',
-  'scales',
-  'intervals',
-  'progressions',
-  'accompaniment',
-] as const satisfies readonly PracticePageId[]
-
-/** The groups listed under a heading, in order: the tool at the keys, then the training. */
+/**
+ * Practice's groups, each under its heading, in the order a learner reaches for them (ADR 0052):
+ * Theory, the things a page shows on the keys; Playing, what the hands play at the keys; Training,
+ * the drills and the clock that keeps them.
+ */
 export const PRACTICE_GROUPS = [
-  { id: 'atTheKeys', pages: ['chordFinder'] },
+  { id: 'theory', pages: ['chords', 'scales', 'intervals', 'progressions'] },
+  { id: 'playing', pages: ['accompaniment', 'chordFinder'] },
   { id: 'training', pages: ['exercises', 'quiz', 'metronome'] },
 ] as const satisfies readonly { id: string; pages: readonly PracticePageId[] }[]
 
 /** Every page of Practice, in the order it lists them. */
-export const PRACTICE_PAGE_IDS: readonly PracticePageId[] = [
-  ...THINGS,
-  ...PRACTICE_GROUPS.flatMap((group) => group.pages),
-]
+export const PRACTICE_PAGE_IDS: readonly PracticePageId[] = PRACTICE_GROUPS.flatMap(
+  (group) => group.pages,
+)

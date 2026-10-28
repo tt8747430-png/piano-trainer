@@ -11,37 +11,33 @@ const rowsOf = (list: HTMLElement) =>
     .map((row) => [row.textContent, row.getAttribute('href')])
 
 describe('Practice', () => {
-  it('lists the things first, under no heading, each saying what is inside it', async () => {
+  it('lists the things shown on the keys under Theory, each with one short line', async () => {
     await renderApp('/practice')
     expect(await screen.findByRole('heading', { level: 1, name: 'Practice' })).toBeInTheDocument()
-    const [things] = within(screen.getByRole('main')).getAllByRole('list')
-    expect(rowsOf(things!)).toEqual([
-      ['Chords Triads to 13ths · Inversions · Tensions', '/practice/chords'],
-      ['Scales and keys Scale · Chords · Key', '/practice/scales'],
-      ['Intervals Every interval, heard and shown on the keys', '/practice/intervals'],
-      ['Progressions Pick a known one or type your own, in any key', '/practice/progressions'],
-      [
-        'Accompaniment Called to Play · Called to Play 2 · Боброва · Горшков · Styles · Yours',
-        '/practice/accompaniment',
-      ],
+    expect(rowsOf(screen.getByRole('region', { name: 'Theory' }))).toEqual([
+      ['Chords Triads to 13ths, inversions', '/practice/chords'],
+      ['Scales and keys Scales, their chords, keys', '/practice/scales'],
+      ['Intervals Every interval on the keys', '/practice/intervals'],
+      ['Progressions Known loops in any key', '/practice/progressions'],
     ])
   })
 
-  it('lists the Chord finder at the keys, a tool of its own', async () => {
+  it('lists Accompaniment and the Chord finder under Playing', async () => {
     await renderApp('/practice')
-    const keys = await screen.findByRole('region', { name: 'At the keys' })
-    expect(rowsOf(keys)).toEqual([
-      ['Chord finder Play a chord to see its name and how it is written', '/practice/chord-finder'],
+    const playing = await screen.findByRole('region', { name: 'Playing' })
+    expect(rowsOf(playing)).toEqual([
+      ['Accompaniment Patterns for both hands', '/practice/accompaniment'],
+      ['Chord finder Play a chord, see its name', '/practice/chord-finder'],
     ])
   })
 
-  it('lists Exercises, Quiz and the Metronome under Training, each saying its groups or its line', async () => {
+  it('lists Exercises, Quiz and the Metronome under Training', async () => {
     await renderApp('/practice')
     const training = await screen.findByRole('region', { name: 'Training' })
     expect(rowsOf(training)).toEqual([
-      ['Exercises Finger technique · Barry Harris · Piano With Jonny', '/practice/exercises'],
-      ['Quiz Chords · Scales and keys · By ear · Reading', '/practice/quiz'],
-      ['Metronome Clicks, beeps or a drum beat, at any tempo', '/practice/metronome'],
+      ['Exercises Technique and drills', '/practice/exercises'],
+      ['Quiz Chords, keys, ear, reading', '/practice/quiz'],
+      ['Metronome Clicks or drums, any tempo', '/practice/metronome'],
     ])
   })
 
@@ -59,14 +55,13 @@ describe('Practice', () => {
     expect(screen.getByRole('link', { name: /^Quiz .* To check: 1$/ })).toBeInTheDocument()
   })
 
-  it('reads in Russian, a row’s line in the words its page uses', async () => {
+  it('reads in Russian', async () => {
     await renderApp('/practice', { locale: 'ru' })
     expect(
-      await screen.findByRole('link', {
-        name: 'Тесты Аккорды · Гаммы и тональности · На слух · Чтение',
-      }),
+      await screen.findByRole('link', { name: 'Тесты Аккорды, тональности, слух, чтение' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('region', { name: 'За клавиатурой' })).toBeInTheDocument()
+    for (const group of ['Теория', 'Игра', 'Тренировка'])
+      expect(screen.getByRole('region', { name: group })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])
   })
 })

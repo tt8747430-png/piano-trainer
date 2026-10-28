@@ -69,6 +69,6 @@ course.
   Courses; one curriculum of stages (2026-10-13 to 10-14), each superseded.
 - 0053 — Lessons and Courses, apart (2026-10-15).
 - 0057, 0058 — Learn at a glance, Continue floating, a lesson's one bar and one column (2026-10-16).
-- Round 13 — Function and root-motion chips, variants, takeaways, rules, S A T B, a page a section on a phone,
+- r13 — Function and root-motion chips, variants, takeaways, rules, S A T B, a page a section on a phone,
   rings and prerequisites in the contents, after the reference theory book (2026-10-28).
 - The research note on clearer lessons (2026-10-12), deleted: its checklist is `docs/CONTENT.md`'s.

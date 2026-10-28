@@ -2,43 +2,47 @@ import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { untranslated } from '@/app/testing/untranslated'
 import type { Sound } from '@/shared/lib/schedule'
 
 const timed = (sounds: readonly Sound[] = []) =>
   sounds.flatMap((sound) => (sound.kind === 'note' ? [[sound.midi, sound.at]] : []))
 
+/** A row by its interval's name. */
+const row = (name: string) =>
+  screen.getByRole('button', { name: (said) => said.includes(name) && !said.startsWith(name) })
+
 describe('Practice → Intervals', () => {
-  it('writes a card for every interval, within the octave and past it, each group folding as the learner leaves it', async () => {
+  it('lists a row for every interval, the tritone as A4 and d5 apart, each group folding as the learner leaves it', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/practice/intervals')
     const simple = await screen.findByRole('region', { name: 'Within the octave' })
     expect(
       within(simple)
-        .getAllByRole('article')
-        .map((card) => within(card).getByRole('heading').textContent),
+        .getAllByRole('button', { pressed: false })
+        .map((each) => each.textContent),
     ).toEqual([
-      'Unison',
-      'Minor second',
-      'Major second',
-      'Minor third',
-      'Major third',
-      'Perfect fourth',
-      'Tritone',
-      'Perfect fifth',
-      'Minor sixth',
-      'Major sixth',
-      'Minor seventh',
-      'Major seventh',
-      'Octave',
+      'P1UnisonSemitones: 0',
+      'm2Minor secondSemitones: 1',
+      'M2Major secondSemitones: 2',
+      'm3Minor thirdSemitones: 3',
+      'M3Major thirdSemitones: 4',
+      'P4Perfect fourthSemitones: 5',
+      'A4Augmented fourthSemitones: 6',
+      'd5Diminished fifthSemitones: 6',
+      'P5Perfect fifthSemitones: 7',
+      'm6Minor sixthSemitones: 8',
+      'M6Major sixthSemitones: 9',
+      'm7Minor seventhSemitones: 10',
+      'M7Major seventhSemitones: 11',
+      'P8OctaveSemitones: 12',
     ])
-    const third = screen.getByRole('article', { name: 'Minor third' })
-    expect(third).toHaveTextContent('m3')
-    expect(third).toHaveTextContent('Semitones: 3 · Size: 1½ tones')
-    expect(third).toHaveTextContent('Imperfect consonance')
-    expect(screen.getByRole('article', { name: 'Tritone' })).toHaveTextContent('A4 · d5')
+    expect(within(row('Minor third')).getByRole('img')).toHaveAccessibleName(
+      'Minor third on the keys',
+    )
     const compound = screen.getByRole('region', { name: 'Past the octave' })
-    expect(within(compound).getByRole('article', { name: 'Augmented ninth' })).toHaveTextContent(
-      'In chords: #9',
+    expect(within(compound).getByRole('button', { name: /Augmented ninth/ })).toHaveTextContent(
+      'Semitones: 15',
     )
     // Folded, as the other explorers' sections: saved in the settings, for every visit.
     await user.click(within(compound).getByRole('button', { name: 'Past the octave' }))
@@ -49,56 +53,32 @@ describe('Practice → Intervals', () => {
     expect(settingsStore.getState().foldedSections).toContain('intervals.compound')
   })
 
-  it('says each size in tones as it is said: a semitone, one tone, tones', async () => {
-    await renderApp('/practice/intervals')
-    expect(await screen.findByRole('article', { name: 'Minor second' })).toHaveTextContent(
-      'Semitones: 1 · Size: a semitone',
-    )
-    expect(screen.getByRole('article', { name: 'Major second' })).toHaveTextContent(
-      'Semitones: 2 · Size: 1 tone ·',
-    )
-    expect(screen.getByRole('article', { name: 'Major third' })).toHaveTextContent(
-      'Semitones: 4 · Size: 2 tones',
-    )
-  })
-
-  it('says each size in tones in Russian', async () => {
-    await renderApp('/practice/intervals', { locale: 'ru' })
-    const simple = await screen.findByRole('region', { name: 'В пределах октавы' })
-    const sizes = within(simple)
-      .getAllByRole('article')
-      .map((card) => /Величина: [^·]+/.exec(card.textContent)?.[0].trim())
-    expect(sizes.slice(1, 7)).toEqual([
-      'Величина: полутон',
-      'Величина: 1 тон',
-      'Величина: 1½ тона',
-      'Величина: 2 тона',
-      'Величина: 2½ тона',
-      'Величина: 3 тона',
-    ])
-  })
-
-  it('plays an interval up, down and together, and shows it on the keys', async () => {
+  it('plays a row tapped at once, up or down as the switch says, kept in the URL, and shows it on the keys', async () => {
     const user = userEvent.setup()
-    const { audio } = await renderApp('/practice/intervals')
-    const third = await screen.findByRole('article', { name: 'Minor third' })
-    await user.click(within(third).getByRole('button', { name: 'Up' }))
+    const { audio, router } = await renderApp('/practice/intervals')
+    const way = await screen.findByRole('radiogroup', { name: 'Play' })
+    expect(within(way).getByRole('radio', { name: 'At once' })).toBeChecked()
+    await user.click(row('Minor third'))
+    expect(timed(audio.played.at(-1)?.sounds)).toEqual([
+      [60, 0],
+      [63, 0],
+    ])
+    expect(row('Minor third')).toHaveAttribute('aria-pressed', 'true')
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    expect(within(keyboard).getByRole('button', { name: 'D sharp 4' })).toHaveTextContent('♭3')
+    await user.click(within(way).getByRole('radio', { name: 'Up' }))
+    expect(router.state.location.search).toEqual({ way: 'up' })
+    await user.click(row('Minor third'))
+    await user.click(row('Minor third'))
     expect(timed(audio.played.at(-1)?.sounds)).toEqual([
       [60, 0],
       [63, 0.6],
     ])
-    expect(within(third).getByRole('button', { name: 'Stop' })).toBeInTheDocument()
-    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
-    expect(within(keyboard).getByRole('button', { name: 'D sharp 4' })).toHaveTextContent('♭3')
-    await user.click(within(third).getByRole('button', { name: 'Down' }))
+    await user.click(within(way).getByRole('radio', { name: 'Down' }))
+    await user.click(row('Perfect fifth'))
     expect(timed(audio.played.at(-1)?.sounds)).toEqual([
-      [63, 0],
+      [67, 0],
       [60, 0.6],
-    ])
-    await user.click(within(third).getByRole('button', { name: 'Together' }))
-    expect(timed(audio.played.at(-1)?.sounds)).toEqual([
-      [60, 0],
-      [63, 0],
     ])
   })
 
@@ -111,8 +91,7 @@ describe('Practice → Intervals', () => {
       }),
     )
     expect(router.state.location.search).toEqual({ root: 'D' })
-    const fifth = screen.getByRole('article', { name: 'Perfect fifth' })
-    await user.click(within(fifth).getByRole('button', { name: 'Together' }))
+    await user.click(row('Perfect fifth'))
     expect(timed(audio.played.at(-1)?.sounds)).toEqual([
       [62, 0],
       [69, 0],
@@ -122,6 +101,8 @@ describe('Practice → Intervals', () => {
   it('speaks Russian', async () => {
     await renderApp('/practice/intervals', { locale: 'ru' })
     expect(await screen.findByRole('heading', { level: 1, name: 'Интервалы' })).toBeInTheDocument()
-    expect(screen.getByRole('article', { name: 'Малая терция' })).toHaveTextContent('м3')
+    expect(screen.getByRole('button', { name: /Малая терция/ })).toHaveTextContent('м3')
+    expect(screen.getByRole('button', { name: /Уменьшённая квинта/ })).toHaveTextContent('ум5')
+    expect(untranslated(document.body)).toEqual([])
   })
 })

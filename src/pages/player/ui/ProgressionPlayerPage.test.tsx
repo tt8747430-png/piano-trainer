@@ -23,9 +23,9 @@ describe('A progression in the Player', () => {
       await screen.findByRole('button', { name: 'Bar 1: Cm7', hidden: true }),
     ).toBeInTheDocument()
     const key = screen.getByRole('group', { name: 'Key' })
-    await user.click(within(key).getByRole('radio', { name: 'G' }))
+    await user.click(within(key).getByRole('radio', { name: 'G♭' }))
     expect(router.state.location.search).toMatchObject({ key: 'Gb', p: 'ii-V-I' })
-    await user.click(within(key).getByRole('radio', { name: 'Natural' }))
+    await user.click(within(key).getByRole('radio', { name: 'G' }))
     expect(router.state.location.search).toMatchObject({ key: 'G', p: 'ii-V-I' })
   })
 

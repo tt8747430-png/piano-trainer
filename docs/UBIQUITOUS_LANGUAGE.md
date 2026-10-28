@@ -182,13 +182,18 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   Copy · Cut · Paste). _Avoid:_ menu bar.
 - **Simplify** («Упростить»): every chord played as its plain triad on its root. _Avoid:_ easy chords.
 - **More** («Ещё»): the bar's last button: favourite, Move to, Archive, Song information, Sections, Share, Print,
-  Export to MIDI. _Avoid:_ overflow, options.
+  Export to MIDI, Export to MusicXML. _Avoid:_ overflow, options.
 - **Song information** («О песне»): a sheet of a piece's chords, facts and credits. _Avoid:_ details.
 - **Sections** (the Player's sheet): the sections by name and first bar. _Avoid:_ markers, chapters.
 - **Share** («Поделиться»): a link to a song, or an own song with its music. _Avoid:_ export link.
 - **Print** («Печать»): the view shown on paper or as a PDF. _Avoid:_ export to PDF.
 - **Export to MIDI** («Экспорт в MIDI»): the music as played, each part a track; **time aligned** or **fixed tempo**
   for a piece with a recording. _Avoid:_ download MIDI.
+- **Export to MusicXML** («Экспорт в MusicXML»): a piece's music as written, every staff, for a notation app.
+  _Avoid:_ save as XML, download score.
+- **Import** («Импорт»): a MusicXML or MIDI file made into the learner's own song, from New or dropped on the
+  library; **Left out** («Не вошло в песню») lists what the file held that a song cannot. _Avoid:_ upload, open
+  file.
 
 ## Views
 
@@ -325,7 +330,8 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 
 - **Place**: one of the three: Learn · Songs · Practice. _Avoid:_ tab, section.
 - **Learn** («Обучение»): the Lessons and the Courses. _Avoid:_ Path.
-- **Practice** («Практика»): the things, At the keys, Training. _Avoid:_ Drill, Tools.
+- **Practice** («Практика»): its pages in three groups, Theory («Теория»), Playing («Игра») and Training
+  («Тренировка»). _Avoid:_ Drill, Tools, At the keys.
 - **Explorer**: a page that shows one thing on the keys: Chords, Scales and keys, Intervals, Progressions. _Avoid:_
   viewer, reference.
 - **Tool**: what works something out from what the learner gives, on the page of the thing it works on. _Avoid:_
@@ -333,6 +339,18 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Tabs** (a page's): the views of one thing. _Avoid:_ sub-pages.
 - **Scale view** / **Chords view** / **Key view**: Scales and keys' three tabs. _Avoid:_ mode.
 - **Keys play**: in Chords view, a key plays its chord or its note. _Avoid:_ tap mode.
+- **Strip** (`StepStrip`): one choice of many in a row that scrolls, with ‹ › to step along it (a root's 17
+  spellings, a chord's quality, a scale's kind). _Avoid:_ carousel, picker wheel.
+- **On the keys** («На клавишах»): what a scale run's keys carry, Notes · Left hand · Right hand. _Avoid:_ key mode.
+- **Fingering by hand** («Аппликатура по рукам»): each hand drawn with its fingers numbered, beside the run's notes
+  and that hand's fingers. _Avoid:_ fingering table.
+- **Character** (a progression's): how it sounds, in one line under its name. _Avoid:_ description, mood.
+- **Library card**: a progression of the library on Progressions: its numerals, name, chord count, character and
+  chips, with a Play that plays it in place. _Avoid:_ preset.
+- **Play what you choose** («Играть выбранное», `autoplay`): a chord or a scale chosen sounds at once. _Avoid:_
+  preview, audition.
+- **Scale on the keys** («Гамма на клавишах»): the Chord finder's key's scale painted on every octave. _Avoid:_
+  overlay, highlight.
 - **Library** (progressions): the one list of practised progressions, one entry an idea, a major and a minor line.
   _Avoid:_ presets, templates.
 - **Typed line**: Progressions' field of numerals or chords. _Avoid:_ key detector.
@@ -370,7 +388,18 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Caret**: where the next note goes, a thin line on its staff. _Avoid:_ cursor.
 - **Selection**: the notes or bars chosen, coloured. _Avoid:_ highlight.
 - **Editing mode**: Replace · Insert · Chord. _Avoid:_ input mode.
-- **Palette**: the editor's tools by category, folded to one row or opened. _Avoid:_ toolbar.
+- **Palette** (UI Tools): the editor's tools by category in Flat's order, docked as a **panel** at the sheet's left
+  (from 48rem across) or a **sheet** at its foot (a phone held upright). _Avoid:_ floating card, folded row.
+- **Panel**: the palette docked at the sheet's left, its sections an accordion, hidden whole by its «. _Avoid:_
+  sidebar (the app's navigation).
+- **Note-entry toolbar** («Ввод нот»): the everyday tools in one row (♮ ♯ ♭, Respell, the values, dots, tie, triplet,
+  rest), over the sheet beside the panel and as the sheet's quick row. _Avoid:_ palette (it is the palette's part).
+- **Compact · Expanded**: the phone's sheet with its quick row and category tabs, or with every section. _Avoid:_
+  folded, opened.
+- **List mode**: the expanded sheet's keys each with its name. _Avoid:_ labels mode.
+- **Chord wizard** («Конструктор аккорда»): the chord symbol built from a root, a chord and a bass beside its field.
+  _Avoid:_ chord builder, chord dialog.
+- **Grace note** («Форшлаг»): a note struck just before its note, taking none of its time. _Avoid:_ ornament note.
 - **Sign picker** (`SignPicker`): the one frame of the **Time signature**, **Key signature** and **Clef** pickers
   and the tempo dial: a sheet on a phone, a popover on a laptop. _Avoid:_ dialog, modal.
 - **Sign tile**: a sign drawn on a staff with its name. _Avoid:_ icon.

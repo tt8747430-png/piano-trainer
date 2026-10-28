@@ -1,24 +1,22 @@
-import { WholeWord } from 'lucide-react'
+import { MicVocal } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { SheetField } from '@/widgets/score-sheet'
 import { useScoreEditorContext } from '../model/editor-context'
 import { fieldOf } from '../model/fields'
+import type { Tool } from '../model/shortcuts'
 import { useFieldReason } from '../model/use-field-reason'
 import { FieldIcon } from './palette-icons'
-import { CaptionKey } from './palette-keys'
+import { PaletteKey } from './palette-keys'
 
-/**
- * The fields the palette opens (ADR 0114): the words and the fingers. The chord symbols' field is
- * opened by a tap on the chord row or Cmd or Ctrl with K, so it has no key.
- */
-type Kind = Exclude<SheetField['kind'], 'chord'>
+type Kind = SheetField['kind']
 
-/** Each field's key: its name and its picture. */
+/** Each field's key: its name, its picture and its shortcut (Flat's ⌘L, ⌘K). */
 const KEYS = {
-  lyrics: { label: 'lyrics.label', picture: <WholeWord /> },
-  fingering: { label: 'fingering', picture: <FieldIcon field="fingering" /> },
-} as const satisfies Readonly<Record<Kind, { label: string; picture: ReactNode }>>
+  lyrics: { label: 'lyrics.label', picture: <MicVocal />, tool: 'lyrics' },
+  chord: { label: 'chord.symbol', picture: <FieldIcon field="chord" />, tool: 'chord' },
+  fingering: { label: 'fingering', picture: <FieldIcon field="fingering" />, tool: 'fingering' },
+} as const satisfies Readonly<Record<Kind, { label: string; picture: ReactNode; tool: Tool }>>
 
 /**
  * The palette's one key for a field typed where it is printed (ADR 0096): it opens the field at the
@@ -30,13 +28,16 @@ export function FieldKey({ field }: { field: Kind }) {
   const why = useFieldReason(field)
   const key = KEYS[field]
   return (
-    <CaptionKey
+    <PaletteKey
       label={t(key.label)}
+      tool={key.tool}
       reason={why}
       disabled={why !== undefined}
       onClick={() => view.openField(fieldOf(field))}
     >
-      {key.picture}
-    </CaptionKey>
+      <span aria-hidden className="grid size-7 place-items-center [&_svg]:size-6">
+        {key.picture}
+      </span>
+    </PaletteKey>
   )
 }

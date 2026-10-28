@@ -17,7 +17,7 @@ import {
 import type { TimedMusic } from '@/shared/lib/notation'
 import { scaleRun, type Hands } from '@/shared/lib/schedule'
 import type { ShownKeys } from '@/shared/ui'
-import type { ScaleView } from './scale-view'
+import type { RunKeyShow, ScaleView } from './scale-view'
 
 /** Scale view's run: its keys from the start note, how it is fingered, and the run as it plays and is written. */
 interface ScaleRun {
@@ -76,20 +76,22 @@ export function scaleRunOf(
 }
 
 /**
- * The keys a run shows: every key it plays, the playing hand's (the right hand's when both play)
- * marked by degree with that hand's fingers, where that hand plays them (the left an octave down).
- * The keys coming down are marked too: melodic minor's natural 6th and 7th are no blank keys.
+ * The keys a run shows: every key it plays, marked by degree, with a hand's fingers where `show` names
+ * a hand, where that hand plays them (the left an octave down where both hands play); its notes alone,
+ * the playing hand's place, where `show` is notes. The keys coming down are marked too: melodic
+ * minor's natural 6th and 7th are no blank keys.
  */
-export function runShown(run: ScaleRun, hands: Hands): ShownKeys {
-  const hand: Hand = hands === 'lh' ? 'lh' : 'rh'
-  const octave = hand === 'lh' ? -12 : 0
+export function runShown(run: ScaleRun, hands: Hands, show: RunKeyShow): ShownKeys {
+  const hand: Hand = show === 'notes' ? (hands === 'lh' ? 'lh' : 'rh') : show
+  const octave = hand === 'lh' && hands !== 'rh' ? -12 : 0
   const played = (notes: readonly PlacedTone[]) =>
     notes.map((note) => ({ ...note, midi: midi(note.midi + octave) }))
+  const fingers = (of: ScaleRun['fingers']) => (show === 'notes' ? undefined : of[hand])
   return {
     keys: run.music.notes.map((note) => note.midi),
     marks: new Map([
-      ...scaleShown(played(run.down.placed), run.down.fingers[hand]).marks,
-      ...scaleShown(played(run.placed), run.fingers[hand]).marks,
+      ...scaleShown(played(run.down.placed), fingers(run.down.fingers)).marks,
+      ...scaleShown(played(run.placed), fingers(run.fingers)).marks,
     ]),
   }
 }

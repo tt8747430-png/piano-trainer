@@ -119,34 +119,18 @@ const CATEGORY_ICONS: Readonly<Record<PaletteCategory, ReactNode>> = {
       />
     </Icon>
   ),
-  // A dynamic over a crescendo's hairpin.
+  // A dynamic as printed: ppp, Flat's dynamics' picture.
   dynamics: (
     <Icon>
-      <Word text="mf" y={11} size={11} italic />
-      <path d="M3 16 L21 19 M3 16 L21 13" />
+      <Word text="ppp" y={16} size={11} italic />
     </Icon>
   ),
-  // A slur over two notes.
-  lines: (
+  // A turn, Flat's ornaments' picture: the S on its side as a score prints it.
+  ornaments: (
     <Icon>
-      <path d="M4 12 C8 4 16 4 20 12" />
-      <ellipse
-        cx="5"
-        cy="17"
-        rx="3.4"
-        ry="2.4"
-        transform="rotate(-20 5 17)"
-        fill="currentColor"
-        stroke="none"
-      />
-      <ellipse
-        cx="19"
-        cy="17"
-        rx="3.4"
-        ry="2.4"
-        transform="rotate(-20 19 17)"
-        fill="currentColor"
-        stroke="none"
+      <path
+        d="M3.5 14.5C3.5 10 8 8.5 10.5 11.5L13.5 15C16 18 20.5 16 20.5 11.5C20.5 8.5 17.5 7.5 16 9.5M3.5 14.5C3.5 16.5 6 17.5 8 14.5"
+        strokeWidth="2"
       />
     </Icon>
   ),
@@ -193,10 +177,10 @@ const CATEGORY_ICONS: Readonly<Record<PaletteCategory, ReactNode>> = {
       <circle cx="10" cy="13.5" r="1.3" fill="currentColor" stroke="none" />
     </Icon>
   ),
-  // Expression text as printed: italic words over the notes.
+  // Text, Flat's Aa: the chord symbols, the lyrics and the words over the notes.
   text: (
     <Icon>
-      <Word text="espr." y={16} size={10.5} italic />
+      <Word text="Aa" y={17} size={13} />
     </Icon>
   ),
 }
@@ -206,8 +190,15 @@ export function CategoryIcon({ category }: { category: PaletteCategory }) {
   return CATEGORY_ICONS[category]
 }
 
-/** The picture of the key that opens the fingering's field (ADR 0096), drawn as it prints. */
+/** The pictures of the keys that open a field (ADR 0096), drawn as what they write prints. */
 const FIELD_ICONS = {
+  // A chord symbol in a box, Flat's chord key.
+  chord: (
+    <Icon>
+      <rect x="2.5" y="4" width="19" height="16" rx="2.5" strokeWidth="1.5" />
+      <Word text="C7" y={16} size={10} />
+    </Icon>
+  ),
   // A note with its finger's number over it.
   fingering: (
     <Icon>
@@ -225,7 +216,7 @@ const FIELD_ICONS = {
   ),
 } as const
 
-/** The picture of a field's key: a finger's. */
+/** The picture of a field's key: a chord symbol's, a finger's. */
 export function FieldIcon({ field }: { field: keyof typeof FIELD_ICONS }) {
   return FIELD_ICONS[field]
 }
@@ -314,7 +305,30 @@ export function CodaSign() {
 
 /** A slur or an octave line's picture: a slur's arc, a hairpin, 8va over its dashed line. */
 const LINE_ICONS = {
-  slur: CATEGORY_ICONS.lines,
+  // A slur over two notes.
+  slur: (
+    <Icon>
+      <path d="M4 12 C8 4 16 4 20 12" />
+      <ellipse
+        cx="5"
+        cy="17"
+        rx="3.4"
+        ry="2.4"
+        transform="rotate(-20 5 17)"
+        fill="currentColor"
+        stroke="none"
+      />
+      <ellipse
+        cx="19"
+        cy="17"
+        rx="3.4"
+        ry="2.4"
+        transform="rotate(-20 19 17)"
+        fill="currentColor"
+        stroke="none"
+      />
+    </Icon>
+  ),
   cresc: (
     <Icon>
       <path d="M21 7 L3 12 L21 17" strokeWidth="2" />

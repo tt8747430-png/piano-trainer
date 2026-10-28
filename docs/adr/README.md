@@ -26,6 +26,6 @@ citation still leads to the right one (`git log -- docs/adr` reads the old recor
 | [0028](0028-takes.md)                       | Takes                                              | recording from a MIDI keyboard                |
 | [0111](0111-learning-a-song.md)             | Learning a song                                    | a song's page, its sections' lessons          |
 | [0106](0106-the-song-library.md)            | The song library                                   | folders, Move, the archive, search            |
-| [0107](0107-share-print-export.md)          | Share, print, export                               | links, Print, MIDI files                      |
+| [0107](0107-share-print-export.md)          | Share, print, export, import                       | links, Print, MIDI and MusicXML files         |
 | [0053](0053-learn.md)                       | Learn                                              | journeys, courses, lessons                    |
 | [0052](0052-practice-and-search.md)         | Three places, Practice and Search                  | navigation, Practice's pages, the Metronome   |

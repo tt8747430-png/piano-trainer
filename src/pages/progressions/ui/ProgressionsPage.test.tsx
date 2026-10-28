@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -19,6 +19,19 @@ const row = () =>
 /** The row once engraved: a staff takes a while under a full run. */
 const rowIs = (chords: readonly string[]) =>
   waitFor(() => expect(row()).toEqual(chords), { timeout: 5000 })
+/** A library card, by its progression's name. */
+const card = (name: string) => screen.getByRole('article', { name })
+/** A card's own button, which shows its progression at the top of the page. */
+const chooseButton = (name: string) => within(card(name)).getAllByRole('button')[0] ?? card(name)
+const findChooseButton = async (name: string) => {
+  await screen.findByRole('article', { name })
+  return chooseButton(name)
+}
+/** A card's chips: each numeral over its chord. */
+const chips = (of: HTMLElement) =>
+  within(within(of).getByRole('list'))
+    .getAllByRole('listitem')
+    .map((chip) => chip.textContent)
 const onsets = (sounds: readonly Sound[] = []) =>
   new Set(sounds.flatMap((sound) => (sound.kind === 'note' ? [sound.at] : []))).size
 
@@ -134,20 +147,23 @@ describe('Practice → Progressions', () => {
     await rowIs(['Dm7ii7', 'G7V7', 'CMaj7IMaj7'])
   })
 
-  it('names the library’s progression it shows, and takes another from the pop-up by style', async () => {
+  it('names the library’s progression it shows and how it sounds, and takes another from its card', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions')
-    const choice = await screen.findByRole('combobox', { name: 'Progression' })
-    expect(choice).toHaveTextContent('Axis of Awesome')
-    await user.click(choice)
-    const blues = await screen.findByRole('group', { name: 'Blues' })
-    await user.click(within(blues).getByRole('option', { name: /^12-bar blues/ }))
+    expect(
+      await screen.findByRole('heading', { level: 2, name: 'Axis of Awesome' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Axis of Awesome' }).nextElementSibling,
+    ).toHaveTextContent('Bright and singable, the sound of a thousand hits')
+    await user.click(chooseButton('12-bar blues'))
     await waitFor(() =>
       expect(router.state.location.search).toMatchObject({
         p: expect.stringMatching(/^I7-I7-I7-I7-IV7/),
       }),
     )
-    expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('12-bar blues')
+    expect(screen.getByRole('heading', { level: 2, name: '12-bar blues' })).toBeInTheDocument()
+    expect(card('12-bar blues')).toHaveAttribute('aria-current', 'true')
     expect(
       screen.getByText(
         'The most common blues form: twelve bars of I7, IV7 and V7. Try the blues scale on top.',
@@ -155,15 +171,49 @@ describe('Practice → Progressions', () => {
     ).toBeInTheDocument()
   })
 
+  it('lists the library as cards by style: numerals, name and chord count, each chord under its numeral', async () => {
+    await renderApp('/practice/progressions')
+    const jazz = await screen.findByRole('region', { name: 'Jazz' })
+    const cadence = within(jazz).getByRole('article', { name: 'Jazz cadence' })
+    expect(within(cadence).getByRole('button', { name: /^ii – V – I/ })).toHaveTextContent(
+      'Jazz cadence · 3 chords',
+    )
+    expect(chips(cadence)).toEqual(['iiDm7', 'VG7', 'ICMaj7'])
+    expect(cadence).toHaveTextContent('Smooth and certain, jazz’s way home')
+  })
+
+  it('re-spells every card in the key and mode chosen above them', async () => {
+    const user = userEvent.setup()
+    await renderApp('/practice/progressions')
+    const key = await screen.findByRole('group', { name: 'Key' })
+    await user.click(within(key).getByRole('radio', { name: 'G' }))
+    await waitFor(() => expect(chips(card('Axis of Awesome'))).toEqual(['IG', 'VD', 'viEm', 'IVC']))
+    await user.click(within(key).getByRole('radio', { name: 'Minor' }))
+    await waitFor(() =>
+      expect(chips(card('Axis of Awesome'))).toEqual(['iGm', 'VIE♭', 'IIIB♭', 'VIIF']),
+    )
+  })
+
+  it('plays a card in place, its sounding chord lit, without choosing it', async () => {
+    const user = userEvent.setup()
+    const { router, audio } = await renderApp('/practice/progressions')
+    const blues = await screen.findByRole('article', { name: 'Blues turnaround' })
+    await user.click(within(blues).getByRole('button', { name: 'Play' }))
+    expect(onsets(audio.played.at(-1)?.sounds)).toBe(4)
+    expect(router.state.location.search).toEqual({})
+    act(() => audio.setNow(0.5))
+    expect(within(blues).getByRole('listitem', { current: true })).toHaveTextContent('I7C7')
+    act(() => audio.setNow(2))
+    expect(within(blues).getByRole('listitem', { current: true })).toHaveTextContent('IV7F7')
+    expect(within(blues).getByRole('button', { name: 'Stop' })).toBeInTheDocument()
+  })
+
   it('keeps the progression chosen while the key turns minor and major again', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions')
-    await user.click(await screen.findByRole('combobox', { name: 'Progression' }))
-    await user.click(await screen.findByRole('option', { name: /^12-bar blues/ }))
+    await user.click(await findChooseButton('12-bar blues'))
     await waitFor(() =>
-      expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent(
-        '12-bar blues',
-      ),
+      expect(screen.getByRole('heading', { level: 2, name: '12-bar blues' })).toBeInTheDocument(),
     )
     const mode = within(screen.getByRole('radiogroup', { name: 'Major or minor' }))
     await user.click(mode.getByRole('radio', { name: 'Minor' }))
@@ -173,12 +223,12 @@ describe('Practice → Progressions', () => {
     expect(router.state.location.search).toMatchObject({
       p: expect.stringMatching(/^I7-I7-I7-I7-IV7/),
     })
-    expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('12-bar blues')
+    expect(screen.getByRole('heading', { level: 2, name: '12-bar blues' })).toBeInTheDocument()
   })
 
-  it('offers no row that chooses in place: the library is one pop-up, never a list of links', async () => {
+  it('offers no row that chooses by a link: a card chooses in place', async () => {
     await renderApp('/practice/progressions')
-    await screen.findByRole('combobox', { name: 'Progression' })
+    await screen.findByRole('article', { name: 'Axis of Awesome' })
     const links = within(screen.getByRole('main'))
       .getAllByRole('link')
       .map((link) => link.getAttribute('href') ?? '')
@@ -188,10 +238,9 @@ describe('Practice → Progressions', () => {
   it('takes a progression in the key’s mode, at its own chord size: in A minor the minor ii–V–i', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions?key=Am')
-    await user.click(await screen.findByRole('combobox', { name: 'Progression' }))
-    const jazz = within(await screen.findByRole('group', { name: 'Jazz' }))
-    expect(jazz.getByRole('option', { name: /^Jazz cadence/ })).toHaveTextContent('ii°–V–i')
-    await user.click(jazz.getByRole('option', { name: /^Jazz cadence/ }))
+    const cadence = await screen.findByRole('article', { name: 'Jazz cadence' })
+    expect(cadence).toHaveTextContent('ii° – V – i')
+    await user.click(chooseButton('Jazz cadence'))
     await waitFor(() =>
       expect(router.state.location.search).toEqual({
         key: 'Am',
@@ -205,8 +254,7 @@ describe('Practice → Progressions', () => {
   it('takes a progression of one mode in the key of the same tonic and that mode', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions?key=A')
-    await user.click(await screen.findByRole('combobox', { name: 'Progression' }))
-    await user.click(await screen.findByRole('option', { name: /^Andalusian cadence/ }))
+    await user.click(await findChooseButton('Andalusian cadence'))
     await waitFor(() =>
       expect(router.state.location.search).toEqual({ key: 'Am', p: 'i-VII-VI-V' }),
     )
@@ -225,13 +273,13 @@ describe('Practice → Progressions', () => {
         size: 'sevenths',
       }),
     )
-    expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('Jazz cadence')
+    expect(screen.getByRole('heading', { level: 2, name: 'Jazz cadence' })).toBeInTheDocument()
     await rowIs(['Dm7♭5ii°', 'G7V', 'Cm7i'])
     await user.click(mode.getByRole('radio', { name: 'Major' }))
     await waitFor(() =>
       expect(router.state.location.search).toEqual({ p: 'ii-V-I', size: 'sevenths' }),
     )
-    expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('Jazz cadence')
+    expect(screen.getByRole('heading', { level: 2, name: 'Jazz cadence' })).toBeInTheDocument()
     await rowIs(['Dm7ii', 'G7V', 'CMaj7I'])
   })
 
@@ -255,36 +303,33 @@ describe('Practice → Progressions', () => {
     await renderApp('/practice/progressions?p=I-ii-iii-IV-V-vi-vii°&size=sevenths')
     const lead = within(await screen.findByRole('radiogroup', { name: 'Lead into each chord' }))
     await user.click(lead.getByRole('radio', { name: 'By its V' }))
-    expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent(
-      'The chords of the key',
-    )
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'The chords of the key' }),
+    ).toBeInTheDocument()
     expect(row().slice(0, 6)).toEqual(['G7V', 'CMaj7I', 'A7V/ii', 'Dm7ii', 'B7V/iii', 'Em7iii'])
   })
 
   it('lists each progression once, never again for the minor key', async () => {
-    const user = userEvent.setup()
     await renderApp('/practice/progressions')
-    await user.click(await screen.findByRole('combobox', { name: 'Progression' }))
-    const names = (await screen.findAllByRole('option')).map((option) => option.textContent)
-    expect(names.filter((name) => name?.startsWith('Jazz cadence'))).toHaveLength(1)
-    expect(screen.queryByRole('group', { name: 'Minor keys' })).not.toBeInTheDocument()
+    await screen.findByRole('article', { name: 'Jazz cadence' })
+    expect(screen.getAllByRole('article', { name: 'Jazz cadence' })).toHaveLength(1)
+    expect(screen.queryByRole('region', { name: 'Minor keys' })).not.toBeInTheDocument()
   })
 
-  it('takes a library progression in place of a typed line, and closes its pop-up', async () => {
+  it('takes a library progression in place of a typed line', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/progressions?p=I-I-IV')
-    await user.click(await screen.findByRole('combobox', { name: 'Progression' }))
-    await user.click(await screen.findByRole('option', { name: /^Jazz cadence/ }))
+    await user.click(await findChooseButton('Jazz cadence'))
     await waitFor(() =>
       expect(router.state.location.search).toEqual({ p: 'ii-V-I', size: 'sevenths' }),
     )
-    expect(screen.getByRole('combobox', { name: 'Progression' })).toHaveTextContent('Jazz cadence')
-    await waitFor(() => expect(screen.queryByRole('listbox')).not.toBeInTheDocument())
+    expect(screen.getByRole('heading', { level: 2, name: 'Jazz cadence' })).toBeInTheDocument()
   })
 
-  it('says a typed line is the learner’s own', async () => {
+  it('names a typed line by its numerals', async () => {
     await renderApp('/practice/progressions?p=I-I-IV')
-    expect(await screen.findByRole('combobox', { name: 'Progression' })).toHaveTextContent('I–I–IV')
+    expect(await screen.findByRole('heading', { level: 2, name: 'I–I–IV' })).toBeInTheDocument()
+    expect(screen.queryByRole('article', { current: true })).not.toBeInTheDocument()
   })
 
   it('opens the progression in the Player, in its key and chord size', async () => {
@@ -398,8 +443,7 @@ describe('Practice → Progressions', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice')
     await user.click(await screen.findByRole('link', { name: /^Progressions / }))
-    await user.click(await screen.findByRole('combobox', { name: 'Progression' }))
-    await user.click(await screen.findByRole('option', { name: /^12-bar blues/ }))
+    await user.click(await findChooseButton('12-bar blues'))
     await waitFor(() =>
       expect(router.state.location.search).toMatchObject({ p: expect.stringMatching(/^I7/) }),
     )

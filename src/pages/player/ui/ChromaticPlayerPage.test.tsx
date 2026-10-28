@@ -72,10 +72,7 @@ describe('The chromatic walk in the Player', () => {
     await user.click(await screen.findByRole('radio', { name: 'Up and down' }))
     expect(router.state.location.search).toMatchObject({ direction: 'both' })
     await user.click(
-      within(screen.getByRole('group', { name: 'Root' })).getByRole('radio', { name: 'A' }),
-    )
-    await user.click(
-      within(screen.getByRole('group', { name: 'Root' })).getByRole('radio', { name: 'Flat' }),
+      within(screen.getByRole('group', { name: 'Root' })).getByRole('radio', { name: 'A♭' }),
     )
     expect(router.state.location.search).toMatchObject({ root: 'Ab' })
   })

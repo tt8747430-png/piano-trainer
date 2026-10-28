@@ -6,4 +6,6 @@ export interface ChordFinderView {
   readonly keys: string
   /** The key the notes and the chords' names are spelled in. */
   readonly key: KeyParam
+  /** The key's scale painted on every octave of the keys, as the reference app's Show scale. */
+  readonly scale?: true
 }

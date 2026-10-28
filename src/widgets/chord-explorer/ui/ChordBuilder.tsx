@@ -15,7 +15,14 @@ import {
   type Triad,
 } from '@/shared/lib/music'
 import { partsFromParams, partsParams } from '@/shared/lib'
-import { InversionChoice, Labelled, NoteChoice, Segmented, ToggleChips } from '@/shared/ui'
+import {
+  InversionChoice,
+  Labelled,
+  NoteChoice,
+  Segmented,
+  StepStrip,
+  ToggleChips,
+} from '@/shared/ui'
 import { isSuspended, takesTwoHands, type ChordView } from '../model/chord-view'
 import { RightHandFrom } from './RightHandFrom'
 
@@ -82,13 +89,12 @@ export function ChordBuilder({
         />
       </div>
       <Labelled label={t('practice:chords.builder.quality')}>
-        <Segmented
+        <StepStrip
           label={t('practice:chords.builder.quality')}
           value={quality}
           options={QUALITIES.map((each) => ({
             value: each,
-            label: t(`practice:chords.builder.triadShort.${each}`),
-            title: t(`practice:chords.builder.triads.${each}`),
+            label: t(`practice:chords.builder.triads.${each}`),
           }))}
           onChange={(next) => onChange({ triad: next })}
         />

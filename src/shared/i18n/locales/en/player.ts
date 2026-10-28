@@ -20,6 +20,7 @@ export const player = {
   exportMidi: 'Export to MIDI',
   exportMidiFixed: 'Export to MIDI, fixed tempo',
   exportMidiAligned: 'Export to MIDI, time aligned',
+  exportMusicXml: 'Export to MusicXML',
   /** A piece's score in its two modes, the Player and the score editor (ADR 0115). */
   mode: { label: 'Practise or edit', practise: 'Practise', edit: 'Edit' },
   // The Player's views of the music (ADR 0108), the View's tiles; each names its own part of the

@@ -22,6 +22,11 @@ use one.
     from the chords alone (`keysOfChords`); a chord out of the key is named, not refused (`V/iv`, `♭VII`); playing
     them in another key keeps their letters and basses;
   - **Between** (`?between=&inKey=`): the passing chords between two chords of its row.
+- **The library is a list of cards** under the key's strip and Major · Minor, style by style, as the reference app
+  lists its progressions: a card's title its numerals, then its name and chord count, how it sounds in one line
+  (`character`, both languages), and a chip a chord, the numeral over the chord in the key shown, so the key
+  re-spells every card. Its Play plays it in place, the sounding chip lit; a tap elsewhere on it shows it at the
+  top of the page, named over its character. No pop-up chooses a progression.
 - **The row's chips** name each chord's harmonic function (T S D, coloured as DESIGN.md's Harmony says) or, with
   `?harmony=motion`, how each root moves to the next (`↓5 ↓3 ↑2`, the strong moves coloured, with their legend). The
   kernel reads both (`harmonicFunction`, `rootMove`): a chord's function by its degree in the key (borrowed and applied
@@ -54,4 +59,5 @@ is saved: views remember numerals, and the Player's `bar` and `loop` open a piec
 - 0041 — One idea in both modes; a lead-in is a way to play it (2026-10-13).
 - 0045 — Transpose reads a song's chords in their key (2026-10-14), now the page's typed line.
 - 0112 — A progression's songs, and a song's progressions (2026-10-27).
-- Round 13 — Function and root-motion chips under the row (2026-10-28).
+- r13 — The library as cards that play in place, each with its character (2026-10-28).
+- r13 — Function and root-motion chips under the row (2026-10-28).

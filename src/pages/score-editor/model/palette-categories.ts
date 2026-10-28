@@ -3,19 +3,19 @@ import { isOneOf } from '@/shared/lib'
 import type { BarMarkChoice } from '@/features/score-editor'
 
 /**
- * The palette's categories, one palette for every tool as Flat's is, each acting on
- * what is chosen: the notes' values and rhythm, their pitch, their marks and dynamics with the
- * hairpins, the slurs and octave lines; the bars chosen (added, removed, broken, their length, written
- * out), their clef, the song's key and time signature, barlines and repeats; text and the pedal. What
- * is typed where it prints (ADR 0096) and opened by no tap on the sheet is a key among its kin: the
- * lyrics in Text & pedal, the fingering in Articulations (ADR 0114).
+ * The palette's categories in Flat's order (ADR 0114), one palette for every tool, each acting on what
+ * is chosen: the notes (the editing modes, the values and rhythm, the accidentals), their pitch and
+ * octave lines, articulations with the slur and the fingering, ornaments, dynamics with the hairpins
+ * and the pedal; the bars chosen (added, removed, broken, their length), their clef, the song's key
+ * and time signature, barlines and repeats; text: the chord symbols, the lyrics and the expression
+ * words. What is typed where it prints (ADR 0096) has its key among its kin.
  */
 export const PALETTE_CATEGORIES = [
   'notes',
   'pitch',
   'articulations',
+  'ornaments',
   'dynamics',
-  'lines',
   'bar',
   'clef',
   'key',
@@ -36,7 +36,13 @@ export const categoryOpen = (category: PaletteCategory, layer: Layer): boolean =
   ANY_ROW.includes(category) || layer !== 'chords'
 
 /** The categories whose tools act on notes chosen: greyed while none is. */
-const ON_NOTES: readonly PaletteCategory[] = ['pitch', 'articulations', 'dynamics', 'lines', 'text']
+const ON_NOTES: readonly PaletteCategory[] = [
+  'pitch',
+  'articulations',
+  'ornaments',
+  'dynamics',
+  'text',
+]
 
 /**
  * Why a category's tools are greyed (ADR 0096: each greyed key says it in its tooltip, its section

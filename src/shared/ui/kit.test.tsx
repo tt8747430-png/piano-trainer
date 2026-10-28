@@ -570,26 +570,50 @@ describe('ToggleChips', () => {
 })
 
 describe('NoteChoice', () => {
-  it('chooses a letter and an accidental apart, writing the note as chosen', async () => {
+  it('chooses a note from a strip of its spellings, both of a black key side by side', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
-    const { rerender } = render(
-      <NoteChoice label="Root" value={noteParam(note('D'))} onChange={onChange} />,
-    )
+    render(<NoteChoice label="Root" value={noteParam(note('D'))} onChange={onChange} />)
     const root = screen.getByRole('group', { name: 'Root' })
     expect(
       within(root)
         .getAllByRole('radio')
         .map((each) => each.textContent),
-    ).toEqual([...['C', 'D', 'E', 'F', 'G', 'A', 'B'], ...['♮', '#', '♭']])
-    await user.click(within(root).getByRole('radio', { name: 'Flat' }))
+    ).toEqual([
+      'C',
+      'C#',
+      'D♭',
+      'D',
+      'D#',
+      'E♭',
+      'E',
+      'F',
+      'F#',
+      'G♭',
+      'G',
+      'G#',
+      'A♭',
+      'A',
+      'A#',
+      'B♭',
+      'B',
+    ])
+    expect(within(root).getByRole('radio', { name: 'D' })).toBeChecked()
+    await user.click(within(root).getByRole('radio', { name: 'D♭' }))
     expect(onChange).toHaveBeenLastCalledWith(noteParam(note('D', -1)))
-    rerender(<NoteChoice label="Root" value={noteParam(note('D', -1))} onChange={onChange} />)
-    await user.click(within(root).getByRole('radio', { name: 'A' }))
-    expect(onChange).toHaveBeenLastCalledWith(noteParam(note('A', -1)))
   })
 
-  it('offers only the accidentals a letter may take, natural where the one chosen is not', async () => {
+  it('steps along the strip with ‹ and ›', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(<NoteChoice label="Root" value={noteParam(note('D'))} onChange={onChange} />)
+    await user.click(screen.getByRole('button', { name: 'Next: Root' }))
+    expect(onChange).toHaveBeenLastCalledWith(noteParam(note('D', 1)))
+    await user.click(screen.getByRole('button', { name: 'Previous: Root' }))
+    expect(onChange).toHaveBeenLastCalledWith(noteParam(note('D', -1)))
+  })
+
+  it('offers only the spellings a key may take', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
     render(
@@ -602,12 +626,10 @@ describe('NoteChoice', () => {
       />,
     )
     const key = screen.getByRole('group', { name: 'Key' })
-    expect(within(key).queryByRole('radio', { name: 'Flat' })).not.toBeInTheDocument()
+    expect(within(key).queryByRole('radio', { name: 'D♭' })).not.toBeInTheDocument()
     expect(screen.getByText('C# minor')).toBeInTheDocument()
-    await user.click(within(key).getByRole('radio', { name: 'D' }))
+    await user.click(within(key).getByRole('radio', { name: 'D#' }))
     expect(onChange).toHaveBeenLastCalledWith(noteParam(note('D', 1)))
-    await user.click(within(key).getByRole('radio', { name: 'F' }))
-    expect(onChange).toHaveBeenLastCalledWith(noteParam(note('F', 1)))
   })
 })
 
@@ -621,8 +643,9 @@ describe('KeyChoice', () => {
     const key = screen.getByRole('group', { name: 'Key' })
     expect(screen.getByText('D♭ major')).toBeInTheDocument()
     expect(within(key).getByRole('radio', { name: 'Major' })).toBeChecked()
-    expect(within(key).queryByRole('radio', { name: 'Sharp' })).not.toBeInTheDocument()
-    await user.click(within(key).getByRole('radio', { name: 'E' }))
+    expect(within(key).getByRole('radio', { name: 'D♭' })).toBeChecked()
+    expect(within(key).queryByRole('radio', { name: 'D#' })).not.toBeInTheDocument()
+    await user.click(within(key).getByRole('radio', { name: 'E♭' }))
     expect(onChange).toHaveBeenLastCalledWith(keyParam({ tonic: note('E', -1), minor: false }))
   })
 

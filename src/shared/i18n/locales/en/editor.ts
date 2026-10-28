@@ -18,27 +18,32 @@ export const editor = {
     preview: 'Preview',
     apply: 'Transpose',
   },
-  // The one palette (ADR 0114): folded, one row of every tool, scrolling sideways; opened, every
-  // category's section stacked over the bar of categories.
+  // The one palette (ADR 0114, Flat's): on a laptop a panel docked at the sheet's left, its sections
+  // folding; on a phone a sheet docked at its foot, compact (the quick row and the categories) or
+  // expanded (every section, as keys or a list of names). The note-entry toolbar over the sheet.
   palette: {
     label: 'Tools',
-    row: 'Every tool',
+    toolbar: 'Note entry',
     open: 'Show every tool',
     close: 'Show fewer tools',
+    hide: 'Hide the tools',
+    show: 'Show the tools',
+    list: 'Show the tools’ names',
+    grid: 'Show the tools as keys',
     categories: 'Kinds of tools',
     keys: 'Keys',
     category: {
       notes: 'Notes',
       pitch: 'Pitch',
       articulations: 'Articulations',
-      dynamics: 'Dynamics & hairpins',
-      lines: 'Slurs & lines',
+      ornaments: 'Ornaments',
+      dynamics: 'Dynamics',
       bar: 'Bar',
       clef: 'Clef',
       key: 'Key signature',
       time: 'Time signature',
       repeats: 'Barlines & repeats',
-      text: 'Text & pedal',
+      text: 'Text',
     },
   },
   // Why a category's tools are greyed: each greyed key's tooltip, and its section's ⓘ (ADR 0096).
@@ -180,6 +185,9 @@ export const editor = {
   },
   // The time signature picker (ADR 0114): its wheels, its pickup, the C or ¢ for its figures.
   time: {
+    // The section's tiles, Flat's: the common meters, then the picker for any other.
+    set: 'Time signature {{time}}',
+    other: 'Another time signature',
     current: 'Current',
     beat: 'Beat',
     beatType: 'Beat type',
@@ -281,6 +289,7 @@ export const editor = {
   },
   dot: 'Dotted',
   doubleDot: 'Double dotted',
+  grace: 'Grace note',
   // A note's marks (ADR 0097), each a key that puts it on the notes at the caret or takes it off.
   marks: {
     staccato: 'Staccato',
@@ -348,6 +357,15 @@ export const editor = {
     suggested: 'Suggested chords',
     invalid: 'Chord not recognised',
     delete: 'Delete chord',
+    // The chord wizard beside the field (Flat's): a root, a quality, a bass, built into the symbol.
+    wizard: 'Chord wizard',
+    root: 'Root',
+    accidental: 'Root’s accidental',
+    kind: 'Kind of chord',
+    quality: 'Chord',
+    bass: 'Bass',
+    rootBass: 'Root',
+    add: 'Add',
   },
   bars: {
     insert: 'Add bar after',
@@ -449,6 +467,20 @@ export const editor = {
     value: 'A note value, whole to 32nd',
     dot: 'Dotted',
     rest: 'A rest',
+    grace: 'A grace note',
+    accidentals: 'Natural, sharp, flat',
+    respell: 'Respell',
+    tie: 'Tie',
+    triplet: 'Triplet',
+    slur: 'Slur',
+    hairpins: 'Crescendo, diminuendo',
+    octaveLines: '8va, 8vb',
+    trill: 'Trill',
+    pedal: 'Pedal',
+    barAfter: 'Add a bar after',
+    barDelete: 'Delete the bars',
+    newLine: 'Start a new line',
+    repeats: 'Start repeat, end repeat',
     mode: 'Replace, Insert or Chord: the next mode',
     step: 'Move the caret',
     bar: 'A bar back or forward',

@@ -1,6 +1,6 @@
 # ADR 0114 — The score editor edits a score as notation software does, on what is chosen and where it is printed
 
-- **Status:** accepted · **Date:** 2026-10-01 · consolidated 2026-10-27
+- **Status:** accepted · **Date:** 2026-10-01 · consolidated 2026-10-27 · amended 2026-10-28
 
 ## Context
 
@@ -41,20 +41,43 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   - a staff's name, opening its menu: Rename, Add a staff over or under, Remove (its notes with it; Undo brings them
     back), Hide or Show the piano. The last staff in sight is never removed or hidden;
   - chord symbols, words and fingers, typed in one field floating where they print (`SheetField`): a chord symbol over
-    the staff at the caret's beat (Cmd or Ctrl with K, or a tap on the chord row), the key's chords suggested as one
-    types, Enter or → writing it and moving a beat on; a syllable under the note (Cmd or Ctrl with L), Space or Enter
+    the staff at the caret's beat (Cmd or Ctrl with K, Text's key, or a tap on the chord row), the key's chords
+    suggested as one types, or built in the chord wizard beside the field (Flat's: the root's letter and accidental,
+    the kind of chord and the chord, the bass as the root or a chord tone), Enter, Add or → writing it and moving a
+    beat on; a syllable under the note (Cmd or Ctrl with L), Space or Enter
     going on, `-` and `_` their marks, ↓ ↑ the verses; the fingers over the note (Shift with F), a chord's bottom up.
     A field is greyed while the View hides what it writes.
-- **One palette** on the selection (`EditorTools`), a card floating over the sheet: at the foot on a phone held upright
-  and a tablet, beside the sheet at its right on a laptop and a phone on its side. Folded, it is one row of every tool,
-  grouped by category with a hairline between, scrolling sideways, one Tab stop with the arrows along it; opened, the
-  bar of categories (Notes · Pitch · Articulations · Dynamics & hairpins · Slurs & lines · Bar · Clef · Key signature ·
-  Time signature · Barlines & repeats · Text & pedal) over every section stacked. Its fold is kept by place
-  (`paletteFolded`), open beside the sheet and folded at the foot until the learner chooses; a grab handle opens and
-  folds it. A key is its picture, named in its tooltip; a term's meaning is its tooltip.
-- **Nothing twice.** The palette holds what no tap on the sheet does: a clef, key or time change at a bar that prints
-  none, the Lyrics key for a song with no words yet, the Fingering key, and the Bar keys (add before or after, delete,
-  line break, join, new section, bar length). A chord symbol is opened from the chord row, not the palette.
+- **One palette** on the selection, docked as Flat's and never floating over the music (`EditorPalette`, one tree
+  for every size):
+  - **A panel** at the sheet's left where the screen is 48rem across (`usePalettePanel`: a laptop at any window size,
+    a tablet, a phone on its side, whose height is too short for a sheet at the foot; width decides, not the pointer).
+    Its sections fold as an accordion, several open at once, the Notes and Pitch open first; « hides it whole, the
+    sheet taking its room, and the toolbar's first key shows it again.
+  - **The note-entry toolbar** over the sheet beside it, Flat's quick toolbar: ♮ ♯ ♭ and Respell, the values whole to
+    32nd, Dotted, Double dotted, Tie, Triplet and Rest, in a sand pill; the Keys toggle at its end. It scrolls sideways
+    where the room is short.
+  - **A sheet** docked at the foot on a phone held upright, shrinking the sheet rather than covering it. Compact, as it
+    opens: the same everyday tools as a quick row over the bar of categories. Expanded (its ⏏, a category tapped, or
+    its grab handle dragged up): every section stacked and scrolling, the bar following them; its keys a table, or a
+    list naming each (list mode). The keys stand where the sections would: expanded, it folds them; with them shown,
+    it stays compact. While it is expanded the transport steps aside. A field typed in (a chord symbol, the lyrics,
+    the fingering) swaps the sheet for a slim bar over the phone's own keyboard (`FieldDocked`).
+  - **Sections in Flat's order:** Notes (the editing modes; on the sheet the everyday tools too) · Pitch (steps,
+    semitones, octaves, the grace note, 8va and 8vb) · Articulations (with the slur and the fingering) · Ornaments ·
+    Dynamics (with the hairpins and the pedal) · Bar · Clef · Key signature · Time signature (the common meters as
+    tiles, C and ¢ among them, then Another opening the picker) · Barlines & repeats · Text (the Lyrics and the chord
+    symbol's keys, then the expression words).
+  - **Keys** are Flat's: square cells of a bordered table, 44px at the least, empty cells left blank; pressed, a sky
+    glyph on a sky wash (as the pickers' cells); greyed, faded, the tooltip saying why. A tooltip is the key's name
+    then its shortcut in brackets, as Flat's (`TOOL_SHORTCUTS`).
+  - Whether the panel is hidden and the sheet compact is kept by place (`paletteFolded`: `panel`, `sheet`); the panel
+    shown and the sheet compact until the learner chooses.
+- **Flat's shortcuts** where the typing keys leave them free (`TOOL_SHORTCUTS`, one table for the keys, the tooltips
+  and the `?` sheet): 1–6 the values, 8 a rest, 9 a grace note, 0 = − ♮ ♯ ♭, the full stop a dot, the comma a tie,
+  Shift with 3 a triplet; a letter alone plays the piano, so Flat's J, S, T and P take Shift (Respell, a slur, a trill,
+  the pedal); Shift with < > the hairpins, Cmd or Ctrl with Shift and 8 or 9 the octave lines; Cmd or Ctrl with Shift
+  and Enter a bar after, with Backspace the bars deleted, with Enter a new line; [ ] the repeats.
+- **A grace note** (`grace`): an appoggiatura a step above in the key before each note chosen; again, it comes off.
 - **Sign pickers** (`SignPicker`): a sheet from the foot on a phone, a popover by the sign on a laptop, ✗ and ✓ at its
   foot (Escape and Enter), one Undo step.
   - **Time:** Current and Pickup, each drawn as it prints on faint staff lines, each figure a wheel. Within the
@@ -85,4 +108,6 @@ reader hears the caret's place in a polite live line (`CaretLine`).
 - 0092 — Editing modes and a clipboard on what is chosen (2026-10-24).
 - 0094 — The score edited where it is printed (2026-10-24). Its bar is ADR 0115's.
 - 0114 — One row of every tool; sign pickers; every meter, clef and tempo unit (2026-10-27).
+- 2026-10-28 — The palette docked as Flat's: a left panel, a note-entry toolbar and a phone sheet in place of the
+  floating card and its folded row; Flat's sections, keys and shortcuts; the chord wizard; the grace note.
 - The research note comparing Flat and Dorico (2026-10-23) and the editor's three design specs, deleted.

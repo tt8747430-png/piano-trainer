@@ -267,8 +267,16 @@ describe('search params', () => {
   })
 
   it('keep an interval’s root as written', async () => {
-    expect(await searchAt('/practice/intervals?root=C%23')).toEqual({ root: 'C#' })
+    expect(await searchAt('/practice/intervals?root=C%23')).toEqual({
+      root: 'C#',
+      way: 'together',
+    })
     expect(await searchAt('/practice/intervals?root=H')).toEqual(INTERVALS_DEFAULTS)
+  })
+
+  it('keep how an interval plays, at once unless a known way is asked', async () => {
+    expect(await searchAt('/practice/intervals?way=down')).toMatchObject({ way: 'down' })
+    expect(await searchAt('/practice/intervals?way=sideways')).toMatchObject({ way: 'together' })
   })
 
   it('keep a number typed as a search, which the router reads as a number', async () => {

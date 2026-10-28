@@ -2,13 +2,13 @@ import { describe, expect, it } from 'vitest'
 import { categoryOpen, greyedBy, PALETTE_CATEGORIES } from './palette-categories'
 
 describe('the palette’s categories', () => {
-  it('holds every tool in one palette, Insert’s kinds among them, the fields’ keys among their kin (ADR 0096)', () => {
+  it('holds every tool in one palette in Flat’s order, the fields’ keys among their kin (ADR 0096)', () => {
     expect(PALETTE_CATEGORIES).toEqual([
       'notes',
       'pitch',
       'articulations',
+      'ornaments',
       'dynamics',
-      'lines',
       'bar',
       'clef',
       'key',
@@ -38,7 +38,7 @@ describe('the palette’s categories', () => {
 
   it('greys the tools that change notes until a note is chosen', () => {
     const none = { chosen: false }
-    for (const category of ['pitch', 'articulations', 'dynamics', 'lines', 'text'] as const)
+    for (const category of ['pitch', 'articulations', 'ornaments', 'dynamics', 'text'] as const)
       expect(greyedBy(category, { ...none, layer: 'rh' })).toBe('chooseNote')
     expect(greyedBy('notes', { ...none, layer: 'rh' })).toBeNull()
     expect(greyedBy('clef', { chosen: true, layer: 'lh' })).toBeNull()

@@ -183,7 +183,14 @@ describe('Piece', () => {
       within(more)
         .getAllByRole('button')
         .map((action) => action.textContent),
-    ).toEqual(['Move to…', 'Archive', 'Check these chords', 'Share'])
+    ).toEqual([
+      'Move to…',
+      'Archive',
+      'Check these chords',
+      'Share',
+      'Export to MIDI',
+      'Export to MusicXML',
+    ])
     await user.click(within(more).getByRole('button', { name: 'Check these chords' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/check'))
     expect(router.state.location.search).toEqual({ of: 'piece:bz5' })
@@ -311,7 +318,7 @@ describe('Piece: the learner’s own music', () => {
       within(more)
         .getAllByRole('button')
         .map((action) => action.textContent),
-    ).toEqual(['Move to…', 'Archive', 'Share', 'Delete'])
+    ).toEqual(['Move to…', 'Archive', 'Share', 'Export to MIDI', 'Export to MusicXML', 'Delete'])
   })
 
   it('has nothing to learn in a song of no chord symbol: its sections say so', async () => {
