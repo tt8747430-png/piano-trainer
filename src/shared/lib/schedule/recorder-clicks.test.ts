@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { recorderClicks } from './recorder-clicks'
+
+const B = TICKS_PER_BEAT
 
 /** Each click as its time and whether it is accented: `2!` a bar's first beat at 2 s. */
 const heard = (sounds: readonly { at: number; accent: boolean }[]) =>
@@ -11,7 +14,7 @@ describe('recorderClicks', () => {
     const clicks = recorderClicks({
       bars: [
         { startTick: 0, beats: 4 },
-        { startTick: 96, beats: 2 },
+        { startTick: 4 * B, beats: 2 },
       ],
       meter: '4/4',
       from: 0,
@@ -36,7 +39,7 @@ describe('recorderClicks', () => {
     const clicks = recorderClicks({
       bars: [
         { startTick: 0, beats: 4 },
-        { startTick: 96, beats: 3, meter: '3/4' },
+        { startTick: 4 * B, beats: 3, meter: '3/4' },
       ],
       meter: '4/4',
       from: 1,
@@ -85,7 +88,7 @@ describe('recorderClicks', () => {
     const clicks = recorderClicks({
       bars: [
         { startTick: 0, beats: 1 },
-        { startTick: 24, beats: 4 },
+        { startTick: B, beats: 4 },
       ],
       meter: '4/4',
       from: 0,
@@ -108,8 +111,8 @@ describe('recorderClicks', () => {
     const clicks = recorderClicks({
       bars: [
         { startTick: 0, beats: 4 },
-        { startTick: 96, beats: 4 },
-        { startTick: 192, beats: 4 },
+        { startTick: 4 * B, beats: 4 },
+        { startTick: 8 * B, beats: 4 },
       ],
       meter: '4/4',
       from: 1,

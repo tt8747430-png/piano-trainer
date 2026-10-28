@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { midi } from '@/shared/lib/music'
+import { midi, TICKS_PER_BEAT } from '@/shared/lib/music'
 import {
   accompanyingHands,
   initialPractice,
@@ -9,6 +9,8 @@ import {
   type PracticeState,
 } from './practice-machine'
 import { ONE_BAR, TWO_BARS, TWO_BARS_IN_HALVES } from './testing/performances'
+
+const B = TICKS_PER_BEAT
 
 const run = (state: PracticeState, ...events: PracticeEvent[]) =>
   events.reduce(practiceReducer, state)
@@ -289,7 +291,7 @@ describe('the practice machine', () => {
         beatGroup: 5,
       })
       const configured = run(state, configure(TWO_BARS_IN_HALVES, 'listen', 'both'))
-      expect(TWO_BARS_IN_HALVES.beatGroups[configured.beatGroup]?.tick).toBe(96)
+      expect(TWO_BARS_IN_HALVES.beatGroups[configured.beatGroup]?.tick).toBe(4 * B)
     })
 
     it('stops playing when the mode changes, and not otherwise', () => {

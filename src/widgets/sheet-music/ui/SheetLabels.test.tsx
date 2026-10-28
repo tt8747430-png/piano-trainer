@@ -1,8 +1,11 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { TWO_BARS } from '@/features/practice/testing/performances'
 import type { ScoreLayout } from '@/shared/ui/score'
 import { SheetLabels } from './SheetLabels'
+
+const B = TICKS_PER_BEAT
 
 /** Two narrow bars, 60px each. */
 const layout: ScoreLayout = {
@@ -12,12 +15,12 @@ const layout: ScoreLayout = {
   staffBottom: 170,
   staves: { treble: { top: 40, bottom: 80 }, bass: { top: 130, bottom: 170 } },
   measures: [
-    { startTick: 0, ticks: 96, x: 0, width: 60, notes: 30 },
-    { startTick: 96, ticks: 96, x: 60, width: 60, notes: 70 },
+    { startTick: 0, ticks: 4 * B, x: 0, width: 60, notes: 30 },
+    { startTick: 4 * B, ticks: 4 * B, x: 60, width: 60, notes: 70 },
   ],
   onsets: [
     { tick: 0, x: 30 },
-    { tick: 96, x: 70 },
+    { tick: 4 * B, x: 70 },
   ],
 }
 

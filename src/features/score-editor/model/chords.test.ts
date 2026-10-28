@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { chordSymbol, note, parseChordSymbol } from '@/shared/lib/music'
+import { chordSymbol, note, parseChordSymbol, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { draftOf, form } from '../testing/test-draft'
 import { chordSuggestions, deleteChord, keyChords, setChord } from './chords'
+
+const B = TICKS_PER_BEAT
 
 describe('setChord', () => {
   it('replaces the chord starting there', () => {
@@ -9,8 +11,8 @@ describe('setChord', () => {
   })
 
   it('splits the bar at a later beat', () => {
-    expect(form(setChord(draftOf(), 0, 48, parseChordSymbol('D7')))).toEqual([
-      [['G@0 D7@48', 'C@0']],
+    expect(form(setChord(draftOf(), 0, 2 * B, parseChordSymbol('D7')))).toEqual([
+      [['G@0 D7@2', 'C@0']],
     ])
   })
 
@@ -33,11 +35,11 @@ describe('deleteChord', () => {
   const split = draftOf({ sections: [{ kind: 'verse', lines: ['G-D-Em@2 C'] }] })
 
   it('gives its beats to the chord before it', () => {
-    expect(form(deleteChord(split, 0, 24))).toEqual([[['G@0 Em@48', 'C@0']]])
+    expect(form(deleteChord(split, 0, B))).toEqual([[['G@0 Em@2', 'C@0']]])
   })
 
   it('gives a bar’s first chord’s beats to the one after', () => {
-    expect(form(deleteChord(split, 0, 0))).toEqual([[['D@0 Em@48', 'C@0']]])
+    expect(form(deleteChord(split, 0, 0))).toEqual([[['D@0 Em@2', 'C@0']]])
   })
 
   it('takes a bar’s only chord, leaving a bar of no chord (ADR 0114)', () => {
@@ -46,7 +48,7 @@ describe('deleteChord', () => {
 
   it('changes nothing where no chord starts', () => {
     const draft = draftOf()
-    expect(deleteChord(draft, 1, 24)).toBe(draft)
+    expect(deleteChord(draft, 1, B)).toBe(draft)
     const empty = draftOf({ sections: [{ kind: 'verse', lines: ['G _'] }] })
     expect(deleteChord(empty, 1, 0)).toBe(empty)
   })
@@ -108,7 +110,7 @@ describe('chordSuggestions', () => {
   })
 
   it('takes the key at the place: a section’s own key there (ADR 0114)', () => {
-    expect(symbols(song, 288, '').slice(0, 7)).toEqual(['D', 'Em', 'F#m', 'G', 'A', 'Bm', 'C#°'])
+    expect(symbols(song, 12 * B, '').slice(0, 7)).toEqual(['D', 'Em', 'F#m', 'G', 'A', 'Bm', 'C#°'])
   })
 
   it('keeps those starting as typed, in any case and with ♯ or #', () => {

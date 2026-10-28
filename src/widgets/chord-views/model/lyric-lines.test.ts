@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
 import { arrangePiece, ownChoice } from '@/features/practice'
@@ -11,6 +12,8 @@ import {
   soundingChip,
   type LyricLine,
 } from './lyric-lines'
+
+const B = TICKS_PER_BEAT
 
 /** A song of 4/4 bars in C, its sections' lines, a staff over the piano, and its verses. */
 function song(
@@ -54,7 +57,7 @@ describe('lyricLines', () => {
         ['G', 'holy'],
       ],
     ])
-    expect(lines[0]).toMatchObject({ section: 0, bars: [0, 1], from: 0, to: 192, sung: true })
+    expect(lines[0]).toMatchObject({ section: 0, bars: [0, 1], from: 0, to: 8 * B, sung: true })
   })
 
   it('starts a chord between syllables at its place there, a word it splits going on', () => {
@@ -131,7 +134,7 @@ describe('lyricLines', () => {
     expect(shown(performance, lines)).toEqual([[['C'], ['F']], [['G']]])
     expect(lines.map(({ bars, from }) => ({ bars, from }))).toEqual([
       { bars: [0, 1], from: 0 },
-      { bars: [2], from: 384 },
+      { bars: [2], from: 16 * B },
     ])
   })
 })
@@ -170,15 +173,15 @@ describe('lineWords', () => {
     const [first] = lyricLines(performance)
     expect(first?.words[0]).toEqual([
       { text: 'Silent', at: 0 },
-      { text: 'night,', at: 48 },
-      { text: 'holy', at: 96 },
+      { text: 'night,', at: 2 * B },
+      { text: 'holy', at: 4 * B },
     ])
     // "Hal-le-lu" over two lines: its first line ends on a hyphen.
     const [ends, goesOn] = lyricLines(
       song([['C', 'F']], { notes: 'E4/2 F4/2 | G4/4', lyrics: ['Hal- le- lu'] }),
     )
     expect(ends?.words[0]).toEqual([{ text: 'Halle-', at: 0 }])
-    expect(goesOn?.words[0]).toEqual([{ text: 'lu', at: 96 }])
+    expect(goesOn?.words[0]).toEqual([{ text: 'lu', at: 4 * B }])
   })
 })
 
@@ -187,19 +190,22 @@ describe('soundingChip', () => {
   const lines = lyricLines(performance)
 
   it('is the chip whose chord sounds in the beat, as written, the later of two in it', () => {
-    expect(soundingChip(lines, { from: 0, to: 24 })).toEqual({ line: 0, segment: 0 })
-    expect(soundingChip(lines, { from: 48, to: 72 })).toEqual({ line: 0, segment: 1 })
-    expect(soundingChip(lines, { from: 40, to: 64 })).toEqual({ line: 0, segment: 1 })
-    expect(soundingChip(lines, { from: 120, to: 144 })).toEqual({ line: 0, segment: 2 })
+    expect(soundingChip(lines, { from: 0, to: B })).toEqual({ line: 0, segment: 0 })
+    expect(soundingChip(lines, { from: 2 * B, to: 3 * B })).toEqual({ line: 0, segment: 1 })
+    expect(soundingChip(lines, { from: (5 * B) / 3, to: (8 * B) / 3 })).toEqual({
+      line: 0,
+      segment: 1,
+    })
+    expect(soundingChip(lines, { from: 5 * B, to: 6 * B })).toEqual({ line: 0, segment: 2 })
   })
 
   it('holds a chord’s one chip over the bars it is held', () => {
-    expect(soundingChip(lines, { from: 300, to: 324 })).toEqual({ line: 1, segment: 0 })
+    expect(soundingChip(lines, { from: 12.5 * B, to: 13.5 * B })).toEqual({ line: 1, segment: 0 })
   })
 
   it('is none in a bar of no chord', () => {
     const empty = song([['C _']])
-    expect(soundingChip(lyricLines(empty), { from: 96, to: 120 })).toBeNull()
+    expect(soundingChip(lyricLines(empty), { from: 4 * B, to: 5 * B })).toBeNull()
   })
 })
 

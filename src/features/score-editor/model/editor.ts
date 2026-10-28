@@ -16,7 +16,7 @@ import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
 import { lineOver, lineSpan } from './lines'
 import { setSyllable, singsHere } from './lyrics'
-import { markNotes } from './marks'
+import { markNotes, setTempoChange, setText, toggleNumeral } from './marks'
 import {
   backFrom,
   deleteNotes,
@@ -39,7 +39,7 @@ import { setKey, setTempo, setTempoMark, transpose } from './settings'
 import { nextMode, type EditorAction, type EditorState } from './state'
 import { writeTake } from './take-edits'
 import { barAt, barsOf, keyAt } from './timeline'
-import { toggledDot, toggledTriplet, withValue, type ChosenValue } from './values'
+import { toggledDot, toggledTuplet, withValue, type ChosenValue } from './values'
 
 /**
  * Where the caret goes once the single staff at `place` is taken away (ADR 0097): from it, to the
@@ -107,12 +107,12 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         withValue(shownValue(state) ?? state.value, action.value, draft.meter),
       )
     case 'dot':
-    case 'triplet': {
+    case 'tuplet': {
       const shown = shownValue(state) ?? state.value
       const value =
         action.type === 'dot'
           ? toggledDot(shown, draft.meter, action.dots)
-          : toggledTriplet(shown, draft.meter)
+          : toggledTuplet(shown, action.num, draft.meter)
       return value === shown ? state : valueChosen(state, value)
     }
     case 'mode':
@@ -265,6 +265,19 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         struck: null,
         selection: state.selection,
       })
+    }
+    case 'numeral':
+    case 'tempoChange':
+    case 'text': {
+      if (layer === 'chords') return state
+      const span = chosenSpan(state)
+      const next =
+        action.type === 'numeral'
+          ? toggleNumeral(draft, layer, span)
+          : action.type === 'tempoChange'
+            ? setTempoChange(draft, layer, span, action.tempo)
+            : setText(draft, layer, span, action.text)
+      return commit(state, next, { struck: null, selection: state.selection })
     }
     case 'line':
       if (layer === 'chords') return state

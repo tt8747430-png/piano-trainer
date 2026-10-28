@@ -29,18 +29,18 @@ function splitGroup(from: number, to: number) {
 /** The keys a take may be split at, C2 to C6: an octave a group, the last up to C6. */
 const SPLITS = [splitGroup(36, 47), splitGroup(48, 59), splitGroup(60, 71), splitGroup(72, 84)]
 
-/** A note value as a choice's value: `8`, `4d` dotted, `8t` a triplet's. */
-const gridKey = ({ value, dots, triplet }: Duration): string =>
-  `${value}${dots === 1 ? 'd' : ''}${triplet ? 't' : ''}`
+/** A note value as a choice's value: `8`, `4d` dotted, `8t3` a triplet's. */
+const gridKey = ({ value, dots, tuplet }: Duration): string =>
+  `${value}${dots === 1 ? 'd' : ''}${tuplet ? `t${tuplet.num}` : ''}`
 /** A note value's glyph, dotted or marked a triplet's. */
-const gridGlyph = ({ value, dots, triplet }: Duration): string =>
-  `${VALUE_GLYPHS[value]}${dots === 1 ? '.' : ''}${triplet ? '³' : ''}`
+const gridGlyph = ({ value, dots, tuplet }: Duration): string =>
+  `${VALUE_GLYPHS[value]}${dots === 1 ? '.' : ''}${tuplet?.num === 3 ? '³' : ''}`
 
 /** Where a take goes on the piano: split between its staves, or on one. */
 const PIANO_INTO = ['both', 'rh', 'lh'] as const
 
 /** An eighth: the shortest note a take is snapped to unless the learner says. */
-const EIGHTH = gridKey({ value: 8, dots: 0, triplet: false })
+const EIGHTH = gridKey({ value: 8, dots: 0 })
 
 /**
  * A take's page of the sheet: where it goes (the piano's staves, or a single

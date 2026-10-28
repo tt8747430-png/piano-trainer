@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { midi, note } from '@/shared/lib/music'
+import { midi, note, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { notate, type TimedMusic, type TimedNote } from '@/shared/lib/notation'
 import { LAST_STAFF, scoreHeight, STAFF_GAP, staffHeight, VERSE, versesOf } from './size'
+
+const B = TICKS_PER_BEAT
 
 const sung = (text: string) => ({ text, hyphen: false, held: 0 })
 
@@ -10,7 +12,7 @@ const n = (key: number, hand: TimedNote['hand'], startTick: number, verses = 0):
   spelled: note('C'),
   hand,
   startTick,
-  durationTicks: 24,
+  durationTicks: B,
   ...(verses > 0 ? { lyrics: Array.from({ length: verses }, (_, i) => sung(`v${i + 1}`)) } : {}),
 })
 
@@ -33,7 +35,7 @@ const music = (notes: TimedNote[], extra: Partial<TimedMusic> = {}): TimedMusic 
 describe('versesOf', () => {
   it('counts the most verses any note of the drawn staves sings', () => {
     const score = notate(
-      music([over(72, 0, 1), over(74, 24, 3), n(60, 'rh', 0), n(48, 'lh', 0)], OVER),
+      music([over(72, 0, 1), over(74, B, 3), n(60, 'rh', 0), n(48, 'lh', 0)], OVER),
     )
     expect(versesOf(score)).toBe(3)
     expect(versesOf(score, ['staff0'])).toBe(3)

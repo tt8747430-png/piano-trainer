@@ -8,6 +8,7 @@ import type { TakePart } from './take-edits'
 import type { Line } from './lines'
 import type { MarkChoice } from './marks'
 import type { TransposeApplies } from './settings'
+import type { TupletCount } from '@/shared/lib/notation'
 import type { ChosenValue, Dots } from './values'
 import type { TimeChoice } from './meters'
 
@@ -80,7 +81,14 @@ export type EditorAction =
   | { readonly type: 'layer'; readonly layer: Layer }
   | { readonly type: 'value'; readonly value: ChosenValue['value'] }
   | { readonly type: 'dot'; readonly dots?: Dots }
-  | { readonly type: 'triplet' }
+  /** A tuplet of `num` (Flat's ⇧2–⇧9) put on the value chosen, or taken off (ADR 0097). */
+  | { readonly type: 'tuplet'; readonly num: TupletCount }
+  /** The Roman numeral of the chord sounding at the caret put under its notes, or taken off (ADR 0097). */
+  | { readonly type: 'numeral' }
+  /** A tempo mark at the caret's notes (ADR 0097): beats a minute from there on; null takes it off. */
+  | { readonly type: 'tempoChange'; readonly tempo: number | null }
+  /** Free text over the caret's notes, as typed; empty takes it off. */
+  | { readonly type: 'text'; readonly text: string }
   /** The editing mode chosen; none, the next round (I). */
   | { readonly type: 'mode'; readonly mode?: EditMode }
   | {
@@ -197,7 +205,7 @@ export const initialEditor = (draft: Draft): EditorState => ({
   caret: 0,
   // The top staff: the top single staff's where the score has one, else the right hand's.
   layer: topStaff(draft),
-  value: { value: 4, dots: 0, triplet: false },
+  value: { value: 4, dots: 0 },
   mode: 'replace',
   selection: null,
   chordNote: null,

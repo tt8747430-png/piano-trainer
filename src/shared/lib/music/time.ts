@@ -1,8 +1,11 @@
-/** The domain's unit of time: 24 per beat, so 32nds (3), 16ths (6) and triplet 8ths (8) are whole. */
+/**
+ * The domain's unit of time: 5040 per beat (2⁴·3²·5·7), so every value to the 64th and every tuplet
+ * of two to nine of them is whole (ADR 0097).
+ */
 export type Tick = number
-export const TICKS_PER_BEAT = 24
+export const TICKS_PER_BEAT = 5040
 
-/** Beats in ticks, to the nearest tick (a third of a beat written `.3333` is 8). */
+/** Beats in ticks, to the nearest tick (a third of a beat written `.3333` is 1680). */
 export const beatsToTicks = (beats: number): Tick => Math.round(beats * TICKS_PER_BEAT)
 
 /** The notes a time signature's lower figure may count (ADR 0114): a half, a quarter, an eighth. */

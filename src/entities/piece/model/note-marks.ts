@@ -1,13 +1,18 @@
-import type {
-  Articulation,
-  Dynamic,
-  Expression,
-  GraceNote,
-  Hairpin,
-  NoteMarks,
-  OctaveLine,
-  Ornament,
-  Pedal,
+import {
+  DYNAMICS,
+  OCTAVE_LINES,
+  type Articulation,
+  type Dynamic,
+  type Expression,
+  type GraceNote,
+  type Hairpin,
+  type NoteMarks,
+  type OctaveLine,
+  type Ornament,
+  type Pedal,
+  numeralText,
+  parseNumeral,
+  type SwingMark,
 } from '@/shared/lib/music'
 import { pitchText } from './music'
 import { readPitch } from './note-text'
@@ -18,15 +23,21 @@ const ARTICULATION_WORDS: Readonly<Record<Articulation, string>> = {
   staccato: 'stacc',
   staccatissimo: 'staccatiss',
   tenuto: 'ten',
+  portato: 'port',
   marcato: 'marc',
   fermata: 'ferm',
+  breath: 'breath',
+  caesura: 'caes',
 }
 const ORNAMENT_WORDS: Readonly<Record<Ornament, string>> = {
   trill: 'tr',
   mordent: 'mord',
   'lower-mordent': 'lmord',
   turn: 'turn',
-  tremolo: 'trem',
+  'inverted-turn': 'iturn',
+  'tremolo-1': 'trem1',
+  'tremolo-2': 'trem2',
+  'tremolo-3': 'trem3',
 }
 const HAIRPIN_WORDS: Readonly<Record<Hairpin, string>> = {
   cresc: 'cresc',
@@ -45,8 +56,8 @@ const EXPRESSION_WORDS: Readonly<Record<Expression, string>> = {
   'a-tempo': 'atempo',
 }
 const PEDAL_WORDS: Readonly<Record<Pedal, string>> = { down: 'ped', up: 'pedup', change: 'pedch' }
-const OCTAVE_WORDS: readonly OctaveLine[] = ['8va', '8vb']
-const DYNAMIC_WORDS: readonly Dynamic[] = ['pp', 'p', 'mp', 'mf', 'f', 'ff']
+const OCTAVE_WORDS: readonly OctaveLine[] = OCTAVE_LINES
+const DYNAMIC_WORDS: readonly Dynamic[] = DYNAMICS
 
 const lookup = <K extends string>(words: Readonly<Record<K, string>>) =>
   new Map(Object.entries(words).map(([kind, word]) => [word as string, kind as K]))
@@ -57,6 +68,41 @@ const EXPRESSION_BY_WORD = lookup(EXPRESSION_WORDS)
 const PEDAL_BY_WORD = lookup(PEDAL_WORDS)
 
 const GRACE = 'gr:'
+const GLISS = 'gliss'
+const TEMPO = 'tempo:'
+const NUMERAL = 'rn:'
+const TEXT = 'txt:'
+const SWING_WORDS: Readonly<Record<SwingMark, string>> = {
+  eighths: 'swing8',
+  sixteenths: 'swing16',
+  straight: 'straight',
+}
+const SWING_BY_WORD = lookup(SWING_WORDS)
+
+/** What a tempo mark may say: 20 to 400 beats a minute. */
+const TEMPO_RANGE = { from: 20, to: 400 } as const
+
+/** `96`: a tempo mark's beats a minute, whole, or null. */
+function readTempo(text: string): number | null {
+  const tempo = Number(text)
+  return /^\d+$/.test(text) && tempo >= TEMPO_RANGE.from && tempo <= TEMPO_RANGE.to ? tempo : null
+}
+
+/** `V7/ii`: a Roman numeral as the numerals kernel writes it, or null. */
+function readNumeral(text: string): string | null {
+  const numeral = parseNumeral(text)
+  return numeral ? numeralText(numeral) : null
+}
+
+/** Free text as a token holds it: its spaces, commas and brackets escaped. */
+const readText = (text: string): string | null => {
+  try {
+    const read = decodeURIComponent(text)
+    return read.trim() === '' ? null : read
+  } catch {
+    return null
+  }
+}
 
 /** `D5+E5`: grace notes' pitches as written, or null. */
 function readGrace(text: string): GraceNote[] | null {
@@ -100,7 +146,18 @@ export function readMarks(text: string): NoteMarks | null {
     else if (expression) read = once('expression', expression)
     else if (pedal) read = once('pedal', pedal)
     else if (word === 'arp') read = once('arpeggio', true)
-    else if (word === '(') read = once('slurStart', true)
+    else if (word === GLISS) read = once('glissando', true)
+    else if (SWING_BY_WORD.has(word)) read = once('swing', SWING_BY_WORD.get(word))
+    else if (word.startsWith(TEMPO)) {
+      const tempo = readTempo(word.slice(TEMPO.length))
+      read = tempo !== null && once('tempo', tempo)
+    } else if (word.startsWith(NUMERAL)) {
+      const numeral = readNumeral(word.slice(NUMERAL.length))
+      read = numeral !== null && once('numeral', numeral)
+    } else if (word.startsWith(TEXT)) {
+      const text = readText(word.slice(TEXT.length))
+      read = text !== null && once('text', text)
+    } else if (word === '(') read = once('slurStart', true)
     else if (word === ')') read = once('slurEnd', true)
     else if (word.startsWith(GRACE)) {
       const grace = readGrace(word.slice(GRACE.length))
@@ -112,8 +169,8 @@ export function readMarks(text: string): NoteMarks | null {
 }
 
 /**
- * Marks as a token writes them, in one order: articulations, ornament, roll, slurs, octave, dynamic,
- * hairpin, expression, pedal, grace.
+ * Marks as a token writes them, in one order: articulations, ornament, roll, slurs, octave,
+ * glissando, dynamic, hairpin, expression, pedal, grace, tempo, swing, numeral, text.
  */
 export function writeMarks(marks: NoteMarks): string {
   const graceText = (grace: readonly GraceNote[]) => GRACE + grace.map(pitchText).join('+')
@@ -124,11 +181,16 @@ export function writeMarks(marks: NoteMarks): string {
     marks.slurStart && '(',
     marks.slurEnd && ')',
     marks.octave,
+    marks.glissando && GLISS,
     marks.dynamic,
     marks.hairpin && HAIRPIN_WORDS[marks.hairpin],
     marks.expression && EXPRESSION_WORDS[marks.expression],
     marks.pedal && PEDAL_WORDS[marks.pedal],
     marks.grace && graceText(marks.grace),
+    marks.tempo !== undefined && `${TEMPO}${marks.tempo}`,
+    marks.swing && SWING_WORDS[marks.swing],
+    marks.numeral && `${NUMERAL}${marks.numeral}`,
+    marks.text && `${TEXT}${encodeURIComponent(marks.text)}`,
   ]
     .filter((word): word is string => typeof word === 'string')
     .join(',')

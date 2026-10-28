@@ -150,7 +150,7 @@ export function pasteBars(draft: Draft, after: number, clip: BarsClip): Draft {
 
 /** A bar's lengths to choose: an eighth at a time up to the meter's bar. */
 export function barLengths(meter: Meter): Tick[] {
-  const eighth = ticksOf({ value: 8, dots: 0, triplet: false }, meter)
+  const eighth = ticksOf({ value: 8, dots: 0 }, meter)
   const full = beatsPerBar(meter) * TICKS_PER_BEAT
   return Array.from({ length: full / eighth }, (_, i) => (i + 1) * eighth)
 }

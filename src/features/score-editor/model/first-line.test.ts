@@ -14,7 +14,7 @@ describe('firstLine', () => {
     })
     const line = firstLine(draft)
     expect(form(line)).toEqual([[['C@0', 'G@0']]])
-    expect(shape(line.hands.rh)).toEqual(['C4@0/96', 'D4@96/96'])
+    expect(shape(line.hands.rh)).toEqual(['C4@0/4', 'D4@4/4'])
     expect(line.sections[0]?.heading).toEqual(draft.sections[0]?.heading)
   })
 

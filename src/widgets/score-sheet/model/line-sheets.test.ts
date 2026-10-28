@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { readDraft } from '@/features/score-editor'
 import { createLineSheets } from './line-sheets'
+
+const B = TICKS_PER_BEAT
 
 const music = {
   key: 'G',
@@ -82,7 +85,7 @@ describe('the sheet’s lines as written', () => {
       readDraft({ ...music, sections: [{ kind: 'verse', lines: ['G C', 'D@2', 'G'] }] }),
     )
     expect(short?.score.measures.map((measure) => [measure.time, measure.ticks])).toEqual([
-      [{ count: 2, unit: 4 }, 48],
+      [{ count: 2, unit: 4 }, 2 * B],
     ])
     // Its 2/4 printed at the end of the line before, and the 4/4 after it again.
     expect(first?.next?.time).toEqual({ count: 2, unit: 4 })

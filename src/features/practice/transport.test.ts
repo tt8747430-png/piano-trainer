@@ -1,10 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createFakeAudio } from '@/shared/api/audio'
 import { arrange, parseFigure } from '@/shared/lib/arrangement'
-import { note, parseChordSymbol } from '@/shared/lib/music'
+import { note, parseChordSymbol, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { audibleHands, type NoteSound } from '@/shared/lib/schedule'
 import { FULL_MIX, type Mix } from './mix'
 import { startTransport } from './transport'
+
+const B = TICKS_PER_BEAT
 
 const BLOCK = {
   id: 'block',
@@ -29,7 +31,12 @@ const performance = arrange(
   { tonic: note('C'), pattern: BLOCK },
 )
 const VOCAL = { src: 'vocal.m4a', start: 2, tempo: 60 }
-const WHOLE = { hands: audibleHands('both'), tempo: 60, range: { from: 0, to: 384 }, fromTick: 0 }
+const WHOLE = {
+  hands: audibleHands('both'),
+  tempo: 60,
+  range: { from: 0, to: 16 * B },
+  fromTick: 0,
+}
 const IGNORED = { reach: () => {}, tempo: () => {}, count: () => {} }
 const FULL = () => FULL_MIX
 
@@ -42,7 +49,12 @@ describe('startTransport', () => {
     const transport = startTransport(
       audio,
       performance,
-      { hands: audibleHands('both'), tempo: 60, range: { from: 96, to: 288 }, fromTick: 192 },
+      {
+        hands: audibleHands('both'),
+        tempo: 60,
+        range: { from: 4 * B, to: 12 * B },
+        fromTick: 8 * B,
+      },
       IGNORED,
       { recording: VOCAL, mix: FULL },
     )
@@ -106,13 +118,13 @@ describe('startTransport', () => {
 
   it('says the tick its music sounds at a time on the clock, between the beat groups (ADR 0096)', () => {
     const audio = createFakeAudio()
-    const transport = startTransport(audio, performance, { ...WHOLE, fromTick: 96 }, IGNORED, {
+    const transport = startTransport(audio, performance, { ...WHOLE, fromTick: 4 * B }, IGNORED, {
       recording: null,
       mix: FULL,
     })
     // From bar 2, a beat group of a bar's chord every four seconds at 60.
     expect(transport.tickAt(0)).toBeNull()
-    expect(transport.tickAt(0.1 + 2)).toBe(144)
+    expect(transport.tickAt(0.1 + 2)).toBe(6 * B)
     transport.stop()
   })
 })

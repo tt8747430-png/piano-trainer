@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { arrange, type Chart } from '@/shared/lib/arrangement'
-import { note } from '@/shared/lib/music'
+import { note, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { collectLocalTexts } from '@/shared/test/local-texts'
 import { BUILT_IN_PATTERNS } from '../model/book'
 import { patternNeed } from '../model/fit'
@@ -18,6 +18,8 @@ import { LEFT_FIGURE_GROUPS, LEFT_FIGURES, RIGHT_FIGURE_GROUPS, RIGHT_FIGURES } 
 import { METHOD_PATTERNS } from '../model/method-patterns'
 import { METHODS } from './methods'
 import { PATTERN_GROUP_ENTRIES, PATTERNS } from './patterns'
+
+const B = TICKS_PER_BEAT
 
 describe('the pattern catalog', () => {
   it('has 48 patterns in six groups, built from 45 right-hand and 27 left-hand figures', () => {
@@ -97,10 +99,10 @@ describe('the pattern catalog', () => {
 
   it('writes 3/4 and major variants where the source has them', () => {
     const r2 = RIGHT_FIGURES.r2.figure
-    expect(r2.kind === 'events' && r2.inThree?.map((event) => event.start)).toEqual([24, 48])
+    expect(r2.kind === 'events' && r2.inThree?.map((event) => event.start)).toEqual([B, 2 * B])
     const p52 = RIGHT_FIGURES.p52.figure
     expect(p52.kind === 'events' && p52.onMajor).toHaveLength(3)
-    expect(LEFT_FIGURES.shuf.figure.events[1]?.start).toBe(16)
+    expect(LEFT_FIGURES.shuf.figure.events[1]?.start).toBe((2 * B) / 3)
   })
 
   it('names the Chord flow by the shapes its right hand plays, I–IV–I–V–I', () => {
@@ -171,8 +173,8 @@ describe('the left hand’s own figures', () => {
 
   it('strides: the bass, then the chord an octave and more above it', () => {
     expect(lhAt('str', 0)).toEqual([36]) // C2
-    expect(lhAt('str', 24)).toEqual([52, 55, 60]) // E3 G3 C4
-    expect(lhAt('str', 48)).toEqual([43]) // G2
+    expect(lhAt('str', B)).toEqual([52, 55, 60]) // E3 G3 C4
+    expect(lhAt('str', 2 * B)).toEqual([43]) // G2
   })
 
   it('opens a 5th and a 10th over the bass', () => {

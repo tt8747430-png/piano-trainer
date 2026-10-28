@@ -13,13 +13,31 @@ const press = (code: string, key: string, mods: Partial<KeyPress> = {}): KeyPres
 })
 
 describe('shortcutOf', () => {
-  it('chooses a value by 1 to 5, a dot by the full stop, and writes a rest by 0', () => {
+  it('chooses a value by 1 to 7, a dot by the full stop, and writes a rest by 0', () => {
     expect(shortcutOf(press('Digit1', '1'), 'staff0')).toEqual({ type: 'value', value: 1 })
     expect(shortcutOf(press('Digit3', '3'), 'rh')).toEqual({ type: 'value', value: 4 })
     expect(shortcutOf(press('Digit5', '5'), 'lh')).toEqual({ type: 'value', value: 16 })
     expect(shortcutOf(press('Digit6', '6'), 'lh')).toEqual({ type: 'value', value: 32 })
+    expect(shortcutOf(press('Digit7', '7'), 'lh')).toEqual({ type: 'value', value: 64 })
     expect(shortcutOf(press('Period', '.'), 'staff0')).toEqual({ type: 'dot' })
     expect(shortcutOf(press('Digit0', '0'), 'staff0')).toEqual({ type: 'rest' })
+  })
+
+  it('puts a tuplet of two to nine on the value with Shift and its digit, as Flat’s (ADR 0097)', () => {
+    expect(shortcutOf(press('Digit3', '#', { shiftKey: true }), 'staff0')).toEqual({
+      type: 'tuplet',
+      num: 3,
+    })
+    expect(shortcutOf(press('Digit5', '%', { shiftKey: true }), 'rh')).toEqual({
+      type: 'tuplet',
+      num: 5,
+    })
+    expect(shortcutOf(press('Digit9', '(', { shiftKey: true }), 'lh')).toEqual({
+      type: 'tuplet',
+      num: 9,
+    })
+    expect(shortcutOf(press('Digit1', '!', { shiftKey: true }), 'lh')).toBeNull()
+    expect(shortcutOf(press('Digit3', '#', { shiftKey: true }), 'chords')).toBeNull()
   })
 
   it('moves the caret: a step, Alt a bar, Home and End or Cmd to the ends, Shift choosing bars', () => {

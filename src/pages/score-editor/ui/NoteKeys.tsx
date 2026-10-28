@@ -8,13 +8,15 @@ import {
   NOTE_VALUES,
   shownValue,
   takesDot,
+  takesTuplet,
   type EditMode,
 } from '@/features/score-editor'
-import { isCompound, type Accidental } from '@/shared/lib/music'
+import type { Accidental } from '@/shared/lib/music'
+import { TUPLET_COUNTS, tupletOf, type TupletCount } from '@/shared/lib/notation'
 import { Segmented } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
-import { VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
+import { TUPLET_WORDS, VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
 import { usePaletteForm } from './palette-form'
 import { GlyphGrid, PaletteKey } from './palette-keys'
 import { usePaletteReason } from './palette-reason'
@@ -28,7 +30,7 @@ const REST = '𝄽'
 const useShown = () => useEditorState(useShallow(shownValue))
 
 /**
- * The values whole to 32nd and Dotted, first of the Notes (ADR 0114): with a note chosen it is made
+ * The values whole to 64th and Dotted, first of the Notes (ADR 0114): with a note chosen it is made
  * that value; else the next note is written so. The chosen note's own value stands pressed.
  */
 function ValueKeys() {
@@ -43,7 +45,7 @@ function ValueKeys() {
     <div
       role="group"
       aria-label={t('values.label')}
-      className={row ? 'contents' : 'grid grid-cols-7 gap-1'}
+      className={row ? 'contents' : 'grid grid-cols-8 gap-1'}
     >
       {NOTE_VALUES.map((option) => (
         <PaletteKey
@@ -72,6 +74,59 @@ function ValueKeys() {
       </PaletteKey>
     </div>
   )
+}
+
+/** A tuplet's bracket over its count, as a score prints one: ⌐3¬. */
+function TupletBracket({ num }: { num: TupletCount }) {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className="size-6">
+      <path
+        d="M3 13V8h5.5M15.5 8H21v5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <text
+        x="12"
+        y="12.5"
+        textAnchor="middle"
+        fontSize="10"
+        fontStyle="italic"
+        fontWeight="600"
+        fill="currentColor"
+      >
+        {num}
+      </text>
+    </svg>
+  )
+}
+
+/**
+ * The tuplets, two to nine (ADR 0097, Flat's ⇧2–⇧9): each puts its tuplet on the value chosen (the
+ * chosen note, else the next written), the same one again taking it off. Greyed where the meter
+ * writes such notes plainly (two or four to a simple beat, three or six to a compound one), or the
+ * value is too short for it.
+ */
+function TupletKeys() {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const shown = useShown()
+  const meter = useEditorState((state) => state.draft.meter)
+  const value = useEditorState((state) => (shownValue(state) ?? state.value).value)
+  return TUPLET_COUNTS.map((num) => (
+    <PaletteKey
+      key={num}
+      label={t(`tuplets.${TUPLET_WORDS[num]}`)}
+      reason={t(tupletOf(num, meter) ? 'reason.shortTuplet' : 'reason.plainTuplet')}
+      pressed={shown?.tuplet?.num === num}
+      disabled={!takesTuplet(value, num, meter)}
+      onClick={() => actions.dispatch({ type: 'tuplet', num })}
+    >
+      <TupletBracket num={num} />
+    </PaletteKey>
+  ))
 }
 
 /** A natural, drawn as the staff draws it. */
@@ -209,8 +264,8 @@ function ModeChoice() {
 }
 
 /**
- * The Notes section: the values and Dotted, the editing modes, then Double dotted and Triplet (out
- * of reach where the meter takes none), Rest and Tie, then the accidentals.
+ * The Notes section: the values and Dotted, the editing modes, then Double dotted, Rest and Tie, the
+ * tuplets (out of reach where the meter takes none), then the accidentals.
  */
 export function NoteKeys() {
   const { t } = useTranslation('editor')
@@ -220,7 +275,6 @@ export function NoteKeys() {
   const doubleDottable = useEditorState((state) =>
     takesDot((shownValue(state) ?? state.value).value, state.draft.meter, 2),
   )
-  const compound = useEditorState((state) => isCompound(state.draft.meter))
   return (
     <>
       <ValueKeys />
@@ -235,17 +289,6 @@ export function NoteKeys() {
         >
           <span aria-hidden className={GLYPH}>
             {VALUE_GLYPHS[4]}..
-          </span>
-        </PaletteKey>
-        <PaletteKey
-          label={t('triplet')}
-          reason={t('reason.compound')}
-          pressed={shown?.triplet === true}
-          disabled={compound}
-          onClick={() => dispatch({ type: 'triplet' })}
-        >
-          <span aria-hidden className="font-display text-xl font-semibold italic">
-            3
           </span>
         </PaletteKey>
         <PaletteKey label={t('rest')} onClick={() => dispatch({ type: 'rest' })}>
@@ -268,6 +311,7 @@ export function NoteKeys() {
             <path d="M5 13 C9 18 15 18 19 13" />
           </svg>
         </PaletteKey>
+        <TupletKeys />
         <AccidentalKeys />
       </GlyphGrid>
     </>

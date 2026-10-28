@@ -4,7 +4,7 @@ import { TICKS_PER_BEAT, type Tick } from '@/shared/lib/music'
 export function ticksIn(beats: number): Tick | null {
   const ticks = beats * TICKS_PER_BEAT
   const whole = Math.round(ticks)
-  return Math.abs(ticks - whole) < 1e-9 ? whole : null
+  return Math.abs(ticks - whole) < 1e-6 ? whole : null
 }
 
 /**

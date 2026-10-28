@@ -1,9 +1,12 @@
 import { fireEvent, render, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
 import { arrangePiece, ownChoice, playedBeatCells } from '@/features/practice'
 import { BeatStrip } from './BeatStrip'
+
+const B = TICKS_PER_BEAT
 
 /** C, G, Am and F, a bar each of 4/4: sixteen beats along the strip. */
 const piece: ChartPiece = {
@@ -94,7 +97,7 @@ describe('the beat strip dragged (ADR 0108)', () => {
     drag(cell(1), -100)
     // Beat 3 of the first bar, its middle at the mark.
     expect(onBeat).toHaveBeenCalledOnce()
-    expect(onBeat).toHaveBeenCalledWith(48)
+    expect(onBeat).toHaveBeenCalledWith(2 * B)
     expect(row.style.transform).toBe('translateX(-25px)')
   })
 
@@ -116,7 +119,7 @@ describe('the beat strip dragged (ADR 0108)', () => {
     fireEvent.pointerDown(cell(5), { ...finger, buttons: 1, clientX: 200, clientY: 20 })
     fireEvent.pointerUp(cell(5), { ...finger, buttons: 0, clientX: 200, clientY: 20 })
     fireEvent.click(cell(5))
-    expect(onBeat).toHaveBeenLastCalledWith(96 + 24)
+    expect(onBeat).toHaveBeenLastCalledWith(4 * B + B)
   })
 
   it('leaves a drag up or down to the page', () => {
@@ -136,7 +139,7 @@ describe('the beat strip dragged (ADR 0108)', () => {
     const scrolled = fireEvent.wheel(strip, { deltaX: 100, deltaY: 0 })
     expect(scrolled).toBe(false)
     expect(row.style.transform).toBe('translateX(-25px)')
-    await waitFor(() => expect(onBeat).toHaveBeenCalledWith(48))
+    await waitFor(() => expect(onBeat).toHaveBeenCalledWith(2 * B))
   })
 
   it('leaves a scroll up or down to the page', () => {

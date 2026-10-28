@@ -9,7 +9,7 @@ import {
   type BarsInMeter,
 } from './grid'
 import { joinedNotes } from './legato'
-import { loudness, markedSounds, rollOffsets } from './marks'
+import { glissandoTargets, loudness, markedSounds, rollOffsets } from './marks'
 import { pedalHeld } from './pedal-marks'
 import { isSwung, swingTick, type SwingFeel } from './swing'
 import { tempoWarp } from './tempo-marks'
@@ -130,11 +130,37 @@ function swungOnGrid(music: BarsInMeter, tick: Tick, feel: SwingFeel): number {
   return origin + swingTick(tick - origin, feel)
 }
 
-/** Where a tick sounds, in ticks: swung on its bar's beats as asked, straight in a compound meter. */
-const placement = (performance: Performance, swing: SwingFeel | undefined) =>
-  swing && isSwung(swing) && !isCompound(performance.meter)
-    ? (tick: Tick) => swungOnGrid(performance, tick, swing)
-    : (tick: Tick) => tick
+/** Where a tick sounds in a half beat whose 16ths swing, as a beat's 8ths do. */
+function swungSixteenth(tick: Tick, feel: SwingFeel): number {
+  const half = TICKS_PER_BEAT / 2
+  const start = Math.floor(tick / half) * half
+  return start + swingTick((tick - start) * 2, feel) / 2
+}
+
+/**
+ * Where a tick sounds, in ticks, straight in a compound meter: swung on its bar's beats as asked,
+ * and from each swing mark on (ADR 0097) as it says, its 8ths or its 16ths long-short (as triplets,
+ * or the feel asked), or straight again.
+ */
+export function placement(
+  performance: Pick<Performance, 'meter' | 'bars' | 'notes' | 'timing'>,
+  swing: SwingFeel | undefined,
+): (tick: Tick) => number {
+  if (isCompound(performance.meter)) return (tick) => tick
+  const asked = swing !== undefined && isSwung(swing)
+  const feel: SwingFeel = asked ? swing : 'medium'
+  const marks = (performance.timing ?? performance.notes)
+    .flatMap((n) => (n.marks?.swing ? [{ tick: n.startTick, swing: n.marks.swing }] : []))
+    .sort((a, b) => a.tick - b.tick)
+  if (marks.length === 0)
+    return asked ? (tick) => swungOnGrid(performance, tick, feel) : (tick) => tick
+  return (tick) => {
+    const region =
+      marks.findLast((mark) => mark.tick <= tick)?.swing ?? (asked ? 'eighths' : 'straight')
+    if (region === 'straight') return tick
+    return region === 'eighths' ? swungOnGrid(performance, tick, feel) : swungSixteenth(tick, feel)
+  }
+}
 
 /** The key a tick is played in: its bar's, else the piece's. */
 const keyAt = (performance: Performance, tick: Tick) =>
@@ -147,7 +173,8 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   // Swung where asked, then held back or pressed on where the notes mark the tempo (ADR 0097).
   const swung = placement(performance, options.swing)
   const marked = performance.timing ?? performance.notes
-  const warp = tempoWarp(marked)
+  // A tempo mark counts against the tempo written at the music's head.
+  const warp = tempoWarp(marked, performance.bars[0]?.tempo)
   const place = (tick: Tick) => warp(swung(tick))
   const pedal = pedalHeld(marked)
   const counted = options.countIn ? countInBeats(performance, fromTick) : []
@@ -165,6 +192,7 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   // The notes' marks (ADR 0097): their dynamics, rolls, lengths, grace notes and ornaments.
   const levels = loudness(performance.notes)
   const rolls = rollOffsets(performance.notes)
+  const glissTo = glissandoTargets(performance.notes)
   const thirtySecond = secondsFor(TICKS_PER_BEAT / 8, tempo)
   const joined = joinedNotes(performance.notes)
   const played: Sound[] = performance.notes.flatMap((n, i) => {
@@ -184,7 +212,13 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
     }
     // A note held over from before the pass sounds plainly: its marks were where it began.
     const marks = n.startTick >= fromTick ? n.marks : undefined
-    return markedSounds(sound, marks, { key: keyAt(performance, n.startTick), thirtySecond, full })
+    const to = glissTo[i]
+    return markedSounds(sound, marks, {
+      key: keyAt(performance, n.startTick),
+      thirtySecond,
+      full,
+      ...(to === undefined ? {} : { glissTo: to }),
+    })
   })
 
   const metronome: Sound[] =

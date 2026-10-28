@@ -3,17 +3,19 @@ import { readBeats, ticksIn } from './beats'
 
 describe('ticksIn', () => {
   it.each([
-    [1, 24],
-    [1.5, 36],
-    [0.25, 6],
-    [0.125, 3],
-    [1 / 3, 8],
+    [1, 5040],
+    [1.5, 7560],
+    [0.25, 1260],
+    [0.0625, 315],
+    [1 / 3, 1680],
+    [1 / 5, 1008],
+    [1 / 7, 720],
   ])('counts %s beats as %s ticks', (beats, ticks) => {
     expect(ticksIn(beats)).toBe(ticks)
   })
 
   it('has no count for beats that fall between ticks', () => {
-    expect(ticksIn(0.3)).toBeNull()
+    expect(ticksIn(0.0001)).toBeNull()
   })
 })
 
@@ -25,6 +27,8 @@ describe('readBeats', () => {
     ['.125', 0.125],
     ['1:3', 1 / 3],
     ['2:3', 2 / 3],
+    ['.0625', 0.0625],
+    ['1:7', 1 / 7],
   ])('reads %j as %s beats', (text, beats) => {
     expect(readBeats(text)).toBe(beats)
   })

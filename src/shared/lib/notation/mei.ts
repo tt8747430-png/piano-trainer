@@ -10,11 +10,14 @@ import {
   type Jump,
   type NoteLyrics,
   type NoteMarks,
+  type OctaveLine,
   type Ornament,
   type TimeSignature,
   beatUnit,
   CLEF_FORMS,
   tempoMark,
+  SWING_TEXT,
+  tremoloStrokes,
   unitNote,
 } from '@/shared/lib/music'
 import {
@@ -154,6 +157,7 @@ const ARTIC: Readonly<Partial<Record<Articulation, string>>> = {
   staccatissimo: 'stacciss',
   accent: 'acc',
   tenuto: 'ten',
+  portato: 'ten-stacc',
   marcato: 'marc',
 }
 const RIGHT: Readonly<Record<Barline, string>> = { double: 'dbl', final: 'end', repeat: 'rptend' }
@@ -241,8 +245,14 @@ const octaveOf = (midi: number, accidental: Accidental) => Math.floor((midi - ac
 interface Open {
   slur?: string
   hairpin?: { readonly id: string; readonly form: 'cres' | 'dim' }
-  octave?: { readonly id: string; readonly line: '8va' | '8vb'; last: string }
+  octave?: { readonly id: string; readonly line: OctaveLine; last: string }
+  /** A glissando from a note to the next the staff writes. */
+  gliss?: string
 }
+
+/** An octave line's MEI: from its first note to its last, 8 or 15 above or below. */
+const octaveLine = (staff: number, { id, line, last }: NonNullable<Open['octave']>) =>
+  `<octave staff="${staff}" startid="#${id}" endid="#${last}" dis="${line.startsWith('15') ? 15 : 8}" dis.place="${line === '8va' || line === '15ma' ? 'above' : 'below'}"/>`
 
 /** The MEI of a score's measures, one by one: what runs across barlines (ties, slurs, lines) held between them. */
 class Writer {
@@ -250,6 +260,8 @@ class Writer {
   private readonly open = new Map<StaffId, Open>()
   /** By verse, whether its last syllable's word goes on: the next is its middle or end. */
   private readonly words = new Map<number, boolean>()
+  /** The measure's beat (its time signature's unit, from 1) of a tick: where a mark between notes stands. */
+  private stamp: (tick: number) => number = () => 1
 
   constructor(
     private readonly score: Score,
@@ -270,6 +282,9 @@ class Writer {
       measure.repeatStart ? 'left="rptstart"' : '',
     ].filter(Boolean)
     const controls: string[] = []
+    const unitTicks = ticksOf({ value: measure.time.unit, dots: 0 }, this.score.meter)
+    const at = (tick: number) => 1 + (tick - measure.startTick) / unitTicks
+    this.stamp = at
     const staves = this.staves.map((staff) => {
       const clef =
         before && clefIn(before, staff) !== clefIn(measure, staff)
@@ -283,11 +298,6 @@ class Writer {
       return `<staff n="${this.number(staff)}">${layers.join('') || '<layer n="1"/>'}</staff>`
     })
     const top = this.number(this.staves[0] ?? 'treble')
-    const unitTicks = ticksOf(
-      { value: measure.time.unit, dots: 0, triplet: false },
-      this.score.meter,
-    )
-    const at = (tick: number) => 1 + (tick - measure.startTick) / unitTicks
     const end = 1 + measure.ticks / unitTicks
     if (this.options.chordSymbols)
       for (const chord of measure.chords)
@@ -315,15 +325,13 @@ class Writer {
     if (index === this.score.measures.length - 1)
       for (const [staff, open] of this.open)
         if (open.octave) {
-          controls.push(
-            `<octave staff="${this.number(staff)}" startid="#${open.octave.id}" endid="#${open.octave.last}" dis="8" dis.place="${open.octave.line === '8va' ? 'above' : 'below'}"/>`,
-          )
+          controls.push(octaveLine(this.number(staff), open.octave))
           open.octave = undefined
         }
     return `<measure ${attrs.join(' ')}>${staves.join('')}${controls.join('')}</measure>`
   }
 
-  /** A layer's events, beamed by the meter and each beat of triplets a tuplet (`beamPlan`, ADR 0087). */
+  /** A layer's events, beamed by the meter, each tuplet bracketed with its count (`beamPlan`, ADR 0087, 0097). */
   private layer(
     events: readonly ScoreEvent[],
     measure: Measure,
@@ -345,8 +353,11 @@ class Writer {
     return events
       .map((event, index) => {
         const written = this.event(event, staff, layer, stem, controls)
+        const tuplet = event.duration.tuplet
         return [
-          opens(tuplets, index) ? '<tuplet num="3" numbase="2">' : '',
+          opens(tuplets, index) && tuplet
+            ? `<tuplet num="${tuplet.num}" numbase="${tuplet.numbase}">`
+            : '',
           opens(beams, index) ? '<beam>' : '',
           written,
           closes(beams, index) ? '</beam>' : '',
@@ -406,7 +417,8 @@ class Writer {
       ].filter(Boolean)
       return `<note ${attrs.join(' ')}${single && inside ? `>${inside}</note>` : '/>'}`
     })
-    this.marks(marks, id, staff, controls)
+    const after = this.stamp(event.tick + ticksOf(event.duration, this.score.meter))
+    this.marks(marks, id, staff, controls, after)
     const graces = (marks?.grace ?? [])
       .map(
         (grace) =>
@@ -445,7 +457,13 @@ class Writer {
   }
 
   /** A note's or chord's marks as MEI's control events, the spans among them closed where they end. */
-  private marks(marks: NoteMarks | undefined, id: string, staff: StaffId, controls: string[]) {
+  private marks(
+    marks: NoteMarks | undefined,
+    id: string,
+    staff: StaffId,
+    controls: string[],
+    after: number,
+  ) {
     const open = this.open.get(staff) ?? {}
     this.open.set(staff, open)
     const n = this.number(staff)
@@ -453,11 +471,15 @@ class Writer {
     const above = staff !== 'bass'
     // An octave line runs over every note under it: it ends at the last such note before one without.
     if (open.octave && marks?.octave !== open.octave.line) {
-      controls.push(
-        `<octave staff="${n}" startid="#${open.octave.id}" endid="#${open.octave.last}" dis="8" dis.place="${open.octave.line === '8va' ? 'above' : 'below'}"/>`,
-      )
+      controls.push(octaveLine(n, open.octave))
       open.octave = undefined
     }
+    // A glissando runs from its note to the next note or chord on the staff.
+    if (open.gliss) {
+      controls.push(`<gliss staff="${n}" startid="#${open.gliss}" endid="#${id}"/>`)
+      open.gliss = undefined
+    }
+    if (marks?.glissando) open.gliss = id
     if (marks?.octave) {
       if (open.octave) open.octave.last = id
       else open.octave = { id, line: marks.octave, last: id }
@@ -492,15 +514,40 @@ class Writer {
       )
     if (marks.articulations?.includes('fermata'))
       controls.push(`<fermata staff="${n}" ${ref} place="${above ? 'above' : 'below'}"/>`)
+    // A breath mark and a caesura stand after their note, where the next would start.
+    if (marks.articulations?.includes('breath'))
+      controls.push(`<breath staff="${n}" tstamp="${after}"/>`)
+    if (marks.articulations?.includes('caesura'))
+      controls.push(`<caesura staff="${n}" tstamp="${after}"/>`)
     if (marks.arpeggio) controls.push(`<arpeg staff="${n}" plist="#${id}"/>`)
+    // A tempo mark from the note on (ADR 0097), in the song's tempo unit, as the head's is printed.
+    if (marks.tempo !== undefined) {
+      const unit = this.score.tempoUnit ?? beatUnit(this.score.meter)
+      const mark = tempoMark(marks.tempo, unit, this.score.meter)
+      const dots = unit.endsWith('.') ? ' mm.dots="1"' : ''
+      controls.push(
+        `<tempo staff="${n}" ${ref} mm="${mark}" mm.unit="${unit.replace('.', '')}"${dots} place="above">${unitNote(unit)} = ${mark}</tempo>`,
+      )
+    }
+    if (marks.swing)
+      controls.push(
+        `<dir staff="${n}" ${ref} place="above"><rend fontweight="bold">${escape(SWING_TEXT[marks.swing])}</rend></dir>`,
+      )
+    // A Roman numeral under its staff (the bass's numerals print under it); free text over it.
+    if (marks.numeral)
+      controls.push(`<harm staff="${n}" ${ref} place="below">${escape(marks.numeral)}</harm>`)
+    if (marks.text)
+      controls.push(`<dir staff="${n}" ${ref} place="above">${escape(marks.text)}</dir>`)
     const ornament = ornamentOf(marks.ornament, n, ref)
     if (ornament) controls.push(ornament)
   }
 }
 
-/** A tremolo is written on the stem; the other ornaments over the note. */
-const tremolo = (ornament: Ornament | undefined) =>
-  ornament === 'tremolo' ? ' stem.mod="3slash"' : ''
+/** A tremolo is written on the stem, a slash a stroke; the other ornaments over the note. */
+const tremolo = (ornament: Ornament | undefined) => {
+  const strokes = tremoloStrokes(ornament)
+  return strokes ? ` stem.mod="${strokes}slash"` : ''
+}
 
 function ornamentOf(ornament: Ornament | undefined, staff: number, ref: string): string | null {
   switch (ornament) {
@@ -512,6 +559,8 @@ function ornamentOf(ornament: Ornament | undefined, staff: number, ref: string):
       return `<mordent staff="${staff}" ${ref} form="lower"/>`
     case 'turn':
       return `<turn staff="${staff}" ${ref}/>`
+    case 'inverted-turn':
+      return `<turn staff="${staff}" ${ref} form="lower"/>`
     default:
       return null
   }

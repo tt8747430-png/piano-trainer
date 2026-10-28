@@ -173,6 +173,7 @@ export {
   numeralsLine,
   numeralsParam,
   numeralText,
+  parseNumeral,
   parseNumerals,
   readDegree,
   type Numeral,
@@ -260,14 +261,19 @@ export { findNumerals, numeralReadings, standsFor, type FoundSpan } from './nume
 export { KEY_WALKS, walkKeys, type KeyWalk } from './key-walk'
 export { LEAD_INS, withLeadIns, type LeadIn } from './lead-in'
 export {
+  ACCENTS,
   ARTICULATIONS,
   DYNAMICS,
+  LEVELS,
+  tremoloStrokes,
   EXPRESSION_TEXT,
   EXPRESSIONS,
   HAIRPINS,
   OCTAVE_LINES,
   ORNAMENTS,
   PEDALS,
+  SWING_MARKS,
+  SWING_TEXT,
   hasMarks,
   writtenShift,
   type Articulation,
@@ -279,6 +285,7 @@ export {
   type OctaveLine,
   type Ornament,
   type Pedal,
+  type SwingMark,
 } from './marks'
 export {
   BARLINES,

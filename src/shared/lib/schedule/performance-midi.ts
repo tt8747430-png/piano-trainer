@@ -127,7 +127,7 @@ export function performanceMidi(
   const click = isCompound(performance.meter) ? 1.5 : 1
   // The tempo and the pedal as every part marks them, whichever the learner hears (ADR 0097).
   const marked = performance.timing ?? performance.notes
-  const steps = tempoSteps(marked)
+  const steps = tempoSteps(marked, performance.bars[0]?.tempo)
   // The silence before bar 1, in the file's ticks at the music's first tempo.
   const first = tempo * (steps[0]?.factor ?? 1) * click
   const lead = Math.round(((options.lead ?? 0) * first * MIDI_DIVISION) / 60)

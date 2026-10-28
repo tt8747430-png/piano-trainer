@@ -1,15 +1,19 @@
-import type {
-  Articulation,
-  Dynamic,
-  Expression,
-  Hairpin,
-  NoteMarks,
-  OctaveLine,
-  Ornament,
-  Pedal,
+import {
+  numeralOf,
+  numeralText,
+  type Articulation,
+  type Dynamic,
+  type Expression,
+  type Hairpin,
+  type NoteMarks,
+  type OctaveLine,
+  type Ornament,
+  type Pedal,
+  type SwingMark,
 } from '@/shared/lib/music'
 import type { Draft, DraftNote, NoteLayer } from './draft'
 import { isAt, notesOf, withNotes, type Where } from './notes'
+import { chordAt, keyAt } from './timeline'
 
 /** A mark the palette puts on notes (ADR 0097). */
 export type MarkChoice =
@@ -23,6 +27,7 @@ export type MarkChoice =
   | { readonly kind: 'hairpin'; readonly hairpin: Hairpin }
   | { readonly kind: 'expression'; readonly expression: Expression }
   | { readonly kind: 'pedal'; readonly pedal: Pedal }
+  | { readonly kind: 'swing'; readonly swing: SwingMark }
 
 type Writable = { -readonly [K in keyof NoteMarks]: NoteMarks[K] }
 
@@ -43,6 +48,8 @@ export function hasMark(marks: NoteMarks | undefined, mark: MarkChoice): boolean
       return marks?.expression === mark.expression
     case 'pedal':
       return marks?.pedal === mark.pedal
+    case 'swing':
+      return marks?.swing === mark.swing
     default:
       return marks?.[mark.kind] === true
   }
@@ -87,6 +94,10 @@ export function withMark(
       if (on) next.pedal = mark.pedal
       else if (next.pedal === mark.pedal) delete next.pedal
       break
+    case 'swing':
+      if (on) next.swing = mark.swing
+      else if (next.swing === mark.swing) delete next.swing
+      break
     default:
       if (on) next[mark.kind] = true
       else delete next[mark.kind]
@@ -128,7 +139,8 @@ export function markNotes(draft: Draft, layer: NoteLayer, span: Where, mark: Mar
   const end = spans ? endOf(mark) : null
   const start: MarkChoice = end && mark.kind === 'slurEnd' ? { kind: 'slurStart' } : mark
   const startsOnFirst =
-    end !== null || (spans && (mark.kind === 'dynamic' || mark.kind === 'expression'))
+    end !== null ||
+    (spans && (mark.kind === 'dynamic' || mark.kind === 'expression' || mark.kind === 'swing'))
   const targets = startsOnFirst ? inSpan.filter((n) => n.startTick === first) : inSpan
   const on = !targets.every((n) => hasMark(n.marks, start))
   return withNotes(
@@ -142,3 +154,59 @@ export function markNotes(draft: Draft, layer: NoteLayer, span: Where, mark: Mar
     }),
   )
 }
+
+/** What words a note's first onset in a span carries: a tempo mark, a Roman numeral, free text (ADR 0097). */
+type Words = Pick<NoteMarks, 'tempo' | 'numeral' | 'text'>
+
+/** The notes of a span's first onset with their words changed, every note there alike. */
+function wordsOnFirst(
+  draft: Draft,
+  layer: NoteLayer,
+  span: Where,
+  words: (now: NoteMarks | undefined, tick: number) => Partial<Record<keyof Words, unknown>>,
+): Draft {
+  const notes = notesOf(draft, layer)
+  const inSpan = notes.filter(isAt(span))
+  if (inSpan.length === 0) return draft
+  const first = Math.min(...inSpan.map((n) => n.startTick))
+  const there = notes.filter((n) => n.startTick === first)
+  const change = words(there[0]?.marks, first)
+  return withNotes(
+    draft,
+    layer,
+    notes.map((n) => {
+      if (n.startTick !== first) return n
+      const next: Writable = { ...n.marks }
+      for (const [key, value] of Object.entries(change)) {
+        const field = key as keyof Words
+        if (value === undefined) delete next[field]
+        else Object.assign(next, { [field]: value })
+      }
+      const { marks: _old, ...note } = n
+      return Object.keys(next).length > 0 ? { ...note, marks: next } : note
+    }),
+  )
+}
+
+/**
+ * A tempo mark at the span's first onset (ADR 0097): the song's beats a minute from there on; null
+ * takes it off.
+ */
+export const setTempoChange = (draft: Draft, layer: NoteLayer, span: Where, tempo: number | null) =>
+  wordsOnFirst(draft, layer, span, () => ({ tempo: tempo ?? undefined }))
+
+/** Free text over the span's first onset, as typed; empty takes it off. */
+export const setText = (draft: Draft, layer: NoteLayer, span: Where, text: string) =>
+  wordsOnFirst(draft, layer, span, () => ({ text: text.trim() === '' ? undefined : text.trim() }))
+
+/**
+ * The Roman numeral of the chord sounding at the span's first onset, in the key there, put under it
+ * (from the numerals kernel, ADR 0097), or taken off where it is there; none in a bar of no chord.
+ */
+export const toggleNumeral = (draft: Draft, layer: NoteLayer, span: Where) =>
+  wordsOnFirst(draft, layer, span, (now, tick) => {
+    if (now?.numeral) return { numeral: undefined }
+    const chord = chordAt(draft, tick)
+    const numeral = chord ? numeralOf(chord, keyAt(draft, tick)) : null
+    return numeral ? { numeral: numeralText(numeral) } : {}
+  })

@@ -11,8 +11,8 @@ import {
   type Tick,
 } from '@/shared/lib/music'
 
-/** The longest decimal written before a fraction is: a 32nd's `.125`. */
-const MOST_PLACES = 3
+/** The longest decimal written before a fraction is: a 64th's `.0625`. */
+const MOST_PLACES = 4
 
 /**
  * Ticks as beats the content reads back as them: the shortest decimal (`2`, `1.5`, `.5`, `.125`), or

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
 import { arrangePiece, ownChoice, playedBeatCells } from '@/features/practice'
@@ -12,6 +13,8 @@ import {
   stripRelease,
   stripShift,
 } from './strip-place'
+
+const B = TICKS_PER_BEAT
 
 const piece: ChartPiece = {
   id: 'my-1',
@@ -30,9 +33,9 @@ describe('beatThrough', () => {
   it('finds the beat along the strip a tick is in, and how far through it', () => {
     expect(firstBeats(bars)).toEqual([0, 4, 8, 12, 16])
     expect(beatThrough(performance, bars, 0)).toEqual({ cell: 0, through: 0 })
-    expect(beatThrough(performance, bars, 36)).toEqual({ cell: 1, through: 0.5 })
+    expect(beatThrough(performance, bars, 1.5 * B)).toEqual({ cell: 1, through: 0.5 })
     // The repeat's second time, along the strip as played.
-    expect(beatThrough(performance, bars, 2 * 96 + 6)).toEqual({ cell: 8, through: 0.25 })
+    expect(beatThrough(performance, bars, 2 * 4 * B + 0.25 * B)).toEqual({ cell: 8, through: 0.25 })
   })
 })
 

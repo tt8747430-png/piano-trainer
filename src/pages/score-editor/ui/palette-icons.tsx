@@ -337,6 +337,26 @@ const LINE_ICONS = {
       <Word text="8vb" y={18} size={9} italic />
     </Icon>
   ),
+  '15ma': (
+    <Icon>
+      <Word text="15ma" y={12} size={8} italic />
+      <path d="M4 17 H18 V21" strokeDasharray="2 2" />
+    </Icon>
+  ),
+  '15mb': (
+    <Icon>
+      <path d="M4 7 H18 V3" strokeDasharray="2 2" />
+      <Word text="15mb" y={18} size={8} italic />
+    </Icon>
+  ),
+  // A glissando: a wavy line rising from one notehead to another.
+  gliss: (
+    <Icon>
+      <ellipse cx="4.5" cy="18" rx="2.2" ry="1.6" fill="currentColor" stroke="none" />
+      <ellipse cx="19.5" cy="6" rx="2.2" ry="1.6" fill="currentColor" stroke="none" />
+      <path d="M6.5 16 q1.5 -3 3 -1.5 t3 -1.5 t3 -1.5 t2 -2.5" />
+    </Icon>
+  ),
 } as const
 
 /** A line key's picture. */

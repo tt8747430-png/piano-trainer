@@ -1,6 +1,7 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
+import { TICKS_PER_BEAT } from '@/shared/lib/music'
 import { renderWithSettings } from '@/app/testing/render-with-settings'
 import { BUILT_IN_PATTERNS } from '@/entities/pattern'
 import type { ChartPiece } from '@/entities/piece'
@@ -11,6 +12,8 @@ import type { Performance } from '@/shared/lib/arrangement'
 import { ServicesProvider } from '@/shared/lib/services'
 import { stubMatchMedia } from '@/shared/test/match-media'
 import { ChordView } from './ChordView'
+
+const B = TICKS_PER_BEAT
 
 /** C, C, G and Am, a bar each of 4/4, as the Player plays them. */
 const piece: ChartPiece = {
@@ -29,7 +32,7 @@ const performance: Performance = arrangePiece(piece, ownChoice(piece), BUILT_IN_
 
 /** The beat group starting a bar, as the cursor stands on it. */
 const barGroup = (bar: number) =>
-  performance.beatGroups.findIndex((group) => group.bar === bar && group.tick === bar * 96)
+  performance.beatGroups.findIndex((group) => group.bar === bar && group.tick === bar * 4 * B)
 
 /** Diagrams in its summary mode, the cursor at a bar's first beat. */
 function renderSummary(bar: number) {
@@ -227,7 +230,7 @@ function renderView(
   }: { bar?: number; pinned?: boolean; textSize?: 80 | 100 | 130; words?: boolean } = {},
 ) {
   const group = sungPerformance.beatGroups.findIndex(
-    (each) => each.bar === bar && each.tick === bar * 96,
+    (each) => each.bar === bar && each.tick === bar * 4 * B,
   )
   const practice = {
     state: { ...initialPractice(sungPerformance, 'listen', 'both'), beatGroup: group },

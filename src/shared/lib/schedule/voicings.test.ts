@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { note } from '@/shared/lib/music'
+import { note, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { readHands, voicingsMusic } from './voicings'
+
+const B = TICKS_PER_BEAT
 
 const C_MINOR = { tonic: note('C'), minor: true }
 
@@ -37,23 +39,23 @@ describe('voicingsMusic', () => {
     expect(music.key).toEqual(C_MINOR)
     expect(music.bars).toEqual([
       { startTick: 0, beats: 4 },
-      { startTick: 96, beats: 4 },
+      { startTick: 4 * B, beats: 4 },
     ])
     expect(music.chords).toEqual([
       { startTick: 0, symbol: 'Dm7♭5' },
-      { startTick: 96, symbol: 'G7♭13' },
+      { startTick: 4 * B, symbol: 'G7♭13' },
     ])
     expect(
       music.notes.map((each) => [each.midi, each.hand, each.startTick, each.durationTicks]),
     ).toEqual([
-      [50, 'lh', 0, 96],
-      [56, 'lh', 0, 96],
-      [60, 'rh', 0, 96],
-      [65, 'rh', 0, 96],
-      [53, 'lh', 96, 96],
-      [59, 'lh', 96, 96],
-      [63, 'rh', 96, 96],
-      [67, 'rh', 96, 96],
+      [50, 'lh', 0, 4 * B],
+      [56, 'lh', 0, 4 * B],
+      [60, 'rh', 0, 4 * B],
+      [65, 'rh', 0, 4 * B],
+      [53, 'lh', 4 * B, 4 * B],
+      [59, 'lh', 4 * B, 4 * B],
+      [63, 'rh', 4 * B, 4 * B],
+      [67, 'rh', 4 * B, 4 * B],
     ])
     expect(music.notes[1]?.spelled).toEqual(note('A', -1))
   })

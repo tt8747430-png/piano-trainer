@@ -214,12 +214,12 @@ describe('parseChart', () => {
     ['C:zz', 'method code "zz"'],
     ['C@0', '"0"'],
     ['C@x', '"x"'],
-    ['C@0.3', '"0.3"'],
+    ['C@0.0001', '"0.0001"'],
     ['C@1e8', '"1e8"'],
     ['C@25', '"25"'],
     ['C@12-G@8', 'longer than four bars'],
     ['C@4-G', 'leave no beats'],
-    ['C-D-E-F-G', '5 chords'],
+    ['C-D-E-F-G-A-B-C-D-E-F', '11 chords'],
     ['  ', 'empty line'],
   ])('refuses %j', (line, problem) => {
     const error = errorOf([line])

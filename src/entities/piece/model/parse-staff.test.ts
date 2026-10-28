@@ -1,17 +1,19 @@
 import { describe, expect, it } from 'vitest'
-import { note } from '@/shared/lib/music'
+import { note, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { ContentError } from './content-error'
 import { parseStaff } from './parse-staff'
 import { testSong } from '../testing/test-pieces'
+
+const B = TICKS_PER_BEAT
 
 const staffOf = (notes: string) => parseStaff(testSong(['C'], { staves: [{ notes }] }), 0)
 
 describe('parseStaff', () => {
   it('reads notes as written and rests, in beats, ignoring bar lines', () => {
     expect(staffOf('E4/1 D4/.5 r/1 | C#5/1.5')).toEqual([
-      { midi: 64, spelled: note('E'), startTick: 0, durationTicks: 24 },
-      { midi: 62, spelled: note('D'), startTick: 24, durationTicks: 12 },
-      { midi: 73, spelled: note('C', 1), startTick: 60, durationTicks: 36 },
+      { midi: 64, spelled: note('E'), startTick: 0, durationTicks: B },
+      { midi: 62, spelled: note('D'), startTick: B, durationTicks: 0.5 * B },
+      { midi: 73, spelled: note('C', 1), startTick: 2.5 * B, durationTicks: 1.5 * B },
     ])
   })
 
@@ -26,7 +28,7 @@ describe('parseStaff', () => {
     expect(parseStaff(testSong(['C']), 0)).toEqual([])
   })
 
-  it.each(['X4/1', 'E4', 'E4/0', 'E4/0.3', 'E/1', 'E4/25', 'E4/1e8', 'C9/1', 'B#8/1', 'Ab0/1'])(
+  it.each(['X4/1', 'E4', 'E4/0', 'E4/0.0001', 'E/1', 'E4/25', 'E4/1e8', 'C9/1', 'B#8/1', 'Ab0/1'])(
     'names the staff and the note it cannot read: %j',
     (token) => {
       let caught: unknown

@@ -43,6 +43,24 @@ function Drawn({ children }: { children: ReactNode }) {
 
 const MORDENT = 'M3 15 L7 9 L10 14 L14 8 L17 13 L21 7'
 
+/** A quarter note with a tremolo's strokes across its stem, as Flat's keys draw them. */
+function Stroked({ strokes }: { strokes: 1 | 2 | 3 }) {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="currentColor">
+      <ellipse cx="9" cy="19" rx="4" ry="2.8" transform="rotate(-20 9 19)" />
+      <rect x="12.4" y="2" width="1.4" height="17" />
+      {Array.from({ length: strokes }, (_, i) => (
+        <path
+          key={i}
+          d={`M9 ${9 + i * 3.4} L17 ${6.5 + i * 3.4}`}
+          stroke="currentColor"
+          strokeWidth="1.8"
+        />
+      ))}
+    </svg>
+  )
+}
+
 /** Whether every note chosen wears the mark: its key then stands pressed. */
 const useMarkOn = (mark: MarkChoice): boolean =>
   useEditorState((state) => {
@@ -97,6 +115,9 @@ export function ArticulationKeys() {
       <MarkKey mark={{ kind: 'articulation', articulation: 'tenuto' }} label={t('marks.tenuto')}>
         <OnHead mark="—" />
       </MarkKey>
+      <MarkKey mark={{ kind: 'articulation', articulation: 'portato' }} label={t('marks.portato')}>
+        <OnHead mark="•̲" />
+      </MarkKey>
       <MarkKey mark={{ kind: 'articulation', articulation: 'marcato' }} label={t('marks.marcato')}>
         <OnHead mark="^" />
       </MarkKey>
@@ -104,6 +125,16 @@ export function ArticulationKeys() {
         <span aria-hidden className={MUSIC}>
           𝄐
         </span>
+      </MarkKey>
+      <MarkKey mark={{ kind: 'articulation', articulation: 'breath' }} label={t('marks.breath')}>
+        <span aria-hidden className="font-serif text-3xl font-bold leading-none">
+          ’
+        </span>
+      </MarkKey>
+      <MarkKey mark={{ kind: 'articulation', articulation: 'caesura' }} label={t('marks.caesura')}>
+        <Drawn>
+          <path d="M7 19 L12 5 M12 19 L17 5" />
+        </Drawn>
       </MarkKey>
       <MarkKey mark={{ kind: 'ornament', ornament: 'trill' }} label={t('marks.trill')}>
         <span aria-hidden className={PRINTED}>
@@ -129,11 +160,24 @@ export function ArticulationKeys() {
           𝆗
         </span>
       </MarkKey>
-      <MarkKey mark={{ kind: 'ornament', ornament: 'tremolo' }} label={t('marks.tremolo')}>
-        <Drawn>
-          <path d="M5 9 L19 5 M5 14 L19 10 M5 19 L19 15" />
-        </Drawn>
+      <MarkKey
+        mark={{ kind: 'ornament', ornament: 'inverted-turn' }}
+        label={t('marks.invertedTurn')}
+      >
+        <span aria-hidden className={`${MUSIC} relative`}>
+          𝆗
+          <span className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-current" />
+        </span>
       </MarkKey>
+      {([1, 2, 3] as const).map((strokes) => (
+        <MarkKey
+          key={strokes}
+          mark={{ kind: 'ornament', ornament: `tremolo-${strokes}` }}
+          label={t(`marks.tremolo${strokes}`)}
+        >
+          <Stroked strokes={strokes} />
+        </MarkKey>
+      ))}
       <MarkKey mark={{ kind: 'arpeggio' }} label={t('marks.arpeggio')}>
         <Drawn>
           <path d="M12 2 C9 4 15 6 12 8 C9 10 15 12 12 14 C9 16 15 18 12 20 M9 19 L12 22 L15 19" />
@@ -143,7 +187,10 @@ export function ArticulationKeys() {
   )
 }
 
-/** The Dynamics: pianissimo to fortissimo, each set from the note it stands under. */
+/**
+ * The Dynamics, Flat's eighteen: ppp to fff, each set from the note it stands under, then the accents
+ * (sforzando, forte-piano …), each on its note alone (ADR 0097).
+ */
 export function DynamicKeys() {
   const { t } = useTranslation('editor')
   return (

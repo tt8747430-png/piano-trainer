@@ -18,6 +18,8 @@ import { beatsText, writeBar } from './write-chart'
 import { writeHand } from './write-hands'
 import { writeStaff } from './write-staff'
 
+const B = TICKS_PER_BEAT
+
 const bar = (...chords: [string, number, string?][]): ChartBar => ({
   chords: chords.map(([symbol, beats, method]) => ({
     ...parseChordSymbol(symbol),
@@ -30,12 +32,25 @@ const firstBar = (line: string) => parseChart(testSong([line])).sections[0]?.lin
 
 describe('beatsText', () => {
   it('writes ticks as beats in the shortest decimal that reads back as them', () => {
-    expect([48, 36, 12, 6, 3, 54].map(beatsText)).toEqual(['2', '1.5', '.5', '.25', '.125', '2.25'])
+    expect([2 * B, 1.5 * B, 0.5 * B, 0.25 * B, 0.125 * B, 2.25 * B].map(beatsText)).toEqual([
+      '2',
+      '1.5',
+      '.5',
+      '.25',
+      '.125',
+      '2.25',
+    ])
   })
 
   it('writes thirds of a beat as a fraction in its lowest terms, which reads back as them', () => {
-    expect([8, 16, 4, 40].map(beatsText)).toEqual(['1:3', '2:3', '1:6', '5:3'])
-    for (const ticks of [8, 4, 40]) expect(ticksIn(readBeats(beatsText(ticks)) ?? 0)).toBe(ticks)
+    expect([B / 3, (2 * B) / 3, B / 6, (5 * B) / 3].map(beatsText)).toEqual([
+      '1:3',
+      '2:3',
+      '1:6',
+      '5:3',
+    ])
+    for (const ticks of [B / 3, B / 6, (5 * B) / 3])
+      expect(ticksIn(readBeats(beatsText(ticks)) ?? 0)).toBe(ticks)
   })
 })
 
@@ -84,13 +99,13 @@ describe('writeBar', () => {
 
   it('reads back thirds of a beat exactly', () => {
     const written = writeBar(bar(['C', 1 / 3], ['G', 11 / 3]), '4/4')
-    expect(firstBar(written)?.chords.map((chord) => chord.beats * 24)).toEqual([8, 88])
+    expect(firstBar(written)?.chords.map((chord) => chord.beats)).toEqual([1 / 3, 11 / 3])
   })
 })
 
 const bars4 = [
-  { startTick: 0, ticks: 96 },
-  { startTick: 96, ticks: 96 },
+  { startTick: 0, ticks: 4 * B },
+  { startTick: 4 * B, ticks: 4 * B },
 ]
 const staffNote = (m: number, startTick: number, durationTicks: number) => ({
   midi: midi(m),
@@ -103,12 +118,12 @@ const staffOf = (lines: string[], notes: string) =>
 
 describe('writeStaff', () => {
   it('writes notes and the rests between them, a bar line where one falls between notes', () => {
-    const notes: StaffNote[] = [staffNote(64, 24, 48), staffNote(64, 96, 96)]
+    const notes: StaffNote[] = [staffNote(64, B, 2 * B), staffNote(64, 4 * B, 4 * B)]
     expect(writeStaff(notes, bars4)).toBe('r/1 E4/2 r/1 | E4/4')
   })
 
   it('writes a note across a bar line as one note', () => {
-    expect(writeStaff([staffNote(61, 48, 96)], bars4)).toBe('r/2 C#4/4')
+    expect(writeStaff([staffNote(61, 2 * B, 4 * B)], bars4)).toBe('r/2 C#4/4')
   })
 
   it('writes a staff with nothing on it as its first bar’s rest, so it stays (ADR 0114)', () => {
@@ -125,7 +140,11 @@ describe('writeStaff', () => {
   })
 
   it('reads back as written', () => {
-    const notes: StaffNote[] = [staffNote(64, 0, 8), staffNote(61, 8, 88), staffNote(64, 120, 24)]
+    const notes: StaffNote[] = [
+      staffNote(64, 0, B / 3),
+      staffNote(61, B / 3, (11 * B) / 3),
+      staffNote(64, 5 * B, B),
+    ]
     expect(staffOf(['C C'], writeStaff(notes, bars4))).toEqual(notes)
   })
 })
@@ -149,27 +168,27 @@ describe('writeHand', () => {
       [
         [],
         [
-          handNote(48, 0, 96, 1),
-          handNote(52, 24, 24),
-          handNote(55, 24, 24, 3),
-          handNote(52, 48, 24),
-          handNote(55, 48, 24),
+          handNote(48, 0, 4 * B, 1),
+          handNote(52, B, B),
+          handNote(55, B, B, 3),
+          handNote(52, 2 * B, B),
+          handNote(55, 2 * B, B),
         ],
       ],
-      [96, 96],
+      [4 * B, 4 * B],
     )
     expect(written).toBe('r/4 | C3^1/4 E3+G3^3/1@2 E3+G3/1')
   })
 
   it('writes every bar, a silent one as a rest of the bar’s length', () => {
-    expect(writeHand([[], []], [96, 72])).toBe('r/4 | r/3')
+    expect(writeHand([[], []], [4 * B, 3 * B])).toBe('r/4 | r/3')
   })
 
   it('reads back as written', () => {
-    const notes = [handNote(48, 0, 144), handNote(52, 48, 24)]
-    const text = writeHand([notes, [handNote(55, 72, 24)]], [96, 96])
+    const notes = [handNote(48, 0, 6 * B), handNote(52, 2 * B, B)]
+    const text = writeHand([notes, [handNote(55, 3 * B, B)]], [4 * B, 4 * B])
     const bars = parseChart(testSong(['C G'], { hands: { lh: text } })).sections[0]?.lines[0]
-    expect(bars?.map((read) => read.hands?.lh)).toEqual([notes, [handNote(55, 72, 24)]])
+    expect(bars?.map((read) => read.hands?.lh)).toEqual([notes, [handNote(55, 3 * B, B)]])
   })
 })
 

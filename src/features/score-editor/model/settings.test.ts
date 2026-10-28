@@ -15,8 +15,8 @@ describe('the song’s settings', () => {
     const moved = setKey(draft, { tonic: note('E', -1), minor: false })
     expect(moved.key).toEqual({ tonic: note('E', -1), minor: false })
     expect(form(moved)).toEqual([[['E♭@0', 'B♭7/D@0']]])
-    expect(shape(staffNotes(moved))).toEqual(['G4@0/96', 'F4@96/96'])
-    expect(shape(moved.hands.lh)).toEqual(['E♭3@0/96'])
+    expect(shape(staffNotes(moved))).toEqual(['G4@0/4', 'F4@4/4'])
+    expect(shape(moved.hands.lh)).toEqual(['E♭3@0/4'])
   })
 
   it('moves a section’s own key with the music (ADR 0114)', () => {
@@ -75,21 +75,21 @@ describe('transpose (ADR 0115)', () => {
   it('leaves the chord symbols as they are, the notes moved, without Apply to chords', () => {
     const moved = transpose(draft, 3, { key: true, chords: false })
     expect(form(moved)).toEqual(form(draft))
-    expect(shape(staffNotes(moved))).toEqual(['G4@0/96', 'F4@96/96'])
+    expect(shape(staffNotes(moved))).toEqual(['G4@0/4', 'F4@4/4'])
   })
 
   it('keeps the key signature, the notes and chords moved, without Apply to key', () => {
     const moved = transpose(draft, 2, { key: false, chords: true })
     expect(moved.key).toEqual(draft.key)
     expect(form(moved)).toEqual([[['D@0', 'A7/C#@0']]])
-    expect(shape(staffNotes(moved))).toEqual(['F#4@0/96', 'E4@96/96'])
+    expect(shape(staffNotes(moved))).toEqual(['F#4@0/4', 'E4@4/4'])
   })
 
   it('moves the notes alone with neither applied, and nothing by no semitone', () => {
     const moved = transpose(draft, 2, { key: false, chords: false })
     expect(moved.key).toEqual(draft.key)
     expect(form(moved)).toEqual(form(draft))
-    expect(shape(moved.hands.lh)).toEqual(['D3@0/96'])
+    expect(shape(moved.hands.lh)).toEqual(['D3@0/4'])
     expect(transpose(draft, 0, { key: true, chords: true })).toBe(draft)
   })
 })

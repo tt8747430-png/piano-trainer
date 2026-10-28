@@ -1,13 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import { arrange, type Chart, type Performance } from '@/shared/lib/arrangement'
-import { note, type Meter, type SpelledNote } from '@/shared/lib/music'
+import { note, TICKS_PER_BEAT, type Meter, type SpelledNote } from '@/shared/lib/music'
 import { BUILT_IN_PATTERNS } from '../model/book'
 import { patternNeed } from '../model/fit'
 import { METHOD_CODES, type PatternId } from '../model/types'
 import { METHODS } from './methods'
 
 // Called to Play's level 2 plays level 1's methods in 6/8 and 12/8: each figure
-// below is the book's, a dotted-quarter beat 24 ticks, an 8th 8, a 16th 4.
+// below is the book's, counted in 24ths of the dotted-quarter beat: an 8th 8, a 16th 4.
+const IN_24THS = TICKS_PER_BEAT / 24
 
 const NAMES = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B']
 const keyName = (midi: number) => `${NAMES[midi % 12]}${Math.floor(midi / 12) - 1}`
@@ -33,7 +34,8 @@ const hand = (performance: Performance, which: 'rh' | 'lh') => {
     .toSorted((a, b) => a - b)
     .map((tick) => {
       const struck = notes.filter((n) => n.startTick === tick).toSorted((a, b) => a.midi - b.midi)
-      return `${tick}:${struck.map((n) => keyName(n.midi)).join('+')}/${struck[0]?.durationTicks}`
+      const length = (struck[0]?.durationTicks ?? 0) / IN_24THS
+      return `${tick / IN_24THS}:${struck.map((n) => keyName(n.midi)).join('+')}/${length}`
     })
 }
 const A = note('A')

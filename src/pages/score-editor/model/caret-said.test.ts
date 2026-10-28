@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { readDraft, type EditorState } from '@/features/score-editor'
-import { midi } from '@/shared/lib/music'
+import { midi, TICKS_PER_BEAT } from '@/shared/lib/music'
 import { caretSaid } from './caret-said'
+
+const B = TICKS_PER_BEAT
 
 const music = {
   key: 'D',
@@ -21,23 +23,25 @@ describe('caretSaid', () => {
       bar: 1,
       beat: '1',
       what: 'F#4',
-      value: { value: 4, dots: 1, triplet: false },
+      value: { value: 4, dots: 1 },
     })
-    expect(at(36, 'staff0')).toEqual({ kind: 'rest', bar: 1, beat: '2.5', what: '' })
-    expect(at(96, 'chords')).toEqual({ kind: 'at', bar: 2, beat: '1', what: 'A7' })
-    expect(at(120, 'lh')).toEqual({ kind: 'rest', bar: 2, beat: '2', what: '' })
-    expect(at(192, 'staff0')).toEqual({ kind: 'end' })
+    expect(at(1.5 * B, 'staff0')).toEqual({ kind: 'rest', bar: 1, beat: '2.5', what: '' })
+    expect(at(4 * B, 'chords')).toEqual({ kind: 'at', bar: 2, beat: '1', what: 'A7' })
+    expect(at(5 * B, 'lh')).toEqual({ kind: 'rest', bar: 2, beat: '2', what: '' })
+    expect(at(8 * B, 'staff0')).toEqual({ kind: 'end' })
   })
 
   it('says a chord as the sheet prints it, ♯ and ♭ as signs', () => {
     const sharp = readDraft({ ...music, sections: [{ kind: 'verse', lines: ['F#m Bb7'] }] })
     expect(caretSaid({ draft: sharp, caret: 0, layer: 'chords' })).toMatchObject({ what: 'F♯m' })
-    expect(caretSaid({ draft: sharp, caret: 96, layer: 'chords' })).toMatchObject({ what: 'B♭7' })
+    expect(caretSaid({ draft: sharp, caret: 4 * B, layer: 'chords' })).toMatchObject({
+      what: 'B♭7',
+    })
   })
 
   it('says a bar of no chord has none in the chord row (ADR 0114)', () => {
     const empty = readDraft({ ...music, sections: [{ kind: 'verse', lines: ['D _'] }] })
-    expect(caretSaid({ draft: empty, caret: 96, layer: 'chords' })).toEqual({
+    expect(caretSaid({ draft: empty, caret: 4 * B, layer: 'chords' })).toEqual({
       kind: 'noChord',
       bar: 2,
       beat: '1',
@@ -53,26 +57,26 @@ describe('caretSaid', () => {
   })
 
   it('says a note is held where it sounds on from before the caret', () => {
-    expect(at(24, 'staff0')).toEqual({ kind: 'held', bar: 1, beat: '2', what: 'F#4' })
-    expect(at(120, 'staff0')).toEqual({ kind: 'held', bar: 2, beat: '2', what: 'A4' })
+    expect(at(B, 'staff0')).toEqual({ kind: 'held', bar: 1, beat: '2', what: 'F#4' })
+    expect(at(5 * B, 'staff0')).toEqual({ kind: 'held', bar: 2, beat: '2', what: 'A4' })
   })
 
   it('names the mode where it is not Replace, on a staff alone (ADR 0114)', () => {
-    expect(caretSaid({ draft, caret: 36, layer: 'staff0', mode: 'insert' })).toEqual({
+    expect(caretSaid({ draft, caret: 1.5 * B, layer: 'staff0', mode: 'insert' })).toEqual({
       kind: 'rest',
       bar: 1,
       beat: '2.5',
       what: '',
       mode: 'insert',
     })
-    expect(caretSaid({ draft, caret: 192, layer: 'staff0', mode: 'chord' })).toEqual({
+    expect(caretSaid({ draft, caret: 8 * B, layer: 'staff0', mode: 'chord' })).toEqual({
       kind: 'end',
       mode: 'chord',
     })
     expect(caretSaid({ draft, caret: 0, layer: 'staff0', mode: 'replace' })).not.toHaveProperty(
       'mode',
     )
-    expect(caretSaid({ draft, caret: 96, layer: 'chords', mode: 'insert' })).not.toHaveProperty(
+    expect(caretSaid({ draft, caret: 4 * B, layer: 'chords', mode: 'insert' })).not.toHaveProperty(
       'mode',
     )
   })

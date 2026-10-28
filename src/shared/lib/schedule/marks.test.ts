@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { PerformanceNote } from '@/shared/lib/arrangement'
 import { C_MAJOR, midi, note, type NoteMarks } from '@/shared/lib/music'
-import { loudness, markedSounds, rollOffsets, stressOf } from './marks'
+import { glissandoTargets, loudness, markedSounds, rollOffsets, stressOf } from './marks'
 
 const played = (m: number, startTick: number, marks?: NoteMarks): PerformanceNote => ({
   midi: midi(m),
@@ -75,7 +75,37 @@ describe('markedSounds', () => {
   it('turns round the note and repeats it as a tremolo', () => {
     const turn = markedSounds(sound, { ornament: 'turn' }, at60)
     expect(turn.map((s) => s.midi)).toEqual([74, 72, 71, 72])
-    expect(markedSounds(sound, { ornament: 'tremolo' }, at60)).toHaveLength(4)
+    expect(markedSounds(sound, { ornament: 'tremolo-3' }, at60)).toHaveLength(4)
+  })
+
+  it('turns the other way round for an inverted turn', () => {
+    const turn = markedSounds(sound, { ornament: 'inverted-turn' }, at60)
+    expect(turn.map((s) => s.midi)).toEqual([71, 72, 74, 72])
+  })
+
+  it('repeats a tremolo’s note in 8ths, 16ths or 32nds by its strokes', () => {
+    const strokes = (ornament: NoteMarks['ornament']) =>
+      markedSounds(sound, { ornament }, at60).map((s) => s.at)
+    expect(strokes('tremolo-1')).toEqual([1])
+    expect(strokes('tremolo-2')).toEqual([1, 1.25])
+    expect(strokes('tremolo-3')).toEqual([1, 1.125, 1.25, 1.375])
+  })
+
+  it('plays portato a little detached, and leaves a breath or a caesura’s silence after the note', () => {
+    const length = (marks: NoteMarks) => markedSounds(sound, marks, at60)[0]?.duration
+    expect(length({ articulations: ['portato'] })).toBe(0.375)
+    expect(length({ articulations: ['breath'] })).toBe(0.25)
+    expect(length({ articulations: ['caesura'] })).toBe(0.25)
+    expect(length({ articulations: ['caesura'], ornament: 'trill' })).toBe(0.125)
+  })
+
+  it('slides a glissando over the white keys to the next note, which it does not play', () => {
+    const up = markedSounds(sound, { glissando: true }, { ...at60, glissTo: midi(79) })
+    expect(up.map((s) => s.midi)).toEqual([72, 74, 76, 77])
+    expect(up.map((s) => s.at)).toEqual([1, 1.125, 1.25, 1.375])
+    const down = markedSounds(sound, { glissando: true }, { ...at60, glissTo: midi(69) })
+    expect(down.map((s) => s.midi)).toEqual([72, 71])
+    expect(markedSounds(sound, { glissando: true }, at60)).toHaveLength(1)
   })
 })
 
@@ -87,6 +117,23 @@ describe('loudness', () => {
       played(64, 48, { dynamic: 'f' }),
     ]
     expect(loudness(notes)).toEqual([0.7, 0.7, 1.25])
+    const extremes = [played(60, 0, { dynamic: 'ppp' }), played(62, 24, { dynamic: 'fff' })]
+    expect(loudness(extremes)[0]).toBeLessThan(0.5)
+    expect(loudness(extremes)[1]).toBeGreaterThan(1.5)
+  })
+
+  it('strikes a sforzando note alone harder, and a forte-piano loud then holds it soft', () => {
+    const sforzando = [
+      played(60, 0, { dynamic: 'p' }),
+      played(62, 24, { dynamic: 'sfz' }),
+      played(64, 48),
+    ]
+    const [p, sfz, after] = loudness(sforzando)
+    expect(sfz).toBeGreaterThan(p ?? 1)
+    expect(after).toBe(p)
+    const fortePiano = loudness([played(60, 0, { dynamic: 'fp' }), played(62, 24)])
+    expect(fortePiano).toEqual([1.25, 0.7])
+    expect(loudness([played(60, 0, { dynamic: 'pf' }), played(62, 24)])).toEqual([0.7, 1.25])
   })
 
   it('ramps a hairpin to the next dynamic, else a step past where it began', () => {
@@ -114,5 +161,18 @@ describe('rollOffsets', () => {
       played(72, 24),
     ]
     expect(rollOffsets(notes)).toEqual([0.06, 0, 0.03, 0])
+  })
+})
+
+describe('glissandoTargets', () => {
+  it('slides to the nearest note of its part’s next onset', () => {
+    const notes = [
+      played(60, 0, { glissando: true }),
+      played(72, 24),
+      played(76, 24),
+      { ...played(40, 24), hand: 'lh' as const },
+    ]
+    expect(glissandoTargets(notes)).toEqual([72, undefined, undefined, undefined])
+    expect(glissandoTargets([played(60, 0, { glissando: true })])).toEqual([undefined])
   })
 })

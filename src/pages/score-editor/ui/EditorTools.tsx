@@ -107,7 +107,7 @@ function Tools({ form }: { form: PaletteForm }) {
         <LineKeys lines={['cresc', 'dim']} />
       </Section>
       <Section category="lines">
-        <LineKeys lines={['slur', '8va', '8vb']} />
+        <LineKeys lines={['slur', '8va', '8vb', '15ma', '15mb', 'gliss']} />
       </Section>
       <Section category="bar">
         <BarKeys />

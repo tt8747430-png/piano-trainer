@@ -11,11 +11,11 @@ import {
 import type { ScoreEvent } from './types'
 import { ticksOf } from './values'
 
-/** Which of a voice's events (by index) are beamed together, and which make a triplet. */
+/** Which of a voice's events (by index) are beamed together, and which make a tuplet. */
 export interface BeamPlan {
   /** Each beam's events, two or more, in order. */
   readonly beams: readonly (readonly number[])[]
-  /** Each tuplet's events: a beat of triplets. */
+  /** Each tuplet's events, in order. */
   readonly tuplets: readonly (readonly number[])[]
 }
 
@@ -67,7 +67,8 @@ function runsBy(indices: readonly number[], key: (index: number) => number): num
 /**
  * A voice's beams and tuplets in a bar, as LilyPond's auto-beaming writes them (ADR 0087): eighths
  * beamed over the meter's groups (`eighthsGroups`), a beam with anything shorter cut at each beat; a
- * rest or a longer note ends a beam; each beat of triplets one tuplet, its eighths beamed. `barStart`
+ * rest or a longer note ends a beam; each tuplet one bracket (ADR 0097), its eighths and shorter
+ * beamed. `barStart`
  * is where the bar's first beat falls (before a pickup's music).
  */
 export function beamPlan(
@@ -83,10 +84,10 @@ export function beamPlan(
   const indices = events.map((_, index) => index)
 
   const tuplets = runsBy(
-    indices.filter((index) => events[index]?.duration.triplet),
-    beatOf,
+    indices.filter((index) => events[index]?.tupletAt !== undefined),
+    (index) => events[index]?.tupletAt ?? 0,
   )
-  const tripletBeams = tuplets.flatMap((tuplet) =>
+  const tupletBeams = tuplets.flatMap((tuplet) =>
     runsBy(
       tuplet.filter((index) => beamable(events[index])),
       () => 0,
@@ -95,14 +96,14 @@ export function beamPlan(
 
   const groups = eighthsGroups(time, meter)
   const plain = indices.filter(
-    (index) => beamable(events[index]) && !events[index]?.duration.triplet,
+    (index) => beamable(events[index]) && events[index]?.tupletAt === undefined,
   )
   const beams = runsBy(plain, (index) => groupAt(groups, Math.max(0, at(index)))).flatMap((run) =>
     run.some((index) => (events[index]?.duration.value ?? 0) > 8) ? runsBy(run, beatOf) : [run],
   )
   const order = (a: readonly number[], b: readonly number[]) => (a[0] ?? 0) - (b[0] ?? 0)
   return {
-    beams: [...beams, ...tripletBeams].filter((beam) => beam.length > 1).sort(order),
+    beams: [...beams, ...tupletBeams].filter((beam) => beam.length > 1).sort(order),
     tuplets,
   }
 }
@@ -114,4 +115,4 @@ export const barStartOf = (
 ): Tick =>
   measure.startTick +
   measure.ticks -
-  measure.time.count * ticksOf({ value: measure.time.unit, dots: 0, triplet: false }, meter)
+  measure.time.count * ticksOf({ value: measure.time.unit, dots: 0 }, meter)
