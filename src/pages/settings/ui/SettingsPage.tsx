@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { ArrowDown, ArrowDownLeft, ArrowDownRight, LifeBuoy } from 'lucide-react'
-import { useId, useState, type ReactNode } from 'react'
+import { ArrowDown, ArrowDownLeft, ArrowDownRight, Cable, LifeBuoy } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
 import {
@@ -16,21 +16,20 @@ import {
   type Theme,
 } from '@/entities/settings'
 import { BackupFields } from '@/features/backup-data'
-import { MidiControl, MidiSettingsFields } from '@/features/connect-midi'
+import { useMidiSummary } from '@/features/connect-midi'
 import { KeyboardSettingsFields } from '@/features/live-keyboard'
 import { MetronomeSwitch, TuneSwitch } from '@/features/record-take'
 import { resetProgress } from '@/features/reset-progress'
 import { setFloating, setLocale, setTheme, setTitles } from '@/features/set-preference'
 import { LOCALES, type Locale } from '@/shared/i18n'
-import { cn } from '@/shared/lib'
 import {
   BackButton,
-  InfoTip,
   RowLink,
   ScreenHeader,
   Segmented,
   SettingField,
   SettingRows,
+  SettingsGroup as Group,
   SwitchRow,
 } from '@/shared/ui'
 import {
@@ -56,35 +55,6 @@ const THEME_LABEL = {
   dark: 'theme.dark',
 } as const satisfies Record<Theme, string>
 
-/**
- * A group of settings, boxed as the book boxes a thing: its title in a band across the top, what the
- * group is for in the ⓘ beside it where its title does not say (ADR 0096), its rows under it.
- */
-function Group({
-  title,
-  info,
-  children,
-  className,
-}: {
-  title: string
-  info?: ReactNode
-  children: ReactNode
-  className?: string
-}) {
-  const id = useId()
-  return (
-    <section aria-labelledby={id} className={cn('overflow-hidden card', className)}>
-      <div className="flex items-center gap-1.5 border-b border-border bg-muted px-5 py-2">
-        <h2 id={id} className="text-xl">
-          {title}
-        </h2>
-        {info ? <InfoTip name={title}>{info}</InfoTip> : null}
-      </div>
-      <div className="flex flex-col gap-3 px-5 py-4">{children}</div>
-    </section>
-  )
-}
-
 /** Each place the floating actions can stand, drawn as the corner of the screen's foot it is. */
 const PLACE_ICON = {
   left: ArrowDownLeft,
@@ -94,9 +64,9 @@ const PLACE_ICON = {
 
 /**
  * Settings, as an app's settings page reads (ADR 0096): Language, Theme, Appearance (the page titles,
- * the floating buttons), the Keyboard, the MIDI keyboard, Recording, Backup, Help (How to use, ADR
- * 0052) and Progress, each choice
- * one compact row (its name with its ⓘ, the control at its right or under it), two columns from a
+ * the floating buttons), the Keyboard, the MIDI keyboard (a row to its own screen, its state at its
+ * right, ADR 0034), Recording, Backup, Help (How to use, ADR 0052) and Progress, each choice one
+ * compact row (its name with its ⓘ, the control at its right or under it), two columns from a
  * laptop's width.
  */
 export function SettingsPage() {
@@ -107,6 +77,7 @@ export function SettingsPage() {
   const theme = useSettings(selectTheme)
   const titles = useSettings(selectTitles)
   const floating = useSettings(selectFloating)
+  const midiSummary = useMidiSummary()
   const [confirming, setConfirming] = useState(false)
   const reset = () => {
     resetProgress(progress)
@@ -171,10 +142,15 @@ export function SettingsPage() {
         <Group title={t('keyboard')} className="lg:col-start-2 lg:row-span-6 lg:row-start-2">
           <KeyboardSettingsFields />
         </Group>
-        <Group title={t('midi')}>
-          <MidiControl />
-          <MidiSettingsFields />
-        </Group>
+        <nav aria-label={t('midi')} className="card p-1.5">
+          <RowLink
+            title={t('midi')}
+            icon={Cable}
+            paint="lilac"
+            value={midiSummary}
+            render={<Link to="/settings/midi" />}
+          />
+        </nav>
         <Group title={t('recording')}>
           <SettingRows>
             <MetronomeSwitch />

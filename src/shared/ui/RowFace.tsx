@@ -20,6 +20,8 @@ export type RowFaceProps = {
   count?: string | undefined
   /** What it carries at its end: a level, a mark. */
   trailing?: ReactNode
+  /** Its setting's value now, at its end before the chevron (Settings' "MIDI keyboard  Off ›"). */
+  value?: string | undefined
   /** What it shows under its title and detail. */
   children?: ReactNode
 } & RowTile
@@ -28,7 +30,7 @@ export type RowFaceProps = {
  * What a list row shows (`RowLink`, `RowButton`): a tile in its paint with an icon, or its number in
  * a sequence (a list of one kind goes without, every row's tile alike), a title of up to two lines,
  * an optional detail of up to two, what it holds under them (a song's chords), what it carries at its
- * end, then the row's own `end` (a link's chevron).
+ * end, its setting's value, then the row's own `end` (a link's chevron).
  */
 export function RowFace({
   title,
@@ -38,6 +40,7 @@ export function RowFace({
   numeral,
   paint,
   trailing,
+  value,
   children,
   end,
 }: RowFaceProps & { end?: ReactNode }) {
@@ -74,6 +77,17 @@ export function RowFace({
         {children ? <> {children}</> : null}
       </span>
       {trailing ? <> {trailing}</> : null}
+      {value ? (
+        <>
+          {' '}
+          <span
+            data-slot="row-value"
+            className="max-w-[45%] shrink-0 truncate text-muted-foreground"
+          >
+            {value}
+          </span>
+        </>
+      ) : null}
       {end}
     </>
   )
