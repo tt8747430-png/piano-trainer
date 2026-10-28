@@ -7,6 +7,7 @@ citation still leads to the right one (`git log -- docs/adr` reads the old recor
 | ADR                                         | Title                                              | Decides                                       |
 | ------------------------------------------- | -------------------------------------------------- | --------------------------------------------- |
 | [0002](0002-foundations.md)                 | Foundations                                        | the stack, FSD, content as code, i18n, PWA    |
+| [0116](0116-the-backend.md)                 | The backend                                        | accounts, sync, content from the database     |
 | [0038](0038-state-urls-and-saved-stores.md) | State: the URL and saved stores                    | URLs, saved stores, remembered views          |
 | [0011](0011-the-look.md)                    | The look: a labelled picture book, printed quietly | colour, type, shape, the icon                 |
 | [0061](0061-controls-and-the-screen.md)     | Controls                                           | the Choosing Rule, floating actions, ⓘ, sizes |
