@@ -35,12 +35,7 @@ The repo's documentation is short, current and in one place per topic. Every rul
 
 ## Task
 
-Run it as parallel worktree agents, split by files so no two edit the same doc. A good split:
-
-- **Agent 1:** the ADRs, the specs, the bug files, `.scratch` and `docs/HISTORY.md`.
-- **Agent 2:** `CLAUDE.md`, `PRODUCT.md`, a README, and `docs/agents/`.
-- **Agent 3:** `CODE_STYLE.md`, the mobile and design docs, and the glossary.
-- **You:** the prompts folder, what is copied from piano-trainer, and the repo clutter.
+Do it yourself, in this order, one commit per step: the work is reading and writing docs, and an agent would reread the same docs at full cost. If one batch of reading is very large (all the old specs and bug files at once), one read-only agent on a smaller model may write notes on it to a file for you; nothing more.
 
 1. **ADRs, as one current record per decision area.**
    - Read every ADR and spec. Group them by the area they decide today.
@@ -99,9 +94,9 @@ Run it as parallel worktree agents, split by files so no two edit the same doc. 
 - **Code:** this is a documentation round. No app behaviour changes; only comments change in code.
 - **Writing:** plain words and short sentences, with no AI-sounding phrasing. Say each rule once, in the one doc it belongs to, and link instead of repeating.
 - **Accuracy:** describe the code as it is now. A claim you can't confirm in `src/` goes, or is marked as an open question.
-- **Agents:**
-  - Each agent commits each finished task with a clear message.
-  - Agents run `typecheck` and `lint` only, never the full suite.
+- **Checks:**
+  - Commit each finished step with a clear message.
+  - Run `typecheck` and `lint` after each step; the full suite once at the end.
   - Never `npm run format`; run prettier only on the files you touched.
 
 ## Done means
