@@ -1,34 +1,8 @@
-import {
-  createContext,
-  use,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  useSyncExternalStore,
-  type ReactNode,
-} from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { Account, AuthGateway } from '@/shared/api/auth'
-import type { SyncOutcome, SyncRunner, SyncStatus } from '../sync'
-
-/** How long the saving must settle before Autosync carries it (memory-palaces' 4 s). */
-export const AUTOSYNC_DELAY_MS = 4000
-
-interface AccountContext {
-  readonly auth: AuthGateway
-  readonly sync: SyncRunner
-  readonly account: Account | null
-  /** Whether the device has been asked who is signed in. */
-  readonly ready: boolean
-}
-
-const Context = createContext<AccountContext | null>(null)
-
-function useAccountContext(): AccountContext {
-  const context = use(Context)
-  if (!context) throw new Error('useAccount needs an AccountProvider')
-  return context
-}
+import type { SyncRunner } from '../sync'
+import { AUTOSYNC_DELAY_MS } from './autosync'
+import { Context } from './context'
 
 /**
  * The learner's account and the sync of their stores (ADR 0116). An account is optional: signed out,
@@ -93,18 +67,4 @@ export function AccountProvider({
 
   const value = useMemo(() => ({ auth, sync, account, ready }), [auth, sync, account, ready])
   return <Context value={value}>{children}</Context>
-}
-
-/** The signed-in learner (none while signed out), whether that is known yet, and the gateway. */
-export function useAccount(): Pick<AccountContext, 'account' | 'ready' | 'auth'> {
-  const { account, ready, auth } = useAccountContext()
-  return { account, ready, auth }
-}
-
-/** Where the sync stands, and a sync on demand (Synchronise). */
-export function useSync(): { status: SyncStatus; syncNow: () => Promise<SyncOutcome> } {
-  const { sync } = useAccountContext()
-  const status = useSyncExternalStore(sync.subscribe, sync.status)
-  const syncNow = useCallback(() => sync.syncNow(), [sync])
-  return { status, syncNow }
 }

@@ -1,1 +1,3 @@
-export { AccountProvider, AUTOSYNC_DELAY_MS, useAccount, useSync } from './account'
+export { AccountProvider } from './account'
+export { AUTOSYNC_DELAY_MS } from './autosync'
+export { useAccount, useSync } from './hooks'

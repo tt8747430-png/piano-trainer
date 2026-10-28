@@ -5,7 +5,7 @@ import { createFakeAuth } from '@/shared/api/auth'
 import { createFakeCloud } from '@/shared/api/sync'
 import { createMemoryStorage } from '../safe-storage'
 import { createSyncRunner } from '../sync'
-import { AccountProvider, useAccount, useSync } from './account'
+import { AccountProvider, useAccount, useSync } from '.'
 
 const learner = { email: 'ana@example.com', name: 'Ana', password: 'correct horse' }
 
