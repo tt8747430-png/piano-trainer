@@ -87,6 +87,14 @@ the index.
 - Tests: `renderApp` with a fake content port and memory storage; nothing in `src` builds a service but the root
   (architecture test).
 
+**Done (2026-10-29):** 0.0 ADR 0116; 0.3 `shared/api/network`; 0.4+0.6 `createStores` and `createContent` in
+the composition root (every store already took its storage); 0.5 A `factsOf` (cross-song readers on facts), C the
+`ContentPort` (`has`, `ensure`) ensured in the routes' `beforeLoad` with the existing pending, not-found and error
+screens. **Left to round 4:** the entry/body type split (TypeScript finds the readers once entries lack bodies),
+`factsOf` reading an entry's own `facts`, a lesson's route ensuring the songs its blocks embed (`LessonBlock`,
+`LessonLinkRow`, `GuidedSongs`, the pattern sample's tune), and the architecture test that only the content port
+imports `entities/*/content`.
+
 **0.7 Round end.** Full suite, build, CLAUDE.md (the seams in its map and change rules), the glossary (Content port,
 Save storage, Net result), push the branch and `main`.
 

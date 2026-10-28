@@ -74,8 +74,8 @@ music, `exercise` music and arrangement, and none of them imports a package. `es
 `no-restricted-imports` enforce all of it (`eslint.config.js`); `src/app/architecture.test.ts` proves it.
 
 - **app/** — `router.tsx` (code-based TanStack Router), `routes/` (each place's lazy screens in `*-screens.ts`, its
-  search validators and defaults in `*-search.ts`, the remembered-view redirect in `remember.ts`), `App.tsx` (the
-  provider stack), `composition-root.ts` (`createServices()`: audio + MIDI, built once in `main.tsx`), `providers/`,
+  search validators and defaults in `*-search.ts`, the remembered-view redirect in `remember.ts`, `ensureContent` in `content.ts`: a route that shows a song's music or a lesson brings it onto the device first), `App.tsx` (the
+  provider stack), `composition-root.ts` (built once in `main.tsx`: `createServices()` audio + MIDI, `createStores()` every saved store on one storage, `createContent()` where songs' music and lessons come from), `providers/`,
   the layouts (`RootLayout`, `ShellLayout` → `AppShell` with the tab bar and the laptop's sidebar,
   `FullScreenLayout` for the Player), `testing/`. The router imports no page or widget code: its search files import
   types only, or a screen would leave its lazy chunk.
@@ -91,7 +91,7 @@ music, `exercise` music and arrangement, and none of them imports a package. `es
   the entity's own data shown), `index.ts`.
 - **shared/** — `lib` (pure helpers and hooks, plus the kernel: `music` theory, `arrangement` (a chart → a
   Performance), `notation` (a Performance → a Score), `schedule` (a Performance → sounds), `exercise`; and `services`
-  (audio and MIDI to React) and `shortcuts`), `api` (the `audio` and `midi` ports, browser adapters and fakes),
+  (audio and MIDI to React) and `shortcuts`), `api` (the `audio`, `midi` and `content` ports, browser adapters and fakes; `network`: every server call's result as a value, ADR 0116),
   `ui` (the kit; shadcn in `ui/primitives`; `ui/score`, Verovio over a Score, imported by that path only), `i18n`,
   `config`, `test`.
 

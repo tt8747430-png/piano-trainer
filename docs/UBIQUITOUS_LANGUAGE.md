@@ -512,3 +512,14 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Shortcut**: a computer key a screen binds; `?` lists them. _Avoid:_ hotkey, keybinding.
 - **Pop-up button** (`Dropdown`): shows its value and opens a list. _Avoid:_ select.
 - **Floating buttons**: a screen's actions floating in reach. _Avoid:_ FAB (in the UI).
+
+## The backend (ADR 0116)
+
+- **Content port** (`ContentPort`): where songs' music and lessons' sections come from; a body is **on the device**
+  once brought there. _Avoid:_ content API, CMS.
+- **Body**: the part of an item a screen needs to play or show it: a song's music, a lesson's sections; its
+  **entry** is what lists read. _Avoid:_ payload, details.
+- **Piece facts** (`factsOf`): what is known of a song without its music: its chords, patterns, chord stretches.
+  _Avoid:_ metadata, summary.
+- **Net result** (`NetResult`): a server call's outcome: ok, **offline**, **refused**, **failed**. _Avoid:_
+  response, status.
