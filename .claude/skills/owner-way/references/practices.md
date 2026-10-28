@@ -88,6 +88,27 @@ Impeccable (impeccable.style, v4.8 installed in `.claude/skills/impeccable`, by 
 - **Skills are not free:** each one loaded costs context. Load the one the task needs, not every one that sounds near.
 - **Superpowers** (obra/superpowers) is enabled for this repo in `.claude/settings.json` (its marketplace is added and the plugin turned on, so a session here installs it). Its skills are called as `superpowers:<name>`: `brainstorming`, `writing-plans`, `executing-plans`, `test-driven-development`, `systematic-debugging`, `verification-before-completion`, `requesting-code-review`, `receiving-code-review`, `using-git-worktrees`, `finishing-a-development-branch`, `dispatching-parallel-agents`, `subagent-driven-development`, `writing-skills`. **The owner-way rule comes first** where they differ: run plans *natively* (inline), never `subagent-driven-development` or `dispatching-parallel-agents` unless the work passes the agent test in SKILL.md; `brainstorming` only for a large feature whose request leaves real choices open; `using-superpowers`' "invoke before anything" means check for a fitting skill, not load every near one.
 
+## Owner-way or a superpowers skill?
+
+**Default: the owner-way practices above.** They are the superpowers' rules already condensed and loaded, so they cost nothing more. Load a full superpowers skill only when its whole procedure pays for the context it takes:
+
+| Situation | Use | Why |
+|---|---|---|
+| A bug you understand, a small fix | the practices (root cause, test first) | the condensed rule is enough |
+| A bug that survived one fix, crosses components, or is intermittent | `superpowers:systematic-debugging` (or our `diagnosing-bugs`) | its four phases stop guessing |
+| Any code change | the practices, or our `tdd` | same red-green rule, already here |
+| About to say "done", commit or push | the practices' "evidence before claims" | a habit, not a procedure |
+| A large feature: several areas, a new model shape, days of work | `superpowers:writing-plans`, then run it **inline** (its "native" mode) | a written plan keeps a long build straight |
+| A request that leaves real choices open and the owner wants to shape it | `superpowers:brainstorming` (or our `grilling` when asked to be grilled) | one question at a time beats a wrong build |
+| Review findings from a bot or a person on a PR | `superpowers:receiving-code-review` | verify each before acting, push back with reasons |
+| A large change worth a fresh pair of eyes | `superpowers:requesting-code-review` or our `code-review` | an unanchored read; otherwise read the diff yourself |
+| Changing a skill beyond a line or two | `superpowers:writing-skills` | test the skill against a task it got wrong |
+| Several truly independent large parts | `superpowers:dispatching-parallel-agents`, only if the agent test passes | otherwise inline |
+| Executing a plan task by task with an agent each | **not** `subagent-driven-development`: run the plan inline | a fresh context per task is what eats the usage |
+| Worktrees and finishing a branch | the owner's own flow (CLAUDE.md, SKILL.md) | `using-git-worktrees` and `finishing-a-development-branch` don't fit it |
+
+When unsure, ask: would following this skill change what I do next? If not, don't load it.
+
 ## Dos and don'ts
 
 Do:
