@@ -8,7 +8,7 @@ import { Switch } from './primitives/switch'
  * On or off in its row of a list: its picture where it has one, the label, what it does in an
  * `InfoTip` after the label's last word where it says more than its name (ADR 0096, never a line
  * under it), and the switch, named by the label alone. A tap anywhere on the row turns it, but on
- * the ⓘ.
+ * the ⓘ. Greyed (`disabled`), it says why under its label (`reason`).
  */
 export function SwitchRow({
   icon,
@@ -16,6 +16,7 @@ export function SwitchRow({
   info,
   checked,
   disabled = false,
+  reason,
   onCheckedChange,
   className,
 }: {
@@ -26,6 +27,8 @@ export function SwitchRow({
   info?: ReactNode
   checked: boolean
   disabled?: boolean
+  /** Why it is greyed, shown under its label while it is (Needs MIDI input). */
+  reason?: string | undefined
   onCheckedChange: (on: boolean) => void
   className?: string
 }) {
@@ -33,6 +36,8 @@ export function SwitchRow({
   const { head, last } = lastWord(label)
   const headId = `${id}-head`
   const lastId = `${id}-last`
+  const why = disabled ? reason : undefined
+  const whyId = `${id}-why`
   return (
     <div
       data-slot="switch-row"
@@ -53,7 +58,10 @@ export function SwitchRow({
           goes with the label's last word, never alone at a line's start. */}
       <label
         htmlFor={id}
-        className="min-w-0 flex-1 after:absolute after:inset-0 after:content-['']"
+        className={cn(
+          "min-w-0 flex-1 after:absolute after:inset-0 after:content-['']",
+          disabled && 'text-muted-foreground',
+        )}
       >
         {head ? <span id={headId}>{head} </span> : null}
         <span className="whitespace-nowrap">
@@ -64,10 +72,16 @@ export function SwitchRow({
             </InfoTip>
           ) : null}
         </span>
+        {why ? (
+          <span id={whyId} className="block text-sm text-muted-foreground">
+            {why}
+          </span>
+        ) : null}
       </label>
       <Switch
         id={id}
         aria-labelledby={head ? `${headId} ${lastId}` : lastId}
+        aria-describedby={why ? whyId : undefined}
         checked={checked}
         disabled={disabled}
         onCheckedChange={onCheckedChange}

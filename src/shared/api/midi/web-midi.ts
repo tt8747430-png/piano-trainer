@@ -2,10 +2,12 @@ import type { NoteOutput } from '@/shared/api/audio'
 import { midi, PIANO, type Midi } from '@/shared/lib/music'
 import type { PedalKind } from '@/shared/lib/schedule'
 import { createListeners } from './listeners'
+import { createMidiLog } from './log'
 import { parseMidiMessage } from './parse-message'
 import {
   ANY_KEYBOARD,
   DEVICE_NAME_MAX,
+  type MidiDevice,
   type MidiPort,
   type MidiStatus,
   type NoteEvent,
@@ -27,6 +29,26 @@ interface Holding {
 
 /** A port's name (its id where it has none, or an empty one), cut to what a setting keeps. */
 const nameOf = (port: MIDIPort) => (port.name || port.id).slice(0, DEVICE_NAME_MAX)
+
+const isConnected = (port: MIDIPort) => port.state === 'connected'
+
+/** The devices connected, by name: a device's input and output ports, of one name, are one. */
+function devicesOf(access: MIDIAccess): MidiDevice[] {
+  const devices = new Map<string, MidiDevice>()
+  const add = (port: MIDIPort, input: boolean) => {
+    const name = nameOf(port)
+    const known = devices.get(name)
+    devices.set(name, {
+      name,
+      manufacturer: known?.manufacturer || port.manufacturer || '',
+      input: input || (known?.input ?? false),
+      output: !input || (known?.output ?? false),
+    })
+  }
+  for (const port of access.inputs.values()) if (isConnected(port)) add(port, true)
+  for (const port of access.outputs.values()) if (isConnected(port)) add(port, false)
+  return [...devices.values()]
+}
 
 const NOTE_ON = 0x90
 const NOTE_OFF = 0x80
@@ -52,7 +74,9 @@ function speakerOf(output: MIDIOutput): NoteOutput {
  * the octaves chosen (one moved off the piano is not heard). A keyboard unplugged, or no longer
  * heard, lets go of the keys it was holding and of its pedals, so nothing stays down without a hand
  * or a foot. One the learner allowed before reconnects without a prompt. The chosen keyboard's
- * speaker (the first that has one, for any keyboard) can sound the app's notes.
+ * speaker (the first that has one, for any keyboard) can sound the app's notes. Every keyboard's
+ * messages, the ones not heard too, go to the MIDI log. Turned off (`disconnect`), it hears nothing
+ * until it connects again.
  */
 export function createWebMidi(
   requestAccess: () => Promise<MIDIAccess> = () => navigator.requestMIDIAccess(),
@@ -67,14 +91,24 @@ export function createWebMidi(
     statuses.emit(status)
   }
   let choice = ANY_KEYBOARD
+  const log = createMidiLog()
+  let devices: readonly MidiDevice[] = []
 
   // What each keyboard heard holds down, by the keyboard's id.
   const held = new Map<string, Holding>()
+
+  /** A keyboard not heard: its messages go to the log only. */
+  const logOnly = (input: MIDIInput) => {
+    input.onmidimessage = (event) => {
+      if (event.data) log.add(nameOf(input), event.data, event.timeStamp)
+    }
+  }
 
   const listenTo = (input: MIDIInput) => {
     const holding = held.get(input.id) ?? { keys: new Set<Midi>(), pedals: new Set<PedalKind>() }
     held.set(input.id, holding)
     input.onmidimessage = (event) => {
+      if (event.data) log.add(nameOf(input), event.data, event.timeStamp)
       const message = event.data
         ? parseMidiMessage(event.data, event.timeStamp, choice.reversedPedal, holding.pedals)
         : null
@@ -122,19 +156,25 @@ export function createWebMidi(
     )
     const heardIds = new Set(heard.map((input) => input.id))
     for (const id of [...held.keys()]) if (!heardIds.has(id)) letGo(id)
-    for (const input of inputs) if (!heardIds.has(input.id)) input.onmidimessage = null
+    for (const input of inputs) if (!heardIds.has(input.id)) logOnly(input)
     for (const input of heard) listenTo(input)
+    devices = devicesOf(access)
     // A keyboard is chosen by its name: two of one name are one choice.
-    const devices = [...new Set(inputs.map(nameOf))]
+    const names = [...new Set(inputs.map(nameOf))]
     if (choice.device !== null && heard.length === 0)
-      return { state: 'away', device: choice.device, devices }
-    return devices.length > 0 ? { state: 'connected', devices } : { state: 'no-device' }
+      return { state: 'away', device: choice.device, devices: names }
+    return names.length > 0 ? { state: 'connected', devices: names } : { state: 'no-device' }
   }
+
+  // Off: nothing listened to; connect() hooks the keyboards again.
+  let off = false
 
   // Granted once and kept: a second access would hear every key through ports of its own.
   let granted: MIDIAccess | null = null
   const connectedOutputs = (): MIDIOutput[] =>
-    granted ? [...granted.outputs.values()].filter((output) => output.state === 'connected') : []
+    granted && !off
+      ? [...granted.outputs.values()].filter((output) => output.state === 'connected')
+      : []
 
   const input: MidiPort = {
     async reconnect() {
@@ -146,7 +186,10 @@ export function createWebMidi(
       let status: MidiStatus
       try {
         const access = (granted ??= await requestAccess())
-        access.onstatechange = () => report(hook(access))
+        off = false
+        access.onstatechange = () => {
+          if (!off) report(hook(access))
+        }
         status = hook(access)
       } catch {
         status = { state: 'denied' }
@@ -154,6 +197,17 @@ export function createWebMidi(
       report(status)
       return status
     },
+    disconnect() {
+      off = true
+      for (const id of [...held.keys()]) letGo(id)
+      if (granted) for (const each of granted.inputs.values()) each.onmidimessage = null
+      devices = []
+      report({ state: 'off' })
+    },
+    devices: () => devices,
+    log: log.entries,
+    onLog: log.subscribe,
+    clearLog: log.clear,
     configure(next) {
       if (
         next.device === choice.device &&
@@ -163,7 +217,7 @@ export function createWebMidi(
         return
       for (const id of [...held.keys()]) letGo(id)
       choice = next
-      if (granted) report(hook(granted))
+      if (granted && !off) report(hook(granted))
     },
     current: () => current,
     outputs: () => [...new Set(connectedOutputs().map(nameOf))],

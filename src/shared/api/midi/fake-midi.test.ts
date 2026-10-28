@@ -85,4 +85,22 @@ describe('createFakeMidi', () => {
     keyboard.setStatus({ state: 'no-device' })
     expect(keyboard.current()).toEqual({ state: 'no-device' })
   })
+
+  it('lists the keyboards it is connected to, logs what it is played, and turns off', async () => {
+    const keyboard = createFakeMidi(undefined, { output: true })
+    await keyboard.connect()
+    expect(keyboard.devices()).toEqual([
+      { name: 'Keyboard', manufacturer: '', input: true, output: true },
+    ])
+    keyboard.press(midi(60), { time: 1, velocity: 90 })
+    keyboard.pedal(true, { time: 2 })
+    expect(keyboard.log()).toEqual([
+      { id: 1, device: 'Keyboard', data: [0x90, 60, 90], time: 1 },
+      { id: 2, device: 'Keyboard', data: [0xb0, 64, 127], time: 2 },
+    ])
+    keyboard.disconnect()
+    expect(keyboard.current()).toEqual({ state: 'off' })
+    expect(keyboard.devices()).toEqual([])
+    expect(await keyboard.connect()).toEqual({ state: 'connected', devices: ['Keyboard'] })
+  })
 })
