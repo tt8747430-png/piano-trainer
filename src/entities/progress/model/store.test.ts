@@ -39,6 +39,7 @@ describe('createProgressStore', () => {
       lessons: { 'bz5:chord:C': DAY, 'bz5:bars:9-18': DAY },
       holds: { 'bz5:chord:G': 2 },
       read: { 'lesson:triads': [0, 2], 'course:called-to-play/five-ways': [1] },
+      tempos: { 'hanon:5': 84, scale: 96 },
     }
     writeSaved(storage, saved)
     expect(createProgressStore({ storage }).getState()).toEqual(saved)
@@ -106,6 +107,7 @@ describe('createProgressStore', () => {
       holds: { 'bz5:chord:Am': 1 },
       // A lesson's sections read, each once and in order; never a piece's.
       read: { 'lesson:triads': [0, 2] },
+      tempos: {},
     })
   })
 

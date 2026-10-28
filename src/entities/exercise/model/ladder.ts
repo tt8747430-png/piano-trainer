@@ -8,9 +8,9 @@ import type { ExerciseChoice } from './choice'
 export const TEMPO_LADDER = [60, 72, 84, 96, 108, 120, 132] as const
 export type Rung = (typeof TEMPO_LADDER)[number]
 
-/** The rung a tempo stands on, if it stands on one. */
-export const rungOf = (tempo: number): Rung | null =>
-  TEMPO_LADDER.find((rung) => rung === tempo) ?? null
+/** The rung a tempo has reached: the highest at or under it (the bottom rung under the ladder). */
+export const rungOf = (tempo: number): Rung =>
+  TEMPO_LADDER.findLast((rung) => rung <= tempo) ?? TEMPO_LADDER[0]
 
 /** The next rung up from a tempo (the top stays the top). */
 export const rungAbove = (tempo: number): Rung => TEMPO_LADDER.find((rung) => rung > tempo) ?? TOP

@@ -10,9 +10,10 @@ describe('the tempo ladder', () => {
     ])
   })
 
-  it('names a tempo’s rung, and the rung above any tempo', () => {
+  it('names the rung a tempo has reached, and the rung above any tempo', () => {
     expect(rungOf(84)).toBe(84)
-    expect(rungOf(90)).toBeNull()
+    expect(rungOf(90)).toBe(84)
+    expect(rungOf(40)).toBe(60)
     expect(rungAbove(60)).toBe(72)
     expect(rungAbove(90)).toBe(96)
     expect(rungAbove(132)).toBe(132)

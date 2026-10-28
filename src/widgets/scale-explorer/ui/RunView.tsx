@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { hasStandardFingering, noteFromParam, noteName, spellScale } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, runSounds } from '@/shared/lib/schedule'
-import { Dropdown, Labelled, Segmented } from '@/shared/ui'
+import { Dropdown, Labelled, Segmented, StepStrip } from '@/shared/ui'
 import { runShown, scaleRunOf } from '../model/scale-run'
 import { RUN_KEY_SHOWS, RUN_OCTAVES, runKeyShow, type ScaleView } from '../model/scale-view'
 import { PlayUpDown } from './PlayUpDown'
@@ -85,10 +85,11 @@ export function RunView({
               onChange={(next) => onChange({ octaves: next })}
             />
           </Labelled>
-          {/* The chromatic scale from another note is the chromatic scale on that root. */}
+          {/* The chromatic scale from another note is the chromatic scale on that root. A strip that
+              steps, as the root's: seven or eight notes outgrow a narrow phone. */}
           {tones.length <= MOST_STARTS ? (
             <Labelled label={t('practice:scales.startOn')}>
-              <Segmented
+              <StepStrip
                 label={t('practice:scales.startOn')}
                 value={start}
                 options={tones.map((tone, i) => ({ value: i + 1, label: noteName(tone.note) }))}

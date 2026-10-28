@@ -84,8 +84,8 @@ describe('the scale fingerings', () => {
     expect(rh(note('F'))).toBe('1-2-3-4-1-2-3-4')
     expect(lh(note('F'))).toBe('5-4-3-2-1-3-2-1')
     // The kernel's one-octave start: published books often start B♭ on 4 and A♭ on 3 4.
-    expect(rh(note('B', -1))).toBe('2-1-2-3-1-2-3-4')
-    expect(rh(note('A', -1))).toBe('2-3-1-2-3-1-2-3')
+    expect(rh(note('B', -1))).toBe('4-1-2-3-1-2-3-4')
+    expect(rh(note('A', -1))).toBe('3-4-1-2-3-1-2-3')
   })
 
   it('finger the minor keys’ left hands as they are published', () => {
@@ -167,10 +167,10 @@ describe('the arpeggio lessons', () => {
     expect(fingers(note('C'), false, 'rh')).toBe('1-2-3-1-2-3-5')
     expect(fingers(note('C'), false, 'lh')).toBe('5-4-2-1-4-2-1')
     expect(fingers(note('A'), true, 'rh')).toBe('1-2-3-1-2-3-5')
-    expect(fingers(note('A', -1), false, 'rh')).toBe('2-1-2-4-1-2-4')
+    expect(fingers(note('A', -1), false, 'rh')).toBe('4-1-2-4-1-2-4')
     expect(fingers(note('A', -1), false, 'lh')).toBe('2-1-4-2-1-4-2')
-    expect(fingers(note('F', 1), true, 'rh')).toBe('2-1-2-4-1-2-4')
-    // The kernel counts down to a late first thumb (3-2-1): the hand counts up to it.
+    expect(fingers(note('F', 1), true, 'rh')).toBe('4-1-2-4-1-2-4')
+    // Before the first thumb, each note takes the finger its tone takes an octave up.
     expect(fingers(note('B', -1), true, 'rh')).toBe('2-3-1-2-3-1-2')
   })
 

@@ -184,7 +184,8 @@ export function scaleFingering(
     const keys = Array.from({ length: tones.length * octaves + 1 }, (_, i) => {
       const at = start + i
       const tone = tones[at % tones.length]
-      return midi(60 + pitchClassOf(root) + (tone?.semitones ?? 0) + 12 * Math.floor(at / 12))
+      // Its keys from C1 up: only which are black, and which lie a half step apart, matter here.
+      return midi(24 + pitchClassOf(root) + (tone?.semitones ?? 0) + 12 * Math.floor(at / 12))
     })
     return chromaticFingering(keys, hand)
   }
@@ -220,34 +221,21 @@ export function chromaticFingering(keys: readonly Midi[], hand: Hand): Finger[] 
   })
 }
 
-/**
- * The ways to finger `count` notes in groups from the thumb (1 2 3 …): every group of 2 to 4, the
- * last of 2 to 5; a lone note is the thumb's.
- */
-function* groupings(count: number): Generator<number[]> {
-  if (count === 1) yield [1]
-  for (let first = 2; first <= Math.min(5, count); first++) {
-    if (first === count) yield [first]
-    else if (first <= 4 && count - first >= 2) {
-      for (const rest of groupings(count - first)) yield [first, ...rest]
-    }
-  }
-}
-
 /** How much a group is preferred, least first: groups of 3, then 4, then 2, then the closing 5. */
 const GROUP_RANK: Readonly<Record<number, number>> = { 3: 0, 4: 1, 2: 2, 5: 3 }
 
-/** A grouping's cost: later thumbs on black keys, then the number of groups, then its groups' ranks. */
-function cost(keys: readonly Midi[], grouping: readonly number[]): number[] {
-  let at = 0
-  let blackThumbs = 0
-  grouping.forEach((size, i) => {
-    const key = keys[at]
-    if (i > 0 && key !== undefined && isBlackKey(key)) blackThumbs++
-    at += size
-  })
-  return [blackThumbs, grouping.length, ...grouping.map((size) => GROUP_RANK[size] ?? 4)]
+/** A grouping of the keys from one on: its groups' sizes, its later thumbs on black keys, its ranks. */
+interface Grouped {
+  readonly sizes: readonly number[]
+  readonly blackThumbs: number
 }
+
+/** A grouping's cost: later thumbs on black keys, then the number of groups, then its groups' ranks. */
+const cost = ({ sizes, blackThumbs }: Grouped): number[] => [
+  blackThumbs,
+  sizes.length,
+  ...sizes.map((size) => GROUP_RANK[size] ?? 4),
+]
 
 function cheaper(a: readonly number[], b: readonly number[]): boolean {
   for (let i = 0; i < Math.max(a.length, b.length); i++) {
@@ -257,18 +245,31 @@ function cheaper(a: readonly number[], b: readonly number[]): boolean {
   return false
 }
 
-/** Keys in the order played, fingered from the thumb in the grouping that costs least. */
+/**
+ * Keys in the order played, fingered from the thumb in the grouping that costs least: groups of 2 to
+ * 4 from the thumb (1 2 3 …), the last of 2 to 5, a lone note the thumb's. Found from the last key
+ * back, each key's cheapest grouping of the rest kept (a cost is compared from its front, so the
+ * cheapest whole starts with the cheapest rest after its first group), so four octaves of an
+ * eight-note scale take no longer than one.
+ */
 function fromTheThumb(keys: readonly Midi[]): Finger[] {
-  let best: number[] = []
-  let bestCost: number[] | null = null
-  for (const grouping of groupings(keys.length)) {
-    const groupingCost = cost(keys, grouping)
-    if (!bestCost || cheaper(groupingCost, bestCost)) {
-      best = grouping
-      bestCost = groupingCost
+  const count = keys.length
+  if (count === 1) return [1]
+  const best: (Grouped | null)[] = Array.from({ length: count + 1 }, () => null)
+  for (let at = count - 2; at >= 0; at--) {
+    const left = count - at
+    const key = keys[at]
+    const black = at > 0 && key !== undefined && isBlackKey(key) ? 1 : 0
+    for (let size = 2; size <= Math.min(5, left); size++) {
+      const rest =
+        size === left ? { sizes: [], blackThumbs: 0 } : size <= 4 ? best[at + size] : null
+      if (!rest) continue
+      const grouped = { sizes: [size, ...rest.sizes], blackThumbs: black + rest.blackThumbs }
+      const current = best[at]
+      if (!current || cheaper(cost(grouped), cost(current))) best[at] = grouped
     }
   }
-  return best.flatMap((size) => FINGERS.slice(0, size))
+  return (best[0]?.sizes ?? [count]).flatMap((size) => FINGERS.slice(0, size))
 }
 
 /**
@@ -302,9 +303,9 @@ const reach = (gap: number, span = 0): Finger => (gap >= 5 || span >= 9 ? 4 : 3)
 export function arpeggioFingering(keys: readonly Midi[], hand: Hand): Finger[] {
   const pitches = [...new Set(keys.map((key) => key % 12))]
   const tones = pitches.length
-  const bottom = keys[0] ?? 0
-  const octave = keys.slice(0, tones)
-  const whites = octave.filter((key) => !isBlackKey(key))
+  const bottom = keys[0]
+  if (bottom === undefined) return []
+  const whites = keys.slice(0, tones).filter((key) => !isBlackKey(key))
   const thumbKey =
     hand === 'rh' || isBlackKey(bottom) ? (hand === 'rh' ? whites[0] : whites.at(-1)) : bottom
   const thumbTone = (thumbKey ?? bottom) % 12
