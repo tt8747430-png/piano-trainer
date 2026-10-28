@@ -28,6 +28,7 @@ describe('Practice → Quiz', () => {
     expect(hrefs(screen.getByRole('region', { name: 'By ear' }))).toEqual([
       '/practice/quiz/scales-by-ear',
       '/practice/quiz/progressions-by-ear',
+      '/practice/quiz/cadences',
     ])
     expect(hrefs(screen.getByRole('region', { name: 'Reading' }))).toEqual([
       '/practice/quiz/reading-notes',

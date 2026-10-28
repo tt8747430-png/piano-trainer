@@ -177,6 +177,17 @@ describe('scoreToMei, a note’s marks and the options', () => {
     )
   })
 
+  it('writes an octave line in the measure it starts in, where it ends in a later one', () => {
+    const written = scoreToMei(
+      plain([c(3 * B, { octave: '8va' }), c(4 * B, { octave: '8va' }), c(5 * B)]),
+    )
+    const measures = written.match(/<measure [^>]*>.*?<\/measure>/g) ?? []
+    expect(measures[0]).toContain(
+      '<octave staff="1" startid="#n-treble-15120-0" endid="#n-treble-20160-0"',
+    )
+    expect(measures[1]).not.toContain('<octave')
+  })
+
   it('writes Flat’s other marks: 15ma, a glissando, portato, a breath, a caesura, an inverted turn, a tremolo’s strokes, an accent’s dynamic', () => {
     const written = scoreToMei(
       plain([

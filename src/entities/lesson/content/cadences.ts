@@ -8,8 +8,8 @@ const cadences: Lesson = {
   after: ['chord-functions', 'inversions'],
   title: { en: 'Cadences', ru: 'Каденции' },
   summary: {
-    en: 'A cadence is the pair of chords that ends a phrase. Learn the four kinds by ear and on the keys.',
-    ru: 'Каденция — это пара аккордов в конце фразы. Узнайте четыре вида на слух и на клавишах.',
+    en: 'A cadence is the pair of chords that ends a phrase. Learn the four kinds and their variants by ear and on the keys.',
+    ru: 'Каденция — это пара аккордов в конце фразы. Узнайте четыре вида и их разновидности на слух и на клавишах.',
   },
   sections: [
     {
@@ -28,6 +28,58 @@ const cadences: Lesson = {
       takeaway: {
         en: 'V to I closes a phrase, like a full stop.',
         ru: 'V – I закрывает фразу, как точка.',
+      },
+    },
+    {
+      heading: { en: 'Perfect or imperfect', ru: 'Совершенная или несовершенная' },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'A perfect authentic cadence', ru: 'Совершенная автентическая каденция' },
+          text: {
+            en: 'has V and I in root position and the tonic on top. Any other V to I is imperfect, and sounds less final.',
+            ru: '— это V и I в основном виде с тоникой в верхнем голосе. Любая другая V – I несовершенная и звучит менее окончательно.',
+          },
+        },
+        {
+          kind: 'variants',
+          variants: [
+            {
+              label: { en: 'Perfect', ru: 'Совершенная' },
+              caption: {
+                en: 'V – I · root position, the tonic on top',
+                ru: 'V – I · основной вид, тоника наверху',
+              },
+              example: {
+                kind: 'voicings',
+                satb: true,
+                voicings: [
+                  { symbol: 'G', caption: 'V', degrees: '1 | 5 1 3', hands: 'G2 | D4 G4 B4' },
+                  { symbol: 'C', caption: 'I', degrees: '1 | 3 5 1', hands: 'C3 | E4 G4 C5' },
+                ],
+              },
+            },
+            {
+              label: { en: 'Imperfect', ru: 'Несовершенная' },
+              caption: {
+                en: 'V6 – I · the leading note in the bass, the 3rd on top',
+                ru: 'V6 – I · вводный тон в басу, терция наверху',
+              },
+              example: {
+                kind: 'voicings',
+                satb: true,
+                voicings: [
+                  { symbol: 'G/B', caption: 'V6', degrees: '3 | 1 5 1', hands: 'B2 | G3 D4 G4' },
+                  { symbol: 'C', caption: 'I', degrees: '1 | 5 1 3', hands: 'C3 | G3 C4 E4' },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+      takeaway: {
+        en: 'Root position and the tonic on top make the cadence perfect.',
+        ru: 'Основной вид и тоника наверху делают каденцию совершенной.',
       },
     },
     {
@@ -112,6 +164,58 @@ const cadences: Lesson = {
         },
         { kind: 'progression', numerals: 'iv V i', key: A_MINOR },
       ],
+    },
+    {
+      heading: { en: 'The Phrygian half cadence', ru: 'Фригийская половинная каденция' },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'A Phrygian half cadence', ru: 'Фригийская половинная каденция' },
+          text: {
+            en: 'goes from iv6 to V in a minor key. The bass falls a half step: F to E in A minor.',
+            ru: 'идёт от iv6 к V в миноре. Бас опускается на полутон: фа – ми в ля миноре.',
+          },
+        },
+        {
+          kind: 'voicings',
+          satb: true,
+          key: A_MINOR,
+          voicings: [
+            { symbol: 'Dm/F', caption: 'iv6', degrees: '3 | 5 1 3', hands: 'F2 | A3 D4 F4' },
+            { symbol: 'E', caption: 'V', degrees: '1 | 3 5 1', hands: 'E2 | G♯3 B3 E4' },
+          ],
+        },
+      ],
+      takeaway: {
+        en: 'iv6 to V: the bass falls a half step onto the dominant.',
+        ru: 'iv6 – V: бас спускается на полутон к доминанте.',
+      },
+    },
+    {
+      heading: { en: 'The cadential 6/4', ru: 'Кадансовый квартсекстаккорд' },
+      blocks: [
+        {
+          kind: 'text',
+          lead: { en: 'The cadential 6/4', ru: 'Кадансовый квартсекстаккорд' },
+          text: {
+            en: 'is I with its 5th in the bass, just before V. Over the held G, the 6th and 4th fall to the 5th and 3rd.',
+            ru: '— это I с квинтой в басу прямо перед V. Над выдержанным соль секста и кварта спускаются в квинту и терцию.',
+          },
+        },
+        {
+          kind: 'voicings',
+          satb: true,
+          voicings: [
+            { symbol: 'C/G', caption: 'I6/4', degrees: '5 | 3 5 1', hands: 'G2 | E4 G4 C5' },
+            { symbol: 'G', caption: 'V', degrees: '1 | 5 1 3', hands: 'G2 | D4 G4 B4' },
+            { symbol: 'C', caption: 'I', degrees: '1 | 3 5 1', hands: 'C3 | E4 G4 C5' },
+          ],
+        },
+      ],
+      takeaway: {
+        en: 'The cadential 6/4 is V in disguise: it decorates the dominant.',
+        ru: 'Кадансовый квартсекстаккорд — переодетая V: он украшает доминанту.',
+      },
     },
     {
       heading: { en: 'Question and answer', ru: 'Вопрос и ответ' },
@@ -209,6 +313,19 @@ const cadences: Lesson = {
             ru: 'Сыграйте аккорд перед I в плагальной каденции фа мажора.',
           },
           answer: { chord: 'B♭' },
+        },
+        {
+          kind: 'question',
+          ask: {
+            en: 'Play the chord before V in a Phrygian half cadence in A minor.',
+            ru: 'Сыграйте аккорд перед V во фригийской половинной каденции ля минора.',
+          },
+          answer: { chord: 'Dm' },
+        },
+        {
+          kind: 'link',
+          title: { en: 'Name cadences by ear in the Quiz', ru: 'Каденции на слух в тестах' },
+          target: { opens: 'quiz', trainer: 'cadences', drill: 'ear' },
         },
         {
           kind: 'link',

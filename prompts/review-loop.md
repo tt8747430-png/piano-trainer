@@ -23,7 +23,7 @@ Review and improve Piano Trainer round after round, starting from the ground up,
    - **Music theory** content in English and Russian.
    - **AI-sounding text**, rewritten plainly.
 3. Fix every confirmed bug yourself, test first. Improve the area: you may refactor anything, change the UI and the architecture, and add features. Implement what is missing rather than leaving it out.
-4. Use parallel worktree agents for large, separable work, and do small or context-heavy work yourself.
+4. Do the work yourself. Only a large, separable part that can be briefed in under a page goes to an agent (two or three at most, a cheap model for reading); see the owner-way skill's maximum principle.
 
 ## Constraints
 

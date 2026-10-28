@@ -53,6 +53,11 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
   defined where it is first used, the example directly under the sentence that names it, no prose repeating what the
   example shows. Mayer's multimedia principles (segmenting, contiguity, redundancy) and Nielsen Norman's findings on
   how people scan were its sources.
+- **What the journeys and courses teach** grows with the reference pages each round, theory checked: r14 added slash
+  chords (Fluency), modulation (Musicianship), rootless voicings and locked hands (Mastery), the perfect and
+  imperfect authentic, Phrygian half and cadential 6/4 cadences, the 6/9, add9 and sus facts, and the **How to
+  Practise** course (technique shelf: a daily plan, a scale routine with its tempo ladder, five days to speed,
+  mistakes to avoid). Facts are taken from the pages, never their wording.
 - `src/app/content/` tests every lesson of both kinds: the kernel reads it, the prose rules, and the rules above that
   keep the two apart.
 
@@ -71,4 +76,5 @@ course.
 - 0057, 0058 — Learn at a glance, Continue floating, a lesson's one bar and one column (2026-10-16).
 - r13 — Function and root-motion chips, variants, takeaways, rules, S A T B, a page a section on a phone,
   rings and prerequisites in the contents, after the reference theory book (2026-10-28).
+- r14 — Slash chords, modulation, rootless voicings, locked hands, the cadences split, How to Practise (2026-10-28).
 - The research note on clearer lessons (2026-10-12), deleted: its checklist is `docs/CONTENT.md`'s.
