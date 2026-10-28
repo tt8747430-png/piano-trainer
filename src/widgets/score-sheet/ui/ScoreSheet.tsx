@@ -306,6 +306,8 @@ export function ScoreSheet({
       (item) => (item.kind === 'line' ? lineHeight(item.sheet) : TITLE_ROOM),
       PAGE.height - 2 * PAGE.margin,
       (item) => item.kind !== 'line',
+      // A page break before a line's first bar (ADR 0097).
+      (item) => item.kind === 'line' && item.sheet.score.measures[0]?.pageBreak === true,
     )
     return (
       <LayerNames value={layerName}>

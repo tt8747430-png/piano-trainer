@@ -28,6 +28,36 @@ describe('markBars', () => {
     ])
   })
 
+  it('plays a repeat once more each time Repeat ×N is tapped, up to nine, then twice again', () => {
+    const times = (draft: ReturnType<typeof draftOf>) => barsOf(draft)[2]?.bar.times
+    const once = markBars(four, { from: 1, to: 2 }, 'repeatTimes')
+    expect(barsOf(once)[2]?.bar.barline).toBe('repeat')
+    expect(times(once)).toBe(3)
+    let more = once
+    for (let tap = 0; tap < 6; tap += 1) more = markBars(more, { from: 1, to: 2 }, 'repeatTimes')
+    expect(times(more)).toBe(9)
+    expect(times(markBars(more, { from: 1, to: 2 }, 'repeatTimes'))).toBeUndefined()
+  })
+
+  it('puts the 3rd and 4th endings over the bars chosen', () => {
+    expect(marks(markBars(four, { from: 2, to: 3 }, 'ending3')).map(([, , e]) => e)).toEqual([
+      undefined,
+      undefined,
+      3,
+      3,
+    ])
+    expect(marks(markBars(four, { from: 3, to: 3 }, 'ending4'))[3]?.[2]).toBe(4)
+  })
+
+  it('breaks the page before the first bar chosen, a new line starting there', () => {
+    const paged = markBars(four, { from: 2, to: 3 }, 'pageBreak')
+    expect(barsOf(paged)[2]?.bar.pageBreak).toBe(true)
+    expect(paged.sections[0]?.lines.map((line) => line.length)).toEqual([2, 2])
+    expect(
+      barsOf(markBars(paged, { from: 2, to: 2 }, 'pageBreak'))[2]?.bar.pageBreak,
+    ).toBeUndefined()
+  })
+
   it('takes a mark off a bar that has it, and every mark with Plain', () => {
     const doubled = markBars(four, { from: 0, to: 0 }, 'double')
     expect(markBars(doubled, { from: 0, to: 0 }, 'double')).toEqual(four)

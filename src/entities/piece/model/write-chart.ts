@@ -69,12 +69,15 @@ function chordsText(bar: ChartBar, meter: Meter): string {
 export function writeBar(bar: ChartBar, meter: Meter): string {
   const chords = chordsText(bar, meter)
   return [
+    ...(bar.pageBreak ? ['Page'] : []),
     ...(bar.segno ? ['Segno'] : []),
     ...(bar.coda ? ['Coda'] : []),
     ...(bar.repeatStart ? ['|:'] : []),
     ...(bar.ending ? [`[${bar.ending}`] : []),
     chords,
-    ...(bar.barline ? [END_TOKEN[bar.barline]] : []),
+    ...(bar.barline
+      ? [`${END_TOKEN[bar.barline]}${bar.barline === 'repeat' && bar.times ? `x${bar.times}` : ''}`]
+      : []),
     ...(bar.fine ? ['Fine'] : []),
     ...(bar.toCoda ? ['ToCoda'] : []),
     ...(bar.jump ? [JUMP_TOKENS[bar.jump]] : []),

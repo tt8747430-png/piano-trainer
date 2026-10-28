@@ -2,9 +2,12 @@
 export const BARLINES = ['double', 'final', 'repeat'] as const
 export type Barline = (typeof BARLINES)[number]
 
-/** The endings a repeated passage takes: the first time through, then the second. */
-export const ENDINGS = [1, 2] as const
+/** The endings a repeated passage takes, each the time through it is played: Flat's first to fourth. */
+export const ENDINGS = [1, 2, 3, 4] as const
 export type Ending = (typeof ENDINGS)[number]
+
+/** How many times a repeated passage may be played: Flat's repeat ×N, twice to nine times. */
+export const REPEAT_TIMES = [2, 3, 4, 5, 6, 7, 8, 9] as const
 
 /**
  * A jump back at a bar's end, taken once: to the start (Da Capo) or the sign (Dal Segno), then on to
@@ -20,23 +23,29 @@ export type Jump = (typeof JUMPS)[number]
 export interface BarMarks {
   readonly repeatStart?: true
   readonly barline?: Barline
+  /** A repeat's end: the times the passage is played, where not twice (or its endings' count). */
+  readonly times?: number
   readonly ending?: Ending
   readonly segno?: true
   readonly coda?: true
   readonly jump?: Jump
   readonly fine?: true
   readonly toCoda?: true
+  /** A page break before it, Flat's: in the page view its line starts a new page. */
+  readonly pageBreak?: true
 }
 
 const MARK_KEYS = [
   'repeatStart',
   'barline',
+  'times',
   'ending',
   'segno',
   'coda',
   'jump',
   'fine',
   'toCoda',
+  'pageBreak',
 ] as const satisfies readonly (keyof BarMarks)[]
 
 /** A bar's marks alone, those it has: what each step from the text to the score carries on. */
@@ -53,26 +62,44 @@ export function withoutBarMarks<B extends BarMarks>(bar: B): Omit<B, keyof BarMa
   return plain as Omit<B, keyof BarMarks>
 }
 
+/** The endings' run a bar belongs to: the bars with an ending around it, their highest ending. */
+function lastEnding(bars: readonly BarMarks[], index: number): number {
+  let from = index
+  while (from > 0 && bars[from - 1]?.ending !== undefined) from -= 1
+  let last = 0
+  for (let at = from; at < bars.length && (at === from || bars[at]?.ending !== undefined); at += 1)
+    last = Math.max(last, bars[at]?.ending ?? 0)
+  return last
+}
+
 /**
- * The bars in the order they are played, by their written index: back once from a repeat's end to
- * its start (the piece's, where none starts it), the 1st ending's bars left out the second time, the
- * 2nd ending's played then. A jump goes back once, to the start or the sign, and plays on without
- * repeats or 1st endings, as players take it: to the end, stopping at Fine, or from To Coda to the
- * coda's sign.
+ * The bars in the order they are played, by their written index: a repeated passage played the
+ * times its repeat's end says (twice by default, or as many times as its endings), back to its start
+ * (the piece's, where none starts it) each time; on each time through only its ending of that number
+ * (the 1st ending the first time, the 2nd the second, Flat's up to the 4th). A jump goes back once,
+ * to the start or the sign, and plays on without repeats, taking each run of endings' last, as
+ * players take it: to the end, stopping at Fine, or from To Coda to the coda's sign.
  */
 export function playOrder(bars: readonly BarMarks[]): number[] {
   const order: number[] = []
-  const taken = new Set<number>()
   let start = 0
-  let second = false
+  let pass = 1
   let jumped: Jump | null = null
   let i = 0
   while (i < bars.length) {
     const bar = bars[i] ?? {}
-    if (bar.repeatStart && !second) start = i
-    if ((second || jumped) && bar.ending === 1) {
-      i += 1
-      continue
+    // Past a run of endings, the passage is done: the next repeat starts here.
+    if (bar.ending === undefined && bars[i - 1]?.ending !== undefined && !jumped) {
+      pass = 1
+      start = i
+    }
+    if (bar.repeatStart && pass === 1) start = i
+    if (bar.ending !== undefined) {
+      const taken = jumped ? lastEnding(bars, i) : pass
+      if (bar.ending !== taken) {
+        i += 1
+        continue
+      }
     }
     order.push(i)
     if (jumped?.endsWith('fine') && bar.fine) break
@@ -83,16 +110,20 @@ export function playOrder(bars: readonly BarMarks[]): number[] {
         continue
       }
     }
-    // A repeat is taken before the jump at the same bar's end: back once, then on to the jump.
-    if (bar.barline === 'repeat' && !taken.has(i) && !jumped) {
-      taken.add(i)
-      second = true
-      i = start
-      continue
+    // A repeat is taken before the jump at the same bar's end: back until played its times.
+    if (bar.barline === 'repeat' && !jumped) {
+      const times = bar.times ?? Math.max(2, bar.ending === undefined ? 0 : lastEnding(bars, i))
+      if (pass < times) {
+        pass += 1
+        i = start
+        continue
+      }
+      pass = 1
+      start = i + 1
     }
     if (bar.jump && !jumped) {
       jumped = bar.jump
-      second = false
+      pass = 1
       i = bar.jump.startsWith('ds')
         ? Math.max(
             0,
@@ -100,11 +131,6 @@ export function playOrder(bars: readonly BarMarks[]): number[] {
           )
         : 0
       continue
-    }
-    // Past the repeated passage: the next repeat starts after it, unless a bar says otherwise.
-    if (second && (bar.barline === 'repeat' || bar.ending === 2 || bars[i + 1]?.repeatStart)) {
-      second = bar.ending === 2 && bars[i + 1]?.ending === 2
-      start = i + 1
     }
     i += 1
   }

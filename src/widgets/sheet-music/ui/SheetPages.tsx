@@ -29,6 +29,9 @@ export function SheetPages({
     lines,
     (each) => height(each) + LINE_GAP,
     PAGE.height - 2 * PAGE.margin - TITLE_ROOM,
+    undefined,
+    // A page break before a line's first bar (ADR 0097).
+    (each) => each.score.measures[0]?.pageBreak === true,
   )
   return dealt.map((page, number) => (
     <SheetPage

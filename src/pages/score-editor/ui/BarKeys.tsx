@@ -50,6 +50,25 @@ export function BarKeys() {
             </span>
           </PaletteKey>
         ))}
+        {/* Flat's page break: the line from the bar chosen starts a new page (ADR 0097). */}
+        <PaletteKey
+          label={t('barline.pageBreak')}
+          onClick={() => actions.dispatch({ type: 'barMarks', choice: 'pageBreak' })}
+        >
+          <svg
+            aria-hidden
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="size-6"
+          >
+            <path d="M6 3h8l4 4v14H6z M14 3v4h4" />
+            <path d="M15 11v4h-6 M11 13l-2 2 2 2" />
+          </svg>
+        </PaletteKey>
       </KeyGrid>
       <GroupName name={t('bars.length')} info={t('bars.lengthInfo')} />
       <KeyGrid label={t('bars.length')}>

@@ -58,13 +58,13 @@ export const LEFT_OUT = [
   'keys',
   /** A tempo after the first. */
   'tempos',
-  /** Dynamics we do not write (sfz, fp, ppp). */
+  /** Dynamics we do not write. */
   'dynamics',
   /** Words over the music that are no mark of ours. */
   'text',
   /** Chord symbols we cannot read. */
   'chords',
-  /** Endings past the second, or one ending for several times through. */
+  /** Endings past the fourth, or one ending for several times through. */
   'endings',
   /** Ornaments, articulations and technique we do not write. */
   'marks',
@@ -664,13 +664,17 @@ function readBarline(
   const style = textAt(barline, 'bar-style')
   const repeat = childOf(barline, 'repeat')?.attrs.direction
   if (repeat === 'forward') bar.repeatStart = true
-  if (repeat === 'backward') bar.barline = 'repeat'
-  else if (!left && (style === 'light-heavy' || style === 'heavy')) bar.barline ??= 'final'
+  if (repeat === 'backward') {
+    bar.barline = 'repeat'
+    const times = Number(childOf(barline, 'repeat')?.attrs.times)
+    if (times >= 3 && times <= 9) bar.times = times
+  } else if (!left && (style === 'light-heavy' || style === 'heavy')) bar.barline ??= 'final'
   else if (!left && style === 'light-light') bar.barline ??= 'double'
   const ending = childOf(barline, 'ending')
   if (ending && ending.attrs.type === 'start') {
     const number = (ending.attrs.number ?? '').trim()
-    if (number === '1' || number === '2') bar.ending = Number(number) as 1 | 2
+    if (number === '1' || number === '2' || number === '3' || number === '4')
+      bar.ending = Number(number) as 1 | 2 | 3 | 4
     else leave('endings')
   }
   if (childOf(barline, 'segno')) bar.segno = true

@@ -318,6 +318,8 @@ class Writer {
     if (measure.coda) controls.push(`<dir staff="${top}" tstamp="1" place="above">𝄌</dir>`)
     const ending = (text: string) =>
       `<dir staff="${top}" tstamp="${end - 0.01}" place="above"><rend halign="right" fontstyle="italic">${text}</rend></dir>`
+    // A repeat played more than twice says its times at its end, as Flat prints it.
+    if (measure.barline === 'repeat' && measure.times) controls.push(ending(`${measure.times}×`))
     if (measure.fine) controls.push(ending('Fine'))
     if (measure.toCoda) controls.push(ending('To Coda 𝄌'))
     if (measure.jump) controls.push(ending(JUMP_TEXT[measure.jump]))

@@ -32,6 +32,27 @@ describe('playOrder', () => {
     ).toEqual([0, 1, 2, 3, 0, 1, 4, 5])
   })
 
+  it('plays a passage the times its repeat says (Flat’s repeat ×N)', () => {
+    expect(playOrder(bars({ repeatStart: true }, { barline: 'repeat', times: 3 }, {}))).toEqual([
+      0, 1, 0, 1, 0, 1, 2,
+    ])
+  })
+
+  it('takes the 3rd and 4th endings on the third and fourth times', () => {
+    expect(
+      playOrder(
+        bars(
+          { repeatStart: true },
+          { ending: 1, barline: 'repeat' },
+          { ending: 2, barline: 'repeat' },
+          { ending: 3, barline: 'repeat' },
+          { ending: 4 },
+          { barline: 'final' },
+        ),
+      ),
+    ).toEqual([0, 1, 0, 2, 0, 3, 0, 4, 5])
+  })
+
   it('repeats two passages one after the other', () => {
     expect(
       playOrder(

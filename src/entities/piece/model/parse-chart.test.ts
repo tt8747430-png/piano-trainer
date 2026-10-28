@@ -91,6 +91,23 @@ describe('parseChart', () => {
     expect(errorOf(['C || |.']).message).toMatch(/two of a kind/)
   })
 
+  it('reads and writes a repeat played its times and the 3rd and 4th endings (Flat’s)', () => {
+    const text = '|: C [1 F :| [2 G :| [3 A :|x4 [4 Bm |.'
+    const [line = []] = parseChart(testSong([text])).sections[0]?.lines ?? []
+    expect(line.map(({ ending, times }) => [ending, times])).toEqual([
+      [undefined, undefined],
+      [1, undefined],
+      [2, undefined],
+      [3, 4],
+      [4, undefined],
+    ])
+    expect(line.map((bar) => writeBar(bar, '4/4')).join(' ')).toBe(text)
+    expect(errorOf(['C :|x1']).message).toMatch(/unknown/)
+    const [paged = []] = parseChart(testSong(['C', 'Page G'])).sections[0]?.lines.slice(1) ?? []
+    expect(paged[0]?.pageBreak).toBe(true)
+    expect(writeBar(paged[0] ?? { chords: [], beats: 4 }, '4/4')).toBe('Page G')
+  })
+
   it('writes a bar’s barlines back around it', () => {
     const [line = []] =
       parseChart(testSong(['|: C [1 F :| [2 G || Am |.'])).sections[0]?.lines ?? []

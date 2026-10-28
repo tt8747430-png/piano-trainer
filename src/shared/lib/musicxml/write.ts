@@ -316,7 +316,9 @@ class PartWriter {
             type: measure.barline === 'repeat' ? 'stop' : 'discontinue',
           })
         : '',
-      measure.barline === 'repeat' ? tag('repeat', { direction: 'backward' }) : '',
+      measure.barline === 'repeat'
+        ? tag('repeat', { direction: 'backward', times: measure.times })
+        : '',
     ].join('')
     if (right) out.push(tag('barline', { location: 'right' }, right))
     return tag('measure', { number, ...(number === 0 ? { implicit: 'yes' } : {}) }, ...out)
