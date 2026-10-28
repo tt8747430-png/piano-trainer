@@ -76,6 +76,9 @@ export function drawnAs(measures: readonly Measure[]): Measure[] {
   })
   return measures.map((measure, i) => {
     const as = drawn[i]
-    return as === undefined ? measure : { ...measure, drawn: as }
+    if (as === measure.drawn) return measure
+    if (as !== undefined) return { ...measure, drawn: as }
+    const { drawn: _was, ...plain } = measure
+    return plain
   })
 }

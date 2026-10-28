@@ -277,7 +277,7 @@ function restRun(measures: readonly Measure[], index: number): number {
 /** A bar repeat's sign where a measure is drawn in one, its pair (a two-bar repeat's) on its line. */
 function repeatSign(measures: readonly Measure[], index: number): string | null {
   const measure = measures[index]
-  if (measure?.drawn === 'repeat') return '<mRpt/>'
+  if (measure?.drawn === 'repeat') return '<mRpt num.visible="false"/>'
   if (measure?.drawn !== 'repeat2') return null
   const pair = measure.barRepeat === 2 ? measures[index + 1] : measures[index - 1]
   const first = measure.barRepeat === 2 ? measure : pair

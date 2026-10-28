@@ -1,3 +1,4 @@
+export { drawnAs } from './drawn'
 export { notate, staffClefAt, staffOf } from './notate'
 export {
   clefIn,

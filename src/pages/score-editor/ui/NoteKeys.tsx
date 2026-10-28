@@ -1,4 +1,5 @@
 import { ArrowDown, ArrowLeftRight, ArrowUp } from 'lucide-react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import {
@@ -9,6 +10,7 @@ import {
   shownValue,
   takesDot,
   takesTuplet,
+  type ChosenValue,
   type EditMode,
   type GraceKind,
 } from '@/features/score-editor'
@@ -30,7 +32,11 @@ const GLYPH = 'font-sans text-3xl leading-none'
 const REST = '𝄽'
 
 /** What the palette shows as chosen: the chosen note's value, else the next note's. */
-const useShown = () => useEditorState(useShallow(shownValue))
+/** The value shown, kept while it reads the same: its tuplet is a fresh object each time it is read. */
+function useShown(): ChosenValue | null {
+  const key = useEditorState((state) => JSON.stringify(shownValue(state)))
+  return useMemo(() => JSON.parse(key) as ChosenValue | null, [key])
+}
 
 /** Each value's key, Flat's 1 to 7. */
 const VALUE_TOOLS: Readonly<Partial<Record<number, Tool>>> = {
@@ -292,7 +298,7 @@ export function NoteKeys() {
         </KeyGrid>
       ) : null}
       <KeyGrid>
-        <TupletKeys />
+        <TupletKeys quick={!sheet} />
       </KeyGrid>
     </>
   )
@@ -341,8 +347,11 @@ function QuickTupletKey() {
  * chosen: the chosen note's, else the next written; greyed where the meter writes such notes plainly (two or four to a simple
  * beat, three or six to a compound one) or the value is too short for it.
  */
-function TupletKeys() {
-  return TUPLET_COUNTS.map((num) => <TupletKey key={num} num={num} />)
+function TupletKeys({ quick }: { quick: boolean }) {
+  const compound = useEditorState((state) => isCompound(state.draft.meter))
+  // On the phone's sheet the everyday tools above hold the quick tuplet already.
+  const shown = quick ? TUPLET_COUNTS : TUPLET_COUNTS.filter((num) => num !== (compound ? 2 : 3))
+  return shown.map((num) => <TupletKey key={num} num={num} />)
 }
 
 /** Chord's picture: noteheads stacked on one stem, as the next notes stack onto the one at the caret. */

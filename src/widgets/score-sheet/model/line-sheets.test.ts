@@ -15,6 +15,27 @@ const music = {
 } as const
 
 describe('the sheet’s lines as written', () => {
+  it('draws a bar repeat and a multi-bar rest whose bars stand on the lines before', () => {
+    const sheetsOf = createLineSheets()
+    const lines = sheetsOf(
+      readDraft({
+        ...music,
+        sections: [{ kind: 'verse', lines: ['G Rest3 _', '_ _', 'G', '% G'] }],
+        staves: undefined,
+        hands: {
+          rh: 'B4/4 | r/4 | r/4 | r/4 | B4/4 | B4/4',
+          lh: 'r/4 | r/4 | r/4 | r/4 | r/4 | r/4',
+        },
+      }),
+    )
+    expect(lines.map(({ score }) => score.measures.map((m) => m.drawn ?? '-'))).toEqual([
+      ['-', 'rest'],
+      ['restOn', 'restOn'],
+      ['-'],
+      ['repeat'],
+    ])
+  })
+
   it('keeps a line that did not change, and writes again only the one that did', () => {
     const sheetsOf = createLineSheets()
     const silent = { rh: 'r/4 | r/4 | r/4 | r/4', lh: 'r/4 | r/4 | r/4 | r/4' }

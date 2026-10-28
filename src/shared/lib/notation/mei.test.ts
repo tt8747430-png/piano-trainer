@@ -58,8 +58,12 @@ describe('scoreToMei', () => {
     it('draws a bar repeat in its sign on every staff, a two-bar repeat’s over both its bars', () => {
       const notes = [whole(60, 'C', 0), whole(60, 'C', 1), whole(60, 'C', 2), whole(60, 'C', 3)]
       const one = measures(scoreToMei(notate(music(notes, { bars: bars([{}, { barRepeat: 1 }]) }))))
-      expect(one[1]).toMatch(/<staff n="1"><layer n="1"><mRpt\/><\/layer><\/staff>/)
-      expect(one[1]).toMatch(/<staff n="2"><layer n="1"><mRpt\/><\/layer><\/staff>/)
+      expect(one[1]).toMatch(
+        /<staff n="1"><layer n="1"><mRpt num.visible="false"\/><\/layer><\/staff>/,
+      )
+      expect(one[1]).toMatch(
+        /<staff n="2"><layer n="1"><mRpt num.visible="false"\/><\/layer><\/staff>/,
+      )
       expect(one[1]).not.toContain('<note')
       const two = measures(
         scoreToMei(notate(music(notes, { bars: bars([{}, {}, { barRepeat: 2 }, {}]) }))),

@@ -1,6 +1,6 @@
 import type { Draft } from '@/features/score-editor'
 import type { TimeSignature } from '@/shared/lib/music'
-import { notate, type NextLine, type Score, type TimedMusic } from '@/shared/lib/notation'
+import { drawnAs, notate, type NextLine, type Score, type TimedMusic } from '@/shared/lib/notation'
 import { lineMusic, linesOf, oneLine, timeBeforeLine, type SheetLineBars } from './line-music'
 
 /** A line as the sheet shows it: its bars, its music and that music engraved, the time before it. */
@@ -53,10 +53,23 @@ export function createLineSheets(): (draft: Draft, cut?: LineCut, lyrics?: boole
   const scores = lastUsed<Score>()
   const sheets = lastUsed<LineSheet>()
   return (draft, cut, lyrics = true) => {
-    const written = (cut?.across ? oneLine(draft) : linesOf(draft, cut)).map((line) => {
+    const notated = (cut?.across ? oneLine(draft) : linesOf(draft, cut)).map((line) => {
       const music = lineMusic(draft, line, lyrics)
       const text = JSON.stringify(music)
       return { line, music, text, score: scores(text, () => notate(untimed(music))) }
+    })
+    // A bar repeat's bars and a multi-bar rest's may stand on the lines before: drawn over them all
+    // (ADR 0087), a line whose drawing that changes its own score.
+    const drawn = drawnAs(notated.flatMap(({ score }) => score.measures))
+    let at = 0
+    const written = notated.map((each) => {
+      const measures = drawn.slice(at, (at += each.score.measures.length))
+      if (measures.every((measure, i) => measure === each.score.measures[i])) return each
+      const signs = measures.map((measure) => measure.drawn ?? '').join(',')
+      return {
+        ...each,
+        score: scores(`${each.text} ${signs}`, () => ({ ...each.score, measures })),
+      }
     })
     return written.map(({ line, music, text, score }, index) => {
       const timeBefore = timeBeforeLine(draft, line)
