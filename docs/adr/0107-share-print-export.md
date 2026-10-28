@@ -16,7 +16,7 @@ seen on screen" with the diagrams on a last page.
     so the link never takes the key its opener kept;
   - an own song carries its music: `/songs/shared?song=…`, its title and music deflated and written in base64url. The
     link's text is untrusted and read by the same reader the pieces store reads its own songs with, so a link holds
-    nothing a save could not. Opening it shows the song; Add to Your songs makes it one of the learner's own. A link
+    nothing a save could not. Opening it shows the song; Add to the library makes it one of the learner's own. A link
     that holds no song says so. A song written in degrees has no Share;
   - the device's share sheet where it has one, else the link copied, said in the status line.
 - **Print**, in the Player's More, for everything the Player plays: the view shown, as it reads. Sheet music on its A4
