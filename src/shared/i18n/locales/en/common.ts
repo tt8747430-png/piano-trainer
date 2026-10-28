@@ -35,6 +35,8 @@ export const common = {
     settings: 'Settings',
   },
   close: 'Close',
+  // A strip's ‹ and ›, each naming what it steps through ("Next: Root").
+  step: { previous: 'Previous: {{what}}', next: 'Next: {{what}}' },
   // Where the toasts stand, as a screen reader names the place.
   notifications: 'Notifications',
   // A notice's Close, named apart from the screen's own Close.
@@ -80,6 +82,10 @@ export const common = {
     octaveUp: 'Octave up',
     zoomOut: 'Smaller keys',
     zoomIn: 'Larger keys',
+    // What a key size just chosen shows, said for a moment on the rail.
+    keysInSight: 'Keys in sight',
+    showing_one: 'Showing {{count}} key ({{from}}–{{to}})',
+    showing_other: 'Showing {{count}} keys ({{from}}–{{to}})',
     names: { c: 'Note names: every C', all: 'Note names: every key', none: 'Note names: off' },
     glissando: 'Glissando',
     pedal: 'Pedal',
@@ -137,6 +143,8 @@ export const common = {
     typing: 'Play from the computer keyboard',
     typingNote: 'The letter keys play the piano',
     typingHint: 'Z X move an octave · Space holds the pedal',
+    autoplay: 'Play what you choose',
+    autoplayNote: 'A chord or a scale chosen on a Practice page plays at once',
   },
   // Which controls the bar over the keys holds: each by the picture it wears there.
   railControls: {

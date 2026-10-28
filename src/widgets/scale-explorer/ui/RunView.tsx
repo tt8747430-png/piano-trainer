@@ -5,9 +5,10 @@ import { noteFromParam, noteName, spellScale } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, runSounds } from '@/shared/lib/schedule'
 import { Dropdown, Labelled, Segmented } from '@/shared/ui'
 import { runShown, scaleRunOf } from '../model/scale-run'
-import type { ScaleView } from '../model/scale-view'
+import { RUN_KEY_SHOWS, runKeyShow, type ScaleView } from '../model/scale-view'
 import { PlayUpDown } from './PlayUpDown'
 import { ScaleExercises } from './ScaleExercises'
+import { ScaleFingering } from './ScaleFingering'
 import { ScaleLayout } from './ScaleLayout'
 import { ScaleSheet } from './ScaleSheet'
 import { TempoSlider } from './TempoSlider'
@@ -42,7 +43,7 @@ export function RunView({
   const tones = spellScale(tonic, kind)
   return (
     <ScaleLayout
-      keyboard={<PinnedKeyboard shown={runShown(run, hands)} />}
+      keyboard={<PinnedKeyboard shown={runShown(run, hands, runKeyShow(scale))} />}
       name={name}
       facts={facts}
       action={<PlayUpDown sounds={runSounds(run.music, scale.tempo)} />}
@@ -59,6 +60,17 @@ export function RunView({
                 { value: 'both', label: t('common:handsShort.both') },
               ]}
               onChange={(next) => onChange({ hands: next })}
+            />
+          </Labelled>
+          <Labelled label={t('practice:scales.onKeys.label')}>
+            <Segmented
+              label={t('practice:scales.onKeys.label')}
+              value={runKeyShow(scale)}
+              options={RUN_KEY_SHOWS.map((show) => ({
+                value: show,
+                label: t(`practice:scales.onKeys.${show}`),
+              }))}
+              onChange={(onKeys) => onChange({ onKeys })}
             />
           </Labelled>
           <Labelled label={t('practice:scales.startOn')}>
@@ -100,6 +112,7 @@ export function RunView({
       }
     >
       <ScaleSheet music={run.music} hands={hands} fingers />
+      <ScaleFingering run={run} />
       <ScaleExercises root={tonic} kind={kind} />
     </ScaleLayout>
   )

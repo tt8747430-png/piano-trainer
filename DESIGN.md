@@ -382,11 +382,17 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
   a hairline. `MultiDropdown` checks several. Under a field's printed name it is `bare`, its value alone.
 - **Toggle chips** (`ToggleChips`): several of a few, all in sight; on is ink on sand in an ink line.
 - **Toggle tiles** (`ToggleTile`, `PictureTiles`): an icon or a drawing over its name; on, the learned wash.
-- **Note, key and inversion choices** (`NoteChoice`, `KeyChoice`, `InversionChoice`): the letters then ♮ ♯ ♭; the
-  tonic then Major · Minor, only keys a signature writes; an inversion as its stack of noteheads.
+- **Strip** (`StepStrip`): one of many in a row that scrolls inside a sand track, ‹ and › at its ends, the chosen a
+  card-paper thumb kept in the middle, the edges fading; a greyed option stays in the row. A chord's quality and a
+  scale's kind are strips.
+- **Note, key and inversion choices** (`NoteChoice`, `KeyChoice`, `InversionChoice`): a strip of spellings, C C♯ D♭
+  D … B, both names of a black key side by side; the tonic's strip, only keys a signature writes, then Major ·
+  Minor; an inversion as its stack of noteheads.
 - **Switch:** a sand track in the control line; on, grass.
 - **Only what applies is offered.** A choice the thing cannot take is left out. A greyed choice says why in its
   tooltip.
+- **Chord names in text** (`ChordText`): the root in soft ink, the quality strong, its numbers raised (`C maj⁷`), a
+  bass after a slash soft again: a library card's chips, the key's chords linked to Chords.
 - **Tabs** (`tab-strip`, `tab`): the views of one thing under the screen's title, 48px, the chosen in ink over an ink
   underline, scrolling sideways with faded edges.
 
@@ -403,6 +409,13 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
   a list of choices or a row link inside it runs to the card's edges (`flush`). A switch greyed for a reason says it
   in a muted line under its label ("Needs MIDI input"), never hidden.
 - **Fact card** (`FactCard`): an icon over a fact's name over its value; three across (Key · Time · Tempo).
+- **Library card** (Progressions): its numerals as the title, name · chord count in soft ink, its character in a
+  line, chips of the numeral (small, soft) over the chord; a round paper Play at its top right. While it plays its
+  line turns honey and the sounding chip takes the selected wash; the card shown wears a darker line.
+- **Interval row** (Intervals): the short name in soft ink, the name over its semitones, a small `KeyDiagram` at its
+  end; two columns from 48rem. The row playing takes the selected wash.
+- **Hand drawing** (`HandDiagram`): a hand palm down in sand, each finger numbered in an ink dot, thumb 1 to little
+  finger 5, the right hand's thumb at the left; beside it the run's notes over that hand's fingers.
 - **Sheet** (`Sheet`): card paper, 20px top corners, a grab handle, its Literata title with Close, a scrolling body,
   an optional footer over a hairline. It stands on the phone's keyboard. Never a sheet over a sheet: open a list as a
   page of the sheet.

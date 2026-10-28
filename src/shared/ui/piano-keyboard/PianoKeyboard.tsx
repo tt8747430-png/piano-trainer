@@ -24,6 +24,7 @@ import { keyDescription, keyLook, type KeyStates, type KeyStateWords } from './k
 import { useKeyNames } from './use-key-names'
 import { useKeyPointers } from './use-key-pointers'
 import { useKeyboardScroll } from './use-keyboard-scroll'
+import { useSizeCaption } from './use-size-caption'
 
 /** Fit's white keys: never narrower than this, so a finger finds them; past it the keyboard scrolls… */
 const MIN_WHITE_PX = 34
@@ -181,6 +182,8 @@ export function PianoKeyboard({
       ? fitWidth(span.whites, asked)
       : WHITE_WIDTH[keySize](span.whites)
   useKeyboardScroll(scroller, PIANO_LAYOUT.keys, span, inView, keySize, white)
+  // A key size just chosen says for a moment what it shows, over the page's own caption.
+  const sizeCaption = useSizeCaption(scroller, keySize)
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const next = MOVES[event.key]?.(tabStop)
@@ -200,7 +203,12 @@ export function PianoKeyboard({
         className="flex shrink-0 flex-col"
         style={{ width: `calc(${PIANO_LAYOUT.whites} * ${white})` }}
       >
-        <KeyRail scroller={scroller} scrolls={scrolls} caption={caption} end={railEnd}>
+        <KeyRail
+          scroller={scroller}
+          scrolls={scrolls}
+          caption={sizeCaption ?? caption}
+          end={railEnd}
+        >
           {children}
         </KeyRail>
         <div

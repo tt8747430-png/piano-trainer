@@ -50,15 +50,25 @@ describe('runShown', () => {
   it('marks the playing hand’s keys with their degrees and that hand’s fingers', () => {
     for (const hands of ['rh', 'lh', 'both'] as const) {
       const run = scaleRunOf({ ...view, hands })
-      const shown = runShown(run, hands)
+      const shown = runShown(run, hands, hands === 'lh' ? 'lh' : 'rh')
       const played = new Set(run.music.notes.map((n) => n.midi))
       expect(new Set(shown.keys)).toEqual(played)
       expect([...shown.marks.keys()].every((key) => played.has(key))).toBe(true)
     }
-    const lh = runShown(scaleRunOf({ ...view, hands: 'lh' }), 'lh')
+    const lh = runShown(scaleRunOf({ ...view, hands: 'lh' }), 'lh', 'lh')
     expect(lh.marks.get(midi(48))?.finger).toBe(5)
     expect(lh.marks.get(midi(60))?.finger).toBe(1)
-    const rh = runShown(scaleRunOf(view), 'rh')
+    const rh = runShown(scaleRunOf(view), 'rh', 'rh')
     expect(rh.marks.get(midi(60))?.finger).toBe(1)
+  })
+
+  it('shows the notes alone, or either hand’s fingers on the right hand’s keys', () => {
+    const run = scaleRunOf(view)
+    const notes = runShown(run, 'rh', 'notes')
+    expect(notes.marks.get(midi(60))?.finger).toBeUndefined()
+    expect(notes.marks.get(midi(60))?.label).toBe('1')
+    const lh = runShown(run, 'rh', 'lh')
+    expect(lh.marks.get(midi(60))?.finger).toBe(5)
+    expect(lh.marks.get(midi(72))?.finger).toBe(1)
   })
 })

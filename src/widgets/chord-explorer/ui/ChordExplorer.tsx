@@ -1,3 +1,4 @@
+import { selectKeyboard, useSettings } from '@/entities/settings'
 import { AudioLines, Square } from 'lucide-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -41,11 +42,13 @@ export function ChordExplorer({
   // The other ways its symbol is written: the table's, where the table has the chord, each printed
   // as the sheets print a chord.
   const others = quality ? qualitySpellings(quality).slice(1) : []
-  // A choice sounds by itself: it has no button, so no Stop, and it cuts off what played.
+  // A choice sounds by itself, unless Settings › Keyboard turns that off: it has no button, so no
+  // Stop, and it cuts off what played.
+  const { autoplay } = useSettings(selectKeyboard)
   const change = (next: Partial<ChordView>) => {
     const view = changedView(chord, next)
     onChange(view)
-    play(chordSounds(chordKeys(view), { arpeggio: false }))
+    if (autoplay) play(chordSounds(chordKeys(view), { arpeggio: false }))
   }
   const sound = (id: 'chord' | 'arpeggio') =>
     playback.toggle(id, () => chordSounds(chordKeys(chord), { arpeggio: id === 'arpeggio' }))

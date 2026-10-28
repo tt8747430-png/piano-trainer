@@ -36,6 +36,7 @@ export const common: LocaleResources['common'] = {
   },
   update: { available: 'Готова новая версия', update: 'Обновить', later: 'Позже' },
   close: 'Закрыть',
+  step: { previous: 'Назад: {{what}}', next: 'Вперёд: {{what}}' },
   notifications: 'Уведомления',
   notice: { close: 'Закрыть уведомление' },
   clearSearch: 'Очистить поиск',
@@ -69,6 +70,11 @@ export const common: LocaleResources['common'] = {
     octaveUp: 'Октава вверх',
     zoomOut: 'Клавиши мельче',
     zoomIn: 'Клавиши крупнее',
+    keysInSight: 'Видно клавиш',
+    showing_one: 'Видна {{count}} клавиша ({{from}}–{{to}})',
+    showing_few: 'Видно {{count}} клавиши ({{from}}–{{to}})',
+    showing_many: 'Видно {{count}} клавиш ({{from}}–{{to}})',
+    showing_other: 'Видно {{count}} клавиши ({{from}}–{{to}})',
     names: {
       c: 'Названия нот: каждое C',
       all: 'Названия нот: все клавиши',
@@ -129,6 +135,8 @@ export const common: LocaleResources['common'] = {
     typing: 'Играть с клавиатуры компьютера',
     typingNote: 'Буквенные клавиши играют на рояле',
     typingHint: 'Z X — октава · Пробел держит педаль',
+    autoplay: 'Играть выбранное',
+    autoplayNote: 'Аккорд или гамма, выбранные на странице практики, сразу звучат',
   },
   railControls: {
     label: 'Кнопки на панели',

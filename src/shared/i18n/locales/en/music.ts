@@ -142,14 +142,6 @@ export const music = {
     majorMode: 'Major',
     minorMode: 'Minor',
   },
-  // A note chosen in two parts: its letter, then its accidental.
-  note: {
-    letter: 'Letter',
-    accidental: 'Accidental',
-    natural: 'Natural',
-    sharp: 'Sharp',
-    flat: 'Flat',
-  },
   // The Intervals reference's cards: each interval's name and short name.
   interval: {
     r: { name: 'Unison', short: 'P1' },

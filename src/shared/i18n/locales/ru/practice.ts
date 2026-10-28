@@ -2,7 +2,7 @@ import type { LocaleResources } from '../../types'
 
 export const practice: LocaleResources['practice'] = {
   title: 'Практика',
-  groups: { atTheKeys: 'За клавиатурой', training: 'Тренировка' },
+  groups: { theory: 'Теория', playing: 'Игра', training: 'Тренировка' },
   pages: {
     chords: 'Аккорды',
     scales: 'Гаммы и тональности',
@@ -15,11 +15,15 @@ export const practice: LocaleResources['practice'] = {
     quiz: 'Тесты',
   },
   about: {
-    chords: 'От трезвучий до терцдецимаккордов · Обращения · Тенсии',
-    intervals: 'Каждый интервал на клавишах и на слух',
-    progressions: 'Известные или свои, в любой тональности',
-    chordFinder: 'Сыграйте аккорд и узнайте, как он называется и пишется',
-    metronome: 'Щелчки, сигналы или ударные в любом темпе',
+    chords: 'От трезвучий до 13-х, обращения',
+    scales: 'Гаммы, их аккорды, тональности',
+    intervals: 'Все интервалы на клавишах',
+    progressions: 'Известные обороты в любой тональности',
+    accompaniment: 'Фактуры для обеих рук',
+    chordFinder: 'Сыграйте аккорд — узнайте его имя',
+    exercises: 'Техника и упражнения',
+    quiz: 'Аккорды, тональности, слух, чтение',
+    metronome: 'Щелчки или ударные, любой темп',
   },
   root: 'Основной тон',
   hands: 'Руки',
@@ -41,7 +45,6 @@ export const practice: LocaleResources['practice'] = {
         sus2: 'С задержанной секундой',
         sus4: 'С задержанной квартой',
       },
-      triadShort: { maj: 'Маж', min: 'Мин', dim: 'Ум', aug: 'Ув' },
       // A stack named by its top interval, as a chord symbol writes it: a triad up to the 5th.
       sizes: { triad: '5', seventh: '7', ninth: '9', eleventh: '11', thirteenth: '13' },
       sizeNames: {
@@ -76,6 +79,16 @@ export const practice: LocaleResources['practice'] = {
     show: { scale: 'Гамма', chords: 'Аккорды', key: 'Тональность' },
     label: 'Гамма',
     startOn: 'Начать с',
+    openInChords: 'Открыть в Аккордах',
+    onKeys: { label: 'На клавишах', notes: 'Ноты', lh: 'Левая рука', rh: 'Правая рука' },
+    byHand: {
+      title: 'Аппликатура по рукам',
+      lh: 'Левая рука',
+      rh: 'Правая рука',
+      drawing: '{{hand}}: пальцы пронумерованы от большого, 1, до мизинца, 5',
+      notes: 'Ноты',
+      fingers: 'Пальцы',
+    },
     fingering: {
       label: 'Аппликатура',
       thumb: 'С первого пальца',
@@ -117,6 +130,12 @@ export const practice: LocaleResources['practice'] = {
   intervals: {
     simple: 'В пределах октавы',
     compound: 'Шире октавы',
+    way: { label: 'Играть', together: 'Вместе', up: 'Вверх', down: 'Вниз' },
+    tritone: {
+      A4: { name: 'Увеличенная кварта', short: 'ув4' },
+      d5: { name: 'Уменьшённая квинта', short: 'ум5' },
+    },
+    keys: '{{name}} на клавишах',
   },
   progressions: {
     field: 'Ступени или аккорды',
@@ -125,8 +144,12 @@ export const practice: LocaleResources['practice'] = {
     minorLine: 'Эти ступени — минорной тональности.',
     playIn: 'Сыграть в тональности {{key}}',
     throughKeys: 'По тональностям',
-    choose: 'Последовательность',
-    typed: 'Набрана',
+    library: 'Библиотека',
+    chordCount_one: '{{count}} аккорд',
+    chordCount_few: '{{count}} аккорда',
+    chordCount_many: '{{count}} аккордов',
+    chordCount_other: '{{count}} аккорда',
+    chordsIn: 'Её аккорды в тональности',
     lead: { label: 'Подвести к каждому аккорду', none: 'Нет', v: 'Через V', 'ii-v': 'Через ii–V' },
     // Песни, в которых звучит последовательность, каждая открывает плеер на своих тактах (ADR 0112).
     songs: {
@@ -223,6 +246,8 @@ export const practice: LocaleResources['practice'] = {
     },
     altered: 'Альтерированная доминанта: {{symbol}}',
     inKeysShown: 'Тональности',
+    scaleShown: 'Гамма на клавишах',
+    scaleShownDetail: 'Гамма тональности на каждой октаве, на клавише её нота',
   },
   passingChords: {
     inKey: 'В тональности',
