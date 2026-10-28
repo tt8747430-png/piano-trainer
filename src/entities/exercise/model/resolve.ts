@@ -81,6 +81,9 @@ export function exerciseChoice(exercise: Exercise, params: ExerciseParams): Exer
     voicing: allowed(params.voicing, fields.voicing, own.voicing),
     from: allowed(params.from, fields.from, own.from),
     tonality: allowed(params.tonality, fields.tonality, own.tonality),
+    // A hand's octave where the exercise takes one; the run keeps its own where it would not fit.
+    ...(fields.handOctaves && params.rhOctave !== undefined ? { rhOctave: params.rhOctave } : {}),
+    ...(fields.handOctaves && params.lhOctave !== undefined ? { lhOctave: params.lhOctave } : {}),
   }
   const root = params.root ? noteFromParam(params.root) : own.root
   return { root: exerciseRootSpelling(exercise, pitchClassOf(root), rest), ...rest }

@@ -20,4 +20,6 @@ export interface PracticeView {
    * sounds whatever the view (ADR 0111). Never remembered.
    */
   readonly keys?: boolean
+  /** Beats of rest, each a click, before each repeat of a loop (ticks between loops); none without. */
+  readonly rest?: number
 }

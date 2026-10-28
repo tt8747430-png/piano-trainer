@@ -29,7 +29,10 @@ export function arrangeExercise(id: ExerciseId, choice: ExerciseChoice): Perform
   const minor = choice.tonality === 'minor'
   switch (id) {
     case 'scale':
-      return scaleExercise(choice)
+      return scaleExercise({
+        ...choice,
+        startOctaves: { rh: choice.rhOctave, lh: choice.lhOctave },
+      })
     case 'thirds':
       return sequenceExercise({ ...choice, figure: THIRDS })
     case 'sixths':

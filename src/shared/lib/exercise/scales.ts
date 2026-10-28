@@ -2,6 +2,9 @@ import {
   fingeringsOf,
   midi,
   kindComingDown,
+  PIANO,
+  pitchClassOf,
+  type Midi,
   ownFingering,
   runFingering,
   scaleKey,
@@ -41,13 +44,81 @@ function overTonic(run: ScaleRun, notes: readonly LineNote[]): Performance {
   })
 }
 
+/** The octaves a hand may start a scale run in, by scientific pitch: C1 to C7. */
+export const HAND_OCTAVES = [1, 2, 3, 4, 5, 6, 7] as const
+
+/** Where each hand starts its run: the octave its tonic is in (4 for middle C's). */
+export interface HandOctaves {
+  readonly rh: number
+  readonly lh: number
+}
+
+/** A run from degree `start`. */
+type StartedRun = ScaleRun & { readonly start: number }
+
+/** The key a hand's tonic stands on, in an octave. */
+const tonicIn = (root: SpelledNote, octave: number): Midi =>
+  midi(12 * (octave + 1) + pitchClassOf(root))
+
+/** The octave a key's tonic is in. */
+const octaveOfKey = (key: Midi): number => Math.floor(key / 12) - 1
+
+/** Each hand's own start: the right hand where the run fits from middle C's octave, the left below. */
+function ownTonics(run: StartedRun): HandOctaves {
+  const tonic = tonicKey(
+    run.root,
+    run.octaves,
+    spellScale(run.root, run.kind)[run.start]?.semitones,
+  )
+  return { rh: tonic, lh: tonic - leftHandBelow(run.octaves) }
+}
+
+/** Each hand's own start octave, as the run plays where nothing is asked. */
+export function ownHandOctaves(run: StartedRun): HandOctaves {
+  const own = ownTonics(run)
+  return { rh: octaveOfKey(midi(own.rh)), lh: octaveOfKey(midi(own.lh)) }
+}
+
+/** The lowest and highest keys a run from a tonic plays, up and back as its kind comes down. */
+function runSpan(run: StartedRun, tonic: Midi): { low: number; high: number } {
+  const count = spellScale(run.root, run.kind).length
+  const degrees = range(run.start, run.start + count * run.octaves)
+  const keys = [run.kind, kindComingDown(run.kind)].flatMap((kind) =>
+    degrees.map(scaleDegrees(run.root, kind, tonic)).map((key) => key.midi),
+  )
+  return { low: Math.min(...keys), high: Math.max(...keys) }
+}
+
+/** Where a run from an octave would leave the keyboard; none where it fits. */
+function outOfKeys(run: StartedRun, octave: number): 'above' | 'below' | undefined {
+  const { low, high } = runSpan(run, tonicIn(run.root, octave))
+  return high > PIANO.to ? 'above' : low < PIANO.from ? 'below' : undefined
+}
+
+/**
+ * The octaves a hand may start a run in, each with where its run would leave the keyboard where it
+ * would (`out`): shown greyed with that reason, never left out.
+ */
+export function handOctaves(
+  run: StartedRun,
+): readonly { readonly octave: number; readonly out?: 'above' | 'below' }[] {
+  return HAND_OCTAVES.map((octave) => {
+    const out = outOfKeys(run, octave)
+    return out ? { octave, out } : { octave }
+  })
+}
+
 /**
  * The scale up `octaves` octaves from degree `start` and back in 8ths, the left hand below the right:
  * fingered as the scale or from the thumb (a fingering the scale cannot take is its own), and coming
  * down as the scale comes down (melodic minor as natural minor).
  */
 export function scaleExercise(
-  run: ScaleRun & { readonly start: number; readonly fingering: Fingering },
+  run: StartedRun & {
+    readonly fingering: Fingering
+    /** The octave each hand starts in, where asked and its run fits on the keys; else its own. */
+    readonly startOctaves?: Partial<HandOctaves>
+  },
 ): Performance {
   const { root, kind, octaves, start } = run
   const count = spellScale(root, kind).length
@@ -55,13 +126,15 @@ export function scaleExercise(
     ? run.fingering
     : ownFingering(kind, start)
   const degrees = range(start, start + count * octaves)
-  const tonic = tonicKey(root, octaves, spellScale(root, kind)[start]?.semitones)
+  const own = ownTonics(run)
+  const tonicOf = (hand: Hand): Midi => {
+    const asked = run.startOctaves?.[hand]
+    return asked !== undefined && outOfKeys(run, asked) === undefined
+      ? tonicIn(root, asked)
+      : midi(own[hand])
+  }
   const handRun = (scale: ScaleKind, hand: Hand): Played[] => {
-    const place = scaleDegrees(
-      root,
-      scale,
-      hand === 'rh' ? tonic : midi(tonic - leftHandBelow(octaves)),
-    )
+    const place = scaleDegrees(root, scale, tonicOf(hand))
     const keys = degrees.map(place)
     const fingers = runFingering(
       root,

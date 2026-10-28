@@ -76,6 +76,11 @@ export interface PracticePlayer {
   setSpeedTraining(on: boolean): void
   setHands(hands: Hands): void
   setSwing(feel: SwingFeel): void
+  /** Beats of rest before each repeat; 0 for none. */
+  readonly rest: number
+  setRest(beats: number): void
+  /** The tempo chosen, the piece's own left out of the URL. */
+  setTempo(tempo: number): void
   /** Loops the bar the cursor is in, or removes the loop. */
   toggleLoop(): void
   /** The loop chosen, or let go of. */
@@ -130,6 +135,7 @@ export function usePracticePlayer(
     loop,
     metronome: click,
     countIn: toggles.countIn,
+    rest: view.rest ?? 0,
     recording,
     mix,
   })
@@ -194,6 +200,9 @@ export function usePracticePlayer(
     setSpeedTraining: (on) => setView({ speedTraining: on }),
     setHands: (next) => setView({ hands: next }),
     setSwing: (feel) => setView({ swing: feel }),
+    rest: view.rest ?? 0,
+    setRest: (beats) => setView({ rest: beats > 0 ? beats : undefined }),
+    setTempo: (next) => setView({ tempo: next === ownTempo ? undefined : next }),
     toggleLoop: () => setView({ loop: loop ? undefined : loopParam({ first: bar, last: bar }) }),
     setLoop: (next) => setView({ loop: next ? loopParam(next) : undefined }),
     reachLoop: (by, direction) => {

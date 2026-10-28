@@ -274,6 +274,17 @@ describe('search params', () => {
     expect(await searchAt('/practice/intervals?root=H')).toEqual(INTERVALS_DEFAULTS)
   })
 
+  it('keep a scale run’s hand octaves and a loop’s rest, within their reach', async () => {
+    expect(await searchAt('/play/exercise/scale?rhOctave=5&lhOctave=2&rest=3')).toMatchObject({
+      rhOctave: 5,
+      lhOctave: 2,
+      rest: 3,
+    })
+    const out = await searchAt('/play/exercise/scale?rhOctave=9&rest=12')
+    expect(out).not.toHaveProperty('rhOctave', 9)
+    expect(out).not.toHaveProperty('rest', 12)
+  })
+
   it('keep how an interval plays, at once unless a known way is asked', async () => {
     expect(await searchAt('/practice/intervals?way=down')).toMatchObject({ way: 'down' })
     expect(await searchAt('/practice/intervals?way=sideways')).toMatchObject({ way: 'together' })

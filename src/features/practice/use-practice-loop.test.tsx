@@ -36,6 +36,7 @@ const SETUP: PracticeSetup = {
   loop: { first: 0, last: 0 },
   metronome: false,
   countIn: false,
+  rest: 0,
   recording: null,
   mix: FULL_MIX,
 }
