@@ -16,12 +16,14 @@ TypeScript, **Feature-Sliced Design** (lint-enforced), English + Russian, deploy
 - `vite-react-best-practices` / `vercel-react-best-practices` → performance, bundle, Vite SPA.
 - `vercel-composition-patterns` → component APIs.
 - `shadcn` → anything in `src/shared/ui/primitives` (add with the CLI, never by hand).
-- `impeccable` → visual design work, over [DESIGN.md](DESIGN.md).
+- `impeccable` → visual design work, over [DESIGN.md](DESIGN.md): call it with a command and a target
+  (`audit`, `polish`, `adapt`, `harden`, `clarify`, `distill` …); our screens are its Operate mode.
 - `vercel:knowledge-update` → before touching `vercel.ts` or anything Vercel.
 - `humanizer` / `writing-guidelines` → docs and any prose the app shows.
 - **Not applicable:** React Native, Next.js and Angular skills.
 
-Non-trivial feature → `superpowers:brainstorming` (or `grilling`) first; its spec goes to `.scratch/<feature>/spec.md`.
+Which skill when, who calls it, and impeccable's commands: `.claude/skills/owner-way/references/practices.md`. A large
+feature gets a short spec in `.scratch/<feature>/spec.md` first.
 
 ## Change rules
 
@@ -42,7 +44,8 @@ Non-trivial feature → `superpowers:brainstorming` (or `grilling`) first; its s
   The full `npm run test` takes minutes: run it once before a push that touches shared code (`shared/lib`, an
   entity's model, `app/`, the test setup or config), never after each edit. After touching startup, routing, the PWA
   or config, also `npm run build`. CI runs only by hand, so these local checks are the gate.
-- **Parallel agents (worktrees).** Each agent commits one task at a time and checks only what it changed
+- **Work inline; agents are the exception** (the `owner-way` skill's maximum principle: the best result for the
+  least usage). When a large, separable part does go to an agent (worktree), it commits one task at a time and checks only what it changed
   (`typecheck`, `lint`, `test:related`/`test:changed`; `build` only after touching startup, routing, the PWA or
   config), never the full suite. The session's branch merges every agent's branch, runs the full `npm run test` and
   `npm run build` once on the merged result, updates this file and the docs, then pushes the branch and `main`.

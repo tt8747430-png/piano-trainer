@@ -2,7 +2,7 @@ import { Outlet, useRouterState } from '@tanstack/react-router'
 import { useLayoutEffect } from 'react'
 import { ReloadOnRestore } from '@/features/backup-data'
 import { ShortcutsHelp } from '@/features/shortcuts-help'
-import { startKeyboardViewport } from '@/shared/lib'
+import { startKeyboardReveal, startKeyboardViewport } from '@/shared/lib'
 import { StorageFullNotice } from './storage-full/StorageFullNotice'
 import { UpdatePrompt } from './update-prompt/UpdatePrompt'
 
@@ -11,8 +11,16 @@ export function RootLayout() {
   const fullScreen = useRouterState({
     select: (state) => state.matches.some((match) => match.staticData.fullScreen === true),
   })
-  // The phone's keyboard, measured once for the whole app: what floats at the foot steps aside.
-  useLayoutEffect(() => startKeyboardViewport(), [])
+  // The phone's keyboard, measured once for the whole app: what floats at the foot steps aside, and
+  // a field focused is lifted clear of it.
+  useLayoutEffect(() => {
+    const stopMeasuring = startKeyboardViewport()
+    const stopRevealing = startKeyboardReveal()
+    return () => {
+      stopRevealing()
+      stopMeasuring()
+    }
+  }, [])
   return (
     <ShortcutsHelp>
       <Outlet />

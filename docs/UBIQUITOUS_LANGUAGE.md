@@ -267,6 +267,10 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Note names**: C · All · None. _Avoid:_ labels.
 - **Chord names**: the rail naming the chord a hand holds. _Avoid:_ chord detection.
 - **Typing keys**: the computer keyboard as a piano. _Avoid:_ hotkeys.
+- **Phone's keyboard** (`keyboard-viewport`): the on-screen keyboard a text field opens; it covers the screen's foot
+  (`--kb-inset`), never the piano. _Avoid:_ soft keyboard, virtual keyboard.
+- **Reveal** (`keyboard-reveal`): the page lifting a focused field, its label and its error clear of the phone's
+  keyboard. **Reserve**: the keyboard last measured, held as a field is focused, before the keyboard comes.
 - **Down** (a key): sounding now or held by a hand, for at least the **shortest press** (150ms). _Avoid:_ active,
   playing.
 - **Lit**: a key shown as an answer or a pattern's note, not sounding. _Avoid:_ down.
