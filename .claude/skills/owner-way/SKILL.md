@@ -73,7 +73,7 @@ These come straight from their feedback. Each has burned a round before.
    - Never run two suites at once. Check `ps` before starting one, and never `pkill` with a pattern that matches your own command.
    - **No ghost tasks** (a loop or server left running after its work is done):
      - Wait for a background command by its own completion notice; don't write a waiting loop. If you must poll, poll its PID (`kill -0 <pid>`) or the line its log prints at the end. A loop on `pgrep -f <pattern>` finds itself when its own command holds the pattern and never ends.
-     - Give every long background command a limit (`timeout 1800 …`).
+     - Give every long background command a limit of about twice what it needs (`timeout 1800 …` for the full suite, up to the tool's 2 hours). The limit is for commands only; an agent or a long task has none, and is bounded by stopping what it started when it reports.
      - Stop processes by PID, never by a pattern; when merging an agent, stop its dev server and loops too.
      - Before reporting a round done, list what is running (`ps -eo pid,etime,args | grep -E 'vitest|vite|sleep|until'`) and stop whatever is yours and finished.
    - **Flaky tests:** a test that fails only under load and passes alone gets made robust (e.g. a longer wait on engraving), and you say so.

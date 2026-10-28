@@ -50,7 +50,7 @@ Then append the common part below unchanged. Launch with `isolation: "worktree"`
   - Shoot each screen your brief lists at 390×844 and 1280×800; add 320×568 and 844×390 only where something may be clipped.
   - Look at every shot and fix what is cut, crowded or misaligned.
 - Background work:
-  - Give every long command a limit (`timeout 1800 <command>`), so a mistake cannot run on.
+  - Give every long command a limit of about twice what it needs (`timeout 1800 <command>` for a large test run), so a mistake cannot run on. Your own work has no time limit.
   - Wait for a background command by its own completion notice; never a loop of your own. If you must poll, poll its PID (`kill -0 <pid>`) or a line its log prints at the end, never `pgrep -f`/`pkill -f` with a pattern your own command holds.
   - Before you report, stop everything you started (dev server, loops, test runs) by PID, and say in the report that nothing of yours is running.
 
