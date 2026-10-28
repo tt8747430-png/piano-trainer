@@ -141,6 +141,7 @@ describe('the Player’s More (ADR 0108)', () => {
         'Share',
         'Print',
         'Export to MIDI',
+        'Export to MusicXML',
       ],
     ],
     // With a recording, its MIDI fixed tempo or time aligned to the recording (ADR 0107).
@@ -157,10 +158,15 @@ describe('the Player’s More (ADR 0108)', () => {
         'Print',
         'Export to MIDI, fixed tempo',
         'Export to MIDI, time aligned',
+        'Export to MusicXML',
       ],
     ],
     // A study is in no library (ADR 0106).
-    ['a study', '/play/ex3', ['Study information', 'Sections', 'Share', 'Print', 'Export to MIDI']],
+    [
+      'a study',
+      '/play/ex3',
+      ['Study information', 'Sections', 'Share', 'Print', 'Export to MIDI', 'Export to MusicXML'],
+    ],
     ['a walk', '/play/walk?root=D&kind=dorian', ['Print', 'Export to MIDI']],
     ['a progression', '/play/progression?p=ii-V-I&key=Bb', ['Print', 'Export to MIDI']],
     ['a chromatic walk', '/play/chromatic?chords=m9&root=G', ['Print', 'Export to MIDI']],
@@ -183,6 +189,7 @@ describe('the Player’s More (ADR 0108)', () => {
       'Share',
       'Print',
       'Export to MIDI',
+      'Export to MusicXML',
     ])
     await user.click(screen.getByRole('button', { name: 'Share' }))
     await waitFor(() =>
@@ -362,6 +369,22 @@ describe('the Player’s More (ADR 0108)', () => {
     const bytes = new Uint8Array(await file.arrayBuffer())
     expect(String.fromCharCode(...bytes.slice(0, 4))).toBe('MThd')
     expect(firstTempo(bytes)).toBe(36)
+  })
+
+  it('exports the music as written to a MusicXML file named for it (ADR 0107)', async () => {
+    const user = userEvent.setup()
+    await renderApp('/play/bz5?key=A')
+    const saved = catchDownloads()
+    await chooseMore(user, 'Export to MusicXML')
+    expect(saved.names).toEqual(['Still, my soul, be still.musicxml'])
+    const [file] = saved.files
+    if (!file) throw new Error('a file is saved')
+    expect(file.type).toBe('application/vnd.recordare.musicxml+xml')
+    const text = await file.text()
+    expect(text).toContain('<score-partwise version="4.0">')
+    expect(text).toContain('<work-title>Still, my soul, be still</work-title>')
+    // In its own key, G, whatever key it is played in.
+    expect(text).toContain('<fifths>1</fifths>')
   })
 
   it('exports a song with a recording at the tempo chosen, or time aligned to the recording', async () => {
