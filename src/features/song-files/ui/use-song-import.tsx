@@ -10,7 +10,7 @@ import { ImportSheet, type ImportState } from './ImportSheet'
  * Import (ADR 0107, Flat's): a MusicXML or MIDI file chosen (`choose`) or dropped (`importFile`)
  * becomes the learner's own song where the learner is (`folder`, else Home). A song read whole opens
  * on its page; one that leaves something out says what, before it is opened; a file that is no song
- * says why. `view` holds the file picker and the sheet.
+ * says why; a reading closed before the file is read makes nothing. `view` holds the file picker and the sheet.
  */
 export function useSongImport(folder: FolderId | null): {
   choose: () => void
@@ -23,11 +23,15 @@ export function useSongImport(folder: FolderId | null): {
   const picker = useRef<HTMLInputElement>(null)
   const [state, setState] = useState<ImportState>({ kind: 'idle' })
   const [made, setMade] = useState<OwnSongId | null>(null)
+  // The reading under way: one closed before its file is read, or overtaken by another, makes nothing.
+  const reading = useRef(0)
   const openSong = (id: OwnSongId) =>
     void navigate({ to: '/songs/$pieceId', params: { pieceId: id } })
   const importFile = (file: File) => {
+    const ticket = (reading.current += 1)
     setState({ kind: 'reading', name: file.name })
     void readSongFile(file).then((read) => {
+      if (ticket !== reading.current) return
       if (!read.ok) {
         setState({ kind: 'failed', name: file.name, problem: read.problem })
         return
@@ -60,7 +64,10 @@ export function useSongImport(folder: FolderId | null): {
       />
       <ImportSheet
         state={state}
-        onClose={() => setState({ kind: 'idle' })}
+        onClose={() => {
+          reading.current += 1
+          setState({ kind: 'idle' })
+        }}
         onOpen={() => {
           setState({ kind: 'idle' })
           if (made) openSong(made)

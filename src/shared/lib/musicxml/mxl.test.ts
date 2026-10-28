@@ -53,6 +53,18 @@ describe('unzipMusicXml', () => {
     await expect(unzipMusicXml(bytes)).resolves.toBe('<score-timewise/>')
   })
 
+  it('refuses an archive whose score is cut short or garbled, as a broken one', async () => {
+    const bytes = await zip([{ name: 'song.xml', text: '<score-partwise/>', deflate: true }])
+    // The deflated data's first byte, after the 30-byte local header and the name: a block of no type.
+    bytes[30 + 'song.xml'.length] = 0xff
+    await expect(unzipMusicXml(bytes)).rejects.toThrow(MxlError)
+    const cut = await zip([{ name: 'song.xml', text: '<score-partwise/>' }])
+    // The directory points its file past the archive's end.
+    const directory = cut.length - 22 - 46 - 'song.xml'.length
+    cut[directory + 42] = 0xf0
+    await expect(unzipMusicXml(cut)).rejects.toThrow(MxlError)
+  })
+
   it('refuses an archive with no score, and bytes that are no archive', async () => {
     await expect(unzipMusicXml(await zip([{ name: 'a.txt', text: 'x' }]))).rejects.toThrow(MxlError)
     expect(isZip(new TextEncoder().encode('<xml/>'))).toBe(false)

@@ -58,8 +58,18 @@ function entriesOf(bytes: Uint8Array): Entry[] {
   return entries
 }
 
-/** A file's bytes, inflated where they are compressed. */
+/** A file's bytes, inflated where they are compressed: an MxlError where they are cut short or garbled. */
 async function contentOf(bytes: Uint8Array, entry: Entry): Promise<Uint8Array> {
+  try {
+    return await inflatedOf(bytes, entry)
+  } catch (error) {
+    if (error instanceof MxlError) throw error
+    // A header past the archive's end (RangeError), or data that does not inflate (TypeError).
+    throw new MxlError('Broken ZIP data', { cause: error })
+  }
+}
+
+async function inflatedOf(bytes: Uint8Array, entry: Entry): Promise<Uint8Array> {
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength)
   if (view.getUint32(entry.local, true) !== LOCAL_FILE) throw new MxlError('Broken ZIP entry')
   const start =

@@ -2,9 +2,11 @@ import { Link } from '@tanstack/react-router'
 import {
   Archive,
   ArrowLeft,
+  CheckCheck,
   Ellipsis,
   FolderInput,
   ListChecks,
+  ListX,
   Music,
   PencilLine,
   Trash2,
@@ -20,7 +22,7 @@ import { ArchiveButton } from './ArchiveButton'
  * The library's bar (Mindscape's): its title says where the learner is, Songs at Home, the folder's
  * name in one, with Back, which goes up a level, to the folder it stands in or Home, named so; then
  * Select, and at Home the archive's button, in a folder its More (Edit folder, New song here, Move to…, Archive
- * folder, Delete folder). While Select is on, the count chosen is its title, with Select all and
+ * folder, Delete folder). While Select is on, the count chosen is its title, with Select all (round) and
  * Done.
  */
 export function LibraryHeader({
@@ -40,9 +42,12 @@ export function LibraryHeader({
         title={t('select.count', { count: select.count })}
         actions={
           <>
-            <Button variant="ghost" onClick={select.toggleAll}>
-              {t(select.all ? 'select.none' : 'select.all')}
-            </Button>
+            {/* Round, as Select was: the bar keeps its one row at 320px, the rows under it still. */}
+            <RoundButton
+              label={t(select.all ? 'select.none' : 'select.all')}
+              icon={select.all ? ListX : CheckCheck}
+              onClick={select.toggleAll}
+            />
             <Button variant="soft" onClick={select.exit}>
               {t('select.done')}
             </Button>
