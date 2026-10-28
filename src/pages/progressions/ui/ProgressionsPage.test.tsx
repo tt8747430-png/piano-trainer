@@ -546,3 +546,47 @@ describe('Practice → Progressions', () => {
     expect(within(songs).getByText('No song uses it yet')).toBeInTheDocument()
   })
 })
+
+describe('Practice → Progressions, read and played other ways', () => {
+  it('names its chords by Nashville numbers or by the chords alone, on the row and the cards', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions')
+    await rowIs(['CI', 'GV', 'Amvi', 'FIV'])
+    const written = screen.getByRole('radiogroup', { name: 'Written as' })
+    await user.click(within(written).getByRole('radio', { name: 'Nashville' }))
+    expect(router.state.location.search).toEqual({ names: 'nashville' })
+    await rowIs(['C1', 'G5', 'Am6m', 'F4'])
+    expect(chips(card('Axis of Awesome'))).toEqual(['1C', '5G', '6mAm', '4F'])
+    await user.click(within(written).getByRole('radio', { name: 'Chords' }))
+    await rowIs(['C', 'G', 'Am', 'F'])
+    expect(chips(card('Axis of Awesome'))).toEqual(['C', 'G', 'Am', 'F'])
+  })
+
+  it('reads its numerals in a church mode on the key’s tonic, kept in the URL', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions?key=D&p=I-IV-V')
+    await user.click(await screen.findByRole('combobox', { name: 'Mode' }))
+    await user.click(await screen.findByRole('option', { name: 'Dorian' }))
+    expect(router.state.location.search).toMatchObject({ key: 'Dm', mode: 'dorian' })
+    await rowIs(['Dmi', 'GIV', 'Amv'])
+    expect(screen.getByText('D Dorian')).toBeInTheDocument()
+  })
+
+  it('opens a modal vamp from the library in its mode', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions?key=A')
+    await user.click(await findChooseButton('Mixolydian vamp'))
+    expect(router.state.location.search).toMatchObject({ mode: 'mixolydian' })
+    await rowIs(['AI', 'G♭VII'])
+  })
+
+  it('plays the same chords as root-position blocks with one switch, the position greyed', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/progressions')
+    await rowIs(['CI', 'GV', 'Amvi', 'FIV'])
+    const voicing = screen.getByRole('radiogroup', { name: 'Voicing' })
+    await user.click(within(voicing).getByRole('radio', { name: 'Block' }))
+    expect(router.state.location.search).toEqual({ block: true })
+    expect(screen.getByRole('switch', { name: /Move smoothly/ })).toHaveAttribute('data-disabled')
+  })
+})

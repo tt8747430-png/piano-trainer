@@ -5,8 +5,8 @@ import { pitchClassOf, plainSpelling, type SpelledNote } from './note'
 import type { PitchClass } from './pitch'
 import { toneAbove, type Tone } from './tone'
 
-/** A chord's base: its 3rd and 5th, or a tone suspended in place of the 3rd. */
-export const TRIADS = ['maj', 'min', 'dim', 'aug', 'sus2', 'sus4'] as const
+/** A chord's base: its 3rd and 5th, a tone suspended in place of the 3rd, or no 3rd (the power chord). */
+export const TRIADS = ['maj', 'min', 'dim', 'aug', 'sus2', 'sus4', 'power'] as const
 export type Triad = (typeof TRIADS)[number]
 
 /** How far a chord stacks, by its highest number: a triad's is its 5th. */
@@ -56,6 +56,7 @@ const TRIAD_INTERVALS: Readonly<Record<Triad, readonly IntervalName[]>> = {
   aug: ['r', 'M3', 'A5'],
   sus2: ['r', 'M2', 'P5'],
   sus4: ['r', 'P4', 'P5'],
+  power: ['r', 'P5'],
 }
 const SEVENTH_INTERVAL: Readonly<Record<Seventh, IntervalName>> = {
   minor: 'm7',
@@ -117,7 +118,8 @@ export const ALTERATION_SIGN: Readonly<Record<Alteration, string>> = {
 /**
  * The sizes a triad stacks to: a suspension stops where its own tone would stack again (a sus2's 2nd
  * is its 9th; a sus4's 4th is its 11th, so it skips to the 13th), and the diminished and augmented
- * triads where chord dictionaries stop naming them.
+ * triads where chord dictionaries stop naming them; the power chord, with no 3rd to stack on, stays
+ * its root and 5th.
  */
 const SIZES: Readonly<Record<Triad, readonly BuiltSize[]>> = {
   maj: [5, 7, 9, 11, 13],
@@ -126,6 +128,7 @@ const SIZES: Readonly<Record<Triad, readonly BuiltSize[]>> = {
   aug: [5, 7, 9],
   sus2: [5, 7],
   sus4: [5, 7, 9, 13],
+  power: [5],
 }
 export const sizesOf = (triad: Triad): readonly BuiltSize[] => SIZES[triad]
 
@@ -138,7 +141,8 @@ export function seventhsOf(triad: Triad, size: BuiltSize): readonly Seventh[] {
 /**
  * The tones a triad adds, as chord dictionaries name them: the major triad its 2nd to its raised 11th
  * (the Lydian triad's), the minor triad all but that, a sus4 its 6th and 9th, a sus2 its 6th (`6sus2`;
- * its 9th is its 2nd), the augmented triad its 9th (`+(add9)`), the diminished triad none.
+ * its 9th is its 2nd), the augmented triad its 9th (`+(add9)`), the diminished triad and the power
+ * chord none.
  */
 const TRIAD_ADDS: Readonly<Record<Triad, readonly AddedTone[]>> = {
   maj: ['add2', 'add4', 'add6', 'add9', 'add11', 'addS11'],
@@ -147,6 +151,7 @@ const TRIAD_ADDS: Readonly<Record<Triad, readonly AddedTone[]>> = {
   aug: ['add9'],
   sus2: ['add6'],
   sus4: ['add6', 'add9'],
+  power: [],
 }
 
 /**

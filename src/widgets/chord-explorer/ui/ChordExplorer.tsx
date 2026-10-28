@@ -5,17 +5,52 @@ import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { chordShown, useShownKeys } from '@/features/play-example'
 import { isOneOf } from '@/shared/lib'
-import { printedSymbol, qualitySpellings, TENSION_CHORDS, writtenSymbol } from '@/shared/lib/music'
+import {
+  printedSymbol,
+  qualitySpellings,
+  TENSION_CHORDS,
+  writtenSymbol,
+  type ChordFingers,
+  type PlacedChord,
+} from '@/shared/lib/music'
 import { chordSounds } from '@/shared/lib/schedule'
 import { usePlay, usePlayback } from '@/shared/lib/services'
-import { ChordHeading, FabPill, FloatingActions, PlayFab, usePlayKey } from '@/shared/ui'
-import { changedView, chordKeys, viewChord, type ChordView } from '../model/chord-view'
+import {
+  ChordHeading,
+  FabPill,
+  FloatingActions,
+  PlayFab,
+  usePlayKey,
+  type ShownKeys,
+} from '@/shared/ui'
+import {
+  changedView,
+  chordKeys,
+  fingeringRows,
+  viewChord,
+  type ChordView,
+} from '../model/chord-view'
+import { ChordFingering } from './ChordFingering'
 import { ChordBuilder } from './ChordBuilder'
 import { ChordPractice } from './ChordPractice'
 import { ChordSheet } from './ChordSheet'
 import { ChordTensions } from './ChordTensions'
 
 const takesTensions = isOneOf(TENSION_CHORDS)
+
+/** The chord's keys by role, each with the finger its hand puts on it, as Scales marks a run's. */
+function fingeredShown(placed: PlacedChord, fingers: ChordFingers): ShownKeys {
+  const shown = chordShown([...placed.lh, ...placed.rh])
+  const marks = new Map(shown.marks)
+  for (const hand of ['lh', 'rh'] as const) {
+    placed[hand].forEach((key, i) => {
+      const mark = marks.get(key.midi)
+      const finger = fingers[hand][i]
+      if (mark && finger !== undefined) marks.set(key.midi, { ...mark, finger })
+    })
+  }
+  return { ...shown, marks }
+}
 
 /**
  * Any chord built part by part on any root, read top to bottom: the keys by role and degree; what it
@@ -33,10 +68,11 @@ export function ChordExplorer({
   const play = usePlay()
   const playback = usePlayback<string>()
   // Placed once per view: a Play or Stop re-renders here, and a new placement would engrave the staff again.
-  const { chord: built, placed } = useMemo(() => viewChord(chord), [chord])
+  const { chord: built, placed, fingers } = useMemo(() => viewChord(chord), [chord])
+  const rows = useMemo(() => fingeringRows(chord), [chord])
   // What stands on the keys is this chord's: a tension played over the last one is forgotten with it.
   const at = Object.values(chord).join(' ')
-  const [shown, show] = useShownKeys(at, chordShown([...placed.lh, ...placed.rh]))
+  const [shown, show] = useShownKeys(at, fingeredShown(placed, fingers))
   const symbol = writtenSymbol(built)
   const { quality } = built
   // The other ways its symbol is written: the table's, where the table has the chord, each printed
@@ -80,7 +116,8 @@ export function ChordExplorer({
           <ChordSheet placed={placed} />
         </div>
       </div>
-      <ChordBuilder chord={chord} tones={built.tones} onChange={change} />
+      <ChordBuilder chord={chord} tones={built.tones} placed={placed} onChange={change} />
+      <ChordFingering rows={rows} />
       {quality && takesTensions(quality) ? (
         <ChordTensions
           root={built.root}

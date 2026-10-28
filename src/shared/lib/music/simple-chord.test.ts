@@ -45,8 +45,8 @@ describe('simplifyChord', () => {
     expect(simplified('Db')).toBe('D♭')
   })
 
-  // The table has no power chord (`C5`): a chart cannot write one. Its 5th alone has no minor 3rd,
-  // so the rule makes every quality without one major.
+  // The power chord (`C5`) has its 5th alone and no minor 3rd, so the rule makes it major, as it does
+  // every quality without a minor 3rd.
   it.each(CHORD_QUALITIES)(
     'makes %s minor exactly where it has a minor 3rd and no major 3rd',
     (quality) => {

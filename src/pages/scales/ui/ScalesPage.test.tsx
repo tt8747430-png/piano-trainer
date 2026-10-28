@@ -510,6 +510,39 @@ describe('Practice → Scales and keys, Key view', () => {
     )
   })
 
+  it('names its parallel key, its neighbours on the circle, its other spelling and its degrees', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/scales?root=B&show=key')
+    await screen.findByRole('heading', { level: 2, name: 'B major' })
+    const facts = (term: string) => {
+      const name = screen.getByText(term, { selector: 'dt' })
+      return within(name.nextElementSibling as HTMLElement)
+    }
+    expect(facts('Parallel').getByRole('link')).toHaveTextContent('B minor')
+    expect(facts('Also written').getByRole('link')).toHaveTextContent('C♭ major')
+    expect(
+      facts('Beside it on the circle')
+        .getAllByRole('link')
+        .map((each) => each.textContent),
+    ).toEqual(['E major', 'F# major'])
+    const degrees = screen.getByRole('table', { name: 'Scale degrees' })
+    expect(
+      within(degrees)
+        .getAllByRole('row')
+        .map((row) => row.textContent),
+    ).toEqual([
+      'ITonicBB',
+      'iiSupertonicC♯C♯m',
+      'iiiMediantD♯D♯m',
+      'IVSubdominantEE',
+      'VDominantF♯F♯',
+      'viSubmediantG♯G♯m',
+      'vii°Leading toneA♯A♯°',
+    ])
+    await user.click(facts('Parallel').getByRole('link'))
+    expect(router.state.location.search).toMatchObject({ root: 'B', kind: 'natural', show: 'key' })
+  })
+
   it('opens a mode of the key in place, on its run, keeping the other choices', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?root=Eb&show=key&hands=lh')

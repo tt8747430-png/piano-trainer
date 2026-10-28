@@ -29,13 +29,20 @@ describe('inversionsExercise', () => {
     expect(exercise.notes[1]?.durationTicks).toBe(2 * B)
   })
 
-  it('fingers each inversion as it is taught, the root under it in the left hand', () => {
+  it('plays each inversion in both hands, the left an octave under the right', () => {
     const exercise = inversionsExercise({ root: note('C'), quality: 'maj' })
-    const right = chordsOf(exercise, 'rh').map((c) => c.map((n) => n.finger).join(''))
-    expect(right.slice(0, 4)).toEqual(['135', '125', '135', '135'])
-    expect(chordsOf(exercise, 'lh').map((c) => c.map((n) => noteName(n.spelled)))).toEqual(
-      Array(7).fill(['C']),
-    )
+    const right = chordsOf(exercise, 'rh').map((c) => c.map((n) => n.midi))
+    const left = chordsOf(exercise, 'lh').map((c) => c.map((n) => n.midi + 12))
+    expect(left).toEqual(right)
+    expect(chordsOf(exercise, 'lh')[1]?.map((n) => noteName(n.spelled))).toEqual(['E', 'G', 'C'])
+  })
+
+  it('fingers each inversion as the books teach it, in each hand', () => {
+    const exercise = inversionsExercise({ root: note('C'), quality: 'maj' })
+    const fingers = (hand: 'rh' | 'lh') =>
+      chordsOf(exercise, hand).map((c) => c.map((n) => n.finger).join(''))
+    expect(fingers('rh').slice(0, 4)).toEqual(['135', '125', '135', '135'])
+    expect(fingers('lh').slice(0, 4)).toEqual(['531', '531', '521', '531'])
   })
 
   it('takes a 7th chord through its four inversions, spelled as the chord spells it', () => {
@@ -43,7 +50,17 @@ describe('inversionsExercise', () => {
     const right = chordsOf(exercise, 'rh')
     expect(right).toHaveLength(9)
     expect(right[1]?.map((n) => noteName(n.spelled))).toEqual(['D', 'F', 'A♭', 'B♭'])
-    expect(right[0]?.map((n) => n.finger).join('')).toBe('1235')
+    expect(right.slice(0, 4).map((c) => c.map((n) => n.finger).join(''))).toEqual([
+      '1235',
+      '1245',
+      '1235',
+      '1235',
+    ])
+    expect(
+      chordsOf(exercise, 'lh')
+        .slice(0, 4)
+        .map((c) => c.map((n) => n.finger).join('')),
+    ).toEqual(['5321', '5321', '5321', '5421'])
     expect(exercise.chords.map((chord) => chord.symbol)).toEqual(['B♭7'])
   })
 

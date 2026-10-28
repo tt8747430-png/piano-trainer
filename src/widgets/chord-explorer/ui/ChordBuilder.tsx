@@ -2,6 +2,8 @@ import { useTranslation } from 'react-i18next'
 import {
   addedOf,
   ALTERATION_SIGN,
+  BUILT_SIZES,
+  lastInversion,
   alterationsOf,
   chordInversions,
   SEVENTH_DEGREE,
@@ -9,8 +11,10 @@ import {
   sizesOf,
   withAdded,
   withAlterations,
+  voicingTakesInversion,
   type AddedTone,
   type BuiltSize,
+  type PlacedChord,
   type Tone,
   type Triad,
 } from '@/shared/lib/music'
@@ -25,9 +29,10 @@ import {
 } from '@/shared/ui'
 import { isSuspended, takesTwoHands, type ChordView } from '../model/chord-view'
 import { RightHandFrom } from './RightHandFrom'
+import { VoicingField } from './VoicingField'
 
-/** A chord's quality: its 3rd and 5th. A suspension is a field of its own. */
-const QUALITIES = ['maj', 'min', 'aug', 'dim'] as const satisfies readonly Triad[]
+/** A chord's quality: its 3rd and 5th, or its 5th alone. A suspension is a field of its own. */
+const QUALITIES = ['maj', 'min', 'aug', 'dim', 'power'] as const satisfies readonly Triad[]
 /** The suspensions, each a major chord's 3rd taken by a 2nd or a 4th. */
 const SUSPENSIONS = ['sus2', 'sus4'] as const satisfies readonly Triad[]
 
@@ -62,11 +67,14 @@ const SIZE_NAMES = {
 export function ChordBuilder({
   chord,
   tones,
+  placed,
   onChange,
 }: {
   chord: ChordView
   /** The chord's tones: how many say its inversions, and whether one hand holds it. */
   tones: readonly Tone[]
+  /** Its keys in the voicing chosen: what the voicing's ⓘ spells. */
+  placed: PlacedChord
   onChange: (change: Partial<ChordView>) => void
 }) {
   const { t } = useTranslation(['practice', 'music', 'common'])
@@ -78,7 +86,9 @@ export function ChordBuilder({
   const sevenths = seventhsOf(parts.triad, parts.size)
   const added = addedOf(parts)
   const alterations = alterationsOf(parts)
-  const twoHands = takesTwoHands(tones.length)
+  const close = chord.voicing === 'close'
+  const twoHands = close && takesTwoHands(tones.length)
+  const inverts = voicingTakesInversion(chord.voicing)
   return (
     <div className="grid-fields gap-x-10 gap-y-5">
       <div className="col-span-full">
@@ -103,10 +113,15 @@ export function ChordBuilder({
         <Segmented
           label={t('music:chordSize.label')}
           value={parts.size}
-          options={sizesOf(quality).map((size) => ({
+          options={BUILT_SIZES.map((size) => ({
             value: size,
             label: t(`practice:chords.builder.sizes.${SIZE_NAMES[size]}`),
             title: t(`practice:chords.builder.sizeNames.${SIZE_NAMES[size]}`),
+            reason: sizesOf(quality).includes(size)
+              ? undefined
+              : t(`practice:chords.builder.sizeNot.${quality === 'power' ? 'power' : 'stops'}`, {
+                  quality: t(`practice:chords.builder.triads.${quality}`).toLocaleLowerCase(),
+                }),
           }))}
           onChange={(size) => onChange({ size })}
         />
@@ -165,6 +180,12 @@ export function ChordBuilder({
           />
         </Labelled>
       ) : null}
+      <VoicingField
+        tones={tones}
+        placed={placed}
+        value={chord.voicing}
+        onChange={(voicing) => onChange({ voicing })}
+      />
       {twoHands ? (
         chordInversions(tones).length > 1 ? (
           <Labelled label={t('practice:chords.builder.handFrom')}>
@@ -178,8 +199,14 @@ export function ChordBuilder({
       ) : (
         <Labelled label={t('music:inversion.label')}>
           <InversionChoice
-            notes={tones.length}
-            value={chord.inversion}
+            notes={Math.max(tones.length, 3)}
+            disabled={!inverts}
+            greyed={(inversion) =>
+              inversion > lastInversion(tones.length)
+                ? t('practice:chords.builder.powerInversion')
+                : undefined
+            }
+            value={inverts ? chord.inversion : null}
             onChange={(inversion) => onChange({ inversion })}
           />
         </Labelled>
@@ -187,8 +214,8 @@ export function ChordBuilder({
       <Labelled label={t('practice:hands')}>
         <Segmented
           label={t('practice:hands')}
-          value={twoHands ? 'both' : chord.hands}
-          disabled={twoHands}
+          value={close ? (twoHands ? 'both' : chord.hands) : null}
+          disabled={!close || twoHands}
           options={[
             { value: 'rh', label: t('common:handsShort.rh') },
             { value: 'both', label: t('common:handsShort.both') },

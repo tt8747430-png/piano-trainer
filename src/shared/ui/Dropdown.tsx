@@ -15,6 +15,7 @@ export function Dropdown<V extends OptionValue>({
   bare = false,
   face,
   align,
+  disabled = false,
   className,
   ...choices
 }: {
@@ -27,6 +28,8 @@ export function Dropdown<V extends OptionValue>({
   face?: (value: V) => ReactNode
   /** Where the list opens from the button's edge, in place of over the button. */
   align?: 'start' | 'end'
+  /** Greyed, its value kept: a choice that waits on another (a switch beside it) to count. */
+  disabled?: boolean
   className?: string
 } & Choices<V>) {
   const groups = choiceGroups(choices)
@@ -37,6 +40,7 @@ export function Dropdown<V extends OptionValue>({
     <Select
       items={items}
       value={value}
+      disabled={disabled}
       onValueChange={(next) => {
         if (next !== null && next !== value) onChange(next)
       }}

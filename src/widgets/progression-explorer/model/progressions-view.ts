@@ -8,26 +8,41 @@ import type { PatternId } from '@/entities/pattern'
 import {
   keyFromParam,
   keyParam,
+  isMinorMode,
   numeralsParam,
   parseNumerals,
+  readInMode,
   withLeadIns,
   writtenKey,
   type ChordSize,
+  type ChurchMode,
   type Inversion,
   type KeyParam,
   type LeadIn,
   type Numeral,
+  type RowPosition,
 } from '@/shared/lib/music'
 
+/** How a row's chords are named: by numerals, Nashville numbers, or by the chords alone. */
+export const PROGRESSION_NAMES = ['numerals', 'nashville', 'chords'] as const
+export type ProgressionNames = (typeof PROGRESSION_NAMES)[number]
+
 /**
- * What Progressions shows: numerals (`I-V-vi-IV`) in a key, at a chord size; the first
- * chord's inversion, and whether each after it moves to the nearest hand or keeps that inversion;
- * what leads into each chord, where something does; the two chords Between looks at; and what the
+ * What Progressions shows: numerals (`I-V-vi-IV`) in a key, at a chord size, read in a church mode
+ * where one is chosen; the first chord's inversion, and whether each after it moves to the nearest
+ * hand or keeps that inversion, or every chord a root-position block; what leads into each chord,
+ * where something does; the two chords Between looks at; how the chords are named, and what the
  * row's chips say.
  */
 export interface ProgressionsView {
   readonly key: KeyParam
   readonly p: string
+  /** The church mode the line is read in; the key's major or minor where left out. */
+  readonly mode?: ChurchMode
+  /** Every chord in root position, the hand leaping: the row as blocks, to set against it voice-led. */
+  readonly block?: true
+  /** How the row's chords are named; by numerals where left out. */
+  readonly names?: Exclude<ProgressionNames, 'numerals'>
   readonly size: ChordSize
   readonly inversion: Inversion
   readonly nearest: boolean
@@ -40,11 +55,24 @@ export interface ProgressionsView {
   readonly harmony?: 'motion'
 }
 
-/** The chords a view plays: its numerals, each led into by its V or ii–V where the view says (ADR 0112). */
+/**
+ * The chords a view plays: its numerals, read in its mode where it has one, each led into by its V or
+ * ii–V where the view says (ADR 0112).
+ */
 export function playedNumerals(view: ProgressionsView): Numeral[] {
-  const numerals = parseNumerals(view.p) ?? []
-  return view.lead ? withLeadIns(numerals, view.lead, keyFromParam(view.key)) : numerals
+  const key = keyFromParam(view.key)
+  const written = parseNumerals(view.p) ?? []
+  const numerals = view.mode ? readInMode(written, key, view.mode) : written
+  return view.lead ? withLeadIns(numerals, view.lead, key) : numerals
 }
+
+/** Where the row's hand stands: the view's position, or every chord a root-position block. */
+export const rowPosition = (
+  view: ProgressionsView,
+): RowPosition & { readonly inversion: Inversion } =>
+  view.block
+    ? { inversion: 0, nearest: false }
+    : { inversion: view.inversion, nearest: view.nearest }
 
 /** The library's progression a view shows; none for a line a learner typed. */
 export const viewProgression = (view: ProgressionsView): LibraryProgression | undefined =>
@@ -53,13 +81,21 @@ export const viewProgression = (view: ProgressionsView): LibraryProgression | un
 /**
  * A view changed. A key turned minor or major shows the library's progression in that mode's line,
  * where it has one (the jazz cadence's ii°–V–i, and back), at the chord size shown; any other line
- * stays as it is written (ADR 0112).
+ * stays as it is written (ADR 0112). A church mode chosen stands on the major or minor key of the
+ * tonic its 3rd says (Dorian on minor); the key turned to the other leaves the mode.
  */
 export function changedView(
   view: ProgressionsView,
   change: Partial<ProgressionsView>,
 ): ProgressionsView {
-  const next = { ...view, ...change }
+  const asked = { ...view, ...change }
+  const { tonic, minor: keyMinor } = keyFromParam(asked.key)
+  const next: ProgressionsView =
+    !asked.mode || isMinorMode(asked.mode) === keyMinor
+      ? asked
+      : 'mode' in change
+        ? { ...asked, key: keyParam(writtenKey({ tonic, minor: isMinorMode(asked.mode) })) }
+        : withoutMode(asked)
   if (change.p !== undefined) return next
   const { minor } = keyFromParam(next.key)
   if (minor === keyFromParam(view.key).minor) return next
@@ -72,7 +108,7 @@ export function changedView(
 /**
  * A view with a library progression chosen: its line in the key's mode where it has one, else in the
  * key of the same tonic and the mode it has (respelled only where no signature writes that key), at
- * its chord size where it has one.
+ * its chord size where it has one, in its church mode where it is heard in one.
  */
 export function chosenView(
   view: ProgressionsView,
@@ -81,11 +117,18 @@ export function chosenView(
   const { tonic, minor } = keyFromParam(view.key)
   const mode = progressionMode(progression, minor)
   return {
-    ...view,
+    ...withoutMode(view),
     key: mode === minor ? view.key : keyParam(writtenKey({ tonic, minor: mode })),
     p: libraryParam(progression, mode),
     size: progression.size ?? view.size,
+    ...(progression.mode ? { mode: progression.mode } : {}),
   }
+}
+
+/** A view read in its key's own major or minor. */
+function withoutMode(view: ProgressionsView): ProgressionsView {
+  const { mode: _mode, ...rest } = view
+  return rest
 }
 
 /**
@@ -103,8 +146,8 @@ export interface InPlayer {
 }
 
 /**
- * The Player's search for the view shown: the chords it plays, lead-ins written out, with the pattern
- * the library's progression is practised in.
+ * The Player's search for the view shown: the chords it plays, read in its mode and lead-ins written
+ * out, with the pattern the library's progression is practised in, its hand where the row's stands.
  */
 export function playerSearch(view: ProgressionsView): InPlayer {
   const pattern = viewProgression(view)?.pattern
@@ -113,7 +156,6 @@ export function playerSearch(view: ProgressionsView): InPlayer {
     key: view.key,
     ...(view.size === 'triads' ? {} : { chordSize: view.size }),
     ...(pattern ? { pattern } : {}),
-    inversion: view.inversion,
-    nearest: view.nearest,
+    ...rowPosition(view),
   }
 }

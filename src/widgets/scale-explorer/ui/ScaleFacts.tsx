@@ -2,9 +2,9 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { IN_PLACE } from '@/shared/lib'
 import {
-  degreeNames,
   noteParam,
   relatedScale,
+  scaleDegreeNames,
   scaleGaps,
   type ScaleKind,
   type SpelledNote,
@@ -30,7 +30,7 @@ export function ScaleFacts({
   const { t } = useTranslation(['practice', 'music'])
   const scaleName = useScaleName()
   const related = relatedScale(root, kind)
-  const names = degreeNames(kind)
+  const names = scaleDegreeNames(kind)
   return (
     <dl className="flex flex-col gap-2">
       <Fact term={t('practice:scales.facts.formula')}>

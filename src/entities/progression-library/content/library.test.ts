@@ -217,6 +217,35 @@ describe('the progressions library', () => {
     ])
   })
 
+  it('plays the cadences, blues and jazz lines the references name as theory writes them', () => {
+    expect(chordsOf('picardy', A_MINOR, 'triads')).toEqual(['Am', 'Dm', 'E', 'A'])
+    expect(chordsOf('amen', C_MAJOR, 'triads')).toEqual(['F', 'Fm', 'C'])
+    expect(chordsOf('phrygian-half', A_MINOR, 'triads')).toEqual(['Dm/F', 'E'])
+    expect(chordsOf('neapolitan', A_MINOR, 'triads')).toEqual(['Am', 'B♭/D', 'E', 'Am'])
+    expect(chordsOf('lament', A_MINOR, 'triads')).toEqual(['Am', 'Em/G', 'Dm/F', 'E'])
+    expect(chordsOf('line-cliche', A_MINOR, 'triads')).toEqual(['Am', 'Am(maj7)', 'Am7', 'Am6'])
+    expect(chordsOf('backdoor', C_MAJOR, 'triads')).toEqual(['Fm7', 'B♭7', 'CMaj7'])
+    expect(chordsOf('coltrane', C_MAJOR, 'triads')).toEqual([
+      ...['CMaj7', 'E♭7', 'A♭Maj7', 'B7', 'EMaj7', 'G7', 'CMaj7'],
+    ])
+    expect(chordsOf('ragtime', C_MAJOR, 'triads')).toEqual(['E7', 'A7', 'D7', 'G7', 'C'])
+    expect(chordsOf('diminished-turnaround', C_MAJOR, 'triads')).toEqual([
+      ...['CMaj7', 'C#°7', 'Dm7', 'G7'],
+    ])
+    expect(chordsOf('quick-change', C_MAJOR, 'triads').slice(0, 4)).toEqual([
+      ...['C7', 'F7', 'C7', 'C7'],
+    ])
+    expect(chordsOf('minor-blues', A_MINOR, 'triads').slice(8)).toEqual(['F7', 'E7', 'Am7', 'E7'])
+  })
+
+  it('opens a modal vamp in its mode, its line written against the major or minor key', () => {
+    expect(listed('dorian-vamp')).toMatchObject({ style: 'modal', minor: 'i IV', mode: 'dorian' })
+    expect(chordsOf('dorian-vamp', A_MINOR, 'triads')).toEqual(['Am', 'D'])
+    expect(chordsOf('mixolydian-vamp', C_MAJOR, 'triads')).toEqual(['C', 'B♭'])
+    expect(chordsOf('lydian-vamp', C_MAJOR, 'triads')).toEqual(['C', 'D'])
+    expect(chordsOf('phrygian-vamp', A_MINOR, 'triads')).toEqual(['Am', 'B♭'])
+  })
+
   it('offers a key its common progressions, each with a line in either mode', () => {
     expect(COMMON_PROGRESSIONS.map((each) => each.id)).toEqual([
       'complete-cadence',

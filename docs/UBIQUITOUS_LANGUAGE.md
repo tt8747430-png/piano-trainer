@@ -82,26 +82,43 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Scale gap**: the step between neighbouring scale notes: W, H, W+H (Т, П, Т+П). _Avoid:_ step.
 - **Scale chord** (`stackSuffix`): a scale's notes stacked in thirds from a degree, 3 to 7 notes. _Avoid:_ diatonic
   chord, chord quality.
-- **Degree name** (`degreeNames`): a seven-note scale's degree by its function: tonic, supertonic («верхний
-  вводный»), mediant, subdominant, dominant, submediant, leading note («вводный тон») or subtonic. _Avoid:_ step name.
-- **Parallel key** («Одноимённая»): the other mode on the same tonic (C major ↔ C minor). Russian «параллельная» is
-  the **relative** key. _Avoid:_ tonic minor/major.
 - **Borrowed chord**: a chord from the parallel scale on a key's degree (♭VI, ♭VII, a minor key's V…). _Avoid:_
   chromatic chord, secondary.
 - **Circle of fifths**: the 24 keys on two rings, the Key view's chooser. _Avoid:_ wheel.
 - **Chord size**: how much of each chord plays: triads, sevenths or ninths; in the builder the highest number (7th
   to 13th). _Avoid:_ voicing, colour.
-- **Voicing**: how a chord's notes lie under the hands: close, open, drop 2, shell, rootless, quartal. _Avoid:_
-  chord size, shape.
-- **Drop 2**: a close four-note chord with its second voice from the top an octave lower. _Avoid:_ spread.
-- **Shell**: the left hand's root and 7th. _Avoid:_ rootless, skeleton.
+- **Voicing** (`Voicing` · «Расположение»): how a chord's notes lie under the hands. The Chords explorer chooses
+  Close · Drop 2 · Drop 3 · Shell · Rootless A · Rootless B · Locked hands · So What; the Chord finder also reads open
+  and quartal. _Avoid:_ chord size, shape.
+- **Drop 2** / **Drop 3**: a close four-note chord with its second (third) voice from the top an octave lower, in
+  the left hand. _Avoid:_ spread.
+- **Shell** («Каркас»): the left hand's root, 3rd and 7th. _Avoid:_ rootless, skeleton.
+- **So What**: three 4ths and a major 3rd from the chord's 9th, for a minor or suspended chord. _Avoid:_ quartal
+  (that is any stack of 4ths).
+- **Power chord** (`five`, `C5` · «Квинтовый аккорд»): a root and its 5th, no 3rd; never inverted. _Avoid:_ fifth
+  chord.
+- **Block fingering** (`blockFingering`, `handFingers` · UI Fingering «Аппликатура»): each hand's fingers on a chord
+  held together, by inversion: a major triad RH 135 · 125 · 135, LH 531 · 531 · 521. _Avoid:_ chord fingers.
+- **Rootless voicing** (`rootlessA`, `rootlessB` · UI Rootless A / B «Без основного A / B»; «Расположение без
+  основного тона»): four notes, no root, in the left hand: **Type A** from the 3rd on ii and I (3 5 7 9), **Type B**
+  from the 7th (7 9 3 5), V the other way round. _Avoid:_ left-hand voicing, shell.
+- **Locked hands** (`locked` · «Сцепленные руки»): block chords: a close four-note chord under each melody note, the
+  left hand doubling the melody an octave down. _Avoid:_ block chords (an accompaniment pattern's name).
+- **Slash chord** («Аккорд с указанным басом»): a chord over a bass, `C/E`: an inversion where the bass is a chord
+  tone, an added bass where it is not. _Avoid:_ over chord, polychord.
+- **Modulation** («Модуляция»): moving to a new key and staying, confirmed by its own cadence: by a **pivot chord**
+  («общий аккорд»), direct, or by step. A borrowed V without a cadence is only a visit. _Avoid:_ key change (as a
+  term), transposition.
+- **Cadence** («Каденция»): the two chords that end a phrase: **authentic** V–I, **perfect** (root position, the
+  tonic on top) or **imperfect**; **plagal** IV–I; **half** ending on V; **deceptive** V–vi; **Phrygian half**
+  iv6–V in minor. The **cadential 6/4** is I6/4 decorating V. _Avoid:_ ending, close (as terms).
 - **Inversion** («Обращение»): which chord tone is lowest: Root · 1st · 2nd · 3rd. A chord of five notes or more is
   not inverted; its **Right hand from** says where the hand above the bass starts. _Avoid:_ position.
 - **Figures**: an inversion's figured-bass mark after a numeral: ⁶, ⁶₄, ⁷, ⁶₅, ⁴₃, ⁴₂. _Avoid:_ inversion symbol.
 - **Placed tone** (`placeChord`, `placeScale`): a tone at a key on the keyboard. _Avoid:_ voicing.
 - **Chord parts** (`ChordParts`): a chord as the builder makes it: Triad, Chord size, 7th, Added tones,
   Alterations. _Avoid:_ chord options, quality.
-- **Triad** (a chord part): major, minor, diminished, augmented, sus2 or sus4. _Avoid:_ quality, sus option.
+- **Triad** (a chord part): major, minor, diminished, augmented, sus2, sus4 or the power chord's bare 5th. _Avoid:_ quality, sus option.
 - **Added tone**: a tone added beside the stack (add2, 6, add9, add11). _Avoid:_ extension.
 - **Alteration**: a raised or lowered tone of a chord with a major 3rd (♭5, ♭9, ♯9, ♯11, ♭13). _Avoid:_ altered
   extension.
@@ -111,6 +128,14 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   chord size (`maj`, `min`, `dom`, `domb9`, `hd`, `=quality`). _Avoid:_ step, chord role.
 - **Progression** («Последовательность»): a line of numerals practised in any key. Never a piece. _Avoid:_ chord
   flow, sequence.
+- **Mode** (a progression's, «Лад»): the church mode its numerals are read in on the key's tonic (Lydian,
+  Mixolydian, Dorian, Phrygian, Locrian), each degree that mode's own chord, written against the major or minor key
+  its 3rd says (`readInMode`, `modeKey`). _Avoid:_ scale (here), modal key.
+- **Nashville number** («Нэшвиллское число»): a chord as its root's number from the tonic, the major scale counting
+  in either mode: `1 5 6m 4`, `2m⁷`, `♭7`, `1/3` (`nashvilleNumber`). _Avoid:_ number chord, degree number.
+- **Written as** («Запись»): how Progressions names a row's chords: Numerals · Nashville · Chords. _Avoid:_ notation.
+- **Voice-led · Block** («Плавное · Блоками»): a row's chords moved to the nearest position, or every one in root
+  position, the hand leaping. _Avoid:_ smooth/jumpy, VL on/off.
 - **Lead-in**: the chords played before each chord of a progression, its own V or ii–V. A way of playing, never a
   library entry. _Avoid:_ approach, tonicisation.
 - **Passing chord**: a chord that leads from one chord to the next. _Avoid:_ connecting chord.
@@ -272,6 +297,10 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Note names**: C · All · None. _Avoid:_ labels.
 - **Chord names**: the rail naming the chord a hand holds. _Avoid:_ chord detection.
 - **Typing keys**: the computer keyboard as a piano. _Avoid:_ hotkeys.
+- **Phone's keyboard** (`keyboard-viewport`): the on-screen keyboard a text field opens; it covers the screen's foot
+  (`--kb-inset`), never the piano. _Avoid:_ soft keyboard, virtual keyboard.
+- **Reveal** (`keyboard-reveal`): the page lifting a focused field, its label and its error clear of the phone's
+  keyboard. **Reserve**: the keyboard last measured, held as a field is focused, before the keyboard comes.
 - **Down** (a key): sounding now or held by a hand, for at least the **shortest press** (150ms). _Avoid:_ active,
   playing.
 - **Lit**: a key shown as an answer or a pattern's note, not sounding. _Avoid:_ down.
@@ -405,7 +434,9 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Chords**, **Intervals**, **Build scale**, **My gaps**: trainers. _Avoid:_ exercise.
 - **Setup** (a trainer's): the one template every trainer opens at: its drill, Options, Timing, how it works, Start.
   _Avoid:_ settings, config.
-- **Drill** («Режим»): the way Chords and Intervals ask the same things: **Cards** («Карточки»), **Quiz** («Тест»),
+- **Cadences** («Каденции»): the Quiz's trainer that asks a cadence in all four drills: heard after its key's tonic,
+  read on the grand staff, the chord that makes it played, or a card of its name or staff. A cadence rates no skill.
+- **Drill** («Режим»): the way Chords, Intervals and Cadences ask the same things: **Cards** («Карточки»), **Quiz** («Тест»),
   **Play** («Игра»), **By ear** («На слух»). Never an exercise. _Avoid:_ mode, game.
 - **Card** (a drill's): a chord or interval shown by one of its name, keys or staff (**Shown**), the rest
   **Revealed**; never right or wrong. _Avoid:_ flashcard (in the UI), flip.
@@ -419,6 +450,19 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Run**: a trainer's rounds, summed up. _Avoid:_ session, game.
 - **Metronome** («Метроном»): its own page: a beat at 30–300 BPM, **Tap tempo**, a sound and a meter. _Avoid:_ click
   track.
+- **Bar trainer** («Тренировка тактов»): the Metronome playing its bars, then silent for its muted bars, the beats
+  still shown. _Avoid:_ gap click, mute mode.
+- **Tempo word** («Обозначение темпа»): an Italian word a tempo is named by, with its range (`TEMPO_TERMS`). The ten
+  of the **ladder** name a tempo (grave … prestissimo); the shades between (lento, andantino, allegretto …) only
+  describe one. _Avoid:_ tempo name, BPM label.
+- **Expression text** (the editor's Text): words over a note in three groups, **Character** (dolce, con brio …),
+  **Tempo changes** (rit., riten., string., rubato …) and **Technique** (legato, simile, m.d., m.s.). _Avoid:_
+  remarks, directions.
+- **Interval's songs**: the tunes that open with an interval, up and down, behind its row's ⓘ. _Avoid:_ mnemonics.
+- **Parallel key** («Одноимённая»): the key on the same tonic in the other mode. Russian's «параллельная» is the
+  **relative** key. _Avoid:_ same-name key.
+- **Scale degrees** («Ступени»): tonic, supertonic, mediant, subdominant, dominant, submediant, leading tone (a minor
+  key's subtonic). _Avoid:_ degree roles.
 - **Search** («Поиск»): finds every named thing by kind. Its **Index** is one list of the registries. _Avoid:_
   glossary.
 

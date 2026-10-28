@@ -68,6 +68,23 @@ describe('tempoSteps', () => {
     ])
   })
 
+  it('holds back at once at a riten., until a tempo', () => {
+    expect(tempoSteps([at(4 * beat, 'riten'), at(8 * beat, 'a-tempo')])).toEqual([
+      { tick: 0, factor: 1 },
+      { tick: 4 * beat, factor: 0.75 },
+      { tick: 8 * beat, factor: 1 },
+    ])
+  })
+
+  it('presses on at a stringendo as at an accel.', () => {
+    expect(tempoSteps([at(0, 'stringendo')])).toEqual(tempoSteps([at(0, 'accel')]))
+  })
+
+  it('keeps the tempo under a mood or a technique word, and under rubato', () => {
+    for (const word of ['con-brio', 'maestoso', 'simile', 'md', 'rubato'] as const)
+      expect(tempoSteps([at(0), at(beat, word)])).toEqual([{ tick: 0, factor: 1 }])
+  })
+
   it('steps to a tempo mark’s tempo at once, against the written tempo', () => {
     const marked = [at(0), { startTick: 4 * beat, marks: { tempo: 120 } }]
     expect(tempoSteps(marked, 60)).toEqual([

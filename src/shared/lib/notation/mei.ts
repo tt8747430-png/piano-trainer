@@ -116,7 +116,7 @@ export function scoreToMei(score: Score, options: MeiOptions = {}): string {
   }</staffGrp></scoreDef>`
 
   const writer = new Writer(score, staves, options)
-  const body: string[] = []
+  const body: (string | (() => string))[] = []
   let ending: number | undefined
   for (let index = 0; index < score.measures.length; index += 1) {
     const measure = score.measures[index]
@@ -146,7 +146,7 @@ export function scoreToMei(score: Score, options: MeiOptions = {}): string {
     scoreDef,
     // The line is a system of its own (ADR 0114): Verovio lays out a justified line by its encoded
     // breaks, and warns of none where it has none.
-    `<section><sb/>${body.join('')}</section>`,
+    `<section><sb/>${body.map((part) => (typeof part === 'string' ? part : part())).join('')}</section>`,
     '</score></mdiv></body></music></mei>',
   ].join('\n')
 }
@@ -251,13 +251,22 @@ const octaveOf = (midi: number, accidental: Accidental) => Math.floor((midi - ac
 interface Open {
   slur?: string
   hairpin?: { readonly id: string; readonly form: 'cres' | 'dim' }
-  octave?: { readonly id: string; readonly line: OctaveLine; last: string }
+  /** Begun in measure `measure` (by index), where Verovio reads it. */
+  octave?: {
+    readonly id: string
+    readonly line: OctaveLine
+    readonly measure: number
+    last: string
+  }
   /** A glissando from a note to the next the staff writes. */
   gliss?: string
 }
 
 /** An octave line's MEI: from its first note to its last, 8 or 15 above or below. */
-const octaveLine = (staff: number, { id, line, last }: NonNullable<Open['octave']>) =>
+const octaveLine = (
+  staff: number,
+  { id, line, last }: Omit<NonNullable<Open['octave']>, 'measure'>,
+) =>
   `<octave staff="${staff}" startid="#${id}" endid="#${last}" dis="${line.startsWith('15') ? 15 : 8}" dis.place="${line === '8va' || line === '15ma' ? 'above' : 'below'}"/>`
 
 /**
@@ -312,6 +321,13 @@ class Writer {
   private readonly open = new Map<StaffId, Open>()
   /** By verse, whether its last syllable's word goes on: the next is its middle or end. */
   private readonly words = new Map<number, boolean>()
+  /**
+   * The octave lines closed after their measure was written, by the measure they start in: Verovio
+   * reads an octave line in its first measure, so each is written there once it is known.
+   */
+  private readonly octaves = new Map<number, string[]>()
+  /** The measure being written, by index. */
+  private index = 0
   /** The measure's beat (its time signature's unit, from 1) of a tick: where a mark between notes stands. */
   private stamp: (tick: number) => number = () => 1
 
@@ -325,8 +341,12 @@ class Writer {
     return this.staves.indexOf(staff) + 1
   }
 
-  /** A measure's MEI; drawn as a multi-bar rest of `resting` bars where that is two or more. */
-  measure(measure: Measure, index: number, resting = 0): string {
+  /**
+   * A measure's MEI, written out once every measure is (its octave lines may end later); drawn as a
+   * multi-bar rest of `resting` bars where that is two or more.
+   */
+  measure(measure: Measure, index: number, resting = 0): () => string {
+    this.index = index
     const before = this.score.measures[index - 1]
     // A multi-bar rest ends as its last bar does.
     const last = (resting > 1 && this.score.measures[index + resting - 1]) || measure
@@ -384,12 +404,18 @@ class Writer {
     if (last.jump) controls.push(ending(JUMP_TEXT[last.jump]))
     // The score's last measure closes an octave line still running.
     if (index === this.score.measures.length - 1)
-      for (const [staff, open] of this.open)
-        if (open.octave) {
-          controls.push(octaveLine(this.number(staff), open.octave))
-          open.octave = undefined
-        }
-    return `<measure ${attrs.join(' ')}>${staves.join('')}${controls.join('')}</measure>`
+      for (const [staff, open] of this.open) if (open.octave) this.closeOctave(staff, open)
+    return () =>
+      `<measure ${attrs.join(' ')}>${staves.join('')}${controls.join('')}${(this.octaves.get(index) ?? []).join('')}</measure>`
+  }
+
+  /** An octave line ended: written in the measure it began in. */
+  private closeOctave(staff: StaffId, open: Open) {
+    if (!open.octave) return
+    const lines = this.octaves.get(open.octave.measure) ?? []
+    lines.push(octaveLine(this.number(staff), open.octave))
+    this.octaves.set(open.octave.measure, lines)
+    open.octave = undefined
   }
 
   /** A layer's events, beamed by the meter, each tuplet bracketed with its count (`beamPlan`, ADR 0087, 0097). */
@@ -538,10 +564,7 @@ class Writer {
     const ref = `startid="#${id}"`
     const above = staff !== 'bass'
     // An octave line runs over every note under it: it ends at the last such note before one without.
-    if (open.octave && marks?.octave !== open.octave.line) {
-      controls.push(octaveLine(n, open.octave))
-      open.octave = undefined
-    }
+    if (open.octave && marks?.octave !== open.octave.line) this.closeOctave(staff, open)
     // A glissando runs from its note to the next note or chord on the staff.
     if (open.gliss) {
       controls.push(`<gliss staff="${n}" startid="#${open.gliss}" endid="#${id}"/>`)
@@ -550,7 +573,7 @@ class Writer {
     if (marks?.glissando) open.gliss = id
     if (marks?.octave) {
       if (open.octave) open.octave.last = id
-      else open.octave = { id, line: marks.octave, last: id }
+      else open.octave = { id, line: marks.octave, measure: this.index, last: id }
     }
     if (!marks) return
     if (marks.slurEnd && open.slur) {

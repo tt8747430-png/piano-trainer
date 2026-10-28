@@ -167,6 +167,34 @@ describe('A trainer', () => {
     expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument()
   })
 
+  it('asks which cadence is heard after the tonic, then shows its two chords on the staff', async () => {
+    const user = userEvent.setup()
+    const { audio } = await start('/practice/quiz/cadences?drill=ear&level=minor')
+    expect(
+      await screen.findByRole('heading', {
+        level: 2,
+        name: /^In [A-G].* minor: which cadence do you hear\?$/,
+      }),
+    ).toBeInTheDocument()
+    // The tonic, then the cadence's two chords: four voices each.
+    expect(audio.played[0]?.sounds).toHaveLength(12)
+    const answers = screen.getByRole('group', { name: 'Answers' })
+    expect(within(answers).getAllByRole('button').length).toBe(4)
+    await user.click(within(answers).getAllByRole('button')[0] ?? answers)
+    expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument()
+  })
+
+  it('names a cadence and asks for the chord that makes it, played on the keys', async () => {
+    await start('/practice/quiz/cadences?drill=entry')
+    expect(
+      await screen.findByRole('heading', {
+        level: 2,
+        name: /^(Authentic|Plagal|Half|Deceptive) cadence in [A-G].* major: play the (chord before the last|last chord)$/,
+      }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Check' })).toBeDisabled()
+  })
+
   it('writes a level, rounds and a time limit to the URL, and runs under them', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/quiz/chords?drill=ear')
@@ -204,7 +232,7 @@ describe('A trainer', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/quiz/chords?level=custom')
     const chords = await screen.findByRole('button', { name: /^Chords/ })
-    expect(chords).toHaveTextContent('2 of 41')
+    expect(chords).toHaveTextContent('2 of 46')
     await user.click(chords)
     await user.click(await screen.findByRole('checkbox', { name: 'Diminished triad' }))
     expect(router.state.location.search).toMatchObject({ chords: 'maj.min.dim' })

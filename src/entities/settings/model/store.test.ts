@@ -151,7 +151,12 @@ describe('createSettingsStore', () => {
         hidden: ['treble', 'staff0'],
         keys: false,
       },
-      metronome: { bpm: 72, meter: '6/8', sound: 'drum' },
+      metronome: {
+        bpm: 72,
+        meter: '6/8',
+        sound: 'drum',
+        trainer: { on: true, play: 4, mute: 1 },
+      },
       foldedSections: ['chords.tensions'],
     }
     expect(restored(saved)).toEqual(saved)
@@ -252,17 +257,23 @@ describe('createSettingsStore', () => {
   })
 
   it('starts the Metronome at 120 in 4/4 with a click, each part saved kept where valid (ADR 0052)', () => {
-    expect(DEFAULT_METRONOME).toEqual({ bpm: 120, meter: '4/4', sound: 'click' })
+    const trainer = { on: false, play: 2, mute: 2 }
+    expect(DEFAULT_METRONOME).toEqual({ bpm: 120, meter: '4/4', sound: 'click', trainer })
     expect(restored({ metronome: { bpm: 400, meter: '5/4', sound: 'beep' } }).metronome).toEqual({
       bpm: 120,
       meter: '4/4',
       sound: 'beep',
+      trainer,
     })
     expect(restored({ metronome: { bpm: 66.5, meter: '2/4', sound: 'bell' } }).metronome).toEqual({
       bpm: 120,
       meter: '2/4',
       sound: 'click',
+      trainer,
     })
+    expect(
+      restored({ metronome: { trainer: { on: true, play: 3, mute: 9 } } }).metronome.trainer,
+    ).toEqual({ on: true, play: 3, mute: 2 })
     expect(restored({ metronome: 'fast' }).metronome).toEqual(DEFAULT_METRONOME)
   })
 

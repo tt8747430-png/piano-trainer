@@ -50,7 +50,13 @@ export const practice = {
         aug: 'Augmented',
         sus2: 'Suspended 2nd',
         sus4: 'Suspended 4th',
+        power: 'Power (5)',
       },
+      sizeNot: {
+        stops: 'Chord dictionaries stop the {{quality}} chord before this size.',
+        power: 'A power chord has no 3rd, so nothing stacks on it.',
+      },
+      powerInversion: 'A power chord stays in root position: its 5th under the root is a 4th.',
       sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
       sizeNames: {
         triad: 'Triad',
@@ -63,6 +69,53 @@ export const practice = {
       sevenths: { minor: 'Minor 7th', major: 'Major 7th', diminished: 'Diminished 7th' },
       added: 'Added tones',
       alterations: 'Alterations',
+    },
+    // How the chord is laid on the keys: the jazz pianist's voicings, each explained in its ⓘ.
+    voicing: {
+      label: 'Voicing',
+      names: {
+        close: 'Close',
+        drop2: 'Drop 2',
+        drop3: 'Drop 3',
+        shell: 'Shell',
+        rootlessA: 'Rootless A',
+        rootlessB: 'Rootless B',
+        locked: 'Locked hands',
+        soWhat: 'So What',
+      },
+      about: {
+        close:
+          'Every note of the chord packed as close together as it goes, from the lowest note of the inversion chosen. Cmaj7: C E G B.',
+        drop2:
+          'A close chord of four notes with its second note from the top moved down an octave, into the left hand. The chord opens out and keeps every note. Cmaj7: G | C E B.',
+        drop3:
+          'As drop 2, but the third note from the top goes down the octave, so the chord spreads wider. Cmaj7: E | C G B.',
+        shell:
+          'Only the root, 3rd and 7th, in the left hand: the three notes that say what the chord is, leaving the right hand free for the melody. C7: C E B♭.',
+        rootlessA:
+          'The left hand leaves the root to the bass and plays the 3rd, 5th, 7th and 9th; a dominant plays its 7th, 9th, 3rd and 13th. Through a ii–V–I in C the hand hardly moves: Dm7 F A C E, G7 F A B E, Cmaj7 E G B D.',
+        rootlessB:
+          'The same four notes as type A, starting from the other end: the 7th, 9th, 3rd and 5th; a dominant plays its 3rd, 13th, 7th and 9th. In C: Dm7 C E F A, G7 B E F A, Cmaj7 B D E G.',
+        locked:
+          'George Shearing’s locked hands: a close chord of four notes in the right hand with the melody on top, and the left hand doubling the melody an octave lower. Cmaj7 with E on top: E | G B C E.',
+        soWhat:
+          'Three 4ths with a major 3rd on top, built up from the chord’s 9th, as the piano plays it in Miles Davis’s “So What”. It has no 3rd, so it suits a minor or suspended chord. Dm7: E A | D G B.',
+      },
+      // The voicing's keys on the chord shown, the left hand's before the bar.
+      here: 'On this chord: {{notes}}',
+      bar: {
+        fourNotes:
+          'Made from a close chord of four notes, such as a 7th or 6th chord. This one has {{count}}.',
+        noThird: 'Needs the chord’s 3rd, and this chord has none.',
+        noSeventh: 'Needs a 7th, and this chord has none.',
+        notDorian:
+          'Suits only a minor or suspended chord with a perfect 5th and no major 3rd, major 7th or altered note.',
+      },
+    },
+    fingering: {
+      title: 'Fingering',
+      // A row of the table: the inversion, or the keys as the voicing lays them.
+      voiced: 'As voiced',
     },
     tensions: {
       title: 'Available tensions',
@@ -115,13 +168,7 @@ export const practice = {
     },
     tempo: 'Tempo',
     playUpDown: 'Play up and down',
-    facts: {
-      formula: 'Formula',
-      gaps: 'Structure',
-      relative: 'Relative',
-      parallel: 'Parallel',
-      modeOf: 'Mode of',
-    },
+    facts: { formula: 'Formula', gaps: 'Structure', relative: 'Relative', modeOf: 'Mode of' },
     chordsIn: 'Chords in this scale',
     keysPlay: { label: 'Keys play', chords: 'Chords', notes: 'Notes' },
     holds: '{{note}} is in {{chords}}',
@@ -134,6 +181,9 @@ export const practice = {
       noSignature: 'No sharps or flats',
       notes: 'Notes',
       modes: 'Modes',
+      parallel: 'Parallel',
+      enharmonic: 'Also written',
+      neighbours: 'Beside it on the circle',
       borrowed: 'Borrowed chords',
       songs: 'Songs in this key',
       studies: 'Studies in this key',
@@ -156,6 +206,8 @@ export const practice = {
       d5: { name: 'Diminished fifth', short: 'd5' },
     },
     keys: '{{name}} on the keys',
+    // The songs an interval opens, behind its row's ⓘ (the unison's one list).
+    songs: 'Songs',
   },
   progressions: {
     field: 'Numerals or chords',
@@ -164,6 +216,25 @@ export const practice = {
     minorLine: 'These numerals are a minor key’s.',
     playIn: 'Play them in {{key}}',
     throughKeys: 'Through the keys',
+    // How the row is read and played (ADR 0112): its mode, how its chords are named, voice-led or blocks.
+    mode: {
+      label: 'Mode',
+      info: 'Read the numerals in a church mode on the key’s tonic: each degree becomes that mode’s own chord. I IV V in Dorian is i IV v, and Mixolydian’s VII is ♭VII. Major or minor reads them in the key itself.',
+    },
+    names: {
+      label: 'Written as',
+      numerals: 'Numerals',
+      nashville: 'Nashville',
+      chords: 'Chords',
+      info: 'Roman numerals, or Nashville numbers: each chord’s root counted from the tonic, a plain number for a major chord and m for a minor one (1 5 6m 4), a ♭ where the root lies below the major scale. Or the chords alone.',
+    },
+    voicing: {
+      label: 'Voicing',
+      led: 'Voice-led',
+      block: 'Block',
+      info: 'Voice-led, each chord moves to the position nearest the one before: the notes they share are held and the rest step. Block, every chord stands in root position and the hand leaps. Switch between them to hear the difference.',
+      blockReason: 'Block chords all stand in root position.',
+    },
     // The library as cards, a card a progression (ADR 0112).
     library: 'Library',
     chordCount_one: '{{count}} chord',
@@ -191,6 +262,7 @@ export const practice = {
       classical: 'Classical',
       soul: 'R&B / Soul',
       gospel: 'Gospel',
+      modal: 'Modal',
       theory: 'Theory',
     },
   },
@@ -405,5 +477,14 @@ export const practice = {
     beat: 'Beat {{beat}}',
     start: 'Start',
     stop: 'Stop',
+    // The bar trainer: bars played, then bars muted, to keep time with no click.
+    trainer: 'Bar trainer',
+    trainerInfo:
+      'The Metronome plays its bars, then goes silent for its muted bars while you keep the time, and comes back in on the beat. The beats still show while it is silent.',
+    played: 'Bars played',
+    mutedBars: 'Bars muted',
+    bars_one: '{{count}} bar',
+    bars_other: '{{count}} bars',
+    muted: 'Muted',
   },
 } as const

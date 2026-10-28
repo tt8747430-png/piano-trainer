@@ -1684,14 +1684,23 @@ describe('the score editor', () => {
     })
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/^Staff 1 · Bar 1/))
     const text = await openCategory(user, 'Text')
-    const expressions = within(text).getByRole('group', { name: 'Expression text' })
-    const dolce = within(expressions).getByRole('button', { name: 'Dolce' })
+    const character = within(text).getByRole('group', { name: 'Character' })
+    const dolce = within(character).getByRole('button', { name: 'Dolce' })
     expect(within(dolce).getByText('dolce')).toBeVisible()
     expect(dolce).toHaveAccessibleDescription('Sweetly')
     expect(within(text).getByText('Sweetly')).not.toBeVisible()
-    const rit = within(expressions).getByRole('button', { name: 'Ritardando' })
+    expect(within(character).getByRole('button', { name: 'Con brio' })).toHaveAccessibleDescription(
+      'With spirit',
+    )
+    const tempo = within(text).getByRole('group', { name: 'Tempo changes' })
+    const rit = within(tempo).getByRole('button', { name: 'Ritardando' })
     expect(within(rit).getByText('rit.')).toBeVisible()
     expect(rit).toHaveAccessibleDescription('Gradually slower')
+    expect(within(tempo).getByRole('button', { name: 'Ritenuto' })).toHaveAccessibleDescription(
+      'Held back at once',
+    )
+    const technique = within(text).getByRole('group', { name: 'Technique' })
+    expect(within(technique).getByRole('button', { name: 'Mano destra' })).toHaveTextContent('m.d.')
     await user.click(dolce)
     await waitFor(() =>
       expect(songOf(piecesStore.getState())).toMatchObject({

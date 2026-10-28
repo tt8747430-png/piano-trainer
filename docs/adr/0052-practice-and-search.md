@@ -27,17 +27,26 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 - **A thing's page shows it on the keys, read top to bottom**: the keys docked; what it is, with its one honey Play;
   its choices as labelled fields; its sections. **It holds the tools that work on it**, never a tab or a page of their
   own:
-  - Chords: the builder (any chord from its parts, ADR 0046; its quality a strip), its tensions under a 7th chord,
-    its arpeggio and chromatic walk into the Player;
+  - Chords: the builder (any chord from its parts, ADR 0046; its quality a strip, the power chord on it; a size or
+    inversion the chord cannot take greyed with why), its voicing (a strip of the eight, ADR 0046, `voicing=`, one
+    the chord cannot take greyed with why, the chosen one's ⓘ saying what it is with its spelling in C and on this
+    chord; a voicing other than close sets the hands, and the inversion where it is not made from a close chord),
+    its Fingering (each hand drawn as Scales draws it, beside a row an inversion of each hand's block fingering, the
+    keys' own marked; a voicing or a chord of five notes one row of what each hand holds), the fingers on the keys,
+    its tensions under a 7th chord, its arpeggio and chromatic walk into the Player;
   - Scales and keys: Scale (a run from any start; what its keys carry, Notes · Left hand · Right hand, `onKeys=`;
     on a staff; its fingering hand by hand, each hand drawn with its fingers numbered beside the run's notes and
     fingers; its exercises), Chords (the scale's chords to 13ths, in an inversion, walked, each a tap to play and a
-    link to open it in Chords) and Key (the circle of fifths, its signature, facts, borrowed chords, the songs in it,
-    and Harmonise: the chords that hold a melody note), as tabs;
+    link to open it in Chords) and Key (the circle of fifths, its signature, facts: notes, relative and parallel
+    keys, the keys beside it on the circle, its other spelling where the circle's ends meet, modes; its degrees by
+    name with their notes and triads; borrowed chords, the songs in it, and Harmonise: the chords that hold a melody
+    note), as tabs;
   - Intervals: a row an interval over a root, as the reference lists them: its short name, its name over its size in
     semitones, a small keyboard with both keys; the simple ones (the tritone twice, A4 and d5) and those a chord
     symbol names (♭9 to 13; no 12th; the augmented 9th). A tap plays it the way the switch above says, At once · Up
-    · Down (`way=`). The cards with a staff are the lessons';
+    · Down (`way=`). Within the octave each row's ⓘ names songs that open with it, rising and falling (the unison
+    once, the tritone under both spellings), each language its own list of titles. The cards with a staff are the
+    lessons';
   - Progressions: its typed line and Between (ADR 0112);
   - Accompaniment: a tab for each method book, Styles and Yours; a pattern's page and the editor of the learner's own;
     a study's page.
@@ -52,7 +61,12 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
   side by side; one honey Play; a square a beat, the first larger, the one sounding filled. The first beat is accented.
   Beats are planned on the audio clock a second and a half ahead and topped up by a timer; a change while it plays
   goes on from the beat heard. Space starts it, ↑ ↓ change the tempo; the screen stays on. Its sounds are synthesised,
-  so it works offline.
+  so it works offline. Its tempo is named by its Italian tempo word (`tempoWord`, the editor's dial's ladder), the
+  word's meaning and range in its ⓘ. The **bar trainer** plays N bars, then mutes N bars (1–8 each, saved with the
+  Metronome): each beat carries its bar since the start, a muted bar's beats are not queued but still shown.
+- **Musical terms** are one list each in the kernel: the tempo words with their ranges (`TEMPO_TERMS`, larghissimo
+  to prestissimo; ten name a tempo, the shades between only describe), the editor's expression text in three groups
+  (`EXPRESSION_GROUPS`: character, tempo changes, technique), each meaning in both languages.
 - **How to use** is Settings' Help: six folding parts in the order a learner meets them, each step beside the icon
   its control wears.
 - **Search** (`/search?q=`) lists every named thing by kind, each a row to its page: Practice's pages, songs and
@@ -79,3 +93,5 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
 - 0113 — The Metronome and How to use (2026-10-27).
 - r13 — Theory · Playing · Training; strips with ‹ ›; interval rows; fingering by hand; autoplay; the scale on the
   Chord finder's keys; the key size's caption (2026-10-28), from the reference app's tool screens.
+- r14 — Chords' voicing and fingering; interval songs; the Key view's parallel, neighbours, other spelling and degrees; the bar trainer and tempo
+  words; the Italian terms (2026-10-28), from Musicca, piano.org and Vita Piano.

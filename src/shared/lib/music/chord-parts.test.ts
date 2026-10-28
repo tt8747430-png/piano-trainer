@@ -42,6 +42,7 @@ describe('buildChord', () => {
 
   it.each([
     [{}, 'C: C E G'],
+    [{ triad: 'power' }, 'C5: C G'],
     [{ triad: 'sus4' }, 'Csus4: C F G'],
     [{ added: ['add6'] }, 'C6: C E G A'],
     [{ triad: 'min', added: ['add6', 'add9'] }, 'Cm6/9: C E♭ G A D'],
@@ -134,10 +135,10 @@ describe('partsOf', () => {
 })
 
 describe('CHORD_PARTS', () => {
-  it('makes 172 chords, each once', () => {
+  it('makes 173 chords, each once', () => {
     const suffixes = CHORD_PARTS.map((each) => buildChord(note('C'), each).suffix)
     expect(new Set(suffixes).size).toBe(suffixes.length)
-    expect(suffixes).toHaveLength(172)
+    expect(suffixes).toHaveLength(173)
   })
 
   it('holds only parts that fit', () => {
@@ -152,6 +153,14 @@ describe('what a triad and size offer', () => {
     expect(sizesOf('sus4')).toEqual([5, 7, 9, 13])
     expect(sizesOf('dim')).toEqual([5, 7, 9, 11])
     expect(sizesOf('aug')).toEqual([5, 7, 9])
+  })
+
+  it('keeps the power chord its root and 5th alone: no 3rd to stack on, nothing added', () => {
+    expect(sizesOf('power')).toEqual([5])
+    expect(addedOf({ triad: 'power', size: 5 })).toEqual([])
+    expect(fitParts(parts({ triad: 'power', size: 9, added: ['add9'] }))).toEqual(
+      parts({ triad: 'power' }),
+    )
   })
 
   it('alters a dominant every way, a major 7th only by its #11, a 7sus4 by its ♭9, a minor chord not at all', () => {

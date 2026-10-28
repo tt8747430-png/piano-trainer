@@ -166,6 +166,8 @@ export function SheetField({
         aria-label={label}
         initialFocus={input}
         finalFocus={false}
+        // The slim bar over the phone's keyboard, which the sheet scrolls the caret's line clear of.
+        data-docked-field={docked ? '' : undefined}
         className={cn(
           'gap-1.5 p-1.5 data-[side=top]:flex-col-reverse',
           docked

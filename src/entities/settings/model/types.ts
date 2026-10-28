@@ -25,6 +25,8 @@ import {
   METRONOME_METERS,
   METRONOME_SOUNDS,
   TOUCHES,
+  TRAINER_BARS,
+  type BarTrainer,
   type MetronomeMeter,
   type MetronomeSound,
   type Touch,
@@ -232,16 +234,27 @@ export const DEFAULT_SCORE_VIEW: ScoreViewSettings = {
   keys: true,
 }
 
-/** The Metronome as the learner left it (ADR 0052): its tempo, meter and sound. */
+/** The bar trainer as left: on or off, its counts kept either way. */
+export interface BarTrainerSettings extends BarTrainer {
+  readonly on: boolean
+}
+
+/** The Metronome as the learner left it (ADR 0052): its tempo, meter, sound and bar trainer. */
 export interface MetronomeSettings {
   /** Beats a minute, whole, within `BPM_RANGE`. */
   readonly bpm: number
   readonly meter: MetronomeMeter
   readonly sound: MetronomeSound
+  readonly trainer: BarTrainerSettings
 }
 
-/** 120 a minute in 4/4, a click on each beat. */
-export const DEFAULT_METRONOME: MetronomeSettings = { bpm: 120, meter: '4/4', sound: 'click' }
+/** 120 a minute in 4/4, a click on each beat; the bar trainer off, at two bars and two. */
+export const DEFAULT_METRONOME: MetronomeSettings = {
+  bpm: 120,
+  meter: '4/4',
+  sound: 'click',
+  trainer: { on: false, play: 2, mute: 2 },
+}
 
 export interface SettingsState {
   theme: Theme
@@ -361,6 +374,7 @@ export const isDiagramsMode = isOneOf(DIAGRAMS_MODES)
 export const isTextSize = isOneOf(TEXT_SIZES)
 export const isMetronomeMeter = isOneOf(METRONOME_METERS)
 export const isMetronomeSound = isOneOf(METRONOME_SOUNDS)
+export const isTrainerBars = isOneOf(TRAINER_BARS)
 
 /** The first of the browser's preferred languages the app speaks decides; English otherwise. */
 export function detectLocale(languages: readonly string[] | undefined): Locale {

@@ -1,6 +1,7 @@
 import { INTERVALS, type IntervalName, type Interval } from './interval'
-import { keyPrefersSharps, keySignature, tonicSpelling, type Key } from './key'
-import { note, pitchClassOf, plainSpelling, rootSpelling, sameNote, type SpelledNote } from './note'
+import { keyPrefersSharps, keySignature, type Key } from './key'
+import { degreeNames, type DegreeName } from './key-relations'
+import { note, plainSpelling, rootSpelling, sameNote, type SpelledNote } from './note'
 import type { PitchClass } from './pitch'
 import { toneAbove, type Tone } from './tone'
 
@@ -297,28 +298,14 @@ export function scaleRootSpelling(pc: PitchClass, kind: ScaleKind): SpelledNote 
   return difference < 0 ? sharp : flat
 }
 
-/** The names of a seven-note scale's degrees, the tonic first; the 7th by its distance below the tonic. */
-export const DEGREE_NAMES = [
-  'tonic',
-  'supertonic',
-  'mediant',
-  'subdominant',
-  'dominant',
-  'submediant',
-  'leadingNote',
-  'subtonic',
-] as const
-export type DegreeName = (typeof DEGREE_NAMES)[number]
-
 /**
- * Each degree's name in a seven-note scale: tonic, supertonic, mediant, subdominant, dominant,
- * submediant, and the 7th a leading note a half step below the tonic or a subtonic a whole step
- * below it (natural minor's, Mixolydian's). None for a scale of more or fewer notes.
+ * Each degree's name in a seven-note scale, a key's names (`degreeNames`) for any mode: the 7th a
+ * leading tone a half step under the tonic, a subtonic a whole step under it (natural minor's,
+ * Mixolydian's). None for a scale of more or fewer notes.
  */
-export function degreeNames(kind: ScaleKind): readonly DegreeName[] | null {
+export function scaleDegreeNames(kind: ScaleKind): readonly DegreeName[] | null {
   if (!isHeptatonic(kind)) return null
-  const seventh = scaleIntervals(kind)[6]?.semitones
-  return [...DEGREE_NAMES.slice(0, 6), seventh === 11 ? 'leadingNote' : 'subtonic']
+  return degreeNames(scaleIntervals(kind)[6]?.semitones !== 11)
 }
 
 /** The gap between neighbouring notes of a scale: a half step, a whole step, or both (three semitones). */
@@ -394,19 +381,4 @@ export function relativeKey(key: Key): Key {
   const related = relatedScale(key.tonic, keyScale(key))
   if (!related) throw new RangeError('Every major and minor key has a relative')
   return { tonic: related.root, minor: !key.minor }
-}
-
-/** The most sharps or flats a written key signature has. */
-const MOST_ACCIDENTALS = 7
-
-/**
- * A key's parallel: the other mode on the same tonic, spelled as written where its signature has seven
- * sharps or flats at most (A♭ major's A♭ minor), else as the same pitch's simplest key (D♭ major's C♯
- * minor, not D♭ minor's eight flats).
- */
-export function parallelKey(key: Key): Key {
-  const same = { tonic: key.tonic, minor: !key.minor }
-  return Math.abs(keySignature(same)) <= MOST_ACCIDENTALS
-    ? same
-    : { tonic: tonicSpelling(pitchClassOf(key.tonic), !key.minor), minor: !key.minor }
 }

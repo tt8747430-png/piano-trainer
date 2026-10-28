@@ -4,11 +4,9 @@ import type { Key } from './key'
 import { note, noteName, rootSpelling, type SpelledNote } from './note'
 import { pitchClass } from './pitch'
 import {
-  degreeNames,
   keyMode,
   keyScale,
   keyTones,
-  parallelKey,
   tonesInKey,
   SCALE_FAMILIES,
   SCALE_KINDS,
@@ -21,6 +19,7 @@ import {
   scaleIntervals,
   scaleKey,
   scaleKindsIn,
+  scaleDegreeNames,
   scaleRootSpelling,
   spellInKey,
   spellScale,
@@ -285,22 +284,22 @@ describe('scaleRootSpelling, beyond today’s kinds', () => {
   })
 })
 
-describe('degreeNames', () => {
-  it('names a seven-note scale’s degrees, its 7th a leading note or a subtonic', () => {
-    expect(degreeNames('major')).toEqual([
+describe('scaleDegreeNames', () => {
+  it('names a seven-note scale’s degrees, its 7th a leading tone or a subtonic', () => {
+    expect(scaleDegreeNames('major')).toEqual([
       'tonic',
       'supertonic',
       'mediant',
       'subdominant',
       'dominant',
       'submediant',
-      'leadingNote',
+      'leadingTone',
     ])
-    expect(degreeNames('natural')?.[6]).toBe('subtonic')
-    expect(degreeNames('harmonic')?.[6]).toBe('leadingNote')
-    expect(degreeNames('mixolydian')?.[6]).toBe('subtonic')
-    expect(degreeNames('pent')).toBeNull()
-    expect(degreeNames('halfWhole')).toBeNull()
+    expect(scaleDegreeNames('natural')?.[6]).toBe('subtonic')
+    expect(scaleDegreeNames('harmonic')?.[6]).toBe('leadingTone')
+    expect(scaleDegreeNames('mixolydian')?.[6]).toBe('subtonic')
+    expect(scaleDegreeNames('pent')).toBeNull()
+    expect(scaleDegreeNames('halfWhole')).toBeNull()
   })
 })
 
@@ -376,27 +375,6 @@ describe('relativeKey', () => {
     })
     expect(relativeKey({ tonic: note('F', 1), minor: true })).toEqual({
       tonic: note('A'),
-      minor: false,
-    })
-  })
-})
-
-describe('parallelKey', () => {
-  it('pairs a key with the other mode on its tonic, a theoretical one by its simplest spelling', () => {
-    expect(parallelKey({ tonic: note('C'), minor: false })).toEqual({
-      tonic: note('C'),
-      minor: true,
-    })
-    expect(parallelKey({ tonic: note('A', -1), minor: false })).toEqual({
-      tonic: note('A', -1),
-      minor: true,
-    })
-    expect(parallelKey({ tonic: note('D', -1), minor: false })).toEqual({
-      tonic: note('C', 1),
-      minor: true,
-    })
-    expect(parallelKey({ tonic: note('G', 1), minor: true })).toEqual({
-      tonic: note('A', -1),
       minor: false,
     })
   })

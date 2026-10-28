@@ -64,19 +64,46 @@ export const HAIRPINS = ['cresc', 'dim', 'end'] as const
 export type Hairpin = (typeof HAIRPINS)[number]
 
 /**
- * Words written over a note: how it is played (dolce, cantabile, espressivo, legato, leggiero), and
- * the tempo from it, held back (rit., rall.), pressed on (accel.) or back to its own (a tempo).
+ * Words written over a note (ADR 0097), in three groups as a palette shows them: its character (dolce,
+ * con brio, maestoso …); the tempo from it, held back (rit., rall. by degrees, riten. at once), pressed
+ * on (accel., string.), free (rubato) or back to its own (a tempo); and how it is played (legato, simile,
+ * which hand: m.d., m.s.).
  */
+export const EXPRESSION_GROUPS = {
+  character: [
+    'dolce',
+    'cantabile',
+    'espressivo',
+    'leggiero',
+    'agitato',
+    'animato',
+    'con-brio',
+    'con-fuoco',
+    'con-moto',
+    'con-amore',
+    'doloroso',
+    'energico',
+    'grazioso',
+    'maestoso',
+    'risoluto',
+    'scherzando',
+    'sostenuto',
+    'tranquillo',
+  ],
+  tempo: ['rit', 'rall', 'accel', 'a-tempo', 'riten', 'stringendo', 'rubato'],
+  technique: ['legato', 'simile', 'md', 'ms'],
+} as const
+export type ExpressionGroup = keyof typeof EXPRESSION_GROUPS
+export const EXPRESSION_GROUP_IDS = [
+  'character',
+  'tempo',
+  'technique',
+] as const satisfies readonly ExpressionGroup[]
+/** Every expression, group by group. */
 export const EXPRESSIONS = [
-  'dolce',
-  'cantabile',
-  'espressivo',
-  'legato',
-  'leggiero',
-  'rit',
-  'rall',
-  'accel',
-  'a-tempo',
+  ...EXPRESSION_GROUPS.character,
+  ...EXPRESSION_GROUPS.tempo,
+  ...EXPRESSION_GROUPS.technique,
 ] as const
 export type Expression = (typeof EXPRESSIONS)[number]
 /** Each expression as a score prints it, in italics. */
@@ -84,12 +111,32 @@ export const EXPRESSION_TEXT: Readonly<Record<Expression, string>> = {
   dolce: 'dolce',
   cantabile: 'cantabile',
   espressivo: 'espress.',
-  legato: 'legato',
   leggiero: 'leggiero',
+  agitato: 'agitato',
+  animato: 'animato',
+  'con-brio': 'con brio',
+  'con-fuoco': 'con fuoco',
+  'con-moto': 'con moto',
+  'con-amore': 'con amore',
+  doloroso: 'doloroso',
+  energico: 'energico',
+  grazioso: 'grazioso',
+  maestoso: 'maestoso',
+  risoluto: 'risoluto',
+  scherzando: 'scherzando',
+  sostenuto: 'sost.',
+  tranquillo: 'tranquillo',
   rit: 'rit.',
   rall: 'rall.',
   accel: 'accel.',
   'a-tempo': 'a tempo',
+  riten: 'riten.',
+  stringendo: 'string.',
+  rubato: 'rubato',
+  legato: 'legato',
+  simile: 'simile',
+  md: 'm.d.',
+  ms: 'm.s.',
 }
 
 /** A swing mark: the 8ths or the 16ths swung from its note on, or straight again. */

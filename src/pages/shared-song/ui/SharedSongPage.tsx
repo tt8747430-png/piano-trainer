@@ -52,7 +52,6 @@ function SharedChart({ song }: { song: SharedSong }) {
           bpm: tempo,
         })}
       </p>
-      <p>{t('shared.says')}</p>
       <PinnedKeyboard shown={NO_KEYS} range={playerRange(performance)} />
       <ChordChart
         performance={performance}

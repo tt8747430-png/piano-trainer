@@ -406,8 +406,8 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 - **Toggle chips** (`ToggleChips`): several of a few, all in sight; on is ink on sand in an ink line.
 - **Toggle tiles** (`ToggleTile`, `PictureTiles`): an icon or a drawing over its name; on, the learned wash.
 - **Strip** (`StepStrip`): one of many in a row that scrolls inside a sand track, ‹ and › at its ends, the chosen a
-  card-paper thumb kept in the middle, the edges fading; a greyed option stays in the row. A chord's quality and a
-  scale's kind are strips.
+  card-paper thumb kept in the middle, the edges fading; a greyed option stays in the row. A chord's quality, its
+  voicing and a scale's kind are strips.
 - **Note, key and inversion choices** (`NoteChoice`, `KeyChoice`, `InversionChoice`): a strip of spellings, C C♯ D♭
   D … B, both names of a black key side by side; the tonic's strip, only keys a signature writes, then Major ·
   Minor; an inversion as its stack of noteheads.
@@ -434,15 +434,24 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 - **Fact card** (`FactCard`): an icon over a fact's name over its value; three across (Key · Time · Tempo).
 - **Library card** (Progressions): its numerals as the title, name · chord count in soft ink, its character in a
   line, chips of the numeral (small, soft) over the chord; a round paper Play at its top right. While it plays its
-  line turns honey and the sounding chip takes the selected wash; the card shown wears a darker line.
-- **Interval row** (Intervals): the short name in soft ink, the name over its semitones, a small `KeyDiagram` at its
-  end; two columns from 48rem. The row playing takes the selected wash.
+  line turns honey and the sounding chip takes the selected wash; the card shown wears a darker line. Written as
+  Nashville, the title and the chips' small line are numbers; as Chords, the chips are the chord alone.
+- **Interval row** (Intervals): the short name in soft ink, the name over its semitones, the songs' ⓘ, a small
+  `KeyDiagram` at its end; two columns from 48rem. The card is the button (stretched under the ⓘ); the row playing
+  takes the selected wash. The ⓘ lists Up and Down, each a semibold head over titles in soft ink.
+- **Metronome's tempo word**: the Italian word under BPM, small caps-tracked soft ink, its meaning and range in its ⓘ.
+- **Bar trainer** (Metronome): a switch row with its ⓘ, then Played · Muted as two round pop-up buttons (a speaker,
+  a crossed speaker) like Sound and Meter, greyed while off so nothing moves. In a muted bar the sounding square is
+  ringed in honey, not filled, under a "Muted" caption that keeps its place (transparent while heard).
+- **Scale degrees** (Key view): a plain table, a hairline between rows: the numeral in soft ink, the degree's name,
+  its note semibold, the triad as printed.
 - **Hand drawing** (`HandDiagram`): a hand palm down in sand, each finger numbered in an ink dot, thumb 1 to little
   finger 5, the right hand's thumb at the left; beside it the run's notes over that hand's fingers, a crossing's
-  finger in sky and underlined (on the keys its circle filled in sky, on the staff its number in bold sky). Under a
-  scale's degrees or a key's notes, each degree's name in small soft ink.
+  finger in sky and underlined (on the keys its circle filled in sky, on the staff its number in bold sky), or a
+  chord's inversions a row each (its name in small type, each note over its finger), the one on the keys in strong
+  ink. Under a scale's formula, each degree's name in small soft ink.
 - **Sheet** (`Sheet`): card paper, 20px top corners, a grab handle, its Literata title with Close, a scrolling body,
-  an optional footer over a hairline. It stands on the phone's keyboard. Never a sheet over a sheet: open a list as a
+  an optional footer over a hairline. It stands on the phone's keyboard, its footer with it; a field in a page is lifted a gap clear of that keyboard, under the screen's bar, which holds still while typing. Never a sheet over a sheet: open a list as a
   page of the sheet.
 - **Drop zone** (`SongDrop`, a laptop's): while a file is dragged over the library, a panel inset 16px over the page,
   its 2px dashed honey border on the page's paper at 90%, an upload icon over one line of what dropping does.
