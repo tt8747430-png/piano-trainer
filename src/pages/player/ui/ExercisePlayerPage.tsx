@@ -57,6 +57,8 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
         <ExerciseSetup
           exercise={exercise}
           choice={choice}
+          player={player}
+          hands={view.hands}
           swing={view.swing}
           onChange={changeSetup}
           onSwing={player.setSwing}

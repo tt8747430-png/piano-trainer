@@ -26,6 +26,12 @@ what they changed.
     plays from: None, the top single staff by its name, or the Recording. A source the song lacks is greyed with why;
     a lead sheet always plays its staff.
   - The song's key is not in the Setup: it is Transpose.
+  - **A scale run's practice** (the Scale exercise, `ScalePracticeFields`), as the reference app's Practice Scale
+    sheet: Hands; the octave each hand playing starts on (C1–C7 as a strip, `rhOctave=`/`lhOctave=`; one whose run
+    would leave the keyboard greyed with where it would go, never hidden; a hand left unchosen starts where the run
+    fits, the left an octave or two below); the tempo; the metronome; and **Ticks between loops** (`rest=`, none to 4
+    beats): each repeat of the loop after the first waits that many beats, a click on each where the click sounds,
+    counted down as a count-in is (`LoopOptions.rest`).
 - **Transpose** (ADR 0115) moves a piece −5 to +6 semitones, into its simplest key; the recording falls silent outside
   its own key, an ⓘ saying so. **Simplify**, a switch, plays and shows each chord as its plain triad on its root
   (`simplifyChart`): a slash chord's bass and added notes dropped, a chord held on where the next simplifies to it, a
@@ -55,3 +61,4 @@ The score editor's Play and its recorder's click keep their own switches. A reco
 - 0104 — Transpose and Simplify in the tools row (2026-10-26).
 - 0105 — The transport's Sound: the count-in, the click and each part's volume (2026-10-26).
 - 0115 — A plain Setup: Starting position, Move smoothly, swing feels, the Melody's source (2026-10-27).
+- r13 — A scale run's practice: hands, each hand's start octave, tempo, metronome, ticks between loops (2026-10-28).

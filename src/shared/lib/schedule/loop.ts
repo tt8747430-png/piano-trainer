@@ -1,7 +1,7 @@
 import type { Performance } from '@/shared/lib/arrangement'
 import type { Tick } from '@/shared/lib/music'
 import { passTickAt } from './playhead'
-import { schedule, type Audible, type Scheduled } from './schedule'
+import { schedule, type Audible, type Scheduled, type Sound } from './schedule'
 import type { SwingFeel } from './swing'
 
 /** Speed training: each pass `step` BPM faster, up to `until`. */
@@ -24,6 +24,11 @@ export interface LoopOptions {
   /** Whether the count-in and the metronome click: a count-in still counts without (ADR 0105). */
   readonly clicks?: boolean
   readonly swing?: SwingFeel
+  /**
+   * Beats of rest before each repeat, a click on each where the clicks sound (the reference app's
+   * ticks between loops): a breath to reset the hand before the passage comes round again.
+   */
+  readonly rest?: number
 }
 
 /** One pass queued on the audio clock: its sounds, cues and end count from `start`, at its tempo. */
@@ -50,6 +55,32 @@ const LATE_START = 0.1
 
 const endOf = (pass: Pass): number => pass.start + pass.end
 
+/**
+ * A pass with `beats` of rest before it: its music moved on by them, each beat a click where the
+ * clicks sound, counted down as a count-in is.
+ */
+function rested(pass: Scheduled, beats: number, tempo: number, clicks: boolean): Scheduled {
+  if (beats <= 0) return pass
+  const beat = 60 / tempo
+  const lead = beats * beat
+  const counts = Array.from({ length: beats }, (_, at) => at * beat)
+  const later = <T extends { readonly at: number }>(timed: T): T => ({
+    ...timed,
+    at: timed.at + lead,
+  })
+  const ticks: Sound[] = clicks
+    ? counts.map((at, index) => ({ kind: 'click', at, accent: index === 0 }))
+    : []
+  return {
+    ...pass,
+    sounds: [...ticks, ...pass.sounds.map(later)],
+    cues: pass.cues.map(later),
+    end: pass.end + lead,
+    musicStart: pass.musicStart + lead,
+    counts: [...counts, ...pass.counts.map((at) => at + lead)],
+  }
+}
+
 function passAt(
   performance: Performance,
   options: LoopOptions,
@@ -60,17 +91,18 @@ function passAt(
   const tempo = options.speedUp
     ? Math.min(options.speedUp.until, options.tempo + index * options.speedUp.step)
     : options.tempo
+  const scheduled = schedule(performance, {
+    tempo,
+    hands: options.hands,
+    fromTick: first ? options.fromTick : options.range.from,
+    toTick: options.range.to,
+    countIn: first && options.countIn === true,
+    metronome: options.metronome === true,
+    clicks: options.clicks !== false,
+    swing: options.swing ?? 'straight',
+  })
   return {
-    ...schedule(performance, {
-      tempo,
-      hands: options.hands,
-      fromTick: first ? options.fromTick : options.range.from,
-      toTick: options.range.to,
-      countIn: first && options.countIn === true,
-      metronome: options.metronome === true,
-      clicks: options.clicks !== false,
-      swing: options.swing ?? 'straight',
-    }),
+    ...(first ? scheduled : rested(scheduled, options.rest ?? 0, tempo, options.clicks !== false)),
     start,
     tempo,
   }

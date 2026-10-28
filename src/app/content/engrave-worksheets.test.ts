@@ -79,7 +79,11 @@ describe('every lesson’s staves, a journey’s or a course’s', { timeout: 60
   it('write each row of voicings whole, on the grand staff', async () => {
     for (const lesson of WORKSHEETS) {
       for (const section of lesson.sections) {
-        for (const block of section.blocks) {
+        // A variants block's voicings too: each version is drawn in its turn.
+        const blocks = section.blocks.flatMap((block) =>
+          block.kind === 'variants' ? block.variants.map((variant) => variant.example) : [block],
+        )
+        for (const block of blocks) {
           if (block.kind !== 'voicings') continue
           const score = notate(voicingsMusic(block.voicings, block.key))
           expectWritten(score)

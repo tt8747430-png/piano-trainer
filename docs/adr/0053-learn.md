@@ -35,6 +35,20 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
   open (a chord, a scale, a key, a tool, a trainer, the Player), never a route.
 - **A lesson's page** is one column in the middle under one floating bar (‹ the section before, the count opening its
   contents and what it is part of, › the next). Its end is the lesson before and the way on; going on learns it.
+  **On a phone** (upright or on its side) it reads **a section a page**, as the reference theory book does: the bar
+  holds ‹, the pages' dots (opening the contents) and Next, Done on the last page, which goes on and learns it. A
+  laptop or a tablet keeps the scroll: there two or three sections fit a screen and the eye looks back over them,
+  where on a phone one section fills it anyway.
+- **What a lesson shows of harmony:** a progression's row has a chip per chord, its numeral over its function
+  (tonic, subdominant, dominant: T S D, the Riemann letters every lesson and the Russian theory use), or over its
+  root's move (`show: 'motion'`, with the legend and Play the chain); the chip sounding follows the row, a tap plays
+  it. **Variants** draw one example in versions (an A/B switch, or chips) and redraw it, its chips and its caption in
+  place. A section may end on its **takeaway**, a note may be a **rule**, and a voicing in four voices names **S A T
+  B** beside its first chord and on the keys, the key a voice left faint as the row plays on.
+- **Progress through a lesson:** the sections read are saved (`pt-progress` `read`, as a page is shown or scrolled to
+  the reading line) and fill a ring round the lesson in the journey map and a course's list. A lesson may name the
+  lessons to read before it (`after`, earlier lessons of its own journey or course): its contents say them by number
+  ("After 4, 5"), its page links them by title.
 - **How a lesson reads** (`docs/CONTENT.md`, held by the content test): one idea a paragraph, the point first, a term
   defined where it is first used, the example directly under the sentence that names it, no prose repeating what the
   example shows. Mayer's multimedia principles (segmenting, contiguity, redundancy) and Nielsen Norman's findings on
@@ -55,4 +69,6 @@ course.
   Courses; one curriculum of stages (2026-10-13 to 10-14), each superseded.
 - 0053 — Lessons and Courses, apart (2026-10-15).
 - 0057, 0058 — Learn at a glance, Continue floating, a lesson's one bar and one column (2026-10-16).
+- r13 — Function and root-motion chips, variants, takeaways, rules, S A T B, a page a section on a phone,
+  rings and prerequisites in the contents, after the reference theory book (2026-10-28).
 - The research note on clearer lessons (2026-10-12), deleted: its checklist is `docs/CONTENT.md`'s.

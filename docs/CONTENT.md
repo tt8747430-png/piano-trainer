@@ -267,7 +267,9 @@ Two kinds of lesson, kept apart; `src/app/content/worksheets.test.ts` holds both
   most. A method book's course keeps its book's content and order. The scale and arpeggio courses build a lesson
   per key (`content/scale-lessons.ts`). Its icon is in `ui/course-look.ts`.
 
-A lesson is an `id`, a `title` and `summary` in both languages, and `sections`, each a `heading` over `blocks`.
+A lesson is an `id`, a `title` and `summary` in both languages, and `sections`, each a `heading` over `blocks` and,
+where it helps, a `takeaway`: the section in one sentence, on a card at its end. A lesson may name the lessons to read
+before it (`after`: ids of earlier lessons of its own journey or course); its contents and its page say them.
 
 **How a lesson reads** (tested): each section shows something (an example, a question) within its first two blocks
 and says at most 35 words in English; sentences stay under 30 words (aim for 20), with no semicolons; a term is
@@ -275,22 +277,31 @@ bold (`lead`) where it is first defined; a section ends with something to play. 
 questions on the keys, then links to practise. Depth comes from more examples, not longer prose. It teaches music;
 it never explains a button.
 
-| Block         | Written                                                                            | Shows                                 |
-| ------------- | ---------------------------------------------------------------------------------- | ------------------------------------- |
-| `text`        | `{ kind: 'text', lead?, text }`                                                    | a paragraph, its lead bold            |
-| `steps`       | `{ kind: 'steps', steps: [...] }`                                                  | a numbered list                       |
-| `note`        | `{ kind: 'note', text }`                                                           | a callout                             |
-| `chords`      | `{ kind: 'chords', symbols: ['C2', 'Cadd9'], apart?, melody? }`                    | a button each that plays the chord    |
-| `grid`        | `{ kind: 'grid', quality: 'm7' }`                                                  | the quality on all twelve roots       |
-| `scale`       | `{ kind: 'scale', root: note('D'), scale: 'dorian' }`                              | its name, notes, run on a staff, Play |
-| `interval`    | `{ kind: 'interval', root: note('C'), interval: 'M3' }`                            | the Intervals explorer's card         |
-| `notes`       | `{ kind: 'notes', clef: 'treble', notes: 'E4 G4/2 B4/8.', bass?, meter?, key? }`   | the line on a staff, Play             |
-| `voicings`    | `{ kind: 'voicings', voicings: [{ symbol, degrees, hands: 'A3 C4 E4' }], key? }`   | voicings as written, on a grand staff |
-| `pattern`     | `{ kind: 'pattern', pattern: 'r4', piece: 'otche' }`                               | the pattern over the piece, Play      |
-| `progression` | `{ kind: 'progression', numerals: 'ii V I', key, size? }`                          | a row of chords and its link          |
-| `question`    | `{ kind: 'question', ask, answer: { chord: 'Em' } }` or `answer: { notes: [...] }` | answered on the keys                  |
-| `link`        | `{ kind: 'link', title, target: { opens: … } }`                                    | a row into a page or the Player       |
+| Block         | Written                                                                                 | Shows                                 |
+| ------------- | --------------------------------------------------------------------------------------- | ------------------------------------- |
+| `text`        | `{ kind: 'text', lead?, text }`                                                         | a paragraph, its lead bold            |
+| `steps`       | `{ kind: 'steps', steps: [...] }`                                                       | a numbered list                       |
+| `note`        | `{ kind: 'note', text, rule? }`                                                         | a callout; with `rule`, a rule's card |
+| `chords`      | `{ kind: 'chords', symbols: ['C2', 'Cadd9'], apart?, melody? }`                         | a button each that plays the chord    |
+| `grid`        | `{ kind: 'grid', quality: 'm7' }`                                                       | the quality on all twelve roots       |
+| `scale`       | `{ kind: 'scale', root: note('D'), scale: 'dorian' }`                                   | its name, notes, run on a staff, Play |
+| `interval`    | `{ kind: 'interval', root: note('C'), interval: 'M3' }`                                 | the Intervals explorer's card         |
+| `notes`       | `{ kind: 'notes', clef: 'treble', notes: 'E4 G4/2 B4/8.', bass?, meter?, key? }`        | the line on a staff, Play             |
+| `voicings`    | `{ kind: 'voicings', voicings: [{ symbol, degrees, hands: 'A3 C4 E4' }], key?, satb? }` | voicings as written, on a grand staff |
+| `pattern`     | `{ kind: 'pattern', pattern: 'r4', piece: 'otche' }`                                    | the pattern over the piece, Play      |
+| `progression` | `{ kind: 'progression', numerals: 'ii V I', key, size?, show? }`                        | a row, its function chips, its link   |
+| `variants`    | `{ kind: 'variants', variants: [{ label, caption, text?, example }] }`                  | one example in versions, chosen above |
+| `question`    | `{ kind: 'question', ask, answer: { chord: 'Em' } }` or `answer: { notes: [...] }`      | answered on the keys                  |
+| `link`        | `{ kind: 'link', title, target: { opens: … } }`                                         | a row into a page or the Player       |
 
+- **`progression`:** its chips name each chord's function (T S D); `show: 'motion'` names each root's move instead
+  (`↓5`, `↓3`, `↑2`), with the moves' legend and Play the chain. Use it where a lesson is about how roots move.
+- **`variants`:** two or more versions of one example (`example` a `progression`, `voicings` or `chords` block): two
+  are an A/B switch (ii6 against ♭II6), more a row of chips (cadential, passing, pedal). The `caption` names the
+  version's shape in a few words (`V – vi · the surprise`); `text` says one line more where it must.
+- **`voicings`:** `satb` names four voices (every voicing four keys, the bass first) S A T B beside its first chord
+  and on the keys.
+- **Vary the key** across a lesson's examples of one idea (C, then F, G, D), so the idea travels.
 - **`chords`:** `apart` plays each on its own in root position; otherwise a row on several roots is voice-led.
   `melody` voices each chord close under that note.
 - **A line of notes:** each note with its octave, then `/` and its value (`1`, `2`, `4` the default, `8`, `16`), a dot

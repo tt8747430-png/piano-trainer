@@ -49,6 +49,8 @@ export interface ExerciseFields {
   readonly voicing?: true
   readonly from?: true
   readonly tonality?: true
+  /** Each hand's start octave (a scale run). */
+  readonly handOctaves?: true
 }
 
 /** An exercise: what it is called and trains, the choices its rule takes, and how it plays when the URL names none. */

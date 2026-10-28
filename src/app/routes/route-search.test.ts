@@ -274,6 +274,17 @@ describe('search params', () => {
     expect(await searchAt('/practice/intervals?root=H')).toEqual(INTERVALS_DEFAULTS)
   })
 
+  it('keep a scale run’s hand octaves and a loop’s rest, within their reach', async () => {
+    expect(await searchAt('/play/exercise/scale?rhOctave=5&lhOctave=2&rest=3')).toMatchObject({
+      rhOctave: 5,
+      lhOctave: 2,
+      rest: 3,
+    })
+    const out = await searchAt('/play/exercise/scale?rhOctave=9&rest=12')
+    expect(out).not.toHaveProperty('rhOctave', 9)
+    expect(out).not.toHaveProperty('rest', 12)
+  })
+
   it('keep how an interval plays, at once unless a known way is asked', async () => {
     expect(await searchAt('/practice/intervals?way=down')).toMatchObject({ way: 'down' })
     expect(await searchAt('/practice/intervals?way=sideways')).toMatchObject({ way: 'together' })
@@ -330,7 +341,7 @@ describe('search params', () => {
     expect(router.state.location.searchStr).not.toContain('p=')
   })
 
-  it('read the pair Between looks at and In the key only, and the Key view’s melody note', async () => {
+  it('read the pair Between looks at, In the key only, the chips’ root motion, and the Key view’s melody note', async () => {
     expect(await searchAt('/practice/progressions?p=I-IV-V&between=1&inKey=true')).toMatchObject({
       between: 1,
       inKey: true,
@@ -338,6 +349,10 @@ describe('search params', () => {
     expect(await searchAt('/practice/progressions?between=-2&inKey=yes')).toEqual(
       PROGRESSIONS_DEFAULTS,
     )
+    expect(await searchAt('/practice/progressions?harmony=motion')).toMatchObject({
+      harmony: 'motion',
+    })
+    expect(await searchAt('/practice/progressions?harmony=keys')).toEqual(PROGRESSIONS_DEFAULTS)
     expect(await searchAt('/practice/scales?show=key&melody=F%23&onlyInKey=true')).toMatchObject({
       show: 'key',
       melody: 'F#',

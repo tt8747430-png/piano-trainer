@@ -9,7 +9,13 @@ import {
   scaleRootSpelling,
   spellScale,
 } from '@/shared/lib/music'
-import { contraryExercise, scaleExercise, sequenceExercise } from './scales'
+import {
+  contraryExercise,
+  handOctaves,
+  ownHandOctaves,
+  scaleExercise,
+  sequenceExercise,
+} from './scales'
 
 const C = note('C')
 const hand = (performance: Performance, side: 'rh' | 'lh') =>
@@ -123,6 +129,55 @@ describe('scaleExercise', () => {
     const keys = scale.notes.map((n) => n.midi)
     expect(Math.max(...keys)).toBe(97)
     expect(Math.min(...keys)).toBe(25)
+  })
+
+  it('starts each hand in the octave asked, its tonic there', () => {
+    const scale = scaleExercise({
+      root: C,
+      kind: 'major',
+      octaves: 1,
+      start: 0,
+      fingering: 'scale',
+      startOctaves: { rh: 5, lh: 2 },
+    })
+    expect(hand(scale, 'rh')[0]?.midi).toBe(72)
+    expect(hand(scale, 'lh')[0]?.midi).toBe(36)
+  })
+
+  it('keeps its own octave for a hand whose octave would leave the keyboard', () => {
+    const scale = scaleExercise({
+      root: C,
+      kind: 'major',
+      octaves: 2,
+      start: 0,
+      fingering: 'scale',
+      startOctaves: { rh: 7 },
+    })
+    expect(hand(scale, 'rh')[0]?.midi).toBe(60)
+  })
+})
+
+describe('handOctaves', () => {
+  const run = { root: C, kind: 'major', octaves: 1, start: 0 } as const
+
+  it('names each hand’s own start: the right hand on middle C’s octave, the left one below', () => {
+    expect(ownHandOctaves(run)).toEqual({ rh: 4, lh: 3 })
+    expect(ownHandOctaves({ ...run, octaves: 2 })).toEqual({ rh: 4, lh: 2 })
+  })
+
+  it('offers octaves 1 to 7, those whose run leaves the keyboard greyed with where it would go', () => {
+    const two = { ...run, octaves: 2 }
+    expect(handOctaves(two).map(({ octave, out }) => `${octave}${out ?? ''}`)).toEqual([
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7above',
+    ])
+    expect(handOctaves({ ...run, root: note('A') }).at(-1)).toEqual({ octave: 7, out: 'above' })
+    expect(handOctaves({ ...run, root: note('A') })[0]).toEqual({ octave: 1 })
   })
 })
 

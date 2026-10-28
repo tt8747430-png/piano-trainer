@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { qualitiesIn, type SkillId } from '@/shared/lib/music'
-import { withAnswer, withHold, withLearned, withRun } from './changes'
+import { withAnswer, withHold, withLearned, withRun, withSectionRead } from './changes'
 import { CHORD_HOLDS } from './lessons'
 import { EMPTY_PROGRESS, type ProgressState } from './types'
 
@@ -81,6 +81,21 @@ describe('withRun', () => {
     expect(withRun(state, 'build-chord:2', { accuracy: 50, streak: 2 }).trainers).toEqual({
       'build-chord:1': { runs: 1, last: 100, best: 100, bestStreak: 10 },
       'build-chord:2': { runs: 1, last: 50, best: 50, bestStreak: 2 },
+    })
+  })
+})
+
+describe('withSectionRead', () => {
+  it('keeps each section read once, in order, lesson by lesson', () => {
+    const read = [2, 0, 2].reduce(
+      (state, section) => withSectionRead(state, 'lesson:triads', section),
+      EMPTY_PROGRESS,
+    )
+    expect(read.read).toEqual({ 'lesson:triads': [0, 2] })
+    expect(withSectionRead(read, 'lesson:triads', 2)).toBe(read)
+    expect(withSectionRead(read, 'course:c/l', 1).read).toEqual({
+      'lesson:triads': [0, 2],
+      'course:c/l': [1],
     })
   })
 })

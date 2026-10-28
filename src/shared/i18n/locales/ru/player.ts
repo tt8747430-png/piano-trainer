@@ -236,6 +236,21 @@ export const player: LocaleResources['player'] = {
   loopBar: 'Повторять такт {{first}}',
   loopBars: 'Повторять такты {{first}}–{{last}}',
   again: 'Ещё раз',
+  scalePractice: {
+    hands: 'Руки',
+    startsOn: { rh: 'Правая рука начинает с', lh: 'Левая рука начинает с' },
+    out: {
+      above: 'Гамма вышла бы за верх клавиатуры',
+      below: 'Гамма вышла бы за низ клавиатуры',
+    },
+    tempo: 'Темп',
+    metronome: 'Метроном',
+    rest: {
+      label: 'Щелчки между повторами',
+      info: 'Сколько долей щелчков перед каждым повтором, чтобы рука успела вернуться в начало',
+      none: 'Нет',
+    },
+  },
   exercise: {
     title: '{{name}}: {{of}}',
     scale: 'Гамма',

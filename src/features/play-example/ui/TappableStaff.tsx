@@ -19,6 +19,8 @@ function barSymbol(music: TimedMusic, start: Tick): string | undefined {
 
 /** How far a note's column reaches past the staff's lines, for notes on ledger lines. */
 const REACH = 16
+/** How far apart a chorale's voice letters stand at least, one over the next. */
+const LETTER_GAP = 12
 /** The band over the staff a bar's tap takes. */
 const BAR_BAND = 22
 
@@ -43,6 +45,7 @@ export function TappableStaff({
   follow = null,
   barShown,
   captions,
+  voices,
   onShow,
 }: {
   music: TimedMusic
@@ -68,6 +71,8 @@ export function TappableStaff({
   captions?: readonly (string | undefined)[] | undefined
   /** What the keys show for a bar tapped, by its place, where not its notes by name: a chord's degrees. */
   barShown?: ((bar: number) => ShownKeys | undefined) | undefined
+  /** Letters beside the first chord's notes, from its lowest up (`B T A S`): the voices of a chorale. */
+  voices?: readonly string[] | undefined
   /** Where the page's keys show what plays; none where the page has no keys to show it on. */
   onShow?: (shown: ShownKeys) => void
 }) {
@@ -145,8 +150,32 @@ export function TappableStaff({
         const ticks = columns.map((column) => column.tick)
         // A rest's onset plays nothing: only the notes are buttons.
         const onsets = columns.filter((column) => namesAt(music, column.tick) !== '')
+        // The first chord's heads, lowest first: on the grand staff the bass staff's lie below.
+        const first = voices
+          ? (layout.heads ?? [])
+              .filter((head) => head.tick === (ticks[0] ?? 0))
+              .sort((a, b) => b.top + b.bottom - (a.top + a.bottom))
+          : []
+        // Each letter by its note, stepping up clear of the one under it where the notes are close.
+        const letterTops = first.reduce<number[]>((tops, head) => {
+          const own = (head.top + head.bottom) / 2 - 6
+          const under = tops.at(-1)
+          return [...tops, under === undefined ? own : Math.min(own, under - LETTER_GAP)]
+        }, [])
         return (
           <>
+            {first.length === voices?.length
+              ? first.map((head, voice) => (
+                  <span
+                    key={head.id}
+                    aria-hidden
+                    className="pointer-events-none absolute z-10 text-xs leading-none font-semibold text-muted-foreground"
+                    style={{ left: head.right + 3, top: letterTops[voice] }}
+                  >
+                    {voices[voice]}
+                  </span>
+                ))
+              : null}
             {/* A passage's last line keeps its bar however short. */}
             {bars.length > 1 || firstBar > 1
               ? layout.measures.map((measure, i) => {

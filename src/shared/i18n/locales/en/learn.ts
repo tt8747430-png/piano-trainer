@@ -24,6 +24,9 @@ export const learn = {
   },
   progress: '{{learned}} of {{total}} learned',
   lessonNumber: 'Lesson {{n}}',
+  // A lesson's prerequisites in its contents, by number; how much of it is read, for a screen reader.
+  after: 'After {{lessons}}',
+  read: '{{percent}}% read',
   // Said after a learned lesson's or check's name, whose check mark is for the eye.
   learned: 'learned',
   current: 'You are here',
@@ -67,12 +70,20 @@ export const learn = {
   // Where a lesson is: a journey's chapter, or a course.
   place: 'Lesson {{n}} of {{total}}',
   placeLabel: 'Where this lesson is',
+  // The lessons to read before this one, each a link.
+  afterLinks: 'After:',
   contents: 'In this lesson',
   contentsAt: 'In this lesson: section {{at}} of {{of}}',
   // A lesson's floating actions: its sections one by one, and its options.
   previousSection: 'Previous section',
   nextSection: 'Next section',
   lessonBar: 'Lesson',
+  // A lesson's example in versions, the chips that choose one; a section's sentence at its end.
+  variants: 'Versions',
+  takeaway: 'In short',
+  // A lesson read a page at a time on a phone: on to its next page, and on past its last.
+  nextPage: 'Next',
+  done: 'Done',
   fingers: 'Fingers on the scales',
   // A lesson's example: the piece a pattern plays over, where it opens, and how to hear it.
   example: {

@@ -9,5 +9,13 @@ export {
 } from './barry-harris'
 export { inversionsExercise } from './inversions'
 export { innerVoice, modes, rapidSwitch, twoFiveOneScale } from './jonny'
-export { contraryExercise, scaleExercise, sequenceExercise } from './scales'
+export {
+  contraryExercise,
+  HAND_OCTAVES,
+  handOctaves,
+  ownHandOctaves,
+  scaleExercise,
+  sequenceExercise,
+  type HandOctaves,
+} from './scales'
 export { fiveFinger, hanon } from './technique'

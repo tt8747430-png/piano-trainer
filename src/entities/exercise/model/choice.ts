@@ -74,6 +74,10 @@ export interface ExerciseChoice {
   readonly voicing: Voicing
   readonly from: ChordToneFrom
   readonly tonality: Tonality
+  /** The octave the right hand starts in (a scale run's), where the learner chose one; else its own. */
+  readonly rhOctave?: number
+  /** The octave the left hand starts in, likewise. */
+  readonly lhOctave?: number
 }
 
 export const isOctaves = isOneOf(OCTAVES)

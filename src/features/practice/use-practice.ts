@@ -46,6 +46,8 @@ export interface PracticeSetup {
   readonly loop: BarRange | null
   readonly metronome: boolean
   readonly countIn: boolean
+  /** Beats of rest, each a click, before each repeat of the passage. */
+  readonly rest: number
   /** The piece's recording, played along in Listen; null plays none. */
   readonly recording: Recording | null
   /** How loud each part plays (ADR 0105): the hands, the staves, the recording and the click. */
@@ -125,6 +127,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
   }
 
   const { tempo, ownTempo, speedTraining, swing, metronome, countIn, mix } = setup
+  const restBeats = setup.rest
   // How loud each part plays, read as each sound comes to sound (ADR 0105): a change is heard from
   // then on, and starts nothing again. Only a part turned right down, or up from nothing, does: it
   // is then left out of the music, or brought into it, from the beat group playing.
@@ -182,6 +185,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
         metronome,
         clicks,
         swing,
+        rest: restBeats,
       },
       {
         reach: (beatGroup) => dispatch({ type: 'reach', beatGroup }),
@@ -216,6 +220,7 @@ export function usePractice(performance: Performance, setup: PracticeSetup): Pra
     swing,
     metronome,
     clicks,
+    restBeats,
     recording,
     passRequest,
   ])
