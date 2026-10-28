@@ -96,24 +96,28 @@ Three places: **Learn · Songs · Practice** (`app/router.tsx` has every route; 
 params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its README).
 
 - **Learn** (`/`, `?view=lessons|courses`) — the Lessons (journeys of chapters, `/lessons/$lessonId`) and the
-  Courses (`/courses/$courseId`, its lessons under it). `pages/learn`, `pages/course`, `pages/lesson`;
+  Courses (`/courses/$courseId`, its lessons under it); a lesson paged a section at a time on a phone, its
+  progress and prerequisites on the contents. `pages/learn`, `pages/course`, `pages/lesson`;
   `widgets/curriculum`, `widgets/lesson-view`; `entities/lesson`, `course`, `step`, `progress`.
-- **Songs** (`/songs`) — one library of folders, favourites and an archive; a song's page and its sections.
+- **Songs** (`/songs`) — one library of folders, favourites and an archive; a song's page and its sections;
+  MusicXML and MIDI import, MusicXML and MIDI export (`features/song-files`, `shared/lib/musicxml`).
   `pages/songs`, `pages/song-archive`, `pages/piece`; `widgets/song-library`; `features/manage-library`;
   `entities/library` (only what the learner changed, read over the catalog by `arrangeLibrary`) and
   `entities/piece` (the catalog, the learner's versions and own songs, `repertoire`).
 - **Practice** (`/practice`) — explorers (Chords, Scales and keys, Intervals, Progressions, Accompaniment), the
-  Chord finder, the Metronome, Exercises and Quiz. Each page holds the tools that work on its thing, never a page of
+  Chord finder, the Metronome, Exercises and Quiz (one setup and four drills for every trainer,
+  `widgets/trainer-setup`), in three groups. Each page holds the tools that work on its thing, never a page of
   their own. `pages/<thing>`, `widgets/*-explorer`, `widgets/practice-pages`, `features/trainer`.
 - **The Player** (`/play/$pieceId`, and walks, progressions and exercises under `/play/`) — one screen
   (`pages/player`'s `PlayerLayout`) over any Performance. `widgets/practice-player` (bar, tools row, dock,
   shortcuts), `widgets/chord-views` and `widgets/sheet-music` (the views), `widgets/player-setup`;
   `features/practice` (the practice machine, the arrangement of a piece, loops, beats) and `shared/lib/schedule`.
-- **The score editor** (`/edit/$pieceId`, takes under it) — the Player's score in Edit mode, sharing its bar and
+- **The score editor** (`/edit/$pieceId`, takes under it) — Flat's palette: a docked panel and a note-entry
+  toolbar from 48rem wide, a bottom sheet on a phone (`EditorPalette`, `TOOL_SHORTCUTS`); the Player's score in Edit mode, sharing its bar and
   transport (`widgets/mode-switch`, `ScoreBar`). `pages/score-editor`, `widgets/score-sheet`;
   `features/score-editor` (the draft, its pure edits, undo, `createEditorStore`), `features/edit-piece` (saving),
   `features/record-take` and `manage-takes`.
-- **Elsewhere** — Search (`/search`), Settings (`/settings`, How to use under it), a shared song
+- **Elsewhere** — Search (`/search`), Settings (`/settings`, How to use and the MIDI keyboard with its log under it), a shared song
   (`/songs/shared`).
 
 **State:** what you look at → URL search params. What must be remembered → a saved entity store; a screen's last
