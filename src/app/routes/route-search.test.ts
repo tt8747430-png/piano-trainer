@@ -68,7 +68,7 @@ describe('search params', () => {
   it('keep what is valid', async () => {
     expect(
       await searchAt(
-        '/practice/chords?root=Bb&triad=min&size=7&seventh=major&inversion=2&hands=both&step=chords:sev',
+        '/practice/chords?root=Bb&triad=min&size=7&seventh=major&voicing=drop2&inversion=2&hands=both&step=chords:sev',
       ),
     ).toEqual({
       root: 'Bb',
@@ -77,10 +77,13 @@ describe('search params', () => {
       seventh: 'major',
       added: '',
       alter: '',
+      voicing: 'drop2',
       inversion: 2,
       hands: 'both',
       step: 'chords:sev',
     })
+    // A voicing the chord cannot take is read as close: a triad has no drop 2.
+    expect(await searchAt('/practice/chords?voicing=drop2')).toMatchObject({ voicing: 'close' })
     // From five notes a chord is in root position or has its right hand from the 7th (ADR 0046).
     expect(await searchAt('/practice/chords?size=9&inversion=3')).toMatchObject({ inversion: 3 })
     expect(await searchAt('/practice/chords?size=9&inversion=2')).toMatchObject({ inversion: 0 })

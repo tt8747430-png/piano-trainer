@@ -314,7 +314,16 @@ describe('Practice → Chords', () => {
     await screen.findByRole('heading', { level: 2, name: 'C7' })
     expect(
       screen.getAllByRole('radiogroup').map((group) => group.getAttribute('aria-label')),
-    ).toEqual(['Root', 'Quality', 'Chord size', '7th', 'Suspension', 'Inversion', 'Hands'])
+    ).toEqual([
+      'Root',
+      'Quality',
+      'Chord size',
+      '7th',
+      'Suspension',
+      'Voicing',
+      'Inversion',
+      'Hands',
+    ])
   })
 
   it('walks a chord the table names chromatically in the Player, from its root', async () => {
@@ -340,9 +349,22 @@ describe('Practice → Chords', () => {
   })
 
   it('offers no chromatic walk for a chord the table does not name', async () => {
-    await renderApp('/practice/chords?triad=sus4&size=13')
-    expect(await screen.findByRole('heading', { level: 2, name: 'C13sus4' })).toBeInTheDocument()
+    await renderApp('/practice/chords?triad=min&size=7&added=add11')
+    expect(await screen.findByRole('heading', { level: 2, name: 'Cm7(add11)' })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /^Chromatic walk/ })).not.toBeInTheDocument()
+  })
+
+  it('lays a chord out in the voicing chosen, its fingering under the keys, and greys the rest with why', async () => {
+    await renderApp('/practice/chords?size=7&seventh=major')
+    await screen.findByRole('heading', { level: 2, name: 'CMaj7' })
+    const voicing = screen.getByRole('radiogroup', { name: 'Voicing' })
+    expect(within(voicing).getByRole('radio', { name: 'So What' })).toHaveAccessibleDescription(
+      /minor or suspended/,
+    )
+    await userEvent.click(within(voicing).getByRole('radio', { name: 'Drop 2' }))
+    const fingering = await screen.findByRole('region', { name: 'Fingering' })
+    expect(within(fingering).getByRole('table', { name: 'Left hand' })).toHaveTextContent('G1')
+    expect(within(fingering).getByRole('table', { name: 'Right hand' })).toHaveTextContent('C1E2B5')
   })
 
   it('opens the chord’s arpeggio in the Player, on this chord', async () => {

@@ -27,10 +27,13 @@ describe('blockFingering', () => {
     // Four notes: 1-2-3-5 and 5-3-2-1, the 4 on a 2nd at the 5th finger's end.
     ['maj7', ['1235/5321', '1245/5321', '1235/5321', '1235/5421']],
     ['d7', ['1235/5321', '1245/5321', '1235/5321', '1235/5421']],
+    ['m7', ['1235/5321', '1245/5321', '1235/5321', '1235/5421']],
+    ['hd', ['1235/5321', '1245/5321', '1235/5321', '1235/5421']],
     ['o7', ['1235/5321', '1235/5321', '1235/5321', '1235/5321']],
     ['six', ['1245/5321', '1235/5321', '1235/5421', '1235/5321']],
     // Two 2nds together at the 5th finger's end take 3-4-5.
     ['add9', ['1235/5321', '1245/5321', '1345/5321', '1235/5431']],
+    // The nine chords above with Vita Piano's lessons agree with its tables, inversion by inversion.
   ])('fingers %s in each inversion', (quality, rows) => {
     expect(byInversion(quality)).toEqual(rows)
   })
