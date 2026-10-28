@@ -36,7 +36,7 @@ were the measure (line breaking, beams, courtesy signatures, page filling).
   multi-bar rest is one `<measure>` with `<multiRest num>` named by its first bar, its other bars not drawn, while
   they stay empty and nothing is marked or changes between them. The layout shares the drawn measure's width among
   the bars it stands for, so the playhead and the caret walk through them.
-- **Flat's marks as MEI**: 8va/8vb/15ma/15mb as `<octave dis>`, a glissando `<gliss>` to the next note, portato as
+- **Flat's marks as MEI**: 8va/8vb/15ma/15mb as `<octave dis>` (written in the measure its line starts in, where Verovio reads it), a glissando `<gliss>` to the next note, portato as
   `ten-stacc`, a breath mark and a caesura after their note, the inverted turn `<turn form="lower">`, a tremolo's
   strokes `stem.mod`, a two-note tremolo `<fTrem unitdur>` over a pair of quarters or halves, each written as
   long as the pair (another pair is written as its notes), a tempo change `<tempo>` over its note, a swing mark and free text as `<dir>`, a Roman
@@ -70,3 +70,4 @@ LilyPond's cautionary accidentals at a line's start are not written: each line i
   the engraving with LilyPond, deleted.
 - 2026-10-28 — The 64th, tuplets of 2 to 9 found from the timing, Flat's marks, bar repeats and multi-bar rests drawn
   as their signs, page breaks.
+- 2026-10-28 — An octave line written in its first measure, not the one after its last note.
