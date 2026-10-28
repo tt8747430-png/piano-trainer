@@ -508,6 +508,58 @@ describe('the editor', () => {
     expect(run(chosen, { type: 'move', by: 'step', direction: 1, extend: false }).grace).toBe(false)
   })
 
+  it('undoes and redoes an edit with what it acted on still chosen: the notes chosen, a chord’s one note', () => {
+    const written = run(start(), key(60, 0), key(62, 500), key(64, 1000))
+    const chosen = run(
+      written,
+      { type: 'place', tick: 0, layer: 'staff0' },
+      { type: 'move', by: 'step', direction: 1, extend: true },
+    )
+    const stepped = run(chosen, { type: 'step', steps: 1 })
+    const undone = run(stepped, { type: 'undo' })
+    expect(undone.selection).toEqual(chosen.selection)
+    // The next step moves both again.
+    expect(shape(staffNotes(run(undone, { type: 'step', steps: 2 }).draft))).toEqual([
+      'E4@0/1',
+      'F#4@1/1',
+      'E4@2/1',
+    ])
+    expect(run(undone, { type: 'redo' }).selection).toEqual(stepped.selection)
+
+    const chord = run(
+      start('rh'),
+      { type: 'mode', mode: 'chord' },
+      key(60, 0),
+      key(64, 900),
+      key(67, 2000),
+      { type: 'chordNote', direction: 1 },
+    )
+    expect(chord.chordNote).toBe(67)
+    const raised = run(chord, { type: 'step', steps: 1 })
+    expect(raised.chordNote).toBe(69)
+    const back = run(raised, { type: 'undo' })
+    expect(back.chordNote).toBe(67)
+    expect(run(back, { type: 'redo' }).chordNote).toBe(69)
+  })
+
+  it('undoes and redoes a grace note’s edit with the grace note still chosen', () => {
+    const back = run(start(), key(60, 0), { type: 'place', tick: 0, layer: 'staff0' })
+    const chosen = run(back, { type: 'grace', kind: 'appoggiatura' })
+    const stepped = run(chosen, { type: 'step', steps: 1 })
+    const undone = run(stepped, { type: 'undo' })
+    expect(staffNotes(undone.draft)[0]?.marks?.grace?.[0]?.midi).toBe(62)
+    expect(undone.grace).toBe(true)
+    // The next step moves the grace note again, never its note.
+    const again = run(undone, { type: 'step', steps: -1 })
+    expect(staffNotes(again.draft)[0]?.marks?.grace?.[0]?.midi).toBe(60)
+    expect(staffNotes(again.draft)[0]?.midi).toBe(60)
+    const redone = run(undone, { type: 'redo' })
+    expect(staffNotes(redone.draft)[0]?.marks?.grace?.[0]?.midi).toBe(64)
+    expect(redone.grace).toBe(true)
+    // Undoing the grace note itself goes back to its note.
+    expect(run(chosen, { type: 'undo' }).grace).toBe(false)
+  })
+
   it('chooses a grace note where its head is tapped on the sheet, to edit it as a note', () => {
     const graced = run(
       start(),
