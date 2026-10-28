@@ -1,5 +1,5 @@
 import type { Finger, Hand } from './fingering'
-import { chordInversions, placeChord, TWO_HANDS_FROM } from './place'
+import { chordInversions, placeChord, TWO_HANDS_FROM, type PlacedChord } from './place'
 import type { Midi } from './pitch'
 import type { Tone } from './tone'
 
@@ -51,6 +51,7 @@ function fromThumb(gaps: readonly number[]): Finger[] {
  */
 export function handFingers(keys: readonly Midi[], hand: Hand): Finger[] {
   const sorted = [...keys].sort((a, b) => a - b)
+  if (sorted.length === 0) return []
   const gaps = sorted.slice(1).map((key, i) => key - (sorted[i] ?? key))
   if (hand === 'rh') return fromThumb(gaps)
   if (sorted.length === 1) return [5]
@@ -81,4 +82,30 @@ export function blockFingering(tones: readonly Tone[]): ChordFingers[] {
     const keys = placed.rh.map((key) => key.midi)
     return { rh: handFingers(keys, 'rh'), lh: handFingers(keys, 'lh') }
   })
+}
+
+/** Within an octave of the right hand, a lone left-hand key is the thumb's: a voice, not a bass. */
+const OCTAVE = 12
+
+/**
+ * The fingers of keys as they are placed, each hand's from its lowest key up. A lone left-hand key
+ * an octave or more under the right hand is a bass, the 5th finger's; nearer, it is a voice of the
+ * chord (drop 2's dropped note, locked hands' doubled melody), the thumb's.
+ */
+export function placedFingering(placed: PlacedChord): ChordFingers {
+  const [lone, ...more] = placed.lh
+  const [lowest] = placed.rh
+  const voice = lone && more.length === 0 && lowest && lowest.midi - lone.midi < OCTAVE
+  return {
+    lh: voice
+      ? [1]
+      : handFingers(
+          placed.lh.map((key) => key.midi),
+          'lh',
+        ),
+    rh: handFingers(
+      placed.rh.map((key) => key.midi),
+      'rh',
+    ),
+  }
 }

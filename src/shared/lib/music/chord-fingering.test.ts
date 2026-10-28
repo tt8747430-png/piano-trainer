@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { spellChord, type ChordQuality } from './chord'
-import { blockFingering, handFingers } from './chord-fingering'
+import { blockFingering, handFingers, placedFingering } from './chord-fingering'
 import { note, type SpelledNote } from './note'
 import { midi } from './pitch'
+import { voiceChord } from './voicing'
 
 const C4 = 60
 const keys = (...semitones: number[]) => semitones.map((each) => midi(C4 + each))
@@ -74,5 +75,28 @@ describe('handFingers', () => {
 
   it('reads the keys from the lowest, whatever order they come in', () => {
     expect(digits(handFingers(keys(7, 0, 4), 'rh'))).toBe('135')
+  })
+})
+
+describe('placedFingering', () => {
+  const fingered = (
+    quality: ChordQuality,
+    voicing: Parameters<typeof voiceChord>[1],
+    inversion = 0,
+  ) => {
+    const { lh, rh } = placedFingering(
+      voiceChord(spellChord(note('C'), quality), voicing, inversion),
+    )
+    return `${digits(lh)}/${digits(rh)}`
+  }
+
+  it('takes a dropped voice or a doubled melody with the left thumb', () => {
+    expect(fingered('maj7', 'drop2')).toBe('1/125')
+    expect(fingered('maj7', 'locked', 2)).toBe('1/1235')
+  })
+
+  it('fingers a left-hand voicing as a block', () => {
+    expect(fingered('maj7', 'rootlessA')).toBe('5321/')
+    expect(fingered('m7', 'soWhat')).toBe('41/135')
   })
 })

@@ -11,8 +11,10 @@ import {
   sizesOf,
   withAdded,
   withAlterations,
+  voicingTakesInversion,
   type AddedTone,
   type BuiltSize,
+  type PlacedChord,
   type Tone,
   type Triad,
 } from '@/shared/lib/music'
@@ -27,6 +29,7 @@ import {
 } from '@/shared/ui'
 import { isSuspended, takesTwoHands, type ChordView } from '../model/chord-view'
 import { RightHandFrom } from './RightHandFrom'
+import { VoicingField } from './VoicingField'
 
 /** A chord's quality: its 3rd and 5th, or its 5th alone. A suspension is a field of its own. */
 const QUALITIES = ['maj', 'min', 'aug', 'dim', 'power'] as const satisfies readonly Triad[]
@@ -64,11 +67,14 @@ const SIZE_NAMES = {
 export function ChordBuilder({
   chord,
   tones,
+  placed,
   onChange,
 }: {
   chord: ChordView
   /** The chord's tones: how many say its inversions, and whether one hand holds it. */
   tones: readonly Tone[]
+  /** Its keys in the voicing chosen: what the voicing's ⓘ spells. */
+  placed: PlacedChord
   onChange: (change: Partial<ChordView>) => void
 }) {
   const { t } = useTranslation(['practice', 'music', 'common'])
@@ -80,7 +86,9 @@ export function ChordBuilder({
   const sevenths = seventhsOf(parts.triad, parts.size)
   const added = addedOf(parts)
   const alterations = alterationsOf(parts)
-  const twoHands = takesTwoHands(tones.length)
+  const close = chord.voicing === 'close'
+  const twoHands = close && takesTwoHands(tones.length)
+  const inverts = voicingTakesInversion(chord.voicing)
   return (
     <div className="grid-fields gap-x-10 gap-y-5">
       <div className="col-span-full">
@@ -172,6 +180,12 @@ export function ChordBuilder({
           />
         </Labelled>
       ) : null}
+      <VoicingField
+        tones={tones}
+        placed={placed}
+        value={chord.voicing}
+        onChange={(voicing) => onChange({ voicing })}
+      />
       {twoHands ? (
         chordInversions(tones).length > 1 ? (
           <Labelled label={t('practice:chords.builder.handFrom')}>
@@ -186,12 +200,13 @@ export function ChordBuilder({
         <Labelled label={t('music:inversion.label')}>
           <InversionChoice
             notes={Math.max(tones.length, 3)}
+            disabled={!inverts}
             greyed={(inversion) =>
               inversion > lastInversion(tones.length)
                 ? t('practice:chords.builder.powerInversion')
                 : undefined
             }
-            value={chord.inversion}
+            value={inverts ? chord.inversion : null}
             onChange={(inversion) => onChange({ inversion })}
           />
         </Labelled>
@@ -199,8 +214,8 @@ export function ChordBuilder({
       <Labelled label={t('practice:hands')}>
         <Segmented
           label={t('practice:hands')}
-          value={twoHands ? 'both' : chord.hands}
-          disabled={twoHands}
+          value={close ? (twoHands ? 'both' : chord.hands) : null}
+          disabled={!close || twoHands}
           options={[
             { value: 'rh', label: t('common:handsShort.rh') },
             { value: 'both', label: t('common:handsShort.both') },

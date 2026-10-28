@@ -35,6 +35,8 @@ import {
   type ScaleKind,
   SEVENTHS,
   TRIADS,
+  VOICINGS,
+  voicingBar,
 } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { ChordView } from '@/widgets/chord-explorer'
@@ -68,6 +70,7 @@ export const CHORDS_DEFAULTS: ChordsSearch = {
   seventh: 'minor',
   added: '',
   alter: '',
+  voicing: 'close',
   inversion: 0,
   hands: 'rh',
 }
@@ -75,6 +78,7 @@ const isTriad = isOneOf(TRIADS)
 const isBuiltSize = isOneOf(BUILT_SIZES)
 const isSeventh = isOneOf(SEVENTHS)
 const isChordHands = isOneOf<ChordView['hands']>(['rh', 'both'])
+const isVoicing = isOneOf(VOICINGS)
 const isChordsStep = (value: unknown): value is ChordsStepId =>
   isStepId(value) && value.startsWith('chords:')
 export function readChordsSearch(raw: Raw): ChordsSearch {
@@ -88,12 +92,13 @@ export function readChordsSearch(raw: Raw): ChordsSearch {
   const read = readNote(raw.root)
   const root = read ?? note('C')
   const asked = wholeIn(raw.inversion, 0, INVERSIONS.length - 1, CHORDS_DEFAULTS.inversion)
+  const { tones } = buildChord(root, parts)
+  const voicing = valueOr(isVoicing, raw.voicing, CHORDS_DEFAULTS.voicing)
   return {
     root: noteParam(root),
     ...partsParams(parts),
-    inversion: chordInversions(buildChord(root, parts).tones).includes(asked)
-      ? asked
-      : CHORDS_DEFAULTS.inversion,
+    voicing: voicingBar(tones, voicing) ? CHORDS_DEFAULTS.voicing : voicing,
+    inversion: chordInversions(tones).includes(asked) ? asked : CHORDS_DEFAULTS.inversion,
     hands: valueOr(isChordHands, raw.hands, CHORDS_DEFAULTS.hands),
     step: isChordsStep(raw.step) ? raw.step : undefined,
   }
