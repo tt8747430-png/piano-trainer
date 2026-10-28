@@ -4,8 +4,12 @@ From `spec.md`. Run inline, a task at a time: its test first (watch it fail), th
 `typecheck`, `lint`, `test:related` on its files, one commit. The full suite and the build once at each round's end,
 then the branch and `main`. Later rounds get their plan when they start, from what these two leave.
 
-Packages, said before they're added: `valibot` (task 0.1), `@supabase/supabase-js` and `supabase` (CLI, dev) in
-round 1, `rxdb` in round 2.
+Packages, said before they're added: `@supabase/supabase-js` and `supabase` (CLI, dev) in round 1, `rxdb` and
+`valibot` in round 2.
+
+**Order changed while building (2026-10-29):** schemas (0.1) move to round 2, where each store becomes sync
+documents, so the sanitisers are rewritten once, not twice; branded ids (0.2) are built with the content port (0.5),
+where the kinds get their ids. Round 0 runs 0.3 → 0.4 → 0.6 → 0.5.
 
 ## Round 0: the seams
 
@@ -13,7 +17,7 @@ round 1, `rxdb` in round 2.
 optional, content audiences and downloads, the seams below; adapted from memory-palaces' ADRs 0004 and 0005; added to
 the index.
 
-**0.1 Schemas (Valibot).**
+**0.1 Schemas (Valibot)** — moved to round 2.
 - `shared/lib/schema.ts`: `savedShape(schema)` reading a save field by field, each field to its default when it
   fails (CLAUDE.md's rule as a function).
 - Each entity's sanitiser becomes its `model/schema.ts`; the type is `v.InferOutput<typeof Schema>`; `store.ts` reads
@@ -22,7 +26,7 @@ the index.
   version's save starts from the initial state); every store's existing tests stay green unchanged.
 - Check: `test:related` on every `store.ts`; no sanitiser left (`grep -r "function sanitis" src` empty).
 
-**0.2 Branded ids and slugs.**
+**0.2 Branded ids and slugs** — built within 0.5.
 - `shared/lib/id.ts`: `type Id<Brand> = string & { readonly __brand: Brand }` and a validating constructor per kind.
 - `PieceId`, `LessonId`, `CourseId`, `PatternId`, `ProgressionId`, `ExerciseId`, `BookId` in their entities' `types.ts`;
   the URL's param stays the slug, parsed to the id at the route.
@@ -44,7 +48,17 @@ the index.
   the boot gate renders nothing until ready, then the app.
 - Check: the full suite at the round's end (it touches every store and the test setup).
 
-**0.5 Content through one gateway.**
+**0.5 Content through one gateway.** Design settled while building (2026-10-29), from where content is read:
+- **Synchronous, always on the device:** the small kinds whole (exercises, patterns' figures and methods, the
+  progression library, books: ~180 KB) and every item's **index entry** (a piece's title, level, key, collection,
+  sections' names; a course's and a journey's structure; a lesson's title and place). Lists, search, filters, the
+  router's not-found checks and progress keep reading these synchronously, as today.
+- **Asynchronous, through the port:** only the **bodies**: a piece's chart or score, a lesson's sections (~2.8 MB).
+  Their readers are few: the Player, the song page and its sections, the score editor, the lesson view.
+- So the piece and lesson types split into `…Entry` (index) and `…Body`; `pieceById` and `lessonById` give entries;
+  `useContent('piece' | 'lesson', id)` gives the body with its status. The learner's own songs and versions stay
+  whole in their store (always on the device) and come back from `useContent` ready at once.
+
 - `shared/api/content/port.ts`: `ContentPort { catalog(kind): Promise<CatalogEntry[]>, item(kind, id):
   Promise<NetResult<Item>>, watch(on) }`; `filesContentPort()` serving today's `entities/*/content`; a fake.
 - `shared/lib/content/use-content.ts`: `useContent(kind, id)` → `{ status: 'loading' | 'ready' | 'offline' |
