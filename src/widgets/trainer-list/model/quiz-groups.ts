@@ -6,8 +6,8 @@ type QuizGroup = (typeof QUIZ_GROUPS)[number]
 
 /** Every trainer but My gaps (which checks across them, from the page's bar) in one group. */
 export const QUIZ_TRAINERS: Readonly<Record<QuizGroup, readonly TrainerId[]>> = {
-  chords: ['build-chord', 'name-chord', 'chord-role'],
+  chords: ['chords', 'intervals', 'chord-role'],
   scales: ['build-scale', 'key-signatures', 'key-degrees'],
-  ear: ['intervals-by-ear', 'chords-by-ear', 'scales-by-ear', 'progressions-by-ear'],
+  ear: ['scales-by-ear', 'progressions-by-ear'],
   reading: ['reading-notes'],
 }

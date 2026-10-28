@@ -24,3 +24,4 @@ export {
 export { NOTE_VALUES, ticksOf, TUPLET_COUNTS, tupletOf, valuesOf, type TupletCount } from './values'
 export { labelLead, lineLead, measureWidths } from './measure-widths'
 export { scoreToMei, type NextLine, type PrintedName, type StaffLabels } from './mei'
+export { barStartOf, beamPlan } from './beams'

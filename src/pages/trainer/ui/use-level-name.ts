@@ -9,7 +9,6 @@ const isLevelOf = {
   chords: isOneOf(LADDERS.chords),
   scales: isOneOf(LADDERS.scales),
   intervals: isOneOf(LADDERS.intervals),
-  qualities: isOneOf(LADDERS.qualities),
   scalesByEar: isOneOf(LADDERS.scalesByEar),
   notes: isOneOf(LADDERS.notes),
   signatures: isOneOf(LADDERS.signatures),
@@ -23,7 +22,6 @@ const NAMES: Readonly<Record<Ladder, (level: string, t: TFunction<'quiz'>) => st
   chords: (level, t) => (isLevelOf.chords(level) ? t(`levels.chords.${level}`) : null),
   scales: (level, t) => (isLevelOf.scales(level) ? t(`levels.scales.${level}`) : null),
   intervals: (level, t) => (isLevelOf.intervals(level) ? t(`levels.intervals.${level}`) : null),
-  qualities: (level, t) => (isLevelOf.qualities(level) ? t(`levels.qualities.${level}`) : null),
   scalesByEar: (level, t) =>
     isLevelOf.scalesByEar(level) ? t(`levels.scalesByEar.${level}`) : null,
   notes: (level, t) => (isLevelOf.notes(level) ? t(`levels.notes.${level}`) : null),

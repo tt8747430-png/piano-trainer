@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import { RowGroup, ScreenHeader } from '@/shared/ui'
-import { PageRow, PRACTICE_GROUPS, THINGS } from '@/widgets/practice-pages'
+import { PageRow, PRACTICE_GROUPS } from '@/widgets/practice-pages'
 import { GapsBadge, useGapsCount } from '@/widgets/trainer-list'
 
 /**
- * Practice (ADR 0052): the things, under no heading, each a page that shows one on the keys; then
- * the Chord finder at the keys; then the training.
+ * Practice (ADR 0052): its pages in three headed groups, Theory, Playing and Training, each a row
+ * with its tile, its name and one short line.
  */
 export function PracticePage() {
   const { t } = useTranslation('practice')
@@ -14,13 +14,6 @@ export function PracticePage() {
     <div className="flex flex-col gap-2">
       <ScreenHeader title={t('title')} />
       <div className="flex flex-col gap-8">
-        <ul className="grid-cards gap-2 *:card">
-          {THINGS.map((page) => (
-            <li key={page}>
-              <PageRow page={page} />
-            </li>
-          ))}
-        </ul>
         {PRACTICE_GROUPS.map((group) => (
           <RowGroup key={group.id} title={t(`groups.${group.id}`)}>
             {group.pages.map((page) => (

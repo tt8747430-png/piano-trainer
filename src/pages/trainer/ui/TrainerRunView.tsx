@@ -10,17 +10,20 @@ import { RunResults, TrainerBoard } from '@/widgets/trainer-board'
 export function TrainerRunView({
   asks,
   rounds,
+  limit,
   runKey,
   onDone,
 }: {
   asks: Asks
   rounds: number
+  /** Each round's time limit in seconds; none, no limit. */
+  limit?: number | undefined
   runKey: RunKey
   onDone: () => void
 }) {
   const { t } = useTranslation('quiz')
   const { autoNext } = useSettings(selectTrainer)
-  const trainer = useTrainer(asks, { rounds, runKey, autoNext })
+  const trainer = useTrainer(asks, { rounds, runKey, autoNext, ...(limit ? { limit } : {}) })
   if (trainer.summary) {
     return <RunResults summary={trainer.summary} onAgain={trainer.again} onDone={onDone} />
   }
@@ -48,7 +51,7 @@ export function TrainerRunView({
           className="-mt-2"
         />
       ) : null}
-      <TrainerBoard trainer={trainer} asks={asks} />
+      <TrainerBoard trainer={trainer} asks={asks} limit={limit} />
     </div>
   )
 }

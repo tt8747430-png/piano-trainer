@@ -90,6 +90,8 @@ export interface KeyboardSettings {
   readonly chordNames: boolean
   /** The computer keyboard plays the keys. */
   readonly typing: boolean
+  /** A chord or a scale chosen on a Practice page plays as it is chosen. */
+  readonly autoplay: boolean
   /** Where a page's keys stay while it scrolls. */
   readonly dock: KeyDock
   /** A page's keys folded away to a button that brings them back. */
@@ -105,14 +107,14 @@ export interface KeyboardSettings {
 }
 
 /**
- * Where the score editor's palette stands: beside the sheet (a laptop, a phone on its side), at its
- * right (ADR 0114), or at its foot.
+ * Where the score editor's palette stands (ADR 0114, Flat's): a panel docked at the sheet's left
+ * (a laptop, a tablet, a phone on its side), or a sheet docked at its foot (a phone held upright).
  */
-export const PALETTE_PLACES = ['beside', 'foot'] as const
+export const PALETTE_PLACES = ['panel', 'sheet'] as const
 export type PalettePlace = (typeof PALETTE_PLACES)[number]
 /**
  * Whether the palette is folded, as the learner last left it in each place; a place never chosen
- * takes its default (ADR 0114): open beside the sheet, where it covers no music, folded at the foot.
+ * takes its default (ADR 0114): the panel shown, the sheet compact (its quick row and its tabs).
  */
 export type PaletteFolds = Readonly<Partial<Record<PalettePlace, boolean>>>
 
@@ -130,6 +132,8 @@ export interface RecorderSettings {
 
 /** The MIDI keyboard's settings. */
 export interface MidiSettings {
+  /** MIDI input on: a keyboard the learner allowed is heard again as the app opens. */
+  readonly input: boolean
   /** The keyboard heard, by its name; null: any. */
   readonly device: string | null
   /** The app sounds the keys played on it: for a keyboard with no speaker. */
@@ -298,6 +302,7 @@ export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false }
 
 /** The owner's piano sounds itself: the app sounds no MIDI key until asked. */
 export const DEFAULT_MIDI: MidiSettings = {
+  input: true,
   device: null,
   sound: false,
   throughPiano: false,
@@ -327,6 +332,7 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   markNotes: true,
   chordNames: true,
   typing: finePointer,
+  autoplay: true,
   dock: 'bottom',
   folded: false,
   foldedLandscape: true,

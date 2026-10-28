@@ -2,6 +2,7 @@ import type { ScoreViewSettings } from '@/entities/settings'
 import {
   fingeredAt,
   isHandLayer,
+  notesOf,
   singsHere,
   sungFrom,
   type EditorState,
@@ -21,6 +22,7 @@ export type FieldReason =
   | 'lyricsOn.rh'
   | 'noNotes'
   | 'hand'
+  | 'staff'
   | 'chooseNote'
 
 /** What the View shows that a field writes: the chord symbols, the words, the notes' fingers. */
@@ -52,6 +54,11 @@ export function fieldClosedBy(
       if (!shown.fingers) return 'fingersHidden'
       if (!isHandLayer(layer)) return 'hand'
       return fingeredAt(state).length > 0 ? null : 'chooseNote'
+    // Free text and a tempo mark stand over a note of a staff (ADR 0097).
+    case 'text':
+    case 'tempo':
+      if (layer === 'chords') return 'staff'
+      return notesOf(draft, layer).some((n) => n.startTick === caret) ? null : 'chooseNote'
   }
 }
 

@@ -61,6 +61,7 @@ export function PlayerLayout({
   staves = NO_STAVES,
   recording,
   more,
+  musicXml,
   status,
   openView = false,
 }: {
@@ -91,6 +92,8 @@ export function PlayerLayout({
   modes?: ReactNode
   /** The music's own in More, before Print: a piece's Song information, Sections and Share (ADR 0107). */
   more?: readonly MenuAction[] | undefined
+  /** More's Export to MusicXML, after its MIDI: a piece's music as written (ADR 0107). */
+  musicXml?: (() => void) | undefined
   /** What the screen says beside Wait mode's line: what a piece's Share said. */
   status?: ReactNode
   /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0108). */
@@ -155,6 +158,7 @@ export function PlayerLayout({
               recording={recording}
               staves={names}
               actions={more}
+              musicXml={musicXml}
               onPrint={() => setPrinting(true)}
             />
           </>

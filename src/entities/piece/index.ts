@@ -18,6 +18,7 @@ export {
   defaultLyricsStaff,
   isLeadSheet,
   lyricsStaff,
+  SECTION_KINDS,
   SONG_SECTION_KINDS,
   STAFF_NAME_MAX,
   staffName,

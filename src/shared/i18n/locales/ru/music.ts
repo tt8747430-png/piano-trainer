@@ -135,7 +135,6 @@ export const music: LocaleResources['music'] = {
     majorMode: 'Мажор',
     minorMode: 'Минор',
   },
-  note: { letter: 'Нота', accidental: 'Знак', natural: 'Бекар', sharp: 'Диез', flat: 'Бемоль' },
   interval: {
     r: { name: 'Прима', short: 'ч1' },
     m2: { name: 'Малая секунда', short: 'м2' },

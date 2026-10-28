@@ -19,6 +19,14 @@ export const showsOf = (kind: ScaleKind): readonly ScaleShow[] =>
       show === 'scale' || (show === 'chords' ? scaleHasChords(kind) : keyMode(kind) !== null),
   )
 
+/** What the run's keys carry, as the reference's switch over its keys: its notes, or a hand's fingers. */
+export const RUN_KEY_SHOWS = ['notes', 'lh', 'rh'] as const
+export type RunKeyShow = (typeof RUN_KEY_SHOWS)[number]
+
+/** What the run's keys carry where the view names nothing: the playing hand's fingers, the right for both. */
+export const runKeyShow = (view: Pick<ScaleView, 'onKeys' | 'hands'>): RunKeyShow =>
+  view.onKeys ?? (view.hands === 'lh' ? 'lh' : 'rh')
+
 /** What the Scales explorer shows: the scale, what its keys carry, and how it is practised. */
 export interface ScaleView {
   readonly root: NoteParam
@@ -36,6 +44,8 @@ export interface ScaleView {
   readonly tempo: number
   /** The hand that plays the run, or both; its fingers stand under the keys (the right hand's for both). */
   readonly hands: Hands
+  /** What the run's keys carry (Scale view); absent, the playing hand's fingers. */
+  readonly onKeys?: RunKeyShow
   /** How many notes each chord stacks: 3 a triad … 7 a 13th (Chords view). */
   readonly chords: ChordNotes
   /** Root position (0) to the 3rd inversion, as far as the chords stack. */

@@ -1,18 +1,18 @@
-import { Ellipsis, FileMusic, Printer } from 'lucide-react'
+import { Ellipsis, FileCode, FileMusic, Printer } from 'lucide-react'
 import { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStaffTitle } from '@/entities/piece'
 import type { Recording } from '@/shared/lib/schedule'
 import { ActionMenu, type MenuAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { exportMidi, type PlayedMusic } from '../model/export-midi'
+import { exportMidi, type PlayedMusic } from '@/features/song-files'
 import { MoreActions } from './more-actions'
 
 /**
  * The bar's More (ADR 0108), after the Setup, in the song page's More's look: a piece's place in the
  * library (`MoreActions`, ADR 0106: Add to favourites, Move to…, Archive), the music's own
  * (`actions`: a piece's Song information, Sections and Share, ADR 0107), Print (the music as the
- * View shows it, ADR 0107) and Export to MIDI: the music as the Player plays it now, at the tempo
+ * View shows it, ADR 0107), Export to MIDI and a piece's Export to MusicXML (its music as written): the music as the Player plays it now, at the tempo
  * chosen, saved under its title and tempo, each part's track named as the screen names it; where a
  * recording plays along, at a fixed tempo or time aligned to the recording (ADR 0107). A walk, a
  * progression, a chromatic walk or an exercise has Print and Export to MIDI alone.
@@ -22,6 +22,7 @@ export function PlayerMore({
   recording,
   staves,
   actions = [],
+  musicXml,
   onPrint,
 }: {
   music: Omit<PlayedMusic, 'names' | 'lead'>
@@ -30,6 +31,8 @@ export function PlayerMore({
   /** Each single staff's own name, top down; none where a staff has none. */
   staves: readonly (string | undefined)[]
   actions?: readonly MenuAction[] | undefined
+  /** Export to MusicXML: a piece's music as written; none for a walk or an exercise. */
+  musicXml?: (() => void) | undefined
   onPrint: () => void
 }) {
   const { t } = useTranslation(['player', 'common'])
@@ -78,6 +81,16 @@ export function PlayerMore({
         ...actions,
         { key: 'print', label: t('player:print'), icon: Printer, onSelect: onPrint },
         ...midi,
+        ...(musicXml
+          ? [
+              {
+                key: 'musicxml',
+                label: t('player:exportMusicXml'),
+                icon: FileCode,
+                onSelect: musicXml,
+              },
+            ]
+          : []),
       ]}
     />
   )

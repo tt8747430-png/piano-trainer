@@ -14,7 +14,15 @@ import {
 import { PIECES_STORAGE_KEY, PIECES_VERSION } from '@/entities/piece'
 import { markLearned } from '@/features/mark-learned/mark-learned'
 import { createMemoryStorage } from '@/shared/lib'
+import { noteEvents, standardMidiFile } from '@/shared/lib/standard-midi-file'
 import { stubBox } from '@/shared/test/layout'
+
+/** A file chosen in Import's picker. */
+function choose(file: File) {
+  const picker = document.querySelector<HTMLInputElement>('input[type="file"]')
+  if (!picker) throw new Error('a file picker')
+  fireEvent.change(picker, { target: { files: [file] } })
+}
 
 const SONG = {
   id: 'my-1',
@@ -321,6 +329,47 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     })
     const folders = await screen.findByRole('region', { name: 'Folders' })
     expect(rowNames(folders).at(-1)).toBe('New folder Empty')
+  })
+
+  it('imports a MIDI file from New as the learner’s song, opening its page (ADR 0107)', async () => {
+    const user = userEvent.setup()
+    const { piecesStore } = await renderApp('/songs')
+    await user.click(await screen.findByRole('button', { name: 'New' }))
+    await user.click(await screen.findByRole('button', { name: 'Import' }))
+    const midi = standardMidiFile([
+      { events: noteEvents([{ key: 60, on: 0, off: 1920, velocity: 80 }], 0), end: 1920 },
+    ])
+    choose(new File([midi], 'Tune.mid', { type: 'audio/midi' }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Tune' })).toBeInTheDocument()
+    expect(piecesStore.getState().songs).toMatchObject([{ id: 'my-1', title: 'Tune' }])
+  })
+
+  it('says what a file dropped on the library left out, then opens the song', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs')
+    const text = `<score-partwise><part-list><score-part id="P1"><part-name>Flute</part-name></score-part></part-list>
+      <part id="P1"><measure><attributes><divisions>1</divisions></attributes>
+      <direction><direction-type><dynamics><sfz/></dynamics></direction-type></direction>
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration></note></measure></part></score-partwise>`
+    const file = new File([text], 'Air.musicxml')
+    fireEvent.drop(await screen.findByRole('region', { name: 'Folders' }), {
+      dataTransfer: { types: ['Files'], files: [file] },
+    })
+    const sheet = await screen.findByRole('dialog', { name: 'Imported' })
+    expect(
+      within(sheet).getByText('Dynamics the app doesn’t write (sfz, fp, ppp)'),
+    ).toBeInTheDocument()
+    await user.click(within(sheet).getByRole('button', { name: 'Open the song' }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Air' })).toBeInTheDocument()
+  })
+
+  it('says plainly why a file is no song, offering another', async () => {
+    await renderApp('/songs')
+    await screen.findByRole('button', { name: 'New' })
+    choose(new File(['just words'], 'notes.txt'))
+    const sheet = await screen.findByRole('dialog', { name: 'Can’t import notes.txt' })
+    expect(within(sheet).getByRole('alert')).toHaveTextContent(/^It isn’t a score\./)
+    expect(within(sheet).getByRole('button', { name: 'Choose another file' })).toBeInTheDocument()
   })
 
   it('archives a folder with its songs, the toast’s Undo putting it back where it stood', async () => {

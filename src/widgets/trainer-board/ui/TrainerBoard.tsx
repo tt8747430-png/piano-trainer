@@ -5,41 +5,67 @@ import { useMidiKeyDown } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
 import {
   answerKeys,
+  answerMarks,
   choiceAnswer,
   choosesKeys,
+  isCard,
   isChoice,
   pressesKeys,
   roundRange,
   targetKeys,
   type Asks,
+  type Question,
   type TrainerRun,
 } from '@/features/trainer'
 import { useWakeLock } from '@/shared/lib'
-import { noteName } from '@/shared/lib/music'
-import { RoundButton } from '@/shared/ui'
+import { noteName, type Midi } from '@/shared/lib/music'
+import { RoundButton, type KeyMark } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { AnsweredChoices } from './AnsweredChoices'
 import { DegreeSlots } from './DegreeSlots'
 import { RoundStaff } from './RoundStaff'
+import { showsStaff } from './staff-question'
+import { TimeLeft } from './TimeLeft'
 import { useRoundShortcuts } from './use-round-shortcuts'
 import { useRoundWords } from './use-round-words'
 
+/** Whether a round asked by ear, or a card, hides this side until it is answered or turned over. */
+function hides(question: Question, side: 'name' | 'keys' | 'staff'): boolean {
+  if (isCard(question)) return question.show !== side
+  if (question.mode === 'name-chord' || question.mode === 'name-interval')
+    return question.heard && side !== 'name'
+  return false
+}
+
 /**
  * One round at a time: what it asks (its words, a staff, a sound to hear again), the keyboard, the
- * answer, and one action. A keyboard user keeps their place: an answer moves them to Next, and Next
- * to the new round's prompt; the computer's keys answer too (`useRoundShortcuts`).
+ * answer, and one primary button that never moves: Reveal on a card, Check on a build, and Next,
+ * waiting for the answer, once answered or turned over (Results after the last). A time limit runs
+ * down under the prompt. A keyboard user keeps their place: an answer moves them to the button, and
+ * Next to the new round's prompt; the computer's keys answer too (`useRoundShortcuts`).
  */
-export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Asks }) {
+export function TrainerBoard({
+  trainer,
+  asks,
+  limit,
+}: {
+  trainer: TrainerRun
+  asks: Asks
+  /** Each round's time limit in seconds, drawn running down; none, no limit. */
+  limit?: number | undefined
+}) {
   // The screen stays on while a round is on the screen: a phone on the stand does not lock mid-song.
   useWakeLock()
   const { t } = useTranslation(['quiz', 'common'])
   const words = useRoundWords()
   const { question, selected, result } = trainer.round
   const prompt = useRef<HTMLHeadingElement>(null)
+  const primary = useRef<HTMLButtonElement>(null)
   const checkHint = useId()
+  const card = isCard(question)
 
-  // Building a chord or scale: keys are chosen until checked. Reading a note or a key's degrees:
-  // each key pressed is answered at once.
+  // Building a chord or scale: keys are chosen until checked. Reading a note, an interval's upper
+  // note or a key's degrees: each key pressed is answered at once.
   const choosing = choosesKeys(question) && !result
   const pressing = pressesKeys(question) && !result
   // A key played on the MIDI keyboard answers like a tap.
@@ -48,22 +74,41 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
     else if (pressing) trainer.pressKey(key)
   })
   const choices = isChoice(question) ? words.options(question) : null
-  const hears = isChoice(question) && question.mode !== 'key-signature'
+  const heard =
+    (question.mode === 'name-chord' || question.mode === 'name-interval') && question.heard
+  // Play again: a round asked by sound; a chord or interval read or turned over, once answered.
+  const seenFirst = card || question.mode === 'name-chord' || question.mode === 'name-interval'
+  const hears =
+    heard ||
+    (seenFirst && result !== null) ||
+    (isChoice(question) && !seenFirst && question.mode !== 'key-signature')
   // A new round, by Next or by auto-next: a keyboard user's focus, on the board or lost with the
-  // button that held it, moves to its prompt.
+  // button that held it, moves to its prompt; an answer, to the one button.
   const board = useRef<HTMLElement>(null)
   const shown = useRef(question)
+  const answered = useRef(result)
   useLayoutEffect(() => {
-    if (shown.current === question) return
-    shown.current = question
     const focused = document.activeElement
-    if (focused === null || focused === document.body || board.current?.contains(focused)) {
-      prompt.current?.focus()
+    const ours = focused === null || focused === document.body || board.current?.contains(focused)
+    if (shown.current !== question) {
+      shown.current = question
+      answered.current = result
+      if (ours) prompt.current?.focus()
+      return
     }
-  }, [question])
+    if (answered.current === null && result !== null && ours) primary.current?.focus()
+    answered.current = result
+  }, [question, result])
   const goOn = trainer.next
+  const act = result
+    ? goOn
+    : card
+      ? trainer.reveal
+      : choosing && selected.length > 0
+        ? trainer.check
+        : null
   useRoundShortcuts({
-    act: result ? goOn : choosing && selected.length > 0 ? trainer.check : null,
+    act,
     answers:
       choices && !result
         ? choices.map(
@@ -74,25 +119,39 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         : [],
     hear: hears ? trainer.hear : null,
   })
-  // On the keys, answered: a build's or a press's keys against the answer; a round heard, what played.
+  // On the keys: a build's or a press's keys against the answer once answered; the answer itself,
+  // each key named, once shown or turned over; the round's keys while they are what it shows.
+  const revealed = result?.kind === 'revealed' || result?.kind === 'shown'
   const checked =
-    result && (choosesKeys(question) || pressesKeys(question))
+    result && !revealed && (choosesKeys(question) || pressesKeys(question))
       ? answerKeys(question, selected)
       : null
+  const marks: ReadonlyMap<Midi, KeyMark> | undefined = revealed
+    ? answerMarks(question)
+    : question.mode === 'build-interval'
+      ? new Map([[question.low, { tone: 'tonic', label: noteName(question.lowNote) }]])
+      : checked?.marks
   const lit =
-    question.mode === 'name-chord' || (result && isChoice(question))
+    !revealed &&
+    (result ? isChoice(question) : !hides(question, 'keys') && (card || isChoice(question)))
       ? new Set(targetKeys(question))
       : undefined
   const verdict = !result
     ? null
-    : result.correct
-      ? t('quiz:right')
-      : result.kind === 'keys' && result.wrongBass && question.mode === 'build-chord'
-        ? t('quiz:wrongBass', {
-            answer: words.answer(question),
-            bass: noteName(question.tones[question.inversion ?? 0]?.note ?? question.root),
-          })
-        : t('quiz:itWas', { answer: words.answer(question) })
+    : result.kind === 'revealed'
+      ? null
+      : result.correct
+        ? t('quiz:right')
+        : result.kind === 'shown'
+          ? t('quiz:itIs', { answer: words.answer(question) })
+          : result.kind === 'keys' && result.wrongBass && question.mode === 'build-chord'
+            ? t('quiz:wrongBass', {
+                answer: words.answer(question),
+                bass: noteName(question.tones[question.inversion ?? 0]?.note ?? question.root),
+              })
+            : t('quiz:itWas', { answer: words.answer(question) })
+  // A card's name, once turned over, is its prompt.
+  const heading = card && result ? words.answer(question) : words.prompt(question)
 
   return (
     // On a phone on its side the round's one action stands beside its question, so the keys and
@@ -107,7 +166,7 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
           tabIndex={-1}
           className="min-w-0 flex-1 text-3xl text-balance hyphens-auto wrap-break-word outline-none sm:text-4xl landscape-phone:text-2xl"
         >
-          {words.prompt(question)}
+          {heading}
         </h2>
         {hears ? (
           <RoundButton
@@ -118,9 +177,10 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         ) : null}
       </div>
 
-      {question.mode === 'read-note' ||
-      (question.mode === 'key-signature' && question.ask === 'name') ? (
-        <RoundStaff question={question} />
+      {limit ? <TimeLeft key={trainer.number} seconds={limit} running={!result} /> : null}
+
+      {showsStaff(question) ? (
+        <RoundStaff question={question} hidden={!result && hides(question, 'staff')} />
       ) : null}
       {question.mode === 'key-degrees' ? (
         <DegreeSlots question={question} played={selected} answered={result !== null} />
@@ -132,31 +192,35 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
           choosing || (pressing && question.mode === 'key-degrees') ? new Set(selected) : undefined
         }
         lit={lit}
-        marks={checked?.marks}
+        marks={marks}
         outlined={checked?.outlined}
         wrong={checked?.wrong}
         onKeyPress={choosing ? trainer.toggleKey : pressing ? trainer.pressKey : undefined}
-        // A round asks for a chord or its name: the rail does not say it.
+        // A round asks for a chord or its name: the rail does not say it, nor do the keys go down
+        // while a round asked by ear sounds.
         namesChords={false}
+        showsSound={!heard || result !== null}
       />
 
-      <p aria-live="polite" className="flex min-h-7 items-center gap-2 text-lg font-semibold">
-        {result ? (
-          result.correct ? (
-            <Check aria-hidden className="size-5 text-learned" />
-          ) : (
-            <X aria-hidden className="size-5 text-destructive" />
-          )
-        ) : null}
-        {verdict}
-      </p>
+      {card ? null : (
+        <p aria-live="polite" className="flex min-h-7 items-center gap-2 text-lg font-semibold">
+          {result && result.kind !== 'revealed' ? (
+            result.correct ? (
+              <Check aria-hidden className="size-5 text-learned" />
+            ) : (
+              <X aria-hidden className="size-5 text-destructive" />
+            )
+          ) : null}
+          {verdict}
+        </p>
+      )}
 
       {choices && isChoice(question) ? (
-        result?.kind === 'choice' ? (
+        result?.kind === 'choice' || result?.kind === 'shown' ? (
           <AnsweredChoices
             choices={choices}
             answer={choiceAnswer(question)}
-            chosen={result.chosen}
+            chosen={result.kind === 'choice' ? result.chosen : null}
           />
         ) : (
           <div
@@ -173,45 +237,46 @@ export function TrainerBoard({ trainer, asks }: { trainer: TrainerRun; asks: Ask
         )
       ) : null}
 
-      {choosing ? (
-        <div
-          data-beside=""
-          className="flex flex-wrap items-center gap-3 landscape-phone:col-start-2 landscape-phone:row-start-1 landscape-phone:flex-nowrap"
-        >
-          {selected.length > 0 ? (
-            <Button variant="soft" size="pill" onClick={trainer.clear}>
-              {t('quiz:clear')}
-            </Button>
-          ) : null}
-          <Button
-            size="pill"
-            className="flex-1 sm:min-w-56 sm:flex-none landscape-phone:min-w-32"
-            disabled={selected.length === 0}
-            aria-describedby={selected.length === 0 ? checkHint : undefined}
-            onClick={trainer.check}
-          >
-            {t('quiz:check')}
+      {/* The round's actions: Clear and Show answer in plain words, then the one primary button,
+          the same button from the round's start to its Next. */}
+      <div
+        data-beside=""
+        className="flex flex-wrap items-center gap-x-3 gap-y-2 landscape-phone:col-start-2 landscape-phone:row-start-1 landscape-phone:flex-nowrap"
+      >
+        {choosing && selected.length > 0 ? (
+          <Button variant="link" className="px-2" onClick={trainer.clear}>
+            {t('quiz:clear')}
           </Button>
-          {selected.length === 0 ? (
-            <p id={checkHint} className="text-sm text-muted-foreground landscape-phone:sr-only">
-              {t('quiz:checkHint')}
-            </p>
-          ) : null}
-        </div>
-      ) : null}
-
-      {result ? (
-        // Shown in place of what was just pressed, so the answer hands it the focus.
+        ) : null}
+        {!result && !card && !isChoice(question) ? (
+          <Button variant="link" className="px-2" onClick={trainer.reveal}>
+            {t('quiz:showAnswer')}
+          </Button>
+        ) : null}
         <Button
-          data-beside=""
+          ref={primary}
           size="pill"
-          autoFocus
-          className="sm:min-w-56 sm:self-start landscape-phone:col-start-2 landscape-phone:row-start-1 landscape-phone:min-w-32"
-          onClick={goOn}
+          className="w-full sm:ms-auto sm:w-auto sm:min-w-56 landscape-phone:w-auto landscape-phone:min-w-32"
+          disabled={act === null}
+          aria-describedby={choosing && selected.length === 0 ? checkHint : undefined}
+          onClick={act ?? undefined}
         >
-          {trainer.run.over ? t('quiz:results') : t('quiz:next')}
+          {result
+            ? trainer.run.over
+              ? t('quiz:results')
+              : t('quiz:next')
+            : card
+              ? t('quiz:reveal')
+              : choosesKeys(question)
+                ? t('quiz:check')
+                : t('quiz:next')}
         </Button>
-      ) : null}
+        {choosing && selected.length === 0 ? (
+          <span id={checkHint} className="sr-only">
+            {t('quiz:checkHint')}
+          </span>
+        ) : null}
+      </div>
     </section>
   )
 }

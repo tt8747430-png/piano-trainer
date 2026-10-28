@@ -6,34 +6,132 @@ import type { SheetField } from '@/widgets/score-sheet'
 /** A shortcut: an editor action, or a field opened to type in where it is printed (ADR 0096). */
 type Shortcut = EditorAction | { readonly type: 'field'; readonly field: SheetField['kind'] }
 
-/** The fields opened with Cmd or Ctrl and a letter, as Flat's: K a chord symbol, L the lyrics. */
-const FIELD_KEYS = { KeyK: 'chord', KeyL: 'lyrics' } as const satisfies Readonly<
-  Record<string, SheetField['kind']>
->
-const isFieldKey = (code: string): code is keyof typeof FIELD_KEYS =>
-  Object.hasOwn(FIELD_KEYS, code)
-
-/** The value keys, by physical key so every layout chooses the same: 1 a whole note to 7 a 64th, as Flat's. */
-const VALUES: Readonly<Record<string, ChosenValue['value']>> = {
-  Digit1: 1,
-  Digit2: 2,
-  Digit3: 4,
-  Digit4: 8,
-  Digit5: 16,
-  Digit6: 32,
-  Digit7: 64,
+/** A tool's key: a physical key (`code`), its cap as printed, and the modifiers held with it. */
+interface ToolCombo {
+  readonly code: string
+  readonly cap: string
+  readonly shift?: true
+  readonly mod?: true
 }
 
-/** The tuplet keys with Shift, by physical key: 2 a duplet to 9 a nonuplet, as Flat's ⇧2–⇧9 (ADR 0097). */
-const TUPLETS: Readonly<Record<string, TupletCount>> = {
-  Digit2: 2,
-  Digit3: 3,
-  Digit4: 4,
-  Digit5: 5,
-  Digit6: 6,
-  Digit7: 7,
-  Digit8: 8,
-  Digit9: 9,
+/** A tool's shortcut, with what it does. */
+interface ToolShortcut extends ToolCombo {
+  readonly does: Shortcut
+}
+
+const tuplet = (num: TupletCount): ToolShortcut => ({
+  code: `Digit${num}`,
+  cap: String(num),
+  shift: true,
+  does: { type: 'tuplet', num },
+})
+
+const value = (chosen: ChosenValue['value'], digit: number): ToolShortcut => ({
+  code: `Digit${digit}`,
+  cap: String(digit),
+  does: { type: 'value', value: chosen },
+})
+
+/**
+ * The palette's tools by Flat's keys (its help's Keyboard shortcuts), where the typing keys leave
+ * them free: a letter alone plays the piano, so Flat's J, S, T and P take Shift (ADR 0114). What
+ * each does, and the caps its tooltip and the shortcuts' sheet print. By physical key, so every
+ * layout presses the same.
+ */
+export const TOOL_SHORTCUTS = {
+  whole: value(1, 1),
+  half: value(2, 2),
+  quarter: value(4, 3),
+  eighth: value(8, 4),
+  sixteenth: value(16, 5),
+  thirtySecond: value(32, 6),
+  sixtyFourth: value(64, 7),
+  rest: { code: 'Digit8', cap: '8', does: { type: 'rest' } },
+  grace: { code: 'Digit9', cap: '9', does: { type: 'grace' } },
+  natural: { code: 'Digit0', cap: '0', does: { type: 'accidental', accidental: 0 } },
+  sharp: { code: 'Equal', cap: '=', does: { type: 'accidental', accidental: 1 } },
+  flat: { code: 'Minus', cap: '−', does: { type: 'accidental', accidental: -1 } },
+  respell: { code: 'KeyJ', cap: 'J', shift: true, does: { type: 'respell' } },
+  dot: { code: 'Period', cap: '.', does: { type: 'dot' } },
+  tie: { code: 'Comma', cap: ',', does: { type: 'tie' } },
+  // Flat's ⇧2–⇧9: a tuplet of two to nine on the value (ADR 0097).
+  tuplet2: tuplet(2),
+  tuplet3: tuplet(3),
+  tuplet4: tuplet(4),
+  tuplet5: tuplet(5),
+  tuplet6: tuplet(6),
+  tuplet7: tuplet(7),
+  tuplet8: tuplet(8),
+  tuplet9: tuplet(9),
+  slur: { code: 'KeyS', cap: 'S', shift: true, does: { type: 'line', line: 'slur' } },
+  cresc: { code: 'Comma', cap: '<', shift: true, does: { type: 'line', line: 'cresc' } },
+  dim: { code: 'Period', cap: '>', shift: true, does: { type: 'line', line: 'dim' } },
+  '8va': { code: 'Digit8', cap: '8', shift: true, mod: true, does: { type: 'line', line: '8va' } },
+  '8vb': { code: 'Digit9', cap: '9', shift: true, mod: true, does: { type: 'line', line: '8vb' } },
+  trill: {
+    code: 'KeyT',
+    cap: 'T',
+    shift: true,
+    does: { type: 'mark', mark: { kind: 'ornament', ornament: 'trill' } },
+  },
+  pedal: {
+    code: 'KeyP',
+    cap: 'P',
+    shift: true,
+    does: { type: 'mark', mark: { kind: 'pedal', pedal: 'down' } },
+  },
+  barAfter: {
+    code: 'Enter',
+    cap: 'Enter',
+    shift: true,
+    mod: true,
+    does: { type: 'bars', edit: 'insert' },
+  },
+  barDelete: {
+    code: 'Backspace',
+    cap: 'Backspace',
+    mod: true,
+    does: { type: 'bars', edit: 'delete' },
+  },
+  newLine: { code: 'Enter', cap: 'Enter', mod: true, does: { type: 'bars', edit: 'newLine' } },
+  repeatStart: {
+    code: 'BracketLeft',
+    cap: '[',
+    does: { type: 'barMarks', choice: 'repeatStart' },
+  },
+  repeatEnd: { code: 'BracketRight', cap: ']', does: { type: 'barMarks', choice: 'repeatEnd' } },
+  mode: { code: 'KeyI', cap: 'I', does: { type: 'mode' } },
+  chord: { code: 'KeyK', cap: 'K', mod: true, does: { type: 'field', field: 'chord' } },
+  lyrics: { code: 'KeyL', cap: 'L', mod: true, does: { type: 'field', field: 'lyrics' } },
+  fingering: { code: 'KeyF', cap: 'F', shift: true, does: { type: 'field', field: 'fingering' } },
+  // Flat's ⌘E an annotation, ⌘⇧K a Roman numeral (ADR 0097).
+  annotation: { code: 'KeyE', cap: 'E', mod: true, does: { type: 'field', field: 'text' } },
+  numeral: { code: 'KeyK', cap: 'K', shift: true, mod: true, does: { type: 'numeral' } },
+} as const satisfies Readonly<Record<string, ToolShortcut>>
+export type Tool = keyof typeof TOOL_SHORTCUTS
+/** Whether a name is a tool's with a shortcut: a line's, a mark's. */
+export const isTool = (name: string): name is Tool => Object.hasOwn(TOOL_SHORTCUTS, name)
+
+const TOOLS: readonly ToolShortcut[] = Object.values(TOOL_SHORTCUTS)
+
+/** The tool a press is the key of: its key with exactly its modifiers, Alt never. */
+const toolOf = (press: KeyPress): ToolShortcut | undefined =>
+  press.altKey
+    ? undefined
+    : TOOLS.find(
+        (tool) =>
+          tool.code === press.code &&
+          (tool.shift === true) === press.shiftKey &&
+          (tool.mod === true) === (press.metaKey || press.ctrlKey),
+      )
+
+/** A tool's keycaps in the order they are pressed, with the modifiers' caps this keyboard prints. */
+export function toolCaps(
+  tool: Tool,
+  caps: { readonly mod: string; readonly shift: string },
+): readonly string[] {
+  const combo: ToolCombo = TOOL_SHORTCUTS[tool]
+  return [...(combo.mod ? [caps.mod] : []), ...(combo.shift ? [caps.shift] : []), combo.cap]
 }
 
 /** The clipboard's edits by letter, with Cmd or Ctrl (the platform's own copy, cut and paste). */
@@ -41,12 +139,13 @@ const CLIP_EDITS = { KeyC: 'copy', KeyX: 'cut', KeyV: 'paste' } as const
 const isClipKey = (code: string): code is keyof typeof CLIP_EDITS => Object.hasOwn(CLIP_EDITS, code)
 
 /**
- * The editor's shortcut for a key press in a layer, or null. Only keys the typing keys leave
- * free: digits (with Shift a tuplet, ADR 0097), the full stop, arrows (Shift extending what is chosen by a note, with Alt by a bar,
- * with Cmd to an end; Alt with ↑ ↓ through a chord's notes, then to the staff over or under, ADR
- * 0096; ↑ ↓ the notes a step in the key, with Shift a semitone, with Cmd an octave), Home, End, Backspace, Delete, Enter and Escape (letting go of what is chosen), and Cmd or
- * Ctrl with Z, Y, and C, X, V (what is chosen, ADR 0114), K and L (the chord-symbol and Lyrics fields, ADR 0096), and Shift with F (the fingering field); a letter alone plays the piano, but for I,
- * which typing leaves free: on a staff it cycles the editing modes, as Dorico's I does (ADR 0114).
+ * The editor's shortcut for a key press in a layer, or null. The tools' keys (`TOOL_SHORTCUTS`),
+ * then the caret's and the edits': arrows (Shift extending what is chosen by a note, with Alt by a
+ * bar, with Cmd to an end; Alt with ↑ ↓ through a chord's notes, then to the staff over or under,
+ * ADR 0096; ↑ ↓ the notes a step in the key, with Shift a semitone, with Cmd an octave), Home, End,
+ * Backspace, Delete, Enter and Escape (letting go of what is chosen), and Cmd or Ctrl with Z, Y,
+ * and C, X, V (what is chosen, ADR 0114). A letter alone plays the piano, but for I, which typing
+ * leaves free: on a staff it cycles the editing modes, as Dorico's I does (ADR 0114).
  */
 export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
   const mod = press.metaKey || press.ctrlKey
@@ -54,9 +153,9 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
     if (press.code === 'KeyZ') return { type: press.shiftKey ? 'redo' : 'undo' }
     if (press.code === 'KeyY' && press.ctrlKey) return { type: 'redo' }
     if (isClipKey(press.code)) return { type: 'clip', edit: CLIP_EDITS[press.code] }
-    if (isFieldKey(press.code) && !press.shiftKey && !press.altKey)
-      return { type: 'field', field: FIELD_KEYS[press.code] }
   }
+  const tool = toolOf(press)
+  if (tool) return tool.does.type === 'mode' && layer === 'chords' ? null : tool.does
   const move = (by: CaretMove, direction: -1 | 1): Shortcut => ({
     type: 'move',
     by,
@@ -95,17 +194,5 @@ export function shortcutOf(press: KeyPress, layer: Layer): Shortcut | null {
       if (mod) return null
       return { type: 'move', by: 'line', direction: press.shiftKey ? -1 : 1, extend: false }
   }
-  if (mod || press.altKey) return null
-  // F with Shift, a letter typing leaves free so, the fingering field (ADR 0062, 0096; Dorico's).
-  if (press.code === 'KeyF' && press.shiftKey) return { type: 'field', field: 'fingering' }
-  if (press.shiftKey) {
-    const num = TUPLETS[press.code]
-    return num === undefined || layer === 'chords' ? null : { type: 'tuplet', num }
-  }
-  const value = VALUES[press.code]
-  if (value !== undefined) return { type: 'value', value }
-  if (press.code === 'Period') return { type: 'dot' }
-  if (press.code === 'Digit0') return { type: 'rest' }
-  if (press.code === 'KeyI') return layer === 'chords' ? null : { type: 'mode' }
   return null
 }

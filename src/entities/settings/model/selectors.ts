@@ -28,11 +28,11 @@ export const selectFloating = (state: SettingsState): FloatingSettings => state.
 export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.keyboard
 export const selectRecorder = (state: SettingsState): RecorderSettings => state.recorder
 export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar
-/** Whether the palette is folded where it stands: as the learner left it there, else open beside the sheet. */
+/** Whether the palette is folded where it stands: as the learner left it there, else the panel shown and the sheet compact. */
 export const selectPaletteFolded =
   (place: PalettePlace) =>
   (state: SettingsState): boolean =>
-    state.paletteFolded[place] ?? place === 'foot'
+    state.paletteFolded[place] ?? place === 'sheet'
 export const selectMidi = (state: SettingsState): MidiSettings => state.midi
 /** Whether the section `id` is folded away. */
 export const selectSectionFolded =

@@ -134,6 +134,8 @@ export type EditorAction =
   | { readonly type: 'piano'; readonly hidden: boolean }
   | { readonly type: 'shift'; readonly semitones: number }
   | { readonly type: 'respell' }
+  /** A grace note before each note chosen, a step above in the key; taken off where they all have one. */
+  | { readonly type: 'grace' }
   /**
    * The notes chosen written on their letter ♯ (1), ♭ (−1) or ♮ (0); where every one carries the
    * sign already, taken off, each spelled as its key spells it (ADR 0114).

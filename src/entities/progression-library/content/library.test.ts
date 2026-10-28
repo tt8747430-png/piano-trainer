@@ -128,6 +128,15 @@ describe('the progressions library', () => {
     }
   })
 
+  it('says how every progression sounds in one short line, in both languages', () => {
+    for (const each of PROGRESSION_LIBRARY)
+      for (const said of [each.character.en, each.character.ru]) {
+        expect(said.trim(), each.id).not.toBe('')
+        expect(said.length, `${each.id}: ${said}`).toBeLessThanOrEqual(60)
+        expect(said, each.id).not.toMatch(/\.$/)
+      }
+  })
+
   it('finds a progression by its id, and none by another', () => {
     for (const each of PROGRESSION_LIBRARY) expect(progressionById(each.id), each.id).toBe(each)
     expect(progressionById('typed')).toBeUndefined()

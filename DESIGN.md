@@ -325,9 +325,14 @@ every screen's title smaller (`data-titles='small'`).
 - **A page that shows a thing on the keys** reads top to bottom: the keys pinned (top or foot, as the keyboard
   settings say), what it is with its one honey Play, its choices as fields, then its titled sections. No page splits
   into two columns of unrelated things.
-- **Floating things float.** The transport, the floating buttons, the editor's palette and the zoom buttons take no
-  layout room; the page gets scroll room under them. Over music they step aside while it is read and come back at a
-  tap.
+- **Floating things float.** The transport, the floating buttons and the zoom buttons take no layout room; the page
+  gets scroll room under them. Over music they step aside while it is read and come back at a tap.
+- **The editor's palette docks, as Flat's.** From 48rem across a panel at the sheet's left (card paper, a hairline at
+  its right, reaching the screen's edge), its sections an accordion of 48px rows parted by hairlines, and over the
+  sheet the note-entry toolbar, its keys 40px glyphs in a sand pill. On a phone held upright a sheet at the foot,
+  card paper with 24px top corners and a soft upward shade, its grab handle 40×4, its category tabs glyphs in a sand
+  pill, the chosen on a card-paper thumb. Keys are square cells of a bordered table (a 12px outer radius, hairlines
+  between cells, 44px at the least); pressed, a sky glyph on a sky wash; greyed at 35%.
 - **Equal columns.** A chart's lines are grids of equal beats so bars line up down the page; a score's lines are
   justified to their share of the longest line. Layouts are named as notation apps name them: Page view, Vertical
   scroll, Panorama.
@@ -382,11 +387,17 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
   a hairline. `MultiDropdown` checks several. Under a field's printed name it is `bare`, its value alone.
 - **Toggle chips** (`ToggleChips`): several of a few, all in sight; on is ink on sand in an ink line.
 - **Toggle tiles** (`ToggleTile`, `PictureTiles`): an icon or a drawing over its name; on, the learned wash.
-- **Note, key and inversion choices** (`NoteChoice`, `KeyChoice`, `InversionChoice`): the letters then ♮ ♯ ♭; the
-  tonic then Major · Minor, only keys a signature writes; an inversion as its stack of noteheads.
+- **Strip** (`StepStrip`): one of many in a row that scrolls inside a sand track, ‹ and › at its ends, the chosen a
+  card-paper thumb kept in the middle, the edges fading; a greyed option stays in the row. A chord's quality and a
+  scale's kind are strips.
+- **Note, key and inversion choices** (`NoteChoice`, `KeyChoice`, `InversionChoice`): a strip of spellings, C C♯ D♭
+  D … B, both names of a black key side by side; the tonic's strip, only keys a signature writes, then Major ·
+  Minor; an inversion as its stack of noteheads.
 - **Switch:** a sand track in the control line; on, grass.
 - **Only what applies is offered.** A choice the thing cannot take is left out. A greyed choice says why in its
   tooltip.
+- **Chord names in text** (`ChordText`): the root in soft ink, the quality strong, its numbers raised (`C maj⁷`), a
+  bass after a slash soft again: a library card's chips, the key's chords linked to Chords.
 - **Tabs** (`tab-strip`, `tab`): the views of one thing under the screen's title, 48px, the chosen in ink over an ink
   underline, scrolling sideways with faded edges.
 
@@ -396,11 +407,33 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 - **Row link** (`RowLink`, 64px): a 48px tile in its paint's wash with a 20px icon in the deep shade (or a number in
   Literata), the title in Onest 600 17px on up to two lines, a one-line detail, what it carries at its end and a
   chevron. Each row card is the link: hover fills the whole card and nudges the chevron. A row that opens a sheet
-  (`RowButton`) has no chevron. A list of one kind goes without tiles.
+  (`RowButton`) has no chevron. A list of one kind goes without tiles. A row that opens a setting's own screen
+  shows the setting's value at its right before the chevron (`value`, muted, cut short before the title is):
+  Settings' "MIDI keyboard Off ›".
+- **Settings group** (`SettingsGroup`): a card with its title in a muted band across the top and its ⓘ beside it;
+  a list of choices or a row link inside it runs to the card's edges (`flush`). A switch greyed for a reason says it
+  in a muted line under its label ("Needs MIDI input"), never hidden.
 - **Fact card** (`FactCard`): an icon over a fact's name over its value; three across (Key · Time · Tempo).
+- **Library card** (Progressions): its numerals as the title, name · chord count in soft ink, its character in a
+  line, chips of the numeral (small, soft) over the chord; a round paper Play at its top right. While it plays its
+  line turns honey and the sounding chip takes the selected wash; the card shown wears a darker line.
+- **Interval row** (Intervals): the short name in soft ink, the name over its semitones, a small `KeyDiagram` at its
+  end; two columns from 48rem. The row playing takes the selected wash.
+- **Hand drawing** (`HandDiagram`): a hand palm down in sand, each finger numbered in an ink dot, thumb 1 to little
+  finger 5, the right hand's thumb at the left; beside it the run's notes over that hand's fingers.
 - **Sheet** (`Sheet`): card paper, 20px top corners, a grab handle, its Literata title with Close, a scrolling body,
   an optional footer over a hairline. It stands on the phone's keyboard. Never a sheet over a sheet: open a list as a
   page of the sheet.
+- **Drop zone** (`SongDrop`, a laptop's): while a file is dragged over the library, a panel inset 16px over the page,
+  its 2px dashed honey border on the page's paper at 90%, an upload icon over one line of what dropping does.
+- **A trainer's setup** (`TrainerSetup`, at most 672px wide): the drill as a segmented control of pictures over
+  their names, then titled cards of `SettingRows` (Options, Timing): a pop-up button at a row's right, a list as a
+  row with "2 of 41 ›" opening a sheet of check rows by group, switches; a muted card with an ⓘ saying the drill in a
+  sentence; one full-width Start pill (its own width from 640px).
+- **A round** (`TrainerBoard`): the prompt, a time limit as a thin primary bar running down with its seconds, the
+  staff (a muted card with a "?" while hidden, the same size, so nothing moves on Reveal), the keys, the answers, and
+  one primary pill in one place from the round's start to its Next: Reveal on a card, Check on a build, Next greyed
+  until answered. Clear and Show answer are link-ink words beside it.
 - **Popover:** 12px corners, the popover shade. An `InfoTip` is a 16px ⓘ in soft ink beside a name, opening a
   popover; no line of explanation stands under a control.
 - **Toast** (`say`): a card with the highest shade over the screen's foot, clear of all that floats there: its line,

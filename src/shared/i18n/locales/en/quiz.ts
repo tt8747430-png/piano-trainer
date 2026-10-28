@@ -1,12 +1,10 @@
 export const quiz = {
   // Practice's trainers, each named as a thing practised, never an order.
   trainers: {
-    'build-chord': 'Chord building',
-    'name-chord': 'Chord naming',
+    chords: 'Chords',
+    intervals: 'Intervals',
     'build-scale': 'Scale building',
     gaps: 'My gaps',
-    'intervals-by-ear': 'Intervals by ear',
-    'chords-by-ear': 'Chords by ear',
     'scales-by-ear': 'Scales by ear',
     'progressions-by-ear': 'Progressions by ear',
     'reading-notes': 'Note reading',
@@ -14,14 +12,54 @@ export const quiz = {
     'key-degrees': 'Key degrees',
     'chord-role': 'Chord roles',
   },
+  /** How each trainer asks, in a sentence: its setup's ⓘ card. */
+  how: {
+    chords: {
+      flashcards: 'A chord is shown by its name, keys or staff. Reveal it to see the rest.',
+      quiz: 'A chord is shown on the keys and the staff. Choose its name from four on the same root.',
+      entry: 'A chord is named. Play it on the keys or a MIDI keyboard, then Check.',
+      ear: 'A chord is played. Choose what you hear from four on the same root.',
+    },
+    intervals: {
+      flashcards: 'An interval is shown by its name, keys or staff. Reveal it to see the rest.',
+      quiz: 'An interval is shown on the keys and the staff. Choose its name from four.',
+      entry: 'An interval and its lower note are named. Play the upper note.',
+      ear: 'An interval is played. Choose what you hear from four.',
+    },
+    'build-scale': 'A scale is named. Play its notes on the keys, then Check.',
+    gaps: 'The chords and scales you miss most are asked again, to build on the keys.',
+    'scales-by-ear': 'A scale is played. Choose its kind.',
+    'progressions-by-ear': 'A key’s tonic and then a progression are played. Choose its numerals.',
+    'reading-notes': 'A note is shown on the staff. Play it on the keys.',
+    'key-signatures': 'Name the key from its signature, or count the sharps or flats of a key.',
+    'key-degrees': 'A key is named. Play its degrees from I to VII.',
+    'chord-role': 'A key’s tonic and then a chord are played. Choose the chord’s numeral.',
+  },
+  // A drill: the four ways Chords and Intervals ask the same things.
+  drill: {
+    label: 'Drill',
+    flashcards: 'Cards',
+    quiz: 'Quiz',
+    entry: 'Play',
+    ear: 'By ear',
+  },
+  // What a flashcard shows; the rest is revealed.
+  show: { label: 'Shown', name: 'Name', keys: 'Keys', staff: 'Staff' },
+  // A trainer's setup.
+  setup: { options: 'Options', timing: 'Timing', start: 'Start', how: 'How it works' },
+  timing: {
+    limit: 'Time limit',
+    limitInfo: 'When the time runs out, the answer is shown and the round counts as missed.',
+    off: 'Off',
+    left: 'Time left',
+    autoNextInfo: 'After a right answer, or a card revealed, the next round starts by itself.',
+  },
   /** What each trainer asks, a line under its name. */
   about: {
-    'build-chord': 'Play the chord named on the keys',
-    'name-chord': 'Name the chord on the keys',
+    chords: 'Cards, a quiz, on the keys or by ear',
+    intervals: 'Cards, a quiz, on the keys or by ear',
     'build-scale': 'Play the scale named, note by note',
     gaps: 'The skills you miss most, asked again',
-    'intervals-by-ear': 'Hear two notes, name the interval',
-    'chords-by-ear': 'Hear a chord, name its kind',
     'scales-by-ear': 'Hear a scale, name its kind',
     'progressions-by-ear': 'Hear a progression, name it',
     'reading-notes': 'Read a note on the staff, play it',
@@ -34,8 +72,10 @@ export const quiz = {
     buildChordIn: 'Build {{symbol}}, {{position}}',
     nameChord: 'Which chord is this?',
     buildScale: 'Build {{scale}}',
+    hearChord: 'Which chord do you hear?',
     nameInterval: 'Which interval is this?',
-    nameQuality: 'Which chord is this?',
+    hearInterval: 'Which interval do you hear?',
+    buildInterval: 'Play the {{interval}} up from {{note}}',
     nameScale: 'Which scale is this?',
     readNote: 'Play this note',
     signatureCount: 'How many sharps or flats does {{key}} have?',
@@ -62,11 +102,17 @@ export const quiz = {
   // Under Check while no key is chosen: what it waits for.
   checkHint: 'Choose the keys on the keyboard, then Check.',
   clear: 'Clear',
+  showAnswer: 'Show answer',
+  reveal: 'Reveal',
   next: 'Next',
   results: 'Results',
   done: 'Done',
   right: 'Correct',
   itWas: 'Not quite: it’s {{answer}}',
+  // An answer shown unanswered: its time ran out, or the learner asked.
+  itIs: 'The answer: {{answer}}',
+  // An interval as an answer names its notes.
+  intervalAnswer: '{{interval}}, {{low}} up to {{high}}',
   // A choice round's answers once one is chosen, for a screen reader.
   theAnswer: 'The answer',
   yourAnswer: 'Your answer',
@@ -89,17 +135,19 @@ export const quiz = {
     missed: 'Missed',
     noneMissed: 'None missed',
     again: 'Again',
+    cards: 'Cards',
   },
   // Custom's choices.
   choice: {
-    sizes: 'Chord sizes',
-    suspended: 'Suspended',
-    added: 'Added tones',
-    altered: 'Altered chords',
+    chords: 'Chords',
+    roots: { chords: 'Roots', intervals: 'From notes' },
+    rootGroups: { natural: 'Natural', sharp: 'Sharp', flat: 'Flat' },
+    inversions: 'Inversions',
+    inversionsInfo: 'Each chord is asked in root position and in each of its inversions.',
+    chosen: '{{count}} of {{total}}',
     scales: 'Scales',
     intervals: 'Intervals',
     ways: 'How they sound',
-    qualities: 'Chords',
     arpeggio: 'One note at a time',
     kinds: 'Scales',
     descending: 'Coming down',
@@ -144,13 +192,6 @@ export const quiz = {
       down: 'Coming down',
       together: 'Together',
       compound: 'Past the octave',
-    },
-    qualities: {
-      'major-minor': 'Major and minor',
-      'diminished-augmented': 'With diminished and augmented',
-      sevenths: '7th chords',
-      all: 'All eight',
-      arpeggio: 'All eight, one note at a time',
     },
     scalesByEar: {
       'major-minor': 'Major and minor',

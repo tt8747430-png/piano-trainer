@@ -456,6 +456,17 @@ describe('the editor', () => {
     expect(staffNotes(run(back, { type: 'delete' }).draft)).toEqual([])
   })
 
+  it('puts a grace note before the notes at the caret, a step above in the key, and takes it off again (Flat’s)', () => {
+    const graces = (state: EditorState) =>
+      staffNotes(state.draft).map((n) => n.marks?.grace?.map((g) => g.midi))
+    const written = run(start(), key(60, 0), key(64, 500))
+    const back = run(written, { type: 'place', tick: 0, layer: 'staff0' })
+    const graced = run(back, { type: 'grace' })
+    // C4's step above in C major is D4.
+    expect(graces(graced)).toEqual([[62], undefined])
+    expect(graces(run(graced, { type: 'grace' }))).toEqual([undefined, undefined])
+  })
+
   it('puts fingers on the notes at the caret bottom up, a chord’s one note alone, none taking them off (ADR 0096)', () => {
     const fingers = (state: EditorState) => state.draft.hands.rh.map((n) => n.finger)
     const chord = run(

@@ -18,6 +18,8 @@ import { TypingToggle } from './TypingToggle'
 
 /** A key plays itself unless the screen says otherwise. */
 const ALONE = (key: Midi): readonly Midi[] => [key]
+/** No keys: what a keyboard shows of a sound that is the question. */
+const NOTHING: ReadonlySet<Midi> = new Set()
 
 /**
  * The keyboard every screen shows, set up as the learner chose (the keyboard settings): a key goes
@@ -40,6 +42,7 @@ export function LiveKeyboard({
   spotlight = false,
   spacePedal = true,
   namesChords = true,
+  showsSound = true,
   railEnd,
   ...keyboard
 }: Omit<
@@ -63,13 +66,16 @@ export function LiveKeyboard({
   spacePedal?: boolean
   /** The rail may name the chord a hand holds: off where its name is the question (a round). */
   namesChords?: boolean
+  /** The keys the app sounds go down: off where what sounds is the question (a round by ear). */
+  showsSound?: boolean
   /** The rail's last control: a page's keys fold away from it. */
   railEnd?: ReactNode
 }) {
   const { typing, chordNames, railControls, keySize, swipe, namedKeys, markNotes, keyLength } =
     useSettings(selectKeyboard)
   const settings = { keySize, swipe, namedKeys, markNotes, keyLength }
-  const sounding = useSoundingKeys(spotlight ? 'struck' : 'sounding')
+  const heard = useSoundingKeys(spotlight ? 'struck' : 'sounding')
+  const sounding = showsSound ? heard : NOTHING
   const live = useSoundingKeys('live')
   const held = useHeldKeys()
   const voice = useLiveVoice()

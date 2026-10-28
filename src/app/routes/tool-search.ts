@@ -10,8 +10,12 @@ export function readChordFinderSearch(raw: Raw): ChordFinderView {
   return {
     keys: keyListParam(readKeyList(raw.keys)),
     key: key ? keyParam(key) : CHORD_FINDER_DEFAULTS.key,
+    scale: raw.scale === true ? true : undefined,
   }
 }
 export const chordFinderSearch = routeSearch(readChordFinderSearch, CHORD_FINDER_DEFAULTS)
-/** What the Chord finder keeps when it is opened plainly: the key it spells in. */
-export const CHORD_FINDER_KEPT = ['key'] as const satisfies readonly (keyof ChordFinderView)[]
+/** What the Chord finder keeps when it is opened plainly: the key it spells in, its scale shown or not. */
+export const CHORD_FINDER_KEPT = [
+  'key',
+  'scale',
+] as const satisfies readonly (keyof ChordFinderView)[]

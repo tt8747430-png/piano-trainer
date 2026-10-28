@@ -394,6 +394,22 @@ export function backFrom(draft: Draft, layer: NoteLayer, at: Tick): Tick | null 
   return before.length === 0 ? null : Math.max(...before.map((n) => n.startTick))
 }
 
+/**
+ * A grace note put before each note `where` takes, a step above it in the key (an appoggiatura, as
+ * Flat's key writes one); where every one has its grace notes already, they come off.
+ */
+export function graceNotes(draft: Draft, layer: NoteLayer, where: Where): Draft {
+  const taken = notesOf(draft, layer).filter(isAt(where))
+  const off = taken.length > 0 && taken.every((n) => (n.marks?.grace?.length ?? 0) > 0)
+  return changeAt(draft, layer, where, (n) => {
+    const { grace: _grace, ...rest } = n.marks ?? {}
+    const above = steppedKey(keyAt(draft, n.startTick), n.midi, 1)
+    const marks = off ? rest : { ...rest, grace: [spelledIn(draft, above, n.startTick)] }
+    const { marks: _marks, ...note } = n
+    return Object.keys(marks).length > 0 ? { ...note, marks } : note
+  })
+}
+
 /** The notes `where` takes written the other way (C♯ ↔ D♭). */
 export const respellNotes = (draft: Draft, layer: NoteLayer, where: Where): Draft =>
   changeAt(draft, layer, where, (n) => ({ ...n, spelled: otherSpelling(n.spelled) }))

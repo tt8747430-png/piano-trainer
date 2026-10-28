@@ -182,6 +182,7 @@ const deviceName = (value: unknown): string | null =>
 function midiSettings(value: unknown): MidiSettings {
   const saved = savedObject<MidiSettings>(value)
   return {
+    input: typeof saved.input === 'boolean' ? saved.input : DEFAULT_MIDI.input,
     device: deviceName(saved.device),
     sound: typeof saved.sound === 'boolean' ? saved.sound : DEFAULT_MIDI.sound,
     throughPiano:
@@ -275,6 +276,7 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
     markNotes: typeof saved.markNotes === 'boolean' ? saved.markNotes : current.markNotes,
     chordNames: typeof saved.chordNames === 'boolean' ? saved.chordNames : current.chordNames,
     typing: typeof saved.typing === 'boolean' ? saved.typing : current.typing,
+    autoplay: typeof saved.autoplay === 'boolean' ? saved.autoplay : current.autoplay,
     dock: isKeyDock(saved.dock) ? saved.dock : current.dock,
     folded: typeof saved.folded === 'boolean' ? saved.folded : current.folded,
     foldedLandscape:

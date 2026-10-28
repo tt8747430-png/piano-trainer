@@ -18,7 +18,8 @@ details.
   never moved into itself or under itself.
 - **The built-in collections are folders from the start**, each with its picture and paint, renamed, restyled, moved
   and archived like the learner's own. The learner's folders (`folder-<n>`, never given twice) have a name, one of 12
-  pictures and one of 5 paints. A new song is made where the learner is.
+  pictures and one of 5 paints. A new song is made where the learner is, and so is an imported one: New offers New
+  song, New folder and Import, and a file dropped on the library imports it (ADR 0107).
 - **The actions**, at every size:
   - a song's row: More (Favourite, Move to…, Archive, and Delete for the learner's own song, asked first), a swipe
     (right Favourite; left Move, then Archive), a long press starting Select;
@@ -60,3 +61,4 @@ A study, practised on Practice, is in no library. A folder played song after son
 - 0103 — The learner's library: Favourites, setlists, Chords I know (2026-10-26), superseded by 0106.
 - 0106 — One library of songs (2026-10-26); its second round nested the folders, made one search with its filters,
   moved at a tap and stood sheets on the phone's keyboard (ADR 0061).
+- New's Import and a file dropped on the library (2026-10-28, ADR 0107).

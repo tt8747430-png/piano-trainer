@@ -1,8 +1,8 @@
 export const practice = {
   title: 'Practice',
-  // Practice's groups of pages (ADR 0052). The things come first, under no heading.
-  groups: { atTheKeys: 'At the keys', training: 'Training' },
-  // Its pages, each by its name: the things, the tools, the training.
+  // Practice's groups of pages (ADR 0052), each under its heading.
+  groups: { theory: 'Theory', playing: 'Playing', training: 'Training' },
+  // Its pages, each by its name.
   pages: {
     chords: 'Chords',
     scales: 'Scales and keys',
@@ -14,14 +14,17 @@ export const practice = {
     exercises: 'Exercises',
     quiz: 'Quiz',
   },
-  // What a page says of itself in a line: a thing what is inside it, a tool what it works out. A page
-  // of tabs or of groups says those, in their own words, so it has no line here.
+  // What a page says of itself in one short line, on Practice and in Search.
   about: {
-    chords: 'Triads to 13ths · Inversions · Tensions',
-    intervals: 'Every interval, heard and shown on the keys',
-    progressions: 'Pick a known one or type your own, in any key',
-    chordFinder: 'Play a chord to see its name and how it is written',
-    metronome: 'Clicks, beeps or a drum beat, at any tempo',
+    chords: 'Triads to 13ths, inversions',
+    scales: 'Scales, their chords, keys',
+    intervals: 'Every interval on the keys',
+    progressions: 'Known loops in any key',
+    accompaniment: 'Patterns for both hands',
+    chordFinder: 'Play a chord, see its name',
+    exercises: 'Technique and drills',
+    quiz: 'Chords, keys, ear, reading',
+    metronome: 'Clicks or drums, any tempo',
   },
   // Words the explorers share.
   root: 'Root',
@@ -48,7 +51,6 @@ export const practice = {
         sus2: 'Suspended 2nd',
         sus4: 'Suspended 4th',
       },
-      triadShort: { maj: 'Major', min: 'Minor', dim: 'Dim', aug: 'Aug' },
       sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
       sizeNames: {
         triad: 'Triad',
@@ -80,6 +82,18 @@ export const practice = {
     show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
     label: 'Scale',
     startOn: 'Start on',
+    openInChords: 'Open in Chords',
+    // What the run's keys carry: its notes, or a hand's fingers.
+    onKeys: { label: 'On the keys', notes: 'Notes', lh: 'Left hand', rh: 'Right hand' },
+    // The run's fingering hand by hand, each hand drawn with its fingers numbered.
+    byHand: {
+      title: 'Fingering by hand',
+      lh: 'Left hand',
+      rh: 'Right hand',
+      drawing: '{{hand}}: fingers numbered from the thumb, 1, to the little finger, 5',
+      notes: 'Notes',
+      fingers: 'Fingers',
+    },
     fingering: {
       label: 'Fingering',
       thumb: 'From the thumb',
@@ -122,6 +136,14 @@ export const practice = {
   intervals: {
     simple: 'Within the octave',
     compound: 'Past the octave',
+    // How a row plays its interval.
+    way: { label: 'Play', together: 'At once', up: 'Up', down: 'Down' },
+    // The tritone by each of its spellings, a row each.
+    tritone: {
+      A4: { name: 'Augmented fourth', short: 'A4' },
+      d5: { name: 'Diminished fifth', short: 'd5' },
+    },
+    keys: '{{name}} on the keys',
   },
   progressions: {
     field: 'Numerals or chords',
@@ -130,8 +152,11 @@ export const practice = {
     minorLine: 'These numerals are a minor key’s.',
     playIn: 'Play them in {{key}}',
     throughKeys: 'Through the keys',
-    choose: 'Progression',
-    typed: 'Typed',
+    // The library as cards, a card a progression (ADR 0112).
+    library: 'Library',
+    chordCount_one: '{{count}} chord',
+    chordCount_other: '{{count}} chords',
+    chordsIn: 'Its chords in the key',
     /** What leads into each chord of the progression (ADR 0112). */
     lead: { label: 'Lead into each chord', none: 'No', v: 'By its V', 'ii-v': 'By its ii–V' },
     // The songs a progression is heard in, each opening the Player at its bars (ADR 0112).
@@ -221,6 +246,8 @@ export const practice = {
     remember: 'Remember',
     rememberDetail: 'The last {{count}}',
     inKeysShown: 'Keys it is in',
+    scaleShown: 'Scale on the keys',
+    scaleShownDetail: 'The key’s scale on every octave of the keys, each key with its note',
     slash: 'Over the bass',
     // The bass where the name leaves it out and it is no inversion: a bass beyond the 7th.
     bass: '{{note}} in the bass',
@@ -342,7 +369,7 @@ export const practice = {
   quiz: {
     // The Quiz page's groups of trainers.
     groups: {
-      chords: 'Chords',
+      chords: 'Chords and intervals',
       scales: 'Scales and keys',
       ear: 'By ear',
       reading: 'Reading',

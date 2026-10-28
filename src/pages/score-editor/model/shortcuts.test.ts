@@ -13,18 +13,17 @@ const press = (code: string, key: string, mods: Partial<KeyPress> = {}): KeyPres
 })
 
 describe('shortcutOf', () => {
-  it('chooses a value by 1 to 7, a dot by the full stop, and writes a rest by 0', () => {
+  it('chooses a value by 1 to 7, a dot by the full stop, writes a rest by 8 and a grace note by 9, as Flat’s', () => {
     expect(shortcutOf(press('Digit1', '1'), 'staff0')).toEqual({ type: 'value', value: 1 })
     expect(shortcutOf(press('Digit3', '3'), 'rh')).toEqual({ type: 'value', value: 4 })
     expect(shortcutOf(press('Digit5', '5'), 'lh')).toEqual({ type: 'value', value: 16 })
     expect(shortcutOf(press('Digit6', '6'), 'lh')).toEqual({ type: 'value', value: 32 })
     expect(shortcutOf(press('Digit7', '7'), 'lh')).toEqual({ type: 'value', value: 64 })
     expect(shortcutOf(press('Period', '.'), 'staff0')).toEqual({ type: 'dot' })
-    expect(shortcutOf(press('Digit0', '0'), 'staff0')).toEqual({ type: 'rest' })
-  })
-
-  it('puts a tuplet of two to nine on the value with Shift and its digit, as Flat’s (ADR 0097)', () => {
-    expect(shortcutOf(press('Digit3', '#', { shiftKey: true }), 'staff0')).toEqual({
+    expect(shortcutOf(press('Digit8', '8'), 'staff0')).toEqual({ type: 'rest' })
+    expect(shortcutOf(press('Digit9', '9'), 'rh')).toEqual({ type: 'grace' })
+    // Shift with a digit is a tuplet's, not a value's.
+    expect(shortcutOf(press('Digit3', '#', { shiftKey: true }), 'rh')).toEqual({
       type: 'tuplet',
       num: 3,
     })
@@ -32,12 +31,68 @@ describe('shortcutOf', () => {
       type: 'tuplet',
       num: 5,
     })
-    expect(shortcutOf(press('Digit9', '(', { shiftKey: true }), 'lh')).toEqual({
+    expect(shortcutOf(press('Digit9', '(', { shiftKey: true }), 'rh')).toEqual({
       type: 'tuplet',
       num: 9,
     })
-    expect(shortcutOf(press('Digit1', '!', { shiftKey: true }), 'lh')).toBeNull()
-    expect(shortcutOf(press('Digit3', '#', { shiftKey: true }), 'chords')).toBeNull()
+    expect(shortcutOf(press('Digit1', '!', { shiftKey: true }), 'rh')).toBeNull()
+  })
+
+  it('writes Flat’s signs by its keys: 0 = − the accidentals, the comma a tie, Shift with J a respelling', () => {
+    expect(shortcutOf(press('Digit0', '0'), 'rh')).toEqual({ type: 'accidental', accidental: 0 })
+    expect(shortcutOf(press('Equal', '='), 'rh')).toEqual({ type: 'accidental', accidental: 1 })
+    expect(shortcutOf(press('Minus', '-'), 'rh')).toEqual({ type: 'accidental', accidental: -1 })
+    expect(shortcutOf(press('Comma', ','), 'staff0')).toEqual({ type: 'tie' })
+    expect(shortcutOf(press('KeyJ', 'J', { shiftKey: true }), 'rh')).toEqual({ type: 'respell' })
+    // J alone is the piano's.
+    expect(shortcutOf(press('KeyJ', 'j'), 'rh')).toBeNull()
+  })
+
+  it('draws Flat’s lines and marks with Shift: S a slur, T a trill, P the pedal, < > the hairpins', () => {
+    const shift = { shiftKey: true }
+    expect(shortcutOf(press('KeyS', 'S', shift), 'rh')).toEqual({ type: 'line', line: 'slur' })
+    expect(shortcutOf(press('KeyT', 'T', shift), 'rh')).toEqual({
+      type: 'mark',
+      mark: { kind: 'ornament', ornament: 'trill' },
+    })
+    expect(shortcutOf(press('KeyP', 'P', shift), 'lh')).toEqual({
+      type: 'mark',
+      mark: { kind: 'pedal', pedal: 'down' },
+    })
+    expect(shortcutOf(press('Comma', '<', shift), 'rh')).toEqual({ type: 'line', line: 'cresc' })
+    expect(shortcutOf(press('Period', '>', shift), 'rh')).toEqual({ type: 'line', line: 'dim' })
+    expect(shortcutOf(press('Digit8', '*', { ...shift, metaKey: true }), 'rh')).toEqual({
+      type: 'line',
+      line: '8va',
+    })
+    expect(shortcutOf(press('Digit9', '(', { ...shift, ctrlKey: true }), 'rh')).toEqual({
+      type: 'line',
+      line: '8vb',
+    })
+  })
+
+  it('edits bars by Flat’s keys: Cmd Shift Enter adds one, Cmd Backspace deletes, Cmd Enter breaks the line, [ ] repeat', () => {
+    const mod = { metaKey: true }
+    expect(shortcutOf(press('Enter', 'Enter', { ...mod, shiftKey: true }), 'rh')).toEqual({
+      type: 'bars',
+      edit: 'insert',
+    })
+    expect(shortcutOf(press('Backspace', 'Backspace', mod), 'chords')).toEqual({
+      type: 'bars',
+      edit: 'delete',
+    })
+    expect(shortcutOf(press('Enter', 'Enter', mod), 'staff0')).toEqual({
+      type: 'bars',
+      edit: 'newLine',
+    })
+    expect(shortcutOf(press('BracketLeft', '['), 'chords')).toEqual({
+      type: 'barMarks',
+      choice: 'repeatStart',
+    })
+    expect(shortcutOf(press('BracketRight', ']'), 'rh')).toEqual({
+      type: 'barMarks',
+      choice: 'repeatEnd',
+    })
   })
 
   it('moves the caret: a step, Alt a bar, Home and End or Cmd to the ends, Shift choosing bars', () => {

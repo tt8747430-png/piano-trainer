@@ -29,7 +29,7 @@ const ROUTES = [
   ['/practice/progressions', '/practice/progressions'],
   ['/play/progression', '/play/progression'],
   ['/lessons/reading-chord-symbols', '/lessons/$lessonId'],
-  ['/practice/quiz/build-chord', '/practice/quiz/$trainerId'],
+  ['/practice/quiz/chords', '/practice/quiz/$trainerId'],
   ['/settings', '/settings'],
   ['/search?q=dorian', '/search'],
   ['/check?of=chords:tri', '/check'],

@@ -238,4 +238,39 @@ export const songs = {
     none: 'This link holds no song: it may be cut short.',
     toSongs: 'To Songs',
   },
+  // A song read from a MusicXML or MIDI file (ADR 0107): New's Import, or a file dropped on the
+  // library; what the file holds that a song can't, listed after.
+  import: {
+    action: 'Import',
+    reading: 'Reading {{name}}…',
+    done: 'Imported',
+    leftOut: 'Left out',
+    open: 'Open the song',
+    failed: 'Can’t import {{name}}',
+    problem: {
+      'not-a-score':
+        'It isn’t a score. Import opens MusicXML (.musicxml, .mxl, .xml) and MIDI (.mid) files.',
+      'too-large': 'It’s too large to open as a song.',
+      broken: 'The file is damaged and can’t be read.',
+    },
+    again: 'Choose another file',
+    drop: 'Drop a MusicXML or MIDI file to import it',
+    left: {
+      rhythms: 'Rhythms rounded to the nearest the app writes',
+      notes: 'Notes off the piano, drums and unpitched notes',
+      meters: 'Time signatures the app doesn’t write',
+      keys: 'Key signatures the app doesn’t write',
+      tempos: 'Tempo changes after the first',
+      dynamics: 'Dynamics the app doesn’t write (sfz, fp, ppp)',
+      text: 'Words over the music',
+      chords: 'Chord symbols the app can’t read',
+      endings: 'Endings past the second',
+      marks: 'Articulations, ornaments and technique the app doesn’t write',
+      voices: 'Second voices and chords on a single staff',
+      clefs: 'Clef changes on a single staff',
+      lyrics: 'Lyrics on other staves',
+      staves: 'A piano part’s staves past two',
+      tempo: 'A tempo outside 40–160, set to the nearest',
+    },
+  },
 } as const

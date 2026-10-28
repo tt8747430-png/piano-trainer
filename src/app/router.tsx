@@ -144,6 +144,17 @@ const howToUseRoute = createRoute({
   path: '/settings/how-to-use',
   component: lazyRouteComponent(settingsScreens, 'HowToUsePage'),
 })
+// The MIDI keyboard (ADR 0034): its input, output, devices and playing, and its MIDI log under it.
+const midiSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/midi',
+  component: lazyRouteComponent(settingsScreens, 'MidiSettingsPage'),
+})
+const midiLogRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/midi/log',
+  component: lazyRouteComponent(settingsScreens, 'MidiLogPage'),
+})
 // Search: every named thing the app has, found by name (ADR 0052).
 const searchRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -503,6 +514,8 @@ const routeTree = rootRoute.addChildren([
     learnRoute,
     settingsRoute,
     howToUseRoute,
+    midiSettingsRoute,
+    midiLogRoute,
     searchRoute,
     songsRoute,
     sharedSongRoute,

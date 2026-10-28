@@ -2,12 +2,14 @@ import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { ChordRow, progressionRow, RowStaff, RowPlay, useShownKeys } from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
+import { useScrollMotion } from '@/shared/lib'
 import {
   keyFromParam,
   keyParam,
   LEAD_INS,
   numeralChord,
   numeralGrows,
+  numeralsLine,
   parseNumerals,
 } from '@/shared/lib/music'
 import { ChordSizeField, KeyChoice, Labelled, NO_KEYS, PositionField, Segmented } from '@/shared/ui'
@@ -20,9 +22,9 @@ import {
   type ProgressionsView,
 } from '../model/progressions-view'
 import { ProgressionBetween } from './ProgressionBetween'
-import { ProgressionChoice } from './ProgressionChoice'
 import { ProgressionField } from './ProgressionField'
 import { ProgressionDiagrams } from './ProgressionDiagrams'
+import { ProgressionLibrary } from './ProgressionLibrary'
 import { ProgressionPractice } from './ProgressionPractice'
 import { ProgressionSongs } from './ProgressionSongs'
 
@@ -51,9 +53,18 @@ export function ProgressionExplorer({
   const named = viewProgression(view)
   const change = (next: Partial<ProgressionsView>) => onChange(changedView(view, next))
   const row = progressionRow(played, key, view.size)
+  const behavior = useScrollMotion()
   return (
     <div className="flex flex-col gap-6">
       <PinnedKeyboard shown={shown} />
+      <hgroup className="flex flex-col gap-1">
+        <h2 className="text-3xl wrap-anywhere">
+          {named ? localText(named.name, locale) : numeralsLine(numerals)}
+        </h2>
+        {named ? (
+          <p className="text-lg text-muted-foreground">{localText(named.character, locale)}</p>
+        ) : null}
+      </hgroup>
       <ChordRow
         chords={row}
         position={{ inversion: view.inversion, nearest: view.nearest }}
@@ -67,20 +78,14 @@ export function ProgressionExplorer({
         ) : null}
       </ChordRow>
       <div className="grid-fields gap-x-10 gap-y-5">
-        <div className="flex min-w-0 flex-col gap-3">
-          <ProgressionChoice
-            named={named}
-            numerals={numerals}
-            minor={key.minor}
-            onChoose={(progression) => onChange(chosenView(view, progression))}
-          />
-          <ProgressionField
-            progression={view.p}
-            musicKey={key}
-            onChange={(p, read) => change({ p, key: keyParam(read) })}
-          />
+        <div className="col-span-full">
+          <KeyChoice value={view.key} onChange={(next) => change({ key: next })} />
         </div>
-        <KeyChoice value={view.key} onChange={(next) => change({ key: next })} />
+        <ProgressionField
+          progression={view.p}
+          musicKey={key}
+          onChange={(p, read) => change({ p, key: keyParam(read) })}
+        />
         <Labelled label={t('music:chordSize.label')}>
           <ChordSizeField
             value={view.size}
@@ -101,6 +106,15 @@ export function ProgressionExplorer({
         </Labelled>
         <PositionField notes={view.size === 'triads' ? 3 : 4} position={view} onChange={change} />
       </div>
+      <ProgressionLibrary
+        musicKey={key}
+        size={view.size}
+        shown={named?.id}
+        onChoose={(progression) => {
+          onChange(chosenView(view, progression))
+          window.scrollTo({ top: 0, behavior })
+        }}
+      />
       <ProgressionPractice musicKey={key} inPlayer={playerSearch(view)} />
       <ProgressionSongs line={view.p} minor={key.minor} />
       <ProgressionBetween

@@ -10,6 +10,7 @@ import { cn } from '@/shared/lib'
 import { Input } from '@/shared/ui/primitives/input'
 import { Popover, PopoverContent } from '@/shared/ui/primitives/popover'
 import type { SheetField as Field } from '@/widgets/score-sheet'
+import { useFieldDocked } from './field-docked'
 
 /** What it types: a field at the caret, or a staff's name where it is printed (ADR 0097). */
 type Kind = Field['kind'] | 'staffName'
@@ -31,6 +32,9 @@ const OVER = { side: 'top', align: 'center', sideOffset: 6 } as const
 /** Under a note, as a finger's number prints under the lower staff. */
 const UNDER = { side: 'bottom', align: 'center', sideOffset: 6 } as const
 
+/** Docked over the phone's own keyboard, as Flat's phone types: a slim bar across the screen. */
+const DOCKED = { side: 'top', align: 'center', sideOffset: 6 } as const
+
 /**
  * Where each field stands at the place the sheet drew for it (ADR 0096): the chord symbol's over the
  * chord row, the Lyrics field on its verse's line under the note, the fingering field over the note
@@ -40,6 +44,8 @@ const PLACES = {
   chord: ON,
   lyrics: ON,
   fingering: OVER,
+  text: OVER,
+  tempo: OVER,
   staffName: ON,
 } as const satisfies Readonly<Record<Kind, object>>
 
@@ -51,6 +57,8 @@ const FACES = {
   chord: 'w-36 font-display font-semibold',
   lyrics: 'w-32 font-serif',
   fingering: 'w-24 text-center font-display font-semibold tabular-nums',
+  text: 'w-44 font-serif italic',
+  tempo: 'w-24 text-center font-display font-semibold tabular-nums',
   staffName: 'w-44 font-serif',
 } as const satisfies Readonly<Record<Kind, string>>
 
@@ -59,6 +67,8 @@ const INPUT_MODES = {
   chord: 'text',
   lyrics: 'text',
   fingering: 'numeric',
+  text: 'text',
+  tempo: 'numeric',
   staffName: 'text',
 } as const satisfies Readonly<Record<Kind, 'text' | 'numeric'>>
 
@@ -118,6 +128,7 @@ export function SheetField({
   children?: ReactNode
 }) {
   const id = useId()
+  const docked = useFieldDocked()
   const input = useRef<HTMLInputElement | null>(null)
   // Opened, the cursor in it, what it holds chosen: a phone's own keyboard comes up with it.
   const opened = useCallback((element: HTMLInputElement | null) => {
@@ -151,11 +162,16 @@ export function SheetField({
     >
       <PopoverContent
         anchor={anchor}
-        {...(under ? UNDER : PLACES[kind])}
+        {...(docked ? DOCKED : under ? UNDER : PLACES[kind])}
         aria-label={label}
         initialFocus={input}
         finalFocus={false}
-        className="w-auto max-w-[min(24rem,calc(100vw-1rem))] gap-1.5 p-1.5 data-[side=top]:flex-col-reverse"
+        className={cn(
+          'gap-1.5 p-1.5 data-[side=top]:flex-col-reverse',
+          docked
+            ? 'w-[calc(100vw-0.75rem)] max-w-none rounded-2xl p-2'
+            : 'w-auto max-w-[min(24rem,calc(100vw-1rem))]',
+        )}
       >
         <div className="flex items-center gap-1">
           <Input
@@ -174,7 +190,11 @@ export function SheetField({
             spellCheck={false}
             onChange={(event) => onText(event.target.value)}
             onKeyDown={onKeyDown}
-            className={cn('h-11 rounded-xl bg-card px-2 text-xl md:text-xl', FACES[kind])}
+            className={cn(
+              'h-11 rounded-xl bg-card px-2 text-xl md:text-xl',
+              FACES[kind],
+              docked && 'min-w-0 flex-1',
+            )}
           />
           {beside}
         </div>

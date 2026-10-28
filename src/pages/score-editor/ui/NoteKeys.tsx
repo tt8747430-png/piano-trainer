@@ -11,15 +11,17 @@ import {
   takesTuplet,
   type EditMode,
 } from '@/features/score-editor'
-import type { Accidental } from '@/shared/lib/music'
+import { isCompound, type Accidental } from '@/shared/lib/music'
 import { TUPLET_COUNTS, tupletOf, type TupletCount } from '@/shared/lib/notation'
 import { Segmented } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
 import { TUPLET_WORDS, VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
-import { usePaletteForm } from './palette-form'
-import { GlyphGrid, PaletteKey } from './palette-keys'
+import type { Tool } from '../model/shortcuts'
+import { usePaletteDock, usePaletteForm } from './palette-form'
+import { KeyGrid, PaletteKey } from './palette-keys'
 import { usePaletteReason } from './palette-reason'
+import { LineKeys } from './LineKeys'
 
 /** A key drawn as notation: a glyph of the music font, at a note value's size. */
 const GLYPH = 'font-sans text-3xl leading-none'
@@ -29,30 +31,33 @@ const REST = '𝄽'
 /** What the palette shows as chosen: the chosen note's value, else the next note's. */
 const useShown = () => useEditorState(useShallow(shownValue))
 
+/** Each value's key, Flat's 1 to 7. */
+const VALUE_TOOLS: Readonly<Partial<Record<number, Tool>>> = {
+  1: 'whole',
+  2: 'half',
+  4: 'quarter',
+  8: 'eighth',
+  16: 'sixteenth',
+  32: 'thirtySecond',
+  64: 'sixtyFourth',
+}
+
 /**
- * The values whole to 64th and Dotted, first of the Notes (ADR 0114): with a note chosen it is made
- * that value; else the next note is written so. The chosen note's own value stands pressed.
+ * The values whole to 64th (ADR 0114): with a note chosen it is made that value; else the next note
+ * is written so. The chosen note's own value stands pressed.
  */
 function ValueKeys() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const shown = useShown()
-  const dottable = useEditorState((state) =>
-    takesDot((shownValue(state) ?? state.value).value, state.draft.meter),
-  )
-  const row = usePaletteForm() === 'row'
   return (
-    <div
-      role="group"
-      aria-label={t('values.label')}
-      className={row ? 'contents' : 'grid grid-cols-8 gap-1'}
-    >
+    <div role="group" aria-label={t('values.label')} className="contents">
       {NOTE_VALUES.map((option) => (
         <PaletteKey
           key={option}
           label={t(`values.${VALUE_WORDS[option]}`)}
+          tool={VALUE_TOOLS[option]}
           pressed={shown?.value === option}
-          className="h-11"
           onClick={() => actions.dispatch({ type: 'value', value: option })}
         >
           <span aria-hidden className={GLYPH}>
@@ -60,73 +65,14 @@ function ValueKeys() {
           </span>
         </PaletteKey>
       ))}
-      <PaletteKey
-        label={t('dot')}
-        reason={t('reason.noDot')}
-        pressed={shown?.dots === 1}
-        disabled={!dottable}
-        className="h-11"
-        onClick={() => actions.dispatch({ type: 'dot' })}
-      >
-        <span aria-hidden className={GLYPH}>
-          {VALUE_GLYPHS[4]}.
-        </span>
-      </PaletteKey>
     </div>
   )
 }
 
-/** A tuplet's bracket over its count, as a score prints one: ⌐3¬. */
-function TupletBracket({ num }: { num: TupletCount }) {
-  return (
-    <svg aria-hidden viewBox="0 0 24 24" className="size-6">
-      <path
-        d="M3 13V8h5.5M15.5 8H21v5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <text
-        x="12"
-        y="12.5"
-        textAnchor="middle"
-        fontSize="10"
-        fontStyle="italic"
-        fontWeight="600"
-        fill="currentColor"
-      >
-        {num}
-      </text>
-    </svg>
-  )
-}
-
-/**
- * The tuplets, two to nine (ADR 0097, Flat's ⇧2–⇧9): each puts its tuplet on the value chosen (the
- * chosen note, else the next written), the same one again taking it off. Greyed where the meter
- * writes such notes plainly (two or four to a simple beat, three or six to a compound one), or the
- * value is too short for it.
- */
-function TupletKeys() {
-  const { t } = useTranslation('editor')
-  const { actions } = useScoreEditorContext()
-  const shown = useShown()
-  const meter = useEditorState((state) => state.draft.meter)
-  const value = useEditorState((state) => (shownValue(state) ?? state.value).value)
-  return TUPLET_COUNTS.map((num) => (
-    <PaletteKey
-      key={num}
-      label={t(`tuplets.${TUPLET_WORDS[num]}`)}
-      reason={t(tupletOf(num, meter) ? 'reason.shortTuplet' : 'reason.plainTuplet')}
-      pressed={shown?.tuplet?.num === num}
-      disabled={!takesTuplet(value, num, meter)}
-      onClick={() => actions.dispatch({ type: 'tuplet', num })}
-    >
-      <TupletBracket num={num} />
-    </PaletteKey>
-  ))
+/** A hairline between the toolbar's groups; nothing in a grid or a list. */
+function Divider() {
+  if (usePaletteForm() !== 'bar') return null
+  return <span aria-hidden className="mx-1 h-6 w-px shrink-0 self-center bg-hairline" />
 }
 
 /** A natural, drawn as the staff draws it. */
@@ -140,8 +86,8 @@ function Natural() {
   )
 }
 
-/** The accidentals' keys, ♯ ♭ ♮, in the palette's order. */
-const ACCIDENTAL_KEYS = [1, -1, 0] as const satisfies readonly Accidental[]
+/** The accidentals' keys, ♮ ♯ ♭, in Flat's order. */
+const ACCIDENTAL_KEYS = [0, 1, -1] as const satisfies readonly Accidental[]
 
 /**
  * The accidentals, Flat's (ADR 0114): each a toggle on the notes chosen, pressed while every one
@@ -159,16 +105,17 @@ function AccidentalKeys() {
     }),
   )
   const keys = {
-    1: { label: t('accidentals.sharp'), picture: <Sharp /> },
-    [-1]: { label: t('accidentals.flat'), picture: <Flat /> },
-    0: { label: t('accidentals.natural'), picture: <Natural /> },
+    1: { label: t('accidentals.sharp'), picture: <Sharp />, tool: 'sharp' },
+    [-1]: { label: t('accidentals.flat'), picture: <Flat />, tool: 'flat' },
+    0: { label: t('accidentals.natural'), picture: <Natural />, tool: 'natural' },
   } as const
   return ACCIDENTAL_KEYS.map((accidental, i) => {
-    const { label, picture } = keys[accidental]
+    const { label, picture, tool } = keys[accidental]
     return (
       <PaletteKey
         key={label}
         label={label}
+        tool={tool}
         reason={t('reason.chooseNote')}
         pressed={carried[i] ?? false}
         disabled={!chosen}
@@ -226,29 +173,12 @@ function ModeIcon({ mode }: { mode: EditMode }) {
 
 /**
  * The editing modes (ADR 0114, Flat's Melody · Insert · Chord): one always chosen; what a key played
- * does in each is the ⓘ beside the section's name (ADR 0096); I cycles them. In the folded row, three
- * picture keys, the mode chosen pressed (ADR 0114).
+ * does in each is the ⓘ beside the section's name (ADR 0096); I cycles them.
  */
 function ModeChoice() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const mode = useEditorState((state) => state.mode)
-  const choose = (next: EditMode) => actions.dispatch({ type: 'mode', mode: next })
-  if (usePaletteForm() === 'row')
-    return (
-      <div role="group" aria-label={t('mode.label')} className="contents">
-        {EDIT_MODES.map((each) => (
-          <PaletteKey
-            key={each}
-            label={t(`mode.${each}`)}
-            pressed={mode === each}
-            onClick={() => choose(each)}
-          >
-            <ModeIcon mode={each} />
-          </PaletteKey>
-        ))}
-      </div>
-    )
   return (
     <Segmented
       label={t('mode.label')}
@@ -258,64 +188,160 @@ function ModeChoice() {
         label: t(`mode.${each}`),
         icon: <ModeIcon mode={each} />,
       }))}
-      onChange={choose}
+      onChange={(next) => actions.dispatch({ type: 'mode', mode: next })}
     />
   )
 }
 
 /**
- * The Notes section: the values and Dotted, the editing modes, then Double dotted, Rest and Tie, the
- * tuplets (out of reach where the meter takes none), then the accidentals.
+ * The everyday tools, Flat's quick toolbar in its order: the accidentals ♮ ♯ ♭ and Respell, the
+ * values whole to 64th, Dotted and Double dotted (out of reach where the meter takes none), Tie,
+ * Tuplet (the meter's first: a triplet, a duplet in compound time) and Rest. The note-entry toolbar over the sheet on a
+ * laptop, the sheet's quick row on a phone, and the Notes' keys there.
  */
-export function NoteKeys() {
+export function NoteBar() {
   const { t } = useTranslation('editor')
   const { actions } = useScoreEditorContext()
   const dispatch = actions.dispatch
   const shown = useShown()
+  const dottable = useEditorState((state) =>
+    takesDot((shownValue(state) ?? state.value).value, state.draft.meter),
+  )
   const doubleDottable = useEditorState((state) =>
     takesDot((shownValue(state) ?? state.value).value, state.draft.meter, 2),
   )
+  const off = !useNotesChosen()
   return (
     <>
+      <AccidentalKeys />
+      <PaletteKey
+        label={t('respell')}
+        tool="respell"
+        reason={t('reason.chooseNote')}
+        disabled={off}
+        onClick={() => dispatch({ type: 'respell' })}
+      >
+        <span aria-hidden className="flex items-center [&_svg]:size-4.5">
+          <Flat />
+          <ArrowLeftRight className="size-3.5!" strokeWidth={2.5} />
+          <Sharp />
+        </span>
+      </PaletteKey>
+      <Divider />
       <ValueKeys />
-      <ModeChoice />
-      <GlyphGrid>
-        <PaletteKey
-          label={t('doubleDot')}
-          reason={t('reason.noDot')}
-          pressed={shown?.dots === 2}
-          disabled={!doubleDottable}
-          onClick={() => dispatch({ type: 'dot', dots: 2 })}
+      <Divider />
+      <PaletteKey
+        label={t('dot')}
+        tool="dot"
+        reason={t('reason.noDot')}
+        pressed={shown?.dots === 1}
+        disabled={!dottable}
+        onClick={() => dispatch({ type: 'dot' })}
+      >
+        <span aria-hidden className={GLYPH}>
+          {VALUE_GLYPHS[4]}.
+        </span>
+      </PaletteKey>
+      <PaletteKey
+        label={t('doubleDot')}
+        reason={t('reason.noDot')}
+        pressed={shown?.dots === 2}
+        disabled={!doubleDottable}
+        onClick={() => dispatch({ type: 'dot', dots: 2 })}
+      >
+        <span aria-hidden className={GLYPH}>
+          {VALUE_GLYPHS[4]}..
+        </span>
+      </PaletteKey>
+      <PaletteKey label={t('marks.tie')} tool="tie" onClick={() => dispatch({ type: 'tie' })}>
+        <svg
+          aria-hidden
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          className="size-6"
         >
-          <span aria-hidden className={GLYPH}>
-            {VALUE_GLYPHS[4]}..
-          </span>
-        </PaletteKey>
-        <PaletteKey label={t('rest')} onClick={() => dispatch({ type: 'rest' })}>
-          <span aria-hidden className={GLYPH}>
-            {REST}
-          </span>
-        </PaletteKey>
-        <PaletteKey label={t('marks.tie')} onClick={() => dispatch({ type: 'tie' })}>
-          <svg
-            aria-hidden
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            className="size-6"
-          >
-            <circle cx="5" cy="9" r="2" fill="currentColor" />
-            <circle cx="19" cy="9" r="2" fill="currentColor" />
-            <path d="M5 13 C9 18 15 18 19 13" />
-          </svg>
-        </PaletteKey>
-        <TupletKeys />
-        <AccidentalKeys />
-      </GlyphGrid>
+          <path d="M3 10 C8 16 16 16 21 10" />
+        </svg>
+      </PaletteKey>
+      <QuickTupletKey />
+      <PaletteKey label={t('rest')} tool="rest" onClick={() => dispatch({ type: 'rest' })}>
+        <span aria-hidden className={GLYPH}>
+          {REST}
+        </span>
+      </PaletteKey>
     </>
   )
+}
+
+/**
+ * The Notes section: the editing modes, then, where the palette is a sheet at the foot (a phone),
+ * the everyday tools in its table; on a laptop those stand in the note-entry toolbar over the sheet.
+ */
+export function NoteKeys() {
+  const sheet = usePaletteDock() === 'sheet'
+  return (
+    <>
+      <ModeChoice />
+      {sheet ? (
+        <KeyGrid>
+          <NoteBar />
+        </KeyGrid>
+      ) : null}
+      <KeyGrid>
+        <TupletKeys />
+      </KeyGrid>
+    </>
+  )
+}
+
+/** A tuplet's bracket round its count, as Flat's key and a score draw it: ⌐3¬. */
+function TupletBracket({ num }: { num: TupletCount }) {
+  return (
+    <span aria-hidden className="flex items-start gap-0.5 font-display text-base leading-none">
+      <span className="mt-1 size-1.5 border-t-[1.5px] border-l-[1.5px] border-current" />
+      <span className="font-semibold italic">{num}</span>
+      <span className="mt-1 size-1.5 border-t-[1.5px] border-r-[1.5px] border-current" />
+    </span>
+  )
+}
+
+/** One tuplet's key: on the value chosen, the same again off; greyed where the meter or value takes none. */
+function TupletKey({ num }: { num: TupletCount }) {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const shown = useShown()
+  const meter = useEditorState((state) => state.draft.meter)
+  const value = useEditorState((state) => (shownValue(state) ?? state.value).value)
+  return (
+    <PaletteKey
+      label={t(`tuplets.${TUPLET_WORDS[num]}`)}
+      tool={`tuplet${num}`}
+      reason={t(tupletOf(num, meter) ? 'reason.shortTuplet' : 'reason.plainTuplet')}
+      pressed={shown?.tuplet?.num === num}
+      disabled={!takesTuplet(value, num, meter)}
+      onClick={() => actions.dispatch({ type: 'tuplet', num })}
+    >
+      <TupletBracket num={num} />
+    </PaletteKey>
+  )
+}
+
+/** The quick toolbar's Tuplet, Flat's: the meter's first, a triplet, or a duplet in compound time. */
+function QuickTupletKey() {
+  const compound = useEditorState((state) => isCompound(state.draft.meter))
+  return <TupletKey num={compound ? 2 : 3} />
+}
+
+/**
+ * The tuplets two to nine (ADR 0097, Flat's ⇧2–⇧9), each on the value chosen: the chosen note's,
+ * else the next written; greyed where the meter writes such notes plainly (two or four to a simple
+ * beat, three or six to a compound one) or the value is too short for it.
+ */
+function TupletKeys() {
+  return TUPLET_COUNTS.map((num) => <TupletKey key={num} num={num} />)
 }
 
 /** Chord's picture: noteheads stacked on one stem, as the next notes stack onto the one at the caret. */
@@ -381,18 +407,28 @@ function Move({ up, by }: { up: boolean; by: 'half' | 'step' | 'octave' }) {
           />
         </svg>
       ) : (
-        <span className="font-display text-base leading-none font-bold italic">
-          8<sup className="text-[0.6em]">{up ? 'va' : 'vb'}</sup>
-        </span>
+        <span className="font-display text-base leading-none font-bold italic">8ve</span>
       )}
     </span>
   )
 }
 
+/** A grace note before its note, as Flat's key draws it: a small flagged note, then a head. */
+function GraceNote() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="currentColor">
+      <ellipse cx="6" cy="16" rx="2.6" ry="1.9" transform="rotate(-20 6 16)" />
+      <rect x="7.9" y="6" width="1.1" height="10" />
+      <path d="M9 6c0 2 3.2 2.6 2.9 5.6-.4-1.6-1.6-2.3-2.9-2.5z" />
+      <ellipse cx="16.5" cy="17" rx="3.8" ry="2.7" transform="rotate(-20 16.5 17)" />
+    </svg>
+  )
+}
+
 /**
- * The Pitch keypad, each pair up then down: a half step (sharps up, flats down), a step of the key, an
- * octave; and Respell, the same keys written the other way (G♯ as A♭). Each key its picture alone,
- * named in its tooltip.
+ * The Pitch section (Flat's Pitch and representation): each pair up then down, a step of the key, a
+ * half step (sharps up, flats down), an octave; then the grace note (Flat's 9) and the octave lines.
+ * Each key its picture alone, named in its tooltip.
  */
 export function PitchKeys() {
   const { t } = useTranslation('editor')
@@ -401,6 +437,10 @@ export function PitchKeys() {
   const step = (steps: number) => actions.dispatch({ type: 'step', steps })
   const off = !useNotesChosen()
   const reason = usePaletteReason()
+  const graced = useEditorState((state) => {
+    const notes = chosenNotes(state)
+    return notes.length > 0 && notes.every((n) => (n.marks?.grace?.length ?? 0) > 0)
+  })
   const pairs = [
     // In the keys' order: ↑ ↓ a step in the key, with Shift a semitone, with Cmd an octave.
     { by: 'step', up: t('stepUp'), down: t('stepDown'), move: step, size: 1 },
@@ -408,7 +448,7 @@ export function PitchKeys() {
     { by: 'octave', up: t('octaveUp'), down: t('octaveDown'), move: shift, size: 12 },
   ] as const
   return (
-    <GlyphGrid>
+    <KeyGrid>
       {pairs.flatMap(({ by, up, down, move, size }) => [
         <PaletteKey key={up} label={up} reason={reason} disabled={off} onClick={() => move(size)}>
           <Move up by={by} />
@@ -424,18 +464,16 @@ export function PitchKeys() {
         </PaletteKey>,
       ])}
       <PaletteKey
-        label={t('respell')}
+        label={t('grace')}
+        tool="grace"
         reason={reason}
-        span="wide"
+        pressed={graced}
         disabled={off}
-        onClick={() => actions.dispatch({ type: 'respell' })}
+        onClick={() => actions.dispatch({ type: 'grace' })}
       >
-        <span aria-hidden className="flex items-center gap-1">
-          <Sharp />
-          <ArrowLeftRight className="size-5" strokeWidth={2.5} />
-          <Flat />
-        </span>
+        <GraceNote />
       </PaletteKey>
-    </GlyphGrid>
+      <LineKeys lines={['8va', '8vb', '15ma', '15mb']} />
+    </KeyGrid>
   )
 }
