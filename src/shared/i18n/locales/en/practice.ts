@@ -82,6 +82,18 @@ export const practice = {
     show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
     label: 'Scale',
     startOn: 'Start on',
+    openInChords: 'Open in Chords',
+    // What the run's keys carry: its notes, or a hand's fingers.
+    onKeys: { label: 'On the keys', notes: 'Notes', lh: 'Left hand', rh: 'Right hand' },
+    // The run's fingering hand by hand, each hand drawn with its fingers numbered.
+    byHand: {
+      title: 'Fingering by hand',
+      lh: 'Left hand',
+      rh: 'Right hand',
+      drawing: '{{hand}}: fingers numbered from the thumb, 1, to the little finger, 5',
+      notes: 'Notes',
+      fingers: 'Fingers',
+    },
     fingering: {
       label: 'Fingering',
       thumb: 'From the thumb',

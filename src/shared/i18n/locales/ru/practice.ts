@@ -79,6 +79,16 @@ export const practice: LocaleResources['practice'] = {
     show: { scale: 'Гамма', chords: 'Аккорды', key: 'Тональность' },
     label: 'Гамма',
     startOn: 'Начать с',
+    openInChords: 'Открыть в Аккордах',
+    onKeys: { label: 'На клавишах', notes: 'Ноты', lh: 'Левая рука', rh: 'Правая рука' },
+    byHand: {
+      title: 'Аппликатура по рукам',
+      lh: 'Левая рука',
+      rh: 'Правая рука',
+      drawing: '{{hand}}: пальцы пронумерованы от большого, 1, до мизинца, 5',
+      notes: 'Ноты',
+      fingers: 'Пальцы',
+    },
     fingering: {
       label: 'Аппликатура',
       thumb: 'С первого пальца',

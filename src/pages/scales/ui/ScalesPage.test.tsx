@@ -246,8 +246,44 @@ describe('Practice → Scales and keys', () => {
     await renderApp('/practice/scales?kind=mpent&root=A')
     await screen.findByRole('group', { name: 'Keyboard' })
     expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent(/^1/)
-    // The fingers are under the keys and on the staff: no table says them a third time.
-    expect(screen.queryByRole('table')).not.toBeInTheDocument()
+  })
+
+  it('writes each hand’s fingering under the run’s notes, beside the hand drawn with its fingers numbered', async () => {
+    await renderApp('/practice/scales')
+    const byHand = await screen.findByRole('region', { name: 'Fingering by hand' })
+    const row = (hand: string) =>
+      within(within(byHand).getByRole('table', { name: hand }))
+        .getAllByRole('row')
+        .map((each) => each.textContent)
+    expect(row('Left hand')).toEqual(['NotesCDEFGABC', 'Fingers54321321'])
+    expect(row('Right hand')).toEqual(['NotesCDEFGABC', 'Fingers12312345'])
+    expect(
+      within(byHand).getByRole('img', {
+        name: 'Right hand: fingers numbered from the thumb, 1, to the little finger, 5',
+      }),
+    ).toBeInTheDocument()
+  })
+
+  it('shows the notes alone or either hand’s fingers on the keys, kept in the URL', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/scales')
+    const onKeys = await screen.findByRole('radiogroup', { name: 'On the keys' })
+    expect(within(onKeys).getByRole('radio', { name: 'Right hand' })).toBeChecked()
+    await user.click(within(onKeys).getByRole('radio', { name: 'Left hand' }))
+    expect(router.state.location.search).toMatchObject({ onKeys: 'lh' })
+    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('54321321')
+    await user.click(within(onKeys).getByRole('radio', { name: 'Notes' }))
+    expect(document.querySelector('[data-slot="finger-row"]')).not.toBeInTheDocument()
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveTextContent('3')
+  })
+
+  it('opens each of the key’s chords in Chords', async () => {
+    await renderApp('/practice/scales?show=chords')
+    const open = await screen.findByRole('navigation', { name: 'Open in Chords' })
+    const links = within(open).getAllByRole('link')
+    expect(links.map((link) => link.textContent)).toEqual(['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B°'])
+    expect(links[1]).toHaveAttribute('href', expect.stringMatching(/^\/practice\/chords\?.*root=D/))
   })
 
   it('has no Chords view for a scale without seven notes', async () => {

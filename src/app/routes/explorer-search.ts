@@ -156,6 +156,9 @@ export function readScalesSearch(raw: Raw): ScalesSearch {
     rhythm: valueOr(isRhythm, raw.rhythm, SCALES_DEFAULTS.rhythm),
     tempo: wholeIn(raw.tempo, TEMPO_RANGE.min, TEMPO_RANGE.max, SCALES_DEFAULTS.tempo),
     hands: valueOr(isHands, raw.hands, SCALES_DEFAULTS.hands),
+    onKeys: isOneOf<NonNullable<ScaleView['onKeys']>>(['notes', 'lh', 'rh'])(raw.onKeys)
+      ? raw.onKeys
+      : undefined,
     chords,
     inversion: wholeIn(raw.inversion, 0, lastInversion(chords), SCALES_DEFAULTS.inversion),
     keysPlay: valueOr(isKeysPlay, raw.keysPlay, SCALES_DEFAULTS.keysPlay),
