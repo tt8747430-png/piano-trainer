@@ -47,7 +47,7 @@ export function MidiDeviceList() {
   const store = useSettingsStoreApi()
   const chosen = useSettings((state) => selectMidi(state).device)
   const devices = useMidiDevices()
-  const { on } = useMidiInput()
+  const { connection, on } = useMidiInput()
   const keyboards = devices.filter((device) => device.input)
   const away = chosen !== null && !keyboards.some((device) => device.name === chosen)
   if (keyboards.length === 0 && !away)
@@ -55,7 +55,9 @@ export function MidiDeviceList() {
       <p className="flex min-h-14 items-center gap-3 px-3.5 text-muted-foreground">
         <Unplug aria-hidden className="size-5 shrink-0" />
         <span className="min-w-0 text-pretty">
-          {on ? t('midiSettings.devices.none') : t('midiSettings.devices.inputOff')}
+          {on || connection.kind === 'unsupported'
+            ? t('midiSettings.devices.none')
+            : t('midiSettings.devices.inputOff')}
         </span>
       </p>
     )

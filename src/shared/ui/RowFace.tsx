@@ -53,7 +53,8 @@ export function RowFace({
           <TileMark numeral={numeral} paint={paint} />
         )
       ) : null}
-      <span className="min-w-0 flex-1">
+      {/* Beside a value, the title keeps the room its longest word needs; the value is cut short. */}
+      <span className={value ? 'min-w-min flex-1' : 'min-w-0 flex-1'}>
         <span className="line-clamp-2 text-lg leading-snug font-semibold text-pretty">{title}</span>
         {count ? (
           <>
@@ -80,10 +81,7 @@ export function RowFace({
       {value ? (
         <>
           {' '}
-          <span
-            data-slot="row-value"
-            className="max-w-[45%] shrink-0 truncate text-muted-foreground"
-          >
+          <span data-slot="row-value" className="min-w-0 truncate text-muted-foreground">
             {value}
           </span>
         </>

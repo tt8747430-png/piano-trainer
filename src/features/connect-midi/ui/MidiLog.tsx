@@ -1,5 +1,5 @@
 import { Eraser, ListMusic, Pause, Play } from 'lucide-react'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import { describeMidiData, type MidiLogEntry, type MidiLogMessage } from '@/shared/api/midi'
@@ -57,7 +57,17 @@ function LogRow({ entry }: { entry: MidiLogEntry }) {
     <li className="flex items-start gap-3 py-2.5">
       <span className="min-w-0 flex-1">
         <span className="block font-semibold">{main}</span>
-        <span className="block truncate text-sm text-muted-foreground">{said.join(' · ')}</span>
+        {/* Each part whole on its line: a long line breaks between them, after their dot. */}
+        <span className="block text-sm text-muted-foreground">
+          {said.map((part, index) => (
+            <Fragment key={index}>
+              <span className="whitespace-nowrap">
+                {part}
+                {index < said.length - 1 ? ' ·' : null}
+              </span>{' '}
+            </Fragment>
+          ))}
+        </span>
       </span>
       <time className="shrink-0 pt-0.5 text-sm text-muted-foreground tabular-nums">
         {logClock(performance.timeOrigin + entry.time)}
@@ -79,11 +89,6 @@ export function MidiLog() {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-2">
-        <span aria-live="polite" className="me-auto text-muted-foreground">
-          {held
-            ? t('midiSettings.log.paused')
-            : t('midiSettings.log.count', { count: shown.length })}
-        </span>
         <Button
           variant="soft"
           aria-pressed={held !== null}
@@ -104,6 +109,9 @@ export function MidiLog() {
           {t('midiSettings.log.clear')}
         </Button>
       </div>
+      <p aria-live="polite" className="-mb-1 text-sm text-pretty text-muted-foreground">
+        {held ? t('midiSettings.log.paused') : t('midiSettings.log.count', { count: shown.length })}
+      </p>
       <div className="card px-4 py-1.5">
         {shown.length === 0 ? (
           <p className="flex min-h-14 items-center gap-3 text-muted-foreground">

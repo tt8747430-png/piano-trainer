@@ -396,7 +396,12 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 - **Row link** (`RowLink`, 64px): a 48px tile in its paint's wash with a 20px icon in the deep shade (or a number in
   Literata), the title in Onest 600 17px on up to two lines, a one-line detail, what it carries at its end and a
   chevron. Each row card is the link: hover fills the whole card and nudges the chevron. A row that opens a sheet
-  (`RowButton`) has no chevron. A list of one kind goes without tiles.
+  (`RowButton`) has no chevron. A list of one kind goes without tiles. A row that opens a setting's own screen
+  shows the setting's value at its right before the chevron (`value`, muted, cut short before the title is):
+  Settings' "MIDI keyboard Off ›".
+- **Settings group** (`SettingsGroup`): a card with its title in a muted band across the top and its ⓘ beside it;
+  a list of choices or a row link inside it runs to the card's edges (`flush`). A switch greyed for a reason says it
+  in a muted line under its label ("Needs MIDI input"), never hidden.
 - **Fact card** (`FactCard`): an icon over a fact's name over its value; three across (Key · Time · Tempo).
 - **Sheet** (`Sheet`): card paper, 20px top corners, a grab handle, its Literata title with Close, a scrolling body,
   an optional footer over a hairline. It stands on the phone's keyboard. Never a sheet over a sheet: open a list as a

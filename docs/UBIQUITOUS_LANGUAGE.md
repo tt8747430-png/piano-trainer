@@ -236,8 +236,17 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Live voice** (`useLiveVoice`): the keys a hand plays, sounding from press to release. _Avoid:_ tap sound.
 - **Touch** («Чувствительность»): how the app hears a MIDI keyboard's velocities: Light, Normal, Heavy. _Avoid:_
   sensitivity (in code).
-- **Sound the MIDI keyboard**: the app sounds the keys played on it. _Avoid:_ MIDI thru.
-- **Play through the piano**: the app's music on the keyboard's own speaker. _Avoid:_ MIDI out.
+- **MIDI input** («MIDI-вход», `midi.input`): the app hears the MIDI keyboards; off, it hears none and asks nothing
+  as it opens (the port's status `off`). _Avoid:_ connect toggle, enable MIDI.
+- **MIDI input plays sound** («Звук MIDI-входа», `midi.sound`): the app sounds the keys played on it, for a keyboard
+  without speakers. _Avoid:_ MIDI thru, Sound the MIDI keyboard.
+- **MIDI output** («MIDI-выход», `midi.throughPiano`): the app's music on the keyboard's own speaker. _Avoid:_ Play
+  through the piano.
+- **Connected devices** («Подключённые устройства», `MidiDevice`): the MIDI devices plugged in, by name, with their
+  maker and whether they send keys or have a speaker; the one heard is chosen there (Any keyboard: all). _Avoid:_
+  ports, Listen to.
+- **MIDI log** («Журнал MIDI», `MidiLogEntry`): the last 200 messages every MIDI device sent, kept by the port,
+  shown live under Troubleshooting. _Avoid:_ MIDI monitor, console.
 
 ## Learn the song
 
