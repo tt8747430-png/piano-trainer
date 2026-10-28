@@ -86,7 +86,7 @@ Impeccable (impeccable.style, v4.8 installed in `.claude/skills/impeccable`, by 
 
 - **Read the skill each time**; skills change, and memory of one is not the skill.
 - **Skills are not free:** each one loaded costs context. Load the one the task needs, not every one that sounds near.
-- The superpowers plugin (obra/superpowers) is not installed here; its practices are folded into this file. The owner can add it with `/plugin marketplace add obra/superpowers-marketplace`.
+- **Superpowers** (obra/superpowers) is enabled for this repo in `.claude/settings.json` (its marketplace is added and the plugin turned on, so a session here installs it). Its skills are called as `superpowers:<name>`: `brainstorming`, `writing-plans`, `executing-plans`, `test-driven-development`, `systematic-debugging`, `verification-before-completion`, `requesting-code-review`, `receiving-code-review`, `using-git-worktrees`, `finishing-a-development-branch`, `dispatching-parallel-agents`, `subagent-driven-development`, `writing-skills`. **The owner-way rule comes first** where they differ: run plans *natively* (inline), never `subagent-driven-development` or `dispatching-parallel-agents` unless the work passes the agent test in SKILL.md; `brainstorming` only for a large feature whose request leaves real choices open; `using-superpowers`' "invoke before anything" means check for a fitting skill, not load every near one.
 
 ## Dos and don'ts
 

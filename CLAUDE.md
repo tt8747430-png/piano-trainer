@@ -20,6 +20,8 @@ TypeScript, **Feature-Sliced Design** (lint-enforced), English + Russian, deploy
   (`audit`, `polish`, `adapt`, `harden`, `clarify`, `distill` …); our screens are its Operate mode.
 - `vercel:knowledge-update` → before touching `vercel.ts` or anything Vercel.
 - `humanizer` / `writing-guidelines` → docs and any prose the app shows.
+- `superpowers:*` (enabled in `.claude/settings.json`) → `systematic-debugging`, `verification-before-completion`,
+  `writing-plans` for a large feature, run inline; the owner-way skill decides when agents are worth it.
 - **Not applicable:** React Native, Next.js and Angular skills.
 
 Which skill when, who calls it, and impeccable's commands: `.claude/skills/owner-way/references/practices.md`. A large
