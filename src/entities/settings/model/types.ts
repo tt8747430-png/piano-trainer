@@ -130,6 +130,8 @@ export interface RecorderSettings {
 
 /** The MIDI keyboard's settings. */
 export interface MidiSettings {
+  /** MIDI input on: a keyboard the learner allowed is heard again as the app opens. */
+  readonly input: boolean
   /** The keyboard heard, by its name; null: any. */
   readonly device: string | null
   /** The app sounds the keys played on it: for a keyboard with no speaker. */
@@ -298,6 +300,7 @@ export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false }
 
 /** The owner's piano sounds itself: the app sounds no MIDI key until asked. */
 export const DEFAULT_MIDI: MidiSettings = {
+  input: true,
   device: null,
   sound: false,
   throughPiano: false,
