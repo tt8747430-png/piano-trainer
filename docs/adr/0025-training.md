@@ -1,13 +1,14 @@
-# ADR 0025 — Training: gaps from quiz answers only, trainers on one round machine, exercises as rules
+# ADR 0025 — Training: gaps from quiz answers only, trainers on one round machine and one setup, exercises as rules
 
-- **Status:** accepted · **Date:** 2026-09-24 · consolidated 2026-10-27
+- **Status:** accepted · **Date:** 2026-09-24 · consolidated 2026-10-27 · amended 2026-10-28
 
 ## Context
 
 The owner wants the app to find and fill gaps in a learner's theory without lesson text, trainers in The Ultimate
 Piano's shape (a ladder of levels, fixed rounds so runs compare, a summary), and every exercise group of the sources
 (scales in 3rds, Hanon, Barry Harris's lines, Piano With Jonny's) in any key, in the Player with its sheet music and
-Wait mode.
+Wait mode. A reference drill app (round 13) gave every drill one setup and asked the same chords and intervals four
+ways, with a time limit and a Next that waits for the answer.
 
 ## Decision
 
@@ -20,10 +21,25 @@ Wait mode.
   each); a journey chapter's Check, which marks its step learned once its family is Known, asking each skill as often
   as it still needs; and My gaps in Quiz's bar (the gaps, then the due, then the unknowns of pieces opened).
 - **One round machine** (`features/trainer`): a round is answered by keys chosen and checked, by keys pressed and
-  judged at once, or by a choice. What a run asks is one value (`Asks`), drawn never the same twice running. A run
-  counts its rounds (10, 20 or until stopped), times each answer, keeps the streak and sums up. The Check, a lesson's
-  question and every trainer share one board.
-- **What a trainer asks is view state** (its level, rounds and Custom choices in the URL, remembered per trainer);
+  judged at once, or by a choice; a card is revealed, never right or wrong; any other round's answer can be shown
+  unanswered (Show answer, or its **time limit** running out), counted missed. What a run asks is one value
+  (`Asks`), drawn never the same twice running. A run counts its rounds (10, 20 or until stopped), times each
+  answer, keeps the streak and sums up; a run of cards has no score and keeps no record. The Check, a lesson's
+  question and every trainer share one board, whose one primary button never moves: Reveal, Check, or Next greyed
+  until the round is answered, then Next.
+- **Four drills over the same material.** **Chords** and **Intervals** are each one trainer asked four ways (`Drill`):
+  **Cards** (one of name, keys and staff shown, the rest revealed), **Quiz** (seen on the keys and staff, four
+  choices on the same root differing only in quality, so the quality is what is read), **Play** (a chord built on the
+  keys or MIDI; an interval's upper note over its given lower one) and **By ear** (heard, the same four choices, the
+  keys staying up while it sounds). Their ladders and Custom (chords or intervals, roots by Natural · Sharp · Flat,
+  inversions, how an interval sounds by ear) are the same for every drill. Only a chord read or played rates its
+  quality: a card or a sound heard is no evidence. Each drill keeps its own record (`chords:quiz:c-main`).
+- **One setup for every trainer** (`widgets/trainer-setup`): the drill and what a card shows, Options (level,
+  Custom's lists each a sheet of checks that never empties, switches, rounds), Timing (time limit, Go on
+  automatically), a card saying the drill in a sentence, the record, Start. Every explanation is an ⓘ. A run takes
+  the setup's place until its X or its results' Done.
+- **What a trainer asks is view state** (its drill, level, rounds, time limit and Custom choices in the URL,
+  remembered per trainer);
   **what a learner did is saved state**: each run adds to its trainer level's record in `pt-progress`.
 - **An exercise is a rule that writes a Performance** (`shared/lib/exercise`, a fenced kernel): one generator per
   rule over a small choice, laid out by `exercisePerformance` in 4/4 bars, four a line, a chord a passage for the
@@ -36,7 +52,7 @@ Wait mode.
 
 ## Consequences
 
-A new trainer is a ladder, an entry in `trainers.ts` and its words; a new exercise a generator, a catalogue row and
+A new trainer is a ladder, an entry in `trainers.ts`, its words and its sentence in the setup; a new exercise a generator, a catalogue row and
 a case in `arrangeExercise`, whose test writes every exercise in every root on the piano's keys.
 
 ## History
@@ -44,3 +60,4 @@ a case in `arrangeExercise`, whose test writes every exercise in every root on t
 - 0006 — Theory gaps come from quiz answers only (2026-09-24; Due added 2026-10-11).
 - 0024 — An exercise is a rule that writes a Performance (2026-10-01).
 - 0025 — A trainer is a round machine with a ladder (2026-10-01).
+- 0025 — Chords and Intervals in four drills, one setup for every trainer, a time limit, an answer-gated Next (2026-10-28).

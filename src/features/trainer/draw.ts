@@ -1,5 +1,6 @@
 import {
   CHORD_QUALITIES,
+  MIDDLE_C,
   chordFamily,
   chordSkill,
   chordSymbol,
@@ -12,13 +13,16 @@ import {
   numeralChord,
   parseNumerals,
   PITCH_CLASSES,
+  pitchClass,
   pitchClassOf,
   placeChord,
   placeScale,
   qualityRootSpelling,
+  rootSpelling,
   sameNote,
   scaleRootSpelling,
   skillOf,
+  spellAbove,
   spellChord,
   spellScale,
   type ChordQuality,
@@ -32,8 +36,9 @@ import {
 } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import type { IntervalWay } from '@/shared/lib/schedule'
-import { EAR_QUALITIES, EAR_SCALES } from './ladders/ear'
-import type { ChordQuestion, Question } from './round-machine'
+import { EAR_SCALES } from './ladders/ear'
+import type { ChordQuestion, IntervalQuestion, Question } from './round-machine'
+import type { CardSide, Drill } from './trainer-view'
 
 /** A chord a level asks: a root and quality, and the inversion it must be built in, if any. */
 export interface ChordItem {
@@ -51,30 +56,33 @@ export interface ReadNote {
 
 /** What a run asks, worked out from its trainer and level: each round is drawn from it. */
 export type Asks =
-  /** Skills on any root (My gaps, the Check, a chord or scale trainer's Custom), in order or drawn. */
+  /** Skills on any root, each built on the keys (My gaps, the Check, Scale building), in order or drawn. */
   | {
       readonly kind: 'skills'
-      readonly chords: 'build-chord' | 'name-chord'
       readonly skills: readonly SkillId[]
       readonly roots?: readonly PitchClass[]
       readonly ordered?: boolean
     }
+  /** Chords, asked as a drill asks them: turned over, chosen by sight, played, or chosen by ear. */
   | {
       readonly kind: 'chords'
-      readonly mode: 'build-chord' | 'name-chord'
+      readonly drill: Drill
       readonly chords: readonly ChordItem[]
       /** In turn, round and round (a piece's Check), rather than drawn. */
       readonly ordered?: boolean
+      /** What a flashcard shows; its name where none is said. */
+      readonly show?: CardSide
+      /** By ear, the chord's notes one at a time. */
+      readonly arpeggio?: boolean
     }
+  /** Intervals, asked as a drill asks them, up from these roots (any where none is said). */
   | {
       readonly kind: 'intervals'
+      readonly drill: Drill
       readonly intervals: readonly ReferenceInterval[]
       readonly ways: readonly IntervalWay[]
-    }
-  | {
-      readonly kind: 'qualities'
-      readonly qualities: readonly ChordQuality[]
-      readonly arpeggio: boolean
+      readonly roots?: readonly SpelledNote[]
+      readonly show?: CardSide
     }
   | { readonly kind: 'scales'; readonly kinds: readonly ScaleKind[]; readonly descending: boolean }
   | { readonly kind: 'notes'; readonly notes: readonly ReadNote[] }
@@ -103,7 +111,7 @@ function numeralKeys(text: string, key: Key): Midi[] {
 /** A question equal to the last one is drawn again at most this many times. */
 const DRAWS = 8
 const OPTIONS = 4
-/** Where an ear trainer's sound starts: a root from G3 to F♯4, so every interval and chord sounds clearly. */
+/** Where an interval heard starts: a root from G3 to F♯4, so every interval sounds clearly. */
 const EAR_LOW = midi(55)
 
 function itemAt<T>(items: readonly T[], index: number): T {
@@ -161,16 +169,19 @@ function chordQuestion(item: ChordItem, skill: SkillId | undefined): ChordQuesti
 }
 
 /**
- * Name chord's options: the answer and three other chords, the level's own first (another chord
- * it asks, on any root), then other qualities on the same root, the answer's family first.
+ * A chord quiz's options: the answer and three other chords on the same root in the same inversion,
+ * differing only in quality, so the quality is what is read or heard: the qualities the drill asks
+ * first, then the answer's family, then any other. Every option is spelled on the answer's root,
+ * so no spelling gives the answer away.
  */
-function nameOptions(question: ChordQuestion, asked: readonly ChordItem[], random: () => number) {
-  const ownSymbols = shuffled(
-    [...new Set(asked.map((item) => chordQuestion(item, undefined).symbol))],
-    random,
-  )
+function nameOptions(
+  question: ChordQuestion,
+  asked: readonly ChordQuality[],
+  random: () => number,
+) {
   const family = chordFamily(question.quality)
-  const sameRoot = [
+  const qualities = [
+    ...shuffled([...new Set(asked)], random),
     ...shuffled(
       CHORD_QUALITIES.filter((q) => chordFamily(q) === family),
       random,
@@ -179,16 +190,92 @@ function nameOptions(question: ChordQuestion, asked: readonly ChordItem[], rando
       CHORD_QUALITIES.filter((q) => chordFamily(q) !== family),
       random,
     ),
-  ]
-    .filter((quality) => quality !== question.quality)
-    .map((quality) =>
-      chordSymbol({ root: qualityRootSpelling(pitchClassOf(question.root), quality), quality }),
-    )
-  const others = [...new Set([...ownSymbols, ...sameRoot])].filter((s) => s !== question.symbol)
-  return withOthers(question.symbol, others, random)
+  ].filter(
+    (quality) =>
+      quality !== question.quality &&
+      (question.inversion === null ||
+        spellChord(question.root, quality).length > question.inversion),
+  )
+  const others = qualities.map(
+    (quality) =>
+      chordQuestion({ root: question.root, quality, inversion: question.inversion }, undefined)
+        .symbol,
+  )
+  return withOthers(
+    question.symbol,
+    [...new Set(others)].filter((s) => s !== question.symbol),
+    random,
+  )
 }
 
-/** A chord round from a skill on a root: the quiz's way (My gaps, the Check, Custom). */
+/** A chord asked as the drill asks it; only a chord read or played is evidence on its quality. */
+function chordRound(
+  asks: Extract<Asks, { kind: 'chords' }>,
+  item: ChordItem,
+  random: () => number,
+): Question {
+  const chord = chordQuestion(item, chordSkill(item.quality))
+  const { skill: _rated, ...unrated } = chord
+  switch (asks.drill) {
+    case 'entry':
+      return { mode: 'build-chord', ...chord }
+    case 'flashcards':
+      return { mode: 'chord-card', ...unrated, show: asks.show ?? 'name' }
+    case 'quiz':
+    case 'ear': {
+      const options = nameOptions(
+        chord,
+        asks.chords.map((asked) => asked.quality),
+        random,
+      )
+      const heard = asks.drill === 'ear'
+      return {
+        mode: 'name-chord',
+        ...(heard ? unrated : chord),
+        options,
+        heard,
+        arpeggio: heard && asks.arpeggio === true,
+      }
+    }
+  }
+}
+
+/** A root's key from `from` up, within the octave. */
+const keyFrom = (from: Midi, root: SpelledNote): Midi =>
+  midi(from + pitchClass(pitchClassOf(root) - from))
+
+/** An interval asked as the drill asks it: up from a root of the drill's, heard from G3, else seen from middle C. */
+function intervalRound(asks: Extract<Asks, { kind: 'intervals' }>, random: () => number): Question {
+  const interval = pick(asks.intervals, random)
+  const lowNote = asks.roots?.length
+    ? pick(asks.roots, random)
+    : rootSpelling(pick(PITCH_CLASSES, random), false)
+  const low = keyFrom(asks.drill === 'ear' ? EAR_LOW : MIDDLE_C, lowNote)
+  const asked: IntervalQuestion = {
+    interval,
+    low,
+    high: midi(low + INTERVALS[interval].semitones),
+    lowNote,
+    highNote: spellAbove(lowNote, INTERVALS[interval]),
+    way: asks.drill === 'ear' ? pick(asks.ways, random) : 'up',
+  }
+  switch (asks.drill) {
+    case 'flashcards':
+      return { mode: 'interval-card', ...asked, show: asks.show ?? 'name' }
+    case 'entry':
+      return { mode: 'build-interval', ...asked }
+    case 'quiz':
+    case 'ear':
+      return {
+        mode: 'name-interval',
+        ...asked,
+        heard: asks.drill === 'ear',
+        options: earOptions(interval, asks.intervals, EAR_INTERVALS, random),
+      }
+  }
+}
+
+/** A round from a skill on a root, built on the keys (My gaps, the Check, Scale building). */
 function skillRound(asks: Extract<Asks, { kind: 'skills' }>, index: number, random: () => number) {
   const skill = asks.ordered
     ? itemAt(asks.skills, index % asks.skills.length)
@@ -210,15 +297,7 @@ function skillRound(asks: Extract<Asks, { kind: 'skills' }>, index: number, rand
     quality: target.quality,
     inversion: null,
   }
-  const chord = chordQuestion(item, skill)
-  if (asks.chords === 'build-chord') return { mode: 'build-chord', ...chord } as const
-  const asked = asks.skills.flatMap((id) => {
-    const other = skillOf(id)
-    return other.kind === 'chord'
-      ? [{ root: qualityRootSpelling(pc, other.quality), quality: other.quality, inversion: null }]
-      : []
-  })
-  return { mode: 'name-chord', ...chord, options: nameOptions(chord, asked, random) } as const
+  return { mode: 'build-chord', ...chordQuestion(item, skill) } as const
 }
 
 /** A count of sharps (positive) or flats (negative), as an option: `3♯`, `2♭`, `0`. */
@@ -232,42 +311,14 @@ function draw(asks: Asks, index: number, random: () => number): Question {
   switch (asks.kind) {
     case 'skills':
       return skillRound(asks, index, random)
-    case 'chords': {
-      const item = asks.ordered
-        ? itemAt(asks.chords, index % asks.chords.length)
-        : pick(asks.chords, random)
-      const chord = chordQuestion(item, chordSkill(item.quality))
-      return asks.mode === 'build-chord'
-        ? { mode: 'build-chord', ...chord }
-        : { mode: 'name-chord', ...chord, options: nameOptions(chord, asks.chords, random) }
-    }
-    case 'intervals': {
-      const interval = pick(asks.intervals, random)
-      const low = midi(EAR_LOW + Math.floor(random() * 12))
-      return {
-        mode: 'name-interval',
-        interval,
-        low,
-        high: midi(low + INTERVALS[interval].semitones),
-        way: pick(asks.ways, random),
-        options: earOptions(interval, asks.intervals, EAR_INTERVALS, random),
-      }
-    }
-    case 'qualities': {
-      const quality = pick(asks.qualities, random)
-      const root = qualityRootSpelling(pick(PITCH_CLASSES, random), quality)
-      const keys = placeChord(spellChord(root, quality), { inversion: 0, bothHands: false }).rh.map(
-        (tone) => midi(tone.midi - 12),
+    case 'chords':
+      return chordRound(
+        asks,
+        asks.ordered ? itemAt(asks.chords, index % asks.chords.length) : pick(asks.chords, random),
+        random,
       )
-      return {
-        mode: 'name-quality',
-        root,
-        keys,
-        quality,
-        arpeggio: asks.arpeggio,
-        options: earOptions(quality, asks.qualities, EAR_QUALITIES, random),
-      }
-    }
+    case 'intervals':
+      return intervalRound(asks, random)
     case 'scales': {
       const kind = pick(asks.kinds, random)
       const root = scaleRootSpelling(pick(PITCH_CLASSES, random), kind)
@@ -345,6 +396,8 @@ function sameQuestion(a: Question, b: Question | null | undefined): boolean {
     case 'read-note':
       return b.mode === a.mode && a.key === b.key
     case 'name-interval':
+    case 'build-interval':
+    case 'interval-card':
       return b.mode === a.mode && a.interval === b.interval && a.low === b.low
     case 'key-signature':
     case 'key-degrees':
@@ -358,7 +411,7 @@ function sameQuestion(a: Question, b: Question | null | undefined): boolean {
       return b.mode === a.mode && a.kind === b.kind && sameNote(a.root, b.root)
     case 'build-chord':
     case 'name-chord':
-    case 'name-quality':
+    case 'chord-card':
       return b.mode === a.mode && a.quality === b.quality && sameNote(a.root, b.root)
   }
 }

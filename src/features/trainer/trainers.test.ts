@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { note, noteName } from '@/shared/lib/music'
 import { drawRound } from './draw'
 import { choiceAnswer, isChoice } from './round-machine'
 import { levelOf, ownTrainerView, runKeyOf, trainerOf } from './trainers'
@@ -12,15 +13,19 @@ describe('every trainer', () => {
     const trainer = trainerOf(id)
     const levels = [...trainer.levels, ...(trainer.custom.length > 0 ? [CUSTOM] : [])]
     const random = scripted(0.05, 0.35, 0.65, 0.95, 0.5, 0.2, 0.8)
-    for (const level of levels.length > 0 ? levels : ['']) {
-      const asks = trainer.asks(level, TEN, ['chord:m7', 'scale:dorian'])
+    const drills = trainer.drills.length > 0 ? trainer.drills : [undefined]
+    for (const [level, drill] of (levels.length > 0 ? levels : ['']).flatMap((each) =>
+      drills.map((way) => [each, way] as const),
+    )) {
+      const asks = trainer.asks(level, { ...TEN, drill }, ['chord:m7', 'scale:dorian'])
       let previous = null
       for (let index = 0; index < 12; index++) {
         const question = drawRound(asks, { index, random, previous })
         if (isChoice(question)) {
-          expect(question.options, `${id} ${level}`).toContain(choiceAnswer(question))
-          expect(new Set(question.options).size, `${id} ${level}`).toBe(question.options.length)
-          expect(question.options.length, `${id} ${level}`).toBeGreaterThanOrEqual(2)
+          const at = `${id} ${level} ${drill ?? ''}`
+          expect(question.options, at).toContain(choiceAnswer(question))
+          expect(new Set(question.options).size, at).toBe(question.options.length)
+          expect(question.options.length, at).toBeGreaterThanOrEqual(2)
         }
         previous = question
       }
@@ -29,29 +34,42 @@ describe('every trainer', () => {
 })
 
 describe('Custom', () => {
-  it('asks the chord types a chord trainer’s URL names', () => {
-    const asks = trainerOf('build-chord').asks(
+  it('asks each chord the URL names on each root it names, in its inversions where asked', () => {
+    const asks = trainerOf('chords').asks(
       CUSTOM,
-      { ...TEN, sizes: 'triads', added: 'six.add9' },
+      { ...TEN, drill: 'quiz', chords: 'maj.m7', roots: 'C.F#', inversions: true },
       [],
     )
-    expect(asks).toMatchObject({ kind: 'skills', chords: 'build-chord' })
-    expect(asks.kind === 'skills' && asks.skills).toEqual([
-      'chord:maj',
-      'chord:min',
-      'chord:dim',
-      'chord:aug',
-      'chord:six',
-      'chord:m6',
-      'chord:add9',
-      'chord:madd9',
-    ])
+    expect(asks).toMatchObject({ kind: 'chords', drill: 'quiz' })
+    if (asks.kind !== 'chords') throw new Error('expected chords')
+    expect(asks.chords).toHaveLength(2 * 3 + 2 * 4)
+    expect(asks.chords[0]).toEqual({ root: note('C'), quality: 'maj', inversion: 0 })
+    expect(asks.chords.map((chord) => noteName(chord.root))).toContain('F#')
   })
 
-  it('asks triads and 7th chords, plain, before the learner chooses', () => {
-    const asks = trainerOf('name-chord').asks(CUSTOM, TEN, [])
-    expect(asks.kind === 'skills' && asks.skills).toContain('chord:d7')
-    expect(asks.kind === 'skills' && asks.skills).not.toContain('chord:sus4')
+  it('asks major and minor triads on the naturals before the learner chooses, any voicing', () => {
+    const asks = trainerOf('chords').asks(CUSTOM, TEN, [])
+    if (asks.kind !== 'chords') throw new Error('expected chords')
+    expect(asks.drill).toBe('flashcards')
+    expect(new Set(asks.chords.map((chord) => chord.quality))).toEqual(new Set(['maj', 'min']))
+    expect(asks.chords).toHaveLength(14)
+    expect(asks.chords.every((chord) => chord.inversion === null)).toBe(true)
+  })
+
+  it('asks Custom’s intervals up from its roots, heard the ways it names', () => {
+    const asks = trainerOf('intervals').asks(
+      CUSTOM,
+      { ...TEN, drill: 'ear', intervals: 'P5.m9', roots: 'Bb', ways: 'together' },
+      [],
+    )
+    expect(asks).toEqual({
+      kind: 'intervals',
+      drill: 'ear',
+      show: 'name',
+      intervals: ['P5', 'm9'],
+      ways: ['together'],
+      roots: [note('B', -1)],
+    })
   })
 
   it('asks its own when the URL names nothing it knows', () => {
@@ -83,9 +101,9 @@ describe('Custom', () => {
   })
 
   it('hears chords one note at a time and scales coming down when the URL says so', () => {
-    expect(trainerOf('chords-by-ear').asks(CUSTOM, { ...TEN, arpeggio: true }, [])).toMatchObject({
-      arpeggio: true,
-    })
+    expect(
+      trainerOf('chords').asks(CUSTOM, { ...TEN, drill: 'ear', arpeggio: true }, []),
+    ).toMatchObject({ arpeggio: true })
     expect(trainerOf('scales-by-ear').asks(CUSTOM, { ...TEN, descending: true }, [])).toMatchObject(
       { descending: true },
     )
@@ -101,10 +119,10 @@ describe('levelOf and runKeyOf', () => {
 
   it('writes a URL’s level as its trainer has it: none for its first or one it lacks', () => {
     const view = { ...TEN, level: 'sevenths' }
-    expect(ownTrainerView(trainerOf('build-chord'), view)).toBe(view)
-    expect(ownTrainerView(trainerOf('build-chord'), { ...TEN, level: 'c-main' })).toEqual(TEN)
-    expect(ownTrainerView(trainerOf('build-chord'), { ...TEN, level: 'everything' })).toEqual(TEN)
-    expect(ownTrainerView(trainerOf('intervals-by-ear'), { ...TEN, level: CUSTOM })).toEqual({
+    expect(ownTrainerView(trainerOf('chords'), view)).toBe(view)
+    expect(ownTrainerView(trainerOf('chords'), { ...TEN, level: 'c-main' })).toEqual(TEN)
+    expect(ownTrainerView(trainerOf('chords'), { ...TEN, level: 'everything' })).toEqual(TEN)
+    expect(ownTrainerView(trainerOf('intervals'), { ...TEN, level: CUSTOM })).toEqual({
       ...TEN,
       level: CUSTOM,
     })
@@ -112,8 +130,9 @@ describe('levelOf and runKeyOf', () => {
     expect(ownTrainerView(trainerOf('gaps'), TEN)).toBe(TEN)
   })
 
-  it('keeps each level’s record under the trainer and level, My gaps under one', () => {
-    expect(runKeyOf(trainerOf('name-chord'), 'c-main')).toBe('name-chord:c-main')
+  it('keeps each level’s record under the trainer, its drill and level, My gaps under one', () => {
+    expect(runKeyOf(trainerOf('chords'), 'c-main', 'quiz')).toBe('chords:quiz:c-main')
+    expect(runKeyOf(trainerOf('build-scale'), 'major')).toBe('build-scale:major')
     expect(runKeyOf(trainerOf('gaps'), '')).toBe('gaps:all')
   })
 })

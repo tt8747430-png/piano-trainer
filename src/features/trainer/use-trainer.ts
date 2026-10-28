@@ -40,6 +40,8 @@ export interface TrainerRun {
   clear(): void
   check(): void
   choose(option: string): void
+  /** Turns a card over; on any other round, shows the answer unanswered (counted wrong). */
+  reveal(): void
   /** The next round; after the last, the summary. */
   next(): void
   /** Ends the run here, its rounds answered so far its summary. */
@@ -56,6 +58,8 @@ export interface TrainerOptions {
   /** Where the run's record is kept; none (the Check) keeps none. */
   readonly runKey?: RunKey
   readonly autoNext?: boolean
+  /** Each round's time in seconds, after which its answer is shown; none, no limit. */
+  readonly limit?: number
   readonly random?: () => number
   readonly now?: () => number
 }
@@ -65,8 +69,9 @@ const clock = () => performance.now()
 /**
  * Drives a run of rounds drawn from `asks`: records each answer on a rated skill once as evidence,
  * sounds an ear round as it is shown and every answer once given, moves on by itself after a right
- * answer with auto-next, and keeps the run's record once it is summed up. A new `asks` needs a new
- * `key` on the caller.
+ * answer with auto-next (a card once turned), shows the answer once a round's time limit runs out,
+ * and keeps the run's record once it is summed up; a run of cards keeps none, as a card is never
+ * right or wrong. A new `asks` needs a new `key` on the caller.
  */
 export function useTrainer(asks: Asks, options: TrainerOptions): TrainerRun {
   const random = options.random ?? Math.random
@@ -117,8 +122,9 @@ export function useTrainer(asks: Asks, options: TrainerOptions): TrainerRun {
   }
 
   const sumUp = (ended: RunState) => {
-    if (options.runKey && ended.answered.length > 0) {
-      const { accuracy, bestStreak } = runSummary(ended)
+    const summary = runSummary(ended)
+    if (options.runKey && ended.answered.length > 0 && !summary.cards) {
+      const { accuracy, bestStreak } = summary
       recordRun(store, options.runKey, { accuracy, streak: bestStreak })
     }
     setSummed(true)
@@ -148,6 +154,16 @@ export function useTrainer(asks: Asks, options: TrainerOptions): TrainerRun {
     return () => clearTimeout(timer)
   }, [autoNext, round])
 
+  // A time limit: a round still unanswered when it runs out shows its answer.
+  const timeUp = useEffectEvent(() => send({ type: 'reveal' }))
+  const limitMs = (options.limit ?? 0) * 1000
+  const waiting = limitMs > 0 && result === null && !summed
+  useEffect(() => {
+    if (!waiting) return
+    const timer = setTimeout(timeUp, limitMs)
+    return () => clearTimeout(timer)
+  }, [waiting, limitMs, question])
+
   return {
     round,
     run,
@@ -158,6 +174,7 @@ export function useTrainer(asks: Asks, options: TrainerOptions): TrainerRun {
     clear: () => send({ type: 'clear' }),
     check: () => send({ type: 'check' }),
     choose: (option) => send({ type: 'choose', option }),
+    reveal: () => send({ type: 'reveal' }),
     next,
     stop() {
       const stopped = stopRun(current.current.run)

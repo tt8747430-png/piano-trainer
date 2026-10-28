@@ -3,6 +3,7 @@ import { CirclePlay, Layers } from 'lucide-react'
 import { readProgression, type LessonLink } from '@/entities/lesson'
 import { STEP_PAINT } from '@/entities/step'
 import { pieceById } from '@/entities/piece'
+import { isDrill } from '@/features/trainer'
 import {
   keyParam,
   keyScale,
@@ -213,7 +214,13 @@ export function LessonLinkRow({ title, target }: { title: string; target: Lesson
         <RowLink
           title={title}
           {...PAGE_TILES.quiz}
-          render={<Link to="/practice/quiz/$trainerId" params={{ trainerId: target.trainer }} />}
+          render={
+            <Link
+              to="/practice/quiz/$trainerId"
+              params={{ trainerId: target.trainer }}
+              search={isDrill(target.drill) ? { drill: target.drill } : {}}
+            />
+          }
         />
       )
     case 'piece': {

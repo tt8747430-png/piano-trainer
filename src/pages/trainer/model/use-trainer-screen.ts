@@ -6,20 +6,24 @@ import {
   type TrainerRecord,
 } from '@/entities/progress'
 import {
+  drillOf,
   levelOf,
   myGaps,
   runKeyOf,
   trainerOf,
   type Asks,
+  type Drill,
   type Trainer,
   type TrainerId,
   type TrainerView,
 } from '@/features/trainer'
 
-/** A trainer's screen: the trainer, its level, what a run asks, and its record at that level. */
+/** A trainer's screen: the trainer, its level and drill, what a run asks, and its record there. */
 interface TrainerScreen {
   readonly trainer: Trainer
   readonly level: string
+  /** How a drill asks; none for a trainer of one way. */
+  readonly drill: Drill | undefined
   /** What a run asks; null for My gaps with no gaps to ask. */
   readonly asks: Asks | null
   readonly runKey: ReturnType<typeof runKeyOf>
@@ -40,26 +44,26 @@ export function useTrainerScreen(id: TrainerId, view: TrainerView): TrainerScree
     return myGaps(answers, practised)
   })
   const level = levelOf(trainer, view)
-  const { sizes, suspended, added, altered, scales, intervals, ways, qualities, arpeggio } = view
-  const { kinds, descending } = view
-  const { from, to, accidentals, rounds } = view
+  const drill = drillOf(trainer, view)
+  const { rounds, show, chords, roots, inversions, scales, intervals, ways, arpeggio } = view
+  const { kinds, descending, from, to, accidentals } = view
   const asks = useMemo(() => {
     if (trainer.id === 'gaps' && gaps.length === 0) return null
-    const custom = { rounds, sizes, suspended, added, altered, scales, intervals, ways }
-    const more = { qualities, arpeggio, kinds, descending, from, to, accidentals }
-    return trainer.asks(level, { ...custom, ...more }, gaps)
+    const asked = { rounds, drill, show, chords, roots, inversions, scales, intervals, ways }
+    const more = { arpeggio, kinds, descending, from, to, accidentals }
+    return trainer.asks(level, { ...asked, ...more }, gaps)
   }, [
     trainer,
     level,
     rounds,
-    sizes,
-    suspended,
-    added,
-    altered,
+    drill,
+    show,
+    chords,
+    roots,
+    inversions,
     scales,
     intervals,
     ways,
-    qualities,
     arpeggio,
     kinds,
     descending,
@@ -72,14 +76,14 @@ export function useTrainerScreen(id: TrainerId, view: TrainerView): TrainerScree
   const runId = [
     level,
     rounds,
-    sizes,
-    suspended,
-    added,
-    altered,
+    drill,
+    show,
+    chords,
+    roots,
+    inversions,
     scales,
     intervals,
     ways,
-    qualities,
     arpeggio,
     kinds,
     descending,
@@ -87,7 +91,7 @@ export function useTrainerScreen(id: TrainerId, view: TrainerView): TrainerScree
     to,
     accidentals,
   ].join('|')
-  const runKey = runKeyOf(trainer, level)
+  const runKey = runKeyOf(trainer, level, drill)
   const record = useProgress(selectTrainerRecord(runKey))
-  return { trainer, level, asks, runKey, runId, record }
+  return { trainer, level, drill, asks, runKey, runId, record }
 }
