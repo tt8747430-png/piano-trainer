@@ -278,6 +278,8 @@ export {
   LEVELS,
   tremoloStrokes,
   TREMOLO_STROKES,
+  EXPRESSION_GROUP_IDS,
+  EXPRESSION_GROUPS,
   EXPRESSION_TEXT,
   EXPRESSIONS,
   HAIRPINS,
@@ -291,6 +293,7 @@ export {
   type Articulation,
   type Dynamic,
   type Expression,
+  type ExpressionGroup,
   type GraceNote,
   type Hairpin,
   type NoteMarks,
@@ -328,3 +331,12 @@ export {
   type ClefShape,
   type HandClefs,
 } from './clef'
+export {
+  TEMPO_LADDER,
+  TEMPO_TERMS,
+  TEMPO_WORDS,
+  tempoTerm,
+  tempoWord,
+  type TempoTerm,
+  type TempoWord,
+} from './tempo-words'

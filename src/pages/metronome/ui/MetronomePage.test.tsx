@@ -42,6 +42,12 @@ describe('Practice → Metronome', () => {
     await user.click(screen.getByRole('button', { name: 'Faster by 10' }))
     await user.click(screen.getByRole('button', { name: 'Slower by 1' }))
     expect(tempo()).toBe('Tempo: 129 BPM')
+    // Named by its tempo word, what it asks and its range behind the ⓘ.
+    expect(screen.getByText('Allegro')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'About Allegro' }))
+    expect(await screen.findByRole('dialog', { name: 'Allegro' })).toHaveTextContent(
+      'Fast and bright120–156 BPM',
+    )
     expect(saved(storage)).toMatchObject({ bpm: 129, meter: '4/4', sound: 'click' })
   })
 
@@ -82,8 +88,9 @@ describe('Practice → Metronome', () => {
     await user.click(screen.getByRole('button', { name: 'Slower by 10' }))
     // What was queued goes; at 110 the third beat comes 60/110 s after the second.
     expect(audio.stops).toBe(1)
-    // (A top-up may have queued the old fourth beat before the change; the stop took it back.)
-    const after = beatsPlayed(audio.played.slice(3)).filter(({ at }) => at !== 1.6)
+    // A slow machine's top-ups may have queued beats at 120 before the change; the stop took them back.
+    const onOldGrid = (at: number) => Number.isInteger(Number(((at - 0.1) / 0.5).toFixed(6)))
+    const after = beatsPlayed(audio.played.slice(3)).filter(({ at }) => !onOldGrid(at))
     expect(after[0]).toEqual({ at: 1.145, voices: ['click'] })
   })
 

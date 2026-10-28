@@ -15,11 +15,13 @@ import {
   tempoMark,
   tempoUnitsFor,
   unitNote,
+  TEMPO_LADDER,
+  tempoWord,
   type Meter,
   type TempoUnit,
+  type TempoWord,
 } from '@/shared/lib/music'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
-import { TEMPO_WORDS, tempoWord } from '../model/tempo-words'
 import { PickerActions, SignPicker } from './SignPicker'
 
 /** How far a finger or the mouse moves the mark: a beat a minute for every few px. */
@@ -53,7 +55,7 @@ function TempoRuler({
   mark: number
   low: number
   high: number
-  name: (word: (typeof TEMPO_WORDS)[number][0]) => string
+  name: (word: TempoWord) => string
 }) {
   const at = (value: number) => `calc(50% + ${(mark - value) * PX_PER_BEAT}px)`
   return createPortal(
@@ -73,7 +75,7 @@ function TempoRuler({
         />
       ))}
       <span className="absolute top-1/2 left-0 h-0.5 w-6 rounded-full bg-current" />
-      {TEMPO_WORDS.filter(([, bpm]) => bpm >= low && bpm <= high).map(([word, bpm]) => (
+      {TEMPO_LADDER.filter(({ from }) => from >= low && from <= high).map(({ word, from: bpm }) => (
         <span
           key={word}
           className="absolute left-6 -translate-y-1/2 text-sm font-bold tracking-wider uppercase transition-opacity duration-150 motion-reduce:transition-none"
@@ -101,7 +103,7 @@ function TempoRuler({
  * step Undo takes back; ✗ (Escape) leaves it.
  */
 function TempoPicker({ onDone }: { onDone: () => void }) {
-  const { t } = useTranslation('editor')
+  const { t } = useTranslation(['editor', 'music'])
   const { actions } = useScoreEditorContext()
   const meter = useEditorState((state) => state.draft.meter)
   const wasUnit = useEditorState((state) => state.draft.tempoUnit ?? beatUnit(state.draft.meter))
@@ -113,7 +115,7 @@ function TempoPicker({ onDone }: { onDone: () => void }) {
   const [dragging, setDragging] = useState(false)
   const { low, high } = markRange(unit, meter)
   const kept = (value: number) => Math.min(high, Math.max(low, Math.round(value)))
-  const word = (each: (typeof TEMPO_WORDS)[number][0]) => t(`song.tempos.${each}`)
+  const word = (each: TempoWord) => t(`music:tempoWord.${each}.name`)
   const press = useRef<{ y: number; mark: number; moved: boolean } | null>(null)
   const typed = useRef({ text: '', at: 0 })
   const wheel = useRef(0)

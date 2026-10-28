@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   BARLINE_CHOICES,
@@ -6,7 +7,13 @@ import {
   sectionMeter,
   type BarMarkChoice,
 } from '@/features/score-editor'
-import { EXPRESSION_TEXT, EXPRESSIONS, meterSymbol, type Meter } from '@/shared/lib/music'
+import {
+  EXPRESSION_GROUP_IDS,
+  EXPRESSION_GROUPS,
+  EXPRESSION_TEXT,
+  meterSymbol,
+  type Meter,
+} from '@/shared/lib/music'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { isJumpWords, JUMP_SIGNS, JUMP_WORDS } from '../model/palette-categories'
 import { isTool } from '../model/shortcuts'
@@ -225,22 +232,26 @@ export function TextKeys() {
         <NumeralKey />
         <FieldKey field="text" />
       </KeyGrid>
-      <GroupName name={t('expressions')} />
-      <KeyGrid label={t('expressions')}>
-        {EXPRESSIONS.map((expression) => (
-          <TermKey
-            key={expression}
-            label={t(`marks.${expression}`)}
-            term={EXPRESSION_TEXT[expression]}
-            meaning={t(`meaning.${expression}`)}
-            reason={reason}
-            disabled={!chosen}
-            onClick={() =>
-              actions.dispatch({ type: 'mark', mark: { kind: 'expression', expression } })
-            }
-          />
-        ))}
-      </KeyGrid>
+      {EXPRESSION_GROUP_IDS.map((group) => (
+        <Fragment key={group}>
+          <GroupName name={t(`expressions.${group}`)} />
+          <KeyGrid label={t(`expressions.${group}`)}>
+            {EXPRESSION_GROUPS[group].map((expression) => (
+              <TermKey
+                key={expression}
+                label={t(`marks.${expression}`)}
+                term={EXPRESSION_TEXT[expression]}
+                meaning={t(`meaning.${expression}`)}
+                reason={reason}
+                disabled={!chosen}
+                onClick={() =>
+                  actions.dispatch({ type: 'mark', mark: { kind: 'expression', expression } })
+                }
+              />
+            ))}
+          </KeyGrid>
+        </Fragment>
+      ))}
     </>
   )
 }
