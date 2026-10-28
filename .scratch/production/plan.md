@@ -58,6 +58,15 @@ the index.
 - So the piece and lesson types split into `…Entry` (index) and `…Body`; `pieceById` and `lessonById` give entries;
   `useContent('piece' | 'lesson', id)` gives the body with its status. The learner's own songs and versions stay
   whole in their store (always on the device) and come back from `useContent` ready at once.
+- **What reads every song's body** (found 2026-10-29): chords on song rows and a piece's Skills (`chordsOfPiece`,
+  `skillsOfPiece`, `features/trainer/check-plan`), the progressions a song uses and the songs a progression is in
+  (`progression-library/in-songs`), and Search's index (`pages/search/model/index-entries`). Each becomes a field
+  **derived into the entry** by the same function (`chords`, `skills`, `stretches`: the readings `findNumerals`
+  needs), computed when the files are read now and when an item is published later, and tested to equal what the
+  body gives. Then nothing outside the Player, the song page, the editor and the lesson view needs a body.
+- **Order inside 0.5:** (a) the entry/body split of pieces with the derived fields, its readers moved; (b) the port,
+  the hook and the four states on the body readers; (c) lessons the same way; (d) the architecture test and the
+  build's chunk check.
 
 - `shared/api/content/port.ts`: `ContentPort { catalog(kind): Promise<CatalogEntry[]>, item(kind, id):
   Promise<NetResult<Item>>, watch(on) }`; `filesContentPort()` serving today's `entities/*/content`; a fake.
