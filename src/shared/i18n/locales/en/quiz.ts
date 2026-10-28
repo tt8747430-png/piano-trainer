@@ -95,8 +95,8 @@ export const quiz = {
     nameProgression: 'In {{key}}: which progression is this?',
     nameCadence: 'In {{key}}: which cadence is this?',
     hearCadence: 'In {{key}}: which cadence do you hear?',
-    playCadenceBefore: '{{cadence}} in {{key}}: play the chord before the last',
-    playCadenceLast: '{{cadence}} in {{key}}: play the last chord',
+    playCadenceBefore: '{{cadence}} cadence in {{key}}: play the chord before the last',
+    playCadenceLast: '{{cadence}} cadence in {{key}}: play the last chord',
   },
   // The cadences, as answers and in prompts.
   cadence: {

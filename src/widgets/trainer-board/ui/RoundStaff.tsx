@@ -116,7 +116,7 @@ export function RoundStaff({
       className="relative card self-stretch px-4 py-2 sm:self-start"
     >
       <div aria-hidden={hidden} className={cn(hidden && 'invisible')}>
-        <LazyScoreView score={score} staff={clef} scale={clef ? 1.25 : 1} />
+        <LazyScoreView score={score} staff={clef} scale={clef ? 1.25 : 0.8} />
       </div>
       {hidden ? (
         <span

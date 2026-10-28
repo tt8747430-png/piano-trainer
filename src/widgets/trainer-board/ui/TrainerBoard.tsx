@@ -241,7 +241,14 @@ export function TrainerBoard({
             className="grid grid-cols-2 gap-3 lg:grid-cols-4"
           >
             {choices.map(({ value, label }) => (
-              <Button key={value} variant="outline" size="lg" onClick={() => trainer.choose(value)}>
+              <Button
+                key={value}
+                variant="outline"
+                size="lg"
+                // A long answer (Imperfect authentic) wraps rather than run past the button.
+                className="h-auto min-h-12 py-2 text-balance whitespace-normal"
+                onClick={() => trainer.choose(value)}
+              >
                 {label}
               </Button>
             ))}

@@ -95,8 +95,8 @@ export const quiz: LocaleResources['quiz'] = {
     nameProgression: '{{key}}: что это за последовательность?',
     nameCadence: '{{key}}: что это за каденция?',
     hearCadence: '{{key}}: какую каденцию вы слышите?',
-    playCadenceBefore: '{{cadence}}, {{key}}: сыграйте предпоследний аккорд',
-    playCadenceLast: '{{cadence}}, {{key}}: сыграйте последний аккорд',
+    playCadenceBefore: '{{cadence}} каденция, {{key}}: сыграйте предпоследний аккорд',
+    playCadenceLast: '{{cadence}} каденция, {{key}}: сыграйте последний аккорд',
   },
   cadence: {
     authentic: 'Автентическая',

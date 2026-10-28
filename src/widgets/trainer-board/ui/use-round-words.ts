@@ -48,7 +48,7 @@ export function useRoundWords() {
               : t('quiz:prompt.playCadenceLast', words)
           return question.inversion === null
             ? chord
-            : `${chord}, ${t(`music:inversionName.${INVERSION_NAMES[question.inversion] ?? 'root'}`)}`
+            : `${chord}, ${t(`music:inversionName.${INVERSION_NAMES[question.inversion] ?? 'root'}`).toLowerCase()}`
         }
         return question.inversion === null
           ? t('quiz:prompt.buildChord', { symbol: printedSymbol(question.symbol) })

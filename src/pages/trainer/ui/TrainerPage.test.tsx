@@ -189,7 +189,7 @@ describe('A trainer', () => {
     expect(
       await screen.findByRole('heading', {
         level: 2,
-        name: /^(Authentic|Plagal|Half|Deceptive) in [A-G].* major: play the (chord before the last|last chord)$/,
+        name: /^(Authentic|Plagal|Half|Deceptive) cadence in [A-G].* major: play the (chord before the last|last chord)$/,
       }),
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Check' })).toBeDisabled()

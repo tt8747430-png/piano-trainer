@@ -30,8 +30,8 @@ const rootlessVoicings: Lesson = {
         {
           kind: 'voicings',
           voicings: [
-            { symbol: 'Dm9', degrees: '♭3 5 ♭7 9 |', hands: 'F3 A3 C4 E4 |' },
-            { symbol: 'Dm9', degrees: '♭7 9 ♭3 5 |', hands: 'C3 E3 F3 A3 |' },
+            { symbol: 'Dm9', degrees: '♭3 5 ♭7 9', hands: 'F3 A3 C4 E4 |' },
+            { symbol: 'Dm9', degrees: '♭7 9 ♭3 5', hands: 'C3 E3 F3 A3 |' },
           ],
         },
       ],
@@ -54,9 +54,9 @@ const rootlessVoicings: Lesson = {
         {
           kind: 'voicings',
           voicings: [
-            { symbol: 'Dm9', caption: 'ii', degrees: '♭3 5 ♭7 9 |', hands: 'F3 A3 C4 E4 |' },
-            { symbol: 'G13', caption: 'V', degrees: '♭7 9 3 13 |', hands: 'F3 A3 B3 E4 |' },
-            { symbol: 'CMaj9', caption: 'I', degrees: '3 5 7 9 |', hands: 'E3 G3 B3 D4 |' },
+            { symbol: 'Dm9', caption: 'ii', degrees: '♭3 5 ♭7 9', hands: 'F3 A3 C4 E4 |' },
+            { symbol: 'G13', caption: 'V', degrees: '♭7 9 3 13', hands: 'F3 A3 B3 E4 |' },
+            { symbol: 'CMaj9', caption: 'I', degrees: '3 5 7 9', hands: 'E3 G3 B3 D4 |' },
           ],
         },
       ],
@@ -79,9 +79,9 @@ const rootlessVoicings: Lesson = {
         {
           kind: 'voicings',
           voicings: [
-            { symbol: 'Dm9', caption: 'ii', degrees: '♭7 9 ♭3 5 |', hands: 'C3 E3 F3 A3 |' },
-            { symbol: 'G13', caption: 'V', degrees: '3 13 ♭7 9 |', hands: 'B2 E3 F3 A3 |' },
-            { symbol: 'CMaj9', caption: 'I', degrees: '7 9 3 5 |', hands: 'B2 D3 E3 G3 |' },
+            { symbol: 'Dm9', caption: 'ii', degrees: '♭7 9 ♭3 5', hands: 'C3 E3 F3 A3 |' },
+            { symbol: 'G13', caption: 'V', degrees: '3 13 ♭7 9', hands: 'B2 E3 F3 A3 |' },
+            { symbol: 'CMaj9', caption: 'I', degrees: '7 9 3 5', hands: 'B2 D3 E3 G3 |' },
           ],
         },
       ],
@@ -109,9 +109,9 @@ const rootlessVoicings: Lesson = {
               example: {
                 kind: 'voicings',
                 voicings: [
-                  { symbol: 'Dm9', degrees: '♭3 5 ♭7 9 |', hands: 'F3 A3 C4 E4 |' },
-                  { symbol: 'G13', degrees: '♭7 9 3 13 |', hands: 'F3 A3 B3 E4 |' },
-                  { symbol: 'CMaj9', degrees: '3 5 7 9 |', hands: 'E3 G3 B3 D4 |' },
+                  { symbol: 'Dm9', degrees: '♭3 5 ♭7 9', hands: 'F3 A3 C4 E4 |' },
+                  { symbol: 'G13', degrees: '♭7 9 3 13', hands: 'F3 A3 B3 E4 |' },
+                  { symbol: 'CMaj9', degrees: '3 5 7 9', hands: 'E3 G3 B3 D4 |' },
                 ],
               },
             },
@@ -121,9 +121,9 @@ const rootlessVoicings: Lesson = {
               example: {
                 kind: 'voicings',
                 voicings: [
-                  { symbol: 'Dm9', degrees: '♭7 9 ♭3 5 |', hands: 'C3 E3 F3 A3 |' },
-                  { symbol: 'G13', degrees: '3 13 ♭7 9 |', hands: 'B2 E3 F3 A3 |' },
-                  { symbol: 'CMaj9', degrees: '7 9 3 5 |', hands: 'B2 D3 E3 G3 |' },
+                  { symbol: 'Dm9', degrees: '♭7 9 ♭3 5', hands: 'C3 E3 F3 A3 |' },
+                  { symbol: 'G13', degrees: '3 13 ♭7 9', hands: 'B2 E3 F3 A3 |' },
+                  { symbol: 'CMaj9', degrees: '7 9 3 5', hands: 'B2 D3 E3 G3 |' },
                 ],
               },
             },
@@ -154,9 +154,9 @@ const rootlessVoicings: Lesson = {
           kind: 'voicings',
           key: B_FLAT,
           voicings: [
-            { symbol: 'Cm9', caption: 'ii', degrees: '♭3 5 ♭7 9 |', hands: 'E♭3 G3 B♭3 D4 |' },
-            { symbol: 'F13', caption: 'V', degrees: '♭7 9 3 13 |', hands: 'E♭3 G3 A3 D4 |' },
-            { symbol: 'B♭Maj9', caption: 'I', degrees: '3 5 7 9 |', hands: 'D3 F3 A3 C4 |' },
+            { symbol: 'Cm9', caption: 'ii', degrees: '♭3 5 ♭7 9', hands: 'E♭3 G3 B♭3 D4 |' },
+            { symbol: 'F13', caption: 'V', degrees: '♭7 9 3 13', hands: 'E♭3 G3 A3 D4 |' },
+            { symbol: 'B♭Maj9', caption: 'I', degrees: '3 5 7 9', hands: 'D3 F3 A3 C4 |' },
           ],
         },
       ],
