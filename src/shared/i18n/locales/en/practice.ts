@@ -395,5 +395,14 @@ export const practice = {
     beat: 'Beat {{beat}}',
     start: 'Start',
     stop: 'Stop',
+    // The bar trainer: bars played, then bars muted, to keep time with no click.
+    trainer: 'Bar trainer',
+    trainerInfo:
+      'The Metronome plays its bars, then goes silent for its muted bars while you keep the time, and comes back in on the beat. The beats still show while it is silent.',
+    played: 'Bars played',
+    mutedBars: 'Bars muted',
+    bars_one: '{{count}} bar',
+    bars_other: '{{count}} bars',
+    muted: 'Muted',
   },
 } as const

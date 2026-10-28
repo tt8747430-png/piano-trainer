@@ -370,5 +370,15 @@ export const practice: LocaleResources['practice'] = {
     beat: 'Доля {{beat}}',
     start: 'Старт',
     stop: 'Стоп',
+    trainer: 'Тренировка тактов',
+    trainerInfo:
+      'Метроном играет свои такты, затем молчит заданное число тактов, пока вы держите темп сами, и снова вступает в долю. Доли видны и в тишине.',
+    played: 'Такты со звуком',
+    mutedBars: 'Такты без звука',
+    bars_one: '{{count}} такт',
+    bars_few: '{{count}} такта',
+    bars_many: '{{count}} тактов',
+    bars_other: '{{count}} такта',
+    muted: 'Без звука',
   },
 }

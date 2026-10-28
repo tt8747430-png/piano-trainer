@@ -20,6 +20,7 @@ import { BackButton, Dropdown, InfoTip, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Slider, SliderLabel } from '@/shared/ui/primitives/slider'
 import { useMetronome } from '../model/use-metronome'
+import { BarTrainerField } from './BarTrainerField'
 import { BeatSquares } from './BeatSquares'
 import { TempoSteps } from './TempoSteps'
 
@@ -126,6 +127,12 @@ export function MetronomePage() {
               className={POP_UP}
             />
           </div>
+          <BarTrainerField
+            trainer={metronome.trainer}
+            onChange={metronome.setTrainer}
+            popUp={POP_UP}
+            face={face}
+          />
         </div>
         <div className="flex w-full flex-col items-center gap-8 narrow-phone:gap-5 landscape-phone:gap-6">
           <Button
@@ -140,7 +147,11 @@ export function MetronomePage() {
               <Play aria-hidden className="size-10 translate-x-0.5 fill-current" />
             )}
           </Button>
-          <BeatSquares beats={beatsOf(metronome.meter)} sounding={metronome.beat} />
+          <BeatSquares
+            beats={beatsOf(metronome.meter)}
+            sounding={metronome.beat}
+            muted={metronome.muted}
+          />
         </div>
       </div>
     </div>

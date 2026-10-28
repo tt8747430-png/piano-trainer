@@ -59,11 +59,29 @@ export function beatSounds(
   return [sound('hat', false), ...(drum ? [sound(drum, first)] : [])]
 }
 
-/** A beat of the Metronome: when it sounds on the audio clock, and which beat of its bar it is. */
+/**
+ * A beat of the Metronome: when it sounds on the audio clock, which beat of its bar it is, and which
+ * bar since it started (for the bar trainer).
+ */
 export interface MetronomeBeat {
   readonly at: number
   readonly beat: number
+  readonly bar: number
 }
+
+/** The bar trainer's counts: bars played, then bars muted, each from 1 to 8. */
+export const TRAINER_BARS = [1, 2, 3, 4, 5, 6, 7, 8] as const
+export type TrainerBars = (typeof TRAINER_BARS)[number]
+
+/** The bar trainer (ADR 0052): `play` bars heard, then `mute` bars silent, round and round. */
+export interface BarTrainer {
+  readonly play: TrainerBars
+  readonly mute: TrainerBars
+}
+
+/** Whether bar `bar` (from 0, since the start) is silent under the bar trainer; none while it is off. */
+export const mutedBar = (bar: number, trainer: BarTrainer | null): boolean =>
+  trainer !== null && bar % (trainer.play + trainer.mute) >= trainer.play
 
 /** How the Metronome keeps time: its tempo and its meter. */
 export interface MetronomeTime {
@@ -73,11 +91,11 @@ export interface MetronomeTime {
 
 const secondsPerBeat = (bpm: number) => 60 / bpm
 
-/** The beat after `beat`, at the tempo: round the bar. */
-const after = (beat: MetronomeBeat, { bpm, meter }: MetronomeTime): MetronomeBeat => ({
-  at: beat.at + secondsPerBeat(bpm),
-  beat: (beat.beat + 1) % beatsOf(meter),
-})
+/** The beat after `beat`, at the tempo: round the bar, into the next. */
+function after(beat: MetronomeBeat, { bpm, meter }: MetronomeTime): MetronomeBeat {
+  const next = (beat.beat + 1) % beatsOf(meter)
+  return { at: beat.at + secondsPerBeat(bpm), beat: next, bar: beat.bar + (next === 0 ? 1 : 0) }
+}
 
 /** The beats from `next` due before `until`, and the beat after them. */
 export function plannedBeats(
@@ -114,10 +132,12 @@ export function goOnFrom(
   time: MetronomeTime,
   meterChanged: boolean,
 ): MetronomeBeat {
-  if (!heard) return { at: now + SOON, beat: 0 }
+  if (!heard) return { at: now + SOON, beat: 0, bar: 0 }
   const next = after(heard, time)
+  const newBar = meterChanged || heard.beat + 1 >= beatsOf(time.meter)
   return {
     at: Math.max(next.at, now + SOON),
-    beat: meterChanged || heard.beat + 1 >= beatsOf(time.meter) ? 0 : next.beat,
+    beat: newBar ? 0 : next.beat,
+    bar: heard.bar + (newBar ? 1 : 0),
   }
 }

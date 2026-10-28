@@ -77,10 +77,14 @@ export {
   goOnFrom,
   METRONOME_METERS,
   METRONOME_SOUNDS,
+  mutedBar,
   plannedBeats,
+  TRAINER_BARS,
+  type BarTrainer,
   type MetronomeBeat,
   type MetronomeMeter,
   type MetronomeSound,
   type MetronomeTime,
+  type TrainerBars,
 } from './metronome'
 export { isSwung, SWING_FEELS, SWING_SHARE, type SwingFeel } from './swing'

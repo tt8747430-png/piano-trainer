@@ -8,6 +8,7 @@ import {
   beatHeard,
   beatSounds,
   goOnFrom,
+  mutedBar,
   plannedBeats,
   type MetronomeBeat,
 } from '@/shared/lib/schedule'
@@ -20,6 +21,9 @@ const TOP_UP = 250
 /** How long a beat heard is kept, in seconds, for the beat shown. */
 const KEPT = 2
 
+/** The bar trainer's counts while it is on. */
+const trainerOf = ({ on, play, mute }: MetronomeSettings['trainer']) => (on ? { play, mute } : null)
+
 /** A Metronome playing: the next beat to queue and the beats queued. */
 interface Run {
   next: MetronomeBeat
@@ -29,14 +33,18 @@ interface Run {
 
 export interface Metronome extends MetronomeSettings {
   readonly playing: boolean
-  /** The beat sounding (from 0), while it plays. */
+  /** The beat sounding (from 0), while it plays, heard or muted. */
   readonly beat: number | null
+  /** Whether the bar going by is one the bar trainer mutes. */
+  readonly muted: boolean
   toggle(): void
   /** The tempo by `step` beats a minute, held to its range. */
   nudge(step: number): void
   setBpm(bpm: number): void
   setMeter(meter: MetronomeSettings['meter']): void
   setSound(sound: MetronomeSettings['sound']): void
+  /** The bar trainer turned on or off, or its counts changed. */
+  setTrainer(change: Partial<MetronomeSettings['trainer']>): void
   /** A tap in time: from the second, the tempo the taps keep. */
   tap(): void
 }
@@ -60,10 +68,12 @@ export function useMetronome(): Metronome {
   const queue = useCallback(() => {
     const current = run.current
     if (!current) return
-    const { meter, sound } = latest.current
+    const { meter, sound, trainer } = latest.current
     const now = audio.now()
     const { beats, next } = plannedBeats(current.next, now + AHEAD, latest.current)
-    for (const beat of beats) audio.play(beatSounds(meter, sound, beat.beat), beat.at)
+    for (const beat of beats)
+      if (!mutedBar(beat.bar, trainerOf(trainer)))
+        audio.play(beatSounds(meter, sound, beat.beat), beat.at)
     current.next = next
     current.planned = [...current.planned.filter((beat) => beat.at > now - KEPT), ...beats]
   }, [audio])
@@ -82,7 +92,7 @@ export function useMetronome(): Metronome {
     await audio.unlock()
     if (run.current) return
     run.current = {
-      next: { at: audio.now() + PLAY_DELAY, beat: 0 },
+      next: { at: audio.now() + PLAY_DELAY, beat: 0, bar: 0 },
       planned: [],
       timer: setInterval(queue, TOP_UP),
     }
@@ -121,9 +131,9 @@ export function useMetronome(): Metronome {
     },
     [playing],
   )
-  const beat = useSyncExternalStore(everyFrame, () =>
-    run.current ? (beatHeard(run.current.planned, audio.now())?.beat ?? null) : null,
-  )
+  const heard = () => (run.current ? beatHeard(run.current.planned, audio.now()) : undefined)
+  const beat = useSyncExternalStore(everyFrame, () => heard()?.beat ?? null)
+  const bar = useSyncExternalStore(everyFrame, () => heard()?.bar ?? null)
 
   const save = useCallback(
     (change: Partial<MetronomeSettings>) => setMetronome(store, change),
@@ -133,11 +143,13 @@ export function useMetronome(): Metronome {
     ...settings,
     playing,
     beat: playing ? beat : null,
+    muted: playing && bar !== null && mutedBar(bar, trainerOf(settings.trainer)),
     toggle: () => (run.current ? stop() : void start()),
     nudge: (step) => save({ bpm: store.getState().metronome.bpm + step }),
     setBpm: (bpm) => save({ bpm }),
     setMeter: (meter) => save({ meter }),
     setSound: (sound) => save({ sound }),
+    setTrainer: (change) => save({ trainer: { ...store.getState().metronome.trainer, ...change } }),
     tap() {
       const read = tapTempo(taps.current, performance.now())
       taps.current = read.taps

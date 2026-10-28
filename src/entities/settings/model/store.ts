@@ -42,6 +42,7 @@ import {
   isKeySize,
   isMetronomeMeter,
   isMetronomeSound,
+  isTrainerBars,
   isMusicView,
   isNamedKeys,
   isOctaveShift,
@@ -252,13 +253,20 @@ const isBpm = (value: unknown): value is number =>
   (value as number) >= BPM_RANGE.min &&
   (value as number) <= BPM_RANGE.max
 
-/** The Metronome's tempo, meter and sound, each as saved where still valid (ADR 0052). */
+/** The Metronome's tempo, meter, sound and bar trainer, each as saved where still valid (ADR 0052). */
 function metronomeSettings(value: unknown): MetronomeSettings {
   const saved = savedObject<MetronomeSettings>(value)
+  const trainer = savedObject<MetronomeSettings['trainer']>(saved.trainer)
+  const initial = DEFAULT_METRONOME.trainer
   return {
     bpm: isBpm(saved.bpm) ? saved.bpm : DEFAULT_METRONOME.bpm,
     meter: isMetronomeMeter(saved.meter) ? saved.meter : DEFAULT_METRONOME.meter,
     sound: isMetronomeSound(saved.sound) ? saved.sound : DEFAULT_METRONOME.sound,
+    trainer: {
+      on: typeof trainer.on === 'boolean' ? trainer.on : initial.on,
+      play: isTrainerBars(trainer.play) ? trainer.play : initial.play,
+      mute: isTrainerBars(trainer.mute) ? trainer.mute : initial.mute,
+    },
   }
 }
 

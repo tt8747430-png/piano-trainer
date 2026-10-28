@@ -42,7 +42,7 @@ describe('Practice → Metronome', () => {
     await user.click(screen.getByRole('button', { name: 'Faster by 10' }))
     await user.click(screen.getByRole('button', { name: 'Slower by 1' }))
     expect(tempo()).toBe('Tempo: 129 BPM')
-    expect(saved(storage)).toEqual({ bpm: 129, meter: '4/4', sound: 'click' })
+    expect(saved(storage)).toMatchObject({ bpm: 129, meter: '4/4', sound: 'click' })
   })
 
   it('plays on the audio clock ahead of time, the first beat of each bar accented', async () => {
@@ -82,7 +82,9 @@ describe('Practice → Metronome', () => {
     await user.click(screen.getByRole('button', { name: 'Slower by 10' }))
     // What was queued goes; at 110 the third beat comes 60/110 s after the second.
     expect(audio.stops).toBe(1)
-    expect(beatsPlayed(audio.played.slice(3))[0]).toEqual({ at: 1.145, voices: ['click'] })
+    // (A top-up may have queued the old fourth beat before the change; the stop took it back.)
+    const after = beatsPlayed(audio.played.slice(3)).filter(({ at }) => at !== 1.6)
+    expect(after[0]).toEqual({ at: 1.145, voices: ['click'] })
   })
 
   it('plays a drum beat in the time signature chosen, both saved', async () => {
@@ -92,7 +94,7 @@ describe('Practice → Metronome', () => {
     await user.click(await screen.findByRole('option', { name: 'Drum beat' }))
     await user.click(screen.getByRole('combobox', { name: 'Time signature' }))
     await user.click(await screen.findByRole('option', { name: '3/4' }))
-    expect(saved(storage)).toEqual({ bpm: 120, meter: '3/4', sound: 'drum' })
+    expect(saved(storage)).toMatchObject({ bpm: 120, meter: '3/4', sound: 'drum' })
     expect(
       within(screen.getByRole('list', { name: 'Beats' })).getAllByRole('listitem'),
     ).toHaveLength(3)
@@ -104,6 +106,33 @@ describe('Practice → Metronome', () => {
         ['hat', 'snare'],
       ]),
     )
+  })
+
+  it('plays its bars, then mutes its bars, the beats still shown while muted', async () => {
+    const user = userEvent.setup()
+    const { audio, storage } = await open()
+    await user.click(screen.getByRole('combobox', { name: 'Time signature' }))
+    await user.click(await screen.findByRole('option', { name: '2/4' }))
+    await user.click(screen.getByRole('switch', { name: 'Bar trainer' }))
+    await user.click(screen.getByRole('combobox', { name: 'Bars played' }))
+    await user.click(await screen.findByRole('option', { name: '1 bar' }))
+    await user.click(screen.getByRole('combobox', { name: 'Bars muted' }))
+    await user.click(await screen.findByRole('option', { name: '1 bar' }))
+    expect(saved(storage).trainer).toEqual({ on: true, play: 1, mute: 1 })
+    await user.click(screen.getByRole('button', { name: 'Start' }))
+    // At 120 in 2/4: the first bar sounds (0.1, 0.6), the second is silent (1.1, 1.6).
+    await waitFor(() => expect(audio.played.length).toBeGreaterThan(0))
+    act(() => audio.setNow(1.5))
+    await waitFor(() =>
+      expect(beatsPlayed(audio.played).map(({ at }) => at)).toEqual([0.1, 0.6, 2.1, 2.6]),
+    )
+    const beats = screen.getByRole('list', { name: 'Beats' })
+    act(() => audio.setNow(1.2))
+    await waitFor(() =>
+      expect(within(beats).getAllByRole('listitem')[0]).toHaveAttribute('aria-current', 'true'),
+    )
+    expect(beats).toHaveAttribute('data-muted', 'true')
+    expect(screen.getByText('Muted')).toBeInTheDocument()
   })
 
   it('starts and stops with Space, and changes the tempo with the arrows, by 10 with Shift', async () => {
