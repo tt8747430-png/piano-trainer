@@ -21,7 +21,7 @@ const SCREENS = [
   '/practice/accompaniment/studies/ex3',
   '/practice/exercises',
   '/practice/quiz',
-  '/practice/quiz/build-chord',
+  '/practice/quiz/chords',
   '/practice/chord-finder',
   '/settings',
 ] as const

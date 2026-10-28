@@ -3,6 +3,7 @@ import {
   keyScale,
   MIDDLE_C,
   midi,
+  noteName,
   pitchClass,
   placeChord,
   placeScale,
@@ -28,6 +29,7 @@ function placed(question: Question): readonly PlacedTone[] {
   switch (question.mode) {
     case 'build-chord':
     case 'name-chord':
+    case 'chord-card':
       return placeChord(question.tones, { inversion: question.inversion ?? 0, bothHands: false }).rh
     case 'build-scale':
       return placeScale(question.root, question.kind)
@@ -42,8 +44,9 @@ function placed(question: Question): readonly PlacedTone[] {
 export function targetKeys(question: Question): Midi[] {
   switch (question.mode) {
     case 'name-interval':
+    case 'build-interval':
+    case 'interval-card':
       return [question.low, question.high]
-    case 'name-quality':
     case 'name-scale':
       return [...question.keys]
     case 'chord-role':
@@ -57,6 +60,29 @@ export function targetKeys(question: Question): Midi[] {
     default:
       return placed(question).map((tone) => tone.midi)
   }
+}
+
+/**
+ * The answer's keys, each marked with its note's name: a card turned over, an answer shown. A chord's
+ * tones by their roles, an interval's lower note as the tonic, its upper as a note of the scale.
+ */
+export function answerMarks(question: Question): Map<Midi, KeyMark> {
+  if (
+    question.mode === 'name-interval' ||
+    question.mode === 'build-interval' ||
+    question.mode === 'interval-card'
+  ) {
+    return new Map<Midi, KeyMark>([
+      [question.low, { tone: 'tonic', label: noteName(question.lowNote) }],
+      [question.high, { tone: 'scale', label: noteName(question.highNote) }],
+    ])
+  }
+  const keys = placed(question)
+  if (keys.length > 0)
+    return new Map(
+      keys.map((key) => [key.midi, { tone: key.tone.role, label: noteName(key.tone.note) }]),
+    )
+  return new Map(targetKeys(question).map((key) => [key, { tone: 'scale', label: '' }]))
 }
 
 /** Two octaves around middle C: the least a note-reading keyboard shows. */
@@ -77,9 +103,7 @@ export function roundRange(asks: Asks, question: Question): KeyRange {
 
 /** Ear rounds sound as they are shown; the others once answered. */
 export const heardFirst = (question: Question): boolean =>
-  question.mode === 'name-chord' ||
-  question.mode === 'name-interval' ||
-  question.mode === 'name-quality' ||
+  ((question.mode === 'name-chord' || question.mode === 'name-interval') && question.heard) ||
   question.mode === 'name-scale' ||
   question.mode === 'chord-role' ||
   question.mode === 'name-progression'
@@ -94,9 +118,11 @@ const line = (keys: readonly Midi[]) =>
 export function roundSounds(question: Question): NoteSound[] {
   switch (question.mode) {
     case 'name-interval':
+    case 'build-interval':
+    case 'interval-card':
       return intervalSounds(question.low, question.high, question.way)
-    case 'name-quality':
-      return chordSounds(question.keys, { arpeggio: question.arpeggio })
+    case 'name-chord':
+      return chordSounds(targetKeys(question), { arpeggio: question.arpeggio })
     case 'name-scale':
       return line(question.keys)
     case 'chord-role':
@@ -175,15 +201,20 @@ function degreeKeys(degrees: readonly PlacedTone[], selected: readonly Midi[]): 
 
 /**
  * After an answer on the keys: a build round's keys against its answer, each tone by role; a note
- * read, the key pressed against the note's; a key's degrees, each pressed against its degree.
+ * read or an interval's upper note, the key pressed against the note's; a key's degrees, each
+ * pressed against its degree.
  */
 export function answerKeys(question: Question, selected: readonly Midi[]): CheckedKeys {
-  if (question.mode === 'read-note') {
-    const right = selected.includes(question.key)
+  if (question.mode === 'read-note' || question.mode === 'build-interval') {
+    const wanted = question.mode === 'read-note' ? question.key : question.high
+    const right = selected.includes(wanted)
+    const marks = new Map<Midi, KeyMark>(right ? [[wanted, { tone: 'root', label: '✓' }]] : [])
+    // An interval's lower note was given: it stays marked.
+    if (question.mode === 'build-interval') marks.set(question.low, { tone: 'root', label: '1' })
     return {
-      marks: right ? new Map([[question.key, { tone: 'root', label: '✓' }]]) : new Map(),
-      wrong: new Set(selected.filter((key) => key !== question.key)),
-      outlined: right ? new Set() : new Set([question.key]),
+      marks,
+      wrong: new Set(selected.filter((key) => key !== wanted)),
+      outlined: right ? new Set() : new Set([wanted]),
     }
   }
   const keys = placed(question)

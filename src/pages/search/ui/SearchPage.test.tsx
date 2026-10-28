@@ -68,7 +68,7 @@ describe('Search', () => {
     expect(hrefOf('Progressions', /^Let It Be/)).toBe('/practice/progressions?p=I-V-vi-IV-I-V-IV-I')
     expect(hrefOf('Patterns', /^1 · Bass \+ chords/)).toBe('/practice/accompaniment/patterns/M1')
     expect(hrefOf('Exercises', /^Hanon No\. 1/)).toBe('/play/exercise/hanon')
-    expect(hrefOf('Quiz', /^Chord building/)).toBe('/practice/quiz/build-chord')
+    expect(hrefOf('Quiz', /^Scale building/)).toBe('/practice/quiz/build-scale')
   })
 
   it('opens a trainer and an exercise as they were left, like their own pages’ rows', async () => {

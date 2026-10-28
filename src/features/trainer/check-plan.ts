@@ -58,7 +58,7 @@ export function checkPlan(
       skills,
       length,
       marks: null,
-      asks: { kind: 'chords', mode: 'build-chord', chords, ordered: true },
+      asks: { kind: 'chords', drill: 'entry', chords, ordered: true },
     }
   }
   const skills = skillsOfStep(step)
@@ -68,6 +68,6 @@ export function checkPlan(
     skills,
     length: asked.length,
     marks: of,
-    asks: { kind: 'skills', chords: 'build-chord', skills: asked, ordered: true },
+    asks: { kind: 'skills', skills: asked, ordered: true },
   }
 }

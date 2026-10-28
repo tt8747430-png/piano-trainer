@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { COURSES, courseIcon, COURSE_ICON } from '@/entities/course'
 import { BUILT_IN_PATTERNS, partOfShelf, patternNeed, type PatternId } from '@/entities/pattern'
 import { pieceById, pieceFit } from '@/entities/piece'
-import { isTrainerId } from '@/features/trainer'
+import { isDrill, isTrainerId } from '@/features/trainer'
 import { readProgressionsSearch } from '@/app/routes/explorer-search'
 import { typedSearch } from '@/widgets/progression-explorer'
 import {
@@ -129,7 +129,10 @@ function problemsOf(block: LessonBlock): string[] {
         case 'lesson':
           return lessonById(target.lesson) ? [] : [target.lesson]
         case 'quiz':
-          return isTrainerId(target.trainer) ? [] : [target.trainer]
+          return isTrainerId(target.trainer) &&
+            (target.drill === undefined || isDrill(target.drill))
+            ? []
+            : [target.trainer]
         case 'progressions':
         case 'player':
           return unread(() => readProgression(target), target.numerals)

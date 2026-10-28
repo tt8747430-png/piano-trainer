@@ -94,7 +94,7 @@ export const settings = {
       title: 'Play on a MIDI keyboard',
       connect: 'Connect a keyboard by cable or Bluetooth, then choose it with the MIDI button.',
       settings:
-        'Settings → MIDI keyboard says whether the app sounds your keys, plays through the piano’s speaker or shifts an octave.',
+        'Settings → MIDI keyboard: MIDI input and output, whether the app sounds your keys, which keyboard it hears, an octave shift, and a MIDI log of what the keyboard sends.',
       play: 'In Wait mode the Player listens for the notes you play; the Chord finder names the chord you hold.',
     },
     metronome: {

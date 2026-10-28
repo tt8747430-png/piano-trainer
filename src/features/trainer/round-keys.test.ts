@@ -37,7 +37,7 @@ const chord = (letter: 'C' | 'B', quality: 'maj' | 'n13'): Question => ({
   ...chordAsked(letter, quality),
 })
 
-const SKILLS: Asks = { kind: 'skills', chords: 'build-chord', skills: [] }
+const SKILLS: Asks = { kind: 'skills', skills: [] }
 
 describe('round keys', () => {
   it('builds on one octave and a third from middle C', () => {
@@ -45,7 +45,13 @@ describe('round keys', () => {
   })
 
   it('widens the keyboard to show a wide chord whole', () => {
-    const question: Question = { mode: 'name-chord', ...chordAsked('B', 'n13'), options: [] }
+    const question: Question = {
+      mode: 'name-chord',
+      ...chordAsked('B', 'n13'),
+      options: [],
+      heard: true,
+      arpeggio: false,
+    }
     const { from, to } = roundRange(SKILLS, question)
     for (const key of targetKeys(question)) {
       expect(key).toBeGreaterThanOrEqual(from)
@@ -121,8 +127,11 @@ describe('round keys', () => {
       interval: 'P5',
       low: midi(60),
       high: midi(67),
+      lowNote: note('C'),
+      highNote: note('G'),
       way: 'up',
       options: ['P5'],
+      heard: true,
     }
     expect(heardFirst(question)).toBe(true)
     expect(

@@ -71,8 +71,11 @@ export type LessonLink =
       /** The scale a scale exercise runs, where it takes one: a minor scale's form. */
       readonly kind?: ScaleKind
     }
-  /** A Quiz trainer, by its id (the catalog's test holds it to one there is), to practise what was read. */
-  | { readonly opens: 'quiz'; readonly trainer: string }
+  /**
+   * A Quiz trainer, by its id, and for Chords or Intervals the drill it opens in (the catalog's test
+   * holds both to ones there are), to practise what was read.
+   */
+  | { readonly opens: 'quiz'; readonly trainer: string; readonly drill?: string }
   /** A progression in the Player, ready to practise: walked through the keys, in an inversion. */
   | ({ readonly opens: 'player' } & LessonProgression & {
         readonly walk?: KeyWalk

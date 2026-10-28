@@ -4,13 +4,37 @@ import type { PedalKind } from '@/shared/lib/schedule'
 
 /**
  * The keyboards connected (`devices`, by name), or the one chosen `away` (unplugged: nothing is
- * heard until it comes back), none, or MIDI refused.
+ * heard until it comes back), none, MIDI refused, or MIDI input turned `off` by the learner.
  */
 export type MidiStatus =
   | { readonly state: 'connected'; readonly devices: readonly string[] }
   | { readonly state: 'away'; readonly device: string; readonly devices: readonly string[] }
   | { readonly state: 'no-device' }
   | { readonly state: 'denied' }
+  | { readonly state: 'off' }
+
+/**
+ * A MIDI device connected, by its name (its ports of one name are one device): its maker as it
+ * says it (empty where it does not), and whether it sends keys (`input`) and has a speaker
+ * (`output`).
+ */
+export interface MidiDevice {
+  readonly name: string
+  readonly manufacturer: string
+  readonly input: boolean
+  readonly output: boolean
+}
+
+/** A message a keyboard sent, as the MIDI log keeps it: its bytes, its keyboard, when it came. */
+export interface MidiLogEntry {
+  readonly id: number
+  readonly device: string
+  readonly data: readonly number[]
+  readonly time: number
+}
+
+/** How many messages the MIDI log keeps: the newest. */
+export const MIDI_LOG_SIZE = 200
 
 /** Which keyboard is heard (null: any), its keys moved by octaves, and whether its pedals read reversed. */
 export interface MidiChoice {
@@ -56,6 +80,8 @@ export type MidiMessage =
 export interface MidiPort {
   /** Asks for access and listens to every keyboard plugged in, now and later. */
   connect(): Promise<MidiStatus>
+  /** Stops listening (MIDI input off): every key and pedal held is let go. */
+  disconnect(): void
   /**
    * Connects without asking where the learner allowed the keyboard before (the app opened again);
    * null, and no prompt, where they have not.
@@ -70,6 +96,12 @@ export interface MidiPort {
   current(): MidiStatus | null
   /** Hears as chosen from now: every key and pedal held is let go first. */
   configure(choice: MidiChoice): void
+  /** The devices connected now, one list until they change (as the status is told). */
+  devices(): readonly MidiDevice[]
+  /** The MIDI log: every keyboard's messages, the newest `MIDI_LOG_SIZE`, one list until one comes. */
+  log(): readonly MidiLogEntry[]
+  onLog(listener: () => void): () => void
+  clearLog(): void
   /** The names of the keyboards that can sound notes. */
   outputs(): readonly string[]
   /** The chosen keyboard's speaker, or the first with one under Any keyboard; null where none. */
