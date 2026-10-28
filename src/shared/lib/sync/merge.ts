@@ -10,11 +10,15 @@ export interface SyncDocument {
   readonly deleted: boolean
 }
 
+/** How a field both sides changed is settled, given each side's value and the base's. */
+export type MergeRule = (mine: unknown, theirs: unknown, base: unknown) => unknown
+
 export interface MergeRules {
-  /** A field both sides changed: how to settle it, else the newer side has it. */
-  readonly both?: Readonly<
-    Record<string, (mine: unknown, theirs: unknown, base: unknown) => unknown>
-  >
+  /**
+   * A field both sides changed: how to settle it. Where none is given, a record merges key by key, a
+   * list of items with ids item by item, anything else goes to the newer side.
+   */
+  readonly both?: Readonly<Record<string, MergeRule>>
 }
 
 function sameValue(a: unknown, b: unknown): boolean {
