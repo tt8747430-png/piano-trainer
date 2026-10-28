@@ -33,7 +33,7 @@ const OVER = { side: 'top', align: 'center', sideOffset: 6 } as const
 const UNDER = { side: 'bottom', align: 'center', sideOffset: 6 } as const
 
 /** Docked over the phone's own keyboard, as Flat's phone types: a slim bar across the screen. */
-const DOCKED = { side: 'top', align: 'center', sideOffset: 0 } as const
+const DOCKED = { side: 'top', align: 'center', sideOffset: 6 } as const
 
 /**
  * Where each field stands at the place the sheet drew for it (ADR 0096): the chord symbol's over the
@@ -163,7 +163,7 @@ export function SheetField({
         className={cn(
           'gap-1.5 p-1.5 data-[side=top]:flex-col-reverse',
           docked
-            ? 'w-screen max-w-none rounded-none border-x-0 border-b-0 px-3 py-2'
+            ? 'w-[calc(100vw-0.75rem)] max-w-none rounded-2xl p-2'
             : 'w-auto max-w-[min(24rem,calc(100vw-1rem))]',
         )}
       >
