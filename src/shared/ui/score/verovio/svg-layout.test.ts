@@ -53,7 +53,7 @@ describe('a line’s grace notes, read back', () => {
       bars: [{ startTick: 0, beats: 4 }],
       notes: [
         {
-          ...n(72, 'rh', 0, 96),
+          ...n(72, 'rh', 0, 4 * B),
           marks: { grace: [{ midi: midi(74), spelled: note('D') }] },
         },
       ],

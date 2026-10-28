@@ -40,7 +40,7 @@ describe('ScoreView', () => {
           spelled: note('C'),
           hand: 'rh',
           startTick: 0,
-          durationTicks: 96,
+          durationTicks: 4 * B,
           marks: { grace: [{ midi: midi(74), spelled: note('D') }] },
         },
       ],
