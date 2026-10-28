@@ -1,14 +1,11 @@
 import { RouterProvider } from '@tanstack/react-router'
-import { type LibraryStore, LibraryStoreProvider } from '@/entities/library'
-import {
-  type DiagramInversionsStore,
-  DiagramInversionsStoreProvider,
-} from '@/entities/diagram-inversion'
-import { type PatternsStore, PatternsStoreProvider } from '@/entities/pattern'
-import { type PiecesStore, PiecesStoreProvider } from '@/entities/piece'
-import { type ProgressStore, ProgressStoreProvider } from '@/entities/progress'
-import { type SettingsStore, SettingsStoreProvider } from '@/entities/settings'
-import { type TakesStore, TakesStoreProvider } from '@/entities/take'
+import { DiagramInversionsStoreProvider } from '@/entities/diagram-inversion'
+import { LibraryStoreProvider } from '@/entities/library'
+import { PatternsStoreProvider } from '@/entities/pattern'
+import { PiecesStoreProvider } from '@/entities/piece'
+import { ProgressStoreProvider } from '@/entities/progress'
+import { SettingsStoreProvider } from '@/entities/settings'
+import { TakesStoreProvider } from '@/entities/take'
 import { type Services, ServicesProvider } from '@/shared/lib/services'
 import { ShortcutsProvider } from '@/shared/lib/shortcuts'
 import { Toaster } from '@/shared/ui'
@@ -18,37 +15,26 @@ import { MidiReconnect } from './providers/MidiReconnect'
 import { MidiSync } from './providers/MidiSync'
 import { ThemeProvider } from './providers/ThemeProvider'
 import { TitlesSync } from './providers/TitlesSync'
+import type { Stores } from './composition-root'
 import type { AppRouter } from './router'
 
 export function App({
-  settingsStore,
-  progressStore,
-  patternsStore,
-  piecesStore,
-  takesStore,
-  libraryStore,
-  diagramInversionsStore,
+  stores,
   services,
   router,
 }: {
-  settingsStore: SettingsStore
-  progressStore: ProgressStore
-  patternsStore: PatternsStore
-  piecesStore: PiecesStore
-  takesStore: TakesStore
-  libraryStore: LibraryStore
-  diagramInversionsStore: DiagramInversionsStore
+  stores: Stores
   services: Services
   router: AppRouter
 }) {
   return (
-    <SettingsStoreProvider store={settingsStore}>
-      <ProgressStoreProvider store={progressStore}>
-        <PatternsStoreProvider store={patternsStore}>
-          <PiecesStoreProvider store={piecesStore}>
-            <TakesStoreProvider store={takesStore}>
-              <LibraryStoreProvider store={libraryStore}>
-                <DiagramInversionsStoreProvider store={diagramInversionsStore}>
+    <SettingsStoreProvider store={stores.settings}>
+      <ProgressStoreProvider store={stores.progress}>
+        <PatternsStoreProvider store={stores.patterns}>
+          <PiecesStoreProvider store={stores.pieces}>
+            <TakesStoreProvider store={stores.takes}>
+              <LibraryStoreProvider store={stores.library}>
+                <DiagramInversionsStoreProvider store={stores.diagramInversions}>
                   <ServicesProvider services={services}>
                     <LocaleSync />
                     <AudioUnlock />
