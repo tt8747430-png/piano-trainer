@@ -164,6 +164,10 @@
   * {
     border-color: var(--color-border);
   }
+  /* A field a sheet scrolls into sight above the phone's keyboard brings its label with it. */
+  [data-slot='drawer-content'] :is(input, textarea) {
+    scroll-margin-block: 2.5rem 1rem;
+  }
   html {
     color-scheme: light;
     /* Both faces carry every weight they are asked for: never a smeared fake bold. */
