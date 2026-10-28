@@ -59,7 +59,8 @@ seen on screen" with the diagrams on a last page.
     staff; the sustain pedal as pedal marks.
   - **What it leaves out** is counted by kind and listed after the import in a sheet, with Open the song; an import
     that leaves nothing out opens the song's page at once. A file over 20 MB or 20,000 notes is too large, one that is
-    no score says what Import opens, a damaged one says so.
+    no score says what Import opens, a damaged one (a .mxl garbled or cut short too) says so. Closing the sheet while
+    a file is read makes nothing of it.
 - **The tuning** is a fact of Song information: A 440 Hz unless the recording says otherwise (`tuningOf`).
 
 ## Consequences
@@ -72,3 +73,5 @@ not its music.
 - The share-a-song spec (2026-10-11), deleted: its link format is here.
 - 0107 — Share, Print, MIDI time aligned, the tuning and Sections (2026-10-26). Its Sections are ADR 0105's.
 - Export to MusicXML, MIDI from the song page, and Import of MusicXML and MIDI (2026-10-28).
+- A broken .mxl says so, an import closed while reading makes nothing; a shared song's Add names the library
+  (2026-10-28).
