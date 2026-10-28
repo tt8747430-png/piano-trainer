@@ -128,8 +128,8 @@ export const practice = {
     way: { label: 'Play', together: 'At once', up: 'Up', down: 'Down' },
     // The tritone by each of its spellings, a row each.
     tritone: {
-      A4: { name: 'Augmented 4th', short: 'A4' },
-      d5: { name: 'Diminished 5th', short: 'd5' },
+      A4: { name: 'Augmented fourth', short: 'A4' },
+      d5: { name: 'Diminished fifth', short: 'd5' },
     },
     keys: '{{name}} on the keys',
   },

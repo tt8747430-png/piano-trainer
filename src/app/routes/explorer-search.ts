@@ -38,6 +38,7 @@ import {
 } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, TEMPO_RANGE } from '@/shared/lib/schedule'
 import type { ChordView } from '@/widgets/chord-explorer'
+import { INTERVAL_WAYS, type IntervalWay } from '@/shared/lib/schedule'
 import type { IntervalView } from '@/widgets/interval-explorer'
 import type { ProgressionsView } from '@/widgets/progression-explorer'
 import type { ScaleShow, ScaleView } from '@/widgets/scale-explorer'
@@ -168,12 +169,14 @@ export const scalesSearch = routeSearch(readScalesSearch, SCALES_DEFAULTS)
 /** A link names a scale; its rhythm, tempo and hands are the learner's. */
 export const SCALES_KEPT: readonly (keyof ScalesSearch & string)[] = ['rhythm', 'tempo', 'hands']
 
-// Intervals: the root as the learner wrote it.
-export const INTERVALS_DEFAULTS: IntervalView = { root: noteParam(note('C')) }
+// Intervals: the root as the learner wrote it, and how a row plays (both notes at once unless asked).
+export const INTERVALS_DEFAULTS: IntervalView = { root: noteParam(note('C')), way: 'together' }
+const isIntervalWay = (raw: unknown): raw is IntervalWay => INTERVAL_WAYS.some((way) => way === raw)
 export function readIntervalsSearch(raw: Raw): IntervalView {
   const read = readNote(raw.root)
   return {
     root: read ? noteParam(read) : INTERVALS_DEFAULTS.root,
+    way: valueOr(isIntervalWay, raw.way, INTERVALS_DEFAULTS.way),
   }
 }
 export const intervalsSearch = routeSearch(readIntervalsSearch, INTERVALS_DEFAULTS)
