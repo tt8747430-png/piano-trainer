@@ -132,3 +132,37 @@ Edge Functions deployed, `.env` with the public URL and key, `shared/api/supabas
 sync that uses them. **Owner, later:** the purge's two Vault secrets.
 
 **1.5 Round end.** Full suite, build, ADR 0116's History, CLAUDE.md (`supabase/`, the gateways), push.
+
+## Round 2: sync (planned 2026-10-29)
+
+**Decided while planning:** no RxDB. Every store is small JSON in localStorage, synchronous, read by zustand; takes
+are MIDI notes, not audio. Moving eight stores onto RxDB would rewrite each for nothing a sync over them lacks, so
+the sync runs over the stores as they are, with memory-palaces' design (ADR 0005 there): a pending-change log, pushes
+naming their base, the server refusing a write over any other, a field-by-field merge, only a deletion meeting a
+change elsewhere asking. ADR 0116 is amended to say so. The `takes` bucket goes (nothing to put in it); `avatars`
+stays. `valibot` comes with the documents' schemas only if a store's sanitiser does not already read a document.
+
+**2.1 Documents.** Each store says what its documents are, in its entity's `model/documents.ts`:
+`documentsOf(state) → Map<id, data>` and `withDocuments(state, docs) → state`, read through the store's own
+sanitiser. Settings, progress, views, library, diagram inversions: one document each (`settings`, …). Pieces: one per
+own song and per version (`song:<id>`, `version:<id>`); patterns: one per own pattern; takes: one per take. Tests:
+round trip for each store; a document of another shape reads through the sanitiser to the defaults.
+
+**2.2 The sync's kernel, pure** (`shared/lib/sync`): `SyncDocument { id, data, updatedAt, deleted }`;
+`changedDocuments(before, after)`; `mergeFields(base, mine, theirs)` (a field one side changed is kept; both changed:
+the newer clock, progress's counters summed from the base); the pending log (`pending`, `confirm(at)`). Tests from
+memory-palaces' `mergeFields` cases and our stores' fields.
+
+**2.3 The cloud port** (`shared/api/sync`): `pull(table, since) → NetResult<rows>`, `push(table, rows) →
+NetResult<refused rows>`; the Supabase adapter (`push_documents`, a select past the checkpoint); a fake server
+implementing `push_documents`' rule, held to the adapter by a contract test (and run once against the project).
+
+**2.4 The runner** (`features/sync`): `syncNow` — pull since the checkpoint, merge into the stores, push the pending
+with their bases, merge what is refused and push again, confirm, step the checkpoint; one cycle at a time; offline it
+says so and does nothing. Pending changes recorded by subscribing to each store (`pt-sync`: log, checkpoints, the
+bases). Tests: two devices over the fake server (edit here and there, delete meeting an edit, offline then back).
+
+**2.5 When it runs** (`app/providers/SyncProvider`): signed in only; Autosync on reconnect, on visibility, 4 s after
+writes settle; Settings quietly. A first sync on a device holds the splash (round 7) for at most 10 s.
+
+**2.6 Round end.** Full suite, build, ADR 0116 amended, CLAUDE.md, push.
