@@ -434,12 +434,19 @@
 }
 /* While the phone's keyboard is up (`keyboard-viewport`'s `data-keyboard`), what floats at the
    screen's foot steps aside rather than ride on the keyboard: the floating actions, the toasts, and
-   the phone's tab bar (Mindscape's, its ADR 0002). */
+   the phone's tab bar (Mindscape's, its ADR 0002). The page pads for them no more: its foot pads by
+   the keyboard's range instead (`pb-foot-*`). */
+:root[data-keyboard] {
+  --floating-foot: 0px;
+}
 :root[data-keyboard] [data-slot='floating-host'],
 :root[data-keyboard] [data-slot='toast-viewport'] {
   display: none;
 }
 @media (orientation: portrait) and (max-width: 63.99rem) {
+  :root[data-keyboard] {
+    --nav-bar: 0px;
+  }
   :root[data-keyboard] [data-slot='app-nav'] {
     display: none;
   }
@@ -550,10 +557,12 @@
   padding-bottom: calc(--spacing(--value(integer)) + var(--docked, 0px));
 }
 /* A screen's foot padding, clear of all that stands at its foot: the phone's tab bar, the keys docked
-   over it and the floating actions over them: `pb-foot-6`. */
+   over it and the floating actions over them, and while typing the range the phone's keyboard asks
+   (`--kb-range`): `pb-foot-6`. */
 @utility pb-foot-* {
   padding-bottom: calc(
-    --spacing(--value(integer)) + var(--nav-bar) + var(--docked, 0px) + var(--floating-foot)
+    --spacing(--value(integer)) + var(--nav-bar) + var(--docked, 0px) + var(--floating-foot) +
+      var(--kb-range, 0px)
   );
 }
 /* A screen that fills the room `AppShell`'s main leaves it, no more, so what it centres stands in the
