@@ -1,18 +1,34 @@
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { printedSymbol, ROOT_STEPS } from '@/shared/lib/music'
 import { MOVE_PAINT, PAINT, type Paint } from './paint'
 
 /**
- * A progression's chips in one even grid: as many columns as fit, every chip as wide as the rest,
- * wrapping onto a second row on a narrow phone.
+ * A progression's chips in one even grid, every chip as wide as the rest: one row of them, or two
+ * rows of half each where a row would crowd (more than six on a phone, more than eight wider).
  */
-export function HarmonyChips({ label, children }: { label: string; children: ReactNode }) {
+export function HarmonyChips({
+  label,
+  count,
+  children,
+}: {
+  label: string
+  /** How many chips: what the rows are split by. */
+  count: number
+  children: ReactNode
+}) {
+  const half = Math.ceil(count / 2)
   return (
     <ul
       aria-label={label}
-      className="grid grid-cols-[repeat(auto-fit,minmax(3.25rem,1fr))] gap-1.5"
+      className="grid grid-cols-[repeat(var(--chips-phone),minmax(0,1fr))] gap-1.5 sm:grid-cols-[repeat(var(--chips),minmax(0,1fr))]"
+      style={
+        {
+          '--chips-phone': count > 6 ? half : count,
+          '--chips': count > 8 ? half : count,
+        } as CSSProperties
+      }
     >
       {children}
     </ul>

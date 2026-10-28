@@ -19,6 +19,8 @@ function barSymbol(music: TimedMusic, start: Tick): string | undefined {
 
 /** How far a note's column reaches past the staff's lines, for notes on ledger lines. */
 const REACH = 16
+/** How far apart a chorale's voice letters stand at least, one over the next. */
+const LETTER_GAP = 12
 /** The band over the staff a bar's tap takes. */
 const BAR_BAND = 22
 
@@ -154,6 +156,12 @@ export function TappableStaff({
               .filter((head) => head.tick === (ticks[0] ?? 0))
               .sort((a, b) => b.top + b.bottom - (a.top + a.bottom))
           : []
+        // Each letter by its note, stepping up clear of the one under it where the notes are close.
+        const letterTops = first.reduce<number[]>((tops, head) => {
+          const own = (head.top + head.bottom) / 2 - 6
+          const under = tops.at(-1)
+          return [...tops, under === undefined ? own : Math.min(own, under - LETTER_GAP)]
+        }, [])
         return (
           <>
             {first.length === voices?.length
@@ -162,7 +170,7 @@ export function TappableStaff({
                     key={head.id}
                     aria-hidden
                     className="pointer-events-none absolute z-10 text-xs leading-none font-semibold text-muted-foreground"
-                    style={{ left: head.right + 3, top: (head.top + head.bottom) / 2 - 6 }}
+                    style={{ left: head.right + 3, top: letterTops[voice] }}
                   >
                     {voices[voice]}
                   </span>

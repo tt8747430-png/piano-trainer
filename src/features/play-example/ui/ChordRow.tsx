@@ -188,7 +188,10 @@ export function RowChips({ show }: { show: 'function' | 'motion' }) {
   if (chords.some((chord) => chord.function === undefined || chord.caption === undefined))
     return null
   return (
-    <HarmonyChips label={t(show === 'function' ? 'harmony.chips' : 'harmony.moves')}>
+    <HarmonyChips
+      label={t(show === 'function' ? 'harmony.chips' : 'harmony.moves')}
+      count={chords.length}
+    >
       {chords.map((chord, place) => {
         const numeral = chord.caption ?? ''
         const said = chord.function ?? 'tonic'
