@@ -22,6 +22,7 @@ export function useEditorShortcutList(): void {
     { label: t('shortcuts.dot'), shown: keys('dot') },
     { label: t('shortcuts.rest'), shown: keys('rest') },
     { label: t('shortcuts.grace'), shown: keys('grace') },
+    { label: t('shortcuts.acciaccatura'), shown: keys('acciaccatura') },
     { label: t('shortcuts.accidentals'), shown: keys('natural', 'sharp', 'flat') },
     { label: t('shortcuts.respell'), shown: keys('respell') },
     { label: t('shortcuts.tie'), shown: keys('tie') },

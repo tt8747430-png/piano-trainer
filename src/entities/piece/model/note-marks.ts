@@ -57,6 +57,8 @@ const EXPRESSION_BY_WORD = lookup(EXPRESSION_WORDS)
 const PEDAL_BY_WORD = lookup(PEDAL_WORDS)
 
 const GRACE = 'gr:'
+/** An appoggiatura's: its grace notes unslashed. */
+const APPOGGIATURA = 'app:'
 
 /** `D5+E5`: grace notes' pitches as written, or null. */
 function readGrace(text: string): GraceNote[] | null {
@@ -105,6 +107,14 @@ export function readMarks(text: string): NoteMarks | null {
     else if (word.startsWith(GRACE)) {
       const grace = readGrace(word.slice(GRACE.length))
       read = grace !== null && once('grace', grace)
+    } else if (word.startsWith(APPOGGIATURA)) {
+      const grace = readGrace(word.slice(APPOGGIATURA.length))
+      read =
+        grace !== null &&
+        once(
+          'grace',
+          grace.map((g) => ({ ...g, appoggiatura: true as const })),
+        )
     } else read = false
     if (!read) return null
   }
@@ -116,7 +126,8 @@ export function readMarks(text: string): NoteMarks | null {
  * hairpin, expression, pedal, grace.
  */
 export function writeMarks(marks: NoteMarks): string {
-  const graceText = (grace: readonly GraceNote[]) => GRACE + grace.map(pitchText).join('+')
+  const graceText = (grace: readonly GraceNote[]) =>
+    (grace[0]?.appoggiatura ? APPOGGIATURA : GRACE) + grace.map(pitchText).join('+')
   return [
     ...(marks.articulations ?? []).map((articulation) => ARTICULATION_WORDS[articulation]),
     marks.ornament && ORNAMENT_WORDS[marks.ornament],

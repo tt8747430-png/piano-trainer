@@ -494,7 +494,7 @@ class PartWriter {
         tag(
           'note',
           {},
-          tag('grace', { slash: 'yes' }),
+          tag('grace', grace.appoggiatura ? {} : { slash: 'yes' }),
           pitchXml(grace.midi, grace.spelled),
           text('voice', voice),
           text('type', 'eighth'),

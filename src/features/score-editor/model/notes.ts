@@ -10,6 +10,7 @@ import {
   spellScale,
   type Accidental,
   type Finger,
+  type GraceNote,
   type Key,
   type Letter,
   type Midi,
@@ -20,7 +21,7 @@ import type { HandId } from '@/entities/piece'
 import { staffPlace } from '@/shared/lib/notation'
 import { isHandLayer, type Draft, type DraftBar, type DraftNote, type NoteLayer } from './draft'
 import { insertBar } from './bars'
-import type { TickSpan } from './state'
+import type { GraceKind, TickSpan } from './state'
 import { barsOf, keyAt, totalTicks } from './timeline'
 
 /** A draft after writing, and where the caret goes next. */
@@ -394,20 +395,98 @@ export function backFrom(draft: Draft, layer: NoteLayer, at: Tick): Tick | null 
   return before.length === 0 ? null : Math.max(...before.map((n) => n.startTick))
 }
 
+/** A note with its grace notes changed: none left, its grace mark taken off. */
+function withGrace(n: DraftNote, grace: readonly GraceNote[]): DraftNote {
+  const { grace: _grace, ...rest } = n.marks ?? {}
+  const marks = grace.length > 0 ? { ...rest, grace } : rest
+  const { marks: _marks, ...plain } = n
+  return Object.keys(marks).length > 0 ? { ...plain, marks } : plain
+}
+
+const ofKind = (grace: GraceNote, kind: GraceKind): GraceNote => {
+  const { appoggiatura: _kind, ...note } = grace
+  return kind === 'appoggiatura' ? { ...note, appoggiatura: true } : note
+}
+
+const isKind = (grace: readonly GraceNote[] | undefined, kind: GraceKind): boolean =>
+  grace !== undefined &&
+  grace.length > 0 &&
+  grace.every((g) => (g.appoggiatura === true) === (kind === 'appoggiatura'))
+
 /**
- * A grace note put before each note `where` takes, a step above it in the key (an appoggiatura, as
- * Flat's key writes one); where every one has its grace notes already, they come off.
+ * Flat's grace-note keys: a grace note of `kind` put before each note `where` takes, a step above
+ * it in the key; one of the other kind made this kind, its pitch kept; where every one has this
+ * kind already, they come off. Whether they are on after it.
  */
-export function graceNotes(draft: Draft, layer: NoteLayer, where: Where): Draft {
+export function graceNotes(
+  draft: Draft,
+  layer: NoteLayer,
+  where: Where,
+  kind: GraceKind,
+): { readonly draft: Draft; readonly on: boolean } {
   const taken = notesOf(draft, layer).filter(isAt(where))
-  const off = taken.length > 0 && taken.every((n) => (n.marks?.grace?.length ?? 0) > 0)
-  return changeAt(draft, layer, where, (n) => {
-    const { grace: _grace, ...rest } = n.marks ?? {}
+  const off = taken.length > 0 && taken.every((n) => isKind(n.marks?.grace, kind))
+  const next = changeAt(draft, layer, where, (n) => {
+    if (off) return withGrace(n, [])
+    const grace = n.marks?.grace
+    if (grace && grace.length > 0)
+      return withGrace(
+        n,
+        grace.map((g) => ofKind(g, kind)),
+      )
     const above = steppedKey(keyAt(draft, n.startTick), n.midi, 1)
-    const marks = off ? rest : { ...rest, grace: [spelledIn(draft, above, n.startTick)] }
-    const { marks: _marks, ...note } = n
-    return Object.keys(marks).length > 0 ? { ...note, marks } : note
+    return withGrace(n, [ofKind(spelledIn(draft, above, n.startTick), kind)])
   })
+  return { draft: next, on: !off && taken.length > 0 }
+}
+
+/** A grace note's pitch edit, at its note's tick; null takes it away. */
+export type GraceEdit = (grace: GraceNote, at: Tick) => GraceNote | null
+
+/**
+ * The grace notes before the notes `where` takes, each edited as a note is (Flat's): its kind kept,
+ * nothing past the piano's ends; one edited away taken off.
+ */
+export const editGraces = (draft: Draft, layer: NoteLayer, where: Where, edit: GraceEdit): Draft =>
+  changeAt(draft, layer, where, (n) => {
+    const grace = n.marks?.grace
+    if (!grace) return n
+    const edited = grace.flatMap((g) => {
+      const next = edit(g, n.startTick)
+      if (next === null) return []
+      return [g.appoggiatura ? { ...next, appoggiatura: true as const } : next]
+    })
+    return withGrace(n, edited)
+  })
+
+/** The grace-note edits, as the note edits of the same name do them. */
+export const GRACE_EDITS = {
+  step:
+    (draft: Draft, steps: number): GraceEdit =>
+    (g, at) =>
+      spelledIn(draft, steppedKey(keyAt(draft, at), g.midi, steps), at),
+  shift:
+    (draft: Draft, semitones: number): GraceEdit =>
+    (g, at) => {
+      const moved = g.midi + semitones
+      return moved < PIANO.from || moved > PIANO.to ? g : spelledIn(draft, midi(moved), at)
+    },
+  key:
+    (draft: Draft, key: Midi): GraceEdit =>
+    (_g, at) =>
+      spelledIn(draft, key, at),
+  respell: (): GraceEdit => (g) => ({ ...g, spelled: otherSpelling(g.spelled) }),
+  accidental:
+    (draft: Draft, accidental: Accidental): GraceEdit =>
+    (g, at) => {
+      const spelled =
+        g.spelled.accidental === accidental
+          ? letterInKey(g.spelled.letter, keyAt(draft, at))
+          : note(g.spelled.letter, accidental)
+      const moved = g.midi + spelled.accidental - g.spelled.accidental
+      return moved < PIANO.from || moved > PIANO.to ? g : { midi: midi(moved), spelled }
+    },
+  delete: (): GraceEdit => () => null,
 }
 
 /** The notes `where` takes written the other way (C♯ ↔ D♭). */

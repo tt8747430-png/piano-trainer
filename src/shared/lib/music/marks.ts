@@ -61,10 +61,14 @@ export const EXPRESSION_TEXT: Readonly<Record<Expression, string>> = {
 export const PEDALS = ['down', 'up', 'change'] as const
 export type Pedal = (typeof PEDALS)[number]
 
-/** A grace note: struck just before its note, taking none of its time. */
+/**
+ * A grace note: struck just before its note, taking none of its time. An acciaccatura, its stem
+ * slashed, as written by default; an appoggiatura (`appoggiatura`) unslashed, leaning on its note.
+ */
 export interface GraceNote {
   readonly midi: Midi
   readonly spelled: SpelledNote
+  readonly appoggiatura?: true
 }
 
 /** What is written on a note besides its pitch and time (ADR 0097); its pitch is the one it sounds. */
