@@ -96,6 +96,7 @@ export function createSettingsStore({
         recorder: DEFAULT_RECORDER,
         sidebar: DEFAULT_SIDEBAR,
         paletteFolded: {},
+        paletteSections: null,
         midi: DEFAULT_MIDI,
         chordFinder: DEFAULT_CHORD_FINDER,
         scoreView: DEFAULT_SCORE_VIEW,
@@ -147,6 +148,10 @@ function floatingSettings(value: unknown): FloatingSettings {
 }
 
 /** Each place's fold as saved where it is a boolean; a place never chosen stays unset. */
+/** The panel's open sections: names, or none chosen. */
+const paletteSections = (value: unknown): readonly string[] | null =>
+  Array.isArray(value) && value.every((name) => typeof name === 'string') ? value : null
+
 function paletteFolds(value: unknown): PaletteFolds {
   const saved = savedObject<PaletteFolds>(value)
   return Object.fromEntries(
@@ -305,6 +310,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     recorder: recorderSettings(saved.recorder),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,
     paletteFolded: paletteFolds(saved.paletteFolded),
+    paletteSections: paletteSections(saved.paletteSections),
     midi: midiSettings(saved.midi),
     chordFinder: chordFinderSettings(saved.chordFinder),
     scoreView: scoreViewSettings(saved.scoreView),

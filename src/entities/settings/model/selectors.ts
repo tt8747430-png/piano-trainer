@@ -33,6 +33,9 @@ export const selectPaletteFolded =
   (place: PalettePlace) =>
   (state: SettingsState): boolean =>
     state.paletteFolded[place] ?? place === 'sheet'
+/** The editor's panel's open sections, by name; null until the learner chooses. */
+export const selectPaletteSections = (state: SettingsState): readonly string[] | null =>
+  state.paletteSections
 export const selectMidi = (state: SettingsState): MidiSettings => state.midi
 /** Whether the section `id` is folded away. */
 export const selectSectionFolded =
