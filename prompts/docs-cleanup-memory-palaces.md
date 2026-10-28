@@ -37,10 +37,10 @@ The repo's documentation is short, current and in one place per topic. Every rul
 
 Run it as parallel worktree agents, split by files so no two edit the same doc. A good split:
 
-- **Agent 1:** the ADRs, the specs, the bug files and `.scratch`.
+- **Agent 1:** the ADRs, the specs, the bug files, `.scratch` and `docs/HISTORY.md`.
 - **Agent 2:** `CLAUDE.md`, `PRODUCT.md`, a README, and `docs/agents/`.
 - **Agent 3:** `CODE_STYLE.md`, the mobile and design docs, and the glossary.
-- **You:** the prompts folder and the repo clutter.
+- **You:** the prompts folder, what is copied from piano-trainer, and the repo clutter.
 
 1. **ADRs, as one current record per decision area.**
    - Read every ADR and spec. Group them by the area they decide today.
@@ -48,37 +48,51 @@ Run it as parallel worktree agents, split by files so no two edit the same doc. 
    - Delete what is superseded or folded in.
    - Add `docs/adr/README.md` with one line per record.
    - If ADRs are renumbered or deleted, write an old → new mapping and a small script that rewrites "ADR 0xxx" citations in code comments and docs. Run it, then grep that no citation to a deleted ADR remains.
-2. **Specs, plans and status notes.** Fold anything still true from these into the right ADR or doc, then delete them:
+2. **Specs, plans and status notes.** Fold any rule still true from these into the right ADR or doc, record what they built in `docs/HISTORY.md` (step 4), then delete them:
    - `docs/superpowers/`;
    - `NEW_ARCHITECHTURE.md`;
    - `DECK_SETTINGS_UI_STATUS.md`.
 3. **Bugs.** The local issue tracker is `.scratch/` (see `docs/agents/issue-tracker.md`).
    - Move each still-open bug from `2.Bugs.md` into `.scratch/` as one issue file, then delete `2.Bugs.md`.
-   - Delete `3.Fixed_Bugs.md`, after folding any rule it taught into CODE_STYLE or an ADR.
-   - In `.scratch/`, delete every issue that is done or obsolete. List what stays open in your report.
-4. **CLAUDE.md.** Check every line against `src/`.
+   - Fold any rule `3.Fixed_Bugs.md` taught into CODE_STYLE or an ADR, record each fix in `docs/HISTORY.md` (step 4), then delete it.
+   - In `.scratch/`, record each done issue in `docs/HISTORY.md`, then delete every issue that is done or obsolete. List what stays open in your report.
+4. **What is built and what was fixed, recorded concisely** in one new `docs/HISTORY.md`. Nothing that was done is lost when its spec or bug file goes.
+   - **Built:** grouped by area (the app's places), one line per feature as it stands now, with the ADR that decides it.
+   - **Fixed:** one line per bug: the symptom, its cause, and the test or rule that now holds it (`file`, or CODE_STYLE §). Group by area, newest first. Fold repeats of one cause into one line.
+   - Check each line against `src/`: a feature that was later removed goes, a fix whose code moved points to where it lives now. No narrative, no dates beyond the month, no commit lists.
+   - CLAUDE.md's read-before-you-touch list points to it ("what exists and what broke before").
+5. **CLAUDE.md.** Check every line against `src/`.
    - **Keep:** the rules that bind, the layers and their import fences, what each layer holds with a few examples, a short map of the places and slices, the commands, the test conventions and the read-before-you-touch list.
    - **Drop:** inventories the code already shows, history, and anything stale.
    - **Keep the owner's own rules exactly,** such as "Be extremely concise. Sacrifice grammar for the sake of concision." at the top.
-5. **CODE_STYLE.md (49 KB) and MOBILE_DESIGN.md.**
+6. **CODE_STYLE.md (49 KB) and MOBILE_DESIGN.md.**
    - Make CODE_STYLE the one place for how code is written: TypeScript, React, the UI kit, layout and mobile, motion, i18n, tests. Aim for well under half its size.
    - Merge MOBILE_DESIGN into it, or keep it separate only if it is truly a different topic. Decide, and say why.
-6. **The glossary.**
+7. **The glossary.**
    - One line per domain term: its meaning in a sentence, the code name where it differs, and the words to avoid. No implementation detail or history.
    - Drop terms of removed features: grep `src/` and the locales.
-7. **PRODUCT.md and a README.** Check PRODUCT.md against the app as it is now. Add a short README if there is none: what the app is, how to run it, where the docs are.
-8. **Prompts.**
+8. **PRODUCT.md and a README.** Check PRODUCT.md against the app as it is now. Add a short README if there is none: what the app is, how to run it, where the docs are.
+9. **Prompts.**
    - Make `prompts/` with an index (`README.md`) and the shape every prompt follows: Goal, Context, Task, Constraints, Done means, Report.
    - Turn each prompt in `1.Other_DontRead.md` into one structured prompt file. Check whether each request is already built; if it is, make it a regression check, not new work, and say so in its file.
    - Delete `1.Other_DontRead.md`.
-9. **Unused files and skills.**
-   - **Skills:** list every installed skill and remove those this repo never uses, from `.claude/skills`, `.agents/skills` and `skills-lock.json`. Supabase is used here, so its skills stay; judge each skill by this repo, not by piano-trainer.
-   - **Tracked clutter:** remove tracked logs, build output and design mockups whose direction is already chosen and recorded.
-   - **Ask before deleting** data the app doesn't read but the owner may want: anything like piano-trainer's `piano-data/`, reference screenshots or `.codex/`.
-10. **The owner's skill.** Copy piano-trainer's `.claude/skills/owner-way/` into this repo.
+   - **Copy piano-trainer's prompts** and adapt each to this repo (its places, its skills, its branch, its reference apps): `prompts/README.md` (the index and the shape), `review-loop.md`, `feature-round.md`, `handoff.md`, and this prompt itself as `docs-cleanup.md`, rewritten so it can run again on this repo later.
+10. **Unused files and skills.**
+
+- **Skills:** list every installed skill and remove those this repo never uses, from `.claude/skills`, `.agents/skills` and `skills-lock.json`. Supabase is used here, so its skills stay; judge each skill by this repo, not by piano-trainer.
+- **Tracked clutter:** remove tracked logs, build output and design mockups whose direction is already chosen and recorded.
+- **Ask before deleting** data the app doesn't read but the owner may want: anything like piano-trainer's `piano-data/`, reference screenshots or `.codex/`.
+
+11. **The owner's skill.** Copy piano-trainer's `.claude/skills/owner-way/` into this repo.
     - **Keep** the owner's general rules: the quality bar, no legacy, phone equals desktop, ⓘ popups, no trapped clicks, the workflow, reporting.
     - **Replace** the piano-specific reference apps and the feedback log with this repo's own, gathered from its docs and history.
     - **Point** CLAUDE.md at it. CLAUDE.md holds the repo's rules and the skill holds the owner's preferences, with no repetition between them.
+12. **Other useful docs from piano-trainer.** Compare and copy what this repo lacks, adapted, never its piano content:
+    - `.claude/skills/owner-way/references/agent-brief.md`, the brief each parallel agent gets;
+    - `docs/adr/README.md`'s shape for the ADR index;
+    - `docs/agents/` (issue tracker, triage labels, domain) where they are shorter or clearer than this repo's;
+    - CLAUDE.md's parallel-agents rule (agents test only what they change; the session's branch runs the full suite once on the merged result, then pushes the branch and `main`) and its verify-before-done rule;
+    - the test conventions in piano-trainer's CLAUDE.md and CODE_STYLE (`isolate: false` hygiene, listeners stopped when a test ends, one hook as a page's test surface) where this repo's setup is the same. Check the setup before copying a rule.
 
 ## Constraints
 
@@ -92,7 +106,8 @@ Run it as parallel worktree agents, split by files so no two edit the same doc. 
 
 ## Done means
 
-- Every doc listed above is rewritten, merged into another, or deleted, and nothing links to a deleted file. Check every Markdown link resolves.
+- Every doc listed above is rewritten, merged into another, or deleted, and nothing links to a deleted file.
+- Every built feature and fixed bug from the deleted specs, bug files and issues has its line in `docs/HISTORY.md`. Check every Markdown link resolves.
 - No code comment cites a deleted ADR or spec.
 - On the merged branch, `npm run typecheck && npm run lint`, the full test suite and the build pass once.
 - The branch is pushed and merged to `main`.
@@ -100,7 +115,8 @@ Run it as parallel worktree agents, split by files so no two edit the same doc. 
 ## Report
 
 - **A size table**, before → after for each doc, and the ADR count.
-- **What was deleted** and where anything still true went.
+- **What was deleted** and where anything still true went, and the size of `docs/HISTORY.md` (built lines, fixed lines).
+- **What was copied** from piano-trainer, and what you adapted.
 - **The open issues** kept in `.scratch/`.
 - **The skills removed.**
 - **The questions that are the owner's:** what to do with data the app doesn't read, and any doc you weren't sure about.
