@@ -147,8 +147,7 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
           what: t('select.count', { count: chosen.size }),
         }),
       archive: () => {
-        acts.archive(chosenSongs)
-        for (const each of chosenFolders) acts.archiveFolder(each)
+        acts.archiveChosen(chosenSongs, chosenFolders)
         exit()
       },
       /** Delete is offered where everything chosen can be: the learner's own songs, and folders. */

@@ -476,6 +476,26 @@ describe('Songs: Select (ADR 0106)', () => {
     expect(await screen.findByText('Archived: 2')).toBeInTheDocument()
   })
 
+  it('archives folders and songs chosen together in one go, one Undo putting all of them back', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs', {
+      storage: saved({ pieces: { songs: [SONG], nextSong: 2 } }),
+    })
+    await user.click(await screen.findByRole('button', { name: 'Select' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Hymns' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Gorshkov’s songs' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Morning' }))
+    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    await user.click(within(bar).getByRole('button', { name: 'Archive' }))
+    expect(libraryStore.getState().archive).toHaveLength(3)
+    expect(await screen.findByText('Archived: 3')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    await waitFor(() => expect(libraryStore.getState().archive).toEqual([]))
+    const folders = await screen.findByRole('region', { name: 'Folders' })
+    expect(rowNames(folders).slice(4)).toEqual(['Hymns 5 songs', 'Gorshkov’s songs 4 songs'])
+    expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toEqual({ folder: null, index: 0 })
+  })
+
   it('chooses every row by Select all, and starts with a row chosen by a long press', async () => {
     const user = userEvent.setup()
     await renderApp('/songs/folders/hymns')

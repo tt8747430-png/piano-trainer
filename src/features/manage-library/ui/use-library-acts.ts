@@ -6,6 +6,7 @@ import {
   useLibraryStoreApi,
   type FolderId,
   type LibraryCatalog,
+  type ShelvedFolder,
 } from '@/entities/library'
 import { entryTitles, useRepertoire, type PieceId } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
@@ -67,6 +68,31 @@ export function useLibraryActs() {
           ? t('library.archived', { title: titleOf(only) })
           : t('library.archivedMany', { count: archived.length }),
         undo(() => restoreSongs(store, catalog(), archived)),
+      )
+    },
+    /**
+     * What Select chose, archived in one go (songs, and folders with all they hold): one toast, its
+     * Undo putting every one back exactly where it stood.
+     */
+    archiveChosen: (ids: readonly PieceId[], folders: readonly ShelvedFolder[]) => {
+      const archived = archiveSongs(store, catalog(), ids)
+      for (const folder of folders) archiveFolder(store, catalog(), folder.id)
+      const [song] = archived
+      const [first] = folders
+      const count = archived.length + folders.length
+      if (count === 0) return
+      say(
+        count > 1
+          ? t('library.archivedMany', { count })
+          : song
+            ? t('library.archived', { title: titleOf(song) })
+            : t('library.folderArchived', { name: first ? folderName(first) : '' }),
+        undo(() => {
+          // The last archived first, so each folder goes back to the place it was taken from.
+          for (const folder of folders.toReversed())
+            restoreFolder(store, catalog(), folder.id, true)
+          restoreSongs(store, catalog(), archived)
+        }),
       )
     },
     restore: (ids: readonly PieceId[]) => {
