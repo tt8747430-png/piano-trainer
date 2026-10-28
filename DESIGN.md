@@ -401,6 +401,8 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 - **Sheet** (`Sheet`): card paper, 20px top corners, a grab handle, its Literata title with Close, a scrolling body,
   an optional footer over a hairline. It stands on the phone's keyboard. Never a sheet over a sheet: open a list as a
   page of the sheet.
+- **Drop zone** (`SongDrop`, a laptop's): while a file is dragged over the library, a panel inset 16px over the page,
+  its 2px dashed honey border on the page's paper at 90%, an upload icon over one line of what dropping does.
 - **Popover:** 12px corners, the popover shade. An `InfoTip` is a 16px ⓘ in soft ink beside a name, opening a
   popover; no line of explanation stands under a control.
 - **Toast** (`say`): a card with the highest shade over the screen's foot, clear of all that floats there: its line,

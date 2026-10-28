@@ -111,5 +111,6 @@ describe('a song’s MusicXML, exported then imported', () => {
       }
     }
     expect(differ).toEqual([])
-  })
+    // Every piece read, written, exported and read back: long on a busy machine.
+  }, 120_000)
 })

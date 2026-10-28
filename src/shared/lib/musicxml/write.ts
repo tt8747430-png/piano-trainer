@@ -41,7 +41,7 @@ export interface MusicXmlOptions {
   readonly lyricist?: string
   /** Each single staff's own name, top down; none prints none. */
   readonly staffNames?: readonly (string | undefined)[]
-  /** The piano's part's name: an instrument's, never printed. */
+  /** The piano's part's name, printed over its brace as the app's score prints it. */
   readonly pianoName?: string
   /** The piano's staves kept and not printed: a lead sheet's (ADR 0114). */
   readonly pianoHidden?: boolean
@@ -140,7 +140,7 @@ export function scoreToMusicXml(score: Score, options: MusicXmlOptions = {}): st
             id: `P${single.length + 1}`,
             staves: piano,
             name: options.pianoName ?? '',
-            printed: false,
+            printed: options.pianoName !== undefined && options.pianoName !== '',
           },
         ]
       : []),
