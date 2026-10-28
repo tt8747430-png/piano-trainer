@@ -300,4 +300,15 @@ export const music: LocaleResources['music'] = {
   },
   tempoRange: '{{from}}–{{to}} уд/мин',
   tempoRangeFrom: 'от {{from}} уд/мин',
+  degree: {
+    label: 'Ступени',
+    tonic: 'Тоника',
+    supertonic: 'Верхний вводный тон',
+    mediant: 'Медианта',
+    subdominant: 'Субдоминанта',
+    dominant: 'Доминанта',
+    submediant: 'Субмедианта',
+    leadingTone: 'Вводный тон',
+    subtonic: 'Субтоника',
+  },
 }

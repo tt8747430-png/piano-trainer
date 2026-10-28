@@ -320,4 +320,16 @@ export const music = {
   },
   tempoRange: '{{from}}–{{to}} BPM',
   tempoRangeFrom: '{{from}} BPM and faster',
+  // A key's degrees by name, on the Key view's table.
+  degree: {
+    label: 'Scale degrees',
+    tonic: 'Tonic',
+    supertonic: 'Supertonic',
+    mediant: 'Mediant',
+    subdominant: 'Subdominant',
+    dominant: 'Dominant',
+    submediant: 'Submediant',
+    leadingTone: 'Leading tone',
+    subtonic: 'Subtonic',
+  },
 } as const

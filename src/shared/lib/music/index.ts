@@ -340,3 +340,11 @@ export {
   type TempoTerm,
   type TempoWord,
 } from './tempo-words'
+export {
+  DEGREE_NAMES,
+  degreeNames,
+  enharmonicKey,
+  neighbourKeys,
+  parallelKey,
+  type DegreeName,
+} from './key-relations'
