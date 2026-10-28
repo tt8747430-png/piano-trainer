@@ -45,6 +45,38 @@ async function engraved(width: number, scale = 1) {
   return layoutOf(element, score.measures, score.staves)
 }
 
+describe('a line’s grace notes, read back', () => {
+  it('boxes each grace note’s head apart from its note’s, small, before it', async () => {
+    const graced = notate({
+      key: { tonic: note('C'), minor: false },
+      meter: '4/4',
+      bars: [{ startTick: 0, beats: 4 }],
+      notes: [
+        {
+          ...n(72, 'rh', 0, 96),
+          marks: { grace: [{ midi: midi(74), spelled: note('D') }] },
+        },
+      ],
+      chords: [],
+    })
+    const [svg = ''] = await engraveMei(scoreToMei(graced), { width: 600, scale: 1 })
+    const host = document.createElement('div')
+    host.innerHTML = svg
+    const element = host.querySelector('svg')
+    if (!element) throw new Error('an SVG')
+    const layout = layoutOf(element, graced.measures, graced.staves)
+    const [grace] = layout.graces ?? []
+    const [head] = (layout.heads ?? []).filter((each) => each.staff === 'treble')
+    if (!grace || !head) throw new Error('a grace note and its note')
+    expect(grace).toMatchObject({ id: 'g-treble-0-0', staff: 'treble', tick: 0, index: 0 })
+    // A grace note's head is drawn smaller, before its note's.
+    expect(grace.bottom - grace.top).toBeLessThan(head.bottom - head.top)
+    expect(grace.right).toBeLessThanOrEqual(head.left + 1)
+    // Its note's heads are its own: the grace note is none of them.
+    expect((layout.heads ?? []).map((each) => each.id)).not.toContain('g-treble-0-0')
+  }, 20_000)
+})
+
 describe('a line engraved by Verovio, read back', () => {
   it('runs the width it is given, its bars side by side, each onset in its bar', async () => {
     const layout = await engraved(600)

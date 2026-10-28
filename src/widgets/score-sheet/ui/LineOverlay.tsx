@@ -112,7 +112,7 @@ export function LineOverlay({
   /** The notes chosen, from the piece's start: their span. */
   selection: { readonly from: Tick; readonly to: Tick } | null
   /** A click on the sheet: the caret to a note (one of a chord's, `key`) or an empty place, Shift extending. */
-  onPlace: (tick: Tick, layer: Layer, extend: boolean, key?: Midi) => void
+  onPlace: (tick: Tick, layer: Layer, extend: boolean, key?: Midi, grace?: boolean) => void
   /** A held finger dragged onto the bar starting at `tick`: what is chosen reaches it. */
   onReach: (tick: Tick) => void
   /** A click on empty staff: what is chosen let go (ADR 0096). */
@@ -214,7 +214,10 @@ export function LineOverlay({
     const picked = pickAt(layout, point.x, point.y)
     if (picked) {
       const key = picked.index === undefined ? undefined : picked.midi
-      onPlace(line.start + picked.tick, staffLayer(picked.staff), extend, key)
+      // A grace note's head: it chosen, before its note (ADR 0114).
+      if (picked.grace)
+        onPlace(line.start + picked.tick, staffLayer(picked.staff), extend, undefined, true)
+      else onPlace(line.start + picked.tick, staffLayer(picked.staff), extend, key)
       return
     }
     const notes = music.notes.filter((n) => layerOfNote(n) === target)

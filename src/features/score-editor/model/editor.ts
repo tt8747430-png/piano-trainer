@@ -145,7 +145,8 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
   const onGrace = graceEdited(state, action)
   if (onGrace) return onGrace
   const next = reduced(state, action)
-  return next.grace && !ON_GRACE.has(action.type) ? { ...next, grace: false } : next
+  const kept = ON_GRACE.has(action.type) || (action.type === 'place' && action.grace === true)
+  return next.grace && !kept ? { ...next, grace: false } : next
 }
 
 function reduced(state: EditorState, action: EditorAction): EditorState {
@@ -178,8 +179,23 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
       return { ...state, mode: action.mode ?? nextMode(state.mode), struck: null }
     case 'move':
       return moveCaret(state, action.by, action.direction, action.extend ?? false)
-    case 'place':
-      return placeCaret(state, action.tick, action.layer, action.extend ?? false, action.key)
+    case 'place': {
+      const placed = placeCaret(
+        state,
+        action.tick,
+        action.layer,
+        action.extend ?? false,
+        action.key,
+      )
+      // A grace note's head tapped: its notes' grace notes chosen, where they have some.
+      const graced =
+        action.grace === true &&
+        placed.layer !== 'chords' &&
+        notesAt(placed.draft, placed.layer, placed.caret).some(
+          (n) => (n.marks?.grace?.length ?? 0) > 0,
+        )
+      return graced ? { ...placed, grace: true } : placed
+    }
     case 'deselect':
       return state.selection === null && state.chordNote === null
         ? state

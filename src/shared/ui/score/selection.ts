@@ -186,6 +186,8 @@ export interface Picked {
   /** One note of its chord, its head clicked; none, the chord whole (its stem, its free room). */
   readonly index?: number
   readonly midi?: Midi
+  /** A grace note before its note at `tick`, its head clicked (ADR 0114). */
+  readonly grace?: true
 }
 
 const holds = (box: Extent, x: number, y: number, room: number) =>
@@ -200,12 +202,23 @@ const centre = (box: Extent, x: number, y: number) =>
  * heads and stem) it is on; else nothing: empty staff is never chosen.
  */
 export function pickAt(
-  layout: Pick<ScoreLayout, 'heads' | 'columns' | 'staves'>,
+  layout: Pick<ScoreLayout, 'heads' | 'graces' | 'columns' | 'staves'>,
   x: number,
   y: number,
 ): Picked | null {
   const grab = GRAB * spaceOf(layout)
   const heads = layout.heads ?? []
+  // A grace note's head, small and close before its note's: nearer to it than its note's is.
+  const near = (each: readonly Extent[]) =>
+    each
+      .filter((head) => holds(head, x, y, grab))
+      .sort((a, b) => centre(a, x, y) - centre(b, x, y))[0]
+  const grace = near(layout.graces ?? [])
+  const note = near(heads)
+  if (grace && (!note || centre(grace, x, y) < centre(note, x, y))) {
+    const { staff, tick, index } = grace as Head
+    return { staff, tick, index, grace: true }
+  }
   const under = heads
     .filter((head) => holds(head, x, y, grab))
     .sort((a, b) => centre(a, x, y) - centre(b, x, y))[0]

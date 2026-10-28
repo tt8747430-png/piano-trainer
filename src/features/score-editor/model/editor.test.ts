@@ -508,6 +508,26 @@ describe('the editor', () => {
     expect(run(chosen, { type: 'move', by: 'step', direction: 1, extend: false }).grace).toBe(false)
   })
 
+  it('chooses a grace note where its head is tapped on the sheet, to edit it as a note', () => {
+    const graced = run(
+      start(),
+      key(60, 0),
+      { type: 'place', tick: 0, layer: 'staff0' },
+      { type: 'grace', kind: 'acciaccatura' },
+      { type: 'deselect' },
+      { type: 'move', by: 'step', direction: 1, extend: false },
+    )
+    expect(graced.grace).toBe(false)
+    const tapped = run(graced, { type: 'place', tick: 0, layer: 'staff0', grace: true })
+    expect(tapped.caret).toBe(0)
+    expect(tapped.grace).toBe(true)
+    const stepped = run(tapped, { type: 'step', steps: 1 })
+    expect(staffNotes(stepped.draft)[0]?.marks?.grace?.[0]?.midi).toBe(64)
+    // A tap on a note with none chooses the note.
+    const plain = run(start(), key(60, 0), { type: 'place', tick: 0, layer: 'staff0', grace: true })
+    expect(plain.grace).toBe(false)
+  })
+
   it('puts a grace note before a note on either of the piano’s staves', () => {
     const piano = run(
       initialEditor(draftOf({ hands: { rh: 'E4/4 | r/4', lh: 'C3/4 | r/4' } })),

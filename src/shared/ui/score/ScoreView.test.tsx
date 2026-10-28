@@ -29,6 +29,37 @@ describe('ScoreView', () => {
     expect(document.querySelector('[data-slot="score"] svg')).toBeInTheDocument()
   })
 
+  it('marks a grace note chosen in its note’s place, its note left as it is (ADR 0114)', async () => {
+    const graced = notate({
+      key: { tonic: note('C'), minor: false },
+      meter: '4/4',
+      bars: [{ startTick: 0, beats: 4 }],
+      notes: [
+        {
+          midi: midi(72),
+          spelled: note('C'),
+          hand: 'rh',
+          startTick: 0,
+          durationTicks: 96,
+          marks: { grace: [{ midi: midi(74), spelled: note('D') }] },
+        },
+      ],
+      chords: [],
+    })
+    render(
+      <ScoreView
+        score={graced}
+        scale={1}
+        fingers={false}
+        selected={{ staff: 'treble', from: 0, to: 1, grace: true }}
+      />,
+    )
+    await waitFor(() =>
+      expect(document.querySelector('g.note.note-chosen')?.id).toBe('g-treble-0-0'),
+    )
+    expect(document.querySelector('#n-treble-0-0.note-chosen')).toBeNull()
+  })
+
   it('marks the notes chosen, on their staff at their tick, without engraving again', async () => {
     const { rerender } = render(
       <ScoreView

@@ -112,6 +112,8 @@ export type EditorAction =
       readonly extend?: boolean
       /** One note of the chord there, clicked on its head (ADR 0096). */
       readonly key?: Midi
+      /** Its grace notes, one clicked on its head (ADR 0114): chosen where the notes there have some. */
+      readonly grace?: boolean
     }
   /** What is chosen let go: the notes chosen, a chord's one note (Escape). */
   | { readonly type: 'deselect' }

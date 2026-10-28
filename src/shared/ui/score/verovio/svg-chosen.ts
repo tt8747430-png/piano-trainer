@@ -55,17 +55,23 @@ function dotsOf(chord: Element, chosen: ReadonlySet<Element>): Element[] {
  * [from, to) on the staves chosen (every staff without), only those of `keys` where one key of a
  * chord is chosen (its head and accidental, and its dot); a chord whose notes are all chosen, whole,
  * with its stem, flag and dots (a lone note holds its own); each rest, unless one key is chosen; and
- * each ledger line from its staff out to a head chosen.
+ * each ledger line from its staff out to a head chosen. With `grace`, the grace notes before those
+ * notes in their place, their notes left as they are (ADR 0114).
  */
 export function chosenParts(
   svg: Element,
   chosen: Chosen,
   keys: ReadonlySet<string> | null,
+  grace = false,
 ): Element[] {
   const staves = chosen.staves as readonly string[] | undefined
   const inChoice = (element: Element) => {
     const { staff, tick } = placeOf(element)
     return tick >= chosen.from && tick < chosen.to && (!staves || staves.includes(staff))
+  }
+  if (grace) {
+    const graces = [...svg.querySelectorAll('g.note[id^="g-"]')].filter(inChoice)
+    return [...graces, ...graces.flatMap(ledgersOf)]
   }
   const notes = [...svg.querySelectorAll('g.note[id^="n-"]')].filter(
     (note) => inChoice(note) && (!keys || keys.has(note.id)),
