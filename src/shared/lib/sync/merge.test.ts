@@ -91,3 +91,38 @@ describe('byKey and byId', () => {
     ])
   })
 })
+
+describe('mergeDocuments, with no rule for a field both changed', () => {
+  const at = (minute: number) => `2026-10-29T10:0${minute}:00Z`
+
+  it('merges a record field key by key, so neither side’s entries are lost', () => {
+    const base = doc({ records: { a: 1 } }, at(0))
+    const mine = doc({ records: { a: 1, b: 2 } }, at(1))
+    const theirs = doc({ records: { a: 1, c: 3 } }, at(2))
+    expect(mergeDocuments(mine, theirs, base).document.data).toEqual({
+      records: { a: 1, b: 2, c: 3 },
+    })
+  })
+
+  it('merges a list of items with ids item by item', () => {
+    const base = doc({ songs: [{ id: 's1', title: 'One' }] }, at(0))
+    const mine = doc({ songs: [{ id: 's1', title: 'One' }, { id: 's2', title: 'Two' }] }, at(1))
+    const theirs = doc({ songs: [{ id: 's1', title: 'One!' }] }, at(2))
+    expect(mergeDocuments(mine, theirs, base).document.data).toEqual({
+      songs: [
+        { id: 's1', title: 'One!' },
+        { id: 's2', title: 'Two' },
+      ],
+    })
+  })
+
+  it('gives a plain value or a list of plain values to the newer side', () => {
+    const base = doc({ order: [1, 2], theme: 'system' }, at(0))
+    const mine = doc({ order: [2, 1], theme: 'dark' }, at(3))
+    const theirs = doc({ order: [1, 2, 3], theme: 'light' }, at(2))
+    expect(mergeDocuments(mine, theirs, base).document.data).toEqual({
+      order: [2, 1],
+      theme: 'dark',
+    })
+  })
+})

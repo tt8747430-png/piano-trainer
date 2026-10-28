@@ -56,7 +56,10 @@ export function mergeDocuments(
   for (const key of new Set([...Object.keys(mine.data), ...Object.keys(theirs.data)])) {
     const mineChanged = !sameValue(mine.data[key], base.data[key])
     const theirsChanged = !sameValue(theirs.data[key], base.data[key])
-    const rule = mineChanged && theirsChanged ? both[key] : undefined
+    const rule =
+      mineChanged && theirsChanged
+        ? (both[key] ?? itemRule(mine.data[key], theirs.data[key]))
+        : undefined
     if (rule) {
       data[key] = rule(mine.data[key], theirs.data[key], base.data[key])
       continue
@@ -105,4 +108,22 @@ export function byId(mine: unknown, theirs: unknown, base: unknown): unknown[] {
   const merged = byKey(keyed(mine), keyed(theirs), keyed(base))
   const order = [...Object.keys(keyed(mine)), ...Object.keys(keyed(theirs))]
   return [...new Set(order)].flatMap((id) => (Object.hasOwn(merged, id) ? [merged[id]] : []))
+}
+
+const isRecord = (value: unknown): boolean =>
+  typeof value === 'object' && value !== null && !Array.isArray(value)
+
+const hasIds = (value: unknown): boolean =>
+  Array.isArray(value) &&
+  value.length > 0 &&
+  value.every((item) => isRecord(item) && typeof (item as Record<string, unknown>).id === 'string')
+
+/**
+ * The rule a field both sides changed takes where none is given: a record merges key by key, a list
+ * of items with ids item by item, anything else goes to the newer side.
+ */
+function itemRule(mine: unknown, theirs: unknown): MergeRule | undefined {
+  if (isRecord(mine) && isRecord(theirs)) return byKey
+  const lists = Array.isArray(mine) && Array.isArray(theirs)
+  return lists && (hasIds(mine) || hasIds(theirs)) ? byId : undefined
 }
