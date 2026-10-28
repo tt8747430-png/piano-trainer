@@ -81,10 +81,12 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
     ...view.folders.map((each) => folderKey(each.folder.id)),
     ...view.groups.flatMap((group) => group.entries.map((entry) => songKey(entry.id))),
   ]
-  const chosenSongs = [...chosen].flatMap((key) =>
+  // What Select acts on: the rows chosen still in sight (a search or a filter hides the rest).
+  const inSight = rows.filter((key) => chosen.has(key))
+  const chosenSongs = inSight.flatMap((key) =>
     key.startsWith('song:') ? [key.slice('song:'.length)] : [],
   )
-  const chosenFolders = layout.folders.filter((each) => chosen.has(folderKey(each.id)))
+  const chosenFolders = layout.folders.filter((each) => inSight.includes(folderKey(each.id)))
   const catalog = () => libraryCatalog(repertoire)
   const exit = () => {
     setSelecting(false)
@@ -115,7 +117,7 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
     select: {
       on: selecting,
       chosen,
-      count: chosen.size,
+      count: inSight.length,
       all: rows.length > 0 && rows.every((key) => chosen.has(key)),
       songs: chosenSongs,
       folders: chosenFolders,
@@ -144,14 +146,14 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
         setPending({
           kind: 'move',
           moving: { songs: chosenSongs, folders: chosenFolders.map((each) => each.id) },
-          what: t('select.count', { count: chosen.size }),
+          what: t('select.count', { count: inSight.length }),
         }),
       archive: () => {
         acts.archiveChosen(chosenSongs, chosenFolders)
         exit()
       },
       /** Delete is offered where everything chosen can be: the learner's own songs, and folders. */
-      deletable: chosen.size > 0 && chosenSongs.every(isOwnSongId),
+      deletable: inSight.length > 0 && chosenSongs.every(isOwnSongId),
       delete: () => setPending({ kind: 'delete-chosen' }),
     },
     /** Leaves a folder's page for the place it stands in: it was deleted or archived. */

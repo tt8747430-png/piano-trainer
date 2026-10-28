@@ -468,8 +468,9 @@ describe('Songs: Select (ADR 0106)', () => {
     await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
     expect(screen.getByRole('heading', { level: 1, name: 'Selected: 2' })).toBeInTheDocument()
     const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
-    // Delete is for the learner's own songs and folders: none of these.
-    expect(within(bar).queryByRole('button', { name: 'Delete' })).toBeNull()
+    // Delete is for the learner's own songs and folders: none of these, so it is greyed, kept in
+    // its slot so the bar's buttons never shift as rows are chosen.
+    expect(within(bar).getByRole('button', { name: 'Delete' })).toBeDisabled()
     await user.click(within(bar).getByRole('button', { name: 'Archive' }))
     expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived')
     expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
@@ -509,6 +510,25 @@ describe('Songs: Select (ADR 0106)', () => {
     expect(libraryStore.getState().favourites).toEqual(['silent', 'amazing'])
     await user.click(await screen.findByRole('button', { name: 'Undo' }))
     await waitFor(() => expect(libraryStore.getState().favourites).toEqual(['amazing']))
+  })
+
+  it('acts only on the rows chosen that are in sight, a search hiding the rest', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs/folders/hymns')
+    await user.click(await screen.findByRole('button', { name: 'Select' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
+    fireEvent.change(screen.getByRole('searchbox', { name: 'Search songs' }), {
+      target: { value: 'Amazing' },
+    })
+    await waitFor(() =>
+      expect(screen.queryByRole('checkbox', { name: 'Select Silent Night' })).toBeNull(),
+    )
+    expect(screen.getByRole('heading', { level: 1, name: 'Selected: 1' })).toBeInTheDocument()
+    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    await user.click(within(bar).getByRole('button', { name: 'Archive' }))
+    expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
+    expect(placeOf(libraryStore.getState(), 'silent')).toMatchObject({ folder: 'hymns' })
   })
 
   it('chooses every row by Select all, and starts with a row chosen by a long press', async () => {
