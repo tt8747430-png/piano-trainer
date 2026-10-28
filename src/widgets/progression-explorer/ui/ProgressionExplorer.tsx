@@ -1,6 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
-import { ChordRow, progressionRow, RowStaff, RowPlay, useShownKeys } from '@/features/play-example'
+import {
+  ChordRow,
+  progressionRow,
+  RowChips,
+  RowStaff,
+  RowPlay,
+  useShownKeys,
+} from '@/features/play-example'
 import { localText, useLocale } from '@/shared/i18n'
 import {
   keyFromParam,
@@ -10,7 +17,15 @@ import {
   numeralGrows,
   parseNumerals,
 } from '@/shared/lib/music'
-import { ChordSizeField, KeyChoice, Labelled, NO_KEYS, PositionField, Segmented } from '@/shared/ui'
+import {
+  ChordSizeField,
+  KeyChoice,
+  Labelled,
+  NO_KEYS,
+  PositionField,
+  RootMoveLegend,
+  Segmented,
+} from '@/shared/ui'
 import {
   changedView,
   chosenView,
@@ -28,7 +43,7 @@ import { ProgressionSongs } from './ProgressionSongs'
 
 /**
  * A progression in any key, read top to bottom (ADR 0052): the keys, its row of chords that play with
- * Play, what it is (the library's, or numerals or a song's chords typed and read in their key; its key,
+ * Play, each a chip over its function or its root's move, what it is (the library's, or numerals or a song's chords typed and read in their key; its key,
  * its chord size, what leads into each chord), its ways into the Player, and the passing chords
  * between two of its chords.
  */
@@ -60,6 +75,19 @@ export function ProgressionExplorer({
         onShow={setShown}
       >
         <RowStaff />
+        <div className="flex flex-col gap-3">
+          <Segmented
+            label={t('music:harmony.label')}
+            value={view.harmony ?? 'function'}
+            options={(['function', 'motion'] as const).map((harmony) => ({
+              value: harmony,
+              label: t(`music:harmony.view.${harmony}`),
+            }))}
+            onChange={(harmony) => change({ harmony: harmony === 'motion' ? 'motion' : undefined })}
+          />
+          <RowChips show={view.harmony ?? 'function'} />
+          {view.harmony === 'motion' ? <RootMoveLegend /> : null}
+        </div>
         <RowPlay variant="default" />
         <ProgressionDiagrams chords={row.map(({ chord }) => chord)} musicKey={key} />
         {named?.note ? (

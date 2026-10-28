@@ -322,7 +322,7 @@ describe('search params', () => {
     expect(router.state.location.searchStr).not.toContain('p=')
   })
 
-  it('read the pair Between looks at and In the key only, and the Key view’s melody note', async () => {
+  it('read the pair Between looks at, In the key only, the chips’ root motion, and the Key view’s melody note', async () => {
     expect(await searchAt('/practice/progressions?p=I-IV-V&between=1&inKey=true')).toMatchObject({
       between: 1,
       inKey: true,
@@ -330,6 +330,10 @@ describe('search params', () => {
     expect(await searchAt('/practice/progressions?between=-2&inKey=yes')).toEqual(
       PROGRESSIONS_DEFAULTS,
     )
+    expect(await searchAt('/practice/progressions?harmony=motion')).toMatchObject({
+      harmony: 'motion',
+    })
+    expect(await searchAt('/practice/progressions?harmony=keys')).toEqual(PROGRESSIONS_DEFAULTS)
     expect(await searchAt('/practice/scales?show=key&melody=F%23&onlyInKey=true')).toMatchObject({
       show: 'key',
       melody: 'F#',

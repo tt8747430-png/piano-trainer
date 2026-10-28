@@ -7,6 +7,7 @@ import {
   IntervalCard,
   NotesExample,
   ChordRow,
+  RowChips,
   symbolsRow,
   progressionRow,
   RowStaff,
@@ -21,7 +22,7 @@ import { gridSymbols } from '../model/chord-grid'
 import { ChordExamples } from './ChordExamples'
 import { LessonLinkRow } from './LessonLinkRow'
 import { PatternExample } from './PatternExample'
-import { ButtonLink, type ShownKeys } from '@/shared/ui'
+import { ButtonLink, RootMoveLegend, type ShownKeys } from '@/shared/ui'
 
 /** One link on its card, as a lesson's rows are. */
 function LinkCard({ title, target }: { title: string; target: LessonLink }) {
@@ -50,7 +51,7 @@ export function LessonBlock({
   onShow: (shown: ShownKeys) => void
   onFollow?: (shown: ShownKeys) => void
 }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation(['learn', 'music'])
   const locale = useLocale()
   switch (block.kind) {
     case 'text':
@@ -106,18 +107,26 @@ export function LessonBlock({
     }
     case 'progression': {
       const { numerals, key, size } = readProgression(block)
+      const motion = block.show === 'motion'
       return (
         <ChordRow chords={progressionRow(numerals, key, size)} onShow={onShow}>
           <RowStaff />
+          <RowChips show={motion ? 'motion' : 'function'} />
+          {motion ? <RootMoveLegend /> : null}
           {/* Play here, and the same row in Progressions to take further: in any key, walked. */}
           <div className="flex flex-wrap items-center gap-2">
-            <RowPlay variant="soft" />
+            <RowPlay variant="soft" {...(motion ? { label: t('music:harmony.playChain') } : {})} />
             <ButtonLink
               variant="outline"
               render={
                 <Link
                   to="/practice/progressions"
-                  search={{ key: keyParam(key), p: numeralsParam(numerals), size }}
+                  search={{
+                    key: keyParam(key),
+                    p: numeralsParam(numerals),
+                    size,
+                    ...(motion ? { harmony: 'motion' as const } : {}),
+                  }}
                 />
               }
             >

@@ -128,7 +128,11 @@ export type LessonBlock =
     }
   /** A pattern heard over the piece its source teaches it on: a pattern is only heard on chords. */
   | { readonly kind: 'pattern'; readonly pattern: PatternId; readonly piece: PieceId }
-  | ({ readonly kind: 'progression' } & LessonProgression)
+  /**
+   * A progression's row in a key, its chips each numeral over its function; or, `show: 'motion'`,
+   * over how its root moved there, with the moves' legend and Play the chain.
+   */
+  | ({ readonly kind: 'progression'; readonly show?: 'motion' } & LessonProgression)
   | { readonly kind: 'question'; readonly ask: LocalText; readonly answer: LessonAnswer }
   | { readonly kind: 'link'; readonly title: LocalText; readonly target: LessonLink }
 

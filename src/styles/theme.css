@@ -64,6 +64,12 @@
   --color-on-paint-grass: var(--on-paint-grass);
   --color-on-paint-sky: var(--on-paint-sky);
   --color-on-paint-lilac: var(--on-paint-lilac);
+  --color-paint-full-sand: var(--paint-full-sand);
+  --color-paint-full-yellow: var(--paint-full-yellow);
+  --color-paint-full-grass: var(--paint-full-grass);
+  --color-paint-full-sky: var(--paint-full-sky);
+  --color-paint-full-lilac: var(--paint-full-lilac);
+  --color-on-paint-full: var(--on-paint-full);
   --color-thumb: var(--thumb);
   --color-raised: var(--raised);
 

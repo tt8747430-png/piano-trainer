@@ -249,6 +249,29 @@ export const music = {
   playNotes: 'Play {{notes}}',
   playBar: 'Play bar {{n}}',
   playBarChord: 'Play bar {{n}}, {{symbol}}',
+  // A progression's chips (DESIGN.md, Harmony): each chord's numeral over what it does in its key,
+  // or how its root moved there; the legend of the moves; Play for the whole chain.
+  harmony: {
+    label: 'Show',
+    view: { function: 'Function', motion: 'Root motion' },
+    chips: 'Chords by function',
+    moves: 'Chords by root motion',
+    function: { tonic: 'Tonic', predominant: 'Predominant', dominant: 'Dominant' },
+    short: { tonic: 'T', predominant: 'PD', dominant: 'D' },
+    chip: '{{numeral}}, {{what}}',
+    move: {
+      fifth: { down: 'down a 5th', up: 'up a 5th' },
+      third: { down: 'down a 3rd', up: 'up a 3rd' },
+      second: { down: 'down a 2nd', up: 'up a 2nd' },
+    },
+    legend: {
+      fifth: { name: 'Down a 5th', text: 'The strongest pull: how most cadences close' },
+      third: { name: 'Down a 3rd', text: 'Mild: the two chords share two notes' },
+      second: { name: 'Up a 2nd', text: 'Fresh: the two chords share no note' },
+      back: { name: '↑5 ↑3 ↓2', text: 'The same moves the other way: they step back' },
+    },
+    playChain: 'Play the chain',
+  },
   // A row of chords that play, named for a screen reader.
   rowChords: 'Chords',
   // A chord drawn as keys (ADR 0108), named for a screen reader by its notes; a piece's chords as

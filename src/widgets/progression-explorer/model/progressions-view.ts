@@ -22,7 +22,8 @@ import {
 /**
  * What Progressions shows: numerals (`I-V-vi-IV`) in a key, at a chord size; the first
  * chord's inversion, and whether each after it moves to the nearest hand or keeps that inversion;
- * what leads into each chord, where something does; and the two chords Between looks at.
+ * what leads into each chord, where something does; the two chords Between looks at; and what the
+ * row's chips say.
  */
 export interface ProgressionsView {
   readonly key: KeyParam
@@ -35,6 +36,8 @@ export interface ProgressionsView {
   readonly between?: number
   /** Between: only the ways whose chords are all the key's. */
   readonly inKey?: boolean
+  /** The row's chips over how each root moves; over each chord's function where left out. */
+  readonly harmony?: 'motion'
 }
 
 /** The chords a view plays: its numerals, each led into by its V or ii–V where the view says (ADR 0112). */

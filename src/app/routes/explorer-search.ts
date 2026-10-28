@@ -205,6 +205,7 @@ export function readProgressionsSearch(raw: Raw): ProgressionsView {
         ? raw.between
         : undefined,
     inKey: raw.inKey === true ? true : undefined,
+    harmony: raw.harmony === 'motion' ? 'motion' : undefined,
   }
 }
 /** Progressions' line left out of the URL only where its key opens on it. */

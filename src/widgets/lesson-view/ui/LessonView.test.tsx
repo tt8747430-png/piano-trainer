@@ -445,6 +445,56 @@ describe('LessonView’s accompaniment', () => {
     expect(tool).toMatch(/[?&]size=sevenths(&|$)/)
   })
 
+  it('names each chord of a progression by its function on a chip that plays it', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderLesson(ACCOMPANIMENT)
+    const chips = screen.getByRole('list', { name: 'Chords by function' })
+    expect(
+      within(chips)
+        .getAllByRole('button')
+        .map((chip) => chip.ariaLabel),
+    ).toEqual(['ii, Predominant', 'V, Dominant', 'I, Tonic'])
+    expect(
+      within(chips)
+        .getAllByRole('button')
+        .map((chip) => chip.textContent),
+    ).toEqual(['iiPD', 'VD', 'IT'])
+    await user.click(within(chips).getByRole('button', { name: 'V, Dominant' }))
+    // G7 alone, as the row voices it: its bass under the hand.
+    expect(new Set(notes(audio.played.at(-1)?.sounds ?? []).map((key) => key % 12))).toEqual(
+      new Set([7, 11, 2, 5]),
+    )
+    expect(within(chips).getByRole('button', { name: 'V, Dominant' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+  })
+
+  it('shows a progression’s root motion with its legend, played as a chain', async () => {
+    await renderLesson({
+      ...ACCOMPANIMENT,
+      sections: [
+        {
+          heading: { en: 'Roots', ru: 'Основные тоны' },
+          blocks: [
+            { kind: 'progression', numerals: 'I IV vii° iii', key: C_MAJOR, show: 'motion' },
+          ],
+        },
+      ],
+    })
+    const chips = screen.getByRole('list', { name: 'Chords by root motion' })
+    expect(
+      within(chips)
+        .getAllByRole('button')
+        .map((chip) => chip.textContent),
+    ).toEqual(['I\u00a0', 'IV↓5', 'vii°↓5', 'iii↓5'])
+    expect(screen.getByText('Down a 5th')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Play the chain' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Open in Progressions' }).getAttribute('href')).toMatch(
+      /[?&]harmony=motion(&|$)/,
+    )
+  })
+
   it('links into the tools and the Player on what it names', async () => {
     await renderLesson(ACCOMPANIMENT)
     // Between two chords, on Progressions: the pair as a line in its key.
