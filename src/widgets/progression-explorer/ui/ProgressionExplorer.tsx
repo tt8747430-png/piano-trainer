@@ -8,7 +8,7 @@ import {
   RowPlay,
   useShownKeys,
 } from '@/features/play-example'
-import { localText, useLocale } from '@/shared/i18n'
+import { localText, useLocale, useScaleName } from '@/shared/i18n'
 import { useScrollMotion } from '@/shared/lib'
 import {
   keyFromParam,
@@ -64,6 +64,7 @@ export function ProgressionExplorer({
 }) {
   const { t } = useTranslation(['music', 'practice'])
   const locale = useLocale()
+  const scaleName = useScaleName()
   const [shown, setShown] = useShownKeys(
     `${view.key} ${view.p} ${view.mode} ${view.size} ${view.inversion} ${view.nearest} ${view.block} ${view.lead}`,
     NO_KEYS,
@@ -85,6 +86,9 @@ export function ProgressionExplorer({
         </h2>
         {named ? (
           <p className="text-lg text-muted-foreground">{localText(named.character, locale)}</p>
+        ) : null}
+        {view.mode ? (
+          <p className="text-lg font-semibold">{printedSymbol(scaleName(key.tonic, view.mode))}</p>
         ) : null}
       </hgroup>
       <ChordRow chords={row} position={rowPosition(view)} onShow={setShown}>
@@ -115,6 +119,7 @@ export function ProgressionExplorer({
         <ProgressionField
           progression={view.p}
           musicKey={key}
+          inMode={view.mode !== undefined}
           onChange={(p, read) => change({ p, key: keyParam(read) })}
         />
         <Labelled label={t('music:chordSize.label')}>

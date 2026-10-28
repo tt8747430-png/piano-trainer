@@ -20,16 +20,20 @@ const written = (numerals: readonly Numeral[]): string => numerals.map(numeralTe
  * Numerals or a song's chords typed (ADR 0052): each change that reads sets the progression, chords
  * in the key they are read in; what the learner typed stays while it means the progression shown in
  * the key it was typed in, and a line says when it cannot be read; numerals written for the other
- * mode (a I in a minor key) say so, with the way to play them in the key of that mode.
+ * mode (a I in a minor key) say so, with the way to play them in the key of that mode, unless the line
+ * is read in a church mode.
  */
 export function ProgressionField({
   progression,
   musicKey,
+  inMode,
   onChange,
 }: {
   /** The progression's numerals as the URL holds them. */
   progression: string
   musicKey: Key
+  /** Whether the line is read in a church mode: its degrees are the mode's, of neither major nor minor. */
+  inMode: boolean
   onChange: (progression: string, key: Key) => void
 }) {
   const { t } = useTranslation('practice')
@@ -44,7 +48,9 @@ export function ProgressionField({
   const from = typing ? typed.from : musicKey
   const minor = tonicMinor(parseNumerals(progression) ?? [])
   const otherKey =
-    minor === null || minor === musicKey.minor ? null : writtenKey({ tonic: musicKey.tonic, minor })
+    inMode || minor === null || minor === musicKey.minor
+      ? null
+      : writtenKey({ tonic: musicKey.tonic, minor })
   return (
     <div className="flex flex-col gap-2">
       <TypedField

@@ -569,6 +569,7 @@ describe('Practice → Progressions, read and played other ways', () => {
     await user.click(await screen.findByRole('option', { name: 'Dorian' }))
     expect(router.state.location.search).toMatchObject({ key: 'Dm', mode: 'dorian' })
     await rowIs(['Dmi', 'GIV', 'Amv'])
+    expect(screen.getByText('D Dorian')).toBeInTheDocument()
   })
 
   it('opens a modal vamp from the library in its mode', async () => {
