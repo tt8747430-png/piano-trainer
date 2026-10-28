@@ -64,5 +64,5 @@ A study, practised on Practice, is in no library. A folder played song after son
 - 0103 — The learner's library: Favourites, setlists, Chords I know (2026-10-26), superseded by 0106.
 - 0106 — One library of songs (2026-10-26); its second round nested the folders, made one search with its filters,
   moved at a tap and stood sheets on the phone's keyboard (ADR 0061).
-- New's Import and a file dropped on the library (2026-10-28, ADR 0107).
-- Select acts on the rows in sight, its bar's slots stay put and its Archive has one Undo (2026-10-28).
+- r13 — New's Import and a file dropped on the library (2026-10-28, ADR 0107).
+- r14 — Select acts on the rows in sight, its bar's slots stay put and its Archive has one Undo (2026-10-28).

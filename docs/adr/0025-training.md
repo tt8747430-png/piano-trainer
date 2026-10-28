@@ -81,6 +81,5 @@ a case in `arrangeExercise`, whose test writes every exercise in every root on t
 - 0024 — An exercise is a rule that writes a Performance (2026-10-01).
 - 0025 — A trainer is a round machine with a ladder (2026-10-01).
 - 0025 — Chords and Intervals in four drills, one setup for every trainer, a time limit, an answer-gated Next (2026-10-28).
-- r14 — Cadences, a trainer in the four drills, its cards naming their faces (2026-10-28).
-- r14 — Hanon's Nos. 1 to 20, the tempo ladder with each exercise's last tempo kept, the daily scale routine
-  (2026-10-28).
+- r14 — Cadences, a trainer in the four drills, its cards naming their faces; Hanon's Nos. 1 to 20, the tempo
+  ladder with each exercise's last tempo kept, the daily scale routine (2026-10-28).

@@ -121,10 +121,10 @@ reader hears the caret's place in a polite live line (`CaretLine`).
 - 0092 — Editing modes and a clipboard on what is chosen (2026-10-24).
 - 0094 — The score edited where it is printed (2026-10-24). Its bar is ADR 0115's.
 - 0114 — One row of every tool; sign pickers; every meter, clef and tempo unit (2026-10-27).
-- 2026-10-28 — The palette docked as Flat's: a left panel, a note-entry toolbar and a phone sheet in place of the
-  floating card and its folded row; Flat's sections, keys and shortcuts; the chord wizard; the grace note.
-- 2026-10-28 — Flat's notation in its sections: the 64th, tuplets of 2 to 9, the new articulations, ornaments, lines
-  and dynamics, tempo changes, swing, free text, Roman numerals, repeat ×N, the 3rd and 4th endings, the page break,
-  bar repeats and multi-bar rests.
-- 2026-10-28 — Undo and redo bring back what was chosen (the notes, a chord's one note, the grace notes).
+- r13 — The palette docked as Flat's: a left panel, a note-entry toolbar and a phone sheet in place of the floating
+  card and its folded row; Flat's sections, keys and shortcuts; the chord wizard; the grace note (2026-10-28).
+- r13 — Flat's notation in its sections: the 64th, tuplets of 2 to 9, the new articulations, ornaments, lines and
+  dynamics, tempo changes, swing, free text, Roman numerals, repeat ×N, the 3rd and 4th endings, the page break, bar
+  repeats and multi-bar rests (2026-10-28).
+- r14 — Undo and redo bring back what was chosen (the notes, a chord's one note, the grace notes) (2026-10-28).
 - The research note comparing Flat and Dorico (2026-10-23) and the editor's three design specs, deleted.

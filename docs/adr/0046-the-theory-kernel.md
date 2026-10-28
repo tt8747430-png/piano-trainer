@@ -97,7 +97,6 @@ Chords view should hold its big chords in two hands too.
 - 0020, 0032, 0040 — Numerals in any key; a numeral carries its chord; applied numerals (2026-09-29 to 10-13).
 - 0035 — A chord of five notes takes two hands (2026-10-09), from the research note on chord hands, deleted.
 - 0046 — The table writes m(add9) and 13♭9 (2026-10-14).
-- r14 — The power chord, Maj11, m13, Maj13, 13sus4; block fingering by rule; eight voicings (2026-10-28), from
-  Musicca's chord finder, Vita Piano's chord lessons and piano.org's voicing pages.
-- r14 — Fingering as the printed books, eight new scale kinds, degree names under a scale's formula, crossings
-  marked (2026-10-28), from Vita Piano's scale and arpeggio lessons and ABRSM's books.
+- r14 — The power chord, Maj11, m13, Maj13, 13sus4; block fingering by rule; eight voicings; scale and arpeggio
+  fingering as the printed books, eight new scale kinds, degree names under a scale's formula, crossings marked
+  (2026-10-28), from Musicca, Vita Piano, piano.org and ABRSM's books.

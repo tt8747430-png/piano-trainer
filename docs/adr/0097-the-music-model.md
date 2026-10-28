@@ -78,7 +78,7 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
 - 0093 — Lyrics under the tune (2026-10-24).
 - 0095 — A section's meter (2026-10-24); every meter and the beat type by 0114 (2026-10-27).
 - 0097 — A score's staves are staves (2026-10-24).
-- 2026-10-28 — Flat's notation: 5040 ticks a beat, the 64th and tuplets of 2 to 9; portato, breath, caesura,
-  inverted turn, tremolos, 15ma/15mb, glissando, every dynamic, tempo changes, swing marks, Roman numerals and free
-  text; repeat ×N, endings to the 4th, page breaks, bar repeats and multi-bar rests; the two-note tremolo; a bar
-  of no chord kept through MusicXML as N.C.
+- r13 — Flat's notation: 5040 ticks a beat, the 64th and tuplets of 2 to 9; portato, breath, caesura, inverted turn,
+  tremolos, 15ma/15mb, glissando, every dynamic, tempo changes, swing marks, Roman numerals and free text; repeat ×N,
+  endings to the 4th, page breaks, bar repeats and multi-bar rests; the two-note tremolo; a bar of no chord kept
+  through MusicXML as N.C (2026-10-28).

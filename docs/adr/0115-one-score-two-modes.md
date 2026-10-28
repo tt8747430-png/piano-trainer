@@ -57,4 +57,4 @@ own Play melody switch: it plays the tune under a take, not the Player's melody.
 - 0110 — One bar, one tools row, one transport (2026-10-26).
 - 0115 — One band for the bar, one Transpose, a plain Setup (2026-10-27). Its Setup is ADR 0105's, its View ADR
   0108's.
-- 2026-10-28 — The editor's palette docked, not floating (ADR 0114).
+- r13 — The editor's palette docked, not floating (ADR 0114) (2026-10-28).

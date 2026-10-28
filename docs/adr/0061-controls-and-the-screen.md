@@ -69,5 +69,5 @@ A new option has one obvious form by this rule. A test reaches a folded action b
   ADR 0115's now.
 - 0094, 0096 — The same at every size; explanations in a popover (2026-10-24).
 - 0106 — The phone's keyboard and one toast at a time (2026-10-26).
-- The keyboard reserved as a field is focused, the field lifted by the page, the bar held still: Mindscape's whole
-  mechanism (2026-10-28).
+- r14 — The keyboard reserved as a field is focused, the field lifted by the page, the bar held still: Mindscape's
+  whole mechanism (2026-10-28).

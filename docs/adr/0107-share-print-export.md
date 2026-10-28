@@ -72,6 +72,6 @@ not its music.
 
 - The share-a-song spec (2026-10-11), deleted: its link format is here.
 - 0107 — Share, Print, MIDI time aligned, the tuning and Sections (2026-10-26). Its Sections are ADR 0105's.
-- Export to MusicXML, MIDI from the song page, and Import of MusicXML and MIDI (2026-10-28).
-- A broken .mxl says so, an import closed while reading makes nothing; a shared song's Add names the library
+- r13 — Export to MusicXML, MIDI from the song page, and Import of MusicXML and MIDI (2026-10-28).
+- r14 — A broken .mxl says so, an import closed while reading makes nothing; a shared song's Add names the library
   (2026-10-28).

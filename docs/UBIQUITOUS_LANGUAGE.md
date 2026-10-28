@@ -118,7 +118,8 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Placed tone** (`placeChord`, `placeScale`): a tone at a key on the keyboard. _Avoid:_ voicing.
 - **Chord parts** (`ChordParts`): a chord as the builder makes it: Triad, Chord size, 7th, Added tones,
   Alterations. _Avoid:_ chord options, quality.
-- **Triad** (a chord part): major, minor, diminished, augmented, sus2, sus4 or the power chord's bare 5th. _Avoid:_ quality, sus option.
+- **Triad** (a chord part): major, minor, diminished, augmented, sus2, sus4 or the power chord's bare 5th.
+  _Avoid:_ quality, sus option.
 - **Added tone**: a tone added beside the stack (add2, 6, add9, add11). _Avoid:_ extension.
 - **Alteration**: a raised or lowered tone of a chord with a major 3rd (♭5, ♭9, ♯9, ♯11, ♭13). _Avoid:_ altered
   extension.
@@ -233,8 +234,8 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Chromatic walk** («По полутонам»): chosen chords root by root, a semitone at a time. _Avoid:_ chord drill.
 - **Start on**: the degree a scale's run starts from. _Avoid:_ rotation.
 - **Fingering**: From the thumb or As the scale (each note its **continuing finger**). _Avoid:_ fingers.
-- **Crossing** («Смена позиции»): a note a finger crosses to: the thumb passing under, or a finger over the thumb;
-  marked in sky on the keys, the fingering table and the staff. _Avoid:_ thumb-under (for both), turn.
+- **Crossing** («Смена позиции»): a note a finger crosses to: the thumb passing under, or a finger over the thumb.
+  _Avoid:_ thumb-under (for both), turn.
 - **No standard fingering**: a scale the books leave unfingered, fingered from the thumb and saying so in an ⓘ.
   _Avoid:_ unknown fingering.
 - **Octaves** (an exercise): how far a run climbs, one to four. _Avoid:_ range, span.
@@ -297,10 +298,12 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Note names**: C · All · None. _Avoid:_ labels.
 - **Chord names**: the rail naming the chord a hand holds. _Avoid:_ chord detection.
 - **Typing keys**: the computer keyboard as a piano. _Avoid:_ hotkeys.
-- **Phone's keyboard** (`keyboard-viewport`): the on-screen keyboard a text field opens; it covers the screen's foot
-  (`--kb-inset`), never the piano. _Avoid:_ soft keyboard, virtual keyboard.
+- **Phone's keyboard** (`keyboard-viewport`): the on-screen keyboard a text field opens, never the piano. _Avoid:_
+  soft keyboard, virtual keyboard.
 - **Reveal** (`keyboard-reveal`): the page lifting a focused field, its label and its error clear of the phone's
-  keyboard. **Reserve**: the keyboard last measured, held as a field is focused, before the keyboard comes.
+  keyboard. _Avoid:_ scroll into view.
+- **Reserve** (`pt-keyboard`): the room of the tallest phone's keyboard measured, held as a field is focused, before
+  the keyboard comes. _Avoid:_ keyboard padding.
 - **Down** (a key): sounding now or held by a hand, for at least the **shortest press** (150ms). _Avoid:_ active,
   playing.
 - **Lit**: a key shown as an answer or a pattern's note, not sounding. _Avoid:_ down.
@@ -436,8 +439,8 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   _Avoid:_ settings, config.
 - **Cadences** («Каденции»): the Quiz's trainer that asks a cadence in all four drills: heard after its key's tonic,
   read on the grand staff, the chord that makes it played, or a card of its name or staff. A cadence rates no skill.
-- **Drill** («Режим»): the way Chords, Intervals and Cadences ask the same things: **Cards** («Карточки»), **Quiz** («Тест»),
-  **Play** («Игра»), **By ear** («На слух»). Never an exercise. _Avoid:_ mode, game.
+- **Drill** («Режим»): the way Chords, Intervals and Cadences ask the same things: **Cards** («Карточки»),
+  **Quiz** («Тест»), **Play** («Игра»), **By ear** («На слух»). Never an exercise. _Avoid:_ mode, game.
 - **Card** (a drill's): a chord or interval shown by one of its name, keys or staff (**Shown**), the rest
   **Revealed**; never right or wrong. _Avoid:_ flashcard (in the UI), flip.
 - **Time limit** («Лимит времени»): a round's seconds; when they run out the answer is shown, the round missed.

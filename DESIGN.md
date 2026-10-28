@@ -451,8 +451,9 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
   chord's inversions a row each (its name in small type, each note over its finger), the one on the keys in strong
   ink. Under a scale's formula, each degree's name in small soft ink.
 - **Sheet** (`Sheet`): card paper, 20px top corners, a grab handle, its Literata title with Close, a scrolling body,
-  an optional footer over a hairline. It stands on the phone's keyboard, its footer with it; a field in a page is lifted a gap clear of that keyboard, under the screen's bar, which holds still while typing. Never a sheet over a sheet: open a list as a
-  page of the sheet.
+  an optional footer over a hairline. It stands on the phone's keyboard, its footer with it; a field in a page is
+  lifted a gap clear of that keyboard, under the screen's bar, which holds still while typing. Never a sheet over a
+  sheet: open a list as a page of the sheet.
 - **Drop zone** (`SongDrop`, a laptop's): while a file is dragged over the library, a panel inset 16px over the page,
   its 2px dashed honey border on the page's paper at 90%, an upload icon over one line of what dropping does.
 - **A trainer's setup** (`TrainerSetup`, at most 672px wide): the drill as a segmented control of pictures over

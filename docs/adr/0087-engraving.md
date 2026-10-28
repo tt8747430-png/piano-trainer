@@ -68,6 +68,6 @@ LilyPond's cautionary accidentals at a line's start are not written: each line i
 - 0084 — Beams by the meter; chord names print ♯ and ♭ (2026-10-23).
 - 0087 — Courtesy signatures, line-start bar numbers, pages filled (2026-10-23), from the research note comparing
   the engraving with LilyPond, deleted.
-- 2026-10-28 — The 64th, tuplets of 2 to 9 found from the timing, Flat's marks, bar repeats and multi-bar rests drawn
-  as their signs, page breaks.
-- 2026-10-28 — An octave line written in its first measure, not the one after its last note.
+- r13 — The 64th, tuplets of 2 to 9 found from the timing, Flat's marks, bar repeats and multi-bar rests drawn as
+  their signs, page breaks (2026-10-28).
+- r14 — An octave line written in its first measure, not the one after its last note (2026-10-28).
