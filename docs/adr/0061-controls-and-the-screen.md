@@ -37,8 +37,18 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
 - **The shell takes the width it is given.** The sidebar collapses to its icons (saved), the gutter grows with the
   width, and a list is a grid of row cards (`grid-cards`), as many columns as fit. A reading page is one column in
   the middle.
-- **A phone's keyboard:** a sheet stands on it (`VirtualKeyboardProvider`); `keyboard-viewport.ts` publishes the room
-  left, and while typing the tab bar, the floating actions and the toasts step aside.
+- **A phone's keyboard covers the screen; the page lifts the field.** One mechanism, Mindscape's (its ADR 0002),
+  started once in `RootLayout`: `keyboard-viewport.ts` measures the keyboard from the visual viewport against the
+  room anchored with no field focused (`--app-height`), and publishes how much it covers (`--kb-inset`), the range a
+  page adds at its foot to lift its last field clear (`--kb-range`, through `pb-foot-*`) and `data-keyboard`. As a
+  field takes the focus, the tallest keyboard measured on this phone (`pt-keyboard`) is reserved at once, so the
+  field is lifted and the foot steps aside before the keyboard comes and iOS has nothing to pan; a laptop never
+  measured one and moves nothing. `keyboard-reveal.ts` scrolls the box round the field (the page, or a screen's own
+  scroller) so the field, its label and its error stand under the screen's bar and a gap above the keyboard. A sheet
+  or a popover owns its own fields: it stands on the keyboard (`VirtualKeyboardProvider`), its buttons with it; the
+  score editor's slim bar stands on `--kb-inset`, and its sheet scrolls the caret's line clear of both. While typing
+  the tab bar, the floating actions and the toasts step aside (the page pads for them no more), and the screen's bar
+  holds still. Nothing listens to the viewport's scroll.
 - **Toasts:** one at a time, the new one replacing the last; Undo in it puts back exactly what was done; gone after
   five seconds or on Undo.
 - **Basics:** 44px targets; one focus ring (a 3px outline 2px off the control, inset inside a scroller); reduced
@@ -59,3 +69,5 @@ A new option has one obvious form by this rule. A test reaches a folded action b
   ADR 0115's now.
 - 0094, 0096 — The same at every size; explanations in a popover (2026-10-24).
 - 0106 — The phone's keyboard and one toast at a time (2026-10-26).
+- The keyboard reserved as a field is focused, the field lifted by the page, the bar held still: Mindscape's whole
+  mechanism (2026-10-28).

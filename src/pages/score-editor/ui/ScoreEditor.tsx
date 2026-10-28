@@ -1,5 +1,5 @@
 import { PanelLeftOpen } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   selectKeyboard,
@@ -14,6 +14,7 @@ import {
   LANDSCAPE_PHONE,
   useElementSize,
   useHiddenWhileReading,
+  useKeyboardHeight,
   useMediaQuery,
 } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
@@ -38,6 +39,8 @@ import { UnsavedNotice } from './UnsavedNotice'
 
 /** What the sheet keeps between its music and what floats over it, in CSS px. */
 const GAP = 8
+/** How far the slim bar stands over the phone's keyboard (`SheetField`'s docked offset). */
+const DOCKED_GAP = 6
 
 /** The panel reaches the screen's left edge and the bar's hairline, past the screen's gutter and gap. */
 const PANEL_EDGE =
@@ -76,8 +79,26 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
   const sheet = useRef<HTMLDivElement>(null)
   const foot = useRef<HTMLDivElement>(null)
   const { height } = useElementSize(sheet)
-  const { height: below } = useElementSize(foot)
-  // The sheet never leaves the caret under the transport: its staff scrolls into the room above it.
+  const { height: transport } = useElementSize(foot)
+  // Where the field open over the sheet stands: the place the caret's line draws for it (ADR 0096);
+  // on a phone, the slim bar over its own keyboard, in the palette sheet's place.
+  const [anchor, setAnchor] = useState<HTMLDivElement | null>(null)
+  const [docked, setDocked] = useState<HTMLDivElement | null>(null)
+  const typing = !panel && editor.view.field !== null
+  // While a field types over the phone's keyboard, the sheet's foot is covered by the keyboard and
+  // the slim bar standing on it: measured, so the caret's line scrolls clear of both (ADR 0061).
+  const keyboard = useKeyboardHeight()
+  const [typedOver, setTypedOver] = useState(0)
+  useLayoutEffect(() => {
+    const box = sheet.current
+    if (!typing || keyboard === 0 || !box || !docked) return setTypedOver(0)
+    const bar = document.querySelector('[data-docked-field]')?.getBoundingClientRect().height ?? 0
+    const barTop = docked.getBoundingClientRect().top - bar - DOCKED_GAP
+    setTypedOver(Math.max(0, Math.round(box.getBoundingClientRect().bottom - barTop)))
+  }, [typing, keyboard, docked])
+  const below = Math.max(transport, typedOver)
+  // The sheet never leaves the caret under the transport (or the phone's keyboard): its staff
+  // scrolls into the room above it.
   useEffect(() => {
     const box = sheet.current
     const caret = box?.querySelector('[data-slot="caret"]')
@@ -89,11 +110,6 @@ export function ScoreEditor({ target, bar }: { target: EditorTarget; bar?: numbe
   }, [below])
   // The transport steps aside while the music is read; a tap on the sheet brings it back.
   const floating = useHiddenWhileReading()
-  // Where the field open over the sheet stands: the place the caret's line draws for it (ADR 0096);
-  // on a phone, the slim bar over its own keyboard, in the palette sheet's place.
-  const [anchor, setAnchor] = useState<HTMLDivElement | null>(null)
-  const [docked, setDocked] = useState<HTMLDivElement | null>(null)
-  const typing = !panel && editor.view.field !== null
   // The phone's sheet expanded is the editing's: the transport steps aside for the music it leaves.
   const expanded = !panel && !folded && keysFolded
   // A take's strip, with its Stop, never steps aside.

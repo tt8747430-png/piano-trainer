@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
+import { expectKeyboard, KEYBOARD_STORAGE_KEY, startKeyboardViewport } from './keyboard-viewport'
 import { useShownOnScrollUp } from './use-shown-on-scroll-up'
 
 const scrollTo = (y: number) => {
@@ -65,5 +66,30 @@ describe('useShownOnScrollUp', () => {
     expect(result.current).toBe(true)
     scrollTo(0)
     expect(result.current).toBe(true)
+  })
+
+  it('holds still while the phone’s keyboard is up: a field lifted clear of it moves no bar', () => {
+    localStorage.setItem(
+      KEYBOARD_STORAGE_KEY,
+      JSON.stringify({ state: { height: 300 }, version: 1 }),
+    )
+    const stop = startKeyboardViewport()
+    try {
+      const { result } = renderHook(() => useShownOnScrollUp())
+      scrollTo(200)
+      scrollTo(150)
+      expect(result.current).toBe(true)
+      act(() => expectKeyboard(true))
+      scrollTo(400)
+      expect(result.current).toBe(true)
+      act(() => expectKeyboard(false))
+      // Reading on from where the keyboard left it.
+      scrollTo(380)
+      expect(result.current).toBe(true)
+      scrollTo(420)
+      expect(result.current).toBe(false)
+    } finally {
+      stop()
+    }
   })
 })
