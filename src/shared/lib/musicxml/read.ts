@@ -8,6 +8,7 @@ import {
   EXPRESSIONS,
   DYNAMICS,
   isCompound,
+  MULTI_REST,
   meterOf,
   signatureKey,
   type Articulation,
@@ -437,6 +438,14 @@ export function readMusicXml(source: string): ReadScore {
               const known = staves[staffOf(Number(details.attrs.number ?? 1))]
               if (known && details.attrs['print-object'] === 'no') known.hidden = true
             }
+            for (const style of childrenOf(child, 'measure-style')) {
+              const repeat = childOf(style, 'measure-repeat')
+              const length = Number(repeat && textOf(repeat))
+              if (repeat?.attrs.type === 'start' && (length === 1 || length === 2))
+                bar.barRepeat = length
+              const rests = numberAt(style, 'multiple-rest') ?? 0
+              if (rests >= MULTI_REST.from && rests <= MULTI_REST.to) bar.multiRest = rests
+            }
             const shift = childOf(child, 'transpose')
             if (shift)
               transpose =
@@ -452,6 +461,7 @@ export function readMusicXml(source: string): ReadScore {
           case 'print':
             if (child.attrs['new-system'] === 'yes' || child.attrs['new-page'] === 'yes')
               bar.lineStart = true
+            if (child.attrs['new-page'] === 'yes') bar.pageBreak = true
             break
           case 'barline':
             readBarline(child, bar, leave)

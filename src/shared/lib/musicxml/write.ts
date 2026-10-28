@@ -272,9 +272,10 @@ class PartWriter {
   }
 
   private measure(measure: Measure, index: number, number: number): string {
-    const before = this.score.measures[index - 1]
     const out: string[] = []
-    if (this.options.lineStarts?.includes(index) && index > 0)
+    // A page break starts a page, its line with it (Flat's).
+    if (measure.pageBreak && index > 0) out.push(tag('print', { 'new-page': 'yes' }))
+    else if (this.options.lineStarts?.includes(index) && index > 0)
       out.push(tag('print', { 'new-system': 'yes' }))
     const ending = this.score.measures[index - 1]?.ending
     const left = [
@@ -285,7 +286,7 @@ class PartWriter {
       measure.repeatStart ? tag('repeat', { direction: 'forward' }) : '',
     ].join('')
     if (left) out.push(tag('barline', { location: 'left' }, left))
-    out.push(this.attributes(measure, before))
+    out.push(this.attributes(measure, index))
     if (this.top) out.push(...this.headDirections(measure, index))
     const staves = this.part.staves
     const voices = staves.flatMap((staff, s) =>
@@ -324,7 +325,25 @@ class PartWriter {
     return tag('measure', { number, ...(number === 0 ? { implicit: 'yes' } : {}) }, ...out)
   }
 
-  private attributes(measure: Measure, before: Measure | undefined): string {
+  /**
+   * A bar repeat's style from its first bar to the first after it, MusicXML's measure-repeat (the
+   * bars it repeats); a multi-bar rest's count at its first bar.
+   */
+  private measureStyle(measure: Measure, index: number): string {
+    const measures = this.score.measures
+    const repeatOf = (at: number) => measures[at]?.barRepeat
+    const ended = [1, 2].some((length) => repeatOf(index - length) === length)
+    const styles = [
+      ended && !measure.barRepeat ? tag('measure-repeat', { type: 'stop' }) : '',
+      measure.barRepeat ? tag('measure-repeat', { type: 'start' }, String(measure.barRepeat)) : '',
+      measure.multiRest ? text('multiple-rest', measure.multiRest) : '',
+    ].filter(Boolean)
+    return styles.length > 0 ? tag('measure-style', {}, ...styles) : ''
+  }
+
+  private attributes(measure: Measure, index: number): string {
+    const before = this.score.measures[index - 1]
+    const style = this.measureStyle(measure, index)
     const keyOf = (m: Measure) => m.key ?? this.score.key
     const key = keyOf(measure)
     const keyXml =
@@ -361,7 +380,7 @@ class PartWriter {
             .map((_, s) => tag('staff-details', { number: s + 1, 'print-object': 'no' }))
             .join('')
         : ''
-    if (!keyXml && !timeXml && !clefs && before) return ''
+    if (!keyXml && !timeXml && !clefs && !style && before) return ''
     return tag(
       'attributes',
       {},
@@ -371,6 +390,7 @@ class PartWriter {
       !before && this.part.staves.length > 1 ? text('staves', this.part.staves.length) : '',
       clefs,
       hidden,
+      style,
     )
   }
 

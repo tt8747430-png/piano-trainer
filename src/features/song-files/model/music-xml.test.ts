@@ -78,6 +78,28 @@ describe('a song’s MusicXML, exported then imported', () => {
     expect(back.song.music).toEqual(written(RICH))
   })
 
+  it('keeps Flat’s repeat ×N, endings to the 4th, a page break, bar repeats and a multi-bar rest', () => {
+    const marked: PieceMusic = {
+      key: 'C',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [
+        {
+          kind: 'verse',
+          lines: ['|: C [1 F :| [2 G :| [3 A :|x4 [4 G', 'Page C % C F G %% F G Rest2 G G |.'],
+        },
+      ],
+    }
+    const xml = musicXmlOf(marked, NAMES)
+    expect(xml).toContain('<print new-page="yes"/>')
+    expect(xml).toContain('<measure-repeat type="start">2</measure-repeat>')
+    expect(xml).toContain('<multiple-rest>2</multiple-rest>')
+    const back = songOfMusicXml(xml, 'x.musicxml')
+    expect(back.leftOut).toEqual({})
+    expect(back.song.music).toEqual(written(marked))
+  })
+
   it('keeps a lead sheet’s piano, not printed', () => {
     const lead: PieceMusic = { ...RICH, leadSheet: true }
     const xml = musicXmlOf(lead, { ...NAMES, staffNames: ['Flute', 'Cello'] })
