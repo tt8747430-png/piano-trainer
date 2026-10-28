@@ -286,14 +286,20 @@ describe('arpeggioFingering', () => {
     expect(digits(arpeggioFingering(arpeggio(48, [4, 3, 3, 2], 2), 'lh'))).toBe('543214321')
   })
 
-  it('puts the thumb on the first white key from a black one', () => {
-    // A♭ major: the thumb on C.
-    expect(digits(arpeggioFingering(arpeggio(68, [4, 3, 5], 1), 'rh'))).toBe('2124')
-    expect(digits(arpeggioFingering(arpeggio(56, [4, 3, 5], 1), 'lh'))).toBe('2142')
-  })
-
-  it('counts up to the right hand’s first thumb from two black keys: B♭ minor 2 3 1', () => {
-    expect(digits(arpeggioFingering(arpeggio(70, [3, 4, 5], 2), 'rh'))).toBe('2312312')
+  // Vita Piano's arpeggio lessons, each checked against ABRSM's: the thumb on the first white key
+  // up from a black bottom note, the notes before it on the fingers their tones take an octave up.
+  it.each([
+    ['A♭ major', 68, [4, 3, 5], 'rh', '4124'],
+    ['A♭ major', 56, [4, 3, 5], 'lh', '2142'],
+    ['B♭ minor', 70, [3, 4, 5], 'rh', '2312312'],
+    ['B♭ minor', 58, [3, 4, 5], 'lh', '3213213'],
+    ['C minor, 1st inversion', 63, [4, 5, 3], 'rh', '3123'],
+    ['C minor, 1st inversion', 51, [4, 5, 3], 'lh', '4214'],
+    ['C minor, 2nd inversion', 67, [5, 3, 4], 'rh', '1235'],
+    ['C minor, 2nd inversion', 55, [5, 3, 4], 'lh', '5321'],
+  ] as const)('fingers %s as the books do (%s, %s)', (_, bottom, steps, hand, fingers) => {
+    const octaves = fingers.length === 7 ? 2 : 1
+    expect(digits(arpeggioFingering(arpeggio(bottom, steps, octaves), hand))).toBe(fingers)
   })
 
   it('uses only fingers 1–5 on every root and shape', () => {

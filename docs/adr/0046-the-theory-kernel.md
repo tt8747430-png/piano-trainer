@@ -37,9 +37,12 @@ something to play, and the root goes to the left hand.
   Hungarian minor, minor pentatonic and major blues have no standard fingering: they are fingered from the thumb and
   say so (`hasStandardFingering`). A scale runs from any start, fingered from the thumb or as the scale is taught,
   over any number of octaves. Where a finger crosses (`fingerCrossings`: the thumb passing under, a finger over it)
-  the run marks the note, on the keys, in the fingering table and on the staff. An arpeggio's fingering is one rule:
-  the thumb on the first white tone each octave, the right hand's 3rd note taking the 4th finger over a 4th from the
-  note below or a major 6th from the thumb, so a 2nd inversion is 1 2 4 5.
+  the run marks the note, on the keys, in the fingering table and on the staff. An arpeggio's fingering is one rule, checked
+  against Vita Piano's arpeggio lessons: the right hand's thumb on the first white tone up from the bottom, the left
+  hand's on the bottom note where it is white, else on the octave's last white tone (C minor from E♭: on C); the
+  right hand's 3rd note takes the 4th finger over a 4th from the note below or a major 6th from the thumb, so a major
+  2nd inversion is 1 2 4 5 and C minor's 1 2 3 5; a note before the first thumb takes the finger its tone takes an
+  octave up (A♭ major 4 1 2 4, C minor's 1st inversion 3 1 2 3).
 - **The chord table has 38 qualities**, each a Skill (ADR 0025). Any chord is built from its parts (`buildChord`):
   the triad or a suspension, the size up to a 13th, the 7th, an added tone, and alterations, which are the available
   tensions. Only what the chord takes is offered, and a change that leaves a part out of reach takes the nearest in

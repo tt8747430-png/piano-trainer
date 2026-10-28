@@ -288,24 +288,42 @@ export function thumbFingering(keys: readonly Midi[], hand: Hand): Finger[] {
 const reach = (gap: number, span = 0): Finger => (gap >= 5 || span >= 9 ? 4 : 3)
 
 /**
- * An arpeggio's fingers (`keys` from the bottom note up, a chord's tones over its octaves): the thumb
- * on one tone in every octave, the first white key from the bottom note (the bottom note if all are
- * black). The right hand counts 1 2 3 (4) up from each thumb, its 3rd finger a 4 when it reaches over
- * a 4th or a major 6th from the thumb (`reach`), and takes 5 on a top note a thumb would land on; the left hand mirrors it, 1 on each thumb,
- * 2 under it, then 4 (3 over a 4th from below) and 5 on a bottom note a thumb would land on. Read
- * from the bottom note up.
+ * An arpeggio's fingers (`keys` from the bottom note up, a chord's tones over its octaves), as the
+ * books finger them (ABRSM, Vita Piano): the thumb on one tone in every octave. The right hand's is
+ * the first white key from the bottom note; the left hand's the bottom note where it is white, else
+ * the last white tone of the octave (C minor from E♭: the thumb on C). The right hand counts 1 2 3
+ * (4) up from each thumb, its 3rd finger a 4 when it reaches over a 4th from the note below or a
+ * major 6th from the thumb (`reach`), and takes 5 on a top note a thumb would land on; the left hand
+ * mirrors it, 1 on each thumb, 2 under it, then 4 (3 over a 4th from below) and 5 on a bottom note a
+ * thumb would land on. A note before the right hand's first thumb takes the finger its tone takes an
+ * octave up (A♭ major from A♭: 4 1 2 4), and the left hand's bottom note reaches from the tone under
+ * it in the chord (B♭ minor: 3 2 1). Read from the bottom note up.
  */
 export function arpeggioFingering(keys: readonly Midi[], hand: Hand): Finger[] {
-  const tones = new Set(keys.map((key) => key % 12)).size
-  const thumbTone = (keys.find((key) => !isBlackKey(key)) ?? keys[0] ?? 0) % 12
+  const pitches = [...new Set(keys.map((key) => key % 12))]
+  const tones = pitches.length
+  const bottom = keys[0] ?? 0
+  const octave = keys.slice(0, tones)
+  const whites = octave.filter((key) => !isBlackKey(key))
+  const thumbKey =
+    hand === 'rh' || isBlackKey(bottom) ? (hand === 'rh' ? whites[0] : whites.at(-1)) : bottom
+  const thumbTone = (thumbKey ?? bottom) % 12
   const thumbs = keys.flatMap((key, i) => (key % 12 === thumbTone ? [i] : []))
   const first = thumbs[0] ?? 0
   const last = thumbs.at(-1) ?? 0
-  const gapBelow = (i: number) => (keys[i] ?? 0) - (keys[i - 1] ?? keys[i] ?? 0)
-  return keys.map((_, i): Finger => {
-    // Before the right hand's first thumb, fingers count up from 2 to it, so the thumb passes under
-    // the last of them (B♭ minor: 2 3 1).
-    if (hand === 'rh' && i < first) return toFinger(i + 2)
+  // The step into a note from the chord tone under it: the bottom note's from the tone an octave
+  // down, as the octave above it steps into it.
+  const gapBelow = (i: number) => {
+    const before = keys[i - 1]
+    if (before !== undefined) return (keys[i] ?? 0) - before
+    const above = keys[i + tones]
+    const under = keys[i + tones - 1]
+    return above !== undefined && under !== undefined ? above - under : 0
+  }
+  const fingerAt = (i: number): Finger => {
+    // Before the right hand's first thumb, the finger its tone takes an octave up.
+    if (hand === 'rh' && i < first)
+      return keys[i + tones] !== undefined ? fingerAt(i + tones) : toFinger(i + 2)
     // A note's place from its thumb: up from the thumb before it (right hand), or down from the
     // thumb after it (left hand); past the last thumb the left hand counts to the next octave's.
     const place =
@@ -326,7 +344,8 @@ export function arpeggioFingering(keys: readonly Midi[], hand: Hand): Finger[] {
       : reach(gapBelow(i)) === 4
         ? 3
         : 4
-  })
+  }
+  return keys.map((_, i) => fingerAt(i))
 }
 
 /**
