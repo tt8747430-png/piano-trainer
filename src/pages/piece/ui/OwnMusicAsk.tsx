@@ -1,9 +1,11 @@
 import { useNavigate } from '@tanstack/react-router'
 import type { RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
+import { libraryCatalog, useLibraryStoreApi } from '@/entities/library'
 import { usePiecesStoreApi, type OwnSongId, type PieceId } from '@/entities/piece'
 import { useTakesStoreApi } from '@/entities/take'
-import { deleteSong, resetVersion } from '@/features/edit-piece'
+import { resetVersion } from '@/features/edit-piece'
+import { deleteOwnSongs } from '@/features/manage-library'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,6 +43,7 @@ export function OwnMusicAsk({
   const { t } = useTranslation('piece')
   const store = usePiecesStoreApi()
   const takes = useTakesStoreApi()
+  const library = useLibraryStoreApi()
   const navigate = useNavigate()
   const words = piece.kind === 'version' ? 'resetting' : 'deleting'
   const act = () => {
@@ -50,7 +53,14 @@ export function OwnMusicAsk({
     }
     // Leave the page first: it has nothing to show once the song is gone.
     const { id } = piece
-    void navigate({ to: '/songs', replace: true }).then(() => deleteSong(store, takes, id))
+    // Deleted as the library deletes one: out of its folder and the favourites, with its takes.
+    void navigate({ to: '/songs', replace: true }).then(() =>
+      deleteOwnSongs(
+        { library, pieces: store, takes },
+        libraryCatalog({ ownSongs: store.getState().songs }),
+        [id],
+      ),
+    )
   }
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
