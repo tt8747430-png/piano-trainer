@@ -87,10 +87,22 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Circle of fifths**: the 24 keys on two rings, the Key view's chooser. _Avoid:_ wheel.
 - **Chord size**: how much of each chord plays: triads, sevenths or ninths; in the builder the highest number (7th
   to 13th). _Avoid:_ voicing, colour.
-- **Voicing**: how a chord's notes lie under the hands: close, open, drop 2, shell, rootless, quartal. _Avoid:_
-  chord size, shape.
-- **Drop 2**: a close four-note chord with its second voice from the top an octave lower. _Avoid:_ spread.
-- **Shell**: the left hand's root and 7th. _Avoid:_ rootless, skeleton.
+- **Voicing** (`Voicing` · «Расположение»): how a chord's notes lie under the hands. The Chords explorer chooses
+  Close · Drop 2 · Drop 3 · Shell · Rootless A · Rootless B · Locked hands · So What; the Chord finder also reads open
+  and quartal. _Avoid:_ chord size, shape.
+- **Drop 2** / **Drop 3**: a close four-note chord with its second (third) voice from the top an octave lower, in
+  the left hand. _Avoid:_ spread.
+- **Shell** («Каркас»): the left hand's root, 3rd and 7th. _Avoid:_ rootless, skeleton.
+- **Rootless A / B** («Без основного A / B»): the left hand's 3rd, 5th (or 13th), 7th and 9th without the root; type
+  A from the 3rd (a dominant from its 7th), type B the other end. _Avoid:_ Bill Evans voicing.
+- **Locked hands** («Блок-аккорды»): a close four-note chord in the right hand, the melody on top doubled an octave
+  lower by the left. _Avoid:_ block chords (that is an accompaniment pattern).
+- **So What**: three 4ths and a major 3rd from the chord's 9th, for a minor or suspended chord. _Avoid:_ quartal
+  (that is any stack of 4ths).
+- **Power chord** (`five`, `C5` · «Квинтовый аккорд»): a root and its 5th, no 3rd; never inverted. _Avoid:_ fifth
+  chord.
+- **Block fingering** (`blockFingering`, `handFingers` · UI Fingering «Аппликатура»): each hand's fingers on a chord
+  held together, by inversion: a major triad RH 135 · 125 · 135, LH 531 · 531 · 521. _Avoid:_ chord fingers.
 - **Inversion** («Обращение»): which chord tone is lowest: Root · 1st · 2nd · 3rd. A chord of five notes or more is
   not inverted; its **Right hand from** says where the hand above the bass starts. _Avoid:_ position.
 - **Figures**: an inversion's figured-bass mark after a numeral: ⁶, ⁶₄, ⁷, ⁶₅, ⁴₃, ⁴₂. _Avoid:_ inversion symbol.
