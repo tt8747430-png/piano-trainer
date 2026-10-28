@@ -10,6 +10,7 @@ import { createSettingsStore, type SettingsStore } from '@/entities/settings'
 import { createTakesStore, type TakesStore } from '@/entities/take'
 import { createViewsStore, type ViewsStore } from '@/entities/views'
 import { createWebAudioOutput } from '@/shared/api/audio'
+import { filesContent, type ContentPort } from '@/shared/api/content'
 import { createWebMidi, hasWebMidi } from '@/shared/api/midi'
 import type { SavingOptions } from '@/shared/lib'
 import type { Services } from '@/shared/lib/services'
@@ -53,3 +54,6 @@ export function createStores(
     diagramInversions: createDiagramInversionsStore(saving),
   }
 }
+
+/** Where content's bodies come from (ADR 0116): written into the app until the database serves them. */
+export const createContent = (): ContentPort => filesContent()

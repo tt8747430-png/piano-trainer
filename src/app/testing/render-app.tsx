@@ -3,6 +3,7 @@ import { render } from '@testing-library/react'
 import type { Locale } from '@/shared/i18n'
 import { createFakeAudio } from '@/shared/api/audio'
 import { createFakeMidi } from '@/shared/api/midi'
+import { filesContent, type ContentPort } from '@/shared/api/content'
 import { createMemoryStorage } from '@/shared/lib'
 import { heardUntil, untilTestEnds } from '@/shared/test/listeners'
 import { loadScoreView } from '@/shared/ui'
@@ -13,7 +14,8 @@ import { createAppRouter } from '../router'
 /**
  * The whole app at `path`, its saved stores on in-memory storage unless told otherwise, in the given
  * language, with fake audio and MIDI it hands back for the test to drive; `webMidi: false` is a
- * browser without it.
+ * browser without it; `content` is where songs' music and lessons come from (all on the device unless
+ * a test says otherwise).
  * Every screen's code is loaded first, and the score's engraver, so a test waits on the app and
  * never on the runner importing a lazy chunk.
  * What the app hears on the window and the document (its stores another tab's saves, its router the
@@ -25,7 +27,8 @@ export async function renderApp(
     locale = 'en',
     storage = createMemoryStorage(),
     webMidi = true,
-  }: { locale?: Locale; storage?: Storage; webMidi?: boolean } = {},
+    content = filesContent(),
+  }: { locale?: Locale; storage?: Storage; webMidi?: boolean; content?: ContentPort } = {},
 ) {
   const testOver = untilTestEnds()
   const stores = createStores(
@@ -33,7 +36,11 @@ export async function renderApp(
     { languages: [locale], finePointer: false },
   )
   const router = heardUntil(testOver, () =>
-    createAppRouter({ ...stores, history: createMemoryHistory({ initialEntries: [path] }) }),
+    createAppRouter({
+      ...stores,
+      content,
+      history: createMemoryHistory({ initialEntries: [path] }),
+    }),
   )
   await Promise.all(Object.values(router.routesById).map((route) => router.loadRouteChunk(route)))
   await loadScoreView()

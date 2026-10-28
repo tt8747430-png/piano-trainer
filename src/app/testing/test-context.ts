@@ -1,23 +1,14 @@
 import { createMemoryHistory } from '@tanstack/react-router'
-import { createLibraryStore } from '@/entities/library'
-import { createPatternsStore } from '@/entities/pattern'
-import { createPiecesStore } from '@/entities/piece'
-import { createTakesStore } from '@/entities/take'
-import { createViewsStore } from '@/entities/views'
+import { filesContent } from '@/shared/api/content'
 import { createMemoryStorage } from '@/shared/lib'
 import { heardUntil, untilTestEnds } from '@/shared/test/listeners'
+import { createStores } from '../composition-root'
 import { createAppRouter, type AppRouter, type RouterContext } from '../router'
 
-/** The router's saved stores on in-memory storage, hearing no other tab: a test's own. */
+/** The router's saved stores on in-memory storage, hearing no other tab, and the content: a test's own. */
 export function testContext(): RouterContext {
-  const saving = { storage: createMemoryStorage(), otherTabs: new EventTarget() }
-  return {
-    views: createViewsStore(saving),
-    patterns: createPatternsStore(saving),
-    pieces: createPiecesStore(saving),
-    takes: createTakesStore(saving),
-    library: createLibraryStore(saving),
-  }
+  const stores = createStores({ storage: createMemoryStorage(), otherTabs: new EventTarget() })
+  return { ...stores, content: filesContent() }
 }
 
 /**

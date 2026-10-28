@@ -19,6 +19,7 @@ import type { LibraryStore } from '@/entities/library'
 import type { PiecesStore } from '@/entities/piece'
 import type { TakesStore } from '@/entities/take'
 import type { ViewsStore } from '@/entities/views'
+import type { ContentPort } from '@/shared/api/content'
 import { rememberView } from '@/features/remember-view'
 import { NotFoundPage, TakeNotFound, type NotFoundWay } from '@/pages/not-found'
 import { scaleHasChords } from '@/shared/lib/music'
@@ -27,6 +28,7 @@ import { FULL_SCREEN_SCROLL, FullScreenLayout } from './FullScreenLayout'
 import { RootLayout } from './RootLayout'
 import { RouteError } from './RouteError'
 import { RoutePending } from './RoutePending'
+import { ensureContent } from './routes/content'
 import {
   accompanimentSearch,
   readAccompanimentSearch,
@@ -104,7 +106,8 @@ function notFoundIn(way: NotFoundWay) {
  * What every route is handed: the screens' remembered views (ADR 0038), the learner's patterns, which
  * say whether a pattern's page is there (ADR 0047), the learner's pieces, which say whether a piece,
  * its page or its editor is (ADR 0097), their takes, which say whether a take's page is (ADR 0034),
- * and their library, which says whether a folder's page is (ADR 0106).
+ * their library, which says whether a folder's page is (ADR 0106), and the content, which brings a
+ * song's music or a lesson onto the device before its screen opens (ADR 0116).
  */
 export interface RouterContext {
   readonly views: ViewsStore
@@ -112,6 +115,7 @@ export interface RouterContext {
   readonly pieces: PiecesStore
   readonly takes: TakesStore
   readonly library: LibraryStore
+  readonly content: ContentPort
 }
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
@@ -182,6 +186,7 @@ const pieceRoute = createRoute({
     const { entryIn, shelfOf } = await songsScreens()
     const entry = entryIn(context.pieces.getState(), params.pieceId)
     if (!entry || shelfOf(entry.kind) !== 'songs') throw notFound()
+    await ensureContent(context.content, 'piece', params.pieceId)
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
@@ -214,6 +219,7 @@ const sectionRoute = createRoute({
     const { sectionIn } = await songsScreens()
     const { pieceId, section } = params
     if (!sectionIn(context.pieces.getState(), pieceId, section, 'songs')) throw notFound()
+    await ensureContent(context.content, 'piece', pieceId)
   },
   component: lazyRouteComponent(songsScreens, 'SectionPage'),
 })
@@ -267,6 +273,7 @@ const studyRoute = createRoute({
   beforeLoad: async ({ params, context }) => {
     const { entryIn } = await songsScreens()
     if (entryIn(context.pieces.getState(), params.pieceId)?.kind !== 'study') throw notFound()
+    await ensureContent(context.content, 'piece', params.pieceId)
   },
   component: lazyRouteComponent(songsScreens, 'PiecePage'),
 })
@@ -278,6 +285,7 @@ const studySectionRoute = createRoute({
     const { sectionIn } = await songsScreens()
     const { pieceId, section } = params
     if (!sectionIn(context.pieces.getState(), pieceId, section, 'practice')) throw notFound()
+    await ensureContent(context.content, 'piece', pieceId)
   },
   component: lazyRouteComponent(songsScreens, 'SectionPage'),
 })
@@ -372,9 +380,10 @@ const lessonRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/lessons/$lessonId',
   notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params }) => {
+  beforeLoad: async ({ params, context }) => {
     const { lessonById, lessonPlace } = await learnScreens()
     if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
+    await ensureContent(context.content, 'lesson', params.lessonId)
   },
   component: lazyRouteComponent(learnScreens, 'LessonPage'),
 })
@@ -392,9 +401,10 @@ const courseLessonRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/courses/$courseId/$lessonId',
   notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params }) => {
+  beforeLoad: async ({ params, context }) => {
     const { courseLesson } = await learnScreens()
     if (!courseLesson(params.courseId, params.lessonId)) throw notFound()
+    await ensureContent(context.content, 'lesson', params.lessonId)
   },
   component: lazyRouteComponent(learnScreens, 'CourseLessonPage'),
 })
@@ -419,6 +429,7 @@ const playerRoute = createRoute({
   beforeLoad: async (context) => {
     const { pieceIn } = await playerScreens()
     if (!pieceIn(context.context.pieces.getState(), context.params.pieceId)) throw notFound()
+    await ensureContent(context.context.content, 'piece', context.params.pieceId)
     restorePiece(context)
   },
   component: lazyRouteComponent(playerScreens, 'PlayerPage'),
@@ -477,6 +488,7 @@ const editRoute = createRoute({
   beforeLoad: async ({ params, context }) => {
     const { editableIn } = await playerScreens()
     if (!editableIn(context.pieces.getState(), params.pieceId)) throw notFound()
+    await ensureContent(context.content, 'piece', params.pieceId)
   },
   component: lazyRouteComponent(playerScreens, 'ScoreEditorPage'),
 })
@@ -493,6 +505,7 @@ const takeRoute = createRoute({
       throw notFound({ routeId: rootRouteId })
     }
     if (!takeIn(context.takes.getState(), params.pieceId, params.takeId)) throw notFound()
+    await ensureContent(context.content, 'piece', params.pieceId)
   },
   component: lazyRouteComponent(playerScreens, 'TakePage'),
 })
@@ -566,11 +579,12 @@ export function createAppRouter({
   pieces,
   takes,
   library,
+  content,
 }: RouterContext & { history?: RouterHistory }) {
   const router = createRouter({
     routeTree,
     history,
-    context: { views, patterns, pieces, takes, library },
+    context: { views, patterns, pieces, takes, library, content },
     defaultPreload: 'intent',
     defaultErrorComponent: RouteError,
     defaultPendingComponent: RoutePending,
