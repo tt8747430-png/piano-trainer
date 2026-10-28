@@ -1,28 +1,32 @@
 import {
-  chordSkill,
+  CHORD_QUALITIES,
   INTERVAL_GROUPS,
+  LETTERS,
   midi,
+  note,
+  noteFromParam,
+  noteParam,
   parseNoteInOctave,
   PIANO,
   SCALE_KINDS,
   scaleSkill,
+  spellChord,
+  type ChordQuality,
+  type NoteParam,
+  type ReferenceInterval,
   type SkillId,
 } from '@/shared/lib/music'
-import { INTERVAL_WAYS } from '@/shared/lib/schedule'
-import type { Asks } from './draw'
+import { INTERVAL_WAYS, type IntervalWay } from '@/shared/lib/schedule'
+import type { Asks, ChordItem } from './draw'
 import { CHORD_LEVELS, chordLevel, type ChordLevel } from './ladders/chords'
 import {
-  EAR_QUALITIES,
   EAR_SCALES,
   INTERVAL_LEVEL,
   INTERVAL_LEVELS,
-  QUALITY_LEVEL,
-  QUALITY_LEVELS,
   SCALE_EAR_LEVEL,
   SCALE_EAR_LEVELS,
   SIMPLE_INTERVALS,
   type IntervalLevel,
-  type QualityLevel,
   type ScaleEarLevel,
 } from './ladders/ear'
 import {
@@ -41,47 +45,64 @@ import {
 } from './ladders/keys'
 import { NOTE_LEVELS, NOTE_RANGE, noteLevel, rangeNotes, type NoteLevel } from './ladders/notes'
 import { SCALE_LEVEL_KINDS, SCALE_LEVELS, type ScaleLevel } from './ladders/scales'
-import { chordTypes, TYPE_ADDED, TYPE_SIZES, TYPE_SUSPENDED, type ChordTypes } from './chord-types'
-import { CUSTOM, readList, type TrainerId, type TrainerView } from './trainer-view'
+import {
+  CUSTOM,
+  DRILLS,
+  readList,
+  type Drill,
+  type TrainerId,
+  type TrainerView,
+} from './trainer-view'
 
-/** Custom's choices a trainer has: each a field of its sheet. */
+/** Custom's choices a trainer has: each a row of its setup. */
 export type CustomField =
-  | 'chordTypes'
+  | 'chords'
+  | 'roots'
+  | 'inversions'
   | 'scales'
   | 'intervals'
   | 'ways'
-  | 'qualities'
-  | 'arpeggio'
   | 'kinds'
   | 'descending'
   | 'range'
   | 'accidentals'
 
-/** A trainer: its ladder, Custom's choices (none: no Custom), and what a run at a level asks. */
+/**
+ * A trainer: its ladder, Custom's choices (none: no Custom), the drills it asks in (none: one way
+ * only), and what a run at a level asks.
+ */
 export interface Trainer {
   readonly id: TrainerId
   readonly levels: readonly string[]
   readonly custom: readonly CustomField[]
+  readonly drills: readonly Drill[]
   asks(level: string, view: TrainerView, gaps: readonly SkillId[]): Asks
 }
 
+/** The roots a drill may ask from, as the URL writes them: the naturals, then the sharps, then the flats. */
+export const ROOT_GROUPS = {
+  natural: LETTERS.map((letter) => noteParam(note(letter))),
+  sharp: (['C', 'D', 'F', 'G', 'A'] as const).map((letter) => noteParam(note(letter, 1))),
+  flat: (['D', 'E', 'G', 'A', 'B'] as const).map((letter) => noteParam(note(letter, -1))),
+} as const satisfies Readonly<Record<string, readonly NoteParam[]>>
+
 /** What each of Custom's lists chooses from. */
 export const CUSTOM_CHOICES = {
-  sizes: TYPE_SIZES,
+  chords: CHORD_QUALITIES,
+  roots: [...ROOT_GROUPS.natural, ...ROOT_GROUPS.sharp, ...ROOT_GROUPS.flat],
   scales: SCALE_KINDS,
   intervals: [...INTERVAL_GROUPS.simple.slice(1), ...INTERVAL_GROUPS.compound],
   ways: INTERVAL_WAYS,
-  qualities: EAR_QUALITIES,
   kinds: EAR_SCALES,
 } as const
 
 /** Custom's own choices: what a trainer's Custom asks before the learner changes it. */
 export const CUSTOM_OWN = {
-  sizes: ['triads', 'sevenths'],
+  chords: ['maj', 'min'],
+  roots: ROOT_GROUPS.natural,
   scales: ['major', 'natural', 'harmonic'],
   intervals: SIMPLE_INTERVALS,
   ways: ['up'],
-  qualities: EAR_QUALITIES,
   kinds: ['major', 'natural', 'harmonic'],
 } as const satisfies {
   readonly [List in keyof typeof CUSTOM_CHOICES]: readonly (typeof CUSTOM_CHOICES)[List][number][]
@@ -91,28 +112,37 @@ export const CUSTOM_OWN = {
 export const orOwn = <T>(read: readonly T[], own: readonly T[]): readonly T[] =>
   read.length > 0 ? read : own
 
-/** Custom's chord types as the URL writes them: sizes (its own where none), then what each adds. */
-const chordTypesOf = (view: TrainerView): ChordTypes => ({
-  sizes: orOwn(readList(view.sizes, CUSTOM_CHOICES.sizes), CUSTOM_OWN.sizes),
-  suspended: readList(view.suspended, TYPE_SUSPENDED),
-  added: readList(view.added, TYPE_ADDED),
-  altered: view.altered === true,
-})
+/** A drill's own list read from the URL, its own where none is read. */
+const ownList = <F extends keyof typeof CUSTOM_CHOICES>(field: F, raw: string | undefined) =>
+  orOwn(
+    readList(raw, CUSTOM_CHOICES[field] as readonly string[]),
+    CUSTOM_OWN[field] as readonly string[],
+  )
 
-/** Custom's chord types, as the skills they rate. */
-const typeSkills = (view: TrainerView): SkillId[] => chordTypes(chordTypesOf(view)).map(chordSkill)
+/** Custom's roots, as notes. */
+const customRoots = (view: TrainerView) =>
+  ownList('roots', view.roots).map((root) => noteFromParam(root as NoteParam))
 
-function chordTrainer(id: 'build-chord' | 'name-chord'): Trainer {
-  return {
-    id,
-    levels: CHORD_LEVELS,
-    custom: ['chordTypes'],
-    asks: (level, view) =>
-      level === CUSTOM
-        ? { kind: 'skills', chords: id, skills: typeSkills(view) }
-        : { kind: 'chords', mode: id, chords: chordLevel(level as ChordLevel) },
-  }
+/** Custom's chords: each quality on each root, in each of its inversions where they are asked. */
+function customChords(view: TrainerView): ChordItem[] {
+  const qualities = ownList('chords', view.chords) as ChordQuality[]
+  return qualities.flatMap((quality) =>
+    customRoots(view).flatMap((root) => {
+      const size = spellChord(root, quality).length
+      const inversions =
+        view.inversions === true ? Array.from({ length: size }, (_, i) => i) : [null]
+      return inversions.map((inversion) => ({ root, quality, inversion }))
+    }),
+  )
 }
+
+/** The drill a URL names of these, the first where none. */
+const drillIn = (drills: readonly Drill[], view: TrainerView): Drill =>
+  view.drill !== undefined && drills.includes(view.drill) ? view.drill : (drills[0] ?? 'quiz')
+
+/** The drill a trainer's URL names, its first where none; a trainer of one way, none. */
+export const drillOf = (trainer: Trainer, view: TrainerView): Drill | undefined =>
+  trainer.drills.length > 0 ? drillIn(trainer.drills, view) : undefined
 
 /** An end of Reading notes' range on the piano's keys, read from the URL; one off them is none. */
 const pianoKey = (text: string | undefined) => {
@@ -133,15 +163,48 @@ function customNotes(view: TrainerView) {
 }
 
 const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
-  'build-chord': chordTrainer('build-chord'),
-  'name-chord': chordTrainer('name-chord'),
+  chords: {
+    id: 'chords',
+    levels: CHORD_LEVELS,
+    custom: ['chords', 'roots', 'inversions'],
+    drills: DRILLS,
+    asks: (level, view) => {
+      return {
+        kind: 'chords',
+        drill: drillIn(DRILLS, view),
+        chords: level === CUSTOM ? customChords(view) : chordLevel(level as ChordLevel),
+        show: view.show ?? 'name',
+        arpeggio: view.arpeggio === true,
+      }
+    },
+  },
+  intervals: {
+    id: 'intervals',
+    levels: INTERVAL_LEVELS,
+    custom: ['intervals', 'roots', 'ways'],
+    drills: DRILLS,
+    asks: (level, view) => {
+      const drill = drillIn(DRILLS, view)
+      const show = view.show ?? 'name'
+      if (level !== CUSTOM)
+        return { kind: 'intervals', drill, show, ...INTERVAL_LEVEL[level as IntervalLevel] }
+      return {
+        kind: 'intervals',
+        drill,
+        show,
+        intervals: ownList('intervals', view.intervals) as ReferenceInterval[],
+        ways: ownList('ways', view.ways) as IntervalWay[],
+        roots: customRoots(view),
+      }
+    },
+  },
   'build-scale': {
     id: 'build-scale',
     levels: SCALE_LEVELS,
     custom: ['scales'],
+    drills: [],
     asks: (level, view) => ({
       kind: 'skills',
-      chords: 'build-chord',
       skills: (level === CUSTOM
         ? orOwn(readList(view.scales, CUSTOM_CHOICES.scales), CUSTOM_OWN.scales)
         : SCALE_LEVEL_KINDS[level as ScaleLevel]
@@ -152,49 +215,18 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     id: 'gaps',
     levels: [],
     custom: [],
+    drills: [],
     asks: (_level, _view, gaps) => ({
       kind: 'skills',
-      chords: 'build-chord',
       skills: gaps,
       ordered: true,
     }),
-  },
-  'intervals-by-ear': {
-    id: 'intervals-by-ear',
-    levels: INTERVAL_LEVELS,
-    custom: ['intervals', 'ways'],
-    asks: (level, view) =>
-      level === CUSTOM
-        ? {
-            kind: 'intervals',
-            intervals: orOwn(
-              readList(view.intervals, CUSTOM_CHOICES.intervals),
-              CUSTOM_OWN.intervals,
-            ),
-            ways: orOwn(readList(view.ways, CUSTOM_CHOICES.ways), CUSTOM_OWN.ways),
-          }
-        : { kind: 'intervals', ...INTERVAL_LEVEL[level as IntervalLevel] },
-  },
-  'chords-by-ear': {
-    id: 'chords-by-ear',
-    levels: QUALITY_LEVELS,
-    custom: ['qualities', 'arpeggio'],
-    asks: (level, view) =>
-      level === CUSTOM
-        ? {
-            kind: 'qualities',
-            qualities: orOwn(
-              readList(view.qualities, CUSTOM_CHOICES.qualities),
-              CUSTOM_OWN.qualities,
-            ),
-            arpeggio: view.arpeggio === true,
-          }
-        : { kind: 'qualities', ...QUALITY_LEVEL[level as QualityLevel] },
   },
   'scales-by-ear': {
     id: 'scales-by-ear',
     levels: SCALE_EAR_LEVELS,
     custom: ['kinds', 'descending'],
+    drills: [],
     asks: (level, view) =>
       level === CUSTOM
         ? {
@@ -208,6 +240,7 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     id: 'reading-notes',
     levels: NOTE_LEVELS,
     custom: ['range', 'accidentals'],
+    drills: [],
     asks: (level, view) => ({
       kind: 'notes',
       notes: level === CUSTOM ? customNotes(view) : noteLevel(level as NoteLevel),
@@ -217,18 +250,21 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     id: 'key-signatures',
     levels: SIGNATURE_LEVELS,
     custom: [],
+    drills: [],
     asks: (level) => ({ kind: 'signatures', keys: SIGNATURE_LEVEL[level as SignatureLevel] }),
   },
   'key-degrees': {
     id: 'key-degrees',
     levels: DEGREE_LEVELS,
     custom: [],
+    drills: [],
     asks: (level) => ({ kind: 'degrees', keys: DEGREE_LEVEL[level as DegreeLevel] }),
   },
   'chord-role': {
     id: 'chord-role',
     levels: ROLE_LEVELS,
     custom: [],
+    drills: [],
     asks: (level) => ({ kind: 'roles', ...ROLE_LEVEL[level as RoleLevel] }),
   },
   // A progression is no skill (UBIQUITOUS_LANGUAGE): its answers rate nothing.
@@ -236,6 +272,7 @@ const TRAINERS: Readonly<Record<TrainerId, Trainer>> = {
     id: 'progressions-by-ear',
     levels: PROGRESSION_LEVELS,
     custom: [],
+    drills: [],
     asks: (level) => ({
       kind: 'progressions',
       ...PROGRESSION_LEVEL[level as ProgressionLevel],
@@ -262,16 +299,18 @@ export function ownTrainerView(trainer: Trainer, view: TrainerView): TrainerView
   return own === view.level ? view : { ...view, level: own }
 }
 
-/** Where a trainer keeps a level's record: `name-chord:c-main`; My gaps, with no ladder, `gaps:all`. */
-export const runKeyOf = (trainer: Trainer, level: string) =>
-  `${trainer.id}:${level || 'all'}` as const
+/**
+ * Where a trainer keeps a level's record: `build-scale:major`; a drill's under its way too,
+ * `chords:quiz:c-main`; My gaps, with no ladder, `gaps:all`.
+ */
+export const runKeyOf = (trainer: Trainer, level: string, drill?: Drill) =>
+  `${trainer.id}:${drill && trainer.drills.length > 0 ? `${drill}:` : ''}${level || 'all'}` as const
 
 /** Each trainer's ladder by the name its levels are kept under; My gaps has none. */
 export const LADDERS = {
   chords: CHORD_LEVELS,
   scales: SCALE_LEVELS,
   intervals: INTERVAL_LEVELS,
-  qualities: QUALITY_LEVELS,
   scalesByEar: SCALE_EAR_LEVELS,
   notes: NOTE_LEVELS,
   signatures: SIGNATURE_LEVELS,
@@ -282,12 +321,10 @@ export const LADDERS = {
 type Ladder = keyof typeof LADDERS
 
 const LADDER_OF: Readonly<Record<TrainerId, Ladder | null>> = {
-  'build-chord': 'chords',
-  'name-chord': 'chords',
+  chords: 'chords',
+  intervals: 'intervals',
   'build-scale': 'scales',
   gaps: null,
-  'intervals-by-ear': 'intervals',
-  'chords-by-ear': 'qualities',
   'scales-by-ear': 'scalesByEar',
   'reading-notes': 'notes',
   'key-signatures': 'signatures',

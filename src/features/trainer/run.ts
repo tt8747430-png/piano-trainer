@@ -1,4 +1,4 @@
-import type { Question } from './round-machine'
+import { isCard, type Question } from './round-machine'
 
 /** A round answered: what it asked, whether it was right, and how long the answer took. */
 export interface AnsweredRound {
@@ -58,6 +58,8 @@ export interface RunSummary {
   readonly averageMs: number
   readonly bestStreak: number
   readonly missed: readonly Question[]
+  /** A run of flashcards: turned over, never right or wrong, so it has no score. */
+  readonly cards: boolean
 }
 
 export function runSummary(run: RunState): RunSummary {
@@ -70,5 +72,6 @@ export function runSummary(run: RunState): RunSummary {
     averageMs: count === 0 ? 0 : Math.round(time / count),
     bestStreak: run.bestStreak,
     missed: run.answered.filter((round) => !round.correct).map((round) => round.question),
+    cards: count > 0 && run.answered.every((round) => isCard(round.question)),
   }
 }
