@@ -90,6 +90,8 @@ export interface KeyboardSettings {
   readonly chordNames: boolean
   /** The computer keyboard plays the keys. */
   readonly typing: boolean
+  /** A chord or a scale chosen on a Practice page plays as it is chosen. */
+  readonly autoplay: boolean
   /** Where a page's keys stay while it scrolls. */
   readonly dock: KeyDock
   /** A page's keys folded away to a button that brings them back. */
@@ -327,6 +329,7 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
   markNotes: true,
   chordNames: true,
   typing: finePointer,
+  autoplay: true,
   dock: 'bottom',
   folded: false,
   foldedLandscape: true,

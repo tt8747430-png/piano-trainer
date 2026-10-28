@@ -275,6 +275,7 @@ function keyboardSettings(value: unknown, current: KeyboardSettings): KeyboardSe
     markNotes: typeof saved.markNotes === 'boolean' ? saved.markNotes : current.markNotes,
     chordNames: typeof saved.chordNames === 'boolean' ? saved.chordNames : current.chordNames,
     typing: typeof saved.typing === 'boolean' ? saved.typing : current.typing,
+    autoplay: typeof saved.autoplay === 'boolean' ? saved.autoplay : current.autoplay,
     dock: isKeyDock(saved.dock) ? saved.dock : current.dock,
     folded: typeof saved.folded === 'boolean' ? saved.folded : current.folded,
     foldedLandscape:

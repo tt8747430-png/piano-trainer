@@ -2,7 +2,7 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
-import { setMidi } from '@/features/set-preference'
+import { setKeyboard, setMidi } from '@/features/set-preference'
 import { createMemoryStorage, SHORTEST_PRESS_MS } from '@/shared/lib'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
@@ -61,6 +61,19 @@ describe('Practice → Chords', () => {
     await user.click(screen.getByRole('radio', { name: '11th · Eleventh chord' }))
     expect(await screen.findByRole('heading', { level: 2, name: 'Gm11' })).toBeInTheDocument()
     expect(audio.played.length).toBeGreaterThan(1)
+  })
+
+  it('chooses in silence where Settings turns Play what you choose off', async () => {
+    const user = userEvent.setup()
+    const { audio, settingsStore } = await renderApp('/practice/chords')
+    act(() => setKeyboard(settingsStore, { autoplay: false }))
+    await user.click(
+      within(await screen.findByRole('radiogroup', { name: 'Quality' })).getByRole('radio', {
+        name: 'Minor',
+      }),
+    )
+    expect(await screen.findByRole('heading', { level: 2, name: 'Cm' })).toBeInTheDocument()
+    expect(audio.played).toHaveLength(0)
   })
 
   it('offers a 7th chord its 7th, and a dominant its alterations', async () => {

@@ -139,6 +139,8 @@ export const common = {
     typing: 'Play from the computer keyboard',
     typingNote: 'The letter keys play the piano',
     typingHint: 'Z X move an octave · Space holds the pedal',
+    autoplay: 'Play what you choose',
+    autoplayNote: 'A chord or a scale chosen on a Practice page plays at once',
   },
   // Which controls the bar over the keys holds: each by the picture it wears there.
   railControls: {

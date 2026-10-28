@@ -1,5 +1,8 @@
+import { selectKeyboard, useSettings } from '@/entities/settings'
 import { useKeyName, useScaleName } from '@/shared/i18n'
-import { noteFromParam, spellScale } from '@/shared/lib/music'
+import { noteFromParam, placeScale, spellScale } from '@/shared/lib/music'
+import { walkSounds } from '@/shared/lib/schedule'
+import { usePlay } from '@/shared/lib/services'
 import { keyOfScale } from '../model/scale-key'
 import type { ScaleView } from '../model/scale-view'
 import { ChordsView } from './ChordsView'
@@ -8,8 +11,12 @@ import { RunView } from './RunView'
 import { ScaleChoice } from './ScaleChoice'
 import { ScaleFacts } from './ScaleFacts'
 
+/** How fast a scale chosen sounds as it is chosen: a quick run up its octave. */
+const CHOSEN_TEMPO = 360
+
 /**
- * Any scale on any root, in the view its page's tab chose. Scale: its run from any note, fingered, on
+ * Any scale on any root, in the view its page's tab chose. A scale chosen (its root or its kind)
+ * plays up its octave as it is chosen, unless Settings › Keyboard turns that off. Scale: its run from any note, fingered, on
  * the keys and on the staff, and its exercises. Chords: each degree's chord on its key, walked, and
  * the chords that hold a note. Key (a major or minor scale): its key on the circle of fifths, its
  * signature, relative and modes, the chords it borrows, and a melody note harmonised in it.
@@ -23,9 +30,22 @@ export function ScaleExplorer({
 }) {
   const scaleName = useScaleName()
   const keyName = useKeyName()
+  const play = usePlay()
+  const { autoplay } = useSettings(selectKeyboard)
   const root = noteFromParam(scale.root)
   const name = scaleName(root, scale.kind)
-  const choice = <ScaleChoice scale={scale} onChange={onChange} />
+  const choose = (change: Partial<ScaleView>) => {
+    onChange(change)
+    if (!autoplay) return
+    const keys = placeScale(noteFromParam(change.root ?? scale.root), change.kind ?? scale.kind, 0)
+    play(
+      walkSounds(
+        keys.map((key) => [key.midi]),
+        { arpeggio: false, tempo: CHOSEN_TEMPO },
+      ),
+    )
+  }
+  const choice = <ScaleChoice scale={scale} onChange={choose} />
   const musicKey = scale.show === 'key' ? keyOfScale(scale.root, scale.kind) : null
   // The Key view is the key's: named as the key, whichever of its scales chose it.
   if (musicKey)

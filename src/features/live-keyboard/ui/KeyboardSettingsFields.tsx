@@ -141,6 +141,12 @@ export function KeyboardSettingsFields() {
           checked={keyboard.typing}
           onCheckedChange={(typing) => setKeyboard(store, { typing })}
         />
+        <SwitchRow
+          label={t('keyboardSettings.autoplay')}
+          info={t('keyboardSettings.autoplayNote')}
+          checked={keyboard.autoplay}
+          onCheckedChange={(autoplay) => setKeyboard(store, { autoplay })}
+        />
       </Part>
       <Part title={t('keyboardSettings.bar')}>
         <RailControlsField />

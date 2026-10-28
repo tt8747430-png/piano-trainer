@@ -130,6 +130,8 @@ export const common: LocaleResources['common'] = {
     typing: 'Играть с клавиатуры компьютера',
     typingNote: 'Буквенные клавиши играют на рояле',
     typingHint: 'Z X — октава · Пробел держит педаль',
+    autoplay: 'Играть выбранное',
+    autoplayNote: 'Аккорд или гамма, выбранные на странице практики, сразу звучат',
   },
   railControls: {
     label: 'Кнопки на панели',

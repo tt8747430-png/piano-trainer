@@ -2,6 +2,7 @@ import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
+import { setKeyboard } from '@/features/set-preference'
 import type { LiveEvent } from '@/shared/api/audio'
 import { midi } from '@/shared/lib/music'
 import type { Sound } from '@/shared/lib/schedule'
@@ -213,6 +214,18 @@ describe('Practice → Scales and keys', () => {
     expect(await screen.findByRole('heading', { level: 2, name: 'D Dorian' })).toBeInTheDocument()
     expect(screen.getByText('Mode of')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'C major' })).toBeInTheDocument()
+  })
+
+  it('plays a scale up its octave as it is chosen, unless Settings turns that off', async () => {
+    const user = userEvent.setup()
+    const { audio, settingsStore } = await renderApp('/practice/scales')
+    const root = await screen.findByRole('group', { name: 'Root' })
+    await user.click(within(root).getByRole('radio', { name: 'D' }))
+    expect(notes(audio.played.at(-1)?.sounds ?? [])).toEqual([62, 64, 66, 67, 69, 71, 73, 74])
+    act(() => setKeyboard(settingsStore, { autoplay: false }))
+    const played = audio.played.length
+    await user.click(within(root).getByRole('radio', { name: 'E' }))
+    expect(audio.played).toHaveLength(played)
   })
 
   it('steps through the scales in a strip, keys, then modes, then blues', async () => {
