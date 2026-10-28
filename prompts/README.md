@@ -2,13 +2,14 @@
 
 Prompts to paste into a new Claude Code session on this repo, and the shape every new prompt should follow.
 
-| Prompt                                             | Use it to                                                                                      |
-| -------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| [review-loop.md](review-loop.md)                   | review and improve the app round after round until the usage runs out                          |
-| [feature-round.md](feature-round.md)               | turn feedback and screenshots into one round of work by parallel agents                        |
-| [handoff.md](handoff.md)                           | hand unfinished work to the next session                                                       |
-| [check-early-requests.md](check-early-requests.md) | check the five early requests (saved preferences, inversions, scroll, header, Back) still hold |
-| [install-claude-mods.md](install-claude-mods.md)   | install and build the owner's Claude Code mods (not about this app)                            |
+| Prompt                                                           | Use it to                                                                                      |
+| ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| [review-loop.md](review-loop.md)                                 | review and improve the app round after round until the usage runs out                          |
+| [feature-round.md](feature-round.md)                             | turn feedback and screenshots into one round of work by parallel agents                        |
+| [handoff.md](handoff.md)                                         | hand unfinished work to the next session                                                       |
+| [check-early-requests.md](check-early-requests.md)               | check the five early requests (saved preferences, inversions, scroll, header, Back) still hold |
+| [docs-cleanup-memory-palaces.md](docs-cleanup-memory-palaces.md) | make the memory-palaces docs concise and current, as was done here                             |
+| [install-claude-mods.md](install-claude-mods.md)                 | install and build the owner's Claude Code mods (not about this app)                            |
 
 The brief each parallel agent gets lives in the owner's skill: [`.claude/skills/owner-way/references/agent-brief.md`](../.claude/skills/owner-way/references/agent-brief.md).
 
