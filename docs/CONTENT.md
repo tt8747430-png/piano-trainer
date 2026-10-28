@@ -93,9 +93,13 @@ tuplet of two to nine notes is whole); what a decimal of four places cannot writ
 8th, `2:3`, `1:6` a triplet 16th, `1:7` a septuplet 16th (a quintuplet 16th is `.2`). Tuplets are not written
 as such: notes of a tuplet's length are engraved in its bracket.
 
-**Barlines** between bars: `|:` starts a repeat, `:|` ends one, `||` a double barline, `|.` the final one, `[1` or
-`[2` before a bar puts it in that ending: `'|: G C [1 D :| [2 D7 G |.'`. **Jumps:** `Segno` or `Coda` before a bar;
-`Fine`, `ToCoda`, `DC`, `DC.Fine`, `DC.Coda`, `DS`, `DS.Fine` or `DS.Coda` after one.
+**Barlines** between bars: `|:` starts a repeat, `:|` ends one (`:|x3` to `:|x9` plays it that many times), `||` a
+double barline, `|.` the final one, `[1` to `[4` before a bar puts it in that ending:
+`'|: G C [1 D :| [2 D7 G |.'`. **Jumps:** `Segno` or `Coda` before a bar; `Fine`, `ToCoda`, `DC`, `DC.Fine`,
+`DC.Coda`, `DS`, `DS.Fine` or `DS.Coda` after one. **Before a bar:** `Page` starts a new page (and line) there; `%`
+marks a bar repeating the bar before, `%%` it and the next repeating the two before (the notes are still written,
+and the sign is drawn while they match); `Rest3` draws that bar and the next two as one multi-bar rest while they
+stay empty (2 to 99 bars).
 
 **Chord symbols** are read in every spelling `qualitySpellings` lists (`src/shared/lib/music/chord.ts`): `m`, `7`,
 `Maj7`/`M7`/`Δ`, `m7b5`/`ø`, `dim`/`°`, `dim7`/`°7`, `sus4`, `sus2`, `6`, `m6`, `6/9`, `add9`/`2`, `9`, `13`, `7b9`,
@@ -158,7 +162,10 @@ slur; `8va` writes the notes an octave lower than they sound, `8vb` higher, `15m
 slides to the next note; dynamics `ppp` to `fff` and the accents `sf` `sfz` `sffz` `fz` `rf` `rfz` `fp` `sfp`
 `sfpp` `pf` (struck on their note alone, or struck at one level and held at another); a hairpin `cresc` or `dim`,
 `/hairpin` to end it; expressions `dolce` `cantabile` `espress` `legato` `leggiero` `rit` `rall` `accel` `atempo`;
-the pedal `ped`, `pedch`, `pedup`; `gr:D5+E5` grace notes. A pitch is always the one heard. A rest takes no marks.
+the pedal `ped`, `pedch`, `pedup`; `gr:D5+E5` grace notes (`app:D5` an appoggiatura's); `tempo:120` a tempo
+change from the note on (20 to 400 beats a minute, played and exported); `swing8`, `swing16` or `straight` a swing
+mark; `rn:V7/ii` a Roman numeral under the note; `txt:` free text above it, percent-encoded (`txt:a%20tempo`). A
+pitch is always the one heard. A rest takes no marks.
 
 ## A recording
 

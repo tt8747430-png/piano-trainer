@@ -54,7 +54,7 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
     Its sections fold as an accordion, several open at once, the Notes and Pitch open first; « hides it whole, the
     sheet taking its room, and the toolbar's first key shows it again.
   - **The note-entry toolbar** over the sheet beside it, Flat's quick toolbar: ♮ ♯ ♭ and Respell, the values whole to
-    32nd, Dotted, Double dotted, Tie, Triplet and Rest, in a sand pill; the Keys toggle at its end. It scrolls sideways
+    64th, Dotted, Double dotted, Tie, the triplet (the duplet in compound time) and Rest, in a sand pill; the Keys toggle at its end. It scrolls sideways
     where the room is short.
   - **A sheet** docked at the foot on a phone held upright, shrinking the sheet rather than covering it. Compact, as it
     opens: the same everyday tools as a quick row over the bar of categories. Expanded (its ⏏, a category tapped, or
@@ -62,11 +62,15 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
     list naming each (list mode). The keys stand where the sections would: expanded, it folds them; with them shown,
     it stays compact. While it is expanded the transport steps aside. A field typed in (a chord symbol, the lyrics,
     the fingering) swaps the sheet for a slim bar over the phone's own keyboard (`FieldDocked`).
-  - **Sections in Flat's order:** Notes (the editing modes; on the sheet the everyday tools too) · Pitch (steps,
-    semitones, octaves, the grace note, 8va and 8vb) · Articulations (with the slur and the fingering) · Ornaments ·
-    Dynamics (with the hairpins and the pedal) · Bar · Clef · Key signature · Time signature (the common meters as
-    tiles, C and ¢ among them, then Another opening the picker) · Barlines & repeats · Text (the Lyrics and the chord
-    symbol's keys, then the expression words).
+  - **Sections in Flat's order:** Notes (the editing modes and the tuplets of 2 to 9; on the sheet the everyday
+    tools too) · Pitch (steps, semitones, octaves, the grace notes, 8va, 8vb, 15ma and 15mb) · Articulations (with
+    portato, the breath mark, the caesura, the slur and the fingering) · Ornaments (with the inverted turn, the
+    tremolos of 1 to 3 strokes and the glissando) · Dynamics (every one of Flat's, with the hairpins and the pedal) ·
+    Bar (with the page break; Tempo & swing: a tempo change typed over the note, the swing marks; Bar repeats &
+    rests) · Clef · Key signature · Time signature (the common meters as tiles, C and ¢ among them, then Another
+    opening the picker) · Barlines & repeats (with repeat ×N, once more each tap up to nine, and the 3rd and 4th
+    endings) · Text (the Lyrics and the chord symbol's keys, free text typed over the note, the Roman numeral of the
+    chord there, then the expression words).
   - **Keys** are Flat's: square cells of a bordered table, 44px at the least, empty cells left blank; pressed, a sky
     glyph on a sky wash (as the pickers' cells); greyed, faded, the tooltip saying why. A tooltip is the key's name
     then its shortcut in brackets, as Flat's (`TOOL_SHORTCUTS`).
@@ -75,9 +79,12 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
     the Notes and Pitch until the learner opens or folds one.
 - **Flat's shortcuts** where the typing keys leave them free (`TOOL_SHORTCUTS`, one table for the keys, the tooltips
   and the `?` sheet): 1–6 the values, 8 a rest, 9 a grace note, 0 = − ♮ ♯ ♭, the full stop a dot, the comma a tie,
-  Shift with 3 a triplet; a letter alone plays the piano, so Flat's J, S, T and P take Shift (Respell, a slur, a trill,
+  a letter alone plays the piano, so Flat's J, S, T and P take Shift (Respell, a slur, a trill,
   the pedal); Shift with < > the hairpins, Cmd or Ctrl with Shift and 8 or 9 the octave lines; Cmd or Ctrl with Shift
-  and Enter a bar after, with Backspace the bars deleted, with Enter a new line; [ ] the repeats.
+  and Enter a bar after, with Backspace the bars deleted, with Enter a new line; [ ] the repeats; 7 the 64th, Shift
+  with 2 to 8 a tuplet (9 by its key: Shift with 9 is the acciaccatura's); Cmd or Ctrl with E free text, with Shift
+  and K the Roman numeral. Bar repeats, multi-bar rests, the page break, swing and the new marks have no key of
+  their own, as in Flat.
 - **Grace notes**, Flat's two kinds: the appoggiatura (9, unslashed) and the acciaccatura (Shift with 9, slashed), a
   step above in the key before each note chosen on any staff; the other kind's key switches it, its pitch kept; the
   same key again takes it off. Put there, it is chosen (`grace`): ↑ ↓, Shift a semitone, the accidentals, Respell, a
@@ -114,4 +121,7 @@ reader hears the caret's place in a polite live line (`CaretLine`).
 - 0114 — One row of every tool; sign pickers; every meter, clef and tempo unit (2026-10-27).
 - 2026-10-28 — The palette docked as Flat's: a left panel, a note-entry toolbar and a phone sheet in place of the
   floating card and its folded row; Flat's sections, keys and shortcuts; the chord wizard; the grace note.
+- 2026-10-28 — Flat's notation in its sections: the 64th, tuplets of 2 to 9, the new articulations, ornaments, lines
+  and dynamics, tempo changes, swing, free text, Roman numerals, repeat ×N, the 3rd and 4th endings, the page break,
+  bar repeats and multi-bar rests.
 - The research note comparing Flat and Dorico (2026-10-23) and the editor's three design specs, deleted.

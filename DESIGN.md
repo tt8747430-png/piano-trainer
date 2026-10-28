@@ -347,7 +347,10 @@ every screen's title smaller (`data-titles='small'`).
   sheet the note-entry toolbar, its keys 40px glyphs in a sand pill. On a phone held upright a sheet at the foot,
   card paper with 24px top corners and a soft upward shade, its grab handle 40×4, its category tabs glyphs in a sand
   pill, the chosen on a card-paper thumb. Keys are square cells of a bordered table (a 12px outer radius, hairlines
-  between cells, 44px at the least); pressed, a sky glyph on a sky wash; greyed at 35%.
+  between cells, 44px at the least); pressed, a sky glyph on a sky wash; greyed at 35%. A key draws the sign the
+  score prints: a tuplet its bracket round the count, a bar repeat its slash between dots, a multi-bar rest its
+  H-bar, a line its dashed bracket with `15ma` or a wavy glissando; a group of keys whose effect needs a word says it
+  in the ⓘ beside the group's name, never on the key.
 - **Equal columns.** A chart's lines are grids of equal beats so bars line up down the page; a score's lines are
   justified to their share of the longest line. Layouts are named as notation apps name them: Page view, Vertical
   scroll, Panorama.

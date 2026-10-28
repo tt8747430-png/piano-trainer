@@ -123,7 +123,25 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Common time**, **cut time** (`timeSymbol`): 4/4 printed as C, 2/2 as ¢. _Avoid:_ C time, alla breve.
 - **Tempo unit** (`tempoUnit`): the note a tempo mark counts. _Avoid:_ beat value.
 - **Clef** («Ключ»): the sign at a staff's head: treble, bass, their octave forms, the C clefs. _Avoid:_ key.
-- **Tick**: the unit of time, 24 a beat. _Avoid:_ step (as time).
+- **Tick**: the unit of time, 5040 a beat, so every value to the 64th and every tuplet of 2 to 9 is whole.
+  _Avoid:_ step (as time).
+- **Tuplet** («Группа»; `Duration.tuplet`): notes of a length the meter does not divide by, bracketed with their
+  count (a triplet, a quintuplet…); found from the timing, never written as such. _Avoid:_ irregular group.
+- **Glissando** («Глиссандо»; `gliss`): a slide from a note to the next, played over the white keys between.
+  _Avoid:_ slide, portamento.
+- **Tempo change** («Смена темпа»; `tempo:`): a tempo mark over a note mid-song, played and exported from it on.
+  _Avoid:_ tempo marking (the head's is the **tempo mark**).
+- **Swing mark** («Свинг»; `swing8`, `swing16`, `straight`): the feel the 8ths or 16ths take from a note on.
+  _Avoid:_ shuffle.
+- **Roman numeral** («Ступень»; `rn:`): the chord's degree in the key there, printed under the staff. _Avoid:_
+  function symbol, degree mark.
+- **Free text** («Текст»; `txt:`): words of the learner's over a note. _Avoid:_ annotation, staff text.
+- **Repeat ×N** («Повтор ×N»; `:|x3`): a repeat's end played its times, three to nine. _Avoid:_ volta count.
+- **Page break** («Разрыв страницы»; `Page`): a bar whose line starts a new page. _Avoid:_ system break (a line's).
+- **Bar repeat** («Повтор такта»; `%`, `%%`): a bar (or two) playing the bar (or two) before again, drawn as its sign
+  while it still does. _Avoid:_ simile, measure repeat.
+- **Multi-bar rest** («Многотактовая пауза»; `Rest3`): empty bars drawn as one rest with their count. _Avoid:_
+  multirest, long rest.
 - **Pedal** («Педаль»): the sustain pedal; the **soft** and **sostenuto** are a MIDI keyboard's others. _Avoid:_
   damper.
 - **Velocity** («Сила нажатия»): how hard a key is struck, 1–127. _Avoid:_ volume.

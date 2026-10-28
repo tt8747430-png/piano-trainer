@@ -337,8 +337,8 @@ function QuickTupletKey() {
 }
 
 /**
- * The tuplets two to nine (ADR 0097, Flat's ⇧2–⇧9), each on the value chosen: the chosen note's,
- * else the next written; greyed where the meter writes such notes plainly (two or four to a simple
+ * The tuplets two to nine (ADR 0097, Flat's ⇧2–⇧8, nine by its key alone), each on the value
+ * chosen: the chosen note's, else the next written; greyed where the meter writes such notes plainly (two or four to a simple
  * beat, three or six to a compound one) or the value is too short for it.
  */
 function TupletKeys() {
