@@ -1,5 +1,5 @@
 import { chordSymbol } from '@/shared/lib/music'
-import { chartOf, chordsOf } from './chart'
+import { factsOf } from './facts'
 import { isPiece, type Entry } from './types'
 
 /** Each piece's chord symbols, read once per object: a list reads a row's again as it renders. */
@@ -14,13 +14,7 @@ const symbols = new WeakMap<Entry, readonly string[]>()
 export function pieceChords(entry: Entry, count = 4): readonly string[] {
   let known = symbols.get(entry)
   if (!known) {
-    known = isPiece(entry)
-      ? [
-          ...new Set(
-            chordsOf(chartOf(entry)).map(({ root, quality }) => chordSymbol({ root, quality })),
-          ),
-        ]
-      : []
+    known = isPiece(entry) ? factsOf(entry).chords.map(chordSymbol) : []
     symbols.set(entry, known)
   }
   return known.slice(0, count)

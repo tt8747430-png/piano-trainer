@@ -1,8 +1,8 @@
 import { pitchClassOf, type ChordSize, type Key, type SpelledNote } from '@/shared/lib/music'
 import type { PatternId } from '@/entities/pattern'
 import { COLLECTIONS, PIECES } from '../content'
-import { patternsOfPiece } from './chart'
 import { asChartPiece } from './degree-chart'
+import { factsOf } from './facts'
 import type { PieceMusic } from './music'
 import type { OwnSong } from './own'
 import type { PiecesState } from './store'
@@ -75,7 +75,7 @@ const PLAYING = new Map<PatternId, readonly Piece[]>()
 export function piecesPlaying(pattern: PatternId): readonly Piece[] {
   const known = PLAYING.get(pattern)
   if (known) return known
-  const pieces = PIECES.filter((piece) => patternsOfPiece(piece).has(pattern))
+  const pieces = PIECES.filter((piece) => factsOf(piece).patterns.includes(pattern))
   PLAYING.set(pattern, pieces)
   return pieces
 }

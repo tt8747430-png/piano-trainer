@@ -1,12 +1,8 @@
-import { chartOf, type Piece } from '@/entities/piece'
-import type { ChartBar } from '@/shared/lib/arrangement'
+import { factsOf, type Piece } from '@/entities/piece'
 import {
   chordSymbol,
   findNumerals,
-  numeralReadings,
   parseNumerals,
-  playOrder,
-  sameKey,
   type Chord,
   type Key,
   type Numeral,
@@ -34,64 +30,6 @@ export interface SongPlace {
   readonly key: Key
   /** Its chords' symbols as written, a chord held over several once: `G C G`. */
   readonly chords: readonly string[]
-}
-
-/** A stretch of a song's chords in one key, with no bar of no chord in it: where a progression runs. */
-interface Stretch {
-  readonly key: Key
-  readonly chords: readonly Chord[]
-  /** Each chord's written bar. */
-  readonly bars: readonly number[]
-  readonly readings: readonly (readonly Numeral[])[]
-}
-
-interface Read {
-  readonly stretches: readonly Stretch[]
-  /** The written bars in the order they are played. */
-  readonly order: readonly number[]
-}
-
-const read = new WeakMap<Piece, Read>()
-
-/** A piece's chords in stretches, each read in its key, and its bars' order: read once per piece. */
-function readPiece(piece: Piece): Read {
-  const known = read.get(piece)
-  if (known) return known
-  const chart = chartOf(piece)
-  const stretches: Stretch[] = []
-  const all: ChartBar[] = []
-  let open: { key: Key; chords: Chord[]; bars: number[] } | null = null
-  const close = () => {
-    if (open && open.chords.length > 0)
-      stretches.push({
-        key: open.key,
-        chords: open.chords,
-        bars: open.bars,
-        readings: numeralReadings(open.chords, open.key),
-      })
-    open = null
-  }
-  for (const section of chart.sections) {
-    const key = section.key ?? chart.key
-    if (open && !sameKey(open.key, key)) close()
-    for (const bar of section.lines.flat()) {
-      const at = all.length
-      all.push(bar)
-      if (bar.chords.length === 0) {
-        close()
-        continue
-      }
-      open ??= { key, chords: [], bars: [] }
-      for (const chord of bar.chords) {
-        open.chords.push(chord)
-        open.bars.push(at)
-      }
-    }
-  }
-  close()
-  const result: Read = { stretches, order: playOrder(all) }
-  read.set(piece, result)
-  return result
 }
 
 /** Written bars as the Player plays them: where they first run on in its order, else from each's first pass. */
@@ -123,7 +61,7 @@ const heldOnce = (chords: readonly Chord[]): string[] =>
 const placeOf = ({ bars, played, key, chords }: Found): SongPlace => ({ bars, played, key, chords })
 
 function found(piece: Piece, numerals: readonly Numeral[], minor: boolean): Found[] {
-  const { stretches, order } = readPiece(piece)
+  const { stretches, order } = factsOf(piece)
   return stretches.flatMap((stretch, at) =>
     stretch.key.minor !== minor
       ? []
