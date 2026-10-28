@@ -1,11 +1,15 @@
 import {
+  harmonicFunction,
+  rootMove,
   numeralChord,
   parseChordSymbol,
   numeralText,
   type Chord,
   type ChordSize,
+  type HarmonicFunction,
   type Key,
   type Numeral,
+  type RootMove,
 } from '@/shared/lib/music'
 
 /** A chord of a row, with what is written under its symbol (a progression's numeral). */
@@ -16,13 +20,15 @@ export interface RowChord {
   readonly symbol?: string
   /** What is said under it where the row says no position: a chord out of the key. */
   readonly detail?: string
+  /** What it does in its key, where the row is a progression read in one. */
+  readonly function?: HarmonicFunction
 }
 
 /** A lesson's row of chord symbols, each written as the lesson writes it. */
 export const symbolsRow = (symbols: readonly string[]): RowChord[] =>
   symbols.map((symbol) => ({ chord: parseChordSymbol(symbol), symbol }))
 
-/** A progression's chords in a key and size, each captioned by its numeral. */
+/** A progression's chords in a key and size, each captioned by its numeral, with what it does there. */
 export const progressionRow = (
   numerals: readonly Numeral[],
   key: Key,
@@ -31,4 +37,12 @@ export const progressionRow = (
   numerals.map((numeral) => ({
     chord: numeralChord(numeral, key, size),
     caption: numeralText(numeral),
+    function: harmonicFunction(numeral, key.minor),
   }))
+
+/** How each chord's root moved from the one before it; none for the first, or where the letter stays. */
+export const rowMoves = (chords: readonly RowChord[]): (RootMove | null)[] =>
+  chords.map(({ chord }, place) => {
+    const before = chords[place - 1]
+    return before ? rootMove(before.chord.root, chord.root) : null
+  })

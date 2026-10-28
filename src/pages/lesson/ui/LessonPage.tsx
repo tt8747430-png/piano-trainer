@@ -31,6 +31,17 @@ export function LessonPage() {
       lesson={lesson}
       step={lessonStepId(lesson.id)}
       back={<BackButton fallback={journey} />}
+      after={(lesson.after ?? []).flatMap((id) => {
+        const before = lessonById(id)
+        return before
+          ? [
+              {
+                title: localText(before.title, locale),
+                link: { to: '/lessons/$lessonId', params: { lessonId: id } } as const,
+              },
+            ]
+          : []
+      })}
       place={
         <>
           <PlaceLink {...journey}>{journeyTitle}</PlaceLink> ·{' '}

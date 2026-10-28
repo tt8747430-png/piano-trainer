@@ -8,7 +8,14 @@ export {
   type TrainerRecord,
 } from './model/types'
 export { isDue, knownCount, ratingOf, stillToKnow } from './model/mastery'
-export { withAnswer, withHold, withLearned, withLesson, withRun } from './model/changes'
+export {
+  withAnswer,
+  withHold,
+  withLearned,
+  withLesson,
+  withRun,
+  withSectionRead,
+} from './model/changes'
 export {
   barsLessonKey,
   CHORD_HOLDS,
@@ -37,6 +44,7 @@ export {
   selectLessonDone,
   selectLessons,
   selectPractised,
+  selectRead,
   selectTrainerRecord,
   selectTrainerRecords,
 } from './model/selectors'

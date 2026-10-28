@@ -7,6 +7,7 @@ const D_MINOR = { tonic: note('D'), minor: true }
 /** Gorshkov's lesson 2, its practice sheet: Exercise 2, the 9ths on «Ромашковые поля», the dominant 9th. */
 const ninthsInASong: Lesson = {
   id: 'ninths-in-a-song',
+  after: ['sevenths-in-a-song'],
   title: { en: 'Ninth chords in a song', ru: 'Нонаккорды в песне' },
   summary: {
     en: 'Grow 7th chords into 9ths, then resolve the dominant 9th into minor and into major.',

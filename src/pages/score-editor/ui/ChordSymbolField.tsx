@@ -1,8 +1,12 @@
+import { WandSparkles } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { chordSuggestions, chordWrittenAt } from '@/features/score-editor'
 import { chordSymbol, printedSymbol, readChordSymbol, type Chord } from '@/shared/lib/music'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
+import { wizardOf } from '../model/chord-wizard'
 import { useFieldText } from '../model/use-field-text'
+import { ChordWizard } from './ChordWizard'
 import { SheetField } from './SheetField'
 
 /**
@@ -50,6 +54,8 @@ export function ChordSymbolField({ anchor }: { anchor: HTMLElement | null }) {
   }
   // Every chord offered over what is written there; those starting as typed once one types.
   const offered = chordSuggestions(draft, caret, text === shown ? '' : text)
+  // The chord wizard (Flat's) in the suggestions' place, built from what is typed.
+  const [wizard, setWizard] = useState(false)
   return (
     <SheetField
       kind="chord"
@@ -64,8 +70,27 @@ export function ChordSymbolField({ anchor }: { anchor: HTMLElement | null }) {
         write()
         view.openField(null)
       }}
+      beside={
+        <button
+          type="button"
+          aria-label={t('chord.wizard')}
+          title={t('chord.wizard')}
+          aria-pressed={wizard}
+          onPointerDown={(event) => event.preventDefault()}
+          onClick={() => setWizard(!wizard)}
+          className="grid size-11 shrink-0 place-items-center rounded-xl text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground aria-pressed:bg-[color-mix(in_oklab,var(--color-link)_14%,var(--color-card))] aria-pressed:text-link"
+        >
+          <WandSparkles aria-hidden className="size-5" />
+        </button>
+      }
     >
-      {offered.length > 0 ? (
+      {wizard ? (
+        <ChordWizard
+          from={wizardOf(readChordSymbol(typed))}
+          onChord={(chord) => setText(chordSymbol(chord))}
+          onAdd={() => go(1)}
+        />
+      ) : offered.length > 0 ? (
         <div
           role="group"
           aria-label={t('chord.suggested')}

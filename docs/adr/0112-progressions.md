@@ -27,6 +27,11 @@ use one.
   (`character`, both languages), and a chip a chord, the numeral over the chord in the key shown, so the key
   re-spells every card. Its Play plays it in place, the sounding chip lit; a tap elsewhere on it shows it at the
   top of the page, named over its character. No pop-up chooses a progression.
+- **The row's chips** name each chord's harmonic function (T S D, coloured as DESIGN.md's Harmony says) or, with
+  `?harmony=motion`, how each root moves to the next (`↓5 ↓3 ↑2`, the strong moves coloured, with their legend). The
+  kernel reads both (`harmonicFunction`, `rootMove`): a chord's function by its degree in the key (borrowed and applied
+  chords as their family, a ♭VII7 and a ♭II7 dominants), a move by letters. The chip sounding follows the row as
+  it plays; a tap plays its chord. The same chips stand under a lesson's progression.
 - **A lead-in is a way to play any progression** (`lead`: `v` or `ii-v`): each chord after its own V or ii–V. The
   secondary dominants and the ii–V–I to every chord of a key are its lines, not the library's.
 - **A walk through the keys** is a chart transformation (`walk`): up or down by semitones or whole tones, or round the
@@ -55,3 +60,4 @@ is saved: views remember numerals, and the Player's `bar` and `loop` open a piec
 - 0045 — Transpose reads a song's chords in their key (2026-10-14), now the page's typed line.
 - 0112 — A progression's songs, and a song's progressions (2026-10-27).
 - r13 — The library as cards that play in place, each with its character (2026-10-28).
+- r13 — Function and root-motion chips under the row (2026-10-28).

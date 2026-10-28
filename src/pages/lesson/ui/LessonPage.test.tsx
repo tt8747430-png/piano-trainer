@@ -16,6 +16,22 @@ describe('A lesson', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Naming any chord' })).toBeInTheDocument()
   })
 
+  it('links the lessons to read before it, and its journey shows its prerequisites by number', async () => {
+    const { router } = await renderApp('/lessons/cadences')
+    const place = await screen.findByRole('navigation', { name: 'Where this lesson is' })
+    expect(within(place).getByRole('link', { name: 'Inversions' })).toHaveAttribute(
+      'href',
+      '/lessons/inversions',
+    )
+    expect(
+      within(place).getByRole('link', { name: 'Chord functions: tonic, subdominant, dominant' }),
+    ).toHaveAttribute('href', '/lessons/chord-functions')
+    await act(() => router.navigate({ to: '/', search: { view: 'lessons', journey: 'fluency' } }))
+    const node = await screen.findByRole('link', { name: /^Cadences/ })
+    // Inversions and Chord functions, lessons 4 and 6 of Fluency.
+    expect(node).toHaveTextContent(/After \d+, \d+/)
+  })
+
   it('is marked learned at its end, and its journey shows it so', async () => {
     const user = userEvent.setup()
     const { progressStore, router } = await renderApp('/lessons/reading-chord-symbols')

@@ -61,13 +61,13 @@ describe('settings selectors', () => {
     expect(selectChordFinder(state)).toBe(DEFAULT_CHORD_FINDER)
   })
 
-  it('folds the palette at the foot and opens it beside the sheet, until the learner chooses', () => {
+  it('keeps the palette’s panel shown and its sheet compact, until the learner chooses', () => {
     const unset = { paletteFolded: {} } as unknown as SettingsState
-    expect(selectPaletteFolded('foot')(unset)).toBe(true)
-    expect(selectPaletteFolded('beside')(unset)).toBe(false)
-    const chosen = { paletteFolded: { beside: true, foot: false } } as unknown as SettingsState
-    expect(selectPaletteFolded('foot')(chosen)).toBe(false)
-    expect(selectPaletteFolded('beside')(chosen)).toBe(true)
+    expect(selectPaletteFolded('sheet')(unset)).toBe(true)
+    expect(selectPaletteFolded('panel')(unset)).toBe(false)
+    const chosen = { paletteFolded: { panel: true, sheet: false } } as unknown as SettingsState
+    expect(selectPaletteFolded('sheet')(chosen)).toBe(false)
+    expect(selectPaletteFolded('panel')(chosen)).toBe(true)
   })
 
   it('says whether a section is folded away', () => {

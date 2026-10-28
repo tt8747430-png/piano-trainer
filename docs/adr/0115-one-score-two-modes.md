@@ -1,6 +1,6 @@
 # ADR 0115 — One score in two modes: the Player and the editor share one bar, one tools row, one transport
 
-- **Status:** accepted · **Date:** 2026-10-23 · consolidated 2026-10-27
+- **Status:** accepted · **Date:** 2026-10-23 · consolidated 2026-10-27 · amended 2026-10-28
 
 ## Context
 
@@ -33,9 +33,12 @@ edit, and a learner practising should not change the music by accident.
   the mode's three: the Player's loop, Sound and hands; the editor's Record, Takes and the recording's settings. Play
   stands in the same spot in both modes. While a take records, its strip stands in the transport's place. Its
   controls shrink step by step so they fit a 320px phone.
-- **What floats over the music takes no room.** The transport and the editor's palette stand over the sheet, which
-  has room past its last line to scroll above them. They step aside while the music is read (dragged, scrolled,
-  pinched: `useHiddenWhileReading`) and come back at a tap. While Diagrams plays the whole bar steps aside.
+- **What floats over the music takes no room.** The transport stands over the sheet, which has room past its last
+  line to scroll above it. It steps aside while the music is read (dragged, scrolled, pinched:
+  `useHiddenWhileReading`) and comes back at a tap. While Diagrams plays the whole bar steps aside. The editor's
+  palette no longer floats: it is docked beside or under the sheet, taking its own room (ADR 0114), so the bar, the
+  tools row, the transport and the keys stand where the Player's do and only the sheet's width or height changes as
+  Practise · Edit switches.
 - **One View menu** in both modes (ADR 0108) and one layout setting (ADR 0096). The keys fold from their rail and
   come back from the View.
 
@@ -54,3 +57,4 @@ own Play melody switch: it plays the tune under a take, not the Player's melody.
 - 0110 — One bar, one tools row, one transport (2026-10-26).
 - 0115 — One band for the bar, one Transpose, a plain Setup (2026-10-27). Its Setup is ADR 0105's, its View ADR
   0108's.
+- 2026-10-28 — The editor's palette docked, not floating (ADR 0114).

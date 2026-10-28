@@ -138,7 +138,10 @@ function KeyButton({
       {look.label ? (
         <span
           aria-hidden
-          className="relative flex w-full flex-col items-center px-0.5 text-center leading-tight wrap-anywhere"
+          className={cn(
+            'relative flex w-full flex-col items-center px-0.5 text-center leading-tight wrap-anywhere transition-opacity duration-200 ease-out',
+            look.label.ghost && 'opacity-40',
+          )}
         >
           {look.label.caption ? (
             <span className="text-xs font-semibold">{look.label.caption}</span>

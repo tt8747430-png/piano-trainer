@@ -2,15 +2,15 @@ import { Link } from '@tanstack/react-router'
 import { Check, ChevronDown } from 'lucide-react'
 import { Fragment, useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { JOURNEYS, type Chapter, type Journey } from '@/entities/lesson'
-import { selectAllAnswers, selectLearned, useProgress } from '@/entities/progress'
-import { stepIdOf, type StepId } from '@/entities/step'
+import { JOURNEYS, lessonById, type Chapter, type Journey } from '@/entities/lesson'
+import { selectAllAnswers, selectLearned, selectRead, useProgress } from '@/entities/progress'
+import { lessonStepId, stepIdOf, type StepId } from '@/entities/step'
 import { useFold } from '@/features/fold-section'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn, IN_PLACE } from '@/shared/lib'
 import { FoldBody, ProgressBar } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
-import { journeyProgress } from '../model/progress'
+import { journeyProgress, lessonShare } from '../model/progress'
 import { centreOf, columnOf } from '../model/zigzag'
 import { JourneyNode } from './JourneyNode'
 
@@ -111,6 +111,7 @@ function ChapterSection({
   const fold = useFold(`journey.${journey.id}.${chapter.id}`)
   const learned = useProgress(selectLearned)
   const answers = useProgress(selectAllAnswers)
+  const read = useProgress(selectRead)
   const ids = chapter.steps.map(stepIdOf)
   const done = ids.filter((each) => learned[each] !== undefined).length
   const complete = done === ids.length
@@ -153,6 +154,7 @@ function ChapterSection({
         <ol className="flex flex-col pt-4 pb-2">
           {chapter.steps.map((step, i) => {
             const stepId = stepIdOf(step)
+            const lesson = step.kind === 'lesson' ? lessonById(step.lessonId) : undefined
             const column = columnOf(i)
             const before = i === 0 ? undefined : columnOf(i - 1)
             return (
@@ -178,6 +180,19 @@ function ChapterSection({
                       learned={learned[stepId] !== undefined}
                       next={stepId === next}
                       answers={answers}
+                      share={
+                        lesson
+                          ? lessonShare(
+                              lesson.sections.length,
+                              read[stepId],
+                              learned[stepId] !== undefined,
+                            )
+                          : 0
+                      }
+                      after={(lesson?.after ?? []).flatMap((id) => {
+                        const n = numbers.get(lessonStepId(id))
+                        return n === undefined ? [] : [n]
+                      })}
                     />
                   </div>
                 </li>

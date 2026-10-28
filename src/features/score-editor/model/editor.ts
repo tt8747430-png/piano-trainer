@@ -20,6 +20,7 @@ import { markNotes } from './marks'
 import {
   backFrom,
   deleteNotes,
+  graceNotes,
   makeRoom,
   notesAt,
   respellNotes,
@@ -246,6 +247,13 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         ...accidentalMoved(state, next),
       })
     }
+    case 'grace':
+      return layer === 'chords'
+        ? state
+        : commit(state, graceNotes(draft, layer, chosenSpan(state)), {
+            struck: null,
+            selection: state.selection,
+          })
     case 'respell':
       return layer === 'chords'
         ? state
