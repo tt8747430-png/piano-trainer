@@ -120,6 +120,12 @@ export const practice: LocaleResources['practice'] = {
   intervals: {
     simple: 'В пределах октавы',
     compound: 'Шире октавы',
+    way: { label: 'Играть', together: 'Вместе', up: 'Вверх', down: 'Вниз' },
+    tritone: {
+      A4: { name: 'Увеличенная кварта', short: 'ув4' },
+      d5: { name: 'Уменьшённая квинта', short: 'ум5' },
+    },
+    keys: '{{name}} на клавишах',
   },
   progressions: {
     field: 'Ступени или аккорды',
@@ -128,8 +134,12 @@ export const practice: LocaleResources['practice'] = {
     minorLine: 'Эти ступени — минорной тональности.',
     playIn: 'Сыграть в тональности {{key}}',
     throughKeys: 'По тональностям',
-    choose: 'Последовательность',
-    typed: 'Набрана',
+    library: 'Библиотека',
+    chordCount_one: '{{count}} аккорд',
+    chordCount_few: '{{count}} аккорда',
+    chordCount_many: '{{count}} аккордов',
+    chordCount_other: '{{count}} аккорда',
+    chordsIn: 'Её аккорды в тональности',
     lead: { label: 'Подвести к каждому аккорду', none: 'Нет', v: 'Через V', 'ii-v': 'Через ii–V' },
     // Песни, в которых звучит последовательность, каждая открывает плеер на своих тактах (ADR 0112).
     songs: {

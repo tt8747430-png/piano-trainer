@@ -1,5 +1,14 @@
 import type { LocalText } from '@/shared/i18n'
-import type { LibraryProgression, ModeLines, ProgressionStyle } from '../model/types'
+import type {
+  LibraryProgression,
+  ModeLines,
+  ProgressionDetails,
+  ProgressionStyle,
+} from '../model/types'
+import { CHARACTERS } from './characters'
+
+/** An entry as written, its character added from `CHARACTERS`. */
+type Written = ModeLines & Omit<ProgressionDetails, 'character'>
 
 type Extras = Pick<LibraryProgression, 'note' | 'pattern' | 'size'>
 
@@ -11,7 +20,7 @@ const entry = <const Id extends string>(
   en: string,
   ru: string,
   extras: Extras = {},
-): LibraryProgression & { readonly id: Id } => ({
+): Written & { readonly id: Id } => ({
   id,
   style,
   ...lines,
@@ -365,4 +374,7 @@ const LIBRARY = [
 export type ProgressionId = (typeof LIBRARY)[number]['id']
 
 /** The library, style by style in the order written. */
-export const PROGRESSION_LIBRARY: readonly LibraryProgression[] = LIBRARY
+export const PROGRESSION_LIBRARY: readonly LibraryProgression[] = LIBRARY.map((each) => ({
+  ...each,
+  character: CHARACTERS[each.id],
+}))

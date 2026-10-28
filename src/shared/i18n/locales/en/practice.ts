@@ -124,6 +124,14 @@ export const practice = {
   intervals: {
     simple: 'Within the octave',
     compound: 'Past the octave',
+    // How a row plays its interval.
+    way: { label: 'Play', together: 'At once', up: 'Up', down: 'Down' },
+    // The tritone by each of its spellings, a row each.
+    tritone: {
+      A4: { name: 'Augmented 4th', short: 'A4' },
+      d5: { name: 'Diminished 5th', short: 'd5' },
+    },
+    keys: '{{name}} on the keys',
   },
   progressions: {
     field: 'Numerals or chords',
@@ -132,8 +140,11 @@ export const practice = {
     minorLine: 'These numerals are a minor key’s.',
     playIn: 'Play them in {{key}}',
     throughKeys: 'Through the keys',
-    choose: 'Progression',
-    typed: 'Typed',
+    // The library as cards, a card a progression (ADR 0112).
+    library: 'Library',
+    chordCount_one: '{{count}} chord',
+    chordCount_other: '{{count}} chords',
+    chordsIn: 'Its chords in the key',
     /** What leads into each chord of the progression (ADR 0112). */
     lead: { label: 'Lead into each chord', none: 'No', v: 'By its V', 'ii-v': 'By its ii–V' },
     // The songs a progression is heard in, each opening the Player at its bars (ADR 0112).

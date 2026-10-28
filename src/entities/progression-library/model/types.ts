@@ -27,10 +27,15 @@ export type ModeLines =
  * A named progression in Roman numerals, read in any key: the one model of a progression that is
  * practised, one idea with its line in each mode it has, so the key's Major · Minor shows the other.
  */
-export type LibraryProgression = ModeLines & {
+export type LibraryProgression = ModeLines & ProgressionDetails
+
+/** What a library progression is besides its lines. */
+export interface ProgressionDetails {
   readonly id: string
   readonly style: ProgressionStyle
   readonly name: LocalText
+  /** How it sounds, in one short line under its name. */
+  readonly character: LocalText
   /** What it teaches, in a line. */
   readonly note?: LocalText
   /** The pattern its Player opens with, where it has one of its own. */
