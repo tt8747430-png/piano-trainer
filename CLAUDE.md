@@ -42,7 +42,8 @@ Non-trivial feature → `superpowers:brainstorming` (or `grilling`) first; its s
   The full `npm run test` takes minutes: run it once before a push that touches shared code (`shared/lib`, an
   entity's model, `app/`, the test setup or config), never after each edit. After touching startup, routing, the PWA
   or config, also `npm run build`. CI runs only by hand, so these local checks are the gate.
-- **Parallel agents (worktrees).** Each agent commits one task at a time and checks only what it changed
+- **Work inline; agents are the exception** (the `owner-way` skill's maximum principle: the best result for the
+  least usage). When a large, separable part does go to an agent (worktree), it commits one task at a time and checks only what it changed
   (`typecheck`, `lint`, `test:related`/`test:changed`; `build` only after touching startup, routing, the PWA or
   config), never the full suite. The session's branch merges every agent's branch, runs the full `npm run test` and
   `npm run build` once on the merged result, updates this file and the docs, then pushes the branch and `main`.
