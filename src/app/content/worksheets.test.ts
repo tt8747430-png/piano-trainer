@@ -41,12 +41,19 @@ const texts = (lesson: Lesson) => [
   lesson.summary,
   ...lesson.sections.flatMap((section) => [
     section.heading,
+    ...(section.takeaway ? [section.takeaway] : []),
     ...section.blocks.flatMap((block) => {
       switch (block.kind) {
         case 'text':
           return block.lead ? [block.lead, block.text] : [block.text]
         case 'note':
-          return [block.text]
+          return block.rule ? [block.rule, block.text] : [block.text]
+        case 'variants':
+          return block.variants.flatMap((variant) => [
+            variant.label,
+            variant.caption,
+            ...(variant.text ? [variant.text] : []),
+          ])
         case 'steps':
           return block.steps
         case 'question':
@@ -99,6 +106,11 @@ function problemsOf(block: LessonBlock): string[] {
       return pieceProblems(block.piece, block.pattern)
     case 'progression':
       return unread(() => readProgression(block), block.numerals)
+    case 'variants':
+      return [
+        ...(block.variants.length < 2 ? ['a variants block of one'] : []),
+        ...block.variants.flatMap((variant) => problemsOf(variant.example)),
+      ]
     case 'question': {
       const { answer } = block
       return 'chord' in answer
@@ -314,12 +326,15 @@ describe('the lessons, a journey’s and a course’s', () => {
 /** Every piece of a lesson's prose, in both languages: text, steps, notes and questions' asks. */
 function proseOf(lesson: Lesson): string[] {
   const texts = (local: { readonly en: string; readonly ru: string }) => [local.en, local.ru]
-  return lesson.sections.flatMap((section) =>
-    section.blocks.flatMap((block) => {
+  return lesson.sections.flatMap((section) => [
+    ...(section.takeaway ? texts(section.takeaway) : []),
+    ...section.blocks.flatMap((block) => {
       switch (block.kind) {
         case 'text':
         case 'note':
           return texts(block.text)
+        case 'variants':
+          return block.variants.flatMap((variant) => (variant.text ? texts(variant.text) : []))
         case 'steps':
           return block.steps.flatMap(texts)
         case 'question':
@@ -328,7 +343,7 @@ function proseOf(lesson: Lesson): string[] {
           return []
       }
     }),
-  )
+  ])
 }
 
 /** The blocks a learner reads rather than plays: a section's example is any other. */

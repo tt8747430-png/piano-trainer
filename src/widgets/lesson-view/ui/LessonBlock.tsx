@@ -1,7 +1,13 @@
 import { Link } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { readProgression, type LessonBlock as Block, type LessonLink } from '@/entities/lesson'
+import {
+  readProgression,
+  type LessonBlock as Block,
+  type LessonLink,
+  type LessonVariant,
+} from '@/entities/lesson'
 import { pieceById } from '@/entities/piece'
 import {
   IntervalCard,
@@ -22,7 +28,7 @@ import { gridSymbols } from '../model/chord-grid'
 import { ChordExamples } from './ChordExamples'
 import { LessonLinkRow } from './LessonLinkRow'
 import { PatternExample } from './PatternExample'
-import { ButtonLink, RootMoveLegend, type ShownKeys } from '@/shared/ui'
+import { ButtonLink, ChoiceChips, RootMoveLegend, Segmented, type ShownKeys } from '@/shared/ui'
 
 /** One link on its card, as a lesson's rows are. */
 function LinkCard({ title, target }: { title: string; target: LessonLink }) {
@@ -32,6 +38,45 @@ function LinkCard({ title, target }: { title: string; target: LessonLink }) {
         <LessonLinkRow title={title} target={target} />
       </li>
     </ul>
+  )
+}
+
+/**
+ * One example in versions: a switch for two (an A/B pair, heard one chord apart), a chip each for
+ * more. Choosing one redraws the example, its chips and its caption in place; the caption names the
+ * version's shape, a line under it says more.
+ */
+function VariantsBlock({
+  variants,
+  onShow,
+}: {
+  variants: readonly LessonVariant[]
+  onShow: (shown: ShownKeys) => void
+}) {
+  const { t } = useTranslation('learn')
+  const locale = useLocale()
+  const [chosen, setChosen] = useState(0)
+  const variant = variants[chosen] ?? variants[0]
+  if (!variant) return null
+  const options = variants.map((each, at) => ({ value: at, label: localText(each.label, locale) }))
+  const choice =
+    variants.length === 2 ? (
+      <Segmented label={t('variants')} value={chosen} options={options} onChange={setChosen} />
+    ) : (
+      <ChoiceChips label={t('variants')} value={chosen} options={options} onChange={setChosen} />
+    )
+  return (
+    <div className="flex flex-col gap-3">
+      {/* A new version is a new example: what the last one played stops with it. */}
+      <LessonBlock key={chosen} block={variant.example} onShow={onShow} />
+      {choice}
+      <p aria-live="polite" className="flex flex-col text-base">
+        <span className="font-semibold">{localText(variant.caption, locale)}</span>
+        {variant.text ? (
+          <span className="text-muted-foreground">{localText(variant.text, locale)}</span>
+        ) : null}
+      </p>
+    </div>
   )
 }
 
@@ -70,7 +115,18 @@ export function LessonBlock({
         </ol>
       )
     case 'note':
-      return <p className="rounded-3xl bg-muted p-4">{localText(block.text, locale)}</p>
+      return block.rule ? (
+        <div className="flex flex-col gap-1 card p-4">
+          <p className="font-display text-xl font-semibold text-balance">
+            {localText(block.rule, locale)}
+          </p>
+          <p className="text-base text-muted-foreground">{localText(block.text, locale)}</p>
+        </div>
+      ) : (
+        <p className="rounded-3xl bg-muted p-4">{localText(block.text, locale)}</p>
+      )
+    case 'variants':
+      return <VariantsBlock variants={block.variants} onShow={onShow} />
     case 'chords':
       return !block.melody && isProgressionRow(block.symbols, block.apart) ? (
         <ChordRow chords={symbolsRow(block.symbols)} onShow={onShow}>

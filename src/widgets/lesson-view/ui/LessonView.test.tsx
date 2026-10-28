@@ -495,6 +495,68 @@ describe('LessonView’s accompaniment', () => {
     )
   })
 
+  it('redraws a variants block’s example, chips and caption in place', async () => {
+    const user = userEvent.setup()
+    await renderLesson({
+      ...ACCOMPANIMENT,
+      sections: [
+        {
+          heading: { en: 'Two ways to V', ru: 'Два пути к V' },
+          blocks: [
+            {
+              kind: 'variants',
+              variants: [
+                {
+                  label: { en: 'ii6', ru: 'ii6' },
+                  caption: { en: 'The plain predominant', ru: 'Простая субдоминанта' },
+                  example: { kind: 'progression', numerals: 'I ii/3 V I', key: C_MAJOR },
+                },
+                {
+                  label: { en: '♭II6', ru: '♭II6' },
+                  caption: { en: 'The Neapolitan', ru: 'Неаполитанский' },
+                  text: { en: 'One note lower.', ru: 'На звук ниже.' },
+                  example: { kind: 'progression', numerals: 'I ♭II/3 V I', key: C_MAJOR },
+                },
+              ],
+            },
+          ],
+          takeaway: { en: 'Lower the 2nd and ii6 turns Neapolitan.', ru: 'Понизь II ступень.' },
+        },
+      ],
+    })
+    const chips = () => screen.getByRole('list', { name: 'Chords by function' })
+    expect(within(chips()).getAllByRole('button')[1]).toHaveAccessibleName('ii/3, Predominant')
+    expect(screen.getByText('The plain predominant')).toBeInTheDocument()
+    await user.click(screen.getByRole('radio', { name: '♭II6' }))
+    expect(within(chips()).getAllByRole('button')[1]).toHaveAccessibleName('♭II/3, Predominant')
+    expect(screen.getByText('The Neapolitan')).toBeInTheDocument()
+    expect(screen.getByText('One note lower.')).toBeInTheDocument()
+    expect(screen.getByRole('complementary', { name: 'In short' })).toHaveTextContent(
+      'Lower the 2nd and ii6 turns Neapolitan.',
+    )
+  })
+
+  it('sets a rule apart on its card, its name over what it says', async () => {
+    await renderLesson({
+      ...ACCOMPANIMENT,
+      sections: [
+        {
+          heading: { en: 'Fifths', ru: 'Квинты' },
+          blocks: [
+            {
+              kind: 'note',
+              rule: { en: 'No parallel fifths', ru: 'Без параллельных квинт' },
+              text: { en: 'Two voices never move in fifths.', ru: 'Два голоса не идут квинтами.' },
+            },
+            { kind: 'progression', numerals: 'I V', key: C_MAJOR },
+          ],
+        },
+      ],
+    })
+    const rule = screen.getByText('No parallel fifths')
+    expect(rule.parentElement).toHaveTextContent('Two voices never move in fifths.')
+  })
+
   it('links into the tools and the Player on what it names', async () => {
     await renderLesson(ACCOMPANIMENT)
     // Between two chords, on Progressions: the pair as a line in its key.

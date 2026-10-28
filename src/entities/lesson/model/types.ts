@@ -88,7 +88,8 @@ export type LessonLink =
 export type LessonBlock =
   | { readonly kind: 'text'; readonly lead?: LocalText; readonly text: LocalText }
   | { readonly kind: 'steps'; readonly steps: readonly LocalText[] }
-  | { readonly kind: 'note'; readonly text: LocalText }
+  /** A note on sand; or, given its `rule`, a rule's card: the rule's name over what it says. */
+  | { readonly kind: 'note'; readonly text: LocalText; readonly rule?: LocalText }
   | {
       readonly kind: 'chords'
       readonly symbols: readonly string[]
@@ -133,12 +134,33 @@ export type LessonBlock =
    * over how its root moved there, with the moves' legend and Play the chain.
    */
   | ({ readonly kind: 'progression'; readonly show?: 'motion' } & LessonProgression)
+  /**
+   * One example in versions, a chip each (a switch for two): choosing one redraws the example, its
+   * chips and its caption in place.
+   */
+  | { readonly kind: 'variants'; readonly variants: readonly LessonVariant[] }
   | { readonly kind: 'question'; readonly ask: LocalText; readonly answer: LessonAnswer }
   | { readonly kind: 'link'; readonly title: LocalText; readonly target: LessonLink }
+
+/** An example a variant draws: a progression's row, voicings as written, or chords. */
+export type VariantExample = Extract<LessonBlock, { kind: 'progression' | 'voicings' | 'chords' }>
+
+/**
+ * A version of a variants block's example: its name on its chip, a caption naming its shape (`Falling
+ * fifths · each copy a step lower`), a line saying more where it needs one, and the example.
+ */
+export interface LessonVariant {
+  readonly label: LocalText
+  readonly caption: LocalText
+  readonly text?: LocalText
+  readonly example: VariantExample
+}
 
 export interface LessonSection {
   readonly heading: LocalText
   readonly blocks: readonly LessonBlock[]
+  /** The section in one sentence, on its card at the section's end. */
+  readonly takeaway?: LocalText
 }
 
 /**

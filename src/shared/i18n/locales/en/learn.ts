@@ -73,6 +73,9 @@ export const learn = {
   previousSection: 'Previous section',
   nextSection: 'Next section',
   lessonBar: 'Lesson',
+  // A lesson's example in versions, the chips that choose one; a section's sentence at its end.
+  variants: 'Versions',
+  takeaway: 'In short',
   fingers: 'Fingers on the scales',
   // A lesson's example: the piece a pattern plays over, where it opens, and how to hear it.
   example: {

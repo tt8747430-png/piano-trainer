@@ -197,6 +197,7 @@ function LessonBar({
  * clear of pinned keys by the page's scroll padding (`theme.css`).
  */
 export function LessonView({ lesson, up }: { lesson: Lesson; up: UpLink }) {
+  const { t } = useTranslation('learn')
   const locale = useLocale()
   const play = usePlay()
   const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
@@ -267,6 +268,19 @@ export function LessonView({ lesson, up }: { lesson: Lesson; up: UpLink }) {
                 />
               )
             })}
+            {section.takeaway ? (
+              <aside
+                aria-label={t('takeaway')}
+                className="flex flex-col gap-1 rounded-3xl bg-paint-lilac p-4"
+              >
+                <span aria-hidden className="text-sm font-semibold text-on-paint-lilac">
+                  {t('takeaway')}
+                </span>
+                <p className="font-display text-xl font-semibold text-balance">
+                  {localText(section.takeaway, locale)}
+                </p>
+              </aside>
+            ) : null}
           </section>
         ))}
       </div>

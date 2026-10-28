@@ -1,6 +1,7 @@
 export { BackButton } from './BackButton'
 export { ButtonLink } from './ButtonLink'
 export { ChordButton } from './ChordButton'
+export { ChoiceChips } from './ChoiceChips'
 export { ChordHeading } from './ChordHeading'
 export { ChordSizeField } from './ChordSizeField'
 export { Dropdown } from './Dropdown'

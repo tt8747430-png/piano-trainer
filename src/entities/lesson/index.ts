@@ -4,6 +4,9 @@ export {
   type LessonBlock,
   type LessonLink,
   type LessonProgression,
+  type LessonSection,
+  type LessonVariant,
+  type VariantExample,
 } from './model/types'
 export { type Chapter, type Journey, type JourneyStep } from './model/journey'
 export { readProgression } from './model/progression'
