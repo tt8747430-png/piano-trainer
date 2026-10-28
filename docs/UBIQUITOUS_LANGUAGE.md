@@ -313,8 +313,18 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Harmonise** («Гармонизовать ноту мелодии»): the Key view's chords that hold a melody note. _Avoid:_ Reharmonise.
 - **Chord finder** («Определитель аккордов»): names the chord played, in every **reading**. _Avoid:_ Find, chord
   detector.
-- **Trainer**: one of the Quiz's: levels or Custom, runs of rounds. _Avoid:_ quiz, game.
-- **Build chord**, **Name chord**, **Build scale**, **My gaps**: trainers. _Avoid:_ exercise, drill.
+- **Trainer**: one of the Quiz's: levels or Custom, runs of rounds, opened at its **Setup**. _Avoid:_ quiz, game.
+- **Chords**, **Intervals**, **Build scale**, **My gaps**: trainers. _Avoid:_ exercise.
+- **Setup** (a trainer's): the one template every trainer opens at: its drill, Options, Timing, how it works, Start.
+  _Avoid:_ settings, config.
+- **Drill** («Режим»): the way Chords and Intervals ask the same things: **Cards** («Карточки»), **Quiz** («Тест»),
+  **Play** («Игра»), **By ear** («На слух»). Never an exercise. _Avoid:_ mode, game.
+- **Card** (a drill's): a chord or interval shown by one of its name, keys or staff (**Shown**), the rest
+  **Revealed**; never right or wrong. _Avoid:_ flashcard (in the UI), flip.
+- **Time limit** («Лимит времени»): a round's seconds; when they run out the answer is shown, the round missed.
+  _Avoid:_ timer, countdown.
+- **Roots** («Основные тоны»), **From notes** («От нот»): Custom's notes a chord or an interval is asked on,
+  grouped Natural, Sharp, Flat. _Avoid:_ used keys, keys.
 - **Level** (a trainer's): a fixed set of what it asks. _Avoid:_ stage.
 - **Custom**: a trainer's own choices. _Avoid:_ free.
 - **Round**: one question of a trainer. _Avoid:_ question, item.
