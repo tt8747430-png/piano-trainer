@@ -70,6 +70,11 @@ export const common: LocaleResources['common'] = {
     octaveUp: 'Октава вверх',
     zoomOut: 'Клавиши мельче',
     zoomIn: 'Клавиши крупнее',
+    keysInSight: 'Видно клавиш',
+    showing_one: 'Видна {{count}} клавиша ({{from}}–{{to}})',
+    showing_few: 'Видно {{count}} клавиши ({{from}}–{{to}})',
+    showing_many: 'Видно {{count}} клавиш ({{from}}–{{to}})',
+    showing_other: 'Видно {{count}} клавиши ({{from}}–{{to}})',
     names: {
       c: 'Названия нот: каждое C',
       all: 'Названия нот: все клавиши',

@@ -82,6 +82,10 @@ export const common = {
     octaveUp: 'Octave up',
     zoomOut: 'Smaller keys',
     zoomIn: 'Larger keys',
+    // What a key size just chosen shows, said for a moment on the rail.
+    keysInSight: 'Keys in sight',
+    showing_one: 'Showing {{count}} key ({{from}}–{{to}})',
+    showing_other: 'Showing {{count}} keys ({{from}}–{{to}})',
     names: { c: 'Note names: every C', all: 'Note names: every key', none: 'Note names: off' },
     glissando: 'Glissando',
     pedal: 'Pedal',
