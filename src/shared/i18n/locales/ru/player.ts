@@ -18,6 +18,7 @@ export const player: LocaleResources['player'] = {
   exportMidi: 'Экспорт в MIDI',
   exportMidiFixed: 'Экспорт в MIDI, ровный темп',
   exportMidiAligned: 'Экспорт в MIDI, по записи',
+  exportMusicXml: 'Экспорт в MusicXML',
   mode: { label: 'Играть или править', practise: 'Играть', edit: 'Править' },
   views: {
     label: 'Как показывать музыку',

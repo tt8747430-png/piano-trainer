@@ -419,6 +419,8 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 - **Sheet** (`Sheet`): card paper, 20px top corners, a grab handle, its Literata title with Close, a scrolling body,
   an optional footer over a hairline. It stands on the phone's keyboard. Never a sheet over a sheet: open a list as a
   page of the sheet.
+- **Drop zone** (`SongDrop`, a laptop's): while a file is dragged over the library, a panel inset 16px over the page,
+  its 2px dashed honey border on the page's paper at 90%, an upload icon over one line of what dropping does.
 - **A trainer's setup** (`TrainerSetup`, at most 672px wide): the drill as a segmented control of pictures over
   their names, then titled cards of `SettingRows` (Options, Timing): a pop-up button at a row's right, a list as a
   row with "2 of 41 ›" opening a sheet of check rows by group, switches; a muted card with an ⓘ saying the drill in a

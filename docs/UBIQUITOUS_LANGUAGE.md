@@ -175,13 +175,18 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   Copy · Cut · Paste). _Avoid:_ menu bar.
 - **Simplify** («Упростить»): every chord played as its plain triad on its root. _Avoid:_ easy chords.
 - **More** («Ещё»): the bar's last button: favourite, Move to, Archive, Song information, Sections, Share, Print,
-  Export to MIDI. _Avoid:_ overflow, options.
+  Export to MIDI, Export to MusicXML. _Avoid:_ overflow, options.
 - **Song information** («О песне»): a sheet of a piece's chords, facts and credits. _Avoid:_ details.
 - **Sections** (the Player's sheet): the sections by name and first bar. _Avoid:_ markers, chapters.
 - **Share** («Поделиться»): a link to a song, or an own song with its music. _Avoid:_ export link.
 - **Print** («Печать»): the view shown on paper or as a PDF. _Avoid:_ export to PDF.
 - **Export to MIDI** («Экспорт в MIDI»): the music as played, each part a track; **time aligned** or **fixed tempo**
   for a piece with a recording. _Avoid:_ download MIDI.
+- **Export to MusicXML** («Экспорт в MusicXML»): a piece's music as written, every staff, for a notation app.
+  _Avoid:_ save as XML, download score.
+- **Import** («Импорт»): a MusicXML or MIDI file made into the learner's own song, from New or dropped on the
+  library; **Left out** («Не вошло в песню») lists what the file held that a song cannot. _Avoid:_ upload, open
+  file.
 
 ## Views
 
