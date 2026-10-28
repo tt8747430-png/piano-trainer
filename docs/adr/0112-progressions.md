@@ -58,7 +58,8 @@ use one.
 - **The library's breadth** follows the common named progressions of the reference sites, checked as chords, with a
   **Modal** style of vamps that open in their mode (`mode` on an entry; its lines still written against major or
   minor). A rotation of a loop already there (vi–IV–I–V, the Aeolian shuttle, I–♭VII–IV beside I–♭VII–IV–I) stays
-  out, as the loop test holds.
+  out, as the loop test holds. A modal vamp is heard in a song only where it comes back to its first chord
+  (`heardLine`: I–II–I, never Aura Lee's I–II⁷ on to V), on the song page and in its songs alike.
 - **Both ways:** the page lists **Songs with this progression**, each at the bars it is first heard on, opening the
   Player there looped; a song's page names the library's progressions it uses as chips, each opening Progressions in
   the song's key, one heard only inside a longer one left out.
