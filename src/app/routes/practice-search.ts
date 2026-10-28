@@ -1,5 +1,12 @@
 import { isStepId, type StepId } from '@/entities/step'
-import { isLevelParam, isRounds, type TrainerView } from '@/features/trainer'
+import {
+  isCardSide,
+  isDrill,
+  isLevelParam,
+  isRounds,
+  isTimeLimit,
+  type TrainerView,
+} from '@/features/trainer'
 import { valueOr } from '@/shared/lib'
 import { parseNoteInOctave, PIANO } from '@/shared/lib/music'
 import { routeSearch, type Input, type Raw } from './read-search'
@@ -13,11 +20,15 @@ export function validateCheckSearch(input: Input<CheckSearch>): CheckSearch {
   return { of: isStepId(raw.of) ? raw.of : undefined }
 }
 
-// A trainer: its level and rounds, then Custom's choices, each absent for its own.
+// A trainer: its level, drill and rounds, its time limit, then Custom's choices, each absent for its own.
 const TRAINER_DEFAULTS: TrainerView = { rounds: 10 }
 const list = (raw: unknown) =>
   typeof raw === 'string' && /^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*$/.test(raw) ? raw : undefined
+/** Notes as the URL writes them, ASCII `#` and `b` (`C.F#.Bb`). */
+const notes = (raw: unknown) =>
+  typeof raw === 'string' && /^[A-G](#|b)?(\.[A-G](#|b)?)*$/.test(raw) ? raw : undefined
 const on = (raw: unknown) => (raw === true ? true : undefined)
+const either = <T>(is: (value: unknown) => value is T, raw: unknown) => (is(raw) ? raw : undefined)
 /** A note with its octave on the piano's keys; one off them is dropped. */
 const noteInOctave = (raw: unknown) => {
   if (typeof raw !== 'string') return undefined
@@ -28,14 +39,15 @@ export function readTrainerSearch(raw: Raw): TrainerView {
   return {
     level: isLevelParam(raw.level) ? raw.level : undefined,
     rounds: valueOr(isRounds, raw.rounds, TRAINER_DEFAULTS.rounds),
-    sizes: list(raw.sizes),
-    suspended: list(raw.suspended),
-    added: list(raw.added),
-    altered: on(raw.altered),
+    drill: either(isDrill, raw.drill),
+    show: either(isCardSide, raw.show),
+    limit: either(isTimeLimit, raw.limit),
+    chords: list(raw.chords),
+    roots: notes(raw.roots),
+    inversions: on(raw.inversions),
     scales: list(raw.scales),
     intervals: list(raw.intervals),
     ways: list(raw.ways),
-    qualities: list(raw.qualities),
     arpeggio: on(raw.arpeggio),
     kinds: list(raw.kinds),
     descending: on(raw.descending),

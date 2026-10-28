@@ -13,6 +13,7 @@ import {
 } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import type { IntervalWay } from '@/shared/lib/schedule'
+import type { CardSide } from './trainer-view'
 
 /** A chord to build or name: its symbol (over its bass in an inversion) and its tones from the root. */
 export interface ChordQuestion {
@@ -26,13 +27,32 @@ export interface ChordQuestion {
   readonly inversion: number | null
 }
 
+/** An interval up from a root: its keys and its notes as written. */
+export interface IntervalQuestion {
+  readonly interval: ReferenceInterval
+  readonly low: Midi
+  readonly high: Midi
+  readonly lowNote: SpelledNote
+  readonly highNote: SpelledNote
+  /** How it sounds: up, down or together. */
+  readonly way: IntervalWay
+}
+
 /**
- * One round of a trainer. Chord building, Scale building, Note reading and Key degrees are
- * answered on the keys; the rest by choosing one of their `options`.
+ * One round of a trainer. A chord or interval is asked four ways (a drill): a card turned over, a
+ * choice read or heard, or played on the keys. Building a chord or scale, reading a note and a key's
+ * degrees are answered on the keys; the rest by choosing one of their `options`.
  */
 export type Question =
   | ({ readonly mode: 'build-chord' } & ChordQuestion)
-  | ({ readonly mode: 'name-chord'; readonly options: readonly string[] } & ChordQuestion)
+  | ({
+      readonly mode: 'name-chord'
+      readonly options: readonly string[]
+      /** Heard, not seen: the keys and staff wait for the answer. */
+      readonly heard: boolean
+      readonly arpeggio: boolean
+    } & ChordQuestion)
+  | ({ readonly mode: 'chord-card'; readonly show: CardSide } & ChordQuestion)
   | {
       readonly mode: 'build-scale'
       readonly skill?: SkillId
@@ -40,22 +60,14 @@ export type Question =
       readonly kind: ScaleKind
       readonly notes: readonly Tone[]
     }
-  | {
+  | ({
       readonly mode: 'name-interval'
-      readonly interval: ReferenceInterval
-      readonly low: Midi
-      readonly high: Midi
-      readonly way: IntervalWay
       readonly options: readonly ReferenceInterval[]
-    }
-  | {
-      readonly mode: 'name-quality'
-      readonly root: SpelledNote
-      readonly keys: readonly Midi[]
-      readonly quality: ChordQuality
-      readonly arpeggio: boolean
-      readonly options: readonly ChordQuality[]
-    }
+      readonly heard: boolean
+    } & IntervalQuestion)
+  /** The lower note given, its upper note pressed. */
+  | ({ readonly mode: 'build-interval' } & IntervalQuestion)
+  | ({ readonly mode: 'interval-card'; readonly show: CardSide } & IntervalQuestion)
   | {
       readonly mode: 'name-scale'
       readonly root: SpelledNote
@@ -112,11 +124,19 @@ export const choosesKeys = (
 ): question is Extract<Question, { mode: 'build-chord' | 'build-scale' }> =>
   question.mode === 'build-chord' || question.mode === 'build-scale'
 
-/** Reading notes and The degrees of a key: each key pressed is part of the answer at once. */
+/** Reading notes, an interval's upper note and a key's degrees: each key pressed is answered at once. */
 export const pressesKeys = (
   question: Question,
-): question is Extract<Question, { mode: 'read-note' | 'key-degrees' }> =>
-  question.mode === 'read-note' || question.mode === 'key-degrees'
+): question is Extract<Question, { mode: 'read-note' | 'key-degrees' | 'build-interval' }> =>
+  question.mode === 'read-note' ||
+  question.mode === 'key-degrees' ||
+  question.mode === 'build-interval'
+
+/** A flashcard: turned over, never right or wrong. */
+export const isCard = (
+  question: Question,
+): question is Extract<Question, { mode: 'chord-card' | 'interval-card' }> =>
+  question.mode === 'chord-card' || question.mode === 'interval-card'
 
 export const isChoice = (question: Question): question is ChoiceQuestion => 'options' in question
 
@@ -127,8 +147,6 @@ export function choiceAnswer(question: ChoiceQuestion): string {
       return question.symbol
     case 'name-interval':
       return question.interval
-    case 'name-quality':
-      return question.quality
     case 'name-scale':
       return question.kind
     case 'key-signature':
@@ -152,6 +170,10 @@ export type RoundResult =
   | { readonly kind: 'choice'; readonly correct: boolean; readonly chosen: string }
   | { readonly kind: 'note'; readonly correct: boolean; readonly played: Midi }
   | { readonly kind: 'degrees'; readonly correct: boolean; readonly played: readonly Midi[] }
+  /** A card turned over. */
+  | { readonly kind: 'revealed'; readonly correct: true }
+  /** The answer shown unanswered: its time ran out, or the learner asked for it. */
+  | { readonly kind: 'shown'; readonly correct: false }
 
 export interface RoundState {
   readonly question: Question
@@ -168,6 +190,8 @@ export type RoundEvent =
   | { readonly type: 'clear' }
   | { readonly type: 'check' }
   | { readonly type: 'choose'; readonly option: string }
+  /** Turn a card over; on any other round, show the answer, unanswered. */
+  | { readonly type: 'reveal' }
 
 /** A round asked, nothing answered yet. */
 export const startRound = (question: Question): RoundState => ({
@@ -229,8 +253,9 @@ export function roundReducer(state: RoundState, event: RoundEvent): RoundState {
           : [...state.selected, event.midi],
       }
     case 'pressKey':
-      if (question.mode === 'read-note') {
-        const correct = event.midi === question.key
+      if (question.mode === 'read-note' || question.mode === 'build-interval') {
+        const wanted = question.mode === 'read-note' ? question.key : question.high
+        const correct = event.midi === wanted
         return {
           ...state,
           selected: [event.midi],
@@ -257,6 +282,13 @@ export function roundReducer(state: RoundState, event: RoundEvent): RoundState {
             },
           }
         : state
+    case 'reveal':
+      return {
+        ...state,
+        result: isCard(question)
+          ? { kind: 'revealed', correct: true }
+          : { kind: 'shown', correct: false },
+      }
   }
 }
 

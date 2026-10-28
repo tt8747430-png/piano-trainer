@@ -139,7 +139,7 @@ const firstChords: Lesson = {
         {
           kind: 'link',
           title: { en: 'Build chords in the Quiz', ru: 'Построение аккордов в тестах' },
-          target: { opens: 'quiz', trainer: 'build-chord' },
+          target: { opens: 'quiz', trainer: 'chords', drill: 'entry' },
         },
       ],
     },

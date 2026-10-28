@@ -8,8 +8,8 @@ import { useServices } from '@/shared/lib/services'
  * The MIDI keyboard as the settings say: the port hears the keyboard chosen,
  * shifted, its pedals read the right way round, so every reader of the port hears the same keys.
  * Its pedals are the live voice's pedals, always; its keys sound through the live voice, as loud as
- * the Touch hears them, only with Sound the MIDI keyboard on: what it sounded is let go as the switch
- * goes off or the app goes, so nothing rings on. With Play through the piano on, the app's music
+ * the Touch hears them, only with MIDI input plays sound on: what it sounded is let go as the switch
+ * goes off or the app goes, so nothing rings on. With MIDI output on, the app's music
  * sounds on the keyboard's speaker while it has one, and in the browser again once it goes.
  */
 export function useMidiSync(): void {

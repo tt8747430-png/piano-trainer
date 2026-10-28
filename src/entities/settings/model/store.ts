@@ -182,6 +182,7 @@ const deviceName = (value: unknown): string | null =>
 function midiSettings(value: unknown): MidiSettings {
   const saved = savedObject<MidiSettings>(value)
   return {
+    input: typeof saved.input === 'boolean' ? saved.input : DEFAULT_MIDI.input,
     device: deviceName(saved.device),
     sound: typeof saved.sound === 'boolean' ? saved.sound : DEFAULT_MIDI.sound,
     throughPiano:

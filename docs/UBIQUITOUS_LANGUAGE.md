@@ -241,8 +241,17 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Live voice** (`useLiveVoice`): the keys a hand plays, sounding from press to release. _Avoid:_ tap sound.
 - **Touch** («Чувствительность»): how the app hears a MIDI keyboard's velocities: Light, Normal, Heavy. _Avoid:_
   sensitivity (in code).
-- **Sound the MIDI keyboard**: the app sounds the keys played on it. _Avoid:_ MIDI thru.
-- **Play through the piano**: the app's music on the keyboard's own speaker. _Avoid:_ MIDI out.
+- **MIDI input** («MIDI-вход», `midi.input`): the app hears the MIDI keyboards; off, it hears none and asks nothing
+  as it opens (the port's status `off`). _Avoid:_ connect toggle, enable MIDI.
+- **MIDI input plays sound** («Звук MIDI-входа», `midi.sound`): the app sounds the keys played on it, for a keyboard
+  without speakers. _Avoid:_ MIDI thru, Sound the MIDI keyboard.
+- **MIDI output** («MIDI-выход», `midi.throughPiano`): the app's music on the keyboard's own speaker. _Avoid:_ Play
+  through the piano.
+- **Connected devices** («Подключённые устройства», `MidiDevice`): the MIDI devices plugged in, by name, with their
+  maker and whether they send keys or have a speaker; the one heard is chosen there (Any keyboard: all). _Avoid:_
+  ports, Listen to.
+- **MIDI log** («Журнал MIDI», `MidiLogEntry`): the last 200 messages every MIDI device sent, kept by the port,
+  shown live under Troubleshooting. _Avoid:_ MIDI monitor, console.
 
 ## Learn the song
 
@@ -318,8 +327,18 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Harmonise** («Гармонизовать ноту мелодии»): the Key view's chords that hold a melody note. _Avoid:_ Reharmonise.
 - **Chord finder** («Определитель аккордов»): names the chord played, in every **reading**. _Avoid:_ Find, chord
   detector.
-- **Trainer**: one of the Quiz's: levels or Custom, runs of rounds. _Avoid:_ quiz, game.
-- **Build chord**, **Name chord**, **Build scale**, **My gaps**: trainers. _Avoid:_ exercise, drill.
+- **Trainer**: one of the Quiz's: levels or Custom, runs of rounds, opened at its **Setup**. _Avoid:_ quiz, game.
+- **Chords**, **Intervals**, **Build scale**, **My gaps**: trainers. _Avoid:_ exercise.
+- **Setup** (a trainer's): the one template every trainer opens at: its drill, Options, Timing, how it works, Start.
+  _Avoid:_ settings, config.
+- **Drill** («Режим»): the way Chords and Intervals ask the same things: **Cards** («Карточки»), **Quiz** («Тест»),
+  **Play** («Игра»), **By ear** («На слух»). Never an exercise. _Avoid:_ mode, game.
+- **Card** (a drill's): a chord or interval shown by one of its name, keys or staff (**Shown**), the rest
+  **Revealed**; never right or wrong. _Avoid:_ flashcard (in the UI), flip.
+- **Time limit** («Лимит времени»): a round's seconds; when they run out the answer is shown, the round missed.
+  _Avoid:_ timer, countdown.
+- **Roots** («Основные тоны»), **From notes** («От нот»): Custom's notes a chord or an interval is asked on,
+  grouped Natural, Sharp, Flat. _Avoid:_ used keys, keys.
 - **Level** (a trainer's): a fixed set of what it asks. _Avoid:_ stage.
 - **Custom**: a trainer's own choices. _Avoid:_ free.
 - **Round**: one question of a trainer. _Avoid:_ question, item.

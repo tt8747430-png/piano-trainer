@@ -1,6 +1,6 @@
 # ADR 0034 — Sound and MIDI sit behind ports; the audio port knows what it sounds
 
-- **Status:** accepted · **Date:** 2026-09-24 · consolidated 2026-10-27
+- **Status:** accepted · **Date:** 2026-09-24 · consolidated 2026-10-27 · amended 2026-10-28
 
 ## Context
 
@@ -25,10 +25,29 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
   through `play()`. `stop()` stops the scheduled music only. One loudness for a velocity (`velocityGain`).
 - **A gain asked as each sound renders.** `play` takes a gain, so a volume moved while music plays is heard from the
   next sound (the Player's mix, ADR 0105).
-- **The MIDI keyboard is set up once, in Settings** (`pt-settings`' `midi`): which keyboard is heard (a chosen one
-  unplugged is away), whether the app sounds it, Play through the piano (the scheduled notes sent to its speaker),
-  an octave shift, the Touch, a reversed pedal. `MidiSync` tells the port (`configure`); a change lets go of every
-  key and pedal held. The three pedals are read (`onPedal`); an unplugged keyboard lets go of its keys and pedals.
+- **The MIDI keyboard is set up once, on its own screen** (Settings › MIDI keyboard, `/settings/midi`;
+  `pt-settings`' `midi`). Settings keeps one row for it, its state at its right (Off, the keyboard's name, Not
+  available). The screen holds, with nothing said twice:
+  - **MIDI input** (`input`): on asks for the keyboards and reconnects to an allowed one as the app opens; off stops
+    listening (`MidiPort.disconnect()`, status `off`) and asks nothing as the app opens. **MIDI output**
+    (`throughPiano`: the scheduled notes sent to the keyboard's speaker) and **MIDI input plays sound** (`sound`)
+    need input: greyed, they say so under their label.
+  - **Connected devices** (`MidiPort.devices()`): each device by its name, its ports of one name one device, with its
+    maker and whether it sends keys or has a speaker; Any keyboard or one chosen (a chosen one unplugged stays,
+    away); none, an empty state.
+  - **Playing**: the octave shift, the Touch, a reversed pedal.
+  - **Bluetooth**: a page cannot pair a BLE-MIDI keyboard, so a row opens the steps (the keyboard's Bluetooth, the
+    system's pairing on a Mac, Windows or Android; no iPhone browser has Web MIDI); paired, it shows in the list.
+  - **Troubleshooting › MIDI log** (`/settings/midi/log`): the port keeps the last 200 messages every keyboard sent,
+    the ones not heard too (`log()`, `onLog`, `clearLog`), read by `describeMidiData`; the log shows them newest
+    first, live (note on/off with the note's name, pedals, controllers, program, pitch bend, its velocity or value,
+    channel and keyboard, to the millisecond), paused and cleared.
+  - Where the browser has no Web MIDI or MIDI was blocked, a line over the switches says so, its ⓘ how to put it
+    right, and every control is greyed, never hidden.
+
+  `MidiSync` tells the port (`configure`); a change lets go of every key and pedal held. The three pedals are read
+  (`onPedal`); an unplugged keyboard lets go of its keys and pedals.
+
 - **Time is placed where it was heard.** A MIDI event carries its own time stamp, and the audio port answers which
   audio-clock time was heard at a moment (`audioTimeAt`: the context's time less its output latency).
 - **A piece's recording plays along** (`Recording`: its file, where bar 1 begins, one steady tempo, its tuning). It
@@ -54,3 +73,5 @@ ring while it is held and stop when it is let go, under the pedals, as a piano d
 - 0016 — A piece may carry a recording that plays along (2026-09-29).
 - 0034 — A key sounds while it is held, the MIDI keyboard set up once (2026-10-09). Its takes are ADR 0028's; its
   Free play went with the Chord finder (ADR 0052).
+- r13 — The MIDI keyboard gets its own screen: input and output switches, connected devices, Bluetooth pairing
+  steps and a live MIDI log; Settings shows its state in its row (2026-10-28).

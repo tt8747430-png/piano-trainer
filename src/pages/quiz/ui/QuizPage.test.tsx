@@ -15,9 +15,9 @@ describe('Practice → Quiz', () => {
   it('lists every trainer in four groups, by what it asks', async () => {
     await renderApp('/practice/quiz')
     expect(await screen.findByRole('heading', { level: 1, name: 'Quiz' })).toBeInTheDocument()
-    expect(hrefs(screen.getByRole('region', { name: 'Chords' }))).toEqual([
-      '/practice/quiz/build-chord',
-      '/practice/quiz/name-chord',
+    expect(hrefs(screen.getByRole('region', { name: 'Chords and intervals' }))).toEqual([
+      '/practice/quiz/chords',
+      '/practice/quiz/intervals',
       '/practice/quiz/chord-role',
     ])
     expect(hrefs(screen.getByRole('region', { name: 'Scales and keys' }))).toEqual([
@@ -26,8 +26,6 @@ describe('Practice → Quiz', () => {
       '/practice/quiz/key-degrees',
     ])
     expect(hrefs(screen.getByRole('region', { name: 'By ear' }))).toEqual([
-      '/practice/quiz/intervals-by-ear',
-      '/practice/quiz/chords-by-ear',
       '/practice/quiz/scales-by-ear',
       '/practice/quiz/progressions-by-ear',
     ])
@@ -62,10 +60,8 @@ describe('Practice → Quiz', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice')
     await user.click(await screen.findByRole('link', { name: /^Quiz / }))
-    await user.click(await screen.findByRole('link', { name: /^Chord building/ }))
-    expect(
-      await screen.findByRole('heading', { level: 1, name: 'Chord building' }),
-    ).toBeInTheDocument()
+    await user.click(await screen.findByRole('link', { name: /^Chords Cards/ }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Chords' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Back' }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Quiz' })).toBeInTheDocument()
     expect(router.state.location.pathname).toBe('/practice/quiz')
