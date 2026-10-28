@@ -14,6 +14,7 @@ The owner's feedback from every session, condensed and grouped by area. Read the
 - Song page (overview)
 - Song library
 - Lessons
+- Practice pages
 - Metronome
 - PWA and touch
 - Process
@@ -37,6 +38,8 @@ The owner's feedback from every session, condensed and grouped by area. Read the
 - **Fingering** is an option where it belongs, not a palette mode. The fingers menu must be intuitive.
 - **Mobile:** mobile needs a layout as usable as Sibelius, with no page overflow and no odd scrolling. All staves are the same width. The keyboard folds as it does everywhere else in the app.
 - **Editing values:** a note chosen, then a value tapped, changes that note. The edge between editing and adding new notes must be obvious.
+- **Like Flat's, exactly** (round 13): "the same features and same music notation and same icons and styles". On a laptop a docked side panel and a note-entry toolbar, never a folded bar at the foot ("annoying and not movable"); on a phone a bottom sheet that shrinks the score. Flat's sections, keys, shortcuts in every tooltip, the chord wizard, grace notes of both kinds.
+- **Notation Flat has, we have** (round 13): 64ths, tuplets, octave lines, glissando, every articulation and dynamic, repeats ×N, endings 3–4, page breaks, bar repeats, multi-bar rests, tempo changes, Roman numerals, free text, the two-note tremolo.
 
 ## Score editor: editing on the score
 - **Edit in place:** everything printed is editable on the score: title, tempo, notes, clefs, key, time, staff names, chords, lyrics and fingering.
@@ -139,9 +142,17 @@ The owner's feedback from every session, condensed and grouped by area. Read the
   - The ⋯ button shows its own hover.
 - **Swipe actions** on rows.
 - **Toasts** disappear as they should.
+- **Import and export** like Flat's (round 13): MusicXML and MIDI in, MusicXML and MIDI out; what can't be held is listed, never dropped.
 
 ## Lessons
 - **Multi-staff:** a lesson with several staves shows them as one score, never as separate pieces.
+- **From the theory-book reference** (round 13): function chips, root motion, variants, a takeaway per section, a page per section on a phone, progress rings and prerequisites, SATB on voicings.
+- **From the new reference pages** (round 14): rootless voicings, locked hands, modulation, slash chords, sus/6/9, the cadences in full, a practice-method course.
+
+## Practice pages
+- **Structure and best practices** from the reference apps and memory-palaces (round 13): grouped, each row its picture, name and one line; strips with ‹ ›; progression cards that play in place; intervals as rows; fingering drawn on a hand; autoplay on choosing.
+- **Chords and fingerings from the new data** (round 14): every chord type, its fingering by hand and inversion, voicings to choose (drop 2, rootless, quartal …), scale fingerings as the printed books give them, more scale kinds, Hanon 1–20, a tempo ladder. "If you need more information … you can fetch the remaining pages of these websites."
+- **Quiz:** one setup and four drills for every trainer; a cadence trainer.
 
 ## Metronome
 - **Layout:** like the owner's example: the BPM large with −10 −1 +1 +10, a slider, Tap tempo, sound and meter, one Play, the beats as squares.
@@ -151,6 +162,7 @@ The owner's feedback from every session, condensed and grouped by area. Read the
 - **The keyboard:**
   - Can be swiped while a key is held (non-glissando), so the piano mini-map isn't needed.
   - Folds the same everywhere.
+- **Fields above the phone's keyboard** as memory-palaces manages them (round 14): every field, its label and its buttons stay in sight; nothing jumps.
 
 ## Process
 - **The loop:** improve and review in a loop until the usage runs out, and resume on "continue".
@@ -161,3 +173,6 @@ The owner's feedback from every session, condensed and grouped by area. Read the
 - **Context:** compact at about 300k tokens.
 - **References:** read the docs of the reference apps (Dorico help, Flat help, Chordify support pages). Look for libraries rather than hand-rolling what exists.
 - **Content:** transcribe songs note for note and check them again before merging. Credit Bobrova's material ("n.b.") to Bobrova.
+- **The maximum principle** (round 14): "this spawns too many agents and eats up all the usage … in most cases [doing the work yourself] is the right way". Work inline; agents only when the owner-way test passes.
+- **Skills:** use impeccable for UI, superpowers where its procedure pays, the owner-way practices otherwise; know who calls which.
+- **Docs and skills reach `main` at once** ("did you merge the new skills to main"); code after the full suite.
