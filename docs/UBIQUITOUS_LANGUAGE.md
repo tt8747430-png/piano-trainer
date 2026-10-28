@@ -107,6 +107,14 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   chord size (`maj`, `min`, `dom`, `domb9`, `hd`, `=quality`). _Avoid:_ step, chord role.
 - **Progression** («Последовательность»): a line of numerals practised in any key. Never a piece. _Avoid:_ chord
   flow, sequence.
+- **Mode** (a progression's, «Лад»): the church mode its numerals are read in on the key's tonic (Lydian,
+  Mixolydian, Dorian, Phrygian, Locrian), each degree that mode's own chord, written against the major or minor key
+  its 3rd says (`readInMode`, `modeKey`). _Avoid:_ scale (here), modal key.
+- **Nashville number** («Нэшвиллское число»): a chord as its root's number from the tonic, the major scale counting
+  in either mode: `1 5 6m 4`, `2m⁷`, `♭7`, `1/3` (`nashvilleNumber`). _Avoid:_ number chord, degree number.
+- **Written as** («Запись»): how Progressions names a row's chords: Numerals · Nashville · Chords. _Avoid:_ notation.
+- **Voice-led · Block** («Плавное · Блоками»): a row's chords moved to the nearest position, or every one in root
+  position, the hand leaping. _Avoid:_ smooth/jumpy, VL on/off.
 - **Lead-in**: the chords played before each chord of a progression, its own V or ii–V. A way of playing, never a
   library entry. _Avoid:_ approach, tonicisation.
 - **Passing chord**: a chord that leads from one chord to the next. _Avoid:_ connecting chord.
@@ -401,6 +409,19 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Run**: a trainer's rounds, summed up. _Avoid:_ session, game.
 - **Metronome** («Метроном»): its own page: a beat at 30–300 BPM, **Tap tempo**, a sound and a meter. _Avoid:_ click
   track.
+- **Bar trainer** («Тренировка тактов»): the Metronome playing its bars, then silent for its muted bars, the beats
+  still shown. _Avoid:_ gap click, mute mode.
+- **Tempo word** («Обозначение темпа»): an Italian word a tempo is named by, with its range (`TEMPO_TERMS`). The ten
+  of the **ladder** name a tempo (grave … prestissimo); the shades between (lento, andantino, allegretto …) only
+  describe one. _Avoid:_ tempo name, BPM label.
+- **Expression text** (the editor's Text): words over a note in three groups, **Character** (dolce, con brio …),
+  **Tempo changes** (rit., riten., string., rubato …) and **Technique** (legato, simile, m.d., m.s.). _Avoid:_
+  remarks, directions.
+- **Interval's songs**: the tunes that open with an interval, up and down, behind its row's ⓘ. _Avoid:_ mnemonics.
+- **Parallel key** («Одноимённая»): the key on the same tonic in the other mode. Russian's «параллельная» is the
+  **relative** key. _Avoid:_ same-name key.
+- **Scale degrees** («Ступени»): tonic, supertonic, mediant, subdominant, dominant, submediant, leading tone (a minor
+  key's subtonic). _Avoid:_ degree roles.
 - **Search** («Поиск»): finds every named thing by kind. Its **Index** is one list of the registries. _Avoid:_
   glossary.
 
