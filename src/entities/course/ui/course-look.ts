@@ -1,6 +1,7 @@
 import {
   AudioLines,
   BookOpen,
+  CalendarCheck,
   Dumbbell,
   Footprints,
   Hand,
@@ -25,6 +26,7 @@ export const COURSE_ICON: Readonly<Record<string, LucideIcon>> = {
   'rhythm-basics': Timer,
   'intermediate-piano-playing': Hand,
   'the-sustain-pedal': AudioLines,
+  'how-to-practise': CalendarCheck,
   'first-exercises-for-both-hands': Dumbbell,
   'major-scales': TrendingUp,
   'minor-scales': TrendingDown,

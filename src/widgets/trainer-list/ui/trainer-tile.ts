@@ -1,6 +1,7 @@
 import {
   BookOpenText,
   ChartNoAxesColumnIncreasing,
+  FlagTriangleRight,
   Hash,
   KeyboardMusic,
   ListOrdered,
@@ -23,6 +24,7 @@ export const TRAINER_TILE: Readonly<Record<TrainerId, { icon: LucideIcon; paint:
   'key-signatures': { icon: Hash, paint: 'yellow' },
   'key-degrees': { icon: ListOrdered, paint: 'yellow' },
   'progressions-by-ear': { icon: ListMusic, paint: 'grass' },
+  cadences: { icon: FlagTriangleRight, paint: 'grass' },
   'scales-by-ear': { icon: Speech, paint: 'grass' },
   'reading-notes': { icon: BookOpenText, paint: 'yellow' },
   gaps: { icon: Target, paint: 'lilac' },

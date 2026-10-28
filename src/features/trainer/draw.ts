@@ -36,6 +36,7 @@ import {
 } from '@/shared/lib/music'
 import type { StaffId } from '@/shared/lib/notation'
 import type { IntervalWay } from '@/shared/lib/schedule'
+import { cadenceIn, cadencePlays, voiceCadence, type Cadence } from './ladders/cadences'
 import { EAR_SCALES } from './ladders/ear'
 import type { ChordQuestion, IntervalQuestion, Question } from './round-machine'
 import type { CardSide, Drill } from './trainer-view'
@@ -93,6 +94,15 @@ export type Asks =
       readonly kind: 'progressions'
       readonly keys: readonly Key[]
       readonly lines: readonly string[]
+    }
+  /** Cadences in these keys, asked as a drill asks them; a key asks only the cadences it has. */
+  | {
+      readonly kind: 'cadences'
+      readonly drill: Drill
+      readonly keys: readonly Key[]
+      readonly cadences: readonly Cadence[]
+      /** What a card shows: the cadence's name or its staff. */
+      readonly show?: 'name' | 'staff'
     }
 
 /** A numeral's triad in a key, in root position from the tonic's octave: every chord sounds as the key's. */
@@ -300,6 +310,43 @@ function skillRound(asks: Extract<Asks, { kind: 'skills' }>, index: number, rand
   return { mode: 'build-chord', ...chordQuestion(item, skill) } as const
 }
 
+/**
+ * A cadence asked as the drill asks it: a card, its staff read, the chord that tells it played, or
+ * heard after its key's tonic. A key draws only the cadences it has, and the options are those too.
+ */
+function cadenceRound(asks: Extract<Asks, { kind: 'cadences' }>, random: () => number): Question {
+  const key = pick(asks.keys, random)
+  const own = asks.cadences.filter((cadence) => cadenceIn(cadence, key))
+  const cadence = pick(own, random)
+  const voicing = voiceCadence(cadence, key)
+  switch (asks.drill) {
+    case 'flashcards':
+      return { mode: 'cadence-card', key, cadence, voicing, show: asks.show ?? 'name' }
+    case 'entry': {
+      const { at, inversion } = cadencePlays(cadence, key)
+      const played = voicing.chords[at]
+      const [numeral] = parseNumerals(played.numeral) ?? []
+      if (!numeral) throw new RangeError(`${played.numeral} is not a numeral`)
+      const { root, quality } = numeralChord(numeral, key, 'triads')
+      return {
+        mode: 'build-chord',
+        ...chordQuestion({ root, quality, inversion }, undefined),
+        cadence: { cadence, key, at, voicing },
+      }
+    }
+    case 'quiz':
+    case 'ear':
+      return {
+        mode: 'name-cadence',
+        key,
+        cadence,
+        voicing,
+        heard: asks.drill === 'ear',
+        options: withOthers(cadence, shuffled(own, random), random),
+      }
+  }
+}
+
 /** A count of sharps (positive) or flats (negative), as an option: `3♯`, `2♭`, `0`. */
 const countOption = (count: number): string =>
   count > 0 ? `${count}♯` : count < 0 ? `${-count}♭` : '0'
@@ -385,6 +432,8 @@ function draw(asks: Asks, index: number, random: () => number): Question {
         options: withOthers(line, shuffled(asks.lines, random), random),
       }
     }
+    case 'cadences':
+      return cadenceRound(asks, random)
   }
 }
 
@@ -406,6 +455,9 @@ function sameQuestion(a: Question, b: Question | null | undefined): boolean {
       return b.mode === a.mode && sameKey(a.key, b.key) && a.numeral === b.numeral
     case 'name-progression':
       return b.mode === a.mode && sameKey(a.key, b.key) && a.line === b.line
+    case 'name-cadence':
+    case 'cadence-card':
+      return b.mode === a.mode && sameKey(a.key, b.key) && a.cadence === b.cadence
     case 'build-scale':
     case 'name-scale':
       return b.mode === a.mode && a.kind === b.kind && sameNote(a.root, b.root)

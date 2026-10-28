@@ -23,10 +23,12 @@ import inversions from './inversions'
 import jazzChordSymbols from './jazz-chord-symbols'
 import jazzVoicings from './jazz-voicings'
 import keySignatures from './key-signatures'
+import lockedHands from './locked-hands'
 import majorScales from './major-scales'
 import minorScales from './minor-scales'
 import minorTwoFiveLevels from './minor-two-five-levels'
 import modalHarmony from './modal-harmony'
+import modulation from './modulation'
 import modes from './modes'
 import ninthChords from './ninth-chords'
 import passingChords from './passing-chords'
@@ -37,9 +39,11 @@ import readingChordSymbols from './reading-chord-symbols'
 import readingNotes from './reading-notes'
 import reharmonisingAMelody from './reharmonising-a-melody'
 import rhythmAndMeter from './rhythm-and-meter'
+import rootlessVoicings from './rootless-voicings'
 import scalesThroughTheChanges from './scales-through-the-changes'
 import seventhChords from './seventh-chords'
 import sixthAndSusChords from './sixth-and-sus-chords'
+import slashChords from './slash-chords'
 import syncopationAndSwing from './syncopation-and-swing'
 import tensions from './tensions'
 import theBlues from './the-blues'
@@ -65,6 +69,7 @@ export const LESSONS: readonly Lesson[] = [
   minorScales,
   transposition,
   inversions,
+  slashChords,
   chordFamily,
   chordFunctions,
   bassAndChords,
@@ -82,6 +87,7 @@ export const LESSONS: readonly Lesson[] = [
   progressionsInOrder,
   passingChords,
   reharmonisingAMelody,
+  modulation,
   gospelProgressions,
   gospelPassingChords,
   gospelReharmonisation,
@@ -96,6 +102,8 @@ export const LESSONS: readonly Lesson[] = [
   alteredDominants,
   jazzVoicings,
   guideTones,
+  rootlessVoicings,
+  lockedHands,
   scalesThroughTheChanges,
   pentatonicImprovisation,
 ]
