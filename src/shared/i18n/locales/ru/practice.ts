@@ -2,7 +2,7 @@ import type { LocaleResources } from '../../types'
 
 export const practice: LocaleResources['practice'] = {
   title: 'Практика',
-  groups: { atTheKeys: 'За клавиатурой', training: 'Тренировка' },
+  groups: { theory: 'Теория', playing: 'Игра', training: 'Тренировка' },
   pages: {
     chords: 'Аккорды',
     scales: 'Гаммы и тональности',
@@ -15,11 +15,15 @@ export const practice: LocaleResources['practice'] = {
     quiz: 'Тесты',
   },
   about: {
-    chords: 'От трезвучий до терцдецимаккордов · Обращения · Тенсии',
-    intervals: 'Каждый интервал на клавишах и на слух',
-    progressions: 'Известные или свои, в любой тональности',
-    chordFinder: 'Сыграйте аккорд и узнайте, как он называется и пишется',
-    metronome: 'Щелчки, сигналы или ударные в любом темпе',
+    chords: 'От трезвучий до 13-х, обращения',
+    scales: 'Гаммы, их аккорды, тональности',
+    intervals: 'Все интервалы на клавишах',
+    progressions: 'Известные обороты в любой тональности',
+    accompaniment: 'Фактуры для обеих рук',
+    chordFinder: 'Сыграйте аккорд — узнайте его имя',
+    exercises: 'Техника и упражнения',
+    quiz: 'Аккорды, тональности, слух, чтение',
+    metronome: 'Щелчки или ударные, любой темп',
   },
   root: 'Основной тон',
   hands: 'Руки',

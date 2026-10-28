@@ -1,8 +1,8 @@
 export const practice = {
   title: 'Practice',
-  // Practice's groups of pages (ADR 0052). The things come first, under no heading.
-  groups: { atTheKeys: 'At the keys', training: 'Training' },
-  // Its pages, each by its name: the things, the tools, the training.
+  // Practice's groups of pages (ADR 0052), each under its heading.
+  groups: { theory: 'Theory', playing: 'Playing', training: 'Training' },
+  // Its pages, each by its name.
   pages: {
     chords: 'Chords',
     scales: 'Scales and keys',
@@ -14,14 +14,17 @@ export const practice = {
     exercises: 'Exercises',
     quiz: 'Quiz',
   },
-  // What a page says of itself in a line: a thing what is inside it, a tool what it works out. A page
-  // of tabs or of groups says those, in their own words, so it has no line here.
+  // What a page says of itself in one short line, on Practice and in Search.
   about: {
-    chords: 'Triads to 13ths · Inversions · Tensions',
-    intervals: 'Every interval, heard and shown on the keys',
-    progressions: 'Pick a known one or type your own, in any key',
-    chordFinder: 'Play a chord to see its name and how it is written',
-    metronome: 'Clicks, beeps or a drum beat, at any tempo',
+    chords: 'Triads to 13ths, inversions',
+    scales: 'Scales, their chords, keys',
+    intervals: 'Every interval on the keys',
+    progressions: 'Known loops in any key',
+    accompaniment: 'Patterns for both hands',
+    chordFinder: 'Play a chord, see its name',
+    exercises: 'Technique and drills',
+    quiz: 'Chords, keys, ear, reading',
+    metronome: 'Clicks or drums, any tempo',
   },
   // Words the explorers share.
   root: 'Root',
