@@ -126,4 +126,9 @@ checked against them in a type test.
 - The client built once in `createServices()`; `auth` added to the services.
 - Tests: each gateway's results as `NetResult`s; signing out offline still clears the session.
 
+**Done (2026-10-29):** migrations applied (security advisor clean; `supabase/tests/access.sql` passes), the two
+Edge Functions deployed, `.env` with the public URL and key, `shared/api/supabase` (client, types) and
+`shared/api/auth` (gateway, fake, contract). **Moved to round 2:** the cloud-sync and storage ports, built with the
+sync that uses them. **Owner, later:** the purge's two Vault secrets.
+
 **1.5 Round end.** Full suite, build, ADR 0116's History, CLAUDE.md (`supabase/`, the gateways), push.

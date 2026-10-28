@@ -43,6 +43,10 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   - ids are branded by kind, and a URL carries a stable slug;
   - one schema per data shape (Valibot) gives the type, the validation and the local database's schema.
 
+- **Where it lives:** `supabase/` (migrations, Edge Functions, `tests/access.sql`); the client and the database's
+  types in `shared/api/supabase`, built once in the composition root from `.env` (the project's URL and
+  publishable key, public by design); the accounts' gateway in `shared/api/auth`.
+
 ## Consequences
 
 - The app's code drops the content and the first install drops its size; a screen showing content renders its
@@ -54,3 +58,6 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 
 - 0116 — The backend: Supabase, optional accounts, sync, content from the database, admin, the Public library
   (2026-10-29), from the owner's production request and memory-palaces' ADRs 0004 and 0005.
+- r1 — The database: the learner's document tables with row-level security, `push_documents`, private buckets
+  for takes and avatars, account deletion with its daily purge and Edge Functions; the accounts' gateway
+  (2026-10-29).

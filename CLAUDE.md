@@ -75,7 +75,7 @@ music, `exercise` music and arrangement, and none of them imports a package. `es
 
 - **app/** — `router.tsx` (code-based TanStack Router), `routes/` (each place's lazy screens in `*-screens.ts`, its
   search validators and defaults in `*-search.ts`, the remembered-view redirect in `remember.ts`, `ensureContent` in `content.ts`: a route that shows a song's music or a lesson brings it onto the device first), `App.tsx` (the
-  provider stack), `composition-root.ts` (built once in `main.tsx`: `createServices()` audio + MIDI, `createStores()` every saved store on one storage, `createContent()` where songs' music and lessons come from), `providers/`,
+  provider stack), `composition-root.ts` (built once in `main.tsx`: `createServices()` audio + MIDI, `createStores()` every saved store on one storage, `createContent()` where songs' music and lessons come from, `createBackend()` the Supabase client from `.env`, `createAuth()`), `providers/`,
   the layouts (`RootLayout`, `ShellLayout` → `AppShell` with the tab bar and the laptop's sidebar,
   `FullScreenLayout` for the Player), `testing/`. The router imports no page or widget code: its search files import
   types only, or a screen would leave its lazy chunk.
@@ -91,7 +91,7 @@ music, `exercise` music and arrangement, and none of them imports a package. `es
   the entity's own data shown), `index.ts`.
 - **shared/** — `lib` (pure helpers and hooks, plus the kernel: `music` theory, `arrangement` (a chart → a
   Performance), `notation` (a Performance → a Score), `schedule` (a Performance → sounds), `exercise`; and `services`
-  (audio and MIDI to React) and `shortcuts`), `api` (the `audio`, `midi` and `content` ports, browser adapters and fakes; `network`: every server call's result as a value, ADR 0116),
+  (audio and MIDI to React) and `shortcuts`), `api` (the `audio`, `midi` and `content` ports, browser adapters and fakes; `network`: every server call's result as a value; `auth`, accounts on Supabase Auth; `supabase`, the client and the database's types, ADR 0116),
   `ui` (the kit; shadcn in `ui/primitives`; `ui/score`, Verovio over a Score, imported by that path only), `i18n`,
   `config`, `test`.
 
@@ -143,6 +143,10 @@ written by `python3 scripts/text-accidentals.py`) before Noto Music.
 **Installed app:** `#standalone-boot` locks pinch and double-tap zoom in the installed app only; `theme.css` keeps
 text unselectable outside fields, with no callout, no overscroll and no double-tap wait
 (`src/app/standalone-boot.test.ts`).
+
+**Backend:** `supabase/` holds the migrations (applied to the project `itmiutianxvtlwhdsalo`), the Edge Functions and
+`tests/access.sql` (run it after a migration: every learner reaches only their own rows). A schema change is a new
+migration file, applied, then `shared/api/supabase/database.types.ts` brought level with the generated types.
 
 ## Read before you touch
 
