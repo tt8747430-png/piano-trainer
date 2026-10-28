@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFolderName, type ShelvedFolder } from '@/entities/library'
-import { SongDrop, useSongImport } from '@/features/song-files'
+import { useSongDrop, useSongImport } from '@/features/song-files'
 import type { SongsFilter } from '../model/songs-filter'
 import { useLibraryPage } from '../model/use-library-page'
 import { LibraryBrowse } from './LibraryBrowse'
@@ -34,30 +34,30 @@ export function LibraryScreen({
   const page = useLibraryPage(folder, { ...filter, q })
   // Import, from New or a file dropped on the library, made where the learner is (ADR 0107).
   const songImport = useSongImport(folder?.id ?? null)
+  const drop = useSongDrop(songImport.importFile)
   // No search, level, With chords, favourites or chords known: the route fills its defaults.
   const clear = () => void navigate({ to: '.', search: {}, replace: true })
   const { view } = page
   const empty = view.folders.length === 0 && view.shown === 0
   return (
-    <SongDrop onFile={songImport.importFile}>
-      <div className="flex flex-col gap-4 pb-4">
-        <LibraryHeader page={page} folder={folder} />
-        <LibraryFilters page={page} filter={filter} screen={folder ? nameOf(folder) : t('title')} />
-        {empty ? (
-          <LibraryEmpty page={page} inFolder={folder !== null} filter={filter} onClear={clear} />
-        ) : page.select.on ? (
-          <LibrarySelect page={page} />
-        ) : (
-          <LibraryBrowse page={page} onClear={clear} />
-        )}
-        {page.select.on ? (
-          <SelectionBar page={page} />
-        ) : (
-          <NewActions page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
-        )}
-        <LibraryDialogs page={page} folder={folder} />
-        {songImport.view}
-      </div>
-    </SongDrop>
+    <div className="flex flex-col gap-4 pb-4" {...drop.dropProps}>
+      <LibraryHeader page={page} folder={folder} />
+      <LibraryFilters page={page} filter={filter} screen={folder ? nameOf(folder) : t('title')} />
+      {empty ? (
+        <LibraryEmpty page={page} inFolder={folder !== null} filter={filter} onClear={clear} />
+      ) : page.select.on ? (
+        <LibrarySelect page={page} />
+      ) : (
+        <LibraryBrowse page={page} onClear={clear} />
+      )}
+      {page.select.on ? (
+        <SelectionBar page={page} />
+      ) : (
+        <NewActions page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
+      )}
+      <LibraryDialogs page={page} folder={folder} />
+      {songImport.view}
+      {drop.panel}
+    </div>
   )
 }
