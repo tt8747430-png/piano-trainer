@@ -222,6 +222,30 @@ export const music: LocaleResources['music'] = {
   playBar: 'Сыграть такт {{n}}',
   playBarChord: 'Сыграть такт {{n}}, {{symbol}}',
   rowChords: 'Аккорды',
+  harmony: {
+    label: 'Показать',
+    view: { function: 'Функции', motion: 'Основные тоны' },
+    chips: 'Аккорды по функциям',
+    moves: 'Аккорды по ходам основных тонов',
+    function: { tonic: 'Тоника', subdominant: 'Субдоминанта', dominant: 'Доминанта' },
+    short: { tonic: 'T', subdominant: 'S', dominant: 'D' },
+    chip: '{{numeral}}, {{what}}',
+    move: {
+      fifth: { down: 'на квинту вниз', up: 'на квинту вверх' },
+      third: { down: 'на терцию вниз', up: 'на терцию вверх' },
+      second: { down: 'на секунду вниз', up: 'на секунду вверх' },
+    },
+    legend: {
+      fifth: {
+        name: 'Квинта вниз',
+        text: 'Самое сильное тяготение: так завершается большинство каденций',
+      },
+      third: { name: 'Терция вниз', text: 'Мягко: у двух аккордов два общих звука' },
+      second: { name: 'Секунда вверх', text: 'Свежо: у двух аккордов нет общих звуков' },
+      back: { name: '↑5 ↑3 ↓2', text: 'Те же ходы в обратную сторону: шаг назад' },
+    },
+    playChain: 'Сыграть цепочку',
+  },
   chordDiagram: '{{symbol}}: {{notes}}',
   chordSummary: 'Аккорды',
   chordSheet: {

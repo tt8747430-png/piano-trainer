@@ -23,6 +23,11 @@ export interface KeyMark {
   readonly note?: string
   /** A finger number, drawn in the finger row under the keys. */
   readonly finger?: Finger
+  /**
+   * Where a voice was a moment ago (a voice's letter on the key it left): the key plain, its label
+   * faint, so the voice's move shows.
+   */
+  readonly ghost?: true
 }
 
 /** What the keyboard shows on its keys, key by key. */
@@ -58,6 +63,8 @@ export interface KeyLabel {
   readonly caption?: string
   /** A mark's note, under its text. */
   readonly note?: string
+  /** A voice's letter left behind on the key it moved from: drawn faint. */
+  readonly ghost?: true
 }
 
 /** One key's face: its fill, whether it is down or outlined, its label and its letter. */
@@ -72,7 +79,7 @@ export interface KeyLook {
 function fillOf(key: Midi, states: KeyStates, mark: KeyMark | undefined): KeyFill {
   if (states.wrong?.has(key)) return 'wrong'
   if (states.lit?.has(key)) return 'lit'
-  if (mark) return mark.tone
+  if (mark && !mark.ghost) return mark.tone
   if (states.selected?.has(key)) return 'selected'
   return isBlackKey(key) ? 'black' : 'white'
 }
@@ -100,6 +107,7 @@ function labelOf(
       text: mark.label,
       ...(mark.caption ? { caption: mark.caption } : {}),
       ...(mark.note && text.markNotes ? { note: mark.note } : {}),
+      ...(mark.ghost ? { ghost: true as const } : {}),
     }
   }
   if (wrong) return { kind: 'mark', text: WRONG_MARK }
@@ -164,4 +172,5 @@ export const sameLook = (a: KeyLook, b: KeyLook): boolean =>
   a.label?.text === b.label?.text &&
   a.label?.caption === b.label?.caption &&
   a.label?.note === b.label?.note &&
+  a.label?.ghost === b.label?.ghost &&
   a.letter === b.letter

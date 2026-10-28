@@ -3,6 +3,7 @@ import type { Lesson } from '../model/types'
 
 const chordFunctions: Lesson = {
   id: 'chord-functions',
+  after: ['chord-family'],
   title: {
     en: 'Chord functions: tonic, subdominant, dominant',
     ru: 'Функции аккордов: тоника, субдоминанта, доминанта',
@@ -36,6 +37,10 @@ const chordFunctions: Lesson = {
           ],
         },
       ],
+      takeaway: {
+        en: 'Every chord either rests, moves away or pulls home.',
+        ru: 'Каждый аккорд либо стоит на месте, либо уходит, либо тянет домой.',
+      },
     },
     {
       heading: { en: 'ii stands in for IV', ru: 'ii вместо IV' },
@@ -51,6 +56,10 @@ const chordFunctions: Lesson = {
         { kind: 'chords', symbols: ['F', 'Dm'] },
         { kind: 'progression', numerals: 'I ii V I', key: C_MAJOR },
       ],
+      takeaway: {
+        en: 'ii does the subdominant’s job, as IV does.',
+        ru: 'ii выполняет задачу субдоминанты, как и IV.',
+      },
     },
     {
       heading: { en: 'vii° stands in for V', ru: 'vii° вместо V' },
@@ -62,8 +71,36 @@ const chordFunctions: Lesson = {
             ru: 'B° — это G7 без основного тона соль. В нём остаётся си, вводный тон, на полутон ниже до. Поэтому он так же тянется вверх, к до.',
           },
         },
-        { kind: 'chords', symbols: ['G7', 'B°', 'C'] },
+        {
+          kind: 'variants',
+          variants: [
+            {
+              label: { en: 'V7', ru: 'V7' },
+              caption: {
+                en: 'I – V7 – I · the dominant 7th',
+                ru: 'I – V7 – I · доминантсептаккорд',
+              },
+              example: { kind: 'progression', numerals: 'I V7 I', key: C_MAJOR },
+            },
+            {
+              label: { en: 'vii°', ru: 'vii°' },
+              caption: {
+                en: 'I – vii° – I · the same pull, without G',
+                ru: 'I – vii° – I · то же тяготение, без соль',
+              },
+              text: {
+                en: 'B and F still resolve to C and E.',
+                ru: 'Си и фа всё так же разрешаются в до и ми.',
+              },
+              example: { kind: 'progression', numerals: 'I vii° I', key: C_MAJOR },
+            },
+          ],
+        },
       ],
+      takeaway: {
+        en: 'vii° is a dominant without its root.',
+        ru: 'vii° — это доминанта без основного тона.',
+      },
     },
     {
       heading: { en: 'vi stands in for I', ru: 'vi вместо I' },
@@ -77,6 +114,10 @@ const chordFunctions: Lesson = {
         },
         { kind: 'progression', numerals: 'I IV V vi', key: C_MAJOR },
       ],
+      takeaway: {
+        en: 'vi is a softer home, and V to vi surprises the ear.',
+        ru: 'vi — мягкий дом, а V – vi удивляет слух.',
+      },
     },
     {
       heading: { en: 'All three groups', ru: 'Все три группы' },
@@ -90,6 +131,14 @@ const chordFunctions: Lesson = {
           ],
         },
         { kind: 'progression', numerals: 'I vi ii V I', key: C_MAJOR },
+        {
+          kind: 'note',
+          rule: { en: 'Two notes shared, one job', ru: 'Два общих звука — одна задача' },
+          text: {
+            en: 'A chord can stand in for one it shares two notes with.',
+            ru: 'Аккорд может заменить тот, с которым у него два общих звука.',
+          },
+        },
       ],
     },
     {

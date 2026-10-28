@@ -110,6 +110,13 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Lead-in**: the chords played before each chord of a progression, its own V or ii–V. A way of playing, never a
   library entry. _Avoid:_ approach, tonicisation.
 - **Passing chord**: a chord that leads from one chord to the next. _Avoid:_ connecting chord.
+- **Harmonic function** («Функция»; UI Tonic, Subdominant, Dominant, T S D): what a chord does in its key: rests,
+  moves away, pulls home (`harmonicFunction`). Not a song-in-degrees' Function above. _Avoid:_ predominant, PD,
+  role.
+- **Root motion** («Ход основных тонов»): how a chord's root moves to the next, by letters: `↓5`, `↓3`, `↑2` (the
+  strong moves) and their opposites (`rootMove`). _Avoid:_ bass motion, root movement.
+- **Function chip** / **root-motion chip**: a progression's chord as a chip, its numeral over its function or its
+  root's move, in that one's paint, ink while it sounds (`HarmonyChip`). _Avoid:_ tag, badge.
 - **Holds** (a chord holds a note): the note is one of its notes, any octave. _Avoid:_ contains, fits.
 - **Meter** («Размер»): a time signature, 1–12 over 2, 4 or 8, with its counted beats and their groups. _Avoid:_
   time sig.
@@ -293,6 +300,18 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   module, path.
 - **Lesson** («Урок»): a worksheet that teaches music, a journey's or a course's. _Avoid:_ tutorial, article.
 - **Lesson question**: a lesson's question answered on its keys; rates nothing. _Avoid:_ quiz.
+- **Variants** («Варианты»): one lesson example in versions, a chip each (a switch for an A/B pair), redrawn in
+  place with its caption. _Avoid:_ tabs, options.
+- **Takeaway** (UI In short, «Коротко»): a section in one sentence, on a lilac card at its end. _Avoid:_ TL;DR,
+  summary (that is the lesson's).
+- **Rule** (a note's `rule`): a rule's name over what it says, on a card. _Avoid:_ tip.
+- **After** («Сначала»; a lesson's `after`): the lessons to read before it, of its own journey or course. _Avoid:_
+  prerequisites (in the UI), requires.
+- **Sections read** (`read`): which of a lesson's sections were shown or scrolled to; they fill its ring. _Avoid:_
+  progress (that is learned steps).
+- **Page** (a lesson on a phone): one section a screen, turned by Next and Done. _Avoid:_ slide, card.
+- **S A T B**: a four-voice voicing's soprano, alto, tenor and bass, named beside its first chord and on the keys;
+  the key a voice left keeps its letter faint (a **ghost**). _Avoid:_ parts.
 - **Step** (`StepId`): one thing learned and marked: a lesson, a piece, a chord family or a scale kind. _Avoid:_
   item, task, node.
 - **Learned**: a step the learner marked. _Avoid:_ done, completed.

@@ -32,6 +32,20 @@ export function CourseLessonPage() {
       lesson={place.lesson}
       step={courseLessonStepId(courseId, lessonId)}
       back={<BackButton fallback={course} />}
+      after={(place.lesson.after ?? []).flatMap((id) => {
+        const before = place.course.lessons.find((each) => each.id === id)
+        return before
+          ? [
+              {
+                title: localText(before.title, locale),
+                link: {
+                  to: '/courses/$courseId/$lessonId',
+                  params: { courseId, lessonId: id },
+                } as const,
+              },
+            ]
+          : []
+      })}
       place={
         <>
           <PlaceLink {...course}>{courseTitle}</PlaceLink> ·{' '}

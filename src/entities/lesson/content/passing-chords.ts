@@ -3,6 +3,7 @@ import type { Lesson } from '../model/types'
 
 const passingChords: Lesson = {
   id: 'passing-chords',
+  after: ['progressions-in-order'],
   title: { en: 'Passing chords', ru: 'Проходящие аккорды' },
   summary: {
     en: 'Lead into a chord with a short chord just before it: its dominant 7th, a diminished 7th, or a chromatic slide.',

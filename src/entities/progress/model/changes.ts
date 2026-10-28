@@ -40,6 +40,16 @@ export function withRun(state: ProgressState, key: RunKey, run: RunResult): Prog
   }
 }
 
+/** The progress with a lesson's section read, by its place: each kept once, in order. */
+export function withSectionRead(state: ProgressState, id: StepId, section: number): ProgressState {
+  const before = state.read[id] ?? []
+  if (before.includes(section)) return state
+  return {
+    ...state,
+    read: { ...state.read, [id]: [...before, section].sort((a, b) => a - b) },
+  }
+}
+
 /** The progress with a song lesson done on `at` (an ISO date), keeping the day it was first done. */
 export const withLesson = (state: ProgressState, key: LessonKey, at: string): ProgressState =>
   state.lessons[key] !== undefined

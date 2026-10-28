@@ -1,25 +1,42 @@
+import { Play } from 'lucide-react'
 import { createContext, use, useMemo, useRef, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { chordSymbol, voiceLead, type Midi, type RowPosition } from '@/shared/lib/music'
+import {
+  chordSymbol,
+  isStrongMove,
+  rootMoveText,
+  voiceLead,
+  type Midi,
+  type RowPosition,
+} from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
-import { walkSounds } from '@/shared/lib/schedule'
-import { usePlayback } from '@/shared/lib/services'
+import { chordSounds, walkSounds } from '@/shared/lib/schedule'
+import { usePlayback, usePlayhead } from '@/shared/lib/services'
 import { useFitZoom } from '@/shared/lib'
 import {
   FloatingActions,
+  FUNCTION_PAINT,
+  HarmonyChip,
+  HarmonyChips,
+  MOVE_PAINT,
   PlayFab,
   PlayButton,
+  PlayLabel,
   type ShownKeys,
   unmarked,
   usePlayKey,
 } from '@/shared/ui'
-import type { RowChord } from '../model/chord-row'
+import { Button } from '@/shared/ui/primitives/button'
+import { rowMoves, type RowChord } from '../model/chord-row'
 import { chordsMusic } from '../model/chords-music'
 import { voicedShown } from '../model/marks'
 import { TappableStaff } from './TappableStaff'
 
 /** How fast a row walks, a chord each two beats. */
 const ROW_TEMPO = 84
+/** Where each chord of a row starts as the row walks, in seconds. */
+const rowOnsets = (count: number): number[] =>
+  Array.from({ length: count }, (_, place) => (place * 2 * 60) / ROW_TEMPO)
 
 /** What a row's parts share: its chords as voiced, whether it plays, and how. */
 interface RowPlayback {
@@ -27,8 +44,12 @@ interface RowPlayback {
   /** Each chord's keys as the row voices them, the bass first. */
   readonly voiced: readonly (readonly Midi[])[]
   readonly onShow: (shown: ShownKeys) => void
-  readonly playing: 'row' | null
+  readonly playing: 'row' | number | null
+  /** The chord sounding, by its place: the row's as it walks, or one played alone. */
+  readonly sounding: number | null
   playRow(): void
+  /** One chord alone, as the row voices it, shown on the keys by its degrees. */
+  playChord(place: number): void
 }
 
 const RowContext = createContext<RowPlayback | null>(null)
@@ -55,7 +76,7 @@ export function ChordRow({
   onShow: (shown: ShownKeys) => void
   children: ReactNode
 }) {
-  const playback = usePlayback<'row'>()
+  const playback = usePlayback<'row' | number>()
   const inversion = position?.inversion
   const nearest = position?.nearest
   const voiced = useMemo(
@@ -66,14 +87,23 @@ export function ChordRow({
       ),
     [chords, inversion, nearest],
   )
+  const onsets = useMemo(() => rowOnsets(voiced.length), [voiced.length])
+  const walking = usePlayhead(playback.playing === 'row' ? playback.handle : null, onsets)
   const row: RowPlayback = {
     chords,
     voiced,
     onShow,
     playing: playback.playing,
+    sounding: typeof playback.playing === 'number' ? playback.playing : walking,
     playRow: () => {
       onShow(unmarked(voiced.flat()))
       playback.toggle('row', () => walkSounds(voiced, { arpeggio: false, tempo: ROW_TEMPO }))
+    },
+    playChord: (place) => {
+      const chord = chords[place]?.chord
+      const keys = voiced[place] ?? []
+      onShow(chord ? voicedShown(chord, keys) : unmarked(keys))
+      playback.toggle(place, () => chordSounds(keys, { arpeggio: false }))
     },
   }
   return (
@@ -146,10 +176,61 @@ export function RowStaff() {
 }
 
 /**
- * Play for the whole row, turning into Stop: honey where it is the screen's one action (Progressions),
- * which Enter plays too; soft beside other examples.
+ * The row's chords as chips under its staff (DESIGN.md, Harmony): each numeral over what the chord
+ * does in its key (`function`), or over how its root moved there (`motion`: a strong move in its
+ * paint, one that steps back neutral). The chip sounding follows the row as it plays; a tap plays its
+ * chord. Only a progression's row, its chords read in a key, has them.
  */
-export function RowPlay({ variant }: { variant: 'default' | 'soft' }) {
+export function RowChips({ show }: { show: 'function' | 'motion' }) {
+  const { t } = useTranslation('music')
+  const { chords, sounding, playChord } = useRow()
+  const moves = useMemo(() => rowMoves(chords), [chords])
+  if (chords.some((chord) => chord.function === undefined || chord.caption === undefined))
+    return null
+  return (
+    <HarmonyChips
+      label={t(show === 'function' ? 'harmony.chips' : 'harmony.moves')}
+      count={chords.length}
+    >
+      {chords.map((chord, place) => {
+        const numeral = chord.caption ?? ''
+        const said = chord.function ?? 'tonic'
+        const move = moves[place] ?? null
+        const strong = move !== null && isStrongMove(move)
+        return (
+          <HarmonyChip
+            key={place}
+            numeral={numeral}
+            {...(show === 'function'
+              ? {
+                  detail: t(`harmony.short.${said}`),
+                  paint: FUNCTION_PAINT[said],
+                  label: t('harmony.chip', { numeral, what: t(`harmony.function.${said}`) }),
+                }
+              : {
+                  detail: move ? rootMoveText(move) : undefined,
+                  paint: move && strong ? MOVE_PAINT[move.by] : undefined,
+                  label: move
+                    ? t('harmony.chip', {
+                        numeral,
+                        what: t(`harmony.move.${move.by}.${move.down ? 'down' : 'up'}`),
+                      })
+                    : numeral,
+                })}
+            sounding={sounding === place}
+            onClick={() => playChord(place)}
+          />
+        )
+      })}
+    </HarmonyChips>
+  )
+}
+
+/**
+ * Play for the whole row, turning into Stop: honey where it is the screen's one action (Progressions),
+ * which Enter plays too; soft beside other examples, named as it is used there (Play the chain).
+ */
+export function RowPlay({ variant, label }: { variant: 'default' | 'soft'; label?: string }) {
   const { t } = useTranslation('music')
   const { playing, playRow } = useRow()
   usePlayKey(playRow, variant === 'default')
@@ -159,6 +240,15 @@ export function RowPlay({ variant }: { variant: 'default' | 'soft' }) {
       <FloatingActions>
         <PlayFab label={t('play')} playing={playing === 'row'} onClick={playRow} />
       </FloatingActions>
+    )
+  if (label)
+    return (
+      <Button variant="soft" onClick={playRow} className="self-start rounded-full">
+        <PlayLabel playing={playing === 'row'}>
+          <Play aria-hidden data-icon="inline-start" className="fill-current" />
+          {label}
+        </PlayLabel>
+      </Button>
     )
   return (
     <PlayButton
