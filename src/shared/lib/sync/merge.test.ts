@@ -106,7 +106,15 @@ describe('mergeDocuments, with no rule for a field both changed', () => {
 
   it('merges a list of items with ids item by item', () => {
     const base = doc({ songs: [{ id: 's1', title: 'One' }] }, at(0))
-    const mine = doc({ songs: [{ id: 's1', title: 'One' }, { id: 's2', title: 'Two' }] }, at(1))
+    const mine = doc(
+      {
+        songs: [
+          { id: 's1', title: 'One' },
+          { id: 's2', title: 'Two' },
+        ],
+      },
+      at(1),
+    )
     const theirs = doc({ songs: [{ id: 's1', title: 'One!' }] }, at(2))
     expect(mergeDocuments(mine, theirs, base).document.data).toEqual({
       songs: [

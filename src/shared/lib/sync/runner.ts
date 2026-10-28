@@ -11,11 +11,23 @@ export interface SyncedSave {
 
 export type SyncOutcome = 'synced' | NetFailure
 
+/** Where the sync stands: idle, running, or its last run stopped; how many stores wait; when it last got through. */
+export interface SyncStatus {
+  readonly state: 'idle' | 'syncing' | 'offline' | 'failed'
+  readonly waiting: number
+  readonly lastSynced: string | null
+}
+
 export interface SyncRunner {
   /** The storage the stores save to: it notes which of them changed since their last sync. */
   readonly storage: Storage
   /** One sync of every store; a request while one runs joins it. */
   syncNow(): Promise<SyncOutcome>
+  status(): SyncStatus
+  /** Hears every change of `status`; returns how to stop. */
+  subscribe(listener: () => void): () => void
+  /** Hears every save a store writes; returns how to stop. */
+  onChange(listener: () => void): () => void
 }
 
 /** What the device keeps of each store's sync: the cloud copy it last saw, and when it changed since. */
@@ -78,6 +90,19 @@ export function createSyncRunner({
   now?: () => string
 }): SyncRunner {
   const tableOf = new Map(saves.map((save) => [save.key, save.table]))
+  const statusListeners = new Set<() => void>()
+  const changeListeners = new Set<() => void>()
+  let state: SyncStatus['state'] = 'idle'
+  let lastSynced: string | null = null
+  let status: SyncStatus = { state, waiting: 0, lastSynced }
+  const refresh = () => {
+    const entries = journal()
+    const waiting = saves.filter((save) => entries[save.table]?.changedAt).length
+    if (status.state === state && status.waiting === waiting && status.lastSynced === lastSynced)
+      return
+    status = { state, waiting, lastSynced }
+    for (const listener of statusListeners) listener()
+  }
   /** What the sync itself last wrote under each key: a store writing the same back is no change. */
   const applied = new Map<string, string>()
 
@@ -96,7 +121,10 @@ export function createSyncRunner({
 
   const noteChange = (key: string, value: string | null) => {
     const table = tableOf.get(key)
-    if (table && value !== applied.get(key)) record(table, { ...entryOf(table), changedAt: now() })
+    if (!table || value === applied.get(key)) return
+    record(table, { ...entryOf(table), changedAt: now() })
+    refresh()
+    for (const listener of changeListeners) listener()
   }
 
   const watched: Storage = {
@@ -176,17 +204,37 @@ export function createSyncRunner({
 
   let running: Promise<SyncOutcome> | null = null
   async function run(): Promise<SyncOutcome> {
+    state = 'syncing'
+    refresh()
     let outcome: SyncOutcome = 'synced'
     for (const save of saves) {
       const result = await syncSave(save)
-      if (result === 'offline') return 'offline'
+      if (result === 'offline') {
+        outcome = 'offline'
+        break
+      }
       if (result !== 'synced') outcome = result
     }
+    state = outcome === 'synced' ? 'idle' : outcome === 'offline' ? 'offline' : 'failed'
+    if (outcome === 'synced') lastSynced = now()
+    refresh()
     return outcome
   }
 
+  // Changes saved before this page opened still wait.
+  refresh()
+
   return {
     storage: watched,
+    status: () => status,
+    subscribe: (listener) => {
+      statusListeners.add(listener)
+      return () => void statusListeners.delete(listener)
+    },
+    onChange: (listener) => {
+      changeListeners.add(listener)
+      return () => void changeListeners.delete(listener)
+    },
     syncNow: () => {
       running ??= run().finally(() => {
         running = null

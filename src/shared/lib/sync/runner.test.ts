@@ -119,3 +119,52 @@ describe('a sync', () => {
     expect([first, second]).toEqual(['synced', 'synced'])
   })
 })
+
+describe('a sync’s state', () => {
+  it('counts the stores waiting, says when it syncs, and when it last did', async () => {
+    const cloud = createFakeCloud()
+    const phone = device(cloud)
+    const seen: string[] = []
+    phone.runner.subscribe(() => seen.push(phone.runner.status().state))
+    expect(phone.runner.status()).toEqual({ state: 'idle', waiting: 0, lastSynced: null })
+    phone.save('pt-settings', { theme: 'dark' })
+    phone.save('pt-pieces', { songs: [] })
+    expect(phone.runner.status().waiting).toBe(2)
+    await phone.runner.syncNow()
+    expect(phone.runner.status()).toMatchObject({ state: 'idle', waiting: 0 })
+    expect(phone.runner.status().lastSynced).not.toBeNull()
+    expect(seen).toContain('syncing')
+  })
+
+  it('tells who listens of each change a store saves, until they stop', () => {
+    const phone = device(createFakeCloud())
+    let heard = 0
+    const stop = phone.runner.onChange(() => heard++)
+    phone.save('pt-settings', { theme: 'dark' })
+    stop()
+    phone.save('pt-settings', { theme: 'light' })
+    expect(heard).toBe(1)
+  })
+
+  it('remembers it was offline until a sync gets through', async () => {
+    let online = false
+    const phone = device(createFakeCloud({ online: () => online }))
+    phone.save('pt-settings', { theme: 'dark' })
+    await phone.runner.syncNow()
+    expect(phone.runner.status().state).toBe('offline')
+    online = true
+    await phone.runner.syncNow()
+    expect(phone.runner.status().state).toBe('idle')
+  })
+})
+
+describe('a sync runner opened on a device with changes waiting', () => {
+  it('counts them from the start', () => {
+    const cloud = createFakeCloud()
+    const storage = createMemoryStorage()
+    const first = createSyncRunner({ cloud, saves: SAVES, storage, announce: () => {} })
+    first.storage.setItem('pt-settings', JSON.stringify({ state: { theme: 'dark' }, version: 1 }))
+    const reopened = createSyncRunner({ cloud, saves: SAVES, storage, announce: () => {} })
+    expect(reopened.status().waiting).toBe(1)
+  })
+})
