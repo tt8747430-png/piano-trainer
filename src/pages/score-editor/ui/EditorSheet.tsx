@@ -62,14 +62,18 @@ export function EditorSheet({
   const layer = useEditorState((state) => state.layer)
   const selection = useEditorState((state) => state.selection)
   const chordNote = useEditorState((state) => state.chordNote)
+  const grace = useEditorState((state) => state.grace)
   const chosen = useMemo(() => (selection ? selectionSpan(selection) : null), [selection])
   const onPlace = useCallback(
-    (tick: Tick, to: Layer, extend: boolean, key?: Midi) =>
-      dispatch(
-        key === undefined
-          ? { type: 'place', tick, layer: to, extend }
-          : { type: 'place', tick, layer: to, extend, key },
-      ),
+    (tick: Tick, to: Layer, extend: boolean, key?: Midi, onGrace?: boolean) =>
+      dispatch({
+        type: 'place',
+        tick,
+        layer: to,
+        extend,
+        ...(key === undefined ? {} : { key }),
+        ...(onGrace ? { grace: true } : {}),
+      }),
     [dispatch],
   )
   // A held finger dragged onto a bar: what is chosen reaches its last note on, its first back.
@@ -130,6 +134,7 @@ export function EditorSheet({
       caret={caret}
       playhead={playhead}
       chordNote={chordNote}
+      grace={grace}
       layer={layer}
       selection={chosen}
       onPlace={onPlace}

@@ -160,6 +160,16 @@ describe('what a click chooses (ADR 0096)', () => {
     expect(pickAt(laid, 76, 73)).toEqual({ staff: 'treble', tick: 0, index: 0, midi: 60 })
   })
 
+  it('chooses a grace note on its head before its note’s (ADR 0114)', () => {
+    const graced = {
+      ...laid,
+      graces: [{ ...head('treble', 0, 0, 58, 50, 62), id: 'g-treble-0-0', right: 66, bottom: 57 }],
+    }
+    expect(pickAt(graced, 61, 53)).toEqual({ staff: 'treble', tick: 0, index: 0, grace: true })
+    // Its note's head is still its note's.
+    expect(pickAt(graced, 76, 73)).toEqual({ staff: 'treble', tick: 0, index: 0, midi: 60 })
+  })
+
   it('chooses the chord whole on its stem', () => {
     expect(pickAt(laid, 81, 30)).toEqual({ staff: 'treble', tick: 0 })
   })
