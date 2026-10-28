@@ -12,15 +12,17 @@ import type { TupletCount } from '@/shared/lib/notation'
 import type { ChosenValue, Dots } from './values'
 import type { TimeChoice } from './meters'
 
-/** What undo and redo bring back. */
+/** What undo and redo bring back: the music, the caret and what was chosen. */
 export interface Snapshot {
   readonly draft: Draft
   readonly caret: Tick
   readonly layer: Layer
+  readonly selection: Selection | null
+  /** One note of the chord at the caret chosen alone, by its key (ADR 0096): else the whole chord. */
+  readonly chordNote: Midi | null
   /**
    * The grace notes before the notes chosen are what the pitch edits act on (Flat's): ↑ ↓, Shift a
    * semitone, the accidentals, Respell, a key played, Delete. Any other action goes back to the notes.
-   * Undo brings it back with the step, so a grace note's edit undone leaves the grace note chosen.
    */
   readonly grace: boolean
 }
@@ -66,9 +68,6 @@ export const nextMode = (mode: EditMode): EditMode =>
 export interface EditorState extends Snapshot {
   readonly value: ChosenValue
   readonly mode: EditMode
-  readonly selection: Selection | null
-  /** One note of the chord at the caret chosen alone, by its key (ADR 0096): else the whole chord. */
-  readonly chordNote: Midi | null
   readonly struck: Struck | null
   readonly clip: Clip | null
   readonly past: readonly Snapshot[]

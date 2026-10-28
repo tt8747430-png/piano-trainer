@@ -7,10 +7,12 @@ import type { EditorState, Snapshot } from './state'
 /** How many steps undo goes back. */
 const HISTORY = 200
 
-const snapshotOf = ({ draft, caret, layer, grace }: Snapshot): Snapshot => ({
+const snapshotOf = ({ draft, caret, layer, selection, chordNote, grace }: Snapshot): Snapshot => ({
   draft,
   caret,
   layer,
+  selection,
+  chordNote,
   grace,
 })
 
@@ -42,8 +44,8 @@ export function commit(
 }
 
 /**
- * The step before brought back (undo), or the one undone last (redo), with its caret, layer and
- * whether its grace notes were chosen.
+ * The step before brought back (undo), or the one undone last (redo), with its caret, its layer and
+ * what was chosen there: the music is as it was, so what was chosen on it is again.
  */
 export function undone(state: EditorState, direction: 'undo' | 'redo'): EditorState {
   const from = direction === 'undo' ? state.past : state.future
@@ -55,8 +57,6 @@ export function undone(state: EditorState, direction: 'undo' | 'redo'): EditorSt
     ...back,
     past: direction === 'undo' ? state.past.slice(0, -1) : [...state.past, now],
     future: direction === 'undo' ? [now, ...state.future] : state.future.slice(1),
-    selection: null,
-    chordNote: null,
     struck: null,
   }
 }

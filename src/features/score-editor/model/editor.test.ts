@@ -508,6 +508,40 @@ describe('the editor', () => {
     expect(run(chosen, { type: 'move', by: 'step', direction: 1, extend: false }).grace).toBe(false)
   })
 
+  it('undoes and redoes an edit with what it acted on still chosen: the notes chosen, a chord’s one note', () => {
+    const written = run(start(), key(60, 0), key(62, 500), key(64, 1000))
+    const chosen = run(
+      written,
+      { type: 'place', tick: 0, layer: 'staff0' },
+      { type: 'move', by: 'step', direction: 1, extend: true },
+    )
+    const stepped = run(chosen, { type: 'step', steps: 1 })
+    const undone = run(stepped, { type: 'undo' })
+    expect(undone.selection).toEqual(chosen.selection)
+    // The next step moves both again.
+    expect(shape(staffNotes(run(undone, { type: 'step', steps: 2 }).draft))).toEqual([
+      'E4@0/1',
+      'F#4@1/1',
+      'E4@2/1',
+    ])
+    expect(run(undone, { type: 'redo' }).selection).toEqual(stepped.selection)
+
+    const chord = run(
+      start('rh'),
+      { type: 'mode', mode: 'chord' },
+      key(60, 0),
+      key(64, 900),
+      key(67, 2000),
+      { type: 'chordNote', direction: 1 },
+    )
+    expect(chord.chordNote).toBe(67)
+    const raised = run(chord, { type: 'step', steps: 1 })
+    expect(raised.chordNote).toBe(69)
+    const back = run(raised, { type: 'undo' })
+    expect(back.chordNote).toBe(67)
+    expect(run(back, { type: 'redo' }).chordNote).toBe(69)
+  })
+
   it('undoes and redoes a grace note’s edit with the grace note still chosen', () => {
     const back = run(start(), key(60, 0), { type: 'place', tick: 0, layer: 'staff0' })
     const chosen = run(back, { type: 'grace', kind: 'appoggiatura' })
