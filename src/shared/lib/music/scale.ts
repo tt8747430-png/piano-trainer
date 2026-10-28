@@ -1,11 +1,15 @@
 import { INTERVALS, type IntervalName, type Interval } from './interval'
-import { keyPrefersSharps, keySignature, type Key } from './key'
-import { plainSpelling, rootSpelling, sameNote, type SpelledNote } from './note'
+import { keyPrefersSharps, keySignature, tonicSpelling, type Key } from './key'
+import { note, pitchClassOf, plainSpelling, rootSpelling, sameNote, type SpelledNote } from './note'
 import type { PitchClass } from './pitch'
 import { toneAbove, type Tone } from './tone'
 
-/** Major and minor; the church modes; pentatonic and blues: the Scale pop-up's groups. */
-export const SCALE_FAMILIES = ['keys', 'modes', 'blues'] as const
+/**
+ * Major and minor; the church modes; pentatonic and blues; the symmetric scales (whole-tone, the two
+ * diminished, chromatic); and the others (harmonic major, Hungarian minor, the bebop scales): the
+ * Scale pop-up's groups.
+ */
+export const SCALE_FAMILIES = ['keys', 'modes', 'blues', 'symmetric', 'other'] as const
 type ScaleFamily = (typeof SCALE_FAMILIES)[number]
 
 export const SCALE_KINDS = [
@@ -22,6 +26,14 @@ export const SCALE_KINDS = [
   'mpent',
   'majorBlues',
   'blues',
+  'wholeTone',
+  'halfWhole',
+  'wholeHalf',
+  'chromatic',
+  'harmonicMajor',
+  'hungarian',
+  'bebopMajor',
+  'bebopDominant',
 ] as const
 export type ScaleKind = (typeof SCALE_KINDS)[number]
 
@@ -42,9 +54,18 @@ interface Related {
 interface ScaleEntry {
   readonly family: ScaleFamily
   readonly intervals: readonly ScaleInterval[]
-  /** A minor 3rd above the root. */
+  /** A minor 3rd above the root (and no major 3rd). */
   readonly minor: boolean
-  readonly related: Related
+  /** The scale it shares its notes with, where there is one. */
+  readonly related?: Related
+  /**
+   * The major key it is written in, where not its root's own: no signature (a symmetric scale, its
+   * accidentals written as they fall), or the major on one of its degrees (a bebop dominant in its
+   * Mixolydian's).
+   */
+  readonly writtenIn?: 'plain' | number
+  /** A seven-note scale whose stacked 3rds are no chords (Hungarian minor's D F♯ A♭). */
+  readonly noChords?: true
 }
 
 const relative = (kind: ScaleKind, degree: number): Related => ({
@@ -134,6 +155,54 @@ const SCALES: Readonly<Record<ScaleKind, ScaleEntry>> = {
     minor: true,
     related: relative('majorBlues', 1),
   },
+  wholeTone: {
+    family: 'symmetric',
+    // Its 6th note as the 7th it sounds as (B♭ over C), as jazz writes it: no letter is left out twice.
+    intervals: ['r', 'M2', 'M3', 'A4', 'A5', 'm7'],
+    minor: false,
+    writtenIn: 'plain',
+  },
+  halfWhole: {
+    family: 'symmetric',
+    intervals: ['r', 'm2', 'm3', 'M3', 'A4', 'P5', 'M6', 'm7'],
+    minor: false,
+    writtenIn: 'plain',
+  },
+  wholeHalf: {
+    family: 'symmetric',
+    intervals: ['r', 'M2', 'm3', 'P4', 'd5', 'm6', 'M6', 'M7'],
+    minor: true,
+    writtenIn: 'plain',
+  },
+  // The harmonic chromatic scale: each letter twice but the tonic's and the dominant's.
+  chromatic: {
+    family: 'symmetric',
+    intervals: ['r', 'm2', 'M2', 'm3', 'M3', 'P4', 'A4', 'P5', 'm6', 'M6', 'm7', 'M7'],
+    minor: false,
+    writtenIn: 'plain',
+  },
+  harmonicMajor: {
+    family: 'other',
+    intervals: ['r', 'M2', 'M3', 'P4', 'P5', 'm6', 'M7'],
+    minor: false,
+  },
+  hungarian: {
+    family: 'other',
+    intervals: ['r', 'M2', 'm3', 'A4', 'P5', 'm6', 'M7'],
+    minor: true,
+    noChords: true,
+  },
+  bebopMajor: {
+    family: 'other',
+    intervals: ['r', 'M2', 'M3', 'P4', 'P5', 'A5', 'M6', 'M7'],
+    minor: false,
+  },
+  bebopDominant: {
+    family: 'other',
+    intervals: ['r', 'M2', 'M3', 'P4', 'P5', 'M6', 'm7', 'M7'],
+    minor: false,
+    writtenIn: 3,
+  },
 }
 
 const scaleFamily = (kind: ScaleKind): ScaleFamily => SCALES[kind].family
@@ -156,8 +225,18 @@ const plainInterval = (interval: ScaleInterval): IntervalName =>
 export const scaleIntervals = (kind: ScaleKind): readonly Interval[] =>
   SCALES[kind].intervals.map((interval) => INTERVALS[plainInterval(interval)])
 
-/** Whether a chord stands on each degree: a scale of seven notes (its numerals run I to VII). */
-export const scaleHasChords = (kind: ScaleKind): boolean => scaleIntervals(kind).length === 7
+/** A church mode: fingered, and written, as its parent major. */
+export const isMode = (kind: ScaleKind): boolean => SCALES[kind].related?.relation === 'parent'
+
+/** A scale of seven notes: one a degree, as a mode's or a key's. */
+export const isHeptatonic = (kind: ScaleKind): boolean => scaleIntervals(kind).length === 7
+
+/**
+ * Whether a chord stands on each degree: a scale of seven notes (its numerals run I to VII) whose
+ * stacked 3rds make chords.
+ */
+export const scaleHasChords = (kind: ScaleKind): boolean =>
+  isHeptatonic(kind) && SCALES[kind].noChords !== true
 
 function blueNote(root: SpelledNote, [first, second]: BlueNote['blue']): Tone {
   const a = toneAbove(root, INTERVALS[first])
@@ -185,15 +264,20 @@ interface RelatedScale extends Related {
  */
 export function relatedScale(root: SpelledNote, kind: ScaleKind): RelatedScale | null {
   const { related } = SCALES[kind]
-  const tone = spellScale(root, kind)[related.degree]
-  return tone ? { ...related, root: tone.note } : null
+  const tone = related && spellScale(root, kind)[related.degree]
+  return related && tone ? { ...related, root: tone.note } : null
 }
 
 /**
- * The key a scale is written in: a major kind's major key, a minor kind's minor key, and a mode its
- * parent major's (D Dorian in C major's signature).
+ * The key a scale is written in: a major kind's major key, a minor kind's minor key, a mode its
+ * parent major's (D Dorian in C major's signature), a bebop dominant its Mixolydian's, and a
+ * symmetric scale no signature at all.
  */
 export function scaleKey(root: SpelledNote, kind: ScaleKind): Key {
+  const { writtenIn } = SCALES[kind]
+  if (writtenIn === 'plain') return { tonic: note('C'), minor: false }
+  const major = writtenIn === undefined ? undefined : spellScale(root, kind)[writtenIn]
+  if (major) return { tonic: major.note, minor: false }
   const related = relatedScale(root, kind)
   if (related?.relation === 'parent') return { tonic: related.root, minor: false }
   return { tonic: root, minor: isMinorScale(kind) }
@@ -211,6 +295,30 @@ export function scaleRootSpelling(pc: PitchClass, kind: ScaleKind): SpelledNote 
   const difference = accidentals(sharp) - accidentals(flat)
   if (difference === 0) return rootSpelling(pc, isMinorScale(kind))
   return difference < 0 ? sharp : flat
+}
+
+/** The names of a seven-note scale's degrees, the tonic first; the 7th by its distance below the tonic. */
+export const DEGREE_NAMES = [
+  'tonic',
+  'supertonic',
+  'mediant',
+  'subdominant',
+  'dominant',
+  'submediant',
+  'leadingNote',
+  'subtonic',
+] as const
+export type DegreeName = (typeof DEGREE_NAMES)[number]
+
+/**
+ * Each degree's name in a seven-note scale: tonic, supertonic, mediant, subdominant, dominant,
+ * submediant, and the 7th a leading note a half step below the tonic or a subtonic a whole step
+ * below it (natural minor's, Mixolydian's). None for a scale of more or fewer notes.
+ */
+export function degreeNames(kind: ScaleKind): readonly DegreeName[] | null {
+  if (!isHeptatonic(kind)) return null
+  const seventh = scaleIntervals(kind)[6]?.semitones
+  return [...DEGREE_NAMES.slice(0, 6), seventh === 11 ? 'leadingNote' : 'subtonic']
 }
 
 /** The gap between neighbouring notes of a scale: a half step, a whole step, or both (three semitones). */
@@ -286,4 +394,19 @@ export function relativeKey(key: Key): Key {
   const related = relatedScale(key.tonic, keyScale(key))
   if (!related) throw new RangeError('Every major and minor key has a relative')
   return { tonic: related.root, minor: !key.minor }
+}
+
+/** The most sharps or flats a written key signature has. */
+const MOST_ACCIDENTALS = 7
+
+/**
+ * A key's parallel: the other mode on the same tonic, spelled as written where its signature has seven
+ * sharps or flats at most (A♭ major's A♭ minor), else as the same pitch's simplest key (D♭ major's C♯
+ * minor, not D♭ minor's eight flats).
+ */
+export function parallelKey(key: Key): Key {
+  const same = { tonic: key.tonic, minor: !key.minor }
+  return Math.abs(keySignature(same)) <= MOST_ACCIDENTALS
+    ? same
+    : { tonic: tonicSpelling(pitchClassOf(key.tonic), !key.minor), minor: !key.minor }
 }

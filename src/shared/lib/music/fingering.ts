@@ -1,7 +1,14 @@
 import { isBlackKey } from './keyboard'
 import { pitchClassOf, type SpelledNote } from './note'
 import { midi, type Midi } from './pitch'
-import { relatedScale, scaleHasChords, scaleIntervals, spellScale, type ScaleKind } from './scale'
+import {
+  isHeptatonic,
+  isMode,
+  relatedScale,
+  scaleIntervals,
+  spellScale,
+  type ScaleKind,
+} from './scale'
 
 export type Finger = 1 | 2 | 3 | 4 | 5
 export type Hand = 'rh' | 'lh'
@@ -15,12 +22,16 @@ export type Fingering = (typeof FINGERINGS)[number]
 
 type FingeringTable = 'major' | 'natural' | 'pent' | 'blues'
 
-/** The kinds taught a fingering of their own; harmonic and melodic minor are fingered as natural minor. */
+/**
+ * The kinds taught a fingering of their own; harmonic and melodic minor are fingered as natural minor,
+ * harmonic major as major (its lowered 6th never falls under a thumb on a black key).
+ */
 const OWN_TABLE: Readonly<Partial<Record<ScaleKind, FingeringTable>>> = {
   major: 'major',
   natural: 'natural',
   harmonic: 'natural',
   melodic: 'natural',
+  harmonicMajor: 'major',
   pent: 'pent',
   blues: 'blues',
 }
@@ -168,6 +179,15 @@ export function scaleFingering(
   start: number,
   octaves = 1,
 ): Finger[] {
+  if (kind === 'chromatic') {
+    const tones = spellScale(root, kind)
+    const keys = Array.from({ length: tones.length * octaves + 1 }, (_, i) => {
+      const at = start + i
+      const tone = tones[at % tones.length]
+      return midi(60 + pitchClassOf(root) + (tone?.semitones ?? 0) + 12 * Math.floor(at / 12))
+    })
+    return chromaticFingering(keys, hand)
+  }
   const own = tableFor(kind, root, hand)
   if (own && start === 0) {
     const run = tableRun(own, root, hand)
@@ -180,10 +200,24 @@ export function scaleFingering(
     const turns = Array.from({ length: octaves - 1 }, () => octave)
     return [...run.slice(0, -1), ...turns.flat(), run.at(-1) ?? 1]
   }
-  if (!scaleHasChords(kind))
+  if (!isHeptatonic(kind))
     throw new RangeError(`${kind} is fingered as its scale from its tonic only`)
   const byDegree = continuingFingers(root, kind, hand)
   return Array.from({ length: 7 * octaves + 1 }, (_, i) => byDegree[(start + i) % 7] ?? 1)
+}
+
+/**
+ * The chromatic scale's fingers (`keys` from the bottom note up), the same both ways: 3 on every
+ * black key, the thumb on a white one, and 2 on a white key beside another white key, the right
+ * hand's on the upper of the two (F, C) and the left hand's on the lower (E, B).
+ */
+export function chromaticFingering(keys: readonly Midi[], hand: Hand): Finger[] {
+  const white = (key: Midi | undefined) => key !== undefined && !isBlackKey(key)
+  return keys.map((key, i) => {
+    if (isBlackKey(key)) return 3
+    const beside = hand === 'rh' ? keys[i - 1] : keys[i + 1]
+    return white(beside) && Math.abs((beside ?? key) - key) === 1 ? 2 : 1
+  })
 }
 
 /**
@@ -295,13 +329,45 @@ export function arpeggioFingering(keys: readonly Midi[], hand: Hand): Finger[] {
   })
 }
 
-/** The fingering a run takes when none is chosen: a taught scale's from its tonic, else from the thumb. */
-export const ownFingering = (kind: ScaleKind, start: number): Fingering =>
-  OWN_TABLE[kind] && start === 0 ? 'scale' : 'thumb'
+/**
+ * Where a fingered line crosses (`keys` in the order played): a note the thumb passes under to, or a
+ * finger crosses over the thumb to. The right hand's fingers count up as it climbs, the left hand's
+ * down; a step against that (E 3 to F 1 going up, F 1 to E 3 coming down) is a crossing. A key
+ * repeated, or a note with no finger, crosses nothing.
+ */
+export function fingerCrossings(
+  keys: readonly Midi[],
+  fingers: readonly (Finger | undefined)[],
+  hand: Hand,
+): boolean[] {
+  const side = hand === 'rh' ? 1 : -1
+  return keys.map((key, i) => {
+    const before = keys[i - 1]
+    const finger = fingers[i]
+    const fingerBefore = fingers[i - 1]
+    if (before === undefined || finger === undefined || fingerBefore === undefined) return false
+    return Math.sign(key - before) * Math.sign(finger - fingerBefore) * side < 0
+  })
+}
 
-/** The fingerings a run can take: both for a seven-note scale, else only its own. */
+/**
+ * Whether a kind has a fingering the books print: a table's, a mode's parent major's, or the
+ * chromatic scale's rule. The others (whole-tone, diminished, bebop, Hungarian minor) are fingered
+ * from the thumb.
+ */
+export const hasStandardFingering = (kind: ScaleKind): boolean =>
+  OWN_TABLE[kind] !== undefined || isMode(kind) || kind === 'chromatic'
+
+/**
+ * The fingering a run takes when none is chosen: a taught scale's from its tonic (the chromatic
+ * scale's from any note), else from the thumb.
+ */
+export const ownFingering = (kind: ScaleKind, start: number): Fingering =>
+  (OWN_TABLE[kind] && start === 0) || kind === 'chromatic' ? 'scale' : 'thumb'
+
+/** The fingerings a run can take: both for a seven-note scale with a standard fingering, else only its own. */
 export const fingeringsOf = (kind: ScaleKind, start: number): readonly Fingering[] =>
-  scaleHasChords(kind) ? FINGERINGS : [ownFingering(kind, start)]
+  isHeptatonic(kind) && hasStandardFingering(kind) ? FINGERINGS : [ownFingering(kind, start)]
 
 /**
  * A run's fingers from its bottom note up (`keys` its keys from degree `start`, over as many octaves

@@ -35,13 +35,13 @@ interface ScaleRun {
   readonly music: TimedMusic
 }
 
-/** The run a Scale view shows: from its start note, fingered as chosen or as its start is. */
+/** The run a Scale view shows: from its start note over its octaves, fingered as chosen or as its start is. */
 export function scaleRunOf(
-  view: Pick<ScaleView, 'root' | 'kind' | 'start' | 'fingering' | 'rhythm' | 'hands'>,
+  view: Pick<ScaleView, 'root' | 'kind' | 'start' | 'octaves' | 'fingering' | 'rhythm' | 'hands'>,
 ): ScaleRun {
   const root = noteFromParam(view.root)
   const start = view.start - 1
-  const placed = placeScale(root, view.kind, start)
+  const placed = placeScale(root, view.kind, start, view.octaves)
   const own = ownFingering(view.kind, start)
   const fingering = view.fingering ?? own
   /** A way of the run as it is fingered: each hand's finger on each of its keys. */
@@ -54,7 +54,7 @@ export function scaleRunOf(
   }
   const fingers = fingered(view.kind, placed)
   const downKind = kindComingDown(view.kind)
-  const downNotes = placeScale(root, downKind, start)
+  const downNotes = placeScale(root, downKind, start, view.octaves)
   const down = { placed: downNotes, fingers: fingered(downKind, downNotes) }
   return {
     placed,
@@ -79,7 +79,8 @@ export function scaleRunOf(
  * The keys a run shows: every key it plays, marked by degree, with a hand's fingers where `show` names
  * a hand, where that hand plays them (the left an octave down where both hands play); its notes alone,
  * the playing hand's place, where `show` is notes. The keys coming down are marked too: melodic
- * minor's natural 6th and 7th are no blank keys.
+ * minor's natural 6th and 7th are no blank keys. A key the hand's finger crosses to going up (the
+ * thumb passing under, a finger over it) is marked as a crossing.
  */
 export function runShown(run: ScaleRun, hands: Hands, show: RunKeyShow): ShownKeys {
   const hand: Hand = show === 'notes' ? (hands === 'lh' ? 'lh' : 'rh') : show
@@ -90,8 +91,8 @@ export function runShown(run: ScaleRun, hands: Hands, show: RunKeyShow): ShownKe
   return {
     keys: run.music.notes.map((note) => note.midi),
     marks: new Map([
-      ...scaleShown(played(run.down.placed), fingers(run.down.fingers)).marks,
-      ...scaleShown(played(run.placed), fingers(run.fingers)).marks,
+      ...scaleShown(played(run.down.placed), fingers(run.down.fingers), hand).marks,
+      ...scaleShown(played(run.placed), fingers(run.fingers), hand).marks,
     ]),
   }
 }

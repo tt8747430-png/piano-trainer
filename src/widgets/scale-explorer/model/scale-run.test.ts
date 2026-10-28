@@ -3,9 +3,33 @@ import { midi, note, noteParam } from '@/shared/lib/music'
 import { runShown, scaleRunOf } from './scale-run'
 
 const C = noteParam(note('C'))
-const view = { root: C, kind: 'major', start: 1, rhythm: 'even', hands: 'rh' } as const
+const view = {
+  root: C,
+  kind: 'major',
+  start: 1,
+  octaves: 1,
+  rhythm: 'even',
+  hands: 'rh',
+} as const
 
 describe('scaleRunOf', () => {
+  it('runs two octaves where asked, fingered as the books carry it on', () => {
+    const run = scaleRunOf({ ...view, octaves: 2 })
+    expect(run.placed).toHaveLength(15)
+    expect(run.fingers.rh.join('')).toBe('123123412312345')
+    expect(run.fingers.lh.join('')).toBe('543213214321321')
+  })
+
+  it('marks the keys a finger crosses to going up: the right thumb on F, the left 3 on A', () => {
+    const marks = runShown(scaleRunOf(view), 'rh', 'rh').marks
+    const crossed = (shown: ReadonlyMap<number, { crossing?: true }>) =>
+      [...shown.entries()].flatMap(([key, mark]) => (mark.crossing ? [key] : []))
+    expect(crossed(marks)).toEqual([65])
+    // The left hand plays an octave down: its 3 crosses over to A3.
+    const left = runShown(scaleRunOf({ ...view, hands: 'lh' }), 'lh', 'lh').marks
+    expect(crossed(left)).toEqual([57])
+  })
+
   it('holds the run coming down, melodic minor’s natural 6th and 7th to mark', () => {
     const run = scaleRunOf({ ...view, root: noteParam(note('A')), kind: 'melodic' })
     const pcs = (tones: readonly { midi: number }[]) => tones.map((tone) => tone.midi % 12)

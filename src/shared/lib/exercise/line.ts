@@ -11,6 +11,7 @@ import {
   type Finger,
   type Hand,
   type Midi,
+  type NoteMarks,
   type ScaleKind,
   type SpelledNote,
   type Tick,
@@ -35,6 +36,8 @@ export interface Played {
   readonly midi: Midi
   readonly spelled: SpelledNote
   readonly finger?: Finger
+  /** What is written on it (a routine's staccato, its dynamics). */
+  readonly marks?: NoteMarks
 }
 
 /**
@@ -131,9 +134,16 @@ export function shell(chord: Chord): Played[] {
   ]
 }
 
-/** The chord a scale is over: its tonic triad, or a pentatonic's or blues scale's major or minor one. */
+/**
+ * The chord a scale is over: its tonic triad, or the triad its own 3rd and 5th make (a pentatonic's
+ * or a blues scale's major or minor, the whole-tone's augmented, the whole-half diminished's
+ * diminished, the Hungarian minor's minor).
+ */
 export function tonicChord(root: SpelledNote, kind: ScaleKind): Chord {
   if (scaleHasChords(kind)) return scaleChordAt(root, kind, 0, 3)
-  const degrees = spellScale(root, kind).map((tone) => tone.degree)
-  return { root, quality: degrees.includes('♭3') && !degrees.includes('3') ? 'min' : 'maj' }
+  const degrees = new Set(spellScale(root, kind).map((tone) => tone.degree))
+  const minor = degrees.has('♭3') && !degrees.has('3')
+  if (degrees.has('5')) return { root, quality: minor ? 'min' : 'maj' }
+  if (minor) return { root, quality: degrees.has('♭5') ? 'dim' : 'min' }
+  return { root, quality: degrees.has('#5') ? 'aug' : 'maj' }
 }

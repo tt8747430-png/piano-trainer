@@ -12,7 +12,8 @@ const SCALE_EXERCISES = exercisesIn('scales')
 
 /**
  * A scale's exercises in the Player, each opening on this scale: the scale itself over several
- * octaves, in 3rds, in 6ths, in groups and in contrary motion.
+ * octaves, in 3rds, in 6ths, in groups, in contrary motion, and the daily routine (a major or minor
+ * scale's only): those that take its kind.
  */
 export function ScaleExercises({ root, kind }: { root: SpelledNote; kind: ScaleKind }) {
   const { t } = useTranslation('practice')
@@ -20,27 +21,29 @@ export function ScaleExercises({ root, kind }: { root: SpelledNote; kind: ScaleK
   const fold = useFold('scales.exercises')
   return (
     <RowGroup title={t('inPlayer')} fold={fold}>
-      {SCALE_EXERCISES.map((exercise) => (
-        <li key={exercise.id}>
-          <RowLink
-            title={localText(exercise.name, locale)}
-            detail={localText(exercise.trains, locale)}
-            icon={Spline}
-            paint="sky"
-            trailing={<StageMark stage={exercise.stage} />}
-            render={
-              <Link
-                to="/play/exercise/$exerciseId"
-                params={{ exerciseId: exercise.id }}
-                search={{
-                  root: noteParam(root),
-                  ...(exercise.fields.kind?.includes(kind) ? { kind } : {}),
-                }}
-              />
-            }
-          />
-        </li>
-      ))}
+      {SCALE_EXERCISES.filter((exercise) => exercise.fields.kind?.includes(kind) !== false).map(
+        (exercise) => (
+          <li key={exercise.id}>
+            <RowLink
+              title={localText(exercise.name, locale)}
+              detail={localText(exercise.trains, locale)}
+              icon={Spline}
+              paint="sky"
+              trailing={<StageMark stage={exercise.stage} />}
+              render={
+                <Link
+                  to="/play/exercise/$exerciseId"
+                  params={{ exerciseId: exercise.id }}
+                  search={{
+                    root: noteParam(root),
+                    kind,
+                  }}
+                />
+              }
+            />
+          </li>
+        ),
+      )}
     </RowGroup>
   )
 }

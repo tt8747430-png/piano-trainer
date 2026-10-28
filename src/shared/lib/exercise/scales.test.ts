@@ -54,6 +54,22 @@ describe('scaleExercise', () => {
     expect(outside).toEqual([])
   }, 60_000)
 
+  it('plays a symmetric scale over the triad its own notes make, the chromatic as it is fingered', () => {
+    const chord = (kind: 'wholeTone' | 'wholeHalf' | 'halfWhole') =>
+      scaleExercise({ root: C, kind, octaves: 1, start: 0, fingering: 'scale' }).chords[0]?.symbol
+    expect(chord('wholeTone')).toBe('C+')
+    expect(chord('wholeHalf')).toBe('C°')
+    expect(chord('halfWhole')).toBe('C')
+    const chromatic = scaleExercise({
+      root: C,
+      kind: 'chromatic',
+      octaves: 1,
+      start: 0,
+      fingering: 'thumb',
+    })
+    expect(fingers(chromatic).slice(0, 13)).toBe('1313123131312')
+  })
+
   it('runs up an octave and back in 8ths, fingered as taught, both hands an octave apart', () => {
     const scale = scaleExercise({
       root: C,

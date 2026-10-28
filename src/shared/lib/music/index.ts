@@ -190,6 +190,8 @@ export {
   type Numeral,
 } from './numerals'
 export {
+  DEGREE_NAMES,
+  degreeNames,
   SCALE_FAMILIES,
   SCALE_KINDS,
   kindComingDown,
@@ -197,6 +199,7 @@ export {
   keyScale,
   modesOfKey,
   relatedScale,
+  parallelKey,
   relativeKey,
   scaleGaps,
   scaleHasChords,
@@ -206,6 +209,7 @@ export {
   scaleRootSpelling,
   spellInKey,
   spellScale,
+  type DegreeName,
   type ScaleKind,
 } from './scale'
 export {
@@ -228,9 +232,11 @@ export {
 } from './place'
 export {
   arpeggioFingering,
+  fingerCrossings,
   FINGERINGS,
   FINGERS,
   fingeringsOf,
+  hasStandardFingering,
   ownFingering,
   runFingering,
   type Finger,

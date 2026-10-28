@@ -51,6 +51,19 @@ describe('scaleRun', () => {
     // Coming down, a note keeps the finger it went up with.
     expect(both.notes.filter((n) => n.hand === 'rh').at(-2)).toMatchObject({ midi: 62, finger: 2 })
   })
+
+  it('marks the notes a finger crosses to, both ways', () => {
+    const fingers: RunWay['fingers'] = {
+      rh: [1, 2, 3, 1, 2, 3, 4, 5],
+      lh: [5, 4, 3, 2, 1, 3, 2, 1],
+    }
+    const run = scaleRun({ ...C_MAJOR, fingers }, { rhythm: 'even', hands: 'both', key: C_KEY })
+    const crossing = (hand: 'rh' | 'lh') =>
+      run.notes.filter((n) => n.hand === hand && n.crossing).map((n) => n.midi)
+    // Up: the right thumb under to F, the left 3 over to A; down: the right 3 over to E, the left thumb to G.
+    expect(crossing('rh')).toEqual([65, 64])
+    expect(crossing('lh')).toEqual([57, 55])
+  })
 })
 
 describe('runSounds', () => {

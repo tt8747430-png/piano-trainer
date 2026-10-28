@@ -78,6 +78,7 @@ export const practice: LocaleResources['practice'] = {
   scales: {
     show: { scale: 'Гамма', chords: 'Аккорды', key: 'Тональность' },
     label: 'Гамма',
+    octaves: 'Октавы',
     startOn: 'Начать с',
     openInChords: 'Открыть в Аккордах',
     onKeys: { label: 'На клавишах', notes: 'Ноты', lh: 'Левая рука', rh: 'Правая рука' },
@@ -88,6 +89,11 @@ export const practice: LocaleResources['practice'] = {
       drawing: '{{hand}}: пальцы пронумерованы от большого, 1, до мизинца, 5',
       notes: 'Ноты',
       fingers: 'Пальцы',
+      crossings:
+        'Синим отмечена смена позиции: большой палец подкладывается под другие, или палец перекладывается через большой.',
+      crossing: 'смена позиции',
+      noStandard:
+        'Общепринятой аппликатуры у этой гаммы нет. Здесь ноты собраны в группы от большого пальца, и он по возможности не попадает на чёрные клавиши.',
     },
     fingering: {
       label: 'Аппликатура',
@@ -104,7 +110,14 @@ export const practice: LocaleResources['practice'] = {
     },
     tempo: 'Темп',
     playUpDown: 'Вверх и вниз',
-    facts: { formula: 'Формула', gaps: 'Строение', relative: 'Параллельная', modeOf: 'Лад от' },
+    // В русской теории relative — «параллельная», а parallel (та же тоника) — «одноимённая».
+    facts: {
+      formula: 'Формула',
+      gaps: 'Строение',
+      relative: 'Параллельная',
+      parallel: 'Одноимённая',
+      modeOf: 'Лад от',
+    },
     chordsIn: 'Аккорды гаммы',
     keysPlay: { label: 'Клавиши играют', chords: 'Аккорды', notes: 'Ноты' },
     holds: '{{note}} есть в {{chords}}',

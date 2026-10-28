@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
   arpeggioFingering,
+  fingerCrossings,
   fingeringsOf,
+  hasStandardFingering,
   ownFingering,
   runFingering,
   scaleFingering,
@@ -122,6 +124,62 @@ describe('scaleFingering', () => {
   it('carries no pentatonic or blues fingering to another note', () => {
     expect(() => scaleFingering(note('C'), 'blues', 'rh', 2)).toThrow(RangeError)
     expect(() => scaleFingering(note('A'), 'mpent', 'rh', 0)).toThrow(RangeError)
+  })
+})
+
+describe('the chromatic scale and the scales with no standard fingering', () => {
+  it('fingers the chromatic scale 3 on black keys, 2 on a white key beside a white one', () => {
+    expect(digits(scaleFingering(note('C'), 'chromatic', 'rh', 0))).toBe('1313123131312')
+    expect(digits(scaleFingering(note('C'), 'chromatic', 'lh', 0))).toBe('1313213131321')
+    expect(digits(scaleFingering(note('E'), 'chromatic', 'rh', 0))).toBe('1231313123131')
+  })
+
+  it('fingers harmonic major as major', () => {
+    for (const hand of ['rh', 'lh'] as const)
+      expect(scaleFingering(note('E', -1), 'harmonicMajor', hand, 0)).toEqual(
+        scaleFingering(note('E', -1), 'major', hand, 0),
+      )
+  })
+
+  it('fingers the scales the books leave unfingered from the thumb, and only so', () => {
+    const unfingered = SCALE_KINDS.filter((kind) => !hasStandardFingering(kind))
+    expect(unfingered).toEqual([
+      'mpent',
+      'majorBlues',
+      'wholeTone',
+      'halfWhole',
+      'wholeHalf',
+      'hungarian',
+      'bebopMajor',
+      'bebopDominant',
+    ])
+    expect(fingeringsOf('hungarian', 0)).toEqual(['thumb'])
+    expect(fingeringsOf('wholeTone', 0)).toEqual(['thumb'])
+    expect(fingeringsOf('chromatic', 3)).toEqual(['scale'])
+  })
+})
+
+describe('fingerCrossings', () => {
+  const crossed = (keys: readonly number[], fingers: string, hand: 'rh' | 'lh') =>
+    fingerCrossings(
+      keys.map(midi),
+      [...fingers].map((digit) => Number(digit) as Finger),
+      hand,
+    ).flatMap((crosses, i) => (crosses ? [i] : []))
+  const up = [60, 62, 64, 65, 67, 69, 71, 72]
+
+  it('marks where the thumb passes under and where a finger crosses over it', () => {
+    // C major: the right hand's thumb on F going up; the left hand's 3 over to A.
+    expect(crossed(up, '12312345', 'rh')).toEqual([3])
+    expect(crossed(up, '54321321', 'lh')).toEqual([5])
+    // Coming down, the right hand's 3 over to E, the left hand's thumb under to G.
+    expect(crossed([...up].reverse(), '54321321', 'rh')).toEqual([5])
+    expect(crossed([...up].reverse(), '12312345', 'lh')).toEqual([3])
+  })
+
+  it('marks nothing in a five-finger position or on a repeated key', () => {
+    expect(crossed([60, 62, 64, 65, 67, 65, 64, 62], '12345432', 'rh')).toEqual([])
+    expect(crossed([60, 60, 62], '213', 'rh')).toEqual([])
   })
 })
 

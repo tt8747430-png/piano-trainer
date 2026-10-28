@@ -23,6 +23,8 @@ export interface KeyMark {
   readonly note?: string
   /** A finger number, drawn in the finger row under the keys. */
   readonly finger?: Finger
+  /** Its finger crosses (the thumb passing under, a finger over it): its circle in the link's sky. */
+  readonly crossing?: true
   /**
    * Where a voice was a moment ago (a voice's letter on the key it left): the key plain, its label
    * faint, so the voice's move shows.

@@ -236,6 +236,18 @@ describe('scoreToMei, a note’s marks and the options', () => {
     expect(bass).not.toContain('symbol="brace"')
   })
 
+  it('types a crossing’s finger, so the engraving can colour it', () => {
+    const score = plain([
+      { ...c(0, undefined, 3) },
+      { ...n(74, note('D'), 'rh', B, B), finger: 1, crossing: true },
+    ])
+    const written = scoreToMei(score, { fingers: true })
+    expect(written).toContain('place="above">3</fing>')
+    expect(written).toMatch(
+      /<fing startid="#n-treble-\d+-0" place="above" type="crossing">1<\/fing>/,
+    )
+  })
+
   it('names the staves drawn at the first line’s head: each single staff’s, the piano’s over its brace (ADR 0114, 0097)', () => {
     const score = notate(
       music(

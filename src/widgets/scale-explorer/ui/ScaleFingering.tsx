@@ -1,6 +1,12 @@
 import { useTranslation } from 'react-i18next'
 import { useFold } from '@/features/fold-section'
-import { noteName, type Finger, type Hand, type PlacedTone } from '@/shared/lib/music'
+import {
+  fingerCrossings,
+  noteName,
+  type Finger,
+  type Hand,
+  type PlacedTone,
+} from '@/shared/lib/music'
 import { FoldSection, HandDiagram } from '@/shared/ui'
 
 /** The run's notes going up, each hand's fingers on them. */
@@ -14,13 +20,29 @@ const HANDS = ['lh', 'rh'] as const satisfies readonly Hand[]
 
 /**
  * The run's fingering hand by hand, as the reference app shows a scale's: each hand drawn with its
- * fingers numbered, beside the run's notes going up with that hand's finger under each.
+ * fingers numbered, beside the run's notes going up with that hand's finger under each, a crossing's
+ * (`fingerCrossings`) in the link's sky and underlined. A scale the books leave unfingered says so in
+ * its ⓘ.
  */
-export function ScaleFingering({ run }: { run: FingeredRun }) {
+export function ScaleFingering({ run, standard }: { run: FingeredRun; standard: boolean }) {
   const { t } = useTranslation('practice')
   const fold = useFold('scales.fingering')
+  const keys = run.placed.map((placed) => placed.midi)
+  const crossings = {
+    lh: fingerCrossings(keys, run.fingers.lh, 'lh'),
+    rh: fingerCrossings(keys, run.fingers.rh, 'rh'),
+  }
   return (
-    <FoldSection title={t('scales.byHand.title')} fold={fold}>
+    <FoldSection
+      title={t('scales.byHand.title')}
+      fold={fold}
+      info={
+        <>
+          <p>{t('scales.byHand.crossings')}</p>
+          {standard ? null : <p className="mt-2">{t('scales.byHand.noStandard')}</p>}
+        </>
+      }
+    >
       <ul className="grid-cards gap-2">
         {HANDS.map((hand) => (
           <li key={hand} className="flex flex-wrap items-center gap-x-4 gap-y-2 card p-4">
@@ -49,7 +71,19 @@ export function ScaleFingering({ run }: { run: FingeredRun }) {
                       {t('scales.byHand.fingers')}
                     </th>
                     {run.fingers[hand].map((finger, at) => (
-                      <td key={at}>{finger}</td>
+                      <td
+                        key={at}
+                        className={
+                          crossings[hand][at]
+                            ? 'text-link underline decoration-2 underline-offset-4'
+                            : undefined
+                        }
+                      >
+                        {finger}
+                        {crossings[hand][at] ? (
+                          <span className="sr-only"> ({t('scales.byHand.crossing')})</span>
+                        ) : null}
+                      </td>
                     ))}
                   </tr>
                 </tbody>

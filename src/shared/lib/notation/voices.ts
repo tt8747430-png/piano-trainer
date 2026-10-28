@@ -6,6 +6,7 @@ export interface BarNote {
   readonly midi: Midi
   readonly spelled: SpelledNote
   readonly finger?: Finger
+  readonly crossing?: true
   readonly marks?: NoteMarks
   /** What it sings, by verse: a tune's note on the staff the words go under. */
   readonly lyrics?: NoteLyrics

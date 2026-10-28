@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { IN_PLACE } from '@/shared/lib'
 import {
+  degreeNames,
   noteParam,
   relatedScale,
   scaleGaps,
@@ -11,8 +12,12 @@ import {
 } from '@/shared/lib/music'
 import { useScaleName } from '@/shared/i18n'
 import { ButtonLink, Fact } from '@/shared/ui'
+import { DegreeList } from './DegreeList'
 
-/** What a scale is made of, and the scale it shares its notes with: its relative, or a mode's parent major. */
+/**
+ * What a scale is made of (its degrees, a seven-note scale's each named by its function), and the
+ * scale it shares its notes with: its relative, or a mode's parent major.
+ */
 export function ScaleFacts({
   root,
   kind,
@@ -25,10 +30,11 @@ export function ScaleFacts({
   const { t } = useTranslation(['practice', 'music'])
   const scaleName = useScaleName()
   const related = relatedScale(root, kind)
+  const names = degreeNames(kind)
   return (
     <dl className="flex flex-col gap-2">
       <Fact term={t('practice:scales.facts.formula')}>
-        {tones.map((tone) => tone.degree).join(' ')}
+        <DegreeList items={tones.map((tone, at) => ({ top: tone.degree, name: names?.[at] }))} />
       </Fact>
       <Fact term={t('practice:scales.facts.gaps')}>
         {scaleGaps(kind)

@@ -19,9 +19,27 @@ something to play, and the root goes to the left hand.
   root is spelled by one rule over its intervals (sharp under a minor 3rd or a minor 9th). A tool's roots are spelled
   by letters, then named plainly (F♭ is written E). A printed chord symbol shows ♯ and ♭ (`printedSymbol`); what is
   stored, typed, parsed or in a URL stays ASCII.
-- **Thirteen scale kinds in three families**: major and the three minors; the five church modes; the pentatonics and
-  blues. A scale runs from any start, fingered from the thumb or as the scale is taught, over any number of octaves;
-  an arpeggio's fingering is one rule (the thumb on the first white tone each octave).
+- **Twenty-one scale kinds in five families**: major and the three minors; the five church modes; the pentatonics and
+  blues; the symmetric scales (whole-tone, half-whole and whole-half diminished, chromatic); and the others (harmonic
+  major, Hungarian minor, bebop major and dominant). The whole-tone scale writes its 6th note as the 7th it sounds as
+  (C D E F♯ G♯ B♭), the chromatic scale is the harmonic one (each letter twice but the tonic's and the dominant's),
+  and bebop major's added note is the ♯5 (G♯ in C). A symmetric scale is written with no signature, a bebop dominant
+  in its Mixolydian's; Hungarian minor's stacked 3rds are no chords, so only harmonic major of the new kinds has a
+  Chords view. A seven-note scale names its degrees (`degreeNames`): tonic, supertonic, mediant, subdominant,
+  dominant, submediant, and a leading note a half step under the tonic or a subtonic a whole step under it. A key's
+  parallel is the other mode on its tonic, spelled by `tonicSpelling` where that mode would need more than seven
+  sharps or flats (D♭ major's parallel is C♯ minor).
+- **Fingering follows the printed books** (ABRSM's scale books, Vita Piano's tables): a right hand that starts on a
+  black key starts on the finger a longer run gives it, A♭ major 3 4, B♭ major 4, C♯, F♯ and G♯ minor 3 4, E♭ minor
+  3, B♭ minor 4. G♯ minor's left hand keeps its thumbs on B and E (3 2 1 3 2 1 4 3), where one printed table puts it
+  on F♯. Harmonic major takes major's table, the chromatic scale one rule (3 on a black key, the thumb on a white,
+  2 on a white key beside a white: the right hand's F and C, the left hand's E and B). Whole-tone, diminished, bebop,
+  Hungarian minor, minor pentatonic and major blues have no standard fingering: they are fingered from the thumb and
+  say so (`hasStandardFingering`). A scale runs from any start, fingered from the thumb or as the scale is taught,
+  over any number of octaves. Where a finger crosses (`fingerCrossings`: the thumb passing under, a finger over it)
+  the run marks the note, on the keys, in the fingering table and on the staff. An arpeggio's fingering is one rule:
+  the thumb on the first white tone each octave, the right hand's 3rd note taking the 4th finger over a 4th from the
+  note below or a major 6th from the thumb, so a 2nd inversion is 1 2 4 5.
 - **The chord table has 38 qualities**, each a Skill (ADR 0025). Any chord is built from its parts (`buildChord`):
   the triad or a suspension, the size up to a 13th, the 7th, an added tone, and alterations, which are the available
   tensions. Only what the chord takes is offered, and a change that leaves a part out of reach takes the nearest in
@@ -65,3 +83,5 @@ Chords view should hold its big chords in two hands too.
 - 0020, 0032, 0040 — Numerals in any key; a numeral carries its chord; applied numerals (2026-09-29 to 10-13).
 - 0035 — A chord of five notes takes two hands (2026-10-09), from the research note on chord hands, deleted.
 - 0046 — The table writes m(add9) and 13♭9 (2026-10-14).
+- 0046 — Fingering as the printed books, eight new scale kinds, degree names, the parallel key, crossings marked
+  (2026-10-28).
