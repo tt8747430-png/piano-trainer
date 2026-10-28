@@ -1,0 +1,54 @@
+import { describe, expect, it } from 'vitest'
+import { createFakeAuth } from './fake-auth'
+
+// What every AuthGateway keeps (ADR 0116). The fake is held to it here; the Supabase adapter's own
+// test checks it maps the server's answers onto the same results.
+describe('an auth gateway', () => {
+  const learner = { email: 'ana@example.com', name: 'Ana', password: 'correct horse' }
+
+  it('signs a new learner up and in, and knows them after', async () => {
+    const auth = createFakeAuth()
+    const signedUp = await auth.signUp(learner)
+    expect(signedUp).toMatchObject({ ok: true, value: { confirm: false } })
+    expect(await auth.current()).toMatchObject({ email: 'ana@example.com', name: 'Ana' })
+  })
+
+  it('refuses a wrong password, and an email already taken', async () => {
+    const auth = createFakeAuth({ accounts: [learner] })
+    expect(await auth.signIn(learner.email, 'wrong')).toMatchObject({
+      ok: false,
+      reason: 'refused',
+    })
+    expect(await auth.signUp(learner)).toMatchObject({ ok: false, reason: 'refused' })
+    expect(await auth.current()).toBeNull()
+  })
+
+  it('says offline before asking, and signs out offline all the same', async () => {
+    let online = true
+    const auth = createFakeAuth({ accounts: [learner], online: () => online })
+    expect(await auth.signIn(learner.email, learner.password)).toMatchObject({ ok: true })
+    online = false
+    expect(await auth.requestPasswordReset(learner.email)).toEqual({ ok: false, reason: 'offline' })
+    await auth.signOut()
+    expect(await auth.current()).toBeNull()
+  })
+
+  it('tells its listeners of each sign-in and sign-out until they stop listening', async () => {
+    const auth = createFakeAuth({ accounts: [learner] })
+    const heard: (string | null)[] = []
+    const stop = auth.onChange((account) => heard.push(account?.email ?? null))
+    await auth.signIn(learner.email, learner.password)
+    await auth.signOut()
+    stop()
+    await auth.signIn(learner.email, learner.password)
+    expect(heard).toEqual(['ana@example.com', null])
+  })
+
+  it('changes the password of the account signed in', async () => {
+    const auth = createFakeAuth({ accounts: [learner] })
+    await auth.signIn(learner.email, learner.password)
+    expect(await auth.updatePassword('a new one')).toEqual({ ok: true, value: undefined })
+    await auth.signOut()
+    expect(await auth.signIn(learner.email, 'a new one')).toMatchObject({ ok: true })
+  })
+})

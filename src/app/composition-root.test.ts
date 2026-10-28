@@ -2,7 +2,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { untilTestEnds } from '@/shared/test/listeners'
-import { createServices, createStores } from './composition-root'
+import { createAuth, createBackend, createServices, createStores } from './composition-root'
 
 describe('createServices', () => {
   it('builds audio without creating an AudioContext, and no MIDI where the browser has none', () => {
@@ -38,5 +38,16 @@ describe('createStores', () => {
     stores.progress.setState({ ...stores.progress.getState() })
     expect(storage.getItem('pt-settings')).not.toBeNull()
     expect(storage.getItem('pt-progress')).not.toBeNull()
+  })
+})
+
+describe('createBackend and createAuth', () => {
+  it('build on the project the .env names, asking the network nothing until a call needs it', async () => {
+    const fetch = vi.fn()
+    vi.stubGlobal('fetch', fetch)
+    const auth = createAuth(createBackend())
+    expect(await auth.current()).toBeNull()
+    expect(fetch).not.toHaveBeenCalled()
+    expect(import.meta.env.VITE_SUPABASE_URL).toBe('https://itmiutianxvtlwhdsalo.supabase.co')
   })
 })

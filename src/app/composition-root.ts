@@ -10,8 +10,10 @@ import { createSettingsStore, type SettingsStore } from '@/entities/settings'
 import { createTakesStore, type TakesStore } from '@/entities/take'
 import { createViewsStore, type ViewsStore } from '@/entities/views'
 import { createWebAudioOutput } from '@/shared/api/audio'
+import { createSupabaseAuth, type AuthGateway } from '@/shared/api/auth'
 import { filesContent, type ContentPort } from '@/shared/api/content'
 import { createWebMidi, hasWebMidi } from '@/shared/api/midi'
+import { createSupabaseClient, type PianoClient } from '@/shared/api/supabase'
 import type { SavingOptions } from '@/shared/lib'
 import type { Services } from '@/shared/lib/services'
 
@@ -57,3 +59,13 @@ export function createStores(
 
 /** Where content's bodies come from (ADR 0116): written into the app until the database serves them. */
 export const createContent = (): ContentPort => filesContent()
+
+/** The app's one Supabase client (ADR 0116), on the project `.env` names. */
+export const createBackend = (): PianoClient =>
+  createSupabaseClient(
+    import.meta.env.VITE_SUPABASE_URL,
+    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+  )
+
+/** Accounts, on the backend's auth. */
+export const createAuth = (backend: PianoClient): AuthGateway => createSupabaseAuth(backend)
