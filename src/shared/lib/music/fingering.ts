@@ -30,7 +30,11 @@ type Run = Readonly<Record<Hand, string>>
 const fingers = (rh: string, lh: string): Run => ({ rh, lh })
 const C_SHAPE = fingers('12312345', '54321321')
 
-/** By the root's pitch class. */
+/**
+ * By the root's pitch class, as the printed books finger them (ABRSM, Vita Piano): a right hand that
+ * starts on a black key starts on the finger a longer run gives it (A♭ major 3 4, B♭ major 4). G♯
+ * minor's left hand puts its thumbs on B and E, never on F♯.
+ */
 const RUNS: Readonly<Record<FingeringTable, Readonly<Partial<Record<number, Run>>>>> = {
   major: {
     0: C_SHAPE,
@@ -41,23 +45,23 @@ const RUNS: Readonly<Record<FingeringTable, Readonly<Partial<Record<number, Run>
     5: fingers('12341234', '54321321'),
     6: fingers('23412312', '43213214'),
     7: C_SHAPE,
-    8: fingers('23123123', '32143213'),
+    8: fingers('34123123', '32143213'),
     9: C_SHAPE,
-    10: fingers('21231234', '32143213'),
+    10: fingers('41231234', '32143213'),
     11: fingers('12312345', '43214321'),
   },
   natural: {
     0: C_SHAPE,
-    1: fingers('23123123', '32143213'),
+    1: fingers('34123123', '32143213'),
     2: C_SHAPE,
-    3: fingers('21234123', '21432132'),
+    3: fingers('31234123', '21432132'),
     4: C_SHAPE,
     5: fingers('12341234', '54321321'),
-    6: fingers('23123123', '43213214'),
+    6: fingers('34123123', '43213214'),
     7: C_SHAPE,
-    8: fingers('23123123', '32132143'),
+    8: fingers('34123123', '32132143'),
     9: C_SHAPE,
-    10: fingers('21231234', '21321432'),
+    10: fingers('41231234', '21321432'),
     11: fingers('12312345', '43214321'),
   },
   // The octave's finger is the next in the hand's direction; a left hand on its thumb crosses 3 over.
@@ -168,7 +172,7 @@ export function scaleFingering(
   if (own && start === 0) {
     const run = tableRun(own, root, hand)
     // An octave between starts as a longer run passing its tonic does, up to its first thumb: a
-    // taught first octave may start on fingers of its own (A♭ major's 2 3, where the run has 3 4).
+    // taught first octave may start on fingers of its own (a pentatonic's or a blues scale's).
     const firstThumb = run.indexOf(1, 1)
     const octave = run
       .slice(0, -1)
@@ -243,14 +247,17 @@ export function thumbFingering(keys: readonly Midi[], hand: Hand): Finger[] {
   return fromTheThumb([...keys].reverse()).reverse()
 }
 
-/** The finger a hand's 2nd or 3rd note from its thumb takes: wider when it reaches over a 4th. */
-const reach = (gap: number): Finger => (gap >= 5 ? 4 : 3)
+/**
+ * The finger a hand's 3rd note from its thumb takes: the 4th when it reaches over a 4th from the note
+ * below it, or (the right hand) a major 6th or more from the thumb, as a 2nd inversion's G C E does.
+ */
+const reach = (gap: number, span = 0): Finger => (gap >= 5 || span >= 9 ? 4 : 3)
 
 /**
  * An arpeggio's fingers (`keys` from the bottom note up, a chord's tones over its octaves): the thumb
  * on one tone in every octave, the first white key from the bottom note (the bottom note if all are
  * black). The right hand counts 1 2 3 (4) up from each thumb, its 3rd finger a 4 when it reaches over
- * a 4th, and takes 5 on a top note a thumb would land on; the left hand mirrors it, 1 on each thumb,
+ * a 4th or a major 6th from the thumb (`reach`), and takes 5 on a top note a thumb would land on; the left hand mirrors it, 1 on each thumb,
  * 2 under it, then 4 (3 over a 4th from below) and 5 on a bottom note a thumb would land on. Read
  * from the bottom note up.
  */
@@ -280,7 +287,11 @@ export function arpeggioFingering(keys: readonly Midi[], hand: Hand): Finger[] {
     if (place === 1) return 2
     if (place === 3) return 4
     if (tones > 3) return 3
-    return hand === 'rh' ? reach(gapBelow(i)) : reach(gapBelow(i)) === 4 ? 3 : 4
+    return hand === 'rh'
+      ? reach(gapBelow(i), (keys[i] ?? 0) - (keys[i - 2] ?? keys[i] ?? 0))
+      : reach(gapBelow(i)) === 4
+        ? 3
+        : 4
   })
 }
 

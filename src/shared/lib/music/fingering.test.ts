@@ -21,8 +21,24 @@ describe('scaleFingering', () => {
     expect(digits(scaleFingering(note('C'), 'major', 'rh', 0))).toBe('12312345')
     expect(digits(scaleFingering(note('C'), 'major', 'lh', 0))).toBe('54321321')
     expect(digits(scaleFingering(note('F'), 'major', 'rh', 0))).toBe('12341234')
-    expect(digits(scaleFingering(note('B', -1), 'major', 'rh', 0))).toBe('21231234')
+    expect(digits(scaleFingering(note('B', -1), 'major', 'rh', 0))).toBe('41231234')
     expect(digits(scaleFingering(note('C'), 'blues', 'lh', 0))).toBe('4214321')
+  })
+
+  // The printed standard (ABRSM's scale books, Vita Piano's tables): where a right hand starts on a
+  // black key, it starts on the finger a longer run gives it, not a finger lower.
+  it.each([
+    ['A♭ major', note('A', -1), 'major', '34123123', '32143213'],
+    ['B♭ major', note('B', -1), 'major', '41231234', '32143213'],
+    ['E♭ major', note('E', -1), 'major', '31234123', '32143213'],
+    ['C♯ minor', note('C', 1), 'natural', '34123123', '32143213'],
+    ['F♯ minor', note('F', 1), 'natural', '34123123', '43213214'],
+    ['G♯ minor', note('G', 1), 'natural', '34123123', '32132143'],
+    ['E♭ minor', note('E', -1), 'natural', '31234123', '21432132'],
+    ['B♭ minor', note('B', -1), 'natural', '41231234', '21321432'],
+  ] as const)('fingers %s as the books print it', (_, root, kind, rh, lh) => {
+    expect(digits(scaleFingering(root, kind, 'rh', 0))).toBe(rh)
+    expect(digits(scaleFingering(root, kind, 'lh', 0))).toBe(lh)
   })
 
   it('fingers harmonic and melodic minor as natural minor, melodic as its major where a thumb would be black', () => {
@@ -54,8 +70,8 @@ describe('scaleFingering', () => {
     }
   })
 
-  it('carries A♭ major’s right hand into its second octave on 3 4, as a longer run fingers it', () => {
-    expect(digits(scaleFingering(note('A', -1), 'major', 'rh', 0, 2))).toBe('231231234123123')
+  it('carries A♭ major’s right hand into its second octave on 3 4, as it starts', () => {
+    expect(digits(scaleFingering(note('A', -1), 'major', 'rh', 0, 2))).toBe('341231234123123')
   })
 
   it('ends D♭ and F♯ major’s left hand on the finger its octave takes in a longer run', () => {
@@ -98,7 +114,7 @@ describe('scaleFingering', () => {
     expect(digits(scaleFingering(note('C'), 'major', 'rh', 0, 2))).toBe('123123412312345')
     expect(digits(scaleFingering(note('C'), 'major', 'lh', 0, 2))).toBe('543213214321321')
     // B♭ major's middle B♭ is 4 in the right hand, 3 in the left.
-    expect(digits(scaleFingering(note('B', -1), 'major', 'rh', 0, 2))).toBe('212312341231234')
+    expect(digits(scaleFingering(note('B', -1), 'major', 'rh', 0, 2))).toBe('412312341231234')
     expect(digits(scaleFingering(note('B', -1), 'major', 'lh', 0, 2))).toBe('321432132143213')
     expect(digits(scaleFingering(note('C'), 'major', 'rh', 2, 2))).toBe('312341231234123')
   })
@@ -202,7 +218,8 @@ describe('arpeggioFingering', () => {
     expect(digits(arpeggioFingering(arpeggio(48, [4, 3, 5], 2), 'lh'))).toBe('5421421')
     expect(digits(arpeggioFingering(arpeggio(64, [3, 5, 4], 2), 'rh'))).toBe('1241245')
     expect(digits(arpeggioFingering(arpeggio(52, [3, 5, 4], 2), 'lh'))).toBe('5421421')
-    expect(digits(arpeggioFingering(arpeggio(67, [5, 4, 3], 2), 'rh'))).toBe('1231235')
+    // The 2nd inversion's 3rd note is a 6th from the thumb: the 4th finger reaches it (1 2 4 5).
+    expect(digits(arpeggioFingering(arpeggio(67, [5, 4, 3], 2), 'rh'))).toBe('1241245')
     expect(digits(arpeggioFingering(arpeggio(55, [5, 4, 3], 2), 'lh'))).toBe('5321321')
   })
 
