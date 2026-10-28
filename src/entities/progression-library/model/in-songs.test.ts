@@ -85,6 +85,12 @@ describe('progressionsOf', () => {
     expect(first && keySymbol(first.key)).toBe('G')
   })
 
+  it('hears a modal vamp only where it comes back round, never in a major song passing through', () => {
+    // I–II7–V7–I is a secondary dominant on its way to V, not the Lydian vamp.
+    expect(ids(testSong(['C D7 G7 C']))).not.toContain('lydian-vamp')
+    expect(ids(testSong(['C D C D']))).toContain('lydian-vamp')
+  })
+
   it('names none for a song of no chord symbol', () => {
     expect(progressionsOf(testSong(['_ _ _ _']))).toEqual([])
   })

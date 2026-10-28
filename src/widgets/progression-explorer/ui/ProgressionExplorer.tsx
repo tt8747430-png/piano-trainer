@@ -160,7 +160,7 @@ export function ProgressionExplorer({
         }}
       />
       <ProgressionPractice musicKey={key} inPlayer={playerSearch(view)} />
-      <ProgressionSongs line={view.p} minor={key.minor} />
+      <ProgressionSongs line={view.p} minor={key.minor} modal={view.mode !== undefined} />
       <ProgressionBetween
         chords={played.map((numeral) => numeralChord(numeral, key, view.size))}
         musicKey={key}

@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PIECES, useRepertoire, type Piece } from '@/entities/piece'
-import { songsWith, type SongPlace } from '@/entities/progression-library'
+import { heardLine, songsWith, type SongPlace } from '@/entities/progression-library'
 import { loopParam } from '@/features/practice'
 import { OPEN_PLAINLY } from '@/shared/lib'
 import { numeralText, parseNumerals, printedSymbol } from '@/shared/lib/music'
@@ -21,10 +21,19 @@ const CHORD_SPACE = ' '
  * it"), each in its own key, wherever it is written in a key of `minor`'s mode: the learner's own
  * songs after the catalog's. None for a line of one chord.
  */
-export function ProgressionSongs({ line, minor }: { line: string; minor: boolean }) {
+export function ProgressionSongs({
+  line,
+  minor,
+  modal,
+}: {
+  line: string
+  minor: boolean
+  /** Read in a mode: heard only where it comes back round (`heardLine`). */
+  modal: boolean
+}) {
   const { t } = useTranslation('practice')
   const repertoire = useRepertoire()
-  const numerals = useMemo(() => parseNumerals(line) ?? [], [line])
+  const numerals = useMemo(() => heardLine(parseNumerals(line) ?? [], modal), [line, modal])
   const songs = useMemo(() => {
     const pieces: Piece[] = [
       ...PIECES.flatMap((each) => repertoire.piece(each.id) ?? []),

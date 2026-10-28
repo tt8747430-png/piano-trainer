@@ -1,4 +1,4 @@
-import { act, screen, waitFor, within } from '@testing-library/react'
+import { act, cleanup, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
@@ -529,6 +529,15 @@ describe('Practice → Progressions', () => {
     await renderApp('/practice/progressions?key=Eb&p=I-IV-I')
     const songs = await everySong()
     expect(within(songs).getByRole('link', { name: /Amazing Grace/ })).toBeInTheDocument()
+  })
+
+  it('hears a line read in a mode only where a song comes back round to its first chord', async () => {
+    // Aura Lee's I–II7–V7–I passes through II on its way to V.
+    await renderApp('/practice/progressions?key=C&p=I-II')
+    expect(within(await everySong()).getByRole('link', { name: /Aura Lee/ })).toBeInTheDocument()
+    cleanup()
+    await renderApp('/practice/progressions?key=C&p=I-II&mode=lydian')
+    expect(within(await everySong()).queryByRole('link', { name: /Aura Lee/ })).toBeNull()
   })
 
   it('shows a few songs, and every one when asked', async () => {

@@ -175,13 +175,24 @@ export interface UsedProgression {
   readonly places: readonly SongPlace[]
 }
 
+/**
+ * The line a song must hold for a progression to be heard in it. A modal vamp is heard as its mode
+ * only coming back round (I–II–I), never in a major song passing through (I–II⁷ on to V).
+ */
+export function heardLine(numerals: readonly Numeral[], modal: boolean): readonly Numeral[] {
+  const [first] = numerals
+  return modal && first && numerals.at(-1) !== first ? [...numerals, first] : numerals
+}
+
 /** Each progression of the library with its lines, one for each mode it has. */
 const LINES = PROGRESSION_LIBRARY.map((progression) => ({
   progression,
   lines: [false, true].flatMap((minor) => {
     if (progressionMode(progression, minor) !== minor) return []
     const numerals = parseNumerals(progression[minor ? 'minor' : 'major'] ?? '')
-    return numerals ? [{ minor, numerals }] : []
+    return numerals
+      ? [{ minor, numerals: heardLine(numerals, progression.mode !== undefined) }]
+      : []
   }),
 }))
 

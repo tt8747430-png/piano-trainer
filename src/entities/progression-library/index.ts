@@ -9,6 +9,7 @@ export {
   progressionMode,
 } from './model/selectors'
 export {
+  heardLine,
   progressionPlaces,
   progressionsOf,
   songsWith,
