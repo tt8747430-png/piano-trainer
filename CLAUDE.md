@@ -16,12 +16,14 @@ TypeScript, **Feature-Sliced Design** (lint-enforced), English + Russian, deploy
 - `vite-react-best-practices` / `vercel-react-best-practices` → performance, bundle, Vite SPA.
 - `vercel-composition-patterns` → component APIs.
 - `shadcn` → anything in `src/shared/ui/primitives` (add with the CLI, never by hand).
-- `impeccable` → visual design work, over [DESIGN.md](DESIGN.md).
+- `impeccable` → visual design work, over [DESIGN.md](DESIGN.md): call it with a command and a target
+  (`audit`, `polish`, `adapt`, `harden`, `clarify`, `distill` …); our screens are its Operate mode.
 - `vercel:knowledge-update` → before touching `vercel.ts` or anything Vercel.
 - `humanizer` / `writing-guidelines` → docs and any prose the app shows.
 - **Not applicable:** React Native, Next.js and Angular skills.
 
-Non-trivial feature → `superpowers:brainstorming` (or `grilling`) first; its spec goes to `.scratch/<feature>/spec.md`.
+Which skill when, who calls it, and impeccable's commands: `.claude/skills/owner-way/references/practices.md`. A large
+feature gets a short spec in `.scratch/<feature>/spec.md` first.
 
 ## Change rules
 
