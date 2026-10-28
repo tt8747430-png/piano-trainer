@@ -126,8 +126,11 @@ describe('scoreToMei, a note’s marks and the options', () => {
     const written = scoreToMei(
       plain([c(0, { grace: [grace] }), c(24, { grace: [{ ...grace, appoggiatura: true }] })]),
     )
-    expect(written).toContain('<note grace="unacc" dur="8" stem.mod="1slash" pname="d"')
-    expect(written).toContain('<note grace="acc" dur="8" pname="d"')
+    // Each its own id, read back from the engraving as its note's grace note (ADR 0114).
+    expect(written).toContain(
+      '<note xml:id="g-treble-0-0" grace="unacc" dur="8" stem.mod="1slash" pname="d"',
+    )
+    expect(written).toContain('<note xml:id="g-treble-24-0" grace="acc" dur="8" pname="d"')
   })
 
   it('writes fingers only where asked, and only the staves asked for', () => {

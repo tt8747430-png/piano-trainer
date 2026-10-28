@@ -409,8 +409,8 @@ class Writer {
     this.marks(marks, id, staff, controls)
     const graces = (marks?.grace ?? [])
       .map(
-        (grace) =>
-          `<note grace="${grace.appoggiatura ? 'acc' : 'unacc'}" dur="8"${grace.appoggiatura ? '' : ' stem.mod="1slash"'} pname="${grace.spelled.letter.toLowerCase()}" oct="${octaveOf(
+        (grace, i) =>
+          `<note xml:id="g-${staff}-${event.tick}-${i}" grace="${grace.appoggiatura ? 'acc' : 'unacc'}" dur="8"${grace.appoggiatura ? '' : ' stem.mod="1slash"'} pname="${grace.spelled.letter.toLowerCase()}" oct="${octaveOf(
             grace.midi,
             grace.spelled.accidental,
           )}"${grace.spelled.accidental !== 0 ? ` accid="${ACCID[grace.spelled.accidental]}"` : ''}/>`,

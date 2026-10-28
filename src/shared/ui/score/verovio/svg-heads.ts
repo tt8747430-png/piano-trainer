@@ -34,7 +34,7 @@ export function headsOf(
   svg: SVGSVGElement,
   space: number,
   at: (box: Extent) => Extent,
-): { heads: Head[]; columns: Column[]; rests: Rest[] } {
+): { heads: Head[]; columns: Column[]; rests: Rest[]; graces: Head[] } {
   const heads: Head[] = []
   /** Each head's chord (or the note itself, alone): where its stem is drawn. */
   const groups = new Map<string, Element>()
@@ -76,5 +76,19 @@ export function headsOf(
     const box = glyphBox(rest.querySelector('use'), space)
     if (staff && box) rests.push({ staff: staff as StaffId, tick: Number(tick), ...at(box) })
   }
-  return { heads, columns: [...columns.values()], rests }
+  // Each grace note's head, small, before its note's (ADR 0114).
+  const graces: Head[] = []
+  for (const note of svg.querySelectorAll('g.note[id^="g-"]')) {
+    const [, staff, tick, index] = note.id.split('-')
+    const head = glyphBox(note.querySelector(':scope > g.notehead > use'), space)
+    if (!staff || !head) continue
+    graces.push({
+      id: note.id,
+      staff: staff as StaffId,
+      tick: Number(tick),
+      index: Number(index),
+      ...at(head),
+    })
+  }
+  return { heads, columns: [...columns.values()], rests, graces }
 }

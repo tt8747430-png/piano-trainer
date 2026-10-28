@@ -44,6 +44,7 @@ export const SheetLine = memo(function SheetLine({
   caret,
   playhead,
   chordNote,
+  grace,
   selection,
   onPlace,
   onReach,
@@ -93,9 +94,11 @@ export const SheetLine = memo(function SheetLine({
   playhead: { readonly tick: Tick; readonly clock: () => Tick | null } | null
   /** One note of the chord at the caret chosen alone (ADR 0096). */
   chordNote: Midi | null
+  /** The grace notes before the notes at the caret chosen in their place (ADR 0114). */
+  grace: boolean
   /** The notes chosen: their span on the piece. */
   selection: { readonly from: Tick; readonly to: Tick } | null
-  onPlace: (tick: Tick, layer: Layer, extend: boolean, key?: Midi) => void
+  onPlace: (tick: Tick, layer: Layer, extend: boolean, key?: Midi, grace?: boolean) => void
   onReach: (tick: Tick) => void
   onDeselect: () => void
   placesOf: (layer: Layer) => readonly Tick[]
@@ -133,7 +136,7 @@ export const SheetLine = memo(function SheetLine({
           }
         : caret === null
           ? undefined
-          : { staff, from: caret, to: caret + 1, midi: chordNote ?? undefined }
+          : { staff, from: caret, to: caret + 1, midi: chordNote ?? undefined, grace }
   // The caret's line comes into view when the caret moves onto it; the sheet opens where it is
   // while the line is already in sight.
   const held = useRef<boolean | null>(null)

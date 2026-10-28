@@ -67,6 +67,8 @@ export function ScoreView({
         readonly from: Tick
         readonly to: Tick
         readonly midi?: Midi | undefined
+        /** Their grace notes chosen in their place (ADR 0114). */
+        readonly grace?: boolean | undefined
       }
     | undefined
   children?: (layout: ScoreLayout) => ReactNode
@@ -124,6 +126,7 @@ export function ScoreView({
   const selectedFrom = selected?.from
   const selectedTo = selected?.to
   const selectedKey = selected?.midi
+  const selectedGrace = selected?.grace === true
   useEffect(() => {
     const element = host.current
     if (
@@ -150,12 +153,13 @@ export function ScoreView({
         to: selectedTo,
       },
       keys,
+      selectedGrace,
     )
     for (const each of marked) each.classList.add('note-chosen')
     return () => {
       for (const each of marked) each.classList.remove('note-chosen')
     }
-  }, [engraving, selectedStaff, selectedFrom, selectedTo, selectedKey])
+  }, [engraving, selectedStaff, selectedFrom, selectedTo, selectedKey, selectedGrace])
 
   const size =
     engraving.status === 'ready'

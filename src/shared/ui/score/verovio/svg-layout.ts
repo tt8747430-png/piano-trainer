@@ -88,7 +88,7 @@ export function layoutOf(
     top: y(box.top),
     bottom: y(box.bottom),
   })
-  const { heads, columns, rests } = headsOf(svg, space, inPx)
+  const { heads, columns, rests, graces } = headsOf(svg, space, inPx)
   const signs = signsOf(svg, space, inPx, staves, (index) => laid[index]?.notes ?? Infinity)
   const labels = labelsOf(svg, inPx, placed)
   const syllables = syllablesOf(svg, inPx)
@@ -101,6 +101,7 @@ export function layoutOf(
     staves: placed,
     onsets: [...onsets].sort(([a], [b]) => a - b).map(([tick, at]) => ({ tick, x: at })),
     heads,
+    graces,
     columns,
     rests,
     signs,

@@ -83,6 +83,7 @@ export function ScoreSheet({
   caret,
   playhead = null,
   chordNote = null,
+  grace = false,
   layer,
   selection,
   onPlace,
@@ -135,10 +136,12 @@ export function ScoreSheet({
   playhead?: { readonly tick: Tick; readonly clock: () => Tick | null } | null
   /** One note of the chord at the caret chosen alone (ADR 0096). */
   chordNote?: Midi | null
+  /** The grace notes before the notes at the caret chosen in their place (ADR 0114). */
+  grace?: boolean
   layer: Layer
   /** The notes chosen: their span on the piece (ADR 0096). */
   selection: { readonly from: Tick; readonly to: Tick } | null
-  onPlace: (tick: Tick, layer: Layer, extend: boolean, key?: Midi) => void
+  onPlace: (tick: Tick, layer: Layer, extend: boolean, key?: Midi, grace?: boolean) => void
   /** A held finger dragged onto the bar starting at a tick: what is chosen reaches it. */
   onReach: (tick: Tick) => void
   /** A click on empty staff: what is chosen let go. */
@@ -270,6 +273,7 @@ export function ScoreSheet({
           playhead && sheet.line.bars.some((placed) => placed.index === playBar) ? playhead : null
         }
         chordNote={chordNote}
+        grace={grace}
         tapsOf={tapsOf}
         selection={selection}
         onPlace={onPlace}

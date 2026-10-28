@@ -23,6 +23,11 @@ export interface ScoreLayout {
   readonly onsets: readonly { readonly tick: Tick; readonly x: number }[]
   /** Each notehead drawn, with its accidental and dots (ADR 0096): what a selection hugs. */
   readonly heads?: readonly Head[]
+  /**
+   * Each grace note's head drawn (`g-<staff>-<tick>-<index>`, ADR 0114), at its note's tick: a tap on
+   * one chooses it, apart from its note's heads.
+   */
+  readonly graces?: readonly Head[]
   /** Each chord's (or note's) column on its staff: its heads and its stem, what a click on it chooses whole. */
   readonly columns?: readonly Column[]
   /** Each rest drawn: notes chosen over it hug it too. */
