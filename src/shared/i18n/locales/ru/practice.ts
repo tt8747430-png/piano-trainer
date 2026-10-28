@@ -347,7 +347,7 @@ export const practice: LocaleResources['practice'] = {
   },
   quiz: {
     groups: {
-      chords: 'Аккорды',
+      chords: 'Аккорды и интервалы',
       scales: 'Гаммы и тональности',
       ear: 'На слух',
       reading: 'Чтение',

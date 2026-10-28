@@ -12,7 +12,6 @@ import { AUTO_NEXT_MS, useTrainer, type TrainerOptions } from './use-trainer'
 
 const ONLY_C_MAJOR: Asks = {
   kind: 'skills',
-  chords: 'build-chord',
   skills: ['chord:maj'],
   roots: [pitchClass(0)],
 }
@@ -130,7 +129,11 @@ describe('useTrainer', () => {
   })
 
   it('sounds an ear round as it is shown, stopping it on request and sounding it again', () => {
-    const asks: Asks = { ...ONLY_C_MAJOR, chords: 'name-chord' }
+    const asks: Asks = {
+      kind: 'chords',
+      drill: 'ear',
+      chords: [{ root: note('C'), quality: 'maj', inversion: null }],
+    }
     const { result, audio } = setup(asks)
     expect(audio.played).toHaveLength(1)
     expect(result.current.hearing).toBe(true)
@@ -141,5 +144,34 @@ describe('useTrainer', () => {
     act(() => result.current.hear())
     expect(audio.played).toHaveLength(2)
     expect(result.current.hearing).toBe(true)
+  })
+
+  it('shows the answer once a round’s time limit runs out, counted wrong, then waits', () => {
+    vi.useFakeTimers()
+    const { result } = setup(MIDDLE_C_ONLY, { limit: 5, autoNext: true })
+    act(() => vi.advanceTimersByTime(4900))
+    expect(result.current.round.result).toBeNull()
+    act(() => vi.advanceTimersByTime(200))
+    expect(result.current.round.result).toEqual({ kind: 'shown', correct: false })
+    expect(result.current.run.answered).toHaveLength(1)
+    act(() => vi.advanceTimersByTime(AUTO_NEXT_MS * 3))
+    expect(result.current.number).toBe(1)
+  })
+
+  it('turns a card over, goes on by itself with auto-next, and sums up a run of cards with no score', () => {
+    vi.useFakeTimers()
+    const cards: Asks = {
+      kind: 'chords',
+      drill: 'flashcards',
+      chords: [{ root: note('C'), quality: 'maj', inversion: null }],
+    }
+    const { result } = setup(cards, { autoNext: true, rounds: 10 })
+    act(() => result.current.reveal())
+    expect(result.current.round.result).toEqual({ kind: 'revealed', correct: true })
+    act(() => vi.advanceTimersByTime(AUTO_NEXT_MS))
+    expect(result.current.number).toBe(2)
+    act(() => result.current.reveal())
+    act(() => result.current.stop())
+    expect(result.current.summary).toMatchObject({ cards: true, answered: 2 })
   })
 })

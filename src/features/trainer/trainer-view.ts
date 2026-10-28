@@ -4,12 +4,10 @@ import { isOneOf } from '@/shared/lib'
 // no trainer into the first paint.
 
 export const TRAINER_IDS = [
-  'build-chord',
-  'name-chord',
+  'chords',
+  'intervals',
   'build-scale',
   'gaps',
-  'intervals-by-ear',
-  'chords-by-ear',
   'scales-by-ear',
   'progressions-by-ear',
   'reading-notes',
@@ -29,21 +27,44 @@ export const isRounds = isOneOf(ROUNDS)
 export const CUSTOM = 'custom'
 
 /**
+ * The four ways a drill asks the same chords or intervals: a card turned over, a choice of four read
+ * off the keys and staff, played on the keys, or a choice of four heard.
+ */
+export const DRILLS = ['flashcards', 'quiz', 'entry', 'ear'] as const
+export type Drill = (typeof DRILLS)[number]
+export const isDrill = isOneOf(DRILLS)
+
+/** What a flashcard shows of its chord or interval, the rest turned over: its name, keys or staff. */
+export const CARD_SIDES = ['name', 'keys', 'staff'] as const
+export type CardSide = (typeof CARD_SIDES)[number]
+export const isCardSide = isOneOf(CARD_SIDES)
+
+/** A round's time limit in seconds: once it runs out the answer is shown. */
+export const TIME_LIMITS = [5, 10, 20, 30] as const
+export type TimeLimit = (typeof TIME_LIMITS)[number]
+export const isTimeLimit = isOneOf(TIME_LIMITS)
+
+/**
  * A trainer's URL: its level (a level of its ladder, or Custom; absent is its first), how many rounds,
  * and Custom's choices, each a list joined by `.` or a switch, absent for its own.
  */
 export interface TrainerView {
   readonly level?: string
   readonly rounds: Rounds
-  /** Build and Name chord's types: sizes, suspensions and added tones as lists, Altered a switch. */
-  readonly sizes?: string
-  readonly suspended?: string
-  readonly added?: string
-  readonly altered?: boolean
+  /** How a drill asks (Chords, Intervals); absent is its first, Flashcards. */
+  readonly drill?: Drill
+  /** What a flashcard shows; absent is its name. */
+  readonly show?: CardSide
+  /** Each round's time limit in seconds; absent is none. */
+  readonly limit?: TimeLimit
+  /** Custom's chords: their qualities, the roots (`C.F#.Bb`) and whether inversions are asked. */
+  readonly chords?: string
+  readonly roots?: string
+  readonly inversions?: boolean
   readonly scales?: string
   readonly intervals?: string
   readonly ways?: string
-  readonly qualities?: string
+  /** By ear, a chord's notes one at a time. */
   readonly arpeggio?: boolean
   readonly kinds?: string
   readonly descending?: boolean

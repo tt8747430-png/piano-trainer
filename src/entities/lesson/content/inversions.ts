@@ -82,7 +82,7 @@ const inversions: Lesson = {
         {
           kind: 'link',
           title: { en: 'Name chords in the Quiz', ru: 'Названия аккордов в тестах' },
-          target: { opens: 'quiz', trainer: 'name-chord' },
+          target: { opens: 'quiz', trainer: 'chords', drill: 'quiz' },
         },
       ],
     },

@@ -46,6 +46,7 @@ describe('a run', () => {
       averageMs: 1667,
       bestStreak: 1,
       missed: [question(62)],
+      cards: false,
     })
   })
 
@@ -56,6 +57,7 @@ describe('a run', () => {
       averageMs: 0,
       bestStreak: 0,
       missed: [],
+      cards: false,
     })
   })
 })

@@ -183,6 +183,7 @@ export const common = {
     noDevice: 'No MIDI keyboard found.',
     denied: 'MIDI access was blocked.',
     unsupported: 'This browser can’t connect a MIDI keyboard.',
+    off: 'MIDI input is off.',
   },
   // How a take is recorded (ADR 0028): in Settings › Recording and the recording strip's settings.
   recorderSettings: {
@@ -192,18 +193,32 @@ export const common = {
     tuneInfo:
       'The song’s melody, its staves over the piano, plays under your take while you record. Shown where the song has one.',
   },
-  // The MIDI keyboard's settings, in Settings under its connection.
+  // The MIDI keyboard's screen (Settings › MIDI keyboard, ADR 0034) and its MIDI log.
   midiSettings: {
-    device: {
-      label: 'Listen to',
-      detail: 'With more than one connected, the app hears only this one',
-      any: 'Any keyboard',
-      away: '{{device}} (not connected)',
-    },
-    sound: 'Sound the MIDI keyboard',
+    input: 'MIDI input',
+    inputNote:
+      'The app hears the keys and pedals played on a MIDI keyboard. Off, it hears none and asks nothing as it opens.',
+    output: 'MIDI output',
+    outputNote: 'Songs and examples sound from the keyboard’s own speakers',
+    sound: 'MIDI input plays sound',
     soundNote: 'For a keyboard without speakers: the app sounds the keys you press',
-    throughPiano: 'Play the app’s music on the keyboard',
-    throughPianoNote: 'Songs and examples sound from the keyboard’s own speakers',
+    needsInput: 'Needs MIDI input',
+    unsupportedNote:
+      'Web MIDI works in Chrome, Edge, Opera and Firefox on a computer or an Android phone. Safari, and every browser on an iPhone or iPad, has none.',
+    deniedNote:
+      'Allow MIDI for this site in the browser’s site settings (the icon before the address), then turn MIDI input on again.',
+    devices: {
+      label: 'Connected devices',
+      info: 'With more than one connected, the app hears only the one chosen',
+      any: 'Any keyboard',
+      anyDetail: 'Every keyboard connected is heard',
+      none: 'No MIDI devices connected',
+      inputOff: 'Turn on MIDI input to see your devices',
+      away: 'Not connected',
+      keys: 'Keys',
+      speaker: 'Speaker',
+    },
+    playing: 'Playing',
     octaveShift: {
       label: 'Octave shift',
       detail: 'Moves what the keyboard plays up or down, for a short keyboard',
@@ -220,6 +235,54 @@ export const common = {
       detail: 'Reversed, for a pedal that holds the notes while it is up',
       normal: 'Normal',
       reversed: 'Reversed',
+    },
+    bluetooth: {
+      label: 'Bluetooth',
+      connect: 'Connect a Bluetooth MIDI keyboard',
+      steps: 'Pair it with this device first: then it shows here',
+      power: 'Turn on the keyboard’s Bluetooth MIDI: its manual says how.',
+      pair: 'Pair it with this device:',
+      mac: 'On a Mac: Audio MIDI Setup › Window › Show MIDI Studio › the Bluetooth button › Connect.',
+      windows: 'On Windows: Settings › Bluetooth & devices › Add device.',
+      android:
+        'On Android: pair it in a Bluetooth MIDI app; the phone’s Bluetooth settings alone do not pair MIDI.',
+      ios: 'An iPhone or iPad cannot: their browsers have no Web MIDI.',
+      back: 'Come back here: the keyboard shows under Connected devices.',
+    },
+    troubleshooting: 'Troubleshooting',
+    log: {
+      label: 'MIDI log',
+      info: 'The last 200 messages your MIDI devices sent, newest first: what a key, a pedal or a knob sends, and on which channel.',
+      count_one: '{{count}} message',
+      count_other: '{{count}} messages',
+      pause: 'Pause',
+      resume: 'Resume',
+      clear: 'Clear',
+      empty: 'Play a key or a pedal: each message shows here',
+      paused: 'Paused: new messages are kept but not shown',
+      noteOn: 'Note on {{note}}',
+      noteOff: 'Note off {{note}}',
+      velocity: 'Velocity {{velocity}}',
+      channel: 'Channel {{channel}}',
+      value: 'Value {{value}}',
+      pedalDown: '{{pedal}} down',
+      pedalUp: '{{pedal}} up',
+      pedals: { sustain: 'Sustain pedal', sostenuto: 'Sostenuto pedal', soft: 'Soft pedal' },
+      control: 'Controller {{controller}}',
+      program: 'Program {{program}}',
+      pitchBend: 'Pitch bend {{value}}',
+      other: 'Message {{bytes}}',
+    },
+    // A Settings row's value: the MIDI keyboard's state in a word or a name.
+    summary: {
+      unavailable: 'Not available',
+      off: 'Off',
+      denied: 'Blocked',
+      connecting: 'Connecting…',
+      noDevice: 'No device',
+      away: '{{device}} away',
+      devices_one: '{{count}} device',
+      devices_other: '{{count}} devices',
     },
   },
 } as const

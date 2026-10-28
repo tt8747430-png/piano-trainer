@@ -1,15 +1,16 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
+import { X } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
-import { CUSTOM, isTrainerId, ROUNDS, type TrainerId, type TrainerView } from '@/features/trainer'
-import { useGoBack, useViewChange } from '@/shared/lib'
-import { BackButton, ButtonLink, Dropdown, NamedSegmented, ScreenHeader } from '@/shared/ui'
+import { CUSTOM, isTrainerId, type TrainerId, type TrainerView } from '@/features/trainer'
+import { useViewChange } from '@/shared/lib'
+import { BackButton, ButtonLink, RoundButton, ScreenHeader } from '@/shared/ui'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
-import { TrainerChoice } from '@/widgets/trainer-choice'
+import { TrainerSetup } from '@/widgets/trainer-setup'
 import { useTrainerScreen } from '../model/use-trainer-screen'
 import { TrainerRecordLine } from './TrainerRecordLine'
 import { TrainerRunView } from './TrainerRunView'
-import { AutoNextToggle } from './AutoNextToggle'
 import { useLevelName } from './use-level-name'
 
 /** A trainer, named by the path: the one Quiz opened. */
@@ -18,61 +19,35 @@ export function TrainerPage() {
   return isTrainerId(trainerId) ? <TrainerScreenView key={trainerId} id={trainerId} /> : null
 }
 
-/** A trainer under its name, with its level, rounds and record, and a run of it. */
+/**
+ * A trainer under its name: its setup (the one template every trainer shares), then, once started,
+ * a run of it in the setup's place, closed back to the setup by its X or its results' Done.
+ */
 function TrainerScreenView({ id }: { id: TrainerId }) {
-  const { t } = useTranslation('quiz')
+  const { t } = useTranslation(['quiz', 'common'])
   const view = useSearch({ from: '/shell/practice/quiz/$trainerId' })
   const setView = useViewChange<TrainerView>()
-  const close = useGoBack({ to: '/practice/quiz' })
+  const [running, setRunning] = useState(false)
   const { trainer, level, asks, runKey, runId, record } = useTrainerScreen(id, view)
   const levelName = useLevelName()
   const levels = [...trainer.levels, ...(trainer.custom.length > 0 ? [CUSTOM] : [])].map(
     (value) => ({ value, label: levelName(id, value) }),
   )
+  const close = () => setRunning(false)
   return (
     <div className="flex flex-col gap-6 landscape-phone:gap-3">
       <ScreenHeader
         title={t(`trainers.${id}`)}
-        back={<BackButton fallback={{ to: '/practice/quiz' }} />}
+        back={
+          running ? (
+            <RoundButton label={t('common:close')} icon={X} onClick={close} />
+          ) : (
+            <BackButton fallback={{ to: '/practice/quiz' }} />
+          )
+        }
         actions={<MidiButton />}
       />
-      {/* On a phone on its side the run comes first, its keys and Check in sight; these follow it. */}
-      <div className="flex flex-col gap-3 landscape-phone:order-last landscape-phone:border-t landscape-phone:border-hairline landscape-phone:pt-3">
-        <div className="flex flex-wrap items-center gap-2">
-          {levels.length > 0 ? (
-            <Dropdown
-              label={t('level')}
-              value={level}
-              options={levels}
-              onChange={(next) => setView({ level: next === trainer.levels[0] ? undefined : next })}
-            />
-          ) : null}
-          <NamedSegmented
-            label={t('rounds.label')}
-            value={view.rounds}
-            options={ROUNDS.map((rounds) =>
-              rounds === 0
-                ? { value: rounds, label: '∞', title: t('rounds.untilStopped') }
-                : { value: rounds, label: String(rounds) },
-            )}
-            onChange={(rounds) => setView({ rounds })}
-          />
-          <AutoNextToggle />
-        </div>
-        {level === CUSTOM ? (
-          <TrainerChoice trainer={trainer} view={view} onChange={setView} />
-        ) : null}
-        <TrainerRecordLine record={record} />
-      </div>
-      {asks ? (
-        <TrainerRunView
-          key={runId}
-          asks={asks}
-          rounds={view.rounds}
-          runKey={runKey}
-          onDone={close}
-        />
-      ) : (
+      {!asks ? (
         // Nothing to ask yet: said as every empty screen says it, with a way to a trainer.
         <Empty>
           <EmptyHeader>
@@ -81,12 +56,37 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
           <EmptyContent>
             <ButtonLink
               variant="soft"
-              render={<Link to="/practice/quiz/$trainerId" params={{ trainerId: 'build-chord' }} />}
+              render={
+                <Link
+                  to="/practice/quiz/$trainerId"
+                  params={{ trainerId: 'chords' }}
+                  search={{ drill: 'entry' }}
+                />
+              }
             >
               {t('gaps.toBuildChord')}
             </ButtonLink>
           </EmptyContent>
         </Empty>
+      ) : running ? (
+        <TrainerRunView
+          key={runId}
+          asks={asks}
+          rounds={view.rounds}
+          limit={view.limit}
+          runKey={runKey}
+          onDone={close}
+        />
+      ) : (
+        <TrainerSetup
+          trainer={trainer}
+          view={view}
+          level={level}
+          levels={levels}
+          onChange={setView}
+          onStart={() => setRunning(true)}
+          footer={<TrainerRecordLine record={record} />}
+        />
       )}
     </div>
   )

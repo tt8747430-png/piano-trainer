@@ -369,7 +369,7 @@ export const practice = {
   quiz: {
     // The Quiz page's groups of trainers.
     groups: {
-      chords: 'Chords',
+      chords: 'Chords and intervals',
       scales: 'Scales and keys',
       ear: 'By ear',
       reading: 'Reading',

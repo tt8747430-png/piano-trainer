@@ -66,6 +66,7 @@ describe('createSettingsStore', () => {
     expect(DEFAULT_TRAINER).toEqual({ autoNext: false })
     expect(DEFAULT_RECORDER).toEqual({ click: true, tune: false })
     expect(DEFAULT_MIDI).toEqual({
+      input: true,
       device: null,
       sound: false,
       throughPiano: false,
@@ -119,6 +120,7 @@ describe('createSettingsStore', () => {
       sidebar: 'collapsed',
       paletteFolded: { beside: true, foot: false },
       midi: {
+        input: false,
         device: 'Piano',
         sound: true,
         throughPiano: false,
@@ -367,6 +369,7 @@ describe('createSettingsStore', () => {
 
   it('restores the MIDI keyboard’s settings, an unknown value taking its default alone', () => {
     const midi = {
+      input: false,
       device: 'Piano',
       sound: true,
       throughPiano: true,
@@ -376,8 +379,17 @@ describe('createSettingsStore', () => {
     }
     expect(restored({ midi }).midi).toEqual(midi)
     expect(
-      restored({ midi: { ...midi, octaveShift: 3, touch: 'soft', device: '', sound: 'yes' } }).midi,
-    ).toEqual({ ...midi, octaveShift: 0, touch: 'normal', device: null, sound: false })
+      restored({
+        midi: { ...midi, input: 1, octaveShift: 3, touch: 'soft', device: '', sound: 'yes' },
+      }).midi,
+    ).toEqual({
+      ...midi,
+      input: true,
+      octaveShift: 0,
+      touch: 'normal',
+      device: null,
+      sound: false,
+    })
     expect(restored({ midi: { device: 'x'.repeat(101) } }).midi.device).toBeNull()
   })
 

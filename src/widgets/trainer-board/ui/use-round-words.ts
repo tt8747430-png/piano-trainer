@@ -38,13 +38,20 @@ export function useRoundWords() {
               position: t(`music:inversionName.${INVERSION_NAMES[question.inversion] ?? 'root'}`),
             })
       case 'name-chord':
-        return t('quiz:prompt.nameChord')
+        return question.heard ? t('quiz:prompt.hearChord') : t('quiz:prompt.nameChord')
+      case 'chord-card':
+        return question.show === 'name' ? answer(question) : t('quiz:prompt.nameChord')
       case 'build-scale':
         return t('quiz:prompt.buildScale', { scale: scaleName(question.root, question.kind) })
       case 'name-interval':
-        return t('quiz:prompt.nameInterval')
-      case 'name-quality':
-        return t('quiz:prompt.nameQuality')
+        return question.heard ? t('quiz:prompt.hearInterval') : t('quiz:prompt.nameInterval')
+      case 'interval-card':
+        return question.show === 'name' ? answer(question) : t('quiz:prompt.nameInterval')
+      case 'build-interval':
+        return t('quiz:prompt.buildInterval', {
+          interval: t(`music:interval.${question.interval}.name`).toLowerCase(),
+          note: noteName(question.lowNote),
+        })
       case 'name-scale':
         return t('quiz:prompt.nameScale')
       case 'read-note':
@@ -72,8 +79,6 @@ export function useRoundWords() {
           value,
           label: t(`music:interval.${value}.name`),
         }))
-      case 'name-quality':
-        return question.options.map((value) => ({ value, label: t(`music:quality.${value}`) }))
       case 'name-scale':
         return question.options.map((value) => ({ value, label: t(`music:scaleKind.${value}`) }))
       case 'key-signature':
@@ -91,10 +96,11 @@ export function useRoundWords() {
   }
 
   /** What the round's answer is called: `C♯m7 · Minor 7th`, `Perfect fifth`, `E4`. */
-  const answer = (question: Question): string => {
+  function answer(question: Question): string {
     switch (question.mode) {
       case 'build-chord':
       case 'name-chord':
+      case 'chord-card':
         return `${printedSymbol(question.symbol)} · ${t(`music:quality.${question.quality}`)}`
       case 'build-scale':
       case 'name-scale':
@@ -110,9 +116,13 @@ export function useRoundWords() {
       case 'name-progression':
         return `${progressionLine(question.line)} · ${keyName(question.key)}`
       case 'name-interval':
-        return t(`music:interval.${question.interval}.name`)
-      case 'name-quality':
-        return t(`music:quality.${question.quality}`)
+      case 'build-interval':
+      case 'interval-card':
+        return t('quiz:intervalAnswer', {
+          interval: t(`music:interval.${question.interval}.name`),
+          low: noteName(question.lowNote),
+          high: noteName(question.highNote),
+        })
     }
   }
 

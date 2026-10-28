@@ -67,10 +67,14 @@ describe('roundReducer: building on the keys', () => {
 
 describe('roundReducer: choosing', () => {
   const naming = startRound(
-    drawRound(skillAsks(['chord:m7'], { roots: [pitchClass(9)], chords: 'name-chord' }), {
-      index: 0,
-      random: scripted(0.2),
-    }),
+    drawRound(
+      {
+        kind: 'chords',
+        drill: 'quiz',
+        chords: [{ root: note('A'), quality: 'm7', inversion: null }],
+      },
+      { index: 0, random: scripted(0.2) },
+    ),
   )
 
   it('judges a chosen option once, and takes no keys', () => {
@@ -88,8 +92,11 @@ describe('roundReducer: choosing', () => {
       interval: 'P4',
       low: midi(60),
       high: midi(65),
+      lowNote: note('C'),
+      highNote: note('F'),
       way: 'up',
       options: ['M3', 'P4', 'P5'],
+      heard: false,
     })
     expect(play(interval, { type: 'choose', option: 'P4' }).result).toMatchObject({ correct: true })
   })
