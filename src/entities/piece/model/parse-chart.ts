@@ -5,6 +5,7 @@ import {
   beatsToTicks,
   ChordSymbolError,
   isCompound,
+  MULTI_REST,
   parseChordSymbol,
   parseKey,
   TICKS_PER_BEAT,
@@ -59,6 +60,14 @@ const START_TOKENS: Readonly<Record<string, BarMarks>> = {
   Segno: { segno: true },
   Coda: { coda: true },
   Page: { pageBreak: true },
+  '%': { barRepeat: 1 },
+  '%%': { barRepeat: 2 },
+}
+
+/** `Rest3`: a multi-bar rest drawn over this bar and the next two (two to ninety-nine bars). */
+function multiRest(token: string): BarMarks | undefined {
+  const count = Number(/^Rest(\d+)$/.exec(token)?.[1])
+  return count >= MULTI_REST.from && count <= MULTI_REST.to ? { multiRest: count } : undefined
 }
 
 /** The most bars of its meter one bar may last: a bar of chords with long `@beats`. */
@@ -201,7 +210,7 @@ export function parseChart(piece: ChartPiece): Chart {
           bars[bars.length - 1] = { ...last, ...end }
           continue
         }
-        const start = START_TOKENS[token]
+        const start = START_TOKENS[token] ?? multiRest(token)
         if (start) {
           if (Object.keys(start).some((mark) => mark in before))
             fail(`two of a kind before one bar: "${token}"`)

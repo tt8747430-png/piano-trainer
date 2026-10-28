@@ -117,7 +117,9 @@ export function scoreToMei(score: Score, options: MeiOptions = {}): string {
   const writer = new Writer(score, staves, options)
   const body: string[] = []
   let ending: number | undefined
-  score.measures.forEach((measure, index) => {
+  for (let index = 0; index < score.measures.length; index += 1) {
+    const measure = score.measures[index]
+    if (!measure) continue
     if (measure.ending !== ending) {
       if (ending !== undefined) body.push('</ending>')
       if (measure.ending !== undefined) body.push(`<ending n="${measure.ending}">`)
@@ -126,8 +128,11 @@ export function scoreToMei(score: Score, options: MeiOptions = {}): string {
     const before = score.measures[index - 1]
     const changes = before ? changedAttrs(score, measure, before) : ''
     if (changes) body.push(`<scoreDef${changes}/>`)
-    body.push(writer.measure(measure, index))
-  })
+    // A multi-bar rest is one measure, named by its first bar (ADR 0087): its others are not drawn.
+    const resting = restRun(score.measures, index)
+    body.push(writer.measure(measure, index, resting))
+    index += Math.max(resting - 1, 0)
+  }
   if (ending !== undefined) body.push('</ending>')
   const last = score.measures.at(-1)
   if (options.next && last) body.push(courtesy(score, last, options.next, staves))
@@ -254,6 +259,31 @@ interface Open {
 const octaveLine = (staff: number, { id, line, last }: NonNullable<Open['octave']>) =>
   `<octave staff="${staff}" startid="#${id}" endid="#${last}" dis="${line.startsWith('15') ? 15 : 8}" dis.place="${line === '8va' || line === '15ma' ? 'above' : 'below'}"/>`
 
+/**
+ * How many bars a multi-bar rest draws as one from `index` (`drawnAs`): its own and the bars it goes
+ * on over, those of a rest begun on a line before counted from the line's first; 0 where it starts
+ * none.
+ */
+function restRun(measures: readonly Measure[], index: number): number {
+  const drawn = measures[index]?.drawn
+  const starts =
+    drawn === 'rest' || (drawn === 'restOn' && measures[index - 1]?.drawn === undefined)
+  if (!starts) return 0
+  let end = index + 1
+  while (measures[end]?.drawn === 'restOn') end += 1
+  return end - index > 1 ? end - index : 0
+}
+
+/** A bar repeat's sign where a measure is drawn in one, its pair (a two-bar repeat's) on its line. */
+function repeatSign(measures: readonly Measure[], index: number): string | null {
+  const measure = measures[index]
+  if (measure?.drawn === 'repeat') return '<mRpt/>'
+  if (measure?.drawn !== 'repeat2') return null
+  const pair = measure.barRepeat === 2 ? measures[index + 1] : measures[index - 1]
+  const first = measure.barRepeat === 2 ? measure : pair
+  return pair?.drawn === 'repeat2' && first?.barRepeat === 2 ? '<mRpt2/>' : null
+}
+
 /** The MEI of a score's measures, one by one: what runs across barlines (ties, slurs, lines) held between them. */
 class Writer {
   private readonly tied = new Map<string, Set<number>>()
@@ -273,12 +303,17 @@ class Writer {
     return this.staves.indexOf(staff) + 1
   }
 
-  measure(measure: Measure, index: number): string {
+  /** A measure's MEI; drawn as a multi-bar rest of `resting` bars where that is two or more. */
+  measure(measure: Measure, index: number, resting = 0): string {
     const before = this.score.measures[index - 1]
+    // A multi-bar rest ends as its last bar does.
+    const last = (resting > 1 && this.score.measures[index + resting - 1]) || measure
+    const sign =
+      resting > 1 ? `<multiRest num="${resting}"/>` : repeatSign(this.score.measures, index)
     const attrs = [
       `xml:id="m-${index}"`,
       `n="${index + 1}"`,
-      measure.barline ? `right="${RIGHT[measure.barline]}"` : '',
+      last.barline ? `right="${RIGHT[last.barline]}"` : '',
       measure.repeatStart ? 'left="rptstart"' : '',
     ].filter(Boolean)
     const controls: string[] = []
@@ -290,6 +325,8 @@ class Writer {
         before && clefIn(before, staff) !== clefIn(measure, staff)
           ? `<clef ${clefAttrs(clefIn(measure, staff), '')}/>`
           : ''
+      if (sign)
+        return `<staff n="${this.number(staff)}"><layer n="1">${clef}${sign}</layer></staff>`
       const layers = (measure.staves[staff] ?? []).map((voice, v) => {
         const stem = voice.stem === 'auto' ? '' : ` stem.dir="${voice.stem}"`
         const events = this.layer(voice.events, measure, staff, `${staff} ${v}`, stem, controls)
@@ -319,10 +356,10 @@ class Writer {
     const ending = (text: string) =>
       `<dir staff="${top}" tstamp="${end - 0.01}" place="above"><rend halign="right" fontstyle="italic">${text}</rend></dir>`
     // A repeat played more than twice says its times at its end, as Flat prints it.
-    if (measure.barline === 'repeat' && measure.times) controls.push(ending(`${measure.times}×`))
-    if (measure.fine) controls.push(ending('Fine'))
-    if (measure.toCoda) controls.push(ending('To Coda 𝄌'))
-    if (measure.jump) controls.push(ending(JUMP_TEXT[measure.jump]))
+    if (last.barline === 'repeat' && last.times) controls.push(ending(`${last.times}×`))
+    if (last.fine) controls.push(ending('Fine'))
+    if (last.toCoda) controls.push(ending('To Coda 𝄌'))
+    if (last.jump) controls.push(ending(JUMP_TEXT[last.jump]))
     // The score's last measure closes an octave line still running.
     if (index === this.score.measures.length - 1)
       for (const [staff, open] of this.open)

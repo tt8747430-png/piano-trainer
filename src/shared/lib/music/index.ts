@@ -299,13 +299,16 @@ export {
   type SwingMark,
 } from './marks'
 export {
+  BAR_REPEATS,
   BARLINES,
   barMarksOf,
   ENDINGS,
   JUMPS,
+  MULTI_REST,
   playOrder,
   withoutBarMarks,
   type BarMarks,
+  type BarRepeat,
   type Barline,
   type Ending,
   type Jump,

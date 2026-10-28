@@ -48,6 +48,40 @@ const mei = scoreToMei(
 )
 
 describe('scoreToMei', () => {
+  describe('bar repeats and multi-bar rests (Flat’s)', () => {
+    const whole = (key: number, letter: Parameters<typeof note>[0], bar: number) =>
+      n(key, note(letter), 'rh', bar * 4 * B, 4 * B)
+    const bars = (marks: Partial<TimedMusic['bars'][number]>[]) =>
+      marks.map((mark, i) => ({ startTick: i * 4 * B, beats: 4, ...mark }))
+    const measures = (written: string) => written.match(/<measure [^>]*>.*?<\/measure>/g) ?? []
+
+    it('draws a bar repeat in its sign on every staff, a two-bar repeat’s over both its bars', () => {
+      const notes = [whole(60, 'C', 0), whole(60, 'C', 1), whole(60, 'C', 2), whole(60, 'C', 3)]
+      const one = measures(scoreToMei(notate(music(notes, { bars: bars([{}, { barRepeat: 1 }]) }))))
+      expect(one[1]).toMatch(/<staff n="1"><layer n="1"><mRpt\/><\/layer><\/staff>/)
+      expect(one[1]).toMatch(/<staff n="2"><layer n="1"><mRpt\/><\/layer><\/staff>/)
+      expect(one[1]).not.toContain('<note')
+      const two = measures(
+        scoreToMei(notate(music(notes, { bars: bars([{}, {}, { barRepeat: 2 }, {}]) }))),
+      )
+      expect(two.slice(2).every((m) => m.includes('<mRpt2/>') && !m.includes('<note'))).toBe(true)
+      // A pair broken by the line's end is drawn in its notes.
+      const cut = notate(music(notes, { bars: bars([{}, {}, { barRepeat: 2 }, {}]) }))
+      const head = measures(scoreToMei({ ...cut, measures: cut.measures.slice(0, 3) }))
+      expect(head[2]).toContain('<note')
+    })
+
+    it('draws a multi-bar rest as one measure counting its bars, named by its first, ending as its last', () => {
+      const notes = [whole(60, 'C', 0), whole(64, 'E', 4)]
+      const marks = bars([{}, { multiRest: 3 }, {}, { barline: 'double' }, {}])
+      const written = measures(scoreToMei(notate(music(notes, { bars: marks }))))
+      expect(written).toHaveLength(3)
+      expect(written[1]).toMatch(/^<measure xml:id="m-1" n="2" right="dbl">/)
+      expect(written[1]).toContain('<layer n="1"><multiRest num="3"/></layer>')
+      expect(written[2]).toMatch(/^<measure xml:id="m-4"/)
+    })
+  })
+
   it('writes an MEI document with the title, the key of five flats and 4/4', () => {
     expect(mei).toContain('<mei xmlns="http://www.music-encoding.org/ns/mei"')
     expect(mei).toContain('<title>Wonderful Grace</title>')

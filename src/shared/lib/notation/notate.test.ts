@@ -37,6 +37,65 @@ const shape = (events: readonly ScoreEvent[]) =>
 const notesOf = (event: ScoreEvent | undefined) => (event?.kind === 'notes' ? event.notes : [])
 
 describe('notate', () => {
+  describe('bar repeats and multi-bar rests (Flat’s)', () => {
+    const bars = (count: number, marks: Partial<TimedMusic['bars'][number]>[] = []) =>
+      Array.from({ length: count }, (_, i) => ({ startTick: i * 4 * B, beats: 4, ...marks[i] }))
+    const drawnOf = (notes: TimedNote[], marks: Partial<TimedMusic['bars'][number]>[]) =>
+      notate(music(notes, { bars: bars(marks.length, marks) })).measures.map((m) => m.drawn)
+    const whole = (key: number, letter: Parameters<typeof note>[0], bar: number) =>
+      n(key, note(letter), 'rh', bar * 4 * B, 4 * B)
+
+    it('draws a bar repeat’s sign where its bar plays the bar before again, its notes where not', () => {
+      const notes = [whole(60, 'C', 0), whole(60, 'C', 1), whole(62, 'D', 2)]
+      expect(drawnOf(notes, [{}, { barRepeat: 1 }, { barRepeat: 1 }])).toEqual([
+        undefined,
+        'repeat',
+        undefined,
+      ])
+    })
+
+    it('draws a two-bar repeat over both its bars where they play the two before again', () => {
+      const notes = [whole(60, 'C', 0), whole(62, 'D', 1), whole(60, 'C', 2), whole(62, 'D', 3)]
+      expect(drawnOf(notes, [{}, {}, { barRepeat: 2 }, {}])).toEqual([
+        undefined,
+        undefined,
+        'repeat2',
+        'repeat2',
+      ])
+      expect(drawnOf(notes.slice(0, 3), [{}, {}, { barRepeat: 2 }])).toEqual([
+        undefined,
+        undefined,
+        undefined,
+      ])
+    })
+
+    it('draws a multi-bar rest over its bars while they are empty, a lone empty bar as its rest', () => {
+      const notes = [whole(60, 'C', 0), whole(64, 'E', 4)]
+      expect(drawnOf(notes, [{}, { multiRest: 3 }, {}, {}, {}])).toEqual([
+        undefined,
+        'rest',
+        'restOn',
+        'restOn',
+        undefined,
+      ])
+      // A bar with notes, or a mark starting a bar, ends the run; a run of one is no multi-bar rest.
+      expect(drawnOf([...notes, whole(62, 'D', 3)], [{}, { multiRest: 3 }, {}, {}, {}])).toEqual([
+        undefined,
+        'rest',
+        'restOn',
+        undefined,
+        undefined,
+      ])
+      expect(drawnOf(notes, [{}, { multiRest: 3 }, { segno: true }, {}, {}])).toEqual([
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ])
+    })
+  })
+
   it('writes each single staff over the grand staff, top down, its notes on it alone (ADR 0097)', () => {
     const notes = [
       n(72, note('C'), 'staff', 0, 4 * B, { staff: 0 }),

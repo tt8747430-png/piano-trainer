@@ -108,6 +108,16 @@ describe('parseChart', () => {
     expect(writeBar(paged[0] ?? { chords: [], beats: 4 }, '4/4')).toBe('Page G')
   })
 
+  it('reads and writes a bar repeat of one or two bars and a multi-bar rest (Flat’s)', () => {
+    const text = 'C % C F G %% F G Rest3 _ _ _'
+    const [line = []] = parseChart(testSong([text])).sections[0]?.lines ?? []
+    expect(line.map(({ barRepeat, multiRest }) => barRepeat ?? multiRest ?? 0)).toEqual([
+      0, 1, 0, 0, 2, 0, 3, 0, 0,
+    ])
+    expect(line.map((bar) => writeBar(bar, '4/4')).join(' ')).toBe(text)
+    expect(errorOf(['Rest1 _']).message).toMatch(/unknown/)
+  })
+
   it('writes a bar’s barlines back around it', () => {
     const [line = []] =
       parseChart(testSong(['|: C [1 F :| [2 G || Am |.'])).sections[0]?.lines ?? []

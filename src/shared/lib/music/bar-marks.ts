@@ -33,7 +33,24 @@ export interface BarMarks {
   readonly toCoda?: true
   /** A page break before it, Flat's: in the page view its line starts a new page. */
   readonly pageBreak?: true
+  /**
+   * A bar repeat, Flat's: it plays the bar before again (1), or it and the next play the two bars
+   * before again (2). Its notes are written out and played; the sign is drawn where they repeat.
+   */
+  readonly barRepeat?: BarRepeat
+  /**
+   * A multi-bar rest, Flat's: this many bars from it, each written as its rest, drawn as one rest
+   * with their count over it while they stay empty.
+   */
+  readonly multiRest?: number
 }
+
+/** A bar repeat's length: one bar's sign, or two bars'. */
+export const BAR_REPEATS = [1, 2] as const
+export type BarRepeat = (typeof BAR_REPEATS)[number]
+
+/** How many bars a multi-bar rest may draw as one: two to ninety-nine. */
+export const MULTI_REST = { from: 2, to: 99 } as const
 
 const MARK_KEYS = [
   'repeatStart',
@@ -46,6 +63,8 @@ const MARK_KEYS = [
   'fine',
   'toCoda',
   'pageBreak',
+  'barRepeat',
+  'multiRest',
 ] as const satisfies readonly (keyof BarMarks)[]
 
 /** A bar's marks alone, those it has: what each step from the text to the score carries on. */

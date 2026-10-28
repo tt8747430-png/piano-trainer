@@ -96,6 +96,9 @@ export const editor = {
     ending3: '3rd ending',
     ending4: '4th ending',
     pageBreak: 'Page break',
+    barRepeat1: 'Repeat the bar before',
+    barRepeat2: 'Repeat the two bars before',
+    multiRest: 'Multi-bar rest',
     double: 'Double barline',
     final: 'Final barline',
     plain: 'Single barline',
@@ -437,6 +440,9 @@ export const editor = {
     joinLine: 'Join lines',
     newSection: 'New section',
     length: 'Bar length',
+    repeats: 'Bar repeats & rests',
+    repeatsInfo:
+      'A bar repeat writes the bar (or two) before into the bars chosen and draws its sign while they stay the same. A multi-bar rest empties the bars chosen and draws them as one rest with their count.',
     lengthInfo:
       'A bar longer or shorter than the meter’s. The first bar’s pickup is the time signature’s.',
     lengthOf: 'Bar length {{time}}',

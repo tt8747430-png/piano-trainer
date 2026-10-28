@@ -58,6 +58,31 @@ describe('a line engraved by Verovio, read back', () => {
     expect(layout.onsets[1]?.x).toBeGreaterThan(layout.onsets[0]?.x ?? 0)
   }, 20_000)
 
+  it('shares a multi-bar rest’s width among the bars it draws as one, each its part in turn', async () => {
+    const rested = notate({
+      key: { tonic: note('C'), minor: false },
+      meter: '4/4',
+      bars: [0, 1, 2, 3].map((i) => ({
+        startTick: i * 4 * B,
+        beats: 4,
+        ...(i === 1 ? { multiRest: 2 } : {}),
+      })),
+      notes: [n(72, 'rh', 0, 4 * B), n(72, 'rh', 12 * B, 4 * B)],
+      chords: [],
+    })
+    const [svg = ''] = await engraveMei(scoreToMei(rested), { width: 600, scale: 1 })
+    const host = document.createElement('div')
+    host.innerHTML = svg
+    const element = host.querySelector('svg')
+    if (!element) throw new Error('an SVG')
+    const [, one, two, last] = layoutOf(element, rested.measures, rested.staves).measures
+    if (!one || !two || !last) throw new Error('four bars')
+    expect(one.width).toBeGreaterThan(0)
+    expect(two.width).toBeCloseTo(one.width, 3)
+    expect(two.x).toBeCloseTo(one.x + one.width, 3)
+    expect(last.x).toBeCloseTo(two.x + two.width, 0)
+  }, 20_000)
+
   it('places the staves top down, a staff space 10 px at full size', async () => {
     const layout = await engraved(600)
     const { treble, bass } = layout.staves

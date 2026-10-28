@@ -186,7 +186,15 @@ export interface Measure extends BarMarks {
   /** One or two voices on each of the score's staves; none on a piano's staff it does not write. */
   readonly staves: StaffVoices
   readonly chords: readonly ChordMark[]
+  /**
+   * How it is drawn where not as its notes (`drawnAs`, ADR 0087): in a bar repeat's sign, one bar's
+   * or a two-bar pair's, or in a multi-bar rest begun at it (`rest`) or before it (`restOn`).
+   */
+  readonly drawn?: DrawnAs
 }
+
+/** A measure drawn as a sign for its notes: a bar repeat's, or a multi-bar rest's. */
+export type DrawnAs = 'repeat' | 'repeat2' | 'rest' | 'restOn'
 
 /** Each staff's voices in a measure: the piano's two always there, a single staff's where it is written. */
 export type StaffVoices = Readonly<Record<PianoStaff, readonly ScoreVoice[]>> &

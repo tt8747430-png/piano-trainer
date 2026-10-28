@@ -1,3 +1,4 @@
+import { drawnAs } from './drawn'
 import {
   clefsInForce,
   HOME_CLEF,
@@ -372,6 +373,6 @@ export function notate(music: TimedMusic): Score {
     ...(music.timeSymbol ? { timeSymbol: true } : {}),
     ...(music.tempoUnit ? { tempoUnit: music.tempoUnit } : {}),
     staves: written,
-    measures,
+    measures: drawnAs(measures),
   }
 }

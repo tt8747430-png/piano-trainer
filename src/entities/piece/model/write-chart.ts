@@ -73,6 +73,8 @@ export function writeBar(bar: ChartBar, meter: Meter): string {
     ...(bar.segno ? ['Segno'] : []),
     ...(bar.coda ? ['Coda'] : []),
     ...(bar.repeatStart ? ['|:'] : []),
+    ...(bar.barRepeat ? ['%'.repeat(bar.barRepeat)] : []),
+    ...(bar.multiRest ? [`Rest${bar.multiRest}`] : []),
     ...(bar.ending ? [`[${bar.ending}`] : []),
     chords,
     ...(bar.barline
