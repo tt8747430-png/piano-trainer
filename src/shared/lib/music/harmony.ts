@@ -24,7 +24,7 @@ const isDiminished = (quality: ChordQuality): boolean => hasSemitones(quality, 3
  * A numeral's function in a major or minor key, by its degree: I, iii and vi (i, III, VI) tonic; ii
  * and IV (ii°, iv) subdominant; V and vii° dominant. In a minor key the subtonic VII is a dominant.
  * Borrowed chords in a major key read as their family: ♭II (the Neapolitan), ♭VI and ♭VII
- * subdominant, ♭III tonic, a ♭VII7 the backdoor dominant. An applied chord is what it is in its own
+ * subdominant, ♭III tonic, a ♭VII7 the backdoor dominant and a ♭II7 the tritone substitute. An applied chord is what it is in its own
  * key (`V/V` a dominant, `ii/V` a subdominant).
  */
 export function harmonicFunction(numeral: Numeral, minor: boolean): HarmonicFunction {
@@ -35,7 +35,8 @@ export function harmonicFunction(numeral: Numeral, minor: boolean): HarmonicFunc
     case 2:
       return 'tonic'
     case 1:
-      return 'subdominant'
+      // A ♭II7 is the tritone substitute for V7: a dominant. A plain ♭II, the Neapolitan, is not.
+      return shift < 0 && isDominantSeventh(quality) ? 'dominant' : 'subdominant'
     case 3:
       // A raised 4th's diminished chord leads to V: the leading tone of the dominant.
       return shift > 0 && isDiminished(quality) ? 'dominant' : 'subdominant'

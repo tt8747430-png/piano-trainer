@@ -5,6 +5,7 @@ const A_MINOR = { tonic: note('A'), minor: true }
 
 const cadences: Lesson = {
   id: 'cadences',
+  after: ['chord-functions', 'inversions'],
   title: { en: 'Cadences', ru: 'Каденции' },
   summary: {
     en: 'A cadence is the pair of chords that ends a phrase. Learn the four kinds by ear and on the keys.',
@@ -24,6 +25,10 @@ const cadences: Lesson = {
         },
         { kind: 'progression', numerals: 'V I', key: C_MAJOR },
       ],
+      takeaway: {
+        en: 'V to I closes a phrase, like a full stop.',
+        ru: 'V – I закрывает фразу, как точка.',
+      },
     },
     {
       heading: { en: 'With the 7th: V7 to I', ru: 'С септимой: V7 – I' },
@@ -37,12 +42,17 @@ const cadences: Lesson = {
         },
         {
           kind: 'voicings',
+          satb: true,
           voicings: [
             { symbol: 'G7', caption: 'V7', degrees: '1 | 5 ♭7 3', hands: 'G2 | D4 F4 B4' },
             { symbol: 'C', caption: 'I', degrees: '1 | 1 3 1', hands: 'C3 | C4 E4 C5' },
           ],
         },
       ],
+      takeaway: {
+        en: 'In V7 to I, the leading note rises and the 7th falls.',
+        ru: 'В V7 – I вводный тон идёт вверх, а септима — вниз.',
+      },
     },
     {
       heading: { en: 'Plagal: IV to I, the Amen', ru: 'Плагальная: IV – I, «аминь»' },
@@ -85,6 +95,10 @@ const cadences: Lesson = {
         },
         { kind: 'progression', numerals: 'IV V vi', key: C_MAJOR },
       ],
+      takeaway: {
+        en: 'A deceptive cadence swaps the expected I for vi.',
+        ru: 'Прерванная каденция подменяет ожидаемую I на vi.',
+      },
     },
     {
       heading: { en: 'In a minor key', ru: 'В миноре' },
@@ -111,6 +125,63 @@ const cadences: Lesson = {
         },
         { kind: 'progression', numerals: 'I IV I V I IV V I', key: C_MAJOR },
       ],
+    },
+    {
+      heading: { en: 'One phrase, four endings', ru: 'Одна фраза, четыре окончания' },
+      blocks: [
+        {
+          kind: 'text',
+          text: {
+            en: 'The same phrase, ended four ways. Choose an ending and hear what changes.',
+            ru: 'Одна и та же фраза с четырьмя окончаниями. Выберите окончание и послушайте, что меняется.',
+          },
+        },
+        {
+          kind: 'variants',
+          variants: [
+            {
+              label: { en: 'Authentic', ru: 'Автентическая' },
+              caption: { en: 'V – I · a full stop', ru: 'V – I · точка' },
+              example: {
+                kind: 'progression',
+                numerals: 'I vi ii V I',
+                key: { tonic: note('G'), minor: false },
+              },
+            },
+            {
+              label: { en: 'Plagal', ru: 'Плагальная' },
+              caption: { en: 'IV – I · the Amen', ru: 'IV – I · «аминь»' },
+              example: {
+                kind: 'progression',
+                numerals: 'I vi IV I',
+                key: { tonic: note('G'), minor: false },
+              },
+            },
+            {
+              label: { en: 'Half', ru: 'Половинная' },
+              caption: { en: 'ends on V · a question', ru: 'конец на V · вопрос' },
+              example: {
+                kind: 'progression',
+                numerals: 'I vi ii V',
+                key: { tonic: note('G'), minor: false },
+              },
+            },
+            {
+              label: { en: 'Deceptive', ru: 'Прерванная' },
+              caption: { en: 'V – vi · the surprise', ru: 'V – vi · неожиданность' },
+              example: {
+                kind: 'progression',
+                numerals: 'I vi ii V vi',
+                key: { tonic: note('G'), minor: false },
+              },
+            },
+          ],
+        },
+      ],
+      takeaway: {
+        en: 'The last two chords decide how a phrase ends.',
+        ru: 'Как закончится фраза, решают два последних аккорда.',
+      },
     },
     {
       heading: { en: 'Try it', ru: 'Попробуйте' },

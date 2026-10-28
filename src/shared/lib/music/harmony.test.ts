@@ -60,6 +60,10 @@ describe('harmonicFunction', () => {
     ])
   })
 
+  it('reads the tritone substitute ♭II7 as a dominant', () => {
+    expect(major('♭II7')).toBe('dominant')
+  })
+
   it('reads an applied chord by what it is in its own key', () => {
     expect(['V/V', 'V7/ii', 'vii°7/V', 'ii/V', 'IV/IV'].map(major)).toEqual([
       'dominant',
