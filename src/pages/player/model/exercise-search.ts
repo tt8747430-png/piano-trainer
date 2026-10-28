@@ -59,6 +59,7 @@ export function exercisePatch(exercise: Exercise, change: ExerciseChange): Parti
     ...('voicing' in change && { voicing: unlessOwn(change.voicing, own.voicing) }),
     ...('from' in change && { from: unlessOwn(change.from, own.from) }),
     ...('tonality' in change && { tonality: unlessOwn(change.tonality, own.tonality) }),
+    ...('hanon' in change && { hanon: unlessOwn(change.hanon, own.hanon) }),
     ...('rhOctave' in change && { rhOctave: change.rhOctave }),
     ...('lhOctave' in change && { lhOctave: change.lhOctave }),
   }

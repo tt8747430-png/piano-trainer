@@ -6,6 +6,7 @@ export {
   isChordTone,
   isFigureId,
   isFingering,
+  isHanonNumber,
   isTonality,
   isOctaves,
   isVoicing,
@@ -17,4 +18,6 @@ export {
 export { type Exercise, type ExerciseGroup, type ExerciseId } from './model/types'
 export { exerciseChoice, type ExerciseParams } from './model/resolve'
 export { exerciseOf, exercisesIn, isExerciseId } from './model/selectors'
+export { rungAbove, rungOf, TEMPO_LADDER, tempoKey, type Rung } from './model/ladder'
 export { EXERCISES } from './content/catalog'
+export { HANON_TRAINS } from './content/hanon'

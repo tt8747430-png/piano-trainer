@@ -1,7 +1,14 @@
 import { isBlackKey } from './keyboard'
 import { pitchClassOf, type SpelledNote } from './note'
 import { midi, type Midi } from './pitch'
-import { relatedScale, scaleHasChords, scaleIntervals, spellScale, type ScaleKind } from './scale'
+import {
+  isHeptatonic,
+  isMode,
+  relatedScale,
+  scaleIntervals,
+  spellScale,
+  type ScaleKind,
+} from './scale'
 
 export type Finger = 1 | 2 | 3 | 4 | 5
 export type Hand = 'rh' | 'lh'
@@ -15,12 +22,16 @@ export type Fingering = (typeof FINGERINGS)[number]
 
 type FingeringTable = 'major' | 'natural' | 'pent' | 'blues'
 
-/** The kinds taught a fingering of their own; harmonic and melodic minor are fingered as natural minor. */
+/**
+ * The kinds taught a fingering of their own; harmonic and melodic minor are fingered as natural minor,
+ * harmonic major as major (its lowered 6th never falls under a thumb on a black key).
+ */
 const OWN_TABLE: Readonly<Partial<Record<ScaleKind, FingeringTable>>> = {
   major: 'major',
   natural: 'natural',
   harmonic: 'natural',
   melodic: 'natural',
+  harmonicMajor: 'major',
   pent: 'pent',
   blues: 'blues',
 }
@@ -30,7 +41,11 @@ type Run = Readonly<Record<Hand, string>>
 const fingers = (rh: string, lh: string): Run => ({ rh, lh })
 const C_SHAPE = fingers('12312345', '54321321')
 
-/** By the root's pitch class. */
+/**
+ * By the root's pitch class, as the printed books finger them (ABRSM, Vita Piano): a right hand that
+ * starts on a black key starts on the finger a longer run gives it (A♭ major 3 4, B♭ major 4). G♯
+ * minor's left hand puts its thumbs on B and E, never on F♯.
+ */
 const RUNS: Readonly<Record<FingeringTable, Readonly<Partial<Record<number, Run>>>>> = {
   major: {
     0: C_SHAPE,
@@ -41,23 +56,23 @@ const RUNS: Readonly<Record<FingeringTable, Readonly<Partial<Record<number, Run>
     5: fingers('12341234', '54321321'),
     6: fingers('23412312', '43213214'),
     7: C_SHAPE,
-    8: fingers('23123123', '32143213'),
+    8: fingers('34123123', '32143213'),
     9: C_SHAPE,
-    10: fingers('21231234', '32143213'),
+    10: fingers('41231234', '32143213'),
     11: fingers('12312345', '43214321'),
   },
   natural: {
     0: C_SHAPE,
-    1: fingers('23123123', '32143213'),
+    1: fingers('34123123', '32143213'),
     2: C_SHAPE,
-    3: fingers('21234123', '21432132'),
+    3: fingers('31234123', '21432132'),
     4: C_SHAPE,
     5: fingers('12341234', '54321321'),
-    6: fingers('23123123', '43213214'),
+    6: fingers('34123123', '43213214'),
     7: C_SHAPE,
-    8: fingers('23123123', '32132143'),
+    8: fingers('34123123', '32132143'),
     9: C_SHAPE,
-    10: fingers('21231234', '21321432'),
+    10: fingers('41231234', '21321432'),
     11: fingers('12312345', '43214321'),
   },
   // The octave's finger is the next in the hand's direction; a left hand on its thumb crosses 3 over.
@@ -164,11 +179,21 @@ export function scaleFingering(
   start: number,
   octaves = 1,
 ): Finger[] {
+  if (kind === 'chromatic') {
+    const tones = spellScale(root, kind)
+    const keys = Array.from({ length: tones.length * octaves + 1 }, (_, i) => {
+      const at = start + i
+      const tone = tones[at % tones.length]
+      // Its keys from C1 up: only which are black, and which lie a half step apart, matter here.
+      return midi(24 + pitchClassOf(root) + (tone?.semitones ?? 0) + 12 * Math.floor(at / 12))
+    })
+    return chromaticFingering(keys, hand)
+  }
   const own = tableFor(kind, root, hand)
   if (own && start === 0) {
     const run = tableRun(own, root, hand)
     // An octave between starts as a longer run passing its tonic does, up to its first thumb: a
-    // taught first octave may start on fingers of its own (A♭ major's 2 3, where the run has 3 4).
+    // taught first octave may start on fingers of its own (a pentatonic's or a blues scale's).
     const firstThumb = run.indexOf(1, 1)
     const octave = run
       .slice(0, -1)
@@ -176,40 +201,41 @@ export function scaleFingering(
     const turns = Array.from({ length: octaves - 1 }, () => octave)
     return [...run.slice(0, -1), ...turns.flat(), run.at(-1) ?? 1]
   }
-  if (!scaleHasChords(kind))
+  if (!isHeptatonic(kind))
     throw new RangeError(`${kind} is fingered as its scale from its tonic only`)
   const byDegree = continuingFingers(root, kind, hand)
   return Array.from({ length: 7 * octaves + 1 }, (_, i) => byDegree[(start + i) % 7] ?? 1)
 }
 
 /**
- * The ways to finger `count` notes in groups from the thumb (1 2 3 …): every group of 2 to 4, the
- * last of 2 to 5; a lone note is the thumb's.
+ * The chromatic scale's fingers (`keys` from the bottom note up), the same both ways: 3 on every
+ * black key, the thumb on a white one, and 2 on a white key beside another white key, the right
+ * hand's on the upper of the two (F, C) and the left hand's on the lower (E, B).
  */
-function* groupings(count: number): Generator<number[]> {
-  if (count === 1) yield [1]
-  for (let first = 2; first <= Math.min(5, count); first++) {
-    if (first === count) yield [first]
-    else if (first <= 4 && count - first >= 2) {
-      for (const rest of groupings(count - first)) yield [first, ...rest]
-    }
-  }
+export function chromaticFingering(keys: readonly Midi[], hand: Hand): Finger[] {
+  const white = (key: Midi | undefined) => key !== undefined && !isBlackKey(key)
+  return keys.map((key, i) => {
+    if (isBlackKey(key)) return 3
+    const beside = hand === 'rh' ? keys[i - 1] : keys[i + 1]
+    return white(beside) && Math.abs((beside ?? key) - key) === 1 ? 2 : 1
+  })
 }
 
 /** How much a group is preferred, least first: groups of 3, then 4, then 2, then the closing 5. */
 const GROUP_RANK: Readonly<Record<number, number>> = { 3: 0, 4: 1, 2: 2, 5: 3 }
 
-/** A grouping's cost: later thumbs on black keys, then the number of groups, then its groups' ranks. */
-function cost(keys: readonly Midi[], grouping: readonly number[]): number[] {
-  let at = 0
-  let blackThumbs = 0
-  grouping.forEach((size, i) => {
-    const key = keys[at]
-    if (i > 0 && key !== undefined && isBlackKey(key)) blackThumbs++
-    at += size
-  })
-  return [blackThumbs, grouping.length, ...grouping.map((size) => GROUP_RANK[size] ?? 4)]
+/** A grouping of the keys from one on: its groups' sizes, its later thumbs on black keys, its ranks. */
+interface Grouped {
+  readonly sizes: readonly number[]
+  readonly blackThumbs: number
 }
+
+/** A grouping's cost: later thumbs on black keys, then the number of groups, then its groups' ranks. */
+const cost = ({ sizes, blackThumbs }: Grouped): number[] => [
+  blackThumbs,
+  sizes.length,
+  ...sizes.map((size) => GROUP_RANK[size] ?? 4),
+]
 
 function cheaper(a: readonly number[], b: readonly number[]): boolean {
   for (let i = 0; i < Math.max(a.length, b.length); i++) {
@@ -219,18 +245,31 @@ function cheaper(a: readonly number[], b: readonly number[]): boolean {
   return false
 }
 
-/** Keys in the order played, fingered from the thumb in the grouping that costs least. */
+/**
+ * Keys in the order played, fingered from the thumb in the grouping that costs least: groups of 2 to
+ * 4 from the thumb (1 2 3 …), the last of 2 to 5, a lone note the thumb's. Found from the last key
+ * back, each key's cheapest grouping of the rest kept (a cost is compared from its front, so the
+ * cheapest whole starts with the cheapest rest after its first group), so four octaves of an
+ * eight-note scale take no longer than one.
+ */
 function fromTheThumb(keys: readonly Midi[]): Finger[] {
-  let best: number[] = []
-  let bestCost: number[] | null = null
-  for (const grouping of groupings(keys.length)) {
-    const groupingCost = cost(keys, grouping)
-    if (!bestCost || cheaper(groupingCost, bestCost)) {
-      best = grouping
-      bestCost = groupingCost
+  const count = keys.length
+  if (count === 1) return [1]
+  const best: (Grouped | null)[] = Array.from({ length: count + 1 }, () => null)
+  for (let at = count - 2; at >= 0; at--) {
+    const left = count - at
+    const key = keys[at]
+    const black = at > 0 && key !== undefined && isBlackKey(key) ? 1 : 0
+    for (let size = 2; size <= Math.min(5, left); size++) {
+      const rest =
+        size === left ? { sizes: [], blackThumbs: 0 } : size <= 4 ? best[at + size] : null
+      if (!rest) continue
+      const grouped = { sizes: [size, ...rest.sizes], blackThumbs: black + rest.blackThumbs }
+      const current = best[at]
+      if (!current || cheaper(cost(grouped), cost(current))) best[at] = grouped
     }
   }
-  return best.flatMap((size) => FINGERS.slice(0, size))
+  return (best[0]?.sizes ?? [count]).flatMap((size) => FINGERS.slice(0, size))
 }
 
 /**
@@ -243,28 +282,49 @@ export function thumbFingering(keys: readonly Midi[], hand: Hand): Finger[] {
   return fromTheThumb([...keys].reverse()).reverse()
 }
 
-/** The finger a hand's 2nd or 3rd note from its thumb takes: wider when it reaches over a 4th. */
-const reach = (gap: number): Finger => (gap >= 5 ? 4 : 3)
+/**
+ * The finger a hand's 3rd note from its thumb takes: the 4th when it reaches over a 4th from the note
+ * below it, or (the right hand) a major 6th or more from the thumb, as a 2nd inversion's G C E does.
+ */
+const reach = (gap: number, span = 0): Finger => (gap >= 5 || span >= 9 ? 4 : 3)
 
 /**
- * An arpeggio's fingers (`keys` from the bottom note up, a chord's tones over its octaves): the thumb
- * on one tone in every octave, the first white key from the bottom note (the bottom note if all are
- * black). The right hand counts 1 2 3 (4) up from each thumb, its 3rd finger a 4 when it reaches over
- * a 4th, and takes 5 on a top note a thumb would land on; the left hand mirrors it, 1 on each thumb,
- * 2 under it, then 4 (3 over a 4th from below) and 5 on a bottom note a thumb would land on. Read
- * from the bottom note up.
+ * An arpeggio's fingers (`keys` from the bottom note up, a chord's tones over its octaves), as the
+ * books finger them (ABRSM, Vita Piano): the thumb on one tone in every octave. The right hand's is
+ * the first white key from the bottom note; the left hand's the bottom note where it is white, else
+ * the last white tone of the octave (C minor from E♭: the thumb on C). The right hand counts 1 2 3
+ * (4) up from each thumb, its 3rd finger a 4 when it reaches over a 4th from the note below or a
+ * major 6th from the thumb (`reach`), and takes 5 on a top note a thumb would land on; the left hand
+ * mirrors it, 1 on each thumb, 2 under it, then 4 (3 over a 4th from below) and 5 on a bottom note a
+ * thumb would land on. A note before the right hand's first thumb takes the finger its tone takes an
+ * octave up (A♭ major from A♭: 4 1 2 4), and the left hand's bottom note reaches from the tone under
+ * it in the chord (B♭ minor: 3 2 1). Read from the bottom note up.
  */
 export function arpeggioFingering(keys: readonly Midi[], hand: Hand): Finger[] {
-  const tones = new Set(keys.map((key) => key % 12)).size
-  const thumbTone = (keys.find((key) => !isBlackKey(key)) ?? keys[0] ?? 0) % 12
+  const pitches = [...new Set(keys.map((key) => key % 12))]
+  const tones = pitches.length
+  const bottom = keys[0]
+  if (bottom === undefined) return []
+  const whites = keys.slice(0, tones).filter((key) => !isBlackKey(key))
+  const thumbKey =
+    hand === 'rh' || isBlackKey(bottom) ? (hand === 'rh' ? whites[0] : whites.at(-1)) : bottom
+  const thumbTone = (thumbKey ?? bottom) % 12
   const thumbs = keys.flatMap((key, i) => (key % 12 === thumbTone ? [i] : []))
   const first = thumbs[0] ?? 0
   const last = thumbs.at(-1) ?? 0
-  const gapBelow = (i: number) => (keys[i] ?? 0) - (keys[i - 1] ?? keys[i] ?? 0)
-  return keys.map((_, i): Finger => {
-    // Before the right hand's first thumb, fingers count up from 2 to it, so the thumb passes under
-    // the last of them (B♭ minor: 2 3 1).
-    if (hand === 'rh' && i < first) return toFinger(i + 2)
+  // The step into a note from the chord tone under it: the bottom note's from the tone an octave
+  // down, as the octave above it steps into it.
+  const gapBelow = (i: number) => {
+    const before = keys[i - 1]
+    if (before !== undefined) return (keys[i] ?? 0) - before
+    const above = keys[i + tones]
+    const under = keys[i + tones - 1]
+    return above !== undefined && under !== undefined ? above - under : 0
+  }
+  const fingerAt = (i: number): Finger => {
+    // Before the right hand's first thumb, the finger its tone takes an octave up.
+    if (hand === 'rh' && i < first)
+      return keys[i + tones] !== undefined ? fingerAt(i + tones) : toFinger(i + 2)
     // A note's place from its thumb: up from the thumb before it (right hand), or down from the
     // thumb after it (left hand); past the last thumb the left hand counts to the next octave's.
     const place =
@@ -280,17 +340,54 @@ export function arpeggioFingering(keys: readonly Midi[], hand: Hand): Finger[] {
     if (place === 1) return 2
     if (place === 3) return 4
     if (tones > 3) return 3
-    return hand === 'rh' ? reach(gapBelow(i)) : reach(gapBelow(i)) === 4 ? 3 : 4
+    return hand === 'rh'
+      ? reach(gapBelow(i), (keys[i] ?? 0) - (keys[i - 2] ?? keys[i] ?? 0))
+      : reach(gapBelow(i)) === 4
+        ? 3
+        : 4
+  }
+  return keys.map((_, i) => fingerAt(i))
+}
+
+/**
+ * Where a fingered line crosses (`keys` in the order played): a note the thumb passes under to, or a
+ * finger crosses over the thumb to. The right hand's fingers count up as it climbs, the left hand's
+ * down; a step against that (E 3 to F 1 going up, F 1 to E 3 coming down) is a crossing. A key
+ * repeated, or a note with no finger, crosses nothing.
+ */
+export function fingerCrossings(
+  keys: readonly Midi[],
+  fingers: readonly (Finger | undefined)[],
+  hand: Hand,
+): boolean[] {
+  const side = hand === 'rh' ? 1 : -1
+  return keys.map((key, i) => {
+    const before = keys[i - 1]
+    const finger = fingers[i]
+    const fingerBefore = fingers[i - 1]
+    if (before === undefined || finger === undefined || fingerBefore === undefined) return false
+    return Math.sign(key - before) * Math.sign(finger - fingerBefore) * side < 0
   })
 }
 
-/** The fingering a run takes when none is chosen: a taught scale's from its tonic, else from the thumb. */
-export const ownFingering = (kind: ScaleKind, start: number): Fingering =>
-  OWN_TABLE[kind] && start === 0 ? 'scale' : 'thumb'
+/**
+ * Whether a kind has a fingering the books print: a table's, a mode's parent major's, or the
+ * chromatic scale's rule. The others (whole-tone, diminished, bebop, Hungarian minor) are fingered
+ * from the thumb.
+ */
+export const hasStandardFingering = (kind: ScaleKind): boolean =>
+  OWN_TABLE[kind] !== undefined || isMode(kind) || kind === 'chromatic'
 
-/** The fingerings a run can take: both for a seven-note scale, else only its own. */
+/**
+ * The fingering a run takes when none is chosen: a taught scale's from its tonic (the chromatic
+ * scale's from any note), else from the thumb.
+ */
+export const ownFingering = (kind: ScaleKind, start: number): Fingering =>
+  (OWN_TABLE[kind] && start === 0) || kind === 'chromatic' ? 'scale' : 'thumb'
+
+/** The fingerings a run can take: both for a seven-note scale with a standard fingering, else only its own. */
 export const fingeringsOf = (kind: ScaleKind, start: number): readonly Fingering[] =>
-  scaleHasChords(kind) ? FINGERINGS : [ownFingering(kind, start)]
+  isHeptatonic(kind) && hasStandardFingering(kind) ? FINGERINGS : [ownFingering(kind, start)]
 
 /**
  * A run's fingers from its bottom note up (`keys` its keys from degree `start`, over as many octaves

@@ -18,6 +18,7 @@ import {
   isChordTone,
   isFigureId,
   isFingering,
+  isHanonNumber,
   isOctaves,
   isTonality,
   isVoicing,
@@ -219,7 +220,8 @@ export function readExerciseSearch(raw: Raw): ExerciseSearch {
     root: root ? noteParam(root) : undefined,
     kind: when(isScaleKind, raw.kind),
     octaves: when(isOctaves, raw.octaves),
-    start: wholeIn(raw.start, 0, 6, undefined),
+    // Any degree of the longest scale; the exercise reads a start past its own scale's as the tonic.
+    start: wholeIn(raw.start, 0, 11, undefined),
     fingering: when(isFingering, raw.fingering),
     quality: when(isArpeggioQuality, raw.quality),
     inversion: when(isInversion, raw.inversion),
@@ -227,6 +229,7 @@ export function readExerciseSearch(raw: Raw): ExerciseSearch {
     voicing: when(isVoicing, raw.voicing),
     from: when(isChordTone, raw.from),
     tonality: when(isTonality, raw.tonality),
+    hanon: when(isHanonNumber, raw.hanon),
     rhOctave: wholeIn(raw.rhOctave, 1, 7, undefined),
     lhOctave: wholeIn(raw.lhOctave, 1, 7, undefined),
   }

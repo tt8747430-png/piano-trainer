@@ -191,6 +191,16 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   Yours. _Avoid:_ section.
 - **Sequence** (an exercise): a figure restarted on each degree up the scale and back. _Avoid:_ pattern.
 - **6th-diminished scale**: Barry Harris's eight-note scale. _Avoid:_ bebop major scale.
+- **Hanon** («Ганон»; `hanon`): one of Nos. 1–20 of The Virtuoso Pianist, chosen by its number («№»). _Avoid:_
+  Hanon exercise 1 (as a name), finger drill.
+- **Tempo ladder** («Лестница темпов»): an exercise's tempos 60 → 132 in steps of 12, a rung up after four clean
+  passes. _Avoid:_ speed steps, ramp (that is Speed training).
+- **Daily scale routine** («Ежедневная разминка в гаммах»; `scale-routine`): one scale in five parts: each hand,
+  together, staccato, piano to forte. _Avoid:_ warm-up (as a name), workout.
+- **Symmetric scale** («Симметричные»): whole-tone, the two diminished and the chromatic scale. _Avoid:_ synthetic
+  scale.
+- **Half-whole / whole-half diminished** («Уменьшённая полутон–тон / тон–полутон»): the eight-note scales by their
+  first step. _Avoid:_ octatonic, dominant diminished.
 
 ## The Player
 
@@ -223,6 +233,10 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Chromatic walk** («По полутонам»): chosen chords root by root, a semitone at a time. _Avoid:_ chord drill.
 - **Start on**: the degree a scale's run starts from. _Avoid:_ rotation.
 - **Fingering**: From the thumb or As the scale (each note its **continuing finger**). _Avoid:_ fingers.
+- **Crossing** («Смена позиции»): a note a finger crosses to: the thumb passing under, or a finger over the thumb;
+  marked in sky on the keys, the fingering table and the staff. _Avoid:_ thumb-under (for both), turn.
+- **No standard fingering**: a scale the books leave unfingered, fingered from the thumb and saying so in an ⓘ.
+  _Avoid:_ unknown fingering.
 - **Octaves** (an exercise): how far a run climbs, one to four. _Avoid:_ range, span.
 - **Practice toggle**: one of the Player's saved switches. _Avoid:_ option, flag.
 - **Score bar** (`ScoreBar`): the Player's and the editor's one header: Close, Practise · Edit, the tools row, the

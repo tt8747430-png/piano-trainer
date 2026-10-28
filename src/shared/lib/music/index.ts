@@ -198,6 +198,7 @@ export {
   modesOfKey,
   relatedScale,
   relativeKey,
+  scaleDegreeNames,
   scaleGaps,
   scaleHasChords,
   scaleIntervals,
@@ -228,9 +229,11 @@ export {
 } from './place'
 export {
   arpeggioFingering,
+  fingerCrossings,
   FINGERINGS,
   FINGERS,
   fingeringsOf,
+  hasStandardFingering,
   ownFingering,
   runFingering,
   type Finger,

@@ -286,8 +286,15 @@ export const player = {
       none: 'None',
     },
   },
+  // An exercise's tempos, rung by rung.
+  tempoLadder: {
+    label: 'Tempo ladder',
+    info: 'Climb one rung once four passes in a row are clean and even. After a slip, step back a rung. The exercise opens at the tempo you last played it at.',
+  },
   exercise: {
     title: '{{name}}: {{of}}',
+    // Hanon's The Virtuoso Pianist, Part I: which exercise.
+    hanon: { label: 'Exercise', number: 'No. {{number}}', name: 'Hanon No. {{number}}' },
     scale: 'Scale',
     chord: 'Chord',
     startOn: 'Start on',

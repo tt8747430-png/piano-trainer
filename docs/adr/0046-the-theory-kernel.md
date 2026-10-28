@@ -19,9 +19,28 @@ something to play, and the root goes to the left hand.
   root is spelled by one rule over its intervals (sharp under a minor 3rd or a minor 9th). A tool's roots are spelled
   by letters, then named plainly (F♭ is written E). A printed chord symbol shows ♯ and ♭ (`printedSymbol`); what is
   stored, typed, parsed or in a URL stays ASCII.
-- **Thirteen scale kinds in three families**: major and the three minors; the five church modes; the pentatonics and
-  blues. A scale runs from any start, fingered from the thumb or as the scale is taught, over any number of octaves;
-  an arpeggio's fingering is one rule (the thumb on the first white tone each octave).
+- **Twenty-one scale kinds in five families**: major and the three minors; the five church modes; the pentatonics and
+  blues; the symmetric scales (whole-tone, half-whole and whole-half diminished, chromatic); and the others (harmonic
+  major, Hungarian minor, bebop major and dominant). The whole-tone scale writes its 6th note as the 7th it sounds as
+  (C D E F♯ G♯ B♭), the chromatic scale is the harmonic one (each letter twice but the tonic's and the dominant's),
+  and bebop major's added note is the ♯5 (G♯ in C). A symmetric scale is written with no signature, a bebop dominant
+  in its Mixolydian's; Hungarian minor's stacked 3rds are no chords, so only harmonic major of the new kinds has a
+  Chords view. A seven-note scale's formula names its degrees by the key's names (`scaleDegreeNames` over
+  `degreeNames`), its 7th a leading tone a half step under the tonic or a subtonic a whole step under it.
+- **Fingering follows the printed books** (ABRSM's scale books, Vita Piano's tables): a right hand that starts on a
+  black key starts on the finger a longer run gives it, A♭ major 3 4, B♭ major 4, C♯, F♯ and G♯ minor 3 4, E♭ minor
+  3, B♭ minor 4. G♯ minor's left hand keeps its thumbs on B and E (3 2 1 3 2 1 4 3), where one printed table puts it
+  on F♯. Harmonic major takes major's table, the chromatic scale one rule (3 on a black key, the thumb on a white,
+  2 on a white key beside a white: the right hand's F and C, the left hand's E and B). Whole-tone, diminished, bebop,
+  Hungarian minor, minor pentatonic and major blues have no standard fingering: they are fingered from the thumb and
+  say so (`hasStandardFingering`). A scale runs from any start, fingered from the thumb or as the scale is taught,
+  over any number of octaves. Where a finger crosses (`fingerCrossings`: the thumb passing under, a finger over it)
+  the run marks the note, on the keys, in the fingering table and on the staff. An arpeggio's fingering is one rule, checked
+  against Vita Piano's arpeggio lessons: the right hand's thumb on the first white tone up from the bottom, the left
+  hand's on the bottom note where it is white, else on the octave's last white tone (C minor from E♭: on C); the
+  right hand's 3rd note takes the 4th finger over a 4th from the note below or a major 6th from the thumb, so a major
+  2nd inversion is 1 2 4 5 and C minor's 1 2 3 5; a note before the first thumb takes the finger its tone takes an
+  octave up (A♭ major 4 1 2 4, C minor's 1st inversion 3 1 2 3).
 - **The chord table has 46 qualities**, each a Skill (ADR 0025): every type Musicca's chord finder lists (the power
   chord `C5`, Maj11, m13, Maj13 among them) and 13sus4. Any chord is built from its parts (`buildChord`): the triad,
   a suspension or the power chord's bare 5th (no larger size, no inversion), the size up to a 13th, the 7th, an added tone, and alterations, which are the available
@@ -80,3 +99,5 @@ Chords view should hold its big chords in two hands too.
 - 0046 — The table writes m(add9) and 13♭9 (2026-10-14).
 - r14 — The power chord, Maj11, m13, Maj13, 13sus4; block fingering by rule; eight voicings (2026-10-28), from
   Musicca's chord finder, Vita Piano's chord lessons and piano.org's voicing pages.
+- r14 — Fingering as the printed books, eight new scale kinds, degree names under a scale's formula, crossings
+  marked (2026-10-28), from Vita Piano's scale and arpeggio lessons and ABRSM's books.

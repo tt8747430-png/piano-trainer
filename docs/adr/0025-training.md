@@ -52,6 +52,20 @@ ways, with a time limit and a Next that waits for the answer.
   symbols and Wait mode. Fingering is written where the method fingers it, and only there. The catalogue is content
   (`entities/exercise`: group, stage, name, what it trains, the fields its rule takes, its own choice, tempo and
   swing). One route plays them, `/play/exercise/$exerciseId`, its URL's choices read against the exercise.
+- **Hanon's Nos. 1 to 20** (The Virtuoso Pianist, Part I, public domain) are one exercise with a number, written
+  from G. Schirmer's 1900 edition note for note and finger for finger: each figure carried up a degree at a time and
+  its descending figure down, the figures the book bends to turn round or to land written as it bends them, No. 20
+  ending on a chord. Both hands play the book's notes, the left two octaves under the right (the book has one) so
+  each reads on its own staff, in any major key (the book prints C). Each number says what it works, as the book
+  does. They start at ♩ = 60, the bottom of the book's 60 to 108.
+- **The tempo ladder** climbs ♩ = 60, 72 … 132 in steps of 12 in every exercise's Setup, its rule in its ⓘ: a rung up
+  after four clean passes, a rung down after a slip. An exercise opens at the tempo it was last played at, kept in
+  `pt-progress` (`tempos`, by `tempoKey`: the exercise, and Hanon's number). It is a field read as none where a
+  save lacks it, so the store's version stays.
+- **The daily scale routine** is an exercise of its own: one major or minor scale two octaves up and back in five
+  parts, each from a bar of its own: the right hand, the left hand, hands together, together staccato, together
+  from piano up to forte and back. Its tempo is the ladder's; the routine's minute of improvising is left out, as
+  nothing is written for it.
 - **One home each:** the Quiz page holds every trainer by group; the Exercises page holds the drills of no other
   page (a scale's exercises open from Scales, a chord's arpeggio from Chords); a drill another Player already plays is
   not repeated.
@@ -68,3 +82,5 @@ a case in `arrangeExercise`, whose test writes every exercise in every root on t
 - 0025 — A trainer is a round machine with a ladder (2026-10-01).
 - 0025 — Chords and Intervals in four drills, one setup for every trainer, a time limit, an answer-gated Next (2026-10-28).
 - r14 — Cadences, a trainer in the four drills, its cards naming their faces (2026-10-28).
+- r14 — Hanon's Nos. 1 to 20, the tempo ladder with each exercise's last tempo kept, the daily scale routine
+  (2026-10-28).

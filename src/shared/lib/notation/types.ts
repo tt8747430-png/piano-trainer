@@ -47,6 +47,8 @@ export interface TimedNote {
   readonly startTick: Tick
   readonly durationTicks: Tick
   readonly finger?: Finger
+  /** Its finger crosses: the thumb passing under, or a finger over the thumb (a scale's). */
+  readonly crossing?: true
   readonly marks?: NoteMarks
   /** What it sings, by verse (ADR 0097): written under the staff whose notes sing it. */
   readonly lyrics?: NoteLyrics
@@ -97,6 +99,8 @@ export interface WrittenNote {
   /** Tied to the same key's next note. */
   readonly tie: boolean
   readonly finger?: Finger
+  /** Its finger crosses (`TimedNote`): the finger printed in the accent colour. */
+  readonly crossing?: true
 }
 
 /** Where a tuplet's bracket starts: the events of one tuplet share it. */

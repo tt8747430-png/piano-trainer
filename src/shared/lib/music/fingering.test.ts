@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
   arpeggioFingering,
+  fingerCrossings,
   fingeringsOf,
+  hasStandardFingering,
   ownFingering,
   runFingering,
   scaleFingering,
@@ -21,8 +23,24 @@ describe('scaleFingering', () => {
     expect(digits(scaleFingering(note('C'), 'major', 'rh', 0))).toBe('12312345')
     expect(digits(scaleFingering(note('C'), 'major', 'lh', 0))).toBe('54321321')
     expect(digits(scaleFingering(note('F'), 'major', 'rh', 0))).toBe('12341234')
-    expect(digits(scaleFingering(note('B', -1), 'major', 'rh', 0))).toBe('21231234')
+    expect(digits(scaleFingering(note('B', -1), 'major', 'rh', 0))).toBe('41231234')
     expect(digits(scaleFingering(note('C'), 'blues', 'lh', 0))).toBe('4214321')
+  })
+
+  // The printed standard (ABRSM's scale books, Vita Piano's tables): where a right hand starts on a
+  // black key, it starts on the finger a longer run gives it, not a finger lower.
+  it.each([
+    ['A♭ major', note('A', -1), 'major', '34123123', '32143213'],
+    ['B♭ major', note('B', -1), 'major', '41231234', '32143213'],
+    ['E♭ major', note('E', -1), 'major', '31234123', '32143213'],
+    ['C♯ minor', note('C', 1), 'natural', '34123123', '32143213'],
+    ['F♯ minor', note('F', 1), 'natural', '34123123', '43213214'],
+    ['G♯ minor', note('G', 1), 'natural', '34123123', '32132143'],
+    ['E♭ minor', note('E', -1), 'natural', '31234123', '21432132'],
+    ['B♭ minor', note('B', -1), 'natural', '41231234', '21321432'],
+  ] as const)('fingers %s as the books print it', (_, root, kind, rh, lh) => {
+    expect(digits(scaleFingering(root, kind, 'rh', 0))).toBe(rh)
+    expect(digits(scaleFingering(root, kind, 'lh', 0))).toBe(lh)
   })
 
   it('fingers harmonic and melodic minor as natural minor, melodic as its major where a thumb would be black', () => {
@@ -54,8 +72,8 @@ describe('scaleFingering', () => {
     }
   })
 
-  it('carries A♭ major’s right hand into its second octave on 3 4, as a longer run fingers it', () => {
-    expect(digits(scaleFingering(note('A', -1), 'major', 'rh', 0, 2))).toBe('231231234123123')
+  it('carries A♭ major’s right hand into its second octave on 3 4, as it starts', () => {
+    expect(digits(scaleFingering(note('A', -1), 'major', 'rh', 0, 2))).toBe('341231234123123')
   })
 
   it('ends D♭ and F♯ major’s left hand on the finger its octave takes in a longer run', () => {
@@ -98,7 +116,7 @@ describe('scaleFingering', () => {
     expect(digits(scaleFingering(note('C'), 'major', 'rh', 0, 2))).toBe('123123412312345')
     expect(digits(scaleFingering(note('C'), 'major', 'lh', 0, 2))).toBe('543213214321321')
     // B♭ major's middle B♭ is 4 in the right hand, 3 in the left.
-    expect(digits(scaleFingering(note('B', -1), 'major', 'rh', 0, 2))).toBe('212312341231234')
+    expect(digits(scaleFingering(note('B', -1), 'major', 'rh', 0, 2))).toBe('412312341231234')
     expect(digits(scaleFingering(note('B', -1), 'major', 'lh', 0, 2))).toBe('321432132143213')
     expect(digits(scaleFingering(note('C'), 'major', 'rh', 2, 2))).toBe('312341231234123')
   })
@@ -106,6 +124,62 @@ describe('scaleFingering', () => {
   it('carries no pentatonic or blues fingering to another note', () => {
     expect(() => scaleFingering(note('C'), 'blues', 'rh', 2)).toThrow(RangeError)
     expect(() => scaleFingering(note('A'), 'mpent', 'rh', 0)).toThrow(RangeError)
+  })
+})
+
+describe('the chromatic scale and the scales with no standard fingering', () => {
+  it('fingers the chromatic scale 3 on black keys, 2 on a white key beside a white one', () => {
+    expect(digits(scaleFingering(note('C'), 'chromatic', 'rh', 0))).toBe('1313123131312')
+    expect(digits(scaleFingering(note('C'), 'chromatic', 'lh', 0))).toBe('1313213131321')
+    expect(digits(scaleFingering(note('E'), 'chromatic', 'rh', 0))).toBe('1231313123131')
+  })
+
+  it('fingers harmonic major as major', () => {
+    for (const hand of ['rh', 'lh'] as const)
+      expect(scaleFingering(note('E', -1), 'harmonicMajor', hand, 0)).toEqual(
+        scaleFingering(note('E', -1), 'major', hand, 0),
+      )
+  })
+
+  it('fingers the scales the books leave unfingered from the thumb, and only so', () => {
+    const unfingered = SCALE_KINDS.filter((kind) => !hasStandardFingering(kind))
+    expect(unfingered).toEqual([
+      'mpent',
+      'majorBlues',
+      'wholeTone',
+      'halfWhole',
+      'wholeHalf',
+      'hungarian',
+      'bebopMajor',
+      'bebopDominant',
+    ])
+    expect(fingeringsOf('hungarian', 0)).toEqual(['thumb'])
+    expect(fingeringsOf('wholeTone', 0)).toEqual(['thumb'])
+    expect(fingeringsOf('chromatic', 3)).toEqual(['scale'])
+  })
+})
+
+describe('fingerCrossings', () => {
+  const crossed = (keys: readonly number[], fingers: string, hand: 'rh' | 'lh') =>
+    fingerCrossings(
+      keys.map(midi),
+      [...fingers].map((digit) => Number(digit) as Finger),
+      hand,
+    ).flatMap((crosses, i) => (crosses ? [i] : []))
+  const up = [60, 62, 64, 65, 67, 69, 71, 72]
+
+  it('marks where the thumb passes under and where a finger crosses over it', () => {
+    // C major: the right hand's thumb on F going up; the left hand's 3 over to A.
+    expect(crossed(up, '12312345', 'rh')).toEqual([3])
+    expect(crossed(up, '54321321', 'lh')).toEqual([5])
+    // Coming down, the right hand's 3 over to E, the left hand's thumb under to G.
+    expect(crossed([...up].reverse(), '54321321', 'rh')).toEqual([5])
+    expect(crossed([...up].reverse(), '12312345', 'lh')).toEqual([3])
+  })
+
+  it('marks nothing in a five-finger position or on a repeated key', () => {
+    expect(crossed([60, 62, 64, 65, 67, 65, 64, 62], '12345432', 'rh')).toEqual([])
+    expect(crossed([60, 60, 62], '213', 'rh')).toEqual([])
   })
 })
 
@@ -202,7 +276,8 @@ describe('arpeggioFingering', () => {
     expect(digits(arpeggioFingering(arpeggio(48, [4, 3, 5], 2), 'lh'))).toBe('5421421')
     expect(digits(arpeggioFingering(arpeggio(64, [3, 5, 4], 2), 'rh'))).toBe('1241245')
     expect(digits(arpeggioFingering(arpeggio(52, [3, 5, 4], 2), 'lh'))).toBe('5421421')
-    expect(digits(arpeggioFingering(arpeggio(67, [5, 4, 3], 2), 'rh'))).toBe('1231235')
+    // The 2nd inversion's 3rd note is a 6th from the thumb: the 4th finger reaches it (1 2 4 5).
+    expect(digits(arpeggioFingering(arpeggio(67, [5, 4, 3], 2), 'rh'))).toBe('1241245')
     expect(digits(arpeggioFingering(arpeggio(55, [5, 4, 3], 2), 'lh'))).toBe('5321321')
   })
 
@@ -211,14 +286,20 @@ describe('arpeggioFingering', () => {
     expect(digits(arpeggioFingering(arpeggio(48, [4, 3, 3, 2], 2), 'lh'))).toBe('543214321')
   })
 
-  it('puts the thumb on the first white key from a black one', () => {
-    // A♭ major: the thumb on C.
-    expect(digits(arpeggioFingering(arpeggio(68, [4, 3, 5], 1), 'rh'))).toBe('2124')
-    expect(digits(arpeggioFingering(arpeggio(56, [4, 3, 5], 1), 'lh'))).toBe('2142')
-  })
-
-  it('counts up to the right hand’s first thumb from two black keys: B♭ minor 2 3 1', () => {
-    expect(digits(arpeggioFingering(arpeggio(70, [3, 4, 5], 2), 'rh'))).toBe('2312312')
+  // Vita Piano's arpeggio lessons, each checked against ABRSM's: the thumb on the first white key
+  // up from a black bottom note, the notes before it on the fingers their tones take an octave up.
+  it.each([
+    ['A♭ major', 68, [4, 3, 5], 'rh', '4124'],
+    ['A♭ major', 56, [4, 3, 5], 'lh', '2142'],
+    ['B♭ minor', 70, [3, 4, 5], 'rh', '2312312'],
+    ['B♭ minor', 58, [3, 4, 5], 'lh', '3213213'],
+    ['C minor, 1st inversion', 63, [4, 5, 3], 'rh', '3123'],
+    ['C minor, 1st inversion', 51, [4, 5, 3], 'lh', '4214'],
+    ['C minor, 2nd inversion', 67, [5, 3, 4], 'rh', '1235'],
+    ['C minor, 2nd inversion', 55, [5, 3, 4], 'lh', '5321'],
+  ] as const)('fingers %s as the books do (%s, %s)', (_, bottom, steps, hand, fingers) => {
+    const octaves = fingers.length === 7 ? 2 : 1
+    expect(digits(arpeggioFingering(arpeggio(bottom, steps, octaves), hand))).toBe(fingers)
   })
 
   it('uses only fingers 1–5 on every root and shape', () => {

@@ -14,6 +14,12 @@ export const selectLessons = (state: ProgressState) => state.lessons
 export const selectAllAnswers = (state: ProgressState) => state.answers
 export const selectRead = (state: ProgressState) => state.read
 
+/** An exercise's last tempo, where one is kept (`tempoKey`). */
+export const selectTempo =
+  (key: string) =>
+  (state: ProgressState): number | undefined =>
+    state.tempos[key]
+
 export const selectIsLearned =
   (id: StepId) =>
   (state: ProgressState): boolean =>

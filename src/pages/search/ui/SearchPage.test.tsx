@@ -67,7 +67,7 @@ describe('Search', () => {
     expect(hrefOf('Scales', /^Dorian/)).toBe('/practice/scales?kind=dorian')
     expect(hrefOf('Progressions', /^Let It Be/)).toBe('/practice/progressions?p=I-V-vi-IV-I-V-IV-I')
     expect(hrefOf('Patterns', /^1 · Bass \+ chords/)).toBe('/practice/accompaniment/patterns/M1')
-    expect(hrefOf('Exercises', /^Hanon No\. 1/)).toBe('/play/exercise/hanon')
+    expect(hrefOf('Exercises', /^Hanon/)).toBe('/play/exercise/hanon')
     expect(hrefOf('Quiz', /^Scale building/)).toBe('/practice/quiz/build-scale')
   })
 

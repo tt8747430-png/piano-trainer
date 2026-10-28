@@ -1,10 +1,12 @@
 import {
+  fingerCrossings,
   noteName,
   pitchClass,
   rangeOf,
   spellChord,
   type Chord,
   type Finger,
+  type Hand,
   type KeyRange,
   type Midi,
   type PlacedScaleChord,
@@ -22,9 +24,12 @@ export const chordShown = (placed: readonly PlacedTone[]): ShownKeys => ({
 export function scaleShown(
   placed: readonly PlacedTone[],
   fingering?: readonly Finger[],
+  hand?: Hand,
 ): ShownKeys {
+  const keys = placed.map((key) => key.midi)
+  const crossings = fingering && hand ? fingerCrossings(keys, fingering, hand) : []
   return {
-    keys: placed.map((key) => key.midi),
+    keys,
     marks: new Map(
       placed.map((key, i) => {
         const finger = fingering?.[i]
@@ -33,6 +38,7 @@ export function scaleShown(
           {
             ...toneMark(key.tone, key.tone.role === 'root' ? 'tonic' : 'scale'),
             ...(finger === undefined ? {} : { finger }),
+            ...(crossings[i] ? { crossing: true } : {}),
           },
         ]
       }),

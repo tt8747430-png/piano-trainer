@@ -19,6 +19,7 @@ import {
   scaleIntervals,
   scaleKey,
   scaleKindsIn,
+  scaleDegreeNames,
   scaleRootSpelling,
   spellInKey,
   spellScale,
@@ -105,13 +106,15 @@ describe('scaleGaps', () => {
 })
 
 describe('the kinds', () => {
-  it('are thirteen, in three families', () => {
+  it('are twenty-one, in five families', () => {
     expect(SCALE_FAMILIES.map((family) => scaleKindsIn(family))).toEqual([
       ['major', 'natural', 'harmonic', 'melodic'],
       ['dorian', 'phrygian', 'lydian', 'mixolydian', 'locrian'],
       ['pent', 'mpent', 'majorBlues', 'blues'],
+      ['wholeTone', 'halfWhole', 'wholeHalf', 'chromatic'],
+      ['harmonicMajor', 'hungarian', 'bebopMajor', 'bebopDominant'],
     ])
-    expect(SCALE_KINDS).toHaveLength(13)
+    expect(SCALE_KINDS).toHaveLength(21)
   })
 
   it('knows which kinds are minor: a minor 3rd above the root', () => {
@@ -124,7 +127,45 @@ describe('the kinds', () => {
       'locrian',
       'mpent',
       'blues',
+      'wholeHalf',
+      'hungarian',
     ])
+  })
+})
+
+describe('the symmetric scales and the others', () => {
+  it.each([
+    ['wholeTone', 'C D E F# G# B♭'],
+    ['halfWhole', 'C D♭ E♭ E F# G A B♭'],
+    ['wholeHalf', 'C D E♭ F G♭ A♭ A B'],
+    ['chromatic', 'C D♭ D E♭ E F F# G A♭ A B♭ B'],
+    ['harmonicMajor', 'C D E F G A♭ B'],
+    ['hungarian', 'C D E♭ F# G A♭ B'],
+    ['bebopMajor', 'C D E F G G# A B'],
+    ['bebopDominant', 'C D E F G A B♭ B'],
+  ] as const)('spells %s on C', (kind, notes) => {
+    expect(names(note('C'), kind).join(' ')).toBe(notes)
+  })
+
+  it('steps by their gaps', () => {
+    expect(scaleGaps('wholeTone')).toEqual(['W', 'W', 'W', 'W', 'W', 'W'])
+    expect(scaleGaps('halfWhole')).toEqual(['H', 'W', 'H', 'W', 'H', 'W', 'H', 'W'])
+    expect(scaleGaps('wholeHalf')).toEqual(['W', 'H', 'W', 'H', 'W', 'H', 'W', 'H'])
+    expect(scaleGaps('chromatic')).toEqual(Array.from({ length: 12 }, () => 'H'))
+    expect(scaleGaps('hungarian')).toEqual(['W', 'H', 'W+H', 'H', 'H', 'W+H', 'H'])
+  })
+
+  it('writes the symmetric scales with no signature, a bebop dominant in its Mixolydian’s', () => {
+    expect(scaleKey(note('F', 1), 'wholeTone')).toEqual({ tonic: note('C'), minor: false })
+    expect(scaleKey(note('E', -1), 'chromatic')).toEqual({ tonic: note('C'), minor: false })
+    expect(scaleKey(note('G'), 'bebopDominant')).toEqual({ tonic: note('C'), minor: false })
+    expect(scaleKey(note('D'), 'bebopMajor')).toEqual({ tonic: note('D'), minor: false })
+    expect(scaleKey(note('A'), 'hungarian')).toEqual({ tonic: note('A'), minor: true })
+  })
+
+  it('shares its notes with no other scale', () => {
+    for (const kind of ['wholeTone', 'halfWhole', 'chromatic', 'hungarian', 'bebopMajor'] as const)
+      expect(relatedScale(note('C'), kind)).toBeNull()
   })
 })
 
@@ -243,8 +284,27 @@ describe('scaleRootSpelling, beyond today’s kinds', () => {
   })
 })
 
+describe('scaleDegreeNames', () => {
+  it('names a seven-note scale’s degrees, its 7th a leading tone or a subtonic', () => {
+    expect(scaleDegreeNames('major')).toEqual([
+      'tonic',
+      'supertonic',
+      'mediant',
+      'subdominant',
+      'dominant',
+      'submediant',
+      'leadingTone',
+    ])
+    expect(scaleDegreeNames('natural')?.[6]).toBe('subtonic')
+    expect(scaleDegreeNames('harmonic')?.[6]).toBe('leadingTone')
+    expect(scaleDegreeNames('mixolydian')?.[6]).toBe('subtonic')
+    expect(scaleDegreeNames('pent')).toBeNull()
+    expect(scaleDegreeNames('halfWhole')).toBeNull()
+  })
+})
+
 describe('scaleHasChords', () => {
-  it('is true for the seven-note scales', () => {
+  it('is true for the seven-note scales whose stacked 3rds are chords', () => {
     expect(SCALE_KINDS.filter(scaleHasChords)).toEqual([
       'major',
       'natural',
@@ -255,6 +315,7 @@ describe('scaleHasChords', () => {
       'lydian',
       'mixolydian',
       'locrian',
+      'harmonicMajor',
     ])
   })
 })

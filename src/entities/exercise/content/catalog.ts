@@ -6,7 +6,7 @@ const FEW_OCTAVES = [1, 2] as const
 
 /**
  * Practice's exercises, by group in the page's order: each written for the
- * app from its method's idea; Hanon's No. 1 is public domain.
+ * app from its method's idea; Hanon's Nos. 1 to 20 are public domain.
  */
 export const EXERCISES: readonly Exercise[] = [
   {
@@ -84,6 +84,21 @@ export const EXERCISES: readonly Exercise[] = [
     fields: { root: 'scale', kind: SCALE_KINDS, octaves: FEW_OCTAVES },
     own: { kind: 'major', octaves: 1 },
     tempo: 72,
+    swing: 'straight',
+  },
+  {
+    id: 'scale-routine',
+    group: 'scales',
+    stage: 'beginner',
+    name: { en: 'Daily scale routine', ru: 'Ежедневная разминка в гаммах' },
+    trains: {
+      en: 'One key a session, two octaves in five parts: each hand alone, together, staccato, then piano to forte and back',
+      ru: 'Одна тональность за занятие, две октавы в пяти частях: каждой рукой, вместе, стаккато, затем от piano к forte и обратно',
+    },
+    fields: { root: 'scale', kind: ['major', 'natural', 'harmonic', 'melodic'] },
+    own: { kind: 'major' },
+    // The routine's ladder starts at its first rung.
+    tempo: 60,
     swing: 'straight',
   },
   {
@@ -272,14 +287,15 @@ export const EXERCISES: readonly Exercise[] = [
     id: 'hanon',
     group: 'technique',
     stage: 'intermediate',
-    name: { en: 'Hanon No. 1', ru: 'Ганон № 1' },
+    name: { en: 'Hanon', ru: 'Ганон' },
     trains: {
-      en: 'One figure climbs two octaves and comes back, for even, independent fingers',
-      ru: 'Одна фигура на две октавы вверх и обратно, для ровных и независимых пальцев',
+      en: 'Nos. 1 to 20 of The Virtuoso Pianist: a figure climbs two octaves and comes back, for even, independent fingers',
+      ru: '№ 1–20 из «Пианиста-виртуоза»: фигура поднимается на две октавы и возвращается, для ровных и независимых пальцев',
     },
-    fields: { root: 'key' },
-    own: {},
-    tempo: 92,
+    fields: { root: 'key', hanon: true },
+    own: { hanon: 1 },
+    // The book's Part I runs from ♩ = 60 to 108: start at the bottom and climb.
+    tempo: 60,
     swing: 'straight',
   },
 ]

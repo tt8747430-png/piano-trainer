@@ -4,6 +4,10 @@ import { selectAnswers, selectIsLearned } from './selectors'
 import type { ProgressState, QuizAnswer, RunKey, RunResult } from './types'
 import type { StepId } from '@/entities/step'
 
+/** The progress with an exercise's last tempo kept: the same progress where it is kept already. */
+export const withTempo = (state: ProgressState, key: string, tempo: number): ProgressState =>
+  state.tempos[key] === tempo ? state : { ...state, tempos: { ...state.tempos, [key]: tempo } }
+
 /** The progress with a step or lesson learned on `at` (an ISO date), keeping the day it was first marked. */
 export const withLearned = (state: ProgressState, id: StepId, at: string): ProgressState =>
   selectIsLearned(id)(state) ? state : { ...state, learned: { ...state.learned, [id]: at } }

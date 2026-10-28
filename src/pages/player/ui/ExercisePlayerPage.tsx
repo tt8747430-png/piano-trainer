@@ -48,7 +48,12 @@ function ExerciseScreen({ exercise }: { exercise: Exercise }) {
   const of = useExerciseOf(exercise, choice)
   return (
     <PlayerLayout
-      title={t('exercise.title', { name: localText(exercise.name, locale), of })}
+      title={t('exercise.title', {
+        name: exercise.fields.hanon
+          ? t('exercise.hanon.name', { number: choice.hanon })
+          : localText(exercise.name, locale),
+        of,
+      })}
       onClose={close}
       view={view}
       player={player}

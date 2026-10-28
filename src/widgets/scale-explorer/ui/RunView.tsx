@@ -1,17 +1,20 @@
 import { useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PinnedKeyboard } from '@/features/live-keyboard'
-import { noteFromParam, noteName, spellScale } from '@/shared/lib/music'
+import { hasStandardFingering, noteFromParam, noteName, spellScale } from '@/shared/lib/music'
 import { PRACTICE_RHYTHM_IDS, runSounds } from '@/shared/lib/schedule'
-import { Dropdown, Labelled, Segmented } from '@/shared/ui'
+import { Dropdown, Labelled, Segmented, StepStrip } from '@/shared/ui'
 import { runShown, scaleRunOf } from '../model/scale-run'
-import { RUN_KEY_SHOWS, runKeyShow, type ScaleView } from '../model/scale-view'
+import { RUN_KEY_SHOWS, RUN_OCTAVES, runKeyShow, type ScaleView } from '../model/scale-view'
 import { PlayUpDown } from './PlayUpDown'
 import { ScaleExercises } from './ScaleExercises'
 import { ScaleFingering } from './ScaleFingering'
 import { ScaleLayout } from './ScaleLayout'
 import { ScaleSheet } from './ScaleSheet'
 import { TempoSlider } from './TempoSlider'
+
+/** The most notes a run offers to start on: a diminished scale's eight. */
+const MOST_STARTS = 8
 
 /**
  * Scale view: the run from its start note, its keys marked by degree with the playing hand's fingers
@@ -34,10 +37,10 @@ export function RunView({
   facts: ReactNode
 }) {
   const { t } = useTranslation(['practice', 'common'])
-  const { root, kind, start, fingering, rhythm, hands } = scale
+  const { root, kind, start, octaves, fingering, rhythm, hands } = scale
   const run = useMemo(
-    () => scaleRunOf({ root, kind, start, fingering, rhythm, hands }),
-    [root, kind, start, fingering, rhythm, hands],
+    () => scaleRunOf({ root, kind, start, octaves, fingering, rhythm, hands }),
+    [root, kind, start, octaves, fingering, rhythm, hands],
   )
   const tonic = noteFromParam(root)
   const tones = spellScale(tonic, kind)
@@ -73,14 +76,27 @@ export function RunView({
               onChange={(onKeys) => onChange({ onKeys })}
             />
           </Labelled>
-          <Labelled label={t('practice:scales.startOn')}>
+          <Labelled label={t('practice:scales.octaves')}>
+            {/* Bare numbers: the name beside them says what they count. */}
             <Segmented
-              label={t('practice:scales.startOn')}
-              value={start}
-              options={tones.map((tone, i) => ({ value: i + 1, label: noteName(tone.note) }))}
-              onChange={(next) => onChange({ start: next })}
+              label={t('practice:scales.octaves')}
+              value={octaves}
+              options={RUN_OCTAVES.map((value) => ({ value, label: String(value) }))}
+              onChange={(next) => onChange({ octaves: next })}
             />
           </Labelled>
+          {/* The chromatic scale from another note is the chromatic scale on that root. A strip that
+              steps, as the root's: seven or eight notes outgrow a narrow phone. */}
+          {tones.length <= MOST_STARTS ? (
+            <Labelled label={t('practice:scales.startOn')}>
+              <StepStrip
+                label={t('practice:scales.startOn')}
+                value={start}
+                options={tones.map((tone, i) => ({ value: i + 1, label: noteName(tone.note) }))}
+                onChange={(next) => onChange({ start: next })}
+              />
+            </Labelled>
+          ) : null}
           {run.fingerings.length > 1 ? (
             <Labelled label={t('practice:scales.fingering.label')}>
               <Segmented
@@ -112,7 +128,7 @@ export function RunView({
       }
     >
       <ScaleSheet music={run.music} hands={hands} fingers />
-      <ScaleFingering run={run} />
+      <ScaleFingering run={run} standard={hasStandardFingering(kind)} />
       <ScaleExercises root={tonic} kind={kind} />
     </ScaleLayout>
   )

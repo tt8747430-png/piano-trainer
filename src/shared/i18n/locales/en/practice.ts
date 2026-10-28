@@ -134,6 +134,7 @@ export const practice = {
   scales: {
     show: { scale: 'Scale', chords: 'Chords', key: 'Key' },
     label: 'Scale',
+    octaves: 'Octaves',
     startOn: 'Start on',
     openInChords: 'Open in Chords',
     // What the run's keys carry: its notes, or a hand's fingers.
@@ -146,6 +147,11 @@ export const practice = {
       drawing: '{{hand}}: fingers numbered from the thumb, 1, to the little finger, 5',
       notes: 'Notes',
       fingers: 'Fingers',
+      crossings:
+        'A finger in blue is a crossing: the thumb passes under to it, or a finger crosses over the thumb to it.',
+      crossing: 'crossing',
+      noStandard:
+        'No fingering is standard for this scale. These fingers group its notes from the thumb, keeping the thumb off the black keys where it can.',
     },
     fingering: {
       label: 'Fingering',

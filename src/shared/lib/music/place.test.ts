@@ -170,6 +170,12 @@ describe('placeScale', () => {
     expect(eFlat.at(-1)?.midi).toBe(75)
   })
 
+  it('runs two octaves where asked', () => {
+    expect(keys(placeScale(note('G'), 'major', 0, 2))).toEqual([
+      67, 69, 71, 72, 74, 76, 78, 79, 81, 83, 84, 86, 88, 90, 91,
+    ])
+  })
+
   it('runs from any degree up an octave, each note keeping its degree from the tonic', () => {
     const fromE = placeScale(note('C'), 'major', 2)
     expect(keys(fromE)).toEqual([64, 65, 67, 69, 71, 72, 74, 76])

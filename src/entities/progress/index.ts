@@ -15,6 +15,7 @@ export {
   withLesson,
   withRun,
   withSectionRead,
+  withTempo,
 } from './model/changes'
 export {
   barsLessonKey,
@@ -45,6 +46,7 @@ export {
   selectLessons,
   selectPractised,
   selectRead,
+  selectTempo,
   selectTrainerRecord,
   selectTrainerRecords,
 } from './model/selectors'

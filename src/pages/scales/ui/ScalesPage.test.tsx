@@ -228,7 +228,7 @@ describe('Practice → Scales and keys', () => {
     expect(audio.played).toHaveLength(played)
   })
 
-  it('steps through the scales in a strip, keys, then modes, then blues', async () => {
+  it('steps through the scales in a strip, keys, then modes, blues, the symmetric scales and the others', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales?kind=mpent')
     const strip = await screen.findByRole('radiogroup', { name: 'Scale' })
@@ -250,6 +250,14 @@ describe('Practice → Scales and keys', () => {
       'Minor pentatonic',
       'Major blues',
       'Minor blues',
+      'Whole-tone',
+      'Diminished (half-whole)',
+      'Diminished (whole-half)',
+      'Chromatic',
+      'Harmonic major',
+      'Hungarian minor',
+      'Bebop major',
+      'Bebop dominant',
     ])
     await user.click(screen.getByRole('button', { name: 'Next: Scale' }))
     expect(router.state.location.search).toMatchObject({ kind: 'majorBlues' })
@@ -268,13 +276,23 @@ describe('Practice → Scales and keys', () => {
       within(within(byHand).getByRole('table', { name: hand }))
         .getAllByRole('row')
         .map((each) => each.textContent)
-    expect(row('Left hand')).toEqual(['NotesCDEFGABC', 'Fingers54321321'])
-    expect(row('Right hand')).toEqual(['NotesCDEFGABC', 'Fingers12312345'])
+    // A crossing's finger says so to a screen reader: the left hand's 3 over to A, the right thumb on F.
+    expect(row('Left hand')).toEqual(['NotesCDEFGABC', 'Fingers543213 (crossing)21'])
+    expect(row('Right hand')).toEqual(['NotesCDEFGABC', 'Fingers1231 (crossing)2345'])
     expect(
       within(byHand).getByRole('img', {
         name: 'Right hand: fingers numbered from the thumb, 1, to the little finger, 5',
       }),
     ).toBeInTheDocument()
+  })
+
+  it('climbs two octaves where asked, kept in the URL', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/scales')
+    const octaves = await screen.findByRole('radiogroup', { name: 'Octaves' })
+    await user.click(within(octaves).getByRole('radio', { name: '2' }))
+    expect(router.state.location.search).toMatchObject({ octaves: 2 })
+    expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('123123412312345')
   })
 
   it('shows the notes alone or either hand’s fingers on the keys, kept in the URL', async () => {

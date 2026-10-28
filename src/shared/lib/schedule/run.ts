@@ -1,4 +1,5 @@
 import {
+  fingerCrossings,
   midi,
   TICKS_PER_BEAT,
   type Finger,
@@ -37,7 +38,7 @@ interface RunOptions {
 /**
  * A scale's notes up and back down in 8ths of a practice rhythm, for one hand or both (the left an
  * octave down), as timed music in 4/4: what the Scales explorer plays and writes. Coming down, each
- * note keeps its finger.
+ * note keeps its finger; a note a finger crosses to (`fingerCrossings`) is marked as one.
  */
 export function scaleRun(up: RunWay, options: RunOptions): TimedMusic {
   const lengths = PRACTICE_RHYTHMS[options.rhythm]
@@ -50,6 +51,16 @@ export function scaleRun(up: RunWay, options: RunOptions): TimedMusic {
       .reverse()
       .map((index) => ({ way: down, index })),
   ]
+  const crossings = (hand: Hand) =>
+    fingerCrossings(
+      upAndDown.map(({ way, index }) => way.notes[index]?.midi ?? midi(0)),
+      upAndDown.map(({ way, index }) => way.fingers?.[hand][index]),
+      hand,
+    )
+  const crossed: Readonly<Record<Hand, readonly boolean[]>> = {
+    rh: crossings('rh'),
+    lh: crossings('lh'),
+  }
   const played: TimedNote[] = []
   let tick = 0
   upAndDown.forEach(({ way, index }, i) => {
@@ -65,6 +76,7 @@ export function scaleRun(up: RunWay, options: RunOptions): TimedMusic {
           startTick: tick,
           durationTicks: length,
           ...(finger === undefined ? {} : { finger }),
+          ...(crossed[hand][i] ? { crossing: true } : {}),
         })
       }
     }

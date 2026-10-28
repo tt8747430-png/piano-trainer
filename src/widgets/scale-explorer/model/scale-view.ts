@@ -19,6 +19,10 @@ export const showsOf = (kind: ScaleKind): readonly ScaleShow[] =>
       show === 'scale' || (show === 'chords' ? scaleHasChords(kind) : keyMode(kind) !== null),
   )
 
+/** A run's octaves on the Scales page. */
+export const RUN_OCTAVES = [1, 2] as const
+export type RunOctaves = (typeof RUN_OCTAVES)[number]
+
 /** What the run's keys carry, as the reference's switch over its keys: its notes, or a hand's fingers. */
 export const RUN_KEY_SHOWS = ['notes', 'lh', 'rh'] as const
 export type RunKeyShow = (typeof RUN_KEY_SHOWS)[number]
@@ -38,6 +42,8 @@ export interface ScaleView {
   readonly show: ScaleShow
   /** The degree the run starts on, 1 the tonic (Scale view). */
   readonly start: number
+  /** How many octaves the run climbs (Scale view): one, or two as the books teach it. */
+  readonly octaves: RunOctaves
   /** How the run is fingered; absent, as its start is (`ownFingering`). */
   readonly fingering?: Fingering
   readonly rhythm: PracticeRhythm

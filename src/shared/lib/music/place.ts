@@ -171,12 +171,17 @@ export function placeChord(
 
 /**
  * A scale as the keyboard shows it: from degree `start` (0 the tonic, at or above middle C) up to
- * that note an octave higher, each tone keeping its degree from the tonic.
+ * that note `octaves` octaves higher, each tone keeping its degree from the tonic.
  */
-export function placeScale(root: SpelledNote, kind: ScaleKind, start = 0): PlacedTone[] {
+export function placeScale(
+  root: SpelledNote,
+  kind: ScaleKind,
+  start = 0,
+  octaves = 1,
+): PlacedTone[] {
   const base = MIDDLE_C + pitchClassOf(root)
   const tones = spellScale(root, kind)
-  return Array.from({ length: tones.length + 1 }, (_, i) => {
+  return Array.from({ length: tones.length * octaves + 1 }, (_, i) => {
     const index = start + i
     const tone = tones[index % tones.length]
     if (!tone) throw new RangeError(`${kind} has no degree ${start}`)

@@ -85,3 +85,12 @@
 [data-slot='score'][data-muted='treble'] g.staff[data-staff='treble'] g.note-chosen g.verse {
   color: var(--muted-foreground);
 }
+/* A finger that crosses (a scale's thumb passing under, a finger over it), typed so by the score:
+   in the link's sky and bold, as the keys' finger row fills its circle. */
+[data-slot='score'] g.fing.crossing {
+  color: var(--link);
+}
+[data-slot='score'] g.fing.crossing text {
+  fill: currentColor;
+  font-weight: 700;
+}

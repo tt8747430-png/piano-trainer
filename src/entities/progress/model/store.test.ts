@@ -39,6 +39,7 @@ describe('createProgressStore', () => {
       lessons: { 'bz5:chord:C': DAY, 'bz5:bars:9-18': DAY },
       holds: { 'bz5:chord:G': 2 },
       read: { 'lesson:triads': [0, 2], 'course:called-to-play/five-ways': [1] },
+      tempos: { 'hanon:5': 84, scale: 96 },
     }
     writeSaved(storage, saved)
     expect(createProgressStore({ storage }).getState()).toEqual(saved)
@@ -106,6 +107,7 @@ describe('createProgressStore', () => {
       holds: { 'bz5:chord:Am': 1 },
       // A lesson's sections read, each once and in order; never a piece's.
       read: { 'lesson:triads': [0, 2] },
+      tempos: {},
     })
   })
 
@@ -130,6 +132,20 @@ describe('createProgressStore', () => {
     expect(state.days).toEqual([])
     expect(state.lessons).toEqual({})
     expect(state.holds).toEqual({})
+  })
+
+  it('keeps each exercise’s last tempo, dropping one off the tempo range or under no exercise', () => {
+    const storage = createMemoryStorage()
+    writeSaved(storage, {
+      tempos: { 'hanon:5': 84, scale: 96, 'hanon:2': 900, 'Bad Key': 60, arpeggio: 'fast' },
+    })
+    expect(createProgressStore({ storage }).getState().tempos).toEqual({ 'hanon:5': 84, scale: 96 })
+  })
+
+  it('reads a save without tempos as none kept', () => {
+    const storage = createMemoryStorage()
+    writeSaved(storage, { learned: { 'piece:bz5': DAY } })
+    expect(createProgressStore({ storage }).getState().tempos).toEqual({})
   })
 
   it.each([3, 5])('does not read a version-%i save', (version) => {
