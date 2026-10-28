@@ -86,7 +86,7 @@ describe('Search', () => {
     const { router } = await renderApp('/search')
     await user.type(await screen.findByRole('searchbox', { name: 'Search' }), 'dorian')
     await waitFor(() => expect(router.state.location.search).toEqual({ q: 'dorian' }))
-    await waitFor(() => expect(headings()).toEqual(['Scales']))
+    await waitFor(() => expect(headings()).toEqual(['Scales', 'Progressions']))
     expect(hrefOf('Scales', /^Dorian/)).toBe('/practice/scales?kind=dorian')
   })
 
