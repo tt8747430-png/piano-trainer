@@ -54,6 +54,7 @@ Impeccable (impeccable.style, v4.8 installed in `.claude/skills/impeccable`, by 
 - **Evidence before claims** (verification-before-completion). Name the command that proves it, run it fresh, read the output, then say what it showed: "6,249 tests pass", never "should pass". An agent's report of success is not evidence; its diff and a test run are.
 - **Check against the request line by line**, the owner's words and screenshots, not only the tests.
 - Run what CLAUDE.md says (typecheck, lint, the tests the change reaches; the full suite and the build once before a push to `main`).
+- Leave nothing running: check `ps` and stop your finished servers, loops and runs by PID (SKILL.md, Testing).
 
 ## Reviews and feedback
 

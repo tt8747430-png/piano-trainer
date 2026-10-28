@@ -38,6 +38,7 @@ Review and improve Piano Trainer round after round, starting from the ground up,
 - The full suite and the build pass on the merged branch.
 - `CLAUDE.md` and the docs are updated.
 - Pushed with `git push -u origin <branch> && git push origin HEAD:main`.
+- Nothing is left running: no dev server, waiting loop or test run of this round (the owner-way skill, Testing).
 
 ## Report, after each round
 

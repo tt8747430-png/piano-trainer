@@ -29,6 +29,7 @@ Turn the owner's feedback (text and screenshots) into finished, merged work that
 
 - Every request is built or explicitly deferred with a reason.
 - The merged branch passes the full suite and the build, and is pushed to the branch and `main`.
+- Nothing is left running: no dev server, waiting loop or test run of this round (the owner-way skill, Testing).
 
 ## Report
 

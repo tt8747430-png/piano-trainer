@@ -71,7 +71,11 @@ These come straight from their feedback. Each has burned a round before.
    - When agents do run: split by files (`references/agent-brief.md`), copy the owner's screenshots to `scratchpad/<round>/owner/` with a written description, send mid-round feedback to the running agent with SendMessage, and resume a stopped agent rather than starting a new one.
 4. **Testing** follows CLAUDE.md's "Verify before claiming done" and "Parallel agents". The owner repeats it: agents never run the full suite; you run it once on the merged result. Beyond that:
    - Never run two suites at once. Check `ps` before starting one, and never `pkill` with a pattern that matches your own command.
-   - Wait for a run you started by its own notification. A loop that waits with `pgrep -f <pattern>` finds itself when its own command holds the pattern and never ends: wait on a PID or the log instead.
+   - **No ghost tasks** (a loop or server left running after its work is done):
+     - Wait for a background command by its own completion notice; don't write a waiting loop. If you must poll, poll its PID (`kill -0 <pid>`) or the line its log prints at the end. A loop on `pgrep -f <pattern>` finds itself when its own command holds the pattern and never ends.
+     - Give every long background command a limit (`timeout 1800 …`).
+     - Stop processes by PID, never by a pattern; when merging an agent, stop its dev server and loops too.
+     - Before reporting a round done, list what is running (`ps -eo pid,etime,args | grep -E 'vitest|vite|sleep|until'`) and stop whatever is yours and finished.
    - **Flaky tests:** a test that fails only under load and passes alone gets made robust (e.g. a longer wait on engraving), and you say so.
 5. **Commits:** one proper commit per finished task. The message says what changed and why and ends with the session's attribution lines. Prettier never runs on CLAUDE.md.
 6. **Merge and push:** once the merged suite and the build are green, update the docs (see below), then run `git push -u origin <branch> && git push origin HEAD:main`. Remove finished worktrees and their branches.
