@@ -1,0 +1,10 @@
+# The piano-trainer project (ADR 0116): ref itmiutianxvtlwhdsalo, eu-west-1.
+project_id = "piano-trainer"
+
+# Both check their caller themselves: a learner's token, or the project's secret key from the
+# daily purge job.
+[functions.request-account-deletion]
+verify_jwt = false
+
+[functions.purge-account]
+verify_jwt = false
