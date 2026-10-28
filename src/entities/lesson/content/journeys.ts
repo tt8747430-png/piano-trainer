@@ -72,7 +72,7 @@ export const JOURNEYS: readonly Journey[] = [
       {
         id: 'chords-of-a-key',
         title: { en: 'The chords of a key', ru: 'Аккорды тональности' },
-        steps: lessons('inversions', 'chord-family', 'chord-functions'),
+        steps: lessons('inversions', 'slash-chords', 'chord-family', 'chord-functions'),
       },
       {
         id: 'accompanying',
@@ -120,7 +120,12 @@ export const JOURNEYS: readonly Journey[] = [
       {
         id: 'moving-harmony',
         title: { en: 'Harmony in motion', ru: 'Гармония в движении' },
-        steps: lessons('progressions-in-order', 'passing-chords', 'reharmonising-a-melody'),
+        steps: lessons(
+          'progressions-in-order',
+          'passing-chords',
+          'reharmonising-a-melody',
+          'modulation',
+        ),
       },
       {
         id: 'gospel',
@@ -168,6 +173,8 @@ export const JOURNEYS: readonly Journey[] = [
         steps: lessons(
           'jazz-voicings',
           'guide-tones',
+          'rootless-voicings',
+          'locked-hands',
           'scales-through-the-changes',
           'pentatonic-improvisation',
         ),

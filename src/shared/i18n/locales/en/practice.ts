@@ -97,7 +97,7 @@ export const practice = {
         rootlessB:
           'The same four notes as type A, starting from the other end: the 7th, 9th, 3rd and 5th; a dominant plays its 3rd, 13th, 7th and 9th. In C: Dm7 C E F A, G7 B E F A, Cmaj7 B D E G.',
         locked:
-          'George Shearing’s block chords: a close chord of four notes in the right hand with the melody on top, and the left hand doubling the melody an octave lower. Cmaj7 with E on top: E | G B C E.',
+          'George Shearing’s locked hands: a close chord of four notes in the right hand with the melody on top, and the left hand doubling the melody an octave lower. Cmaj7 with E on top: E | G B C E.',
         soWhat:
           'Three 4ths with a major 3rd on top, built up from the chord’s 9th, as the piano plays it in Miles Davis’s “So What”. It has no 3rd, so it suits a minor or suspended chord. Dm7: E A | D G B.',
       },

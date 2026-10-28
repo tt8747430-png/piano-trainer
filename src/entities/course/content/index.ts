@@ -3,6 +3,7 @@ import calledToPlay from './called-to-play'
 import calledToPlayTwo from './called-to-play-2'
 import firstExercisesForBothHands from './first-exercises-for-both-hands'
 import gorshkov from './gorshkov'
+import howToPractise from './how-to-practise'
 import improvisingWithChords from './improvising-with-chords'
 import intermediatePianoPlaying from './intermediate-piano-playing'
 import introToMusicReading from './intro-to-music-reading'
@@ -26,6 +27,7 @@ export const COURSES: readonly Course[] = [
   rhythmBasics,
   intermediatePianoPlaying,
   theSustainPedal,
+  howToPractise,
   firstExercisesForBothHands,
   majorScales,
   minorScales,

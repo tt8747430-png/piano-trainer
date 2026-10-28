@@ -13,8 +13,29 @@ const WHOLE_BAR = 4 * TICKS_PER_BEAT
  * What a round shows on a staff: a note on its clef, a key's signature over a bar's rest, a chord
  * held for a bar as the keys place it, or an interval's two notes together.
  */
-function staffOf(question: StaffQuestion): { clef: StaffId; music: TimedMusic } {
+function staffOf(question: StaffQuestion): { clef: StaffId | undefined; music: TimedMusic } {
   switch (question.mode) {
+    // A cadence's two chords, a bar each, on the grand staff in their key: no symbol over them.
+    case 'name-cadence':
+    case 'cadence-card':
+      return {
+        clef: undefined,
+        music: {
+          key: question.key,
+          meter: '4/4',
+          bars: question.voicing.chords.map((_, i) => ({ startTick: i * WHOLE_BAR, beats: 4 })),
+          chords: [],
+          notes: question.voicing.chords.flatMap((chord, i) =>
+            chord.keys.map((key, voice) => ({
+              midi: key.midi,
+              spelled: key.note,
+              hand: voice === 0 ? ('lh' as const) : ('rh' as const),
+              startTick: i * WHOLE_BAR,
+              durationTicks: WHOLE_BAR,
+            })),
+          ),
+        },
+      }
     case 'read-note': {
       const written = `${writtenName(question.key, question.spelled)}/1`
       const hand = question.clef === 'treble' ? 'rh' : 'lh'
@@ -95,7 +116,7 @@ export function RoundStaff({
       className="relative card self-stretch px-4 py-2 sm:self-start"
     >
       <div aria-hidden={hidden} className={cn(hidden && 'invisible')}>
-        <LazyScoreView score={score} staff={clef} scale={1.25} />
+        <LazyScoreView score={score} staff={clef} scale={clef ? 1.25 : 0.8} />
       </div>
       {hidden ? (
         <span

@@ -17,7 +17,9 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   editor opens it, as the Player plays it. There are no hands, patterns or parts in the editor: staves, chord symbols
   as text over the music, words and fingers. What is heard is what is written. Sections are the song's form (Intro,
   Verse, Chorus…), started and joined in the editor, and carry no pattern.
-- **A pure draft and reducer** (`features/score-editor`) with undo and redo; every change is saved as it is made. A
+- **A pure draft and reducer** (`features/score-editor`) with undo and redo; each step brings back what was chosen with
+  the music (the notes chosen, a chord's one note, the grace notes), so the next edit acts where the undone one did.
+  Every change is saved as it is made. A
   change its music cannot be written with is said in a notice, the music last saved kept.
 - **The caret and the selection.** The staff written is the one the caret is on (a click, or Alt ↑ ↓). Writing past
   the last bar adds one. A double click writes the note there in its bar's key. ↑ ↓ move a step in the key, with
@@ -124,4 +126,5 @@ reader hears the caret's place in a polite live line (`CaretLine`).
 - 2026-10-28 — Flat's notation in its sections: the 64th, tuplets of 2 to 9, the new articulations, ornaments, lines
   and dynamics, tempo changes, swing, free text, Roman numerals, repeat ×N, the 3rd and 4th endings, the page break,
   bar repeats and multi-bar rests.
+- 2026-10-28 — Undo and redo bring back what was chosen (the notes, a chord's one note, the grace notes).
 - The research note comparing Flat and Dorico (2026-10-23) and the editor's three design specs, deleted.

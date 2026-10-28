@@ -414,19 +414,22 @@ describe('Piece: the learner’s own music', () => {
     })
   })
 
-  it('deletes an own song once asked, back on Songs', async () => {
+  it('deletes an own song once asked, out of the favourites too, back on Songs', async () => {
     const user = userEvent.setup()
     const song = { id: 'my-1', title: 'Morning', ...MUSIC }
-    const { router, piecesStore } = await renderApp('/songs/my-1', {
+    const { router, piecesStore, libraryStore } = await renderApp('/songs/my-1', {
       storage: saved({ songs: [song], nextSong: 2 }),
     })
     expect(await screen.findByRole('heading', { level: 1, name: 'Morning' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Learned' })).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'Add to favourites' }))
+    expect(libraryStore.getState().favourites).toEqual(['my-1'])
     await openMore(user)
     await user.click(screen.getByRole('button', { name: 'Delete' }))
     await user.click(await screen.findByRole('button', { name: 'Delete for good' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs'))
     expect(piecesStore.getState().songs).toEqual([])
+    expect(libraryStore.getState().favourites).toEqual([])
   })
 
   it('writes a listing’s chart in the editor', async () => {

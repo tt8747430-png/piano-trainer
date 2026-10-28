@@ -14,6 +14,7 @@ import {
 import { chordSounds, intervalSounds, walkSounds, type NoteSound } from '@/shared/lib/schedule'
 import type { KeyMark } from '@/shared/ui'
 import type { Asks } from './draw'
+import type { CadenceVoicing } from './ladders/cadences'
 import type { Question } from './round-machine'
 
 /** Middle C to the E above the next C: room to build most chords and scales, any octave counting. */
@@ -53,6 +54,10 @@ export function targetKeys(question: Question): Midi[] {
       return [...question.chordKeys]
     case 'name-progression':
       return [...new Set(question.chordKeys.flat())]
+    // A cadence is two chords, read on the staff: the keys show them as they sound.
+    case 'name-cadence':
+    case 'cadence-card':
+      return []
     case 'read-note':
       return [question.key]
     case 'key-signature':
@@ -85,6 +90,18 @@ export function answerMarks(question: Question): Map<Midi, KeyMark> {
   return new Map(targetKeys(question).map((key) => [key, { tone: 'scale', label: '' }]))
 }
 
+/** A cadence's keys, its key's tonic and then its two chords, each from the bass up. */
+const cadenceChords = (voicing: CadenceVoicing): Midi[][] =>
+  [voicing.tonic, ...voicing.chords].map((chord) => chord.keys.map((key) => key.midi))
+
+/** The cadence a round sounds, if it asks one. */
+const cadenceOf = (question: Question): CadenceVoicing | undefined =>
+  question.mode === 'name-cadence' || question.mode === 'cadence-card'
+    ? question.voicing
+    : question.mode === 'build-chord'
+      ? question.cadence?.voicing
+      : undefined
+
 /** Two octaves around middle C: the least a note-reading keyboard shows. */
 const READING_LEAST: KeyRange = { from: midi(48), to: midi(71) }
 
@@ -98,7 +115,11 @@ export function roundRange(asks: Asks, question: Question): KeyRange {
       asks.notes.map((n) => n.key),
       READING_LEAST,
     )
-  return keyboardRange(targetKeys(question), QUIZ_RANGE)
+  const cadence = cadenceOf(question)
+  return keyboardRange(
+    cadence ? [...targetKeys(question), ...cadenceChords(cadence).flat()] : targetKeys(question),
+    QUIZ_RANGE,
+  )
 }
 
 /** Ear rounds sound as they are shown; the others once answered. */
@@ -106,7 +127,8 @@ export const heardFirst = (question: Question): boolean =>
   ((question.mode === 'name-chord' || question.mode === 'name-interval') && question.heard) ||
   question.mode === 'name-scale' ||
   question.mode === 'chord-role' ||
-  question.mode === 'name-progression'
+  question.mode === 'name-progression' ||
+  (question.mode === 'name-cadence' && question.heard)
 
 const line = (keys: readonly Midi[]) =>
   walkSounds(
@@ -116,6 +138,8 @@ const line = (keys: readonly Midi[]) =>
 
 /** What a round sounds: its chord, interval, scale or key, as the learner hears it. */
 export function roundSounds(question: Question): NoteSound[] {
+  const cadence = cadenceOf(question)
+  if (cadence) return walkSounds(cadenceChords(cadence), { arpeggio: false, tempo: ROLE_TEMPO })
   switch (question.mode) {
     case 'name-interval':
     case 'build-interval':

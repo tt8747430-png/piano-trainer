@@ -43,7 +43,7 @@ something to play, and the root goes to the left hand.
 - **Voicings** (`voiceChord`, `voicingBar`): close; drop 2 and drop 3 of a close 4-note chord in any inversion, the
   dropped voice in the left hand; a shell (root, 3rd, 7th) and the rootless types A and B (3rd and 7th, the chord's
   9th or the natural one, its altered 5th or 13th or, on a dominant with a natural 9th, the 13th added, else the 5th;
-  A from the 3rd, a dominant from its 7th, B the other end) in the left hand from D3; locked hands (a close 4-note
+  A from the 3rd, a dominant from its 7th, B the other end) in the left hand from D3; locked hands (George Shearing's: a close 4-note
   chord from middle C, its top doubled an octave down); So What (three 4ths and a major 3rd from the 9th, only over
   Dorian tones with a perfect 5th and no major 3rd). A voicing a chord cannot take says why (`fourNotes`, `noThird`,
   `noSeventh`, `notDorian`).

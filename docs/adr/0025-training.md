@@ -33,7 +33,13 @@ ways, with a time limit and a Next that waits for the answer.
   keys or MIDI; an interval's upper note over its given lower one) and **By ear** (heard, the same four choices, the
   keys staying up while it sounds). Their ladders and Custom (chords or intervals, roots by Natural · Sharp · Flat,
   inversions, how an interval sounds by ear) are the same for every drill. Only a chord read or played rates its
-  quality: a card or a sound heard is no evidence. Each drill keeps its own record (`chords:quiz:c-main`).
+  quality: a card or a sound heard is no evidence. Each drill keeps its own record (`chords:quiz:c-main`). **Cadences** is a third trainer in the
+  four drills (in the By ear group): the authentic (perfect and imperfect where a level splits it), plagal, half,
+  deceptive and Phrygian half cadences, each voiced in four parts over its key's tonic, common tones held, in keys up
+  to three sharps or flats (`ladders/cadences.ts`); By ear plays the tonic then the cadence, Quiz shows its two
+  chords on the grand staff with no symbols, Play asks for the chord that makes it (before the last, or the last) in
+  the inversion it needs, and its Cards show its name or its staff, a trainer naming the card faces it has
+  (`Trainer.sides`). Like a progression, a cadence rates no skill.
 - **One setup for every trainer** (`widgets/trainer-setup`): the drill and what a card shows, Options (level,
   Custom's lists each a sheet of checks that never empties, switches, rounds), Timing (time limit, Go on
   automatically), a card saying the drill in a sentence, the record, Start. Every explanation is an ⓘ. A run takes
@@ -61,3 +67,4 @@ a case in `arrangeExercise`, whose test writes every exercise in every root on t
 - 0024 — An exercise is a rule that writes a Performance (2026-10-01).
 - 0025 — A trainer is a round machine with a ladder (2026-10-01).
 - 0025 — Chords and Intervals in four drills, one setup for every trainer, a time limit, an answer-gated Next (2026-10-28).
+- r14 — Cadences, a trainer in the four drills, its cards naming their faces (2026-10-28).

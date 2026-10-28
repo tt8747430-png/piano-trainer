@@ -38,8 +38,7 @@ function BarAction({
 /**
  * Select's bar at the foot (Mindscape's `SelectToolbar`), floating where the screen's actions float:
  * Favourite for the songs chosen, Move and Archive for every row chosen (folders with all they
- * hold), and Delete where everything chosen can be deleted
- * (the learner's own songs, and folders). Its slots stay put as rows are chosen: one that cannot act
+ * hold), and Delete where everything chosen can be deleted (the learner's own songs, and folders). Its slots stay put as rows are chosen: one that cannot act
  * on the choice is greyed, never taken away.
  */
 export function SelectionBar({ page }: { page: LibraryPage }) {
@@ -71,15 +70,13 @@ export function SelectionBar({ page }: { page: LibraryPage }) {
           onClick={select.archive}
           disabled={select.count === 0}
         />
-        {select.deletable ? (
-          <BarAction
-            label={t('select.delete')}
-            icon={Trash2}
-            onClick={select.delete}
-            disabled={false}
-            destructive
-          />
-        ) : null}
+        <BarAction
+          label={t('select.delete')}
+          icon={Trash2}
+          onClick={select.delete}
+          disabled={!select.deletable}
+          destructive
+        />
       </div>
     </FloatingActions>
   )
