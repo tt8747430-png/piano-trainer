@@ -9,7 +9,15 @@ import {
   ListOrdered,
   type LucideIcon,
 } from 'lucide-react'
-import { useMemo, useReducer, useState, type ReactElement, type ReactNode } from 'react'
+import {
+  useEffect,
+  useEffectEvent,
+  useMemo,
+  useReducer,
+  useState,
+  type ReactElement,
+  type ReactNode,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson, LessonAnswer } from '@/entities/lesson'
 import { useMidiKeyDown } from '@/features/connect-midi'
@@ -277,10 +285,13 @@ export function LessonView({
   up,
   onward,
   end,
+  onRead,
 }: {
   lesson: Lesson
   up: UpLink
   onward: Onward
+  /** A section read, by its place: its page shown, or scrolled to the reading line. */
+  onRead?: (section: number) => void
   /** What follows the lesson's last section, told whether the lesson reads a page at a time. */
   end?: (paged: boolean) => ReactNode
 }) {
@@ -292,12 +303,13 @@ export function LessonView({
   const [shown, setShown] = useState<ShownKeys>(NO_KEYS)
   const scrolled = useReadingSection(paged ? [] : lesson.sections.map((_, s) => sectionId(s)))
   const page = sectionAt(hash, lesson.sections.length)
-  const at = paged
-    ? page
-    : Math.max(
-        lesson.sections.findIndex((_, s) => sectionId(s) === scrolled),
-        0,
-      )
+  const scrolledTo = lesson.sections.findIndex((_, s) => sectionId(s) === scrolled)
+  const read = paged ? page : scrolledTo < 0 ? null : scrolledTo
+  const at = read ?? 0
+  const heard = useEffectEvent((section: number) => onRead?.(section))
+  useEffect(() => {
+    if (read !== null) heard(read)
+  }, [read])
   const [question, dispatch] = useReducer(questionReducer, null)
   const answers = useMemo(() => questionAnswers(lesson), [lesson])
   const saidAnswers = useMemo(() => lessonAnswers(lesson), [lesson])

@@ -22,7 +22,7 @@ import {
 } from './types'
 
 export const PROGRESS_STORAGE_KEY = 'pt-progress'
-export const PROGRESS_VERSION = 3
+export const PROGRESS_VERSION = 4
 
 export type ProgressStore = StoreApi<ProgressState>
 
@@ -61,6 +61,17 @@ function kept<K extends string, V>(
 }
 
 const isPieceKey = (key: string): key is string => key !== ''
+
+/** A lesson's step, a journey's or a course's: what a lesson's sections read are kept under. */
+const isLessonStep = (key: string): key is StepId =>
+  isStepId(key) && (key.startsWith('lesson:') || key.startsWith('course:'))
+
+/** The sections read, each a place once, in order; nothing where none can be read. */
+function sectionsRead(value: unknown): readonly number[] | undefined {
+  if (!Array.isArray(value)) return undefined
+  const places = [...new Set(value.filter(isCount))].sort((a, b) => a - b)
+  return places.length > 0 ? places : undefined
+}
 const dateOrNothing = (value: unknown) => (isDate(value) ? value : undefined)
 
 function evidenceOrNothing(value: unknown): readonly Answer[] | undefined {
@@ -98,6 +109,7 @@ function sanitize(persisted: unknown): ProgressState {
     days: Array.isArray(saved.days) ? keptDays(saved.days) : [],
     lessons,
     // A chord held short of learning it: never one its lessons have learned.
+    read: kept<StepId, readonly number[]>(saved.read, isLessonStep, sectionsRead),
     holds: keptHolds(
       kept(
         saved.holds,

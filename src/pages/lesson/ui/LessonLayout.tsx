@@ -1,10 +1,12 @@
 import { Link, type LinkProps } from '@tanstack/react-router'
 import { ArrowRight, ChevronsLeft } from 'lucide-react'
-import type { ReactElement, ReactNode } from 'react'
+import { Fragment, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
 import type { StepId } from '@/entities/step'
+import { useProgressStoreApi } from '@/entities/progress'
 import { LearnedButton, useLearned } from '@/features/mark-learned'
+import { recordSectionRead } from '@/features/record-reading'
 import { localText, useLocale } from '@/shared/i18n'
 import { ButtonLink, ScreenHeader } from '@/shared/ui'
 import { LessonView, type UpLink } from '@/widgets/lesson-view'
@@ -37,10 +39,13 @@ export function LessonLayout({
   place,
   back,
   track,
+  after = [],
 }: {
   lesson: Lesson
   step: StepId
   place: ReactNode
+  /** The lessons to read before it, each a link by its title. */
+  after?: readonly { readonly title: string; readonly link: LinkProps }[]
   /** The screen's Back (`BackButton`). */
   back: ReactNode
   track: LessonTrack
@@ -48,6 +53,7 @@ export function LessonLayout({
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const { learn } = useLearned(step)
+  const progress = useProgressStoreApi()
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
       <ScreenHeader
@@ -57,6 +63,17 @@ export function LessonLayout({
       />
       <nav aria-label={t('placeLabel')} className="-mt-3 text-muted-foreground print:hidden">
         {place}
+        {after.length > 0 ? (
+          <span className="block">
+            {t('afterLinks')}{' '}
+            {after.map(({ title, link }, i) => (
+              <Fragment key={title}>
+                {i > 0 ? ', ' : null}
+                <PlaceLink {...link}>{title}</PlaceLink>
+              </Fragment>
+            ))}
+          </span>
+        ) : null}
       </nav>
       <LessonView
         key={lesson.id}
@@ -64,6 +81,7 @@ export function LessonLayout({
         up={track.up}
         onward={{ link: track.next.link, onGo: learn }}
         end={(paged) => <LessonEnd track={track} onGo={learn} paged={paged} />}
+        onRead={(section) => recordSectionRead(progress, step, section)}
       />
     </div>
   )

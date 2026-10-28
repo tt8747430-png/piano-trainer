@@ -172,4 +172,9 @@ export interface Lesson {
   readonly title: LocalText
   readonly summary: LocalText
   readonly sections: readonly LessonSection[]
+  /**
+   * The lessons to read before it, by id: a journey's lessons for a journey's, its own course's for a
+   * course's. Said in its contents and over the lesson ("After …").
+   */
+  readonly after?: readonly string[]
 }

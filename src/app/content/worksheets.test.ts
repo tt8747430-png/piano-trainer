@@ -149,6 +149,37 @@ function problemsOf(block: LessonBlock): string[] {
 }
 
 describe('the lessons, a journey’s and a course’s', () => {
+  it('name as their prerequisites only earlier lessons of their own journey or course', () => {
+    const journeyLessons = JOURNEYS.map((journey) =>
+      journey.chapters.flatMap((chapter) =>
+        chapter.steps.flatMap((step) => (step.kind === 'lesson' ? [step.lessonId] : [])),
+      ),
+    )
+    const tracks = [
+      ...journeyLessons.map((ids) => ({
+        ids,
+        lessons: ids.flatMap((id) => {
+          const lesson = lessonById(id)
+          return lesson ? [lesson] : []
+        }),
+      })),
+      ...COURSES.map((course) => ({
+        ids: course.lessons.map((lesson) => lesson.id),
+        lessons: course.lessons,
+      })),
+    ]
+    const problems = tracks.flatMap(({ ids, lessons }) =>
+      lessons.flatMap((lesson) =>
+        (lesson.after ?? []).flatMap((id) =>
+          ids.indexOf(id) >= 0 && ids.indexOf(id) < ids.indexOf(lesson.id)
+            ? []
+            : [`${lesson.id} after ${id}`],
+        ),
+      ),
+    )
+    expect(problems).toEqual([])
+  })
+
   it('have unique ids, each journey lesson found by its id', () => {
     const ids = LESSONS.map((lesson) => lesson.id)
     expect(new Set(ids).size).toBe(ids.length)
