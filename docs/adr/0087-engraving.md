@@ -38,7 +38,8 @@ were the measure (line breaking, beams, courtesy signatures, page filling).
   the bars it stands for, so the playhead and the caret walk through them.
 - **Flat's marks as MEI**: 8va/8vb/15ma/15mb as `<octave dis>`, a glissando `<gliss>` to the next note, portato as
   `ten-stacc`, a breath mark and a caesura after their note, the inverted turn `<turn form="lower">`, a tremolo's
-  strokes `stem.mod`, a tempo change `<tempo>` over its note, a swing mark and free text as `<dir>`, a Roman
+  strokes `stem.mod`, a two-note tremolo `<fTrem unitdur>` over a pair of quarters or halves, each written as
+  long as the pair (another pair is written as its notes), a tempo change `<tempo>` over its note, a swing mark and free text as `<dir>`, a Roman
   numeral `<harm>` under the staff, a repeat played N times its `N×` over its end. A page break starts a new page in
   the page view (`paginate`).
 - **Courtesy signatures**: a line is told what the next starts in (`NextLine`) and ends with the new key, time or

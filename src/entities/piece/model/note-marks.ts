@@ -13,6 +13,7 @@ import {
   numeralText,
   parseNumeral,
   type SwingMark,
+  type TremoloStrokes,
 } from '@/shared/lib/music'
 import { pitchText } from './music'
 import { readPitch } from './note-text'
@@ -69,6 +70,8 @@ const PEDAL_BY_WORD = lookup(PEDAL_WORDS)
 
 const GRACE = 'gr:'
 const GLISS = 'gliss'
+/** `ftrem2`: a two-note tremolo of its strokes. */
+const TWO_NOTE_TREMOLO = /^ftrem([1-3])$/
 const TEMPO = 'tempo:'
 const NUMERAL = 'rn:'
 const TEXT = 'txt:'
@@ -149,6 +152,8 @@ export function readMarks(text: string): NoteMarks | null {
     else if (pedal) read = once('pedal', pedal)
     else if (word === 'arp') read = once('arpeggio', true)
     else if (word === GLISS) read = once('glissando', true)
+    else if (TWO_NOTE_TREMOLO.test(word))
+      read = once('twoNoteTremolo', Number(word.slice('ftrem'.length)) as TremoloStrokes)
     else if (SWING_BY_WORD.has(word)) read = once('swing', SWING_BY_WORD.get(word))
     else if (word.startsWith(TEMPO)) {
       const tempo = readTempo(word.slice(TEMPO.length))
@@ -180,7 +185,7 @@ export function readMarks(text: string): NoteMarks | null {
 
 /**
  * Marks as a token writes them, in one order: articulations, ornament, roll, slurs, octave,
- * glissando, dynamic, hairpin, expression, pedal, grace, tempo, swing, numeral, text.
+ * glissando, two-note tremolo, dynamic, hairpin, expression, pedal, grace, tempo, swing, numeral, text.
  */
 export function writeMarks(marks: NoteMarks): string {
   const graceText = (grace: readonly GraceNote[]) =>
@@ -193,6 +198,7 @@ export function writeMarks(marks: NoteMarks): string {
     marks.slurEnd && ')',
     marks.octave,
     marks.glissando && GLISS,
+    marks.twoNoteTremolo && `ftrem${marks.twoNoteTremolo}`,
     marks.dynamic,
     marks.hairpin && HAIRPIN_WORDS[marks.hairpin],
     marks.expression && EXPRESSION_WORDS[marks.expression],

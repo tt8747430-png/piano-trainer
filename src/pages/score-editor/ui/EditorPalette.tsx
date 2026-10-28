@@ -35,7 +35,14 @@ import { setPaletteSections } from '@/features/set-preference'
 import { BarKeys } from './BarKeys'
 import { FieldKey } from './FieldKey'
 import { LineKeys } from './LineKeys'
-import { SwingKeys, ArticulationKeys, DynamicKeys, OrnamentKeys, PedalKeys } from './MarkKeys'
+import {
+  SwingKeys,
+  ArticulationKeys,
+  DynamicKeys,
+  OrnamentKeys,
+  PedalKeys,
+  TwoNoteTremoloKeys,
+} from './MarkKeys'
 import { NoteBar, NoteKeys, PitchKeys } from './NoteKeys'
 import {
   PaletteDockContext,
@@ -132,6 +139,10 @@ function Tools() {
       <Section category="ornaments">
         <KeyGrid>
           <OrnamentKeys />
+        </KeyGrid>
+        <GroupName name={t('marks.twoNoteTremolo')} info={t('marks.twoNoteTremoloInfo')} />
+        <KeyGrid label={t('marks.twoNoteTremolo')}>
+          <TwoNoteTremoloKeys />
         </KeyGrid>
       </Section>
       <Section category="dynamics">

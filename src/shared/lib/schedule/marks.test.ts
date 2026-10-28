@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import type { PerformanceNote } from '@/shared/lib/arrangement'
 import { C_MAJOR, midi, note, type NoteMarks } from '@/shared/lib/music'
-import { glissandoTargets, loudness, markedSounds, rollOffsets, stressOf } from './marks'
+import {
+  glissandoTargets,
+  loudness,
+  markedSounds,
+  rollOffsets,
+  stressOf,
+  tremoloPartners,
+} from './marks'
 
 const played = (m: number, startTick: number, marks?: NoteMarks): PerformanceNote => ({
   midi: midi(m),
@@ -106,6 +113,30 @@ describe('markedSounds', () => {
     const down = markedSounds(sound, { glissando: true }, { ...at60, glissTo: midi(69) })
     expect(down.map((s) => s.midi)).toEqual([72, 71])
     expect(markedSounds(sound, { glissando: true }, at60)).toHaveLength(1)
+  })
+
+  it('alternates a two-note tremolo with its partner by its strokes until the partner’s end', () => {
+    const with2 = { ...at60, tremoloWith: { midi: midi(76), full: 1 } }
+    const strokes = markedSounds(sound, { twoNoteTremolo: 2 }, with2)
+    expect(strokes.map((s) => s.midi)).toEqual([72, 76, 72, 76])
+    expect(strokes.map((s) => s.at)).toEqual([1, 1.25, 1.5, 1.75])
+    expect(strokes.every((s) => s.duration === 0.25)).toBe(true)
+    expect(markedSounds(sound, { twoNoteTremolo: 3 }, with2)).toHaveLength(8)
+    // With no partner it is played as written.
+    expect(markedSounds(sound, { twoNoteTremolo: 2 }, at60)).toEqual([sound])
+  })
+})
+
+describe('tremoloPartners', () => {
+  it('pairs a two-note tremolo with the nearest note of its part’s next onset', () => {
+    const notes = [
+      played(60, 0, { twoNoteTremolo: 1 }),
+      played(64, 24),
+      played(79, 24),
+      played(67, 48),
+      played(72, 72, { twoNoteTremolo: 2 }),
+    ]
+    expect(tremoloPartners(notes)).toEqual([1, undefined, undefined, undefined, undefined])
   })
 })
 

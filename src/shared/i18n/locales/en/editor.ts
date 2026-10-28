@@ -346,6 +346,12 @@ export const editor = {
     tremolo1: 'Tremolo, one stroke (8ths)',
     tremolo2: 'Tremolo, two strokes (16ths)',
     tremolo3: 'Tremolo, three strokes (32nds)',
+    twoNoteTremolo: 'Tremolo between notes',
+    twoNoteTremoloInfo:
+      'Put it on the first of two notes of the same length, quarters or halves: the two alternate until the second ends, and both are written as long as the pair.',
+    twoNoteTremolo1: 'Tremolo between notes, one stroke (8ths)',
+    twoNoteTremolo2: 'Tremolo between notes, two strokes (16ths)',
+    twoNoteTremolo3: 'Tremolo between notes, three strokes (32nds)',
     arpeggio: 'Arpeggio',
     tie: 'Tie',
     ppp: 'Pianississimo',

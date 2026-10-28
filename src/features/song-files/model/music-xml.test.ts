@@ -102,6 +102,23 @@ describe('a song’s MusicXML, exported then imported', () => {
     expect(back.song.music).toEqual(written(marked))
   })
 
+  it('keeps a two-note tremolo as MusicXML’s tremolo start and stop', () => {
+    const tremolo: PieceMusic = {
+      key: 'C',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['C'] }],
+      hands: { rh: 'C5/1[ftrem2] E5/1 G5/2', lh: 'C3/4' },
+    }
+    const xml = musicXmlOf(tremolo, NAMES)
+    expect(xml).toContain('<tremolo type="start">2</tremolo>')
+    expect(xml).toContain('<tremolo type="stop">2</tremolo>')
+    const back = songOfMusicXml(xml, 'x.musicxml')
+    expect(back.leftOut).toEqual({})
+    expect(back.song.music).toEqual(written(tremolo))
+  })
+
   it('keeps a lead sheet’s piano, not printed', () => {
     const lead: PieceMusic = { ...RICH, leadSheet: true }
     const xml = musicXmlOf(lead, { ...NAMES, staffNames: ['Flute', 'Cello'] })

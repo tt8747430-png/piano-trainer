@@ -33,8 +33,12 @@ export const ORNAMENTS = [
   'tremolo-3',
 ] as const
 export type Ornament = (typeof ORNAMENTS)[number]
+/** A tremolo's strokes: one to three, its 8ths', 16ths' or 32nds' beams. */
+export const TREMOLO_STROKES = [1, 2, 3] as const
+export type TremoloStrokes = (typeof TREMOLO_STROKES)[number]
+
 /** A tremolo's strokes: each halves the notes it repeats, an 8th's to a 32nd's. */
-export const tremoloStrokes = (ornament: Ornament | undefined): 1 | 2 | 3 | null =>
+export const tremoloStrokes = (ornament: Ornament | undefined): TremoloStrokes | null =>
   ornament === 'tremolo-1' ? 1 : ornament === 'tremolo-2' ? 2 : ornament === 'tremolo-3' ? 3 : null
 
 /** How loud, softest first: each holds from its note until the next (Flat's ppp to fff). */
@@ -123,6 +127,11 @@ export interface NoteMarks {
   readonly octave?: OctaveLine
   /** A glissando from it to the next note on its staff. */
   readonly glissando?: true
+  /**
+   * A two-note tremolo of one to three strokes: it alternates with the next note on its staff until
+   * that note's end, the pair written each as long as both (ADR 0097).
+   */
+  readonly twoNoteTremolo?: TremoloStrokes
   readonly dynamic?: Dynamic
   readonly hairpin?: Hairpin
   readonly expression?: Expression

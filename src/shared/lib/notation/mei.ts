@@ -22,6 +22,7 @@ import {
 } from '@/shared/lib/music'
 import {
   clefIn,
+  type Duration,
   isSingleStaff,
   type Measure,
   type Score,
@@ -284,6 +285,27 @@ function repeatSign(measures: readonly Measure[], index: number): string | null 
   return pair?.drawn === 'repeat2' && first?.barRepeat === 2 ? '<mRpt2/>' : null
 }
 
+/**
+ * The two-note tremolos in a layer, by their first event's index: a note marked so and the notes
+ * after it, of one plain length a quarter or a half, written each as long as the pair, the stroke
+ * the value its strokes beam (an 8th's to a 32nd's).
+ */
+function tremoloPairs(
+  events: readonly ScoreEvent[],
+): Map<number, { readonly duration: Duration; readonly unit: number }> {
+  const pairs = new Map<number, { readonly duration: Duration; readonly unit: number }>()
+  events.forEach((event, index) => {
+    const next = events[index + 1]
+    const strokes = event.kind === 'notes' ? event.marks?.twoNoteTremolo : undefined
+    if (!strokes || next?.kind !== 'notes' || pairs.has(index - 1)) return
+    const { value, dots, tuplet } = event.duration
+    const same = next.duration.value === value && next.duration.dots === 0 && !next.duration.tuplet
+    if (!same || dots !== 0 || tuplet || (value !== 4 && value !== 2)) return
+    pairs.set(index, { duration: { value: value === 4 ? 2 : 1, dots: 0 }, unit: 4 * 2 ** strokes })
+  })
+  return pairs
+}
+
 /** The MEI of a score's measures, one by one: what runs across barlines (ties, slurs, lines) held between them. */
 class Writer {
   private readonly tied = new Map<string, Set<number>>()
@@ -389,16 +411,22 @@ class Writer {
       groups.some((group) => group[0] === index)
     const closes = (groups: readonly (readonly number[])[], index: number) =>
       groups.some((group) => group.at(-1) === index)
+    const paired = tremoloPairs(events)
     return events
       .map((event, index) => {
-        const written = this.event(event, staff, layer, stem, controls)
+        const pair = paired.get(index) ?? paired.get(index - 1)
+        // A two-note tremolo's notes are each written as long as the pair (ADR 0087).
+        const as = pair ? { ...event, duration: pair.duration } : event
+        const written = this.event(as, staff, layer, stem, controls)
         const tuplet = event.duration.tuplet
         return [
           opens(tuplets, index) && tuplet
             ? `<tuplet num="${tuplet.num}" numbase="${tuplet.numbase}">`
             : '',
           opens(beams, index) ? '<beam>' : '',
+          paired.has(index) ? `<fTrem unitdur="${paired.get(index)?.unit}">` : '',
           written,
+          paired.has(index - 1) ? '</fTrem>' : '',
           closes(beams, index) ? '</beam>' : '',
           closes(tuplets, index) ? '</tuplet>' : '',
         ].join('')

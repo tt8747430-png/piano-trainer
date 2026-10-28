@@ -156,7 +156,8 @@ In the piece's key, accidentals as printed (`E5` in a D♭ section is E natural)
 piano. A note may run past its bar only into a bar where the same hand is written: it is tied across.
 
 **Marks**, joined by commas in brackets: articulations `stacc` `staccatiss` `acc` `ten` `marc` `ferm`; one ornament
-`tr` `mord` `lmord` `turn` `iturn` (inverted), `trem1` `trem2` `trem3` (a tremolo's strokes); `port` (portato),
+`tr` `mord` `lmord` `turn` `iturn` (inverted), `trem1` `trem2` `trem3` (a tremolo's strokes); `ftrem1` to `ftrem3` on the first of two notes of one length, a
+tremolo between them (`C5/1[ftrem2] E5/1`, a half's tremolo); `port` (portato),
 `breath` and `caes` (a breath mark or a caesura after the note); `arp` rolls the chord; `(` and `)` start and end a
 slur; `8va` writes the notes an octave lower than they sound, `8vb` higher, `15ma` and `15mb` two octaves; `gliss`
 slides to the next note; dynamics `ppp` to `fff` and the accents `sf` `sfz` `sffz` `fz` `rf` `rfz` `fp` `sfp`

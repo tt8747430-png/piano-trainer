@@ -29,6 +29,7 @@ import {
   type NoteMarks,
   type OctaveLine,
   type Ornament,
+  type TremoloStrokes,
   type SpelledNote,
   type Syllable,
   type TempoUnit,
@@ -861,6 +862,13 @@ function readNote(note: XmlElement, toTicks: (duration: number) => number): Note
         case 'ornaments':
           for (const each of child.children) {
             if (typeof each === 'string' || each.name === 'accidental-mark') continue
+            // A two-note tremolo starts on its first note; its stop on its partner says no more.
+            if (each.name === 'tremolo' && each.attrs.type === 'stop') continue
+            if (each.name === 'tremolo' && each.attrs.type === 'start') {
+              const strokes = Math.min(3, Math.max(1, Number(textOf(each) || 3)))
+              marks.twoNoteTremolo = strokes as TremoloStrokes
+              continue
+            }
             const ornament =
               each.name === 'tremolo' && each.attrs.type !== 'start' && each.attrs.type !== 'stop'
                 ? tremoloOf(Number(textOf(each) || 3))

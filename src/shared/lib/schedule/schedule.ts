@@ -9,7 +9,7 @@ import {
   type BarsInMeter,
 } from './grid'
 import { joinedNotes } from './legato'
-import { glissandoTargets, loudness, markedSounds, rollOffsets } from './marks'
+import { glissandoTargets, loudness, markedSounds, rollOffsets, tremoloPartners } from './marks'
 import { pedalHeld } from './pedal-marks'
 import { isSwung, swingTick, type SwingFeel } from './swing'
 import { tempoWarp } from './tempo-marks'
@@ -193,10 +193,15 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
   const levels = loudness(performance.notes)
   const rolls = rollOffsets(performance.notes)
   const glissTo = glissandoTargets(performance.notes)
+  // A two-note tremolo's partner sounds in its tremolo alone.
+  const partners = tremoloPartners(performance.notes)
+  const inTremolo = new Set(partners.filter((index) => index !== undefined))
   const thirtySecond = secondsFor(TICKS_PER_BEAT / 8, tempo)
   const joined = joinedNotes(performance.notes)
   const played: Sound[] = performance.notes.flatMap((n, i) => {
     if (!heard(n) || !isAudible(n, hands)) return []
+    const partner = partners[i] === undefined ? undefined : performance.notes[partners[i]]
+    if (inTremolo.has(i) && n.startTick >= fromTick) return []
     const start = Math.max(fromTick, n.startTick)
     // Under the pedal a note sounds on until it is let up.
     const released = pedal(n.startTick) ?? 0
@@ -218,6 +223,14 @@ export function schedule(performance: Performance, options: ScheduleOptions): Sc
       thirtySecond,
       full,
       ...(to === undefined ? {} : { glissTo: to }),
+      ...(partner && partner.startTick < toTick
+        ? {
+            tremoloWith: {
+              midi: partner.midi,
+              full: at(Math.min(partner.startTick + partner.durationTicks, toTick)) - at(start),
+            },
+          }
+        : {}),
     })
   })
 

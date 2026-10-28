@@ -65,7 +65,7 @@ phone has the laptop's tools; signs are chosen in sheets of pictures.
   - **Sections in Flat's order:** Notes (the editing modes and the tuplets of 2 to 9; on the sheet the everyday
     tools too) · Pitch (steps, semitones, octaves, the grace notes, 8va, 8vb, 15ma and 15mb) · Articulations (with
     portato, the breath mark, the caesura, the slur and the fingering) · Ornaments (with the inverted turn, the
-    tremolos of 1 to 3 strokes and the glissando) · Dynamics (every one of Flat's, with the hairpins and the pedal) ·
+    tremolos of 1 to 3 strokes, the glissando, and Tremolo between notes on the first of a pair) · Dynamics (every one of Flat's, with the hairpins and the pedal) ·
     Bar (with the page break; Tempo & swing: a tempo change typed over the note, the swing marks; Bar repeats &
     rests) · Clef · Key signature · Time signature (the common meters as tiles, C and ¢ among them, then Another
     opening the picker) · Barlines & repeats (with repeat ×N, once more each tap up to nine, and the 3rd and 4th

@@ -224,6 +224,8 @@ interface Open {
   octave: false | 8 | 15
   /** A glissando started on the note before. */
   gliss?: boolean
+  /** A two-note tremolo's strokes, started on the note before. */
+  tremolo?: number
 }
 
 /** One part's measures, what runs across their barlines (ties, slurs, lines, held words) held between them. */
@@ -569,7 +571,7 @@ class PartWriter {
         first ? this.slurs(marks, staff, number) : '',
         first && tuplet ? tag('tuplet', { type: tuplet, bracket: 'yes' }) : '',
         first ? this.glissando(marks, staff, number) : '',
-        first && marks?.ornament ? tag('ornaments', {}, ORNAMENTS[marks.ornament] ?? '') : '',
+        first ? this.ornaments(marks, staff) : '',
         written.finger === undefined ? '' : tag('technical', {}, text('fingering', written.finger)),
         first ? articulationsXml(marks) : '',
         first && marks?.articulations?.includes('fermata')
@@ -687,6 +689,23 @@ class PartWriter {
         ),
       )
     return out
+  }
+
+  /**
+   * A note's ornaments: its own, and a two-note tremolo's start on its note and its stop on the
+   * staff's next (ADR 0097).
+   */
+  private ornaments(marks: NoteMarks | undefined, staff: StaffId): string {
+    const open = this.open.get(staff)
+    const stop = open?.tremolo ? tag('tremolo', { type: 'stop' }, String(open.tremolo)) : ''
+    const strokes = marks?.twoNoteTremolo
+    if (open) open.tremolo = strokes
+    const inside = [
+      marks?.ornament ? (ORNAMENTS[marks.ornament] ?? '') : '',
+      stop,
+      strokes ? tag('tremolo', { type: 'start' }, String(strokes)) : '',
+    ].join('')
+    return inside ? tag('ornaments', {}, inside) : ''
   }
 
   /** A glissando's start on its note, its stop on the staff's next (ADR 0097). */

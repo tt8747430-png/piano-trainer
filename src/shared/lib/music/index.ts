@@ -277,6 +277,7 @@ export {
   DYNAMICS,
   LEVELS,
   tremoloStrokes,
+  TREMOLO_STROKES,
   EXPRESSION_TEXT,
   EXPRESSIONS,
   HAIRPINS,
@@ -297,6 +298,7 @@ export {
   type Ornament,
   type Pedal,
   type SwingMark,
+  type TremoloStrokes,
 } from './marks'
 export {
   BAR_REPEATS,
