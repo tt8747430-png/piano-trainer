@@ -40,6 +40,7 @@ const QUALITIES = {
   aug: { family: 'tri', suffix: '+', aliases: ['aug'], intervals: ['r', 'M3', 'A5'] },
   sus2: { family: 'tri', suffix: 'sus2', aliases: [], intervals: ['r', 'M2', 'P5'] },
   sus4: { family: 'tri', suffix: 'sus4', aliases: ['sus'], intervals: ['r', 'P4', 'P5'] },
+  five: { family: 'tri', suffix: '5', aliases: ['(no3)'], intervals: ['r', 'P5'] },
   six: { family: 'six', suffix: '6', aliases: [], intervals: ['r', 'M3', 'P5', 'M6'] },
   m6: {
     family: 'six',
@@ -170,11 +171,35 @@ const QUALITIES = {
     aliases: [],
     intervals: ['r', 'M3', 'P5', 'm7', 'M9', 'P11'],
   },
+  maj11: {
+    family: 'nin',
+    suffix: 'Maj11',
+    aliases: ['maj11', 'M11', 'Δ11'],
+    intervals: ['r', 'M3', 'P5', 'M7', 'M9', 'P11'],
+  },
+  m13: {
+    family: 'nin',
+    suffix: 'm13',
+    aliases: ['−13', 'min13'],
+    intervals: ['r', 'm3', 'P5', 'm7', 'M9', 'P11', 'M13'],
+  },
   n13: {
     family: 'nin',
     suffix: '13',
     aliases: [],
     intervals: ['r', 'M3', 'P5', 'm7', 'M9', 'M13'],
+  },
+  maj13: {
+    family: 'nin',
+    suffix: 'Maj13',
+    aliases: ['maj13', 'M13', 'Δ13'],
+    intervals: ['r', 'M3', 'P5', 'M7', 'M9', 'M13'],
+  },
+  sus13: {
+    family: 'nin',
+    suffix: '13sus4',
+    aliases: ['13sus'],
+    intervals: ['r', 'P4', 'P5', 'm7', 'M9', 'M13'],
   },
   b9: {
     family: 'alt',
@@ -229,7 +254,7 @@ const QUALITIES = {
 
 export type ChordQuality = keyof typeof QUALITIES
 
-/** All 41, in table order: family by family. */
+/** All 46, in table order: family by family. */
 export const CHORD_QUALITIES = Object.keys(QUALITIES) as readonly ChordQuality[]
 
 const entry = (quality: ChordQuality): QualityEntry => QUALITIES[quality]

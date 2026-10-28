@@ -23,9 +23,9 @@ const names = (root: SpelledNote, quality: ChordQuality) =>
   spellChord(root, quality).map((tone) => noteName(tone.note))
 
 describe('chord qualities', () => {
-  it('are 41, in five families', () => {
-    expect(CHORD_QUALITIES).toHaveLength(41)
-    expect(CHORD_FAMILIES.map((family) => qualitiesIn(family).length)).toEqual([6, 7, 9, 10, 9])
+  it('are 46, in five families', () => {
+    expect(CHORD_QUALITIES).toHaveLength(46)
+    expect(CHORD_FAMILIES.map((family) => qualitiesIn(family).length)).toEqual([7, 7, 9, 14, 9])
     expect(qualitiesIn('sev').every((quality) => chordFamily(quality) === 'sev')).toBe(true)
   })
 
@@ -40,6 +40,36 @@ describe('chord qualities', () => {
     expect(qualitySuffix('maj')).toBe('')
     expect(qualitySuffix('alt')).toBe('7alt')
     expect(qualitySpellings('hd')[0]).toBe('m7♭5')
+  })
+})
+
+describe('the chord types a chord finder lists', () => {
+  it('spells the power chord, its root and 5th alone', () => {
+    expect(names(note('C'), 'five')).toEqual(['C', 'G'])
+    expect(names(note('B', -1), 'five')).toEqual(['B♭', 'F'])
+    expect(parseChordSymbol('E5')).toEqual({ root: note('E'), quality: 'five' })
+    expect(chordSymbol({ root: note('A'), quality: 'five' })).toBe('A5')
+  })
+
+  it('spells the major 11th, the minor 13th and the major 13th', () => {
+    expect(names(note('C'), 'maj11')).toEqual(['C', 'E', 'G', 'B', 'D', 'F'])
+    expect(names(note('C'), 'm13')).toEqual(['C', 'E♭', 'G', 'B♭', 'D', 'F', 'A'])
+    // Over a major 3rd the 13th leaves its 11th out, as the dominant 13th does.
+    expect(names(note('C'), 'maj13')).toEqual(['C', 'E', 'G', 'B', 'D', 'A'])
+    expect(names(note('E', -1), 'maj13')).toEqual(['E♭', 'G', 'B♭', 'D', 'F', 'C'])
+  })
+
+  it('spells the 13sus4, its 4th in place of the 3rd and no 11th above it', () => {
+    expect(names(note('G'), 'sus13')).toEqual(['G', 'C', 'D', 'F', 'A', 'E'])
+  })
+
+  it('reads each in the ways a chart writes it', () => {
+    expect(parseChordSymbol('CMaj11')).toEqual({ root: note('C'), quality: 'maj11' })
+    expect(parseChordSymbol('Cmaj13')).toEqual({ root: note('C'), quality: 'maj13' })
+    expect(parseChordSymbol('CΔ13')).toEqual({ root: note('C'), quality: 'maj13' })
+    expect(parseChordSymbol('Dm13')).toEqual({ root: note('D'), quality: 'm13' })
+    expect(parseChordSymbol('G13sus')).toEqual({ root: note('G'), quality: 'sus13' })
+    expect(parseChordSymbol('G13sus4')).toEqual({ root: note('G'), quality: 'sus13' })
   })
 })
 

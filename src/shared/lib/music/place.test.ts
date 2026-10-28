@@ -147,6 +147,10 @@ describe('lastInversion', () => {
     expect(lastInversion(4)).toBe(3)
     expect(CHORD_NOTES.map(lastInversion)).toEqual([2, 3, 3, 3, 3])
   })
+
+  it('leaves a power chord in root position: its 5th under its root is a 4th', () => {
+    expect(lastInversion(2)).toBe(0)
+  })
 })
 
 describe('fitInversion', () => {

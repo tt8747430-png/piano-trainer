@@ -232,7 +232,7 @@ describe('A trainer', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/quiz/chords?level=custom')
     const chords = await screen.findByRole('button', { name: /^Chords/ })
-    expect(chords).toHaveTextContent('2 of 41')
+    expect(chords).toHaveTextContent('2 of 46')
     await user.click(chords)
     await user.click(await screen.findByRole('checkbox', { name: 'Diminished triad' }))
     expect(router.state.location.search).toMatchObject({ chords: 'maj.min.dim' })

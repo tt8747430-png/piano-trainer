@@ -87,15 +87,23 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Circle of fifths**: the 24 keys on two rings, the Key view's chooser. _Avoid:_ wheel.
 - **Chord size**: how much of each chord plays: triads, sevenths or ninths; in the builder the highest number (7th
   to 13th). _Avoid:_ voicing, colour.
-- **Voicing**: how a chord's notes lie under the hands: close, open, drop 2, shell, rootless, quartal. _Avoid:_
-  chord size, shape.
-- **Drop 2**: a close four-note chord with its second voice from the top an octave lower. _Avoid:_ spread.
-- **Shell**: the left hand's root and 7th. _Avoid:_ rootless, skeleton.
-- **Rootless voicing** («Расположение без основного тона»): four notes, no root, in the left hand: **Type A** from
-  the 3rd on ii and I (3 5 7 9), **Type B** from the 7th (7 9 3 5), V the other way round. _Avoid:_ left-hand
-  voicing, shell.
-- **Locked hands** («Сцепленные руки»): block chords: a close four-note chord under each melody note, the left hand
-  doubling the melody an octave down. _Avoid:_ block chords (an accompaniment pattern's name).
+- **Voicing** (`Voicing` · «Расположение»): how a chord's notes lie under the hands. The Chords explorer chooses
+  Close · Drop 2 · Drop 3 · Shell · Rootless A · Rootless B · Locked hands · So What; the Chord finder also reads open
+  and quartal. _Avoid:_ chord size, shape.
+- **Drop 2** / **Drop 3**: a close four-note chord with its second (third) voice from the top an octave lower, in
+  the left hand. _Avoid:_ spread.
+- **Shell** («Каркас»): the left hand's root, 3rd and 7th. _Avoid:_ rootless, skeleton.
+- **So What**: three 4ths and a major 3rd from the chord's 9th, for a minor or suspended chord. _Avoid:_ quartal
+  (that is any stack of 4ths).
+- **Power chord** (`five`, `C5` · «Квинтовый аккорд»): a root and its 5th, no 3rd; never inverted. _Avoid:_ fifth
+  chord.
+- **Block fingering** (`blockFingering`, `handFingers` · UI Fingering «Аппликатура»): each hand's fingers on a chord
+  held together, by inversion: a major triad RH 135 · 125 · 135, LH 531 · 531 · 521. _Avoid:_ chord fingers.
+- **Rootless voicing** (`rootlessA`, `rootlessB` · UI Rootless A / B «Без основного A / B»; «Расположение без
+  основного тона»): four notes, no root, in the left hand: **Type A** from the 3rd on ii and I (3 5 7 9), **Type B**
+  from the 7th (7 9 3 5), V the other way round. _Avoid:_ left-hand voicing, shell.
+- **Locked hands** (`locked` · «Сцепленные руки»): block chords: a close four-note chord under each melody note, the
+  left hand doubling the melody an octave down. _Avoid:_ block chords (an accompaniment pattern's name).
 - **Slash chord** («Аккорд с указанным басом»): a chord over a bass, `C/E`: an inversion where the bass is a chord
   tone, an added bass where it is not. _Avoid:_ over chord, polychord.
 - **Modulation** («Модуляция»): moving to a new key and staying, confirmed by its own cadence: by a **pivot chord**
@@ -110,7 +118,7 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Placed tone** (`placeChord`, `placeScale`): a tone at a key on the keyboard. _Avoid:_ voicing.
 - **Chord parts** (`ChordParts`): a chord as the builder makes it: Triad, Chord size, 7th, Added tones,
   Alterations. _Avoid:_ chord options, quality.
-- **Triad** (a chord part): major, minor, diminished, augmented, sus2 or sus4. _Avoid:_ quality, sus option.
+- **Triad** (a chord part): major, minor, diminished, augmented, sus2, sus4 or the power chord's bare 5th. _Avoid:_ quality, sus option.
 - **Added tone**: a tone added beside the stack (add2, 6, add9, add11). _Avoid:_ extension.
 - **Alteration**: a raised or lowered tone of a chord with a major 3rd (♭5, ♭9, ♯9, ♯11, ♭13). _Avoid:_ altered
   extension.

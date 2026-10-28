@@ -237,6 +237,16 @@ export {
   type Fingering,
   type Hand,
 } from './fingering'
+export { blockFingering, handFingers, placedFingering, type ChordFingers } from './chord-fingering'
+export {
+  VOICINGS,
+  voiceChord,
+  voicingBar,
+  voicingInLeftHand,
+  voicingTakesInversion,
+  type Voicing,
+  type VoicingBar,
+} from './voicing'
 export {
   CHORD_NOTES,
   CHORD_SIZES,

@@ -55,7 +55,7 @@ describe('parseChordSymbol', () => {
     expect(parseChordSymbol(symbol)).toEqual(chord)
   })
 
-  it.each(['H7', 'Cmaj13', '', 'C/X', '7', 'C12'])(
+  it.each(['H7', 'Cmaj15', '', 'C/X', '7', 'C12'])(
     'names the symbol it cannot read: %j',
     (symbol) => {
       let caught: unknown

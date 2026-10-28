@@ -27,8 +27,13 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 - **A thing's page shows it on the keys, read top to bottom**: the keys docked; what it is, with its one honey Play;
   its choices as labelled fields; its sections. **It holds the tools that work on it**, never a tab or a page of their
   own:
-  - Chords: the builder (any chord from its parts, ADR 0046; its quality a strip), its tensions under a 7th chord,
-    its arpeggio and chromatic walk into the Player;
+  - Chords: the builder (any chord from its parts, ADR 0046; its quality a strip, the power chord on it; a size or
+    inversion the chord cannot take greyed with why), its voicing (a strip of the eight, ADR 0046, `voicing=`, one
+    the chord cannot take greyed with why, the chosen one's ⓘ saying what it is with its spelling in C and on this
+    chord; a voicing other than close sets the hands, and the inversion where it is not made from a close chord),
+    its Fingering (each hand drawn as Scales draws it, beside a row an inversion of each hand's block fingering, the
+    keys' own marked; a voicing or a chord of five notes one row of what each hand holds), the fingers on the keys,
+    its tensions under a 7th chord, its arpeggio and chromatic walk into the Player;
   - Scales and keys: Scale (a run from any start; what its keys carry, Notes · Left hand · Right hand, `onKeys=`;
     on a staff; its fingering hand by hand, each hand drawn with its fingers numbered beside the run's notes and
     fingers; its exercises), Chords (the scale's chords to 13ths, in an inversion, walked, each a tap to play and a
@@ -79,3 +84,4 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
 - 0113 — The Metronome and How to use (2026-10-27).
 - r13 — Theory · Playing · Training; strips with ‹ ›; interval rows; fingering by hand; autoplay; the scale on the
   Chord finder's keys; the key size's caption (2026-10-28), from the reference app's tool screens.
+- r14 — Chords' voicing and fingering (2026-10-28), from Musicca, Vita Piano and piano.org.

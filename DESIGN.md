@@ -406,8 +406,8 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 - **Toggle chips** (`ToggleChips`): several of a few, all in sight; on is ink on sand in an ink line.
 - **Toggle tiles** (`ToggleTile`, `PictureTiles`): an icon or a drawing over its name; on, the learned wash.
 - **Strip** (`StepStrip`): one of many in a row that scrolls inside a sand track, ‹ and › at its ends, the chosen a
-  card-paper thumb kept in the middle, the edges fading; a greyed option stays in the row. A chord's quality and a
-  scale's kind are strips.
+  card-paper thumb kept in the middle, the edges fading; a greyed option stays in the row. A chord's quality, its
+  voicing and a scale's kind are strips.
 - **Note, key and inversion choices** (`NoteChoice`, `KeyChoice`, `InversionChoice`): a strip of spellings, C C♯ D♭
   D … B, both names of a black key side by side; the tonic's strip, only keys a signature writes, then Major ·
   Minor; an inversion as its stack of noteheads.
@@ -438,7 +438,8 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 - **Interval row** (Intervals): the short name in soft ink, the name over its semitones, a small `KeyDiagram` at its
   end; two columns from 48rem. The row playing takes the selected wash.
 - **Hand drawing** (`HandDiagram`): a hand palm down in sand, each finger numbered in an ink dot, thumb 1 to little
-  finger 5, the right hand's thumb at the left; beside it the run's notes over that hand's fingers.
+  finger 5, the right hand's thumb at the left; beside it the run's notes over that hand's fingers, or a chord's
+  inversions a row each (its name in small type, each note over its finger), the one on the keys in strong ink.
 - **Sheet** (`Sheet`): card paper, 20px top corners, a grab handle, its Literata title with Close, a scrolling body,
   an optional footer over a hairline. It stands on the phone's keyboard, its footer with it; a field in a page is lifted a gap clear of that keyboard, under the screen's bar, which holds still while typing. Never a sheet over a sheet: open a list as a
   page of the sheet.

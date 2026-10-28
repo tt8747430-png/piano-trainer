@@ -11,7 +11,7 @@ interface SeventhName {
   readonly mark: string
 }
 
-/** The triads, by the semitones of their 3rd (or the tone suspended in its place) and 5th. */
+/** The triads, by the semitones of their 3rd (or the tone suspended in its place) and 5th; the power chord by its 5th alone. */
 const TRIADS = new Map<string, TriadName>([
   ['4 7', { suffix: '', mark: '' }],
   ['3 7', { suffix: 'm', mark: '' }],
@@ -19,6 +19,8 @@ const TRIADS = new Map<string, TriadName>([
   ['4 8', { suffix: '+', mark: '+' }],
   ['2 7', { suffix: 'sus2', mark: '' }],
   ['5 7', { suffix: 'sus4', mark: '' }],
+  // The power chord: a 5th and no 3rd.
+  ['7', { suffix: '5', mark: '' }],
 ])
 
 /** The 7th chords, by the semitones of their 3rd (or suspended tone), 5th and 7th. */
