@@ -35,13 +35,14 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   accounts are listed through an Edge Function, never by the client. Features reach groups behind switches; every
   build goes to everyone.
 - **The seams the app is built on:**
-  - content is read through one asynchronous port and hook (`useContent`, `useCatalog`), each read loading, ready,
-    offline or missing;
-  - saved stores write through a swappable storage port (localStorage, then RxDB);
-  - every service is built once in `createServices()` and tests take fakes from the same place;
+  - a song's music and a lesson come through one port (`ContentPort`: `has`, `ensure`); a route that shows one
+    ensures it in `beforeLoad`, so the route's pending, not-found and error screens are its loading, missing and
+    offline states; what reads across the songs reads `factsOf`, never the music;
+  - the saved stores are built once on one storage (`createStores`), which RxDB replaces in round 2;
+  - every service and port is built once in the composition root, and tests take fakes from the same place;
   - every server call returns its result as a value (`ok`, `offline`, `refused`, `failed`), never a throw;
-  - ids are branded by kind, and a URL carries a stable slug;
-  - one schema per data shape (Valibot) gives the type, the validation and the local database's schema.
+  - ids are branded by kind with the entry/body split, and one schema per data shape (Valibot) with the sync's
+    documents: both when the database serves content and stores sync (rounds 2 and 4).
 
 - **Where it lives:** `supabase/` (migrations, Edge Functions, `tests/access.sql`); the client and the database's
   types in `shared/api/supabase`, built once in the composition root from `.env` (the project's URL and
