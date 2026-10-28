@@ -40,6 +40,19 @@ needs." Model: the owner's `memory-palaces` repo (Supabase + RxDB), whose code w
 Each round: its ADR first, tests first, one commit per task, the full suite and the build on the merged result,
 then the branch and `main`.
 
+### 0. Preparation: the seams the rest builds on
+- **Content through one asynchronous gateway:** `useContent(kind, id)` and `useCatalog(kind)` over a `ContentPort`
+  (files now, the database in round 4), each read loading · ready · offline · missing; every screen that shows
+  content renders all four.
+- **Saved stores over a swappable storage:** `createSavedStore` takes an asynchronous `SaveStorage` port (localStorage
+  now, RxDB in round 2) and a store is `ready` once read; the app waits for its stores behind the splash.
+- **One composition root** builds every service (audio, MIDI, auth, sync, content, storage) and tests take fakes
+  from the same place.
+- **Branded ids** (`PieceId`, `LessonId`, `CourseId`, …) and a stable `slug` for URLs beside the database's id.
+- **Network results as values:** `ok · offline · refused · failed`, never a throw, at every server call.
+- **One schema per shape** (Valibot): the type, the validation and the local database's schema from one source;
+  every sanitiser becomes its schema; database types generated from Supabase.
+
 ### 1. The database and its rules
 - Migrations in `supabase/migrations/`, copied from memory-palaces where they fit: per-user tables for every saved
   store (`settings`, `progress`, `library`, `pieces`, `takes`, `views`, `patterns`, `keyboard`, …), each row
@@ -111,3 +124,16 @@ then the branch and `main`.
   iPhone launch images from `public/favicon.svg`; the update prompt.
 - Error reporting, privacy policy and terms (GDPR), security headers on Vercel, a staging project, backups, a few
   end-to-end tests in a real browser.
+- **Performance:** precache the shell only (Verovio's 8 MB worker, fonts and samples cached on first use); size
+  budgets per chunk checked by the build; real-use speed (web-vitals) reported with the errors.
+- **Quality:** an error boundary per screen with Reload, reported with its route; screenshot tests of the key screens
+  at 320, 390, 844×390 and 1280; axe in the screen tests; a component gallery page (every shared control in every
+  state, light and dark); checks on every pull request; Renovate grouped weekly.
+
+## Later, in review rounds
+
+- Split by job: `musicxml/read.ts` and `write.ts` by element; `arrangement/arrange.ts` and `notation/mei.ts` by pass;
+  `EditorPalette`, `NoteKeys` and `shared/ui/FloatingActions` into hooks and layout; `router.tsx` by place.
+- The 109 `useEffect`s against React's "You might not need an Effect".
+- Each language, and each place's strings, loaded with its screen.
+- A faster suite: logic as plain-function tests, one `renderApp` test per flow, a few end-to-end journeys.
