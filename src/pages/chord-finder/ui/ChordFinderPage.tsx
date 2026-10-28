@@ -3,6 +3,7 @@ import {
   Eraser,
   History,
   KeyRound,
+  Piano,
   ListX,
   Music2,
   Play,
@@ -33,23 +34,26 @@ import {
   usePlayKey,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { scaleOverlay } from '../model/scale-overlay'
 import { ChordKeys, ChordName, ChordTrail, readingAt, readingMarks } from '@/widgets/chord-finder'
 import type { ChordFinderView } from '../model/chord-finder-view'
 import { useChordFinder } from '../model/use-chord-finder'
 
 /**
  * The Chord finder's settings, in a sheet off its bar: the key it spells in, then its on-or-offs as
- * tiles: whether it remembers the chords played, names an inversion over its bass, and shows the
- * keys a chord is in.
+ * tiles: whether it remembers the chords played, names an inversion over its bass, shows the keys a
+ * chord is in, and paints the key's scale on the keys.
  */
 function FinderSettings({
   finder,
   view,
   onKey,
+  onScale,
 }: {
   finder: ReturnType<typeof useChordFinder>
   view: ChordFinderView
   onKey: (key: ChordFinderView['key']) => void
+  onScale: (shown: boolean) => void
 }) {
   const { t } = useTranslation('practice')
   return (
@@ -94,6 +98,13 @@ function FinderSettings({
               pressed={finder.inKeys}
               onPressedChange={finder.setInKeys}
             />
+            <ToggleTile
+              icon={Piano}
+              label={t('chordFinder.scaleShown')}
+              tip={t('chordFinder.scaleShownDetail')}
+              pressed={view.scale === true}
+              onPressedChange={onScale}
+            />
           </ToggleGrid>
         </div>
       </SheetContent>
@@ -131,13 +142,24 @@ export function ChordFinderPage() {
         actions={
           <div className="flex gap-2">
             <MidiButton />
-            <FinderSettings finder={finder} view={view} onKey={(key) => change({ key })} />
+            <FinderSettings
+              finder={finder}
+              view={view}
+              onKey={(key) => change({ key })}
+              onScale={(shown) => change({ scale: shown ? true : undefined })}
+            />
           </div>
         }
       />
       <PinnedKeyboard
         screen="playing"
-        shown={{ keys, marks: reading ? readingMarks(reading, keys) : new Map() }}
+        shown={{
+          keys,
+          marks: new Map([
+            ...(view.scale ? scaleOverlay(finder.musicKey) : []),
+            ...(reading ? readingMarks(reading, keys) : []),
+          ]),
+        }}
         selected={finder.tapped}
         onKeyPress={finder.tap}
       />

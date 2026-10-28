@@ -246,6 +246,8 @@ export const practice: LocaleResources['practice'] = {
     },
     altered: 'Альтерированная доминанта: {{symbol}}',
     inKeysShown: 'Тональности',
+    scaleShown: 'Гамма на клавишах',
+    scaleShownDetail: 'Гамма тональности на каждой октаве, на клавише её нота',
   },
   passingChords: {
     inKey: 'В тональности',

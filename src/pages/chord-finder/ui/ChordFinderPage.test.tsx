@@ -185,6 +185,20 @@ describe('Practice → Chord finder', () => {
     expect(screen.queryByRole('region', { name: 'In these keys' })).not.toBeInTheDocument()
   })
 
+  it('paints the key’s scale on the keys where asked, kept in the URL, the chord’s own keys over it', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/practice/chord-finder?keys=60-64-67&key=G')
+    const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
+    expect(within(keyboard).getByRole('button', { name: 'F sharp 4' })).not.toHaveTextContent('F#')
+    await user.click(screen.getByRole('button', { name: 'Chord finder settings' }))
+    await user.click(screen.getByRole('button', { name: /^Scale on the keys/ }))
+    await user.click(screen.getByRole('button', { name: 'Close' }))
+    expect(router.state.location.search).toMatchObject({ scale: true })
+    expect(within(keyboard).getByRole('button', { name: 'F sharp 4' })).toHaveTextContent('F#')
+    expect(within(keyboard).getByRole('button', { name: 'F sharp 2' })).toHaveTextContent('F#')
+    expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveTextContent('1')
+  })
+
   it('says an inversion, and names it by its root alone where asked', async () => {
     const user = userEvent.setup()
     await renderApp('/practice/chord-finder?keys=52-60-67')

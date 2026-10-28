@@ -246,6 +246,8 @@ export const practice = {
     remember: 'Remember',
     rememberDetail: 'The last {{count}}',
     inKeysShown: 'Keys it is in',
+    scaleShown: 'Scale on the keys',
+    scaleShownDetail: 'The key’s scale on every octave of the keys, each key with its note',
     slash: 'Over the bass',
     // The bass where the name leaves it out and it is no inversion: a bass beyond the 7th.
     bass: '{{note}} in the bass',
