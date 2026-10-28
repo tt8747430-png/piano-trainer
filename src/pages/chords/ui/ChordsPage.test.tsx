@@ -43,7 +43,6 @@ describe('Practice → Chords', () => {
     expect(within(sizes).getByRole('radio', { name: 'Triad' })).toBeChecked()
     const root = screen.getByRole('group', { name: 'Root' })
     expect(within(root).getByRole('radio', { name: 'C' })).toBeChecked()
-    expect(within(root).getByRole('radio', { name: 'Natural' })).toBeChecked()
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveTextContent('3')
   })
@@ -302,16 +301,7 @@ describe('Practice → Chords', () => {
     await screen.findByRole('heading', { level: 2, name: 'C7' })
     expect(
       screen.getAllByRole('radiogroup').map((group) => group.getAttribute('aria-label')),
-    ).toEqual([
-      'Letter',
-      'Accidental',
-      'Quality',
-      'Chord size',
-      '7th',
-      'Suspension',
-      'Inversion',
-      'Hands',
-    ])
+    ).toEqual(['Root', 'Quality', 'Chord size', '7th', 'Suspension', 'Inversion', 'Hands'])
   })
 
   it('walks a chord the table names chromatically in the Player, from its root', async () => {

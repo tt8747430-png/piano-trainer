@@ -45,7 +45,6 @@ export const practice: LocaleResources['practice'] = {
         sus2: 'С задержанной секундой',
         sus4: 'С задержанной квартой',
       },
-      triadShort: { maj: 'Маж', min: 'Мин', dim: 'Ум', aug: 'Ув' },
       // A stack named by its top interval, as a chord symbol writes it: a triad up to the 5th.
       sizes: { triad: '5', seventh: '7', ninth: '9', eleventh: '11', thirteenth: '13' },
       sizeNames: {

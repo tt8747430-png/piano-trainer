@@ -35,6 +35,8 @@ export const common = {
     settings: 'Settings',
   },
   close: 'Close',
+  // A strip's ‹ and ›, each naming what it steps through ("Next: Root").
+  step: { previous: 'Previous: {{what}}', next: 'Next: {{what}}' },
   // Where the toasts stand, as a screen reader names the place.
   notifications: 'Notifications',
   // A notice's Close, named apart from the screen's own Close.

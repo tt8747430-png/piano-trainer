@@ -51,7 +51,6 @@ export const practice = {
         sus2: 'Suspended 2nd',
         sus4: 'Suspended 4th',
       },
-      triadShort: { maj: 'Major', min: 'Minor', dim: 'Dim', aug: 'Aug' },
       sizes: { triad: 'Triad', seventh: '7th', ninth: '9th', eleventh: '11th', thirteenth: '13th' },
       sizeNames: {
         triad: 'Triad',

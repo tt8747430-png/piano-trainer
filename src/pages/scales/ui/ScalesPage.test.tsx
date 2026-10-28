@@ -120,13 +120,13 @@ describe('Practice → Scales and keys', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales')
     await user.click(
-      within(await screen.findByRole('group', { name: 'Root' })).getByRole('radio', { name: 'E' }),
+      within(await screen.findByRole('group', { name: 'Root' })).getByRole('radio', { name: 'E♭' }),
     )
     await user.click(
-      within(screen.getByRole('group', { name: 'Root' })).getByRole('radio', { name: 'Flat' }),
+      within(screen.getByRole('radiogroup', { name: 'Scale' })).getByRole('radio', {
+        name: 'Harmonic minor',
+      }),
     )
-    await user.click(screen.getByRole('combobox', { name: 'Scale' }))
-    await user.click(await screen.findByRole('option', { name: 'Harmonic minor' }))
     expect(router.state.location.search).toMatchObject({ root: 'Eb', kind: 'harmonic' })
   })
 
@@ -215,12 +215,30 @@ describe('Practice → Scales and keys', () => {
     expect(screen.getByRole('link', { name: 'C major' })).toBeInTheDocument()
   })
 
-  it('groups the scales in the Scale pop-up', async () => {
+  it('steps through the scales in a strip, keys, then modes, then blues', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/practice/scales')
-    await user.click(await screen.findByRole('combobox', { name: 'Scale' }))
-    expect(await screen.findByText('Modes')).toBeInTheDocument()
-    await user.click(await screen.findByRole('option', { name: 'Major blues' }))
+    const { router } = await renderApp('/practice/scales?kind=mpent')
+    const strip = await screen.findByRole('radiogroup', { name: 'Scale' })
+    expect(
+      within(strip)
+        .getAllByRole('radio')
+        .map((kind) => kind.textContent),
+    ).toEqual([
+      'Major',
+      'Natural minor',
+      'Harmonic minor',
+      'Melodic minor',
+      'Dorian',
+      'Phrygian',
+      'Lydian',
+      'Mixolydian',
+      'Locrian',
+      'Major pentatonic',
+      'Minor pentatonic',
+      'Major blues',
+      'Minor blues',
+    ])
+    await user.click(screen.getByRole('button', { name: 'Next: Scale' }))
     expect(router.state.location.search).toMatchObject({ kind: 'majorBlues' })
   })
 
@@ -443,8 +461,11 @@ describe('Practice → Scales and keys, Key view', () => {
     const circle = await screen.findByRole('navigation', { name: 'Circle of fifths' })
     await user.click(within(circle).getByRole('link', { name: 'A minor' }))
     expect(router.state.location.search).toEqual({ root: 'A', kind: 'natural', show: 'key' })
-    await user.click(screen.getByRole('combobox', { name: /^Scale/ }))
-    await user.click(await screen.findByRole('option', { name: 'Harmonic minor' }))
+    await user.click(
+      within(screen.getByRole('radiogroup', { name: 'Scale' })).getByRole('radio', {
+        name: 'Harmonic minor',
+      }),
+    )
     await user.click(within(circle).getByRole('link', { name: 'E minor' }))
     expect(router.state.location.search).toEqual({ root: 'E', kind: 'harmonic', show: 'key' })
   })
