@@ -80,6 +80,19 @@ These come straight from their feedback. Each has burned a round before.
    - **Bobrova:** material from Bobrova's books is credited to Bobrova, as is everything marked "n.b.".
    - **Music theory:** check theory content in English and Russian, and rewrite AI-sounding text plainly.
 
+9. **Sources and research:**
+   - **The owner's reference material** is in `piano-data/` (books, scores, screenshots of other apps, saved web pages in `piano-data/web-references/`). Read what the task needs; the app reads none of it at runtime.
+   - **Saved pages are a starting point, not the whole source.** When they lack something the work needs (more fingerings, chord types, scales, progressions, terms), fetch the rest of the same sites (piano.org, musicca.com, vitapiano.com, the chord-chart sites, Flat's and Dorico's help) with WebFetch or curl, and search the web where no saved site covers it.
+   - **Facts and behaviour only:** check every fact against music theory (sites have errors: note any you find), never copy wording, code or assets.
+   - **Open-source references** (LilyPond, abcjs, Verovio, memory-palaces) may be read for how they solve a problem and, where licences allow, ported to TypeScript.
+   - **Prefer an existing library** to hand-written code when one does the job well; say so before adding a package, and never `npm install` in a worktree.
+10. **Merging to `main`:**
+    - Code reaches `main` only after the full suite and the build pass on the merged branch.
+    - Docs, skills, prompts and settings that touch no code may go to `main` at once (picked onto it), so the next session has them; say that you did.
+    - Ignore Vercel's deployment status and CI; the local checks are the gate.
+11. **When the usage limit stops the work:** wait for the reset, then resume each stopped agent with SendMessage from where it stopped (its work is saved), never start it again from scratch. When the owner says "continue", pick up exactly there.
+12. **A question to answer, not a task to do:** when the owner asks something ("why …", "have you …", "what about …"), answer it first, in a line or two, before doing anything else; when they ask you to research and then say what you will do, stop after saying it.
+
 ## How to work well (the best practices this skill adopts)
 
 `references/practices.md` holds the practices taken from superpowers (brainstorming, plans, TDD, debugging, verification, code review) and from impeccable (design), each in a line or two, with when to call which skill. Read it once a session, before the first task.
@@ -91,6 +104,8 @@ Keep reports short, answer first, no preamble or recap:
 - what was left and why;
 - the decisions that are the owner's, as direct questions;
 - the push state: branch, `main`, and whether tests and the build passed.
+
+In a review loop, keep a running list of areas reviewed and areas left, and give it in each round's report.
 
 If agents are running and the owner asks, say so; never guess their results. If something takes long, explain where the time goes and how to make it faster.
 
