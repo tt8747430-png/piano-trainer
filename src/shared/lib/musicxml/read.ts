@@ -10,6 +10,10 @@ import {
   isCompound,
   MULTI_REST,
   meterOf,
+  numeralText,
+  parseNumeral,
+  SWING_MARKS,
+  SWING_TEXT,
   signatureKey,
   type Articulation,
   type BarMarks,
@@ -29,6 +33,7 @@ import {
   type NoteMarks,
   type OctaveLine,
   type Ornament,
+  type TremoloStrokes,
   type SpelledNote,
   type Syllable,
   type TempoUnit,
@@ -57,12 +62,10 @@ export const LEFT_OUT = [
   'meters',
   /** A key signature of more than seven, or a key of its own. */
   'keys',
-  /** A tempo after the first. */
+  /** A tempo change outside the beats a minute a tempo mark says (20 to 400). */
   'tempos',
-  /** Dynamics we do not write. */
+  /** Dynamics we do not write (pppp, ffff, niente…). */
   'dynamics',
-  /** Words over the music that are no mark of ours. */
-  'text',
   /** Chord symbols we cannot read. */
   'chords',
   /** Endings past the fourth, or one ending for several times through. */
@@ -132,7 +135,8 @@ export interface ReadScore {
   readonly staves: readonly ReadStaff[]
   readonly bars: readonly ReadBar[]
   readonly notes: readonly ReadNote[]
-  readonly chords: readonly { readonly startTick: Tick; readonly chord: Chord }[]
+  /** Each chord symbol from where it stands; null where none sounds from there on (N.C.). */
+  readonly chords: readonly { readonly startTick: Tick; readonly chord: Chord | null }[]
   /** The app's own data, where the file is one the app wrote. */
   readonly appData?: string
   readonly leftOut: Readonly<Partial<Record<LeftOut, number>>>
@@ -192,6 +196,12 @@ const EXPRESSION_WORDS = new Map<string, Expression>([
   ['rallentando', 'rall'],
   ['accelerando', 'accel'],
 ])
+
+/** A swing mark by the words it prints. */
+const SWING_BY_TEXT = new Map(SWING_MARKS.map((swing) => [SWING_TEXT[swing], swing] as const))
+
+/** What a tempo change may say, as a song's text holds it (ADR 0097). */
+const TEMPO_CHANGE = { from: 20, to: 400 } as const
 
 function normalWords(text: string): string {
   return text
@@ -318,10 +328,12 @@ export function readMusicXml(source: string): ReadScore {
   const parts: ReadPart[] = []
   const notes: Building[] = []
   const pending: Pending[] = []
-  const chords = new Map<Tick, Chord>()
+  const chords = new Map<Tick, Chord | null>()
   const bars: { -readonly [K in keyof ReadBar]?: ReadBar[K] }[] = []
   let key: Key | undefined
   let tempo: { tempo: number; unit?: TempoUnit } | undefined
+  /** The tempo in force: the first, or the last change read. */
+  let current: { tempo: number; unit?: TempoUnit } | undefined
   const firstKeyed = { done: false }
   const barAt = (index: number) => (bars[index] ??= {})
   let rounded = 0
@@ -472,6 +484,7 @@ export function readMusicXml(source: string): ReadScore {
             const chord = readHarmony(child)
             if (!chord) {
               if (textAt(child, 'kind') !== 'none') leave('chords')
+              else if (!chords.has(tick)) chords.set(tick, null)
             } else if (!chords.has(tick)) chords.set(tick, chord)
             break
           }
@@ -490,8 +503,19 @@ export function readMusicXml(source: string): ReadScore {
                 const quarters = (each: { tempo: number; unit?: TempoUnit }) =>
                   each.tempo * unitQuarters(each.unit ?? '4')
                 // One tempo said twice (words with a sound, and a metronome mark) is one: the mark's.
-                if (!tempo || (quarters(tempo) === quarters(read) && read.unit)) tempo = read
-                else if (quarters(tempo) !== quarters(read)) leave('tempos')
+                if (!tempo || !current) {
+                  tempo = read
+                  current = read
+                } else if (quarters(current) === quarters(read)) {
+                  if (current === tempo && read.unit) tempo = current = read
+                } else {
+                  // A tempo change from here (ADR 0097), in the song's beats.
+                  current = read
+                  const beats = Math.round(tempoOf(read, meter).tempo ?? 0)
+                  if (beats >= TEMPO_CHANGE.from && beats <= TEMPO_CHANGE.to)
+                    pending.push({ staff, tick, marks: { tempo: beats } })
+                  else leave('tempos')
+                }
               },
               leave,
             })
@@ -710,6 +734,10 @@ interface DirectionReader {
 function readDirection(direction: XmlElement, read: DirectionReader) {
   const sound = childOf(direction, 'sound')
   let tempoRead = false
+  // Words given with a tempo name it (Allegro): the tempo is what is kept.
+  const namesTempo =
+    sound?.attrs.tempo !== undefined ||
+    childrenOf(direction, 'direction-type').some((type) => childOf(type, 'metronome'))
   for (const type of childrenOf(direction, 'direction-type')) {
     for (const child of type.children) {
       if (typeof child === 'string') continue
@@ -747,15 +775,22 @@ function readDirection(direction: XmlElement, read: DirectionReader) {
           break
         }
         case 'words': {
-          const words = normalWords(textOf(child))
+          const written = textOf(child).trim()
+          const words = normalWords(written)
           if (words === '') break
           const expression = EXPRESSION_WORDS.get(words)
           const jump = JUMP_BY_WORDS.get(words)
+          const swing = SWING_BY_TEXT.get(written)
+          const numeral = parseNumeral(written)
           if (expression) read.mark({ expression })
           else if (jump) read.bar({ jump })
           else if (words === 'fine') read.bar({ fine: true })
           else if (words === 'to coda') read.bar({ toCoda: true })
-          else read.leave('text')
+          else if (namesTempo) break
+          else if (swing) read.mark({ swing })
+          else if (numeral) read.mark({ numeral: numeralText(numeral) })
+          // Any other words over the music are its free text (ADR 0097).
+          else read.mark({ text: written })
           break
         }
         case 'rehearsal':
@@ -859,6 +894,13 @@ function readNote(note: XmlElement, toTicks: (duration: number) => number): Note
         case 'ornaments':
           for (const each of child.children) {
             if (typeof each === 'string' || each.name === 'accidental-mark') continue
+            // A two-note tremolo starts on its first note; its stop on its partner says no more.
+            if (each.name === 'tremolo' && each.attrs.type === 'stop') continue
+            if (each.name === 'tremolo' && each.attrs.type === 'start') {
+              const strokes = Math.min(3, Math.max(1, Number(textOf(each) || 3)))
+              marks.twoNoteTremolo = strokes as TremoloStrokes
+              continue
+            }
             const ornament =
               each.name === 'tremolo' && each.attrs.type !== 'start' && each.attrs.type !== 'stop'
                 ? tremoloOf(Number(textOf(each) || 3))

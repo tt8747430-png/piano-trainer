@@ -10,6 +10,7 @@ import {
   type Ornament,
   type Pedal,
   type SwingMark,
+  type TremoloStrokes,
 } from '@/shared/lib/music'
 import type { Draft, DraftNote, NoteLayer } from './draft'
 import { isAt, notesOf, withNotes, type Where } from './notes'
@@ -28,6 +29,7 @@ export type MarkChoice =
   | { readonly kind: 'expression'; readonly expression: Expression }
   | { readonly kind: 'pedal'; readonly pedal: Pedal }
   | { readonly kind: 'swing'; readonly swing: SwingMark }
+  | { readonly kind: 'twoNoteTremolo'; readonly strokes: TremoloStrokes }
 
 type Writable = { -readonly [K in keyof NoteMarks]: NoteMarks[K] }
 
@@ -50,6 +52,8 @@ export function hasMark(marks: NoteMarks | undefined, mark: MarkChoice): boolean
       return marks?.pedal === mark.pedal
     case 'swing':
       return marks?.swing === mark.swing
+    case 'twoNoteTremolo':
+      return marks?.twoNoteTremolo === mark.strokes
     default:
       return marks?.[mark.kind] === true
   }
@@ -97,6 +101,10 @@ export function withMark(
     case 'swing':
       if (on) next.swing = mark.swing
       else if (next.swing === mark.swing) delete next.swing
+      break
+    case 'twoNoteTremolo':
+      if (on) next.twoNoteTremolo = mark.strokes
+      else if (next.twoNoteTremolo === mark.strokes) delete next.twoNoteTremolo
       break
     default:
       if (on) next[mark.kind] = true

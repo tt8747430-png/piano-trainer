@@ -135,6 +135,8 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   _Avoid:_ shuffle.
 - **Roman numeral** («Ступень»; `rn:`): the chord's degree in the key there, printed under the staff. _Avoid:_
   function symbol, degree mark.
+- **Two-note tremolo** («Тремоло между нотами»; `ftrem2`): two notes alternating fast, marked on the first, each
+  written as long as the pair. _Avoid:_ fingered tremolo, measured tremolo.
 - **Free text** («Текст»; `txt:`): words of the learner's over a note. _Avoid:_ annotation, staff text.
 - **Repeat ×N** («Повтор ×N»; `:|x3`): a repeat's end played its times, three to nine. _Avoid:_ volta count.
 - **Page break** («Разрыв страницы»; `Page`): a bar whose line starts a new page. _Avoid:_ system break (a line's).

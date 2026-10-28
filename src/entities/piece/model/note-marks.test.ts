@@ -41,6 +41,14 @@ describe('readMarks', () => {
     expect(readMarks('gliss,gliss')).toBeNull()
   })
 
+  it('reads and writes a two-note tremolo of one to three strokes, with an ornament of its own', () => {
+    expect(readMarks('ftrem2')).toEqual({ twoNoteTremolo: 2 })
+    expect(readMarks('tr,ftrem3')).toEqual({ ornament: 'trill', twoNoteTremolo: 3 })
+    expect(writeMarks({ twoNoteTremolo: 1, glissando: true })).toBe('gliss,ftrem1')
+    expect(readMarks('ftrem4')).toBeNull()
+    expect(readMarks('ftrem1,ftrem2')).toBeNull()
+  })
+
   it('reads a tempo mark, a swing mark, a Roman numeral and free text', () => {
     expect(readMarks('tempo:96,swing8')).toEqual({ tempo: 96, swing: 'eighths' })
     expect(readMarks('swing16')).toEqual({ swing: 'sixteenths' })

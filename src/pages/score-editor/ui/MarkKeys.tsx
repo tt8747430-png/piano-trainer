@@ -128,6 +128,30 @@ export function ArticulationKeys() {
 }
 
 /**
+ * Flat's tremolo between two notes, of one to three strokes, on the first of its pair (ADR 0097):
+ * drawn as two half notes with the strokes between their stems.
+ */
+export function TwoNoteTremoloKeys() {
+  const { t } = useTranslation('editor')
+  return ([1, 2, 3] as const).map((strokes) => (
+    <MarkKey
+      key={strokes}
+      mark={{ kind: 'twoNoteTremolo', strokes }}
+      label={t(`marks.twoNoteTremolo${strokes}`)}
+    >
+      <Drawn>
+        <ellipse cx="5" cy="19" rx="3" ry="2.2" transform="rotate(-20 5 19)" />
+        <ellipse cx="17" cy="17" rx="3" ry="2.2" transform="rotate(-20 17 17)" />
+        <path d="M7.8 18.5V4 M19.8 16.5V3" strokeWidth="1.5" />
+        {Array.from({ length: strokes }, (_, i) => (
+          <path key={i} d={`M7.8 ${7 + i * 3.5} L19.8 ${5.5 + i * 3.5}`} strokeWidth="2" />
+        ))}
+      </Drawn>
+    </MarkKey>
+  ))
+}
+
+/**
  * The Ornaments (Flat's order): the trill, the tremolo of one to three strokes, the rolled chord,
  * the glissando, the mordents, the turn and the inverted turn.
  */

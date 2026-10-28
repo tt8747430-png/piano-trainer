@@ -32,7 +32,7 @@ import {
   type ScoreEvent,
   type StaffId,
 } from '@/shared/lib/notation'
-import { harmonyXml } from './harmony'
+import { harmonyXml, NO_CHORD_XML } from './harmony'
 import { tag, text } from './xml'
 
 /** What a score is written with besides its music. */
@@ -224,6 +224,8 @@ interface Open {
   octave: false | 8 | 15
   /** A glissando started on the note before. */
   gliss?: boolean
+  /** A two-note tremolo's strokes, started on the note before. */
+  tremolo?: number
 }
 
 /** One part's measures, what runs across their barlines (ties, slurs, lines, held words) held between them. */
@@ -477,6 +479,11 @@ class PartWriter {
     }
     const out: string[] = []
     const harmonies = chords ? [...measure.chords] : []
+    // A bar of no chord after a bar of chords (ADR 0114) stops the chord sounding on: N.C.
+    const index = this.score.measures.indexOf(measure)
+    const before = this.score.measures[index - 1]
+    if (chords && measure.chords.length === 0 && before && before.chords.length > 0)
+      out.push(NO_CHORD_XML)
     const whole = events.length === 1 && events[0]?.kind === 'rest'
     events.forEach((event, index) => {
       const length = ticksOf(event.duration, this.score.meter)
@@ -564,7 +571,7 @@ class PartWriter {
         first ? this.slurs(marks, staff, number) : '',
         first && tuplet ? tag('tuplet', { type: tuplet, bracket: 'yes' }) : '',
         first ? this.glissando(marks, staff, number) : '',
-        first && marks?.ornament ? tag('ornaments', {}, ORNAMENTS[marks.ornament] ?? '') : '',
+        first ? this.ornaments(marks, staff) : '',
         written.finger === undefined ? '' : tag('technical', {}, text('fingering', written.finger)),
         first ? articulationsXml(marks) : '',
         first && marks?.articulations?.includes('fermata')
@@ -682,6 +689,23 @@ class PartWriter {
         ),
       )
     return out
+  }
+
+  /**
+   * A note's ornaments: its own, and a two-note tremolo's start on its note and its stop on the
+   * staff's next (ADR 0097).
+   */
+  private ornaments(marks: NoteMarks | undefined, staff: StaffId): string {
+    const open = this.open.get(staff)
+    const stop = open?.tremolo ? tag('tremolo', { type: 'stop' }, String(open.tremolo)) : ''
+    const strokes = marks?.twoNoteTremolo
+    if (open) open.tremolo = strokes
+    const inside = [
+      marks?.ornament ? (ORNAMENTS[marks.ornament] ?? '') : '',
+      stop,
+      strokes ? tag('tremolo', { type: 'start' }, String(strokes)) : '',
+    ].join('')
+    return inside ? tag('ornaments', {}, inside) : ''
   }
 
   /** A glissando's start on its note, its stop on the staff's next (ADR 0097). */

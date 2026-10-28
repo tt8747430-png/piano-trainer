@@ -349,7 +349,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     await renderApp('/songs')
     const text = `<score-partwise><part-list><score-part id="P1"><part-name>Flute</part-name></score-part></part-list>
       <part id="P1"><measure><attributes><divisions>1</divisions></attributes>
-      <direction><direction-type><dynamics><sfz/></dynamics></direction-type></direction>
+      <direction><direction-type><dynamics><pppp/></dynamics></direction-type></direction>
       <note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration></note></measure></part></score-partwise>`
     const file = new File([text], 'Air.musicxml')
     fireEvent.drop(await screen.findByRole('region', { name: 'Folders' }), {
@@ -357,7 +357,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     })
     const sheet = await screen.findByRole('dialog', { name: 'Imported' })
     expect(
-      within(sheet).getByText('Dynamics the app doesn’t write (sfz, fp, ppp)'),
+      within(sheet).getByText('Dynamics the app doesn’t write (pppp, ffff, niente)'),
     ).toBeInTheDocument()
     await user.click(within(sheet).getByRole('button', { name: 'Open the song' }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Air' })).toBeInTheDocument()

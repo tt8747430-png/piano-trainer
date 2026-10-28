@@ -11,6 +11,7 @@ import {
   type Key,
   type Midi,
   type NoteMarks,
+  type TremoloStrokes,
 } from '@/shared/lib/music'
 import type { NoteSound } from './schedule'
 
@@ -64,6 +65,8 @@ export interface MarkTiming {
   readonly full: number
   /** The next note on its staff, where a glissando slides to. */
   readonly glissTo?: Midi
+  /** A two-note tremolo's partner, and the seconds from the note's start to the partner's end. */
+  readonly tremoloWith?: { readonly midi: Midi; readonly full: number }
 }
 
 /** The key's note next above or below a key, by step: an ornament's neighbour. */
@@ -108,6 +111,9 @@ export function markedSounds(
     at: Math.max(0, main.at - GRACE * (all.length - i)),
     duration: GRACE,
   }))
+  const partner = timing.tremoloWith
+  if (marks.twoNoteTremolo && partner)
+    return [...grace, ...twoNoteTremolo(main, partner, marks.twoNoteTremolo, timing)]
   const glissTo = timing.glissTo
   if (marks.glissando && glissTo !== undefined && glissTo !== main.midi)
     return [...grace, ...glissando(main, glissTo, timing)]
@@ -124,6 +130,26 @@ function glissando(main: NoteSound, to: Midi, { thirtySecond }: MarkTiming): Not
   for (let m = main.midi + step; m !== to; m += step) if (!isBlackKey(midi(m))) keys.push(midi(m))
   const each = Math.max(Math.min(thirtySecond, 0.05), main.duration / keys.length)
   return keys.map((m, i) => ({ ...main, midi: m, at: main.at + i * each, duration: each }))
+}
+
+/**
+ * A two-note tremolo: the note and its partner in turn, in 8ths, 16ths or 32nds by its strokes, from
+ * the note's start to the partner's end.
+ */
+function twoNoteTremolo(
+  main: NoteSound,
+  partner: NonNullable<MarkTiming['tremoloWith']>,
+  strokes: TremoloStrokes,
+  { thirtySecond }: MarkTiming,
+): NoteSound[] {
+  const stroke = thirtySecond * 2 ** (3 - strokes)
+  const count = Math.max(2, Math.floor(partner.full / stroke + 1e-9))
+  return Array.from({ length: count }, (_, i) => ({
+    ...main,
+    midi: i % 2 === 0 ? main.midi : partner.midi,
+    at: main.at + i * stroke,
+    duration: stroke,
+  }))
 }
 
 /** A note played as its ornament: strokes of 32nds, the last holding what is left of it. */
@@ -215,6 +241,25 @@ export function rollOffsets(notes: readonly PerformanceNote[]): number[] {
         other.midi < n.midi,
     )
     return +(below.length * ROLL_STEP).toFixed(3)
+  })
+}
+
+/**
+ * Each two-note tremolo's partner (ADR 0097), by its index: the note of its part's next onset
+ * nearest its pitch, which sounds only in the tremolo; none for another note.
+ */
+export function tremoloPartners(notes: readonly PerformanceNote[]): (number | undefined)[] {
+  return notes.map((n) => {
+    if (!n.marks?.twoNoteTremolo) return undefined
+    const later = notes.flatMap((other, index) =>
+      other.hand === n.hand && other.staff === n.staff && other.startTick > n.startTick
+        ? [{ other, index }]
+        : [],
+    )
+    const next = Math.min(...later.map(({ other }) => other.startTick))
+    return later
+      .filter(({ other }) => other.startTick === next)
+      .sort((a, b) => Math.abs(a.other.midi - n.midi) - Math.abs(b.other.midi - n.midi))[0]?.index
   })
 }
 

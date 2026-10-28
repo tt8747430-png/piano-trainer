@@ -156,7 +156,11 @@ function barChords(
   const inBar = score.chords.filter(
     (chord) => chord.startTick >= bar.startTick && chord.startTick < bar.startTick + bar.ticks,
   )
-  const placed = inBar.map(({ startTick, chord }) => ({ at: startTick - bar.startTick, chord }))
+  // N.C. stops the chord sounding on: a bar it starts with no chord after it is a bar of no chord.
+  if (inBar.some(({ chord }) => chord === null)) sounding.chord = undefined
+  const placed = inBar.flatMap(({ startTick, chord }) =>
+    chord ? [{ at: startTick - bar.startTick, chord }] : [],
+  )
   const [first] = placed
   if (first && first.at > 0) {
     if (sounding.chord) placed.unshift({ at: 0, chord: sounding.chord })

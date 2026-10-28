@@ -135,8 +135,40 @@ describe('readMusicXml', () => {
   })
 
   it('counts what it leaves out', () => {
-    // Allegro alone: the quintuplet, the sfz and the detached legato are read (ADR 0097).
-    expect(readMusicXml(PIANO).leftOut).toEqual({ text: 1 })
+    // Nothing: Allegro names the tempo, the quintuplet, the sfz and the detached legato are read
+    // (ADR 0097).
+    expect(readMusicXml(PIANO).leftOut).toEqual({})
+  })
+
+  it('reads a tempo change, a swing mark, a Roman numeral and free text onto their notes', () => {
+    const words = (text: string, placement = 'above') =>
+      `<direction placement="${placement}"><direction-type><words>${text}</words></direction-type><staff>1</staff></direction>`
+    const quarter = `<note>${pitch('C', 5)}<duration>1</duration><voice>1</voice><type>quarter</type><staff>1</staff></note>`
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<score-partwise version="4.0">
+  <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+  <part id="P1"><measure number="1">
+    <attributes><divisions>1</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes>
+    <direction placement="above"><direction-type><words>Moderato</words></direction-type><direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>100</per-minute></metronome></direction-type><sound tempo="100"/></direction>
+    ${quarter}
+    <direction placement="above"><direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>72</per-minute></metronome></direction-type><sound tempo="72"/></direction>
+    ${words('Swing \u{1D160}\u{1D160}')}${words('con brio, ma')}${words('V7/ii', 'below')}
+    ${quarter}
+    <direction><direction-type><dynamics><pppp/></dynamics></direction-type><staff>1</staff></direction>
+    ${quarter}
+    <direction placement="above"><direction-type><metronome><beat-unit>quarter</beat-unit><per-minute>100</per-minute></metronome></direction-type></direction>
+    ${quarter}
+  </measure></part>
+</score-partwise>`
+    const read = readMusicXml(xml)
+    expect(read.tempo).toBe(100)
+    expect(read.notes.map((n) => n.marks)).toEqual([
+      undefined,
+      { tempo: 72, swing: 'eighths', text: 'con brio, ma', numeral: 'V7/ii' },
+      undefined,
+      { tempo: 100 },
+    ])
+    expect(read.leftOut).toEqual({ dynamics: 1 })
   })
 
   it('refuses what is no score', () => {

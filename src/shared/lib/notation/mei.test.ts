@@ -130,6 +130,22 @@ describe('scoreToMei, a note’s marks and the options', () => {
   })
   const plain = (notes: TimedNote[]) => notate(music(notes, { chords: [] }))
 
+  it('writes a two-note tremolo as fTrem, each note as long as the pair, its strokes as beams', () => {
+    const pair = (length: number, strokes: 1 | 2 | 3) =>
+      scoreToMei(
+        plain([
+          { ...c(0, { twoNoteTremolo: strokes }), durationTicks: length },
+          { ...c(length), midi: midi(76), spelled: note('E'), durationTicks: length },
+        ]),
+      )
+    expect(pair(B, 2)).toMatch(
+      /<fTrem unitdur="16"><note xml:id="n-treble-0-0" pname="c" oct="5" dur="2"[^>]*\/><note xml:id="n-treble-5040-0" pname="e" oct="5"[^>]* dur="2"[^>]*\/><\/fTrem>/,
+    )
+    expect(pair(2 * B, 3)).toMatch(/<fTrem unitdur="32"><note [^>]* dur="1"/)
+    // A pair of other lengths is written as its two notes, each with no tremolo.
+    expect(pair(1.5 * B, 1)).not.toContain('fTrem')
+  })
+
   it('writes a slur from its note to the one it ends on, a dynamic, the pedal and an expression', () => {
     const written = scoreToMei(
       plain([

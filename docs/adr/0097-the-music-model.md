@@ -42,8 +42,9 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
   between its notes, `rit` and `accel` and each tempo change (`tempoWarp`, and in the MIDI file's tempo map), a swing
   mark's feel from its note on, the pedal (`pedalHeld`), notes joined under a slur or legato. A tie is a longer
   note, not a mark. A Roman numeral is the numerals kernel's of the chord and key there, not typed; free text is
-  percent-encoded in the text (`txt:`). A two-note tremolo is not a mark: the model has no notes paired across a
-  beat.
+  percent-encoded in the text (`txt:`). A **two-note tremolo** (`ftrem1` to `ftrem3`) is a mark on the first
+  of a pair: it alternates with its part's next note, nearest in pitch, until that note's end, which sounds in it
+  alone; the two are timed as played (two quarters for a half's tremolo) and engraved each as long as the pair.
 - **Barlines, repeats, endings and jumps are bar marks** (`|: :| :|x3 || |. [1 [2 [3 [4`, Segno, Coda, Fine, To
   Coda, D.C. and D.S. with their al Fine and al Coda). They are engraved as written and played as taken
   (`playOrder`): back from a repeat's end until played its times (twice, `:|xN`'s N, or as many as its endings),
@@ -79,4 +80,5 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
 - 0097 — A score's staves are staves (2026-10-24).
 - 2026-10-28 — Flat's notation: 5040 ticks a beat, the 64th and tuplets of 2 to 9; portato, breath, caesura,
   inverted turn, tremolos, 15ma/15mb, glissando, every dynamic, tempo changes, swing marks, Roman numerals and free
-  text; repeat ×N, endings to the 4th, page breaks, bar repeats and multi-bar rests.
+  text; repeat ×N, endings to the 4th, page breaks, bar repeats and multi-bar rests; the two-note tremolo; a bar
+  of no chord kept through MusicXML as N.C.

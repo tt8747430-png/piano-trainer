@@ -27,6 +27,18 @@ describe('withMark', () => {
   })
 })
 
+describe('a two-note tremolo', () => {
+  it('goes on the first of its pair, its strokes in place of another’s, and comes off', () => {
+    const two = { kind: 'twoNoteTremolo', strokes: 2 } as const
+    const on = withMark({ ornament: 'trill' }, two, true)
+    expect(on).toEqual({ ornament: 'trill', twoNoteTremolo: 2 })
+    expect(hasMark(on, two)).toBe(true)
+    expect(hasMark(on, { kind: 'twoNoteTremolo', strokes: 3 })).toBe(false)
+    expect(withMark(on, { kind: 'twoNoteTremolo', strokes: 3 }, true)?.twoNoteTremolo).toBe(3)
+    expect(withMark({ twoNoteTremolo: 2 }, two, false)).toBeUndefined()
+  })
+})
+
 describe('markNotes', () => {
   const draft = draftOf({ hands: { rh: 'C4+E4/2 G4/2 | A4/4' } })
 

@@ -87,7 +87,7 @@ describe('a song’s MusicXML, exported then imported', () => {
       sections: [
         {
           kind: 'verse',
-          lines: ['|: C [1 F :| [2 G :| [3 A :|x4 [4 G', 'Page C % C F G %% F G Rest2 G G |.'],
+          lines: ['|: C [1 F :| [2 G :| [3 A :|x4 [4 G', 'Page C % C F G %% F G Rest2 _ _ C |.'],
         },
       ],
     }
@@ -95,9 +95,28 @@ describe('a song’s MusicXML, exported then imported', () => {
     expect(xml).toContain('<print new-page="yes"/>')
     expect(xml).toContain('<measure-repeat type="start">2</measure-repeat>')
     expect(xml).toContain('<multiple-rest>2</multiple-rest>')
+    // A bar of no chord (ADR 0114) says so: N.C., MusicXML's harmony of no kind.
+    expect(xml).toContain('<kind text="N.C.">none</kind>')
     const back = songOfMusicXml(xml, 'x.musicxml')
     expect(back.leftOut).toEqual({})
     expect(back.song.music).toEqual(written(marked))
+  })
+
+  it('keeps a two-note tremolo as MusicXML’s tremolo start and stop', () => {
+    const tremolo: PieceMusic = {
+      key: 'C',
+      meter: '4/4',
+      tempo: 90,
+      pattern: 'r1',
+      sections: [{ kind: 'verse', lines: ['C'] }],
+      hands: { rh: 'C5/1[ftrem2] E5/1 G5/2', lh: 'C3/4' },
+    }
+    const xml = musicXmlOf(tremolo, NAMES)
+    expect(xml).toContain('<tremolo type="start">2</tremolo>')
+    expect(xml).toContain('<tremolo type="stop">2</tremolo>')
+    const back = songOfMusicXml(xml, 'x.musicxml')
+    expect(back.leftOut).toEqual({})
+    expect(back.song.music).toEqual(written(tremolo))
   })
 
   it('keeps a lead sheet’s piano, not printed', () => {
