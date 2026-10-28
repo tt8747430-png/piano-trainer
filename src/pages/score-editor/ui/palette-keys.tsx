@@ -1,17 +1,40 @@
-import type { ComponentProps, ReactNode } from 'react'
+import { ChevronDown } from 'lucide-react'
+import { use, type ComponentProps, type ReactNode } from 'react'
 import { cn } from '@/shared/lib'
 import { InfoTip, ToolKey } from '@/shared/ui'
 import type { PaletteCategory } from '../model/palette-categories'
-import { PaletteGroupName, useKeyTip, usePaletteForm } from './palette-form'
+import type { Tool } from '../model/shortcuts'
+import { PanelSections, useKeyTip, usePaletteDock, usePaletteForm } from './palette-form'
 
-/** A key of the folded palette's row: a 44px picture (40px on a phone on its side), snapping in. */
-const ROW_KEY = 'h-11 min-w-11 shrink-0 snap-start px-1.5 landscape-phone:h-10'
+/** What is chosen on the music, as the pickers' cells show it (ADR 0114): a sky glyph on a sky wash. */
+const PRESSED =
+  'aria-pressed:border-hairline aria-pressed:bg-[color-mix(in_oklab,var(--color-link)_14%,var(--color-card))] aria-pressed:text-link'
 
 /**
- * A category's tools under its name, as the palette lays them out (ADR 0114). Opened, a titled
- * section the category bar scrolls to; `info`, what its tools do or why they are greyed where they
- * are, is the ⓘ beside its name, never a line in it (ADR 0096). In the folded row, a group of keys
- * parted from the one before by a hairline, named for a screen reader and in each key's tooltip.
+ * A key's face in each form (Flat's): in a section's grid a square cell of the bordered table, its
+ * hairlines right and under; in the toolbar a 40px glyph with no box; in the list its picture and its
+ * name. Pressed, a sky glyph on a sky wash; greyed, faded.
+ */
+const FACES = {
+  grid: cn(
+    'h-11 w-auto min-w-0 rounded-none border-0 border-r border-b border-hairline bg-card px-0.5 text-foreground/80 shadow-none hover:bg-accent hover:text-foreground focus-visible:z-10 active:scale-100 landscape-phone:h-10',
+    PRESSED,
+  ),
+  bar: cn(
+    'size-10 shrink-0 rounded-lg border-0 bg-transparent px-0 text-foreground/75 shadow-none hover:bg-accent hover:text-foreground landscape-phone:size-9',
+    PRESSED,
+  ),
+  list: cn(
+    'h-11 justify-start gap-2.5 rounded-xl border-hairline bg-card px-2 text-left text-sm leading-tight font-normal whitespace-normal',
+    PRESSED,
+  ),
+} as const
+
+/**
+ * A category's tools under its name (ADR 0114). In the panel an accordion row, as Flat's: its name
+ * and a chevron, a tap folding it open or shut, several open at once; in the sheet a titled section
+ * the category bar scrolls to. `info`, what its tools do or why they are greyed where they are, is the
+ * ⓘ beside its name, never a line in it (ADR 0096).
  */
 export function PaletteSection({
   category,
@@ -24,26 +47,55 @@ export function PaletteSection({
   info?: ReactNode
   children: ReactNode
 }) {
-  const form = usePaletteForm()
-  if (form === 'row')
+  const dock = usePaletteDock()
+  const { open, toggle } = use(PanelSections)
+  if (dock === 'panel') {
+    const shown = open.has(category)
     return (
-      <div
-        role="group"
+      <section
         aria-label={title}
         data-category={category}
-        className="flex shrink-0 items-center gap-1 border-l border-hairline pl-2 first:border-l-0 first:pl-0"
+        className="border-b border-hairline last:border-b-0"
       >
-        <PaletteGroupName value={title}>{children}</PaletteGroupName>
-      </div>
+        <div className="flex items-center gap-1.5">
+          <h3 className="min-w-0 flex-1">
+            <button
+              type="button"
+              aria-expanded={shown}
+              onClick={() => toggle(category)}
+              className="flex min-h-12 w-full items-center text-left text-base leading-tight font-semibold outline-none focus-visible:underline"
+            >
+              {title}
+            </button>
+          </h3>
+          {info ? <InfoTip name={title}>{info}</InfoTip> : null}
+          <button
+            type="button"
+            aria-hidden
+            tabIndex={-1}
+            onClick={() => toggle(category)}
+            className="grid size-8 shrink-0 place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground"
+          >
+            <ChevronDown
+              className={cn(
+                'size-5 transition-transform duration-200 ease-out motion-reduce:transition-none',
+                shown && 'rotate-180',
+              )}
+            />
+          </button>
+        </div>
+        {shown ? <div className="flex flex-col gap-2 pb-4">{children}</div> : null}
+      </section>
     )
+  }
   return (
     <section
       aria-label={title}
       data-category={category}
-      className="flex scroll-mt-1 flex-col gap-2 py-1.5"
+      className="flex scroll-mt-1 flex-col gap-2 py-2"
     >
       <div className="flex min-h-5 items-center gap-1.5">
-        <h3 className="text-sm leading-tight font-semibold">{title}</h3>
+        <h3 className="text-[0.9375rem] leading-tight font-semibold">{title}</h3>
         {info ? <InfoTip name={title}>{info}</InfoTip> : null}
       </div>
       {children}
@@ -51,9 +103,8 @@ export function PaletteSection({
   )
 }
 
-/** A group's name inside a section (Pedal, Lyrics), with what it is for where it says more; none in the row. */
+/** A group's name inside a section (Pedal, Signs and jumps), with what it is for where it says more. */
 export function GroupName({ name, info }: { name: string; info?: ReactNode }) {
-  if (usePaletteForm() === 'row') return null
   return (
     <div className="flex min-h-5 items-center gap-1.5 pt-1">
       <h4 className="text-sm text-muted-foreground">{name}</h4>
@@ -62,181 +113,92 @@ export function GroupName({ name, info }: { name: string; info?: ReactNode }) {
   )
 }
 
-/** What a section says over its keys (whose staff, from which bar); none in the row, whose keys say it. */
+/** What a section says over its keys (whose staff, from which bar). */
 export function SectionLine({ children }: { children: ReactNode }) {
-  if (usePaletteForm() === 'row') return null
   return <p className="text-sm text-muted-foreground">{children}</p>
 }
 
-/** A grid of keys in a section; in the row, the keys in line. */
-function KeyGrid({
-  label,
-  className,
-  children,
-}: {
-  label?: string | undefined
-  className: string
-  children: ReactNode
-}) {
-  const row = usePaletteForm() === 'row'
+/**
+ * A group of keys as the form lays them out (Flat's): a bordered table of square cells, 44px at the
+ * least, as many to a row as the panel or the sheet holds, empty cells left blank so the table stays
+ * whole; two columns of named keys in the list; in line in the toolbar.
+ */
+export function KeyGrid({ label, children }: { label?: string | undefined; children: ReactNode }) {
+  const form = usePaletteForm()
+  const group = { role: label ? 'group' : undefined, 'aria-label': label }
+  if (form === 'bar')
+    return (
+      <div {...group} className="contents">
+        {children}
+      </div>
+    )
+  if (form === 'list')
+    return (
+      <div {...group} className="grid grid-cols-2 gap-1.5">
+        {children}
+      </div>
+    )
   return (
-    <div
-      role={label ? 'group' : undefined}
-      aria-label={label}
-      className={row ? 'contents' : className}
-    >
-      {children}
+    <div {...group} className="overflow-hidden rounded-xl border border-hairline bg-card">
+      <div className="-mr-px -mb-px grid grid-cols-[repeat(auto-fill,minmax(2.75rem,1fr))]">
+        {children}
+      </div>
     </div>
   )
 }
 
-/** A group of picture keys, six to a row: the values, the marks, the dynamics. */
-export function GlyphGrid({ label, children }: { label?: string; children: ReactNode }) {
+/** A key's picture and, in the list, its name beside it. */
+function Face({ label, children }: { label: string; children: ReactNode }) {
+  if (usePaletteForm() !== 'list') return children
   return (
-    <KeyGrid label={label} className="grid grid-cols-6 gap-1.5">
-      {children}
-    </KeyGrid>
-  )
-}
-
-/** A group of keys that name what they do under their picture, as many to a row as fit. */
-export function CaptionGrid({ label, children }: { label?: string; children: ReactNode }) {
-  return (
-    <KeyGrid label={label} className="grid grid-cols-[repeat(auto-fill,minmax(5rem,1fr))] gap-1.5">
-      {children}
-    </KeyGrid>
+    <>
+      <span aria-hidden className="grid size-8 shrink-0 place-items-center [&_svg]:size-6">
+        {children}
+      </span>
+      <span aria-hidden className="min-w-0 flex-1 break-words">
+        {label}
+      </span>
+    </>
   )
 }
 
 /**
- * Signs as tiles (ADR 0115, 0114): clefs, key signatures, barlines, as many to a row as fit, three on
- * the narrowest phone; `narrow` for the key signatures, seven to a row where there is room.
+ * A palette's key (`ToolKey`), as the form lays it out: a cell of the section's table, the
+ * toolbar's glyph, or the list's picture and name. Its tooltip names it, then its shortcut (`tool`,
+ * Flat's); greyed, why (`reason`, ADR 0096).
  */
-export function SignGrid({
+export function PaletteKey({
   label,
-  narrow = false,
+  tool,
+  className,
+  span,
   children,
-}: {
-  label?: string
-  narrow?: boolean
-  children: ReactNode
-}) {
-  return (
-    <KeyGrid
-      label={label}
-      className={cn(
-        'grid gap-1.5',
-        narrow
-          ? 'grid-cols-[repeat(auto-fill,minmax(3.5rem,1fr))]'
-          : 'grid-cols-[repeat(auto-fill,minmax(4.75rem,1fr))]',
-      )}
-    >
-      {children}
-    </KeyGrid>
-  )
-}
-
-/** Terms as a score prints them (dolce, rit., D.C. al Fine), as many to a row as fit. */
-export function TermGrid({ label, children }: { label?: string; children: ReactNode }) {
-  return (
-    <KeyGrid
-      label={label}
-      className="grid grid-cols-[repeat(auto-fill,minmax(4.5rem,1fr))] gap-1.5"
-    >
-      {children}
-    </KeyGrid>
-  )
-}
-
-/**
- * A palette's key (`ToolKey`), as the palette lays it out: in a section's grid as its grid sizes it;
- * in the row a 44px picture, its group's name in its tooltip (ADR 0114).
- */
-export function PaletteKey({ label, className, ...props }: ComponentProps<typeof ToolKey>) {
-  const row = usePaletteForm() === 'row'
+  ...props
+}: ComponentProps<typeof ToolKey> & { tool?: Tool }) {
+  const form = usePaletteForm()
   return (
     <ToolKey
       label={label}
-      tip={useKeyTip(label)}
-      className={cn(className, row && ROW_KEY)}
+      tip={useKeyTip(label, tool)}
+      span={form === 'grid' ? span : 'one'}
+      className={cn(FACES[form], className)}
       {...props}
-    />
-  )
-}
-
-/**
- * A key that says what it does: in a section, its picture over its name (a standard musical term),
- * the name wrapping inside its box, never cut; in the row, its picture alone, named in its tooltip.
- * Pressed where it is so already; greyed, its tooltip says why (`reason`, ADR 0096).
- */
-export function CaptionKey({
-  label,
-  reason,
-  pressed,
-  disabled = false,
-  onClick,
-  children,
-}: {
-  label: string
-  /** Why it is greyed, said in its tooltip while it is. */
-  reason?: string | undefined
-  pressed?: boolean
-  disabled?: boolean
-  onClick: () => void
-  children: ReactNode
-}) {
-  const row = usePaletteForm() === 'row'
-  if (row)
-    return (
-      <PaletteKey
-        label={label}
-        reason={reason}
-        pressed={pressed}
-        disabled={disabled}
-        onClick={onClick}
-        className="[&_svg]:size-6"
-      >
-        <span aria-hidden className="grid place-items-center">
-          {children}
-        </span>
-      </PaletteKey>
-    )
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      title={disabled && reason ? reason : label}
-      aria-pressed={pressed}
-      disabled={disabled}
-      onClick={onClick}
-      className={cn(KEY_FACE, 'min-h-16 justify-start gap-1 px-1 pt-2 pb-1.5')}
     >
-      <span aria-hidden className="grid min-h-7 w-full shrink-0 place-items-center [&_svg]:size-7">
-        {children}
-      </span>
-      <span
-        aria-hidden
-        className="w-full text-center text-xs leading-tight text-balance break-words hyphens-auto"
-      >
-        {label}
-      </span>
-    </button>
+      <Face label={label}>{children}</Face>
+    </ToolKey>
   )
 }
 
-/** A tile's face: a card that gives a little as it is pressed, filled while it is so (ADR 0114). */
-const KEY_FACE =
-  'flex min-w-0 flex-col items-center rounded-xl border border-border bg-card text-card-foreground transition-[background-color,border-color,color,scale] duration-80 ease-out hover:bg-chosen active:scale-95 aria-pressed:border-selected aria-pressed:bg-selected aria-pressed:text-selected-foreground disabled:opacity-35 disabled:hover:bg-card motion-reduce:transition-none motion-reduce:active:scale-100'
-
 /**
- * A sign's tile (ADR 0115, 0114, forScore's palette): the sign drawn on a short staff (`children`),
- * its name under it in small type, the same tile for a clef, a key and a barline; what it is besides
- * its name (`detail`: a key's relative minor) said in its tooltip and to a screen reader. Pressed where
- * it is so already; greyed, its tooltip says why (`reason`, ADR 0096). In the row, the sign alone.
+ * A sign's key (ADR 0115, 0114): the sign drawn on a short staff (`children`), named in its tooltip
+ * and to a screen reader, what it is besides (`name`: a key's relative minor) in the list. A cell of
+ * the section's table, a trigger for the sign's picker where it opens one. Pressed where it is so
+ * already; greyed, its tooltip says why (`reason`, ADR 0096).
  */
 export function SignTile({
   label,
   name = label,
+  tool,
   reason,
   pressed,
   disabled = false,
@@ -245,8 +207,10 @@ export function SignTile({
 }: {
   /** Its name for a screen reader and its tooltip. */
   label: string
-  /** What it prints under the sign, where that is not its label: a key's two names, short. */
+  /** What the list prints beside the sign, where that is not its label. */
   name?: string
+  /** Its shortcut, named in its tooltip. */
+  tool?: Tool | undefined
   reason?: string | undefined
   pressed?: boolean
   disabled?: boolean
@@ -255,8 +219,8 @@ export function SignTile({
   ComponentProps<'button'>,
   'aria-label' | 'aria-pressed' | 'title' | 'disabled' | 'children'
 >) {
-  const row = usePaletteForm() === 'row'
-  const tip = useKeyTip(label)
+  const form = usePaletteForm()
+  const tip = useKeyTip(label, tool)
   return (
     <button
       type="button"
@@ -266,35 +230,38 @@ export function SignTile({
       disabled={disabled}
       {...props}
       className={cn(
-        KEY_FACE,
-        row
-          ? 'h-11 w-16 shrink-0 snap-start justify-center p-1 landscape-phone:h-10'
-          : 'min-h-18 justify-start gap-0.5 px-1 pt-1.5 pb-1.5',
+        'flex min-w-0 items-center transition-colors duration-150 ease-out outline-none focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ring disabled:opacity-35 motion-reduce:transition-none',
+        form === 'list'
+          ? 'h-11 gap-2.5 rounded-xl border border-hairline bg-card px-2 text-left text-sm leading-tight hover:bg-accent'
+          : 'col-span-2 h-11 justify-center border-r border-b border-hairline bg-card px-1 text-foreground/80 hover:bg-accent hover:text-foreground focus-visible:z-10 landscape-phone:h-10',
+        PRESSED,
       )}
     >
-      <span aria-hidden className={cn('flex w-full shrink-0 justify-center', row ? 'h-8' : 'h-10')}>
+      <span
+        aria-hidden
+        className={cn('flex h-9 shrink-0 justify-center', form === 'list' && 'w-12')}
+      >
         {children}
       </span>
-      {row ? null : (
-        <span
-          aria-hidden
-          className="w-full text-center text-xs leading-tight text-balance break-words"
-        >
+      {form === 'list' ? (
+        <span aria-hidden className="min-w-0 flex-1 break-words">
           {name}
         </span>
-      )}
+      ) : null}
     </button>
   )
 }
 
 /**
- * A term's key (ADR 0096): the term alone as a score prints it, its name for a screen reader, what it
- * means (`meaning`: dolce, sweetly) its tooltip and a screen reader's description; greyed, why.
+ * A term's key (ADR 0096): the term alone as a score prints it, two cells wide, its name for a screen
+ * reader, what it means (`meaning`: dolce, sweetly) its tooltip and a screen reader's description;
+ * greyed, why.
  */
 export function TermKey({
   label,
   term,
   meaning,
+  tool,
   reason,
   disabled = false,
   onClick,
@@ -302,26 +269,28 @@ export function TermKey({
   label: string
   term: string
   meaning: string
+  tool?: Tool
   reason?: string | undefined
   disabled?: boolean
   onClick: () => void
 }) {
-  const row = usePaletteForm() === 'row'
   return (
     <PaletteKey
       label={label}
+      tool={tool}
       description={meaning}
       reason={reason}
       disabled={disabled}
+      span="wide"
       onClick={onClick}
-      className={row ? 'w-auto px-2.5 whitespace-nowrap' : 'whitespace-normal'}
+      className="whitespace-nowrap"
     >
       <Printed text={term} />
     </PaletteKey>
   )
 }
 
-/** Words as a score prints them, as a key's picture: italic, wrapping in its box. */
+/** Words as a score prints them, as a key's picture: a serif's bold italic, or a music glyph. */
 export function Printed({ text, music = false }: { text: string; music?: boolean }) {
   return (
     <span

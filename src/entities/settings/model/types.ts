@@ -105,14 +105,14 @@ export interface KeyboardSettings {
 }
 
 /**
- * Where the score editor's palette stands: beside the sheet (a laptop, a phone on its side), at its
- * right (ADR 0114), or at its foot.
+ * Where the score editor's palette stands (ADR 0114, Flat's): a panel docked at the sheet's left
+ * (a laptop, a tablet, a phone on its side), or a sheet docked at its foot (a phone held upright).
  */
-export const PALETTE_PLACES = ['beside', 'foot'] as const
+export const PALETTE_PLACES = ['panel', 'sheet'] as const
 export type PalettePlace = (typeof PALETTE_PLACES)[number]
 /**
  * Whether the palette is folded, as the learner last left it in each place; a place never chosen
- * takes its default (ADR 0114): open beside the sheet, where it covers no music, folded at the foot.
+ * takes its default (ADR 0114): the panel shown, the sheet compact (its quick row and its tabs).
  */
 export type PaletteFolds = Readonly<Partial<Record<PalettePlace, boolean>>>
 

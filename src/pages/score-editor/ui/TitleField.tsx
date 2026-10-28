@@ -4,16 +4,9 @@ import { TITLE_MAX } from '@/entities/piece'
 import { cn } from '@/shared/lib'
 import { SheetTitle, type TitlePlace } from '@/shared/ui'
 import { useScoreEditorContext } from '../model/editor-context'
-import { usePaletteBeside } from '../model/use-palette-beside'
 
 /** The title: at the line's head across, else centred, its field as wide as the sheet. */
 const PLACED = { across: '', centred: 'text-center' } as const
-/**
- * The room the palette leaves beside the sheet, which it covers at its right (ADR 0114): the title
- * keeps to it, as the dock does; a page's title is the page's.
- */
-const BESIDE = 'pr-84 landscape-phone:pr-80 xl:pr-96'
-
 /**
  * The title printed at the sheet's head (ADR 0114), edited where it is, as Flat's: a click turns it
  * into a field in its place, the title chosen; Enter or leaving the field saves what it holds with the
@@ -24,7 +17,6 @@ const BESIDE = 'pr-84 landscape-phone:pr-80 xl:pr-96'
 export function TitleField({ place }: { place: TitlePlace }) {
   const { t } = useTranslation('editor')
   const { actions, meta } = useScoreEditorContext()
-  const beside = usePaletteBeside() && place !== 'page'
   // What the field holds while it is open; null while the title is printed.
   const [typed, setTyped] = useState<string | null>(null)
   const editing = typed !== null
@@ -51,7 +43,7 @@ export function TitleField({ place }: { place: TitlePlace }) {
     close(event.key === 'Enter')
   }
   return (
-    <div className={cn(place === 'across' ? PLACED.across : PLACED.centred, beside && BESIDE)}>
+    <div className={place === 'across' ? PLACED.across : PLACED.centred}>
       <SheetTitle title={meta.title} place={place}>
         {editing ? (
           // In place, at the title's size, as wide as what it holds (a copy of it, unseen, sizes

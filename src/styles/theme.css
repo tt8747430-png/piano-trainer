@@ -702,14 +702,11 @@
   & > [data-area='status'] {
     grid-area: status;
   }
-  /* The score editor's (ADR 0115): what floats over its sheet (the palette, the transport, the notice)
-     lies over the sheet's area, above it, and only its own controls take a touch. */
-  & > [data-area='float'] {
+  /* The score editor's work (ADR 0114): in the sheet's area, its palette docked beside or under the
+     music it lays out itself. */
+  & > [data-area='work'] {
     grid-area: sheet;
-    position: relative;
-    z-index: 30;
     min-height: 0;
-    pointer-events: none;
   }
   /* The transport floats over the sheet's foot (ADR 0061, 0115), taking no room of its own. */
   & > [data-area='dock'] {

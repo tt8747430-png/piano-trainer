@@ -4,7 +4,8 @@ import { TICKS_PER_BEAT, timeSignature, timeSignatureText } from '@/shared/lib/m
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { BarIcon, type BarKeyEdit } from './palette-icons'
 import { TimeFigures } from './sign-pictures'
-import { CaptionGrid, CaptionKey, GlyphGrid, GroupName, PaletteKey } from './palette-keys'
+import type { Tool } from '../model/shortcuts'
+import { GroupName, KeyGrid, PaletteKey } from './palette-keys'
 
 /** What the Bar section does to the bars chosen, else the caret's, in order. */
 const BAR_KEYS: readonly BarKeyEdit[] = [
@@ -15,6 +16,13 @@ const BAR_KEYS: readonly BarKeyEdit[] = [
   'joinLine',
   'newSection',
 ]
+
+/** The bar edits' shortcuts, Flat's. */
+const BAR_TOOLS: Readonly<Partial<Record<BarKeyEdit, Tool>>> = {
+  insert: 'barAfter',
+  delete: 'barDelete',
+  newLine: 'newLine',
+}
 
 /**
  * Bar: what acts on the bars chosen, else the caret's: a bar added before or after,
@@ -29,19 +37,22 @@ export function BarKeys() {
   const barTicks = useEditorState((state) => barAt(state.draft, state.caret).bar.ticks)
   return (
     <>
-      <CaptionGrid>
+      <KeyGrid>
         {BAR_KEYS.map((edit) => (
-          <CaptionKey
+          <PaletteKey
             key={edit}
             label={t(`bars.${edit}`)}
+            tool={BAR_TOOLS[edit]}
             onClick={() => actions.dispatch({ type: 'bars', edit })}
           >
-            <BarIcon edit={edit} />
-          </CaptionKey>
+            <span aria-hidden className="size-7">
+              <BarIcon edit={edit} />
+            </span>
+          </PaletteKey>
         ))}
-      </CaptionGrid>
+      </KeyGrid>
       <GroupName name={t('bars.length')} info={t('bars.lengthInfo')} />
-      <GlyphGrid label={t('bars.length')}>
+      <KeyGrid label={t('bars.length')}>
         {barLengths(meter).map((ticks) => {
           const time = timeSignature(ticks / TICKS_PER_BEAT, meter)
           return (
@@ -55,7 +66,7 @@ export function BarKeys() {
             </PaletteKey>
           )
         })}
-      </GlyphGrid>
+      </KeyGrid>
     </>
   )
 }
