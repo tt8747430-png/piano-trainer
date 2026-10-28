@@ -26,7 +26,7 @@ type CaretPlace =
       /** The value they are written as; none for a length no one value writes (tied over). */
       readonly value: Duration | null
     })
-  | (Place & { readonly kind: 'at' | 'held' | 'rest'; readonly what: string })
+  | (Place & { readonly kind: 'at' | 'held' | 'rest' | 'grace'; readonly what: string })
   /** The chord row of a bar of no chord (ADR 0114). */
   | (Place & { readonly kind: 'noChord' })
 
@@ -45,11 +45,21 @@ export function caretSaid({
   layer,
   chordNote = null,
   mode = 'replace',
+  grace = false,
 }: Pick<EditorState, 'draft' | 'caret' | 'layer'> &
-  Partial<Pick<EditorState, 'chordNote' | 'mode'>>): CaretSaid {
+  Partial<Pick<EditorState, 'chordNote' | 'mode' | 'grace'>>): CaretSaid {
   // The mode is a staff's: the chord row writes chords whatever it is.
   const said = mode === 'replace' || layer === 'chords' ? {} : { mode }
-  return { ...placeSaid(draft, caret, layer, chordNote), ...said }
+  const place = placeSaid(draft, caret, layer, chordNote)
+  // The grace notes chosen (Flat's): theirs said in their notes' place.
+  if (grace && place.kind === 'notes' && layer !== 'chords') {
+    const graces = notesAt(draft, layer, caret).flatMap((n) => n.marks?.grace ?? [])
+    if (graces.length > 0) {
+      const what = graces.map((g) => writtenName(g.midi, g.spelled)).join(' ')
+      return { kind: 'grace', bar: place.bar, beat: place.beat, what, ...said }
+    }
+  }
+  return { ...place, ...said }
 }
 
 function placeSaid(

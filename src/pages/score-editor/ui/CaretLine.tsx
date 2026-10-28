@@ -20,7 +20,8 @@ export function CaretLine() {
   const layer = useEditorState((state) => state.layer)
   const chordNote = useEditorState((state) => state.chordNote)
   const mode = useEditorState((state) => state.mode)
-  const said = caretSaid({ draft, caret, layer, chordNote, mode })
+  const grace = useEditorState((state) => state.grace)
+  const said = caretSaid({ draft, caret, layer, chordNote, mode, grace })
   const valueWord = useValueWord()
   const layerName = useLayerName(useStaffHeads())
   const where = (() => {

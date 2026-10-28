@@ -30,6 +30,7 @@ export {
   type CaretMove,
   type ClipEdit,
   type EditMode,
+  type GraceKind,
   type EditorAction,
   type EditorState,
 } from './model/state'

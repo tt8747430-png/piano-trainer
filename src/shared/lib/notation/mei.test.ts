@@ -121,6 +121,15 @@ describe('scoreToMei, a note’s marks and the options', () => {
     )
   })
 
+  it('writes an acciaccatura slashed and an appoggiatura unslashed before their notes', () => {
+    const grace = { midi: midi(62), spelled: note('D') }
+    const written = scoreToMei(
+      plain([c(0, { grace: [grace] }), c(24, { grace: [{ ...grace, appoggiatura: true }] })]),
+    )
+    expect(written).toContain('<note grace="unacc" dur="8" stem.mod="1slash" pname="d"')
+    expect(written).toContain('<note grace="acc" dur="8" pname="d"')
+  })
+
   it('writes fingers only where asked, and only the staves asked for', () => {
     const score = plain([c(0, undefined, 3), { ...n(48, note('C'), 'lh', 0, 24) }])
     expect(scoreToMei(score)).not.toContain('<fing')

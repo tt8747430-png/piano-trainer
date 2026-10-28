@@ -410,7 +410,7 @@ class Writer {
     const graces = (marks?.grace ?? [])
       .map(
         (grace) =>
-          `<note grace="acc" dur="8" stem.mod="1slash" pname="${grace.spelled.letter.toLowerCase()}" oct="${octaveOf(
+          `<note grace="${grace.appoggiatura ? 'acc' : 'unacc'}" dur="8"${grace.appoggiatura ? '' : ' stem.mod="1slash"'} pname="${grace.spelled.letter.toLowerCase()}" oct="${octaveOf(
             grace.midi,
             grace.spelled.accidental,
           )}"${grace.spelled.accidental !== 0 ? ` accid="${ACCID[grace.spelled.accidental]}"` : ''}/>`,

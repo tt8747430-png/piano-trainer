@@ -29,6 +29,16 @@ describe('caretSaid', () => {
     expect(at(192, 'staff0')).toEqual({ kind: 'end' })
   })
 
+  it('says the grace notes chosen in their notes’ place, by their names (Flat’s)', () => {
+    const graced = readDraft({ ...music, staves: [{ notes: 'F#4/4[gr:G4] r/4 r/2 | A4/4' }] })
+    expect(caretSaid({ draft: graced, caret: 0, layer: 'staff0', grace: true })).toEqual({
+      kind: 'grace',
+      bar: 1,
+      beat: '1',
+      what: 'G4',
+    })
+  })
+
   it('says a chord as the sheet prints it, ♯ and ♭ as signs', () => {
     const sharp = readDraft({ ...music, sections: [{ kind: 'verse', lines: ['F#m Bb7'] }] })
     expect(caretSaid({ draft: sharp, caret: 0, layer: 'chords' })).toMatchObject({ what: 'F♯m' })

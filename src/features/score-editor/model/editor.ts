@@ -20,7 +20,10 @@ import { markNotes } from './marks'
 import {
   backFrom,
   deleteNotes,
+  editGraces,
+  GRACE_EDITS,
   graceNotes,
+  type GraceEdit,
   makeRoom,
   notesAt,
   respellNotes,
@@ -89,8 +92,63 @@ function accidentalMoved(state: EditorState, next: Draft): Partial<EditorState> 
   return moved ? { chordNote: moved.midi } : {}
 }
 
-/** The editor's state after an action. */
+/** The actions that edit the grace notes chosen in place of their notes (`grace`). */
+const ON_GRACE: ReadonlySet<EditorAction['type']> = new Set([
+  'step',
+  'shift',
+  'accidental',
+  'respell',
+  'key',
+  'delete',
+  'grace',
+])
+
+/**
+ * A pitch edit on the grace notes chosen (`grace`), as it would be on their notes; null for an
+ * action that is no grace note's.
+ */
+function graceEdited(state: EditorState, action: EditorAction): EditorState | null {
+  const { draft, layer } = state
+  if (layer === 'chords') return null
+  const where = chosenSpan(state)
+  const edited = (edit: GraceEdit, keep = true) =>
+    commit(state, editGraces(draft, layer, where, edit), {
+      struck: null,
+      selection: state.selection,
+      grace: keep,
+    })
+  switch (action.type) {
+    case 'step':
+      return edited(GRACE_EDITS.step(draft, action.steps))
+    case 'shift':
+      return edited(GRACE_EDITS.shift(draft, action.semitones))
+    case 'accidental':
+      return edited(GRACE_EDITS.accidental(draft, action.accidental))
+    case 'respell':
+      return edited(GRACE_EDITS.respell())
+    case 'key':
+      return edited(GRACE_EDITS.key(draft, action.key))
+    case 'delete':
+      return edited(GRACE_EDITS.delete(), false)
+    default:
+      return null
+  }
+}
+
+/**
+ * The editor's state after an action. While the grace notes are chosen (`grace`), the pitch edits
+ * act on them; Escape, or any other action, goes back to their notes.
+ */
 export function reduce(state: EditorState, action: EditorAction): EditorState {
+  if (!state.grace) return reduced(state, action)
+  if (action.type === 'deselect') return { ...state, grace: false }
+  const onGrace = graceEdited(state, action)
+  if (onGrace) return onGrace
+  const next = reduced(state, action)
+  return next.grace && !ON_GRACE.has(action.type) ? { ...next, grace: false } : next
+}
+
+function reduced(state: EditorState, action: EditorAction): EditorState {
   const { draft, layer, caret } = state
   switch (action.type) {
     case 'layer':
@@ -247,13 +305,15 @@ export function reduce(state: EditorState, action: EditorAction): EditorState {
         ...accidentalMoved(state, next),
       })
     }
-    case 'grace':
-      return layer === 'chords'
-        ? state
-        : commit(state, graceNotes(draft, layer, chosenSpan(state)), {
-            struck: null,
-            selection: state.selection,
-          })
+    case 'grace': {
+      if (layer === 'chords') return state
+      const graced = graceNotes(draft, layer, chosenSpan(state), action.kind)
+      return commit(state, graced.draft, {
+        struck: null,
+        selection: state.selection,
+        grace: graced.on,
+      })
+    }
     case 'respell':
       return layer === 'chords'
         ? state

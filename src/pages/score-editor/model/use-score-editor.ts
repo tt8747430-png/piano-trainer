@@ -171,8 +171,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
     }
     // Escape with nothing chosen is the screen's (a sheet's, a menu's), not the editor's.
     if (shortcut.type === 'deselect') {
-      const { selection, chordNote } = store.getState()
-      if (selection === null && chordNote === null) return
+      const { selection, chordNote, grace } = store.getState()
+      if (selection === null && chordNote === null && !grace) return
     }
     event.preventDefault()
     store.dispatch(shortcut)

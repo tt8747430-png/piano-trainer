@@ -9,6 +9,7 @@ import {
   shownValue,
   takesDot,
   type EditMode,
+  type GraceKind,
 } from '@/features/score-editor'
 import { isCompound, type Accidental } from '@/shared/lib/music'
 import { Segmented } from '@/shared/ui'
@@ -375,16 +376,70 @@ function Move({ up, by }: { up: boolean; by: 'half' | 'step' | 'octave' }) {
   )
 }
 
-/** A grace note before its note, as Flat's key draws it: a small flagged note, then a head. */
-function GraceNote() {
+/**
+ * A grace note before its note, as Flat's keys draw it: a small flagged note, then a head; the
+ * acciaccatura's stem slashed.
+ */
+function GraceNote({ kind }: { kind: GraceKind }) {
   return (
     <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="currentColor">
       <ellipse cx="6" cy="16" rx="2.6" ry="1.9" transform="rotate(-20 6 16)" />
       <rect x="7.9" y="6" width="1.1" height="10" />
       <path d="M9 6c0 2 3.2 2.6 2.9 5.6-.4-1.6-1.6-2.3-2.9-2.5z" />
+      {kind === 'acciaccatura' ? (
+        <path d="M4.5 12.5 12 7.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      ) : null}
       <ellipse cx="16.5" cy="17" rx="3.8" ry="2.7" transform="rotate(-20 16.5 17)" />
     </svg>
   )
+}
+
+/** Flat's two grace-note keys, with their shortcuts: the appoggiatura (9), the acciaccatura (⇧9). */
+const GRACE_KEYS = [
+  { kind: 'appoggiatura', label: 'grace', tool: 'grace' },
+  { kind: 'acciaccatura', label: 'acciaccatura', tool: 'acciaccatura' },
+] as const satisfies readonly { kind: GraceKind; label: string; tool: Tool }[]
+
+/**
+ * The grace-note keys (Flat's): one puts a grace note of its kind before the notes chosen and chooses
+ * it, so ↑ ↓, the accidentals, a key played and Delete edit it; pressed where they carry its kind.
+ */
+function GraceKeys() {
+  const { t } = useTranslation('editor')
+  const { actions } = useScoreEditorContext()
+  const off = !useNotesChosen()
+  const reason = usePaletteReason()
+  const kinds = useEditorState(
+    useShallow((state) =>
+      GRACE_KEYS.map(({ kind }) => {
+        const notes = chosenNotes(state)
+        return (
+          notes.length > 0 &&
+          notes.every((n) => {
+            const grace = n.marks?.grace
+            return (
+              grace !== undefined &&
+              grace.length > 0 &&
+              grace.every((g) => (g.appoggiatura === true) === (kind === 'appoggiatura'))
+            )
+          })
+        )
+      }),
+    ),
+  )
+  return GRACE_KEYS.map(({ kind, label, tool }, i) => (
+    <PaletteKey
+      key={kind}
+      label={t(label)}
+      tool={tool}
+      reason={reason}
+      pressed={kinds[i] ?? false}
+      disabled={off}
+      onClick={() => actions.dispatch({ type: 'grace', kind })}
+    >
+      <GraceNote kind={kind} />
+    </PaletteKey>
+  ))
 }
 
 /**
@@ -399,10 +454,6 @@ export function PitchKeys() {
   const step = (steps: number) => actions.dispatch({ type: 'step', steps })
   const off = !useNotesChosen()
   const reason = usePaletteReason()
-  const graced = useEditorState((state) => {
-    const notes = chosenNotes(state)
-    return notes.length > 0 && notes.every((n) => (n.marks?.grace?.length ?? 0) > 0)
-  })
   const pairs = [
     // In the keys' order: ↑ ↓ a step in the key, with Shift a semitone, with Cmd an octave.
     { by: 'step', up: t('stepUp'), down: t('stepDown'), move: step, size: 1 },
@@ -425,16 +476,7 @@ export function PitchKeys() {
           <Move up={false} by={by} />
         </PaletteKey>,
       ])}
-      <PaletteKey
-        label={t('grace')}
-        tool="grace"
-        reason={reason}
-        pressed={graced}
-        disabled={off}
-        onClick={() => actions.dispatch({ type: 'grace' })}
-      >
-        <GraceNote />
-      </PaletteKey>
+      <GraceKeys />
       <LineKeys lines={['8va', '8vb']} />
     </KeyGrid>
   )

@@ -7,7 +7,15 @@ import {
   SquareChevronUp,
 } from 'lucide-react'
 import { MotionConfig, motion } from 'motion/react'
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type RefObject } from 'react'
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+  type RefObject,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { chosenNotes, EDIT_MODES } from '@/features/score-editor'
 import { useFoldKeys } from '@/features/live-keyboard'
@@ -18,9 +26,12 @@ import { gripRelease } from '../model/grip'
 import {
   closedBy,
   greyedBy,
+  isPaletteCategory,
   PALETTE_CATEGORIES,
   type PaletteCategory,
 } from '../model/palette-categories'
+import { selectPaletteSections, useSettings, useSettingsStoreApi } from '@/entities/settings'
+import { setPaletteSections } from '@/features/set-preference'
 import { BarKeys } from './BarKeys'
 import { FieldKey } from './FieldKey'
 import { LineKeys } from './LineKeys'
@@ -183,13 +194,18 @@ const FIRST_OPEN: readonly PaletteCategory[] = ['notes', 'pitch']
 export function PalettePanel({ onHide }: { onHide: () => void }) {
   const { t } = useTranslation('editor')
   const { takes } = useScoreEditorContext()
-  const [open, setOpen] = useState<ReadonlySet<PaletteCategory>>(() => new Set(FIRST_OPEN))
-  const toggle = (category: PaletteCategory) =>
-    setOpen((now) => {
-      const next = new Set(now)
-      if (!next.delete(category)) next.add(category)
-      return next
-    })
+  const settings = useSettingsStoreApi()
+  // As the learner left them, remembered (ADR 0114); Flat's first ones until they choose.
+  const saved = useSettings(selectPaletteSections)
+  const open = useMemo(() => new Set(saved ? saved.filter(isPaletteCategory) : FIRST_OPEN), [saved])
+  const toggle = (category: PaletteCategory) => {
+    const next = new Set(open)
+    if (!next.delete(category)) next.add(category)
+    setPaletteSections(
+      settings,
+      PALETTE_CATEGORIES.filter((each) => next.has(each)),
+    )
+  }
   return (
     <section aria-label={t('palette.label')} className="flex min-h-0 flex-col">
       <div className="flex h-12 shrink-0 items-center gap-2 border-b border-hairline px-4">

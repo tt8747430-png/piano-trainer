@@ -256,6 +256,11 @@ export interface SettingsState {
   sidebar: Sidebar
   /** Whether the score editor's palette is folded to its quick row and categories, by where it stands. */
   paletteFolded: PaletteFolds
+  /**
+   * The editor's panel's sections open, by name, as the learner left them (ADR 0114); null until
+   * they open or fold one, the panel then opening its first ones.
+   */
+  paletteSections: readonly string[] | null
   midi: MidiSettings
   chordFinder: ChordFinderSettings
   scoreView: ScoreViewSettings

@@ -38,6 +38,7 @@ const DEFAULTS = {
   recorder: DEFAULT_RECORDER,
   sidebar: DEFAULT_SIDEBAR,
   paletteFolded: {},
+  paletteSections: null,
   midi: DEFAULT_MIDI,
   chordFinder: DEFAULT_CHORD_FINDER,
   scoreView: DEFAULT_SCORE_VIEW,
@@ -119,6 +120,7 @@ describe('createSettingsStore', () => {
       recorder: { click: false, tune: true },
       sidebar: 'collapsed',
       paletteFolded: { panel: true, sheet: false },
+      paletteSections: ['notes', 'clef'],
       midi: {
         input: false,
         device: 'Piano',
@@ -205,6 +207,16 @@ describe('createSettingsStore', () => {
     expect(restored({ paletteFolded: { panel: 'yes', sheet: false } }).paletteFolded).toEqual({
       sheet: false,
     })
+  })
+
+  it('keeps the palette panel’s open sections by name, and none chosen where they are not names', () => {
+    expect(restored({ paletteSections: ['notes', 'bar'] }).paletteSections).toEqual([
+      'notes',
+      'bar',
+    ])
+    expect(restored({ paletteSections: [] }).paletteSections).toEqual([])
+    expect(restored({ paletteSections: 'notes' }).paletteSections).toBeNull()
+    expect(restored({ paletteSections: ['notes', 3] }).paletteSections).toBeNull()
   })
 
   it('turns a click that is not a boolean on, its default', () => {
