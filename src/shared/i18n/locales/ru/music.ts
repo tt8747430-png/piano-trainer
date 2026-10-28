@@ -228,8 +228,8 @@ export const music: LocaleResources['music'] = {
     view: { function: 'Функции', motion: 'Основные тоны' },
     chips: 'Аккорды по функциям',
     moves: 'Аккорды по ходам основных тонов',
-    function: { tonic: 'Тоника', predominant: 'Субдоминанта', dominant: 'Доминанта' },
-    short: { tonic: 'T', predominant: 'S', dominant: 'D' },
+    function: { tonic: 'Тоника', subdominant: 'Субдоминанта', dominant: 'Доминанта' },
+    short: { tonic: 'T', subdominant: 'S', dominant: 'D' },
     chip: '{{numeral}}, {{what}}',
     move: {
       fifth: { down: 'на квинту вниз', up: 'на квинту вверх' },

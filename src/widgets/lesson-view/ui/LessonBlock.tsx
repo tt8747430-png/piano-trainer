@@ -49,9 +49,11 @@ function LinkCard({ title, target }: { title: string; target: LessonLink }) {
 function VariantsBlock({
   variants,
   onShow,
+  onFollow,
 }: {
   variants: readonly LessonVariant[]
   onShow: (shown: ShownKeys) => void
+  onFollow: (shown: ShownKeys) => void
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
@@ -68,7 +70,7 @@ function VariantsBlock({
   return (
     <div className="flex flex-col gap-3">
       {/* A new version is a new example: what the last one played stops with it. */}
-      <LessonBlock key={chosen} block={variant.example} onShow={onShow} />
+      <LessonBlock key={chosen} block={variant.example} onShow={onShow} onFollow={onFollow} />
       {choice}
       <p aria-live="polite" className="flex flex-col text-base">
         <span className="font-semibold">{localText(variant.caption, locale)}</span>
@@ -126,7 +128,7 @@ export function LessonBlock({
         <p className="rounded-3xl bg-muted p-4">{localText(block.text, locale)}</p>
       )
     case 'variants':
-      return <VariantsBlock variants={block.variants} onShow={onShow} />
+      return <VariantsBlock variants={block.variants} onShow={onShow} onFollow={onFollow} />
     case 'chords':
       return !block.melody && isProgressionRow(block.symbols, block.apart) ? (
         <ChordRow chords={symbolsRow(block.symbols)} onShow={onShow}>
@@ -155,7 +157,15 @@ export function LessonBlock({
         />
       )
     case 'voicings':
-      return <VoicingsExample voicings={block.voicings} musicKey={block.key} onShow={onShow} />
+      return (
+        <VoicingsExample
+          voicings={block.voicings}
+          musicKey={block.key}
+          satb={block.satb === true}
+          onShow={onShow}
+          onFollow={onFollow}
+        />
+      )
     case 'pattern': {
       const piece = pieceById(block.piece)
       if (!piece) throw new RangeError(`A lesson plays a pattern over "${block.piece}": no piece`)

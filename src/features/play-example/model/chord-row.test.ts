@@ -21,7 +21,7 @@ describe('progressionRow', () => {
     )
     expect(row.map((chord) => chord.function)).toEqual([
       'tonic',
-      'predominant',
+      'subdominant',
       'dominant',
       'tonic',
     ])

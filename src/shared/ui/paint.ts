@@ -20,7 +20,7 @@ export const PAINT: Readonly<
 /** What each function is painted, on every chip and legend (DESIGN.md, Harmony). */
 export const FUNCTION_PAINT: Readonly<Record<HarmonicFunction, Paint>> = {
   tonic: 'grass',
-  predominant: 'sand',
+  subdominant: 'sand',
   dominant: 'lilac',
 }
 

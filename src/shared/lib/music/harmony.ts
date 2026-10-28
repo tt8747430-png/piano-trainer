@@ -4,10 +4,10 @@ import type { Numeral } from './numerals'
 
 /**
  * What a chord does in its key: rests at home (tonic), leads away towards the dominant
- * (predominant), or pulls back home (dominant). The three functions of tonal harmony, as theory
+ * (subdominant, or predominant), or pulls back home (dominant). The three functions of tonal harmony, as theory
  * books colour a progression's chords.
  */
-export const HARMONIC_FUNCTIONS = ['tonic', 'predominant', 'dominant'] as const
+export const HARMONIC_FUNCTIONS = ['tonic', 'subdominant', 'dominant'] as const
 export type HarmonicFunction = (typeof HARMONIC_FUNCTIONS)[number]
 
 const hasSemitones = (quality: ChordQuality, ...semitones: number[]): boolean => {
@@ -22,10 +22,10 @@ const isDiminished = (quality: ChordQuality): boolean => hasSemitones(quality, 3
 
 /**
  * A numeral's function in a major or minor key, by its degree: I, iii and vi (i, III, VI) tonic; ii
- * and IV (ii°, iv) predominant; V and vii° dominant. In a minor key the subtonic VII is a dominant.
+ * and IV (ii°, iv) subdominant; V and vii° dominant. In a minor key the subtonic VII is a dominant.
  * Borrowed chords in a major key read as their family: ♭II (the Neapolitan), ♭VI and ♭VII
- * predominant, ♭III tonic, a ♭VII7 the backdoor dominant. An applied chord is what it is in its own
- * key (`V/V` a dominant, `ii/V` a predominant).
+ * subdominant, ♭III tonic, a ♭VII7 the backdoor dominant. An applied chord is what it is in its own
+ * key (`V/V` a dominant, `ii/V` a subdominant).
  */
 export function harmonicFunction(numeral: Numeral, minor: boolean): HarmonicFunction {
   const { degree, shift, quality } = numeral
@@ -35,18 +35,18 @@ export function harmonicFunction(numeral: Numeral, minor: boolean): HarmonicFunc
     case 2:
       return 'tonic'
     case 1:
-      return 'predominant'
+      return 'subdominant'
     case 3:
       // A raised 4th's diminished chord leads to V: the leading tone of the dominant.
-      return shift > 0 && isDiminished(quality) ? 'dominant' : 'predominant'
+      return shift > 0 && isDiminished(quality) ? 'dominant' : 'subdominant'
     case 4:
       return 'dominant'
     case 5:
-      return shift < 0 ? 'predominant' : 'tonic'
+      return shift < 0 ? 'subdominant' : 'tonic'
     default:
       // The 7th: the leading-tone chord and the subtonic dominant; a major key's ♭VII its plagal colour.
       return shift < 0 && !minor && !isDominantSeventh(quality) && !isDiminished(quality)
-        ? 'predominant'
+        ? 'subdominant'
         : 'dominant'
   }
 }

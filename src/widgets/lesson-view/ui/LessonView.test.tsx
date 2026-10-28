@@ -166,6 +166,42 @@ describe('LessonView', () => {
     expect(within(keyboard).getByRole('button', { name: 'D sharp 4' })).toHaveTextContent('♭3')
   })
 
+  it('names four voices on the keys, the key a voice left faint as the row plays on', async () => {
+    const user = userEvent.setup()
+    const { audio } = await renderLesson({
+      ...firstLesson(),
+      sections: [
+        {
+          heading: { en: 'Four voices', ru: 'Четыре голоса' },
+          blocks: [
+            {
+              kind: 'voicings',
+              satb: true,
+              voicings: [
+                { symbol: 'C', caption: 'I', hands: 'C3 G3 | E4 C5' },
+                { symbol: 'G', caption: 'V', hands: 'G2 G3 | D4 B4' },
+              ],
+            },
+          ],
+        },
+      ],
+    })
+    const keyboard = screen.getByRole('group', { name: 'Keyboard' })
+    const chords = screen.getByRole('list', { name: 'Chords' })
+    await user.click(found(within(chords).getAllByRole('button')[0], 'the first chord'))
+    expect(within(keyboard).getByRole('button', { name: 'C5' })).toHaveTextContent('S')
+    expect(within(keyboard).getByRole('button', { name: 'C3' })).toHaveTextContent('B')
+    await user.click(screen.getByRole('button', { name: 'Play' }))
+    // Into the second chord: its voices named, the keys they left faint.
+    act(() => audio.setNow((audio.played.at(-1)?.at ?? 0) + 1.5))
+    await waitFor(() =>
+      expect(within(keyboard).getByRole('button', { name: 'B4' })).toHaveTextContent('S'),
+    )
+    const left = within(keyboard).getByRole('button', { name: 'C5' })
+    expect(left).toHaveTextContent('S')
+    expect(left.querySelector('.opacity-40')).not.toBeNull()
+  })
+
   it('stops an example on a second tap', async () => {
     const user = userEvent.setup()
     const { audio } = await renderLesson()
@@ -496,12 +532,12 @@ describe('LessonView’s accompaniment', () => {
       within(chips)
         .getAllByRole('button')
         .map((chip) => chip.ariaLabel),
-    ).toEqual(['ii, Predominant', 'V, Dominant', 'I, Tonic'])
+    ).toEqual(['ii, Subdominant', 'V, Dominant', 'I, Tonic'])
     expect(
       within(chips)
         .getAllByRole('button')
         .map((chip) => chip.textContent),
-    ).toEqual(['iiPD', 'VD', 'IT'])
+    ).toEqual(['iiS', 'VD', 'IT'])
     await user.click(within(chips).getByRole('button', { name: 'V, Dominant' }))
     // G7 alone, as the row voices it: its bass under the hand.
     expect(new Set(notes(audio.played.at(-1)?.sounds ?? []).map((key) => key % 12))).toEqual(
@@ -551,7 +587,7 @@ describe('LessonView’s accompaniment', () => {
               variants: [
                 {
                   label: { en: 'ii6', ru: 'ii6' },
-                  caption: { en: 'The plain predominant', ru: 'Простая субдоминанта' },
+                  caption: { en: 'The plain subdominant', ru: 'Простая субдоминанта' },
                   example: { kind: 'progression', numerals: 'I ii/3 V I', key: C_MAJOR },
                 },
                 {
@@ -568,10 +604,10 @@ describe('LessonView’s accompaniment', () => {
       ],
     })
     const chips = () => screen.getByRole('list', { name: 'Chords by function' })
-    expect(within(chips()).getAllByRole('button')[1]).toHaveAccessibleName('ii/3, Predominant')
-    expect(screen.getByText('The plain predominant')).toBeInTheDocument()
+    expect(within(chips()).getAllByRole('button')[1]).toHaveAccessibleName('ii/3, Subdominant')
+    expect(screen.getByText('The plain subdominant')).toBeInTheDocument()
     await user.click(screen.getByRole('radio', { name: '♭II6' }))
-    expect(within(chips()).getAllByRole('button')[1]).toHaveAccessibleName('♭II/3, Predominant')
+    expect(within(chips()).getAllByRole('button')[1]).toHaveAccessibleName('♭II/3, Subdominant')
     expect(screen.getByText('The Neapolitan')).toBeInTheDocument()
     expect(screen.getByText('One note lower.')).toBeInTheDocument()
     expect(screen.getByRole('complementary', { name: 'In short' })).toHaveTextContent(

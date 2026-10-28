@@ -12,12 +12,12 @@ const major = (text: string) => harmonicFunction(numeral(text), false)
 const minor = (text: string) => harmonicFunction(numeral(text), true)
 
 describe('harmonicFunction', () => {
-  it('reads a major key’s diatonic chords as tonic, predominant or dominant', () => {
+  it('reads a major key’s diatonic chords as tonic, subdominant or dominant', () => {
     expect(['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'].map(major)).toEqual([
       'tonic',
-      'predominant',
+      'subdominant',
       'tonic',
-      'predominant',
+      'subdominant',
       'dominant',
       'tonic',
       'dominant',
@@ -27,20 +27,20 @@ describe('harmonicFunction', () => {
   it('reads sevenths, inversions and the cadential six-four by their degree', () => {
     expect(['IMaj7', 'ii7', 'V7', 'viiø7', 'I/5', 'IV/3'].map(major)).toEqual([
       'tonic',
-      'predominant',
+      'subdominant',
       'dominant',
       'dominant',
       'tonic',
-      'predominant',
+      'subdominant',
     ])
   })
 
   it('reads a minor key’s chords the same way, its subtonic a dominant', () => {
     expect(['i', 'ii°', 'III', 'iv', 'V', 'v', 'VI', 'VII', 'vii°7'].map(minor)).toEqual([
       'tonic',
-      'predominant',
+      'subdominant',
       'tonic',
-      'predominant',
+      'subdominant',
       'dominant',
       'dominant',
       'tonic',
@@ -49,12 +49,12 @@ describe('harmonicFunction', () => {
     ])
   })
 
-  it('reads chords borrowed into a major key: the Neapolitan and ♭VI predominant, ♭VII7 a dominant', () => {
+  it('reads chords borrowed into a major key: the Neapolitan and ♭VI subdominant, ♭VII7 a dominant', () => {
     expect(['♭II', '♭VI', 'iv', '♭VII', '♭VII7', '♭III'].map(major)).toEqual([
-      'predominant',
-      'predominant',
-      'predominant',
-      'predominant',
+      'subdominant',
+      'subdominant',
+      'subdominant',
+      'subdominant',
       'dominant',
       'tonic',
     ])
@@ -65,8 +65,8 @@ describe('harmonicFunction', () => {
       'dominant',
       'dominant',
       'dominant',
-      'predominant',
-      'predominant',
+      'subdominant',
+      'subdominant',
     ])
   })
 })

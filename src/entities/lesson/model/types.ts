@@ -126,6 +126,8 @@ export type LessonBlock =
       readonly kind: 'voicings'
       readonly voicings: readonly WrittenVoicing[]
       readonly key?: Key
+      /** Four voices a chord, named S A T B beside the first chord and on the keys. */
+      readonly satb?: true
     }
   /** A pattern heard over the piece its source teaches it on: a pattern is only heard on chords. */
   | { readonly kind: 'pattern'; readonly pattern: PatternId; readonly piece: PieceId }

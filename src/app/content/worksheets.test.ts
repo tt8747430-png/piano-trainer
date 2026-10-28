@@ -20,7 +20,7 @@ import {
   readChordLine,
   writtenSymbol,
 } from '@/shared/lib/music'
-import { noteLine, voicingsMusic } from '@/shared/lib/schedule'
+import { noteLine, voicingKeys, voicingsMusic } from '@/shared/lib/schedule'
 import { isMethodBookId } from '@/entities/book'
 import {
   JOURNEYS,
@@ -99,9 +99,13 @@ function problemsOf(block: LessonBlock): string[] {
         block.notes,
       )
     case 'voicings':
-      return block.voicings.flatMap((voicing) =>
-        unread(() => voicingsMusic([voicing], block.key), voicing.hands),
-      )
+      return block.voicings.flatMap((voicing) => [
+        ...unread(() => voicingsMusic([voicing], block.key), voicing.hands),
+        // Four voices a chord, where the lesson names them S A T B.
+        ...(block.satb && voicingKeys(voicing.hands).length !== 4
+          ? [`${voicing.hands}: not four voices`]
+          : []),
+      ])
     case 'pattern':
       return pieceProblems(block.piece, block.pattern)
     case 'progression':

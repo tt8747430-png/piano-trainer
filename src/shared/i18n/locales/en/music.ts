@@ -256,8 +256,8 @@ export const music = {
     view: { function: 'Function', motion: 'Root motion' },
     chips: 'Chords by function',
     moves: 'Chords by root motion',
-    function: { tonic: 'Tonic', predominant: 'Predominant', dominant: 'Dominant' },
-    short: { tonic: 'T', predominant: 'PD', dominant: 'D' },
+    function: { tonic: 'Tonic', subdominant: 'Subdominant', dominant: 'Dominant' },
+    short: { tonic: 'T', subdominant: 'S', dominant: 'D' },
     chip: '{{numeral}}, {{what}}',
     move: {
       fifth: { down: 'down a 5th', up: 'up a 5th' },
