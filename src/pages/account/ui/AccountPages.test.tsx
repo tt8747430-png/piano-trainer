@@ -100,7 +100,7 @@ describe('Create an account', () => {
       ...createFakeAuth(),
       signUp: async ({ email, name }) => ({
         ok: true,
-        value: { account: { id: 'a', email, name }, confirm: true },
+        value: { account: { id: 'a', email, name, role: 'learner' }, confirm: true },
       }),
     }
     await renderApp('/account/create', { auth })

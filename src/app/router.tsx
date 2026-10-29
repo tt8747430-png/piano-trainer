@@ -29,6 +29,7 @@ import { RootLayout } from './RootLayout'
 import { RouteError } from './RouteError'
 import { RoutePending } from './RoutePending'
 import { callbackSearch } from './routes/account-search'
+import { adminSearch } from './routes/admin-search'
 import { ensureContent } from './routes/content'
 import {
   accompanimentSearch,
@@ -79,6 +80,7 @@ import { ShellLayout } from './ShellLayout'
 // chunk and out of the first paint.
 const homeScreens = () => import('./routes/home-screens')
 const settingsScreens = () => import('./routes/settings-screens')
+const adminScreens = () => import('./routes/admin-screens')
 const searchScreens = () => import('./routes/search-screens')
 const songsScreens = () => import('./routes/songs-screens')
 const playerScreens = () => import('./routes/player-screens')
@@ -143,6 +145,13 @@ const settingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings',
   component: lazyRouteComponent(settingsScreens, 'SettingsPage'),
+})
+// The Admin area (ADR 0116): accounts, groups, feature switches, reports, activity; an admin's alone.
+const adminRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/admin',
+  ...adminSearch,
+  component: lazyRouteComponent(adminScreens, 'AdminPage'),
 })
 // The Profile (round 3): the learner, the days they practised, their record.
 const profileRoute = createRoute({
@@ -601,6 +610,7 @@ const routeTree = rootRoute.addChildren([
   shellRoute.addChildren([
     learnRoute,
     profileRoute,
+    adminRoute,
     settingsRoute,
     preferencesRoute,
     playingRoute,

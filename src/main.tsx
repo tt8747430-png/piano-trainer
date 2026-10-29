@@ -3,11 +3,13 @@ import { createRoot } from 'react-dom/client'
 import '@/shared/i18n'
 import { App } from './app/App'
 import {
+  createAdmin,
   createAuth,
   createBackend,
   createCloud,
   createContent,
   createContentUpdates,
+  createFeatures,
   createPublicLibrary,
   createServices,
   createStores,
@@ -37,6 +39,8 @@ createRoot(rootElement).render(
       auth={createAuth(backend)}
       sync={sync}
       publicLibrary={createPublicLibrary(backend)}
+      admin={createAdmin(backend)}
+      features={createFeatures(backend)}
       router={createAppRouter({ ...stores, content: createContent() })}
     />
   </StrictMode>,

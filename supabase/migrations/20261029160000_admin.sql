@@ -108,3 +108,8 @@ grant execute on function public.my_features() to anon, authenticated;
 
 -- Applied in two steps (admin_roles_and_bootstrap, admin_groups_switches_log). admin_bootstrap has no policy on
 -- purpose: no client reads it. my_features is open to all: it returns switch keys only.
+
+-- Editors dismiss a report once it is dealt with (editors_dismiss_reports).
+grant delete on public.public_reports to authenticated;
+create policy editors_dismiss_reports on public.public_reports for delete to authenticated
+  using ((select public.is_content_editor()));

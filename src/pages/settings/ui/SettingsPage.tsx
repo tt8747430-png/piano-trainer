@@ -1,15 +1,24 @@
 import { Link } from '@tanstack/react-router'
-import { CloudUpload, LifeBuoy, Piano, SlidersHorizontal, UserRound } from 'lucide-react'
+import {
+  CloudUpload,
+  LifeBuoy,
+  Piano,
+  ShieldCheck,
+  SlidersHorizontal,
+  UserRound,
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAccount, useSync } from '@/shared/lib/account'
 import { BackButton, RowLink, ScreenHeader } from '@/shared/ui'
 
 /**
  * Settings, as an app's settings page reads: the account first (Sign in, or the learner signed in
- * with the sync's state), then a row to each group's page: Preferences, Playing, Sync and data, Help.
+ * with the sync's state), then a row to each group's page: Preferences, Playing, Sync and data, Help;
+ * and for an admin, the Admin area.
  */
 export function SettingsPage() {
-  const { t } = useTranslation('settings')
+  const { t } = useTranslation(['settings', 'admin'])
+  const { account } = useAccount()
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader title={t('title')} back={<BackButton fallback={{ to: '/' }} />} />
@@ -44,6 +53,15 @@ export function SettingsPage() {
             paint="sky"
             render={<Link to="/settings/help" />}
           />
+          {account?.role === 'admin' ? (
+            <RowLink
+              title={t('admin:title')}
+              detail={t('admin:line')}
+              icon={ShieldCheck}
+              paint="lilac"
+              render={<Link to="/admin" />}
+            />
+          ) : null}
         </nav>
       </div>
     </div>

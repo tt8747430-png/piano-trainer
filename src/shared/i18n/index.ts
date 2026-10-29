@@ -16,6 +16,7 @@ const NAMESPACES = [
   'settings',
   'editor',
   'account',
+  'admin',
 ] as const
 
 // Resources are bundled, so initialisation is synchronous: the first render already has text.

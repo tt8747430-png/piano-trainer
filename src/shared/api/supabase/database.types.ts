@@ -180,6 +180,63 @@ export type Database = {
         Update: { blocked_at?: string }
         Relationships: []
       }
+      admin_log: {
+        Row: {
+          action: string
+          admin_id: string | null
+          at: string
+          detail: Json
+          id: number
+          target: string
+        }
+        Insert: {
+          action: string
+          admin_id?: string | null
+          at?: string
+          detail?: Json
+          target?: string
+        }
+        Update: { action?: string; detail?: Json; target?: string }
+        Relationships: []
+      }
+      feature_switches: {
+        Row: { groups: string[]; key: string; label: string; state: string; updated_at: string }
+        Insert: {
+          groups?: string[]
+          key: string
+          label: string
+          state?: string
+          updated_at?: string
+        }
+        Update: {
+          groups?: string[]
+          key?: string
+          label?: string
+          state?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      group_members: {
+        Row: { added_at: string; group_id: string; user_id: string }
+        Insert: { added_at?: string; group_id: string; user_id: string }
+        Update: { added_at?: string }
+        Relationships: [
+          {
+            foreignKeyName: 'group_members_group_id_fkey'
+            columns: ['group_id']
+            isOneToOne: false
+            referencedRelation: 'groups'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      groups: {
+        Row: { created_at: string; id: string; name: string }
+        Insert: { created_at?: string; id?: string; name: string }
+        Update: { name?: string }
+        Relationships: []
+      }
       diagram_inversions: DocumentTable
       library: DocumentTable
       patterns: DocumentTable
@@ -194,7 +251,9 @@ export type Database = {
     Functions: {
       invoke_purge_account: { Args: never; Returns: undefined }
       hide_public_item: { Args: { p_hidden: boolean; p_item: string }; Returns: undefined }
+      is_admin: { Args: never; Returns: boolean }
       is_content_editor: { Args: never; Returns: boolean }
+      my_features: { Args: never; Returns: string[] }
       is_publish_blocked: { Args: never; Returns: boolean }
       save_public_item: { Args: { p_item: string }; Returns: number }
       push_documents: { Args: { p_rows: Json; p_table: string }; Returns: Json }

@@ -1,5 +1,6 @@
 import type { LocaleResources } from '../../types'
 import { account } from './account'
+import { admin } from './admin'
 import { common } from './common'
 import { editor } from './editor'
 import { learn } from './learn'
@@ -25,4 +26,5 @@ export const ru: LocaleResources = {
   settings,
   editor,
   account,
+  admin,
 }

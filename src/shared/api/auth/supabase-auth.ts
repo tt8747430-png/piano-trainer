@@ -1,12 +1,18 @@
 import { isAuthRetryableFetchError, type User } from '@supabase/supabase-js'
 import { netResult, type NetOptions } from '../network'
 import type { PianoClient } from '../supabase/client'
-import type { Account, AuthGateway } from './types'
+import type { Account, AccountRole, AuthGateway } from './types'
+
+const roleOf = (user: User): AccountRole => {
+  const role: unknown = user.app_metadata.role
+  return role === 'admin' || role === 'editor' ? role : 'learner'
+}
 
 const accountOf = (user: User): Account => ({
   id: user.id,
   email: user.email ?? '',
   name: typeof user.user_metadata.name === 'string' ? user.user_metadata.name : '',
+  role: roleOf(user),
 })
 
 /** Throws the server's error, so `netResult` reads it: a 4xx refused, a fetch that failed failed. */

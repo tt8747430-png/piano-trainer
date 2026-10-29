@@ -7,6 +7,7 @@ const user = {
   id: 'u1',
   email: 'ana@example.com',
   user_metadata: { name: 'Ana' },
+  app_metadata: {},
 } as unknown as User
 
 /** A client whose auth answers as the server would, the rest never reached. */
@@ -24,7 +25,7 @@ describe('createSupabaseAuth', () => {
     )
     expect(await auth.signIn('ana@example.com', 'x')).toEqual({
       ok: true,
-      value: { id: 'u1', email: 'ana@example.com', name: 'Ana' },
+      value: { id: 'u1', email: 'ana@example.com', name: 'Ana', role: 'learner' },
     })
   })
 
@@ -52,7 +53,10 @@ describe('createSupabaseAuth', () => {
     )
     expect(await auth.signUp({ email: 'ana@example.com', name: 'Ana', password: 'x' })).toEqual({
       ok: true,
-      value: { account: { id: 'u1', email: 'ana@example.com', name: 'Ana' }, confirm: true },
+      value: {
+        account: { id: 'u1', email: 'ana@example.com', name: 'Ana', role: 'learner' },
+        confirm: true,
+      },
     })
   })
 
@@ -112,5 +116,21 @@ describe('createSupabaseAuth', () => {
       ok: false,
       reason: 'refused',
     })
+  })
+
+  it('reads the role the server gave, and none other', async () => {
+    const signIn = (app_metadata: object) =>
+      createSupabaseAuth(
+        clientWith({
+          signInWithPassword: async () => ({
+            data: { user: { ...user, app_metadata }, session: {} },
+            error: null,
+          }),
+        }),
+        OPTIONS,
+      ).signIn('ana@example.com', 'x')
+    expect(await signIn({ role: 'admin' })).toMatchObject({ value: { role: 'admin' } })
+    expect(await signIn({ role: 'editor' })).toMatchObject({ value: { role: 'editor' } })
+    expect(await signIn({ role: 'king' })).toMatchObject({ value: { role: 'learner' } })
   })
 })

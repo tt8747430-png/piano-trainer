@@ -3,11 +3,15 @@ import type { NetResult } from '../network'
 /** The sign-in services an account can use (ADR 0116); Apple is shown as coming soon. */
 export type OAuthProvider = 'google' | 'apple'
 
+/** What an account may do beyond a learner's: set only by the server (ADR 0116). */
+export type AccountRole = 'learner' | 'editor' | 'admin'
+
 /** A signed-in learner, as the app knows them. */
 export interface Account {
   readonly id: string
   readonly email: string
   readonly name: string
+  readonly role: AccountRole
 }
 
 export interface SignUp {
@@ -15,6 +19,9 @@ export interface SignUp {
   readonly name: string
   readonly password: string
 }
+
+/** An account a fake knows already: a sign-up, and its role where it is not a learner's. */
+export type KnownAccount = SignUp & { readonly role?: AccountRole }
 
 /**
  * Accounts (ADR 0116): optional, so the app runs without one. Each call that needs the server returns

@@ -10,6 +10,12 @@ import { createProgressStore, PROGRESS_STORAGE_KEY, type ProgressStore } from '@
 import { createSettingsStore, SETTINGS_STORAGE_KEY, type SettingsStore } from '@/entities/settings'
 import { createTakesStore, TAKES_STORAGE_KEY, type TakesStore } from '@/entities/take'
 import { createViewsStore, VIEWS_STORAGE_KEY, type ViewsStore } from '@/entities/views'
+import {
+  createSupabaseAdmin,
+  createSupabaseFeatures,
+  type AdminPort,
+  type FeaturesPort,
+} from '@/shared/api/admin'
 import { createWebAudioOutput } from '@/shared/api/audio'
 import { createSupabaseAuth, type AuthGateway } from '@/shared/api/auth'
 import {
@@ -128,3 +134,10 @@ export const createCloud = (backend: PianoClient): CloudSync => createSupabaseCl
 /** The Public library: the project's tables (ADR 0116). */
 export const createPublicLibrary = (backend: PianoClient): PublicLibrary =>
   createSupabasePublicLibrary(backend)
+
+/** The admin's tools: the project's `admin` function and tables (ADR 0116). */
+export const createAdmin = (backend: PianoClient): AdminPort => createSupabaseAdmin(backend)
+
+/** The feature switches on for whoever is signed in. */
+export const createFeatures = (backend: PianoClient): FeaturesPort =>
+  createSupabaseFeatures(backend)

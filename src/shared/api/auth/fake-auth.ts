@@ -1,5 +1,5 @@
 import { netResult, type NetResult } from '../network'
-import type { Account, AuthGateway, SignUp } from './types'
+import type { Account, AccountRole, AuthGateway, KnownAccount } from './types'
 
 const refused = (message: string) => Object.assign(new Error(message), { status: 400 })
 
@@ -14,9 +14,16 @@ export function createFakeAuth({
   accounts = [],
   online = () => true,
   now = () => Date.now(),
-}: { accounts?: readonly SignUp[]; online?: () => boolean; now?: () => number } = {}): AuthGateway {
-  const known = new Map<string, { name: string; password: string }>(
-    accounts.map(({ email, name, password }) => [email, { name, password }]),
+}: {
+  accounts?: readonly KnownAccount[]
+  online?: () => boolean
+  now?: () => number
+} = {}): AuthGateway {
+  const known = new Map<string, { name: string; password: string; role: AccountRole }>(
+    accounts.map(({ email, name, password, role = 'learner' }) => [
+      email,
+      { name, password, role },
+    ]),
   )
   const deletions = new Map<string, string>()
   const listeners = new Set<(account: Account | null) => void>()
@@ -29,7 +36,7 @@ export function createFakeAuth({
   const accountOf = (email: string): Account => {
     const found = known.get(email)
     if (!found) throw refused('Unknown account')
-    return { id: `fake-${email}`, email, name: found.name }
+    return { id: `fake-${email}`, email, name: found.name, role: found.role }
   }
 
   return {
@@ -37,7 +44,7 @@ export function createFakeAuth({
     signUp: (input) =>
       ask(async () => {
         if (known.has(input.email)) throw refused('User already registered')
-        known.set(input.email, { name: input.name, password: input.password })
+        known.set(input.email, { name: input.name, password: input.password, role: 'learner' })
         const account = accountOf(input.email)
         become(account)
         return { account, confirm: false }
