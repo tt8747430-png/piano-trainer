@@ -33,6 +33,10 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 
 - Google OAuth client ID and secret → Supabase Auth → Providers → Google (redirect URI in spec).
 - Vault secrets `project_url`, `secret_key` for the daily account purge (spec).
+- Supabase Auth → URL configuration: Site URL = the Vercel domain; Redirect URLs = `https://<domain>/auth/callback`,
+  `https://*-<team>.vercel.app/auth/callback` (previews) and `http://localhost:5173/auth/callback`. Without them
+  OAuth, confirmation and reset links go to the Site URL instead of the callback.
+- Supabase Auth → Passwords: minimum length 8 (the app asks for 8; the server's default is 6).
 
 ## Log
 
@@ -63,3 +67,13 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   - Social marks (Google, Apple SVG paths) in `../memory-palaces/src/shared/ui/SocialButtons.tsx`; Apple disabled
     with "Coming soon". Memory-palaces' Login/Forgot/AuthCallback pages under `../memory-palaces/src/pages/`.
   - Tests through `renderApp(path, { auth: createFakeAuth({ accounts }) })`; `useAccount()` gives `auth`.
+- 2026-10-29 Round 3.1 committed (699df81c): `pages/account` (SignIn, SignUp, ForgotPassword, NewPassword,
+  AuthCallback at `/account/*` and `/auth/callback`), `shared/ui/FormField`, `shared/lib/useOnline`,
+  `shared/lib/account/authProblem`, `account` i18n namespace. Sign-up's confirmation link → the callback.
+- 2026-10-29 Round 3.2/3.3 committed (9cd4a01b): Settings index (account card + rows) with pages
+  `/settings/{preferences,playing,data,help,account}` in `pages/settings`; `SyncFields`; About shows
+  `APP_BUILD` (`__APP_BUILD__` define in vite.config.ts: Vercel's commit or `dev`); AuthGateway gained
+  `updateName`, `requestDeletion` (Edge Function), `pendingDeletion`, `cancelDeletion`; `app/deletion-gate`
+  in RootLayout. MIDI's Back → Playing, How to use's → Help, the storage-full notice → Sync and data.
+  Decision: Google sign-in is enabled in the UI now; until the owner adds the credentials it lands on
+  Supabase's "provider not enabled" error (pre-release, no users).
