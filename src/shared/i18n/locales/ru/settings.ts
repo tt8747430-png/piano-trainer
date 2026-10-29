@@ -6,7 +6,6 @@ export const settings: LocaleResources['settings'] = {
   theme: { label: 'Тема', system: 'Как в системе', light: 'Светлая', dark: 'Тёмная' },
   appearance: {
     label: 'Внешний вид',
-    titles: { label: 'Заголовки страниц', large: 'Крупные', small: 'Мелкие' },
   },
   keyboard: 'Клавиатура',
   midi: 'MIDI-клавиатура',

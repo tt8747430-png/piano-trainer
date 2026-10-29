@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { RowGroup, ScreenHeader } from '@/shared/ui'
+import { PlaceActions } from '@/widgets/app-nav'
 import { PageRow, PRACTICE_GROUPS } from '@/widgets/practice-pages'
 import { GapsBadge, useGapsCount } from '@/widgets/trainer-list'
 
@@ -12,7 +13,7 @@ export function PracticePage() {
   const gaps = useGapsCount()
   return (
     <div className="flex flex-col gap-2">
-      <ScreenHeader title={t('title')} />
+      <ScreenHeader title={t('title')} large actions={<PlaceActions />} />
       <div className="flex flex-col gap-8">
         {PRACTICE_GROUPS.map((group) => (
           <RowGroup key={group.id} title={t(`groups.${group.id}`)}>

@@ -1,4 +1,3 @@
-import { repertoire, type PiecesState } from '@/entities/piece'
 import type { StepId } from '@/entities/step'
 import { checkPlan } from '@/features/trainer'
 
@@ -9,6 +8,5 @@ export { PracticePage } from '@/pages/practice'
 export { QuizPage } from '@/pages/quiz'
 export { TrainerPage } from '@/pages/trainer'
 
-/** Whether a Check has questions: a piece's as the learner plays it, their version or own song. */
-export const checkIn = (state: PiecesState, of: StepId) =>
-  checkPlan(of, undefined, repertoire(state).piece) !== null
+/** Whether a Check has questions: a journey's chapter's chord family or scale. */
+export const checkIn = (of: StepId) => checkPlan(of) !== null

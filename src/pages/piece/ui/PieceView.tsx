@@ -1,16 +1,14 @@
-import { Link, useNavigate, useRouter } from '@tanstack/react-router'
+import { Link, useRouter } from '@tanstack/react-router'
 import {
   Ellipsis,
   FileCode,
   FileMusic,
-  FilePenLine,
   Globe,
   GlobeLock,
   PencilLine,
   Play,
   RotateCcw,
   Share2,
-  Target,
   Trash2,
 } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
@@ -33,7 +31,6 @@ import { PublishDialog, PublishSaid, usePublish, type PublishItem } from '@/feat
 import { ShareSaid, useShareSong } from '@/features/share-song'
 import { useSongExport } from '@/features/song-files'
 import { OPEN_PLAINLY } from '@/shared/lib'
-import { editsContent, useAccount } from '@/shared/lib/account'
 import { useLocale } from '@/shared/i18n'
 import { ActionMenu, ButtonLink, RoundLink } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -49,12 +46,11 @@ import { SectionRows } from './SectionRows'
 
 /**
  * A piece with a chart, in one calm column: Learn the song (ADR 0111, amended). Its bar (Back, the
- * title, then Edit the score, Learned, its ♡ (ADR 0106) and More: Move to… and Archive (Restore
- * while it is archived; a study is in no library, ADR 0106), Check these chords, Share, Export to
- * MIDI and to MusicXML (ADR 0107), an editor's Edit the original (ADR 0116),
- * and for the learner's own music its way back, asked first); under the title its byline (what else it
- * is called, Your version, its stage, who wrote it); then, first and largest, Practise, the Player as
- * it was left; its key, time and tempo as cards, the way to its key's scale under them and what is
+ * title, then Edit, its ♡ (ADR 0106) and More: Move to… and Archive (Restore while it is archived; a
+ * study is in no library, ADR 0106), Share, Export to MIDI and to MusicXML (ADR 0107), and for the
+ * learner's own music its way back, asked first). Edit opens the editor, where an editor switches to
+ * the original (ADR 0116). Under the title its byline (what else it is called, its stage, who wrote
+ * it); then, first and largest, Practise, the Player as it was left, with Learned beside it; its key, time and tempo as cards, the way to its key's scale under them and what is
  * said of it behind an ⓘ; its chords as diagrams, once, each opening its sheet; and, where it has
  * more than one, its sections, each a row to its page of lessons. Its chart is the Player's: the page
  * shows no keys but a chord's sheet's.
@@ -86,15 +82,11 @@ export function PieceView({ piece }: { piece: Piece }) {
   // More, which takes the focus back from a dialog it opened: the action chosen is folded away.
   const more = useRef<HTMLDivElement>(null)
   const step = pieceStepId(piece.id)
-  const navigate = useNavigate()
   const router = useRouter()
   // A song's place in the library (ADR 0106); a study, on Practice, is in none.
   const library = useSongActions(piece)
   const inLibrary = piece.kind !== 'study'
   const files = useSongExport(piece)
-  // A built-in song or study written as a chart: its original, an editor's to change (ADR 0116).
-  const { account } = useAccount()
-  const original = !own && !isDegreePiece(piece) && editsContent(account)
   const ownMusic = own
     ? ({ kind: 'song', id: own, title } as const)
     : hasVersion
@@ -102,17 +94,6 @@ export function PieceView({ piece }: { piece: Piece }) {
       : null
   const actions = [
     ...(inLibrary ? library.actions : []),
-    // A piece of no chord symbol has none to check (ADR 0114).
-    ...(performance.chords.length > 0
-      ? [
-          {
-            key: 'check',
-            label: t('checkChords'),
-            icon: Target,
-            onSelect: () => void navigate({ to: '/check', search: { of: step } }),
-          },
-        ]
-      : []),
     // An own song carries its music; one of the app's is a link to itself, as last played (ADR 0107).
     ...(own && isDegreePiece(piece)
       ? []
@@ -174,21 +155,6 @@ export function PieceView({ piece }: { piece: Piece }) {
       icon: FileCode,
       onSelect: files.musicXml,
     },
-    ...(original
-      ? [
-          {
-            key: 'original',
-            label: t('editOriginal'),
-            icon: FilePenLine,
-            onSelect: () =>
-              void navigate({
-                to: '/edit/$pieceId',
-                params: { pieceId: piece.id },
-                search: { original: true },
-              }),
-          },
-        ]
-      : []),
     ...(ownMusic
       ? [
           {
@@ -206,7 +172,6 @@ export function PieceView({ piece }: { piece: Piece }) {
     <div className="flex flex-col gap-6 pb-4">
       <PieceHeader
         entry={piece}
-        crowded
         actions={
           <>
             {/* Every piece is edited: one written in degrees as its chart in its key (ADR 0115). */}
@@ -215,7 +180,6 @@ export function PieceView({ piece }: { piece: Piece }) {
               icon={PencilLine}
               render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
             />
-            {own ? null : <LearnedButton step={step} round />}
             {inLibrary ? <FavouriteButton piece={piece.id} /> : null}
             <div ref={more} className="contents">
               <ActionMenu
@@ -224,7 +188,7 @@ export function PieceView({ piece }: { piece: Piece }) {
                 trigger={<Ellipsis aria-hidden />}
                 render={
                   <Button
-                    variant="surface"
+                    variant="bar"
                     size="icon"
                     className="rounded-full"
                     aria-label={t('more')}
@@ -253,14 +217,17 @@ export function PieceView({ piece }: { piece: Piece }) {
         }}
       />
       {/* The one thing to do first: play it (ADR 0111, amended), the Player as it was left. */}
-      <ButtonLink
-        size="lg"
-        className="h-14 w-full rounded-2xl text-lg sm:w-auto sm:self-start sm:px-8"
-        render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />}
-      >
-        <Play data-icon="inline-start" aria-hidden className="fill-current" />
-        {t('practise')}
-      </ButtonLink>
+      <div className="flex items-center gap-3">
+        <ButtonLink
+          size="lg"
+          className="h-14 flex-1 rounded-2xl text-lg sm:flex-none sm:px-8"
+          render={<Link to="/play/$pieceId" params={{ pieceId: piece.id }} state={OPEN_PLAINLY} />}
+        >
+          <Play data-icon="inline-start" aria-hidden className="fill-current" />
+          {t('practise')}
+        </ButtonLink>
+        {own ? null : <LearnedButton step={step} />}
+      </div>
       <PieceFactCards piece={piece} />
       <PieceAbout entry={piece} />
       <PieceChords performance={performance}>

@@ -1,8 +1,6 @@
 import type { LocaleResources } from '../../types'
 
 export const piece: LocaleResources['piece'] = {
-  checkChords: 'Проверить эти аккорды',
-  editOriginal: 'Править оригинал',
   barOne: 'такт {{n}}',
   barsFromTo: 'такты {{first}}–{{last}}',
   learnSong: {

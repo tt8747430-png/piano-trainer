@@ -33,7 +33,8 @@ describe('the screen’s bar', () => {
     'on %s is a child of the page’s root, so it holds as long as the page',
     async (path) => {
       await renderApp(path)
-      const bar = (await screen.findByRole('heading', { level: 1 })).closest('header')
+      await screen.findByRole('heading', { level: 1 })
+      const bar = document.querySelector('[data-slot="screen-bar"]')
       expect(bar?.parentElement?.parentElement?.tagName).toBe('MAIN')
     },
   )

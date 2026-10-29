@@ -24,7 +24,7 @@ export function CheckResult({
 }) {
   const { t } = useTranslation(['quiz', 'music'])
   const answers = useProgress(selectAllAnswers)
-  const learned = useProgress(selectIsLearned(plan.marks ?? plan.of))
+  const learned = useProgress(selectIsLearned(plan.of))
   const score = useRef<HTMLParagraphElement>(null)
   // The score replaces the question whose Next ended the check: it takes the focus, and is read.
   useEffect(() => score.current?.focus(), [])
@@ -38,7 +38,7 @@ export function CheckResult({
       >
         {t('score', { correct, total: plan.length })}
       </p>
-      {plan.marks && learned && newlyLearned ? (
+      {learned && newlyLearned ? (
         <p className="text-lg font-semibold text-learned">{t('marked', { title })}</p>
       ) : null}
       <ul className="flex flex-col divide-y divide-hairline card">

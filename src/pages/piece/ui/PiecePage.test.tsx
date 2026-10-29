@@ -174,26 +174,15 @@ describe('Piece', () => {
     expect(screen.getByRole('link', { name: 'Practise' })).toHaveAttribute('href', '/play/ex3')
   })
 
-  it('checks the song’s chords from More, after its place in the library', async () => {
-    const user = userEvent.setup()
-    const { router } = await renderApp('/songs/bz5')
-    await openMore(user)
+  it('lists its place in the library, Share and its files in More: nothing to check, no second Edit', async () => {
+    await renderApp('/songs/bz5')
+    await openMore(userEvent.setup())
     const more = await screen.findByRole('dialog', { name: 'More' })
     expect(
       within(more)
         .getAllByRole('button')
         .map((action) => action.textContent),
-    ).toEqual([
-      'Move to…',
-      'Archive',
-      'Check these chords',
-      'Share',
-      'Export to MIDI',
-      'Export to MusicXML',
-    ])
-    await user.click(within(more).getByRole('button', { name: 'Check these chords' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/check'))
-    expect(router.state.location.search).toEqual({ of: 'piece:bz5' })
+    ).toEqual(['Move to…', 'Archive', 'Share', 'Export to MIDI', 'Export to MusicXML'])
   })
 
   it('shares a song of the app as a link to it in the Player, in the key and as simplified as last played (ADR 0107)', async () => {
@@ -211,7 +200,7 @@ describe('Piece', () => {
     expect(`${link.pathname}${link.search}`).toBe('/play/bz5?key=A&simple=true')
   })
 
-  it('puts Practise first, under its byline, and keeps Edit, Learned, its ♡ and More in its bar', async () => {
+  it('puts Practise first, Learned beside it, and keeps Edit, its ♡ and More in its bar', async () => {
     await renderApp('/songs/bz5')
     const practise = await screen.findByRole('link', { name: 'Practise' })
     expect(practise).toHaveAttribute('href', '/play/bz5')
@@ -219,12 +208,12 @@ describe('Piece', () => {
     const facts = screen.getByText('Key').closest('dl') as HTMLElement
     expect(practise.compareDocumentPosition(facts) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     const bar = screen.getByRole('heading', { level: 1 }).closest('header') as HTMLElement
-    for (const name of ['Edit the score', 'Learned', 'Add to favourites', 'More'])
+    for (const name of ['Edit the score', 'Add to favourites', 'More'])
       expect(
         within(bar).getByRole(name === 'Edit the score' ? 'link' : 'button', { name }),
       ).toBeInTheDocument()
-    // Three actions beside Back: on a phone the title takes a row of its own under them.
-    expect(screen.getByRole('heading', { level: 1 })).toHaveClass('max-sm:basis-full')
+    expect(within(bar).queryByRole('button', { name: 'Learned' })).toBeNull()
+    expect(practise.parentElement).toContainElement(screen.getByRole('button', { name: 'Learned' }))
   })
 
   it('opens the Player and marks the song learned', async () => {

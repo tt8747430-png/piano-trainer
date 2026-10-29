@@ -35,10 +35,6 @@ import {
 export const THEMES = ['system', 'light', 'dark'] as const
 export type Theme = (typeof THEMES)[number]
 
-export const TITLE_SIZES = ['large', 'small'] as const
-/** How large a screen's title is: large, or small, leaving the page more of the screen. */
-export type TitleSize = (typeof TITLE_SIZES)[number]
-
 /**
  * The Player's saved switches: the View menu's chord positions, finger numbers and named notes, and
  * the count-in and the click (`metronome`, the transport's Sound's, ADR 0105).
@@ -258,7 +254,6 @@ export const DEFAULT_METRONOME: MetronomeSettings = {
 
 export interface SettingsState {
   theme: Theme
-  titles: TitleSize
   locale: Locale
   practice: PracticeToggles
   sound: SoundSettings
@@ -361,7 +356,6 @@ export const defaultKeyboard = (finePointer: boolean): KeyboardSettings => ({
 })
 
 export const isTheme = isOneOf(THEMES)
-export const isTitleSize = isOneOf(TITLE_SIZES)
 export const isKeySize = isOneOf(KEY_SIZES)
 export const isSwipe = isOneOf(SWIPES)
 export const isKeyDock = isOneOf(KEY_DOCKS)

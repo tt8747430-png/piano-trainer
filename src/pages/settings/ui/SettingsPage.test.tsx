@@ -5,15 +5,14 @@ import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 
 describe('Settings', () => {
-  it('goes back to the Path it was opened from, leaving no Settings to come back to', async () => {
+  it('goes back to the Profile it was opened from', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/')
+    const { router } = await renderApp('/profile')
     await user.click(
       within(await screen.findByRole('main')).getByRole('link', { name: 'Settings' }),
     )
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
-    expect(router.history.canGoBack()).toBe(false)
+    await waitFor(() => expect(router.state.location.pathname).toBe('/profile'))
   })
 
   it('goes back to the Path when it was opened directly', async () => {
@@ -133,15 +132,6 @@ describe('Settings', () => {
     expect(await screen.findByRole('dialog', { name: 'Backup' })).toHaveTextContent(
       'live on this device only',
     )
-  })
-
-  it('makes every screen’s title small, saved', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings/preferences')
-    const titles = await screen.findByRole('radiogroup', { name: 'Page titles' })
-    await user.click(within(titles).getByRole('radio', { name: 'Small' }))
-    expect(settingsStore.getState().titles).toBe('small')
-    expect(document.documentElement.dataset['titles']).toBe('small')
   })
 
   it('sets up the keyboard, and saves each change', async () => {

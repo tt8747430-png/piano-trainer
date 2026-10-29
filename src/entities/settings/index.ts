@@ -2,7 +2,6 @@ export {
   FOLDED_MAX,
   REMEMBERED_CHORDS,
   THEMES,
-  TITLE_SIZES,
   defaultKeyboard,
   FLOATING_PLACES,
   type ChordFinderSettings,
@@ -28,7 +27,6 @@ export {
   type SoundSettings,
   type Sidebar,
   type Theme,
-  type TitleSize,
 } from './model/types'
 export { resolveTheme } from './model/resolve-theme'
 export {
@@ -55,7 +53,6 @@ export {
   selectWelcomed,
   selectSound,
   selectTheme,
-  selectTitles,
   selectTrainer,
 } from './model/selectors'
 export { SettingsStoreProvider, useSettings, useSettingsStoreApi } from './model/context'
