@@ -134,3 +134,14 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   said before it (test added). Suite rerunning. Round 6 planned; 6.1's migration written WITHOUT delete (a `delete`
   in a function body also raised the Supabase tool's unseen confirmation, timed out): apply it next.
 - 2026-10-29 Round 5 on main: full suite 6651 green, build ok. 6.1 migration applied (content_drafts, publish_content).
+- 2026-10-29 6.1 checked (drafts-access.sql passes). 6.2: ContentEditingPort (draft, saveDraft, discardDraft,
+  publish, versions, restore, published), fake + Supabase adapter, run live with the seed editor: a lesson's draft
+  saved, published (a new version), the versions listed, the original version restored (the item is back on its
+  first version; the extra version stays kept, harmless).
+- 2026-10-29 6.3: Edit the original (an editor's, a song's More) → the score editor on the server draft, its
+  strip (Publish, Versions, Discard) over the sheet; screenshots at 320/390/landscape/laptop live. 6.4: the lesson
+  editor (/lessons/<id>/edit, a course's under it), every text en + ru side by side, Edit the lesson in the
+  lesson's bar. Left for later: a lesson's examples, questions' answers and links edited in the app (still
+  authored as code); patterns and courses' own fields; a draft's live preview on the lesson page itself.
+  Suite run 1: two failures — route-search (my new `original` search field; test updated) and a Playhead
+  scroll timing under load (made to wait, as its second half already did).
