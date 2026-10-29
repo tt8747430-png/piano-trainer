@@ -129,3 +129,7 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   useFeature + FeaturesProvider, AdminPort (fake + Supabase), editors may dismiss reports. The adapter run live
   against the project (seed account admin for the run, editor again after): groups, members, switches,
   my_features for a group member, reports, hide, dismiss, activity all work. Full suite running.
+- 2026-10-29 Round 5 suite: one failure, only in the full run (the scroll-up bar's keyboard test): the keyboard
+  viewport's module state leaked from another file (isolate: false). Fixed in the code: a start forgets what was
+  said before it (test added). Suite rerunning. Round 6 planned; 6.1's migration written WITHOUT delete (a `delete`
+  in a function body also raised the Supabase tool's unseen confirmation, timed out): apply it next.
