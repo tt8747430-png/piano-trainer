@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { keepContent } from '@/shared/api/content'
 import { COURSES } from '../content'
 import { courseById, courseLesson, coursesOn } from './selectors'
-import { courseTexts, updatesCourse } from './types'
+import { courseRecord, updatesCourse } from './types'
 
 afterEach(() => keepContent([]))
 
@@ -37,13 +37,14 @@ describe('a course’s texts over the kept content (round 12)', () => {
   const kept = (body: unknown) =>
     keepContent([{ kind: 'course', id: course.id, version: 'v2', body }])
 
-  it('holds a course’s title and summary, as the database keeps them', () => {
-    expect(courseTexts(course)).toEqual({
+  it('holds a course’s title, summary and lessons in order, as the database keeps them', () => {
+    expect(courseRecord(course)).toEqual({
       id: course.id,
       title: course.title,
       summary: course.summary,
+      lessons: course.lessons.map((lesson) => lesson.id),
     })
-    expect(updatesCourse(course.id, courseTexts(course))).toBe(true)
+    expect(updatesCourse(course.id, courseRecord(course))).toBe(true)
   })
 
   it('reads the database’s newer title and summary over the course, its lessons as they were', () => {
@@ -65,5 +66,39 @@ describe('a course’s texts over the kept content (round 12)', () => {
       kept(body)
       expect(courseById(course.id)).toBe(course)
     }
+  })
+
+  it('orders the course’s lessons as the record lists them, leaving out one it no longer lists', () => {
+    const [first, second, ...rest] = course.lessons
+    if (!first || !second) throw new Error('a course of two lessons at least')
+    kept({ ...texts, lessons: [second.id, first.id] })
+    expect(courseById(course.id)?.lessons).toEqual([second, first])
+    expect(rest.length).toBeGreaterThanOrEqual(0)
+  })
+
+  it('adds a lesson the database holds for it, a new one an editor wrote', () => {
+    const added = {
+      id: 'new-lesson',
+      title: { en: 'A new lesson', ru: 'Новый урок' },
+      summary: { en: 'Written in the app', ru: 'Написан в приложении' },
+      sections: [{ heading: { en: 'Begin', ru: 'Начало' }, blocks: [] }],
+    }
+    keepContent([
+      { kind: 'course', id: course.id, version: 'v2', body: { ...texts, lessons: ['new-lesson'] } },
+      { kind: 'lesson', id: `${course.id}/new-lesson`, version: 'v1', body: added },
+    ])
+    expect(courseById(course.id)?.lessons).toEqual([added])
+  })
+
+  it('passes over a listed lesson with no body, built in or kept: one not yet published', () => {
+    const [first] = course.lessons
+    if (!first) throw new Error('a course with a lesson')
+    kept({ ...texts, lessons: [first.id, 'unpublished'] })
+    expect(courseById(course.id)?.lessons).toEqual([first])
+  })
+
+  it('passes over a lessons list that is not a list of ids', () => {
+    kept({ ...texts, lessons: [1, 2] })
+    expect(courseById(course.id)).toBe(course)
   })
 })
