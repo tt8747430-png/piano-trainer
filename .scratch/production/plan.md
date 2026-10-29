@@ -339,3 +339,18 @@ the kept content.
 **8.5** A song saved from the Public library names its author (an own song's `from` field: pt-pieces version bump).
 Decisions: no web-vitals collection (the Privacy page promises no tracking); staging and backups are the owner's
 (a paid Supabase plan): logged as to-dos.
+
+## Round 9: patterns in the Public library (planned 2026-10-29)
+
+An own pattern is a name over a figure for each hand (`OwnPattern`: name, rh, lh), so it publishes as a small
+body. **9.1** `public_items.kind` takes `pattern` (its check widened); the port publishes and browses by kind.
+**9.2** The Public library has Songs · Patterns (`?kind=`); a pattern's page names its two figures, plays it over
+a built-in song, and Save to my patterns adds it (named, its author kept). **9.3** An own pattern's page has
+Publish, Update and Remove in its More, as an own song's has. **9.4** en/ru, tests, docs.
+
+## Round 10: review of rounds 6–9 (planned 2026-10-29)
+
+Screenshots at 320, 390, landscape and laptop, light and dark, of every screen rounds 6–9 added or changed: the
+score editor's draft strip, the lesson editor (Edit and Preview), the Admin area's Errors, Privacy and Terms,
+Create an account's foot, Settings › Sync and data, the Public library's Songs · Patterns and a pattern's page,
+an own pattern's Publish. Fix what is clipped, crowded or unclear; then the e2e and axe again.
