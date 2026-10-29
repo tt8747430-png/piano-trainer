@@ -38,7 +38,7 @@ const REPORT = {
 describe('the Admin area', () => {
   it('is in Settings for an admin only', async () => {
     const { unmount } = await renderApp('/settings', { auth: await signedInAs('learner') })
-    await screen.findByRole('navigation', { name: 'Settings' })
+    await screen.findByRole('region', { name: 'General' })
     expect(screen.queryByRole('link', { name: /Admin/ })).toBeNull()
     unmount()
     await renderApp('/settings', { auth: await signedInAs('admin') })
