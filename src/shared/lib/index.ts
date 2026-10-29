@@ -135,3 +135,4 @@ export { useGestureHold, type GestureHold, type ReleaseReason } from './gesture-
 export { impact } from './haptics'
 export { useLongPress, type LongPressHandlers } from './use-long-press'
 export { nextName } from './next-name'
+export { contentHash } from './content-hash'
