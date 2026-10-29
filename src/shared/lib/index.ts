@@ -99,6 +99,7 @@ export { mergeVisibleOrder } from './order'
 export { nameFrom } from './name-from'
 export { useSortableList, type SortableList } from './use-sortable-list'
 export { morph } from './morph'
+export { useOnline } from './use-online'
 export { longestLine } from './longest-line'
 export { breakLine } from './line-breaks'
 export {

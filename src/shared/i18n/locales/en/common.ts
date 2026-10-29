@@ -43,6 +43,7 @@ export const common = {
   notice: { close: 'Close the notice' },
   // A search box's button that empties it.
   clearSearch: 'Clear search',
+  password: { show: 'Show password', hide: 'Hide password' },
   // The ⓘ beside a control's name, opening its explanation (ADR 0096).
   infoTip: 'About {{name}}',
   loading: 'Loading',

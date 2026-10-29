@@ -40,6 +40,7 @@ export const common: LocaleResources['common'] = {
   notifications: 'Уведомления',
   notice: { close: 'Закрыть уведомление' },
   clearSearch: 'Очистить поиск',
+  password: { show: 'Показать пароль', hide: 'Скрыть пароль' },
   infoTip: 'Подробнее: {{name}}',
   loading: 'Загрузка',
   stage: {

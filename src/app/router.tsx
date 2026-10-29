@@ -28,6 +28,7 @@ import { FULL_SCREEN_SCROLL, FullScreenLayout } from './FullScreenLayout'
 import { RootLayout } from './RootLayout'
 import { RouteError } from './RouteError'
 import { RoutePending } from './RoutePending'
+import { callbackSearch } from './routes/account-search'
 import { ensureContent } from './routes/content'
 import {
   accompanimentSearch,
@@ -158,6 +159,34 @@ const midiLogRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/midi/log',
   component: lazyRouteComponent(settingsScreens, 'MidiLogPage'),
+})
+// The account pages (ADR 0116): signing in, a new account, a forgotten password, a new one.
+const signInRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/account/sign-in',
+  component: lazyRouteComponent(settingsScreens, 'SignInPage'),
+})
+const signUpRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/account/create',
+  component: lazyRouteComponent(settingsScreens, 'SignUpPage'),
+})
+const forgotPasswordRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/account/forgot',
+  component: lazyRouteComponent(settingsScreens, 'ForgotPasswordPage'),
+})
+const newPasswordRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/account/new-password',
+  component: lazyRouteComponent(settingsScreens, 'NewPasswordPage'),
+})
+// Where the server's links come back: Google's sign-in, a confirmed email, a password reset.
+const authCallbackRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/auth/callback',
+  ...callbackSearch,
+  component: lazyRouteComponent(settingsScreens, 'AuthCallbackPage'),
 })
 // Search: every named thing the app has, found by name (ADR 0052).
 const searchRoute = createRoute({
@@ -529,6 +558,11 @@ const routeTree = rootRoute.addChildren([
     howToUseRoute,
     midiSettingsRoute,
     midiLogRoute,
+    signInRoute,
+    signUpRoute,
+    forgotPasswordRoute,
+    newPasswordRoute,
+    authCallbackRoute,
     searchRoute,
     songsRoute,
     sharedSongRoute,

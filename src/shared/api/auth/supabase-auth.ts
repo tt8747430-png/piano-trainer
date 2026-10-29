@@ -34,7 +34,11 @@ export function createSupabaseAuth(
     signUp: ({ email, name, password }) =>
       ask(async () => {
         const { user, session } = answer(
-          await client.auth.signUp({ email, password, options: { data: { name } } }),
+          await client.auth.signUp({
+            email,
+            password,
+            options: { data: { name }, emailRedirectTo: callback },
+          }),
         )
         if (!user) throw new Error('The server made no account')
         return { account: accountOf(user), confirm: session === null }
