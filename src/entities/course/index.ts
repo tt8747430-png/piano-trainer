@@ -1,4 +1,11 @@
-export { SHELVES, type Course, type Shelf } from './model/types'
+export {
+  courseTexts,
+  SHELVES,
+  updatesCourse,
+  type Course,
+  type CourseTexts,
+  type Shelf,
+} from './model/types'
 export {
   courseById,
   courseLesson,

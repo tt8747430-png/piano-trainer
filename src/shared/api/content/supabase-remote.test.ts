@@ -23,7 +23,7 @@ describe('the Supabase content remote', () => {
   it('lists what is published, leaving out kinds this app does not read', async () => {
     const { client, asked } = clientAnswering([
       { kind: 'piece', id: 'bz5', version: 'v2' },
-      { kind: 'course', id: 'c', version: 'v1' },
+      { kind: 'book', id: 'b', version: 'v1' },
     ])
     expect(await createSupabaseContentRemote(backendOf(client), OPTIONS).versions()).toEqual({
       ok: true,

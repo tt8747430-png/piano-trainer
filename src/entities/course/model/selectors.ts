@@ -3,7 +3,7 @@ import type { PieceId } from '@/entities/piece'
 import { courseLessonStepId, type Stage, type StepId } from '@/entities/step'
 import { updatesLesson, type Lesson } from '@/entities/lesson'
 import { COURSES } from '../content'
-import type { Course, Shelf } from './types'
+import { updatesCourse, type Course, type Shelf } from './types'
 
 let built = {
   revision: -1,
@@ -13,8 +13,8 @@ let built = {
 
 /**
  * The courses: the app's own, each lesson the database has a newer copy of (kept on the device by
- * `<course>/<lesson>`, ADR 0116) in that copy where it reads as the lesson. Built again when the
- * kept content changes.
+ * `<course>/<lesson>`, ADR 0116) in that copy where it reads as the lesson, and the course's title
+ * and summary the database's where they read (round 12). Built again when the kept content changes.
  */
 function catalog(): typeof built {
   const kept = keptContent()
@@ -24,9 +24,15 @@ function catalog(): typeof built {
       const body = kept.body('lesson', `${course.id}/${lesson.id}`)
       return updatesLesson(lesson.id, body) ? body : lesson
     })
-    return lessons.some((lesson, i) => lesson !== course.lessons[i])
-      ? { ...course, lessons }
-      : course
+    const texts = kept.body('course', course.id)
+    const renamed = updatesCourse(course.id, texts)
+    const relessoned = lessons.some((lesson, i) => lesson !== course.lessons[i])
+    if (!renamed && !relessoned) return course
+    return {
+      ...course,
+      ...(renamed ? { title: texts.title, summary: texts.summary } : {}),
+      ...(relessoned ? { lessons } : {}),
+    }
   })
   built = {
     revision: kept.revision,

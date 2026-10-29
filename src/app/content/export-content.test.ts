@@ -7,7 +7,7 @@ import { exportContent } from './export-content'
 describe('exportContent', () => {
   const records = exportContent()
 
-  it('holds every piece, lesson and course lesson once, by kind and id', () => {
+  it('holds every piece, lesson, course lesson and course once, by kind and id', () => {
     const keys = records.map(({ kind, id }) => `${kind} ${id}`)
     expect(new Set(keys).size).toBe(keys.length)
     const courseLessons = COURSES.flatMap((course) => course.lessons).length
@@ -16,6 +16,14 @@ describe('exportContent', () => {
       LESSONS.length + courseLessons,
     )
     expect(keys).toContain(`lesson ${COURSES[0]?.id}/${COURSES[0]?.lessons[0]?.id}`)
+    expect(records.filter((record) => record.kind === 'course')).toHaveLength(COURSES.length)
+  })
+
+  it('holds a course as its title and summary, its lessons apart', () => {
+    const course = COURSES[0]
+    const record = records.find(({ kind, id }) => kind === 'course' && id === course?.id)
+    expect(record?.body).toEqual({ id: course?.id, title: course?.title, summary: course?.summary })
+    expect(record?.meta).toEqual({ title: course?.title })
   })
 
   it('carries each body as JSON that reads back as the same object', () => {

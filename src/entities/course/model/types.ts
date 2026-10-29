@@ -29,3 +29,26 @@ export interface Course {
   /** The songs that strengthen what it teaches, played in the Player. */
   readonly songs: readonly PieceId[]
 }
+
+/** A course's own texts as the database keeps them (ADR 0116, round 12): its title and summary. */
+export interface CourseTexts {
+  readonly id: string
+  readonly title: LocalText
+  readonly summary: LocalText
+}
+
+export const courseTexts = ({ id, title, summary }: Course): CourseTexts => ({ id, title, summary })
+
+/** Words in both languages, neither blank. */
+const isWritten = (value: unknown): value is LocalText => {
+  if (typeof value !== 'object' || value === null) return false
+  const { en, ru } = value as Partial<LocalText>
+  return typeof en === 'string' && typeof ru === 'string' && en.trim() !== '' && ru.trim() !== ''
+}
+
+/** Whether a body from the database reads as newer texts of the course `id`: its title and summary, each in both languages. */
+export function updatesCourse(id: string, body: unknown): body is CourseTexts {
+  if (typeof body !== 'object' || body === null) return false
+  const texts = body as Partial<CourseTexts>
+  return texts.id === id && isWritten(texts.title) && isWritten(texts.summary)
+}

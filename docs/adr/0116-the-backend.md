@@ -118,3 +118,6 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r11 — A lesson's examples written as a line of text are edited in the lesson editor (a row of chords, a line of
   notes and its left hand's, a progression's numerals), each read by the reader the lesson plays it with; a
   lesson publishes only with every one reading (2026-10-29).
+- r12 — A course's own title and summary are content (`course`, `{ id, title, summary }`), exported and seeded
+  with the rest and read over the course where they read in both languages (`updatesCourse`); an editor edits
+  them on the course editor (`/courses/$courseId/edit`) with the draft's strip (2026-10-29).

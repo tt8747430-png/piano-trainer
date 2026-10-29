@@ -1,5 +1,5 @@
 import { Link, useParams } from '@tanstack/react-router'
-import { ArrowRight, Check, Play, RotateCcw } from 'lucide-react'
+import { ArrowRight, Check, PencilLine, Play, RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { courseById, CourseIcon, courseStepIds, type Course } from '@/entities/course'
 import { PieceLink, pieceById } from '@/entities/piece'
@@ -7,7 +7,8 @@ import { selectLearned, useProgress } from '@/entities/progress'
 import { STAGE_PAINT, stepOf } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
-import { BackButton, ButtonLink, PAINT, ScreenHeader } from '@/shared/ui'
+import { editsContent, useAccount } from '@/shared/lib/account'
+import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
 import {
   CourseFacts,
   courseProgress,
@@ -68,6 +69,7 @@ export function CoursePage() {
   const locale = useLocale()
   const { courseId } = useParams({ from: '/shell/courses/$courseId' })
   const learned = useProgress(selectLearned)
+  const { account } = useAccount()
   const course = courseById(courseId)
   // The route finds no course that is not there.
   if (!course) return null
@@ -79,6 +81,15 @@ export function CoursePage() {
       <ScreenHeader
         title={localText(course.title, locale)}
         back={<BackButton fallback={{ to: '/', search: { view: 'courses', journey: '' } }} />}
+        actions={
+          editsContent(account) ? (
+            <RoundLink
+              label={t('edit.course.open')}
+              icon={PencilLine}
+              render={<Link to="/courses/$courseId/edit" params={{ courseId }} />}
+            />
+          ) : undefined
+        }
       />
       {/* One card: what it is, its facts and progress, and its one way in along its foot. */}
       <section className="-mt-2 flex max-w-3xl flex-col overflow-hidden card">

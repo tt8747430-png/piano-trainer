@@ -1,7 +1,10 @@
 import { netResult, type NetResult } from '../network'
 
-/** The kinds of content whose body may be away from the device: a piece's music, a lesson's sections. */
-export const CONTENT_KINDS = ['piece', 'lesson'] as const
+/**
+ * The kinds of content the database holds for this app: a piece's music, a lesson's sections, a
+ * course's title and summary.
+ */
+export const CONTENT_KINDS = ['piece', 'lesson', 'course'] as const
 export type ContentKind = (typeof CONTENT_KINDS)[number]
 
 export const isContentKind = (value: string): value is ContentKind =>

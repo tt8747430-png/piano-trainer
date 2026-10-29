@@ -504,7 +504,18 @@ const courseLessonRoute = createRoute({
   component: lazyRouteComponent(learnScreens, 'CourseLessonPage'),
 })
 
-// An editor's lesson editor (ADR 0116): every text of a journey's or a course's lesson.
+// An editor's lesson editor (ADR 0116): every text of a journey's or a course's lesson; a course's
+// own title and summary in the course editor.
+const courseEditRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/courses/$courseId/edit',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params }) => {
+    const { courseById } = await learnScreens()
+    if (!courseById(params.courseId)) throw notFound()
+  },
+  component: lazyRouteComponent(learnScreens, 'CourseEditorPage'),
+})
 const lessonEditRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/lessons/$lessonId/edit',
@@ -684,6 +695,7 @@ const routeTree = rootRoute.addChildren([
     courseLessonRoute,
     lessonEditRoute,
     courseLessonEditRoute,
+    courseEditRoute,
     practiceRoute,
     quizRoute,
     exercisesRoute,

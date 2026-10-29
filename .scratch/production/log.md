@@ -172,3 +172,6 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 - 2026-10-29 Round 11: the lesson editor writes a lesson's chord rows, note lines and numerals (each checked by
   the lesson's own reader; a test holds every built-in lesson to it). Still authored as code: voicings, variants,
   scales, intervals, grids, patterns over pieces, questions' answers, links.
+- 2026-10-29 Round 12: a course's title and summary are content (`course` records, seeded: 19 rows), read over the
+  course where they read; an editor's course editor at `/courses/$courseId/edit` (Edit the course on its page),
+  sharing the lesson editor's two-language fields and draft screen (`TextFields`, `DraftScreen`).

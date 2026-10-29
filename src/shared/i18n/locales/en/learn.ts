@@ -129,6 +129,15 @@ export const learn = {
     preview: 'Preview',
     examples:
       'Chord rows, lines of notes and progressions are written here too. Other examples, questions’ answers and links stay as they are.',
+    course: {
+      open: 'Edit the course',
+      heading: 'The course',
+      lessons: 'Its title and summary here; each lesson is edited on its own page.',
+      back: 'Back to the course',
+      editorsOnly: 'Only an editor edits a course.',
+      unreadable:
+        'The title and the summary need words in both languages. Put them right, then publish.',
+    },
     example: {
       chords: 'Chords',
       notes: 'Notes',
