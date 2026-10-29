@@ -96,3 +96,10 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   Found: the Supabase tool's hidden confirmation (the owner never sees it; it times out after 230 s) is raised by
   `drop …` statements in a migration. Write migrations without drops (new objects need none); a `revoke` alone
   passes. Bug found by the test: a BEFORE trigger wrote the version before the item existed → AFTER trigger.
+- 2026-10-29 Round 4 built: 4.1 tables; 4.2–4.3 export + seed (281 items); 4.4 cache (IndexedDB, fake-indexeddb
+  dev dep), remote; 4.5 content updates (kept content read at start, overlaid lazily per entity; checked in a
+  browser against the project: no change → only the versions asked; a changed song downloads, shows next start);
+  recordings keep the app's own file (romashki's URL differed between builds: found by the browser check);
+  4.6 course lessons keyed `<course>/<lesson>`. content_versions holds two test rows for bz5 (check-1, check-2) from
+  the browser check: harmless history. Docs: ADR 0116 r4, CLAUDE.md, glossary. Full suite running.
+- Next: round 4b (the Public library). Then 5 (admin), 6 (inline editing), 7 (production basics).

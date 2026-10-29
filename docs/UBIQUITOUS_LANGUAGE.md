@@ -531,4 +531,7 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   the **deletion gate** (keep the account, or sign out). _Avoid:_ soft delete.
 - **Profile**: the learner's own page: who they are and their **practice record** (`practiceRecord`: days
   practised, best run, steps learned, song lessons done, songs played, skills known). _Avoid:_ dashboard, stats.
+- **Content update**: a newer copy of a built-in item the database publishes, kept on the device (`pt-content`)
+  and read at the next start over the app's own (**kept content**, `keepContent`). _Avoid:_ patch, hotfix.
+- **Content version**: a hash of an item's body (`contentHash`); a change of content is a change of version.
 - **Welcome**: the app's first-run screen, shown once (`welcomed`). _Avoid:_ onboarding, intro.

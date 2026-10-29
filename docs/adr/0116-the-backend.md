@@ -28,11 +28,18 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   save of a newer app version in the cloud is left be. Autosync, signed in only: at sign-in, on reconnect, when the
   app comes into view, 4 s after saving settles (`AccountProvider`). The keyboard's store stays on the device.
 - **Account deletion** has a 30-day grace and a daily purge.
-- **Content lives in the database**, read-only to learners: a catalog index synced whole (titles, levels, keys, sizes)
-  drives every list offline; an item's body downloads when first opened, or ahead with Download for offline, and is
-  fetched again only when its version changes. A starter set ships in the app and always works. Each item has an
-  audience: everyone, groups, or admins. Only an admin edits the built-in content, in place, as drafts published with
-  every version kept.
+- **Content lives in the database** (`content_items`: kind, id, version, audience, status, meta, body; every
+  published version kept in `content_versions`), read-only to learners; editors (`app_metadata.role` admin or
+  editor) read drafts and write. The authored content is small (songs 82 KB as data, lessons about 1 MB, in lazy
+  chunks), so **the app carries all of it** as its offline starter and the built-in content always works. The
+  database delivers what changed and what is new: after first paint the app compares the published versions with
+  its own content's (a hash of each body), keeps the changed bodies in IndexedDB (`pt-content`), and reads them at
+  the next start, before the first screen, where each entity overlays them on its own (`keepContent`; a body is
+  taken only where it reads as its item). An update so lands as an app update does, never mid-use. A recording's
+  file stays the app's asset (its URL is a build's), the database holding its timing. What is never bundled
+  downloads when opened: the Public library's items, and recordings once they move to storage (round 7). Until
+  content is edited in the app (round 6), `entities/*/content` is the source: `scripts/export-content.mjs` and
+  `scripts/seed-content.mjs` publish it.
 - **The Public library:** a learner's own songs, patterns and progressions are private until published; a published
   item is a snapshot others can play and save a copy of, credited. Reports go to the admin.
 - **Admin** is a role set only by the server (`app_metadata.role`), read by row-level security and Edge Functions;
@@ -71,3 +78,5 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r3 — The accounts' screens: sign in (email, Google; Apple coming soon), create an account, a forgotten and a new
   password, the callback; Settings as an index of pages with the account's own (rename, password, sign out,
   delete after 30 days, the gate on signing in to an account to be deleted); the Profile; the welcome (2026-10-29).
+- r4 — Content in the database as updates over the carried content, not bodies taken out of the bundle: measured,
+  the content is small; the database's changes are kept on the device and read at the next start (2026-10-29).
