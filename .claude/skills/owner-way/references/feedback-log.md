@@ -183,4 +183,9 @@ The owner's feedback from every session, condensed and grouped by area. Read the
 - **Skills** (2026-10-29): Supabase's agent skills and MCP server, and Vercel's skills (agent-browser,
   building-components, deploy-to-vercel, vercel-cli, before-and-after, …) were installed: use the ones that fit
   (practices.md, Calling skills).
+- **Keep working through messages** (2026-10-29): "when i send a message this doesnt mean you should stop your
+  tasks, only when i say stop you stop". A new message adds to the work or redirects it; carry on with the tasks
+  in hand unless the owner says stop.
+- **Learners' data** (2026-10-29): the owner refused a query reading the sync tables' rows. Diagnose from logs,
+  aggregates and code; never read a learner's saved data.
 

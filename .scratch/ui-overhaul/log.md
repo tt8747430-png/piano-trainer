@@ -12,3 +12,49 @@
   and floating buttons chosen in place; Playing; Sync and data; Help with the version); the Preferences and Help
   pages and routes gone; Settings goes back to the Profile. The Profile: avatar, name and email (a guest's Sign in),
   the record as one card of six figures.
+- 2026-10-29 Round 4a, component library: one `SettingsGroup` (the grouped-list look, optional title; `SettingsList`
+  merged into it), `ToolButton`/`ToolDivider` deleted, internal kit pieces unexported, Admin › Components gallery
+  (`pages/admin/ui/ComponentsTab.tsx`), DESIGN.md "Placement" rules. UX principles the owner sent:
+  `.claude/skills/owner-way/references/ux-principles.md` (linked from SKILL.md).
+- 2026-10-29 Round 5a, Learn: `widgets/continue-action` is now Learn's hero card (track › step, progress, full-width
+  Continue) at the top of Learn's first column, no longer floating; course cards are rows (tile beside title and
+  facts, chevron). Public library: an empty state that says how to publish the first song or pattern.
+
+## Where it stands (handoff)
+
+- Branch `claude/keen-gates-q9bnit`; main has rounds 1–3 (sync fix, the bar, Settings/Profile). Rounds 4a and 5a are
+  on the branch; their full suite was running when the session compacted: rerun `npm run test` and `npm run build`,
+  then `git push origin HEAD:main`.
+- Reference reading done: new_app_2 (all 24: Noji, Quizlet, Duolingo Music, simpleclub) and new-app (sampled 1 in
+  10: a piano chords/theory app). The synthesis and the rounds are in `spec.md`, "Second pass". The memory-palaces
+  screenshots were not read (the research agent was stopped by the owner).
+- Tasks left, in order (spec "Second pass" rounds 6–13):
+  1. **Content as data, courses first** (the owner's "add new lessons to a course"). Plan, checked against the
+     database: editors may insert `content_items` rows with `status = 'draft'`; `publish_content` sets
+     `status = 'published'`; `content_drafts` has a foreign key to `content_items`, so an item must exist before its
+     draft. Steps:
+     - `entities/course`: the course record body gains `lessons?: string[]` (lesson ids in order); `courseTexts`
+       becomes `courseRecord`; `updatesCourse` accepts the optional list; `catalog()` builds a course's lessons from
+       the list: the kept `<course>/<id>` lesson body, else the built-in lesson, dropping ids with neither.
+       `entities/lesson`: `blankLesson(id, title)`.
+     - `shared/api/content-editing`: a `create(kind, id, { body, meta })` port method (fake, Supabase insert with
+       status 'draft', contract test).
+     - `features/edit-original`: `useCourseDraft` writes the lesson order; a create-lesson command.
+     - Course editor (`pages/lesson-editor/ui/CourseEditor.tsx`): the lessons as rows with move up, move down,
+       remove; Add lesson (a name, then the item is created and its lesson editor opens).
+     - Route `/courses/$courseId/$lessonId/edit`: let an editor open a lesson the catalog does not have yet (a blank
+       lesson fallback); learners see it once both the lesson and the course order are published.
+     - Re-export and re-seed the 19 course rows (their bodies change with `lessons`), as in round 12.
+     - Then journeys (needs `'journey'` added to `content_items_kind_check` by migration), songs, practice items.
+  2. Lesson reader polish (larger section headings, the new app's TL;DR card), drills as one drill screen.
+  3. Songs: + opens a sheet of ways to create (new, import, Public library); Public library as Noji's (category
+     chips, carousels with See all).
+  4. Practice home as one grouped card per group.
+  5. Profile → Activity: streak tiles, month calendar, achievements (Noji, Quizlet).
+  6. Block editor for lessons and songs (TipTap; a new package, say so in the report).
+  7. Admin: an overview page (active learners this week, new accounts, publishes, errors), errors grouped by
+     message, content queue.
+  8. Music editor: impeccable critique against Flat and Dorico, then fixes.
+- Owner rules learnt this session: a message from the owner is not a stop; stop only when they say "stop". Never
+  read learners' synced rows (they refused a query on sync tables); use logs and aggregate queries.
+

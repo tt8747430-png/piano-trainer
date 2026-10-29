@@ -69,7 +69,8 @@ These come straight from their feedback. Each has burned a round before.
 ## How the owner wants work run
 
 1. **Before starting:** fetch and check that the branch is level with `main` (`claude/keen-gates-q9bnit` unless told otherwise).
-2. **Work in rounds, in a loop.** Keep going round after round without asking. Stop only for decisions that are genuinely the owner's, and put those as clear questions at the end of the report. When the owner says "continue", pick up exactly where the work stopped.
+2. **A message is not a stop.** When the owner writes while work is running, take in what they say and carry on with the tasks in hand; stop only when they say "stop".
+2b. **Work in rounds, in a loop.** Keep going round after round without asking. Stop only for decisions that are genuinely the owner's, and put those as clear questions at the end of the report. When the owner says "continue", pick up exactly where the work stopped.
    - **"Continue with all" means autonomous mode.** Work through every open task (the plan's rounds, the log's
      "left for later" and deferred items, the review findings) one round after another, without asking anything:
      no AskUserQuestion, no "shall I…", no stopping to report between rounds. Where a choice is the owner's, take
