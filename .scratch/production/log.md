@@ -6,12 +6,12 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 
 ## Where it stands
 
-- Branch `claude/keen-gates-q9bnit`; `main` carries rounds 0 and 1 (pushed after green suites: 6502 → 6513 tests).
+- Branch `claude/keen-gates-q9bnit`; `main` carries rounds 0, 1 and 2 (green suites: 6502 → 6513 → 6552 tests).
 - Supabase project `piano-trainer`, ref `itmiutianxvtlwhdsalo`, `eu-west-1`, org `hhhabylwpqoudiihkqyn`.
   Migrations in `supabase/migrations` all applied; Edge Functions `request-account-deletion`, `purge-account`
   deployed (verify_jwt false, they check their caller). `supabase/tests/access.sql` passes.
 - Round 2 (sync) built: merge, CloudSync (fake + Supabase), createSyncRunner (status, onChange), AccountProvider
-  (Autosync), app wiring (SYNCED_SAVES, createSync), app-level tests. Round end (full suite, build, main) next.
+  (Autosync), app wiring (SYNCED_SAVES, createSync), app-level tests. On main. Round 3 (accounts UI) next: plan.md.
 
 ## Decisions taken on the owner's behalf (report them in the morning)
 
@@ -45,3 +45,5 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   by test), app wiring; cloud adapter checked on the project (signed-out 401 → refused; it had read the Postgres
   code as status). `takes` bucket: policies dropped by migration. Owner allowed all Supabase tool calls
   (`.claude/settings.local.json`, ignored by git).
+- 2026-10-29 Round 2 on main (6552 tests, build ok). Note for round 7: the entry chunk grew 396 → 616 KB with
+  supabase-js; load auth and the cloud after first paint.
