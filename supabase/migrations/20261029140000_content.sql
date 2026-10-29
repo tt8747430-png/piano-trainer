@@ -1,6 +1,8 @@
 -- Content from the database (ADR 0116, round 4): every built-in piece, lesson, course and the rest, one row an
 -- item. Learners read what is published to an audience they are in; admins and editors (app_metadata.role, set
 -- only by the service role) read drafts and write. Every published version is kept in content_versions.
+-- Applied to the project in four steps (content_editor_role, content_tables, content_version_function_private,
+-- content_version_after_write); this file is their sum. No drop statements: the tables are new.
 
 create or replace function public.is_content_editor()
 returns boolean
@@ -38,8 +40,24 @@ create table if not exists public.content_versions (
   foreign key (kind, id) references public.content_items (kind, id) on delete cascade
 );
 
--- A publish keeps its version: inserting or updating a published item records it once.
+-- An item's clock, before it is written.
 create or replace function public.keep_content_version()
+returns trigger
+language plpgsql
+set search_path = ''
+as $$
+begin
+  new.updated_at := now();
+  return new;
+end;
+$$;
+
+create trigger keep_content_version
+  before insert or update on public.content_items
+  for each row execute function public.keep_content_version();
+
+-- A publish keeps its version, once the item is written (the version's key refers to it).
+create or replace function public.record_content_version()
 returns trigger
 language plpgsql
 security definer
@@ -51,16 +69,15 @@ begin
     values (new.kind, new.id, new.version, new.meta, new.body)
     on conflict (kind, id, version) do nothing;
   end if;
-  new.updated_at := now();
-  return new;
+  return null;
 end;
 $$;
 
-revoke execute on function public.keep_content_version() from public, anon, authenticated;
+revoke execute on function public.record_content_version() from public, anon, authenticated;
 
-create trigger keep_content_version
-  before insert or update on public.content_items
-  for each row execute function public.keep_content_version();
+create trigger record_content_version
+  after insert or update on public.content_items
+  for each row execute function public.record_content_version();
 
 alter table public.content_items enable row level security;
 alter table public.content_versions enable row level security;
@@ -74,17 +91,14 @@ create policy published_read on public.content_items for select to anon, authent
     status = 'published' and (
       audience = 'everyone'
       or (audience = 'signed-in' and (select auth.role()) = 'authenticated')
-      or (select public.is_content_editor())
     )
     or (select public.is_content_editor())
   );
-
 create policy editor_insert on public.content_items for insert to authenticated
   with check ((select public.is_content_editor()));
 create policy editor_update on public.content_items for update to authenticated
   using ((select public.is_content_editor())) with check ((select public.is_content_editor()));
 create policy editor_delete on public.content_items for delete to authenticated
   using ((select public.is_content_editor()));
-
 create policy editor_read on public.content_versions for select to authenticated
   using ((select public.is_content_editor()));

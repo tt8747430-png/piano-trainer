@@ -24,6 +24,75 @@ export type Database = {
         Update: { purge_after?: string; requested_at?: string; user_id?: string }
         Relationships: []
       }
+      content_items: {
+        Row: {
+          audience: string
+          body: Json
+          id: string
+          kind: string
+          meta: Json
+          size: number | null
+          status: string
+          updated_at: string
+          version: string
+        }
+        Insert: {
+          audience?: string
+          body: Json
+          id: string
+          kind: string
+          meta?: Json
+          status?: string
+          updated_at?: string
+          version: string
+        }
+        Update: {
+          audience?: string
+          body?: Json
+          id?: string
+          kind?: string
+          meta?: Json
+          status?: string
+          updated_at?: string
+          version?: string
+        }
+        Relationships: []
+      }
+      content_versions: {
+        Row: {
+          body: Json
+          id: string
+          kind: string
+          meta: Json
+          published_at: string
+          version: string
+        }
+        Insert: {
+          body: Json
+          id: string
+          kind: string
+          meta: Json
+          published_at?: string
+          version: string
+        }
+        Update: {
+          body?: Json
+          id?: string
+          kind?: string
+          meta?: Json
+          published_at?: string
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'content_versions_kind_id_fkey'
+            columns: ['kind', 'id']
+            isOneToOne: false
+            referencedRelation: 'content_items'
+            referencedColumns: ['kind', 'id']
+          },
+        ]
+      }
       diagram_inversions: DocumentTable
       library: DocumentTable
       patterns: DocumentTable
@@ -37,6 +106,7 @@ export type Database = {
     Views: { [_ in never]: never }
     Functions: {
       invoke_purge_account: { Args: never; Returns: undefined }
+      is_content_editor: { Args: never; Returns: boolean }
       push_documents: { Args: { p_rows: Json; p_table: string }; Returns: Json }
     }
     Enums: { [_ in never]: never }
