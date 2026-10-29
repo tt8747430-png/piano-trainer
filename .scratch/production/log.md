@@ -9,7 +9,7 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 - Branch `claude/keen-gates-q9bnit`; `main` carries rounds 0–11 (full suite 6704 green at round 11); round 12 (a
   course's title and summary edited in the app) and the error reports' 90-day purge are on the branch, going to
   main once the full suite and build pass.
-- Supabase project `piano-trainer`, ref `itmiutianxvtlwhdsalo`, `eu-west-1`, org `hhhabylwpqoudiihkqyn`.
+- Supabase project `piano-trainer` (the one `.mcp.json` names), `eu-west-1`.
   Migrations in `supabase/migrations` all applied; Edge Functions `request-account-deletion`, `purge-account`
   deployed (verify_jwt false, they check their caller). Every `supabase/tests/*.sql` passes. pg_cron runs
   `purge-accounts` and `purge-old-error-reports` nightly.
@@ -30,20 +30,25 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 5. The `takes` bucket is unneeded (takes are MIDI notes): drop it in a migration with the round-2 changes.
 6. Content-body type split (entry vs body) and a lesson's embedded songs: left to round 4 (plan 0.5 notes).
 7. Schemas (Valibot): only if a store's sanitiser cannot read a synced document; so far none needed.
-8. `.env` committed with the project URL and publishable key (public by design), so Vercel needs no setup.
+8. ~~`.env` committed so Vercel needed no setup~~ — wrong, undone in round 13: the owner's call, and config never
+   goes in git. The values live in Vercel's environment variables and `.env.local`; `.env.example` names them.
 9. Content (round 4): the authored content is small (pieces 82 KB as data; the piece folder's 1.1 MB is audio;
    lessons ~1 MB, in lazy chunks), so the bundle keeps it all as the offline starter ("the built-in content always
    works" stands). The database delivers what changed and what is new: the app compares versions after first
    paint, downloads changed bodies into IndexedDB, and applies them at the next start (as an app update), so no
    screen re-reads content mid-use. Download-on-open applies to what is never bundled: the Public library (4b) and,
    in round 7, recordings (audio cached on first use). Settings → Storage waits for those.
-10. A seeding editor account `content-seed@piano-trainer.invalid` (app_metadata.role editor) exists; its password
-   is only in the session's scratchpad. Rotate or delete it once the owner is admin (round 5).
+10. ~~A seeding editor account the owner did not control~~ — gone: the owner is the project's admin and seeds
+   with their own account (`SEED_EMAIL`, `SEED_PASSWORD`).
 
 ## Owner's to-dos (cannot be done from here)
 
 - Delete the empty, policy-less `takes` bucket (Dashboard → Storage): SQL may not delete buckets.
 
+- **Vercel → piano-trainer → Settings → Environment Variables:** `VITE_SUPABASE_URL` and
+  `VITE_SUPABASE_PUBLISHABLE_KEY` (values: Supabase → Project Settings → API), for Production, Preview and
+  Development. Until they are set, Vercel's builds stop with the names missing (the live deployment stays).
+  The same two as the repository's Actions variables for the hand-started CI.
 - Google OAuth client ID and secret → Supabase Auth → Providers → Google (redirect URI in spec).
 - Vault secrets `project_url`, `secret_key` for the daily account purge (spec).
 - Supabase Auth → URL configuration: Site URL = the Vercel domain; Redirect URLs = `https://<domain>/auth/callback`,
@@ -188,3 +193,7 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   owner to-do is done. A test-order flake fixed at its root: a test that blocks storage, run first in a worker,
   made `safeLocalStorage` choose memory for every later file (the keyboard's tests then missed their seeded
   height); the DOM setup now chooses the page's storage before any test, as a page does as it loads.
+- 2026-10-29 Round 13: the owner's verdict on decision 8 ("such things should not be at all"): `.env` untracked,
+  `.env.example` added, `.env*` ignored, the build and dev server stop without the two names, the seed script and
+  CI read them from the environment, the project's ids out of CLAUDE.md and `supabase/config.toml`. Decision 10's
+  seed account was already gone; its password file deleted from the session's scratchpad.

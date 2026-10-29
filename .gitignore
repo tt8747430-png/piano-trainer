@@ -3,7 +3,9 @@ dist
 dev-dist
 coverage
 .vercel
-.env*.local
+# Config lives in the host's environment variables (Vercel's) and, on a machine, in .env.local: never in git.
+.env*
+!.env.example
 .superpowers/
 .DS_Store
 *.tsbuildinfo

@@ -91,7 +91,7 @@ export const createContentUpdates = (
 })
 
 /**
- * The app's one Supabase client (ADR 0116), on the project `.env` names: loaded on the first call that
+ * The app's one Supabase client (ADR 0116), on the project the build's environment names: loaded on the first call that
  * needs it, after the first paint, so supabase-js is not in the app's first chunk.
  */
 export const createBackend = (): Backend =>

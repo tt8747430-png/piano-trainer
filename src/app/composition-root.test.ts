@@ -51,13 +51,12 @@ describe('createStores', () => {
 })
 
 describe('createBackend and createAuth', () => {
-  it('build on the project the .env names, asking the network nothing until a call needs it', async () => {
+  it('build on the project the environment names, asking the network nothing until a call needs it', async () => {
     const fetch = vi.fn()
     vi.stubGlobal('fetch', fetch)
     const auth = createAuth(createBackend())
     expect(await auth.current()).toBeNull()
     expect(fetch).not.toHaveBeenCalled()
-    expect(import.meta.env.VITE_SUPABASE_URL).toBe('https://itmiutianxvtlwhdsalo.supabase.co')
   })
 })
 

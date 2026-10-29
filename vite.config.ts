@@ -29,12 +29,34 @@ function themeColorMeta(): Plugin {
   }
 }
 
+/** The Supabase project the app talks to (ADR 0116): set in the host's environment, never in git. */
+const BACKEND_ENV = ['VITE_SUPABASE_URL', 'VITE_SUPABASE_PUBLISHABLE_KEY'] as const
+
+/**
+ * Stops a build or a dev server that names no project, rather than shipping an app whose accounts,
+ * sync and content updates cannot reach their server. Tests run on fakes and need none.
+ */
+function requireBackendEnv(): Plugin {
+  return {
+    name: 'require-backend-env',
+    configResolved({ env, mode }) {
+      if (mode === 'test') return
+      const missing = BACKEND_ENV.filter((name) => !env[name])
+      if (missing.length > 0)
+        throw new Error(
+          `${missing.join(' and ')} not set: copy .env.example to .env.local, or set them in Vercel's environment variables.`,
+        )
+    },
+  }
+}
+
 export default defineConfig({
   // The build's version, as About says it: the commit Vercel built, or `dev` here.
   define: {
     __APP_BUILD__: JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? 'dev'),
   },
   plugins: [
+    requireBackendEnv(),
     react(),
     tailwindcss(),
     themeColorMeta(),

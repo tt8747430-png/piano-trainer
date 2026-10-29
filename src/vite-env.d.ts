@@ -2,7 +2,7 @@
 /// <reference types="vite-plugin-pwa/react" />
 
 interface ImportMetaEnv {
-  /** The Supabase project's URL (`.env`, ADR 0116). */
+  /** The Supabase project's URL (the host's environment, `.env.example`; ADR 0116). */
   readonly VITE_SUPABASE_URL: string
   /** The project's publishable key: public, held in check by row-level security. */
   readonly VITE_SUPABASE_PUBLISHABLE_KEY: string

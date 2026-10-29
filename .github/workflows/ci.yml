@@ -35,6 +35,13 @@ jobs:
       - run: npm run lint
       - run: npm run test:cov
       - run: npm run build
+        # The project's public settings, from the repository's Actions variables (never committed).
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
       # The end-to-end checks on the build just made: the main places, a lesson, the Player, and axe.
       - run: npx playwright install --with-deps chromium
       - run: npm run e2e
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}

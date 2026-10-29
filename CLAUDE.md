@@ -75,7 +75,7 @@ music, `exercise` music and arrangement, and none of them imports a package. `es
 
 - **app/** — `router.tsx` (code-based TanStack Router), `routes/` (each place's lazy screens in `*-screens.ts`, its
   search validators and defaults in `*-search.ts`, the remembered-view redirect in `remember.ts`, `ensureContent` in `content.ts`: a route that shows a song's music or a lesson brings it onto the device first), `App.tsx` (the
-  provider stack), `composition-root.ts` (built once in `main.tsx`: `createServices()` audio + MIDI, `createStores()` every saved store on one storage, `createContent()` where songs' music and lessons come from, `createContentUpdates()` the database's newer content (the cache and the remote; `app/content` reads what is kept before the first render and asks for changes after first paint), `createBackend()` the Supabase client from `.env`, loaded on its first call after first paint (`lazyBackend`: every adapter takes a `Backend`, `() => Promise<PianoClient>`), `createAuth()`, `createSync()` over `SYNCED_SAVES`, the stores saving through its watched storage), `providers/`,
+  provider stack), `composition-root.ts` (built once in `main.tsx`: `createServices()` audio + MIDI, `createStores()` every saved store on one storage, `createContent()` where songs' music and lessons come from, `createContentUpdates()` the database's newer content (the cache and the remote; `app/content` reads what is kept before the first render and asks for changes after first paint), `createBackend()` the Supabase client from the environment (`VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`: Vercel's environment variables, `.env.local` on a machine, `.env.example` their names; the build stops without them; never in git), loaded on its first call after first paint (`lazyBackend`: every adapter takes a `Backend`, `() => Promise<PianoClient>`), `createAuth()`, `createSync()` over `SYNCED_SAVES`, the stores saving through its watched storage), `providers/`,
   the layouts (`RootLayout`, `ShellLayout` → `AppShell` with the tab bar and the laptop's sidebar,
   `FullScreenLayout` for the Player), `testing/`. The router imports no page or widget code: its search files import
   types only, or a screen would leave its lazy chunk.
@@ -153,7 +153,7 @@ written by `python3 scripts/text-accidentals.py`) before Noto Music.
 text unselectable outside fields, with no callout, no overscroll and no double-tap wait
 (`src/app/standalone-boot.test.ts`).
 
-**Backend:** `supabase/` holds the migrations (written without `drop` statements: the Supabase tool asks an unseen confirmation for them) (applied to the project `itmiutianxvtlwhdsalo`), the Edge Functions and
+**Backend:** `supabase/` holds the migrations (written without `drop` statements: the Supabase tool asks an unseen confirmation for them) (applied to the project `.mcp.json` names), the Edge Functions and
 `tests/access.sql`, `tests/content-access.sql`, `tests/public-access.sql` and `tests/admin-access.sql`, `tests/drafts-access.sql`, `tests/errors-access.sql` (run them, never with a `delete` in them, for the same reason after a migration: every learner reaches only their own rows; content reads by audience, writes by editors). The built-in content is published by `node scripts/export-content.mjs` then `scripts/seed-content.mjs` (an editor's `SEED_EMAIL`, `SEED_PASSWORD`). A schema change is a new
 migration file, applied, then `shared/api/supabase/database.types.ts` brought level with the generated types.
 

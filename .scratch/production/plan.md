@@ -100,7 +100,7 @@ Save storage, Net result), push the branch and `main`.
 
 ## Round 1: the database and its rules
 
-**1.1 The project in the repo.** `supabase/config.toml` (project `itmiutianxvtlwhdsalo`), `.env.example` with
+**1.1 The project in the repo.** `supabase/config.toml` (project `<project-ref>`), `.env.example` with
 `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`; secrets never committed.
 
 **1.2 Migrations**, copied from memory-palaces where they fit, applied with the Supabase tools, each a file:

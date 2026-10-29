@@ -2,14 +2,14 @@
 // (ADR 0116, round 4): signed in as an editor, a batch at a time; an item whose version is unchanged is left.
 // Run: SEED_EMAIL=… SEED_PASSWORD=… node scripts/seed-content.mjs
 import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { createClient } from '@supabase/supabase-js'
+import { loadEnv } from 'vite'
 
-const env = Object.fromEntries(
-  readFileSync(new URL('../.env', import.meta.url), 'utf8')
-    .split('\n')
-    .filter((line) => line.includes('='))
-    .map((line) => line.split('=').map((part) => part.trim())),
-)
+// The project as the app's build reads it: the environment, else .env.local (never committed).
+const env = loadEnv('production', fileURLToPath(new URL('..', import.meta.url)), 'VITE_')
+if (!env.VITE_SUPABASE_URL || !env.VITE_SUPABASE_PUBLISHABLE_KEY)
+  throw new Error('Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY (.env.example)')
 const { SEED_EMAIL: email, SEED_PASSWORD: password } = process.env
 if (!email || !password) throw new Error('Set SEED_EMAIL and SEED_PASSWORD: an editor account')
 

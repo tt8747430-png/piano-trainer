@@ -68,8 +68,9 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
     documents: both when the database serves content and stores sync (rounds 2 and 4).
 
 - **Where it lives:** `supabase/` (migrations, Edge Functions, `tests/access.sql`); the client and the database's
-  types in `shared/api/supabase`, built once in the composition root from `.env` (the project's URL and
-  publishable key, public by design); the accounts' gateway in `shared/api/auth`.
+  types in `shared/api/supabase`, built once in the composition root from the build's environment (the
+  project's URL and publishable key: Vercel's environment variables, `.env.local` on a machine, their names in
+  `.env.example`; the build stops without them, and none of it is in git); the accounts' gateway in `shared/api/auth`.
 
 ## Consequences
 
@@ -121,3 +122,6 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r12 — A course's own title and summary are content (`course`, `{ id, title, summary }`), exported and seeded
   with the rest and read over the course where they read in both languages (`updatesCourse`); an editor edits
   them on the course editor (`/courses/$courseId/edit`) with the draft's strip (2026-10-29).
+- r13 — The project's settings left git: `.env` is no longer committed (it had been, its values being public, so
+  Vercel needed no setup: the owner's call to make, and they made the other one). The build and the dev server
+  stop when either is missing; the seed script and CI read the same names from the environment (2026-10-29).
