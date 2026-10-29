@@ -6,6 +6,7 @@ export const ADMIN_TABS = [
   'reports',
   'errors',
   'activity',
+  'components',
 ] as const
 export type AdminTab = (typeof ADMIN_TABS)[number]
 

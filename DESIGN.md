@@ -380,6 +380,24 @@ Round buttons, Play, marks and pips are full circles. Keys are square at the top
 
 ## Components
 
+### Placement
+
+Where each thing goes, on every screen (the owner's UX principles, `.claude/skills/owner-way/references/ux-principles.md`;
+every piece is shown in the Admin area's Components):
+
+- **A detail page reads hero → primary action → facts → sections.** The title in the bar (large on a place), what the
+  thing is under it, its one filled action first and full width on a phone, its facts as cards or a line, then its
+  sections, each headed with a count and See all where it is cut short.
+- **The bar holds Back, the title and at most two round actions**; More holds the rest, its destructive action last,
+  red and alone. The primary action is never in the bar.
+- **Lists are grouped cards of rows** (`SettingsGroup`, `RowGroup`): a soft tile, the title, one detail line, then a
+  value, a status pill or a chevron; a choice made in place is a `ChoiceRow`, a switch a `SwitchRow`.
+- **Creating is the + floating action**, opening a sheet of the ways to create (new, import, from the Public library).
+- **One accent per screen:** the honey fill is the primary action alone; the selection and states have their own
+  colours.
+- **Feedback for every act:** pressed states, a toast that says what happened, skeletons while loading, an empty
+  state that says what to do, an offline line where the server is needed.
+
 ### Buttons
 
 - **Sizes:** 44px (default), 48px (`lg`), a 56px pill for a primary action that stands alone, a 72px round Play.

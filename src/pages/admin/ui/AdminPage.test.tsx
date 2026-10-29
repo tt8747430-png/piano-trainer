@@ -45,6 +45,13 @@ describe('the Admin area', () => {
     expect(await screen.findByRole('link', { name: /Admin/ })).toHaveAttribute('href', '/admin')
   })
 
+  it('shows the kit’s components by kind, an admin’s gallery', async () => {
+    await renderApp('/admin?tab=components', { auth: await signedInAs('admin') })
+    for (const kind of ['Actions', 'Rows', 'Choices', 'Progress', 'Empty state'])
+      expect(await screen.findByRole('region', { name: kind })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Components' })).toHaveAttribute('aria-current', 'page')
+  })
+
   it('tells anyone else it is an admin’s', async () => {
     await renderApp('/admin', { auth: await signedInAs('editor') })
     expect(await screen.findByText('Only an admin can open this page.')).toBeVisible()

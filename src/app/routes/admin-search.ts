@@ -10,6 +10,7 @@ const TABS = [
   'reports',
   'errors',
   'activity',
+  'components',
 ] as const satisfies readonly AdminTab[]
 // Every tab the page has is read: one left out here fails to compile.
 const EVERY_TAB: readonly (typeof TABS)[number][] = [] as readonly AdminTab[]

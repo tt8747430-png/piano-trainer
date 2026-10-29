@@ -37,7 +37,7 @@ import {
   RowFace,
   RowLink,
   ScreenHeader,
-  SettingsList,
+  SettingsGroup,
   SwitchRow,
   TileMark,
 } from '@/shared/ui'
@@ -66,7 +66,7 @@ export function SettingsPage() {
       <ScreenHeader title={t('title')} back={<BackButton fallback={{ to: '/profile' }} />} />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <AccountCard />
-        <SettingsList title={t('sections.general')}>
+        <SettingsGroup flush title={t('sections.general')}>
           <ChoiceRow title={t('language.label')} icon={Languages} paint="sky">
             <Dropdown
               label={t('language.label')}
@@ -108,8 +108,8 @@ export function SettingsPage() {
             onCheckedChange={(labels) => setFloating(settings, { labels })}
             className="border-0 pr-3 pl-2 font-semibold"
           />
-        </SettingsList>
-        <SettingsList title={t('groups.playing.label')}>
+        </SettingsGroup>
+        <SettingsGroup flush title={t('groups.playing.label')}>
           <RowLink
             title={t('midi')}
             icon={Cable}
@@ -123,8 +123,8 @@ export function SettingsPage() {
             paint="lilac"
             render={<Link to="/settings/playing" />}
           />
-        </SettingsList>
-        <SettingsList title={t('groups.data.label')}>
+        </SettingsGroup>
+        <SettingsGroup flush title={t('groups.data.label')}>
           <RowLink
             title={t('groups.data.label')}
             icon={CloudUpload}
@@ -132,8 +132,8 @@ export function SettingsPage() {
             value={account ? t(`sync.state.${status.state}`) : undefined}
             render={<Link to="/settings/data" />}
           />
-        </SettingsList>
-        <SettingsList title={t('groups.help.label')}>
+        </SettingsGroup>
+        <SettingsGroup flush title={t('groups.help.label')}>
           <RowLink
             title={t('help.howToUse')}
             icon={LifeBuoy}
@@ -158,9 +158,9 @@ export function SettingsPage() {
           >
             <RowFace title={t('about.version')} icon={Info} paint="sand" value={APP_BUILD} />
           </div>
-        </SettingsList>
+        </SettingsGroup>
         {account?.role === 'admin' ? (
-          <SettingsList>
+          <SettingsGroup flush>
             <RowLink
               title={t('admin:title')}
               detail={t('admin:line')}
@@ -168,7 +168,7 @@ export function SettingsPage() {
               paint="lilac"
               render={<Link to="/admin" />}
             />
-          </SettingsList>
+          </SettingsGroup>
         ) : null}
       </div>
     </div>
