@@ -117,7 +117,7 @@ These come straight from their feedback. Each has burned a round before.
 
 ## How to work well (the best practices this skill adopts)
 
-`references/practices.md` holds the practices taken from superpowers (brainstorming, plans, TDD, debugging, verification, code review) and from impeccable (design), each in a line or two, with when to call which skill. Read it once a session, before the first task.
+`references/ux-principles.md` holds the UX and UI principles the owner asks every screen to follow (hierarchy, progressive disclosure, consistency, contrast, proximity, alignment, context, user control, feedback, accessibility; the Laws of UX), with a checklist per screen: apply it when shaping, refactoring or reviewing any screen. `references/practices.md` holds the practices taken from superpowers (brainstorming, plans, TDD, debugging, verification, code review) and from impeccable (design), each in a line or two, with when to call which skill. Read it once a session, before the first task.
 
 ## Reporting
 
