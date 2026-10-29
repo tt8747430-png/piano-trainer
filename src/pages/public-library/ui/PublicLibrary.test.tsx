@@ -196,7 +196,7 @@ describe('patterns in the Public library', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs/public', { publicLibrary: withPattern() })
     expect(await screen.findByText('No songs here yet.')).toBeVisible()
-    await user.click(screen.getByRole('radio', { name: 'Patterns' }))
+    await user.click(screen.getByRole('link', { name: 'Patterns' }))
     await waitFor(() => expect(router.state.location.search).toMatchObject({ kind: 'pattern' }))
     const list = await screen.findByRole('list', { name: 'Public library' })
     expect(within(list).getByRole('link', { name: /Waltz of mine/ })).toBeVisible()

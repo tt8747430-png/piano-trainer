@@ -4,7 +4,15 @@ import { LEFT_FIGURES, RIGHT_FIGURES, isLeftFigureId, isRightFigureId } from '@/
 import type { PublicEntry, PublicKind, PublicSort } from '@/shared/api/public-library'
 import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { keySymbol, parseKey, printedSymbol } from '@/shared/lib/music'
-import { BackButton, RowLink, ScreenHeader, SearchField, Segmented } from '@/shared/ui'
+import {
+  BackButton,
+  NavTab,
+  NavTabs,
+  RowLink,
+  ScreenHeader,
+  SearchField,
+  Segmented,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { PUBLIC_KINDS, PUBLIC_SORTS } from '../model/public-view'
@@ -42,15 +50,24 @@ export function PublicLibraryPage() {
     void navigate({ search: (was) => ({ ...was, ...next }), replace: true })
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('public.title')} back={<BackButton fallback={{ to: '/songs' }} />} />
-      <Segmented
-        label={t('public.kinds.label')}
-        value={view.kind}
-        options={PUBLIC_KINDS.map((value: PublicKind) => ({
-          value,
-          label: t(`public.kinds.${value}`),
-        }))}
-        onChange={(kind) => show({ kind })}
+      <ScreenHeader
+        title={t('public.title')}
+        back={<BackButton fallback={{ to: '/songs' }} />}
+        tabs={
+          <NavTabs label={t('public.kinds.label')}>
+            {PUBLIC_KINDS.map((kind: PublicKind) => (
+              <NavTab
+                key={kind}
+                to="/songs/public"
+                search={{ ...view, kind }}
+                replace
+                current={kind === view.kind}
+              >
+                {t(`public.kinds.${kind}`)}
+              </NavTab>
+            ))}
+          </NavTabs>
+        }
       />
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="min-w-0 flex-1">
@@ -61,15 +78,17 @@ export function PublicLibraryPage() {
             screen={t('public.title')}
           />
         </div>
-        <Segmented
-          label={t('public.sort.label')}
-          value={view.sort}
-          options={PUBLIC_SORTS.map((value: PublicSort) => ({
-            value,
-            label: t(`public.sort.${value}`),
-          }))}
-          onChange={(sort) => show({ sort })}
-        />
+        <div className="shrink-0 sm:w-64">
+          <Segmented
+            label={t('public.sort.label')}
+            value={view.sort}
+            options={PUBLIC_SORTS.map((value: PublicSort) => ({
+              value,
+              label: t(`public.sort.${value}`),
+            }))}
+            onChange={(sort) => show({ sort })}
+          />
+        </div>
       </div>
       {browse.kind === 'loading' ? (
         <p role="status" className="text-muted-foreground">

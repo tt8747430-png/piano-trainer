@@ -164,3 +164,8 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   (the cache is the composition root's, and the next start replaces it anyway). 8.5: a song saved from the
   Public library keeps `author` (an optional own-song field: no store version bump, an older save reads without
   it) and shows "Published by" in its byline.
+- 2026-10-29 Round 9 on main (suite 6699 green, build ok, e2e 22 green). Round 10 review: screenshots of every
+  screen rounds 6–9 touched at 320/390/landscape/laptop, light and dark: no sideways scroll, no page errors. Fixed:
+  the Public library's kind moved into the bar's tabs (two identical segmented controls were stacked), and its
+  search field no longer collapses beside the sort on a laptop. Left as is: the editor's draft strip and the
+  lesson editor read well at every size.
