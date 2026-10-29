@@ -166,3 +166,33 @@ bases). Tests: two devices over the fake server (edit here and there, delete mee
 writes settle; Settings quietly. A first sync on a device holds the splash (round 7) for at most 10 s.
 
 **2.6 Round end.** Full suite, build, ADR 0116 amended, CLAUDE.md, push.
+
+## Round 3: accounts, Settings, Profile, the welcome (planned 2026-10-29)
+
+From memory-palaces' threshold pages (login, signup, forgot-password, auth-callback, settings-profile with
+DeleteAccountSheet, SocialButtons) fitted to our kit (`SettingsGroup`, `RowLink`, `SwitchRow`, `Segmented`,
+`SettingField`, `ScreenHeader`, `BackButton`). Every string in en and ru; each page's test through `renderApp`.
+
+**3.1 Account pages** (`pages/account`, one place, routes under `/account`): Sign in (email, password, Forgot,
+Google · Apple coming soon, Create an account), Create an account (name, email, password; "check your email" when the
+server asks to confirm), Forgotten password (sends the email, says so whatever the address), the callback
+(`/auth/callback`: the code exchanged; `?next=reset` opens New password). Offline: each form's button disabled with
+the offline note (the network rule). Errors from `NetResult.detail` mapped to plain messages (wrong password, email
+taken, weak password, too many tries).
+
+**3.2 Settings regrouped:** `/settings` an index: the account card (signed out: Sign in · sync your songs and
+progress; signed in: name, email, the sync's state), then rows to Preferences (language, theme, appearance),
+Playing (the keyboard, MIDI, recording), Sync and data (Autosync status and Synchronise, backup, reset progress),
+Help (How to use, About: version, credits). Each a page under `/settings/…`, the old page's rows moved, not
+rewritten.
+
+**3.3 Account settings** (`/settings/account`, signed in): name (synced in `profiles`), email, change password, sign
+out (local, always), delete account (typed confirmation, the 30-day grace, `request-account-deletion`); the
+scheduled-deletion gate on sign-in (Cancel deletion · Sign out).
+
+**3.4 Profile** (`/profile`): name and initial avatar, or a guest's sign-in card; the practice record from
+`pt-progress` (streak, minutes this week against the daily goal, songs learned, lessons and courses finished,
+Skills rated); the songs played most. From the account card and the shell's header.
+
+**3.5 Welcome** on first run (`pt-settings.welcomed`): language, level (picks Learn's start), MIDI keyboard, daily
+goal; Sign in or Continue without an account.
