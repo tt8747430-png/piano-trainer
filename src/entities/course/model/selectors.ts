@@ -1,16 +1,46 @@
+import { keptContent } from '@/shared/api/content'
 import type { PieceId } from '@/entities/piece'
 import { courseLessonStepId, type Stage, type StepId } from '@/entities/step'
-import type { Lesson } from '@/entities/lesson'
+import { updatesLesson, type Lesson } from '@/entities/lesson'
 import { COURSES } from '../content'
 import type { Course, Shelf } from './types'
 
-const COURSE_BY_ID = new Map(COURSES.map((course) => [course.id, course]))
+let built = {
+  revision: -1,
+  courses: COURSES,
+  index: new Map(COURSES.map((course) => [course.id, course])) as ReadonlyMap<string, Course>,
+}
 
-export const courseById = (id: string): Course | undefined => COURSE_BY_ID.get(id)
+/**
+ * The courses: the app's own, each lesson the database has a newer copy of (kept on the device by
+ * `<course>/<lesson>`, ADR 0116) in that copy where it reads as the lesson. Built again when the
+ * kept content changes.
+ */
+function catalog(): typeof built {
+  const kept = keptContent()
+  if (kept.revision === built.revision) return built
+  const courses = COURSES.map((course) => {
+    const lessons = course.lessons.map((lesson) => {
+      const body = kept.body('lesson', `${course.id}/${lesson.id}`)
+      return updatesLesson(lesson.id, body) ? body : lesson
+    })
+    return lessons.some((lesson, i) => lesson !== course.lessons[i])
+      ? { ...course, lessons }
+      : course
+  })
+  built = {
+    revision: kept.revision,
+    courses,
+    index: new Map(courses.map((course) => [course.id, course])),
+  }
+  return built
+}
+
+export const courseById = (id: string): Course | undefined => catalog().index.get(id)
 
 /** A shelf's courses, in the order Courses lists them. */
 export const coursesOn = (shelf: Shelf): readonly Course[] =>
-  COURSES.filter((course) => course.shelf === shelf)
+  catalog().courses.filter((course) => course.shelf === shelf)
 
 /** A course's lesson and its number there from 1; undefined for one the course does not have. */
 export interface CourseLessonPlace {

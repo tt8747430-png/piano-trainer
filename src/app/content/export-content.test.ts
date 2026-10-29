@@ -19,9 +19,16 @@ describe('exportContent', () => {
   })
 
   it('carries each body as JSON that reads back as the same object', () => {
-    const piece = PIECES[0]
+    const piece = PIECES.find((each) => !('recording' in each && each.recording))
     const record = records.find(({ kind, id }) => kind === 'piece' && id === piece?.id)
     expect(JSON.parse(JSON.stringify(record?.body))).toEqual(piece)
+  })
+
+  it('holds a recording without its file’s URL, which each build names anew', () => {
+    const recorded = PIECES.find((piece) => 'recording' in piece && piece.recording)
+    const record = records.find(({ id }) => id === recorded?.id)
+    expect(record?.body).toMatchObject({ recording: { start: expect.any(Number) } })
+    expect(JSON.stringify(record?.body)).not.toContain('.m4a')
   })
 
   it('versions a body by what it holds: the same body, the same version', () => {

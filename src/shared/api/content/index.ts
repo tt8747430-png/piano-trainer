@@ -14,3 +14,4 @@ export {
 } from './port'
 export { createSupabaseContentRemote } from './supabase-remote'
 export { fetchContentUpdates, type ContentRemote } from './updates'
+export { keepContent, keptContent } from './kept'

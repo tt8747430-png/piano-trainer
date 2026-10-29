@@ -1,6 +1,6 @@
 import { EXERCISES, type ExerciseId } from '@/entities/exercise'
-import { COURSES } from '@/entities/course'
-import { LESSONS, lessonPlace } from '@/entities/lesson'
+import { COURSES, courseById } from '@/entities/course'
+import { LESSONS, lessonById, lessonPlace } from '@/entities/lesson'
 import type { FolderId } from '@/entities/library'
 import type { BookPattern, PatternRef } from '@/entities/pattern'
 import { entryTitles, type Entry, type PieceId } from '@/entities/piece'
@@ -167,7 +167,8 @@ export function indexEntries({
       words: [],
       target: { opens: 'folder', folder: folder.id },
     })),
-    ...LESSONS.map((lesson): IndexEntry => {
+    ...LESSONS.map((bundled): IndexEntry => {
+      const lesson = lessonById(bundled.id) ?? bundled
       const place = lessonPlace(lesson.id)
       return {
         id: `lessons:${lesson.id}`,
@@ -179,22 +180,24 @@ export function indexEntries({
         target: { opens: 'lesson', lesson: lesson.id },
       }
     }),
-    ...COURSES.flatMap((course): IndexEntry[] => [
-      {
-        id: `courses:${course.id}`,
-        kind: 'courses',
-        ...named(course.title, locale),
-        detail: localText(course.summary, locale),
-        target: { opens: 'course', course: course.id },
-      },
-      ...course.lessons.map((lesson): IndexEntry => ({
-        id: `courses:${course.id}/${lesson.id}`,
-        kind: 'courses',
-        ...named(lesson.title, locale),
-        detail: localText(course.title, locale),
-        target: { opens: 'course-lesson', course: course.id, lesson: lesson.id },
-      })),
-    ]),
+    ...COURSES.map((bundled) => courseById(bundled.id) ?? bundled).flatMap(
+      (course): IndexEntry[] => [
+        {
+          id: `courses:${course.id}`,
+          kind: 'courses',
+          ...named(course.title, locale),
+          detail: localText(course.summary, locale),
+          target: { opens: 'course', course: course.id },
+        },
+        ...course.lessons.map((lesson): IndexEntry => ({
+          id: `courses:${course.id}/${lesson.id}`,
+          kind: 'courses',
+          ...named(lesson.title, locale),
+          detail: localText(course.title, locale),
+          target: { opens: 'course-lesson', course: course.id, lesson: lesson.id },
+        })),
+      ],
+    ),
     ...CHORD_QUALITIES.map((quality): IndexEntry => {
       const [symbol = '', ...others] = qualitySpellings(quality).map((suffix) =>
         writtenSymbol({ root: C, suffix }),

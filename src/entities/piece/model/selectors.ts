@@ -1,6 +1,13 @@
-import { pitchClassOf, type ChordSize, type Key, type SpelledNote } from '@/shared/lib/music'
+import { keptContent } from '@/shared/api/content'
+import {
+  parseKey,
+  pitchClassOf,
+  type ChordSize,
+  type Key,
+  type SpelledNote,
+} from '@/shared/lib/music'
 import type { PatternId } from '@/entities/pattern'
-import { COLLECTIONS, PIECES } from '../content'
+import { COLLECTIONS } from '../content'
 import { asChartPiece } from './degree-chart'
 import { factsOf } from './facts'
 import type { PieceMusic } from './music'
@@ -16,11 +23,56 @@ import {
   type Piece,
 } from './types'
 
-const ENTRY_BY_ID = new Map(
+const BUNDLED_BY_ID = new Map(
   COLLECTIONS.flatMap((collection) => collection.entries).map((entry) => [entry.id, entry]),
 )
+let built = { revision: -1, index: BUNDLED_BY_ID as ReadonlyMap<string, Entry> }
 
-export const entryById = (id: string): Entry | undefined => ENTRY_BY_ID.get(id)
+/** Whether a body from the database reads as a newer copy of this catalog piece: its id, kind and key. */
+function updatesPiece(entry: Entry, body: unknown): body is Piece {
+  if (typeof body !== 'object' || body === null) return false
+  const update = body as Partial<Piece>
+  return (
+    isPiece(entry) &&
+    update.id === entry.id &&
+    update.kind === entry.kind &&
+    typeof update.key === 'string' &&
+    Boolean(parseKey(update.key)) &&
+    typeof update.meter === 'string' &&
+    ('sections' in update ? Array.isArray(update.sections) : 'progression' in update)
+  )
+}
+
+/**
+ * A newer copy with the app's own recording file: the database holds a recording's timing, never
+ * its file, which is the app's asset (ADR 0116); a recording the app has no file for is left out.
+ */
+function withOwnRecording(entry: Entry, update: Piece): Piece {
+  const file = 'recording' in entry ? entry.recording?.src : undefined
+  if (!('recording' in update) || !update.recording) return update
+  const { recording, ...rest } = update
+  return file ? { ...update, recording: { ...recording, src: file } } : (rest as Piece)
+}
+
+/**
+ * The catalog by id: the app's own entries, each piece the database has a newer copy of (kept on
+ * the device, ADR 0116) in that copy where it reads as the piece. Built again when the kept content
+ * changes.
+ */
+function entryIndex(): ReadonlyMap<string, Entry> {
+  const kept = keptContent()
+  if (kept.revision === built.revision) return built.index
+  const index = new Map(BUNDLED_BY_ID)
+  for (const entry of BUNDLED_BY_ID.values()) {
+    const body = kept.body('piece', entry.id)
+    if (updatesPiece(entry, body)) index.set(entry.id, withOwnRecording(entry, body))
+  }
+  built = { revision: kept.revision, index }
+  PLAYING.clear()
+  return index
+}
+
+export const entryById = (id: string): Entry | undefined => entryIndex().get(id)
 
 /** The piece with this id; undefined for a listing, which never opens in the Player. */
 export function pieceById(id: string): Piece | undefined {
@@ -63,7 +115,7 @@ export const isOwnKey = (piece: Piece, tonic: SpelledNote): boolean =>
 /** The songs, listings and studies in a key, in catalog order. */
 export function entriesInKey(key: Key): Entry[] {
   const tonic = pitchClassOf(key.tonic)
-  return [...ENTRY_BY_ID.values()].filter((entry) => {
+  return [...entryIndex().values()].filter((entry) => {
     const own = pieceKey(entry)
     return own.minor === key.minor && pitchClassOf(own.tonic) === tonic
   })
@@ -73,9 +125,12 @@ const PLAYING = new Map<PatternId, readonly Piece[]>()
 
 /** The songs, studies and progressions that play a built-in pattern, in catalog order. */
 export function piecesPlaying(pattern: PatternId): readonly Piece[] {
+  const index = entryIndex()
   const known = PLAYING.get(pattern)
   if (known) return known
-  const pieces = PIECES.filter((piece) => factsOf(piece).patterns.includes(pattern))
+  const pieces = [...index.values()]
+    .filter(isPiece)
+    .filter((piece) => factsOf(piece).patterns.includes(pattern))
   PLAYING.set(pattern, pieces)
   return pieces
 }

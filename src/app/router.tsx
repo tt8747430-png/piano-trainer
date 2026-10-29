@@ -465,7 +465,8 @@ const courseLessonRoute = createRoute({
   beforeLoad: async ({ params, context }) => {
     const { courseLesson } = await learnScreens()
     if (!courseLesson(params.courseId, params.lessonId)) throw notFound()
-    await ensureContent(context.content, 'lesson', params.lessonId)
+    // A course's lesson is the database's by its course and its id (ADR 0116).
+    await ensureContent(context.content, 'lesson', `${params.courseId}/${params.lessonId}`)
   },
   component: lazyRouteComponent(learnScreens, 'CourseLessonPage'),
 })

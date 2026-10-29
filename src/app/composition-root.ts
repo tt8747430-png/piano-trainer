@@ -12,7 +12,14 @@ import { createTakesStore, TAKES_STORAGE_KEY, type TakesStore } from '@/entities
 import { createViewsStore, VIEWS_STORAGE_KEY, type ViewsStore } from '@/entities/views'
 import { createWebAudioOutput } from '@/shared/api/audio'
 import { createSupabaseAuth, type AuthGateway } from '@/shared/api/auth'
-import { filesContent, type ContentPort } from '@/shared/api/content'
+import {
+  createBrowserContentCache,
+  createSupabaseContentRemote,
+  filesContent,
+  type ContentCache,
+  type ContentPort,
+  type ContentRemote,
+} from '@/shared/api/content'
 import { createWebMidi, hasWebMidi } from '@/shared/api/midi'
 import { createSupabaseClient, type PianoClient } from '@/shared/api/supabase'
 import { createSupabaseCloud, type CloudSync } from '@/shared/api/sync'
@@ -62,6 +69,17 @@ export function createStores(
 
 /** Where content's bodies come from (ADR 0116): written into the app until the database serves them. */
 export const createContent = (): ContentPort => filesContent()
+
+/**
+ * The database's content updates (ADR 0116): where the device keeps them (IndexedDB), and what the
+ * project publishes.
+ */
+export const createContentUpdates = (
+  backend: PianoClient,
+): { readonly cache: ContentCache; readonly remote: ContentRemote } => ({
+  cache: createBrowserContentCache(),
+  remote: createSupabaseContentRemote(backend),
+})
 
 /** The app's one Supabase client (ADR 0116), on the project `.env` names. */
 export const createBackend = (): PianoClient =>

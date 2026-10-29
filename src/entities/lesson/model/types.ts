@@ -183,3 +183,21 @@ export interface Lesson {
    */
   readonly after?: readonly string[]
 }
+
+/**
+ * Whether a body from the database reads as a newer copy of the lesson `id` (ADR 0116): its id, its
+ * title and summary, and sections of headings and blocks. Its blocks are the content tests' to hold.
+ */
+export function updatesLesson(id: string, body: unknown): body is Lesson {
+  if (typeof body !== 'object' || body === null) return false
+  const lesson = body as Partial<Lesson>
+  return (
+    lesson.id === id &&
+    typeof lesson.title === 'object' &&
+    typeof lesson.summary === 'object' &&
+    Array.isArray(lesson.sections) &&
+    lesson.sections.every(
+      (section) => typeof section === 'object' && section !== null && Array.isArray(section.blocks),
+    )
+  )
+}

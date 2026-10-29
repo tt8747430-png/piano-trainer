@@ -1,12 +1,30 @@
+import { keptContent } from '@/shared/api/content'
 import { LESSONS } from '../content'
 import { JOURNEYS } from '../content/journeys'
 import type { Chapter, Journey } from './journey'
-import type { Lesson } from './types'
+import { updatesLesson, type Lesson } from './types'
 
-const LESSON_BY_ID = new Map(LESSONS.map((lesson) => [lesson.id, lesson]))
+const BUNDLED_BY_ID = new Map(LESSONS.map((lesson) => [lesson.id, lesson]))
+let built = { revision: -1, index: BUNDLED_BY_ID as ReadonlyMap<string, Lesson> }
 const JOURNEY_BY_ID = new Map(JOURNEYS.map((journey) => [journey.id, journey]))
 
-export const lessonById = (id: string): Lesson | undefined => LESSON_BY_ID.get(id)
+/**
+ * The journey lessons by id: the app's own, each the database has a newer copy of (kept on the
+ * device, ADR 0116) in that copy where it reads as the lesson. Built again when the kept content changes.
+ */
+function lessonIndex(): ReadonlyMap<string, Lesson> {
+  const kept = keptContent()
+  if (kept.revision === built.revision) return built.index
+  const index = new Map(BUNDLED_BY_ID)
+  for (const id of BUNDLED_BY_ID.keys()) {
+    const body = kept.body('lesson', id)
+    if (updatesLesson(id, body)) index.set(id, body)
+  }
+  built = { revision: kept.revision, index }
+  return index
+}
+
+export const lessonById = (id: string): Lesson | undefined => lessonIndex().get(id)
 
 export const journeyById = (id: string): Journey | undefined => JOURNEY_BY_ID.get(id)
 
