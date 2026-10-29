@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.purge-account]
 verify_jwt = false
+
+[functions.admin]
+verify_jwt = false

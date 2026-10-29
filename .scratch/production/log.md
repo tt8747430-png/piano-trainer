@@ -120,3 +120,7 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 - 2026-10-29 5.1–5.2 applied and checked (admin-access.sql passes): is_admin, admin_bootstrap + trigger (the
   owner's address is listed in the database only: they become admin when they create their account), groups,
   group_members, feature_switches, admin_log, my_features().
+- 2026-10-29 5.3: Edge Function `admin` deployed (verify_jwt off; checks the caller's app_metadata.role itself):
+  list-accounts (paged, filtered), set-role (admin · editor · learner; an admin cannot demote themselves; logged).
+  Checked live: stranger 401, editor 403, admin lists and is refused self-demotion and bad input. The seeding
+  account was admin for the check and is editor again.
