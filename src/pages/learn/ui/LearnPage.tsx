@@ -41,10 +41,13 @@ export function LearnPage() {
           </NavTabs>
         }
       />
-      {/* The Lessons or the Courses; the days and the songs played last after them on a phone, beside
-          them on a laptop. Continue floats in the thumb's reach. */}
-      <div className="mt-2 grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-x-12">
-        <div className="min-w-0">
+      {/* What to do next first; then the Lessons or the Courses; the days and the songs played last
+          after them on a phone, beside them on a laptop. */}
+      <div className="mt-4 grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-x-12">
+        <div className="flex min-w-0 flex-col gap-8">
+          <div className="mx-auto w-full max-w-2xl">
+            <ContinueAction />
+          </div>
           {view === 'lessons' ? (
             <div className="mx-auto w-full max-w-2xl">
               <JourneyMap journey={journey} />
@@ -58,7 +61,6 @@ export function LearnPage() {
           <RecentPieces />
         </div>
       </div>
-      <ContinueAction />
     </div>
   )
 }
