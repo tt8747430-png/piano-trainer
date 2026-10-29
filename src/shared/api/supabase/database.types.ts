@@ -93,6 +93,93 @@ export type Database = {
           },
         ]
       }
+      public_items: {
+        Row: {
+          author_id: string
+          author_name: string
+          body: Json
+          hidden: boolean
+          id: string
+          kind: string
+          meta: Json
+          published_at: string
+          saves: number
+          size: number | null
+          source_id: string
+          title: string
+          updated_at: string
+          version: string
+        }
+        Insert: {
+          author_id?: string
+          author_name: string
+          body: Json
+          hidden?: boolean
+          id?: string
+          kind?: string
+          meta?: Json
+          published_at?: string
+          saves?: number
+          source_id: string
+          title: string
+          updated_at?: string
+          version: string
+        }
+        Update: {
+          author_name?: string
+          body?: Json
+          meta?: Json
+          title?: string
+          version?: string
+        }
+        Relationships: []
+      }
+      public_reports: {
+        Row: {
+          item_id: string
+          note: string
+          reason: string
+          reported_at: string
+          reporter_id: string
+        }
+        Insert: {
+          item_id: string
+          note?: string
+          reason: string
+          reported_at?: string
+          reporter_id?: string
+        }
+        Update: { note?: string; reason?: string }
+        Relationships: [
+          {
+            foreignKeyName: 'public_reports_item_id_fkey'
+            columns: ['item_id']
+            isOneToOne: false
+            referencedRelation: 'public_items'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      public_saves: {
+        Row: { item_id: string; saved_at: string; user_id: string }
+        Insert: { item_id: string; saved_at?: string; user_id: string }
+        Update: { saved_at?: string }
+        Relationships: [
+          {
+            foreignKeyName: 'public_saves_item_id_fkey'
+            columns: ['item_id']
+            isOneToOne: false
+            referencedRelation: 'public_items'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      publish_blocks: {
+        Row: { blocked_at: string; user_id: string }
+        Insert: { blocked_at?: string; user_id: string }
+        Update: { blocked_at?: string }
+        Relationships: []
+      }
       diagram_inversions: DocumentTable
       library: DocumentTable
       patterns: DocumentTable
@@ -106,7 +193,10 @@ export type Database = {
     Views: { [_ in never]: never }
     Functions: {
       invoke_purge_account: { Args: never; Returns: undefined }
+      hide_public_item: { Args: { p_hidden: boolean; p_item: string }; Returns: undefined }
       is_content_editor: { Args: never; Returns: boolean }
+      is_publish_blocked: { Args: never; Returns: boolean }
+      save_public_item: { Args: { p_item: string }; Returns: number }
       push_documents: { Args: { p_rows: Json; p_table: string }; Returns: Json }
     }
     Enums: { [_ in never]: never }
