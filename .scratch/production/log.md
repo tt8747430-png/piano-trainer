@@ -103,3 +103,6 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   4.6 course lessons keyed `<course>/<lesson>`. content_versions holds two test rows for bz5 (check-1, check-2) from
   the browser check: harmless history. Docs: ADR 0116 r4, CLAUDE.md, glossary. Full suite running.
 - Next: round 4b (the Public library). Then 5 (admin), 6 (inline editing), 7 (production basics).
+- 2026-10-29 Round 4 on main: full suite 6625 green, build ok. Round 4b.1: the Public library tables, functions and
+  rules applied (public_library_tables, _functions, _rules). Its access test did not run: a `delete` statement
+  in execute_sql also raises the Supabase tool's unseen confirmation (timed out). Rerun it without `delete`.
