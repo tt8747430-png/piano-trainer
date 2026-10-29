@@ -110,3 +110,10 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 - 2026-10-29 4b.1 checked: public-access.sql passes (no `delete` in it); public_saves read-own policy added. The
   advisor's warnings on save_public_item, hide_public_item, is_publish_blocked being callable by the signed in are
   intended (each checks its caller; the last only says whether the caller is blocked).
+- 2026-10-29 4b built: port (fake + Supabase, run live against the project), publish on an own song's More,
+  /songs/public and /songs/public/<id> (save, report), song-preview widget. Bugs found and fixed: the published
+  body must be flat like a save (readSharedSong); a store's FIRST sync let a fresh device's defaults overwrite the
+  account's settings (the sync test failed once the clock passed 10:00 UTC) → the account's plain values stand.
+  Known limit: on a first sync a list of plain values (e.g. progress `days`) takes the account's whole; records and
+  lists of id'd items merge. Deferred: the saved copy names its author (needs an own-song field: a pt-pieces shape
+  change), patterns and progressions in the Public library.

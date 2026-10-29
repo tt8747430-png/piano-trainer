@@ -40,8 +40,14 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   downloads when opened: the Public library's items, and recordings once they move to storage (round 7). Until
   content is edited in the app (round 6), `entities/*/content` is the source: `scripts/export-content.mjs` and
   `scripts/seed-content.mjs` publish it.
-- **The Public library:** a learner's own songs, patterns and progressions are private until published; a published
-  item is a snapshot others can play and save a copy of, credited. Reports go to the admin.
+- **The Public library:** a learner's own song is private until they publish it (its More: Publish to the Public
+  library, asked first with what it means and the rights it takes; Update once it has changed; Remove). A published
+  song is a snapshot held as a save holds an own song (`public_items`, one per author and song, 200 KB at most), read
+  by anyone, written by its author unless an editor has blocked them, at most 20 publishes an hour. Songs → Public
+  library lists them, newest or most saved, searched by title; a song's page plays it and saves an own copy (a save
+  counted once per signed-in learner, `save_public_item`) and takes a report (`public_reports`, a reason and a
+  note) to the editors, who hide an item (`hide_public_item`, never its author) or block a publisher. Patterns and
+  progressions follow on the same tables.
 - **Admin** is a role set only by the server (`app_metadata.role`), read by row-level security and Edge Functions;
   accounts are listed through an Edge Function, never by the client. Features reach groups behind switches; every
   build goes to everyone.
@@ -80,3 +86,4 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   delete after 30 days, the gate on signing in to an account to be deleted); the Profile; the welcome (2026-10-29).
 - r4 — Content in the database as updates over the carried content, not bodies taken out of the bundle: measured,
   the content is small; the database's changes are kept on the device and read at the next start (2026-10-29).
+- r4b — The Public library for songs; a store's first sync takes the account's plain values (2026-10-29).

@@ -106,7 +106,9 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
   `widgets/curriculum`, `widgets/lesson-view`; `entities/lesson`, `course`, `step`, `progress`.
 - **Songs** (`/songs`) — one library of folders, favourites and an archive; a song's page and its sections;
   MusicXML and MIDI import, MusicXML and MIDI export (`features/song-files`, `shared/lib/musicxml`).
-  `pages/songs`, `pages/song-archive`, `pages/piece`; `widgets/song-library`; `features/manage-library`;
+  `pages/songs`, `pages/song-archive`, `pages/piece`; `widgets/song-library`; `features/manage-library`; the
+  Public library (`/songs/public`, a song at `/songs/public/$itemId`; `pages/public-library`,
+  `features/publish-song`, `widgets/song-preview`, `shared/api/public-library`, `shared/lib/public-library`);
   `entities/library` (only what the learner changed, read over the catalog by `arrangeLibrary`) and
   `entities/piece` (the catalog, the learner's versions and own songs, `repertoire`).
 - **Practice** (`/practice`) — explorers (Chords, Scales and keys, Intervals, Progressions, Accompaniment), the
@@ -149,7 +151,7 @@ text unselectable outside fields, with no callout, no overscroll and no double-t
 (`src/app/standalone-boot.test.ts`).
 
 **Backend:** `supabase/` holds the migrations (written without `drop` statements: the Supabase tool asks an unseen confirmation for them) (applied to the project `itmiutianxvtlwhdsalo`), the Edge Functions and
-`tests/access.sql` and `tests/content-access.sql` (run them after a migration: every learner reaches only their own rows; content reads by audience, writes by editors). The built-in content is published by `node scripts/export-content.mjs` then `scripts/seed-content.mjs` (an editor's `SEED_EMAIL`, `SEED_PASSWORD`). A schema change is a new
+`tests/access.sql`, `tests/content-access.sql` and `tests/public-access.sql` (run them, never with a `delete` in them, for the same reason after a migration: every learner reaches only their own rows; content reads by audience, writes by editors). The built-in content is published by `node scripts/export-content.mjs` then `scripts/seed-content.mjs` (an editor's `SEED_EMAIL`, `SEED_PASSWORD`). A schema change is a new
 migration file, applied, then `shared/api/supabase/database.types.ts` brought level with the generated types.
 
 ## Read before you touch

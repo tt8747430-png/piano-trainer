@@ -534,4 +534,7 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Content update**: a newer copy of a built-in item the database publishes, kept on the device (`pt-content`)
   and read at the next start over the app's own (**kept content**, `keepContent`). _Avoid:_ patch, hotfix.
 - **Content version**: a hash of an item's body (`contentHash`); a change of content is a change of version.
+- **Public library**: the songs learners published for anyone to play and save a copy of. **Publish**, **Update**,
+  **Remove** (the author's); **Save to my songs**, **Report** (anyone's). _Avoid:_ community, marketplace, share
+  (Share is a link).
 - **Welcome**: the app's first-run screen, shown once (`welcomed`). _Avoid:_ onboarding, intro.
