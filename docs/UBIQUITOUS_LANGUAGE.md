@@ -537,4 +537,8 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Public library**: the songs learners published for anyone to play and save a copy of. **Publish**, **Update**,
   **Remove** (the author's); **Save to my songs**, **Report** (anyone's). _Avoid:_ community, marketplace, share
   (Share is a link).
+- **Role**: what an account may do beyond a learner's: **editor** (content, reports) or **admin** (everything,
+  the Admin area). Set only by the server. _Avoid:_ permission, rank.
+- **Feature switch**: turns a feature on for everyone, no one or chosen **groups** (`useFeature`). _Avoid:_ flag,
+  toggle (a toggle is the learner's).
 - **Welcome**: the app's first-run screen, shown once (`welcomed`). _Avoid:_ onboarding, intro.

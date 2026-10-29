@@ -48,9 +48,15 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   counted once per signed-in learner, `save_public_item`) and takes a report (`public_reports`, a reason and a
   note) to the editors, who hide an item (`hide_public_item`, never its author) or block a publisher. Patterns and
   progressions follow on the same tables.
-- **Admin** is a role set only by the server (`app_metadata.role`), read by row-level security and Edge Functions;
-  accounts are listed through an Edge Function, never by the client. Features reach groups behind switches; every
-  build goes to everyone.
+- **Admin** is a role set only by the server (`app_metadata.role`: admin or editor; anyone else a learner), read
+  by row-level security, by Edge Functions and into the app's `Account`. The first admin is the owner: their
+  address is listed in `admin_bootstrap` (in the database only, never the repo) and their account becomes an admin
+  when it is made. Accounts are listed and their roles changed through the `admin` Edge Function, which checks the
+  caller's role itself; never by a client query on `auth.users`. Groups, their members and feature switches are
+  admins' tables; a switch is on for everyone, no one, or chosen groups, and the app asks `my_features()` at start
+  and at each sign-in (`useFeature`): every build goes to everyone, a feature waits behind its switch. The Admin
+  area (`/admin`, its own chunk, in Settings for admins): Accounts, Groups, Switches, Reports, Activity; every
+  change is written to `admin_log`.
 - **The seams the app is built on:**
   - a song's music and a lesson come through one port (`ContentPort`: `has`, `ensure`); a route that shows one
     ensures it in `beforeLoad`, so the route's pending, not-found and error screens are its loading, missing and
@@ -87,3 +93,5 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r4 — Content in the database as updates over the carried content, not bodies taken out of the bundle: measured,
   the content is small; the database's changes are kept on the device and read at the next start (2026-10-29).
 - r4b — The Public library for songs; a store's first sync takes the account's plain values (2026-10-29).
+- r5 — Admin: roles, the first admin from `admin_bootstrap`, the `admin` function, groups, feature switches,
+  reports and the activity log; the Admin area (2026-10-29).

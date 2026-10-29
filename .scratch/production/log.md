@@ -125,3 +125,7 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   Checked live: stranger 401, editor 403, admin lists and is refused self-demotion and bad input. The seeding
   account was admin for the check and is editor again.
 - 2026-10-29 Round 4b on main: full suite 6640 green, build ok, Public library screenshots clean; checked live in a browser against the project (an empty library says so).
+- 2026-10-29 5.4 built: Account.role, the Admin area (/admin: Accounts, Groups, Switches, Reports, Activity),
+  useFeature + FeaturesProvider, AdminPort (fake + Supabase), editors may dismiss reports. The adapter run live
+  against the project (seed account admin for the run, editor again after): groups, members, switches,
+  my_features for a group member, reports, hide, dismiss, activity all work. Full suite running.

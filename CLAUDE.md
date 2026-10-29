@@ -129,7 +129,9 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
 - **Elsewhere** — Search (`/search`); Settings (`/settings`: the account card, then a page each for Preferences,
   Playing, Sync and data, Help, and Account, `pages/settings`; How to use and the MIDI keyboard with its log under
   them); the account pages (`/account/sign-in`, `create`, `forgot`, `new-password`, and `/auth/callback` where the
-  server's links return; `pages/account`); the Profile (`/profile`, `pages/profile`); a shared song
+  server's links return; `pages/account`); the Profile (`/profile`, `pages/profile`); the Admin area (`/admin`,
+  `pages/admin`, its own chunk, an admin's alone; `shared/api/admin`, `shared/lib/admin`; feature switches by
+  `useFeature`, `shared/lib/features`); a shared song
   (`/songs/shared`). The welcome (`widgets/welcome`, once, `pt-settings.welcomed`) and the deletion gate
   (`app/deletion-gate`) sit in `RootLayout`.
 
@@ -151,7 +153,7 @@ text unselectable outside fields, with no callout, no overscroll and no double-t
 (`src/app/standalone-boot.test.ts`).
 
 **Backend:** `supabase/` holds the migrations (written without `drop` statements: the Supabase tool asks an unseen confirmation for them) (applied to the project `itmiutianxvtlwhdsalo`), the Edge Functions and
-`tests/access.sql`, `tests/content-access.sql` and `tests/public-access.sql` (run them, never with a `delete` in them, for the same reason after a migration: every learner reaches only their own rows; content reads by audience, writes by editors). The built-in content is published by `node scripts/export-content.mjs` then `scripts/seed-content.mjs` (an editor's `SEED_EMAIL`, `SEED_PASSWORD`). A schema change is a new
+`tests/access.sql`, `tests/content-access.sql`, `tests/public-access.sql` and `tests/admin-access.sql` (run them, never with a `delete` in them, for the same reason after a migration: every learner reaches only their own rows; content reads by audience, writes by editors). The built-in content is published by `node scripts/export-content.mjs` then `scripts/seed-content.mjs` (an editor's `SEED_EMAIL`, `SEED_PASSWORD`). A schema change is a new
 migration file, applied, then `shared/api/supabase/database.types.ts` brought level with the generated types.
 
 ## Read before you touch
