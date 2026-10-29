@@ -6,12 +6,17 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 
 ## Where it stands
 
-- Branch `claude/keen-gates-q9bnit`; `main` carries rounds 0, 1 and 2 (green suites: 6502 → 6513 → 6552 tests).
+- Branch `claude/keen-gates-q9bnit`; `main` carries rounds 0–11 (full suite 6704 green at round 11); round 12 (a
+  course's title and summary edited in the app) and the error reports' 90-day purge are on the branch, going to
+  main once the full suite and build pass.
 - Supabase project `piano-trainer`, ref `itmiutianxvtlwhdsalo`, `eu-west-1`, org `hhhabylwpqoudiihkqyn`.
   Migrations in `supabase/migrations` all applied; Edge Functions `request-account-deletion`, `purge-account`
-  deployed (verify_jwt false, they check their caller). `supabase/tests/access.sql` passes.
-- Round 2 (sync) built: merge, CloudSync (fake + Supabase), createSyncRunner (status, onChange), AccountProvider
-  (Autosync), app wiring (SYNCED_SAVES, createSync), app-level tests. On main. Round 3 (accounts UI) next: plan.md.
+  deployed (verify_jwt false, they check their caller). Every `supabase/tests/*.sql` passes. pg_cron runs
+  `purge-accounts` and `purge-old-error-reports` nightly.
+- Content in the database: every piece, lesson, course lesson and (round 12) course; editors edit songs (the score
+  editor's Edit the original), lessons (texts and text-written examples) and courses' titles and summaries.
+- What remains is the owner's (below): Google, Auth URLs and passwords, Vault secrets, the bucket, legal review and
+  a contact address, installing the Renovate app.
 
 ## Decisions taken on the owner's behalf (report them in the morning)
 
@@ -46,6 +51,9 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   OAuth, confirmation and reset links go to the Site URL instead of the callback.
 - Supabase Auth → Passwords: turn on leaked password protection (HaveIBeenPwned; the security advisor asks).
 - Supabase Auth → Passwords: minimum length 8 (the app asks for 8; the server's default is 6).
+- Read Privacy and Terms (`/legal/privacy`, `/legal/terms`), have them reviewed for your country, and give a
+  contact address for data requests (none of yours goes in the repo unasked).
+- Install the Renovate GitHub app on the repository (`renovate.json` is ready).
 
 ## Log
 
