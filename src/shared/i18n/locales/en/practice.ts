@@ -210,6 +210,27 @@ export const practice = {
     songs: 'Songs',
   },
   progressions: {
+    edit: {
+      open: 'Edit the progression',
+      new: 'New progression',
+      newInfo:
+        'It is made unpublished: write its lines and words, then publish it for learners to see it in the library.',
+      title: 'Edit: {{title}}',
+      heading: 'The progression',
+      info: 'Its name and how it sounds in both languages, its style, and its numerals in a major key, a minor key or both.',
+      name: 'Name',
+      character: 'How it sounds',
+      style: 'Style',
+      major: 'In a major key',
+      minor: 'In a minor key',
+      back: 'Back to Progressions',
+      editorsOnly: 'Only an editor edits a progression.',
+      unreadable:
+        'The name and how it sounds need words in both languages, and a line of numerals must read. Put them right, then publish.',
+      create: 'Create progression',
+      creating: 'Creating…',
+      createFailed: 'The progression could not be made: one of that name may be there already.',
+    },
     field: 'Numerals or chords',
     unread: 'This progression can’t be read.',
     majorLine: 'These numerals are a major key’s.',

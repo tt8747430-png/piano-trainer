@@ -1,5 +1,12 @@
 import { Link } from '@tanstack/react-router'
-import { FileText, GraduationCap, Map as MapIcon, Music, type LucideIcon } from 'lucide-react'
+import {
+  FileText,
+  GraduationCap,
+  ListMusic,
+  Map as MapIcon,
+  Music,
+  type LucideIcon,
+} from 'lucide-react'
 import { useCallback, type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ContentKind } from '@/shared/api/content'
@@ -15,9 +22,13 @@ const ICONS: Readonly<Record<ContentKind, LucideIcon>> = {
   lesson: FileText,
   course: GraduationCap,
   journey: MapIcon,
+  progression: ListMusic,
 }
 
-/** The editor a draft opens in: a song's original, a lesson's (a course's under its course), a course's, a journey's. */
+/**
+ * The editor a draft opens in: a song's original, a lesson's (a course's under its course), a
+ * course's, a journey's, a progression's.
+ */
 function editorOf({ kind, id }: Pick<DraftListing, 'kind' | 'id'>): ReactElement {
   switch (kind) {
     case 'piece':
@@ -26,6 +37,8 @@ function editorOf({ kind, id }: Pick<DraftListing, 'kind' | 'id'>): ReactElement
       return <Link to="/courses/$courseId/edit" params={{ courseId: id }} />
     case 'journey':
       return <Link to="/journeys/$journeyId/edit" params={{ journeyId: id }} />
+    case 'progression':
+      return <Link to="/practice/progressions/$progressionId/edit" params={{ progressionId: id }} />
     case 'lesson': {
       const [courseId, lessonId] = id.split('/')
       return courseId && lessonId ? (

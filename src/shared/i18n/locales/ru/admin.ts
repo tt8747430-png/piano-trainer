@@ -95,7 +95,13 @@ export const admin: LocaleResources['admin'] = {
     label: 'Черновики',
     unpublished: 'Ещё не опубликовано',
     edited: 'Изменено {{date}}',
-    kinds: { piece: 'Песня', lesson: 'Урок', course: 'Курс', journey: 'Путь' },
+    kinds: {
+      piece: 'Песня',
+      lesson: 'Урок',
+      course: 'Курс',
+      journey: 'Путь',
+      progression: 'Прогрессия',
+    },
   },
   errors: {
     none: 'Об ошибках не сообщалось.',

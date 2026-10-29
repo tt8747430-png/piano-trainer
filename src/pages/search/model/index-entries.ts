@@ -5,7 +5,7 @@ import type { FolderId } from '@/entities/library'
 import type { BookPattern, PatternRef } from '@/entities/pattern'
 import { entryTitles, type Entry, type PieceId } from '@/entities/piece'
 import {
-  LIBRARY_BY_STYLE,
+  libraryByStyle,
   libraryLine,
   libraryParam,
   progressionMode,
@@ -216,22 +216,24 @@ export function indexEntries({
       words: [],
       target: { opens: 'scale', scale },
     })),
-    ...LIBRARY_BY_STYLE.flatMap((style) => style.progressions).map((progression): IndexEntry => {
-      // The mode it has: its major line where it has one.
-      const minor = progressionMode(progression, false)
-      return {
-        id: `progressions:${progression.id}`,
-        kind: 'progressions',
-        ...named(progression.name, locale),
-        detail: libraryLine(progression, minor),
-        target: {
-          opens: 'progression',
-          p: libraryParam(progression, minor),
-          minor,
-          ...(progression.size ? { size: progression.size } : {}),
-        },
-      }
-    }),
+    ...libraryByStyle()
+      .flatMap((style) => style.progressions)
+      .map((progression): IndexEntry => {
+        // The mode it has: its major line where it has one.
+        const minor = progressionMode(progression, false)
+        return {
+          id: `progressions:${progression.id}`,
+          kind: 'progressions',
+          ...named(progression.name, locale),
+          detail: libraryLine(progression, minor),
+          target: {
+            opens: 'progression',
+            p: libraryParam(progression, minor),
+            minor,
+            ...(progression.size ? { size: progression.size } : {}),
+          },
+        }
+      }),
     ...patterns.map((pattern): IndexEntry => ({
       id: `patterns:${pattern.ref}`,
       kind: 'patterns',

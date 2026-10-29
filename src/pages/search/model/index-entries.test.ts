@@ -4,7 +4,7 @@ import { COURSES } from '@/entities/course'
 import { LESSONS } from '@/entities/lesson'
 import { BUILT_IN_PATTERNS, PATTERN_IDS } from '@/entities/pattern'
 import { COLLECTIONS } from '@/entities/piece'
-import { LIBRARY_BY_STYLE } from '@/entities/progression-library'
+import { libraryByStyle } from '@/entities/progression-library'
 import { TRAINER_IDS } from '@/features/trainer'
 import { CHORD_QUALITIES, keySymbol, SCALE_KINDS } from '@/shared/lib/music'
 import { PRACTICE_PAGE_IDS } from '@/widgets/practice-pages'
@@ -63,7 +63,7 @@ describe('indexEntries', () => {
     expect(ofKind('chords')).toHaveLength(CHORD_QUALITIES.length)
     expect(ofKind('scales')).toHaveLength(SCALE_KINDS.length)
     expect(ofKind('progressions')).toHaveLength(
-      LIBRARY_BY_STYLE.flatMap((style) => style.progressions).length,
+      libraryByStyle().flatMap((style) => style.progressions).length,
     )
     expect(ofKind('patterns')).toHaveLength(PATTERN_IDS.length)
     expect(ofKind('exercises')).toHaveLength(EXERCISES.length)

@@ -93,7 +93,13 @@ export const admin = {
     label: 'Drafts',
     unpublished: 'Not published yet',
     edited: 'Changed {{date}}',
-    kinds: { piece: 'Song', lesson: 'Lesson', course: 'Course', journey: 'Journey' },
+    kinds: {
+      piece: 'Song',
+      lesson: 'Lesson',
+      course: 'Course',
+      journey: 'Journey',
+      progression: 'Progression',
+    },
   },
   errors: {
     none: 'No errors reported.',

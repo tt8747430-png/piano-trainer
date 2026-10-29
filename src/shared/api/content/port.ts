@@ -4,7 +4,7 @@ import { netResult, type NetResult } from '../network'
  * The kinds of content the database holds for this app: a piece's music, a lesson's sections, a
  * course's title and summary.
  */
-export const CONTENT_KINDS = ['piece', 'lesson', 'course', 'journey'] as const
+export const CONTENT_KINDS = ['piece', 'lesson', 'course', 'journey', 'progression'] as const
 export type ContentKind = (typeof CONTENT_KINDS)[number]
 
 export const isContentKind = (value: string): value is ContentKind =>

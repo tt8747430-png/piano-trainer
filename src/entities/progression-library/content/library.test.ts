@@ -9,8 +9,8 @@ import {
   type Key,
 } from '@/shared/lib/music'
 import {
-  COMMON_PROGRESSIONS,
-  LIBRARY_BY_STYLE,
+  commonProgressions,
+  libraryByStyle,
   libraryLine,
   libraryParam,
   libraryProgression,
@@ -143,11 +143,11 @@ describe('the progressions library', () => {
   })
 
   it('lists the library by style, in the styles’ order, every progression once', () => {
-    expect(LIBRARY_BY_STYLE.map((group) => group.style)).toEqual([...PROGRESSION_STYLES])
-    expect(LIBRARY_BY_STYLE.flatMap((group) => group.progressions)).toHaveLength(
+    expect(libraryByStyle().map((group) => group.style)).toEqual([...PROGRESSION_STYLES])
+    expect(libraryByStyle().flatMap((group) => group.progressions)).toHaveLength(
       PROGRESSION_LIBRARY.length,
     )
-    for (const { style, progressions } of LIBRARY_BY_STYLE)
+    for (const { style, progressions } of libraryByStyle())
       for (const each of progressions) expect(each.style, each.id).toBe(style)
   })
 
@@ -247,12 +247,12 @@ describe('the progressions library', () => {
   })
 
   it('offers a key its common progressions, each with a line in either mode', () => {
-    expect(COMMON_PROGRESSIONS.map((each) => each.id)).toEqual([
+    expect(commonProgressions().map((each) => each.id)).toEqual([
       'complete-cadence',
       'doo-wop',
       'jazz-cadence',
       'axis',
     ])
-    for (const each of COMMON_PROGRESSIONS) expect(modesOf(each), each.id).toEqual([false, true])
+    for (const each of commonProgressions()) expect(modesOf(each), each.id).toEqual([false, true])
   })
 })

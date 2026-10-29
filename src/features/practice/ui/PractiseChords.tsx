@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Footprints } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { COMMON_PROGRESSIONS, libraryLine, libraryParam } from '@/entities/progression-library'
+import { commonProgressions, libraryLine, libraryParam } from '@/entities/progression-library'
 import { localText, useLocale } from '@/shared/i18n'
 import {
   circleKey,
@@ -66,7 +66,7 @@ export function PractiseChords({
       </RowGroup>
       {mode ? (
         <RowGroup title={t('scales.keyProgressions')}>
-          {COMMON_PROGRESSIONS.map((progression) => (
+          {commonProgressions().map((progression) => (
             <li key={progression.id}>
               <RowLink
                 title={localText(progression.name, locale)}

@@ -7,8 +7,7 @@ import {
   type Key,
   type Numeral,
 } from '@/shared/lib/music'
-import { PROGRESSION_LIBRARY } from '../content/library'
-import { progressionMode } from './selectors'
+import { libraryProgressions, progressionMode } from './selectors'
 import type { LibraryProgression } from './types'
 
 // The library's progressions in the songs (ADR 0112): each song's chords read as numerals in the key
@@ -123,16 +122,17 @@ export function heardLine(numerals: readonly Numeral[], modal: boolean): readonl
 }
 
 /** Each progression of the library with its lines, one for each mode it has. */
-const LINES = PROGRESSION_LIBRARY.map((progression) => ({
-  progression,
-  lines: [false, true].flatMap((minor) => {
-    if (progressionMode(progression, minor) !== minor) return []
-    const numerals = parseNumerals(progression[minor ? 'minor' : 'major'] ?? '')
-    return numerals
-      ? [{ minor, numerals: heardLine(numerals, progression.mode !== undefined) }]
-      : []
-  }),
-}))
+const linesOf = () =>
+  libraryProgressions().map((progression) => ({
+    progression,
+    lines: [false, true].flatMap((minor) => {
+      if (progressionMode(progression, minor) !== minor) return []
+      const numerals = parseNumerals(progression[minor ? 'minor' : 'major'] ?? '')
+      return numerals
+        ? [{ minor, numerals: heardLine(numerals, progression.mode !== undefined) }]
+        : []
+    }),
+  }))
 
 const inside = (inner: Found, outer: Found): boolean =>
   inner.stretch === outer.stretch &&
@@ -146,7 +146,7 @@ const inside = (inner: Found, outer: Found): boolean =>
  * the key it is first heard in.
  */
 export function progressionsOf(piece: Piece): UsedProgression[] {
-  const all = LINES.map(({ progression, lines }) => ({
+  const all = linesOf().map(({ progression, lines }) => ({
     progression,
     places: lines.flatMap(({ minor, numerals }) => found(piece, numerals, minor)),
   }))

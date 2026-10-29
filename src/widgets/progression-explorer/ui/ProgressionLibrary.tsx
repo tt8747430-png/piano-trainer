@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFold } from '@/features/fold-section'
 import {
-  LIBRARY_BY_STYLE,
+  libraryByStyle,
   libraryParam,
   progressionMode,
   type LibraryProgression,
@@ -74,7 +74,7 @@ export function ProgressionLibrary({
   const playback = usePlayback<string>()
   return (
     <FoldSection title={t('progressions.library')} fold={fold} className="flex flex-col gap-6">
-      {LIBRARY_BY_STYLE.map(({ style, progressions }) => (
+      {libraryByStyle().map(({ style, progressions }) => (
         <section
           key={style}
           aria-label={t(`progressions.style.${style}`)}

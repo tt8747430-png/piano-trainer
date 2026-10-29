@@ -14,8 +14,8 @@ import { localText, useLocale, type LocalText } from '@/shared/i18n'
 import { InfoTip, Segmented } from '@/shared/ui'
 import { Input } from '@/shared/ui/primitives/input'
 import { LessonView } from '@/widgets/lesson-view'
-import { DraftScreen } from './DraftScreen'
-import { TextFields } from './TextFields'
+import { DraftScreen } from '@/widgets/content-editor'
+import { TextFields } from '@/widgets/content-editor'
 
 /**
  * An example written as a line of text (a row of chords, a line of notes, numerals): its kind over a

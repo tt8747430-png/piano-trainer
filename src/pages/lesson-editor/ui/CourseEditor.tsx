@@ -6,9 +6,9 @@ import { STAGES } from '@/entities/step'
 import { useAddLesson, useCourseDraft } from '@/features/edit-original'
 import { localText, useLocale } from '@/shared/i18n'
 import { Dropdown, InfoTip } from '@/shared/ui'
-import { DraftScreen } from './DraftScreen'
-import { AddByName, OrderList } from './OrderList'
-import { TextFields } from './TextFields'
+import { DraftScreen } from '@/widgets/content-editor'
+import { AddByName, OrderList } from '@/widgets/content-editor'
+import { TextFields } from '@/widgets/content-editor'
 
 /** The course's lessons in order: each one's editor, moved up or down, removed; a new one added. */
 function CourseLessons({

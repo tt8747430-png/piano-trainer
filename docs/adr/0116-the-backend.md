@@ -149,3 +149,9 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r17 — The Admin area's Drafts tab lists every draft kept, the newest first (`ContentEditingPort.drafts`: each
   its kind, name, when changed, and whether it was ever published), each opening its editor: what an editor made
   and left unpublished is found again there (2026-10-29).
+- r18 — Progressions are content (`progression`, kept whole): the library is the app's own under the database's
+  copies, then the progressions editors made, each reading as one (`readsAsProgression`: a style, a name and how
+  it sounds in both languages, a line of numerals that reads); `libraryProgressions`, `libraryByStyle` and
+  `commonProgressions` replace the bundled constants. An editor's Progressions bar edits the progression in sight
+  and makes a new one (`/practice/progressions/$progressionId/edit`, `/practice/progressions/new`). The editors'
+  shared parts (`DraftScreen`, `TextFields`, `OrderList`) moved to `widgets/content-editor` (2026-10-29).

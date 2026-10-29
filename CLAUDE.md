@@ -114,7 +114,7 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
 - **Practice** (`/practice`) — explorers (Chords, Scales and keys, Intervals, Progressions, Accompaniment), the
   Chord finder, the Metronome, Exercises and Quiz (one setup and four drills for every trainer,
   `widgets/trainer-setup`), in three groups. Each page holds the tools that work on its thing, never a page of
-  their own. `pages/<thing>`, `widgets/*-explorer`, `widgets/practice-pages`, `features/trainer`. Fingering by hand
+  their own. `pages/<thing>`, `widgets/*-explorer`, `widgets/practice-pages`, `features/trainer`; an editor's progression editor (`/practice/progressions/$progressionId/edit`, `/practice/progressions/new`, `pages/progression-editor`; the editors' shared parts in `widgets/content-editor`). Fingering by hand
   (scales and arpeggios as the printed books, chords by rule) and the voicings live in the kernel (`music/fingering`,
   `chord-fingering`, `voicing`); Hanon and the daily scale routine in `shared/lib/exercise`.
 - **The Player** (`/play/$pieceId`, and walks, progressions and exercises under `/play/`) — one screen
