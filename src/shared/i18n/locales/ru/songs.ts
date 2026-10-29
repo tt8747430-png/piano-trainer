@@ -127,6 +127,7 @@ export const songs: LocaleResources['songs'] = {
     empty: 'Пусто',
     more: 'Ещё: {{name}}',
     newSong: 'Новая песня здесь',
+    newBuiltIn: 'Новая песня каталога',
     archive: 'Папку в архив',
     delete: 'Удалить папку',
     emptyTitle: 'В этой папке пусто',
@@ -199,6 +200,9 @@ export const songs: LocaleResources['songs'] = {
     meter: 'Размер',
     make: 'Создать',
     makeAndRecord: 'Записать',
+    builtInTitle: 'Новая песня каталога',
+    making: 'Создаём…',
+    failed: 'Песня не создана. Попробуйте снова, когда будете онлайн.',
   },
   setup: {
     title: 'Партитура',

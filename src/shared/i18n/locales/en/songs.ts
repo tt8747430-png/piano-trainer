@@ -133,6 +133,7 @@ export const songs = {
     empty: 'Empty',
     more: 'More for {{name}}',
     newSong: 'New song here',
+    newBuiltIn: 'New built-in song',
     archive: 'Archive folder',
     delete: 'Delete folder',
     emptyTitle: 'This folder is empty',
@@ -209,6 +210,9 @@ export const songs = {
     meter: 'Time signature',
     make: 'Make',
     makeAndRecord: 'Record',
+    builtInTitle: 'New built-in song',
+    making: 'Making…',
+    failed: 'The song could not be made. Try again once you’re online.',
   },
   // The staves a new song's score starts with, its own sheet (ADR 0114, 0097).
   setup: {

@@ -588,6 +588,7 @@ export const editor: LocaleResources['editor'] = {
     retry: 'Повторить',
     editorsOnly: 'Оригинал песни правит только редактор.',
     toSong: 'К песне',
+    toSongs: 'К песням',
     label: 'Черновик оригинала',
     unchanged: 'Оригинал · без изменений',
     drafted: 'Черновик · не опубликован',

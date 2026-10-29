@@ -652,6 +652,7 @@ export const editor = {
     retry: 'Try again',
     editorsOnly: 'Only an editor edits a song’s original.',
     toSong: 'Back to the song',
+    toSongs: 'Back to Songs',
     label: 'Draft of the original',
     unchanged: 'Original · not changed',
     drafted: 'Draft · not published',

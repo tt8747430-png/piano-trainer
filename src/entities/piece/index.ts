@@ -66,6 +66,7 @@ export { chordsOfPiece, skillsOfPiece } from './model/skills'
 export { factsOf, type ChordStretch, type PieceFacts } from './model/facts'
 export { pieceChords } from './model/piece-chords'
 export {
+  allCollections,
   choosableChordSize,
   entriesInKey,
   entryById,
@@ -75,6 +76,7 @@ export {
   selectHasVersion,
   selectOwnSong,
   selectVersion,
+  songCollections,
   versionableEntry,
 } from './model/selectors'
 export { shelfOf } from './model/shelf'
@@ -83,6 +85,8 @@ export {
   originalWith,
   pieceRecordBody,
   pieceRecordMeta,
+  readsAsMadeSong,
+  type MadeSong,
 } from './model/content-record'
 export { entryTitles, entryWords } from './model/titles'
 export { Credits } from './ui/Credits'

@@ -1,8 +1,8 @@
 import { keptContent } from '@/shared/api/content'
 import { pitchClassOf, type ChordSize, type Key, type SpelledNote } from '@/shared/lib/music'
 import type { PatternId } from '@/entities/pattern'
-import { COLLECTIONS } from '../content'
-import { updatesPiece } from './content-record'
+import { COLLECTIONS, SONG_COLLECTIONS } from '../content'
+import { readsAsMadeSong, updatesPiece, type MadeSong } from './content-record'
 import { asChartPiece } from './degree-chart'
 import { factsOf } from './facts'
 import type { PieceMusic } from './music'
@@ -11,8 +11,10 @@ import type { PiecesState } from './store'
 import {
   isDegreePiece,
   isPiece,
+  isSongCollectionId,
   pieceKey,
   type ChartPiece,
+  type Collection,
   type Entry,
   type Listing,
   type Piece,
@@ -21,7 +23,11 @@ import {
 const BUNDLED_BY_ID = new Map(
   COLLECTIONS.flatMap((collection) => collection.entries).map((entry) => [entry.id, entry]),
 )
-let built = { revision: -1, index: BUNDLED_BY_ID as ReadonlyMap<string, Entry> }
+let built = {
+  revision: -1,
+  index: BUNDLED_BY_ID as ReadonlyMap<string, Entry>,
+  made: [] as readonly MadeSong[],
+}
 
 /**
  * A newer copy with the app's own recording file: the database holds a recording's timing, never
@@ -36,20 +42,45 @@ function withOwnRecording(entry: Entry, update: Piece): Piece {
 
 /**
  * The catalog by id: the app's own entries, each piece the database has a newer copy of (kept on
- * the device, ADR 0116) in that copy where it reads as the piece. Built again when the kept content
- * changes.
+ * the device, ADR 0116) in that copy where it reads as the piece, then the songs editors made (a kept
+ * piece the app has not got that reads as one). Built again when the kept content changes.
  */
-function entryIndex(): ReadonlyMap<string, Entry> {
+function catalog(): typeof built {
   const kept = keptContent()
-  if (kept.revision === built.revision) return built.index
+  if (kept.revision === built.revision) return built
   const index = new Map(BUNDLED_BY_ID)
   for (const entry of BUNDLED_BY_ID.values()) {
     const body = kept.body('piece', entry.id)
     if (updatesPiece(entry, body)) index.set(entry.id, withOwnRecording(entry, body))
   }
-  built = { revision: kept.revision, index }
+  const made = kept.ids('piece').flatMap((id) => {
+    const body = kept.body('piece', id)
+    return !BUNDLED_BY_ID.has(id) && readsAsMadeSong(id, body) ? [body] : []
+  })
+  for (const song of made) index.set(song.id, song)
+  built = { revision: kept.revision, index, made }
   PLAYING.clear()
-  return index
+  return built
+}
+
+const entryIndex = (): ReadonlyMap<string, Entry> => catalog().index
+
+/** Every collection, in `COLLECTION_IDS` order, the songs editors made at their collections' ends. */
+export const allCollections = (): readonly Collection[] => [
+  ...songCollections(),
+  ...COLLECTIONS.filter((collection) => !isSongCollectionId(collection.id)),
+]
+
+/** The collections Songs lists, in order, each with the songs editors made in it at its end. */
+export const songCollections = (): readonly Collection[] => {
+  const { made } = catalog()
+  if (made.length === 0) return SONG_COLLECTIONS
+  return SONG_COLLECTIONS.map((collection) => {
+    const added = made.filter((song) => song.collection === collection.id)
+    return added.length === 0
+      ? collection
+      : { ...collection, entries: [...collection.entries, ...added] }
+  })
 }
 
 export const entryById = (id: string): Entry | undefined => entryIndex().get(id)

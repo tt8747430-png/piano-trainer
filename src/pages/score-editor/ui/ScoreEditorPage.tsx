@@ -11,7 +11,7 @@ import {
   usePiecesStoreApi,
   type ChartPiece,
 } from '@/entities/piece'
-import { DraftStrip, useOriginalDraft } from '@/features/edit-original'
+import { DraftStrip, useMadeSong, useOriginalDraft } from '@/features/edit-original'
 import { useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, NotFound } from '@/shared/ui'
@@ -102,13 +102,32 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
   )
 }
 
-/** The original of the route's piece, where it has one an editor changes: a built-in song or study written as a chart. */
+/** A song an editor made and has not published: its draft read from the server, then edited. */
+function MadeOriginal({ id }: { id: string }) {
+  const { t } = useTranslation('editor')
+  const load = useMadeSong(id)
+  if (load.state === 'loading') return <NotOpen line={t('original.opening')} />
+  if (load.state === 'failed')
+    return <NotOpen line={t(load.reason === 'offline' ? 'original.offline' : 'original.failed')} />
+  if (load.state === 'none')
+    return (
+      <NotOpen line={t('original.failed')}>
+        <ButtonLink render={<Link to="/songs" />}>{t('original.toSongs')}</ButtonLink>
+      </NotOpen>
+    )
+  return <EditingOriginal piece={load.song} />
+}
+
+/**
+ * The original of the route's piece, where it has one an editor changes: a built-in song or study
+ * written as a chart, or a song an editor made and has not published yet.
+ */
 function OriginalOf({ id }: { id: string }) {
   const { t } = useTranslation('editor')
   const { account } = useAccount()
   const entry = entryById(id)
   const piece = entry && isPiece(entry) && !isDegreePiece(entry) ? entry : undefined
-  if (!piece || !editsContent(account))
+  if (!editsContent(account) || (entry && !piece))
     return (
       <NotOpen line={t('original.editorsOnly')}>
         <ButtonLink render={<Link to="/songs/$pieceId" params={{ pieceId: id }} />}>
@@ -116,7 +135,7 @@ function OriginalOf({ id }: { id: string }) {
         </ButtonLink>
       </NotOpen>
     )
-  return <EditingOriginal piece={piece} />
+  return piece ? <EditingOriginal piece={piece} /> : <MadeOriginal id={id} />
 }
 
 /**

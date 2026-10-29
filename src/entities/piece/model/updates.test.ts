@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { keepContent } from '@/shared/api/content'
-import { entryById, pieceById, piecesPlaying } from './selectors'
+import { readsAsMadeSong } from './content-record'
+import { entryById, pieceById, piecesPlaying, songCollections } from './selectors'
 
 afterEach(() => keepContent([]))
 
@@ -53,5 +54,46 @@ describe('the catalog over the kept content', () => {
     expect(pieceById('romashki')).toMatchObject({
       recording: { src: recorded.recording.src, start: 4 },
     })
+  })
+})
+
+describe('a song an editor made (content as data)', () => {
+  const made = {
+    id: 'made-song',
+    kind: 'song',
+    title: 'A made song',
+    key: 'C',
+    meter: '4/4',
+    tempo: 90,
+    pattern: 'r1',
+    sections: [{ kind: 'verse', lines: ['C C F G'] }],
+    collection: 'hymns',
+  }
+
+  it('is in the catalog and at its collection’s end once published', () => {
+    kept(made, 'made-song')
+    expect(pieceById('made-song')).toMatchObject({ id: 'made-song', title: 'A made song' })
+    const hymns = songCollections().find((collection) => collection.id === 'hymns')
+    expect(hymns?.entries.at(-1)?.id).toBe('made-song')
+  })
+
+  it('reads as a made song only with a song collection and music that reads', () => {
+    expect(readsAsMadeSong('made-song', made)).toBe(true)
+    for (const body of [
+      { ...made, collection: 'studies' },
+      { ...made, collection: undefined },
+      { ...made, key: 'H' },
+      { ...made, sections: 'none' },
+      { ...made, id: 'other' },
+    ])
+      expect(readsAsMadeSong('made-song', body)).toBe(false)
+  })
+
+  it('is not there without reading as one', () => {
+    kept({ ...made, collection: 'nowhere' }, 'made-song')
+    expect(entryById('made-song')).toBeUndefined()
+    expect(
+      songCollections().flatMap((collection) => collection.entries.map(({ id }) => id)),
+    ).not.toContain('made-song')
   })
 })

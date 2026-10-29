@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { archivedSongs, useFolderName, useLibraryLayout } from '@/entities/library'
 import { PATTERN_IDS, usePatternBook } from '@/entities/pattern'
-import { COLLECTIONS, useRepertoire } from '@/entities/piece'
+import { allCollections, useRepertoire } from '@/entities/piece'
 import { useKeyName, useLocale } from '@/shared/i18n'
 import { usePageWords } from '@/widgets/practice-pages'
 import { indexEntries, type IndexEntry, type IndexNames } from './index-entries'
@@ -45,7 +45,7 @@ export function useIndex(names: IndexNames): IndexEntry[] {
         names,
         pieces: [
           ...repertoire.ownSongs,
-          ...COLLECTIONS.flatMap((collection) =>
+          ...allCollections().flatMap((collection) =>
             collection.entries.map((entry) => repertoire.entry(entry.id) ?? entry),
           ),
         ],

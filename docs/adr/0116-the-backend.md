@@ -141,3 +141,8 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   orders, removes and adds a chapter's steps; a new lesson is created unpublished and opened in the lesson
   editor. Continue, Search and the map read the catalog (`allCourses`, `allJourneys`), not the bundled lists. One
   list for every order an editor arranges (`OrderList`, `AddByName`) (2026-10-29).
+- r16 — Songs are made in the app: an editor's New built-in song (a collection folder's More) creates the song on
+  the server unpublished with its collection (`MadeSong`, `readsAsMadeSong`), its chart started as a learner's
+  new song's, and opens its original in the score editor from its draft (`useMadeSong`; the edit route lets an
+  original the device has not got through). Published, it is in the catalog at its collection's end
+  (`songCollections`, `allCollections`), its folder, Search and the Player reading it (2026-10-29).

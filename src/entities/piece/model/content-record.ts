@@ -1,7 +1,14 @@
 import { parseKey } from '@/shared/lib/music'
 import { factsOf } from './facts'
 import { musicOf, readMusic, type PieceMusic } from './music'
-import { isPiece, type ChartPiece, type Entry, type Piece } from './types'
+import {
+  isPiece,
+  isSongCollectionId,
+  type ChartPiece,
+  type Entry,
+  type Piece,
+  type SongCollectionId,
+} from './types'
 
 /** Every field of a piece that is its music: what an editor's draft writes over (ADR 0116). */
 const MUSIC_FIELDS = [
@@ -31,6 +38,31 @@ export function updatesPiece(entry: Entry, body: unknown): body is Piece {
     Boolean(parseKey(update.key)) &&
     typeof update.meter === 'string' &&
     ('sections' in update ? Array.isArray(update.sections) : 'progression' in update)
+  )
+}
+
+/** A song an editor made in the app (content as data, ADR 0116): a chart, and the collection it ends. */
+export type MadeSong = ChartPiece & { readonly collection: SongCollectionId }
+
+/**
+ * Whether a body from the database reads as the song `id` an editor made: a song written as a chart,
+ * titled, in a key and a meter, and in a collection Songs lists.
+ */
+export function readsAsMadeSong(id: string, body: unknown): body is MadeSong {
+  if (typeof body !== 'object' || body === null) return false
+  const song = body as Partial<MadeSong>
+  return (
+    song.id === id &&
+    song.kind === 'song' &&
+    isSongCollectionId(song.collection) &&
+    typeof song.title === 'string' &&
+    song.title.trim() !== '' &&
+    typeof song.key === 'string' &&
+    Boolean(parseKey(song.key)) &&
+    typeof song.meter === 'string' &&
+    typeof song.tempo === 'number' &&
+    typeof song.pattern === 'string' &&
+    Array.isArray(song.sections)
   )
 }
 

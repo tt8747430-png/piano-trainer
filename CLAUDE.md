@@ -126,7 +126,7 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
   transport (`widgets/mode-switch`, `ScoreBar`). `pages/score-editor`, `widgets/score-sheet`;
   `features/score-editor` (the draft, its pure edits, undo, `createEditorStore`), `features/edit-piece` (saving),
   `features/record-take` and `manage-takes`; an editor's Edit the original (`?original=true`,
-  `features/edit-original`: the song's draft on the server, Publish, Versions, Discard).
+  `features/edit-original`: the song's draft on the server, Publish, Versions, Discard); an editor's New built-in song in a collection's folder (`useCreateBuiltInSong`), opened there unpublished.
 - **Elsewhere** — Search (`/search`); Settings (`/settings`: one grouped list, the account card, General's choices in place,
   then rows to Keyboard and recording, Sync and data, the Account, How to use and the MIDI keyboard with its log;
   `pages/settings`, `SettingsList`, `ChoiceRow`); the account pages (`/account/sign-in`, `create`, `forgot`, `new-password`, and `/auth/callback` where the

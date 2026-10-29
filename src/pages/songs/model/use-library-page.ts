@@ -13,7 +13,13 @@ import {
   type LibrarySort,
   type ShelvedFolder,
 } from '@/entities/library'
-import { entryTitles, isOwnSongId, useRepertoire, type PieceId } from '@/entities/piece'
+import {
+  entryTitles,
+  isOwnSongId,
+  useRepertoire,
+  type PieceId,
+  type SongCollectionId,
+} from '@/entities/piece'
 import { byLastOpened, selectPractised, useProgress } from '@/entities/progress'
 import {
   orderFolders,
@@ -39,7 +45,7 @@ export type Pending =
   | { readonly kind: 'delete-folder'; readonly folder: ShelvedFolder }
   | { readonly kind: 'delete-songs'; readonly songs: readonly PieceId[] }
   | { readonly kind: 'delete-chosen' }
-  | { readonly kind: 'new-song' }
+  | { readonly kind: 'new-song'; readonly builtIn?: SongCollectionId }
   | { readonly kind: 'move-in' }
 
 /**

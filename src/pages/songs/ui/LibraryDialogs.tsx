@@ -49,6 +49,7 @@ export function LibraryDialogs({
         open={pending?.kind === 'new-song'}
         onOpenChange={shut}
         folder={folder?.id ?? null}
+        builtIn={pending?.kind === 'new-song' ? pending.builtIn : undefined}
       />
       {folder ? (
         <MoveInSheet
