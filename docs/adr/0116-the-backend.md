@@ -68,3 +68,6 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   (2026-10-29).
 - r2 — Sync over the saved stores as they are, no RxDB: one document a store, merged field by field, collections
   item by item; Autosync while signed in; the takes bucket's policies dropped (takes are MIDI notes) (2026-10-29).
+- r3 — The accounts' screens: sign in (email, Google; Apple coming soon), create an account, a forgotten and a new
+  password, the callback; Settings as an index of pages with the account's own (rename, password, sign out,
+  delete after 30 days, the gate on signing in to an account to be deleted); the Profile; the welcome (2026-10-29).

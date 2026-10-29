@@ -124,8 +124,12 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
   transport (`widgets/mode-switch`, `ScoreBar`). `pages/score-editor`, `widgets/score-sheet`;
   `features/score-editor` (the draft, its pure edits, undo, `createEditorStore`), `features/edit-piece` (saving),
   `features/record-take` and `manage-takes`.
-- **Elsewhere** — Search (`/search`), Settings (`/settings`, How to use and the MIDI keyboard with its log under it), a shared song
-  (`/songs/shared`).
+- **Elsewhere** — Search (`/search`); Settings (`/settings`: the account card, then a page each for Preferences,
+  Playing, Sync and data, Help, and Account, `pages/settings`; How to use and the MIDI keyboard with its log under
+  them); the account pages (`/account/sign-in`, `create`, `forgot`, `new-password`, and `/auth/callback` where the
+  server's links return; `pages/account`); the Profile (`/profile`, `pages/profile`); a shared song
+  (`/songs/shared`). The welcome (`widgets/welcome`, once, `pt-settings.welcomed`) and the deletion gate
+  (`app/deletion-gate`) sit in `RootLayout`.
 
 **State:** what you look at → URL search params. What must be remembered → a saved entity store; a screen's last
 view → `pt-views`. Everything else → component state.

@@ -523,3 +523,12 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   _Avoid:_ metadata, summary.
 - **Net result** (`NetResult`): a server call's outcome: ok, **offline**, **refused**, **failed**. _Avoid:_
   response, status.
+- **Account** (`Account`): the learner signed in: id, email, name. Optional: the app works without one, as a
+  **guest**. _Avoid:_ user (in the UI), login.
+- **Auth problem** (`authProblem`): what a refused sign-in, sign-up or password came to, in words a screen says
+  (wrong credentials, email taken, weak password, too many tries, unconfirmed). _Avoid:_ error code.
+- **Deletion grace**: the 30 days between asking to delete an account and its purge; signing in within it meets
+  the **deletion gate** (keep the account, or sign out). _Avoid:_ soft delete.
+- **Profile**: the learner's own page: who they are and their **practice record** (`practiceRecord`: days
+  practised, best run, steps learned, song lessons done, songs played, skills known). _Avoid:_ dashboard, stats.
+- **Welcome**: the app's first-run screen, shown once (`welcomed`). _Avoid:_ onboarding, intro.
