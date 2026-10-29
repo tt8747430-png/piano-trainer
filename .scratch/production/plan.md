@@ -241,3 +241,28 @@ Order: 4.1 → 4.2 → 4.3 → 4.4 → 4.5 → 4.6; the full suite and the build
 the database's, download what changed, keep it; at start, before the first render, apply what is kept (each entity's
 catalog reads bundled content overlaid with it); 4.6 course lessons ensured as `<course>/<lesson>`. Download for
 offline, Downloaded, Storage move to 4b and round 7, where content is not bundled.
+
+## Round 4b: the Public library (planned 2026-10-29)
+
+Songs first (the learner's own songs and versions); patterns and progressions follow the same tables later.
+
+**4b.1 Tables** (migration, no drops): `public_items` (`id uuid`, `author_id` → auth.users on delete cascade,
+`author_name`, `kind` song, `source_id` the author's own id, `title`, `meta jsonb`, `body jsonb`, `size` generated,
+`version`, `saves int`, `hidden bool`, `published_at`, `updated_at`; unique (author_id, source_id); body under
+200 KB by a check); `public_reports` (item, reporter, reason, note, at; one per reporter and item); `public_saves`
+(item, user; unique); `publish_blocks` (user). RLS: anyone reads what is not hidden, an author reads and writes
+their own unless blocked; reports insert by the signed in, read by editors; editors hide and block. A trigger caps
+publishing at 20 an hour per author. `save_public_item(id)` (security definer) records a save once and counts it.
+`tests/public-access.sql`.
+
+**4b.2 Port** `shared/api/public-library`: `browse({sort: new | saved, query})`, `item(id)`, `publish(song)`,
+`unpublish(sourceId)`, `save(id)`, `report(id, reason, note)`, `mine()`; NetResults; fake + Supabase adapter.
+
+**4b.3 Publish**: on an own song's page (its More menu): Publish (signed in; the rights notice the first time:
+only what you wrote or may share), Update when published and changed, Unpublish; its state on the song's page.
+
+**4b.4 The Public library page** (`/songs/public`, from Songs): New · Most saved, search; a song opens its preview
+(title, author, chords, the sheet) with Save to my library (an own song, credited to its author) and Report
+(reason: not theirs to share, offensive, spam, broken; a note). Offline: says it needs a connection.
+
+**4b.5** en/ru, tests through renderApp with the fake, screenshots, docs (ADR 0116 r4b).
