@@ -47,3 +47,19 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   (`.claude/settings.local.json`, ignored by git).
 - 2026-10-29 Round 2 on main (6552 tests, build ok). Note for round 7: the entry chunk grew 396 → 616 KB with
   supabase-js; load auth and the cloud after first paint.
+- 2026-10-29 Round 3 started (no code yet). Findings for 3.1, the account pages:
+  - Pattern to copy: `pages/midi-settings` (ScreenHeader + BackButton fallback, `SettingsGroup`, `RowLink`); lazy
+    screens in `app/routes/settings-screens.ts`, routes in `app/router.tsx` (~l.140–160, list ~l.528).
+  - Fields: `shared/ui/NameField.tsx` (label over `InputGroup`/`InputGroupInput`): add `EmailField`/`PasswordField`
+    beside it. No toast component in the kit: show errors inline (`role="alert"`) under the form.
+  - i18n: add an `account` namespace: `NAMESPACES` in `shared/i18n/index.ts`, `locales/{en,ru}/index.ts`, ru typed
+    by `LocaleResources['account']`.
+  - No `useOnline` hook exists (RouteError reads `navigator.onLine`): add one in `shared/lib` (online/offline events,
+    `useSyncExternalStore`), used to disable the forms' buttons with the offline note.
+  - Auth errors (`NetResult.detail`, Supabase's messages): "Invalid login credentials" → wrong email or password;
+    "User already registered" → email taken; "Password should be at least" → weak; "rate limit"/"For security
+    purposes" → too many tries; "Email not confirmed" → confirm first. Map by substring in one pure function in
+    `pages/account/model` with a test.
+  - Social marks (Google, Apple SVG paths) in `../memory-palaces/src/shared/ui/SocialButtons.tsx`; Apple disabled
+    with "Coming soon". Memory-palaces' Login/Forgot/AuthCallback pages under `../memory-palaces/src/pages/`.
+  - Tests through `renderApp(path, { auth: createFakeAuth({ accounts }) })`; `useAccount()` gives `auth`.
