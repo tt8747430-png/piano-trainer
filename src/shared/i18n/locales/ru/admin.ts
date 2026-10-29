@@ -36,6 +36,7 @@ export const admin: LocaleResources['admin'] = {
     reports: 'Жалобы',
     errors: 'Ошибки',
     activity: 'Журнал',
+    drafts: 'Черновики',
     components: 'Компоненты',
   },
   loading: 'Загрузка…',
@@ -88,6 +89,13 @@ export const admin: LocaleResources['admin'] = {
     show: 'Показать снова',
     block: 'Запретить публиковать',
     dismiss: 'Закрыть',
+  },
+  drafts: {
+    none: 'Черновиков нет. Правки редактора ждут здесь, пока их не опубликуют.',
+    label: 'Черновики',
+    unpublished: 'Ещё не опубликовано',
+    edited: 'Изменено {{date}}',
+    kinds: { piece: 'Песня', lesson: 'Урок', course: 'Курс', journey: 'Путь' },
   },
   errors: {
     none: 'Об ошибках не сообщалось.',

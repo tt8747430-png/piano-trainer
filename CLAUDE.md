@@ -131,7 +131,7 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
   then rows to Keyboard and recording, Sync and data, the Account, How to use and the MIDI keyboard with its log;
   `pages/settings`, `SettingsList`, `ChoiceRow`); the account pages (`/account/sign-in`, `create`, `forgot`, `new-password`, and `/auth/callback` where the
   server's links return; `pages/account`); the Profile (`/profile`, `pages/profile`); Privacy and Terms (`/legal/privacy`, `/legal/terms`, `pages/legal`, linked from Help and Create an account); the Admin area (`/admin`,
-  `pages/admin`, its own chunk, an admin's alone; `shared/api/admin`, `shared/lib/admin`; feature switches by
+  `pages/admin`, its own chunk, an admin's alone; its Drafts tab every editor's draft, unpublished ones marked; `shared/api/admin`, `shared/lib/admin`; feature switches by
   `useFeature`, `shared/lib/features`); a shared song
   (`/songs/shared`). The welcome (`widgets/welcome`, once, `pt-settings.welcomed`) and the deletion gate
   (`app/deletion-gate`) sit in `RootLayout`.

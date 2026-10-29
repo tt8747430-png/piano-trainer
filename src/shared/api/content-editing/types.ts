@@ -8,6 +8,17 @@ export interface ContentDraft {
   readonly updatedAt: string
 }
 
+/** A draft as the list of drafts shows it: whose, its name as its meta has it, and whether it was ever published. */
+export interface DraftListing {
+  readonly kind: ContentKind
+  readonly id: string
+  /** Its name in both languages, or as typed (a song's); none where its meta has none. */
+  readonly title: unknown
+  readonly updatedAt: string
+  /** False for an item made in the app and not yet published: learners have nothing of it. */
+  readonly published: boolean
+}
+
 /** A version of an item that was published, kept to be published again. */
 export interface KeptVersion {
   readonly version: string
@@ -31,6 +42,8 @@ export interface ContentEditingPort {
     id: string,
     draft: Pick<ContentDraft, 'body' | 'meta'>,
   ): Promise<NetResult<void>>
+  /** Every draft kept, the newest first: what an editor comes back to. */
+  drafts(): Promise<NetResult<readonly DraftListing[]>>
   /** The item's draft, or null where it has none. */
   draft(kind: ContentKind, id: string): Promise<NetResult<ContentDraft | null>>
   saveDraft(

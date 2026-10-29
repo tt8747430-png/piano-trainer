@@ -37,7 +37,9 @@
      New course (`/courses/new`, editors), the record holding shelf/stage/weeks. Not yet: a list of unpublished
      drafts to come back to (goes with the Admin content queue), deleting a course. Journeys DONE (r15: migration
      applied, journey editor). Songs DONE (r16: New built-in song in a collection folder). Next: practice items (progressions,
-     exercises, patterns) as content, then the Admin drafts queue. Original plan, checked against the
+     exercises, patterns) as content. Admin Drafts tab DONE (r17). Decision: Drafts sit in the Admin area
+     (admins only); an editor who is not an admin reaches drafts by their editors' links only — owner may want it
+     opened to editors. Original plan, checked against the
      database: editors may insert `content_items` rows with `status = 'draft'`; `publish_content` sets
      `status = 'published'`; `content_drafts` has a foreign key to `content_items`, so an item must exist before its
      draft. Steps:

@@ -95,6 +95,33 @@ describe('editing the built-in content', () => {
     })
   })
 
+  it('lists the drafts, the newest first, each with its name and whether it was ever published', async () => {
+    const { port, set } = editing()
+    await port.saveDraft('lesson', 'scales', { body: { id: 'scales', v: 2 }, meta: { title: 'S' } })
+    await port.create('course', 'jazz', { body: { id: 'jazz' }, meta: { title: 'Jazz' } })
+    expect(await port.drafts()).toEqual({
+      ok: true,
+      value: [
+        {
+          kind: 'course',
+          id: 'jazz',
+          title: 'Jazz',
+          updatedAt: expect.any(String),
+          published: false,
+        },
+        {
+          kind: 'lesson',
+          id: 'scales',
+          title: 'S',
+          updatedAt: expect.any(String),
+          published: true,
+        },
+      ],
+    })
+    set({ editor: false })
+    expect(await port.drafts()).toEqual({ ok: true, value: [] })
+  })
+
   it('says it is offline without a connection', async () => {
     const { port } = editing({ online: false })
     expect(await port.versions('lesson', 'scales')).toMatchObject({ ok: false, reason: 'offline' })

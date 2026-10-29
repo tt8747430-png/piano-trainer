@@ -1,4 +1,5 @@
 import { contentHash } from '@/shared/lib'
+import { isContentKind } from '../content'
 import { netResult, type NetOptions } from '../network'
 import type { Json, Backend, PianoClient } from '../supabase'
 import type { ContentEditingPort } from './types'
@@ -52,6 +53,27 @@ export function createSupabaseContentEditing(
             body: body as Json,
             meta: meta as Json,
           }),
+        )
+      }),
+    drafts: () =>
+      ask(async (client) => {
+        const { data, error, status } = await client
+          .from('content_drafts')
+          .select('kind, id, meta, updated_at, content_items(status)')
+          .order('updated_at', { ascending: false })
+        if (error) throw thrown(error, status)
+        return data.flatMap((row) =>
+          isContentKind(row.kind)
+            ? [
+                {
+                  kind: row.kind,
+                  id: row.id,
+                  title: isRecord(row.meta) ? row.meta.title : undefined,
+                  updatedAt: row.updated_at,
+                  published: row.content_items?.status === 'published',
+                },
+              ]
+            : [],
         )
       }),
     draft: (kind, id) =>

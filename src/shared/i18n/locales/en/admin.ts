@@ -35,6 +35,7 @@ export const admin = {
     reports: 'Reports',
     errors: 'Errors',
     activity: 'Activity',
+    drafts: 'Drafts',
     components: 'Components',
   },
   loading: 'Loading…',
@@ -87,6 +88,13 @@ export const admin = {
     dismiss: 'Dismiss',
   },
   // What went wrong on learners' devices, the latest first (ADR 0116).
+  drafts: {
+    none: 'No drafts. An editor’s changes wait here until they are published.',
+    label: 'Drafts',
+    unpublished: 'Not published yet',
+    edited: 'Changed {{date}}',
+    kinds: { piece: 'Song', lesson: 'Lesson', course: 'Course', journey: 'Journey' },
+  },
   errors: {
     none: 'No errors reported.',
     where: '{{date}} · {{path}} · build {{build}}',

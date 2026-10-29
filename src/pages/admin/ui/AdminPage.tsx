@@ -6,6 +6,7 @@ import { ADMIN_TABS, type AdminTab } from '../model/admin-tab'
 import { AccountsTab } from './AccountsTab'
 import { ActivityTab } from './ActivityTab'
 import { ComponentsTab } from './ComponentsTab'
+import { DraftsTab } from './DraftsTab'
 import { ErrorsTab } from './ErrorsTab'
 import { GroupsTab } from './GroupsTab'
 import { ReportsTab } from './ReportsTab'
@@ -18,6 +19,7 @@ const TABS: Readonly<Record<AdminTab, () => React.JSX.Element>> = {
   reports: ReportsTab,
   errors: ErrorsTab,
   activity: ActivityTab,
+  drafts: DraftsTab,
   components: ComponentsTab,
 }
 

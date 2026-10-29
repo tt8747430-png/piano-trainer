@@ -5,6 +5,7 @@ import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { createFakeAdmin } from '@/shared/api/admin'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
+import { createFakeContentEditing } from '@/shared/api/content-editing'
 
 const OWNER = { email: 'owner@example.com', name: 'Owner', password: 'correct horse' }
 
@@ -141,6 +142,28 @@ describe('the Admin area', () => {
     expect(screen.getByText(/\/play\/bz5 · build 1\.2\.3/)).toBeVisible()
     await user.click(screen.getByText('Stack'))
     expect(screen.getByText('at draw (score.ts:1)')).toBeVisible()
+  })
+
+  it('lists the drafts editors left, the unpublished marked, each opening its editor', async () => {
+    const user = userEvent.setup()
+    const content = createFakeContentEditing()
+    await content.create('course', 'jazz', {
+      body: { id: 'jazz' },
+      meta: { title: { en: 'Jazz voicings', ru: 'Джазовые аккорды' } },
+    })
+    await content.create('piece', 'abide', { body: { id: 'abide' }, meta: { title: 'Abide' } })
+    const { router } = await renderApp('/admin?tab=drafts', {
+      auth: await signedInAs('admin'),
+      contentEditing: content,
+    })
+    const course = await screen.findByRole('link', { name: /Jazz voicings/ })
+    expect(course).toHaveTextContent(/Course · Not published yet/)
+    expect(screen.getByRole('link', { name: /Abide/ })).toHaveAttribute(
+      'href',
+      '/edit/abide?original=true',
+    )
+    await user.click(course)
+    await waitFor(() => expect(router.state.location.pathname).toBe('/courses/jazz/edit'))
   })
 
   it('says when no error was reported', async () => {

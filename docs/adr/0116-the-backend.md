@@ -146,3 +146,6 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   new song's, and opens its original in the score editor from its draft (`useMadeSong`; the edit route lets an
   original the device has not got through). Published, it is in the catalog at its collection's end
   (`songCollections`, `allCollections`), its folder, Search and the Player reading it (2026-10-29).
+- r17 — The Admin area's Drafts tab lists every draft kept, the newest first (`ContentEditingPort.drafts`: each
+  its kind, name, when changed, and whether it was ever published), each opening its editor: what an editor made
+  and left unpublished is found again there (2026-10-29).

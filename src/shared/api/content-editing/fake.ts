@@ -71,6 +71,23 @@ export function createFakeContentEditing({
         unpublished.add(name(kind, id))
         drafts.set(name(kind, id), { body, meta, updatedAt: now() })
       }),
+    drafts: () =>
+      read(
+        async () =>
+          [...drafts]
+            .map(([key, draft]) => {
+              const [kind, id] = key.split(' ') as [ContentKind, string]
+              return {
+                kind,
+                id,
+                title: draft.meta.title,
+                updatedAt: draft.updatedAt,
+                published: !unpublished.has(key),
+              }
+            })
+            .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)),
+        [],
+      ),
     draft: (kind, id) => read(async () => drafts.get(name(kind, id)) ?? null, null),
     saveDraft: (kind, id, { body, meta }) =>
       ask(async () => {

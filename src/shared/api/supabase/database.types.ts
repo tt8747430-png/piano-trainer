@@ -76,7 +76,15 @@ export type Database = {
           updated_by?: string | null
         }
         Update: { body?: Json; meta?: Json; updated_at?: string; updated_by?: string | null }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: 'content_drafts_kind_id_fkey'
+            columns: ['kind', 'id']
+            isOneToOne: true
+            referencedRelation: 'content_items'
+            referencedColumns: ['kind', 'id']
+          },
+        ]
       }
       content_versions: {
         Row: {
