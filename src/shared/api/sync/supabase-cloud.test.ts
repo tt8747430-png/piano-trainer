@@ -54,3 +54,20 @@ describe('createSupabaseCloud', () => {
     expect(await cloud.push('progress', mine, null)).toEqual({ ok: true, value: null })
   })
 })
+
+describe('createSupabaseCloud, refused', () => {
+  it('reads the server refusing a signed-out device as refused, by the response’s status', async () => {
+    const rpc = vi.fn(async () => ({
+      data: null,
+      error: { message: 'permission denied for function push_documents', code: '42501' },
+      status: 401,
+    }))
+    const cloud = createSupabaseCloud({ rpc } as unknown as PianoClient, OPTIONS)
+    const mine = { id: 'state', data: {}, updatedAt: 't1', deleted: false }
+    expect(await cloud.push('settings', mine, null)).toEqual({
+      ok: false,
+      reason: 'refused',
+      detail: 'permission denied for function push_documents',
+    })
+  })
+})

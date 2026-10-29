@@ -28,7 +28,7 @@ export function createSupabaseCloud(client: PianoClient, { online }: NetOptions 
   return {
     fetch: (table: DocumentTableName) =>
       ask(async () => {
-        const { data, error } = await client
+        const { data, error, status } = await client
           .from(table)
           .select('id, data, deleted')
           .eq('id', STATE_ID)
@@ -43,11 +43,11 @@ export function createSupabaseCloud(client: PianoClient, { online }: NetOptions 
           ...rowOf(document),
           ...(base ? { base: base.updatedAt, base_deleted: base.deleted } : {}),
         }
-        const { data, error } = await client.rpc('push_documents', {
+        const { data, error, status } = await client.rpc('push_documents', {
           p_table: table,
           p_rows: [row],
         })
-        if (error) throw Object.assign(new Error(error.message), { status: 500 })
+        if (error) throw Object.assign(new Error(error.message), { status })
         const [refused] = Array.isArray(data) ? data : []
         return refused && typeof refused === 'object' && !Array.isArray(refused)
           ? documentOf(refused as unknown as Row)
