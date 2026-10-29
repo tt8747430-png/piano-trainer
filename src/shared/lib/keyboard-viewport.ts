@@ -134,8 +134,26 @@ export function expectKeyboard(on: boolean) {
   if (publish()) notify()
 }
 
-/** Starts measuring the keyboard (once, from the app's root); returns what stops it and clears all it set. */
+/** Forgets every measure and every field said to have the focus: where a start begins and a stop ends. */
+function forget() {
+  covered = 0
+  present = false
+  expected = 0
+  expecting = false
+  reserving = false
+  remember = () => {}
+  published = -1
+  publishedOpen = false
+  appHeight = 0
+  appWidth = 0
+}
+
+/**
+ * Starts measuring the keyboard (once, from the app's root), afresh whatever was said before it;
+ * returns what stops it and clears all it set.
+ */
 export function startKeyboardViewport(): () => void {
+  forget()
   const root = document.documentElement
   const viewport = window.visualViewport
   const stopped = new AbortController()
@@ -176,16 +194,7 @@ export function startKeyboardViewport(): () => void {
     viewport?.removeEventListener('resize', onResize)
     window.removeEventListener('orientationchange', onResize)
     stopped.abort()
-    covered = 0
-    present = false
-    expected = 0
-    expecting = false
-    reserving = false
-    remember = () => {}
-    published = -1
-    publishedOpen = false
-    appHeight = 0
-    appWidth = 0
+    forget()
     root.style.removeProperty('--kb-inset')
     root.style.removeProperty('--kb-range')
     root.style.removeProperty('--app-height')

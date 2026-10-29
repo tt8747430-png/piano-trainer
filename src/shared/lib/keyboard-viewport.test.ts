@@ -71,6 +71,17 @@ afterEach(() => {
 })
 
 describe('the keyboard’s viewport', () => {
+  it('starts afresh, whatever was said of a field before it started', () => {
+    stubViewport({ height: 800, offsetTop: 0 }, 800)
+    remembered(300)
+    // A field took the focus while nothing measured the keyboard: said, and left so.
+    expectKeyboard(true)
+    stop = startKeyboardViewport()
+    expect(keyboardOpen()).toBe(false)
+    expectKeyboard(true)
+    expect(keyboardOpen()).toBe(true)
+  })
+
   it('publishes no inset and no keyboard while none is up', () => {
     stubViewport({ height: 800, offsetTop: 0 }, 800)
     stop = startKeyboardViewport()
