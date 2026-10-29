@@ -11,6 +11,7 @@ export const common: LocaleResources['common'] = {
     practice: 'Практика',
     search: 'Поиск',
     settings: 'Настройки',
+    profile: 'Профиль',
     collapse: 'Свернуть боковую панель',
     open: 'Развернуть боковую панель',
   },

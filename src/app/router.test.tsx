@@ -178,6 +178,7 @@ describe('the app shell', () => {
       'Songs',
       'Practice',
       'Search',
+      'Profile',
       'Settings',
     ])
     expect(within(nav).getByRole('link', { name: 'Songs' })).toHaveAttribute('aria-current', 'page')

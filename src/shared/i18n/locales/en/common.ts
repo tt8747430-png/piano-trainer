@@ -9,6 +9,7 @@ export const common = {
     practice: 'Practice',
     search: 'Search',
     settings: 'Settings',
+    profile: 'Profile',
     collapse: 'Collapse the sidebar',
     open: 'Open the sidebar',
   },

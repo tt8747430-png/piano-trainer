@@ -10,6 +10,21 @@ export const account = {
   guest: 'Continue without an account',
   offline: 'You’re offline. Signing in needs a connection.',
   why: 'An account keeps your songs, progress and settings on every device you sign in on. The app works fully without one.',
+  // The Profile: who is signed in, and what they have done.
+  profile: {
+    title: 'Profile',
+    guest: 'Playing without an account',
+    guestLine: 'Sign in to keep your songs and progress on every device.',
+    signIn: 'Sign in',
+    settings: 'Account settings',
+    record: 'Your record',
+    days: 'Days practised',
+    bestStreak: 'Best run of days',
+    steps: 'Steps learned',
+    lessons: 'Song lessons done',
+    songs: 'Songs played',
+    skills: 'Skills known',
+  },
   signIn: {
     title: 'Sign in',
     submit: 'Sign in',

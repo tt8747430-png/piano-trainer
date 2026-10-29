@@ -143,6 +143,12 @@ const settingsRoute = createRoute({
   path: '/settings',
   component: lazyRouteComponent(settingsScreens, 'SettingsPage'),
 })
+// The Profile (round 3): the learner, the days they practised, their record.
+const profileRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile',
+  component: lazyRouteComponent(settingsScreens, 'ProfilePage'),
+})
 // Settings' pages (round 3): each group of settings on its own page, the account's among them.
 const preferencesRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -580,6 +586,7 @@ const checkRoute = createRoute({
 const routeTree = rootRoute.addChildren([
   shellRoute.addChildren([
     learnRoute,
+    profileRoute,
     settingsRoute,
     preferencesRoute,
     playingRoute,

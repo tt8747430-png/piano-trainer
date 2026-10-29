@@ -7,6 +7,7 @@ import {
   PanelLeftOpen,
   Search,
   Settings,
+  UserRound,
   type LucideIcon,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -17,8 +18,9 @@ import { keyHint, useShortcutsPlatform, useShortcuts, type Combo } from '@/share
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
 
 interface Place {
-  readonly to: '/' | '/songs' | '/practice' | '/search' | '/settings'
-  readonly label: 'nav.learn' | 'nav.songs' | 'nav.practice' | 'nav.search' | 'nav.settings'
+  readonly to: '/' | '/songs' | '/practice' | '/search' | '/profile' | '/settings'
+  readonly label:
+    'nav.learn' | 'nav.songs' | 'nav.practice' | 'nav.search' | 'nav.profile' | 'nav.settings'
   readonly icon: LucideIcon
   readonly exact: boolean
   /** Where else the place is the current one: Learn's lessons and courses (ADR 0053). */
@@ -56,7 +58,7 @@ const PLACES: readonly Place[] = [
 const SIDEBAR_KEY: Combo = { code: 'KeyB', mod: true }
 /**
  * What sits at the sidebar's foot on a laptop, and in Learn's bar on a phone: Search, on the
- * platform's modifier and K from anywhere, and Settings.
+ * platform's modifier and K from anywhere, the Profile, and Settings.
  */
 const FOOT: readonly Place[] = [
   {
@@ -66,6 +68,7 @@ const FOOT: readonly Place[] = [
     exact: false,
     key: { code: 'KeyK', mod: true },
   },
+  { to: '/profile', label: 'nav.profile', icon: UserRound, exact: false },
   { to: '/settings', label: 'nav.settings', icon: Settings, exact: false },
 ]
 

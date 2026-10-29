@@ -1,5 +1,5 @@
 import { Link, useSearch } from '@tanstack/react-router'
-import { Search, Settings } from 'lucide-react'
+import { Search, Settings, UserRound } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { journeyById } from '@/entities/lesson'
 import { selectLearned, useProgress } from '@/entities/progress'
@@ -27,12 +27,17 @@ export function LearnPage() {
         actions={
           <div className="flex items-center gap-2">
             <LearnViewToggle shown={view} />
-            {/* A laptop's sidebar has Search and Settings at its foot. */}
+            {/* A laptop's sidebar has Search, the Profile and Settings at its foot. */}
             <div className="flex gap-2 lg:hidden">
               <RoundLink
                 label={t('common:nav.search')}
                 icon={Search}
                 render={<Link to="/search" />}
+              />
+              <RoundLink
+                label={t('common:nav.profile')}
+                icon={UserRound}
+                render={<Link to="/profile" />}
               />
               <RoundLink
                 label={t('common:nav.settings')}

@@ -51,3 +51,4 @@ export {
   selectTrainerRecords,
 } from './model/selectors'
 export { ProgressStoreProvider, useProgress, useProgressStoreApi } from './model/context'
+export { practiceRecord, type PracticeRecord } from './model/record'

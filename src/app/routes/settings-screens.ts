@@ -16,3 +16,4 @@ export {
   SignInPage,
   SignUpPage,
 } from '@/pages/account'
+export { ProfilePage } from '@/pages/profile'
