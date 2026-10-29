@@ -266,3 +266,22 @@ only what you wrote or may share), Update when published and changed, Unpublish;
 (reason: not theirs to share, offensive, spam, broken; a note). Offline: says it needs a connection.
 
 **4b.5** en/ru, tests through renderApp with the fake, screenshots, docs (ADR 0116 r4b).
+
+## Round 5: admin (planned 2026-10-29)
+
+**5.1 Roles and the first admin.** `app_metadata.role` (admin · editor) is written only by the service role. The
+first admin: a table `admin_bootstrap (email)` filled by SQL (never in a migration: the owner's address stays out
+of the repo) and a trigger on `auth.users` insert that gives a listed address the admin role. The app's `Account`
+gains `role` (from the session's app_metadata).
+
+**5.2 Tables:** `groups (id, name)`, `group_members (group_id, user_id)`, `feature_switches (key, label, state
+everyone · nobody · groups, groups uuid[])`, `admin_log (at, admin_id, action, target, detail)`. RLS: admins only;
+`my_features()` (security definer) returns the switch keys on for the caller (anon: those on for everyone).
+
+**5.3 Edge Function `admin`** (verify_jwt off, checks the caller's role from their JWT itself): accounts (list,
+search, set role, add to and remove from groups, delete), each action written to `admin_log`. Never a client
+query on `auth.users`.
+
+**5.4 The app:** `shared/api/admin` (port, fake, adapter over the function and the tables); `useFeature(key)`
+(switches fetched at sign-in and start, kept for offline); the Admin area (`/admin`, a lazy chunk, shown in Settings
+only to admins): Accounts, Groups, Switches, Reports (hide, show, block, dismiss), Activity. Content stays round 6.
