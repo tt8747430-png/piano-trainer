@@ -81,3 +81,6 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   unless `welcomed: false`), docs. Full suite 6597 green, build ok, screenshots at 390/320/844×390/1280 clean
   (no sideways scroll). On main. Decision: the welcome asks only the language (no level or daily goal: nothing in
   the app reads them yet). Next: round 4 (content in the database): write its plan section first.
+- 2026-10-29 Round 4 planned (plan.md). 4.1: `supabase/migrations/20261029140000_content.sql` written
+  (content_items, content_versions, is_content_editor, keep_content_version trigger, RLS); NOT yet applied: the
+  Supabase tool asked the owner to confirm and timed out. Next: apply it, extend tests/access.sql, advisors.
