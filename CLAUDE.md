@@ -56,8 +56,8 @@ feature gets a short spec in `.scratch/<feature>/spec.md` first.
 
 Node 24 (`.nvmrc`, `nvm use`). `dev` · `build` · `preview` · `typecheck` · `lint` (includes the layer rules) ·
 `test` (everything) / `test:unit` (the node half) / `test:related -- <files>` / `test:changed` / `test:watch` /
-`test:cov` (90% lines on `src/shared/lib/**` and `src/entities/*/model/**`) · `icons` (the PWA icons from
-`public/favicon.svg`). CI (`.github/workflows/ci.yml`: typecheck, lint, `test:cov`, build) runs only when started by
+`test:cov` (90% lines on `src/shared/lib/**` and `src/entities/*/model/**`) · `icons` (the PWA icons and the iPhone's launch
+images from `public/favicon.svg`; its head links go into `index.html`). CI (`.github/workflows/ci.yml`: typecheck, lint, `test:cov`, build) runs only when started by
 hand. Vercel previews each PR and deploys `main`.
 
 One file: `npx vitest run src/shared/lib/cn.test.ts` · one test: `npx vitest run src/x.test.ts -t "saves a new

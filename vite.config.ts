@@ -76,6 +76,8 @@ export default defineConfig({
         // does, a credit's ž; its math and symbols hold ♭ ♯ and arrows); a glyph that ever needs one
         // fetches it from the network.
         globIgnores: [
+          // An iPhone's launch images: each phone reads its own once, at its install.
+          '**/apple-splash-*.png',
           '**/literata-{greek,greek-ext,vietnamese,cyrillic-ext,latin-ext}-*.woff2',
           '**/onest-{vietnamese,cyrillic-ext}-*.woff2',
         ],
