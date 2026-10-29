@@ -354,3 +354,10 @@ Screenshots at 320, 390, landscape and laptop, light and dark, of every screen r
 score editor's draft strip, the lesson editor (Edit and Preview), the Admin area's Errors, Privacy and Terms,
 Create an account's foot, Settings › Sync and data, the Public library's Songs · Patterns and a pattern's page,
 an own pattern's Publish. Fix what is clipped, crowded or unclear; then the e2e and axe again.
+
+## Round 12: a course's own texts edited in the app (planned 2026-10-29)
+
+A course's title and summary become content (`course` is already a kind the database takes): the export and the
+seed carry them as `{ id, title, summary }`; the course entity overlays a kept copy (`updatesCourse`); an editor's
+Edit the course on the course's page opens its title and summary, English and Russian, with the draft's strip.
+Its lessons' order and songs stay authored.
