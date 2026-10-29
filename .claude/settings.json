@@ -1,11 +1,20 @@
 {
   "extraKnownMarketplaces": {
     "superpowers-marketplace": {
-      "source": { "source": "github", "repo": "obra/superpowers-marketplace" }
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      }
     }
   },
   "enabledPlugins": {
     "understand-anything@understand-anything": false,
     "superpowers@superpowers-marketplace": true
+  },
+  "permissions": {
+    "allow": [
+      "mcp__Supabase",
+      "mcp__Supabase__*"
+    ]
   }
 }
