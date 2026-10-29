@@ -19,10 +19,14 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - **The network rule** (memory-palaces' ADR 0004): an action waits on the network only when the server must answer
   for it to be right (sign in, sign up, reset, a password change, requesting deletion, publishing). Every other write
   is the device's and a sync carries it later. Signing out is local, always.
-- **Sync** (its ADR 0005): every saved store lives in a local database (RxDB on IndexedDB) and each write waits in a
-  pending-change log until a sync confirms it. A push names the server copy it was based on; the server refuses a
-  write over any other and the device merges field by field. Only a deletion meeting a change elsewhere asks.
-  Settings sync quietly; the rest on Autosync or Synchronise.
+- **Sync** (its ADR 0005, without its local database): every saved store stays in the browser's storage, small
+  JSON, and syncs as one document in its table (`state`), its data the store's own save. The device notes a store
+  changed when its save is written (`createSyncRunner`'s watched storage); a sync reads the cloud's copy, merges it
+  with the device's against the copy both started from where both changed (a field at a time; a record key by key,
+  a list of items with ids item by item), brings the result into the store as another tab's save is brought in,
+  and pushes it naming that base; the server refuses a write over any other copy and the device merges again. A
+  save of a newer app version in the cloud is left be. Autosync, signed in only: at sign-in, on reconnect, when the
+  app comes into view, 4 s after saving settles (`AccountProvider`). The keyboard's store stays on the device.
 - **Account deletion** has a 30-day grace and a daily purge.
 - **Content lives in the database**, read-only to learners: a catalog index synced whole (titles, levels, keys, sizes)
   drives every list offline; an item's body downloads when first opened, or ahead with Download for offline, and is
@@ -38,7 +42,7 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   - a song's music and a lesson come through one port (`ContentPort`: `has`, `ensure`); a route that shows one
     ensures it in `beforeLoad`, so the route's pending, not-found and error screens are its loading, missing and
     offline states; what reads across the songs reads `factsOf`, never the music;
-  - the saved stores are built once on one storage (`createStores`), which RxDB replaces in round 2;
+  - the saved stores are built once on one storage (`createStores`), the sync's watched storage;
   - every service and port is built once in the composition root, and tests take fakes from the same place;
   - every server call returns its result as a value (`ok`, `offline`, `refused`, `failed`), never a throw;
   - ids are branded by kind with the entry/body split, and one schema per data shape (Valibot) with the sync's
@@ -62,3 +66,5 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r1 — The database: the learner's document tables with row-level security, `push_documents`, private buckets
   for takes and avatars, account deletion with its daily purge and Edge Functions; the accounts' gateway
   (2026-10-29).
+- r2 — Sync over the saved stores as they are, no RxDB: one document a store, merged field by field, collections
+  item by item; Autosync while signed in; the takes bucket's policies dropped (takes are MIDI notes) (2026-10-29).

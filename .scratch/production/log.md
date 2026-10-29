@@ -10,9 +10,8 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 - Supabase project `piano-trainer`, ref `itmiutianxvtlwhdsalo`, `eu-west-1`, org `hhhabylwpqoudiihkqyn`.
   Migrations in `supabase/migrations` all applied; Edge Functions `request-account-deletion`, `purge-account`
   deployed (verify_jwt false, they check their caller). `supabase/tests/access.sql` passes.
-- Round 2 (sync) in progress: done `shared/lib/sync/merge.ts` (mergeDocuments, byKey, byId, automatic item rule),
-  `shared/api/sync` (CloudSync port, fake, Supabase adapter); in progress `shared/lib/sync/runner.ts` + test
-  (uncommitted when this log was started).
+- Round 2 (sync) built: merge, CloudSync (fake + Supabase), createSyncRunner (status, onChange), AccountProvider
+  (Autosync), app wiring (SYNCED_SAVES, createSync), app-level tests. Round end (full suite, build, main) next.
 
 ## Decisions taken on the owner's behalf (report them in the morning)
 
@@ -30,6 +29,8 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 
 ## Owner's to-dos (cannot be done from here)
 
+- Delete the empty, policy-less `takes` bucket (Dashboard → Storage): SQL may not delete buckets.
+
 - Google OAuth client ID and secret → Supabase Auth → Providers → Google (redirect URI in spec).
 - Vault secrets `project_url`, `secret_key` for the daily account purge (spec).
 
@@ -40,3 +41,7 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 - 2026-10-29 Round 1 done and on main: migrations, Edge Functions, access test, `.env`, shared/api/supabase,
   shared/api/auth (gateway, fake, contract, adapter test).
 - 2026-10-29 Round 2: merge kernel and cloud port committed; runner being written.
+- 2026-10-29 Round 2: runner, status, AccountProvider (a heard sign-in wins over the first session read: a race found
+  by test), app wiring; cloud adapter checked on the project (signed-out 401 → refused; it had read the Postgres
+  code as status). `takes` bucket: policies dropped by migration. Owner allowed all Supabase tool calls
+  (`.claude/settings.local.json`, ignored by git).
