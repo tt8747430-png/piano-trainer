@@ -44,7 +44,7 @@ function useCloseTo(target: EditorTarget): () => void {
   const params = { pieceId: target.id }
   const toSongs = useGoBack({ to: '/songs/$pieceId', params })
   const toStudies = useGoBack({ to: '/practice/accompaniment/studies/$pieceId', params })
-  return target.kind === 'version' && target.entry.kind === 'study' ? toStudies : toSongs
+  return target.kind !== 'song' && target.entry.kind === 'study' ? toStudies : toSongs
 }
 
 /**
@@ -73,7 +73,8 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       setUnsaved(music === null)
       if (!music) return
       saved.music = music
-      saveMusic(pieces, savingTo(target), music)
+      if (target.kind === 'original') target.save(music)
+      else saveMusic(pieces, savingTo(target), music)
     }),
   )
   // The same music changed in another tab: the editor opens on it, so its next change does not

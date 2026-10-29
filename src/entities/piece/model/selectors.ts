@@ -1,13 +1,8 @@
 import { keptContent } from '@/shared/api/content'
-import {
-  parseKey,
-  pitchClassOf,
-  type ChordSize,
-  type Key,
-  type SpelledNote,
-} from '@/shared/lib/music'
+import { pitchClassOf, type ChordSize, type Key, type SpelledNote } from '@/shared/lib/music'
 import type { PatternId } from '@/entities/pattern'
 import { COLLECTIONS } from '../content'
+import { updatesPiece } from './content-record'
 import { asChartPiece } from './degree-chart'
 import { factsOf } from './facts'
 import type { PieceMusic } from './music'
@@ -27,21 +22,6 @@ const BUNDLED_BY_ID = new Map(
   COLLECTIONS.flatMap((collection) => collection.entries).map((entry) => [entry.id, entry]),
 )
 let built = { revision: -1, index: BUNDLED_BY_ID as ReadonlyMap<string, Entry> }
-
-/** Whether a body from the database reads as a newer copy of this catalog piece: its id, kind and key. */
-function updatesPiece(entry: Entry, body: unknown): body is Piece {
-  if (typeof body !== 'object' || body === null) return false
-  const update = body as Partial<Piece>
-  return (
-    isPiece(entry) &&
-    update.id === entry.id &&
-    update.kind === entry.kind &&
-    typeof update.key === 'string' &&
-    Boolean(parseKey(update.key)) &&
-    typeof update.meter === 'string' &&
-    ('sections' in update ? Array.isArray(update.sections) : 'progression' in update)
-  )
-}
 
 /**
  * A newer copy with the app's own recording file: the database holds a recording's timing, never

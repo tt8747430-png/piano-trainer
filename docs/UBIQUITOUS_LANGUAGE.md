@@ -541,4 +541,9 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   the Admin area). Set only by the server. _Avoid:_ permission, rank.
 - **Feature switch**: turns a feature on for everyone, no one or chosen **groups** (`useFeature`). _Avoid:_ flag,
   toggle (a toggle is the learner's).
+- **Original**: a built-in song as every learner gets it, an editor's to change (**Edit the original**), in place
+  of a learner's own **version**. _Avoid:_ master, source.
+- **Draft**: an editor's unpublished change to a built-in item, kept on the server until it is **published**
+  (every learner gets it as a content update) or **discarded**. Each version published is kept, to **restore**.
+  _Avoid:_ revision, staging.
 - **Welcome**: the app's first-run screen, shown once (`welcomed`). _Avoid:_ onboarding, intro.

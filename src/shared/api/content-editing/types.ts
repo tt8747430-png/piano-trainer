@@ -20,6 +20,8 @@ export interface KeptVersion {
  * published kept, to be restored. Every call's result is a value; anyone else is refused.
  */
 export interface ContentEditingPort {
+  /** The item's body as published now: what a new draft starts from (the device's copy may be older). */
+  published(kind: ContentKind, id: string): Promise<NetResult<unknown>>
   /** The item's draft, or null where it has none. */
   draft(kind: ContentKind, id: string): Promise<NetResult<ContentDraft | null>>
   saveDraft(

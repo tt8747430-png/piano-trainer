@@ -29,6 +29,7 @@ describe('editing the built-in content', () => {
     expect(published).toEqual({ ok: true, value: contentHash(JSON.stringify(body)) })
     expect(await port.draft('lesson', 'scales')).toEqual({ ok: true, value: null })
     expect(port.body('lesson', 'scales')).toEqual(body)
+    expect(await port.published('lesson', 'scales')).toEqual({ ok: true, value: body })
   })
 
   it('keeps every version published, the newest first, and restores one', async () => {

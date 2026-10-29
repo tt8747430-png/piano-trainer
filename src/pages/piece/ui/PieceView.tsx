@@ -3,6 +3,7 @@ import {
   Ellipsis,
   FileCode,
   FileMusic,
+  FilePenLine,
   Globe,
   GlobeLock,
   PencilLine,
@@ -32,6 +33,7 @@ import { PublishDialog, PublishSaid, usePublishSong } from '@/features/publish-s
 import { ShareSaid, useShareSong } from '@/features/share-song'
 import { useSongExport } from '@/features/song-files'
 import { OPEN_PLAINLY } from '@/shared/lib'
+import { editsContent, useAccount } from '@/shared/lib/account'
 import { useLocale } from '@/shared/i18n'
 import { ActionMenu, ButtonLink, RoundLink } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -49,7 +51,7 @@ import { SectionRows } from './SectionRows'
  * A piece with a chart, in one calm column: Learn the song (ADR 0111, amended). Its bar (Back, the
  * title, then Edit the score, Learned, its ♡ (ADR 0106) and More: Move to… and Archive (Restore
  * while it is archived; a study is in no library, ADR 0106), Check these chords, Share, Export to
- * MIDI and to MusicXML (ADR 0107),
+ * MIDI and to MusicXML (ADR 0107), an editor's Edit the original (ADR 0116),
  * and for the learner's own music its way back, asked first); under the title its byline (what else it
  * is called, Your version, its stage, who wrote it); then, first and largest, Practise, the Player as
  * it was left; its key, time and tempo as cards, the way to its key's scale under them and what is
@@ -83,6 +85,9 @@ export function PieceView({ piece }: { piece: Piece }) {
   const library = useSongActions(piece)
   const inLibrary = piece.kind !== 'study'
   const files = useSongExport(piece)
+  // A built-in song or study written as a chart: its original, an editor's to change (ADR 0116).
+  const { account } = useAccount()
+  const original = !own && !isDegreePiece(piece) && editsContent(account)
   const ownMusic = own
     ? ({ kind: 'song', id: own, title } as const)
     : hasVersion
@@ -162,6 +167,21 @@ export function PieceView({ piece }: { piece: Piece }) {
       icon: FileCode,
       onSelect: files.musicXml,
     },
+    ...(original
+      ? [
+          {
+            key: 'original',
+            label: t('editOriginal'),
+            icon: FilePenLine,
+            onSelect: () =>
+              void navigate({
+                to: '/edit/$pieceId',
+                params: { pieceId: piece.id },
+                search: { original: true },
+              }),
+          },
+        ]
+      : []),
     ...(ownMusic
       ? [
           {

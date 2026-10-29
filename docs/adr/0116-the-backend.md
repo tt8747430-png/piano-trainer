@@ -95,3 +95,9 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r4b — The Public library for songs; a store's first sync takes the account's plain values (2026-10-29).
 - r5 — Admin: roles, the first admin from `admin_bootstrap`, the `admin` function, groups, feature switches,
   reports and the activity log; the Admin area (2026-10-29).
+- r6 — Content edited in the app: an editor's draft of an item (`content_drafts`), published by `publish_content`
+  (the draft's body becomes the item's under the hash of its body, the version kept) or a kept version restored;
+  the `ContentEditingPort` (`shared/api/content-editing`). A built-in song's original is edited in the score
+  editor (`/edit/$pieceId?original=true`, `features/edit-original`): it opens on the draft, else the song as
+  published now; each change is saved to the draft once the editor rests; Publish checks the music reads first
+  (2026-10-29).

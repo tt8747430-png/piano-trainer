@@ -91,7 +91,7 @@ music, `exercise` music and arrangement, and none of them imports a package. `es
   the entity's own data shown), `index.ts`.
 - **shared/** — `lib` (pure helpers and hooks, plus the kernel: `music` theory, `arrangement` (a chart → a
   Performance), `notation` (a Performance → a Score), `schedule` (a Performance → sounds), `exercise`; and `services`
-  (audio and MIDI to React), `shortcuts`, `sync` (the merge and `createSyncRunner`) and `account` (`AccountProvider`, `useAccount`, `useSync`: Autosync while signed in)), `api` (the `audio`, `midi` and `content` ports, browser adapters and fakes; `content` also the database's content updates: the IndexedDB cache, the remote, `keepContent` read by each entity's index; `network`: every server call's result as a value; `auth`, accounts on Supabase Auth; `sync`, each store's cloud document (`CloudSync`); `supabase`, the client and the database's types, ADR 0116),
+  (audio and MIDI to React), `shortcuts`, `sync` (the merge and `createSyncRunner`) and `account` (`AccountProvider`, `useAccount`, `useSync`: Autosync while signed in)), `api` (the `audio`, `midi` and `content` ports, browser adapters and fakes; `content` also the database's content updates: the IndexedDB cache, the remote, `keepContent` read by each entity's index; `network`: every server call's result as a value; `auth`, accounts on Supabase Auth; `sync`, each store's cloud document (`CloudSync`); `content-editing`, an editor's drafts, publishing and kept versions; `supabase`, the client and the database's types, ADR 0116),
   `ui` (the kit; shadcn in `ui/primitives`; `ui/score`, Verovio over a Score, imported by that path only), `i18n`,
   `config`, `test`.
 
@@ -125,7 +125,8 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
   toolbar from 48rem wide, a bottom sheet on a phone (`EditorPalette`, `TOOL_SHORTCUTS`); the Player's score in Edit mode, sharing its bar and
   transport (`widgets/mode-switch`, `ScoreBar`). `pages/score-editor`, `widgets/score-sheet`;
   `features/score-editor` (the draft, its pure edits, undo, `createEditorStore`), `features/edit-piece` (saving),
-  `features/record-take` and `manage-takes`.
+  `features/record-take` and `manage-takes`; an editor's Edit the original (`?original=true`,
+  `features/edit-original`: the song's draft on the server, Publish, Versions, Discard).
 - **Elsewhere** — Search (`/search`); Settings (`/settings`: the account card, then a page each for Preferences,
   Playing, Sync and data, Help, and Account, `pages/settings`; How to use and the MIDI keyboard with its log under
   them); the account pages (`/account/sign-in`, `create`, `forgot`, `new-password`, and `/auth/callback` where the

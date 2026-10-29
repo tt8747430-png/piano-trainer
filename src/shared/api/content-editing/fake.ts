@@ -56,6 +56,12 @@ export function createFakeContentEditing({
     )
   return {
     body: (kind, id) => published.get(name(kind, id))?.body,
+    published: (kind, id) =>
+      ask(async () => {
+        const item = published.get(name(kind, id))
+        if (!item) throw refused('no such item')
+        return item.body
+      }),
     draft: (kind, id) => read(async () => drafts.get(name(kind, id)) ?? null, null),
     saveDraft: (kind, id, { body, meta }) =>
       ask(async () => {

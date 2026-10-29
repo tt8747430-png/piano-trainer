@@ -61,8 +61,8 @@ export interface ScoreEditorValue {
     readonly id: string
     readonly title: string
     readonly playing: boolean
-    /** Whose music: a catalog piece's version, or an own song. */
-    readonly kind: 'version' | 'song'
+    /** Whose music: a catalog piece's version, an own song, or a built-in song's original (an editor's). */
+    readonly kind: 'version' | 'song' | 'original'
     /**
      * Whether the last change could not be saved (an edit the song's music cannot be written with):
      * the song keeps the music last saved.

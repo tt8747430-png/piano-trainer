@@ -20,6 +20,17 @@ export function createSupabaseContentEditing(
     if (error) throw thrown(error, status)
   }
   return {
+    published: (kind, id) =>
+      ask(async () => {
+        const { data, error, status } = await client
+          .from('content_items')
+          .select('body')
+          .eq('kind', kind)
+          .eq('id', id)
+          .single()
+        if (error) throw thrown(error, status)
+        return data.body as unknown
+      }),
     draft: (kind, id) =>
       ask(async () => {
         const { data, error, status } = await client
