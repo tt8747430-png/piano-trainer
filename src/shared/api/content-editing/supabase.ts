@@ -1,6 +1,6 @@
 import { contentHash } from '@/shared/lib'
 import { netResult, type NetOptions } from '../network'
-import type { Json, PianoClient } from '../supabase'
+import type { Json, Backend, PianoClient } from '../supabase'
 import type { ContentEditingPort } from './types'
 
 // `publish_content`'s own refusals come back as 4xx: editors only a 403, nothing to publish a 404.
@@ -12,16 +12,17 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 
 /** Editing the built-in content on Supabase (ADR 0116, round 6): the drafts table and `publish_content`. */
 export function createSupabaseContentEditing(
-  client: PianoClient,
+  backend: Backend,
   { online }: NetOptions = {},
 ): ContentEditingPort {
-  const ask = <T>(run: () => Promise<T>) => netResult(run, online ? { online } : {})
+  const ask = <T>(run: (client: PianoClient) => Promise<T>) =>
+    netResult(async () => run(await backend()), online ? { online } : {})
   const check = ({ error, status }: { error: { message: string } | null; status: number }) => {
     if (error) throw thrown(error, status)
   }
   return {
     published: (kind, id) =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from('content_items')
           .select('body')
@@ -32,7 +33,7 @@ export function createSupabaseContentEditing(
         return data.body as unknown
       }),
     draft: (kind, id) =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from('content_drafts')
           .select('body, meta, updated_at')
@@ -49,7 +50,7 @@ export function createSupabaseContentEditing(
           : null
       }),
     saveDraft: (kind, id, { body, meta }) =>
-      ask(async () => {
+      ask(async (client) => {
         check(
           await client.from('content_drafts').upsert({
             kind,
@@ -61,11 +62,11 @@ export function createSupabaseContentEditing(
         )
       }),
     discardDraft: (kind, id) =>
-      ask(async () => {
+      ask(async (client) => {
         check(await client.from('content_drafts').delete().eq('kind', kind).eq('id', id))
       }),
     publish: (kind, id) =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from('content_drafts')
           .select('body')
@@ -87,7 +88,7 @@ export function createSupabaseContentEditing(
         return version
       }),
     versions: (kind, id) =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from('content_versions')
           .select('version, published_at')
@@ -98,7 +99,7 @@ export function createSupabaseContentEditing(
         return data.map((row) => ({ version: row.version, publishedAt: row.published_at }))
       }),
     restore: (kind, id, version) =>
-      ask(async () => {
+      ask(async (client) => {
         check(
           await client.rpc('publish_content', {
             p_kind: kind,

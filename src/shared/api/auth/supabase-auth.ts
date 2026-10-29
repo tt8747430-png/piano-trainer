@@ -1,6 +1,6 @@
-import { isAuthRetryableFetchError, type User } from '@supabase/supabase-js'
+import type { User } from '@supabase/supabase-js'
 import { netResult, type NetOptions } from '../network'
-import type { PianoClient } from '../supabase/client'
+import type { Backend, PianoClient } from '../supabase'
 import type { Account, AccountRole, AuthGateway } from './types'
 
 const roleOf = (user: User): AccountRole => {
@@ -34,20 +34,22 @@ function functionError(error: unknown): Error {
 
 /** Accounts on Supabase Auth (ADR 0116), memory-palaces' gateway with its results as values. */
 export function createSupabaseAuth(
-  client: PianoClient,
+  backend: Backend,
   {
     callback = `${window.location.origin}/auth/callback`,
     online,
   }: NetOptions & { callback?: string } = {},
 ): AuthGateway {
-  const ask = <T>(run: () => Promise<T>) => netResult(run, online ? { online } : {})
+  const ask = <T>(run: (client: PianoClient) => Promise<T>) =>
+    netResult(async () => run(await backend()), online ? { online } : {})
   return {
     current: async () => {
+      const client = await backend()
       const { data } = await client.auth.getSession()
       return data.session ? accountOf(data.session.user) : null
     },
     signUp: ({ email, name, password }) =>
-      ask(async () => {
+      ask(async (client) => {
         const { user, session } = answer(
           await client.auth.signUp({
             email,
@@ -59,29 +61,31 @@ export function createSupabaseAuth(
         return { account: accountOf(user), confirm: session === null }
       }),
     signIn: (email, password) =>
-      ask(async () =>
+      ask(async (client) =>
         accountOf(answer(await client.auth.signInWithPassword({ email, password })).user),
       ),
     signInWith: (provider) =>
-      ask(async () => {
+      ask(async (client) => {
         answer(await client.auth.signInWithOAuth({ provider, options: { redirectTo: callback } }))
       }),
     completeRedirect: (code) =>
-      ask(async () => accountOf(answer(await client.auth.exchangeCodeForSession(code)).user)),
+      ask(async (client) => accountOf(answer(await client.auth.exchangeCodeForSession(code)).user)),
     requestPasswordReset: (email) =>
-      ask(async () => {
+      ask(async (client) => {
         answer(
           await client.auth.resetPasswordForEmail(email, { redirectTo: `${callback}?next=reset` }),
         )
       }),
     updatePassword: (password) =>
-      ask(async () => {
+      ask(async (client) => {
         answer(await client.auth.updateUser({ password }))
       }),
     updateName: (name) =>
-      ask(async () => accountOf(answer(await client.auth.updateUser({ data: { name } })).user)),
+      ask(async (client) =>
+        accountOf(answer(await client.auth.updateUser({ data: { name } })).user),
+      ),
     requestDeletion: () =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error } = await client.functions.invoke<{ purgeAfter: string }>(
           'request-account-deletion',
           { method: 'POST' },
@@ -92,7 +96,7 @@ export function createSupabaseAuth(
         return { purgeAfter: data.purgeAfter }
       }),
     pendingDeletion: () =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from('account_deletions')
           .select('purge_after')
@@ -101,7 +105,7 @@ export function createSupabaseAuth(
         return data?.purge_after ?? null
       }),
     cancelDeletion: () =>
-      ask(async () => {
+      ask(async (client) => {
         const { data } = await client.auth.getSession()
         if (!data.session) throw Object.assign(new Error('Not signed in'), { status: 401 })
         const { error, status } = await client
@@ -112,14 +116,26 @@ export function createSupabaseAuth(
       }),
     // Local, always: the session goes from the device, and only a refused revocation is said.
     signOut: async () => {
+      const client = await backend()
       const { error } = await client.auth.signOut({ scope: 'local' })
-      if (error && !isAuthRetryableFetchError(error)) throw error
+      // A revocation that never reached the server is no refusal (supabase-js's retryable fetch error).
+      if (error && error.name !== 'AuthRetryableFetchError') throw error
     },
+    // Heard once the client has loaded; stopped before then, it is never heard.
     onChange: (listener) => {
-      const { data } = client.auth.onAuthStateChange((_event, session) =>
-        listener(session ? accountOf(session.user) : null),
-      )
-      return () => data.subscription.unsubscribe()
+      let stop: (() => void) | null = null
+      let stopped = false
+      void backend().then((client) => {
+        if (stopped) return
+        const { data } = client.auth.onAuthStateChange((_event, session) =>
+          listener(session ? accountOf(session.user) : null),
+        )
+        stop = () => data.subscription.unsubscribe()
+      })
+      return () => {
+        stopped = true
+        stop?.()
+      }
     },
   }
 }

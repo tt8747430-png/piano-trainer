@@ -1,6 +1,6 @@
 import type { SyncDocument } from '@/shared/lib/sync'
 import { netResult, type NetOptions } from '../network'
-import type { DocumentTableName, Json, PianoClient } from '../supabase'
+import type { DocumentTableName, Json, Backend, PianoClient } from '../supabase'
 import { STATE_ID, type CloudSync } from './types'
 
 interface Row {
@@ -23,11 +23,12 @@ const rowOf = (document: SyncDocument) => ({
 })
 
 /** The cloud on Supabase (ADR 0116): a select the learner's row-level security narrows, and `push_documents`. */
-export function createSupabaseCloud(client: PianoClient, { online }: NetOptions = {}): CloudSync {
-  const ask = <T>(run: () => Promise<T>) => netResult(run, online ? { online } : {})
+export function createSupabaseCloud(backend: Backend, { online }: NetOptions = {}): CloudSync {
+  const ask = <T>(run: (client: PianoClient) => Promise<T>) =>
+    netResult(async () => run(await backend()), online ? { online } : {})
   return {
     fetch: (table: DocumentTableName) =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from(table)
           .select('id, data, deleted')
@@ -37,7 +38,7 @@ export function createSupabaseCloud(client: PianoClient, { online }: NetOptions 
         return data ? documentOf(data) : null
       }),
     push: (table, document, base) =>
-      ask(async () => {
+      ask(async (client) => {
         const row = {
           ...rowOf(document),
           ...(base ? { base: base.updatedAt, base_deleted: base.deleted } : {}),

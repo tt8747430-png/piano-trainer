@@ -1,5 +1,5 @@
 import { netResult, type NetOptions } from '../network'
-import type { PianoClient } from '../supabase'
+import type { Backend, PianoClient } from '../supabase'
 import type { ContentItem } from './cache'
 import { isContentKind } from './port'
 import type { ContentRemote } from './updates'
@@ -10,13 +10,14 @@ const ofKnownKind = <R extends { kind: string }>(row: R): row is R & Pick<Conten
 
 /** What the project publishes to this learner (ADR 0116): row-level security picks the rows. */
 export function createSupabaseContentRemote(
-  client: PianoClient,
+  backend: Backend,
   { online }: NetOptions = {},
 ): ContentRemote {
-  const ask = <T>(run: () => Promise<T>) => netResult(run, online ? { online } : {})
+  const ask = <T>(run: (client: PianoClient) => Promise<T>) =>
+    netResult(async () => run(await backend()), online ? { online } : {})
   return {
     versions: () =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from('content_items')
           .select('kind, id, version')
@@ -25,7 +26,7 @@ export function createSupabaseContentRemote(
         return data.filter(ofKnownKind)
       }),
     bodies: (kind, ids) =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from('content_items')
           .select('kind, id, version, body')

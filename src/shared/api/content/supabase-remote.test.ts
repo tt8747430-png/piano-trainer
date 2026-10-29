@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { PianoClient } from '../supabase'
 import { createSupabaseContentRemote } from './supabase-remote'
+import { backendOf } from '../supabase'
 
 /** A client whose `content_items` answers `rows`, recording the filters asked. */
 function clientAnswering(rows: unknown[], status = 200, error: { message: string } | null = null) {
@@ -24,7 +25,7 @@ describe('the Supabase content remote', () => {
       { kind: 'piece', id: 'bz5', version: 'v2' },
       { kind: 'course', id: 'c', version: 'v1' },
     ])
-    expect(await createSupabaseContentRemote(client, OPTIONS).versions()).toEqual({
+    expect(await createSupabaseContentRemote(backendOf(client), OPTIONS).versions()).toEqual({
       ok: true,
       value: [{ kind: 'piece', id: 'bz5', version: 'v2' }],
     })
@@ -34,7 +35,9 @@ describe('the Supabase content remote', () => {
   it('asks for bodies by kind and ids', async () => {
     const row = { kind: 'piece', id: 'bz5', version: 'v2', body: {} }
     const { client, asked } = clientAnswering([row])
-    expect(await createSupabaseContentRemote(client, OPTIONS).bodies('piece', ['bz5'])).toEqual({
+    expect(
+      await createSupabaseContentRemote(backendOf(client), OPTIONS).bodies('piece', ['bz5']),
+    ).toEqual({
       ok: true,
       value: [row],
     })
@@ -43,7 +46,7 @@ describe('the Supabase content remote', () => {
 
   it('reads a refusal by its status', async () => {
     const { client } = clientAnswering([], 401, { message: 'permission denied' })
-    expect(await createSupabaseContentRemote(client, OPTIONS).versions()).toMatchObject({
+    expect(await createSupabaseContentRemote(backendOf(client), OPTIONS).versions()).toMatchObject({
       ok: false,
       reason: 'refused',
     })

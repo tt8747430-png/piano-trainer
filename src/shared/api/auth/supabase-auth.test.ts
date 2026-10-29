@@ -1,6 +1,6 @@
 import { AuthApiError, AuthRetryableFetchError, type User } from '@supabase/supabase-js'
 import { describe, expect, it, vi } from 'vitest'
-import type { PianoClient } from '../supabase/client'
+import { backendOf, type PianoClient } from '../supabase'
 import { createSupabaseAuth } from './supabase-auth'
 
 const user = {
@@ -13,7 +13,7 @@ const user = {
 /** A client whose auth answers as the server would, the rest never reached. */
 const OPTIONS = { callback: 'https://app/auth/callback', online: () => true }
 
-const clientWith = (auth: Record<string, unknown>) => ({ auth }) as unknown as PianoClient
+const clientWith = (auth: Record<string, unknown>) => backendOf({ auth } as unknown as PianoClient)
 
 describe('createSupabaseAuth', () => {
   it('reads a signed-in learner as an account', async () => {
@@ -95,7 +95,7 @@ describe('createSupabaseAuth', () => {
     }))
     const signOut = vi.fn(async () => ({ error: null }))
     const client = { auth: { signOut }, functions: { invoke } } as unknown as PianoClient
-    const auth = createSupabaseAuth(client, OPTIONS)
+    const auth = createSupabaseAuth(backendOf(client), OPTIONS)
     expect(await auth.requestDeletion()).toEqual({
       ok: true,
       value: { purgeAfter: '2026-11-28T10:00:00.000Z' },
@@ -112,7 +112,7 @@ describe('createSupabaseAuth', () => {
       }),
     })
     const client = { auth: {}, functions: { invoke } } as unknown as PianoClient
-    expect(await createSupabaseAuth(client, OPTIONS).requestDeletion()).toMatchObject({
+    expect(await createSupabaseAuth(backendOf(client), OPTIONS).requestDeletion()).toMatchObject({
       ok: false,
       reason: 'refused',
     })

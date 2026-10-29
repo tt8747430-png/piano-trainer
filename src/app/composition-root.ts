@@ -29,7 +29,7 @@ import {
   type ContentRemote,
 } from '@/shared/api/content'
 import { createWebMidi, hasWebMidi } from '@/shared/api/midi'
-import { createSupabaseClient, type PianoClient } from '@/shared/api/supabase'
+import { lazyBackend, type Backend } from '@/shared/api/supabase'
 import { createSupabasePublicLibrary, type PublicLibrary } from '@/shared/api/public-library'
 import { createSupabaseCloud, type CloudSync } from '@/shared/api/sync'
 import { safeLocalStorage, type SavingOptions } from '@/shared/lib'
@@ -84,21 +84,21 @@ export const createContent = (): ContentPort => filesContent()
  * project publishes.
  */
 export const createContentUpdates = (
-  backend: PianoClient,
+  backend: Backend,
 ): { readonly cache: ContentCache; readonly remote: ContentRemote } => ({
   cache: createBrowserContentCache(),
   remote: createSupabaseContentRemote(backend),
 })
 
-/** The app's one Supabase client (ADR 0116), on the project `.env` names. */
-export const createBackend = (): PianoClient =>
-  createSupabaseClient(
-    import.meta.env.VITE_SUPABASE_URL,
-    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-  )
+/**
+ * The app's one Supabase client (ADR 0116), on the project `.env` names: loaded on the first call that
+ * needs it, after the first paint, so supabase-js is not in the app's first chunk.
+ */
+export const createBackend = (): Backend =>
+  lazyBackend(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY)
 
 /** Accounts, on the backend's auth. */
-export const createAuth = (backend: PianoClient): AuthGateway => createSupabaseAuth(backend)
+export const createAuth = (backend: Backend): AuthGateway => createSupabaseAuth(backend)
 
 /** Each saved store that follows the learner to their other devices, and its table (ADR 0116). */
 export const SYNCED_SAVES: readonly SyncedSave[] = [
@@ -131,23 +131,22 @@ export function createSync(
 }
 
 /** The cloud the sync talks to: the backend's tables. */
-export const createCloud = (backend: PianoClient): CloudSync => createSupabaseCloud(backend)
+export const createCloud = (backend: Backend): CloudSync => createSupabaseCloud(backend)
 
 /** The Public library: the project's tables (ADR 0116). */
-export const createPublicLibrary = (backend: PianoClient): PublicLibrary =>
+export const createPublicLibrary = (backend: Backend): PublicLibrary =>
   createSupabasePublicLibrary(backend)
 
 /** The admin's tools: the project's `admin` function and tables (ADR 0116). */
-export const createAdmin = (backend: PianoClient): AdminPort => createSupabaseAdmin(backend)
+export const createAdmin = (backend: Backend): AdminPort => createSupabaseAdmin(backend)
 
 /** Editing the built-in content, an editor's: the project's drafts and `publish_content` (ADR 0116). */
-export const createContentEditing = (backend: PianoClient): ContentEditingPort =>
+export const createContentEditing = (backend: Backend): ContentEditingPort =>
   createSupabaseContentEditing(backend)
 
 /** Where what went wrong is reported: the project's `error_reports` (ADR 0116). */
-export const createErrorReporter = (backend: PianoClient): ErrorReporter =>
+export const createErrorReporter = (backend: Backend): ErrorReporter =>
   createSupabaseErrorReporter(backend)
 
 /** The feature switches on for whoever is signed in. */
-export const createFeatures = (backend: PianoClient): FeaturesPort =>
-  createSupabaseFeatures(backend)
+export const createFeatures = (backend: Backend): FeaturesPort => createSupabaseFeatures(backend)

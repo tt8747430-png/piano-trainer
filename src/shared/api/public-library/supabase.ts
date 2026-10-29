@@ -1,5 +1,5 @@
 import { netResult, type NetOptions } from '../network'
-import type { Json, PianoClient } from '../supabase'
+import type { Json, Backend, PianoClient } from '../supabase'
 import type { PublicEntry, PublicLibrary, Published } from './types'
 
 const ENTRY = 'id, title, author_name, saves, published_at, meta'
@@ -40,11 +40,13 @@ const likeOf = (query: string) => `%${query.trim().replace(/[\\%_]/g, (char) => 
 
 /** The Public library on Supabase (ADR 0116): its tables' row-level security and two functions. */
 export function createSupabasePublicLibrary(
-  client: PianoClient,
+  backend: Backend,
   { online }: NetOptions = {},
 ): PublicLibrary {
-  const ask = <T>(run: () => Promise<T>) => netResult(run, online ? { online } : {})
+  const ask = <T>(run: (client: PianoClient) => Promise<T>) =>
+    netResult(async () => run(await backend()), online ? { online } : {})
   const me = async () => {
+    const client = await backend()
     const { data } = await client.auth.getSession()
     const user = data.session?.user
     if (!user) throw Object.assign(new Error('Not signed in'), { status: 401 })
@@ -52,7 +54,7 @@ export function createSupabasePublicLibrary(
   }
   return {
     browse: ({ sort, query }) =>
-      ask(async () => {
+      ask(async (client) => {
         let request = client.from('public_items').select(ENTRY)
         if (query.trim()) request = request.ilike('title', likeOf(query))
         const { data, error, status } = await request
@@ -62,7 +64,7 @@ export function createSupabasePublicLibrary(
         return data.map(entryOf)
       }),
     item: (id) =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from('public_items')
           .select(`${ENTRY}, body`)
@@ -72,7 +74,7 @@ export function createSupabasePublicLibrary(
         return data ? { entry: entryOf(data), body: data.body } : null
       }),
     publish: ({ sourceId, title, authorName, meta, body, version }) =>
-      ask(async () => {
+      ask(async (client) => {
         const author = await me()
         const fields = {
           title,
@@ -104,7 +106,7 @@ export function createSupabasePublicLibrary(
         return { sourceId, id: data.id, version }
       }),
     unpublish: (sourceId) =>
-      ask(async () => {
+      ask(async (client) => {
         const author = await me()
         const { error, status } = await client
           .from('public_items')
@@ -114,7 +116,7 @@ export function createSupabasePublicLibrary(
         if (error) throw thrown(error, status)
       }),
     mine: () =>
-      ask(async () => {
+      ask(async (client) => {
         const author = await me()
         const { data, error, status } = await client
           .from('public_items')
@@ -128,13 +130,13 @@ export function createSupabasePublicLibrary(
         }))
       }),
     save: (id) =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client.rpc('save_public_item', { p_item: id })
         if (error) throw thrown(error, status)
         return data
       }),
     report: (id, reason, note) =>
-      ask(async () => {
+      ask(async (client) => {
         const { error, status } = await client
           .from('public_reports')
           .upsert(

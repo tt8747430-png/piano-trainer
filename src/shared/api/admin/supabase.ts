@@ -1,6 +1,6 @@
 import type { AccountRole } from '../auth'
 import { netResult, type NetOptions } from '../network'
-import type { Json, PianoClient } from '../supabase'
+import type { Json, Backend, PianoClient } from '../supabase'
 import type { AdminAccount, AdminPort, FeaturesPort, Report } from './types'
 
 const thrown = (error: { message: string }, status: number) =>
@@ -21,15 +21,18 @@ async function functionError(error: unknown): Promise<Error> {
 }
 
 /** The admin's tools on Supabase (ADR 0116): the `admin` function for accounts, the tables for the rest. */
-export function createSupabaseAdmin(client: PianoClient, { online }: NetOptions = {}): AdminPort {
-  const ask = <T>(run: () => Promise<T>) => netResult(run, online ? { online } : {})
+export function createSupabaseAdmin(backend: Backend, { online }: NetOptions = {}): AdminPort {
+  const ask = <T>(run: (client: PianoClient) => Promise<T>) =>
+    netResult(async () => run(await backend()), online ? { online } : {})
   const invoke = async <T>(body: Record<string, unknown>): Promise<T> => {
+    const client = await backend()
     const { data, error } = await client.functions.invoke<T>('admin', { body })
     if (error || data === null) throw await functionError(error)
     return data
   }
   /** Writes what the admin did to the log; a change that went through stands if its line does not. */
   const note = async (action: string, target: string, detail: Json = {}) => {
+    const client = await backend()
     const { data } = await client.auth.getSession()
     const admin = data.session?.user.id
     if (admin) await client.from('admin_log').insert({ admin_id: admin, action, target, detail })
@@ -48,7 +51,7 @@ export function createSupabaseAdmin(client: PianoClient, { online }: NetOptions 
         await invoke({ action: 'set-role', userId, role })
       }),
     groups: () =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from('groups')
           .select('id, name, group_members(user_id)')
@@ -61,7 +64,7 @@ export function createSupabaseAdmin(client: PianoClient, { online }: NetOptions 
         }))
       }),
     createGroup: (name) =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from('groups')
           .insert({ name })
@@ -72,12 +75,12 @@ export function createSupabaseAdmin(client: PianoClient, { online }: NetOptions 
         return { ...data, members: [] }
       }),
     deleteGroup: (id) =>
-      ask(async () => {
+      ask(async (client) => {
         check(await client.from('groups').delete().eq('id', id))
         await note('delete-group', id)
       }),
     setMember: (groupId, userId, member) =>
-      ask(async () => {
+      ask(async (client) => {
         check(
           member
             ? await client
@@ -92,7 +95,7 @@ export function createSupabaseAdmin(client: PianoClient, { online }: NetOptions 
         await note(member ? 'add-member' : 'remove-member', groupId, { userId })
       }),
     switches: () =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from('feature_switches')
           .select('key, label, state, groups')
@@ -107,19 +110,19 @@ export function createSupabaseAdmin(client: PianoClient, { online }: NetOptions 
         }))
       }),
     saveSwitch: ({ key, label, state, groups }) =>
-      ask(async () => {
+      ask(async (client) => {
         check(
           await client.from('feature_switches').upsert({ key, label, state, groups: [...groups] }),
         )
         await note('save-switch', key, { state })
       }),
     deleteSwitch: (key) =>
-      ask(async () => {
+      ask(async (client) => {
         check(await client.from('feature_switches').delete().eq('key', key))
         await note('delete-switch', key)
       }),
     reports: () =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from('public_reports')
           .select(
@@ -146,12 +149,12 @@ export function createSupabaseAdmin(client: PianoClient, { online }: NetOptions 
         )
       }),
     hide: (itemId, hidden) =>
-      ask(async () => {
+      ask(async (client) => {
         check(await client.rpc('hide_public_item', { p_item: itemId, p_hidden: hidden }))
         await note(hidden ? 'hide' : 'show', itemId)
       }),
     block: (userId) =>
-      ask(async () => {
+      ask(async (client) => {
         check(
           await client
             .from('publish_blocks')
@@ -160,7 +163,7 @@ export function createSupabaseAdmin(client: PianoClient, { online }: NetOptions 
         await note('block', userId)
       }),
     dismiss: (itemId, reporterId) =>
-      ask(async () => {
+      ask(async (client) => {
         check(
           await client
             .from('public_reports')
@@ -171,7 +174,7 @@ export function createSupabaseAdmin(client: PianoClient, { online }: NetOptions 
         await note('dismiss', itemId, { reporterId })
       }),
     activity: () =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from('admin_log')
           .select('at, action, target')
@@ -181,7 +184,7 @@ export function createSupabaseAdmin(client: PianoClient, { online }: NetOptions 
         return data
       }),
     errors: () =>
-      ask(async () => {
+      ask(async (client) => {
         const { data, error, status } = await client
           .from('error_reports')
           .select('at, message, stack, path, build')
@@ -195,13 +198,14 @@ export function createSupabaseAdmin(client: PianoClient, { online }: NetOptions 
 
 /** The feature switches on for the caller, by `my_features()`. */
 export function createSupabaseFeatures(
-  client: PianoClient,
+  backend: Backend,
   { online }: NetOptions = {},
 ): FeaturesPort {
   return {
     mine: () =>
       netResult(
         async () => {
+          const client = await backend()
           const { data, error, status } = await client.rpc('my_features')
           if (error) throw thrown(error, status)
           return data
