@@ -1,7 +1,11 @@
 import { netResult, type NetResult } from '../network'
 
 /** The kinds of content whose body may be away from the device: a piece's music, a lesson's sections. */
-export type ContentKind = 'piece' | 'lesson'
+export const CONTENT_KINDS = ['piece', 'lesson'] as const
+export type ContentKind = (typeof CONTENT_KINDS)[number]
+
+export const isContentKind = (value: string): value is ContentKind =>
+  (CONTENT_KINDS as readonly string[]).includes(value)
 
 /**
  * Where content's bodies come from (ADR 0116). The catalog's index is always on the device; a body is
