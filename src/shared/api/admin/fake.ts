@@ -3,6 +3,7 @@ import { netResult } from '../network'
 import type {
   AdminAccount,
   AdminPort,
+  ErrorEntry,
   FeaturesPort,
   FeatureSwitch,
   Group,
@@ -19,11 +20,13 @@ const refused = (message: string) => Object.assign(new Error(message), { status:
 export function createFakeAdmin({
   accounts = [],
   reports = [],
+  errors = [],
   online = () => true,
   self = '',
 }: {
   accounts?: readonly AdminAccount[]
   reports?: readonly Report[]
+  errors?: readonly ErrorEntry[]
   online?: () => boolean
   /** The admin's own account id: they cannot take their own role away. */
   self?: string
@@ -112,6 +115,7 @@ export function createFakeAdmin({
         note('dismiss', itemId)
       }),
     activity: () => ask(async () => log),
+    errors: () => ask(async () => errors),
   }
 }
 

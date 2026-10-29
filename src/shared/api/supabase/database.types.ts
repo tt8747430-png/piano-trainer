@@ -219,6 +219,30 @@ export type Database = {
         Update: { action?: string; detail?: Json; target?: string }
         Relationships: []
       }
+      error_reports: {
+        Row: {
+          agent: string
+          at: string
+          build: string
+          id: string
+          message: string
+          path: string
+          stack: string
+          user_id: string | null
+        }
+        Insert: {
+          agent?: string
+          at?: string
+          build?: string
+          id?: string
+          message: string
+          path?: string
+          stack?: string
+          user_id?: string | null
+        }
+        Update: never
+        Relationships: []
+      }
       feature_switches: {
         Row: { groups: string[]; key: string; label: string; state: string; updated_at: string }
         Insert: {

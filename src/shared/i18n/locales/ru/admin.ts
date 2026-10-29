@@ -8,6 +8,7 @@ export const admin: LocaleResources['admin'] = {
     groups: 'Группы',
     switches: 'Переключатели',
     reports: 'Жалобы',
+    errors: 'Ошибки',
     activity: 'Журнал',
   },
   loading: 'Загрузка…',
@@ -60,6 +61,11 @@ export const admin: LocaleResources['admin'] = {
     show: 'Показать снова',
     block: 'Запретить публиковать',
     dismiss: 'Закрыть',
+  },
+  errors: {
+    none: 'Об ошибках не сообщалось.',
+    where: '{{date}} · {{path}} · сборка {{build}}',
+    stack: 'Стек',
   },
   activity: {
     none: 'Пока ничего не сделано.',

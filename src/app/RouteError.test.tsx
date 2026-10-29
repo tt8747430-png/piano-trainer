@@ -9,10 +9,13 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { testRouter } from '@/app/testing/test-context'
+import { createFakeErrorReporter } from '@/shared/api/errors'
+import { ErrorReportsProvider } from '@/shared/lib/error-reports'
 import { RouteError } from './RouteError'
 
 /** Path, and a full-screen screen that throws as it renders, under the app's error screen. */
 function renderThrowing(initialEntries: string[], reload = vi.fn()) {
+  const errors = createFakeErrorReporter()
   const rootRoute = createRootRoute()
   const path = createRoute({
     getParentRoute: () => rootRoute,
@@ -29,12 +32,16 @@ function renderThrowing(initialEntries: string[], reload = vi.fn()) {
   const router = createRouter({
     routeTree: rootRoute.addChildren([path, player]),
     history: createMemoryHistory({ initialEntries }),
-    defaultErrorComponent: () => <RouteError reload={reload} />,
+    defaultErrorComponent: ({ error }) => <RouteError error={error} reload={reload} />,
   })
   // React reports the error it caught; the test throws it on purpose.
   vi.spyOn(console, 'error').mockImplementation(() => undefined)
-  render(<RouterProvider router={router} />)
-  return { router, reload }
+  render(
+    <ErrorReportsProvider reporter={errors}>
+      <RouterProvider router={router} />
+    </ErrorReportsProvider>,
+  )
+  return { router, reload, errors }
 }
 
 describe('RouteError', () => {
@@ -44,6 +51,16 @@ describe('RouteError', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('Something went wrong')
     await user.click(screen.getByRole('button', { name: 'Reload' }))
     expect(reload).toHaveBeenCalledOnce()
+  })
+
+  it('reports what was thrown, and where (ADR 0116)', async () => {
+    const { errors } = renderThrowing(['/play/broken'])
+    await screen.findByRole('alert')
+    await waitFor(() =>
+      expect(errors.sent).toEqual([
+        expect.objectContaining({ message: 'a screen that cannot draw', path: '/play/broken' }),
+      ]),
+    )
   })
 
   it('says when the learner is offline: the screen opens once they are back online', async () => {

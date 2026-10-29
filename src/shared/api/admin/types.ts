@@ -49,6 +49,15 @@ export interface LogEntry {
   readonly target: string
 }
 
+/** An error a device reported: when, what, its stack, where in the app, on which build. */
+export interface ErrorEntry {
+  readonly at: string
+  readonly message: string
+  readonly stack: string
+  readonly path: string
+  readonly build: string
+}
+
 /**
  * The admin's tools (ADR 0116): accounts and their roles, groups, feature switches, the Public
  * library's reports, and the activity log. Every call's result is a value; every change is logged.
@@ -71,6 +80,8 @@ export interface AdminPort {
   /** Lets a report go, dealt with. */
   dismiss(itemId: string, reporterId: string): Promise<NetResult<void>>
   activity(): Promise<NetResult<readonly LogEntry[]>>
+  /** The errors devices reported, the latest first. */
+  errors(): Promise<NetResult<readonly ErrorEntry[]>>
 }
 
 /** The feature switches on for whoever is signed in (or no one). */

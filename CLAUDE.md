@@ -91,7 +91,7 @@ music, `exercise` music and arrangement, and none of them imports a package. `es
   the entity's own data shown), `index.ts`.
 - **shared/** — `lib` (pure helpers and hooks, plus the kernel: `music` theory, `arrangement` (a chart → a
   Performance), `notation` (a Performance → a Score), `schedule` (a Performance → sounds), `exercise`; and `services`
-  (audio and MIDI to React), `shortcuts`, `sync` (the merge and `createSyncRunner`) and `account` (`AccountProvider`, `useAccount`, `useSync`: Autosync while signed in)), `api` (the `audio`, `midi` and `content` ports, browser adapters and fakes; `content` also the database's content updates: the IndexedDB cache, the remote, `keepContent` read by each entity's index; `network`: every server call's result as a value; `auth`, accounts on Supabase Auth; `sync`, each store's cloud document (`CloudSync`); `content-editing`, an editor's drafts, publishing and kept versions; `supabase`, the client and the database's types, ADR 0116),
+  (audio and MIDI to React), `shortcuts`, `sync` (the merge and `createSyncRunner`) and `account` (`AccountProvider`, `useAccount`, `useSync`: Autosync while signed in)), `api` (the `audio`, `midi` and `content` ports, browser adapters and fakes; `content` also the database's content updates: the IndexedDB cache, the remote, `keepContent` read by each entity's index; `network`: every server call's result as a value; `auth`, accounts on Supabase Auth; `sync`, each store's cloud document (`CloudSync`); `content-editing`, an editor's drafts, publishing and kept versions; `errors`, what went wrong reported (`ErrorReportsProvider`, `useReportError` in `shared/lib/error-reports`); `supabase`, the client and the database's types, ADR 0116),
   `ui` (the kit; shadcn in `ui/primitives`; `ui/score`, Verovio over a Score, imported by that path only), `i18n`,
   `config`, `test`.
 
@@ -154,7 +154,7 @@ text unselectable outside fields, with no callout, no overscroll and no double-t
 (`src/app/standalone-boot.test.ts`).
 
 **Backend:** `supabase/` holds the migrations (written without `drop` statements: the Supabase tool asks an unseen confirmation for them) (applied to the project `itmiutianxvtlwhdsalo`), the Edge Functions and
-`tests/access.sql`, `tests/content-access.sql`, `tests/public-access.sql` and `tests/admin-access.sql` (run them, never with a `delete` in them, for the same reason after a migration: every learner reaches only their own rows; content reads by audience, writes by editors). The built-in content is published by `node scripts/export-content.mjs` then `scripts/seed-content.mjs` (an editor's `SEED_EMAIL`, `SEED_PASSWORD`). A schema change is a new
+`tests/access.sql`, `tests/content-access.sql`, `tests/public-access.sql` and `tests/admin-access.sql`, `tests/drafts-access.sql`, `tests/errors-access.sql` (run them, never with a `delete` in them, for the same reason after a migration: every learner reaches only their own rows; content reads by audience, writes by editors). The built-in content is published by `node scripts/export-content.mjs` then `scripts/seed-content.mjs` (an editor's `SEED_EMAIL`, `SEED_PASSWORD`). A schema change is a new
 migration file, applied, then `shared/api/supabase/database.types.ts` brought level with the generated types.
 
 ## Read before you touch

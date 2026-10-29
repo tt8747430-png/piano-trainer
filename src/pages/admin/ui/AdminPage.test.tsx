@@ -116,6 +116,34 @@ describe('the Admin area', () => {
     expect(await screen.findByText('Role changed')).toBeVisible()
   })
 
+  it('lists the errors devices reported, each with where and its stack', async () => {
+    const user = userEvent.setup()
+    const admin = createFakeAdmin({
+      errors: [
+        {
+          at: '2026-10-29T12:00:00Z',
+          message: 'Cannot read the score',
+          stack: 'at draw (score.ts:1)',
+          path: '/play/bz5',
+          build: '1.2.3',
+        },
+      ],
+    })
+    await renderApp('/admin?tab=errors', { auth: await signedInAs('admin'), admin })
+    expect(await screen.findByText('Cannot read the score')).toBeVisible()
+    expect(screen.getByText(/\/play\/bz5 · build 1\.2\.3/)).toBeVisible()
+    await user.click(screen.getByText('Stack'))
+    expect(screen.getByText('at draw (score.ts:1)')).toBeVisible()
+  })
+
+  it('says when no error was reported', async () => {
+    await renderApp('/admin?tab=errors', {
+      auth: await signedInAs('admin'),
+      admin: createFakeAdmin(),
+    })
+    expect(await screen.findByText('No errors reported.')).toBeVisible()
+  })
+
   it('reads in Russian', async () => {
     await renderApp('/admin', {
       auth: await signedInAs('admin'),

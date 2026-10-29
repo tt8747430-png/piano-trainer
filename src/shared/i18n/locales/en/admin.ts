@@ -7,6 +7,7 @@ export const admin = {
     groups: 'Groups',
     switches: 'Switches',
     reports: 'Reports',
+    errors: 'Errors',
     activity: 'Activity',
   },
   loading: 'Loading…',
@@ -57,6 +58,12 @@ export const admin = {
     show: 'Show again',
     block: 'Stop them publishing',
     dismiss: 'Dismiss',
+  },
+  // What went wrong on learners' devices, the latest first (ADR 0116).
+  errors: {
+    none: 'No errors reported.',
+    where: '{{date}} · {{path}} · build {{build}}',
+    stack: 'Stack',
   },
   activity: {
     none: 'Nothing done yet.',

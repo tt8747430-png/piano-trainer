@@ -103,3 +103,6 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   A lesson's every text is edited on its lesson editor (`/lessons/$lessonId/edit`, a course's under its course;
   `pages/lesson-editor`), English and Russian side by side; its examples stay as authored this round
   (2026-10-29).
+- r7 — Error reports: a screen's error (`RouteError`) and one never caught are reported once a run, ten at most,
+  into `error_reports` (written by anyone, capped at a hundred a minute, read by admins: the Admin area's Errors
+  tab), with no third party (2026-10-29).

@@ -3,6 +3,7 @@ export { createSupabaseAdmin, createSupabaseFeatures } from './supabase'
 export type {
   AdminAccount,
   AdminPort,
+  ErrorEntry,
   FeatureSwitch,
   FeaturesPort,
   Group,

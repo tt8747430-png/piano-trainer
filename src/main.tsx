@@ -9,6 +9,7 @@ import {
   createCloud,
   createContent,
   createContentEditing,
+  createErrorReporter,
   createContentUpdates,
   createFeatures,
   createPublicLibrary,
@@ -43,6 +44,7 @@ createRoot(rootElement).render(
       admin={createAdmin(backend)}
       features={createFeatures(backend)}
       contentEditing={createContentEditing(backend)}
+      errors={createErrorReporter(backend)}
       router={createAppRouter({ ...stores, content: createContent() })}
     />
   </StrictMode>,

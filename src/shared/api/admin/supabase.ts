@@ -180,6 +180,16 @@ export function createSupabaseAdmin(client: PianoClient, { online }: NetOptions 
         if (error) throw thrown(error, status)
         return data
       }),
+    errors: () =>
+      ask(async () => {
+        const { data, error, status } = await client
+          .from('error_reports')
+          .select('at, message, stack, path, build')
+          .order('at', { ascending: false })
+          .limit(100)
+        if (error) throw thrown(error, status)
+        return data
+      }),
   }
 }
 

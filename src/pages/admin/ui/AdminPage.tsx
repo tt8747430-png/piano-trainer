@@ -5,6 +5,7 @@ import { BackButton, NavTab, NavTabs, ScreenHeader } from '@/shared/ui'
 import { ADMIN_TABS, type AdminTab } from '../model/admin-tab'
 import { AccountsTab } from './AccountsTab'
 import { ActivityTab } from './ActivityTab'
+import { ErrorsTab } from './ErrorsTab'
 import { GroupsTab } from './GroupsTab'
 import { ReportsTab } from './ReportsTab'
 import { SwitchesTab } from './SwitchesTab'
@@ -14,11 +15,12 @@ const TABS: Readonly<Record<AdminTab, () => React.JSX.Element>> = {
   groups: GroupsTab,
   switches: SwitchesTab,
   reports: ReportsTab,
+  errors: ErrorsTab,
   activity: ActivityTab,
 }
 
 /**
- * The Admin area (ADR 0116), an admin's alone: Accounts, Groups, Switches, Reports and Activity, a
+ * The Admin area (ADR 0116), an admin's alone: Accounts, Groups, Switches, Reports, Errors and Activity, a
  * tab each. Anyone else is told it is an admin's; the server refuses them all the same.
  */
 export function AdminPage() {
