@@ -52,30 +52,30 @@ describe('ScreenHeader', () => {
     expect(within(bar).getByRole('navigation', { name: 'Chords' })).toBeInTheDocument()
   })
 
-  it('keeps the title beside one or two actions, and under three or more on a phone, two lines at most', () => {
-    const { rerender } = render(
+  it('keeps a screen’s title on the bar’s one row, cut short rather than wrapped', () => {
+    render(
       <ScreenHeader
         title="Wonderful Grace of Jesus"
         actions={<button type="button">Edit</button>}
       />,
     )
     const title = screen.getByRole('heading', { level: 1 })
-    expect(title).not.toHaveClass('max-sm:basis-full')
-    rerender(
-      <ScreenHeader
-        title="Wonderful Grace of Jesus"
-        crowded
-        actions={
-          <>
-            <button type="button">Edit</button>
-            <button type="button">Learned</button>
-            <button type="button">More</button>
-          </>
-        }
-      />,
-    )
-    expect(title).toHaveClass('max-sm:order-last', 'max-sm:basis-full', 'max-sm:line-clamp-2')
+    expect(within(screen.getByRole('banner')).getByRole('heading', { level: 1 })).toBe(title)
+    expect(title).toHaveClass('truncate')
   })
+
+  it('stands a place’s title large on the page, the bar echoing it once it is scrolled past', () => {
+    render(<ScreenHeader title="Learn" large />)
+    const heading = screen.getByRole('heading', { level: 1, name: 'Learn' })
+    const bar = screen.getByRole('banner')
+    expect(bar).not.toContainElement(heading)
+    // The echo is for the eye; the heading is the large title alone.
+    expect(within(bar).queryByRole('heading')).toBeNull()
+    expect(within(bar).getByText('Learn', { ignore: '[aria-hidden=false]' })).toHaveClass(
+      'opacity-0',
+    )
+  })
+
   const scrollTo = (y: number) => {
     vi.spyOn(window, 'scrollY', 'get').mockReturnValue(y)
     act(() => void window.dispatchEvent(new Event('scroll')))

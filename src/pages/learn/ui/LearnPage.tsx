@@ -1,14 +1,13 @@
-import { Link, useSearch } from '@tanstack/react-router'
-import { Search, Settings, UserRound } from 'lucide-react'
+import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { journeyById } from '@/entities/lesson'
 import { selectLearned, useProgress } from '@/entities/progress'
-import { RoundLink, ScreenHeader } from '@/shared/ui'
+import { NavTab, NavTabs, ScreenHeader } from '@/shared/ui'
+import { PlaceActions } from '@/widgets/app-nav'
 import { ContinueAction } from '@/widgets/continue-action'
 import { CourseShelves, currentJourney, JourneyMap } from '@/widgets/curriculum'
 import { RecentPieces } from '@/widgets/piece-list'
 import { PracticeDays } from '@/widgets/practice-days'
-import { LearnViewToggle } from './LearnViewToggle'
 
 /**
  * Learn (ADR 0053), the app's first place: its header's toggle between the Lessons, four journeys of
@@ -24,28 +23,22 @@ export function LearnPage() {
     <div className="flex flex-col">
       <ScreenHeader
         title={t('learn:title')}
-        actions={
-          <div className="flex items-center gap-2">
-            <LearnViewToggle shown={view} />
-            {/* A laptop's sidebar has Search, the Profile and Settings at its foot. */}
-            <div className="flex gap-2 lg:hidden">
-              <RoundLink
-                label={t('common:nav.search')}
-                icon={Search}
-                render={<Link to="/search" />}
-              />
-              <RoundLink
-                label={t('common:nav.profile')}
-                icon={UserRound}
-                render={<Link to="/profile" />}
-              />
-              <RoundLink
-                label={t('common:nav.settings')}
-                icon={Settings}
-                render={<Link to="/settings" />}
-              />
-            </div>
-          </div>
+        large
+        actions={<PlaceActions />}
+        tabs={
+          <NavTabs label={t('learn:views.label')}>
+            {(['lessons', 'courses'] as const).map((shown) => (
+              <NavTab
+                key={shown}
+                to="/"
+                search={{ view: shown, journey: '' }}
+                replace
+                current={shown === view}
+              >
+                {t(`learn:views.${shown}`)}
+              </NavTab>
+            ))}
+          </NavTabs>
         }
       />
       {/* The Lessons or the Courses; the days and the songs played last after them on a phone, beside

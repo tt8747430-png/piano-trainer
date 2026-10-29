@@ -2,7 +2,6 @@ import { useSearch } from '@tanstack/react-router'
 import { X } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRepertoire } from '@/entities/piece'
 import { stepOf, type StepId } from '@/entities/step'
 import { selectAnswers, selectIsLearned, useProgressStoreApi } from '@/entities/progress'
 import { MidiButton } from '@/features/connect-midi'
@@ -22,9 +21,7 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
   const step = stepOf(plan.of)
   const title = step ? stepTitle(step).primary : ''
   const trainer = useTrainer(plan.asks, { rounds: plan.length })
-  const [learnedBefore] = useState(
-    () => plan.marks !== null && selectIsLearned(plan.marks)(store.getState()),
-  )
+  const [learnedBefore] = useState(() => selectIsLearned(plan.of)(store.getState()))
   const close = useGoBack({ to: '/' })
   // Escape closes, as it closes the Player: the Check is full screen too.
   useShortcuts(t('quiz:shortcuts.group'), [
@@ -68,10 +65,7 @@ function CheckFlow({ plan }: { plan: CheckPlan }) {
 /** The check's questions, drawn once from the evidence as it opens: each skill as often as it still needs. */
 function CheckDraw({ of }: { of: StepId }) {
   const progress = useProgressStoreApi()
-  const pieces = useRepertoire()
-  const [plan] = useState(() =>
-    checkPlan(of, (skill) => selectAnswers(skill)(progress.getState()), pieces.piece),
-  )
+  const [plan] = useState(() => checkPlan(of, (skill) => selectAnswers(skill)(progress.getState())))
   return plan ? <CheckFlow plan={plan} /> : null
 }
 

@@ -196,12 +196,12 @@ describe('the app shell', () => {
     expect(within(nav).getByRole('link', { name: place })).toHaveAttribute('aria-current', 'page')
   })
 
-  it('reaches Settings from Learn', async () => {
+  it('reaches Settings from Learn, through the Profile', async () => {
     const user = userEvent.setup()
     await renderApp('/')
-    await user.click(
-      within(await screen.findByRole('main')).getByRole('link', { name: 'Settings' }),
-    )
+    await user.click(within(await screen.findByRole('main')).getByRole('link', { name: 'Profile' }))
+    await screen.findByRole('heading', { level: 1, name: 'Profile' })
+    await user.click(within(screen.getByRole('main')).getByRole('link', { name: 'Settings' }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Settings' })).toBeInTheDocument()
   })
 

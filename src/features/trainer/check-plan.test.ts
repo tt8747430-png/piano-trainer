@@ -1,21 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { chordsOfPiece, isDegreePiece, pieceById, skillsOfPiece } from '@/entities/piece'
 import type { Answer } from '@/entities/progress'
 import { chordSkill, qualitiesIn, type SkillId } from '@/shared/lib/music'
 import { checkPlan } from './check-plan'
 
 describe('checkPlan', () => {
-  it('checks each of a piece’s chords as written in turn, six questions or one each', () => {
-    const bz5 = pieceById('bz5')
-    if (!bz5) throw new Error('bz5')
-    const chords = chordsOfPiece(bz5).map((chord) => ({ ...chord, inversion: null }))
-    const plan = checkPlan('piece:bz5')
-    expect(plan?.skills).toEqual(skillsOfPiece(bz5))
-    expect(plan?.length).toBe(Math.max(6, chords.length))
-    expect(plan?.marks).toBeNull()
-    expect(plan?.asks).toEqual({ kind: 'chords', drill: 'entry', chords, ordered: true })
-  })
-
   it('asks every quality of a family in turn, as often as each still needs to be Known', () => {
     const qualities = qualitiesIn('tri').map(chordSkill)
     const plan = checkPlan('chords:tri')
@@ -28,7 +16,6 @@ describe('checkPlan', () => {
     ])
     expect(plan?.length).toBe(qualities.length * 4)
     expect(plan?.asks.kind === 'skills' && plan.asks.ordered).toBe(true)
-    expect(plan?.marks).toBe('chords:tri')
   })
 
   it('asks a quality already Known once, and one nearly Known as often as it lacks', () => {
@@ -55,20 +42,12 @@ describe('checkPlan', () => {
     expect(checkPlan('scale:harmonic')).toMatchObject({
       length: 4,
       skills: ['scale:harmonic'],
-      marks: 'scale:harmonic',
     })
   })
 
-  it('has no plan for a piece that is not there', () => {
-    expect(checkPlan('piece:gone')).toBeNull()
+  it('has no plan for a lesson, which is read, or a song, which is played', () => {
+    expect(checkPlan('piece:bz5')).toBeNull()
     expect(checkPlan('lesson:triads')).toBeNull()
     expect(checkPlan('course:rhythm-basics/note-values')).toBeNull()
-  })
-
-  it('has none for a piece of no chord symbol: nothing to check (ADR 0114)', () => {
-    const bz5 = pieceById('bz5')
-    if (!bz5 || isDegreePiece(bz5)) throw new Error('bz5')
-    const silent = { ...bz5, sections: [{ kind: 'verse' as const, lines: ['_ _'] }] }
-    expect(checkPlan('piece:bz5', undefined, () => silent)).toBeNull()
   })
 })

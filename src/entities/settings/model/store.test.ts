@@ -29,7 +29,6 @@ const restored = (state: unknown, version = SETTINGS_VERSION) => {
 
 // The test setup's matchMedia answers false: no fine pointer, so no typing by default.
 const DEFAULTS = {
-  titles: 'large',
   practice: DEFAULT_PRACTICE,
   sound: DEFAULT_SOUND,
   trainer: DEFAULT_TRAINER,
@@ -91,7 +90,6 @@ describe('createSettingsStore', () => {
   it('restores what was saved', () => {
     const saved = {
       theme: 'light',
-      titles: 'small',
       locale: 'ru',
       practice: {
         fingerNumbers: true,
@@ -251,9 +249,9 @@ describe('createSettingsStore', () => {
     expect(restored({ scoreView: { pinned: 'no' } }).scoreView.pinned).toBe(true)
   })
 
-  it('starts afresh over a save of the version before, which had a tune and a recording switch (ADR 0115)', () => {
-    expect(SETTINGS_VERSION).toBe(15)
-    expect(restored({ theme: 'dark', practice: { tune: true } }, 14)).toEqual(
+  it('starts afresh over a save of the version before, which had a title size', () => {
+    expect(SETTINGS_VERSION).toBe(16)
+    expect(restored({ theme: 'dark', titles: 'small' }, 15)).toEqual(
       createSettingsStore({ storage: createMemoryStorage(), languages: ['en'] }).getState(),
     )
   })

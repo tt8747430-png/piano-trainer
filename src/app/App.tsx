@@ -27,7 +27,6 @@ import { LocaleSync } from './providers/LocaleSync'
 import { MidiReconnect } from './providers/MidiReconnect'
 import { MidiSync } from './providers/MidiSync'
 import { ThemeProvider } from './providers/ThemeProvider'
-import { TitlesSync } from './providers/TitlesSync'
 import type { Stores } from './composition-root'
 import type { AppRouter } from './router'
 
@@ -74,7 +73,6 @@ export function App({
                                 <AudioUnlock />
                                 <MidiReconnect />
                                 <MidiSync />
-                                <TitlesSync />
                                 <ThemeProvider>
                                   <ShortcutsProvider>
                                     <RouterProvider router={router} />

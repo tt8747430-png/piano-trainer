@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { createSettingsStore, SETTINGS_STORAGE_KEY, SETTINGS_VERSION } from '@/entities/settings'
-import { setTheme, setTitles } from '@/features/set-preference'
+import { setTheme } from '@/features/set-preference'
 import { THEME_COLORS } from '@/shared/config'
 import { stubMatchMedia } from '@/shared/test/match-media'
 
@@ -26,16 +26,6 @@ describe('the #theme-boot script in index.html', () => {
     stubMatchMedia({ dark: false })
     setTheme(createSettingsStore({ languages: ['en'] }), 'dark')
     expect(runBoot()).toBe('dark')
-  })
-
-  it('makes the titles small where the settings store saved them so', () => {
-    stubMatchMedia({ dark: false })
-    onTestFinished(() => {
-      delete document.documentElement.dataset['titles']
-    })
-    setTitles(createSettingsStore({ languages: ['en'] }), 'small')
-    runBoot()
-    expect(document.documentElement.dataset['titles']).toBe('small')
   })
 
   it('colours the browser toolbar for the theme it paints', () => {

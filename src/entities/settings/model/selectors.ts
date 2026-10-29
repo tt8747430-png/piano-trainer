@@ -13,13 +13,11 @@ import type {
   Sidebar,
   SoundSettings,
   Theme,
-  TitleSize,
   FloatingSettings,
   TrainerSettings,
 } from './types'
 
 export const selectTheme = (state: SettingsState): Theme => state.theme
-export const selectTitles = (state: SettingsState): TitleSize => state.titles
 export const selectLocale = (state: SettingsState): Locale => state.locale
 export const selectPractice = (state: SettingsState): PracticeToggles => state.practice
 export const selectSound = (state: SettingsState): SoundSettings => state.sound

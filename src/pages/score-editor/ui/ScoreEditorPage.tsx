@@ -18,6 +18,7 @@ import { ButtonLink, NotFound } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { editorTarget, originalTarget } from '../model/editor-target'
+import { EditWhat } from './EditWhat'
 import { ScoreEditor } from './ScoreEditor'
 
 function Editing({ id }: { id: string }) {
@@ -38,7 +39,7 @@ function Editing({ id }: { id: string }) {
         <ButtonLink render={<Link to="/songs" />}>{t('notFound.toSongs')}</ButtonLink>
       </NotFound>
     )
-  return <ScoreEditor target={target} bar={bar} />
+  return <ScoreEditor target={target} bar={bar} head={<EditWhat original={false} />} />
 }
 
 /** A screen in the editor's place saying why it is not open yet: its line, and what to do. */
@@ -87,12 +88,15 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
       target={target}
       bar={bar}
       head={
-        <DraftStrip
-          draft={draft}
-          title={entryTitles(piece, locale).primary}
-          unreadable={t('original.unreadable')}
-          onReset={draft.reopen}
-        />
+        <div className="flex flex-col items-center gap-2">
+          <EditWhat original />
+          <DraftStrip
+            draft={draft}
+            title={entryTitles(piece, locale).primary}
+            unreadable={t('original.unreadable')}
+            onReset={draft.reopen}
+          />
+        </div>
       }
     />
   )

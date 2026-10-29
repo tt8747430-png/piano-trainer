@@ -5,14 +5,12 @@ import {
   selectFloating,
   selectLocale,
   selectTheme,
-  selectTitles,
   THEMES,
-  TITLE_SIZES,
   useSettings,
   useSettingsStoreApi,
   type Theme,
 } from '@/entities/settings'
-import { setFloating, setLocale, setTheme, setTitles } from '@/features/set-preference'
+import { setFloating, setLocale, setTheme } from '@/features/set-preference'
 import { LOCALES, type Locale } from '@/shared/i18n'
 import {
   Segmented,
@@ -46,7 +44,6 @@ export function PreferencesPage() {
   const settings = useSettingsStoreApi()
   const locale = useSettings(selectLocale)
   const theme = useSettings(selectTheme)
-  const titles = useSettings(selectTitles)
   const floating = useSettings(selectFloating)
   return (
     <SettingsScreen title={t('groups.preferences.label')}>
@@ -68,17 +65,6 @@ export function PreferencesPage() {
       </Group>
       <Group title={t('appearance.label')}>
         <SettingRows>
-          <SettingField label={t('appearance.titles.label')}>
-            <Segmented
-              label={t('appearance.titles.label')}
-              value={titles}
-              options={TITLE_SIZES.map((value) => ({
-                value,
-                label: t(`appearance.titles.${value}`),
-              }))}
-              onChange={(value) => setTitles(settings, value)}
-            />
-          </SettingField>
           <SettingField label={t('floating.place')} info={t('floating.placeInfo')}>
             <Segmented
               label={t('floating.place')}

@@ -33,21 +33,19 @@ async function writeChord(user: ReturnType<typeof userEvent.setup>, symbol: stri
 }
 
 describe('an editor’s draft of a built-in song’s original (ADR 0116)', () => {
-  it('opens from the song’s More, an editor’s alone', async () => {
+  it('is a switch in the one editor, an editor’s alone: Mine or The original', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp(`/songs/${SONG.id}`, { auth: await signedInAs('editor') })
-    await user.click(await screen.findByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('button', { name: 'Edit the original' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe(`/edit/${SONG.id}`))
-    expect(router.state.location.search).toMatchObject({ original: true })
+    const { router } = await renderApp(`/edit/${SONG.id}`, { auth: await signedInAs('editor') })
+    const what = await screen.findByRole('navigation', { name: 'What to edit' })
+    expect(within(what).getByRole('link', { name: 'Mine' })).toHaveAttribute('aria-current', 'page')
+    await user.click(within(what).getByRole('link', { name: 'The original' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ original: true }))
   })
 
-  it('is not in a learner’s More', async () => {
-    const user = userEvent.setup()
-    await renderApp(`/songs/${SONG.id}`, { auth: await signedInAs('learner') })
-    await user.click(await screen.findByRole('button', { name: 'More' }))
-    await screen.findByRole('button', { name: 'Export to MIDI' })
-    expect(screen.queryByRole('button', { name: 'Edit the original' })).not.toBeInTheDocument()
+  it('is no switch in a learner’s editor', async () => {
+    await renderApp(`/edit/${SONG.id}`, { auth: await signedInAs('learner') })
+    await screen.findByRole('button', { name: /^Bar 1(:|$)/ })
+    expect(screen.queryByRole('navigation', { name: 'What to edit' })).not.toBeInTheDocument()
   })
 
   it('is an editor’s alone: a learner is told so, with the way back to the song', async () => {

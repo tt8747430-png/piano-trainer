@@ -5,7 +5,6 @@ export const settings = {
   // How the screens look: their titles, and the floating buttons.
   appearance: {
     label: 'Appearance',
-    titles: { label: 'Page titles', large: 'Large', small: 'Small' },
   },
   keyboard: 'Keyboard',
   midi: 'MIDI keyboard',

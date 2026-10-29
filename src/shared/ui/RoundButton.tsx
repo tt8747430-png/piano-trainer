@@ -12,7 +12,7 @@ export function RoundButton({
   'children' | 'render' | 'nativeButton'
 >) {
   return (
-    <Button variant="surface" size="icon" aria-label={label} title={label} {...props}>
+    <Button variant="bar" size="icon" aria-label={label} title={label} {...props}>
       <Icon aria-hidden />
     </Button>
   )

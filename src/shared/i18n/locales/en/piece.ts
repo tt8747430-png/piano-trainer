@@ -1,7 +1,5 @@
 export const piece = {
-  checkChords: 'Check these chords',
   // An editor's: the built-in song's original, edited for every learner (ADR 0116).
-  editOriginal: 'Edit the original',
   // A chord chart's section says its bars.
   barOne: 'bar {{n}}',
   barsFromTo: 'bars {{first}}–{{last}}',

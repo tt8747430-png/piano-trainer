@@ -1,5 +1,4 @@
 import { skillsOfStep, stepOf, type StepId } from '@/entities/step'
-import { chordsOfPiece, pieceById, skillsOfPiece, type Piece } from '@/entities/piece'
 import { stillToKnow, type Answer } from '@/entities/progress'
 import type { SkillId } from '@/shared/lib/music'
 import type { Asks } from './draw'
@@ -10,11 +9,8 @@ export interface CheckPlan {
   /** Its rounds, asked in order. */
   readonly asks: Asks
   readonly length: number
-  /** The step whose skills this check can make Known, marking it learned. */
-  readonly marks: StepId | null
 }
 
-const PIECE_CHECK = 6
 const NO_EVIDENCE = (): readonly Answer[] => []
 
 /**
@@ -33,41 +29,22 @@ function untilKnown(
 }
 
 /**
- * A Check's questions: a piece's own chords as written, in turn, six questions or one each
- * (none for a piece of no chord symbol, ADR 0114); a step's chord family or scale until each is Known,
- * which marks the step learned (ADR 0025). A piece is looked up in `pieceOf`: the repertoire's, so a
- * learner's version and own song are checked as they play.
+ * A Check's questions: a journey's chapter's chord family or scale until each is Known, which marks
+ * the step learned (ADR 0025). A lesson is read and a song played, never checked.
  */
 export function checkPlan(
   of: StepId,
   answersOf: (skill: SkillId) => readonly Answer[] = NO_EVIDENCE,
-  pieceOf: (id: string) => Piece | undefined = pieceById,
 ): CheckPlan | null {
   const step = stepOf(of)
-  // A lesson is read, never checked.
-  if (!step || step.kind === 'lesson' || step.kind === 'course-lesson') return null
-  if (step.kind === 'piece') {
-    const piece = pieceOf(step.pieceId)
-    if (!piece) return null
-    const skills = skillsOfPiece(piece)
-    const chords = chordsOfPiece(piece).map((chord) => ({ ...chord, inversion: null }))
-    if (chords.length === 0) return null
-    const length = Math.max(PIECE_CHECK, chords.length)
-    return {
-      of,
-      skills,
-      length,
-      marks: null,
-      asks: { kind: 'chords', drill: 'entry', chords, ordered: true },
-    }
-  }
+  if (!step || step.kind === 'lesson' || step.kind === 'course-lesson' || step.kind === 'piece')
+    return null
   const skills = skillsOfStep(step)
   const asked = untilKnown(skills, answersOf)
   return {
     of,
     skills,
     length: asked.length,
-    marks: of,
     asks: { kind: 'skills', skills: asked, ordered: true },
   }
 }

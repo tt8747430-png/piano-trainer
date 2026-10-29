@@ -51,7 +51,6 @@ import {
   PALETTE_PLACES,
   isSwipe,
   isTheme,
-  isTitleSize,
   isTouch,
   type ChordFinderSettings,
   type KeyboardSettings,
@@ -69,7 +68,7 @@ import {
 
 /** Read before first paint by index.html's #theme-boot script: keep the key and shape in step. */
 export const SETTINGS_STORAGE_KEY = 'pt-settings'
-export const SETTINGS_VERSION = 15
+export const SETTINGS_VERSION = 16
 
 export type SettingsStore = StoreApi<SettingsState>
 
@@ -87,7 +86,6 @@ export function createSettingsStore({
       version: SETTINGS_VERSION,
       initial: {
         theme: 'system',
-        titles: 'large',
         locale: detectLocale(languages),
         practice: DEFAULT_PRACTICE,
         sound: DEFAULT_SOUND,
@@ -309,7 +307,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
   const saved = savedObject<SettingsState>(persisted)
   return {
     theme: isTheme(saved.theme) ? saved.theme : current.theme,
-    titles: isTitleSize(saved.titles) ? saved.titles : current.titles,
     locale: isLocale(saved.locale) ? saved.locale : current.locale,
     practice: practiceToggles(saved.practice),
     sound: soundSettings(saved.sound),

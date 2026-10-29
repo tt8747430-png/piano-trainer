@@ -487,9 +487,13 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 
 - **Places** (tab bar, rail, sidebar): a 24px icon over an Onest 500 14px label in soft ink (a 20px icon beside a
   16px label in the sidebar); the current place sand in a soft line under a semibold ink label.
-- **The screen's bar** (`ScreenHeader`): Back, the title in Literata, the actions; a page's tabs its second row. It
-  stays until the page scrolls past it, slides away while reading down and returns the moment the page turns up;
-  what is pinned under it slides with it. With three or more actions on a phone, the title goes under them.
+- **The screen's bar** (`ScreenHeader`): one row of one height (56px, 64px from 640px): Back, the title in Literata
+  600 on one line cut short with an ellipsis, at most two round actions (a soft sand fill, no frame) with More for
+  the rest; a page's tabs its second row; a hairline under it once the page runs beneath. A place (Learn, Songs,
+  Practice) stands its title large on the page under the bar, its tabs under that, the bar taking the title small
+  once it is scrolled past; on a laptop, whose sidebar names the place, the bar is only its actions, at the right
+  of the large title. It slides away while reading down and returns the moment the page turns up; what is pinned
+  under it slides with it. A place's bar holds Search and the Profile on a phone; Settings is in the Profile.
 
 ### The keyboard
 

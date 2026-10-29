@@ -61,6 +61,7 @@ export function LibraryHeader({
   return (
     <ScreenHeader
       title={name}
+      large={!folder}
       back={
         folder ? (
           <RoundLink

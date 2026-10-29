@@ -643,6 +643,9 @@ export const editor = {
   // An editor's draft of a built-in song's original (ADR 0116): what its strip says, Publish, the
   // draft's menu (Versions, Discard), and the dialogs they open.
   original: {
+    what: 'What to edit',
+    mine: 'Mine',
+    theOriginal: 'The original',
     opening: 'Opening the draft…',
     offline: 'You’re offline: the draft opens once you’re back online.',
     failed: 'The draft could not be opened.',
