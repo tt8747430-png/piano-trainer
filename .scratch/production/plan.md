@@ -307,3 +307,22 @@ and Russian side by side; other blocks (examples, quizzes) stay as they are this
 Discard, Versions.
 
 **6.5** en/ru, tests through renderApp with fakes, screenshots, docs (ADR 0116 r6).
+
+## Round 7: production hardening (revised 2026-10-29)
+
+Already in place: the update prompt (`app/update-prompt`), security headers (`vercel.ts`), a route's error screen
+(`RouteError`). What is left, in order:
+
+**7.1 Error reports:** `error_reports` (at, message, stack, path, build, user agent, user_id default auth.uid()),
+insert-only for anyone (sized checks, a per-minute cap by a trigger), read by admins; a reporting port (fake +
+Supabase) called by `RouteError` and a window `error`/`unhandledrejection` listener, at most once per message a run;
+the Admin area's Errors tab. `tests/errors-access.sql`.
+
+**7.2 Legal pages:** Privacy and Terms (en, ru), linked from Settings → Help, the account forms and the welcome;
+what is stored, where (Supabase, EU), for how long, deletion; needed for Google sign-in's consent screen.
+
+**7.3 supabase-js after first paint:** measure the entry chunk; load the client lazily if it is in it.
+
+**7.4 iPhone launch images** (apple-touch-startup-image for the common sizes, both themes) from the icon.
+
+**7.5** docs, the full suite, the build, push.
