@@ -23,7 +23,7 @@ export const legal = {
       },
       errors: {
         heading: 'When something goes wrong',
-        text: 'If a screen fails, the app sends what went wrong: the error, the screen’s address, the app’s version and your browser’s name, and your account if you’re signed in. It is read only to fix the app.',
+        text: 'If a screen fails, the app sends what went wrong: the error, the screen’s address, the app’s version and your browser’s name, and your account if you’re signed in. It is read only to fix the app, and deleted after 90 days.',
       },
       where: {
         heading: 'Where it is kept',

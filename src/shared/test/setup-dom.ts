@@ -2,6 +2,7 @@ import '@testing-library/jest-dom/vitest'
 import { cleanup, configure } from '@testing-library/react'
 import { afterEach, beforeEach, vi } from 'vitest'
 import { i18n } from '@/shared/i18n'
+import { safeLocalStorage } from '@/shared/lib/safe-storage'
 import { stubIntersectionObserver } from './intersection'
 import { stubMatchMedia } from './match-media'
 import { stubServiceWorker } from './pwa-register'
@@ -27,6 +28,9 @@ const hasPointerCapture = vi.fn()
  */
 export function setUpDom() {
   let takeTreesApart = () => {}
+  // A page chooses its storage once, as it loads: chosen first by a test that blocks writes, it
+  // would be memory for every file after it in the worker, whose saves then miss `localStorage`.
+  safeLocalStorage()
 
   beforeEach(() => {
     takeTreesApart = watchTrees()

@@ -175,3 +175,8 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 - 2026-10-29 Round 12: a course's title and summary are content (`course` records, seeded: 19 rows), read over the
   course where they read; an editor's course editor at `/courses/$courseId/edit` (Edit the course on its page),
   sharing the lesson editor's two-language fields and draft screen (`TextFields`, `DraftScreen`).
+- 2026-10-29 Round 12, after: error reports older than 90 days are deleted each night (pg_cron job
+  `purge-old-error-reports`, migration `20261029200000_error_reports_purge.sql`, applied; Privacy says so), so that
+  owner to-do is done. A test-order flake fixed at its root: a test that blocks storage, run first in a worker,
+  made `safeLocalStorage` choose memory for every later file (the keyboard's tests then missed their seeded
+  height); the DOM setup now chooses the page's storage before any test, as a page does as it loads.
