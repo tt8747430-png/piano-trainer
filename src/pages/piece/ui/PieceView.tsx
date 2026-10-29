@@ -226,7 +226,7 @@ export function PieceView({ piece }: { piece: Piece }) {
           <Play data-icon="inline-start" aria-hidden className="fill-current" />
           {t('practise')}
         </ButtonLink>
-        {own ? null : <LearnedButton step={step} />}
+        {own ? null : <LearnedButton step={step} className="h-14 rounded-2xl px-5 text-lg" />}
       </div>
       <PieceFactCards piece={piece} />
       <PieceAbout entry={piece} />

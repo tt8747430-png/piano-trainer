@@ -207,7 +207,7 @@ describe('Piece', () => {
     // Before its facts and its chords: the first thing on the page to do.
     const facts = screen.getByText('Key').closest('dl') as HTMLElement
     expect(practise.compareDocumentPosition(facts) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    const bar = screen.getByRole('heading', { level: 1 }).closest('header') as HTMLElement
+    const bar = document.querySelector('[data-slot="screen-bar"]') as HTMLElement
     for (const name of ['Edit the score', 'Add to favourites', 'More'])
       expect(
         within(bar).getByRole(name === 'Edit the score' ? 'link' : 'button', { name }),

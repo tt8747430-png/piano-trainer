@@ -1,6 +1,7 @@
 import { Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { StepId } from '@/entities/step'
+import { cn } from '@/shared/lib'
 import { Toggle } from '@/shared/ui/primitives/toggle'
 import { useLearned } from './use-learned'
 
@@ -9,7 +10,16 @@ import { useLearned } from './use-learned'
  * paint's wash and its check sits on the paint. `round`, it is the check alone in a screen's bar,
  * named by its tooltip.
  */
-export function LearnedButton({ step, round = false }: { step: StepId; round?: boolean }) {
+export function LearnedButton({
+  step,
+  round = false,
+  className,
+}: {
+  step: StepId
+  round?: boolean
+  /** Its size beside a larger button (a song's Practise), as that button's. */
+  className?: string
+}) {
   const { t } = useTranslation('common')
   const { learned, toggle } = useLearned(step)
   if (round)
@@ -28,7 +38,10 @@ export function LearnedButton({ step, round = false }: { step: StepId; round?: b
     <Toggle
       pressed={learned}
       onPressedChange={toggle}
-      className="gap-2 text-muted-foreground aria-pressed:border-transparent aria-pressed:bg-paint-grass aria-pressed:text-on-paint-grass"
+      className={cn(
+        'gap-2 text-muted-foreground aria-pressed:border-transparent aria-pressed:bg-paint-grass aria-pressed:text-on-paint-grass',
+        className,
+      )}
     >
       <span
         aria-hidden
