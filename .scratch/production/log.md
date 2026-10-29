@@ -77,3 +77,7 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   in RootLayout. MIDI's Back → Playing, How to use's → Help, the storage-full notice → Sync and data.
   Decision: Google sign-in is enabled in the UI now; until the owner adds the credentials it lands on
   Supabase's "provider not enabled" error (pre-release, no users).
+- 2026-10-29 Round 3 done: Profile (35c3523c), welcome (cb3a7eaf, `pt-settings.welcomed`, renderApp welcomed
+  unless `welcomed: false`), docs. Full suite 6597 green, build ok, screenshots at 390/320/844×390/1280 clean
+  (no sideways scroll). On main. Decision: the welcome asks only the language (no level or daily goal: nothing in
+  the app reads them yet). Next: round 4 (content in the database): write its plan section first.
