@@ -58,6 +58,26 @@ export type Database = {
         }
         Relationships: []
       }
+      content_drafts: {
+        Row: {
+          body: Json
+          id: string
+          kind: string
+          meta: Json
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          body: Json
+          id: string
+          kind: string
+          meta?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: { body?: Json; meta?: Json; updated_at?: string; updated_by?: string | null }
+        Relationships: []
+      }
       content_versions: {
         Row: {
           body: Json
@@ -254,6 +274,10 @@ export type Database = {
       is_admin: { Args: never; Returns: boolean }
       is_content_editor: { Args: never; Returns: boolean }
       my_features: { Args: never; Returns: string[] }
+      publish_content: {
+        Args: { p_from_version?: string; p_id: string; p_kind: string; p_version: string }
+        Returns: undefined
+      }
       is_publish_blocked: { Args: never; Returns: boolean }
       save_public_item: { Args: { p_item: string }; Returns: number }
       push_documents: { Args: { p_rows: Json; p_table: string }; Returns: Json }
