@@ -16,6 +16,7 @@ import {
   type AdminPort,
   type FeaturesPort,
 } from '@/shared/api/admin'
+import { createSupabaseContentEditing, type ContentEditingPort } from '@/shared/api/content-editing'
 import { createWebAudioOutput } from '@/shared/api/audio'
 import { createSupabaseAuth, type AuthGateway } from '@/shared/api/auth'
 import {
@@ -137,6 +138,10 @@ export const createPublicLibrary = (backend: PianoClient): PublicLibrary =>
 
 /** The admin's tools: the project's `admin` function and tables (ADR 0116). */
 export const createAdmin = (backend: PianoClient): AdminPort => createSupabaseAdmin(backend)
+
+/** Editing the built-in content, an editor's: the project's drafts and `publish_content` (ADR 0116). */
+export const createContentEditing = (backend: PianoClient): ContentEditingPort =>
+  createSupabaseContentEditing(backend)
 
 /** The feature switches on for whoever is signed in. */
 export const createFeatures = (backend: PianoClient): FeaturesPort =>

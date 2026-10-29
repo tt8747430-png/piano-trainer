@@ -8,9 +8,11 @@ import { SettingsStoreProvider } from '@/entities/settings'
 import { TakesStoreProvider } from '@/entities/take'
 import type { AdminPort, FeaturesPort } from '@/shared/api/admin'
 import type { AuthGateway } from '@/shared/api/auth'
+import type { ContentEditingPort } from '@/shared/api/content-editing'
 import type { PublicLibrary } from '@/shared/api/public-library'
 import { AccountProvider } from '@/shared/lib/account'
 import { AdminProvider } from '@/shared/lib/admin'
+import { ContentEditingProvider } from '@/shared/lib/content-editing'
 import { FeaturesProvider } from '@/shared/lib/features'
 import { PublicLibraryProvider } from '@/shared/lib/public-library'
 import { type Services, ServicesProvider } from '@/shared/lib/services'
@@ -34,6 +36,7 @@ export function App({
   publicLibrary,
   admin,
   features,
+  contentEditing,
   router,
 }: {
   stores: Stores
@@ -43,6 +46,7 @@ export function App({
   publicLibrary: PublicLibrary
   admin: AdminPort
   features: FeaturesPort
+  contentEditing: ContentEditingPort
   router: AppRouter
 }) {
   return (
@@ -50,33 +54,35 @@ export function App({
       <PublicLibraryProvider library={publicLibrary}>
         <AdminProvider admin={admin}>
           <FeaturesProvider features={features}>
-            <SettingsStoreProvider store={stores.settings}>
-              <ProgressStoreProvider store={stores.progress}>
-                <PatternsStoreProvider store={stores.patterns}>
-                  <PiecesStoreProvider store={stores.pieces}>
-                    <TakesStoreProvider store={stores.takes}>
-                      <LibraryStoreProvider store={stores.library}>
-                        <DiagramInversionsStoreProvider store={stores.diagramInversions}>
-                          <ServicesProvider services={services}>
-                            <LocaleSync />
-                            <AudioUnlock />
-                            <MidiReconnect />
-                            <MidiSync />
-                            <TitlesSync />
-                            <ThemeProvider>
-                              <ShortcutsProvider>
-                                <RouterProvider router={router} />
-                                <Toaster />
-                              </ShortcutsProvider>
-                            </ThemeProvider>
-                          </ServicesProvider>
-                        </DiagramInversionsStoreProvider>
-                      </LibraryStoreProvider>
-                    </TakesStoreProvider>
-                  </PiecesStoreProvider>
-                </PatternsStoreProvider>
-              </ProgressStoreProvider>
-            </SettingsStoreProvider>
+            <ContentEditingProvider editing={contentEditing}>
+              <SettingsStoreProvider store={stores.settings}>
+                <ProgressStoreProvider store={stores.progress}>
+                  <PatternsStoreProvider store={stores.patterns}>
+                    <PiecesStoreProvider store={stores.pieces}>
+                      <TakesStoreProvider store={stores.takes}>
+                        <LibraryStoreProvider store={stores.library}>
+                          <DiagramInversionsStoreProvider store={stores.diagramInversions}>
+                            <ServicesProvider services={services}>
+                              <LocaleSync />
+                              <AudioUnlock />
+                              <MidiReconnect />
+                              <MidiSync />
+                              <TitlesSync />
+                              <ThemeProvider>
+                                <ShortcutsProvider>
+                                  <RouterProvider router={router} />
+                                  <Toaster />
+                                </ShortcutsProvider>
+                              </ThemeProvider>
+                            </ServicesProvider>
+                          </DiagramInversionsStoreProvider>
+                        </LibraryStoreProvider>
+                      </TakesStoreProvider>
+                    </PiecesStoreProvider>
+                  </PatternsStoreProvider>
+                </ProgressStoreProvider>
+              </SettingsStoreProvider>
+            </ContentEditingProvider>
           </FeaturesProvider>
         </AdminProvider>
       </PublicLibraryProvider>
