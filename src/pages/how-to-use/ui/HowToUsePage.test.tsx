@@ -15,7 +15,7 @@ const PARTS = [
 describe('Settings → How to use', () => {
   it('is reached from Settings’ Help, its parts in plain steps', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/settings')
+    const { router } = await renderApp('/settings/help')
     const help = await screen.findByRole('region', { name: 'Help' })
     await user.click(within(help).getByRole('link', { name: /How to use/ }))
     expect(await screen.findByRole('heading', { level: 1, name: 'How to use' })).toBeInTheDocument()

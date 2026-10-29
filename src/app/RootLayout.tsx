@@ -3,6 +3,7 @@ import { useLayoutEffect } from 'react'
 import { ReloadOnRestore } from '@/features/backup-data'
 import { ShortcutsHelp } from '@/features/shortcuts-help'
 import { startKeyboardReveal, startKeyboardViewport } from '@/shared/lib'
+import { DeletionGate } from './deletion-gate/DeletionGate'
 import { StorageFullNotice } from './storage-full/StorageFullNotice'
 import { UpdatePrompt } from './update-prompt/UpdatePrompt'
 
@@ -30,6 +31,7 @@ export function RootLayout() {
         <UpdatePrompt offer={!fullScreen} />
       </div>
       <ReloadOnRestore />
+      <DeletionGate />
     </ShortcutsHelp>
   )
 }

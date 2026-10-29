@@ -30,6 +30,10 @@ function themeColorMeta(): Plugin {
 }
 
 export default defineConfig({
+  // The build's version, as About says it: the commit Vercel built, or `dev` here.
+  define: {
+    __APP_BUILD__: JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? 'dev'),
+  },
   plugins: [
     react(),
     tailwindcss(),

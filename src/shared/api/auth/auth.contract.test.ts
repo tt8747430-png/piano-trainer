@@ -51,4 +51,31 @@ describe('an auth gateway', () => {
     await auth.signOut()
     expect(await auth.signIn(learner.email, 'a new one')).toMatchObject({ ok: true })
   })
+
+  it('renames the account signed in, and its listeners hear it', async () => {
+    const auth = createFakeAuth({ accounts: [learner] })
+    await auth.signIn(learner.email, learner.password)
+    const heard: string[] = []
+    auth.onChange((account) => heard.push(account?.name ?? ''))
+    expect(await auth.updateName('Anna')).toMatchObject({ ok: true, value: { name: 'Anna' } })
+    expect(heard).toEqual(['Anna'])
+    expect(await auth.current()).toMatchObject({ name: 'Anna' })
+  })
+
+  it('schedules a deletion, signs out, and lets the learner cancel it on signing in again', async () => {
+    const auth = createFakeAuth({
+      accounts: [learner],
+      now: () => Date.parse('2026-10-29T10:00:00Z'),
+    })
+    await auth.signIn(learner.email, learner.password)
+    expect(await auth.requestDeletion()).toEqual({
+      ok: true,
+      value: { purgeAfter: '2026-11-28T10:00:00.000Z' },
+    })
+    expect(await auth.current()).toBeNull()
+    await auth.signIn(learner.email, learner.password)
+    expect(await auth.pendingDeletion()).toEqual({ ok: true, value: '2026-11-28T10:00:00.000Z' })
+    expect(await auth.cancelDeletion()).toEqual({ ok: true, value: undefined })
+    expect(await auth.pendingDeletion()).toEqual({ ok: true, value: null })
+  })
 })

@@ -32,6 +32,16 @@ export interface AuthGateway {
   completeRedirect(code: string): Promise<NetResult<Account>>
   requestPasswordReset(email: string): Promise<NetResult<void>>
   updatePassword(password: string): Promise<NetResult<void>>
+  /** Renames the account signed in; its listeners hear the account renamed. */
+  updateName(name: string): Promise<NetResult<Account>>
+  /**
+   * Schedules the account signed in for deletion after its grace (30 days) and signs out on every
+   * device; returns when it will be deleted. Signing in again within the grace can cancel it.
+   */
+  requestDeletion(): Promise<NetResult<{ purgeAfter: string }>>
+  /** When the account signed in is to be deleted, if it is. */
+  pendingDeletion(): Promise<NetResult<string | null>>
+  cancelDeletion(): Promise<NetResult<void>>
   signOut(): Promise<void>
   /** Hears every change of account: a sign-in, a sign-out, another tab's. Returns how to stop. */
   onChange(listener: (account: Account | null) => void): () => void

@@ -41,7 +41,7 @@ describe('the shell’s shortcuts', () => {
 
   it('lists the screen’s shortcuts on ?, and from Settings', async () => {
     const user = userEvent.setup()
-    await renderApp('/settings')
+    await renderApp('/settings/playing')
     await user.click(await screen.findByRole('button', { name: 'Shortcuts' }))
     const sheet = await screen.findByRole('dialog', { name: 'Shortcuts' })
     expect(within(sheet).getByRole('heading', { level: 3, name: 'Anywhere' })).toBeInTheDocument()

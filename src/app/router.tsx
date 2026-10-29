@@ -143,6 +143,32 @@ const settingsRoute = createRoute({
   path: '/settings',
   component: lazyRouteComponent(settingsScreens, 'SettingsPage'),
 })
+// Settings' pages (round 3): each group of settings on its own page, the account's among them.
+const preferencesRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/preferences',
+  component: lazyRouteComponent(settingsScreens, 'PreferencesPage'),
+})
+const playingRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/playing',
+  component: lazyRouteComponent(settingsScreens, 'PlayingPage'),
+})
+const dataRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/data',
+  component: lazyRouteComponent(settingsScreens, 'DataPage'),
+})
+const helpRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/help',
+  component: lazyRouteComponent(settingsScreens, 'HelpPage'),
+})
+const accountSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/settings/account',
+  component: lazyRouteComponent(settingsScreens, 'AccountSettingsPage'),
+})
 // How to use (ADR 0052): a short guide, reached from Settings' Help.
 const howToUseRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -555,6 +581,11 @@ const routeTree = rootRoute.addChildren([
   shellRoute.addChildren([
     learnRoute,
     settingsRoute,
+    preferencesRoute,
+    playingRoute,
+    dataRoute,
+    helpRoute,
+    accountSettingsRoute,
     howToUseRoute,
     midiSettingsRoute,
     midiLogRoute,

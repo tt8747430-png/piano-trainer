@@ -3,17 +3,22 @@ import type { Account, AuthGateway, SignUp } from './types'
 
 const refused = (message: string) => Object.assign(new Error(message), { status: 400 })
 
+const GRACE_MS = 30 * 24 * 60 * 60 * 1000
+
 /**
  * Accounts kept in memory for tests, behaving as the server does (the contract test holds it to
- * that): `accounts` exist already, `online` is the device's connection.
+ * that): `accounts` exist already, `online` is the device's connection, `now` the clock a
+ * deletion's grace is counted from.
  */
 export function createFakeAuth({
   accounts = [],
   online = () => true,
-}: { accounts?: readonly SignUp[]; online?: () => boolean } = {}): AuthGateway {
+  now = () => Date.now(),
+}: { accounts?: readonly SignUp[]; online?: () => boolean; now?: () => number } = {}): AuthGateway {
   const known = new Map<string, { name: string; password: string }>(
     accounts.map(({ email, name, password }) => [email, { name, password }]),
   )
+  const deletions = new Map<string, string>()
   const listeners = new Set<(account: Account | null) => void>()
   let current: Account | null = null
   const ask = <T>(run: () => Promise<T>): Promise<NetResult<T>> => netResult(run, { online })
@@ -57,6 +62,33 @@ export function createFakeAuth({
         const found = current && known.get(current.email)
         if (!found) throw refused('Not signed in')
         found.password = password
+      }),
+    updateName: (name) =>
+      ask(async () => {
+        const found = current && known.get(current.email)
+        if (!current || !found) throw refused('Not signed in')
+        found.name = name
+        const account = accountOf(current.email)
+        become(account)
+        return account
+      }),
+    requestDeletion: () =>
+      ask(async () => {
+        if (!current) throw refused('Not signed in')
+        const purgeAfter = new Date(now() + GRACE_MS).toISOString()
+        deletions.set(current.email, purgeAfter)
+        become(null)
+        return { purgeAfter }
+      }),
+    pendingDeletion: () =>
+      ask(async () => {
+        if (!current) throw refused('Not signed in')
+        return deletions.get(current.email) ?? null
+      }),
+    cancelDeletion: () =>
+      ask(async () => {
+        if (!current) throw refused('Not signed in')
+        deletions.delete(current.email)
       }),
     signOut: async () => become(null),
     onChange: (listener) => {

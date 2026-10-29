@@ -17,6 +17,15 @@ function answer<R extends { data: unknown; error: Error | null }>(
   return response.data
 }
 
+/** An Edge Function's error, with the status its response had: a 4xx is a refusal. */
+function functionError(error: unknown): Error {
+  const message = error instanceof Error ? error.message : 'The function failed'
+  const context = error instanceof Object && 'context' in error ? error.context : undefined
+  return Object.assign(new Error(message), {
+    status: context instanceof Response ? context.status : undefined,
+  })
+}
+
 /** Accounts on Supabase Auth (ADR 0116), memory-palaces' gateway with its results as values. */
 export function createSupabaseAuth(
   client: PianoClient,
@@ -62,6 +71,38 @@ export function createSupabaseAuth(
     updatePassword: (password) =>
       ask(async () => {
         answer(await client.auth.updateUser({ password }))
+      }),
+    updateName: (name) =>
+      ask(async () => accountOf(answer(await client.auth.updateUser({ data: { name } })).user)),
+    requestDeletion: () =>
+      ask(async () => {
+        const { data, error } = await client.functions.invoke<{ purgeAfter: string }>(
+          'request-account-deletion',
+          { method: 'POST' },
+        )
+        if (error || !data) throw functionError(error)
+        // The function signed every device out; this one lets its session go too.
+        await client.auth.signOut({ scope: 'local' })
+        return { purgeAfter: data.purgeAfter }
+      }),
+    pendingDeletion: () =>
+      ask(async () => {
+        const { data, error, status } = await client
+          .from('account_deletions')
+          .select('purge_after')
+          .maybeSingle()
+        if (error) throw Object.assign(new Error(error.message), { status })
+        return data?.purge_after ?? null
+      }),
+    cancelDeletion: () =>
+      ask(async () => {
+        const { data } = await client.auth.getSession()
+        if (!data.session) throw Object.assign(new Error('Not signed in'), { status: 401 })
+        const { error, status } = await client
+          .from('account_deletions')
+          .delete()
+          .eq('user_id', data.session.user.id)
+        if (error) throw Object.assign(new Error(error.message), { status })
       }),
     // Local, always: the session goes from the device, and only a refused revocation is said.
     signOut: async () => {

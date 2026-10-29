@@ -21,7 +21,10 @@ export function MidiSettingsPage() {
   const { entries } = useMidiLog()
   return (
     <div className="flex flex-col gap-6">
-      <ScreenHeader title={t('midi.label')} back={<BackButton fallback={{ to: '/settings' }} />} />
+      <ScreenHeader
+        title={t('midi.label')}
+        back={<BackButton fallback={{ to: '/settings/playing' }} />}
+      />
       <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
         <div className="flex flex-col gap-6">
           <section aria-label={t('midi.label')} className="card px-5 py-4">

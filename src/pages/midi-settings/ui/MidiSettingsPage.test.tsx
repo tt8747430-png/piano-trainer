@@ -10,9 +10,9 @@ const midiRow = () =>
   within(screen.getByRole('navigation', { name: 'MIDI keyboard' })).getByRole('link')
 
 describe('Settings › MIDI keyboard', () => {
-  it('is a row of Settings that shows its state at its right and opens the MIDI screen', async () => {
+  it('is a row of Settings › Playing that shows its state at its right and opens the MIDI screen', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/settings')
+    const { router } = await renderApp('/settings/playing')
     await screen.findByRole('navigation', { name: 'MIDI keyboard' })
     expect(midiRow()).toHaveTextContent(/MIDI keyboard\s*Off/)
     await user.click(midiRow())
@@ -21,7 +21,7 @@ describe('Settings › MIDI keyboard', () => {
   })
 
   it('names the keyboard connected in the Settings row', async () => {
-    const { midi } = await renderApp('/settings')
+    const { midi } = await renderApp('/settings/playing')
     await screen.findByRole('navigation', { name: 'MIDI keyboard' })
     await act(() => midi.connect())
     expect(midiRow()).toHaveTextContent(/MIDI keyboard\s*Keyboard/)

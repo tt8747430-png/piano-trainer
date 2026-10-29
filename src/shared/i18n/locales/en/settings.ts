@@ -45,6 +45,69 @@ export const settings = {
     cancel: 'Keep what is here',
     confirm: 'Restore',
   },
+  // The index (round 3): the account, then a page for each group of settings.
+  groups: {
+    preferences: { label: 'Preferences', line: 'Language, theme and how screens look' },
+    playing: { label: 'Playing', line: 'The keyboard, a MIDI keyboard and recording' },
+    data: { label: 'Sync and data', line: 'Sync, backup and progress' },
+    help: { label: 'Help', line: 'How to use, and about the app' },
+  },
+  account: {
+    signIn: 'Sign in',
+    signInLine: 'Keep your songs and progress on every device',
+    label: 'Account',
+  },
+  sync: {
+    label: 'Sync',
+    info: 'While you’re signed in, your songs, progress and settings sync by themselves whenever you’re online. Sync now does it at once.',
+    now: 'Sync now',
+    signedOut: 'Sign in to keep your songs, progress and settings on every device.',
+    state: {
+      idle: 'Up to date',
+      syncing: 'Syncing…',
+      offline: 'Offline: changes wait for a connection',
+      failed: 'The last sync didn’t finish',
+    },
+    waiting_one: '{{count}} change waiting',
+    waiting_other: '{{count}} changes waiting',
+    last: 'Last synced {{when}}',
+  },
+  about: {
+    label: 'About',
+    version: 'Version',
+    made: 'Made with',
+    madeWith: 'Verovio for the scores, Noto fonts, and Supabase for accounts and sync',
+  },
+  // The account's own page (round 3): its name, password, signing out, deleting it.
+  accountPage: {
+    title: 'Account',
+    profile: 'Your name',
+    email: 'Email',
+    save: 'Save',
+    saved: 'Saved',
+    password: 'Change password',
+    signOut: 'Sign out',
+    signOutInfo: 'Your songs and progress stay on this device. Signing in again syncs them.',
+    signedOut: 'You’re not signed in.',
+    delete: {
+      label: 'Delete account',
+      info: 'Your account and everything synced to it are deleted 30 days after you ask. Sign in before then to cancel. What is on this device stays.',
+      button: 'Delete account…',
+      title: 'Delete your account?',
+      body: 'Type your email to confirm. Your account is deleted in 30 days, and you’re signed out on every device now.',
+      field: 'Your email',
+      cancel: 'Keep my account',
+      confirm: 'Delete',
+      scheduled: 'Your account will be deleted on {{date}}. Sign in before then to keep it.',
+    },
+  },
+  // Signing in to an account that is to be deleted.
+  deletionGate: {
+    title: 'Your account is to be deleted',
+    body: 'It will be deleted on {{date}}. Keep it, or sign out and let it go.',
+    keep: 'Keep my account',
+    signOut: 'Sign out',
+  },
   // Help (ADR 0052): How to use, a short guide in plain steps, each part folding.
   help: {
     label: 'Help',

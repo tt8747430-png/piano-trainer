@@ -10,7 +10,7 @@ import { StorageFullNotice } from './StorageFullNotice'
 vi.hoisted(() => vi.resetModules())
 
 describe('StorageFullNotice', () => {
-  it('says the device is out of room when a save is lost, leads to Settings, and closes', async () => {
+  it('says the device is out of room when a save is lost, leads to its backup, and closes', async () => {
     await renderRouted(<StorageFullNotice />)
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     const storage = safeLocalStorage()
@@ -20,7 +20,7 @@ describe('StorageFullNotice', () => {
     act(() => storage.setItem('pt-takes', '{}'))
     const alert = await screen.findByRole('alert')
     expect(alert).toHaveTextContent('This device is out of room: your last change was not saved.')
-    expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '/settings')
+    expect(screen.getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '/settings/data')
     await userEvent.setup().click(screen.getByRole('button', { name: 'Close the notice' }))
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
   })
