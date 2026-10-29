@@ -282,6 +282,8 @@ export interface SettingsState {
   metronome: MetronomeSettings
   /** The sections folded away, by their ids (`chords.tensions`): the same on every visit. */
   foldedSections: readonly string[]
+  /** Whether the welcome was seen: the app's first run shows it once. */
+  welcomed: boolean
 }
 
 export const DEFAULT_PRACTICE: PracticeToggles = {

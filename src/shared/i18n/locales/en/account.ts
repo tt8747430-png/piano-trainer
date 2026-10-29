@@ -25,6 +25,15 @@ export const account = {
     songs: 'Songs played',
     skills: 'Skills known',
   },
+  // The welcome, on the app's first run.
+  welcome: {
+    title: 'Welcome to Piano Trainer',
+    says: 'Learn songs, chords and scales at the piano, at your own pace.',
+    language: 'Language',
+    account: 'An account is optional: it keeps your songs and progress on every device.',
+    start: 'Start playing',
+    signIn: 'Sign in',
+  },
   signIn: {
     title: 'Sign in',
     submit: 'Sign in',

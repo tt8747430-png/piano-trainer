@@ -104,6 +104,7 @@ export function createSettingsStore({
         melody: DEFAULT_MELODY,
         metronome: DEFAULT_METRONOME,
         foldedSections: [],
+        welcomed: false,
       },
       read: sanitize,
     },
@@ -325,5 +326,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     melody: isMelodySource(saved.melody) ? saved.melody : DEFAULT_MELODY,
     metronome: metronomeSettings(saved.metronome),
     foldedSections: foldedSections(saved.foldedSections),
+    welcomed: saved.welcomed === true,
   }
 }

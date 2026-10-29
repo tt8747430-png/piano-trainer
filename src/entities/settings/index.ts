@@ -52,6 +52,7 @@ export {
   selectPaletteFolded,
   selectPaletteSections,
   selectSidebar,
+  selectWelcomed,
   selectSound,
   selectTheme,
   selectTitles,

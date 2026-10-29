@@ -40,6 +40,7 @@ describe('settings selectors', () => {
       keyboard: defaultKeyboard(false),
       recorder: DEFAULT_RECORDER,
       foldedSections: ['chords.tensions'],
+      welcomed: true,
       sidebar: 'collapsed',
       paletteFolded: {},
       paletteSections: null,

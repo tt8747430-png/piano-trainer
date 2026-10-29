@@ -47,3 +47,5 @@ export const selectScoreView = (state: SettingsState): ScoreViewSettings => stat
 /** What plays a song's melody along (ADR 0115). */
 export const selectMelody = (state: SettingsState): MelodySource => state.melody
 export const selectMetronome = (state: SettingsState): MetronomeSettings => state.metronome
+
+export const selectWelcomed = (state: SettingsState): boolean => state.welcomed

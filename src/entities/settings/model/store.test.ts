@@ -45,6 +45,7 @@ const DEFAULTS = {
   melody: 'recording',
   metronome: DEFAULT_METRONOME,
   foldedSections: [],
+  welcomed: false,
 }
 
 describe('createSettingsStore', () => {
@@ -158,6 +159,7 @@ describe('createSettingsStore', () => {
         trainer: { on: true, play: 4, mute: 1 },
       },
       foldedSections: ['chords.tensions'],
+      welcomed: true,
     }
     expect(restored(saved)).toEqual(saved)
   })
