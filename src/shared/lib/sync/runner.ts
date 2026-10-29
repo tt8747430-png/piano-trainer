@@ -184,7 +184,14 @@ export function createSyncRunner({
       versionOf(other) === versionOf(target)
         ? mergeDocuments(target, other, base ?? EMPTY).document
         : target
-    let target = theirs && changedThere ? merged(mine, theirs, entry.base) : mine
+    // A store's first sync knows no copy both started from, so every field reads as changed on both
+    // sides: the account's plain values stand (a fresh device's defaults never overwrite them), and
+    // records and lists still merge item by item, keeping both sides' items.
+    const first = entry.base === null
+    let target =
+      theirs && changedThere
+        ? merged(first ? { ...mine, updatedAt: '' } : mine, theirs, entry.base)
+        : mine
     let base = theirs
     for (let push = 0; push < PUSHES; push++) {
       const pushed = await cloud.push(table, target, base)

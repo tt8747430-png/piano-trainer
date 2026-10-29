@@ -73,6 +73,21 @@ describe('a sync', () => {
     expect(phone.saved('pt-pieces')).toEqual(both)
   })
 
+  it('takes the account’s plain values on a device’s first sync, keeping both sides’ items', async () => {
+    const cloud = createFakeCloud()
+    const laptop = device(cloud, 50)
+    laptop.save('pt-settings', { theme: 'dark', records: { a: 1 } })
+    await laptop.runner.syncNow()
+    // A new phone, its clock later than the laptop's, its settings its defaults and one record.
+    const phone = device(cloud, 58)
+    phone.save('pt-settings', { theme: 'system', records: { b: 2 } })
+    await phone.runner.syncNow()
+    expect(phone.saved('pt-settings')).toEqual({
+      state: { theme: 'dark', records: { a: 1, b: 2 } },
+      version: 1,
+    })
+  })
+
   it('pushes nothing it did not change, and leaves alone a store nobody changed', async () => {
     const cloud = createFakeCloud()
     const phone = device(cloud)
