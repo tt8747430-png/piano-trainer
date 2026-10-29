@@ -160,3 +160,8 @@ create policy editors_read_reports on public.public_reports for select to authen
 
 create policy editors_block on public.publish_blocks for all to authenticated
   using ((select public.is_content_editor())) with check ((select public.is_content_editor()));
+
+-- A learner reads their own saves, so the app can say a song is saved (public_saves_read_own).
+grant select on public.public_saves to authenticated;
+create policy read_own_saves on public.public_saves for select to authenticated
+  using (user_id = (select auth.uid()));

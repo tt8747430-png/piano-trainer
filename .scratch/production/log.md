@@ -44,6 +44,7 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 - Supabase Auth → URL configuration: Site URL = the Vercel domain; Redirect URLs = `https://<domain>/auth/callback`,
   `https://*-<team>.vercel.app/auth/callback` (previews) and `http://localhost:5173/auth/callback`. Without them
   OAuth, confirmation and reset links go to the Site URL instead of the callback.
+- Supabase Auth → Passwords: turn on leaked password protection (HaveIBeenPwned; the security advisor asks).
 - Supabase Auth → Passwords: minimum length 8 (the app asks for 8; the server's default is 6).
 
 ## Log
@@ -106,3 +107,6 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 - 2026-10-29 Round 4 on main: full suite 6625 green, build ok. Round 4b.1: the Public library tables, functions and
   rules applied (public_library_tables, _functions, _rules). Its access test did not run: a `delete` statement
   in execute_sql also raises the Supabase tool's unseen confirmation (timed out). Rerun it without `delete`.
+- 2026-10-29 4b.1 checked: public-access.sql passes (no `delete` in it); public_saves read-own policy added. The
+  advisor's warnings on save_public_item, hide_public_item, is_publish_blocked being callable by the signed in are
+  intended (each checks its caller; the last only says whether the caller is blocked).
