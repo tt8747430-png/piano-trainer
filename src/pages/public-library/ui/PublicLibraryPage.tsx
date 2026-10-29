@@ -6,6 +6,7 @@ import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { keySymbol, parseKey, printedSymbol } from '@/shared/lib/music'
 import {
   BackButton,
+  ButtonLink,
   NavTab,
   NavTabs,
   RowLink,
@@ -107,14 +108,40 @@ export function PublicLibraryPage() {
             </Button>
           </EmptyContent>
         </Empty>
-      ) : browse.songs.length === 0 ? (
+      ) : browse.songs.length === 0 && view.q.trim() ? (
         <p role="status" className="text-muted-foreground">
-          {view.q.trim()
-            ? t(view.kind === 'pattern' ? 'public.noMatchPattern' : 'public.noMatch', {
-                query: view.q.trim(),
-              })
-            : t(view.kind === 'pattern' ? 'public.emptyPatterns' : 'public.empty')}
+          {t(view.kind === 'pattern' ? 'public.noMatchPattern' : 'public.noMatch', {
+            query: view.q.trim(),
+          })}
         </p>
+      ) : browse.songs.length === 0 ? (
+        // Nothing published yet: say so, and the way to publish the first (an empty state that teaches).
+        <Empty>
+          <EmptyHeader>
+            <EmptyTitle>
+              <p role="status">
+                {t(view.kind === 'pattern' ? 'public.emptyPatterns' : 'public.empty')}
+              </p>
+            </EmptyTitle>
+            <p className="text-muted-foreground">
+              {t(view.kind === 'pattern' ? 'public.firstPattern' : 'public.firstSong')}
+            </p>
+          </EmptyHeader>
+          <EmptyContent>
+            <ButtonLink
+              variant="outline"
+              render={
+                view.kind === 'pattern' ? (
+                  <Link to="/practice/accompaniment" />
+                ) : (
+                  <Link to="/songs" />
+                )
+              }
+            >
+              {t(view.kind === 'pattern' ? 'public.toPatterns' : 'public.toSongs')}
+            </ButtonLink>
+          </EmptyContent>
+        </Empty>
       ) : (
         <ul aria-label={t('public.title')} className="grid-cards gap-2 *:card">
           {browse.songs.map((song) => (
