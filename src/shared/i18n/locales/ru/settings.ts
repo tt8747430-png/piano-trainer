@@ -111,6 +111,10 @@ export const settings: LocaleResources['settings'] = {
     label: 'Помощь',
     howToUse: 'Как пользоваться',
     howToUseLine: 'Песни, плеер, уроки, редактор, MIDI и метроном',
+    privacy: 'Конфиденциальность',
+    privacyLine: 'Что хранится, где и как это удалить',
+    terms: 'Условия',
+    termsLine: 'Пользование приложением и публикация песен',
   },
   howToUse: {
     title: 'Как пользоваться',

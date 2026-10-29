@@ -113,6 +113,10 @@ export const settings = {
     label: 'Help',
     howToUse: 'How to use',
     howToUseLine: 'Songs, the Player, lessons, the editor, MIDI and the Metronome',
+    privacy: 'Privacy',
+    privacyLine: 'What is kept, where, and how to delete it',
+    terms: 'Terms',
+    termsLine: 'Using the app, and publishing songs',
   },
   howToUse: {
     title: 'How to use',

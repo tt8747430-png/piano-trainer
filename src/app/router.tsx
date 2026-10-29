@@ -180,6 +180,17 @@ const helpRoute = createRoute({
   path: '/settings/help',
   component: lazyRouteComponent(settingsScreens, 'HelpPage'),
 })
+// The app's Privacy and Terms (ADR 0116): read signed in or not, linked from Help and the account forms.
+const privacyRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/legal/privacy',
+  component: lazyRouteComponent(settingsScreens, 'PrivacyPage'),
+})
+const termsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/legal/terms',
+  component: lazyRouteComponent(settingsScreens, 'TermsPage'),
+})
 const accountSettingsRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/account',
@@ -640,6 +651,8 @@ const routeTree = rootRoute.addChildren([
     playingRoute,
     dataRoute,
     helpRoute,
+    privacyRoute,
+    termsRoute,
     accountSettingsRoute,
     howToUseRoute,
     midiSettingsRoute,

@@ -17,3 +17,4 @@ export {
   SignUpPage,
 } from '@/pages/account'
 export { ProfilePage } from '@/pages/profile'
+export { PrivacyPage, TermsPage } from '@/pages/legal'

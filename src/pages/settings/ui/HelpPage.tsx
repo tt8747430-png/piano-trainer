@@ -1,11 +1,14 @@
 import { Link } from '@tanstack/react-router'
-import { LifeBuoy } from 'lucide-react'
+import { LifeBuoy, ScrollText, ShieldCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { APP_BUILD } from '@/shared/config'
 import { RowLink, SettingsGroup as Group } from '@/shared/ui'
 import { SettingsScreen } from './SettingsScreen'
 
-/** Settings › Help: How to use (ADR 0052), and About: the app's version and what it is made with. */
+/**
+ * Settings › Help: How to use (ADR 0052), Privacy and Terms (ADR 0116), and About: the app's version and
+ * what it is made with.
+ */
 export function HelpPage() {
   const { t } = useTranslation('settings')
   return (
@@ -17,6 +20,20 @@ export function HelpPage() {
           icon={LifeBuoy}
           paint="sky"
           render={<Link to="/settings/how-to-use" />}
+        />
+        <RowLink
+          title={t('help.privacy')}
+          detail={t('help.privacyLine')}
+          icon={ShieldCheck}
+          paint="grass"
+          render={<Link to="/legal/privacy" />}
+        />
+        <RowLink
+          title={t('help.terms')}
+          detail={t('help.termsLine')}
+          icon={ScrollText}
+          paint="sand"
+          render={<Link to="/legal/terms" />}
         />
       </Group>
       <Group title={t('about.label')}>

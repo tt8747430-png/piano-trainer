@@ -84,6 +84,17 @@ export function SignUpPage() {
         <Button type="submit" size="lg" disabled={!online || busy}>
           {t('signUp.submit')}
         </Button>
+        <p className="text-center text-sm text-muted-foreground">
+          {t('signUp.agree')}{' '}
+          <Link to="/legal/terms" className="font-medium text-foreground underline">
+            {t('signUp.terms')}
+          </Link>{' '}
+          {t('signUp.and')}{' '}
+          <Link to="/legal/privacy" className="font-medium text-foreground underline">
+            {t('signUp.privacy')}
+          </Link>
+          .
+        </p>
       </form>
       <p className="text-center text-sm text-muted-foreground">
         {t('signUp.haveAccount')}{' '}

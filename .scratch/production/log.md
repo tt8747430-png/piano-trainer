@@ -145,3 +145,8 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   authored as code); patterns and courses' own fields; a draft's live preview on the lesson page itself.
   Suite run 1: two failures — route-search (my new `original` search field; test updated) and a Playhead
   scroll timing under load (made to wait, as its second half already did).
+- 2026-10-29 7.1 on the branch: error_reports applied (errors-access.sql passes), reports live-checked, the Admin
+  area's Errors tab. 7.2: Privacy and Terms pages (en, ru), from Help and Create an account. OWNER TO-DO: read both
+  pages and have them reviewed for your country; add a contact address for data requests (left out: no address
+  of yours goes in the repo unasked); old error reports are kept until purged (a pg_cron purge of rows older than
+  90 days is yours to add: deleting through the tool asks a confirmation).

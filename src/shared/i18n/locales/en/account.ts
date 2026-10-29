@@ -47,6 +47,11 @@ export const account = {
     passwordInfo: 'At least 8 characters. A longer phrase is stronger than a short, clever one.',
     haveAccount: 'Already have an account?',
     signIn: 'Sign in',
+    // Under Create account: what creating one agrees to, its two links.
+    agree: 'Creating an account, you agree to the',
+    terms: 'Terms',
+    and: 'and the',
+    privacy: 'Privacy notice',
     checkTitle: 'Check your email',
     check: 'We sent a link to {{email}}. Open it on this device to finish creating your account.',
   },

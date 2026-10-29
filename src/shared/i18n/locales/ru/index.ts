@@ -4,6 +4,7 @@ import { admin } from './admin'
 import { common } from './common'
 import { editor } from './editor'
 import { learn } from './learn'
+import { legal } from './legal'
 import { music } from './music'
 import { piece } from './piece'
 import { player } from './player'
@@ -27,4 +28,5 @@ export const ru: LocaleResources = {
   editor,
   account,
   admin,
+  legal,
 }
