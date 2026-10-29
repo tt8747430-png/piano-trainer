@@ -122,11 +122,26 @@ export const learn = {
     english: 'English',
     russian: 'Русский',
     empty: 'Words are needed here',
-    unreadable: 'Every text needs words in both languages. Fill them in, then publish.',
+    unreadable:
+      'Every text needs words in both languages, and every example must read. Put them right, then publish.',
     mode: 'Edit or preview',
     editing: 'Edit',
     preview: 'Preview',
-    examples: 'Examples, questions’ answers and links stay as they are here.',
+    examples:
+      'Chord rows, lines of notes and progressions are written here too. Other examples, questions’ answers and links stay as they are.',
+    example: {
+      chords: 'Chords',
+      notes: 'Notes',
+      bass: 'Left hand',
+      numerals: 'Numerals',
+      chordsInfo: 'Chord symbols, a space between them: C Am F G7.',
+      notesInfo:
+        'Each note with its octave, its value after a slash (2 a half, 8 an eighth), r a rest: E4 G4/2 r.',
+      bassInfo: 'The left hand’s line, written as the notes are: C3/1.',
+      numeralsInfo: 'Roman numerals, a space between them: ii V I.',
+      unread: '“{{word}}” doesn’t read',
+      empty: 'Write the example here',
+    },
     kinds: {
       title: 'Title',
       summary: 'Summary',

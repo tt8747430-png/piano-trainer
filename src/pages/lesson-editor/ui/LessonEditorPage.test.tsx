@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { COURSES } from '@/entities/course'
-import { LESSONS, lessonPlace } from '@/entities/lesson'
+import { LESSONS, lessonExamples, lessonPlace } from '@/entities/lesson'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
 import { createFakeContentEditing } from '@/shared/api/content-editing'
 
@@ -95,7 +95,7 @@ describe('the lesson editor (ADR 0116)', () => {
     )
     expect(
       await screen.findByText(
-        'Every text needs words in both languages. Fill them in, then publish.',
+        'Every text needs words in both languages, and every example must read. Put them right, then publish.',
       ),
     ).toBeInTheDocument()
     expect(content.body('lesson', LESSON.id)).toEqual(LESSON)
@@ -144,6 +144,48 @@ describe('the lesson editor (ADR 0116)', () => {
       await screen.findByRole('heading', { name: 'A heading of the draft' }),
     ).toBeInTheDocument()
     expect(screen.queryByRole('textbox', { name: 'English' })).not.toBeInTheDocument()
+  })
+
+  it('writes a row of chords, says the symbol that does not read, and publishes it once it reads', async () => {
+    const user = userEvent.setup()
+    const lesson = LESSONS.find(
+      (each) =>
+        lessonPlace(each.id) && lessonExamples(each).some((example) => example.kind === 'chords'),
+    )!
+    const content = createFakeContentEditing({
+      items: [{ kind: 'lesson', id: lesson.id, body: lesson, meta: {} }],
+    })
+    await renderApp(`/lessons/${lesson.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    const chords = (await screen.findAllByRole('textbox', { name: 'Chords' }))[0]!
+    await user.clear(chords)
+    await user.type(chords, 'C Qx G7')
+    expect(chords).toHaveAccessibleDescription('“Qx” doesn’t read')
+    const strip = screen.getByRole('group', { name: 'Draft of the original' })
+    await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
+    await user.click(within(strip).getByRole('button', { name: 'Publish' }))
+    await user.click(
+      within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
+    )
+    expect(
+      await screen.findByText(
+        'Every text needs words in both languages, and every example must read. Put them right, then publish.',
+      ),
+    ).toBeInTheDocument()
+    await user.clear(chords)
+    await user.type(chords, 'C Am G7')
+    expect(chords).not.toHaveAccessibleDescription()
+    await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
+    await user.click(within(strip).getByRole('button', { name: 'Publish' }))
+    await user.click(
+      within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
+    )
+    expect(
+      await screen.findByText('Published. Learners get it the next time the app starts.'),
+    ).toBeInTheDocument()
+    expect(JSON.stringify(content.body('lesson', lesson.id))).toContain('["C","Am","G7"]')
   })
 
   it('tells a learner it is an editor’s, with the way back', async () => {

@@ -169,3 +169,6 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   the Public library's kind moved into the bar's tabs (two identical segmented controls were stacked), and its
   search field no longer collapses beside the sort on a laptop. Left as is: the editor's draft strip and the
   lesson editor read well at every size.
+- 2026-10-29 Round 11: the lesson editor writes a lesson's chord rows, note lines and numerals (each checked by
+  the lesson's own reader; a test holds every built-in lesson to it). Still authored as code: voicings, variants,
+  scales, intervals, grids, patterns over pieces, questions' answers, links.

@@ -1,6 +1,16 @@
 import { useId, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { lessonTexts, withLessonText, type Lesson, type LessonText } from '@/entities/lesson'
+import {
+  exampleProblem,
+  lessonExamples,
+  lessonTexts,
+  withExample,
+  withLessonText,
+  type Lesson,
+  type LessonExample,
+  type LessonText,
+} from '@/entities/lesson'
+import { Input } from '@/shared/ui/primitives/input'
 import { DraftStrip, useLessonDraft } from '@/features/edit-original'
 import { localText, useLocale, type LocalText } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
@@ -55,11 +65,68 @@ function TextFields({
   )
 }
 
+/**
+ * An example written as a line of text (a row of chords, a line of notes, numerals): its kind over a
+ * field, its format behind an ⓘ, and where it does not read, the word at fault under it.
+ */
+function ExampleField({
+  lesson,
+  example,
+  onChange,
+}: {
+  lesson: Lesson
+  example: LessonExample
+  onChange: (text: string) => void
+}) {
+  const { t } = useTranslation('learn')
+  const id = useId()
+  // What is typed, spaces and all: a row of chords is written a symbol a word under it.
+  const [typed, setTyped] = useState(example.text)
+  const problem = exampleProblem(lesson, example)
+  const label = t(`edit.example.${example.kind}`)
+  return (
+    <div className="flex flex-col gap-1">
+      <div className="flex items-center gap-1">
+        <label htmlFor={id} className="text-sm font-medium">
+          {label}
+        </label>
+        <InfoTip name={label}>{t(`edit.example.${example.kind}Info`)}</InfoTip>
+      </div>
+      <Input
+        id={id}
+        value={typed}
+        spellCheck={false}
+        autoCapitalize="off"
+        autoCorrect="off"
+        aria-invalid={problem !== null || undefined}
+        aria-describedby={problem === null ? undefined : `${id}-problem`}
+        className="font-mono"
+        onChange={(event) => {
+          setTyped(event.target.value)
+          onChange(event.target.value)
+        }}
+      />
+      {problem === null ? null : (
+        <p id={`${id}-problem`} className="text-xs text-destructive">
+          {problem === '' ? t('edit.example.empty') : t('edit.example.unread', { word: problem })}
+        </p>
+      )}
+    </div>
+  )
+}
+
+/** Where a field stands in its section: its heading first, its blocks in their order, its takeaway last. */
+const orderOf = (key: string): number => {
+  const block = /\.blocks\.(\d+)\./.exec(key)
+  return block ? Number(block[1]) : key.endsWith('.takeaway') ? Infinity : -1
+}
+
 /** Every text of the lesson as fields, a group for the lesson's own and one a section; each change saved. */
 function LessonForm({ lesson, onChange }: { lesson: Lesson; onChange: (lesson: Lesson) => void }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const texts = lessonTexts(lesson)
+  const examples = lessonExamples(lesson)
   const write = (key: string, text: LocalText) => onChange(withLessonText(lesson, key, text))
   const groups = [null, ...lesson.sections.map((_, i) => i)]
   return (
@@ -80,18 +147,45 @@ function LessonForm({ lesson, onChange }: { lesson: Lesson; onChange: (lesson: L
                 <InfoTip name={t('edit.lesson')}>{t('edit.examples')}</InfoTip>
               ) : null}
             </div>
-            {own.map((text, i) => {
-              step = text.kind === 'step' ? (own[i - 1]?.kind === 'step' ? step + 1 : 1) : 0
-              const label = t(`edit.kinds.${text.kind}`) + (step ? ` ${step}` : '')
-              return (
-                <TextFields
-                  key={text.key}
-                  text={text}
-                  label={label}
-                  onChange={(next) => write(text.key, next)}
-                />
+            {[
+              ...own.map((text) => ({ field: 'text' as const, text })),
+              ...examples
+                .filter((example) => example.section === section)
+                .map((example) => ({ field: 'example' as const, example })),
+            ]
+              .sort(
+                (a, b) =>
+                  orderOf(a.field === 'text' ? a.text.key : a.example.key) -
+                  orderOf(b.field === 'text' ? b.text.key : b.example.key),
               )
-            })}
+              .map((item, i, items) => {
+                if (item.field === 'example')
+                  return (
+                    <ExampleField
+                      key={item.example.key}
+                      lesson={lesson}
+                      example={item.example}
+                      onChange={(text) => onChange(withExample(lesson, item.example.key, text))}
+                    />
+                  )
+                const { text } = item
+                const before = items[i - 1]
+                step =
+                  text.kind === 'step'
+                    ? before?.field === 'text' && before.text.kind === 'step'
+                      ? step + 1
+                      : 1
+                    : 0
+                const label = t(`edit.kinds.${text.kind}`) + (step ? ` ${step}` : '')
+                return (
+                  <TextFields
+                    key={text.key}
+                    text={text}
+                    label={label}
+                    onChange={(next) => write(text.key, next)}
+                  />
+                )
+              })}
           </section>
         )
       })}

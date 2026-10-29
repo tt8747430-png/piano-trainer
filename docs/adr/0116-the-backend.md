@@ -114,3 +114,7 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r9 — Patterns in the Public library: `public_items.kind` takes `pattern` (an own pattern's name and two figures,
   `pattern/`-prefixed source ids); the library browses one kind at a time (Songs · Patterns, `?kind=`); a pattern
   saved opens as the learner's own; `features/publish` publishes either (2026-10-29).
+- r10 — Review of rounds 6–9 at every size: the Public library's kind moved into its bar's tabs (2026-10-29).
+- r11 — A lesson's examples written as a line of text are edited in the lesson editor (a row of chords, a line of
+  notes and its left hand's, a progression's numerals), each read by the reader the lesson plays it with; a
+  lesson publishes only with every one reading (2026-10-29).
