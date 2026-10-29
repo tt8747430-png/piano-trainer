@@ -1,6 +1,7 @@
 // A Standard MIDI File (MIDI 1.0's file format) read: each track's name, its notes and its pedal,
 // and the file's tempos, time signatures and key signatures, all in the file's ticks.
 
+import { plainText } from './plain-text'
 import type { MidiNote } from './standard-midi-file'
 
 /** A file that is no Standard MIDI File, or is broken. */
@@ -31,9 +32,17 @@ export interface MidiFile {
   readonly parts: readonly MidiPart[]
   /** Quarter notes a minute from each tick on. */
   readonly tempos: readonly { readonly tick: number; readonly quarters: number }[]
-  readonly times: readonly { readonly tick: number; readonly count: number; readonly unit: number }[]
+  readonly times: readonly {
+    readonly tick: number
+    readonly count: number
+    readonly unit: number
+  }[]
   /** Sharps (> 0) or flats (< 0), and whether minor. */
-  readonly keys: readonly { readonly tick: number; readonly fifths: number; readonly minor: boolean }[]
+  readonly keys: readonly {
+    readonly tick: number
+    readonly fifths: number
+    readonly minor: boolean
+  }[]
   /** Drum notes left out. */
   readonly drums: number
 }
@@ -64,7 +73,8 @@ export function readMidiFile(bytes: Uint8Array): MidiFile {
   let title: string | undefined
   let at = 8 + headerLength
   for (let track = 0; track < count && at + 8 <= bytes.length; track += 1) {
-    if (String.fromCharCode(...bytes.subarray(at, at + 4)) !== 'MTrk') throw new MidiFileError('No MTrk')
+    if (String.fromCharCode(...bytes.subarray(at, at + 4)) !== 'MTrk')
+      throw new MidiFileError('No MTrk')
     const length = view.getUint32(at + 4)
     const end = Math.min(bytes.length, at + 8 + length)
     let p = at + 8
@@ -107,7 +117,7 @@ export function readMidiFile(bytes: Uint8Array): MidiFile {
         const data = bytes.subarray(p, p + size)
         p += size
         if (type === 0x2f) break
-        if (type === 0x03) name = decoder.decode(data).trim() || undefined
+        if (type === 0x03) name = plainText(decoder.decode(data)) || undefined
         if (type === 0x51 && size === 3) {
           const micros = ((data[0] ?? 0) << 16) | ((data[1] ?? 0) << 8) | (data[2] ?? 0)
           if (micros > 0) tempos.push({ tick, quarters: 60_000_000 / micros })
@@ -139,7 +149,10 @@ export function readMidiFile(bytes: Uint8Array): MidiFile {
       else if (kind === 0xb0 && first === SUSTAIN) {
         if (second >= PRESSED && !down.has(channel)) down.set(channel, tick)
         else if (second < PRESSED && down.has(channel)) {
-          pedals.set(channel, [...(pedals.get(channel) ?? []), { down: down.get(channel) ?? 0, up: tick }])
+          pedals.set(channel, [
+            ...(pedals.get(channel) ?? []),
+            { down: down.get(channel) ?? 0, up: tick },
+          ])
           down.delete(channel)
         }
       }

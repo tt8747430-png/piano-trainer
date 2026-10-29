@@ -16,9 +16,20 @@ function documentOf({ id, data, deleted }: Row): SyncDocument {
   return { id, data: rest, updatedAt: typeof updatedAt === 'string' ? updatedAt : '', deleted }
 }
 
+/**
+ * Data as `jsonb` holds it: no NUL character, which it refuses (and with it the whole push). A NUL comes
+ * in with a file, a MIDI track name padded with them; it is never something the learner typed.
+ */
+const storable = (data: unknown): Json =>
+  JSON.parse(
+    JSON.stringify(data, (_, value: unknown) =>
+      typeof value === 'string' ? value.replaceAll('\u0000', '') : value,
+    ),
+  ) as Json
+
 const rowOf = (document: SyncDocument) => ({
   id: document.id,
-  data: { ...document.data, updatedAt: document.updatedAt } as Json,
+  data: storable({ ...document.data, updatedAt: document.updatedAt }),
   deleted: document.deleted,
 })
 

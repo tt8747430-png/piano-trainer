@@ -48,6 +48,28 @@ describe('createSupabaseCloud', () => {
     })
   })
 
+  it('sends no NUL, which jsonb cannot hold: a MIDI file’s padded track name no longer stops a push', async () => {
+    const rpc = vi.fn(async () => ({ data: [], error: null }))
+    const cloud = createSupabaseCloud(backendOf({ rpc } as unknown as PianoClient), OPTIONS)
+    const mine = {
+      id: 'state',
+      data: { songs: [{ title: 'Piano\u0000\u0000', staves: [{ name: 'R\u0000H' }] }] },
+      updatedAt: 't1',
+      deleted: false,
+    }
+    expect(await cloud.push('pieces', mine, null)).toEqual({ ok: true, value: null })
+    expect(rpc).toHaveBeenCalledWith('push_documents', {
+      p_table: 'pieces',
+      p_rows: [
+        {
+          id: 'state',
+          data: { songs: [{ title: 'Piano', staves: [{ name: 'RH' }] }], updatedAt: 't1' },
+          deleted: false,
+        },
+      ],
+    })
+  })
+
   it('reads an applied push as nothing refused', async () => {
     const rpc = vi.fn(async () => ({ data: [], error: null }))
     const cloud = createSupabaseCloud(backendOf({ rpc } as unknown as PianoClient), OPTIONS)

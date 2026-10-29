@@ -57,6 +57,22 @@ describe('readMidiFile', () => {
     ])
   })
 
+  it('reads a name without the NUL bytes and control characters some programs pad it with', () => {
+    const bytes = standardMidiFile([
+      { events: [{ tick: 0, kind: 'name', text: 'Minuet\u0000\u0000\u0000' }], end: 0 },
+      {
+        events: [
+          { tick: 0, kind: 'name', text: '\u0000Right\u0007 hand\u0000' },
+          ...noteEvents([{ key: 60, on: 0, off: 480, velocity: 80 }], 0),
+        ],
+        end: 480,
+      },
+    ])
+    const read = readMidiFile(bytes)
+    expect(read.title).toBe('Minuet')
+    expect(read.parts[0]?.name).toBe('Right hand')
+  })
+
   it('reads a key signature, and leaves the drums out', () => {
     const bytes = standardMidiFile([
       { events: [...noteEvents([{ key: 36, on: 0, off: 10, velocity: 90 }], 9)], end: 10 },

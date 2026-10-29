@@ -1,3 +1,4 @@
+import { plainText } from '@/shared/lib'
 import type { PieceMusic } from './music'
 
 /** A song of the learner's own: its id, `my-` and its number, never given twice. */
@@ -31,6 +32,6 @@ export const ownSongNumber = (id: OwnSongId): number => Number(id.slice(3))
 
 /** A title as an own song keeps it: trimmed, 1 to 80 characters; null where none is left. */
 export function songTitle(text: string): string | null {
-  const title = text.trim()
+  const title = plainText(text)
   return title.length > 0 && title.length <= TITLE_MAX ? title : null
 }
