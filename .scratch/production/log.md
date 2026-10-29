@@ -133,3 +133,4 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   viewport's module state leaked from another file (isolate: false). Fixed in the code: a start forgets what was
   said before it (test added). Suite rerunning. Round 6 planned; 6.1's migration written WITHOUT delete (a `delete`
   in a function body also raised the Supabase tool's unseen confirmation, timed out): apply it next.
+- 2026-10-29 Round 5 on main: full suite 6651 green, build ok. 6.1 migration applied (content_drafts, publish_content).
