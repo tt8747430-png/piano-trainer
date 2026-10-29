@@ -61,6 +61,13 @@ These come straight from their feedback. Each has burned a round before.
 
 1. **Before starting:** fetch and check that the branch is level with `main` (`claude/keen-gates-q9bnit` unless told otherwise).
 2. **Work in rounds, in a loop.** Keep going round after round without asking. Stop only for decisions that are genuinely the owner's, and put those as clear questions at the end of the report. When the owner says "continue", pick up exactly where the work stopped.
+   - **"Continue with all" means autonomous mode.** Work through every open task (the plan's rounds, the log's
+     "left for later" and deferred items, the review findings) one round after another, without asking anything:
+     no AskUserQuestion, no "shall I…", no stopping to report between rounds. Where a choice is the owner's, take
+     the sensible default, write it in the log's decisions with the reason, and carry on; their to-dos (keys,
+     accounts, legal review) go in the log, never block the work. Keep the gate (typecheck, lint, the full suite
+     and the build before `main`) and push each round. Stop only when every task is done, or something needs
+     credentials or an action only the owner can take and nothing else is left; then report once.
 3. **Do the work yourself; agents are the exception.** The owner pays for every agent's context: each one starts from nothing, rereads CLAUDE.md, the docs and the code, and its report lands back in yours. Five agents cost about five sessions. The rule is the *maximum principle*: the best result for the least usage. So:
    - **By default you work inline**, one task after another, in this session: read only what the task needs, edit, run the tests it reaches, commit. Most rounds, including feature rounds and bug hunts, are done this way.
    - **Use an agent only when all of these hold:** the work is large (hours, not minutes), it splits into parts that touch different files, each part can be briefed in under a page without the chat's history, and running them in parallel saves the owner real time. Two or three agents at most; never more than the parts that are truly independent.
