@@ -20,3 +20,6 @@ coverage
 
 # Local logs (a dev server run in the background)
 *.log
+
+# Personal Claude Code settings
+.claude/settings.local.json
