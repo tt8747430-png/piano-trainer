@@ -285,3 +285,25 @@ query on `auth.users`.
 **5.4 The app:** `shared/api/admin` (port, fake, adapter over the function and the tables); `useFeature(key)`
 (switches fetched at sign-in and start, kept for offline); the Admin area (`/admin`, a lazy chunk, shown in Settings
 only to admins): Accounts, Groups, Switches, Reports (hide, show, block, dismiss), Activity. Content stays round 6.
+
+## Round 6: inline content editing (planned 2026-10-29)
+
+Editors (and admins) edit the built-in content where it shows; learners receive it as a content update (round 4).
+
+**6.1 Drafts:** `content_drafts (kind, id, meta, body, updated_at, updated_by)`, editors only. Publish (an RPC,
+security definer, editors only): the draft's body becomes the item's in `content_items` with a new version (its
+hash), published; the version is kept by the existing trigger; the draft goes. Restore: any kept version published
+again. `tests/drafts-access.sql`.
+
+**6.2 Port** `shared/api/content-editing`: `draft(kind, id)`, `saveDraft`, `discardDraft`, `publish`, `versions`,
+`restore`; fake + adapter; checks before publishing: a song reads (`readMusic`), a lesson reads (`updatesLesson`).
+
+**6.3 Songs:** on a built-in song, an editor's More has Edit the original: the score editor opens on the draft (or
+the catalog's music), and saving saves the draft (not a learner version); its bar says Draft with Publish and
+Discard; Versions lists the kept ones with Restore.
+
+**6.4 Lessons:** an editor's Edit on a lesson page: each section's heading and text blocks become fields, English
+and Russian side by side; other blocks (examples, quizzes) stay as they are this round; Save draft, Publish,
+Discard, Versions.
+
+**6.5** en/ru, tests through renderApp with fakes, screenshots, docs (ADR 0116 r6).
