@@ -80,11 +80,12 @@ describe('Settings', () => {
     ])
   })
 
-  it('keeps the sync, the backup and the progress under Sync and data', async () => {
+  it('keeps the sync, what the device keeps, the backup and the progress under Sync and data', async () => {
     await renderApp('/settings/data')
     await screen.findByRole('region', { name: 'Sync' })
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
       'Sync',
+      'On this device',
       'Backup',
       'Progress',
     ])

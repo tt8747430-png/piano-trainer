@@ -1,6 +1,7 @@
 import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { shownText } from '@/shared/test/shown-text'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import { createMemoryStorage } from '@/shared/lib'
@@ -34,7 +35,7 @@ describe('Practice → Chord finder', () => {
     await waitFor(() => expect(router.state.location.search).toMatchObject({ keys: '57-60-64-67' }))
     expect(screen.getByRole('heading', { level: 2, name: 'Am7' })).toBeInTheDocument()
     // Each key says its degree and, under it, its note.
-    expect(['A3', 'C4', 'E4', 'G4'].map((each) => key(each).textContent)).toEqual([
+    expect(['A3', 'C4', 'E4', 'G4'].map((each) => shownText(key(each)))).toEqual([
       expect.stringMatching(/1A$/),
       expect.stringMatching(/♭3C$/),
       expect.stringMatching(/5E$/),

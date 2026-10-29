@@ -2,6 +2,7 @@ import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ComponentProps } from 'react'
 import { describe, expect, it, vi } from 'vitest'
+import { shownText } from '@/shared/test/shown-text'
 import { midi, type Midi } from '@/shared/lib/music'
 import { stubScrolling } from '@/shared/test/layout'
 import type { KeyMark } from './key-look'
@@ -76,11 +77,11 @@ describe('PianoKeyboard', () => {
   it('names a marked key’s note under its degree, unless marked notes go unnamed', () => {
     const marks = new Map<Midi, KeyMark>([[midi(64), { tone: '3rd', label: '3', note: 'E' }]])
     const { rerender } = renderKeyboard({ marks })
-    expect(screen.getByRole('button', { name: 'E4' })).toHaveTextContent(/3E$/)
+    expect(shownText(screen.getByRole('button', { name: 'E4' }))).toMatch(/3E$/)
     rerender(
       <PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} marks={marks} markNotes={false} />,
     )
-    expect(screen.getByRole('button', { name: 'E4' })).not.toHaveTextContent('E')
+    expect(shownText(screen.getByRole('button', { name: 'E4' }))).not.toContain('E')
   })
 
   it('colours a scale’s keys whole, black keys too, each with its degree', () => {
@@ -93,22 +94,22 @@ describe('PianoKeyboard', () => {
     expect(screen.getByRole('button', { name: 'C4' })).toHaveClass('bg-key-tonic')
     const eFlat = screen.getByRole('button', { name: 'D sharp 4' })
     expect(eFlat).toHaveClass('bg-key-scale')
-    expect(eFlat).toHaveTextContent('♭3')
+    expect(shownText(eFlat)).toContain('♭3')
   })
 
   it('names every C by default, all keys or none when asked', () => {
     const { rerender } = renderKeyboard()
-    expect(screen.getByRole('button', { name: 'C4' })).toHaveTextContent('C4')
-    expect(screen.getByRole('button', { name: 'D4' }).textContent).toBe('')
+    expect(shownText(screen.getByRole('button', { name: 'C4' }))).toContain('C4')
+    expect(shownText(screen.getByRole('button', { name: 'D4' }))).toBe('')
     rerender(<PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} namedKeys="all" />)
-    expect(screen.getByRole('button', { name: 'C sharp 4' })).toHaveTextContent('C#')
+    expect(shownText(screen.getByRole('button', { name: 'C sharp 4' }))).toContain('C#')
     rerender(<PianoKeyboard range={ONE_OCTAVE} onKeyPress={() => {}} namedKeys="none" />)
-    expect(screen.getByRole('button', { name: 'C4' }).textContent).toBe('')
+    expect(shownText(screen.getByRole('button', { name: 'C4' }))).toBe('')
   })
 
   it('shows the typing letters on their keys', () => {
     renderKeyboard({ letters: new Map([[C4, 'A']]) })
-    expect(screen.getByRole('button', { name: 'C4' })).toHaveTextContent('A')
+    expect(shownText(screen.getByRole('button', { name: 'C4' }))).toContain('A')
   })
 
   it('keeps every mark while keys are down, a finger’s key among them', () => {
@@ -122,7 +123,7 @@ describe('PianoKeyboard', () => {
     fireEvent.pointerDown(e, { pointerId: 1, pointerType: 'touch' })
     expect(e).toHaveAttribute('data-down')
     expect(c).toHaveClass('bg-role-root-wash')
-    expect(c).toHaveTextContent('1')
+    expect(shownText(c)).toContain('1')
   })
 
   it('makes keys toggles when it holds a selection, and fills the selected ones yellow', () => {
@@ -280,7 +281,7 @@ describe('PianoKeyboard', () => {
     renderKeyboard({
       marks: new Map<Midi, KeyMark>([[midi(62), { tone: 'scale', label: 'Dm', caption: 'ii' }]]),
     })
-    expect(screen.getByRole('button', { name: 'D4' })).toHaveTextContent('iiDm')
+    expect(shownText(screen.getByRole('button', { name: 'D4' }))).toContain('iiDm')
   })
 
   it('holds down every key a pressed key plays', () => {

@@ -326,3 +326,16 @@ what is stored, where (Supabase, EU), for how long, deletion; needed for Google 
 **7.4 iPhone launch images** (apple-touch-startup-image for the common sizes, both themes) from the icon.
 
 **7.5** docs, the full suite, the build, push.
+
+## Round 8: checks that run themselves, and the deferred items (planned 2026-10-29)
+
+**8.1 End-to-end tests:** Playwright Test (`e2e/`, `npm run e2e`) against the production build served by
+`vite preview`: the main places open, a song plays in the Player, a lesson reads, the library, Settings; and axe
+on each (no serious or critical violation). Added to the hand-run CI.
+**8.2** Fix what axe finds.
+**8.3** Renovate's config (grouped, weekly, the pinned majors held); the owner installs the app.
+**8.4 Settings › Storage:** what the device keeps (saves, kept content, the offline copy), its size, and Clear
+the kept content.
+**8.5** A song saved from the Public library names its author (an own song's `from` field: pt-pieces version bump).
+Decisions: no web-vitals collection (the Privacy page promises no tracking); staging and backups are the owner's
+(a paid Supabase plan): logged as to-dos.

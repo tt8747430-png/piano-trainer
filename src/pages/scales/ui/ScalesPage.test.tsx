@@ -1,6 +1,7 @@
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { shownText } from '@/shared/test/shown-text'
 import { renderApp } from '@/app/testing/render-app'
 import { setKeyboard } from '@/features/set-preference'
 import type { LiveEvent } from '@/shared/api/audio'
@@ -33,7 +34,7 @@ describe('Practice → Scales and keys', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/practice/scales')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
-    expect(within(keyboard).getByRole('button', { name: 'F4' })).toHaveTextContent('4')
+    expect(shownText(within(keyboard).getByRole('button', { name: 'F4' }))).toContain('4')
     expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('12312345')
     const hands = screen.getByRole('radiogroup', { name: 'Hands' })
     await user.click(within(hands).getByRole('radio', { name: 'Left' }))
@@ -137,7 +138,7 @@ describe('Practice → Scales and keys', () => {
     const views = await screen.findByRole('navigation', { name: 'Scales and keys' })
     await user.click(within(views).getByRole('link', { name: 'Chords' }))
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
-    expect(within(keyboard).getByRole('button', { name: 'D4' })).toHaveTextContent('iiDm')
+    expect(shownText(within(keyboard).getByRole('button', { name: 'D4' }))).toContain('iiDm')
     expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveClass('bg-key-tonic')
     // Two controls say "Chords": the one for what the keys play names itself on screen.
     expect(screen.getByText('Keys play')).toBeVisible()
@@ -306,7 +307,7 @@ describe('Practice → Scales and keys', () => {
     await user.click(within(onKeys).getByRole('radio', { name: 'Notes' }))
     expect(document.querySelector('[data-slot="finger-row"]')).not.toBeInTheDocument()
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
-    expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveTextContent('3')
+    expect(shownText(within(keyboard).getByRole('button', { name: 'E4' }))).toContain('3')
   })
 
   it('opens each of the key’s chords in Chords', async () => {
@@ -323,7 +324,7 @@ describe('Practice → Scales and keys', () => {
     expect(
       within(screen.getByRole('navigation', { name: 'Scales and keys' })).getAllByRole('link'),
     ).toHaveLength(1)
-    expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveTextContent('1')
+    expect(shownText(within(keyboard).getByRole('button', { name: 'C4' }))).toContain('1')
   })
 
   it('starts the run on any note, fingered from the thumb there', async () => {
@@ -344,7 +345,7 @@ describe('Practice → Scales and keys', () => {
     )
     expect(document.querySelector('[data-slot="finger-row"]')).toHaveTextContent('12312345')
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
-    expect(within(keyboard).getByRole('button', { name: 'E4' })).toHaveTextContent('3')
+    expect(shownText(within(keyboard).getByRole('button', { name: 'E4' }))).toContain('3')
     await user.click(screen.getByRole('button', { name: 'Play up and down' }))
     expect(notes(audio.played.at(-1)?.sounds ?? [])[0]).toBe(64)
   })
@@ -384,7 +385,7 @@ describe('Practice → Scales and keys', () => {
   it('shows the chords in an inversion over their bass, each numeral figured', async () => {
     await renderApp('/practice/scales?show=chords&inversion=1')
     const keyboard = await screen.findByRole('group', { name: 'Keyboard' })
-    expect(within(keyboard).getByRole('button', { name: 'C4' })).toHaveTextContent('I⁶C/E')
+    expect(shownText(within(keyboard).getByRole('button', { name: 'C4' }))).toContain('I⁶C/E')
     expect(screen.getByRole('button', { name: /^Dm\/F/ })).toBeInTheDocument()
   })
 
@@ -476,8 +477,8 @@ describe('Practice → Scales and keys, Key view', () => {
     expect(await screen.findByRole('heading', { level: 2, name: 'F# minor' })).toBeInTheDocument()
     const keyboard = screen.getByRole('group', { name: 'Keyboard' })
     // F♯ minor's 7th as its signature writes it is E, not harmonic minor's raised E♯.
-    expect(within(keyboard).getByRole('button', { name: 'E5' })).toHaveTextContent('♭7')
-    expect(within(keyboard).getByRole('button', { name: 'F5' })).not.toHaveTextContent('7')
+    expect(shownText(within(keyboard).getByRole('button', { name: 'E5' }))).toContain('♭7')
+    expect(shownText(within(keyboard).getByRole('button', { name: 'F5' }))).not.toContain('7')
   })
 
   it('writes the key’s chords on the circle as the key spells them, and its borrowed chords plainly', async () => {

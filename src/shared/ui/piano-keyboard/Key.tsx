@@ -1,6 +1,7 @@
 import { memo, useId, type PointerEvent } from 'react'
 import { BLACK_HEIGHT, cn, type KeyGeometry } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
+import { Glyph } from '../Glyph'
 import { ROLE_BG, ROLE_WASH } from '../role-classes'
 import { sameLook, type KeyFill, type KeyLook } from './key-look'
 
@@ -131,9 +132,7 @@ function KeyButton({
         </span>
       ) : null}
       {look.letter ? (
-        <span aria-hidden className="relative text-xs font-semibold opacity-70">
-          {look.letter}
-        </span>
+        <Glyph text={look.letter} className="relative text-xs font-semibold opacity-70" />
       ) : null}
       {look.label ? (
         <span
@@ -144,18 +143,17 @@ function KeyButton({
           )}
         >
           {look.label.caption ? (
-            <span className="text-xs font-semibold">{look.label.caption}</span>
+            <Glyph text={look.label.caption} className="text-xs font-semibold" />
           ) : null}
-          <span
+          <Glyph
+            text={look.label.text}
             className={cn(
               'font-bold tabular-nums',
               look.label.kind === 'name' || look.label.caption ? 'text-xs' : 'text-sm',
             )}
-          >
-            {look.label.text}
-          </span>
+          />
           {look.label.note ? (
-            <span className="text-xs font-semibold opacity-80">{look.label.note}</span>
+            <Glyph text={look.label.note} className="text-xs font-semibold opacity-80" />
           ) : null}
         </span>
       ) : null}

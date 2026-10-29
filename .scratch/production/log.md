@@ -153,3 +153,10 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 - 2026-10-29 Round 7 on main: 7.1 error reports, 7.2 Privacy and Terms, 7.3 supabase-js after first paint (first
   chunk 154 → 100 KB gzipped; sign-in and the lesson editor checked on the production build), 7.4 the iPhone's
   launch images (52, never precached). Full suite 6689 green, build ok.
+- 2026-10-29 Round 8: e2e (Playwright + axe on the production build, 22 checks, phone and laptop) found WCAG 2.5.3
+  "label in name" failures: the keys' faces, the harmony chips' T/S/D, the chord-names rail button, the lesson's
+  page counter and the Transpose key now draw their shorthand as `Glyph` (CSS content, for the eye), the bar
+  chips name their caption, the Continue link is named by what it shows. Renovate config added (weekly, grouped,
+  CLAUDE.md's pinned majors held). DECISIONS: no web-vitals collection (the Privacy page promises no tracking);
+  staging and backups need a paid Supabase plan: the owner's call. OWNER TO-DO: install the Renovate GitHub app
+  on the repository (https://github.com/apps/renovate) for the config to run.

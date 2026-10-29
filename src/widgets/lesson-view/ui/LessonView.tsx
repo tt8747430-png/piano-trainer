@@ -42,6 +42,7 @@ import {
   FloatingActions,
   FloatingBar,
   FloatingBarButton,
+  Glyph,
   NO_KEYS,
   Sheet,
   SheetContent,
@@ -251,9 +252,7 @@ function LessonBar({
           }
         >
           <ListOrdered aria-hidden />
-          <span aria-hidden className="font-semibold tabular-nums">
-            {at + 1}/{of}
-          </span>
+          <Glyph text={`${at + 1}/${of}`} className="font-semibold tabular-nums" />
         </SheetTrigger>
         {contents}
       </Sheet>

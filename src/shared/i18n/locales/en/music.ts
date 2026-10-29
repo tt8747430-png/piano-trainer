@@ -268,6 +268,7 @@ export const music = {
   playNotes: 'Play {{notes}}',
   playBar: 'Play bar {{n}}',
   playBarChord: 'Play bar {{n}}, {{symbol}}',
+  playBarChordCaption: 'Play bar {{n}}, {{symbol}} {{caption}}',
   // A progression's chips (DESIGN.md, Harmony): each chord's numeral over what it does in its key,
   // or how its root moved there; the legend of the moves; Play for the whole chain.
   harmony: {

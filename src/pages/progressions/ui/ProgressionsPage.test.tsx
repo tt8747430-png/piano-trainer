@@ -87,7 +87,9 @@ describe('Practice → Progressions', () => {
     await renderApp(`/practice/progressions?p=${encodeURIComponent('I6/9-V7#9-III+')}`)
     await screen.findAllByRole('group', { name: 'Chords' })
     await rowIs(['C6/9I6/9', 'G7♯9V7♯9', 'E+III+'])
-    expect(within(rowStaff()).getByRole('button', { name: 'Play bar 2, G7♯9' })).toBeInTheDocument()
+    expect(
+      within(rowStaff()).getByRole('button', { name: 'Play bar 2, G7♯9 V7♯9' }),
+    ).toBeInTheDocument()
   })
 
   it('prints the row’s chords, the passing chords and the walks through the keys with ♯ and ♭', async () => {

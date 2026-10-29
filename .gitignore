@@ -24,3 +24,7 @@ coverage
 # Personal Claude Code settings
 .claude/settings.local.json
 content-export/
+
+# Playwright
+/test-results/
+/playwright-report/

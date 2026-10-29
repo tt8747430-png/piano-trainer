@@ -1,6 +1,7 @@
 import { act, createEvent, fireEvent, renderHook, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { shownText } from '@/shared/test/shown-text'
 import { setKeyboard } from '@/features/set-preference'
 import { SHORTEST_PRESS_MS } from '@/shared/lib'
 import { stubScrolling } from '@/shared/test/layout'
@@ -22,7 +23,7 @@ describe('typing on the computer keyboard', () => {
     await user.keyboard('a')
     expect(audio.voice[0]).toEqual({ kind: 'press', midi: 60, velocity: 100 })
     expect(onKeyPress).toHaveBeenCalledWith(60)
-    expect(screen.getByRole('button', { name: 'C4' })).toHaveTextContent('A')
+    expect(shownText(screen.getByRole('button', { name: 'C4' }))).toContain('A')
   })
 
   it('holds a typed key down until it is let go', () => {

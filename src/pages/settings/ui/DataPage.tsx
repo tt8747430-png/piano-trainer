@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useProgressStoreApi } from '@/entities/progress'
 import { BackupFields } from '@/features/backup-data'
+import { KeepOnDeviceFields } from '@/features/keep-on-device'
 import { resetProgress } from '@/features/reset-progress'
 import { SettingsGroup as Group } from '@/shared/ui'
 import {
@@ -19,7 +20,10 @@ import { Button } from '@/shared/ui/primitives/button'
 import { SettingsScreen } from './SettingsScreen'
 import { SyncFields } from './SyncFields'
 
-/** Settings › Sync and data: the sync (ADR 0116), Backup, and resetting the progress. */
+/**
+ * Settings › Sync and data: the sync (ADR 0116), what this device keeps (and keeping it safe), Backup,
+ * and resetting the progress.
+ */
 export function DataPage() {
   const { t } = useTranslation('settings')
   const progress = useProgressStoreApi()
@@ -32,6 +36,9 @@ export function DataPage() {
     <SettingsScreen title={t('groups.data.label')}>
       <Group title={t('sync.label')} info={t('sync.info')}>
         <SyncFields />
+      </Group>
+      <Group title={t('storage.label')} info={t('storage.info')}>
+        <KeepOnDeviceFields />
       </Group>
       <Group title={t('backup.label')} info={t('backup.says')}>
         <BackupFields />

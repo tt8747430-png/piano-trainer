@@ -189,7 +189,13 @@ export function TappableStaff({
                       type="button"
                       aria-label={
                         bar.symbol
-                          ? t('playBarChord', { n: firstBar + i, symbol: bar.symbol })
+                          ? caption
+                            ? t('playBarChordCaption', {
+                                n: firstBar + i,
+                                symbol: bar.symbol,
+                                caption: printedSymbol(caption),
+                              })
+                            : t('playBarChord', { n: firstBar + i, symbol: bar.symbol })
                           : t('playBar', { n: firstBar + i })
                       }
                       aria-pressed={playback.playing === id}

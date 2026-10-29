@@ -1,6 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { shownText } from '@/shared/test/shown-text'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 
@@ -27,7 +28,7 @@ describe('Transpose (ADR 0105)', () => {
       'Transpose: C major',
       'Simplify',
     ])
-    expect(tools[1]).toHaveTextContent('TransposeC')
+    expect(shownText(tools[1] ?? document.body)).toContain('TransposeC')
   })
 
   it('moves the key a semitone at a time, each key spelled by its simplest signature', async () => {
@@ -39,7 +40,7 @@ describe('Transpose (ADR 0105)', () => {
     expect(router.state.location.search).toMatchObject({ key: 'B' })
     expect(popover).toHaveTextContent('B major')
     expect(popover).toHaveTextContent('−1')
-    expect(screen.getByRole('button', { name: 'Transpose: B major, −1' })).toHaveTextContent(
+    expect(shownText(screen.getByRole('button', { name: 'Transpose: B major, −1' }))).toContain(
       'TransposeB',
     )
     await user.click(within(popover).getByRole('button', { name: 'Up a semitone' }))
@@ -60,7 +61,7 @@ describe('Transpose (ADR 0105)', () => {
     expect(popover).toHaveTextContent('F# major')
     expect(popover).toHaveTextContent('+1')
     // The tool prints the key as a chord symbol is printed.
-    expect(screen.getByRole('button', { name: 'Transpose: F# major, +1' })).toHaveTextContent(
+    expect(shownText(screen.getByRole('button', { name: 'Transpose: F# major, +1' }))).toContain(
       'TransposeF♯',
     )
   })
@@ -120,7 +121,7 @@ describe('Transpose (ADR 0105)', () => {
     const user = userEvent.setup()
     await renderApp('/play/romashki?key=E', { locale: 'ru' })
     const tool = await screen.findByRole('button', { name: 'Тональность: E минор, +2' })
-    expect(tool).toHaveTextContent('ТональностьEm')
+    expect(shownText(tool)).toContain('ТональностьEm')
     await user.click(tool)
     const popover = (await screen.findAllByRole('dialog', { name: 'Транспонировать' }))[0]
     expect(popover).toHaveTextContent('+2 полутона')

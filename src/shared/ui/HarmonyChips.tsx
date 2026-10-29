@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
 import { printedSymbol, ROOT_STEPS } from '@/shared/lib/music'
+import { Glyph } from './Glyph'
 import { MOVE_PAINT, PAINT, type Paint } from './paint'
 
 /**
@@ -79,9 +80,7 @@ export function HarmonyChip({
         <span className="max-w-full truncate font-display text-lg font-semibold">
           {printedSymbol(numeral)}
         </span>
-        <span aria-hidden className="text-sm font-semibold tabular-nums">
-          {detail ?? ' '}
-        </span>
+        <Glyph text={detail ?? ' '} className="text-sm font-semibold tabular-nums" />
       </button>
     </li>
   )

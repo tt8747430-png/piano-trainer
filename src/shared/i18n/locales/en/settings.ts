@@ -27,6 +27,16 @@ export const settings = {
     cancel: 'Keep it',
     confirm: 'Reset',
   },
+  // What this device keeps of the app, and keeping it safe from the browser's clearing (ADR 0116).
+  storage: {
+    label: 'On this device',
+    info: 'Your songs, progress and the app’s offline copy are kept by this browser. When a device runs short of space, a browser may clear what an app keeps, unless the app asked it to keep it safe.',
+    reading: 'Finding out what this device keeps…',
+    used: '{{size}} kept on this device',
+    keepSafe: 'Keep them safe',
+    safe: 'Kept safe: the browser won’t clear them to make room',
+    refused: 'This browser decides for itself. Installing the app, or a backup, keeps them safe.',
+  },
   backup: {
     label: 'Backup',
     says: 'Your songs, folders, takes, patterns, progress and settings live on this device only. Save them as a file to keep them safe or to move them to another device.',

@@ -8,6 +8,7 @@ import {
 import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
+import { shownText } from '@/shared/test/shown-text'
 import { lessonById, type Lesson } from '@/entities/lesson'
 import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
 import { createFakeAudio } from '@/shared/api/audio'
@@ -536,7 +537,7 @@ describe('LessonView’s accompaniment', () => {
     expect(
       within(chips)
         .getAllByRole('button')
-        .map((chip) => chip.textContent),
+        .map((chip) => shownText(chip)),
     ).toEqual(['iiS', 'VD', 'IT'])
     await user.click(within(chips).getByRole('button', { name: 'V, Dominant' }))
     // G7 alone, as the row voices it: its bass under the hand.
@@ -565,7 +566,7 @@ describe('LessonView’s accompaniment', () => {
     expect(
       within(chips)
         .getAllByRole('button')
-        .map((chip) => chip.textContent),
+        .map((chip) => shownText(chip)),
     ).toEqual(['I\u00a0', 'IV↓5', 'vii°↓5', 'iii↓5'])
     expect(screen.getByText('Down a 5th')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Play the chain' })).toBeInTheDocument()

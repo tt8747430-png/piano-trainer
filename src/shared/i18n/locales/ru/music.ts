@@ -248,6 +248,7 @@ export const music: LocaleResources['music'] = {
   playNotes: 'Сыграть {{notes}}',
   playBar: 'Сыграть такт {{n}}',
   playBarChord: 'Сыграть такт {{n}}, {{symbol}}',
+  playBarChordCaption: 'Сыграть такт {{n}}, {{symbol}} {{caption}}',
   rowChords: 'Аккорды',
   harmony: {
     label: 'Показать',

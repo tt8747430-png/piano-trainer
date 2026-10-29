@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useKeyName } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { keySymbol, printedSymbol, TRANSPOSITION_RANGE, type Key } from '@/shared/lib/music'
-import { MenuSection } from '@/shared/ui'
+import { Glyph, MenuSection } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
 import { PlayerTool } from '@/widgets/practice-player'
@@ -70,10 +70,12 @@ export function TransposeTool({
             }
             name={t('transpose.name')}
             disabled={disabled}
+            // The key in its symbol: the label says it in words.
             value={
-              <span className={cn('font-display', moved && 'text-link')}>
-                {printedSymbol(keySymbol(current))}
-              </span>
+              <Glyph
+                text={printedSymbol(keySymbol(current))}
+                className={cn('font-display', moved && 'text-link')}
+              />
             }
           />
         }

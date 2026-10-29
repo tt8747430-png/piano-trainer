@@ -22,11 +22,9 @@ export function ContinueAction() {
   const read = step.kind === 'lesson' || step.kind === 'course-lesson'
   const Icon = read ? BookOpenText : Play
   const title = stepTitle(step).primary
-  const name = `${t('continue')}: ${title}`
   return (
     <FloatingActions>
       <ButtonLink
-        aria-label={name}
         className="h-14 max-w-[min(20rem,calc(100vw-2*var(--gutter)))] gap-3 rounded-full pr-6 pl-2 elevation-2 transition-[scale,box-shadow,filter] duration-150 ease-out hover:elevation-3 active:scale-96 active:elevation-1"
         render={
           step.kind === 'piece' ? (
@@ -41,6 +39,7 @@ export function ContinueAction() {
         </span>
         <span className="flex min-w-0 flex-col text-left leading-tight">
           <span className="text-xs font-medium">{t('continue')}</span>
+          {/* Its name, read from what it shows: the two lines a word apart. */}{' '}
           <span className="truncate font-display text-base">{title}</span>
         </span>
       </ButtonLink>

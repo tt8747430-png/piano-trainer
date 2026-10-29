@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { selectKeyboard, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setKeyboard } from '@/features/set-preference'
-import { RailButton } from '@/shared/ui'
+import { Glyph, RailButton } from '@/shared/ui'
 
 /**
  * The rail's chord names: on, the rail names the chord a hand holds; off, it says nothing. It wears
@@ -19,7 +19,7 @@ export function ChordNamesToggle({ disabled = false }: { disabled?: boolean }) {
       disabled={disabled}
       onClick={() => setKeyboard(store, { chordNames: !chordNames })}
     >
-      <span aria-hidden>Cm7</span>
+      <Glyph text="Cm7" />
     </RailButton>
   )
 }

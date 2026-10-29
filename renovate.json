@@ -1,0 +1,36 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Dependency updates for piano-trainer: latest stable, once a week, grouped; the majors CLAUDE.md pins are bumped by hand, each its own change.",
+  "extends": ["config:recommended", ":semanticCommitsDisabled", "group:allNonMajor"],
+  "schedule": ["before 6am on monday"],
+  "timezone": "UTC",
+  "minimumReleaseAge": "3 days",
+  "rangeStrategy": "bump",
+  "lockFileMaintenance": { "enabled": true, "schedule": ["before 6am on monday"] },
+  "packageRules": [
+    {
+      "description": "Majors pinned in CLAUDE.md: a bump is its own change, made by hand.",
+      "matchPackageNames": [
+        "typescript",
+        "vitest",
+        "@vitest/coverage-v8",
+        "jsdom",
+        "@testing-library/jest-dom",
+        "eslint-plugin-boundaries",
+        "@vite-pwa/assets-generator"
+      ],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "Every other major on its own pull request, to read its notes.",
+      "matchUpdateTypes": ["major"],
+      "groupName": null
+    },
+    {
+      "description": "The GitHub Actions the hand-run CI uses.",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions"
+    }
+  ]
+}
