@@ -54,7 +54,7 @@ describe('the Public library', () => {
   it('is reached from Songs, and lists the songs published, newest first, by author', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs', { publicLibrary: withSongs('Older', 'Newer') })
-    await user.click(await screen.findByRole('link', { name: 'Public library' }))
+    await user.click(await screen.findByRole('link', { name: /^Public library/ }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/public'))
     const list = await screen.findByRole('list', { name: 'Public library' })
     expect(

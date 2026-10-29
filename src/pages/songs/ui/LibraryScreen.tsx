@@ -1,6 +1,8 @@
-import { useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { Globe } from 'lucide-react'
 import { useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
+import { RowLink } from '@/shared/ui'
 import { useFolderName, type ShelvedFolder } from '@/entities/library'
 import { useSongDrop, useSongImport } from '@/features/song-files'
 import type { SongsFilter } from '../model/songs-filter'
@@ -43,6 +45,18 @@ export function LibraryScreen({
     <div className="flex flex-col gap-4 pb-4" {...drop.dropProps}>
       <LibraryHeader page={page} folder={folder} />
       <LibraryFilters page={page} filter={filter} screen={folder ? nameOf(folder) : t('title')} />
+      {/* Home's way to what others shared, first of its rows (Noji's Discover). */}
+      {folder || page.select.on ? null : (
+        <div className="card">
+          <RowLink
+            render={<Link to="/songs/public" />}
+            icon={Globe}
+            paint="sky"
+            title={t('public.title')}
+            detail={t('public.line')}
+          />
+        </div>
+      )}
       {empty ? (
         <LibraryEmpty page={page} inFolder={folder !== null} filter={filter} onClear={clear} />
       ) : page.select.on ? (
