@@ -102,6 +102,8 @@ export const admin = {
     },
   },
   errors: {
+    count_one: 'Once, on {{places}} screen',
+    count_other: '{{count}} times, on {{places}} screens',
     none: 'No errors reported.',
     where: '{{date}} · {{path}} · build {{build}}',
     stack: 'Stack',

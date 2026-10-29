@@ -2,10 +2,14 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
 import { useAdmin } from '@/shared/lib/admin'
+import { groupErrors } from '../model/group-errors'
 import { useLoaded } from '../model/use-loaded'
 import { LoadedState } from './LoadedState'
 
-/** What went wrong on learners' devices, the latest first: what, when, where, which build; its stack folded. */
+/**
+ * What went wrong on learners' devices, one row a message, the most recently seen first: how many
+ * times and on how many screens, then the latest's when, where and build, its stack folded.
+ */
 export function ErrorsTab() {
   const { t } = useTranslation('admin')
   const locale = useLocale()
@@ -20,22 +24,27 @@ export function ErrorsTab() {
           <p className="text-muted-foreground">{t('errors.none')}</p>
         ) : (
           <ol className="flex flex-col divide-y divide-border card">
-            {entries.map((entry, i) => (
-              <li key={i} className="flex min-w-0 flex-col gap-1 px-4 py-3">
-                <span className="font-medium break-words">{entry.message}</span>
+            {groupErrors(entries).map(({ message, count, places, latest }) => (
+              <li key={message} className="flex min-w-0 flex-col gap-1 px-4 py-3">
+                <span className="font-medium break-words">{message}</span>
+                <span className="text-sm font-medium text-muted-foreground">
+                  {t('errors.count', { count, places })}
+                </span>
                 <span className="truncate text-sm text-muted-foreground">
                   {t('errors.where', {
-                    date: date.format(new Date(entry.at)),
-                    path: entry.path,
-                    build: entry.build,
+                    date: date.format(new Date(latest.at)),
+                    path: latest.path,
+                    build: latest.build,
                   })}
                 </span>
-                {entry.stack ? (
+                {latest.stack ? (
                   <details className="text-sm">
                     <summary className="cursor-pointer text-muted-foreground">
                       {t('errors.stack')}
                     </summary>
-                    <pre className="mt-2 overflow-x-auto text-xs whitespace-pre">{entry.stack}</pre>
+                    <pre className="mt-2 overflow-x-auto text-xs whitespace-pre">
+                      {latest.stack}
+                    </pre>
                   </details>
                 ) : null}
               </li>

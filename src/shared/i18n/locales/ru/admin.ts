@@ -104,6 +104,10 @@ export const admin: LocaleResources['admin'] = {
     },
   },
   errors: {
+    count_one: '{{count}} раз, экранов: {{places}}',
+    count_few: '{{count}} раза, экранов: {{places}}',
+    count_many: '{{count}} раз, экранов: {{places}}',
+    count_other: '{{count}} раза, экранов: {{places}}',
     none: 'Об ошибках не сообщалось.',
     where: '{{date}} · {{path}} · сборка {{build}}',
     stack: 'Стек',

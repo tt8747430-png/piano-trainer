@@ -139,6 +139,7 @@ describe('the Admin area', () => {
     })
     await renderApp('/admin?tab=errors', { auth: await signedInAs('admin'), admin })
     expect(await screen.findByText('Cannot read the score')).toBeVisible()
+    expect(screen.getByText('Once, on 1 screen')).toBeVisible()
     expect(screen.getByText(/\/play\/bz5 · build 1\.2\.3/)).toBeVisible()
     await user.click(screen.getByText('Stack'))
     expect(screen.getByText('at draw (score.ts:1)')).toBeVisible()
