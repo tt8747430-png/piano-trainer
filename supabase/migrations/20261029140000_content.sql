@@ -58,7 +58,6 @@ $$;
 
 revoke execute on function public.keep_content_version() from public, anon, authenticated;
 
-drop trigger if exists keep_content_version on public.content_items;
 create trigger keep_content_version
   before insert or update on public.content_items
   for each row execute function public.keep_content_version();
@@ -70,7 +69,6 @@ grant select on public.content_items to anon, authenticated;
 grant insert, update, delete on public.content_items to authenticated;
 grant select on public.content_versions to authenticated;
 
-drop policy if exists published_read on public.content_items;
 create policy published_read on public.content_items for select to anon, authenticated
   using (
     status = 'published' and (
@@ -81,16 +79,12 @@ create policy published_read on public.content_items for select to anon, authent
     or (select public.is_content_editor())
   );
 
-drop policy if exists editor_insert on public.content_items;
 create policy editor_insert on public.content_items for insert to authenticated
   with check ((select public.is_content_editor()));
-drop policy if exists editor_update on public.content_items;
 create policy editor_update on public.content_items for update to authenticated
   using ((select public.is_content_editor())) with check ((select public.is_content_editor()));
-drop policy if exists editor_delete on public.content_items;
 create policy editor_delete on public.content_items for delete to authenticated
   using ((select public.is_content_editor()));
 
-drop policy if exists editor_read on public.content_versions;
 create policy editor_read on public.content_versions for select to authenticated
   using ((select public.is_content_editor()));
