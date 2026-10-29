@@ -31,6 +31,7 @@ export function CourseLessonPage() {
       key={lessonId}
       lesson={place.lesson}
       step={courseLessonStepId(courseId, lessonId)}
+      edit={<Link to="/courses/$courseId/$lessonId/edit" params={{ courseId, lessonId }} />}
       back={<BackButton fallback={course} />}
       after={(place.lesson.after ?? []).flatMap((id) => {
         const before = place.course.lessons.find((each) => each.id === id)

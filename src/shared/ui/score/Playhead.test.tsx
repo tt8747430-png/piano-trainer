@@ -145,7 +145,10 @@ describe('Playhead (ADR 0096)', () => {
     const scrolled = vi.mocked(Element.prototype.scrollIntoView)
     scrolled.mockClear()
     await renderPlayhead({ tick: 0 })
-    expect(scrolled).toHaveBeenCalledWith(expect.objectContaining({ block: 'nearest' }))
+    // It scrolls once the line is placed, a frame after the engraving: later under the whole suite.
+    await vi.waitFor(() =>
+      expect(scrolled).toHaveBeenCalledWith(expect.objectContaining({ block: 'nearest' })),
+    )
     expect(scrolled.mock.contexts.at(-1)).toBe(document.querySelector('[data-slot="sheet-line"]'))
     const reveal = vi.fn()
     render(

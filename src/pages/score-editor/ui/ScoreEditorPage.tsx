@@ -11,7 +11,7 @@ import {
   usePiecesStoreApi,
   type ChartPiece,
 } from '@/entities/piece'
-import { OriginalStrip, useOriginalDraft } from '@/features/edit-original'
+import { DraftStrip, useOriginalDraft } from '@/features/edit-original'
 import { useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, NotFound } from '@/shared/ui'
@@ -65,7 +65,7 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
   const draft = useOriginalDraft(piece)
   const { load, save } = draft
   const target = useMemo(
-    () => (load.state === 'ready' ? originalTarget(piece, load.music, save) : null),
+    () => (load.state === 'ready' ? originalTarget(piece, load.value, save) : null),
     [load, piece, save],
   )
   if (load.state === 'loading') return <NotOpen line={t('original.opening')} />
@@ -87,9 +87,10 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
       target={target}
       bar={bar}
       head={
-        <OriginalStrip
+        <DraftStrip
           draft={draft}
           title={entryTitles(piece, locale).primary}
+          unreadable={t('original.unreadable')}
           onReset={draft.reopen}
         />
       }

@@ -99,5 +99,7 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   (the draft's body becomes the item's under the hash of its body, the version kept) or a kept version restored;
   the `ContentEditingPort` (`shared/api/content-editing`). A built-in song's original is edited in the score
   editor (`/edit/$pieceId?original=true`, `features/edit-original`): it opens on the draft, else the song as
-  published now; each change is saved to the draft once the editor rests; Publish checks the music reads first
+  published now; each change is saved to the draft once the editor rests; Publish checks the music reads first.
+  A lesson's every text is edited on its lesson editor (`/lessons/$lessonId/edit`, a course's under its course;
+  `pages/lesson-editor`), English and Russian side by side; its examples stay as authored this round
   (2026-10-29).

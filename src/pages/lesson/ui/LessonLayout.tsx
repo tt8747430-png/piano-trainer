@@ -1,5 +1,5 @@
 import { Link, type LinkProps } from '@tanstack/react-router'
-import { ArrowRight, ChevronsLeft } from 'lucide-react'
+import { ArrowRight, ChevronsLeft, PencilLine } from 'lucide-react'
 import { Fragment, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
@@ -8,7 +8,8 @@ import { useProgressStoreApi } from '@/entities/progress'
 import { LearnedButton, useLearned } from '@/features/mark-learned'
 import { recordSectionRead } from '@/features/record-reading'
 import { localText, useLocale } from '@/shared/i18n'
-import { ButtonLink, ScreenHeader } from '@/shared/ui'
+import { editsContent, useAccount } from '@/shared/lib/account'
+import { ButtonLink, RoundLink, ScreenHeader } from '@/shared/ui'
 import { LessonView, type UpLink } from '@/widgets/lesson-view'
 
 /** A lesson either side of this one, or the way on past the last: a router `Link`, named. */
@@ -31,7 +32,8 @@ export interface LessonTrack {
  * A lesson, a journey's or a course's (ADR 0053, 0061), in one column in the middle of the screen:
  * its title with Learned in its bar, where it is (`place`), the lesson under its
  * floating bar of sections, and at its end the lesson before and the way on, which learns it (on a
- * phone, read a page at a time, the bar's Done).
+ * phone, read a page at a time, the bar's Done). An editor has its lesson editor in the bar (`edit`,
+ * ADR 0116).
  */
 export function LessonLayout({
   lesson,
@@ -39,6 +41,7 @@ export function LessonLayout({
   place,
   back,
   track,
+  edit,
   after = [],
 }: {
   lesson: Lesson
@@ -49,17 +52,27 @@ export function LessonLayout({
   /** The screen's Back (`BackButton`). */
   back: ReactNode
   track: LessonTrack
+  /** A router `Link` to its lesson editor, an editor's. */
+  edit: ReactElement
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const { learn } = useLearned(step)
   const progress = useProgressStoreApi()
+  const { account } = useAccount()
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
       <ScreenHeader
         title={localText(lesson.title, locale)}
         back={back}
-        actions={<LearnedButton step={step} round />}
+        actions={
+          <>
+            {editsContent(account) ? (
+              <RoundLink label={t('edit.open')} icon={PencilLine} render={edit} />
+            ) : null}
+            <LearnedButton step={step} round />
+          </>
+        }
       />
       <nav aria-label={t('placeLabel')} className="-mt-3 text-muted-foreground print:hidden">
         {place}

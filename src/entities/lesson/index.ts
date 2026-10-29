@@ -12,6 +12,12 @@ export {
 export { type Chapter, type Journey, type JourneyStep } from './model/journey'
 export { readProgression } from './model/progression'
 export {
+  lessonTexts,
+  withLessonText,
+  type LessonText,
+  type LessonTextKind,
+} from './model/texts'
+export {
   journeyById,
   lessonById,
   lessonPlace,

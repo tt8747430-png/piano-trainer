@@ -30,6 +30,7 @@ export function LessonPage() {
       key={lesson.id}
       lesson={lesson}
       step={lessonStepId(lesson.id)}
+      edit={<Link to="/lessons/$lessonId/edit" params={{ lessonId: lesson.id }} />}
       back={<BackButton fallback={journey} />}
       after={(lesson.after ?? []).flatMap((id) => {
         const before = lessonById(id)

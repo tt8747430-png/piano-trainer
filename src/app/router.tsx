@@ -493,6 +493,30 @@ const courseLessonRoute = createRoute({
   component: lazyRouteComponent(learnScreens, 'CourseLessonPage'),
 })
 
+// An editor's lesson editor (ADR 0116): every text of a journey's or a course's lesson.
+const lessonEditRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/lessons/$lessonId/edit',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params, context }) => {
+    const { lessonById, lessonPlace } = await learnScreens()
+    if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
+    await ensureContent(context.content, 'lesson', params.lessonId)
+  },
+  component: lazyRouteComponent(learnScreens, 'LessonEditorPage'),
+})
+const courseLessonEditRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/courses/$courseId/$lessonId/edit',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params, context }) => {
+    const { courseLesson } = await learnScreens()
+    if (!courseLesson(params.courseId, params.lessonId)) throw notFound()
+    await ensureContent(context.content, 'lesson', `${params.courseId}/${params.lessonId}`)
+  },
+  component: lazyRouteComponent(learnScreens, 'CourseLessonEditorPage'),
+})
+
 // Screens that take the whole screen, with their own way back.
 const fullScreenRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -645,6 +669,8 @@ const routeTree = rootRoute.addChildren([
     editPatternRoute,
     lessonRoute,
     courseLessonRoute,
+    lessonEditRoute,
+    courseLessonEditRoute,
     practiceRoute,
     quizRoute,
     exercisesRoute,

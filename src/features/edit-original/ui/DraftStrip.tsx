@@ -13,24 +13,27 @@ import {
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
-import type { OriginalDraft, Unreadable } from '../model/use-original-draft'
+import type { ContentDraft, Unreadable } from '../model/use-content-draft'
 import { VersionsDialog } from './VersionsDialog'
 
 type Asked = 'publish' | 'discard' | 'versions' | null
 
 /**
- * The strip an editor's draft of a built-in song's original stands under (ADR 0116): where the draft
- * stands (saved, saving, not saved), Publish, and the draft's menu: Versions, to restore one, and
- * Discard. What publishing, discarding or restoring changes is asked first; after discarding or
- * restoring, the editor opens again on the song as published (`onReset`).
+ * The strip an editor's draft of a built-in item stands under (ADR 0116): where the draft stands
+ * (saved, saving, not saved), Publish, and the draft's menu: Versions, to restore one, and Discard.
+ * What publishing, discarding or restoring changes is asked first; after discarding or restoring,
+ * the editor opens again on the item as published (`onReset`).
  */
-export function OriginalStrip({
+export function DraftStrip({
   draft,
   title,
+  unreadable,
   onReset,
 }: {
-  draft: OriginalDraft
+  draft: Pick<ContentDraft, 'drafted' | 'saved' | 'publish' | 'discard' | 'versions' | 'restore'>
   title: string
+  /** What is said where a publish is refused for a draft that does not read as the item. */
+  unreadable: string
   onReset: () => void
 }) {
   const { t } = useTranslation('editor')
@@ -68,7 +71,7 @@ export function OriginalStrip({
     }
     say(
       result.reason === 'unreadable'
-        ? t('original.unreadable')
+        ? unreadable
         : result.reason === 'offline'
           ? t('original.actionOffline')
           : t('original.actionFailed'),

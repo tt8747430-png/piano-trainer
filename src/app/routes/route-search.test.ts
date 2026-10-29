@@ -42,9 +42,14 @@ describe('search params', () => {
   })
 
   it('open the score editor’s takes, or press its Record as it opens, only when the URL says so', async () => {
-    expect(await searchAt('/edit/bz5?takes=true')).toEqual({ takes: true, record: false })
-    expect(await searchAt('/edit/bz5?record=true')).toEqual({ takes: false, record: true })
+    expect(await searchAt('/edit/bz5?takes=true')).toEqual({ ...EDIT_DEFAULTS, takes: true })
+    expect(await searchAt('/edit/bz5?record=true')).toEqual({ ...EDIT_DEFAULTS, record: true })
     expect(await searchAt('/edit/bz5?takes=yes&record=1')).toEqual(EDIT_DEFAULTS)
+  })
+
+  it('open a song’s original in the score editor only when the URL says so (ADR 0116)', async () => {
+    expect(await searchAt('/edit/bz5?original=true')).toEqual({ ...EDIT_DEFAULTS, original: true })
+    expect(await searchAt('/edit/bz5?original=yes')).toEqual(EDIT_DEFAULTS)
   })
 
   it('simplify a piece’s chords only where the URL says so, and nothing a walk plays (ADR 0105)', async () => {
