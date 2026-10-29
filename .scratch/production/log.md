@@ -124,3 +124,4 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   list-accounts (paged, filtered), set-role (admin · editor · learner; an admin cannot demote themselves; logged).
   Checked live: stranger 401, editor 403, admin lists and is refused self-demotion and bad input. The seeding
   account was admin for the check and is editor again.
+- 2026-10-29 Round 4b on main: full suite 6640 green, build ok, Public library screenshots clean; checked live in a browser against the project (an empty library says so).
