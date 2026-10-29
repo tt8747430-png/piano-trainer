@@ -1,20 +1,23 @@
 import {
   createDiagramInversionsStore,
+  DIAGRAM_INVERSIONS_STORAGE_KEY,
   type DiagramInversionsStore,
 } from '@/entities/diagram-inversion'
-import { createLibraryStore, type LibraryStore } from '@/entities/library'
-import { createPatternsStore, type PatternsStore } from '@/entities/pattern'
-import { createPiecesStore, type PiecesStore } from '@/entities/piece'
-import { createProgressStore, type ProgressStore } from '@/entities/progress'
-import { createSettingsStore, type SettingsStore } from '@/entities/settings'
-import { createTakesStore, type TakesStore } from '@/entities/take'
-import { createViewsStore, type ViewsStore } from '@/entities/views'
+import { createLibraryStore, LIBRARY_STORAGE_KEY, type LibraryStore } from '@/entities/library'
+import { createPatternsStore, PATTERNS_STORAGE_KEY, type PatternsStore } from '@/entities/pattern'
+import { createPiecesStore, PIECES_STORAGE_KEY, type PiecesStore } from '@/entities/piece'
+import { createProgressStore, PROGRESS_STORAGE_KEY, type ProgressStore } from '@/entities/progress'
+import { createSettingsStore, SETTINGS_STORAGE_KEY, type SettingsStore } from '@/entities/settings'
+import { createTakesStore, TAKES_STORAGE_KEY, type TakesStore } from '@/entities/take'
+import { createViewsStore, VIEWS_STORAGE_KEY, type ViewsStore } from '@/entities/views'
 import { createWebAudioOutput } from '@/shared/api/audio'
 import { createSupabaseAuth, type AuthGateway } from '@/shared/api/auth'
 import { filesContent, type ContentPort } from '@/shared/api/content'
 import { createWebMidi, hasWebMidi } from '@/shared/api/midi'
 import { createSupabaseClient, type PianoClient } from '@/shared/api/supabase'
-import type { SavingOptions } from '@/shared/lib'
+import { createSupabaseCloud, type CloudSync } from '@/shared/api/sync'
+import { safeLocalStorage, type SavingOptions } from '@/shared/lib'
+import { createSyncRunner, type SyncedSave, type SyncRunner } from '@/shared/lib/sync'
 import type { Services } from '@/shared/lib/services'
 
 /** The app's one audio output and MIDI port, built once at startup. */
@@ -69,3 +72,36 @@ export const createBackend = (): PianoClient =>
 
 /** Accounts, on the backend's auth. */
 export const createAuth = (backend: PianoClient): AuthGateway => createSupabaseAuth(backend)
+
+/** Each saved store that follows the learner to their other devices, and its table (ADR 0116). */
+export const SYNCED_SAVES: readonly SyncedSave[] = [
+  { table: 'settings', key: SETTINGS_STORAGE_KEY },
+  { table: 'progress', key: PROGRESS_STORAGE_KEY },
+  { table: 'pieces', key: PIECES_STORAGE_KEY },
+  { table: 'patterns', key: PATTERNS_STORAGE_KEY },
+  { table: 'takes', key: TAKES_STORAGE_KEY },
+  { table: 'library', key: LIBRARY_STORAGE_KEY },
+  { table: 'views', key: VIEWS_STORAGE_KEY },
+  { table: 'diagram_inversions', key: DIAGRAM_INVERSIONS_STORAGE_KEY },
+]
+
+/**
+ * The sync of the saved stores over `storage` (the browser's, or a test's): the stores save through
+ * its watched storage, and a save it brings in reaches its store as another tab's would.
+ */
+export function createSync(
+  cloud: CloudSync,
+  storage: Storage = safeLocalStorage(),
+  tabs: EventTarget = window,
+): SyncRunner {
+  return createSyncRunner({
+    cloud,
+    saves: SYNCED_SAVES,
+    storage,
+    announce: (key) =>
+      tabs.dispatchEvent(new StorageEvent('storage', { key, newValue: storage.getItem(key) })),
+  })
+}
+
+/** The cloud the sync talks to: the backend's tables. */
+export const createCloud = (backend: PianoClient): CloudSync => createSupabaseCloud(backend)

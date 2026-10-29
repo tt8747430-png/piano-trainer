@@ -2,7 +2,16 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createMemoryStorage } from '@/shared/lib'
 import { untilTestEnds } from '@/shared/test/listeners'
-import { createAuth, createBackend, createServices, createStores } from './composition-root'
+import { SETTINGS_VERSION } from '@/entities/settings'
+import { createFakeCloud } from '@/shared/api/sync'
+import {
+  createAuth,
+  createBackend,
+  createServices,
+  createStores,
+  createSync,
+  SYNCED_SAVES,
+} from './composition-root'
 
 describe('createServices', () => {
   it('builds audio without creating an AudioContext, and no MIDI where the browser has none', () => {
@@ -49,5 +58,51 @@ describe('createBackend and createAuth', () => {
     expect(await auth.current()).toBeNull()
     expect(fetch).not.toHaveBeenCalled()
     expect(import.meta.env.VITE_SUPABASE_URL).toBe('https://itmiutianxvtlwhdsalo.supabase.co')
+  })
+})
+
+describe('createSync', () => {
+  it('syncs every saved store but the keyboard’s, which is this device’s alone', () => {
+    expect(SYNCED_SAVES.map((save) => save.key).sort()).toEqual([
+      'pt-diagram-inversions',
+      'pt-library',
+      'pt-patterns',
+      'pt-pieces',
+      'pt-progress',
+      'pt-settings',
+      'pt-takes',
+      'pt-views',
+    ])
+  })
+
+  it('brings a save from the cloud into its store, as another tab’s would be', async () => {
+    const cloud = createFakeCloud()
+    const tabs = new EventTarget()
+    const storage = createMemoryStorage()
+    const sync = createSync(cloud, storage, tabs)
+    const stores = createStores(
+      { storage: sync.storage, otherTabs: tabs, signal: untilTestEnds() },
+      { languages: ['en'] },
+    )
+    const saved = JSON.parse(sync.storage.getItem('pt-settings') ?? 'null') ?? {
+      state: stores.settings.getState(),
+      version: 0,
+    }
+    await cloud.push(
+      'settings',
+      {
+        id: 'state',
+        data: {
+          ...saved.state,
+          theme: 'dark',
+          _version: SETTINGS_VERSION,
+        },
+        updatedAt: '2026-10-29T10:00:00.000Z',
+        deleted: false,
+      },
+      null,
+    )
+    await sync.syncNow()
+    await vi.waitFor(() => expect(stores.settings.getState().theme).toBe('dark'))
   })
 })

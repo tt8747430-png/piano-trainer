@@ -6,7 +6,10 @@ import { PiecesStoreProvider } from '@/entities/piece'
 import { ProgressStoreProvider } from '@/entities/progress'
 import { SettingsStoreProvider } from '@/entities/settings'
 import { TakesStoreProvider } from '@/entities/take'
+import type { AuthGateway } from '@/shared/api/auth'
+import { AccountProvider } from '@/shared/lib/account'
 import { type Services, ServicesProvider } from '@/shared/lib/services'
+import type { SyncRunner } from '@/shared/lib/sync'
 import { ShortcutsProvider } from '@/shared/lib/shortcuts'
 import { Toaster } from '@/shared/ui'
 import { AudioUnlock } from './providers/AudioUnlock'
@@ -21,39 +24,45 @@ import type { AppRouter } from './router'
 export function App({
   stores,
   services,
+  auth,
+  sync,
   router,
 }: {
   stores: Stores
   services: Services
+  auth: AuthGateway
+  sync: SyncRunner
   router: AppRouter
 }) {
   return (
-    <SettingsStoreProvider store={stores.settings}>
-      <ProgressStoreProvider store={stores.progress}>
-        <PatternsStoreProvider store={stores.patterns}>
-          <PiecesStoreProvider store={stores.pieces}>
-            <TakesStoreProvider store={stores.takes}>
-              <LibraryStoreProvider store={stores.library}>
-                <DiagramInversionsStoreProvider store={stores.diagramInversions}>
-                  <ServicesProvider services={services}>
-                    <LocaleSync />
-                    <AudioUnlock />
-                    <MidiReconnect />
-                    <MidiSync />
-                    <TitlesSync />
-                    <ThemeProvider>
-                      <ShortcutsProvider>
-                        <RouterProvider router={router} />
-                        <Toaster />
-                      </ShortcutsProvider>
-                    </ThemeProvider>
-                  </ServicesProvider>
-                </DiagramInversionsStoreProvider>
-              </LibraryStoreProvider>
-            </TakesStoreProvider>
-          </PiecesStoreProvider>
-        </PatternsStoreProvider>
-      </ProgressStoreProvider>
-    </SettingsStoreProvider>
+    <AccountProvider auth={auth} sync={sync}>
+      <SettingsStoreProvider store={stores.settings}>
+        <ProgressStoreProvider store={stores.progress}>
+          <PatternsStoreProvider store={stores.patterns}>
+            <PiecesStoreProvider store={stores.pieces}>
+              <TakesStoreProvider store={stores.takes}>
+                <LibraryStoreProvider store={stores.library}>
+                  <DiagramInversionsStoreProvider store={stores.diagramInversions}>
+                    <ServicesProvider services={services}>
+                      <LocaleSync />
+                      <AudioUnlock />
+                      <MidiReconnect />
+                      <MidiSync />
+                      <TitlesSync />
+                      <ThemeProvider>
+                        <ShortcutsProvider>
+                          <RouterProvider router={router} />
+                          <Toaster />
+                        </ShortcutsProvider>
+                      </ThemeProvider>
+                    </ServicesProvider>
+                  </DiagramInversionsStoreProvider>
+                </LibraryStoreProvider>
+              </TakesStoreProvider>
+            </PiecesStoreProvider>
+          </PatternsStoreProvider>
+        </ProgressStoreProvider>
+      </SettingsStoreProvider>
+    </AccountProvider>
   )
 }

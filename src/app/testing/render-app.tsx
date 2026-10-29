@@ -3,19 +3,21 @@ import { render } from '@testing-library/react'
 import type { Locale } from '@/shared/i18n'
 import { createFakeAudio } from '@/shared/api/audio'
 import { createFakeMidi } from '@/shared/api/midi'
+import { createFakeAuth, type AuthGateway } from '@/shared/api/auth'
 import { filesContent, type ContentPort } from '@/shared/api/content'
+import { createFakeCloud } from '@/shared/api/sync'
 import { createMemoryStorage } from '@/shared/lib'
 import { heardUntil, untilTestEnds } from '@/shared/test/listeners'
 import { loadScoreView } from '@/shared/ui'
 import { App } from '../App'
-import { createStores } from '../composition-root'
+import { createStores, createSync } from '../composition-root'
 import { createAppRouter } from '../router'
 
 /**
  * The whole app at `path`, its saved stores on in-memory storage unless told otherwise, in the given
  * language, with fake audio and MIDI it hands back for the test to drive; `webMidi: false` is a
  * browser without it; `content` is where songs' music and lessons come from (all on the device unless
- * a test says otherwise).
+ * a test says otherwise); `auth` and `cloud` are fakes, signed out unless the test signs in.
  * Every screen's code is loaded first, and the score's engraver, so a test waits on the app and
  * never on the runner importing a lazy chunk.
  * What the app hears on the window and the document (its stores another tab's saves, its router the
@@ -28,11 +30,21 @@ export async function renderApp(
     storage = createMemoryStorage(),
     webMidi = true,
     content = filesContent(),
-  }: { locale?: Locale; storage?: Storage; webMidi?: boolean; content?: ContentPort } = {},
+    auth = createFakeAuth(),
+    cloud = createFakeCloud(),
+  }: {
+    locale?: Locale
+    storage?: Storage
+    webMidi?: boolean
+    content?: ContentPort
+    auth?: AuthGateway
+    cloud?: ReturnType<typeof createFakeCloud>
+  } = {},
 ) {
   const testOver = untilTestEnds()
+  const sync = createSync(cloud, storage)
   const stores = createStores(
-    { storage, signal: testOver },
+    { storage: sync.storage, signal: testOver },
     { languages: [locale], finePointer: false },
   )
   const router = heardUntil(testOver, () =>
@@ -47,7 +59,13 @@ export async function renderApp(
   const audio = createFakeAudio()
   const midi = createFakeMidi()
   const view = render(
-    <App stores={stores} services={{ audio, midi: webMidi ? midi : null }} router={router} />,
+    <App
+      stores={stores}
+      services={{ audio, midi: webMidi ? midi : null }}
+      auth={auth}
+      sync={sync}
+      router={router}
+    />,
   )
   return {
     ...view,
@@ -62,5 +80,8 @@ export async function renderApp(
     diagramInversionsStore: stores.diagramInversions,
     audio,
     midi,
+    auth,
+    cloud,
+    sync,
   }
 }
