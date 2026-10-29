@@ -235,3 +235,9 @@ entry's facts. A lesson's route ensures the songs it embeds.
 connection" on what is away while offline, Settings → Sync and data → Storage (downloads, sizes, Remove).
 
 Order: 4.1 → 4.2 → 4.3 → 4.4 → 4.5 → 4.6; the full suite and the build at the end; ADR 0116 r4.
+
+**Revised 2026-10-29 after measuring** (decision 9 in the log): 4.4 the content cache (IndexedDB) and the remote
+(versions, bodies; Supabase adapter); 4.5 updates: after first paint, compare the bundled and cached versions with
+the database's, download what changed, keep it; at start, before the first render, apply what is kept (each entity's
+catalog reads bundled content overlaid with it); 4.6 course lessons ensured as `<course>/<lesson>`. Download for
+offline, Downloaded, Storage move to 4b and round 7, where content is not bundled.

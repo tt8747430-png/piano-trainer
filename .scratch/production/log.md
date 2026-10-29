@@ -26,6 +26,14 @@ each section. The owner said (2026-10-29): continue through every round overnigh
 6. Content-body type split (entry vs body) and a lesson's embedded songs: left to round 4 (plan 0.5 notes).
 7. Schemas (Valibot): only if a store's sanitiser cannot read a synced document; so far none needed.
 8. `.env` committed with the project URL and publishable key (public by design), so Vercel needs no setup.
+9. Content (round 4): the authored content is small (pieces 82 KB as data; the piece folder's 1.1 MB is audio;
+   lessons ~1 MB, in lazy chunks), so the bundle keeps it all as the offline starter ("the built-in content always
+   works" stands). The database delivers what changed and what is new: the app compares versions after first
+   paint, downloads changed bodies into IndexedDB, and applies them at the next start (as an app update), so no
+   screen re-reads content mid-use. Download-on-open applies to what is never bundled: the Public library (4b) and,
+   in round 7, recordings (audio cached on first use). Settings → Storage waits for those.
+10. A seeding editor account `content-seed@piano-trainer.invalid` (app_metadata.role editor) exists; its password
+   is only in the session's scratchpad. Rotate or delete it once the owner is admin (round 5).
 
 ## Owner's to-dos (cannot be done from here)
 
