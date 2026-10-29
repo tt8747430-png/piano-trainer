@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { PATTERNS_STORAGE_KEY } from '@/entities/pattern'
 import { deleteOwnPattern } from '@/features/manage-patterns'
+import { createFakeAuth } from '@/shared/api/auth'
+import { createFakePublicLibrary } from '@/shared/api/public-library'
 import { createMemoryStorage } from '@/shared/lib'
 
 const withOwn = () => {
@@ -148,5 +150,35 @@ describe('A pattern’s page', () => {
   it('is not found for a pattern the book does not hold', async () => {
     await renderApp('/practice/accompaniment/patterns/my-9')
     expect(await screen.findByRole('heading', { level: 1, name: /not found/i })).toBeInTheDocument()
+  })
+})
+
+describe('a pattern of the learner’s own in the Public library (ADR 0116)', () => {
+  it('is published, asked first, its figures with it; then removed', async () => {
+    const user = userEvent.setup()
+    const account = { email: 'ana@example.com', name: 'Ana', password: 'correct horse' }
+    const auth = createFakeAuth({ accounts: [account] })
+    await auth.signIn(account.email, account.password)
+    const publicLibrary = createFakePublicLibrary({ author: () => ({ id: 'ana', name: 'Ana' }) })
+    await renderApp('/practice/accompaniment/patterns/my-1', {
+      storage: withOwn(),
+      auth,
+      publicLibrary,
+    })
+    await user.click(await screen.findByRole('button', { name: 'Publish to the Public library' }))
+    await user.click(await screen.findByRole('button', { name: 'Publish' }))
+    expect(await screen.findByText('Published to the Public library.')).toBeInTheDocument()
+    const listed = await publicLibrary.browse({ kind: 'pattern', sort: 'new', query: '' })
+    expect(listed).toMatchObject({
+      ok: true,
+      value: [{ kind: 'pattern', title: 'Sunday', meta: { rh: 'jaz', lh: 'walk' } }],
+    })
+    await user.click(screen.getByRole('button', { name: 'Remove from the Public library' }))
+    await waitFor(async () =>
+      expect(await publicLibrary.browse({ kind: 'pattern', sort: 'new', query: '' })).toEqual({
+        ok: true,
+        value: [],
+      }),
+    )
   })
 })

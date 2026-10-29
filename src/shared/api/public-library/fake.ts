@@ -21,14 +21,25 @@ export function createFakePublicLibrary({
 }: {
   author?: () => { readonly id: string; readonly name: string } | null
   online?: () => boolean
-  items?: readonly (Omit<PublicEntry, 'saves' | 'publishedAt'> & { body: unknown })[]
+  items?: readonly (Omit<PublicEntry, 'saves' | 'publishedAt' | 'kind'> & {
+    kind?: PublicEntry['kind']
+    body: unknown
+  })[]
 } = {}): PublicLibrary & { readonly reports: { id: string; reason: string; note: string }[] } {
   let clock = 0
   const at = () => new Date(Date.UTC(2026, 9, 29, 10, clock++)).toISOString()
   const held = new Map<string, Held>(
     items.map((item) => [
       item.id,
-      { ...item, saves: 0, publishedAt: at(), sourceId: item.id, author: 'someone', version: '1' },
+      {
+        ...item,
+        kind: item.kind ?? 'song',
+        saves: 0,
+        publishedAt: at(),
+        sourceId: item.id,
+        author: 'someone',
+        version: '1',
+      },
     ]),
   )
   const saved = new Set<string>()
@@ -40,8 +51,17 @@ export function createFakePublicLibrary({
     if (!who) throw refused('Not signed in')
     return who
   }
-  const entryOf = ({ id, title, authorName, saves, publishedAt, meta }: Held): PublicEntry => ({
+  const entryOf = ({
     id,
+    kind,
+    title,
+    authorName,
+    saves,
+    publishedAt,
+    meta,
+  }: Held): PublicEntry => ({
+    id,
+    kind,
     title,
     authorName,
     saves,
@@ -50,9 +70,10 @@ export function createFakePublicLibrary({
   })
   return {
     reports,
-    browse: ({ sort, query }) =>
+    browse: ({ kind, sort, query }) =>
       ask(async () =>
         [...held.values()]
+          .filter((item) => item.kind === kind)
           .filter((item) => item.title.toLowerCase().includes(query.trim().toLowerCase()))
           .sort((a, b) =>
             sort === 'saved' ? b.saves - a.saves : b.publishedAt.localeCompare(a.publishedAt),

@@ -1,4 +1,11 @@
-import { isPatternId, type LeftFigureId, type PatternId, type RightFigureId } from './types'
+import {
+  isLeftFigureId,
+  isPatternId,
+  isRightFigureId,
+  type LeftFigureId,
+  type PatternId,
+  type RightFigureId,
+} from './types'
 
 /** An own pattern's id: `my-` and its number, never reused. */
 export type OwnPatternId = `my-${number}`
@@ -35,4 +42,15 @@ export const ownNumber = (id: OwnPatternId): number => Number(id.slice(3))
 export function ownName(text: string): string | null {
   const name = text.trim()
   return name.length > 0 && name.length <= OWN_NAME_MAX ? name : null
+}
+
+/** A pattern from outside this device (the Public library) as it is saved: a name and two figures. */
+export type SharedPattern = Omit<OwnPattern, 'id'>
+
+/** A body read as a shared pattern: a name an own pattern takes and a catalog figure for each hand. */
+export function readSharedPattern(body: unknown): SharedPattern | null {
+  if (typeof body !== 'object' || body === null) return null
+  const { name, rh, lh } = body as Record<string, unknown>
+  const named = typeof name === 'string' ? ownName(name) : null
+  return named && isRightFigureId(rh) && isLeftFigureId(lh) ? { name: named, rh, lh } : null
 }

@@ -2,11 +2,12 @@ import { netResult, type NetOptions } from '../network'
 import type { Json, Backend, PianoClient } from '../supabase'
 import type { PublicEntry, PublicLibrary, Published } from './types'
 
-const ENTRY = 'id, title, author_name, saves, published_at, meta'
+const ENTRY = 'id, kind, title, author_name, saves, published_at, meta'
 const LIMIT = 100
 
 interface EntryRow {
   readonly id: string
+  readonly kind: string
   readonly title: string
   readonly author_name: string
   readonly saves: number
@@ -21,13 +22,16 @@ function entryOf(row: EntryRow): PublicEntry {
     typeof row.meta === 'object' && row.meta !== null && !Array.isArray(row.meta) ? row.meta : {}
   const key = text(meta.key)
   const meter = text(meta.meter)
+  const rh = text(meta.rh)
+  const lh = text(meta.lh)
   return {
     id: row.id,
+    kind: row.kind === 'pattern' ? 'pattern' : 'song',
     title: row.title,
     authorName: row.author_name,
     saves: row.saves,
     publishedAt: row.published_at,
-    meta: { ...(key && { key }), ...(meter && { meter }) },
+    meta: { ...(key && { key }), ...(meter && { meter }), ...(rh && { rh }), ...(lh && { lh }) },
   }
 }
 
@@ -53,9 +57,9 @@ export function createSupabasePublicLibrary(
     return user.id
   }
   return {
-    browse: ({ sort, query }) =>
+    browse: ({ kind, sort, query }) =>
       ask(async (client) => {
-        let request = client.from('public_items').select(ENTRY)
+        let request = client.from('public_items').select(ENTRY).eq('kind', kind)
         if (query.trim()) request = request.ilike('title', likeOf(query))
         const { data, error, status } = await request
           .order(sort === 'saved' ? 'saves' : 'published_at', { ascending: false })
@@ -73,7 +77,7 @@ export function createSupabasePublicLibrary(
         if (error) throw thrown(error, status)
         return data ? { entry: entryOf(data), body: data.body } : null
       }),
-    publish: ({ sourceId, title, authorName, meta, body, version }) =>
+    publish: ({ kind, sourceId, title, authorName, meta, body, version }) =>
       ask(async (client) => {
         const author = await me()
         const fields = {
@@ -99,7 +103,7 @@ export function createSupabasePublicLibrary(
           ? await client.from('public_items').update(fields).eq('id', held.id).select('id').single()
           : await client
               .from('public_items')
-              .insert({ ...fields, source_id: sourceId })
+              .insert({ ...fields, kind, source_id: sourceId })
               .select('id')
               .single()
         if (error) throw thrown(error, status)

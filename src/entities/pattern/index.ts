@@ -31,9 +31,11 @@ export {
   OWN_NAME_MAX,
   ownName,
   ownPatternId,
+  readSharedPattern,
   type OwnPattern,
   type OwnPatternId,
   type PatternRef,
+  type SharedPattern,
 } from './model/own'
 export { BUILT_IN_PATTERNS, patternBook, type BookPattern, type PatternBook } from './model/book'
 export {

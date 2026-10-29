@@ -1,12 +1,22 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import type { PublicEntry, PublicSort } from '@/shared/api/public-library'
+import { LEFT_FIGURES, RIGHT_FIGURES, isLeftFigureId, isRightFigureId } from '@/entities/pattern'
+import type { PublicEntry, PublicKind, PublicSort } from '@/shared/api/public-library'
+import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { keySymbol, parseKey, printedSymbol } from '@/shared/lib/music'
 import { BackButton, RowLink, ScreenHeader, SearchField, Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
-import { PUBLIC_SORTS } from '../model/public-view'
+import { PUBLIC_KINDS, PUBLIC_SORTS } from '../model/public-view'
 import { usePublicBrowse } from '../model/use-public-browse'
+
+/** A pattern's figures, the right hand's then the left's, by their names. */
+function figuresOf({ meta }: PublicEntry, locale: Locale): string | undefined {
+  const rh =
+    meta.rh && isRightFigureId(meta.rh) ? localText(RIGHT_FIGURES[meta.rh].name, locale) : ''
+  const lh = meta.lh && isLeftFigureId(meta.lh) ? localText(LEFT_FIGURES[meta.lh].name, locale) : ''
+  return [rh, lh].filter(Boolean).join(' · ') || undefined
+}
 
 /** A song's key, as printed, and its meter: what its row says at its end. */
 function factsOf({ meta }: PublicEntry): string | undefined {
@@ -18,11 +28,13 @@ function factsOf({ meta }: PublicEntry): string | undefined {
 }
 
 /**
- * The Public library (ADR 0116): the songs learners published, the newest or the most saved first,
- * searched by title; each opens its page to hear and save. It needs a connection and says so.
+ * The Public library (ADR 0116): the songs and the patterns learners published, a kind at a time, the
+ * newest or the most saved first, searched by title; each opens its page to hear or read and save. It
+ * needs a connection and says so.
  */
 export function PublicLibraryPage() {
   const { t } = useTranslation('songs')
+  const locale = useLocale()
   const view = useSearch({ from: '/shell/songs/public' })
   const navigate = useNavigate({ from: '/songs/public' })
   const { browse, retry } = usePublicBrowse(view)
@@ -31,6 +43,15 @@ export function PublicLibraryPage() {
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader title={t('public.title')} back={<BackButton fallback={{ to: '/songs' }} />} />
+      <Segmented
+        label={t('public.kinds.label')}
+        value={view.kind}
+        options={PUBLIC_KINDS.map((value: PublicKind) => ({
+          value,
+          label: t(`public.kinds.${value}`),
+        }))}
+        onChange={(kind) => show({ kind })}
+      />
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="min-w-0 flex-1">
           <SearchField
@@ -69,7 +90,11 @@ export function PublicLibraryPage() {
         </Empty>
       ) : browse.songs.length === 0 ? (
         <p role="status" className="text-muted-foreground">
-          {view.q.trim() ? t('public.noMatch', { query: view.q.trim() }) : t('public.empty')}
+          {view.q.trim()
+            ? t(view.kind === 'pattern' ? 'public.noMatchPattern' : 'public.noMatch', {
+                query: view.q.trim(),
+              })
+            : t(view.kind === 'pattern' ? 'public.emptyPatterns' : 'public.empty')}
         </p>
       ) : (
         <ul aria-label={t('public.title')} className="grid-cards gap-2 *:card">
@@ -78,7 +103,7 @@ export function PublicLibraryPage() {
               <RowLink
                 title={song.title}
                 detail={`${t('public.by', { name: song.authorName })} · ${t('public.saves', { count: song.saves })}`}
-                value={factsOf(song)}
+                value={song.kind === 'pattern' ? figuresOf(song, locale) : factsOf(song)}
                 render={<Link to="/songs/public/$itemId" params={{ itemId: song.id }} />}
               />
             </li>

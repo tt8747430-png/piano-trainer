@@ -29,7 +29,7 @@ import {
 import { selectView } from '@/entities/views'
 import { FavouriteButton, useSongActions } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
-import { PublishDialog, PublishSaid, usePublishSong } from '@/features/publish-song'
+import { PublishDialog, PublishSaid, usePublish, type PublishItem } from '@/features/publish'
 import { ShareSaid, useShareSong } from '@/features/share-song'
 import { useSongExport } from '@/features/song-files'
 import { OPEN_PLAINLY } from '@/shared/lib'
@@ -68,12 +68,19 @@ export function PieceView({ piece }: { piece: Piece }) {
   const { performance, headings, sections } = useSongLessons(piece)
   const shared = useShareSong()
   // An own song, written as a chart, may go to the Public library (ADR 0116).
-  const publishable = useMemo(
-    () =>
-      own && !isDegreePiece(piece) ? { id: own, song: { title, music: musicOf(piece) } } : null,
-    [own, piece, title],
-  )
-  const publishing = usePublishSong(publishable)
+  // Held as a save holds an own song, its title beside its music: read back by `readSharedSong`.
+  const publishable = useMemo((): PublishItem | null => {
+    if (!own || isDegreePiece(piece)) return null
+    const music = musicOf(piece)
+    return {
+      kind: 'song',
+      sourceId: own,
+      title,
+      meta: { key: music.key, meter: music.meter },
+      body: { title, ...music },
+    }
+  }, [own, piece, title])
+  const publishing = usePublish(publishable)
   const [publishAsked, setPublishAsked] = useState(false)
   const [asking, setAsking] = useState(false)
   // More, which takes the focus back from a dialog it opened: the action chosen is folded away.

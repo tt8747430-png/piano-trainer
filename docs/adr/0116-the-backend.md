@@ -111,3 +111,6 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r8 — End-to-end checks with axe on the production build (`e2e/`); WCAG 2.5.3 fixes (shorthand a control's name
   says in words drawn by `Glyph`); a song saved from the Public library names who published it; Settings shows
   what the device keeps and asks the browser to keep it safe; Renovate's config (2026-10-29).
+- r9 — Patterns in the Public library: `public_items.kind` takes `pattern` (an own pattern's name and two figures,
+  `pattern/`-prefixed source ids); the library browses one kind at a time (Songs · Patterns, `?kind=`); a pattern
+  saved opens as the learner's own; `features/publish` publishes either (2026-10-29).

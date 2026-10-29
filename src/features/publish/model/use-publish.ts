@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import type { OwnSongId, SharedSong } from '@/entities/piece'
 import type { NetFailed } from '@/shared/api/network'
-import type { Published } from '@/shared/api/public-library'
+import type { PublicEntry, PublicKind, Published } from '@/shared/api/public-library'
 import { contentHash, useOnline } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { usePublicLibrary } from '@/shared/lib/public-library'
@@ -16,23 +15,32 @@ export type PublishState = 'unknown' | 'unpublished' | 'published' | 'changed'
 const saidOf = (failed: NetFailed): PublishSaid =>
   failed.reason === 'offline' ? 'offline' : failed.detail?.includes('limit') ? 'limit' : 'failed'
 
+/** A learner's own song or pattern as it is published: its kind, its id among theirs, and its body. */
+export interface PublishItem {
+  readonly kind: PublicKind
+  /** Unique among the author's own: a pattern's prefixed `pattern/`, as a song's and a pattern's ids may match. */
+  readonly sourceId: string
+  readonly title: string
+  readonly meta: PublicEntry['meta']
+  /** As a save holds it, read back by the saving side (`readSharedSong`, an own pattern's reader). */
+  readonly body: unknown
+}
+
 /**
- * Publishing a learner's own song to the Public library (ADR 0116): where it stands (asked of the
- * library once signed in), publishing it or its newer version, and taking it out. Signed out, the
- * screen asks to sign in first (`signedIn`). A song that is not the learner's own (`own` null) has
+ * Publishing a learner's own song or pattern to the Public library (ADR 0116): where it stands
+ * (asked of the library once signed in), publishing it or its newer version, and taking it out.
+ * Signed out, the screen asks to sign in first (`signedIn`). Nothing of their own (`item` null) has
  * nothing to publish.
  */
-export function usePublishSong(own: { readonly id: OwnSongId; readonly song: SharedSong } | null) {
-  const id = own?.id ?? null
-  const song = own?.song ?? null
+export function usePublish(item: PublishItem | null) {
+  const id = item?.sourceId ?? null
   const library = usePublicLibrary()
   const { account } = useAccount()
   const online = useOnline()
   const [published, setPublished] = useState<Published | null | undefined>(undefined)
   const [said, setSaid] = useState<PublishSaid>(null)
   const [busy, setBusy] = useState(false)
-  // Held as a save holds an own song: its title beside its music, read back by `readSharedSong`.
-  const body = useMemo(() => (song ? { title: song.title, ...song.music } : null), [song])
+  const body = item?.body ?? null
   const version = useMemo(() => (body ? contentHash(JSON.stringify(body)) : ''), [body])
   const accountId = account?.id
 
@@ -62,13 +70,14 @@ export function usePublishSong(own: { readonly id: OwnSongId; readonly song: Sha
   const authorName = account ? account.name || account.email.split('@')[0] || account.email : ''
 
   const publish = useCallback(async () => {
-    if (!account || !id || !song || !body) return
+    if (!account || !id || !item || !body) return
     setBusy(true)
     const result = await library.publish({
+      kind: item.kind,
       sourceId: id,
-      title: song.title,
+      title: item.title,
       authorName,
-      meta: { key: song.music.key, meter: song.music.meter },
+      meta: item.meta,
       body,
       version,
     })
@@ -76,7 +85,7 @@ export function usePublishSong(own: { readonly id: OwnSongId; readonly song: Sha
     if (!result.ok) return setSaid(saidOf(result))
     setSaid(published ? 'updated' : 'published')
     setPublished(result.value)
-  }, [account, authorName, library, id, song, body, version, published])
+  }, [account, authorName, library, id, item, body, version, published])
 
   const unpublish = useCallback(async () => {
     if (!id) return

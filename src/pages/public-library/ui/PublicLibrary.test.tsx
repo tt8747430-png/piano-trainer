@@ -148,7 +148,7 @@ describe('publishing an own song', () => {
     expect(dialog).toHaveTextContent('Publish only music you wrote or may share.')
     await user.click(within(dialog).getByRole('button', { name: 'Publish' }))
     expect(await screen.findByText('Published to the Public library.')).toBeVisible()
-    const found = await publicLibrary.browse({ sort: 'new', query: '' })
+    const found = await publicLibrary.browse({ kind: 'song', sort: 'new', query: '' })
     expect(found.ok && found.value.map((entry) => entry.title)).toEqual(['Morning'])
     await user.click(screen.getByRole('button', { name: 'More' }))
     await user.click(
@@ -173,5 +173,49 @@ describe('publishing an own song', () => {
       'href',
       '/account/sign-in',
     )
+  })
+})
+
+describe('patterns in the Public library', () => {
+  const withPattern = () =>
+    createFakePublicLibrary({
+      author: () => ({ id: 'bo', name: 'Bo' }),
+      items: [
+        {
+          id: 'public-9',
+          kind: 'pattern',
+          title: 'Waltz of mine',
+          authorName: 'Bo',
+          meta: { rh: 'b1', lh: 'r' },
+          body: { name: 'Waltz of mine', rh: 'b1', lh: 'r' },
+        },
+      ],
+    })
+
+  it('lists the patterns apart from the songs, each by its figures', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp('/songs/public', { publicLibrary: withPattern() })
+    expect(await screen.findByText('No songs here yet.')).toBeVisible()
+    await user.click(screen.getByRole('radio', { name: 'Patterns' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ kind: 'pattern' }))
+    const list = await screen.findByRole('list', { name: 'Public library' })
+    expect(within(list).getByRole('link', { name: /Waltz of mine/ })).toBeVisible()
+  })
+
+  it('opens a pattern by its figures, and saves it to the learner’s patterns', async () => {
+    const user = userEvent.setup()
+    const { router, patternsStore } = await renderApp('/songs/public/public-9', {
+      publicLibrary: withPattern(),
+      auth: await signedIn(),
+    })
+    expect(await screen.findByRole('heading', { level: 1, name: 'Waltz of mine' })).toBeVisible()
+    expect(screen.getByText('Right hand')).toBeVisible()
+    await user.click(screen.getByRole('button', { name: 'Save to my patterns' }))
+    await waitFor(() =>
+      expect(router.state.location.pathname).toBe('/practice/accompaniment/patterns/my-1'),
+    )
+    expect(patternsStore.getState().own).toMatchObject([
+      { id: 'my-1', name: 'Waltz of mine', rh: 'b1', lh: 'r' },
+    ])
   })
 })

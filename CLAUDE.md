@@ -107,8 +107,8 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
 - **Songs** (`/songs`) — one library of folders, favourites and an archive; a song's page and its sections;
   MusicXML and MIDI import, MusicXML and MIDI export (`features/song-files`, `shared/lib/musicxml`).
   `pages/songs`, `pages/song-archive`, `pages/piece`; `widgets/song-library`; `features/manage-library`; the
-  Public library (`/songs/public`, a song at `/songs/public/$itemId`; `pages/public-library`,
-  `features/publish-song`, `widgets/song-preview`, `shared/api/public-library`, `shared/lib/public-library`);
+  Public library (`/songs/public`, songs or patterns by `?kind=`, an item at `/songs/public/$itemId`; `pages/public-library`,
+  `features/publish`, `widgets/song-preview`, `shared/api/public-library`, `shared/lib/public-library`);
   `entities/library` (only what the learner changed, read over the catalog by `arrangeLibrary`) and
   `entities/piece` (the catalog, the learner's versions and own songs, `repertoire`).
 - **Practice** (`/practice`) — explorers (Chords, Scales and keys, Intervals, Progressions, Accompaniment), the

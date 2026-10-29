@@ -11,6 +11,7 @@ function library(who: { id: string; name: string } | null = ANA, online = true) 
 }
 
 const publication = (sourceId: string, title: string, version = '1') => ({
+  kind: 'song' as const,
   sourceId,
   title,
   authorName: 'Ana',
@@ -27,7 +28,7 @@ describe('a public library', () => {
     expect(first).toMatchObject({ ok: true, value: { sourceId: 'my-1' } })
     await shelf.publish(publication('my-1', 'Morning song', '2'))
     as(null)
-    const found = await shelf.browse({ sort: 'new', query: 'morn' })
+    const found = await shelf.browse({ kind: 'song', sort: 'new', query: 'morn' })
     expect(found).toMatchObject({ ok: true, value: [{ title: 'Morning song', authorName: 'Ana' }] })
     const id = found.ok ? found.value[0]?.id : undefined
     expect(await shelf.item(id ?? '')).toMatchObject({
@@ -42,7 +43,7 @@ describe('a public library', () => {
       ok: false,
       reason: 'refused',
     })
-    expect(await shelf.browse({ sort: 'new', query: '' })).toEqual({ ok: true, value: [] })
+    expect(await shelf.browse({ kind: 'song', sort: 'new', query: '' })).toEqual({ ok: true, value: [] })
   })
 
   it('counts a learner’s save once, and sorts by the most saved', async () => {
@@ -53,7 +54,7 @@ describe('a public library', () => {
     as({ id: 'bo', name: 'Bo' })
     expect(await shelf.save(id)).toEqual({ ok: true, value: 1 })
     expect(await shelf.save(id)).toEqual({ ok: true, value: 1 })
-    const sorted = await shelf.browse({ sort: 'saved', query: '' })
+    const sorted = await shelf.browse({ kind: 'song', sort: 'saved', query: '' })
     expect(sorted.ok && sorted.value.map((entry) => entry.title)).toEqual(['Two', 'One'])
   })
 
@@ -66,11 +67,11 @@ describe('a public library', () => {
     as(ANA)
     expect(await shelf.mine()).toMatchObject({ ok: true, value: [{ sourceId: 'my-1' }] })
     await shelf.unpublish('my-1')
-    expect(await shelf.browse({ sort: 'new', query: '' })).toEqual({ ok: true, value: [] })
+    expect(await shelf.browse({ kind: 'song', sort: 'new', query: '' })).toEqual({ ok: true, value: [] })
   })
 
   it('says offline before asking', async () => {
     const { library: shelf } = library(ANA, false)
-    expect(await shelf.browse({ sort: 'new', query: '' })).toEqual({ ok: false, reason: 'offline' })
+    expect(await shelf.browse({ kind: 'song', sort: 'new', query: '' })).toEqual({ ok: false, reason: 'offline' })
   })
 })

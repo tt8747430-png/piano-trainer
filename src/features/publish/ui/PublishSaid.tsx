@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import type { PublishSaid as Said } from '../model/use-publish-song'
+import type { PublishSaid as Said } from '../model/use-publish'
 
 const WORDS = {
   published: 'public.published',

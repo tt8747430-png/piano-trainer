@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { Star } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   isOwnPatternId,
@@ -23,6 +23,7 @@ import { piecesPlaying } from '@/entities/piece'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { deleteOwnPattern, toggleFavourite, toggleHidden } from '@/features/manage-patterns'
 import { useShownKeys } from '@/features/play-example'
+import { PublishDialog, PublishSaid, usePublish, type PublishItem } from '@/features/publish'
 import { localText, useLocale } from '@/shared/i18n'
 import { BackButton, ButtonLink, Fact, NotFound, RoundButton, ScreenHeader } from '@/shared/ui'
 import {
@@ -79,8 +80,77 @@ function BuiltInActions({ id }: { id: PatternId }) {
   )
 }
 
-/** The learner's pattern's own actions: Edit, and Delete once asked. */
-function OwnActions({ id, name }: { id: OwnPatternId; name: string }) {
+/**
+ * The learner's pattern in the Public library (ADR 0116): Publish (asked first), Update once it has
+ * changed, Remove; what was done said under it.
+ */
+function PublishActions({ pattern, name }: { pattern: BookPattern; name: string }) {
+  const { t } = useTranslation('songs')
+  const item = useMemo(
+    (): PublishItem => ({
+      kind: 'pattern',
+      sourceId: `pattern/${pattern.ref}`,
+      title: name,
+      meta: { rh: pattern.rh, lh: pattern.lh },
+      body: { name, rh: pattern.rh, lh: pattern.lh },
+    }),
+    [pattern.ref, pattern.rh, pattern.lh, name],
+  )
+  const publishing = usePublish(item)
+  const [asked, setAsked] = useState(false)
+  return (
+    <>
+      {publishing.state === 'unpublished' ? (
+        <Button variant="outline" onClick={() => setAsked(true)}>
+          {t('public.publish')}
+        </Button>
+      ) : publishing.state === 'changed' ? (
+        <Button
+          variant="outline"
+          disabled={publishing.busy}
+          onClick={() => void publishing.publish()}
+        >
+          {t('public.update')}
+        </Button>
+      ) : null}
+      {publishing.state === 'published' || publishing.state === 'changed' ? (
+        <Button
+          variant="outline"
+          disabled={publishing.busy}
+          onClick={() => void publishing.unpublish()}
+        >
+          {t('public.unpublish')}
+        </Button>
+      ) : null}
+      <div className="basis-full empty:hidden">
+        <PublishSaid said={publishing.said} />
+      </div>
+      <PublishDialog
+        open={asked}
+        onOpenChange={setAsked}
+        title={name}
+        authorName={publishing.authorName}
+        signedIn={publishing.signedIn}
+        busy={publishing.busy}
+        onPublish={() => {
+          setAsked(false)
+          void publishing.publish()
+        }}
+      />
+    </>
+  )
+}
+
+/** The learner's pattern's own actions: Edit, Delete once asked, and its place in the Public library. */
+function OwnActions({
+  pattern,
+  id,
+  name,
+}: {
+  pattern: BookPattern
+  id: OwnPatternId
+  name: string
+}) {
   const { t } = useTranslation('practice')
   const store = usePatternsStoreApi()
   const navigate = useNavigate()
@@ -106,6 +176,7 @@ function OwnActions({ id, name }: { id: OwnPatternId; name: string }) {
       >
         {t('patterns.edit')}
       </ButtonLink>
+      <PublishActions pattern={pattern} name={name} />
       <AlertDialog open={asking} onOpenChange={setAsking}>
         <AlertDialogTrigger render={<Button variant="destructive" />}>
           {t('patterns.delete')}
@@ -193,7 +264,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
               {t('inPlayer')}
             </ButtonLink>
             {isOwnPatternId(pattern.ref) ? (
-              <OwnActions id={pattern.ref} name={name} />
+              <OwnActions pattern={pattern} id={pattern.ref} name={name} />
             ) : (
               <BuiltInActions id={pattern.ref} />
             )}

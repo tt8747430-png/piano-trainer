@@ -23,11 +23,11 @@ export function usePublicBrowse(view: PublicView): { browse: Browse; retry: () =
   const online = useOnline()
   const [browse, setBrowse] = useState<Browse>({ kind: 'loading' })
   const [attempt, setAttempt] = useState(0)
-  const { sort, q } = view
+  const { kind, sort, q } = view
   useEffect(() => {
     let current = true
     const timer = setTimeout(() => {
-      void library.browse({ sort, query: q }).then((result) => {
+      void library.browse({ kind, sort, query: q }).then((result) => {
         if (!current) return
         setBrowse(
           result.ok
@@ -40,6 +40,6 @@ export function usePublicBrowse(view: PublicView): { browse: Browse; retry: () =
       current = false
       clearTimeout(timer)
     }
-  }, [library, sort, q, online, attempt])
+  }, [library, kind, sort, q, online, attempt])
   return { browse, retry: () => setAttempt((n) => n + 1) }
 }
