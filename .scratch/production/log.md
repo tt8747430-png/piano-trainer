@@ -117,3 +117,6 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   Known limit: on a first sync a list of plain values (e.g. progress `days`) takes the account's whole; records and
   lists of id'd items merge. Deferred: the saved copy names its author (needs an own-song field: a pt-pieces shape
   change), patterns and progressions in the Public library.
+- 2026-10-29 5.1–5.2 applied and checked (admin-access.sql passes): is_admin, admin_bootstrap + trigger (the
+  owner's address is listed in the database only: they become admin when they create their account), groups,
+  group_members, feature_switches, admin_log, my_features().
