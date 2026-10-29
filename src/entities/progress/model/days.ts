@@ -55,3 +55,32 @@ export function lastWeek(
     return { day, practised: practised.has(day) }
   })
 }
+
+/** A day of a month's calendar: its date, whether it was practised, whether it is today. */
+export interface CalendarDay {
+  readonly day: string
+  readonly practised: boolean
+  readonly today: boolean
+}
+
+/**
+ * Today's month as a calendar, a week a row from Monday, each day practised or not; the places before
+ * its 1st and after its last day empty (null).
+ */
+export function monthOf(
+  days: readonly string[],
+  today: string,
+): readonly (readonly (CalendarDay | null)[])[] {
+  const practised = new Set(days)
+  const first = dateOfDay(today)
+  first.setDate(1)
+  const lead = (first.getDay() + 6) % 7
+  const length = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate()
+  const cells: (CalendarDay | null)[] = Array.from({ length: lead }, () => null)
+  for (let date = 1; date <= length; date += 1) {
+    const day = localDay(new Date(first.getFullYear(), first.getMonth(), date, 12))
+    cells.push({ day, practised: practised.has(day), today: day === today })
+  }
+  while (cells.length % 7 !== 0) cells.push(null)
+  return Array.from({ length: cells.length / 7 }, (_, week) => cells.slice(week * 7, week * 7 + 7))
+}

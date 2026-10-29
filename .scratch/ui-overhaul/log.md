@@ -58,11 +58,12 @@
        lesson fallback); learners see it once both the lesson and the course order are published.
      - Re-export and re-seed the 19 course rows (their bodies change with `lessons`), as in round 12.
      - Then journeys (needs `'journey'` added to `content_items_kind_check` by migration), songs, practice items.
-  2. Lesson reader polish (larger section headings, the new app's TL;DR card), drills as one drill screen.
+  2. Lesson reader polish — checked at 390: section headings large, the In short card at each section's end, the
+     pager floating clear of the content; nothing to change. Drills as one drill screen: left.
   3. Songs: + opens a sheet of ways to create (new, import, Public library); Public library as Noji's (category
      chips, carousels with See all).
-  4. Practice home as one grouped card per group.
-  5. Profile → Activity: streak tiles, month calendar, achievements (Noji, Quizlet).
+  4. Practice home as one grouped card per group — DONE (one card per group, groups side by side on a laptop).
+  5. Profile → Activity: month calendar DONE (This month, days practised filled, today ringed); achievements left.
   6. Block editor for lessons and songs (TipTap; a new package, say so in the report).
   7. Admin: an overview page (active learners this week, new accounts, publishes, errors), errors grouped by
      message, content queue.

@@ -26,7 +26,15 @@ export {
   type ChordLessonKey,
   type LessonKey,
 } from './model/lessons'
-export { dateOfDay, lastWeek, localDay, streak, withDay } from './model/days'
+export {
+  dateOfDay,
+  lastWeek,
+  localDay,
+  monthOf,
+  streak,
+  withDay,
+  type CalendarDay,
+} from './model/days'
 export {
   createProgressStore,
   PROGRESS_STORAGE_KEY,

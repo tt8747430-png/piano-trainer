@@ -36,6 +36,7 @@ export const learn = {
   recent: 'Recently practised',
   // The days practised: opening a piece in the Player, or answering a quiz round.
   days: {
+    month: 'This month',
     title: 'Practice',
     inARow: 'Days in a row: {{count}}',
     keep: 'Practise today to keep it going.',

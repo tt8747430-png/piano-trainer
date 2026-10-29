@@ -30,6 +30,7 @@ export const learn: LocaleResources['learn'] = {
   known: 'Знаю {{known}} из {{total}}',
   recent: 'Недавно играли',
   days: {
+    month: 'Этот месяц',
     title: 'Занятия',
     inARow: 'Дней подряд: {{count}}',
     keep: 'Позанимайтесь сегодня, чтобы не прервать серию.',

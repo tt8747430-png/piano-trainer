@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { practiceRecord, useProgress, type PracticeRecord } from '@/entities/progress'
 import { useAccount } from '@/shared/lib/account'
 import { BackButton, ButtonLink, RoundLink, ScreenHeader } from '@/shared/ui'
-import { PracticeDays } from '@/widgets/practice-days'
+import { PracticeCalendar, PracticeDays } from '@/widgets/practice-days'
 import { RecentPieces } from '@/widgets/piece-list'
 
 const FIGURES = [
@@ -50,6 +50,7 @@ export function ProfilePage() {
         <Identity />
         <PracticeDays />
         <Record />
+        <PracticeCalendar />
         <RecentPieces />
       </div>
     </div>
