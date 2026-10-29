@@ -150,3 +150,6 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   pages and have them reviewed for your country; add a contact address for data requests (left out: no address
   of yours goes in the repo unasked); old error reports are kept until purged (a pg_cron purge of rows older than
   90 days is yours to add: deleting through the tool asks a confirmation).
+- 2026-10-29 Round 7 on main: 7.1 error reports, 7.2 Privacy and Terms, 7.3 supabase-js after first paint (first
+  chunk 154 → 100 KB gzipped; sign-in and the lesson editor checked on the production build), 7.4 the iPhone's
+  launch images (52, never precached). Full suite 6689 green, build ok.
