@@ -33,8 +33,7 @@ export function createSupabaseCloud(client: PianoClient, { online }: NetOptions 
           .select('id, data, deleted')
           .eq('id', STATE_ID)
           .maybeSingle()
-        if (error)
-          throw Object.assign(new Error(error.message), { status: Number(error.code) || 500 })
+        if (error) throw Object.assign(new Error(error.message), { status })
         return data ? documentOf(data) : null
       }),
     push: (table, document, base) =>
