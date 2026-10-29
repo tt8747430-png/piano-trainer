@@ -4,7 +4,8 @@ import { lessonTexts, withLessonText, type Lesson, type LessonText } from '@/ent
 import { DraftStrip, useLessonDraft } from '@/features/edit-original'
 import { localText, useLocale, type LocalText } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { ButtonLink, InfoTip, ScreenHeader } from '@/shared/ui'
+import { ButtonLink, InfoTip, ScreenHeader, Segmented } from '@/shared/ui'
+import { LessonView } from '@/widgets/lesson-view'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { Textarea } from '@/shared/ui/primitives/textarea'
@@ -55,22 +56,11 @@ function TextFields({
 }
 
 /** Every text of the lesson as fields, a group for the lesson's own and one a section; each change saved. */
-function LessonForm({
-  initial,
-  onChange,
-}: {
-  initial: Lesson
-  onChange: (lesson: Lesson) => void
-}) {
+function LessonForm({ lesson, onChange }: { lesson: Lesson; onChange: (lesson: Lesson) => void }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
-  const [lesson, setLesson] = useState(initial)
   const texts = lessonTexts(lesson)
-  const write = (key: string, text: LocalText) => {
-    const next = withLessonText(lesson, key, text)
-    setLesson(next)
-    onChange(next)
-  }
+  const write = (key: string, text: LocalText) => onChange(withLessonText(lesson, key, text))
   const groups = [null, ...lesson.sections.map((_, i) => i)]
   return (
     <div className="flex flex-col gap-8">
@@ -105,6 +95,51 @@ function LessonForm({
           </section>
         )
       })}
+    </div>
+  )
+}
+
+/**
+ * The draft as fields, or (Preview) as the lesson reads to a learner, its examples playing: the same
+ * draft, each change saved as it rests.
+ */
+function DraftEditing({
+  initial,
+  onChange,
+  toLesson,
+}: {
+  initial: Lesson
+  onChange: (lesson: Lesson) => void
+  toLesson: ReactElement
+}) {
+  const { t } = useTranslation('learn')
+  const locale = useLocale()
+  const [lesson, setLesson] = useState(initial)
+  const [mode, setMode] = useState<'edit' | 'preview'>('edit')
+  const change = (next: Lesson) => {
+    setLesson(next)
+    onChange(next)
+  }
+  return (
+    <div className="flex flex-col gap-6">
+      <Segmented
+        label={t('edit.mode')}
+        value={mode}
+        onChange={setMode}
+        options={[
+          { value: 'edit', label: t('edit.editing') },
+          { value: 'preview', label: t('edit.preview') },
+        ]}
+      />
+      {mode === 'edit' ? (
+        <LessonForm lesson={lesson} onChange={change} />
+      ) : (
+        <LessonView
+          lesson={lesson}
+          up={{ link: toLesson, label: t('edit.back'), title: localText(lesson.title, locale) }}
+          onward={{ link: toLesson, onGo: () => undefined }}
+        />
+      )}
     </div>
   )
 }
@@ -164,7 +199,12 @@ export function LessonEditor({
       <Button onClick={draft.reopen}>{t('editor:original.retry')}</Button>
     </NotOpen>
   ) : (
-    <LessonForm key={draft.opened} initial={load.value} onChange={draft.save} />
+    <DraftEditing
+      key={draft.opened}
+      initial={load.value}
+      onChange={draft.save}
+      toLesson={toLesson}
+    />
   )
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 pb-8">

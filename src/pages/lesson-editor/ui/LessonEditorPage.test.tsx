@@ -123,6 +123,29 @@ describe('the lesson editor (ADR 0116)', () => {
     )
   })
 
+  it('previews the draft as the lesson reads, the change in it', async () => {
+    const user = userEvent.setup()
+    await renderApp(`/lessons/${LESSON.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: editing(),
+    })
+    const heading = LESSON.sections[0]?.heading.en ?? ''
+    const field = within(
+      (await screen.findByRole('heading', { name: new RegExp(`^Section 1`) })).closest(
+        'section',
+      ) as HTMLElement,
+    ).getAllByRole('textbox', { name: 'English' })[0]
+    if (!field) throw new Error('the first section’s heading field')
+    expect(field).toHaveValue(heading)
+    await user.clear(field)
+    await user.type(field, 'A heading of the draft')
+    await user.click(screen.getByRole('radio', { name: 'Preview' }))
+    expect(
+      await screen.findByRole('heading', { name: 'A heading of the draft' }),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('textbox', { name: 'English' })).not.toBeInTheDocument()
+  })
+
   it('tells a learner it is an editor’s, with the way back', async () => {
     await renderApp(`/lessons/${LESSON.id}/edit`, { auth: await signedInAs('learner') })
     expect(await screen.findByText('Only an editor edits a lesson.')).toBeInTheDocument()

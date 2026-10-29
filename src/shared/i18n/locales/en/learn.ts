@@ -123,6 +123,9 @@ export const learn = {
     russian: 'Русский',
     empty: 'Words are needed here',
     unreadable: 'Every text needs words in both languages. Fill them in, then publish.',
+    mode: 'Edit or preview',
+    editing: 'Edit',
+    preview: 'Preview',
     examples: 'Examples, questions’ answers and links stay as they are here.',
     kinds: {
       title: 'Title',
