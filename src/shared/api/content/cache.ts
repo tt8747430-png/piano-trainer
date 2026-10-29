@@ -36,16 +36,17 @@ export function createMemoryContentCache(items: readonly ContentItem[] = []): Co
   }
 }
 
-const done = (request: IDBRequest | IDBTransaction) =>
+const answered = <T>(request: IDBRequest<T>) =>
+  new Promise<T>((resolve, reject) => {
+    request.onsuccess = () => resolve(request.result)
+    request.onerror = () => reject(request.error)
+  })
+
+const committed = (transaction: IDBTransaction) =>
   new Promise<void>((resolve, reject) => {
-    if (request instanceof IDBTransaction) {
-      request.oncomplete = () => resolve()
-      request.onerror = () => reject(request.error)
-      request.onabort = () => reject(request.error)
-    } else {
-      request.onsuccess = () => resolve()
-      request.onerror = () => reject(request.error)
-    }
+    transaction.oncomplete = () => resolve()
+    transaction.onerror = () => reject(transaction.error)
+    transaction.onabort = () => reject(transaction.error)
   })
 
 function open(factory: IDBFactory): Promise<IDBDatabase> {
@@ -53,7 +54,7 @@ function open(factory: IDBFactory): Promise<IDBDatabase> {
   request.onupgradeneeded = () => {
     request.result.createObjectStore(STORE, { keyPath: ['kind', 'id'] })
   }
-  return done(request).then(() => request.result)
+  return answered(request)
 }
 
 /** The cache in the browser's IndexedDB (`pt-content`), or in memory where there is none. */
@@ -73,21 +74,20 @@ export function createBrowserContentCache(
   return {
     all: () =>
       settle(async () => {
-        const request = (await database()).transaction(STORE).objectStore(STORE).getAll()
-        await done(request)
-        return request.result as ContentItem[]
+        const store = (await database()).transaction(STORE).objectStore(STORE)
+        return (await answered(store.getAll())) as ContentItem[]
       }, []),
     put: (items) =>
       settle(async () => {
         const transaction = (await database()).transaction(STORE, 'readwrite')
         for (const item of items) transaction.objectStore(STORE).put(item)
-        await done(transaction)
+        await committed(transaction)
       }, undefined),
     remove: (keys) =>
       settle(async () => {
         const transaction = (await database()).transaction(STORE, 'readwrite')
         for (const [kind, id] of keys) transaction.objectStore(STORE).delete([kind, id])
-        await done(transaction)
+        await committed(transaction)
       }, undefined),
   }
 }
