@@ -33,7 +33,7 @@ export function LegalPage({ page }: { page: 'privacy' | 'terms' }) {
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-4 pb-8">
       <ScreenHeader
         title={t(`${page}.title`)}
-        back={<BackButton fallback={{ to: '/settings/help' }} />}
+        back={<BackButton fallback={{ to: '/settings' }} />}
       />
       <p className="-mt-3 text-sm text-muted-foreground">{t('updated', { date })}</p>
       {sections.map(({ key, heading, text }) => (

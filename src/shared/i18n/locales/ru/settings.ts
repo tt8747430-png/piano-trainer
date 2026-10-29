@@ -4,15 +4,11 @@ export const settings: LocaleResources['settings'] = {
   title: 'Настройки',
   language: { label: 'Язык', en: 'English', ru: 'Русский' },
   theme: { label: 'Тема', system: 'Как в системе', light: 'Светлая', dark: 'Тёмная' },
-  appearance: {
-    label: 'Внешний вид',
-  },
   keyboard: 'Клавиатура',
   midi: 'MIDI-клавиатура',
   recording: 'Запись',
   floating: {
     place: 'Плавающие кнопки',
-    placeInfo: 'Где у нижнего края экрана стоят кнопки, плавающие над ним',
     places: { left: 'Слева', center: 'Посередине', right: 'Справа' },
     labels: 'Подписывать плавающие кнопки',
     labelsNote: 'Иначе у каждой только значок; название видно при наведении',
@@ -51,11 +47,12 @@ export const settings: LocaleResources['settings'] = {
     cancel: 'Оставить как есть',
     confirm: 'Восстановить',
   },
+  // Settings' grouped list: its sections.
+  sections: { general: 'Общие', keyboard: 'Клавиатура и запись' },
   groups: {
-    preferences: { label: 'Предпочтения', line: 'Язык, тема и вид экранов' },
-    playing: { label: 'Игра', line: 'Клавиатура, MIDI-клавиатура и запись' },
-    data: { label: 'Синхронизация и данные', line: 'Синхронизация, резервная копия и прогресс' },
-    help: { label: 'Помощь', line: 'Как пользоваться и о приложении' },
+    playing: { label: 'Игра' },
+    data: { label: 'Синхронизация и данные' },
+    help: { label: 'Помощь' },
   },
   account: {
     signIn: 'Войти',
@@ -80,9 +77,7 @@ export const settings: LocaleResources['settings'] = {
     last: 'Последняя синхронизация: {{when}}',
   },
   about: {
-    label: 'О приложении',
     version: 'Версия',
-    made: 'Сделано с',
     madeWith: 'Verovio для нот, шрифты Noto и Supabase для аккаунтов и синхронизации',
   },
   accountPage: {
@@ -116,13 +111,9 @@ export const settings: LocaleResources['settings'] = {
   },
 
   help: {
-    label: 'Помощь',
     howToUse: 'Как пользоваться',
-    howToUseLine: 'Песни, плеер, уроки, редактор, MIDI и метроном',
     privacy: 'Конфиденциальность',
-    privacyLine: 'Что хранится, где и как это удалить',
     terms: 'Условия',
-    termsLine: 'Пользование приложением и публикация песен',
   },
   howToUse: {
     title: 'Как пользоваться',

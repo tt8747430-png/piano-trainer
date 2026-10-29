@@ -4,18 +4,18 @@ import { describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 
 describe('Privacy and Terms (ADR 0116)', () => {
-  it('opens Privacy from Settings › Help, its sections each under a heading', async () => {
+  it('opens Privacy from Settings’ Help, its sections each under a heading', async () => {
     const user = userEvent.setup()
-    await renderApp('/settings/help')
+    await renderApp('/settings')
     await user.click(await screen.findByRole('link', { name: /^Privacy/ }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Privacy' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Where it is kept' })).toBeInTheDocument()
     expect(screen.getByText(/Supabase in the European Union/)).toBeInTheDocument()
   })
 
-  it('opens Terms from Settings › Help', async () => {
+  it('opens Terms from Settings’ Help', async () => {
     const user = userEvent.setup()
-    await renderApp('/settings/help')
+    await renderApp('/settings')
     await user.click(await screen.findByRole('link', { name: /^Terms/ }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Terms' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'What you publish' })).toBeInTheDocument()

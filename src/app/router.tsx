@@ -159,12 +159,7 @@ const profileRoute = createRoute({
   path: '/profile',
   component: lazyRouteComponent(settingsScreens, 'ProfilePage'),
 })
-// Settings' pages (round 3): each group of settings on its own page, the account's among them.
-const preferencesRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/preferences',
-  component: lazyRouteComponent(settingsScreens, 'PreferencesPage'),
-})
+// Settings' pages: the keyboard and recording, sync and data, and the account's.
 const playingRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/playing',
@@ -174,11 +169,6 @@ const dataRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/settings/data',
   component: lazyRouteComponent(settingsScreens, 'DataPage'),
-})
-const helpRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/settings/help',
-  component: lazyRouteComponent(settingsScreens, 'HelpPage'),
 })
 // The app's Privacy and Terms (ADR 0116): read signed in or not, linked from Help and the account forms.
 const privacyRoute = createRoute({
@@ -658,10 +648,8 @@ const routeTree = rootRoute.addChildren([
     profileRoute,
     adminRoute,
     settingsRoute,
-    preferencesRoute,
     playingRoute,
     dataRoute,
-    helpRoute,
     privacyRoute,
     termsRoute,
     accountSettingsRoute,

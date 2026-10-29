@@ -2,10 +2,6 @@ export const settings = {
   title: 'Settings',
   language: { label: 'Language', en: 'English', ru: 'Русский' },
   theme: { label: 'Theme', system: 'System', light: 'Light', dark: 'Dark' },
-  // How the screens look: their titles, and the floating buttons.
-  appearance: {
-    label: 'Appearance',
-  },
   keyboard: 'Keyboard',
   midi: 'MIDI keyboard',
   // How a take is recorded in the score editor (ADR 0028), as its recording strip's settings say too.
@@ -13,7 +9,6 @@ export const settings = {
   // A screen's floating actions (ADR 0061): where they stand, and whether they say their names.
   floating: {
     place: 'Floating buttons',
-    placeInfo: 'Where the buttons that float over a screen stand along its foot',
     places: { left: 'Left', center: 'Middle', right: 'Right' },
     labels: 'Name the floating buttons',
     labelsNote: 'Otherwise each shows its icon only, and its name appears when you point at it',
@@ -55,11 +50,12 @@ export const settings = {
     confirm: 'Restore',
   },
   // The index (round 3): the account, then a page for each group of settings.
+  // Settings' grouped list: its sections.
+  sections: { general: 'General', keyboard: 'Keyboard and recording' },
   groups: {
-    preferences: { label: 'Preferences', line: 'Language, theme and how screens look' },
-    playing: { label: 'Playing', line: 'The keyboard, a MIDI keyboard and recording' },
-    data: { label: 'Sync and data', line: 'Sync, backup and progress' },
-    help: { label: 'Help', line: 'How to use, and about the app' },
+    playing: { label: 'Playing' },
+    data: { label: 'Sync and data' },
+    help: { label: 'Help' },
   },
   account: {
     signIn: 'Sign in',
@@ -82,9 +78,7 @@ export const settings = {
     last: 'Last synced {{when}}',
   },
   about: {
-    label: 'About',
     version: 'Version',
-    made: 'Made with',
     madeWith: 'Verovio for the scores, Noto fonts, and Supabase for accounts and sync',
   },
   // The account's own page (round 3): its name, password, signing out, deleting it.
@@ -119,13 +113,9 @@ export const settings = {
   },
   // Help (ADR 0052): How to use, a short guide in plain steps, each part folding.
   help: {
-    label: 'Help',
     howToUse: 'How to use',
-    howToUseLine: 'Songs, the Player, lessons, the editor, MIDI and the Metronome',
     privacy: 'Privacy',
-    privacyLine: 'What is kept, where, and how to delete it',
     terms: 'Terms',
-    termsLine: 'Using the app, and publishing songs',
   },
   howToUse: {
     title: 'How to use',

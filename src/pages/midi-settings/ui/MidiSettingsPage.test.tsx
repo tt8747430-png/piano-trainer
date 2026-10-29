@@ -7,13 +7,15 @@ import { setMidi } from '@/features/set-preference'
 import { midi as key } from '@/shared/lib/music'
 
 const midiRow = () =>
-  within(screen.getByRole('navigation', { name: 'MIDI keyboard' })).getByRole('link')
+  within(screen.getByRole('region', { name: 'Playing' })).getByRole('link', {
+    name: /^MIDI keyboard/,
+  })
 
 describe('Settings › MIDI keyboard', () => {
-  it('is a row of Settings › Playing that shows its state at its right and opens the MIDI screen', async () => {
+  it('is a row of Settings’ Playing that shows its state at its right and opens the MIDI screen', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp('/settings/playing')
-    await screen.findByRole('navigation', { name: 'MIDI keyboard' })
+    const { router } = await renderApp('/settings')
+    await screen.findByRole('region', { name: 'Playing' })
     expect(midiRow()).toHaveTextContent(/MIDI keyboard\s*Off/)
     await user.click(midiRow())
     expect(await screen.findByRole('heading', { level: 1, name: 'MIDI keyboard' })).toBeVisible()
@@ -21,8 +23,8 @@ describe('Settings › MIDI keyboard', () => {
   })
 
   it('names the keyboard connected in the Settings row', async () => {
-    const { midi } = await renderApp('/settings/playing')
-    await screen.findByRole('navigation', { name: 'MIDI keyboard' })
+    const { midi } = await renderApp('/settings')
+    await screen.findByRole('region', { name: 'Playing' })
     await act(() => midi.connect())
     expect(midiRow()).toHaveTextContent(/MIDI keyboard\s*Keyboard/)
   })

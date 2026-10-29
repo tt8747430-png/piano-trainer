@@ -127,9 +127,9 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
   `features/score-editor` (the draft, its pure edits, undo, `createEditorStore`), `features/edit-piece` (saving),
   `features/record-take` and `manage-takes`; an editor's Edit the original (`?original=true`,
   `features/edit-original`: the song's draft on the server, Publish, Versions, Discard).
-- **Elsewhere** — Search (`/search`); Settings (`/settings`: the account card, then a page each for Preferences,
-  Playing, Sync and data, Help, and Account, `pages/settings`; How to use and the MIDI keyboard with its log under
-  them); the account pages (`/account/sign-in`, `create`, `forgot`, `new-password`, and `/auth/callback` where the
+- **Elsewhere** — Search (`/search`); Settings (`/settings`: one grouped list, the account card, General's choices in place,
+  then rows to Keyboard and recording, Sync and data, the Account, How to use and the MIDI keyboard with its log;
+  `pages/settings`, `SettingsList`, `ChoiceRow`); the account pages (`/account/sign-in`, `create`, `forgot`, `new-password`, and `/auth/callback` where the
   server's links return; `pages/account`); the Profile (`/profile`, `pages/profile`); Privacy and Terms (`/legal/privacy`, `/legal/terms`, `pages/legal`, linked from Help and Create an account); the Admin area (`/admin`,
   `pages/admin`, its own chunk, an admin's alone; `shared/api/admin`, `shared/lib/admin`; feature switches by
   `useFeature`, `shared/lib/features`); a shared song

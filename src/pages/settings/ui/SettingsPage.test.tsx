@@ -15,57 +15,60 @@ describe('Settings', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/profile'))
   })
 
-  it('goes back to the Path when it was opened directly', async () => {
+  it('goes back to the Profile when it was opened directly', async () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/settings')
     await user.click(await screen.findByRole('button', { name: 'Back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
-    expect(router.history.canGoBack()).toBe(false)
+    await waitFor(() => expect(router.state.location.pathname).toBe('/profile'))
   })
 
-  it('shows the saved language and theme as chosen', async () => {
-    await renderApp('/settings/preferences')
-    expect(await screen.findByRole('radio', { name: 'English' })).toHaveAttribute(
-      'aria-checked',
-      'true',
-    )
-    expect(screen.getByRole('radio', { name: 'System' })).toHaveAttribute('aria-checked', 'true')
-  })
-
-  it('opens on the account, then a row to each group’s page', async () => {
+  it('is one grouped list: the account, General, Playing, Sync and data, Help', async () => {
     await renderApp('/settings')
     expect(
       within(await screen.findByRole('navigation', { name: 'Account' })).getByRole('link'),
     ).toHaveTextContent(/Sign in\s*Keep your songs and progress on every device/)
-    const rows = within(screen.getByRole('navigation', { name: 'Settings' })).getAllByRole('link')
-    expect(rows.map((row) => row.getAttribute('href'))).toEqual([
-      '/settings/preferences',
+    expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
+      'General',
+      'Playing',
+      'Sync and data',
+      'Help',
+    ])
+    expect(
+      screen
+        .getAllByRole('link')
+        .map((row) => row.getAttribute('href'))
+        .filter((href) => href?.startsWith('/settings/') || href?.startsWith('/legal/')),
+    ).toEqual([
+      '/settings/midi',
       '/settings/playing',
       '/settings/data',
-      '/settings/help',
+      '/settings/how-to-use',
+      '/legal/privacy',
+      '/legal/terms',
     ])
   })
 
-  it('keeps each group’s settings on its page, each under its own heading', async () => {
-    const headings = () => screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
-    const { unmount } = await renderApp('/settings/preferences')
-    const language = await screen.findByRole('radiogroup', { name: 'Language' })
-    expect(
-      within(language)
-        .getAllByRole('radio')
-        .map((b) => b.textContent),
-    ).toEqual(['English', 'Русский'])
-    const theme = screen.getByRole('radiogroup', { name: 'Theme' })
-    expect(
-      within(theme)
-        .getAllByRole('radio')
-        .map((b) => b.textContent),
-    ).toEqual(['System', 'Light', 'Dark'])
-    expect(headings()).toEqual(['Language', 'Theme', 'Appearance'])
-    unmount()
+  it('shows the saved language and theme as chosen, each changed in place and saved', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/settings')
+    const general = await screen.findByRole('region', { name: 'General' })
+    expect(within(general).getByRole('combobox', { name: 'Language' })).toHaveTextContent('English')
+    expect(within(general).getByRole('combobox', { name: 'Theme' })).toHaveTextContent('System')
+    await user.click(within(general).getByRole('combobox', { name: 'Theme' }))
+    await user.click(await screen.findByRole('option', { name: 'Dark' }))
+    expect(settingsStore.getState().theme).toBe('dark')
+    await user.click(within(general).getByRole('combobox', { name: 'Language' }))
+    await user.click(await screen.findByRole('option', { name: 'Русский' }))
+    expect(settingsStore.getState().locale).toBe('ru')
+  })
+
+  it('keeps the keyboard and recording on their page, each under its own heading', async () => {
     await renderApp('/settings/playing')
-    await screen.findByRole('navigation', { name: 'MIDI keyboard' })
-    expect(headings()).toEqual(['Recording', 'Keyboard'])
+    await screen.findByRole('region', { name: 'Recording' })
+    expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
+      'Recording',
+      'Keyboard',
+    ])
     // How the keys look, where a page’s keys sit, how they play, and the bar over them.
     expect(
       within(screen.getByRole('region', { name: 'Keyboard' }))
@@ -91,22 +94,19 @@ describe('Settings', () => {
   })
 
   it('says the app’s version under Help', async () => {
-    await renderApp('/settings/help')
-    const about = await screen.findByRole('region', { name: 'About' })
-    expect(about).toHaveTextContent(/Version\s*dev/)
-    expect(screen.getByRole('link', { name: /How to use/ })).toHaveAttribute(
-      'href',
-      '/settings/how-to-use',
-    )
+    await renderApp('/settings')
+    const help = await screen.findByRole('region', { name: 'Help' })
+    expect(help).toHaveTextContent(/Version\s*dev/)
   })
 
   it('stands the floating buttons where chosen and has them say their names, saved', async () => {
     const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings/preferences')
-    await user.click(await screen.findByRole('radio', { name: 'Right' }))
+    const { settingsStore } = await renderApp('/settings')
+    const general = await screen.findByRole('region', { name: 'General' })
+    await user.click(within(general).getByRole('combobox', { name: 'Floating buttons' }))
+    await user.click(await screen.findByRole('option', { name: 'Right' }))
     expect(settingsStore.getState().floating.place).toBe('right')
-    const appearance = screen.getByRole('region', { name: 'Appearance' })
-    await user.click(within(appearance).getByRole('switch', { name: 'Name the floating buttons' }))
+    await user.click(within(general).getByRole('switch', { name: 'Name the floating buttons' }))
     expect(settingsStore.getState().floating.labels).toBe(true)
   })
 
@@ -185,34 +185,14 @@ describe('Settings', () => {
     expect(settingsStore.getState().keyboard.railControls).not.toContain('noteNames')
   })
 
-  it('saves a new language', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings/preferences')
-    await user.click(await screen.findByRole('radio', { name: 'Русский' }))
-    expect(settingsStore.getState().locale).toBe('ru')
-  })
-
-  it('saves a new theme', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings/preferences')
-    await user.click(await screen.findByRole('radio', { name: 'Dark' }))
-    expect(settingsStore.getState().theme).toBe('dark')
-  })
-
   it('says on the MIDI keyboard’s row when the browser cannot connect one', async () => {
-    await renderApp('/settings/playing', { webMidi: false })
-    const row = within(await screen.findByRole('navigation', { name: 'MIDI keyboard' }))
-    expect(row.getByRole('link')).toHaveTextContent(/MIDI keyboard\s*Not available/)
+    await renderApp('/settings', { webMidi: false })
+    const row = (await screen.findByText('MIDI keyboard')).closest('a') as HTMLElement
+    expect(row).toHaveTextContent(/MIDI keyboard\s*Not available/)
   })
 
   it('reads in Russian, with nothing left in English', async () => {
-    for (const path of [
-      '/settings',
-      '/settings/preferences',
-      '/settings/playing',
-      '/settings/data',
-      '/settings/help',
-    ]) {
+    for (const path of ['/settings', '/settings/playing', '/settings/data']) {
       const { unmount } = await renderApp(path, { locale: 'ru' })
       await screen.findByRole('heading', { level: 1 })
       expect(untranslated(document.body)).toEqual([])

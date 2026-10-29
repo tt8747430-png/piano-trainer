@@ -23,7 +23,7 @@ export function MidiSettingsPage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('midi.label')}
-        back={<BackButton fallback={{ to: '/settings/playing' }} />}
+        back={<BackButton fallback={{ to: '/settings' }} />}
       />
       <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
         <div className="flex flex-col gap-6">

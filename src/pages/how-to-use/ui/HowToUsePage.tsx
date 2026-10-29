@@ -14,7 +14,7 @@ export function HowToUsePage() {
     <div className="flex flex-col gap-6">
       <ScreenHeader
         title={t('howToUse.title')}
-        back={<BackButton fallback={{ to: '/settings/help' }} />}
+        back={<BackButton fallback={{ to: '/settings' }} />}
       />
       <div className="flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
         {GUIDE.map((part) => (
