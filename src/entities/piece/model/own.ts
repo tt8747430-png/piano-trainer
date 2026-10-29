@@ -3,10 +3,14 @@ import type { PieceMusic } from './music'
 /** A song of the learner's own: its id, `my-` and its number, never given twice. */
 export type OwnSongId = `my-${number}`
 
-/** A song the learner wrote from scratch: a title of their own over its music. */
+/**
+ * A song the learner wrote from scratch: a title of their own over its music; or saved from the
+ * Public library, its `author` who published it.
+ */
 export interface OwnSong extends PieceMusic {
   readonly id: OwnSongId
   readonly title: string
+  readonly author?: string
 }
 
 /** The longest title an own song takes. */

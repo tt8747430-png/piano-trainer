@@ -61,12 +61,12 @@ export function PublicSongPage() {
   // Saved once: a second press before the copy's page opens saves nothing.
   const saved = useRef(false)
   const [saving, setSaving] = useState(false)
-  const save = (song: SharedSong) => {
+  const save = (song: SharedSong, author: string) => {
     if (saved.current) return
     saved.current = true
     setSaving(true)
     if (account) void library.save(itemId)
-    const id = addSong(pieces, song)
+    const id = addSong(pieces, song, author)
     void navigate({ to: '/songs/$pieceId', params: { pieceId: id }, replace: true })
   }
   const title = reading.kind === 'song' ? reading.song.title : t('public.title')
@@ -102,7 +102,7 @@ export function PublicSongPage() {
               icon={Plus}
               extended
               disabled={saving}
-              onClick={() => save(reading.song)}
+              onClick={() => save(reading.song, reading.entry.authorName)}
             />
           </FloatingActions>
           <ReportDialog itemId={itemId} open={reporting} onOpenChange={setReporting} />

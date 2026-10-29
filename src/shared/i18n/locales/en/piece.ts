@@ -92,6 +92,7 @@ export const piece = {
     'russian-text': 'Russian text',
     harmony: 'Harmony',
     accompaniment: 'Accompaniment',
+    'published-by': 'Published by',
     unknown: 'Author unknown',
     said: {
       traditional: 'Traditional',

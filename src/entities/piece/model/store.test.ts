@@ -238,6 +238,16 @@ describe('createPiecesStore', () => {
     expect(restored({ songs, nextSong: 9 }).songs).toEqual([SONG])
   })
 
+  it('keeps who published a song saved from the Public library, as long as a title at most', () => {
+    expect(restored({ songs: [{ ...SONG, author: '  Ana  ' }], nextSong: 2 }).songs).toEqual([
+      { ...SONG, author: 'Ana' },
+    ])
+    expect(restored({ songs: [{ ...SONG, author: 7 }], nextSong: 2 }).songs).toEqual([SONG])
+    expect(
+      restored({ songs: [{ ...SONG, author: 'x'.repeat(200) }], nextSong: 2 }).songs[0]?.author,
+    ).toHaveLength(80)
+  })
+
   it('keeps nextSong past every own id', () => {
     expect(restored({ songs: [{ ...SONG, id: 'my-7' }], nextSong: 3 }).nextSong).toBe(8)
     expect(restored({ nextSong: 'many' }).nextSong).toBe(1)

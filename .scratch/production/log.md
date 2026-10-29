@@ -160,3 +160,7 @@ each section. The owner said (2026-10-29): continue through every round overnigh
   CLAUDE.md's pinned majors held). DECISIONS: no web-vitals collection (the Privacy page promises no tracking);
   staging and backups need a paid Supabase plan: the owner's call. OWNER TO-DO: install the Renovate GitHub app
   on the repository (https://github.com/apps/renovate) for the config to run.
+- 2026-10-29 8.4: Settings › Sync and data › On this device (size, Keep them safe). Dropped "Clear the kept content"
+  (the cache is the composition root's, and the next start replaces it anyway). 8.5: a song saved from the
+  Public library keeps `author` (an optional own-song field: no store version bump, an older save reads without
+  it) and shows "Published by" in its byline.

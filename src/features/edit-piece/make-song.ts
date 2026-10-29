@@ -74,12 +74,15 @@ export function makeSong(store: PiecesStore, draft: SongDraft): OwnSongId | null
   return id
 }
 
-/** Makes a song that came from elsewhere (a shared link) the learner's, under the next number. */
-export function addSong(store: PiecesStore, song: SharedSong): OwnSongId {
+/**
+ * Makes a song that came from elsewhere (a shared link, the Public library) the learner's, under the
+ * next number; from the Public library, with who published it.
+ */
+export function addSong(store: PiecesStore, song: SharedSong, author?: string): OwnSongId {
   const { songs, nextSong } = store.getState()
   const id = ownSongId(nextSong)
   store.setState({
-    songs: [...songs, { id, title: song.title, ...song.music }],
+    songs: [...songs, { id, title: song.title, ...song.music, ...(author ? { author } : {}) }],
     nextSong: nextSong + 1,
   })
   return id

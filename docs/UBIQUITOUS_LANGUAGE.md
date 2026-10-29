@@ -541,6 +541,9 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   the Admin area). Set only by the server. _Avoid:_ permission, rank.
 - **Feature switch**: turns a feature on for everyone, no one or chosen **groups** (`useFeature`). _Avoid:_ flag,
   toggle (a toggle is the learner's).
+- **Published by**: on a song saved from the Public library, who published it (an own song's `author`).
+- **Kept safe**: what this device keeps of the app, which the browser has agreed not to clear when space runs
+  short (Settings › Sync and data › On this device). _Avoid:_ persistent storage (the API's name).
 - **Original**: a built-in song as every learner gets it, an editor's to change (**Edit the original**), in place
   of a learner's own **version**. _Avoid:_ master, source.
 - **Draft**: an editor's unpublished change to a built-in item, kept on the server until it is **published**

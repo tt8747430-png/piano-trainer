@@ -108,3 +108,6 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   tab), with no third party. Privacy and Terms pages. supabase-js loads on the first call that needs it, after
   the first paint: every adapter takes a `Backend` (`() => Promise<PianoClient>`), and the app's first chunk
   went from 154 KB to 100 KB gzipped (2026-10-29).
+- r8 — End-to-end checks with axe on the production build (`e2e/`); WCAG 2.5.3 fixes (shorthand a control's name
+  says in words drawn by `Glyph`); a song saved from the Public library names who published it; Settings shows
+  what the device keeps and asks the browser to keep it safe; Renovate's config (2026-10-29).

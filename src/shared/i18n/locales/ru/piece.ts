@@ -91,6 +91,7 @@ export const piece: LocaleResources['piece'] = {
     'russian-text': 'Русский текст',
     harmony: 'Гармонизация',
     accompaniment: 'Аккомпанемент',
+    'published-by': 'Опубликовал(а)',
     unknown: 'Автор неизвестен',
     said: {
       traditional: 'народная',

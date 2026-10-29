@@ -98,7 +98,12 @@ describe('the Public library', () => {
     expect(screen.getByText(/by Bo · 0 saves/)).toBeVisible()
     await user.click(screen.getByRole('button', { name: 'Save to my songs' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/my-1'))
-    expect(piecesStore.getState().songs).toMatchObject([{ id: 'my-1', title: 'Morning' }])
+    expect(piecesStore.getState().songs).toMatchObject([
+      { id: 'my-1', title: 'Morning', author: 'Bo' },
+    ])
+    // The copy names who published it, under its title.
+    expect(await screen.findByText('Bo')).toBeVisible()
+    expect(screen.getByText(/Published by/)).toBeVisible()
     const item = await publicLibrary.item('public-1')
     expect(item.ok && item.value?.entry.saves).toBe(1)
   })

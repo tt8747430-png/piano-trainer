@@ -46,7 +46,12 @@ const versions = new WeakMap<PieceMusic, ChartPiece>()
 function ownPiece(song: OwnSong): ChartPiece {
   const known = ownPieces.get(song)
   if (known) return known
-  const piece: ChartPiece = { ...song, kind: 'song' }
+  const { author, ...rest } = song
+  const piece: ChartPiece = {
+    ...rest,
+    kind: 'song',
+    ...(author ? { credits: [{ role: 'published-by', names: author }] } : {}),
+  }
   ownPieces.set(song, piece)
   return piece
 }

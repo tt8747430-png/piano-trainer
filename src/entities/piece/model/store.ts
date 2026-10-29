@@ -18,6 +18,7 @@ import {
   ownSongNumber,
   PIECE_TEMPO,
   songTitle,
+  TITLE_MAX,
   type OwnSong,
   type OwnSongId,
 } from './own'
@@ -211,7 +212,10 @@ export function readSharedSong(saved: unknown): SharedSong | null {
 function songOf(saved: unknown): OwnSong | null {
   if (!isRecord(saved) || !isOwnSongId(saved.id)) return null
   const song = readSharedSong(saved)
-  return song ? { id: saved.id, title: song.title, ...song.music } : null
+  if (!song) return null
+  // Who published it, where it came from the Public library: as long as a title, at most.
+  const author = isText(saved.author) ? saved.author.trim().slice(0, TITLE_MAX) : ''
+  return { id: saved.id, title: song.title, ...song.music, ...(author ? { author } : {}) }
 }
 
 /** The value already held where it has the same content: a screen's memos over it hold. */

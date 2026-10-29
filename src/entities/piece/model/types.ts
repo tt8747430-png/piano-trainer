@@ -70,7 +70,15 @@ export interface Source {
 }
 
 type CreditRole =
-  'authors' | 'words-and-music' | 'words' | 'music' | 'russian-text' | 'harmony' | 'accompaniment'
+  | 'authors'
+  | 'words-and-music'
+  | 'words'
+  | 'music'
+  | 'russian-text'
+  | 'harmony'
+  | 'accompaniment'
+  /** Who published a learner's song to the Public library, on the copy another learner saved. */
+  | 'published-by'
 /** Names stay as printed; the role is shown through an interface string in the learner's language. */
 export type Credit =
   { readonly role: CreditRole; readonly names: string } | { readonly role: 'unknown' }
