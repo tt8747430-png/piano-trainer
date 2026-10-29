@@ -196,3 +196,42 @@ Skills rated); the songs played most. From the account card and the shell's head
 
 **3.5 Welcome** on first run (`pt-settings.welcomed`): language, level (picks Learn's start), MIDI keyboard, daily
 goal; Sign in or Continue without an account.
+
+## Round 4: content from the database (planned 2026-10-29)
+
+Today ~3 MB of authored content (pieces 1.5 MB, courses 0.9 MB, lessons 0.5 MB, the rest small) is compiled into
+the app and read synchronously everywhere (`PIECES`, `COLLECTIONS`, lesson and course modules). The round moves the
+bodies out of the bundle without making every reader async:
+
+- **The repo stays the authoring source until round 6** (inline editing): `entities/*/content` are what the export
+  reads and what the content tests check. The app's bundle keeps only the **catalog index** (generated: ids, titles,
+  facts, levels, sizes) and the **starter set** (a few songs and the first lessons, so a first run offline works).
+- **A body registry** (`shared/api/content`): bodies brought onto the device live in IndexedDB and, once opened
+  this session, in memory; `has` is synchronous over memory, `ensure` reads IndexedDB, then the server. Routes
+  already `ensureContent` before their screen renders (round 0), so screens read bodies synchronously from the
+  registry as they read the modules now.
+
+Tasks, each test-first, one commit:
+
+**4.1 Tables** `content_items` (`kind`, `id`, `version`, `audience` everyone · signed-in · group:<id> · admins,
+`status` draft · published, `meta jsonb`, `body jsonb`, `size`, `updated_at`) and `content_versions` (each published
+version, kept); RLS: published items whose audience the caller is in (anon reads `everyone`), drafts to admins
+(`app_metadata.role`). Writes only by admins. `tests/access.sql` extended.
+
+**4.2 Export** `scripts/export-content.ts` (run with jiti, `@` aliased): every piece and lesson as
+`{kind, id, version: hash(body), meta, body}` into `content/export/*.json`; a content test proves export → import
+round-trips to the same objects.
+
+**4.3 Seed** the project from the export (SQL in chunks through the Supabase tools; later an admin Edge Function).
+
+**4.4 The Supabase content port**: `ensure` = IndexedDB → `content_items` select by kind and id → stored; a version
+change in the index replaces the stored body. Fake-IndexedDB in tests.
+
+**4.5 The split**: `entities/piece` and `entities/lesson` read their entries from the catalog index and their
+bodies from the registry; the starter set bundled; the architecture test holds the bundle to it. `factsOf` reads the
+entry's facts. A lesson's route ensures the songs it embeds.
+
+**4.6 Offline UX**: Download for offline (a song, a course, a collection, a folder), a Downloaded filter, "Needs a
+connection" on what is away while offline, Settings → Sync and data → Storage (downloads, sizes, Remove).
+
+Order: 4.1 → 4.2 → 4.3 → 4.4 → 4.5 → 4.6; the full suite and the build at the end; ADR 0116 r4.
