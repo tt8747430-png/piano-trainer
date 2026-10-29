@@ -32,6 +32,15 @@ These come straight from their feedback. Each has burned a round before.
 - If something is missing, implement it and extend the app rather than leaving it out. When you refuse or defer a part, say why and propose how to build it.
 - One implementation of a thing, used everywhere. The same control looks and behaves the same in the Player and the editor (Transpose, selection, header, transport, View).
 
+**Secrets and config**
+- Never commit `.env`, a key or any account value, not even one that is public by design (the Supabase URL and
+  publishable key). Config lives in the host's environment variables (Vercel's), with a `.env.example` of names
+  and placeholders in the repo; `.env*` stays in `.gitignore`.
+- Security, secrets, accounts, hosting and what the repo exposes are never decided on the owner's behalf, not even
+  in autonomous mode: ask, or leave it as the owner's to-do with the steps.
+- Supabase: the project's MCP server is in `.mcp.json` (the owner authenticates it with `/mcp` on their computer); a
+  cloud session uses its connected Supabase tools. The `supabase` skills come before any database work.
+
 **Layout**
 - Phone and desktop have the same features, text and layout logic. Check an iPhone (390×844 and 320×568), a phone on its side (844×390) and a laptop (1280×800). Nothing may be clipped, overflow or wrap badly at 320px.
 - Floating things float. Palettes, the transport, the zoom controls and the tools reserve no space under them and never push the page. Auto-hide must be reliable.
@@ -64,7 +73,8 @@ These come straight from their feedback. Each has burned a round before.
    - **"Continue with all" means autonomous mode.** Work through every open task (the plan's rounds, the log's
      "left for later" and deferred items, the review findings) one round after another, without asking anything:
      no AskUserQuestion, no "shall I…", no stopping to report between rounds. Where a choice is the owner's, take
-     the sensible default, write it in the log's decisions with the reason, and carry on; their to-dos (keys,
+     the sensible default (never on secrets, security or hosting: see Secrets and config), write it in the log's
+     decisions with the reason, and carry on; their to-dos (keys,
      accounts, legal review) go in the log, never block the work. Keep the gate (typecheck, lint, the full suite
      and the build before `main`) and push each round. Stop only when every task is done, or something needs
      credentials or an action only the owner can take and nothing else is left; then report once.

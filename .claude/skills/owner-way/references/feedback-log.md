@@ -176,3 +176,11 @@ The owner's feedback from every session, condensed and grouped by area. Read the
 - **The maximum principle** (round 14): "this spawns too many agents and eats up all the usage … in most cases [doing the work yourself] is the right way". Work inline; agents only when the owner-way test passes.
 - **Skills:** use impeccable for UI, superpowers where its procedure pays, the owner-way practices otherwise; know who calls which.
 - **Docs and skills reach `main` at once** ("did you merge the new skills to main"); code after the full suite.
+- **No committed `.env`** (2026-10-29): "WHY IS the .env commited to the git … such things should not be at all,
+  now refactor all the bad decisions you took". A decision taken on the owner's behalf (committing public Supabase
+  values so Vercel needed no setup) was wrong: config goes in Vercel's environment variables, never in git, and
+  such decisions are the owner's.
+- **Skills** (2026-10-29): Supabase's agent skills and MCP server, and Vercel's skills (agent-browser,
+  building-components, deploy-to-vercel, vercel-cli, before-and-after, …) were installed: use the ones that fit
+  (practices.md, Calling skills).
+

@@ -84,6 +84,14 @@ Impeccable (impeccable.style, v4.8 installed in `.claude/skills/impeccable`, by 
   | a throwaway try-out | `prototype` |
   | a spec, issues, triage | `to-spec`, `to-issues`, `triage` (the tracker is `.scratch/`) |
   | handing work to the next session | `handoff`, or `prompts/handoff.md` |
+  | the database: a table, a migration, row-level security, a function, pg_cron, Auth | `supabase`, then `supabase-postgres-best-practices` before writing SQL |
+  | a new component's anatomy, accessibility and tokens | `building-components` (with `shadcn` for primitives) |
+  | driving the running app: QA, a bug hunt, screenshots | `agent-browser` where its CLI is installed (`npm i -g agent-browser`); else Playwright (SKILL.md, Repo facts) |
+  | screenshots on a pull request's description | `before-and-after` |
+  | a deploy, a domain, Vercel's settings | `deploy-to-vercel`, `vercel-cli` (they need the owner's Vercel login: not in a cloud session) |
+
+  Installed but not for this app unless the owner asks: `workflow` (Vercel Workflow SDK), `autoship` (npm releases),
+  `remotion-best-practices` (video), and json-render's `core` and `react`.
 
 - **Read the skill each time**; skills change, and memory of one is not the skill.
 - **Skills are not free:** each one loaded costs context. Load the one the task needs, not every one that sounds near.
