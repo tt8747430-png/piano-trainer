@@ -32,6 +32,28 @@ export function createSupabaseContentEditing(
         if (error) throw thrown(error, status)
         return data.body as unknown
       }),
+    create: (kind, id, { body, meta }) =>
+      ask(async (client) => {
+        // Unpublished, so learners read nothing of it; the version is a placeholder until it is.
+        check(
+          await client.from('content_items').insert({
+            kind,
+            id,
+            version: 'draft',
+            status: 'draft',
+            body: body as Json,
+            meta: meta as Json,
+          }),
+        )
+        check(
+          await client.from('content_drafts').insert({
+            kind,
+            id,
+            body: body as Json,
+            meta: meta as Json,
+          }),
+        )
+      }),
     draft: (kind, id) =>
       ask(async (client) => {
         const { data, error, status } = await client

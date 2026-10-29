@@ -31,6 +31,8 @@ export function createFakeContentEditing({
   const name = (kind: ContentKind, id: string) => `${kind} ${id}`
   const published = new Map(items.map((item) => [name(item.kind, item.id), item]))
   const drafts = new Map<string, ContentDraft>()
+  // Created and never published: there for drafts, read by no one.
+  const unpublished = new Set<string>()
   const kept = new Map<string, (KeptVersion & Item)[]>()
   let clock = 0
   const now = () => new Date(Date.UTC(2026, 9, 29, 12, clock++)).toISOString()
@@ -62,10 +64,18 @@ export function createFakeContentEditing({
         if (!item) throw refused('no such item')
         return item.body
       }),
+    create: (kind, id, { body, meta }) =>
+      ask(async () => {
+        if (published.has(name(kind, id)) || unpublished.has(name(kind, id)))
+          throw refused('already there')
+        unpublished.add(name(kind, id))
+        drafts.set(name(kind, id), { body, meta, updatedAt: now() })
+      }),
     draft: (kind, id) => read(async () => drafts.get(name(kind, id)) ?? null, null),
     saveDraft: (kind, id, { body, meta }) =>
       ask(async () => {
-        if (!published.has(name(kind, id))) throw refused('no such item')
+        if (!published.has(name(kind, id)) && !unpublished.has(name(kind, id)))
+          throw refused('no such item')
         drafts.set(name(kind, id), { body, meta, updatedAt: now() })
       }),
     discardDraft: (kind, id) =>
@@ -77,6 +87,7 @@ export function createFakeContentEditing({
         const draft = drafts.get(name(kind, id))
         if (!draft) throw refused('nothing to publish')
         keep({ kind, id, body: draft.body, meta: draft.meta })
+        unpublished.delete(name(kind, id))
         drafts.delete(name(kind, id))
         return versionOf(draft.body)
       }),

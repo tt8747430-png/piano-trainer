@@ -1,6 +1,6 @@
 import type { Lesson } from '@/entities/lesson'
 import type { PieceId } from '@/entities/piece'
-import type { Stage } from '@/entities/step'
+import { isStage, type Stage } from '@/entities/step'
 import type { LocalText } from '@/shared/i18n'
 
 /**
@@ -30,25 +30,107 @@ export interface Course {
   readonly songs: readonly PieceId[]
 }
 
-/** A course's own texts as the database keeps them (ADR 0116, round 12): its title and summary. */
-export interface CourseTexts {
+/**
+ * A course as the database keeps it (ADR 0116): its title, its summary and the ids of its lessons in
+ * the order they are taught. A lesson's body is its own item, `<course>/<lesson>`.
+ */
+export interface CourseRecord {
   readonly id: string
   readonly title: LocalText
   readonly summary: LocalText
+  /** Its lessons in order; a record without the list keeps the app's own. */
+  readonly lessons?: readonly string[]
+  /** Where Courses lists it, its level and its length: the app's own where it has them. */
+  readonly shelf?: Shelf
+  readonly stage?: Stage
+  readonly weeks?: number
 }
 
-export const courseTexts = ({ id, title, summary }: Course): CourseTexts => ({ id, title, summary })
+export const courseRecord = ({
+  id,
+  title,
+  summary,
+  lessons,
+  shelf,
+  stage,
+  weeks,
+}: Course): CourseRecord => ({
+  id,
+  title,
+  summary,
+  lessons: lessons.map((lesson) => lesson.id),
+  shelf,
+  stage,
+  weeks,
+})
 
-/** Words in both languages, neither blank. */
-const isWritten = (value: unknown): value is LocalText => {
+const isShelf = (value: unknown): value is Shelf => SHELVES.some((shelf) => shelf === value)
+/** How long a course may take, in weeks: the lengths an editor chooses from. */
+export const COURSE_WEEKS: readonly number[] = Array.from({ length: 24 }, (_, i) => i + 1)
+
+const isWeeks = (value: unknown): value is number =>
+  typeof value === 'number' && COURSE_WEEKS.includes(value)
+
+/** Text in both languages, blank or not. */
+const isText = (value: unknown): value is LocalText => {
   if (typeof value !== 'object' || value === null) return false
   const { en, ru } = value as Partial<LocalText>
-  return typeof en === 'string' && typeof ru === 'string' && en.trim() !== '' && ru.trim() !== ''
+  return typeof en === 'string' && typeof ru === 'string'
 }
 
-/** Whether a body from the database reads as newer texts of the course `id`: its title and summary, each in both languages. */
-export function updatesCourse(id: string, body: unknown): body is CourseTexts {
+/** Words in both languages, neither blank. */
+const isWritten = (value: unknown): value is LocalText =>
+  isText(value) && value.en.trim() !== '' && value.ru.trim() !== ''
+
+const isIdList = (value: unknown): value is readonly string[] =>
+  Array.isArray(value) && value.every((id) => typeof id === 'string' && id.trim() !== '')
+
+/** Whether a body reads as a record of the course `id`, words missing or not: a draft of it. */
+export function isCourseRecord(id: string, body: unknown): body is CourseRecord {
   if (typeof body !== 'object' || body === null) return false
-  const texts = body as Partial<CourseTexts>
-  return texts.id === id && isWritten(texts.title) && isWritten(texts.summary)
+  const record = body as Partial<CourseRecord>
+  return (
+    record.id === id &&
+    isText(record.title) &&
+    isText(record.summary) &&
+    (record.lessons === undefined || isIdList(record.lessons)) &&
+    (record.shelf === undefined || isShelf(record.shelf)) &&
+    (record.stage === undefined || isStage(record.stage)) &&
+    (record.weeks === undefined || isWeeks(record.weeks))
+  )
 }
+
+/** A record that stands as a course of its own: one an editor made, with its shelf, stage and weeks. */
+export type WholeCourseRecord = CourseRecord & {
+  readonly lessons: readonly string[]
+  readonly shelf: Shelf
+  readonly stage: Stage
+  readonly weeks: number
+}
+
+export const isWholeCourse = (record: CourseRecord): record is WholeCourseRecord =>
+  record.lessons !== undefined &&
+  record.shelf !== undefined &&
+  record.stage !== undefined &&
+  record.weeks !== undefined
+
+/**
+ * Whether a body from the database reads as a newer record of the course `id`: its title and summary,
+ * each in both languages, and its lessons, when listed, a list of ids.
+ */
+export function updatesCourse(id: string, body: unknown): body is CourseRecord {
+  if (typeof body !== 'object' || body === null) return false
+  return isCourseRecord(id, body) && isWritten(body.title) && isWritten(body.summary)
+}
+
+/** A course an editor has only begun, as the device has it: no words, no lessons, no songs. */
+export const blankCourse = (id: string): Course => ({
+  id,
+  shelf: 'beginner',
+  stage: 'beginner',
+  title: { en: '', ru: '' },
+  summary: { en: '', ru: '' },
+  weeks: 4,
+  lessons: [],
+  songs: [],
+})

@@ -43,6 +43,9 @@ describe('a course’s texts over the kept content (round 12)', () => {
       title: course.title,
       summary: course.summary,
       lessons: course.lessons.map((lesson) => lesson.id),
+      shelf: course.shelf,
+      stage: course.stage,
+      weeks: course.weeks,
     })
     expect(updatesCourse(course.id, courseRecord(course))).toBe(true)
   })
@@ -100,5 +103,60 @@ describe('a course’s texts over the kept content (round 12)', () => {
   it('passes over a lessons list that is not a list of ids', () => {
     kept({ ...texts, lessons: [1, 2] })
     expect(courseById(course.id)).toBe(course)
+  })
+})
+
+describe('a course an editor made (content as data)', () => {
+  const lesson = {
+    id: 'first',
+    title: { en: 'First', ru: 'Первый' },
+    summary: { en: 'Begins', ru: 'Начало' },
+    sections: [{ heading: { en: 'Begin', ru: 'Начало' }, blocks: [] }],
+  }
+  const made = {
+    id: 'made-course',
+    title: { en: 'A made course', ru: 'Новый курс' },
+    summary: { en: 'Made in the app', ru: 'Сделан в приложении' },
+    lessons: ['first'],
+    shelf: 'chords',
+    stage: 'intermediate',
+    weeks: 3,
+  }
+  const keep = (body: unknown) =>
+    keepContent([
+      { kind: 'course', id: 'made-course', version: 'v1', body },
+      { kind: 'lesson', id: 'made-course/first', version: 'v1', body: lesson },
+    ])
+
+  it('is on its shelf after the app’s own, with its lessons, and no songs', () => {
+    keep(made)
+    const course = courseById('made-course')
+    expect(course).toMatchObject({
+      id: 'made-course',
+      shelf: 'chords',
+      stage: 'intermediate',
+      weeks: 3,
+      lessons: [lesson],
+      songs: [],
+    })
+    expect(coursesOn('chords').at(-1)).toBe(course)
+  })
+
+  it('is not there without a shelf, a stage and its weeks', () => {
+    for (const body of [
+      { ...made, shelf: 'nowhere' },
+      { ...made, stage: undefined },
+      { ...made, weeks: 0 },
+    ]) {
+      keep(body)
+      expect(courseById('made-course')).toBeUndefined()
+    }
+  })
+
+  it('holds its shelf, stage and weeks in its record', () => {
+    keep(made)
+    const course = courseById('made-course')
+    if (!course) throw new Error('the made course is there')
+    expect(courseRecord(course)).toMatchObject({ shelf: 'chords', stage: 'intermediate', weeks: 3 })
   })
 })

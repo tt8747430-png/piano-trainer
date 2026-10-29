@@ -500,30 +500,40 @@ const courseEditRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/courses/$courseId/edit',
   notFoundComponent: notFoundIn('learn'),
-  beforeLoad: async ({ params }) => {
-    const { courseById } = await learnScreens()
-    if (!courseById(params.courseId)) throw notFound()
-  },
+  // A course not yet published is there for its editor: the draft New course made.
   component: lazyRouteComponent(learnScreens, 'CourseEditorPage'),
+})
+const newCourseRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/courses/new',
+  component: lazyRouteComponent(learnScreens, 'NewCoursePage'),
 })
 const lessonEditRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/lessons/$lessonId/edit',
   notFoundComponent: notFoundIn('learn'),
   beforeLoad: async ({ params, context }) => {
-    const { lessonById, lessonPlace } = await learnScreens()
-    if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
+    // A lesson not yet published is there for its editor: the draft the journey editor made.
     await ensureContent(context.content, 'lesson', params.lessonId)
   },
   component: lazyRouteComponent(learnScreens, 'LessonEditorPage'),
+})
+const journeyEditRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/journeys/$journeyId/edit',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params }) => {
+    const { journeyById } = await learnScreens()
+    if (!journeyById(params.journeyId)) throw notFound()
+  },
+  component: lazyRouteComponent(learnScreens, 'JourneyEditorPage'),
 })
 const courseLessonEditRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/courses/$courseId/$lessonId/edit',
   notFoundComponent: notFoundIn('learn'),
   beforeLoad: async ({ params, context }) => {
-    const { courseLesson } = await learnScreens()
-    if (!courseLesson(params.courseId, params.lessonId)) throw notFound()
+    // A lesson not yet published is there for its editor: the draft the course editor made.
     await ensureContent(context.content, 'lesson', `${params.courseId}/${params.lessonId}`)
   },
   component: lazyRouteComponent(learnScreens, 'CourseLessonEditorPage'),
@@ -684,6 +694,8 @@ const routeTree = rootRoute.addChildren([
     lessonEditRoute,
     courseLessonEditRoute,
     courseEditRoute,
+    newCourseRoute,
+    journeyEditRoute,
     practiceRoute,
     quizRoute,
     exercisesRoute,

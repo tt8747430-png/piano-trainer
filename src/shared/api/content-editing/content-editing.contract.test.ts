@@ -73,6 +73,28 @@ describe('editing the built-in content', () => {
     })
   })
 
+  it('creates a new item unpublished, with its first draft; never one that is there', async () => {
+    const { port, set } = editing()
+    const body = { id: 'arpeggios', v: 1 }
+    expect(await port.create('lesson', 'arpeggios', { body, meta: { title: 'A' } })).toEqual({
+      ok: true,
+      value: undefined,
+    })
+    expect(port.body('lesson', 'arpeggios')).toBeUndefined()
+    expect(await port.draft('lesson', 'arpeggios')).toMatchObject({ ok: true, value: { body } })
+    await port.publish('lesson', 'arpeggios')
+    expect(port.body('lesson', 'arpeggios')).toEqual(body)
+    expect(await port.create('lesson', 'scales', { body, meta: {} })).toMatchObject({
+      ok: false,
+      reason: 'refused',
+    })
+    set({ editor: false })
+    expect(await port.create('lesson', 'more', { body, meta: {} })).toMatchObject({
+      ok: false,
+      reason: 'refused',
+    })
+  })
+
   it('says it is offline without a connection', async () => {
     const { port } = editing({ online: false })
     expect(await port.versions('lesson', 'scales')).toMatchObject({ ok: false, reason: 'offline' })

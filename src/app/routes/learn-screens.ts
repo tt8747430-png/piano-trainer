@@ -1,5 +1,11 @@
 export { courseById, courseLesson } from '@/entities/course'
-export { lessonById, lessonPlace } from '@/entities/lesson'
+export { journeyById, lessonById, lessonPlace } from '@/entities/lesson'
 export { CoursePage } from '@/pages/course'
 export { CourseLessonPage, LessonPage } from '@/pages/lesson'
-export { CourseEditorPage, CourseLessonEditorPage, LessonEditorPage } from '@/pages/lesson-editor'
+export {
+  CourseEditorPage,
+  CourseLessonEditorPage,
+  JourneyEditorPage,
+  LessonEditorPage,
+  NewCoursePage,
+} from '@/pages/lesson-editor'

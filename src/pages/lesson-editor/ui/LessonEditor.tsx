@@ -212,7 +212,9 @@ export function LessonEditor({
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const draft = useLessonDraft(lesson, id)
-  const title = localText(lesson.title, locale)
+  // A new lesson's name is its draft's: the device has none of it.
+  const opened = draft.load.state === 'ready' ? draft.load.value : lesson
+  const title = localText(opened.title, locale)
   return (
     <DraftScreen
       draft={draft}

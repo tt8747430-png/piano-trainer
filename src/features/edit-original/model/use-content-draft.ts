@@ -24,8 +24,10 @@ export interface DraftSpec<T> {
   readonly kind: ContentKind
   /** The item's id in the database. */
   readonly id: string
-  /** A body read as the item, or nothing where it does not read. */
+  /** A body read as the item, words missing or not, or nothing where it does not read. */
   read(body: unknown): T | undefined
+  /** Whether the item, as written, may be published (every text written); any that reads where not given. */
+  publishable?(value: T): boolean
   /** The item as the database holds it: its body and what lists show of it. */
   write(value: T): { readonly body: unknown; readonly meta: Readonly<Record<string, unknown>> }
   /** The item as this device has it: where the server has none that reads. */
@@ -38,7 +40,7 @@ export interface DraftSpec<T> {
  * published (once it reads as the item), discarded, or a kept version restored.
  */
 export function useContentDraft<T>(spec: DraftSpec<T>) {
-  const { kind, id, read, write, fallback } = spec
+  const { kind, id, read, write, fallback, publishable } = spec
   const editing = useContentEditing()
   const [load, setLoad] = useState<DraftLoad<T>>({ state: 'loading' })
   const [saved, setSaved] = useState<DraftSaved>('idle')
@@ -110,12 +112,15 @@ export function useContentDraft<T>(spec: DraftSpec<T>) {
     const flushed = await flush()
     if (flushed && !flushed.ok) return flushed
     const value = last.current?.value ?? (load.state === 'ready' ? load.value : undefined)
-    if (value !== undefined && read(write(value).body) === undefined)
-      return { ok: false, reason: 'unreadable' }
+    if (value !== undefined) {
+      const written = read(write(value).body)
+      if (written === undefined || (publishable && !publishable(written)))
+        return { ok: false, reason: 'unreadable' }
+    }
     const result = await editing.publish(kind, id)
     if (result.ok) setDrafted(false)
     return result
-  }, [editing, flush, load, kind, id, read, write])
+  }, [editing, flush, load, kind, id, read, write, publishable])
 
   const discard = useCallback(async (): Promise<NetResult<void>> => {
     if (pending.current) window.clearTimeout(pending.current.timer)
@@ -139,6 +144,7 @@ export function useContentDraft<T>(spec: DraftSpec<T>) {
     saved,
     drafted,
     save,
+    flush,
     publish,
     discard,
     versions,

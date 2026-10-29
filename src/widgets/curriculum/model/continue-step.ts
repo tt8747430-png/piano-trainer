@@ -1,5 +1,5 @@
-import { COURSES, courseStepIds, type Course } from '@/entities/course'
-import { JOURNEYS, type Journey } from '@/entities/lesson'
+import { allCourses, courseStepIds, type Course } from '@/entities/course'
+import { allJourneys, type Journey } from '@/entities/lesson'
 import { stepIdOf, stepOf, type Step, type StepId } from '@/entities/step'
 import { journeySteps } from './progress'
 
@@ -29,7 +29,7 @@ function openInCourse(course: Course, learned: Learned): ContinueStep | undefine
 
 /** The course a step id belongs to: a course lesson's, or the course a song is guided in. */
 function courseOf(id: StepId): Course | undefined {
-  return COURSES.find((course) => courseStepIds(course).includes(id))
+  return allCourses().find((course) => courseStepIds(course).includes(id))
 }
 
 /**
@@ -44,11 +44,11 @@ export function continueStep(learned: Learned): ContinueStep | null {
   const course = latest && courseOf(latest.id)
   const inCourse = course && openInCourse(course, learned)
   if (inCourse) return inCourse
-  for (const journey of JOURNEYS) {
+  for (const journey of allJourneys()) {
     const open = openInJourney(journey, learned)
     if (open) return open
   }
-  for (const course of COURSES) {
+  for (const course of allCourses()) {
     const open = openInCourse(course, learned)
     if (open) return open
   }
@@ -60,7 +60,8 @@ export function continueStep(learned: Learned): ContinueStep | null {
  * is, whichever track Continue is on), else the first journey once every one is learned.
  */
 export function currentJourney(learned: Learned): Journey {
-  const first = JOURNEYS[0]
+  const journeys = allJourneys()
+  const first = journeys[0]
   if (!first) throw new Error('The Lessons need a journey')
-  return JOURNEYS.find((journey) => openInJourney(journey, learned) !== undefined) ?? first
+  return journeys.find((journey) => openInJourney(journey, learned) !== undefined) ?? first
 }

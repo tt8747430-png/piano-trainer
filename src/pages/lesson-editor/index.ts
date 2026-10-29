@@ -1,3 +1,5 @@
 export { CourseEditorPage } from './ui/CourseEditorPage'
 export { CourseLessonEditorPage } from './ui/CourseLessonEditorPage'
 export { LessonEditorPage } from './ui/LessonEditorPage'
+export { NewCoursePage } from './ui/NewCoursePage'
+export { JourneyEditorPage } from './ui/JourneyEditorPage'

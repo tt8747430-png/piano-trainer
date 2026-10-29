@@ -184,6 +184,14 @@ export interface Lesson {
   readonly after?: readonly string[]
 }
 
+/** A new lesson an editor starts: its name in English, every other text and its one section to write. */
+export const blankLesson = (id: string, name = ''): Lesson => ({
+  id,
+  title: { en: name, ru: '' },
+  summary: { en: '', ru: '' },
+  sections: [{ heading: { en: '', ru: '' }, blocks: [] }],
+})
+
 /**
  * Whether a body from the database reads as a newer copy of the lesson `id` (ADR 0116): its id, its
  * title and summary, and sections of headings and blocks. Its blocks are the content tests' to hold.

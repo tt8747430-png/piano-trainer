@@ -549,4 +549,7 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Draft**: an editor's unpublished change to a built-in item, kept on the server until it is **published**
   (every learner gets it as a content update) or **discarded**. Each version published is kept, to **restore**.
   _Avoid:_ revision, staging.
+- **Course record** (`CourseRecord`): a course as the database keeps it: its title, summary and its lessons' ids
+  in order. A lesson an editor adds is **created** unpublished and listed once the course is published.
+  _Avoid:_ course texts, syllabus.
 - **Welcome**: the app's first-run screen, shown once (`welcomed`). _Avoid:_ onboarding, intro.

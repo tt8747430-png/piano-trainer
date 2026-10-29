@@ -22,6 +22,15 @@ export interface KeptVersion {
 export interface ContentEditingPort {
   /** The item's body as published now: what a new draft starts from (the device's copy may be older). */
   published(kind: ContentKind, id: string): Promise<NetResult<unknown>>
+  /**
+   * Creates a new item, unpublished (learners see nothing of it), with `draft` as its first draft;
+   * refused where the item is there already.
+   */
+  create(
+    kind: ContentKind,
+    id: string,
+    draft: Pick<ContentDraft, 'body' | 'meta'>,
+  ): Promise<NetResult<void>>
   /** The item's draft, or null where it has none. */
   draft(kind: ContentKind, id: string): Promise<NetResult<ContentDraft | null>>
   saveDraft(

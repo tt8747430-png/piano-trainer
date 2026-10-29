@@ -1,5 +1,5 @@
-import { COURSES, courseTexts } from '@/entities/course'
-import { LESSONS, type Lesson } from '@/entities/lesson'
+import { COURSES, courseRecord } from '@/entities/course'
+import { JOURNEYS, LESSONS, type Lesson } from '@/entities/lesson'
 import { PIECES, pieceRecordBody, pieceRecordMeta } from '@/entities/piece'
 import type { ContentKind } from '@/shared/api/content'
 import { contentHash } from '@/shared/lib'
@@ -24,7 +24,7 @@ const lessonMeta = (lesson: Lesson) => ({ title: lesson.title })
 
 /**
  * Every body the app carries, as the database keys it: a course's lesson as `<course>/<lesson>`, a
- * course's own as its title and summary.
+ * course's own as its record, a journey whole.
  */
 export function bundledBodies(): readonly Omit<ContentRecord, 'version' | 'meta'>[] {
   return [
@@ -44,8 +44,9 @@ export function bundledBodies(): readonly Omit<ContentRecord, 'version' | 'meta'
     ...COURSES.map((course) => ({
       kind: 'course' as const,
       id: course.id,
-      body: courseTexts(course),
+      body: courseRecord(course),
     })),
+    ...JOURNEYS.map((journey) => ({ kind: 'journey' as const, id: journey.id, body: journey })),
   ]
 }
 
@@ -76,7 +77,8 @@ export function exportContent(): readonly ContentRecord[] {
       ),
     ),
     ...COURSES.map((course) =>
-      record('course', course.id, { title: course.title }, courseTexts(course)),
+      record('course', course.id, { title: course.title }, courseRecord(course)),
     ),
+    ...JOURNEYS.map((journey) => record('journey', journey.id, { title: journey.title }, journey)),
   ]
 }

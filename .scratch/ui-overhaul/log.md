@@ -29,7 +29,14 @@
   10: a piano chords/theory app). The synthesis and the rounds are in `spec.md`, "Second pass". The memory-palaces
   screenshots were not read (the research agent was stopped by the owner).
 - Tasks left, in order (spec "Second pass" rounds 6–13):
-  1. **Content as data, courses first** (the owner's "add new lessons to a course"). Plan, checked against the
+  1. **Content as data, courses first** — courses DONE (2026-10-29, ADR 0116 r14): record lists lessons in order,
+     course editor moves/removes/adds, `create` on the port, unpublished lessons open in the lesson editor; a draft
+     now opens with words missing (only publishing needs every text). Decision: the 19 course rows were not
+     re-seeded: their bodies without `lessons` read as "the app's own order", and re-seeding needs the editor's
+     seed credentials (the owner's: `node scripts/export-content.mjs && node scripts/seed-content.mjs`). Also DONE:
+     New course (`/courses/new`, editors), the record holding shelf/stage/weeks. Not yet: a list of unpublished
+     drafts to come back to (goes with the Admin content queue), deleting a course. Journeys DONE (r15: migration
+     applied, journey editor). Next: songs and practice items as content. Original plan, checked against the
      database: editors may insert `content_items` rows with `status = 'draft'`; `publish_content` sets
      `status = 'published'`; `content_drafts` has a foreign key to `content_items`, so an item must exist before its
      draft. Steps:

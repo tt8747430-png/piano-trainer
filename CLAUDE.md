@@ -102,7 +102,7 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
 
 - **Learn** (`/`, `?view=lessons|courses`) — the Lessons (journeys of chapters, `/lessons/$lessonId`) and the
   Courses (`/courses/$courseId`, its lessons under it); a lesson paged a section at a time on a phone, its
-  progress and prerequisites on the contents. `pages/learn`, `pages/course`, `pages/lesson`; an editor's lesson editor (`/lessons/$lessonId/edit`, `pages/lesson-editor`, ADR 0116) and course editor (`/courses/$courseId/edit`, a course's title and summary);
+  progress and prerequisites on the contents. `pages/learn`, `pages/course`, `pages/lesson`; an editor's lesson editor (`/lessons/$lessonId/edit`, `pages/lesson-editor`, ADR 0116) and course editor (`/courses/$courseId/edit`, a course's title, summary, shelf, level, weeks and lessons in order: moved, removed, added) and New course (`/courses/new`); the journey editor (`/journeys/$journeyId/edit`: chapters and their steps in order, new lessons);
   `widgets/curriculum`, `widgets/lesson-view`; `entities/lesson`, `course`, `step`, `progress`.
 - **Songs** (`/songs`) — one library of folders, favourites and an archive; a song's page and its sections;
   MusicXML and MIDI import, MusicXML and MIDI export (`features/song-files`, `shared/lib/musicxml`).

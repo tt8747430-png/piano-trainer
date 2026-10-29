@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Check, ChevronDown } from 'lucide-react'
 import { Fragment, useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { JOURNEYS, lessonById, type Chapter, type Journey } from '@/entities/lesson'
+import { allJourneys, lessonById, type Chapter, type Journey } from '@/entities/lesson'
 import { selectAllAnswers, selectLearned, selectRead, useProgress } from '@/entities/progress'
 import { lessonStepId, stepIdOf, type StepId } from '@/entities/step'
 import { useFold } from '@/features/fold-section'
@@ -53,7 +53,7 @@ function JourneyTabs({ shown }: { shown: Journey }) {
       className="-mx-gutter overflow-x-auto px-gutter scrollbar-none"
     >
       <ul className="flex min-w-max gap-1 rounded-2xl bg-muted p-1 sm:min-w-0">
-        {JOURNEYS.map((journey) => {
+        {allJourneys().map((journey) => {
           const progress = journeyProgress(journey, learned)
           const current = journey.id === shown.id
           return (

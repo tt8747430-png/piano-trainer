@@ -101,6 +101,21 @@ describe('the lesson editor (ADR 0116)', () => {
     expect(content.body('lesson', LESSON.id)).toEqual(LESSON)
   })
 
+  it('opens a draft kept with words missing as it was left, not as published', async () => {
+    const content = editing()
+    const left = { ...LESSON, summary: { en: '', ru: LESSON.summary.ru } }
+    await content.saveDraft('lesson', LESSON.id, { body: left, meta: {} })
+    await renderApp(`/lessons/${LESSON.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    const summary = within(
+      within(await lessonGroup()).getByRole('group', { name: 'Summary' }),
+    ).getByRole('textbox', { name: 'English' })
+    expect(summary).toHaveValue('')
+    expect(summary).toHaveAccessibleDescription('Words are needed here')
+  })
+
   it('edits a course’s lesson as the database keys it, by its course', async () => {
     const user = userEvent.setup()
     const content = editing()

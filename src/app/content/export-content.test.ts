@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { COURSES } from '@/entities/course'
-import { LESSONS } from '@/entities/lesson'
+import { JOURNEYS, LESSONS } from '@/entities/lesson'
 import { PIECES } from '@/entities/piece'
 import { exportContent } from './export-content'
 
@@ -17,13 +17,28 @@ describe('exportContent', () => {
     )
     expect(keys).toContain(`lesson ${COURSES[0]?.id}/${COURSES[0]?.lessons[0]?.id}`)
     expect(records.filter((record) => record.kind === 'course')).toHaveLength(COURSES.length)
+    expect(records.filter((record) => record.kind === 'journey')).toHaveLength(JOURNEYS.length)
   })
 
-  it('holds a course as its title and summary, its lessons apart', () => {
+  it('holds a course as its record, its lessons by id in order, their bodies apart', () => {
     const course = COURSES[0]
     const record = records.find(({ kind, id }) => kind === 'course' && id === course?.id)
-    expect(record?.body).toEqual({ id: course?.id, title: course?.title, summary: course?.summary })
+    expect(record?.body).toEqual({
+      id: course?.id,
+      title: course?.title,
+      summary: course?.summary,
+      lessons: course?.lessons.map((lesson) => lesson.id),
+      shelf: course?.shelf,
+      stage: course?.stage,
+      weeks: course?.weeks,
+    })
     expect(record?.meta).toEqual({ title: course?.title })
+  })
+
+  it('holds a journey whole, its chapters and their steps in order', () => {
+    const journey = JOURNEYS[0]
+    const record = records.find(({ kind, id }) => kind === 'journey' && id === journey?.id)
+    expect(record?.body).toEqual(journey)
   })
 
   it('carries each body as JSON that reads back as the same object', () => {

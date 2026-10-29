@@ -1,14 +1,15 @@
 import { Link, useParams } from '@tanstack/react-router'
-import { courseById } from '@/entities/course'
+import { blankCourse, courseById } from '@/entities/course'
 import { BackButton } from '@/shared/ui'
 import { CourseEditor } from './CourseEditor'
 
-/** A course's title and summary in the course editor, an editor's (ADR 0116, round 12). */
+/**
+ * A course in the course editor, an editor's (ADR 0116). A course the app does not list is one an
+ * editor made and has not published: its draft is the server's.
+ */
 export function CourseEditorPage() {
   const { courseId } = useParams({ from: '/shell/courses/$courseId/edit' })
-  const course = courseById(courseId)
-  // The route finds no course that is not there.
-  if (!course) return null
+  const course = courseById(courseId) ?? blankCourse(courseId)
   return (
     <CourseEditor
       key={courseId}

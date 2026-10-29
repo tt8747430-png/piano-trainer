@@ -1,13 +1,18 @@
 export {
-  courseTexts,
+  blankCourse,
+  COURSE_WEEKS,
+  courseRecord,
+  isCourseRecord,
   SHELVES,
   updatesCourse,
   type Course,
-  type CourseTexts,
+  type CourseRecord,
   type Shelf,
 } from './model/types'
 export {
+  allCourses,
   courseById,
+  courseIds,
   courseLesson,
   coursesOn,
   courseStepIds,

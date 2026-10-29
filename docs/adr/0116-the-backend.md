@@ -125,3 +125,19 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r13 — The project's settings left git: `.env` is no longer committed (it had been, its values being public, so
   Vercel needed no setup: the owner's call to make, and they made the other one). The build and the dev server
   stop when either is missing; the seed script and CI read the same names from the environment (2026-10-29).
+- r14 — Content is data, courses first: a course's record lists its lessons' ids in order (`CourseRecord`,
+  `courseRecord`), each lesson read from its kept `<course>/<lesson>` body or the app's own and one with neither
+  passed over. The course editor orders, removes and adds lessons; Add lesson creates the lesson on the server
+  unpublished (`ContentEditingPort.create`: a `draft` row and its first draft) and opens it in the lesson editor,
+  which opens a lesson not yet published from its draft. A draft opens with words missing; only publishing asks
+  for every text (`DraftSpec.publishable`). A course's record also holds its shelf, level and weeks, so an
+  editor makes a whole course: New course (Learn's Courses, `/courses/new`) creates it unpublished with no
+  lessons and opens its editor; a kept record of a course the app does not have is listed after the app's own
+  (`keptContent().ids`) (2026-10-29).
+- r15 — Journeys are content (`journey`, kept whole; the kind check takes it, migration
+  `20261029210000_content_journeys`): each journey is the database's copy where it reads (`updatesJourney`), its
+  lessons the kept bodies of the ids it lists, one with no body passed over. The journey editor
+  (`/journeys/$journeyId/edit`, from an editor's Lessons) names the journey, orders, names and adds chapters, and
+  orders, removes and adds a chapter's steps; a new lesson is created unpublished and opened in the lesson
+  editor. Continue, Search and the map read the catalog (`allCourses`, `allJourneys`), not the bundled lists. One
+  list for every order an editor arranges (`OrderList`, `AddByName`) (2026-10-29).

@@ -1,19 +1,33 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { courseLesson } from '@/entities/course'
+import { blankLesson } from '@/entities/lesson'
 import { BackButton } from '@/shared/ui'
 import { LessonEditor } from './LessonEditor'
 
-/** A course's lesson in the lesson editor, an editor's (ADR 0116): the database's as `<course>/<lesson>`. */
+/**
+ * A course's lesson in the lesson editor, an editor's (ADR 0116): the database's as `<course>/<lesson>`.
+ * A lesson the course does not have yet is a new one, not published: its draft is the server's, and
+ * its way back is the course's editor.
+ */
 export function CourseLessonEditorPage() {
   const { courseId, lessonId } = useParams({ from: '/shell/courses/$courseId/$lessonId/edit' })
   const place = courseLesson(courseId, lessonId)
-  // The route finds no lesson its course does not have.
-  if (!place) return null
+  const id = `${courseId}/${lessonId}`
+  if (!place)
+    return (
+      <LessonEditor
+        key={id}
+        lesson={blankLesson(lessonId)}
+        id={id}
+        back={<BackButton fallback={{ to: '/courses/$courseId/edit', params: { courseId } }} />}
+        toLesson={<Link to="/courses/$courseId/edit" params={{ courseId }} />}
+      />
+    )
   return (
     <LessonEditor
-      key={`${courseId}/${lessonId}`}
+      key={id}
       lesson={place.lesson}
-      id={`${courseId}/${lessonId}`}
+      id={id}
       back={
         <BackButton
           fallback={{ to: '/courses/$courseId/$lessonId', params: { courseId, lessonId } }}

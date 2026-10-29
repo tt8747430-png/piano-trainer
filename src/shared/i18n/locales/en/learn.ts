@@ -129,10 +129,55 @@ export const learn = {
     preview: 'Preview',
     examples:
       'Chord rows, lines of notes and progressions are written here too. Other examples, questions’ answers and links stay as they are.',
+    order: {
+      moveUp: 'Move up: {{title}}',
+      moveDown: 'Move down: {{title}}',
+      remove: 'Remove: {{title}}',
+      unpublished: 'Not published yet',
+      newLesson: 'New lesson',
+      addLesson: 'Add lesson',
+      newChapter: 'New chapter',
+      addChapter: 'Add chapter',
+      adding: 'Adding…',
+      addFailed: 'It could not be made: one of that name may be there already.',
+    },
+    journey: {
+      open: 'Edit the journey',
+      heading: 'The journey',
+      info: 'Its title, goal and chapters here; each lesson is edited on its own page.',
+      goal: 'Goal',
+      back: 'Back to the Lessons',
+      editorsOnly: 'Only an editor edits a journey.',
+      unreadable:
+        'The title, the goal and every chapter’s name need words in both languages. Put them right, then publish.',
+      chapters: 'Chapters',
+      chaptersInfo:
+        'The order learners take them in. Each chapter lists its lessons, then the chords or scales its Check asks.',
+      chapterName: 'Chapter name',
+      steps: 'Steps: {{title}}',
+      check: 'Check',
+      noSteps: 'No lessons yet. Name the first one below.',
+    },
     course: {
       open: 'Edit the course',
       heading: 'The course',
-      lessons: 'Its title and summary here; each lesson is edited on its own page.',
+      lessons:
+        'Its title, summary and the order of its lessons here; each lesson is edited on its own page.',
+      lessonList: 'Lessons',
+      lessonsInfo:
+        'The order learners take them in. A lesson removed stays on the server; publish the course for the change to reach learners.',
+      noLessons: 'No lessons yet. Name the first one below.',
+      new: 'New course',
+      newInfo:
+        'It is made unpublished: write its lessons, then publish it from its editor for learners to see it.',
+      name: 'Name',
+      create: 'Create course',
+      creating: 'Creating…',
+      createFailed: 'The course could not be made: a course of that name may be there already.',
+      where: 'Where it stands',
+      shelf: 'Shelf',
+      stage: 'Level',
+      weeks: 'Length',
       back: 'Back to the course',
       editorsOnly: 'Only an editor edits a course.',
       unreadable:
