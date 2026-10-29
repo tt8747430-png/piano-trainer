@@ -318,7 +318,15 @@ describe('Piece: the learner’s own music', () => {
       within(more)
         .getAllByRole('button')
         .map((action) => action.textContent),
-    ).toEqual(['Move to…', 'Archive', 'Share', 'Export to MIDI', 'Export to MusicXML', 'Delete'])
+    ).toEqual([
+      'Move to…',
+      'Archive',
+      'Share',
+      'Publish to the Public library',
+      'Export to MIDI',
+      'Export to MusicXML',
+      'Delete',
+    ])
   })
 
   it('has nothing to learn in a song of no chord symbol: its sections say so', async () => {

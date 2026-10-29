@@ -3,6 +3,8 @@ import {
   Ellipsis,
   FileCode,
   FileMusic,
+  Globe,
+  GlobeLock,
   PencilLine,
   Play,
   RotateCcw,
@@ -10,7 +12,7 @@ import {
   Target,
   Trash2,
 } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { pieceStepId } from '@/entities/step'
 import {
@@ -26,6 +28,7 @@ import {
 import { selectView } from '@/entities/views'
 import { FavouriteButton, useSongActions } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
+import { PublishDialog, PublishSaid, usePublishSong } from '@/features/publish-song'
 import { ShareSaid, useShareSong } from '@/features/share-song'
 import { useSongExport } from '@/features/song-files'
 import { OPEN_PLAINLY } from '@/shared/lib'
@@ -55,13 +58,21 @@ import { SectionRows } from './SectionRows'
  * shows no keys but a chord's sheet's.
  */
 export function PieceView({ piece }: { piece: Piece }) {
-  const { t } = useTranslation(['piece', 'player'])
+  const { t } = useTranslation(['piece', 'player', 'songs'])
   const locale = useLocale()
   const own = isOwnSongId(piece.id) ? piece.id : null
   const hasVersion = usePieces((state) => selectHasVersion(state, piece.id))
   const title = entryTitles(piece, locale).primary
   const { performance, headings, sections } = useSongLessons(piece)
   const shared = useShareSong()
+  // An own song, written as a chart, may go to the Public library (ADR 0116).
+  const publishable = useMemo(
+    () =>
+      own && !isDegreePiece(piece) ? { id: own, song: { title, music: musicOf(piece) } } : null,
+    [own, piece, title],
+  )
+  const publishing = usePublishSong(publishable)
+  const [publishAsked, setPublishAsked] = useState(false)
   const [asking, setAsking] = useState(false)
   // More, which takes the focus back from a dialog it opened: the action chosen is folded away.
   const more = useRef<HTMLDivElement>(null)
@@ -114,6 +125,35 @@ export function PieceView({ piece }: { piece: Piece }) {
               ),
           },
         ]),
+    ...(publishable
+      ? [
+          ...(publishing.state === 'published' || publishing.state === 'unknown'
+            ? []
+            : [
+                {
+                  key: 'publish',
+                  label: t(
+                    publishing.state === 'changed' ? 'songs:public.update' : 'songs:public.publish',
+                  ),
+                  icon: Globe,
+                  onSelect: () =>
+                    publishing.state === 'changed'
+                      ? void publishing.publish()
+                      : setPublishAsked(true),
+                },
+              ]),
+          ...(publishing.state === 'published' || publishing.state === 'changed'
+            ? [
+                {
+                  key: 'unpublish',
+                  label: t('songs:public.unpublish'),
+                  icon: GlobeLock,
+                  onSelect: () => void publishing.unpublish(),
+                },
+              ]
+            : []),
+        ]
+      : []),
     // Its files, as the Player's More exports them (ADR 0107).
     { key: 'midi', label: t('player:exportMidi'), icon: FileMusic, onSelect: files.midi },
     {
@@ -172,6 +212,19 @@ export function PieceView({ piece }: { piece: Piece }) {
       />
       <PieceByline piece={piece} />
       <ShareSaid said={shared.said} />
+      <PublishSaid said={publishing.said} />
+      <PublishDialog
+        open={publishAsked}
+        onOpenChange={setPublishAsked}
+        title={title}
+        authorName={publishing.authorName}
+        signedIn={publishing.signedIn}
+        busy={publishing.busy}
+        onPublish={() => {
+          setPublishAsked(false)
+          void publishing.publish()
+        }}
+      />
       {/* The one thing to do first: play it (ADR 0111, amended), the Player as it was left. */}
       <ButtonLink
         size="lg"

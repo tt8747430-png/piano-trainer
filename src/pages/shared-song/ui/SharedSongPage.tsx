@@ -1,67 +1,18 @@
 import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BUILT_IN_PATTERNS } from '@/entities/pattern'
-import {
-  pieceKey,
-  usePieceHeadings,
-  useTempoText,
-  usePiecesStoreApi,
-  type ChartPiece,
-  type SharedSong,
-} from '@/entities/piece'
+import { usePiecesStoreApi, type SharedSong } from '@/entities/piece'
 import { addSong } from '@/features/edit-piece'
-import { PinnedKeyboard } from '@/features/live-keyboard'
-import { arrangePiece, ownChoice, playerRange } from '@/features/practice'
 import { readSongLink } from '@/features/share-song'
-import { keySymbol, printedSymbol } from '@/shared/lib/music'
-import { BackButton, ButtonLink, Fab, FloatingActions, NO_KEYS, ScreenHeader } from '@/shared/ui'
-import { ChordChart, useChartPlayback } from '@/widgets/chord-chart'
+import { BackButton, ButtonLink, Fab, FloatingActions, ScreenHeader } from '@/shared/ui'
+import { SongPreview } from '@/widgets/song-preview'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 
 type Reading =
   | { readonly kind: 'reading' }
   | { readonly kind: 'none' }
   | { readonly kind: 'song'; readonly song: SharedSong }
-
-/**
- * A shared song as every song reads: its key, meter and tempo in a line, then its chart, its bars
- * under their sections' headings, each to tap and hear on the keys, so the learner hears the song
- * before adding it.
- */
-function SharedChart({ song }: { song: SharedSong }) {
-  const { t } = useTranslation(['songs', 'music'])
-  const piece = useMemo<ChartPiece>(
-    () => ({ id: 'shared', kind: 'song', title: song.title, ...song.music }),
-    [song],
-  )
-  const performance = useMemo(
-    () => arrangePiece(piece, ownChoice(piece), BUILT_IN_PATTERNS),
-    [piece],
-  )
-  const headings = usePieceHeadings(piece)
-  const tempo = useTempoText(piece)
-  const { playing, toggleBar } = useChartPlayback(performance, piece.tempo)
-  return (
-    <>
-      <p className="-mt-3 text-lg text-muted-foreground">
-        {t('shared.facts', {
-          key: printedSymbol(keySymbol(pieceKey(piece))),
-          meter: piece.meter,
-          bpm: tempo,
-        })}
-      </p>
-      <PinnedKeyboard shown={NO_KEYS} range={playerRange(performance)} />
-      <ChordChart
-        performance={performance}
-        headings={headings}
-        playing={playing}
-        onBar={toggleBar}
-      />
-    </>
-  )
-}
 
 /**
  * A song someone shared: read from its link, shown as its chart, and
@@ -113,7 +64,7 @@ export function SharedSongPage() {
         </Empty>
       ) : (
         <>
-          <SharedChart song={reading.song} />
+          <SongPreview song={reading.song} />
           <FloatingActions>
             {/* The page's one action, named in words: a lone + would not say what it adds to. */}
             <Fab

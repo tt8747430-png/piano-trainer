@@ -20,7 +20,7 @@ export interface Publication {
   readonly title: string
   readonly authorName: string
   readonly meta: PublicEntry['meta']
-  /** The song as a shared song is held: `{ title, music }`, read back by `readSharedSong`. */
+  /** The song as a save holds an own song, its title beside its music: read back by `readSharedSong`. */
   readonly body: unknown
   readonly version: string
 }

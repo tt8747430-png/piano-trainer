@@ -22,6 +22,7 @@ import {
 } from '@/shared/api/content'
 import { createWebMidi, hasWebMidi } from '@/shared/api/midi'
 import { createSupabaseClient, type PianoClient } from '@/shared/api/supabase'
+import { createSupabasePublicLibrary, type PublicLibrary } from '@/shared/api/public-library'
 import { createSupabaseCloud, type CloudSync } from '@/shared/api/sync'
 import { safeLocalStorage, type SavingOptions } from '@/shared/lib'
 import { createSyncRunner, type SyncedSave, type SyncRunner } from '@/shared/lib/sync'
@@ -123,3 +124,7 @@ export function createSync(
 
 /** The cloud the sync talks to: the backend's tables. */
 export const createCloud = (backend: PianoClient): CloudSync => createSupabaseCloud(backend)
+
+/** The Public library: the project's tables (ADR 0116). */
+export const createPublicLibrary = (backend: PianoClient): PublicLibrary =>
+  createSupabasePublicLibrary(backend)

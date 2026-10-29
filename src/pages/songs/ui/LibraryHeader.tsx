@@ -5,6 +5,7 @@ import {
   CheckCheck,
   Ellipsis,
   FolderInput,
+  Globe,
   ListChecks,
   ListX,
   Music,
@@ -82,6 +83,13 @@ export function LibraryHeader({
             icon={ListChecks}
             onClick={() => page.select.start()}
           />
+          {folder ? null : (
+            <RoundLink
+              label={t('public.title')}
+              icon={Globe}
+              render={<Link to="/songs/public" />}
+            />
+          )}
           {folder ? null : <ArchiveButton />}
           {folder ? (
             <ActionMenu

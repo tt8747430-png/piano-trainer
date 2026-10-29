@@ -5,6 +5,7 @@ import { createFakeAudio } from '@/shared/api/audio'
 import { createFakeMidi } from '@/shared/api/midi'
 import { createFakeAuth, type AuthGateway } from '@/shared/api/auth'
 import { filesContent, type ContentPort } from '@/shared/api/content'
+import { createFakePublicLibrary, type PublicLibrary } from '@/shared/api/public-library'
 import { createFakeCloud } from '@/shared/api/sync'
 import { createMemoryStorage } from '@/shared/lib'
 import { heardUntil, untilTestEnds } from '@/shared/test/listeners'
@@ -18,7 +19,7 @@ import { createAppRouter } from '../router'
  * language, with fake audio and MIDI it hands back for the test to drive; `webMidi: false` is a
  * browser without it; `content` is where songs' music and lessons come from (all on the device unless
  * a test says otherwise); `auth` and `cloud` are fakes, signed out unless the test signs in;
- * `welcomed: false` is the app's first run, with its welcome.
+ * `welcomed: false` is the app's first run, with its welcome; `publicLibrary` a fake, empty unless given.
  * Every screen's code is loaded first, and the score's engraver, so a test waits on the app and
  * never on the runner importing a lazy chunk.
  * What the app hears on the window and the document (its stores another tab's saves, its router the
@@ -34,6 +35,7 @@ export async function renderApp(
     auth = createFakeAuth(),
     cloud = createFakeCloud(),
     welcomed = true,
+    publicLibrary = createFakePublicLibrary(),
   }: {
     locale?: Locale
     storage?: Storage
@@ -42,6 +44,7 @@ export async function renderApp(
     auth?: AuthGateway
     cloud?: ReturnType<typeof createFakeCloud>
     welcomed?: boolean
+    publicLibrary?: PublicLibrary
   } = {},
 ) {
   const testOver = untilTestEnds()
@@ -68,6 +71,7 @@ export async function renderApp(
       services={{ audio, midi: webMidi ? midi : null }}
       auth={auth}
       sync={sync}
+      publicLibrary={publicLibrary}
       router={router}
     />,
   )

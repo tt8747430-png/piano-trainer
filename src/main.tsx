@@ -8,6 +8,7 @@ import {
   createCloud,
   createContent,
   createContentUpdates,
+  createPublicLibrary,
   createServices,
   createStores,
   createSync,
@@ -35,6 +36,7 @@ createRoot(rootElement).render(
       services={createServices()}
       auth={createAuth(backend)}
       sync={sync}
+      publicLibrary={createPublicLibrary(backend)}
       router={createAppRouter({ ...stores, content: createContent() })}
     />
   </StrictMode>,

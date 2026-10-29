@@ -69,6 +69,7 @@ import { LEARN_KEPT, learnSearch, readLearnSearch } from './routes/learn-search'
 import { readTrainerSearch, trainerSearch, validateCheckSearch } from './routes/practice-search'
 import { searchSearch } from './routes/search-search'
 import { songsSearch, validateSharedSongSearch } from './routes/songs-search'
+import { publicSearch } from './routes/public-search'
 import { remembered, restoreView } from './routes/remember'
 import { CHORD_FINDER_KEPT, chordFinderSearch, readChordFinderSearch } from './routes/tool-search'
 import { ShellLayout } from './ShellLayout'
@@ -232,6 +233,18 @@ const songsRoute = createRoute({
   path: '/songs',
   ...songsSearch,
   component: lazyRouteComponent(songsScreens, 'SongsPage'),
+})
+// The Public library (ADR 0116): learners' published songs, and one to hear and save.
+const publicLibraryRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/public',
+  ...publicSearch,
+  component: lazyRouteComponent(songsScreens, 'PublicLibraryPage'),
+})
+const publicSongRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/songs/public/$itemId',
+  component: lazyRouteComponent(songsScreens, 'PublicSongPage'),
 })
 const sharedSongRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -605,6 +618,8 @@ const routeTree = rootRoute.addChildren([
     searchRoute,
     songsRoute,
     sharedSongRoute,
+    publicLibraryRoute,
+    publicSongRoute,
     pieceRoute,
     folderRoute,
     archiveRoute,
