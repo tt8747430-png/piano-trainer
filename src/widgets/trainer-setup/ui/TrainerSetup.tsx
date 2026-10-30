@@ -60,12 +60,12 @@ const WHITE_KEYS = Array.from({ length: 9 }, (_, octave) => ({
 const whiteKeyText = (key: Midi): string =>
   WHITE_KEYS.flatMap((group) => group.keys).find((white) => white.key === key)?.text ?? ''
 
-/** A titled group of a setup's rows on a card. */
+/** A titled group of a setup's rows on a card, its name small over it as Settings' groups. */
 function SetupGroup({ title, children }: { title: string; children: ReactNode }) {
   const id = useId()
   return (
     <section aria-labelledby={id} className="flex flex-col gap-2">
-      <h2 id={id} className="px-1 text-xl">
+      <h2 id={id} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
         {title}
       </h2>
       <div className="card px-4 py-3">
@@ -355,9 +355,16 @@ export function TrainerSetup({
 
       {footer}
 
-      <Button size="pill" className="w-full sm:w-auto sm:min-w-56 sm:self-start" onClick={onStart}>
-        {t('quiz:setup.start')}
-      </Button>
+      {/* The one thing to do, always in reach: it stays at the foot of the screen as the setup scrolls. */}
+      <div className="sticky bottom-[calc(var(--nav-bar)+--spacing(3))] z-10 sm:static">
+        <Button
+          size="pill"
+          className="w-full elevation-2 sm:w-auto sm:min-w-56 sm:elevation-0"
+          onClick={onStart}
+        >
+          {t('quiz:setup.start')}
+        </Button>
+      </div>
     </div>
   )
 }

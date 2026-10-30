@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { selectTrainerRecords, useProgress } from '@/entities/progress'
 import type { TrainerId } from '@/features/trainer'
 import { OPEN_PLAINLY } from '@/shared/lib'
-import { RowGroup, RowLink } from '@/shared/ui'
+import { RowLink, SettingsGroup } from '@/shared/ui'
 import { TRAINER_TILE } from './trainer-tile'
 
 /** The runs a trainer has, over all its levels. */
@@ -15,8 +15,8 @@ function runsOf(records: ReturnType<typeof selectTrainerRecords>, id: TrainerId)
 }
 
 /**
- * A group of trainers under its heading: each row opens its trainer as it was left, saying what it
- * asks and how many runs it has.
+ * A group of trainers under its name, one card of rows (a grouped list, as Practice's): each row opens
+ * its trainer as it was left, saying what it asks and how many runs it has.
  */
 export function TrainerList({
   title,
@@ -28,30 +28,32 @@ export function TrainerList({
   const { t } = useTranslation('quiz')
   const records = useProgress(selectTrainerRecords)
   return (
-    <RowGroup title={title}>
-      {trainers.map((id) => {
-        const runs = runsOf(records, id)
-        return (
-          <li key={id}>
-            <RowLink
-              title={t(`trainers.${id}`)}
-              detail={
-                runs > 0
-                  ? `${t(`about.${id}`)} · ${t('record.runs', { count: runs })}`
-                  : t(`about.${id}`)
-              }
-              {...TRAINER_TILE[id]}
-              render={
-                <Link
-                  to="/practice/quiz/$trainerId"
-                  params={{ trainerId: id }}
-                  state={OPEN_PLAINLY}
-                />
-              }
-            />
-          </li>
-        )
-      })}
-    </RowGroup>
+    <SettingsGroup title={title} flush>
+      <ul className="flex flex-col">
+        {trainers.map((id) => {
+          const runs = runsOf(records, id)
+          return (
+            <li key={id}>
+              <RowLink
+                title={t(`trainers.${id}`)}
+                detail={
+                  runs > 0
+                    ? `${t(`about.${id}`)} · ${t('record.runs', { count: runs })}`
+                    : t(`about.${id}`)
+                }
+                {...TRAINER_TILE[id]}
+                render={
+                  <Link
+                    to="/practice/quiz/$trainerId"
+                    params={{ trainerId: id }}
+                    state={OPEN_PLAINLY}
+                  />
+                }
+              />
+            </li>
+          )
+        })}
+      </ul>
+    </SettingsGroup>
   )
 }
