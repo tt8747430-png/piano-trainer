@@ -209,7 +209,6 @@ export const songs = {
     song: 'Write it on the staff',
     folder: 'Keep songs together',
     import: 'A MusicXML or MIDI file',
-    public: 'Songs other learners shared',
   },
   making: {
     title: 'New song',
@@ -243,7 +242,7 @@ export const songs = {
   // The Public library (ADR 0116): learners' songs published for anyone to play and save a copy of.
   public: {
     title: 'Public library',
-    line: 'Songs and patterns other learners shared',
+    line: 'Browse songs and patterns others shared',
     kinds: { label: 'Songs or patterns', song: 'Songs', pattern: 'Patterns' },
     sort: { label: 'Sort', new: 'Newest', saved: 'Most saved' },
     search: 'Search the Public library',

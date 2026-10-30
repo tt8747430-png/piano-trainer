@@ -1,5 +1,4 @@
-import { useNavigate } from '@tanstack/react-router'
-import { FileUp, FolderPlus, Globe, Music, Plus } from 'lucide-react'
+import { FileUp, FolderPlus, Music, Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { FolderId } from '@/entities/library'
 import { FloatingActions, SpeedDial, SpeedDialAction } from '@/shared/ui'
@@ -8,7 +7,8 @@ import type { LibraryPage } from '../model/use-library-page'
 /**
  * New, floating (Mindscape's `LibrarySpeedDial`): a dial of New song, New folder and Import (a
  * MusicXML or MIDI file, ADR 0107), each made where the learner is, in the folder open (`folder`) or
- * at Home; and the Public library, where a song another learner shared is saved.
+ * at Home. It adds, and only adds (Noji's +): the Public library is a place, reached by its own row
+ * at the top of Home.
  */
 export function NewActions({
   page,
@@ -20,17 +20,10 @@ export function NewActions({
   onImport: () => void
 }) {
   const { t } = useTranslation('songs')
-  const navigate = useNavigate()
   return (
     <FloatingActions>
       <SpeedDial label={t('new')} icon={Plus} main>
         {/* The nearest last: a song is what is added most. */}
-        <SpeedDialAction
-          label={t('public.title')}
-          detail={t('adds.public')}
-          icon={Globe}
-          onClick={() => void navigate({ to: '/songs/public' })}
-        />
         <SpeedDialAction
           label={t('import.action')}
           detail={t('adds.import')}

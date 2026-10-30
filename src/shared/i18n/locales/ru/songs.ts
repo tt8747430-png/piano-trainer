@@ -198,7 +198,6 @@ export const songs: LocaleResources['songs'] = {
     song: 'Записать на нотном стане',
     folder: 'Собрать песни вместе',
     import: 'Файл MusicXML или MIDI',
-    public: 'Песни других учеников',
   },
   making: {
     title: 'Новая песня',
@@ -229,7 +228,7 @@ export const songs: LocaleResources['songs'] = {
   },
   public: {
     title: 'Общая библиотека',
-    line: 'Песни и рисунки, которыми поделились другие',
+    line: 'Песни и рисунки, которыми делятся другие',
     kinds: { label: 'Песни или рисунки', song: 'Песни', pattern: 'Рисунки' },
     sort: { label: 'Сортировка', new: 'Новые', saved: 'Популярные' },
     search: 'Поиск в общей библиотеке',

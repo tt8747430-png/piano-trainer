@@ -331,6 +331,19 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     expect(rowNames(folders).at(-1)).toBe('New folder Empty')
   })
 
+  it('New only adds: a song, an import, a folder; the Public library is a row of its own', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs')
+    expect(
+      await screen.findByRole('link', { name: /Public library Browse songs and patterns/ }),
+    ).toHaveAttribute('href', '/songs/public')
+    await user.click(await screen.findByRole('button', { name: 'New' }))
+    expect(await screen.findByRole('button', { name: /New song/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Import/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /New folder/ })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Public library/ })).not.toBeInTheDocument()
+  })
+
   it('imports a MIDI file from New as the learner’s song, opening its page (ADR 0107)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/songs')
