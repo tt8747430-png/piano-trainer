@@ -171,7 +171,7 @@ describe('the Public library', () => {
 })
 
 describe('publishing an own song', () => {
-  it('publishes it after saying what that means, then offers to take it out', async () => {
+  it('publishes it from its own sheet: a description long enough, its row previewed', async () => {
     const user = userEvent.setup()
     const publicLibrary = createFakePublicLibrary({ author: () => ({ id: 'ana', name: 'Ana' }) })
     await renderApp('/songs/my-1', { storage: ownSong(), publicLibrary, auth: await signedIn() })
@@ -181,19 +181,57 @@ describe('publishing an own song', () => {
         name: 'Publish to the Public library',
       }),
     )
-    const dialog = await screen.findByRole('alertdialog', { name: 'Publish “Morning”?' })
-    expect(dialog).toHaveTextContent('Publish only music you wrote or may share.')
-    await user.click(within(dialog).getByRole('button', { name: 'Publish' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Publish to the Public library' })
+    expect(sheet).toHaveTextContent('Publish only music you wrote or may share.')
+    // Its row as others will see it: its title, by whom, its key and time.
+    expect(within(sheet).getByRole('region', { name: 'As others will see it' })).toHaveTextContent(
+      /Morning.*Ana/,
+    )
+    expect(within(sheet).getByRole('button', { name: 'About Publish to the Public library' }))
+    const publish = within(sheet).getByRole('button', { name: 'Publish' })
+    expect(publish).toBeDisabled()
+    const description = within(sheet).getByRole('textbox', { name: 'Description' })
+    await user.type(description, 'A slow song')
+    expect(sheet).toHaveTextContent('9 more characters to go')
+    expect(publish).toBeDisabled()
+    await user.type(description, ' for the morning')
+    expect(publish).toBeEnabled()
+    await user.click(publish)
     expect(await screen.findByText('Published to the Public library.')).toBeVisible()
     const found = await publicLibrary.browse({ kind: 'song', sort: 'new', query: '' })
-    expect(found.ok && found.value.map((entry) => entry.title)).toEqual(['Morning'])
-    await user.click(screen.getByRole('button', { name: 'More' }))
-    await user.click(
-      within(await screen.findByRole('dialog', { name: 'More' })).getByRole('button', {
-        name: 'Remove from the Public library',
-      }),
+    expect(found).toMatchObject({
+      ok: true,
+      value: [{ title: 'Morning', meta: { description: 'A slow song for the morning' } }],
+    })
+    // The song's page says where it stands: in the library, to view, edit or take out.
+    const card = await screen.findByRole('region', { name: 'In the Public library' })
+    const id = found.ok ? found.value[0]?.id : ''
+    expect(within(card).getByRole('link', { name: 'View in the library' })).toHaveAttribute(
+      'href',
+      `/songs/public/${id}`,
     )
+    await user.click(within(card).getByRole('button', { name: 'Unpublish' }))
     expect(await screen.findByText('Removed from the Public library.')).toBeVisible()
+    await waitFor(() =>
+      expect(screen.queryByRole('region', { name: 'In the Public library' })).toBeNull(),
+    )
+  })
+
+  it('shows what its author wrote of an item on its page', async () => {
+    const publicLibrary = createFakePublicLibrary({
+      items: [
+        {
+          id: 'public-3',
+          title: 'Evening',
+          authorName: 'Bo',
+          meta: { key: 'C', meter: '3/4', description: 'A waltz to end the day with.' },
+          body: { title: 'Evening', ...MUSIC },
+        },
+      ],
+    })
+    await renderApp('/songs/public/public-3', { publicLibrary })
+    const about = await screen.findByRole('region', { name: 'About' })
+    expect(about).toHaveTextContent('A waltz to end the day with.')
   })
 
   it('asks a learner signed out to sign in first', async () => {
@@ -205,7 +243,7 @@ describe('publishing an own song', () => {
         name: 'Publish to the Public library',
       }),
     )
-    const dialog = await screen.findByRole('alertdialog')
+    const dialog = await screen.findByRole('dialog', { name: 'Publish to the Public library' })
     expect(within(dialog).getByRole('link', { name: 'Sign in' })).toHaveAttribute(
       'href',
       '/account/sign-in',

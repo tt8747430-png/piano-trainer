@@ -171,12 +171,23 @@ describe('a pattern of the learner’s own in the Public library (ADR 0116)', ()
     })
     await user.click(await screen.findByRole('button', { name: 'More' }))
     await user.click(await screen.findByRole('button', { name: 'Publish to the Public library' }))
-    await user.click(await screen.findByRole('button', { name: 'Publish' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Publish to the Public library' })
+    await user.type(
+      within(sheet).getByRole('textbox', { name: 'Description' }),
+      'A walking bass under jazz chords',
+    )
+    await user.click(within(sheet).getByRole('button', { name: 'Publish' }))
     expect(await screen.findByText('Published to the Public library.')).toBeInTheDocument()
     const listed = await publicLibrary.browse({ kind: 'pattern', sort: 'new', query: '' })
     expect(listed).toMatchObject({
       ok: true,
-      value: [{ kind: 'pattern', title: 'Sunday', meta: { rh: 'jaz', lh: 'walk' } }],
+      value: [
+        {
+          kind: 'pattern',
+          title: 'Sunday',
+          meta: { rh: 'jaz', lh: 'walk', description: 'A walking bass under jazz chords' },
+        },
+      ],
     })
     await user.click(screen.getByRole('button', { name: 'More' }))
     await user.click(await screen.findByRole('button', { name: 'Remove from the Public library' }))

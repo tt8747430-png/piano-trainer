@@ -29,7 +29,13 @@ import { selectView } from '@/entities/views'
 import { selectIsFavourite, useLibrary, useLibraryStoreApi } from '@/entities/library'
 import { toggleFavourite, useSongActions } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
-import { PublishDialog, PublishSaid, usePublish, type PublishItem } from '@/features/publish'
+import {
+  PublishedCard,
+  PublishSaid,
+  PublishSheet,
+  usePublish,
+  type PublishItem,
+} from '@/features/publish'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
 import { ExportSheet } from '@/features/song-files'
 import { OPEN_PLAINLY } from '@/shared/lib'
@@ -151,10 +157,7 @@ export function PieceView({ piece }: { piece: Piece }) {
                     publishing.state === 'changed' ? 'songs:public.update' : 'songs:public.publish',
                   ),
                   icon: Globe,
-                  onSelect: () =>
-                    publishing.state === 'changed'
-                      ? void publishing.publish()
-                      : setPublishAsked(true),
+                  onSelect: () => setPublishAsked(true),
                 },
               ]),
           ...(publishing.state === 'published' || publishing.state === 'changed'
@@ -243,18 +246,37 @@ export function PieceView({ piece }: { piece: Piece }) {
       <PieceByline piece={piece} />
       <ShareSaid said={shared.said} />
       <PublishSaid said={publishing.said} />
-      <PublishDialog
-        open={publishAsked}
-        onOpenChange={setPublishAsked}
-        title={title}
-        authorName={publishing.authorName}
-        signedIn={publishing.signedIn}
-        busy={publishing.busy}
-        onPublish={() => {
-          setPublishAsked(false)
-          void publishing.publish()
-        }}
-      />
+      {publishable ? (
+        <>
+          <PublishedCard
+            state={publishing.state}
+            publicId={publishing.publicId}
+            saves={publishing.saves}
+            busy={publishing.busy}
+            onEdit={() => setPublishAsked(true)}
+            onUnpublish={() => void publishing.unpublish()}
+          />
+          <PublishSheet
+            open={publishAsked}
+            onOpenChange={setPublishAsked}
+            item={{
+              id: publishable.sourceId,
+              kind: 'song',
+              title,
+              meta: publishable.meta,
+            }}
+            authorName={publishing.authorName}
+            signedIn={publishing.signedIn}
+            busy={publishing.busy}
+            update={publishing.state === 'published' || publishing.state === 'changed'}
+            description={publishing.description}
+            onPublish={(description) => {
+              setPublishAsked(false)
+              void publishing.publish(description)
+            }}
+          />
+        </>
+      ) : null}
       <PieceFactLine piece={piece} />
       <PieceAbout entry={piece} />
       <PieceChords performance={performance}>

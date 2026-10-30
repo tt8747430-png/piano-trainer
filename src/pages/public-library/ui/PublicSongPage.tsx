@@ -26,7 +26,7 @@ import {
   ScreenHeader,
 } from '@/shared/ui'
 import { SongPreview } from '@/widgets/song-preview'
-import { Byline, FactChips, ReadingItem } from './PublicItemParts'
+import { About, Byline, FactChips, ReadingItem } from './PublicItemParts'
 import { ReportDialog } from './ReportDialog'
 import { Said } from './Said'
 
@@ -129,6 +129,7 @@ export function PublicSongPage() {
       ) : reading.kind === 'song' ? (
         <>
           <Byline entry={reading.entry} />
+          <About entry={reading.entry} />
           <SongPreview song={reading.song} />
           <FloatingActions>
             <Fab
@@ -144,6 +145,7 @@ export function PublicSongPage() {
       ) : reading.kind === 'pattern' ? (
         <>
           <Byline entry={reading.entry} />
+          <About entry={reading.entry} />
           <FactChips
             facts={[
               {
