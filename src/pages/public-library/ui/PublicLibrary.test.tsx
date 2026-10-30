@@ -62,12 +62,29 @@ describe('the Public library', () => {
         .getAllByRole('link')
         .map((row) => row.textContent),
     ).toEqual([
-      expect.stringMatching(/^Newer\s*by Bo · 0 saves/),
-      expect.stringMatching(/^Older\s*by Bo · 0 saves/),
+      expect.stringMatching(/^Newer\s*Bo · G · 3\/4/),
+      expect.stringMatching(/^Older\s*Bo · G · 3\/4/),
     ])
+    expect(screen.getByText('2 songs')).toBeVisible()
   })
 
-  it('searches by title, and says when nothing matches', async () => {
+  it('sorts by the most saved, from the pop-up by the search', async () => {
+    const user = userEvent.setup()
+    const publicLibrary = withSongs('Quiet', 'Loved')
+    await publicLibrary.save('public-1')
+    await renderApp('/songs/public', { publicLibrary })
+    const list = await screen.findByRole('list', { name: 'Public library' })
+    expect(within(list).getAllByRole('link')[0]).toHaveTextContent(/^Loved/)
+    await user.click(screen.getByRole('combobox', { name: /^Sort/ }))
+    await user.click(await screen.findByRole('option', { name: 'Most saved' }))
+    await waitFor(() =>
+      expect(
+        within(screen.getByRole('list', { name: 'Public library' })).getAllByRole('link')[0],
+      ).toHaveTextContent(/^Quiet.*1 save/),
+    )
+  })
+
+  it('searches by title, says when nothing matches, and shows all again', async () => {
     const user = userEvent.setup()
     await renderApp('/songs/public', { publicLibrary: withSongs('Morning', 'Evening') })
     await user.type(
@@ -75,6 +92,22 @@ describe('the Public library', () => {
       'zzz',
     )
     expect(await screen.findByText('No song matches “zzz”.')).toBeVisible()
+    await user.click(screen.getByRole('button', { name: 'Show all' }))
+    expect(await screen.findByRole('list', { name: 'Public library' })).toBeVisible()
+  })
+
+  it('says it is loading while the library is asked', async () => {
+    const publicLibrary = withSongs('Morning')
+    await renderApp('/songs/public', {
+      publicLibrary: { ...publicLibrary, browse: () => new Promise(() => {}) },
+    })
+    expect(await screen.findByRole('status')).toHaveTextContent('Loading the Public library…')
+  })
+
+  it('says nothing is published yet, and how to publish the first', async () => {
+    await renderApp('/songs/public', { publicLibrary: createFakePublicLibrary() })
+    expect(await screen.findByText('No songs here yet.')).toBeVisible()
+    expect(screen.getByRole('link', { name: 'Your songs' })).toHaveAttribute('href', '/songs')
   })
 
   it('says it needs a connection, offline', async () => {
@@ -95,7 +128,11 @@ describe('the Public library', () => {
       auth: await signedIn(),
     })
     expect(await screen.findByRole('heading', { level: 1, name: 'Morning' })).toBeVisible()
-    expect(screen.getByText(/by Bo · 0 saves/)).toBeVisible()
+    expect(screen.getByText('Bo')).toBeVisible()
+    expect(screen.getByText('Not saved yet')).toBeVisible()
+    // Its facts, a line of chips.
+    expect(screen.getByText('Key').nextElementSibling).toHaveTextContent('G')
+    expect(screen.getByText('Time').nextElementSibling).toHaveTextContent('3/4')
     await user.click(screen.getByRole('button', { name: 'Save to my songs' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/songs/my-1'))
     expect(piecesStore.getState().songs).toMatchObject([
@@ -196,10 +233,11 @@ describe('patterns in the Public library', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs/public', { publicLibrary: withPattern() })
     expect(await screen.findByText('No songs here yet.')).toBeVisible()
-    await user.click(screen.getByRole('link', { name: 'Patterns' }))
+    await user.click(screen.getByRole('radio', { name: 'Patterns' }))
     await waitFor(() => expect(router.state.location.search).toMatchObject({ kind: 'pattern' }))
     const list = await screen.findByRole('list', { name: 'Public library' })
     expect(within(list).getByRole('link', { name: /Waltz of mine/ })).toBeVisible()
+    expect(screen.getByText('1 pattern')).toBeVisible()
   })
 
   it('opens a pattern by its figures, and saves it to the learner’s patterns', async () => {
