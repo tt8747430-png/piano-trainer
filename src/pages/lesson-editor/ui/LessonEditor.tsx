@@ -108,25 +108,25 @@ export function LessonEditor({
       {(initial) => {
         const last = written.current?.opened === draft.opened ? written.current.lesson : initial
         return (
-          <>
-            {readFirst ? (
-              <ReadFirst
-                lesson={id}
-                value={last.after ?? []}
-                onChange={(after) => save(withAfter(written.current?.lesson ?? initial, after))}
-              />
-            ) : null}
-            <LessonDocument
-              key={locale}
-              locale={locale}
-              initial={last}
-              // The document keeps what it does not write (the lessons to read first) as it opened;
-              // what was chosen since is the last saved.
-              onChange={(next) =>
-                save(withAfter(next, (written.current?.lesson ?? initial).after ?? []))
-              }
-            />
-          </>
+          <LessonDocument
+            key={locale}
+            locale={locale}
+            initial={last}
+            properties={
+              readFirst ? (
+                <ReadFirst
+                  lesson={id}
+                  value={last.after ?? []}
+                  onChange={(after) => save(withAfter(written.current?.lesson ?? initial, after))}
+                />
+              ) : undefined
+            }
+            // The document keeps what it does not write (the lessons to read first) as it opened;
+            // what was chosen since is the last saved.
+            onChange={(next) =>
+              save(withAfter(next, (written.current?.lesson ?? initial).after ?? []))
+            }
+          />
         )
       }}
     </DraftScreen>

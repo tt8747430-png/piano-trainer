@@ -95,3 +95,14 @@
   background: var(--ring);
   border-radius: 2px;
 }
+
+/* The lesson's properties, under its title and summary as a page's are: not typed into. */
+.lesson-doc-properties {
+  margin-block: 1rem 0;
+  user-select: none;
+}
+
+/* The document's own rule under the summary closes them: theirs would double it. */
+.lesson-doc-properties > dl {
+  border-bottom-width: 0;
+}

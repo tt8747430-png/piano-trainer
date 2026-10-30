@@ -188,3 +188,4 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   menu; the lesson editor's toolbar one floating capsule, Insert its accent; a level's lesson's Read first
   (2026-10-30).
 - r25 — Every New … one sheet (`NewSheet`): New song as Flat's new score (staves as tiles, the key signature grid, time tiles), New course, New progression, Add lesson and Add chapter; /courses/new and /practice/progressions/new gone (2026-10-30).
+- r25 — A level's lesson's Read first stands under its title and summary inside the document, as a page's properties do (2026-10-30).
