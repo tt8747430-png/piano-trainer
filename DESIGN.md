@@ -514,6 +514,11 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
   title block under the bar, and nothing pushes the page's content below the fold. It slides away while reading
   down and returns the moment the page turns up; what is pinned under it slides with it. A place's bar holds
   Search and the Profile on a phone; Settings is in the Profile.
+- **Three layers on the score's screens** (the Player, the editor): the bar, flat, for where the learner is and
+  what screen-wide (Close, the mode, MIDI, Undo · Redo or Setup · More); the tools of what is shown (View,
+  Transpose) a floating capsule under it on a phone held upright and a tablet, in the bar's row where it is one
+  row; what acts on the notes chosen (Delete, Copy, Cut, Paste) a capsule over the transport, there only while
+  something is chosen. Floating parts take no room: the music scrolls under them.
 - **Modes are a pop-up** (`Dropdown`, its face the mode's icon and name): Practise · Edit · Edit the original in
   the Player's and the editor's bars, Replace · Insert · Chord in the editor's Notes. An action with several
   targets (a song's Edit: your version, the original) is a pull-down (`ActionMenu`) from one bar button.

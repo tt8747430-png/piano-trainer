@@ -88,7 +88,7 @@ export function ChordDiagrams({
     return (
       <section
         aria-label={t('views.diagrams')}
-        className="-mx-gutter flex h-full flex-col gap-4 overflow-x-hidden overflow-y-auto overscroll-contain px-gutter pb-(--float-room) *:shrink-0 landscape-phone:mx-0 landscape-phone:px-0"
+        className="-mx-gutter flex h-full flex-col gap-4 overflow-x-hidden overflow-y-auto overscroll-contain px-gutter pt-(--tools-room) pb-(--float-room) *:shrink-0 landscape-phone:mx-0 landscape-phone:px-0"
       >
         <SheetTitle title={title} place="lines" />
         <div className="sticky top-0 z-20 -mx-gutter bg-background py-2 landscape-phone:mx-0">
@@ -106,7 +106,7 @@ export function ChordDiagrams({
   return (
     <section
       aria-label={t('views.diagrams')}
-      className="diagrams-view -mx-gutter h-full overflow-hidden px-gutter pb-(--float-room) landscape-phone:mx-0 landscape-phone:px-0"
+      className="diagrams-view -mx-gutter h-full overflow-hidden px-gutter pt-(--tools-room) pb-(--float-room) landscape-phone:mx-0 landscape-phone:px-0"
     >
       <div data-area="title">
         <SheetTitle title={title} place="lines" />

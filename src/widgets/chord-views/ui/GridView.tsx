@@ -58,7 +58,7 @@ export function GridView({
     <section
       ref={scroller}
       aria-label={t('views.grid')}
-      className="flex h-full scroll-pb-(--float-room) flex-col gap-6 overflow-y-auto overscroll-contain *:shrink-0"
+      className="flex h-full scroll-pt-(--tools-room) scroll-pb-(--float-room) flex-col gap-6 pt-(--tools-room) overflow-y-auto overscroll-contain *:shrink-0"
     >
       <SheetTitle title={title} place="lines" />
       <ChordChart

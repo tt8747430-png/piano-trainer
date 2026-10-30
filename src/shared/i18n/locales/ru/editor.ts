@@ -6,7 +6,9 @@ export const editor: LocaleResources['editor'] = {
   redo: 'Повторить',
   unsaved: 'Это изменение нельзя сохранить: песня остаётся такой, какой была сохранена.',
   dock: 'Играть, перемещать курсор и записывать',
-  tools: 'Инструменты правки',
+  tools: 'Инструменты нот',
+  // The floating capsule of what is done to the notes chosen: Delete, Copy, Cut, Paste.
+  selection: 'Выделенное',
   transpose: {
     key: 'Менять тональность',
     keyInfo:

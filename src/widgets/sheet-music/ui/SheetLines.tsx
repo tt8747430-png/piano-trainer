@@ -173,7 +173,7 @@ export function SheetLines({
       <section
         ref={box}
         aria-label={t('sheet.label')}
-        className="flex h-full scroll-pb-(--float-room) flex-col overflow-y-auto overscroll-contain"
+        className="flex h-full scroll-pt-(--tools-room) scroll-pb-(--float-room) flex-col overflow-y-auto overscroll-contain pt-(--tools-room)"
         style={{ gap: LINE_GAP }}
       >
         <SheetTitle title={title} place="lines" />

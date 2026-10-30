@@ -1154,16 +1154,14 @@ describe('the score editor', () => {
     async (_size, query) => {
       sizedAs(query)
       await renderApp('/edit/my-1', { storage: withSong() })
-      // The tools row in the Player's place: the View, Transpose, then what is done to what is
-      // chosen; the staff written is chosen on the sheet (a click, Alt ↑ ↓).
-      expect(namesIn(await screen.findByRole('toolbar', { name: 'Editing tools' }))).toEqual([
+      // The tools in the Player's place: the View and Transpose; what is done to what is chosen
+      // floats by the transport while something is (`Selection`); the staff written is chosen on
+      // the sheet (a click, Alt ↑ ↓).
+      expect(namesIn(await screen.findByRole('toolbar', { name: 'Score tools' }))).toEqual([
         'View',
         'Transpose: G major',
-        'Delete',
-        'Copy',
-        'Cut',
-        'Paste',
       ])
+      expect(screen.queryByRole('toolbar', { name: 'Selection' })).not.toBeInTheDocument()
       expect(screen.queryByRole('button', { name: /^Next note goes in/ })).not.toBeInTheDocument()
       // The sheet prints the title, the page's one heading; it shows the caret, which the bar says
       // for a screen reader.
@@ -1193,17 +1191,14 @@ describe('the score editor', () => {
         ...document.querySelectorAll(
           '[data-area="lead"] :is(button, a), [data-area="actions"] :is(button, a)',
         ),
-        ...screen
-          .getByRole('toolbar', { name: 'Editing tools' })
-          .querySelectorAll('button:not([aria-label="View"], [aria-label^="Transpose"])'),
       ]
       const dock = [
         ...screen
           .getByRole('toolbar', { name: 'Play, move and record' })
           .querySelectorAll('button:not([aria-label^="Tempo"])'),
       ]
-      // Close, the mode's pop-up (showing the mode), MIDI, Undo, Redo; Delete, Copy, Cut, Paste.
-      expect(bar).toHaveLength(9)
+      // Close, the mode's pop-up (showing the mode), MIDI, Undo, Redo.
+      expect(bar).toHaveLength(5)
       for (const control of [...bar, ...dock].filter(
         (each) => each.getAttribute('aria-label') !== 'Practise or edit',
       )) {
@@ -1302,12 +1297,13 @@ describe('the score editor', () => {
     expect(songOf(piecesStore.getState())).toMatchObject({ tempo: 90 })
   })
 
-  it('copies a bar and pastes it after the caret’s from the edit row, and adds a bar from the palette’s Bar', async () => {
+  it('copies a bar and pastes it after the caret’s from the selection’s capsule, and adds a bar from the palette’s Bar', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/edit/my-1', { storage: withSong() })
     await writeChord(user, 1, 'Em')
     await toChordRow(user)
-    const row = screen.getByRole('toolbar', { name: 'Editing tools' })
+    // In the chord row the caret's bar is always there to copy: the selection's capsule floats.
+    const row = await screen.findByRole('toolbar', { name: 'Selection' })
     // Nothing copied yet: Paste is greyed (its tooltip saying so).
     expect(within(row).getByRole('button', { name: 'Paste' })).toHaveAttribute(
       'aria-disabled',
@@ -1334,8 +1330,9 @@ describe('the score editor', () => {
     })
     act(() => setKeyboard(settingsStore, { typing: true }))
     expect(await screen.findByRole('status')).toHaveTextContent('B4 quarter')
-    const row = screen.getByRole('toolbar', { name: 'Editing tools' })
+    expect(screen.queryByRole('toolbar', { name: 'Selection' })).not.toBeInTheDocument()
     await user.keyboard('{Shift>}{ArrowRight}{/Shift}')
+    const row = await screen.findByRole('toolbar', { name: 'Selection' })
     await user.keyboard('{Meta>}c{/Meta}')
     await user.keyboard('{Escape}{Alt>}{ArrowRight}{/Alt}')
     await user.click(within(row).getByRole('button', { name: 'Paste' }))

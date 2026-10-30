@@ -61,3 +61,8 @@ own Play melody switch: it plays the tune under a take, not the Player's melody.
 - r13 — The editor's palette docked, not floating (ADR 0114) (2026-10-28).
 - r21 — Practise · Edit · Edit the original one pop-up (`ModeSwitch`), its face the mode's icon and name; the
   editor's Mine / The original tabs gone; the editor's Replace · Insert · Chord a pop-up too (2026-10-30).
+- r21 — The bar flat and alone (Close, the mode, the screen's own three); the tools (View, Transpose, Simplify)
+  a capsule floating under it over the music on a phone held upright and a tablet, in the bar's row where it is
+  one row; Delete · Copy · Cut · Paste a selection capsule floating over the transport while notes are chosen,
+  the chord row is written or the clip holds some (Apple's layers: navigation, content tools, the edit menu by
+  the selection) (2026-10-30).

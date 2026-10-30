@@ -74,39 +74,48 @@ function usePasteSaid(): { readonly hint?: string; readonly blocked?: string } {
 }
 
 /**
- * The edit row's commands (Flat's second toolbar), in the tools row after Transpose
- * (ADR 0115): what is done to what is chosen, never a mark put on it: Delete (the notes or chord
- * chosen, else the ones before the caret, as Backspace), Copy, Cut and Paste of what is chosen (the
- * bars in the chord row, the notes on a staff; Paste greyed with its reason where the clip cannot go,
- * ADR 0114). Undo and Redo are the bar's. While a take records, they wait for Stop.
+ * What is done to what is chosen (Flat's second toolbar), never a mark put on it: Delete (the notes
+ * or chord chosen, else the ones before the caret, as Backspace), Copy, Cut and Paste of what is chosen
+ * (the bars in the chord row, the notes on a staff; Paste greyed with its reason where the clip cannot
+ * go, ADR 0114). A capsule floating over the music above the transport, as iOS's edit menu stands by
+ * a selection: there while notes are chosen (in the chord row, the caret's bar
+ * at least) or the clip holds some, gone otherwise. Undo and Redo are
+ * the bar's. While a take records, it is gone.
  */
-export function EditCommands() {
+export function SelectionActions() {
   const { t } = useTranslation('editor')
   const { actions, takes } = useScoreEditorContext()
   const dispatch = actions.dispatch
   const chords = useEditorState((state) => state.layer === 'chords')
+  // Something to act on: notes chosen, the chord row's bars (the caret's at least), or the clip.
+  const shown = useEditorState(
+    (state) => state.selection !== null || state.layer === 'chords' || state.clip !== null,
+  )
   const copySaid = useCopySaid()
   const paste = usePasteSaid()
-  const recording = takes.stage !== 'idle'
+  if (!shown || takes.stage !== 'idle') return null
   const clip = (edit: ClipEdit) => () => dispatch({ type: 'clip', edit })
   return (
-    <>
+    <div
+      role="toolbar"
+      aria-label={t('selection')}
+      className="pointer-events-auto flex items-center gap-0.5 rounded-full border border-border bg-raised px-1.5 py-0.5 elevation-2 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1"
+    >
       <EditButton
         label={t(chords ? 'chord.delete' : 'deleteNotes')}
-        disabled={recording}
         onClick={() => dispatch({ type: 'delete', back: true })}
       >
         <Delete aria-hidden />
       </EditButton>
-      <EditButton label={t('copy')} hint={copySaid} disabled={recording} onClick={clip('copy')}>
+      <EditButton label={t('copy')} hint={copySaid} onClick={clip('copy')}>
         <Copy aria-hidden />
       </EditButton>
-      <EditButton label={t('cut')} hint={copySaid} disabled={recording} onClick={clip('cut')}>
+      <EditButton label={t('cut')} hint={copySaid} onClick={clip('cut')}>
         <Scissors aria-hidden />
       </EditButton>
-      <EditButton label={t('paste')} {...paste} disabled={recording} onClick={clip('paste')}>
+      <EditButton label={t('paste')} {...paste} onClick={clip('paste')}>
         <ClipboardPaste aria-hidden />
       </EditButton>
-    </>
+    </div>
   )
 }

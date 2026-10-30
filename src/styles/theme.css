@@ -707,6 +707,15 @@
   /* The music's scroll room under the transport floating over its foot: room to scroll into, never a
      row kept empty. */
   --float-room: 5.5rem;
+  /* The music's scroll room under the tools floating at its head on a phone held upright and a tablet
+     (the score bar's capsule): room to scroll from, never a row kept empty. */
+  --tools-room: 3.5rem;
+  @variant lg {
+    --tools-room: 0px;
+  }
+  @variant landscape-phone {
+    --tools-room: 0px;
+  }
   /* How far the screen's top padding lies above the bar: its band reaches the screen's top edge. */
   --bar-above: calc(--spacing(2) + max(--spacing(4), env(safe-area-inset-top)));
   & > [data-area='bar'] {
@@ -784,9 +793,7 @@
   isolation: isolate;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    'lead actions'
-    'tools tools';
+  grid-template-areas: 'lead actions';
   align-items: center;
   column-gap: --spacing(2);
   padding-bottom: --spacing(1);
@@ -807,8 +814,21 @@
   & > [data-area='actions'] {
     grid-area: actions;
   }
+  /* Where the bar is one row too narrow for them (a phone held upright, a tablet), the tools float
+     under it as a capsule over the music, as the palette and the transport float (ADR 0115): they act
+     on what is shown, not on where the learner is, and take no room from the sheet. */
   & > [data-area='tools'] {
-    grid-area: tools;
+    position: absolute;
+    top: calc(100% + --spacing(2));
+    left: 0;
+    z-index: 20;
+    width: fit-content;
+    max-width: 100%;
+    padding: --spacing(0.5) --spacing(1.5);
+    border: 1px solid var(--color-border);
+    border-radius: 9999px;
+    background: var(--color-raised);
+    box-shadow: var(--elevation-2);
   }
   @variant max-sm {
     column-gap: --spacing(1);
@@ -817,6 +837,15 @@
     grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas: 'lead tools actions';
     column-gap: --spacing(3);
+    & > [data-area='tools'] {
+      position: static;
+      grid-area: tools;
+      width: auto;
+      padding: 0;
+      border: 0;
+      background: none;
+      box-shadow: none;
+    }
   }
   @variant landscape-phone {
     grid-template-columns: subgrid;
@@ -826,7 +855,13 @@
       grid-area: 1 / 1;
     }
     & > [data-area='tools'] {
+      position: static;
       grid-area: 1 / 2;
+      width: auto;
+      padding: 0;
+      border: 0;
+      background: none;
+      box-shadow: none;
     }
     & > [data-area='actions'] {
       grid-area: 1 / 4;

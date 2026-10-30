@@ -26,6 +26,7 @@ import { usePalettePanel } from '../model/use-palette-panel'
 import { useScoreEditor } from '../model/use-score-editor'
 import { CaretLine } from './CaretLine'
 import { EditorDock } from './EditorDock'
+import { SelectionActions } from './SelectionActions'
 import { EditorActions, EditorLead } from './EditorHeader'
 import { EditorToolsRow } from './EditorToolsRow'
 import { EditorKeyboard } from './EditorKeyboard'
@@ -142,7 +143,7 @@ export function ScoreEditor({
         ref={sheet}
         data-area="sheet"
         style={{ scrollPaddingBottom: below + GAP }}
-        className="h-full min-h-0 overflow-y-auto overscroll-contain"
+        className="h-full min-h-0 scroll-pt-(--tools-room) overflow-y-auto overscroll-contain pt-(--tools-room)"
         {...floating.reading}
         onClickCapture={floating.show}
       >
@@ -222,8 +223,11 @@ export function ScoreEditor({
                 // The transport at the sheet's foot where the Player's stands (ADR 0115).
                 className="absolute inset-x-0 bottom-0 flex justify-center px-1 pb-2 transition-[opacity,translate] duration-200 ease-out data-hidden:translate-y-2 data-hidden:opacity-0 motion-reduce:transition-none landscape-phone:pb-1"
               >
-                <div className="pointer-events-auto shrink-0">
-                  {idle ? <EditorDock /> : <RecordingStrip />}
+                <div className="flex shrink-0 flex-col items-center gap-2">
+                  <SelectionActions />
+                  <div className="pointer-events-auto">
+                    {idle ? <EditorDock /> : <RecordingStrip />}
+                  </div>
                 </div>
               </div>
             </div>

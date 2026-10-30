@@ -7,7 +7,9 @@ export const editor = {
   // The dock over the sheet's foot (ADR 0114): the tempo, ‹ Play ›, and Record.
   dock: 'Play, move and record',
   // The tools row (ADR 0115), the Player's in its place: the View, Transpose, then the edit row.
-  tools: 'Editing tools',
+  tools: 'Score tools',
+  // The floating capsule of what is done to the notes chosen: Delete, Copy, Cut, Paste.
+  selection: 'Selection',
   // The editor's Transpose (ADR 0115): its sheet writes the song in another key.
   transpose: {
     key: 'Apply to key',
