@@ -60,15 +60,18 @@ export function LibraryScreen({
       {empty ? (
         <LibraryEmpty page={page} inFolder={folder !== null} filter={filter} onClear={clear} />
       ) : page.select.on ? (
-        <LibrarySelect page={page} />
+        // Select's bar in the rows' drag: its places take what a row's face carries.
+        <LibrarySelect page={page} folder={folder}>
+          <SelectionBar page={page} folder={folder} />
+        </LibrarySelect>
       ) : (
         <LibraryBrowse page={page} onClear={clear} />
       )}
-      {page.select.on ? (
-        <SelectionBar page={page} />
-      ) : (
+      {!page.select.on ? (
         <NewActions page={page} folder={folder?.id ?? null} onImport={songImport.choose} />
-      )}
+      ) : empty ? (
+        <SelectionBar page={page} folder={folder} />
+      ) : null}
       <LibraryDialogs page={page} folder={folder} />
       {songImport.view}
       {drop.panel}

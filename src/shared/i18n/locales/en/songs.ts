@@ -184,6 +184,12 @@ export const songs = {
     over: '{{name}} is at place {{place}} of {{count}}.',
     dropped: '{{name}} put down at place {{place}} of {{count}}.',
     cancelled: '{{name}} put back.',
+    // A row carried by its face into a folder or onto a place on the bar.
+    overTarget: 'Over {{target}}.',
+    droppedOn: '{{name}} dropped on {{target}}.',
+    archive: 'Archive',
+    moveOut: 'Move to {{place}}',
+    zones: 'Drop here',
   },
   // Home with nothing in it: every song and folder archived.
   homeEmpty: {

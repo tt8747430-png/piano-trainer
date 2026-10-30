@@ -1,6 +1,16 @@
-import { Archive, FolderInput, Heart, HeartOff, Trash2, type LucideIcon } from 'lucide-react'
+import {
+  Archive,
+  FolderInput,
+  FolderOutput,
+  Heart,
+  HeartOff,
+  Trash2,
+  type LucideIcon,
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useFolderName, type ShelvedFolder } from '@/entities/library'
 import { FloatingActions } from '@/shared/ui'
+import { DropZone, useCarrying } from '@/widgets/song-library'
 import { Button } from '@/shared/ui/primitives/button'
 import type { LibraryPage } from '../model/use-library-page'
 
@@ -38,13 +48,49 @@ function BarAction({
 /**
  * Select's bar at the foot (Mindscape's `SelectToolbar`), floating where the screen's actions float:
  * Favourite for the songs chosen, Move and Archive for every row chosen (folders with all they
- * hold), and Delete where everything chosen can be deleted (the learner's own songs, and folders). Its slots stay put as rows are chosen: one that cannot act
- * on the choice is greyed, never taken away.
+ * hold), and Delete where everything chosen can be deleted (the learner's own songs, and folders).
+ * Its slots stay put as rows are chosen: one that cannot act on the choice is greyed, never taken
+ * away. While a row's face is carried, the bar is where it drops: Archive, and in a folder, out to
+ * the place the folder stands in (iOS Files').
  */
-export function SelectionBar({ page }: { page: LibraryPage }) {
+export function SelectionBar({
+  page,
+  folder,
+}: {
+  page: LibraryPage
+  /** The folder open: what is carried may go out of it, to the place it stands in. */
+  folder: ShelvedFolder | null
+}) {
   const { t } = useTranslation('songs')
+  const nameOf = useFolderName()
+  const carrying = useCarrying()
   const { select } = page
   const noSongs = select.songs.length === 0
+  if (carrying) {
+    const parent = folder?.parent
+      ? page.layout.folders.find((each) => each.id === folder.parent)
+      : undefined
+    return (
+      <FloatingActions>
+        <div
+          role="group"
+          aria-label={t('drag.zones')}
+          className="flex w-[min(24rem,calc(100vw-2rem))] gap-1 rounded-3xl border border-border bg-raised p-1 elevation-3"
+        >
+          {folder ? (
+            <DropZone
+              zone="out"
+              label={t('drag.moveOut', {
+                place: parent ? nameOf(parent) : t('library.home'),
+              })}
+              icon={FolderOutput}
+            />
+          ) : null}
+          <DropZone zone="archive" label={t('drag.archive')} icon={Archive} />
+        </div>
+      </FloatingActions>
+    )
+  }
   return (
     <FloatingActions>
       <div

@@ -1,9 +1,11 @@
+import { useDraggable, useDroppable } from '@dnd-kit/core'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Check, GripVertical } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
+import { CARRY, INTO, useLibraryDnd } from '../model/library-dnd'
 import { ROW_BODY, ROW_CARD, ROW_CONTROL } from './row-class'
 
 /**
@@ -28,7 +30,10 @@ export function SelectCheck({ checked }: { checked: boolean }) {
  * A row while Select is on (Mindscape's `SelectRow`): a tap chooses it or lets it go, its check at
  * its end in the place its More stood, so its tile and title stay where they were (iOS Files'); in
  * the Manual order, its handle beside the check moves it by a finger, a mouse or the keyboard
- * (`sortable`). In the hand, its place is an empty slot, where it would land.
+ * (`sortable`). In the hand, its place is an empty slot, where it would land. Its face carries it
+ * (`carry`, its key: held a moment by a finger, or dragged by a mouse), with every row chosen where
+ * it is chosen, into a folder or onto the bar's places; a folder's row (`into`, its id) takes what is
+ * carried, lit while it is over it, and greys while it is carried itself.
  */
 export function SelectRow({
   id,
@@ -36,6 +41,8 @@ export function SelectRow({
   checked,
   onToggle,
   sortable,
+  carry,
+  into,
   children,
 }: {
   id: string
@@ -44,6 +51,10 @@ export function SelectRow({
   checked: boolean
   onToggle: () => void
   sortable: boolean
+  /** Its key, as its face carries it. */
+  carry: string
+  /** A folder's id: what is carried drops into it. */
+  into?: string | undefined
   /** Its face. */
   children: ReactNode
 }) {
@@ -58,16 +69,41 @@ export function SelectRow({
     isDragging,
   } = useSortable({ id, disabled: !sortable, attributes: { roleDescription: t('drag.role') } })
   const move = t('drag.move', { name })
+  const { carrying } = useLibraryDnd()
+  const carried = carrying?.has(carry) === true
+  const { setNodeRef: setCarrierRef, listeners: carrierListeners } = useDraggable({
+    id: `${CARRY}${carry}`,
+  })
+  const target = useDroppable({ id: `${INTO}${into ?? ''}`, disabled: !into || carried })
+  const lit = target.isOver && carrying !== null
   return (
     <li
-      ref={setNodeRef}
+      ref={(node) => {
+        setNodeRef(node)
+        target.setNodeRef(node)
+      }}
       style={{ transform: CSS.Translate.toString(transform), transition }}
       data-dragging={isDragging ? '' : undefined}
-      className="data-dragging:*:border-dashed data-dragging:*:bg-muted data-dragging:*:*:invisible"
+      data-carried={carried ? '' : undefined}
+      className="data-carried:opacity-50 data-dragging:*:border-dashed data-dragging:*:bg-muted data-dragging:*:*:invisible"
     >
-      <div className={cn(ROW_CARD, 'hover:bg-muted', checked && 'ring-2 ring-selected ring-inset')}>
-        {/* The row's face chooses it too, as the check does: one stop for a keyboard, the check's. */}
-        <div aria-hidden onClick={onToggle} className={cn(ROW_BODY, 'cursor-pointer')}>
+      <div
+        data-drop={lit ? '' : undefined}
+        className={cn(
+          ROW_CARD,
+          'hover:bg-muted data-drop:bg-selected/15 data-drop:ring-2 data-drop:ring-selected data-drop:ring-inset',
+          checked && 'ring-2 ring-selected ring-inset',
+        )}
+      >
+        {/* The row's face chooses it too, as the check does: one stop for a keyboard, the check's.
+            Held or dragged, it carries the row. */}
+        <div
+          ref={setCarrierRef}
+          aria-hidden
+          onClick={onToggle}
+          {...carrierListeners}
+          className={cn(ROW_BODY, 'cursor-pointer touch-manipulation select-none')}
+        >
           {children}
         </div>
         {sortable ? (
@@ -98,14 +134,25 @@ export function SelectRow({
   )
 }
 
-/** The row in the hand, over the list (the drag's overlay): the row it came from, lifted a shade. */
-export function RowInHand({ checked, children }: { checked: boolean; children: ReactNode }) {
+/**
+ * The row in the hand, over the list (the drag's overlay): the row it came from, lifted a shade;
+ * carrying more than one (`count`), how many on a badge at its corner, as iOS Files' stack says.
+ */
+export function RowInHand({
+  checked,
+  count = 1,
+  children,
+}: {
+  checked: boolean
+  count?: number
+  children: ReactNode
+}) {
   return (
     <div
       aria-hidden
       className={cn(
         ROW_CARD,
-        'cursor-grabbing elevation-3',
+        'relative cursor-grabbing elevation-3',
         checked && 'ring-2 ring-selected ring-inset',
       )}
     >
@@ -116,6 +163,14 @@ export function RowInHand({ checked, children }: { checked: boolean; children: R
       <span className={ROW_CONTROL}>
         <SelectCheck checked={checked} />
       </span>
+      {count > 1 ? (
+        <span
+          data-slot="carried-count"
+          className="absolute -top-2 -right-2 grid h-6 min-w-6 place-items-center rounded-full bg-selected px-1.5 text-xs font-semibold text-selected-foreground tabular-nums"
+        >
+          {count}
+        </span>
+      ) : null}
     </div>
   )
 }

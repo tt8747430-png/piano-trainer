@@ -175,6 +175,11 @@ export const songs: LocaleResources['songs'] = {
     over: '«{{name}}» на месте {{place}} из {{count}}.',
     dropped: '«{{name}}» поставлена на место {{place}} из {{count}}.',
     cancelled: '«{{name}}» возвращена на место.',
+    overTarget: 'Над: {{target}}.',
+    droppedOn: '«{{name}}» отпущена: {{target}}.',
+    archive: 'Архив',
+    moveOut: 'В «{{place}}»',
+    zones: 'Отпустите здесь',
   },
   homeEmpty: {
     title: 'Библиотека пуста',
