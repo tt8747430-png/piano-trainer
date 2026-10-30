@@ -70,6 +70,7 @@ export {
   choosableChordSize,
   entriesInKey,
   entryById,
+  hasEditableOriginal,
   isOwnKey,
   pieceById,
   piecesPlaying,
@@ -90,7 +91,7 @@ export {
 } from './model/content-record'
 export { entryTitles, entryWords } from './model/titles'
 export { Credits } from './ui/Credits'
-export { PieceFactCards } from './ui/PieceFactCards'
+export { PieceFactCards, PieceFactLine } from './ui/PieceFactCards'
 export { PieceLink } from './ui/PieceLink'
 export { SourceLine } from './ui/SourceLine'
 export { usePieceHeadings, useSectionHeading } from './ui/use-section-heading'
