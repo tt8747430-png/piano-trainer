@@ -1,12 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import {
-  ArrowDown,
-  ArrowUp,
-  ChartNoAxesColumnIncreasing,
-  Ellipsis,
-  KeyboardMusic,
-  Trash2,
-} from 'lucide-react'
+import { ChartNoAxesColumnIncreasing, Ellipsis, KeyboardMusic, Trash2 } from 'lucide-react'
 import { useRef, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -17,36 +10,23 @@ import {
   type Journey,
   type JourneyStep,
 } from '@/entities/lesson'
-import { STAGE_PAINT, stepIdOf } from '@/entities/step'
+import { STAGE_PAINT } from '@/entities/step'
 import { useAddLesson, useJourneyDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { cn, slug } from '@/shared/lib'
 import { ActionMenu, ChoiceChips, PAINT, say } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useStepTitle } from '@/widgets/curriculum'
+import { rowKey, withOrder } from '../model/journey-order'
 import { AddRow, DocText, DraftScreen, RowGroups, type RowOrder } from '@/widgets/content-editor'
 
-/** A step's row key: its chapter's and its own, so a Check asked in two chapters is two rows. */
-const rowKey = (chapter: Chapter, step: JourneyStep) => `${chapter.id}|${stepIdOf(step)}`
-
-/** A chapter moved up or down by one; the same chapters where it cannot move. */
-function moved(chapters: readonly Chapter[], at: number, by: -1 | 1): readonly Chapter[] {
-  const to = at + by
-  if (to < 0 || to >= chapters.length) return chapters
-  const next = [...chapters]
-  const [chapter] = next.splice(at, 1)
-  if (chapter) next.splice(to, 0, chapter)
-  return next
-}
-
-/** A chapter's heading, renamed in place, and its menu: moved up or down, or removed (with Undo). */
+/** A chapter's heading, renamed in place, and its menu: removed (with Undo). Dragged by its handle. */
 function ChapterHead({
   chapter,
   at,
   count,
   locale,
   onRename,
-  onMove,
   onRemove,
 }: {
   chapter: Chapter
@@ -54,7 +34,6 @@ function ChapterHead({
   count: number
   locale: Locale
   onRename: (title: Chapter['title']) => void
-  onMove: (by: -1 | 1) => void
   onRemove: () => void
 }) {
   const { t } = useTranslation('learn')
@@ -93,22 +72,8 @@ function ChapterHead({
         }
         actions={[
           {
-            key: 'up',
-            label: t('edit.order.moveUp', { title: name }),
-            icon: ArrowUp,
-            disabled: at === 0,
-            onSelect: () => onMove(-1),
-          },
-          {
-            key: 'down',
-            label: t('edit.order.moveDown', { title: name }),
-            icon: ArrowDown,
-            disabled: at === count - 1,
-            onSelect: () => onMove(1),
-          },
-          {
             key: 'remove',
-            label: t('edit.order.remove', { title: name }),
+            label: t('edit.order.remove'),
             icon: Trash2,
             destructive: true,
             disabled: count === 1,
@@ -148,18 +113,7 @@ function JourneyDocument({
     onChange(next)
   }
   const chapters = (next: readonly Chapter[]) => change({ ...journey, chapters: next })
-  const steps = new Map(
-    journey.chapters.flatMap((chapter) =>
-      chapter.steps.map((step) => [rowKey(chapter, step), step] as const),
-    ),
-  )
-  const reorder = (order: RowOrder) =>
-    chapters(
-      journey.chapters.map((chapter, c) => ({
-        ...chapter,
-        steps: (order[c]?.rows ?? []).flatMap((key) => steps.get(key) ?? []),
-      })),
-    )
+  const reorder = (order: RowOrder) => change(withOrder(journey, order))
   const paint = PAINT[STAGE_PAINT[journey.stage]]
   const rowOf = (chapter: Chapter, step: JourneyStep) => {
     const key = rowKey(chapter, step)
@@ -216,7 +170,6 @@ function JourneyDocument({
                     journey.chapters.map((each) => (each === chapter ? { ...each, title } : each)),
                   )
                 }
-                onMove={(by) => chapters(moved(journey.chapters, c, by))}
                 onRemove={() => {
                   chapters(journey.chapters.filter((each) => each !== chapter))
                   say(t('edit.order.removed', { title: name }), {

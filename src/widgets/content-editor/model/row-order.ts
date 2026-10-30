@@ -20,20 +20,12 @@ export function withRowAt(order: RowOrder, row: string, group: number, at: numbe
   )
 }
 
-/**
- * The order with a row moved one place up or down: past its neighbour, or from a group's edge onto
- * the next group's (the previous one's end, the next one's start); null where it cannot move.
- */
-export function withRowMoved(order: RowOrder, row: string, by: -1 | 1): RowOrder | null {
-  const place = rowPlace(order, row)
-  if (!place) return null
-  const rows = order[place.group]?.rows ?? []
-  const to = place.at + by
-  if (to >= 0 && to < rows.length) return withRowAt(order, row, place.group, to)
-  const group = place.group + by
-  const next = order[group]
-  if (!next) return null
-  return withRowAt(order, row, group, by < 0 ? next.rows.length : 0)
+/** The order with group `group` (its key) taken out and put at place `to` among the groups. */
+export function withGroupAt(order: RowOrder, group: string, to: number): RowOrder {
+  const moved = order.find((each) => each.key === group)
+  if (!moved) return order
+  const rest = order.filter((each) => each !== moved)
+  return [...rest.slice(0, to), moved, ...rest.slice(to)]
 }
 
 /** The order without row `row`. */

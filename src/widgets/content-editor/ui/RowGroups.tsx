@@ -18,28 +18,14 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import {
-  ArrowDown,
-  ArrowUp,
-  CornerDownRight,
-  Ellipsis,
-  GripVertical,
-  Trash2,
-  type LucideIcon,
-} from 'lucide-react'
+import { Ellipsis, GripVertical, Trash2, type LucideIcon } from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
 import { useRender } from '@base-ui/react/use-render'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { ActionMenu, say, type MenuAction } from '@/shared/ui'
+import { ActionMenu, say } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import {
-  rowPlace,
-  withRowAt,
-  withRowMoved,
-  withRowRemoved,
-  type RowOrder,
-} from '../model/row-order'
+import { rowPlace, withGroupAt, withRowAt, withRowRemoved, type RowOrder } from '../model/row-order'
 
 /** A row of a document's list: its name, a line under it, and where it opens. */
 export interface DocRow {
@@ -66,6 +52,8 @@ export interface RowGroup {
   readonly empty?: string
   /** A group that is a part of the page (a chapter): its region's name. */
   readonly region?: string
+  /** What else its heading's menu holds after Remove (a chapter's). */
+  readonly onRemove?: () => void
 }
 
 function RowName({ title, detail, link }: Pick<DocRow, 'title' | 'detail' | 'link'>) {
@@ -85,32 +73,73 @@ function RowName({ title, detail, link }: Pick<DocRow, 'title' | 'detail' | 'lin
   })
 }
 
+/** A row's drag handle and a group's: held and moved (a mouse, a finger held, or Space and the arrows). */
+function Handle({
+  label,
+  handle,
+}: {
+  label: string
+  handle: Pick<ReturnType<typeof useSortable>, 'attributes' | 'listeners' | 'setActivatorNodeRef'>
+}) {
+  const { attributes, listeners, setActivatorNodeRef } = handle
+  return (
+    <button
+      ref={setActivatorNodeRef}
+      type="button"
+      aria-label={label}
+      title={label}
+      className="grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-xl text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted active:cursor-grabbing"
+      {...attributes}
+      {...listeners}
+    >
+      <GripVertical aria-hidden className="size-4" />
+    </button>
+  )
+}
+
+/** A row's menu, named for the row: what is not done by dragging it (Remove). */
+function RowMenu({ title, onRemove }: { title: string; onRemove: () => void }) {
+  const { t } = useTranslation('learn')
+  const label = t('edit.doc.rowMenu', { title })
+  return (
+    <ActionMenu
+      label={label}
+      align="end"
+      trigger={<Ellipsis aria-hidden />}
+      render={
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-11 shrink-0"
+          aria-label={label}
+          title={label}
+        />
+      }
+      actions={[
+        {
+          key: 'remove',
+          label: t('edit.order.remove'),
+          icon: Trash2,
+          destructive: true,
+          onSelect: onRemove,
+        },
+      ]}
+    />
+  )
+}
+
 function SortableRow({
   row,
   number,
-  canMove,
-  onMove,
-  moves,
   onRemove,
 }: {
   row: DocRow
   number: number
-  canMove: { up: boolean; down: boolean }
-  onMove: (by: -1 | 1) => void
-  /** Onto another group's end (another chapter), one action each. */
-  moves: readonly MenuAction[]
   onRemove: () => void
 }) {
   const { t } = useTranslation('learn')
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    setActivatorNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: row.key })
+  const sortable = useSortable({ id: row.key })
+  const { setNodeRef, transform, transition, isDragging } = sortable
   const Icon = row.icon
   return (
     <li
@@ -119,17 +148,7 @@ function SortableRow({
       data-dragging={isDragging ? '' : undefined}
       className="group/row relative flex min-h-16 items-center gap-2 bg-card py-1 pr-1 data-dragging:z-10 data-dragging:rounded-xl data-dragging:shadow-lg"
     >
-      <button
-        ref={setActivatorNodeRef}
-        type="button"
-        aria-label={t('edit.doc.drag', { title: row.title })}
-        title={t('edit.doc.drag', { title: row.title })}
-        className="grid size-11 shrink-0 cursor-grab touch-none place-items-center rounded-xl text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted active:cursor-grabbing"
-        {...attributes}
-        {...listeners}
-      >
-        <GripVertical aria-hidden className="size-4" />
-      </button>
+      <Handle label={t('edit.doc.drag', { title: row.title })} handle={sortable} />
       {/* Its tile, as the learner's row: the lesson's number in its level's paint, a Check's picture. */}
       <span
         aria-hidden
@@ -142,44 +161,7 @@ function SortableRow({
         {Icon ? <Icon className="size-5" strokeWidth={1.75} /> : number}
       </span>
       <RowName title={row.title} detail={row.detail} link={row.link} />
-      <ActionMenu
-        label={t('edit.doc.rowMenu', { title: row.title })}
-        align="end"
-        trigger={<Ellipsis aria-hidden />}
-        render={
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-11 shrink-0"
-            aria-label={t('edit.doc.rowMenu', { title: row.title })}
-            title={t('edit.doc.rowMenu', { title: row.title })}
-          />
-        }
-        actions={[
-          {
-            key: 'up',
-            label: t('edit.order.moveUp', { title: row.title }),
-            icon: ArrowUp,
-            disabled: !canMove.up,
-            onSelect: () => onMove(-1),
-          },
-          {
-            key: 'down',
-            label: t('edit.order.moveDown', { title: row.title }),
-            icon: ArrowDown,
-            disabled: !canMove.down,
-            onSelect: () => onMove(1),
-          },
-          {
-            key: 'remove',
-            label: t('edit.order.remove', { title: row.title }),
-            icon: Trash2,
-            destructive: true,
-            onSelect: onRemove,
-          },
-          ...moves,
-        ]}
-      />
+      <RowMenu title={row.title} onRemove={onRemove} />
     </li>
   )
 }
@@ -201,9 +183,7 @@ function GroupList({
         ref={setNodeRef}
         aria-label={group.label}
         data-over={isOver ? '' : undefined}
-        className={cn(
-          'flex min-h-16 flex-col divide-y divide-hairline card transition-colors duration-150 ease-out data-over:ring-2 data-over:ring-primary/60',
-        )}
+        className="flex min-h-16 flex-col divide-y divide-hairline card transition-colors duration-150 ease-out data-over:ring-2 data-over:ring-primary/60"
       >
         {children}
       </ol>
@@ -211,18 +191,58 @@ function GroupList({
   )
 }
 
+/** A group's own place among the groups, dragged by the handle beside its heading (a chapter). */
+function SortableGroup({
+  group,
+  sortable: sorts,
+  children,
+}: {
+  group: RowGroup
+  sortable: boolean
+  children: (handle: ReactNode) => ReactNode
+}) {
+  const { t } = useTranslation('learn')
+  const sortable = useSortable({ id: groupId(group.key), disabled: !sorts })
+  const { setNodeRef, transform, transition, isDragging } = sortable
+  const Part = group.region ? 'section' : 'div'
+  return (
+    <Part
+      ref={setNodeRef}
+      aria-label={group.region}
+      style={{ transform: CSS.Translate.toString(transform), transition }}
+      data-dragging={isDragging ? '' : undefined}
+      className="flex flex-col gap-2 rounded-2xl data-dragging:z-10 data-dragging:bg-background data-dragging:shadow-lg"
+    >
+      {children(
+        sorts ? (
+          <Handle
+            label={t('edit.doc.drag', { title: group.region ?? group.label })}
+            handle={sortable}
+          />
+        ) : null,
+      )}
+    </Part>
+  )
+}
+
+/** A group's id among the draggables, apart from its rows' and its list's own. */
+const groupId = (key: string) => `group:${key}`
+const groupKeyOf = (id: UniqueIdentifier) =>
+  String(id).startsWith('group:') ? String(id).slice('group:'.length) : null
+
 /**
- * Rows of a document an editor puts in order (round 21: a course's lessons, a journey's chapters'
- * steps): each dragged by its handle (a mouse, a finger held, or Space and the arrows), within its
- * group or onto another; its menu moves it up or down (onto the next group from an edge) or removes
- * it (said, with Undo). No up and down buttons: the document reads as a list.
+ * Rows of a document an editor puts in order (a course's lessons, a level's chapters' steps), each
+ * dragged by its handle (a mouse, a finger held, or Space and the arrows) within its group or onto
+ * another; where there are several groups (chapters), each group dragged by the handle beside its
+ * heading. A row's menu removes it (said, with Undo). Nothing is moved by a menu: dragging is the
+ * one way.
  */
 export function RowGroups({
   groups,
   onChange,
 }: {
   groups: readonly RowGroup[]
-  /** The rows' keys in their new order, group by group. */
+  /** The groups and their rows' keys in their new order. */
   onChange: (order: RowOrder) => void
 }) {
   const { t } = useTranslation('learn')
@@ -235,17 +255,19 @@ export function RowGroups({
     key: group.key,
     rows: group.rows.map((row) => row.key),
   }))
-  // While a row is in the hand, where it would land: across groups as it is dragged over them.
+  // While something is in the hand, where it would land: a row across groups as it is dragged over them.
   const [dragged, setDragged] = useState<RowOrder | null>(null)
   const order = dragged ?? given
+  const sortsGroups = groups.length > 1
   const rows = new Map(groups.flatMap((group) => group.rows.map((row) => [row.key, row])))
+  const byKey = new Map(groups.map((group) => [group.key, group]))
   const groupOf = (id: UniqueIdentifier): number => {
-    const key = String(id)
+    const key = groupKeyOf(id) ?? String(id)
     const byGroup = order.findIndex((group) => group.key === key)
     return byGroup !== -1 ? byGroup : (rowPlace(order, key)?.group ?? -1)
   }
   const over = ({ active, over: target }: DragOverEvent) => {
-    if (!target) return
+    if (!target || groupKeyOf(active.id)) return
     const from = groupOf(active.id)
     const to = groupOf(target.id)
     if (from === -1 || to === -1 || from === to) return
@@ -257,11 +279,19 @@ export function RowGroups({
     setDragged(null)
     if (!target) return
     const to = groupOf(target.id)
-    const place = rowPlace(now, String(target.id))
-    const next =
-      to === -1
+    const moving = groupKeyOf(active.id)
+    const next = moving
+      ? to === -1
         ? now
-        : withRowAt(now, String(active.id), to, place?.at ?? now[to]?.rows.length ?? 0)
+        : withGroupAt(now, moving, to)
+      : to === -1
+        ? now
+        : withRowAt(
+            now,
+            String(active.id),
+            to,
+            rowPlace(now, String(target.id))?.at ?? now[to]?.rows.length ?? 0,
+          )
     if (JSON.stringify(next) !== JSON.stringify(given)) onChange(next)
   }
   const remove = (row: DocRow) => {
@@ -284,57 +314,49 @@ export function RowGroups({
       onDragEnd={end}
       onDragCancel={() => setDragged(null)}
     >
-      {groups.map((group, g) => {
-        const keys = order[g]?.rows ?? []
-        const Part = group.region ? 'section' : 'div'
-        return (
-          <Part key={group.key} aria-label={group.region} className="flex flex-col gap-2">
-            {group.head}
-            <GroupList group={group} rows={keys}>
-              {keys.length === 0 && group.empty ? (
-                <li className="flex min-h-16 items-center px-4 text-sm text-muted-foreground">
-                  {group.empty}
-                </li>
-              ) : null}
-              {keys.map((key, at) => {
-                const row = rows.get(key)
-                if (!row) return null
-                return (
-                  <SortableRow
-                    key={key}
-                    row={row}
-                    number={(firsts[g] ?? 0) + at + 1}
-                    canMove={{
-                      up: withRowMoved(given, key, -1) !== null,
-                      down: withRowMoved(given, key, 1) !== null,
-                    }}
-                    onMove={(by) => {
-                      const moved = withRowMoved(given, key, by)
-                      if (moved) onChange(moved)
-                    }}
-                    moves={groups.flatMap((other, o) =>
-                      o === g || !other.region
-                        ? []
-                        : [
-                            {
-                              key: `to-${other.key}`,
-                              group: t('edit.order.moveTo'),
-                              label: other.region,
-                              icon: CornerDownRight,
-                              onSelect: () =>
-                                onChange(withRowAt(given, key, o, given[o]?.rows.length ?? 0)),
-                            },
-                          ],
-                    )}
-                    onRemove={() => remove(row)}
-                  />
-                )
-              })}
-            </GroupList>
-            {group.foot}
-          </Part>
-        )
-      })}
+      <SortableContext
+        items={order.map((group) => groupId(group.key))}
+        strategy={verticalListSortingStrategy}
+      >
+        {order.map(({ key, rows: keys }, g) => {
+          const group = byKey.get(key)
+          if (!group) return null
+          return (
+            <SortableGroup key={key} group={group} sortable={sortsGroups}>
+              {(handle) => (
+                <>
+                  {handle || group.head ? (
+                    <div className="flex items-end gap-1">
+                      {handle}
+                      <div className="min-w-0 flex-1">{group.head}</div>
+                    </div>
+                  ) : null}
+                  <GroupList group={group} rows={keys}>
+                    {keys.length === 0 && group.empty ? (
+                      <li className="flex min-h-16 items-center px-4 text-sm text-muted-foreground">
+                        {group.empty}
+                      </li>
+                    ) : null}
+                    {keys.map((rowKey, at) => {
+                      const row = rows.get(rowKey)
+                      if (!row) return null
+                      return (
+                        <SortableRow
+                          key={rowKey}
+                          row={row}
+                          number={(firsts[g] ?? 0) + at + 1}
+                          onRemove={() => remove(row)}
+                        />
+                      )
+                    })}
+                  </GroupList>
+                  {group.foot}
+                </>
+              )}
+            </SortableGroup>
+          )
+        })}
+      </SortableContext>
     </DndContext>
   )
 }

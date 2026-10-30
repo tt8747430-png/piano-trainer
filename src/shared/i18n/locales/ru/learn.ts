@@ -117,8 +117,6 @@ export const learn: LocaleResources['learn'] = {
       redo: 'Повторить',
       block: 'Блок',
       blockMenu: 'Блок: {{name}}',
-      moveUp: 'Выше',
-      moveDown: 'Ниже',
       duplicate: 'Копировать',
       remove: 'Удалить',
       removed: 'Удалено: {{name}}',
@@ -222,10 +220,7 @@ export const learn: LocaleResources['learn'] = {
     unreadable:
       'У каждого текста должны быть слова на обоих языках, а каждый пример должен читаться. Исправьте и опубликуйте.',
     order: {
-      moveTo: 'Перенести в',
-      moveUp: 'Выше: {{title}}',
-      moveDown: 'Ниже: {{title}}',
-      remove: 'Убрать: {{title}}',
+      remove: 'Убрать',
       removed: 'Убрано: {{title}}',
       undo: 'Отменить',
       unpublished: 'Ещё не опубликован',

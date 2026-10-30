@@ -1,8 +1,6 @@
 import type { Editor } from '@tiptap/core'
 import type { TFunction } from 'i18next'
 import {
-  ArrowDown,
-  ArrowUp,
   BookMarked,
   CircleHelp,
   Copy,
@@ -24,7 +22,7 @@ import {
 } from 'lucide-react'
 import type { Locale } from '@/shared/i18n'
 import { say, type MenuAction } from '@/shared/ui'
-import { canMoveBlock, FIXED_BLOCKS } from '../../model/doc-blocks'
+import { FIXED_BLOCKS } from '../../model/doc-blocks'
 import { insertableName, nodeName } from './block-names'
 import { actOnBlock, insertBlock, INSERTABLES, type Insertable } from './commands'
 
@@ -84,29 +82,12 @@ export function insertActions(
   }))
 }
 
-/**
- * Block `index`'s menu: moved up or down, copied, deleted (said, with Undo). Its moves are the
- * keyboard's and a screen reader's way to do what dragging its handle does.
- */
+/** Block `index`'s menu: copied, deleted (said, with Undo). It is moved by dragging its handle. */
 export function blockActions(editor: Editor, index: number, t: TFunction<'learn'>): MenuAction[] {
   const { doc } = editor.state
   const node = doc.maybeChild(index)
   const fixed = index < FIXED_BLOCKS || !node
   return [
-    {
-      key: 'up',
-      label: t('edit.doc.moveUp'),
-      icon: ArrowUp,
-      disabled: !canMoveBlock(doc, index, -1),
-      onSelect: () => actOnBlock(editor, index, 'up'),
-    },
-    {
-      key: 'down',
-      label: t('edit.doc.moveDown'),
-      icon: ArrowDown,
-      disabled: !canMoveBlock(doc, index, 1),
-      onSelect: () => actOnBlock(editor, index, 'down'),
-    },
     {
       key: 'duplicate',
       label: t('edit.doc.duplicate'),

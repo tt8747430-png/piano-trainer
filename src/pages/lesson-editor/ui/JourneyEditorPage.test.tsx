@@ -48,44 +48,29 @@ describe('Manage lessons, a level’s editor (content as data)', () => {
     expect(screen.queryByRole('link', { name: 'Manage lessons' })).not.toBeInTheDocument()
   })
 
-  it('orders the chapters and a chapter’s steps, and publishes the journey with them', async () => {
+  it('drags its chapters and their steps by handles, and removes a step from its menu', async () => {
     const user = userEvent.setup()
     const content = editing()
     await renderApp(`/journeys/${JOURNEY.id}/edit`, {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await user.click(await screen.findByRole('button', { name: `Chapter: ${FIRST.title.en}` }))
-    await user.click(await screen.findByRole('button', { name: `Move down: ${FIRST.title.en}` }))
+    // Chapters and steps alike are dragged by their handles; no menu moves them.
+    for (const chapter of JOURNEY.chapters)
+      // (a chapter may share its name with a step of its own)
+      expect(
+        await screen.findAllByRole('button', { name: `Move: ${chapter.title.en}` }),
+      ).not.toHaveLength(0)
     const steps = screen.getByRole('list', { name: `Steps: ${FIRST.title.en}` })
-    const [, last] = within(steps).getAllByRole('listitem')
-    if (!last) throw new Error('a chapter of two steps at least')
-    await user.click(within(last).getByRole('button', { name: /^More: / }))
-    await user.click(await screen.findByRole('button', { name: /^Move up: / }))
-    await publish(user)
-    const body = content.body('journey', JOURNEY.id) as Journey
-    expect(body.chapters.map((chapter) => chapter.id).slice(0, 2)).toEqual([SECOND.id, FIRST.id])
-    const moved = body.chapters[1]?.steps
-    expect(moved?.[0]).toEqual(FIRST.steps[1])
-    expect(moved?.[1]).toEqual(FIRST.steps[0])
-  })
-
-  it('moves a chapter’s first step onto the end of the chapter before it', async () => {
-    const user = userEvent.setup()
-    const content = editing()
-    await renderApp(`/journeys/${JOURNEY.id}/edit`, {
-      auth: await signedInAs('editor'),
-      contentEditing: content,
-    })
-    const steps = await screen.findByRole('list', { name: `Steps: ${SECOND.title.en}` })
     const [first] = within(steps).getAllByRole('listitem')
     if (!first) throw new Error('a chapter of a step at least')
+    expect(within(first).getByRole('button', { name: /^Move: / })).toBeInTheDocument()
     await user.click(within(first).getByRole('button', { name: /^More: / }))
-    await user.click(await screen.findByRole('button', { name: /^Move up: / }))
+    expect(screen.queryByRole('button', { name: /^Move (up|down|to)/ })).not.toBeInTheDocument()
+    await user.click(await screen.findByRole('button', { name: 'Remove' }))
     await publish(user)
     const body = content.body('journey', JOURNEY.id) as Journey
-    expect(body.chapters[0]?.steps.at(-1)).toEqual(SECOND.steps[0])
-    expect(body.chapters[1]?.steps).toEqual(SECOND.steps.slice(1))
+    expect(body.chapters[0]?.steps).toEqual(FIRST.steps.slice(1))
   })
 
   it('renames a chapter in place, in the language the draft’s menu says', async () => {
@@ -130,24 +115,6 @@ describe('Manage lessons, a level’s editor (content as data)', () => {
     })
     expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Edit lesson')
     expect(await screen.findByText('Half pedal')).toBeInTheDocument()
-  })
-
-  it('moves a step onto another chapter from its menu', async () => {
-    const user = userEvent.setup()
-    const content = editing()
-    await renderApp(`/journeys/${JOURNEY.id}/edit`, {
-      auth: await signedInAs('editor'),
-      contentEditing: content,
-    })
-    const steps = await screen.findByRole('list', { name: `Steps: ${FIRST.title.en}` })
-    const [first] = within(steps).getAllByRole('listitem')
-    if (!first) throw new Error('a chapter of a step at least')
-    await user.click(within(first).getByRole('button', { name: /^More: / }))
-    await user.click(await screen.findByRole('button', { name: SECOND.title.en }))
-    await publish(user)
-    const body = content.body('journey', JOURNEY.id) as Journey
-    expect(body.chapters[0]?.steps).toEqual(FIRST.steps.slice(1))
-    expect(body.chapters[1]?.steps.at(-1)).toEqual(FIRST.steps[0])
   })
 
   it('opens another level from its chips', async () => {

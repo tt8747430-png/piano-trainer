@@ -26,7 +26,7 @@ const field = (name: 'Title' | 'Summary') => screen.findByRole('textbox', { name
 /** A lesson row's menu, opened, and one of its actions chosen. */
 async function rowAction(user: ReturnType<typeof userEvent.setup>, title: string, action: string) {
   await user.click(screen.getByRole('button', { name: `More: ${title}` }))
-  await user.click(await screen.findByRole('button', { name: `${action}: ${title}` }))
+  await user.click(await screen.findByRole('button', { name: action }))
 }
 
 /** Publishes the draft once it is saved: the bar's Publish, then the dialog's. */
@@ -103,7 +103,7 @@ describe('the course editor (ADR 0116, round 12)', () => {
     expect(content.body('course', COURSE.id)).toEqual(courseRecord(COURSE))
   })
 
-  it('orders and removes the course’s lessons, published with the course', async () => {
+  it('drags its lessons by their handles and removes one from its menu, published with the course', async () => {
     const user = userEvent.setup()
     const content = editing()
     await renderApp(`/courses/${COURSE.id}/edit`, {
@@ -114,21 +114,17 @@ describe('the course editor (ADR 0116, round 12)', () => {
     if (!first || !second || !third) throw new Error('a course of three lessons at least')
     const lessons = await screen.findByRole('list', { name: 'Lessons' })
     expect(within(lessons).getAllByRole('listitem')).toHaveLength(COURSE.lessons.length)
-    await rowAction(user, second.title.en, 'Move up')
-    await rowAction(user, third.title.en, 'Remove')
-    expect(
-      within(lessons)
-        .getAllByRole('link')
-        .slice(0, 2)
-        .map((link) => link.textContent),
-    ).toEqual([second.title.en, first.title.en])
+    // Each row is dragged by its handle; its menu does what dragging does not.
+    for (const lesson of COURSE.lessons)
+      expect(screen.getByRole('button', { name: `Move: ${lesson.title.en}` })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: `More: ${third.title.en}` }))
+    expect(screen.queryByRole('button', { name: /^Move (up|down)/ })).not.toBeInTheDocument()
+    await user.click(await screen.findByRole('button', { name: 'Remove' }))
     await publish(user)
     await screen.findByText('Published. Learners get it the next time the app starts.')
-    expect((content.body('course', COURSE.id) as { lessons: string[] }).lessons).toEqual([
-      second.id,
-      first.id,
-      ...COURSE.lessons.slice(3).map((lesson) => lesson.id),
-    ])
+    expect((content.body('course', COURSE.id) as { lessons: string[] }).lessons).toEqual(
+      COURSE.lessons.filter((lesson) => lesson !== third).map((lesson) => lesson.id),
+    )
   })
 
   it('says a lesson was taken out, and Undo puts it back where it was', async () => {

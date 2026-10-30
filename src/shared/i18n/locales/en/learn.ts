@@ -128,8 +128,6 @@ export const learn = {
       redo: 'Redo',
       block: 'Block',
       blockMenu: 'Block: {{name}}',
-      moveUp: 'Move up',
-      moveDown: 'Move down',
       duplicate: 'Duplicate',
       remove: 'Delete',
       removed: 'Deleted: {{name}}',
@@ -234,10 +232,7 @@ export const learn = {
     unreadable:
       'Every text needs words in both languages, and every example must read. Put them right, then publish.',
     order: {
-      moveTo: 'Move to',
-      moveUp: 'Move up: {{title}}',
-      moveDown: 'Move down: {{title}}',
-      remove: 'Remove: {{title}}',
+      remove: 'Remove',
       removed: 'Removed: {{title}}',
       undo: 'Undo',
       unpublished: 'Not published yet',
