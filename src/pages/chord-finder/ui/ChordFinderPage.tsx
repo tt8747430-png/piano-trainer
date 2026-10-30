@@ -63,7 +63,7 @@ function FinderSettings({
       <SheetTrigger
         render={
           <Button
-            variant="surface"
+            variant="bar"
             aria-label={t('chordFinder.settings')}
             title={t('chordFinder.settings')}
             className="rounded-full px-3"
