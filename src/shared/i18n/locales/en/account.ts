@@ -12,6 +12,21 @@ export const account = {
   why: 'An account keeps your songs, progress and settings on every device you sign in on. The app works fully without one.',
   // The Profile: who is signed in, and what they have done.
   profile: {
+    achievements: {
+      title: 'Badges',
+      earned: 'Earned',
+      progress: '{{have}} of {{goal}}',
+      names: {
+        firstStep: 'First step',
+        week: 'A week in a row',
+        tenSteps: 'Ten steps',
+        firstSong: 'First song',
+        month: 'Thirty days',
+        fiftySteps: 'Fifty steps',
+        tenSongs: 'Ten songs',
+        tenSkills: 'Ten skills',
+      },
+    },
     title: 'Profile',
     guest: 'Playing without an account',
     guestLine: 'Sign in to keep your songs and progress on every device.',

@@ -4,6 +4,7 @@ import {
   CalendarDays,
   Flame,
   Footprints,
+  Lock,
   Music,
   Settings,
   Sparkles,
@@ -12,7 +13,13 @@ import {
 } from 'lucide-react'
 import { useId, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { practiceRecord, useProgress, type PracticeRecord } from '@/entities/progress'
+import {
+  achievementsOf,
+  practiceRecord,
+  useProgress,
+  type PracticeRecord,
+} from '@/entities/progress'
+import { cn } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { BackButton, ButtonLink, RoundLink, ScreenHeader } from '@/shared/ui'
 import { PracticeCalendar, PracticeDays } from '@/widgets/practice-days'
@@ -51,6 +58,7 @@ export function ProfilePage() {
         <PracticeDays />
         <Record />
         <PracticeCalendar />
+        <Achievements />
         <RecentPieces />
       </div>
     </div>
@@ -129,6 +137,57 @@ function Record() {
           )
         })}
       </dl>
+    </section>
+  )
+}
+
+/**
+ * The learner's badges (Noji's, Quizlet's): earned ones first, each its icon on its paint, then the
+ * ones to earn greyed with how far along they are.
+ */
+function Achievements() {
+  const { t } = useTranslation('account')
+  const headingId = useId()
+  const progress = useProgress((state) => state)
+  const badges = useMemo(() => achievementsOf(practiceRecord(progress)), [progress])
+  return (
+    <section aria-labelledby={headingId} className="flex flex-col gap-2">
+      <h2 id={headingId} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
+        {t('profile.achievements.title')}
+      </h2>
+      <ul className="grid grid-cols-2 gap-y-5 card px-2 py-5 sm:grid-cols-4">
+        {badges.map(({ id, figure, earned, have, goal }) => {
+          const Icon = FIGURE_ICON[figure]
+          return (
+            <li key={id} className="flex min-w-0 flex-col items-center gap-1 text-center">
+              <span
+                aria-hidden
+                className={cn(
+                  'grid size-12 place-items-center rounded-full',
+                  earned
+                    ? 'bg-paint-yellow text-on-paint-yellow'
+                    : 'bg-muted text-muted-foreground',
+                )}
+              >
+                {earned ? <Icon className="size-6" /> : <Lock className="size-5" />}
+              </span>
+              <span
+                className={cn(
+                  'text-sm font-medium text-pretty',
+                  !earned && 'text-muted-foreground',
+                )}
+              >
+                {t(`profile.achievements.names.${id}`)}
+              </span>
+              <span className="text-xs text-muted-foreground tabular-nums">
+                {earned
+                  ? t('profile.achievements.earned')
+                  : t('profile.achievements.progress', { have, goal })}
+              </span>
+            </li>
+          )
+        })}
+      </ul>
     </section>
   )
 }
