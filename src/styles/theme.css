@@ -450,9 +450,15 @@
   display: none;
 }
 @media (orientation: portrait) and (max-width: 63.99rem) {
-  :root[data-keyboard],
   :root:has([data-slot='app-nav'][data-away]),
   :root:has([data-takes-tab-bar]) {
+    /* The foot is the home indicator's then: what floats keeps its gap above it. */
+    --nav-bar: env(safe-area-inset-bottom);
+  }
+  /* The keyboard covers the foot: nothing to keep a gap above (it wins over the rule above). */
+  :root[data-keyboard],
+  :root[data-keyboard]:has([data-slot='app-nav'][data-away]),
+  :root[data-keyboard]:has([data-takes-tab-bar]) {
     --nav-bar: 0px;
   }
   :root[data-keyboard] [data-slot='app-nav'],
