@@ -203,6 +203,37 @@ describe('the lesson editor (ADR 0116)', () => {
     expect(JSON.stringify(content.body('lesson', lesson.id))).toContain('["C","Am","G7"]')
   })
 
+  it('adds a block of a kind and a section, moves and removes blocks, all on the draft', async () => {
+    const user = userEvent.setup()
+    const content = editing()
+    await renderApp(`/lessons/${LESSON.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    const first = await screen.findByRole('region', { name: /^Section 1/ })
+    const blocks = LESSON.sections[0]?.blocks.length ?? 0
+    await user.click(within(first).getByRole('button', { name: 'Add block' }))
+    await user.click(await screen.findByRole('button', { name: 'Rule' }))
+    await user.click(within(first).getAllByRole('button', { name: 'Move up: Rule' }).at(-1)!)
+    await user.type(screen.getByRole('textbox', { name: 'New section' }), 'Practice it')
+    await user.click(screen.getByRole('button', { name: 'Add section' }))
+    expect(await screen.findByRole('region', { name: /Practice it$/ })).toBeInTheDocument()
+    await waitFor(
+      async () => {
+        const draft = await content.draft('lesson', LESSON.id)
+        const body = draft.ok ? (draft.value?.body as typeof LESSON) : undefined
+        expect(body?.sections[0]?.blocks).toHaveLength(blocks + 1)
+        expect(body?.sections[0]?.blocks.at(-2)).toEqual({
+          kind: 'note',
+          rule: { en: '', ru: '' },
+          text: { en: '', ru: '' },
+        })
+        expect(body?.sections.at(-1)?.heading).toEqual({ en: 'Practice it', ru: '' })
+      },
+      { timeout: 3000 },
+    )
+  })
+
   it('tells a learner it is an editor’s, with the way back', async () => {
     await renderApp(`/lessons/${LESSON.id}/edit`, { auth: await signedInAs('learner') })
     expect(await screen.findByText('Only an editor edits a lesson.')).toBeInTheDocument()

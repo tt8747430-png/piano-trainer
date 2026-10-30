@@ -100,7 +100,7 @@ export const admin: LocaleResources['admin'] = {
       lesson: 'Урок',
       course: 'Курс',
       journey: 'Путь',
-      progression: 'Прогрессия',
+      progression: 'Последовательность',
     },
   },
   errors: {

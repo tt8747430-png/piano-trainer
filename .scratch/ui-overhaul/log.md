@@ -64,7 +64,9 @@
      chips, carousels with See all).
   4. Practice home as one grouped card per group — DONE (one card per group, groups side by side on a laptop).
   5. Profile → Activity: month calendar DONE (This month, days practised filled, today ringed); achievements left.
-  6. Block editor for lessons and songs (TipTap; a new package, say so in the report).
+  6. Block editor — DONE as a structured block editor (r19), not TipTap. Decision (owner may overturn): lessons
+     are bilingual side by side, which one rich-text document does not hold; no new package. Left: inline
+     markdown shortcuts, questions and links as insertable blocks (they need an answer/target editor).
   7. Admin: an overview page (active learners this week, new accounts, publishes, errors), errors grouped by
      message, content queue.
   8. Music editor: impeccable critique against Flat and Dorico, then fixes.

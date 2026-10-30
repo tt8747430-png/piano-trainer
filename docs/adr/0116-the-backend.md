@@ -155,3 +155,8 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   `commonProgressions` replace the bundled constants. An editor's Progressions bar edits the progression in sight
   and makes a new one (`/practice/progressions/$progressionId/edit`, `/practice/progressions/new`). The editors'
   shared parts (`DraftScreen`, `TextFields`, `OrderList`) moved to `widgets/content-editor` (2026-10-29).
+- r19 — The lesson editor edits a lesson's structure: each section's blocks as cards (moved, removed), Add block
+  for a new block of a kind (text, steps, note, rule, chords, notes, progression; `blankBlock`), sections moved,
+  removed and added (`withSection*`, `withBlock*` in `entities/lesson/model/structure.ts`). A structured block
+  editor, not an inline rich-text one (TipTap): every text is English and Russian side by side, which a single
+  rich-text document does not hold; markdown shortcuts and a `/` menu stay open (2026-10-30).
