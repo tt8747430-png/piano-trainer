@@ -38,7 +38,7 @@ export function RowButton({
       aria-describedby={why ? id : undefined}
       aria-current={current ? 'true' : undefined}
       className={cn(
-        rowClass(face.paint !== undefined),
+        rowClass(face.paint !== undefined || face.mark !== undefined),
         'w-full text-left disabled:opacity-50 disabled:hover:bg-transparent aria-[current=true]:bg-muted',
         destructive &&
           'text-destructive [&_[data-slot=row-tile]]:bg-destructive/10 [&_[data-slot=row-tile]]:text-destructive',

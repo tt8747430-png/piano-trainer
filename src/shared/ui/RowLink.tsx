@@ -18,7 +18,7 @@ export function RowLink({
     defaultTagName: 'a',
     render,
     props: {
-      className: rowClass(face.paint !== undefined),
+      className: rowClass(face.paint !== undefined || face.mark !== undefined),
       children: (
         <RowFace
           {...face}

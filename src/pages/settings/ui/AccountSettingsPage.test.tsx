@@ -17,9 +17,12 @@ describe('Settings, signed in', () => {
   it('shows the learner on the account card, leading to their account', async () => {
     await renderApp('/settings', { auth: await signedIn() })
     const card = await screen.findByRole('navigation', { name: 'Account' })
-    await waitFor(() => expect(within(card).getByRole('link')).toHaveTextContent(/Ana/))
-    expect(within(card).getByRole('link')).toHaveTextContent(/ana@example.com · Up to date/)
-    expect(within(card).getByRole('link')).toHaveAttribute('href', '/settings/account')
+    const learner = () => within(card).getAllByRole('link')[0]!
+    await waitFor(() => expect(learner()).toHaveTextContent(/Ana\s*ana@example.com/))
+    expect(learner()).toHaveAttribute('href', '/settings/account')
+    expect(within(card).getByRole('link', { name: /Sync and data/ })).toHaveTextContent(
+      'Up to date',
+    )
   })
 
   it('syncs now from Sync and data, saying where the sync stands', async () => {
