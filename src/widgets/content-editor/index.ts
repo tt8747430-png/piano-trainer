@@ -1,7 +1,6 @@
 export { DraftScreen, NotOpen } from './ui/DraftScreen'
-export { TextFields } from './ui/TextFields'
 export { LanguageChoice } from './ui/LanguageChoice'
 export { AddRow, type Addable } from './ui/AddRow'
-export { DocText, Properties, PropertyRow } from './ui/DocFields'
+export { DocText, DocTitleField, Properties, PropertyRow } from './ui/DocFields'
 export { RowGroups, type DocRow, type RowGroup } from './ui/RowGroups'
 export type { RowOrder } from './model/row-order'

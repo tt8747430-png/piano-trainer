@@ -295,7 +295,7 @@ export function JourneyEditor({
   return (
     <DraftScreen
       draft={draft}
-      heading={t('edit.title', { title })}
+      heading={t('edit.bar.journey')}
       title={title}
       back={back}
       backTo={{ link: toLessons, label: t('edit.journey.back') }}

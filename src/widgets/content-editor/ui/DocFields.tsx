@@ -35,12 +35,41 @@ export function DocText({
       aria-invalid={value[locale].trim() === '' || undefined}
       onChange={(event) => onChange({ ...value, [locale]: event.target.value.replace(/\n/g, ' ') })}
       className={cn(
-        'w-full resize-none bg-transparent outline-none field-sizing-content placeholder:text-muted-foreground focus-visible:rounded-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background',
+        // Written in place, as in a document: the caret marks where, never a box round it.
+        'w-full resize-none bg-transparent caret-primary outline-none field-sizing-content placeholder:text-muted-foreground',
         size === 'title' && 'font-display text-3xl font-semibold text-balance sm:text-4xl',
         size === 'heading' && 'font-display text-2xl text-balance',
         size === 'text' && 'text-lg leading-relaxed text-muted-foreground',
         className,
       )}
+    />
+  )
+}
+
+/**
+ * A new item's name, written as its page's large heading (a new course, a new progression): one line,
+ * no box round it, the caret marking where; focused as the page opens.
+ */
+export function DocTitleField({
+  label,
+  value,
+  placeholder,
+  onChange,
+}: {
+  label: string
+  value: string
+  placeholder: string
+  onChange: (value: string) => void
+}) {
+  return (
+    <input
+      aria-label={label}
+      value={value}
+      required
+      autoFocus
+      placeholder={placeholder}
+      onChange={(event) => onChange(event.target.value)}
+      className="w-full bg-transparent font-display text-3xl font-semibold caret-primary outline-none placeholder:text-muted-foreground sm:text-4xl"
     />
   )
 }

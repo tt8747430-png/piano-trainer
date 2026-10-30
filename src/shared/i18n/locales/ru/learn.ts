@@ -192,7 +192,7 @@ export const learn: LocaleResources['learn'] = {
       link: 'Ссылка',
     },
     open: 'Править урок',
-    title: 'Правка: {{title}}',
+    bar: { lesson: 'Правка урока', course: 'Правка курса', journey: 'Правка пути' },
     back: 'К уроку',
     editorsOnly: 'Урок правит только редактор.',
     english: 'English',

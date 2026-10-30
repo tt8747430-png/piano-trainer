@@ -215,7 +215,8 @@ export const practice = {
       new: 'New progression',
       newInfo:
         'It is made unpublished: write its lines and words, then publish it for learners to see it in the library.',
-      title: 'Edit: {{title}}',
+      bar: 'Edit progression',
+      lines: 'Lines',
       heading: 'The progression',
       info: 'Its name and how it sounds in both languages, its style, and its numerals in a major key, a minor key or both.',
       name: 'Name',

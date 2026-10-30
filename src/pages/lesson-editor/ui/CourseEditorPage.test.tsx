@@ -182,7 +182,9 @@ describe('the course editor (ADR 0116, round 12)', () => {
     const course = await content.draft('course', COURSE.id)
     const record = course.ok ? (course.value?.body as { lessons: string[] }) : undefined
     expect(record?.lessons.at(-1)).toBe('blues-in-c')
-    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Blues in C')
+    // The lesson editor, on the new lesson's document.
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Edit lesson')
+    expect(await screen.findByText('Blues in C')).toBeInTheDocument()
   })
 
   it('makes a new course from Courses, unpublished, and opens it in the course editor', async () => {
@@ -205,7 +207,8 @@ describe('the course editor (ADR 0116, round 12)', () => {
       stage: 'beginner',
     })
     expect(content.body('course', 'jazz-voicings')).toBeUndefined()
-    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Jazz voicings')
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Edit course')
+    expect(await screen.findByDisplayValue('Jazz voicings')).toBeInTheDocument()
     expect(await screen.findByText('No lessons yet. Add the first one below.')).toBeInTheDocument()
   })
 
@@ -231,7 +234,8 @@ describe('the course editor (ADR 0116, round 12)', () => {
       contentEditing: editing(),
     })
     expect(await screen.findByRole('textbox', { name: 'Название' })).toHaveValue(COURSE.title.ru)
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(COURSE.title.ru)
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Правка курса')
+    expect(screen.getByDisplayValue(COURSE.title.ru)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Уроки' })).toBeInTheDocument()
   })
 })

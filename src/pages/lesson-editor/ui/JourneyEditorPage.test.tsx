@@ -127,7 +127,8 @@ describe('the journey editor (content as data)', () => {
       title: { en: 'Pedalling' },
       steps: [{ kind: 'lesson', lessonId: 'half-pedal' }],
     })
-    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Half pedal')
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Edit lesson')
+    expect(await screen.findByText('Half pedal')).toBeInTheDocument()
   })
 
   it('tells a learner it is an editor’s', async () => {

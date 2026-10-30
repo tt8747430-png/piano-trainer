@@ -74,6 +74,7 @@ function CourseDocument({
         <PropertyRow name={t('learn:edit.course.shelf')}>
           <Dropdown
             bare
+            className="max-w-full"
             label={t('learn:edit.course.shelf')}
             value={record.shelf ?? course.shelf}
             options={SHELVES.map((value) => ({ value, label: t(`learn:shelves.${value}`) }))}
@@ -83,6 +84,7 @@ function CourseDocument({
         <PropertyRow name={t('learn:edit.course.stage')}>
           <Dropdown
             bare
+            className="max-w-full"
             label={t('learn:edit.course.stage')}
             value={record.stage ?? course.stage}
             options={STAGES.map((value) => ({ value, label: t(`common:stage.${value}`) }))}
@@ -92,6 +94,7 @@ function CourseDocument({
         <PropertyRow name={t('learn:edit.course.weeks')}>
           <Dropdown
             bare
+            className="max-w-full"
             label={t('learn:edit.course.weeks')}
             value={record.weeks ?? course.weeks}
             options={COURSE_WEEKS.map((value) => ({
@@ -189,7 +192,7 @@ export function CourseEditor({
   return (
     <DraftScreen
       draft={draft}
-      heading={t('edit.title', { title })}
+      heading={t('edit.bar.course')}
       title={title}
       back={back}
       backTo={{ link: toCourse, label: t('edit.course.back') }}

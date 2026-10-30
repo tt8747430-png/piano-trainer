@@ -38,7 +38,7 @@ export function LessonEditor({
   return (
     <DraftScreen
       draft={draft}
-      heading={t('edit.title', { title })}
+      heading={t('edit.bar.lesson')}
       title={title}
       back={back}
       backTo={{ link: toLesson, label: t('edit.back') }}

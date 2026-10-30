@@ -1,18 +1,18 @@
 import { useNavigate } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
-import { useState, type FormEvent } from 'react'
+import { useId, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { COURSE_WEEKS, courseIds, SHELVES, type Shelf } from '@/entities/course'
 import { STAGES, type Stage } from '@/entities/step'
 import { useCreateCourse } from '@/features/edit-original'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { BackButton, Dropdown, InfoTip, NameField, ScreenHeader } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
-import { NotOpen } from '@/widgets/content-editor'
+import { BackButton, Dropdown, Fab, FloatingActions, InfoTip, ScreenHeader } from '@/shared/ui'
+import { DocTitleField, NotOpen, Properties, PropertyRow } from '@/widgets/content-editor'
 
 /**
- * An editor's new course (ADR 0116): its name, shelf, level and length, then Create, which makes it
- * on the server unpublished and opens the course editor on it.
+ * An editor's new course (ADR 0116), written as the course editor's document: its name as the
+ * heading, its shelf, level and length as properties; Create floats, making it on the server
+ * unpublished and opening the course editor on it.
  */
 export function NewCoursePage() {
   const { t } = useTranslation(['learn', 'common'])
@@ -25,6 +25,7 @@ export function NewCoursePage() {
   const [weeks, setWeeks] = useState(4)
   const [creating, setCreating] = useState(false)
   const [failed, setFailed] = useState(false)
+  const formId = useId()
   const submit = async (event: FormEvent) => {
     event.preventDefault()
     if (name.trim() === '' || creating) return
@@ -47,51 +48,65 @@ export function NewCoursePage() {
         }
       />
       {editsContent(account) ? (
-        <form onSubmit={(event) => void submit(event)} className="flex flex-col gap-5">
-          <NameField
+        <form id={formId} onSubmit={(event) => void submit(event)} className="flex flex-col gap-6">
+          {/* Written as the course's page will read: its name as the heading, no box round it. */}
+          <DocTitleField
             label={t('learn:edit.course.name')}
             value={name}
-            required
-            onChange={(event) => setName(event.target.value)}
+            placeholder={t('learn:edit.doc.courseTitle')}
+            onChange={setName}
           />
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Dropdown
-              className="sm:col-span-2"
-              label={t('learn:edit.course.shelf')}
-              value={shelf}
-              options={SHELVES.map((value) => ({ value, label: t(`learn:shelves.${value}`) }))}
-              onChange={setShelf}
-            />
-            <Dropdown
-              label={t('learn:edit.course.stage')}
-              value={stage}
-              options={STAGES.map((value) => ({ value, label: t(`common:stage.${value}`) }))}
-              onChange={setStage}
-            />
-            <Dropdown
-              label={t('learn:edit.course.weeks')}
-              value={weeks}
-              options={COURSE_WEEKS.map((value) => ({
-                value,
-                label: t('learn:course.weekCount', { count: value }),
-              }))}
-              onChange={setWeeks}
-            />
-          </div>
-          <Button
-            type="submit"
-            size="lg"
-            className="self-start"
-            disabled={name.trim() === '' || creating}
-          >
-            <Plus data-icon="inline-start" aria-hidden />
-            {creating ? t('learn:edit.course.creating') : t('learn:edit.course.create')}
-          </Button>
+          <Properties label={t('learn:edit.doc.properties')}>
+            <PropertyRow name={t('learn:edit.course.shelf')}>
+              <Dropdown
+                bare
+                className="max-w-full"
+                label={t('learn:edit.course.shelf')}
+                value={shelf}
+                options={SHELVES.map((value) => ({ value, label: t(`learn:shelves.${value}`) }))}
+                onChange={setShelf}
+              />
+            </PropertyRow>
+            <PropertyRow name={t('learn:edit.course.stage')}>
+              <Dropdown
+                bare
+                className="max-w-full"
+                label={t('learn:edit.course.stage')}
+                value={stage}
+                options={STAGES.map((value) => ({ value, label: t(`common:stage.${value}`) }))}
+                onChange={setStage}
+              />
+            </PropertyRow>
+            <PropertyRow name={t('learn:edit.course.weeks')}>
+              <Dropdown
+                bare
+                className="max-w-full"
+                label={t('learn:edit.course.weeks')}
+                value={weeks}
+                options={COURSE_WEEKS.map((value) => ({
+                  value,
+                  label: t('learn:course.weekCount', { count: value }),
+                }))}
+                onChange={setWeeks}
+              />
+            </PropertyRow>
+          </Properties>
           {failed ? (
             <p role="alert" className="text-sm text-destructive">
               {t('learn:edit.course.createFailed')}
             </p>
           ) : null}
+          {/* Create, the page's one action, floats as every screen's does. */}
+          <FloatingActions>
+            <Fab
+              extended
+              type="submit"
+              form={formId}
+              label={creating ? t('learn:edit.course.creating') : t('learn:edit.course.create')}
+              icon={Plus}
+              disabled={name.trim() === '' || creating}
+            />
+          </FloatingActions>
         </form>
       ) : (
         <NotOpen line={t('learn:edit.course.editorsOnly')} />

@@ -203,7 +203,8 @@ export const learn = {
       link: 'Link',
     },
     open: 'Edit the lesson',
-    title: 'Edit: {{title}}',
+    // The editor's bar: what is edited; the document under it names which.
+    bar: { lesson: 'Edit lesson', course: 'Edit course', journey: 'Edit journey' },
     back: 'Back to the lesson',
     editorsOnly: 'Only an editor edits a lesson.',
     english: 'English',

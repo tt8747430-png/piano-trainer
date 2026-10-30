@@ -69,6 +69,7 @@ describe('the progression editor (content as data)', () => {
       id: 'gospel-walk',
       name: { en: 'Gospel walk' },
     })
-    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Gospel walk')
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Edit progression')
+    expect(await screen.findByDisplayValue('Gospel walk')).toBeInTheDocument()
   })
 })

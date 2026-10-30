@@ -1,16 +1,15 @@
 import { useNavigate } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
-import { useState, type FormEvent } from 'react'
+import { useId, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCreateProgression } from '@/features/edit-original'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { BackButton, InfoTip, NameField, ScreenHeader } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
-import { NotOpen } from '@/widgets/content-editor'
+import { BackButton, Fab, FloatingActions, InfoTip, ScreenHeader } from '@/shared/ui'
+import { DocTitleField, NotOpen } from '@/widgets/content-editor'
 
 /**
- * An editor's new progression (content as data, ADR 0116): its name, then Create, which makes it on
- * the server unpublished and opens the progression editor on it.
+ * An editor's new progression (content as data, ADR 0116): its name written as its page's heading;
+ * Create floats, making it on the server unpublished and opening the progression editor on it.
  */
 export function NewProgressionPage() {
   const { t } = useTranslation('practice')
@@ -20,6 +19,7 @@ export function NewProgressionPage() {
   const [name, setName] = useState('')
   const [creating, setCreating] = useState(false)
   const [failed, setFailed] = useState(false)
+  const formId = useId()
   const submit = async (event: FormEvent) => {
     event.preventDefault()
     if (name.trim() === '' || creating) return
@@ -45,27 +45,29 @@ export function NewProgressionPage() {
         }
       />
       {editsContent(account) ? (
-        <form onSubmit={(event) => void submit(event)} className="flex flex-col gap-5">
-          <NameField
+        <form id={formId} onSubmit={(event) => void submit(event)} className="flex flex-col gap-6">
+          <DocTitleField
             label={t('progressions.edit.name')}
             value={name}
-            required
-            onChange={(event) => setName(event.target.value)}
+            placeholder={t('progressions.edit.name')}
+            onChange={setName}
           />
-          <Button
-            type="submit"
-            size="lg"
-            className="self-start"
-            disabled={name.trim() === '' || creating}
-          >
-            <Plus data-icon="inline-start" aria-hidden />
-            {creating ? t('progressions.edit.creating') : t('progressions.edit.create')}
-          </Button>
           {failed ? (
             <p role="alert" className="text-sm text-destructive">
               {t('progressions.edit.createFailed')}
             </p>
           ) : null}
+          {/* Create, the page's one action, floats as every screen's does. */}
+          <FloatingActions>
+            <Fab
+              extended
+              type="submit"
+              form={formId}
+              label={creating ? t('progressions.edit.creating') : t('progressions.edit.create')}
+              icon={Plus}
+              disabled={name.trim() === '' || creating}
+            />
+          </FloatingActions>
         </form>
       ) : (
         <NotOpen line={t('progressions.edit.editorsOnly')} />
