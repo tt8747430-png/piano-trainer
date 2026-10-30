@@ -333,8 +333,8 @@ every screen's title smaller (`data-titles='small'`).
   20rem columns as fit (`grid-fields`); chord buttons `grid-chords`. Rows and grids stay even on wide screens.
 - **Stacks use gap:** 24px between a screen's parts, 32px between sections, 16–20px inside a group.
 - **The shell:** on a phone the places are a bar docked along the bottom; on a phone on its side a rail down the
-  left; from 1024px a 256px sidebar (72px of icons collapsed, each named in a tooltip). Learn, Songs and Practice,
-  with Search and Settings.
+  left; from 1024px a 256px sidebar (72px of icons collapsed, each named in a tooltip). Learn, Songs, Practice and
+  the Profile (its icon the learner's initial on the yellow paint, `Avatar`), with Search at the sidebar's foot.
 - **Full screens** (the Player, the score editor, the Check) have no navigation: the viewport's height, scrolling
   inside.
 - **A page that shows a thing on the keys** reads top to bottom: the keys pinned (top or foot, as the keyboard
@@ -515,7 +515,10 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
   course) set their title larger in that same row, wrapping to a second line rather than being cut; there is no
   title block under the bar, and nothing pushes the page's content below the fold. It slides away while reading
   down and returns the moment the page turns up; what is pinned under it slides with it. A place's bar holds
-  Search and the Profile on a phone; Settings is in the Profile.
+  Search on a phone; Settings opens from the Profile's bar and its first row.
+- **The learner** is their initial on the yellow paint (`Avatar`): the Profile's tab, the Profile's and the
+  Account's top, Settings' account card. An action on the account is a row (`RowButton`; a destructive one in the
+  destructive ink, `destructive`), never a button in a card under an ⓘ heading; what it does is told in its dialog.
 - **Three layers on the score's screens** (the Player, the editor): the bar, flat, for where the learner is and
   what screen-wide (Close, the mode, MIDI, Undo · Redo or Setup · More); the tools of what is shown (View,
   Transpose) a floating capsule under it on a phone held upright and a tablet, in the bar's row where it is one
