@@ -13,9 +13,9 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 
 - **Three places and the Profile**: Learn (ADR 0053), Songs (ADR 0106) and Practice, then the Profile as the fourth
   tab (memory-palaces', Noji's), its icon the learner's initial. A bar docked at the foot on a phone, a rail down the
-  left on a phone on its side, a sidebar from 1024px that collapses to its icons, Search at its foot. Alt with 1–4
+  left on a phone on its side, a sidebar from 1024px that collapses to its icons, Search and Settings at its foot (a phone opens Settings from the Profile); the phone's bar on the places alone. Alt with 1–4
   goes to them. A place's bar on a phone has Search. Settings opens from the Profile (the gear in its bar and a row
-  under its hero); the Profile's tab stays current under Settings and the account pages. Every screen below a place
+  under its hero); the Profile's tab stays current under Settings and the account pages on a phone; on a laptop Settings is current alone. Every screen below a place
   has Back.
 - **The Profile** is the learner at a glance: their name as its title, their initial, email (or a guest's Sign in),
   one row of three figures (days in a row, days practised, songs played); rows to Settings and the Account; Activity
@@ -107,3 +107,5 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
   words; the Italian terms (2026-10-28), from Musicca, piano.org and Vita Piano.
 - r24 — The Profile a tab of its own; its page, Settings' account card and the Account rebuilt as grouped rows; the
   week strip, the six-figure grid and Recently practised gone from the Profile (2026-10-30), from memory-palaces.
+- r24 — The phone's tab bar shown on the places alone (memory-palaces'): what a place opens steps it away; one
+  place current at a time, Settings the laptop sidebar's own (2026-10-30).

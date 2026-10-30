@@ -334,7 +334,7 @@ every screen's title smaller (`data-titles='small'`).
 - **Stacks use gap:** 24px between a screen's parts, 32px between sections, 16–20px inside a group.
 - **The shell:** on a phone the places are a bar docked along the bottom; on a phone on its side a rail down the
   left; from 1024px a 256px sidebar (72px of icons collapsed, each named in a tooltip). Learn, Songs, Practice and
-  the Profile (its icon the learner's initial on the yellow paint, `Avatar`), with Search at the sidebar's foot.
+  the Profile (its icon the learner's initial on the yellow paint, `Avatar`), with Search and Settings at the sidebar's foot; the phone's bar shown on the places alone.
 - **Full screens** (the Player, the score editor, the Check) have no navigation: the viewport's height, scrolling
   inside.
 - **A page that shows a thing on the keys** reads top to bottom: the keys pinned (top or foot, as the keyboard

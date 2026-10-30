@@ -183,3 +183,7 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   line; Insert grouped (Text, Music, For the learner) with voicings and a link added (2026-10-30).
 - r24 — Publish as its own sheet with a description, the published card on a song's and a pattern's page, and
   the Public library as Noji's: shelves of Newest and Most saved over the list, kinds as chips (2026-10-30).
+- r24 — Manage lessons: a level's chapters as cards of the learner's rows, dragged within and across them, a row's
+  menu moving it to another chapter, + a lesson or a chapter. The language written in chosen in the draft's
+  menu; the lesson editor's toolbar one floating capsule, Insert its accent; a level's lesson's Read first
+  (2026-10-30).

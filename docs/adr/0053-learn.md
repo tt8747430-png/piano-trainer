@@ -82,3 +82,5 @@ course.
   Continue one compact row; an editor's Edit the journey and New course floating (2026-10-30).
 - r23 — The Courses as library rows (a tile, the facts on one line, how much is learned, Next), grouped by shelf in
   one card each; a paged lesson's bar narrowed to sit beside the floating button (2026-10-30).
+- r24 — The journeys named for what they are, the four levels: chosen from one row of chips, the level's name,
+  goal and steps learned under them; the days practised and the songs played last are the Profile's (2026-10-30).
