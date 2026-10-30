@@ -105,6 +105,36 @@ describe('the Admin area', () => {
     })
   })
 
+  it('deletes a feature switch only once asked', async () => {
+    const user = userEvent.setup()
+    const admin = createFakeAdmin()
+    await admin.saveSwitch({
+      key: 'new-editor',
+      label: 'The new editor',
+      state: 'nobody',
+      groups: [],
+    })
+    await renderApp('/admin?tab=switches', { auth: await signedInAs('admin'), admin })
+    await user.click(await screen.findByRole('button', { name: 'Delete switch' }))
+    const asked = await screen.findByRole('alertdialog', { name: 'Delete “The new editor”?' })
+    await user.click(within(asked).getByRole('button', { name: 'Delete' }))
+    expect(await screen.findByText('No switches yet.')).toBeVisible()
+  })
+
+  it('says a change was not made offline as offline, not as refused', async () => {
+    const user = userEvent.setup()
+    let online = true
+    const admin = createFakeAdmin({ accounts: [ANA], online: () => online })
+    await renderApp('/admin?tab=accounts', { auth: await signedInAs('admin'), admin })
+    const role = await screen.findByRole('radiogroup', { name: 'Role for Ana' })
+    online = false
+    await user.click(within(role).getByRole('radio', { name: 'Editor' }))
+    expect(
+      (await screen.findAllByText('You’re offline. The Admin area needs a connection.'))[0],
+    ).toBeVisible()
+    expect(screen.queryByText('The server turned that down.')).toBeNull()
+  })
+
   it('hides a reported song, stops its author, and dismisses the report', async () => {
     const user = userEvent.setup()
     const admin = createFakeAdmin({ reports: [REPORT] })
@@ -112,6 +142,9 @@ describe('the Admin area', () => {
     await user.click(await screen.findByRole('button', { name: 'Hide' }))
     expect(await screen.findByText('Hidden')).toBeVisible()
     await user.click(screen.getByRole('button', { name: 'Stop them publishing' }))
+    const asked = await screen.findByRole('alertdialog', { name: 'Stop Bo publishing?' })
+    expect(admin.blocked.has('bo')).toBe(false)
+    await user.click(within(asked).getByRole('button', { name: 'Stop them publishing' }))
     await waitFor(() => expect(admin.blocked.has('bo')).toBe(true))
     await user.click(screen.getByRole('button', { name: 'Dismiss' }))
     expect(await screen.findByText('No reports.')).toBeVisible()
