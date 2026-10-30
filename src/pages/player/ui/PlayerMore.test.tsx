@@ -47,6 +47,16 @@ async function moreActions(user: User) {
     )
 }
 
+/** Opens More's Export… and chooses one of its rows, by its title. */
+async function exportAs(user: User, row: string) {
+  await chooseMore(user, 'Export…')
+  const sheet = await screen.findByRole('dialog', { name: 'Export' })
+  const title = within(sheet).getByText(row, { exact: true })
+  const button = title.closest('button')
+  if (!button) throw new Error(`${row} is a row of Export`)
+  await user.click(button)
+}
+
 /** Opens More and chooses one of its actions. */
 async function chooseMore(user: User, action: string) {
   await user.click(await screen.findByRole('button', { name: 'More' }))
@@ -128,53 +138,40 @@ function firstNoteOn(bytes: Uint8Array): number {
 }
 
 describe('the Player’s More (ADR 0108)', () => {
+  const LIBRARY = ['Add to favourites', 'Move to…', 'Archive']
   it.each([
-    [
-      'a song',
-      '/play/bz5',
-      [
-        'Add to favourites',
-        'Move to…',
-        'Archive',
-        'Song information',
-        'Sections',
-        'Share',
-        'Print',
-        'Export to MIDI',
-        'Export to MusicXML',
-      ],
-    ],
-    // With a recording, its MIDI fixed tempo or time aligned to the recording (ADR 0107).
-    [
-      'a song with a recording',
-      '/play/romashki',
-      [
-        'Add to favourites',
-        'Move to…',
-        'Archive',
-        'Song information',
-        'Sections',
-        'Share',
-        'Print',
-        'Export to MIDI, fixed tempo',
-        'Export to MIDI, time aligned',
-        'Export to MusicXML',
-      ],
-    ],
+    ['a song', '/play/bz5', [...LIBRARY, 'Song information', 'Sections', 'Print', 'Export…']],
     // A study is in no library (ADR 0106).
-    [
-      'a study',
-      '/play/ex3',
-      ['Study information', 'Sections', 'Share', 'Print', 'Export to MIDI', 'Export to MusicXML'],
-    ],
-    ['a walk', '/play/walk?root=D&kind=dorian', ['Print', 'Export to MIDI']],
-    ['a progression', '/play/progression?p=ii-V-I&key=Bb', ['Print', 'Export to MIDI']],
-    ['a chromatic walk', '/play/chromatic?chords=m9&root=G', ['Print', 'Export to MIDI']],
-    ['an exercise', '/play/exercise/hanon', ['Print', 'Export to MIDI']],
+    ['a study', '/play/ex3', ['Study information', 'Sections', 'Print', 'Export…']],
+    ['a walk', '/play/walk?root=D&kind=dorian', ['Print', 'Export…']],
+    ['an exercise', '/play/exercise/hanon', ['Print', 'Export…']],
   ])('lists what %s has', async (_music, path, actions) => {
     const user = userEvent.setup()
     await renderApp(path)
     expect(await moreActions(user)).toEqual(actions)
+  })
+
+  it.each([
+    ['a song', '/play/bz5', ['MusicXML', 'MIDI', 'Share link']],
+    // With a recording, its MIDI fixed tempo or time aligned to the recording (ADR 0107).
+    [
+      'a song with a recording',
+      '/play/romashki',
+      ['MusicXML', 'MIDI', 'MIDI, time aligned', 'Share link'],
+    ],
+    ['a progression', '/play/progression?p=ii-V-I&key=Bb', ['MIDI']],
+    ['a chromatic walk', '/play/chromatic?chords=m9&root=G', ['MIDI']],
+  ])('exports %s the ways the Export sheet lists', async (_music, path, rows) => {
+    const user = userEvent.setup()
+    await renderApp(path)
+    await chooseMore(user, 'Export…')
+    const sheet = await screen.findByRole('dialog', { name: 'Export' })
+    expect(
+      within(within(sheet).getByRole('list', { name: 'Export' }))
+        .getAllByRole('button')
+        .map((row) => row.textContent),
+      // Each row's title, then its line.
+    ).toEqual(rows.map((row) => expect.stringMatching(new RegExp(`^${row} [A-Z]`))))
   })
 
   it('shares an own song with its music, saying the link is copied where there is no share sheet', async () => {
@@ -186,12 +183,11 @@ describe('the Player’s More (ADR 0108)', () => {
       'Archive',
       'Song information',
       'Sections',
-      'Share',
       'Print',
-      'Export to MIDI',
-      'Export to MusicXML',
+      'Export…',
     ])
-    await user.click(screen.getByRole('button', { name: 'Share' }))
+    await user.keyboard('{Escape}')
+    await exportAs(user, 'Share link')
     await waitFor(() =>
       expect(screen.getByText(/^Link copied\. Anyone who opens it can add/)).toHaveAttribute(
         'role',
@@ -215,7 +211,7 @@ describe('the Player’s More (ADR 0108)', () => {
   it('shares a song of the app as a link to itself, in the key it is played and as simplified', async () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5?key=A&simple=true')
-    await chooseMore(user, 'Share')
+    await exportAs(user, 'Share link')
     await waitFor(() =>
       expect(screen.getByText(/^Link copied\. Anyone who opens it/)).toHaveAttribute(
         'role',
@@ -234,7 +230,7 @@ describe('the Player’s More (ADR 0108)', () => {
     Object.defineProperty(navigator, 'share', { value: share, configurable: true })
     onTestFinished(() => void Reflect.deleteProperty(navigator, 'share'))
     await renderApp('/play/bz5')
-    await chooseMore(user, 'Share')
+    await exportAs(user, 'Share link')
     await waitFor(() => expect(share).toHaveBeenCalledTimes(1))
     expect(share).toHaveBeenCalledWith({
       title: 'Still, my soul, be still',
@@ -361,7 +357,7 @@ describe('the Player’s More (ADR 0108)', () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5?tempo=36')
     const saved = catchDownloads()
-    await chooseMore(user, 'Export to MIDI')
+    await exportAs(user, 'MIDI')
     expect(saved.names).toEqual(['Still, my soul, be still (36 BPM).mid'])
     const [file] = saved.files
     if (!file) throw new Error('a file is saved')
@@ -375,7 +371,7 @@ describe('the Player’s More (ADR 0108)', () => {
     const user = userEvent.setup()
     await renderApp('/play/bz5?key=A')
     const saved = catchDownloads()
-    await chooseMore(user, 'Export to MusicXML')
+    await exportAs(user, 'MusicXML')
     expect(saved.names).toEqual(['Still, my soul, be still.musicxml'])
     const [file] = saved.files
     if (!file) throw new Error('a file is saved')
@@ -391,8 +387,8 @@ describe('the Player’s More (ADR 0108)', () => {
     const user = userEvent.setup()
     await renderApp('/play/romashki?tempo=60')
     const saved = catchDownloads()
-    await chooseMore(user, 'Export to MIDI, fixed tempo')
-    await chooseMore(user, 'Export to MIDI, time aligned')
+    await exportAs(user, 'MIDI')
+    await exportAs(user, 'MIDI, time aligned')
     // Time aligned: at the recording's tempo, its notes from where its bar 1 is, 3.26 s in.
     expect(saved.names).toEqual(['Daisy fields (60 BPM).mid', 'Daisy fields (73 BPM).mid'])
     const [fixed, aligned] = await Promise.all(
@@ -410,7 +406,7 @@ describe('the Player’s More (ADR 0108)', () => {
     const user = userEvent.setup()
     await renderApp('/play/walk?root=D&kind=dorian')
     const saved = catchDownloads()
-    await chooseMore(user, 'Export to MIDI')
+    await exportAs(user, 'MIDI')
     expect(saved.names).toEqual([
       expect.stringMatching(/^Walk the chords in D Dorian \(\d+ BPM\)\.mid$/),
     ])
@@ -426,7 +422,11 @@ describe('the Player’s More (ADR 0108)', () => {
     await renderApp('/play/silent', { locale: 'ru' })
     const saved = catchDownloads()
     await user.click(await screen.findByRole('button', { name: 'Ещё' }))
-    await user.click(await screen.findByRole('button', { name: 'Экспорт в MIDI' }))
+    await user.click(await screen.findByRole('button', { name: 'Экспорт…' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Экспорт' })
+    const midi = within(sheet).getByText('MIDI', { exact: true }).closest('button')
+    if (!midi) throw new Error('MIDI is a row of Export')
+    await user.click(midi)
     const [file] = saved.files
     if (!file) throw new Error('a file is saved')
     const text = new TextDecoder().decode(await file.arrayBuffer())

@@ -6,7 +6,7 @@ import { entryTitles, useRepertoire } from '@/entities/piece'
 import { selectView } from '@/entities/views'
 import { DeleteFolderAsk, FolderSheet, MoveSheet } from '@/features/manage-library'
 import { songToShare, useShareSong } from '@/features/share-song'
-import { ExportSheet } from '@/features/song-files'
+import { SongExportSheet } from '@/features/song-files'
 import { useLocale } from '@/shared/i18n'
 import { say } from '@/shared/ui'
 import type { LibraryPage } from '../model/use-library-page'
@@ -87,7 +87,7 @@ export function LibraryDialogs({
         builtIn={pending?.kind === 'new-song' ? pending.builtIn : undefined}
         record={pending?.kind === 'new-song' && pending.record === true}
       />
-      <ExportSheet
+      <SongExportSheet
         piece={exported}
         onOpenChange={shut}
         share={

@@ -818,7 +818,12 @@ describe('the score editor', () => {
       within(menu)
         .getAllByRole('button')
         .map((item) => item.textContent),
-    ).toEqual(['Intro', 'Chorus', 'Bridge', 'Ending'])
+    ).toEqual(['Intro', 'Verse', 'Chorus', 'Bridge', 'Ending'])
+    // Its own part ticked, as every choice menu ticks its own.
+    expect(within(menu).getByRole('button', { name: 'Verse' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
   })
 
   it('prints a section’s name in the labels’ row as the Player does, its menu opened there (ADR 0097)', async () => {

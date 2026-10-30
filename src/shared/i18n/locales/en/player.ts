@@ -17,10 +17,6 @@ export const player = {
     one: { song: 'This song has one section.', study: 'This study has one section.' },
   },
   print: 'Print',
-  exportMidi: 'Export to MIDI',
-  exportMidiFixed: 'Export to MIDI, fixed tempo',
-  exportMidiAligned: 'Export to MIDI, time aligned',
-  exportMusicXml: 'Export to MusicXML',
   /** A piece's score in its two modes, the Player and the score editor (ADR 0115). */
   mode: {
     label: 'Practise or edit',

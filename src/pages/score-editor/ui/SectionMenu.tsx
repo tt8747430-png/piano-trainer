@@ -1,3 +1,4 @@
+import { Merge } from 'lucide-react'
 import type { ComponentProps, ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SONG_SECTION_KINDS } from '@/entities/piece'
@@ -26,16 +27,22 @@ export function SectionMenu({
       render={trigger}
       trigger={null}
       actions={[
-        ...SONG_SECTION_KINDS.filter((each) => each !== kind).map((each) => ({
+        // The song's parts, the one it is ticked, as every choice menu ticks its own.
+        ...SONG_SECTION_KINDS.map((each) => ({
           key: each,
           label: t(`piece:section.${each}`),
-          onSelect: () => actions.dispatch({ type: 'sectionKind', section, kind: each }),
+          group: t('editor:section.kind'),
+          checked: each === kind,
+          onSelect: () => {
+            if (each !== kind) actions.dispatch({ type: 'sectionKind', section, kind: each })
+          },
         })),
         ...(section > 0
           ? [
               {
                 key: 'join',
                 label: t('editor:section.join'),
+                icon: Merge,
                 onSelect: () => actions.dispatch({ type: 'joinSection', section }),
               },
             ]

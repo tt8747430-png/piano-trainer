@@ -28,6 +28,7 @@ import { SheetMusic } from '@/widgets/sheet-music'
 import { SongPrint } from '@/widgets/song-print'
 import { useChordKeys } from '../model/use-chord-keys'
 import { PlayerMore } from './PlayerMore'
+import type { ExportShare } from '@/features/song-files'
 import { PlayerViewMenu } from './PlayerViewMenu'
 
 /** A walk or a progression: one section, named nowhere. */
@@ -62,6 +63,7 @@ export function PlayerLayout({
   recording,
   more,
   musicXml,
+  share,
   status,
   openView = false,
 }: {
@@ -90,10 +92,12 @@ export function PlayerLayout({
   tools?: ReactNode
   /** Practise · Edit (ADR 0115), after Close: a piece's own, none for a walk. */
   modes?: ReactNode
-  /** The music's own in More, before Print: a piece's Song information, Sections and Share (ADR 0107). */
+  /** The music's own in More, before Print: a piece's Song information and Sections (ADR 0107). */
   more?: readonly MenuAction[] | undefined
-  /** More's Export to MusicXML, after its MIDI: a piece's music as written (ADR 0107). */
+  /** Export…'s MusicXML: a piece's music as written (ADR 0107). */
   musicXml?: (() => void) | undefined
+  /** Export…'s link: a piece's, as its page shares it. */
+  share?: ExportShare | undefined
   /** What the screen says beside Wait mode's line: what a piece's Share said. */
   status?: ReactNode
   /** The View open as the screen opens: a piece's, where the learner asks each time (ADR 0108). */
@@ -159,6 +163,7 @@ export function PlayerLayout({
               staves={names}
               actions={more}
               musicXml={musicXml}
+              share={share}
               onPrint={() => setPrinting(true)}
             />
           </>

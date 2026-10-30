@@ -77,3 +77,5 @@ not its music.
   (2026-10-28).
 - r24 — A song's page and its library row export from one Export… sheet: MusicXML, MIDI and Share link, each with
   what it is for (2026-10-30).
+- r25 — The Player's More exports from the same Export… sheet (MusicXML, MIDI, MIDI time aligned where a recording
+  plays along, Share link); its separate Export to… items and its Share are gone (2026-10-30).

@@ -37,7 +37,7 @@ import {
   type PublishItem,
 } from '@/features/publish'
 import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
-import { ExportSheet } from '@/features/song-files'
+import { SongExportSheet } from '@/features/song-files'
 import { OPEN_PLAINLY } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { useLocale } from '@/shared/i18n'
@@ -290,7 +290,7 @@ export function PieceView({ piece }: { piece: Piece }) {
         <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} returnTo={more} />
       ) : null}
       {inLibrary ? library.sheet : null}
-      <ExportSheet
+      <SongExportSheet
         piece={exporting ? piece : null}
         onOpenChange={setExporting}
         share={

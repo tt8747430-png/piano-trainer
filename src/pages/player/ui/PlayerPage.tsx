@@ -1,5 +1,5 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { Info, ListTree, Share2 } from 'lucide-react'
+import { Info, ListTree } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -35,7 +35,7 @@ import { SongInfo } from './SongInfo'
 import { TransposeTool } from './TransposeTool'
 
 function PiecePlayer({ piece }: { piece: Piece }) {
-  const { t } = useTranslation(['player', 'piece'])
+  const { t } = useTranslation(['player', 'piece', 'songs'])
   const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
   const close = useClose(piece)
@@ -59,8 +59,8 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   useEffect(() => {
     if (search.bar !== undefined) openAt(search.bar)
   }, [search.bar])
-  // More's own (ADR 0108, 0107): the piece's information and its sections as sheets, and Share, as
-  // its page shares it, saying so where the status line is.
+  // More's own (ADR 0108, 0107): the piece's information and its sections as sheets; Export…'s link
+  // shares as its page does, saying so where the status line is.
   const [showing, setShowing] = useState<'info' | 'sections' | null>(null)
   const sheetOf = (sheet: 'info' | 'sections') => ({
     open: showing === sheet,
@@ -94,17 +94,14 @@ function PiecePlayer({ piece }: { piece: Piece }) {
       disabled: starts.length < 2,
       reason: t(`player:sections.one.${piece.kind}`),
     },
-    ...(sharing
-      ? [
-          {
-            key: 'share',
-            label: t('piece:share'),
-            icon: Share2,
-            onSelect: () => shared.share(sharing),
-          },
-        ]
-      : []),
   ]
+  // Its link, a way out in Export… as on its page (ADR 0107).
+  const share = sharing
+    ? {
+        detail: t(sharing.kind === 'own' ? 'songs:export.shareOwn' : 'songs:export.sharePiece'),
+        onSelect: () => shared.share(sharing),
+      }
+    : undefined
   // Its place in the learner's library (ADR 0106), first in More; a study is in none.
   const favourite = useFavouriteAction(piece.id)
   const library = useSongActions(piece)
@@ -153,6 +150,7 @@ function PiecePlayer({ piece }: { piece: Piece }) {
           }
           more={more}
           musicXml={files.musicXml}
+          share={share}
           status={<ShareSaid said={shared.said} />}
           // Chordify's "Show this when opening a song" (ADR 0108): the View, to choose how it shows.
           openView={askView}

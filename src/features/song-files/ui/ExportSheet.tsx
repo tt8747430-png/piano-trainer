@@ -1,86 +1,161 @@
-import { FileCode, FileMusic, Link2 } from 'lucide-react'
+import { FileCode, FileMusic, Link2, type LucideIcon } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { entryTitles, type Piece } from '@/entities/piece'
 import { useLocale } from '@/shared/i18n'
-import { RowButton, Sheet, SheetContent } from '@/shared/ui'
+import { RowButton, Sheet, SheetContent, type Paint } from '@/shared/ui'
 import { useSongExport } from './use-song-export'
 
-/** The ways out: a file the learner keeps, or a link. */
-type Format = 'musicXml' | 'midi' | 'share'
+/** What the screen shares, as its own Share does it, and what the row says of it. */
+export type ExportShare = { readonly detail: string; readonly onSelect: () => void }
 
 /**
- * Export… (ADR 0107), one menu of a song's ways out, as a song's page and its library row open it
- * (Noji's Export deck, MuseScore's Export): MusicXML, the score for a notation app; MIDI, the music
- * as played; and Share link where the screen shares (`share`): each a row with a line of what it is
- * for. A row chosen does its work and closes the sheet. Nothing to export (`piece` null), it is shut.
+ * The ways out of a piece of music: its score as MusicXML (a piece's alone), its music as played as
+ * MIDI, timed to its recording where one plays along, and its link where the screen shares.
+ */
+export type ExportFiles = {
+  readonly musicXml?: (() => void) | undefined
+  readonly midi: () => void
+  readonly midiAligned?: (() => void) | undefined
+  readonly share?: ExportShare | undefined
+}
+
+type Row = {
+  key: string
+  title: string
+  detail: string
+  icon: LucideIcon
+  paint: Paint
+  onSelect: () => void
+}
+
+/**
+ * Export… (ADR 0107), one sheet of the music's ways out, as every screen opens it (a song's page, its
+ * library row, the Player's and the editor's More; Noji's Export deck, MuseScore's Export): each a
+ * row with a line of what it is for. A row chosen does its work and closes the sheet. `subject`, the
+ * name under the title, null while it is shut.
  */
 export function ExportSheet({
+  subject,
+  files,
+  onOpenChange,
+}: {
+  subject: string | null
+  files: ExportFiles
+  onOpenChange: (open: boolean) => void
+}) {
+  const { t } = useTranslation('songs')
+  const rows: Row[] = [
+    ...(files.musicXml
+      ? [
+          {
+            key: 'musicXml',
+            title: t('export.musicXml'),
+            detail: t('export.musicXmlLine'),
+            icon: FileCode,
+            paint: 'sky' as const,
+            onSelect: files.musicXml,
+          },
+        ]
+      : []),
+    {
+      key: 'midi',
+      title: t('export.midi'),
+      detail: t(files.midiAligned ? 'export.midiFixedLine' : 'export.midiLine'),
+      icon: FileMusic,
+      paint: 'lilac',
+      onSelect: files.midi,
+    },
+    ...(files.midiAligned
+      ? [
+          {
+            key: 'midiAligned',
+            title: t('export.midiAligned'),
+            detail: t('export.midiAlignedLine'),
+            icon: FileMusic,
+            paint: 'lilac' as const,
+            onSelect: files.midiAligned,
+          },
+        ]
+      : []),
+    ...(files.share
+      ? [
+          {
+            key: 'share',
+            title: t('export.share'),
+            detail: files.share.detail,
+            icon: Link2,
+            paint: 'grass' as const,
+            onSelect: files.share.onSelect,
+          },
+        ]
+      : []),
+  ]
+  return (
+    <Sheet open={subject !== null} onOpenChange={onOpenChange}>
+      {subject !== null ? (
+        <SheetContent title={t('export.title')} description={subject}>
+          <ul aria-label={t('export.title')} className="flex flex-col gap-1">
+            {rows.map((row) => (
+              <li key={row.key}>
+                <RowButton
+                  title={row.title}
+                  detail={row.detail}
+                  icon={row.icon}
+                  paint={row.paint}
+                  onClick={() => {
+                    onOpenChange(false)
+                    row.onSelect()
+                  }}
+                />
+              </li>
+            ))}
+          </ul>
+        </SheetContent>
+      ) : null}
+    </Sheet>
+  )
+}
+
+/**
+ * Export… for a song of the library: its own files, under its title (`piece` null: shut). The last
+ * song stays behind the sheet while it closes, so it slides away as it came.
+ */
+export function SongExportSheet({
   piece,
   onOpenChange,
   share,
 }: {
   piece: Piece | null
   onOpenChange: (open: boolean) => void
-  /** The song's link, shared as its screen shares it; what the row says of it. */
-  share?: { readonly detail: string; readonly onSelect: () => void } | undefined
+  share?: ExportShare | undefined
 }) {
-  return (
-    <Sheet open={piece !== null} onOpenChange={onOpenChange}>
-      {piece ? <ExportRows piece={piece} share={share} onDone={() => onOpenChange(false)} /> : null}
-    </Sheet>
-  )
+  const [last, setLast] = useState(piece)
+  if (piece && piece !== last) setLast(piece)
+  const shown = piece ?? last
+  return shown ? (
+    <SongExport piece={shown} open={piece !== null} share={share} onOpenChange={onOpenChange} />
+  ) : null
 }
 
-function ExportRows({
+function SongExport({
   piece,
+  open,
   share,
-  onDone,
+  onOpenChange,
 }: {
   piece: Piece
-  share: { readonly detail: string; readonly onSelect: () => void } | undefined
-  onDone: () => void
+  open: boolean
+  share: ExportShare | undefined
+  onOpenChange: (open: boolean) => void
 }) {
-  const { t } = useTranslation('songs')
   const locale = useLocale()
   const files = useSongExport(piece)
-  const run = (format: Format) => {
-    onDone()
-    if (format === 'share') share?.onSelect()
-    else files[format]()
-  }
   return (
-    <SheetContent title={t('export.title')} description={entryTitles(piece, locale).primary}>
-      <ul aria-label={t('export.title')} className="flex flex-col gap-1">
-        <li>
-          <RowButton
-            title={t('export.musicXml')}
-            detail={t('export.musicXmlLine')}
-            icon={FileCode}
-            paint="sky"
-            onClick={() => run('musicXml')}
-          />
-        </li>
-        <li>
-          <RowButton
-            title={t('export.midi')}
-            detail={t('export.midiLine')}
-            icon={FileMusic}
-            paint="lilac"
-            onClick={() => run('midi')}
-          />
-        </li>
-        {share ? (
-          <li>
-            <RowButton
-              title={t('export.share')}
-              detail={share.detail}
-              icon={Link2}
-              paint="grass"
-              onClick={() => run('share')}
-            />
-          </li>
-        ) : null}
-      </ul>
-    </SheetContent>
+    <ExportSheet
+      subject={open ? entryTitles(piece, locale).primary : null}
+      files={{ ...files, share }}
+      onOpenChange={onOpenChange}
+    />
   )
 }
