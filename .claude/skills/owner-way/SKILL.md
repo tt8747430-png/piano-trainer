@@ -20,6 +20,10 @@ Compare against real apps, never against "good enough for a prototype":
 | Player views, chords, lessons | Chordify (no guitar features) |
 | Library, folders, archive, swipe actions, dialogs above the keyboard | Mindscape and the owner's `memory-palaces` repo, whose code you may copy |
 | Metronome, time/key/clef/tempo pickers | the owner's screenshots |
+| New song / new score, creating things | Flat's new score (`piano-data/reference-apps/flat-score-editor`, IMG_4516–4522): one sheet, steppers, a key-signature grid, time tiles, Create pinned |
+| Public library, publish, export, a deck's actions, Profile | Noji (`piano-data/reference-apps/new_app_2`) |
+| Profile tab, Settings, the tab bar shown and hidden, selection bar | memory-palaces (`/home/user/memory-palaces`: `AppNav`, `BottomDock`, `ProfilePage`, `SettingsPage`) |
+| Lesson and course editors | Obsidian's live preview, Notion/Craft's floating toolbar |
 
 When the owner points at a reference, study how that app actually behaves: its help docs, its layout on a phone and on a desktop, its icons and names. Then come as close as our look allows. "Try to make it as close as possible to this" means the layout, the interaction and the features, not a loose nod to them.
 
@@ -41,12 +45,27 @@ These come straight from their feedback. Each has burned a round before.
 - Supabase: the project's MCP server is in `.mcp.json` (the owner authenticates it with `/mcp` on their computer); a
   cloud session uses its connected Supabase tools. The `supabase` skills come before any database work.
 
+**Interaction** (rounds 24–25: each of these sent a round back)
+- One way to each action: no button that repeats a row, menu item or field beside it. Adding a direct way removes
+  the old one.
+- Reorder by dragging a handle (mouse and a held finger), never Move up / Move down in a menu.
+- Menu items short ("Remove"); the menu's label names the thing.
+- A screen's own actions in its bar (Settings, Manage); the floating + only creates.
+- One place current in the navigation at a time.
+- Creating anything is a proper New sheet (name, a few properties, one Create at the foot), never a bare text
+  field or a page with a title alone.
+- When you change a pattern, change it everywhere it occurs (the score editor included), not in one place.
+- Never ship a flaw you noticed and "report" it: fix it to the obvious right behaviour first.
+
 **Layout**
 - Phone and desktop have the same features, text and layout logic. Check an iPhone (390×844 and 320×568), a phone on its side (844×390) and a laptop (1280×800). Nothing may be clipped, overflow or wrap badly at 320px.
 - Floating things float. Palettes, the transport, the zoom controls and the tools reserve no space under them and never push the page. Auto-hide must be reliable.
 - Nothing may trap a click meant for something else. After a popover closes, the next tap must reach its target. Test overlapping layers.
 - Controls must not jump when switching modes (Player ↔ editor) or entering Select mode. Icons stay put and heights stay equal.
 - Rows and grids are even on wide screens, and a card's hover never hides the hover of a button inside it.
+- Nothing cut: titles wrap to two lines rather than end in "…"; rows inside a rounded card keep its corners.
+- The phone's tab bar shows on the four places alone, hides on every screen they open and while the keyboard is
+  up; a selection's bar takes its slot. Floating buttons keep a gap above the home indicator.
 
 **Words and help**
 - Explanations go in ⓘ popups (`InfoTip`), never in a line of text under a control. Keep pages calm and avoid "too much information at once".

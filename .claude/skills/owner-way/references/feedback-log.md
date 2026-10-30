@@ -17,6 +17,12 @@ The owner's feedback from every session, condensed and grouped by area. Read the
 - Practice pages
 - Metronome
 - PWA and touch
+- Navigation, bars and the tab bar
+- Menus, actions and floating buttons
+- Creating things: New sheets
+- Learn and the lesson and course editors
+- Profile, Settings and the Account
+- Songs: adding, exporting, publishing, the Public library
 - Process
 
 ## Score editor: layout and palette
@@ -51,7 +57,7 @@ The owner's feedback from every session, condensed and grouped by area. Read the
   - Staves are just staves: add, remove, rename and hide them, with no special "melody" option.
   - Hiding a staff must never delete its notes, and toggling a staff must never clear the score.
   - A song can be a single staff with no piano.
-- **New songs:** a new song can be customised (which staves) through a separate dialog rather than one overloaded dialog.
+- **New songs** (superseded round 25): no separate Customize dialog. New song is one sheet as Flat's new score; see "Creating things". (Was: a separate dialog rather than one overloaded dialog.
 - **Editable songs:** every song is editable. Where something can't be edited, the learner is told why.
 - **Recording:** the learner chooses what plays along and what is shown.
 - **More notation:** add more of what music notation offers, such as notes shifted an octave (8va) and the rest.
@@ -164,15 +170,77 @@ The owner's feedback from every session, condensed and grouped by area. Read the
   - Folds the same everywhere.
 - **Fields above the phone's keyboard** as memory-palaces manages them (round 14): every field, its label and its buttons stay in sight; nothing jumps.
 
-## Navigation
-- **One place current at a time** (round 24): never two highlights in the tab bar or sidebar. Settings is in the
-  laptop's sidebar (its own highlight there); on a phone it sits in the Profile, which is highlighted for it.
-- **One way to each action** (round 24): no button that repeats a row, a menu item or an inline field beside it
-  (a gear and a Settings row, a + and Add lesson, ↑↓ and the block menu's moves). Adding a direct way removes the old.
-- **Don't decide UI trade-offs silently:** a known flaw ("both highlight, say if you'd rather…") is not shipped and
-  reported; fix it to the obvious right behaviour first.
+## Navigation, bars and the tab bar
+- **Compact bars** (round 21): "why the headers take like a half of the screen". One row: Back, the title, the
+  screen's actions. No tall hero.
+- **Titles are never cut** (round 25): a long title wraps to two lines; no ellipsis where two lines say it.
+- **A screen's own actions go in its bar** (round 25): Settings is the Profile's gear, Manage lessons is Learn's bar
+  button for an editor. The floating + is only for creating.
+- **The Profile is a tab** (round 24, memory-palaces): Learn · Songs · Practice · Profile. Settings opens from the
+  Profile's gear on a phone and sits at the laptop sidebar's foot under Search ("you can put it back in the sidebar").
+- **One place current at a time** (round 24): "not such things as two highlights, this is bad ui". On a laptop
+  Settings is current alone; on a phone the Profile is current for Settings.
+- **The tab bar as memory-palaces manages it** (round 24): shown on the four places alone; every screen a place
+  opens hides it (Back the way out, the whole height); hidden while the keyboard is up; a selection's bar takes
+  its slot (never two bars stacked). Floating buttons keep their gap above the home indicator then.
+- **Don't decide UI trade-offs silently** (round 24): "dont make such bad decisions for yourself". A known flaw is
+  fixed to the obvious right behaviour before reporting, never shipped with "say if you'd rather".
+
+## Menus, actions and floating buttons
+- **One way to each action** (round 24): "why are there duplicate buttons and actions". No button repeating a row,
+  a menu item or an inline field beside it. Adding a direct way removes the old one.
+- **Drag, never Move up / Move down** (round 25): "i dont like these move up move down, why dont drag and drop".
+  Everything orderable (rows, chapters, blocks, songs, folders) moves by a handle, by mouse and by a finger held.
+  No menu moves things; a menu holds what dragging can't (Remove, Duplicate).
+- **Menu items short** (round 25): "Remove", never "Remove: The keyboard and the s…". The menu's own label names
+  the thing.
+- **Change it everywhere** (round 25): "when you change something change across the whole app and not just in one
+  place". The score editor's menus too ("the options are old").
+- **Floating buttons** (round 23): one family: the main action the honey 56px circle, a second a raised 48px one; a
+  dial opens as a card of rows (tile, name, one line). Always a gap from the bottom edge.
+- **Cards whole** (round 25): "don't you see how bad this looks with these cut borders". Rows inside a rounded
+  card take its corners; nothing square pokes out.
+- **Look before reporting:** render every changed screen at 390, 320, 844×390 and 1280 and judge it as the owner
+  will; the owner spots cut borders, clipped titles and doubled controls at once.
+
+## Creating things: New sheets
+- **New song like a notation app's** (round 25, Flat's new score): its name; the staves as drawn tiles; the key
+  signature from the score editor's own grid of signatures; the common time signatures as tiles; one Create button
+  pinned at the foot. "Make" was a non-word; "Customize" opening a second sheet was wrong; a strip of 1/2 2/2 3/2 …
+  clipped at the edge was wrong. Record is the + menu's own entry.
+- **The + menu adds** (round 24): "the add menu for me means add something". New song, Record, Import, New folder.
+  The Public library is a place (its own row), never an add option.
+- **Every New … is a proper sheet** (round 25): New course, New lesson, New chapter, New progression, New folder:
+  "the new lessons and new courses still have the old ui with just the text". One shared sheet: name, a few
+  properties, one Create at the foot. Not an inline text field, not a page with a bare title.
+
+## Learn and the lesson and course editors
+- **A library, not a path** (round 21). The Lessons by level (Beginner to Professional) as chips: "why is it called a
+  journey when it is not a journey anymore". No days practised or recently practised on Learn.
+- **Real editors** (round 21): "an endless editor like a simple text editor but with all of our features like the
+  obsidian app does with its inline rendering and a toolbar to add all of our options, and not edit and preview".
+- **The toolbar floats like the palette** (round 22): distinct from the bar so it is plain what belongs to what.
+- **Edit in place, as it reads** (round 25, open): "i want to have inline editor maybe the page enters the edit
+  mode and not a new page … i want the editor to look the same like it looks in preview with all the features
+  like the styles editor". The lesson's and course's own page switches to Edit; the document looks exactly as
+  the lesson reads.
+- **Manage lessons and courses as a library** (round 24): group, order by dragging, add; "not just text reorder and
+  no ui". The language written in is the draft menu's, not a switch in the bar.
+
+## Profile, Settings and the Account
+- **memory-palaces' Profile** (round 24): the learner's initial, three figures, Activity, badges; Settings from its
+  gear. The Account is Settings' first row; Sign out and Delete are rows asking in a dialog; the ⓘ texts went into
+  the dialogs.
+
+## Songs: adding, exporting, publishing, the Public library
+- **Noji's way** (round 24, `piano-data/reference-apps/new_app_2`): one Export… sheet (MusicXML, MIDI, Share link);
+  Publish as its own sheet (description, a preview of the row, Why publish ⓘ, one Publish); the Public library
+  with search, chips, shelves of cards and the full list; a published song shows View · Update · Unpublish.
+- **Drag and drop in the library** (round 24): rows into folders and onto the Archive, by finger and mouse.
 
 ## Process
+- **Interrupting means "wait"** (round 25): when the owner interrupts a tool call, stop, take in the new message
+  and continue from it; it is not a cue to argue or to launch the stopped work again.
 - **The loop:** improve and review in a loop until the usage runs out, and resume on "continue".
 - **Commits:** one proper commit per finished task.
 - **Tests:** "you don't need to run tests for each commit, only when round finishes".
