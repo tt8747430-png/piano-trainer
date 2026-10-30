@@ -116,7 +116,7 @@ function Figures() {
   return (
     <dl
       aria-label={t('profile.figures')}
-      className="flex w-full max-w-sm items-stretch divide-x divide-border"
+      className="mt-1 flex w-full max-w-sm items-stretch divide-x divide-border"
     >
       {figures.map(({ label, value, icon: Icon }) => (
         <div

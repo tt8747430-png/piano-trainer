@@ -8,12 +8,14 @@ import { rowClass } from './row-class'
  * a `RowLink`'s face without its chevron, which says a row leads to a page; a button, not a
  * link. Greyed (`disabled`), it says why (`reason`): the browser's tooltip, and to a screen reader.
  * The one of its list where the screen is now (`current`: the Player's section) wears the muted fill.
+ * One that destroys (`destructive`: Delete account…) is set in the destructive ink, its tile too.
  */
 export function RowButton({
   onClick,
   disabled = false,
   reason,
   current = false,
+  destructive = false,
   ref,
   ...face
 }: RowFaceProps & {
@@ -21,6 +23,7 @@ export function RowButton({
   disabled?: boolean
   reason?: string | undefined
   current?: boolean
+  destructive?: boolean
   ref?: Ref<HTMLButtonElement>
 }) {
   const id = useId()
@@ -37,6 +40,8 @@ export function RowButton({
       className={cn(
         rowClass(face.paint !== undefined),
         'w-full text-left disabled:opacity-50 disabled:hover:bg-transparent aria-[current=true]:bg-muted',
+        destructive &&
+          'text-destructive [&_[data-slot=row-tile]]:bg-destructive/10 [&_[data-slot=row-tile]]:text-destructive',
       )}
     >
       <RowFace {...face} />

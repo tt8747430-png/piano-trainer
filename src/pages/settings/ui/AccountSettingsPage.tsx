@@ -1,11 +1,20 @@
 import { Link } from '@tanstack/react-router'
-import { KeyRound } from 'lucide-react'
+import { KeyRound, LogIn, LogOut, Mail, Trash2, UserRoundPlus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
 import { useGoBack, useOnline } from '@/shared/lib'
 import { authProblem, useAccount, type AuthProblem } from '@/shared/lib/account'
-import { ButtonLink, FormField, RowLink, SettingsGroup as Group } from '@/shared/ui'
+import {
+  Avatar,
+  BackButton,
+  FormField,
+  RowButton,
+  RowFace,
+  RowLink,
+  ScreenHeader,
+  SettingsGroup as Group,
+} from '@/shared/ui'
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -14,120 +23,148 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
-import { SettingsScreen } from './SettingsScreen'
 
 /**
- * Settings › Account (ADR 0116): the learner's name, their email, changing the password, signing
- * out (on this device, always), and deleting the account after its 30 days' grace.
+ * Settings › Account (ADR 0116), as memory-palaces' edit profile reads: the learner's picture at its
+ * top; Profile, their name, saved once changed; Sign-in, their email and Change password; Sign out,
+ * a row asking first (on this device, always); and Delete account…, a red row asking for their email,
+ * its 30 days' grace told in the asking. A guest is offered Sign in and Create an account.
  */
 export function AccountSettingsPage() {
   const { t } = useTranslation('settings')
-  const { account, auth } = useAccount()
-  const locale = useLocale()
-  const back = useGoBack({ to: '/settings' })
+  const { account } = useAccount()
   const [scheduled, setScheduled] = useState<string | null>(null)
-  if (!account)
-    return (
-      <SettingsScreen title={t('accountPage.title')}>
-        <div className="flex flex-col gap-3 card p-5">
-          <p role="status">
-            {scheduled === null
-              ? t('accountPage.signedOut')
-              : t('accountPage.delete.scheduled', {
-                  date: new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(
-                    new Date(scheduled),
-                  ),
-                })}
-          </p>
-          <ButtonLink className="self-start" render={<Link to="/account/sign-in" />}>
-            {t('account.signIn')}
-          </ButtonLink>
-        </div>
-      </SettingsScreen>
-    )
   return (
-    <SettingsScreen title={t('accountPage.title')}>
-      <div className="flex flex-col gap-6">
-        <Group title={t('accountPage.title')}>
-          <NameForm key={account.id} name={account.name} />
-          <dl className="mt-4 flex flex-col gap-0.5">
-            <dt className="text-sm text-muted-foreground">{t('accountPage.email')}</dt>
-            <dd className="font-medium break-all">{account.email}</dd>
-          </dl>
-        </Group>
-        <nav aria-label={t('accountPage.password')} className="card p-1.5">
-          <RowLink
-            title={t('accountPage.password')}
-            icon={KeyRound}
-            paint="sand"
-            render={<Link to="/account/new-password" />}
-          />
-        </nav>
+    <div className="flex flex-col gap-2">
+      <ScreenHeader
+        title={t('accountPage.title')}
+        back={<BackButton fallback={{ to: '/profile' }} />}
+      />
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
+        {account ? (
+          <>
+            <div className="flex flex-col items-center gap-3 pt-2 text-center">
+              <Avatar name={account.name || account.email} size="hero" />
+            </div>
+            <Group title={t('accountPage.profileGroup')}>
+              <NameForm key={account.id} name={account.name} />
+            </Group>
+            <Group flush title={t('accountPage.signInGroup')}>
+              {/* The email under its name, broken anywhere a long one must be to fit a phone. */}
+              <div className="flex min-h-16 items-center gap-3 py-2 pr-3 pl-2 wrap-anywhere">
+                <RowFace
+                  title={t('accountPage.email')}
+                  icon={Mail}
+                  paint="sky"
+                  detail={account.email}
+                />
+              </div>
+              <RowLink
+                title={t('accountPage.password')}
+                icon={KeyRound}
+                paint="sand"
+                render={<Link to="/account/new-password" />}
+              />
+            </Group>
+            <Group flush>
+              <SignOut />
+            </Group>
+            <Group flush>
+              <DeleteAccount email={account.email} onScheduled={setScheduled} />
+            </Group>
+          </>
+        ) : (
+          <Guest scheduled={scheduled} />
+        )}
       </div>
-      <div className="flex flex-col gap-6">
-        <Group title={t('accountPage.signOut')} info={t('accountPage.signOutInfo')}>
-          <Button
-            variant="outline"
-            className="self-start"
-            onClick={() => void auth.signOut().then(back)}
-          >
-            {t('accountPage.signOut')}
-          </Button>
-        </Group>
-        <Group title={t('accountPage.delete.label')} info={t('accountPage.delete.info')}>
-          <DeleteAccount email={account.email} onScheduled={setScheduled} />
-        </Group>
-      </div>
-    </SettingsScreen>
+    </div>
   )
 }
 
-/** The learner's name, saved to their account. */
+/** Signed out: the figure of a person, why (or when the account is to be deleted), Sign in and Create. */
+function Guest({ scheduled }: { scheduled: string | null }) {
+  const { t } = useTranslation('settings')
+  const locale = useLocale()
+  return (
+    <>
+      <div className="flex flex-col items-center gap-3 pt-2 text-center">
+        <Avatar name={null} size="hero" />
+        <p role="status" className="max-w-sm text-pretty text-muted-foreground">
+          {scheduled === null
+            ? t('accountPage.signedOut')
+            : t('accountPage.delete.scheduled', {
+                date: new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(
+                  new Date(scheduled),
+                ),
+              })}
+        </p>
+      </div>
+      <Group flush>
+        <RowLink
+          title={t('accountPage.signIn')}
+          icon={LogIn}
+          paint="yellow"
+          render={<Link to="/account/sign-in" />}
+        />
+        <RowLink
+          title={t('accountPage.create')}
+          icon={UserRoundPlus}
+          paint="grass"
+          render={<Link to="/account/create" />}
+        />
+      </Group>
+    </>
+  )
+}
+
+/** The learner's name, saved to their account: Save beside it once it is changed. */
 function NameForm({ name: saved }: { name: string }) {
   const { t } = useTranslation(['settings', 'account'])
   const { auth } = useAccount()
   const online = useOnline()
   const [name, setName] = useState(saved)
+  const [last, setLast] = useState(saved)
   const [state, setState] = useState<'idle' | 'busy' | 'saved' | AuthProblem>('idle')
   const save = async () => {
     setState('busy')
     const result = await auth.updateName(name.trim())
+    if (result.ok) setLast(name.trim())
     setState(result.ok ? 'saved' : authProblem(result))
   }
+  const changed = name.trim() !== '' && name.trim() !== last
   const problem = state !== 'idle' && state !== 'busy' && state !== 'saved' ? state : null
   return (
     <form
       noValidate
-      className="flex flex-col gap-3"
+      className="flex flex-col gap-2"
       onSubmit={(event) => {
         event.preventDefault()
-        void save()
+        if (changed) void save()
       }}
     >
-      <FormField
-        label={t('accountPage.profile')}
-        autoComplete="name"
-        value={name}
-        onChange={(event) => {
-          setName(event.target.value)
-          setState('idle')
-        }}
-        error={name.trim() === '' ? t('account:invalid.name') : undefined}
-      />
-      <div className="flex items-center gap-3">
-        <Button
-          type="submit"
-          disabled={!online || state === 'busy' || name.trim() === '' || name.trim() === saved}
-        >
-          {t('accountPage.save')}
-        </Button>
-        <p role="status" className="text-sm text-muted-foreground">
-          {state === 'saved' ? t('accountPage.saved') : ''}
-        </p>
+      <div className="flex items-end gap-2">
+        <FormField
+          className="min-w-0 flex-1"
+          label={t('accountPage.profile')}
+          autoComplete="name"
+          value={name}
+          onChange={(event) => {
+            setName(event.target.value)
+            setState('idle')
+          }}
+          error={name.trim() === '' ? t('account:invalid.name') : undefined}
+        />
+        {changed ? (
+          <Button type="submit" size="lg" className="h-12" disabled={!online || state === 'busy'}>
+            {t('accountPage.save')}
+          </Button>
+        ) : null}
       </div>
+      <p role="status" className="text-sm text-muted-foreground empty:hidden">
+        {state === 'saved' ? t('accountPage.saved') : ''}
+      </p>
       {problem === null ? null : (
         <p role="alert" className="text-sm text-destructive">
           {t(`account:problem.${problem}`)}
@@ -137,7 +174,44 @@ function NameForm({ name: saved }: { name: string }) {
   )
 }
 
-/** Delete account: the learner types their email to confirm; the deletion is scheduled. */
+/** Sign out, on this device: a row, asking first and saying what stays. */
+function SignOut() {
+  const { t } = useTranslation('settings')
+  const { auth } = useAccount()
+  const back = useGoBack({ to: '/settings' })
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <RowButton
+        title={t('accountPage.signOut')}
+        icon={LogOut}
+        paint="sand"
+        onClick={() => setOpen(true)}
+      />
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('accountPage.signOutTitle')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('accountPage.signOutInfo')}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('accountPage.signOutCancel')}</AlertDialogCancel>
+            <Button
+              onClick={() => {
+                setOpen(false)
+                void auth.signOut().then(back)
+              }}
+            >
+              {t('accountPage.signOut')}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  )
+}
+
+/** Delete account…: a red row; the learner types their email to confirm; the deletion is scheduled. */
 function DeleteAccount({
   email,
   onScheduled,
@@ -163,47 +237,53 @@ function DeleteAccount({
     onScheduled(result.value.purgeAfter)
   }
   return (
-    <AlertDialog
-      open={open}
-      onOpenChange={(next) => {
-        setOpen(next)
-        setTyped('')
-        setProblem(null)
-      }}
-    >
-      <AlertDialogTrigger
-        render={<Button variant="destructive" className="self-start" disabled={!online} />}
+    <>
+      <RowButton
+        title={t('accountPage.delete.button')}
+        icon={Trash2}
+        paint="sand"
+        destructive
+        disabled={!online}
+        reason={t('account:problem.offline')}
+        onClick={() => setOpen(true)}
+      />
+      <AlertDialog
+        open={open}
+        onOpenChange={(next) => {
+          setOpen(next)
+          setTyped('')
+          setProblem(null)
+        }}
       >
-        {t('accountPage.delete.button')}
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{t('accountPage.delete.title')}</AlertDialogTitle>
-          <AlertDialogDescription>{t('accountPage.delete.body')}</AlertDialogDescription>
-        </AlertDialogHeader>
-        <FormField
-          label={t('accountPage.delete.field')}
-          type="email"
-          autoComplete="off"
-          value={typed}
-          onChange={(event) => setTyped(event.target.value)}
-        />
-        {problem === null ? null : (
-          <p role="alert" className="text-sm text-destructive">
-            {t(`account:problem.${problem}`)}
-          </p>
-        )}
-        <AlertDialogFooter>
-          <AlertDialogCancel>{t('accountPage.delete.cancel')}</AlertDialogCancel>
-          <Button
-            variant="destructive"
-            disabled={!matches || busy || !online}
-            onClick={() => void remove()}
-          >
-            {t('accountPage.delete.confirm')}
-          </Button>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('accountPage.delete.title')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('accountPage.delete.body')}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <FormField
+            label={t('accountPage.delete.field')}
+            type="email"
+            autoComplete="off"
+            value={typed}
+            onChange={(event) => setTyped(event.target.value)}
+          />
+          {problem === null ? null : (
+            <p role="alert" className="text-sm text-destructive">
+              {t(`account:problem.${problem}`)}
+            </p>
+          )}
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('accountPage.delete.cancel')}</AlertDialogCancel>
+            <Button
+              variant="destructive"
+              disabled={!matches || busy || !online}
+              onClick={() => void remove()}
+            >
+              {t('accountPage.delete.confirm')}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   )
 }
