@@ -65,6 +65,7 @@ export const common: LocaleResources['common'] = {
     '11th': 'Ундецима',
     '13th': 'Терцдецима',
   },
+  more: 'Ещё',
   moreActions: 'Ещё действия',
   stop: 'Стоп',
   rail: {

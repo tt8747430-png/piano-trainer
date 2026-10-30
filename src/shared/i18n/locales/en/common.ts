@@ -75,6 +75,7 @@ export const common = {
     '13th': '13th',
   },
   // A screen's other actions, folded into one floating button.
+  more: 'More',
   moreActions: 'More actions',
   // What a Play button says while its sound plays.
   stop: 'Stop',

@@ -1,5 +1,15 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { Star } from 'lucide-react'
+import {
+  CopyPlus,
+  Eye,
+  EyeOff,
+  Globe,
+  GlobeLock,
+  PencilLine,
+  Play,
+  Star,
+  Trash2,
+} from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -17,7 +27,6 @@ import {
   type BookPattern,
   type OwnPatternId,
   type PatternBook,
-  type PatternId,
 } from '@/entities/pattern'
 import { piecesPlaying } from '@/entities/piece'
 import { PinnedKeyboard } from '@/features/live-keyboard'
@@ -25,7 +34,18 @@ import { deleteOwnPattern, toggleFavourite, toggleHidden } from '@/features/mana
 import { useShownKeys } from '@/features/play-example'
 import { PublishDialog, PublishSaid, usePublish, type PublishItem } from '@/features/publish'
 import { localText, useLocale } from '@/shared/i18n'
-import { BackButton, ButtonLink, Fact, NotFound, RoundButton, ScreenHeader } from '@/shared/ui'
+import {
+  BackButton,
+  ButtonLink,
+  FabLink,
+  Fact,
+  FloatingActions,
+  MoreMenu,
+  NotFound,
+  RoundButton,
+  ScreenHeader,
+  type MenuAction,
+} from '@/shared/ui'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,9 +55,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/shared/ui/primitives/alert-dialog'
-import { Button } from '@/shared/ui/primitives/button'
 import { PatternPlay, PatternStaff, usePatternSample } from '@/widgets/pattern-music'
 import { PieceList } from '@/widgets/piece-list'
 
@@ -57,105 +75,36 @@ function FavouriteButton({ pattern }: { pattern: BookPattern }) {
   )
 }
 
-/** A built-in pattern's own actions: a pattern of the learner's own from it, and hiding it from the Player. */
-function BuiltInActions({ id }: { id: PatternId }) {
-  const { t } = useTranslation('practice')
-  const store = usePatternsStoreApi()
-  const hidden = usePatterns(selectIsHidden(id))
-  return (
-    <>
-      <ButtonLink
-        variant="outline"
-        render={<Link to="/practice/accompaniment/patterns/new" search={{ from: id }} />}
-      >
-        {t('patterns.makeOwn')}
-      </ButtonLink>
-      <Button variant="outline" onClick={() => toggleHidden(store, id)}>
-        {hidden ? t('patterns.show') : t('patterns.hide')}
-      </Button>
-      {hidden ? (
-        <p className="basis-full text-sm text-muted-foreground">{t('patterns.hiddenNote')}</p>
-      ) : null}
-    </>
-  )
-}
-
 /**
- * The learner's pattern in the Public library (ADR 0116): Publish (asked first), Update once it has
- * changed, Remove; what was done said under it.
+ * A pattern's actions for its bar's More: for a built-in one, a pattern of the learner's own from it
+ * and hiding it from the Player; for the learner's own, Edit, its place in the Public library
+ * (Publish, asked first; Update once it has changed; Remove) and Delete, asked first, last. What they
+ * open (the dialogs) and what was done (a line) come with them.
  */
-function PublishActions({ pattern, name }: { pattern: BookPattern; name: string }) {
-  const { t } = useTranslation('songs')
-  const item = useMemo(
-    (): PublishItem => ({
-      kind: 'pattern',
-      sourceId: `pattern/${pattern.ref}`,
-      title: name,
-      meta: { rh: pattern.rh, lh: pattern.lh },
-      body: { name, rh: pattern.rh, lh: pattern.lh },
-    }),
-    [pattern.ref, pattern.rh, pattern.lh, name],
-  )
-  const publishing = usePublish(item)
-  const [asked, setAsked] = useState(false)
-  return (
-    <>
-      {publishing.state === 'unpublished' ? (
-        <Button variant="outline" onClick={() => setAsked(true)}>
-          {t('public.publish')}
-        </Button>
-      ) : publishing.state === 'changed' ? (
-        <Button
-          variant="outline"
-          disabled={publishing.busy}
-          onClick={() => void publishing.publish()}
-        >
-          {t('public.update')}
-        </Button>
-      ) : null}
-      {publishing.state === 'published' || publishing.state === 'changed' ? (
-        <Button
-          variant="outline"
-          disabled={publishing.busy}
-          onClick={() => void publishing.unpublish()}
-        >
-          {t('public.unpublish')}
-        </Button>
-      ) : null}
-      <div className="basis-full empty:hidden">
-        <PublishSaid said={publishing.said} />
-      </div>
-      <PublishDialog
-        open={asked}
-        onOpenChange={setAsked}
-        title={name}
-        authorName={publishing.authorName}
-        signedIn={publishing.signedIn}
-        busy={publishing.busy}
-        onPublish={() => {
-          setAsked(false)
-          void publishing.publish()
-        }}
-      />
-    </>
-  )
-}
-
-/** The learner's pattern's own actions: Edit, Delete once asked, and its place in the Public library. */
-function OwnActions({
-  pattern,
-  id,
-  name,
-}: {
-  pattern: BookPattern
-  id: OwnPatternId
-  name: string
-}) {
-  const { t } = useTranslation('practice')
+function usePatternActions(pattern: BookPattern, name: string) {
+  const { t } = useTranslation(['practice', 'songs'])
   const store = usePatternsStoreApi()
   const navigate = useNavigate()
-  const [asking, setAsking] = useState(false)
-  const remove = () => {
+  const own = isOwnPatternId(pattern.ref) ? pattern.ref : null
+  const builtIn = isPatternId(pattern.ref) ? pattern.ref : null
+  const hidden = usePatterns((state) => builtIn !== null && selectIsHidden(builtIn)(state))
+  const item = useMemo(
+    (): PublishItem | null =>
+      own === null
+        ? null
+        : {
+            kind: 'pattern',
+            sourceId: `pattern/${own}`,
+            title: name,
+            meta: { rh: pattern.rh, lh: pattern.lh },
+            body: { name, rh: pattern.rh, lh: pattern.lh },
+          },
+    [own, pattern.rh, pattern.lh, name],
+  )
+  const publishing = usePublish(item)
+  const [publishAsked, setPublishAsked] = useState(false)
+  const [deleteAsked, setDeleteAsked] = useState(false)
+  const remove = (id: OwnPatternId) => {
     // Leave the page first: it has nothing to show once the pattern is gone.
     void navigate({
       to: '/practice/accompaniment',
@@ -163,45 +112,122 @@ function OwnActions({
       replace: true,
     }).then(() => deleteOwnPattern(store, id))
   }
-  return (
+  const actions: MenuAction[] =
+    own === null
+      ? builtIn === null
+        ? []
+        : [
+            {
+              key: 'own',
+              label: t('patterns.makeOwn'),
+              icon: CopyPlus,
+              onSelect: () =>
+                void navigate({
+                  to: '/practice/accompaniment/patterns/new',
+                  search: { from: builtIn },
+                }),
+            },
+            {
+              key: 'hide',
+              label: t(hidden ? 'patterns.show' : 'patterns.hide'),
+              icon: hidden ? Eye : EyeOff,
+              onSelect: () => toggleHidden(store, builtIn),
+            },
+          ]
+      : [
+          {
+            key: 'edit',
+            label: t('patterns.edit'),
+            icon: PencilLine,
+            onSelect: () =>
+              void navigate({
+                to: '/practice/accompaniment/patterns/$patternRef/edit',
+                params: { patternRef: own },
+              }),
+          },
+          ...(publishing.state === 'unpublished'
+            ? [
+                {
+                  key: 'publish',
+                  label: t('songs:public.publish'),
+                  icon: Globe,
+                  onSelect: () => setPublishAsked(true),
+                },
+              ]
+            : publishing.state === 'changed'
+              ? [
+                  {
+                    key: 'publish',
+                    label: t('songs:public.update'),
+                    icon: Globe,
+                    disabled: publishing.busy,
+                    onSelect: () => void publishing.publish(),
+                  },
+                ]
+              : []),
+          ...(publishing.state === 'published' || publishing.state === 'changed'
+            ? [
+                {
+                  key: 'unpublish',
+                  label: t('songs:public.unpublish'),
+                  icon: GlobeLock,
+                  disabled: publishing.busy,
+                  onSelect: () => void publishing.unpublish(),
+                },
+              ]
+            : []),
+          {
+            key: 'delete',
+            label: t('patterns.delete'),
+            icon: Trash2,
+            destructive: true,
+            onSelect: () => setDeleteAsked(true),
+          },
+        ]
+  const dialogs =
+    own === null ? null : (
+      <>
+        <PublishDialog
+          open={publishAsked}
+          onOpenChange={setPublishAsked}
+          title={name}
+          authorName={publishing.authorName}
+          signedIn={publishing.signedIn}
+          busy={publishing.busy}
+          onPublish={() => {
+            setPublishAsked(false)
+            void publishing.publish()
+          }}
+        />
+        <AlertDialog open={deleteAsked} onOpenChange={setDeleteAsked}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t('patterns.deleting.title', { name })}</AlertDialogTitle>
+              <AlertDialogDescription>{t('patterns.deleting.says')}</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>{t('patterns.deleting.cancel')}</AlertDialogCancel>
+              <AlertDialogAction variant="destructive" onClick={() => remove(own)}>
+                {t('patterns.deleting.confirm')}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
+    )
+  const said = (
     <>
-      <ButtonLink
-        variant="outline"
-        render={
-          <Link
-            to="/practice/accompaniment/patterns/$patternRef/edit"
-            params={{ patternRef: id }}
-          />
-        }
-      >
-        {t('patterns.edit')}
-      </ButtonLink>
-      <PublishActions pattern={pattern} name={name} />
-      <AlertDialog open={asking} onOpenChange={setAsking}>
-        <AlertDialogTrigger render={<Button variant="destructive" />}>
-          {t('patterns.delete')}
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t('patterns.deleting.title', { name })}</AlertDialogTitle>
-            <AlertDialogDescription>{t('patterns.deleting.says')}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t('patterns.deleting.cancel')}</AlertDialogCancel>
-            <AlertDialogAction variant="destructive" onClick={remove}>
-              {t('patterns.deleting.confirm')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <PublishSaid said={publishing.said} />
+      {hidden ? <p className="text-sm text-muted-foreground">{t('patterns.hiddenNote')}</p> : null}
     </>
   )
+  return { actions, dialogs, said }
 }
 
 /**
  * A pattern explained: its idea, what each hand plays, the pattern on the staff and heard on the keys,
- * its source's explanation, the music that plays it, and the ways on: the Player, and a pattern of
- * the learner's own from it (or, for their own, Edit and Delete).
+ * its source's explanation and the music that plays it. Its bar holds the star and More (its own
+ * actions); Practise in the Player floats.
  */
 function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBook }) {
   const { t } = useTranslation('practice')
@@ -213,6 +239,7 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
   // A hidden pattern is listed under Yours alone, no longer on its book's shelf.
   const { ref } = pattern
   const hidden = usePatterns((state) => isPatternId(ref) && selectIsHidden(ref)(state))
+  const more = usePatternActions(pattern, name)
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader
@@ -225,7 +252,12 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
             }}
           />
         }
-        actions={<FavouriteButton pattern={pattern} />}
+        actions={
+          <>
+            <FavouriteButton pattern={pattern} />
+            <MoreMenu actions={more.actions} />
+          </>
+        }
       />
       <PinnedKeyboard shown={shown} />
       <div className="flex flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10">
@@ -246,34 +278,32 @@ function PatternView({ pattern, book }: { pattern: BookPattern; book: PatternBoo
           {pattern.description ? (
             <p className="text-lg leading-relaxed">{localText(pattern.description, locale)}</p>
           ) : null}
-          <div className="flex flex-wrap gap-3">
-            <ButtonLink
-              variant="outline"
-              render={
-                sample.piece ? (
-                  <Link
-                    to="/play/$pieceId"
-                    params={{ pieceId: sample.piece.id }}
-                    search={{ pattern: pattern.ref }}
-                  />
-                ) : (
-                  <Link to="/play/progression" search={{ pattern: pattern.ref }} />
-                )
-              }
-            >
-              {t('inPlayer')}
-            </ButtonLink>
-            {isOwnPatternId(pattern.ref) ? (
-              <OwnActions pattern={pattern} id={pattern.ref} name={name} />
-            ) : (
-              <BuiltInActions id={pattern.ref} />
-            )}
-          </div>
+          {more.said}
         </div>
         {pieces.length > 0 ? (
           <PieceList groups={[{ id: 'used-in', heading: t('patterns.usedIn'), entries: pieces }]} />
         ) : null}
       </div>
+      {more.dialogs}
+      {/* The way on: the pattern played in the Player, under its sample's music. */}
+      <FloatingActions>
+        <FabLink
+          label={t('inPlayer')}
+          icon={Play}
+          className="[&_svg]:fill-current"
+          render={
+            sample.piece ? (
+              <Link
+                to="/play/$pieceId"
+                params={{ pieceId: sample.piece.id }}
+                search={{ pattern: pattern.ref }}
+              />
+            ) : (
+              <Link to="/play/progression" search={{ pattern: pattern.ref }} />
+            )
+          }
+        />
+      </FloatingActions>
     </div>
   )
 }
