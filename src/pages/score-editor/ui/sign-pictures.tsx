@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import type { BarMarkChoice } from '@/features/score-editor'
 import { keySignature, type Clef, type Key, type Meter, type MeterSymbol } from '@/shared/lib/music'
-import { G_CLEF } from './palette-icons'
-import { ClefSign } from './picker-pictures'
+import { G_CLEF } from '@/shared/ui/pickers/picker-pictures'
+import { ClefSign } from '@/shared/ui/pickers/picker-pictures'
 
 /** A staff space in the picture's units: its five lines from y 8 to 32. */
 const SPACE = 6

@@ -12,8 +12,11 @@ const COLUMNS = 'grid-cols-4 min-[380px]:grid-cols-7'
 export function PickerGrid({
   label,
   rows,
+  columns = 7,
 }: {
   label: string
+  /** Four for a grid whose rows hold four (a new song's time signatures): no empty cells. */
+  columns?: 4 | 7
   /** Each group's cells, in order: a group starts a row of its own. */
   rows: readonly { readonly label: string; readonly cells: readonly ReactNode[] }[]
 }) {
@@ -28,16 +31,25 @@ export function PickerGrid({
           key={row.label}
           role="group"
           aria-label={row.label}
-          className={cn('grid gap-px border-hairline not-first:border-t', COLUMNS)}
+          className={cn(
+            'grid gap-px border-hairline not-first:border-t',
+            columns === 4 ? 'grid-cols-4' : COLUMNS,
+          )}
         >
           {row.cells}
           {/* The row's empty cells: up to a whole row at seven, and at four. */}
-          {Array.from({ length: (7 - (row.cells.length % 7)) % 7 }, (_, at) => (
-            <span key={`wide-${at}`} aria-hidden className="hidden bg-card min-[380px]:block" />
+          {Array.from({ length: (columns - (row.cells.length % columns)) % columns }, (_, at) => (
+            <span
+              key={`wide-${at}`}
+              aria-hidden
+              className={cn('bg-card', columns === 7 && 'hidden min-[380px]:block')}
+            />
           ))}
-          {Array.from({ length: (4 - (row.cells.length % 4)) % 4 }, (_, at) => (
-            <span key={`narrow-${at}`} aria-hidden className="bg-card min-[380px]:hidden" />
-          ))}
+          {columns === 7
+            ? Array.from({ length: (4 - (row.cells.length % 4)) % 4 }, (_, at) => (
+                <span key={`narrow-${at}`} aria-hidden className="bg-card min-[380px]:hidden" />
+              ))
+            : null}
         </div>
       ))}
     </div>

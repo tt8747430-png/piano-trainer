@@ -2311,9 +2311,10 @@ describe('the score editor’s takes', () => {
     const { router, midi: keyboard } = await renderApp('/songs/folders/hymns')
     connect(keyboard)
     await user.click(await screen.findByRole('button', { name: 'New' }))
-    await user.click(await screen.findByRole('button', { name: 'New song' }))
+    // Record, the + menu's own way in: the same sheet, made to be played in.
+    await user.click(await screen.findByRole('button', { name: 'Record' }))
     await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Evening')
-    await user.click(screen.getByRole('button', { name: 'Record' }))
+    await user.click(screen.getByRole('button', { name: 'Create and record' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Count-in'))
     // Record is pressed once: the URL says nothing of it any more.
@@ -2324,9 +2325,10 @@ describe('the score editor’s takes', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/songs/folders/hymns')
     await user.click(await screen.findByRole('button', { name: 'New' }))
-    await user.click(await screen.findByRole('button', { name: 'New song' }))
+    // Record, the + menu's own way in: the same sheet, made to be played in.
+    await user.click(await screen.findByRole('button', { name: 'Record' }))
     await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Evening')
-    await user.click(screen.getByRole('button', { name: 'Record' }))
+    await user.click(screen.getByRole('button', { name: 'Create and record' }))
     const record = await screen.findByRole('dialog', { name: 'Record' })
     expect(record).toHaveTextContent('Recording needs a MIDI keyboard.')
     expect(router.state.location.pathname).toBe('/edit/my-1')

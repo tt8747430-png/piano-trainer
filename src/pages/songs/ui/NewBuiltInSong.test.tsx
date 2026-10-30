@@ -29,7 +29,7 @@ describe('a new built-in song (content as data)', () => {
     await user.click(await screen.findByRole('button', { name: 'New built-in song' }))
     const sheet = await screen.findByRole('dialog', { name: 'New built-in song' })
     await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), 'Abide with me')
-    await user.click(within(sheet).getByRole('button', { name: 'Make' }))
+    await user.click(within(sheet).getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/abide-with-me'))
     expect(router.state.location.search).toMatchObject({ original: true })
     const draft = await content.draft('piece', 'abide-with-me')

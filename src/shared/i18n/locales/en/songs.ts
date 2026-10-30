@@ -210,39 +210,39 @@ export const songs = {
   },
   new: 'New',
   newSong: 'New song',
+  recordSong: 'Record',
   // The New dial's lines, what each way of adding does.
   adds: {
+    record: 'Play it; we write the notes',
     song: 'Write it on the staff',
     folder: 'Keep songs together',
     import: 'A MusicXML or MIDI file',
   },
   making: {
     title: 'New song',
+    recordTitle: 'Record a song',
     name: 'Title',
+    later: 'Everything here can be changed on the score later.',
+    key: 'Key signature',
+    keyDetail: 'Starts with no sharps or flats, in major.',
     meter: 'Time signature',
-    make: 'Make',
-    makeAndRecord: 'Record',
+    meterDetail: 'Beats in a bar and the note that counts them.',
+    simple: 'Simple',
+    compound: 'Compound',
+    create: 'Create song',
+    createAndRecord: 'Create and record',
     builtInTitle: 'New built-in song',
     making: 'Making…',
     failed: 'The song could not be made. Try again once you’re online.',
   },
-  // The staves a new song's score starts with, its own sheet (ADR 0114, 0097).
   setup: {
-    title: 'Score',
-    customize: 'Customize',
-    done: 'Done',
     staves: 'Staves',
+    stavesDetail: 'Add, name and take away staves on the score.',
     choice: {
       piano: 'Piano',
-      staffAndPiano: 'A staff and piano',
-      staff: 'A staff',
+      staffAndPiano: 'Melody and piano',
+      staff: 'Lead sheet',
     },
-    choiceDetail: {
-      piano: 'The piano’s two staves',
-      staffAndPiano: 'A staff over the piano, for a voice or another part',
-      staff: 'A lead sheet: one staff with chord symbols, the piano out of sight',
-    },
-    more: 'Add more staves, name them and take them away on the score.',
   },
   // A song someone shared as a link.
   // The Public library (ADR 0116): learners' songs published for anyone to play and save a copy of.

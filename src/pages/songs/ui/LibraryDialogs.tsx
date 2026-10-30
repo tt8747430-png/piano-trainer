@@ -85,6 +85,7 @@ export function LibraryDialogs({
         onOpenChange={shut}
         folder={folder?.id ?? null}
         builtIn={pending?.kind === 'new-song' ? pending.builtIn : undefined}
+        record={pending?.kind === 'new-song' && pending.record === true}
       />
       <ExportSheet
         piece={exported}

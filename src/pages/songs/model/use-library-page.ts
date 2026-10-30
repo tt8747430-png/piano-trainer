@@ -46,7 +46,7 @@ export type Pending =
   | { readonly kind: 'delete-folder'; readonly folder: ShelvedFolder }
   | { readonly kind: 'delete-songs'; readonly songs: readonly PieceId[] }
   | { readonly kind: 'delete-chosen' }
-  | { readonly kind: 'new-song'; readonly builtIn?: SongCollectionId }
+  | { readonly kind: 'new-song'; readonly builtIn?: SongCollectionId; readonly record?: boolean }
   | { readonly kind: 'move-in' }
   | { readonly kind: 'export'; readonly song: PieceId }
 
