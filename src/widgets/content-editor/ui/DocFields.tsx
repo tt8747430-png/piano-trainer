@@ -28,6 +28,8 @@ export function DocText({
   return (
     <textarea
       aria-label={label}
+      autoComplete="off"
+      data-1p-ignore
       lang={locale}
       rows={1}
       value={value[locale]}
@@ -67,6 +69,10 @@ export function DocTitleField({
       value={value}
       required
       autoFocus
+      // A course's or a progression's name, never the device's contacts (iOS offers them for a name).
+      autoComplete="off"
+      autoCorrect="on"
+      data-1p-ignore
       placeholder={placeholder}
       onChange={(event) => onChange(event.target.value)}
       className="w-full bg-transparent font-display text-3xl font-semibold caret-primary outline-none placeholder:text-muted-foreground sm:text-4xl"
@@ -87,7 +93,10 @@ export function PropertyRow({ name, children }: { name: string; children: ReactN
   return (
     <div className="grid min-h-12 grid-cols-[minmax(6rem,10rem)_minmax(0,1fr)] items-center gap-3">
       <dt className="text-sm text-muted-foreground">{name}</dt>
-      <dd className="min-w-0">{children}</dd>
+      {/* A value chosen in place, as a list's value is: no box until the pointer is on it. */}
+      <dd className="flex min-w-0 justify-end [&_[data-slot=select-trigger]]:border-transparent [&_[data-slot=select-trigger]]:bg-transparent [&_[data-slot=select-trigger]]:shadow-none [&_[data-slot=select-trigger]]:hover:bg-muted">
+        {children}
+      </dd>
     </div>
   )
 }

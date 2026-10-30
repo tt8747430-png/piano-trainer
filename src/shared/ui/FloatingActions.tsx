@@ -306,11 +306,14 @@ const DIAL_OUT_MS = 120
 export function SpeedDial({
   label,
   icon: Icon = Ellipsis,
+  main = false,
   children,
 }: {
   /** What the folded button says: More, or what its actions are about. */
   label?: string
   icon?: LucideIcon
+  /** The screen's main action (Songs' New): the honey 56px button, as every screen's main one. */
+  main?: boolean
   /** Its `SpeedDialAction`s, the nearest last. */
   children: ReactNode
 }) {
@@ -345,19 +348,20 @@ export function SpeedDial({
         }}
       >
         <Button
-          variant="surface"
+          variant={main ? 'default' : 'surface'}
           size="icon"
           aria-label={name}
           title={name}
           aria-expanded={open}
           aria-controls={open ? id : undefined}
           onClick={() => (open ? close() : setShown('open'))}
-          className={cn(MINI_FAB, open && 'bg-muted elevation-2')}
+          className={cn(main ? FAB : MINI_FAB, open && !main && 'bg-muted elevation-2')}
         >
           <Icon
             aria-hidden
             className="transition-[rotate] duration-200 ease-out"
-            style={open ? { rotate: '90deg' } : undefined}
+            // The main + turns to ×, the ⋯ a quarter turn.
+            style={open ? { rotate: main ? '45deg' : '90deg' } : undefined}
           />
         </Button>
         {shown !== 'closed' ? (
@@ -392,12 +396,15 @@ export function SpeedDial({
  */
 export function SpeedDialAction({
   label,
+  detail,
   icon: Icon,
   onClick,
   render,
   disabled,
 }: {
   label: string
+  /** What it does, in one short line under its name (Import: "A MusicXML or MIDI file"). */
+  detail?: string
   icon: LucideIcon
   onClick?: () => void
   /** A link in place of a button. */
@@ -405,26 +412,43 @@ export function SpeedDialAction({
   disabled?: boolean
 }) {
   const close = useContext(CloseDial)
-  const look =
-    'h-12 w-full justify-start gap-3 rounded-2xl px-3 pr-5 text-base font-semibold text-foreground transition-colors active:not-aria-[haspopup]:translate-y-0 active:bg-muted'
+  const detailId = useId()
+  // Named by its label; its line says what it does, as its description.
+  const named = { 'aria-label': label, 'aria-describedby': detail ? detailId : undefined }
+  const look = cn(
+    'w-full justify-start gap-3 rounded-2xl px-2 pr-5 text-left text-base font-semibold text-foreground transition-colors active:not-aria-[haspopup]:translate-y-0 active:bg-muted',
+    detail ? 'h-auto min-h-14 py-2' : 'h-12',
+  )
   const choose = () => {
     onClick?.()
     close()
   }
   const face = (
     <>
-      <Icon aria-hidden className="size-5 text-muted-foreground" />
-      <span className="truncate">{label}</span>
+      <span
+        aria-hidden
+        className="grid size-9 shrink-0 place-items-center rounded-xl bg-muted text-foreground [&_svg]:size-5"
+      >
+        <Icon />
+      </span>
+      <span className="flex min-w-0 flex-col">
+        <span className="truncate">{label}</span>
+        {detail ? (
+          <span id={detailId} className="truncate text-sm font-normal text-muted-foreground">
+            {detail}
+          </span>
+        ) : null}
+      </span>
     </>
   )
   return (
     <li>
       {render ? (
-        <ButtonLink variant="ghost" render={render} onClick={choose} className={look}>
+        <ButtonLink variant="ghost" render={render} onClick={choose} className={look} {...named}>
           {face}
         </ButtonLink>
       ) : (
-        <Button variant="ghost" disabled={disabled} onClick={choose} className={look}>
+        <Button variant="ghost" disabled={disabled} onClick={choose} className={look} {...named}>
           {face}
         </Button>
       )}

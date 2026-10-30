@@ -190,7 +190,11 @@ function LessonBar({
   )
   if (paged)
     return (
-      <FloatingBar label={t('lessonBar')} className="w-[min(24rem,calc(100vw-2rem))] gap-1 pr-1">
+      <FloatingBar
+        label={t('lessonBar')}
+        // As wide as the row leaves it beside the keys' round button: never past the screen's edge.
+        className="w-[min(22rem,calc(100vw-2*var(--gutter)-3.75rem))] gap-1 pr-1"
+      >
         {section(at - 1, t('previousSection'), arrows(ChevronLeft, ChevronUp))}
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger

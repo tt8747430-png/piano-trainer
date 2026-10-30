@@ -204,6 +204,13 @@ export const songs = {
   },
   new: 'New',
   newSong: 'New song',
+  // The New dial's lines, what each way of adding does.
+  adds: {
+    song: 'Write it on the staff',
+    folder: 'Keep songs together',
+    import: 'A MusicXML or MIDI file',
+    public: 'Songs other learners shared',
+  },
   making: {
     title: 'New song',
     name: 'Title',

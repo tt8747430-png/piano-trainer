@@ -194,6 +194,12 @@ export const songs: LocaleResources['songs'] = {
   },
   new: 'Создать',
   newSong: 'Новая песня',
+  adds: {
+    song: 'Записать на нотном стане',
+    folder: 'Собрать песни вместе',
+    import: 'Файл MusicXML или MIDI',
+    public: 'Песни других учеников',
+  },
   making: {
     title: 'Новая песня',
     name: 'Название',
