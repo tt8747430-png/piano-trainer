@@ -89,4 +89,31 @@ describe('a question’s answer, as an editor writes it', () => {
     expect(exampleProblem(changed, answer)).toBeNull()
     expect(exampleProblem(withExample(asking, answer.key, 'Xq'), answer)).toBe('Xq')
   })
+
+  it('is the notes a question asks for, in order, rising still where they rose', () => {
+    const rising: Lesson = {
+      ...asking,
+      sections: [
+        {
+          heading: asking.sections[0]!.heading,
+          blocks: [
+            {
+              kind: 'question',
+              ask: { en: 'Play F major up', ru: 'Сыграй фа мажор вверх' },
+              answer: { notes: ['F', 'A', 'C'], rising: true },
+            },
+          ],
+        },
+      ],
+    }
+    const [answer] = lessonExamples(rising)
+    expect(answer).toMatchObject({ kind: 'answerNotes', text: 'F A C' })
+    if (!answer) throw new Error('an answer')
+    const changed = withExample(rising, answer.key, 'G B♭ D')
+    expect(changed.sections[0]?.blocks[0]).toMatchObject({
+      answer: { notes: ['G', 'B♭', 'D'], rising: true },
+    })
+    expect(exampleProblem(changed, answer)).toBeNull()
+    expect(exampleProblem(withExample(rising, answer.key, 'G H2'), answer)).toBe('H2')
+  })
 })

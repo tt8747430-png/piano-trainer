@@ -1,5 +1,5 @@
 import { NodeViewWrapper, type ReactNodeViewProps } from '@tiptap/react'
-import { SlidersHorizontal } from 'lucide-react'
+import { CircleHelp, Piano, SlidersHorizontal } from 'lucide-react'
 import { Component, use, useId, useState, type FocusEvent, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { LessonBlock, LessonExample } from '@/entities/lesson'
@@ -315,13 +315,31 @@ export function ExampleView({ node, updateAttributes, selected }: ReactNodeViewP
         ) : null}
       </div>
       {block.kind === 'question' ? (
-        <WordsLine
-          label={t('edit.doc.ask')}
-          value={block.ask}
-          placeholder={words('edit.doc.ask')}
-          className="font-semibold"
-          onChange={(ask) => change({ ...block, ask })}
-        />
+        // The question's card as the lesson shows it, its words typed where they print.
+        <div className="flex flex-col gap-3 card p-4 text-base">
+          <div className="flex items-start gap-3">
+            <span
+              aria-hidden
+              className="grid size-10 shrink-0 place-items-center rounded-full bg-paint-lilac text-on-paint-lilac"
+            >
+              <CircleHelp className="size-5" />
+            </span>
+            <WordsLine
+              label={t('edit.doc.ask')}
+              value={block.ask}
+              placeholder={words('edit.doc.ask')}
+              className="h-auto min-h-10 flex-1 rounded-lg border-transparent bg-transparent px-1 font-semibold shadow-none dark:bg-transparent"
+              onChange={(ask) => change({ ...block, ask })}
+            />
+          </div>
+          <span
+            aria-hidden
+            className="ml-13 inline-flex h-10 w-fit items-center gap-2 rounded-full border border-border px-4 text-sm font-medium"
+          >
+            <Piano className="size-4" />
+            {words('question.answer')}
+          </span>
+        </div>
       ) : block.kind === 'link' ? (
         <WordsLine
           label={t('edit.doc.linkTitle')}

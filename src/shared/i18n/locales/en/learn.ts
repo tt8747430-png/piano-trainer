@@ -282,6 +282,8 @@ export const learn = {
     example: {
       answer: 'Answer',
       answerInfo: 'The chord the question asks to be played, as a symbol: C, Am7, F/A.',
+      answerNotes: 'Answer',
+      answerNotesInfo: 'The notes the question asks to be played, in order, a space between them: F A C.',
       chords: 'Chords',
       notes: 'Notes',
       bass: 'Left hand',

@@ -189,3 +189,4 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   (2026-10-30).
 - r25 — Every New … one sheet (`NewSheet`): New song as Flat's new score (staves as tiles, the key signature grid, time tiles), New course, New progression, Add lesson and Add chapter; /courses/new and /practice/progressions/new gone (2026-10-30).
 - r25 — A level's lesson's Read first stands under its title and summary inside the document, as a page's properties do (2026-10-30).
+- r25 — A question in Edit is the lesson's question card, its words typed where they print; a notes answer is written in order as text (F A C), rising or falling as it was (2026-10-30).

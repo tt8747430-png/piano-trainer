@@ -270,6 +270,8 @@ export const learn: LocaleResources['learn'] = {
     example: {
       answer: 'Ответ',
       answerInfo: 'Аккорд, который вопрос просит сыграть, символом: C, Am7, F/A.',
+      answerNotes: 'Ответ',
+      answerNotesInfo: 'Ноты, которые вопрос просит сыграть, по порядку, через пробел: F A C.',
       chords: 'Аккорды',
       notes: 'Ноты',
       bass: 'Левая рука',

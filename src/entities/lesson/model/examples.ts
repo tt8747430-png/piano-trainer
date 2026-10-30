@@ -1,12 +1,13 @@
-import { C_MAJOR, parseChordSymbol, parseNumerals } from '@/shared/lib/music'
+import { C_MAJOR, parseChordSymbol, parseNoteName, parseNumerals } from '@/shared/lib/music'
 import { noteLine } from '@/shared/lib/schedule'
 import type { Lesson, LessonBlock } from './types'
 
 /**
  * What an example's line of text writes: a row of chord symbols, a line of notes (the left hand's,
- * `bass`), numerals, or the chord a question asks to be played (`answer`).
+ * `bass`), numerals, or what a question asks to be played: a chord (`answer`) or notes in order
+ * (`answerNotes`).
  */
-export type ExampleKind = 'chords' | 'notes' | 'bass' | 'numerals' | 'answer'
+export type ExampleKind = 'chords' | 'notes' | 'bass' | 'numerals' | 'answer' | 'answerNotes'
 
 /** One example of a lesson an editor writes as a line of text: where it is (`key`), what it is, in which section. */
 export interface LessonExample {
@@ -31,7 +32,9 @@ function blockExamples(block: LessonBlock): (readonly [ExampleKind, string, stri
     case 'progression':
       return [['numerals', 'numerals', block.numerals]]
     case 'question':
-      return 'chord' in block.answer ? [['answer', 'answer', block.answer.chord]] : []
+      return 'chord' in block.answer
+        ? [['answer', 'answer', block.answer.chord]]
+        : [['answerNotes', 'answer', block.answer.notes.join(' ')]]
     default:
       return []
   }
@@ -39,7 +42,7 @@ function blockExamples(block: LessonBlock): (readonly [ExampleKind, string, stri
 
 /**
  * A lesson's examples written as a line of text, in its order (ADR 0116, round 11): a row of chords,
- * a line of notes and its left hand's, a progression's numerals, the chord a question asks for. The
+ * a line of notes and its left hand's, a progression's numerals, the chord or the notes a question asks for. The
  * rest stay as authored.
  */
 export function lessonExamples(lesson: Lesson): LessonExample[] {
@@ -76,7 +79,10 @@ export function withExample(lesson: Lesson, key: string, text: string): Lesson {
       ? text.split(/\s+/).filter(Boolean)
       : example.kind === 'answer'
         ? { chord: text.trim() }
-        : text
+        : example.kind === 'answerNotes' && at.block.kind === 'question'
+          ? // The notes rewritten, still rising or falling as they were.
+            { ...at.block.answer, notes: text.split(/\s+/).filter(Boolean) }
+          : text
   const [, s, , b] = pathOf(key) as [string, number, string, number]
   return {
     ...lesson,
@@ -151,6 +157,11 @@ export function exampleProblem(lesson: Lesson, example: LessonExample): string |
       } catch {
         return now.text.trim()
       }
+    case 'answerNotes':
+      return firstUnread(
+        now.text.split(/\s+/).filter(Boolean),
+        (name) => parseNoteName(name) !== null,
+      )
   }
 }
 
