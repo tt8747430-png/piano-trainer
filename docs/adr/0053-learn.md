@@ -78,3 +78,5 @@ course.
   rings and prerequisites in the contents, after the reference theory book (2026-10-28).
 - r14 — Slash chords, modulation, rootless voicings, locked hands, the cadences split, How to Practise (2026-10-28).
 - The research note on clearer lessons (2026-10-12), deleted: its checklist is `docs/CONTENT.md`'s.
+- r21 — The Lessons a library: a journey chosen from a pop-up, its chapters groups of rows, no zigzag path;
+  Continue one compact row; an editor's Edit the journey and New course floating (2026-10-30).

@@ -164,11 +164,10 @@ function ChapterGroup({
   const title = localText(chapter.title, locale)
   return (
     <section aria-labelledby={id} className="flex flex-col gap-2">
-      <h3
-        id={id}
-        className="flex items-baseline gap-2 px-3 font-sans text-sm font-semibold text-muted-foreground"
-      >
-        <span className="sr-only">{t('journey.chapter', { n, title })}</span>
+      <h3 className="flex items-baseline gap-2 px-3 font-sans text-sm font-semibold text-muted-foreground">
+        <span id={id} className="sr-only">
+          {t('journey.chapter', { n, title })}
+        </span>
         <span aria-hidden className="min-w-0 flex-1">
           {n} · {title}
         </span>

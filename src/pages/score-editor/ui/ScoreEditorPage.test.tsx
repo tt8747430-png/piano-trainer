@@ -75,9 +75,6 @@ async function openCategory(user: ReturnType<typeof userEvent.setup>, category: 
 }
 
 /** The Notes section's editing modes (ADR 0114). */
-const modesOf = (notes: HTMLElement) =>
-  within(notes).getByRole('radiogroup', { name: 'Editing mode' })
-
 /** Opens a category of the palette and taps one of its keys. */
 async function tapIn(user: ReturnType<typeof userEvent.setup>, category: string, key: string) {
   const section = await openCategory(user, category)
@@ -1091,7 +1088,9 @@ describe('the score editor', () => {
       }),
     )
     const notes = await openCategory(user, 'Notes')
-    expect(within(notes).getByRole('radio', { name: 'Insert' })).toBeChecked()
+    expect(within(notes).getByRole('combobox', { name: 'Editing mode' })).toHaveTextContent(
+      'Insert',
+    )
     // What each mode does is in the ⓘ beside Notes, never a line under the modes (ADR 0096).
     expect(notes).not.toHaveTextContent('pushes the notes after it')
     await user.click(within(notes).getByRole('button', { name: 'About Notes' }))
@@ -1105,8 +1104,11 @@ describe('the score editor', () => {
     // The G taken back, Delete closes the gap it leaves.
     await user.keyboard('{ArrowLeft}{Backspace}')
     await waitFor(() => expect(songOf(piecesStore.getState())).toMatchObject(three))
-    await user.click(within(notes).getByRole('radio', { name: 'Chord' }))
-    expect(screen.getByRole('status')).toHaveTextContent(/· Chord mode$/)
+    await user.click(within(notes).getByRole('combobox', { name: 'Editing mode' }))
+    await user.click(await screen.findByRole('option', { name: 'Chord' }))
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/· Chord mode$/))
+    // Back on the sheet, I cycles on: the pop-up kept the keys while it was focused.
+    act(() => (document.activeElement as HTMLElement | null)?.blur())
     await user.keyboard('i')
     expect(screen.getByRole('status')).not.toHaveTextContent('mode')
   })
@@ -1200,10 +1202,11 @@ describe('the score editor', () => {
           .getByRole('toolbar', { name: 'Play, move and record' })
           .querySelectorAll('button:not([aria-label^="Tempo"])'),
       ]
-      // Close, Practise (Edit, the mode shown, is no control), MIDI, Undo, Redo; Delete, Copy,
-      // Cut, Paste.
+      // Close, the mode's pop-up (showing the mode), MIDI, Undo, Redo; Delete, Copy, Cut, Paste.
       expect(bar).toHaveLength(9)
-      for (const control of [...bar, ...dock]) {
+      for (const control of [...bar, ...dock].filter(
+        (each) => each.getAttribute('aria-label') !== 'Practise or edit',
+      )) {
         const name = control.getAttribute('aria-label') ?? ''
         expect(shownText(control), name).toBe('')
         // Its name in a tooltip: the browser's (`title`), or the edit row's own, which adds what
@@ -1443,13 +1446,16 @@ describe('the score editor', () => {
       'Enharmonic spelling',
     ])
       expect(within(notes).getByRole('button', { name })).toBeInTheDocument()
-    // The editing modes, Flat's, one always chosen (ADR 0114).
-    const modes = within(modesOf(notes)).getAllByRole('radio')
-    expect(modes).toHaveLength(3)
-    ;['Replace', 'Insert', 'Chord'].forEach((name, i) =>
-      expect(modes[i]).toHaveAccessibleName(name),
-    )
-    expect(modes[0]).toBeChecked()
+    // The editing modes, Flat's, one always chosen from a pop-up (ADR 0114).
+    const mode = within(notes).getByRole('combobox', { name: 'Editing mode' })
+    expect(mode).toHaveTextContent('Replace')
+    await user.click(mode)
+    expect((await screen.findAllByRole('option')).map((each) => each.textContent)).toEqual([
+      'Replace',
+      'Insert',
+      'Chord',
+    ])
+    await user.keyboard('{Escape}')
     const pitch = screen.getByRole('region', { name: 'Pitch' })
     for (const name of [
       'Up a semitone',
@@ -1818,12 +1824,11 @@ describe('the score editor', () => {
     const { router } = await renderApp('/edit/my-1?bar=3', { storage: withSong() })
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Bar 3, beat 1/))
     await waitFor(() => expect(router.state.location.search).not.toHaveProperty('bar'))
-    const modes = screen.getByRole('navigation', { name: 'Practise or edit' })
-    expect(within(modes).getByText('Edit').closest('[aria-current="page"]')).not.toBeNull()
+    const modes = screen.getByRole('combobox', { name: 'Practise or edit' })
+    expect(modes).toHaveTextContent('Edit')
     await user.keyboard('{Alt>}{ArrowRight}{/Alt}')
-    const practise = within(modes).getByRole('link', { name: 'Practise' })
-    expect(practise.getAttribute('href')).toBe('/play/my-1?bar=4')
-    await user.click(practise)
+    await user.click(modes)
+    await user.click(await screen.findByRole('option', { name: 'Practise' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/play/my-1'))
   })
 

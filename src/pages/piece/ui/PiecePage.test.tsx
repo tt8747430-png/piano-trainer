@@ -88,7 +88,7 @@ describe('Piece', () => {
     expect(screen.queryByRole('list', { name: 'Progressions' })).not.toBeInTheDocument()
   })
 
-  it('puts its key, time and tempo on three cards, its second title under them (ADR 0111)', async () => {
+  it('puts its key, time and tempo in one line, its second title over them (ADR 0111)', async () => {
     await renderApp('/songs/bz5')
     const facts = (await screen.findByText('Tempo')).closest('dl') as HTMLElement
     expect(
@@ -182,7 +182,14 @@ describe('Piece', () => {
       within(more)
         .getAllByRole('button')
         .map((action) => action.textContent),
-    ).toEqual(['Move to…', 'Archive', 'Share', 'Export to MIDI', 'Export to MusicXML'])
+    ).toEqual([
+      'Add to favourites',
+      'Move to…',
+      'Archive',
+      'Share',
+      'Export to MIDI',
+      'Export to MusicXML',
+    ])
   })
 
   it('shares a song of the app as a link to it in the Player, in the key and as simplified as last played (ADR 0107)', async () => {
@@ -200,20 +207,19 @@ describe('Piece', () => {
     expect(`${link.pathname}${link.search}`).toBe('/play/bz5?key=A&simple=true')
   })
 
-  it('puts Practise first, Learned beside it, and keeps Edit, its ♡ and More in its bar', async () => {
+  it('floats Practise, and keeps Edit, Learned and More in its bar', async () => {
     await renderApp('/songs/bz5')
     const practise = await screen.findByRole('link', { name: 'Practise' })
     expect(practise).toHaveAttribute('href', '/play/bz5')
-    // Before its facts and its chords: the first thing on the page to do.
-    const facts = screen.getByText('Key').closest('dl') as HTMLElement
-    expect(practise.compareDocumentPosition(facts) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     const bar = document.querySelector('[data-slot="screen-bar"]') as HTMLElement
-    for (const name of ['Edit the score', 'Add to favourites', 'More'])
-      expect(
-        within(bar).getByRole(name === 'Edit the score' ? 'link' : 'button', { name }),
-      ).toBeInTheDocument()
-    expect(within(bar).queryByRole('button', { name: 'Learned' })).toBeNull()
-    expect(practise.parentElement).toContainElement(screen.getByRole('button', { name: 'Learned' }))
+    expect(bar).not.toContainElement(practise)
+    expect(within(bar).getByRole('link', { name: 'Edit the score' })).toHaveAttribute(
+      'href',
+      '/edit/bz5',
+    )
+    for (const name of ['Learned', 'More'])
+      expect(within(bar).getByRole('button', { name })).toBeInTheDocument()
+    expect(within(bar).queryByRole('button', { name: 'Add to favourites' })).toBeNull()
   })
 
   it('opens the Player and marks the song learned', async () => {
@@ -308,6 +314,7 @@ describe('Piece: the learner’s own music', () => {
         .getAllByRole('button')
         .map((action) => action.textContent),
     ).toEqual([
+      'Add to favourites',
       'Move to…',
       'Archive',
       'Share',
@@ -419,7 +426,8 @@ describe('Piece: the learner’s own music', () => {
     })
     expect(await screen.findByRole('heading', { level: 1, name: 'Morning' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Learned' })).toBeNull()
-    await user.click(screen.getByRole('button', { name: 'Add to favourites' }))
+    await openMore(user)
+    await user.click(await screen.findByRole('button', { name: 'Add to favourites' }))
     expect(libraryStore.getState().favourites).toEqual(['my-1'])
     await openMore(user)
     await user.click(screen.getByRole('button', { name: 'Delete' }))
@@ -448,17 +456,14 @@ describe('Piece: the learner’s library (ADR 0106)', () => {
   const placeOf = (state: Parameters<typeof arrangeLibrary>[0], id: string) =>
     placeIn(arrangeLibrary(state, libraryCatalog({ ownSongs: [] })), id)
 
-  it('keeps a song among the favourites from the ♡ in its bar, pressed while it is one', async () => {
+  it('keeps a song among the favourites from More, named by what a tap does now', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs/bz5')
-    const heart = await screen.findByRole('button', { name: 'Add to favourites' })
-    expect(heart).toHaveAttribute('aria-pressed', 'false')
-    await user.click(heart)
+    await openMore(user)
+    await user.click(await screen.findByRole('button', { name: 'Add to favourites' }))
     expect(libraryStore.getState().favourites).toEqual(['bz5'])
-    // Named by what a tap does now.
-    expect(heart).toHaveAccessibleName('Remove from favourites')
-    expect(heart).toHaveAttribute('aria-pressed', 'true')
-    await user.click(heart)
+    await openMore(user)
+    await user.click(await screen.findByRole('button', { name: 'Remove from favourites' }))
     expect(libraryStore.getState().favourites).toEqual([])
   })
 
@@ -506,8 +511,8 @@ describe('Piece: the learner’s library (ADR 0106)', () => {
   it('reads in Russian', async () => {
     const user = userEvent.setup()
     await renderApp('/songs/bz5', { locale: 'ru', storage: kept({ favourites: ['bz5'] }) })
+    await user.click(await screen.findByRole('button', { name: 'Ещё' }))
     expect(await screen.findByRole('button', { name: 'Убрать из избранного' })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Ещё' }))
     await user.click(await screen.findByRole('button', { name: 'Переместить…' }))
     expect(await screen.findByRole('dialog', { name: 'Переместить' })).toBeInTheDocument()
     expect(untranslated(document.body)).toEqual([])

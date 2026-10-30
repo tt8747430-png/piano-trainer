@@ -64,16 +64,11 @@ describe('ScreenHeader', () => {
     expect(title).toHaveClass('truncate')
   })
 
-  it('stands a place’s title large on the page, the bar echoing it once it is scrolled past', () => {
+  it('sets a place’s title larger in the bar’s one row, never in a block of its own', () => {
     render(<ScreenHeader title="Learn" large />)
     const heading = screen.getByRole('heading', { level: 1, name: 'Learn' })
-    const bar = screen.getByRole('banner')
-    expect(bar).not.toContainElement(heading)
-    // The echo is for the eye; the heading is the large title alone.
-    expect(within(bar).queryByRole('heading')).toBeNull()
-    expect(within(bar).getByText('Learn', { ignore: '[aria-hidden=false]' })).toHaveClass(
-      'opacity-0',
-    )
+    expect(screen.getByRole('banner')).toContainElement(heading)
+    expect(heading).toHaveClass('line-clamp-2')
   })
 
   const scrollTo = (y: number) => {

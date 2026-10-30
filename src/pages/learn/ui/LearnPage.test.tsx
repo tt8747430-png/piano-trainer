@@ -71,7 +71,7 @@ describe('Learn', () => {
   })
 
   describe('its Lessons', () => {
-    it('show the current journey’s chapters, each a run of nodes, Continue’s marked', async () => {
+    it('show the current journey’s chapters as groups of rows, Continue’s marked Next', async () => {
       await renderApp('/')
       const journey = JOURNEYS[0]!
       expect(
@@ -83,51 +83,50 @@ describe('Learn', () => {
       const first = within(chapters[0]!).getAllByRole('link')[0]
       expect(first).toHaveAttribute('href', '/lessons/finding-home')
       expect(first).toHaveAttribute('aria-current', 'step')
-    })
-
-    it('count each journey’s steps on its tab, its lessons and its checks, and say so', async () => {
-      await renderApp('/')
-      const tabs = await screen.findByRole('navigation', { name: 'Journeys' })
-      const journey = JOURNEYS[0]!
-      const steps = journey.chapters.flatMap((chapter) => chapter.steps).length
-      expect(within(tabs).getByRole('link', { name: /^Foundations/ })).toHaveTextContent(
-        `0/${steps} steps`,
+      expect(first).toHaveTextContent('Next')
+      expect(within(chapters[0]!).getAllByRole('link')).toHaveLength(
+        journey.chapters[0]!.steps.length,
       )
     })
 
-    it('say a learned node is learned', async () => {
+    it('count each journey’s steps in its pop-up, its lessons and its checks, and say so', async () => {
+      const user = userEvent.setup()
+      await renderApp('/')
+      const picker = await screen.findByRole('combobox', { name: 'Journeys' })
+      expect(picker).toHaveTextContent('Foundations')
+      await user.click(picker)
+      const journey = JOURNEYS[0]!
+      const steps = journey.chapters.flatMap((chapter) => chapter.steps).length
+      expect(await screen.findByRole('option', { name: /^Foundations/ })).toHaveTextContent(
+        `0/${steps} steps`,
+      )
+      expect(screen.getAllByRole('option')).toHaveLength(JOURNEYS.length)
+    })
+
+    it('say a learned step is learned', async () => {
       const { progressStore } = await renderApp('/')
       await screen.findByRole('heading', { level: 2, name: 'Foundations' })
       act(() => progressStore.setState({ learned: { 'lesson:finding-home': at } }))
+      const chapter = screen.getByRole('region', { name: /^Chapter 1:/ })
       expect(
-        screen.getByRole('link', { name: /^Finding your way on the keys.*, learned$/ }),
+        within(chapter).getByRole('link', { name: /^Finding your way on the keys.*, learned/ }),
       ).toHaveAttribute('href', '/lessons/finding-home')
       expect(
-        screen.getByRole('link', { name: /^The staff and the treble clef/ }),
+        within(chapter).getByRole('link', { name: /^The staff and the treble clef/ }),
       ).not.toHaveAccessibleName(/learned/)
     })
 
-    it('switch journeys from their tabs, and fold a chapter under its heading', async () => {
+    it('switch journeys from the pop-up', async () => {
       const user = userEvent.setup()
-      const { router, settingsStore } = await renderApp('/')
-      const tabs = await screen.findByRole('navigation', { name: 'Journeys' })
-      expect(within(tabs).getAllByRole('link')).toHaveLength(JOURNEYS.length)
-      await user.click(within(tabs).getByRole('link', { name: /^Fluency/ }))
+      const { router } = await renderApp('/')
+      await user.click(await screen.findByRole('combobox', { name: 'Journeys' }))
+      await user.click(await screen.findByRole('option', { name: /^Fluency/ }))
       expect(await screen.findByRole('heading', { level: 2, name: 'Fluency' })).toBeInTheDocument()
       expect(router.state.location.search).toMatchObject({ journey: 'fluency' })
-      expect(within(tabs).getByRole('link', { name: /^Fluency/ })).toHaveAttribute(
-        'aria-current',
-        'page',
-      )
       const chapter = JOURNEYS[1]!.chapters[0]!
-      // Its visible words name it, its count of steps learned with them.
-      const heading = screen.getByRole('button', {
-        name: new RegExp(`^${chapter.title.en}\\s*0/${chapter.steps.length}$`),
-      })
-      expect(heading).toHaveAttribute('aria-expanded', 'true')
-      await user.click(heading)
-      expect(heading).toHaveAttribute('aria-expanded', 'false')
-      expect(settingsStore.getState().foldedSections).toContain(`journey.fluency.${chapter.id}`)
+      expect(
+        screen.getByRole('region', { name: `Chapter 1: ${chapter.title.en}` }),
+      ).toHaveTextContent(`0/${chapter.steps.length}`)
     })
   })
 

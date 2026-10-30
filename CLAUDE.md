@@ -99,7 +99,7 @@ music, `exercise` music and arrangement, and none of them imports a package. `es
 
 Three places: **Learn · Songs · Practice** (`app/router.tsx` has every route; `routes/*-search.ts` every URL's
 params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its README).
-
+- **Learn** (`/`, `?view=lessons|courses`) — a library: the Lessons (a journey chosen from a pop-up, its chapters groups of rows, `/lessons/$lessonId`) and the
 - **Learn** (`/`, `?view=lessons|courses`) — the Lessons (journeys of chapters, `/lessons/$lessonId`) and the
   Courses (`/courses/$courseId`, its lessons under it); a lesson paged a section at a time on a phone, its
   progress and prerequisites on the contents. `pages/learn`, `pages/course`, `pages/lesson`; an editor's lesson editor (`/lessons/$lessonId/edit`, `pages/lesson-editor`, ADR 0116) and course editor (`/courses/$courseId/edit`, a course's title, summary, shelf, level, weeks and lessons in order: moved, removed, added) and New course (`/courses/new`); the journey editor (`/journeys/$journeyId/edit`: chapters and their steps in order, new lessons);
@@ -123,7 +123,7 @@ params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its READ
   `features/practice` (the practice machine, the arrangement of a piece, loops, beats) and `shared/lib/schedule`.
 - **The score editor** (`/edit/$pieceId`, takes under it) — Flat's palette: a docked panel and a note-entry
   toolbar from 48rem wide, a bottom sheet on a phone (`EditorPalette`, `TOOL_SHORTCUTS`); the Player's score in Edit mode, sharing its bar and
-  transport (`widgets/mode-switch`, `ScoreBar`). `pages/score-editor`, `widgets/score-sheet`;
+  transport (`widgets/mode-switch`: one pop-up, Practise · Edit · an editor's Edit the original; `ScoreBar`). `pages/score-editor`, `widgets/score-sheet`;
   `features/score-editor` (the draft, its pure edits, undo, `createEditorStore`), `features/edit-piece` (saving),
   `features/record-take` and `manage-takes`; an editor's Edit the original (`?original=true`,
   `features/edit-original`: the song's draft on the server, Publish, Versions, Discard); an editor's New built-in song in a collection's folder (`useCreateBuiltInSong`), opened there unpublished.

@@ -385,10 +385,10 @@ Round buttons, Play, marks and pips are full circles. Keys are square at the top
 Where each thing goes, on every screen (the owner's UX principles, `.claude/skills/owner-way/references/ux-principles.md`;
 every piece is shown in the Admin area's Components):
 
-- **A detail page reads hero → primary action → facts → sections.** The title large on the page (a place's, and a song's,
-  whose names run long; the bar echoes it once scrolled), what the
-  thing is under it, its one filled action first and full width on a phone, its facts as cards or a line, then its
-  sections, each headed with a count and See all where it is cut short.
+- **A detail page reads title → facts → sections, its one primary action floating.** The title in the bar's row,
+  what the thing is under it in a line, its facts as one line of chips, then its sections, each headed with a count
+  and See all where it is cut short. The primary action (Practise, Start, Continue, Practise in the Player) is the
+  floating action, never a full-width button on the page.
 - **The bar holds Back, the title and at most two round actions**; More holds the rest, its destructive action last,
   red and alone. The primary action is never in the bar.
 - **Lists are grouped cards of rows** (`SettingsGroup`; `RowGroup` for a browsed list, one card in columns): a soft tile, the title, one detail line, then a
@@ -507,13 +507,16 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 
 - **Places** (tab bar, rail, sidebar): a 24px icon over an Onest 500 14px label in soft ink (a 20px icon beside a
   16px label in the sidebar); the current place sand in a soft line under a semibold ink label.
-- **The screen's bar** (`ScreenHeader`): one row of one height (56px, 64px from 640px): Back, the title in Literata
-  600 on one line cut short with an ellipsis, at most two round actions (a soft sand fill, no frame) with More for
-  the rest; a page's tabs its second row; a hairline under it once the page runs beneath. A place (Learn, Songs,
-  Practice), and a song's page, stand their title large on the page under the bar, its tabs under that, the bar taking the title small
-  once it is scrolled past; on a laptop, whose sidebar names the place, the bar is only its actions, at the right
-  of the large title. It slides away while reading down and returns the moment the page turns up; what is pinned
-  under it slides with it. A place's bar holds Search and the Profile on a phone; Settings is in the Profile.
+- **The screen's bar** (`ScreenHeader`): one row (56px at least): Back, the title in Literata 600, at most two
+  round actions (a soft sand fill, no frame) with More (`MoreMenu`) for the rest; a page's tabs its second row; a
+  hairline under it once the page runs beneath. A place (Learn, Songs, Practice) and a detail page (a song, a
+  course) set their title larger in that same row, wrapping to a second line rather than being cut; there is no
+  title block under the bar, and nothing pushes the page's content below the fold. It slides away while reading
+  down and returns the moment the page turns up; what is pinned under it slides with it. A place's bar holds
+  Search and the Profile on a phone; Settings is in the Profile.
+- **Modes are a pop-up** (`Dropdown`, its face the mode's icon and name): Practise · Edit · Edit the original in
+  the Player's and the editor's bars, Replace · Insert · Chord in the editor's Notes. An action with several
+  targets (a song's Edit: your version, the original) is a pull-down (`ActionMenu`) from one bar button.
 
 ### The keyboard
 

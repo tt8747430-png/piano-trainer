@@ -33,7 +33,9 @@ describe('the Player’s Sections (ADR 0107)', () => {
       expect(screen.queryByRole('dialog', { name: 'Sections' })).not.toBeInTheDocument(),
     )
     // The cursor at the chorus's first bar: the editor opens there from it (ADR 0115).
-    expect(screen.getByRole('link', { name: 'Edit' })).toHaveAttribute('href', '/edit/bz5?bar=9')
+    await user.click(screen.getByRole('combobox', { name: 'Practise or edit' }))
+    await user.click(await screen.findByRole('option', { name: 'Edit' }))
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/Bar 9, beat 1/))
   })
 
   it('marks the section the cursor is in', async () => {

@@ -41,3 +41,5 @@ along is not built: it would need timing windows the Player does not keep.
 - 0098 — A song's page introduces it (2026-10-24).
 - 0100 — A song is learned by its sections (2026-10-25; the learning card removed 2026-10-26).
 - 0111 — Song lessons by Chordify's rules: three holds, in time with the click, one change in Wait mode (2026-10-27).
+- r21 — The title in the bar's row; Edit a pull-down (your version, an editor's original); Learned in the bar;
+  Favourite in More; Practise the floating action; key, time and tempo one line of chips (2026-10-30).

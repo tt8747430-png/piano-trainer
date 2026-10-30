@@ -13,7 +13,8 @@ edit, and a learner practising should not change the music by accident.
 
 ## Decision
 
-- **Two screens, one score, two modes.** Practise · Edit (`ModeSwitch`) leads both bars. Switching replaces the
+- **Two screens, one score, two modes.** Practise · Edit (`ModeSwitch`, one pop-up; an editor also sees Edit the
+  original) leads both bars. Switching replaces the
   history entry, so Close still goes back where the learner came from. The bar carries over: both URLs take `bar`, the
   bar as written (the Player's cursor read back through the repeats, `writtenBarAt`; a written bar opening on its
   first time played, `beatGroupInBar`), read once and dropped from the URL. Only a piece has the switch, and every
@@ -58,3 +59,5 @@ own Play melody switch: it plays the tune under a take, not the Player's melody.
 - 0115 — One band for the bar, one Transpose, a plain Setup (2026-10-27). Its Setup is ADR 0105's, its View ADR
   0108's.
 - r13 — The editor's palette docked, not floating (ADR 0114) (2026-10-28).
+- r21 — Practise · Edit · Edit the original one pop-up (`ModeSwitch`), its face the mode's icon and name; the
+  editor's Mine / The original tabs gone; the editor's Replace · Insert · Chord a pop-up too (2026-10-30).
