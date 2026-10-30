@@ -42,7 +42,7 @@ describe('a new built-in song (content as data)', () => {
     expect(content.body('piece', 'abide-with-me')).toBeUndefined()
     expect(piecesStore.getState().songs).toEqual([])
     expect(
-      await screen.findByRole('group', { name: 'Draft of the original' }, { timeout: 5000 }),
+      await screen.findByRole('button', { name: 'The draft’s menu' }, { timeout: 5000 }),
     ).toBeInTheDocument()
   })
 

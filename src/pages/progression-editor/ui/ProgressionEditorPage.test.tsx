@@ -42,7 +42,7 @@ describe('the progression editor (content as data)', () => {
     const major = await screen.findByRole('textbox', { name: 'In a major key' })
     await user.clear(major)
     await user.type(major, 'I vi ii V')
-    const strip = screen.getByRole('group', { name: 'Draft of the original' })
+    const strip = document.body
     await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
     await user.click(within(strip).getByRole('button', { name: 'Publish' }))
     await user.click(

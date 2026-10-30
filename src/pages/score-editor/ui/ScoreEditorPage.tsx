@@ -11,7 +11,7 @@ import {
   usePiecesStoreApi,
   type ChartPiece,
 } from '@/entities/piece'
-import { DraftStrip, useMadeSong, useOriginalDraft } from '@/features/edit-original'
+import { DraftActions, DraftStatus, useMadeSong, useOriginalDraft } from '@/features/edit-original'
 import { useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, NotFound } from '@/shared/ui'
@@ -87,13 +87,18 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
       target={target}
       bar={bar}
       head={
-        <div className="flex flex-col items-center gap-2">
-          <DraftStrip
-            draft={draft}
-            title={entryTitles(piece, locale).primary}
-            unreadable={t('original.unreadable')}
-            onReset={draft.reopen}
-          />
+        // Where the draft stands, its menu and Publish, in the column's head: the score's bar has no
+        // room for them beside its own tools on a phone.
+        <div className="flex flex-col items-center gap-1">
+          <div className="flex max-w-full items-center gap-1">
+            <DraftStatus draft={draft} className="ps-2" />
+            <DraftActions
+              draft={draft}
+              title={entryTitles(piece, locale).primary}
+              unreadable={t('original.unreadable')}
+              onReset={draft.reopen}
+            />
+          </div>
         </div>
       }
     />

@@ -61,7 +61,7 @@ const SHEET_EDGES = 'mx-[calc(-1*max(var(--gutter),env(safe-area-inset-left)))]'
  * transport floats over the sheet's foot, the Player's in shape and place (ADR 0115), stepping aside
  * while the music is read; the sheet has room to scroll its last line above it. While a take records,
  * its strip stands where the transport was. What the music's owner says of it (an editor's draft of
- * a song's original, its strip) stands over the sheet, in the column's head (`head`).
+ * a song's original, its status and Publish) stands over the sheet, in the column's head (`head`).
  */
 export function ScoreEditor({
   target,

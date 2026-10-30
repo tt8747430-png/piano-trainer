@@ -2,6 +2,7 @@ import { CloudOff, Ellipsis, History, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { NetResult } from '@/shared/api/network'
+import { cn } from '@/shared/lib'
 import { ActionMenu, say } from '@/shared/ui'
 import {
   AlertDialog,
@@ -18,13 +19,46 @@ import { VersionsDialog } from './VersionsDialog'
 
 type Asked = 'publish' | 'discard' | 'versions' | null
 
+type DraftState = Pick<ContentDraft, 'drafted' | 'saved'>
+
+/** What the status says of the draft: saved, saving, published as it is, or not saved (and why). */
+function statusKey(draft: DraftState) {
+  if (draft.saved === 'saving') return 'original.saving' as const
+  if (draft.saved === 'offline') return 'original.notSavedOffline' as const
+  if (draft.saved === 'failed') return 'original.notSaved' as const
+  if (!draft.drafted) return 'original.unchanged' as const
+  return draft.saved === 'saved' ? ('original.saved' as const) : ('original.drafted' as const)
+}
+
 /**
- * The strip an editor's draft of a built-in item stands under (ADR 0116): where the draft stands
- * (saved, saving, not saved), Publish, and the draft's menu: Versions, to restore one, and Discard.
- * What publishing, discarding or restoring changes is asked first; after discarding or restoring,
- * the editor opens again on the item as published (`onReset`).
+ * Where an editor's draft stands (round 21), one small line under the screen's title: saved, saving,
+ * published as it is, or not saved (offline, or failed), its cloud struck out.
  */
-export function DraftStrip({
+export function DraftStatus({ draft, className }: { draft: DraftState; className?: string }) {
+  const { t } = useTranslation('editor')
+  const unsaved = draft.saved === 'offline' || draft.saved === 'failed'
+  return (
+    <p
+      role="status"
+      className={cn(
+        'flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground',
+        unsaved && 'text-destructive',
+        className,
+      )}
+    >
+      {unsaved ? <CloudOff aria-hidden className="size-4 shrink-0" /> : null}
+      <span className="truncate">{t(statusKey(draft))}</span>
+    </p>
+  )
+}
+
+/**
+ * The draft's actions in the screen's bar (ADR 0116, round 21): its menu (Versions, to restore one,
+ * and Discard) and Publish, the bar's one accent. What publishing, discarding or restoring changes is
+ * asked first; after discarding or restoring, the editor opens again on the item as published
+ * (`onReset`).
+ */
+export function DraftActions({
   draft,
   title,
   unreadable,
@@ -39,20 +73,6 @@ export function DraftStrip({
   const { t } = useTranslation('editor')
   const [asked, setAsked] = useState<Asked>(null)
   const [busy, setBusy] = useState(false)
-  const status = draft.drafted
-    ? (
-        {
-          idle: 'original.drafted',
-          saving: 'original.saving',
-          saved: 'original.saved',
-          offline: 'original.notSavedOffline',
-          failed: 'original.notSaved',
-        } as const
-      )[draft.saved]
-    : draft.saved === 'saving'
-      ? ('original.saving' as const)
-      : ('original.unchanged' as const)
-  const unsaved = draft.saved === 'offline' || draft.saved === 'failed'
 
   /** Runs what was asked, says how it went, and closes the dialog. */
   const run = async (
@@ -79,15 +99,7 @@ export function DraftStrip({
   }
 
   return (
-    <div
-      role="group"
-      aria-label={t('original.label')}
-      className="pointer-events-auto flex items-center gap-1 rounded-full border border-hairline bg-card/95 py-1 pr-1 pl-3 shadow-md backdrop-blur"
-    >
-      {unsaved ? <CloudOff aria-hidden className="size-4 shrink-0 text-destructive" /> : null}
-      <p aria-live="polite" className="min-w-0 truncate text-sm text-muted-foreground">
-        {t(status)}
-      </p>
+    <>
       <ActionMenu
         label={t('original.more')}
         align="end"
@@ -173,6 +185,6 @@ export function DraftStrip({
           void run(() => draft.restore(version), t('original.restored'), onReset)
         }
       />
-    </div>
+    </>
   )
 }

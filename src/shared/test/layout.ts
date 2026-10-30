@@ -63,3 +63,31 @@ export function stubScrolling({
   onTestFinished(() => void Reflect.deleteProperty(Element.prototype, 'scrollTo'))
   return { scrolls }
 }
+
+/**
+ * jsdom lays out no text: for this test a range has no boxes, so an editor's caret (ProseMirror's
+ * `coordsAtPos`, its scrolling to the selection) reads as at the page's corner.
+ */
+export function stubTextLayout() {
+  const proto = Range.prototype as Partial<Pick<Range, 'getClientRects' | 'getBoundingClientRect'>>
+  const own = { rects: proto.getClientRects, box: proto.getBoundingClientRect }
+  const empty = (): DOMRect => ({
+    x: 0,
+    y: 0,
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+    right: 0,
+    bottom: 0,
+    toJSON: () => ({}),
+  })
+  proto.getClientRects = () => Object.assign([], { item: () => null }) as unknown as DOMRectList
+  proto.getBoundingClientRect = empty
+  onTestFinished(() => {
+    if (own.rects) proto.getClientRects = own.rects
+    else delete proto.getClientRects
+    if (own.box) proto.getBoundingClientRect = own.box
+    else delete proto.getBoundingClientRect
+  })
+}

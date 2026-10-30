@@ -20,15 +20,18 @@ const editing = () =>
     items: [{ kind: 'course', id: COURSE.id, body: courseRecord(COURSE), meta: {} }],
   })
 
-/** A field of the course's texts: its group by name, its language's box. */
-const field = async (group: 'Title' | 'Summary', language: 'English' | 'Русский') =>
-  within(await screen.findByRole('group', { name: group })).getByRole('textbox', {
-    name: language,
-  })
+/** A text of the course's document, written in place. */
+const field = (name: 'Title' | 'Summary') => screen.findByRole('textbox', { name })
 
-/** Publishes the draft once it is saved: the strip's Publish, then the dialog's. */
+/** A lesson row's menu, opened, and one of its actions chosen. */
+async function rowAction(user: ReturnType<typeof userEvent.setup>, title: string, action: string) {
+  await user.click(screen.getByRole('button', { name: `More: ${title}` }))
+  await user.click(await screen.findByRole('button', { name: `${action}: ${title}` }))
+}
+
+/** Publishes the draft once it is saved: the bar's Publish, then the dialog's. */
 async function publish(user: ReturnType<typeof userEvent.setup>) {
-  const strip = screen.getByRole('group', { name: 'Draft of the original' })
+  const strip = document.body
   await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
   await user.click(within(strip).getByRole('button', { name: 'Publish' }))
   await user.click(
@@ -58,11 +61,13 @@ describe('the course editor (ADR 0116, round 12)', () => {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    const title = await field('Title', 'English')
+    const title = await field('Title')
     expect(title).toHaveValue(COURSE.title.en)
     await user.clear(title)
     await user.type(title, 'A new course title')
-    await user.type(await field('Summary', 'Русский'), '!')
+    await user.click(screen.getByRole('radio', { name: 'RU · Русский' }))
+    expect(await field('Title')).toHaveValue(COURSE.title.ru)
+    await user.type(await field('Summary'), '!')
     await publish(user)
     expect(
       await screen.findByText('Published. Learners get it the next time the app starts.'),
@@ -85,9 +90,9 @@ describe('the course editor (ADR 0116, round 12)', () => {
       auth: await signedInAs('admin'),
       contentEditing: content,
     })
-    const summary = await field('Summary', 'English')
+    const summary = await field('Summary')
     await user.clear(summary)
-    expect(summary).toHaveAccessibleDescription('Words are needed here')
+    expect(summary).toBeInvalid()
     await publish(user)
     expect(
       await screen.findByText(
@@ -108,8 +113,8 @@ describe('the course editor (ADR 0116, round 12)', () => {
     if (!first || !second || !third) throw new Error('a course of three lessons at least')
     const lessons = await screen.findByRole('list', { name: 'Lessons' })
     expect(within(lessons).getAllByRole('listitem')).toHaveLength(COURSE.lessons.length)
-    await user.click(within(lessons).getByRole('button', { name: `Move up: ${second.title.en}` }))
-    await user.click(within(lessons).getByRole('button', { name: `Remove: ${third.title.en}` }))
+    await rowAction(user, second.title.en, 'Move up')
+    await rowAction(user, third.title.en, 'Remove')
     expect(
       within(lessons)
         .getAllByRole('link')
@@ -134,11 +139,26 @@ describe('the course editor (ADR 0116, round 12)', () => {
     const [first, second] = COURSE.lessons
     if (!first || !second) throw new Error('a course of two lessons at least')
     const lessons = await screen.findByRole('list', { name: 'Lessons' })
-    await user.click(within(lessons).getByRole('button', { name: `Remove: ${first.title.en}` }))
+    await rowAction(user, first.title.en, 'Remove')
     expect(within(lessons).getAllByRole('link')[0]).toHaveTextContent(second.title.en)
     expect(await screen.findByText(`Removed: ${first.title.en}`)).toBeVisible()
     await user.click(screen.getByRole('button', { name: 'Undo' }))
     expect(within(lessons).getAllByRole('link')[0]).toHaveTextContent(first.title.en)
+  })
+
+  it('finds a lesson it took out by name, and adds it back at the end', async () => {
+    const user = userEvent.setup()
+    await renderApp(`/courses/${COURSE.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: editing(),
+    })
+    const [first] = COURSE.lessons
+    if (!first) throw new Error('a course of a lesson at least')
+    const lessons = await screen.findByRole('list', { name: 'Lessons' })
+    await rowAction(user, first.title.en, 'Remove')
+    await user.type(screen.getByRole('textbox', { name: 'Add lesson' }), first.title.en.slice(0, 6))
+    await user.click(screen.getByRole('button', { name: first.title.en }))
+    expect(within(lessons).getAllByRole('link').at(-1)).toHaveTextContent(first.title.en)
   })
 
   it('adds a new lesson, unpublished, at the course’s end, and opens it in the lesson editor', async () => {
@@ -148,8 +168,8 @@ describe('the course editor (ADR 0116, round 12)', () => {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await user.type(await screen.findByRole('textbox', { name: 'New lesson' }), 'Blues in C')
-    await user.click(screen.getByRole('button', { name: 'Add lesson' }))
+    await user.type(await screen.findByRole('textbox', { name: 'Add lesson' }), 'Blues in C')
+    await user.click(screen.getByRole('button', { name: 'New lesson “Blues in C”' }))
     await waitFor(() =>
       expect(router.state.location.pathname).toBe(`/courses/${COURSE.id}/blues-in-c/edit`),
     )
@@ -186,7 +206,7 @@ describe('the course editor (ADR 0116, round 12)', () => {
     })
     expect(content.body('course', 'jazz-voicings')).toBeUndefined()
     expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Jazz voicings')
-    expect(await screen.findByText('No lessons yet. Name the first one below.')).toBeInTheDocument()
+    expect(await screen.findByText('No lessons yet. Add the first one below.')).toBeInTheDocument()
   })
 
   it('offers no new course to a learner', async () => {
@@ -210,7 +230,8 @@ describe('the course editor (ADR 0116, round 12)', () => {
       auth: await signedInAs('editor'),
       contentEditing: editing(),
     })
-    expect(await screen.findByRole('heading', { name: 'Курс' })).toBeInTheDocument()
+    expect(await screen.findByRole('textbox', { name: 'Название' })).toHaveValue(COURSE.title.ru)
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(COURSE.title.ru)
+    expect(screen.getByRole('heading', { name: 'Уроки' })).toBeInTheDocument()
   })
 })

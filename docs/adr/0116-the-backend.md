@@ -160,3 +160,15 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   removed and added (`withSection*`, `withBlock*` in `entities/lesson/model/structure.ts`). A structured block
   editor, not an inline rich-text one (TipTap): every text is English and Russian side by side, which a single
   rich-text document does not hold; markdown shortcuts and a `/` menu stay open (2026-10-30).
+- r21 — Supersedes r19's structured cards: the owner asked for one continuous document, edited where it reads
+  (Obsidian's Live Preview), with no Edit/Preview switch and no floating publish bar. The lesson editor is a TipTap
+  3 document written in one language at a time (the bar's EN/RU), which answers r19's objection: each node
+  carries the lesson's text it shows (`lessonToDoc`/`docToLesson` in `pages/lesson-editor/model/lesson-doc.ts`,
+  tested round trip), so the other language comes back untouched. Examples are atoms drawn by `LessonView`'s
+  renderer, their line of text typed in the block and their other fields in a popover (a sheet on a phone); a
+  toolbar, Insert, a `/` menu, a drag handle and Alt+↑/↓ (`doc-blocks.ts`). The course and journey editors are
+  the same kind of page (title and summary written in place, properties, rows dragged with `@dnd-kit`, across
+  chapters too; `widgets/content-editor`'s `RowGroups`, `AddRow`, `DocText`). The draft's status sits under the
+  bar's title and Publish with its menu at the bar's end (`DraftStatus`, `DraftActions`; `DraftStrip` and
+  `OrderList` gone); the score editor's original shows them under Mine · The original. The editors are their
+  own chunk (`lesson-editor-screens`), so a learner never downloads TipTap (2026-10-30).

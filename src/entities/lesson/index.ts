@@ -20,7 +20,7 @@ export {
   type ExampleKind,
   type LessonExample,
 } from './model/examples'
-export { lessonTexts, withLessonText, type LessonText, type LessonTextKind } from './model/texts'
+export { lessonTexts, type LessonText, type LessonTextKind } from './model/texts'
 export {
   allJourneys,
   journeyById,
@@ -33,14 +33,4 @@ export {
 } from './model/selectors'
 export { LESSONS } from './content'
 export { JOURNEYS } from './content/journeys'
-export {
-  blankBlock,
-  INSERTABLE_BLOCKS,
-  withBlockInserted,
-  withBlockMoved,
-  withBlockRemoved,
-  withSectionAdded,
-  withSectionMoved,
-  withSectionRemoved,
-  type InsertableBlock,
-} from './model/structure'
+export { blankBlock, INSERTABLE_BLOCKS, type InsertableBlock } from './model/structure'
