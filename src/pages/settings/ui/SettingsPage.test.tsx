@@ -9,7 +9,7 @@ describe('Settings', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/profile')
     await user.click(
-      within(await screen.findByRole('main')).getByRole('link', { name: 'Settings' }),
+      within(await screen.findByRole('main')).getAllByRole('link', { name: 'Settings' })[0]!,
     )
     await user.click(await screen.findByRole('button', { name: 'Back' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/profile'))

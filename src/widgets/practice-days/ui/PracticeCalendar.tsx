@@ -1,21 +1,25 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
-import { dateOfDay, monthOf, selectDays, useProgress } from '@/entities/progress'
+import { Flame } from 'lucide-react'
+import { dateOfDay, monthOf, selectDays, streak, useProgress } from '@/entities/progress'
 import { useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { useToday } from '../model/use-today'
 
 /**
  * This month's days practised (the Profile's Activity, as Noji's and Quizlet's): a calendar, a week a
- * row from Monday, each day practised filled, today ringed; its month's name over it.
+ * row from Monday, each day practised filled, today ringed; over it its month's name and, while a run
+ * of days goes on, whether today has kept it (the run's length is the Profile's first figure).
  */
-export function PracticeCalendar() {
+export function PracticeCalendar({ title }: { title: string }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const headingId = useId()
   const days = useProgress(selectDays)
   const today = useToday()
   const weeks = monthOf(days, today)
+  const run = streak(days, today)
+  const practisedToday = days.includes(today)
   const month = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(
     dateOfDay(today),
   )
@@ -26,10 +30,18 @@ export function PracticeCalendar() {
   return (
     <section aria-labelledby={headingId} className="flex flex-col gap-2">
       <h2 id={headingId} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
-        {t('days.month')}
+        {title}
       </h2>
       <div className="flex flex-col gap-3 card p-4">
-        <p className="font-display text-lg font-semibold first-letter:uppercase">{month}</p>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <p className="font-display text-lg font-semibold first-letter:uppercase">{month}</p>
+          {run > 0 ? (
+            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <Flame aria-hidden className="size-4 shrink-0 text-paint-full-sand" />
+              {practisedToday ? t('days.done') : t('days.keep')}
+            </p>
+          ) : null}
+        </div>
         <table className="w-full table-fixed text-center">
           <thead>
             <tr>
