@@ -167,6 +167,8 @@ The owner's feedback from every session, condensed and grouped by area. Read the
 ## Navigation
 - **One place current at a time** (round 24): never two highlights in the tab bar or sidebar. Settings is in the
   laptop's sidebar (its own highlight there); on a phone it sits in the Profile, which is highlighted for it.
+- **One way to each action** (round 24): no button that repeats a row, a menu item or an inline field beside it
+  (a gear and a Settings row, a + and Add lesson, ↑↓ and the block menu's moves). Adding a direct way removes the old.
 - **Don't decide UI trade-offs silently:** a known flaw ("both highlight, say if you'd rather…") is not shipped and
   reported; fix it to the obvious right behaviour first.
 
