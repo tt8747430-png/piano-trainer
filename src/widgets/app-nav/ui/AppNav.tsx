@@ -13,7 +13,7 @@ import type { ComponentType } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectSidebar, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setSidebar } from '@/features/set-preference'
-import { OPEN_PLAINLY } from '@/shared/lib'
+import { OPEN_PLAINLY, useMediaQuery } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
 import { keyHint, useShortcutsPlatform, useShortcuts, type Combo } from '@/shared/lib/shortcuts'
 import { Avatar } from '@/shared/ui'
@@ -30,6 +30,8 @@ interface Place {
    * Settings and account pages, opened from it.
    */
   readonly also?: readonly ('/lessons' | '/courses' | '/settings' | '/account')[]
+  /** Where it is current only while the sidebar is not shown: Settings, the sidebar's own place. */
+  readonly alsoWithoutSidebar?: readonly '/settings'[]
   /** The place's shortcut: Alt and its number. */
   readonly key?: Combo
 }
@@ -80,12 +82,15 @@ const PLACES: readonly Place[] = [
     label: 'nav.profile',
     icon: ProfileIcon,
     exact: false,
-    also: ['/settings', '/account'],
+    also: ['/account'],
+    alsoWithoutSidebar: ['/settings'],
     key: { code: 'Digit4', alt: true },
   },
 ]
 /** The sidebar, open or collapsed: the platform's modifier and B. */
 const SIDEBAR_KEY: Combo = { code: 'KeyB', mod: true }
+/** Where the navigation is the sidebar (the `lg` breakpoint), with Settings at its foot. */
+const SIDEBAR_SHOWN = '(min-width: 64rem)'
 /**
  * What sits at the sidebar's foot on a laptop: Search, on the platform's modifier and K from
  * anywhere, and Settings, on the modifier and a comma (a phone has Search in a place's bar and
@@ -116,7 +121,7 @@ const PLACE_LINK =
  * alone (its name in a tooltip, and still its link's name) while the sidebar is collapsed.
  */
 function PlaceLink({
-  place: { to, label, icon: Icon, exact, also },
+  place: { to, label, icon: Icon, exact, also = [], alsoWithoutSidebar = [] },
   collapsed,
 }: {
   place: Place
@@ -124,8 +129,13 @@ function PlaceLink({
 }) {
   const { t } = useTranslation('common')
   const pathname = useRouterState({ select: (state) => state.location.pathname })
+  // The sidebar (a laptop's) has Settings of its own; a phone's bar has it in the Profile.
+  const sidebar = useMediaQuery(SIDEBAR_SHOWN)
   // The place is current under its other prefix too, as the router marks its own address.
-  const current = also?.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))
+  const prefixes = sidebar ? also : [...also, ...alsoWithoutSidebar]
+  const current = prefixes.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  )
     ? ({ 'data-status': 'active', 'aria-current': 'page' } as const)
     : {}
   const content = (
