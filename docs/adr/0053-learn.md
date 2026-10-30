@@ -84,3 +84,4 @@ course.
   one card each; a paged lesson's bar narrowed to sit beside the floating button (2026-10-30).
 - r24 — The journeys named for what they are, the four levels: chosen from one row of chips, the level's name,
   goal and steps learned under them; the days practised and the songs played last are the Profile's (2026-10-30).
+- r25 — The phone's tab bar fades and slides from the foot as it comes and goes (memory-palaces'), at once under reduced motion (2026-10-30).

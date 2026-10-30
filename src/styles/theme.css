@@ -461,10 +461,29 @@
   :root[data-keyboard]:has([data-takes-tab-bar]) {
     --nav-bar: 0px;
   }
+  /* The tab bar comes and goes as memory-palaces' does: it fades and slides from the foot, never
+     cut in or out (a display swap that waits for the fade, and a start style for its return). */
+  [data-slot='app-nav'] {
+    transition:
+      opacity 180ms ease-out,
+      translate 180ms ease-out,
+      display 180ms allow-discrete;
+    @starting-style {
+      opacity: 0;
+      translate: 0 40%;
+    }
+  }
   :root[data-keyboard] [data-slot='app-nav'],
   [data-slot='app-nav'][data-away],
   :root:has([data-takes-tab-bar]) [data-slot='app-nav'] {
     display: none;
+    opacity: 0;
+    translate: 0 40%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-slot='app-nav'] {
+      transition: none;
+    }
   }
 }
 /* A sheet over the phone's keyboard stands on it: Base UI's VirtualKeyboardProvider measures the room
