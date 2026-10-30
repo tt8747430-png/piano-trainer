@@ -31,7 +31,6 @@ export const account = {
     guest: 'Playing without an account',
     guestLine: 'Sign in to keep your songs and progress on every device.',
     signIn: 'Sign in',
-    account: 'Account',
     figures: 'Your practice',
     streak: 'Days in a row',
     activity: 'Activity',

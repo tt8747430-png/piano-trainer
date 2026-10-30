@@ -4,10 +4,7 @@ import {
   ArrowUp,
   ChartNoAxesColumnIncreasing,
   Ellipsis,
-  FilePlus2,
-  FolderPlus,
   KeyboardMusic,
-  Plus,
   Trash2,
 } from 'lucide-react'
 import { useRef, useState, type ReactElement, type ReactNode } from 'react'
@@ -24,15 +21,7 @@ import { STAGE_PAINT, stepIdOf } from '@/entities/step'
 import { useAddLesson, useJourneyDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { cn, slug } from '@/shared/lib'
-import {
-  ActionMenu,
-  ChoiceChips,
-  FloatingActions,
-  PAINT,
-  say,
-  SpeedDial,
-  SpeedDialAction,
-} from '@/shared/ui'
+import { ActionMenu, ChoiceChips, PAINT, say } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useStepTitle } from '@/widgets/curriculum'
 import { AddRow, DocText, DraftScreen, RowGroups, type RowOrder } from '@/widgets/content-editor'
@@ -191,13 +180,6 @@ function JourneyDocument({
       link: <Link to="/lessons/$lessonId/edit" params={{ lessonId: step.lessonId }} />,
     }
   }
-  // + finds the field it opens: a new lesson at the last chapter's end, or a new chapter.
-  const focusAdd = (which: 'lesson' | 'chapter') => {
-    const fields = document.querySelectorAll<HTMLInputElement>(`[data-add="${which}"] input`)
-    const field = fields[fields.length - 1]
-    field?.scrollIntoView({ block: 'center', behavior: 'smooth' })
-    field?.focus({ preventScroll: true })
-  }
   return (
     <div className="flex flex-col gap-2">
       <DocText
@@ -246,20 +228,18 @@ function JourneyDocument({
             ),
             rows: chapter.steps.map((step) => rowOf(chapter, step)),
             foot: (
-              <div data-add="lesson">
-                <AddRow
-                  label={t('edit.order.addLesson')}
-                  newLabel={(lesson) => t('edit.doc.newLesson', { name: lesson })}
-                  failed={t('edit.order.addFailed')}
-                  onCreate={(lesson) => onAddLesson(journey, chapter.id, lesson)}
-                />
-              </div>
+              <AddRow
+                label={t('edit.order.addLesson')}
+                newLabel={(lesson) => t('edit.doc.newLesson', { name: lesson })}
+                failed={t('edit.order.addFailed')}
+                onCreate={(lesson) => onAddLesson(journey, chapter.id, lesson)}
+              />
             ),
           }
         })}
         onChange={reorder}
       />
-      <div data-add="chapter" className="mt-6 border-t border-border pt-4">
+      <div className="mt-6 border-t border-border pt-4">
         <AddRow
           label={t('edit.order.addChapter')}
           newLabel={(name) => t('edit.doc.newChapter', { name })}
@@ -276,22 +256,6 @@ function JourneyDocument({
           }}
         />
       </div>
-      <FloatingActions>
-        <SpeedDial label={t('edit.journey.add')} icon={Plus} main>
-          <SpeedDialAction
-            label={t('edit.order.addChapter')}
-            detail={t('edit.journey.addChapterDetail')}
-            icon={FolderPlus}
-            onClick={() => focusAdd('chapter')}
-          />
-          <SpeedDialAction
-            label={t('edit.order.addLesson')}
-            detail={t('edit.journey.addLessonDetail')}
-            icon={FilePlus2}
-            onClick={() => focusAdd('lesson')}
-          />
-        </SpeedDial>
-      </FloatingActions>
     </div>
   )
 }

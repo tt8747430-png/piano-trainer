@@ -25,24 +25,21 @@ describe('the Profile', () => {
     expect(screen.queryByRole('link', { name: 'Account' })).toBeNull()
   })
 
-  it('is titled with the learner’s name, their picture their initial, their Account a row', async () => {
+  it('is titled with the learner’s name, their picture their initial', async () => {
     await renderApp('/profile', { auth: await signedIn() })
     await screen.findByRole('heading', { level: 1, name: 'ana' })
     const learner = await screen.findByRole('region', { name: 'ana' })
     expect(learner).toHaveTextContent(/A\s*ana@example.com/)
-    expect(screen.getByRole('link', { name: 'Account' })).toHaveAttribute(
-      'href',
-      '/settings/account',
-    )
   })
 
-  it('opens Settings from its bar and from a row', async () => {
-    await renderApp('/profile')
-    await screen.findByRole('heading', { level: 1, name: 'Profile' })
+  it('opens Settings one way, its row (the Account is Settings’ first row)', async () => {
+    await renderApp('/profile', { auth: await signedIn() })
+    await screen.findByRole('heading', { level: 1, name: 'ana' })
     const main = screen.getByRole('main')
     const settings = within(main).getAllByRole('link', { name: 'Settings' })
-    expect(settings).toHaveLength(2)
-    for (const link of settings) expect(link).toHaveAttribute('href', '/settings')
+    expect(settings).toHaveLength(1)
+    expect(settings[0]).toHaveAttribute('href', '/settings')
+    expect(within(main).queryByRole('link', { name: 'Account' })).not.toBeInTheDocument()
   })
 
   it('counts the days in a row, the days practised and the songs played, then the rest of the record', async () => {

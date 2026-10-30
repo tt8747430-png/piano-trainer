@@ -249,9 +249,6 @@ export const learn = {
     journey: {
       chapterN: 'Chapter {{n}}',
       lesson: 'Lesson',
-      add: 'Add',
-      addChapterDetail: 'A group of lessons, at the end',
-      addLessonDetail: 'A new lesson, in the last chapter',
       open: 'Manage lessons',
       goal: 'Goal',
       back: 'Back to the Lessons',

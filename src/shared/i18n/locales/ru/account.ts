@@ -31,7 +31,6 @@ export const account: LocaleResources['account'] = {
     guest: 'Игра без аккаунта',
     guestLine: 'Войдите, чтобы ваши песни и прогресс были на всех устройствах.',
     signIn: 'Войти',
-    account: 'Аккаунт',
     figures: 'Ваши занятия',
     streak: 'Дней подряд',
     activity: 'Активность',

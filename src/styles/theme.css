@@ -439,7 +439,8 @@
 /* While the phone's keyboard is up (`keyboard-viewport`'s `data-keyboard`), what floats at the
    screen's foot steps aside rather than ride on the keyboard: the floating actions, the toasts, and
    the phone's tab bar (Mindscape's, its ADR 0002). The tab bar is the places' own too: on what a place
-   opens (`data-away`) it steps away and the screen has the whole height. The page pads for them no more: its foot pads by
+   opens (`data-away`) it steps away and the screen has the whole height; a bar that takes its place
+   (Select's, `data-takes-tab-bar`) stands there alone. The page pads for them no more: its foot pads by
    the keyboard's range instead (`pb-foot-*`). */
 :root[data-keyboard] {
   --floating-foot: 0px;
@@ -450,11 +451,13 @@
 }
 @media (orientation: portrait) and (max-width: 63.99rem) {
   :root[data-keyboard],
-  :root:has([data-slot='app-nav'][data-away]) {
+  :root:has([data-slot='app-nav'][data-away]),
+  :root:has([data-takes-tab-bar]) {
     --nav-bar: 0px;
   }
   :root[data-keyboard] [data-slot='app-nav'],
-  [data-slot='app-nav'][data-away] {
+  [data-slot='app-nav'][data-away],
+  :root:has([data-takes-tab-bar]) [data-slot='app-nav'] {
     display: none;
   }
 }

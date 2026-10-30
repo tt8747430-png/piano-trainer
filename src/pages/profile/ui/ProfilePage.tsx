@@ -9,7 +9,6 @@ import {
   Settings,
   Sparkles,
   Trophy,
-  UserRoundCog,
   type LucideIcon,
 } from 'lucide-react'
 import { useId, useMemo } from 'react'
@@ -24,30 +23,21 @@ import {
 } from '@/entities/progress'
 import { cn } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
-import { Avatar, ButtonLink, RoundLink, RowLink, ScreenHeader, SettingsGroup } from '@/shared/ui'
+import { Avatar, ButtonLink, RowLink, ScreenHeader, SettingsGroup } from '@/shared/ui'
 import { PracticeCalendar, useToday } from '@/widgets/practice-days'
 
 /**
- * The Profile, a place of its own (memory-palaces', Noji's): the learner's name in its bar with
- * Settings beside it; their picture, email (or a guest's Sign in) and three figures of their practice;
- * rows to Settings and their Account; the month's Activity; the rest of their record; their badges.
+ * The Profile, a place of its own (memory-palaces', Noji's): the learner's name in its bar; their
+ * picture, email (or a guest's Sign in) and three figures of their practice; one row to Settings (the
+ * Account is its first row); the month's Activity; the rest of their record; their badges. Each
+ * thing opens one way.
  */
 export function ProfilePage() {
   const { t } = useTranslation(['account', 'common'])
   const { account } = useAccount()
   return (
     <div className="flex flex-col gap-2">
-      <ScreenHeader
-        title={account ? account.name || account.email : t('profile.title')}
-        large
-        actions={
-          <RoundLink
-            label={t('common:nav.settings')}
-            icon={Settings}
-            render={<Link to="/settings" />}
-          />
-        }
-      />
+      <ScreenHeader title={account ? account.name || account.email : t('profile.title')} large />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <Hero />
         <SettingsGroup flush>
@@ -57,14 +47,6 @@ export function ProfilePage() {
             paint="sand"
             render={<Link to="/settings" />}
           />
-          {account ? (
-            <RowLink
-              title={t('profile.account')}
-              icon={UserRoundCog}
-              paint="yellow"
-              render={<Link to="/settings/account" />}
-            />
-          ) : null}
         </SettingsGroup>
         <PracticeCalendar title={t('profile.activity')} />
         <Record />

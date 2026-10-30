@@ -237,9 +237,6 @@ export const learn: LocaleResources['learn'] = {
     journey: {
       chapterN: 'Глава {{n}}',
       lesson: 'Урок',
-      add: 'Добавить',
-      addChapterDetail: 'Группа уроков, в конец',
-      addLessonDetail: 'Новый урок, в последнюю главу',
       open: 'Управлять уроками',
       goal: 'Цель',
       back: 'К урокам',

@@ -75,6 +75,7 @@ export function SelectionBar({
         <div
           role="group"
           aria-label={t('drag.zones')}
+          data-takes-tab-bar=""
           className="flex w-[min(24rem,calc(100vw-2rem))] gap-1 rounded-3xl border border-border bg-raised p-1 elevation-3"
         >
           {folder ? (
@@ -96,6 +97,8 @@ export function SelectionBar({
       <div
         role="toolbar"
         aria-label={t('select.actions')}
+        // Select's bar takes the phone's tab bar's place (memory-palaces'): one bar at the foot.
+        data-takes-tab-bar=""
         className="flex gap-1 rounded-3xl border border-border bg-raised p-1 elevation-3"
       >
         <BarAction
