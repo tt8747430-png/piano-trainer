@@ -5,13 +5,17 @@ import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
 import { CUSTOM, isTrainerId, type TrainerId, type TrainerView } from '@/features/trainer'
 import { useViewChange } from '@/shared/lib'
-import { BackButton, ButtonLink, RoundButton, ScreenHeader } from '@/shared/ui'
+import { BackButton, ButtonLink, InfoTip, RoundButton, ScreenHeader } from '@/shared/ui'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
-import { TrainerSetup } from '@/widgets/trainer-setup'
+import { TrainerSetup, useTrainerHow } from '@/widgets/trainer-setup'
 import { useTrainerScreen } from '../model/use-trainer-screen'
 import { TrainerRecordLine } from './TrainerRecordLine'
 import { TrainerRunView } from './TrainerRunView'
 import { useLevelName } from './use-level-name'
+
+/** The bar's ⓘ, drawn as the bar's other round buttons (`RoundButton`). */
+const HEADER_TIP =
+  'size-11 bg-muted/70 text-foreground hover:bg-muted data-popup-open:bg-muted [&_svg]:size-5'
 
 /** A trainer, named by the path: the one Quiz opened. */
 export function TrainerPage() {
@@ -33,11 +37,13 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
   const levels = [...trainer.levels, ...(trainer.custom.length > 0 ? [CUSTOM] : [])].map(
     (value) => ({ value, label: levelName(id, value) }),
   )
+  const how = useTrainerHow(trainer, view)
   const close = () => setRunning(false)
+  const title = t(`trainers.${id}`)
   return (
     <div className="flex flex-col gap-6 landscape-phone:gap-3">
       <ScreenHeader
-        title={t(`trainers.${id}`)}
+        title={title}
         back={
           running ? (
             <RoundButton label={t('common:close')} icon={X} onClick={close} />
@@ -45,7 +51,17 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
             <BackButton fallback={{ to: '/practice/quiz' }} />
           )
         }
-        actions={<MidiButton />}
+        actions={
+          <>
+            {/* How the drill asks, out of the way on the setup: gone once a run starts. */}
+            {asks && !running ? (
+              <InfoTip name={title} className={HEADER_TIP}>
+                {how}
+              </InfoTip>
+            ) : null}
+            <MidiButton />
+          </>
+        }
       />
       {!asks ? (
         // Nothing to ask yet: said as every empty screen says it, with a way to a trainer.
