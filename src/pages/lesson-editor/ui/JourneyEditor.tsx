@@ -161,7 +161,7 @@ function JourneyDocument({
     const lesson = lessonById(step.lessonId)
     return {
       key,
-      title: lesson ? localText(lesson.title, shown) : step.lessonId,
+      title: lesson ? localText(lesson.title, locale) : step.lessonId,
       detail: lesson ? undefined : t('edit.order.unpublished'),
       link: <Link to="/lessons/$lessonId/edit" params={{ lessonId: step.lessonId }} />,
     }

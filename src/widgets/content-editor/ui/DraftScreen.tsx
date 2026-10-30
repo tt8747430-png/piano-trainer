@@ -79,7 +79,7 @@ export function DraftScreen<T>({
         }
         tabs={
           open ? (
-            <div className="flex min-h-9 items-center gap-2 pb-1.5 pl-13">
+            <div className="flex min-h-9 items-center gap-2 pb-1 pl-13">
               <DraftStatus draft={draft} className="flex-1" />
               {bar}
             </div>

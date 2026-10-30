@@ -38,7 +38,6 @@ function CourseDocument({
   onAdd: (name: string, record: CourseRecord) => Promise<boolean>
 }) {
   const { t } = useTranslation(['learn', 'common'])
-  const shown = useLocale()
   const words = i18n.getFixedT(locale, 'learn')
   const [record, setRecord] = useState(initial)
   const change = (next: CourseRecord) => {
@@ -49,7 +48,7 @@ function CourseDocument({
   const lessons = new Map(course.lessons.map((lesson) => [lesson.id, lesson]))
   const titleOf = (id: string) => {
     const lesson = lessons.get(id)
-    return lesson ? localText(lesson.title, shown) : id
+    return lesson ? localText(lesson.title, locale) : id
   }
   return (
     <div className="flex flex-col gap-6">
@@ -130,7 +129,7 @@ function CourseDocument({
                 failed={t('learn:edit.order.addFailed')}
                 found={course.lessons
                   .filter((lesson) => !ids.includes(lesson.id))
-                  .map((lesson) => ({ key: lesson.id, title: localText(lesson.title, shown) }))}
+                  .map((lesson) => ({ key: lesson.id, title: localText(lesson.title, locale) }))}
                 onPick={(id) => change({ ...record, lessons: [...ids, id] })}
                 onCreate={(name) => onAdd(name, { ...record, lessons: ids })}
               />

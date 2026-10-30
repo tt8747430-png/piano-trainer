@@ -15,7 +15,7 @@ export function LanguageChoice({
 }) {
   const { t } = useTranslation('learn')
   return (
-    <div className="w-28 shrink-0">
+    <div className="w-24 shrink-0">
       <Segmented
         label={t('edit.doc.language')}
         value={value}
@@ -24,6 +24,7 @@ export function LanguageChoice({
           { value: 'ru' as const, label: 'RU', title: 'Русский' },
         ]}
         onChange={onChange}
+        compact
       />
     </div>
   )

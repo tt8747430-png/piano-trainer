@@ -16,6 +16,7 @@ export function Segmented<V extends OptionValue>({
   options,
   onChange,
   disabled = false,
+  compact = false,
 }: {
   label: string
   value: V | null
@@ -23,6 +24,8 @@ export function Segmented<V extends OptionValue>({
   onChange: (value: V) => void
   /** Shown, but not to be changed: its segments faded. */
   disabled?: boolean
+  /** In a bar's second row (a document's language): 36px tall, its reach still 44px. */
+  compact?: boolean
 }) {
   const id = useId()
   // Four segments, or words enough for a line (Трезвучия · Септаккорды · Нонаккорды), crowd a phone.
@@ -37,7 +40,10 @@ export function Segmented<V extends OptionValue>({
         const picked = options.find((option) => option.value === next)
         if (picked && picked.value !== value) onChange(picked.value)
       }}
-      className="flex w-full gap-1 rounded-2xl bg-muted p-1"
+      className={cn(
+        'flex w-full rounded-2xl bg-muted',
+        compact ? 'gap-0.5 rounded-full p-0.5' : 'gap-1 p-1',
+      )}
     >
       {options.map((option, index) => {
         const why = option.reason ? `${id}-why-${index}` : undefined
@@ -53,6 +59,8 @@ export function Segmented<V extends OptionValue>({
               'inline-flex min-h-11 min-w-11 flex-1 cursor-default flex-col items-center justify-center gap-1 rounded-lg border border-transparent px-2 py-1.5 text-center text-base leading-tight font-semibold hyphens-auto wrap-break-word text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground data-checked:border-input data-checked:bg-chosen data-checked:text-foreground data-disabled:opacity-50 data-disabled:hover:text-muted-foreground',
               // Crowded on a phone's width: the words a size down, to fit.
               crowded && 'max-sm:px-1 max-sm:text-sm',
+              compact &&
+                'relative min-h-8 rounded-full py-0.5 text-sm before:absolute before:-inset-y-1.5 before:inset-x-0 before:content-[""]',
             )}
           >
             {option.icon}
