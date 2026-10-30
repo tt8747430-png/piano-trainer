@@ -18,12 +18,20 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { ArrowDown, ArrowUp, Ellipsis, GripVertical, Trash2 } from 'lucide-react'
+import {
+  ArrowDown,
+  ArrowUp,
+  CornerDownRight,
+  Ellipsis,
+  GripVertical,
+  Trash2,
+  type LucideIcon,
+} from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
 import { useRender } from '@base-ui/react/use-render'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { ActionMenu, say } from '@/shared/ui'
+import { ActionMenu, say, type MenuAction } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   rowPlace,
@@ -40,6 +48,10 @@ export interface DocRow {
   readonly detail?: string | undefined
   /** A router `Link` to the item's editor; a row without one is named alone. */
   readonly link?: ReactElement | undefined
+  /** Its tile's paint (`PAINT[…]`'s fill and ink), as the learner's row has it; muted without one. */
+  readonly paint?: string | undefined
+  /** A row that is not a lesson (a chapter's Check): its tile's picture in place of its number. */
+  readonly icon?: LucideIcon | undefined
 }
 
 /** A group of rows: a course's lessons, a chapter's steps; what stands over it and under it. */
@@ -56,10 +68,10 @@ export interface RowGroup {
   readonly region?: string
 }
 
-function RowName({ title, detail, link }: Omit<DocRow, 'key'>) {
+function RowName({ title, detail, link }: Pick<DocRow, 'title' | 'detail' | 'link'>) {
   const face = (
     <>
-      <span className="line-clamp-2 font-medium">{title}</span>
+      <span className="line-clamp-2 font-semibold text-pretty">{title}</span>
       {detail ? <span className="text-sm text-muted-foreground">{detail}</span> : null}
     </>
   )
@@ -78,12 +90,15 @@ function SortableRow({
   number,
   canMove,
   onMove,
+  moves,
   onRemove,
 }: {
   row: DocRow
   number: number
   canMove: { up: boolean; down: boolean }
   onMove: (by: -1 | 1) => void
+  /** Onto another group's end (another chapter), one action each. */
+  moves: readonly MenuAction[]
   onRemove: () => void
 }) {
   const { t } = useTranslation('learn')
@@ -96,13 +111,13 @@ function SortableRow({
     transition,
     isDragging,
   } = useSortable({ id: row.key })
-  const { key: _key, ...name } = row
+  const Icon = row.icon
   return (
     <li
       ref={setNodeRef}
       style={{ transform: CSS.Translate.toString(transform), transition }}
       data-dragging={isDragging ? '' : undefined}
-      className="group/row relative flex min-h-12 items-center gap-1 rounded-xl bg-background data-dragging:z-10 data-dragging:shadow-md"
+      className="group/row relative flex min-h-16 items-center gap-2 bg-card py-1 pr-1 data-dragging:z-10 data-dragging:rounded-xl data-dragging:shadow-lg"
     >
       <button
         ref={setActivatorNodeRef}
@@ -115,10 +130,18 @@ function SortableRow({
       >
         <GripVertical aria-hidden className="size-4" />
       </button>
-      <span aria-hidden className="w-6 shrink-0 text-sm text-muted-foreground tabular-nums">
-        {number}
+      {/* Its tile, as the learner's row: the lesson's number in its level's paint, a Check's picture. */}
+      <span
+        aria-hidden
+        className={cn(
+          'grid size-10 shrink-0 place-items-center rounded-full font-semibold tabular-nums',
+          row.paint ?? 'bg-muted text-muted-foreground',
+          Icon && 'rounded-xl',
+        )}
+      >
+        {Icon ? <Icon className="size-5" strokeWidth={1.75} /> : number}
       </span>
-      <RowName {...name} />
+      <RowName title={row.title} detail={row.detail} link={row.link} />
       <ActionMenu
         label={t('edit.doc.rowMenu', { title: row.title })}
         align="end"
@@ -154,6 +177,7 @@ function SortableRow({
             destructive: true,
             onSelect: onRemove,
           },
+          ...moves,
         ]}
       />
     </li>
@@ -178,7 +202,7 @@ function GroupList({
         aria-label={group.label}
         data-over={isOver ? '' : undefined}
         className={cn(
-          'flex min-h-12 flex-col rounded-2xl transition-colors duration-150 ease-out data-over:bg-muted/60',
+          'flex min-h-16 flex-col divide-y divide-hairline card transition-colors duration-150 ease-out data-over:ring-2 data-over:ring-primary/60',
         )}
       >
         {children}
@@ -268,7 +292,7 @@ export function RowGroups({
             {group.head}
             <GroupList group={group} rows={keys}>
               {keys.length === 0 && group.empty ? (
-                <li className="flex min-h-12 items-center px-3 text-sm text-muted-foreground">
+                <li className="flex min-h-16 items-center px-4 text-sm text-muted-foreground">
                   {group.empty}
                 </li>
               ) : null}
@@ -288,6 +312,20 @@ export function RowGroups({
                       const moved = withRowMoved(given, key, by)
                       if (moved) onChange(moved)
                     }}
+                    moves={groups.flatMap((other, o) =>
+                      o === g || !other.region
+                        ? []
+                        : [
+                            {
+                              key: `to-${other.key}`,
+                              group: t('edit.order.moveTo'),
+                              label: other.region,
+                              icon: CornerDownRight,
+                              onSelect: () =>
+                                onChange(withRowAt(given, key, o, given[o]?.rows.length ?? 0)),
+                            },
+                          ],
+                    )}
                     onRemove={() => remove(row)}
                   />
                 )

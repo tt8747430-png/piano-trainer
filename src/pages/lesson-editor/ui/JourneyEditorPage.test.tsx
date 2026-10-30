@@ -31,12 +31,12 @@ async function publish(user: ReturnType<typeof userEvent.setup>) {
   await screen.findByText('Published. Learners get it the next time the app starts.')
 }
 
-describe('the journey editor (content as data)', () => {
+describe('Manage lessons, a level’s editor (content as data)', () => {
   if (!FIRST || !SECOND) throw new Error('a journey of two chapters at least')
 
   it('is on an editor’s Lessons, never a learner’s', async () => {
     await renderApp('/', { auth: await signedInAs('editor') })
-    expect(await screen.findByRole('link', { name: 'Edit the journey' })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: 'Manage lessons' })).toHaveAttribute(
       'href',
       `/journeys/${JOURNEY.id}/edit`,
     )
@@ -45,7 +45,7 @@ describe('the journey editor (content as data)', () => {
   it('is not on a learner’s', async () => {
     await renderApp('/', { auth: await signedInAs('learner') })
     await screen.findByRole('heading', { level: 1 })
-    expect(screen.queryByRole('link', { name: 'Edit the journey' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Manage lessons' })).not.toBeInTheDocument()
   })
 
   it('orders the chapters and a chapter’s steps, and publishes the journey with them', async () => {
@@ -88,14 +88,15 @@ describe('the journey editor (content as data)', () => {
     expect(body.chapters[1]?.steps).toEqual(SECOND.steps.slice(1))
   })
 
-  it('renames a chapter in place, in the language the bar says', async () => {
+  it('renames a chapter in place, in the language the draft’s menu says', async () => {
     const user = userEvent.setup()
     const content = editing()
     await renderApp(`/journeys/${JOURNEY.id}/edit`, {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await user.click(await screen.findByRole('radio', { name: 'RU · Русский' }))
+    await user.click(await screen.findByRole('button', { name: 'The draft’s menu' }))
+    await user.click(await screen.findByRole('button', { name: 'Русский' }))
     const name = within(screen.getByRole('region', { name: FIRST.title.en })).getByRole('textbox', {
       name: 'Chapter name',
     })
@@ -131,8 +132,39 @@ describe('the journey editor (content as data)', () => {
     expect(await screen.findByText('Half pedal')).toBeInTheDocument()
   })
 
+  it('moves a step onto another chapter from its menu', async () => {
+    const user = userEvent.setup()
+    const content = editing()
+    await renderApp(`/journeys/${JOURNEY.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    const steps = await screen.findByRole('list', { name: `Steps: ${FIRST.title.en}` })
+    const [first] = within(steps).getAllByRole('listitem')
+    if (!first) throw new Error('a chapter of a step at least')
+    await user.click(within(first).getByRole('button', { name: /^More: / }))
+    await user.click(await screen.findByRole('button', { name: SECOND.title.en }))
+    await publish(user)
+    const body = content.body('journey', JOURNEY.id) as Journey
+    expect(body.chapters[0]?.steps).toEqual(FIRST.steps.slice(1))
+    expect(body.chapters[1]?.steps.at(-1)).toEqual(FIRST.steps[0])
+  })
+
+  it('opens another level from its chips', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp(`/journeys/${JOURNEY.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: editing(),
+    })
+    const levels = await screen.findByRole('radiogroup', { name: 'Level' })
+    await user.click(within(levels).getByRole('radio', { name: 'Intermediate' }))
+    await waitFor(() =>
+      expect(router.state.location.pathname).toBe(`/journeys/${JOURNEYS[1]!.id}/edit`),
+    )
+  })
+
   it('tells a learner it is an editor’s', async () => {
     await renderApp(`/journeys/${JOURNEY.id}/edit`, { auth: await signedInAs('learner') })
-    expect(await screen.findByText('Only an editor edits a journey.')).toBeInTheDocument()
+    expect(await screen.findByText('Only an editor manages the lessons.')).toBeInTheDocument()
   })
 })

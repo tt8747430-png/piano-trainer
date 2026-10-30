@@ -1,4 +1,4 @@
-import type { LucideIcon } from 'lucide-react'
+import { Check, type LucideIcon } from 'lucide-react'
 import { Fragment, useId, useState, type ReactElement, type ReactNode, type Ref } from 'react'
 import { cn } from '@/shared/lib'
 import { Button } from './primitives/button'
@@ -18,6 +18,8 @@ export interface MenuAction {
   readonly destructive?: boolean
   /** The group it is in, named small over the first of it (Insert's Text · Music · Ask and link). */
   readonly group?: string
+  /** One of a choice (the language written in): pressed, with a check at its end, when it is the one. */
+  readonly checked?: boolean
 }
 
 /**
@@ -74,6 +76,7 @@ export function ActionMenu({
               <Button
                 variant="ghost"
                 disabled={action.disabled}
+                aria-pressed={action.checked}
                 title={why}
                 aria-describedby={why ? whyId : undefined}
                 className={cn(
@@ -89,6 +92,7 @@ export function ActionMenu({
               >
                 {action.icon ? <action.icon data-icon="inline-start" aria-hidden /> : null}
                 {action.label}
+                {action.checked ? <Check aria-hidden className="ml-auto" /> : null}
                 {why ? (
                   <span id={whyId} hidden>
                     {why}

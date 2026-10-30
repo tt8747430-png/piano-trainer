@@ -1,31 +1,24 @@
-import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type { Locale } from '@/shared/i18n'
-import { Segmented } from '@/shared/ui'
+import type { MenuAction } from '@/shared/ui'
+
+/** Each language named in itself. */
+export const LANGUAGE_NAMES: Readonly<Record<Locale, string>> = { en: 'English', ru: 'Русский' }
 
 /**
- * The language a document is written in (round 21), in the editor's bar beside where its draft
- * stands: English or Русский, each named in itself. The document opens anew on the other.
+ * The language a document is written in (round 24), as the draft's menu's first group: English and
+ * Русский, each named in itself, the one written in checked. The document opens anew on the other.
  */
-export function LanguageChoice({
-  value,
-  onChange,
-}: {
-  value: Locale
-  onChange: (locale: Locale) => void
-}) {
-  const { t } = useTranslation('learn')
-  return (
-    <div className="w-24 shrink-0">
-      <Segmented
-        label={t('edit.doc.language')}
-        value={value}
-        options={[
-          { value: 'en' as const, label: 'EN', title: 'English' },
-          { value: 'ru' as const, label: 'RU', title: 'Русский' },
-        ]}
-        onChange={onChange}
-        compact
-      />
-    </div>
-  )
+export function languageActions(
+  value: Locale,
+  onChange: (locale: Locale) => void,
+  t: TFunction<'learn'>,
+): MenuAction[] {
+  return (['en', 'ru'] as const).map((locale) => ({
+    key: `language-${locale}`,
+    group: t('edit.doc.language'),
+    label: LANGUAGE_NAMES[locale],
+    checked: locale === value,
+    onSelect: () => onChange(locale),
+  }))
 }

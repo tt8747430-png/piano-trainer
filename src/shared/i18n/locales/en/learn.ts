@@ -8,11 +8,11 @@ export const learn = {
   },
   // The Lessons: four journeys, beginner to professional, each in chapters.
   journey: {
-    label: 'Journeys',
+    label: 'Level',
     chapter: 'Chapter {{n}}: {{title}}',
     count: '{{learned}}/{{total}}',
     // A journey's tab: its steps learned, lessons and checks alike (a lesson's line counts lessons).
-    steps: '{{learned}}/{{total}} steps',
+    steps: '{{learned}} of {{total}} learned',
   },
   // The Courses, shelf by shelf.
   shelves: {
@@ -99,7 +99,7 @@ export const learn = {
     previous: 'Previous lesson',
     next: 'Next lesson',
     toCourseLessons: 'The course',
-    toJourney: 'Back to the journey',
+    toJourney: 'Back to the Lessons',
     toCourse: 'On to the guided songs',
     courseDone: 'Back to the course',
   },
@@ -167,7 +167,7 @@ export const learn = {
       chapterMenu: 'Chapter: {{title}}',
       courseTitle: 'Course title',
       courseSummary: 'What the course teaches',
-      journeyTitle: 'Journey title',
+      journeyTitle: 'Level name',
       journeyGoal: 'What a learner can do at its end',
       chapterName: 'Chapter name',
       fields: 'Edit: {{name}}',
@@ -228,7 +228,7 @@ export const learn = {
     },
     open: 'Edit the lesson',
     // The editor's bar: what is edited; the document under it names which.
-    bar: { lesson: 'Edit lesson', course: 'Edit course', journey: 'Edit journey' },
+    bar: { lesson: 'Edit lesson', course: 'Edit course', journey: 'Manage lessons' },
     back: 'Back to the lesson',
     editorsOnly: 'Only an editor edits a lesson.',
     english: 'English',
@@ -237,6 +237,7 @@ export const learn = {
     unreadable:
       'Every text needs words in both languages, and every example must read. Put them right, then publish.',
     order: {
+      moveTo: 'Move to',
       moveUp: 'Move up: {{title}}',
       moveDown: 'Move down: {{title}}',
       remove: 'Remove: {{title}}',
@@ -249,10 +250,15 @@ export const learn = {
       addFailed: 'It could not be made: one of that name may be there already.',
     },
     journey: {
-      open: 'Edit the journey',
+      chapterN: 'Chapter {{n}}',
+      lesson: 'Lesson',
+      add: 'Add',
+      addChapterDetail: 'A group of lessons, at the end',
+      addLessonDetail: 'A new lesson, in the last chapter',
+      open: 'Manage lessons',
       goal: 'Goal',
       back: 'Back to the Lessons',
-      editorsOnly: 'Only an editor edits a journey.',
+      editorsOnly: 'Only an editor manages the lessons.',
       unreadable:
         'The title, the goal and every chapter’s name need words in both languages. Put them right, then publish.',
       chapterName: 'Chapter name',

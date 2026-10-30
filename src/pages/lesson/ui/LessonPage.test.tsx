@@ -155,10 +155,10 @@ describe('A lesson', () => {
     )
   })
 
-  it('ends a journey’s last lesson on the way back to the journey', async () => {
+  it('ends a level’s last lesson on the way back to its Lessons', async () => {
     const user = userEvent.setup()
     const { progressStore, router } = await renderApp('/lessons/pentatonic-improvisation')
-    await user.click(await screen.findByRole('link', { name: /Back to the journey/ }))
+    await user.click(await screen.findByRole('link', { name: /Back to the Lessons/ }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/'))
     expect(router.state.location.search).toMatchObject({ journey: 'mastery' })
     expect(progressStore.getState().learned['lesson:pentatonic-improvisation']).toBeDefined()

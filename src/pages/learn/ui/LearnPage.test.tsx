@@ -49,25 +49,12 @@ describe('Learn', () => {
     )
   })
 
-  it('lists the pieces practised last, latest first, and none before the first', async () => {
+  it('leaves the days practised and the songs played last to the Profile', async () => {
     const { progressStore } = await renderApp('/')
     await screen.findByRole('heading', { level: 1, name: 'Learn' })
+    act(() => progressStore.setState({ practised: { ode: '2026-09-27T10:00:00Z' } }))
     expect(screen.queryByRole('region', { name: 'Recently practised' })).not.toBeInTheDocument()
-    act(() =>
-      progressStore.setState({
-        practised: {
-          bz5: '2026-09-25T10:00:00Z',
-          ode: '2026-09-27T10:00:00Z',
-          'my-404': '2026-09-28T10:00:00Z',
-        },
-      }),
-    )
-    const recent = await screen.findByRole('region', { name: 'Recently practised' })
-    expect(
-      within(recent)
-        .getAllByRole('link')
-        .map((link) => link.getAttribute('href')),
-    ).toEqual(['/songs/ode', '/songs/bz5'])
+    expect(screen.queryByRole('region', { name: 'Practice' })).not.toBeInTheDocument()
   })
 
   describe('its Lessons', () => {
@@ -89,18 +76,19 @@ describe('Learn', () => {
       )
     })
 
-    it('count each journey’s steps in its pop-up, its lessons and its checks, and say so', async () => {
-      const user = userEvent.setup()
+    it('offer the four levels as chips, the level’s steps learned under its name', async () => {
       await renderApp('/')
-      const picker = await screen.findByRole('combobox', { name: 'Journeys' })
-      expect(picker).toHaveTextContent('Foundations')
-      await user.click(picker)
-      const journey = JOURNEYS[0]!
-      const steps = journey.chapters.flatMap((chapter) => chapter.steps).length
-      expect(await screen.findByRole('option', { name: /^Foundations/ })).toHaveTextContent(
-        `0/${steps} steps`,
+      const levels = await screen.findByRole('radiogroup', { name: 'Level' })
+      expect(
+        within(levels)
+          .getAllByRole('radio')
+          .map((chip) => chip.textContent),
+      ).toEqual(['Beginner', 'Intermediate', 'Advanced', 'Professional'])
+      expect(within(levels).getByRole('radio', { name: 'Beginner' })).toBeChecked()
+      const steps = JOURNEYS[0]!.chapters.flatMap((chapter) => chapter.steps).length
+      expect(screen.getByRole('region', { name: 'Foundations' })).toHaveTextContent(
+        `0 of ${steps} learned`,
       )
-      expect(screen.getAllByRole('option')).toHaveLength(JOURNEYS.length)
     })
 
     it('say a learned step is learned', async () => {
@@ -116,11 +104,11 @@ describe('Learn', () => {
       ).not.toHaveAccessibleName(/learned/)
     })
 
-    it('switch journeys from the pop-up', async () => {
+    it('switch levels from the chips', async () => {
       const user = userEvent.setup()
       const { router } = await renderApp('/')
-      await user.click(await screen.findByRole('combobox', { name: 'Journeys' }))
-      await user.click(await screen.findByRole('option', { name: /^Fluency/ }))
+      const levels = await screen.findByRole('radiogroup', { name: 'Level' })
+      await user.click(within(levels).getByRole('radio', { name: 'Intermediate' }))
       expect(await screen.findByRole('heading', { level: 2, name: 'Fluency' })).toBeInTheDocument()
       expect(router.state.location.search).toMatchObject({ journey: 'fluency' })
       const chapter = JOURNEYS[1]!.chapters[0]!

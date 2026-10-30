@@ -1,29 +1,41 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { ArrowDown, ArrowUp, Ellipsis, Trash2 } from 'lucide-react'
+import {
+  ArrowDown,
+  ArrowUp,
+  ChartNoAxesColumnIncreasing,
+  Ellipsis,
+  FilePlus2,
+  FolderPlus,
+  KeyboardMusic,
+  Plus,
+  Trash2,
+} from 'lucide-react'
 import { useRef, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  allJourneys,
   lessonById,
   lessonIds,
   type Chapter,
   type Journey,
   type JourneyStep,
 } from '@/entities/lesson'
-import { stepIdOf } from '@/entities/step'
+import { STAGE_PAINT, stepIdOf } from '@/entities/step'
 import { useAddLesson, useJourneyDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
-import { slug } from '@/shared/lib'
-import { ActionMenu, say } from '@/shared/ui'
+import { cn, slug } from '@/shared/lib'
+import {
+  ActionMenu,
+  ChoiceChips,
+  FloatingActions,
+  PAINT,
+  say,
+  SpeedDial,
+  SpeedDialAction,
+} from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { useStepTitle } from '@/widgets/curriculum'
-import {
-  AddRow,
-  DocText,
-  DraftScreen,
-  LanguageChoice,
-  RowGroups,
-  type RowOrder,
-} from '@/widgets/content-editor'
+import { AddRow, DocText, DraftScreen, RowGroups, type RowOrder } from '@/widgets/content-editor'
 
 /** A step's row key: its chapter's and its own, so a Check asked in two chapters is two rows. */
 const rowKey = (chapter: Chapter, step: JourneyStep) => `${chapter.id}|${stepIdOf(step)}`
@@ -62,16 +74,21 @@ function ChapterHead({
   const name = localText(chapter.title, shown) || chapter.id
   const menu = t('edit.doc.chapterMenu', { title: name })
   return (
-    <div className="mt-6 flex items-start gap-1 border-t border-border pt-6">
-      <DocText
-        size="heading"
-        label={t('edit.journey.chapterName')}
-        value={chapter.title}
-        locale={locale}
-        placeholder={words('edit.doc.chapterName')}
-        onChange={onRename}
-        className="min-w-0 flex-1"
-      />
+    <div className="mt-4 flex items-end gap-1 px-1">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <span className="px-3 text-sm font-semibold text-muted-foreground">
+          {t('edit.journey.chapterN', { n: at + 1 })}
+        </span>
+        <DocText
+          size="heading"
+          label={t('edit.journey.chapterName')}
+          value={chapter.title}
+          locale={locale}
+          placeholder={words('edit.doc.chapterName')}
+          onChange={onRename}
+          className="rounded-lg px-3 text-xl transition-colors duration-150 ease-out hover:bg-muted/60 focus:bg-muted/60"
+        />
+      </div>
       <ActionMenu
         label={menu}
         align="end"
@@ -154,17 +171,32 @@ function JourneyDocument({
         steps: (order[c]?.rows ?? []).flatMap((key) => steps.get(key) ?? []),
       })),
     )
+  const paint = PAINT[STAGE_PAINT[journey.stage]]
   const rowOf = (chapter: Chapter, step: JourneyStep) => {
     const key = rowKey(chapter, step)
     if (step.kind !== 'lesson')
-      return { key, title: stepTitle(step).primary, detail: t('edit.journey.check') }
+      return {
+        key,
+        title: stepTitle(step).primary,
+        detail: t('edit.journey.check'),
+        icon: step.kind === 'chords' ? KeyboardMusic : ChartNoAxesColumnIncreasing,
+        paint: cn(paint.fill, paint.ink),
+      }
     const lesson = lessonById(step.lessonId)
     return {
       key,
       title: lesson ? localText(lesson.title, locale) : step.lessonId,
-      detail: lesson ? undefined : t('edit.order.unpublished'),
+      detail: lesson ? t('edit.journey.lesson') : t('edit.order.unpublished'),
+      paint: cn(paint.fill, paint.ink),
       link: <Link to="/lessons/$lessonId/edit" params={{ lessonId: step.lessonId }} />,
     }
+  }
+  // + finds the field it opens: a new lesson at the last chapter's end, or a new chapter.
+  const focusAdd = (which: 'lesson' | 'chapter') => {
+    const fields = document.querySelectorAll<HTMLInputElement>(`[data-add="${which}"] input`)
+    const field = fields[fields.length - 1]
+    field?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    field?.focus({ preventScroll: true })
   }
   return (
     <div className="flex flex-col gap-2">
@@ -214,18 +246,20 @@ function JourneyDocument({
             ),
             rows: chapter.steps.map((step) => rowOf(chapter, step)),
             foot: (
-              <AddRow
-                label={t('edit.order.addLesson')}
-                newLabel={(lesson) => t('edit.doc.newLesson', { name: lesson })}
-                failed={t('edit.order.addFailed')}
-                onCreate={(lesson) => onAddLesson(journey, chapter.id, lesson)}
-              />
+              <div data-add="lesson">
+                <AddRow
+                  label={t('edit.order.addLesson')}
+                  newLabel={(lesson) => t('edit.doc.newLesson', { name: lesson })}
+                  failed={t('edit.order.addFailed')}
+                  onCreate={(lesson) => onAddLesson(journey, chapter.id, lesson)}
+                />
+              </div>
             ),
           }
         })}
         onChange={reorder}
       />
-      <div className="mt-6 border-t border-border pt-4">
+      <div data-add="chapter" className="mt-6 border-t border-border pt-4">
         <AddRow
           label={t('edit.order.addChapter')}
           newLabel={(name) => t('edit.doc.newChapter', { name })}
@@ -242,6 +276,22 @@ function JourneyDocument({
           }}
         />
       </div>
+      <FloatingActions>
+        <SpeedDial label={t('edit.journey.add')} icon={Plus} main>
+          <SpeedDialAction
+            label={t('edit.order.addChapter')}
+            detail={t('edit.journey.addChapterDetail')}
+            icon={FolderPlus}
+            onClick={() => focusAdd('chapter')}
+          />
+          <SpeedDialAction
+            label={t('edit.order.addLesson')}
+            detail={t('edit.journey.addLessonDetail')}
+            icon={FilePlus2}
+            onClick={() => focusAdd('lesson')}
+          />
+        </SpeedDial>
+      </FloatingActions>
     </div>
   )
 }
@@ -263,6 +313,7 @@ export function JourneyEditor({
   toLessons: ReactElement
 }) {
   const { t } = useTranslation('learn')
+  const { t: tc } = useTranslation('common')
   const shown = useLocale()
   const [locale, setLocale] = useState<Locale>(shown)
   const draft = useJourneyDraft(journey)
@@ -301,16 +352,31 @@ export function JourneyEditor({
       backTo={{ link: toLessons, label: t('edit.journey.back') }}
       editorsOnly={t('edit.journey.editorsOnly')}
       unreadable={t('edit.journey.unreadable')}
-      bar={<LanguageChoice value={locale} onChange={setLocale} />}
+      language={{ value: locale, onChange: setLocale }}
     >
       {(initial) => (
-        <JourneyDocument
-          key={locale}
-          locale={locale}
-          initial={written.current?.opened === draft.opened ? written.current.journey : initial}
-          onChange={save}
-          onAddLesson={add}
-        />
+        <>
+          {/* The four levels, each its own lessons to manage. */}
+          <ChoiceChips
+            label={t('journey.label')}
+            value={journey.id}
+            scroll
+            options={allJourneys().map((each) => ({
+              value: each.id,
+              label: tc(`stage.${each.stage}`),
+            }))}
+            onChange={(journeyId) =>
+              void navigate({ to: '/journeys/$journeyId/edit', params: { journeyId } })
+            }
+          />
+          <JourneyDocument
+            key={locale}
+            locale={locale}
+            initial={written.current?.opened === draft.opened ? written.current.journey : initial}
+            onChange={save}
+            onAddLesson={add}
+          />
+        </>
       )}
     </DraftScreen>
   )

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { NetResult } from '@/shared/api/network'
 import { cn } from '@/shared/lib'
-import { ActionMenu, say } from '@/shared/ui'
+import { ActionMenu, say, type MenuAction } from '@/shared/ui'
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -63,9 +63,12 @@ export function DraftActions({
   title,
   unreadable,
   onReset,
+  more = [],
 }: {
   draft: Pick<ContentDraft, 'drafted' | 'saved' | 'publish' | 'discard' | 'versions' | 'restore'>
   title: string
+  /** What else the menu holds, over the draft's own actions (the language the document is written in). */
+  more?: readonly MenuAction[]
   /** What is said where a publish is refused for a draft that does not read as the item. */
   unreadable: string
   onReset: () => void
@@ -114,8 +117,10 @@ export function DraftActions({
           />
         }
         actions={[
+          ...more,
           {
             key: 'versions',
+            ...(more.length > 0 ? { group: t('original.draft') } : {}),
             label: t('original.versions'),
             icon: History,
             onSelect: () => setAsked('versions'),

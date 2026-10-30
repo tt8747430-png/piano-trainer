@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
 import { useLessonDraft } from '@/features/edit-original'
 import { localText, useLocale, type Locale } from '@/shared/i18n'
-import { DraftScreen, LanguageChoice } from '@/widgets/content-editor'
+import { DraftScreen } from '@/widgets/content-editor'
 import { LessonDocument } from './document/LessonDocument'
 
 /**
@@ -44,7 +44,7 @@ export function LessonEditor({
       backTo={{ link: toLesson, label: t('edit.back') }}
       editorsOnly={t('edit.editorsOnly')}
       unreadable={t('edit.unreadable')}
-      bar={<LanguageChoice value={locale} onChange={setLocale} />}
+      language={{ value: locale, onChange: setLocale }}
     >
       {(initial) => (
         <LessonDocument

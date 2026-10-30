@@ -1,5 +1,5 @@
 export { DraftScreen, NotOpen } from './ui/DraftScreen'
-export { LanguageChoice } from './ui/LanguageChoice'
+export { LANGUAGE_NAMES, languageActions } from './ui/LanguageChoice'
 export { AddRow, type Addable } from './ui/AddRow'
 export { DocText, DocTitleField, Properties, PropertyRow } from './ui/DocFields'
 export { RowGroups, type DocRow, type RowGroup } from './ui/RowGroups'

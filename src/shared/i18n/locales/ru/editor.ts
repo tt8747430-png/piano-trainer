@@ -581,6 +581,7 @@ export const editor: LocaleResources['editor'] = {
     lastInSight: 'В партитуре остаётся видимый нотоносец.',
   },
   original: {
+    draft: 'Черновик',
     opening: 'Открываем черновик…',
     offline: 'Нет сети: черновик откроется, когда она появится.',
     failed: 'Не удалось открыть черновик.',

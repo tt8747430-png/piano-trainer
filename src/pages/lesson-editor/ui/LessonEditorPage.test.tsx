@@ -110,7 +110,7 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     })
   })
 
-  it('writes Russian in the same document once the bar says so, the English left as it was', async () => {
+  it('writes Russian in the same document once the draft’s menu says so, the English left as it was', async () => {
     const user = userEvent.setup()
     const content = editing()
     await renderApp(`/lessons/${LESSON.id}/edit`, {
@@ -118,7 +118,8 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
       contentEditing: content,
     })
     await lessonDoc()
-    await user.click(screen.getByRole('radio', { name: 'RU · Русский' }))
+    await user.click(screen.getByRole('button', { name: 'The draft’s menu' }))
+    await user.click(await screen.findByRole('button', { name: 'Русский' }))
     const { doc, editor } = await lessonDoc()
     expect(line(doc, 'p[data-lesson-title]')).toHaveTextContent(LESSON.title.ru)
     await caretAtEnd(editor, line(doc, 'h2'))

@@ -1,10 +1,12 @@
 import { Fragment, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DraftActions, DraftStatus, type ContentDraft } from '@/features/edit-original'
+import type { Locale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
+import { LANGUAGE_NAMES, languageActions } from './LanguageChoice'
 
 /** A screen saying why the form is not open (yet): its line, and what to do. */
 export function NotOpen({ line, children }: { line: string; children?: ReactNode }) {
@@ -36,7 +38,7 @@ export function DraftScreen<T>({
   backTo,
   editorsOnly,
   unreadable,
-  bar,
+  language,
   children,
 }: {
   draft: ContentDraft<T>
@@ -52,11 +54,12 @@ export function DraftScreen<T>({
   editorsOnly: string
   /** What is said where a publish is refused for a draft that does not read. */
   unreadable: string
-  /** What else the bar holds beside the status: the language the document is written in. */
-  bar?: ReactNode
+  /** The language the document is written in: chosen in the draft's menu, named after its status. */
+  language?: { value: Locale; onChange: (locale: Locale) => void }
   children: (initial: T) => ReactNode
 }) {
   const { t } = useTranslation('editor')
+  const { t: words } = useTranslation('learn')
   const { account } = useAccount()
   const { load } = draft
   const editor = editsContent(account)
@@ -74,14 +77,19 @@ export function DraftScreen<T>({
               title={title}
               unreadable={unreadable}
               onReset={draft.reopen}
+              more={language ? languageActions(language.value, language.onChange, words) : []}
             />
           ) : undefined
         }
         tabs={
           open ? (
             <div className="flex min-h-9 items-center gap-2 pb-1 pl-13">
-              <DraftStatus draft={draft} className="flex-1" />
-              {bar}
+              <DraftStatus draft={draft} className="min-w-0" />
+              {language ? (
+                <span className="shrink-0 text-sm text-muted-foreground">
+                  · {LANGUAGE_NAMES[language.value]}
+                </span>
+              ) : null}
             </div>
           ) : undefined
         }

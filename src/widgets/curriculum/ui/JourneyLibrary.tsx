@@ -32,7 +32,7 @@ import {
 } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn, IN_PLACE } from '@/shared/lib'
-import { Dropdown, PAINT, ProgressRing } from '@/shared/ui'
+import { ChoiceChips, PAINT, ProgressRing } from '@/shared/ui'
 import { continueStep } from '../model/continue-step'
 import { journeyProgress, lessonShare } from '../model/progress'
 import { useStepTitle } from '../model/use-step-title'
@@ -195,16 +195,19 @@ function ChapterGroup({
 }
 
 /**
- * The Lessons as a library (ADR 0053, amended): the journey chosen from one pop-up button (each with
- * how many of its steps are learned), then its chapters as groups of rows, each step a row that
- * opens it. Every step opens; the order only suggests.
+ * The Lessons as a library (ADR 0053, amended): the four levels as chips, each with how many of its
+ * steps are learned; under them the level's name, what it makes of the learner and how far along they
+ * are; then its chapters as groups of rows, each step a row that opens it. Every step opens; the order
+ * only suggests.
  */
 export function JourneyLibrary({ journey }: { journey: Journey }) {
-  const { t } = useTranslation('learn')
+  const { t } = useTranslation(['learn', 'common'])
   const locale = useLocale()
   const navigate = useNavigate()
   const learned = useProgress(selectLearned)
   const next = continueStep(learned)?.id
+  const headingId = useId()
+  const progress = journeyProgress(journey, learned)
   const numbers = new Map(
     journey.chapters
       .flatMap((chapter) => chapter.steps)
@@ -213,23 +216,27 @@ export function JourneyLibrary({ journey }: { journey: Journey }) {
   )
   return (
     <div className="flex flex-col gap-6">
-      <Dropdown
-        label={t('journey.label')}
+      <ChoiceChips
+        label={t('learn:journey.label')}
         value={journey.id}
-        className="w-full sm:w-80"
-        options={allJourneys().map((each) => {
-          const progress = journeyProgress(each, learned)
-          return {
-            value: each.id,
-            label: localText(each.title, locale),
-            detail: t('journey.steps', { learned: progress.done, total: progress.total }),
-          }
-        })}
+        scroll
+        options={allJourneys().map((each) => ({
+          value: each.id,
+          label: t(`common:stage.${each.stage}`),
+        }))}
         onChange={(id) =>
           void navigate({ to: '/', search: { view: 'lessons', journey: id }, ...IN_PLACE })
         }
       />
-      <h2 className="sr-only">{localText(journey.title, locale)}</h2>
+      <section aria-labelledby={headingId} className="flex flex-col gap-1 px-3">
+        <h2 id={headingId} className="text-2xl font-semibold text-balance">
+          {localText(journey.title, locale)}
+        </h2>
+        <p className="text-pretty text-muted-foreground">{localText(journey.goal, locale)}</p>
+        <p className="text-sm text-muted-foreground tabular-nums">
+          {t('learn:journey.steps', { learned: progress.done, total: progress.total })}
+        </p>
+      </section>
       {journey.chapters.map((chapter, i) => (
         <ChapterGroup
           key={chapter.id}

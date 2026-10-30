@@ -5,13 +5,7 @@ import { useProgressionDraft } from '@/features/edit-original'
 import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
 import { parseNumerals } from '@/shared/lib/music'
 import { Dropdown, InfoTip, TypedField } from '@/shared/ui'
-import {
-  DocText,
-  DraftScreen,
-  LanguageChoice,
-  Properties,
-  PropertyRow,
-} from '@/widgets/content-editor'
+import { DocText, DraftScreen, Properties, PropertyRow } from '@/widgets/content-editor'
 
 /** A line of numerals as the field holds it: none where it is empty. */
 const lineOf = (text: string): string | undefined => (text.trim() === '' ? undefined : text)
@@ -141,7 +135,7 @@ export function ProgressionEditor({
       backTo={{ link: toProgressions, label: t('progressions.edit.back') }}
       editorsOnly={t('progressions.edit.editorsOnly')}
       unreadable={t('progressions.edit.unreadable')}
-      bar={<LanguageChoice value={locale} onChange={setLocale} />}
+      language={{ value: locale, onChange: setLocale }}
     >
       {(initial) => (
         <ProgressionDocument key={locale} initial={initial} locale={locale} onChange={draft.save} />

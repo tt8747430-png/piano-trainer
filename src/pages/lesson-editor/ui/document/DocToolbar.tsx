@@ -1,6 +1,8 @@
 import type { Editor } from '@tiptap/core'
 import { useEditorState } from '@tiptap/react'
 import {
+  ArrowDown,
+  ArrowUp,
   Bold,
   ChevronDown,
   Ellipsis,
@@ -18,9 +20,9 @@ import type { Locale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { ActionMenu } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { FIXED_BLOCKS, selectedBlock } from '../../model/doc-blocks'
+import { canMoveBlock, FIXED_BLOCKS, selectedBlock } from '../../model/doc-blocks'
 import { DOC } from '../../model/lesson-doc'
-import { toggleNote } from './commands'
+import { actOnBlock, toggleNote } from './commands'
 import { blockActions, insertActions } from './menus'
 
 function ToolButton({
@@ -55,10 +57,10 @@ function ToolButton({
 }
 
 /**
- * The document's toolbar (round 21): text or a section's heading, numbered steps, a note, the lead
- * in bold, Insert (every block kind), Undo and Redo, and the block the caret is in's menu (the
- * phone's way to move one; a laptop drags its handle). Pinned under the bar on a laptop, docked
- * over the phone's keyboard on a phone.
+ * The document's toolbar (round 24): Insert first, its one accent (every block kind, grouped); then
+ * text or a section's heading, numbered steps or a note, the lead in bold; Undo and Redo; the block
+ * the caret is in moved up or down, and its menu (copy, delete). One floating capsule at the foot,
+ * over the phone's keyboard while it is up.
  */
 export function DocToolbar({
   editor,
@@ -85,6 +87,8 @@ export function DocToolbar({
         note: top === DOC.note,
         bold: each.isActive('bold'),
         canBold: top === DOC.paragraph || top === DOC.steps,
+        canUp: canMoveBlock(each.state.doc, index, -1),
+        canDown: canMoveBlock(each.state.doc, index, 1),
         canUndo: each.can().undo(),
         canRedo: each.can().redo(),
       }
@@ -128,6 +132,24 @@ export function DocToolbar({
       aria-label={t('edit.doc.toolbar')}
       className={cn('flex items-center gap-0.5 overflow-x-auto overscroll-x-contain', className)}
     >
+      {/* Insert, the toolbar's one accent: every kind of block, grouped. */}
+      <ActionMenu
+        label={t('edit.doc.insert')}
+        trigger={
+          <>
+            <Plus data-icon="inline-start" aria-hidden />
+            {t('edit.doc.insert')}
+          </>
+        }
+        render={
+          <Button
+            className="h-11 shrink-0 rounded-xl px-3"
+            onMouseDown={(event) => event.preventDefault()}
+          />
+        }
+        actions={insertActions(editor, locale, t)}
+      />
+      <span aria-hidden className="mx-1 h-6 w-px shrink-0 bg-border max-sm:hidden" />
       {/* Text, a heading, steps or a note: a button each on a laptop, one menu on a phone. */}
       <div className="hidden md:contents">
         {styles.map((style) => (
@@ -174,18 +196,6 @@ export function DocToolbar({
         <Bold aria-hidden />
       </ToolButton>
       <span aria-hidden className="mx-1 h-6 w-px shrink-0 bg-border max-sm:hidden" />
-      <ActionMenu
-        label={t('edit.doc.insert')}
-        trigger={
-          <>
-            <Plus data-icon="inline-start" aria-hidden />
-            {t('edit.doc.insert')}
-          </>
-        }
-        render={<Button variant="tool" className="h-11 shrink-0 px-2.5" />}
-        actions={insertActions(editor, locale, t)}
-      />
-      <span aria-hidden className="mx-1 h-6 w-px shrink-0 bg-border max-sm:hidden" />
       <ToolButton
         label={t('edit.doc.undo')}
         disabled={!state.canUndo}
@@ -200,8 +210,25 @@ export function DocToolbar({
       >
         <Redo2 aria-hidden />
       </ToolButton>
-      {/* A laptop drags a block by its handle, which has the same menu. */}
-      <div className="ms-auto md:hidden">
+      <span aria-hidden className="mx-1 h-6 w-px shrink-0 bg-border max-sm:hidden" />
+      {/* The block the caret is in, moved: what dragging its handle does. */}
+      <span className="contents max-sm:hidden">
+        <ToolButton
+          label={t('edit.doc.moveUp')}
+          disabled={!state.inLesson || !state.canUp}
+          onClick={() => actOnBlock(editor, state.index, 'up')}
+        >
+          <ArrowUp aria-hidden />
+        </ToolButton>
+        <ToolButton
+          label={t('edit.doc.moveDown')}
+          disabled={!state.inLesson || !state.canDown}
+          onClick={() => actOnBlock(editor, state.index, 'down')}
+        >
+          <ArrowDown aria-hidden />
+        </ToolButton>
+      </span>
+      <div className="shrink-0">
         <ActionMenu
           label={t('edit.doc.block')}
           align="end"

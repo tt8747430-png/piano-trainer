@@ -4,8 +4,6 @@ import { useRef, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
 import { i18n, type Locale } from '@/shared/i18n'
-import { useMediaQuery } from '@/shared/lib'
-import { Pinned } from '@/shared/ui'
 import { docExtensions } from '../../model/doc-schema'
 import { DOC, docToLesson, lessonToDoc, type DocNode } from '../../model/lesson-doc'
 import { BlockHandle } from './BlockHandle'
@@ -60,7 +58,6 @@ export function LessonDocument({
   const base = useRef(initial)
   const slashKeys = useRef<SlashKeys | null>(null)
   const frame = useRef<HTMLDivElement>(null)
-  const wide = useMediaQuery('(min-width: 48rem)')
   const editor = useEditor({
     extensions: docExtensions({
       exampleView: ReactNodeViewRenderer(ExampleView),
@@ -89,17 +86,16 @@ export function LessonDocument({
   const toolbar = <DocToolbar editor={editor} locale={locale} />
   return (
     <DocLocale value={locale}>
-      {wide ? (
-        <Pinned className="pb-2">{toolbar}</Pinned>
-      ) : (
-        // On a phone, over its keyboard while it is up, else over the tab bar.
-        <div className="fixed inset-x-0 bottom-[max(var(--nav-bar),var(--kb-inset,0px))] z-30 border-t border-border bg-background px-2 pb-safe">
+      {/* The toolbar floats as the score editor's palette does (round 24): one raised capsule at
+          the foot, over the phone's keyboard while it is up, else over the tab bar. */}
+      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(max(var(--nav-bar),var(--kb-inset,0px))+0.5rem)] z-30 flex justify-center px-2 landscape-phone:left-rail lg:bottom-6 lg:left-sidebar lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed">
+        <div className="pointer-events-auto max-w-full rounded-2xl border border-border bg-raised p-1 elevation-2">
           {toolbar}
         </div>
-      )}
+      </div>
       <div
         ref={frame}
-        className="relative pr-10 pb-24 md:pr-0 md:pb-8 md:pl-12"
+        className="relative pr-10 pb-28 md:pr-0 md:pl-12"
         style={{ '--takeaway-label': JSON.stringify(words('edit.doc.takeaway')) } as CSSProperties}
       >
         <EditorContent editor={editor} />

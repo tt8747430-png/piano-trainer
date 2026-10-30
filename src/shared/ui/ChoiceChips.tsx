@@ -1,5 +1,6 @@
 import { Radio } from '@base-ui/react/radio'
 import { RadioGroup } from '@base-ui/react/radio-group'
+import { cn } from '@/shared/lib'
 import { optionName, type Option, type OptionValue } from './option'
 
 /**
@@ -12,11 +13,14 @@ export function ChoiceChips<V extends OptionValue>({
   value,
   options,
   onChange,
+  scroll = false,
 }: {
   label: string
   value: V
   options: readonly Option<V>[]
   onChange: (value: V) => void
+  /** One row that scrolls sideways past the screen's edges, never wrapping (the four levels). */
+  scroll?: boolean
 }) {
   return (
     <RadioGroup
@@ -26,14 +30,19 @@ export function ChoiceChips<V extends OptionValue>({
         const picked = options.find((option) => option.value === next)
         if (picked && picked.value !== value) onChange(picked.value)
       }}
-      className="flex flex-wrap gap-2"
+      className={cn(
+        'flex gap-2',
+        scroll
+          ? '-mx-(--gutter) scrollbar-none overflow-x-auto overscroll-x-contain px-(--gutter) py-0.5'
+          : 'flex-wrap',
+      )}
     >
       {options.map((option) => (
         <Radio.Root
           key={String(option.value)}
           value={option.value}
           aria-label={optionName(option)}
-          className="inline-flex min-h-11 min-w-14 cursor-default items-center justify-center rounded-xl border border-input bg-card px-3 text-base font-semibold text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring data-checked:border-foreground data-checked:bg-muted data-checked:text-foreground"
+          className="inline-flex min-h-11 shrink-0 min-w-14 cursor-default items-center justify-center rounded-xl border border-input bg-card px-3 text-base font-semibold text-muted-foreground transition-colors duration-200 ease-out select-none hover:text-foreground focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring data-checked:border-foreground data-checked:bg-muted data-checked:text-foreground"
         >
           {option.label}
         </Radio.Root>

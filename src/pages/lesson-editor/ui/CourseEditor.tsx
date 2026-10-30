@@ -10,7 +10,6 @@ import {
   AddRow,
   DocText,
   DraftScreen,
-  LanguageChoice,
   Properties,
   PropertyRow,
   RowGroups,
@@ -197,7 +196,7 @@ export function CourseEditor({
       backTo={{ link: toCourse, label: t('edit.course.back') }}
       editorsOnly={t('edit.course.editorsOnly')}
       unreadable={t('edit.course.unreadable')}
-      bar={<LanguageChoice value={locale} onChange={setLocale} />}
+      language={{ value: locale, onChange: setLocale }}
     >
       {(initial) => (
         <CourseDocument
