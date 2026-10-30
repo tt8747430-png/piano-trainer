@@ -1,11 +1,13 @@
 import { Link, useSearch } from '@tanstack/react-router'
 import { LibraryBig, Plus } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { journeyById } from '@/entities/lesson'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { FabLink, FloatingActions, NavTab, NavTabs, RoundLink, ScreenHeader } from '@/shared/ui'
+import { Fab, FloatingActions, NavTab, NavTabs, RoundLink, ScreenHeader } from '@/shared/ui'
 import { PlaceActions } from '@/widgets/app-nav'
+import { NewCourseSheet } from '@/widgets/content-editor'
 import { ContinueAction } from '@/widgets/continue-action'
 import { CourseShelves, currentJourney, JourneyLibrary } from '@/widgets/curriculum'
 
@@ -20,6 +22,7 @@ export function LearnPage() {
   const learned = useProgress(selectLearned)
   const { account } = useAccount()
   const journey = journeyById(journeyId) ?? currentJourney(learned)
+  const [newCourse, setNewCourse] = useState(false)
   return (
     <div className="flex flex-col">
       <ScreenHeader
@@ -60,16 +63,14 @@ export function LearnPage() {
         <ContinueAction />
         {view === 'lessons' ? <JourneyLibrary journey={journey} /> : <CourseShelves />}
       </div>
-      {/* An editor's way to change what is shown: the journey, or a new course (ADR 0116). */}
-      {/* Creating is the + floating action: an editor's New course. */}
+      {/* Creating is the + floating action: an editor's New course, its sheet. */}
       {editsContent(account) && view === 'courses' ? (
         <FloatingActions>
-          <FabLink
-            label={t('learn:edit.course.new')}
-            icon={Plus}
-            render={<Link to="/courses/new" />}
-          />
+          <Fab label={t('learn:edit.course.new')} icon={Plus} onClick={() => setNewCourse(true)} />
         </FloatingActions>
+      ) : null}
+      {editsContent(account) ? (
+        <NewCourseSheet open={newCourse} onOpenChange={setNewCourse} />
       ) : null}
     </div>
   )

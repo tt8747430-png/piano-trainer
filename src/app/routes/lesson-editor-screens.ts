@@ -5,5 +5,4 @@ export {
   CourseLessonEditorPage,
   JourneyEditorPage,
   LessonEditorPage,
-  NewCoursePage,
 } from '@/pages/lesson-editor'

@@ -1,9 +1,9 @@
 import { useNavigate } from '@tanstack/react-router'
 import { Mic } from 'lucide-react'
-import { useId, useState, type ReactNode } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { libraryCatalog, useLibraryStoreApi, type FolderId } from '@/entities/library'
-import { songTitle, TITLE_MAX, usePiecesStoreApi, type SongCollectionId } from '@/entities/piece'
+import { TITLE_MAX, usePiecesStoreApi, type SongCollectionId } from '@/entities/piece'
 import {
   makeSong,
   SCORE_SETUPS,
@@ -12,10 +12,9 @@ import {
 } from '@/features/edit-piece'
 import { moveTo } from '@/features/manage-library'
 import { C_MAJOR, meterParts, type Key, type Meter } from '@/shared/lib/music'
-import { NameField, PictureTiles, Sheet, SheetContent } from '@/shared/ui'
+import { NewSheet, PictureTiles, SheetPart } from '@/shared/ui'
 import { KeySignaturePicker } from '@/shared/ui/pickers/KeySignaturePicker'
 import { PickerCell, PickerGrid } from '@/shared/ui/pickers/PickerGrid'
-import { Button } from '@/shared/ui/primitives/button'
 
 /** The time signatures a new song offers, as notation apps' new scores do: the common ones. */
 const COMMON_METERS: readonly (readonly Meter[])[] = [
@@ -58,22 +57,6 @@ function StavesPicture({ setup }: { setup: ScoreSetup }) {
         />
       )}
     </svg>
-  )
-}
-
-/** A part of the sheet: its name and a line of what it sets, over its choice (Flat's new score). */
-function Part({ title, detail, children }: { title: string; detail: string; children: ReactNode }) {
-  const id = useId()
-  return (
-    <section aria-labelledby={id} className="flex flex-col gap-3 rounded-2xl bg-muted/50 p-4">
-      <div className="flex flex-col">
-        <h3 id={id} className="font-sans font-semibold">
-          {title}
-        </h3>
-        <p className="text-sm text-muted-foreground">{detail}</p>
-      </div>
-      {children}
-    </section>
   )
 }
 
@@ -138,80 +121,64 @@ export function NewSongSheet({
       )
     void navigate({ to: '/edit/$pieceId', params: { pieceId: id }, search: { record } })
   }
-  const untitled = songTitle(title) === null
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        title={t(builtIn ? 'making.builtInTitle' : record ? 'making.recordTitle' : 'making.title')}
-        footer={
-          <div className="flex flex-col gap-2">
-            <Button
-              size="lg"
-              disabled={untitled || making}
-              onClick={() => (builtIn ? void makeBuiltIn(builtIn) : make())}
-            >
-              {record ? <Mic data-icon="inline-start" aria-hidden /> : null}
-              {t(making ? 'making.making' : record ? 'making.createAndRecord' : 'making.create')}
-            </Button>
-            {failed ? (
-              <p role="alert" className="text-sm text-destructive">
-                {t('making.failed')}
-              </p>
-            ) : null}
-          </div>
-        }
-      >
-        <div className="flex flex-col gap-4">
-          <NameField
-            label={t('making.name')}
-            value={title}
-            maxLength={TITLE_MAX}
-            onChange={(event) => setTitle(event.target.value)}
-          />
-          <p className="-mt-2 text-sm text-muted-foreground">{t('making.later')}</p>
-          <Part title={t('setup.staves')} detail={t('setup.stavesDetail')}>
-            <PictureTiles
-              label={t('setup.staves')}
-              value={setup}
-              columns={3}
-              tiles={SCORE_SETUPS.map((choice) => ({
-                value: choice,
-                label: t(`setup.choice.${choice}`),
-                picture: <StavesPicture setup={choice} />,
-              }))}
-              onChange={setSetup}
-            />
-          </Part>
-          <Part title={t('making.key')} detail={t('making.keyDetail')}>
-            <KeySignaturePicker value={key} onChange={setKey} />
-          </Part>
-          <Part title={t('making.meter')} detail={t('making.meterDetail')}>
-            <PickerGrid
-              label={t('making.meter')}
-              columns={4}
-              rows={COMMON_METERS.map((row, r) => ({
-                label: t(r === 0 ? 'making.simple' : 'making.compound'),
-                cells: row.map((each) => {
-                  const { count, unit } = meterParts(each)
-                  return (
-                    <PickerCell
-                      key={each}
-                      label={each}
-                      pressed={each === meter}
-                      onClick={() => setMeter(each)}
-                    >
-                      <span className="flex flex-col items-center font-display text-lg leading-none font-semibold">
-                        <span>{count}</span>
-                        <span>{unit}</span>
-                      </span>
-                    </PickerCell>
-                  )
-                }),
-              }))}
-            />
-          </Part>
-        </div>
-      </SheetContent>
-    </Sheet>
+    <NewSheet
+      open={open}
+      onOpenChange={onOpenChange}
+      title={t(builtIn ? 'making.builtInTitle' : record ? 'making.recordTitle' : 'making.title')}
+      nameLabel={t('making.name')}
+      name={title}
+      onName={setTitle}
+      maxLength={TITLE_MAX}
+      hint={t('making.later')}
+      createLabel={t(record ? 'making.createAndRecord' : 'making.create')}
+      creatingLabel={t('making.making')}
+      creating={making}
+      createIcon={record ? <Mic data-icon="inline-start" aria-hidden /> : null}
+      failed={failed ? t('making.failed') : null}
+      onCreate={() => (builtIn ? void makeBuiltIn(builtIn) : make())}
+    >
+      <SheetPart title={t('setup.staves')} detail={t('setup.stavesDetail')}>
+        <PictureTiles
+          label={t('setup.staves')}
+          value={setup}
+          columns={3}
+          tiles={SCORE_SETUPS.map((choice) => ({
+            value: choice,
+            label: t(`setup.choice.${choice}`),
+            picture: <StavesPicture setup={choice} />,
+          }))}
+          onChange={setSetup}
+        />
+      </SheetPart>
+      <SheetPart title={t('making.key')} detail={t('making.keyDetail')}>
+        <KeySignaturePicker value={key} onChange={setKey} />
+      </SheetPart>
+      <SheetPart title={t('making.meter')} detail={t('making.meterDetail')}>
+        <PickerGrid
+          label={t('making.meter')}
+          columns={4}
+          rows={COMMON_METERS.map((row, r) => ({
+            label: t(r === 0 ? 'making.simple' : 'making.compound'),
+            cells: row.map((each) => {
+              const { count, unit } = meterParts(each)
+              return (
+                <PickerCell
+                  key={each}
+                  label={each}
+                  pressed={each === meter}
+                  onClick={() => setMeter(each)}
+                >
+                  <span className="flex flex-col items-center font-display text-lg leading-none font-semibold">
+                    <span>{count}</span>
+                    <span>{unit}</span>
+                  </span>
+                </PickerCell>
+              )
+            }),
+          }))}
+        />
+      </SheetPart>
+    </NewSheet>
   )
 }

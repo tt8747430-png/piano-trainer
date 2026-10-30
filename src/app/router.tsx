@@ -515,11 +515,6 @@ const courseEditRoute = createRoute({
   // A course not yet published is there for its editor: the draft New course made.
   component: lazyRouteComponent(lessonEditorScreens, 'CourseEditorPage'),
 })
-const newCourseRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/courses/new',
-  component: lazyRouteComponent(lessonEditorScreens, 'NewCoursePage'),
-})
 const lessonEditRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/lessons/$lessonId/edit',
@@ -712,7 +707,6 @@ const routeTree = rootRoute.addChildren([
     lessonEditRoute,
     courseLessonEditRoute,
     courseEditRoute,
-    newCourseRoute,
     journeyEditRoute,
     practiceRoute,
     quizRoute,
