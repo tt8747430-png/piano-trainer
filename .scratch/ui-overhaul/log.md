@@ -67,8 +67,9 @@
   6. Block editor — DONE as a structured block editor (r19), not TipTap. Decision (owner may overturn): lessons
      are bilingual side by side, which one rich-text document does not hold; no new package. Left: inline
      markdown shortcuts, questions and links as insertable blocks (they need an answer/target editor).
-  7. Admin: an overview page (active learners this week, new accounts, publishes, errors), errors grouped by
-     message, content queue.
+  7. Admin — DONE: Overview (r20), errors grouped, Drafts tab (the content queue). Decision: the figures are
+     counted on the device from the first page of 50 accounts ("50+" beyond); an exact count needs an admin-only
+     server function — the owner's call (access).
   8. Music editor: impeccable critique against Flat and Dorico, then fixes.
 - Owner rules learnt this session: a message from the owner is not a stop; stop only when they say "stop". Never
   read learners' synced rows (they refused a query on sync tables); use logs and aggregate queries.

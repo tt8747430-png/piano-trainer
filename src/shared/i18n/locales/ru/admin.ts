@@ -30,6 +30,7 @@ export const admin: LocaleResources['admin'] = {
     empty: 'Здесь пока ничего нет',
   },
   tabs: {
+    overview: 'Обзор',
     accounts: 'Аккаунты',
     groups: 'Группы',
     switches: 'Переключатели',
@@ -89,6 +90,15 @@ export const admin: LocaleResources['admin'] = {
     show: 'Показать снова',
     block: 'Запретить публиковать',
     dismiss: 'Закрыть',
+  },
+  overview: {
+    title: 'Эта неделя',
+    accounts: 'Аккаунты',
+    newThisWeek: 'Новых за неделю',
+    activeThisWeek: 'Входили за неделю',
+    errorsThisWeek: 'Ошибок за неделю',
+    reports: 'Жалоб на рассмотрении',
+    unpublished: 'Неопубликованных черновиков',
   },
   drafts: {
     none: 'Черновиков нет. Правки редактора ждут здесь, пока их не опубликуют.',

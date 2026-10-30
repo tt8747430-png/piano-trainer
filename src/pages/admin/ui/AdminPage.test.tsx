@@ -61,7 +61,7 @@ describe('the Admin area', () => {
   it('changes an account’s role', async () => {
     const user = userEvent.setup()
     const admin = createFakeAdmin({ accounts: [ANA] })
-    await renderApp('/admin', { auth: await signedInAs('admin'), admin })
+    await renderApp('/admin?tab=accounts', { auth: await signedInAs('admin'), admin })
     const role = await screen.findByRole('radiogroup', { name: 'Role for Ana' })
     await user.click(within(role).getByRole('radio', { name: 'Editor' }))
     await waitFor(() =>
@@ -167,6 +167,22 @@ describe('the Admin area', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/courses/jazz/edit'))
   })
 
+  it('opens on the overview: accounts, the week’s new and active, errors, reports and drafts', async () => {
+    const admin = createFakeAdmin({
+      accounts: [{ ...ANA, joinedAt: new Date().toISOString(), lastSignInAt: null }],
+      reports: [REPORT],
+    })
+    await renderApp('/admin', { auth: await signedInAs('admin'), admin })
+    const figures = await screen.findByRole('region', { name: 'This week' })
+    expect(within(figures).getByText('Accounts').closest('div')).toHaveTextContent(/Accounts\s*1/)
+    expect(within(figures).getByText('New this week').closest('div')).toHaveTextContent(
+      /New this week\s*1/,
+    )
+    expect(within(figures).getByText('Reports to look at').closest('div')).toHaveTextContent(
+      /Reports to look at\s*1/,
+    )
+  })
+
   it('says when no error was reported', async () => {
     await renderApp('/admin?tab=errors', {
       auth: await signedInAs('admin'),
@@ -176,7 +192,7 @@ describe('the Admin area', () => {
   })
 
   it('reads in Russian', async () => {
-    await renderApp('/admin', {
+    await renderApp('/admin?tab=accounts', {
       auth: await signedInAs('admin'),
       admin: createFakeAdmin({ accounts: [ANA] }),
       locale: 'ru',

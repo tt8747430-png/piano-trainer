@@ -9,10 +9,12 @@ import { ComponentsTab } from './ComponentsTab'
 import { DraftsTab } from './DraftsTab'
 import { ErrorsTab } from './ErrorsTab'
 import { GroupsTab } from './GroupsTab'
+import { OverviewTab } from './OverviewTab'
 import { ReportsTab } from './ReportsTab'
 import { SwitchesTab } from './SwitchesTab'
 
 const TABS: Readonly<Record<AdminTab, () => React.JSX.Element>> = {
+  overview: OverviewTab,
   accounts: AccountsTab,
   groups: GroupsTab,
   switches: SwitchesTab,

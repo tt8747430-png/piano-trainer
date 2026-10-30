@@ -29,6 +29,7 @@ export const admin = {
     empty: 'Nothing here yet',
   },
   tabs: {
+    overview: 'Overview',
     accounts: 'Accounts',
     groups: 'Groups',
     switches: 'Switches',
@@ -88,6 +89,15 @@ export const admin = {
     dismiss: 'Dismiss',
   },
   // What went wrong on learners' devices, the latest first (ADR 0116).
+  overview: {
+    title: 'This week',
+    accounts: 'Accounts',
+    newThisWeek: 'New this week',
+    activeThisWeek: 'Signed in this week',
+    errorsThisWeek: 'Errors this week',
+    reports: 'Reports to look at',
+    unpublished: 'Drafts not published',
+  },
   drafts: {
     none: 'No drafts. An editor’s changes wait here until they are published.',
     label: 'Drafts',
