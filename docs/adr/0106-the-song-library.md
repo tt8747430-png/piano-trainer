@@ -19,7 +19,8 @@ details.
 - **The built-in collections are folders from the start**, each with its picture and paint, renamed, restyled, moved
   and archived like the learner's own. The learner's folders (`folder-<n>`, never given twice) have a name, one of 12
   pictures and one of 5 paints. A new song is made where the learner is, and so is an imported one: New offers New
-  song, New folder and Import, and a file dropped on the library imports it (ADR 0107).
+  song, New folder and Import, and only these (it adds; the Public library is a place, Home's first row), and a
+  file dropped on the library imports it (ADR 0107).
 - **The actions**, at every size:
   - a song's row: More (Favourite, Move to…, Archive, and Delete for the learner's own song, asked first), a swipe
     (right Favourite; left Move, then Archive), a long press starting Select;
@@ -30,10 +31,14 @@ details.
     what is chosen does not allow it (Delete: anything but the learner's own songs and folders); it counts and acts on
     the rows chosen that are in sight, a search or filter hiding the rest; its Archive is one toast whose Undo puts
     every song and folder back; in the Manual sort a handle moves each row, by finger, mouse or keyboard, a screen
-    reader told where;
+    reader told where; in any sort a row's face carries it (a mouse after 8px, a finger after a quarter-second
+    hold), with every row chosen where it is chosen, into a folder lit as the target, or onto the bar, which while
+    carrying is Archive and, in a folder, Move to the place it stands in; each drop a toast with Undo, ending Select
+    (`LibraryDnd`: one drag the sorted lists join);
   - **Move to…**: Home, then the folders as they nest, the place it stands in marked Here; a tap moves at once;
     New folder at its foot;
-  - the song's page and the Player's More: the ♡, Move to…, Archive or Restore.
+  - the song's page and the Player's More: the ♡, Move to…, Archive or Restore; a song's row and page also
+    Export…, one sheet of MusicXML, MIDI and Share link (ADR 0107).
 - **Every move, archive and favourite toasts with Undo**, which puts it back exactly where it stood.
 - **Deleting a folder deletes its songs and folders**, but the app's content is never destroyed: what the learner
   made goes for good (their songs with their takes); what the app brought goes to the archive (a built-in folder
@@ -66,3 +71,5 @@ A study, practised on Practice, is in no library. A folder played song after son
   moved at a tap and stood sheets on the phone's keyboard (ADR 0061).
 - r13 — New's Import and a file dropped on the library (2026-10-28, ADR 0107).
 - r14 — Select acts on the rows in sight, its bar's slots stay put and its Archive has one Undo (2026-10-28).
+- r24 — New only adds (the Public library out of it); a row's face carries it into a folder, out, or onto Archive;
+  Export… on a song's row (2026-10-30).
