@@ -17,6 +17,7 @@ export function LessonEditorPage() {
       id={lessonId}
       back={<BackButton fallback={{ to: '/lessons/$lessonId', params: { lessonId } }} />}
       toLesson={<Link to="/lessons/$lessonId" params={{ lessonId }} />}
+      readFirst
     />
   )
 }

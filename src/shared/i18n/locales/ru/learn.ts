@@ -108,6 +108,8 @@ export const learn: LocaleResources['learn'] = {
     doc: {
       label: 'Урок',
       language: 'Язык текста',
+      readFirst: 'Сначала прочесть',
+      readFirstNone: 'Ничего',
       style: 'Стиль текста',
       toolbar: 'Оформление',
       text: 'Текст',

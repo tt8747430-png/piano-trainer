@@ -119,6 +119,8 @@ export const learn = {
     doc: {
       label: 'The lesson',
       language: 'Written in',
+      readFirst: 'Read first',
+      readFirstNone: 'Nothing',
       style: 'Text style',
       toolbar: 'Formatting',
       text: 'Text',

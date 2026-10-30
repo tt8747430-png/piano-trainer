@@ -89,6 +89,25 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     expect(screen.queryByRole('radio', { name: 'Preview' })).not.toBeInTheDocument()
   })
 
+  it('chooses the lessons to read first, then publishes the lesson with them', async () => {
+    const user = userEvent.setup()
+    const content = editing()
+    await renderApp(`/lessons/${LESSON.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    await lessonDoc()
+    const other = LESSONS.find((each) => each.id !== LESSON.id && !LESSON.after?.includes(each.id))!
+    await user.click(screen.getByRole('combobox', { name: 'Read first' }))
+    await user.click(await screen.findByRole('option', { name: other.title.en }))
+    await user.keyboard('{Escape}')
+    await publish(user)
+    expect(content.body('lesson', LESSON.id)).toMatchObject({
+      after: [...(LESSON.after ?? []), other.id],
+      sections: LESSON.sections,
+    })
+  })
+
   it('saves the title typed to the draft, then publishes the lesson with it', async () => {
     const user = userEvent.setup()
     const content = editing()
