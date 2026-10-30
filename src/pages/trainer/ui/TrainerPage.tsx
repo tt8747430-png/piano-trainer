@@ -13,10 +13,6 @@ import { TrainerRecordLine } from './TrainerRecordLine'
 import { TrainerRunView } from './TrainerRunView'
 import { useLevelName } from './use-level-name'
 
-/** The bar's ⓘ, drawn as the bar's other round buttons (`RoundButton`). */
-const HEADER_TIP =
-  'size-11 bg-muted/70 text-foreground hover:bg-muted data-popup-open:bg-muted [&_svg]:size-5'
-
 /** A trainer, named by the path: the one Quiz opened. */
 export function TrainerPage() {
   const { trainerId } = useParams({ from: '/shell/practice/quiz/$trainerId' })
@@ -55,7 +51,7 @@ function TrainerScreenView({ id }: { id: TrainerId }) {
           <>
             {/* How the drill asks, out of the way on the setup: gone once a run starts. */}
             {asks && !running ? (
-              <InfoTip name={title} className={HEADER_TIP}>
+              <InfoTip name={title} bar>
                 {how}
               </InfoTip>
             ) : null}

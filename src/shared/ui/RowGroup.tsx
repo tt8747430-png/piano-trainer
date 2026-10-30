@@ -29,7 +29,8 @@ export function RowGroup({
       fold={fold}
       info={info}
       level={level}
-      headingClassName={level === 2 ? 'text-2xl' : 'text-xl'}
+      // Its name small over its card, as Settings' and Practice's groups (DESIGN.md, Placement).
+      headingClassName="px-3 font-sans text-sm font-semibold text-muted-foreground"
     >
       <ul className="grid-cards gap-x-2 card p-1.5">{children}</ul>
       {footer}

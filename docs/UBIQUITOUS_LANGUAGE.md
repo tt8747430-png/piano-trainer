@@ -435,7 +435,7 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
   detector.
 - **Trainer**: one of the Quiz's: levels or Custom, runs of rounds, opened at its **Setup**. _Avoid:_ quiz, game.
 - **Chords**, **Intervals**, **Build scale**, **My gaps**: trainers. _Avoid:_ exercise.
-- **Setup** (a trainer's): the one template every trainer opens at: its drill, Options, Timing, how it works, Start.
+- **Setup** (a trainer's): the one template every trainer opens at: its drill, Options, Timing and Start, how it works behind the bar's ⓘ.
   _Avoid:_ settings, config.
 - **Cadences** («Каденции»): the Quiz's trainer that asks a cadence in all four drills: heard after its key's tonic,
   read on the grand staff, the chord that makes it played, or a card of its name or staff. A cadence rates no skill.

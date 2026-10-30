@@ -476,9 +476,10 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
 - **Drop zone** (`SongDrop`, a laptop's): while a file is dragged over the library, a panel inset 16px over the page,
   its 2px dashed honey border on the page's paper at 90%, an upload icon over one line of what dropping does.
 - **A trainer's setup** (`TrainerSetup`, at most 672px wide): the drill as a segmented control of pictures over
-  their names, then titled cards of `SettingRows` (Options, Timing): a pop-up button at a row's right, a list as a
-  row with "2 of 41 ›" opening a sheet of check rows by group, switches; a muted card with an ⓘ saying the drill in a
-  sentence; one full-width Start pill (its own width from 640px).
+  their names, then cards of `SettingRows` named small over them (Options, Timing): a pop-up button at a row's
+  right, a list as a row with "2 of 41 ›" opening a sheet of check rows by group, switches; the drill in a sentence
+  behind the bar's ⓘ (`InfoTip bar`); one full-width Start pill held at the foot of a phone's screen as the setup
+  scrolls (its own width, in place, from 640px).
 - **A round** (`TrainerBoard`): the prompt, a time limit as a thin primary bar running down with its seconds, the
   staff (a muted card with a "?" while hidden, the same size, so nothing moves on Reveal), the keys, the answers, and
   one primary pill in one place from the round's start to its Next: Reveal on a card, Check on a build, Next greyed
