@@ -35,15 +35,10 @@ export const learn = {
   // Continue: the next lesson of the journey or the course in progress, in one tap.
   continue: 'Continue',
   known: '{{known}} of {{total}} known',
-  recent: 'Recently practised',
   // The days practised: opening a piece in the Player, or answering a quiz round.
   days: {
-    month: 'This month',
-    title: 'Practice',
-    inARow: 'Days in a row: {{count}}',
     keep: 'Practise today to keep it going.',
     done: 'Practised today.',
-    week: 'The last seven days',
     practised: '{{day}}: practised',
     missed: '{{day}}: not practised',
   },
