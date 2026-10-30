@@ -164,6 +164,12 @@ The owner's feedback from every session, condensed and grouped by area. Read the
   - Folds the same everywhere.
 - **Fields above the phone's keyboard** as memory-palaces manages them (round 14): every field, its label and its buttons stay in sight; nothing jumps.
 
+## Navigation
+- **One place current at a time** (round 24): never two highlights in the tab bar or sidebar. Settings is in the
+  laptop's sidebar (its own highlight there); on a phone it sits in the Profile, which is highlighted for it.
+- **Don't decide UI trade-offs silently:** a known flaw ("both highlight, say if you'd rather…") is not shipped and
+  reported; fix it to the obvious right behaviour first.
+
 ## Process
 - **The loop:** improve and review in a loop until the usage runs out, and resume on "continue".
 - **Commits:** one proper commit per finished task.
