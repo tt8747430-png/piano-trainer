@@ -30,6 +30,8 @@ export const learn = {
   // Said after a learned lesson's or check's name, whose check mark is for the eye.
   learned: 'learned',
   current: 'You are here',
+  // Where Continue leads, on its row in the Lessons.
+  upNext: 'Next',
   // Continue: the next lesson of the journey or the course in progress, in one tap.
   continue: 'Continue',
   known: '{{known}} of {{total}} known',

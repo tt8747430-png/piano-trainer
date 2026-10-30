@@ -1,11 +1,10 @@
-import { BookOpenText, ChevronRight, Play } from 'lucide-react'
+import { BookOpenText, Play } from 'lucide-react'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PieceLink, pieceById } from '@/entities/piece'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { StepLink } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
-import { ButtonLink } from '@/shared/ui'
 import {
   continueStep,
   courseProgress,
@@ -15,10 +14,10 @@ import {
 } from '@/widgets/curriculum'
 
 /**
- * What to do next (ADR 0053), Learn's hero card (as Noji's and simpleclub's homes lead with one): the
- * journey or course it is on, the step it opens, how far that track is learned, and one full-width
- * honey button, Continue: the next lesson of the journey or of the course last worked in, read; its
- * next guided song, on its page. Nothing once everything is learned.
+ * What to do next (ADR 0053), Learn's first row: one card that is the link, Continue and the
+ * journey or course it is on, the step it opens, how far that track is learned, and a round honey
+ * mark at its end: the next lesson of the journey or of the course last worked in, read; its next
+ * guided song, on its page. Nothing once everything is learned.
  */
 export function ContinueAction() {
   const { t } = useTranslation('learn')
@@ -35,36 +34,42 @@ export function ContinueAction() {
   const track = 'course' in next ? next.course : next.journey
   const progress =
     'course' in next ? courseProgress(next.course, learned) : journeyProgress(next.journey, learned)
-  return (
-    <section
-      aria-labelledby={id}
-      className="flex flex-col gap-4 card bg-gradient-to-b from-secondary/60 to-card p-5"
-    >
-      <div className="flex flex-col gap-1">
-        <p className="flex items-center gap-0.5 text-sm text-muted-foreground">
-          {localText(track.title, locale)}
-          <ChevronRight aria-hidden className="size-4" />
-        </p>
-        <h2 id={id} className="font-display text-2xl text-balance">
+  const face = (
+    <>
+      <span className="flex min-w-0 flex-1 flex-col gap-1">
+        <span className="text-sm text-muted-foreground">
+          {t('continue')} · {localText(track.title, locale)}
+        </span>
+        <h2 id={id} className="font-display text-xl leading-tight text-balance">
           {title}
         </h2>
-      </div>
-      <LearnedMeter progress={progress} />
-      <ButtonLink
-        size="lg"
-        className="w-full rounded-2xl text-base"
-        aria-label={`${t('continue')} ${title}`}
-        render={
-          step.kind === 'piece' ? (
-            <PieceLink entry={pieceById(step.pieceId) ?? { id: step.pieceId, kind: 'song' }} />
-          ) : (
-            <StepLink step={step} />
-          )
-        }
+        <LearnedMeter progress={progress} />
+      </span>
+      <span
+        aria-hidden
+        className="grid size-12 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground transition-transform duration-200 ease-out group-hover:scale-105 group-active:scale-95 [&_svg]:size-5"
       >
-        <Icon data-icon="inline-start" aria-hidden />
-        {t('continue')}
-      </ButtonLink>
+        <Icon className={read ? undefined : 'fill-current'} />
+      </span>
+    </>
+  )
+  const className =
+    'group flex items-center gap-4 card bg-gradient-to-b from-secondary/60 to-card p-4 transition-colors duration-200 ease-out hover:border-input'
+  return (
+    <section aria-labelledby={id}>
+      {step.kind === 'piece' ? (
+        <PieceLink
+          entry={pieceById(step.pieceId) ?? { id: step.pieceId, kind: 'song' }}
+          aria-label={`${t('continue')} ${title}`}
+          className={className}
+        >
+          {face}
+        </PieceLink>
+      ) : (
+        <StepLink step={step} aria-label={`${t('continue')} ${title}`} className={className}>
+          {face}
+        </StepLink>
+      )}
     </section>
   )
 }

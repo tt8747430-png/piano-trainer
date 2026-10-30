@@ -4,17 +4,18 @@ import { useTranslation } from 'react-i18next'
 import { journeyById } from '@/entities/lesson'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { ButtonLink, NavTab, NavTabs, ScreenHeader } from '@/shared/ui'
+import { FabLink, FloatingActions, NavTab, NavTabs, ScreenHeader } from '@/shared/ui'
 import { PlaceActions } from '@/widgets/app-nav'
 import { ContinueAction } from '@/widgets/continue-action'
-import { CourseShelves, currentJourney, JourneyMap } from '@/widgets/curriculum'
+import { CourseShelves, currentJourney, JourneyLibrary } from '@/widgets/curriculum'
 import { RecentPieces } from '@/widgets/piece-list'
 import { PracticeDays } from '@/widgets/practice-days'
 
 /**
- * Learn (ADR 0053), the app's first place: its header's toggle between the Lessons, four journeys of
- * chapters as the journey-app lays them out, and the Courses, shelves of courses as the courses-app
- * has them. Beside them the days practised and the songs played last; Continue floats over it.
+ * Learn (ADR 0053), the app's first place, a library: its header's toggle between the Lessons, a
+ * journey chosen from a pop-up and its chapters as groups of rows, and the Courses, shelves of
+ * courses as rows. Beside them the days practised and the songs played last; an editor's Edit the
+ * journey or New course floats over it.
  */
 export function LearnPage() {
   const { t } = useTranslation(['learn', 'common'])
@@ -53,36 +54,10 @@ export function LearnPage() {
           </div>
           {view === 'lessons' ? (
             <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
-              <JourneyMap journey={journey} />
-              {editsContent(account) ? (
-                <ButtonLink
-                  render={
-                    <Link to="/journeys/$journeyId/edit" params={{ journeyId: journey.id }} />
-                  }
-                  variant="outline"
-                  size="lg"
-                  className="self-start"
-                >
-                  <PencilLine data-icon="inline-start" aria-hidden />
-                  {t('learn:edit.journey.open')}
-                </ButtonLink>
-              ) : null}
+              <JourneyLibrary journey={journey} />
             </div>
           ) : (
-            <div className="flex flex-col gap-6">
-              <CourseShelves />
-              {editsContent(account) ? (
-                <ButtonLink
-                  render={<Link to="/courses/new" />}
-                  variant="outline"
-                  size="lg"
-                  className="self-start"
-                >
-                  <Plus data-icon="inline-start" aria-hidden />
-                  {t('learn:edit.course.new')}
-                </ButtonLink>
-              ) : null}
-            </div>
+            <CourseShelves />
           )}
         </div>
         <div className="flex flex-col gap-6 lg:sticky lg:top-6 lg:self-start">
@@ -90,6 +65,24 @@ export function LearnPage() {
           <RecentPieces />
         </div>
       </div>
+      {/* An editor's way to change what is shown: the journey, or a new course (ADR 0116). */}
+      {editsContent(account) ? (
+        <FloatingActions>
+          {view === 'lessons' ? (
+            <FabLink
+              label={t('learn:edit.journey.open')}
+              icon={PencilLine}
+              render={<Link to="/journeys/$journeyId/edit" params={{ journeyId: journey.id }} />}
+            />
+          ) : (
+            <FabLink
+              label={t('learn:edit.course.new')}
+              icon={Plus}
+              render={<Link to="/courses/new" />}
+            />
+          )}
+        </FloatingActions>
+      ) : null}
     </div>
   )
 }

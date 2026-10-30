@@ -26,6 +26,7 @@ export const learn: LocaleResources['learn'] = {
   lessonNumber: 'Урок {{n}}',
   learned: 'изучено',
   current: 'Вы здесь',
+  upNext: 'Далее',
   continue: 'Продолжить',
   known: 'Знаю {{known}} из {{total}}',
   recent: 'Недавно играли',
