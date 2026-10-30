@@ -391,7 +391,7 @@ every piece is shown in the Admin area's Components):
   sections, each headed with a count and See all where it is cut short.
 - **The bar holds Back, the title and at most two round actions**; More holds the rest, its destructive action last,
   red and alone. The primary action is never in the bar.
-- **Lists are grouped cards of rows** (`SettingsGroup`, `RowGroup`): a soft tile, the title, one detail line, then a
+- **Lists are grouped cards of rows** (`SettingsGroup`; `RowGroup` for a browsed list, one card in columns): a soft tile, the title, one detail line, then a
   value, a status pill or a chevron; a choice made in place is a `ChoiceRow`, a switch a `SwitchRow`.
 - **Creating is the + floating action**, opening a sheet of the ways to create (new, import, from the Public library).
 - **One accent per screen:** the honey fill is the primary action alone; the selection and states have their own
