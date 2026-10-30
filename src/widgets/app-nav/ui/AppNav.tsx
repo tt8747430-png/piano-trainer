@@ -206,11 +206,16 @@ export function AppNav() {
     ],
     { scope: 'app' },
   )
+  // A phone's tab bar is the places' own (memory-palaces'): on what a place opens it steps away, Back
+  // the way out, and the screen has the whole height.
+  const pathname = useRouterState({ select: (state) => state.location.pathname })
+  const away = !PLACES.some(({ to }) => to === pathname)
   return (
     <nav
       aria-label={t('nav.label')}
       data-slot="app-nav"
       data-sidebar={sidebar}
+      data-away={away ? '' : undefined}
       className="group/nav fixed inset-x-0 bottom-0 z-30 print:hidden border-t border-border bg-card pb-safe landscape-phone:inset-y-0 landscape-phone:right-auto landscape-phone:flex landscape-phone:w-rail landscape-phone:flex-col landscape-phone:justify-center landscape-phone:border-t-0 landscape-phone:border-r landscape-phone:pb-0 landscape-phone:pl-safe-left lg:inset-y-0 lg:right-auto lg:flex lg:w-64 lg:flex-col lg:border-t-0 lg:border-r lg:pb-0 lg:data-[sidebar=collapsed]:w-18"
     >
       <div className="hidden h-20 shrink-0 items-center gap-2 px-3 lg:flex lg:group-data-[sidebar=collapsed]/nav:justify-center">
