@@ -61,8 +61,9 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    const strip = await screen.findByRole('group', { name: 'Draft of the original' })
-    expect(within(strip).getByText('Original · not changed')).toBeInTheDocument()
+    await screen.findByRole('button', { name: 'The draft’s menu' })
+    const strip = document.body
+    expect(within(strip).getByText('Published', { selector: 'span' })).toBeInTheDocument()
     expect(within(strip).getByRole('button', { name: 'Publish' })).toBeDisabled()
 
     await writeChord(user, 'Dm7')
@@ -90,7 +91,8 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    const strip = await screen.findByRole('group', { name: 'Draft of the original' })
+    await screen.findByRole('button', { name: 'The draft’s menu' })
+    const strip = document.body
     expect(within(strip).getByText('Draft · not published')).toBeInTheDocument()
 
     await user.click(within(strip).getByRole('button', { name: 'The draft’s menu' }))
@@ -100,11 +102,7 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
     await user.click(within(asked).getByRole('button', { name: 'Discard the draft' }))
     expect(await screen.findByText('Draft discarded')).toBeInTheDocument()
     await waitFor(() =>
-      expect(
-        within(screen.getByRole('group', { name: 'Draft of the original' })).getByText(
-          'Original · not changed',
-        ),
-      ).toBeInTheDocument(),
+      expect(screen.getByText('Published', { selector: 'span' })).toBeInTheDocument(),
     )
     expect(await content.draft('piece', SONG.id)).toEqual({ ok: true, value: null })
   })
@@ -121,7 +119,8 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    const strip = await screen.findByRole('group', { name: 'Draft of the original' })
+    await screen.findByRole('button', { name: 'The draft’s menu' })
+    const strip = document.body
     await user.click(within(strip).getByRole('button', { name: 'The draft’s menu' }))
     await user.click(await screen.findByRole('button', { name: 'Versions' }))
     const versions = await screen.findByRole('alertdialog')

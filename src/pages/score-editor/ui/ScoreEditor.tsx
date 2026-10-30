@@ -60,16 +60,19 @@ const SHEET_EDGES = 'mx-[calc(-1*max(var(--gutter),env(safe-area-inset-left)))]'
  * transport floats over the sheet's foot, the Player's in shape and place (ADR 0115), stepping aside
  * while the music is read; the sheet has room to scroll its last line above it. While a take records,
  * its strip stands where the transport was. What the music's owner says of it (an editor's draft of
- * a song's original, its strip) stands over the sheet, in the column's head (`head`).
+ * a song's original, where it stands) stands over the sheet, in the column's head (`head`).
  */
 export function ScoreEditor({
   target,
   bar,
   head,
+  barEnd,
 }: {
   target: EditorTarget
   bar?: number | undefined
   head?: ReactNode
+  /** What the music's owner adds at the bar's end: an editor's draft's menu and Publish. */
+  barEnd?: ReactNode
 }) {
   const { t } = useTranslation('editor')
   const editor = useScoreEditor(target, bar)
@@ -156,7 +159,16 @@ export function ScoreEditor({
       {/* The Player's frame (ADR 0115): its bar's two groups, its tools row, the work and the keys
           in the Player's places, so the bar and the keys stand still as Practise · Edit switches. */}
       <div data-keys={dock} className={SCORE_SCREEN}>
-        <ScoreBar lead={<EditorLead />} actions={<EditorActions />} tools={<EditorToolsRow />} />
+        <ScoreBar
+          lead={<EditorLead />}
+          actions={
+            <>
+              <EditorActions />
+              {barEnd}
+            </>
+          }
+          tools={<EditorToolsRow />}
+        />
         {/* Where the caret is, a screen reader's alone, in the Player's status line's place. */}
         <PlayerArea area="status">{idle ? <CaretLine /> : null}</PlayerArea>
         <div

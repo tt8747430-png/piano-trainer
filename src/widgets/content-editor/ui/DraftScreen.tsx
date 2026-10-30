@@ -1,6 +1,6 @@
 import { Fragment, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { DraftStrip, type ContentDraft } from '@/features/edit-original'
+import { DraftActions, DraftStatus, type ContentDraft } from '@/features/edit-original'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
@@ -23,9 +23,9 @@ export function NotOpen({ line, children }: { line: string; children?: ReactNode
 }
 
 /**
- * An editor's screen over a built-in item's draft (ADR 0116): its title and Back, the draft's strip
- * in the bar once it is open, and the form (`children`, given the draft as it opened). Until then,
- * why not: opening, offline or failed with Try again, or, to anyone but an editor, that only an
+ * An editor's screen over a built-in item's draft (ADR 0116): its title and Back; once the draft is
+ * open, its Publish and menu at the bar's end and where it stands under the title (round 21); and the
+ * form (`children`, given the draft as it opened). Until then, why not: opening, offline or failed with Try again, or, to anyone but an editor, that only an
  * editor edits it, with the way back.
  */
 export function DraftScreen<T>({
@@ -36,6 +36,7 @@ export function DraftScreen<T>({
   backTo,
   editorsOnly,
   unreadable,
+  bar,
   children,
 }: {
   draft: ContentDraft<T>
@@ -51,27 +52,36 @@ export function DraftScreen<T>({
   editorsOnly: string
   /** What is said where a publish is refused for a draft that does not read. */
   unreadable: string
+  /** What else the bar holds beside the status: the language the document is written in. */
+  bar?: ReactNode
   children: (initial: T) => ReactNode
 }) {
   const { t } = useTranslation('editor')
   const { account } = useAccount()
   const { load } = draft
   const editor = editsContent(account)
+  const open = editor && load.state === 'ready'
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 pb-8">
       <ScreenHeader
         title={heading}
         back={back}
-        // The strip is the bar's second row: beside the title it would leave a phone no room for it.
+        // Publish and the draft's menu at the bar's end; where the draft stands, small, under the title.
+        actions={
+          open ? (
+            <DraftActions
+              draft={draft}
+              title={title}
+              unreadable={unreadable}
+              onReset={draft.reopen}
+            />
+          ) : undefined
+        }
         tabs={
-          editor && load.state === 'ready' ? (
-            <div className="flex justify-end pb-2 *:min-w-0">
-              <DraftStrip
-                draft={draft}
-                title={title}
-                unreadable={unreadable}
-                onReset={draft.reopen}
-              />
+          open ? (
+            <div className="flex min-h-9 items-center gap-2 pb-1.5 pl-13">
+              <DraftStatus draft={draft} className="flex-1" />
+              {bar}
             </div>
           ) : undefined
         }

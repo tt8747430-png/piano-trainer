@@ -22,7 +22,7 @@ const editing = () =>
   })
 
 async function publish(user: ReturnType<typeof userEvent.setup>) {
-  const strip = screen.getByRole('group', { name: 'Draft of the original' })
+  const strip = document.body
   await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
   await user.click(within(strip).getByRole('button', { name: 'Publish' }))
   await user.click(

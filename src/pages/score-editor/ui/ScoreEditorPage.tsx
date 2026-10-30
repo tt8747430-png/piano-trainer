@@ -11,7 +11,7 @@ import {
   usePiecesStoreApi,
   type ChartPiece,
 } from '@/entities/piece'
-import { DraftStrip, useMadeSong, useOriginalDraft } from '@/features/edit-original'
+import { DraftActions, DraftStatus, useMadeSong, useOriginalDraft } from '@/features/edit-original'
 import { useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, NotFound } from '@/shared/ui'
@@ -88,15 +88,19 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
       target={target}
       bar={bar}
       head={
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-1">
           <EditWhat original />
-          <DraftStrip
-            draft={draft}
-            title={entryTitles(piece, locale).primary}
-            unreadable={t('original.unreadable')}
-            onReset={draft.reopen}
-          />
+          <DraftStatus draft={draft} />
         </div>
+      }
+      barEnd={
+        <DraftActions
+          tool
+          draft={draft}
+          title={entryTitles(piece, locale).primary}
+          unreadable={t('original.unreadable')}
+          onReset={draft.reopen}
+        />
       }
     />
   )
