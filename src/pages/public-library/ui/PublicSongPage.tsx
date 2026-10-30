@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { Flag, Plus } from 'lucide-react'
+import { CloudOff, Flag, Plus, SearchX, TriangleAlert } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -25,9 +25,10 @@ import {
   RoundButton,
   ScreenHeader,
 } from '@/shared/ui'
-import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { SongPreview } from '@/widgets/song-preview'
+import { Byline, FactChips, ReadingItem } from './PublicItemParts'
 import { ReportDialog } from './ReportDialog'
+import { Said } from './Said'
 
 type Reading =
   | { readonly kind: 'reading' }
@@ -37,7 +38,8 @@ type Reading =
   | { readonly kind: 'pattern'; readonly entry: PublicEntry; readonly pattern: SharedPattern }
 
 /**
- * A song or a pattern from the Public library (ADR 0116): its title and author; a song's chart to hear
+ * A song or a pattern from the Public library (ADR 0116), as a song's page reads: its title in the
+ * bar, who published it and how often it is saved, its facts a line of chips; a song's chart to hear
  * on the keys, a pattern's figure for each hand; Save to my songs or my patterns (a copy of the
  * learner's own, opened at once to play; counted once where they are signed in), and Report.
  */
@@ -108,7 +110,7 @@ export function PublicSongPage() {
         ? reading.pattern.name
         : t('public.title')
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5">
       <ScreenHeader
         title={title}
         back={<BackButton fallback={{ to: '/songs/public' }} />}
@@ -123,15 +125,10 @@ export function PublicSongPage() {
         }
       />
       {reading.kind === 'reading' ? (
-        <p role="status" className="text-muted-foreground">
-          {t('shared.reading')}
-        </p>
+        <ReadingItem label={t('shared.reading')} />
       ) : reading.kind === 'song' ? (
         <>
-          <p className="-mt-4 text-muted-foreground">
-            {t('public.by', { name: reading.entry.authorName })} ·{' '}
-            {t('public.saves', { count: reading.entry.saves })}
-          </p>
+          <Byline entry={reading.entry} />
           <SongPreview song={reading.song} />
           <FloatingActions>
             <Fab
@@ -146,20 +143,19 @@ export function PublicSongPage() {
         </>
       ) : reading.kind === 'pattern' ? (
         <>
-          <p className="-mt-4 text-muted-foreground">
-            {t('public.by', { name: reading.entry.authorName })} ·{' '}
-            {t('public.saves', { count: reading.entry.saves })}
-          </p>
-          <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 card p-4">
-            <dt className="text-muted-foreground">{t('public.rightHand')}</dt>
-            <dd className="font-medium">
-              {localText(RIGHT_FIGURES[reading.pattern.rh].name, locale)}
-            </dd>
-            <dt className="text-muted-foreground">{t('public.leftHand')}</dt>
-            <dd className="font-medium">
-              {localText(LEFT_FIGURES[reading.pattern.lh].name, locale)}
-            </dd>
-          </dl>
+          <Byline entry={reading.entry} />
+          <FactChips
+            facts={[
+              {
+                name: t('public.rightHand'),
+                value: localText(RIGHT_FIGURES[reading.pattern.rh].name, locale),
+              },
+              {
+                name: t('public.leftHand'),
+                value: localText(LEFT_FIGURES[reading.pattern.lh].name, locale),
+              },
+            ]}
+          />
           <FloatingActions>
             <Fab
               label={t('public.savePattern')}
@@ -172,22 +168,28 @@ export function PublicSongPage() {
           <ReportDialog itemId={itemId} open={reporting} onOpenChange={setReporting} />
         </>
       ) : (
-        <Empty>
-          <EmptyHeader>
-            <EmptyTitle>
-              {reading.kind === 'gone'
-                ? t('public.gone')
-                : reading.reason === 'offline'
-                  ? t('public.offline')
-                  : t('public.failed')}
-            </EmptyTitle>
-          </EmptyHeader>
-          <EmptyContent>
-            <ButtonLink variant="outline" render={<Link to="/songs/public" />}>
+        <Said
+          icon={
+            reading.kind === 'gone'
+              ? SearchX
+              : reading.reason === 'offline'
+                ? CloudOff
+                : TriangleAlert
+          }
+          paint="sand"
+          title={
+            reading.kind === 'gone'
+              ? t('public.gone')
+              : reading.reason === 'offline'
+                ? t('public.offline')
+                : t('public.failed')
+          }
+          action={
+            <ButtonLink variant="soft" render={<Link to="/songs/public" />}>
               {t('public.title')}
             </ButtonLink>
-          </EmptyContent>
-        </Empty>
+          }
+        />
       )}
     </div>
   )

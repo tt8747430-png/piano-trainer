@@ -30,7 +30,10 @@ describe('A shared song', () => {
     const data = await linkOf(SONG)
     const { router, piecesStore } = await renderApp(`/songs/shared?song=${data}`)
     expect(await screen.findByRole('heading', { level: 1, name: 'Morning' })).toBeInTheDocument()
-    expect(screen.getByText('G · 3/4 · 84 BPM')).toBeInTheDocument()
+    // Its facts as the song page's, a line of chips.
+    expect(screen.getByText('Key').nextElementSibling).toHaveTextContent('G')
+    expect(screen.getByText('Time').nextElementSibling).toHaveTextContent('3/4')
+    expect(screen.getByText('Tempo').nextElementSibling).toHaveTextContent('84 BPM')
     expect(screen.getByRole('button', { name: /^Bar 1: G$/ })).toBeInTheDocument()
     expect(piecesStore.getState().songs).toEqual([])
     await user.click(screen.getByRole('button', { name: 'Add to the library' }))
@@ -41,7 +44,7 @@ describe('A shared song', () => {
   it('writes its key as the song page does, a flat as a flat', async () => {
     const data = await linkOf({ ...SONG, music: { ...SONG.music, key: 'Db' } })
     await renderApp(`/songs/shared?song=${data}`)
-    expect(await screen.findByText('D♭ · 3/4 · 84 BPM')).toBeInTheDocument()
+    expect((await screen.findByText('Key')).nextElementSibling).toHaveTextContent('D♭')
   })
 
   it('floats Add, and plays a tapped bar on its keys before it is added', async () => {
