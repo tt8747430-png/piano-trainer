@@ -11,9 +11,19 @@ URL. The owner asked for less jumping between pages, and then for a metronome to
 
 ## Decision
 
-- **Three places**: Learn (ADR 0053), Songs (ADR 0106) and Practice. A bar docked at the foot on a phone, a rail down
-  the left on a phone on its side, a sidebar from 1024px that collapses to its icons, Search and Settings at its foot.
-  Alt with 1–3 goes to them. Every screen below a place has Back.
+- **Three places and the Profile**: Learn (ADR 0053), Songs (ADR 0106) and Practice, then the Profile as the fourth
+  tab (memory-palaces', Noji's), its icon the learner's initial. A bar docked at the foot on a phone, a rail down the
+  left on a phone on its side, a sidebar from 1024px that collapses to its icons, Search at its foot. Alt with 1–4
+  goes to them. A place's bar on a phone has Search. Settings opens from the Profile (the gear in its bar and a row
+  under its hero); the Profile's tab stays current under Settings and the account pages. Every screen below a place
+  has Back.
+- **The Profile** is the learner at a glance: their name as its title, their initial, email (or a guest's Sign in),
+  one row of three figures (days in a row, days practised, songs played); rows to Settings and the Account; Activity
+  (the month's calendar, whether today kept the run in its header); the rest of the record as a short list; badges.
+- **Settings** is one grouped list: the account card (the learner by their initial, then Sync and data), General,
+  Playing, Help, and an admin's Admin area. **The Account** reads as an edit profile: the initial; Profile (the name,
+  Save once changed); Sign-in (the email, Change password); Sign out and Delete account… as rows, each asking in a
+  dialog that says what follows.
 - **Practice lists its pages and remembers nothing**, in three headed groups as the reference app and memory-palaces
   list theirs: **Theory** (Chords, Scales and keys, Intervals, Progressions: the things a page shows on the keys),
   **Playing** (Accompaniment, the Chord finder: what the hands play) and **Training** (Exercises, Quiz, Metronome).
@@ -95,3 +105,5 @@ A link to a tool opens the page that holds it, on what it names. A new page is a
   Chord finder's keys; the key size's caption (2026-10-28), from the reference app's tool screens.
 - r14 — Chords' voicing and fingering; interval songs; the Key view's parallel, neighbours, other spelling and degrees; the bar trainer and tempo
   words; the Italian terms (2026-10-28), from Musicca, piano.org and Vita Piano.
+- r24 — The Profile a tab of its own; its page, Settings' account card and the Account rebuilt as grouped rows; the
+  week strip, the six-figure grid and Recently practised gone from the Profile (2026-10-30), from memory-palaces.

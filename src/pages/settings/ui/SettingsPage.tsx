@@ -11,9 +11,9 @@ import {
   Piano,
   ScrollText,
   ShieldCheck,
+  ShieldUser,
   SunMoon,
   Tags,
-  UserRound,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -31,6 +31,7 @@ import { APP_BUILD } from '@/shared/config'
 import { LOCALES } from '@/shared/i18n'
 import { useAccount, useSync } from '@/shared/lib/account'
 import {
+  Avatar,
   BackButton,
   ChoiceRow,
   Dropdown,
@@ -46,15 +47,15 @@ import {
 const PLACE_ICON = { left: ArrowDownLeft, center: ArrowDown, right: ArrowDownRight } as const
 
 /**
- * Settings, one grouped list as an app's settings read (memory-palaces'): the account first; then
- * General, its choices made in place (the language, the theme, where the floating buttons stand and
- * whether they say their names); Playing (the MIDI keyboard, the keyboard and recording); Sync and
- * data; Help (How to use, Privacy, Terms) and the app's version; and for an admin, the Admin area.
+ * Settings, one grouped list as an app's settings read (memory-palaces', iOS's): the account card
+ * first, the learner and their Sync and data (as an Apple ID's card holds iCloud); then General, its
+ * choices made in place (the language, the theme, where the floating buttons stand and whether they
+ * say their names); Playing (the MIDI keyboard, the keyboard and recording); Help (How to use,
+ * Privacy, Terms) and the app's version; and for an admin, the Admin area.
  */
 export function SettingsPage() {
   const { t } = useTranslation(['settings', 'admin'])
   const { account } = useAccount()
-  const { status } = useSync()
   const settings = useSettingsStoreApi()
   const locale = useSettings(selectLocale)
   const theme = useSettings(selectTheme)
@@ -124,15 +125,6 @@ export function SettingsPage() {
             render={<Link to="/settings/playing" />}
           />
         </SettingsGroup>
-        <SettingsGroup flush title={t('groups.data.label')}>
-          <RowLink
-            title={t('groups.data.label')}
-            icon={CloudUpload}
-            paint="grass"
-            value={account ? t(`sync.state.${status.state}`) : undefined}
-            render={<Link to="/settings/data" />}
-          />
-        </SettingsGroup>
         <SettingsGroup flush title={t('groups.help.label')}>
           <RowLink
             title={t('help.howToUse')}
@@ -156,7 +148,7 @@ export function SettingsPage() {
             className="flex min-h-16 items-center gap-3 py-2 pr-3 pl-2"
             title={t('about.madeWith')}
           >
-            <RowFace title={t('about.version')} icon={Info} paint="sand" value={APP_BUILD} />
+            <RowFace title={t('about.version')} icon={Info} paint="lilac" value={APP_BUILD} />
           </div>
         </SettingsGroup>
         {account?.role === 'admin' ? (
@@ -164,7 +156,7 @@ export function SettingsPage() {
             <RowLink
               title={t('admin:title')}
               detail={t('admin:line')}
-              icon={ShieldCheck}
+              icon={ShieldUser}
               paint="lilac"
               render={<Link to="/admin" />}
             />
@@ -175,30 +167,38 @@ export function SettingsPage() {
   )
 }
 
-/** Signed out, Sign in and why; signed in, the learner and where their sync stands. */
+/**
+ * The account card: signed out, Sign in and why; signed in, the learner by their initial, leading
+ * to their Account. Under it Sync and data, saying where the sync stands.
+ */
 function AccountCard() {
   const { t } = useTranslation('settings')
   const { account } = useAccount()
   const { status } = useSync()
   return (
-    <nav aria-label={t('account.label')} className="card p-1.5">
+    <nav aria-label={t('account.label')} className="flex flex-col card p-1.5">
       {account ? (
         <RowLink
           title={account.name || account.email}
-          detail={`${account.email} · ${t(`sync.state.${status.state}`)}`}
-          icon={UserRound}
-          paint="yellow"
+          detail={account.email}
+          mark={<Avatar name={account.name || account.email} size="row" />}
           render={<Link to="/settings/account" />}
         />
       ) : (
         <RowLink
           title={t('account.signIn')}
           detail={t('account.signInLine')}
-          icon={UserRound}
-          paint="yellow"
+          mark={<Avatar name={null} size="row" />}
           render={<Link to="/account/sign-in" />}
         />
       )}
+      <RowLink
+        title={t('groups.data.label')}
+        icon={CloudUpload}
+        paint="grass"
+        value={account ? t(`sync.state.${status.state}`) : undefined}
+        render={<Link to="/settings/data" />}
+      />
     </nav>
   )
 }

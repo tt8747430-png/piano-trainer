@@ -7,7 +7,7 @@ import { AccountScreen } from './AccountScreen'
 
 /**
  * Where the server's links come back (ADR 0116): Google's sign-in, an email confirmed, a password
- * reset. The code is exchanged once for a session; then Settings, or New password after a reset.
+ * reset. The code is exchanged once for a session; then the Profile, or New password after a reset.
  */
 export function AuthCallbackPage() {
   const search = useSearch({ from: '/shell/auth/callback' })
@@ -25,7 +25,7 @@ export function AuthCallbackPage() {
       if (!result.ok) setFailed(true)
       else
         void navigate({
-          to: next === 'reset' ? '/account/new-password' : '/settings',
+          to: next === 'reset' ? '/account/new-password' : '/profile',
           replace: true,
         })
     })

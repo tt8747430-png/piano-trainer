@@ -6,30 +6,50 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Search,
-  Settings,
   UserRound,
-  type LucideIcon,
 } from 'lucide-react'
+import type { ComponentType } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectSidebar, useSettings, useSettingsStoreApi } from '@/entities/settings'
 import { setSidebar } from '@/features/set-preference'
 import { OPEN_PLAINLY } from '@/shared/lib'
+import { useAccount } from '@/shared/lib/account'
 import { keyHint, useShortcutsPlatform, useShortcuts, type Combo } from '@/shared/lib/shortcuts'
+import { Avatar } from '@/shared/ui'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
 
 interface Place {
-  readonly to: '/' | '/songs' | '/practice' | '/search' | '/profile' | '/settings'
-  readonly label:
-    'nav.learn' | 'nav.songs' | 'nav.practice' | 'nav.search' | 'nav.profile' | 'nav.settings'
-  readonly icon: LucideIcon
+  readonly to: '/' | '/songs' | '/practice' | '/profile' | '/search'
+  readonly label: 'nav.learn' | 'nav.songs' | 'nav.practice' | 'nav.profile' | 'nav.search'
+  readonly icon: ComponentType<{ className?: string; 'aria-hidden'?: boolean }>
   readonly exact: boolean
-  /** Where else the place is the current one: Learn's lessons and courses (ADR 0053). */
-  readonly also?: readonly ('/lessons' | '/courses')[]
+  /**
+   * Where else the place is the current one: Learn's lessons and courses (ADR 0053); the Profile's
+   * Settings and account pages, opened from it.
+   */
+  readonly also?: readonly ('/lessons' | '/courses' | '/settings' | '/account')[]
   /** The place's shortcut: Alt and its number. */
   readonly key?: Combo
 }
 
-/** The three places (ADR 0053), each opened as it was left. The bar is monochrome: the screens above it carry the colour. */
+/**
+ * The learner's picture as the Profile's tab: their initial signed in, the figure of a person for a
+ * guest (memory-palaces', Noji's).
+ */
+function ProfileIcon({ className }: { className?: string }) {
+  const { account } = useAccount()
+  return account ? (
+    <Avatar name={account.name || account.email} size="icon" />
+  ) : (
+    <UserRound aria-hidden className={className} />
+  )
+}
+
+/**
+ * The four places (ADR 0053), each opened as it was left: Learn, Songs, Practice and the Profile
+ * (Settings opens from it). The bar is monochrome but for the learner's picture: the screens above
+ * it carry the colour.
+ */
 const PLACES: readonly Place[] = [
   {
     to: '/',
@@ -53,12 +73,20 @@ const PLACES: readonly Place[] = [
     exact: false,
     key: { code: 'Digit3', alt: true },
   },
+  {
+    to: '/profile',
+    label: 'nav.profile',
+    icon: ProfileIcon,
+    exact: false,
+    also: ['/settings', '/account'],
+    key: { code: 'Digit4', alt: true },
+  },
 ]
 /** The sidebar, open or collapsed: the platform's modifier and B. */
 const SIDEBAR_KEY: Combo = { code: 'KeyB', mod: true }
 /**
- * What sits at the sidebar's foot on a laptop, and in Learn's bar on a phone: Search, on the
- * platform's modifier and K from anywhere, the Profile, and Settings.
+ * What sits at the sidebar's foot on a laptop, and in a place's bar on a phone: Search, on the
+ * platform's modifier and K from anywhere.
  */
 const FOOT: readonly Place[] = [
   {
@@ -68,8 +96,6 @@ const FOOT: readonly Place[] = [
     exact: false,
     key: { code: 'KeyK', mod: true },
   },
-  { to: '/profile', label: 'nav.profile', icon: UserRound, exact: false },
-  { to: '/settings', label: 'nav.settings', icon: Settings, exact: false },
 ]
 
 const PLACE_LINK =
@@ -89,7 +115,7 @@ function PlaceLink({
   const { t } = useTranslation('common')
   const pathname = useRouterState({ select: (state) => state.location.pathname })
   // The place is current under its other prefix too, as the router marks its own address.
-  const current = also?.some((prefix) => pathname.startsWith(`${prefix}/`))
+  const current = also?.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))
     ? ({ 'data-status': 'active', 'aria-current': 'page' } as const)
     : {}
   const content = (
@@ -134,7 +160,7 @@ function PlaceLink({
 
 /**
  * The main navigation: a bar docked along the bottom on phones; from 1024px a sidebar that collapses
- * to its icons and remembers it, with Search and Settings at its foot. From the computer's keys, Alt
+ * to its icons and remembers it, with Search at its foot. From the computer's keys, Alt
  * and a place's number goes there, the platform's modifier with K opens Search, and with B collapses
  * or opens the sidebar.
  */

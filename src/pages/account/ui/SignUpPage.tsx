@@ -7,7 +7,7 @@ import { FormField } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { emailProblem, passwordProblem } from '../model/fields'
 import { useAuthSubmit } from '../model/use-auth-submit'
-import { AccountScreen, OfflineLine, ProblemLine } from './AccountScreen'
+import { AccountScreen, FieldGroup, OfflineLine, ProblemLine } from './AccountScreen'
 import { SocialButtons } from './SocialButtons'
 
 type Field = 'name' | 'email' | 'password'
@@ -20,7 +20,7 @@ export function SignUpPage() {
   const { t } = useTranslation('account')
   const { auth } = useAccount()
   const online = useOnline()
-  const back = useGoBack({ to: '/settings' })
+  const back = useGoBack({ to: '/profile' })
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -55,31 +55,33 @@ export function SignUpPage() {
       <OfflineLine online={online} />
       <SocialButtons online={online} onProblem={setProblem} />
       <form noValidate onSubmit={(event) => void submit(event)} className="flex flex-col gap-4">
-        <FormField
-          label={t('name')}
-          autoComplete="name"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          error={invalid.name ? t('invalid.name') : undefined}
-        />
-        <FormField
-          label={t('email')}
-          type="email"
-          autoComplete="email"
-          inputMode="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          error={invalid.email ? t('invalid.email') : undefined}
-        />
-        <FormField
-          label={t('password')}
-          info={t('signUp.passwordInfo')}
-          type="password"
-          autoComplete="new-password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          error={invalid.password ? t('invalid.password') : undefined}
-        />
+        <FieldGroup>
+          <FormField
+            label={t('name')}
+            autoComplete="name"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            error={invalid.name ? t('invalid.name') : undefined}
+          />
+          <FormField
+            label={t('email')}
+            type="email"
+            autoComplete="email"
+            inputMode="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            error={invalid.email ? t('invalid.email') : undefined}
+          />
+          <FormField
+            label={t('password')}
+            info={t('signUp.passwordInfo')}
+            type="password"
+            autoComplete="new-password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            error={invalid.password ? t('invalid.password') : undefined}
+          />
+        </FieldGroup>
         <ProblemLine problem={problem} />
         <Button type="submit" size="lg" disabled={!online || busy}>
           {t('signUp.submit')}

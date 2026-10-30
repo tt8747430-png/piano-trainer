@@ -24,6 +24,8 @@ export type RowFaceProps = {
   value?: string | undefined
   /** What it shows under its title and detail. */
   children?: ReactNode
+  /** A picture of its own in its tile's place, the tile's size (the learner's `Avatar`). */
+  mark?: ReactNode
 } & RowTile
 
 /**
@@ -42,10 +44,12 @@ export function RowFace({
   trailing,
   value,
   children,
+  mark,
   end,
 }: RowFaceProps & { end?: ReactNode }) {
   return (
     <>
+      {mark}
       {paint ? (
         Icon ? (
           <TileMark icon={Icon} paint={paint} />

@@ -17,7 +17,7 @@ describe('Sign in', () => {
     await user.type(await screen.findByLabelText('Email'), ANA.email)
     await user.type(screen.getByLabelText('Password'), ANA.password)
     await user.click(screen.getByRole('button', { name: 'Sign in' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/settings'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/profile'))
     expect(await auth.current()).toMatchObject({ email: ANA.email, name: 'Ana' })
   })
 
@@ -90,7 +90,7 @@ describe('Create an account', () => {
     await user.type(screen.getByLabelText('Email'), ANA.email)
     await user.type(screen.getByLabelText('Password'), ANA.password)
     await user.click(screen.getByRole('button', { name: 'Create account' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/settings'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/profile'))
     expect(await auth.current()).toMatchObject({ name: 'Ana' })
   })
 
@@ -148,12 +148,12 @@ describe('Forgotten password', () => {
 })
 
 describe('The sign-in callback', () => {
-  it('finishes the sign-in the link brought back, and goes to Settings', async () => {
+  it('finishes the sign-in the link brought back, and goes to the Profile', async () => {
     const auth = createFakeAuth({ accounts: [ANA] })
     const complete = vi.spyOn(auth, 'completeRedirect')
     await auth.signIn(ANA.email, ANA.password)
     const { router } = await renderApp('/auth/callback?code=abc', { auth })
-    await waitFor(() => expect(router.state.location.pathname).toBe('/settings'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/profile'))
     expect(complete).toHaveBeenCalledTimes(1)
     expect(complete).toHaveBeenCalledWith('abc')
   })

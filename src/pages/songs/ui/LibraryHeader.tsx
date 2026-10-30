@@ -19,7 +19,6 @@ import { editsContent, useAccount } from '@/shared/lib/account'
 import { ActionMenu, RoundButton, RoundLink, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import type { LibraryPage } from '../model/use-library-page'
-import { ProfileAction } from '@/widgets/app-nav'
 import { ArchiveButton } from './ArchiveButton'
 
 /**
@@ -92,7 +91,6 @@ export function LibraryHeader({
             onClick={() => page.select.start()}
           />
           {folder ? null : <ArchiveButton />}
-          {folder ? null : <ProfileAction />}
           {folder ? (
             <ActionMenu
               label={t('folder.more', { name })}

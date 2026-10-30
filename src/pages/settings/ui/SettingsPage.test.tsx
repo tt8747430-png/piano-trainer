@@ -9,7 +9,7 @@ describe('Settings', () => {
     const user = userEvent.setup()
     const { router } = await renderApp('/profile')
     await user.click(
-      within(await screen.findByRole('main')).getByRole('link', { name: 'Settings' }),
+      within(await screen.findByRole('main')).getAllByRole('link', { name: 'Settings' })[0]!,
     )
     await user.click(await screen.findByRole('button', { name: 'Back' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/profile'))
@@ -22,15 +22,16 @@ describe('Settings', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/profile'))
   })
 
-  it('is one grouped list: the account, General, Playing, Sync and data, Help', async () => {
+  it('is one grouped list: the account card with Sync and data, General, Playing, Help', async () => {
     await renderApp('/settings')
-    expect(
-      within(await screen.findByRole('navigation', { name: 'Account' })).getByRole('link'),
-    ).toHaveTextContent(/Sign in\s*Keep your songs and progress on every device/)
+    const card = within(await screen.findByRole('navigation', { name: 'Account' }))
+    expect(card.getAllByRole('link').map((link) => link.textContent)).toEqual([
+      'Sign in Keep your songs and progress on every device',
+      'Sync and data',
+    ])
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
       'General',
       'Playing',
-      'Sync and data',
       'Help',
     ])
     expect(
@@ -39,9 +40,9 @@ describe('Settings', () => {
         .map((row) => row.getAttribute('href'))
         .filter((href) => href?.startsWith('/settings/') || href?.startsWith('/legal/')),
     ).toEqual([
+      '/settings/data',
       '/settings/midi',
       '/settings/playing',
-      '/settings/data',
       '/settings/how-to-use',
       '/legal/privacy',
       '/legal/terms',
