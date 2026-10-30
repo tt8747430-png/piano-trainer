@@ -393,7 +393,10 @@ every piece is shown in the Admin area's Components):
   red and alone. The primary action is never in the bar.
 - **Lists are grouped cards of rows** (`SettingsGroup`; `RowGroup` for a browsed list, one card in columns): a soft tile, the title, one detail line, then a
   value, a status pill or a chevron; a choice made in place is a `ChoiceRow`, a switch a `SwitchRow`.
-- **Creating is the + floating action**, opening a sheet of the ways to create (new, import, from the Public library).
+- **Creating is the + floating action**, opening a dial of the ways to add (New song, Record, Import, New folder).
+- **Every New … is one sheet** (`NewSheet`, round 25, after Flat's new score): the name first, then its few
+  properties as soft parts (`SheetPart`: a name, a line, the choice: drawn tiles, chips, a `Stepper`, the key
+  signature grid), one Create button pinned at the foot named for the act. Never a bare text field or a page.
 - **One accent per screen:** the honey fill is the primary action alone; the selection and states have their own
   colours.
 - **Feedback for every act:** pressed states, a toast that says what happened, skeletons while loading, an empty

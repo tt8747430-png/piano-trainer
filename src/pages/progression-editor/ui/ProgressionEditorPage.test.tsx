@@ -18,16 +18,13 @@ async function signedInAs(role: AccountRole) {
 describe('the progression editor (content as data)', () => {
   it('is in an editor’s Progressions bar, never a learner’s', async () => {
     await renderApp('/practice/progressions', { auth: await signedInAs('editor') })
-    expect(await screen.findByRole('link', { name: 'New progression' })).toHaveAttribute(
-      'href',
-      '/practice/progressions/new',
-    )
+    expect(await screen.findByRole('button', { name: 'New progression' })).toBeInTheDocument()
   })
 
   it('is not in a learner’s', async () => {
     await renderApp('/practice/progressions', { auth: await signedInAs('learner') })
     await screen.findByRole('heading', { level: 1 })
-    expect(screen.queryByRole('link', { name: 'New progression' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'New progression' })).not.toBeInTheDocument()
   })
 
   it('edits a progression’s words and lines, and publishes it', async () => {
@@ -55,12 +52,14 @@ describe('the progression editor (content as data)', () => {
   it('makes a new progression, unpublished, and opens its editor', async () => {
     const user = userEvent.setup()
     const content = createFakeContentEditing()
-    const { router } = await renderApp('/practice/progressions/new', {
+    const { router } = await renderApp('/practice/progressions', {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await user.type(await screen.findByRole('textbox', { name: 'Name' }), 'Gospel walk')
-    await user.click(screen.getByRole('button', { name: 'Create progression' }))
+    await user.click(await screen.findByRole('button', { name: 'New progression' }))
+    const sheet = await screen.findByRole('dialog', { name: 'New progression' })
+    await user.type(within(sheet).getByRole('textbox', { name: 'Name' }), 'Gospel walk')
+    await user.click(within(sheet).getByRole('button', { name: 'Create progression' }))
     await waitFor(() =>
       expect(router.state.location.pathname).toBe('/practice/progressions/gospel-walk/edit'),
     )

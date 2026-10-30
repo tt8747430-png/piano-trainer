@@ -409,11 +409,6 @@ const progressionEditRoute = createRoute({
   path: '/practice/progressions/$progressionId/edit',
   component: lazyRouteComponent(explorerScreens, 'ProgressionEditorPage'),
 })
-const newProgressionRoute = createRoute({
-  getParentRoute: () => shellRoute,
-  path: '/practice/progressions/new',
-  component: lazyRouteComponent(explorerScreens, 'NewProgressionPage'),
-})
 
 // The Chord finder (ADR 0052): a tool of its own, any chord played or tapped named, spelled and written.
 const chordFinderRoute = createRoute({
@@ -697,7 +692,6 @@ const routeTree = rootRoute.addChildren([
     intervalsRoute,
     progressionsRoute,
     progressionEditRoute,
-    newProgressionRoute,
     accompanimentRoute,
     newPatternRoute,
     patternRoute,
