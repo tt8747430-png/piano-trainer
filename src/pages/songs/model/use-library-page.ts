@@ -47,6 +47,7 @@ export type Pending =
   | { readonly kind: 'delete-chosen' }
   | { readonly kind: 'new-song'; readonly builtIn?: SongCollectionId }
   | { readonly kind: 'move-in' }
+  | { readonly kind: 'export'; readonly song: PieceId }
 
 /**
  * The library's page's acts (Mindscape's `use-library`), at Home (`folder` null) or in a folder:

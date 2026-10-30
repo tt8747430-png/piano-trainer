@@ -302,6 +302,17 @@ export const songs: LocaleResources['songs'] = {
     none: 'В этой ссылке нет песни: возможно, она обрезана.',
     toSongs: 'К песням',
   },
+  export: {
+    action: 'Экспорт…',
+    title: 'Экспорт',
+    musicXml: 'MusicXML',
+    musicXmlLine: 'Ноты для MuseScore, Sibelius, Finale или Dorico',
+    midi: 'MIDI',
+    midiLine: 'Музыка, как она звучит, для DAW или клавиш',
+    share: 'Ссылка',
+    shareOwn: 'Ссылка с песней внутри: кто её откроет, сможет добавить песню себе',
+    sharePiece: 'Ссылка на песню в приложении, в той тональности, в которой вы играете',
+  },
   import: {
     action: 'Импорт',
     reading: 'Читаем {{name}}…',

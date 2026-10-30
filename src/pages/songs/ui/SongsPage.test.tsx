@@ -344,6 +344,27 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     expect(screen.queryByRole('button', { name: /Public library/ })).not.toBeInTheDocument()
   })
 
+  it('exports a song from its row’s More: one sheet of MusicXML, MIDI and its link', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs', { storage: saved({ pieces: { songs: [SONG], nextSong: 2 } }) })
+    await rowAction(user, 'Morning', 'Export…')
+    const sheet = await screen.findByRole('dialog', { name: 'Export' })
+    expect(
+      within(sheet)
+        .getAllByRole('button')
+        .flatMap((row) => (row.textContent ? [row.textContent] : [])),
+    ).toEqual([
+      'MusicXML The score, for MuseScore, Sibelius, Finale or Dorico',
+      'MIDI The music as played, for a DAW or a keyboard',
+      'Share link A link that carries the song: whoever opens it can add it',
+    ])
+    await user.click(within(sheet).getByRole('button', { name: /^Share link/ }))
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog', { name: 'Export' })).not.toBeInTheDocument(),
+    )
+    expect(new URL(await navigator.clipboard.readText()).pathname).toBe('/songs/shared')
+  })
+
   it('imports a MIDI file from New as the learner’s song, opening its page (ADR 0107)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/songs')

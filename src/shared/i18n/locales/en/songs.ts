@@ -310,6 +310,18 @@ export const songs = {
     none: 'This link holds no song: it may be cut short.',
     toSongs: 'To Songs',
   },
+  // Export… (ADR 0107): a song's ways out, each with what it is for.
+  export: {
+    action: 'Export…',
+    title: 'Export',
+    musicXml: 'MusicXML',
+    musicXmlLine: 'The score, for MuseScore, Sibelius, Finale or Dorico',
+    midi: 'MIDI',
+    midiLine: 'The music as played, for a DAW or a keyboard',
+    share: 'Share link',
+    shareOwn: 'A link that carries the song: whoever opens it can add it',
+    sharePiece: 'A link to the song in the app, in the key you play it',
+  },
   // A song read from a MusicXML or MIDI file (ADR 0107): New's Import, or a file dropped on the
   // library; what the file holds that a song can't, listed after.
   import: {
