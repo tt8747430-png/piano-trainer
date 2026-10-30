@@ -6,8 +6,8 @@ import { ButtonLink, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 
-/** A screen saying why the form is not open yet: its line, and what to do. */
-function NotOpen({ line, children }: { line: string; children?: ReactNode }) {
+/** A screen saying why the form is not open (yet): its line, and what to do. */
+export function NotOpen({ line, children }: { line: string; children?: ReactNode }) {
   return (
     <Empty className="min-h-80">
       <EmptyHeader>
@@ -62,14 +62,17 @@ export function DraftScreen<T>({
       <ScreenHeader
         title={heading}
         back={back}
-        actions={
+        // The strip is the bar's second row: beside the title it would leave a phone no room for it.
+        tabs={
           editor && load.state === 'ready' ? (
-            <DraftStrip
-              draft={draft}
-              title={title}
-              unreadable={unreadable}
-              onReset={draft.reopen}
-            />
+            <div className="flex justify-end pb-2 *:min-w-0">
+              <DraftStrip
+                draft={draft}
+                title={title}
+                unreadable={unreadable}
+                onReset={draft.reopen}
+              />
+            </div>
           ) : undefined
         }
       />

@@ -6,9 +6,7 @@ import { STAGES } from '@/entities/step'
 import { useAddLesson, useCourseDraft } from '@/features/edit-original'
 import { localText, useLocale } from '@/shared/i18n'
 import { Dropdown, InfoTip } from '@/shared/ui'
-import { DraftScreen } from '@/widgets/content-editor'
-import { AddByName, OrderList } from '@/widgets/content-editor'
-import { TextFields } from '@/widgets/content-editor'
+import { AddByName, DraftScreen, OrderList, TextFields } from '@/widgets/content-editor'
 
 /** The course's lessons in order: each one's editor, moved up or down, removed; a new one added. */
 function CourseLessons({
@@ -105,8 +103,9 @@ function CourseForm({
         />
         <fieldset className="flex flex-col gap-2">
           <legend className="mb-2 text-sm font-medium">{t('edit.course.where')}</legend>
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2">
             <Dropdown
+              className="sm:col-span-2"
               label={t('edit.course.shelf')}
               value={record.shelf ?? course.shelf}
               options={SHELVES.map((value) => ({ value, label: t(`shelves.${value}`) }))}

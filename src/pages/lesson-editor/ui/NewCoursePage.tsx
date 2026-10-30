@@ -8,6 +8,7 @@ import { useCreateCourse } from '@/features/edit-original'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, Dropdown, InfoTip, NameField, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { NotOpen } from '@/widgets/content-editor'
 
 /**
  * An editor's new course (ADR 0116): its name, shelf, level and length, then Create, which makes it
@@ -35,7 +36,7 @@ export function NewCoursePage() {
     await navigate({ to: '/courses/$courseId/edit', params: { courseId: made.value } })
   }
   return (
-    <div className="flex flex-col gap-6">
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 pb-8">
       <ScreenHeader
         title={t('learn:edit.course.new')}
         back={<BackButton fallback={{ to: '/', search: { view: 'courses', journey: '' } }} />}
@@ -44,15 +45,16 @@ export function NewCoursePage() {
         }
       />
       {editsContent(account) ? (
-        <form onSubmit={(event) => void submit(event)} className="flex max-w-xl flex-col gap-5">
+        <form onSubmit={(event) => void submit(event)} className="flex flex-col gap-5">
           <NameField
             label={t('learn:edit.course.name')}
             value={name}
             required
             onChange={(event) => setName(event.target.value)}
           />
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2">
             <Dropdown
+              className="sm:col-span-2"
               label={t('learn:edit.course.shelf')}
               value={shelf}
               options={SHELVES.map((value) => ({ value, label: t(`learn:shelves.${value}`) }))}
@@ -90,7 +92,7 @@ export function NewCoursePage() {
           ) : null}
         </form>
       ) : (
-        <p className="text-muted-foreground">{t('learn:edit.course.editorsOnly')}</p>
+        <NotOpen line={t('learn:edit.course.editorsOnly')} />
       )}
     </div>
   )

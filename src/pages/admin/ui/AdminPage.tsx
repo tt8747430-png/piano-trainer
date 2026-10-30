@@ -2,6 +2,7 @@ import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from '@/shared/lib/account'
 import { BackButton, NavTab, NavTabs, ScreenHeader } from '@/shared/ui'
+import { NotOpen } from '@/widgets/content-editor'
 import { ADMIN_TABS, type AdminTab } from '../model/admin-tab'
 import { AccountsTab } from './AccountsTab'
 import { ActivityTab } from './ActivityTab'
@@ -58,7 +59,7 @@ export function AdminPage() {
         }
       />
       <div className="mx-auto w-full max-w-3xl">
-        {account?.role === 'admin' ? <Tab /> : <p role="status">{t('notAdmin')}</p>}
+        {account?.role === 'admin' ? <Tab /> : <NotOpen line={t('notAdmin')} />}
       </div>
     </div>
   )
