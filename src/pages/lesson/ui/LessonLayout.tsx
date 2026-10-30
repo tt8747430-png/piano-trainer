@@ -1,5 +1,5 @@
 import { Link, type LinkProps } from '@tanstack/react-router'
-import { ArrowRight, ChevronsLeft, PencilLine } from 'lucide-react'
+import { ArrowRight, ChevronsLeft } from 'lucide-react'
 import { Fragment, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
@@ -9,7 +9,7 @@ import { LearnedButton, useLearned } from '@/features/mark-learned'
 import { recordSectionRead } from '@/features/record-reading'
 import { localText, useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { ButtonLink, RoundLink, ScreenHeader } from '@/shared/ui'
+import { ButtonLink, ScreenHeader } from '@/shared/ui'
 import { LessonView, type UpLink } from '@/widgets/lesson-view'
 
 /** A lesson either side of this one, or the way on past the last: a router `Link`, named. */
@@ -41,7 +41,7 @@ export function LessonLayout({
   place,
   back,
   track,
-  edit,
+  modes,
   after = [],
 }: {
   lesson: Lesson
@@ -52,8 +52,8 @@ export function LessonLayout({
   /** The screen's Back (`BackButton`). */
   back: ReactNode
   track: LessonTrack
-  /** A router `Link` to its lesson editor, an editor's. */
-  edit: ReactElement
+  /** Its Read · Edit switch, an editor's (`ReadEditSwitch`). */
+  modes: ReactNode
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
@@ -67,9 +67,7 @@ export function LessonLayout({
         back={back}
         actions={
           <>
-            {editsContent(account) ? (
-              <RoundLink label={t('edit.open')} icon={PencilLine} render={edit} />
-            ) : null}
+            {editsContent(account) ? modes : null}
             <LearnedButton step={step} round />
           </>
         }

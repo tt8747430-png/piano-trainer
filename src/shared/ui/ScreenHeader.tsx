@@ -19,6 +19,7 @@ export function ScreenHeader({
   actions,
   tabs,
   large = false,
+  titleOnPage = false,
 }: {
   /** The screen's name: its title and the page's. */
   title: string
@@ -29,6 +30,9 @@ export function ScreenHeader({
   tabs?: ReactNode
   /** A place's title, set larger in the same row. */
   large?: boolean
+  /** The page shows its title itself, large under the bar (a document in Edit): on a phone the bar
+   * keeps it for a screen reader alone and leaves its room to the bar's tools. */
+  titleOnPage?: boolean
 }) {
   const { shown, report, hold } = useScreenBar()
   const bar = useRef<HTMLElement>(null)
@@ -79,6 +83,7 @@ export function ScreenHeader({
             // on a phone where two lines say it all.
             'line-clamp-2 leading-tight text-balance wrap-break-word',
             large ? 'text-[1.375rem] sm:text-2xl' : 'text-lg sm:text-xl',
+            titleOnPage && 'max-sm:sr-only',
           )}
         >
           {title}

@@ -151,12 +151,15 @@ export function CourseEditor({
   course,
   back,
   toCourse,
+  modes,
 }: {
   course: Course
   /** The screen's Back (`BackButton`). */
   back: ReactNode
   /** A router `Link` to the course's page. */
   toCourse: ReactElement
+  /** Its Read · Edit switch, set to Edit. */
+  modes?: ReactNode
 }) {
   const { t } = useTranslation('learn')
   const shown = useLocale()
@@ -191,7 +194,9 @@ export function CourseEditor({
   return (
     <DraftScreen
       draft={draft}
-      heading={t('edit.bar.course')}
+      // The course's own name over it, as it reads: the page in Edit, not another page.
+      heading={title}
+      modes={modes}
       title={title}
       back={back}
       backTo={{ link: toCourse, label: t('edit.course.back') }}

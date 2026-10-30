@@ -1,7 +1,8 @@
-import { Link, useParams } from '@tanstack/react-router'
+import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { courseLesson } from '@/entities/course'
 import { blankLesson } from '@/entities/lesson'
 import { BackButton } from '@/shared/ui'
+import { ReadEditSwitch } from '@/widgets/mode-switch'
 import { LessonEditor } from './LessonEditor'
 
 /**
@@ -10,6 +11,7 @@ import { LessonEditor } from './LessonEditor'
  * its way back is the course's editor.
  */
 export function CourseLessonEditorPage() {
+  const navigate = useNavigate()
   const { courseId, lessonId } = useParams({ from: '/shell/courses/$courseId/$lessonId/edit' })
   const place = courseLesson(courseId, lessonId)
   const id = `${courseId}/${lessonId}`
@@ -34,6 +36,19 @@ export function CourseLessonEditorPage() {
         />
       }
       toLesson={<Link to="/courses/$courseId/$lessonId" params={{ courseId, lessonId }} />}
+      modes={
+        <ReadEditSwitch
+          mode="edit"
+          read={() =>
+            void navigate({
+              to: '/courses/$courseId/$lessonId',
+              params: { courseId, lessonId },
+              replace: true,
+            })
+          }
+          edit={() => undefined}
+        />
+      }
     />
   )
 }

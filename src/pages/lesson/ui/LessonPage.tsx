@@ -1,4 +1,5 @@
-import { Link, useParams } from '@tanstack/react-router'
+import { ReadEditSwitch } from '@/widgets/mode-switch'
+import { Link, useParams, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { lessonById, lessonPlace, nextLessonId, previousLessonId } from '@/entities/lesson'
 import { lessonStepId } from '@/entities/step'
@@ -11,6 +12,7 @@ import { LessonLayout, PlaceLink } from './LessonLayout'
  * the lesson before it, and on to the journey's next lesson, or after its last back to the journey.
  */
 export function LessonPage() {
+  const navigate = useNavigate()
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const { lessonId } = useParams({ from: '/shell/lessons/$lessonId' })
@@ -30,7 +32,25 @@ export function LessonPage() {
       key={lesson.id}
       lesson={lesson}
       step={lessonStepId(lesson.id)}
-      edit={<Link to="/lessons/$lessonId/edit" params={{ lessonId: lesson.id }} />}
+      modes={
+        <ReadEditSwitch
+          mode="read"
+          read={() =>
+            void navigate({
+              to: '/lessons/$lessonId',
+              params: { lessonId: lesson.id },
+              replace: true,
+            })
+          }
+          edit={() =>
+            void navigate({
+              to: '/lessons/$lessonId/edit',
+              params: { lessonId: lesson.id },
+              replace: true,
+            })
+          }
+        />
+      }
       back={<BackButton fallback={journey} />}
       after={(lesson.after ?? []).flatMap((id) => {
         const before = lessonById(id)

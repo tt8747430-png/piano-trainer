@@ -117,8 +117,10 @@ describe('Manage lessons, a level’s editor (content as data)', () => {
       title: { en: 'Pedalling' },
       steps: [{ kind: 'lesson', lessonId: 'half-pedal' }],
     })
-    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Edit lesson')
-    expect(await screen.findByText('Half pedal')).toBeInTheDocument()
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Half pedal'),
+    )
+    expect(await screen.findAllByText('Half pedal')).not.toHaveLength(0)
   })
 
   it('opens another level from its chips', async () => {

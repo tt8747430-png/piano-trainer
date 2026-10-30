@@ -1,4 +1,5 @@
-import { Link, useParams } from '@tanstack/react-router'
+import { ReadEditSwitch } from '@/widgets/mode-switch'
+import { Link, useParams, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { courseLesson, nextCourseLesson, previousCourseLesson } from '@/entities/course'
 import { courseLessonStepId } from '@/entities/step'
@@ -11,6 +12,7 @@ import { LessonLayout, PlaceLink } from './LessonLayout'
  * to the course's next lesson, or after its last to its guided songs on the course's page.
  */
 export function CourseLessonPage() {
+  const navigate = useNavigate()
   const { t } = useTranslation('learn')
   const locale = useLocale()
   const { courseId, lessonId } = useParams({ from: '/shell/courses/$courseId/$lessonId' })
@@ -31,7 +33,25 @@ export function CourseLessonPage() {
       key={lessonId}
       lesson={place.lesson}
       step={courseLessonStepId(courseId, lessonId)}
-      edit={<Link to="/courses/$courseId/$lessonId/edit" params={{ courseId, lessonId }} />}
+      modes={
+        <ReadEditSwitch
+          mode="read"
+          read={() =>
+            void navigate({
+              to: '/courses/$courseId/$lessonId',
+              params: { courseId, lessonId },
+              replace: true,
+            })
+          }
+          edit={() =>
+            void navigate({
+              to: '/courses/$courseId/$lessonId/edit',
+              params: { courseId, lessonId },
+              replace: true,
+            })
+          }
+        />
+      }
       back={<BackButton fallback={course} />}
       after={(place.lesson.after ?? []).flatMap((id) => {
         const before = place.course.lessons.find((each) => each.id === id)

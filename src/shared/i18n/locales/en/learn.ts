@@ -110,6 +110,8 @@ export const learn = {
     again: 'Again',
   },
   // An editor's lesson editor (ADR 0116): every text the lesson shows, English and Russian side by side.
+  // A lesson's or a course's two modes, an editor's (round 25).
+  mode: { label: 'Read or edit', read: 'Read', edit: 'Edit' },
   edit: {
     doc: {
       label: 'The lesson',
@@ -219,9 +221,8 @@ export const learn = {
       question: 'Question',
       link: 'Link',
     },
-    open: 'Edit the lesson',
     // The editor's bar: what is edited; the document under it names which.
-    bar: { lesson: 'Edit lesson', course: 'Edit course', journey: 'Manage lessons' },
+    bar: { journey: 'Manage lessons' },
     back: 'Back to the lesson',
     editorsOnly: 'Only an editor edits a lesson.',
     english: 'English',
@@ -260,7 +261,6 @@ export const learn = {
       noSteps: 'No lessons yet. Add the first one below.',
     },
     course: {
-      open: 'Edit the course',
       lessonList: 'Lessons',
       noLessons: 'No lessons yet. Add the first one below.',
       new: 'New course',

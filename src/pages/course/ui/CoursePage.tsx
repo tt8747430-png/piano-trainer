@@ -1,5 +1,5 @@
-import { Link, useParams } from '@tanstack/react-router'
-import { ArrowRight, Check, PencilLine, Play, RotateCcw } from 'lucide-react'
+import { Link, useNavigate, useParams } from '@tanstack/react-router'
+import { ArrowRight, Check, Play, RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { courseById, CourseIcon, courseStepIds, type Course } from '@/entities/course'
 import { PieceLink, pieceById } from '@/entities/piece'
@@ -8,7 +8,8 @@ import { STAGE_PAINT, stepOf } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { BackButton, FabLink, FloatingActions, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, FabLink, FloatingActions, PAINT, ScreenHeader } from '@/shared/ui'
+import { ReadEditSwitch } from '@/widgets/mode-switch'
 import {
   CourseFacts,
   courseProgress,
@@ -68,6 +69,7 @@ export function CoursePage() {
   const { courseId } = useParams({ from: '/shell/courses/$courseId' })
   const learned = useProgress(selectLearned)
   const { account } = useAccount()
+  const navigate = useNavigate()
   const course = courseById(courseId)
   // The route finds no course that is not there.
   if (!course) return null
@@ -83,10 +85,16 @@ export function CoursePage() {
         back={<BackButton fallback={{ to: '/', search: { view: 'courses', journey: '' } }} />}
         actions={
           editsContent(account) ? (
-            <RoundLink
-              label={t('edit.course.open')}
-              icon={PencilLine}
-              render={<Link to="/courses/$courseId/edit" params={{ courseId }} />}
+            <ReadEditSwitch
+              mode="read"
+              read={() => undefined}
+              edit={() =>
+                void navigate({
+                  to: '/courses/$courseId/edit',
+                  params: { courseId },
+                  replace: true,
+                })
+              }
             />
           ) : undefined
         }

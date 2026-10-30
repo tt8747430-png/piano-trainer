@@ -65,6 +65,7 @@ export function LessonEditor({
   back,
   toLesson,
   readFirst = false,
+  modes,
 }: {
   lesson: Lesson
   /** The lesson's id in the database (a course's as `<course>/<lesson>`). */
@@ -75,6 +76,8 @@ export function LessonEditor({
   toLesson: ReactElement
   /** A level's lesson: the lessons to read before it chosen above the document (a course's has none). */
   readFirst?: boolean
+  /** Its Read · Edit switch, set to Edit. */
+  modes?: ReactNode
 }) {
   const { t } = useTranslation('learn')
   const shown = useLocale()
@@ -92,7 +95,9 @@ export function LessonEditor({
   return (
     <DraftScreen
       draft={draft}
-      heading={t('edit.bar.lesson')}
+      // The lesson's own title over it, as it reads: the page in Edit, not another page.
+      heading={title}
+      modes={modes}
       title={title}
       back={back}
       backTo={{ link: toLesson, label: t('edit.back') }}

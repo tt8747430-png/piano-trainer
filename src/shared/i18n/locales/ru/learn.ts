@@ -99,6 +99,8 @@ export const learn: LocaleResources['learn'] = {
     shown: 'Ответ на клавишах',
     again: 'Снова',
   },
+  // A lesson's or a course's two modes, an editor's (round 25).
+  mode: { label: 'Читать или править', read: 'Читать', edit: 'Править' },
   edit: {
     doc: {
       label: 'Урок',
@@ -208,8 +210,7 @@ export const learn: LocaleResources['learn'] = {
       question: 'Вопрос',
       link: 'Ссылка',
     },
-    open: 'Править урок',
-    bar: { lesson: 'Правка урока', course: 'Правка курса', journey: 'Уроки' },
+    bar: { journey: 'Уроки' },
     back: 'К уроку',
     editorsOnly: 'Урок правит только редактор.',
     english: 'English',
@@ -248,7 +249,6 @@ export const learn: LocaleResources['learn'] = {
       noSteps: 'Уроков пока нет. Добавьте первый ниже.',
     },
     course: {
-      open: 'Править курс',
       lessonList: 'Уроки',
       noLessons: 'Уроков пока нет. Добавьте первый ниже.',
       new: 'Новый курс',

@@ -40,18 +40,22 @@ async function publish(user: ReturnType<typeof userEvent.setup>) {
 }
 
 describe('the course editor (ADR 0116, round 12)', () => {
-  it('is on an editor’s course page, never a learner’s', async () => {
-    await renderApp(`/courses/${COURSE.id}`, { auth: await signedInAs('editor') })
-    expect(await screen.findByRole('link', { name: 'Edit the course' })).toHaveAttribute(
-      'href',
-      `/courses/${COURSE.id}/edit`,
-    )
+  it('puts the course into Edit from its bar’s Read · Edit, its name over it', async () => {
+    const user = userEvent.setup()
+    const { router } = await renderApp(`/courses/${COURSE.id}`, {
+      auth: await signedInAs('editor'),
+      contentEditing: editing(),
+    })
+    await user.click(await screen.findByRole('combobox', { name: 'Read or edit' }))
+    await user.click(await screen.findByRole('option', { name: 'Edit' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe(`/courses/${COURSE.id}/edit`))
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent(COURSE.title.en)
   })
 
   it('is not on a learner’s', async () => {
     await renderApp(`/courses/${COURSE.id}`, { auth: await signedInAs('learner') })
     await screen.findByRole('heading', { level: 1 })
-    expect(screen.queryByRole('link', { name: 'Edit the course' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('combobox', { name: 'Read or edit' })).not.toBeInTheDocument()
   })
 
   it('saves the title and summary to the draft, then publishes the course with them', async () => {
@@ -187,8 +191,10 @@ describe('the course editor (ADR 0116, round 12)', () => {
     const record = course.ok ? (course.value?.body as { lessons: string[] }) : undefined
     expect(record?.lessons.at(-1)).toBe('blues-in-c')
     // The lesson editor, on the new lesson's document.
-    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Edit lesson')
-    expect(await screen.findByText('Blues in C')).toBeInTheDocument()
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Blues in C'),
+    )
+    expect(await screen.findAllByText('Blues in C')).not.toHaveLength(0)
   })
 
   it('makes a new course from Courses’ New sheet, unpublished, and opens it in the course editor', async () => {
@@ -216,7 +222,9 @@ describe('the course editor (ADR 0116, round 12)', () => {
       weeks: 5,
     })
     expect(content.body('course', 'jazz-voicings')).toBeUndefined()
-    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent('Edit course')
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Jazz voicings'),
+    )
     expect(await screen.findByDisplayValue('Jazz voicings')).toBeInTheDocument()
     expect(await screen.findByText('No lessons yet. Add the first one below.')).toBeInTheDocument()
   })
@@ -243,7 +251,7 @@ describe('the course editor (ADR 0116, round 12)', () => {
       contentEditing: editing(),
     })
     expect(await screen.findByRole('textbox', { name: 'Название' })).toHaveValue(COURSE.title.ru)
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Правка курса')
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(COURSE.title.ru)
     expect(screen.getByDisplayValue(COURSE.title.ru)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Уроки' })).toBeInTheDocument()
   })

@@ -39,6 +39,7 @@ export function DraftScreen<T>({
   editorsOnly,
   unreadable,
   language,
+  modes,
   children,
 }: {
   draft: ContentDraft<T>
@@ -56,6 +57,8 @@ export function DraftScreen<T>({
   unreadable: string
   /** The language the document is written in: chosen in the draft's menu, named after its status. */
   language?: { value: Locale; onChange: (locale: Locale) => void }
+  /** The item's Read · Edit switch (`ReadEditSwitch`): the page in Edit, not another page. */
+  modes?: ReactNode
   children: (initial: T) => ReactNode
 }) {
   const { t } = useTranslation('editor')
@@ -69,17 +72,24 @@ export function DraftScreen<T>({
       <ScreenHeader
         title={heading}
         back={back}
+        // The document shows the item's title large under the bar.
+        titleOnPage={modes !== undefined}
         // Publish and the draft's menu at the bar's end; where the draft stands, small, under the title.
         actions={
           open ? (
-            <DraftActions
-              draft={draft}
-              title={title}
-              unreadable={unreadable}
-              onReset={draft.reopen}
-              more={language ? languageActions(language.value, language.onChange, words) : []}
-            />
-          ) : undefined
+            <>
+              {modes}
+              <DraftActions
+                draft={draft}
+                title={title}
+                unreadable={unreadable}
+                onReset={draft.reopen}
+                more={language ? languageActions(language.value, language.onChange, words) : []}
+              />
+            </>
+          ) : (
+            modes
+          )
         }
         tabs={
           open ? (
