@@ -36,6 +36,7 @@ import {
   withBlockExample,
 } from '../../model/block-examples'
 import { blockName } from './block-names'
+import { LinkFields, PatternFields, VoicingsFields } from './ExampleFields'
 import { DocLocale } from './doc-locale'
 
 const nothing = () => undefined
@@ -215,6 +216,12 @@ function KindFields({
           />
         </>
       )
+    case 'voicings':
+      return <VoicingsFields block={block} onChange={onChange} />
+    case 'pattern':
+      return <PatternFields block={block} onChange={onChange} />
+    case 'link':
+      return <LinkFields block={block} onChange={onChange} />
     default:
       return null
   }
@@ -226,6 +233,9 @@ const HAS_FIELDS = new Set<LessonBlock['kind']>([
   'grid',
   'scale',
   'interval',
+  'voicings',
+  'pattern',
+  'link',
 ])
 
 /** An example's fields, opened from its button: a popover on a laptop, a bottom sheet on a phone. */
@@ -272,8 +282,8 @@ export function ExampleView({ node, updateAttributes, selected }: ReactNodeViewP
   const change = (next: LessonBlock) => updateAttributes({ block: next })
   const name = t(`edit.blocks.${blockName(block)}`)
   const examples = blockExamples(block)
-  const asWritten =
-    block.kind === 'voicings' || block.kind === 'pattern' || block.kind === 'variants'
+  // Variants hold whole examples of their own: kept as written, moved, copied or deleted whole.
+  const asWritten = block.kind === 'variants'
   return (
     <NodeViewWrapper
       data-example={block.kind}

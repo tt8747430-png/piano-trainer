@@ -229,6 +229,34 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     expect(JSON.stringify(content.body('lesson', lesson.id))).toContain('["C","Am","G7"]')
   })
 
+  it('writes a voicing’s keys in its block’s fields, and publishes them', async () => {
+    const user = userEvent.setup()
+    const lesson = LESSONS.find(
+      (each) =>
+        lessonPlace(each.id) &&
+        each.sections.some((section) => section.blocks.some((block) => block.kind === 'voicings')),
+    )!
+    const content = createFakeContentEditing({
+      items: [{ kind: 'lesson', id: lesson.id, body: lesson, meta: {} }],
+    })
+    await renderApp(`/lessons/${lesson.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    await user.click((await screen.findAllByRole('button', { name: 'Edit: Voicings' }))[0]!)
+    const keys = await screen.findByRole('textbox', {
+      name: 'Voicing 1: Keys: left hand | right hand',
+    })
+    await user.clear(keys)
+    await user.type(keys, 'C3 G3 | E4 B4')
+    await user.keyboard('{Escape}')
+    await publish(user)
+    expect(
+      await screen.findByText('Published. Learners get it the next time the app starts.'),
+    ).toBeInTheDocument()
+    expect(JSON.stringify(content.body('lesson', lesson.id))).toContain('C3 G3 | E4 B4')
+  })
+
   it('inserts a block of a kind from the toolbar after the one the caret is in', async () => {
     const user = userEvent.setup()
     const content = editing()
