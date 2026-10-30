@@ -40,7 +40,7 @@ const run = (text: string, bold = false): DocNode[] =>
   text === '' ? [] : [{ type: 'text', text, ...(bold ? { marks: [{ type: 'bold' }] } : {}) }]
 
 /** A block of the lesson as the document's node, in `locale`, carrying the whole block. */
-function blockNode(block: LessonBlock, locale: Locale): DocNode {
+export function blockNode(block: LessonBlock, locale: Locale): DocNode {
   switch (block.kind) {
     case 'text': {
       const lead = block.lead?.[locale] ?? ''

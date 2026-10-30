@@ -79,24 +79,3 @@ export function lessonTexts(lesson: Lesson): LessonText[] {
     ]),
   ]
 }
-
-/** `value` with `text` at `path` in place of what is there, each object on the way copied, the rest shared. */
-function setAt(value: unknown, path: Path, text: LocalText): unknown {
-  const [step, ...rest] = path
-  if (step === undefined) return text
-  if (Array.isArray(value) && typeof step === 'number' && step < value.length) {
-    const copy = [...value]
-    copy[step] = setAt(value[step], rest, text)
-    return copy
-  }
-  if (typeof value === 'object' && value !== null && typeof step === 'string' && step in value)
-    return { ...value, [step]: setAt((value as Record<string, unknown>)[step], rest, text) }
-  return value
-}
-
-/** The lesson with `text` at `key` (a `LessonText`'s); the lesson as it was where it has no text there. */
-export function withLessonText(lesson: Lesson, key: string, text: LocalText): Lesson {
-  if (!lessonTexts(lesson).some((each) => each.key === key)) return lesson
-  const path = key.split('.').map((step) => (/^\d+$/.test(step) ? Number(step) : step))
-  return setAt(lesson, path, text) as Lesson
-}

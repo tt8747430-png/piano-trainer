@@ -1,0 +1,218 @@
+import type { Editor } from '@tiptap/core'
+import { useEditorState } from '@tiptap/react'
+import {
+  Bold,
+  Ellipsis,
+  Heading2,
+  ListOrdered,
+  Pilcrow,
+  Plus,
+  Redo2,
+  StickyNote,
+  Undo2,
+} from 'lucide-react'
+import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
+import type { Locale } from '@/shared/i18n'
+import { cn } from '@/shared/lib'
+import { ActionMenu } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
+import { FIXED_BLOCKS, selectedBlock } from '../../model/doc-blocks'
+import { DOC } from '../../model/lesson-doc'
+import { toggleNote } from './commands'
+import { blockActions, insertActions } from './menus'
+
+function ToolButton({
+  label,
+  pressed,
+  disabled,
+  onClick,
+  children,
+}: {
+  label: string
+  pressed?: boolean
+  disabled?: boolean
+  onClick: () => void
+  children: ReactNode
+}) {
+  return (
+    <Button
+      variant="tool"
+      size="icon"
+      className="size-11 shrink-0"
+      aria-label={label}
+      title={label}
+      aria-pressed={pressed}
+      disabled={disabled}
+      // The caret stays in the document: a tap on the toolbar never takes focus from it.
+      onMouseDown={(event) => event.preventDefault()}
+      onClick={onClick}
+    >
+      {children}
+    </Button>
+  )
+}
+
+/**
+ * The document's toolbar (round 21): text or a section's heading, numbered steps, a note, the lead
+ * in bold, Insert (every block kind), Undo and Redo, and the block the caret is in's menu (the
+ * phone's way to move one; a laptop drags its handle). Pinned under the bar on a laptop, docked
+ * over the phone's keyboard on a phone.
+ */
+export function DocToolbar({
+  editor,
+  locale,
+  className,
+}: {
+  editor: Editor
+  locale: Locale
+  className?: string
+}) {
+  const { t } = useTranslation('learn')
+  const state = useEditorState({
+    editor,
+    selector: ({ editor: each }) => {
+      const index = selectedBlock(each.state)
+      const top = each.state.doc.maybeChild(index)?.type.name
+      return {
+        index,
+        blocks: each.state.doc.childCount,
+        inLesson: index >= FIXED_BLOCKS,
+        paragraph: top === DOC.paragraph,
+        heading: top === DOC.heading,
+        steps: top === DOC.steps,
+        note: top === DOC.note,
+        bold: each.isActive('bold'),
+        canBold: top === DOC.paragraph || top === DOC.steps,
+        canUndo: each.can().undo(),
+        canRedo: each.can().redo(),
+      }
+    },
+  })
+  const chain = () => editor.chain().focus()
+  const styles = [
+    {
+      key: 'text',
+      label: t('edit.doc.text'),
+      icon: Pilcrow,
+      pressed: state.paragraph,
+      run: () => (state.steps ? chain().toggleOrderedList().run() : chain().setParagraph().run()),
+    },
+    {
+      key: 'heading',
+      label: t('edit.doc.heading'),
+      icon: Heading2,
+      pressed: state.heading,
+      run: () => chain().toggleHeading({ level: 2 }).run(),
+    },
+    {
+      key: 'steps',
+      label: t('edit.doc.steps'),
+      icon: ListOrdered,
+      pressed: state.steps,
+      run: () => chain().toggleOrderedList().run(),
+    },
+    {
+      key: 'note',
+      label: t('edit.doc.note'),
+      icon: StickyNote,
+      pressed: state.note,
+      run: () => toggleNote(editor),
+    },
+  ]
+  const Current = styles.find((style) => style.pressed)?.icon ?? Pilcrow
+  return (
+    <div
+      role="toolbar"
+      aria-label={t('edit.doc.toolbar')}
+      className={cn('flex items-center gap-0.5 overflow-x-auto overscroll-x-contain', className)}
+    >
+      {/* Text, a heading, steps or a note: a button each on a laptop, one menu on a phone. */}
+      <div className="hidden md:contents">
+        {styles.map((style) => (
+          <ToolButton
+            key={style.key}
+            label={style.label}
+            pressed={style.pressed}
+            disabled={!state.inLesson}
+            onClick={style.run}
+          >
+            <style.icon aria-hidden />
+          </ToolButton>
+        ))}
+      </div>
+      <div className="md:hidden">
+        <ActionMenu
+          label={t('edit.doc.style')}
+          trigger={<Current aria-hidden />}
+          render={
+            <Button
+              variant="tool"
+              size="icon"
+              className="size-11"
+              aria-label={t('edit.doc.style')}
+              title={t('edit.doc.style')}
+              disabled={!state.inLesson}
+              onMouseDown={(event) => event.preventDefault()}
+            />
+          }
+          actions={styles.map(({ key, label, icon, run }) => ({ key, label, icon, onSelect: run }))}
+        />
+      </div>
+      <ToolButton
+        label={t('edit.doc.lead')}
+        pressed={state.bold}
+        disabled={!state.canBold}
+        onClick={() => chain().toggleBold().run()}
+      >
+        <Bold aria-hidden />
+      </ToolButton>
+      <span aria-hidden className="mx-1 h-6 w-px shrink-0 bg-border" />
+      <ActionMenu
+        label={t('edit.doc.insert')}
+        trigger={
+          <>
+            <Plus data-icon="inline-start" aria-hidden />
+            <span className="max-sm:sr-only">{t('edit.doc.insert')}</span>
+          </>
+        }
+        render={<Button variant="tool" className="h-11 shrink-0 px-3" />}
+        actions={insertActions(editor, locale, t)}
+      />
+      <span aria-hidden className="mx-1 h-6 w-px shrink-0 bg-border" />
+      <ToolButton
+        label={t('edit.doc.undo')}
+        disabled={!state.canUndo}
+        onClick={() => chain().undo().run()}
+      >
+        <Undo2 aria-hidden />
+      </ToolButton>
+      <ToolButton
+        label={t('edit.doc.redo')}
+        disabled={!state.canRedo}
+        onClick={() => chain().redo().run()}
+      >
+        <Redo2 aria-hidden />
+      </ToolButton>
+      {/* A laptop drags a block by its handle, which has the same menu. */}
+      <div className="ms-auto md:hidden">
+        <ActionMenu
+          label={t('edit.doc.block')}
+          align="end"
+          trigger={<Ellipsis aria-hidden />}
+          render={
+            <Button
+              variant="tool"
+              size="icon"
+              className="size-11"
+              aria-label={t('edit.doc.block')}
+              title={t('edit.doc.block')}
+              disabled={!state.inLesson}
+            />
+          }
+          actions={blockActions(editor, state.index, t)}
+        />
+      </div>
+    </div>
+  )
+}

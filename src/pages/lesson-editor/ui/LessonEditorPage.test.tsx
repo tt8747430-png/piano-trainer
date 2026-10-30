@@ -1,11 +1,13 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import type { Editor } from '@tiptap/core'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { COURSES } from '@/entities/course'
-import { LESSONS, lessonExamples, lessonPlace } from '@/entities/lesson'
+import { LESSONS, lessonExamples, lessonPlace, type Lesson } from '@/entities/lesson'
 import { createFakeAuth, type AccountRole } from '@/shared/api/auth'
 import { createFakeContentEditing } from '@/shared/api/content-editing'
+import { stubTextLayout } from '@/shared/test/layout'
 
 const LESSON = LESSONS.find((lesson) => lessonPlace(lesson.id))!
 const COURSE = COURSES.find((course) => course.lessons.length > 0)!
@@ -26,11 +28,40 @@ const editing = () =>
     ],
   })
 
-/** The lesson's own group of fields: its title and summary. */
-const lessonGroup = async () =>
-  (await screen.findByRole('heading', { name: 'The lesson' })).closest('section') as HTMLElement
+/** The lesson's document, and the editor behind it. */
+async function lessonDoc() {
+  const doc = await screen.findByRole('textbox', { name: 'The lesson' })
+  return { doc, editor: (doc as HTMLElement & { editor: Editor }).editor }
+}
 
-describe('the lesson editor (ADR 0116)', () => {
+/** The document's line of this type and these words. */
+const line = (doc: HTMLElement, selector: string) => doc.querySelector<HTMLElement>(selector)!
+
+/** Puts the caret at the end of `element`'s words. */
+async function caretAtEnd(editor: Editor, element: HTMLElement) {
+  const at = editor.view.posAtDOM(element, element.childNodes.length)
+  editor.commands.setTextSelection(at)
+  editor.commands.focus()
+  await waitFor(() => expect(editor.view.dom).toHaveFocus())
+}
+
+/** Publishes the draft once it is saved: the bar's Publish, then the dialog's. */
+async function publish(user: ReturnType<typeof userEvent.setup>) {
+  await screen.findByText('Draft · saved', {}, { timeout: 3000 })
+  await user.click(screen.getByRole('button', { name: 'Publish' }))
+  await user.click(
+    within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
+  )
+}
+
+const saved = async (content: ReturnType<typeof editing>, id = LESSON.id) => {
+  const draft = await content.draft('lesson', id)
+  return draft.ok ? (draft.value?.body as Lesson | undefined) : undefined
+}
+
+describe('the lesson editor (ADR 0116, round 21)', () => {
+  beforeEach(stubTextLayout)
+
   it('is in an editor’s lesson bar, never a learner’s', async () => {
     await renderApp(`/lessons/${LESSON.id}`, { auth: await signedInAs('editor') })
     expect(await screen.findByRole('link', { name: 'Edit the lesson' })).toHaveAttribute(
@@ -45,34 +76,61 @@ describe('the lesson editor (ADR 0116)', () => {
     expect(screen.queryByRole('link', { name: 'Edit the lesson' })).not.toBeInTheDocument()
   })
 
-  it('saves a text changed to the draft, then publishes the lesson with it', async () => {
+  it('opens the lesson as one document, its status and Publish in the bar', async () => {
+    await renderApp(`/lessons/${LESSON.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: editing(),
+    })
+    const { doc } = await lessonDoc()
+    expect(line(doc, 'p[data-lesson-title]')).toHaveTextContent(LESSON.title.en)
+    expect(doc.querySelectorAll('h2')).toHaveLength(LESSON.sections.length)
+    expect(screen.getByText('Published', { selector: 'span' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Publish' })).toBeDisabled()
+    expect(screen.queryByRole('radio', { name: 'Preview' })).not.toBeInTheDocument()
+  })
+
+  it('saves the title typed to the draft, then publishes the lesson with it', async () => {
     const user = userEvent.setup()
     const content = editing()
     await renderApp(`/lessons/${LESSON.id}/edit`, {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    const title = within(
-      within(await lessonGroup()).getByRole('group', { name: 'Title' }),
-    ).getByRole('textbox', { name: 'English' })
-    expect(title).toHaveValue(LESSON.title.en)
-    await user.clear(title)
-    await user.type(title, 'A new title')
-    const strip = screen.getByRole('group', { name: 'Draft of the original' })
-    await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
-
-    await user.click(within(strip).getByRole('button', { name: 'Publish' }))
-    await user.click(
-      within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
-    )
+    const { doc, editor } = await lessonDoc()
+    await caretAtEnd(editor, line(doc, 'p[data-lesson-title]'))
+    await user.keyboard(' again')
+    await publish(user)
     expect(
       await screen.findByText('Published. Learners get it the next time the app starts.'),
     ).toBeInTheDocument()
     expect(content.body('lesson', LESSON.id)).toMatchObject({
       id: LESSON.id,
-      title: { en: 'A new title', ru: LESSON.title.ru },
+      title: { en: `${LESSON.title.en} again`, ru: LESSON.title.ru },
       sections: LESSON.sections,
     })
+  })
+
+  it('writes Russian in the same document once the bar says so, the English left as it was', async () => {
+    const user = userEvent.setup()
+    const content = editing()
+    await renderApp(`/lessons/${LESSON.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    await lessonDoc()
+    await user.click(screen.getByRole('radio', { name: 'RU · Русский' }))
+    const { doc, editor } = await lessonDoc()
+    expect(line(doc, 'p[data-lesson-title]')).toHaveTextContent(LESSON.title.ru)
+    await caretAtEnd(editor, line(doc, 'h2'))
+    await user.keyboard('!')
+    await waitFor(
+      async () =>
+        expect((await saved(content))?.sections[0]?.heading).toEqual({
+          en: LESSON.sections[0]?.heading.en,
+          ru: `${LESSON.sections[0]?.heading.ru}!`,
+        }),
+      { timeout: 3000 },
+    )
   })
 
   it('says where words are missing, and publishes nothing until they are there', async () => {
@@ -82,17 +140,22 @@ describe('the lesson editor (ADR 0116)', () => {
       auth: await signedInAs('admin'),
       contentEditing: content,
     })
-    const summary = within(
-      within(await lessonGroup()).getByRole('group', { name: 'Summary' }),
-    ).getByRole('textbox', { name: 'Русский' })
-    await user.clear(summary)
-    expect(summary).toHaveAccessibleDescription('Words are needed here')
-    const strip = screen.getByRole('group', { name: 'Draft of the original' })
-    await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
-    await user.click(within(strip).getByRole('button', { name: 'Publish' }))
-    await user.click(
-      within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
+    const { doc, editor } = await lessonDoc()
+    const summary = line(doc, 'p[data-lesson-summary]')
+    editor.commands.setTextSelection({
+      from: editor.view.posAtDOM(summary, 0),
+      to: editor.view.posAtDOM(summary, summary.childNodes.length),
+    })
+    editor.commands.focus()
+    await waitFor(() => expect(doc).toHaveFocus())
+    await user.keyboard('{Backspace}')
+    await waitFor(() =>
+      expect(line(doc, 'p[data-lesson-summary]')).toHaveAttribute(
+        'data-placeholder',
+        'What it teaches, in a sentence',
+      ),
     )
+    await publish(user)
     expect(
       await screen.findByText(
         'Every text needs words in both languages, and every example must read. Put them right, then publish.',
@@ -109,11 +172,9 @@ describe('the lesson editor (ADR 0116)', () => {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    const summary = within(
-      within(await lessonGroup()).getByRole('group', { name: 'Summary' }),
-    ).getByRole('textbox', { name: 'English' })
-    expect(summary).toHaveValue('')
-    expect(summary).toHaveAccessibleDescription('Words are needed here')
+    const { doc } = await lessonDoc()
+    expect(line(doc, 'p[data-lesson-summary]')).toHaveTextContent('')
+    expect(screen.getByText('Draft · not published')).toBeInTheDocument()
   })
 
   it('edits a course’s lesson as the database keys it, by its course', async () => {
@@ -123,45 +184,19 @@ describe('the lesson editor (ADR 0116)', () => {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    const title = within(
-      within(await lessonGroup()).getByRole('group', { name: 'Title' }),
-    ).getByRole('textbox', { name: 'English' })
-    await user.type(title, '!')
+    const { doc, editor } = await lessonDoc()
+    await caretAtEnd(editor, line(doc, 'p[data-lesson-title]'))
+    await user.keyboard('!')
     await waitFor(
-      async () => {
-        const draft = await content.draft('lesson', `${COURSE.id}/${COURSE_LESSON.id}`)
-        expect(draft.ok && draft.value?.body).toMatchObject({
-          title: { en: `${COURSE_LESSON.title.en}!` },
-        })
-      },
+      async () =>
+        expect((await saved(content, `${COURSE.id}/${COURSE_LESSON.id}`))?.title.en).toBe(
+          `${COURSE_LESSON.title.en}!`,
+        ),
       { timeout: 3000 },
     )
   })
 
-  it('previews the draft as the lesson reads, the change in it', async () => {
-    const user = userEvent.setup()
-    await renderApp(`/lessons/${LESSON.id}/edit`, {
-      auth: await signedInAs('editor'),
-      contentEditing: editing(),
-    })
-    const heading = LESSON.sections[0]?.heading.en ?? ''
-    const field = within(
-      (await screen.findByRole('heading', { name: new RegExp(`^Section 1`) })).closest(
-        'section',
-      ) as HTMLElement,
-    ).getAllByRole('textbox', { name: 'English' })[0]
-    if (!field) throw new Error('the first section’s heading field')
-    expect(field).toHaveValue(heading)
-    await user.clear(field)
-    await user.type(field, 'A heading of the draft')
-    await user.click(screen.getByRole('radio', { name: 'Preview' }))
-    expect(
-      await screen.findByRole('heading', { name: 'A heading of the draft' }),
-    ).toBeInTheDocument()
-    expect(screen.queryByRole('textbox', { name: 'English' })).not.toBeInTheDocument()
-  })
-
-  it('writes a row of chords, says the symbol that does not read, and publishes it once it reads', async () => {
+  it('writes a row of chords in its block, says the symbol that does not read, and publishes it once it reads', async () => {
     const user = userEvent.setup()
     const lesson = LESSONS.find(
       (each) =>
@@ -178,12 +213,7 @@ describe('the lesson editor (ADR 0116)', () => {
     await user.clear(chords)
     await user.type(chords, 'C Qx G7')
     expect(chords).toHaveAccessibleDescription('“Qx” doesn’t read')
-    const strip = screen.getByRole('group', { name: 'Draft of the original' })
-    await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
-    await user.click(within(strip).getByRole('button', { name: 'Publish' }))
-    await user.click(
-      within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
-    )
+    await publish(user)
     expect(
       await screen.findByText(
         'Every text needs words in both languages, and every example must read. Put them right, then publish.',
@@ -192,61 +222,97 @@ describe('the lesson editor (ADR 0116)', () => {
     await user.clear(chords)
     await user.type(chords, 'C Am G7')
     expect(chords).not.toHaveAccessibleDescription()
-    await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
-    await user.click(within(strip).getByRole('button', { name: 'Publish' }))
-    await user.click(
-      within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
-    )
+    await publish(user)
     expect(
       await screen.findByText('Published. Learners get it the next time the app starts.'),
     ).toBeInTheDocument()
     expect(JSON.stringify(content.body('lesson', lesson.id))).toContain('["C","Am","G7"]')
   })
 
-  it('says a section was removed, and Undo puts it back with its blocks', async () => {
-    const user = userEvent.setup()
-    await renderApp(`/lessons/${LESSON.id}/edit`, {
-      auth: await signedInAs('editor'),
-      contentEditing: editing(),
-    })
-    const first = await screen.findByRole('region', { name: /^Section 1/ })
-    const name = first.getAttribute('aria-label') ?? ''
-    await user.click(within(first).getByRole('button', { name: `Remove: ${name}` }))
-    expect(screen.queryByRole('region', { name })).toBeNull()
-    expect(await screen.findByText(`Removed: ${name}`)).toBeVisible()
-    await user.click(screen.getByRole('button', { name: 'Undo' }))
-    expect(await screen.findByRole('region', { name })).toBeInTheDocument()
-  })
-
-  it('adds a block of a kind and a section, moves and removes blocks, all on the draft', async () => {
+  it('inserts a block of a kind from the toolbar after the one the caret is in', async () => {
     const user = userEvent.setup()
     const content = editing()
     await renderApp(`/lessons/${LESSON.id}/edit`, {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    const first = await screen.findByRole('region', { name: /^Section 1/ })
-    const blocks = LESSON.sections[0]?.blocks.length ?? 0
-    await user.click(within(first).getByRole('button', { name: 'Add block' }))
+    const { doc, editor } = await lessonDoc()
+    await caretAtEnd(editor, line(doc, 'h2'))
+    const toolbar = screen.getByRole('toolbar', { name: 'Formatting' })
+    await user.click(within(toolbar).getByRole('button', { name: 'Insert' }))
     await user.click(await screen.findByRole('button', { name: 'Rule' }))
-    await user.click(within(first).getAllByRole('button', { name: 'Move up: Rule' }).at(-1)!)
-    await user.type(screen.getByRole('textbox', { name: 'New section' }), 'Practice it')
-    await user.click(screen.getByRole('button', { name: 'Add section' }))
-    expect(await screen.findByRole('region', { name: /Practice it$/ })).toBeInTheDocument()
+    await user.keyboard('Play it slowly')
+    await waitFor(
+      async () =>
+        expect((await saved(content))?.sections[0]?.blocks[0]).toEqual({
+          kind: 'note',
+          rule: { en: 'Play it slowly', ru: '' },
+          text: { en: '', ru: '' },
+        }),
+      { timeout: 3000 },
+    )
+  })
+
+  it('opens the / menu at an empty line, filtered as typed, and puts the block in its place', async () => {
+    const user = userEvent.setup()
+    const content = editing()
+    await renderApp(`/lessons/${LESSON.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    const { doc, editor } = await lessonDoc()
+    await caretAtEnd(editor, line(doc, 'h2'))
+    await user.keyboard('{Enter}/prog')
+    const menu = await screen.findByRole('listbox', { name: 'Blocks' })
+    expect(
+      within(menu)
+        .getAllByRole('option')
+        .map((option) => option.textContent),
+    ).toEqual(['Progression'])
+    await user.keyboard('{Enter}')
+    expect(screen.queryByRole('listbox', { name: 'Blocks' })).not.toBeInTheDocument()
+    await waitFor(
+      async () =>
+        expect((await saved(content))?.sections[0]?.blocks[0]).toMatchObject({
+          kind: 'progression',
+          numerals: 'I IV V I',
+        }),
+      { timeout: 3000 },
+    )
+  })
+
+  it('moves the block the caret is in with Alt+arrows, and deletes one from its menu with Undo', async () => {
+    const user = userEvent.setup()
+    const content = editing()
+    await renderApp(`/lessons/${LESSON.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    const first = LESSON.sections[0]!.blocks
+    const { doc, editor } = await lessonDoc()
+    const paragraph = doc.querySelector<HTMLElement>('h2 + p')!
+    await caretAtEnd(editor, paragraph)
+    await user.keyboard('{Alt>}{ArrowUp}{/Alt}')
     await waitFor(
       async () => {
-        const draft = await content.draft('lesson', LESSON.id)
-        const body = draft.ok ? (draft.value?.body as typeof LESSON) : undefined
-        expect(body?.sections[0]?.blocks).toHaveLength(blocks + 1)
-        expect(body?.sections[0]?.blocks.at(-2)).toEqual({
-          kind: 'note',
-          rule: { en: '', ru: '' },
-          text: { en: '', ru: '' },
-        })
-        expect(body?.sections.at(-1)?.heading).toEqual({ en: 'Practice it', ru: '' })
+        const blocks = (await saved(content))?.sections
+        expect(blocks?.[0]?.heading.en).toBe('')
+        expect(blocks?.[0]?.blocks[0]).toEqual(first[0])
       },
       { timeout: 3000 },
     )
+    await user.keyboard('{Alt>}{ArrowDown}{/Alt}')
+    await user.click(screen.getByRole('button', { name: 'Block' }))
+    await user.click(await screen.findByRole('button', { name: 'Delete' }))
+    expect(await screen.findByText('Deleted: Text')).toBeVisible()
+    expect(doc.querySelector('h2 + p')).not.toBe(paragraph)
+    const toolbar = screen.getByRole('toolbar', { name: 'Formatting' })
+    await user.click(
+      screen.getAllByRole('button', { name: 'Undo' }).find((each) => !toolbar.contains(each))!,
+    )
+    await waitFor(async () => expect((await saved(content))?.sections).toEqual(LESSON.sections), {
+      timeout: 3000,
+    })
   })
 
   it('tells a learner it is an editor’s, with the way back', async () => {
