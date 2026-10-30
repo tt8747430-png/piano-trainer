@@ -1,4 +1,4 @@
-import { Ear, KeyboardMusic, Layers, ListChecks, type LucideIcon } from 'lucide-react'
+import { Ear, KeyboardMusic, Layers, ListChecks, Play, type LucideIcon } from 'lucide-react'
 import { useId, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectTrainer, useSettings, useSettingsStoreApi } from '@/entities/settings'
@@ -33,8 +33,16 @@ import {
   scaleKindsIn,
   type Midi,
 } from '@/shared/lib/music'
-import { Dropdown, Segmented, SettingField, SettingRows, SwitchRow, ToggleChips } from '@/shared/ui'
-import { Button } from '@/shared/ui/primitives/button'
+import {
+  Dropdown,
+  Fab,
+  FloatingActions,
+  Segmented,
+  SettingField,
+  SettingRows,
+  SwitchRow,
+  ToggleChips,
+} from '@/shared/ui'
 import { ListSheetRow } from './ListSheetRow'
 
 type ListField = keyof typeof CUSTOM_CHOICES
@@ -342,16 +350,15 @@ export function TrainerSetup({
 
       {footer}
 
-      {/* The one thing to do, always in reach: it stays at the foot of the screen as the setup scrolls. */}
-      <div className="sticky bottom-[calc(var(--nav-bar)+--spacing(3))] z-10 sm:static">
-        <Button
-          size="pill"
-          className="w-full elevation-2 sm:w-auto sm:min-w-56 sm:elevation-0"
+      {/* The one thing to do, always in reach: the floating action. */}
+      <FloatingActions>
+        <Fab
+          label={t('quiz:setup.start')}
+          icon={Play}
+          className="[&_svg]:fill-current"
           onClick={onStart}
-        >
-          {t('quiz:setup.start')}
-        </Button>
-      </div>
+        />
+      </FloatingActions>
     </div>
   )
 }

@@ -8,7 +8,7 @@ import { STAGE_PAINT, stepOf } from '@/entities/step'
 import { localText, useLocale } from '@/shared/i18n'
 import { cn } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { BackButton, ButtonLink, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
+import { BackButton, FabLink, FloatingActions, PAINT, RoundLink, ScreenHeader } from '@/shared/ui'
 import {
   CourseFacts,
   courseProgress,
@@ -20,8 +20,8 @@ import {
 } from '@/widgets/curriculum'
 
 /**
- * The course's one honey way in: Start course, or Continue onto the step to take; Review, onto its
- * first lesson, once every one is learned.
+ * The course's one way in, its floating action: Start course, or Continue onto the step to take;
+ * Review, onto its first lesson, once every one is learned.
  */
 function CourseAction({ course }: { course: Course }) {
   const { t } = useTranslation('learn')
@@ -37,32 +37,30 @@ function CourseAction({ course }: { course: Course }) {
       : t('course.continue')
   const Icon = !open ? RotateCcw : step.kind === 'piece' ? Play : ArrowRight
   return (
-    <ButtonLink
-      size="lg"
-      variant={open ? 'default' : 'outline'}
-      className="w-full sm:w-auto sm:min-w-48"
-      render={
-        step.kind === 'piece' ? (
-          // A guided song's page, where it is played and marked learned.
-          <PieceLink entry={pieceById(step.pieceId) ?? { id: step.pieceId, kind: 'song' }} />
-        ) : (
-          <Link
-            to="/courses/$courseId/$lessonId"
-            params={{ courseId: step.courseId, lessonId: step.lessonId }}
-          />
-        )
-      }
-    >
-      {label}
-      <Icon data-icon="inline-end" aria-hidden />
-    </ButtonLink>
+    <FloatingActions>
+      <FabLink
+        label={label}
+        icon={Icon}
+        render={
+          step.kind === 'piece' ? (
+            // A guided song's page, where it is played and marked learned.
+            <PieceLink entry={pieceById(step.pieceId) ?? { id: step.pieceId, kind: 'song' }} />
+          ) : (
+            <Link
+              to="/courses/$courseId/$lessonId"
+              params={{ courseId: step.courseId, lessonId: step.lessonId }}
+            />
+          )
+        }
+      />
+    </FloatingActions>
   )
 }
 
 /**
  * A course's page (ADR 0053, 0061): one card, its icon on its level's paint beside what it teaches
- * and its facts in words, and along its foot how much is learned and its one way in; then its
- * lessons numbered as taught, the next ringed, and its guided songs.
+ * and its facts in words, and along its foot how much is learned; then its lessons numbered as
+ * taught, the next ringed, and its guided songs. Its one way in floats.
  */
 export function CoursePage() {
   const { t } = useTranslation('learn')
@@ -110,7 +108,7 @@ export function CoursePage() {
             <CourseFacts course={course} level className="text-sm" />
           </div>
         </div>
-        <div className="flex flex-col gap-4 border-t border-hairline bg-muted/40 p-5 sm:flex-row sm:items-center">
+        <div className="flex flex-col gap-4 border-t border-hairline bg-muted/40 p-5">
           {isComplete(progress) ? (
             <p className="flex flex-1 items-center gap-2 font-semibold text-learned">
               <Check aria-hidden className="size-5" strokeWidth={3} />
