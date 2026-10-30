@@ -100,7 +100,6 @@ music, `exercise` music and arrangement, and none of them imports a package. `es
 Three places: **Learn · Songs · Practice** (`app/router.tsx` has every route; `routes/*-search.ts` every URL's
 params). Decisions and their reasons: the ADRs in `docs/adr/` (index in its README).
 - **Learn** (`/`, `?view=lessons|courses`) — a library: the Lessons (a journey chosen from a pop-up, its chapters groups of rows, `/lessons/$lessonId`) and the
-- **Learn** (`/`, `?view=lessons|courses`) — the Lessons (journeys of chapters, `/lessons/$lessonId`) and the
   Courses (`/courses/$courseId`, its lessons under it); a lesson paged a section at a time on a phone, its
   progress and prerequisites on the contents. `pages/learn`, `pages/course`, `pages/lesson`; an editor's lesson editor (`/lessons/$lessonId/edit`, `pages/lesson-editor`, ADR 0116: one continuous TipTap document, its examples drawn live, a toolbar, Insert and `/`, one language at a time; `lessonToDoc`/`docToLesson` in its `model`), course editor (`/courses/$courseId/edit`, a document: title and summary in place, its facts as properties, lessons dragged into order) and New course (`/courses/new`); the journey editor (`/journeys/$journeyId/edit`: chapters as headings, steps dragged across them); the editors their own chunk, a draft's status and Publish in the bar (`DraftStatus`, `DraftActions`);
   `widgets/curriculum`, `widgets/lesson-view`; `entities/lesson`, `course`, `step`, `progress`.
