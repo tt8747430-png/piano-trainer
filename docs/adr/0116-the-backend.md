@@ -176,3 +176,6 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   Create floating); the bars say what is edited (Edit lesson …); voicings, a pattern and a link edited in their
   blocks (Versions kept as written); blocks dragged by finger on a phone (`moveBlockTo`), rows by dnd-kit's
   touch sensor; lesson names in the language written; a compact EN · RU (2026-10-30).
+- r23 — A draft of an item the database has not got yet (a journey or progression never seeded) creates the item,
+  unpublished, then keeps the draft. The lesson editor's `/` opens after words too, the block going after their
+  line; Insert grouped (Text, Music, For the learner) with voicings and a link added (2026-10-30).

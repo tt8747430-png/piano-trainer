@@ -80,3 +80,5 @@ course.
 - The research note on clearer lessons (2026-10-12), deleted: its checklist is `docs/CONTENT.md`'s.
 - r21 — The Lessons a library: a journey chosen from a pop-up, its chapters groups of rows, no zigzag path;
   Continue one compact row; an editor's Edit the journey and New course floating (2026-10-30).
+- r23 — The Courses as library rows (a tile, the facts on one line, how much is learned, Next), grouped by shelf in
+  one card each; a paged lesson's bar narrowed to sit beside the floating button (2026-10-30).

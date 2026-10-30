@@ -407,8 +407,10 @@ every piece is shown in the Admin area's Components):
   second action); `secondary` sky mist; `ghost` no fill until hovered; `destructive` card paper with a crimson line
   and label; `link` deep sky; `tool` a toolbar's button, no frame until hovered, open or pressed.
 - **Round** (`RoundButton`, `RoundLink`): 44px circles for close, back, settings, More.
-- **Floating** (`Fab`, `SpeedDial`): the main action 56px, a second 48px, each its icon alone unless the learner asks
-  for names. A dial opens as a card of 48px rows over a page dimmed to half.
+- **Floating** (`Fab`, `FabLink`, `FabPill`, `SpeedDial`): one family across the app. A screen's main action is
+  the honey 56px circle (a dial's `main` too, its + turning to ✕ while open), a second action a raised 48px circle,
+  each its icon alone unless the learner asks for names. A dial opens as a card of rows over a page dimmed to half:
+  each row a soft tile, its name and a line of what it does, the nearest action last.
 - **Every Play becomes Stop** (a square) while it sounds; an item in a grid is pressed instead (sky mist).
 - **Focus:** one ring for every control, 3px deep sky, 2px outside, inset only where a scroller would cut it.
 
