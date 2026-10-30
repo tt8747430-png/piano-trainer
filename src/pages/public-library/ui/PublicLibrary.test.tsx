@@ -68,7 +68,35 @@ describe('the Public library', () => {
     expect(screen.getByText('2 songs')).toBeVisible()
   })
 
-  it('sorts by the most saved, from the pop-up by the search', async () => {
+  it('shelves the newest and the most saved over the list, each with See all', async () => {
+    const user = userEvent.setup()
+    const publicLibrary = withSongs('One', 'Two', 'Three', 'Four', 'Five')
+    await publicLibrary.save('public-1')
+    await publicLibrary.save('public-2')
+    const { router } = await renderApp('/songs/public', { publicLibrary })
+    expect(await screen.findByText('Browse songs and patterns others shared')).toBeVisible()
+    const newest = await screen.findByRole('region', { name: 'Newest' })
+    expect(
+      within(within(newest).getByRole('list'))
+        .getAllByRole('link')
+        .map((card) => card.textContent),
+    ).toEqual([
+      expect.stringMatching(/^Five/),
+      expect.stringMatching(/^Four/),
+      expect.stringMatching(/^Three/),
+      expect.stringMatching(/^Two/),
+      expect.stringMatching(/^One/),
+    ])
+    const loved = screen.getByRole('region', { name: 'Most saved' })
+    expect(within(loved).getAllByRole('link')).toHaveLength(2)
+    await user.click(within(loved).getByRole('button', { name: 'See all' }))
+    await waitFor(() => expect(router.state.location.search).toMatchObject({ sort: 'saved' }))
+    // Searched, the list alone.
+    await user.type(screen.getByRole('searchbox', { name: 'Search the Public library' }), 'Two')
+    await waitFor(() => expect(screen.queryByRole('region', { name: 'Newest' })).toBeNull())
+  })
+
+  it('sorts the list by the most saved, from the pop-up at its head', async () => {
     const user = userEvent.setup()
     const publicLibrary = withSongs('Quiet', 'Loved')
     await publicLibrary.save('public-1')

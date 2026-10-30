@@ -235,6 +235,7 @@ export const songs: LocaleResources['songs'] = {
     title: 'Общая библиотека',
     line: 'Песни и рисунки, которыми делятся другие',
     kinds: { label: 'Песни или рисунки', song: 'Песни', pattern: 'Рисунки' },
+    seeAll: 'Все',
     sort: { label: 'Сортировка', new: 'Новые', saved: 'Популярные' },
     search: 'Поиск в общей библиотеке',
     clear: 'Показать все',

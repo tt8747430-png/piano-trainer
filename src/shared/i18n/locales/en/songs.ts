@@ -250,6 +250,7 @@ export const songs = {
     title: 'Public library',
     line: 'Browse songs and patterns others shared',
     kinds: { label: 'Songs or patterns', song: 'Songs', pattern: 'Patterns' },
+    seeAll: 'See all',
     sort: { label: 'Sort', new: 'Newest', saved: 'Most saved' },
     search: 'Search the Public library',
     clear: 'Show all',
