@@ -153,8 +153,13 @@ describe('the course editor (ADR 0116, round 12)', () => {
     if (!first) throw new Error('a course of a lesson at least')
     const lessons = await screen.findByRole('list', { name: 'Lessons' })
     await rowAction(user, first.title.en, 'Remove')
-    await user.type(screen.getByRole('textbox', { name: 'Add lesson' }), first.title.en.slice(0, 6))
-    await user.click(screen.getByRole('button', { name: first.title.en }))
+    await user.click(screen.getByRole('button', { name: 'Add lesson' }))
+    const sheet = await screen.findByRole('dialog', { name: 'New lesson' })
+    await user.type(
+      within(sheet).getByRole('textbox', { name: 'Name' }),
+      first.title.en.slice(0, 6),
+    )
+    await user.click(within(sheet).getByRole('button', { name: first.title.en }))
     expect(within(lessons).getAllByRole('link').at(-1)).toHaveTextContent(first.title.en)
   })
 
@@ -165,8 +170,10 @@ describe('the course editor (ADR 0116, round 12)', () => {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await user.type(await screen.findByRole('textbox', { name: 'Add lesson' }), 'Blues in C')
-    await user.click(screen.getByRole('button', { name: 'New lesson “Blues in C”' }))
+    await user.click(await screen.findByRole('button', { name: 'Add lesson' }))
+    const sheet = await screen.findByRole('dialog', { name: 'New lesson' })
+    await user.type(within(sheet).getByRole('textbox', { name: 'Name' }), 'Blues in C')
+    await user.click(within(sheet).getByRole('button', { name: 'Create lesson' }))
     await waitFor(() =>
       expect(router.state.location.pathname).toBe(`/courses/${COURSE.id}/blues-in-c/edit`),
     )

@@ -124,7 +124,8 @@ function CourseDocument({
             foot: (
               <AddRow
                 label={t('learn:edit.order.addLesson')}
-                newLabel={(name) => t('learn:edit.doc.newLesson', { name })}
+                title={t('learn:edit.order.newLesson')}
+                createLabel={t('learn:edit.order.createLesson')}
                 failed={t('learn:edit.order.addFailed')}
                 found={course.lessons
                   .filter((lesson) => !ids.includes(lesson.id))

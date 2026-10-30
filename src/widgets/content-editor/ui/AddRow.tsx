@@ -1,6 +1,7 @@
-import { FilePlus2, Plus } from 'lucide-react'
-import { useId, useState, type FormEvent } from 'react'
+import { Plus, Undo2 } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { NewSheet, SheetPart } from '@/shared/ui'
 
 /** An item that may be added back by its name: a lesson the course had. */
 export interface Addable {
@@ -9,110 +10,102 @@ export interface Addable {
 }
 
 /**
- * A list's last row (round 21): "Add lesson", typed into in place. What is typed finds the items to
- * add by their name, and offers a new one of that name; Enter adds the first found, else the new
- * one. Why one was not made is said under it.
+ * A list's last row (round 25): "+ Add lesson", which opens the app's New sheet: its name, then
+ * Create. Where items may be added back (lessons taken out of a course), the sheet lists them too,
+ * narrowed by the name typed, each added by a tap. Why one was not made is said in the sheet.
  */
 export function AddRow({
   label,
-  newLabel,
+  title,
+  createLabel,
   failed: failedLine,
   found = [],
   onPick,
   onCreate,
 }: {
-  /** The field's name and placeholder: "Add lesson". */
+  /** The row's name: "Add lesson". */
   label: string
-  /** The offer to make a new one of the name typed: "New lesson “Blues”". */
-  newLabel: (name: string) => string
+  /** The sheet's title: "New lesson". */
+  title: string
+  /** Its button: "Create lesson". */
+  createLabel: string
   /** Said where a new one was not made. */
   failed: string
-  /** What may be added by its name. */
+  /** What may be added back by its name. */
   found?: readonly Addable[]
   onPick?: (key: string) => void
   /** Makes a new one; false where it was not made. */
   onCreate: (name: string) => Promise<boolean>
 }) {
   const { t } = useTranslation('learn')
-  const id = useId()
+  const [open, setOpen] = useState(false)
   const [name, setName] = useState('')
   const [busy, setBusy] = useState(false)
   const [failed, setFailed] = useState(false)
-  const typed = name.trim()
-  const matches =
-    typed === ''
-      ? []
-      : found.filter((item) => item.title.toLowerCase().includes(typed.toLowerCase()))
+  const typed = name.trim().toLowerCase()
+  const matches = found.filter((item) => item.title.toLowerCase().includes(typed))
+  const close = (next: boolean) => {
+    setOpen(next)
+    if (!next) {
+      setName('')
+      setFailed(false)
+    }
+  }
   const create = async () => {
-    if (typed === '' || busy) return
     setBusy(true)
     setFailed(false)
-    const made = await onCreate(typed)
+    const made = await onCreate(name.trim())
     setBusy(false)
-    if (made) setName('')
+    if (made) close(false)
     else setFailed(true)
   }
-  const pick = (key: string) => {
-    onPick?.(key)
-    setName('')
-  }
-  const submit = (event: FormEvent) => {
-    event.preventDefault()
-    const first = matches[0]
-    if (first) pick(first.key)
-    else void create()
-  }
   return (
-    <form onSubmit={submit} className="flex flex-col">
-      <div className="flex min-h-12 items-center gap-1 rounded-xl transition-colors duration-150 ease-out focus-within:bg-muted/60 hover:bg-muted/60">
-        <span
-          aria-hidden
-          className="grid size-11 shrink-0 place-items-center text-muted-foreground"
-        >
+    <>
+      <button
+        type="button"
+        className="flex min-h-12 items-center gap-1 rounded-xl pr-3 text-left font-medium text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted/60 hover:text-foreground"
+        onClick={() => setOpen(true)}
+      >
+        <span aria-hidden className="grid size-11 shrink-0 place-items-center">
           <Plus className="size-4" />
         </span>
-        <input
-          id={id}
-          aria-label={label}
-          placeholder={label}
-          value={name}
-          disabled={busy}
-          autoComplete="off"
-          onChange={(event) => setName(event.target.value)}
-          className="min-h-11 min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground"
-        />
-      </div>
-      {typed === '' ? null : (
-        <ul aria-label={label} className="flex flex-col pl-11">
-          {matches.map((item) => (
-            <li key={item.key}>
-              <button
-                type="button"
-                className="flex min-h-11 w-full items-center rounded-xl px-2 text-left transition-colors duration-150 ease-out hover:bg-muted"
-                onClick={() => pick(item.key)}
-              >
-                {item.title}
-              </button>
-            </li>
-          ))}
-          <li>
-            <button
-              type="button"
-              disabled={busy}
-              className="flex min-h-11 w-full items-center gap-2 rounded-xl px-2 text-left font-medium transition-colors duration-150 ease-out hover:bg-muted"
-              onClick={() => void create()}
-            >
-              <FilePlus2 aria-hidden className="size-4 text-muted-foreground" />
-              {busy ? t('edit.order.adding') : newLabel(typed)}
-            </button>
-          </li>
-        </ul>
-      )}
-      {failed ? (
-        <p role="alert" className="pl-11 text-sm text-destructive">
-          {failedLine}
-        </p>
-      ) : null}
-    </form>
+        {label}
+      </button>
+      <NewSheet
+        open={open}
+        onOpenChange={close}
+        title={title}
+        nameLabel={t('edit.order.name')}
+        name={name}
+        onName={setName}
+        createLabel={createLabel}
+        creatingLabel={t('edit.order.adding')}
+        creating={busy}
+        failed={failed ? failedLine : null}
+        onCreate={() => void create()}
+      >
+        {matches.length > 0 ? (
+          <SheetPart title={t('edit.order.addBack')}>
+            <ul className="flex flex-col">
+              {matches.map((item) => (
+                <li key={item.key}>
+                  <button
+                    type="button"
+                    className="flex min-h-11 w-full items-center gap-2 rounded-xl px-2 text-left transition-colors duration-150 ease-out hover:bg-card"
+                    onClick={() => {
+                      onPick?.(item.key)
+                      close(false)
+                    }}
+                  >
+                    <Undo2 aria-hidden className="size-4 shrink-0 text-muted-foreground" />
+                    {item.title}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </SheetPart>
+        ) : null}
+      </NewSheet>
+    </>
   )
 }

@@ -146,8 +146,6 @@ export const learn: LocaleResources['learn'] = {
       drag: 'Переместить: {{title}}',
       rowMenu: 'Ещё: {{title}}',
       properties: 'Свойства',
-      newLesson: 'Новый урок «{{name}}»',
-      newChapter: 'Новая глава «{{name}}»',
       chapterMenu: 'Глава: {{title}}',
       courseTitle: 'Название курса',
       courseSummary: 'Чему учит курс',
@@ -220,6 +218,12 @@ export const learn: LocaleResources['learn'] = {
     unreadable:
       'У каждого текста должны быть слова на обоих языках, а каждый пример должен читаться. Исправьте и опубликуйте.',
     order: {
+      name: 'Название',
+      addBack: 'Или вернуть убранный',
+      newLesson: 'Новый урок',
+      createLesson: 'Создать урок',
+      newChapter: 'Новая глава',
+      createChapter: 'Создать главу',
       remove: 'Убрать',
       removed: 'Убрано: {{title}}',
       undo: 'Отменить',

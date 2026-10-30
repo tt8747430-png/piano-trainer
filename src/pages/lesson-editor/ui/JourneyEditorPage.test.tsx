@@ -99,10 +99,14 @@ describe('Manage lessons, a level’s editor (content as data)', () => {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await user.type(await screen.findByRole('textbox', { name: 'Add chapter' }), 'Pedalling{Enter}')
+    await user.click(await screen.findByRole('button', { name: 'Add chapter' }))
+    const chapterSheet = await screen.findByRole('dialog', { name: 'New chapter' })
+    await user.type(within(chapterSheet).getByRole('textbox', { name: 'Name' }), 'Pedalling{Enter}')
     const chapter = await screen.findByRole('region', { name: 'Pedalling' })
-    await user.type(within(chapter).getByRole('textbox', { name: 'Add lesson' }), 'Half pedal')
-    await user.click(within(chapter).getByRole('button', { name: 'New lesson “Half pedal”' }))
+    await user.click(within(chapter).getByRole('button', { name: 'Add lesson' }))
+    const lessonSheet = await screen.findByRole('dialog', { name: 'New lesson' })
+    await user.type(within(lessonSheet).getByRole('textbox', { name: 'Name' }), 'Half pedal')
+    await user.click(within(lessonSheet).getByRole('button', { name: 'Create lesson' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/lessons/half-pedal/edit'))
     const lesson = await content.draft('lesson', 'half-pedal')
     expect(lesson.ok && lesson.value?.body).toMatchObject({ title: { en: 'Half pedal' } })

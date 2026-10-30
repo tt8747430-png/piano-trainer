@@ -183,7 +183,8 @@ function JourneyDocument({
             foot: (
               <AddRow
                 label={t('edit.order.addLesson')}
-                newLabel={(lesson) => t('edit.doc.newLesson', { name: lesson })}
+                title={t('edit.order.newLesson')}
+                createLabel={t('edit.order.createLesson')}
                 failed={t('edit.order.addFailed')}
                 onCreate={(lesson) => onAddLesson(journey, chapter.id, lesson)}
               />
@@ -195,7 +196,8 @@ function JourneyDocument({
       <div className="mt-6 border-t border-border pt-4">
         <AddRow
           label={t('edit.order.addChapter')}
-          newLabel={(name) => t('edit.doc.newChapter', { name })}
+          title={t('edit.order.newChapter')}
+          createLabel={t('edit.order.createChapter')}
           failed={t('edit.order.addFailed')}
           onCreate={async (name) => {
             const id = slug(

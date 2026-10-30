@@ -157,8 +157,6 @@ export const learn = {
       drag: 'Move: {{title}}',
       rowMenu: 'More: {{title}}',
       properties: 'Properties',
-      newLesson: 'New lesson “{{name}}”',
-      newChapter: 'New chapter “{{name}}”',
       chapterMenu: 'Chapter: {{title}}',
       courseTitle: 'Course title',
       courseSummary: 'What the course teaches',
@@ -232,6 +230,12 @@ export const learn = {
     unreadable:
       'Every text needs words in both languages, and every example must read. Put them right, then publish.',
     order: {
+      name: 'Name',
+      addBack: 'Or add one back',
+      newLesson: 'New lesson',
+      createLesson: 'Create lesson',
+      newChapter: 'New chapter',
+      createChapter: 'Create chapter',
       remove: 'Remove',
       removed: 'Removed: {{title}}',
       undo: 'Undo',
