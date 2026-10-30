@@ -30,6 +30,7 @@ import {
   type Moving,
 } from '@/features/manage-library'
 import { useLocale } from '@/shared/i18n'
+import type { CarryTarget } from '@/widgets/song-library'
 import { libraryView } from './library-view'
 import type { SongsFilter } from './songs-filter'
 
@@ -47,6 +48,7 @@ export type Pending =
   | { readonly kind: 'delete-chosen' }
   | { readonly kind: 'new-song'; readonly builtIn?: SongCollectionId }
   | { readonly kind: 'move-in' }
+  | { readonly kind: 'export'; readonly song: PieceId }
 
 /**
  * The library's page's acts (Mindscape's `use-library`), at Home (`folder` null) or in a folder:
@@ -156,6 +158,30 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
         }),
       archive: () => {
         acts.archiveChosen(chosenSongs, chosenFolders)
+        exit()
+      },
+      /** What a row's face carries: every row chosen in sight where it is chosen, else itself. */
+      carried: (key: Chosen): Chosen[] => (chosen.has(key) ? inSight : [key]),
+      /**
+       * What was carried, dropped (ADR 0106): into a folder, out to the place this folder stands in,
+       * or on Archive; said in a toast with Undo, as Move to… and Archive say it. It ends Select.
+       */
+      carry: (keys: readonly Chosen[], target: CarryTarget) => {
+        const songs = keys.flatMap((key) =>
+          key.startsWith('song:') ? [key.slice('song:'.length)] : [],
+        )
+        const folderIds = new Set(
+          keys.flatMap((key) => (key.startsWith('folder:') ? [key.slice('folder:'.length)] : [])),
+        )
+        const folders = layout.folders.filter((each) => folderIds.has(each.id))
+        const moving = { songs, folders: folders.map((each) => each.id) }
+        const into =
+          'into' in target ? layout.folders.find((each) => each.id === target.into) : undefined
+        if (into) acts.move(moving, into.id)
+        else if ('zone' in target && target.zone === 'out')
+          acts.move(moving, folder?.parent ?? null)
+        else if ('zone' in target && target.zone === 'archive') acts.archiveChosen(songs, folders)
+        else return
         exit()
       },
       /** Delete is offered where everything chosen can be: the learner's own songs, and folders. */

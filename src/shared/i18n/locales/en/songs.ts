@@ -184,6 +184,12 @@ export const songs = {
     over: '{{name}} is at place {{place}} of {{count}}.',
     dropped: '{{name}} put down at place {{place}} of {{count}}.',
     cancelled: '{{name}} put back.',
+    // A row carried by its face into a folder or onto a place on the bar.
+    overTarget: 'Over {{target}}.',
+    droppedOn: '{{name}} dropped on {{target}}.',
+    archive: 'Archive',
+    moveOut: 'Move to {{place}}',
+    zones: 'Drop here',
   },
   // Home with nothing in it: every song and folder archived.
   homeEmpty: {
@@ -209,7 +215,6 @@ export const songs = {
     song: 'Write it on the staff',
     folder: 'Keep songs together',
     import: 'A MusicXML or MIDI file',
-    public: 'Songs other learners shared',
   },
   making: {
     title: 'New song',
@@ -243,8 +248,9 @@ export const songs = {
   // The Public library (ADR 0116): learners' songs published for anyone to play and save a copy of.
   public: {
     title: 'Public library',
-    line: 'Songs and patterns other learners shared',
+    line: 'Browse songs and patterns others shared',
     kinds: { label: 'Songs or patterns', song: 'Songs', pattern: 'Patterns' },
+    seeAll: 'See all',
     sort: { label: 'Sort', new: 'Newest', saved: 'Most saved' },
     search: 'Search the Public library',
     clear: 'Show all',
@@ -292,10 +298,28 @@ export const songs = {
     publish: 'Publish to the Public library',
     update: 'Update in the Public library',
     unpublish: 'Remove from the Public library',
-    publishTitle: 'Publish “{{title}}”?',
-    publishBody:
-      'Anyone can play it and save a copy, credited to {{name}}. Publish only music you wrote or may share.',
     publishConfirm: 'Publish',
+    updateConfirm: 'Update',
+    // Publish's own sheet (Noji's Publish in library).
+    description: 'Description',
+    aboutSong: 'What the song is, its style, and who it suits',
+    aboutPattern: 'What the pattern is, its style, and what it suits',
+    descriptionLeft_one: '{{count}} more character to go',
+    descriptionLeft_other: '{{count}} more characters to go',
+    descriptionCount: '{{count}} of {{max}}',
+    preview: 'As others will see it',
+    rights: 'Publish only music you wrote or may share.',
+    why: 'Why publish?',
+    whyFound: 'Other learners find it, play it and save a copy to learn.',
+    whyCredit: 'It carries your name wherever it is saved.',
+    whyYours: 'It stays yours: update it or take it out whenever you like.',
+    // A published song's or pattern's place, on its own page.
+    inLibrary: 'In the Public library',
+    changedSince: 'Changed since you published it',
+    view: 'View',
+    edit: 'Edit',
+    unpublishShort: 'Unpublish',
+    about: 'About',
     published: 'Published to the Public library.',
     updated: 'Updated in the Public library.',
     unpublished: 'Removed from the Public library.',
@@ -310,6 +334,18 @@ export const songs = {
     add: 'Add to the library',
     none: 'This link holds no song: it may be cut short.',
     toSongs: 'To Songs',
+  },
+  // Export… (ADR 0107): a song's ways out, each with what it is for.
+  export: {
+    action: 'Export…',
+    title: 'Export',
+    musicXml: 'MusicXML',
+    musicXmlLine: 'The score, for MuseScore, Sibelius, Finale or Dorico',
+    midi: 'MIDI',
+    midiLine: 'The music as played, for a DAW or a keyboard',
+    share: 'Share link',
+    shareOwn: 'A link that carries the song: whoever opens it can add it',
+    sharePiece: 'A link to the song in the app, in the key you play it',
   },
   // A song read from a MusicXML or MIDI file (ADR 0107): New's Import, or a file dropped on the
   // library; what the file holds that a song can't, listed after.

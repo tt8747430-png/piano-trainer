@@ -41,7 +41,9 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   content is edited in the app (round 6), `entities/*/content` is the source: `scripts/export-content.mjs` and
   `scripts/seed-content.mjs` publish it.
 - **The Public library:** a learner's own song is private until they publish it (its More: Publish to the Public
-  library, asked first with what it means and the rights it takes; Update once it has changed; Remove). A published
+  library, a sheet as Noji's: a description of at least 20 characters, kept in `meta.description` (the item's JSON,
+  no column of its own), the row as others will see it, the rights in a line and why publish behind the ⓘ;
+  published, the page's card says so with View, Edit or Update, and Unpublish). A published
   song is a snapshot held as a save holds an own song (`public_items`, one per author and song, 200 KB at most), read
   by anyone, written by its author unless an editor has blocked them, at most 20 publishes an hour. Songs → Public
   library lists them, newest or most saved, searched by title; a song's page plays it and saves an own copy (a save
@@ -179,3 +181,5 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r23 — A draft of an item the database has not got yet (a journey or progression never seeded) creates the item,
   unpublished, then keeps the draft. The lesson editor's `/` opens after words too, the block going after their
   line; Insert grouped (Text, Music, For the learner) with voicings and a link added (2026-10-30).
+- r24 — Publish as its own sheet with a description, the published card on a song's and a pattern's page, and
+  the Public library as Noji's: shelves of Newest and Most saved over the list, kinds as chips (2026-10-30).

@@ -1,45 +1,19 @@
 import { Link } from '@tanstack/react-router'
-import {
-  AudioWaveform,
-  Bookmark,
-  CloudOff,
-  Globe,
-  Music,
-  SearchX,
-  TriangleAlert,
-} from 'lucide-react'
+import { Bookmark, CloudOff, Globe, SearchX, TriangleAlert } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LEFT_FIGURES, RIGHT_FIGURES, isLeftFigureId, isRightFigureId } from '@/entities/pattern'
+import { publicFace } from '@/features/publish'
 import type { PublicEntry } from '@/shared/api/public-library'
-import { localText, useLocale, type Locale } from '@/shared/i18n'
-import { keySymbol, parseKey, printedSymbol } from '@/shared/lib/music'
+import { useLocale } from '@/shared/i18n'
 import { ButtonLink, RowLink } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { itemPaint } from '../model/item-paint'
 import type { PublicView } from '../model/public-view'
 import type { Browse } from '../model/use-public-browse'
 import { Said } from './Said'
 
-/** A kind's tile: a song's note, a pattern's wave. */
-const KIND_ICON = { song: Music, pattern: AudioWaveform } as const
-
-/** A pattern's figures, the right hand's then the left's, by their names. */
-function figuresOf({ meta }: PublicEntry, locale: Locale): string[] {
-  const rh =
-    meta.rh && isRightFigureId(meta.rh) ? localText(RIGHT_FIGURES[meta.rh].name, locale) : ''
-  const lh = meta.lh && isLeftFigureId(meta.lh) ? localText(LEFT_FIGURES[meta.lh].name, locale) : ''
-  return [rh, lh].filter(Boolean)
-}
-
-/** A song's key, as printed, and its meter. */
-function factsOf({ meta }: PublicEntry): string[] {
-  const key = meta.key ? parseKey(meta.key) : null
-  return [key ? printedSymbol(keySymbol(key)) : '', meta.meter ?? ''].filter(Boolean)
-}
-
 /**
- * What the Public library found for its view: while asked, rows of grey; then a count over a card of
- * rows; or, with none, why: offline or failed (Try again), nothing matching the search (Show all),
+ * What the Public library found for its view: while asked, rows of grey; then a count (its sort at
+ * its end) over a card of rows; or, with none, why: offline or failed (Try again), nothing matching the search (Show all),
  * or nothing published yet, with the way to publish the first.
  */
 export function PublicResults({
@@ -47,11 +21,14 @@ export function PublicResults({
   browse,
   onRetry,
   onClear,
+  sort,
 }: {
   view: PublicView
   browse: Browse
   onRetry: () => void
   onClear: () => void
+  /** The list's sort, at the end of its count. */
+  sort?: ReactNode
 }) {
   const { t } = useTranslation('songs')
   const pattern = view.kind === 'pattern'
@@ -105,9 +82,12 @@ export function PublicResults({
     )
   return (
     <section className="flex flex-col gap-2">
-      <p className="px-3 text-sm font-semibold text-muted-foreground tabular-nums">
-        {t(pattern ? 'public.patternCount' : 'public.songCount', { count: browse.songs.length })}
-      </p>
+      <div className="flex min-h-9 items-center justify-between gap-2 pl-3">
+        <h2 className="font-sans text-sm font-semibold text-muted-foreground tabular-nums">
+          {t(pattern ? 'public.patternCount' : 'public.songCount', { count: browse.songs.length })}
+        </h2>
+        {sort}
+      </div>
       <ul aria-label={t('public.title')} className="grid-cards gap-x-2 card p-1.5">
         {browse.songs.map((entry) => (
           <PublicRow key={entry.id} entry={entry} />
@@ -123,16 +103,10 @@ export function PublicResults({
  */
 function PublicRow({ entry }: { entry: PublicEntry }) {
   const locale = useLocale()
-  const facts = entry.kind === 'pattern' ? figuresOf(entry, locale) : factsOf(entry)
   return (
     <li>
       <RowLink
-        icon={KIND_ICON[entry.kind]}
-        paint={itemPaint(entry.id)}
-        title={entry.title}
-        detail={entry.authorName}
-        // What it is, kept whole at the line's end; a long name is cut short before it.
-        count={facts.length > 0 ? facts.join(' · ') : undefined}
+        {...publicFace(entry, locale)}
         trailing={entry.saves > 0 ? <Saves count={entry.saves} /> : undefined}
         render={<Link to="/songs/public/$itemId" params={{ itemId: entry.id }} />}
       />
@@ -141,7 +115,7 @@ function PublicRow({ entry }: { entry: PublicEntry }) {
 }
 
 /** How often an item is saved: a bookmark and its number, said in words. */
-function Saves({ count }: { count: number }) {
+export function Saves({ count }: { count: number }) {
   const { t } = useTranslation('songs')
   return (
     <span className="flex shrink-0 items-center gap-1 text-sm font-semibold text-muted-foreground tabular-nums">

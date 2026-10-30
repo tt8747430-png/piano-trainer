@@ -1,13 +1,31 @@
+import { useRouter } from '@tanstack/react-router'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { ShelvedFolder } from '@/entities/library'
+import { entryTitles, useRepertoire } from '@/entities/piece'
+import { selectView } from '@/entities/views'
 import { DeleteFolderAsk, FolderSheet, MoveSheet } from '@/features/manage-library'
+import { songToShare, useShareSong } from '@/features/share-song'
+import { ExportSheet } from '@/features/song-files'
+import { useLocale } from '@/shared/i18n'
+import { say } from '@/shared/ui'
 import type { LibraryPage } from '../model/use-library-page'
 import { DeleteAsk } from './DeleteAsk'
 import { MoveInSheet } from './MoveInSheet'
 import { NewSongSheet } from './NewSongSheet'
 
+/** What sharing said, as the song's page words it. */
+const SAID = {
+  copied: 'shareCopied',
+  linked: 'shareLinked',
+  failed: 'shareFailed',
+  tooLong: 'shareTooLong',
+} as const
+
 /**
  * What the library's page opens over itself, one at a time (Mindscape's `LibraryDialogs`): Move to…,
- * the folder sheet, the asks before Delete, New song, and an empty folder's Move songs here.
+ * the folder sheet, the asks before Delete, New song, an empty folder's Move songs here, and a
+ * song's Export… (its link's word said in a toast, as the row has no line of its own).
  */
 export function LibraryDialogs({
   page,
@@ -16,7 +34,24 @@ export function LibraryDialogs({
   page: LibraryPage
   folder: ShelvedFolder | null
 }) {
+  const { t } = useTranslation(['songs', 'piece'])
   const { pending } = page
+  const repertoire = useRepertoire()
+  const locale = useLocale()
+  const router = useRouter()
+  const shared = useShareSong()
+  const said = shared.said
+  useEffect(() => {
+    if (said) say(t(`piece:${SAID[said]}`))
+  }, [said, t])
+  const exported = pending?.kind === 'export' ? (repertoire.piece(pending.song) ?? null) : null
+  const toShare = exported
+    ? songToShare(
+        exported,
+        entryTitles(exported, locale).primary,
+        selectView(router.options.context.views.getState(), `/play/${exported.id}`),
+      )
+    : null
   const shut = (open: boolean) => {
     if (!open) page.close()
   }
@@ -50,6 +85,18 @@ export function LibraryDialogs({
         onOpenChange={shut}
         folder={folder?.id ?? null}
         builtIn={pending?.kind === 'new-song' ? pending.builtIn : undefined}
+      />
+      <ExportSheet
+        piece={exported}
+        onOpenChange={shut}
+        share={
+          toShare
+            ? {
+                detail: t(toShare.kind === 'own' ? 'export.shareOwn' : 'export.sharePiece'),
+                onSelect: () => shared.share(toShare),
+              }
+            : undefined
+        }
       />
       {folder ? (
         <MoveInSheet

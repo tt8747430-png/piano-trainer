@@ -1,6 +1,6 @@
 import { act, cleanup, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '@/app/testing/render-app'
 import { untranslated } from '@/app/testing/untranslated'
 import {
@@ -68,6 +68,15 @@ const rowNames = (list: HTMLElement) =>
 async function openFilters(user: ReturnType<typeof userEvent.setup>) {
   await user.click(await screen.findByRole('button', { name: /^Filters/ }))
   return screen.findByRole('dialog', { name: 'Filters' })
+}
+
+/** A row in Select by its check's name: the row, and its face, which carries it. */
+function rowOf(check: string) {
+  const box = screen.getByRole('checkbox', { name: check })
+  const row = box.closest('li')
+  const face = box.parentElement?.firstElementChild
+  if (!row || !(face instanceof HTMLElement)) throw new Error(`a row for ${check}`)
+  return { row, face }
 }
 
 /** Opens a row's More (⋯) by what it is the More of, and chooses an action. */
@@ -331,6 +340,40 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
     expect(rowNames(folders).at(-1)).toBe('New folder Empty')
   })
 
+  it('New only adds: a song, an import, a folder; the Public library is a row of its own', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs')
+    expect(
+      await screen.findByRole('link', { name: /Public library Browse songs and patterns/ }),
+    ).toHaveAttribute('href', '/songs/public')
+    await user.click(await screen.findByRole('button', { name: 'New' }))
+    expect(await screen.findByRole('button', { name: /New song/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Import/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /New folder/ })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Public library/ })).not.toBeInTheDocument()
+  })
+
+  it('exports a song from its row’s More: one sheet of MusicXML, MIDI and its link', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs', { storage: saved({ pieces: { songs: [SONG], nextSong: 2 } }) })
+    await rowAction(user, 'Morning', 'Export…')
+    const sheet = await screen.findByRole('dialog', { name: 'Export' })
+    expect(
+      within(sheet)
+        .getAllByRole('button')
+        .flatMap((row) => (row.textContent ? [row.textContent] : [])),
+    ).toEqual([
+      'MusicXML The score, for MuseScore, Sibelius, Finale or Dorico',
+      'MIDI The music as played, for a DAW or a keyboard',
+      'Share link A link that carries the song: whoever opens it can add it',
+    ])
+    await user.click(within(sheet).getByRole('button', { name: /^Share link/ }))
+    await waitFor(() =>
+      expect(screen.queryByRole('dialog', { name: 'Export' })).not.toBeInTheDocument(),
+    )
+    expect(new URL(await navigator.clipboard.readText()).pathname).toBe('/songs/shared')
+  })
+
   it('imports a MIDI file from New as the learner’s song, opening its page (ADR 0107)', async () => {
     const user = userEvent.setup()
     const { piecesStore } = await renderApp('/songs')
@@ -564,6 +607,70 @@ describe('Songs: Select (ADR 0106)', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Selected: 5' })).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Done' }))
     expect(screen.getByRole('heading', { level: 1, name: 'Hymns' })).toBeInTheDocument()
+  })
+
+  it('carries a song by its face into a folder, the folder lit as the target, with Undo', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs', {
+      storage: saved({ pieces: { songs: [SONG], nextSong: 2 } }),
+    })
+    await user.click(await screen.findByRole('button', { name: 'Select' }))
+    const song = rowOf('Select Morning')
+    const folder = rowOf('Select Hymns')
+    stubBox(song.row, { top: 600, width: 360, height: 72 })
+    stubBox(folder.row, { top: 100, width: 360, height: 72 })
+    const mouse = { button: 0, buttons: 1 }
+    fireEvent.mouseDown(song.face, { ...mouse, clientX: 20, clientY: 630 })
+    fireEvent.mouseMove(document, { ...mouse, clientX: 20, clientY: 400 })
+    fireEvent.mouseMove(document, { ...mouse, clientX: 30, clientY: 130 })
+    // Carried, the bar is where it drops; the folder under the pointer is lit.
+    expect(await screen.findByRole('group', { name: 'Drop here' })).toBeInTheDocument()
+    await waitFor(() => expect(folder.row.querySelector('[data-drop]')).not.toBeNull())
+    fireEvent.mouseUp(document, { button: 0, clientX: 30, clientY: 130 })
+    await waitFor(() =>
+      expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toMatchObject({
+        folder: 'hymns',
+      }),
+    )
+    expect(await screen.findByText('“Morning” moved to Hymns')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    await waitFor(() =>
+      expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toMatchObject({ folder: null }),
+    )
+  })
+
+  it('carries every row chosen onto Archive on the bar', async () => {
+    const user = userEvent.setup()
+    const { libraryStore } = await renderApp('/songs/folders/hymns')
+    await user.click(await screen.findByRole('button', { name: 'Select' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
+    const song = rowOf('Select Silent Night')
+    // The bar's places stand at the foot, as they are drawn once the rows are carried.
+    const box = HTMLElement.prototype.getBoundingClientRect
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (
+      this: HTMLElement,
+    ) {
+      return this.dataset.slot === 'drop-zone'
+        ? DOMRect.fromRect({
+            x: this.textContent === 'Archive' ? 200 : 0,
+            y: 760,
+            width: 180,
+            height: 56,
+          })
+        : box.call(this)
+    })
+    const mouse = { button: 0, buttons: 1 }
+    fireEvent.mouseDown(song.face, { ...mouse, clientX: 20, clientY: 20 })
+    fireEvent.mouseMove(document, { ...mouse, clientX: 20, clientY: 300 })
+    const zones = await screen.findByRole('group', { name: 'Drop here' })
+    expect(within(zones).getByText('Move to Home')).toBeInTheDocument()
+    fireEvent.mouseMove(document, { ...mouse, clientX: 240, clientY: 770 })
+    fireEvent.mouseMove(document, { ...mouse, clientX: 241, clientY: 780 })
+    fireEvent.mouseUp(document, { button: 0, clientX: 241, clientY: 780 })
+    await waitFor(() => expect(placeOf(libraryStore.getState(), 'silent')).toBe('archived'))
+    expect(placeOf(libraryStore.getState(), 'amazing')).toBe('archived')
+    expect(await screen.findByText('Archived: 2')).toBeInTheDocument()
   })
 
   it('moves what is chosen by the Move sheet, into a new folder', async () => {

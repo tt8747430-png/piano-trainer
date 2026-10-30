@@ -1,16 +1,14 @@
 import { Link, useNavigate, useRouter } from '@tanstack/react-router'
 import {
   BookLock,
+  Download,
   Ellipsis,
-  FileCode,
-  FileMusic,
   Globe,
   GlobeLock,
   Heart,
   PencilLine,
   Play,
   RotateCcw,
-  Share2,
   Trash2,
 } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
@@ -31,15 +29,20 @@ import { selectView } from '@/entities/views'
 import { selectIsFavourite, useLibrary, useLibraryStoreApi } from '@/entities/library'
 import { toggleFavourite, useSongActions } from '@/features/manage-library'
 import { LearnedButton } from '@/features/mark-learned'
-import { PublishDialog, PublishSaid, usePublish, type PublishItem } from '@/features/publish'
-import { ShareSaid, useShareSong } from '@/features/share-song'
-import { useSongExport } from '@/features/song-files'
+import {
+  PublishedCard,
+  PublishSaid,
+  PublishSheet,
+  usePublish,
+  type PublishItem,
+} from '@/features/publish'
+import { ShareSaid, songToShare, useShareSong } from '@/features/share-song'
+import { ExportSheet } from '@/features/song-files'
 import { OPEN_PLAINLY } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { useLocale } from '@/shared/i18n'
 import { ActionMenu, FabLink, FloatingActions, RoundLink } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { playedAs } from '../model/played-as'
 import { useSongLessons } from '../model/use-song-lessons'
 import { PieceAbout } from './PieceAbout'
 import { PieceByline } from './PieceByline'
@@ -53,9 +56,9 @@ import { SectionRows } from './SectionRows'
  * A piece with a chart, in one calm column: Learn the song (ADR 0111, amended). Its bar: Back, the
  * title, then Edit (a pull-down: the learner's version, and to an editor the original, ADR 0116),
  * Learned and More (Favourite, Move to… and Archive, Restore while it is archived, a study in no
- * library, ADR 0106; Share, Export to MIDI and to MusicXML, ADR 0107; for the learner's own music its
- * way back, asked first). Under the title its byline and its key, time and tempo in one line, the way
- * to its key's scale and what is said of it behind an ⓘ; its chords as diagrams, each opening its
+ * library, ADR 0106; Export…, its MusicXML, MIDI and link in one sheet, ADR 0107; for the
+ * learner's own music its way back, asked first). Under the title its byline and its key, time and
+ * tempo in one line, the way to its key's scale and what is said of it behind an ⓘ; its chords as diagrams, each opening its
  * sheet; and, where it has more than one, its sections, each a row to its page of lessons. Practise,
  * the Player as it was left, is the floating action.
  */
@@ -90,7 +93,14 @@ export function PieceView({ piece }: { piece: Piece }) {
   // A song's place in the library (ADR 0106); a study, on Practice, is in none.
   const library = useSongActions(piece)
   const inLibrary = piece.kind !== 'study'
-  const files = useSongExport(piece)
+  const [exporting, setExporting] = useState(false)
+  // An own song carries its music; one of the app's is a link to itself, as last played (ADR 0107).
+  const shareable = !(own && isDegreePiece(piece))
+  const share = () => {
+    const views = router.options.context.views.getState()
+    const what = songToShare(piece, title, selectView(views, `/play/${piece.id}`))
+    if (what) shared.share(what)
+  }
   const navigate = useNavigate()
   const { account } = useAccount()
   const libraryStore = useLibraryStoreApi()
@@ -136,30 +146,6 @@ export function PieceView({ piece }: { piece: Piece }) {
           ...library.actions,
         ]
       : []),
-    // An own song carries its music; one of the app's is a link to itself, as last played (ADR 0107).
-    ...(own && isDegreePiece(piece)
-      ? []
-      : [
-          {
-            key: 'share',
-            label: t('share'),
-            icon: Share2,
-            onSelect: () =>
-              shared.share(
-                own && !isDegreePiece(piece)
-                  ? { kind: 'own', song: { title, music: musicOf(piece) } }
-                  : {
-                      kind: 'piece',
-                      id: piece.id,
-                      title,
-                      played: playedAs(
-                        piece,
-                        selectView(router.options.context.views.getState(), `/play/${piece.id}`),
-                      ),
-                    },
-              ),
-          },
-        ]),
     ...(publishable
       ? [
           ...(publishing.state === 'published' || publishing.state === 'unknown'
@@ -171,10 +157,7 @@ export function PieceView({ piece }: { piece: Piece }) {
                     publishing.state === 'changed' ? 'songs:public.update' : 'songs:public.publish',
                   ),
                   icon: Globe,
-                  onSelect: () =>
-                    publishing.state === 'changed'
-                      ? void publishing.publish()
-                      : setPublishAsked(true),
+                  onSelect: () => setPublishAsked(true),
                 },
               ]),
           ...(publishing.state === 'published' || publishing.state === 'changed'
@@ -189,13 +172,12 @@ export function PieceView({ piece }: { piece: Piece }) {
             : []),
         ]
       : []),
-    // Its files, as the Player's More exports them (ADR 0107).
-    { key: 'midi', label: t('player:exportMidi'), icon: FileMusic, onSelect: files.midi },
+    // Its ways out in one menu (ADR 0107): MusicXML, MIDI and its link.
     {
-      key: 'musicxml',
-      label: t('player:exportMusicXml'),
-      icon: FileCode,
-      onSelect: files.musicXml,
+      key: 'export',
+      label: t('songs:export.action'),
+      icon: Download,
+      onSelect: () => setExporting(true),
     },
     ...(ownMusic
       ? [
@@ -264,18 +246,37 @@ export function PieceView({ piece }: { piece: Piece }) {
       <PieceByline piece={piece} />
       <ShareSaid said={shared.said} />
       <PublishSaid said={publishing.said} />
-      <PublishDialog
-        open={publishAsked}
-        onOpenChange={setPublishAsked}
-        title={title}
-        authorName={publishing.authorName}
-        signedIn={publishing.signedIn}
-        busy={publishing.busy}
-        onPublish={() => {
-          setPublishAsked(false)
-          void publishing.publish()
-        }}
-      />
+      {publishable ? (
+        <>
+          <PublishedCard
+            state={publishing.state}
+            publicId={publishing.publicId}
+            saves={publishing.saves}
+            busy={publishing.busy}
+            onEdit={() => setPublishAsked(true)}
+            onUnpublish={() => void publishing.unpublish()}
+          />
+          <PublishSheet
+            open={publishAsked}
+            onOpenChange={setPublishAsked}
+            item={{
+              id: publishable.sourceId,
+              kind: 'song',
+              title,
+              meta: publishable.meta,
+            }}
+            authorName={publishing.authorName}
+            signedIn={publishing.signedIn}
+            busy={publishing.busy}
+            update={publishing.state === 'published' || publishing.state === 'changed'}
+            description={publishing.description}
+            onPublish={(description) => {
+              setPublishAsked(false)
+              void publishing.publish(description)
+            }}
+          />
+        </>
+      ) : null}
       <PieceFactLine piece={piece} />
       <PieceAbout entry={piece} />
       <PieceChords performance={performance}>
@@ -289,6 +290,18 @@ export function PieceView({ piece }: { piece: Piece }) {
         <OwnMusicAsk piece={ownMusic} open={asking} onOpenChange={setAsking} returnTo={more} />
       ) : null}
       {inLibrary ? library.sheet : null}
+      <ExportSheet
+        piece={exporting ? piece : null}
+        onOpenChange={setExporting}
+        share={
+          shareable
+            ? {
+                detail: t(own ? 'songs:export.shareOwn' : 'songs:export.sharePiece'),
+                onSelect: share,
+              }
+            : undefined
+        }
+      />
       {/* The one thing to do first: play it (ADR 0111, amended), the Player as it was left. */}
       <FloatingActions>
         <FabLink

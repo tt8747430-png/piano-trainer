@@ -32,7 +32,13 @@ import { piecesPlaying } from '@/entities/piece'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { deleteOwnPattern, toggleFavourite, toggleHidden } from '@/features/manage-patterns'
 import { useShownKeys } from '@/features/play-example'
-import { PublishDialog, PublishSaid, usePublish, type PublishItem } from '@/features/publish'
+import {
+  PublishedCard,
+  PublishSaid,
+  PublishSheet,
+  usePublish,
+  type PublishItem,
+} from '@/features/publish'
 import { localText, useLocale } from '@/shared/i18n'
 import {
   BackButton,
@@ -161,7 +167,7 @@ function usePatternActions(pattern: BookPattern, name: string) {
                     label: t('songs:public.update'),
                     icon: Globe,
                     disabled: publishing.busy,
-                    onSelect: () => void publishing.publish(),
+                    onSelect: () => setPublishAsked(true),
                   },
                 ]
               : []),
@@ -187,16 +193,23 @@ function usePatternActions(pattern: BookPattern, name: string) {
   const dialogs =
     own === null ? null : (
       <>
-        <PublishDialog
+        <PublishSheet
           open={publishAsked}
           onOpenChange={setPublishAsked}
-          title={name}
+          item={{
+            id: `pattern/${own}`,
+            kind: 'pattern',
+            title: name,
+            meta: { rh: pattern.rh, lh: pattern.lh },
+          }}
           authorName={publishing.authorName}
           signedIn={publishing.signedIn}
           busy={publishing.busy}
-          onPublish={() => {
+          update={publishing.state === 'published' || publishing.state === 'changed'}
+          description={publishing.description}
+          onPublish={(description) => {
             setPublishAsked(false)
-            void publishing.publish()
+            void publishing.publish(description)
           }}
         />
         <AlertDialog open={deleteAsked} onOpenChange={setDeleteAsked}>
@@ -218,6 +231,14 @@ function usePatternActions(pattern: BookPattern, name: string) {
   const said = (
     <>
       <PublishSaid said={publishing.said} />
+      <PublishedCard
+        state={publishing.state}
+        publicId={publishing.publicId}
+        saves={publishing.saves}
+        busy={publishing.busy}
+        onEdit={() => setPublishAsked(true)}
+        onUnpublish={() => void publishing.unpublish()}
+      />
       {hidden ? <p className="text-sm text-muted-foreground">{t('patterns.hiddenNote')}</p> : null}
     </>
   )

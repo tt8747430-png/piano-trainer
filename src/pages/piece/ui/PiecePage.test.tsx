@@ -174,7 +174,24 @@ describe('Piece', () => {
     expect(screen.getByRole('link', { name: 'Practise' })).toHaveAttribute('href', '/play/ex3')
   })
 
-  it('lists its place in the library, Share and its files in More: nothing to check, no second Edit', async () => {
+  it('exports from one sheet: MusicXML for notation apps, MIDI, and its link, each said what it is for', async () => {
+    const user = userEvent.setup()
+    await renderApp('/songs/bz5')
+    await openMore(user)
+    await user.click(await screen.findByRole('button', { name: 'Export…' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Export' })
+    expect(
+      within(within(sheet).getByRole('list', { name: 'Export' }))
+        .getAllByRole('button')
+        .map((row) => row.textContent),
+    ).toEqual([
+      'MusicXML The score, for MuseScore, Sibelius, Finale or Dorico',
+      'MIDI The music as played, for a DAW or a keyboard',
+      'Share link A link to the song in the app, in the key you play it',
+    ])
+  })
+
+  it('lists its place in the library and Export… in More: nothing to check, no second Edit', async () => {
     await renderApp('/songs/bz5')
     await openMore(userEvent.setup())
     const more = await screen.findByRole('dialog', { name: 'More' })
@@ -182,14 +199,7 @@ describe('Piece', () => {
       within(more)
         .getAllByRole('button')
         .map((action) => action.textContent),
-    ).toEqual([
-      'Add to favourites',
-      'Move to…',
-      'Archive',
-      'Share',
-      'Export to MIDI',
-      'Export to MusicXML',
-    ])
+    ).toEqual(['Add to favourites', 'Move to…', 'Archive', 'Export…'])
   })
 
   it('shares a song of the app as a link to it in the Player, in the key and as simplified as last played (ADR 0107)', async () => {
@@ -197,7 +207,8 @@ describe('Piece', () => {
     const { viewsStore } = await renderApp('/songs/bz5')
     act(() => viewsStore.setState({ views: { '/play/bz5': { key: 'A', simple: true } } }))
     await openMore(user)
-    await user.click(await screen.findByRole('button', { name: 'Share' }))
+    await user.click(await screen.findByRole('button', { name: 'Export…' }))
+    await user.click(await screen.findByRole('button', { name: /^Share link/ }))
     await waitFor(() =>
       expect(screen.getByRole('status', { name: '' })).toHaveTextContent(
         'Link copied. Anyone who opens it sees the chords as you play them.',
@@ -317,10 +328,8 @@ describe('Piece: the learner’s own music', () => {
       'Add to favourites',
       'Move to…',
       'Archive',
-      'Share',
       'Publish to the Public library',
-      'Export to MIDI',
-      'Export to MusicXML',
+      'Export…',
       'Delete',
     ])
   })
@@ -405,7 +414,8 @@ describe('Piece: the learner’s own music', () => {
     const song = { id: 'my-1', title: 'Morning', ...MUSIC }
     await renderApp('/songs/my-1', { storage: saved({ songs: [song], nextSong: 2 }) })
     await openMore(user)
-    await user.click(await screen.findByRole('button', { name: 'Share' }))
+    await user.click(await screen.findByRole('button', { name: 'Export…' }))
+    await user.click(await screen.findByRole('button', { name: /^Share link/ }))
     // The status line is always there, empty until the song is deflated and copied.
     await waitFor(() =>
       expect(screen.getByRole('status', { name: '' })).toHaveTextContent('Link copied.'),

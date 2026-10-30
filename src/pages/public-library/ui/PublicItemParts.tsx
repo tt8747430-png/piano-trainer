@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import type { PublicEntry } from '@/shared/api/public-library'
 import { cn } from '@/shared/lib'
 import { PAINT } from '@/shared/ui'
-import { itemPaint } from '../model/item-paint'
+import { itemPaint } from '@/features/publish'
 
 /**
  * Who published an item, under its title: their initial in a round mark of their own paint, their
@@ -31,6 +31,21 @@ export function Byline({ entry }: { entry: PublicEntry }) {
         </span>
       </span>
     </div>
+  )
+}
+
+/** What its author wrote of it (Noji's About), under its byline; nothing where they wrote nothing. */
+export function About({ entry }: { entry: PublicEntry }) {
+  const { t } = useTranslation('songs')
+  const text = entry.meta.description
+  if (!text) return null
+  return (
+    <section aria-labelledby="public-about" className="flex flex-col gap-1.5">
+      <h2 id="public-about" className="text-sm font-semibold text-muted-foreground">
+        {t('public.about')}
+      </h2>
+      <p className="text-pretty whitespace-pre-line">{text}</p>
+    </section>
   )
 }
 

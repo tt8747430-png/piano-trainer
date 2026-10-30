@@ -75,3 +75,5 @@ not its music.
 - r13 — Export to MusicXML, MIDI from the song page, and Import of MusicXML and MIDI (2026-10-28).
 - r14 — A broken .mxl says so, an import closed while reading makes nothing; a shared song's Add names the library
   (2026-10-28).
+- r24 — A song's page and its library row export from one Export… sheet: MusicXML, MIDI and Share link, each with
+  what it is for (2026-10-30).

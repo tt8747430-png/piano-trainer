@@ -1,13 +1,13 @@
-import { Archive, FolderInput, Heart, HeartOff, PencilLine, Trash2 } from 'lucide-react'
+import { Archive, Download, FolderInput, Heart, HeartOff, PencilLine, Trash2 } from 'lucide-react'
 import type { TFunction } from 'i18next'
 import type { ShelvedFolder } from '@/entities/library'
-import { isOwnSongId, type Entry } from '@/entities/piece'
+import { isOwnSongId, isPiece, type Entry } from '@/entities/piece'
 import type { RowAction } from '@/widgets/song-library'
 import type { LibraryPage } from '../model/use-library-page'
 
 /**
- * A song's actions in the library (ADR 0106): Favourite, Move to…, Archive, and Delete for the
- * learner's own song alone, asked first.
+ * A song's actions in the library (ADR 0106): Favourite, Move to…, Archive, Export… (its files and
+ * link, ADR 0107) where it has music, and Delete for the learner's own song alone, asked first.
  */
 export function songActions(entry: Entry, page: LibraryPage, t: TFunction<'songs'>): RowAction[] {
   const favourite = page.favourites.includes(entry.id)
@@ -33,6 +33,17 @@ export function songActions(entry: Entry, page: LibraryPage, t: TFunction<'songs
       paint: 'lilac',
       onSelect: () => page.acts.archive([entry.id]),
     },
+    ...(isPiece(entry)
+      ? [
+          {
+            key: 'export',
+            label: t('export.action'),
+            icon: Download,
+            paint: 'grass' as const,
+            onSelect: () => page.open({ kind: 'export', song: entry.id }),
+          },
+        ]
+      : []),
     ...(isOwnSongId(entry.id)
       ? [
           {
