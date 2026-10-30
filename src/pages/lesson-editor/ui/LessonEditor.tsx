@@ -22,7 +22,7 @@ import {
 } from '@/entities/lesson'
 import { useLessonDraft } from '@/features/edit-original'
 import { localText, useLocale, type LocalText } from '@/shared/i18n'
-import { ActionMenu, InfoTip, Segmented } from '@/shared/ui'
+import { ActionMenu, InfoTip, say, Segmented } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { LessonView } from '@/widgets/lesson-view'
@@ -145,7 +145,8 @@ function BlockCard({
 /**
  * The lesson as blocks, a group for the lesson's own texts and one a section (ADR 0116): a section's
  * heading, its blocks as cards (each its words and examples as fields, moved up or down or removed),
- * Add block for a new one of a kind, its takeaway; sections moved, removed and added. Each change saved.
+ * Add block for a new one of a kind, its takeaway; sections moved, removed (said, with Undo) and added.
+ * Each change saved.
  */
 function LessonForm({ lesson, onChange }: { lesson: Lesson; onChange: (lesson: Lesson) => void }) {
   const { t } = useTranslation('learn')
@@ -170,6 +171,14 @@ function LessonForm({ lesson, onChange }: { lesson: Lesson; onChange: (lesson: L
     />
   )
   const own = texts.filter((text) => text.section === null)
+  /** Takes out a section or a block, said with Undo, which puts the lesson back as it was. */
+  const remove = (title: string, next: Lesson) => {
+    onChange(next)
+    say(t('edit.order.removed', { title }), {
+      label: t('edit.order.undo'),
+      onClick: () => onChange(lesson),
+    })
+  }
   return (
     <div className="flex flex-col gap-10">
       <section className="flex flex-col gap-5">
@@ -217,7 +226,7 @@ function LessonForm({ lesson, onChange }: { lesson: Lesson; onChange: (lesson: L
                 aria-label={t('edit.order.remove', { title })}
                 className="text-destructive"
                 disabled={lesson.sections.length === 1}
-                onClick={() => onChange(withSectionRemoved(lesson, s))}
+                onClick={() => remove(title, withSectionRemoved(lesson, s))}
               >
                 <X aria-hidden />
               </Button>
@@ -236,14 +245,15 @@ function LessonForm({ lesson, onChange }: { lesson: Lesson; onChange: (lesson: L
                   .filter((example) => example.section === s && blockOf(example.key) === b)
                   .map(exampleField),
               ]
+              const label = t(`edit.blocks.${blockKind(block)}`)
               return (
                 <BlockCard
                   key={`${s}.${b}.${block.kind}`}
-                  label={t(`edit.blocks.${blockKind(block)}`)}
+                  label={label}
                   first={b === 0}
                   last={b === section.blocks.length - 1}
                   onMove={(by) => onChange(withBlockMoved(lesson, s, b, by))}
-                  onRemove={() => onChange(withBlockRemoved(lesson, s, b))}
+                  onRemove={() => remove(label, withBlockRemoved(lesson, s, b))}
                 >
                   {fields.length > 0 ? (
                     fields

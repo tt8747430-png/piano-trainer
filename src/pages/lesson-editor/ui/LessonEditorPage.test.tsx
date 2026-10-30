@@ -203,6 +203,21 @@ describe('the lesson editor (ADR 0116)', () => {
     expect(JSON.stringify(content.body('lesson', lesson.id))).toContain('["C","Am","G7"]')
   })
 
+  it('says a section was removed, and Undo puts it back with its blocks', async () => {
+    const user = userEvent.setup()
+    await renderApp(`/lessons/${LESSON.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: editing(),
+    })
+    const first = await screen.findByRole('region', { name: /^Section 1/ })
+    const name = first.getAttribute('aria-label') ?? ''
+    await user.click(within(first).getByRole('button', { name: `Remove: ${name}` }))
+    expect(screen.queryByRole('region', { name })).toBeNull()
+    expect(await screen.findByText(`Removed: ${name}`)).toBeVisible()
+    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    expect(await screen.findByRole('region', { name })).toBeInTheDocument()
+  })
+
   it('adds a block of a kind and a section, moves and removes blocks, all on the draft', async () => {
     const user = userEvent.setup()
     const content = editing()

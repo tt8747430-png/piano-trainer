@@ -125,6 +125,22 @@ describe('the course editor (ADR 0116, round 12)', () => {
     ])
   })
 
+  it('says a lesson was taken out, and Undo puts it back where it was', async () => {
+    const user = userEvent.setup()
+    await renderApp(`/courses/${COURSE.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: editing(),
+    })
+    const [first, second] = COURSE.lessons
+    if (!first || !second) throw new Error('a course of two lessons at least')
+    const lessons = await screen.findByRole('list', { name: 'Lessons' })
+    await user.click(within(lessons).getByRole('button', { name: `Remove: ${first.title.en}` }))
+    expect(within(lessons).getAllByRole('link')[0]).toHaveTextContent(second.title.en)
+    expect(await screen.findByText(`Removed: ${first.title.en}`)).toBeVisible()
+    await user.click(screen.getByRole('button', { name: 'Undo' }))
+    expect(within(lessons).getAllByRole('link')[0]).toHaveTextContent(first.title.en)
+  })
+
   it('adds a new lesson, unpublished, at the course’s end, and opens it in the lesson editor', async () => {
     const user = userEvent.setup()
     const content = editing()

@@ -145,6 +145,8 @@ export const learn: LocaleResources['learn'] = {
       moveUp: 'Выше: {{title}}',
       moveDown: 'Ниже: {{title}}',
       remove: 'Убрать: {{title}}',
+      removed: 'Убрано: {{title}}',
+      undo: 'Отменить',
       unpublished: 'Ещё не опубликован',
       newLesson: 'Новый урок',
       addLesson: 'Добавить урок',
