@@ -96,7 +96,7 @@ export function DraftStrip({
           <Button
             variant="ghost"
             size="icon"
-            className="size-9 shrink-0 rounded-full"
+            className="size-11 shrink-0 rounded-full"
             aria-label={t('original.more')}
             title={t('original.more')}
           />
@@ -119,7 +119,7 @@ export function DraftStrip({
         ]}
       />
       <Button
-        className="h-9 shrink-0 rounded-full px-4"
+        className="h-11 shrink-0 rounded-full px-4"
         disabled={!draft.drafted || busy}
         onClick={() => setAsked('publish')}
       >

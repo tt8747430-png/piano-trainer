@@ -41,7 +41,9 @@ export function NewCoursePage() {
         title={t('learn:edit.course.new')}
         back={<BackButton fallback={{ to: '/', search: { view: 'courses', journey: '' } }} />}
         actions={
-          <InfoTip name={t('learn:edit.course.new')}>{t('learn:edit.course.newInfo')}</InfoTip>
+          <InfoTip name={t('learn:edit.course.new')} bar>
+            {t('learn:edit.course.newInfo')}
+          </InfoTip>
         }
       />
       {editsContent(account) ? (

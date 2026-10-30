@@ -39,7 +39,9 @@ export function NewProgressionPage() {
         title={t('progressions.edit.new')}
         back={<BackButton fallback={{ to: '/practice/progressions' }} />}
         actions={
-          <InfoTip name={t('progressions.edit.new')}>{t('progressions.edit.newInfo')}</InfoTip>
+          <InfoTip name={t('progressions.edit.new')} bar>
+            {t('progressions.edit.newInfo')}
+          </InfoTip>
         }
       />
       {editsContent(account) ? (
