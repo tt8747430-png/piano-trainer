@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { journeyById } from '@/entities/lesson'
 import { selectLearned, useProgress } from '@/entities/progress'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { FabLink, FloatingActions, NavTab, NavTabs, ScreenHeader } from '@/shared/ui'
+import { FabLink, FloatingActions, NavTab, NavTabs, RoundLink, ScreenHeader } from '@/shared/ui'
 import { PlaceActions } from '@/widgets/app-nav'
 import { ContinueAction } from '@/widgets/continue-action'
 import { CourseShelves, currentJourney, JourneyLibrary } from '@/widgets/curriculum'
@@ -25,7 +25,19 @@ export function LearnPage() {
       <ScreenHeader
         title={t('learn:title')}
         large
-        actions={<PlaceActions />}
+        actions={
+          <>
+            {/* An editor's way to the Lessons' order: the screen's own action, in its bar. */}
+            {editsContent(account) && view === 'lessons' ? (
+              <RoundLink
+                label={t('learn:edit.journey.open')}
+                icon={LibraryBig}
+                render={<Link to="/journeys/$journeyId/edit" params={{ journeyId: journey.id }} />}
+              />
+            ) : null}
+            <PlaceActions />
+          </>
+        }
         tabs={
           <NavTabs label={t('learn:views.label')}>
             {(['lessons', 'courses'] as const).map((shown) => (
@@ -49,21 +61,14 @@ export function LearnPage() {
         {view === 'lessons' ? <JourneyLibrary journey={journey} /> : <CourseShelves />}
       </div>
       {/* An editor's way to change what is shown: the journey, or a new course (ADR 0116). */}
-      {editsContent(account) ? (
+      {/* Creating is the + floating action: an editor's New course. */}
+      {editsContent(account) && view === 'courses' ? (
         <FloatingActions>
-          {view === 'lessons' ? (
-            <FabLink
-              label={t('learn:edit.journey.open')}
-              icon={LibraryBig}
-              render={<Link to="/journeys/$journeyId/edit" params={{ journeyId: journey.id }} />}
-            />
-          ) : (
-            <FabLink
-              label={t('learn:edit.course.new')}
-              icon={Plus}
-              render={<Link to="/courses/new" />}
-            />
-          )}
+          <FabLink
+            label={t('learn:edit.course.new')}
+            icon={Plus}
+            render={<Link to="/courses/new" />}
+          />
         </FloatingActions>
       ) : null}
     </div>

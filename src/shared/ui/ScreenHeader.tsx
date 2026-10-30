@@ -75,10 +75,10 @@ export function ScreenHeader({
           {...pageHeading}
           className={cn(
             'min-w-0 flex-1 font-display font-semibold outline-none',
-            // A place's name, or a song's long one, may take a second line rather than be cut.
-            large
-              ? 'line-clamp-2 text-[1.375rem] leading-tight text-balance wrap-break-word sm:text-2xl'
-              : 'truncate text-lg sm:text-xl',
+            // A name takes a second line rather than be cut (a lesson's, a song's): never an ellipsis
+            // on a phone where two lines say it all.
+            'line-clamp-2 leading-tight text-balance wrap-break-word',
+            large ? 'text-[1.375rem] sm:text-2xl' : 'text-lg sm:text-xl',
           )}
         >
           {title}

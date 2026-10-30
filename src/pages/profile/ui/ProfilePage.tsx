@@ -23,31 +23,33 @@ import {
 } from '@/entities/progress'
 import { cn } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
-import { Avatar, ButtonLink, RowLink, ScreenHeader, SettingsGroup } from '@/shared/ui'
+import { Avatar, ButtonLink, RoundLink, ScreenHeader } from '@/shared/ui'
 import { PracticeCalendar, useToday } from '@/widgets/practice-days'
 
 /**
- * The Profile, a place of its own (memory-palaces', Noji's): the learner's name in its bar; their
- * picture, email (or a guest's Sign in) and three figures of their practice; one row to Settings (the
- * Account is its first row); the month's Activity; the rest of their record; their badges. Each
- * thing opens one way.
+ * The Profile, a place of its own (memory-palaces'): the learner's name in its bar with Settings,
+ * the screen's action, beside it (the Account is Settings' first row); their picture, email (or a
+ * guest's Sign in) and three figures of their practice; the month's Activity; the rest of their
+ * record; their badges. Each thing opens one way.
  */
 export function ProfilePage() {
   const { t } = useTranslation(['account', 'common'])
   const { account } = useAccount()
   return (
     <div className="flex flex-col gap-2">
-      <ScreenHeader title={account ? account.name || account.email : t('profile.title')} large />
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
-        <Hero />
-        <SettingsGroup flush>
-          <RowLink
-            title={t('common:nav.settings')}
+      <ScreenHeader
+        title={account ? account.name || account.email : t('profile.title')}
+        large
+        actions={
+          <RoundLink
+            label={t('common:nav.settings')}
             icon={Settings}
-            paint="sand"
             render={<Link to="/settings" />}
           />
-        </SettingsGroup>
+        }
+      />
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
+        <Hero />
         <PracticeCalendar title={t('profile.activity')} />
         <Record />
         <Achievements />

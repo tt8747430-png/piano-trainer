@@ -32,7 +32,7 @@ describe('the Profile', () => {
     expect(learner).toHaveTextContent(/A\s*ana@example.com/)
   })
 
-  it('opens Settings one way, its row (the Account is Settings’ first row)', async () => {
+  it('opens Settings one way, from its bar (the Account is Settings’ first row)', async () => {
     await renderApp('/profile', { auth: await signedIn() })
     await screen.findByRole('heading', { level: 1, name: 'ana' })
     const main = screen.getByRole('main')

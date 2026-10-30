@@ -52,7 +52,7 @@ describe('ScreenHeader', () => {
     expect(within(bar).getByRole('navigation', { name: 'Chords' })).toBeInTheDocument()
   })
 
-  it('keeps a screen’s title on the bar’s one row, cut short rather than wrapped', () => {
+  it('keeps a screen’s title in the bar, a long one on two lines rather than cut', () => {
     render(
       <ScreenHeader
         title="Wonderful Grace of Jesus"
@@ -61,7 +61,8 @@ describe('ScreenHeader', () => {
     )
     const title = screen.getByRole('heading', { level: 1 })
     expect(within(screen.getByRole('banner')).getByRole('heading', { level: 1 })).toBe(title)
-    expect(title).toHaveClass('truncate')
+    expect(title).toHaveClass('line-clamp-2')
+    expect(title).not.toHaveClass('truncate')
   })
 
   it('sets a place’s title larger in the bar’s one row, never in a block of its own', () => {
