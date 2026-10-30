@@ -316,8 +316,8 @@ export const songs = {
     // A published song's or pattern's place, on its own page.
     inLibrary: 'In the Public library',
     changedSince: 'Changed since you published it',
-    view: 'View in the library',
-    edit: 'Edit description',
+    view: 'View',
+    edit: 'Edit',
     unpublishShort: 'Unpublish',
     about: 'About',
     published: 'Published to the Public library.',

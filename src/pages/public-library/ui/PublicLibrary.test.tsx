@@ -234,7 +234,7 @@ describe('publishing an own song', () => {
     // The song's page says where it stands: in the library, to view, edit or take out.
     const card = await screen.findByRole('region', { name: 'In the Public library' })
     const id = found.ok ? found.value[0]?.id : ''
-    expect(within(card).getByRole('link', { name: 'View in the library' })).toHaveAttribute(
+    expect(within(card).getByRole('link', { name: 'View' })).toHaveAttribute(
       'href',
       `/songs/public/${id}`,
     )

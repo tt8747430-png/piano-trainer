@@ -136,15 +136,19 @@ export function SelectRow({
 
 /**
  * The row in the hand, over the list (the drag's overlay): the row it came from, lifted a shade;
- * carrying more than one (`count`), how many on a badge at its corner, as iOS Files' stack says.
+ * carrying more than one (`count`), how many on a badge at its corner, as iOS Files' stack says;
+ * carried by its face (`carried`), the face alone.
  */
 export function RowInHand({
   checked,
   count = 1,
+  carried = false,
   children,
 }: {
   checked: boolean
   count?: number
+  /** Carried by its face: the face alone, as wide as the face it was lifted from. */
+  carried?: boolean
   children: ReactNode
 }) {
   return (
@@ -157,12 +161,16 @@ export function RowInHand({
       )}
     >
       <div className={ROW_BODY}>{children}</div>
-      <span className={ROW_CONTROL}>
-        <GripVertical />
-      </span>
-      <span className={ROW_CONTROL}>
-        <SelectCheck checked={checked} />
-      </span>
+      {carried ? null : (
+        <>
+          <span className={ROW_CONTROL}>
+            <GripVertical />
+          </span>
+          <span className={ROW_CONTROL}>
+            <SelectCheck checked={checked} />
+          </span>
+        </>
+      )}
       {count > 1 ? (
         <span
           data-slot="carried-count"

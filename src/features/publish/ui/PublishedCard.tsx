@@ -45,7 +45,7 @@ export function PublishedCard({
           }
         />
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(5.5rem,1fr))] gap-2">
         <ButtonLink
           variant="soft"
           render={<Link to="/songs/public/$itemId" params={{ itemId: publicId }} />}

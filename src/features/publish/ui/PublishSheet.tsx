@@ -150,7 +150,9 @@ function Preview({ item, authorName }: { item: PublishPreview; authorName: strin
   const face = publicFace({ ...item, authorName }, locale)
   return (
     <section aria-label={t('public.preview')} className="flex flex-col gap-2">
-      <h3 className="px-1 text-sm font-semibold text-muted-foreground">{t('public.preview')}</h3>
+      <h3 className="px-1 font-sans text-sm font-semibold text-muted-foreground">
+        {t('public.preview')}
+      </h3>
       <div className="card p-1.5">
         <div className="flex min-h-16 items-center gap-3 py-2 pr-3 pl-2">
           <RowFace {...face} />

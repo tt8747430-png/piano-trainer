@@ -86,7 +86,7 @@ export function LibrarySelect({
       inHand={(keys) => {
         const [first] = keys
         return first ? (
-          <RowInHand checked={select.chosen.has(first as Chosen)} count={keys.length}>
+          <RowInHand checked={select.chosen.has(first as Chosen)} count={keys.length} carried>
             {face(first)}
           </RowInHand>
         ) : null
