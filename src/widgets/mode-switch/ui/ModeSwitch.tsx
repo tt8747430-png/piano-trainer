@@ -1,67 +1,28 @@
-import { Link } from '@tanstack/react-router'
-import { Music, PencilLine, type LucideIcon } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { useNavigate } from '@tanstack/react-router'
+import { BookLock, Music, PencilLine, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/shared/lib'
-
-/** The two modes of a piece's one score: practised in the Player, written in the editor. */
-export type ScoreMode = 'practise' | 'edit'
-
-const ICONS: Readonly<Record<ScoreMode, LucideIcon>> = { practise: Music, edit: PencilLine }
-
-// Drawn 36px on the 44px track; its reach grows to the track's edge (a 44px touch target, CODE_STYLE §5).
-const SEGMENT =
-  'relative inline-flex size-9 items-center justify-center rounded-lg border border-transparent text-muted-foreground transition-colors duration-200 ease-out select-none before:absolute before:-inset-1 before:content-[""] [&_svg]:size-5'
+import { hasEditableOriginal } from '@/entities/piece'
+import { editsContent, useAccount } from '@/shared/lib/account'
+import { Dropdown } from '@/shared/ui'
 
 /**
- * One mode, its icon at every size, its name its tooltip and a screen reader's (ADR 0114): the one
- * shown a card on the track, the other a link to it.
+ * The modes of a piece's one score: practised in the Player, written in the editor, and, an editor's
+ * alone, its original changed for everyone (ADR 0116).
  */
-function Segment({
-  mode,
-  current,
-  disabled,
-  link,
-}: {
-  mode: ScoreMode
-  current: boolean
-  disabled: boolean
-  link: (children: ReactNode, className: string, label: string) => ReactNode
-}) {
-  const { t } = useTranslation('player')
-  const Icon = ICONS[mode]
-  const label = t(`mode.${mode}`)
-  const children = (
-    <>
-      <Icon aria-hidden />
-      <span className="sr-only">{label}</span>
-    </>
-  )
-  if (current)
-    return (
-      <span
-        aria-current="page"
-        title={label}
-        className={cn(SEGMENT, 'border-input bg-chosen text-foreground')}
-      >
-        {children}
-      </span>
-    )
-  if (disabled)
-    return (
-      <span aria-disabled title={label} className={cn(SEGMENT, 'opacity-50')}>
-        {children}
-      </span>
-    )
-  return link(children, cn(SEGMENT, 'hover:text-foreground'), label)
+export type ScoreMode = 'practise' | 'edit' | 'original'
+
+const ICONS: Readonly<Record<ScoreMode, LucideIcon>> = {
+  practise: Music,
+  edit: PencilLine,
+  original: BookLock,
 }
 
 /**
- * Practise · Edit (ADR 0115): a piece's score in its two modes, the Player and the score editor, as
- * one screen's (Flat's Composing and Read-only), first of the round buttons in both bars. The other
- * mode opens at `bar` (as printed, from 1: the Player's cursor's, the editor's caret's), in place of
- * this one in the history, so Close still goes back where the learner came from. Only for a piece
- * whose score can be edited; while a take records, the way out waits for Stop (`disabled`).
+ * Practise · Edit · Edit the original (ADR 0115): a piece's score in its modes, chosen from one
+ * pop-up button, first in both bars, its face the mode's icon and name. The other mode opens at `bar`
+ * (as printed, from 1: the Player's cursor's, the editor's caret's), in place of this one in the
+ * history, so Close still goes back where the learner came from. The original is offered to an
+ * editor, for a song that has one. While a take records, the way out waits for Stop (`disabled`).
  */
 export function ModeSwitch({
   pieceId,
@@ -75,50 +36,53 @@ export function ModeSwitch({
   disabled?: boolean
 }) {
   const { t } = useTranslation('player')
-  const params = { pieceId }
+  const navigate = useNavigate()
+  const { account } = useAccount()
+  const modes: ScoreMode[] = [
+    'practise',
+    'edit',
+    ...(editsContent(account) && hasEditableOriginal(pieceId) ? (['original'] as const) : []),
+  ]
   // The first bar is where either opens: a URL never says so.
-  const search = bar > 1 ? { bar } : {}
+  const at = bar > 1 ? { bar } : {}
+  const open = (next: ScoreMode) =>
+    void navigate(
+      next === 'practise'
+        ? { to: '/play/$pieceId', params: { pieceId }, search: at, replace: true }
+        : {
+            to: '/edit/$pieceId',
+            params: { pieceId },
+            search: next === 'original' ? { ...at, original: true } : at,
+            replace: true,
+          },
+    )
+  const face = (each: ScoreMode) => {
+    const Icon = ICONS[each]
+    return (
+      <span className="flex items-center gap-2">
+        <Icon aria-hidden className="size-5 shrink-0" />
+        <span className="truncate max-sm:sr-only">{t(`mode.${each}`)}</span>
+      </span>
+    )
+  }
   return (
-    <nav
-      aria-label={t('mode.label')}
-      className="flex shrink-0 items-center gap-0.5 rounded-xl bg-muted p-1"
-    >
-      <Segment
-        mode="practise"
-        current={mode === 'practise'}
-        disabled={disabled}
-        link={(children, className, label) => (
-          <Link
-            to="/play/$pieceId"
-            params={params}
-            search={search}
-            replace
-            aria-label={label}
-            title={label}
-            className={className}
-          >
-            {children}
-          </Link>
-        )}
-      />
-      <Segment
-        mode="edit"
-        current={mode === 'edit'}
-        disabled={disabled}
-        link={(children, className, label) => (
-          <Link
-            to="/edit/$pieceId"
-            params={params}
-            search={search}
-            replace
-            aria-label={label}
-            title={label}
-            className={className}
-          >
-            {children}
-          </Link>
-        )}
-      />
-    </nav>
+    <Dropdown
+      label={t('mode.label')}
+      bare
+      value={mode}
+      disabled={disabled}
+      face={face}
+      align="start"
+      className="w-auto shrink-0 gap-1 border-transparent bg-muted/70 px-3 hover:bg-muted"
+      options={modes.map((each) => ({
+        value: each,
+        label: t(`mode.${each}`),
+        icon: (() => {
+          const Icon = ICONS[each]
+          return <Icon />
+        })(),
+      }))}
+      onChange={open}
+    />
   )
 }

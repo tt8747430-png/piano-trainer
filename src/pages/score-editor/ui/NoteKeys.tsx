@@ -16,7 +16,7 @@ import {
 } from '@/features/score-editor'
 import { isCompound, type Accidental } from '@/shared/lib/music'
 import { TUPLET_COUNTS, tupletOf, type TupletCount } from '@/shared/lib/notation'
-import { Segmented } from '@/shared/ui'
+import { Dropdown } from '@/shared/ui'
 import { useEditorState, useScoreEditorContext } from '../model/editor-context'
 import { useNotesChosen } from '../model/use-notes-chosen'
 import { TUPLET_WORDS, VALUE_GLYPHS, VALUE_WORDS } from '../model/value-words'
@@ -179,7 +179,7 @@ function ModeIcon({ mode }: { mode: EditMode }) {
 }
 
 /**
- * The editing modes (ADR 0114, Flat's Melody · Insert · Chord): one always chosen; what a key played
+ * The editing modes (ADR 0114, Flat's Melody · Insert · Chord), one pop-up button: one always chosen; what a key played
  * does in each is the ⓘ beside the section's name (ADR 0096); I cycles them.
  */
 function ModeChoice() {
@@ -187,9 +187,16 @@ function ModeChoice() {
   const { actions } = useScoreEditorContext()
   const mode = useEditorState((state) => state.mode)
   return (
-    <Segmented
+    <Dropdown
       label={t('mode.label')}
       value={mode}
+      className="w-full"
+      face={(each) => (
+        <span className="flex items-center gap-2">
+          <ModeIcon mode={each} />
+          {t(`mode.${each}`)}
+        </span>
+      )}
       options={EDIT_MODES.map((each) => ({
         value: each,
         label: t(`mode.${each}`),
