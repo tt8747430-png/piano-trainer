@@ -68,6 +68,16 @@ describe('the Profile', () => {
     expect(screen.queryByRole('list', { name: 'The last seven days' })).toBeNull()
   })
 
+  it('says where a new learner’s record starts, with the way to start it', async () => {
+    await renderApp('/profile')
+    expect(
+      await screen.findByText(
+        'Nothing here yet. Finish a lesson or play a song, and your record starts.',
+      ),
+    ).toBeVisible()
+    expect(screen.getByRole('link', { name: 'Start learning' })).toHaveAttribute('href', '/')
+  })
+
   it('is a tab of the main navigation', async () => {
     await renderApp('/')
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })

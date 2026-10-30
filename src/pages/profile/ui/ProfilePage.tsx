@@ -139,15 +139,25 @@ function Record() {
       <h2 id={headingId} className="px-3 font-sans text-sm font-semibold text-muted-foreground">
         {t('profile.record')}
       </h2>
-      <dl className="flex flex-col divide-y divide-border card px-4">
-        {RECORD.map(([field, label, Icon]) => (
-          <div key={field} className="flex min-h-12 items-center gap-3 py-2">
-            <Icon aria-hidden className="size-5 shrink-0 text-muted-foreground" />
-            <dt className="min-w-0 flex-1 text-pretty">{t(`profile.${label}`)}</dt>
-            <dd className="font-display text-lg font-semibold tabular-nums">{record[field]}</dd>
-          </div>
-        ))}
-      </dl>
+      {Object.values(record).every((figure) => figure === 0) ? (
+        // Nothing practised yet: where the record starts, and the way to start it.
+        <div className="flex flex-col items-start gap-3 card p-4">
+          <p className="text-pretty text-muted-foreground">{t('profile.recordEmpty')}</p>
+          <ButtonLink variant="outline" render={<Link to="/" />}>
+            {t('profile.recordStart')}
+          </ButtonLink>
+        </div>
+      ) : (
+        <dl className="flex flex-col divide-y divide-border card px-4">
+          {RECORD.map(([field, label, Icon]) => (
+            <div key={field} className="flex min-h-12 items-center gap-3 py-2">
+              <Icon aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+              <dt className="min-w-0 flex-1 text-pretty">{t(`profile.${label}`)}</dt>
+              <dd className="font-display text-lg font-semibold tabular-nums">{record[field]}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
     </section>
   )
 }

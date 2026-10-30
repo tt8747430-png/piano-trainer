@@ -35,6 +35,8 @@ export const account = {
     streak: 'Days in a row',
     activity: 'Activity',
     record: 'Your record',
+    recordEmpty: 'Nothing here yet. Finish a lesson or play a song, and your record starts.',
+    recordStart: 'Start learning',
     days: 'Days practised',
     bestStreak: 'Best run of days',
     steps: 'Steps learned',

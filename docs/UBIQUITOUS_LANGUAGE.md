@@ -364,7 +364,7 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 ## Learning and progress
 
 - **Stage** («Этап»): Beginner · Intermediate · Advanced · Professional. _Avoid:_ level, difficulty.
-- **Journey**: one stage of the Lessons, in chapters. _Avoid:_ path, curriculum.
+- **Level** (the Lessons', «Уровень»): one stage of the Lessons, Beginner to Professional, in chapters; `Journey` in code. _Avoid:_ journey (in the UI), path, curriculum.
 - **Chapter**: one subject of a journey, ended by its Check. _Avoid:_ module, unit.
 - **Course**: a self-contained way through one subject, on a shelf, with its own lessons and guided songs. _Avoid:_
   module, path.

@@ -35,6 +35,8 @@ export const account: LocaleResources['account'] = {
     streak: 'Дней подряд',
     activity: 'Активность',
     record: 'Ваши успехи',
+    recordEmpty: 'Пока пусто. Пройдите урок или сыграйте песню, и здесь появятся ваши успехи.',
+    recordStart: 'Начать учиться',
     days: 'Дней занятий',
     bestStreak: 'Лучшая серия дней',
     steps: 'Шагов выучено',
