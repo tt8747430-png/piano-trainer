@@ -6,6 +6,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Search,
+  Settings,
   UserRound,
 } from 'lucide-react'
 import type { ComponentType } from 'react'
@@ -19,8 +20,9 @@ import { Avatar } from '@/shared/ui'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
 
 interface Place {
-  readonly to: '/' | '/songs' | '/practice' | '/profile' | '/search'
-  readonly label: 'nav.learn' | 'nav.songs' | 'nav.practice' | 'nav.profile' | 'nav.search'
+  readonly to: '/' | '/songs' | '/practice' | '/profile' | '/search' | '/settings'
+  readonly label:
+    'nav.learn' | 'nav.songs' | 'nav.practice' | 'nav.profile' | 'nav.search' | 'nav.settings'
   readonly icon: ComponentType<{ className?: string; 'aria-hidden'?: boolean }>
   readonly exact: boolean
   /**
@@ -85,8 +87,9 @@ const PLACES: readonly Place[] = [
 /** The sidebar, open or collapsed: the platform's modifier and B. */
 const SIDEBAR_KEY: Combo = { code: 'KeyB', mod: true }
 /**
- * What sits at the sidebar's foot on a laptop, and in a place's bar on a phone: Search, on the
- * platform's modifier and K from anywhere.
+ * What sits at the sidebar's foot on a laptop: Search, on the platform's modifier and K from
+ * anywhere, and Settings, on the modifier and a comma (a phone has Search in a place's bar and
+ * Settings in the Profile).
  */
 const FOOT: readonly Place[] = [
   {
@@ -95,6 +98,13 @@ const FOOT: readonly Place[] = [
     icon: Search,
     exact: false,
     key: { code: 'KeyK', mod: true },
+  },
+  {
+    to: '/settings',
+    label: 'nav.settings',
+    icon: Settings,
+    exact: false,
+    key: { code: 'Comma', mod: true },
   },
 ]
 

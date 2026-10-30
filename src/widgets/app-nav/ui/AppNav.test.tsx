@@ -7,7 +7,7 @@ import { createMemoryStorage } from '@/shared/lib'
 const nav = () => screen.findByRole('navigation', { name: 'Main navigation' })
 
 describe('AppNav', () => {
-  it('lists the four places, the Profile last, then Search', async () => {
+  it('lists the four places, the Profile last, then Search and Settings', async () => {
     await renderApp('/songs')
     const links = within(await nav()).getAllByRole('link')
     expect(links.map((link) => link.textContent)).toEqual([
@@ -16,6 +16,7 @@ describe('AppNav', () => {
       'Practice',
       'Profile',
       'Search',
+      'Settings',
     ])
   })
 
