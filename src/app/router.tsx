@@ -530,6 +530,12 @@ const journeyEditRoute = createRoute({
   },
   component: lazyRouteComponent(lessonEditorScreens, 'JourneyEditorPage'),
 })
+// Manage courses: the courses' order on their shelves, an editor's.
+const courseOrderEditRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/courses/manage',
+  component: lazyRouteComponent(lessonEditorScreens, 'CourseOrderEditorPage'),
+})
 const courseLessonEditRoute = createRoute({
   getParentRoute: () => shellRoute,
   path: '/courses/$courseId/$lessonId/edit',
@@ -701,6 +707,7 @@ const routeTree = rootRoute.addChildren([
     lessonEditRoute,
     courseLessonEditRoute,
     courseEditRoute,
+    courseOrderEditRoute,
     journeyEditRoute,
     practiceRoute,
     quizRoute,

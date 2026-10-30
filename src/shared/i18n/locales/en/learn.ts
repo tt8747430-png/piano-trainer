@@ -246,6 +246,12 @@ export const learn = {
       adding: 'Adding…',
       addFailed: 'It could not be made: one of that name may be there already.',
     },
+    courses: {
+      open: 'Manage courses',
+      back: 'Back to the Courses',
+      editorsOnly: 'Only an editor manages the courses.',
+      empty: 'No courses on this shelf. A course’s Shelf puts it here.',
+    },
     journey: {
       chapterN: 'Chapter {{n}}',
       lesson: 'Lesson',

@@ -30,12 +30,19 @@ export function LearnPage() {
         large
         actions={
           <>
-            {/* An editor's way to the Lessons' order: the screen's own action, in its bar. */}
+            {/* An editor's way to the Lessons' or the Courses' order: the screen's own action, in its bar. */}
             {editsContent(account) && view === 'lessons' ? (
               <RoundLink
                 label={t('learn:edit.journey.open')}
                 icon={LibraryBig}
                 render={<Link to="/journeys/$journeyId/edit" params={{ journeyId: journey.id }} />}
+              />
+            ) : null}
+            {editsContent(account) && view === 'courses' ? (
+              <RoundLink
+                label={t('learn:edit.courses.open')}
+                icon={LibraryBig}
+                render={<Link to="/courses/manage" />}
               />
             ) : null}
             <PlaceActions />

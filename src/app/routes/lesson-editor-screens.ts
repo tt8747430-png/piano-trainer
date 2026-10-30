@@ -3,6 +3,7 @@
 export {
   CourseEditorPage,
   CourseLessonEditorPage,
+  CourseOrderEditorPage,
   JourneyEditorPage,
   LessonEditorPage,
 } from '@/pages/lesson-editor'

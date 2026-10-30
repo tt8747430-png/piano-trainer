@@ -7,6 +7,7 @@ export {
 } from './model/use-content-draft'
 export { useAddLesson } from './model/use-add-lesson'
 export { useCourseDraft } from './model/use-course-draft'
+export { useCourseOrderDraft } from './model/use-course-order-draft'
 export { useCreateProgression } from './model/use-create-progression'
 export { useCreateCourse, type NewCourse } from './model/use-create-course'
 export { useJourneyDraft } from './model/use-journey-draft'

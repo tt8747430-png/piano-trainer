@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import {
+  ArrowDownUp,
   FileText,
   GraduationCap,
   ListMusic,
@@ -22,12 +23,13 @@ const ICONS: Readonly<Record<ContentKind, LucideIcon>> = {
   lesson: FileText,
   course: GraduationCap,
   journey: MapIcon,
+  catalog: ArrowDownUp,
   progression: ListMusic,
 }
 
 /**
  * The editor a draft opens in: a song's original, a lesson's (a course's under its course), a
- * course's, a journey's, a progression's.
+ * course's, a level's, the courses' order, a progression's.
  */
 function editorOf({ kind, id }: Pick<DraftListing, 'kind' | 'id'>): ReactElement {
   switch (kind) {
@@ -37,6 +39,8 @@ function editorOf({ kind, id }: Pick<DraftListing, 'kind' | 'id'>): ReactElement
       return <Link to="/courses/$courseId/edit" params={{ courseId: id }} />
     case 'journey':
       return <Link to="/journeys/$journeyId/edit" params={{ journeyId: id }} />
+    case 'catalog':
+      return <Link to="/courses/manage" />
     case 'progression':
       return <Link to="/practice/progressions/$progressionId/edit" params={{ progressionId: id }} />
     case 'lesson': {

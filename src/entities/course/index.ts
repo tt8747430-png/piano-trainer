@@ -21,6 +21,7 @@ export {
   pieceStage,
   type CourseLessonPlace,
 } from './model/selectors'
+export { COURSE_ORDER_ID, inCourseOrder, isCourseOrder, type CourseOrder } from './model/order'
 export { COURSES } from './content'
 export { COURSE_ICON, courseIcon } from './ui/course-look'
 export { CourseIcon } from './ui/CourseIcon'

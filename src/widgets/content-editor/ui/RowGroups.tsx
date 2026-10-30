@@ -135,7 +135,8 @@ function SortableRow({
 }: {
   row: DocRow
   number: number
-  onRemove: () => void
+  /** Its menu's Remove; none where the rows are only put in order. */
+  onRemove: (() => void) | undefined
 }) {
   const { t } = useTranslation('learn')
   const sortable = useSortable({ id: row.key })
@@ -161,7 +162,7 @@ function SortableRow({
         {Icon ? <Icon className="size-5" strokeWidth={1.75} /> : number}
       </span>
       <RowName title={row.title} detail={row.detail} link={row.link} />
-      <RowMenu title={row.title} onRemove={onRemove} />
+      {onRemove ? <RowMenu title={row.title} onRemove={onRemove} /> : null}
     </li>
   )
 }
@@ -240,10 +241,14 @@ const groupKeyOf = (id: UniqueIdentifier) =>
 export function RowGroups({
   groups,
   onChange,
+  fixed = false,
 }: {
   groups: readonly RowGroup[]
   /** The groups and their rows' keys in their new order. */
   onChange: (order: RowOrder) => void
+  /** The groups are given (a course's shelf): they stay where they are, each row in its own, and
+   * the rows are only put in order (no Remove). */
+  fixed?: boolean
 }) {
   const { t } = useTranslation('learn')
   const sensors = useSensors(
@@ -258,7 +263,7 @@ export function RowGroups({
   // While something is in the hand, where it would land: a row across groups as it is dragged over them.
   const [dragged, setDragged] = useState<RowOrder | null>(null)
   const order = dragged ?? given
-  const sortsGroups = groups.length > 1
+  const sortsGroups = groups.length > 1 && !fixed
   const rows = new Map(groups.flatMap((group) => group.rows.map((row) => [row.key, row])))
   const byKey = new Map(groups.map((group) => [group.key, group]))
   const groupOf = (id: UniqueIdentifier): number => {
@@ -270,7 +275,7 @@ export function RowGroups({
     if (!target || groupKeyOf(active.id)) return
     const from = groupOf(active.id)
     const to = groupOf(target.id)
-    if (from === -1 || to === -1 || from === to) return
+    if (from === -1 || to === -1 || from === to || fixed) return
     const at = rowPlace(order, String(target.id))?.at ?? order[to]?.rows.length ?? 0
     setDragged(withRowAt(order, String(active.id), to, at))
   }
@@ -284,7 +289,7 @@ export function RowGroups({
       ? to === -1
         ? now
         : withGroupAt(now, moving, to)
-      : to === -1
+      : to === -1 || (fixed && to !== groupOf(active.id))
         ? now
         : withRowAt(
             now,
@@ -345,7 +350,7 @@ export function RowGroups({
                           key={rowKey}
                           row={row}
                           number={(firsts[g] ?? 0) + at + 1}
-                          onRemove={() => remove(row)}
+                          onRemove={fixed ? undefined : () => remove(row)}
                         />
                       )
                     })}
