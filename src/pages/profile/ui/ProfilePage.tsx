@@ -41,11 +41,14 @@ export function ProfilePage() {
         title={account ? account.name || account.email : t('profile.title')}
         large
         actions={
-          <RoundLink
-            label={t('common:nav.settings')}
-            icon={Settings}
-            render={<Link to="/settings" />}
-          />
+          // The laptop's sidebar has Settings at its foot: the bar's would be a second way.
+          <span className="lg:hidden">
+            <RoundLink
+              label={t('common:nav.settings')}
+              icon={Settings}
+              render={<Link to="/settings" />}
+            />
+          </span>
         }
       />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">

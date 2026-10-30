@@ -93,7 +93,7 @@ export function DraftScreen<T>({
         }
         tabs={
           open ? (
-            <div className="flex min-h-9 items-center gap-2 pb-1 pl-13">
+            <div className="flex min-h-9 items-center gap-1 pb-1 pl-13">
               <DraftStatus draft={draft} className="min-w-0" />
               {language ? (
                 <span className="shrink-0 text-sm text-muted-foreground">
