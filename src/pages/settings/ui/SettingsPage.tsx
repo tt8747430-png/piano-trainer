@@ -106,7 +106,7 @@ export function SettingsPage() {
             info={t('floating.labelsNote')}
             checked={floating.labels}
             onCheckedChange={(labels) => setFloating(settings, { labels })}
-            className="border-0 pr-3 pl-2 font-semibold"
+            className="gap-3 border-0 pr-3 pl-2 font-semibold"
           />
         </SettingsGroup>
         <SettingsGroup flush title={t('groups.playing.label')}>

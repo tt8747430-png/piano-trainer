@@ -21,7 +21,7 @@ export function SwitchRow({
   onCheckedChange,
   className,
 }: {
-  /** What it turns on, drawn: an icon or a glyph. */
+  /** What it turns on, drawn: an icon or a glyph on a muted square, or a row's tile (`TileMark`) as it is. */
   icon?: ReactNode
   label: string
   /** What it does, opened from the ⓘ after the label. */
@@ -51,7 +51,7 @@ export function SwitchRow({
       {icon ? (
         <span
           aria-hidden
-          className="grid size-9 shrink-0 place-items-center rounded-xl bg-muted text-muted-foreground [&_svg]:size-5"
+          className="grid min-h-9 min-w-9 shrink-0 place-items-center rounded-xl bg-muted text-muted-foreground [&_svg]:size-5"
         >
           {icon}
         </span>

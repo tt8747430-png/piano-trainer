@@ -100,7 +100,7 @@ export function LibraryHeader({
               trigger={<Ellipsis aria-hidden />}
               render={
                 <Button
-                  variant="surface"
+                  variant="bar"
                   size="icon"
                   className="rounded-full"
                   aria-label={t('folder.more', { name })}
