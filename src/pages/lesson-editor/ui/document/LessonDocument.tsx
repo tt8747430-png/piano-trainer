@@ -99,7 +99,7 @@ export function LessonDocument({
       )}
       <div
         ref={frame}
-        className="relative pb-24 md:pb-8 md:pl-12"
+        className="relative pr-10 pb-24 md:pr-0 md:pb-8 md:pl-12"
         style={{ '--takeaway-label': JSON.stringify(words('edit.doc.takeaway')) } as CSSProperties}
       >
         <EditorContent editor={editor} />

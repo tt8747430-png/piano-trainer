@@ -1,12 +1,20 @@
 import type { Editor } from '@tiptap/core'
+import { closeHistory } from '@tiptap/pm/history'
 import { NodeSelection } from '@tiptap/pm/state'
 import { useEditorState } from '@tiptap/react'
 import { GripVertical } from 'lucide-react'
-import { useEffect, useRef, useState, type DragEvent, type RefObject } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type DragEvent,
+  type PointerEvent as ReactPointerEvent,
+  type RefObject,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActionMenu } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { blockStart, FIXED_BLOCKS, selectedBlock } from '../../model/doc-blocks'
+import { blockStart, FIXED_BLOCKS, moveBlockTo, selectedBlock } from '../../model/doc-blocks'
 import { nodeName } from './block-names'
 import { blockActions } from './menus'
 
@@ -45,10 +53,21 @@ function endDrag(editor: Editor): void {
   editor.view.dragging = null
 }
 
+/** Where a block dropped at index `index` would stand: the top of the block there, in the frame. */
+function dropTop(editor: Editor, frame: HTMLElement, index: number): number {
+  const dom = editor.view.nodeDOM(blockStart(editor.state.doc, index))
+  const top = frame.getBoundingClientRect().top
+  return dom instanceof HTMLElement ? dom.getBoundingClientRect().top - top - 4 : 0
+}
+
+/** How far a finger moves on the handle before it drags the block rather than taps its menu. */
+const DRAG_SLOP_PX = 8
+
 /**
  * A block's handle in the document's margin (round 21), beside the block under the pointer or the
  * one the caret is in: dragged, it moves the block where it is dropped (the drop cursor shows
- * where); tapped, its menu moves, copies or deletes it. A laptop's: a phone has the toolbar's menu.
+ * where), by mouse or by finger (a line shows where it goes); tapped, its menu moves, copies or
+ * deletes it. Beside the block the caret is in on a phone, at the text's right.
  */
 export function BlockHandle({
   editor,
@@ -62,6 +81,10 @@ export function BlockHandle({
   const [hovered, setHovered] = useState<number | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const handle = useRef<HTMLDivElement>(null)
+  // A finger's drag: where it started, whether it has moved off a tap, where the block would land.
+  const touch = useRef<{ y: number; moving: boolean } | null>(null)
+  const [dropAt, setDropAt] = useState<{ index: number; top: number } | null>(null)
+  const dragged = useRef(false)
   const caret = useEditorState({
     editor,
     selector: ({ editor: each }) => ({
@@ -97,36 +120,83 @@ export function BlockHandle({
   }, [editor, frame, index, node, caret.blocks])
   if (index === null || !node) return null
   const label = t('edit.doc.blockMenu', { name: nodeName(node, t) })
+  const fingerDown = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    if (event.pointerType === 'mouse') return
+    touch.current = { y: event.clientY, moving: false }
+    dragged.current = false
+    event.currentTarget.setPointerCapture(event.pointerId)
+  }
+  const fingerMove = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    const start = touch.current
+    const box = frame.current
+    if (!start || !box) return
+    if (!start.moving && Math.abs(event.clientY - start.y) < DRAG_SLOP_PX) return
+    start.moving = true
+    const over = blockAtY(editor, event.clientY)
+    if (over !== null) setDropAt({ index: over, top: dropTop(editor, box, over) })
+  }
+  const fingerUp = () => {
+    const start = touch.current
+    touch.current = null
+    if (!start?.moving) return
+    dragged.current = true
+    const tr = dropAt ? moveBlockTo(editor.state, index, dropAt.index) : null
+    if (tr) editor.view.dispatch(closeHistory(tr))
+    setDropAt(null)
+  }
   return (
-    <div ref={handle} className="absolute left-0 hidden md:block">
-      <ActionMenu
-        label={label}
-        trigger={<GripVertical aria-hidden />}
-        render={
-          <Button
-            variant="ghost"
-            size="icon"
-            draggable
-            aria-label={label}
-            title={label}
-            className="size-11 cursor-grab text-muted-foreground active:cursor-grabbing"
-            // The block its menu acts on stays selected, the handle beside it, while the menu is open.
-            onPointerDown={() => {
-              selectBlock(editor, index)
-              setMenuOpen(true)
-            }}
-            onDragStart={(event) => startDrag(editor, index, event)}
-            onDragEnd={() => endDrag(editor)}
-          />
-        }
-        actions={blockActions(editor, index, t).map((action) => ({
-          ...action,
-          onSelect: () => {
-            action.onSelect()
-            setMenuOpen(false)
-          },
-        }))}
-      />
-    </div>
+    <>
+      {dropAt ? (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 h-1 rounded-full bg-primary"
+          style={{ top: dropAt.top }}
+        />
+      ) : null}
+      <div ref={handle} className="absolute right-0 md:right-auto md:left-0">
+        <ActionMenu
+          label={label}
+          trigger={<GripVertical aria-hidden />}
+          render={
+            <Button
+              variant="ghost"
+              size="icon"
+              draggable
+              aria-label={label}
+              title={label}
+              className="size-11 cursor-grab touch-none text-muted-foreground active:cursor-grabbing"
+              // The block its menu acts on stays selected, the handle beside it, while the menu is open.
+              onPointerDown={(event) => {
+                selectBlock(editor, index)
+                setMenuOpen(true)
+                fingerDown(event)
+              }}
+              onPointerMove={fingerMove}
+              onPointerUp={fingerUp}
+              onPointerCancel={() => {
+                touch.current = null
+                setDropAt(null)
+              }}
+              // A finger's drag is no tap: its menu stays shut.
+              onClickCapture={(event) => {
+                if (!dragged.current) return
+                dragged.current = false
+                event.preventDefault()
+                event.stopPropagation()
+              }}
+              onDragStart={(event) => startDrag(editor, index, event)}
+              onDragEnd={() => endDrag(editor)}
+            />
+          }
+          actions={blockActions(editor, index, t).map((action) => ({
+            ...action,
+            onSelect: () => {
+              action.onSelect()
+              setMenuOpen(false)
+            },
+          }))}
+        />
+      </div>
+    </>
   )
 }

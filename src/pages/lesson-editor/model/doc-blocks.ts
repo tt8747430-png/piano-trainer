@@ -48,6 +48,24 @@ export function moveBlock(
   return tr.scrollIntoView()
 }
 
+/**
+ * The transaction moving block `from` to stand at index `to` (a block dragged and dropped), selected
+ * there whole; never above the title and summary, null where it would not move.
+ */
+export function moveBlockTo(state: EditorState, from: number, to: number): Transaction | null {
+  const { doc } = state
+  const last = doc.childCount - 1
+  const at = Math.min(Math.max(to, FIXED_BLOCKS), last)
+  if (from < FIXED_BLOCKS || from > last || at === from) return null
+  const node = doc.child(from)
+  const start = blockStart(doc, from)
+  const tr = state.tr.delete(start, start + node.nodeSize)
+  const into = blockStart(tr.doc, at)
+  tr.insert(into, node)
+  tr.setSelection(NodeSelection.create(tr.doc, into))
+  return tr.scrollIntoView()
+}
+
 /** The transaction putting a copy of block `index` after it; null for the title and summary. */
 export function duplicateBlock(state: EditorState, index: number): Transaction | null {
   if (index < FIXED_BLOCKS || index >= state.doc.childCount) return null

@@ -4,7 +4,7 @@ import { EditorState, NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { describe, expect, it } from 'vitest'
 import { COURSES } from '@/entities/course'
 import { LESSONS, type Lesson } from '@/entities/lesson'
-import { duplicateBlock, moveBlock, removeBlock } from './doc-blocks'
+import { duplicateBlock, moveBlock, moveBlockTo, removeBlock } from './doc-blocks'
 import { docExtensions } from './doc-schema'
 import { docToLesson, lessonToDoc, textOf, type DocNode } from './lesson-doc'
 
@@ -64,6 +64,29 @@ describe('a block moved, copied and taken out', () => {
     const moved = at.apply(moveBlock(at, 1)!)
     expect(texts(moved)).toEqual(['T', 'S', 'H', 'one', 'three', 'lessonExample'])
     expect((moved.selection as NodeSelection).node.type.name).toBe('lessonExample')
+  })
+
+  it('moves a block dragged to where it is dropped, selected there', () => {
+    const state = stateOf(LESSON)
+    const up = state.apply(moveBlockTo(state, 5, 3)!)
+    expect(texts(up)).toEqual(['T', 'S', 'H', 'three', 'one', 'lessonExample'])
+    expect((up.selection as NodeSelection).node.textContent).toBe('three')
+    const down = state.apply(moveBlockTo(state, 3, 5)!)
+    expect(texts(down)).toEqual(['T', 'S', 'H', 'lessonExample', 'three', 'one'])
+  })
+
+  it('drops nothing above the title and summary, nor in its own place', () => {
+    const state = stateOf(LESSON)
+    expect(texts(state.apply(moveBlockTo(state, 4, 0)!))).toEqual([
+      'T',
+      'S',
+      'lessonExample',
+      'H',
+      'one',
+      'three',
+    ])
+    expect(moveBlockTo(state, 4, 4)).toBeNull()
+    expect(moveBlockTo(state, 1, 4)).toBeNull()
   })
 
   it('never moves the title or summary, nor a block above them', () => {
