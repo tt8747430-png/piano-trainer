@@ -17,14 +17,14 @@ import {
 import { Button } from '@/shared/ui/primitives/button'
 import { Switch } from '@/shared/ui/primitives/switch'
 import { useLoaded } from '../model/use-loaded'
-import { LoadedState } from './LoadedState'
+import { useChangeProblem } from '../model/use-change-problem'
+import { FailureLine, LoadedState } from './LoadedState'
 
 /** Groups: made by name, each with its members chosen from the accounts, and deleted, asked first. */
 export function GroupsTab() {
   const { t } = useTranslation('admin')
   const admin = useAdmin()
   const [name, setName] = useState('')
-  const [problem, setProblem] = useState(false)
   const [deleting, setDeleting] = useState<Group | null>(null)
   const load = useCallback(async () => {
     const [groups, accounts] = await Promise.all([admin.groups(), admin.accounts('')])
@@ -33,10 +33,7 @@ export function GroupsTab() {
     return { ok: true as const, value: { groups: groups.value, accounts: accounts.value } }
   }, [admin])
   const { loaded, reload } = useLoaded(load)
-  const after = (result: { ok: boolean }) => {
-    setProblem(!result.ok)
-    reload()
-  }
+  const { problem, after } = useChangeProblem(reload)
   return (
     <div className="flex flex-col gap-4">
       <form
@@ -61,7 +58,7 @@ export function GroupsTab() {
           {t('groups.add')}
         </Button>
       </form>
-      {problem ? <p role="alert">{t('refused')}</p> : null}
+      {problem ? <FailureLine reason={problem} /> : null}
       <LoadedState loaded={loaded} reload={reload}>
         {({ groups, accounts }) =>
           groups.length === 0 ? (

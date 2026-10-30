@@ -6,6 +6,7 @@ import { useCreateProgression } from '@/features/edit-original'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, InfoTip, NameField, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
+import { NotOpen } from '@/widgets/content-editor'
 
 /**
  * An editor's new progression (content as data, ADR 0116): its name, then Create, which makes it on
@@ -33,7 +34,7 @@ export function NewProgressionPage() {
     })
   }
   return (
-    <div className="flex flex-col gap-6">
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 pb-8">
       <ScreenHeader
         title={t('progressions.edit.new')}
         back={<BackButton fallback={{ to: '/practice/progressions' }} />}
@@ -42,7 +43,7 @@ export function NewProgressionPage() {
         }
       />
       {editsContent(account) ? (
-        <form onSubmit={(event) => void submit(event)} className="flex max-w-xl flex-col gap-5">
+        <form onSubmit={(event) => void submit(event)} className="flex flex-col gap-5">
           <NameField
             label={t('progressions.edit.name')}
             value={name}
@@ -65,7 +66,7 @@ export function NewProgressionPage() {
           ) : null}
         </form>
       ) : (
-        <p className="text-muted-foreground">{t('progressions.edit.editorsOnly')}</p>
+        <NotOpen line={t('progressions.edit.editorsOnly')} />
       )}
     </div>
   )

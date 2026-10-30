@@ -155,6 +155,8 @@ export const learn = {
       moveUp: 'Move up: {{title}}',
       moveDown: 'Move down: {{title}}',
       remove: 'Remove: {{title}}',
+      removed: 'Removed: {{title}}',
+      undo: 'Undo',
       unpublished: 'Not published yet',
       newLesson: 'New lesson',
       addLesson: 'Add lesson',

@@ -1,29 +1,38 @@
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/shared/i18n'
+import type { Report } from '@/shared/api/admin'
 import { useAdmin } from '@/shared/lib/admin'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/shared/ui/primitives/alert-dialog'
 import { Button } from '@/shared/ui/primitives/button'
 import { useLoaded } from '../model/use-loaded'
-import { LoadedState } from './LoadedState'
+import { useChangeProblem } from '../model/use-change-problem'
+import { FailureLine, LoadedState } from './LoadedState'
 
 /**
  * The Public library's reports, the newest first: the song, its author, the reason and note; Hide
- * (or Show again), Stop them publishing, Dismiss.
+ * (or Show again), Stop them publishing (asked first), Dismiss.
  */
 export function ReportsTab() {
   const { t } = useTranslation(['admin', 'songs'])
   const locale = useLocale()
   const admin = useAdmin()
-  const [problem, setProblem] = useState(false)
   const load = useCallback(() => admin.reports(), [admin])
   const { loaded, reload } = useLoaded(load)
-  const after = (result: { ok: boolean }) => {
-    setProblem(!result.ok)
-    reload()
-  }
+  const { problem, after } = useChangeProblem(reload)
+  const [blocking, setBlocking] = useState<Report | null>(null)
   return (
     <div className="flex flex-col gap-4">
-      {problem ? <p role="alert">{t('refused')}</p> : null}
+      {problem ? <FailureLine reason={problem} /> : null}
       <LoadedState loaded={loaded} reload={reload}>
         {(reports) =>
           reports.length === 0 ? (
@@ -61,10 +70,7 @@ export function ReportsTab() {
                     >
                       {report.hidden ? t('reports.show') : t('reports.hide')}
                     </Button>
-                    <Button
-                      variant="outline"
-                      onClick={() => void admin.block(report.authorId).then(after)}
-                    >
+                    <Button variant="outline" onClick={() => setBlocking(report)}>
                       {t('reports.block')}
                     </Button>
                     <Button
@@ -82,6 +88,28 @@ export function ReportsTab() {
           )
         }
       </LoadedState>
+      <AlertDialog open={blocking !== null} onOpenChange={(open) => !open && setBlocking(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {t('reports.blockTitle', { name: blocking?.authorName ?? '' })}
+            </AlertDialogTitle>
+            <AlertDialogDescription>{t('reports.blockBody')}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('reports.cancel')}</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={() => {
+                if (blocking) void admin.block(blocking.authorId).then(after)
+                setBlocking(null)
+              }}
+            >
+              {t('reports.block')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

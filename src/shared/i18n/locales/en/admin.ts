@@ -77,6 +77,12 @@ export const admin = {
     states: { everyone: 'Everyone', nobody: 'No one', groups: 'Groups' },
     groups: 'The groups it is on for',
     delete: 'Delete switch',
+    deleteTitle: 'Delete “{{label}}”?',
+    deleteBody: 'The feature it holds back turns off for everyone.',
+    cancel: 'Keep it',
+    confirm: 'Delete',
+    new: 'New switch',
+    noGroups: 'No groups yet: make one in Groups.',
     invalidKey: 'Lower-case letters, digits and dashes, starting with a letter.',
   },
   reports: {
@@ -86,6 +92,9 @@ export const admin = {
     hide: 'Hide',
     show: 'Show again',
     block: 'Stop them publishing',
+    blockTitle: 'Stop {{name}} publishing?',
+    blockBody: 'They can no longer publish to the Public library. What they have published stays.',
+    cancel: 'Cancel',
     dismiss: 'Dismiss',
   },
   // What went wrong on learners' devices, the latest first (ADR 0116).

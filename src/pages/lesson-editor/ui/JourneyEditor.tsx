@@ -14,9 +14,7 @@ import { localText, useLocale } from '@/shared/i18n'
 import { slug } from '@/shared/lib'
 import { InfoTip } from '@/shared/ui'
 import { useStepTitle } from '@/widgets/curriculum'
-import { DraftScreen } from '@/widgets/content-editor'
-import { AddByName, OrderList } from '@/widgets/content-editor'
-import { TextFields } from '@/widgets/content-editor'
+import { AddByName, DraftScreen, OrderList, TextFields } from '@/widgets/content-editor'
 
 /** A chapter's name, its steps in order (each lesson opened in its editor) and a new lesson added. */
 function ChapterFields({

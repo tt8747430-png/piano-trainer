@@ -2,7 +2,7 @@ import { ArrowDown, ArrowUp, Plus, X } from 'lucide-react'
 import { useState, type FormEvent, type ReactElement } from 'react'
 import { useRender } from '@base-ui/react/use-render'
 import { useTranslation } from 'react-i18next'
-import { NameField } from '@/shared/ui'
+import { NameField, say } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 
 /** A row of an ordered list an editor arranges: its name, a line under it, and where it opens. */
@@ -25,7 +25,7 @@ function RowName({ title, detail, link }: Omit<OrderRow, 'key'>) {
     defaultTagName: 'span',
     render: link,
     props: {
-      className: `flex min-w-0 flex-1 flex-col py-2${link ? ' hover:underline' : ''}`,
+      className: `flex min-h-11 min-w-0 flex-1 flex-col justify-center py-2${link ? ' hover:underline' : ''}`,
       children: face,
     },
   })
@@ -33,7 +33,7 @@ function RowName({ title, detail, link }: Omit<OrderRow, 'key'>) {
 
 /**
  * What an editor puts in order (a course's lessons, a journey's chapters and a chapter's steps): one
- * card of numbered rows, each opened from its name, moved up or down, or removed.
+ * card of numbered rows, each opened from its name, moved up or down, or removed (said, with Undo).
  */
 export function OrderList({
   label,
@@ -88,7 +88,13 @@ export function OrderList({
             size="icon"
             aria-label={t('edit.order.remove', { title: row.title })}
             className="text-destructive"
-            onClick={() => onChange(keys.filter((each) => each !== key))}
+            onClick={() => {
+              onChange(keys.filter((each) => each !== key))
+              say(t('edit.order.removed', { title: row.title }), {
+                label: t('edit.order.undo'),
+                onClick: () => onChange(keys),
+              })
+            }}
           >
             <X aria-hidden />
           </Button>
