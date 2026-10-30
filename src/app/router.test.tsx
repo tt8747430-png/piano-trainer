@@ -177,9 +177,8 @@ describe('the app shell', () => {
       'Learn',
       'Songs',
       'Practice',
-      'Search',
       'Profile',
-      'Settings',
+      'Search',
     ])
     expect(within(nav).getByRole('link', { name: 'Songs' })).toHaveAttribute('aria-current', 'page')
   })
@@ -190,18 +189,24 @@ describe('the app shell', () => {
     ['/courses/gorshkov', 'Learn'],
     ['/courses/gorshkov/chord-pulse', 'Learn'],
     ['/practice/quiz/gaps', 'Practice'],
+    ['/settings', 'Profile'],
+    ['/settings/account', 'Profile'],
+    ['/account/sign-in', 'Profile'],
   ])('marks the place of %s current: %s', async (path, place) => {
     await renderApp(path)
     const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
     expect(within(nav).getByRole('link', { name: place })).toHaveAttribute('aria-current', 'page')
   })
 
-  it('reaches Settings from Learn, through the Profile', async () => {
+  it('reaches Settings through the Profile’s tab', async () => {
     const user = userEvent.setup()
     await renderApp('/')
-    await user.click(within(await screen.findByRole('main')).getByRole('link', { name: 'Profile' }))
+    const nav = await screen.findByRole('navigation', { name: 'Main navigation' })
+    await user.click(within(nav).getByRole('link', { name: 'Profile' }))
     await screen.findByRole('heading', { level: 1, name: 'Profile' })
-    await user.click(within(screen.getByRole('main')).getByRole('link', { name: 'Settings' }))
+    await user.click(
+      within(screen.getByRole('main')).getAllByRole('link', { name: 'Settings' })[0]!,
+    )
     expect(await screen.findByRole('heading', { level: 1, name: 'Settings' })).toBeInTheDocument()
   })
 

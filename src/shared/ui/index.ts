@@ -1,3 +1,4 @@
+export { Avatar } from './Avatar'
 export { BackButton } from './BackButton'
 export { ButtonLink } from './ButtonLink'
 export { ChordButton } from './ChordButton'
