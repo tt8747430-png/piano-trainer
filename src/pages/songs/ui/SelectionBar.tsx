@@ -1,5 +1,6 @@
 import {
   Archive,
+  Download,
   FolderInput,
   FolderOutput,
   Heart,
@@ -35,8 +36,8 @@ function BarAction({
       onClick={onClick}
       className={
         destructive
-          ? 'h-14 min-w-16 flex-col gap-0.5 rounded-2xl px-2 text-xs text-destructive'
-          : 'h-14 min-w-16 flex-col gap-0.5 rounded-2xl px-2 text-xs'
+          ? 'h-14 min-w-13 flex-col gap-0.5 rounded-2xl px-1 text-xs text-destructive sm:min-w-16'
+          : 'h-14 min-w-13 flex-col gap-0.5 rounded-2xl px-1 text-xs sm:min-w-16'
       }
     >
       <Icon aria-hidden className="size-5" />
@@ -47,7 +48,7 @@ function BarAction({
 
 /**
  * Select's bar at the foot (Mindscape's `SelectToolbar`), floating where the screen's actions float:
- * Favourite for the songs chosen, Move and Archive for every row chosen (folders with all they
+ * Favourite and Export… for the songs chosen, Move and Archive for every row chosen (folders with all they
  * hold), and Delete where everything chosen can be deleted (the learner's own songs, and folders).
  * Its slots stay put as rows are chosen: one that cannot act on the choice is greyed, never taken
  * away. While a row's face is carried, the bar is where it drops: Archive, and in a folder, out to
@@ -112,6 +113,12 @@ export function SelectionBar({
           icon={FolderInput}
           onClick={select.move}
           disabled={select.count === 0}
+        />
+        <BarAction
+          label={t('select.export')}
+          icon={Download}
+          onClick={select.export}
+          disabled={noSongs}
         />
         <BarAction
           label={t('select.archive')}

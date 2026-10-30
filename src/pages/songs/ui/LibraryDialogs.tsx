@@ -6,7 +6,7 @@ import { entryTitles, useRepertoire } from '@/entities/piece'
 import { selectView } from '@/entities/views'
 import { DeleteFolderAsk, FolderSheet, MoveSheet } from '@/features/manage-library'
 import { songToShare, useShareSong } from '@/features/share-song'
-import { SongExportSheet } from '@/features/song-files'
+import { ExportSheet, SongExportSheet, useSongFiles } from '@/features/song-files'
 import { useLocale } from '@/shared/i18n'
 import { say } from '@/shared/ui'
 import type { LibraryPage } from '../model/use-library-page'
@@ -52,6 +52,19 @@ export function LibraryDialogs({
         selectView(router.options.context.views.getState(), `/play/${exported.id}`),
       )
     : null
+  // The songs Select chose, each one's file in turn.
+  const filesOf = useSongFiles()
+  const chosen =
+    pending?.kind === 'export-chosen'
+      ? pending.songs.flatMap((id) => {
+          const piece = repertoire.piece(id)
+          return piece ? [filesOf(piece)] : []
+        })
+      : []
+  const chosenFiles = {
+    musicXml: () => chosen.forEach((files) => files.musicXml()),
+    midi: () => chosen.forEach((files) => files.midi()),
+  }
   const shut = (open: boolean) => {
     if (!open) page.close()
   }
@@ -86,6 +99,11 @@ export function LibraryDialogs({
         folder={folder?.id ?? null}
         builtIn={pending?.kind === 'new-song' ? pending.builtIn : undefined}
         record={pending?.kind === 'new-song' && pending.record === true}
+      />
+      <ExportSheet
+        subject={pending?.kind === 'export-chosen' ? pending.what : null}
+        files={chosenFiles}
+        onOpenChange={shut}
       />
       <SongExportSheet
         piece={exported}

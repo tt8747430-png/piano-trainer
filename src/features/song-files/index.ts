@@ -1,6 +1,6 @@
 export { importSong } from './import-song'
 export { exportMidi, type PlayedMusic } from './model/export-midi'
 export { ExportSheet, SongExportSheet, type ExportFiles, type ExportShare } from './ui/ExportSheet'
-export { useSongExport } from './ui/use-song-export'
+export { useSongExport, useSongFiles, type SongFiles } from './ui/use-song-export'
 export { useSongImport } from './ui/use-song-import'
 export { useSongDrop } from './ui/use-song-drop'

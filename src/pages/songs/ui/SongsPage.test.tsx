@@ -575,6 +575,40 @@ describe('Songs: Select (ADR 0106)', () => {
     await waitFor(() => expect(libraryStore.getState().favourites).toEqual(['amazing']))
   })
 
+  it('exports the songs chosen, a file each, from the one Export sheet', async () => {
+    const user = userEvent.setup()
+    const names: string[] = []
+    vi.stubGlobal(
+      'URL',
+      class extends URL {
+        static override createObjectURL = () => 'blob:music'
+        static override revokeObjectURL = () => {}
+      },
+    )
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (
+      this: HTMLAnchorElement,
+    ) {
+      names.push(this.download)
+    })
+    await renderApp('/songs/folders/hymns')
+    await user.click(await screen.findByRole('button', { name: 'Select' }))
+    const bar = screen.getByRole('toolbar', { name: 'For what is selected' })
+    // Nothing chosen, nothing to export.
+    expect(within(bar).getByRole('button', { name: 'Export' })).toBeDisabled()
+    await user.click(screen.getByRole('checkbox', { name: 'Select Silent Night' }))
+    await user.click(screen.getByRole('checkbox', { name: 'Select Amazing Grace' }))
+    await user.click(within(bar).getByRole('button', { name: 'Export' }))
+    const sheet = await screen.findByRole('dialog', { name: 'Export' })
+    expect(within(sheet).getByText('Selected: 2')).toBeInTheDocument()
+    const midi = within(sheet).getByText('MIDI', { exact: true }).closest('button')
+    if (!midi) throw new Error('MIDI is a row of Export')
+    await user.click(midi)
+    expect(names).toEqual([
+      expect.stringMatching(/^Silent Night.*\.mid$/),
+      expect.stringMatching(/^Amazing Grace.*\.mid$/),
+    ])
+  })
+
   it('acts only on the rows chosen that are in sight, a search hiding the rest', async () => {
     const user = userEvent.setup()
     const { libraryStore } = await renderApp('/songs/folders/hymns')

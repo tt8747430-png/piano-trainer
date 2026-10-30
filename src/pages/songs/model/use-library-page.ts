@@ -49,6 +49,7 @@ export type Pending =
   | { readonly kind: 'new-song'; readonly builtIn?: SongCollectionId; readonly record?: boolean }
   | { readonly kind: 'move-in' }
   | { readonly kind: 'export'; readonly song: PieceId }
+  | { readonly kind: 'export-chosen'; readonly songs: readonly PieceId[]; readonly what: string }
 
 /**
  * The library's page's acts (Mindscape's `use-library`), at Home (`folder` null) or in a folder:
@@ -155,6 +156,13 @@ export function useLibraryPage(folder: ShelvedFolder | null, filter: SongsFilter
           kind: 'move',
           moving: { songs: chosenSongs, folders: chosenFolders.map((each) => each.id) },
           what: t('select.count', { count: inSight.length }),
+        }),
+      /** Export… for the songs chosen: each one's file. */
+      export: () =>
+        setPending({
+          kind: 'export-chosen',
+          songs: chosenSongs,
+          what: t('select.count', { count: chosenSongs.length }),
         }),
       archive: () => {
         acts.archiveChosen(chosenSongs, chosenFolders)

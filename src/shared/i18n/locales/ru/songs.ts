@@ -154,6 +154,7 @@ export const songs: LocaleResources['songs'] = {
     favourite: 'В избранное',
     unfavourite: 'Из избранного',
     move: 'Переместить',
+    export: 'Экспорт',
     archive: 'В архив',
     delete: 'Удалить',
   },

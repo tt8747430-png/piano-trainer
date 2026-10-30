@@ -25,7 +25,8 @@ Ordered by what the owner pressed hardest. Strike an item when it reaches `main`
 - **Lesson customisation:** a level's lesson has Read first; nothing else (cover colour, length, level) is a
   property yet.
 - **Publish:** no level or style tags (the public items have no columns for them; a migration would add them).
-- **Export:** one Export… sheet everywhere (the Player's More too); no export of several chosen songs from Select.
+- **Export:** one Export… sheet everywhere (the Player's More, Select's bar for several songs, a file each);
+  no single archive (.zip) of several.
 - **Public library:** redesigned after Noji; dark mode and a long list not checked by eye.
 - **Actions in the bar:** done for the Profile and Learn; the other screens not yet audited for actions that
   belong in their bar.

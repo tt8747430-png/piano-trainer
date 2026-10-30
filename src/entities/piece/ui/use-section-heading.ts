@@ -27,13 +27,22 @@ export function useSectionHeading(): (section: Section) => string {
 
 /** The headings a piece's chart is shown under: its sections in order, or the one of degrees written in one line. */
 export function usePieceHeadings(piece: Piece): readonly string[] {
+  const headings = usePieceHeadingsOf()
+  // One array per piece and language: the sheet's labels are drawn again only when it changes.
+  return useMemo(() => headings(piece), [piece, headings])
+}
+
+/** `usePieceHeadings` for any piece: several songs' at once (Select's Export). */
+export function usePieceHeadingsOf(): (piece: Piece) => readonly string[] {
   const { t } = useTranslation('piece')
   const heading = useSectionHeading()
-  // One array per piece and language: the sheet's labels are drawn again only when it changes.
-  return useMemo(() => {
-    if (!isDegreePiece(piece)) return piece.sections.map(heading)
-    return typeof piece.progression === 'string'
-      ? [t('progression')]
-      : piece.progression.map(heading)
-  }, [piece, heading, t])
+  return useCallback(
+    (piece) => {
+      if (!isDegreePiece(piece)) return piece.sections.map(heading)
+      return typeof piece.progression === 'string'
+        ? [t('progression')]
+        : piece.progression.map(heading)
+    },
+    [heading, t],
+  )
 }

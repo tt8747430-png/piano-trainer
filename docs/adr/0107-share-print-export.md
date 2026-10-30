@@ -79,3 +79,4 @@ not its music.
   what it is for (2026-10-30).
 - r25 — The Player's More exports from the same Export… sheet (MusicXML, MIDI, MIDI time aligned where a recording
   plays along, Share link); its separate Export to… items and its Share are gone (2026-10-30).
+- r25 — Select's bar exports the songs chosen from the same Export… sheet, a file each (2026-10-30).

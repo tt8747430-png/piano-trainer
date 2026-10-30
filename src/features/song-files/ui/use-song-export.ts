@@ -4,8 +4,8 @@ import {
   entryTitles,
   isDegreePiece,
   musicOf,
-  usePieceHeadings,
-  useStaffNames,
+  staffNamesOf,
+  usePieceHeadingsOf,
   useStaffTitle,
   versionableEntry,
   type ChartPiece,
@@ -30,42 +30,53 @@ function creditNames(credits: readonly Credit[] | undefined, roles: readonly str
 const chartOf = (piece: Piece): ChartPiece =>
   isDegreePiece(piece) ? (versionableEntry(piece.id) as ChartPiece) : piece
 
+/** A song's files: its score as MusicXML, its music as played as MIDI. */
+export interface SongFiles {
+  readonly musicXml: () => void
+  readonly midi: () => void
+}
+
 /**
- * A song's files (ADR 0107), as its page's More and the Player's export them: its music as written
- * as MusicXML, under its title and who wrote it, its sections' headings, its staves' names and the
- * piano's in the learner's language; and its music as played in its own key and pattern as a MIDI
- * file, each part's track named as the screen names it.
+ * A song's files (ADR 0107), as its page's More, the Player's and Select's export them: its music as
+ * written as MusicXML, under its title and who wrote it, its sections' headings, its staves' names and
+ * the piano's in the learner's language; and its music as played in its own key and pattern as a
+ * MIDI file, each part's track named as the screen names it. For any song: several chosen at once.
  */
-export function useSongExport(piece: Piece): { musicXml: () => void; midi: () => void } {
+export function useSongFiles(): (piece: Piece) => SongFiles {
   const { t } = useTranslation(['music', 'common'])
   const locale = useLocale()
-  const chart = chartOf(piece)
-  const title = entryTitles(piece, locale).primary
-  const headings = usePieceHeadings(chart)
-  const staffNames = useStaffNames(chart.staves)
+  const headingsOf = usePieceHeadingsOf()
   const staffTitle = useStaffTitle()
-  const composer = creditNames(chart.credits, ['music', 'words-and-music', 'authors'])
-  const lyricist = creditNames(chart.credits, ['words', 'russian-text'])
-  return {
-    musicXml: () =>
-      exportMusicXml(musicOf(chart), {
-        title,
-        ...(composer ? { composer } : {}),
-        ...(lyricist ? { lyricist } : {}),
-        headings,
-        staffNames,
-        piano: t('music:sheet.staves.piano'),
-      }),
-    midi: () =>
-      exportMidi({
-        performance: arrangePiece(chart, ownChoice(chart), BUILT_IN_PATTERNS),
-        title,
-        tempo: chart.tempo,
-        names: {
-          staff: (place) => staffTitle(staffNames[place], place),
-          rh: t('common:hands.rh'),
-          lh: t('common:hands.lh'),
-        },
-      }),
+  return (piece) => {
+    const chart = chartOf(piece)
+    const title = entryTitles(piece, locale).primary
+    const staffNames = staffNamesOf(chart.staves ?? [], locale)
+    const composer = creditNames(chart.credits, ['music', 'words-and-music', 'authors'])
+    const lyricist = creditNames(chart.credits, ['words', 'russian-text'])
+    return {
+      musicXml: () =>
+        exportMusicXml(musicOf(chart), {
+          title,
+          ...(composer ? { composer } : {}),
+          ...(lyricist ? { lyricist } : {}),
+          headings: headingsOf(chart),
+          staffNames,
+          piano: t('music:sheet.staves.piano'),
+        }),
+      midi: () =>
+        exportMidi({
+          performance: arrangePiece(chart, ownChoice(chart), BUILT_IN_PATTERNS),
+          title,
+          tempo: chart.tempo,
+          names: {
+            staff: (place) => staffTitle(staffNames[place], place),
+            rh: t('common:hands.rh'),
+            lh: t('common:hands.lh'),
+          },
+        }),
+    }
   }
 }
+
+/** One song's files (`useSongFiles`). */
+export const useSongExport = (piece: Piece): SongFiles => useSongFiles()(piece)

@@ -161,6 +161,7 @@ export const songs = {
     favourite: 'Favourite',
     unfavourite: 'Unfavourite',
     move: 'Move',
+    export: 'Export',
     archive: 'Archive',
     delete: 'Delete',
   },
