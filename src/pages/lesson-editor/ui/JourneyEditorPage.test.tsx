@@ -55,18 +55,55 @@ describe('the journey editor (content as data)', () => {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    const chapters = await screen.findByRole('list', { name: 'Chapters' })
-    await user.click(within(chapters).getByRole('button', { name: `Move down: ${FIRST.title.en}` }))
+    await user.click(await screen.findByRole('button', { name: `Chapter: ${FIRST.title.en}` }))
+    await user.click(await screen.findByRole('button', { name: `Move down: ${FIRST.title.en}` }))
     const steps = screen.getByRole('list', { name: `Steps: ${FIRST.title.en}` })
     const [, last] = within(steps).getAllByRole('listitem')
     if (!last) throw new Error('a chapter of two steps at least')
-    await user.click(within(last).getByRole('button', { name: /^Move up: / }))
+    await user.click(within(last).getByRole('button', { name: /^More: / }))
+    await user.click(await screen.findByRole('button', { name: /^Move up: / }))
     await publish(user)
     const body = content.body('journey', JOURNEY.id) as Journey
     expect(body.chapters.map((chapter) => chapter.id).slice(0, 2)).toEqual([SECOND.id, FIRST.id])
     const moved = body.chapters[1]?.steps
     expect(moved?.[0]).toEqual(FIRST.steps[1])
     expect(moved?.[1]).toEqual(FIRST.steps[0])
+  })
+
+  it('moves a chapter’s first step onto the end of the chapter before it', async () => {
+    const user = userEvent.setup()
+    const content = editing()
+    await renderApp(`/journeys/${JOURNEY.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    const steps = await screen.findByRole('list', { name: `Steps: ${SECOND.title.en}` })
+    const [first] = within(steps).getAllByRole('listitem')
+    if (!first) throw new Error('a chapter of a step at least')
+    await user.click(within(first).getByRole('button', { name: /^More: / }))
+    await user.click(await screen.findByRole('button', { name: /^Move up: / }))
+    await publish(user)
+    const body = content.body('journey', JOURNEY.id) as Journey
+    expect(body.chapters[0]?.steps.at(-1)).toEqual(SECOND.steps[0])
+    expect(body.chapters[1]?.steps).toEqual(SECOND.steps.slice(1))
+  })
+
+  it('renames a chapter in place, in the language the bar says', async () => {
+    const user = userEvent.setup()
+    const content = editing()
+    await renderApp(`/journeys/${JOURNEY.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    await user.click(await screen.findByRole('radio', { name: 'RU · Русский' }))
+    const name = within(screen.getByRole('region', { name: FIRST.title.en })).getByRole('textbox', {
+      name: 'Chapter name',
+    })
+    expect(name).toHaveValue(FIRST.title.ru)
+    await user.type(name, '!')
+    await publish(user)
+    const body = content.body('journey', JOURNEY.id) as Journey
+    expect(body.chapters[0]?.title).toEqual({ en: FIRST.title.en, ru: `${FIRST.title.ru}!` })
   })
 
   it('adds a chapter, and a new lesson to it that opens in the lesson editor', async () => {
@@ -76,11 +113,10 @@ describe('the journey editor (content as data)', () => {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await user.type(await screen.findByRole('textbox', { name: 'New chapter' }), 'Pedalling')
-    await user.click(screen.getByRole('button', { name: 'Add chapter' }))
+    await user.type(await screen.findByRole('textbox', { name: 'Add chapter' }), 'Pedalling{Enter}')
     const chapter = await screen.findByRole('region', { name: 'Pedalling' })
-    await user.type(within(chapter).getByRole('textbox', { name: 'New lesson' }), 'Half pedal')
-    await user.click(within(chapter).getByRole('button', { name: 'Add lesson' }))
+    await user.type(within(chapter).getByRole('textbox', { name: 'Add lesson' }), 'Half pedal')
+    await user.click(within(chapter).getByRole('button', { name: 'New lesson “Half pedal”' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/lessons/half-pedal/edit'))
     const lesson = await content.draft('lesson', 'half-pedal')
     expect(lesson.ok && lesson.value?.body).toMatchObject({ title: { en: 'Half pedal' } })

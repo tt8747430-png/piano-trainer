@@ -1,148 +1,149 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { useId, useState, type ReactElement, type ReactNode } from 'react'
+import { useRef, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { COURSE_WEEKS, SHELVES, type Course, type CourseRecord } from '@/entities/course'
 import { STAGES } from '@/entities/step'
 import { useAddLesson, useCourseDraft } from '@/features/edit-original'
-import { localText, useLocale } from '@/shared/i18n'
-import { Dropdown, InfoTip } from '@/shared/ui'
-import { AddByName, DraftScreen, OrderList, TextFields } from '@/widgets/content-editor'
+import { i18n, localText, useLocale, type Locale } from '@/shared/i18n'
+import { Dropdown } from '@/shared/ui'
+import {
+  AddRow,
+  DocText,
+  DraftScreen,
+  LanguageChoice,
+  Properties,
+  PropertyRow,
+  RowGroups,
+} from '@/widgets/content-editor'
 
-/** The course's lessons in order: each one's editor, moved up or down, removed; a new one added. */
-function CourseLessons({
-  course,
-  ids,
-  onChange,
-  onAdd,
-}: {
-  course: Course
-  ids: readonly string[]
-  onChange: (ids: readonly string[]) => void
-  /** Makes a lesson of this name; resolves once it is listed and opened, false where it was not made. */
-  onAdd: (name: string) => Promise<boolean>
-}) {
-  const { t } = useTranslation('learn')
-  const locale = useLocale()
-  const listId = useId()
-  const lessons = new Map(course.lessons.map((lesson) => [lesson.id, lesson]))
-  return (
-    <section aria-labelledby={listId} className="flex flex-col gap-3">
-      <div className="flex items-center gap-1">
-        <h2 id={listId} className="font-display text-xl">
-          {t('edit.course.lessonList')}
-        </h2>
-        <InfoTip name={t('edit.course.lessonList')}>{t('edit.course.lessonsInfo')}</InfoTip>
-      </div>
-      {ids.length === 0 ? (
-        <p className="text-sm text-muted-foreground">{t('edit.course.noLessons')}</p>
-      ) : (
-        <OrderList
-          label={t('edit.course.lessonList')}
-          rows={ids.map((id) => {
-            const lesson = lessons.get(id)
-            return {
-              key: id,
-              title: lesson ? localText(lesson.title, locale) : id,
-              detail: lesson ? undefined : t('edit.order.unpublished'),
-              link: (
-                <Link
-                  to="/courses/$courseId/$lessonId/edit"
-                  params={{ courseId: course.id, lessonId: id }}
-                />
-              ),
-            }
-          })}
-          onChange={onChange}
-        />
-      )}
-      <AddByName
-        label={t('edit.order.newLesson')}
-        action={t('edit.order.addLesson')}
-        failed={t('edit.order.addFailed')}
-        onAdd={onAdd}
-      />
-    </section>
-  )
-}
-
-/** The course's title, summary and lessons as fields, each change saved to the draft as it rests. */
-function CourseForm({
+/**
+ * The course as one document in one language (round 21): its title as the page's heading and its
+ * summary under it, written in place; its shelf, level and length as properties, each a choice in
+ * place; its lessons as rows dragged into order, each opened in its editor or removed; Add lesson at
+ * their end, finding a lesson it had by name, or making a new one. Each change saved to the draft as
+ * it rests.
+ */
+function CourseDocument({
   course,
   initial,
+  locale,
   onChange,
   onAdd,
 }: {
   course: Course
   initial: CourseRecord
+  locale: Locale
   onChange: (record: CourseRecord) => void
+  /** Makes a lesson of this name; resolves once it is listed and opened, false where it was not made. */
   onAdd: (name: string, record: CourseRecord) => Promise<boolean>
 }) {
   const { t } = useTranslation(['learn', 'common'])
+  const shown = useLocale()
+  const words = i18n.getFixedT(locale, 'learn')
   const [record, setRecord] = useState(initial)
   const change = (next: CourseRecord) => {
     setRecord(next)
     onChange(next)
   }
   const ids = record.lessons ?? course.lessons.map((lesson) => lesson.id)
+  const lessons = new Map(course.lessons.map((lesson) => [lesson.id, lesson]))
+  const titleOf = (id: string) => {
+    const lesson = lessons.get(id)
+    return lesson ? localText(lesson.title, shown) : id
+  }
   return (
-    <div className="flex flex-col gap-10">
-      <section className="flex flex-col gap-5">
-        <div className="flex items-center gap-1">
-          <h2 className="font-display text-xl">{t('edit.course.heading')}</h2>
-          <InfoTip name={t('edit.course.heading')}>{t('edit.course.lessons')}</InfoTip>
-        </div>
-        <TextFields
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
+        <DocText
+          size="title"
+          label={t('learn:edit.kinds.title')}
           value={record.title}
-          label={t('edit.kinds.title')}
+          locale={locale}
+          placeholder={words('edit.doc.courseTitle')}
           onChange={(title) => change({ ...record, title })}
         />
-        <TextFields
+        <DocText
+          label={t('learn:edit.kinds.summary')}
           value={record.summary}
-          label={t('edit.kinds.summary')}
+          locale={locale}
+          placeholder={words('edit.doc.courseSummary')}
           onChange={(summary) => change({ ...record, summary })}
         />
-        <fieldset className="flex flex-col gap-2">
-          <legend className="mb-2 text-sm font-medium">{t('edit.course.where')}</legend>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Dropdown
-              className="sm:col-span-2"
-              label={t('edit.course.shelf')}
-              value={record.shelf ?? course.shelf}
-              options={SHELVES.map((value) => ({ value, label: t(`shelves.${value}`) }))}
-              onChange={(shelf) => change({ ...record, shelf })}
-            />
-            <Dropdown
-              label={t('edit.course.stage')}
-              value={record.stage ?? course.stage}
-              options={STAGES.map((value) => ({ value, label: t(`common:stage.${value}`) }))}
-              onChange={(stage) => change({ ...record, stage })}
-            />
-            <Dropdown
-              label={t('edit.course.weeks')}
-              value={record.weeks ?? course.weeks}
-              options={COURSE_WEEKS.map((value) => ({
-                value,
-                label: t('course.weekCount', { count: value }),
-              }))}
-              onChange={(weeks) => change({ ...record, weeks })}
-            />
-          </div>
-        </fieldset>
-      </section>
-      <CourseLessons
-        course={course}
-        ids={ids}
-        onChange={(lessons) => change({ ...record, lessons })}
-        onAdd={(name) => onAdd(name, { ...record, lessons: ids })}
+      </div>
+      <Properties label={t('learn:edit.doc.properties')}>
+        <PropertyRow name={t('learn:edit.course.shelf')}>
+          <Dropdown
+            bare
+            label={t('learn:edit.course.shelf')}
+            value={record.shelf ?? course.shelf}
+            options={SHELVES.map((value) => ({ value, label: t(`learn:shelves.${value}`) }))}
+            onChange={(shelf) => change({ ...record, shelf })}
+          />
+        </PropertyRow>
+        <PropertyRow name={t('learn:edit.course.stage')}>
+          <Dropdown
+            bare
+            label={t('learn:edit.course.stage')}
+            value={record.stage ?? course.stage}
+            options={STAGES.map((value) => ({ value, label: t(`common:stage.${value}`) }))}
+            onChange={(stage) => change({ ...record, stage })}
+          />
+        </PropertyRow>
+        <PropertyRow name={t('learn:edit.course.weeks')}>
+          <Dropdown
+            bare
+            label={t('learn:edit.course.weeks')}
+            value={record.weeks ?? course.weeks}
+            options={COURSE_WEEKS.map((value) => ({
+              value,
+              label: t('learn:course.weekCount', { count: value }),
+            }))}
+            onChange={(weeks) => change({ ...record, weeks })}
+          />
+        </PropertyRow>
+      </Properties>
+      <RowGroups
+        groups={[
+          {
+            key: 'lessons',
+            label: t('learn:edit.course.lessonList'),
+            head: <h2 className="font-display text-2xl">{t('learn:edit.course.lessonList')}</h2>,
+            empty: t('learn:edit.course.noLessons'),
+            rows: ids.map((id) => ({
+              key: id,
+              title: titleOf(id),
+              detail: lessons.has(id) ? undefined : t('learn:edit.order.unpublished'),
+              link: (
+                <Link
+                  to="/courses/$courseId/$lessonId/edit"
+                  params={{ courseId: course.id, lessonId: id }}
+                />
+              ),
+            })),
+            foot: (
+              <AddRow
+                label={t('learn:edit.order.addLesson')}
+                newLabel={(name) => t('learn:edit.doc.newLesson', { name })}
+                failed={t('learn:edit.order.addFailed')}
+                found={course.lessons
+                  .filter((lesson) => !ids.includes(lesson.id))
+                  .map((lesson) => ({ key: lesson.id, title: localText(lesson.title, shown) }))}
+                onPick={(id) => change({ ...record, lessons: [...ids, id] })}
+                onCreate={(name) => onAdd(name, { ...record, lessons: ids })}
+              />
+            ),
+          },
+        ]}
+        onChange={([group]) => change({ ...record, lessons: group?.rows ?? [] })}
       />
     </div>
   )
 }
 
 /**
- * An editor's course editor (ADR 0116): the course's own title and summary, English and Russian, and
- * its lessons in order (moved, removed, a new one added), on the course's draft, with the draft's
- * strip; each lesson is edited on its own page.
+ * An editor's course editor (ADR 0116, round 21): the course's draft as one document, one language
+ * at a time (the bar's choice); each lesson is edited on its own page; the draft's status, Publish
+ * and menu in the bar.
  */
 export function CourseEditor({
   course,
@@ -156,21 +157,28 @@ export function CourseEditor({
   toCourse: ReactElement
 }) {
   const { t } = useTranslation('learn')
-  const locale = useLocale()
+  const shown = useLocale()
+  const [locale, setLocale] = useState<Locale>(shown)
   const draft = useCourseDraft(course)
   const addLesson = useAddLesson(course.id)
   const navigate = useNavigate()
+  // The course as last written, for the document to open on in the other language.
+  const written = useRef<{ opened: number; record: CourseRecord } | null>(null)
   // A new course's name is its draft's: the device has none of it.
   const title = localText(
     draft.load.state === 'ready' ? draft.load.value.title : course.title,
-    locale,
+    shown,
   )
+  const save = (record: CourseRecord) => {
+    written.current = { opened: draft.opened, record }
+    draft.save(record)
+  }
   // A new lesson is made on the server, listed last in the course's draft, saved now, then opened.
   const add = async (name: string, record: CourseRecord) => {
     const ids = record.lessons ?? []
     const made = await addLesson(name, ids)
     if (!made.ok) return false
-    draft.save({ ...record, lessons: [...ids, made.value] })
+    save({ ...record, lessons: [...ids, made.value] })
     await draft.flush()
     await navigate({
       to: '/courses/$courseId/$lessonId/edit',
@@ -187,9 +195,17 @@ export function CourseEditor({
       backTo={{ link: toCourse, label: t('edit.course.back') }}
       editorsOnly={t('edit.course.editorsOnly')}
       unreadable={t('edit.course.unreadable')}
+      bar={<LanguageChoice value={locale} onChange={setLocale} />}
     >
       {(initial) => (
-        <CourseForm course={course} initial={initial} onChange={draft.save} onAdd={add} />
+        <CourseDocument
+          key={locale}
+          course={course}
+          locale={locale}
+          initial={written.current?.opened === draft.opened ? written.current.record : initial}
+          onChange={save}
+          onAdd={add}
+        />
       )}
     </DraftScreen>
   )
