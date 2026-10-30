@@ -21,8 +21,8 @@ function barSymbol(music: TimedMusic, start: Tick): string | undefined {
 const REACH = 16
 /** How far apart a chorale's voice letters stand at least, one over the next. */
 const LETTER_GAP = 12
-/** The band over the staff a bar's tap takes. */
-const BAR_BAND = 22
+/** The band over the staff a bar's tap takes: 24px, WCAG 2.2's smallest target. */
+const BAR_BAND = 24
 
 /**
  * A staff, or the grand staff, whose notes play when tapped: each written onset is a button that
