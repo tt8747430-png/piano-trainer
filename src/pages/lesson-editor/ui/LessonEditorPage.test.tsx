@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { Editor } from '@tiptap/core'
 import { beforeEach, describe, expect, it } from 'vitest'
@@ -237,6 +237,9 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
+    // As it reads until it is worked on: a tap opens its fields.
+    await screen.findByRole('textbox', { name: 'The lesson' })
+    act(() => document.querySelector<HTMLElement>('[data-example="chords"]')!.focus())
     const chords = (await screen.findAllByRole('textbox', { name: 'Chords' }))[0]!
     await user.clear(chords)
     await user.type(chords, 'C Qx G7')
@@ -247,9 +250,12 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
         'Every text needs words in both languages, and every example must read. Put them right, then publish.',
       ),
     ).toBeInTheDocument()
-    await user.clear(chords)
-    await user.type(chords, 'C Am G7')
-    expect(chords).not.toHaveAccessibleDescription()
+    // Publish took the focus away, and the example reads as the lesson again: a tap opens it anew.
+    act(() => document.querySelector<HTMLElement>('[data-example="chords"]')!.focus())
+    const again = (await screen.findAllByRole('textbox', { name: 'Chords' }))[0]!
+    await user.clear(again)
+    await user.type(again, 'C Am G7')
+    expect(again).not.toHaveAccessibleDescription()
     await publish(user)
     expect(
       await screen.findByText('Published. Learners get it the next time the app starts.'),

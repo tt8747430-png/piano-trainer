@@ -1,6 +1,6 @@
 import { NodeViewWrapper, type ReactNodeViewProps } from '@tiptap/react'
 import { SlidersHorizontal } from 'lucide-react'
-import { Component, use, useId, useState, type ReactNode } from 'react'
+import { Component, use, useId, useState, type FocusEvent, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { LessonBlock, LessonExample } from '@/entities/lesson'
 import { i18n, type LocalText } from '@/shared/i18n'
@@ -276,8 +276,11 @@ function FieldsPanel({ name, children }: { name: string; children: ReactNode }) 
 export function ExampleView({ node, updateAttributes, selected }: ReactNodeViewProps) {
   const { t } = useTranslation('learn')
   const locale = use(DocLocale)
+  // As it reads until it is worked on (round 25): chosen, or a field of it focused.
+  const [focused, setFocused] = useState(false)
   const block = node.attrs['block'] as LessonBlock | null
   if (!block) return <NodeViewWrapper />
+  const working = selected || focused
   const words = i18n.getFixedT(locale, 'learn')
   const change = (next: LessonBlock) => updateAttributes({ block: next })
   const name = t(`edit.blocks.${blockName(block)}`)
@@ -287,12 +290,21 @@ export function ExampleView({ node, updateAttributes, selected }: ReactNodeViewP
   return (
     <NodeViewWrapper
       data-example={block.kind}
+      data-working={working ? '' : undefined}
+      // A tap takes it, as a block of the document: its fields open.
+      tabIndex={-1}
+      onFocus={() => setFocused(true)}
+      onBlur={(event: FocusEvent<HTMLElement>) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false)
+      }}
       className={cn(
-        'my-5 flex flex-col gap-3 rounded-3xl outline-offset-8 transition-[outline-color] duration-200 ease-out',
-        selected ? 'outline-2 outline-ring' : 'outline-2 outline-transparent',
+        'my-5 flex cursor-pointer flex-col gap-3 rounded-3xl outline-offset-8 transition-[outline-color] duration-200 ease-out',
+        working ? 'outline-2 outline-ring' : 'outline-2 outline-transparent hover:outline-border',
       )}
     >
-      <div className="flex min-h-11 items-center gap-2">
+      {/* What the example is and its fields: shown while it is worked on, the page reading as the
+          lesson otherwise. */}
+      <div className={cn('flex min-h-11 items-center gap-2', !working && 'hidden')}>
         <span className="text-sm font-semibold text-muted-foreground">{name}</span>
         {asWritten ? (
           <InfoTip name={name}>{t('edit.doc.asWritten')}</InfoTip>
@@ -330,9 +342,11 @@ export function ExampleView({ node, updateAttributes, selected }: ReactNodeViewP
           {t('edit.doc.notShown')}
         </p>
       )}
-      {examples.map((example) => (
-        <ExampleLine key={example.key} block={block} example={example} onChange={change} />
-      ))}
+      {working
+        ? examples.map((example) => (
+            <ExampleLine key={example.key} block={block} example={example} onChange={change} />
+          ))
+        : null}
     </NodeViewWrapper>
   )
 }

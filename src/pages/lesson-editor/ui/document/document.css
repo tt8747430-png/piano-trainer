@@ -86,7 +86,7 @@
   display: block;
   margin-top: -1.625em;
 }
-.lesson-doc .ProseMirror-selectednode:not([data-node-view-wrapper]) {
+.lesson-doc .ProseMirror-selectednode:not([data-node-view-wrapper]):not(:has(> [data-node-view-wrapper])) {
   outline: 2px solid var(--ring);
   outline-offset: 4px;
   border-radius: 0.75rem;
