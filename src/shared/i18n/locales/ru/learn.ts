@@ -173,6 +173,7 @@ export const learn: LocaleResources['learn'] = {
       motion: 'Как движутся основания',
       ask: 'Вопрос',
       linkTitle: 'Текст ссылки',
+      groups: { text: 'Текст', music: 'Музыка', learner: 'Вопрос и ссылка' },
       voicing: 'Расположение {{n}}',
       symbol: 'Аккорд',
       hands: 'Клавиши: левая рука | правая',

@@ -14,7 +14,9 @@ describe('the blocks an editor inserts', () => {
       'grid',
       'scale',
       'interval',
+      'voicings',
       'question',
+      'link',
     ])
     expect(blankBlock('rule')).toEqual({
       kind: 'note',

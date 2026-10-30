@@ -10,15 +10,19 @@ import { insertActions } from './menus'
 /** A key the document hands the slash menu first: true where the menu took it. */
 export type SlashKeys = (event: KeyboardEvent) => boolean
 
-/** What is typed after a `/` alone on an empty line of text, the caret at its end; null otherwise. */
+/**
+ * What is typed after a `/` in a line of text, at its start or after a space, the caret at the end
+ * of it (Notion's and Obsidian's); null otherwise. `from` is where the `/` is.
+ */
 function slashQuery(editor: Editor): { query: string; from: number } | null {
   const { selection } = editor.state
   const { $from, empty } = selection
   if (!empty || $from.depth !== 1 || $from.parent.type.name !== DOC.paragraph) return null
-  const typed = $from.parent.textContent
-  const match = /^\/([^\s/]*)$/.exec(typed)
-  if (!match || $from.parentOffset !== typed.length) return null
-  return { query: match[1] ?? '', from: $from.start() }
+  const before = $from.parent.textBetween(0, $from.parentOffset)
+  const match = /(?:^|\s)\/([^\s/]*)$/.exec(before)
+  if (!match) return null
+  const query = match[1] ?? ''
+  return { query, from: $from.start() + $from.parentOffset - query.length - 1 }
 }
 
 /** Where the caret is on screen; none where the page is not laid out. */
@@ -31,8 +35,9 @@ function caretBox(editor: Editor, at: number): { bottom: number; left: number } 
 }
 
 /**
- * The `/` menu (round 21): at an empty line, a `/` opens every block kind the Insert menu has,
- * filtered by what is typed after it; ↑ ↓ choose, Enter puts it in place of the line, Escape closes.
+ * The `/` menu (round 21): a `/` at a line's start or after a space opens every block kind the Insert
+ * menu has, filtered by what is typed after it; ↑ ↓ choose, Enter puts it after the line (in place of
+ * a line left empty), the `/` and its letters gone; Escape closes.
  */
 export function SlashMenu({
   editor,
@@ -56,7 +61,14 @@ export function SlashMenu({
   const shown = open !== null && closedAt !== open.from
   const clear = () => {
     const at = slashQuery(editor)
-    if (at) editor.view.dispatch(editor.state.tr.delete(at.from, at.from + at.query.length + 1))
+    if (!at) return
+    // The space before the `/` goes with it: the words before it end where they ended.
+    const { state } = editor
+    const space =
+      at.from > state.selection.$from.start() && state.doc.textBetween(at.from - 1, at.from) === ' '
+    editor.view.dispatch(
+      state.tr.delete(space ? at.from - 1 : at.from, at.from + at.query.length + 1),
+    )
   }
   const actions = insertActions(editor, locale, t, clear).filter((action) =>
     action.label.toLowerCase().includes(query),

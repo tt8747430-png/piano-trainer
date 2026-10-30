@@ -309,6 +309,29 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     )
   })
 
+  it('opens the / menu after words too, keeping them, and puts the block after their line', async () => {
+    const user = userEvent.setup()
+    const content = editing()
+    await renderApp(`/lessons/${LESSON.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    const { doc, editor } = await lessonDoc()
+    await caretAtEnd(editor, line(doc, 'h2'))
+    await user.keyboard('{Enter}Play these /prog')
+    const menu = await screen.findByRole('listbox', { name: 'Blocks' })
+    expect(within(menu).getByRole('option', { name: /Progression/ })).toBeInTheDocument()
+    await user.keyboard('{Enter}')
+    await waitFor(
+      async () =>
+        expect((await saved(content))?.sections[0]?.blocks.slice(0, 2)).toMatchObject([
+          { kind: 'text', text: { en: 'Play these' } },
+          { kind: 'progression' },
+        ]),
+      { timeout: 3000 },
+    )
+  })
+
   it('moves the block the caret is in with Alt+arrows, and deletes one from its menu with Undo', async () => {
     const user = userEvent.setup()
     const content = editing()

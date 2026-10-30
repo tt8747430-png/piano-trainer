@@ -16,7 +16,9 @@ export const INSERTABLE_BLOCKS = [
   'grid',
   'scale',
   'interval',
+  'voicings',
   'question',
+  'link',
 ] as const
 export type InsertableBlock = (typeof INSERTABLE_BLOCKS)[number]
 
@@ -45,7 +47,11 @@ export function blankBlock(kind: InsertableBlock): LessonBlock {
       return { kind: 'scale', root: C_MAJOR.tonic, scale: 'major' }
     case 'interval':
       return { kind: 'interval', root: C_MAJOR.tonic, interval: 'P5' }
+    case 'voicings':
+      return { kind: 'voicings', voicings: [{ symbol: 'C', hands: 'C3 G3 | E4 G4' }] }
     case 'question':
       return { kind: 'question', ask: blank, answer: { chord: 'C' } }
+    case 'link':
+      return { kind: 'link', title: blank, target: { opens: 'chords', chord: 'C' } }
   }
 }

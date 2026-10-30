@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
-import { useId, useState, type ReactElement, type ReactNode, type Ref } from 'react'
+import { Fragment, useId, useState, type ReactElement, type ReactNode, type Ref } from 'react'
 import { cn } from '@/shared/lib'
 import { Button } from './primitives/button'
 import { Popover, PopoverContent, PopoverTrigger } from './primitives/popover'
@@ -16,6 +16,8 @@ export interface MenuAction {
   readonly icon?: LucideIcon
   /** An action that destroys (Delete): its row in the warning colour. */
   readonly destructive?: boolean
+  /** The group it is in, named small over the first of it (Insert's Text · Music · Ask and link). */
+  readonly group?: string
 }
 
 /**
@@ -55,35 +57,45 @@ export function ActionMenu({
         align={align}
         className="max-h-(--available-height) w-72 gap-1 overflow-y-auto overscroll-contain p-2"
       >
-        {actions.map((action) => {
+        {actions.map((action, index) => {
           const why = action.disabled ? action.reason : undefined
           const whyId = `${id}-${action.key}-why`
+          const heads = action.group !== undefined && action.group !== actions[index - 1]?.group
           return (
-            <Button
-              key={action.key}
-              variant="ghost"
-              disabled={action.disabled}
-              title={why}
-              aria-describedby={why ? whyId : undefined}
-              className={cn(
-                'w-full justify-start',
-                action.destructive && 'text-destructive',
-                // Greyed with a reason, the pointer kept on it so the tooltip says it.
-                why && 'disabled:pointer-events-auto disabled:hover:bg-transparent',
-              )}
-              onClick={() => {
-                action.onSelect()
-                setOpen(false)
-              }}
-            >
-              {action.icon ? <action.icon data-icon="inline-start" aria-hidden /> : null}
-              {action.label}
-              {why ? (
-                <span id={whyId} hidden>
-                  {why}
-                </span>
+            <Fragment key={action.key}>
+              {heads ? (
+                <p
+                  aria-hidden
+                  className="px-3 pt-2 pb-0.5 text-xs font-semibold text-muted-foreground first:pt-0.5"
+                >
+                  {action.group}
+                </p>
               ) : null}
-            </Button>
+              <Button
+                variant="ghost"
+                disabled={action.disabled}
+                title={why}
+                aria-describedby={why ? whyId : undefined}
+                className={cn(
+                  'w-full justify-start',
+                  action.destructive && 'text-destructive',
+                  // Greyed with a reason, the pointer kept on it so the tooltip says it.
+                  why && 'disabled:pointer-events-auto disabled:hover:bg-transparent',
+                )}
+                onClick={() => {
+                  action.onSelect()
+                  setOpen(false)
+                }}
+              >
+                {action.icon ? <action.icon data-icon="inline-start" aria-hidden /> : null}
+                {action.label}
+                {why ? (
+                  <span id={whyId} hidden>
+                    {why}
+                  </span>
+                ) : null}
+              </Button>
+            </Fragment>
           )
         })}
         {children}

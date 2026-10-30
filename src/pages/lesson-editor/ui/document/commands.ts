@@ -29,7 +29,9 @@ export const INSERTABLES: readonly Insertable[] = [
   'grid',
   'scale',
   'interval',
+  'voicings',
   'question',
+  'link',
 ]
 
 const nodeOf = (kind: Insertable, locale: Locale): DocNode =>

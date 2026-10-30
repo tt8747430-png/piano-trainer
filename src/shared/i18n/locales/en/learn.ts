@@ -184,6 +184,7 @@ export const learn = {
       motion: 'How the roots move',
       ask: 'Question',
       linkTitle: 'Link text',
+      groups: { text: 'Text', music: 'Music', learner: 'Ask and link' },
       voicing: 'Voicing {{n}}',
       symbol: 'Chord',
       hands: 'Keys: left hand | right hand',

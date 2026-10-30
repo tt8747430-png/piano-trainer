@@ -8,6 +8,8 @@ import {
   Copy,
   Grid3x3,
   Heading2,
+  KeyboardMusic,
+  Link2,
   ListMusic,
   ListOrdered,
   MoveVertical,
@@ -39,10 +41,31 @@ export const INSERT_ICONS: Record<Insertable, LucideIcon> = {
   grid: Grid3x3,
   scale: TrendingUp,
   interval: MoveVertical,
+  voicings: KeyboardMusic,
   question: CircleHelp,
+  link: Link2,
 }
 
-/** The Insert menu's and the slash menu's rows: every kind, its picture and its name. */
+/** Which group of the Insert menu a kind is in: words, music, or what asks or leads on. */
+const GROUP_OF: Record<Insertable, 'text' | 'music' | 'learner'> = {
+  section: 'text',
+  text: 'text',
+  steps: 'text',
+  note: 'text',
+  rule: 'text',
+  takeaway: 'text',
+  chords: 'music',
+  notes: 'music',
+  progression: 'music',
+  grid: 'music',
+  scale: 'music',
+  interval: 'music',
+  voicings: 'music',
+  question: 'learner',
+  link: 'learner',
+}
+
+/** The Insert menu's and the slash menu's rows: every kind, its picture, its name and its group. */
 export function insertActions(
   editor: Editor,
   locale: Locale,
@@ -51,6 +74,7 @@ export function insertActions(
 ): MenuAction[] {
   return INSERTABLES.map((kind) => ({
     key: kind,
+    group: t(`edit.doc.groups.${GROUP_OF[kind]}`),
     label: insertableName(kind, t),
     icon: INSERT_ICONS[kind],
     onSelect: () => {

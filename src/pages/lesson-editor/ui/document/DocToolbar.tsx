@@ -2,6 +2,7 @@ import type { Editor } from '@tiptap/core'
 import { useEditorState } from '@tiptap/react'
 import {
   Bold,
+  ChevronDown,
   Ellipsis,
   Heading2,
   ListOrdered,
@@ -120,7 +121,7 @@ export function DocToolbar({
       run: () => toggleNote(editor),
     },
   ]
-  const Current = styles.find((style) => style.pressed)?.icon ?? Pilcrow
+  const current = styles.find((style) => style.pressed) ?? styles[0]!
   return (
     <div
       role="toolbar"
@@ -144,12 +145,17 @@ export function DocToolbar({
       <div className="md:hidden">
         <ActionMenu
           label={t('edit.doc.style')}
-          trigger={<Current aria-hidden />}
+          trigger={
+            <>
+              <current.icon data-icon="inline-start" aria-hidden />
+              {current.label}
+              <ChevronDown data-icon="inline-end" aria-hidden className="text-muted-foreground" />
+            </>
+          }
           render={
             <Button
               variant="tool"
-              size="icon"
-              className="size-11"
+              className="h-11 shrink-0 gap-1 px-2"
               aria-label={t('edit.doc.style')}
               title={t('edit.doc.style')}
               disabled={!state.inLesson}
@@ -167,19 +173,19 @@ export function DocToolbar({
       >
         <Bold aria-hidden />
       </ToolButton>
-      <span aria-hidden className="mx-1 h-6 w-px shrink-0 bg-border" />
+      <span aria-hidden className="mx-1 h-6 w-px shrink-0 bg-border max-sm:hidden" />
       <ActionMenu
         label={t('edit.doc.insert')}
         trigger={
           <>
             <Plus data-icon="inline-start" aria-hidden />
-            <span className="max-sm:sr-only">{t('edit.doc.insert')}</span>
+            {t('edit.doc.insert')}
           </>
         }
-        render={<Button variant="tool" className="h-11 shrink-0 px-3" />}
+        render={<Button variant="tool" className="h-11 shrink-0 px-2.5" />}
         actions={insertActions(editor, locale, t)}
       />
-      <span aria-hidden className="mx-1 h-6 w-px shrink-0 bg-border" />
+      <span aria-hidden className="mx-1 h-6 w-px shrink-0 bg-border max-sm:hidden" />
       <ToolButton
         label={t('edit.doc.undo')}
         disabled={!state.canUndo}
