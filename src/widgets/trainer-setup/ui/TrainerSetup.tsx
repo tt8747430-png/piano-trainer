@@ -1,4 +1,4 @@
-import { Ear, Info, KeyboardMusic, Layers, ListChecks, type LucideIcon } from 'lucide-react'
+import { Ear, KeyboardMusic, Layers, ListChecks, type LucideIcon } from 'lucide-react'
 import { useId, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { selectTrainer, useSettings, useSettingsStoreApi } from '@/entities/settings'
@@ -78,9 +78,9 @@ function SetupGroup({ title, children }: { title: string; children: ReactNode })
 /**
  * Every trainer's setup, one template (ADR 0025): the drill (Flashcards, Quiz, Play, By ear) where it
  * has them and what a card shows; its Options (the level, Custom's lists each in a sheet, its
- * switches, the rounds); its Timing (a time limit, going on by itself); a card saying the drill in a
- * sentence; and one Start. Each choice is written to the URL, its own left out; what each does is
- * in an ⓘ beside its name.
+ * switches, the rounds); its Timing (a time limit, going on by itself); and one Start. Each choice is
+ * written to the URL, its own left out; what each does is in an ⓘ beside its name, and how the
+ * drill asks (`useTrainerHow`) in the ⓘ of the screen's bar.
  */
 export function TrainerSetup({
   trainer,
@@ -119,11 +119,6 @@ export function TrainerSetup({
       readList(view[field], CUSTOM_CHOICES[field] as readonly string[]),
       CUSTOM_OWN[field] as readonly string[],
     )
-  const { id } = trainer
-  const how =
-    id === 'chords' || id === 'intervals' || id === 'cadences'
-      ? t(`quiz:how.${id}.${drill ?? 'flashcards'}`)
-      : t(`quiz:how.${id}`)
 
   return (
     <div className="flex w-full max-w-2xl flex-col gap-6">
@@ -344,14 +339,6 @@ export function TrainerSetup({
           onCheckedChange={(on) => setAutoNext(settings, on)}
         />
       </SetupGroup>
-
-      <aside
-        aria-label={t('quiz:setup.how')}
-        className="flex items-start gap-3 rounded-3xl bg-muted px-4 py-3 text-pretty text-muted-foreground"
-      >
-        <Info aria-hidden className="mt-0.5 size-5 shrink-0" />
-        <p>{how}</p>
-      </aside>
 
       {footer}
 

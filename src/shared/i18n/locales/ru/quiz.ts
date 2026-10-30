@@ -55,7 +55,7 @@ export const quiz: LocaleResources['quiz'] = {
     ear: 'На слух',
   },
   show: { label: 'Видно', name: 'Название', keys: 'Клавиши', staff: 'Ноты' },
-  setup: { options: 'Настройки', timing: 'Время', start: 'Начать', how: 'Как это устроено' },
+  setup: { options: 'Настройки', timing: 'Время', start: 'Начать' },
   timing: {
     limit: 'Лимит времени',
     limitInfo: 'Когда время выходит, показывается ответ, а раунд считается ошибкой.',

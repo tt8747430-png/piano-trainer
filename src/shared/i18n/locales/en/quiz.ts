@@ -13,7 +13,7 @@ export const quiz = {
     'key-degrees': 'Key degrees',
     'chord-role': 'Chord roles',
   },
-  /** How each trainer asks, in a sentence: its setup's ⓘ card. */
+  /** How each trainer asks, in a sentence: the ⓘ in its setup's bar. */
   how: {
     chords: {
       flashcards: 'A chord is shown by its name, keys or staff. Reveal it to see the rest.',
@@ -54,7 +54,7 @@ export const quiz = {
   // What a flashcard shows; the rest is revealed.
   show: { label: 'Shown', name: 'Name', keys: 'Keys', staff: 'Staff' },
   // A trainer's setup.
-  setup: { options: 'Options', timing: 'Timing', start: 'Start', how: 'How it works' },
+  setup: { options: 'Options', timing: 'Timing', start: 'Start' },
   timing: {
     limit: 'Time limit',
     limitInfo: 'When the time runs out, the answer is shown and the round counts as missed.',
