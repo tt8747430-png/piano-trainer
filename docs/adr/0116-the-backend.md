@@ -170,5 +170,9 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   the same kind of page (title and summary written in place, properties, rows dragged with `@dnd-kit`, across
   chapters too; `widgets/content-editor`'s `RowGroups`, `AddRow`, `DocText`). The draft's status sits under the
   bar's title and Publish with its menu at the bar's end (`DraftStatus`, `DraftActions`; `DraftStrip` and
-  `OrderList` gone); the score editor's original shows them under Mine · The original. The editors are their
+  `OrderList` gone); the score editor's original shows them in the column's head (Edit the original is the mode pop-up's). The editors are their
   own chunk (`lesson-editor-screens`), so a learner never downloads TipTap (2026-10-30).
+- r22 — New course, New progression and the progression editor as documents (`DocTitleField`, properties,
+  Create floating); the bars say what is edited (Edit lesson …); voicings, a pattern and a link edited in their
+  blocks (Versions kept as written); blocks dragged by finger on a phone (`moveBlockTo`), rows by dnd-kit's
+  touch sensor; lesson names in the language written; a compact EN · RU (2026-10-30).
