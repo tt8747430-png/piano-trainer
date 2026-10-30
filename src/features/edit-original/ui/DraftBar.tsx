@@ -63,15 +63,12 @@ export function DraftActions({
   title,
   unreadable,
   onReset,
-  tool = false,
 }: {
   draft: Pick<ContentDraft, 'drafted' | 'saved' | 'publish' | 'discard' | 'versions' | 'restore'>
   title: string
   /** What is said where a publish is refused for a draft that does not read as the item. */
   unreadable: string
   onReset: () => void
-  /** In the score's bar: its tool buttons' look. */
-  tool?: boolean
 }) {
   const { t } = useTranslation('editor')
   const [asked, setAsked] = useState<Asked>(null)
@@ -109,9 +106,9 @@ export function DraftActions({
         trigger={<Ellipsis aria-hidden />}
         render={
           <Button
-            variant={tool ? 'tool' : 'ghost'}
+            variant="ghost"
             size="icon"
-            className={tool ? undefined : 'size-11 shrink-0 rounded-full'}
+            className="size-11 shrink-0 rounded-full"
             aria-label={t('original.more')}
             title={t('original.more')}
           />

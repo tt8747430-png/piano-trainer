@@ -88,19 +88,20 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
       target={target}
       bar={bar}
       head={
+        // Where the draft stands, its menu and Publish, in the column's head under Mine · The
+        // original: the score's bar has no room for them beside its own tools on a phone.
         <div className="flex flex-col items-center gap-1">
           <EditWhat original />
-          <DraftStatus draft={draft} />
+          <div className="flex max-w-full items-center gap-1">
+            <DraftStatus draft={draft} className="ps-2" />
+            <DraftActions
+              draft={draft}
+              title={entryTitles(piece, locale).primary}
+              unreadable={t('original.unreadable')}
+              onReset={draft.reopen}
+            />
+          </div>
         </div>
-      }
-      barEnd={
-        <DraftActions
-          tool
-          draft={draft}
-          title={entryTitles(piece, locale).primary}
-          unreadable={t('original.unreadable')}
-          onReset={draft.reopen}
-        />
       }
     />
   )
