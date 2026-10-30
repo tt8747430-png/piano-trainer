@@ -206,6 +206,8 @@ export const learn = {
         'The title and the summary need words in both languages. Put them right, then publish.',
     },
     example: {
+      answer: 'Answer',
+      answerInfo: 'The chord the question asks to be played, as a symbol: C, Am7, F/A.',
       chords: 'Chords',
       notes: 'Notes',
       bass: 'Left hand',

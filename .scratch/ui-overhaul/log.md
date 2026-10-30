@@ -70,7 +70,10 @@
   7. Admin — DONE: Overview (r20), errors grouped, Drafts tab (the content queue). Decision: the figures are
      counted on the device from the first page of 50 accounts ("50+" beyond); an exact count needs an admin-only
      server function — the owner's call (access).
-  8. Music editor: impeccable critique against Flat and Dorico, then fixes.
+  8. Music editor: first look at 390 and 1280 (2026-10-30). It renders well once Verovio has loaded (a blank
+     staff skeleton until then). On a phone the transport pill, the palette sheet and the keyboard together leave
+     about 280px for the score (one system): the owner's question whether the keyboard should start folded in
+     the editor on a phone (Flat hides its keyboard until a note is entered). Full critique vs Flat/Dorico left.
 - Owner rules learnt this session: a message from the owner is not a stop; stop only when they say "stop". Never
   read learners' synced rows (they refused a query on sync tables); use logs and aggregate queries.
 

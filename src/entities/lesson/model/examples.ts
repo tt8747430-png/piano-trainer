@@ -2,8 +2,11 @@ import { C_MAJOR, parseChordSymbol, parseNumerals } from '@/shared/lib/music'
 import { noteLine } from '@/shared/lib/schedule'
 import type { Lesson, LessonBlock } from './types'
 
-/** What an example's line of text writes: a row of chord symbols, a line of notes (the left hand's, `bass`), numerals. */
-export type ExampleKind = 'chords' | 'notes' | 'bass' | 'numerals'
+/**
+ * What an example's line of text writes: a row of chord symbols, a line of notes (the left hand's,
+ * `bass`), numerals, or the chord a question asks to be played (`answer`).
+ */
+export type ExampleKind = 'chords' | 'notes' | 'bass' | 'numerals' | 'answer'
 
 /** One example of a lesson an editor writes as a line of text: where it is (`key`), what it is, in which section. */
 export interface LessonExample {
@@ -27,6 +30,8 @@ function blockExamples(block: LessonBlock): (readonly [ExampleKind, string, stri
       ]
     case 'progression':
       return [['numerals', 'numerals', block.numerals]]
+    case 'question':
+      return 'chord' in block.answer ? [['answer', 'answer', block.answer.chord]] : []
     default:
       return []
   }
@@ -34,7 +39,8 @@ function blockExamples(block: LessonBlock): (readonly [ExampleKind, string, stri
 
 /**
  * A lesson's examples written as a line of text, in its order (ADR 0116, round 11): a row of chords,
- * a line of notes and its left hand's, a progression's numerals. The rest stay as authored.
+ * a line of notes and its left hand's, a progression's numerals, the chord a question asks for. The
+ * rest stay as authored.
  */
 export function lessonExamples(lesson: Lesson): LessonExample[] {
   return lesson.sections.flatMap((section, s) =>
@@ -65,7 +71,12 @@ export function withExample(lesson: Lesson, key: string, text: string): Lesson {
   const example = lessonExamples(lesson).find((each) => each.key === key)
   const at = blockAt(lesson, key)
   if (!example || !at) return lesson
-  const value = example.kind === 'chords' ? text.split(/\s+/).filter(Boolean) : text
+  const value =
+    example.kind === 'chords'
+      ? text.split(/\s+/).filter(Boolean)
+      : example.kind === 'answer'
+        ? { chord: text.trim() }
+        : text
   const [, s, , b] = pathOf(key) as [string, number, string, number]
   return {
     ...lesson,
@@ -133,6 +144,13 @@ export function exampleProblem(lesson: Lesson, example: LessonExample): string |
     }
     case 'numerals':
       return parseNumerals(now.text) ? null : now.text
+    case 'answer':
+      try {
+        parseChordSymbol(now.text.trim())
+        return null
+      } catch {
+        return now.text.trim()
+      }
   }
 }
 

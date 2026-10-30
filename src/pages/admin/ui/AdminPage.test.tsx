@@ -167,21 +167,28 @@ describe('the Admin area', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/courses/jazz/edit'))
   })
 
-  it('opens on the overview: accounts, the week’s new and active, errors, reports and drafts', async () => {
-    const admin = createFakeAdmin({
-      accounts: [{ ...ANA, joinedAt: new Date().toISOString(), lastSignInAt: null }],
-      reports: [REPORT],
-    })
-    await renderApp('/admin', { auth: await signedInAs('admin'), admin })
-    const figures = await screen.findByRole('region', { name: 'This week' })
-    expect(within(figures).getByText('Accounts').closest('div')).toHaveTextContent(/Accounts\s*1/)
-    expect(within(figures).getByText('New this week').closest('div')).toHaveTextContent(
-      /New this week\s*1/,
-    )
-    expect(within(figures).getByText('Reports to look at').closest('div')).toHaveTextContent(
-      /Reports to look at\s*1/,
-    )
-  })
+  it(
+    'opens on the overview: accounts, the week’s new and active, errors, reports and drafts',
+    {
+      timeout: 15000,
+    },
+    async () => {
+      const admin = createFakeAdmin({
+        accounts: [{ ...ANA, joinedAt: new Date().toISOString(), lastSignInAt: null }],
+        reports: [REPORT],
+      })
+      await renderApp('/admin', { auth: await signedInAs('admin'), admin })
+      // Four calls answer first: under a full run's load they take a while.
+      const figures = await screen.findByRole('region', { name: 'This week' }, { timeout: 8000 })
+      expect(within(figures).getByText('Accounts').closest('div')).toHaveTextContent(/Accounts\s*1/)
+      expect(within(figures).getByText('New this week').closest('div')).toHaveTextContent(
+        /New this week\s*1/,
+      )
+      expect(within(figures).getByText('Reports to look at').closest('div')).toHaveTextContent(
+        /Reports to look at\s*1/,
+      )
+    },
+  )
 
   it('says when no error was reported', async () => {
     await renderApp('/admin?tab=errors', {

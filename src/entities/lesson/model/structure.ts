@@ -10,6 +10,7 @@ export const INSERTABLE_BLOCKS = [
   'chords',
   'notes',
   'progression',
+  'question',
 ] as const
 export type InsertableBlock = (typeof INSERTABLE_BLOCKS)[number]
 
@@ -32,6 +33,8 @@ export function blankBlock(kind: InsertableBlock): LessonBlock {
       return { kind: 'notes', clef: 'treble', notes: 'C4 D4 E4 F4 G4' }
     case 'progression':
       return { kind: 'progression', numerals: 'I IV V I', key: C_MAJOR }
+    case 'question':
+      return { kind: 'question', ask: blank, answer: { chord: 'C' } }
   }
 }
 

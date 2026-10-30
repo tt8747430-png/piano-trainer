@@ -58,6 +58,7 @@ describe('a lesson’s structure, edited', () => {
       'chords',
       'notes',
       'progression',
+      'question',
     ])
     expect(blankBlock('rule')).toEqual({
       kind: 'note',
