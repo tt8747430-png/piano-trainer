@@ -91,8 +91,8 @@ export function createFakeContentEditing({
     draft: (kind, id) => read(async () => drafts.get(name(kind, id)) ?? null, null),
     saveDraft: (kind, id, { body, meta }) =>
       ask(async () => {
-        if (!published.has(name(kind, id)) && !unpublished.has(name(kind, id)))
-          throw refused('no such item')
+        // An item the database has not got yet (a built-in one never seeded) is made, unpublished.
+        if (!published.has(name(kind, id))) unpublished.add(name(kind, id))
         drafts.set(name(kind, id), { body, meta, updatedAt: now() })
       }),
     discardDraft: (kind, id) =>

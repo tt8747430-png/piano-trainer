@@ -95,15 +95,32 @@ export function createSupabaseContentEditing(
       }),
     saveDraft: (kind, id, { body, meta }) =>
       ask(async (client) => {
-        check(
-          await client.from('content_drafts').upsert({
+        const keep = () =>
+          client.from('content_drafts').upsert({
             kind,
             id,
             body: body as Json,
             meta: meta as Json,
             updated_at: new Date().toISOString(),
-          }),
+          })
+        const kept = await keep()
+        // 23503: the database has not got the item yet (a built-in one never seeded). It is made,
+        // unpublished (learners keep the copy the app has), and the draft kept on it.
+        if (kept.error?.code !== '23503') return check(kept)
+        check(
+          await client.from('content_items').upsert(
+            {
+              kind,
+              id,
+              version: 'draft',
+              status: 'draft',
+              body: body as Json,
+              meta: meta as Json,
+            },
+            { onConflict: 'kind,id', ignoreDuplicates: true },
+          ),
         )
+        check(await keep())
       }),
     discardDraft: (kind, id) =>
       ask(async (client) => {
