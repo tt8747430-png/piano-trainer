@@ -191,3 +191,4 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r25 — A level's lesson's Read first stands under its title and summary inside the document, as a page's properties do (2026-10-30).
 - r25 — A question in Edit is the lesson's question card, its words typed where they print; a notes answer is written in order as text (F A C), rising or falling as it was (2026-10-30).
 - r25 — Manage courses: the courses' order on their shelves is content (`catalog` `courses`, a migration adds the kind), dragged within each shelf and published whole; Courses reads it, a course it does not name after the rest; a course's shelf stays its own property (2026-10-30).
+- r25 — A draft's status stands in the bar beside Publish (a cloud, its word from sm up), never a line under the bar; the language is the draft menu's alone (2026-10-30).

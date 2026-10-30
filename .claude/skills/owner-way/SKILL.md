@@ -62,6 +62,7 @@ These come straight from their feedback. Each has burned a round before.
 - Floating things float. Palettes, the transport, the zoom controls and the tools reserve no space under them and never push the page. Auto-hide must be reliable.
 - Nothing may trap a click meant for something else. After a popover closes, the next tap must reach its target. Test overlapping layers.
 - Controls must not jump when switching modes (Player ↔ editor) or entering Select mode. Icons stay put and heights stay equal.
+- Nothing hangs under a screen's bar: a status or a language goes in the bar or its menu, never a line of its own under it.
 - Rows and grids are even on wide screens, and a card's hover never hides the hover of a button inside it.
 - Nothing cut: titles wrap to two lines rather than end in "…"; rows inside a rounded card keep its corners.
 - The phone's tab bar shows on the four places alone, hides on every screen they open and while the keyboard is

@@ -6,7 +6,7 @@ import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, ScreenHeader } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
-import { LANGUAGE_NAMES, languageActions } from './LanguageChoice'
+import { languageActions } from './LanguageChoice'
 
 /** A screen saying why the form is not open (yet): its line, and what to do. */
 export function NotOpen({ line, children }: { line: string; children?: ReactNode }) {
@@ -26,7 +26,7 @@ export function NotOpen({ line, children }: { line: string; children?: ReactNode
 
 /**
  * An editor's screen over a built-in item's draft (ADR 0116): its title and Back; once the draft is
- * open, its Publish and menu at the bar's end and where it stands under the title (round 21); and the
+ * open, where it stands, its Publish and menu at the bar's end (round 25: nothing under the bar); and the
  * form (`children`, given the draft as it opened). Until then, why not: opening, offline or failed with Try again, or, to anyone but an editor, that only an
  * editor edits it, with the way back.
  */
@@ -55,7 +55,7 @@ export function DraftScreen<T>({
   editorsOnly: string
   /** What is said where a publish is refused for a draft that does not read. */
   unreadable: string
-  /** The language the document is written in: chosen in the draft's menu, named after its status. */
+  /** The language the document is written in: chosen in the draft's menu, ticked there. */
   language?: { value: Locale; onChange: (locale: Locale) => void }
   /** The item's Read · Edit switch (`ReadEditSwitch`): the page in Edit, not another page. */
   modes?: ReactNode
@@ -74,10 +74,12 @@ export function DraftScreen<T>({
         back={back}
         // The document shows the item's title large under the bar.
         titleOnPage={modes !== undefined}
-        // Publish and the draft's menu at the bar's end; where the draft stands, small, under the title.
+        // Where the draft stands, then Publish and the draft's menu, at the bar's end: nothing under
+        // the bar (the language is the menu's, ticked there).
         actions={
           open ? (
             <>
+              <DraftStatus draft={draft} className="me-1" />
               {modes}
               <DraftActions
                 draft={draft}
@@ -90,18 +92,6 @@ export function DraftScreen<T>({
           ) : (
             modes
           )
-        }
-        tabs={
-          open ? (
-            <div className="flex min-h-9 items-center gap-1 pb-1 pl-13">
-              <DraftStatus draft={draft} className="min-w-0" />
-              {language ? (
-                <span className="shrink-0 text-sm text-muted-foreground">
-                  · {LANGUAGE_NAMES[language.value]}
-                </span>
-              ) : null}
-            </div>
-          ) : undefined
         }
       />
       {!editor ? (

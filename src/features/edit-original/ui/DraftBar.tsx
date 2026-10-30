@@ -1,4 +1,4 @@
-import { CloudOff, Ellipsis, History, Trash2 } from 'lucide-react'
+import { CloudCheck, CloudOff, Ellipsis, History, LoaderCircle, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { NetResult } from '@/shared/api/network'
@@ -31,23 +31,31 @@ function statusKey(draft: DraftState) {
 }
 
 /**
- * Where an editor's draft stands (round 21), one small line under the screen's title: saved, saving,
- * published as it is, or not saved (offline, or failed), its cloud struck out.
+ * Where an editor's draft stands (round 21), in the screen's bar beside Publish, never a line of its
+ * own under it (the owner's rule, round 25): a cloud and its word, saved, saving, published as it is,
+ * or not saved (offline, or failed, the cloud struck out). On a phone the cloud alone, its word
+ * still heard and in its tooltip.
  */
 export function DraftStatus({ draft, className }: { draft: DraftState; className?: string }) {
   const { t } = useTranslation('editor')
   const unsaved = draft.saved === 'offline' || draft.saved === 'failed'
+  const said = t(statusKey(draft))
+  const Icon = unsaved ? CloudOff : draft.saved === 'saving' ? LoaderCircle : CloudCheck
   return (
     <p
       role="status"
+      title={said}
       className={cn(
-        'flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground',
+        'flex min-w-0 shrink items-center gap-1.5 text-sm text-muted-foreground',
         unsaved && 'text-destructive',
         className,
       )}
     >
-      {unsaved ? <CloudOff aria-hidden className="size-4 shrink-0" /> : null}
-      <span className="truncate">{t(statusKey(draft))}</span>
+      <Icon
+        aria-hidden
+        className={cn('size-4 shrink-0', draft.saved === 'saving' && 'motion-safe:animate-spin')}
+      />
+      <span className="truncate max-sm:sr-only">{said}</span>
     </p>
   )
 }

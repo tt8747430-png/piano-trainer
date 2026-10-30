@@ -173,6 +173,10 @@ The owner's feedback from every session, condensed and grouped by area. Read the
 ## Navigation, bars and the tab bar
 - **Compact bars** (round 21): "why the headers take like a half of the screen". One row: Back, the title, the
   screen's actions. No tall hero.
+- **Nothing hangs under the bar** (round 25): "i dont like how this published is under the header it looks
+  awful, do not do this in future anymore". A status (Published, Draft · saved, a language) never sits as a
+  line of its own under a screen's bar: it goes in the bar (a draft's cloud beside Publish, its word on a
+  laptop, the icon alone on a phone) or in the bar's menu (the language, ticked).
 - **Titles are never cut** (round 25): a long title wraps to two lines; no ellipsis where two lines say it.
 - **A screen's own actions go in its bar** (round 25): Settings is the Profile's gear, Manage lessons is Learn's bar
   button for an editor. The floating + is only for creating.
