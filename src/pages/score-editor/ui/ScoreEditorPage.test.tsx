@@ -1202,8 +1202,8 @@ describe('the score editor', () => {
           .getByRole('toolbar', { name: 'Play, move and record' })
           .querySelectorAll('button:not([aria-label^="Tempo"])'),
       ]
-      // Close, MIDI, Undo, Redo, then Done, the one in words (iOS's).
-      expect(bar).toHaveLength(5)
+      // Close, MIDI, Undo, Redo, Score settings, then Done, the one in words (iOS's).
+      expect(bar).toHaveLength(6)
       expect(bar.at(-1)).toHaveTextContent('Done')
       for (const control of [...bar.slice(0, -1), ...dock]) {
         const name = control.getAttribute('aria-label') ?? ''
@@ -1885,7 +1885,13 @@ describe('the score editor', () => {
     await renderApp('/edit/my-1', { storage: withSong() })
     const midiButton = await screen.findByRole('button', { name: 'MIDI keyboard' })
     const end = midiButton.closest('[data-area="actions"]')
-    expect(namesIn(end as HTMLElement)).toEqual(['MIDI keyboard', 'Undo', 'Redo', 'Done'])
+    expect(namesIn(end as HTMLElement)).toEqual([
+      'MIDI keyboard',
+      'Undo',
+      'Redo',
+      'Score settings',
+      'Done',
+    ])
     const lead = document.querySelector<HTMLElement>('[data-area="lead"]')
     expect(namesIn(lead as HTMLElement)).toEqual(['Close'])
   })

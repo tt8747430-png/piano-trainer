@@ -140,9 +140,13 @@ function firstNoteOn(bytes: Uint8Array): number {
 describe('the Player’s More (ADR 0108)', () => {
   const LIBRARY = ['Add to favourites', 'Move to…', 'Archive']
   it.each([
-    ['a song', '/play/bz5', [...LIBRARY, 'Song information', 'Sections', 'Print', 'Export…']],
+    [
+      'a song',
+      '/play/bz5',
+      [...LIBRARY, 'Song information', 'Sections', 'Settings…', 'Print', 'Export…'],
+    ],
     // A study is in no library (ADR 0106).
-    ['a study', '/play/ex3', ['Study information', 'Sections', 'Print', 'Export…']],
+    ['a study', '/play/ex3', ['Study information', 'Sections', 'Settings…', 'Print', 'Export…']],
     ['a walk', '/play/walk?root=D&kind=dorian', ['Print', 'Export…']],
     ['an exercise', '/play/exercise/hanon', ['Print', 'Export…']],
   ])('lists what %s has', async (_music, path, actions) => {
@@ -183,6 +187,7 @@ describe('the Player’s More (ADR 0108)', () => {
       'Archive',
       'Song information',
       'Sections',
+      'Settings…',
       'Print',
       'Export…',
     ])
