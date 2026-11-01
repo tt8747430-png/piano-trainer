@@ -58,8 +58,9 @@ export function RowFace({
         )
       ) : null}
       {/* Beside a value, the title takes the room it needs (two thirds at most); the value wraps
-          between its words under itself, never inside one, and a narrow row takes from the title. */}
-      <span className={value ? 'max-w-[65%] min-w-0 flex-[1_4_auto]' : 'min-w-0 flex-1'}>
+          between its words under itself, never inside one, and a narrow row takes from the title, down
+          to its longest word (round 28: never cut inside one at 320px). */}
+      <span className={value ? 'max-w-[65%] min-w-min flex-[1_4_auto]' : 'min-w-0 flex-1'}>
         <span className="line-clamp-2 text-lg leading-snug font-semibold text-pretty">{title}</span>
         {count ? (
           <>
