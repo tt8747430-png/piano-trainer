@@ -343,9 +343,10 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
   it('New only adds: a song, an import, a folder; the Public library is a row of its own', async () => {
     const user = userEvent.setup()
     await renderApp('/songs')
-    expect(
-      await screen.findByRole('link', { name: /Public library Browse songs and patterns/ }),
-    ).toHaveAttribute('href', '/songs/public')
+    expect(await screen.findByRole('link', { name: 'Public library' })).toHaveAttribute(
+      'href',
+      '/songs/public',
+    )
     await user.click(await screen.findByRole('button', { name: 'New' }))
     expect(await screen.findByRole('button', { name: /New song/ })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Import/ })).toBeInTheDocument()
@@ -362,11 +363,7 @@ describe('Songs: a song’s and a folder’s actions (ADR 0106)', () => {
       within(sheet)
         .getAllByRole('button')
         .flatMap((row) => (row.textContent ? [row.textContent] : [])),
-    ).toEqual([
-      'MusicXML The score, for MuseScore, Sibelius, Finale or Dorico',
-      'MIDI The music as played, for a DAW or a keyboard',
-      'Share link A link that carries the song: whoever opens it can add it',
-    ])
+    ).toEqual(['MusicXML', 'MIDI', 'Share link'])
     await user.click(within(sheet).getByRole('button', { name: /^Share link/ }))
     await waitFor(() =>
       expect(screen.queryByRole('dialog', { name: 'Export' })).not.toBeInTheDocument(),

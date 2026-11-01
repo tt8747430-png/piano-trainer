@@ -74,7 +74,7 @@ describe('the Public library', () => {
     await publicLibrary.save('public-1')
     await publicLibrary.save('public-2')
     const { router } = await renderApp('/songs/public', { publicLibrary })
-    expect(await screen.findByText('Browse songs and patterns others shared')).toBeVisible()
+    await screen.findByRole('heading', { level: 1, name: 'Public library' })
     const newest = await screen.findByRole('region', { name: 'Newest' })
     expect(
       within(within(newest).getByRole('list'))

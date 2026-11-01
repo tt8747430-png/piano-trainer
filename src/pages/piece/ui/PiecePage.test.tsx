@@ -177,7 +177,7 @@ describe('Piece', () => {
     expect(screen.getByRole('link', { name: 'Practise' })).toHaveAttribute('href', '/play/ex3')
   })
 
-  it('exports from one sheet: MusicXML for notation apps, MIDI, and its link, each said what it is for', async () => {
+  it('exports from one sheet: MusicXML for notation apps, MIDI, and its link, each named for its file', async () => {
     const user = userEvent.setup()
     await renderApp('/songs/bz5')
     await openSettings(user)
@@ -187,11 +187,7 @@ describe('Piece', () => {
       within(within(sheet).getByRole('list', { name: 'Export' }))
         .getAllByRole('button')
         .map((row) => row.textContent),
-    ).toEqual([
-      'MusicXML The score, for MuseScore, Sibelius, Finale or Dorico',
-      'MIDI The music as played, for a DAW or a keyboard',
-      'Share link A link to the song in the app, in the key you play it',
-    ])
+    ).toEqual(['MusicXML', 'MIDI', 'Share link'])
   })
 
   it('keeps everything else on its Settings page, grouped: its music, its place, its ways out (round 26)', async () => {

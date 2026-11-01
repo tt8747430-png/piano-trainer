@@ -329,9 +329,7 @@ describe('Practice → Chords', () => {
   it('walks a chord the table names chromatically in the Player, from its root', async () => {
     await renderApp('/practice/chords?root=G&triad=min&size=9')
     expect(await screen.findByRole('heading', { level: 2, name: 'Gm9' })).toBeInTheDocument()
-    const walk = screen.getByRole('link', {
-      name: 'Chromatic walk The chord moved a semitone at a time from its root, one bar each',
-    })
+    const walk = screen.getByRole('link', { name: 'Chromatic walk' })
     const href = walk.getAttribute('href') ?? ''
     const [path, query] = href.split('?')
     expect(path).toBe('/play/chromatic')

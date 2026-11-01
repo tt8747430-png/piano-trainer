@@ -170,8 +170,8 @@ describe('the Player’s More (ADR 0108)', () => {
       within(within(sheet).getByRole('list', { name: 'Export' }))
         .getAllByRole('button')
         .map((row) => row.textContent),
-      // Each row's title, then its line.
-    ).toEqual(rows.map((row) => expect.stringMatching(new RegExp(`^${row} [A-Z]`))))
+      // Each row named for its file, no line under it.
+    ).toEqual(rows)
   })
 
   it('shares an own song with its music, saying the link is copied where there is no share sheet', async () => {

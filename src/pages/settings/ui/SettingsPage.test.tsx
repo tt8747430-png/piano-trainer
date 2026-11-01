@@ -26,7 +26,7 @@ describe('Settings', () => {
     await renderApp('/settings')
     const card = within(await screen.findByRole('navigation', { name: 'Account' }))
     expect(card.getAllByRole('link').map((link) => link.textContent)).toEqual([
-      'Sign in Keep your songs and progress on every device',
+      'Sign in',
       'Sync and data',
     ])
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
