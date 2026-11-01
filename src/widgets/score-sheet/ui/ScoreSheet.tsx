@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useRef, useState, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSectionHeading, useStaffNames, useStaffTitle } from '@/entities/piece'
+import { staffScale, useSectionHeading, useStaffNames, useStaffTitle } from '@/entities/piece'
 import { barAt, type Draft, type Layer } from '@/features/score-editor'
 import { PAGE, paginate, PRINT_SCALE, useElementSize, type SheetView } from '@/shared/lib'
-import { PageCanvas, SheetPage, type TitlePlace } from '@/shared/ui'
+import { creditsRoom, PageCanvas, SheetPage, type TitlePlace } from '@/shared/ui'
 import { lineLead, measureWidths, notate, type StaffId } from '@/shared/lib/notation'
 import type { Midi, Tick } from '@/shared/lib/music'
 import { labelRow, scoreHeight, useStaffLabels, versesOf } from '@/shared/ui/score'
@@ -234,7 +234,10 @@ export function ScoreSheet({
           })
         : lineFit({ room, staves, chordNames, verses })
       : 1
-  const sized = pages ? PRINT_SCALE : Math.min(fit, scrollScale(width))
+  // The score's own staff size (ADR 0114) over the size the sheet gives it; a short sheet's fit
+  // still holds a whole system.
+  const size = staffScale(draft.layout)
+  const sized = pages ? PRINT_SCALE * size : Math.min(fit, scrollScale(width) * size)
   const widths = useMemo(
     () => (whole ? measureWidths({ ...whole, staves: drawn }, sized, chordNames, labels) : []),
     [whole, drawn, sized, chordNames, labels],
@@ -297,7 +300,7 @@ export function ScoreSheet({
   }
 
   if (pages) {
-    const scale = PRINT_SCALE
+    const scale = sized
     // A line's height as engraved: its staves and the verses under its tune (ADR 0097).
     const lineHeight = (sheet: LineSheet) =>
       labelRow(chordNames, scale, true) + (scoreHeight(sheet.score, drawn) + LINE_GAP) * scale
@@ -307,7 +310,8 @@ export function ScoreSheet({
     ]
     const dealt = paginate(
       items,
-      (item) => (item.kind === 'line' ? lineHeight(item.sheet) : TITLE_ROOM),
+      (item) =>
+        item.kind === 'line' ? lineHeight(item.sheet) : TITLE_ROOM + creditsRoom(draft.header),
       PAGE.height - 2 * PAGE.margin,
       (item) => item.kind !== 'line',
       // A page break before a line's first bar (ADR 0097).

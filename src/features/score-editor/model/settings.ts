@@ -1,4 +1,11 @@
-import { keyText, PIECE_TEMPO, type KeyText } from '@/entities/piece'
+import {
+  isBarsPerLine,
+  keyText,
+  PIECE_TEMPO,
+  type KeyText,
+  type PieceLayout,
+  type StaffSize,
+} from '@/entities/piece'
 import { transposeChord, transposeNotes } from '@/shared/lib/arrangement'
 import {
   beatUnit,
@@ -122,4 +129,19 @@ export function setTempoMark(draft: Draft, mark: number, unit: TempoUnit): Draft
   const next: Draft =
     unit === beatUnit(draft.meter) ? { ...rest, tempo } : { ...rest, tempo, tempoUnit: unit }
   return next.tempo === draft.tempo && next.tempoUnit === draft.tempoUnit ? draft : next
+}
+
+/**
+ * A layout with its staff size or its most bars a line given anew (ADR 0114): the score's own size
+ * (100) and a null count said by leaving them out.
+ */
+export function laidOut(
+  layout: PieceLayout,
+  change: { readonly staffSize?: StaffSize; readonly barsPerLine?: number | null },
+): PieceLayout {
+  const { staffSize, barsPerLine } = { ...layout, ...change }
+  return {
+    ...(staffSize !== undefined && staffSize !== 100 ? { staffSize } : {}),
+    ...(isBarsPerLine(barsPerLine) ? { barsPerLine } : {}),
+  }
 }

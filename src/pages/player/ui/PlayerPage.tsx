@@ -113,6 +113,8 @@ function PiecePlayer({ piece }: { piece: Piece }) {
       <MoreActions value={inLibrary ? [favourite, ...library.actions] : []}>
         <PlayerLayout
           title={title}
+          credits={isDegreePiece(piece) ? undefined : piece.header}
+          layout={isDegreePiece(piece) ? undefined : piece.layout}
           onClose={close}
           view={search}
           player={player}

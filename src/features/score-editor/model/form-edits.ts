@@ -65,3 +65,25 @@ export function barsEdited(state: EditorState, edit: BarEdit): EditorState {
       return commit(state, newSection(draft, range.from), { selection: null })
   }
 }
+
+/** The most bars a song is given from its Settings: a long song's. */
+export const MOST_BARS = 500
+
+/**
+ * The song made `count` bars long (round 28, Flat's measures added or removed at the end): new bars,
+ * silent and in the last section's meter, after the last; or the last bars taken away with their
+ * music (Undo brings it back). Never fewer than one. The caret stays, or comes back to the last bar.
+ */
+export function barsCounted(state: EditorState, count: number): EditorState {
+  const { draft } = state
+  const total = barsOf(draft).length
+  const wanted = Math.max(1, Math.min(MOST_BARS, Math.round(count)))
+  if (wanted === total) return state
+  let next = draft
+  if (wanted > total) {
+    for (let at = total; at < wanted; at++) next = insertBar(next, at - 1)
+  } else next = deleteBars(draft, { from: wanted, to: total - 1 })
+  const last = barsOf(next).at(-1)
+  const caret = last && state.caret >= last.start + last.bar.ticks ? last.start : state.caret
+  return commit(state, next, { caret, selection: null })
+}

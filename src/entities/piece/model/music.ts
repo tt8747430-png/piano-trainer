@@ -7,6 +7,7 @@ import {
 } from '@/shared/lib/music'
 import type { Chart, StaffMusic } from '@/shared/lib/arrangement'
 import { chartOf, stavesOf } from './chart'
+import { HEADER_FIELDS } from './score-header'
 import {
   defaultLyricsStaff,
   lyricsStaff,
@@ -35,6 +36,8 @@ export type PieceMusic = Pick<
   | 'hands'
   | 'lyrics'
   | 'lyricsOn'
+  | 'header'
+  | 'layout'
 > & {
   /** The learner's own title: a version's, shown in every language in place of the catalog's. */
   readonly title?: string
@@ -62,6 +65,8 @@ export function musicOf(piece: ChartPiece): PieceMusic {
     ...(piece.hands === undefined ? {} : { hands: piece.hands }),
     ...(sung ? { lyrics: sung } : {}),
     ...(sung && on !== defaultLyricsStaff(piece) ? { lyricsOn: on } : {}),
+    ...(piece.header ? { header: piece.header } : {}),
+    ...(piece.layout ? { layout: piece.layout } : {}),
   }
 }
 
@@ -98,6 +103,8 @@ export const withMusic = (piece: ChartPiece, { title, ...music }: PieceMusic): C
       hands: music.hands,
       lyrics: music.lyrics,
       lyricsOn: music.lyricsOn,
+      header: music.header,
+      layout: music.layout,
     },
     title,
   )
@@ -127,6 +134,9 @@ const sameSection = (a: Section, b: Section) =>
 /** Whether two pieces' music is written the same. */
 export const sameMusic = (a: PieceMusic, b: PieceMusic): boolean =>
   a.title === b.title &&
+  HEADER_FIELDS.every((field) => a.header?.[field] === b.header?.[field]) &&
+  a.layout?.staffSize === b.layout?.staffSize &&
+  a.layout?.barsPerLine === b.layout?.barsPerLine &&
   a.key === b.key &&
   a.meter === b.meter &&
   (a.timeSymbol ?? false) === (b.timeSymbol ?? false) &&

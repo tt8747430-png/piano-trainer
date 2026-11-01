@@ -1,5 +1,5 @@
 import type { BarMarkChoice } from './bar-marks'
-import type { SectionKind } from '@/entities/piece'
+import type { HeaderField, SectionKind, StaffName, StaffSize } from '@/entities/piece'
 import type { Chord, Clef, Finger, Key, Midi, TempoUnit, Tick } from '@/shared/lib/music'
 import type { Clip } from './clip'
 import type { Draft, Layer, NoteLayer } from './draft'
@@ -135,7 +135,13 @@ export type EditorAction =
    * A single staff added at a place top down (ADR 0097): over a staff, or after the last, over the
    * piano; the caret goes to it.
    */
-  | { readonly type: 'addStaff'; readonly place: number }
+  | {
+      readonly type: 'addStaff'
+      readonly place: number
+      /** An instrument's staff, its name and clef (the score's Settings, round 28). */
+      readonly name?: StaffName
+      readonly clef?: Clef
+    }
   /** A single staff taken away with its notes (ADR 0097); Undo brings them back. */
   | { readonly type: 'removeStaff'; readonly place: number }
   /** A single staff's printed name as typed (ADR 0097): an empty one takes it away. */
@@ -175,6 +181,8 @@ export type EditorAction =
   /** A take written from the caret's bar. */
   | { readonly type: 'take'; readonly parts: readonly TakePart[] }
   | { readonly type: 'bars'; readonly edit: BarEdit }
+  /** The song made so many bars long, at its end (the score's Settings, round 28). */
+  | { readonly type: 'barCount'; readonly count: number }
   | { readonly type: 'clip'; readonly edit: ClipEdit }
   | { readonly type: 'barLength'; readonly ticks: Tick }
   /** Barlines on the bars chosen, else the caret's (a repeat, an ending, a double or final barline). */
@@ -212,6 +220,14 @@ export type EditorAction =
     }
   /** The title printed at the sheet's head, given anew (ADR 0114): an empty one changes nothing. */
   | { readonly type: 'title'; readonly title: string }
+  /** A line of what prints under the title, given anew (ADR 0114): an empty one takes it away. */
+  | { readonly type: 'header'; readonly field: HeaderField; readonly text: string }
+  /** How the score is laid out (ADR 0114): its staff size or the most bars a line holds, null its own. */
+  | {
+      readonly type: 'layout'
+      readonly staffSize?: StaffSize
+      readonly barsPerLine?: number | null
+    }
   | { readonly type: 'undo' }
   | { readonly type: 'redo' }
 

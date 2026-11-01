@@ -30,6 +30,14 @@ describe('the sheet’s lines', () => {
     ])
   })
 
+  it('hold no more bars than the score’s layout asks a line to (ADR 0114)', () => {
+    const one = { ...draft, layout: { barsPerLine: 1 } }
+    expect(linesOf(one).map((line) => line.bars.map((b) => b.index))).toEqual([[0], [1], [2], [3]])
+    expect(
+      linesOf(one, { room: 1000, widths: [100, 100, 100, 100] }).map((line) => line.bars.length),
+    ).toEqual([1, 1, 1, 1])
+  })
+
   it('say what each bar’s label prints: a line’s first number, a section’s name, the tempo (ADR 0097)', () => {
     expect(linesOf(draft).map((line) => line.labels)).toEqual([
       [{ number: 1, section: 0, tempo: 90 }],

@@ -1,4 +1,4 @@
-import { defaultLyricsStaff, staffName } from '@/entities/piece'
+import { defaultLyricsStaff, staffName, type StaffName } from '@/entities/piece'
 import type { Clef } from '@/shared/lib/music'
 import type { Draft, DraftStaff } from './draft'
 import { verseCount } from './lyrics'
@@ -16,9 +16,18 @@ function withStaff(draft: Draft, place: number, change: (staff: DraftStaff) => D
  * or after the last, over the piano; a treble staff with nothing on it yet. The words stay on their
  * staff; a song with none yet takes them on its top single staff.
  */
-export function addStaff(draft: Draft, place: number): Draft {
+export function addStaff(
+  draft: Draft,
+  place: number,
+  instrument: { readonly name?: StaffName; readonly clef?: Clef } = {},
+): Draft {
   const at = Math.max(0, Math.min(place, draft.staves.length))
-  const added: DraftStaff = { clef: 'treble', notes: [] }
+  // An instrument's staff (round 28, the score's Settings): its name and its clef.
+  const added: DraftStaff = {
+    ...(instrument.name === undefined ? {} : { name: instrument.name }),
+    clef: instrument.clef ?? 'treble',
+    notes: [],
+  }
   const { lyricsOn } = draft
   return {
     ...draft,

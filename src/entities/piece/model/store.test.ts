@@ -221,6 +221,24 @@ describe('createPiecesStore', () => {
     for (const id of ['bz2', 'bz3', 'bz5']) expect(read[id]).toEqual(MUSIC)
   })
 
+  it('keeps a score’s header line by line and its layout field by field (ADR 0114)', () => {
+    const versions = {
+      bz1: {
+        ...MUSIC,
+        header: { subtitle: '  Op. 2 ', composer: 'Clara', lyricist: '  ', arranger: 4, x: 'y' },
+        layout: { staffSize: 130, barsPerLine: 12 },
+      },
+      bz2: { ...MUSIC, header: { composer: '' }, layout: { staffSize: 100, barsPerLine: 4 } },
+    }
+    const read = restored({ versions }).versions
+    expect(read.bz1).toEqual({
+      ...MUSIC,
+      header: { subtitle: 'Op. 2', composer: 'Clara' },
+      layout: { staffSize: 130 },
+    })
+    expect(read.bz2).toEqual({ ...MUSIC, layout: { barsPerLine: 4 } })
+  })
+
   it('drops a single staff longer than its chart', () => {
     const versions = { bz1: { ...MUSIC, staves: [{ notes: 'B4/4' }, { notes: 'B4/16 B4/1' }] } }
     expect(restored({ versions }).versions).toEqual({})

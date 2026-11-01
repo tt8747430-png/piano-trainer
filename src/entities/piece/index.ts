@@ -38,6 +38,21 @@ export {
 export { keyText, musicOf, readMusic, sameMusic, type PieceMusic } from './model/music'
 export { HAND_IDS, type HandId } from './model/parse-hands'
 export {
+  BARS_PER_LINE,
+  HEADER_FIELDS,
+  HEADER_MAX,
+  headerLine,
+  isBarsPerLine,
+  isStaffSize,
+  STAFF_SIZES,
+  staffScale,
+  withHeaderLine,
+  type HeaderField,
+  type PieceLayout,
+  type ScoreHeader,
+  type StaffSize,
+} from './model/score-header'
+export {
   isOwnSongId,
   ownSongId,
   PIECE_TEMPO,

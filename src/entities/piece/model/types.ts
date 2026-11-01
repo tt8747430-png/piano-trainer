@@ -12,6 +12,7 @@ import {
   type TempoUnit,
 } from '@/shared/lib/music'
 import type { Recording } from '@/shared/lib/schedule'
+import type { PieceLayout, ScoreHeader } from './score-header'
 
 /** A saved id may name a piece a later version removed, so it stays a plain name. */
 export type PieceId = string
@@ -161,6 +162,10 @@ export interface ChartPiece extends PieceCommon {
    * else the upper staff; written only where it is another.
    */
   readonly lyricsOn?: LyricsStaff
+  /** What it prints under its title (ADR 0114): a subtitle, its composer, lyricist and arranger. */
+  readonly header?: ScoreHeader
+  /** How its score is laid out (ADR 0114): its staff size, the most bars a line holds. */
+  readonly layout?: PieceLayout
 }
 
 /**

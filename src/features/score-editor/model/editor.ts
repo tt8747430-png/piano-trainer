@@ -1,4 +1,4 @@
-import { songTitle } from '@/entities/piece'
+import { songTitle, withHeaderLine } from '@/entities/piece'
 import { markBars } from './bar-marks'
 import { setClef } from './clefs'
 import { shownRows, staffLeftFor } from './rows'
@@ -11,7 +11,7 @@ import { chordNoteStep } from './chord-note'
 import { deleteChord } from './chords'
 import { midi, PIANO, type Midi } from '@/shared/lib/music'
 import { isHandLayer, type Draft, type Layer } from './draft'
-import { barsEdited, chordSet, chosenBars } from './form-edits'
+import { barsCounted, barsEdited, chordSet, chosenBars } from './form-edits'
 import { commit, undone } from './history'
 import { keyPlayed } from './keys-played'
 import { lineOver, lineSpan } from './lines'
@@ -39,7 +39,7 @@ import {
 import { setTime } from './meters'
 import { joinSection, setSectionKey, setSectionKind } from './sections'
 import { addStaff, removeStaff, renameStaff, setStaffClef } from './staves'
-import { setKey, setTempo, setTempoMark, transpose } from './settings'
+import { laidOut, setKey, setTempo, setTempoMark, transpose } from './settings'
 import { nextMode, type EditorAction, type EditorState } from './state'
 import { writeTake } from './take-edits'
 import { barAt, barsOf, keyAt } from './timeline'
@@ -271,7 +271,10 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
             action.joins ?? false,
           )
     case 'addStaff': {
-      const next = addStaff(draft, action.place)
+      const next = addStaff(draft, action.place, {
+        ...(action.name === undefined ? {} : { name: action.name }),
+        ...(action.clef === undefined ? {} : { clef: action.clef }),
+      })
       // The caret on the staff added, where it was in time.
       const added = singleStaff(Math.max(0, Math.min(action.place, draft.staves.length)))
       return commit(state, next, {
@@ -388,6 +391,8 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
       })
     case 'bars':
       return barsEdited(state, action.edit)
+    case 'barCount':
+      return barsCounted(state, action.count)
     case 'clip':
       return clipEdited(state, action.edit)
     case 'barMarks':
@@ -431,6 +436,22 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
     case 'title': {
       const title = songTitle(action.title)
       return title === null || title === draft.title ? state : commit(state, { ...draft, title })
+    }
+    case 'header': {
+      const header = withHeaderLine(draft.header ?? {}, action.field, action.text)
+      if (header[action.field] === draft.header?.[action.field]) return state
+      const { header: _was, ...rest } = draft
+      return commit(state, Object.keys(header).length > 0 ? { ...rest, header } : rest)
+    }
+    case 'layout': {
+      const layout = laidOut(draft.layout ?? {}, action)
+      if (
+        layout.staffSize === draft.layout?.staffSize &&
+        layout.barsPerLine === draft.layout?.barsPerLine
+      )
+        return state
+      const { layout: _was, ...rest } = draft
+      return commit(state, Object.keys(layout).length > 0 ? { ...rest, layout } : rest)
     }
     case 'undo':
     case 'redo':

@@ -1,5 +1,5 @@
 import { useMemo, useState, type ReactNode } from 'react'
-import { useStaffNames, type StaffName } from '@/entities/piece'
+import { useStaffNames, type PieceLayout, type ScoreHeader, type StaffName } from '@/entities/piece'
 import { selectKeyboard, selectScoreView, useSettings } from '@/entities/settings'
 import { MidiButton } from '@/features/connect-midi'
 import { LiveKeyboard } from '@/features/live-keyboard'
@@ -50,6 +50,8 @@ const NO_STAVES: readonly { readonly name?: StaffName }[] = []
  */
 export function PlayerLayout({
   title,
+  credits,
+  layout,
   onClose,
   view,
   player,
@@ -80,6 +82,10 @@ export function PlayerLayout({
    */
   recording?: Recording | undefined
   title: string
+  /** Printed under the title on the sheet (ADR 0114): a piece's subtitle, composer, lyricist, arranger. */
+  credits?: ScoreHeader | undefined
+  /** The score's staff size and the most bars a line holds (ADR 0114): a piece's. */
+  layout?: PieceLayout | undefined
   onClose: () => void
   view: PracticeView
   player: PracticePlayer
@@ -187,6 +193,8 @@ export function PlayerLayout({
             piano={piano}
             staffNames={names}
             title={title}
+            credits={credits}
+            layout={layout}
             performance={performance}
             headings={headings}
             current={practice.state.beatGroup}

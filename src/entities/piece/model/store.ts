@@ -13,6 +13,7 @@ import {
 import { barTicksOf, chartOf, stavesOf } from './chart'
 import { ContentError } from './content-error'
 import { musicOf, type PieceMusic } from './music'
+import { savedHeader, savedLayout } from './score-header'
 import {
   isOwnSongId,
   ownSongNumber,
@@ -145,6 +146,10 @@ function singsLyrics(piece: ChartPiece): boolean {
   }
 }
 
+/** A field only where it has a value. */
+const optional = <K extends string, V>(key: K, value: V | undefined) =>
+  (value === undefined ? {} : { [key]: value }) as Partial<Record<K, V>>
+
 /**
  * Saved music that reads as a piece's: its fields, its chart, single staves and hands; null
  * otherwise. Its words are kept where they read on the staff they are on (ADR 0097), its own title
@@ -176,6 +181,8 @@ function musicOfSaved(saved: unknown): PieceMusic | null {
     ...(single.length > 0 && leadSheet === true ? { leadSheet } : {}),
     ...(written ? { hands: written } : {}),
     ...(isLyricsStaff(lyricsOn, single.length) ? { lyricsOn } : {}),
+    ...optional('header', savedHeader(saved.header)),
+    ...optional('layout', savedLayout(saved.layout)),
   }
   try {
     const ends = stavesOf(piece).flatMap(({ notes }) =>
