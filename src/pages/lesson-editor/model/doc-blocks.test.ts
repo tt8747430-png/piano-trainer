@@ -4,7 +4,15 @@ import { EditorState, NodeSelection, TextSelection } from '@tiptap/pm/state'
 import { describe, expect, it } from 'vitest'
 import { COURSES } from '@/entities/course'
 import { LESSONS, type Lesson } from '@/entities/lesson'
-import { duplicateBlock, moveBlock, moveBlockTo, removeBlock } from './doc-blocks'
+import {
+  blockTurn,
+  duplicateBlock,
+  lineAfter,
+  moveBlock,
+  moveBlockTo,
+  removeBlock,
+  turnBlockInto,
+} from './doc-blocks'
 import { docExtensions } from './doc-schema'
 import { docToLesson, lessonToDoc, textOf, type DocNode } from './lesson-doc'
 
@@ -110,5 +118,87 @@ describe('a block moved, copied and taken out', () => {
     ])
     expect(removeBlock(state, 1)).toBeNull()
     expect(duplicateBlock(state, 0)).toBeNull()
+  })
+})
+
+describe('a block turned into another (round 28, its menu’s Turn into)', () => {
+  const STEPS: Lesson = {
+    ...LESSON,
+    sections: [
+      {
+        heading: { en: 'H', ru: 'Х' },
+        blocks: [
+          {
+            kind: 'steps',
+            steps: [
+              { en: 'a', ru: 'а' },
+              { en: 'b', ru: 'б' },
+            ],
+          },
+          { kind: 'chords', symbols: ['C'] },
+        ],
+        takeaway: { en: 'K', ru: 'К' },
+      },
+    ],
+  }
+
+  it('says what a block of words is, and nothing for an example or the title', () => {
+    const state = stateOf(STEPS)
+    expect([0, 1, 2, 3, 4, 5].map((at) => blockTurn(state.doc.child(at)))).toEqual([
+      null,
+      null,
+      'section',
+      'steps',
+      null,
+      'takeaway',
+    ])
+  })
+
+  it('turns text into a section’s heading and back, its other language kept', () => {
+    const state = stateOf(LESSON)
+    const heading = state.apply(turnBlockInto(state, 3, 'section')!)
+    expect(blockTurn(heading.doc.child(3))).toBe('section')
+    expect(heading.selection.$from.parent.textContent).toBe('one')
+    const lesson = docToLesson(heading.doc.toJSON() as DocNode, LESSON, 'en')
+    expect(lesson.sections[1]?.heading).toEqual({ en: 'one', ru: 'один' })
+    const text = heading.apply(turnBlockInto(heading, 3, 'text')!)
+    expect(docToLesson(text.doc.toJSON() as DocNode, LESSON, 'en')).toEqual(LESSON)
+  })
+
+  it('makes each step a line of text, and lines a note or a takeaway of their words', () => {
+    const state = stateOf(STEPS)
+    const text = state.apply(turnBlockInto(state, 3, 'text')!)
+    expect(texts(text)).toEqual(['T', 'S', 'H', 'a', 'b', 'lessonExample', 'K'])
+    expect(docToLesson(text.doc.toJSON() as DocNode, STEPS, 'en').sections[0]?.blocks[1]).toEqual({
+      kind: 'text',
+      text: { en: 'b', ru: 'б' },
+    })
+    const note = state.apply(turnBlockInto(state, 3, 'note')!)
+    expect(docToLesson(note.doc.toJSON() as DocNode, STEPS, 'en').sections[0]?.blocks[0]).toEqual({
+      kind: 'note',
+      text: { en: 'a b', ru: '' },
+    })
+    const takeaway = state.apply(turnBlockInto(state, 5, 'note')!)
+    expect(
+      docToLesson(takeaway.doc.toJSON() as DocNode, STEPS, 'en').sections[0]?.blocks[2],
+    ).toEqual({ kind: 'note', text: { en: 'K', ru: 'К' } })
+  })
+
+  it('turns nothing into what it is, nor an example or the title', () => {
+    const state = stateOf(STEPS)
+    expect(turnBlockInto(state, 3, 'steps')).toBeNull()
+    expect(turnBlockInto(state, 4, 'text')).toBeNull()
+    expect(turnBlockInto(state, 0, 'text')).toBeNull()
+  })
+})
+
+describe('a line added under a block (round 28, its gutter’s +)', () => {
+  it('puts an empty line under it with / typed, the caret after it', () => {
+    const state = stateOf(LESSON)
+    const added = state.apply(lineAfter(state, 4)!)
+    expect(texts(added)).toEqual(['T', 'S', 'H', 'one', 'lessonExample', '/', 'three'])
+    expect(added.selection.$from.parent.textContent).toBe('/')
+    expect(added.selection.$from.parentOffset).toBe(1)
+    expect(lineAfter(state, 0)).toBeNull()
   })
 })

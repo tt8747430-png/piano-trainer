@@ -23,7 +23,7 @@ export function nodeName(node: Node, t: TFunction<'learn'>): string {
     case DOC.takeaway:
       return t(`edit.doc.kinds.${node.type.name}`)
     default:
-      return t('edit.doc.block')
+      return t('edit.doc.kinds.paragraph')
   }
 }
 

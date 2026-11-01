@@ -45,6 +45,12 @@ async function caretAtEnd(editor: Editor, element: HTMLElement) {
   await waitFor(() => expect(editor.view.dom).toHaveFocus())
 }
 
+/** Chooses the first example of `kind`, as a tap does: its toolbar, named by it, shows. */
+async function chooseExample(kind: string, name: string) {
+  act(() => document.querySelector<HTMLElement>(`[data-example="${kind}"]`)!.focus())
+  return within(await screen.findByRole('toolbar', { name }))
+}
+
 /** Publishes the draft once it is saved: the bar's Publish, then the dialog's. */
 async function publish(user: ReturnType<typeof userEvent.setup>) {
   await screen.findByText('Draft · saved', {}, { timeout: 3000 })
@@ -235,10 +241,15 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    // As it reads until it is worked on: a tap opens its fields.
+    // As it reads until it is worked on: a tap shows its toolbar, its Edit its fields in place.
     await screen.findByRole('textbox', { name: 'The lesson' })
-    act(() => document.querySelector<HTMLElement>('[data-example="chords"]')!.focus())
-    const chords = (await screen.findAllByRole('textbox', { name: 'Chords' }))[0]!
+    expect(screen.queryByRole('textbox', { name: 'Chords' })).not.toBeInTheDocument()
+    await user.click(
+      (await chooseExample('chords', 'Chords')).getByRole('button', { name: 'Edit' }),
+    )
+    const fields = await screen.findByRole('group', { name: 'Chords: its settings' })
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    const chords = within(fields).getByRole('textbox', { name: 'Chords' })
     await user.clear(chords)
     await user.type(chords, 'C Qx G7')
     expect(chords).toHaveAccessibleDescription('“Qx” doesn’t read')
@@ -249,7 +260,9 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
       ),
     ).toBeInTheDocument()
     // Publish took the focus away, and the example reads as the lesson again: a tap opens it anew.
-    act(() => document.querySelector<HTMLElement>('[data-example="chords"]')!.focus())
+    await user.click(
+      (await chooseExample('chords', 'Chords')).getByRole('button', { name: 'Edit' }),
+    )
     const again = (await screen.findAllByRole('textbox', { name: 'Chords' }))[0]!
     await user.clear(again)
     await user.type(again, 'C Am G7')
@@ -275,7 +288,10 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await user.click((await screen.findAllByRole('button', { name: 'Edit: Voicings' }))[0]!)
+    await screen.findByRole('textbox', { name: 'The lesson' })
+    await user.click(
+      (await chooseExample('voicings', 'Voicings')).getByRole('button', { name: 'Edit' }),
+    )
     const keys = await screen.findByRole('textbox', {
       name: 'Voicing 1: Keys: left hand | right hand',
     })
@@ -323,14 +339,14 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     const { doc, editor } = await lessonDoc()
     await caretAtEnd(editor, line(doc, 'h2'))
     await user.keyboard('{Enter}/prog')
-    const menu = await screen.findByRole('listbox', { name: 'Blocks' })
+    const menu = await screen.findByRole('listbox', { name: 'Insert' })
     expect(
       within(menu)
         .getAllByRole('option')
         .map((option) => option.textContent),
     ).toEqual(['Progression'])
     await user.keyboard('{Enter}')
-    expect(screen.queryByRole('listbox', { name: 'Blocks' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('listbox', { name: 'Insert' })).not.toBeInTheDocument()
     await waitFor(
       async () =>
         expect((await saved(content))?.sections[0]?.blocks[0]).toMatchObject({
@@ -351,7 +367,7 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     const { doc, editor } = await lessonDoc()
     await caretAtEnd(editor, line(doc, 'h2'))
     await user.keyboard('{Enter}Play these /prog')
-    const menu = await screen.findByRole('listbox', { name: 'Blocks' })
+    const menu = await screen.findByRole('listbox', { name: 'Insert' })
     expect(within(menu).getByRole('option', { name: /Progression/ })).toBeInTheDocument()
     await user.keyboard('{Enter}')
     await waitFor(
@@ -385,7 +401,7 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
       { timeout: 3000 },
     )
     await user.keyboard('{Alt>}{ArrowDown}{/Alt}')
-    await user.click(screen.getByRole('button', { name: 'Block' }))
+    await user.click(screen.getByRole('button', { name: 'More: Text' }))
     await user.click(await screen.findByRole('menuitem', { name: 'Delete' }))
     expect(await screen.findByText('Deleted: Text')).toBeVisible()
     expect(doc.querySelector('h2 + p')).not.toBe(paragraph)
@@ -396,6 +412,82 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     await waitFor(async () => expect((await saved(content))?.sections).toEqual(LESSON.sections), {
       timeout: 3000,
     })
+  })
+
+  it('turns a block of words into a section’s heading from its gutter’s menu (round 28)', async () => {
+    const user = userEvent.setup()
+    const content = editing()
+    await renderApp(`/lessons/${LESSON.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    const { doc, editor } = await lessonDoc()
+    const paragraph = doc.querySelector<HTMLElement>('h2 + p')!
+    const words = paragraph.textContent
+    await caretAtEnd(editor, paragraph)
+    await user.click(screen.getByRole('button', { name: 'More: Text' }))
+    expect(await screen.findByRole('menuitemcheckbox', { name: 'Text' })).toBeChecked()
+    expect(screen.queryByRole('menuitem', { name: /Move/ })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('menuitemcheckbox', { name: 'Section heading' }))
+    await waitFor(async () => expect((await saved(content))?.sections[1]?.heading.en).toBe(words), {
+      timeout: 3000,
+    })
+  })
+
+  it('hints how to insert on the empty line the caret is in, and on no other (round 28)', async () => {
+    const user = userEvent.setup()
+    await renderApp(`/lessons/${LESSON.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: editing(),
+    })
+    const { doc, editor } = await lessonDoc()
+    await caretAtEnd(editor, line(doc, 'h2'))
+    await user.keyboard('{Enter}')
+    const hint = 'Type / to insert music, a note and more'
+    await waitFor(() =>
+      expect(doc.querySelectorAll(`p[data-placeholder="${hint}"]`)).toHaveLength(1),
+    )
+    await caretAtEnd(editor, line(doc, 'h2'))
+    await waitFor(() => expect(doc.querySelector(`p[data-placeholder="${hint}"]`)).toBeNull())
+  })
+
+  it('adds a line under a block from its gutter’s +, the Insert menu open on it (round 28)', async () => {
+    const user = userEvent.setup()
+    await renderApp(`/lessons/${LESSON.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: editing(),
+    })
+    const { doc, editor } = await lessonDoc()
+    await caretAtEnd(editor, line(doc, 'h2'))
+    await user.click(screen.getByRole('button', { name: 'Add below' }))
+    const menu = await screen.findByRole('listbox', { name: 'Insert' })
+    expect(within(menu).getByRole('option', { name: /Progression/ })).toBeInTheDocument()
+  })
+
+  it('duplicates and deletes an example from its toolbar, said with Undo (round 28)', async () => {
+    const user = userEvent.setup()
+    const lesson = LESSONS.find(
+      (each) =>
+        lessonPlace(each.id) && lessonExamples(each).some((example) => example.kind === 'chords'),
+    )!
+    await renderApp(`/lessons/${lesson.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: createFakeContentEditing({
+        items: [{ kind: 'lesson', id: lesson.id, body: lesson, meta: {} }],
+      }),
+    })
+    await lessonDoc()
+    const count = () => document.querySelectorAll('[data-example="chords"]').length
+    const before = count()
+    await user.click(
+      (await chooseExample('chords', 'Chords')).getByRole('button', { name: 'Duplicate' }),
+    )
+    await waitFor(() => expect(count()).toBe(before + 1))
+    await user.click(
+      (await chooseExample('chords', 'Chords')).getByRole('button', { name: 'Delete' }),
+    )
+    expect(await screen.findByText('Deleted: Chords')).toBeVisible()
+    await waitFor(() => expect(count()).toBe(before))
   })
 
   it('tells a learner it is an editor’s, with the way back', async () => {
@@ -422,8 +514,9 @@ describe('an example of notes on its own score (round 27)', () => {
       contentEditing: content,
     })
     await lessonDoc()
-    const [first] = await screen.findAllByRole('button', { name: 'Edit music' })
-    await user.click(first!)
+    await user.click(
+      (await chooseExample('notes', 'Notes')).getByRole('button', { name: 'Edit music' }),
+    )
     await waitFor(() =>
       expect(router.state.location.pathname).toBe(`/lessons/${lesson.id}/example`),
     )

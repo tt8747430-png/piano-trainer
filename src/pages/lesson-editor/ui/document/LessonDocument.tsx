@@ -19,7 +19,7 @@ import { cn, useKeyboardTop } from '@/shared/lib'
 import { docExtensions } from '../../model/doc-schema'
 import { DOC, docToLesson, lessonToDoc, type DocNode } from '../../model/lesson-doc'
 import { BlockHandle } from './BlockHandle'
-import { DocToolbar } from './DocToolbar'
+import { DocToolbar, TextBubble } from './DocToolbar'
 import { DocLocale } from './doc-locale'
 import { ExampleView } from './ExampleView'
 import { SlashMenu, type SlashKeys } from './SlashMenu'
@@ -27,8 +27,11 @@ import './document.css'
 
 type Words = ReturnType<typeof i18n.getFixedT<'learn'>>
 
-/** What an empty line says, in the language written: what its words are for. */
-function placeholderOf(type: string, parent: string, words: Words): string {
+/**
+ * What an empty line says, in the language written: what its words are for; an empty line of text
+ * only where the caret is (Notion's), how to put something there.
+ */
+function placeholderOf(type: string, parent: string, current: boolean, words: Words): string {
   if (parent === DOC.step) return words('edit.doc.placeholder.step')
   switch (type) {
     case DOC.title:
@@ -44,7 +47,7 @@ function placeholderOf(type: string, parent: string, words: Words): string {
     case DOC.takeaway:
       return words('edit.doc.placeholder.takeaway')
     default:
-      return words('edit.doc.placeholder.paragraph')
+      return current ? words('edit.doc.placeholder.paragraph') : ''
   }
 }
 
@@ -112,8 +115,13 @@ export function LessonDocument({
         Placeholder.configure({
           includeChildren: true,
           showOnlyCurrent: false,
-          placeholder: ({ editor: each, node, pos }) =>
-            placeholderOf(node.type.name, each.state.doc.resolve(pos).parent.type.name, words),
+          placeholder: ({ editor: each, node, pos, hasAnchor }) =>
+            placeholderOf(
+              node.type.name,
+              each.state.doc.resolve(pos).parent.type.name,
+              hasAnchor,
+              words,
+            ),
         }),
       ],
     }),
@@ -136,12 +144,13 @@ export function LessonDocument({
       <ToolbarDock editorDom={frame}>{toolbar}</ToolbarDock>
       <div
         ref={frame}
-        className="relative pr-10 pb-28 md:pr-0 md:pl-12"
+        className="relative pr-11 pb-28 md:pr-0 md:pl-20"
         style={{ '--takeaway-label': JSON.stringify(words('edit.doc.takeaway')) } as CSSProperties}
       >
         <EditorContent editor={editor} />
         {properties ? createPortal(properties, host) : null}
         <BlockHandle editor={editor} frame={frame} />
+        <TextBubble editor={editor} />
         <SlashMenu editor={editor} locale={locale} frame={frame} keysRef={slashKeys} />
       </div>
     </DocLocale>

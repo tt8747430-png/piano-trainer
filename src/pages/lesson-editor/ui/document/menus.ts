@@ -22,9 +22,9 @@ import {
 } from 'lucide-react'
 import type { Locale } from '@/shared/i18n'
 import { say, type MenuAction } from '@/shared/ui'
-import { FIXED_BLOCKS } from '../../model/doc-blocks'
+import { blockTurn, FIXED_BLOCKS, TURN_INTO, type TurnInto } from '../../model/doc-blocks'
 import { insertableName, nodeName } from './block-names'
-import { actOnBlock, insertBlock, INSERTABLES, type Insertable } from './commands'
+import { actOnBlock, insertBlock, INSERTABLES, turnInto, type Insertable } from './commands'
 
 export const INSERT_ICONS: Record<Insertable, LucideIcon> = {
   section: Heading2,
@@ -85,12 +85,36 @@ export function insertActions(
   }))
 }
 
-/** Block `index`'s menu: copied, deleted (said, with Undo). It is moved by dragging its handle. */
+/** Turn into's kinds, each its picture: the Insert menu's own. */
+const TURN_ICONS: Record<TurnInto, LucideIcon> = {
+  text: Pilcrow,
+  section: Heading2,
+  steps: ListOrdered,
+  note: StickyNote,
+  takeaway: Quote,
+}
+
+/**
+ * Block `index`'s menu (round 28, Notion's): words turned into another kind (ticked as what they
+ * are), copied, deleted (said, with Undo). It is moved by dragging its handle, or Alt+↑/↓: never Move
+ * up/down in a menu (the owner's rule).
+ */
 export function blockActions(editor: Editor, index: number, t: TFunction<'learn'>): MenuAction[] {
   const { doc } = editor.state
   const node = doc.maybeChild(index)
   const fixed = index < FIXED_BLOCKS || !node
+  const is = node ? blockTurn(node) : null
   return [
+    ...(is === null || fixed
+      ? []
+      : TURN_INTO.map((into) => ({
+          key: `turn-${into}`,
+          group: t('edit.doc.turnInto'),
+          label: t(`edit.doc.turn.${into}`),
+          icon: TURN_ICONS[into],
+          checked: into === is,
+          onSelect: () => turnInto(editor, index, into),
+        }))),
     {
       key: 'duplicate',
       label: t('edit.doc.duplicate'),
