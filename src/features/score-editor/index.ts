@@ -28,7 +28,7 @@ export {
   type NoteLayer,
 } from './model/draft'
 export { placesIn, selectionSpan, tapsIn } from './model/caret-moves'
-export { chosenBars } from './model/form-edits'
+export { chosenBars, MOST_BARS } from './model/form-edits'
 export {
   EDIT_MODES,
   type BarEdit,

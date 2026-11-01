@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
-import { ChevronDown, ChevronLeft, Mic, Minus, Pencil, Plus } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { ChevronLeft, Mic, Pencil } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { libraryCatalog, useLibraryStoreApi, type FolderId } from '@/entities/library'
 import { TITLE_MAX, usePiecesStoreApi, type SongCollectionId } from '@/entities/piece'
@@ -42,6 +42,7 @@ import {
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { KeySignaturePicker } from '@/shared/ui/pickers/KeySignaturePicker'
+import { InstrumentList } from '@/widgets/instrument-list'
 
 /** The steps of New song, Flat's: its name, its instruments, then its setup fine-tuned. */
 const STEPS = [1, 2, 3] as const
@@ -86,92 +87,6 @@ function counted(staves: ScoreStaves, instrument: Instrument) {
     fewer: { ...staves, voices: staves.voices.filter((_, index) => index !== at) },
     more: { ...staves, voices: [...staves.voices, instrument] },
   }
-}
-
-/** A family's instruments under its name, folded open or shut by its header (Flat's). */
-function Family({ title, children }: { title: string; children: ReactNode }) {
-  const [open, setOpen] = useState(true)
-  return (
-    <section className="flex flex-col card">
-      <button
-        type="button"
-        aria-expanded={open}
-        onClick={() => setOpen(!open)}
-        className="flex min-h-14 items-center gap-3 rounded-3xl px-4 text-start font-semibold outline-none focus-visible:ring-3 focus-visible:ring-ring"
-      >
-        <span className="min-w-0 flex-1">{title}</span>
-        <ChevronDown
-          aria-hidden
-          className={cn(
-            'size-5 text-muted-foreground transition-transform duration-200',
-            open && 'rotate-180',
-          )}
-        />
-      </button>
-      {open ? <ul className="flex flex-col border-t border-border">{children}</ul> : null}
-    </section>
-  )
-}
-
-/** One instrument's row: its name, and how many with − and +; a change no score can be, greyed. */
-function InstrumentRow({
-  name,
-  now,
-  fewer,
-  more,
-  onChange,
-}: {
-  name: string
-  now: number
-  fewer: ScoreStaves
-  more: ScoreStaves | null
-  onChange: (next: ScoreStaves) => void
-}) {
-  const { t } = useTranslation('songs')
-  return (
-    <li
-      className={cn(
-        'flex min-h-14 items-center gap-2 py-1 pr-2 pl-4 first:pt-1 last:rounded-b-3xl',
-        now > 0 && 'bg-chosen/60',
-      )}
-    >
-      <span className={cn('min-w-0 flex-1', now > 0 && 'font-semibold')}>{name}</span>
-      {now > 0 ? (
-        <>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="size-11 rounded-full"
-            aria-label={t('setup.fewer', { staff: name })}
-            title={t('setup.fewer', { staff: name })}
-            disabled={!isScoreStaves(fewer)}
-            onClick={() => onChange(fewer)}
-          >
-            <Minus aria-hidden />
-          </Button>
-          <output
-            aria-label={t('setup.count', { staff: name, count: now })}
-            className="w-5 text-center font-semibold tabular-nums"
-          >
-            {now}
-          </output>
-        </>
-      ) : null}
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        className="size-11 rounded-full text-link"
-        aria-label={t('setup.more', { staff: name })}
-        title={t('setup.more', { staff: name })}
-        disabled={more === null || !isScoreStaves(more)}
-        onClick={() => more && onChange(more)}
-      >
-        <Plus aria-hidden />
-      </Button>
-    </li>
-  )
 }
 
 /**
@@ -366,18 +281,22 @@ export function NewSongSheet({
               {families.length === 0 ? (
                 <p className="px-1 text-muted-foreground">{t('setup.noMatch')}</p>
               ) : (
-                families.map(({ family, instruments }) => (
-                  <Family key={family} title={t(`setup.families.${family}`)}>
-                    {instruments.map((instrument) => (
-                      <InstrumentRow
-                        key={instrument}
-                        name={nameOf(instrument)}
-                        {...counted(staves, instrument)}
-                        onChange={setStaves}
-                      />
-                    ))}
-                  </Family>
-                ))
+                <InstrumentList
+                  families={families.map(({ family, instruments }) => ({
+                    key: family,
+                    title: t(`setup.families.${family}`),
+                    rows: instruments.map((instrument) => {
+                      const { now, fewer, more } = counted(staves, instrument)
+                      return {
+                        key: instrument,
+                        name: nameOf(instrument),
+                        count: now,
+                        onFewer: isScoreStaves(fewer) ? () => setStaves(fewer) : undefined,
+                        onMore: more && isScoreStaves(more) ? () => setStaves(more) : undefined,
+                      }
+                    }),
+                  }))}
+                />
               )}
             </>
           ) : (

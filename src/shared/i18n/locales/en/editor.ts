@@ -691,4 +691,55 @@ export const editor = {
     actionOffline: 'You’re offline. Try again once you’re back online.',
     actionFailed: 'That didn’t go through. Try again.',
   },
+  // The score's Settings (round 28, Flat's score settings): its credits, instruments, music, layout
+  // and how the editor writes.
+  scoreSettings: {
+    title: 'Score settings',
+    open: 'Settings…',
+    score: 'Score',
+    names: {
+      title: 'Title',
+      subtitle: 'Subtitle',
+      composer: 'Composer',
+      lyricist: 'Lyricist',
+      arranger: 'Arranger',
+    },
+    add: 'Add',
+    namesInfo:
+      'Printed under the title, as a printed score has them: the subtitle in the middle, the lyricist on the left, the composer and the arranger on the right.',
+    instruments: 'Instruments',
+    instrumentsInfo:
+      'Each instrument is a staff. Taking one away takes its notes with it; Undo in the editor brings them back. Rename a staff by tapping its name on the score.',
+    families: { other: 'Other' },
+    staff: 'Staff',
+    music: 'Music',
+    tempo: 'Tempo',
+    tempoValue: '{{tempo}} a minute',
+    key: 'Key signature',
+    time: 'Time signature',
+    timeOther: '{{meter}}',
+    bars: 'Bars',
+    barsInfo: 'Bars are added or taken away at the end of the song.',
+    layout: 'Layout',
+    staffSize: 'Staff size',
+    staffSizes: {
+      '75': 'Smallest',
+      '90': 'Small',
+      '100': 'Normal',
+      '115': 'Large',
+      '130': 'Largest',
+    },
+    staffSizeInfo:
+      'How large the staves are drawn, in the Player and the editor. On a phone on its side the staves still fit the screen.',
+    barsPerLine: 'Bars per line',
+    asWritten: 'As written',
+    barsPerLineInfo:
+      'The most bars a line holds. A line holds fewer where they don’t fit the width.',
+    editing: 'Editing',
+    hearNotes: 'Hear notes as you edit',
+    hearNotesInfo:
+      'A note sounds when you tap it on the score or move its pitch. Keys you play sound anyway.',
+    midi: 'MIDI keyboard',
+    keyboard: 'Keyboard and recording',
+  },
 } as const

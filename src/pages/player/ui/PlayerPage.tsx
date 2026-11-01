@@ -1,5 +1,5 @@
-import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { Info, ListTree } from 'lucide-react'
+import { Link, useNavigate, useParams, useSearch } from '@tanstack/react-router'
+import { Info, ListTree, Settings2 } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -35,7 +35,8 @@ import { SongInfo } from './SongInfo'
 import { TransposeTool } from './TransposeTool'
 
 function PiecePlayer({ piece }: { piece: Piece }) {
-  const { t } = useTranslation(['player', 'piece', 'songs'])
+  const { t } = useTranslation(['player', 'piece', 'songs', 'editor'])
+  const navigate = useNavigate()
   const locale = useLocale()
   const search = useSearch({ from: '/full-screen/play/$pieceId' })
   const close = useClose(piece)
@@ -93,6 +94,14 @@ function PiecePlayer({ piece }: { piece: Piece }) {
       onSelect: () => setShowing('sections'),
       disabled: starts.length < 2,
       reason: t(`player:sections.one.${piece.kind}`),
+    },
+    // The score's Settings (round 28): every piece is edited, so every piece has them.
+    {
+      key: 'settings',
+      label: t('editor:scoreSettings.open'),
+      icon: Settings2,
+      onSelect: () =>
+        void navigate({ to: '/edit/$pieceId/settings', params: { pieceId: piece.id } }),
     },
   ]
   // Its link, a way out in Export… as on its page (ADR 0107).

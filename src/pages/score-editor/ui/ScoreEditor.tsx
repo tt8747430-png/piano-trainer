@@ -1,3 +1,4 @@
+import { Outlet, useChildMatches } from '@tanstack/react-router'
 import { PanelLeftOpen } from 'lucide-react'
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +21,7 @@ import {
 } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
 import { PlayerArea, SCORE_SCREEN, ScoreBar } from '@/widgets/practice-player'
-import { ScoreEditorContext } from '../model/editor-context'
+import { ScoreEditorContext, useScoreEditorContext } from '../model/editor-context'
 import type { EditorTarget } from '../model/editor-target'
 import { useEditorShortcutList } from '../model/use-editor-shortcut-list'
 import { usePalettePanel } from '../model/use-palette-panel'
@@ -76,8 +77,21 @@ export function ScoreEditor({
   /** Done in its own place (a lesson's example's, back to its lesson). */
   done?: ReactNode
 }) {
-  const { t } = useTranslation('editor')
   const editor = useScoreEditor(target, bar)
+  // The score's Settings (`/edit/$pieceId/settings`, round 28) in the editor's place, on the same
+  // draft: what it changes is undone in the editor as any edit.
+  const inSettings = useChildMatches().length > 0
+  return (
+    <ScoreEditorContext value={editor}>
+      {inSettings ? <Outlet /> : <EditorScreen draft={draft} done={done} />}
+    </ScoreEditorContext>
+  )
+}
+
+/** The editor's screen over its context's draft (`ScoreEditor`). */
+function EditorScreen({ draft, done }: { draft?: ReactNode; done?: ReactNode }) {
+  const { t } = useTranslation('editor')
+  const editor = useScoreEditorContext()
   useEditorShortcutList()
   const onSide = useMediaQuery(LANDSCAPE_PHONE)
   const panel = usePalettePanel()
@@ -157,7 +171,7 @@ export function ScoreEditor({
       </div>
     )
   return (
-    <ScoreEditorContext value={editor}>
+    <>
       {/* The Player's frame (ADR 0115): its bar's two groups, its tools row, the work and the keys
           in the Player's places, so the bar and the keys stand still as Practise · Edit switches. */}
       <div data-keys={dock} className={SCORE_SCREEN}>
@@ -259,7 +273,7 @@ export function ScoreEditor({
         <OpenField anchor={typing ? docked : anchor} />
       </FieldDocked>
       <TakesSheet />
-    </ScoreEditorContext>
+    </>
   )
 }
 

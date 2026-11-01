@@ -1,4 +1,5 @@
-import { Redo2, Undo2, X } from 'lucide-react'
+import { useNavigate } from '@tanstack/react-router'
+import { Redo2, Settings2, Undo2, X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
@@ -69,8 +70,36 @@ export function EditorActions({
       >
         <Redo2 aria-hidden />
       </Button>
+      {meta.kind === 'example' ? null : <SettingsButton id={meta.id} disabled={recording} />}
       {draft}
       {done ?? <ScoreEditToggle pieceId={meta.id} editing bar={bar} disabled={recording} />}
     </>
+  )
+}
+
+/**
+ * The score's Settings (round 28), the bar's gear as a song page's: its credits, instruments, tempo,
+ * key, time, bars, layout and how the editor writes, a page in the editor's place.
+ */
+function SettingsButton({ id, disabled }: { id: string; disabled: boolean }) {
+  const { t } = useTranslation('editor')
+  const navigate = useNavigate()
+  return (
+    <Button
+      variant="tool"
+      size="icon"
+      aria-label={t('scoreSettings.title')}
+      title={t('scoreSettings.title')}
+      disabled={disabled}
+      onClick={() =>
+        void navigate({
+          to: '/edit/$pieceId/settings',
+          params: { pieceId: id },
+          search: (prev) => prev,
+        })
+      }
+    >
+      <Settings2 aria-hidden />
+    </Button>
   )
 }
