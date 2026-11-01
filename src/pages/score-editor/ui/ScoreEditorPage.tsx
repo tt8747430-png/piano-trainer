@@ -6,12 +6,19 @@ import {
   entryTitles,
   isDegreePiece,
   isPiece,
+  musicOf,
   selectOwnSong,
   usePieces,
   usePiecesStoreApi,
   type ChartPiece,
 } from '@/entities/piece'
-import { DraftActions, DraftStatus, useMadeSong, useOriginalDraft } from '@/features/edit-original'
+import {
+  DraftActions,
+  DraftStatus,
+  draftWithMusic,
+  useMadeSong,
+  useOriginalDraft,
+} from '@/features/edit-original'
 import { useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, NotFound } from '@/shared/ui'
@@ -47,10 +54,12 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
   const { bar } = useSearch({ from: '/full-screen/edit/$pieceId' })
   const draft = useOriginalDraft(piece)
   const { load, save } = draft
-  const target = useMemo(
-    () => (load.state === 'ready' ? originalTarget(piece, load.value, save) : null),
-    [load, piece, save],
-  )
+  // The score writes the draft's music; the rest of the song (what its page says) stays the draft's.
+  const target = useMemo(() => {
+    if (load.state !== 'ready') return null
+    const opened = load.value
+    return originalTarget(piece, musicOf(opened), (music) => save(draftWithMusic(opened, music)))
+  }, [load, piece, save])
   if (load.state === 'loading') return <NotOpen line={t('original.opening')} />
   if (load.state === 'failed' || !target)
     return (

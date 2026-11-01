@@ -16,4 +16,5 @@ export {
 } from './make-song'
 export { resetVersion } from './reset-version'
 export { saveMusic, type MusicTarget } from './save-music'
+export { setSongFacts } from './set-song-facts'
 export { useCreateBuiltInSong, type BuiltInSongDraft } from './create-built-in-song'
