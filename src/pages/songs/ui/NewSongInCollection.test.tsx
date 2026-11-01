@@ -13,21 +13,27 @@ async function signedInAs(role: AccountRole) {
   return auth
 }
 
-async function openMore(user: ReturnType<typeof userEvent.setup>) {
-  await user.click(await screen.findByRole('button', { name: 'More for Hymns' }))
+/** The +, then its New song: the one way to a new song, in any folder. */
+async function newSong(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(await screen.findByRole('button', { name: 'New' }))
+  await user.click(await screen.findByRole('button', { name: /^New song/ }))
+  return screen.findByRole('dialog', { name: 'New song' })
 }
 
-describe('a new built-in song (content as data)', () => {
-  it('is made in a collection’s folder, unpublished, and opens in the original’s editor', async () => {
+describe('a new song in a collection’s folder (content as data, round 26: one New song)', () => {
+  it('is an editor’s, made in the collection, unpublished, and opens in the original’s editor', async () => {
     const user = userEvent.setup()
     const content = createFakeContentEditing()
     const { router, piecesStore } = await renderApp('/songs/folders/hymns', {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await openMore(user)
-    await user.click(await screen.findByRole('menuitem', { name: 'New built-in song' }))
-    const sheet = await screen.findByRole('dialog', { name: 'New built-in song' })
+    const sheet = await newSong(user)
+    expect(
+      within(sheet).getByText(
+        'It goes into this collection for everyone, unpublished until you publish it.',
+      ),
+    ).toBeInTheDocument()
     await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), 'Abide with me')
     await user.click(within(sheet).getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/abide-with-me'))
@@ -46,11 +52,18 @@ describe('a new built-in song (content as data)', () => {
     ).toBeInTheDocument()
   })
 
-  it('is not offered to a learner, nor in a folder of the learner’s own', async () => {
+  it('is a learner’s own song, in their library', async () => {
     const user = userEvent.setup()
-    await renderApp('/songs/folders/hymns', { auth: await signedInAs('learner') })
-    await openMore(user)
-    await screen.findByRole('menuitem', { name: 'New song here' })
-    expect(screen.queryByRole('button', { name: 'New built-in song' })).not.toBeInTheDocument()
+    const { router, piecesStore } = await renderApp('/songs/folders/hymns', {
+      auth: await signedInAs('learner'),
+    })
+    const sheet = await newSong(user)
+    expect(
+      within(sheet).getByText('Everything here can be changed on the score later.'),
+    ).toBeInTheDocument()
+    await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), 'Abide with me')
+    await user.click(within(sheet).getByRole('button', { name: 'Create song' }))
+    await waitFor(() => expect(router.state.location.pathname).toMatch(/^\/edit\/my-/))
+    expect(piecesStore.getState().songs.map((song) => song.title)).toEqual(['Abide with me'])
   })
 })

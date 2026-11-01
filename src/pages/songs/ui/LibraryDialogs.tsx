@@ -2,12 +2,13 @@ import { useRouter } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ShelvedFolder } from '@/entities/library'
-import { entryTitles, useRepertoire } from '@/entities/piece'
+import { entryTitles, isSongCollectionId, useRepertoire } from '@/entities/piece'
 import { selectView } from '@/entities/views'
 import { DeleteFolderAsk, FolderSheet, MoveSheet } from '@/features/manage-library'
 import { songToShare, useShareSong } from '@/features/share-song'
 import { ExportSheet, SongExportSheet, useSongFiles } from '@/features/song-files'
 import { useLocale } from '@/shared/i18n'
+import { editsContent, useAccount } from '@/shared/lib/account'
 import { say } from '@/shared/ui'
 import type { LibraryPage } from '../model/use-library-page'
 import { DeleteAsk } from './DeleteAsk'
@@ -65,6 +66,10 @@ export function LibraryDialogs({
     musicXml: () => chosen.forEach((files) => files.musicXml()),
     midi: () => chosen.forEach((files) => files.midi()),
   }
+  // One New song (round 26): in a collection's folder, an editor's is the collection's, for everyone.
+  const { account } = useAccount()
+  const collection =
+    folder && editsContent(account) && isSongCollectionId(folder.id) ? folder.id : undefined
   const shut = (open: boolean) => {
     if (!open) page.close()
   }
@@ -97,7 +102,7 @@ export function LibraryDialogs({
         open={pending?.kind === 'new-song'}
         onOpenChange={shut}
         folder={folder?.id ?? null}
-        builtIn={pending?.kind === 'new-song' ? pending.builtIn : undefined}
+        builtIn={collection}
         record={pending?.kind === 'new-song' && pending.record === true}
       />
       <ExportSheet

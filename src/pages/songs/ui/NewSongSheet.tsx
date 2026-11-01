@@ -125,12 +125,12 @@ export function NewSongSheet({
     <NewSheet
       open={open}
       onOpenChange={onOpenChange}
-      title={t(builtIn ? 'making.builtInTitle' : record ? 'making.recordTitle' : 'making.title')}
+      title={t(record && !builtIn ? 'making.recordTitle' : 'making.title')}
       nameLabel={t('making.name')}
       name={title}
       onName={setTitle}
       maxLength={TITLE_MAX}
-      hint={t('making.later')}
+      hint={t(builtIn ? 'making.builtInHint' : 'making.later')}
       createLabel={t(record ? 'making.createAndRecord' : 'making.create')}
       creatingLabel={t('making.making')}
       creating={making}
