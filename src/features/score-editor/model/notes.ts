@@ -533,24 +533,30 @@ export function setFingers(
   })
 }
 
-/** The notes at `at` joined to the same keys' notes starting where they end: one note, tied as written. */
-export function tieNotes(draft: Draft, layer: NoteLayer, at: Tick): Draft {
-  const notes = notesOf(draft, layer)
-  const joined = new Set<DraftNote>()
-  const tied = notes.map((n) => {
-    if (n.startTick !== at) return n
+/**
+ * The notes starting in `span` (the notes chosen, else the caret's: `at` to `at` + 1) each joined to
+ * the same key's note starting where it ends: one note, tied as written (ADR 0114, every tool acts on
+ * what is chosen). A run of the same key chosen whole becomes one note.
+ */
+export function tieNotes(draft: Draft, layer: NoteLayer, span: Tick | TickSpan): Draft {
+  const { from, to } = typeof span === 'number' ? { from: span, to: span + 1 } : span
+  let notes = [...notesOf(draft, layer)]
+  // The last first, so a note joined already carries what it was joined to.
+  const tying = notes
+    .filter((n) => n.startTick >= from && n.startTick < to)
+    .sort((a, b) => b.startTick - a.startTick)
+  let changed = false
+  for (const n of tying) {
+    const at = notes.indexOf(n)
+    const now = notes[at]
+    if (!now) continue
     const next = notes.find(
-      (m) => m.midi === n.midi && m.startTick === n.startTick + n.durationTicks,
+      (m) => m.midi === now.midi && m.startTick === now.startTick + now.durationTicks,
     )
-    if (!next) return n
-    joined.add(next)
-    return { ...n, durationTicks: n.durationTicks + next.durationTicks }
-  })
-  return joined.size === 0
-    ? draft
-    : withNotes(
-        draft,
-        layer,
-        tied.filter((n) => !joined.has(n)),
-      )
+    if (!next) continue
+    changed = true
+    notes[at] = { ...now, durationTicks: now.durationTicks + next.durationTicks }
+    notes = notes.filter((m) => m !== next)
+  }
+  return changed ? withNotes(draft, layer, notes) : draft
 }

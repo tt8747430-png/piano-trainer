@@ -868,6 +868,17 @@
   @variant max-sm {
     column-gap: --spacing(1);
   }
+  /* A 320px phone (round 28): the editor's six (MIDI, Undo, Redo, Settings, Done) and Close fit in a
+     row with their gaps closed and each button a little narrower, still 40px to touch. */
+  @media (width < 360px) {
+    & > [data-area='actions'] {
+      gap: 0;
+    }
+    & > [data-area] > [data-slot='button'] {
+      min-width: 2.5rem;
+      width: 2.5rem;
+    }
+  }
   @variant md {
     grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas: 'lead tools actions';

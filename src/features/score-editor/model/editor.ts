@@ -377,7 +377,11 @@ function reduced(state: EditorState, action: EditorAction): EditorState {
     case 'tie':
       return layer === 'chords'
         ? state
-        : commit(state, tieNotes(draft, layer, caret), { struck: null })
+        : commit(
+            state,
+            tieNotes(draft, layer, state.selection ? selectionSpan(state.selection) : caret),
+            { struck: null },
+          )
     // The words go under the staff they are written on alone (ADR 0097).
     case 'syllable':
       return singsHere(draft, layer)
