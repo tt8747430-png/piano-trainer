@@ -68,3 +68,4 @@ own Play melody switch: it plays the tune under a take, not the Player's melody.
   the selection) (2026-10-30).
 - r26 — Practise · Edit is no longer a pop-up: the Player's pencil at the bar's end opens the editor, the editor's Done in the same place returns; Edit the original is the Player's More's, an editor's (2026-11-01).
 - r26 — One Sound in both modes: the editor's transport ends with the Player's Sound (its icon, name and place), a take's Metronome and Play melody over each part's volume; the click is called Metronome in both; the tools row's room over the score fits the capsule (2026-11-01).
+- r27 — The tools capsule floats centred over the music on a phone held upright, never pinned left; from a tablet up (48rem) the tools sit in the bar's row, so the editor's note toolbar has the music's head to itself (2026-11-01).

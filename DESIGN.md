@@ -524,7 +524,7 @@ where it says it faster. A setting is never hidden behind a pop-up when it fits 
   destructive ink, `destructive`), never a button in a card under an ⓘ heading; what it does is told in its dialog.
 - **Three layers on the score's screens** (the Player, the editor): the bar, flat, for where the learner is and
   what screen-wide (Close, the mode, MIDI, Undo · Redo or Setup · More); the tools of what is shown (View,
-  Transpose) a floating capsule under it on a phone held upright and a tablet, in the bar's row where it is one
+  Transpose) a floating capsule centred under it on a phone held upright, in the bar's row where it is one
   row; what acts on the notes chosen (Delete, Copy, Cut, Paste) a capsule over the transport, there only while
   something is chosen. Floating parts take no room: the music scrolls under them.
 - **Modes are a pop-up** (`Dropdown`, its face the mode's icon and name): Practise · Edit · Edit the original in

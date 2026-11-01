@@ -741,7 +741,7 @@
   /* The music's scroll room under the tools floating at its head on a phone held upright and a tablet
      (the score bar's capsule): room to scroll from, never a row kept empty. */
   --tools-room: 4.25rem;
-  @variant lg {
+  @variant md {
     --tools-room: 0px;
   }
   @variant landscape-phone {
@@ -845,13 +845,17 @@
   & > [data-area='actions'] {
     grid-area: actions;
   }
-  /* Where the bar is one row too narrow for them (a phone held upright, a tablet), the tools float
-     under it as a capsule over the music, as the palette and the transport float (ADR 0115): they act
-     on what is shown, not on where the learner is, and take no room from the sheet. */
+  /* Where the bar is one row too narrow for them (a phone held upright), the tools float under it as
+     a capsule over the music, in its middle as the transport floats in the middle of its foot (ADR
+     0115, round 27): they act on what is shown, not on where the learner is, and take no room from
+     the sheet. From a tablet up they sit in the bar, so the editor's note toolbar has the music's
+     head to itself. */
   & > [data-area='tools'] {
     position: absolute;
     top: calc(100% + --spacing(2));
-    left: 0;
+    /* In the middle of the music, as the transport floats at its foot (round 27): never pinned left. */
+    left: 50%;
+    translate: -50% 0;
     z-index: 20;
     width: fit-content;
     max-width: 100%;
@@ -864,12 +868,13 @@
   @variant max-sm {
     column-gap: --spacing(1);
   }
-  @variant lg {
+  @variant md {
     grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas: 'lead tools actions';
     column-gap: --spacing(3);
     & > [data-area='tools'] {
       position: static;
+      translate: none;
       grid-area: tools;
       width: auto;
       padding: 0;
@@ -887,6 +892,7 @@
     }
     & > [data-area='tools'] {
       position: static;
+      translate: none;
       grid-area: 1 / 2;
       width: auto;
       padding: 0;
