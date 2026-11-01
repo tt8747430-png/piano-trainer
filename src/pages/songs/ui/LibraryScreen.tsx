@@ -53,7 +53,6 @@ export function LibraryScreen({
             icon={Globe}
             paint="sky"
             title={t('public.title')}
-            detail={t('public.line')}
           />
         </div>
       )}

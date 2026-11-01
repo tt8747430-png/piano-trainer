@@ -53,7 +53,6 @@ export function KeyHarmonise({
         <h3 id={id} className="text-2xl">
           {t('scales.key.harmonise')}
         </h3>
-        <p className="max-w-prose text-muted-foreground">{t('scales.key.harmoniseAbout')}</p>
       </div>
       <div className="grid-fields gap-x-10 gap-y-5">
         <NoteChoice

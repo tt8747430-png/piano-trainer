@@ -1,7 +1,6 @@
 /** The Admin area: accounts, groups, feature switches, the Public library's reports, the activity log. */
 export const admin = {
   title: 'Admin',
-  line: 'Accounts, groups, feature switches and reports',
   components: {
     actions: 'Actions',
     primary: 'Practise',

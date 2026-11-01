@@ -42,7 +42,6 @@ export function NewProgressionSheet({
       nameLabel={t('progressions.edit.name')}
       name={name}
       onName={setName}
-      hint={t('progressions.edit.newInfo')}
       createLabel={t('progressions.edit.create')}
       creatingLabel={t('progressions.edit.creating')}
       creating={creating}

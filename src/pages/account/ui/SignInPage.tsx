@@ -33,7 +33,6 @@ export function SignInPage() {
   })
   return (
     <AccountScreen title={t('signIn.title')}>
-      <p className="text-muted-foreground">{t('why')}</p>
       <OfflineLine online={online} />
       <SocialButtons online={online} onProblem={setProblem} />
       <form noValidate onSubmit={(event) => void submit(event)} className="flex flex-col gap-4">

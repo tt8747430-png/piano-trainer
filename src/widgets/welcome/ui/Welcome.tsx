@@ -44,7 +44,6 @@ export function Welcome({ shown }: { shown: boolean }) {
           options={LOCALES.map((value) => ({ value, label: t(`settings:language.${value}`) }))}
           onChange={(value) => setLocale(settings, value)}
         />
-        <p className="text-sm text-muted-foreground">{t('welcome.account')}</p>
         <AlertDialogFooter>
           <Button variant="outline" onClick={signIn}>
             {t('welcome.signIn')}

@@ -211,12 +211,6 @@ export const songs = {
   newSong: 'New song',
   recordSong: 'Record',
   // The New dial's lines, what each way of adding does.
-  adds: {
-    record: 'Play it; we write the notes',
-    song: 'Write it on the staff',
-    folder: 'Keep songs together',
-    import: 'A MusicXML or MIDI file',
-  },
   making: {
     title: 'New song',
     recordTitle: 'Record a song',
@@ -269,7 +263,6 @@ export const songs = {
   public: {
     publishIn: 'Publish in library',
     title: 'Public library',
-    line: 'Browse songs and patterns others shared',
     kinds: { label: 'Songs or patterns', song: 'Songs', pattern: 'Patterns' },
     seeAll: 'See all',
     sort: { label: 'Sort', new: 'Newest', saved: 'Most saved' },
@@ -364,15 +357,9 @@ export const songs = {
     action: 'Export…',
     title: 'Export',
     musicXml: 'MusicXML',
-    musicXmlLine: 'The score, for MuseScore, Sibelius, Finale or Dorico',
     midi: 'MIDI',
-    midiLine: 'The music as played, for a DAW or a keyboard',
-    midiFixedLine: 'The music at a steady tempo, for a DAW or a keyboard',
     midiAligned: 'MIDI, time aligned',
-    midiAlignedLine: 'The notes timed to the recording, from where its first bar begins',
     share: 'Share link',
-    shareOwn: 'A link that carries the song: whoever opens it can add it',
-    sharePiece: 'A link to the song in the app, in the key you play it',
   },
   // A song read from a MusicXML or MIDI file (ADR 0107): New's Import, or a file dropped on the
   // library; what the file holds that a song can't, listed after.

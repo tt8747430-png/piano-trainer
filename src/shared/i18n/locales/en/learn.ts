@@ -272,7 +272,6 @@ export const learn = {
       lessonList: 'Lessons',
       noLessons: 'No lessons yet. Add the first one below.',
       new: 'New course',
-      newInfo: 'Made unpublished: write its lessons, then publish it.',
       name: 'Name',
       create: 'Create course',
       creating: 'Creating…',

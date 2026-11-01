@@ -59,7 +59,6 @@ export const settings = {
   },
   account: {
     signIn: 'Sign in',
-    signInLine: 'Keep your songs and progress on every device',
     label: 'Account',
   },
   sync: {

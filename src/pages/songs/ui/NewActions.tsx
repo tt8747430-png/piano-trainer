@@ -24,27 +24,19 @@ export function NewActions({
     <FloatingActions>
       <SpeedDial label={t('new')} icon={Plus} main>
         {/* The nearest last: a song is what is added most. */}
-        <SpeedDialAction
-          label={t('import.action')}
-          detail={t('adds.import')}
-          icon={FileUp}
-          onClick={onImport}
-        />
+        <SpeedDialAction label={t('import.action')} icon={FileUp} onClick={onImport} />
         <SpeedDialAction
           label={t('folder.new')}
-          detail={t('adds.folder')}
           icon={FolderPlus}
           onClick={() => page.open({ kind: 'folder', target: { kind: 'new', parent: folder } })}
         />
         <SpeedDialAction
           label={t('recordSong')}
-          detail={t('adds.record')}
           icon={Mic}
           onClick={() => page.open({ kind: 'new-song', record: true })}
         />
         <SpeedDialAction
           label={t('newSong')}
-          detail={t('adds.song')}
           icon={Music}
           onClick={() => page.open({ kind: 'new-song' })}
         />

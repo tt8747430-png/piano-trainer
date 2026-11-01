@@ -199,12 +199,6 @@ export const songs: LocaleResources['songs'] = {
   new: 'Создать',
   newSong: 'Новая песня',
   recordSong: 'Записать',
-  adds: {
-    record: 'Сыграйте: ноты запишутся',
-    song: 'Записать на нотном стане',
-    folder: 'Собрать песни вместе',
-    import: 'Файл MusicXML или MIDI',
-  },
   making: {
     title: 'Новая песня',
     recordTitle: 'Записать песню',
@@ -259,7 +253,6 @@ export const songs: LocaleResources['songs'] = {
   public: {
     publishIn: 'Опубликовать в библиотеке',
     title: 'Общая библиотека',
-    line: 'Песни и рисунки, которыми делятся другие',
     kinds: { label: 'Песни или рисунки', song: 'Песни', pattern: 'Рисунки' },
     seeAll: 'Все',
     sort: { label: 'Сортировка', new: 'Новые', saved: 'Популярные' },
@@ -359,15 +352,9 @@ export const songs: LocaleResources['songs'] = {
     action: 'Экспорт…',
     title: 'Экспорт',
     musicXml: 'MusicXML',
-    musicXmlLine: 'Ноты для MuseScore, Sibelius, Finale или Dorico',
     midi: 'MIDI',
-    midiLine: 'Музыка, как она звучит, для DAW или клавиш',
-    midiFixedLine: 'Музыка в ровном темпе, для DAW или клавиш',
     midiAligned: 'MIDI по записи',
-    midiAlignedLine: 'Ноты во времени записи, с начала её первого такта',
     share: 'Ссылка',
-    shareOwn: 'Ссылка с песней внутри: кто её откроет, сможет добавить песню себе',
-    sharePiece: 'Ссылка на песню в приложении, в той тональности, в которой вы играете',
   },
   import: {
     action: 'Импорт',

@@ -132,7 +132,6 @@ function SongSettings({ piece }: { piece: Piece }) {
         <SettingsGroup flush title={t('settings.music')}>
           <RowLink
             title={t('settings.editScore')}
-            detail={t('settings.editScoreLine')}
             icon={PencilLine}
             paint="sky"
             render={<Link to="/edit/$pieceId" params={{ pieceId: piece.id }} />}
@@ -176,13 +175,7 @@ function SongSettings({ piece }: { piece: Piece }) {
             onClick={() => setExporting(true)}
           />
           {shareable ? (
-            <RowButton
-              title={t('settings.shareLink')}
-              detail={t(own ? 'songs:export.shareOwn' : 'songs:export.sharePiece')}
-              icon={Link2}
-              paint="grass"
-              onClick={share}
-            />
+            <RowButton title={t('settings.shareLink')} icon={Link2} paint="grass" onClick={share} />
           ) : null}
           {item ? (
             <RowLink
@@ -222,7 +215,6 @@ function SongSettings({ piece }: { piece: Piece }) {
         share={
           shareable
             ? {
-                detail: t(own ? 'songs:export.shareOwn' : 'songs:export.sharePiece'),
                 onSelect: share,
               }
             : undefined
@@ -246,7 +238,6 @@ function OriginalRows({ piece, title }: { piece: ChartPiece; title: string }) {
     <SettingsGroup flush title={t('settings.original')}>
       <RowLink
         title={t('settings.editOriginal')}
-        detail={t('settings.originalLine')}
         icon={BookLock}
         paint="lilac"
         render={

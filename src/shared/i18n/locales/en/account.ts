@@ -8,7 +8,6 @@ export const account = {
   apple: 'Continue with Apple',
   soon: 'Coming soon',
   offline: 'You’re offline. Signing in needs a connection.',
-  why: 'An account keeps your songs, progress and settings on every device you sign in on. The app works fully without one.',
   // The Profile: who is signed in, and what they have done.
   profile: {
     achievements: {
@@ -28,12 +27,10 @@ export const account = {
     },
     title: 'Profile',
     guest: 'Playing without an account',
-    guestLine: 'Sign in to keep your songs and progress on every device.',
     signIn: 'Sign in',
     figures: 'Your practice',
     streak: 'Days in a row',
     activity: 'Activity',
-    activityLine: 'Your run of days and this month’s calendar',
     month: 'This month',
     record: 'Your record',
     recordEmpty: 'Nothing here yet. Finish a lesson or play a song, and your record starts.',
@@ -50,7 +47,6 @@ export const account = {
     title: 'Welcome to Piano Trainer',
     says: 'Learn songs, chords and scales at the piano, at your own pace.',
     language: 'Language',
-    account: 'An account is optional: it keeps your songs and progress on every device.',
     start: 'Start playing',
     signIn: 'Sign in',
   },

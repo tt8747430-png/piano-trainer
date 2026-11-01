@@ -172,7 +172,6 @@ export function SettingsPage() {
           <SettingsGroup flush>
             <RowLink
               title={t('admin:title')}
-              detail={t('admin:line')}
               icon={ShieldUser}
               paint="lilac"
               render={<Link to="/admin" />}
@@ -204,7 +203,6 @@ function AccountCard() {
       ) : (
         <RowLink
           title={t('account.signIn')}
-          detail={t('account.signInLine')}
           mark={<Avatar name={null} size="row" />}
           render={<Link to="/account/sign-in" />}
         />

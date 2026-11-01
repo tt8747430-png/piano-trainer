@@ -44,7 +44,6 @@ export function NewCourseSheet({
       nameLabel={t('learn:edit.course.name')}
       name={name}
       onName={setName}
-      hint={t('learn:edit.course.newInfo')}
       createLabel={t('learn:edit.course.create')}
       creatingLabel={t('learn:edit.course.creating')}
       creating={creating}

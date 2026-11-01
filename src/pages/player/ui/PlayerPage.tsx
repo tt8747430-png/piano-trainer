@@ -98,7 +98,6 @@ function PiecePlayer({ piece }: { piece: Piece }) {
   // Its link, a way out in Export… as on its page (ADR 0107).
   const share = sharing
     ? {
-        detail: t(sharing.kind === 'own' ? 'songs:export.shareOwn' : 'songs:export.sharePiece'),
         onSelect: () => shared.share(sharing),
       }
     : undefined

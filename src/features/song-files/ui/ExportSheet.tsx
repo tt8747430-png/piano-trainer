@@ -6,8 +6,8 @@ import { useLocale } from '@/shared/i18n'
 import { RowButton, Sheet, SheetContent, type Paint } from '@/shared/ui'
 import { useSongExport } from './use-song-export'
 
-/** What the screen shares, as its own Share does it, and what the row says of it. */
-export type ExportShare = { readonly detail: string; readonly onSelect: () => void }
+/** What the screen shares, as its own Share does it. */
+export type ExportShare = { readonly onSelect: () => void }
 
 /**
  * The ways out of a piece of music: its score as MusicXML (a piece's alone), its music as played as
@@ -23,7 +23,6 @@ export type ExportFiles = {
 type Row = {
   key: string
   title: string
-  detail: string
   icon: LucideIcon
   paint: Paint
   onSelect: () => void
@@ -32,7 +31,7 @@ type Row = {
 /**
  * Export… (ADR 0107), one sheet of the music's ways out, as every screen opens it (a song's page, its
  * library row, the Player's and the editor's More; Noji's Export deck, MuseScore's Export): each a
- * row with a line of what it is for. A row chosen does its work and closes the sheet. `subject`, the
+ * row named for its file. A row chosen does its work and closes the sheet. `subject`, the
  * name under the title, null while it is shut.
  */
 export function ExportSheet({
@@ -51,7 +50,6 @@ export function ExportSheet({
           {
             key: 'musicXml',
             title: t('export.musicXml'),
-            detail: t('export.musicXmlLine'),
             icon: FileCode,
             paint: 'sky' as const,
             onSelect: files.musicXml,
@@ -61,7 +59,6 @@ export function ExportSheet({
     {
       key: 'midi',
       title: t('export.midi'),
-      detail: t(files.midiAligned ? 'export.midiFixedLine' : 'export.midiLine'),
       icon: FileMusic,
       paint: 'lilac',
       onSelect: files.midi,
@@ -71,7 +68,6 @@ export function ExportSheet({
           {
             key: 'midiAligned',
             title: t('export.midiAligned'),
-            detail: t('export.midiAlignedLine'),
             icon: FileMusic,
             paint: 'lilac' as const,
             onSelect: files.midiAligned,
@@ -83,7 +79,6 @@ export function ExportSheet({
           {
             key: 'share',
             title: t('export.share'),
-            detail: files.share.detail,
             icon: Link2,
             paint: 'grass' as const,
             onSelect: files.share.onSelect,
@@ -100,7 +95,6 @@ export function ExportSheet({
               <li key={row.key}>
                 <RowButton
                   title={row.title}
-                  detail={row.detail}
                   icon={row.icon}
                   paint={row.paint}
                   onClick={() => {

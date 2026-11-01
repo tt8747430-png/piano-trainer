@@ -45,7 +45,6 @@ export function PublicLibraryPage() {
         large
         back={<BackButton fallback={{ to: '/songs' }} />}
       />
-      <p className="-mt-2 text-pretty text-muted-foreground">{t('public.line')}</p>
       <div className="flex flex-col gap-3 lg:max-w-2xl">
         <SearchField
           value={view.q}

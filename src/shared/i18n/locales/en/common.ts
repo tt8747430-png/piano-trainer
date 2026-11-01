@@ -216,7 +216,6 @@ export const common = {
       label: 'Connected devices',
       info: 'With more than one connected, the app hears only the one chosen',
       any: 'Any keyboard',
-      anyDetail: 'Every keyboard connected is heard',
       none: 'No MIDI devices connected',
       inputOff: 'Turn on MIDI input to see your devices',
       away: 'Not connected',

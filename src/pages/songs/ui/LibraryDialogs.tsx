@@ -116,7 +116,6 @@ export function LibraryDialogs({
         share={
           toShare
             ? {
-                detail: t(toShare.kind === 'own' ? 'export.shareOwn' : 'export.sharePiece'),
                 onSelect: () => shared.share(toShare),
               }
             : undefined

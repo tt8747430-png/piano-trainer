@@ -259,7 +259,6 @@ export const learn: LocaleResources['learn'] = {
       lessonList: 'Уроки',
       noLessons: 'Уроков пока нет. Добавьте первый ниже.',
       new: 'Новый курс',
-      newInfo: 'Создаётся неопубликованным: напишите уроки, затем опубликуйте.',
       name: 'Название',
       create: 'Создать курс',
       creating: 'Создаём…',

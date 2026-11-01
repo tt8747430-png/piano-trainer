@@ -2,7 +2,6 @@ import type { LocaleResources } from '../../types'
 
 export const admin: LocaleResources['admin'] = {
   title: 'Администрирование',
-  line: 'Аккаунты, группы, переключатели функций и жалобы',
   components: {
     actions: 'Действия',
     primary: 'Играть',

@@ -131,7 +131,6 @@ export const player: LocaleResources['player'] = {
   playing: 'Как звучит',
   allPatterns: 'Все фактуры',
   ownPattern: 'Своя фактура',
-  ownPatternDetail: 'Левая и правая рука на ваш выбор',
   inversion: { own: 'Эта фактура играет свои фигуры.' },
   keyWalk: {
     label: 'По тональностям',

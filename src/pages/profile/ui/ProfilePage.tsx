@@ -55,7 +55,6 @@ export function ProfilePage() {
         <SettingsGroup flush>
           <RowLink
             title={t('profile.activity')}
-            detail={t('profile.activityLine')}
             icon={CalendarDays}
             paint="grass"
             render={<Link to="/profile/activity" />}
@@ -85,7 +84,6 @@ function Hero() {
         <div className="flex max-w-sm flex-col items-center gap-3">
           <div className="flex flex-col gap-0.5">
             <p className="font-display text-xl font-semibold text-balance">{t('profile.guest')}</p>
-            <p className="text-pretty text-muted-foreground">{t('profile.guestLine')}</p>
           </div>
           <ButtonLink render={<Link to="/account/sign-in" />}>{t('profile.signIn')}</ButtonLink>
         </div>

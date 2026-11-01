@@ -56,7 +56,6 @@ export const settings: LocaleResources['settings'] = {
   },
   account: {
     signIn: 'Войти',
-    signInLine: 'Ваши песни и прогресс на всех устройствах',
     label: 'Аккаунт',
   },
   sync: {
