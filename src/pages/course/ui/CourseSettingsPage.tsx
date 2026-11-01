@@ -3,12 +3,12 @@ import { Link2, Library } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { courseById, courseStepIds, type Course } from '@/entities/course'
 import { useCourseDraft } from '@/features/edit-original'
-import { DraftActions, DraftStatus } from '@/features/edit-original'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { localText, useLocale } from '@/shared/i18n'
 import { shareLink } from '@/shared/lib'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { BackButton, RowButton, RowLink, say, ScreenHeader, SettingsGroup } from '@/shared/ui'
+import { ChangesGroup } from '@/widgets/content-editor'
 
 /**
  * A course's Settings (`/courses/$courseId/settings`, round 28, as a song's): Share link, and apart
@@ -82,27 +82,7 @@ function EditorRows({ course, title }: { course: Course; title: string }) {
           render={<Link to="/courses/manage" />}
         />
       </SettingsGroup>
-      <SettingsGroup flush title={t('settings.publishing')}>
-        {draft.load.state === 'ready' ? (
-          <div className="flex min-h-16 items-center gap-3 py-2 pr-2 pl-2">
-            <span className="min-w-0 flex-1 pl-1 text-lg font-semibold">
-              {t('settings.changes')}
-            </span>
-            <DraftStatus draft={draft} />
-            <DraftActions
-              draft={draft}
-              title={title}
-              unreadable={t('edit.course.unreadable')}
-              onReset={draft.reopen}
-              publishInMenu
-            />
-          </div>
-        ) : (
-          <p className="flex min-h-16 items-center px-3 text-muted-foreground">
-            {draft.load.state === 'loading' ? t('settings.opening') : t('settings.offline')}
-          </p>
-        )}
-      </SettingsGroup>
+      <ChangesGroup draft={draft} title={title} unreadable={t('edit.course.unreadable')} />
     </>
   )
 }

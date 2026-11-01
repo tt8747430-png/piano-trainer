@@ -26,7 +26,7 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { courseLessonStepId, lessonStepId, type StepId } from '@/entities/step'
-import { DraftActions, DraftStatus, useLessonDraft } from '@/features/edit-original'
+import { useLessonDraft } from '@/features/edit-original'
 import { ResetStepsRow } from '@/features/reset-progress'
 import { setLessonReading } from '@/features/set-preference'
 import { localText, useLocale } from '@/shared/i18n'
@@ -38,12 +38,13 @@ import {
   Dropdown,
   MultiDropdown,
   RowButton,
-  RowFace,
   RowLink,
   say,
   ScreenHeader,
   SettingsGroup,
+  TileMark,
 } from '@/shared/ui'
+import { ChangesGroup } from '@/widgets/content-editor'
 
 /** Where a lesson stands: a level's chapter, or a course. */
 type Where =
@@ -197,8 +198,11 @@ function LessonSettings({
 /** A row that says a value, not a way on: its tile, its name, the value at its end. */
 function ValueRow({ title, value, icon }: { title: string; value: string; icon: LucideIcon }) {
   return (
-    <div className="flex min-h-16 min-w-0 items-center gap-3 py-2 pr-3 pl-2">
-      <RowFace title={title} value={value} icon={icon} paint="lilac" />
+    // Its name kept whole: a long value wraps under itself, at the row's end.
+    <div className="flex min-h-16 min-w-0 items-center gap-3 py-2 pr-4 pl-2">
+      <TileMark icon={icon} paint="lilac" />
+      <span className="shrink-0 text-lg font-semibold">{title}</span>
+      <span className="min-w-0 flex-1 text-right text-balance text-muted-foreground">{value}</span>
     </div>
   )
 }
@@ -284,27 +288,7 @@ function EditorRows({
           }
         />
       </SettingsGroup>
-      <SettingsGroup flush title={t('settings.publishing')}>
-        {draft.load.state === 'ready' ? (
-          <div className="flex min-h-16 items-center gap-3 py-2 pr-2 pl-2">
-            <span className="min-w-0 flex-1 pl-1 text-lg font-semibold">
-              {t('settings.changes')}
-            </span>
-            <DraftStatus draft={draft} />
-            <DraftActions
-              draft={draft}
-              title={title}
-              unreadable={t('edit.unreadable')}
-              onReset={draft.reopen}
-              publishInMenu
-            />
-          </div>
-        ) : (
-          <p className="flex min-h-16 items-center px-3 text-muted-foreground">
-            {draft.load.state === 'loading' ? t('settings.opening') : t('settings.offline')}
-          </p>
-        )}
-      </SettingsGroup>
+      <ChangesGroup draft={draft} title={title} unreadable={t('edit.unreadable')} />
     </>
   )
 }
