@@ -101,7 +101,7 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r6 — Content edited in the app: an editor's draft of an item (`content_drafts`), published by `publish_content`
   (the draft's body becomes the item's under the hash of its body, the version kept) or a kept version restored;
   the `ContentEditingPort` (`shared/api/content-editing`). A built-in song's original is edited in the score
-  editor (`/edit/$pieceId?original=true`, `features/edit-original`): it opens on the draft, else the song as
+  editor (`/edit/$pieceId`, an editor's Edit, round 28; `features/edit-original`): it opens on the draft, else the song as
   published now; each change is saved to the draft once the editor rests; Publish checks the music reads first.
   A lesson's every text is edited on its lesson editor (`/lessons/$lessonId/edit`, a course's under its course;
   `pages/lesson-editor`), English and Russian side by side; its examples stay as authored this round
@@ -201,3 +201,4 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   example (`exampleMusic` / `exampleBlock`), what an example cannot hold (a mark, notes struck together, a staff
   more, a tuplet, another time) said once and not kept; Close and Done save and go back. No takes there
   (2026-11-01).
+- r28 — An editor's Edit on a built-in song edits the song everyone sees (no Edit the original, no `?original`); anyone else's edits their version. The draft holds the song whole: the score editor writes its music, the song's page in Edit its title, credits and note. Its status says nothing while it is as published; Settings shows Unpublished changes only while there are some. The draft's words became Publishing, Discard changes (2026-11-01).
