@@ -175,20 +175,20 @@ function InstrumentRow({
 }
 
 /**
- * New song, as Flat's new score (round 27), in three steps, their dots under the title, Back on the
- * later two:
+ * New song, as Flat's new score (round 27), in three steps, their dots under the title (a screen
+ * reader's step count), Back on the later two:
  *
  * 1. its name, and Next;
  * 2. its instruments by family (Vocals: Voice, Soprano, Alto, Tenor, Baritone, Bass; Keyboards:
  *    Piano), each added with + and counted with − n +, found by Search; how many are chosen beside
  *    Next. A voice is a staff named for it in its clef over the piano; without the piano, one voice
- *    alone is a lead sheet;
+ *    alone is a lead sheet, a change no score can be greyed;
  * 3. Fine-tune your setup: the tempo (the note it counts, the number typed or stepped), how many bars
  *    (typed or stepped), the key signature from the grid the score editor's key picker is, the time
  *    signature from the common ones, common and cut time as their signs, or your own; Create song,
  *    which opens it in the score editor (`record`: Record pressed there, the + menu's Record).
  *
- * Everything here can be changed on the score later. It is made where the learner is (ADR 0106): in
+ * No line explains what Flat's own screens leave unsaid. It is made where the learner is (ADR 0106): in
  * the folder open (`folder`), else at Home, last. An editor's New built-in song (`builtIn`, content as
  * data) is made on the server in that collection, unpublished, and opens in the original's editor.
  */
@@ -296,7 +296,6 @@ export function NewSongSheet({
             ? t(record && !builtIn ? 'making.recordTitle' : 'making.title')
             : title.trim()
         }
-        description={t('setup.step', { at: step })}
         tall={step > 1}
         footer={
           <div className="flex flex-col gap-2">
@@ -341,7 +340,7 @@ export function NewSongSheet({
           }}
         >
           {/* The three steps as bars, those reached in ink (Flat's). */}
-          <div aria-hidden className="-mt-2 flex gap-1.5">
+          <div role="img" aria-label={t('setup.step', { at: step })} className="-mt-2 flex gap-1.5">
             {STEPS.map((at) => (
               <span
                 key={at}
@@ -360,16 +359,9 @@ export function NewSongSheet({
                 maxLength={TITLE_MAX}
                 onChange={(event) => setTitle(event.target.value)}
               />
-              <p className="-mt-2 text-sm text-muted-foreground">
-                {t(builtIn ? 'making.builtInHint' : 'making.later')}
-              </p>
             </>
           ) : step === 2 ? (
             <>
-              <div className="flex flex-col">
-                <h3 className="font-sans font-semibold">{t('setup.instruments')}</h3>
-                <p className="text-sm text-muted-foreground">{t('setup.instrumentsDetail')}</p>
-              </div>
               <SearchField label={t('setup.search')} value={search} onChange={setSearch} />
               {families.length === 0 ? (
                 <p className="px-1 text-muted-foreground">{t('setup.noMatch')}</p>
@@ -386,9 +378,6 @@ export function NewSongSheet({
                     ))}
                   </Family>
                 ))
-              )}
-              {staves.piano ? null : (
-                <p className="px-1 text-sm text-muted-foreground">{t('setup.leadSheet')}</p>
               )}
             </>
           ) : (

@@ -29,11 +29,8 @@ describe('a new song in a collection’s folder (content as data, round 26: one 
       contentEditing: content,
     })
     const sheet = await newSong(user)
-    expect(
-      within(sheet).getByText(
-        'It goes into this collection for everyone, unpublished until you publish it.',
-      ),
-    ).toBeInTheDocument()
+    // No hint under the name: Flat's new score says nothing there.
+    expect(within(sheet).queryByText(/unpublished until/)).toBeNull()
     await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), 'Abide with me')
     // Flat's three steps: the name, the instruments, the setup.
     await user.click(within(sheet).getByRole('button', { name: 'Next' }))
@@ -61,9 +58,6 @@ describe('a new song in a collection’s folder (content as data, round 26: one 
       auth: await signedInAs('learner'),
     })
     const sheet = await newSong(user)
-    expect(
-      within(sheet).getByText('Everything here can be changed on the score later.'),
-    ).toBeInTheDocument()
     await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), 'Abide with me')
     // Flat's three steps: the name, the instruments, the setup.
     await user.click(within(sheet).getByRole('button', { name: 'Next' }))

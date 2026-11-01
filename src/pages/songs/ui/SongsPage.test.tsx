@@ -900,9 +900,6 @@ describe('Songs: your own', () => {
     expect(screen.getByRole('button', { name: 'One Piano fewer' })).toBeDisabled()
     await user.click(screen.getByRole('button', { name: 'One Alto fewer' }))
     await user.click(screen.getByRole('button', { name: 'One Piano fewer' }))
-    expect(
-      screen.getByText('Without the piano, one voice alone: a lead sheet.'),
-    ).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Next' }))
     await user.click(screen.getByRole('button', { name: 'Common time' }))
     await user.click(screen.getByRole('button', { name: 'Create song' }))
