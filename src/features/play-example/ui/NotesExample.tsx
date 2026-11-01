@@ -62,9 +62,18 @@ export function NotesExample({
     shownBar.current = bar
     onFollow(barShown(line, bar))
   }, [bar, line, onFollow])
+  // The line followed as it plays, wider than its card; once it stops, read from its first bar again.
+  const strip = useRef<HTMLDivElement>(null)
+  const following = follow !== null
+  useEffect(() => {
+    if (!following) strip.current?.scrollTo?.({ left: 0, behavior: 'smooth' })
+  }, [following])
   return (
     <figure className="flex w-fit max-w-full items-center gap-4 card p-3 pl-4">
-      <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain scrollbar-none">
+      <div
+        ref={strip}
+        className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain scrollbar-none"
+      >
         <TappableStaff
           music={line}
           score={score}

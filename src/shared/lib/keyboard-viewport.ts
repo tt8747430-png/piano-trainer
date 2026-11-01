@@ -118,6 +118,30 @@ export function visibleBottom(): number {
   return layoutBottom() - keyboardHeight()
 }
 
+/**
+ * Where the phone's keyboard begins, in a fixed element's coordinates (the layout viewport's): the
+ * visual viewport's foot while a keyboard is up, which moves as iOS pans the page under it (a scroll
+ * with the keyboard up resizes nothing); the room reserved for it while one is expected; `null` while
+ * none is up. What rides on the keyboard stands there, never at the layout viewport's foot.
+ */
+export function keyboardTop(): number | null {
+  if (!publishedOpen) return null
+  const viewport = window.visualViewport
+  if (present && viewport) return Math.round(viewport.offsetTop + viewport.height)
+  return (appHeight || document.documentElement.clientHeight) - keyboardHeight()
+}
+
+/** Hears every change of where the keyboard begins: its own, and iOS's pan of the page under it. */
+export function subscribeKeyboardTop(listener: () => void): () => void {
+  const viewport = window.visualViewport
+  viewport?.addEventListener('scroll', listener)
+  const stop = subscribeKeyboard(listener)
+  return () => {
+    viewport?.removeEventListener('scroll', listener)
+    stop()
+  }
+}
+
 /** Hears every change of the keyboard's height or of whether it is up; returns what stops it. */
 export function subscribeKeyboard(listener: () => void): () => void {
   listeners.add(listener)

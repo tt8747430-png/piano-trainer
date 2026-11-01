@@ -3,11 +3,19 @@ import { Placeholder } from '@tiptap/extensions'
 import { Plugin } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
 import { EditorContent, ReactNodeViewRenderer, useEditor, type JSONContent } from '@tiptap/react'
-import { useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+  type RefObject,
+} from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
 import { i18n, type Locale } from '@/shared/i18n'
+import { cn, useKeyboardTop } from '@/shared/lib'
 import { docExtensions } from '../../model/doc-schema'
 import { DOC, docToLesson, lessonToDoc, type DocNode } from '../../model/lesson-doc'
 import { BlockHandle } from './BlockHandle'
@@ -125,13 +133,7 @@ export function LessonDocument({
   const toolbar = <DocToolbar editor={editor} locale={locale} />
   return (
     <DocLocale value={locale}>
-      {/* The toolbar floats as the score editor's palette does (round 24): one raised capsule at
-          the foot, over the phone's keyboard while it is up, else over the tab bar. */}
-      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(max(var(--nav-bar),var(--kb-inset,0px))+0.5rem)] z-30 flex justify-center px-2 landscape-phone:left-rail lg:bottom-6 lg:left-sidebar lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed">
-        <div className="pointer-events-auto max-w-full rounded-2xl border border-border bg-raised p-1 elevation-2">
-          {toolbar}
-        </div>
-      </div>
+      <ToolbarDock editorDom={frame}>{toolbar}</ToolbarDock>
       <div
         ref={frame}
         className="relative pr-10 pb-28 md:pr-0 md:pl-12"
@@ -143,5 +145,61 @@ export function LessonDocument({
         <SlashMenu editor={editor} locale={locale} frame={frame} keysRef={slashKeys} />
       </div>
     </DocLocale>
+  )
+}
+
+/**
+ * Where the formatting toolbar stands (round 26, as Flat's and Notion's): a raised capsule floating at
+ * the foot, over the tab bar; with the phone's keyboard up, a bar flush on the keyboard's top edge,
+ * followed as iOS pans the page under it (never where the layout viewport's foot was, mid-page). A
+ * field of the document's own (an example's notes, a link) typed in has the keyboard alone: the
+ * toolbar formats the document's text, so it steps aside.
+ */
+function ToolbarDock({
+  editorDom,
+  children,
+}: {
+  editorDom: RefObject<HTMLDivElement | null>
+  children: ReactNode
+}) {
+  const top = useKeyboardTop()
+  const [inField, setInField] = useState(false)
+  useEffect(() => {
+    const signal = new AbortController()
+    const heard = () => {
+      const focused = document.activeElement
+      setInField(
+        focused instanceof HTMLElement &&
+          focused.matches('input, textarea, select') &&
+          !!editorDom.current?.contains(focused),
+      )
+    }
+    document.addEventListener('focusin', heard, { signal: signal.signal })
+    document.addEventListener('focusout', heard, { signal: signal.signal })
+    return () => signal.abort()
+  }, [editorDom])
+  if (top !== null && inField) return null
+  if (top !== null)
+    return (
+      <div
+        data-slot="keyboard-bar"
+        style={{ top }}
+        className="fixed inset-x-0 z-40 -translate-y-full border-t border-border bg-raised px-1 py-1 pr-[max(0.25rem,env(safe-area-inset-right))] pl-[max(0.25rem,env(safe-area-inset-left))]"
+      >
+        {children}
+      </div>
+    )
+  return (
+    // The capsule floats as the score editor's palette does (round 24), over the tab bar.
+    <div
+      className={cn(
+        'pointer-events-none fixed inset-x-0 bottom-[calc(var(--nav-bar)+0.5rem)] z-30 flex justify-center px-2',
+        'landscape-phone:left-rail lg:bottom-6 lg:left-sidebar lg:group-data-[sidebar=collapsed]/main:left-sidebar-collapsed',
+      )}
+    >
+      <div className="pointer-events-auto max-w-full rounded-2xl border border-border bg-raised p-1 elevation-2">
+        {children}
+      </div>
+    </div>
   )
 }

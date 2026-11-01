@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { CirclePlay, Layers } from 'lucide-react'
+import { CirclePlay, Layers, type LucideIcon } from 'lucide-react'
 import { readProgression, type LessonLink } from '@/entities/lesson'
 import { STEP_PAINT } from '@/entities/step'
 import { pieceById } from '@/entities/piece'
@@ -13,8 +13,35 @@ import {
   parseChordSymbol,
 } from '@/shared/lib/music'
 import { qualityParams } from '@/shared/lib'
-import { PAGE_TILES, RowLink } from '@/shared/ui'
+import { PAGE_TILES, RowLink, type Paint } from '@/shared/ui'
 import { typedSearch } from '@/widgets/progression-explorer'
+
+/** The tile of the page a lesson's link opens: the page's own, as its row shows it. */
+export function linkTile(target: LessonLink): { icon: LucideIcon; paint: Paint } {
+  switch (target.opens) {
+    case 'chords':
+    case 'scales':
+    case 'key':
+    case 'intervals':
+    case 'tensions':
+    case 'lesson':
+    case 'progressions':
+      return PAGE_TILES[target.opens]
+    case 'between':
+    case 'song-chords':
+      return PAGE_TILES.progressions
+    case 'harmonise':
+      return PAGE_TILES.key
+    case 'player':
+      return { icon: CirclePlay, paint: PAGE_TILES.progressions.paint }
+    case 'exercise':
+      return { icon: Layers, paint: 'sky' }
+    case 'quiz':
+      return PAGE_TILES.quiz
+    case 'piece':
+      return { icon: CirclePlay, paint: STEP_PAINT[pieceById(target.piece)?.kind ?? 'song'] }
+  }
+}
 
 /**
  * A row leading to what a lesson names, on the page or in the Player that shows it, with that page's

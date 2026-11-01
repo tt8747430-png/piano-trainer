@@ -1,5 +1,5 @@
 import { NodeViewWrapper, type ReactNodeViewProps } from '@tiptap/react'
-import { CircleHelp, Piano, SlidersHorizontal } from 'lucide-react'
+import { ChevronRight, CircleHelp, Piano, SlidersHorizontal } from 'lucide-react'
 import { Component, use, useId, useState, type FocusEvent, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { LessonBlock, LessonExample } from '@/entities/lesson'
@@ -24,11 +24,13 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
+  TileMark,
 } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
+import { Textarea } from '@/shared/ui/primitives/textarea'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/primitives/popover'
-import { LessonBlock as Shown } from '@/widgets/lesson-view'
+import { LessonBlock as Shown, linkTile } from '@/widgets/lesson-view'
 import {
   blockExampleProblem,
   blockExamples,
@@ -118,15 +120,21 @@ function WordsLine({
   className?: string
 }) {
   const locale = use(DocLocale)
+  // As long as its words, wrapped as they print (round 26): one line grows, never cut off.
   return (
-    <Input
+    <Textarea
       aria-label={label}
       lang={locale}
+      rows={1}
       value={value[locale]}
       placeholder={placeholder}
       aria-invalid={value[locale].trim() === '' || undefined}
-      className={className}
-      onChange={(event) => onChange({ ...value, [locale]: event.target.value })}
+      className={cn('min-h-10 resize-none', className)}
+      // Its words are one line: Enter ends them rather than breaking it.
+      onKeyDown={(event) => {
+        if (event.key === 'Enter') event.preventDefault()
+      }}
+      onChange={(event) => onChange({ ...value, [locale]: event.target.value.replace(/\n/g, ' ') })}
     />
   )
 }
@@ -328,7 +336,7 @@ export function ExampleView({ node, updateAttributes, selected }: ReactNodeViewP
               label={t('edit.doc.ask')}
               value={block.ask}
               placeholder={words('edit.doc.ask')}
-              className="h-auto min-h-10 flex-1 rounded-lg border-transparent bg-transparent px-1 font-semibold shadow-none dark:bg-transparent"
+              className="h-auto min-h-10 flex-1 rounded-lg border-transparent bg-transparent px-1 font-semibold shadow-none md:text-base dark:bg-transparent"
               onChange={(ask) => change({ ...block, ask })}
             />
           </div>
@@ -341,14 +349,23 @@ export function ExampleView({ node, updateAttributes, selected }: ReactNodeViewP
           </span>
         </div>
       ) : block.kind === 'link' ? (
-        <WordsLine
-          label={t('edit.doc.linkTitle')}
-          value={block.title}
-          placeholder={words('edit.doc.linkTitle')}
-          onChange={(title) => change({ ...block, title })}
-        />
+        // The link's row on its card as the lesson shows it (round 26), its title typed where it
+        // prints: one card, never a field over a copy of it.
+        <div className="card px-2">
+          <div className="flex min-h-16 items-center gap-3 py-2 pr-2 pl-1">
+            <TileMark {...linkTile(block.target)} />
+            <WordsLine
+              label={t('edit.doc.linkTitle')}
+              value={block.title}
+              placeholder={words('edit.doc.linkTitle')}
+              className="h-auto min-h-10 flex-1 rounded-lg border-transparent bg-transparent px-1 text-lg font-semibold shadow-none md:text-lg dark:bg-transparent"
+              onChange={(title) => change({ ...block, title })}
+            />
+            <ChevronRight aria-hidden className="size-5 shrink-0 text-muted-foreground" />
+          </div>
+        </div>
       ) : null}
-      {block.kind === 'question' ? null : blockReads(block) ? (
+      {block.kind === 'question' || block.kind === 'link' ? null : blockReads(block) ? (
         <Drawn
           key={JSON.stringify(block)}
           fallback={<p className="text-sm text-muted-foreground">{t('edit.doc.notShown')}</p>}

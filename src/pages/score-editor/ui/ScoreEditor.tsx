@@ -1,5 +1,5 @@
 import { PanelLeftOpen } from 'lucide-react'
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   selectKeyboard,
@@ -15,6 +15,7 @@ import {
   useElementSize,
   useHiddenWhileReading,
   useKeyboardHeight,
+  useKeyboardTop,
   useMediaQuery,
 } from '@/shared/lib'
 import { Button } from '@/shared/ui/primitives/button'
@@ -235,11 +236,7 @@ export function ScoreEditor({
           </div>
           {panel ? null : typing ? (
             // The field's slim bar stands over the phone's own keyboard, where the sheet was.
-            <div
-              ref={setDocked}
-              aria-hidden
-              className="pointer-events-none fixed inset-x-0 bottom-[var(--kb-inset,0px)] h-0"
-            />
+            <KeyboardAnchor ref={setDocked} />
           ) : (
             <div
               className={cn(
@@ -260,5 +257,21 @@ export function ScoreEditor({
       </FieldDocked>
       <TakesSheet />
     </ScoreEditorContext>
+  )
+}
+
+/**
+ * Where the phone's keyboard begins (round 26): the slim bar of a field typed in stands on it,
+ * followed as iOS pans the screen under it; at the screen's foot while no keyboard is up.
+ */
+function KeyboardAnchor({ ref }: { ref: Ref<HTMLDivElement> }) {
+  const top = useKeyboardTop()
+  return (
+    <div
+      ref={ref}
+      aria-hidden
+      style={top === null ? { bottom: 0 } : { top }}
+      className="pointer-events-none fixed inset-x-0 h-0"
+    />
   )
 }

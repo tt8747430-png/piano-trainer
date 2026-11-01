@@ -5,8 +5,10 @@ import {
   KEYBOARD_STORAGE_KEY,
   keyboardHeight,
   keyboardOpen as isKeyboardOpen,
+  keyboardTop,
   startKeyboardViewport,
   subscribeKeyboard,
+  subscribeKeyboardTop,
   visibleBottom,
 } from './keyboard-viewport'
 
@@ -96,6 +98,31 @@ describe('the keyboard’s viewport', () => {
     // A keyboard of 390, the view panned by 113: 277 of the layout's room covered.
     expect(inset()).toBe('277px')
     expect(keyboardOpen()).toBe(true)
+  })
+
+  it('says where the keyboard begins as iOS pans the page under it, a scroll resizing nothing', async () => {
+    const viewport = stubViewport({ height: 412, offsetTop: 113 }, 802)
+    stop = startKeyboardViewport()
+    let heard = 0
+    const quiet = subscribeKeyboardTop(() => heard++)
+    // The visual viewport's foot, in the layout viewport's coordinates: 113 + 412.
+    expect(keyboardTop()).toBe(525)
+    await viewport.move({ height: 412, offsetTop: 300 })
+    expect(keyboardTop()).toBe(712)
+    expect(heard).toBeGreaterThan(0)
+    await viewport.move({ height: 802, offsetTop: 0 })
+    expect(keyboardTop()).toBeNull()
+    quiet()
+  })
+
+  it('stands where the keyboard is reserved while one is expected and none has come', () => {
+    remembered(300)
+    stubViewport({ height: 844, offsetTop: 0 }, 844)
+    stop = startKeyboardViewport()
+    expect(keyboardTop()).toBeNull()
+    expectKeyboard(true)
+    expect(keyboardTop()).toBe(544)
+    expectKeyboard(false)
   })
 
   it('reads a keyboard panned past its floor as a keyboard still (the floor is the keyboard’s)', () => {
