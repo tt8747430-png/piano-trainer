@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router'
 import { useRef, useState, type ReactElement, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { lessonById, lessonIds, type Lesson } from '@/entities/lesson'
@@ -6,6 +7,7 @@ import { localText, useLocale, type Locale } from '@/shared/i18n'
 import { MultiDropdown } from '@/shared/ui'
 import { DraftScreen, Properties, PropertyRow } from '@/widgets/content-editor'
 import { LessonDocument } from './document/LessonDocument'
+import { OpenScore } from './document/open-score'
 
 /** The lesson with these lessons to read first; none, the field left out. */
 function withAfter(lesson: Lesson, after: readonly string[]): Lesson {
@@ -66,6 +68,7 @@ export function LessonEditor({
   toLesson,
   readFirst = false,
   modes,
+  course,
 }: {
   lesson: Lesson
   /** The lesson's id in the database (a course's as `<course>/<lesson>`). */
@@ -76,13 +79,26 @@ export function LessonEditor({
   toLesson: ReactElement
   /** A level's lesson: the lessons to read before it chosen above the document (a course's has none). */
   readFirst?: boolean
-  /** Its Read · Edit switch, set to Edit. */
+  /** Its Edit toggle, set to Done. */
   modes?: ReactNode
+  /** The course whose lesson it is, where it is a course's: an example's score opens under it. */
+  course?: string
 }) {
   const { t } = useTranslation('learn')
   const shown = useLocale()
   const [locale, setLocale] = useState<Locale>(shown)
   const draft = useLessonDraft(lesson, id)
+  const navigate = useNavigate()
+  // An example of notes opened on its own score (round 27): the draft saved first, so the score
+  // opens on what was just written.
+  const openScore = (n: number) =>
+    void draft.flush().then(() =>
+      navigate({
+        to: '/lessons/$lessonId/example',
+        params: { lessonId: lesson.id },
+        search: { n, ...(course ? { course } : {}) },
+      }),
+    )
   // The lesson as last written, for the document to open on in the other language.
   const written = useRef<{ opened: number; lesson: Lesson } | null>(null)
   const save = (next: Lesson) => {
@@ -108,25 +124,27 @@ export function LessonEditor({
       {(initial) => {
         const last = written.current?.opened === draft.opened ? written.current.lesson : initial
         return (
-          <LessonDocument
-            key={locale}
-            locale={locale}
-            initial={last}
-            properties={
-              readFirst ? (
-                <ReadFirst
-                  lesson={id}
-                  value={last.after ?? []}
-                  onChange={(after) => save(withAfter(written.current?.lesson ?? initial, after))}
-                />
-              ) : undefined
-            }
-            // The document keeps what it does not write (the lessons to read first) as it opened;
-            // what was chosen since is the last saved.
-            onChange={(next) =>
-              save(withAfter(next, (written.current?.lesson ?? initial).after ?? []))
-            }
-          />
+          <OpenScore value={openScore}>
+            <LessonDocument
+              key={locale}
+              locale={locale}
+              initial={last}
+              properties={
+                readFirst ? (
+                  <ReadFirst
+                    lesson={id}
+                    value={last.after ?? []}
+                    onChange={(after) => save(withAfter(written.current?.lesson ?? initial, after))}
+                  />
+                ) : undefined
+              }
+              // The document keeps what it does not write (the lessons to read first) as it opened;
+              // what was chosen since is the last saved.
+              onChange={(next) =>
+                save(withAfter(next, (written.current?.lesson ?? initial).after ?? []))
+              }
+            />
+          </OpenScore>
         )
       }}
     </DraftScreen>

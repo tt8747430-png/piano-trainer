@@ -98,7 +98,10 @@ export function useEditorTakes(pieceId: PieceId, store: EditorStore, title: stri
   const takes = useTakesStoreApi()
   const pieces = usePiecesStoreApi()
   const settings = useSettingsStoreApi()
-  const { takes: open, record: asked } = useSearch({ from: '/full-screen/edit/$pieceId' })
+  // The song's editor's URL, or a lesson's example's, which keeps neither: read wherever it is open.
+  const search: Partial<EditSearch> = useSearch({ strict: false })
+  const open = search.takes === true
+  const asked = search.record === true
   const changeView = useViewChange<EditSearch>()
   const [shown, setShown] = useState<TakesPage>(TAKES_PAGE)
   const [fromBar, setFromBar] = useState(1)

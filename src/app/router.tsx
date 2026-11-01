@@ -52,6 +52,7 @@ import {
   CHROMATIC_KEPT,
   chromaticSearch,
   editSearch,
+  exampleSearch,
   EXERCISE_KEPT,
   exerciseSearch,
   PLAYER_KEPT,
@@ -660,6 +661,17 @@ const exerciseRoute = createRoute({
 })
 
 // The score editor: the Player's chunk carries the engraver it writes on.
+// A lesson's example of notes on its own score (round 27): the lesson's draft brought, an editor's.
+const exampleEditRoute = createRoute({
+  getParentRoute: () => fullScreenRoute,
+  path: '/lessons/$lessonId/example',
+  notFoundComponent: notFoundIn('learn'),
+  ...exampleSearch,
+  beforeLoad: async ({ params, context }) => {
+    await ensureContent(context.content, 'lesson', params.lessonId)
+  },
+  component: lazyRouteComponent(playerScreens, 'ExampleEditorPage'),
+})
 const editRoute = createRoute({
   getParentRoute: () => fullScreenRoute,
   path: '/edit/$pieceId',
@@ -772,6 +784,7 @@ const routeTree = rootRoute.addChildren([
     progressionPlayerRoute,
     exerciseRoute,
     editRoute,
+    exampleEditRoute,
     checkRoute,
   ]),
 ])

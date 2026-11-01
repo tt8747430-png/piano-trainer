@@ -407,3 +407,27 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     )
   })
 })
+
+describe('an example of notes on its own score (round 27)', () => {
+  it('opens from the example’s Edit music, the draft saved, at its place among the examples of notes', async () => {
+    const user = userEvent.setup()
+    const lesson = LESSONS.find((each) =>
+      each.sections.some((section) => section.blocks.some((block) => block.kind === 'notes')),
+    )!
+    const content = createFakeContentEditing({
+      items: [{ kind: 'lesson', id: lesson.id, body: lesson, meta: {} }],
+    })
+    const { router } = await renderApp(`/lessons/${lesson.id}/edit`, {
+      auth: await signedInAs('editor'),
+      contentEditing: content,
+    })
+    await lessonDoc()
+    const [first] = await screen.findAllByRole('button', { name: 'Edit music' })
+    await user.click(first!)
+    await waitFor(() =>
+      expect(router.state.location.pathname).toBe(`/lessons/${lesson.id}/example`),
+    )
+    // The first example of notes: its place the URL's default, left out.
+    expect(router.state.location.search).not.toHaveProperty('n')
+  }, 30_000)
+})

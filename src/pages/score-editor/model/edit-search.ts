@@ -10,3 +10,13 @@ export interface EditSearch {
   readonly bar?: number
   readonly original: boolean
 }
+
+/**
+ * A lesson's example of notes on the score (round 27): its place among the lesson's examples of
+ * notes (`n`), and the course whose lesson it is, where it is a course's (its draft and its editor
+ * are the course's).
+ */
+export interface ExampleSearch {
+  readonly n: number
+  readonly course?: string
+}

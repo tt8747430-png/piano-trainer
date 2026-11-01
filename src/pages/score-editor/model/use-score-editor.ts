@@ -44,6 +44,7 @@ function useCloseTo(target: EditorTarget): () => void {
   const params = { pieceId: target.id }
   const toSongs = useGoBack({ to: '/songs/$pieceId', params })
   const toStudies = useGoBack({ to: '/practice/accompaniment/studies/$pieceId', params })
+  if (target.kind === 'example') return target.close
   return target.kind !== 'song' && target.entry.kind === 'study' ? toStudies : toSongs
 }
 
@@ -73,7 +74,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       setUnsaved(music === null)
       if (!music) return
       saved.music = music
-      if (target.kind === 'original') target.save(music)
+      if (target.kind === 'original' || target.kind === 'example') target.save(music)
       else saveMusic(pieces, savingTo(target), music)
     }),
   )

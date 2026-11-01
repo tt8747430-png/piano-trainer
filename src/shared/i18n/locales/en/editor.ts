@@ -639,6 +639,18 @@ export const editor = {
   },
   // An editor's draft of a built-in song's original (ADR 0116): what its strip says, Publish, the
   // draft's menu (Versions, Discard), and the dialogs they open.
+  // A lesson's example of notes on its own score (round 27).
+  example: {
+    missing: 'This example is no longer in the lesson.',
+    refused: {
+      marks: 'An example has no marks: this change is not kept.',
+      chords: 'An example plays one note at a time: this change is not kept.',
+      staves: 'An example has one staff, or a tune over a bass: this change is not kept.',
+      rhythm: 'An example writes notes from whole notes to sixteenths: this change is not kept.',
+      meter:
+        'An example is in 2/4, 3/4, 4/4, 6/8 or 12/8, one time and key: this change is not kept.',
+    },
+  },
   original: {
     draft: 'Draft',
     opening: 'Opening the draft…',

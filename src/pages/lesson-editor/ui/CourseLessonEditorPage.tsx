@@ -21,6 +21,7 @@ export function CourseLessonEditorPage() {
         key={id}
         lesson={blankLesson(lessonId)}
         id={id}
+        course={courseId}
         back={<BackButton fallback={{ to: '/courses/$courseId/edit', params: { courseId } }} />}
         toLesson={<Link to="/courses/$courseId/edit" params={{ courseId }} />}
       />
@@ -30,6 +31,7 @@ export function CourseLessonEditorPage() {
       key={id}
       lesson={place.lesson}
       id={id}
+      course={courseId}
       back={
         <BackButton
           fallback={{ to: '/courses/$courseId/$lessonId', params: { courseId, lessonId } }}

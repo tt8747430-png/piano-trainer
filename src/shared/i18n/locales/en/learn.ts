@@ -174,6 +174,7 @@ export const learn = {
       chapterName: 'Chapter name',
       fields: 'Edit: {{name}}',
       asWritten: 'Kept as written: move it, copy it or delete it here.',
+      editMusic: 'Edit music',
       notShown: 'Shown here once it reads',
       clef: 'Clef',
       treble: 'Treble',

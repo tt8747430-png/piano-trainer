@@ -30,7 +30,7 @@ import type {
   ProgressionSearch,
   WalkSearch,
 } from '@/pages/player'
-import type { EditSearch } from '@/pages/score-editor'
+import type { EditSearch, ExampleSearch } from '@/pages/score-editor'
 import { isOneOf, readNote, valueOr, wholeIn } from '@/shared/lib'
 import { isInversion, keyParam, note, noteParam } from '@/shared/lib/music'
 import { SWING_FEELS, TEMPO_RANGE, type SwingFeel } from '@/shared/lib/schedule'
@@ -254,3 +254,11 @@ const readEditSearch = (raw: Raw): EditSearch => ({
   original: raw.original === true,
 })
 export const editSearch = routeSearch(readEditSearch, EDIT_DEFAULTS)
+
+// A lesson's example of notes on the score: its place among the lesson's, and its course.
+export const EXAMPLE_DEFAULTS: ExampleSearch = { n: 0 }
+const readExampleSearch = (raw: Raw): ExampleSearch => ({
+  n: wholeIn(raw.n, 0, 999, 0),
+  ...(typeof raw.course === 'string' && raw.course !== '' ? { course: raw.course } : {}),
+})
+export const exampleSearch = routeSearch(readExampleSearch, EXAMPLE_DEFAULTS)

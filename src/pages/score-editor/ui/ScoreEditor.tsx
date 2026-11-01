@@ -68,10 +68,13 @@ export function ScoreEditor({
   target,
   bar,
   draft,
+  done,
 }: {
   target: EditorTarget
   bar?: number | undefined
   draft?: ReactNode
+  /** Done in its own place (a lesson's example's, back to its lesson). */
+  done?: ReactNode
 }) {
   const { t } = useTranslation('editor')
   const editor = useScoreEditor(target, bar)
@@ -160,7 +163,7 @@ export function ScoreEditor({
       <div data-keys={dock} className={SCORE_SCREEN}>
         <ScoreBar
           lead={<EditorLead />}
-          actions={<EditorActions draft={draft} />}
+          actions={<EditorActions draft={draft} done={done} />}
           tools={<EditorToolsRow />}
         />
         {/* Where the caret is, a screen reader's alone, in the Player's status line's place. */}

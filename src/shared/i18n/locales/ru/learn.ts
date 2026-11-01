@@ -162,6 +162,7 @@ export const learn: LocaleResources['learn'] = {
       chapterName: 'Название главы',
       fields: 'Правка: {{name}}',
       asWritten: 'Оставлен как написан: здесь его можно переместить, скопировать или удалить.',
+      editMusic: 'Править ноты',
       notShown: 'Покажется здесь, когда будет читаться',
       clef: 'Ключ',
       treble: 'Скрипичный',

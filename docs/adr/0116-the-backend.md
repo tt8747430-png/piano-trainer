@@ -195,3 +195,9 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r26 — A lesson's or course's Read · Edit pop-up became Edit mode's one button (Noji's, iOS's): a pencil at the bar's end, Done in Edit (2026-11-01).
 - r26 — Editing an original, the draft's status and menu (Publish first, Versions, Discard) stand in the score's bar by Done, never over the music (2026-11-01).
 - r26 — One New song: in a collection's folder an editor's is the collection's. An original is edited from the song's Settings, its draft's status and menu there too (2026-11-01).
+- r27 — A lesson's example of notes is edited on its own score: its Edit music opens the score editor with all it
+  has (`/lessons/$lessonId/example?n=`, its place among the lesson's examples of notes; a course's with
+  `course`), the draft saved first; each change written back into the lesson's draft as the lesson writes the
+  example (`exampleMusic` / `exampleBlock`), what an example cannot hold (a mark, notes struck together, a staff
+  more, a tuplet, another time) said once and not kept; Close and Done save and go back. No takes there
+  (2026-11-01).

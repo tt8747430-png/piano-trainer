@@ -183,7 +183,7 @@ Ours:
   - "Customise the song page" means its Settings page and the reading/view choices.
   - "Customise the lesson page" means the reading settings (one page or sections, text size).
 
-## 6b. The example editor (next round, scoped 2026-11-01)
+## 6b. The example editor (built 2026-11-01, round 27)
 
 - Route `/lessons/$lessonId/edit/example/$at` (full screen) in `pages/score-editor`: the lesson's draft
   (`useLessonDraft`, `features/edit-original`) opened, its block `at` a `notes` block, edited by `ScoreEditor`

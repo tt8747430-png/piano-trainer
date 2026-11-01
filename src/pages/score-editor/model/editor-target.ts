@@ -51,6 +51,17 @@ export type EditorTarget =
       /** Saves a change to the draft. */
       readonly save: (music: PieceMusic) => void
     }
+  | {
+      /** A lesson's example of notes (round 27): edited on its own score, saved into the lesson's draft. */
+      readonly kind: 'example'
+      readonly id: string
+      /** What its score is named: the lesson's title. */
+      readonly entry: ChartPiece
+      readonly music: PieceMusic
+      readonly save: (music: PieceMusic) => void
+      /** Back to the lesson's editor, its draft saved on the way. */
+      readonly close: () => void
+    }
 
 /** The editor's target for an id, or none: a progression, or nothing there, is not edited. */
 export function editorTarget(state: PiecesState, id: string): EditorTarget | undefined {
@@ -77,11 +88,29 @@ export const originalTarget = (
 ): EditorTarget => ({ kind: 'original', id: entry.id, entry, music: asWritten(music), save })
 
 /**
- * The target's music as the store holds it now; none for an own song deleted, or an original (its
- * draft is the server's, not this device's store).
+ * A lesson's example of notes on its own score (round 27): named for its lesson, its music as the
+ * editor writes it, saved by `save`, closed by `close`.
+ */
+export const exampleTarget = (
+  title: string,
+  music: PieceMusic,
+  save: (music: PieceMusic) => void,
+  close: () => void,
+): EditorTarget => ({
+  kind: 'example',
+  id: 'example',
+  entry: { id: 'example', kind: 'song', title, ...music },
+  music: asWritten(music),
+  save,
+  close,
+})
+
+/**
+ * The target's music as the store holds it now; none for an own song deleted, an original or a
+ * lesson's example (their drafts are the server's, not this device's store).
  */
 export function savedMusic(state: PiecesState, target: EditorTarget): PieceMusic | undefined {
-  if (target.kind === 'original') return undefined
+  if (target.kind === 'original' || target.kind === 'example') return undefined
   if (target.kind === 'version') return selectVersion(state, target.id) ?? target.original
   const song = selectOwnSong(state, target.id)
   if (!song) return undefined
@@ -90,7 +119,9 @@ export function savedMusic(state: PiecesState, target: EditorTarget): PieceMusic
 }
 
 /** Where the editor saves what it writes. */
-export const savingTo = (target: Exclude<EditorTarget, { kind: 'original' }>): MusicTarget =>
+export const savingTo = (
+  target: Exclude<EditorTarget, { kind: 'original' | 'example' }>,
+): MusicTarget =>
   target.kind === 'song'
     ? { kind: 'song', id: target.id }
     : { kind: 'version', id: target.id, original: target.original }

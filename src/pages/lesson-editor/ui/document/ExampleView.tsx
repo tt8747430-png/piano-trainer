@@ -1,5 +1,5 @@
 import { NodeViewWrapper, type ReactNodeViewProps } from '@tiptap/react'
-import { ChevronRight, CircleHelp, Piano, SlidersHorizontal } from 'lucide-react'
+import { ChevronRight, CircleHelp, FilePen, Piano, SlidersHorizontal } from 'lucide-react'
 import { Component, use, useId, useState, type FocusEvent, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { LessonBlock, LessonExample } from '@/entities/lesson'
@@ -40,6 +40,7 @@ import {
 import { blockName } from './block-names'
 import { LinkFields, PatternFields, VoicingsFields } from './ExampleFields'
 import { DocLocale } from './doc-locale'
+import { OpenScore } from './open-score'
 
 const nothing = () => undefined
 
@@ -276,14 +277,33 @@ function FieldsPanel({ name, children }: { name: string; children: ReactNode }) 
   )
 }
 
+/** How many examples of notes stand before `pos` in the document: an example's place among them. */
+function notesBefore(doc: ReactNodeViewProps['editor']['state']['doc'], pos: number | undefined) {
+  let count = 0
+  doc.descendants((each, at) => {
+    if (pos === undefined || at >= pos) return false
+    const block = each.attrs['block'] as LessonBlock | null | undefined
+    if (block?.kind === 'notes') count += 1
+    return true
+  })
+  return count
+}
+
 /**
  * An example of the lesson in the document (round 21): its name, drawn live as the lesson shows it,
  * its line of text typed in place under it with what does not read, its words in the document's
  * language, and its other fields behind its button (a popover, or a sheet on a phone).
  */
-export function ExampleView({ node, updateAttributes, selected }: ReactNodeViewProps) {
+export function ExampleView({
+  node,
+  updateAttributes,
+  selected,
+  editor,
+  getPos,
+}: ReactNodeViewProps) {
   const { t } = useTranslation('learn')
   const locale = use(DocLocale)
+  const openScore = use(OpenScore)
   // As it reads until it is worked on (round 25): chosen, or a field of it focused.
   const [focused, setFocused] = useState(false)
   const block = node.attrs['block'] as LessonBlock | null
@@ -320,6 +340,19 @@ export function ExampleView({ node, updateAttributes, selected }: ReactNodeViewP
           <FieldsPanel name={name}>
             <KindFields block={block} onChange={change} />
           </FieldsPanel>
+        ) : null}
+        {block.kind === 'notes' && openScore ? (
+          // Its music on its own score, the score editor's (round 27): its place among the
+          // lesson's examples of notes names it there.
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={t('edit.doc.editMusic')}
+            title={t('edit.doc.editMusic')}
+            onClick={() => openScore(notesBefore(editor.state.doc, getPos()))}
+          >
+            <FilePen aria-hidden />
+          </Button>
         ) : null}
       </div>
       {block.kind === 'question' ? (

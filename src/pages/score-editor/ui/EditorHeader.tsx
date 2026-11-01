@@ -32,7 +32,14 @@ export function EditorLead() {
  * where Setup and More are; an original's draft, its status and its menu (`draft`); Done at the end.
  * While a take records they wait for Stop.
  */
-export function EditorActions({ draft }: { draft?: ReactNode }) {
+export function EditorActions({
+  draft,
+  done,
+}: {
+  draft?: ReactNode
+  /** Done in its own place: a lesson's example goes back to its lesson, not to the Player. */
+  done?: ReactNode
+}) {
   const { t } = useTranslation('editor')
   const { actions, meta, takes } = useScoreEditorContext()
   const bar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
@@ -63,7 +70,7 @@ export function EditorActions({ draft }: { draft?: ReactNode }) {
         <Redo2 aria-hidden />
       </Button>
       {draft}
-      <ScoreEditToggle pieceId={meta.id} editing bar={bar} disabled={recording} />
+      {done ?? <ScoreEditToggle pieceId={meta.id} editing bar={bar} disabled={recording} />}
     </>
   )
 }

@@ -1,5 +1,5 @@
 import { Link, useParams, useSearch } from '@tanstack/react-router'
-import { useMemo, useState, type ReactNode } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   entryById,
@@ -16,8 +16,8 @@ import { useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
 import { ButtonLink, NotFound } from '@/shared/ui'
 import { Button } from '@/shared/ui/primitives/button'
-import { Empty, EmptyContent, EmptyHeader, EmptyTitle } from '@/shared/ui/primitives/empty'
 import { editorTarget, originalTarget } from '../model/editor-target'
+import { NotOpen } from './NotOpen'
 import { ScoreEditor } from './ScoreEditor'
 
 function Editing({ id }: { id: string }) {
@@ -39,22 +39,6 @@ function Editing({ id }: { id: string }) {
       </NotFound>
     )
   return <ScoreEditor target={target} bar={bar} />
-}
-
-/** A screen in the editor's place saying why it is not open yet: its line, and what to do. */
-function NotOpen({ line, children }: { line: string; children?: ReactNode }) {
-  return (
-    <Empty className="min-h-96">
-      <EmptyHeader>
-        <EmptyTitle>
-          <p role="status" className="text-lg">
-            {line}
-          </p>
-        </EmptyTitle>
-      </EmptyHeader>
-      {children ? <EmptyContent>{children}</EmptyContent> : null}
-    </Empty>
-  )
 }
 
 /** A built-in song's original, an editor's to change (ADR 0116): its draft opened, then edited. */
