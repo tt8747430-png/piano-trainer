@@ -40,7 +40,7 @@ function renderPinned({
   render(
     <SettingsStoreProvider store={settingsStore}>
       <ServicesProvider services={{ audio: createFakeAudio(), midi: createFakeMidi() }}>
-        <FloatingHost place="right" labels={false} screen="page">
+        <FloatingHost screen="page">
           <PinnedKeyboard shown={{ keys: [midi(60)], marks: new Map() }} screen={kind} />
         </FloatingHost>
       </ServicesProvider>

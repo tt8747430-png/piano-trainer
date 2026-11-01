@@ -1,8 +1,5 @@
 import { Link } from '@tanstack/react-router'
 import {
-  ArrowDown,
-  ArrowDownLeft,
-  ArrowDownRight,
   Cable,
   CloudUpload,
   BookOpenText,
@@ -14,14 +11,11 @@ import {
   ShieldCheck,
   ShieldUser,
   SunMoon,
-  Tags,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
-  FLOATING_PLACES,
   LESSON_READINGS,
   selectLessonReading,
-  selectFloating,
   selectLocale,
   selectTheme,
   THEMES,
@@ -29,7 +23,7 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { useMidiSummary } from '@/features/connect-midi'
-import { setFloating, setLessonReading, setLocale, setTheme } from '@/features/set-preference'
+import { setLessonReading, setLocale, setTheme } from '@/features/set-preference'
 import { APP_BUILD } from '@/shared/config'
 import { LOCALES } from '@/shared/i18n'
 import { useAccount, useSync } from '@/shared/lib/account'
@@ -42,18 +36,12 @@ import {
   RowLink,
   ScreenHeader,
   SettingsGroup,
-  SwitchRow,
-  TileMark,
 } from '@/shared/ui'
-
-/** Each place the floating actions can stand, drawn as the corner of the screen's foot it is. */
-const PLACE_ICON = { left: ArrowDownLeft, center: ArrowDown, right: ArrowDownRight } as const
 
 /**
  * Settings, one grouped list as an app's settings read (memory-palaces', iOS's): the account card
  * first, the learner and their Sync and data (as an Apple ID's card holds iCloud); then General, its
- * choices made in place (the language, the theme, where the floating buttons stand and whether they
- * say their names, how a lesson reads); Playing (the MIDI keyboard, the keyboard and recording); Help (How to use,
+ * choices made in place (the language, the theme, how a lesson reads); Playing (the MIDI keyboard, the keyboard and recording); Help (How to use,
  * Privacy, Terms) and the app's version; and for an admin, the Admin area.
  */
 export function SettingsPage() {
@@ -62,10 +50,8 @@ export function SettingsPage() {
   const settings = useSettingsStoreApi()
   const locale = useSettings(selectLocale)
   const theme = useSettings(selectTheme)
-  const floating = useSettings(selectFloating)
   const reading = useSettings(selectLessonReading)
   const midi = useMidiSummary()
-  const FloatingIcon = PLACE_ICON[floating.place]
   return (
     <div className="flex flex-col gap-6">
       <ScreenHeader title={t('title')} back={<BackButton fallback={{ to: '/profile' }} />} />
@@ -92,27 +78,6 @@ export function SettingsPage() {
               onChange={(value) => setTheme(settings, value)}
             />
           </ChoiceRow>
-          <ChoiceRow title={t('floating.place')} icon={FloatingIcon} paint="grass">
-            <Dropdown
-              label={t('floating.place')}
-              bare
-              align="end"
-              value={floating.place}
-              options={FLOATING_PLACES.map((value) => ({
-                value,
-                label: t(`floating.places.${value}`),
-              }))}
-              onChange={(place) => setFloating(settings, { place })}
-            />
-          </ChoiceRow>
-          <SwitchRow
-            icon={<TileMark icon={Tags} paint="grass" />}
-            label={t('floating.labels')}
-            info={t('floating.labelsNote')}
-            checked={floating.labels}
-            onCheckedChange={(labels) => setFloating(settings, { labels })}
-            className="gap-3 border-0 pr-3 pl-2 font-semibold"
-          />
           <ChoiceRow title={t('learn:reading.title')} icon={BookOpenText} paint="lilac">
             <Dropdown
               label={t('learn:reading.title')}

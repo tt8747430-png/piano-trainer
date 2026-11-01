@@ -100,17 +100,6 @@ describe('Settings', () => {
     expect(help).toHaveTextContent(/Version\s*dev/)
   })
 
-  it('stands the floating buttons where chosen and has them say their names, saved', async () => {
-    const user = userEvent.setup()
-    const { settingsStore } = await renderApp('/settings')
-    const general = await screen.findByRole('region', { name: 'General' })
-    await user.click(within(general).getByRole('combobox', { name: 'Floating buttons' }))
-    await user.click(await screen.findByRole('option', { name: 'Right' }))
-    expect(settingsStore.getState().floating.place).toBe('right')
-    await user.click(within(general).getByRole('switch', { name: 'Name the floating buttons' }))
-    expect(settingsStore.getState().floating.labels).toBe(true)
-  })
-
   it('keeps how a take is recorded under Recording: the metronome and the tune, saved', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/settings/playing')
