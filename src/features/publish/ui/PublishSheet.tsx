@@ -94,10 +94,7 @@ function PublishForm({
   onPublish: (description: string) => void
 }) {
   const { t } = useTranslation('songs')
-  const id = useId()
   const [text, setText] = useState(description)
-  const length = descriptionOf(text).length
-  const ready = describes(text)
   return (
     <SheetContent
       title={t(update ? 'public.update' : 'public.publish')}
@@ -106,40 +103,63 @@ function PublishForm({
       footer={
         <div className="flex flex-col gap-3">
           <p className="text-sm text-muted-foreground">{t('public.rights')}</p>
-          <Button size="lg" disabled={!ready || busy} onClick={() => onPublish(text)}>
+          <Button size="lg" disabled={!describes(text) || busy} onClick={() => onPublish(text)}>
             {t(update ? 'public.updateConfirm' : 'public.publishConfirm')}
           </Button>
         </div>
       }
     >
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor={id} className="text-sm text-muted-foreground">
-            {t('public.description')}
-          </label>
-          <Textarea
-            id={id}
-            value={text}
-            maxLength={DESCRIPTION_MAX}
-            rows={4}
-            placeholder={t(item.kind === 'pattern' ? 'public.aboutPattern' : 'public.aboutSong')}
-            aria-describedby={`${id}-count`}
-            onChange={(event) => setText(event.target.value)}
-            className="min-h-28 rounded-2xl bg-card px-3.5 py-3 text-base md:text-base"
-          />
-          <p
-            id={`${id}-count`}
-            aria-live="polite"
-            className="px-1 text-sm text-muted-foreground tabular-nums"
-          >
-            {ready
-              ? t('public.descriptionCount', { count: length, max: DESCRIPTION_MAX })
-              : t('public.descriptionLeft', { count: DESCRIPTION_MIN - length })}
-          </p>
-        </div>
-        <Preview item={item} authorName={authorName} />
-      </div>
+      <PublishFields item={item} authorName={authorName} text={text} onText={setText} />
     </SheetContent>
+  )
+}
+
+/**
+ * What others will read of it: its description (at least `DESCRIPTION_MIN` characters, its count said
+ * as it is typed) and its row as they will see it. The sheet's and the Publish page's (round 26).
+ */
+export function PublishFields({
+  item,
+  authorName,
+  text,
+  onText,
+}: {
+  item: PublishPreview
+  authorName: string
+  text: string
+  onText: (text: string) => void
+}) {
+  const { t } = useTranslation('songs')
+  const id = useId()
+  const length = descriptionOf(text).length
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor={id} className="text-sm text-muted-foreground">
+          {t('public.description')}
+        </label>
+        <Textarea
+          id={id}
+          value={text}
+          maxLength={DESCRIPTION_MAX}
+          rows={4}
+          placeholder={t(item.kind === 'pattern' ? 'public.aboutPattern' : 'public.aboutSong')}
+          aria-describedby={`${id}-count`}
+          onChange={(event) => onText(event.target.value)}
+          className="min-h-28 rounded-2xl bg-card px-3.5 py-3 text-base md:text-base"
+        />
+        <p
+          id={`${id}-count`}
+          aria-live="polite"
+          className="px-1 text-sm text-muted-foreground tabular-nums"
+        >
+          {describes(text)
+            ? t('public.descriptionCount', { count: length, max: DESCRIPTION_MAX })
+            : t('public.descriptionLeft', { count: DESCRIPTION_MIN - length })}
+        </p>
+      </div>
+      <Preview item={item} authorName={authorName} />
+    </div>
   )
 }
 
@@ -163,7 +183,7 @@ function Preview({ item, authorName }: { item: PublishPreview; authorName: strin
 }
 
 /** Why publish, behind the sheet's ⓘ (Noji's "Why should I publish my deck?"). */
-function WhyPublish() {
+export function WhyPublish() {
   const { t } = useTranslation('songs')
   return (
     <div className="flex flex-col gap-2">

@@ -194,3 +194,4 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r25 — A draft's status stands in the bar beside Publish (a cloud, its word from sm up), never a line under the bar; the language is the draft menu's alone (2026-10-30).
 - r26 — A lesson's or course's Read · Edit pop-up became Edit mode's one button (Noji's, iOS's): a pencil at the bar's end, Done in Edit (2026-11-01).
 - r26 — Editing an original, the draft's status and menu (Publish first, Versions, Discard) stand in the score's bar by Done, never over the music (2026-11-01).
+- r26 — One New song: in a collection's folder an editor's is the collection's. An original is edited from the song's Settings, its draft's status and menu there too (2026-11-01).

@@ -246,6 +246,7 @@ export const songs = {
   // A song someone shared as a link.
   // The Public library (ADR 0116): learners' songs published for anyone to play and save a copy of.
   public: {
+    publishIn: 'Publish in library',
     title: 'Public library',
     line: 'Browse songs and patterns others shared',
     kinds: { label: 'Songs or patterns', song: 'Songs', pattern: 'Patterns' },

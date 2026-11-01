@@ -27,7 +27,7 @@ export function folderIn(pieces: PiecesState, library: LibraryState, id: string)
   const { folders } = arrangeLibrary(library, libraryCatalog({ ownSongs: pieces.songs }))
   return folders.some((folder) => folder.id === id)
 }
-export { PiecePage, SectionPage } from '@/pages/piece'
+export { PiecePage, PublishPage, SectionPage, SongSettingsPage } from '@/pages/piece'
 export { ArchivePage } from '@/pages/song-archive'
 export { SharedSongPage } from '@/pages/shared-song'
 export { FolderPage, SongsPage } from '@/pages/songs'

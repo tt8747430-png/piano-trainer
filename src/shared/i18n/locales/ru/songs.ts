@@ -232,6 +232,7 @@ export const songs: LocaleResources['songs'] = {
     },
   },
   public: {
+    publishIn: 'Опубликовать в библиотеке',
     title: 'Общая библиотека',
     line: 'Песни и рисунки, которыми делятся другие',
     kinds: { label: 'Песни или рисунки', song: 'Песни', pattern: 'Рисунки' },

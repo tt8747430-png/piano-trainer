@@ -33,21 +33,20 @@ async function writeChord(user: ReturnType<typeof userEvent.setup>, symbol: stri
 }
 
 describe('an editor’s draft of a built-in song’s original (ADR 0116)', () => {
-  it('opens from the Player’s More, an editor’s alone', async () => {
+  it('opens from the song’s Settings, an editor’s alone, its draft where it stands there', async () => {
     const user = userEvent.setup()
-    const { router } = await renderApp(`/play/${SONG.id}`, { auth: await signedInAs('editor') })
-    await user.click(await screen.findByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Edit the original' }))
+    const { router } = await renderApp(`/songs/${SONG.id}/settings`, {
+      auth: await signedInAs('editor'),
+    })
+    await user.click(await screen.findByRole('link', { name: /^Edit the original/ }))
     await waitFor(() => expect(router.state.location.pathname).toBe(`/edit/${SONG.id}`))
     expect(router.state.location.search).toMatchObject({ original: true })
   })
 
-  it('is not in a learner’s More', async () => {
-    const user = userEvent.setup()
-    await renderApp(`/play/${SONG.id}`, { auth: await signedInAs('learner') })
-    await user.click(await screen.findByRole('button', { name: 'More' }))
-    await screen.findByRole('menu', { name: 'More' })
-    expect(screen.queryByRole('menuitem', { name: 'Edit the original' })).not.toBeInTheDocument()
+  it('is not in a learner’s Settings', async () => {
+    await renderApp(`/songs/${SONG.id}/settings`, { auth: await signedInAs('learner') })
+    await screen.findByRole('heading', { level: 1, name: 'Settings' })
+    expect(screen.queryByRole('link', { name: /^Edit the original/ })).not.toBeInTheDocument()
   })
 
   it('is an editor’s alone: a learner is told so, with the way back to the song', async () => {

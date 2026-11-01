@@ -22,8 +22,9 @@ export function PublishedCard({
   publicId: string | null
   saves: number
   busy: boolean
-  /** Opens Publish over it again: its description, and the newer version where it changed. */
-  onEdit: () => void
+  /** Opens Publish over it again: its description, and the newer version where it changed. None
+   * where the form stands under it (the Publish page). */
+  onEdit?: (() => void) | undefined
   onUnpublish: () => void
 }) {
   const { t } = useTranslation('songs')
@@ -52,9 +53,11 @@ export function PublishedCard({
         >
           {t('public.view')}
         </ButtonLink>
-        <Button variant={changed ? 'default' : 'soft'} disabled={busy} onClick={onEdit}>
-          {t(changed ? 'public.updateConfirm' : 'public.edit')}
-        </Button>
+        {onEdit ? (
+          <Button variant={changed ? 'default' : 'soft'} disabled={busy} onClick={onEdit}>
+            {t(changed ? 'public.updateConfirm' : 'public.edit')}
+          </Button>
+        ) : null}
         <Button variant="ghost" disabled={busy} onClick={onUnpublish}>
           {t('public.unpublishShort')}
         </Button>
