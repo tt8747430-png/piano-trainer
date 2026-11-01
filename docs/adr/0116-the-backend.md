@@ -59,6 +59,25 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   and at each sign-in (`useFeature`): every build goes to everyone, a feature waits behind its switch. The Admin
   area (`/admin`, its own chunk, in Settings for admins): Accounts, Groups, Switches, Reports, Activity; every
   change is written to `admin_log`.
+- **The lesson editor** (`pages/lesson-editor`, round 21 to 28; Notion's, Craft's and BlockNote's block editors,
+  Obsidian's Live Preview) is one TipTap document that reads as the lesson and as a page being edited:
+  - each block's **gutter** shows beside the block under the pointer, or the caret's on a phone (left of the text on
+    a laptop, at its right on a phone): **＋** puts a line under it with `/` typed, the Insert menu open on it;
+    **⋮⋮** dragged moves the block, tapped opens its menu: **Turn into** (text, section heading, numbered steps,
+    note, in short; its lines kept, a step each into steps, joined for the rest; `turnBlockInto`), Duplicate,
+    Delete. Order is by dragging or Alt+↑/↓, never Move up/down in a menu (the owner's rule), so the brief's Move
+    up/down was left out;
+  - an empty line hints **"Type / to insert music, a note and more"** only where the caret is, as Notion's; the
+    title, summary, heading, note and takeaway always say what they are for;
+  - **selected words** get a bubble with the lead in bold, the one mark a lesson's text has; the floating toolbar
+    keeps Insert, Undo and Redo. Each action has one place: a block's kind is its menu's, bold the bubble's;
+  - an **example** (notes, chords, keys, a question, a link) is drawn as the lesson shows it, with no kind's label
+    over it. Chosen, it is outlined and a small toolbar floats over its top edge: **Edit** (its line of text and
+    its fields in a panel opened in place under it, the same on a phone and a laptop, nothing covering the page;
+    open at once for an example that does not read yet), Edit music for notes, Duplicate, Delete;
+  - the lessons to read first are the lesson's Settings', not a property in the document (ADR 0053).
+  A field focused on a phone is lifted clear of the keyboard by the line the caret is in, never by the whole
+  document's box, which jumped a tap far down a lesson to its start.
 - **The seams the app is built on:**
   - a song's music and a lesson come through one port (`ContentPort`: `has`, `ensure`); a route that shows one
     ensures it in `beforeLoad`, so the route's pending, not-found and error screens are its loading, missing and
@@ -201,3 +220,7 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
   example (`exampleMusic` / `exampleBlock`), what an example cannot hold (a mark, notes struck together, a staff
   more, a tuplet, another time) said once and not kept; Close and Done save and go back. No takes there
   (2026-11-01).
+- r28 — The lesson editor as a block editor: a gutter (＋, ⋮⋮ with Turn into), the hint on the caret's empty line, a
+  bubble for bold, an example's floating toolbar and its fields in place under it (no sheet blurring the page); a
+  tap far down a lesson no longer jumps to its start; Read first moved to the lesson's Settings, whose changes row
+  holds Publish (2026-11-01).

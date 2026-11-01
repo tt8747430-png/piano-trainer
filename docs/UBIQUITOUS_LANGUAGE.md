@@ -380,6 +380,15 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Sections read** (`read`): which of a lesson's sections were shown or scrolled to; they fill its ring. _Avoid:_
   progress (that is learned steps).
 - **Page** (a lesson on a phone): one section a screen, turned by Next and Done. _Avoid:_ slide, card.
+- **A lesson's Settings · a course's Settings** («Настройки»; round 28): their own page from the gear in their bar:
+  how lessons read, Share link, Reset progress; an editor's place, Read first, languages and changes. _Avoid:_
+  options, lesson options.
+- **Reset progress** («Сбросить прогресс»; `resetSteps`): a lesson's or a course's steps marked not learned and their
+  sections unread, nothing else. _Avoid:_ clear, restart.
+- **Turn into** («Превратить в»; `turnBlockInto`): the lesson editor's change of a text's kind (text, section
+  heading, numbered steps, note, in short), from the menu of its ⋮⋮. _Avoid:_ convert, block type (in the UI).
+- **Changes** («Изменения»): an editor's unpublished edits of a lesson or a course, on its Settings with Publish.
+  _Avoid:_ draft (in Learn's rows), block, node.
 - **S A T B**: a four-voice voicing's soprano, alto, tenor and bass, named beside its first chord and on the keys;
   the key a voice left keeps its letter faint (a **ghost**). _Avoid:_ parts.
 - **Step** (`StepId`): one thing learned and marked: a lesson, a piece, a chord family or a scale kind. _Avoid:_
