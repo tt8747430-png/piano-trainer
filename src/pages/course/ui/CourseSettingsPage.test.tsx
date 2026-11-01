@@ -38,7 +38,7 @@ describe('a course’s Settings (round 28)', () => {
     expect(progressStore.getState().read).toEqual({})
   })
 
-  it('gives an editor its shelf, a way to Manage courses, and its changes', async () => {
+  it('gives an editor its shelf, a way to Manage courses', async () => {
     const auth = createFakeAuth({ accounts: [{ ...OWNER, role: 'editor' }] })
     await auth.signIn(OWNER.email, OWNER.password)
     await renderApp(`/courses/${COURSE.id}/settings`, {
@@ -49,6 +49,7 @@ describe('a course’s Settings (round 28)', () => {
       'href',
       '/courses/manage',
     )
-    expect(await screen.findByRole('button', { name: 'The draft’s menu' })).toBeInTheDocument()
+    // No changes, no row of them.
+    expect(screen.queryByText('Unpublished changes')).not.toBeInTheDocument()
   })
 })

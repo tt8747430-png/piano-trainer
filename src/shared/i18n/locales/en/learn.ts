@@ -140,10 +140,8 @@ export const learn = {
     readFirst: 'Read first',
     languages: 'Written in',
     noLanguage: 'Not yet in full',
-    publishing: 'Publishing',
-    changes: 'Changes',
+    changes: 'Unpublished changes',
     opening: 'Opening…',
-    offline: 'Offline',
   },
   reading: {
     title: 'Lessons read as',

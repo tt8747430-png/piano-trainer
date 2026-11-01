@@ -127,10 +127,8 @@ export const learn: LocaleResources['learn'] = {
     readFirst: 'Сначала прочесть',
     languages: 'Языки',
     noLanguage: 'Пока не полностью',
-    publishing: 'Публикация',
-    changes: 'Изменения',
+    changes: 'Неопубликованные изменения',
     opening: 'Открываем…',
-    offline: 'Нет сети',
   },
   reading: {
     title: 'Уроки читаются',

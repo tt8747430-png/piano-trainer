@@ -86,9 +86,11 @@ describe('a lesson’s Settings (round 28)', () => {
     await user.click(screen.getByRole('combobox', { name: 'Read first' }))
     await user.click(await screen.findByRole('option', { name: other.title.en }))
     await user.keyboard('{Escape}')
-    await screen.findByText('Draft · saved', {}, { timeout: 3000 })
-    await user.click(screen.getByRole('button', { name: 'The draft’s menu' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Publish' }))
+    // Its changes, there once there are some, with Publish.
+    expect(screen.queryByText('Unpublished changes')).not.toBeInTheDocument()
+    await screen.findByText('Saved · not published', {}, { timeout: 3000 })
+    expect(screen.getByText('Unpublished changes')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
     await user.click(
       within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
     )
