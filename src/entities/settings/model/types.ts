@@ -128,6 +128,12 @@ export interface RecorderSettings {
   readonly tune: boolean
 }
 
+/** How the score editor writes (round 28, MuseScore's and Dorico's note input preferences). */
+export interface EditingSettings {
+  /** A note sounds as it is chosen on the score or its pitch is changed (the keys sound themselves). */
+  readonly hearNotes: boolean
+}
+
 /** The MIDI keyboard's settings. */
 export interface MidiSettings {
   /** MIDI input on: a keyboard the learner allowed is heard again as the app opens. */
@@ -261,6 +267,8 @@ export interface SettingsState {
   floating: FloatingSettings
   keyboard: KeyboardSettings
   recorder: RecorderSettings
+  /** How the score editor writes (round 28). */
+  editing: EditingSettings
   sidebar: Sidebar
   /** Whether the score editor's palette is folded to its quick row and categories, by where it stands. */
   paletteFolded: PaletteFolds
@@ -322,6 +330,9 @@ export const DEFAULT_TRAINER: TrainerSettings = { autoNext: false }
 export const DEFAULT_FLOATING: FloatingSettings = { place: 'center', labels: false }
 
 export const DEFAULT_RECORDER: RecorderSettings = { click: true, tune: false }
+
+/** A note heard as it is edited, as notation software does by default. */
+export const DEFAULT_EDITING: EditingSettings = { hearNotes: true }
 
 /** The owner's piano sounds itself: the app sounds no MIDI key until asked. */
 export const DEFAULT_MIDI: MidiSettings = {

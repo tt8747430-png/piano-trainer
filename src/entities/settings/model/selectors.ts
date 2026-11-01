@@ -8,6 +8,7 @@ import type {
   MidiSettings,
   PracticeToggles,
   RecorderSettings,
+  EditingSettings,
   PalettePlace,
   SettingsState,
   Sidebar,
@@ -26,6 +27,7 @@ export const selectTrainer = (state: SettingsState): TrainerSettings => state.tr
 export const selectFloating = (state: SettingsState): FloatingSettings => state.floating
 export const selectKeyboard = (state: SettingsState): KeyboardSettings => state.keyboard
 export const selectRecorder = (state: SettingsState): RecorderSettings => state.recorder
+export const selectEditing = (state: SettingsState): EditingSettings => state.editing
 export const selectSidebar = (state: SettingsState): Sidebar => state.sidebar
 /** Whether the palette is folded where it stands: as the learner left it there, else the panel shown and the sheet compact. */
 export const selectPaletteFolded =

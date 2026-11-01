@@ -1,7 +1,8 @@
+import { useChildMatches } from '@tanstack/react-router'
 import { useStore } from 'zustand'
-import { useCallback, useEffect, useEffectEvent, useMemo, useState } from 'react'
+import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import { entryTitles, sameMusic, usePiecesStoreApi } from '@/entities/piece'
-import { selectPractice, selectScoreView, useSettings } from '@/entities/settings'
+import { selectEditing, selectPractice, selectScoreView, useSettings } from '@/entities/settings'
 import { useMidiKeyDown } from '@/features/connect-midi'
 import { saveMusic } from '@/features/edit-piece'
 import {
@@ -16,8 +17,8 @@ import {
 import { useLocale } from '@/shared/i18n'
 import { useGoBack, useViewChange, useWakeLock } from '@/shared/lib'
 import type { Midi } from '@/shared/lib/music'
-import { audibleHands, schedule, type Scheduled } from '@/shared/lib/schedule'
-import { usePlayback } from '@/shared/lib/services'
+import { audibleHands, chordSounds, schedule, type Scheduled } from '@/shared/lib/schedule'
+import { usePlay, usePlayback } from '@/shared/lib/services'
 import { inPopUp, isTyping } from '@/shared/lib/shortcuts'
 import { speedTempo } from '@/widgets/practice-player'
 import { arrangeDraft } from './arrange-draft'
@@ -27,6 +28,7 @@ import { savedMusic, savingTo, type EditorTarget } from './editor-target'
 import { layerInSight, rowsInSight } from './rows-in-sight'
 import { shortcutOf } from './shortcuts'
 import { fieldOf } from './fields'
+import { heardEdit } from './heard-edit'
 import { useEditorTakes } from './use-editor-takes'
 import { useOpenField } from './use-open-field'
 
@@ -120,16 +122,37 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   const takes = useEditorTakes(target.id, store, title)
   const recording = takes.stage !== 'idle'
 
-  const dispatch = useCallback((action: EditorAction) => store.dispatch(action), [store])
+  // The score's Settings open in the editor's place (round 28): its fields and switches have the keys,
+  // and nothing is written at a caret out of sight.
+  const away = useChildMatches().length > 0
+  // A note heard as it is chosen or its pitch moved (round 28), the editor's preference; never over
+  // Play, which it would cut off.
+  const hearNotes = useSettings((state) => selectEditing(state).hearNotes)
+  const sound = usePlay()
+  const hearing = useRef({ hearNotes, playing: false })
+  const playingNow = playback.playing !== null
+  useEffect(() => {
+    hearing.current = { hearNotes, playing: playingNow }
+  }, [hearNotes, playingNow])
+  const dispatch = useCallback(
+    (action: EditorAction) => {
+      const before = store.getState()
+      store.dispatch(action)
+      if (!hearing.current.hearNotes || hearing.current.playing) return
+      const keys = heardEdit(action, before, store.getState())
+      if (keys.length > 0) sound(chordSounds(keys, { arpeggio: false }))
+    },
+    [store, sound],
+  )
   const play = useCallback(
     (key: Midi) => {
       // A MIDI key writes only where the computer's keys would: never into the music behind an open
       // sheet, or while a field (a chord typed, a name) has the focus.
       const focus = document.activeElement
-      if (recording || isTyping(focus) || inPopUp(focus)) return
+      if (away || recording || isTyping(focus) || inPopUp(focus)) return
       store.dispatch({ type: 'key', key, time: performance.now() })
     },
-    [store, recording],
+    [store, recording, away],
   )
   useMidiKeyDown(play)
 
@@ -152,7 +175,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
   // The editor reads its keys layer by layer (`shortcutOf`), and lists them for the sheet
   // (`useEditorShortcutList`); a key another listener took, or one an IME is composing, is not its.
   const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
-    if (event.defaultPrevented || event.isComposing) return
+    if (event.defaultPrevented || event.isComposing || away) return
     if (recording) {
       // The recording strip's settings keep their own keys: Escape closes them, Space turns a switch.
       if (event.target instanceof Element && event.target.closest(OWN_KEYS)) return
@@ -177,7 +200,7 @@ export function useScoreEditor(target: EditorTarget, bar?: number): ScoreEditorV
       if (selection === null && chordNote === null && !grace) return
     }
     event.preventDefault()
-    store.dispatch(shortcut)
+    dispatch(shortcut)
   })
   useEffect(() => {
     const listener = (event: KeyboardEvent) => onKeyDown(event)

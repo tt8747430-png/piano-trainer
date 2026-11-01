@@ -22,6 +22,7 @@ import {
   DEFAULT_MIDI,
   DEFAULT_SCORE_VIEW,
   DEFAULT_PRACTICE,
+  DEFAULT_EDITING,
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
   DEFAULT_SOUND,
@@ -59,6 +60,7 @@ import {
   type MidiSettings,
   type PaletteFolds,
   type PracticeToggles,
+  type EditingSettings,
   type RecorderSettings,
   type ScoreViewSettings,
   type SettingsState,
@@ -94,6 +96,7 @@ export function createSettingsStore({
         floating: DEFAULT_FLOATING,
         keyboard: defaultKeyboard(finePointer),
         recorder: DEFAULT_RECORDER,
+        editing: DEFAULT_EDITING,
         sidebar: DEFAULT_SIDEBAR,
         paletteFolded: {},
         paletteSections: null,
@@ -178,6 +181,14 @@ function recorderSettings(value: unknown): RecorderSettings {
   return {
     click: typeof saved.click === 'boolean' ? saved.click : DEFAULT_RECORDER.click,
     tune: typeof saved.tune === 'boolean' ? saved.tune : DEFAULT_RECORDER.tune,
+  }
+}
+
+/** The editor's preferences keep what was saved; one never saved, or not valid, takes its default. */
+function editingSettings(value: unknown): EditingSettings {
+  const saved = savedObject<EditingSettings>(value)
+  return {
+    hearNotes: typeof saved.hearNotes === 'boolean' ? saved.hearNotes : DEFAULT_EDITING.hearNotes,
   }
 }
 
@@ -316,6 +327,7 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     floating: floatingSettings(saved.floating),
     keyboard: keyboardSettings(saved.keyboard, current.keyboard),
     recorder: recorderSettings(saved.recorder),
+    editing: editingSettings(saved.editing),
     sidebar: isSidebar(saved.sidebar) ? saved.sidebar : current.sidebar,
     paletteFolded: paletteFolds(saved.paletteFolded),
     paletteSections: paletteSections(saved.paletteSections),

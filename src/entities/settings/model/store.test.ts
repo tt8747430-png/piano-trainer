@@ -8,6 +8,7 @@ import {
   DEFAULT_METRONOME,
   DEFAULT_MIDI,
   DEFAULT_PRACTICE,
+  DEFAULT_EDITING,
   DEFAULT_RECORDER,
   DEFAULT_SIDEBAR,
   DEFAULT_SOUND,
@@ -35,6 +36,7 @@ const DEFAULTS = {
   floating: DEFAULT_FLOATING,
   keyboard: defaultKeyboard(false),
   recorder: DEFAULT_RECORDER,
+  editing: DEFAULT_EDITING,
   sidebar: DEFAULT_SIDEBAR,
   paletteFolded: {},
   paletteSections: null,
@@ -124,6 +126,7 @@ describe('createSettingsStore', () => {
         railControls: ['zoom', 'pedal'],
       },
       recorder: { click: false, tune: true },
+      editing: { hearNotes: false },
       sidebar: 'collapsed',
       paletteFolded: { panel: true, sheet: false },
       paletteSections: ['notes', 'clef'],
@@ -230,6 +233,12 @@ describe('createSettingsStore', () => {
     expect(restored({ paletteSections: [] }).paletteSections).toEqual([])
     expect(restored({ paletteSections: 'notes' }).paletteSections).toBeNull()
     expect(restored({ paletteSections: ['notes', 3] }).paletteSections).toBeNull()
+  })
+
+  it('hears notes as they are edited unless the learner saved otherwise (round 28)', () => {
+    expect(DEFAULT_EDITING.hearNotes).toBe(true)
+    expect(restored({ editing: { hearNotes: 'no' } }).editing).toEqual(DEFAULT_EDITING)
+    expect(restored({ editing: { hearNotes: false } }).editing).toEqual({ hearNotes: false })
   })
 
   it('turns a click that is not a boolean on, its default', () => {
