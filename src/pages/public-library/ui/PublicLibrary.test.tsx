@@ -216,7 +216,12 @@ describe('publishing an own song', () => {
     expect(screen.getByRole('region', { name: 'As others will see it' })).toHaveTextContent(
       /Morning.*Ana/,
     )
-    expect(screen.getByRole('button', { name: 'About Publish in library' })).toBeInTheDocument()
+    // Why publish, behind the bar's ⓘ, in a sheet of its own (Noji's).
+    await user.click(screen.getByRole('button', { name: 'Why publish?' }))
+    expect(await screen.findByRole('dialog', { name: 'Why publish?' })).toHaveTextContent(
+      'Found by other learners',
+    )
+    await user.keyboard('{Escape}')
     const publish = screen.getByRole('button', { name: 'Publish' })
     expect(publish).toBeDisabled()
     const description = screen.getByRole('textbox', { name: 'Description' })
@@ -232,19 +237,24 @@ describe('publishing an own song', () => {
       ok: true,
       value: [{ title: 'Morning', meta: { description: 'A slow song for the morning' } }],
     })
-    // The page says where it stands: in the library, to view or take out; Publish is Update now.
-    const card = await screen.findByRole('region', { name: 'In the Public library' })
+    // The page says where it stands (Noji's): in the library, its link, View in library, its saves;
+    // a new version only once something changed; Unpublish.
+    expect(await screen.findByText('In the library')).toBeVisible()
     const id = found.ok ? found.value[0]?.id : ''
-    expect(within(card).getByRole('link', { name: 'View' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'View in library' })).toHaveAttribute(
       'href',
       `/songs/public/${id}`,
     )
-    expect(screen.getByRole('button', { name: 'Update' })).toBeInTheDocument()
-    await user.click(within(card).getByRole('button', { name: 'Unpublish' }))
+    expect(document.body).toHaveTextContent(`/songs/public/${id}`)
+    expect(screen.getByRole('button', { name: 'Copy link' })).toBeInTheDocument()
+    expect(document.body).toHaveTextContent('Not saved yet')
+    const again = screen.getByRole('button', { name: 'Publish new version' })
+    expect(again).toBeDisabled()
+    await user.type(screen.getByRole('textbox', { name: 'Description' }), ', slowly')
+    expect(again).toBeEnabled()
+    await user.click(screen.getByRole('button', { name: 'Unpublish' }))
     expect(await screen.findByText('Removed from the Public library.')).toBeVisible()
-    await waitFor(() =>
-      expect(screen.queryByRole('region', { name: 'In the Public library' })).toBeNull(),
-    )
+    await waitFor(() => expect(screen.queryByText('In the library')).toBeNull())
   })
 
   it('shows what its author wrote of an item on its page', async () => {

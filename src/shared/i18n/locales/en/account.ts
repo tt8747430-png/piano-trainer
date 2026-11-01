@@ -7,7 +7,6 @@ export const account = {
   google: 'Continue with Google',
   apple: 'Continue with Apple',
   soon: 'Coming soon',
-  guest: 'Continue without an account',
   offline: 'You’re offline. Signing in needs a connection.',
   why: 'An account keeps your songs, progress and settings on every device you sign in on. The app works fully without one.',
   // The Profile: who is signed in, and what they have done.

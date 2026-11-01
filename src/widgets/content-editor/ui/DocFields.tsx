@@ -48,38 +48,6 @@ export function DocText({
   )
 }
 
-/**
- * A new item's name, written as its page's large heading (a new course, a new progression): one line,
- * no box round it, the caret marking where; focused as the page opens.
- */
-export function DocTitleField({
-  label,
-  value,
-  placeholder,
-  onChange,
-}: {
-  label: string
-  value: string
-  placeholder: string
-  onChange: (value: string) => void
-}) {
-  return (
-    <input
-      aria-label={label}
-      value={value}
-      required
-      autoFocus
-      // A course's or a progression's name, never the device's contacts (iOS offers them for a name).
-      autoComplete="off"
-      autoCorrect="on"
-      data-1p-ignore
-      placeholder={placeholder}
-      onChange={(event) => onChange(event.target.value)}
-      className="w-full bg-transparent font-display text-3xl font-semibold caret-primary outline-none placeholder:text-muted-foreground sm:text-4xl"
-    />
-  )
-}
-
 /** A document's properties (Obsidian's): rows of a name and its value, each a choice in place. */
 export function Properties({ label, children }: { label: string; children: ReactNode }) {
   return (

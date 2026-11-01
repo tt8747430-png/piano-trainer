@@ -51,8 +51,6 @@ export const piece: LocaleResources['piece'] = {
   more: 'Ещё',
   practise: 'Играть',
   edit: 'Редактировать ноты',
-  editMine: 'Править свою версию',
-  editOriginal: 'Править оригинал',
   writeChart: 'Записать аккорды',
   noChart: {
     title: 'Аккордов пока нет',

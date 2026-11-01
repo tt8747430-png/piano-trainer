@@ -71,7 +71,6 @@ export const editor = {
     },
   },
   // The edit row under the bar: what is done to what is chosen.
-  editRow: 'Edit',
   copy: 'Copy',
   cut: 'Cut',
   paste: 'Paste',
@@ -505,8 +504,6 @@ export const editor = {
   song: {
     title: 'Title',
     tempo: 'Tempo',
-    tempoWords: 'Tempo words',
-    tempoLabel: '{{word}}, {{bpm}} a minute',
     meter: 'Time signature',
   },
   // Record in the dock, the recording strip, and the takes' own sheet (ADR 0028, 0096).
@@ -518,8 +515,6 @@ export const editor = {
     needsMidi: 'Recording needs a MIDI keyboard.',
     // The takes' button beside Record, with how many there are.
     takes: 'Takes: {{count}}',
-    // The recording strip's settings: Settings › Recording's switches.
-    settings: 'Recording settings',
     // The takes' button while the song has none: greyed, its tooltip saying why.
     noTakes: 'No takes yet: Record keeps one here.',
     full: 'Your takes are full: delete one to record another.',

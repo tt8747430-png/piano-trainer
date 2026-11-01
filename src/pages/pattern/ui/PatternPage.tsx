@@ -1,16 +1,6 @@
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import {
-  CopyPlus,
-  Eye,
-  EyeOff,
-  Globe,
-  GlobeLock,
-  PencilLine,
-  Play,
-  Star,
-  Trash2,
-} from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { CopyPlus, Eye, EyeOff, Globe, PencilLine, Play, Star, Trash2 } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   isOwnPatternId,
@@ -32,13 +22,6 @@ import { piecesPlaying } from '@/entities/piece'
 import { PinnedKeyboard } from '@/features/live-keyboard'
 import { deleteOwnPattern, toggleFavourite, toggleHidden } from '@/features/manage-patterns'
 import { useShownKeys } from '@/features/play-example'
-import {
-  PublishedCard,
-  PublishSaid,
-  PublishSheet,
-  usePublish,
-  type PublishItem,
-} from '@/features/publish'
 import { localText, useLocale } from '@/shared/i18n'
 import {
   BackButton,
@@ -83,8 +66,8 @@ function FavouriteButton({ pattern }: { pattern: BookPattern }) {
 
 /**
  * A pattern's actions for its bar's More: for a built-in one, a pattern of the learner's own from it
- * and hiding it from the Player; for the learner's own, Edit, its place in the Public library
- * (Publish, asked first; Update once it has changed; Remove) and Delete, asked first, last. What they
+ * and hiding it from the Player; for the learner's own, Edit, Publish in library (a page of its own,
+ * round 27) and Delete, asked first, last. What they
  * open (the dialogs) and what was done (a line) come with them.
  */
 function usePatternActions(pattern: BookPattern, name: string) {
@@ -94,21 +77,6 @@ function usePatternActions(pattern: BookPattern, name: string) {
   const own = isOwnPatternId(pattern.ref) ? pattern.ref : null
   const builtIn = isPatternId(pattern.ref) ? pattern.ref : null
   const hidden = usePatterns((state) => builtIn !== null && selectIsHidden(builtIn)(state))
-  const item = useMemo(
-    (): PublishItem | null =>
-      own === null
-        ? null
-        : {
-            kind: 'pattern',
-            sourceId: `pattern/${own}`,
-            title: name,
-            meta: { rh: pattern.rh, lh: pattern.lh },
-            body: { name, rh: pattern.rh, lh: pattern.lh },
-          },
-    [own, pattern.rh, pattern.lh, name],
-  )
-  const publishing = usePublish(item)
-  const [publishAsked, setPublishAsked] = useState(false)
   const [deleteAsked, setDeleteAsked] = useState(false)
   const remove = (id: OwnPatternId) => {
     // Leave the page first: it has nothing to show once the pattern is gone.
@@ -151,37 +119,16 @@ function usePatternActions(pattern: BookPattern, name: string) {
                 params: { patternRef: own },
               }),
           },
-          ...(publishing.state === 'unpublished'
-            ? [
-                {
-                  key: 'publish',
-                  label: t('songs:public.publish'),
-                  icon: Globe,
-                  onSelect: () => setPublishAsked(true),
-                },
-              ]
-            : publishing.state === 'changed'
-              ? [
-                  {
-                    key: 'publish',
-                    label: t('songs:public.update'),
-                    icon: Globe,
-                    disabled: publishing.busy,
-                    onSelect: () => setPublishAsked(true),
-                  },
-                ]
-              : []),
-          ...(publishing.state === 'published' || publishing.state === 'changed'
-            ? [
-                {
-                  key: 'unpublish',
-                  label: t('songs:public.unpublish'),
-                  icon: GlobeLock,
-                  disabled: publishing.busy,
-                  onSelect: () => void publishing.unpublish(),
-                },
-              ]
-            : []),
+          {
+            key: 'publish',
+            label: t('songs:public.publishIn'),
+            icon: Globe,
+            onSelect: () =>
+              void navigate({
+                to: '/practice/accompaniment/patterns/$patternRef/publish',
+                params: { patternRef: own },
+              }),
+          },
           {
             key: 'delete',
             label: t('patterns.delete'),
@@ -193,25 +140,6 @@ function usePatternActions(pattern: BookPattern, name: string) {
   const dialogs =
     own === null ? null : (
       <>
-        <PublishSheet
-          open={publishAsked}
-          onOpenChange={setPublishAsked}
-          item={{
-            id: `pattern/${own}`,
-            kind: 'pattern',
-            title: name,
-            meta: { rh: pattern.rh, lh: pattern.lh },
-          }}
-          authorName={publishing.authorName}
-          signedIn={publishing.signedIn}
-          busy={publishing.busy}
-          update={publishing.state === 'published' || publishing.state === 'changed'}
-          description={publishing.description}
-          onPublish={(description) => {
-            setPublishAsked(false)
-            void publishing.publish(description)
-          }}
-        />
         <AlertDialog open={deleteAsked} onOpenChange={setDeleteAsked}>
           <AlertDialogContent>
             <AlertDialogHeader>
@@ -230,15 +158,6 @@ function usePatternActions(pattern: BookPattern, name: string) {
     )
   const said = (
     <>
-      <PublishSaid said={publishing.said} />
-      <PublishedCard
-        state={publishing.state}
-        publicId={publishing.publicId}
-        saves={publishing.saves}
-        busy={publishing.busy}
-        onEdit={() => setPublishAsked(true)}
-        onUnpublish={() => void publishing.unpublish()}
-      />
       {hidden ? <p className="text-sm text-muted-foreground">{t('patterns.hiddenNote')}</p> : null}
     </>
   )

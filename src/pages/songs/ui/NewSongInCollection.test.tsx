@@ -35,6 +35,9 @@ describe('a new song in a collection’s folder (content as data, round 26: one 
       ),
     ).toBeInTheDocument()
     await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), 'Abide with me')
+    // Flat's three steps: the name, the instruments, the setup.
+    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
+    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
     await user.click(within(sheet).getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/abide-with-me'))
     expect(router.state.location.search).toMatchObject({ original: true })
@@ -62,6 +65,9 @@ describe('a new song in a collection’s folder (content as data, round 26: one 
       within(sheet).getByText('Everything here can be changed on the score later.'),
     ).toBeInTheDocument()
     await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), 'Abide with me')
+    // Flat's three steps: the name, the instruments, the setup.
+    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
+    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
     await user.click(within(sheet).getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toMatch(/^\/edit\/my-/))
     expect(piecesStore.getState().songs.map((song) => song.title)).toEqual(['Abide with me'])

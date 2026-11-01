@@ -495,6 +495,18 @@ const editPatternRoute = createRoute({
   },
   component: lazyRouteComponent(accompanimentScreens, 'EditPatternPage'),
 })
+// A pattern of the learner's own published to the Public library, on its own page (round 27).
+const publishPatternRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/practice/accompaniment/patterns/$patternRef/publish',
+  notFoundComponent: notFoundIn('accompaniment'),
+  beforeLoad: ({ params, context }) => {
+    if (!isOwnPatternId(params.patternRef) || !inBook(params.patternRef, context.patterns)) {
+      throw notFound()
+    }
+  },
+  component: lazyRouteComponent(accompanimentScreens, 'PatternPublishPage'),
+})
 
 // A lesson of the Lessons' journeys; a course and its own lessons (ADR 0053).
 const lessonRoute = createRoute({
@@ -735,6 +747,7 @@ const routeTree = rootRoute.addChildren([
     newPatternRoute,
     patternRoute,
     editPatternRoute,
+    publishPatternRoute,
     lessonRoute,
     courseLessonRoute,
     lessonEditRoute,

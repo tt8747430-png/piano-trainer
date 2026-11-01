@@ -173,7 +173,6 @@ export const learn = {
       journeyGoal: 'What a learner can do at its end',
       chapterName: 'Chapter name',
       fields: 'Edit: {{name}}',
-      done: 'Done',
       asWritten: 'Kept as written: move it, copy it or delete it here.',
       notShown: 'Shown here once it reads',
       clef: 'Clef',
@@ -183,7 +182,6 @@ export const learn = {
       scale: 'Scale',
       root: 'Root',
       interval: 'Interval',
-      motion: 'How the roots move',
       ask: 'Question',
       linkTitle: 'Link text',
       groups: { text: 'Text', music: 'Music', learner: 'Ask and link' },
@@ -232,9 +230,6 @@ export const learn = {
     bar: { journey: 'Manage lessons' },
     back: 'Back to the lesson',
     editorsOnly: 'Only an editor edits a lesson.',
-    english: 'English',
-    russian: 'Русский',
-    empty: 'Words are needed here',
     unreadable:
       'Every text needs words in both languages, and every example must read. Put them right, then publish.',
     order: {

@@ -832,23 +832,39 @@ describe('Songs: the sort and the filters (ADR 0106)', () => {
 })
 
 describe('Songs: your own', () => {
-  it('makes a new song at Home from its title, key and meter, and opens it in the editor', async () => {
+  it('makes a new song at Home in Flat’s three steps: its name, its instruments, its setup', async () => {
     const user = userEvent.setup()
     const { router, piecesStore, libraryStore } = await renderApp('/songs')
     await user.click(await screen.findByRole('button', { name: 'New' }))
     await user.click(await screen.findByRole('button', { name: 'New song' }))
-    const make = await screen.findByRole('button', { name: 'Create song' })
-    expect(make).toBeDisabled()
-    await user.type(screen.getByRole('textbox', { name: 'Title' }), 'Evening')
-    // The key signature as the score editor's key picker chooses it: the mode, then the signs.
-    await user.click(screen.getByRole('radio', { name: 'Minor' }))
-    await user.click(screen.getByRole('button', { name: 'G major / E minor' }))
-    await user.click(screen.getByRole('button', { name: '3/4' }))
-    await user.click(make)
+    const sheet = await screen.findByRole('dialog', { name: 'New song' })
+    expect(within(sheet).getByRole('button', { name: 'Next' })).toBeDisabled()
+    await user.type(within(sheet).getByRole('textbox', { name: 'Title' }), 'Evening')
+    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
+    // The piano chosen to start, as Flat's score starts with one instrument.
+    expect(within(sheet).getByRole('heading', { name: 'Evening' })).toBeInTheDocument()
+    expect(within(sheet).getByText('1 selected')).toBeInTheDocument()
+    expect(within(sheet).getByRole('status', { name: 'Piano: 1' })).toBeInTheDocument()
+    await user.click(within(sheet).getByRole('button', { name: 'Next' }))
+    // Fine-tune: the tempo typed, more bars, the key signature, the time signature.
+    const tempo = within(sheet).getByRole('textbox', { name: 'Tempo' })
+    await user.clear(tempo)
+    await user.type(tempo, '120{Enter}')
+    await user.click(within(sheet).getByRole('button', { name: 'One bar more' }))
+    await user.click(within(sheet).getByRole('radio', { name: 'Minor' }))
+    await user.click(within(sheet).getByRole('button', { name: 'G major / E minor' }))
+    await user.click(within(sheet).getByRole('button', { name: '3/4' }))
+    await user.click(within(sheet).getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
-    expect(piecesStore.getState().songs).toMatchObject([
-      { id: 'my-1', title: 'Evening', key: 'Em', meter: '3/4' },
-    ])
+    const song = piecesStore.getState().songs[0]
+    expect(song).toMatchObject({
+      id: 'my-1',
+      title: 'Evening',
+      key: 'Em',
+      meter: '3/4',
+      tempo: 120,
+    })
+    expect(song?.sections[0]?.lines[0]?.split(' ')).toHaveLength(5)
     expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toMatchObject({ folder: null })
   })
 
@@ -857,7 +873,8 @@ describe('Songs: your own', () => {
     const { router, libraryStore } = await renderApp('/songs/folders/hymns')
     await user.click(await screen.findByRole('button', { name: 'New' }))
     await user.click(await screen.findByRole('button', { name: 'New song' }))
-    await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Doxology')
+    await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Doxology{Enter}')
+    await user.click(screen.getByRole('button', { name: 'Next' }))
     await user.click(screen.getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
     expect(placeOf(libraryStore.getState(), 'my-1', ['my-1'])).toEqual({
@@ -866,21 +883,35 @@ describe('Songs: your own', () => {
     })
   })
 
-  it('makes a lead sheet: a staff alone, the piano hidden (ADR 0114, 0097)', async () => {
+  it('makes a choir over the piano, or one voice alone: a lead sheet (ADR 0114, 0097)', async () => {
     const user = userEvent.setup()
     const { piecesStore, router } = await renderApp('/songs/folders/hymns')
     await user.click(await screen.findByRole('button', { name: 'New' }))
     await user.click(await screen.findByRole('button', { name: 'New song' }))
-    await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Hymn')
-    // The staves as pictures in the sheet itself, no sheet of their own.
-    const staves = screen.getByRole('radiogroup', { name: 'Staves' })
-    expect(within(staves).getByRole('radio', { name: 'Piano' })).toBeChecked()
-    await user.click(within(staves).getByRole('radio', { name: 'Lead sheet' }))
+    await user.type(await screen.findByRole('textbox', { name: 'Title' }), 'Hymn{Enter}')
+    // The instruments by family, found by Search.
+    await user.type(screen.getByRole('searchbox', { name: 'Search instruments' }), 'sop')
+    expect(screen.queryByRole('button', { name: 'One more Alto' })).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'One more Soprano' }))
+    await user.clear(screen.getByRole('searchbox', { name: 'Search instruments' }))
+    // No piano under two voices: one voice alone is a lead sheet.
+    expect(screen.getByRole('button', { name: 'One Piano fewer' })).toBeEnabled()
+    await user.click(screen.getByRole('button', { name: 'One more Alto' }))
+    expect(screen.getByRole('button', { name: 'One Piano fewer' })).toBeDisabled()
+    await user.click(screen.getByRole('button', { name: 'One Alto fewer' }))
+    await user.click(screen.getByRole('button', { name: 'One Piano fewer' }))
+    expect(
+      screen.getByText('Without the piano, one voice alone: a lead sheet.'),
+    ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Next' }))
+    await user.click(screen.getByRole('button', { name: 'Common time' }))
     await user.click(screen.getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/my-1'))
     expect(piecesStore.getState().songs[0]).toMatchObject({
-      staves: [{ notes: 'r/4' }],
+      staves: [{ name: { en: 'Soprano' }, notes: 'r/4' }],
       leadSheet: true,
+      meter: '4/4',
+      timeSymbol: true,
     })
   })
 

@@ -48,3 +48,7 @@ along is not built: it would need timing windows the Player does not keep.
   Favourite in More; Practise the floating action; key, time and tempo one line of chips (2026-10-30).
 - r26 — The page's bar Edit and Settings; Practise, Learned and ♡ in the song's card; More and the floating Practise
   gone; everything done to a song on its Settings page, publishing on a page of its own (2026-11-01).
+- r27 — New song in Flat's three steps (its name; its instruments: the piano and voices by family, counted with
+  − n +, found by Search; Fine-tune: the tempo's note and number, bars, key, time with C, ¢ or your own). Publish in
+  library one screen for songs and patterns, Noji's: its link with Copy, View in library, its saves, Unpublish and
+  Publish new version at the foot, why publish in a sheet (2026-11-01).

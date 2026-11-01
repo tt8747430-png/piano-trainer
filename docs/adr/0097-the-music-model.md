@@ -59,7 +59,12 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
 - **A score is staves**: any number of single staves over or under the piano's grand staff, each named by the learner
   (`staves: [{ name?, notes }]`), the piano there or hidden. The piano may be hidden (a lead sheet, `leadSheet`) only
   where there is a single staff, so a score never hides every staff. What the Player calls the tune is the top single
-  staff. There are no voices or instruments beyond these.
+  staff. A new song chooses its staves as Flat chooses instruments (round 27): the piano, and voices (Voice,
+  Soprano, Alto, Tenor, Baritone, Bass), each voice a staff named for it in its own clef, sounding as the piano does.
+- **Other instruments come later, not never** (the owner, 2026-11-01): Flat's families (woodwind, brass, strings,
+  percussion…), each instrument sounding as itself, from General MIDI soundfont samples played by `smplr`, loaded the
+  first time an instrument is used and kept by the service worker for offline play. Until then a score holds the piano
+  and voices alone.
 - **Lyrics** are verses of syllables aligned to the notes of the staff they are written on (`lyricsOn`: a single staff
   by its place, else the upper staff), `-` carrying a word on, `_` a melisma, `~` an empty place. A verse longer than
   its tune is a content mistake.
@@ -82,3 +87,5 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
   tremolos, 15ma/15mb, glissando, every dynamic, tempo changes, swing marks, Roman numerals and free text; repeat ×N,
   endings to the 4th, page breaks, bar repeats and multi-bar rests; the two-note tremolo; a bar of no chord kept
   through MusicXML as N.C (2026-10-28).
+- r27 — New song chooses its staves as Flat's instruments (piano and voices); other instruments decided for later,
+  sampled and cached offline, not left out (2026-11-01).

@@ -1,0 +1,219 @@
+import { Link } from '@tanstack/react-router'
+import { BadgeCheck, Copy, Download, Info, LogIn, RefreshCw, Users } from 'lucide-react'
+import { useState, type ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
+import { cn } from '@/shared/lib'
+import { ButtonLink, ScreenHeader, say, Sheet, SheetContent, SheetTrigger } from '@/shared/ui'
+import { Button } from '@/shared/ui/primitives/button'
+import { describes, descriptionOf, type usePublish } from '../model/use-publish'
+import { PublishFields, type PublishPreview } from './PublishFields'
+import { PublishSaid } from './PublishSaid'
+
+/** Why publish, three reasons each under its picture (Noji's "Why should I publish my deck?"). */
+const WHY = [
+  { icon: Users, title: 'whyFoundTitle', line: 'whyFound' },
+  { icon: BadgeCheck, title: 'whyCreditTitle', line: 'whyCredit' },
+  { icon: RefreshCw, title: 'whyYoursTitle', line: 'whyYours' },
+] as const
+
+/** The bar's ⓘ: why publish, in a sheet of its own. */
+function WhyPublish() {
+  const { t } = useTranslation('songs')
+  return (
+    <Sheet>
+      <SheetTrigger
+        render={
+          <Button
+            variant="bar"
+            size="icon"
+            className="rounded-full"
+            aria-label={t('public.why')}
+            title={t('public.why')}
+          />
+        }
+      >
+        <Info aria-hidden />
+      </SheetTrigger>
+      <SheetContent title={t('public.why')}>
+        <ul className="flex flex-col gap-6 pb-2">
+          {WHY.map(({ icon: Icon, title, line }) => (
+            <li key={title} className="flex flex-col gap-1">
+              <span className="flex items-center gap-3 text-lg font-semibold">
+                <Icon aria-hidden className="size-6 shrink-0 text-link" />
+                {t(`public.${title}`)}
+              </span>
+              <span className="text-pretty text-muted-foreground">{t(`public.${line}`)}</span>
+            </li>
+          ))}
+        </ul>
+      </SheetContent>
+    </Sheet>
+  )
+}
+
+/** Its address in the Public library, in a field with Copy (Noji's). */
+function PublicLink({ publicId }: { publicId: string }) {
+  const { t } = useTranslation('songs')
+  const url = `${window.location.origin}/songs/public/${publicId}`
+  return (
+    <div className="flex min-h-14 items-center gap-2 rounded-2xl bg-muted pr-1.5 pl-4">
+      <span className="min-w-0 flex-1 truncate text-muted-foreground select-text">{url}</span>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="size-11 shrink-0 rounded-xl"
+        aria-label={t('public.copyLink')}
+        title={t('public.copyLink')}
+        onClick={() =>
+          void navigator.clipboard
+            ?.writeText(url)
+            .then(() => say(t('public.linkCopied')))
+            .catch(() => say(t('public.linkNotCopied')))
+        }
+      >
+        <Copy aria-hidden />
+      </Button>
+    </div>
+  )
+}
+
+/**
+ * Publish in library, a page of its own for a song or a pattern (round 27, Noji's): why publish behind
+ * the ⓘ in the bar, in a sheet.
+ *
+ * - Not yet published: what others will read of it (its description, its count said as it is typed)
+ *   and its row as they will see it; the rights it takes in a line, and Publish at the foot, greyed
+ *   until the description says enough.
+ * - Published: "In the library" (or that it changed since), its link with Copy, View in library, how
+ *   often it is saved, its description; at the foot Unpublish and Publish new version, live once it or
+ *   its description changed.
+ * - Signed out: Sign in.
+ */
+export function PublishScreen({
+  item,
+  publishing,
+  back,
+}: {
+  item: PublishPreview
+  publishing: ReturnType<typeof usePublish>
+  /** The bar's way back: the song's Settings, the pattern's page. */
+  back: ReactNode
+}) {
+  const { t } = useTranslation('songs')
+  return (
+    <div className="flex min-h-screen-free flex-col gap-6">
+      <ScreenHeader title={t('public.publishIn')} back={back} actions={<WhyPublish />} />
+      <PublishSaid said={publishing.said} />
+      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6">
+        {publishing.signedIn ? (
+          <PublishForm
+            // Each version of its description, as the library holds it, starts the field afresh.
+            key={publishing.description}
+            item={item}
+            publishing={publishing}
+          />
+        ) : (
+          <div className="flex flex-col items-start gap-3 card p-4">
+            <p className="text-pretty text-muted-foreground">{t('public.publishSignIn')}</p>
+            <ButtonLink render={<Link to="/account/sign-in" />}>
+              <LogIn data-icon="inline-start" aria-hidden />
+              {t('public.signIn')}
+            </ButtonLink>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function PublishForm({
+  item,
+  publishing,
+}: {
+  item: PublishPreview
+  publishing: ReturnType<typeof usePublish>
+}) {
+  const { t } = useTranslation('songs')
+  const [text, setText] = useState(publishing.description)
+  const live = publishing.state === 'published' || publishing.state === 'changed'
+  const changed =
+    publishing.state === 'changed' || descriptionOf(text) !== descriptionOf(publishing.description)
+  return (
+    <>
+      {live && publishing.publicId ? (
+        <>
+          <p
+            className={cn(
+              'flex items-center gap-2 px-1 font-semibold',
+              publishing.state === 'published' ? 'text-link' : 'text-foreground',
+            )}
+          >
+            <span
+              aria-hidden
+              className={cn(
+                'size-2.5 rounded-full',
+                publishing.state === 'published' ? 'bg-link' : 'bg-paint-sand',
+              )}
+            />
+            {t(publishing.state === 'published' ? 'public.live' : 'public.changedSince')}
+          </p>
+          <div className="-mt-3 flex flex-col gap-3">
+            <PublicLink publicId={publishing.publicId} />
+            <ButtonLink
+              variant="outline"
+              size="lg"
+              render={<Link to="/songs/public/$itemId" params={{ itemId: publishing.publicId }} />}
+            >
+              {t('public.viewInLibrary')}
+            </ButtonLink>
+          </div>
+          <section className="flex flex-col gap-2">
+            <h2 className="px-1 font-sans text-sm font-semibold text-muted-foreground">
+              {t('public.stats')}
+            </h2>
+            <p className="flex items-center gap-3 px-1">
+              <Download aria-hidden className="size-5 text-muted-foreground" />
+              {publishing.saves > 0
+                ? t('public.saves', { count: publishing.saves })
+                : t('public.savesNone')}
+            </p>
+          </section>
+        </>
+      ) : null}
+      <PublishFields item={item} authorName={publishing.authorName} text={text} onText={setText} />
+      {/* The page's foot: what is done to it, Noji's pair of full-width buttons. */}
+      <div className="mt-auto flex flex-col gap-3 pt-4">
+        {live ? (
+          <>
+            <Button
+              size="lg"
+              variant="soft"
+              disabled={publishing.busy}
+              onClick={() => void publishing.unpublish()}
+            >
+              {t('public.unpublishShort')}
+            </Button>
+            <Button
+              size="lg"
+              disabled={publishing.busy || !changed || !describes(text)}
+              onClick={() => void publishing.publish(text)}
+            >
+              {t('public.publishNew')}
+            </Button>
+          </>
+        ) : (
+          <>
+            <p className="px-1 text-sm text-muted-foreground">{t('public.rights')}</p>
+            <Button
+              size="lg"
+              disabled={publishing.busy || !describes(text)}
+              onClick={() => void publishing.publish(text)}
+            >
+              {t('public.publishConfirm')}
+            </Button>
+          </>
+        )}
+      </div>
+    </>
+  )
+}

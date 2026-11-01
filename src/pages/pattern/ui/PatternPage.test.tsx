@@ -101,7 +101,7 @@ describe('A pattern’s page', () => {
       within(more)
         .getAllByRole('menuitem')
         .map((action) => action.textContent),
-    ).toEqual(['Edit', 'Publish to the Public library', 'Delete'])
+    ).toEqual(['Edit', 'Publish in library', 'Delete'])
     await user.click(within(more).getByRole('menuitem', { name: 'Delete' }))
     await user.click(await screen.findByRole('button', { name: 'Delete' }))
     await waitFor(() =>
@@ -158,25 +158,26 @@ describe('A pattern’s page', () => {
 })
 
 describe('a pattern of the learner’s own in the Public library (ADR 0116)', () => {
-  it('is published, asked first, its figures with it; then removed', async () => {
+  it('is published from its own page, as a song is, its figures with it; then unpublished', async () => {
     const user = userEvent.setup()
     const account = { email: 'ana@example.com', name: 'Ana', password: 'correct horse' }
     const auth = createFakeAuth({ accounts: [account] })
     await auth.signIn(account.email, account.password)
     const publicLibrary = createFakePublicLibrary({ author: () => ({ id: 'ana', name: 'Ana' }) })
-    await renderApp('/practice/accompaniment/patterns/my-1', {
+    const { router } = await renderApp('/practice/accompaniment/patterns/my-1', {
       storage: withOwn(),
       auth,
       publicLibrary,
     })
     await user.click(await screen.findByRole('button', { name: 'More' }))
-    await user.click(await screen.findByRole('menuitem', { name: 'Publish to the Public library' }))
-    const sheet = await screen.findByRole('dialog', { name: 'Publish to the Public library' })
+    await user.click(await screen.findByRole('menuitem', { name: 'Publish in library' }))
+    await screen.findByRole('heading', { level: 1, name: 'Publish in library' })
+    expect(router.state.location.pathname).toBe('/practice/accompaniment/patterns/my-1/publish')
     await user.type(
-      within(sheet).getByRole('textbox', { name: 'Description' }),
+      screen.getByRole('textbox', { name: 'Description' }),
       'A walking bass under jazz chords',
     )
-    await user.click(within(sheet).getByRole('button', { name: 'Publish' }))
+    await user.click(screen.getByRole('button', { name: 'Publish' }))
     expect(await screen.findByText('Published to the Public library.')).toBeInTheDocument()
     const listed = await publicLibrary.browse({ kind: 'pattern', sort: 'new', query: '' })
     expect(listed).toMatchObject({
@@ -189,10 +190,7 @@ describe('a pattern of the learner’s own in the Public library (ADR 0116)', ()
         },
       ],
     })
-    await user.click(screen.getByRole('button', { name: 'More' }))
-    await user.click(
-      await screen.findByRole('menuitem', { name: 'Remove from the Public library' }),
-    )
+    await user.click(await screen.findByRole('button', { name: 'Unpublish' }))
     await waitFor(async () =>
       expect(await publicLibrary.browse({ kind: 'pattern', sort: 'new', query: '' })).toEqual({
         ok: true,

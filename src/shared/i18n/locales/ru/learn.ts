@@ -161,7 +161,6 @@ export const learn: LocaleResources['learn'] = {
       journeyGoal: 'Что ученик умеет в конце',
       chapterName: 'Название главы',
       fields: 'Правка: {{name}}',
-      done: 'Готово',
       asWritten: 'Оставлен как написан: здесь его можно переместить, скопировать или удалить.',
       notShown: 'Покажется здесь, когда будет читаться',
       clef: 'Ключ',
@@ -171,7 +170,6 @@ export const learn: LocaleResources['learn'] = {
       scale: 'Гамма',
       root: 'От ноты',
       interval: 'Интервал',
-      motion: 'Как движутся основания',
       ask: 'Вопрос',
       linkTitle: 'Текст ссылки',
       groups: { text: 'Текст', music: 'Музыка', learner: 'Вопрос и ссылка' },
@@ -219,9 +217,6 @@ export const learn: LocaleResources['learn'] = {
     bar: { journey: 'Уроки' },
     back: 'К уроку',
     editorsOnly: 'Урок правит только редактор.',
-    english: 'English',
-    russian: 'Русский',
-    empty: 'Здесь нужен текст',
     unreadable:
       'У каждого текста должны быть слова на обоих языках, а каждый пример должен читаться. Исправьте и опубликуйте.',
     order: {

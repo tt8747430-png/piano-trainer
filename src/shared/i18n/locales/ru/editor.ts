@@ -60,7 +60,6 @@ export const editor: LocaleResources['editor'] = {
       rh: 'Текст пишется на верхнем нотоносце: коснитесь ноты на нём.',
     },
   },
-  editRow: 'Правка',
   copy: 'Копировать',
   cut: 'Вырезать',
   paste: 'Вставить',
@@ -459,8 +458,6 @@ export const editor: LocaleResources['editor'] = {
   song: {
     title: 'Название',
     tempo: 'Темп',
-    tempoWords: 'Обозначения темпа',
-    tempoLabel: '{{word}}, {{bpm}} в минуту',
     meter: 'Размер',
   },
   recorder: {
@@ -469,7 +466,6 @@ export const editor: LocaleResources['editor'] = {
     record: 'Записать',
     needsMidi: 'Для записи нужна MIDI-клавиатура.',
     takes: 'Дубли: {{count}}',
-    settings: 'Настройки записи',
     noTakes: 'Дублей пока нет: «Записать» сохранит дубль здесь.',
     full: 'Дубли заняли всё место: удалите один, чтобы записать новый.',
     nothing: 'Ничего не сыграно.',
