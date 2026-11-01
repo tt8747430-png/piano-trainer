@@ -1,6 +1,6 @@
 # ADR 0115 — One score in two modes: the Player and the editor share one bar, one tools row, one transport
 
-- **Status:** accepted · **Date:** 2026-10-23 · consolidated 2026-10-27 · amended 2026-10-28
+- **Status:** accepted · **Date:** 2026-10-23 · consolidated 2026-10-27 · amended 2026-11-01
 
 ## Context
 
@@ -22,8 +22,8 @@ edit, and a learner practising should not change the music by accident.
   the switch waits for Stop.
 - **One bar** (`ScoreBar`): one band of card paper to the screen's edges with one hairline under it. Its buttons are a
   toolbar's (the button's `tool` variant: no frame at rest, the muted fill on hover, while open and pressed, 44px).
-  Close and Practise · Edit lead; each mode's three buttons end it (the Player's MIDI · Setup · More, the editor's
-  MIDI · Undo · Redo); the tools stand between. Two rows on a phone held upright and on a tablet, one row from 1024px
+  Close and Practise · Edit lead; each mode's buttons end it (the Player's MIDI · Setup · More, the editor's
+  MIDI · Undo · Redo · Settings, the score's Settings a gear as a song page's); the tools stand between. Two rows on a phone held upright and on a tablet, one row from 1024px
   and on a phone on its side. The same height in both modes, so the sheet never moves as the mode switches.
 - **One tools row** (`PlayerTools`): the Player's View · Transpose · Simplify; the editor's View · Transpose, then
   Delete · Copy · Cut · Paste. On a phone held upright a tool with a value shows its value alone after its icon.
@@ -69,3 +69,6 @@ own Play melody switch: it plays the tune under a take, not the Player's melody.
 - r26 — Practise · Edit is no longer a pop-up: the Player's pencil at the bar's end opens the editor, the editor's Done in the same place returns; Edit the original is the Player's More's, an editor's (2026-11-01).
 - r26 — One Sound in both modes: the editor's transport ends with the Player's Sound (its icon, name and place), a take's Metronome and Play melody over each part's volume; the click is called Metronome in both; the tools row's room over the score fits the capsule (2026-11-01).
 - r27 — The tools capsule floats centred over the music on a phone held upright, never pinned left; from a tablet up (48rem) the tools sit in the bar's row, so the editor's note toolbar has the music's head to itself (2026-11-01).
+- r28 — The editor's bar ends MIDI · Undo · Redo · Settings · Done; the Player's More has Settings… (the score's
+  Settings, ADR 0114); under 360px the bar's buttons are 40px with no gaps, so a 320px phone holds them
+  (2026-11-01).

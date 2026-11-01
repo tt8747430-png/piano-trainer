@@ -68,6 +68,11 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
 - **Lyrics** are verses of syllables aligned to the notes of the staff they are written on (`lyricsOn`: a single staff
   by its place, else the upper staff), `-` carrying a word on, `_` a melisma, `~` an empty place. A verse longer than
   its tune is a content mistake.
+- **What prints under the title and how the score is laid out are the music's too** (r28): `header`, a subtitle,
+  composer, lyricist and arranger, each a plain line of 80 characters at most, none kept empty; `layout`, a staff
+  size of 75, 90, 115 or 130 percent (100, the score's own, kept as none) and the most bars a line holds, 1 to 8.
+  Both are read from a save field by field, travel with a version, an own song and a shared song, and are compared
+  by `sameMusic`. A catalog piece may carry them; the catalog's `credits` stay the song page's.
 
 ## Consequences
 
@@ -89,3 +94,4 @@ arrangement note for note (Wonderful Grace of Jesus) needed 32nds, triplets and 
   through MusicXML as N.C (2026-10-28).
 - r27 — New song chooses its staves as Flat's instruments (piano and voices); other instruments decided for later,
   sampled and cached offline, not left out (2026-11-01).
+- r28 — The music's `header` (credits under the title) and `layout` (staff size, bars per line) (2026-11-01).

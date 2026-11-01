@@ -499,6 +499,16 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Take's page**: a take on its own, drawn as a **piano roll**, with **Keep bars** («Оставить такты»), which cuts
   it to whole bars. _Avoid:_ trim, crop.
 - **Write into the score** («Вписать в ноты»): a take turned into notes. _Avoid:_ quantise (in the UI), import.
+- **Score settings** («Настройки партитуры», `/edit/$pieceId/settings`): the score's own page in the editor's place:
+  its names, instruments, tempo, key, time, bars, layout and how the editor writes. _Avoid:_ song settings (the
+  song page's), properties.
+- **Credits** (`header`, UI the **Subtitle**, **Composer**, **Lyricist**, **Arranger**): what prints under the title,
+  as typed. _Avoid:_ authors (the catalog's `credits`), metadata.
+- **Staff size** («Размер нотоносца»): how large the staves are drawn, Smallest to Largest. _Avoid:_ zoom, scale.
+- **Bars per line** («Тактов в строке»): the most bars a line holds; **As written** keeps the song's own lines.
+  _Avoid:_ measures per system (Flat's), wrap.
+- **Hear notes as you edit** (`editing.hearNotes`): a note sounds when it is tapped or its pitch moved. _Avoid:_
+  preview, audition.
 
 ## App
 
