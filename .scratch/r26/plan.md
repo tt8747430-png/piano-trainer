@@ -1,8 +1,33 @@
 # Round 26 plan: pages, menus and editors
 
 The owner's feedback, 27 screenshots (2026-11-01). Research: memory-palaces' deck detail and deck settings pages
-and its menus (`FlyoutMenu` on Base UI's Menu), the reference apps in `piano-data/reference-apps` (new-app's
-settings, Flat's editor on a phone, the course apps), and the platform rules for menus, sheets and pages.
+and its menus (`FlyoutMenu` on Base UI's Menu), **Noji** (`piano-data/reference-apps/new_app_2`: its deck settings,
+Publish in library, Sharing settings, public deck page, Edit mode, Activity), the other reference apps in
+`piano-data/reference-apps` (new-app's settings, Flat's editor on a phone, the course apps), and the platform rules
+for menus, sheets and pages.
+
+### What Noji does (the model for songs)
+- **Deck settings** is one long list of rows:
+  - each row has an icon, a label, a value where it has one (Sharing settings · Off) and a chevron;
+  - rows that need more than a switch open **a page**, not a sheet;
+  - the list, in order: Spaced repetition (its preset as a subtitle), Text-to-speech, Card style,
+    Sharing settings, Publish in library, AI cards, Offline learning, Import cards, Rename deck, Move deck,
+    Duplicate deck, Reset progress, Archive deck, Export deck, and Delete deck last, in red.
+- **Publish in library** is a page:
+  - Deck name and Description fields, then Submit for review at the foot;
+  - an ⓘ opens a sheet explaining why to publish;
+  - a line says what is missing (a minimum number of cards).
+- **Sharing settings** is a page: an Invite link switch, Share link, and the participants.
+- **The public deck page:**
+  - its title, author, rating and studiers;
+  - a card preview, About, ratings, the cards;
+  - **one fixed button at the foot** (Duplicate deck), and Share in the bar.
+- **Edit mode on Home:** the pencil in the bar becomes a ✓ (Done); rows get their drag handles; Archive and
+  Recently deleted stand at the top.
+- **+:** a sheet with two big rows, each with a line under it (Create manually / Create automatically).
+- **Profile:**
+  - rows to Settings and Activity, then Achievements;
+  - Activity is its own page: day streak, longest streak, active days and the month's calendar.
 
 ## 1. The rule: menu, sheet or page
 
@@ -28,8 +53,8 @@ Consequences:
   - group labels, separators, checked and radio items, a destructive variant.
   It is one component used by every ⋯ menu (song row, folder, song page, Player, lesson editor, takes, archive).
 - `Dropdown` (the select) stays the pop-up button, and always shows its value in words.
-- **Read · Edit and Practise · Edit stop being pop-ups.** They become the iOS pattern: an **Edit** button in the
-  bar; in Edit, **Done** returns. For an editor, a song's original is edited from its Settings page
+- **Read · Edit and Practise · Edit stop being pop-ups.** They become Noji's and iOS's pattern: a **pencil** in
+  the bar; in Edit it turns into a **✓ (Done)**. For an editor, a song's original is edited from its Settings page
   (Edit the original), not from a third mode.
 
 ## 3. Songs: one kind, a real page, a Settings page
@@ -42,12 +67,15 @@ Consequences:
     - the overview card: key, time, tempo, difficulty, Learned, and Practise as its main button;
     - the ways to practise: Player views, Learn by sections;
     - the content: sections, chords, progressions.
-- **The song's Settings page** (`/songs/$id/settings`, deck settings' shape), grouped rows:
+- **The song's Settings page** (`/songs/$id/settings`, Noji's deck settings: one list, an icon on each row, its
+  value at the end, a chevron where it opens a page), grouped rows:
   - *Song:* Title & subtitle, Credits, Key · Time · Tempo (each a row that opens its picker), Staves.
   - *Practice:* Default view, Pattern, Count-in.
   - *Library:* Folder (Move to…), Favourite (switch), Export…, Share link.
-  - *Public library:* Publish / Update / Unpublish with the description and the preview. This is the
-    publish sheet, reached from here only.
+  - *Public library:* **Publish in library, a page** (Noji's):
+    - the song's name and description, a preview, Publish at the foot;
+    - an ⓘ sheet saying why to publish, and a line saying what is missing.
+    Once published, the same page shows Update and Unpublish. The publish sheet goes.
   - *For editors* (a built-in song): Edit the original, Versions, Discard draft; the draft's status and Publish
     stand on this page, never over the score.
   - *Danger:* Archive, Delete (own) / Reset to the original (a changed built-in).
@@ -121,8 +149,11 @@ Ours:
 - **Lesson editor:**
   - a link block shows its field and its card twice: one card, its text edited in place;
   - an example's staff starts mid-bar: it shows from its first bar.
-- **Days practised:** it goes from the Profile, as the owner asked in round 24; the Profile keeps
-  Days in a row and Songs played.
+- **Days practised:** it leaves the Profile's figures, as the owner asked in round 24.
+  - The Profile becomes Noji's: rows to Settings and **Activity**, then the record and badges.
+  - **Activity is a page** with Days in a row, the longest run, days practised and the month's calendar.
+- **The public library's song page:** Noji's public deck page, with one fixed button at the foot
+  (Add to my songs) and Share in the bar.
 - **Padding audit:** every control's padding against DESIGN.md's tokens (bars, pills, rows, sheets),
   screenshots at 390/320/844×390/1280.
 
