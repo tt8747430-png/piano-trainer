@@ -53,7 +53,7 @@ async function chooseExample(kind: string, name: string) {
 
 /** Publishes the draft once it is saved: the bar's Publish, then the dialog's. */
 async function publish(user: ReturnType<typeof userEvent.setup>) {
-  await screen.findByText('Draft · saved', {}, { timeout: 3000 })
+  await screen.findByText('Saved · not published', {}, { timeout: 3000 })
   await user.click(screen.getByRole('button', { name: 'Publish' }))
   await user.click(
     within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
@@ -96,7 +96,7 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     const { doc } = await lessonDoc()
     expect(line(doc, 'p[data-lesson-title]')).toHaveTextContent(LESSON.title.en)
     expect(doc.querySelectorAll('h2')).toHaveLength(LESSON.sections.length)
-    expect(screen.getByText('Published', { selector: 'span' })).toBeInTheDocument()
+    expect(screen.queryByText('Not published')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Publish' })).toBeDisabled()
     expect(screen.queryByRole('radio', { name: 'Preview' })).not.toBeInTheDocument()
   })
@@ -130,7 +130,7 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
       contentEditing: content,
     })
     await lessonDoc()
-    await user.click(screen.getByRole('button', { name: 'The draft’s menu' }))
+    await user.click(screen.getByRole('button', { name: 'Publishing' }))
     await user.click(await screen.findByRole('menuitemcheckbox', { name: 'Русский' }))
     const { doc, editor } = await lessonDoc()
     expect(line(doc, 'p[data-lesson-title]')).toHaveTextContent(LESSON.title.ru)
@@ -187,7 +187,7 @@ describe('the lesson editor (ADR 0116, round 21)', () => {
     })
     const { doc } = await lessonDoc()
     expect(line(doc, 'p[data-lesson-summary]')).toHaveTextContent('')
-    expect(screen.getByText('Draft · not published')).toBeInTheDocument()
+    expect(screen.getByText('Not published')).toBeInTheDocument()
   })
 
   it('edits a course’s lesson as the database keys it, by its course', async () => {

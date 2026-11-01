@@ -245,13 +245,12 @@ export const EXERCISE_KEPT: readonly (keyof ExerciseSearch & string)[] = [
 ]
 
 // The score editor: whether its takes' sheet is open, whether Record is pressed as it opens, the
-// bar its caret opens on (its layout is a setting), and whether an editor edits the song's original.
-export const EDIT_DEFAULTS: EditSearch = { takes: false, record: false, original: false }
+// bar its caret opens on (its layout is a setting).
+export const EDIT_DEFAULTS: EditSearch = { takes: false, record: false }
 const readEditSearch = (raw: Raw): EditSearch => ({
   takes: raw.takes === true,
   record: raw.record === true,
   bar: bar(raw),
-  original: raw.original === true,
 })
 export const editSearch = routeSearch(readEditSearch, EDIT_DEFAULTS)
 

@@ -7,12 +7,6 @@ export const settings: LocaleResources['settings'] = {
   keyboard: 'Клавиатура',
   midi: 'MIDI-клавиатура',
   recording: 'Запись',
-  floating: {
-    place: 'Плавающие кнопки',
-    places: { left: 'Слева', center: 'Посередине', right: 'Справа' },
-    labels: 'Подписывать плавающие кнопки',
-    labelsNote: 'Иначе у каждой только значок; название видно при наведении',
-  },
   progress: {
     label: 'Прогресс',
     reset: 'Сбросить прогресс',

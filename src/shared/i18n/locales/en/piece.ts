@@ -113,6 +113,18 @@ export const piece = {
     partLabelled: 'Part {{label}}',
   },
   // A song's Settings page (round 26, Noji's deck settings): one list, a row a setting or a way on.
+  // A song's page in Edit (round 28): what it says of the song, written in place.
+  facts: {
+    title: 'Title',
+    titlePlaceholder: 'The song’s title',
+    credits: 'Who wrote it',
+    music: 'Music',
+    words: 'Words',
+    add: 'Add',
+    about: 'About the song',
+    aboutPlaceholder: 'What to know about this song',
+    editMusic: 'Edit the music',
+  },
   settings: {
     overview: 'The song',
     title: 'Settings',
@@ -130,9 +142,7 @@ export const piece = {
     published: 'Published',
     changed: 'Changed since',
     notPublished: 'Not published',
-    original: 'The original',
-    editOriginal: 'Edit the original',
-    draft: 'Draft',
+    changes: 'Unpublished changes',
     danger: 'Remove',
   },
 } as const

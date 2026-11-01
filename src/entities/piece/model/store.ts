@@ -12,6 +12,7 @@ import {
 } from '@/shared/lib/music'
 import { barTicksOf, chartOf, stavesOf } from './chart'
 import { ContentError } from './content-error'
+import { readCredits, readNote } from './song-facts'
 import { musicOf, type PieceMusic } from './music'
 import {
   isOwnSongId,
@@ -215,7 +216,17 @@ function songOf(saved: unknown): OwnSong | null {
   if (!song) return null
   // Who published it, where it came from the Public library: as long as a title, at most.
   const author = isText(saved.author) ? saved.author.trim().slice(0, TITLE_MAX) : ''
-  return { id: saved.id, title: song.title, ...song.music, ...(author ? { author } : {}) }
+  // Who wrote it and what is said of it, written on its page (round 28).
+  const credits = readCredits(saved.credits)?.filter((credit) => credit.role !== 'published-by')
+  const note = readNote(saved.note)
+  return {
+    id: saved.id,
+    title: song.title,
+    ...song.music,
+    ...(author ? { author } : {}),
+    ...(credits?.length ? { credits } : {}),
+    ...(note ? { note } : {}),
+  }
 }
 
 /** The value already held where it has the same content: a screen's memos over it hold. */

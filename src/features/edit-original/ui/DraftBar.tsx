@@ -21,25 +21,27 @@ type Asked = 'publish' | 'discard' | 'versions' | null
 
 type DraftState = Pick<ContentDraft, 'drafted' | 'saved'>
 
-/** What the status says of the draft: saved, saving, published as it is, or not saved (and why). */
+/** What the status says of the changes: saved, saving, or not saved (and why); nothing while none. */
 function statusKey(draft: DraftState) {
   if (draft.saved === 'saving') return 'original.saving' as const
   if (draft.saved === 'offline') return 'original.notSavedOffline' as const
   if (draft.saved === 'failed') return 'original.notSaved' as const
-  if (!draft.drafted) return 'original.unchanged' as const
+  if (!draft.drafted) return null
   return draft.saved === 'saved' ? ('original.saved' as const) : ('original.drafted' as const)
 }
 
 /**
- * Where an editor's draft stands (round 21), in the screen's bar beside Publish, never a line of its
- * own under it (the owner's rule, round 25): a cloud and its word, saved, saving, published as it is,
- * or not saved (offline, or failed, the cloud struck out). On a phone the cloud alone, its word
- * still heard and in its tooltip.
+ * Where an editor's changes stand (round 21), in the screen's bar beside Publish, never a line of
+ * its own under it (the owner's rule, round 25): a cloud and its word, saved, saving, or not saved
+ * (offline, or failed, the cloud struck out). Nothing while the item is as published (round 28). On
+ * a phone the cloud alone, its word still heard and in its tooltip.
  */
 export function DraftStatus({ draft, className }: { draft: DraftState; className?: string }) {
   const { t } = useTranslation('editor')
+  const key = statusKey(draft)
+  if (!key) return null
   const unsaved = draft.saved === 'offline' || draft.saved === 'failed'
-  const said = t(statusKey(draft))
+  const said = t(key)
   const Icon = unsaved ? CloudOff : draft.saved === 'saving' ? LoaderCircle : CloudCheck
   return (
     <p

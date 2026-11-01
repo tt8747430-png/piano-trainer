@@ -520,7 +520,7 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Screen bar** (`ScreenHeader`): a screen's title, Back and actions. _Avoid:_ navbar.
 - **Shortcut**: a computer key a screen binds; `?` lists them. _Avoid:_ hotkey, keybinding.
 - **Pop-up button** (`Dropdown`): shows its value and opens a list. _Avoid:_ select.
-- **Floating buttons**: a screen's actions floating in reach. _Avoid:_ FAB (in the UI).
+- **Floating buttons**: a screen's actions floating in reach (a word of the code; the app never names them). _Avoid:_ FAB (in the UI).
 
 ## The backend (ADR 0116)
 
@@ -553,9 +553,9 @@ Format: **Term** (code · UI «Russian»): meaning. _Avoid:_ words.
 - **Published by**: on a song saved from the Public library, who published it (an own song's `author`).
 - **Kept safe**: what this device keeps of the app, which the browser has agreed not to clear when space runs
   short (Settings › Sync and data › On this device). _Avoid:_ persistent storage (the API's name).
-- **Original**: a built-in song as every learner gets it, an editor's to change (**Edit the original**), in place
-  of a learner's own **version**. _Avoid:_ master, source.
-- **Draft**: an editor's unpublished change to a built-in item, kept on the server until it is **published**
+- **Original**: a built-in song as every learner gets it, an editor's to change (their **Edit** edits it), in
+  place of a learner's own **version**. Not a word the app shows. _Avoid:_ master, source.
+- **Draft**: an editor's unpublished change to a built-in item (the app says **Unpublished changes**), kept on the server until it is **published**
   (every learner gets it as a content update) or **discarded**. Each version published is kept, to **restore**.
   _Avoid:_ revision, staging.
 - **Course record** (`CourseRecord`): a course as the database keeps it: its title, summary and its lessons' ids

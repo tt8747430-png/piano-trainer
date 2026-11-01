@@ -111,6 +111,18 @@ export const piece: LocaleResources['piece'] = {
     part: 'Часть',
     partLabelled: 'Часть {{label}}',
   },
+  // A song's page in Edit (round 28): what it says of the song, written in place.
+  facts: {
+    title: 'Название',
+    titlePlaceholder: 'Название песни',
+    credits: 'Авторы',
+    music: 'Музыка',
+    words: 'Слова',
+    add: 'Добавить',
+    about: 'О песне',
+    aboutPlaceholder: 'Что стоит знать об этой песне',
+    editMusic: 'Изменить ноты',
+  },
   settings: {
     overview: 'Песня',
     title: 'Настройки',
@@ -128,9 +140,7 @@ export const piece: LocaleResources['piece'] = {
     published: 'Опубликована',
     changed: 'Изменена',
     notPublished: 'Не опубликована',
-    original: 'Оригинал',
-    editOriginal: 'Править оригинал',
-    draft: 'Черновик',
+    changes: 'Неопубликованные изменения',
     danger: 'Удаление',
   },
 }

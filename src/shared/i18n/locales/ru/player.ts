@@ -15,9 +15,6 @@ export const player: LocaleResources['player'] = {
     one: { song: 'В этой песне один раздел.', study: 'В этом этюде один раздел.' },
   },
   print: 'Печать',
-  mode: {
-    original: 'Править оригинал',
-  },
   views: {
     label: 'Как показывать музыку',
     sheet: 'Ноты',

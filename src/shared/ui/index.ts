@@ -41,7 +41,6 @@ export {
 export { ActionMenu, type MenuAction } from './ActionMenu'
 export { MoreMenu } from './MoreMenu'
 export { FloatingBar, FloatingBarButton, FloatingBarPlay } from './FloatingBar'
-export { useFloatingLabels, type FloatingPlace } from './floating-context'
 export { RankMark } from './RankMark'
 export { Listbox } from './Listbox'
 export { MultiDropdown } from './MultiDropdown'

@@ -23,7 +23,7 @@ const editing = () =>
 
 async function publish(user: ReturnType<typeof userEvent.setup>) {
   const strip = document.body
-  await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
+  await within(strip).findByText('Saved · not published', {}, { timeout: 3000 })
   await user.click(within(strip).getByRole('button', { name: 'Publish' }))
   await user.click(
     within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
@@ -80,7 +80,7 @@ describe('Manage lessons, a level’s editor (content as data)', () => {
       auth: await signedInAs('editor'),
       contentEditing: content,
     })
-    await user.click(await screen.findByRole('button', { name: 'The draft’s menu' }))
+    await user.click(await screen.findByRole('button', { name: 'Publishing' }))
     await user.click(await screen.findByRole('menuitemcheckbox', { name: 'Русский' }))
     const name = within(screen.getByRole('region', { name: FIRST.title.en })).getByRole('textbox', {
       name: 'Chapter name',

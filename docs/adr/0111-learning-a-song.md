@@ -19,8 +19,8 @@ no card on top.
 - **The song's Settings** (`/songs/$pieceId/settings`, Noji's deck settings): one list of grouped rows, a value at
   each row's end or a way on. Music (Edit the score); In your library (Favourite, its folder, Archive or Restore);
   Share (Export…, Share link, **Publish in library**, a page of its own at `/songs/$pieceId/publish`: the
-  description, the row as others see it, Publish or Update, Unpublish); an editor's original (Edit the original, its
-  draft's status and menu); and apart, Delete or Reset to the original, asked first. A study has no library rows.
+  description, the row as others see it, Publish or Update, Unpublish); an editor's Unpublished changes (their status and
+  menu, there only while there are some); and apart, Delete or Reset to the original, asked first. A study has no library rows.
 - **A section's page** (`…/sections/$section`) teaches it:
   - **Chords**, open: each learned by **three holds** in its sheet: its keys held together on a MIDI keyboard or the
     sheet's keys, every key let go since the last. Each hold is heard (an accented click) and seen ("1 of 3").
@@ -52,3 +52,4 @@ along is not built: it would need timing windows the Player does not keep.
   − n +, found by Search; Fine-tune: the tempo's note and number, bars, key, time with C, ¢ or your own). Publish in
   library one screen for songs and patterns, Noji's: its link with Copy, View in library, its saves, Unpublish and
   Publish new version at the foot, why publish in a sheet (2026-11-01).
+- r28 — The song's page in Edit, where its words are the learner's (an own song) or an editor's (the app's): its title in the language shown, who wrote its music and words (properties), what is said of it, and Edit the music; Settings, then Edit at the bar's end. Elsewhere the pencil opens the learner's version of the score (2026-11-01).

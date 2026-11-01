@@ -2,7 +2,6 @@ import { Link, useParams, useRouter } from '@tanstack/react-router'
 import {
   Archive,
   ArchiveRestore,
-  BookLock,
   FilePen,
   Download,
   FolderInput,
@@ -71,7 +70,7 @@ export function SongSettingsPage() {
  * A song's Settings (round 26, Noji's deck settings, memory-palaces' deck settings): one list of
  * grouped rows, each a setting with its value at its end or a way on, a sheet or a page. Its music,
  * edited on the score; its place in the library (Favourite, its folder, Archive or Restore); its ways
- * out (Export…, Share link, Publish in library, a page); an editor's original, its draft's status and
+ * out (Export…, Share link, Publish in library, a page); an editor's unpublished changes, their status and
  * menu (Publish, Versions, Discard); and last, apart, the learner's own music given up: Delete, or
  * Reset to the original, asked first.
  */
@@ -193,7 +192,7 @@ function SongSettings({ piece }: { piece: Piece }) {
             />
           ) : null}
         </SettingsGroup>
-        {original ? <OriginalRows piece={original} title={title} /> : null}
+        {original ? <UnpublishedChanges piece={original} title={title} /> : null}
         {ownMusic ? (
           <div ref={danger}>
             <SettingsGroup flush title={t('settings.danger')}>
@@ -228,35 +227,26 @@ function SongSettings({ piece }: { piece: Piece }) {
 }
 
 /**
- * An editor's original of a built-in song (ADR 0116): Edit the original, and its draft, where it
- * stands with its menu (Publish, Versions, Discard).
+ * A built-in song's changes not published yet, an editor's (ADR 0116): where they stand, with their
+ * menu (Publish, Versions, Discard). Nothing shows while the song is as published.
  */
-function OriginalRows({ piece, title }: { piece: ChartPiece; title: string }) {
+function UnpublishedChanges({ piece, title }: { piece: ChartPiece; title: string }) {
   const { t } = useTranslation(['piece', 'editor'])
   const draft = useOriginalDraft(piece)
+  if (draft.load.state !== 'ready' || !draft.drafted) return null
   return (
-    <SettingsGroup flush title={t('settings.original')}>
-      <RowLink
-        title={t('settings.editOriginal')}
-        icon={BookLock}
-        paint="lilac"
-        render={
-          <Link to="/edit/$pieceId" params={{ pieceId: piece.id }} search={{ original: true }} />
-        }
-      />
-      {draft.load.state === 'ready' ? (
-        <div className="flex min-h-16 items-center gap-3 py-2 pr-2 pl-2">
-          <TileMark icon={FilePen} paint="sand" />
-          <span className="min-w-0 flex-1 text-lg font-semibold">{t('settings.draft')}</span>
-          <DraftStatus draft={draft} />
-          <DraftActions
-            draft={draft}
-            title={title}
-            unreadable={t('editor:original.unreadable')}
-            onReset={draft.reopen}
-          />
-        </div>
-      ) : null}
+    <SettingsGroup flush>
+      <div className="flex min-h-16 items-center gap-3 py-2 pr-2 pl-2">
+        <TileMark icon={FilePen} paint="sand" />
+        <span className="min-w-0 flex-1 text-lg font-semibold">{t('settings.changes')}</span>
+        <DraftStatus draft={draft} />
+        <DraftActions
+          draft={draft}
+          title={title}
+          unreadable={t('editor:original.unreadable')}
+          onReset={draft.reopen}
+        />
+      </div>
     </SettingsGroup>
   )
 }

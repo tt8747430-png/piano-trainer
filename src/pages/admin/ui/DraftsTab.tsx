@@ -34,7 +34,7 @@ const ICONS: Readonly<Record<ContentKind, LucideIcon>> = {
 function editorOf({ kind, id }: Pick<DraftListing, 'kind' | 'id'>): ReactElement {
   switch (kind) {
     case 'piece':
-      return <Link to="/edit/$pieceId" params={{ pieceId: id }} search={{ original: true }} />
+      return <Link to="/edit/$pieceId" params={{ pieceId: id }} />
     case 'course':
       return <Link to="/courses/$courseId/edit" params={{ courseId: id }} />
     case 'journey':

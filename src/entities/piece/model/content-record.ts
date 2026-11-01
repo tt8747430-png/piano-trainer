@@ -1,6 +1,7 @@
 import { parseKey } from '@/shared/lib/music'
 import { factsOf } from './facts'
 import { musicOf, readMusic, type PieceMusic } from './music'
+import { readCredits, readNote } from './song-facts'
 import {
   isPiece,
   isSongCollectionId,
@@ -107,5 +108,24 @@ export function originalMusic(piece: ChartPiece, body: unknown): PieceMusic | un
     return music
   } catch {
     return undefined
+  }
+}
+
+/**
+ * An editor's draft of the piece read back whole (round 28): its music as `originalMusic` reads it,
+ * and what its page says of it (its title, credits and note) as written there.
+ */
+export function originalPiece(piece: ChartPiece, body: unknown): ChartPiece | undefined {
+  const music = originalMusic(piece, body)
+  if (!music) return undefined
+  const written = body as Partial<Record<'title' | 'credits' | 'note', unknown>>
+  const { credits: _credits, note: _note, ...withMusic } = originalWith(piece, music)
+  const credits = readCredits(written.credits)
+  const note = readNote(written.note)
+  return {
+    ...withMusic,
+    title: typeof written.title === 'string' && written.title.trim() ? written.title : piece.title,
+    ...(credits ? { credits } : {}),
+    ...(note ? { note } : {}),
   }
 }

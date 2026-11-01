@@ -32,7 +32,7 @@ async function rowAction(user: ReturnType<typeof userEvent.setup>, title: string
 /** Publishes the draft once it is saved: the bar's Publish, then the dialog's. */
 async function publish(user: ReturnType<typeof userEvent.setup>) {
   const strip = document.body
-  await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
+  await within(strip).findByText('Saved · not published', {}, { timeout: 3000 })
   await user.click(within(strip).getByRole('button', { name: 'Publish' }))
   await user.click(
     within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),
@@ -68,7 +68,7 @@ describe('the course editor (ADR 0116, round 12)', () => {
     expect(title).toHaveValue(COURSE.title.en)
     await user.clear(title)
     await user.type(title, 'A new course title')
-    await user.click(screen.getByRole('button', { name: 'The draft’s menu' }))
+    await user.click(screen.getByRole('button', { name: 'Publishing' }))
     await user.click(await screen.findByRole('menuitemcheckbox', { name: 'Русский' }))
     expect(await field('Title')).toHaveValue(COURSE.title.ru)
     await user.type(await field('Summary'), '!')

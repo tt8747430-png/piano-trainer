@@ -40,7 +40,7 @@ describe('the progression editor (content as data)', () => {
     await user.clear(major)
     await user.type(major, 'I vi ii V')
     const strip = document.body
-    await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
+    await within(strip).findByText('Saved · not published', {}, { timeout: 3000 })
     await user.click(within(strip).getByRole('button', { name: 'Publish' }))
     await user.click(
       within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }),

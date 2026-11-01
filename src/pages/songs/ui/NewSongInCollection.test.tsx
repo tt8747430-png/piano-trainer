@@ -37,7 +37,6 @@ describe('a new song in a collection’s folder (content as data, round 26: one 
     await user.click(within(sheet).getByRole('button', { name: 'Next' }))
     await user.click(within(sheet).getByRole('button', { name: 'Create song' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/edit/abide-with-me'))
-    expect(router.state.location.search).toMatchObject({ original: true })
     const draft = await content.draft('piece', 'abide-with-me')
     expect(draft.ok && draft.value?.body).toMatchObject({
       id: 'abide-with-me',
@@ -48,7 +47,7 @@ describe('a new song in a collection’s folder (content as data, round 26: one 
     expect(content.body('piece', 'abide-with-me')).toBeUndefined()
     expect(piecesStore.getState().songs).toEqual([])
     expect(
-      await screen.findByRole('button', { name: 'The draft’s menu' }, { timeout: 5000 }),
+      await screen.findByRole('button', { name: 'Publishing' }, { timeout: 5000 }),
     ).toBeInTheDocument()
   })
 
