@@ -60,17 +60,17 @@ const SHEET_EDGES = 'mx-[calc(-1*max(var(--gutter),env(safe-area-inset-left)))]'
  * keyboard. The keys dock under all of it, or under the bar, as the keyboard settings say. The
  * transport floats over the sheet's foot, the Player's in shape and place (ADR 0115), stepping aside
  * while the music is read; the sheet has room to scroll its last line above it. While a take records,
- * its strip stands where the transport was. What the music's owner says of it (an editor's draft of
- * a song's original, its status and Publish) stands over the sheet, in the column's head (`head`).
+ * its strip stands where the transport was. An editor's draft of a song's original says where it
+ * stands, with its menu (Publish first), in the bar by Done (`draft`), never over the music.
  */
 export function ScoreEditor({
   target,
   bar,
-  head,
+  draft,
 }: {
   target: EditorTarget
   bar?: number | undefined
-  head?: ReactNode
+  draft?: ReactNode
 }) {
   const { t } = useTranslation('editor')
   const editor = useScoreEditor(target, bar)
@@ -157,7 +157,11 @@ export function ScoreEditor({
       {/* The Player's frame (ADR 0115): its bar's two groups, its tools row, the work and the keys
           in the Player's places, so the bar and the keys stand still as Practise · Edit switches. */}
       <div data-keys={dock} className={SCORE_SCREEN}>
-        <ScoreBar lead={<EditorLead />} actions={<EditorActions />} tools={<EditorToolsRow />} />
+        <ScoreBar
+          lead={<EditorLead />}
+          actions={<EditorActions draft={draft} />}
+          tools={<EditorToolsRow />}
+        />
         {/* Where the caret is, a screen reader's alone, in the Player's status line's place. */}
         <PlayerArea area="status">{idle ? <CaretLine /> : null}</PlayerArea>
         <div
@@ -204,9 +208,6 @@ export function ScoreEditor({
             />
           ) : null}
           <div className="relative flex min-h-0 flex-1 flex-col">
-            {/* What the music's owner says over it, in the column's head: the music under it, never
-                covered. */}
-            {head ? <div className="flex shrink-0 justify-center px-2 pb-2">{head}</div> : null}
             <div className="min-h-0 flex-1">{music}</div>
             {/* What floats over the music (ADR 0115): above it, only its own controls taking a touch. */}
             <div className="pointer-events-none absolute inset-0 z-30">

@@ -66,7 +66,13 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
     await screen.findByRole('button', { name: 'The draft’s menu' })
     const strip = document.body
     expect(within(strip).getByText('Published', { selector: 'span' })).toBeInTheDocument()
-    expect(within(strip).getByRole('button', { name: 'Publish' })).toBeDisabled()
+    // Publish is the draft menu's first command (round 26): greyed while nothing is changed.
+    await user.click(screen.getByRole('button', { name: 'The draft’s menu' }))
+    expect(await screen.findByRole('menuitem', { name: 'Publish' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    )
+    await user.keyboard('{Escape}')
 
     await writeChord(user, 'Dm7')
     await within(strip).findByText('Draft · saved', {}, { timeout: 3000 })
@@ -74,7 +80,8 @@ describe('an editor’s draft of a built-in song’s original (ADR 0116)', () =>
     expect(JSON.stringify(draft.ok && draft.value?.body)).toContain('Dm7')
     expect(piecesStore.getState().versions).toEqual({})
 
-    await user.click(within(strip).getByRole('button', { name: 'Publish' }))
+    await user.click(screen.getByRole('button', { name: 'The draft’s menu' }))
+    await user.click(await screen.findByRole('menuitem', { name: 'Publish' }))
     const asked = await screen.findByRole('alertdialog')
     await user.click(within(asked).getByRole('button', { name: 'Publish' }))
     expect(

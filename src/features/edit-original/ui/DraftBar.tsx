@@ -1,4 +1,4 @@
-import { CloudCheck, CloudOff, Ellipsis, History, LoaderCircle, Trash2 } from 'lucide-react'
+import { CloudCheck, CloudOff, Ellipsis, History, LoaderCircle, Trash2, Upload } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { NetResult } from '@/shared/api/network'
@@ -72,6 +72,8 @@ export function DraftActions({
   unreadable,
   onReset,
   more = [],
+  publishInMenu = false,
+  variant = 'ghost',
 }: {
   draft: Pick<ContentDraft, 'drafted' | 'saved' | 'publish' | 'discard' | 'versions' | 'restore'>
   title: string
@@ -80,6 +82,10 @@ export function DraftActions({
   /** What is said where a publish is refused for a draft that does not read as the item. */
   unreadable: string
   onReset: () => void
+  /** Publish as the menu's first command, not a button of its own: the score's bar has no room. */
+  publishInMenu?: boolean
+  /** The menu's button: a page's bar's, or the score's (`tool`). */
+  variant?: 'ghost' | 'tool'
 }) {
   const { t } = useTranslation('editor')
   const [asked, setAsked] = useState<Asked>(null)
@@ -117,7 +123,7 @@ export function DraftActions({
         trigger={<Ellipsis aria-hidden />}
         render={
           <Button
-            variant="ghost"
+            variant={variant}
             size="icon"
             className="size-11 shrink-0 rounded-full"
             aria-label={t('original.more')}
@@ -125,6 +131,17 @@ export function DraftActions({
           />
         }
         actions={[
+          ...(publishInMenu
+            ? [
+                {
+                  key: 'publish',
+                  label: t('original.publish'),
+                  icon: Upload,
+                  disabled: !draft.drafted || busy,
+                  onSelect: () => setAsked('publish'),
+                },
+              ]
+            : []),
           ...more,
           {
             key: 'versions',
@@ -143,13 +160,15 @@ export function DraftActions({
           },
         ]}
       />
-      <Button
-        className="h-11 shrink-0 rounded-full px-4"
-        disabled={!draft.drafted || busy}
-        onClick={() => setAsked('publish')}
-      >
-        {t('original.publish')}
-      </Button>
+      {publishInMenu ? null : (
+        <Button
+          className="h-11 shrink-0 rounded-full px-4"
+          disabled={!draft.drafted || busy}
+          onClick={() => setAsked('publish')}
+        >
+          {t('original.publish')}
+        </Button>
+      )}
 
       <AlertDialog open={asked === 'publish'} onOpenChange={(open) => !open && setAsked(null)}>
         <AlertDialogContent>

@@ -1,4 +1,5 @@
 import { Redo2, Undo2, X } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MidiButton } from '@/features/connect-midi'
 import { barAt } from '@/features/score-editor'
@@ -28,9 +29,10 @@ export function EditorLead() {
 /**
  * The editor's bar's end, in the slots the Player's MIDI · Setup · More stand in (ADR 0115): the MIDI
  * keyboard (hidden without Web MIDI, as the Player's), then Undo and Redo, the edits made most often,
- * where Setup and More are. While a take records they wait for Stop.
+ * where Setup and More are; an original's draft, its status and its menu (`draft`); Done at the end.
+ * While a take records they wait for Stop.
  */
-export function EditorActions() {
+export function EditorActions({ draft }: { draft?: ReactNode }) {
   const { t } = useTranslation('editor')
   const { actions, meta, takes } = useScoreEditorContext()
   const bar = useEditorState((state) => barAt(state.draft, state.caret).index + 1)
@@ -60,6 +62,7 @@ export function EditorActions() {
       >
         <Redo2 aria-hidden />
       </Button>
+      {draft}
       <ScoreEditToggle pieceId={meta.id} editing bar={bar} disabled={recording} />
     </>
   )

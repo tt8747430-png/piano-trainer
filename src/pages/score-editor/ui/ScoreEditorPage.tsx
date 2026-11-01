@@ -86,20 +86,20 @@ function EditingOriginal({ piece }: { piece: ChartPiece }) {
       key={draft.opened}
       target={target}
       bar={bar}
-      head={
-        // Where the draft stands, its menu and Publish, in the column's head: the score's bar has no
-        // room for them beside its own tools on a phone.
-        <div className="flex flex-col items-center gap-1">
-          <div className="flex max-w-full items-center gap-1">
-            <DraftStatus draft={draft} className="ps-2" />
-            <DraftActions
-              draft={draft}
-              title={entryTitles(piece, locale).primary}
-              unreadable={t('original.unreadable')}
-              onReset={draft.reopen}
-            />
-          </div>
-        </div>
+      draft={
+        // Where the draft stands and its menu (Publish first), in the score's bar by Done: never
+        // over the music (round 26).
+        <>
+          <DraftStatus draft={draft} className="px-1 max-[359px]:sr-only" />
+          <DraftActions
+            draft={draft}
+            title={entryTitles(piece, locale).primary}
+            unreadable={t('original.unreadable')}
+            onReset={draft.reopen}
+            publishInMenu
+            variant="tool"
+          />
+        </>
       }
     />
   )

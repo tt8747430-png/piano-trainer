@@ -193,3 +193,4 @@ RxDB with the accounts, sync and deletion we need; we copy its design and code w
 - r25 — Manage courses: the courses' order on their shelves is content (`catalog` `courses`, a migration adds the kind), dragged within each shelf and published whole; Courses reads it, a course it does not name after the rest; a course's shelf stays its own property (2026-10-30).
 - r25 — A draft's status stands in the bar beside Publish (a cloud, its word from sm up), never a line under the bar; the language is the draft menu's alone (2026-10-30).
 - r26 — A lesson's or course's Read · Edit pop-up became Edit mode's one button (Noji's, iOS's): a pencil at the bar's end, Done in Edit (2026-11-01).
+- r26 — Editing an original, the draft's status and menu (Publish first, Versions, Discard) stand in the score's bar by Done, never over the music (2026-11-01).
