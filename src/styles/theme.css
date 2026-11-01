@@ -740,7 +740,7 @@
   --float-room: 5.5rem;
   /* The music's scroll room under the tools floating at its head on a phone held upright and a tablet
      (the score bar's capsule): room to scroll from, never a row kept empty. */
-  --tools-room: 3.5rem;
+  --tools-room: 4.25rem;
   @variant lg {
     --tools-room: 0px;
   }

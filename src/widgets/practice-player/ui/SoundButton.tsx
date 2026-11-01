@@ -45,18 +45,9 @@ export function SoundButton({
   recording: boolean
 }) {
   const { t } = useTranslation(['player', 'common'])
-  const locale = useLocale()
   const side = useDockSide()
   const settings = useSettingsStoreApi()
   const { countIn } = useSettings(selectPractice)
-  const sound = useSettings(selectSound)
-  const parts: readonly { part: SoundPart; label: string }[] = [
-    { part: 'rh', label: t('common:hands.rh') },
-    { part: 'lh', label: t('common:hands.lh') },
-    ...(staves ? [{ part: 'staves' as const, label: t('player:sound.staves') }] : []),
-    ...(recording ? [{ part: 'recording' as const, label: t('player:sound.recording') }] : []),
-    { part: 'click', label: t('player:sound.click') },
-  ]
   return (
     <Popover>
       <PopoverTrigger
@@ -94,39 +85,61 @@ export function SoundButton({
             className={SWITCH_ROW}
           />
         </div>
-        <MenuSection title={t('player:sound.volume')} info={t('player:sound.volumeInfo')}>
-          {parts.map(({ part, label }) => (
-            <Slider
-              key={part}
-              min={0}
-              max={100}
-              step={VOLUME_STEP}
-              value={sound[part]}
-              onValueChange={(percent) => setSound(settings, { [part]: percent })}
-              format={PERCENT}
-              locale={locale}
-              // Room under the track for the thumb's 44px reach, which the popover's edge would cut.
-              className="flex flex-col gap-2 pb-2.5"
-            >
-              <div className="flex justify-between gap-3 text-base">
-                <SliderLabel>{label}</SliderLabel>
-                <span className="text-muted-foreground tabular-nums">
-                  {formatPercent(locale, sound[part])}
-                </span>
-              </div>
-            </Slider>
-          ))}
-          {recording ? (
-            <Button
-              variant="outline"
-              className="min-h-11 self-start rounded-full px-4 text-base"
-              onClick={() => onlyTheChords(settings)}
-            >
-              {t('player:sound.onlyChords')}
-            </Button>
-          ) : null}
-        </MenuSection>
+        <SoundVolumes staves={staves} recording={recording} />
       </PopoverContent>
     </Popover>
+  )
+}
+
+/**
+ * A volume for each part of the music, saved (ADR 0105): the hands, the staves over the piano's and
+ * the recording's where the music has them, and the click; with a recording, Only the chords. The
+ * Player's Sound's and the editor's (round 26): one Sound, one place, in both.
+ */
+export function SoundVolumes({ staves, recording }: { staves: boolean; recording: boolean }) {
+  const { t } = useTranslation(['player', 'common'])
+  const locale = useLocale()
+  const settings = useSettingsStoreApi()
+  const sound = useSettings(selectSound)
+  const parts: readonly { part: SoundPart; label: string }[] = [
+    { part: 'rh', label: t('common:hands.rh') },
+    { part: 'lh', label: t('common:hands.lh') },
+    ...(staves ? [{ part: 'staves' as const, label: t('player:sound.staves') }] : []),
+    ...(recording ? [{ part: 'recording' as const, label: t('player:sound.recording') }] : []),
+    { part: 'click', label: t('player:sound.click') },
+  ]
+  return (
+    <MenuSection title={t('player:sound.volume')} info={t('player:sound.volumeInfo')}>
+      {parts.map(({ part, label }) => (
+        <Slider
+          key={part}
+          min={0}
+          max={100}
+          step={VOLUME_STEP}
+          value={sound[part]}
+          onValueChange={(percent) => setSound(settings, { [part]: percent })}
+          format={PERCENT}
+          locale={locale}
+          // Room under the track for the thumb's 44px reach, which the popover's edge would cut.
+          className="flex flex-col gap-2 pb-2.5"
+        >
+          <div className="flex justify-between gap-3 text-base">
+            <SliderLabel>{label}</SliderLabel>
+            <span className="text-muted-foreground tabular-nums">
+              {formatPercent(locale, sound[part])}
+            </span>
+          </div>
+        </Slider>
+      ))}
+      {recording ? (
+        <Button
+          variant="outline"
+          className="min-h-11 self-start rounded-full px-4 text-base"
+          onClick={() => onlyTheChords(settings)}
+        >
+          {t('player:sound.onlyChords')}
+        </Button>
+      ) : null}
+    </MenuSection>
   )
 }

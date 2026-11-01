@@ -195,7 +195,7 @@ describe('Player', () => {
     const labels = [...sound.querySelectorAll('[data-slot="slider-label"]')].map(
       (label) => label.textContent,
     )
-    expect(labels).toEqual(['Right hand', 'Left hand', 'Recording', 'Click'])
+    expect(labels).toEqual(['Right hand', 'Left hand', 'Recording', 'Metronome'])
     await user.click(within(sound).getByRole('button', { name: 'Only the chords' }))
     expect(settingsStore.getState().sound).toMatchObject({ recording: 0, rh: 100, lh: 100 })
     await user.keyboard('{Escape}')

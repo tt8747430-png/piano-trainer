@@ -139,7 +139,7 @@ export const settings = {
       view: 'View chooses how the music shows: sheet music, chords over lyrics, chord diagrams or a grid.',
       transpose: 'Transpose moves the song up or down a semitone at a time. Reset takes it back.',
       simplify: 'Simplify plays each chord as a plain major or minor triad.',
-      sound: 'Sound holds the count-in, the click and each part’s volume.',
+      sound: 'Sound holds the count-in, the metronome and each part’s volume.',
       loop: 'Loop repeats a passage. Choose it with Shift and a click, or hold a note and drag.',
       wait: 'In the tempo menu, Wait mode waits for each note you play before it goes on.',
     },

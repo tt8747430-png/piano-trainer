@@ -1228,15 +1228,15 @@ describe('the score editor', () => {
       'Next note',
       'Record',
       'Takes: 0',
-      'Recording settings',
+      'Sound',
     ])
     // No take yet: the takes greyed, saying why.
     expect(within(dock).getByRole('button', { name: 'Takes: 0' })).toHaveAttribute(
       'title',
       'Takes: 0 · No takes yet: Record keeps one here.',
     )
-    await user.click(within(dock).getByRole('button', { name: 'Recording settings' }))
-    const settings = await screen.findByRole('dialog', { name: 'Recording settings' })
+    await user.click(within(dock).getByRole('button', { name: 'Sound' }))
+    const settings = await screen.findByRole('dialog', { name: 'Sound' })
     expect(within(settings).getByRole('switch', { name: 'Metronome' })).toBeInTheDocument()
     await user.keyboard('{Escape}')
     // No MIDI keyboard yet: Record's popover says what it needs (ADR 0096).
@@ -2019,8 +2019,8 @@ describe('the score editor’s takes', () => {
 
   /** The recording strip's settings, opened from its button while a take records. */
   async function recordingSettings(user: ReturnType<typeof userEvent.setup>) {
-    await user.click(screen.getByRole('button', { name: 'Recording settings' }))
-    return screen.findByRole('dialog', { name: 'Recording settings' })
+    await user.click(screen.getByRole('button', { name: 'Sound' }))
+    return screen.findByRole('dialog', { name: 'Sound' })
   }
 
   /** One of a take's actions, from its row's menu. */

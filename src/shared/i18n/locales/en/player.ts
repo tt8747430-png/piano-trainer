@@ -201,7 +201,7 @@ export const player = {
     title: 'Sound',
     countIn: 'Count in',
     countInInfo: 'A bar of clicks before the music starts, its beats counted down on the screen.',
-    click: 'Click',
+    click: 'Metronome',
     clickInfo: 'A click on every beat while the music plays.',
     volume: 'Volume',
     volumeInfo:

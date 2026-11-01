@@ -62,3 +62,4 @@ The score editor's Play and its recorder's click keep their own switches. A reco
 - 0105 — The transport's Sound: the count-in, the click and each part's volume (2026-10-26).
 - 0115 — A plain Setup: Starting position, Move smoothly, swing feels, the Melody's source (2026-10-27).
 - r13 — A scale run's practice: hands, each hand's start octave, tempo, metronome, ticks between loops (2026-10-28).
+- r26 — One Sound in both modes: the editor's transport ends with the Player's Sound (its icon, name and place), a take's Metronome and Play melody over each part's volume; the click is called Metronome in both; the tools row's room over the score fits the capsule (2026-11-01).
