@@ -16,6 +16,20 @@ describe('A lesson', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Naming any chord' })).toBeInTheDocument()
   })
 
+  it('reads as one page, or a section at a time from its ⋯, remembered', async () => {
+    const user = userEvent.setup()
+    const { settingsStore } = await renderApp('/lessons/reading-chord-symbols')
+    await screen.findByRole('heading', { level: 1, name: 'How to read chord symbols' })
+    expect(screen.getAllByRole('heading', { level: 2 }).length).toBeGreaterThan(1)
+    expect(screen.queryByRole('link', { name: 'Next' })).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'Lesson options' }))
+    expect(await screen.findByRole('menuitemcheckbox', { name: 'One page' })).toBeChecked()
+    await user.click(screen.getByRole('menuitemcheckbox', { name: 'A section at a time' }))
+    expect(await screen.findByRole('link', { name: 'Next' })).toBeVisible()
+    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(1)
+    expect(settingsStore.getState().lessonReading).toBe('sections')
+  })
+
   it('links the lessons to read before it, and its journey shows its prerequisites by number', async () => {
     const { router } = await renderApp('/lessons/cadences')
     const place = await screen.findByRole('navigation', { name: 'Where this lesson is' })

@@ -8,7 +8,6 @@ import {
   Music,
   Settings,
   Sparkles,
-  Trophy,
   type LucideIcon,
 } from 'lucide-react'
 import { useId, useMemo } from 'react'
@@ -23,14 +22,14 @@ import {
 } from '@/entities/progress'
 import { cn } from '@/shared/lib'
 import { useAccount } from '@/shared/lib/account'
-import { Avatar, ButtonLink, RoundLink, ScreenHeader } from '@/shared/ui'
-import { PracticeCalendar, useToday } from '@/widgets/practice-days'
+import { Avatar, ButtonLink, RoundLink, RowLink, ScreenHeader, SettingsGroup } from '@/shared/ui'
+import { useToday } from '@/widgets/practice-days'
 
 /**
  * The Profile, a place of its own (memory-palaces'): the learner's name in its bar with Settings,
  * the screen's action, beside it (the Account is Settings' first row); their picture, email (or a
- * guest's Sign in) and three figures of their practice; the month's Activity; the rest of their
- * record; their badges. Each thing opens one way.
+ * guest's Sign in) and three figures of their practice; a row to their Activity (Noji's, a page of
+ * its own); the rest of their record; their badges. Each thing opens one way.
  */
 export function ProfilePage() {
   const { t } = useTranslation(['account', 'common'])
@@ -53,7 +52,15 @@ export function ProfilePage() {
       />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-7">
         <Hero />
-        <PracticeCalendar title={t('profile.activity')} />
+        <SettingsGroup flush>
+          <RowLink
+            title={t('profile.activity')}
+            detail={t('profile.activityLine')}
+            icon={CalendarDays}
+            paint="grass"
+            render={<Link to="/profile/activity" />}
+          />
+        </SettingsGroup>
         <Record />
         <Achievements />
       </div>
@@ -88,7 +95,7 @@ function Hero() {
   )
 }
 
-/** Days in a row, days practised and songs played, side by side, a hairline between them. */
+/** Days in a row, songs played and steps learned, side by side, a hairline between them. */
 function Figures() {
   const { t } = useTranslation('account')
   const days = useProgress(selectDays)
@@ -97,8 +104,8 @@ function Figures() {
   const record = useMemo(() => practiceRecord(progress), [progress])
   const figures = [
     { label: t('profile.streak'), value: streak(days, today), icon: Flame },
-    { label: t('profile.days'), value: record.daysPractised, icon: CalendarDays },
     { label: t('profile.songs'), value: record.songsPlayed, icon: Music },
+    { label: t('profile.steps'), value: record.stepsLearned, icon: Footprints },
   ] as const
   return (
     <dl
@@ -123,8 +130,6 @@ function Figures() {
 
 /** The figures of the record the hero leaves out: one card, a figure a line, its number at its end. */
 const RECORD = [
-  ['bestStreak', 'bestStreak', Trophy],
-  ['stepsLearned', 'steps', Footprints],
   ['lessonsDone', 'lessons', BookOpenCheck],
   ['skillsKnown', 'skills', Sparkles],
 ] as const satisfies readonly (readonly [keyof PracticeRecord, string, LucideIcon])[]

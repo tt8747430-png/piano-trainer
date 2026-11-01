@@ -7,10 +7,11 @@ import {
 } from '@tanstack/react-router'
 import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { shownText } from '@/shared/test/shown-text'
 import { lessonById, type Lesson } from '@/entities/lesson'
-import { createSettingsStore, SettingsStoreProvider } from '@/entities/settings'
+import { createSettingsStore, SettingsStoreProvider, type LessonReading } from '@/entities/settings'
+import { setLessonReading } from '@/features/set-preference'
 import { createFakeAudio } from '@/shared/api/audio'
 import { createFakeMidi } from '@/shared/api/midi'
 import { createMemoryStorage } from '@/shared/lib'
@@ -36,13 +37,14 @@ const UP: UpLink = { link: <Link to="/" />, label: 'Back to the journey', title:
 const ONWARD: Onward = { link: <Link to="/" />, onGo: () => {} }
 
 /** A lesson as the one route of a memory router, so its links build their addresses. */
-async function renderLesson(lesson: Lesson = firstLesson()) {
+async function renderLesson(lesson: Lesson = firstLesson(), reading: LessonReading = 'page') {
   const audio = createFakeAudio()
   const store = createSettingsStore({
     storage: createMemoryStorage(),
     languages: ['en'],
     finePointer: false,
   })
+  setLessonReading(store, reading)
   const router = createRouter({
     routeTree: createRootRoute({
       component: () => <LessonView lesson={lesson} up={UP} onward={ONWARD} />,
@@ -116,20 +118,9 @@ describe('LessonView', () => {
     )
   })
 
-  it('reads a page at a time on a phone: back, the pages’ dots, Next, and Done on the last', async () => {
-    // A phone held upright: the paged lesson's query matches.
-    vi.stubGlobal('matchMedia', (media: string) => ({
-      media,
-      matches: media.includes('max-width: 639.98px'),
-      onchange: null,
-      addEventListener: () => {},
-      removeEventListener: () => {},
-      addListener: () => {},
-      removeListener: () => {},
-      dispatchEvent: () => false,
-    }))
+  it('reads a section at a time where the learner chose it: back, the dots, Next, and Done on the last', async () => {
     const user = userEvent.setup()
-    await renderLesson()
+    await renderLesson(firstLesson(), 'sections')
     expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
       'Reading chord symbols',
     ])

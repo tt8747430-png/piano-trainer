@@ -15,6 +15,7 @@ import type {
   Theme,
   FloatingSettings,
   TrainerSettings,
+  LessonReading,
 } from './types'
 
 export const selectTheme = (state: SettingsState): Theme => state.theme
@@ -47,3 +48,6 @@ export const selectMelody = (state: SettingsState): MelodySource => state.melody
 export const selectMetronome = (state: SettingsState): MetronomeSettings => state.metronome
 
 export const selectWelcomed = (state: SettingsState): boolean => state.welcomed
+
+/** How a lesson reads (round 26): one page, or a section at a time. */
+export const selectLessonReading = (state: SettingsState): LessonReading => state.lessonReading

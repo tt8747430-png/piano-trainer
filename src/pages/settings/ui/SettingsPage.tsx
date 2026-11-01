@@ -5,6 +5,7 @@ import {
   ArrowDownRight,
   Cable,
   CloudUpload,
+  BookOpenText,
   Info,
   Languages,
   LifeBuoy,
@@ -18,6 +19,8 @@ import {
 import { useTranslation } from 'react-i18next'
 import {
   FLOATING_PLACES,
+  LESSON_READINGS,
+  selectLessonReading,
   selectFloating,
   selectLocale,
   selectTheme,
@@ -26,7 +29,7 @@ import {
   useSettingsStoreApi,
 } from '@/entities/settings'
 import { useMidiSummary } from '@/features/connect-midi'
-import { setFloating, setLocale, setTheme } from '@/features/set-preference'
+import { setFloating, setLessonReading, setLocale, setTheme } from '@/features/set-preference'
 import { APP_BUILD } from '@/shared/config'
 import { LOCALES } from '@/shared/i18n'
 import { useAccount, useSync } from '@/shared/lib/account'
@@ -50,16 +53,17 @@ const PLACE_ICON = { left: ArrowDownLeft, center: ArrowDown, right: ArrowDownRig
  * Settings, one grouped list as an app's settings read (memory-palaces', iOS's): the account card
  * first, the learner and their Sync and data (as an Apple ID's card holds iCloud); then General, its
  * choices made in place (the language, the theme, where the floating buttons stand and whether they
- * say their names); Playing (the MIDI keyboard, the keyboard and recording); Help (How to use,
+ * say their names, how a lesson reads); Playing (the MIDI keyboard, the keyboard and recording); Help (How to use,
  * Privacy, Terms) and the app's version; and for an admin, the Admin area.
  */
 export function SettingsPage() {
-  const { t } = useTranslation(['settings', 'admin'])
+  const { t } = useTranslation(['settings', 'admin', 'learn'])
   const { account } = useAccount()
   const settings = useSettingsStoreApi()
   const locale = useSettings(selectLocale)
   const theme = useSettings(selectTheme)
   const floating = useSettings(selectFloating)
+  const reading = useSettings(selectLessonReading)
   const midi = useMidiSummary()
   const FloatingIcon = PLACE_ICON[floating.place]
   return (
@@ -109,6 +113,19 @@ export function SettingsPage() {
             onCheckedChange={(labels) => setFloating(settings, { labels })}
             className="gap-3 border-0 pr-3 pl-2 font-semibold"
           />
+          <ChoiceRow title={t('learn:reading.title')} icon={BookOpenText} paint="lilac">
+            <Dropdown
+              label={t('learn:reading.title')}
+              bare
+              align="end"
+              value={reading}
+              options={LESSON_READINGS.map((value) => ({
+                value,
+                label: t(`learn:reading.${value}`),
+              }))}
+              onChange={(value) => setLessonReading(settings, value)}
+            />
+          </ChoiceRow>
         </SettingsGroup>
         <SettingsGroup flush title={t('groups.playing.label')}>
           <RowLink

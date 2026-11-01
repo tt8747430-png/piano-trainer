@@ -45,9 +45,16 @@ const DEFAULTS = {
   metronome: DEFAULT_METRONOME,
   foldedSections: [],
   welcomed: false,
+  lessonReading: 'page',
 }
 
 describe('createSettingsStore', () => {
+  it('reads a lesson as one page, or a section at a time where that was saved (round 26)', () => {
+    expect(restored({}).lessonReading).toBe('page')
+    expect(restored({ lessonReading: 'sections' }).lessonReading).toBe('sections')
+    expect(restored({ lessonReading: 'scroll' }).lessonReading).toBe('page')
+  })
+
   it('keeps the Melody saved where it is a source, the recording otherwise (ADR 0115)', () => {
     expect(restored({ melody: 'staff' }).melody).toBe('staff')
     expect(restored({ melody: 'tune' }).melody).toBe('recording')
@@ -158,6 +165,7 @@ describe('createSettingsStore', () => {
       },
       foldedSections: ['chords.tensions'],
       welcomed: true,
+      lessonReading: 'sections',
     }
     expect(restored(saved)).toEqual(saved)
   })

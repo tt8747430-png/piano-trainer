@@ -40,6 +40,7 @@ describe('settings selectors', () => {
       recorder: DEFAULT_RECORDER,
       foldedSections: ['chords.tensions'],
       welcomed: true,
+      lessonReading: 'sections',
       sidebar: 'collapsed',
       paletteFolded: {},
       paletteSections: null,

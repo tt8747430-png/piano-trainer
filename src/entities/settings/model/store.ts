@@ -14,6 +14,7 @@ import type { Midi } from '@/shared/lib/music'
 import { BPM_RANGE } from '@/shared/lib/schedule'
 import {
   CHORD_KEYS_MAX,
+  isLessonReading,
   DEFAULT_CHORD_FINDER,
   DEFAULT_MELODY,
   DEFAULT_METRONOME,
@@ -103,6 +104,7 @@ export function createSettingsStore({
         metronome: DEFAULT_METRONOME,
         foldedSections: [],
         welcomed: false,
+        lessonReading: 'page',
       },
       read: sanitize,
     },
@@ -324,5 +326,6 @@ function sanitize(persisted: unknown, current: SettingsState): SettingsState {
     metronome: metronomeSettings(saved.metronome),
     foldedSections: foldedSections(saved.foldedSections),
     welcomed: saved.welcomed === true,
+    lessonReading: isLessonReading(saved.lessonReading) ? saved.lessonReading : 'page',
   }
 }

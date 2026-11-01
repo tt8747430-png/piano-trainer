@@ -279,7 +279,15 @@ export interface SettingsState {
   foldedSections: readonly string[]
   /** Whether the welcome was seen: the app's first run shows it once. */
   welcomed: boolean
+  /** How a lesson reads (round 26): one page of its sections, or a section at a time. */
+  lessonReading: LessonReading
 }
+
+/** How a lesson reads: one page of its sections (the plain page), or a section at a time. */
+export const LESSON_READINGS = ['page', 'sections'] as const
+export type LessonReading = (typeof LESSON_READINGS)[number]
+export const isLessonReading = (value: unknown): value is LessonReading =>
+  LESSON_READINGS.some((reading) => reading === value)
 
 export const DEFAULT_PRACTICE: PracticeToggles = {
   fingerNumbers: false,

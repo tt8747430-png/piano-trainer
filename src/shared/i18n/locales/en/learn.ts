@@ -111,6 +111,14 @@ export const learn = {
   },
   // An editor's lesson editor (ADR 0116): every text the lesson shows, English and Russian side by side.
   // A lesson's or a course's two modes, an editor's (round 25).
+  // How a lesson reads (round 26): the lesson's ⋯, and Settings' Lessons.
+  reading: {
+    label: 'Lesson options',
+    group: 'Reading',
+    title: 'Lessons read as',
+    page: 'One page',
+    sections: 'A section at a time',
+  },
   edit: {
     doc: {
       label: 'The lesson',
@@ -288,7 +296,8 @@ export const learn = {
       answer: 'Answer',
       answerInfo: 'The chord the question asks to be played, as a symbol: C, Am7, F/A.',
       answerNotes: 'Answer',
-      answerNotesInfo: 'The notes the question asks to be played, in order, a space between them: F A C.',
+      answerNotesInfo:
+        'The notes the question asks to be played, in order, a space between them: F A C.',
       chords: 'Chords',
       notes: 'Notes',
       bass: 'Left hand',

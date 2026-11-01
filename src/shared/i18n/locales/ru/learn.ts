@@ -100,6 +100,13 @@ export const learn: LocaleResources['learn'] = {
     again: 'Снова',
   },
   // A lesson's or a course's two modes, an editor's (round 25).
+  reading: {
+    label: 'Настройки урока',
+    group: 'Чтение',
+    title: 'Уроки читаются',
+    page: 'Одной страницей',
+    sections: 'По разделам',
+  },
   edit: {
     doc: {
       label: 'Урок',

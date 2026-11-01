@@ -34,6 +34,8 @@ export const account = {
     figures: 'Your practice',
     streak: 'Days in a row',
     activity: 'Activity',
+    activityLine: 'Your run of days and this month’s calendar',
+    month: 'This month',
     record: 'Your record',
     recordEmpty: 'Nothing here yet. Finish a lesson or play a song, and your record starts.',
     recordStart: 'Start learning',

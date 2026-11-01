@@ -160,6 +160,12 @@ const profileRoute = createRoute({
   path: '/profile',
   component: lazyRouteComponent(settingsScreens, 'ProfilePage'),
 })
+// Its Activity (round 26, Noji's): the days at the piano in figures and the month's calendar.
+const activityRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/profile/activity',
+  component: lazyRouteComponent(settingsScreens, 'ActivityPage'),
+})
 // Settings' pages: the keyboard and recording, sync and data, and the account's.
 const playingRoute = createRoute({
   getParentRoute: () => shellRoute,
@@ -692,6 +698,7 @@ const routeTree = rootRoute.addChildren([
   shellRoute.addChildren([
     learnRoute,
     profileRoute,
+    activityRoute,
     adminRoute,
     settingsRoute,
     playingRoute,
