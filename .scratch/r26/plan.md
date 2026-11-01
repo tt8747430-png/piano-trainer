@@ -182,3 +182,17 @@ Ours:
 - None blocking. Interpretations taken:
   - "Customise the song page" means its Settings page and the reading/view choices.
   - "Customise the lesson page" means the reading settings (one page or sections, text size).
+
+## 6b. The example editor (next round, scoped 2026-11-01)
+
+- Route `/lessons/$lessonId/edit/example/$at` (full screen) in `pages/score-editor`: the lesson's draft
+  (`useLessonDraft`, `features/edit-original`) opened, its block `at` a `notes` block, edited by `ScoreEditor`
+  over a new `EditorTarget` kind `example` whose `save` writes the block back into the draft; Done returns to the
+  lesson editor at the example.
+- Music: a treble or bass line alone is one single staff, a lead sheet (`staves: [{ clef, notes }]`,
+  `leadSheet: true`); with a `bass` line, the grand staff (`hands: { rh, lh }`). Bars carry no chord symbol
+  (ADR 0094 C). The key and meter are the block's.
+- Conversion, pure and tested, in `entities/lesson/model` (or `features/score-editor`): a lesson's note line
+  (`E4/2 B4/8. C5/2~ C5/4`, note values) ⇄ a piece's line (`E4/2 B4/.75`, beats; compound meters' beat a dotted
+  quarter), ties kept; what the example cannot hold (chords in a hand, marks, more staves) said and refused at Done.
+- The example's Edit music button (pencil) beside its fields; the text line stays under an ⓘ "Edit as text".
