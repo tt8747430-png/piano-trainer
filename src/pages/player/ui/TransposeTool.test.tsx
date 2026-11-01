@@ -58,10 +58,10 @@ describe('Transpose (ADR 0105)', () => {
     const popover = await openTranspose(user)
     await user.click(within(popover).getByRole('button', { name: 'Up a semitone' }))
     expect(router.state.location.search).toMatchObject({ key: 'F#' })
-    expect(popover).toHaveTextContent('F# major')
+    expect(popover).toHaveTextContent('F♯ major')
     expect(popover).toHaveTextContent('+1')
     // The tool prints the key as a chord symbol is printed.
-    expect(shownText(screen.getByRole('button', { name: 'Transpose: F# major, +1' }))).toContain(
+    expect(shownText(screen.getByRole('button', { name: 'Transpose: F♯ major, +1' }))).toContain(
       'TransposeF♯',
     )
   })

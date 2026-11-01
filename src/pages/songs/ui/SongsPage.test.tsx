@@ -824,7 +824,7 @@ describe('Songs: the sort and the filters (ADR 0106)', () => {
   it('says which filter found nothing, by its own words', async () => {
     await renderApp('/songs/folders/hymns?key=C%23m')
     // The key as the app names keys.
-    expect(await screen.findByText('No songs here in C# minor.')).toBeInTheDocument()
+    expect(await screen.findByText('No songs here in C♯ minor.')).toBeInTheDocument()
     cleanup()
     await renderApp('/songs/folders/hymns?key=C%23m&favourites=true')
     expect(await screen.findByText('No songs here match these filters.')).toBeInTheDocument()

@@ -577,20 +577,20 @@ describe('NoteChoice', () => {
         .map((each) => each.textContent),
     ).toEqual([
       'C',
-      'C#',
+      'C♯',
       'D♭',
       'D',
-      'D#',
+      'D♯',
       'E♭',
       'E',
       'F',
-      'F#',
+      'F♯',
       'G♭',
       'G',
-      'G#',
+      'G♯',
       'A♭',
       'A',
-      'A#',
+      'A♯',
       'B♭',
       'B',
     ])
@@ -624,7 +624,7 @@ describe('NoteChoice', () => {
     const key = screen.getByRole('group', { name: 'Key' })
     expect(within(key).queryByRole('radio', { name: 'D♭' })).not.toBeInTheDocument()
     expect(screen.getByText('C# minor')).toBeInTheDocument()
-    await user.click(within(key).getByRole('radio', { name: 'D#' }))
+    await user.click(within(key).getByRole('radio', { name: 'D♯' }))
     expect(onChange).toHaveBeenLastCalledWith(noteParam(note('D', 1)))
   })
 })
@@ -640,7 +640,7 @@ describe('KeyChoice', () => {
     expect(screen.getByText('D♭ major')).toBeInTheDocument()
     expect(within(key).getByRole('radio', { name: 'Major' })).toBeChecked()
     expect(within(key).getByRole('radio', { name: 'D♭' })).toBeChecked()
-    expect(within(key).queryByRole('radio', { name: 'D#' })).not.toBeInTheDocument()
+    expect(within(key).queryByRole('radio', { name: 'D♯' })).not.toBeInTheDocument()
     await user.click(within(key).getByRole('radio', { name: 'E♭' }))
     expect(onChange).toHaveBeenLastCalledWith(keyParam({ tonic: note('E', -1), minor: false }))
   })

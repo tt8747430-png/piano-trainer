@@ -66,7 +66,7 @@ describe('Practice → Progressions', () => {
     await user.clear(field)
     await user.type(field, 'ii V I')
     expect(screen.getByText('These numerals are a major key’s.')).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Play them in F# major' }))
+    await user.click(screen.getByRole('button', { name: 'Play them in F♯ major' }))
     await waitFor(() =>
       expect(router.state.location.search).toMatchObject({ key: 'F#', p: 'ii-V-I' }),
     )

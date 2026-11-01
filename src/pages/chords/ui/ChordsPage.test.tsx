@@ -391,7 +391,7 @@ describe('Practice → Chords, a 7th chord’s tensions', () => {
     await screen.findByRole('region', { name: 'Available tensions' })
     expect(chips('Weak')).toEqual(['1 C', '5 G'])
     expect(chips('Strong')).toEqual(['3 E', '♭7 B♭'])
-    expect(chips('Tensions')).toEqual(['♭9 D♭', '9 D', '#9 D#', '#11 F#', '♭13 A♭', '13 A'])
+    expect(chips('Tensions')).toEqual(['♭9 D♭', '9 D', '♯9 D♯', '♯11 F♯', '♭13 A♭', '13 A'])
     expect(chips('Avoid')).toEqual(['11 F', '7 B'])
   })
 
