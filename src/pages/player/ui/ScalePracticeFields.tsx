@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { ExerciseChoice } from '@/entities/exercise'
-import { noteName, type Hand } from '@/shared/lib/music'
+import { type Hand, printedNote } from '@/shared/lib/music'
 import { handOctaves, ownHandOctaves } from '@/shared/lib/exercise'
 import { TEMPO_RANGE, type Hands } from '@/shared/lib/schedule'
 import { Labelled, Segmented, StepStrip, SwitchRow } from '@/shared/ui'
@@ -62,7 +62,7 @@ export function ScalePracticeFields({
               value={asked !== undefined && fits ? asked : own[hand]}
               options={octaves.map(({ octave, out }) => ({
                 value: octave,
-                label: `${noteName(choice.root)}${octave}`,
+                label: `${printedNote(choice.root)}${octave}`,
                 reason: out ? t(`player:scalePractice.out.${out}`) : undefined,
               }))}
               onChange={(octave) =>

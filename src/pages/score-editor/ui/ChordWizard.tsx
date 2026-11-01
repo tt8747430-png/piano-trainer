@@ -7,10 +7,10 @@ import {
   note,
   noteName,
   printedChord,
-  printedSymbol,
   qualitiesIn,
   type Chord,
   type ChordFamily,
+  printedNote,
 } from '@/shared/lib/music'
 import { bassesOf, WIZARD_ACCIDENTALS, wizardChord, type WizardChoice } from '../model/chord-wizard'
 
@@ -136,7 +136,7 @@ export function ChordWizard({
                 pressed={from.inversion === at + 1}
                 onChoose={() => choose({ inversion: at + 1 })}
               >
-                /{printedSymbol(noteName(bass))}
+                /{printedNote(bass)}
               </Chip>
             ))}
           </Row>

@@ -1,13 +1,13 @@
 import { useDeferredValue, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  noteName,
   pitchClass,
   printedSymbol,
   spellInKey,
   type Key,
   type Midi,
   type TimeSignature,
+  printedNote,
 } from '@/shared/lib/music'
 import { notate } from '@/shared/lib/notation'
 import { cn, keyListParam } from '@/shared/lib'
@@ -127,14 +127,16 @@ export function ChordTrail({
               heard: t(`music:interval.${finding.interval}.name`),
             }
           case 'note': {
-            const symbol = printedSymbol(noteName(finding.note))
+            const symbol = printedNote(finding.note)
             return { symbol, detail: '', heard: symbol }
           }
           default:
             return {
               symbol: '',
               detail: '',
-              heard: keys.map((each) => noteName(spellInKey(pitchClass(each), musicKey))).join(' '),
+              heard: keys
+                .map((each) => printedNote(spellInKey(pitchClass(each), musicKey)))
+                .join(' '),
             }
         }
       }),

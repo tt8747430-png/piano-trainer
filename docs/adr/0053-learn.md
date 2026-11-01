@@ -35,10 +35,10 @@ laid out as journeys, and courses on shelves with pages of their own, as the ref
   open (a chord, a scale, a key, a tool, a trainer, the Player), never a route.
 - **A lesson's page** is one column in the middle under one floating bar (‹ the section before, the count opening its
   contents and what it is part of, › the next). Its end is the lesson before and the way on; going on learns it.
-  **On a phone** (upright or on its side) it reads **a section a page**, as the reference theory book does: the bar
-  holds ‹, the pages' dots (opening the contents) and Next, Done on the last page, which goes on and learns it. A
-  laptop or a tablet keeps the scroll: there two or three sections fit a screen and the eye looks back over them,
-  where on a phone one section fills it anyway.
+  It reads as **one page of its sections** for everyone, on every screen. A learner who wants it **a section at a
+  time** chooses so (the lesson's ⋯, Reading: One page · A section at a time; or Settings › General, `pt-settings`
+  `lessonReading`): then the bar holds ‹, the pages' dots (opening the contents) and Next, Done on the last page,
+  which goes on and learns it.
 - **What a lesson shows of harmony:** a progression's row has a chip per chord, its numeral over its function
   (tonic, subdominant, dominant: T S D, the Riemann letters every lesson and the Russian theory use), or over its
   root's move (`show: 'motion'`, with the legend and Play the chain); the chip sounding follows the row, a tap plays
@@ -85,3 +85,6 @@ course.
 - r24 — The journeys named for what they are, the four levels: chosen from one row of chips, the level's name,
   goal and steps learned under them; the days practised and the songs played last are the Profile's (2026-10-30).
 - r25 — The phone's tab bar fades and slides from the foot as it comes and goes (memory-palaces'), at once under reduced motion (2026-10-30).
+- r26 — A lesson one page by default everywhere, a section at a time the learner's choice (the lesson's ⋯ and
+  Settings); the Profile's figures are days in a row, songs played and steps learned, with **Activity** a page of its
+  own (`/profile/activity`: the run, the best run, the days practised, this month's calendar), as Noji's (2026-11-01).

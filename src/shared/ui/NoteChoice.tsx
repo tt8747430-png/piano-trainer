@@ -3,13 +3,13 @@ import {
   LETTERS,
   note,
   noteFromParam,
-  noteName,
   noteParam,
   ROOT_ACCIDENTALS,
   type Letter,
   type NoteParam,
   type RootAccidental,
   type SpelledNote,
+  printedNote,
 } from '@/shared/lib/music'
 import { StepStrip } from './StepStrip'
 
@@ -37,7 +37,7 @@ export function NoteChoice({
   value,
   onChange,
   accidentals = ROOT_SPELLINGS,
-  name = noteName,
+  name = printedNote,
   children,
 }: {
   label: string
@@ -70,7 +70,7 @@ export function NoteChoice({
             value={value}
             options={spellings.map((spelled) => ({
               value: noteParam(spelled),
-              label: noteName(spelled),
+              label: printedNote(spelled),
             }))}
             onChange={onChange}
           />

@@ -17,6 +17,7 @@ import {
   useSortable,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { CSS } from '@dnd-kit/utilities'
 import { Ellipsis, GripVertical, Trash2, type LucideIcon } from 'lucide-react'
 import { useState, type ReactElement, type ReactNode } from 'react'
@@ -314,6 +315,8 @@ export function RowGroups({
     <DndContext
       sensors={sensors}
       collisionDetection={closestCorners}
+      // A row or a group moves up and down its list only: it never slides out past its card's sides.
+      modifiers={[restrictToVerticalAxis]}
       onDragStart={() => setDragged(given)}
       onDragOver={over}
       onDragEnd={end}

@@ -1,12 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import {
-  keySignature,
-  noteName,
-  printedSymbol,
-  signatureKey,
-  writtenKey,
-  type Key,
-} from '@/shared/lib/music'
+import { keySignature, signatureKey, writtenKey, type Key, printedNote } from '@/shared/lib/music'
 import { Button } from '../primitives/button'
 import { Segmented } from '../Segmented'
 import { PickerCell, PickerGrid } from './PickerGrid'
@@ -33,7 +26,7 @@ export function KeySignaturePicker({
   const { t } = useTranslation(['editor', 'music'])
   const full = (key: Key) =>
     t(key.minor ? 'music:key.minor' : 'music:key.major', {
-      tonic: printedSymbol(noteName(key.tonic)),
+      tonic: printedNote(key.tonic),
     })
   const count = keySignature(value)
   const signature = (each: number) => signatureKey(each, value.minor)

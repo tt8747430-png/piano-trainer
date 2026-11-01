@@ -1,7 +1,7 @@
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib'
-import { noteName, type TensionGroup, type TensionTone } from '@/shared/lib/music'
+import { type TensionGroup, type TensionTone, printedNote } from '@/shared/lib/music'
 import { PlayToggle, ROLE_BG } from '@/shared/ui'
 
 /** An avoid note's degree stands on the card's own sand: its role's colour would call it a chord tone. */
@@ -51,7 +51,7 @@ export function TensionGroupCard({
                 >
                   {tone.degree}
                 </span>{' '}
-                <span>{noteName(tone.note)}</span>
+                <span>{printedNote(tone.note)}</span>
               </PlayToggle>
             </li>
           )

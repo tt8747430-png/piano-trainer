@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { Question } from '@/features/trainer'
-import { noteName, pitchClass, ROMAN_NUMERALS, type Midi } from '@/shared/lib/music'
+import { pitchClass, ROMAN_NUMERALS, type Midi, printedNote } from '@/shared/lib/music'
 import { cn } from '@/shared/lib'
 
 /**
@@ -33,7 +33,7 @@ export function DegreeSlots({
           >
             <span className="text-xs text-muted-foreground">{ROMAN_NUMERALS[i]}</span>
             <span className="font-display text-lg font-semibold">
-              {shown ? noteName(tone.note) : ' '}
+              {shown ? printedNote(tone.note) : ' '}
             </span>
             {wrong ? <span className="sr-only">{t('common:keyState.wrong')}</span> : null}
           </li>

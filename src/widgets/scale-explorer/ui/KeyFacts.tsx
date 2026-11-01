@@ -9,12 +9,12 @@ import {
   modesOfKey,
   neighbourKeys,
   parallelKey,
-  noteName,
   noteParam,
   relativeKey,
   signatureNotes,
   spellScale,
   type Key,
+  printedNote,
 } from '@/shared/lib/music'
 import { ButtonLink, Fact } from '@/shared/ui'
 import { KeyLink } from './KeyLink'
@@ -35,9 +35,11 @@ export function KeyFacts({ value }: { value: Key }) {
   return (
     <dl className="flex flex-col gap-2">
       <Fact term={t('scales.key.signature')}>
-        {signature.length === 0 ? t('scales.key.noSignature') : signature.map(noteName).join(' ')}
+        {signature.length === 0 ? t('scales.key.noSignature') : signature.map(printedNote).join(' ')}
       </Fact>
-      <Fact term={t('scales.key.notes')}>{notes.map((tone) => noteName(tone.note)).join(' ')}</Fact>
+      <Fact term={t('scales.key.notes')}>
+        {notes.map((tone) => printedNote(tone.note)).join(' ')}
+      </Fact>
       <Fact term={t('scales.facts.relative')}>
         <KeyLink value={relative} />
       </Fact>

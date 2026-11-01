@@ -1,6 +1,6 @@
 import { Piano } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { noteName, printedSymbol, type FoundChord, type Midi } from '@/shared/lib/music'
+import { printedSymbol, type FoundChord, type Midi, printedNote } from '@/shared/lib/music'
 import { cn } from '@/shared/lib'
 import { ChordHeading } from '@/shared/ui'
 import { Toggle } from '@/shared/ui/primitives/toggle'
@@ -74,7 +74,7 @@ export function ChordName({
     case 'note':
       return (
         <div className="flex flex-col items-center gap-1">
-          <h2 className="text-7xl">{printedSymbol(noteName(finding.note))}</h2>
+          <h2 className="text-7xl">{printedNote(finding.note)}</h2>
           <SourceLine source={source}>{t('practice:chordFinder.note')}</SourceLine>
         </div>
       )

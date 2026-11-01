@@ -8,13 +8,13 @@ import {
 import {
   chordFamily,
   noteFromParam,
-  noteName,
   noteParam,
   printedSymbol,
   qualitySuffix,
   SCALE_FAMILIES,
   scaleKindsIn,
   spellScale,
+  printedNote,
 } from '@/shared/lib/music'
 import { Dropdown, NamedSegmented, NoteChoice } from '@/shared/ui'
 import type { ExerciseChange } from '../model/exercise-search'
@@ -81,7 +81,7 @@ export function ExerciseMusicFields({
               value={choice.start}
               options={spellScale(choice.root, choice.kind).map((tone, i) => ({
                 value: i,
-                label: noteName(tone.note),
+                label: printedNote(tone.note),
                 detail: tone.degree,
               }))}
               onChange={(start) => onChange({ start })}

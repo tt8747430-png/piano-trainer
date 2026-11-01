@@ -46,13 +46,21 @@ Apple's Human Interface Guidelines and the owner's reference apps settled each.
   measured one and moves nothing. `keyboard-reveal.ts` scrolls the box round the field (the page, or a screen's own
   scroller) so the field, its label and its error stand under the screen's bar and a gap above the keyboard. A sheet
   or a popover owns its own fields: it stands on the keyboard (`VirtualKeyboardProvider`), its buttons with it; the
-  score editor's slim bar stands on `--kb-inset`, and its sheet scrolls the caret's line clear of both. While typing
+  score editor's slim bar and the lesson editor's formatting toolbar stand on the keyboard's top edge
+  (`useKeyboardTop`: the visual viewport's foot, followed on its scroll too, since iOS pans the page under a
+  keyboard without resizing anything), and the editor's sheet scrolls the caret's line clear of both. While typing
   the tab bar, the floating actions and the toasts step aside (the page pads for them no more), and the screen's bar
-  holds still. Nothing listens to the viewport's scroll.
+  holds still.
 - **Toasts:** one at a time, the new one replacing the last; Undo in it puts back exactly what was done; gone after
   five seconds or on Undo.
 - **Basics:** 44px targets; one focus ring (a 3px outline 2px off the control, inset inside a scroller); reduced
   motion honoured: what slides or morphs changes at once.
+
+- **A menu, a sheet, a pop-up or a page** (round 26): a ⋯ is a real menu (`ActionMenu` on shadcn's `dropdown-menu`)
+  of commands that act at once, grouped with a label, the destructive last after a separator, a choice ticked; a
+  sheet is one focused task; a pop-up button chooses one value, shown in words; a page holds content or settings in
+  more than one group (a song's Settings, Publish in library, Settings › Keyboard). A switch row is a toggle. Edit is
+  a pencil at the bar's end; editing, it is the word Done.
 
 ## Consequences
 
@@ -71,3 +79,5 @@ A new option has one obvious form by this rule. A test reaches a folded action b
 - 0106 — The phone's keyboard and one toast at a time (2026-10-26).
 - r14 — The keyboard reserved as a field is focused, the field lifted by the page, the bar held still: Mindscape's
   whole mechanism (2026-10-28).
+- r26 — Menus, sheets, pop-ups and pages told apart; real menus; Edit ⇄ Done; the keyboard's bars on its top edge as
+  iOS pans the page (2026-11-01).

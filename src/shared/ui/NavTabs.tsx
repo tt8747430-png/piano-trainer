@@ -49,8 +49,10 @@ export const NavTab: LinkComponent<typeof TabAnchor> = (props) => <TabLink {...p
  */
 export function NavTabs({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <nav aria-label={label} className="-mx-gutter px-gutter">
-      <ul className="tab-strip">{children}</ul>
+    // The strip runs to the screen's edges, its tabs starting at the gutter: one cut by its scroll is
+    // cut at the edge, never in the page's margin.
+    <nav aria-label={label} className="-mx-gutter">
+      <ul className="tab-strip px-gutter">{children}</ul>
     </nav>
   )
 }
