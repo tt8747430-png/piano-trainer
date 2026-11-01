@@ -1,5 +1,5 @@
 import { C_MAJOR } from '@/shared/lib/music'
-import type { LessonBlock } from './types'
+import type { Lesson, LessonBlock } from './types'
 
 /**
  * The blocks an editor inserts in a lesson, by what the editor calls them (a rule is a note with a
@@ -54,4 +54,10 @@ export function blankBlock(kind: InsertableBlock): LessonBlock {
     case 'link':
       return { kind: 'link', title: blank, target: { opens: 'chords', chord: 'C' } }
   }
+}
+
+/** The lesson with these lessons to read first; none, the field left out. */
+export function withAfter(lesson: Lesson, after: readonly string[]): Lesson {
+  const { after: _after, ...rest } = lesson
+  return after.length > 0 ? { ...rest, after } : rest
 }

@@ -1,16 +1,7 @@
 import { Link, type LinkProps } from '@tanstack/react-router'
-import { ArrowRight, ChevronsLeft } from 'lucide-react'
+import { ArrowRight, ChevronsLeft, Settings } from 'lucide-react'
 import { Fragment, type ReactElement, type ReactNode } from 'react'
-import { Ellipsis } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import {
-  LESSON_READINGS,
-  selectLessonReading,
-  useSettings,
-  useSettingsStoreApi,
-} from '@/entities/settings'
-import { setLessonReading } from '@/features/set-preference'
-import { Button } from '@/shared/ui/primitives/button'
 import type { Lesson } from '@/entities/lesson'
 import type { StepId } from '@/entities/step'
 import { useProgressStoreApi } from '@/entities/progress'
@@ -18,7 +9,7 @@ import { LearnedButton, useLearned } from '@/features/mark-learned'
 import { recordSectionRead } from '@/features/record-reading'
 import { localText, useLocale } from '@/shared/i18n'
 import { editsContent, useAccount } from '@/shared/lib/account'
-import { ActionMenu, ButtonLink, ScreenHeader } from '@/shared/ui'
+import { ButtonLink, RoundLink, ScreenHeader } from '@/shared/ui'
 import { LessonView, type UpLink } from '@/widgets/lesson-view'
 
 /** A lesson either side of this one, or the way on past the last: a router `Link`, named. */
@@ -41,8 +32,8 @@ export interface LessonTrack {
  * A lesson, a journey's or a course's (ADR 0053, 0061), in one column in the middle of the screen:
  * its title with Learned in its bar, where it is (`place`), the lesson under its
  * floating bar of sections, and at its end the lesson before and the way on, which learns it (on a
- * phone, read a page at a time, the bar's Done). An editor has its lesson editor in the bar (`edit`,
- * ADR 0116).
+ * phone, read a page at a time, the bar's Done). Its Settings (round 28, a song's gear) in the bar;
+ * an editor has its lesson editor there too (`modes`, ADR 0116).
  */
 export function LessonLayout({
   lesson,
@@ -51,6 +42,7 @@ export function LessonLayout({
   back,
   track,
   modes,
+  settings,
   after = [],
 }: {
   lesson: Lesson
@@ -63,6 +55,8 @@ export function LessonLayout({
   track: LessonTrack
   /** Its Edit, an editor's (`EditToggle`), at the bar's end. */
   modes: ReactNode
+  /** A router `Link` to its Settings page. */
+  settings: ReactElement
 }) {
   const { t } = useTranslation('learn')
   const locale = useLocale()
@@ -77,7 +71,7 @@ export function LessonLayout({
         actions={
           <>
             <LearnedButton step={step} round />
-            <ReadingMenu />
+            <RoundLink label={t('settings.open')} icon={Settings} render={settings} />
             {editsContent(account) ? modes : null}
           </>
         }
@@ -166,38 +160,5 @@ export function PlaceLink({ children, ...link }: LinkProps & { children: ReactNo
     >
       {children}
     </Link>
-  )
-}
-
-/**
- * The lesson's ⋯ (round 26): how a lesson reads, one page of its sections or a section at a time,
- * ticked; the same choice as Settings' Lessons.
- */
-function ReadingMenu() {
-  const { t } = useTranslation('learn')
-  const settings = useSettingsStoreApi()
-  const reading = useSettings(selectLessonReading)
-  return (
-    <ActionMenu
-      label={t('reading.label')}
-      align="end"
-      trigger={<Ellipsis aria-hidden />}
-      render={
-        <Button
-          variant="bar"
-          size="icon"
-          className="rounded-full"
-          aria-label={t('reading.label')}
-          title={t('reading.label')}
-        />
-      }
-      actions={LESSON_READINGS.map((each) => ({
-        key: each,
-        group: t('reading.group'),
-        label: t(`reading.${each}`),
-        checked: reading === each,
-        onSelect: () => setLessonReading(settings, each),
-      }))}
-    />
   )
 }

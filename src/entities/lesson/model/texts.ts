@@ -1,4 +1,4 @@
-import type { LocalText } from '@/shared/i18n'
+import { LOCALES, type Locale, type LocalText } from '@/shared/i18n'
 import type { Lesson, LessonBlock } from './types'
 
 /** What a text of a lesson is: its title and summary, a section's heading and takeaway, or a block's words. */
@@ -79,3 +79,10 @@ export function lessonTexts(lesson: Lesson): LessonText[] {
     ]),
   ]
 }
+
+/**
+ * The languages a lesson is written in (round 28, its Settings): those in which every text it shows
+ * has words.
+ */
+export const lessonLanguages = (lesson: Lesson): Locale[] =>
+  LOCALES.filter((locale) => lessonTexts(lesson).every(({ text }) => text[locale].trim() !== ''))

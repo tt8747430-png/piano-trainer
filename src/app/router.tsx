@@ -543,6 +543,39 @@ const courseLessonRoute = createRoute({
   },
   component: lazyRouteComponent(learnScreens, 'CourseLessonPage'),
 })
+// A lesson's and a course's Settings (round 28), pages of their own under theirs, as a song's.
+const lessonSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/lessons/$lessonId/settings',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params, context }) => {
+    const { lessonById, lessonPlace } = await learnScreens()
+    if (!lessonById(params.lessonId) || !lessonPlace(params.lessonId)) throw notFound()
+    await ensureContent(context.content, 'lesson', params.lessonId)
+  },
+  component: lazyRouteComponent(learnScreens, 'LessonSettingsPage'),
+})
+const courseSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/courses/$courseId/settings',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params }) => {
+    const { courseById } = await learnScreens()
+    if (!courseById(params.courseId)) throw notFound()
+  },
+  component: lazyRouteComponent(learnScreens, 'CourseSettingsPage'),
+})
+const courseLessonSettingsRoute = createRoute({
+  getParentRoute: () => shellRoute,
+  path: '/courses/$courseId/$lessonId/settings',
+  notFoundComponent: notFoundIn('learn'),
+  beforeLoad: async ({ params, context }) => {
+    const { courseLesson } = await learnScreens()
+    if (!courseLesson(params.courseId, params.lessonId)) throw notFound()
+    await ensureContent(context.content, 'lesson', `${params.courseId}/${params.lessonId}`)
+  },
+  component: lazyRouteComponent(learnScreens, 'CourseLessonSettingsPage'),
+})
 
 // An editor's lesson editor (ADR 0116): every text of a journey's or a course's lesson; a course's
 // own title and summary in the course editor.
@@ -762,6 +795,9 @@ const routeTree = rootRoute.addChildren([
     publishPatternRoute,
     lessonRoute,
     courseLessonRoute,
+    lessonSettingsRoute,
+    courseSettingsRoute,
+    courseLessonSettingsRoute,
     lessonEditRoute,
     courseLessonEditRoute,
     courseEditRoute,

@@ -1,7 +1,4 @@
-import { Extension } from '@tiptap/core'
 import { Placeholder } from '@tiptap/extensions'
-import { Plugin } from '@tiptap/pm/state'
-import { Decoration, DecorationSet } from '@tiptap/pm/view'
 import { EditorContent, ReactNodeViewRenderer, useEditor, type JSONContent } from '@tiptap/react'
 import {
   useEffect,
@@ -11,7 +8,6 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react'
-import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import type { Lesson } from '@/entities/lesson'
 import { i18n, type Locale } from '@/shared/i18n'
@@ -51,30 +47,6 @@ function placeholderOf(type: string, parent: string, current: boolean, words: Wo
   }
 }
 
-/** A widget after the title and the summary, holding `host`: the properties, never typed into. */
-const propertiesAt = (host: HTMLElement) =>
-  Extension.create({
-    name: 'lessonProperties',
-    addProseMirrorPlugins: () => [
-      new Plugin({
-        props: {
-          decorations: ({ doc }) => {
-            const [title, summary] = [doc.maybeChild(0), doc.maybeChild(1)]
-            if (!title || !summary) return null
-            return DecorationSet.create(doc, [
-              Decoration.widget(title.nodeSize + summary.nodeSize, host, {
-                key: 'properties',
-                side: -1,
-                ignoreSelection: true,
-                stopEvent: () => true,
-              }),
-            ])
-          },
-        },
-      }),
-    ],
-  })
-
 /**
  * The lesson as one document, written in one language where it reads (round 21, Obsidian's Live
  * Preview): its title and summary, each section's heading, its words, steps and notes typed in place,
@@ -86,22 +58,12 @@ export function LessonDocument({
   initial,
   locale,
   onChange,
-  properties,
 }: {
   initial: Lesson
   /** The language written: the document opens anew on another. */
   locale: Locale
   onChange: (lesson: Lesson) => void
-  /** The lesson's properties (Read first), under its title and summary as a page's are. */
-  properties?: ReactNode
 }) {
-  // Where the properties stand in the document: a widget after the summary, outside what is typed.
-  const [host] = useState(() => {
-    const element = document.createElement('div')
-    element.contentEditable = 'false'
-    element.className = 'lesson-doc-properties'
-    return element
-  })
   const { t } = useTranslation('learn')
   const words = i18n.getFixedT(locale, 'learn')
   const base = useRef(initial)
@@ -111,7 +73,6 @@ export function LessonDocument({
     extensions: docExtensions({
       exampleView: ReactNodeViewRenderer(ExampleView),
       more: [
-        ...(properties ? [propertiesAt(host)] : []),
         Placeholder.configure({
           includeChildren: true,
           showOnlyCurrent: false,
@@ -148,7 +109,6 @@ export function LessonDocument({
         style={{ '--takeaway-label': JSON.stringify(words('edit.doc.takeaway')) } as CSSProperties}
       >
         <EditorContent editor={editor} />
-        {properties ? createPortal(properties, host) : null}
         <BlockHandle editor={editor} frame={frame} />
         <TextBubble editor={editor} />
         <SlashMenu editor={editor} locale={locale} frame={frame} keysRef={slashKeys} />

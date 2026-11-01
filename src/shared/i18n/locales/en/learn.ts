@@ -112,9 +112,40 @@ export const learn = {
   // An editor's lesson editor (ADR 0116): every text the lesson shows, English and Russian side by side.
   // A lesson's or a course's two modes, an editor's (round 25).
   // How a lesson reads (round 26): the lesson's ⋯, and Settings' Lessons.
+  // A lesson's and a course's Settings page (round 28, as a song's): one list, a row a setting or a
+  // way on.
+  settings: {
+    title: 'Settings',
+    open: 'Settings',
+    reading: 'Reading',
+    share: 'Share',
+    shareLink: 'Share link',
+    shared: 'Link copied',
+    shareFailed: 'The link could not be shared',
+    progress: 'Your progress',
+    reset: 'Reset progress',
+    resetLesson: 'Reset this lesson’s progress?',
+    resetLessonBody: 'It is marked not learned and its sections unread. Nothing else changes.',
+    resetCourse: 'Reset this course’s progress?',
+    resetCourseBody:
+      'Its lessons and guided songs are marked not learned and their sections unread. Nothing else changes.',
+    resetDone: 'Progress reset',
+    cancel: 'Cancel',
+    confirm: 'Reset',
+    lesson: 'The lesson',
+    course: 'The course',
+    level: 'Level',
+    chapter: 'Chapter',
+    inCourse: 'Course',
+    readFirst: 'Read first',
+    languages: 'Written in',
+    noLanguage: 'Not yet in full',
+    publishing: 'Publishing',
+    changes: 'Changes',
+    opening: 'Opening…',
+    offline: 'Offline',
+  },
   reading: {
-    label: 'Lesson options',
-    group: 'Reading',
     title: 'Lessons read as',
     page: 'One page',
     sections: 'A section at a time',

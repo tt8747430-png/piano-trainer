@@ -6,6 +6,13 @@ import { lessonPlace } from '@/entities/lesson'
 import { midi } from '@/shared/lib/music'
 import { untranslated } from '@/app/testing/untranslated'
 
+/** The screen bar's Settings (the gear), not the sidebar's. */
+async function openSettings(user: ReturnType<typeof userEvent.setup>) {
+  await screen.findByRole('heading', { level: 1 })
+  const bar = document.querySelector<HTMLElement>('[data-slot="screen-bar"]')!
+  await user.click(within(bar).getByRole('link', { name: 'Settings' }))
+}
+
 describe('A lesson', () => {
   it('shows its title over its sections, and no summary', async () => {
     await renderApp('/lessons/reading-chord-symbols')
@@ -16,15 +23,18 @@ describe('A lesson', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Naming any chord' })).toBeInTheDocument()
   })
 
-  it('reads as one page, or a section at a time from its ⋯, remembered', async () => {
+  it('reads as one page, or a section at a time as its Settings say, remembered', async () => {
     const user = userEvent.setup()
     const { settingsStore } = await renderApp('/lessons/reading-chord-symbols')
     await screen.findByRole('heading', { level: 1, name: 'How to read chord symbols' })
     expect(screen.getAllByRole('heading', { level: 2 }).length).toBeGreaterThan(1)
     expect(screen.queryByRole('link', { name: 'Next' })).toBeNull()
-    await user.click(screen.getByRole('button', { name: 'Lesson options' }))
-    expect(await screen.findByRole('menuitemcheckbox', { name: 'One page' })).toBeChecked()
-    await user.click(screen.getByRole('menuitemcheckbox', { name: 'A section at a time' }))
+    await openSettings(user)
+    const reading = await screen.findByRole('combobox', { name: 'Lessons read as' })
+    expect(reading).toHaveTextContent('One page')
+    await user.click(reading)
+    await user.click(await screen.findByRole('option', { name: 'A section at a time' }))
+    await user.click(screen.getByRole('button', { name: 'Back' }))
     expect(await screen.findByRole('link', { name: 'Next' })).toBeVisible()
     expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(1)
     expect(settingsStore.getState().lessonReading).toBe('sections')

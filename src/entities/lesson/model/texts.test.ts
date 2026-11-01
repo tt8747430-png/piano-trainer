@@ -1,6 +1,21 @@
 import { describe, expect, it } from 'vitest'
-import { lessonTexts } from './texts'
+import { lessonLanguages, lessonTexts } from './texts'
 import type { Lesson } from './types'
+
+describe('lessonLanguages (round 28)', () => {
+  const lesson: Lesson = {
+    id: 'l',
+    title: { en: 'Triads', ru: 'Трезвучия' },
+    summary: { en: 'Three notes', ru: 'Три ноты' },
+    sections: [],
+  }
+
+  it('names each language every text has words in', () => {
+    expect(lessonLanguages(lesson)).toEqual(['en', 'ru'])
+    expect(lessonLanguages({ ...lesson, summary: { en: 'Three notes', ru: ' ' } })).toEqual(['en'])
+    expect(lessonLanguages({ ...lesson, title: { en: '', ru: '' } })).toEqual([])
+  })
+})
 
 const t = (en: string, ru = `ru ${en}`) => ({ en, ru })
 

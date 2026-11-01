@@ -72,3 +72,19 @@ export function withHold(state: ProgressState, key: ChordLessonKey, at: string):
     ? { ...withLesson(state, key, at), holds: others }
     : { ...state, holds: keptHolds({ ...others, [key]: held }) }
 }
+
+/**
+ * The progress with these steps forgotten (round 28, a lesson's or a course's Reset progress): not
+ * learned, none of their sections read; the days practised and the rest kept.
+ */
+export function withoutSteps(state: ProgressState, ids: readonly StepId[]): ProgressState {
+  if (!ids.some((id) => state.learned[id] !== undefined || state.read[id] !== undefined))
+    return state
+  const learned = { ...state.learned }
+  const read = { ...state.read }
+  for (const id of ids) {
+    delete learned[id]
+    delete read[id]
+  }
+  return { ...state, learned, read }
+}
